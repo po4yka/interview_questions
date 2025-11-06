@@ -19,17 +19,17 @@ tags: [android/lifecycle, android/ui-views, custom-view, difficulty/medium, view
 
 # Вопрос (RU)
 
-> Что известно о жизненном цикле View в Android?
+> Что известно о жизненном цикле `View` в Android?
 
 # Question (EN)
 
-> What is known about View lifecycles in Android?
+> What is known about `View` lifecycles in Android?
 
 ---
 
 ## Ответ (RU)
 
-Жизненный цикл View описывает последовательность методов от создания до уничтожения представления. Понимание этого цикла критично для управления ресурсами, обработки configuration changes и оптимизации производительности.
+Жизненный цикл `View` описывает последовательность методов от создания до уничтожения представления. Понимание этого цикла критично для управления ресурсами, обработки configuration changes и оптимизации производительности.
 
 ### Основные Этапы
 
@@ -61,7 +61,7 @@ class CustomView @JvmOverloads constructor(
 
 ### 2. onAttachedToWindow() — Запуск Ресурсов
 
-Вызывается когда View прикрепляется к окну. Здесь запускаем анимации, регистрируем слушатели.
+Вызывается когда `View` прикрепляется к окну. Здесь запускаем анимации, регистрируем слушатели.
 
 ```kotlin
 override fun onAttachedToWindow() {
@@ -75,7 +75,7 @@ override fun onAttachedToWindow() {
 
 ### 3. onMeasure() — Измерение Размера
 
-Определяет размер View. Обязательно вызвать `setMeasuredDimension()`.
+Определяет размер `View`. Обязательно вызвать `setMeasuredDimension()`.
 
 ```kotlin
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -95,7 +95,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
 ### 4. onLayout() — Позиционирование
 
-Для ViewGroup позиционирует дочерние элементы. Для простых View можно пересчитать координаты отрисовки.
+Для `ViewGroup` позиционирует дочерние элементы. Для простых `View` можно пересчитать координаты отрисовки.
 
 ```kotlin
 // ViewGroup
@@ -119,7 +119,7 @@ override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
 
 ### 5. onDraw() — Отрисовка
 
-Рендеринг содержимого View. Вызывается часто — избегать аллокаций!
+Рендеринг содержимого `View`. Вызывается часто — избегать аллокаций!
 
 ```kotlin
 override fun onDraw(canvas: Canvas) {
@@ -193,7 +193,7 @@ override fun onRestoreInstanceState(state: Parcelable?) {
 
 ### Основные Принципы
 
-1. **Инициализация в constructor** — Paint-объекты, значения по умолчанию
+1. **Инициализация в constructor** — `Paint`-объекты, значения по умолчанию
 2. **Запуск ресурсов в onAttachedToWindow()** — анимации, слушатели
 3. **Остановка в onDetachedFromWindow()** — предотвращение утечек памяти
 4. **Избегать аллокаций в onDraw()** — создавать объекты заранее
@@ -204,7 +204,7 @@ override fun onRestoreInstanceState(state: Parcelable?) {
 
 ## Answer (EN)
 
-The View lifecycle describes the sequence of method calls from view creation to destruction. Understanding this lifecycle is critical for resource management, handling configuration changes, and optimizing performance.
+The `View` lifecycle describes the sequence of method calls from view creation to destruction. Understanding this lifecycle is critical for resource management, handling configuration changes, and optimizing performance.
 
 ### Key Stages
 
@@ -368,7 +368,7 @@ override fun onRestoreInstanceState(state: Parcelable?) {
 
 ### Core Principles
 
-1. **Initialize in constructor** — Paint objects, default values
+1. **Initialize in constructor** — `Paint` objects, default values
 2. **Start resources in onAttachedToWindow()** — animations, listeners
 3. **Stop in onDetachedFromWindow()** — prevent memory leaks
 4. **Avoid allocations in onDraw()** — pre-create objects
@@ -383,12 +383,12 @@ override fun onRestoreInstanceState(state: Parcelable?) {
 2. When should you override `onSizeChanged()` vs `onLayout()`?
 3. How does `onMeasure()` handle nested ViewGroups and measure passes?
 4. What happens if you forget to call `setMeasuredDimension()` in `onMeasure()`?
-5. How can you detect if a View is currently attached to a window?
+5. How can you detect if a `View` is currently attached to a window?
 
 ## References
 
-- [Android View API Documentation](https://developer.android.com/reference/android/view/View)
-- [Custom View Components Guide](https://developer.android.com/develop/ui/views/layout/custom-views/custom-components)
+- [Android `View` API Documentation](https://developer.android.com/reference/android/view/`View`)
+- [Custom `View` Components Guide](https://developer.android.com/develop/ui/views/layout/custom-views/custom-components)
 - [[c-view-lifecycle]] (concept note)
 - [[c-custom-views]] (concept note)
 
@@ -396,12 +396,12 @@ override fun onRestoreInstanceState(state: Parcelable?) {
 
 ### Prerequisites (Easier)
 - [[q-what-is-activity-lifecycle--android--easy]] - Understanding lifecycle concepts
-- [[q-what-is-fragment-lifecycle--android--easy]] - Fragment lifecycle basics
+- [[q-what-is-fragment-lifecycle--android--easy]] - `Fragment` lifecycle basics
 
 ### Related (Same Level)
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - State preservation patterns
-- [[q-spannable-text-styling--android--medium]] - Advanced View text handling
-- [[q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium]] - View updates in RecyclerView
+- [[q-spannable-text-styling--android--medium]] - Advanced `View` text handling
+- [[q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium]] - `View` updates in `RecyclerView`
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--android--hard]] - Custom layouts in Jetpack Compose

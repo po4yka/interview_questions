@@ -63,7 +63,7 @@ tags: [android/architecture-clean, android/networking-http, android/service, dif
 
 > How to design a feature flags & experimentation SDK for Android?
 
-## Short Version
+## `Short` Version
 
 Design a feature flags SDK for Android. Key requirements: dynamic feature toggles, A/B testing, <150ms bootstrap, sticky assignments, offline cache with TTL, kill-switch semantics, privacy-safe exposure logging.
 

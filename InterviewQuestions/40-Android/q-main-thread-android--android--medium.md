@@ -45,7 +45,7 @@ tags:
 
 ## Ответ (RU)
 
-Главный поток (Main Thread), также известный как UI Thread, отвечает за обработку пользовательского интерфейса и событий в Android.
+Главный поток (Main `Thread`), также известный как UI `Thread`, отвечает за обработку пользовательского интерфейса и событий в Android.
 
 ### Основные Характеристики
 
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
 #### 2. Event Loop
 
-Main thread работает на основе очереди событий (Looper + MessageQueue):
+Main thread работает на основе очереди событий (`Looper` + MessageQueue):
 
 ```kotlin
 // ✅ Отправка задачи в main thread
@@ -82,7 +82,7 @@ thread {
 
 #### 3. ANR При Блокировке
 
-Блокировка главного потока более 5 секунд вызывает ANR (Application Not Responding):
+Блокировка главного потока более 5 секунд вызывает ANR (`Application` Not Responding):
 
 ```kotlin
 // ❌ Блокирует UI
@@ -144,7 +144,7 @@ class MyViewModel : ViewModel() {
 
 ## Answer (EN)
 
-The Main Thread, also known as the UI Thread, is responsible for handling user interface operations and events in Android.
+The Main `Thread`, also known as the UI `Thread`, is responsible for handling user interface operations and events in Android.
 
 ### Key Characteristics
 
@@ -166,7 +166,7 @@ class MainActivity : AppCompatActivity() {
 
 #### 2. Event Loop
 
-The main thread operates using an event queue (Looper + MessageQueue):
+The main thread operates using an event queue (`Looper` + MessageQueue):
 
 ```kotlin
 // ✅ Posting task to main thread
@@ -181,7 +181,7 @@ thread {
 
 #### 3. ANR on Blocking
 
-Blocking the main thread for more than 5 seconds triggers ANR (Application Not Responding):
+Blocking the main thread for more than 5 seconds triggers ANR (`Application` Not Responding):
 
 ```kotlin
 // ❌ Blocks UI
@@ -243,8 +243,8 @@ class MyViewModel : ViewModel() {
 
 ## Follow-ups
 
-- How does Looper.prepare() work internally?
-- What's the difference between Handler.post() and View.post()?
+- How does `Looper`.prepare() work internally?
+- What's the difference between `Handler`.post() and `View`.post()?
 - How to detect if current code is running on main thread?
 - What happens when MessageQueue is full?
 - How does StrictMode detect main thread violations?
@@ -268,7 +268,7 @@ class MyViewModel : ViewModel() {
 
 ### Related
 - [[q-room-code-generation-timing--android--medium]] - Database operations and threading
-- Handler and Looper patterns
+- `Handler` and `Looper` patterns
 
 ### Advanced
 - ANR debugging techniques

@@ -40,9 +40,9 @@ Android Jetpack — набор библиотек от Google для упрощ�
 
 ### Architecture Components
 
-**ViewModel** — сохраняет UI-данные при конфигурационных изменениях
+**`ViewModel`** — сохраняет UI-данные при конфигурационных изменениях
 **Room** — type-safe ORM для SQLite с compile-time проверками
-**Lifecycle** — отслеживает жизненный цикл Activity/Fragment
+**`Lifecycle`** — отслеживает жизненный цикл Activity/`Fragment`
 **Navigation** — декларативная навигация между экранами
 
 ```kotlin
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 ### UI Components
 
 **Jetpack Compose** — декларативный UI фреймворк
-**Fragment** — модульные UI-компоненты для View-based UI
+**`Fragment`** — модульные UI-компоненты для `View`-based UI
 **ViewBinding** — type-safe доступ к Views
 
 ```kotlin
@@ -128,9 +128,9 @@ Android Jetpack is Google's suite of libraries for simplified Android developmen
 
 ### Architecture Components
 
-**ViewModel** — survives configuration changes like screen rotation
+**`ViewModel`** — survives configuration changes like screen rotation
 **Room** — type-safe ORM for SQLite with compile-time verification
-**Lifecycle** — tracks Activity/Fragment lifecycle states
+**`Lifecycle`** — tracks Activity/`Fragment` lifecycle states
 **Navigation** — declarative screen navigation
 
 ```kotlin
@@ -149,8 +149,8 @@ class MainActivity : AppCompatActivity() {
 ### UI Components
 
 **Jetpack Compose** — declarative UI framework
-**Fragment** — modular UI components for View-based UI
-**ViewBinding** — type-safe View access
+**`Fragment`** — modular UI components for `View`-based UI
+**ViewBinding** — type-safe `View` access
 
 ```kotlin
 @Composable
@@ -210,15 +210,15 @@ class UserViewModel @Inject constructor(
 
 ## Follow-ups
 
-- When to use WorkManager vs AlarmManager vs Foreground Service?
-- How does ViewModel survive configuration changes internally?
-- What's the migration path from View system to Jetpack Compose?
+- When to use WorkManager vs AlarmManager vs Foreground `Service`?
+- How does `ViewModel` survive configuration changes internally?
+- What's the migration path from `View` system to Jetpack Compose?
 - How does Hilt differ from manual Dagger setup?
 - What are the benefits of Room over raw SQLite?
 
 ## References
 
-- [[c-viewmodel]] - ViewModel architecture component
+- [[c-viewmodel]] - `ViewModel` architecture component
 - [[c-room]] - Room database library
 - [[c-lifecycle]] - Android lifecycle awareness
 - Official docs: https://developer.android.com/jetpack
@@ -229,7 +229,7 @@ class UserViewModel @Inject constructor(
 - [[q-android-app-components--android--easy]] - Basic Android components
 
 ### Related
-- [[q-viewmodel-pattern--android--easy]] - ViewModel pattern details
+- [[q-viewmodel-pattern--android--easy]] - `ViewModel` pattern details
 - [[q-room-library-definition--android--easy]] - Room database details
  - State management in Compose
 

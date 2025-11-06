@@ -33,22 +33,22 @@ tags:
 
 # Вопрос (RU)
 
-> Что такое setHasFixedSize(true) в RecyclerView?
+> Что такое setHasFixedSize(true) в `RecyclerView`?
 
 # Question (EN)
 
-> What is setHasFixedSize(true) in RecyclerView?
+> What is setHasFixedSize(true) in `RecyclerView`?
 
 ---
 
 ## Ответ (RU)
 
-`setHasFixedSize(true)` — метод оптимизации RecyclerView, сообщающий, что **размер RecyclerView не изменится** при изменении содержимого адаптера.
+`setHasFixedSize(true)` — метод оптимизации `RecyclerView`, сообщающий, что **размер `RecyclerView` не изменится** при изменении содержимого адаптера.
 
 ### Как Работает
 
 Когда вызывается `setHasFixedSize(true)`:
-- Добавление/удаление элементов не меняет размеры RecyclerView
+- Добавление/удаление элементов не меняет размеры `RecyclerView`
 - Пропускаются дорогостоящие пересчеты layout
 - Только содержимое обновляется, иерархия представлений не пересчитывается
 
@@ -128,12 +128,12 @@ class MainActivity : AppCompatActivity() {
 
 ## Answer (EN)
 
-`setHasFixedSize(true)` is a performance optimization method that tells RecyclerView **its size won't change** when adapter content changes.
+`setHasFixedSize(true)` is a performance optimization method that tells `RecyclerView` **its size won't change** when adapter content changes.
 
 ### How It Works
 
 When you call `setHasFixedSize(true)`:
-- Adding/removing items won't trigger RecyclerView dimension changes
+- Adding/removing items won't trigger `RecyclerView` dimension changes
 - Expensive layout calculations are skipped
 - Only content updates, view hierarchy stays intact
 
@@ -224,20 +224,20 @@ recyclerView.apply {
 recyclerView.setHasFixedSize(true) // Inconsistent with wrap_content!
 ```
 
-**Key Point:** This optimizes the RecyclerView **container size**, not adapter item count. You can still add/remove items normally.
+**Key Point:** This optimizes the `RecyclerView` **container size**, not adapter item count. You can still add/remove items normally.
 
 ---
 
 ## Follow-ups
 
-- What other RecyclerView optimizations can be combined with `setHasFixedSize(true)`?
+- What other `RecyclerView` optimizations can be combined with `setHasFixedSize(true)`?
 - How does `setHasFixedSize()` interact with `DiffUtil` and `ListAdapter`?
 - What performance metrics should be measured to validate the optimization impact?
 - When should you use `setItemViewCacheSize()` vs `RecycledViewPool`?
 
 ## References
 
-- https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView#setHasFixedSize(boolean)
+- https://developer.android.com/reference/androidx/recyclerview/widget/`RecyclerView`#setHasFixedSize(boolean)
 - https://developer.android.com/topic/performance/rendering/recyclerview
 
 ## Related Questions
@@ -249,12 +249,12 @@ recyclerView.setHasFixedSize(true) // Inconsistent with wrap_content!
 
 ### Prerequisites
 
-- [[q-what-events-are-activity-methods-tied-to--android--medium]] - Activity lifecycle basics
+- [[q-what-events-are-activity-methods-tied-to--android--medium]] - `Activity` lifecycle basics
 - [[q-handler-looper-main-thread--android--medium]] - Main thread and performance
 
 ### Related (Same Level)
 
-- RecyclerView adapter optimization techniques
+- `RecyclerView` adapter optimization techniques
 - ViewHolder pattern and recycling mechanism
 - DiffUtil for efficient list updates
 

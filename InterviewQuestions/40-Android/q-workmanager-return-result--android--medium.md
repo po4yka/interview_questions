@@ -33,7 +33,7 @@ WorkManager возвращает результаты через механиз�
 
 **Основной подход**:
 1. В Worker используем `Result.success(outputData)` для передачи данных
-2. В Activity/ViewModel наблюдаем за `WorkInfo` через LiveData или Flow
+2. В Activity/`ViewModel` наблюдаем за `WorkInfo` через `LiveData` или `Flow`
 3. Проверяем состояние `WorkInfo.State.SUCCEEDED`
 4. Извлекаем данные из `workInfo.outputData`
 
@@ -65,7 +65,7 @@ class DataWorker(
 }
 ```
 
-### Наблюдение В ViewModel (рекомендуемый способ)
+### Наблюдение В `ViewModel` (рекомендуемый способ)
 
 ```kotlin
 class DataViewModel(
@@ -110,7 +110,7 @@ sealed class WorkResult {
 }
 ```
 
-### Современный Подход С Flow
+### Современный Подход С `Flow`
 
 ```kotlin
 class DataRepository(
@@ -201,8 +201,8 @@ workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
 - `workInfo.outputData` — извлечение результата
 
 **Лучшие практики**:
-- Используйте ViewModel для разделения логики
-- Предпочитайте Flow для современного реактивного кода
+- Используйте `ViewModel` для разделения логики
+- Предпочитайте `Flow` для современного реактивного кода
 - Сериализуйте сложные объекты в JSON
 - Обрабатывайте все состояния (SUCCEEDED, FAILED, RUNNING)
 - Для прогресса используйте `setProgress()` (API 29+)
@@ -215,7 +215,7 @@ WorkManager returns results through the `outputData` mechanism:
 
 **Core Approach**:
 1. In Worker, use `Result.success(outputData)` to pass data
-2. In Activity/ViewModel, observe `WorkInfo` via LiveData or Flow
+2. In Activity/`ViewModel`, observe `WorkInfo` via `LiveData` or `Flow`
 3. Check for `WorkInfo.State.SUCCEEDED` state
 4. Extract data from `workInfo.outputData`
 
@@ -247,7 +247,7 @@ class DataWorker(
 }
 ```
 
-### ViewModel Observation (Recommended)
+### `ViewModel` Observation (Recommended)
 
 ```kotlin
 class DataViewModel(
@@ -292,7 +292,7 @@ sealed class WorkResult {
 }
 ```
 
-### Modern Flow Approach
+### Modern `Flow` Approach
 
 ```kotlin
 class DataRepository(
@@ -383,8 +383,8 @@ workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
 - `workInfo.outputData` — extract result
 
 **Best Practices**:
-- Use ViewModel for separation of concerns
-- Prefer Flow for modern reactive code
+- Use `ViewModel` for separation of concerns
+- Prefer `Flow` for modern reactive code
 - Serialize complex objects to JSON
 - Handle all states (SUCCEEDED, FAILED, RUNNING)
 - Use `setProgress()` for progress updates (API 29+)
@@ -405,8 +405,8 @@ workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
 
 - [[c-workmanager]] — WorkManager core concepts
 - [[c-coroutines]] — Kotlin coroutines fundamentals
-- [[c-livedata]] — LiveData reactive pattern
-- [[c-flow]] — Kotlin Flow fundamentals
+- [[c-livedata]] — `LiveData` reactive pattern
+- [[c-flow]] — Kotlin `Flow` fundamentals
 - [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
 - [WorkManager Advanced Guide](https://developer.android.com/topic/libraries/architecture/workmanager/advanced)
 
@@ -421,7 +421,7 @@ workManager.getWorkInfosForUniqueWorkLiveData("background_sync")
 ### Related (Same Level)
 - [[q-workmanager-constraints--android--medium]] — WorkManager constraints
 - [[q-workmanager-chaining--android--medium]] — Chaining work requests
-- [[q-livedata-vs-flow--kotlin--medium]] — LiveData vs Flow comparison
+- [[q-livedata-vs-flow--kotlin--medium]] — `LiveData` vs `Flow` comparison
 
 ### Advanced (Harder)
 - [[q-workmanager-chaining--android--hard]] — Testing WorkManager

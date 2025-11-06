@@ -54,11 +54,11 @@ sources:
 
 ## Ответ (RU)
 
-Android по умолчанию уничтожает и пересоздает Activity при изменении конфигурации (поворот экрана). Непонятые переменные сбрасываются, и данные теряются.
+Android по умолчанию уничтожает и пересоздает `Activity` при изменении конфигурации (поворот экрана). Непонятые переменные сбрасываются, и данные теряются.
 
-### Почему Android Пересоздаёт Activity
+### Почему Android Пересоздаёт `Activity`
 
-Система пересоздаёт Activity для:
+Система пересоздаёт `Activity` для:
 1. Применения новых ресурсов (layout-land, values-sw600dp)
 2. Загрузки ресурсов для новой ориентации
 3. Пересчёта размеров layout
@@ -132,10 +132,10 @@ class FormActivity : AppCompatActivity() {
 ```
 
 **Ограничения**:
-- Bundle имеет лимит ~500KB (TransactionTooLargeException)
-- Только сериализуемые типы (Parcelable, Serializable, примитивы)
+- `Bundle` имеет лимит ~500KB (TransactionTooLargeException)
+- Только сериализуемые типы (`Parcelable`, `Serializable`, примитивы)
 
-### ✅ Решение 2: ViewModel (для Сложных данных)
+### ✅ Решение 2: `ViewModel` (для Сложных данных)
 
 ```kotlin
 class FormViewModel : ViewModel() {
@@ -174,7 +174,7 @@ class FormActivity : AppCompatActivity() {
 
 **Преимущества**:
 - Переживает configuration changes
-- Не имеет размерных ограничений Bundle
+- Не имеет размерных ограничений `Bundle`
 - Идеально для тяжёлых операций (сетевые запросы, БД)
 
 **Ограничение**: НЕ переживает process death
@@ -239,7 +239,7 @@ class MainActivity : AppCompatActivity() {
 - Усложняет код
 - Считается bad practice
 
-### Автоматическое Сохранение View
+### Автоматическое Сохранение `View`
 
 ```xml
 <!-- View с android:id автоматически сохраняют базовое состояние -->
@@ -257,8 +257,8 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Требует**:
-- View должна иметь `android:id`
-- View должна быть присоединена к window во время `onSaveInstanceState()`
+- `View` должна иметь `android:id`
+- `View` должна быть присоединена к window во время `onSaveInstanceState()`
 
 ### Что Требует Ручного Сохранения
 
@@ -318,11 +318,11 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 | Тип данных | Решение | Причина |
 |------------|---------|---------|
-| EditText (с ID) | Автоматически | View сохраняет сам |
+| `EditText` (с ID) | Автоматически | `View` сохраняет сам |
 | Кастомная переменная | onSaveInstanceState | Маленькие данные |
-| Большой объект | ViewModel | Только config changes |
+| Большой объект | `ViewModel` | Только config changes |
 | Критические данные | SavedStateHandle | Config changes + process death |
-| Сетевые данные | ViewModel + Repository | Не перезагружать |
+| Сетевые данные | `ViewModel` + `Repository` | Не перезагружать |
 | Ввод формы | SavedStateHandle | Должен пережить process death |
 
 ### Полный Пример (best practice)
@@ -369,22 +369,22 @@ class RegistrationActivity : AppCompatActivity() {
 ### Резюме
 
 Данные исчезают потому что:
-1. Activity уничтожается и пересоздаётся
+1. `Activity` уничтожается и пересоздаётся
 2. Переменные сбрасываются в начальные значения
 3. Данные не сохранены в onSaveInstanceState
-4. ViewModel не используется для сложных данных
+4. `ViewModel` не используется для сложных данных
 
 **Решения**:
 - **onSaveInstanceState** - маленькое UI-состояние (< 500KB)
-- **ViewModel** - сложные данные, config changes
+- **`ViewModel`** - сложные данные, config changes
 - **SavedStateHandle** - критические данные (best practice)
-- **View ID** - автоматическое сохранение базового состояния View
+- **`View` ID** - автоматическое сохранение базового состояния `View`
 
 ## Answer (EN)
 
 Android destroys and recreates Activities by default during configuration changes (screen rotation). Unsaved variables reset, causing data loss.
 
-### Why Android Recreates Activity
+### Why Android Recreates `Activity`
 
 System recreates to:
 1. Apply new resource configurations (layout-land, values-sw600dp)
@@ -392,7 +392,7 @@ System recreates to:
 3. Recalculate layout dimensions
 4. Apply density/language/theme changes
 
-### Lifecycle During Rotation
+### `Lifecycle` During Rotation
 
 ```
 Device rotated
@@ -460,10 +460,10 @@ class FormActivity : AppCompatActivity() {
 ```
 
 **Limitations**:
-- Bundle has ~500KB limit (TransactionTooLargeException)
-- Only serializable types (Parcelable, Serializable, primitives)
+- `Bundle` has ~500KB limit (TransactionTooLargeException)
+- Only serializable types (`Parcelable`, `Serializable`, primitives)
 
-### ✅ Solution 2: ViewModel (for Complex data)
+### ✅ Solution 2: `ViewModel` (for Complex data)
 
 ```kotlin
 class FormViewModel : ViewModel() {
@@ -502,7 +502,7 @@ class FormActivity : AppCompatActivity() {
 
 **Benefits**:
 - Survives configuration changes
-- No Bundle size limits
+- No `Bundle` size limits
 - Perfect for heavy operations (network, database)
 
 **Limitation**: Does NOT survive process death
@@ -567,7 +567,7 @@ class MainActivity : AppCompatActivity() {
 - Complicates code
 - Considered bad practice
 
-### Automatic View State Saving
+### Automatic `View` State Saving
 
 ```xml
 <!-- Views with android:id automatically save basic state -->
@@ -585,8 +585,8 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Requirements**:
-- View must have `android:id`
-- View must be attached to window during `onSaveInstanceState()`
+- `View` must have `android:id`
+- `View` must be attached to window during `onSaveInstanceState()`
 
 ### What Needs Manual Saving
 
@@ -646,11 +646,11 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 | Data Type | Solution | Reason |
 |-----------|----------|--------|
-| EditText (with ID) | Automatic | View saves itself |
+| `EditText` (with ID) | Automatic | `View` saves itself |
 | Custom variable | onSaveInstanceState | Small data |
-| Large object | ViewModel | Config changes only |
+| Large object | `ViewModel` | Config changes only |
 | Critical data | SavedStateHandle | Config changes + process death |
-| Network data | ViewModel + Repository | Don't reload |
+| Network data | `ViewModel` + `Repository` | Don't reload |
 | Form input | SavedStateHandle | Must survive process death |
 
 ### Complete Example (best practice)
@@ -697,24 +697,24 @@ class RegistrationActivity : AppCompatActivity() {
 ### Summary
 
 Data disappears because:
-1. Activity destroyed and recreated
+1. `Activity` destroyed and recreated
 2. Variables reset to initial values
 3. Data not saved in onSaveInstanceState
-4. ViewModel not used for complex data
+4. `ViewModel` not used for complex data
 
 **Solutions**:
 - **onSaveInstanceState** - small UI state (< 500KB)
-- **ViewModel** - complex data, config changes
+- **`ViewModel`** - complex data, config changes
 - **SavedStateHandle** - critical data (best practice)
-- **View ID** - automatic basic View state saving
+- **`View` ID** - automatic basic `View` state saving
 
 ---
 
 ## Follow-ups
 
-1. What's the maximum size for data in onSaveInstanceState Bundle and what happens if exceeded?
-2. How does SavedStateHandle internally combine ViewModel persistence with Bundle serialization?
-3. What happens to ViewModel when process is killed (low memory) vs configuration change?
+1. What's the maximum size for data in onSaveInstanceState `Bundle` and what happens if exceeded?
+2. How does SavedStateHandle internally combine `ViewModel` persistence with `Bundle` serialization?
+3. What happens to `ViewModel` when process is killed (low memory) vs configuration change?
 4. How to handle state restoration for custom Views that don't extend standard Android Views?
 5. What advanced patterns exist for managing complex multi-fragment state during configuration changes?
 
@@ -722,7 +722,7 @@ Data disappears because:
 
 - Official Android Documentation: [Handle configuration changes](https://developer.android.com/guide/topics/resources/runtime-changes)
 - Official Android Documentation: [Saving UI States](https://developer.android.com/topic/libraries/architecture/saving-states)
-- Official Android Documentation: [ViewModel Overview](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- Official Android Documentation: [`ViewModel` Overview](https://developer.android.com/topic/libraries/architecture/viewmodel)
 
 ## Related Questions
 

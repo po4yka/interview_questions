@@ -237,9 +237,9 @@ transaction.commitNowAllowingStateLoss()
 
 ## References
 
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment lifecycle
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment` lifecycle
 - [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - State loss issues
-- [[q-fragments-history-and-purpose--android--hard]] - Fragment architecture
+- [[q-fragments-history-and-purpose--android--hard]] - `Fragment` architecture
 - Official: [Fragments Guide](https://developer.android.com/guide/fragments)
 - Official: [FragmentManager API](https://developer.android.com/reference/androidx/fragment/app/FragmentManager)
 
@@ -252,15 +252,15 @@ transaction.commitNowAllowingStateLoss()
 
 
 ### Prerequisites (Easier)
-- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment basics
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - `Fragment` basics
 - [[q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy]] - Multiple fragments
 
 ### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment lifecycle
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment` lifecycle
 - [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - State loss
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle comparison
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Lifecycle` comparison
 
 ### Advanced (Harder)
-- [[q-fragments-history-and-purpose--android--hard]] - Fragment design rationale
-- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - Fragment architecture
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Fragment necessity
+- [[q-fragments-history-and-purpose--android--hard]] - `Fragment` design rationale
+- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - `Fragment` architecture
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - `Fragment` necessity

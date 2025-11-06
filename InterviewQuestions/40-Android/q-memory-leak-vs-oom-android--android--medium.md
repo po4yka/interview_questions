@@ -178,8 +178,8 @@ class MemoryMonitor {
 **Утечки памяти:**
 - WeakReference для долгоживущих объектов
 - Очистка listeners/observers в onDestroy
-- Lifecycle-aware компоненты (ViewModel, lifecycleScope)
-- Application context вместо Activity context
+- `Lifecycle`-aware компоненты (`ViewModel`, lifecycleScope)
+- `Application` context вместо `Activity` context
 - Отмена coroutines/jobs
 
 **OutOfMemoryError:**
@@ -344,8 +344,8 @@ class MemoryMonitor {
 **Memory Leaks:**
 - WeakReference for long-lived objects
 - Clean up listeners/observers in onDestroy
-- Lifecycle-aware components (ViewModel, lifecycleScope)
-- Application context instead of Activity context
+- `Lifecycle`-aware components (`ViewModel`, lifecycleScope)
+- `Application` context instead of `Activity` context
 - Cancel coroutines/jobs properly
 
 **OutOfMemoryError:**

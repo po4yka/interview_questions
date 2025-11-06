@@ -47,17 +47,17 @@ tags: [android/architecture-clean, android/architecture-modularization, android/
 **Domain (core-domain)**
 - Entities: модели бизнес-логики
 - Use Cases: операции (один case = одна операция)
-- Repository интерфейсы (порты)
+- `Repository` интерфейсы (порты)
 - Чистый Kotlin, без Android зависимостей
 
 **Data (core-data)**
-- Repository реализации (адаптеры)
+- `Repository` реализации (адаптеры)
 - Источники данных (API, DB, Cache)
 - Mappers: DTO/DB → Domain
 - Зависит от domain (реализует интерфейсы)
 
 **Presentation (app/feature-*)**
-- ViewModel: управляет UI состоянием
+- `ViewModel`: управляет UI состоянием
 - UI: Compose/Views
 - Mappers: Domain → UI models
 - Зависит только от domain (use cases)
@@ -86,7 +86,7 @@ class GetUserUseCase(private val repo: UserRepository) {
 }
 ```
 
-### Repository Реализация
+### `Repository` Реализация
 
 ```kotlin
 // ✅ core-data: адаптер репозитория
@@ -102,7 +102,7 @@ class UserRepositoryImpl(
 }
 ```
 
-### ViewModel Интеграция
+### `ViewModel` Интеграция
 
 ```kotlin
 // ✅ feature-user: ViewModel зависит от use cases
@@ -153,7 +153,7 @@ fun User.toUiModel() = UserUiModel(name, email)
 
 **Data**: contract-тесты против портов; instrumented-тесты для Room
 
-**Presentation**: ViewModel тесты с TestDispatcher и fake use cases
+**Presentation**: `ViewModel` тесты с TestDispatcher и fake use cases
 
 ## Answer (EN)
 
@@ -170,17 +170,17 @@ fun User.toUiModel() = UserUiModel(name, email)
 **Domain (core-domain)**
 - Entities: business logic models
 - Use Cases: operations (one case = one operation)
-- Repository interfaces (ports)
+- `Repository` interfaces (ports)
 - Pure Kotlin, no Android dependencies
 
 **Data (core-data)**
-- Repository implementations (adapters)
+- `Repository` implementations (adapters)
 - Data sources (API, DB, Cache)
 - Mappers: DTO/DB → Domain
 - Depends on domain (implements interfaces)
 
 **Presentation (app/feature-*)**
-- ViewModel: manages UI state
+- `ViewModel`: manages UI state
 - UI: Compose/Views
 - Mappers: Domain → UI models
 - Depends only on domain (use cases)
@@ -209,7 +209,7 @@ class GetUserUseCase(private val repo: UserRepository) {
 }
 ```
 
-### Repository Implementation
+### `Repository` Implementation
 
 ```kotlin
 // ✅ core-data: repository adapter
@@ -225,7 +225,7 @@ class UserRepositoryImpl(
 }
 ```
 
-### ViewModel Integration
+### `ViewModel` Integration
 
 ```kotlin
 // ✅ feature-user: ViewModel depends on use cases
@@ -276,7 +276,7 @@ fun User.toUiModel() = UserUiModel(name, email)
 
 **Data**: contract tests against ports; instrumented tests for Room
 
-**Presentation**: ViewModel tests with TestDispatcher and fake use cases
+**Presentation**: `ViewModel` tests with TestDispatcher and fake use cases
 
 ## Follow-ups
 

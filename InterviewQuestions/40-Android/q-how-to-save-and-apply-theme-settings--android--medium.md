@@ -61,7 +61,7 @@ class SettingsActivity : AppCompatActivity() {
 }
 ```
 
-**2. DataStore + Flow (Reactive)**
+**2. DataStore + `Flow` (Reactive)**
 
 Использовать для реактивного обновления:
 
@@ -185,7 +185,7 @@ class SettingsActivity : AppCompatActivity() {
 }
 ```
 
-**2. DataStore + Flow (Reactive)**
+**2. DataStore + `Flow` (Reactive)**
 
 Use for reactive updates:
 
@@ -258,7 +258,7 @@ class MainActivity : ComponentActivity() {
 
 ### Key Details
 
-**Theme Application for Views:**
+**Theme `Application` for Views:**
 - Global: `Application.onCreate()` → `AppCompatDelegate.setDefaultNightMode()`
 - Local: `Activity.onCreate()` → `setTheme()` **before** `setContentView()`
 
@@ -280,7 +280,7 @@ class MainActivity : ComponentActivity() {
 ## Follow-ups
 
 - What happens if `setTheme()` is called after `setContentView()`?
-- How to handle dynamic theme changes without restarting Activity?
+- How to handle dynamic theme changes without restarting `Activity`?
 - What's the difference between `Theme.MaterialComponents.DayNight` and custom theme inheritance?
 - How to implement multiple theme variants (not just light/dark)?
 - How to test theme persistence across app restarts?

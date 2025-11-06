@@ -308,9 +308,9 @@ class Presenter @Inject constructor(private val navController: NavController)
 
 1. How to handle navigation results (e.g., selecting payment method and returning result to caller)?
 2. How to implement deep link routing in multi-module app with feature-based navigation?
-3. What are the lifecycle implications of different DI scopes (Activity vs Fragment) for routers?
+3. What are the lifecycle implications of different DI scopes (`Activity` vs `Fragment`) for routers?
 4. How to test navigation flows in integration tests without mocking the router?
-5. How to migrate from Activity-based navigation (Intent) to Fragment-based (NavController) while keeping presenters unchanged?
+5. How to migrate from `Activity`-based navigation (`Intent`) to `Fragment`-based (NavController) while keeping presenters unchanged?
 
 ## References
 

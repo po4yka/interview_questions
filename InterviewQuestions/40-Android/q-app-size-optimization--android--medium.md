@@ -76,7 +76,7 @@ android {
 - Vector drawables для иконок: экономия 90%+
 - Удаление неиспользуемых densities через R8
 
-### Android App Bundle (AAB)
+### Android App `Bundle` (AAB)
 
 Google Play генерирует APK под конкретное устройство:
 
@@ -162,7 +162,7 @@ android {
 - Vector drawables for icons: 90%+ reduction
 - Remove unused densities via R8
 
-### Android App Bundle (AAB)
+### Android App `Bundle` (AAB)
 
 Google Play generates device-specific APKs:
 
@@ -217,7 +217,7 @@ android {
 
 - [[c-app-bundle]] - AAB format and split APK generation
 - [Shrink Your App (Official Docs)](https://developer.android.com/studio/build/shrink-code)
-- [Android App Bundle Guide](https://developer.android.com/guide/app-bundle)
+- [Android App `Bundle` Guide](https://developer.android.com/guide/app-bundle)
 - [R8 Optimization](https://developer.android.com/studio/build/r8)
 
 ## Related Questions

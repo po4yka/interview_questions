@@ -27,11 +27,11 @@ tags: [android, android/activity, android/ui-compose, android/ui-views, difficul
 
 ## Ответ (RU)
 
-Чтобы отобразить UI на экране в Android, необходимо: **(1)** создать Activity как точку входа, **(2)** установить content view с помощью XML layout или [[c-jetpack-compose|Compose]], **(3)** объявить Activity в AndroidManifest.xml как `LAUNCHER`. При запуске система вызывает `onCreate()` и UI прикрепляется к экрану.
+Чтобы отобразить UI на экране в Android, необходимо: **(1)** создать `Activity` как точку входа, **(2)** установить content view с помощью XML layout или [[c-jetpack-compose|Compose]], **(3)** объявить `Activity` в AndroidManifest.xml как `LAUNCHER`. При запуске система вызывает `onCreate()` и UI прикрепляется к экрану.
 
 ### Минимальные Шаги
 
-1. **Создать Activity**
+1. **Создать `Activity`**
 2. **Установить content view** (XML, Compose или программно)
 3. **Зарегистрировать в AndroidManifest.xml**
 
@@ -95,7 +95,7 @@ class MainActivity : ComponentActivity() {
 ```
 
 **Ключевые моменты:**
-- **LAUNCHER** intent filter делает Activity стартовой точкой приложения
+- **LAUNCHER** intent filter делает `Activity` стартовой точкой приложения
 - `android:exported="true"` обязателен для компонентов с intent-filter
 - `setContentView()` или `setContent {}` вызываются **один раз** в `onCreate()`
 
@@ -103,12 +103,12 @@ class MainActivity : ComponentActivity() {
 
 ## Answer (EN)
 
-To display UI on screen in Android, you need: **(1)** create an Activity as entry point, **(2)** set content view with XML layout or [[c-jetpack-compose|Compose]], **(3)** declare the Activity in AndroidManifest.xml as `LAUNCHER`. When launched, the system calls `onCreate()` and UI is attached to the screen.
+To display UI on screen in Android, you need: **(1)** create an `Activity` as entry point, **(2)** set content view with XML layout or [[c-jetpack-compose|Compose]], **(3)** declare the `Activity` in AndroidManifest.xml as `LAUNCHER`. When launched, the system calls `onCreate()` and UI is attached to the screen.
 
 ### Minimum Steps
 
-1. **Create Activity**
-2. **Set content view** (XML, Compose, or programmatically)
+1. **Create `Activity`**
+2. **`Set` content view** (XML, Compose, or programmatically)
 3. **Register in AndroidManifest.xml**
 
 ### Classic Approach (XML + Views)
@@ -171,7 +171,7 @@ class MainActivity : ComponentActivity() {
 ```
 
 **Key Points:**
-- **LAUNCHER** intent filter makes Activity the app entry point
+- **LAUNCHER** intent filter makes `Activity` the app entry point
 - `android:exported="true"` is mandatory for components with intent-filter
 - `setContentView()` or `setContent {}` called **once** in `onCreate()`
 
@@ -196,9 +196,9 @@ class MainActivity : ComponentActivity() {
 - Familiarity with Kotlin or Java
 
 ### Related
-- [[q-how-to-pass-parameters-to-fragment--android--easy]] - Fragment initialization
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment vs Activity lifecycle
+- [[q-how-to-pass-parameters-to-fragment--android--easy]] - `Fragment` initialization
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Fragment` vs `Activity` lifecycle
 
 ### Advanced
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle callbacks
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle callbacks
 - [[q-how-does-activity-lifecycle-work--android--medium]] - Detailed lifecycle mechanics

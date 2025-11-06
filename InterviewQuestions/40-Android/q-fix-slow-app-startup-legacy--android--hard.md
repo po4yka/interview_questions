@@ -54,7 +54,7 @@ tags:
 - Измерьте холодный/теплый/горячий старт с целевыми показателями <2с/<1с/<500мс
 
 **Оптимизация инициализации:**
-- Перенесите тяжелые операции из Application.onCreate() в фоновые потоки
+- Перенесите тяжелые операции из `Application`.onCreate() в фоновые потоки
 - Используйте Jetpack App Startup для отложенной инициализации компонентов
 - Примените lazy initialization через dependency injection
 
@@ -67,7 +67,7 @@ tags:
 
 > How would you approach fixing slow app startup in a legacy Android project?
 
-## Short Version
+## `Short` Version
 
 Optimize legacy Android app startup: profile bottlenecks, move heavy initialization to background, use lazy loading and Baseline Profiles for 15-30% performance improvement.
 
@@ -80,7 +80,7 @@ Systematically optimize slow startup in legacy Android application:
 - Measure cold/warm/hot start with targets <2s/<1s/<500ms
 
 **Initialization Optimization:**
-- Move heavy operations from Application.onCreate() to background threads
+- Move heavy operations from `Application`.onCreate() to background threads
 - Use Jetpack App Startup for deferred component initialization
 - Apply lazy initialization through dependency injection
 
@@ -103,7 +103,7 @@ Systematically optimize slow startup in legacy Android application:
 - **Горячий старт** — приложение уже активно, перезапуск из background
 
 **Критические факторы производительности:**
-- **Application.onCreate()** — блокирует UI-поток, должен содержать только критические инициализации
+- **`Application`.onCreate()** — блокирует UI-поток, должен содержать только критические инициализации
 - **Lazy initialization** — отложенная загрузка компонентов при первом обращении
 - **Baseline Profiles** — AOT-компиляция критических путей для 15-30% улучшения производительности
 - **App Startup library** — управление порядком инициализации компонентов с зависимостями
@@ -129,7 +129,7 @@ fun startupBenchmark() = benchmarkRule.measureRepeated(
 
 Анализируйте метрики: холодный старт (cold), теплый (warm), горячий (hot). Целевые значения для production: холодный старт < 2 сек, теплый < 1 сек.
 
-**2. Оптимизация Application.onCreate()**
+**2. Оптимизация `Application`.onCreate()**
 
 Критично: только crash reporting и критические системы инициализируются синхронно.
 
@@ -178,9 +178,9 @@ object AppModule {
 }
 ```
 
-**4. Оптимизация Activity startup**
+**4. Оптимизация `Activity` startup**
 
-Перенесите тяжелую работу в ViewModel + coroutines:
+Перенесите тяжелую работу в `ViewModel` + coroutines:
 
 ```kotlin
 // ❌ Плохо: блокирует onCreate
@@ -240,7 +240,7 @@ HSPLcom/example/app/MainActivity;->onCreate(Landroid/os/Bundle;)V
 - **Hot start** — app already active, restart from background
 
 **Critical performance factors:**
-- **Application.onCreate()** — blocks UI thread, should contain only critical initializations
+- **`Application`.onCreate()** — blocks UI thread, should contain only critical initializations
 - **Lazy initialization** — deferred loading of components on first access
 - **Baseline Profiles** — AOT compilation of critical paths for 15-30% performance improvement
 - **App Startup library** — managing component initialization order with dependencies
@@ -266,7 +266,7 @@ fun startupBenchmark() = benchmarkRule.measureRepeated(
 
 Analyze metrics: cold start, warm start, hot start. Production targets: cold start < 2s, warm < 1s.
 
-**2. Optimize Application.onCreate()**
+**2. Optimize `Application`.onCreate()**
 
 Critical: only crash reporting and essential systems initialize synchronously.
 
@@ -315,9 +315,9 @@ object AppModule {
 }
 ```
 
-**4. Optimize Activity Startup**
+**4. Optimize `Activity` Startup**
 
-Move heavy work to ViewModel + coroutines:
+Move heavy work to `ViewModel` + coroutines:
 
 ```kotlin
 // ❌ Bad: blocks onCreate
@@ -373,7 +373,7 @@ Effect: 15-30% cold start improvement through pre-compilation.
 - What trade-offs exist between App Startup library and manual initialization?
 - How do you measure startup performance in CI/CD pipeline?
 - What's the impact of ProGuard/R8 optimization on startup time?
-- How would you prioritize initialization for 20+ SDKs in Application.onCreate()?
+- How would you prioritize initialization for 20+ SDKs in `Application`.onCreate()?
 
 ## References
 

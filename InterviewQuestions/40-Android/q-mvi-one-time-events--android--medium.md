@@ -29,7 +29,7 @@ tags: [android/architecture-mvi, architecture, difficulty/medium, events, mvi]
 
 ## Ответ (RU)
 
-В MVI State должен быть immutable и содержать только постоянные UI данные. Одноразовые события (navigation, toasts, snackbars) обрабатываются отдельно через **SharedFlow** с `replay = 0` или **Channel**.
+В MVI State должен быть immutable и содержать только постоянные UI данные. Одноразовые события (navigation, toasts, snackbars) обрабатываются отдельно через **`SharedFlow`** с `replay = 0` или **Channel**.
 
 **Проблема**: хранение событий в State приводит к их повторному срабатыванию при пересоздании экрана.
 
@@ -41,7 +41,7 @@ data class UiState(
 )
 ```
 
-**Решение 1: SharedFlow (рекомендуется для Compose)**
+**Решение 1: `SharedFlow` (рекомендуется для Compose)**
 
 ```kotlin
 sealed class UiEvent {
@@ -138,7 +138,7 @@ class UserViewModel : ViewModel() {
 
 | Подход | Плюсы | Минусы | Use Case |
 |--------|-------|--------|----------|
-| **SharedFlow** | Множественные подписчики, контроль replay | Чуть сложнее API | Compose, современные проекты |
+| **`SharedFlow`** | Множественные подписчики, контроль replay | Чуть сложнее API | Compose, современные проекты |
 | **Channel** | Простой API, FIFO гарантия | Только один подписчик | Простые случаи |
 
 **Best Practices**:
@@ -165,7 +165,7 @@ fun `loadUsers failure emits error event`() = runTest {
 
 ## Answer (EN)
 
-In MVI, State should be immutable and contain only persistent UI data. One-time events (navigation, toasts, snackbars) are handled separately via **SharedFlow** with `replay = 0` or **Channel**.
+In MVI, State should be immutable and contain only persistent UI data. One-time events (navigation, toasts, snackbars) are handled separately via **`SharedFlow`** with `replay = 0` or **Channel**.
 
 **Problem**: storing events in State causes them to re-trigger on screen recreation.
 
@@ -177,7 +177,7 @@ data class UiState(
 )
 ```
 
-**Solution 1: SharedFlow (recommended for Compose)**
+**Solution 1: `SharedFlow` (recommended for Compose)**
 
 ```kotlin
 sealed class UiEvent {
@@ -274,7 +274,7 @@ class UserViewModel : ViewModel() {
 
 | Approach | Pros | Cons | Use Case |
 |----------|------|------|----------|
-| **SharedFlow** | Multiple subscribers, replay control | Slightly complex API | Compose, modern projects |
+| **`SharedFlow`** | Multiple subscribers, replay control | Slightly complex API | Compose, modern projects |
 | **Channel** | Simple API, FIFO guarantee | Single subscriber only | Simple cases |
 
 **Best Practices**:
@@ -305,26 +305,26 @@ fun `loadUsers failure emits error event`() = runTest {
 
 - How to handle events when multiple subscribers are needed?
 - What happens to events emitted before UI subscribes?
-- How to test SharedFlow vs Channel in ViewModels?
-- When to use `extraBufferCapacity` in SharedFlow?
+- How to test `SharedFlow` vs Channel in ViewModels?
+- When to use `extraBufferCapacity` in `SharedFlow`?
 - How to prevent event loss during configuration changes?
 
 ## References
 
-- [[c-viewmodel]] - ViewModel fundamentals
-- [[c-lifecycle]] - Android Lifecycle
+- [[c-viewmodel]] - `ViewModel` fundamentals
+- [[c-lifecycle]] - Android `Lifecycle`
 
 ## Related Questions
 
 ### Prerequisites
 
-- [[q-what-is-viewmodel--android--medium]] - ViewModel basics
-- [[q-channel-flow-comparison--kotlin--medium]] - Channel vs Flow comparison
+- [[q-what-is-viewmodel--android--medium]] - `ViewModel` basics
+- [[q-channel-flow-comparison--kotlin--medium]] - Channel vs `Flow` comparison
 
 ### Related
 
 - [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
-- [[q-stateflow-flow-sharedflow-livedata--android--medium]] - StateFlow vs SharedFlow vs LiveData
+- [[q-stateflow-flow-sharedflow-livedata--android--medium]] - `StateFlow` vs `SharedFlow` vs `LiveData`
 
 ### Advanced
 

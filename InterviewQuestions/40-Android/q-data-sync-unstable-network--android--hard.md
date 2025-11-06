@@ -52,7 +52,7 @@ sources:
 
 ### Реализация
 
-**1. Offline-First Repository:**
+**1. Offline-First `Repository`:**
 ```kotlin
 class DataRepository @Inject constructor(
     private val localDb: LocalDataSource,
@@ -175,7 +175,7 @@ Handling data synchronization on unstable networks requires `offline-first` arch
 
 ### Implementation
 
-**1. Offline-First Repository:**
+**1. Offline-First `Repository`:**
 ```kotlin
 class DataRepository @Inject constructor(
     private val localDb: LocalDataSource,

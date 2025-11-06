@@ -136,7 +136,7 @@ MVP (basic playback + simple upload) → Prefetch/cache → ABR/LL‑HLS → The
 
 ### Tradeoffs
 
-Short segments improve start but add overhead; use HTTP/2 and tuned prefetch to compensate. HEVC saves bandwidth but risks compatibility—flag‑guard.
+`Short` segments improve start but add overhead; use HTTP/2 and tuned prefetch to compensate. HEVC saves bandwidth but risks compatibility—flag‑guard.
 
 ---
 

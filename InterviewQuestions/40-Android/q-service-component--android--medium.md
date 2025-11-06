@@ -42,9 +42,9 @@ tags:
 ---
 
 # Question (EN)
-> What's Service?
+> What's `Service`?
 # Вопрос (RU)
-> Что такое Service?
+> Что такое `Service`?
 
 ---
 
@@ -64,7 +64,7 @@ These are the three different types of services: Foreground, Background, Bound.
 - **Bound**: A service is bound when an application component binds to it by calling `bindService()`. A bound service offers a client-server interface that allows components to interact with the service, send requests, receive results, and even do so across processes with interprocess communication (IPC). A bound service runs only as long as another application component is bound to it. Multiple components can bind to the service at once, but when all of them unbind, the service is destroyed
 - **Foreground**: A foreground service performs some operation that is noticeable to the user. For example, an audio app would use a foreground service to play an audio track. Foreground services must display a Notification. Foreground services continue running even when the user isn't interacting with the app
 
-### Declaring a Service
+### Declaring a `Service`
 
 You must declare all services in your application's manifest file, just as you do for activities and other components.
 
@@ -97,13 +97,13 @@ The Android system stops a service only when memory is low and it must recover s
 
 ### onStartCommand() Return Values
 
-`onStartCommand()` requires we return an Integer as result. This integer represents how the Service should be handled by the OS:
+`onStartCommand()` requires we return an Integer as result. This integer represents how the `Service` should be handled by the OS:
 
 - **START_NOT_STICKY** - If the system kills the service after `onStartCommand()` returns, do not recreate the service unless there are pending intents to deliver. This is the safest option to avoid running your service when not necessary and when your application can simply restart any unfinished jobs
 - **START_STICKY** - If the system kills the service after `onStartCommand()` returns, recreate the service and call `onStartCommand()`, but do not redeliver the last intent. Instead, the system calls `onStartCommand()` with a null intent unless there are pending intents to start the service. In that case, those intents are delivered. This is suitable for media players (or similar services) that are not executing commands but are running indefinitely and waiting for a job
 - **START_REDELIVER_INTENT** - If the system kills the service after `onStartCommand()` returns, recreate the service and call `onStartCommand()` with the last intent that was delivered to the service. Any pending intents are delivered in turn. This is suitable for services that are actively performing a job that should be immediately resumed, such as downloading a file
 
-### Service Lifecycle
+### `Service` `Lifecycle`
 
 The lifecycle of a service is much simpler than that of an activity. However, it's even more important that you pay close attention to how your service is created and destroyed because a service can run in the background without the user being aware.
 
@@ -113,13 +113,13 @@ The service lifecycle—from when it's created to when it's destroyed—can foll
 
 - **A bound service**: The service is created when another component (a client) calls `bindService()`. The client then communicates with the service through an `IBinder` interface. The client can close the connection by calling `unbindService()`. Multiple clients can bind to the same service and when all of them unbind, the system destroys the service. The service does not need to stop itself
 
-These two paths aren't entirely separate. You can bind to a service that is already started with `startService()`. For example, you can start a background music service by calling `startService()` with an Intent that identifies the music to play. Later, possibly when the user wants to exercise some control over the player or get information about the current song, an activity can bind to the service by calling `bindService()`. In cases such as this, `stopService()` or `stopSelf()` doesn't actually stop the service until all of the clients unbind.
+These two paths aren't entirely separate. You can bind to a service that is already started with `startService()`. For example, you can start a background music service by calling `startService()` with an `Intent` that identifies the music to play. Later, possibly when the user wants to exercise some control over the player or get information about the current song, an activity can bind to the service by calling `bindService()`. In cases such as this, `stopService()` or `stopSelf()` doesn't actually stop the service until all of the clients unbind.
 
 
 # Question (EN)
-> What's Service?
+> What's `Service`?
 # Вопрос (RU)
-> Что такое Service?
+> Что такое `Service`?
 
 ---
 
@@ -143,7 +143,7 @@ These are the three different types of services: Foreground, Background, Bound.
 - **Bound**: A service is bound when an application component binds to it by calling `bindService()`. A bound service offers a client-server interface that allows components to interact with the service, send requests, receive results, and even do so across processes with interprocess communication (IPC). A bound service runs only as long as another application component is bound to it. Multiple components can bind to the service at once, but when all of them unbind, the service is destroyed
 - **Foreground**: A foreground service performs some operation that is noticeable to the user. For example, an audio app would use a foreground service to play an audio track. Foreground services must display a Notification. Foreground services continue running even when the user isn't interacting with the app
 
-### Declaring a Service
+### Declaring a `Service`
 
 You must declare all services in your application's manifest file, just as you do for activities and other components.
 
@@ -176,13 +176,13 @@ The Android system stops a service only when memory is low and it must recover s
 
 ### onStartCommand() Return Values
 
-`onStartCommand()` requires we return an Integer as result. This integer represents how the Service should be handled by the OS:
+`onStartCommand()` requires we return an Integer as result. This integer represents how the `Service` should be handled by the OS:
 
 - **START_NOT_STICKY** - If the system kills the service after `onStartCommand()` returns, do not recreate the service unless there are pending intents to deliver. This is the safest option to avoid running your service when not necessary and when your application can simply restart any unfinished jobs
 - **START_STICKY** - If the system kills the service after `onStartCommand()` returns, recreate the service and call `onStartCommand()`, but do not redeliver the last intent. Instead, the system calls `onStartCommand()` with a null intent unless there are pending intents to start the service. In that case, those intents are delivered. This is suitable for media players (or similar services) that are not executing commands but are running indefinitely and waiting for a job
 - **START_REDELIVER_INTENT** - If the system kills the service after `onStartCommand()` returns, recreate the service and call `onStartCommand()` with the last intent that was delivered to the service. Any pending intents are delivered in turn. This is suitable for services that are actively performing a job that should be immediately resumed, such as downloading a file
 
-### Service Lifecycle
+### `Service` `Lifecycle`
 
 The lifecycle of a service is much simpler than that of an activity. However, it's even more important that you pay close attention to how your service is created and destroyed because a service can run in the background without the user being aware.
 
@@ -192,7 +192,7 @@ The service lifecycle—from when it's created to when it's destroyed—can foll
 
 - **A bound service**: The service is created when another component (a client) calls `bindService()`. The client then communicates with the service through an `IBinder` interface. The client can close the connection by calling `unbindService()`. Multiple clients can bind to the same service and when all of them unbind, the system destroys the service. The service does not need to stop itself
 
-These two paths aren't entirely separate. You can bind to a service that is already started with `startService()`. For example, you can start a background music service by calling `startService()` with an Intent that identifies the music to play. Later, possibly when the user wants to exercise some control over the player or get information about the current song, an activity can bind to the service by calling `bindService()`. In cases such as this, `stopService()` or `stopSelf()` doesn't actually stop the service until all of the clients unbind.
+These two paths aren't entirely separate. You can bind to a service that is already started with `startService()`. For example, you can start a background music service by calling `startService()` with an `Intent` that identifies the music to play. Later, possibly when the user wants to exercise some control over the player or get information about the current song, an activity can bind to the service by calling `bindService()`. In cases such as this, `stopService()` or `stopSelf()` doesn't actually stop the service until all of the clients unbind.
 
 ## Ответ (RU)
 
@@ -265,8 +265,8 @@ These two paths aren't entirely separate. You can bind to a service that is alre
 
 ## References
 - [Services overview](https://developer.android.com/guide/components/services)
-- [Android Service Tutorial](https://www.vogella.com/tutorials/AndroidServices/article.html)
-- [Android Service Tutorial](https://www.survivingwithandroid.com/android-service-tutorial-2/)
+- [Android `Service` Tutorial](https://www.vogella.com/tutorials/AndroidServices/article.html)
+- [Android `Service` Tutorial](https://www.survivingwithandroid.com/android-service-tutorial-2/)
 
 
 ## Follow-ups

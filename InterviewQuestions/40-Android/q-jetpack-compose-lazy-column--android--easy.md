@@ -19,11 +19,11 @@ tags: [android/ui-compose, android/ui-widgets, difficulty/easy, jetpack-compose,
 
 # Вопрос (RU)
 
-Как в Jetpack Compose создать список, аналогичный RecyclerView?
+Как в Jetpack Compose создать список, аналогичный `RecyclerView`?
 
 # Question (EN)
 
-How to create a RecyclerView-like list in Jetpack Compose?
+How to create a `RecyclerView`-like list in Jetpack Compose?
 
 ---
 
@@ -34,7 +34,7 @@ How to create a RecyclerView-like list in Jetpack Compose?
 ### Основные Характеристики
 
 LazyColumn создает элементы по требованию (lazy) — только видимые на экране:
-- Аналог RecyclerView с автоматическим переиспользованием
+- Аналог `RecyclerView` с автоматическим переиспользованием
 - Не требует настройки Adapter и ViewHolder
 - Поддерживает разные типы элементов в одном списке
 
@@ -75,9 +75,9 @@ LazyColumn {
 }
 ```
 
-### Ключевые Различия С RecyclerView
+### Ключевые Различия С `RecyclerView`
 
-| RecyclerView | LazyColumn |
+| `RecyclerView` | LazyColumn |
 |--------------|------------|
 | Adapter + ViewHolder | Composable-функции напрямую |
 | notifyDataSetChanged() | Автоматическая реакция на State |
@@ -95,7 +95,7 @@ Use **LazyColumn** or **LazyRow** for vertical and horizontal lists respectively
 ### Core Characteristics
 
 LazyColumn creates items on demand (lazy) — only those visible on screen:
-- RecyclerView equivalent with automatic recycling
+- `RecyclerView` equivalent with automatic recycling
 - No need for Adapter or ViewHolder setup
 - Supports different item types in one list
 
@@ -136,9 +136,9 @@ LazyColumn {
 }
 ```
 
-### Key Differences from RecyclerView
+### Key Differences from `RecyclerView`
 
-| RecyclerView | LazyColumn |
+| `RecyclerView` | LazyColumn |
 |--------------|------------|
 | Adapter + ViewHolder | Composable functions directly |
 | notifyDataSetChanged() | Automatic State reaction |
@@ -162,13 +162,13 @@ LazyColumn {
 ## References
 
 - [[c-jetpack-compose]] - Jetpack Compose fundamentals
-- [[c-recyclerview]] - RecyclerView concept for comparison
+- [[c-recyclerview]] - `RecyclerView` concept for comparison
 - [Compose Lists Documentation](https://developer.android.com/jetpack/compose/lists)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-known-about-recyclerview--android--easy]] - RecyclerView basics
+- [[q-what-is-known-about-recyclerview--android--easy]] - `RecyclerView` basics
 
 ### Related (Same Level)
 - [[q-which-layout-for-large-list--android--easy]] - When to use different list layouts

@@ -30,23 +30,23 @@ sources:
 
 # Вопрос (RU)
 
-> Как работает навигация между Activity в Android?
+> Как работает навигация между `Activity` в Android?
 
 ---
 
 # Question (EN)
 
-> How does Activity navigation work in Android?
+> How does `Activity` navigation work in Android?
 
 ---
 
 ## Ответ (RU)
 
-Навигация между Activity управляется через **Intent** (намерение), **back stack** (стек возврата) и **Task** (задача). Система использует стек LIFO для управления жизненным циклом Activity.
+Навигация между `Activity` управляется через **`Intent`** (намерение), **back stack** (стек возврата) и **Task** (задача). Система использует стек LIFO для управления жизненным циклом `Activity`.
 
 **Ключевые компоненты:**
 
-### 1. Intent — Механизм Запуска Activity
+### 1. `Intent` — Механизм Запуска `Activity`
 
 ```kotlin
 // ✅ Explicit Intent — указываем конкретный класс
@@ -59,7 +59,7 @@ val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com"))
 startActivity(intent)
 ```
 
-### 2. Back Stack — LIFO Стек Activity
+### 2. Back `Stack` — LIFO Стек `Activity`
 
 ```text
 Навигация: HomeActivity → ListActivity → DetailActivity
@@ -82,7 +82,7 @@ Back Stack:
 DetailActivity уничтожена (onDestroy)
 ```
 
-### 3. Управление Стеком Через Intent Flags
+### 3. Управление Стеком Через `Intent` Flags
 
 ```kotlin
 // ✅ Очистить все Activity выше целевой
@@ -110,7 +110,7 @@ B → A (кнопка Back):
   A: onRestart() → onStart() → onResume()
 ```
 
-### 5. Возврат Результата Из Activity
+### 5. Возврат Результата Из `Activity`
 
 ```kotlin
 // ✅ Activity B возвращает результат в A
@@ -146,11 +146,11 @@ findNavController().navigate(R.id.action_home_to_detail, bundle)
 
 ## Answer (EN)
 
-Activity navigation is managed via **Intent**, **back stack**, and **Task**. The system uses a LIFO stack to manage Activity lifecycle.
+`Activity` navigation is managed via **`Intent`**, **back stack**, and **Task**. The system uses a LIFO stack to manage `Activity` lifecycle.
 
 **Core components:**
 
-### 1. Intent — Activity Launch Mechanism
+### 1. `Intent` — `Activity` Launch Mechanism
 
 ```kotlin
 // ✅ Explicit Intent — specify target class
@@ -163,7 +163,7 @@ val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://google.com"))
 startActivity(intent)
 ```
 
-### 2. Back Stack — LIFO Stack of Activities
+### 2. Back `Stack` — LIFO `Stack` of Activities
 
 ```text
 Navigation: HomeActivity → ListActivity → DetailActivity
@@ -186,7 +186,7 @@ After Back:
 DetailActivity destroyed (onDestroy)
 ```
 
-### 3. Stack Management via Intent Flags
+### 3. `Stack` Management via `Intent` Flags
 
 ```kotlin
 // ✅ Clear all Activities above target
@@ -202,7 +202,7 @@ intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
 // Used for logout: clears entire stack and opens LoginActivity
 ```
 
-### 4. Lifecycle During Navigation
+### 4. `Lifecycle` During Navigation
 
 ```text
 A → B (opening new Activity):
@@ -214,7 +214,7 @@ B → A (Back button):
   A: onRestart() → onStart() → onResume()
 ```
 
-### 5. Returning Result from Activity
+### 5. Returning Result from `Activity`
 
 ```kotlin
 // ✅ Activity B returns result to A
@@ -250,15 +250,15 @@ findNavController().navigate(R.id.action_home_to_detail, bundle)
 
 ## Follow-ups
 
-- Что происходит со стеком Activity при повороте экрана?
+- Что происходит со стеком `Activity` при повороте экрана?
 - В чём разница между launch modes: standard, singleTop, singleTask, singleInstance?
 - Как обрабатывать deep links и навигацию из push-уведомлений?
-- Почему Navigation Component рекомендуется вместо прямой навигации Activity?
-- Как восстановить стек Activity после убийства процесса системой?
+- Почему Navigation Component рекомендуется вместо прямой навигации `Activity`?
+- Как восстановить стек `Activity` после убийства процесса системой?
 
 ## References
 
-- [[c-activity-lifecycle]] — жизненный цикл Activity
+- [[c-activity-lifecycle]] — жизненный цикл `Activity`
 - https://developer.android.com/guide/components/activities/tasks-and-back-stack
 - [Navigation](https://developer.android.com/guide/navigation)
 - https://developer.android.com/guide/components/intents-filters
@@ -267,8 +267,8 @@ findNavController().navigate(R.id.action_home_to_detail, bundle)
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-intent--android--easy]] — основы Intent в Android
-- [[q-activity-lifecycle-methods--android--medium]] — методы жизненного цикла Activity
+- [[q-what-is-intent--android--easy]] — основы `Intent` в Android
+- [[q-activity-lifecycle-methods--android--medium]] — методы жизненного цикла `Activity`
 
 ### Related (Same Level)
-- [[q-intent-filters-android--android--medium]] — Intent filters для implicit навигации
+- [[q-intent-filters-android--android--medium]] — `Intent` filters для implicit навигации

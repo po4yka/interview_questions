@@ -53,7 +53,7 @@ Jetpack Compose использует **трёхфазный асинхронны
 
 1. **Composition (Композиция)** — построение дерева UI из composable функций
 2. **Layout (Размещение)** — измерение и позиционирование элементов
-3. **Drawing (Рисование)** — рендеринг на Canvas через GPU
+3. **Drawing (Рисование)** — рендеринг на `Canvas` через GPU
 
 ### Фаза 1: Composition
 
@@ -106,7 +106,7 @@ Layout(content = content, modifier = modifier) { measurables, constraints ->
 
 ### Фаза 3: Drawing
 
-**Рисование на Skia Canvas:**
+**Рисование на Skia `Canvas`:**
 - Использует `DrawScope` для операций рисования
 - GPU-ускорение через hardware layers
 - `graphicsLayer` создаёт отдельный hardware layer для трансформаций
@@ -193,7 +193,7 @@ Jetpack Compose uses a **three-phase asynchronous rendering** pipeline where eac
 
 1. **Composition** — builds UI tree from composable functions
 2. **Layout** — measures and positions elements
-3. **Drawing** — renders to Canvas via GPU
+3. **Drawing** — renders to `Canvas` via GPU
 
 ### Phase 1: Composition
 
@@ -246,7 +246,7 @@ Layout(content = content, modifier = modifier) { measurables, constraints ->
 
 ### Phase 3: Drawing
 
-**Rendering to Skia Canvas:**
+**Rendering to Skia `Canvas`:**
 - Uses `DrawScope` for drawing operations
 - GPU acceleration via hardware layers
 - `graphicsLayer` creates separate hardware layer for transformations

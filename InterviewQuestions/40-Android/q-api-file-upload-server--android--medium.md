@@ -167,7 +167,7 @@ suspend fun compressImage(uri: Uri, quality: Int = 80): File = withContext(Dispa
 }
 ```
 
-### 5. Полный Пример ViewModel
+### 5. Полный Пример `ViewModel`
 
 ```kotlin
 class FileUploadViewModel @Inject constructor(
@@ -208,7 +208,7 @@ sealed class UploadState {
 | **Сжатие** | JPEG 80% для фото | Оптимальный баланс качества и размера |
 | **Retry** | 3 попытки с exponential backoff | Учитывает временные сетевые проблемы |
 | **Размер** | < 10MB для мобильных сетей | Избегаем таймаутов и лимитов оператора |
-| **Фоновая загрузка** | WorkManager вместо Service | Гарантированная доставка, экономия батареи |
+| **Фоновая загрузка** | WorkManager вместо `Service` | Гарантированная доставка, экономия батареи |
 | **Разрешения** | READ_MEDIA_IMAGES для Android 13+ | Granular media permissions |
 
 ## Answer (EN)
@@ -342,7 +342,7 @@ suspend fun compressImage(uri: Uri, quality: Int = 80): File = withContext(Dispa
 }
 ```
 
-### 5. Complete ViewModel Example
+### 5. Complete `ViewModel` Example
 
 ```kotlin
 class FileUploadViewModel @Inject constructor(
@@ -383,7 +383,7 @@ sealed class UploadState {
 | **Compression** | JPEG 80% for photos | Optimal quality-size balance |
 | **Retry** | 3 attempts with exponential backoff | Handles temporary network issues |
 | **Size** | < 10MB for mobile networks | Avoids timeouts and carrier limits |
-| **Background upload** | WorkManager instead of Service | Guaranteed delivery, battery efficient |
+| **Background upload** | WorkManager instead of `Service` | Guaranteed delivery, battery efficient |
 | **Permissions** | READ_MEDIA_IMAGES for Android 13+ | Granular media permissions |
 
 ---

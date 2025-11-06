@@ -44,8 +44,8 @@ Creating chat lists from a UI perspective requires considering multiple aspects 
 
 1. **Define data models**
 2. **Create layouts for list items**
-3. **Create adapter for RecyclerView**
-4. **Configure RecyclerView and data management**
+3. **Create adapter for `RecyclerView`**
+4. **Configure `RecyclerView` and data management**
 5. **Optimize performance**
 
 ### 1. Define Data Models
@@ -235,7 +235,7 @@ enum class MessageStatus {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-#### Message Item Layouts
+#### `Message` Item Layouts
 
 ```xml
 <!-- item_message_sent.xml -->
@@ -397,7 +397,7 @@ class ChatRoomAdapter(
 }
 ```
 
-### 4. Configure RecyclerView
+### 4. Configure `RecyclerView`
 
 ```kotlin
 class ChatListFragment : Fragment() {
@@ -484,7 +484,7 @@ class ChatListViewModel : ViewModel() {
 
 ### Best Practices
 
-1. **Use RecyclerView** with adapter for efficient scrolling
+1. **Use `RecyclerView`** with adapter for efficient scrolling
 2. **Optimize images** with Glide or Coil
 3. **Use DiffUtil** for smart list updates
 4. **Implement pagination** for large chat lists
@@ -510,8 +510,8 @@ Creating chat lists from a UI perspective requires considering multiple aspects 
 
 1. **Define data models**
 2. **Create layouts for list items**
-3. **Create adapter for RecyclerView**
-4. **Configure RecyclerView and data management**
+3. **Create adapter for `RecyclerView`**
+4. **Configure `RecyclerView` and data management**
 5. **Optimize performance**
 
 ### 1. Define Data Models
@@ -701,7 +701,7 @@ enum class MessageStatus {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-#### Message Item Layouts
+#### `Message` Item Layouts
 
 ```xml
 <!-- item_message_sent.xml -->
@@ -863,7 +863,7 @@ class ChatRoomAdapter(
 }
 ```
 
-### 4. Configure RecyclerView
+### 4. Configure `RecyclerView`
 
 ```kotlin
 class ChatListFragment : Fragment() {
@@ -950,7 +950,7 @@ class ChatListViewModel : ViewModel() {
 
 ### Best Practices
 
-1. **Use RecyclerView** with adapter for efficient scrolling
+1. **Use `RecyclerView`** with adapter for efficient scrolling
 2. **Optimize images** with Glide or Coil
 3. **Use DiffUtil** for smart list updates
 4. **Implement pagination** for large chat lists
@@ -960,7 +960,7 @@ class ChatListViewModel : ViewModel() {
 8. **Implement swipe actions** for delete/archive
 
 ## Ответ (RU)
-Создание списков чатов с точки зрения UI требует учёта множества аспектов, чтобы обеспечить удобство использования, хорошую производительность и красивый внешний вид. Основные шаги: определение данных, создание макетов для элементов списка, создание адаптера для RecyclerView, настройка RecyclerView и управление данными, оптимизация производительности. Для чата можно определить два типа элементов: чат-комнаты и сообщения. Важно использовать RecyclerView с адаптером для отображения элементов списка и оптимизировать производительность с помощью DiffUtil и пагинации.
+Создание списков чатов с точки зрения UI требует учёта множества аспектов, чтобы обеспечить удобство использования, хорошую производительность и красивый внешний вид. Основные шаги: определение данных, создание макетов для элементов списка, создание адаптера для `RecyclerView`, настройка `RecyclerView` и управление данными, оптимизация производительности. Для чата можно определить два типа элементов: чат-комнаты и сообщения. Важно использовать `RecyclerView` с адаптером для отображения элементов списка и оптимизировать производительность с помощью DiffUtil и пагинации.
 
 
 ---

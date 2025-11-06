@@ -40,7 +40,7 @@ tags:
 
 # Вопрос (RU)
 
-> Как на экране одновременно отобразить два одинаковых Fragment?
+> Как на экране одновременно отобразить два одинаковых `Fragment`?
 
 # Question (EN)
 
@@ -50,11 +50,11 @@ tags:
 
 ## Ответ (RU)
 
-Добавьте два экземпляра одного класса Fragment в разные контейнеры макета Activity. Каждый экземпляр работает независимо с собственным состоянием.
+Добавьте два экземпляра одного класса `Fragment` в разные контейнеры макета `Activity`. Каждый экземпляр работает независимо с собственным состоянием.
 
 ### Основной Подход
 
-**1. Макет Activity с двумя контейнерами**
+**1. Макет `Activity` с двумя контейнерами**
 
 ```xml
 <LinearLayout
@@ -76,7 +76,7 @@ tags:
 </LinearLayout>
 ```
 
-**2. Fragment с factory-методом**
+**2. `Fragment` с factory-методом**
 
 ```kotlin
 class CounterFragment : Fragment() {
@@ -108,7 +108,7 @@ class CounterFragment : Fragment() {
 }
 ```
 
-**3. Добавление в Activity**
+**3. Добавление в `Activity`**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -131,8 +131,8 @@ class MainActivity : AppCompatActivity() {
 ### Ключевые Принципы
 
 ✅ **Используйте уникальные теги** - для идентификации экземпляров
-✅ **Проверяйте savedInstanceState** - чтобы не создавать дубликаты при пересоздании Activity
-✅ **Сохраняйте состояние** - каждый Fragment независимо сохраняет свое состояние
+✅ **Проверяйте savedInstanceState** - чтобы не создавать дубликаты при пересоздании `Activity`
+✅ **Сохраняйте состояние** - каждый `Fragment` независимо сохраняет свое состояние
 ✅ **Factory-метод newInstance()** - стандартный паттерн для передачи аргументов
 
 ❌ Не создавайте фрагменты повторно при каждом onCreate()
@@ -142,11 +142,11 @@ class MainActivity : AppCompatActivity() {
 
 ## Answer (EN)
 
-Add two instances of the same Fragment class to separate container views in the Activity layout. Each instance maintains independent state.
+Add two instances of the same `Fragment` class to separate container views in the `Activity` layout. Each instance maintains independent state.
 
 ### Basic Approach
 
-**1. Activity Layout with Two Containers**
+**1. `Activity` Layout with Two Containers**
 
 ```xml
 <LinearLayout
@@ -168,7 +168,7 @@ Add two instances of the same Fragment class to separate container views in the 
 </LinearLayout>
 ```
 
-**2. Fragment with Factory Method**
+**2. `Fragment` with Factory Method**
 
 ```kotlin
 class CounterFragment : Fragment() {
@@ -200,7 +200,7 @@ class CounterFragment : Fragment() {
 }
 ```
 
-**3. Adding to Activity**
+**3. Adding to `Activity`**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -223,8 +223,8 @@ class MainActivity : AppCompatActivity() {
 ### Key Principles
 
 ✅ **Use unique tags** - to identify fragment instances
-✅ **Check savedInstanceState** - to avoid creating duplicates on Activity recreation
-✅ **Save state independently** - each Fragment manages its own state
+✅ **Check savedInstanceState** - to avoid creating duplicates on `Activity` recreation
+✅ **Save state independently** - each `Fragment` manages its own state
 ✅ **Factory method newInstance()** - standard pattern for passing arguments
 
 ❌ Don't recreate fragments on every onCreate()
@@ -235,16 +235,16 @@ class MainActivity : AppCompatActivity() {
 ## Follow-ups
 
 - What happens if you don't check savedInstanceState before adding fragments?
-- How can fragments communicate with each other through the parent Activity?
+- How can fragments communicate with each other through the parent `Activity`?
 - What's the difference between add() and replace() for fragment transactions?
 - How do you handle configuration changes with multiple fragment instances?
-- Can you use the same Fragment instance in multiple containers?
+- Can you use the same `Fragment` instance in multiple containers?
 
 ## References
 
 - [Android Fragments Documentation](https://developer.android.com/guide/fragments)
 - [FragmentTransaction API](https://developer.android.com/reference/androidx/fragment/app/FragmentTransaction)
-- [Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
+- [`Fragment` `Lifecycle`](https://developer.android.com/guide/fragments/lifecycle)
 - [Best Practices for Fragments](https://developer.android.com/guide/fragments/best-practices)
 
 ## Related Questions
@@ -256,14 +256,14 @@ class MainActivity : AppCompatActivity() {
 
 
 ### Prerequisites (Easier)
-- [[q-fragment-basics--android--easy]] - Fragment basics
-- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment layouts
+- [[q-fragment-basics--android--easy]] - `Fragment` basics
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - `Fragment` layouts
 
 ### Related (Same Level)
-- [[q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy]] - View lifecycle
+- [[q-how-to-implement-view-behavior-when-it-is-added-to-the-tree--android--easy]] - `View` lifecycle
 - [[q-which-class-to-catch-gestures--android--easy]] - Touch handling
 
 ### Advanced (Harder)
-- [[q-save-data-outside-fragment--android--medium]] - Fragment data persistence
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Fragment use cases
-- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Fragment vs Activity
+- [[q-save-data-outside-fragment--android--medium]] - `Fragment` data persistence
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - `Fragment` use cases
+- [[q-why-use-fragments-when-we-have-activities--android--medium]] - `Fragment` vs `Activity`

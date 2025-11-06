@@ -42,7 +42,7 @@ tags: [android/performance-memory, android/profiling, android/testing-benchmark,
 **1. Profiling в реальном времени**
 - **Android Profiler** (Android Studio): CPU, память, сеть, энергопотребление в режиме реального времени
 - **GPU Rendering**: визуализация времени отрисовки кадров (цель: 16ms для 60fps)
-- **Layout Inspector**: анализ иерархии View и композиции
+- **Layout Inspector**: анализ иерархии `View` и композиции
 
 **2. Автоматизированные бенчмарки**
 
@@ -137,7 +137,7 @@ val trimmedMean = times.sorted()
 **1. Real-time Profiling**
 - **Android Profiler** (Android Studio): CPU, memory, network, energy consumption in real-time
 - **GPU Rendering**: frame timing visualization (target: 16ms for 60fps)
-- **Layout Inspector**: View hierarchy and composition analysis
+- **Layout Inspector**: `View` hierarchy and composition analysis
 
 **2. Automated Benchmarks**
 

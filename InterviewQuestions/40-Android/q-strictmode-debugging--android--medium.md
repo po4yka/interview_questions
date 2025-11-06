@@ -108,9 +108,9 @@ StrictMode.setThreadPolicy(
 
 **Note**: The exact policies offered by `StrictMode` have evolved over Android versions.
 
-## Thread Policy
+## `Thread` Policy
 
-Thread policy detects violations that occur on the main thread:
+`Thread` policy detects violations that occur on the main thread:
 
 ### Common Detections
 
@@ -143,10 +143,10 @@ VM policy detects violations across your entire application:
 
 ### Common Detections
 
-- **detectActivityLeaks()** - Detects when Activity instances are leaked
+- **detectActivityLeaks()** - Detects when `Activity` instances are leaked
 - **detectLeakedClosableObjects()** - Detects when closeable objects (like SQLite cursors) are not closed
 - **detectLeakedSqlLiteObjects()** - Detects when SQLite objects are not closed
-- **detectLeakedRegistrationObjects()** - Detects when BroadcastReceiver or ServiceConnection instances are leaked
+- **detectLeakedRegistrationObjects()** - Detects when `BroadcastReceiver` or ServiceConnection instances are leaked
 - **detectFileUriExposure()** - Detects when file:// URIs are exposed beyond your app
 - **detectAll()** - Enables all VM policy detections
 
@@ -235,7 +235,7 @@ if (BuildConfig.DEBUG) {
 
 ## Common Violations and Fixes
 
-### 1. Network on Main Thread
+### 1. Network on Main `Thread`
 
 **Problem:**
 ```kotlin
@@ -253,7 +253,7 @@ suspend fun loadData() = withContext(Dispatchers.IO) {
 }
 ```
 
-### 2. Disk I/O on Main Thread
+### 2. Disk I/O on Main `Thread`
 
 **Problem:**
 ```kotlin
@@ -382,9 +382,9 @@ StrictMode.setThreadPolicy(
 
 **Note**: The exact policies offered by `StrictMode` have evolved over Android versions.
 
-## Thread Policy
+## `Thread` Policy
 
-Thread policy detects violations that occur on the main thread:
+`Thread` policy detects violations that occur on the main thread:
 
 ### Common Detections
 
@@ -417,10 +417,10 @@ VM policy detects violations across your entire application:
 
 ### Common Detections
 
-- **detectActivityLeaks()** - Detects when Activity instances are leaked
+- **detectActivityLeaks()** - Detects when `Activity` instances are leaked
 - **detectLeakedClosableObjects()** - Detects when closeable objects (like SQLite cursors) are not closed
 - **detectLeakedSqlLiteObjects()** - Detects when SQLite objects are not closed
-- **detectLeakedRegistrationObjects()** - Detects when BroadcastReceiver or ServiceConnection instances are leaked
+- **detectLeakedRegistrationObjects()** - Detects when `BroadcastReceiver` or ServiceConnection instances are leaked
 - **detectFileUriExposure()** - Detects when file:// URIs are exposed beyond your app
 - **detectAll()** - Enables all VM policy detections
 
@@ -509,7 +509,7 @@ if (BuildConfig.DEBUG) {
 
 ## Common Violations and Fixes
 
-### 1. Network on Main Thread
+### 1. Network on Main `Thread`
 
 **Problem:**
 ```kotlin
@@ -527,7 +527,7 @@ suspend fun loadData() = withContext(Dispatchers.IO) {
 }
 ```
 
-### 2. Disk I/O on Main Thread
+### 2. Disk I/O on Main `Thread`
 
 **Problem:**
 ```kotlin
@@ -619,9 +619,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 **Примечание**: Точные политики, предлагаемые `StrictMode`, развивались с версиями Android.
 
-## Thread Policy
+## `Thread` Policy
 
-Thread policy обнаруживает нарушения, происходящие в основном потоке:
+`Thread` policy обнаруживает нарушения, происходящие в основном потоке:
 
 ### Общие Обнаружения
 
@@ -637,10 +637,10 @@ VM policy обнаруживает нарушения во всем прилож
 
 ### Общие Обнаружения
 
-- **detectActivityLeaks()** - Обнаруживает утечки экземпляров Activity
+- **detectActivityLeaks()** - Обнаруживает утечки экземпляров `Activity`
 - **detectLeakedClosableObjects()** - Обнаруживает, когда закрываемые объекты (как курсоры SQLite) не закрыты
 - **detectLeakedSqlLiteObjects()** - Обнаруживает, когда объекты SQLite не закрыты
-- **detectLeakedRegistrationObjects()** - Обнаруживает утечки экземпляров BroadcastReceiver или ServiceConnection
+- **detectLeakedRegistrationObjects()** - Обнаруживает утечки экземпляров `BroadcastReceiver` или ServiceConnection
 - **detectFileUriExposure()** - Обнаруживает, когда file:// URI раскрываются за пределами вашего приложения
 - **detectAll()** - Включает все обнаружения VM policy
 

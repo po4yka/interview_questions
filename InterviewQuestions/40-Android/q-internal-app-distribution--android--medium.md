@@ -114,7 +114,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
 
-**In-App Feedback Collection**
+**In-App Feedback `Collection`**
 
 ```kotlin
 @Singleton
@@ -322,7 +322,7 @@ data class ComplianceResult(
 - Highlight breaking changes и known issues
 - Ссылка на detailed changelog
 
-**3. Feedback Collection**
+**3. Feedback `Collection`**
 - In-app механизм (shake to report)
 - Auto-capture screenshots и device info
 - Категоризация (bug/feature/UX)
@@ -445,7 +445,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
 ```
 
-**In-App Feedback Collection**
+**In-App Feedback `Collection`**
 
 ```kotlin
 @Singleton
@@ -653,7 +653,7 @@ data class ComplianceResult(
 - Highlight breaking changes and known issues
 - Link to detailed changelog
 
-**3. Feedback Collection**
+**3. Feedback `Collection`**
 - In-app mechanism (shake to report)
 - Auto-capture screenshots and device info
 - Categorization (bug/feature/UX)
@@ -710,7 +710,7 @@ Key components of internal distribution:
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-app-bundles--android--easy]] - App Bundle format for distribution
+- [[q-android-app-bundles--android--easy]] - App `Bundle` format for distribution
 - [[q-gradle-basics--android--easy]] - Gradle build system fundamentals
 
 ### Related (Same Level)

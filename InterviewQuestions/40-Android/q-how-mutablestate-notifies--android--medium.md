@@ -125,7 +125,7 @@ class MutableStateImpl<T>(private var _value: T) : MutableState<T> {
 }
 ```
 
-### Интеграция С ViewModel
+### Интеграция С `ViewModel`
 
 ```kotlin
 class CounterViewModel : ViewModel() {
@@ -226,7 +226,7 @@ Snapshot { count = 1 }
 
 **Benefits:**
 - **Isolation** - reads always see consistent state
-- **Thread-safety** - multiple threads can read safely
+- **`Thread`-safety** - multiple threads can read safely
 - **Rollback** - can discard changes if needed
 
 ### Granular Recomposition
@@ -279,7 +279,7 @@ class MutableStateImpl<T>(private var _value: T) : MutableState<T> {
 }
 ```
 
-### ViewModel Integration
+### `ViewModel` Integration
 
 ```kotlin
 class CounterViewModel : ViewModel() {
@@ -299,7 +299,7 @@ fun CounterScreen(viewModel: CounterViewModel = viewModel()) {
 }
 ```
 
-**Flow:**
+**`Flow`:**
 1. `viewModel.increment()` changes `_count.value`
 2. `StateFlow` emits new value
 3. `collectAsState()` receives value
@@ -307,7 +307,7 @@ fun CounterScreen(viewModel: CounterViewModel = viewModel()) {
 5. `MutableState` notifies subscribers
 6. `Text` recomposes
 
-### Subscription Lifecycle
+### Subscription `Lifecycle`
 
 ```kotlin
 @Composable

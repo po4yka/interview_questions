@@ -41,17 +41,17 @@ tags:
 
 # Вопрос (RU)
 
-> Как настроить RecyclerView для кеширования элементов вперед?
+> Как настроить `RecyclerView` для кеширования элементов вперед?
 
 # Question (EN)
 
-> How to configure RecyclerView to cache items ahead?
+> How to configure `RecyclerView` to cache items ahead?
 
 ---
 
 ## Ответ (RU)
 
-RecyclerView предоставляет несколько механизмов для кеширования элементов вперед:
+`RecyclerView` предоставляет несколько механизмов для кеширования элементов вперед:
 
 **1. setItemViewCacheSize() - Кеш представлений**
 
@@ -114,7 +114,7 @@ class CustomPrefetchLayoutManager(context: Context) : LinearLayoutManager(contex
 }
 ```
 
-**5. RecycledViewPool для вложенных RecyclerView**
+**5. RecycledViewPool для вложенных `RecyclerView`**
 
 ```kotlin
 val sharedPool = RecyclerView.RecycledViewPool().apply {
@@ -132,15 +132,15 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 **Рекомендации**:
 - setItemViewCacheSize(20-30) для гладкой прокрутки
-- initialPrefetchItemCount = 4-6 для вложенных RecyclerView
+- initialPrefetchItemCount = 4-6 для вложенных `RecyclerView`
 - OnScrollListener для пагинации с threshold = 5-10
 - RecycledViewPool для вложенных списков
 
 ## Answer (EN)
 
-RecyclerView provides several mechanisms for caching items ahead:
+`RecyclerView` provides several mechanisms for caching items ahead:
 
-**1. setItemViewCacheSize() - View Cache**
+**1. setItemViewCacheSize() - `View` Cache**
 
 ```kotlin
 recyclerView.setItemViewCacheSize(20) // Default: 2
@@ -234,8 +234,8 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 ## References
 
-- [RecyclerView Performance Best Practices](https://developer.android.com/develop/ui/views/layout/recyclerview)
-- [Understanding RecyclerView Caching](https://proandroiddev.com/recyclerview-caching-8f3c5c6b4e92)
+- [`RecyclerView` Performance Best Practices](https://developer.android.com/develop/ui/views/layout/recyclerview)
+- [Understanding `RecyclerView` Caching](https://proandroiddev.com/recyclerview-caching-8f3c5c6b4e92)
 
 ## Related Questions
 
@@ -255,5 +255,5 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 - [[q-recyclerview-itemdecoration-advanced--android--medium]]
 
 ### Advanced (Harder)
-- Advanced RecyclerView optimization with custom ItemAnimator
+- Advanced `RecyclerView` optimization with custom ItemAnimator
 - Building infinite scroll with prefetching and error handling

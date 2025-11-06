@@ -279,7 +279,7 @@ fun testAccessibility() {
 ## Follow-ups
 
 - How to test navigation in Compose with nested destinations?
-- How to mock ViewModel dependencies in Compose tests?
+- How to mock `ViewModel` dependencies in Compose tests?
 - How to test LazyColumn scroll behavior and item visibility?
 - How to handle test flakiness caused by animations and delays?
 - How to test custom Modifier chains and layout measurements?

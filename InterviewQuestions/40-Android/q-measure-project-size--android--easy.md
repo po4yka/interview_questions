@@ -208,7 +208,7 @@ find . \( -name "*.kt" -o -name "*.java" \) | xargs wc -l
 
 1. Install "Statistic" plugin
 2. **Analyze → Statistic**
-3. View breakdown: Kotlin (83%), Java (12%), XML (5%)
+3. `View` breakdown: Kotlin (83%), Java (12%), XML (5%)
 
 **Size interpretation:**
 
@@ -269,7 +269,7 @@ ls -lh app/build/outputs/apk/release/app-release.apk
 
 1. **Build → Analyze APK**
 2. Select APK file
-3. View breakdown:
+3. `View` breakdown:
    - classes.dex: 5.2 MB (34%)
    - resources.arsc: 2.1 MB (14%)
    - res/: 4.8 MB (32%)
@@ -319,7 +319,7 @@ Build Time:       2m 15s (incremental)
 ### Best Practices
 
 1. **Monitor growth** — track metrics in commits
-2. **Set limits** — Gradle fail on APK exceeding 50 MB
+2. **`Set` limits** — Gradle fail on APK exceeding 50 MB
 3. **Regular cleanup** — remove unused dependencies, dead code
 4. **Optimize resources** — use R8/ProGuard shrinking
 

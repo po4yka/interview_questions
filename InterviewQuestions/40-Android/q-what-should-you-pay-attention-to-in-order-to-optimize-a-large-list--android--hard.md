@@ -38,14 +38,14 @@ tags:
 > Оптимизация больших списков
 
 # Question (EN)
-> List Optimization
+> `List` Optimization
 
 ---
 
 ## Answer (EN)
 Optimizing large lists in Android applications is critical for smooth scrolling and good user experience. Here are the key areas to focus on:
 
-### 1. Proper Use of ViewHolder in RecyclerView
+### 1. Proper Use of ViewHolder in `RecyclerView`
 
 **ViewHolder pattern** is essential for view reuse and performance.
 
@@ -388,7 +388,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-### 6. RecyclerView Configuration Optimizations
+### 6. `RecyclerView` Configuration Optimizations
 
 ```kotlin
 recyclerView.apply {
@@ -451,7 +451,7 @@ recyclerView.apply {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-### 8. Use View Binding for Type Safety
+### 8. Use `View` Binding for Type Safety
 
 ```kotlin
 class ViewBindingViewHolder(
@@ -528,15 +528,15 @@ To optimize large lists:
 3. **Optimize image loading** - use Glide/Coil with caching and sizing
 4. **Implement pagination** - load data in chunks (Paging 3)
 5. **Avoid heavy operations** in `onBindViewHolder()`
-6. **Configure RecyclerView** - fixed size, view cache, recycled pool
-7. **Optimize layouts** - flat hierarchies with ConstraintLayout
-8. **Use View Binding** - type-safe and efficient
+6. **Configure `RecyclerView`** - fixed size, view cache, recycled pool
+7. **Optimize layouts** - flat hierarchies with `ConstraintLayout`
+8. **Use `View` Binding** - type-safe and efficient
 9. **Enable prefetching** - smoother scrolling
 10. **Monitor performance** - use profilers and tools
 
 
 # Question (EN)
-> List Optimization
+> `List` Optimization
 
 ---
 
@@ -547,7 +547,7 @@ To optimize large lists:
 ## Answer (EN)
 Optimizing large lists in Android applications is critical for smooth scrolling and good user experience. Here are the key areas to focus on:
 
-### 1. Proper Use of ViewHolder in RecyclerView
+### 1. Proper Use of ViewHolder in `RecyclerView`
 
 **ViewHolder pattern** is essential for view reuse and performance.
 
@@ -890,7 +890,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-### 6. RecyclerView Configuration Optimizations
+### 6. `RecyclerView` Configuration Optimizations
 
 ```kotlin
 recyclerView.apply {
@@ -953,7 +953,7 @@ recyclerView.apply {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-### 8. Use View Binding for Type Safety
+### 8. Use `View` Binding for Type Safety
 
 ```kotlin
 class ViewBindingViewHolder(
@@ -1030,9 +1030,9 @@ To optimize large lists:
 3. **Optimize image loading** - use Glide/Coil with caching and sizing
 4. **Implement pagination** - load data in chunks (Paging 3)
 5. **Avoid heavy operations** in `onBindViewHolder()`
-6. **Configure RecyclerView** - fixed size, view cache, recycled pool
-7. **Optimize layouts** - flat hierarchies with ConstraintLayout
-8. **Use View Binding** - type-safe and efficient
+6. **Configure `RecyclerView`** - fixed size, view cache, recycled pool
+7. **Optimize layouts** - flat hierarchies with `ConstraintLayout`
+8. **Use `View` Binding** - type-safe and efficient
 9. **Enable prefetching** - smoother scrolling
 10. **Monitor performance** - use profilers and tools
 
@@ -1040,7 +1040,7 @@ To optimize large lists:
 
 Оптимизация больших списков в Android-приложениях критична для плавной прокрутки и хорошего пользовательского опыта. Вот ключевые области для фокуса:
 
-### 1. Правильное Использование ViewHolder В RecyclerView
+### 1. Правильное Использование ViewHolder В `RecyclerView`
 
 **Паттерн ViewHolder** важен для повторного использования view и производительности.
 
@@ -1315,7 +1315,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-### 6. Оптимизация Конфигурации RecyclerView
+### 6. Оптимизация Конфигурации `RecyclerView`
 
 ```kotlin
 recyclerView.apply {
@@ -1374,7 +1374,7 @@ recyclerView.apply {
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
 
-### 8. Использование View Binding Для Типобезопасности
+### 8. Использование `View` Binding Для Типобезопасности
 
 ```kotlin
 class ViewBindingViewHolder(
@@ -1451,9 +1451,9 @@ if (BuildConfig.DEBUG) {
 3. **Оптимизировать загрузку изображений** - использовать Glide/Coil с кэшированием и изменением размера
 4. **Реализовать пагинацию** - загружать данные порциями (Paging 3)
 5. **Избегать тяжелых операций** в `onBindViewHolder()`
-6. **Конфигурировать RecyclerView** - фиксированный размер, кэш view, пул переработки
-7. **Оптимизировать layouts** - плоские иерархии с ConstraintLayout
-8. **Использовать View Binding** - типобезопасно и эффективно
+6. **Конфигурировать `RecyclerView`** - фиксированный размер, кэш view, пул переработки
+7. **Оптимизировать layouts** - плоские иерархии с `ConstraintLayout`
+8. **Использовать `View` Binding** - типобезопасно и эффективно
 9. **Включить предварительную загрузку** - более плавная прокрутка
 10. **Мониторить производительность** - использовать профилировщики и инструменты
 

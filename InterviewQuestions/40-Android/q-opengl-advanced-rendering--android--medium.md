@@ -99,7 +99,7 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
 ```
 
 **VAO/VBO для геометрии:**
-Эффективное управление вершинными данными через Vertex Array Objects.
+Эффективное управление вершинными данными через Vertex `Array` Objects.
 
 ```kotlin
 class Mesh(vertices: FloatArray, indices: IntArray, val stride: Int = 8) {
@@ -323,7 +323,7 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
 ```
 
 **VAO/VBO for Geometry:**
-Efficient vertex data management through Vertex Array Objects.
+Efficient vertex data management through Vertex `Array` Objects.
 
 ```kotlin
 class Mesh(vertices: FloatArray, indices: IntArray, val stride: Int = 8) {
@@ -493,7 +493,7 @@ class Framebuffer(width: Int, height: Int) {
 ## Related Questions
 
 ### Prerequisites
-- [[q-custom-view-animation--android--medium]] — Canvas-based 2D rendering
+- [[q-custom-view-animation--android--medium]] — `Canvas`-based 2D rendering
 
 ### Related
 - [[q-jank-detection-frame-metrics--android--medium]] — Performance monitoring

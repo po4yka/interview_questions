@@ -67,7 +67,7 @@ tags: [android/architecture-clean, android/media, android/service, architecture,
 
 > How to design Instagram Stories for Android?
 
-## Short Version
+## `Short` Version
 
 Design a system for creating, uploading, and playing Stories on Android. The system should support fast video capture, reliable background upload, and smooth playback with automatic deletion after 24 hours.
 
@@ -241,7 +241,7 @@ class CleanupExpiredWorker(ctx: Context, params: WorkerParameters) : CoroutineWo
 
 **Паттерны архитектуры:**
 
--   **MVVM + однонаправленный поток данных**: `ViewModel` содержит бизнес-логику и state, `View` (Compose/Views) только отображает состояние и отправляет события обратно в `ViewModel`. Flow обеспечивает реактивность
+-   **MVVM + однонаправленный поток данных**: `ViewModel` содержит бизнес-логику и state, `View` (Compose/Views) только отображает состояние и отправляет события обратно в `ViewModel`. `Flow` обеспечивает реактивность
 -   **DI (Hilt)**: Dependency injection для управления зависимостями между модулями — легкость тестирования и поддержки
 
 **Захват видео:**
@@ -325,7 +325,7 @@ Audio focus и PiP:
 -   **p95 экспорта**: 95-й перцентиль времени экспорта видео — должен быть <3 секунды на mid-tier устройствах
 -   **Rebuffer ratio**: Отношение времени rebuffering к общему времени воспроизведения — индикатор проблем с сетью или кешем
 -   **Ошибки кодека**: Частота ошибок `MediaCodec` (failure to configure, encoding errors) — индикатор проблем с совместимостью устройств
--   **ANR/Crashes**: Мониторинг `ANR` (Application Not Responding) и крэшей — критичные для стабильности
+-   **ANR/Crashes**: Мониторинг `ANR` (`Application` Not Responding) и крэшей — критичные для стабильности
 -   **Cache hit rate**: Процент запросов, обслуженных из кеша — индикатор эффективности кеширования
 -   **Upload retries**: Количество повторных попыток загрузки — индикатор проблем с сетью
 
@@ -577,7 +577,7 @@ Performance metrics:
 -   **Export p95**: 95th percentile video export time — should be <3 seconds on mid-tier devices
 -   **Rebuffer ratio**: Ratio of rebuffering time to total playback time — indicator of network or cache issues
 -   **Codec errors**: Frequency of `MediaCodec` errors (failure to configure, encoding errors) — indicator of device compatibility issues
--   **ANR/Crashes**: Monitor `ANR` (Application Not Responding) and crashes — critical for stability
+-   **ANR/Crashes**: Monitor `ANR` (`Application` Not Responding) and crashes — critical for stability
 -   **Cache hit rate**: Percentage of requests served from cache — indicator of caching effectiveness
 -   **Upload retries**: Number of upload retry attempts — indicator of network issues
 
@@ -607,7 +607,7 @@ MVP → Hardening → Scale:
 
 **Trade-offs:**
 
--   Short 1s segments reduce start latency but raise CDN overhead (more requests). Longer segments (2-3s) reduce overhead but increase startup time
+-   `Short` 1s segments reduce start latency but raise CDN overhead (more requests). Longer segments (2-3s) reduce overhead but increase startup time
 -   `HEVC` reduces bitrate by 30-50% but risks compatibility (not all devices support). Guard by feature flags and dual-mux (both `H.264` and `HEVC`) where needed for fallback
 
 **Accessibility & UX resilience (RU):**

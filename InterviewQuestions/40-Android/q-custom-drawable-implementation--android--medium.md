@@ -24,31 +24,31 @@ sources: []
 ---
 
 # Вопрос (RU)
-> Как реализовать Custom Drawable в Android?
+> Как реализовать Custom `Drawable` в Android?
 
 # Question (EN)
-> How to implement a Custom Drawable in Android?
+> How to implement a Custom `Drawable` in Android?
 
 ---
 
 ## Ответ (RU)
 
-### Что Такое Custom Drawable
-Легковесный переиспользуемый графический примитив для отображения в нескольких View. Эффективнее кастомной View для простой неинтерактивной графики — не требует сложного жизненного цикла, управляется системой.
+### Что Такое Custom `Drawable`
+Легковесный переиспользуемый графический примитив для отображения в нескольких `View`. Эффективнее кастомной `View` для простой неинтерактивной графики — не требует сложного жизненного цикла, управляется системой.
 
-**Когда использовать Drawable**: неинтерактивная графика (иконки, фоны), переиспользование в разных View, простые формы и анимации.
+**Когда использовать `Drawable`**: неинтерактивная графика (иконки, фоны), переиспользование в разных `View`, простые формы и анимации.
 
-**Когда использовать Custom View**: обработка касаний, сложный жизненный цикл, требования доступности, координация анимаций.
+**Когда использовать Custom `View`**: обработка касаний, сложный жизненный цикл, требования доступности, координация анимаций.
 
 ### Ключевые Методы
 
-**draw(canvas: Canvas)** — основной метод отрисовки, вызывается системой.
+**draw(canvas: `Canvas`)** — основной метод отрисовки, вызывается системой.
 
 **setBounds()** — устанавливает область рисования (координаты и размер).
 
 **getOpacity()** — возвращает прозрачность (PixelFormat.OPAQUE/TRANSLUCENT/TRANSPARENT).
 
-**setAlpha(alpha: Int)** — устанавливает альфа-канал.
+**setAlpha(alpha: `Int`)** — устанавливает альфа-канал.
 
 **setColorFilter(colorFilter: ColorFilter?)** — применяет цветовой фильтр для тонирования.
 
@@ -97,7 +97,7 @@ class CircleDrawable : Drawable() {
 ```
 
 **Критичные моменты**:
-- Paint создается один раз, не в draw() — иначе аллокации на каждом фрейме
+- `Paint` создается один раз, не в draw() — иначе аллокации на каждом фрейме
 - invalidateSelf() запрашивает перерисовку при изменении состояния
 - intrinsic размеры определяют дефолтные размеры для wrap_content
 
@@ -129,7 +129,7 @@ class StatefulDrawable : Drawable() {
 }
 ```
 
-**setState()** вызывается системой при изменении состояния View (pressed, focused, selected). Возвращайте true только если состояние реально изменилось — это триггерит перерисовку.
+**setState()** вызывается системой при изменении состояния `View` (pressed, focused, selected). Возвращайте true только если состояние реально изменилось — это триггерит перерисовку.
 
 ### Анимация
 
@@ -163,7 +163,7 @@ class PulsingDrawable : Drawable() {
 
 ### Лучшие Практики
 
-1. **Кэшируйте Paint** — не создавайте в draw(), это аллокации на каждом фрейме
+1. **Кэшируйте `Paint`** — не создавайте в draw(), это аллокации на каждом фрейме
 2. **Вызывайте invalidateSelf()** при изменении внешнего вида
 3. **Реализуйте intrinsic размеры** для корректной работы с wrap_content
 4. **Избегайте вычислений в draw()** — предварительно вычисляйте в setBounds()
@@ -178,22 +178,22 @@ class PulsingDrawable : Drawable() {
 
 ## Answer (EN)
 
-### What is Custom Drawable
-Lightweight reusable graphic primitive for display in multiple Views. More efficient than Custom View for simple non-interactive graphics — no complex lifecycle needed, managed by system.
+### What is Custom `Drawable`
+Lightweight reusable graphic primitive for display in multiple Views. More efficient than Custom `View` for simple non-interactive graphics — no complex lifecycle needed, managed by system.
 
-**When to use Drawable**: non-interactive graphics (icons, backgrounds), reuse across Views, simple shapes and animations.
+**When to use `Drawable`**: non-interactive graphics (icons, backgrounds), reuse across Views, simple shapes and animations.
 
-**When to use Custom View**: touch handling, complex lifecycle, accessibility requirements, animation coordination.
+**When to use Custom `View`**: touch handling, complex lifecycle, accessibility requirements, animation coordination.
 
 ### Key Methods
 
-**draw(canvas: Canvas)** — main drawing method called by system.
+**draw(canvas: `Canvas`)** — main drawing method called by system.
 
 **setBounds()** — sets drawing area (coordinates and size).
 
 **getOpacity()** — returns transparency (PixelFormat.OPAQUE/TRANSLUCENT/TRANSPARENT).
 
-**setAlpha(alpha: Int)** — sets alpha channel.
+**setAlpha(alpha: `Int`)** — sets alpha channel.
 
 **setColorFilter(colorFilter: ColorFilter?)** — applies color filter for tinting.
 
@@ -242,7 +242,7 @@ class CircleDrawable : Drawable() {
 ```
 
 **Critical points**:
-- Paint created once, not in draw() — otherwise allocations every frame
+- `Paint` created once, not in draw() — otherwise allocations every frame
 - invalidateSelf() requests redraw on state change
 - intrinsic sizes define default dimensions for wrap_content
 
@@ -274,7 +274,7 @@ class StatefulDrawable : Drawable() {
 }
 ```
 
-**setState()** called by system when View state changes (pressed, focused, selected). Return true only if state actually changed — this triggers redraw.
+**setState()** called by system when `View` state changes (pressed, focused, selected). Return true only if state actually changed — this triggers redraw.
 
 ### Animation
 
@@ -308,7 +308,7 @@ class PulsingDrawable : Drawable() {
 
 ### Best Practices
 
-1. **Cache Paint** — don't create in draw(), causes allocations every frame
+1. **Cache `Paint`** — don't create in draw(), causes allocations every frame
 2. **Call invalidateSelf()** when appearance changes
 3. **Implement intrinsic sizes** for correct wrap_content behavior
 4. **Avoid calculations in draw()** — precompute in setBounds()
@@ -326,20 +326,20 @@ class PulsingDrawable : Drawable() {
 ## Follow-ups
 
 - How to implement compound drawables using LayerDrawable or DrawableContainer?
-- When should you use VectorDrawable vs custom Drawable for scalable graphics?
+- When should you use VectorDrawable vs custom `Drawable` for scalable graphics?
 - How to properly handle density-independent sizing in custom Drawables?
 - What are performance trade-offs of complex draw() operations vs bitmap caching?
 - How to implement animated state transitions (StateListAnimator equivalent)?
 
 ## References
 
-- [[c-custom-views]] - Custom View implementation patterns
+- [[c-custom-views]] - Custom `View` implementation patterns
 - [[c-lifecycle]] - Android component lifecycle
-- [Drawable API Reference](https://developer.android.com/reference/android/graphics/drawable/Drawable)
+- [`Drawable` API Reference](https://developer.android.com/reference/android/graphics/drawable/`Drawable`)
 - [Custom Drawables Guide](https://developer.android.com/develop/ui/views/graphics/drawables)
 
 ## Related Questions
 
 ### Advanced
-- [[q-canvas-drawing-optimization--android--hard]] - Advanced Canvas optimization techniques
-- [[q-custom-viewgroup-layout--android--hard]] - Custom ViewGroup implementation
+- [[q-canvas-drawing-optimization--android--hard]] - Advanced `Canvas` optimization techniques
+- [[q-custom-viewgroup-layout--android--hard]] - Custom `ViewGroup` implementation

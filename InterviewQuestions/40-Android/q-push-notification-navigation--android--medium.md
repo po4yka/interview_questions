@@ -42,21 +42,21 @@ tags:
 
 # Вопрос (RU)
 
-Как открыть конкретную Activity или Fragment из push-уведомления?
+Как открыть конкретную `Activity` или `Fragment` из push-уведомления?
 
 # Question (EN)
 
-How to open a specific Activity or Fragment from a push notification?
+How to open a specific `Activity` or `Fragment` from a push notification?
 
 ---
 
 ## Ответ (RU)
 
-**Подход**: Настроить FCM service для создания PendingIntent с данными навигации, обработать intent в Activity через `onCreate()`/`onNewIntent()`
+**Подход**: Настроить FCM service для создания PendingIntent с данными навигации, обработать intent в `Activity` через `onCreate()`/`onNewIntent()`
 
 **Сложность**: Time O(1), Space O(1)
 
-### 1. FCM Service С Навигационными Данными
+### 1. FCM `Service` С Навигационными Данными
 
 ```kotlin
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -140,7 +140,7 @@ class MainActivity : AppCompatActivity() {
 
 ✅ **Правильно**: Обработка в `onNewIntent()` для launchMode="singleTop"
 ✅ **Правильно**: Проверка extras перед навигацией
-❌ **Неправильно**: Навигация только в `onCreate()` - не работает если Activity уже открыта
+❌ **Неправильно**: Навигация только в `onCreate()` - не работает если `Activity` уже открыта
 
 ### 3. Deep Links Для Навигации
 
@@ -173,7 +173,7 @@ private fun createDeepLinkIntent(itemId: Int): Intent {
 ✅ **Правильно**: setPackage() предотвращает открытие в других приложениях
 ❌ **Неправильно**: Отсутствие autoVerify для HTTPS deep links
 
-### 4. Back Stack Для Правильной Навигации
+### 4. Back `Stack` Для Правильной Навигации
 
 ```kotlin
 private fun createIntentWithBackStack(itemId: Int): PendingIntent {
@@ -194,22 +194,22 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 ```
 
 ✅ **Правильно**: TaskStackBuilder создает корректный back stack
-❌ **Неправильно**: Прямой переход на Detail без родительской Activity - кнопка Back закрывает приложение
+❌ **Неправильно**: Прямой переход на Detail без родительской `Activity` - кнопка Back закрывает приложение
 
 **Объяснение**:
-1. FCM Service получает сообщение и парсит data payload
-2. Создается Intent с extras (screen, itemId) или deep link URI
+1. FCM `Service` получает сообщение и парсит data payload
+2. Создается `Intent` с extras (screen, itemId) или deep link URI
 3. PendingIntent передается в уведомление через setContentIntent()
 4. При клике MainActivity обрабатывает intent в onCreate()/onNewIntent()
 5. NavController выполняет переход на нужный экран с параметрами
 
 ## Answer (EN)
 
-**Approach**: Configure FCM service to create PendingIntent with navigation data, handle intent in Activity via `onCreate()`/`onNewIntent()`
+**Approach**: Configure FCM service to create PendingIntent with navigation data, handle intent in `Activity` via `onCreate()`/`onNewIntent()`
 
 **Complexity**: Time O(1), Space O(1)
 
-### 1. FCM Service with Navigation Data
+### 1. FCM `Service` with Navigation Data
 
 ```kotlin
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -293,7 +293,7 @@ class MainActivity : AppCompatActivity() {
 
 ✅ **Correct**: Handle in `onNewIntent()` for launchMode="singleTop"
 ✅ **Correct**: Check extras before navigation
-❌ **Incorrect**: Navigation only in `onCreate()` - doesn't work if Activity already open
+❌ **Incorrect**: Navigation only in `onCreate()` - doesn't work if `Activity` already open
 
 ### 3. Deep Links for Navigation
 
@@ -326,7 +326,7 @@ private fun createDeepLinkIntent(itemId: Int): Intent {
 ✅ **Correct**: setPackage() prevents opening in other apps
 ❌ **Incorrect**: Missing autoVerify for HTTPS deep links
 
-### 4. Back Stack for Proper Navigation
+### 4. Back `Stack` for Proper Navigation
 
 ```kotlin
 private fun createIntentWithBackStack(itemId: Int): PendingIntent {
@@ -347,11 +347,11 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 ```
 
 ✅ **Correct**: TaskStackBuilder creates proper back stack
-❌ **Incorrect**: Direct jump to Detail without parent Activity - Back button closes app
+❌ **Incorrect**: Direct jump to Detail without parent `Activity` - Back button closes app
 
 **Explanation**:
-1. FCM Service receives message and parses data payload
-2. Create Intent with extras (screen, itemId) or deep link URI
+1. FCM `Service` receives message and parses data payload
+2. Create `Intent` with extras (screen, itemId) or deep link URI
 3. PendingIntent passed to notification via setContentIntent()
 4. On click MainActivity handles intent in onCreate()/onNewIntent()
 5. NavController performs navigation to target screen with parameters

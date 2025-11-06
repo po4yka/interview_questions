@@ -96,7 +96,7 @@ class TaskRepositoryTest {
 }
 ```
 
-**Тестирование Flow с Turbine:**
+**Тестирование `Flow` с Turbine:**
 
 ```kotlin
 @Test
@@ -294,7 +294,7 @@ kotlin {
 
 ### Unit Testing in commonTest
 
-**Repository test:**
+**`Repository` test:**
 
 ```kotlin
 // ✅ Shared test - runs on all platforms
@@ -320,7 +320,7 @@ class TaskRepositoryTest {
 }
 ```
 
-**Flow testing with Turbine:**
+**`Flow` testing with Turbine:**
 
 ```kotlin
 @Test
@@ -447,12 +447,12 @@ class AndroidPreferencesTest {
 - [[c-testing-strategies]] - Testing strategies overview
 - [Kotlin Multiplatform Testing](https://kotlinlang.org/docs/multiplatform-run-tests.html)
 - [MockK Documentation](https://mockk.io/)
-- [Turbine - Flow Testing Library](https://github.com/cashapp/turbine)
+- [Turbine - `Flow` Testing Library](https://github.com/cashapp/turbine)
 
 ## Related Questions
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--android--medium]] - ViewModel testing with Turbine
+- [[q-testing-viewmodels-turbine--android--medium]] - `ViewModel` testing with Turbine
 - [[q-compose-testing--android--medium]] - Compose UI testing
 - [[q-robolectric-vs-instrumented--android--medium]] - Robolectric vs instrumented tests
 

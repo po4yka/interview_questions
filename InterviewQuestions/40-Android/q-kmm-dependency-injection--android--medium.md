@@ -290,7 +290,7 @@ actual class DatabaseDriverFactory {
 ## Follow-ups
 
 - How do you test Koin modules in KMM?
-- What are best practices for ViewModel injection in KMM?
+- What are best practices for `ViewModel` injection in KMM?
 - How do you handle lifecycle-aware dependencies in iOS?
 - When should you use factory vs single scope in Koin?
 - How do you migrate from Dagger to Koin in KMM?

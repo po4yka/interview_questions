@@ -54,7 +54,7 @@ sources:
 
 ### 1. Цели и философия
 
-| Критерий | Koin (Service Locator) | Dagger/Hilt (Compile-time DI) |
+| Критерий | Koin (`Service` Locator) | Dagger/Hilt (Compile-time DI) |
 |----------|------------------------|------------------------------|
 | **Цель** | Ускорить delivery и облегчить bootstrap | Гарантировать типобезопасный граф до запуска |
 | **Парадигма** | DSL + runtime регистрация | Аннотации + генерация кода |
@@ -113,7 +113,7 @@ sources:
 
 ### 6. Философские выводы
 
-- **Service Locator против DI**: Koin сознательно смещает ответственность на разработчика/тесты → философия «простота > безопасность». Dagger/Hilt напротив: «безопасность графа > скорость» и продвигают «dependency inversion как контракт».
+- **`Service` Locator против DI**: Koin сознательно смещает ответственность на разработчика/тесты → философия «простота > безопасность». Dagger/Hilt напротив: «безопасность графа > скорость» и продвигают «dependency inversion как контракт».
 - **Declarative vs Imperative**: Hilt описывает граф декларативно (аннотации), Koin — исполняемым DSL.
 - **Переопределение зависимостей**: Koin считает override часть философии; Dagger/Hilt требует явных компонентов/модулей, чтобы избежать неявных подмен.
 
@@ -123,7 +123,7 @@ sources:
 
 ### 1. Goals and philosophy
 
-| Dimension | Koin (Service Locator) | Dagger/Hilt (Compile-time DI) |
+| Dimension | Koin (`Service` Locator) | Dagger/Hilt (Compile-time DI) |
 |-----------|------------------------|-------------------------------|
 | **Primary goal** | Reduce ceremony, speed up delivery | Guarantee a type-safe graph pre-runtime |
 | **Paradigm** | Kotlin DSL + runtime registry | Annotations + generated code |
@@ -160,7 +160,7 @@ sources:
 
 ### 6. Philosophical takeaways
 
-- **Service Locator vs DI**: Koin intentionally trades strict DI purity for simplicity; Dagger/Hilt enforces dependency inversion contracts.
+- **`Service` Locator vs DI**: Koin intentionally trades strict DI purity for simplicity; Dagger/Hilt enforces dependency inversion contracts.
 - **Declarative vs Imperative**: Hilt’s declarative annotations contrast with Koin’s imperative DSL.
 - **Override semantics**: Koin treats overrides as first-class, while Dagger/Hilt requires structured modules/components to avoid ambiguous substitutions.
 

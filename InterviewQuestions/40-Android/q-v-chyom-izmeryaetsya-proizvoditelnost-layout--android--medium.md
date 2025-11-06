@@ -199,7 +199,7 @@ kotlinOptions {
 | Layout | ms | < 5 |
 | Draw | ms | < 6.67 |
 | Глубина иерархии | уровни | < 10 |
-| Количество View | шт. | < 80 |
+| Количество `View` | шт. | < 80 |
 | Recomposition | количество | минимизировать |
 
 ---
@@ -376,14 +376,14 @@ kotlinOptions {
 | Layout | ms | < 5 |
 | Draw | ms | < 6.67 |
 | Hierarchy depth | levels | < 10 |
-| View count | count | < 80 |
+| `View` count | count | < 80 |
 | Recomposition | count | minimize |
 
 ---
 
 ## Follow-ups
 
-1. How does ConstraintLayout improve performance compared to nested LinearLayouts?
+1. How does `ConstraintLayout` improve performance compared to nested LinearLayouts?
 2. What causes jank and how to detect it with Android Profiler?
 3. How do Compose recomposition scopes affect performance?
 4. When should you use `Trace.beginSection()` vs Android Studio Profiler?

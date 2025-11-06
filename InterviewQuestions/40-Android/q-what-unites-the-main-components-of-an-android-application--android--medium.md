@@ -44,7 +44,7 @@ tags:
 ---
 
 ## Answer (EN)
-The main Android components (Activity, Service, BroadcastReceiver, ContentProvider) share several fundamental characteristics that unite them in the Android framework.
+The main Android components (`Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`) share several fundamental characteristics that unite them in the Android framework.
 
 ### Four Main Components
 
@@ -116,12 +116,12 @@ activity.onCreate()
 
 **System responsibilities**:
 - Component instantiation
-- Lifecycle management
+- `Lifecycle` management
 - Process allocation
 - Memory management
 - Component destruction
 
-#### 3. Intent Communication
+#### 3. `Intent` Communication
 
 Components interact through **Intents**:
 
@@ -143,9 +143,9 @@ val uri = Uri.parse("content://com.example.app.provider/users")
 contentResolver.query(uri, null, null, null, null)
 ```
 
-#### 4. Context Access
+#### 4. `Context` Access
 
-All components have access to **Context**:
+All components have access to **`Context`**:
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -217,7 +217,7 @@ class MyProvider : ContentProvider() {
 }
 ```
 
-#### 6. Run in Application Process
+#### 6. Run in `Application` Process
 
 All components run in the **same process** by default:
 
@@ -263,15 +263,15 @@ Components can require **permissions**:
 
 ### Component Comparison Table
 
-| Characteristic | Activity | Service | BroadcastReceiver | ContentProvider |
+| Characteristic | `Activity` | `Service` | `BroadcastReceiver` | `ContentProvider` |
 |----------------|----------|---------|-------------------|-----------------|
 | Purpose | UI screen | Background work | Event handling | Data sharing |
 | Has UI | Yes | No | No | No |
-| Lifecycle | Complex (7 states) | Medium (4 states) | Simple (1 method) | Minimal |
+| `Lifecycle` | Complex (7 states) | Medium (4 states) | Simple (1 method) | Minimal |
 | Created by | System | System | System | System |
 | Manifest required | Yes | Yes | Yes (for static) | Yes |
-| Intent interaction | Yes | Yes | Yes | No (uses ContentResolver) |
-| Context access | IS Context | IS Context | RECEIVES Context | HAS context |
+| `Intent` interaction | Yes | Yes | Yes | No (uses ContentResolver) |
+| `Context` access | IS `Context` | IS `Context` | RECEIVES `Context` | HAS context |
 | Process | App process | App/separate | App process | App process |
 | Max runtime | User-controlled | Indefinite | 10 seconds | Process lifetime |
 
@@ -337,7 +337,7 @@ Main Android components are united by:
 1. **Manifest declaration** - all must be declared
 2. **System management** - lifecycle controlled by OS
 3. **Intent/ContentResolver communication** - standard interaction pattern
-4. **Context access** - all have access to Android context
+4. **`Context` access** - all have access to Android context
 5. **Defined lifecycles** - predictable state transitions
 6. **Process execution** - run in application process
 7. **Permission system** - consistent security model
@@ -353,7 +353,7 @@ Main Android components are united by:
 
 
 ## Answer (EN)
-The main Android components (Activity, Service, BroadcastReceiver, ContentProvider) share several fundamental characteristics that unite them in the Android framework.
+The main Android components (`Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`) share several fundamental characteristics that unite them in the Android framework.
 
 ### Four Main Components
 
@@ -425,12 +425,12 @@ activity.onCreate()
 
 **System responsibilities**:
 - Component instantiation
-- Lifecycle management
+- `Lifecycle` management
 - Process allocation
 - Memory management
 - Component destruction
 
-#### 3. Intent Communication
+#### 3. `Intent` Communication
 
 Components interact through **Intents**:
 
@@ -452,9 +452,9 @@ val uri = Uri.parse("content://com.example.app.provider/users")
 contentResolver.query(uri, null, null, null, null)
 ```
 
-#### 4. Context Access
+#### 4. `Context` Access
 
-All components have access to **Context**:
+All components have access to **`Context`**:
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -526,7 +526,7 @@ class MyProvider : ContentProvider() {
 }
 ```
 
-#### 6. Run in Application Process
+#### 6. Run in `Application` Process
 
 All components run in the **same process** by default:
 
@@ -572,15 +572,15 @@ Components can require **permissions**:
 
 ### Component Comparison Table
 
-| Characteristic | Activity | Service | BroadcastReceiver | ContentProvider |
+| Characteristic | `Activity` | `Service` | `BroadcastReceiver` | `ContentProvider` |
 |----------------|----------|---------|-------------------|-----------------|
 | Purpose | UI screen | Background work | Event handling | Data sharing |
 | Has UI | Yes | No | No | No |
-| Lifecycle | Complex (7 states) | Medium (4 states) | Simple (1 method) | Minimal |
+| `Lifecycle` | Complex (7 states) | Medium (4 states) | Simple (1 method) | Minimal |
 | Created by | System | System | System | System |
 | Manifest required | Yes | Yes | Yes (for static) | Yes |
-| Intent interaction | Yes | Yes | Yes | No (uses ContentResolver) |
-| Context access | IS Context | IS Context | RECEIVES Context | HAS context |
+| `Intent` interaction | Yes | Yes | Yes | No (uses ContentResolver) |
+| `Context` access | IS `Context` | IS `Context` | RECEIVES `Context` | HAS context |
 | Process | App process | App/separate | App process | App process |
 | Max runtime | User-controlled | Indefinite | 10 seconds | Process lifetime |
 
@@ -646,14 +646,14 @@ Main Android components are united by:
 1. **Manifest declaration** - all must be declared
 2. **System management** - lifecycle controlled by OS
 3. **Intent/ContentResolver communication** - standard interaction pattern
-4. **Context access** - all have access to Android context
+4. **`Context` access** - all have access to Android context
 5. **Defined lifecycles** - predictable state transitions
 6. **Process execution** - run in application process
 7. **Permission system** - consistent security model
 
 ## Ответ (RU)
 
-Основные компоненты Android (Activity, Service, BroadcastReceiver, ContentProvider) разделяют несколько фундаментальных характеристик, которые объединяют их в Android framework.
+Основные компоненты Android (`Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`) разделяют несколько фундаментальных характеристик, которые объединяют их в Android framework.
 
 ### Четыре Основных Компонента
 
@@ -722,7 +722,7 @@ activity.onCreate()
 - Управление памятью
 - Уничтожение компонентов
 
-#### 3. Взаимодействие Через Intent
+#### 3. Взаимодействие Через `Intent`
 
 Компоненты взаимодействуют через **Intents**:
 
@@ -744,9 +744,9 @@ val uri = Uri.parse("content://com.example.app.provider/users")
 contentResolver.query(uri, null, null, null, null)
 ```
 
-#### 4. Доступ К Context
+#### 4. Доступ К `Context`
 
-Все компоненты имеют доступ к **Context**:
+Все компоненты имеют доступ к **`Context`**:
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -863,15 +863,15 @@ class MyProvider : ContentProvider() {
 
 ### Таблица Сравнения Компонентов
 
-| Характеристика | Activity | Service | BroadcastReceiver | ContentProvider |
+| Характеристика | `Activity` | `Service` | `BroadcastReceiver` | `ContentProvider` |
 |----------------|----------|---------|-------------------|-----------------|
 | Назначение | UI экран | Фоновая работа | Обработка событий | Обмен данными |
 | Имеет UI | Да | Нет | Нет | Нет |
 | Жизненный цикл | Сложный (7 состояний) | Средний (4 состояния) | Простой (1 метод) | Минимальный |
 | Создается | Системой | Системой | Системой | Системой |
 | Манифест обязателен | Да | Да | Да (для статических) | Да |
-| Intent взаимодействие | Да | Да | Да | Нет (использует ContentResolver) |
-| Доступ к Context | ЯВЛЯЕТСЯ Context | ЯВЛЯЕТСЯ Context | ПОЛУЧАЕТ Context | ИМЕЕТ context |
+| `Intent` взаимодействие | Да | Да | Да | Нет (использует ContentResolver) |
+| Доступ к `Context` | ЯВЛЯЕТСЯ `Context` | ЯВЛЯЕТСЯ `Context` | ПОЛУЧАЕТ `Context` | ИМЕЕТ context |
 | Процесс | Процесс приложения | Приложения/отдельный | Процесс приложения | Процесс приложения |
 | Макс. время работы | Контролируется пользователем | Неограниченное | 10 секунд | Время жизни процесса |
 
@@ -882,10 +882,10 @@ class MyProvider : ContentProvider() {
 1. Объявление в манифесте
 2. Расширение базового класса
 3. Переопределение методов жизненного цикла
-4. Доступ к Context
+4. Доступ к `Context`
 5. Взаимодействие через Intent/ContentResolver
 
-**Пример Service:**
+**Пример `Service`:**
 ```kotlin
 // 1. Объявление в манифесте:
 // <service android:name=".DownloadService" />
@@ -1031,7 +1031,7 @@ class NetworkChangeReceiver : BroadcastReceiver() {
 // </receiver>
 ```
 
-**Сценарий 3: Обмен данными через ContentProvider**
+**Сценарий 3: Обмен данными через `ContentProvider`**
 ```kotlin
 // ContentProvider для обмена данными между приложениями
 class ContactsProvider : ContentProvider() {
@@ -1099,7 +1099,7 @@ class AnotherActivity : AppCompatActivity() {
 }
 ```
 
-**Сценарий 4: Foreground Service для музыкального плеера**
+**Сценарий 4: Foreground `Service` для музыкального плеера**
 ```kotlin
 class MusicPlayerService : Service() {
     private lateinit var mediaPlayer: MediaPlayer
@@ -1187,7 +1187,7 @@ class MusicPlayerService : Service() {
 1. **Объявлением в манифесте** - все должны быть объявлены
 2. **Управлением системой** - жизненный цикл контролируется ОС
 3. **Intent/ContentResolver коммуникацией** - стандартный паттерн взаимодействия
-4. **Доступом к Context** - все имеют доступ к Android context
+4. **Доступом к `Context`** - все имеют доступ к Android context
 5. **Определенными жизненными циклами** - предсказуемые переходы состояний
 6. **Выполнением в процессе** - выполняются в процессе приложения
 7. **Системой разрешений** - последовательная модель безопасности
@@ -1200,18 +1200,18 @@ class MusicPlayerService : Service() {
 - Как они взаимодействуют?
 
 **Правильный ответ должен включать:**
-1. Четыре компонента: Activity, Service, BroadcastReceiver, ContentProvider
+1. Четыре компонента: `Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`
 2. Все объявляются в манифесте
 3. Управляются системой, не разработчиком
-4. Взаимодействуют через Intent (кроме ContentProvider - через ContentResolver)
-5. Имеют доступ к Context
+4. Взаимодействуют через `Intent` (кроме `ContentProvider` - через ContentResolver)
+5. Имеют доступ к `Context`
 6. Имеют определенные жизненные циклы
 7. Выполняются в процессе приложения (с возможностью указать отдельный процесс)
 
 ## Related Topics
 - AndroidManifest.xml
-- Intent system
-- Context and Application
+- `Intent` system
+- `Context` and `Application`
 - Component lifecycles
 - Process management
 

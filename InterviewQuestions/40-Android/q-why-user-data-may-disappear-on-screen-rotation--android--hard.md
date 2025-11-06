@@ -29,13 +29,13 @@ Why does user data disappear on screen rotation?
 
 ## Ответ (RU)
 
-При повороте экрана Android **уничтожает и пересоздаёт Activity** как часть обработки изменения конфигурации. Если состояние не сохранено должным образом, все временные данные теряются.
+При повороте экрана Android **уничтожает и пересоздаёт `Activity`** как часть обработки изменения конфигурации. Если состояние не сохранено должным образом, все временные данные теряются.
 
-### Почему Activity Пересоздаётся
+### Почему `Activity` Пересоздаётся
 
 Поворот экрана = изменение конфигурации. Android:
-1. Вызывает `onDestroy()` для текущей Activity
-2. Создаёт новый экземпляр Activity через `onCreate()`
+1. Вызывает `onDestroy()` для текущей `Activity`
+2. Создаёт новый экземпляр `Activity` через `onCreate()`
 3. Загружает layout для новой ориентации
 
 **Последствия:**
@@ -53,7 +53,7 @@ class LoginActivity : AppCompatActivity() {
 }
 ```
 
-**2. EditText без android:id**
+**2. `EditText` без android:id**
 ```xml
 <!-- ❌ Состояние не сохраняется -->
 <EditText
@@ -67,7 +67,7 @@ class LoginActivity : AppCompatActivity() {
     android:layout_height="wrap_content" />
 ```
 
-**3. Не используется ViewModel**
+**3. Не используется `ViewModel`**
 ```kotlin
 // ❌ Данные теряются
 class BadActivity : AppCompatActivity() {
@@ -113,7 +113,7 @@ class GameActivity : AppCompatActivity() {
 
 ### Решения
 
-**1. ViewModel для UI данных**
+**1. `ViewModel` для UI данных**
 ```kotlin
 class MyViewModel : ViewModel() {
     val data = MutableLiveData<String>()
@@ -161,12 +161,12 @@ onResume()
 
 ### Лучшие Практики
 
-1. ✅ Используйте **ViewModel** для всех UI данных
+1. ✅ Используйте **`ViewModel`** для всех UI данных
 2. ✅ Добавляйте **SavedStateHandle** для критического состояния
 3. ✅ Добавляйте **android:id** ко всем Views с пользовательским вводом
 4. ✅ Используйте **DataStore/Room** для долгосрочного хранения
 5. ✅ Тестируйте с включенным "Don't keep activities"
-6. ❌ Не полагайтесь на переменные экземпляра Activity
+6. ❌ Не полагайтесь на переменные экземпляра `Activity`
 7. ❌ Не делайте повторные сетевые запросы после поворота
 
 ### Современное Решение
@@ -187,13 +187,13 @@ class MyViewModel(
 
 ## Answer (EN)
 
-On screen rotation, Android **destroys and recreates the Activity** as part of configuration change handling. If state isn't properly saved, all transient data is lost.
+On screen rotation, Android **destroys and recreates the `Activity`** as part of configuration change handling. If state isn't properly saved, all transient data is lost.
 
-### Why Activity is Recreated
+### Why `Activity` is Recreated
 
 Screen rotation = configuration change. Android:
-1. Calls `onDestroy()` on current Activity
-2. Creates new Activity instance via `onCreate()`
+1. Calls `onDestroy()` on current `Activity`
+2. Creates new `Activity` instance via `onCreate()`
 3. Loads appropriate layout for new orientation
 
 **Consequences:**
@@ -211,7 +211,7 @@ class LoginActivity : AppCompatActivity() {
 }
 ```
 
-**2. EditText Without android:id**
+**2. `EditText` Without android:id**
 ```xml
 <!-- ❌ State not preserved -->
 <EditText
@@ -225,7 +225,7 @@ class LoginActivity : AppCompatActivity() {
     android:layout_height="wrap_content" />
 ```
 
-**3. Not Using ViewModel**
+**3. Not Using `ViewModel`**
 ```kotlin
 // ❌ Data lost
 class BadActivity : AppCompatActivity() {
@@ -271,7 +271,7 @@ class GameActivity : AppCompatActivity() {
 
 ### Solutions
 
-**1. ViewModel for UI Data**
+**1. `ViewModel` for UI Data**
 ```kotlin
 class MyViewModel : ViewModel() {
     val data = MutableLiveData<String>()
@@ -297,7 +297,7 @@ class MyViewModel(
 <!-- ✅ Automatic save/restore -->
 ```
 
-### Configuration Change Lifecycle
+### Configuration Change `Lifecycle`
 
 ```
 Screen rotation
@@ -319,12 +319,12 @@ onResume()
 
 ### Best Practices
 
-1. ✅ Use **ViewModel** for all UI-related data
+1. ✅ Use **`ViewModel`** for all UI-related data
 2. ✅ Add **SavedStateHandle** for critical state
 3. ✅ Add **android:id** to all Views with user input
 4. ✅ Use **DataStore/Room** for long-term storage
 5. ✅ Test with "Don't keep activities" enabled
-6. ❌ Don't rely on Activity instance variables
+6. ❌ Don't rely on `Activity` instance variables
 7. ❌ Don't make redundant network calls after rotation
 
 ### Modern Solution
@@ -345,16 +345,16 @@ This ensures data survives both configuration changes **and** process death.
 
 ## Follow-ups
 
-1. What's the difference between `onSaveInstanceState()` and ViewModel for state preservation?
-2. How does SavedStateHandle differ from regular ViewModel properties?
-3. When should you use `android:configChanges` to prevent Activity recreation?
+1. What's the difference between `onSaveInstanceState()` and `ViewModel` for state preservation?
+2. How does SavedStateHandle differ from regular `ViewModel` properties?
+3. When should you use `android:configChanges` to prevent `Activity` recreation?
 4. How can you test configuration changes without physically rotating the device?
-5. What happens to ongoing coroutines/Jobs when Activity is destroyed on rotation?
+5. What happens to ongoing coroutines/Jobs when `Activity` is destroyed on rotation?
 
 ## References
 
 - [[c-lifecycle]] - Android lifecycle fundamentals
-- [[c-viewmodel]] - ViewModel architecture component
+- [[c-viewmodel]] - `ViewModel` architecture component
 - [[c-mvvm]] - MVVM pattern implementation
 - https://developer.android.com/guide/components/activities/activity-lifecycle
 - https://developer.android.com/topic/libraries/architecture/viewmodel-savedstate
@@ -362,8 +362,8 @@ This ensures data survives both configuration changes **and** process death.
 ## Related Questions
 
 ### Prerequisites
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle basics
-- [[q-viewmodel-basics--android--easy]] - Introduction to ViewModel
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle basics
+- [[q-viewmodel-basics--android--easy]] - Introduction to `ViewModel`
 
 ### Related
 - [[q-compose-side-effects-advanced--android--hard]] - Side effects in Compose

@@ -48,7 +48,7 @@ related:
 
 **Основные причины:**
 
-**1. Статические ссылки на Activity:**
+**1. Статические ссылки на `Activity`:**
 
 ```kotlin
 // ❌ Утечка памяти
@@ -147,7 +147,7 @@ A **memory leak** occurs when an object is no longer used by the application but
 
 **Common causes:**
 
-**1. Static references to Activity:**
+**1. Static references to `Activity`:**
 
 ```kotlin
 // ❌ Memory leak
@@ -247,7 +247,7 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 - How do you detect memory leaks using Android Profiler?
 - What is the difference between a memory leak and a memory bloat?
 - How can weak references help prevent memory leaks?
-- What are common memory leaks in ViewModel and LiveData?
+- What are common memory leaks in `ViewModel` and `LiveData`?
 - How do coroutines prevent or cause memory leaks?
 
 ## References
@@ -270,8 +270,8 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 
 ### Related
 - [[q-coroutine-memory-leak-detection--kotlin--hard]] - Detecting coroutine leaks
-- Activity lifecycle and proper cleanup
-- RecyclerView memory efficiency patterns
+- `Activity` lifecycle and proper cleanup
+- `RecyclerView` memory efficiency patterns
 
 ### Advanced
 - [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutine-specific memory leaks

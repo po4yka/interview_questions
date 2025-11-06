@@ -40,21 +40,21 @@ tags:
 
 # Вопрос (RU)
 
-> В каком потоке работает обычный Service по умолчанию?
+> В каком потоке работает обычный `Service` по умолчанию?
 
 # Question (EN)
 
-> In which thread does a regular Service run by default?
+> In which thread does a regular `Service` run by default?
 
 ---
 
 ## Ответ (RU)
 
-**Обычный Service работает в главном потоке (UI thread) по умолчанию**, а не в отдельном фоновом потоке. Это распространённое заблуждение.
+**Обычный `Service` работает в главном потоке (UI thread) по умолчанию**, а не в отдельном фоновом потоке. Это распространённое заблуждение.
 
 ### Ключевые Моменты
 
-1. **Service работает в главном потоке** - Все методы жизненного цикла (`onCreate()`, `onStartCommand()`, `onBind()`) выполняются в главном потоке
+1. **`Service` работает в главном потоке** - Все методы жизненного цикла (`onCreate()`, `onStartCommand()`, `onBind()`) выполняются в главном потоке
 2. **Длительные операции нужно выгружать** - Сетевые запросы, БД, файловые операции должны выполняться в отдельных потоках
 3. **Блокировка главного потока вызывает ANR** - Диалог "Приложение не отвечает" появится при слишком долгой блокировке
 
@@ -73,9 +73,9 @@ class MyService : Service() {
 }
 ```
 
-### Паттерны Работы С Service
+### Паттерны Работы С `Service`
 
-#### 1. Started Service С Ручным Управлением Потоками
+#### 1. Started `Service` С Ручным Управлением Потоками
 
 ```kotlin
 class DataSyncService : Service() {
@@ -96,7 +96,7 @@ class DataSyncService : Service() {
 }
 ```
 
-#### 2. Foreground Service С Корутинами (рекомендуется)
+#### 2. Foreground `Service` С Корутинами (рекомендуется)
 
 ```kotlin
 class MusicPlayerService : Service() {
@@ -155,20 +155,20 @@ val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>()
 WorkManager.getInstance(context).enqueue(syncRequest)
 ```
 
-### Сравнение Типов Service
+### Сравнение Типов `Service`
 
-| Тип Service | Поток по умолчанию | Нужен фоновый поток | Рекомендация |
+| Тип `Service` | Поток по умолчанию | Нужен фоновый поток | Рекомендация |
 |-------------|-------------------|---------------------|--------------|
-| Regular Service | Главный | Да, вручную | Устаревший подход |
+| Regular `Service` | Главный | Да, вручную | Устаревший подход |
 | IntentService | Фоновый (авто) | Нет | Deprecated API 30 |
-| Foreground Service | Главный | Да, корутины | Музыка, навигация |
+| Foreground `Service` | Главный | Да, корутины | Музыка, навигация |
 | WorkManager | Фоновый (авто) | Нет | Рекомендуется |
 
 ### Best Practices
 
-1. **Никогда не предполагайте, что Service работает в фоновом потоке** - Всегда проверяйте
+1. **Никогда не предполагайте, что `Service` работает в фоновом потоке** - Всегда проверяйте
 2. **Используйте WorkManager для фоновых задач** - Современный, lifecycle-aware
-3. **Используйте Foreground Service для видимой работы** - Музыка, навигация
+3. **Используйте Foreground `Service` для видимой работы** - Музыка, навигация
 4. **Всегда используйте корутины/потоки для длительных операций** - Предотвращает ANR
 5. **Останавливайте сервис когда закончите** - Вызывайте `stopSelf()`
 
@@ -176,13 +176,13 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 
 ## Answer (EN)
 
-**A regular Service runs in the main thread (UI thread) by default**, not in a separate background thread. This is a common misconception.
+**A regular `Service` runs in the main thread (UI thread) by default**, not in a separate background thread. This is a common misconception.
 
 ### Key Points
 
-1. **Service runs on main thread** - All lifecycle methods (`onCreate()`, `onStartCommand()`, `onBind()`) execute on main thread
-2. **Long operations must be offloaded** - Network requests, database queries, file I/O must be done in separate threads
-3. **Blocking main thread causes ANR** - Application Not Responding dialog appears if main thread is blocked
+1. **`Service` runs on main thread** - All lifecycle methods (`onCreate()`, `onStartCommand()`, `onBind()`) execute on main thread
+2. **`Long` operations must be offloaded** - Network requests, database queries, file I/O must be done in separate threads
+3. **Blocking main thread causes ANR** - `Application` Not Responding dialog appears if main thread is blocked
 
 ### Demonstration
 
@@ -199,9 +199,9 @@ class MyService : Service() {
 }
 ```
 
-### Service Patterns
+### `Service` Patterns
 
-#### 1. Started Service with Manual Threading
+#### 1. Started `Service` with Manual Threading
 
 ```kotlin
 class DataSyncService : Service() {
@@ -222,7 +222,7 @@ class DataSyncService : Service() {
 }
 ```
 
-#### 2. Foreground Service with Coroutines (Recommended)
+#### 2. Foreground `Service` with Coroutines (Recommended)
 
 ```kotlin
 class MusicPlayerService : Service() {
@@ -281,20 +281,20 @@ val syncRequest = OneTimeWorkRequestBuilder<SyncWorker>()
 WorkManager.getInstance(context).enqueue(syncRequest)
 ```
 
-### Service Types Comparison
+### `Service` Types Comparison
 
-| Service Type | Default Thread | Background Required | Recommendation |
+| `Service` Type | Default `Thread` | Background Required | Recommendation |
 |--------------|---------------|---------------------|----------------|
-| Regular Service | Main | Yes, manual | Deprecated approach |
+| Regular `Service` | Main | Yes, manual | Deprecated approach |
 | IntentService | Background (auto) | No | Deprecated API 30 |
-| Foreground Service | Main | Yes, coroutines | Music, navigation |
+| Foreground `Service` | Main | Yes, coroutines | Music, navigation |
 | WorkManager | Background (auto) | No | Recommended |
 
 ### Best Practices
 
-1. **Never assume Service runs on background thread** - Always verify
+1. **Never assume `Service` runs on background thread** - Always verify
 2. **Use WorkManager for background tasks** - Modern, lifecycle-aware
-3. **Use Foreground Service for user-visible work** - Music, navigation
+3. **Use Foreground `Service` for user-visible work** - Music, navigation
 4. **Always use coroutines/threads for long operations** - Prevents ANR
 5. **Stop service when done** - Call `stopSelf()` to release resources
 
@@ -302,11 +302,11 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 
 ## Follow-ups
 
-- What happens if you block the main thread in a Service?
-- When should you use Foreground Service vs WorkManager?
-- How does IntentService differ from regular Service?
+- What happens if you block the main thread in a `Service`?
+- When should you use Foreground `Service` vs WorkManager?
+- How does IntentService differ from regular `Service`?
 - What is the role of `stopSelf()` vs `stopService()`?
-- How do you handle Service lifecycle with coroutines?
+- How do you handle `Service` lifecycle with coroutines?
 
 ## References
 

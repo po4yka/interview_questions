@@ -303,7 +303,7 @@ fun isNetworkAvailable(context: Context): Boolean {
 - [[q-graphql-vs-rest--networking--easy]] - API architecture comparison
 
 ### Related (Medium)
-- [[q-what-does-the-lifecycle-library-do--android--medium]] - Lifecycle-aware networking
+- [[q-what-does-the-lifecycle-library-do--android--medium]] - `Lifecycle`-aware networking
 - [[q-http-protocols-comparison--android--medium]] - HTTP protocol details
 - [[q-network-error-handling-strategies--networking--medium]] - Error handling patterns
 - [[q-kmm-ktor-networking--android--medium]] - Multiplatform networking

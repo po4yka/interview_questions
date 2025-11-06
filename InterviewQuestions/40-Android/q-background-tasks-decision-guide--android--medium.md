@@ -115,7 +115,7 @@ class FileTransferService : Service() {
 - **Coroutines**: используйте структурированные scope (`viewModelScope`, `lifecycleScope`) для автоотмены
 - **WorkManager**: гарантирует выполнение даже после перезагрузки устройства, соблюдает Doze Mode
 - **ShortService**: требует тип `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE` и завершение до 3 минут
-- **Избегайте**: обычных Service без foreground режима для задач длительнее 1 секунды
+- **Избегайте**: обычных `Service` без foreground режима для задач длительнее 1 секунды
 
 ---
 

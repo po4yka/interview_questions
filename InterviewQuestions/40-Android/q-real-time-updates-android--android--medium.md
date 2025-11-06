@@ -160,7 +160,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 **Плюсы**: надежная доставка, кроссплатформенность
 **Минусы**: требует Google Services
 
-### 5. Polling / Long Polling — Fallback Стратегия
+### 5. Polling / `Long` Polling — Fallback Стратегия
 
 ```kotlin
 fun startPolling(interval: Long, onUpdate: (List<Message>) -> Unit) {
@@ -183,7 +183,7 @@ fun startPolling(interval: Long, onUpdate: (List<Message>) -> Unit) {
 **Плюсы**: простота реализации
 **Минусы**: высокая нагрузка на сервер, задержки
 
-### Lifecycle-aware Подключение
+### `Lifecycle`-aware Подключение
 
 ```kotlin
 @HiltViewModel
@@ -375,7 +375,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 **Pros**: Reliable delivery, cross-platform
 **Cons**: Requires Google Services
 
-### 5. Polling / Long Polling — Fallback Strategy
+### 5. Polling / `Long` Polling — Fallback Strategy
 
 ```kotlin
 fun startPolling(interval: Long, onUpdate: (List<Message>) -> Unit) {
@@ -398,7 +398,7 @@ fun startPolling(interval: Long, onUpdate: (List<Message>) -> Unit) {
 **Pros**: Easy to implement
 **Cons**: High server load, delayed updates
 
-### Lifecycle-Aware Connection
+### `Lifecycle`-Aware Connection
 
 ```kotlin
 @HiltViewModel
@@ -444,7 +444,7 @@ class ChatViewModel @Inject constructor(
 **Performance:**
 - Batch updates
 - Local caching (Room)
-- Message compression (Gzip)
+- `Message` compression (Gzip)
 - Pagination for message history
 
 **Security:**

@@ -28,7 +28,7 @@ sources: [https://kotlinlang.org/docs/whatsnew15.html#context-receivers]
 ## Ответ (RU)
 
 **Концепция:**
-Context receivers — экспериментальная возможность Kotlin, позволяющая объявлять контекстные зависимости для функций. Ключевое преимущество — поддержка множественных контекстов (в отличие от extension-функций).
+`Context` receivers — экспериментальная возможность Kotlin, позволяющая объявлять контекстные зависимости для функций. Ключевое преимущество — поддержка множественных контекстов (в отличие от extension-функций).
 
 **Основные концепции:**
 - Множественные контексты (extension-функции ограничены одним receiver)
@@ -139,7 +139,7 @@ fun openCamera() {
 ## Answer (EN)
 
 **Concept:**
-Context receivers are an experimental Kotlin feature that allows declaring context dependencies for functions. Key advantage — support for multiple contexts (unlike extension functions).
+`Context` receivers are an experimental Kotlin feature that allows declaring context dependencies for functions. Key advantage — support for multiple contexts (unlike extension functions).
 
 **Main concepts:**
 - Multiple contexts (extension functions limited to one receiver)
@@ -261,7 +261,7 @@ fun openCamera() {
 
 - [[c-dependency-injection]] - Dependency injection patterns
 - [[c-kotlin-dsl]] - DSL builders in Kotlin
-- [Kotlin Context Receivers (KEEP)](https://github.com/Kotlin/KEEP/blob/master/proposals/context-receivers.md)
+- [Kotlin `Context` Receivers (KEEP)](https://github.com/Kotlin/KEEP/blob/master/proposals/context-receivers.md)
 - [Kotlin 1.6.20 Release Notes](https://kotlinlang.org/docs/whatsnew1620.html)
 
 ## Related Questions
@@ -269,7 +269,7 @@ fun openCamera() {
 ### Prerequisites (Medium)
 - [[q-kotlin-value-classes--android--medium]] - Value classes for type safety
 - [[q-koin-vs-hilt-comparison--android--medium]] - Dependency injection patterns
-- [[q-repository-pattern--android--medium]] - Repository pattern basics
+- [[q-repository-pattern--android--medium]] - `Repository` pattern basics
 
 ### Related (Same Level)
 - [[q-kotlin-dsl-builders--android--hard]] - DSL builders

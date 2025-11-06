@@ -31,11 +31,11 @@ tags: [android/app-startup, android/performance-startup, difficulty/medium, jetp
 
 ## Ответ (RU)
 
-**App Startup** — библиотека Jetpack для централизации инициализации компонентов, объединяющая множественные ContentProvider'ы в один `InitializationProvider`, что сокращает холодный старт на 30-50% (~170мс при 5 SDK).
+**App Startup** — библиотека Jetpack для централизации инициализации компонентов, объединяющая множественные `ContentProvider`'ы в один `InitializationProvider`, что сокращает холодный старт на 30-50% (~170мс при 5 SDK).
 
-### Проблема: Множественные ContentProvider
+### Проблема: Множественные `ContentProvider`
 
-Каждая библиотека традиционно создаёт свой ContentProvider для auto-init:
+Каждая библиотека традиционно создаёт свой `ContentProvider` для auto-init:
 
 ```kotlin
 // ❌ Проблема: каждая библиотека добавляет ContentProvider
@@ -117,7 +117,7 @@ if (userLoggedIn) {
 
 ### Problem: Multiple ContentProviders
 
-Each library traditionally creates its own ContentProvider for auto-init:
+Each library traditionally creates its own `ContentProvider` for auto-init:
 
 ```kotlin
 // ❌ Problem: each library adds a ContentProvider
@@ -205,14 +205,14 @@ if (userLoggedIn) {
 
 ## References
 
-- [[c-content-provider]] — ContentProvider lifecycle and performance
+- [[c-content-provider]] — `ContentProvider` lifecycle and performance
 - [App Startup Library](https://developer.android.com/topic/libraries/app-startup)
 
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]] — ContentProvider fundamentals
+- [[q-android-app-components--android--easy]] — `ContentProvider` fundamentals
 - [[q-android-project-parts--android--easy]] — AndroidManifest structure
 
 ### Related (Same Level)

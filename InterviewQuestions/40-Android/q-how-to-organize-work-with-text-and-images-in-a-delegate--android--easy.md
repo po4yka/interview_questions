@@ -19,11 +19,11 @@ tags: [adapter, android/ui-views, delegates, difficulty/easy, recyclerview]
 
 # Вопрос (RU)
 
-> Как организовать работу с текстом и картинками в делегате RecyclerView?
+> Как организовать работу с текстом и картинками в делегате `RecyclerView`?
 
 # Question (EN)
 
-> How to organize work with text and images in a RecyclerView delegate?
+> How to organize work with text and images in a `RecyclerView` delegate?
 
 ---
 
@@ -237,14 +237,14 @@ class DelegateAdapter : ListDelegationAdapter<List<ListItem>>() {
 
 - How to handle click events in different delegate types?
 - When to use DiffUtil with adapter delegates?
-- How to optimize image loading in RecyclerView with delegates?
+- How to optimize image loading in `RecyclerView` with delegates?
 - What are alternatives to the AdapterDelegates library?
 
 ## References
 
 - [[c-recyclerview]]
 - [[q-which-layout-for-large-list--android--easy]]
-- Android RecyclerView documentation
+- Android `RecyclerView` documentation
 
 ## Related Questions
 

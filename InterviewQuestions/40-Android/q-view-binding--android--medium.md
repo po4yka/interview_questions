@@ -34,17 +34,17 @@ tags:
 
 # Вопрос (RU)
 
-Что вы знаете о View Binding?
+Что вы знаете о `View` Binding?
 
 # Question (EN)
 
-What do you know about View Binding?
+What do you know about `View` Binding?
 
 ---
 
 ## Ответ (RU)
 
-View Binding генерирует типобезопасные классы привязки для XML-макетов. Для каждого layout-файла создается класс с прямыми ссылками на все view с ID, заменяя `findViewById`.
+`View` Binding генерирует типобезопасные классы привязки для XML-макетов. Для каждого layout-файла создается класс с прямыми ссылками на все view с ID, заменяя `findViewById`.
 
 ### Настройка
 
@@ -57,7 +57,7 @@ android {
 }
 ```
 
-### Использование В Activity
+### Использование В `Activity`
 
 ```kotlin
 private lateinit var binding: ResultProfileBinding
@@ -71,7 +71,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-### Использование Во Fragment
+### Использование Во `Fragment`
 
 ```kotlin
 private var _binding: ResultProfileBinding? = null
@@ -94,7 +94,7 @@ override fun onDestroyView() {
 
 ### Преимущества
 
-**Null-безопасность**: View в определенных конфигурациях помечены `@Nullable`
+**Null-безопасность**: `View` в определенных конфигурациях помечены `@Nullable`
 
 **Типобезопасность**: Компилятор гарантирует соответствие типов
 
@@ -113,7 +113,7 @@ override fun onDestroyView() {
 
 ## Answer (EN)
 
-View Binding generates type-safe binding classes for XML layouts. Each layout file produces a class with direct references to all views with IDs, replacing `findViewById`.
+`View` Binding generates type-safe binding classes for XML layouts. Each layout file produces a class with direct references to all views with IDs, replacing `findViewById`.
 
 ### Setup
 
@@ -126,7 +126,7 @@ android {
 }
 ```
 
-### Activity Usage
+### `Activity` Usage
 
 ```kotlin
 private lateinit var binding: ResultProfileBinding
@@ -140,7 +140,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-### Fragment Usage
+### `Fragment` Usage
 
 ```kotlin
 private var _binding: ResultProfileBinding? = null
@@ -184,15 +184,15 @@ override fun onDestroyView() {
 
 ## Follow-ups
 
-- How does View Binding compare to Data Binding in terms of features and overhead?
-- What happens if you forget to clean up binding in Fragment's onDestroyView?
-- Can you selectively exclude layouts from View Binding generation?
+- How does `View` Binding compare to Data Binding in terms of features and overhead?
+- What happens if you forget to clean up binding in `Fragment`'s onDestroyView?
+- Can you selectively exclude layouts from `View` Binding generation?
 - What are the memory implications of lateinit vs nullable binding patterns?
-- How does View Binding handle include/merge tags?
+- How does `View` Binding handle include/merge tags?
 
 ## References
 
-- [Official View Binding Guide](https://developer.android.com/topic/libraries/view-binding)
+- [Official `View` Binding Guide](https://developer.android.com/topic/libraries/view-binding)
 - [Migrating from findViewById](https://medium.com/androiddevelopers/use-view-binding-to-replace-findviewbyid-c83942471fc)
 
 ## Related Questions
@@ -203,12 +203,12 @@ override fun onDestroyView() {
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View hierarchy optimization
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View` hierarchy optimization
 - [[q-viewmodel-pattern--android--easy]] - Separation of concerns
 
 ### Related (Medium)
-- [[q-what-is-viewmodel--android--medium]] - ViewModel integration
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View rendering
+- [[q-what-is-viewmodel--android--medium]] - `ViewModel` integration
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` rendering
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--android--hard]] - Declarative UI alternative

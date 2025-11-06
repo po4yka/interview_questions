@@ -60,7 +60,7 @@ WorkManager.getInstance(context)
 
 **Ограничения WorkData**
 - Максимальный размер: 10 KB
-- Только примитивные типы и String/Array
+- Только примитивные типы и String/`Array`
 - ❌ Не передавать большие объекты напрямую
 - ✅ Передавать ID, пути к файлам, метаданные
 
@@ -242,7 +242,7 @@ WorkManager.getInstance(context)
 
 **WorkData Constraints**
 - Maximum size: 10 KB
-- Only primitive types and String/Array
+- Only primitive types and String/`Array`
 - ❌ Don't pass large objects directly
 - ✅ Pass IDs, file paths, metadata
 
@@ -406,7 +406,7 @@ val worker = OneTimeWorkRequestBuilder<DownloadWorker>()
 
 ### Prerequisites
 - Basic WorkManager concepts and worker implementation
-- Understanding Kotlin coroutines and Flow for monitoring
+- Understanding Kotlin coroutines and `Flow` for monitoring
 
 ### Related
 - WorkManager constraints and network requirements

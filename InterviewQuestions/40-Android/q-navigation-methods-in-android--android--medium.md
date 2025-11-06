@@ -31,9 +31,9 @@ tags: [android/architecture-modularization, android/intents-deeplinks, android/u
 
 Android предоставляет несколько методов навигации, каждый со своими преимуществами и сценариями использования:
 
-### 1. Навигация Между Activity Через Intent
+### 1. Навигация Между `Activity` Через `Intent`
 
-Традиционный способ перехода между экранами на уровне Activity. Intent может быть явным (explicit) или неявным (implicit).
+Традиционный способ перехода между экранами на уровне `Activity`. `Intent` может быть явным (explicit) или неявным (implicit).
 
 ```kotlin
 // ✅ Явный Intent - прямой переход к конкретной Activity
@@ -57,11 +57,11 @@ launcher.launch(Intent(this, DetailActivity::class.java))
 // startActivityForResult(intent, REQUEST_CODE)  // Deprecated
 ```
 
-**Когда использовать**: межмодульная навигация, глубокая интеграция с системой, запуск внешних Activity.
+**Когда использовать**: межмодульная навигация, глубокая интеграция с системой, запуск внешних `Activity`.
 
-### 2. Навигация На Основе Fragment С FragmentManager
+### 2. Навигация На Основе `Fragment` С FragmentManager
 
-Управление фрагментами внутри одной Activity. Позволяет создавать модульные UI-компоненты и управлять back stack.
+Управление фрагментами внутри одной `Activity`. Позволяет создавать модульные UI-компоненты и управлять back stack.
 
 ```kotlin
 // ✅ Современный подход с FragmentContainerView
@@ -256,9 +256,9 @@ binding.drawerLayout.addDrawerListener(
 
 Android provides several navigation methods, each with its own advantages and use cases:
 
-### 1. Activity Navigation via Intent
+### 1. `Activity` Navigation via `Intent`
 
-Traditional way of navigating between screens at the Activity level. Intents can be explicit or implicit.
+Traditional way of navigating between screens at the `Activity` level. Intents can be explicit or implicit.
 
 ```kotlin
 // ✅ Explicit Intent - direct navigation to specific Activity
@@ -284,9 +284,9 @@ launcher.launch(Intent(this, DetailActivity::class.java))
 
 **When to use**: inter-module navigation, deep system integration, launching external Activities.
 
-### 2. Fragment-Based Navigation with FragmentManager
+### 2. `Fragment`-Based Navigation with FragmentManager
 
-Managing fragments within a single Activity. Enables modular UI components and back stack management.
+Managing fragments within a single `Activity`. Enables modular UI components and back stack management.
 
 ```kotlin
 // ✅ Modern approach with FragmentContainerView
@@ -503,8 +503,8 @@ binding.drawerLayout.addDrawerListener(
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-intent--android--easy]] - Understanding Intent basics
-- [[q-fragment-basics--android--easy]] - Fragment fundamentals
+- [[q-what-is-intent--android--easy]] - Understanding `Intent` basics
+- [[q-fragment-basics--android--easy]] - `Fragment` fundamentals
 - [[q-main-android-components--android--easy]] - Android component overview
 - [[q-android-app-components--android--easy]] - Core app component types
 

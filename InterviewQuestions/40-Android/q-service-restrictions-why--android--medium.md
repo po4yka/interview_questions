@@ -28,17 +28,17 @@ tags:
 ---
 
 # Вопрос (RU)
-> Ограничения Service
+> Ограничения `Service`
 
 # Question (EN)
-> Service Restrictions
+> `Service` Restrictions
 
 ---
 
 ## Answer (EN)
-Service restrictions are related to **battery optimization** and **performance**:
+`Service` restrictions are related to **battery optimization** and **performance**:
 
-1. **Battery life** - Long-running background services drain battery
+1. **Battery life** - `Long`-running background services drain battery
 2. **Memory usage** - Too many services cause memory pressure
 3. **Performance** - Background work slows down the device
 4. **Security** - Prevents malicious apps from running indefinitely
@@ -47,7 +47,7 @@ Service restrictions are related to **battery optimization** and **performance**
 
 ---
 
-## History of Service Restrictions
+## History of `Service` Restrictions
 
 ### Android Evolution
 
@@ -65,7 +65,7 @@ Android 13 (T) - Notification permissions required
 
 ---
 
-## Android 8.0+ Background Service Restrictions
+## Android 8.0+ Background `Service` Restrictions
 
 ### What Changed in Android 8.0 (Oreo)
 
@@ -221,7 +221,7 @@ Apps are categorized into buckets based on usage:
 
 ---
 
-### Android 10 (Q) - Background Activity Starts
+### Android 10 (Q) - Background `Activity` Starts
 
 **Restriction:** Apps cannot start activities from background.
 
@@ -471,7 +471,7 @@ class GoodWorker : CoroutineWorker() {
 
 ---
 
-### 3. Use Appropriate Service Type
+### 3. Use Appropriate `Service` Type
 
 ```kotlin
 // - Foreground service for user-visible work
@@ -524,7 +524,7 @@ startForegroundService(Intent(this, MyService::class.java))
 
 
 # Question (EN)
-> Service Restrictions
+> `Service` Restrictions
 
 ---
 
@@ -533,9 +533,9 @@ startForegroundService(Intent(this, MyService::class.java))
 
 
 ## Answer (EN)
-Service restrictions are related to **battery optimization** and **performance**:
+`Service` restrictions are related to **battery optimization** and **performance**:
 
-1. **Battery life** - Long-running background services drain battery
+1. **Battery life** - `Long`-running background services drain battery
 2. **Memory usage** - Too many services cause memory pressure
 3. **Performance** - Background work slows down the device
 4. **Security** - Prevents malicious apps from running indefinitely
@@ -544,7 +544,7 @@ Service restrictions are related to **battery optimization** and **performance**
 
 ---
 
-## History of Service Restrictions
+## History of `Service` Restrictions
 
 ### Android Evolution
 
@@ -562,7 +562,7 @@ Android 13 (T) - Notification permissions required
 
 ---
 
-## Android 8.0+ Background Service Restrictions
+## Android 8.0+ Background `Service` Restrictions
 
 ### What Changed in Android 8.0 (Oreo)
 
@@ -718,7 +718,7 @@ Apps are categorized into buckets based on usage:
 
 ---
 
-### Android 10 (Q) - Background Activity Starts
+### Android 10 (Q) - Background `Activity` Starts
 
 **Restriction:** Apps cannot start activities from background.
 
@@ -968,7 +968,7 @@ class GoodWorker : CoroutineWorker() {
 
 ---
 
-### 3. Use Appropriate Service Type
+### 3. Use Appropriate `Service` Type
 
 ```kotlin
 // - Foreground service for user-visible work
@@ -1075,14 +1075,14 @@ startForegroundService(Intent(this, MyService::class.java))
 
 
 ### Prerequisites (Easier)
-- [[q-android-service-types--android--easy]] - Service
+- [[q-android-service-types--android--easy]] - `Service`
 
 ### Related (Medium)
-- [[q-service-component--android--medium]] - Service
-- [[q-foreground-service-types--android--medium]] - Service
-- [[q-when-can-the-system-restart-a-service--android--medium]] - Service
-- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Service
-- [[q-keep-service-running-background--android--medium]] - Service
+- [[q-service-component--android--medium]] - `Service`
+- [[q-foreground-service-types--android--medium]] - `Service`
+- [[q-when-can-the-system-restart-a-service--android--medium]] - `Service`
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - `Service`
+- [[q-keep-service-running-background--android--medium]] - `Service`
 
 ### Advanced (Harder)
-- [[q-service-lifecycle-binding--android--hard]] - Service
+- [[q-service-lifecycle-binding--android--hard]] - `Service`

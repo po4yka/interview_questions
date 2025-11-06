@@ -51,7 +51,7 @@ tags:
 
 ## Ответ (RU)
 
-Android не поддерживает SVG нативно, но существует несколько проверенных подходов для отображения SVG-строк: AndroidSVG библиотека, Coil с SVG декодером, конвертация в Bitmap, или custom Drawable.
+Android не поддерживает SVG нативно, но существует несколько проверенных подходов для отображения SVG-строк: AndroidSVG библиотека, Coil с SVG декодером, конвертация в `Bitmap`, или custom `Drawable`.
 
 ### 1. AndroidSVG Библиотека — Прямая Работа Со Строками
 
@@ -109,7 +109,7 @@ fun loadSvgString(svgString: String, imageView: ImageView) {
 **Преимущества:** Кэширование, coroutines поддержка, современный API.
 **Недостатки:** Дополнительная зависимость.
 
-### 3. Custom Drawable — Полный Контроль
+### 3. Custom `Drawable` — Полный Контроль
 
 ```kotlin
 class SvgDrawable(private val svgString: String) : Drawable() {
@@ -161,7 +161,7 @@ fun SvgFromString(svgString: String, modifier: Modifier = Modifier) {
 }
 ```
 
-### 5. Конвертация В Bitmap
+### 5. Конвертация В `Bitmap`
 
 ❌ **Избегать** для векторной графики — теряется масштабируемость.
 
@@ -218,7 +218,7 @@ class OptimizedSvgLoader {
 }
 ```
 
-**ViewModel интеграция:**
+**`ViewModel` интеграция:**
 ```kotlin
 class SvgViewModel : ViewModel() {
     private val _svgDrawable = MutableLiveData<PictureDrawable?>()
@@ -239,22 +239,22 @@ class SvgViewModel : ViewModel() {
 |--------|-------------------|-------------|-----------|----------|
 | AndroidSVG | Высокая | Ручное | Низкая | Простые случаи |
 | Coil | Высокая | Автоматическое | Средняя | Сеть, кэш |
-| Custom Drawable | Высокая | Ручное | Средняя | Особые требования |
-| Bitmap | Низкая | Ручное | Низкая | ❌ Не рекомендуется |
+| Custom `Drawable` | Высокая | Ручное | Средняя | Особые требования |
+| `Bitmap` | Низкая | Ручное | Низкая | ❌ Не рекомендуется |
 
 **Рекомендации по выбору:**
 - **Простая интеграция** → AndroidSVG
 - **Сетевые SVG** → Coil с SVG декодером
-- **Compose UI** → Custom Canvas с LaunchedEffect
-- **Особая логика отрисовки** → Custom Drawable
+- **Compose UI** → Custom `Canvas` с LaunchedEffect
+- **Особая логика отрисовки** → Custom `Drawable`
 
 ---
 
 ## Answer (EN)
 
-Android doesn't support SVG natively, but there are several proven approaches to display SVG strings: AndroidSVG library, Coil with SVG decoder, Bitmap conversion, or custom Drawable.
+Android doesn't support SVG natively, but there are several proven approaches to display SVG strings: AndroidSVG library, Coil with SVG decoder, `Bitmap` conversion, or custom `Drawable`.
 
-### 1. AndroidSVG Library — Direct String Handling
+### 1. AndroidSVG Library — Direct `String` Handling
 
 ✅ **Recommended approach** for most scenarios.
 
@@ -310,7 +310,7 @@ fun loadSvgString(svgString: String, imageView: ImageView) {
 **Pros:** Caching, coroutines support, modern API.
 **Cons:** Additional dependency.
 
-### 3. Custom Drawable — Full Control
+### 3. Custom `Drawable` — Full Control
 
 ```kotlin
 class SvgDrawable(private val svgString: String) : Drawable() {
@@ -362,7 +362,7 @@ fun SvgFromString(svgString: String, modifier: Modifier = Modifier) {
 }
 ```
 
-### 5. Bitmap Conversion
+### 5. `Bitmap` Conversion
 
 ❌ **Avoid** for vector graphics — loses scalability.
 
@@ -419,7 +419,7 @@ class OptimizedSvgLoader {
 }
 ```
 
-**ViewModel Integration:**
+**`ViewModel` Integration:**
 ```kotlin
 class SvgViewModel : ViewModel() {
     private val _svgDrawable = MutableLiveData<PictureDrawable?>()
@@ -440,14 +440,14 @@ class SvgViewModel : ViewModel() {
 |----------|------------|---------|------------|----------|
 | AndroidSVG | High | Manual | Low | Simple cases |
 | Coil | High | Automatic | Medium | Network, cache |
-| Custom Drawable | High | Manual | Medium | Special requirements |
-| Bitmap | Low | Manual | Low | ❌ Not recommended |
+| Custom `Drawable` | High | Manual | Medium | Special requirements |
+| `Bitmap` | Low | Manual | Low | ❌ Not recommended |
 
 **Selection Recommendations:**
 - **Simple integration** → AndroidSVG
 - **Network SVG** → Coil with SVG decoder
-- **Compose UI** → Custom Canvas with LaunchedEffect
-- **Custom rendering logic** → Custom Drawable
+- **Compose UI** → Custom `Canvas` with LaunchedEffect
+- **Custom rendering logic** → Custom `Drawable`
 
 ---
 
@@ -457,7 +457,7 @@ class SvgViewModel : ViewModel() {
 2. What memory optimizations are needed when caching multiple SVG drawables?
 3. How to implement SVG color tinting at runtime?
 4. What are the performance implications of SVG vs VectorDrawable in Android?
-5. How to batch-load multiple SVG strings efficiently in RecyclerView?
+5. How to batch-load multiple SVG strings efficiently in `RecyclerView`?
 
 ## References
 

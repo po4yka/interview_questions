@@ -208,7 +208,7 @@ fun ItemRow(item: Item) {
 }
 ```
 
-### Интеграция С ViewModel
+### Интеграция С `ViewModel`
 
 ```kotlin
 class HomeViewModel : ViewModel() {
@@ -238,15 +238,15 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 
 **Slot Table** использует gap buffer для эффективного хранения состояния и минимизации перевыделения памяти при рекомпозиции.
 
-### Ключевые Отличия От View System
+### Ключевые Отличия От `View` System
 
-| View System         | Jetpack Compose           |
+| `View` System         | Jetpack Compose           |
 | ------------------- | ------------------------- |
 | Императивный        | Декларативный             |
 | XML + код           | Чистый Kotlin             |
 | findViewById        | Прямой доступ             |
 | Ручные обновления   | Автоматическая обновление |
-| RecyclerView нужен  | Встроенный LazyColumn     |
+| `RecyclerView` нужен  | Встроенный LazyColumn     |
 | Сложный lifecycle   | Простой lifecycle         |
 
 ---
@@ -337,7 +337,7 @@ fun CounterScreen() {
 }
 ```
 
-### Lifecycle of Composables
+### `Lifecycle` of Composables
 
 **Enter → Recompose → Leave**
 
@@ -432,7 +432,7 @@ fun ItemRow(item: Item) {
 }
 ```
 
-### Integration With ViewModel
+### Integration With `ViewModel`
 
 ```kotlin
 class HomeViewModel : ViewModel() {
@@ -462,15 +462,15 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 
 **Slot Table** uses a gap buffer for efficient state storage and minimal memory reallocation during recomposition.
 
-### Key Differences From View System
+### Key Differences From `View` System
 
-| View System         | Jetpack Compose       |
+| `View` System         | Jetpack Compose       |
 | ------------------- | --------------------- |
 | Imperative          | Declarative           |
 | XML + code          | Pure Kotlin           |
 | findViewById        | Direct access         |
 | Manual updates      | Automatic updates     |
-| RecyclerView needed | Built-in LazyColumn   |
+| `RecyclerView` needed | Built-in LazyColumn   |
 | Complex lifecycle   | Simple lifecycle      |
 
 ---

@@ -27,7 +27,7 @@ sources: []
 
 ## Ответ (RU)
 
-Чтобы начать отображать UI в Android, необходимо: (1) создать [[c-activity|Activity]], (2) определить layout (разметку), (3) связать их через `setContentView()`.
+Чтобы начать отображать UI в Android, необходимо: (1) создать [[c-activity|`Activity`]], (2) определить layout (разметку), (3) связать их через `setContentView()`.
 
 ### Основные Способы
 
@@ -71,7 +71,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-**3. Custom View (программная отрисовка)**
+**3. Custom `View` (программная отрисовка)**
 
 ```kotlin
 // ✅ Низкоуровневая отрисовка через Canvas
@@ -86,7 +86,7 @@ class CustomView(context: Context) : View(context) {
 
 ## Answer (EN)
 
-To display UI in Android, you need to: (1) create an [[c-activity|Activity]], (2) define a layout, (3) connect them via `setContentView()`.
+To display UI in Android, you need to: (1) create an [[c-activity|`Activity`]], (2) define a layout, (3) connect them via `setContentView()`.
 
 ### Main Approaches
 
@@ -130,7 +130,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-**3. Custom View (programmatic drawing)**
+**3. Custom `View` (programmatic drawing)**
 
 ```kotlin
 // ✅ Low-level drawing with Canvas
@@ -148,13 +148,13 @@ class CustomView(context: Context) : View(context) {
 ## Follow-ups
 
 - What happens if `setContentView()` is called multiple times?
-- How does Android handle Activity recreation during configuration changes (rotation)?
+- How does Android handle `Activity` recreation during configuration changes (rotation)?
 - What is the difference between `AppCompatActivity` and `ComponentActivity`?
 - How does ViewBinding/DataBinding integrate with `setContentView()`?
 
 ## References
 
-- [[c-activity]] - Activity lifecycle and fundamentals
+- [[c-activity]] - `Activity` lifecycle and fundamentals
 - [[c-android-ui-composition]] - UI composition patterns
 - https://developer.android.com/guide/components/activities/intro-activities
 
@@ -162,15 +162,15 @@ class CustomView(context: Context) : View(context) {
 
 ### Prerequisites (Easier)
 
-- [[c-activity]] - Understanding Activity basics
+- [[c-activity]] - Understanding `Activity` basics
 
 ### Related (Same Level)
 
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment vs Activity lifecycle
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Fragment` vs `Activity` lifecycle
 - [[q-retrofit-library--android--medium]] - Network layer setup
 
 ### Advanced (Harder)
 
-- Activity state restoration during process death
-- Custom ViewGroup implementation
+- `Activity` state restoration during process death
+- Custom `ViewGroup` implementation
 - Compose interop with XML Views

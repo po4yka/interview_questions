@@ -33,19 +33,19 @@ tags:
 ---
 
 # Вопрос (RU)
-> Компонент Activity
+> Компонент `Activity`
 
 # Question (EN)
-> Activity
+> `Activity`
 
 ---
 
 ## Answer (EN)
-Activity is a core component of an Android application that provides a user interface with which users can interact to perform various actions such as dialing a phone, viewing photos, sending emails, etc. Each Activity represents a single screen with a user interface.
+`Activity` is a core component of an Android application that provides a user interface with which users can interact to perform various actions such as dialing a phone, viewing photos, sending emails, etc. Each `Activity` represents a single screen with a user interface.
 
-### Activity as a Page in a Book
+### `Activity` as a Page in a Book
 
-If you imagine an application as a book, then an Activity is one page of that book. Each page (Activity) has its own content and purpose, and users can navigate between pages.
+If you imagine an application as a book, then an `Activity` is one page of that book. Each page (`Activity`) has its own content and purpose, and users can navigate between pages.
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -74,11 +74,11 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Main Purposes of Activity
+### Main Purposes of `Activity`
 
 #### 1. Providing User Interface
 
-Activity is responsible for displaying the UI and making it interactive:
+`Activity` is responsible for displaying the UI and making it interactive:
 
 ```kotlin
 class PhotoGalleryActivity : AppCompatActivity() {
@@ -102,7 +102,7 @@ class PhotoGalleryActivity : AppCompatActivity() {
 
 #### 2. User Interaction Handling
 
-Activity processes user input and responds to it:
+`Activity` processes user input and responds to it:
 
 ```kotlin
 class EmailComposeActivity : AppCompatActivity() {
@@ -163,9 +163,9 @@ class EmailComposeActivity : AppCompatActivity() {
 }
 ```
 
-#### 3. Lifecycle Management
+#### 3. `Lifecycle` Management
 
-Activity manages resources throughout its lifecycle:
+`Activity` manages resources throughout its lifecycle:
 
 ```kotlin
 class VideoPlayerActivity : AppCompatActivity() {
@@ -219,7 +219,7 @@ class VideoPlayerActivity : AppCompatActivity() {
 
 #### 4. Screen Transitions
 
-Activity enables navigation between different screens:
+`Activity` enables navigation between different screens:
 
 ```kotlin
 class ProductListActivity : AppCompatActivity() {
@@ -274,7 +274,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
 #### 5. Component Interaction
 
-Activity interacts with other Android components:
+`Activity` interacts with other Android components:
 
 ```kotlin
 class MainDashboardActivity : AppCompatActivity() {
@@ -397,33 +397,33 @@ class PhotoViewerActivity : AppCompatActivity() {
 }
 ```
 
-### Activity Properties
+### `Activity` Properties
 
 | Property | Description |
 |----------|-------------|
-| **Single Screen** | Each Activity typically represents one screen |
+| **Single Screen** | Each `Activity` typically represents one screen |
 | **Independent** | Can be started by other apps (if exported) |
-| **Managed by System** | Lifecycle controlled by Android |
-| **Has Intent Filter** | Can respond to specific intents |
+| **Managed by System** | `Lifecycle` controlled by Android |
+| **Has `Intent` Filter** | Can respond to specific intents |
 | **Resource Owner** | Manages its own UI resources |
-| **Context Provider** | Provides application context |
+| **`Context` Provider** | Provides application context |
 
-### When to Use Activity
+### When to Use `Activity`
 
-- **Use Activity for**:
+- **Use `Activity` for**:
 - Distinct screens in your app
 - Entry points from other apps
 - Different task flows
 - Full-screen experiences
 
-- **Don't use Activity for**:
+- **Don't use `Activity` for**:
 - Sub-sections of a screen (use Fragments)
 - Temporary UI overlays (use DialogFragment)
 - Background operations (use Service/WorkManager)
 
 
 # Question (EN)
-> Activity
+> `Activity`
 
 ---
 
@@ -432,11 +432,11 @@ class PhotoViewerActivity : AppCompatActivity() {
 
 
 ## Answer (EN)
-Activity is a core component of an Android application that provides a user interface with which users can interact to perform various actions such as dialing a phone, viewing photos, sending emails, etc. Each Activity represents a single screen with a user interface.
+`Activity` is a core component of an Android application that provides a user interface with which users can interact to perform various actions such as dialing a phone, viewing photos, sending emails, etc. Each `Activity` represents a single screen with a user interface.
 
-### Activity as a Page in a Book
+### `Activity` as a Page in a Book
 
-If you imagine an application as a book, then an Activity is one page of that book. Each page (Activity) has its own content and purpose, and users can navigate between pages.
+If you imagine an application as a book, then an `Activity` is one page of that book. Each page (`Activity`) has its own content and purpose, and users can navigate between pages.
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -465,11 +465,11 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Main Purposes of Activity
+### Main Purposes of `Activity`
 
 #### 1. Providing User Interface
 
-Activity is responsible for displaying the UI and making it interactive:
+`Activity` is responsible for displaying the UI and making it interactive:
 
 ```kotlin
 class PhotoGalleryActivity : AppCompatActivity() {
@@ -493,7 +493,7 @@ class PhotoGalleryActivity : AppCompatActivity() {
 
 #### 2. User Interaction Handling
 
-Activity processes user input and responds to it:
+`Activity` processes user input and responds to it:
 
 ```kotlin
 class EmailComposeActivity : AppCompatActivity() {
@@ -554,9 +554,9 @@ class EmailComposeActivity : AppCompatActivity() {
 }
 ```
 
-#### 3. Lifecycle Management
+#### 3. `Lifecycle` Management
 
-Activity manages resources throughout its lifecycle:
+`Activity` manages resources throughout its lifecycle:
 
 ```kotlin
 class VideoPlayerActivity : AppCompatActivity() {
@@ -610,7 +610,7 @@ class VideoPlayerActivity : AppCompatActivity() {
 
 #### 4. Screen Transitions
 
-Activity enables navigation between different screens:
+`Activity` enables navigation between different screens:
 
 ```kotlin
 class ProductListActivity : AppCompatActivity() {
@@ -665,7 +665,7 @@ class ProductDetailActivity : AppCompatActivity() {
 
 #### 5. Component Interaction
 
-Activity interacts with other Android components:
+`Activity` interacts with other Android components:
 
 ```kotlin
 class MainDashboardActivity : AppCompatActivity() {
@@ -788,26 +788,26 @@ class PhotoViewerActivity : AppCompatActivity() {
 }
 ```
 
-### Activity Properties
+### `Activity` Properties
 
 | Property | Description |
 |----------|-------------|
-| **Single Screen** | Each Activity typically represents one screen |
+| **Single Screen** | Each `Activity` typically represents one screen |
 | **Independent** | Can be started by other apps (if exported) |
-| **Managed by System** | Lifecycle controlled by Android |
-| **Has Intent Filter** | Can respond to specific intents |
+| **Managed by System** | `Lifecycle` controlled by Android |
+| **Has `Intent` Filter** | Can respond to specific intents |
 | **Resource Owner** | Manages its own UI resources |
-| **Context Provider** | Provides application context |
+| **`Context` Provider** | Provides application context |
 
-### When to Use Activity
+### When to Use `Activity`
 
-- **Use Activity for**:
+- **Use `Activity` for**:
 - Distinct screens in your app
 - Entry points from other apps
 - Different task flows
 - Full-screen experiences
 
-- **Don't use Activity for**:
+- **Don't use `Activity` for**:
 - Sub-sections of a screen (use Fragments)
 - Temporary UI overlays (use DialogFragment)
 - Background operations (use Service/WorkManager)
@@ -816,10 +816,10 @@ class PhotoViewerActivity : AppCompatActivity() {
 Это компонент приложения, который предоставляет пользовательский интерфейс (UI), с которым пользователи могут взаимодействовать для выполнения различных действий, таких как набор номера телефона, просмотр фотографий, отправка электронной почты и т. д. Каждая активность представляет собой один экран с пользовательским интерфейсом. Если представить приложение как книгу, то активность будет одной страницей этой книги. Основное назначение: предоставление интерфейса пользователя, взаимодействие с пользователем, управление жизненным циклом, переход между экранами и взаимодействие с другими компонентами приложения.
 
 ## Related Topics
-- Activity lifecycle
-- Intent system
-- Fragment vs Activity
-- Single Activity architecture
+- `Activity` lifecycle
+- `Intent` system
+- `Fragment` vs `Activity`
+- Single `Activity` architecture
 - Task and back stack
 
 ---
@@ -835,20 +835,20 @@ class PhotoViewerActivity : AppCompatActivity() {
 ## References
 
 - [Android Documentation](https://developer.android.com/docs)
-- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-components-besides-activity--android--easy]] - Activity
+- [[q-android-components-besides-activity--android--easy]] - `Activity`
 
 ### Related (Medium)
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
-- [[q-single-activity-pros-cons--android--medium]] - Activity
-- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Activity
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - `Activity`
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Activity`
+- [[q-single-activity-pros-cons--android--medium]] - `Activity`
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - `Activity`
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity`
 
 ### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - `Activity`

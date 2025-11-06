@@ -41,18 +41,18 @@ tags:
 ---
 
 # Question (EN)
-> What is the Repository pattern in Android? How does it abstract data sources, provide a single source of truth, and work with ViewModels?
+> What is the `Repository` pattern in Android? How does it abstract data sources, provide a single source of truth, and work with ViewModels?
 
 # Вопрос (RU)
-> Что такое паттерн Repository в Android? Как он абстрагирует источники данных, предоставляет единый источник истины и работает с ViewModels?
+> Что такое паттерн `Repository` в Android? Как он абстрагирует источники данных, предоставляет единый источник истины и работает с ViewModels?
 
 ---
 
 ## Answer (EN)
 
-**Repository Pattern** is an architectural pattern that abstracts data sources (network, database, cache) behind a clean API, providing a single source of truth and separating business logic from data access logic.
+**`Repository` Pattern** is an architectural pattern that abstracts data sources (network, database, cache) behind a clean API, providing a single source of truth and separating business logic from data access logic.
 
-### Why Repository Pattern?
+### Why `Repository` Pattern?
 
 **Problems it solves:**
 1. **Data source coupling** - ViewModels shouldn't know if data comes from API or database
@@ -67,7 +67,7 @@ tags:
 - Clean separation of concerns
 - Swappable data sources
 
-### Basic Repository
+### Basic `Repository`
 
 ```kotlin
 interface UserRepository {
@@ -100,7 +100,7 @@ class UserRepositoryImpl(
 }
 ```
 
-### Repository in MVVM Architecture
+### `Repository` in MVVM Architecture
 
 ```
 View (Activity/Fragment/Composable)
@@ -229,7 +229,7 @@ class ProductRepository(
 **Benefits:**
 - UI always shows consistent data
 - Network failures don't break UI
-- Automatic updates via Flow/LiveData
+- Automatic updates via Flow/`LiveData`
 - No state management needed in UI
 
 ### Caching Strategies
@@ -388,7 +388,7 @@ class UserViewModel @Inject constructor(
 }
 ```
 
-### Testing Repository
+### Testing `Repository`
 
 #### 1. Unit Testing with Fakes
 
@@ -491,7 +491,7 @@ class UserRepositoryIntegrationTest {
 }
 ```
 
-### Real-World Example: E-Commerce Repository
+### Real-World Example: E-Commerce `Repository`
 
 ```kotlin
 interface ProductRepository {
@@ -695,8 +695,8 @@ class CheckoutRepository(
 
 ### Best Practices
 
-1. **Repository per entity** - `UserRepository`, `ProductRepository`, not `DataRepository`
-2. **Return Flow for reactive data** - Automatic UI updates
+1. **`Repository` per entity** - `UserRepository`, `ProductRepository`, not `DataRepository`
+2. **Return `Flow` for reactive data** - Automatic UI updates
 3. **Return suspend functions for one-shot operations** - Login, update profile
 4. **Database as single source of truth** - Network updates database, UI observes database
 5. **Handle errors gracefully** - Show cached data even on network errors
@@ -775,10 +775,10 @@ class UserRepository {
 
 
 # Question (EN)
-> What is the Repository pattern in Android? How does it abstract data sources, provide a single source of truth, and work with ViewModels?
+> What is the `Repository` pattern in Android? How does it abstract data sources, provide a single source of truth, and work with ViewModels?
 
 # Вопрос (RU)
-> Что такое паттерн Repository в Android? Как он абстрагирует источники данных, предоставляет единый источник истины и работает с ViewModels?
+> Что такое паттерн `Repository` в Android? Как он абстрагирует источники данных, предоставляет единый источник истины и работает с ViewModels?
 
 ---
 
@@ -788,9 +788,9 @@ class UserRepository {
 
 ## Answer (EN)
 
-**Repository Pattern** is an architectural pattern that abstracts data sources (network, database, cache) behind a clean API, providing a single source of truth and separating business logic from data access logic.
+**`Repository` Pattern** is an architectural pattern that abstracts data sources (network, database, cache) behind a clean API, providing a single source of truth and separating business logic from data access logic.
 
-### Why Repository Pattern?
+### Why `Repository` Pattern?
 
 **Problems it solves:**
 1. **Data source coupling** - ViewModels shouldn't know if data comes from API or database
@@ -805,7 +805,7 @@ class UserRepository {
 - Clean separation of concerns
 - Swappable data sources
 
-### Basic Repository
+### Basic `Repository`
 
 ```kotlin
 interface UserRepository {
@@ -838,7 +838,7 @@ class UserRepositoryImpl(
 }
 ```
 
-### Repository in MVVM Architecture
+### `Repository` in MVVM Architecture
 
 ```
 View (Activity/Fragment/Composable)
@@ -967,7 +967,7 @@ class ProductRepository(
 **Benefits:**
 - UI always shows consistent data
 - Network failures don't break UI
-- Automatic updates via Flow/LiveData
+- Automatic updates via Flow/`LiveData`
 - No state management needed in UI
 
 ### Caching Strategies
@@ -1126,7 +1126,7 @@ class UserViewModel @Inject constructor(
 }
 ```
 
-### Testing Repository
+### Testing `Repository`
 
 #### 1. Unit Testing with Fakes
 
@@ -1229,7 +1229,7 @@ class UserRepositoryIntegrationTest {
 }
 ```
 
-### Real-World Example: E-Commerce Repository
+### Real-World Example: E-Commerce `Repository`
 
 ```kotlin
 interface ProductRepository {
@@ -1433,8 +1433,8 @@ class CheckoutRepository(
 
 ### Best Practices
 
-1. **Repository per entity** - `UserRepository`, `ProductRepository`, not `DataRepository`
-2. **Return Flow for reactive data** - Automatic UI updates
+1. **`Repository` per entity** - `UserRepository`, `ProductRepository`, not `DataRepository`
+2. **Return `Flow` for reactive data** - Automatic UI updates
 3. **Return suspend functions for one-shot operations** - Login, update profile
 4. **Database as single source of truth** - Network updates database, UI observes database
 5. **Handle errors gracefully** - Show cached data even on network errors
@@ -1513,17 +1513,17 @@ class UserRepository {
 
 ## Ответ (RU)
 
-**Repository Pattern** - это архитектурный паттерн, который абстрагирует источники данных (сеть, база данных, кэш) за чистым API, предоставляя единый источник истины и разделяя бизнес-логику от логики доступа к данным.
+**`Repository` Pattern** - это архитектурный паттерн, который абстрагирует источники данных (сеть, база данных, кэш) за чистым API, предоставляя единый источник истины и разделяя бизнес-логику от логики доступа к данным.
 
-### Зачем Нужен Repository Pattern?
+### Зачем Нужен `Repository` Pattern?
 
 **Проблемы, которые он решает:**
-1. **Связанность с источниками данных** - ViewModel не должна знать откуда данные: из API или БД
+1. **Связанность с источниками данных** - `ViewModel` не должна знать откуда данные: из API или БД
 2. **Дублирование логики** - Логика кэширования не должна повторяться на разных экранах
-3. **Сложность тестирования** - Сложно тестировать ViewModel с реальными источниками данных
+3. **Сложность тестирования** - Сложно тестировать `ViewModel` с реальными источниками данных
 4. **Комплексность** - Управление множественными источниками данных становится неуправляемым
 
-### Базовый Repository
+### Базовый `Repository`
 
 ```kotlin
 interface UserRepository {
@@ -1556,7 +1556,7 @@ class UserRepositoryImpl(
 }
 ```
 
-### Repository В MVVM Архитектуре
+### `Repository` В MVVM Архитектуре
 
 ```
 View (Activity/Fragment/Composable)
@@ -1596,7 +1596,7 @@ class ProductRepository(
 **Преимущества:**
 - UI всегда показывает консистентные данные
 - Сбои сети не ломают UI
-- Автоматические обновления через Flow/LiveData
+- Автоматические обновления через Flow/`LiveData`
 - Не нужно управлять состоянием в UI
 
 ### Стратегии Кэширования
@@ -1683,8 +1683,8 @@ class UserViewModel @Inject constructor(
 
 ### Best Practices (Лучшие практики)
 
-1. **Repository на каждую сущность** - `UserRepository`, `ProductRepository`, не `DataRepository`
-2. **Возвращать Flow для реактивных данных** - Автоматические обновления UI
+1. **`Repository` на каждую сущность** - `UserRepository`, `ProductRepository`, не `DataRepository`
+2. **Возвращать `Flow` для реактивных данных** - Автоматические обновления UI
 3. **Возвращать suspend функции для one-shot операций** - Логин, обновление профиля
 4. **База данных как единый источник истины** - Сеть обновляет БД, UI наблюдает за БД
 5. **Обрабатывать ошибки gracefully** - Показывать кэшированные данные даже при ошибках сети
@@ -1727,7 +1727,7 @@ class UserViewModel @Inject constructor(
 ## References
 
 - [Data layer - Android](https://developer.android.com/topic/architecture/data-layer)
-- [Repository pattern](https://developer.android.com/codelabs/basic-android-kotlin-training-repository-pattern)
+- [`Repository` pattern](https://developer.android.com/codelabs/basic-android-kotlin-training-repository-pattern)
 - [Guide to app architecture](https://developer.android.com/topic/architecture)
 
 ## MOC Links

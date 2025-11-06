@@ -45,9 +45,9 @@ tags:
 
 ## EN (expanded)
 
-### FrameLayout (Traditional Views)
+### `FrameLayout` (Traditional Views)
 
-In the traditional Android View system, **FrameLayout** is used for overlapping elements:
+In the traditional Android `View` system, **`FrameLayout`** is used for overlapping elements:
 
 ```xml
 <FrameLayout
@@ -87,7 +87,7 @@ In the traditional Android View system, **FrameLayout** is used for overlapping 
 
 ### Box (Jetpack Compose)
 
-In Jetpack Compose, **Box** serves the same purpose as FrameLayout:
+In Jetpack Compose, **Box** serves the same purpose as `FrameLayout`:
 
 ```kotlin
 @Composable
@@ -214,7 +214,7 @@ fun IconWithBadge(badgeCount: Int) {
 }
 ```
 
-#### 4. Floating Action Button over Content
+#### 4. Floating Action `Button` over Content
 ```kotlin
 @Composable
 fun ScreenWithFAB() {
@@ -279,7 +279,7 @@ fun LayeringExample() {
 
 Как называется лейаут в котором объекты могут наслаиваться друг на друга
 
-В Android для наложения элементов используется FrameLayout или Box в Jetpack Compose. FrameLayout — контейнер, где элементы располагаются в левом верхнем углу и могут накладываться друг на друга. Box в Jetpack Compose аналогичен FrameLayout и также позволяет наложение элементов.
+В Android для наложения элементов используется `FrameLayout` или Box в Jetpack Compose. `FrameLayout` — контейнер, где элементы располагаются в левом верхнем углу и могут накладываться друг на друга. Box в Jetpack Compose аналогичен `FrameLayout` и также позволяет наложение элементов.
 
 
 ## Follow-ups

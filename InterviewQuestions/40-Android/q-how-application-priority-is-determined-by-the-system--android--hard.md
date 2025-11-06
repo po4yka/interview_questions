@@ -57,27 +57,27 @@ Android классифицирует процессы по **иерархии в
 
 1. **Foreground Process** - пользователь активно взаимодействует
 2. **Visible Process** - процесс частично виден пользователю
-3. **Service Process** - выполняет фоновую задачу
+3. **`Service` Process** - выполняет фоновую задачу
 4. **Cached Process** - остановлен, но кешируется для быстрого перезапуска
 5. **Empty Process** - без активных компонентов, убивается первым
 
 ### Критерии Определения
 
 **Foreground (oom_adj = 0):**
-- Activity в состоянии resumed (onResume)
-- Foreground Service с уведомлением
-- BroadcastReceiver выполняет onReceive()
+- `Activity` в состоянии resumed (onResume)
+- Foreground `Service` с уведомлением
+- `BroadcastReceiver` выполняет onReceive()
 
 **Visible (oom_adj = 100-200):**
-- Activity в состоянии paused, но видима (диалог поверх)
-- Service привязан к visible Activity
+- `Activity` в состоянии paused, но видима (диалог поверх)
+- `Service` привязан к visible `Activity`
 
-**Service (oom_adj = 300-400):**
-- Service запущен через startService()
+**`Service` (oom_adj = 300-400):**
+- `Service` запущен через startService()
 - Выполняет длительную операцию
 
 **Cached (oom_adj = 900-999):**
-- Activity в состоянии stopped (onStop)
+- `Activity` в состоянии stopped (onStop)
 - Нет активных компонентов
 - Убивается первым при нехватке памяти (LRU порядок)
 
@@ -106,9 +106,9 @@ class PriorityChecker(private val context: Context) {
 
 ### Факторы Влияния
 
-1. **Состояние компонентов** - resumed Activity повышает до Foreground
-2. **Тип Service** - foreground Service (startForeground) получает приоритет Foreground
-3. **Bound Services** - наследуют приоритет Activity, к которой привязаны
+1. **Состояние компонентов** - resumed `Activity` повышает до Foreground
+2. **Тип `Service`** - foreground `Service` (startForeground) получает приоритет Foreground
+3. **Bound Services** - наследуют приоритет `Activity`, к которой привязаны
 4. **Зависимости процессов** - если процесс A зависит от B, B получает приоритет A
 
 ### Low Memory Killer
@@ -116,7 +116,7 @@ class PriorityChecker(private val context: Context) {
 LMK убивает процессы начиная с наибольшего oom_adj:
 1. Empty (1000) → немедленно
 2. Cached (900-999) → LRU порядок
-3. Service (300-400) → при нехватке памяти
+3. `Service` (300-400) → при нехватке памяти
 4. Visible/Foreground → в крайнем случае
 
 ## Answer (EN)
@@ -129,27 +129,27 @@ From highest to lowest:
 
 1. **Foreground Process** - user actively interacting
 2. **Visible Process** - partially visible to user
-3. **Service Process** - performing background task
+3. **`Service` Process** - performing background task
 4. **Cached Process** - stopped but cached for quick restart
 5. **Empty Process** - no active components, killed first
 
 ### Determination Criteria
 
 **Foreground (oom_adj = 0):**
-- Activity in resumed state (onResume)
-- Foreground Service with notification
-- BroadcastReceiver executing onReceive()
+- `Activity` in resumed state (onResume)
+- Foreground `Service` with notification
+- `BroadcastReceiver` executing onReceive()
 
 **Visible (oom_adj = 100-200):**
-- Activity in paused state but visible (dialog on top)
-- Service bound to visible Activity
+- `Activity` in paused state but visible (dialog on top)
+- `Service` bound to visible `Activity`
 
-**Service (oom_adj = 300-400):**
-- Service started via startService()
+**`Service` (oom_adj = 300-400):**
+- `Service` started via startService()
 - Performing long-running operation
 
 **Cached (oom_adj = 900-999):**
-- Activity in stopped state (onStop)
+- `Activity` in stopped state (onStop)
 - No active components
 - Killed first during low memory (LRU order)
 
@@ -178,9 +178,9 @@ class PriorityChecker(private val context: Context) {
 
 ### Influencing Factors
 
-1. **Component state** - resumed Activity elevates to Foreground
-2. **Service type** - foreground Service (startForeground) gets Foreground priority
-3. **Bound Services** - inherit priority of bound Activity
+1. **Component state** - resumed `Activity` elevates to Foreground
+2. **`Service` type** - foreground `Service` (startForeground) gets Foreground priority
+3. **Bound Services** - inherit priority of bound `Activity`
 4. **Process dependencies** - if process A depends on B, B inherits A's priority
 
 ### Low Memory Killer
@@ -188,14 +188,14 @@ class PriorityChecker(private val context: Context) {
 LMK kills processes starting with highest oom_adj:
 1. Empty (1000) → immediately
 2. Cached (900-999) → LRU order
-3. Service (300-400) → when memory low
+3. `Service` (300-400) → when memory low
 4. Visible/Foreground → last resort
 
 ---
 
 ## Follow-ups
 
-- How does the oom_adj score dynamically change during Activity lifecycle transitions?
+- How does the oom_adj score dynamically change during `Activity` lifecycle transitions?
 - What are the trade-offs between using foreground Services versus WorkManager for background tasks?
 - How can bound Services affect the priority of processes across different applications?
 

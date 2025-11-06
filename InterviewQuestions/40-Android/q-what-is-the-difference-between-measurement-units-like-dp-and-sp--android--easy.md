@@ -33,7 +33,7 @@ Android использует две масштабируемые единицы 
 - **dp**: масштабируется только с плотностью экрана (dpi)
 - **sp**: масштабируется с плотностью экрана + пользовательские настройки текста
 - **dp**: для размеров, отступов, границ UI элементов
-- **sp**: только для размеров текста (включая text в Button)
+- **sp**: только для размеров текста (включая text в `Button`)
 
 **Примеры:**
 
@@ -75,7 +75,7 @@ Android uses two scalable measurement units: **dp** (density-independent pixels)
 - **dp**: scales only with screen density (dpi)
 - **sp**: scales with screen density + user text preferences
 - **dp**: for dimensions, spacing, borders of UI elements
-- **sp**: only for text sizes (including text in Button)
+- **sp**: only for text sizes (including text in `Button`)
 
 **Examples:**
 

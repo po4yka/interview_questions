@@ -28,22 +28,22 @@ tags: [android/notifications, android/service, difficulty/medium, foreground-ser
 > Может ли сервис общаться с пользователем?
 
 # Question (EN)
-> Can a Service communicate with the user?
+> Can a `Service` communicate with the user?
 
 ---
 
 ## Ответ (RU)
 
-**Прямой UI**: Нет. [[c-service|Service]] не имеет собственного UI и выполняется в фоновом режиме.
+**Прямой UI**: Нет. [[c-service|`Service`]] не имеет собственного UI и выполняется в фоновом режиме.
 
 **Способы коммуникации** (от приоритетных к редким):
 
 1. **Notifications** — основной механизм для foreground-сервисов и важных событий
-2. **Bound Service callbacks** — UI привязывается к сервису, получает данные через интерфейс
+2. **Bound `Service` callbacks** — UI привязывается к сервису, получает данные через интерфейс
 3. **Broadcast/`LiveData`/`Flow`** — сервис отправляет событие → UI-слой реагирует
 4. **Запуск `Activity`** — только для критичных user-initiated сценариев
 
-### Foreground Service С Уведомлением
+### Foreground `Service` С Уведомлением
 
 ```kotlin
 class MusicService : Service() {
@@ -63,7 +63,7 @@ class MusicService : Service() {
 }
 ```
 
-### Bound Service С Callbacks
+### Bound `Service` С Callbacks
 
 ```kotlin
 // Service
@@ -149,16 +149,16 @@ lifecycleScope.launch {
 
 ## Answer (EN)
 
-**Direct UI**: No. [[c-service|Service]] has no UI and runs in the background.
+**Direct UI**: No. [[c-service|`Service`]] has no UI and runs in the background.
 
 **Communication mechanisms** (from preferred to rare):
 
 1. **Notifications** — primary mechanism for foreground services and important events
-2. **Bound Service callbacks** — UI binds to service, receives data through interface
+2. **Bound `Service` callbacks** — UI binds to service, receives data through interface
 3. **Broadcast/`LiveData`/`Flow`** — service sends event → UI layer reacts
 4. **Start `Activity`** — only for critical user-initiated scenarios
 
-### Foreground Service with Notification
+### Foreground `Service` with Notification
 
 ```kotlin
 class MusicService : Service() {
@@ -178,7 +178,7 @@ class MusicService : Service() {
 }
 ```
 
-### Bound Service with Callbacks
+### Bound `Service` with Callbacks
 
 ```kotlin
 // Service
@@ -280,8 +280,8 @@ lifecycleScope.launch {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-service-types--android--easy]] — Service types overview
-- Service lifecycle basics
+- [[q-android-service-types--android--easy]] — `Service` types overview
+- `Service` lifecycle basics
 
 ### Related (Same Level)
 - [[q-background-vs-foreground-service--android--medium]] — Foreground vs background services

@@ -51,7 +51,7 @@ sources:
 
 ## Ответ (RU)
 
-Koin — это runtime Service Locator. DSL `module { single { ... } }` разворачивается в `BeanDefinition`, которые регистрируются в `DefinitionRegistry`. При каждом вызове `get()` фреймворк запускает **pipeline разрешения**, комбинируя `DefinitionResolver`, `ScopeRegistry` и `InstanceContext`.
+Koin — это runtime `Service` Locator. DSL `module { single { ... } }` разворачивается в `BeanDefinition`, которые регистрируются в `DefinitionRegistry`. При каждом вызове `get()` фреймворк запускает **pipeline разрешения**, комбинируя `DefinitionResolver`, `ScopeRegistry` и `InstanceContext`.
 
 ### 1. От DSL к BeanDefinition
 
@@ -154,7 +154,7 @@ featureScope.close()
 
 ## Answer (EN)
 
-Koin acts as a runtime Service Locator. The DSL `module { single { ... } }` expands into `BeanDefinition` objects registered in the `DefinitionRegistry`. Every `get()` call triggers a **resolution pipeline** orchestrated by `DefinitionResolver`, `ScopeRegistry`, and `InstanceContext`.
+Koin acts as a runtime `Service` Locator. The DSL `module { single { ... } }` expands into `BeanDefinition` objects registered in the `DefinitionRegistry`. Every `get()` call triggers a **resolution pipeline** orchestrated by `DefinitionResolver`, `ScopeRegistry`, and `InstanceContext`.
 
 ### 1. From DSL to BeanDefinition
 

@@ -38,22 +38,22 @@ related:
 ---
 
 # Вопрос (RU)
-> Что такое Fragment в Android и для чего он используется?
+> Что такое `Fragment` в Android и для чего он используется?
 
 # Question (EN)
-> What is a Fragment in Android and what is it used for?
+> What is a `Fragment` in Android and what is it used for?
 
 ---
 
 ## Ответ (RU)
 
-**Fragment** — это переиспользуемая часть пользовательского интерфейса в Android-приложении. Fragment определяет свой layout, имеет собственный жизненный цикл и обрабатывает события ввода независимо.
+**`Fragment`** — это переиспользуемая часть пользовательского интерфейса в Android-приложении. `Fragment` определяет свой layout, имеет собственный жизненный цикл и обрабатывает события ввода независимо.
 
 ### Ключевые Характеристики
 
-- Fragment не может существовать сам по себе — он должен быть размещен в Activity или другом Fragment
-- Иерархия View фрагмента присоединяется к иерархии View хоста
-- Fragment инкапсулирует View и логику для повторного использования
+- `Fragment` не может существовать сам по себе — он должен быть размещен в `Activity` или другом `Fragment`
+- Иерархия `View` фрагмента присоединяется к иерархии `View` хоста
+- `Fragment` инкапсулирует `View` и логику для повторного использования
 
 ### Основные Способы Добавления
 
@@ -94,7 +94,7 @@ supportFragmentManager.beginTransaction()
 3. **Динамическое изменение UI** — добавление, замена, удаление в runtime
 4. **Back stack** — управление историей навигации
 
-### Пример Простого Fragment
+### Пример Простого `Fragment`
 
 ```kotlin
 class ProfileFragment : Fragment() {
@@ -117,8 +117,8 @@ class ProfileFragment : Fragment() {
 ### Лучшие Практики
 
 - Всегда предоставляйте конструктор без параметров
-- Используйте ViewModel для связи с Activity вместо прямых ссылок
-- Учитывайте жизненный цикл — view создаются и уничтожаются независимо от Fragment
+- Используйте `ViewModel` для связи с `Activity` вместо прямых ссылок
+- Учитывайте жизненный цикл — view создаются и уничтожаются независимо от `Fragment`
 - Избегайте глубокой вложенности фрагментов
 - Для сложной навигации используйте Navigation Component
 
@@ -126,7 +126,7 @@ class ProfileFragment : Fragment() {
 
 ## Answer (EN)
 
-A **Fragment** is a reusable portion of your app's UI in Android. A fragment defines its own layout, has its own lifecycle, and handles input events independently.
+A **`Fragment`** is a reusable portion of your app's UI in Android. A fragment defines its own layout, has its own lifecycle, and handles input events independently.
 
 ### Key Characteristics
 
@@ -171,9 +171,9 @@ supportFragmentManager.beginTransaction()
 1. **UI Modularity** — dividing screen into reusable components
 2. **Adaptive Design** — combining fragments for tablets, separating for phones
 3. **Dynamic UI Changes** — adding, replacing, removing at runtime
-4. **Back Stack** — managing navigation history
+4. **Back `Stack`** — managing navigation history
 
-### Simple Fragment Example
+### Simple `Fragment` Example
 
 ```kotlin
 class ProfileFragment : Fragment() {
@@ -196,8 +196,8 @@ class ProfileFragment : Fragment() {
 ### Best Practices
 
 - Always provide a no-argument constructor
-- Use ViewModel for Activity communication instead of direct references
-- Be lifecycle-aware — views are created and destroyed independently from Fragment
+- Use `ViewModel` for `Activity` communication instead of direct references
+- Be lifecycle-aware — views are created and destroyed independently from `Fragment`
 - Avoid deep fragment nesting
 - Use Navigation Component for complex navigation
 
@@ -205,16 +205,16 @@ class ProfileFragment : Fragment() {
 
 ## Follow-ups
 
-- What is the Fragment lifecycle and how does it relate to Activity lifecycle?
+- What is the `Fragment` lifecycle and how does it relate to `Activity` lifecycle?
 - How does FragmentManager handle back stack navigation?
 - When should you use childFragmentManager vs parentFragmentManager?
-- What are the differences between Fragment and Jetpack Compose navigation?
+- What are the differences between `Fragment` and Jetpack Compose navigation?
 - How do you handle configuration changes in Fragments?
 
 ## References
 
 - [Android Developer Docs: Fragments](https://developer.android.com/guide/fragments)
-- [Android Developer Docs: Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
+- [Android Developer Docs: `Fragment` `Lifecycle`](https://developer.android.com/guide/fragments/lifecycle)
 - [Android Developer Docs: Navigation Component](https://developer.android.com/guide/navigation)
 
 ---
@@ -232,11 +232,11 @@ class ProfileFragment : Fragment() {
 - [[q-what-each-android-component-represents--android--easy]] - Understanding Android components
 
 ### Related
-- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment layouts and design
-- Activity lifecycle and how it relates to Fragments
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - `Fragment` layouts and design
+- `Activity` lifecycle and how it relates to Fragments
 
 ### Advanced
-- [[q-save-data-outside-fragment--android--medium]] - Fragment data persistence
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment lifecycle details
-- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - Fragment state loss handling
+- [[q-save-data-outside-fragment--android--medium]] - `Fragment` data persistence
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment` lifecycle details
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - `Fragment` state loss handling
 - [[q-android-build-optimization--android--medium]] - Build optimization techniques

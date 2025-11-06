@@ -46,23 +46,23 @@ sources: []
 
 ## Ответ (RU)
 
-Нет, **LayoutInflater не является глобальным синглтоном**. Каждый Context кэширует свой экземпляр LayoutInflater, полученный через `getSystemService()`. Это паттерн «синглтон в пределах области видимости» (scope-bound singleton).
+Нет, **LayoutInflater не является глобальным синглтоном**. Каждый `Context` кэширует свой экземпляр LayoutInflater, полученный через `getSystemService()`. Это паттерн «синглтон в пределах области видимости» (scope-bound singleton).
 
 ### Ключевые Моменты
 
 **Не глобальный синглтон**
-- Разные Context (Activity, Application) имеют разные экземпляры LayoutInflater
-- Каждый LayoutInflater привязан к своему Context и его теме
+- Разные `Context` (`Activity`, `Application`) имеют разные экземпляры LayoutInflater
+- Каждый LayoutInflater привязан к своему `Context` и его теме
 
-**Кэшируется в Context**
-- `LayoutInflater.from(context)` и `getSystemService(LAYOUT_INFLATER_SERVICE)` возвращают один экземпляр для данного Context
-- Внутренне Context хранит `mLayoutInflater` и переиспользует его
+**Кэшируется в `Context`**
+- `LayoutInflater.from(context)` и `getSystemService(LAYOUT_INFLATER_SERVICE)` возвращают один экземпляр для данного `Context`
+- Внутренне `Context` хранит `mLayoutInflater` и переиспользует его
 
 **Stateless для inflate операций**
 - LayoutInflater не сохраняет состояние между вызовами `inflate()`
 - Безопасно переиспользовать для множественных инфляций
 
-### Пример: Один Экземпляр На Context
+### Пример: Один Экземпляр На `Context`
 
 ```kotlin
 val inflater1 = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -98,23 +98,23 @@ class BadAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 ## Answer (EN)
 
-No, **LayoutInflater is not a global singleton**. Each Context caches its own LayoutInflater instance obtained via `getSystemService()`. This is a scope-bound singleton pattern.
+No, **LayoutInflater is not a global singleton**. Each `Context` caches its own LayoutInflater instance obtained via `getSystemService()`. This is a scope-bound singleton pattern.
 
 ### Key Points
 
 **Not a global singleton**
-- Different Contexts (Activity, Application) have different LayoutInflater instances
-- Each LayoutInflater is bound to its Context and theme
+- Different Contexts (`Activity`, `Application`) have different LayoutInflater instances
+- Each LayoutInflater is bound to its `Context` and theme
 
-**Cached in Context**
-- `LayoutInflater.from(context)` and `getSystemService(LAYOUT_INFLATER_SERVICE)` return the same instance for a given Context
-- Internally, Context stores `mLayoutInflater` and reuses it
+**Cached in `Context`**
+- `LayoutInflater.from(context)` and `getSystemService(LAYOUT_INFLATER_SERVICE)` return the same instance for a given `Context`
+- Internally, `Context` stores `mLayoutInflater` and reuses it
 
 **Stateless for inflate operations**
 - LayoutInflater doesn't preserve state between `inflate()` calls
 - Safe to reuse for multiple inflations
 
-### Example: One Instance per Context
+### Example: One Instance per `Context`
 
 ```kotlin
 val inflater1 = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -154,12 +154,12 @@ class BadAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 - What are the performance implications of creating LayoutInflater instances repeatedly?
 - How does LayoutInflater handle custom views and attributes?
-- When should you use Activity context vs Application context for LayoutInflater?
-- How does View Binding compare to direct inflation?
+- When should you use `Activity` context vs `Application` context for LayoutInflater?
+- How does `View` Binding compare to direct inflation?
 
 ## References
 
-- Android Developer Documentation: System Services and Context
+- Android Developer Documentation: System Services and `Context`
 
 ## Related Questions
 

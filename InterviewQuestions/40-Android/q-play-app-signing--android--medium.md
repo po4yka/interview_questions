@@ -106,7 +106,7 @@ keytool -export -rfc -keystore existing.jks \
 - Upload key можно сбросить при компрометации
 - App signing key остаётся в безопасности даже при утечке upload key
 
-**2. Android App Bundle:**
+**2. Android App `Bundle`:**
 - Требуется для публикации AAB (обязательно с августа 2021)
 - Уменьшает размер приложения на 15-35% через split APKs
 - Динамическая доставка модулей
@@ -179,7 +179,7 @@ Play App Signing uses an **app signing key** and an **upload key**:
 - Can be reset if compromised via Play Console
 - Verifies developer identity
 
-**Flow:**
+**`Flow`:**
 ```
 Developer → sign with upload key → upload to Play Console
                                           ↓
@@ -238,7 +238,7 @@ keytool -export -rfc -keystore existing.jks \
 - Upload key can be reset if compromised
 - App signing key remains safe even if upload key leaks
 
-**2. Android App Bundle:**
+**2. Android App `Bundle`:**
 - Required for AAB publishing (mandatory since August 2021)
 - Reduces app size by 15-35% through split APKs
 - Dynamic delivery of modules
@@ -248,7 +248,7 @@ keytool -export -rfc -keystore existing.jks \
 - Ability to migrate to stronger cryptographic key
 - Does not affect updates for existing users
 
-### Service Integration
+### `Service` Integration
 
 **Google APIs / Firebase:**
 ```bash
@@ -303,7 +303,7 @@ keytool -list -v -keystore upload.jks -alias upload
 
 ## References
 
-- [[c-app-bundle|Android App Bundle]]
+- [[c-app-bundle|Android App `Bundle`]]
 - [[c-android-keystore|Android Keystore System]]
 - [[c-gradle|Gradle Build System]]
 - [Play App Signing documentation](https://developer.android.com/studio/publish/app-signing#app-signing-google-play)
@@ -312,7 +312,7 @@ keytool -list -v -keystore upload.jks -alias upload
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-app-bundles--android--easy|What is Android App Bundle?]]
+- [[q-android-app-bundles--android--easy|What is Android App `Bundle`?]]
 - [[q-gradle-basics--android--easy|Gradle basics]]
 
 ### Related (Same Level)

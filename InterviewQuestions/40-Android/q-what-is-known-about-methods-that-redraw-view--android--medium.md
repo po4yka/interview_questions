@@ -39,19 +39,19 @@ tags:
 
 # Вопрос (RU)
 
-Что известно про методы, которые перерисовывают View?
+Что известно про методы, которые перерисовывают `View`?
 
 # Question (EN)
 
-What is known about methods that redraw View?
+What is known about methods that redraw `View`?
 
 ## Ответ (RU)
 
-Android предоставляет три основных метода для перерисовки View:
+Android предоставляет три основных метода для перерисовки `View`:
 
 ### 1. invalidate()
 
-Помечает View для перерисовки через вызов `onDraw()`. Используется когда изменяется только визуальный вид, но размер остаётся прежним.
+Помечает `View` для перерисовки через вызов `onDraw()`. Используется когда изменяется только визуальный вид, но размер остаётся прежним.
 
 **Когда использовать:**
 - Изменения цвета, текста
@@ -81,13 +81,13 @@ class CustomView : View {
 
 ### 2. requestLayout()
 
-Запускает полный цикл layout через вызов `onMeasure()` и `onLayout()`. Используется когда изменяются размеры или позиция View.
+Запускает полный цикл layout через вызов `onMeasure()` и `onLayout()`. Используется когда изменяются размеры или позиция `View`.
 
 **Когда использовать:**
 - Изменения размера
 - Изменения margin/padding
 - Изменения LayoutParams
-- Добавление/удаление дочерних View
+- Добавление/удаление дочерних `View`
 
 ```kotlin
 class ExpandableView : ViewGroup {
@@ -168,11 +168,11 @@ fun updateSeparately() {
 
 ## Answer (EN)
 
-Android provides three primary methods to trigger View redrawing and layout recalculation:
+Android provides three primary methods to trigger `View` redrawing and layout recalculation:
 
 ### 1. invalidate()
 
-Marks the View for redrawing by calling `onDraw()`. Use when visual appearance changes but size remains the same.
+Marks the `View` for redrawing by calling `onDraw()`. Use when visual appearance changes but size remains the same.
 
 **When to use:**
 - Color changes
@@ -203,7 +203,7 @@ class CustomView : View {
 
 ### 2. requestLayout()
 
-Triggers full layout pass by calling `onMeasure()` and `onLayout()`. Use when View dimensions change.
+Triggers full layout pass by calling `onMeasure()` and `onLayout()`. Use when `View` dimensions change.
 
 **When to use:**
 - Size changes
@@ -232,7 +232,7 @@ class ExpandableView : ViewGroup {
 
 ### 3. postInvalidate()
 
-Thread-safe version of `invalidate()` for calling from background threads. Posts invalidation request to UI thread.
+`Thread`-safe version of `invalidate()` for calling from background threads. Posts invalidation request to UI thread.
 
 **When to use:**
 - Updates from background threads
@@ -257,7 +257,7 @@ class LoadingView : View {
 
 ### Method Comparison
 
-| Method | Thread | Calls | Use Case |
+| Method | `Thread` | Calls | Use Case |
 |--------|--------|-------|----------|
 | `invalidate()` | UI | `onDraw()` | Visual changes |
 | `requestLayout()` | UI | `onMeasure()`, `onLayout()` | Size/position changes |
@@ -294,14 +294,14 @@ fun updateSeparately() {
 
 - What happens if you call `invalidate()` from a background thread?
 - When should you call both `requestLayout()` and `invalidate()`?
-- How does View invalidation propagate up the View hierarchy?
+- How does `View` invalidation propagate up the `View` hierarchy?
 - What is the difference between `forceLayout()` and `requestLayout()`?
-- How can you optimize multiple View updates in a custom ViewGroup?
+- How can you optimize multiple `View` updates in a custom `ViewGroup`?
 
 ## References
 
-- Android Documentation: View Rendering
-- Android Source: View.java invalidate/requestLayout implementation
+- Android Documentation: `View` Rendering
+- Android Source: `View`.java invalidate/requestLayout implementation
 
 ## Related Questions
 
@@ -311,14 +311,14 @@ fun updateSeparately() {
 
 
 ### Prerequisites
-- Basic understanding of View lifecycle (onMeasure, onLayout, onDraw)
+- Basic understanding of `View` lifecycle (onMeasure, onLayout, onDraw)
 - Knowledge of Android UI thread and main looper
 
 ### Related
 - [[q-handler-looper-main-thread--android--medium]] — UI thread and message handling
-- Custom View rendering pipeline and drawing process
-- Canvas drawing operations in Android
+- Custom `View` rendering pipeline and drawing process
+- `Canvas` drawing operations in Android
 
 ### Advanced
-- View performance optimization techniques
-- Advanced ViewGroup layout and measure passes
+- `View` performance optimization techniques
+- Advanced `ViewGroup` layout and measure passes

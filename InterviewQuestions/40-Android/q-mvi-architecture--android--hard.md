@@ -17,16 +17,16 @@ tags: [android/architecture-mvi, android/coroutines, android/ui-state, architect
 ---
 
 # Вопрос (RU)
-> Объясните архитектурный паттерн MVI (Model-View-Intent). В чем его ключевые отличия от MVVM?
+> Объясните архитектурный паттерн MVI (Model-`View`-`Intent`). В чем его ключевые отличия от MVVM?
 
 # Question (EN)
-> Explain the MVI (Model-View-Intent) architecture pattern. How does it differ from MVVM?
+> Explain the MVI (Model-`View`-`Intent`) architecture pattern. How does it differ from MVVM?
 
 ---
 
 ## Ответ (RU)
 
-**MVI (Model-View-Intent)** - архитектурный паттерн с **unidirectional data flow** (однонаправленным потоком данных), где UI состояние иммутабельно и изменяется только через явные намерения (Intents).
+**MVI (Model-`View`-`Intent`)** - архитектурный паттерн с **unidirectional data flow** (однонаправленным потоком данных), где UI состояние иммутабельно и изменяется только через явные намерения (Intents).
 
 ### Компоненты MVI
 
@@ -35,10 +35,10 @@ tags: [android/architecture-mvi, android/coroutines, android/ui-state, architect
 Intent → Processor → Model → View → Intent
 ```
 
-1. **Intent** - намерения пользователя (клик, ввод текста, загрузка данных)
+1. **`Intent`** - намерения пользователя (клик, ввод текста, загрузка данных)
 2. **Model** - иммутабельное состояние UI (data class)
-3. **View** - отрисовывает UI на основе Model
-4. **Processor** - обрабатывает Intent → создает новый Model
+3. **`View`** - отрисовывает UI на основе Model
+4. **Processor** - обрабатывает `Intent` → создает новый Model
 
 ### Базовая Реализация
 
@@ -114,8 +114,8 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 
 | Аспект | MVVM | MVI |
 |--------|------|-----|
-| **State** | Множественные LiveData/StateFlow | Единое иммутабельное состояние |
-| **Updates** | Прямые вызовы методов | Intent-based |
+| **State** | Множественные LiveData/`StateFlow` | Единое иммутабельное состояние |
+| **Updates** | Прямые вызовы методов | `Intent`-based |
 | **Data flow** | Bi-directional | Unidirectional |
 | **Testability** | Хорошая | Отличная (pure functions) |
 | **Boilerplate** | Меньше | Больше |
@@ -354,22 +354,22 @@ class DebuggableViewModel<I, S>(
 
 ✅ **Правильно**:
 - Единое иммутабельное состояние (data class)
-- Все действия через Intent
-- Side effects через Channel/SharedFlow
+- Все действия через `Intent`
+- Side effects через Channel/`SharedFlow`
 - Reducer - чистые функции
 - `state.copy()` для изменений
 
 ❌ **Неправильно**:
 - Мутация state: `_state.value.items.add(item)`
 - События в State: `navigateToHome: Boolean`
-- Прямые вызовы методов вместо Intent
+- Прямые вызовы методов вместо `Intent`
 - Множественные источники состояния
 
 ---
 
 ## Answer (EN)
 
-**MVI (Model-View-Intent)** is an architecture pattern with **unidirectional data flow**, where UI state is immutable and changes only through explicit Intents.
+**MVI (Model-`View`-`Intent`)** is an architecture pattern with **unidirectional data flow**, where UI state is immutable and changes only through explicit Intents.
 
 ### MVI Components
 
@@ -378,10 +378,10 @@ class DebuggableViewModel<I, S>(
 Intent → Processor → Model → View → Intent
 ```
 
-1. **Intent** - user actions/events
+1. **`Intent`** - user actions/events
 2. **Model** - single immutable UI state
-3. **View** - renders UI from Model
-4. **Processor** - processes Intent → creates new Model
+3. **`View`** - renders UI from Model
+4. **Processor** - processes `Intent` → creates new Model
 
 ### Basic Implementation
 
@@ -438,8 +438,8 @@ class UserViewModel(
 
 | Aspect | MVVM | MVI |
 |--------|------|-----|
-| **State** | Multiple LiveData/StateFlow | Single immutable state |
-| **Updates** | Direct method calls | Intent-based |
+| **State** | Multiple LiveData/`StateFlow` | Single immutable state |
+| **Updates** | Direct method calls | `Intent`-based |
 | **Data flow** | Bi-directional | Unidirectional |
 | **Testability** | Good | Excellent (pure functions) |
 | **Boilerplate** | Less | More |
@@ -589,15 +589,15 @@ class AnalyticsMiddleware : Middleware<LoginIntent, LoginState> {
 
 ✅ **Correct**:
 - Single immutable state (data class)
-- All actions through Intent
-- Side effects through Channel/SharedFlow
+- All actions through `Intent`
+- Side effects through Channel/`SharedFlow`
 - Reducer - pure functions
 - Use `state.copy()` for changes
 
 ❌ **Wrong**:
 - State mutation: `_state.value.items.add(item)`
 - Events in State: `navigateToHome: Boolean`
-- Direct method calls instead of Intent
+- Direct method calls instead of `Intent`
 - Multiple state sources
 
 ---
@@ -624,7 +624,7 @@ class AnalyticsMiddleware : Middleware<LoginIntent, LoginState> {
 - [[q-mvvm-pattern--android--medium]] - MVVM architecture pattern
 - [[q-mvp-pattern--android--medium]] - MVP architecture pattern
 - [[q-stateflow-flow-sharedflow-livedata--android--medium]] - State management tools
-- [[q-repository-pattern--android--medium]] - Repository pattern
+- [[q-repository-pattern--android--medium]] - `Repository` pattern
 
 ### Related (Hard)
 - [[q-clean-architecture-android--android--hard]] - Clean architecture principles

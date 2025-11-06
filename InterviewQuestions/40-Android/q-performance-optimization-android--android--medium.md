@@ -83,7 +83,7 @@ val imageLoader by lazy { Coil.imageLoader(context) }
 **Ключевые техники**:
 - App Startup library для управления порядком инициализации
 - Baseline Profiles для предкомпиляции критического кода
-- Splash screen через windowBackground (не отдельная Activity)
+- Splash screen через windowBackground (не отдельная `Activity`)
 
 ### 2. Оптимизация UI И Рендеринга
 
@@ -115,7 +115,7 @@ val imageLoader by lazy { Coil.imageLoader(context) }
 - Debug GPU Overdraw: цель < 2x overdraw
 - Layout Inspector: анализ глубины иерархии (< 10 уровней)
 
-### 3. Оптимизация RecyclerView
+### 3. Оптимизация `RecyclerView`
 
 ```kotlin
 class OptimizedAdapter : ListAdapter<Item, ViewHolder>(DIFF_CALLBACK) {
@@ -174,7 +174,7 @@ suspend fun loadLargeBitmap(path: String, reqWidth: Int, reqHeight: Int): Bitmap
 val sparse = SparseIntArray() // Вместо HashMap<Int, Int>
 ```
 
-**Инструменты**: LeakCanary для детектирования утечек, ViewModel для сохранения данных при пересоздании Activity.
+**Инструменты**: LeakCanary для детектирования утечек, `ViewModel` для сохранения данных при пересоздании `Activity`.
 
 ### 5. Оптимизация Сети
 
@@ -256,7 +256,7 @@ android {
 }
 ```
 
-**Цель**: APK < 20MB через Android App Bundle, WebP для изображений, удаление неиспользуемых зависимостей.
+**Цель**: APK < 20MB через Android App `Bundle`, WebP для изображений, удаление неиспользуемых зависимостей.
 
 ### Инструменты Профилирования
 
@@ -312,7 +312,7 @@ val imageLoader by lazy { Coil.imageLoader(context) }
 **Key techniques**:
 - App Startup library for dependency initialization order
 - Baseline Profiles for pre-compiling critical code paths
-- Splash screen via windowBackground (not a separate Activity)
+- Splash screen via windowBackground (not a separate `Activity`)
 
 ### 2. UI and Rendering Optimization
 
@@ -344,7 +344,7 @@ val imageLoader by lazy { Coil.imageLoader(context) }
 - Debug GPU Overdraw: target < 2x overdraw
 - Layout Inspector: analyze hierarchy depth (< 10 levels)
 
-### 3. RecyclerView Optimization
+### 3. `RecyclerView` Optimization
 
 ```kotlin
 class OptimizedAdapter : ListAdapter<Item, ViewHolder>(DIFF_CALLBACK) {
@@ -403,7 +403,7 @@ suspend fun loadLargeBitmap(path: String, reqWidth: Int, reqHeight: Int): Bitmap
 val sparse = SparseIntArray() // Instead of HashMap<Int, Int>
 ```
 
-**Tools**: LeakCanary for leak detection, ViewModel for data retention across configuration changes.
+**Tools**: LeakCanary for leak detection, `ViewModel` for data retention across configuration changes.
 
 ### 5. Network Optimization
 
@@ -485,7 +485,7 @@ android {
 }
 ```
 
-**Target**: APK < 20MB via Android App Bundle, WebP for images, remove unused dependencies.
+**Target**: APK < 20MB via Android App `Bundle`, WebP for images, remove unused dependencies.
 
 ### Profiling Tools
 
@@ -511,7 +511,7 @@ android {
 - How do Baseline Profiles improve startup performance?
 - What are the trade-offs between DiskLruCache and DataStore for caching?
 - How does R8 full-mode differ from standard optimization?
-- When should you use RecyclerView.RecycledViewPool for nested lists?
+- When should you use `RecyclerView`.RecycledViewPool for nested lists?
 - What battery impact metrics should trigger optimization?
 
 ## References
@@ -531,8 +531,8 @@ android {
 
 
 ### Prerequisites
-- Understanding Activity and Fragment lifecycle is essential for optimization context
-- RecyclerView fundamentals are required for list optimization
+- Understanding `Activity` and `Fragment` lifecycle is essential for optimization context
+- `RecyclerView` fundamentals are required for list optimization
 
 ### Related
 - [[q-baseline-profiles-android--android--medium]] - Startup optimization technique

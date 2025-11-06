@@ -34,10 +34,10 @@ Dialog - это UI-компонент, который отображается �
 **Ключевые отличия:**
 
 1. **Overlay vs Replacement** - Dialog отображается поверх экрана, обычная навигация заменяет экран
-2. **Back Stack** - Dialog не добавляется в back stack, навигация добавляет записи
+2. **Back `Stack`** - Dialog не добавляется в back stack, навигация добавляет записи
 3. **State Preservation** - Под dialog сохраняется состояние экрана, при навигации может теряться
 4. **Scope** - Dialog для кратких взаимодействий (подтверждения, выбор), навигация для полноценных экранов
-5. **Lifecycle** - Dialog имеет независимый lifecycle, привязанный к родительскому экрану
+5. **`Lifecycle`** - Dialog имеет независимый lifecycle, привязанный к родительскому экрану
 
 **Использование:** подтверждения действий, простые формы, выбор опций (date/time picker), индикаторы прогресса.
 
@@ -111,10 +111,10 @@ A dialog is a UI component displayed on top of the current screen, fundamentally
 **Key Differences:**
 
 1. **Overlay vs Replacement** - Dialog appears on top, navigation replaces the screen
-2. **Back Stack** - Dialog doesn't add to back stack, navigation does
+2. **Back `Stack`** - Dialog doesn't add to back stack, navigation does
 3. **State Preservation** - Screen state preserved under dialog, may be lost with navigation
 4. **Scope** - Dialog for brief interactions (confirmations, selections), navigation for full screens
-5. **Lifecycle** - Dialog has independent lifecycle tied to parent screen
+5. **`Lifecycle`** - Dialog has independent lifecycle tied to parent screen
 
 **Use Cases:** Action confirmations, simple forms, option selection (date/time pickers), progress indicators.
 

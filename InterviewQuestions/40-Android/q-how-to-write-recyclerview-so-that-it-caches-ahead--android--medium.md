@@ -42,23 +42,23 @@ tags:
 
 # Вопрос (RU)
 
-Как можно писать RecyclerView, чтобы он кэшировал наперёд?
+Как можно писать `RecyclerView`, чтобы он кэшировал наперёд?
 
 ---
 
 # Question (EN)
 
-How to write RecyclerView so that it caches ahead?
+How to write `RecyclerView` so that it caches ahead?
 
 ---
 
 ## Ответ (RU)
 
-RecyclerView предоставляет несколько механизмов для кэширования элементов наперёд, улучшая производительность скроллинга.
+`RecyclerView` предоставляет несколько механизмов для кэширования элементов наперёд, улучшая производительность скроллинга.
 
-### 1. Кэширование View Через setItemViewCacheSize()
+### 1. Кэширование `View` Через setItemViewCacheSize()
 
-Кэш хранит недавно скрытые View без повторного биндинга данных.
+Кэш хранит недавно скрытые `View` без повторного биндинга данных.
 
 ```kotlin
 // ✅ Хорошо: увеличиваем размер кэша
@@ -139,7 +139,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-### 6. SharedPool Для Вложенных RecyclerView
+### 6. SharedPool Для Вложенных `RecyclerView`
 
 ```kotlin
 private val sharedPool = RecyclerView.RecycledViewPool().apply {
@@ -190,9 +190,9 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView) {
 
 ## Answer (EN)
 
-RecyclerView provides several mechanisms for caching items ahead to improve scrolling performance.
+`RecyclerView` provides several mechanisms for caching items ahead to improve scrolling performance.
 
-### 1. View Caching via setItemViewCacheSize()
+### 1. `View` Caching via setItemViewCacheSize()
 
 The view cache stores recently off-screen views without rebinding data.
 
@@ -326,7 +326,7 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView) {
 
 ## Follow-ups
 
-- How does RecyclerView's view recycling work internally?
+- How does `RecyclerView`'s view recycling work internally?
 - What's the difference between ViewCache and RecycledViewPool?
 - When should you use DiffUtil vs AsyncListDiffer?
 - How to measure cache hit rate in production?
@@ -362,5 +362,5 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView) {
 
 ### Advanced (Harder)
 - Custom layout managers for complex scrolling patterns
-- Profiling RecyclerView performance with systrace
+- Profiling `RecyclerView` performance with systrace
 - Memory optimization strategies for large lists

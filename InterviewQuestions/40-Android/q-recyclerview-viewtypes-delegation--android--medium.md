@@ -31,17 +31,17 @@ sources:
 ---
 
 # Вопрос (RU)
-> Как обрабатывать множественные типы view в RecyclerView?
+> Как обрабатывать множественные типы view в `RecyclerView`?
 
 # Question (EN)
-> How to handle multiple view types in RecyclerView?
+> How to handle multiple view types in `RecyclerView`?
 
 ---
 
 ## Ответ (RU)
 
 **Теория ViewTypes:**
-ViewTypes позволяют отображать разные макеты в одном RecyclerView (заголовки, элементы, футеры, реклама). Правильная реализация критична для производительности и поддерживаемости гетерогенных списков.
+ViewTypes позволяют отображать разные макеты в одном `RecyclerView` (заголовки, элементы, футеры, реклама). Правильная реализация критична для производительности и поддерживаемости гетерогенных списков.
 
 **Основные компоненты:**
 - `getItemViewType()` - определяет тип view для позиции
@@ -128,7 +128,7 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 ## Answer (EN)
 
 **ViewTypes Theory:**
-ViewTypes allow displaying different layouts in the same RecyclerView (headers, items, footers, ads). Proper implementation is critical for performance and maintainability of heterogeneous lists.
+ViewTypes allow displaying different layouts in the same `RecyclerView` (headers, items, footers, ads). Proper implementation is critical for performance and maintainability of heterogeneous lists.
 
 **Main components:**
 - `getItemViewType()` - determines view type for position
@@ -235,14 +235,14 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-basics--android--easy]] - RecyclerView basics
+- [[q-recyclerview-basics--android--easy]] - `RecyclerView` basics
 - [[q-android-app-components--android--easy]] - App components
 
 ### Related (Same Level)
 - [[q-adapter-patterns--android--medium]] - Adapter patterns
-- [[q-recyclerview-explained--android--medium]] - RecyclerView performance
+- [[q-recyclerview-explained--android--medium]] - `RecyclerView` performance
 - [[q-viewholder-pattern--android--medium]] - ViewHolder pattern
 
 ### Advanced (Harder)
-- [[q-recyclerview-advanced--android--hard]] - RecyclerView advanced
+- [[q-recyclerview-advanced--android--hard]] - `RecyclerView` advanced
 - [[q-android-runtime-internals--android--hard]] - Runtime internals

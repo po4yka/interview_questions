@@ -39,7 +39,7 @@ tags: [activity, android/activity, android/architecture-modularization, android/
 
 ## Ответ (RU)
 
-Фрагменты обеспечивают **модульную композицию UI** внутри одного Activity. Ключевые преимущества: переиспользуемые компоненты, адаптивные макеты для планшетов/телефонов, эффективное управление памятью и упрощённая внутриэкранная навигация.
+Фрагменты обеспечивают **модульную композицию UI** внутри одного `Activity`. Ключевые преимущества: переиспользуемые компоненты, адаптивные макеты для планшетов/телефонов, эффективное управление памятью и упрощённая внутриэкранная навигация.
 
 ### Основные Причины
 
@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**4. Shared ViewModel для коммуникации**
+**4. Shared `ViewModel` для коммуникации**
 
 ```kotlin
 class SharedViewModel : ViewModel() {
@@ -141,7 +141,7 @@ class DetailFragment : Fragment() {
 
 ## Answer (EN)
 
-Fragments provide **modular UI composition** within a single Activity. Key advantages: reusable components, adaptive layouts for tablets/phones, efficient memory management, and simplified in-screen navigation.
+Fragments provide **modular UI composition** within a single `Activity`. Key advantages: reusable components, adaptive layouts for tablets/phones, efficient memory management, and simplified in-screen navigation.
 
 ### Core Reasons
 
@@ -205,7 +205,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**4. Shared ViewModel for Communication**
+**4. Shared `ViewModel` for Communication**
 
 ```kotlin
 class SharedViewModel : ViewModel() {
@@ -243,7 +243,7 @@ class DetailFragment : Fragment() {
 
 ## Follow-ups
 
-- How does Fragment lifecycle relate to Activity lifecycle?
+- How does `Fragment` lifecycle relate to `Activity` lifecycle?
 - What are the performance implications of nested fragments?
 - How does Navigation Component simplify fragment transactions?
 - What are best practices for fragment communication patterns?
@@ -251,9 +251,9 @@ class DetailFragment : Fragment() {
 
 ## References
 
-- [[c-fragments]] - Fragment fundamentals
-- [[c-activity-lifecycle]] - Activity lifecycle concepts
-- [[c-viewmodel]] - ViewModel architecture component
+- [[c-fragments]] - `Fragment` fundamentals
+- [[c-activity-lifecycle]] - `Activity` lifecycle concepts
+- [[c-viewmodel]] - `ViewModel` architecture component
 - [Fragments](https://developer.android.com/guide/fragments)
 - [Navigation](https://developer.android.com/guide/navigation)
 
@@ -261,14 +261,14 @@ class DetailFragment : Fragment() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-intent--android--easy]] - Fragment basics
-- [[q-activity-lifecycle--android--easy]] - Activity lifecycle fundamentals
+- [[q-what-is-intent--android--easy]] - `Fragment` basics
+- [[q-activity-lifecycle--android--easy]] - `Activity` lifecycle fundamentals
 
 ### Related (Same Level)
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle comparison
-- [[q-fragment-communication--android--medium]] - Fragment communication patterns
-- [[q-viewmodel-scope--android--medium]] - ViewModel scoping
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Lifecycle` comparison
+- [[q-fragment-communication--android--medium]] - `Fragment` communication patterns
+- [[q-viewmodel-scope--android--medium]] - `ViewModel` scoping
 
 ### Advanced (Harder)
 - [[q-fragment-transaction-optimizations--android--hard]] - Advanced fragment transactions
-- [[q-single-activity-architecture--android--hard]] - Single-Activity architecture patterns
+- [[q-single-activity-architecture--android--hard]] - Single-`Activity` architecture patterns

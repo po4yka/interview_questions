@@ -254,7 +254,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ### Prerequisites (Easier)
 - [[q-main-thread-android--android--medium]] - Understanding Android threading model
-- [[q-activity-lifecycle--android--easy]] - Activity lifecycle and destruction
+- [[q-activity-lifecycle--android--easy]] - `Activity` lifecycle and destruction
 
 ### Related (Same Level)
 - [[q-leakcanary-detection-mechanism--android--medium]] - How LeakCanary detects leaks

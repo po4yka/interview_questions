@@ -56,13 +56,13 @@ Android использует иерархию важности процессо�
 
 1. **Foreground Process** (высший) — активный UI или foreground service
 2. **Visible Process** — видимый, но не в фокусе
-3. **Service Process** — фоновый сервис
+3. **`Service` Process** — фоновый сервис
 4. **Cached Process** — недавно использованный, нет активных компонентов
 5. **Empty Process** (низший) — убивается первым
 
 При нехватке памяти система убивает процессы снизу вверх.
 
-### Foreground Service (высокий приоритет)
+### Foreground `Service` (высокий приоритет)
 
 ```kotlin
 class DownloadService : Service() {
@@ -102,7 +102,7 @@ class DownloadService : Service() {
 }
 ```
 
-### Запуск Foreground Service
+### Запуск Foreground `Service`
 
 ```kotlin
 // Android 8.0+ требует startForegroundService()
@@ -129,7 +129,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
 ### Другие Способы Влияния На Приоритет
 
-**Bound Service с foreground activity:**
+**Bound `Service` с foreground activity:**
 ```kotlin
 // Сервис наследует приоритет активности при биндинге
 bindService(Intent(this, MyService::class.java), connection, BIND_AUTO_CREATE)
@@ -174,13 +174,13 @@ Android uses a hierarchy of process importance for memory management decisions:
 
 1. **Foreground Process** (highest) — active UI or foreground service
 2. **Visible Process** — visible but not focused
-3. **Service Process** — background service
+3. **`Service` Process** — background service
 4. **Cached Process** — recently used, no active components
 5. **Empty Process** (lowest) — killed first
 
 When memory is low, system kills processes from bottom to top.
 
-### Foreground Service (high priority)
+### Foreground `Service` (high priority)
 
 ```kotlin
 class DownloadService : Service() {
@@ -220,7 +220,7 @@ class DownloadService : Service() {
 }
 ```
 
-### Starting Foreground Service
+### Starting Foreground `Service`
 
 ```kotlin
 // Android 8.0+ requires startForegroundService()
@@ -247,7 +247,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
 ### Other Ways to Influence Priority
 
-**Bound Service with foreground activity:**
+**Bound `Service` with foreground activity:**
 ```kotlin
 // Service inherits activity's priority when bound
 bindService(Intent(this, MyService::class.java), connection, BIND_AUTO_CREATE)
@@ -265,7 +265,7 @@ val job = JobInfo.Builder(JOB_ID, componentName)
 
 1. **Notification required** — can't hide service work from user
 2. **Android 12+ restrictions** — can't start foreground service from background
-3. **Service type (Android 10+)** — must declare `foregroundServiceType` in manifest
+3. **`Service` type (Android 10+)** — must declare `foregroundServiceType` in manifest
 
 ```xml
 <service
@@ -292,7 +292,7 @@ val job = JobInfo.Builder(JOB_ID, componentName)
 ## References
 
 - Android Documentation: Services and Foreground Services
-- Android Documentation: Process and Application Lifecycle
+- Android Documentation: Process and `Application` `Lifecycle`
 
 ## Related Questions
 
@@ -303,7 +303,7 @@ val job = JobInfo.Builder(JOB_ID, componentName)
 
 
 ### Prerequisites
-- [[q-what-events-are-activity-methods-tied-to--android--medium]] — understanding Activity lifecycle helps with service lifecycle
+- [[q-what-events-are-activity-methods-tied-to--android--medium]] — understanding `Activity` lifecycle helps with service lifecycle
 
 ### Related
 - [[q-network-operations-android--android--medium]] — common use case for background services

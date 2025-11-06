@@ -400,7 +400,7 @@ class CoverageReporter {
 
 ### Best Practices
 
-1. **Set realistic coverage goals** (70-85% is often sufficient)
+1. **`Set` realistic coverage goals** (70-85% is often sufficient)
 2. **Focus on critical paths** over arbitrary coverage numbers
 3. **Exclude generated and framework code**
 4. **Use branch coverage** as primary metric
@@ -782,7 +782,7 @@ class CoverageReporter {
 
 ### Best Practices
 
-1. **Set realistic coverage goals** (70-85% is often sufficient)
+1. **`Set` realistic coverage goals** (70-85% is often sufficient)
 2. **Focus on critical paths** over arbitrary coverage numbers
 3. **Exclude generated and framework code**
 4. **Use branch coverage** as primary metric

@@ -31,11 +31,11 @@ What is the layout called where UI elements can overlay each other?
 
 В Android существует два основных контейнера для наложения элементов:
 
-**FrameLayout** (View System) — традиционный контейнер, где дочерние элементы накладываются друг на друга в порядке добавления. Последний добавленный элемент рисуется сверху.
+**`FrameLayout`** (`View` System) — традиционный контейнер, где дочерние элементы накладываются друг на друга в порядке добавления. Последний добавленный элемент рисуется сверху.
 
 **Box** (Jetpack Compose) — современный composable-контейнер с аналогичной логикой наложения.
 
-### FrameLayout (View System)
+### `FrameLayout` (`View` System)
 
 Основное использование — простые случаи наложения: badge поверх изображения, loading overlay, FAB поверх контента.
 
@@ -87,11 +87,11 @@ container.addView(badge)  // Добавляется последним = рис�
 **Типичные паттерны:**
 - Loading overlay — полупрозрачный слой с ProgressBar
 - Badge notifications — индикатор поверх иконки
-- Floating Action Button — кнопка поверх списка
+- Floating Action `Button` — кнопка поверх списка
 
 ### Box (Jetpack Compose)
 
-Декларативный эквивалент FrameLayout. Позиционирование через `Modifier.align()`, контроль z-order через `zIndex()` или порядок добавления.
+Декларативный эквивалент `FrameLayout`. Позиционирование через `Modifier.align()`, контроль z-order через `zIndex()` или порядок добавления.
 
 **Пример: Базовое наложение**
 
@@ -154,26 +154,26 @@ fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 
 ### Сравнение
 
-| Характеристика | FrameLayout | Box (Compose) |
+| Характеристика | `FrameLayout` | Box (Compose) |
 |----------------|-------------|---------------|
-| Система | View System | Jetpack Compose |
+| Система | `View` System | Jetpack Compose |
 | Порядок слоёв | Последний сверху | Последний сверху |
 | Позиционирование | `layout_gravity` | `Modifier.align()` |
 | Z-ordering | Только порядок добавления | `zIndex()` + порядок |
 
 **Выбор:**
-- FrameLayout — для legacy View-based UI
+- `FrameLayout` — для legacy `View`-based UI
 - Box — для новых Compose UI
 
 ## Answer (EN)
 
 Android provides two main containers for overlaying elements:
 
-**FrameLayout** (View System) — traditional container where children stack in the order they're added. Last child draws on top.
+**`FrameLayout`** (`View` System) — traditional container where children stack in the order they're added. Last child draws on top.
 
 **Box** (Jetpack Compose) — modern composable with similar layering logic.
 
-### FrameLayout (View System)
+### `FrameLayout` (`View` System)
 
 Primary use cases: simple overlays like badges over images, loading overlays, FABs over content.
 
@@ -225,11 +225,11 @@ container.addView(badge)  // Added last = draws on top
 **Common Patterns:**
 - Loading overlay — semi-transparent layer with ProgressBar
 - Badge notifications — indicator over icon
-- Floating Action Button — button over list
+- Floating Action `Button` — button over list
 
 ### Box (Jetpack Compose)
 
-Declarative FrameLayout equivalent. Positioning via `Modifier.align()`, z-order control via `zIndex()` or add order.
+Declarative `FrameLayout` equivalent. Positioning via `Modifier.align()`, z-order control via `zIndex()` or add order.
 
 **Example: Basic Overlay**
 
@@ -292,42 +292,42 @@ fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 
 ### Comparison
 
-| Feature | FrameLayout | Box (Compose) |
+| Feature | `FrameLayout` | Box (Compose) |
 |---------|-------------|---------------|
-| System | View System | Jetpack Compose |
+| System | `View` System | Jetpack Compose |
 | Layer Order | Last on top | Last on top |
 | Positioning | `layout_gravity` | `Modifier.align()` |
 | Z-ordering | Add order only | `zIndex()` + order |
 
 **Choice:**
-- FrameLayout — for legacy View-based UI
+- `FrameLayout` — for legacy `View`-based UI
 - Box — for new Compose UI
 
 ---
 
 ## Follow-ups
 
-1. How do you implement z-index control in FrameLayout without modifying add order?
+1. How do you implement z-index control in `FrameLayout` without modifying add order?
 2. What happens when Box children have the same `zIndex()` value?
-3. How does FrameLayout handle measurement and layout of overlapping children?
+3. How does `FrameLayout` handle measurement and layout of overlapping children?
 4. Can you nest FrameLayout/Box for complex layering scenarios? What's the performance impact?
 5. How do you implement drag-and-drop reordering of overlaid elements in both systems?
 
 ## References
 
-- [[c-framelayout]] - FrameLayout deep dive
+- [[c-framelayout]] - `FrameLayout` deep dive
 - [[c-box-compose]] - Box composable patterns
-- https://developer.android.com/reference/android/widget/FrameLayout
+- https://developer.android.com/reference/android/widget/`FrameLayout`
 - https://developer.android.com/jetpack/compose/layouts/basics
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View fundamentals
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View` fundamentals
 - [[q-viewmodel-pattern--android--easy]] - Architecture basics
 
 ### Related (Same Level)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View rendering
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` rendering
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose layouts
 
 ### Advanced (Harder)

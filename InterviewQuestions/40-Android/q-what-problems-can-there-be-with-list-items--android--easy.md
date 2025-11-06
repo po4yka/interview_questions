@@ -36,7 +36,7 @@ tags:
 > Проблемы с элементами списка
 
 # Question (EN)
-> List Items Problems
+> `List` Items Problems
 
 ---
 
@@ -110,7 +110,7 @@ recyclerView.apply {
 - Heavy operations in `onBindViewHolder()`
 - Complex layouts with deep view hierarchies
 - Loading images on the main thread
-- No view recycling (using ListView incorrectly)
+- No view recycling (using `ListView` incorrectly)
 
 **Solution:**
 
@@ -309,7 +309,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**Using Kotlin Flow:**
+**Using Kotlin `Flow`:**
 
 ```kotlin
 class FlowViewModel : ViewModel() {
@@ -398,16 +398,16 @@ class StableAdapter : RecyclerView.Adapter<StableAdapter.ViewHolder>() {
 
 Common problems and solutions:
 
-1. **Out of Memory** → Use RecyclerView, Glide/Picasso for image loading
+1. **Out of Memory** → Use `RecyclerView`, Glide/Picasso for image loading
 2. **Slow scrolling** → Optimize adapter with ViewHolder, simplify layouts
 3. **Data inconsistency** → Use DiffUtil/ListAdapter for updates
-4. **Concurrency issues** → Use LiveData/Flow for thread-safe updates
+4. **Concurrency issues** → Use LiveData/`Flow` for thread-safe updates
 5. **Click issues** → Proper click listener implementation
 6. **Positioning issues** → Use stable IDs
 
 
 # Question (EN)
-> List Items Problems
+> `List` Items Problems
 
 ---
 
@@ -485,7 +485,7 @@ recyclerView.apply {
 - Heavy operations in `onBindViewHolder()`
 - Complex layouts with deep view hierarchies
 - Loading images on the main thread
-- No view recycling (using ListView incorrectly)
+- No view recycling (using `ListView` incorrectly)
 
 **Solution:**
 
@@ -684,7 +684,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**Using Kotlin Flow:**
+**Using Kotlin `Flow`:**
 
 ```kotlin
 class FlowViewModel : ViewModel() {
@@ -773,15 +773,15 @@ class StableAdapter : RecyclerView.Adapter<StableAdapter.ViewHolder>() {
 
 Common problems and solutions:
 
-1. **Out of Memory** → Use RecyclerView, Glide/Picasso for image loading
+1. **Out of Memory** → Use `RecyclerView`, Glide/Picasso for image loading
 2. **Slow scrolling** → Optimize adapter with ViewHolder, simplify layouts
 3. **Data inconsistency** → Use DiffUtil/ListAdapter for updates
-4. **Concurrency issues** → Use LiveData/Flow for thread-safe updates
+4. **Concurrency issues** → Use LiveData/`Flow` for thread-safe updates
 5. **Click issues** → Proper click listener implementation
 6. **Positioning issues** → Use stable IDs
 
 ## Ответ (RU)
-Проблемы с элементами списка в Android-приложениях могут быть разнообразными. Давайте рассмотрим некоторые из наиболее распространённых проблем и способы их решения. 1. Переполнение памяти (Out of Memory) - Списки с большим количеством элементов могут вызывать переполнение памяти. Решение: Использовать RecyclerView вместо ListView и библиотеки для загрузки изображений, такие как Glide или Picasso. 2. Медленная прокрутка (Lagging) - Прокрутка может быть медленной из-за долгой отрисовки элементов. Решение: Оптимизировать адаптер списка и использовать ViewHolder паттерн. 3. Неправильное отображение данных (Data Inconsistency) - Если адаптер неправильно управляет обновлением данных. Решение: Использовать DiffUtil для вычисления изменений в данных и обновления только необходимых элементов. 4. Многопоточность (Concurrency Issues) - Если обновление данных происходит из разных потоков без должной синхронизации. Решение: Использовать LiveData или Flow из библиотеки Jetpack для обновления в главном потоке.
+Проблемы с элементами списка в Android-приложениях могут быть разнообразными. Давайте рассмотрим некоторые из наиболее распространённых проблем и способы их решения. 1. Переполнение памяти (Out of Memory) - Списки с большим количеством элементов могут вызывать переполнение памяти. Решение: Использовать `RecyclerView` вместо `ListView` и библиотеки для загрузки изображений, такие как Glide или Picasso. 2. Медленная прокрутка (Lagging) - Прокрутка может быть медленной из-за долгой отрисовки элементов. Решение: Оптимизировать адаптер списка и использовать ViewHolder паттерн. 3. Неправильное отображение данных (Data Inconsistency) - Если адаптер неправильно управляет обновлением данных. Решение: Использовать DiffUtil для вычисления изменений в данных и обновления только необходимых элементов. 4. Многопоточность (Concurrency Issues) - Если обновление данных происходит из разных потоков без должной синхронизации. Решение: Использовать `LiveData` или `Flow` из библиотеки Jetpack для обновления в главном потоке.
 
 
 ---

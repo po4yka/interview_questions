@@ -33,10 +33,10 @@ tags:
 ---
 
 # Вопрос (RU)
-> Как реализовать анимацию в Custom View?
+> Как реализовать анимацию в Custom `View`?
 
 # Question (EN)
-> How to implement animation in Custom View?
+> How to implement animation in Custom `View`?
 
 ---
 
@@ -46,11 +46,11 @@ tags:
 
 | Подход | Назначение | Производительность | Управление |
 |--------|------------|-------------------|------------|
-| **ValueAnimator** | Анимация пользовательских свойств | Отличная (VSYNC, без аллокаций) | Полный контроль |
-| **Property Animation** | Анимация стандартных свойств View | Отличная (Hardware-accelerated) | Простое |
-| **Canvas Animation** | Сложная математическая графика | Хорошая | Требует математики |
+| **`ValueAnimator`** | Анимация пользовательских свойств | Отличная (VSYNC, без аллокаций) | Полный контроль |
+| **Property Animation** | Анимация стандартных свойств `View` | Отличная (Hardware-accelerated) | Простое |
+| **`Canvas` Animation** | Сложная математическая графика | Хорошая | Требует математики |
 
-### ValueAnimator - Универсальный Подход
+### `ValueAnimator` - Универсальный Подход
 
 **Принцип**: Интерполяция значений через Choreographer, синхронизация с VSYNC (60 FPS), работа только с примитивами.
 
@@ -110,7 +110,7 @@ class AnimatedButton : Button {
 }
 ```
 
-### Canvas Animation - Математическая Графика
+### `Canvas` Animation - Математическая Графика
 
 **Принцип**: Тригонометрия (sin, cos) для циклических анимаций, математические функции для вычисления значений.
 
@@ -186,7 +186,7 @@ class LifecycleAwareAnimatedView : View {
 
 **✅ Обязательно:**
 - Отменяйте анимации в `onDetachedFromWindow()`
-- Кэшируйте Paint объекты - НЕ создавайте в `onDraw()`
+- Кэшируйте `Paint` объекты - НЕ создавайте в `onDraw()`
 - Приостанавливайте при `visibility != VISIBLE`
 
 **❌ Ошибки:**
@@ -200,11 +200,11 @@ class LifecycleAwareAnimatedView : View {
 
 | Approach | Use Case | Performance | Control |
 |----------|----------|-------------|---------|
-| **ValueAnimator** | Animate custom properties | Excellent (VSYNC, no allocations) | Full control |
-| **Property Animation** | Animate standard View properties | Excellent (Hardware-accelerated) | Simple |
-| **Canvas Animation** | Complex mathematical graphics | Good | Requires math |
+| **`ValueAnimator`** | Animate custom properties | Excellent (VSYNC, no allocations) | Full control |
+| **Property Animation** | Animate standard `View` properties | Excellent (Hardware-accelerated) | Simple |
+| **`Canvas` Animation** | Complex mathematical graphics | Good | Requires math |
 
-### ValueAnimator - Universal Approach
+### `ValueAnimator` - Universal Approach
 
 **Principle**: Value interpolation via Choreographer, VSYNC synchronization (60 FPS), primitives only.
 
@@ -264,7 +264,7 @@ class AnimatedButton : Button {
 }
 ```
 
-### Canvas Animation - Mathematical Graphics
+### `Canvas` Animation - Mathematical Graphics
 
 **Principle**: Trigonometry (sin, cos) for cyclical animations, mathematical functions for value computation.
 
@@ -300,7 +300,7 @@ class AnimatedCircleView : View {
 }
 ```
 
-### Lifecycle Management
+### `Lifecycle` Management
 
 ```kotlin
 class LifecycleAwareAnimatedView : View {
@@ -340,7 +340,7 @@ class LifecycleAwareAnimatedView : View {
 
 **✅ Required:**
 - Cancel animations in `onDetachedFromWindow()`
-- Cache Paint objects - DON'T create in `onDraw()`
+- Cache `Paint` objects - DON'T create in `onDraw()`
 - Pause when `visibility != VISIBLE`
 
 **❌ Mistakes:**
@@ -353,7 +353,7 @@ class LifecycleAwareAnimatedView : View {
 ## Follow-ups
 
 - Как создать сложные path-анимации с PathInterpolator?
-- В чем разница производительности между ValueAnimator и ObjectAnimator?
+- В чем разница производительности между `ValueAnimator` и `ObjectAnimator`?
 - Как синхронизировать несколько анимаций (AnimatorSet)?
 - Когда использовать postInvalidateOnAnimation() вместо invalidate()?
 - Как сохранить состояние анимации при повороте экрана?
@@ -373,15 +373,15 @@ class LifecycleAwareAnimatedView : View {
 
 
 ### Prerequisites (Easier)
-- [[q-custom-view-lifecycle--android--medium]] - Жизненный цикл View для правильной очистки анимаций
-- Custom View basics - onDraw() и основы рендеринга
+- [[q-custom-view-lifecycle--android--medium]] - Жизненный цикл `View` для правильной очистки анимаций
+- Custom `View` basics - onDraw() и основы рендеринга
 
 ### Related (Same Level)
-- [[q-canvas-drawing-optimization--android--hard]] - Оптимизация Canvas для плавных анимаций
-- Property Animation System - ObjectAnimator vs ViewPropertyAnimator
+- [[q-canvas-drawing-optimization--android--hard]] - Оптимизация `Canvas` для плавных анимаций
+- Property Animation System - `ObjectAnimator` vs ViewPropertyAnimator
 - Touch handling with animation - Gesture integration
 
 ### Advanced (Harder)
-- Path animations with PathMeasure - Сложные траектории движения
+- `Path` animations with PathMeasure - Сложные траектории движения
 - Spring animations - Physics-based motion (SpringAnimation, FlingAnimation)
 - Coordinated animations - Transition API и Motion Layout

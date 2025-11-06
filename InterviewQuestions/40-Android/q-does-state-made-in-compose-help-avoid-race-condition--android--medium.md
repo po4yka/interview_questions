@@ -226,7 +226,7 @@ fun ParentComponentWithFlow(viewModel: SharedViewModel = hiltViewModel()) {
 }
 ```
 
-### Решения И Паттерны Thread Safety
+### Решения И Паттерны `Thread` Safety
 
 **1. Корутины с Main Dispatcher**
 
@@ -255,7 +255,7 @@ fun SafeAsyncComponent() {
 }
 ```
 
-**2. ViewModel с StateFlow для shared state**
+**2. `ViewModel` с `StateFlow` для shared state**
 
 `StateFlow` является thread-safe и гарантирует, что все обновления происходят безопасно:
 
@@ -577,7 +577,7 @@ fun ParentComponentWithFlow(viewModel: SharedViewModel = hiltViewModel()) {
 }
 ```
 
-### Thread Safety Solutions and Patterns
+### `Thread` Safety Solutions and Patterns
 
 **1. Coroutines with Main Dispatcher**
 
@@ -606,7 +606,7 @@ fun SafeAsyncComponent() {
 }
 ```
 
-**2. ViewModel with StateFlow for shared state**
+**2. `ViewModel` with `StateFlow` for shared state**
 
 `StateFlow` is thread-safe and guarantees that all updates occur safely:
 
@@ -797,9 +797,9 @@ Button2 { viewModel.increment() } // Thread-safe via StateFlow
 ## References
 
 - [Compose State Documentation](https://developer.android.com/jetpack/compose/state)
-- [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [`StateFlow` and `SharedFlow`](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 - [Compose State Hoisting](https://developer.android.com/jetpack/compose/state-hoisting)
-- [Thread Safety in Kotlin](https://kotlinlang.org/docs/thread-safety.html)
+- [`Thread` Safety in Kotlin](https://kotlinlang.org/docs/thread-safety.html)
 - [Coroutines Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 
 ## Related Questions
@@ -818,9 +818,9 @@ Button2 { viewModel.increment() } // Thread-safe via StateFlow
 
 ### Related (Same Level)
 - Derived state and snapshot system in Compose
-- ViewModel state management patterns
+- `ViewModel` state management patterns
 
 ### Advanced (Harder)
 - [[q-derived-state-snapshot-system--android--hard]]
 - Custom thread-safe state implementations
-- Advanced Flow patterns for state synchronization
+- Advanced `Flow` patterns for state synchronization

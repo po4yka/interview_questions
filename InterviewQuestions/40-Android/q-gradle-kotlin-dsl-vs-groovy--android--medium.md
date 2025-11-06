@@ -109,7 +109,7 @@ dependencies {
 | **IDE support** |  Autocomplete, refactoring |  Limited |
 | **Performance** | Slower first build | Faster first build |
 | **Syntax** | More verbose | More concise |
-| **String quotes** | Required ("") | Optional |
+| **`String` quotes** | Required ("") | Optional |
 | **Assignment** | = required | = optional |
 
 ### Advantages of Kotlin DSL
@@ -273,7 +273,7 @@ dependencies {
 | **IDE support** |  Autocomplete, refactoring |  Limited |
 | **Performance** | Slower first build | Faster first build |
 | **Syntax** | More verbose | More concise |
-| **String quotes** | Required ("") | Optional |
+| **`String` quotes** | Required ("") | Optional |
 | **Assignment** | = required | = optional |
 
 ### Advantages of Kotlin DSL

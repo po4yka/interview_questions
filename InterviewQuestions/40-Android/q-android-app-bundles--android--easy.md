@@ -27,18 +27,18 @@ tags: [android/app-bundle, android/gradle, difficulty/easy]
 ---
 
 # Вопрос (RU)
-> Что такое Android App Bundle (AAB)?
+> Что такое Android App `Bundle` (AAB)?
 
 ---
 
 # Question (EN)
-> What is Android App Bundle (AAB)?
+> What is Android App `Bundle` (AAB)?
 
 ---
 
 ## Ответ (RU)
 
-**Android App Bundle (AAB)** — формат публикации для Google Play, заменяющий универсальный APK. Google Play генерирует оптимизированные APK для каждой конфигурации устройства, уменьшая размер загрузки на 15-35%.
+**Android App `Bundle` (AAB)** — формат публикации для Google Play, заменяющий универсальный APK. Google Play генерирует оптимизированные APK для каждой конфигурации устройства, уменьшая размер загрузки на 15-35%.
 
 **Архитектура AAB:**
 
@@ -93,7 +93,7 @@ AAB подписывается локально ключом разработч�
 
 ## Answer (EN)
 
-**Android App Bundle (AAB)** is a publishing format for Google Play that replaces universal APK. Google Play generates optimized APKs for each device configuration, reducing download size by 15-35%.
+**Android App `Bundle` (AAB)** is a publishing format for Google Play that replaces universal APK. Google Play generates optimized APKs for each device configuration, reducing download size by 15-35%.
 
 **AAB Architecture:**
 
@@ -156,9 +156,9 @@ AAB is signed locally with developer key, but **Google Play App Signing** recrea
 
 ## References
 
-- [[c-app-bundle]] - App Bundle concepts and architecture
+- [[c-app-bundle]] - App `Bundle` concepts and architecture
 - [[c-gradle]] - Gradle build system fundamentals
-- [Android App Bundle Guide](https://developer.android.com/guide/app-bundle)
+- [Android App `Bundle` Guide](https://developer.android.com/guide/app-bundle)
 - [BundleTool Documentation](https://developer.android.com/studio/command-line/bundletool)
 
 ## Related Questions

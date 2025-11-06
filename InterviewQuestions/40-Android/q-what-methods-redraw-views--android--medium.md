@@ -34,19 +34,19 @@ tags:
 ---
 
 # Вопрос (RU)
-> Методы перерисовки View
+> Методы перерисовки `View`
 
 # Question (EN)
-> View Redraw Methods
+> `View` Redraw Methods
 
 ---
 
 ## Answer (EN)
-Android provides several methods to trigger View redrawing and layout recalculation. Understanding when and how to use each method is crucial for efficient UI updates.
+Android provides several methods to trigger `View` redrawing and layout recalculation. Understanding when and how to use each method is crucial for efficient UI updates.
 
 ### 1. invalidate()
 
-Marks the View for redrawing by calling `onDraw()`. Use when visual appearance changes but size remains the same.
+Marks the `View` for redrawing by calling `onDraw()`. Use when visual appearance changes but size remains the same.
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
@@ -99,7 +99,7 @@ class AnimatedView : View {
 
 ### 2. requestLayout()
 
-Triggers recalculation of sizes and positioning by calling `onMeasure()` and `onLayout()`. Use when View dimensions change.
+Triggers recalculation of sizes and positioning by calling `onMeasure()` and `onLayout()`. Use when `View` dimensions change.
 
 ```kotlin
 class ExpandableView @JvmOverloads constructor(
@@ -163,7 +163,7 @@ class DynamicSizeView : View {
 
 ### 3. postInvalidate()
 
-Deferred redrawing from a non-UI thread. Thread-safe version of `invalidate()`.
+Deferred redrawing from a non-UI thread. `Thread`-safe version of `invalidate()`.
 
 ```kotlin
 class LoadingView : View {
@@ -237,7 +237,7 @@ fun forceLayoutExample() {
 ```
 
 #### invalidateDrawable()
-Invalidates a specific Drawable:
+Invalidates a specific `Drawable`:
 
 ```kotlin
 class CustomView : View {
@@ -258,7 +258,7 @@ class CustomView : View {
 
 ### 5. Practical Examples
 
-#### Complex View Update
+#### Complex `View` Update
 
 ```kotlin
 class ComplexView : View {
@@ -357,7 +357,7 @@ fun safeInvalidate() {
 
 ### Summary Table
 
-| Method | Thread | Calls | Use Case |
+| Method | `Thread` | Calls | Use Case |
 |--------|--------|-------|----------|
 | `invalidate()` | UI thread | `onDraw()` | Visual changes only |
 | `requestLayout()` | UI thread | `onMeasure()`, `onLayout()` | Size/position changes |
@@ -366,11 +366,11 @@ fun safeInvalidate() {
 
 ---
 
-# Что Известно Про Методы, Которые Перерисовывают View?
+# Что Известно Про Методы, Которые Перерисовывают `View`?
 
 
 # Question (EN)
-> View Redraw Methods
+> `View` Redraw Methods
 
 ---
 
@@ -379,11 +379,11 @@ fun safeInvalidate() {
 
 
 ## Answer (EN)
-Android provides several methods to trigger View redrawing and layout recalculation. Understanding when and how to use each method is crucial for efficient UI updates.
+Android provides several methods to trigger `View` redrawing and layout recalculation. Understanding when and how to use each method is crucial for efficient UI updates.
 
 ### 1. invalidate()
 
-Marks the View for redrawing by calling `onDraw()`. Use when visual appearance changes but size remains the same.
+Marks the `View` for redrawing by calling `onDraw()`. Use when visual appearance changes but size remains the same.
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
@@ -436,7 +436,7 @@ class AnimatedView : View {
 
 ### 2. requestLayout()
 
-Triggers recalculation of sizes and positioning by calling `onMeasure()` and `onLayout()`. Use when View dimensions change.
+Triggers recalculation of sizes and positioning by calling `onMeasure()` and `onLayout()`. Use when `View` dimensions change.
 
 ```kotlin
 class ExpandableView @JvmOverloads constructor(
@@ -500,7 +500,7 @@ class DynamicSizeView : View {
 
 ### 3. postInvalidate()
 
-Deferred redrawing from a non-UI thread. Thread-safe version of `invalidate()`.
+Deferred redrawing from a non-UI thread. `Thread`-safe version of `invalidate()`.
 
 ```kotlin
 class LoadingView : View {
@@ -574,7 +574,7 @@ fun forceLayoutExample() {
 ```
 
 #### invalidateDrawable()
-Invalidates a specific Drawable:
+Invalidates a specific `Drawable`:
 
 ```kotlin
 class CustomView : View {
@@ -595,7 +595,7 @@ class CustomView : View {
 
 ### 5. Practical Examples
 
-#### Complex View Update
+#### Complex `View` Update
 
 ```kotlin
 class ComplexView : View {
@@ -694,7 +694,7 @@ fun safeInvalidate() {
 
 ### Summary Table
 
-| Method | Thread | Calls | Use Case |
+| Method | `Thread` | Calls | Use Case |
 |--------|--------|-------|----------|
 | `invalidate()` | UI thread | `onDraw()` | Visual changes only |
 | `requestLayout()` | UI thread | `onMeasure()`, `onLayout()` | Size/position changes |
@@ -703,15 +703,15 @@ fun safeInvalidate() {
 
 ---
 
-# Что Известно Про Методы, Которые Перерисовывают View?
+# Что Известно Про Методы, Которые Перерисовывают `View`?
 
 ## Ответ (RU)
 
-Android предоставляет несколько методов для запуска перерисовки View и пересчёта layout. Понимание когда и как использовать каждый метод критично для эффективных обновлений UI.
+Android предоставляет несколько методов для запуска перерисовки `View` и пересчёта layout. Понимание когда и как использовать каждый метод критично для эффективных обновлений UI.
 
 ### 1. invalidate()
 
-Помечает View для перерисовки вызовом `onDraw()`. Используйте когда визуальный вид меняется, но размер остаётся прежним.
+Помечает `View` для перерисовки вызовом `onDraw()`. Используйте когда визуальный вид меняется, но размер остаётся прежним.
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
@@ -764,7 +764,7 @@ class AnimatedView : View {
 
 ### 2. requestLayout()
 
-Запускает пересчёт размеров и позиционирования вызовом `onMeasure()` и `onLayout()`. Используйте когда размеры View меняются.
+Запускает пересчёт размеров и позиционирования вызовом `onMeasure()` и `onLayout()`. Используйте когда размеры `View` меняются.
 
 ```kotlin
 class ExpandableView @JvmOverloads constructor(
@@ -902,7 +902,7 @@ fun forceLayoutExample() {
 ```
 
 #### invalidateDrawable()
-Инвалидирует конкретный Drawable:
+Инвалидирует конкретный `Drawable`:
 
 ```kotlin
 class CustomView : View {
@@ -923,7 +923,7 @@ class CustomView : View {
 
 ### 5. Практические Примеры
 
-#### Сложное Обновление View
+#### Сложное Обновление `View`
 
 ```kotlin
 class ComplexView : View {
@@ -1043,21 +1043,21 @@ fun safeInvalidate() {
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
-- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View
-- [[q-viewmodel-pattern--android--easy]] - View
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`
+- [[q-viewmodel-pattern--android--easy]] - `View`
 
 ### Related (Medium)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- [[q-testing-viewmodels-turbine--android--medium]] - View
-- q-rxjava-pagination-recyclerview--android--medium - View
-- [[q-what-is-viewmodel--android--medium]] - View
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View`
+- [[q-testing-viewmodels-turbine--android--medium]] - `View`
+- q-rxjava-pagination-recyclerview--android--medium - `View`
+- [[q-what-is-viewmodel--android--medium]] - `View`
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--android--hard]] - View
+- [[q-compose-custom-layout--android--hard]] - `View`

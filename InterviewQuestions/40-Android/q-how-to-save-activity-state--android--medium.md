@@ -19,17 +19,17 @@ sources: []
 
 # Вопрос (RU)
 
-> Как сохранить состояние Activity?
+> Как сохранить состояние `Activity`?
 
 # Question (EN)
 
-> How to save Activity state?
+> How to save `Activity` state?
 
 ---
 
 ## Ответ (RU)
 
-Android предоставляет несколько механизмов для сохранения и восстановления состояния Activity при изменениях конфигурации (поворот экрана) и завершении процесса. Выбор зависит от типа данных, их размера и требований к постоянству.
+Android предоставляет несколько механизмов для сохранения и восстановления состояния `Activity` при изменениях конфигурации (поворот экрана) и завершении процесса. Выбор зависит от типа данных, их размера и требований к постоянству.
 
 ### 1. onSaveInstanceState() / onRestoreInstanceState()
 
@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**Сложные объекты через Parcelable:**
+**Сложные объекты через `Parcelable`:**
 
 ```kotlin
 import kotlinx.parcelize.Parcelize
@@ -86,10 +86,10 @@ class ProfileActivity : AppCompatActivity() {
 
 **Ограничения:**
 - Максимум ~1 МБ данных
-- Только примитивы и Parcelable/Serializable объекты
+- Только примитивы и Parcelable/`Serializable` объекты
 - Может не сработать при смерти процесса в фоне
 
-### 2. ViewModel С SavedStateHandle (рекомендуется)
+### 2. `ViewModel` С SavedStateHandle (рекомендуется)
 
 Современный подход, переживающий и изменения конфигурации, и смерть процесса.
 
@@ -125,7 +125,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**С StateFlow (современный подход):**
+**С `StateFlow` (современный подход):**
 
 ```kotlin
 class ModernViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -198,8 +198,8 @@ interface UserStateDao {
 | Подход | Поворот экрана | Смерть процесса | Закрытие приложения | Применение |
 |--------|----------------|-----------------|---------------------|------------|
 | **onSaveInstanceState** | ✅ | ⚠️ ограниченно | ❌ | Легковесное UI-состояние |
-| **ViewModel (без SavedState)** | ✅ | ❌ | ❌ | UI-данные во время сессии |
-| **ViewModel + SavedStateHandle** | ✅ | ✅ | ❌ | UI-состояние + смерть процесса |
+| **`ViewModel` (без SavedState)** | ✅ | ❌ | ❌ | UI-данные во время сессии |
+| **`ViewModel` + SavedStateHandle** | ✅ | ✅ | ❌ | UI-состояние + смерть процесса |
 | **DataStore** | ✅ | ✅ | ✅ | Настройки, preferences |
 | **Room** | ✅ | ✅ | ✅ | Большие наборы данных |
 
@@ -235,14 +235,14 @@ class UserActivity : AppCompatActivity() {
 ```
 
 **Рекомендации:**
-- ViewModel + SavedStateHandle для большинства UI-состояния
+- `ViewModel` + SavedStateHandle для большинства UI-состояния
 - DataStore или Room для постоянных данных
 - Избегайте хранения больших объектов в onSaveInstanceState (лимит ~1 МБ)
-- Не сохраняйте Context, View, Activity в ViewModel
+- Не сохраняйте `Context`, `View`, `Activity` в `ViewModel`
 
 ## Answer (EN)
 
-Android provides multiple mechanisms to save and restore Activity state across configuration changes (like screen rotation) and process death. The choice depends on data type, size, and persistence requirements.
+Android provides multiple mechanisms to save and restore `Activity` state across configuration changes (like screen rotation) and process death. The choice depends on data type, size, and persistence requirements.
 
 ### 1. onSaveInstanceState() / onRestoreInstanceState()
 
@@ -270,7 +270,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**Complex objects via Parcelable:**
+**Complex objects via `Parcelable`:**
 
 ```kotlin
 import kotlinx.parcelize.Parcelize
@@ -299,10 +299,10 @@ class ProfileActivity : AppCompatActivity() {
 
 **Limitations:**
 - Maximum ~1 MB of data
-- Only primitives and Parcelable/Serializable objects
+- Only primitives and Parcelable/`Serializable` objects
 - May not survive process death in background
 
-### 2. ViewModel with SavedStateHandle (recommended)
+### 2. `ViewModel` with SavedStateHandle (recommended)
 
 Modern approach surviving both configuration changes and process death.
 
@@ -338,7 +338,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**With StateFlow (modern approach):**
+**With `StateFlow` (modern approach):**
 
 ```kotlin
 class ModernViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel() {
@@ -411,8 +411,8 @@ interface UserStateDao {
 | Approach | Survives Rotation | Survives Process Death | Survives App Close | Use Case |
 |----------|------------------|----------------------|-------------------|----------|
 | **onSaveInstanceState** | ✅ | ⚠️ limited | ❌ | Lightweight UI state |
-| **ViewModel (no SavedState)** | ✅ | ❌ | ❌ | UI-related data during session |
-| **ViewModel + SavedStateHandle** | ✅ | ✅ | ❌ | UI state + process death |
+| **`ViewModel` (no SavedState)** | ✅ | ❌ | ❌ | UI-related data during session |
+| **`ViewModel` + SavedStateHandle** | ✅ | ✅ | ❌ | UI state + process death |
 | **DataStore** | ✅ | ✅ | ✅ | Settings, preferences |
 | **Room** | ✅ | ✅ | ✅ | Large datasets |
 
@@ -448,24 +448,24 @@ class UserActivity : AppCompatActivity() {
 ```
 
 **Recommendations:**
-- Use ViewModel + SavedStateHandle for most UI state
+- Use `ViewModel` + SavedStateHandle for most UI state
 - Use DataStore or Room for persistent data
 - Avoid storing large objects in onSaveInstanceState (limit ~1 MB)
-- Never store Context, View, Activity in ViewModel
+- Never store `Context`, `View`, `Activity` in `ViewModel`
 
 ---
 
 ## Follow-ups
 
-1. What is the maximum size limit for data stored in onSaveInstanceState Bundle?
-2. How does SavedStateHandle differ from regular ViewModel state when process is killed?
+1. What is the maximum size limit for data stored in onSaveInstanceState `Bundle`?
+2. How does SavedStateHandle differ from regular `ViewModel` state when process is killed?
 3. When should you choose DataStore over SharedPreferences?
-4. Can ViewModel survive process death without SavedStateHandle?
+4. Can `ViewModel` survive process death without SavedStateHandle?
 5. What happens to saved state when user clears app data from Settings?
 
 ## References
 
-- [[c-viewmodel]] - ViewModel architecture component
+- [[c-viewmodel]] - `ViewModel` architecture component
 - [[c-lifecycle]] - Android lifecycle management
 - [[c-coroutines]] - Kotlin coroutines for async operations
 - https://developer.android.com/topic/libraries/architecture/saving-states
@@ -476,12 +476,12 @@ class UserActivity : AppCompatActivity() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle basics
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle basics
 - [[q-android-components-besides-activity--android--easy]] - Android core components
 
 ### Related (Medium)
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity memory management
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment state management
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - `Activity` memory management
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment` state management
 - [[q-single-activity-pros-cons--android--medium]] - Single-activity architecture
 
 ### Advanced (Harder)

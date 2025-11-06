@@ -70,8 +70,8 @@ class UserFragment : Fragment() {
 }
 ```
 
-**3. ViewModel с SavedStateHandle**
-Для временных UI-состояний. ViewModel переживает пересоздание Activity, SavedStateHandle — смерть процесса.
+**3. `ViewModel` с SavedStateHandle**
+Для временных UI-состояний. `ViewModel` переживает пересоздание `Activity`, SavedStateHandle — смерть процесса.
 
 ```kotlin
 // ✅ Activity-scoped ViewModel для шаринга между фрагментами
@@ -117,7 +117,7 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
 | SharedPreferences  | Постоянная      | Да                 | Да                         | Настройки, флаги   |
 | DataStore          | Постоянная      | Да                 | Да                         | Настройки (новое)  |
 | Room               | Постоянная      | Да                 | Да                         | Структурированные  |
-| ViewModel          | Временная       | Да                 | Нет                        | UI состояние       |
+| `ViewModel`          | Временная       | Да                 | Нет                        | UI состояние       |
 | SavedStateHandle   | Ограниченная    | Да                 | Да                         | UI состояние (малое) |
 
 ### Рекомендуемая Архитектура
@@ -134,7 +134,7 @@ Data Sources (Room, DataStore, Network)
 ```
 
 **Ключевые принципы:**
-- Используйте Repository pattern для централизованного доступа к данным
+- Используйте `Repository` pattern для централизованного доступа к данным
 - [[c-viewmodel]] для UI-состояний и бизнес-логики
 - Room + DataStore для персистентных данных
 - SavedStateHandle только для минимального UI-состояния при смерти процесса
@@ -182,8 +182,8 @@ class UserFragment : Fragment() {
 }
 ```
 
-**3. ViewModel with SavedStateHandle**
-For temporary UI state. ViewModel survives configuration changes, SavedStateHandle survives process death.
+**3. `ViewModel` with SavedStateHandle**
+For temporary UI state. `ViewModel` survives configuration changes, SavedStateHandle survives process death.
 
 ```kotlin
 // ✅ Activity-scoped ViewModel for sharing between fragments
@@ -229,7 +229,7 @@ class SettingsRepository(private val dataStore: DataStore<Preferences>) {
 | SharedPreferences  | Permanent   | Yes               | Yes                    | Settings, flags   |
 | DataStore          | Permanent   | Yes               | Yes                    | Settings (modern) |
 | Room               | Permanent   | Yes               | Yes                    | Structured data   |
-| ViewModel          | Temporary   | Yes               | No                     | UI state          |
+| `ViewModel`          | Temporary   | Yes               | No                     | UI state          |
 | SavedStateHandle   | Limited     | Yes               | Yes                    | UI state (small)  |
 
 ### Recommended Architecture
@@ -246,7 +246,7 @@ Data Sources (Room, DataStore, Network)
 ```
 
 **Key Principles:**
-- Use Repository pattern for centralized data access
+- Use `Repository` pattern for centralized data access
 - [[c-viewmodel]] for UI state and business logic
 - Room + DataStore for persistent data
 - SavedStateHandle only for minimal UI state during process death
@@ -255,14 +255,14 @@ Data Sources (Room, DataStore, Network)
 
 ## Follow-ups
 
-- How does SavedStateHandle differ from ViewModel in handling process death?
+- How does SavedStateHandle differ from `ViewModel` in handling process death?
 - What are the trade-offs between DataStore Preferences and Proto DataStore?
-- How do you implement proper caching strategy in Repository pattern?
+- How do you implement proper caching strategy in `Repository` pattern?
 - What are the migration paths from SharedPreferences to DataStore?
 
 ## References
 
-- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
 - [Room Database](https://developer.android.com/training/data-storage/room)
 - https://developer.android.com/topic/libraries/architecture/saving-states
@@ -273,8 +273,8 @@ Data Sources (Room, DataStore, Network)
 ### Prerequisites (Easier)
 
 - [[q-what-is-layout-types-and-when-to-use--android--easy]]
-- What is Fragment lifecycle?
-- What is the difference between Activity and Fragment scope?
+- What is `Fragment` lifecycle?
+- What is the difference between `Activity` and `Fragment` scope?
 
 ### Related (Medium)
 
@@ -284,6 +284,6 @@ Data Sources (Room, DataStore, Network)
 
 ### Advanced (Harder)
 
-- How to implement multi-module data layer with shared Repository?
+- How to implement multi-module data layer with shared `Repository`?
 - What are the performance implications of different storage mechanisms?
 - How to handle data synchronization across multiple data sources?

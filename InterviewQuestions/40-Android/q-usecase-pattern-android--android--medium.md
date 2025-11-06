@@ -41,7 +41,7 @@ tags:
 
 ## Ответ (RU)
 
-**UseCase** (или Interactor) — компонент domain-слоя, инкапсулирующий одну бизнес-операцию. Делает логику переиспользуемой, тестируемой и изолирует ViewModel от деталей repository.
+**UseCase** (или Interactor) — компонент domain-слоя, инкапсулирующий одну бизнес-операцию. Делает логику переиспользуемой, тестируемой и изолирует `ViewModel` от деталей repository.
 
 ### Базовая Реализация
 
@@ -122,11 +122,11 @@ val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
     .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 ```
 
-**Краткое содержание**: UseCase инкапсулирует бизнес-операцию domain-слоя. Использовать для: сложной логики, нескольких data sources, переиспользования. НЕ использовать для простых вызовов repository. Реализация: `operator fun invoke()`, может возвращать Flow для реактивности.
+**Краткое содержание**: UseCase инкапсулирует бизнес-операцию domain-слоя. Использовать для: сложной логики, нескольких data sources, переиспользования. НЕ использовать для простых вызовов repository. Реализация: `operator fun invoke()`, может возвращать `Flow` для реактивности.
 
 ## Answer (EN)
 
-**UseCase** (or Interactor) is a domain layer component that encapsulates a single business operation. Makes logic reusable, testable, and isolates ViewModel from repository details.
+**UseCase** (or Interactor) is a domain layer component that encapsulates a single business operation. Makes logic reusable, testable, and isolates `ViewModel` from repository details.
 
 ### Basic Implementation
 
@@ -207,7 +207,7 @@ val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
     .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 ```
 
-**Summary**: UseCase encapsulates domain layer business operation. Use for: complex logic, multiple data sources, reusability. Don't use for simple repository calls. Implementation: `operator fun invoke()`, can return Flow for reactivity.
+**Summary**: UseCase encapsulates domain layer business operation. Use for: complex logic, multiple data sources, reusability. Don't use for simple repository calls. Implementation: `operator fun invoke()`, can return `Flow` for reactivity.
 
 ---
 
@@ -216,7 +216,7 @@ val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
 1. How to test UseCases in isolation from repositories?
 2. Should UseCases handle threading or rely on repositories?
 3. How to handle multiple parameters in UseCases (data class vs varargs)?
-4. When to use `suspend fun invoke()` vs `fun invoke(): Flow<T>`?
+4. When to use `suspend fun invoke()` vs `fun invoke(): `Flow`<T>`?
 5. How do UseCases fit in multi-module architecture?
 
 ## References
@@ -234,10 +234,10 @@ val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
 
 
 ### Prerequisites (Easier)
-- [[q-repository-pattern--android--medium]] - Repository pattern basics
+- [[q-repository-pattern--android--medium]] - `Repository` pattern basics
 
 ### Related (Same Level)
-- [[q-viewmodel-livedata--android--medium]] - ViewModel basics
+- [[q-viewmodel-livedata--android--medium]] - `ViewModel` basics
 - [[q-kmm-dependency-injection--android--medium]] - DI fundamentals
 
 ### Advanced (Harder)

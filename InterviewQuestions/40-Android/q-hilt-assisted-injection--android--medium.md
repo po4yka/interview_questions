@@ -518,7 +518,7 @@ interface ProductViewHolderFactory {
 
 ### Related (Same Level)
 - [[q-hilt-entry-points--android--medium]] - Entry Points
-- [[q-hilt-viewmodel-injection--android--medium]] - ViewModel injection
+- [[q-hilt-viewmodel-injection--android--medium]] - `ViewModel` injection
 - [[q-kmm-dependency-injection--android--medium]] - DI patterns
 
 ### Advanced (Harder)

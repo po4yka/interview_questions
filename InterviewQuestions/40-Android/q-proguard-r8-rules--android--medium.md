@@ -332,7 +332,7 @@ class ProguardRulesTest {
 - **Размер APK**: уменьшение на 30-50%
 - **Количество методов**: уменьшение на 10-30%
 - **Время сборки**: увеличение на 20-40%
-- **Stack traces**: требуют деобфускации через mapping.txt
+- **`Stack` traces**: требуют деобфускации через mapping.txt
 
 ---
 
@@ -623,7 +623,7 @@ class ProguardRulesTest {
 - **APK size**: 30-50% reduction
 - **Method count**: 10-30% reduction
 - **Build time**: 20-40% increase
-- **Stack traces**: Require deobfuscation via mapping.txt
+- **`Stack` traces**: Require deobfuscation via mapping.txt
 
 ---
 

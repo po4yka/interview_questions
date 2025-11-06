@@ -109,7 +109,7 @@ fun PerformanceTracker() {
 
 ### Метрики Сложности Layout
 
-**View hierarchy analyzer:**
+**`View` hierarchy analyzer:**
 
 ```kotlin
 fun analyzeComplexity(view: View): Metrics {
@@ -226,7 +226,7 @@ fun PerformanceTracker() {
 
 ### Layout Complexity Metrics
 
-**View hierarchy analyzer:**
+**`View` hierarchy analyzer:**
 
 ```kotlin
 fun analyzeComplexity(view: View): Metrics {

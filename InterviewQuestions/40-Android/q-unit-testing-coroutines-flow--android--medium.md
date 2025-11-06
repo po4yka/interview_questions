@@ -19,17 +19,17 @@ tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium
 
 # Вопрос (RU)
 
-> Как писать юнит-тесты для Kotlin Coroutines и Flow? Какие есть best practices и распространённые ошибки?
+> Как писать юнит-тесты для Kotlin Coroutines и `Flow`? Какие есть best practices и распространённые ошибки?
 
 # Question (EN)
 
-> How do you write unit tests for Kotlin Coroutines and Flow? What are the best practices and common pitfalls?
+> How do you write unit tests for Kotlin Coroutines and `Flow`? What are the best practices and common pitfalls?
 
 ---
 
 ## Ответ (RU)
 
-Тестирование корутин и Flow требует специального подхода: тестовые диспетчеры, управление виртуальным временем, правильная обработка асинхронности.
+Тестирование корутин и `Flow` требует специального подхода: тестовые диспетчеры, управление виртуальным временем, правильная обработка асинхронности.
 
 ### Ключевые Инструменты
 
@@ -39,7 +39,7 @@ tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium
 - `runTest { }` — корутинный scope с виртуальным временем
 
 **2. Turbine**
-- Удобный API для тестирования Flow
+- Удобный API для тестирования `Flow`
 - `awaitItem()`, `awaitComplete()`, `awaitError()`
 - Автоматическая отмена коллекции
 
@@ -76,7 +76,7 @@ fun `loadUser updates state`() = runTest {
 }
 ```
 
-**Тестирование Flow с Turbine**
+**Тестирование `Flow` с Turbine**
 
 ```kotlin
 // Repository
@@ -106,7 +106,7 @@ fun `observeArticles emits periodically`() = runTest {
 }
 ```
 
-**Тестирование StateFlow с debounce**
+**Тестирование `StateFlow` с debounce**
 
 ```kotlin
 // ViewModel
@@ -159,13 +159,13 @@ class MainDispatcherRule(
 - Используйте `runTest { }` вместо `runBlocking`
 - Инжектируйте `CoroutineDispatcher` для тестируемости
 - Управляйте виртуальным временем через `testScheduler`
-- Используйте Turbine для Flow тестов
+- Используйте Turbine для `Flow` тестов
 - Проверяйте error cases и cancellation
 
 **❌ Избегайте:**
 - `Thread.sleep()` — ломает виртуальное время
 - Забывать `advanceTimeBy()` для delay
-- Не закрывать infinite Flow (используйте `take()` или Turbine)
+- Не закрывать infinite `Flow` (используйте `take()` или Turbine)
 - Не тестировать cancellation
 - Использовать реальные Dispatchers
 
@@ -212,7 +212,7 @@ fun test() = runTest {
 
 ## Answer (EN)
 
-Testing coroutines and Flow requires specialized tools: test dispatchers, virtual time control, and proper async handling.
+Testing coroutines and `Flow` requires specialized tools: test dispatchers, virtual time control, and proper async handling.
 
 ### Key Tools
 
@@ -222,7 +222,7 @@ Testing coroutines and Flow requires specialized tools: test dispatchers, virtua
 - `runTest { }` — coroutine scope with virtual time
 
 **2. Turbine**
-- Convenient API for Flow testing
+- Convenient API for `Flow` testing
 - `awaitItem()`, `awaitComplete()`, `awaitError()`
 - Automatic collection cancellation
 
@@ -259,7 +259,7 @@ fun `loadUser updates state`() = runTest {
 }
 ```
 
-**Testing Flow with Turbine**
+**Testing `Flow` with Turbine**
 
 ```kotlin
 // Repository
@@ -289,7 +289,7 @@ fun `observeArticles emits periodically`() = runTest {
 }
 ```
 
-**Testing StateFlow with debounce**
+**Testing `StateFlow` with debounce**
 
 ```kotlin
 // ViewModel
@@ -342,7 +342,7 @@ class MainDispatcherRule(
 - Use `runTest { }` instead of `runBlocking`
 - Inject `CoroutineDispatcher` for testability
 - Control virtual time via `testScheduler`
-- Use Turbine for Flow tests
+- Use Turbine for `Flow` tests
 - Test error cases and cancellation
 
 **❌ Avoid:**
@@ -406,7 +406,7 @@ fun test() = runTest {
 ## References
 
 - [[c-coroutines]] — Kotlin coroutines fundamentals
-- [[c-flow]] — Flow basics and operators
+- [[c-flow]] — `Flow` basics and operators
 - [[c-testing-strategies]] — General testing approaches
 - [Kotlin Coroutines Test Guide](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
 - [Turbine Documentation](https://github.com/cashapp/turbine)
@@ -418,11 +418,11 @@ fun test() = runTest {
 
 ### Prerequisites (Easier)
 - [[q-what-is-coroutine--kotlin--easy]] — Coroutine basics
-- [[q-what-is-flow--kotlin--easy]] — Flow fundamentals
+- [[q-what-is-flow--kotlin--easy]] — `Flow` fundamentals
 - [[q-unit-testing-basics--android--easy]] — Unit testing intro
 
 ### Related (Same Level)
-- [[q-testing-viewmodels--android--medium]] — ViewModel testing patterns
+- [[q-testing-viewmodels--android--medium]] — `ViewModel` testing patterns
 - [[q-testing-compose-ui--android--medium]] — Compose UI testing
 - [[q-coroutine-dispatchers--kotlin--medium]] — Dispatcher types and usage
 

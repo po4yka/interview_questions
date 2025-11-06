@@ -253,9 +253,9 @@ securePrefs.edit {
 
 - What happens to SharedPreferences data on app uninstall?
 - How do you migrate from SharedPreferences to DataStore?
-- Can SharedPreferences cause ANR (Application Not Responding)?
+- Can SharedPreferences cause ANR (`Application` Not Responding)?
 - What's the file size limit for SharedPreferences in practice?
-- How do you observe changes in SharedPreferences reactively (with Flow)?
+- How do you observe changes in SharedPreferences reactively (with `Flow`)?
 
 ## References
 

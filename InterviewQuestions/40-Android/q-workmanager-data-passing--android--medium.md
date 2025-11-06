@@ -27,7 +27,7 @@ tags: [android/background-execution, android/coroutines, background-processing, 
 
 ## Ответ (RU)
 
-WorkManager использует класс **Data** для передачи данных между Activity и Worker. Связано с [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
+WorkManager использует класс **Data** для передачи данных между `Activity` и Worker. Связано с [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
 
 ### Передача Данных В Worker (Input)
 
@@ -173,7 +173,7 @@ override suspend fun doWork(): Result {
 
 ## Answer (EN)
 
-WorkManager uses **Data** class for passing data between Activity and Worker. Related to [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
+WorkManager uses **Data** class for passing data between `Activity` and Worker. Related to [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
 
 ### Passing Data TO Worker
 

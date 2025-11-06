@@ -36,23 +36,23 @@ tags:
 
 # Вопрос (RU)
 
-> Что делает библиотека Lifecycle?
+> Что делает библиотека `Lifecycle`?
 
 # Question (EN)
 
-> What does the Lifecycle library do?
+> What does the `Lifecycle` library do?
 
 ---
 
 ## Ответ (RU)
 
-**Библиотека Lifecycle** предоставляет классы и интерфейсы для создания **lifecycle-aware компонентов**, которые автоматически адаптируют свое поведение в зависимости от текущего состояния жизненного цикла Activity и Fragment. Это предотвращает утечки памяти, крэши и улучшает архитектуру кода.
+**Библиотека `Lifecycle`** предоставляет классы и интерфейсы для создания **lifecycle-aware компонентов**, которые автоматически адаптируют свое поведение в зависимости от текущего состояния жизненного цикла `Activity` и `Fragment`. Это предотвращает утечки памяти, крэши и улучшает архитектуру кода.
 
 ### Основные Компоненты
 
-**1. Lifecycle** — представляет состояние жизненного цикла
-**2. LifecycleOwner** — интерфейс, реализуемый Activity/Fragment
-**3. LifecycleObserver** — наблюдатель за изменениями жизненного цикла
+**1. `Lifecycle`** — представляет состояние жизненного цикла
+**2. `LifecycleOwner`** — интерфейс, реализуемый Activity/`Fragment`
+**3. `LifecycleObserver`** — наблюдатель за изменениями жизненного цикла
 
 ### Современный Подход: DefaultLifecycleObserver
 
@@ -93,7 +93,7 @@ if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
 }
 ```
 
-### Интеграция С LiveData И Корутинами
+### Интеграция С `LiveData` И Корутинами
 
 ```kotlin
 class MyViewModel : ViewModel() {
@@ -161,7 +161,7 @@ class GoodActivity : AppCompatActivity() {
 }
 ```
 
-**2. Повторное использование** — один observer работает с любыми Activity/Fragment
+**2. Повторное использование** — один observer работает с любыми Activity/`Fragment`
 
 **3. Тестируемость** — компоненты легко тестировать независимо
 
@@ -169,13 +169,13 @@ class GoodActivity : AppCompatActivity() {
 
 ## Answer (EN)
 
-The **Lifecycle library** provides classes and interfaces to build **lifecycle-aware components** that automatically adjust their behavior based on the current lifecycle state of Activities and Fragments. This prevents memory leaks, crashes, and improves code architecture.
+The **`Lifecycle` library** provides classes and interfaces to build **lifecycle-aware components** that automatically adjust their behavior based on the current lifecycle state of Activities and Fragments. This prevents memory leaks, crashes, and improves code architecture.
 
 ### Core Components
 
-**1. Lifecycle** — represents the lifecycle state
-**2. LifecycleOwner** — interface implemented by Activity/Fragment
-**3. LifecycleObserver** — observes lifecycle changes
+**1. `Lifecycle`** — represents the lifecycle state
+**2. `LifecycleOwner`** — interface implemented by Activity/`Fragment`
+**3. `LifecycleObserver`** — observes lifecycle changes
 
 ### Modern Approach: DefaultLifecycleObserver
 
@@ -216,7 +216,7 @@ if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
 }
 ```
 
-### Integration with LiveData and Coroutines
+### Integration with `LiveData` and Coroutines
 
 ```kotlin
 class MyViewModel : ViewModel() {
@@ -242,7 +242,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### ProcessLifecycleOwner (App Lifecycle)
+### ProcessLifecycleOwner (App `Lifecycle`)
 
 ```kotlin
 class MyApp : Application() {
@@ -284,7 +284,7 @@ class GoodActivity : AppCompatActivity() {
 }
 ```
 
-**2. Reusability** — same observer works with any Activity/Fragment
+**2. Reusability** — same observer works with any Activity/`Fragment`
 
 **3. Testability** — components are easily testable independently
 
@@ -294,9 +294,9 @@ class GoodActivity : AppCompatActivity() {
 
 ## Follow-ups
 
-- How does Lifecycle library handle configuration changes?
-- What's the difference between LifecycleObserver and DefaultLifecycleObserver?
-- Can custom components implement LifecycleOwner?
+- How does `Lifecycle` library handle configuration changes?
+- What's the difference between `LifecycleObserver` and DefaultLifecycleObserver?
+- Can custom components implement `LifecycleOwner`?
 - How does ProcessLifecycleOwner differ from component lifecycle?
 - What happens if you try to access UI in an inactive lifecycle state?
 
@@ -304,7 +304,7 @@ class GoodActivity : AppCompatActivity() {
 
 - [[q-why-was-the-lifecycle-library-created--android--hard]]
 - [[q-what-is-viewmodel--android--medium]]
-- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
 
 ## Related Questions
@@ -320,7 +320,7 @@ class GoodActivity : AppCompatActivity() {
 - [[q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]] - Basic Android concepts
 
 ### Related (Medium)
-- [[q-what-is-viewmodel--android--medium]] - Uses Lifecycle library
+- [[q-what-is-viewmodel--android--medium]] - Uses `Lifecycle` library
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - State preservation across lifecycle
 
 ### Advanced (Harder)

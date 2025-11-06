@@ -70,7 +70,7 @@ measureClient.registerMeasureCallback(
 
 - Запускайте `ForegroundService` только для Exercise сессий, остальное — passive monitoring.
 - Используйте `Constraints` (battery not low) и `Quota` API для долгих тренировок.
-- Выводите состояния в `Complication`/Tile, чтобы не держать Activity.
+- Выводите состояния в `Complication`/Tile, чтобы не держать `Activity`.
 
 ### Health Connect Integration
 
@@ -118,7 +118,7 @@ if (healthConnectClient.permissionController.getGrantedPermissions()
 ## Follow-ups
 - Как передавать данные в real-time на телефон (BLE/Companion) при отсутствии Health Connect?
 - Какие ограничения вводит Health Connect на историю данных и ревокацию разрешений?
-- Как использовать Tiles/Complications для отображения данных без запуска Activity?
+- Как использовать Tiles/Complications для отображения данных без запуска `Activity`?
 
 ## References
 - [[c-wear-health]]

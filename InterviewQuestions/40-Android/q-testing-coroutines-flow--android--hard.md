@@ -19,11 +19,11 @@ tags: [android/coroutines, android/flow, android/testing-unit, async, coroutines
 
 # Вопрос (RU)
 
-> Как тестировать suspend функции, StateFlow и SharedFlow? Объясните TestDispatcher, runTest и библиотеку turbine.
+> Как тестировать suspend функции, `StateFlow` и `SharedFlow`? Объясните TestDispatcher, runTest и библиотеку turbine.
 
 # Question (EN)
 
-> How do you test suspend functions, StateFlow, and SharedFlow? Explain TestDispatcher, runTest, and turbine library.
+> How do you test suspend functions, `StateFlow`, and `SharedFlow`? Explain TestDispatcher, runTest, and turbine library.
 
 ---
 
@@ -82,9 +82,9 @@ fun testTimeControl() = runTest {
 - `advanceTimeBy(ms)` - продвинуть время на указанный период
 - `advanceUntilIdle()` - выполнить все оставшиеся задачи
 
-### Тестирование StateFlow
+### Тестирование `StateFlow`
 
-**StateFlow** эмитирует текущее значение немедленно:
+**`StateFlow`** эмитирует текущее значение немедленно:
 
 ```kotlin
 class UserViewModel {
@@ -109,9 +109,9 @@ fun testStateFlow() = runTest {
 }
 ```
 
-### Тестирование SharedFlow
+### Тестирование `SharedFlow`
 
-**SharedFlow** не имеет начального значения, нужно начать сбор ДО эмиссии:
+**`SharedFlow`** не имеет начального значения, нужно начать сбор ДО эмиссии:
 
 ```kotlin
 class EventBus {
@@ -143,7 +143,7 @@ fun testSharedFlow() = runTest {
 
 ### Библиотека Turbine
 
-**Turbine** упрощает тестирование Flow с чистым API:
+**Turbine** упрощает тестирование `Flow` с чистым API:
 
 ```kotlin
 @Test
@@ -162,7 +162,7 @@ fun testFlowWithTurbine() = runTest {
 }
 ```
 
-**StateFlow с Turbine:**
+**`StateFlow` с Turbine:**
 
 ```kotlin
 @Test
@@ -189,7 +189,7 @@ fun testStateFlowWithTurbine() = runTest {
 - `awaitError()` - ждать ошибку
 - `awaitComplete()` - ждать завершения
 
-### Тестирование ViewModel
+### Тестирование `ViewModel`
 
 ```kotlin
 @Test
@@ -247,7 +247,7 @@ fun setUp() {
 }
 ```
 
-**3. Используйте Turbine для Flow:**
+**3. Используйте Turbine для `Flow`:**
 
 ```kotlin
 // ✅ DO
@@ -319,9 +319,9 @@ fun testTimeControl() = runTest {
 - `advanceTimeBy(ms)` - advance time by specific period
 - `advanceUntilIdle()` - run all remaining tasks
 
-### Testing StateFlow
+### Testing `StateFlow`
 
-**StateFlow** emits current value immediately:
+**`StateFlow`** emits current value immediately:
 
 ```kotlin
 class UserViewModel {
@@ -346,9 +346,9 @@ fun testStateFlow() = runTest {
 }
 ```
 
-### Testing SharedFlow
+### Testing `SharedFlow`
 
-**SharedFlow** has no initial value, must start collecting BEFORE emitting:
+**`SharedFlow`** has no initial value, must start collecting BEFORE emitting:
 
 ```kotlin
 class EventBus {
@@ -380,7 +380,7 @@ fun testSharedFlow() = runTest {
 
 ### Turbine Library
 
-**Turbine** simplifies Flow testing with clean API:
+**Turbine** simplifies `Flow` testing with clean API:
 
 ```kotlin
 @Test
@@ -399,7 +399,7 @@ fun testFlowWithTurbine() = runTest {
 }
 ```
 
-**StateFlow with Turbine:**
+**`StateFlow` with Turbine:**
 
 ```kotlin
 @Test
@@ -426,7 +426,7 @@ fun testStateFlowWithTurbine() = runTest {
 - `awaitError()` - wait for error
 - `awaitComplete()` - wait for completion
 
-### Testing ViewModel
+### Testing `ViewModel`
 
 ```kotlin
 @Test
@@ -470,7 +470,7 @@ fun test() = runTest { /* ... */ }
 fun test() = runBlocking { /* ... */ }
 ```
 
-**2. Set Main dispatcher:**
+**2. `Set` Main dispatcher:**
 
 ```kotlin
 // ✅ DO
@@ -484,7 +484,7 @@ fun setUp() {
 }
 ```
 
-**3. Use Turbine for Flow:**
+**3. Use Turbine for `Flow`:**
 
 ```kotlin
 // ✅ DO

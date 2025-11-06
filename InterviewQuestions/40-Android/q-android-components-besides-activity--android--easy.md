@@ -27,13 +27,13 @@ sources: []
 
 # Вопрос (RU)
 
-Какие компоненты Android существуют помимо Activity?
+Какие компоненты Android существуют помимо `Activity`?
 
 ---
 
 # Question (EN)
 
-What Android components exist besides Activity?
+What Android components exist besides `Activity`?
 
 ---
 
@@ -41,7 +41,7 @@ What Android components exist besides Activity?
 
 Android определяет четыре основных компонента приложения, из которых три работают без UI:
 
-### 1. Service (Сервис)
+### 1. `Service` (Сервис)
 Выполняет длительные операции в фоне без пользовательского интерфейса.
 
 ```kotlin
@@ -56,7 +56,7 @@ class MusicService : Service() {
 
 **Применение**: Воспроизведение музыки, загрузка файлов, синхронизация данных.
 
-### 2. BroadcastReceiver (Приёмник событий)
+### 2. `BroadcastReceiver` (Приёмник событий)
 Реагирует на системные и кастомные broadcast-сообщения.
 
 ```kotlin
@@ -70,7 +70,7 @@ class NetworkReceiver : BroadcastReceiver() {
 
 **Сценарии**: Изменение подключения, уровень батареи, загрузка завершена, кастомные события.
 
-### 3. ContentProvider (Поставщик контента)
+### 3. `ContentProvider` (Поставщик контента)
 Управляет доступом к структурированным данным между приложениями.
 
 ```kotlin
@@ -84,8 +84,8 @@ class ContactsProvider : ContentProvider() {
 
 **Назначение**: Межприложенский доступ к контактам, медиафайлам, календарю.
 
-### 4. Fragment (Фрагмент)
-Модульная часть UI с собственным жизненным циклом, привязанная к Activity.
+### 4. `Fragment` (Фрагмент)
+Модульная часть UI с собственным жизненным циклом, привязанная к `Activity`.
 
 ```kotlin
 class DetailsFragment : Fragment() {
@@ -104,10 +104,10 @@ class DetailsFragment : Fragment() {
 
 | Компонент | Назначение | UI | Жизненный цикл |
 |-----------|------------|----|----------------|
-| Service | Фоновые операции | ❌ | Независимый от Activity |
-| BroadcastReceiver | Обработка событий | ❌ | Кратковременный (10 сек) |
-| ContentProvider | Обмен данными | ❌ | Singleton, по требованию |
-| Fragment | UI-модули | ✅ | Привязан к Activity |
+| `Service` | Фоновые операции | ❌ | Независимый от `Activity` |
+| `BroadcastReceiver` | Обработка событий | ❌ | Кратковременный (10 сек) |
+| `ContentProvider` | Обмен данными | ❌ | Singleton, по требованию |
+| `Fragment` | UI-модули | ✅ | Привязан к `Activity` |
 
 ---
 
@@ -115,7 +115,7 @@ class DetailsFragment : Fragment() {
 
 Android defines four main application components, three of which operate without UI:
 
-### 1. Service
+### 1. `Service`
 Executes long-running operations in the background without a user interface.
 
 ```kotlin
@@ -130,7 +130,7 @@ class MusicService : Service() {
 
 **Use cases**: Music playback, file downloads, data synchronization.
 
-### 2. BroadcastReceiver
+### 2. `BroadcastReceiver`
 Responds to system-wide and custom broadcast announcements.
 
 ```kotlin
@@ -144,7 +144,7 @@ class NetworkReceiver : BroadcastReceiver() {
 
 **Use cases**: Network connectivity changes, battery level, download completed, custom events.
 
-### 3. ContentProvider
+### 3. `ContentProvider`
 Manages access to structured data shared between applications.
 
 ```kotlin
@@ -158,8 +158,8 @@ class ContactsProvider : ContentProvider() {
 
 **Purpose**: Inter-app access to contacts, media files, calendar.
 
-### 4. Fragment
-Modular UI portion with its own lifecycle, attached to an Activity.
+### 4. `Fragment`
+Modular UI portion with its own lifecycle, attached to an `Activity`.
 
 ```kotlin
 class DetailsFragment : Fragment() {
@@ -176,26 +176,26 @@ class DetailsFragment : Fragment() {
 
 **Benefits**: Reusability, master-detail layouts, back stack support.
 
-| Component | Purpose | UI | Lifecycle |
+| Component | Purpose | UI | `Lifecycle` |
 |-----------|---------|-----|-----------|
-| Service | Background operations | ❌ | Independent from Activity |
-| BroadcastReceiver | Event handling | ❌ | Short-lived (10 sec) |
-| ContentProvider | Data sharing | ❌ | Singleton, on-demand |
-| Fragment | UI modules | ✅ | Tied to Activity |
+| `Service` | Background operations | ❌ | Independent from `Activity` |
+| `BroadcastReceiver` | Event handling | ❌ | `Short`-lived (10 sec) |
+| `ContentProvider` | Data sharing | ❌ | Singleton, on-demand |
+| `Fragment` | UI modules | ✅ | Tied to `Activity` |
 
 ---
 
 ## Follow-ups
 
-- What's the difference between started Service and bound Service?
-- When should you use WorkManager instead of Service?
-- How does BroadcastReceiver's 10-second limit affect implementation?
-- What security mechanisms does ContentProvider offer?
+- What's the difference between started `Service` and bound `Service`?
+- When should you use WorkManager instead of `Service`?
+- How does `BroadcastReceiver`'s 10-second limit affect implementation?
+- What security mechanisms does `ContentProvider` offer?
 - Why are Fragments controversial in modern Android development?
 
 ## References
 
-- [[c-service]] - Service component details
+- [[c-service]] - `Service` component details
 - [[c-lifecycle]] - Android lifecycle fundamentals
 - https://developer.android.com/guide/components/fundamentals
 
@@ -205,8 +205,8 @@ class DetailsFragment : Fragment() {
 - [[q-android-app-components--android--easy]] - Overview of all app components
 
 ### Related
-- [[q-service-types-android--android--easy]] - Started vs Bound Service
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment lifecycle comparison
+- [[q-service-types-android--android--easy]] - Started vs Bound `Service`
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Fragment` lifecycle comparison
 
 ### Advanced
  - Modern background work patterns

@@ -305,7 +305,7 @@ fun GestureExample() {
 
 ## Follow-ups
 
-- How to combine multiple gesture detectors on the same View?
+- How to combine multiple gesture detectors on the same `View`?
 - What's the difference between `onSingleTapUp` and `onSingleTapConfirmed`?
 - How to implement custom multi-touch gestures beyond pinch-zoom?
 - How to handle gesture conflicts (e.g., scroll vs fling)?

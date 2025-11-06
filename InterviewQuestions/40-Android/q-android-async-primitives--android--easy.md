@@ -39,11 +39,11 @@ Android предоставляет несколько примитивов дл�
 
 **Современные (рекомендуемые):**
 - **[[c-coroutines|Корутины]]** — легковесная конкурентность с lifecycle-aware отменой
-- **Flow** — реактивные потоки данных (cold streams + hot StateFlow/SharedFlow)
+- **`Flow`** — реактивные потоки данных (cold streams + hot StateFlow/`SharedFlow`)
 - **[[c-workmanager|WorkManager]]** — гарантированное выполнение задач, переживающих смерть процесса
 
 **Legacy (устаревшие):**
-- **Handler/Looper** — низкоуровневая передача сообщений между потоками
+- **Handler/`Looper`** — низкоуровневая передача сообщений между потоками
 - **ExecutorService** — Java thread pool без интеграции с Android lifecycle
 - **RxJava** — функциональное реактивное программирование (требует дисциплины управления подписками)
 - **AsyncTask** — DEPRECATED, утечки памяти при rotation
@@ -81,7 +81,7 @@ class DataViewModel : ViewModel() {
 }
 ```
 
-### 2. Flow (реактивные потоки)
+### 2. `Flow` (реактивные потоки)
 
 ```kotlin
 // ✅ StateFlow: hot stream с последним значением + conflation
@@ -142,7 +142,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 
 **Выбор примитива:**
 - **Корутины** — UI-связанные операции с коротким временем выполнения (API calls, DB queries)
-- **Flow** — непрерывные потоки данных (sensors, DB observations, WebSocket)
+- **`Flow`** — непрерывные потоки данных (sensors, DB observations, WebSocket)
 - **WorkManager** — критичные задачи, которые должны выполниться даже после закрытия app (upload, sync)
 
 ---
@@ -153,11 +153,11 @@ Android provides several async primitives:
 
 **Modern (recommended):**
 - **[[c-coroutines|Coroutines]]** — lightweight concurrency with lifecycle-aware cancellation
-- **Flow** — reactive data streams (cold streams + hot StateFlow/SharedFlow)
+- **`Flow`** — reactive data streams (cold streams + hot StateFlow/`SharedFlow`)
 - **[[c-workmanager|WorkManager]]** — guaranteed task execution surviving process death
 
 **Legacy (outdated):**
-- **Handler/Looper** — low-level message passing between threads
+- **Handler/`Looper`** — low-level message passing between threads
 - **ExecutorService** — Java thread pool without Android lifecycle integration
 - **RxJava** — functional reactive programming (requires disciplined subscription management)
 - **AsyncTask** — DEPRECATED, memory leaks on rotation
@@ -195,7 +195,7 @@ class DataViewModel : ViewModel() {
 }
 ```
 
-### 2. Flow (reactive streams)
+### 2. `Flow` (reactive streams)
 
 ```kotlin
 // ✅ StateFlow: hot stream with latest value + conflation
@@ -256,18 +256,18 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 
 **Choosing the right primitive:**
 - **Coroutines** — UI-bound operations with short execution time (API calls, DB queries)
-- **Flow** — continuous data streams (sensors, DB observations, WebSocket)
+- **`Flow`** — continuous data streams (sensors, DB observations, WebSocket)
 - **WorkManager** — critical tasks that must complete even after app closes (upload, sync)
 
 ---
 
 ## Follow-ups
 
-- How does `viewModelScope` ensure automatic cancellation when ViewModel is cleared?
+- How does `viewModelScope` ensure automatic cancellation when `ViewModel` is cleared?
 - What's the difference between `StateFlow` and `SharedFlow` in terms of buffering and replay?
 - When would you prefer `ExecutorService` over coroutines despite the recommendation?
 - How does WorkManager guarantee task execution across process death?
-- What are the memory implications of using Handler with long-lived Activity references?
+- What are the memory implications of using `Handler` with long-lived `Activity` references?
 - Why is `AsyncTask` deprecated and what specific issues did it have with lifecycle management?
 - How do coroutine dispatchers map to Android's threading model (Main, IO, Default)?
 
@@ -276,7 +276,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 - [[c-coroutines]] — Coroutines fundamentals
 - [[c-workmanager]] — WorkManager architecture
 - [Kotlin Coroutines on Android](https://developer.android.com/kotlin/coroutines)
-- [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)
+- [Kotlin `Flow` Documentation](https://kotlinlang.org/docs/flow.html)
 - [WorkManager Guide](https://developer.android.com/topic/libraries/architecture/workmanager)
 - [Background Tasks Overview](https://developer.android.com/develop/background-work/background-tasks)
 
@@ -284,10 +284,10 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 
 ### Prerequisites
 - [[q-coroutine-builders-basics--kotlin--easy]] — Coroutines fundamentals
-- [[q-viewmodel-pattern--android--easy]] — ViewModel pattern
+- [[q-viewmodel-pattern--android--easy]] — `ViewModel` pattern
 
 ### Related
-- [[q-flow-operators--kotlin--medium]] — Flow operators
+- [[q-flow-operators--kotlin--medium]] — `Flow` operators
 - [[q-what-is-workmanager--android--medium]] — WorkManager basics
 
 ### Advanced

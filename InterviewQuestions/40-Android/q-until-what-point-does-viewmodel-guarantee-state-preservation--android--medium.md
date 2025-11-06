@@ -19,17 +19,17 @@ tags: [android, android/architecture-mvvm, android/lifecycle, difficulty/medium,
 
 # Вопрос (RU)
 
-До какого момента ViewModel гарантирует сохранение состояния?
+До какого момента `ViewModel` гарантирует сохранение состояния?
 
 # Question (EN)
 
-Until what point does ViewModel guarantee state preservation?
+Until what point does `ViewModel` guarantee state preservation?
 
 ---
 
 ## Ответ (RU)
 
-ViewModel гарантирует сохранение состояния до момента полного завершения Activity или уничтожения процесса. Она переживает изменения конфигурации (поворот экрана), но не переживает смерть процесса.
+`ViewModel` гарантирует сохранение состояния до момента полного завершения `Activity` или уничтожения процесса. Она переживает изменения конфигурации (поворот экрана), но не переживает смерть процесса.
 
 ### Когда Данные Сохраняются
 
@@ -41,13 +41,13 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-**Fragment транзакции**: замена Fragment в той же Activity, добавление в back stack.
+**`Fragment` транзакции**: замена `Fragment` в той же `Activity`, добавление в back stack.
 
-**Activity в фоне**: Activity в onStop(), процесс жив.
+**`Activity` в фоне**: `Activity` в onStop(), процесс жив.
 
 ### Когда Данные Теряются
 
-**Activity.finish()**:
+**`Activity`.finish()**:
 ```kotlin
 fun closeActivity() {
     finish() // ❌ ViewModel.onCleared() будет вызван
@@ -56,7 +56,7 @@ fun closeActivity() {
 
 **Смерть процесса**: система убивает приложение из-за нехватки памяти, принудительная остановка, crash.
 
-**Back навигация**: нажатие back на корневой Activity.
+**Back навигация**: нажатие back на корневой `Activity`.
 
 ### Обработка Смерти Процесса
 
@@ -76,7 +76,7 @@ class MyViewModel(
 }
 ```
 
-### Fragment-scoped ViewModel
+### `Fragment`-scoped `ViewModel`
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -87,13 +87,13 @@ class MyFragment : Fragment() {
 }
 ```
 
-**Fragment ViewModel очищается**: при окончательном удалении Fragment (не в back stack) или завершении родительской Activity.
+**`Fragment` `ViewModel` очищается**: при окончательном удалении `Fragment` (не в back stack) или завершении родительской `Activity`.
 
 ### Лучшие Практики
 
 1. **Критичные данные**: SavedStateHandle
 2. **Большие данные**: Repository/Database
-3. **Временное UI состояние**: обычные свойства ViewModel
+3. **Временное UI состояние**: обычные свойства `ViewModel`
 4. **Очистка**: реализуйте onCleared()
 
 ```kotlin
@@ -107,7 +107,7 @@ class MyViewModel : ViewModel() {
 
 ## Answer (EN)
 
-ViewModel guarantees state preservation until Activity finishes or process is killed. It survives configuration changes (screen rotation) but not process death.
+`ViewModel` guarantees state preservation until `Activity` finishes or process is killed. It survives configuration changes (screen rotation) but not process death.
 
 ### When Data Survives
 
@@ -119,13 +119,13 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-**Fragment Transactions**: Fragment replacement in same Activity, back stack additions.
+**`Fragment` Transactions**: `Fragment` replacement in same `Activity`, back stack additions.
 
-**Background Activity**: Activity in onStop(), process alive.
+**Background `Activity`**: `Activity` in onStop(), process alive.
 
 ### When Data Is Lost
 
-**Activity.finish()**:
+**`Activity`.finish()**:
 ```kotlin
 fun closeActivity() {
     finish() // ❌ ViewModel.onCleared() will be called
@@ -134,7 +134,7 @@ fun closeActivity() {
 
 **Process Death**: System kills app due to memory pressure, force-stop, crash.
 
-**Back Navigation**: Back press on root Activity.
+**Back Navigation**: Back press on root `Activity`.
 
 ### Handling Process Death
 
@@ -154,7 +154,7 @@ class MyViewModel(
 }
 ```
 
-### Fragment-Scoped ViewModel
+### `Fragment`-Scoped `ViewModel`
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -165,13 +165,13 @@ class MyFragment : Fragment() {
 }
 ```
 
-**Fragment ViewModel cleared**: When Fragment permanently removed (not in back stack) or parent Activity finishes.
+**`Fragment` `ViewModel` cleared**: When `Fragment` permanently removed (not in back stack) or parent `Activity` finishes.
 
 ### Best Practices
 
 1. **Critical data**: SavedStateHandle
 2. **Large data**: Repository/Database
-3. **Temporary UI state**: Regular ViewModel properties
+3. **Temporary UI state**: Regular `ViewModel` properties
 4. **Cleanup**: Implement onCleared()
 
 ```kotlin
@@ -187,33 +187,33 @@ class MyViewModel : ViewModel() {
 
 ## Follow-ups
 
-1. What happens to ViewModel when the app is killed from recent apps?
+1. What happens to `ViewModel` when the app is killed from recent apps?
 2. How does SavedStateHandle differ from onSaveInstanceState?
 3. What are the size limitations of SavedStateHandle?
-4. How can you test ViewModel survival during process death?
-5. What's the lifecycle difference between Activity-scoped and Fragment-scoped ViewModels in a multi-fragment setup?
+4. How can you test `ViewModel` survival during process death?
+5. What's the lifecycle difference between `Activity`-scoped and `Fragment`-scoped ViewModels in a multi-fragment setup?
 
 ## References
 
-- [[c-viewmodel]] - ViewModel concept and architecture
+- [[c-viewmodel]] - `ViewModel` concept and architecture
 - [[c-savedstatehandle]] - SavedStateHandle for process death handling
 - [[c-mvvm-pattern]] - MVVM architectural pattern
 - [[c-lifecycle]] - Android lifecycle components
-- [Android Developer Guide: ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [Android Developer Guide: `ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - [Android Developer Guide: Saved State](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate)
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-what-is-viewmodel--android--medium]] - What is ViewModel and why is it needed
+- [[q-what-is-viewmodel--android--medium]] - What is `ViewModel` and why is it needed
 - [[q-mvvm-pattern--android--medium]] - MVVM architecture pattern basics
 
 ### Related
-- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - ViewModel vs onSavedInstanceState comparison
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel internals and purpose
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - `ViewModel` vs onSavedInstanceState comparison
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - `ViewModel` internals and purpose
 - [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP architectural comparison
 
 ### Advanced
-- [[q-clean-architecture-android--android--hard]] - Clean Architecture with ViewModel
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture with `ViewModel`
 - [[q-mvi-architecture--android--hard]] - MVI pattern and state management
 - [[q-offline-first-architecture--android--hard]] - Offline-first architecture patterns

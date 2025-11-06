@@ -37,10 +37,10 @@ sources: []
 
 Android поддерживает несколько архитектурных паттернов: **MVP**, **MVVM**, **MVI** и **Clean Architecture**. Современный стандарт — MVVM с Architecture Components.
 
-### MVP (Model-View-Presenter)
-**Структура**: Model (данные) → Presenter (логика) → View (пассивный UI).
+### MVP (Model-`View`-Presenter)
+**Структура**: Model (данные) → Presenter (логика) → `View` (пассивный UI).
 
-**Проблема**: Presenter держит ссылку на View, что создает риск утечек памяти и требует ручного управления lifecycle.
+**Проблема**: Presenter держит ссылку на `View`, что создает риск утечек памяти и требует ручного управления lifecycle.
 
 ```kotlin
 // ❌ Presenter держит ссылку на View
@@ -52,8 +52,8 @@ class UserPresenter(private val view: UserContract.View) {
 }
 ```
 
-### MVVM (Model-View-ViewModel)
-**Структура**: View наблюдает за ViewModel через LiveData/StateFlow. ViewModel переживает configuration changes и автоматически очищается.
+### MVVM (Model-`View`-`ViewModel`)
+**Структура**: `View` наблюдает за `ViewModel` через LiveData/`StateFlow`. `ViewModel` переживает configuration changes и автоматически очищается.
 
 ```kotlin
 // ✅ ViewModel lifecycle-aware, автоматическая отмена корутин
@@ -68,8 +68,8 @@ class UserViewModel(private val repo: UserRepository) : ViewModel() {
 }
 ```
 
-### MVI (Model-View-Intent)
-**Структура**: Unidirectional data flow с immutable state. Все изменения происходят через Intent.
+### MVI (Model-`View`-`Intent`)
+**Структура**: Unidirectional data flow с immutable state. Все изменения происходят через `Intent`.
 
 ```kotlin
 // ✅ Единая точка входа, предсказуемое состояние
@@ -106,10 +106,10 @@ class GetUserUseCase(private val repo: UserRepository) {
 
 Android supports several architectural patterns: **MVP**, **MVVM**, **MVI**, and **Clean Architecture**. The modern standard is MVVM with Architecture Components.
 
-### MVP (Model-View-Presenter)
-**Structure**: Model (data) → Presenter (logic) → View (passive UI).
+### MVP (Model-`View`-Presenter)
+**Structure**: Model (data) → Presenter (logic) → `View` (passive UI).
 
-**Problem**: Presenter holds a reference to View, creating memory leak risks and requiring manual lifecycle management.
+**Problem**: Presenter holds a reference to `View`, creating memory leak risks and requiring manual lifecycle management.
 
 ```kotlin
 // ❌ Presenter holds View reference
@@ -121,8 +121,8 @@ class UserPresenter(private val view: UserContract.View) {
 }
 ```
 
-### MVVM (Model-View-ViewModel)
-**Structure**: View observes ViewModel via LiveData/StateFlow. ViewModel survives configuration changes and is automatically cleared.
+### MVVM (Model-`View`-`ViewModel`)
+**Structure**: `View` observes `ViewModel` via LiveData/`StateFlow`. `ViewModel` survives configuration changes and is automatically cleared.
 
 ```kotlin
 // ✅ ViewModel is lifecycle-aware, auto-cancels coroutines
@@ -137,7 +137,7 @@ class UserViewModel(private val repo: UserRepository) : ViewModel() {
 }
 ```
 
-### MVI (Model-View-Intent)
+### MVI (Model-`View`-`Intent`)
 **Structure**: Unidirectional data flow with immutable state. All changes happen through Intents.
 
 ```kotlin
@@ -176,7 +176,7 @@ class GetUserUseCase(private val repo: UserRepository) {
 - How does Clean Architecture enforce dependency inversion in Android?
 - How do you handle shared state across multiple ViewModels in MVVM?
 - What are the testing implications of each architectural pattern?
-- How does Repository pattern integrate with Clean Architecture layers?
+- How does `Repository` pattern integrate with Clean Architecture layers?
 
 ## References
 

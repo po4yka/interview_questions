@@ -108,7 +108,7 @@ val activityComponent = appComponent
 - ❌ Нужен доступ ко всем зависимостям родителя
 
 **Subcomponents:**
-- ✅ Простая иерархия Activity → Fragment
+- ✅ Простая иерархия `Activity` → `Fragment`
 - ✅ Доступ ко всем зависимостям приложения
 - ✅ Feature-based модули с общим scope
 - ❌ Строгая инкапсуляция модулей
@@ -209,7 +209,7 @@ val activityComponent = appComponent
 - ❌ Need access to all parent dependencies
 
 **Subcomponents:**
-- ✅ Simple Activity → Fragment hierarchy
+- ✅ Simple `Activity` → `Fragment` hierarchy
 - ✅ Access to all app dependencies
 - ✅ Feature-based modules with shared scope
 - ❌ Strict module encapsulation

@@ -52,7 +52,7 @@ tags:
 
 ## Ответ (RU)
 
-Фоторедактор реализуется как Fragment с ImageView для отображения и методами обработки Bitmap. Используйте Matrix для трансформаций и ColorMatrix для фильтров.
+Фоторедактор реализуется как `Fragment` с `ImageView` для отображения и методами обработки `Bitmap`. Используйте Matrix для трансформаций и ColorMatrix для фильтров.
 
 ### Основной Компонент
 
@@ -164,7 +164,7 @@ override fun onDestroyView() {
 ```
 
 **Ключевые моменты**:
-- Fragment для переиспользования
+- `Fragment` для переиспользования
 - Matrix для трансформаций (rotate, scale, translate)
 - ColorMatrix для фильтров (brightness, contrast, saturation)
 - MediaStore для сохранения результата
@@ -172,7 +172,7 @@ override fun onDestroyView() {
 
 ## Answer (EN)
 
-Photo editor is implemented as a Fragment with ImageView for display and Bitmap processing methods. Use Matrix for transformations and ColorMatrix for filters.
+Photo editor is implemented as a `Fragment` with `ImageView` for display and `Bitmap` processing methods. Use Matrix for transformations and ColorMatrix for filters.
 
 ### Core Component
 
@@ -284,7 +284,7 @@ override fun onDestroyView() {
 ```
 
 **Key Points**:
-- Fragment for reusability
+- `Fragment` for reusability
 - Matrix for transformations (rotate, scale, translate)
 - ColorMatrix for filters (brightness, contrast, saturation)
 - MediaStore for saving results
@@ -302,7 +302,7 @@ override fun onDestroyView() {
 
 ## References
 
-- [Android Canvas and Bitmap Documentation](https://developer.android.com/reference/android/graphics/Bitmap)
+- [Android `Canvas` and `Bitmap` Documentation](https://developer.android.com/reference/android/graphics/`Bitmap`)
 - [ColorMatrix Filters](https://developer.android.com/reference/android/graphics/ColorMatrix)
 - [MediaStore API](https://developer.android.com/training/data-storage/shared/media)
 

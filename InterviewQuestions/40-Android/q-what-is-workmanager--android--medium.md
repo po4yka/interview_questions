@@ -43,7 +43,7 @@ tags: [android/background-execution, android/coroutines, difficulty/medium, jetp
 
 **Гарантированное выполнение**: задачи сохраняются в SQLite БД и переживают перезагрузки, уничтожение процесса, режим Doze.
 
-**Умный выбор механизма**: автоматически использует JobScheduler (API 23+) или AlarmManager + BroadcastReceiver (API 14-22).
+**Умный выбор механизма**: автоматически использует JobScheduler (API 23+) или AlarmManager + `BroadcastReceiver` (API 14-22).
 
 **Ограничения выполнения**: декларативно задаются условия — сеть, зарядка, уровень батареи, свободное место.
 
@@ -138,9 +138,9 @@ WorkManager.getInstance(context)
 
 **Не используйте WorkManager**:
 - Точное время выполнения (используйте AlarmManager)
-- Длительная работа на переднем плане (используйте Foreground Service)
+- Длительная работа на переднем плане (используйте Foreground `Service`)
 - Немедленные UI обновления (используйте корутины)
-- Задачи реального времени (используйте Service)
+- Задачи реального времени (используйте `Service`)
 
 ## Answer (EN)
 
@@ -150,7 +150,7 @@ WorkManager.getInstance(context)
 
 **Guaranteed execution**: tasks are persisted in SQLite database and survive reboots, process death, Doze mode.
 
-**Smart mechanism selection**: automatically uses JobScheduler (API 23+) or AlarmManager + BroadcastReceiver (API 14-22).
+**Smart mechanism selection**: automatically uses JobScheduler (API 23+) or AlarmManager + `BroadcastReceiver` (API 14-22).
 
 **Execution constraints**: declaratively specify conditions — network, charging, battery level, storage space.
 
@@ -245,9 +245,9 @@ WorkManager.getInstance(context)
 
 **Don't use WorkManager for**:
 - Precise timing (use AlarmManager)
-- Long-running foreground work (use Foreground Service)
+- `Long`-running foreground work (use Foreground `Service`)
 - Immediate UI updates (use coroutines)
-- Real-time processing (use Service)
+- Real-time processing (use `Service`)
 
 ---
 
@@ -269,12 +269,12 @@ WorkManager.getInstance(context)
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-service--android--easy]] — Understanding Android Service lifecycle
+- [[q-what-is-service--android--easy]] — Understanding Android `Service` lifecycle
 - [[q-coroutines-basics--kotlin--easy]] — Kotlin coroutines fundamentals
 
 ### Related (Same Level)
-- [[q-coroutines-flow--kotlin--medium]] — Asynchronous data streams with Flow
-- [[q-foreground-service-types--android--medium]] — Long-running visible background work
+- [[q-coroutines-flow--kotlin--medium]] — Asynchronous data streams with `Flow`
+- [[q-foreground-service-types--android--medium]] — `Long`-running visible background work
 - [[q-jobscheduler--android--medium]] — Lower-level scheduled task API
 
 ### Advanced (Harder)

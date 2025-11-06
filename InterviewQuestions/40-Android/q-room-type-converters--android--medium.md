@@ -41,11 +41,11 @@ What do you know about Converters in Room?
 
 ## Ответ (RU)
 
-**Room TypeConverters** — это механизм преобразования пользовательских типов данных в примитивные типы, которые Room умеет сохранять в SQLite. Они позволяют работать с Date, Enum, List и сложными объектами как с обычными полями Entity.
+**Room TypeConverters** — это механизм преобразования пользовательских типов данных в примитивные типы, которые Room умеет сохранять в SQLite. Они позволяют работать с Date, Enum, `List` и сложными объектами как с обычными полями Entity.
 
 ### Основной Принцип
 
-Room знает только примитивы (Int, Long, String, Boolean, etc). Для кастомных типов нужны конвертеры.
+Room знает только примитивы (`Int`, `Long`, `String`, `Boolean`, etc). Для кастомных типов нужны конвертеры.
 
 **Простой пример:**
 
@@ -109,7 +109,7 @@ class Converters {
 }
 ```
 
-**List через JSON:**
+**`List` через JSON:**
 
 ```kotlin
 class Converters {
@@ -188,11 +188,11 @@ data class PostWithAuthor(
 
 ## Answer (EN)
 
-**Room TypeConverters** are a mechanism for converting custom data types to primitive types that Room can persist in SQLite. They enable working with Date, Enum, List, and complex objects as regular Entity fields.
+**Room TypeConverters** are a mechanism for converting custom data types to primitive types that Room can persist in SQLite. They enable working with Date, Enum, `List`, and complex objects as regular Entity fields.
 
 ### Core Principle
 
-Room only understands primitives (Int, Long, String, Boolean, etc). Custom types require converters.
+Room only understands primitives (`Int`, `Long`, `String`, `Boolean`, etc). Custom types require converters.
 
 **Basic Example:**
 
@@ -256,7 +256,7 @@ class Converters {
 }
 ```
 
-**List via JSON:**
+**`List` via JSON:**
 
 ```kotlin
 class Converters {

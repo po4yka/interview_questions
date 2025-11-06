@@ -40,13 +40,13 @@ tags: [android/architecture-mvvm, android/lifecycle, android/room, difficulty/ea
 ### Ключевые Принципы
 
 - **Separation of concerns**: UI не содержит бизнес-логику
-- **Lifecycle-aware**: компоненты автоматически реагируют на lifecycle events
-- **Unidirectional data flow**: ViewModel → UI (предсказуемость состояния)
+- **`Lifecycle`-aware**: компоненты автоматически реагируют на lifecycle events
+- **Unidirectional data flow**: `ViewModel` → UI (предсказуемость состояния)
 - **Testability**: слои изолированы через чёткие контракты
 
-### 1) ViewModel — Переживает Configuration Changes
+### 1) `ViewModel` — Переживает Configuration Changes
 
-Хранит UI state; отделяет логику от UI; ViewModelScope для корутин; **не хранит Context**.
+Хранит UI state; отделяет логику от UI; ViewModelScope для корутин; **не хранит `Context`**.
 
 ```kotlin
 // ✅ Переживает поворот экрана
@@ -63,12 +63,12 @@ class UserViewModel : ViewModel() {
 class BadViewModel(val context: Context) : ViewModel()
 ```
 
-**Когда использовать**: любая UI-логика, которая должна пережить recreate Activity/Fragment.
+**Когда использовать**: любая UI-логика, которая должна пережить recreate Activity/`Fragment`.
 
-### 2) LiveData / StateFlow — Observable Состояние
+### 2) `LiveData` / `StateFlow` — Observable Состояние
 
-**LiveData**: lifecycle-aware out-of-the-box; автоматическая отписка; legacy в новых проектах.
-**StateFlow**: Kotlin-first; требует manual lifecycle scope; лучшая интеграция с Compose/Flow.
+**`LiveData`**: lifecycle-aware out-of-the-box; автоматическая отписка; legacy в новых проектах.
+**`StateFlow`**: Kotlin-first; требует manual lifecycle scope; лучшая интеграция с Compose/`Flow`.
 
 ```kotlin
 // ✅ LiveData: автоматически отписывается
@@ -80,11 +80,11 @@ lifecycleScope.launch {
 }
 ```
 
-**Когда использовать**: StateFlow для новых проектов (Kotlin-first); LiveData для legacy или простых case.
+**Когда использовать**: `StateFlow` для новых проектов (Kotlin-first); `LiveData` для legacy или простых case.
 
 ### 3) Room — Type-safe SQLite ORM
 
-Compile-time SQL validation; аннотации (@Entity, @Dao, @Database); поддержка Flow/LiveData; migration automation.
+Compile-time SQL validation; аннотации (@Entity, @Dao, @Database); поддержка Flow/`LiveData`; migration automation.
 
 ```kotlin
 @Entity(tableName = "users")
@@ -134,7 +134,7 @@ val request = OneTimeWorkRequestBuilder<SyncWorker>()
 
 ### 5) Navigation — Централизованная Навигация
 
-Single-activity pattern; type-safe arguments (Safe Args); ViewModel scoping к графу; deep linking.
+Single-activity pattern; type-safe arguments (Safe Args); `ViewModel` scoping к графу; deep linking.
 
 ```kotlin
 // ✅ Type-safe передача аргументов
@@ -161,7 +161,7 @@ UI Layer (Compose / Views)
 
 **Trade-offs**:
 - ✅ Проверенные решения для типичных проблем
-- ✅ Lifecycle-aware по умолчанию
+- ✅ `Lifecycle`-aware по умолчанию
 - ❌ Boilerplate для простых экранов
 - ❌ Learning curve для junior разработчиков
 
@@ -174,13 +174,13 @@ UI Layer (Compose / Views)
 ### Key Principles
 
 - **Separation of concerns**: UI doesn't contain business logic
-- **Lifecycle-aware**: components automatically react to lifecycle events
-- **Unidirectional data flow**: ViewModel → UI (state predictability)
+- **`Lifecycle`-aware**: components automatically react to lifecycle events
+- **Unidirectional data flow**: `ViewModel` → UI (state predictability)
 - **Testability**: layers isolated via clear contracts
 
-### 1) ViewModel — Survives Configuration Changes
+### 1) `ViewModel` — Survives Configuration Changes
 
-Stores UI state; separates logic from UI; ViewModelScope for coroutines; **no Context**.
+Stores UI state; separates logic from UI; ViewModelScope for coroutines; **no `Context`**.
 
 ```kotlin
 // ✅ Survives screen rotation
@@ -197,12 +197,12 @@ class UserViewModel : ViewModel() {
 class BadViewModel(val context: Context) : ViewModel()
 ```
 
-**When to use**: any UI logic that should survive Activity/Fragment recreate.
+**When to use**: any UI logic that should survive Activity/`Fragment` recreate.
 
-### 2) LiveData / StateFlow — Observable State
+### 2) `LiveData` / `StateFlow` — Observable State
 
-**LiveData**: lifecycle-aware out-of-the-box; automatic unsubscribe; legacy in new projects.
-**StateFlow**: Kotlin-first; requires manual lifecycle scope; better Compose/Flow integration.
+**`LiveData`**: lifecycle-aware out-of-the-box; automatic unsubscribe; legacy in new projects.
+**`StateFlow`**: Kotlin-first; requires manual lifecycle scope; better Compose/`Flow` integration.
 
 ```kotlin
 // ✅ LiveData: auto-unsubscribes
@@ -214,11 +214,11 @@ lifecycleScope.launch {
 }
 ```
 
-**When to use**: StateFlow for new projects (Kotlin-first); LiveData for legacy or simple cases.
+**When to use**: `StateFlow` for new projects (Kotlin-first); `LiveData` for legacy or simple cases.
 
 ### 3) Room — Type-safe SQLite ORM
 
-Compile-time SQL validation; annotations (@Entity, @Dao, @Database); Flow/LiveData support; migration automation.
+Compile-time SQL validation; annotations (@Entity, @Dao, @Database); Flow/`LiveData` support; migration automation.
 
 ```kotlin
 @Entity(tableName = "users")
@@ -268,7 +268,7 @@ val request = OneTimeWorkRequestBuilder<SyncWorker>()
 
 ### 5) Navigation — Centralized Navigation
 
-Single-activity pattern; type-safe arguments (Safe Args); ViewModel scoping to graph; deep linking.
+Single-activity pattern; type-safe arguments (Safe Args); `ViewModel` scoping to graph; deep linking.
 
 ```kotlin
 // ✅ Type-safe argument passing
@@ -295,7 +295,7 @@ UI Layer (Compose / Views)
 
 **Trade-offs**:
 - ✅ Battle-tested solutions for common problems
-- ✅ Lifecycle-aware by default
+- ✅ `Lifecycle`-aware by default
 - ❌ Boilerplate for simple screens
 - ❌ Learning curve for juniors
 
@@ -303,11 +303,11 @@ UI Layer (Compose / Views)
 
 ## Follow-ups
 
-- When should you use StateFlow vs LiveData in modern Android?
-- How does ViewModel survive configuration changes without saving state bundle?
-- What's the difference between Room's Flow vs LiveData queries?
+- When should you use `StateFlow` vs `LiveData` in modern Android?
+- How does `ViewModel` survive configuration changes without saving state bundle?
+- What's the difference between Room's `Flow` vs `LiveData` queries?
 - When should you use WorkManager vs ForegroundService vs Coroutines?
-- How do you scope a ViewModel to a Navigation graph vs Activity?
+- How do you scope a `ViewModel` to a Navigation graph vs `Activity`?
 
 ## References
 
@@ -316,7 +316,7 @@ UI Layer (Compose / Views)
 - [[c-room]]
 - https://developer.android.com/jetpack
 - [Architecture](https://developer.android.com/topic/architecture)
-- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - [Room Database](https://developer.android.com/training/data-storage/room)
 - [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 

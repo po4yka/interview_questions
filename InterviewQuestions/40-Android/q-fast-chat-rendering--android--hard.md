@@ -155,7 +155,7 @@ fun ChatImage(url: String) { AsyncImage(model = url, contentDescription = null) 
 - Partial updates (`DiffUtil` payloads), stable keys in `LazyColumn`
 - `Paging 3` + backpressure, IO batching
 - Image caches (memory/disk), size constraints
-- Message cache in `Room`, indexes on `timestamp`
+- `Message` cache in `Room`, indexes on `timestamp`
 
 ### Common Pitfalls
 - Full `ViewHolder` redraw without payloads

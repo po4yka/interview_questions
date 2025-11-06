@@ -35,11 +35,11 @@ tags:
 
 # Вопрос (RU)
 
-> Как правильно уведомить адаптер RecyclerView о том, что элемент был удален из списка?
+> Как правильно уведомить адаптер `RecyclerView` о том, что элемент был удален из списка?
 
 # Question (EN)
 
-> How to properly notify a RecyclerView adapter that an item has been deleted from the list?
+> How to properly notify a `RecyclerView` adapter that an item has been deleted from the list?
 
 ---
 
@@ -68,7 +68,7 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator
 }
 ```
 
-**2. DiffUtil с RecyclerView.Adapter**
+**2. DiffUtil с `RecyclerView`.Adapter**
 
 ```kotlin
 // ✅ Эффективно для больших списков
@@ -208,7 +208,7 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator
 }
 ```
 
-**2. DiffUtil with RecyclerView.Adapter**
+**2. DiffUtil with `RecyclerView`.Adapter**
 
 ```kotlin
 // ✅ Efficient for large lists
@@ -333,7 +333,7 @@ fun ItemList() {
 
 ## References
 
-- Android Documentation: [RecyclerView.Adapter](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.Adapter)
+- Android Documentation: [`RecyclerView`.Adapter](https://developer.android.com/reference/androidx/recyclerview/widget/`RecyclerView`.Adapter)
 - Android Documentation: [ListAdapter](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter)
 - Android Documentation: [DiffUtil](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 
@@ -345,13 +345,13 @@ fun ItemList() {
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView basics
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView` basics
 - [[q-why-separate-ui-and-business-logic--android--easy]] - Architecture fundamentals
 - [[q-how-to-start-drawing-ui-in-android--android--easy]] - UI fundamentals
 
 ### Related (Same Level)
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose alternative
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - RecyclerView customization
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - `RecyclerView` customization
 - [[q-testing-compose-ui--android--medium]] - Testing UI components
 
 ### Advanced (Harder)

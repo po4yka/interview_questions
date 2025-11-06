@@ -44,13 +44,13 @@ tags:
 
 ## Ответ (RU)
 
-**ViewStub** — это невидимый View нулевого размера, который используется для ленивой инфляции layout-ресурсов во время выполнения.
+**ViewStub** — это невидимый `View` нулевого размера, который используется для ленивой инфляции layout-ресурсов во время выполнения.
 
 ### Основная Концепция
 
-При вызове `inflate()` или `setVisibility(View.VISIBLE)` происходит:
+При вызове `inflate()` или `setVisibility(`View`.VISIBLE)` происходит:
 1. Инфляция указанного layout-ресурса
-2. ViewStub **заменяет себя** созданным View в родительской иерархии
+2. ViewStub **заменяет себя** созданным `View` в родительской иерархии
 3. ViewStub перестает существовать (повторная инфляция невозможна)
 
 ### Зачем Нужен ViewStub
@@ -58,7 +58,7 @@ tags:
 ViewStub оптимизирует производительность для:
 - Сложных layout, которые не всегда нужны
 - Условно отображаемых UI элементов (ошибки, детали, премиум-функции)
-- Тяжелых View, которые должны создаваться только при необходимости
+- Тяжелых `View`, которые должны создаваться только при необходимости
 
 **Преимущества**:
 - Ускоряет startup приложения
@@ -211,13 +211,13 @@ ViewStub — легковесный механизм ленивой инфляц
 
 ## Answer (EN)
 
-**ViewStub** is an invisible, zero-sized View used for lazy inflation of layout resources at runtime.
+**ViewStub** is an invisible, zero-sized `View` used for lazy inflation of layout resources at runtime.
 
 ### Core Concept
 
-When `inflate()` or `setVisibility(View.VISIBLE)` is called:
+When `inflate()` or `setVisibility(`View`.VISIBLE)` is called:
 1. The specified layout resource is inflated
-2. ViewStub **replaces itself** with the inflated View in the parent hierarchy
+2. ViewStub **replaces itself** with the inflated `View` in the parent hierarchy
 3. ViewStub ceases to exist (re-inflation is impossible)
 
 ### Why Use ViewStub
@@ -398,14 +398,14 @@ ViewStub is a lightweight lazy inflation mechanism for performance and memory op
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Basic view optimization
-- View lifecycle and inflation concepts
+- `View` lifecycle and inflation concepts
 
 ### Related (Same Level)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View rendering methods
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` rendering methods
 - Layout inflation performance optimization
 - Error state handling patterns
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--android--hard]] - Modern declarative UI approach
-- Custom ViewGroup implementation with lazy child inflation
+- Custom `ViewGroup` implementation with lazy child inflation
 - Memory profiling for layout optimization

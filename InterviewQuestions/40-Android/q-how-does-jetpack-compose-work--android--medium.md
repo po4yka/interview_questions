@@ -243,7 +243,7 @@ fun UserProfile(userId: String) {
 - What is the difference between remember and rememberSaveable?
 - How do modifiers work and what is the order of execution?
 - What are stable classes and why do they matter?
-- How does Compose integrate with ViewModel?
+- How does Compose integrate with `ViewModel`?
 
 ## References
 

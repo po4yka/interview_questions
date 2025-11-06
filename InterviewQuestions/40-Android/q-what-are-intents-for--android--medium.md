@@ -29,7 +29,7 @@ tags: [android, android/activity, android/intents-deeplinks, android/service, di
 
 # Вопрос (RU)
 
-> Для чего нужны Intent в Android?
+> Для чего нужны `Intent` в Android?
 
 # Question (EN)
 
@@ -39,11 +39,11 @@ tags: [android, android/activity, android/intents-deeplinks, android/service, di
 
 ## Ответ (RU)
 
-Intent — это объект сообщения в Android для коммуникации между компонентами. Основные назначения: запуск Activity, Service, отправка Broadcast и передача данных между модулями.
+`Intent` — это объект сообщения в Android для коммуникации между компонентами. Основные назначения: запуск `Activity`, `Service`, отправка Broadcast и передача данных между модулями.
 
 ### Основные Сценарии Использования
 
-**1. Запуск Activity**
+**1. Запуск `Activity`**
 
 ```kotlin
 // Явный Intent — запуск конкретной Activity
@@ -68,7 +68,7 @@ val launcher = registerForActivityResult(
 launcher.launch(Intent(this, PickerActivity::class.java))
 ```
 
-**2. Запуск Service**
+**2. Запуск `Service`**
 
 ```kotlin
 // Запуск фонового сервиса
@@ -104,7 +104,7 @@ sendBroadcast(
 )
 ```
 
-**4. Неявные Intent (Implicit)**
+**4. Неявные `Intent` (Implicit)**
 
 Система находит подходящий компонент по action и data:
 
@@ -130,7 +130,7 @@ fun safeStartActivity(intent: Intent) {
 }
 ```
 
-### Компоненты Intent
+### Компоненты `Intent`
 
 ```kotlin
 val intent = Intent().apply {
@@ -143,7 +143,7 @@ val intent = Intent().apply {
 }
 ```
 
-### Intent Flags (важные)
+### `Intent` Flags (важные)
 
 ```kotlin
 // ✅ Очистить стек выше целевой Activity
@@ -158,7 +158,7 @@ intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 
 ### PendingIntent
 
-Intent, который может быть выполнен другим приложением (для уведомлений, алармов):
+`Intent`, который может быть выполнен другим приложением (для уведомлений, алармов):
 
 ```kotlin
 val notificationIntent = Intent(this, MainActivity::class.java)
@@ -174,7 +174,7 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 
 ### Когда Использовать Что
 
-| Тип Intent | Применение | Пример |
+| Тип `Intent` | Применение | Пример |
 |-----------|-----------|--------|
 | **Explicit** | Запуск компонента вашего приложения | `Intent(this, DetailActivity::class.java)` |
 | **Implicit** | Запуск системного компонента или другого приложения | `Intent.ACTION_VIEW` |
@@ -182,7 +182,7 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 
 ## Answer (EN)
 
-Intent is a messaging object in Android for component communication. Core purposes: starting Activities, Services, broadcasting messages, and passing data between modules.
+`Intent` is a messaging object in Android for component communication. Core purposes: starting Activities, Services, broadcasting messages, and passing data between modules.
 
 ### Main Use Cases
 
@@ -273,7 +273,7 @@ fun safeStartActivity(intent: Intent) {
 }
 ```
 
-### Intent Components
+### `Intent` Components
 
 ```kotlin
 val intent = Intent().apply {
@@ -286,7 +286,7 @@ val intent = Intent().apply {
 }
 ```
 
-### Intent Flags (important)
+### `Intent` Flags (important)
 
 ```kotlin
 // ✅ Clear all activities above target
@@ -301,7 +301,7 @@ intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 
 ### PendingIntent
 
-Intent that can be executed by another app (for notifications, alarms):
+`Intent` that can be executed by another app (for notifications, alarms):
 
 ```kotlin
 val notificationIntent = Intent(this, MainActivity::class.java)
@@ -317,7 +317,7 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 
 ### When to Use What
 
-| Intent Type | Use Case | Example |
+| `Intent` Type | Use Case | Example |
 |-----------|----------|---------|
 | **Explicit** | Launch component in your app | `Intent(this, DetailActivity::class.java)` |
 | **Implicit** | Launch system component or other app | `Intent.ACTION_VIEW` |
@@ -327,7 +327,7 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 
 ## Follow-ups
 
-- How do Intent Filters work in AndroidManifest.xml?
+- How do `Intent` Filters work in AndroidManifest.xml?
 - What's the difference between startActivity() and startActivityForResult() (deprecated)?
 - When should you use LocalBroadcastManager vs system broadcasts?
 - What are the security implications of implicit Intents?
@@ -336,8 +336,8 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 ## References
 
 - [[c-android-components]] - Overview of Android components
-- [[c-activity-lifecycle]] - Activity lifecycle and Intent handling
-- [Android Developer Guide: Intents and Intent Filters](https://developer.android.com/guide/components/intents-filters)
+- [[c-activity-lifecycle]] - `Activity` lifecycle and `Intent` handling
+- [Android Developer Guide: Intents and `Intent` Filters](https://developer.android.com/guide/components/intents-filters)
 - [Common Intents Reference](https://developer.android.com/guide/components/intents-common)
 
 ## Related Questions
@@ -347,7 +347,7 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread and component communication
 
 ### Related (Medium)
-- [[q-intent-filters-android--android--medium]] - How apps declare Intent handling
+- [[q-intent-filters-android--android--medium]] - How apps declare `Intent` handling
 - [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Component architecture
 
 ### Advanced (Harder)

@@ -19,21 +19,21 @@ tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, callback
 
 # Вопрос (RU)
 
-После получения результата внутри Presenter как сообщить об этом View?
+После получения результата внутри Presenter как сообщить об этом `View`?
 
 # Question (EN)
 
-After getting a result inside Presenter, how to notify the View?
+After getting a result inside Presenter, how to notify the `View`?
 
 ---
 
 ## Ответ (RU)
 
-В MVP-архитектуре Presenter отвечает за бизнес-логику, а View — за отображение. Presenter не должен знать об Android-специфике View (Activity/Fragment), поэтому используется абстракция через интерфейс.
+В MVP-архитектуре Presenter отвечает за бизнес-логику, а `View` — за отображение. Presenter не должен знать об Android-специфике `View` (Activity/`Fragment`), поэтому используется абстракция через интерфейс.
 
 ### 1. Интерфейсный Контракт (Interface Contract) ✅
 
-**Наиболее распространенный подход**. Presenter вызывает методы интерфейса, который реализует View:
+**Наиболее распространенный подход**. Presenter вызывает методы интерфейса, который реализует `View`:
 
 ```kotlin
 // Contract
@@ -82,14 +82,14 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 
 **Преимущества**:
 - Четкий контракт между слоями
-- Легко тестировать (можно мокировать View)
+- Легко тестировать (можно мокировать `View`)
 - Type-safe вызовы
 
 **Недостатки**:
 - Много boilerplate кода для интерфейсов
-- При уничтожении View может быть NPE (нужна проверка)
+- При уничтожении `View` может быть NPE (нужна проверка)
 
-### 2. Callback-функции ✅
+### 2. `Callback`-функции ✅
 
 Передача лямбда-функций для специфичных операций:
 
@@ -123,7 +123,7 @@ val presenter = DataPresenter(
 - Может привести к memory leak если не управлять жизненным циклом
 - Сложнее тестировать множественные callback
 
-### 3. LiveData/StateFlow (Гибридный подход)
+### 3. LiveData/`StateFlow` (Гибридный подход)
 
 Если используется переход к MVVM, Presenter может эмитить состояния:
 
@@ -154,17 +154,17 @@ presenter.userState.observe(this) { state ->
 ```
 
 **Преимущества**:
-- Lifecycle-aware (автоматически отписывается)
+- `Lifecycle`-aware (автоматически отписывается)
 - Нет проблем с утечками памяти
 - Проще работать с потоками
 
 **Недостатки**:
 - Это уже не чистый MVP, а гибрид с MVVM
-- Добавляет зависимость от Android Lifecycle
+- Добавляет зависимость от Android `Lifecycle`
 
 ### Важные Моменты (Best Practices)
 
-**Проверка жизненного цикла** — Presenter должен проверять, что View еще "жива":
+**Проверка жизненного цикла** — Presenter должен проверять, что `View` еще "жива":
 
 ```kotlin
 class BasePresenter<V : BaseView>(private var view: V?) {
@@ -179,12 +179,12 @@ class BasePresenter<V : BaseView>(private var view: V?) {
 }
 ```
 
-**Weak reference** ❌ — не используйте `WeakReference<View>` в Presenter:
+**Weak reference** ❌ — не используйте `WeakReference<`View`>` в Presenter:
 - Усложняет код
 - Может привести к неожиданной потере ссылки
 - Лучше явно управлять через `onDestroy()`
 
-**Thread safety** — всегда переключайтесь на Main thread для UI операций:
+**`Thread` safety** — всегда переключайтесь на Main thread для UI операций:
 
 ```kotlin
 // ✅ Correct
@@ -202,11 +202,11 @@ fun notifyView(data: Data) {
 
 ## Answer (EN)
 
-In MVP architecture, the Presenter handles business logic while the View handles display. The Presenter should not know Android-specific details about the View (Activity/Fragment), so abstraction through interfaces is used.
+In MVP architecture, the Presenter handles business logic while the `View` handles display. The Presenter should not know Android-specific details about the `View` (Activity/`Fragment`), so abstraction through interfaces is used.
 
 ### 1. Interface Contract ✅
 
-**Most common approach**. The Presenter calls interface methods that the View implements:
+**Most common approach**. The Presenter calls interface methods that the `View` implements:
 
 ```kotlin
 // Contract
@@ -255,14 +255,14 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 
 **Advantages**:
 - Clear contract between layers
-- Easy to test (can mock View)
+- Easy to test (can mock `View`)
 - Type-safe calls
 
 **Disadvantages**:
 - Lots of boilerplate for interfaces
-- Potential NPE when View is destroyed (needs checks)
+- Potential NPE when `View` is destroyed (needs checks)
 
-### 2. Callback Functions ✅
+### 2. `Callback` Functions ✅
 
 Passing lambda functions for specific operations:
 
@@ -296,7 +296,7 @@ val presenter = DataPresenter(
 - Can lead to memory leaks if lifecycle not managed
 - Harder to test multiple callbacks
 
-### 3. LiveData/StateFlow (Hybrid Approach)
+### 3. LiveData/`StateFlow` (Hybrid Approach)
 
 If transitioning to MVVM, the Presenter can emit states:
 
@@ -327,17 +327,17 @@ presenter.userState.observe(this) { state ->
 ```
 
 **Advantages**:
-- Lifecycle-aware (auto-unsubscribes)
+- `Lifecycle`-aware (auto-unsubscribes)
 - No memory leak issues
 - Easier thread handling
 
 **Disadvantages**:
 - Not pure MVP, but MVP-MVVM hybrid
-- Adds dependency on Android Lifecycle
+- Adds dependency on Android `Lifecycle`
 
 ### Important Considerations (Best Practices)
 
-**Lifecycle checking** — Presenter should verify View is still "alive":
+**`Lifecycle` checking** — Presenter should verify `View` is still "alive":
 
 ```kotlin
 class BasePresenter<V : BaseView>(private var view: V?) {
@@ -352,12 +352,12 @@ class BasePresenter<V : BaseView>(private var view: V?) {
 }
 ```
 
-**Weak reference** ❌ — don't use `WeakReference<View>` in Presenter:
+**Weak reference** ❌ — don't use `WeakReference<`View`>` in Presenter:
 - Complicates code
 - Can lead to unexpected reference loss
 - Better to explicitly manage via `onDestroy()`
 
-**Thread safety** — always switch to Main thread for UI operations:
+**`Thread` safety** — always switch to Main thread for UI operations:
 
 ```kotlin
 // ✅ Correct
@@ -379,8 +379,8 @@ fun notifyView(data: Data) {
 
 - How to handle configuration changes (rotation) in MVP without losing Presenter state?
 - What are the differences between MVP and MVVM patterns in Android?
-- How to properly test Presenter with mock View in unit tests?
-- Should Presenter hold reference to Android Context? Why or why not?
+- How to properly test Presenter with mock `View` in unit tests?
+- Should Presenter hold reference to Android `Context`? Why or why not?
 - How to implement proper error handling and retry logic in Presenter?
 
 ## References
@@ -392,13 +392,13 @@ fun notifyView(data: Data) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-viewmodel-pattern--android--easy]] - Understanding ViewModel
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View optimization
+- [[q-viewmodel-pattern--android--easy]] - Understanding `ViewModel`
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View` optimization
 
 ### Related (Same Level)
-- [[q-what-is-viewmodel--android--medium]] - ViewModel in detail
+- [[q-what-is-viewmodel--android--medium]] - `ViewModel` in detail
 - [[q-testing-viewmodels-turbine--android--medium]] - Testing patterns
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View redraw methods
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` redraw methods
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--android--hard]] - Modern View composition
+- [[q-compose-custom-layout--android--hard]] - Modern `View` composition

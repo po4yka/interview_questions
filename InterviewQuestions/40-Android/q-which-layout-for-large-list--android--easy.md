@@ -39,12 +39,12 @@ tags: [android/performance-memory, android/ui-views, difficulty/easy, recyclervi
 
 ## Ответ (RU)
 
-Для больших списков используйте **RecyclerView** — современный компонент Android с переиспользованием views.
+Для больших списков используйте **`RecyclerView`** — современный компонент Android с переиспользованием views.
 
-### Почему RecyclerView?
+### Почему `RecyclerView`?
 
 **Ключевые преимущества**:
-1. **View Recycling** — переиспользует ViewHolder'ы вместо создания новых
+1. **`View` Recycling** — переиспользует ViewHolder'ы вместо создания новых
 2. **Эффективная память** — держит в памяти только видимые элементы
 3. **Гибкие LayoutManager'ы** — вертикальные/горизонтальные списки, сетки
 4. **Встроенные анимации** — плавные изменения списка
@@ -92,29 +92,29 @@ GridLayoutManager(context, spanCount = 2)
 LinearLayoutManager(context, HORIZONTAL, false)
 ```
 
-### Сравнение: RecyclerView Vs ListView
+### Сравнение: `RecyclerView` Vs `ListView`
 
-| Критерий | RecyclerView | ListView |
+| Критерий | `RecyclerView` | `ListView` |
 |----------|--------------|----------|
-| View Recycling | ✅ Обязательный ViewHolder | Опциональный |
+| `View` Recycling | ✅ Обязательный ViewHolder | Опциональный |
 | Производительность | ✅ Отличная | ❌ Плохая для больших списков |
 | Layout варианты | ✅ Списки, сетки | ❌ Только список |
 | Статус | ✅ Рекомендуется | ❌ Deprecated |
 
-### Когда НЕ Использовать RecyclerView
+### Когда НЕ Использовать `RecyclerView`
 
 Для маленьких статических списков (<20 элементов):
-- **LinearLayout + ScrollView** — для 5-10 элементов
+- **`LinearLayout` + `ScrollView`** — для 5-10 элементов
 - **Compose LazyColumn** — для проектов на Jetpack Compose
 
 ## Answer (EN)
 
-For large lists, use **RecyclerView** — Android's modern component with view recycling.
+For large lists, use **`RecyclerView`** — Android's modern component with view recycling.
 
-### Why RecyclerView?
+### Why `RecyclerView`?
 
 **Key advantages**:
-1. **View Recycling** — reuses ViewHolders instead of creating new views
+1. **`View` Recycling** — reuses ViewHolders instead of creating new views
 2. **Memory Efficiency** — keeps only visible items in memory
 3. **Flexible LayoutManagers** — vertical/horizontal lists, grids
 4. **Built-in Animations** — smooth list changes
@@ -162,52 +162,52 @@ GridLayoutManager(context, spanCount = 2)
 LinearLayoutManager(context, HORIZONTAL, false)
 ```
 
-### Comparison: RecyclerView Vs ListView
+### Comparison: `RecyclerView` Vs `ListView`
 
-| Criterion | RecyclerView | ListView |
+| Criterion | `RecyclerView` | `ListView` |
 |-----------|--------------|----------|
-| View Recycling | ✅ Mandatory ViewHolder | Optional |
+| `View` Recycling | ✅ Mandatory ViewHolder | Optional |
 | Performance | ✅ Excellent | ❌ Poor for large lists |
-| Layout Options | ✅ Lists, grids | ❌ List only |
+| Layout Options | ✅ Lists, grids | ❌ `List` only |
 | Status | ✅ Recommended | ❌ Deprecated |
 
-### When NOT to Use RecyclerView
+### When NOT to Use `RecyclerView`
 
 For small static lists (<20 items):
-- **LinearLayout + ScrollView** — for 5-10 items
+- **`LinearLayout` + `ScrollView`** — for 5-10 items
 - **Compose LazyColumn** — for Jetpack Compose projects
 
 ---
 
 ## Follow-ups
 
-- What is the ViewHolder pattern and why is it mandatory in RecyclerView?
-- What are the main differences between RecyclerView and ListView?
-- What LayoutManagers does RecyclerView support out of the box?
+- What is the ViewHolder pattern and why is it mandatory in `RecyclerView`?
+- What are the main differences between `RecyclerView` and `ListView`?
+- What LayoutManagers does `RecyclerView` support out of the box?
 - When would you use GridLayoutManager instead of LinearLayoutManager?
-- How does RecyclerView handle memory efficiently for large lists?
+- How does `RecyclerView` handle memory efficiently for large lists?
 
 ## References
 
-- [[c-recyclerview]] — RecyclerView concept
-- [[c-view-recycling]] — View recycling pattern
+- [[c-recyclerview]] — `RecyclerView` concept
+- [[c-view-recycling]] — `View` recycling pattern
 - [[c-adapter-pattern]] — Adapter design pattern
-- https://developer.android.com/guide/topics/ui/layout/recyclerview — RecyclerView guide
+- https://developer.android.com/guide/topics/ui/layout/recyclerview — `RecyclerView` guide
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
-- [[q-recyclerview-sethasfixedsize--android--easy]] — RecyclerView optimization
-- [[q-what-is-intent--android--easy]] — View basics
+- [[q-recyclerview-sethasfixedsize--android--easy]] — `RecyclerView` optimization
+- [[q-what-is-intent--android--easy]] — `View` basics
 
 ### Related (Same Level)
 
 - [[q-what-is-viewholder--android--easy]] — ViewHolder pattern
-- [[q-recyclerview-adapter--android--easy]] — RecyclerView adapter
+- [[q-recyclerview-adapter--android--easy]] — `RecyclerView` adapter
 
 ### Advanced (Harder)
 
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] — Compose LazyColumn
-- [[q-what-do-you-know-about-modifications--android--medium]] — List updates
+- [[q-what-do-you-know-about-modifications--android--medium]] — `List` updates
 - [[q-diffutil-recyclerview--android--medium]] — DiffUtil for efficient updates

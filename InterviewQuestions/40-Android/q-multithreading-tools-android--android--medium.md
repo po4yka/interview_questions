@@ -76,11 +76,11 @@ coroutineScope {
 ```
 
 **Области видимости:**
-- `viewModelScope` — привязан к жизненному циклу ViewModel
-- `lifecycleScope` — привязан к Activity/Fragment
+- `viewModelScope` — привязан к жизненному циклу `ViewModel`
+- `lifecycleScope` — привязан к Activity/`Fragment`
 - `GlobalScope` — уровень приложения (осторожно)
 
-**✅ Flow для потоков данных:**
+**✅ `Flow` для потоков данных:**
 
 ```kotlin
 fun fetchUpdates(): Flow<Update> = flow {
@@ -170,7 +170,7 @@ Observable.fromCallable { fetchDataFromNetwork() }
 `AsyncTask` был предназначен для UI потока, но **deprecated** и не должен использоваться.
 
 **Почему устарел:**
-- Утечки Context, пропущенные коллбэки, сбои при изменении конфигурации
+- Утечки `Context`, пропущенные коллбэки, сбои при изменении конфигурации
 - Несогласованное поведение на разных версиях Android
 - Поглощает исключения из `doInBackground`
 
@@ -242,11 +242,11 @@ coroutineScope {
 ```
 
 **Coroutine Scopes:**
-- `viewModelScope` — tied to ViewModel lifecycle
-- `lifecycleScope` — tied to Activity/Fragment lifecycle
+- `viewModelScope` — tied to `ViewModel` lifecycle
+- `lifecycleScope` — tied to Activity/`Fragment` lifecycle
 - `GlobalScope` — application-level scope (use carefully)
 
-**✅ Flow for Streams:**
+**✅ `Flow` for Streams:**
 
 ```kotlin
 fun fetchUpdates(): Flow<Update> = flow {
@@ -304,7 +304,7 @@ WorkManager.getInstance(context).enqueue(uploadRequest)
 
 Reactive Extensions for Java VM — composing asynchronous programs via observable sequences.
 
-**✅ Thread Switching Example:**
+**✅ `Thread` Switching Example:**
 
 ```kotlin
 Observable.fromCallable { fetchDataFromNetwork() }
@@ -336,7 +336,7 @@ Observable.fromCallable { fetchDataFromNetwork() }
 `AsyncTask` was designed for UI thread but is **deprecated** and should not be used.
 
 **Why Deprecated:**
-- Context leaks, missed callbacks, crashes on configuration changes
+- `Context` leaks, missed callbacks, crashes on configuration changes
 - Inconsistent behavior across Android versions
 - Swallows exceptions from `doInBackground`
 
@@ -364,10 +364,10 @@ For new Android development:
 ## Follow-ups
 
 - How does structured concurrency prevent memory leaks in coroutines?
-- When should you choose WorkManager over a Foreground Service?
+- When should you choose WorkManager over a Foreground `Service`?
 - What are the differences between `flowOn()` and `withContext()` in coroutines?
-- How do you handle backpressure in RxJava vs Flow?
-- What happens to running coroutines when ViewModel is cleared?
+- How do you handle backpressure in RxJava vs `Flow`?
+- What happens to running coroutines when `ViewModel` is cleared?
 
 ## References
 
@@ -386,8 +386,8 @@ For new Android development:
 
 ### Related (Same Level)
 - [[q-background-vs-foreground-service--android--medium]] - Background service types
-- [[q-handler-looper-comprehensive--android--medium]] - Handler and Looper mechanics
-- [[q-looper-empty-queue-behavior--android--medium]] - Looper queue behavior
+- [[q-handler-looper-comprehensive--android--medium]] - `Handler` and `Looper` mechanics
+- [[q-looper-empty-queue-behavior--android--medium]] - `Looper` queue behavior
 - [[q-workmanager-vs-alternatives--android--medium]] - WorkManager comparison
 
 ### Advanced (Harder)

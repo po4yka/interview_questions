@@ -18,10 +18,10 @@ sources: []
 ---
 
 # Вопрос (RU)
-> Что такое SparseArray и когда его использовать вместо HashMap?
+> Что такое SparseArray и когда его использовать вместо `HashMap`?
 
 # Question (EN)
-> What is SparseArray and when to use it instead of HashMap?
+> What is SparseArray and when to use it instead of `HashMap`?
 
 ---
 
@@ -31,7 +31,7 @@ sources: []
 SparseArray — оптимизированная структура данных для отображения int → Object. Избегает автоупаковки ключей (Integer boxing) и использует два массива: int[] для ключей и Object[] для значений. Внутри — бинарный поиск вместо хеширования.
 
 **Компромиссы:**
-- Экономия памяти: ~30–50% по сравнению с HashMap<Integer, V>
+- Экономия памяти: ~30–50% по сравнению с `HashMap`<Integer, V>
 - Производительность: O(log n) вместо O(1), критично при >1000 элементов
 - Подходит для: небольших коллекций (<100 элементов), разреженных ключей
 
@@ -78,7 +78,7 @@ sparseArray.put(key, newValue)  // Может переиспользовать �
 SparseArray is an optimized data structure for int → Object mapping. Avoids Integer boxing by using two arrays: int[] for keys and Object[] for values. Internally uses binary search instead of hashing.
 
 **Trade-offs:**
-- Memory savings: ~30–50% compared to HashMap<Integer, V>
+- Memory savings: ~30–50% compared to `HashMap`<Integer, V>
 - Performance: O(log n) instead of O(1), critical above 1000 elements
 - Suitable for: small collections (<100 elements), sparse keys
 
@@ -123,16 +123,16 @@ sparseArray.put(key, newValue)  // May reuse the slot
 
 ## Follow-ups
 
-- What's the memory overhead difference between SparseArray and HashMap quantitatively?
+- What's the memory overhead difference between SparseArray and `HashMap` quantitatively?
 - When does the O(log n) lookup cost outweigh memory savings?
-- How does SparseArray handle collisions compared to HashMap?
+- How does SparseArray handle collisions compared to `HashMap`?
 - What happens during SparseArray compaction (gc() method)?
 - Are there thread-safety considerations with SparseArray?
 
 ## References
 
 - [[c-sparsearray]] - SparseArray concept note
-- [[c-hash-map]] - HashMap internals
+- [[c-hash-map]] - `HashMap` internals
 - https://developer.android.com/reference/android/util/SparseArray
 
 ## Related Questions

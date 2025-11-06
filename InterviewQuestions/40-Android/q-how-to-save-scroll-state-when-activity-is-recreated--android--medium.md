@@ -18,19 +18,19 @@ tags: [android, android/lifecycle, android/ui-views, difficulty/medium, recycler
 
 # Вопрос (RU)
 
-> Как сохранить позицию скролла при пересоздании Activity?
+> Как сохранить позицию скролла при пересоздании `Activity`?
 
 # Question (EN)
 
-> How to save scroll state when Activity is recreated?
+> How to save scroll state when `Activity` is recreated?
 
 ---
 
 ## Ответ (RU)
 
-При пересоздании Activity (rotation, process death) позиция скролла сбрасывается. Существует несколько подходов для сохранения состояния.
+При пересоздании `Activity` (rotation, process death) позиция скролла сбрасывается. Существует несколько подходов для сохранения состояния.
 
-### Подход 1: ScrollView С onSaveInstanceState
+### Подход 1: `ScrollView` С onSaveInstanceState
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Подход 2: RecyclerView С LayoutManager State
+### Подход 2: `RecyclerView` С LayoutManager State
 
 ✅ **Рекомендуемый подход** - использует встроенный механизм:
 
@@ -94,7 +94,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Подход 3: SavedStateHandle В ViewModel
+### Подход 3: SavedStateHandle В `ViewModel`
 
 ✅ **Best Practice** - переживает process death:
 
@@ -170,27 +170,27 @@ class MainActivity : AppCompatActivity() {
 |--------|----------------|---------------|----------|-----------|
 | onSaveInstanceState | ✅ | ✅ | Высокая | Низкая |
 | LayoutManager state | ✅ | ✅ | Точная | Низкая |
-| ViewModel | ✅ | ❌ | Точная | Средняя |
+| `ViewModel` | ✅ | ❌ | Точная | Средняя |
 | SavedStateHandle | ✅ | ✅ | Точная | Средняя |
 
 ### Best Practices
 
 ✅ **DO:**
-- Используйте `LayoutManager.onSaveInstanceState()` для RecyclerView
+- Используйте `LayoutManager.onSaveInstanceState()` для `RecyclerView`
 - Используйте `SavedStateHandle` в production
 - Вызывайте scroll операции через `post()` после layout
 - Тестируйте с включенной опцией "Don't keep activities"
 
 ❌ **DON'T:**
-- Не используйте простой ViewModel без SavedStateHandle для критичного состояния
+- Не используйте простой `ViewModel` без SavedStateHandle для критичного состояния
 - Не забывайте про process death сценарии
-- Не сохраняйте слишком много данных в Bundle (лимит ~1MB)
+- Не сохраняйте слишком много данных в `Bundle` (лимит ~1MB)
 
 ## Answer (EN)
 
-When Activity is recreated (rotation, process death), scroll position resets. Several approaches exist for state preservation.
+When `Activity` is recreated (rotation, process death), scroll position resets. Several approaches exist for state preservation.
 
-### Approach 1: ScrollView with onSaveInstanceState
+### Approach 1: `ScrollView` with onSaveInstanceState
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Approach 2: RecyclerView with LayoutManager State
+### Approach 2: `RecyclerView` with LayoutManager State
 
 ✅ **Recommended approach** - uses built-in mechanism:
 
@@ -254,7 +254,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Approach 3: SavedStateHandle in ViewModel
+### Approach 3: SavedStateHandle in `ViewModel`
 
 ✅ **Best Practice** - survives process death:
 
@@ -330,51 +330,51 @@ class MainActivity : AppCompatActivity() {
 |----------|----------------|---------------|-----------|------------|
 | onSaveInstanceState | ✅ | ✅ | High | Low |
 | LayoutManager state | ✅ | ✅ | Exact | Low |
-| ViewModel | ✅ | ❌ | Exact | Medium |
+| `ViewModel` | ✅ | ❌ | Exact | Medium |
 | SavedStateHandle | ✅ | ✅ | Exact | Medium |
 
 ### Best Practices
 
 ✅ **DO:**
-- Use `LayoutManager.onSaveInstanceState()` for RecyclerView
+- Use `LayoutManager.onSaveInstanceState()` for `RecyclerView`
 - Use `SavedStateHandle` in production
 - Post scroll operations after layout pass
 - Test with "Don't keep activities" enabled
 
 ❌ **DON'T:**
-- Don't use plain ViewModel without SavedStateHandle for critical state
+- Don't use plain `ViewModel` without SavedStateHandle for critical state
 - Don't forget process death scenarios
-- Don't save too much data in Bundle (limit ~1MB)
+- Don't save too much data in `Bundle` (limit ~1MB)
 
 ---
 
 ## Follow-ups
 
 - How does SavedStateHandle survive process death internally?
-- What's the Bundle size limit for onSaveInstanceState()?
-- Can you save RecyclerView scroll state for StaggeredGridLayoutManager?
+- What's the `Bundle` size limit for onSaveInstanceState()?
+- Can you save `RecyclerView` scroll state for StaggeredGridLayoutManager?
 - How to handle scroll restoration when adapter data changes during recreation?
 - What happens if you restore scroll position before adapter data is loaded?
 
 ## References
 
 - [[c-savedstatehandle]] - SavedStateHandle concept
-- [[c-viewmodel]] - ViewModel lifecycle
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle
+- [[c-viewmodel]] - `ViewModel` lifecycle
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle
 - [Saving UI States](https://developer.android.com/topic/libraries/architecture/saving-states)
-- [RecyclerView state management](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView)
+- [`RecyclerView` state management](https://developer.android.com/reference/androidx/recyclerview/widget/`RecyclerView`)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-components-besides-activity--android--easy]] - Activity basics
+- [[q-android-components-besides-activity--android--easy]] - `Activity` basics
 
 ### Related (Same Level)
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle
 - [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Memory management
 - [[q-single-activity-pros-cons--android--medium]] - Architecture patterns
-- [[q-diffutil-background-calculation-issues--android--medium]] - RecyclerView optimization
+- [[q-diffutil-background-calculation-issues--android--medium]] - `RecyclerView` optimization
 
 ### Advanced (Harder)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment lifecycle
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment` lifecycle
 - [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Architecture decisions

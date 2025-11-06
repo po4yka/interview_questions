@@ -86,7 +86,7 @@ fun StatelessCounter(count: Int, onIncrement: () -> Unit) {
 }
 ```
 
-**Интеграция с [[c-viewmodel|ViewModel]]:**
+**Интеграция с [[c-viewmodel|`ViewModel`]]:**
 
 ```kotlin
 @Composable
@@ -124,7 +124,7 @@ Box(
 - **Column** — вертикальная компоновка
 - **Row** — горизонтальная компоновка
 - **Box** — стековая компоновка (overlay)
-- **LazyColumn/LazyRow** — эффективные списки с виртуализацией (аналог RecyclerView)
+- **LazyColumn/LazyRow** — эффективные списки с виртуализацией (аналог `RecyclerView`)
 
 ```kotlin
 @Composable
@@ -257,7 +257,7 @@ fun StatelessCounter(count: Int, onIncrement: () -> Unit) {
 }
 ```
 
-**[[c-viewmodel|ViewModel]] Integration:**
+**[[c-viewmodel|`ViewModel`]] Integration:**
 
 ```kotlin
 @Composable
@@ -295,7 +295,7 @@ Define child element positioning:
 - **Column** — vertical layout
 - **Row** — horizontal layout
 - **Box** — stack layout (overlay)
-- **LazyColumn/LazyRow** — efficient lists with virtualization (like RecyclerView)
+- **LazyColumn/LazyRow** — efficient lists with virtualization (like `RecyclerView`)
 
 ```kotlin
 @Composable
@@ -381,7 +381,7 @@ MaterialTheme(
 ## References
 
 - [[c-jetpack-compose]] — Jetpack Compose fundamentals
-- [[c-viewmodel]] — ViewModel architecture
+- [[c-viewmodel]] — `ViewModel` architecture
 
 ## Related Questions
 

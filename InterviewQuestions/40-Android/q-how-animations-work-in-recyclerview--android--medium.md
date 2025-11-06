@@ -30,15 +30,15 @@ tags:
 ---
 
 # Вопрос (RU)
-> Как работают анимации в RecyclerView
+> Как работают анимации в `RecyclerView`
 
 # Question (EN)
-> How Animations Work In RecyclerView
+> How Animations Work In `RecyclerView`
 
 ---
 
 ## Answer (EN)
-RecyclerView provides several ways to implement animations, from simple built-in animations to complex custom animations. Animations can be applied at different levels: item-level, adapter-level, and through custom ItemAnimators.
+`RecyclerView` provides several ways to implement animations, from simple built-in animations to complex custom animations. Animations can be applied at different levels: item-level, adapter-level, and through custom ItemAnimators.
 
 ### 1. Using DefaultItemAnimator
 
@@ -200,7 +200,7 @@ class SlideInLeftAnimator : DefaultItemAnimator() {
 
 ### 6. Using Third-Party Libraries
 
-#### RecyclerView Animators Library
+#### `RecyclerView` Animators Library
 
 ```kotlin
 // Usage
@@ -258,7 +258,7 @@ class AnimatedAdapter(private val items: MutableList<String>) :
 
 ### 8. Shared Element Transitions
 
-For transitions between RecyclerView and detail views:
+For transitions between `RecyclerView` and detail views:
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
@@ -353,7 +353,7 @@ if (!isReduceMotionEnabled) {
 
 
 # Question (EN)
-> How Animations Work In RecyclerView
+> How Animations Work In `RecyclerView`
 
 ---
 
@@ -362,7 +362,7 @@ if (!isReduceMotionEnabled) {
 
 
 ## Answer (EN)
-RecyclerView provides several ways to implement animations, from simple built-in animations to complex custom animations. Animations can be applied at different levels: item-level, adapter-level, and through custom ItemAnimators.
+`RecyclerView` provides several ways to implement animations, from simple built-in animations to complex custom animations. Animations can be applied at different levels: item-level, adapter-level, and through custom ItemAnimators.
 
 ### 1. Using DefaultItemAnimator
 
@@ -524,7 +524,7 @@ class SlideInLeftAnimator : DefaultItemAnimator() {
 
 ### 6. Using Third-Party Libraries
 
-#### RecyclerView Animators Library
+#### `RecyclerView` Animators Library
 
 ```kotlin
 // Usage
@@ -582,7 +582,7 @@ class AnimatedAdapter(private val items: MutableList<String>) :
 
 ### 8. Shared Element Transitions
 
-For transitions between RecyclerView and detail views:
+For transitions between `RecyclerView` and detail views:
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
@@ -677,7 +677,7 @@ if (!isReduceMotionEnabled) {
 
 ## Ответ (RU)
 
-RecyclerView предоставляет несколько способов реализации анимаций, от простых встроенных анимаций до сложных пользовательских. Анимации могут применяться на разных уровнях: на уровне элементов, адаптера и через кастомные ItemAnimator.
+`RecyclerView` предоставляет несколько способов реализации анимаций, от простых встроенных анимаций до сложных пользовательских. Анимации могут применяться на разных уровнях: на уровне элементов, адаптера и через кастомные ItemAnimator.
 
 ### 1. Использование DefaultItemAnimator
 
@@ -966,12 +966,12 @@ if (!isReduceMotionEnabled) {
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - `View`, Ui
 
 ### Related (Medium)
-- q-rxjava-pagination-recyclerview--android--medium - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
-- [[q-recyclerview-async-list-differ--android--medium]] - View, Ui
-- [[q-recyclerview-diffutil-advanced--android--medium]] - View, Ui
+- q-rxjava-pagination-recyclerview--android--medium - `View`, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - `View`, Ui
+- [[q-recyclerview-async-list-differ--android--medium]] - `View`, Ui
+- [[q-recyclerview-diffutil-advanced--android--medium]] - `View`, Ui

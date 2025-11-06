@@ -115,7 +115,7 @@ actual fun generateUUID() = NSUUID().UUIDString
 
 ### Shared Business Logic
 
-**Repository Pattern:**
+**`Repository` Pattern:**
 ```kotlin
 // ✅ commonMain - Repository interface
 interface TaskRepository {
@@ -285,7 +285,7 @@ object KoinKt {
 - Avoid complex generics
 - Use `@Throws` annotation for iOS
 - Export dependencies to framework
-- Provide Flow wrappers for SwiftUI
+- Provide `Flow` wrappers for SwiftUI
 
 **Performance:**
 - Minimize JNI/ObjC bridge calls
@@ -296,7 +296,7 @@ object KoinKt {
 ### Common Pitfalls
 
 ❌ **Over-sharing:** Trying to share UI code leads to poor UX
-❌ **Complex Generics:** iOS struggles with Kotlin generics like `Flow<Result<List<T>>>`
+❌ **Complex Generics:** iOS struggles with Kotlin generics like `Flow<Result<`List`<T>>>`
 ❌ **Missing @Throws:** iOS can't handle uncaught Kotlin exceptions
 ❌ **Memory Leaks:** Improper lifecycle management in shared ViewModels
 ❌ **Build Configuration:** Forgetting to update Podfile or export dependencies
@@ -389,7 +389,7 @@ actual fun generateUUID() = NSUUID().UUIDString
 
 ### Shared Business Logic
 
-**Repository Pattern:**
+**`Repository` Pattern:**
 ```kotlin
 // ✅ commonMain - Repository interface
 interface TaskRepository {
@@ -559,7 +559,7 @@ object KoinKt {
 - Avoid complex generics
 - Use `@Throws` annotation for iOS
 - Export dependencies to framework
-- Provide Flow wrappers for SwiftUI
+- Provide `Flow` wrappers for SwiftUI
 
 **Performance:**
 - Minimize JNI/ObjC bridge calls
@@ -570,7 +570,7 @@ object KoinKt {
 ### Common Pitfalls
 
 ❌ **Over-sharing:** Trying to share UI code leads to poor UX
-❌ **Complex Generics:** iOS struggles with Kotlin generics like `Flow<Result<List<T>>>`
+❌ **Complex Generics:** iOS struggles with Kotlin generics like `Flow<Result<`List`<T>>>`
 ❌ **Missing @Throws:** iOS can't handle uncaught Kotlin exceptions
 ❌ **Memory Leaks:** Improper lifecycle management in shared ViewModels
 ❌ **Build Configuration:** Forgetting to update Podfile or export dependencies
@@ -588,14 +588,14 @@ object KoinKt {
 ## References
 
 - [[c-clean-architecture]] - Clean Architecture principles
-- [[c-repository-pattern]] - Repository pattern implementation
+- [[c-repository-pattern]] - `Repository` pattern implementation
 - [[c-dependency-injection]] - Dependency injection patterns
 
 ## Related Questions
 
 ### Prerequisites (Medium)
 - [[q-clean-architecture-android--android--hard]] - Clean Architecture on Android
-- [[q-repository-pattern--android--medium]] - Repository pattern basics
+- [[q-repository-pattern--android--medium]] - `Repository` pattern basics
 
 ### Related (Hard)
 - [[q-mvi-architecture--android--hard]] - MVI architecture pattern

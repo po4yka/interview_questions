@@ -295,7 +295,7 @@ dependencies {
 - Teams of 5+ developers
 - 50,000+ lines of code
 - Multiple apps sharing code
-- Long builds (>5 minutes)
+- `Long` builds (>5 minutes)
 
 **Not needed for:**
 - Small apps (<10,000 lines)
@@ -334,7 +334,7 @@ dependencies {
 
 - [[c-modularization]] - Modularization concepts
 - [[c-dependency-injection]] - Dependency inversion principle
-- [[c-repository-pattern]] - Repository pattern
+- [[c-repository-pattern]] - `Repository` pattern
 - [[c-gradle]] - Gradle build system
 - [Guide to Android app modularization](https://developer.android.com/topic/modularization)
 

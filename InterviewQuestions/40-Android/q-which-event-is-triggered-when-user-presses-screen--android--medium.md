@@ -44,7 +44,7 @@ Which event is triggered when user presses the screen?
 | **ACTION_POINTER_DOWN** | 5 | Дополнительный указатель касается экрана |
 | **ACTION_POINTER_UP** | 6 | Не основной указатель покидает экран |
 
-### Базовая Обработка Касаний В View
+### Базовая Обработка Касаний В `View`
 
 ```kotlin
 class CustomView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
@@ -289,7 +289,7 @@ When a user presses the screen in Android, the **ACTION_DOWN** event is triggere
 | **ACTION_POINTER_DOWN** | 5 | Additional pointer touches screen |
 | **ACTION_POINTER_UP** | 6 | Non-primary pointer leaves screen |
 
-### Basic Touch Handling in View
+### Basic Touch Handling in `View`
 
 ```kotlin
 class CustomView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
@@ -535,12 +535,12 @@ class ParentView(context: Context) : ViewGroup(context) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- Understanding of View lifecycle in Android
+- Understanding of `View` lifecycle in Android
 - Basic knowledge of event handling patterns
 
 ### Related (Same Level)
 - [[q-how-to-create-chat-lists-from-a-ui-perspective--android--hard]]
-- Custom View drawing and invalidation
+- Custom `View` drawing and invalidation
 - Gesture recognition and touch feedback
 
 ### Advanced (Harder)

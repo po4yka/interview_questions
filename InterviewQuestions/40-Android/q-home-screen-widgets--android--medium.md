@@ -56,7 +56,7 @@ Examples:
 - Stock price widgets
 - Calendar widgets
 
-**2. Collection widgets:**
+**2. `Collection` widgets:**
 
 Specialize in displaying multitude elements of the same type, such as a collection of pictures, articles, emails, or messages.
 
@@ -132,7 +132,7 @@ This file describes the properties of the widget (size, update frequency, etc.):
     android:previewImage="@drawable/widget_preview" />
 ```
 
-**3. Create a BroadcastReceiver (AppWidgetProvider):**
+**3. Create a `BroadcastReceiver` (AppWidgetProvider):**
 
 ```kotlin
 class MyWidgetProvider : AppWidgetProvider() {
@@ -209,7 +209,7 @@ class MyWidgetProvider : AppWidgetProvider() {
 </receiver>
 ```
 
-**Widget Lifecycle Methods:**
+**Widget `Lifecycle` Methods:**
 
 | Method | Description |
 |--------|-------------|
@@ -257,7 +257,7 @@ Because widgets live on the home screen, they have to co-exist with navigation. 
 - **Touch** (click)
 - **Vertical swipe**
 
-**2. Limited Layout and View Support:**
+**2. Limited Layout and `View` Support:**
 
 RemoteViews support only specific layouts and widgets:
 
@@ -285,12 +285,12 @@ RemoteViews support only specific layouts and widgets:
 
 A widget has the same runtime restrictions as a normal broadcast receiver:
 - **5 seconds** to finish processing
-- Time-consuming operations should be performed in a **Service**
+- Time-consuming operations should be performed in a **`Service`**
 - Update widgets from the service
 
 **Advanced Widget Features:**
 
-**1. Widget with ListView (Collection Widget):**
+**1. Widget with `ListView` (`Collection` Widget):**
 
 ```kotlin
 // Widget provider
@@ -356,7 +356,7 @@ class WidgetRemoteViewsFactory(
 }
 ```
 
-**2. Configuration Activity:**
+**2. Configuration `Activity`:**
 
 Optional activity launched when user adds the widget:
 
@@ -417,7 +417,7 @@ Declare in `widget_info.xml`:
     android:configure="com.example.WidgetConfigActivity" />
 ```
 
-**3. Updating Widget from Service:**
+**3. Updating Widget from `Service`:**
 
 ```kotlin
 class WidgetUpdateService : Service() {
@@ -458,12 +458,12 @@ class WidgetUpdateService : Service() {
 **Summary:**
 
 - **Widgets**: Interactive components on home screen
-- **Categories**: Information, Collection, Control, Hybrid
+- **Categories**: Information, `Collection`, Control, Hybrid
 - **Components**: Layout, metadata XML, AppWidgetProvider, manifest entry
-- **Lifecycle**: onEnabled, onUpdate, onDeleted, onDisabled
+- **`Lifecycle`**: onEnabled, onUpdate, onDeleted, onDisabled
 - **RemoteViews**: Build UI for widgets (limited view support)
 - **Limitations**: Gesture support, view types, 5-second execution limit
-- **Advanced**: Collection widgets (ListView), configuration activity, service updates
+- **Advanced**: `Collection` widgets (`ListView`), configuration activity, service updates
 
 **Sources:**
 - [App widgets overview](https://developer.android.com/guide/topics/appwidgets/overview)
@@ -499,7 +499,7 @@ Examples:
 - Stock price widgets
 - Calendar widgets
 
-**2. Collection widgets:**
+**2. `Collection` widgets:**
 
 Specialize in displaying multitude elements of the same type, such as a collection of pictures, articles, emails, or messages.
 
@@ -575,7 +575,7 @@ This file describes the properties of the widget (size, update frequency, etc.):
     android:previewImage="@drawable/widget_preview" />
 ```
 
-**3. Create a BroadcastReceiver (AppWidgetProvider):**
+**3. Create a `BroadcastReceiver` (AppWidgetProvider):**
 
 ```kotlin
 class MyWidgetProvider : AppWidgetProvider() {
@@ -652,7 +652,7 @@ class MyWidgetProvider : AppWidgetProvider() {
 </receiver>
 ```
 
-**Widget Lifecycle Methods:**
+**Widget `Lifecycle` Methods:**
 
 | Method | Description |
 |--------|-------------|
@@ -700,7 +700,7 @@ Because widgets live on the home screen, they have to co-exist with navigation. 
 - **Touch** (click)
 - **Vertical swipe**
 
-**2. Limited Layout and View Support:**
+**2. Limited Layout and `View` Support:**
 
 RemoteViews support only specific layouts and widgets:
 
@@ -728,12 +728,12 @@ RemoteViews support only specific layouts and widgets:
 
 A widget has the same runtime restrictions as a normal broadcast receiver:
 - **5 seconds** to finish processing
-- Time-consuming operations should be performed in a **Service**
+- Time-consuming operations should be performed in a **`Service`**
 - Update widgets from the service
 
 **Advanced Widget Features:**
 
-**1. Widget with ListView (Collection Widget):**
+**1. Widget with `ListView` (`Collection` Widget):**
 
 ```kotlin
 // Widget provider
@@ -799,7 +799,7 @@ class WidgetRemoteViewsFactory(
 }
 ```
 
-**2. Configuration Activity:**
+**2. Configuration `Activity`:**
 
 Optional activity launched when user adds the widget:
 
@@ -860,7 +860,7 @@ Declare in `widget_info.xml`:
     android:configure="com.example.WidgetConfigActivity" />
 ```
 
-**3. Updating Widget from Service:**
+**3. Updating Widget from `Service`:**
 
 ```kotlin
 class WidgetUpdateService : Service() {
@@ -901,12 +901,12 @@ class WidgetUpdateService : Service() {
 **Summary:**
 
 - **Widgets**: Interactive components on home screen
-- **Categories**: Information, Collection, Control, Hybrid
+- **Categories**: Information, `Collection`, Control, Hybrid
 - **Components**: Layout, metadata XML, AppWidgetProvider, manifest entry
-- **Lifecycle**: onEnabled, onUpdate, onDeleted, onDisabled
+- **`Lifecycle`**: onEnabled, onUpdate, onDeleted, onDisabled
 - **RemoteViews**: Build UI for widgets (limited view support)
 - **Limitations**: Gesture support, view types, 5-second execution limit
-- **Advanced**: Collection widgets (ListView), configuration activity, service updates
+- **Advanced**: `Collection` widgets (`ListView`), configuration activity, service updates
 
 **Sources:**
 - [App widgets overview](https://developer.android.com/guide/topics/appwidgets/overview)
@@ -925,7 +925,7 @@ class WidgetUpdateService : Service() {
 
 Примеры: виджеты погоды, часов, спортивных результатов, цен акций, календаря
 
-**2. Collection widgets (виджеты коллекций):**
+**2. `Collection` widgets (виджеты коллекций):**
 
 Специализируются на отображении множества элементов одного типа.
 
@@ -975,7 +975,7 @@ class WidgetUpdateService : Service() {
     android:resizeMode="horizontal|vertical" />
 ```
 
-**3. Создать BroadcastReceiver (AppWidgetProvider):**
+**3. Создать `BroadcastReceiver` (AppWidgetProvider):**
 
 ```kotlin
 class MyWidgetProvider : AppWidgetProvider() {
@@ -1031,24 +1031,24 @@ class MyWidgetProvider : AppWidgetProvider() {
 **1. Ограниченная поддержка жестов:**
 - Только нажатие (touch) и вертикальный свайп
 
-**2. Ограниченная поддержка Layout и View:**
+**2. Ограниченная поддержка Layout и `View`:**
 
 RemoteViews поддерживает только определённые layouts и widgets:
 
 **Поддерживаемые layouts:**
-- FrameLayout, LinearLayout, RelativeLayout, GridLayout
+- `FrameLayout`, `LinearLayout`, `RelativeLayout`, GridLayout
 
 **Поддерживаемые widgets:**
-- Button, ImageButton, ImageView, ProgressBar, TextView, ListView, GridView и др.
+- `Button`, ImageButton, `ImageView`, ProgressBar, `TextView`, `ListView`, GridView и др.
 
 **3. Ограничения времени выполнения:**
 - **5 секунд** на завершение обработки
-- Длительные операции должны выполняться в Service
+- Длительные операции должны выполняться в `Service`
 
 **Лучшие практики:**
 
 1. Держите виджеты лёгкими — не выполняйте тяжёлые операции
-2. Используйте Service для обновлений
+2. Используйте `Service` для обновлений
 3. Оптимизируйте частоту обновлений
 4. Предоставляйте содержательный preview
 5. Используйте PendingIntent.FLAG_IMMUTABLE для Android 12+

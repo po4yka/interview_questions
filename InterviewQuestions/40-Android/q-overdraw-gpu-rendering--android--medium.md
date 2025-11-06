@@ -60,7 +60,7 @@ What is Overdraw and how to optimize it?
 **Основные причины:**
 
 1. **Избыточные фоны** — background на view, полностью закрытой дочерними элементами
-2. **Глубокая иерархия layouts** — вложенные LinearLayout/RelativeLayout с пересекающимися bounds
+2. **Глубокая иерархия layouts** — вложенные LinearLayout/`RelativeLayout` с пересекающимися bounds
 3. **Window background** — дефолтный фон окна, дублирующий корневой layout
 4. **Неоптимальный onDraw()** — перерисовка всей области вместо изменённых участков
 
@@ -112,7 +112,7 @@ override fun onDraw(canvas: Canvas) {
 
 **Практические советы:**
 
-- **ConstraintLayout** вместо вложенных Linear/Relative — уменьшает глубину иерархии
+- **`ConstraintLayout`** вместо вложенных Linear/Relative — уменьшает глубину иерархии
 - **ViewStub** для редко показываемых элементов — ленивая инициализация
 - **Профилирование** — Systrace/Perfetto для анализа GPU load
 - **Целевой уровень** — максимум 2x overdraw (зелёный) для основных экранов
@@ -132,7 +132,7 @@ override fun onDraw(canvas: Canvas) {
 **Root Causes:**
 
 1. **Redundant backgrounds** — background on view completely covered by children
-2. **Deep layout hierarchy** — nested LinearLayout/RelativeLayout with overlapping bounds
+2. **Deep layout hierarchy** — nested LinearLayout/`RelativeLayout` with overlapping bounds
 3. **Window background** — default window background duplicating root layout
 4. **Inefficient onDraw()** — redrawing entire area instead of changed regions
 
@@ -184,16 +184,16 @@ override fun onDraw(canvas: Canvas) {
 
 **Practical Guidelines:**
 
-- **ConstraintLayout** instead of nested Linear/Relative — reduces hierarchy depth
+- **`ConstraintLayout`** instead of nested Linear/Relative — reduces hierarchy depth
 - **ViewStub** for rarely shown elements — lazy initialization
 - **Profiling** — Systrace/Perfetto for GPU load analysis
 - **Target level** — max 2x overdraw (green) for primary screens
 
 ## Follow-ups
 
-- How does Compose handle overdraw compared to View system?
+- How does Compose handle overdraw compared to `View` system?
 - What's the performance impact of translucent views on overdraw?
-- How to optimize overdraw in RecyclerView with complex items?
+- How to optimize overdraw in `RecyclerView` with complex items?
 - When is clipRect() applicable and when does it add overhead?
 - How does hardware acceleration affect overdraw detection and optimization?
 

@@ -23,23 +23,23 @@ tags: [android/fragment, android/serialization, bundle, data-passing, difficulty
 
 # Question (EN)
 
-How to pass parameters to a Fragment?
+How to pass parameters to a `Fragment`?
 
 ---
 
 ## Ответ (RU)
 
-Рекомендуемый и безопасный способ передачи параметров во фрагмент в Android — использование **Bundle** через свойство `arguments` фрагмента. Этот подход поддерживается системой Android и переживает изменения конфигурации (например, поворот экрана).
+Рекомендуемый и безопасный способ передачи параметров во фрагмент в Android — использование **`Bundle`** через свойство `arguments` фрагмента. Этот подход поддерживается системой Android и переживает изменения конфигурации (например, поворот экрана).
 
 ### Основные Принципы
 
 1. **Фабричный метод (Factory Method)**
-   Создайте статический метод `newInstance()` в companion object, который принимает параметры и возвращает экземпляр фрагмента с установленным Bundle.
+   Создайте статический метод `newInstance()` в companion object, который принимает параметры и возвращает экземпляр фрагмента с установленным `Bundle`.
 
-2. **Bundle для примитивов и простых типов**
+2. **`Bundle` для примитивов и простых типов**
    Используйте `Bundle.putInt()`, `putString()`, `putBoolean()` и т.д. для передачи примитивных типов.
 
-3. **Parcelable для сложных объектов**
+3. **`Parcelable` для сложных объектов**
    Для передачи пользовательских объектов используйте интерфейс `Parcelable` и аннотацию `@Parcelize`.
 
 4. **Извлечение в onCreate()**
@@ -89,7 +89,7 @@ supportFragmentManager.beginTransaction()
     .commit()
 ```
 
-### Пример 2: Передача Сложных Объектов Через Parcelable
+### Пример 2: Передача Сложных Объектов Через `Parcelable`
 
 ```kotlin
 // Data класс с Parcelable
@@ -154,11 +154,11 @@ class UserFragment : Fragment() {
 
 ### Лучшие Практики
 
-1. ✅ **Всегда используйте Bundle и arguments** — не передавайте данные через конструктор
+1. ✅ **Всегда используйте `Bundle` и arguments** — не передавайте данные через конструктор
 2. ✅ **Создавайте фабричные методы** (`newInstance`) в companion object
 3. ✅ **Извлекайте аргументы в onCreate()** или используйте lazy-делегаты
-4. ✅ **Используйте константы** для ключей Bundle
-5. ✅ **Предпочитайте Parcelable вместо Serializable** для лучшей производительности
+4. ✅ **Используйте константы** для ключей `Bundle`
+5. ✅ **Предпочитайте `Parcelable` вместо `Serializable`** для лучшей производительности
 6. ❌ **Никогда не передавайте данные через конструктор** — они теряются при пересоздании
 7. ❌ **Не используйте setter-методы** — небезопасно при изменении конфигурации
 
@@ -199,17 +199,17 @@ class CorrectFragment : Fragment() {
 
 ## Answer (EN)
 
-The recommended and safe way to pass parameters to a Fragment in Android is using **Bundle** with the fragment's `arguments` property. This approach is supported by the Android system and survives configuration changes.
+The recommended and safe way to pass parameters to a `Fragment` in Android is using **`Bundle`** with the fragment's `arguments` property. This approach is supported by the Android system and survives configuration changes.
 
 ### Basic Principles
 
 1. **Factory Method Pattern**
-   Create a static `newInstance()` method in the companion object that accepts parameters and returns a fragment instance with Bundle set.
+   Create a static `newInstance()` method in the companion object that accepts parameters and returns a fragment instance with `Bundle` set.
 
-2. **Bundle for Primitives**
+2. **`Bundle` for Primitives**
    Use `Bundle.putInt()`, `putString()`, `putBoolean()`, etc., for primitive types.
 
-3. **Parcelable for Complex Objects**
+3. **`Parcelable` for Complex Objects**
    For custom objects, use the `Parcelable` interface with `@Parcelize` annotation.
 
 4. **Extract in onCreate()**
@@ -259,7 +259,7 @@ supportFragmentManager.beginTransaction()
     .commit()
 ```
 
-### Example 2: Passing Complex Objects via Parcelable
+### Example 2: Passing Complex Objects via `Parcelable`
 
 ```kotlin
 // Data class with Parcelable
@@ -324,11 +324,11 @@ class UserFragment : Fragment() {
 
 ### Best Practices
 
-1. ✅ **Always use Bundle and arguments** — never pass data via constructor
+1. ✅ **Always use `Bundle` and arguments** — never pass data via constructor
 2. ✅ **Create factory methods** (`newInstance`) in companion object
 3. ✅ **Extract arguments in onCreate()** or use lazy delegates
-4. ✅ **Use constants** for Bundle keys
-5. ✅ **Prefer Parcelable over Serializable** for better performance
+4. ✅ **Use constants** for `Bundle` keys
+5. ✅ **Prefer `Parcelable` over `Serializable`** for better performance
 6. ❌ **Never pass data via constructor** — lost on configuration change
 7. ❌ **Don't use setter methods** — unsafe for configuration changes
 
@@ -372,18 +372,18 @@ class CorrectFragment : Fragment() {
 ## Follow-ups
 
 1. What happens to fragment arguments during configuration changes?
-2. Why is Parcelable preferred over Serializable for Android?
+2. Why is `Parcelable` preferred over `Serializable` for Android?
 3. What is the difference between `arguments` and `requireArguments()`?
-4. Can you pass lambda functions or callbacks via Bundle?
+4. Can you pass lambda functions or callbacks via `Bundle`?
 5. How do you handle optional vs required fragment arguments?
 
 ## References
 
-- [[c-fragments]] - Fragment basics and lifecycle
-- [[c-bundle]] - Android Bundle data container
-- [[c-parcelable]] - Parcelable interface for efficient serialization
+- [[c-fragments]] - `Fragment` basics and lifecycle
+- [[c-bundle]] - Android `Bundle` data container
+- [[c-parcelable]] - `Parcelable` interface for efficient serialization
 - [Android Developer Guide: Fragments](https://developer.android.com/guide/fragments)
-- [Android Developer Guide: Parcelable](https://developer.android.com/reference/android/os/Parcelable)
+- [Android Developer Guide: `Parcelable`](https://developer.android.com/reference/android/os/`Parcelable`)
 
 ## Related Questions
 
@@ -391,9 +391,9 @@ class CorrectFragment : Fragment() {
 
 ### Related (Same Level)
 - [[q-fragment-communication--android--easy]] - Communication between fragments
-- [[q-bundle-vs-intent--android--easy]] - Difference between Bundle and Intent
+- [[q-bundle-vs-intent--android--easy]] - Difference between `Bundle` and `Intent`
 
 ### Advanced (Harder)
-- [[q-viewmodel-in-fragment--android--medium]] - Using ViewModel with fragments
+- [[q-viewmodel-in-fragment--android--medium]] - Using `ViewModel` with fragments
 - [[q-fragment-result-api--android--medium]] - Returning results from fragments
-- [[q-fragment-savedstate--android--hard]] - Fragment state preservation
+- [[q-fragment-savedstate--android--hard]] - `Fragment` state preservation

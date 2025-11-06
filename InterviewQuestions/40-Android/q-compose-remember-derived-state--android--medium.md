@@ -119,7 +119,7 @@ val showFabWrong = listState.firstVisibleItemIndex > 0
 | Функция | Область видимости | Персистентность | Применение |
 |---------|-------------------|-----------------|------------|
 | **remember** | Композиция | Нет | Временное UI-состояние, кеш |
-| **rememberSaveable** | Процесс + Bundle | Да | Формы, input, навигация |
+| **rememberSaveable** | Процесс + `Bundle` | Да | Формы, input, навигация |
 | **derivedStateOf** | С remember | Как remember | Вычисляемые значения |
 
 ## Answer (EN)
@@ -208,7 +208,7 @@ val showFabWrong = listState.firstVisibleItemIndex > 0
 | Function | Scope | Persistence | Use Case |
 |----------|-------|-------------|----------|
 | **remember** | Composition | No | Temporary UI state, cache |
-| **rememberSaveable** | Process + Bundle | Yes | Forms, inputs, navigation |
+| **rememberSaveable** | Process + `Bundle` | Yes | Forms, inputs, navigation |
 | **derivedStateOf** | With remember | Like remember | Computed values |
 
 ---

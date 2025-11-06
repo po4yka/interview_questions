@@ -227,7 +227,7 @@ Text(
 
 - How does AccessibilityChecks.enable() impact test execution time in CI pipelines?
 - What semantic properties must custom Compose components expose for TalkBack compatibility?
-- How do you test accessibility for dynamic content updating via StateFlow?
+- How do you test accessibility for dynamic content updating via `StateFlow`?
 - What strategies handle accessibility testing across multi-module projects?
 - How do you balance accessibility test coverage with test suite execution constraints?
 

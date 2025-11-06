@@ -28,7 +28,7 @@ tags: [adapter, android/performance-rendering, android/ui-views, difficulty/medi
 
 ## Ответ (RU)
 
-**DiffUtil** — утилита для вычисления разницы между двумя списками и генерации минимального набора операций обновления RecyclerView.
+**DiffUtil** — утилита для вычисления разницы между двумя списками и генерации минимального набора операций обновления `RecyclerView`.
 
 ### Проблема Без DiffUtil
 
@@ -51,7 +51,7 @@ class SimpleAdapter : RecyclerView.Adapter<ViewHolder>() {
 - Потеря позиции скролла
 - Расход CPU/GPU ресурсов
 
-### DiffUtil.Callback
+### DiffUtil.`Callback`
 
 **✅ Базовое использование:**
 
@@ -179,7 +179,7 @@ fun UserList(users: List<User>) {
 
 ## Answer (EN)
 
-**DiffUtil** is a utility that calculates the difference between two lists and generates minimal update operations for RecyclerView.
+**DiffUtil** is a utility that calculates the difference between two lists and generates minimal update operations for `RecyclerView`.
 
 ### Problem Without DiffUtil
 
@@ -202,7 +202,7 @@ class SimpleAdapter : RecyclerView.Adapter<ViewHolder>() {
 - Lost scroll position
 - Wasted CPU/GPU resources
 
-### DiffUtil.Callback
+### DiffUtil.`Callback`
 
 **✅ Basic usage:**
 
@@ -342,7 +342,7 @@ fun UserList(users: List<User>) {
 - [[c-adapter-pattern]]
 - [[c-myers-diff-algorithm]]
 - [Android DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
-- [RecyclerView Performance](https://developer.android.com/topic/performance/recyclerview)
+- [`RecyclerView` Performance](https://developer.android.com/topic/performance/recyclerview)
 
 ## Related Questions
 

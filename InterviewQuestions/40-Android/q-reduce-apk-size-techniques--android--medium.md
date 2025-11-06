@@ -38,7 +38,7 @@ tags: [android/app-bundle, android/gradle, android/performance-memory, difficult
 
 ## Ответ (RU)
 
-Уменьшение размера APK критически важно для улучшения конверсии загрузок и пользовательского опыта. Основные подходы включают сжатие кода, оптимизацию ресурсов и использование [[c-app-bundle|Android App Bundle]].
+Уменьшение размера APK критически важно для улучшения конверсии загрузок и пользовательского опыта. Основные подходы включают сжатие кода, оптимизацию ресурсов и использование [[c-app-bundle|Android App `Bundle`]].
 
 ### 1. R8/ProGuard - Сжатие Кода
 
@@ -57,7 +57,7 @@ android {
 
 **Эффект**: удаление мертвого кода, обфускация имен, оптимизация байткода. Уменьшение 20-40%.
 
-### 2. Android App Bundle
+### 2. Android App `Bundle`
 
 ```gradle
 android {
@@ -117,7 +117,7 @@ implementation 'com.google.android.gms:play-services-maps:...'
 | Техника | Уменьшение |
 |---------|-----------|
 | R8/ProGuard + Resource Shrinking | 20-40% |
-| Android App Bundle | 15-35% |
+| Android App `Bundle` | 15-35% |
 | WebP + VectorDrawable | 25-50% |
 | ABI фильтры | 30-50% |
 | **Комбинированно** | **40-70%** |
@@ -125,13 +125,13 @@ implementation 'com.google.android.gms:play-services-maps:...'
 ### Лучшие Практики
 
 1. Мониторинг размера APK в CI/CD
-2. Использование [[c-app-bundle|App Bundle]] вместо APK
+2. Использование [[c-app-bundle|App `Bundle`]] вместо APK
 3. Регулярный анализ через APK Analyzer
 4. Dynamic Feature Modules для опциональных компонентов
 
 ## Answer (EN)
 
-Reducing APK size is crucial for improving download conversion rates and user experience. Main approaches include code shrinking, resource optimization, and using [[c-app-bundle|Android App Bundle]].
+Reducing APK size is crucial for improving download conversion rates and user experience. Main approaches include code shrinking, resource optimization, and using [[c-app-bundle|Android App `Bundle`]].
 
 ### 1. R8/ProGuard - Code Shrinking
 
@@ -150,7 +150,7 @@ android {
 
 **Effect**: dead code elimination, name obfuscation, bytecode optimization. Reduces by 20-40%.
 
-### 2. Android App Bundle
+### 2. Android App `Bundle`
 
 ```gradle
 android {
@@ -210,7 +210,7 @@ Size analysis: `./gradlew :app:analyzeReleaseBundle`
 | Technique | Reduction |
 |-----------|-----------|
 | R8/ProGuard + Resource Shrinking | 20-40% |
-| Android App Bundle | 15-35% |
+| Android App `Bundle` | 15-35% |
 | WebP + VectorDrawable | 25-50% |
 | ABI filters | 30-50% |
 | **Combined** | **40-70%** |
@@ -218,7 +218,7 @@ Size analysis: `./gradlew :app:analyzeReleaseBundle`
 ### Best Practices
 
 1. Monitor APK size in CI/CD
-2. Use [[c-app-bundle|App Bundle]] instead of APK
+2. Use [[c-app-bundle|App `Bundle`]] instead of APK
 3. Regular analysis via APK Analyzer
 4. Dynamic Feature Modules for optional components
 
@@ -233,7 +233,7 @@ Size analysis: `./gradlew :app:analyzeReleaseBundle`
 
 ## References
 
-- [[c-app-bundle]] - Android App Bundle architecture
+- [[c-app-bundle]] - Android App `Bundle` architecture
 - https://developer.android.com/topic/performance/reduce-apk-size
 - https://developer.android.com/studio/build/shrink-code
 

@@ -179,7 +179,7 @@ class UserRepository(
 2. **PagingConfig**: pageSize 20-50, prefetchDistance 5-10, initialLoadSize 2-3x pageSize
 3. **LoadState** — обработка состояний загрузки и ошибок
 4. **RemoteMediator** — офлайн-first с кэшированием в Room
-5. **DiffUtil** — эффективные обновления RecyclerView
+5. **DiffUtil** — эффективные обновления `RecyclerView`
 6. **Remote Keys** — отдельная таблица для состояния пагинации
 7. **withTransaction** — атомарность операций
 8. **Retry mechanism** — восстановление после ошибок
@@ -351,7 +351,7 @@ class UserRepository(
 2. **PagingConfig**: pageSize 20-50, prefetchDistance 5-10, initialLoadSize 2-3x pageSize
 3. **LoadState** — handle loading and error states
 4. **RemoteMediator** — offline-first with Room caching
-5. **DiffUtil** — efficient RecyclerView updates
+5. **DiffUtil** — efficient `RecyclerView` updates
 6. **Remote Keys** — separate table for pagination state
 7. **withTransaction** — atomic operations
 8. **Retry mechanism** — recovery from errors

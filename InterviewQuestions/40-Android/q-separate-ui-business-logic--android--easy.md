@@ -514,7 +514,7 @@ class CounterActivity : AppCompatActivity() {
 
 ### Common Architecture Patterns
 
-#### MVVM (Model-View-ViewModel)
+#### MVVM (Model-`View`-`ViewModel`)
 
 ```kotlin
 // Model
@@ -557,7 +557,7 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-#### MVI (Model-View-Intent)
+#### MVI (Model-`View`-`Intent`)
 
 ```kotlin
 // State
@@ -1113,7 +1113,7 @@ class CounterActivity : AppCompatActivity() {
 
 ### Common Architecture Patterns
 
-#### MVVM (Model-View-ViewModel)
+#### MVVM (Model-`View`-`ViewModel`)
 
 ```kotlin
 // Model
@@ -1156,7 +1156,7 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-#### MVI (Model-View-Intent)
+#### MVI (Model-`View`-`Intent`)
 
 ```kotlin
 // State
@@ -1231,7 +1231,7 @@ class UserActivity : AppCompatActivity() {
 
 #### 1. Тестируемость
 
-Без разделения невозможно протестировать логику без создания Activity или Fragment. С разделением можно писать чистые unit-тесты для ViewModel.
+Без разделения невозможно протестировать логику без создания `Activity` или `Fragment`. С разделением можно писать чистые unit-тесты для `ViewModel`.
 
 ```kotlin
 // Тест ViewModel без UI
@@ -1247,7 +1247,7 @@ fun `login with invalid email shows error`() = runTest {
 
 #### 2. Переиспользуемость
 
-Логика в ViewModel может использоваться в Activity, Fragment и Compose без дублирования.
+Логика в `ViewModel` может использоваться в `Activity`, `Fragment` и Compose без дублирования.
 
 ```kotlin
 // Одна ViewModel для разных UI
@@ -1276,17 +1276,17 @@ fun UserListScreen(viewModel: UserListViewModel = viewModel())
 
 #### 4. Командная Работа
 
-Разные команды могут работать параллельно: Backend-команда над Repository, команда бизнес-логики над ViewModel, UI/UX команда над Activity/Compose.
+Разные команды могут работать параллельно: Backend-команда над `Repository`, команда бизнес-логики над `ViewModel`, UI/UX команда над Activity/Compose.
 
 #### 5. Сохранение Состояния
 
-ViewModel переживает изменения конфигурации (поворот экрана), сохраняя состояние приложения.
+`ViewModel` переживает изменения конфигурации (поворот экрана), сохраняя состояние приложения.
 
 ### Популярные Паттерны
 
-**MVVM** - Model-View-ViewModel
-**MVI** - Model-View-Intent
-**MVP** - Model-View-Presenter
+**MVVM** - Model-`View`-`ViewModel`
+**MVI** - Model-`View`-`Intent`
+**MVP** - Model-`View`-Presenter
 
 ### Резюме Преимуществ
 

@@ -180,7 +180,7 @@ while (parser.next() != XmlPullParser.END_DOCUMENT) {
 }
 ```
 
-**2. Reduce String Conversions**
+**2. Reduce `String` Conversions**
 
 Avoid multiple conversions between formats - parse directly from streams.
 
@@ -272,7 +272,7 @@ fun parseStream(stream: InputStream) = flow {
 | Technique | Benefit | Use Case |
 |-----------|---------|----------|
 | Streaming | Lower memory | Large XML/JSON |
-| Fewer conversions | Faster | String data |
+| Fewer conversions | Faster | `String` data |
 | Caching | Avoid re-parsing | Frequent access |
 | Moshi/kotlinx | Speed | JSON parsing |
 | Lazy parsing | Memory efficient | Large lists |

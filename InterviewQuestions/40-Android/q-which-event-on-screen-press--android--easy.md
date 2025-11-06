@@ -96,7 +96,7 @@ view.setOnTouchListener { _, e -> e.action == MotionEvent.ACTION_DOWN }
 
 ## References
 
-- [[c-view-lifecycle]] — View event dispatch mechanism
+- [[c-view-lifecycle]] — `View` event dispatch mechanism
 - [[c-custom-views]] — Custom view patterns
 - [Touch & Input](https://developer.android.com/develop/ui/views/touch-and-input/gestures) — Official docs
 

@@ -44,7 +44,7 @@ tags: [android/cross-platform, android/kmp, difficulty/medium]
 
 **React Native:**
 - JavaScript-движок (Hermes/JSC) взаимодействует с нативными модулями через Bridge
-- Рендерит нативные UI-компоненты (Button, Text, View)
+- Рендерит нативные UI-компоненты (`Button`, Text, `View`)
 - Требует явных нативных модулей для платформенных API
 
 ```kotlin
@@ -63,7 +63,7 @@ class ToastModule(reactContext: ReactApplicationContext) :
 
 **Flutter:**
 - Dart VM компилируется в нативный код (ARM/x64)
-- Skia Canvas рендерит собственные UI-виджеты (Material/Cupertino)
+- Skia `Canvas` рендерит собственные UI-виджеты (Material/Cupertino)
 - Platform Channels для взаимодействия с нативными API
 
 ```kotlin
@@ -173,7 +173,7 @@ Container(
 
 **React Native:**
 - JavaScript engine (Hermes/JSC) communicates with native modules via Bridge
-- Renders native UI components (Button, Text, View)
+- Renders native UI components (`Button`, Text, `View`)
 - Requires explicit native modules for platform APIs
 
 ```kotlin
@@ -192,7 +192,7 @@ class ToastModule(reactContext: ReactApplicationContext) :
 
 **Flutter:**
 - Dart VM compiles to native code (ARM/x64)
-- Skia Canvas renders custom UI widgets (Material/Cupertino)
+- Skia `Canvas` renders custom UI widgets (Material/Cupertino)
 - Platform Channels for native API interaction
 
 ```kotlin

@@ -34,21 +34,21 @@ tags:
 ---
 
 # Вопрос (RU)
-> Методы View и их назначение
+> Методы `View` и их назначение
 
 # Question (EN)
-> View Methods And Their Purpose
+> `View` Methods And Their Purpose
 
 ---
 
 ## Answer (EN)
-The Android **View** class provides numerous methods for controlling appearance, behavior, and lifecycle. Understanding these methods is crucial for custom view development and UI optimization.
+The Android **`View`** class provides numerous methods for controlling appearance, behavior, and lifecycle. Understanding these methods is crucial for custom view development and UI optimization.
 
 ### Measurement and Layout Methods
 
 #### onMeasure()
 
-Determines the size requirements for the View and its children.
+Determines the size requirements for the `View` and its children.
 
 ```kotlin
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -67,7 +67,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
 #### onLayout()
 
-Positions the View and its children within the parent container.
+Positions the `View` and its children within the parent container.
 
 ```kotlin
 override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -83,7 +83,7 @@ override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom:
 
 #### onDraw()
 
-Renders the View's visual content on the canvas.
+Renders the `View`'s visual content on the canvas.
 
 ```kotlin
 override fun onDraw(canvas: Canvas) {
@@ -101,7 +101,7 @@ override fun onDraw(canvas: Canvas) {
 
 #### invalidate()
 
-Requests a redraw of the View on the UI thread.
+Requests a redraw of the `View` on the UI thread.
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
@@ -135,7 +135,7 @@ Thread {
 
 #### getWidth() And getHeight()
 
-Returns the View's current dimensions.
+Returns the `View`'s current dimensions.
 
 ```kotlin
 val width = view.width
@@ -166,7 +166,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
 #### setVisibility()
 
-Controls View visibility state.
+Controls `View` visibility state.
 
 ```kotlin
 // Make view invisible but keep its space
@@ -184,7 +184,7 @@ view.visibility = if (view.visibility == View.VISIBLE) View.GONE else View.VISIB
 
 #### isShown()
 
-Checks if the View and all ancestors are visible.
+Checks if the `View` and all ancestors are visible.
 
 ```kotlin
 if (view.isShown) {
@@ -196,7 +196,7 @@ if (view.isShown) {
 
 #### setBackgroundColor()
 
-Sets the View's background color.
+Sets the `View`'s background color.
 
 ```kotlin
 view.setBackgroundColor(Color.RED)
@@ -219,7 +219,7 @@ view.background = null
 
 #### setAlpha()
 
-Sets View transparency (0.0f = transparent, 1.0f = opaque).
+Sets `View` transparency (0.0f = transparent, 1.0f = opaque).
 
 ```kotlin
 view.alpha = 0.5f // 50% transparent
@@ -280,7 +280,7 @@ view.setOnTouchListener { v, event ->
 
 #### requestFocus()
 
-Requests keyboard focus for the View.
+Requests keyboard focus for the `View`.
 
 ```kotlin
 editText.requestFocus()
@@ -292,7 +292,7 @@ imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
 
 #### clearFocus()
 
-Removes focus from the View.
+Removes focus from the `View`.
 
 ```kotlin
 editText.clearFocus()
@@ -315,7 +315,7 @@ view.animate()
 
 #### setTranslationX/Y/Z()
 
-Sets View translation in 3D space.
+Sets `View` translation in 3D space.
 
 ```kotlin
 view.translationX = 100f
@@ -325,7 +325,7 @@ view.translationZ = 10f
 
 #### setRotation/RotationX/RotationY()
 
-Sets View rotation.
+Sets `View` rotation.
 
 ```kotlin
 view.rotation = 45f // Rotate 45 degrees
@@ -335,7 +335,7 @@ view.rotationY = 30f // Rotate around Y-axis
 
 #### setScaleX/ScaleY()
 
-Sets View scale.
+Sets `View` scale.
 
 ```kotlin
 view.scaleX = 1.5f // Scale to 150% horizontally
@@ -346,7 +346,7 @@ view.scaleY = 1.5f // Scale to 150% vertically
 
 #### setEnabled()
 
-Enables or disables the View.
+Enables or disables the `View`.
 
 ```kotlin
 button.isEnabled = false // Disable
@@ -355,7 +355,7 @@ button.isEnabled = true  // Enable
 
 #### setClickable()
 
-Controls whether the View responds to clicks.
+Controls whether the `View` responds to clicks.
 
 ```kotlin
 view.isClickable = true
@@ -364,7 +364,7 @@ view.isLongClickable = true
 
 #### setSelected()
 
-Sets the View's selected state.
+Sets the `View`'s selected state.
 
 ```kotlin
 view.isSelected = true
@@ -372,7 +372,7 @@ view.isSelected = true
 
 #### setPressed()
 
-Sets the View's pressed state.
+Sets the `View`'s pressed state.
 
 ```kotlin
 view.isPressed = true
@@ -405,7 +405,7 @@ view.layoutParams = params
 
 #### setTag() / getTag()
 
-Stores arbitrary data with the View.
+Stores arbitrary data with the `View`.
 
 ```kotlin
 view.tag = userData
@@ -416,11 +416,11 @@ view.setTag(R.id.user_data, userData)
 val data = view.getTag(R.id.user_data) as? UserData
 ```
 
-### Lifecycle Methods
+### `Lifecycle` Methods
 
 #### onAttachedToWindow()
 
-Called when View is attached to a window.
+Called when `View` is attached to a window.
 
 ```kotlin
 override fun onAttachedToWindow() {
@@ -431,7 +431,7 @@ override fun onAttachedToWindow() {
 
 #### onDetachedFromWindow()
 
-Called when View is detached from window.
+Called when `View` is detached from window.
 
 ```kotlin
 override fun onDetachedFromWindow() {
@@ -451,13 +451,13 @@ override fun onDetachedFromWindow() {
 | getWidth/Height() | Get current dimensions |
 | setVisibility() | Control visibility |
 | setOnClickListener() | Handle clicks |
-| setBackgroundColor() | Set background color |
+| setBackgroundColor() | `Set` background color |
 | animate() | Create animations |
 | requestFocus() | Request keyboard focus |
 
 
 # Question (EN)
-> View Methods And Their Purpose
+> `View` Methods And Their Purpose
 
 ---
 
@@ -466,13 +466,13 @@ override fun onDetachedFromWindow() {
 
 
 ## Answer (EN)
-The Android **View** class provides numerous methods for controlling appearance, behavior, and lifecycle. Understanding these methods is crucial for custom view development and UI optimization.
+The Android **`View`** class provides numerous methods for controlling appearance, behavior, and lifecycle. Understanding these methods is crucial for custom view development and UI optimization.
 
 ### Measurement and Layout Methods
 
 #### onMeasure()
 
-Determines the size requirements for the View and its children.
+Determines the size requirements for the `View` and its children.
 
 ```kotlin
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -491,7 +491,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
 #### onLayout()
 
-Positions the View and its children within the parent container.
+Positions the `View` and its children within the parent container.
 
 ```kotlin
 override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -507,7 +507,7 @@ override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom:
 
 #### onDraw()
 
-Renders the View's visual content on the canvas.
+Renders the `View`'s visual content on the canvas.
 
 ```kotlin
 override fun onDraw(canvas: Canvas) {
@@ -525,7 +525,7 @@ override fun onDraw(canvas: Canvas) {
 
 #### invalidate()
 
-Requests a redraw of the View on the UI thread.
+Requests a redraw of the `View` on the UI thread.
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
@@ -559,7 +559,7 @@ Thread {
 
 #### getWidth() And getHeight()
 
-Returns the View's current dimensions.
+Returns the `View`'s current dimensions.
 
 ```kotlin
 val width = view.width
@@ -590,7 +590,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
 #### setVisibility()
 
-Controls View visibility state.
+Controls `View` visibility state.
 
 ```kotlin
 // Make view invisible but keep its space
@@ -608,7 +608,7 @@ view.visibility = if (view.visibility == View.VISIBLE) View.GONE else View.VISIB
 
 #### isShown()
 
-Checks if the View and all ancestors are visible.
+Checks if the `View` and all ancestors are visible.
 
 ```kotlin
 if (view.isShown) {
@@ -620,7 +620,7 @@ if (view.isShown) {
 
 #### setBackgroundColor()
 
-Sets the View's background color.
+Sets the `View`'s background color.
 
 ```kotlin
 view.setBackgroundColor(Color.RED)
@@ -643,7 +643,7 @@ view.background = null
 
 #### setAlpha()
 
-Sets View transparency (0.0f = transparent, 1.0f = opaque).
+Sets `View` transparency (0.0f = transparent, 1.0f = opaque).
 
 ```kotlin
 view.alpha = 0.5f // 50% transparent
@@ -704,7 +704,7 @@ view.setOnTouchListener { v, event ->
 
 #### requestFocus()
 
-Requests keyboard focus for the View.
+Requests keyboard focus for the `View`.
 
 ```kotlin
 editText.requestFocus()
@@ -716,7 +716,7 @@ imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
 
 #### clearFocus()
 
-Removes focus from the View.
+Removes focus from the `View`.
 
 ```kotlin
 editText.clearFocus()
@@ -739,7 +739,7 @@ view.animate()
 
 #### setTranslationX/Y/Z()
 
-Sets View translation in 3D space.
+Sets `View` translation in 3D space.
 
 ```kotlin
 view.translationX = 100f
@@ -749,7 +749,7 @@ view.translationZ = 10f
 
 #### setRotation/RotationX/RotationY()
 
-Sets View rotation.
+Sets `View` rotation.
 
 ```kotlin
 view.rotation = 45f // Rotate 45 degrees
@@ -759,7 +759,7 @@ view.rotationY = 30f // Rotate around Y-axis
 
 #### setScaleX/ScaleY()
 
-Sets View scale.
+Sets `View` scale.
 
 ```kotlin
 view.scaleX = 1.5f // Scale to 150% horizontally
@@ -770,7 +770,7 @@ view.scaleY = 1.5f // Scale to 150% vertically
 
 #### setEnabled()
 
-Enables or disables the View.
+Enables or disables the `View`.
 
 ```kotlin
 button.isEnabled = false // Disable
@@ -779,7 +779,7 @@ button.isEnabled = true  // Enable
 
 #### setClickable()
 
-Controls whether the View responds to clicks.
+Controls whether the `View` responds to clicks.
 
 ```kotlin
 view.isClickable = true
@@ -788,7 +788,7 @@ view.isLongClickable = true
 
 #### setSelected()
 
-Sets the View's selected state.
+Sets the `View`'s selected state.
 
 ```kotlin
 view.isSelected = true
@@ -796,7 +796,7 @@ view.isSelected = true
 
 #### setPressed()
 
-Sets the View's pressed state.
+Sets the `View`'s pressed state.
 
 ```kotlin
 view.isPressed = true
@@ -829,7 +829,7 @@ view.layoutParams = params
 
 #### setTag() / getTag()
 
-Stores arbitrary data with the View.
+Stores arbitrary data with the `View`.
 
 ```kotlin
 view.tag = userData
@@ -840,11 +840,11 @@ view.setTag(R.id.user_data, userData)
 val data = view.getTag(R.id.user_data) as? UserData
 ```
 
-### Lifecycle Methods
+### `Lifecycle` Methods
 
 #### onAttachedToWindow()
 
-Called when View is attached to a window.
+Called when `View` is attached to a window.
 
 ```kotlin
 override fun onAttachedToWindow() {
@@ -855,7 +855,7 @@ override fun onAttachedToWindow() {
 
 #### onDetachedFromWindow()
 
-Called when View is detached from window.
+Called when `View` is detached from window.
 
 ```kotlin
 override fun onDetachedFromWindow() {
@@ -875,19 +875,19 @@ override fun onDetachedFromWindow() {
 | getWidth/Height() | Get current dimensions |
 | setVisibility() | Control visibility |
 | setOnClickListener() | Handle clicks |
-| setBackgroundColor() | Set background color |
+| setBackgroundColor() | `Set` background color |
 | animate() | Create animations |
 | requestFocus() | Request keyboard focus |
 
 ## Ответ (RU)
 
-Класс **View** в Android предоставляет множество методов для управления внешним видом, поведением и жизненным циклом. Понимание этих методов критически важно для разработки пользовательских представлений и оптимизации UI.
+Класс **`View`** в Android предоставляет множество методов для управления внешним видом, поведением и жизненным циклом. Понимание этих методов критически важно для разработки пользовательских представлений и оптимизации UI.
 
 ### Методы Измерения И Макетирования
 
 #### onMeasure()
 
-Определяет требования к размеру для View и его дочерних элементов.
+Определяет требования к размеру для `View` и его дочерних элементов.
 
 ```kotlin
 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -906,7 +906,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
 #### onLayout()
 
-Позиционирует View и его дочерние элементы внутри родительского контейнера.
+Позиционирует `View` и его дочерние элементы внутри родительского контейнера.
 
 ```kotlin
 override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
@@ -922,7 +922,7 @@ override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom:
 
 #### onDraw()
 
-Отрисовывает визуальное содержимое View на холсте.
+Отрисовывает визуальное содержимое `View` на холсте.
 
 ```kotlin
 override fun onDraw(canvas: Canvas) {
@@ -940,7 +940,7 @@ override fun onDraw(canvas: Canvas) {
 
 #### invalidate()
 
-Запрашивает перерисовку View в UI потоке.
+Запрашивает перерисовку `View` в UI потоке.
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
@@ -974,7 +974,7 @@ Thread {
 
 #### getWidth() И getHeight()
 
-Возвращает текущие размеры View.
+Возвращает текущие размеры `View`.
 
 ```kotlin
 val width = view.width
@@ -1005,7 +1005,7 @@ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
 #### setVisibility()
 
-Управляет состоянием видимости View.
+Управляет состоянием видимости `View`.
 
 ```kotlin
 // Сделать представление невидимым, но сохранить его пространство
@@ -1023,7 +1023,7 @@ view.visibility = if (view.visibility == View.VISIBLE) View.GONE else View.VISIB
 
 #### isShown()
 
-Проверяет, видимы ли View и все его предки.
+Проверяет, видимы ли `View` и все его предки.
 
 ```kotlin
 if (view.isShown) {
@@ -1035,7 +1035,7 @@ if (view.isShown) {
 
 #### setBackgroundColor()
 
-Устанавливает цвет фона View.
+Устанавливает цвет фона `View`.
 
 ```kotlin
 view.setBackgroundColor(Color.RED)
@@ -1058,7 +1058,7 @@ view.background = null
 
 #### setAlpha()
 
-Устанавливает прозрачность View (0.0f = прозрачный, 1.0f = непрозрачный).
+Устанавливает прозрачность `View` (0.0f = прозрачный, 1.0f = непрозрачный).
 
 ```kotlin
 view.alpha = 0.5f // 50% прозрачность
@@ -1119,7 +1119,7 @@ view.setOnTouchListener { v, event ->
 
 #### requestFocus()
 
-Запрашивает фокус клавиатуры для View.
+Запрашивает фокус клавиатуры для `View`.
 
 ```kotlin
 editText.requestFocus()
@@ -1131,7 +1131,7 @@ imm.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT)
 
 #### clearFocus()
 
-Удаляет фокус с View.
+Удаляет фокус с `View`.
 
 ```kotlin
 editText.clearFocus()
@@ -1154,7 +1154,7 @@ view.animate()
 
 #### setTranslationX/Y/Z()
 
-Устанавливает смещение View в 3D пространстве.
+Устанавливает смещение `View` в 3D пространстве.
 
 ```kotlin
 view.translationX = 100f
@@ -1164,7 +1164,7 @@ view.translationZ = 10f
 
 #### setRotation/RotationX/RotationY()
 
-Устанавливает поворот View.
+Устанавливает поворот `View`.
 
 ```kotlin
 view.rotation = 45f // Повернуть на 45 градусов
@@ -1174,7 +1174,7 @@ view.rotationY = 30f // Повернуть вокруг оси Y
 
 #### setScaleX/ScaleY()
 
-Устанавливает масштаб View.
+Устанавливает масштаб `View`.
 
 ```kotlin
 view.scaleX = 1.5f // Масштаб до 150% по горизонтали
@@ -1185,7 +1185,7 @@ view.scaleY = 1.5f // Масштаб до 150% по вертикали
 
 #### setEnabled()
 
-Включает или отключает View.
+Включает или отключает `View`.
 
 ```kotlin
 button.isEnabled = false // Отключить
@@ -1194,7 +1194,7 @@ button.isEnabled = true  // Включить
 
 #### setClickable()
 
-Управляет реагированием View на клики.
+Управляет реагированием `View` на клики.
 
 ```kotlin
 view.isClickable = true
@@ -1203,7 +1203,7 @@ view.isLongClickable = true
 
 #### setSelected()
 
-Устанавливает состояние выбора View.
+Устанавливает состояние выбора `View`.
 
 ```kotlin
 view.isSelected = true
@@ -1211,7 +1211,7 @@ view.isSelected = true
 
 #### setPressed()
 
-Устанавливает состояние нажатия View.
+Устанавливает состояние нажатия `View`.
 
 ```kotlin
 view.isPressed = true
@@ -1244,7 +1244,7 @@ view.layoutParams = params
 
 #### setTag() / getTag()
 
-Сохраняет произвольные данные с View.
+Сохраняет произвольные данные с `View`.
 
 ```kotlin
 view.tag = userData
@@ -1259,7 +1259,7 @@ val data = view.getTag(R.id.user_data) as? UserData
 
 #### onAttachedToWindow()
 
-Вызывается когда View присоединен к окну.
+Вызывается когда `View` присоединен к окну.
 
 ```kotlin
 override fun onAttachedToWindow() {
@@ -1270,7 +1270,7 @@ override fun onAttachedToWindow() {
 
 #### onDetachedFromWindow()
 
-Вызывается когда View отсоединен от окна.
+Вызывается когда `View` отсоединен от окна.
 
 ```kotlin
 override fun onDetachedFromWindow() {
@@ -1309,21 +1309,21 @@ override fun onDetachedFromWindow() {
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
-- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View
-- [[q-viewmodel-pattern--android--easy]] - View
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`
+- [[q-viewmodel-pattern--android--easy]] - `View`
 
 ### Related (Medium)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- [[q-testing-viewmodels-turbine--android--medium]] - View
-- q-rxjava-pagination-recyclerview--android--medium - View
-- [[q-what-is-viewmodel--android--medium]] - View
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View`
+- [[q-testing-viewmodels-turbine--android--medium]] - `View`
+- q-rxjava-pagination-recyclerview--android--medium - `View`
+- [[q-what-is-viewmodel--android--medium]] - `View`
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--android--hard]] - View
+- [[q-compose-custom-layout--android--hard]] - `View`

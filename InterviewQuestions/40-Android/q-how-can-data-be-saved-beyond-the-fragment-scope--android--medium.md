@@ -19,21 +19,21 @@ tags: [android, android/architecture-mvvm, android/datastore, android/lifecycle,
 
 # Вопрос (RU)
 
-> Как можно сохранить данные за пределами области видимости Fragment?
+> Как можно сохранить данные за пределами области видимости `Fragment`?
 
 # Question (EN)
 
-> How can data be saved beyond the Fragment scope?
+> How can data be saved beyond the `Fragment` scope?
 
 ---
 
 ## Ответ (RU)
 
-Существует 5 основных подходов для сохранения данных за пределами области видимости Fragment, каждый с различными характеристиками времени жизни.
+Существует 5 основных подходов для сохранения данных за пределами области видимости `Fragment`, каждый с различными характеристиками времени жизни.
 
-### 1. ViewModel
+### 1. `ViewModel`
 
-ViewModel переживает изменения конфигурации и привязана к жизненному циклу Activity или Fragment.
+`ViewModel` переживает изменения конфигурации и привязана к жизненному циклу `Activity` или `Fragment`.
 
 ```kotlin
 // ✅ Fragment-scoped ViewModel
@@ -53,7 +53,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**Время жизни**: До завершения Activity или окончательного удаления Fragment
+**Время жизни**: До завершения `Activity` или окончательного удаления `Fragment`
 **Потеря данных**: ❌ Смерть процесса
 
 ### 2. SavedStateHandle
@@ -78,9 +78,9 @@ class MyFragment : Fragment() {
 ```
 
 **Время жизни**: ✅ Переживает смерть процесса
-**Ограничение**: Ограниченный размер данных (Bundle size restrictions)
+**Ограничение**: Ограниченный размер данных (`Bundle` size restrictions)
 
-### 3. Repository + Database
+### 3. `Repository` + Database
 
 Постоянное хранение с использованием Room, SharedPreferences или DataStore.
 
@@ -107,9 +107,9 @@ class MyFragment : Fragment() {
 **Время жизни**: ✅ Переживает перезапуски приложения и смерть процесса
 **Использование**: Большие наборы данных, настройки, кэш
 
-### 4. Shared ViewModel Pattern
+### 4. Shared `ViewModel` Pattern
 
-Совместное использование данных между несколькими фрагментами через Activity-scoped ViewModel.
+Совместное использование данных между несколькими фрагментами через `Activity`-scoped `ViewModel`.
 
 ```kotlin
 class SharedViewModel : ViewModel() {
@@ -142,7 +142,7 @@ class FragmentB : Fragment() {
 }
 ```
 
-### 5. Application Class
+### 5. `Application` Class
 
 ```kotlin
 // ❌ Не рекомендуется - используйте DI или Repository
@@ -157,28 +157,28 @@ class MyApplication : Application() {
 
 | Метод | Config Change | Process Death | Размер | Использование |
 |-------|---------------|---------------|--------|---------------|
-| ViewModel | ✅ | ❌ | Средний | UI state |
+| `ViewModel` | ✅ | ❌ | Средний | UI state |
 | SavedStateHandle | ✅ | ✅ | Маленький | Критическое состояние |
 | Repository/DB | ✅ | ✅ | Большой | Постоянные данные |
-| Shared ViewModel | ✅ | ❌ | Любой | Коммуникация между Fragment |
-| Application | ✅ | ❌ | Маленький | ❌ Не рекомендуется |
+| Shared `ViewModel` | ✅ | ❌ | Любой | Коммуникация между `Fragment` |
+| `Application` | ✅ | ❌ | Маленький | ❌ Не рекомендуется |
 
 ### Лучшие Практики
 
-1. **Комбинируйте подходы**: ViewModel + SavedStateHandle для надёжного управления состоянием
-2. **Используйте Repository pattern**: Отделяйте управление данными от UI логики
-3. **Избегайте утечек памяти**: Не держите ссылки на Fragment в ViewModel или Application
+1. **Комбинируйте подходы**: `ViewModel` + SavedStateHandle для надёжного управления состоянием
+2. **Используйте `Repository` pattern**: Отделяйте управление данными от UI логики
+3. **Избегайте утечек памяти**: Не держите ссылки на `Fragment` в `ViewModel` или `Application`
 4. **Учитывайте конфиденциальность**: Используйте EncryptedSharedPreferences для чувствительных данных
 
 ---
 
 ## Answer (EN)
 
-There are 5 main approaches to save data beyond Fragment scope, each with different lifetime characteristics.
+There are 5 main approaches to save data beyond `Fragment` scope, each with different lifetime characteristics.
 
-### 1. ViewModel
+### 1. `ViewModel`
 
-ViewModel survives configuration changes and is scoped to Activity or Fragment lifecycle.
+`ViewModel` survives configuration changes and is scoped to `Activity` or `Fragment` lifecycle.
 
 ```kotlin
 // ✅ Fragment-scoped ViewModel
@@ -198,7 +198,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**Lifetime**: Until Activity finishes or Fragment is permanently removed
+**Lifetime**: Until `Activity` finishes or `Fragment` is permanently removed
 **Data loss**: ❌ Process death
 
 ### 2. SavedStateHandle
@@ -223,9 +223,9 @@ class MyFragment : Fragment() {
 ```
 
 **Lifetime**: ✅ Survives process death
-**Limitation**: Limited data size (Bundle size restrictions)
+**Limitation**: Limited data size (`Bundle` size restrictions)
 
-### 3. Repository + Database
+### 3. `Repository` + Database
 
 Persistent storage using Room, SharedPreferences, or DataStore.
 
@@ -252,9 +252,9 @@ class MyFragment : Fragment() {
 **Lifetime**: ✅ Survives app restarts and process death
 **Use case**: Large datasets, user preferences, cached data
 
-### 4. Shared ViewModel Pattern
+### 4. Shared `ViewModel` Pattern
 
-Share data across multiple fragments via Activity-scoped ViewModel.
+Share data across multiple fragments via `Activity`-scoped `ViewModel`.
 
 ```kotlin
 class SharedViewModel : ViewModel() {
@@ -287,7 +287,7 @@ class FragmentB : Fragment() {
 }
 ```
 
-### 5. Application Class
+### 5. `Application` Class
 
 ```kotlin
 // ❌ Not recommended - use DI or Repository instead
@@ -302,17 +302,17 @@ class MyApplication : Application() {
 
 | Method | Config Change | Process Death | Size | Use Case |
 |--------|---------------|---------------|------|----------|
-| ViewModel | ✅ | ❌ | Medium | UI state |
+| `ViewModel` | ✅ | ❌ | Medium | UI state |
 | SavedStateHandle | ✅ | ✅ | Small | Critical state |
 | Repository/DB | ✅ | ✅ | Large | Persistent data |
-| Shared ViewModel | ✅ | ❌ | Any | Fragment communication |
-| Application | ✅ | ❌ | Small | ❌ Not recommended |
+| Shared `ViewModel` | ✅ | ❌ | Any | `Fragment` communication |
+| `Application` | ✅ | ❌ | Small | ❌ Not recommended |
 
 ### Best Practices
 
-1. **Combine approaches**: Use ViewModel + SavedStateHandle for robust state management
-2. **Use Repository pattern**: Separate data management from UI logic
-3. **Avoid memory leaks**: Don't hold Fragment references in ViewModels or Application
+1. **Combine approaches**: Use `ViewModel` + SavedStateHandle for robust state management
+2. **Use `Repository` pattern**: Separate data management from UI logic
+3. **Avoid memory leaks**: Don't hold `Fragment` references in ViewModels or `Application`
 4. **Consider data sensitivity**: Use EncryptedSharedPreferences for sensitive data
 
 ---
@@ -321,8 +321,8 @@ class MyApplication : Application() {
 
 - How does SavedStateHandle differ from onSaveInstanceState?
 - When should I use DataStore instead of SharedPreferences?
-- How to prevent memory leaks when sharing data via Application class?
-- What's the maximum Bundle size for SavedStateHandle?
+- How to prevent memory leaks when sharing data via `Application` class?
+- What's the maximum `Bundle` size for SavedStateHandle?
 - How to share data between fragments in different activities?
 
 ## References
@@ -330,7 +330,7 @@ class MyApplication : Application() {
 - [[c-viewmodel]]
 - [[c-repository-pattern]]
 - [[c-fragment-lifecycle]]
-- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
 - https://developer.android.com/topic/libraries/architecture/saving-states
 
 

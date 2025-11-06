@@ -109,7 +109,7 @@ project/
 ### Best practices
 
 ✅ **DO:**
-- App манифест минимален - только launcher activity и Application
+- App манифест минимален - только launcher activity и `Application`
 - Feature-модули самодостаточны - объявляют всё необходимое
 - Library-модули без `<application>` - только permissions
 
@@ -204,7 +204,7 @@ project/
 ### Best practices
 
 ✅ **DO:**
-- Keep app manifest minimal - only launcher activity and Application
+- Keep app manifest minimal - only launcher activity and `Application`
 - Make feature modules self-contained - declare everything needed
 - Library modules without `<application>` - only permissions
 
@@ -213,7 +213,7 @@ project/
 - Hardcode `android:authorities` (use `${applicationId}`)
 - Ignore merge conflicts (check Merged Manifest tab)
 
-### View merged result
+### `View` merged result
 
 **Android Studio:** `app/AndroidManifest.xml` → **Merged Manifest** tab
 

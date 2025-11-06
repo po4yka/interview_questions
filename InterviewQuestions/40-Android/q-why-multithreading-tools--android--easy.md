@@ -31,12 +31,12 @@ Why is multithreading needed in Android and which tools should be used?
 
 ### Зачем Нужна Многопоточность
 
-**Проблема:** UI поток (Main Thread) выполняет:
+**Проблема:** UI поток (Main `Thread`) выполняет:
 - Отрисовку интерфейса (60 FPS = 16ms на кадр)
 - Обработку событий пользователя
-- Lifecycle callbacks
+- `Lifecycle` callbacks
 
-Если блокировать UI поток > 5 секунд → **ANR** (Application Not Responding)
+Если блокировать UI поток > 5 секунд → **ANR** (`Application` Not Responding)
 
 ❌ **Плохо: Блокировка UI потока**
 ```kotlin
@@ -100,7 +100,7 @@ class UserViewModel : ViewModel() {
 ```
 
 **Преимущества:**
-- ✅ Автоматическая отмена при уничтожении Activity/ViewModel
+- ✅ Автоматическая отмена при уничтожении Activity/`ViewModel`
 - ✅ Простой синтаксис
 - ✅ Встроенная обработка ошибок
 - ✅ Легко переключаться между потоками
@@ -142,7 +142,7 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 
 **Когда использовать:** Синхронизация данных, загрузка файлов, очистка кэша
 
-#### 3. Thread + Handler
+#### 3. `Thread` + `Handler`
 
 **Базовый подход (для простых случаев)**
 
@@ -190,14 +190,14 @@ Dispatchers.Main
 
 ### Why Multithreading is Needed
 
-**Problem:** The UI thread (Main Thread) handles:
+**Problem:** The UI thread (Main `Thread`) handles:
 - UI rendering (60 FPS = 16ms per frame)
 - User interaction events
-- Lifecycle callbacks
+- `Lifecycle` callbacks
 
-If you block the UI thread for > 5 seconds → **ANR** (Application Not Responding)
+If you block the UI thread for > 5 seconds → **ANR** (`Application` Not Responding)
 
-❌ **Bad: Blocking UI Thread**
+❌ **Bad: Blocking UI `Thread`**
 ```kotlin
 class MainActivity : AppCompatActivity() {
     private fun loadData() {
@@ -209,7 +209,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-✅ **Good: Background Thread**
+✅ **Good: Background `Thread`**
 ```kotlin
 class MainActivity : AppCompatActivity() {
     private fun loadData() {
@@ -259,7 +259,7 @@ class UserViewModel : ViewModel() {
 ```
 
 **Advantages:**
-- ✅ Automatic cancellation when Activity/ViewModel is destroyed
+- ✅ Automatic cancellation when Activity/`ViewModel` is destroyed
 - ✅ Simple syntax
 - ✅ Built-in error handling
 - ✅ Easy thread switching
@@ -301,7 +301,7 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 
 **When to use:** Data sync, file uploads, cache cleanup
 
-#### 3. Thread + Handler
+#### 3. `Thread` + `Handler`
 
 **Basic approach (for simple cases)**
 

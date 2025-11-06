@@ -159,7 +159,7 @@ fun buildTable() {
 }
 ```
 
-**Android View DSL:**
+**Android `View` DSL:**
 ```kotlin
 @DslMarker
 annotation class ViewDsl
@@ -327,7 +327,7 @@ fun buildTable() {
 }
 ```
 
-**Android View DSL:**
+**Android `View` DSL:**
 ```kotlin
 @DslMarker
 annotation class ViewDsl
@@ -403,4 +403,4 @@ val layout = verticalLayout {
 - [[q-kotlin-lambda-expressions--kotlin--medium]] - Lambda receivers
 
 ### Advanced (Harder)
-- [[q-kotlin-context-receivers--android--hard]] - Context receivers
+- [[q-kotlin-context-receivers--android--hard]] - `Context` receivers

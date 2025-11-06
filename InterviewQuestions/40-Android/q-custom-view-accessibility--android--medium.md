@@ -76,7 +76,7 @@ class AccessibleButton @JvmOverloads constructor(
 }
 ```
 
-### Комплексные View С Действиями
+### Комплексные `View` С Действиями
 
 ```kotlin
 class ScrollableCustomView : View {
@@ -170,7 +170,7 @@ class ProgressView : View {
 - State (`enabled`, `checked`, `selected`)
 
 **Three required steps**:
-1. Set base properties (`focusable`, `clickable`)
+1. `Set` base properties (`focusable`, `clickable`)
 2. Override `onInitializeAccessibilityNodeInfo()`
 3. Handle accessibility actions in `performAccessibilityAction()`
 
@@ -300,7 +300,7 @@ class ProgressView : View {
 - [[c-accessibility]]
 - [Android Accessibility Guide](https://developer.android.com/guide/topics/ui/accessibility)
 - [AccessibilityNodeInfo API](https://developer.android.com/reference/android/view/accessibility/AccessibilityNodeInfo)
-- [Custom View Accessibility](https://developer.android.com/guide/topics/ui/accessibility/custom-views)
+- [Custom `View` Accessibility](https://developer.android.com/guide/topics/ui/accessibility/custom-views)
 
 ## Related Questions
 

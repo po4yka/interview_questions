@@ -38,7 +38,7 @@ tags:
 
 # Вопрос (RU)
 
-Для чего нужны Фрагменты если есть Activity?
+Для чего нужны Фрагменты если есть `Activity`?
 
 # Question (EN)
 
@@ -46,13 +46,13 @@ Why use Fragments if we have Activities?
 
 ## Ответ (RU)
 
-Фрагменты (Fragments) — модульные компоненты пользовательского интерфейса с собственным жизненным циклом, которые можно встраивать в Activity. Они позволяют создавать переиспользуемые, гибкие UI-компоненты для сложных и адаптивных интерфейсов.
+Фрагменты (Fragments) — модульные компоненты пользовательского интерфейса с собственным жизненным циклом, которые можно встраивать в `Activity`. Они позволяют создавать переиспользуемые, гибкие UI-компоненты для сложных и адаптивных интерфейсов.
 
 ### Основные Преимущества
 
 **1. Модульность и переиспользование**
 
-Фрагменты инкапсулируют логику и UI, позволяя использовать их в разных Activity без дублирования кода.
+Фрагменты инкапсулируют логику и UI, позволяя использовать их в разных `Activity` без дублирования кода.
 
 ```kotlin
 // ✅ Один фрагмент — несколько контекстов
@@ -89,7 +89,7 @@ if (isTablet()) {
 
 **3. Независимый жизненный цикл**
 
-Жизненный цикл фрагмента связан с Activity, но управляется отдельно — фрагмент может пережить конфигурационные изменения (поворот экрана) или быть помещён в back stack.
+Жизненный цикл фрагмента связан с `Activity`, но управляется отдельно — фрагмент может пережить конфигурационные изменения (поворот экрана) или быть помещён в back stack.
 
 ```kotlin
 class DataFragment : Fragment() {
@@ -169,9 +169,9 @@ if (isTablet()) {
 }
 ```
 
-**3. Independent Lifecycle**
+**3. Independent `Lifecycle`**
 
-Fragment lifecycle is tied to the Activity but managed separately — fragments can survive configuration changes (rotation) or be placed on the back stack.
+`Fragment` lifecycle is tied to the `Activity` but managed separately — fragments can survive configuration changes (rotation) or be placed on the back stack.
 
 ```kotlin
 class DataFragment : Fragment() {
@@ -214,8 +214,8 @@ findNavController().navigate(
 ## Follow-ups
 
 - When should you use multiple Activities instead of Fragments?
-- How does Jetpack Compose affect the Fragment vs Activity decision?
-- What are the performance implications of using many Fragments in a single Activity?
+- How does Jetpack Compose affect the `Fragment` vs `Activity` decision?
+- What are the performance implications of using many Fragments in a single `Activity`?
 - How do you handle communication between Fragments without tight coupling?
 - What are the alternatives to `retainInstance` for preserving state across configuration changes?
 
@@ -223,8 +223,8 @@ findNavController().navigate(
 
 - [Android Developers: Fragments](https://developer.android.com/guide/fragments)
 - [Android Developers: Navigation Component](https://developer.android.com/guide/navigation)
-- [Android Developers: Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
-- [Android Developers: Activity Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle)
+- [Android Developers: `Fragment` `Lifecycle`](https://developer.android.com/guide/fragments/lifecycle)
+- [Android Developers: `Activity` `Lifecycle`](https://developer.android.com/guide/components/activities/activity-lifecycle)
 
 ## Related Questions
 
@@ -236,14 +236,14 @@ findNavController().navigate(
 
 
 ### Prerequisites
-- Understanding Activity lifecycle basics
-- Fragment lifecycle fundamentals
+- Understanding `Activity` lifecycle basics
+- `Fragment` lifecycle fundamentals
 
 ### Related
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle comparison
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle relationship
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Lifecycle` comparison
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Lifecycle` relationship
 
 ### Advanced
-- How to implement Single-Activity architecture with Jetpack Compose?
-- What are the trade-offs of Fragment back stack vs Navigation Component?
-- How to optimize Fragment transactions for performance?
+- How to implement Single-`Activity` architecture with Jetpack Compose?
+- What are the trade-offs of `Fragment` back stack vs Navigation Component?
+- How to optimize `Fragment` transactions for performance?

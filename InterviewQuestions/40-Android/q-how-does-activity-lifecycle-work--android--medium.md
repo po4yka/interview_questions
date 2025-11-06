@@ -37,34 +37,34 @@ sources: []
 
 # Вопрос (RU)
 
-Как жизненный цикл Fragment связан с Activity?
+Как жизненный цикл `Fragment` связан с `Activity`?
 
 # Question (EN)
 
-How is Fragment lifecycle connected with Activity?
+How is `Fragment` lifecycle connected with `Activity`?
 
 ---
 
 ## Ответ (RU)
 
-Жизненный цикл Fragment **тесно связан** с жизненным циклом Activity. Fragment никогда не может превысить состояние жизненного цикла Activity, но имеет **дополнительные колбэки** (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach).
+Жизненный цикл `Fragment` **тесно связан** с жизненным циклом `Activity`. `Fragment` никогда не может превысить состояние жизненного цикла `Activity`, но имеет **дополнительные колбэки** (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach).
 
 ### Ключевые Правила Зависимости
 
-**1. Fragment не превышает состояние Activity:**
+**1. `Fragment` не превышает состояние `Activity`:**
 ```kotlin
 // Fragment может быть STARTED только когда Activity STARTED
 // Fragment может быть RESUMED только когда Activity RESUMED
 ```
 
-**2. При запуске — Fragment колбэки ПОСЛЕ Activity:**
+**2. При запуске — `Fragment` колбэки ПОСЛЕ `Activity`:**
 ```
 Activity.onCreate() → Fragment.onCreate()
 Activity.onStart() → Fragment.onStart()
 Activity.onResume() → Fragment.onResume()
 ```
 
-**3. При остановке — Fragment колбэки ПЕРЕД Activity:**
+**3. При остановке — `Fragment` колбэки ПЕРЕД `Activity`:**
 ```
 Fragment.onPause() → Activity.onPause()
 Fragment.onStop() → Activity.onStop()
@@ -97,9 +97,9 @@ onStop()
 onDestroy()
 ```
 
-### Раздельный Жизненный Цикл View
+### Раздельный Жизненный Цикл `View`
 
-Fragment имеет **два владельца жизненного цикла**:
+`Fragment` имеет **два владельца жизненного цикла**:
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -142,7 +142,7 @@ supportFragmentManager.beginTransaction()
 // onCreateView() → onViewCreated() → onStart() → onResume()
 ```
 
-### Управление Ресурсами View
+### Управление Ресурсами `View`
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -193,31 +193,31 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 ## Answer (EN)
 
-Fragment lifecycle is **tightly coupled** with Activity lifecycle. Fragment can never exceed the Activity's lifecycle state but has **additional callbacks** (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach).
+`Fragment` lifecycle is **tightly coupled** with `Activity` lifecycle. `Fragment` can never exceed the `Activity`'s lifecycle state but has **additional callbacks** (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach).
 
 ### Key Dependency Rules
 
-**1. Fragment never exceeds Activity state:**
+**1. `Fragment` never exceeds `Activity` state:**
 ```kotlin
 // Fragment can only be STARTED when Activity is STARTED
 // Fragment can only be RESUMED when Activity is RESUMED
 ```
 
-**2. On startup — Fragment callbacks AFTER Activity:**
+**2. On startup — `Fragment` callbacks AFTER `Activity`:**
 ```
 Activity.onCreate() → Fragment.onCreate()
 Activity.onStart() → Fragment.onStart()
 Activity.onResume() → Fragment.onResume()
 ```
 
-**3. On shutdown — Fragment callbacks BEFORE Activity:**
+**3. On shutdown — `Fragment` callbacks BEFORE `Activity`:**
 ```
 Fragment.onPause() → Activity.onPause()
 Fragment.onStop() → Activity.onStop()
 Fragment.onDestroy() → Activity.onDestroy()
 ```
 
-### Complete Lifecycle Diagram
+### Complete `Lifecycle` Diagram
 
 ```
 Activity              Fragment
@@ -243,9 +243,9 @@ onStop()
 onDestroy()
 ```
 
-### Separate View Lifecycle
+### Separate `View` `Lifecycle`
 
-Fragment has **two lifecycle owners**:
+`Fragment` has **two lifecycle owners**:
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -288,7 +288,7 @@ supportFragmentManager.beginTransaction()
 // onCreateView() → onViewCreated() → onStart() → onResume()
 ```
 
-### View Resource Management
+### `View` Resource Management
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -341,16 +341,16 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 ## Follow-ups
 
-- What happens to Fragment when Activity is destroyed due to configuration change?
-- How does ViewModel survive Fragment recreation in BackStack scenarios?
-- When should you use Fragment lifecycle vs viewLifecycleOwner for coroutines?
-- What are the differences between replace(), add(), and show()/hide() Fragment transactions?
-- How does setRetainInstance(true) affect Fragment lifecycle (deprecated)?
+- What happens to `Fragment` when `Activity` is destroyed due to configuration change?
+- How does `ViewModel` survive `Fragment` recreation in BackStack scenarios?
+- When should you use `Fragment` lifecycle vs viewLifecycleOwner for coroutines?
+- What are the differences between replace(), add(), and show()/hide() `Fragment` transactions?
+- How does setRetainInstance(true) affect `Fragment` lifecycle (deprecated)?
 
 ## References
 
-- Android Official: [Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
-- Android Official: [ViewLifecycleOwner](https://developer.android.com/reference/androidx/fragment/app/Fragment#getViewLifecycleOwner())
+- Android Official: [`Fragment` `Lifecycle`](https://developer.android.com/guide/fragments/lifecycle)
+- Android Official: [ViewLifecycleOwner](https://developer.android.com/reference/androidx/fragment/app/`Fragment`#getViewLifecycleOwner())
 
 ## Related Questions
 
@@ -362,13 +362,13 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
 
 ### Prerequisites (Easier)
-- Activity lifecycle basics — understand Activity states first
-- Fragment basics — what is Fragment and why use it
+- `Activity` lifecycle basics — understand `Activity` states first
+- `Fragment` basics — what is `Fragment` and why use it
 
 ### Related (Same Level)
 - [[q-android-runtime-art--android--medium]] — Understanding Android runtime
 - [[q-view-composition-strategy-compose--android--medium]] — Modern UI lifecycle
 
 ### Advanced (Harder)
-- Fragment BackStack state management — complex navigation scenarios
-- Fragment shared element transitions — coordinating lifecycle with animations
+- `Fragment` BackStack state management — complex navigation scenarios
+- `Fragment` shared element transitions — coordinating lifecycle with animations

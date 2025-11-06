@@ -33,24 +33,24 @@ tags:
 
 # Вопрос (RU)
 
-> Как Looper связывается с потоком?
+> Как `Looper` связывается с потоком?
 
 # Question (EN)
 
-> How does Looper connect to a thread?
+> How does `Looper` connect to a thread?
 
 ---
 
 ## Ответ (RU)
 
-**Looper** связывается с потоком через два ключевых метода:
+**`Looper`** связывается с потоком через два ключевых метода:
 
-1. **`Looper.prepare()`** — создает Looper для текущего потока
+1. **`Looper.prepare()`** — создает `Looper` для текущего потока
 2. **`Looper.loop()`** — запускает бесконечный цикл обработки сообщений
 
 ### Механизм Связывания
 
-**Looper.prepare()** сохраняет Looper в `ThreadLocal<Looper>`:
+**`Looper`.prepare()** сохраняет `Looper` в `ThreadLocal<`Looper`>`:
 
 ```kotlin
 // ✅ Правильное создание потока с Looper
@@ -69,10 +69,10 @@ class LooperThread : Thread() {
 ```
 
 **Ключевые особенности:**
-- Один Looper на поток (повторный вызов `prepare()` выбросит исключение)
-- Главный поток имеет Looper автоматически
+- Один `Looper` на поток (повторный вызов `prepare()` выбросит исключение)
+- Главный поток имеет `Looper` автоматически
 - `Looper.loop()` блокирует поток для обработки сообщений
-- Handler получает доступ к Looper через `ThreadLocal`
+- `Handler` получает доступ к `Looper` через `ThreadLocal`
 
 ### Жизненный Цикл
 
@@ -109,18 +109,18 @@ val handler = Handler(Looper.myLooper()!!)
 // Сообщения не обрабатываются!
 ```
 
-**Лучшая практика:** используйте `HandlerThread` вместо ручной настройки Looper.
+**Лучшая практика:** используйте `HandlerThread` вместо ручной настройки `Looper`.
 
 ## Answer (EN)
 
-**Looper** connects to a thread using two key methods:
+**`Looper`** connects to a thread using two key methods:
 
-1. **`Looper.prepare()`** — creates a Looper for the current thread
+1. **`Looper.prepare()`** — creates a `Looper` for the current thread
 2. **`Looper.loop()`** — starts the infinite message processing loop
 
 ### Binding Mechanism
 
-**Looper.prepare()** stores the Looper in `ThreadLocal<Looper>`:
+**`Looper`.prepare()** stores the `Looper` in `ThreadLocal<`Looper`>`:
 
 ```kotlin
 // ✅ Correct Looper thread creation
@@ -139,12 +139,12 @@ class LooperThread : Thread() {
 ```
 
 **Key characteristics:**
-- One Looper per thread (calling `prepare()` twice throws exception)
-- Main thread has Looper prepared automatically
+- One `Looper` per thread (calling `prepare()` twice throws exception)
+- Main thread has `Looper` prepared automatically
 - `Looper.loop()` blocks the thread to process messages
-- Handler accesses Looper via `ThreadLocal`
+- `Handler` accesses `Looper` via `ThreadLocal`
 
-### Lifecycle
+### `Lifecycle`
 
 ```kotlin
 // ✅ HandlerThread — ready-made implementation
@@ -179,21 +179,21 @@ val handler = Handler(Looper.myLooper()!!)
 // Messages won't be processed!
 ```
 
-**Best practice:** Use `HandlerThread` instead of manual Looper setup.
+**Best practice:** Use `HandlerThread` instead of manual `Looper` setup.
 
 ---
 
 ## Follow-ups
 
 - What happens if you call `Looper.prepare()` twice on the same thread?
-- How does the main thread get its Looper without calling `prepare()`?
+- How does the main thread get its `Looper` without calling `prepare()`?
 - What's the difference between `quit()` and `quitSafely()`?
-- Can multiple Handlers share the same Looper?
-- How does `HandlerThread` simplify Looper management?
+- Can multiple Handlers share the same `Looper`?
+- How does `HandlerThread` simplify `Looper` management?
 
 ## References
 
-- Android Developer Docs: Looper and Handler
+- Android Developer Docs: `Looper` and `Handler`
 - Android Threading Guide
 
 ## Related Questions
@@ -204,12 +204,12 @@ val handler = Handler(Looper.myLooper()!!)
 
 
 ### Prerequisites
-- [[q-handler-looper-main-thread--android--medium]] — Understanding Handler-Looper-Thread relationship
+- [[q-handler-looper-main-thread--android--medium]] — Understanding `Handler`-`Looper`-`Thread` relationship
 
 ### Related
-- Handler-Thread interaction patterns
-- Message queue implementation details
+- `Handler`-`Thread` interaction patterns
+- `Message` queue implementation details
 
 ### Advanced
 - Advanced HandlerThread patterns and lifecycle management
-- Custom Looper implementations for specialized use cases
+- Custom `Looper` implementations for specialized use cases

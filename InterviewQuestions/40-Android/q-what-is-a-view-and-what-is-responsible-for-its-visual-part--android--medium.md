@@ -30,19 +30,19 @@ tags:
 
 # Вопрос (RU)
 
-> Что такое View и что отвечает за её визуальную часть?
+> Что такое `View` и что отвечает за её визуальную часть?
 
 # Question (EN)
 
-> What is a View and what is responsible for its visual part?
+> What is a `View` and what is responsible for its visual part?
 
 ## Ответ (RU)
 
-**View** — базовый строительный блок пользовательских интерфейсов в Android. Это объект, который отрисовывается на экране и может взаимодействовать с пользователем.
+**`View`** — базовый строительный блок пользовательских интерфейсов в Android. Это объект, который отрисовывается на экране и может взаимодействовать с пользователем.
 
 ### Основные Характеристики
 
-**View** — базовый класс для виджетов (Button, TextView, ImageView). **ViewGroup** — контейнер для других View, образующий иерархию (LinearLayout, ConstraintLayout).
+**`View`** — базовый класс для виджетов (`Button`, `TextView`, `ImageView`). **`ViewGroup`** — контейнер для других `View`, образующий иерархию (`LinearLayout`, `ConstraintLayout`).
 
 ```kotlin
 // ✅ Типичные подклассы View
@@ -55,7 +55,7 @@ class CustomLayout : LinearLayout(context)
 
 ### Отрисовка И Измерения
 
-Каждая View отвечает за свою отрисовку через `onDraw(Canvas)`, измерения через `onMeasure()`, и позиционирование через `onLayout()`.
+Каждая `View` отвечает за свою отрисовку через `onDraw(`Canvas`)`, измерения через `onMeasure()`, и позиционирование через `onLayout()`.
 
 ```kotlin
 class CustomView(context: Context) : View(context) {
@@ -110,15 +110,15 @@ textView.apply {
 }
 ```
 
-**4. Canvas API** — кастомная отрисовка (drawCircle, drawPath, drawText)
+**4. `Canvas` API** — кастомная отрисовка (drawCircle, drawPath, drawText)
 
 ## Answer (EN)
 
-**View** is the fundamental building block for user interfaces in Android. It's an object that is drawn on screen and can interact with the user.
+**`View`** is the fundamental building block for user interfaces in Android. It's an object that is drawn on screen and can interact with the user.
 
 ### Core Characteristics
 
-**View** is the base class for widgets (Button, TextView, ImageView). **ViewGroup** is a container for other Views, forming a hierarchy (LinearLayout, ConstraintLayout).
+**`View`** is the base class for widgets (`Button`, `TextView`, `ImageView`). **`ViewGroup`** is a container for other Views, forming a hierarchy (`LinearLayout`, `ConstraintLayout`).
 
 ```kotlin
 // ✅ Typical View subclasses
@@ -131,7 +131,7 @@ class CustomLayout : LinearLayout(context)
 
 ### Rendering and Measurement
 
-Each View is responsible for its own drawing via `onDraw(Canvas)`, measurement via `onMeasure()`, and positioning via `onLayout()`.
+Each `View` is responsible for its own drawing via `onDraw(`Canvas`)`, measurement via `onMeasure()`, and positioning via `onLayout()`.
 
 ```kotlin
 class CustomView(context: Context) : View(context) {
@@ -186,7 +186,7 @@ textView.apply {
 }
 ```
 
-**4. Canvas API** — custom drawing (drawCircle, drawPath, drawText)
+**4. `Canvas` API** — custom drawing (drawCircle, drawPath, drawText)
 
 ---
 
@@ -194,11 +194,11 @@ textView.apply {
 
 - How do `onMeasure`, `onLayout`, and `onDraw` interact during the rendering pipeline?
 - When should you override `dispatchDraw` vs `onDraw`?
-- How does hardware acceleration affect custom View performance and what drawing operations are unsupported?
+- How does hardware acceleration affect custom `View` performance and what drawing operations are unsupported?
 
 ## References
 
-- https://developer.android.com/reference/android/view/View — View API
+- https://developer.android.com/reference/android/view/`View` — `View` API
 - https://developer.android.com/guide/topics/ui/custom-components — Custom components
 - https://developer.android.com/guide/topics/ui/how-android-draws — How Android draws views
 
@@ -215,7 +215,7 @@ textView.apply {
 
 ### Related (Medium)
 
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View invalidation
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` invalidation
 
 ### Advanced (Harder)
 

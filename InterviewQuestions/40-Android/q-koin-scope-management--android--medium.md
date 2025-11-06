@@ -39,23 +39,23 @@ tags:
 
 # Вопрос (RU)
 
-> Как управлять scope в Koin? Реализуйте зависимости с ограниченным временем жизни для Activity и Fragment с правильной обработкой жизненного цикла.
+> Как управлять scope в Koin? Реализуйте зависимости с ограниченным временем жизни для `Activity` и `Fragment` с правильной обработкой жизненного цикла.
 
 # Question (EN)
 
-> How do you manage scopes in Koin? Implement Activity and Fragment scoped dependencies with proper lifecycle handling.
+> How do you manage scopes in Koin? Implement `Activity` and `Fragment` scoped dependencies with proper lifecycle handling.
 
 ---
 
 ## Ответ (RU)
 
-**Scope в Koin** — это контейнеры для зависимостей с ограниченным временем жизни, привязанные к Android компонентам (Activity, Fragment) или пользовательским логическим границам. Они предотвращают утечки памяти и обеспечивают правильную обработку жизненного цикла.
+**Scope в Koin** — это контейнеры для зависимостей с ограниченным временем жизни, привязанные к Android компонентам (`Activity`, `Fragment`) или пользовательским логическим границам. Они предотвращают утечки памяти и обеспечивают правильную обработку жизненного цикла.
 
 ### Основные Концепции
 
 **Типы Scope**:
 1. **Root Scope** - на уровне приложения
-2. **Component Scope** - привязан к Activity/Fragment
+2. **Component Scope** - привязан к Activity/`Fragment`
 3. **Named Scope** - пользовательские логические границы
 
 **Преимущества**:
@@ -63,7 +63,7 @@ tags:
 - Предотвращение утечек памяти
 - Соответствие жизненному циклу компонентов
 
-### Activity Scoped Dependencies
+### `Activity` Scoped Dependencies
 
 ```kotlin
 // ✅ Определение модуля с Activity scope
@@ -98,11 +98,11 @@ class ShoppingActivity : AppCompatActivity() {
 ```
 
 **Объяснение**:
-- `activityScope()` автоматически привязывает scope к жизненному циклу Activity
+- `activityScope()` автоматически привязывает scope к жизненному циклу `Activity`
 - `scoped` создаёт один экземпляр на scope
 - При `onDestroy()` все зависимости автоматически освобождаются
 
-### Fragment Scoped Dependencies
+### `Fragment` Scoped Dependencies
 
 ```kotlin
 // ✅ Модуль с Fragment scope
@@ -136,9 +136,9 @@ class ProfileFragment : Fragment() {
 ```
 
 **Ключевые моменты**:
-- `fragmentScope()` привязывает к жизненному циклу Fragment
+- `fragmentScope()` привязывает к жизненному циклу `Fragment`
 - `parametersOf()` передаёт runtime параметры
-- Scope закрывается при уничтожении Fragment
+- Scope закрывается при уничтожении `Fragment`
 
 ### Разделение Scope Между Компонентами
 
@@ -199,36 +199,36 @@ class SessionManager(private val koin: Koin) {
 
 | Подход | Использование | Автоматическая очистка |
 |--------|---------------|------------------------|
-| `activityScope()` | Activity-зависимости | Да |
-| `fragmentScope()` | Fragment-зависимости | Да |
+| `activityScope()` | `Activity`-зависимости | Да |
+| `fragmentScope()` | `Fragment`-зависимости | Да |
 | Named scope | Пользовательская логика | Нет (ручное управление) |
 
 ### Best Practices
 
 1. **Соответствие жизненному циклу**: Используйте `activityScope()` / `fragmentScope()` для автоматического управления
 2. **Избегать утечек**: Всегда закрывайте custom scopes в `onDestroy()`
-3. **Shared state**: Используйте Activity scope для разделения состояния между фрагментами
+3. **Shared state**: Используйте `Activity` scope для разделения состояния между фрагментами
 4. **Lazy injection**: Предпочитайте `by inject()` вместо прямого `get()`
 
 ---
 
 ## Answer (EN)
 
-**Koin Scopes** provide lifecycle-aware dependency management by creating containers for dependencies with limited lifetimes tied to Android components (Activity, Fragment) or custom logical boundaries. They prevent memory leaks and ensure proper lifecycle handling.
+**Koin Scopes** provide lifecycle-aware dependency management by creating containers for dependencies with limited lifetimes tied to Android components (`Activity`, `Fragment`) or custom logical boundaries. They prevent memory leaks and ensure proper lifecycle handling.
 
 ### Core Concepts
 
 **Scope Types**:
-1. **Root Scope** - Application-wide, never closes
-2. **Component Scope** - Tied to Activity/Fragment lifecycle
+1. **Root Scope** - `Application`-wide, never closes
+2. **Component Scope** - Tied to Activity/`Fragment` lifecycle
 3. **Named Scope** - Custom logical boundaries
 
 **Benefits**:
 - Automatic resource cleanup
 - Memory leak prevention
-- Lifecycle alignment with components
+- `Lifecycle` alignment with components
 
-### Activity Scoped Dependencies
+### `Activity` Scoped Dependencies
 
 ```kotlin
 // ✅ Module with Activity scope
@@ -263,11 +263,11 @@ class ShoppingActivity : AppCompatActivity() {
 ```
 
 **Explanation**:
-- `activityScope()` automatically ties scope to Activity lifecycle
+- `activityScope()` automatically ties scope to `Activity` lifecycle
 - `scoped` creates one instance per scope
 - On `onDestroy()` all dependencies are automatically released
 
-### Fragment Scoped Dependencies
+### `Fragment` Scoped Dependencies
 
 ```kotlin
 // ✅ Module with Fragment scope
@@ -301,9 +301,9 @@ class ProfileFragment : Fragment() {
 ```
 
 **Key Points**:
-- `fragmentScope()` ties to Fragment lifecycle
+- `fragmentScope()` ties to `Fragment` lifecycle
 - `parametersOf()` passes runtime parameters
-- Scope closes when Fragment is destroyed
+- Scope closes when `Fragment` is destroyed
 
 ### Sharing Scopes Between Components
 
@@ -364,15 +364,15 @@ class SessionManager(private val koin: Koin) {
 
 | Approach | Use Case | Automatic Cleanup |
 |----------|----------|-------------------|
-| `activityScope()` | Activity-level dependencies | Yes |
-| `fragmentScope()` | Fragment-level dependencies | Yes |
+| `activityScope()` | `Activity`-level dependencies | Yes |
+| `fragmentScope()` | `Fragment`-level dependencies | Yes |
 | Named scope | Custom logic boundaries | No (manual management) |
 
 ### Best Practices
 
 1. **Match lifecycle**: Use `activityScope()` / `fragmentScope()` for automatic management
 2. **Prevent leaks**: Always close custom scopes in `onDestroy()`
-3. **Shared state**: Use Activity scope to share state between fragments
+3. **Shared state**: Use `Activity` scope to share state between fragments
 4. **Lazy injection**: Prefer `by inject()` over direct `get()`
 
 ---
@@ -382,7 +382,7 @@ class SessionManager(private val koin: Koin) {
 - How to test scoped dependencies in unit tests?
 - What happens if you forget to close a custom named scope?
 - Can you nest scopes (scope within a scope)?
-- How to handle scope for ViewModel with SavedStateHandle?
+- How to handle scope for `ViewModel` with SavedStateHandle?
 
 ## References
 

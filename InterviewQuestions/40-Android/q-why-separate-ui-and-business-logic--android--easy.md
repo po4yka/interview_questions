@@ -87,7 +87,7 @@ fun `active users are sorted by name`() {
 
 **3. Переиспользуемость**
 
-Бизнес-логика может использоваться в Activity, Fragment, Compose, даже на других платформах через Kotlin Multiplatform (KMM).
+Бизнес-логика может использоваться в `Activity`, `Fragment`, Compose, даже на других платформах через Kotlin Multiplatform (KMM).
 
 **4. Архитектурные паттерны**
 
@@ -172,7 +172,7 @@ fun `active users are sorted by name`() {
 
 **3. Reusability**
 
-Business logic can be reused in Activity, Fragment, Compose, even cross-platform via Kotlin Multiplatform (KMM).
+Business logic can be reused in `Activity`, `Fragment`, Compose, even cross-platform via Kotlin Multiplatform (KMM).
 
 **4. Architectural Patterns**
 
@@ -224,7 +224,7 @@ class GetUsersUseCase(private val repository: UserRepository) {
 ## References
 
 - https://developer.android.com/jetpack/guide - Android architecture guide
-- https://developer.android.com/topic/libraries/architecture/viewmodel - ViewModel guide
+- https://developer.android.com/topic/libraries/architecture/viewmodel - `ViewModel` guide
 
 ## Related Questions
 
@@ -237,7 +237,7 @@ class GetUsersUseCase(private val repository: UserRepository) {
 
 ### Prerequisites
 
-- Basic understanding of Android components (Activity, Fragment)
+- Basic understanding of Android components (`Activity`, `Fragment`)
 
 ### Related
 

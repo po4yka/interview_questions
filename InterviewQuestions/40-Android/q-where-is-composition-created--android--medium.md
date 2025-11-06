@@ -29,9 +29,9 @@ Where is composition created for calling composable functions?
 
 ## Ответ (RU)
 
-**Композиция** создается при вызове **setContent** в Activity (или ComposeView во Fragment). Это точка входа для Compose UI.
+**Композиция** создается при вызове **setContent** в `Activity` (или ComposeView во `Fragment`). Это точка входа для Compose UI.
 
-### setContent В Activity
+### setContent В `Activity`
 
 ```kotlin
 class MainActivity : ComponentActivity() {
@@ -53,7 +53,7 @@ fun MyApp() {
 }
 ```
 
-### ComposeView Во Fragment
+### ComposeView Во `Fragment`
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -88,9 +88,9 @@ val layout = LinearLayout(this).apply {
 
 ## Answer (EN)
 
-**Composition** is created when **setContent** is called in Activity (or when ComposeView is created in Fragment). It's the entry point for Compose UI.
+**Composition** is created when **setContent** is called in `Activity` (or when ComposeView is created in `Fragment`). It's the entry point for Compose UI.
 
-### setContent in Activity
+### setContent in `Activity`
 
 ```kotlin
 class MainActivity : ComponentActivity() {
@@ -112,7 +112,7 @@ fun MyApp() {
 }
 ```
 
-### ComposeView in Fragment
+### ComposeView in `Fragment`
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -159,7 +159,7 @@ val layout = LinearLayout(this).apply {
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
-- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
 - [Jetpack Compose](https://developer.android.com/develop/ui/compose)
 
 

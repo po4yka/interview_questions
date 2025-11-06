@@ -27,10 +27,10 @@ tags: [android/networking-http, android/performance-memory, android/websockets, 
 ---
 
 # Вопрос (RU)
-> В чем разница между HTTP, Long-Polling, WebSocket и Server-Sent Events (SSE)? Когда следует использовать каждый из них?
+> В чем разница между HTTP, `Long`-Polling, WebSocket и Server-Sent Events (SSE)? Когда следует использовать каждый из них?
 
 # Question (EN)
-> What are the differences between HTTP, Long-Polling, WebSocket, and Server-Sent Events (SSE)? When should each be used?
+> What are the differences between HTTP, `Long`-Polling, WebSocket, and Server-Sent Events (SSE)? When should each be used?
 
 ---
 
@@ -41,7 +41,7 @@ tags: [android/networking-http, android/performance-memory, android/websockets, 
 | Протокол | Направление | Соединение | Задержка | Real-time | Use Case |
 |----------|-------------|------------|----------|-----------|----------|
 | HTTP | Запрос→Ответ | Новое | Высокая | Нет | REST API, CRUD |
-| Long-Polling | Запрос→Ответ | Удержание | Средняя | Почти | Уведомления (fallback) |
+| `Long`-Polling | Запрос→Ответ | Удержание | Средняя | Почти | Уведомления (fallback) |
 | WebSocket | Двунаправленный | Постоянное | Низкая | Да | Чаты, игры |
 | SSE | Сервер→Клиент | Постоянное | Низкая | Да | Новости, тикеры |
 
@@ -73,7 +73,7 @@ class UserRepository(private val api: ApiService) {
 }
 ```
 
-### 2. Long-Polling
+### 2. `Long`-Polling
 
 **Модель**: Клиент → Запрос открыт до появления данных → Ответ → Новый запрос
 
@@ -204,7 +204,7 @@ class SSEClient(private val client: OkHttpClient) {
 ### Матрица Решений
 
 **HTTP**: Простые CRUD, RESTful API, кэшируемые данные
-**Long-Polling**: Fallback для WebSocket, legacy системы
+**`Long`-Polling**: Fallback для WebSocket, legacy системы
 **WebSocket**: Двунаправленный real-time, низкая задержка критична
 **SSE**: Только сервер→клиент, текстовые уведомления, простота
 
@@ -221,7 +221,7 @@ class SSEClient(private val client: OkHttpClient) {
 2. Timeout для зависших соединений
 3. HTTP/2 для лучшей производительности
 
-**Long-Polling:**
+**`Long`-Polling:**
 1. Timeout на стороне сервера
 2. Jitter для предотвращения thundering herd
 3. Graceful обработка ошибок
@@ -233,7 +233,7 @@ class SSEClient(private val client: OkHttpClient) {
 | Protocol | Direction | Connection | Latency | Real-time | Use Case |
 |----------|-----------|------------|---------|-----------|----------|
 | HTTP | Request→Response | New | High | No | REST API, CRUD |
-| Long-Polling | Request→Response | Held | Medium | Near | Notifications (fallback) |
+| `Long`-Polling | Request→Response | Held | Medium | Near | Notifications (fallback) |
 | WebSocket | Bidirectional | Persistent | Low | Yes | Chat, games |
 | SSE | Server→Client | Persistent | Low | Yes | News, tickers |
 
@@ -265,7 +265,7 @@ class UserRepository(private val api: ApiService) {
 }
 ```
 
-### 2. Long-Polling
+### 2. `Long`-Polling
 
 **Model**: Client → Request held until data available → Response → New request
 
@@ -309,7 +309,7 @@ class LongPollingClient(private val client: OkHttpClient) {
 
 ### 3. WebSocket
 
-**Model**: Handshake → Persistent bidirectional connection → Message exchange
+**Model**: Handshake → Persistent bidirectional connection → `Message` exchange
 
 **Characteristics:**
 - Full-duplex communication over single TCP connection
@@ -396,7 +396,7 @@ class SSEClient(private val client: OkHttpClient) {
 ### Decision Matrix
 
 **HTTP**: Simple CRUD, RESTful APIs, cacheable data
-**Long-Polling**: Fallback for WebSocket, legacy systems
+**`Long`-Polling**: Fallback for WebSocket, legacy systems
 **WebSocket**: Bidirectional real-time, low latency critical
 **SSE**: Server→client only, text notifications, simplicity
 
@@ -413,7 +413,7 @@ class SSEClient(private val client: OkHttpClient) {
 2. Timeout for hung connections
 3. HTTP/2 for better performance
 
-**Long-Polling:**
+**`Long`-Polling:**
 1. Server-side timeout
 2. Jitter to prevent thundering herd
 3. Graceful error handling

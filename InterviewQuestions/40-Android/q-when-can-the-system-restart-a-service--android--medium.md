@@ -33,7 +33,7 @@ tags: [android, android/background-execution, android/lifecycle, android/service
 
 ### Режимы Перезапуска
 
-**START_STICKY** — система перезапустит сервис, но Intent будет null:
+**START_STICKY** — система перезапустит сервис, но `Intent` будет null:
 
 ```kotlin
 class MusicPlayerService : Service() {
@@ -45,7 +45,7 @@ class MusicPlayerService : Service() {
 }
 ```
 
-**START_REDELIVER_INTENT** — система перезапустит сервис и повторно доставит последний Intent:
+**START_REDELIVER_INTENT** — система перезапустит сервис и повторно доставит последний `Intent`:
 
 ```kotlin
 class DownloadService : Service() {
@@ -87,9 +87,9 @@ class MusicService : Service() {
 
 - Снижается нагрузка на память
 - Сервис имеет высокий приоритет (foreground)
-- Есть ожидающие Intent (для START_NOT_STICKY)
+- Есть ожидающие `Intent` (для START_NOT_STICKY)
 
-### Обработка Null Intent
+### Обработка Null `Intent`
 
 ```kotlin
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -105,7 +105,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
 ### Сравнение Режимов
 
-| Режим | Перезапуск | Intent | Применение |
+| Режим | Перезапуск | `Intent` | Применение |
 |-------|------------|--------|------------|
 | START_STICKY | Да | Null | Музыка, мониторинг |
 | START_REDELIVER_INTENT | Да | Повторно | Загрузки, синхронизация |
@@ -120,7 +120,7 @@ The Android system can automatically restart a service after it has been killed,
 
 ### Restart Modes
 
-**START_STICKY** — system restarts the service, but Intent will be null:
+**START_STICKY** — system restarts the service, but `Intent` will be null:
 
 ```kotlin
 class MusicPlayerService : Service() {
@@ -132,7 +132,7 @@ class MusicPlayerService : Service() {
 }
 ```
 
-**START_REDELIVER_INTENT** — system restarts the service and redelivers the last Intent:
+**START_REDELIVER_INTENT** — system restarts the service and redelivers the last `Intent`:
 
 ```kotlin
 class DownloadService : Service() {
@@ -173,10 +173,10 @@ class MusicService : Service() {
 ### Restart Conditions
 
 - Memory pressure decreases
-- Service has high priority (foreground)
+- `Service` has high priority (foreground)
 - Pending Intents exist (for START_NOT_STICKY)
 
-### Handling Null Intent
+### Handling Null `Intent`
 
 ```kotlin
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -192,7 +192,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
 ### Mode Comparison
 
-| Mode | Restarts | Intent | Use Case |
+| Mode | Restarts | `Intent` | Use Case |
 |------|----------|--------|----------|
 | START_STICKY | Yes | Null | Music, monitoring |
 | START_REDELIVER_INTENT | Yes | Redelivered | Downloads, sync |
@@ -203,14 +203,14 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
 ## Follow-ups
 
-- How does JobScheduler differ from Service restart mechanisms?
+- How does JobScheduler differ from `Service` restart mechanisms?
 - What happens to pending Intents when a service is killed with START_NOT_STICKY?
 - How can you implement idempotent operations when using START_REDELIVER_INTENT?
 - What are the foreground service type restrictions and how do they affect restart behavior?
 
 ## References
 
-- [[c-service]] — Service component concepts
+- [[c-service]] — `Service` component concepts
 - [[c-lifecycle]] — Android lifecycle fundamentals
 - [[c-workmanager]] — Modern alternative for background work
 - https://developer.android.com/guide/components/services
@@ -223,11 +223,11 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
 ### Related
 
-- [[q-service-component--android--medium]] — Service component details
+- [[q-service-component--android--medium]] — `Service` component details
 - [[q-foreground-service-types--android--medium]] — Foreground service types
 - [[q-keep-service-running-background--android--medium]] — Keeping services alive
-- [[q-background-vs-foreground-service--android--medium]] — Service comparison
+- [[q-background-vs-foreground-service--android--medium]] — `Service` comparison
 
 ### Advanced
 
-- [[q-service-lifecycle-binding--android--hard]] — Service lifecycle and binding
+- [[q-service-lifecycle-binding--android--hard]] — `Service` lifecycle and binding

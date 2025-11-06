@@ -39,7 +39,7 @@ tags: [android/background-execution, android/service, background-execution, diff
 
 ## Ответ (RU)
 
-**Service** — компонент Android для выполнения длительных фоновых операций без UI.
+**`Service`** — компонент Android для выполнения длительных фоновых операций без UI.
 
 ### Основные Сценарии Использования
 
@@ -83,7 +83,7 @@ class DownloadService : Service() {
 
 - Работает в фоне без UI
 - Выполняет длительные операции
-- Может работать после закрытия Activity
+- Может работать после закрытия `Activity`
 - Ресурсоёмкий — влияет на батарею
 
 ### Современная Альтернатива
@@ -101,20 +101,20 @@ val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
-**Когда использовать Service:**
-- Foreground Service для музыки/навигации (требует notification)
-- Bound Service для межпроцессного взаимодействия (IPC)
+**Когда использовать `Service`:**
+- Foreground `Service` для музыки/навигации (требует notification)
+- Bound `Service` для межпроцессного взаимодействия (IPC)
 
 **Когда НЕ использовать:**
 - Простые фоновые задачи → WorkManager
 - Периодические задачи → WorkManager с PeriodicWorkRequest
-- Короткие задачи → Coroutines/Threads в ViewModel
+- Короткие задачи → Coroutines/Threads в `ViewModel`
 
 ---
 
 ## Answer (EN)
 
-**Service** is an Android component for long-running background operations without UI.
+**`Service`** is an Android component for long-running background operations without UI.
 
 ### Primary Use Cases
 
@@ -158,7 +158,7 @@ class DownloadService : Service() {
 
 - Runs in background without UI
 - Handles long-running operations
-- Can continue after Activity is closed
+- Can continue after `Activity` is closed
 - Resource-intensive — impacts battery
 
 ### Modern Alternative
@@ -176,28 +176,28 @@ val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
 
-**When to use Service:**
-- Foreground Service for music/navigation (requires notification)
-- Bound Service for inter-process communication (IPC)
+**When to use `Service`:**
+- Foreground `Service` for music/navigation (requires notification)
+- Bound `Service` for inter-process communication (IPC)
 
 **When NOT to use:**
 - Simple background tasks → WorkManager
 - Periodic tasks → WorkManager with PeriodicWorkRequest
-- Short tasks → Coroutines/Threads in ViewModel
+- `Short` tasks → Coroutines/Threads in `ViewModel`
 
 ---
 
 ## Follow-ups
 
-- What's the difference between Foreground Service and Background Service?
-- How do Android 8.0+ background execution limits affect Service usage?
+- What's the difference between Foreground `Service` and Background `Service`?
+- How do Android 8.0+ background execution limits affect `Service` usage?
 - When should you use START_STICKY vs START_NOT_STICKY vs START_REDELIVER_INTENT?
-- How does Bound Service differ from Started Service?
-- What are the alternatives to Service for background work in modern Android?
+- How does Bound `Service` differ from Started `Service`?
+- What are the alternatives to `Service` for background work in modern Android?
 
 ## References
 
-- [[c-service]] — Android Service component concept
+- [[c-service]] — Android `Service` component concept
 - [[c-workmanager]] — Modern background work API
 - https://developer.android.com/guide/components/services — Official Services guide
 - https://developer.android.com/guide/background — Background work overview
@@ -212,8 +212,8 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 - [[q-background-tasks-decision-guide--android--medium]] — Choosing the right background API
 - [[q-raise-process-priority--android--medium]] — Process priority management
-- [[q-background-vs-foreground-service--android--medium]] — Service types comparison
+- [[q-background-vs-foreground-service--android--medium]] — `Service` types comparison
 
 ### Advanced (Harder)
 
-- [[q-foreground-service-types--android--medium]] — Foreground Service types and restrictions
+- [[q-foreground-service-types--android--medium]] — Foreground `Service` types and restrictions

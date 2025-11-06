@@ -34,7 +34,7 @@ How do you work with vector graphics and AnimatedVectorDrawable in Android? What
 **VectorDrawable** — это XML-представление векторной графики на основе SVG path синтаксиса. Обеспечивает независимость от разрешения экрана и минимальный размер APK без bitmap ресурсов для разных плотностей.
 
 **AnimatedVectorDrawable** позволяет анимировать свойства VectorDrawable:
-- **Path morphing** — трансформация путей (требует совместимых путей с одинаковым количеством команд)
+- **`Path` morphing** — трансформация путей (требует совместимых путей с одинаковым количеством команд)
 - **Rotation, scale, translation** — трансформация групп
 - **Trim path** — эффект рисования линии
 - **Fill/stroke alpha** — анимация прозрачности
@@ -119,7 +119,7 @@ class AnimatedVectorManager {
 }
 ```
 
-**4. Path morphing совместимость:**
+**4. `Path` morphing совместимость:**
 
 ```kotlin
 // ❌ Incompatible paths - different command counts
@@ -221,8 +221,8 @@ fun AnimatedVectorIcon(
 
 ### Лучшие Практики
 
-1. **Path morphing**: используйте инструменты для нормализации путей (Android Studio Vector Asset Studio, svg-path-morph)
-2. **Performance**: кешируйте inflated drawable, растеризуйте сложные векторы для RecyclerView, используйте hardware layers
+1. **`Path` morphing**: используйте инструменты для нормализации путей (Android Studio Vector Asset Studio, svg-path-morph)
+2. **Performance**: кешируйте inflated drawable, растеризуйте сложные векторы для `RecyclerView`, используйте hardware layers
 3. **SVG import**: импортируйте через Android Studio → Vector Asset → упростите пути → оптимизируйте viewport
 4. **Animation**: длительность 200-400мс, используйте FastOutSlowInInterpolator, избегайте одновременной анимации >3 путей
 5. **Compatibility**: VectorDrawableCompat для backward compatibility, тестируйте на API 21+
@@ -244,7 +244,7 @@ fun AnimatedVectorIcon(
 **VectorDrawable** is an XML representation of vector graphics based on SVG path syntax. It provides resolution independence and minimal APK size without bitmap resources for different densities.
 
 **AnimatedVectorDrawable** enables animating VectorDrawable properties:
-- **Path morphing** — shape transitions (requires compatible paths with same command count)
+- **`Path` morphing** — shape transitions (requires compatible paths with same command count)
 - **Rotation, scale, translation** — group transformations
 - **Trim path** — line drawing effects
 - **Fill/stroke alpha** — opacity animations
@@ -329,7 +329,7 @@ class AnimatedVectorManager {
 }
 ```
 
-**4. Path morphing compatibility:**
+**4. `Path` morphing compatibility:**
 
 ```kotlin
 // ❌ Incompatible paths - different command counts
@@ -431,8 +431,8 @@ fun AnimatedVectorIcon(
 
 ### Best Practices
 
-1. **Path morphing**: use tools to normalize paths (Android Studio Vector Asset Studio, svg-path-morph)
-2. **Performance**: cache inflated drawable, rasterize complex vectors for RecyclerView, use hardware layers
+1. **`Path` morphing**: use tools to normalize paths (Android Studio Vector Asset Studio, svg-path-morph)
+2. **Performance**: cache inflated drawable, rasterize complex vectors for `RecyclerView`, use hardware layers
 3. **SVG import**: import via Android Studio → Vector Asset → simplify paths → optimize viewport
 4. **Animation**: duration 200-400ms, use FastOutSlowInInterpolator, avoid animating >3 paths simultaneously
 5. **Compatibility**: use VectorDrawableCompat for backward compatibility, test on API 21+
@@ -469,8 +469,8 @@ fun AnimatedVectorIcon(
 - [[q-animation-types--android--easy]] — Animation framework overview
 
 ### Related (Same Level)
-- [[q-canvas-custom-views--android--medium]] — Custom drawing with Canvas
-- [[q-transition-animations--android--medium]] — View transitions
+- [[q-canvas-custom-views--android--medium]] — Custom drawing with `Canvas`
+- [[q-transition-animations--android--medium]] — `View` transitions
 
 ### Advanced (Harder)
 - [[q-opengl-rendering--android--hard]] — Low-level graphics with OpenGL

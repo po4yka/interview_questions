@@ -45,12 +45,12 @@ tags: [android/performance-memory, android/ui-compose, compiler, compose, diffic
 ### Механизм Стабильности
 
 **Стабильные типы** → функция пропускается при одинаковых параметрах:
-- Примитивы (Int, String, Boolean)
+- Примитивы (`Int`, `String`, `Boolean`)
 - Типы с `@Immutable` / `@Stable`
 - Referentially equal объекты
 
 **Нестабильные типы** → всегда перекомпозируются:
-- Изменяемые коллекции (MutableList, MutableMap)
+- Изменяемые коллекции (`MutableList`, MutableMap)
 - Классы без явных маркеров стабильности
 - Типы с var полями
 
@@ -124,12 +124,12 @@ The compiler transforms `@Composable` functions into state machines:
 ### Stability Mechanism
 
 **Stable types** → function skips when parameters are equal:
-- Primitives (Int, String, Boolean)
+- Primitives (`Int`, `String`, `Boolean`)
 - Types annotated with `@Immutable` / `@Stable`
 - Referentially equal objects
 
 **Unstable types** → always recompose:
-- Mutable collections (MutableList, MutableMap)
+- Mutable collections (`MutableList`, MutableMap)
 - Classes without explicit stability markers
 - Types with var fields
 

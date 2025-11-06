@@ -107,7 +107,7 @@ dependencies {
 }
 ```
 
-### 2. Annotate Application Class
+### 2. Annotate `Application` Class
 
 ```kotlin
 @HiltAndroidApp
@@ -175,7 +175,7 @@ Hilt provides standard scopes for Android:
 
 ## Basic Usage
 
-### 1. Injecting into ViewModel
+### 1. Injecting into `ViewModel`
 
 ```kotlin
 @HiltViewModel
@@ -463,7 +463,7 @@ class MainActivityTest {
    - Predefined components for Android
    - Standard scopes
 
-2. **Lifecycle Awareness**
+2. **`Lifecycle` Awareness**
    - Components tied to Android lifecycle
    - Automatic cleanup
    - Survives configuration changes
@@ -474,7 +474,7 @@ class MainActivityTest {
    - No runtime dependency resolution
 
 4. **Integration with Jetpack**
-   - ViewModel injection
+   - `ViewModel` injection
    - WorkManager support
    - Navigation component support
 
@@ -492,7 +492,7 @@ class MainActivityTest {
 
 ## Common Use Cases
 
-### 1. Repository Pattern
+### 1. `Repository` Pattern
 
 ```kotlin
 @Singleton
@@ -576,15 +576,15 @@ object DatabaseModule {
 1. **Simplifies DI setup** - Less boilerplate than raw Dagger
 2. **Provides standard components** - Aligned with Android lifecycle
 3. **Manages scopes** - Automatic lifecycle management
-4. **Integrates with Jetpack** - ViewModel, WorkManager, Navigation
+4. **Integrates with Jetpack** - `ViewModel`, WorkManager, Navigation
 5. **Improves testability** - Easy to swap dependencies in tests
 6. **Compile-time safe** - Errors caught early
 7. **Zero runtime cost** - Code generation, no reflection
 
 **Key annotations:**
-- `@HiltAndroidApp` - Application class
-- `@AndroidEntryPoint` - Activity, Fragment, View, Service
-- `@HiltViewModel` - ViewModel
+- `@HiltAndroidApp` - `Application` class
+- `@AndroidEntryPoint` - `Activity`, `Fragment`, `View`, `Service`
+- `@HiltViewModel` - `ViewModel`
 - `@Inject` - Constructor or field injection
 - `@Module` + `@InstallIn` - Provide dependencies
 - `@Provides` - Provide method
@@ -674,7 +674,7 @@ dependencies {
 }
 ```
 
-### 2. Annotate Application Class
+### 2. Annotate `Application` Class
 
 ```kotlin
 @HiltAndroidApp
@@ -742,7 +742,7 @@ Hilt provides standard scopes for Android:
 
 ## Basic Usage
 
-### 1. Injecting into ViewModel
+### 1. Injecting into `ViewModel`
 
 ```kotlin
 @HiltViewModel
@@ -1030,7 +1030,7 @@ class MainActivityTest {
    - Predefined components for Android
    - Standard scopes
 
-2. **Lifecycle Awareness**
+2. **`Lifecycle` Awareness**
    - Components tied to Android lifecycle
    - Automatic cleanup
    - Survives configuration changes
@@ -1041,7 +1041,7 @@ class MainActivityTest {
    - No runtime dependency resolution
 
 4. **Integration with Jetpack**
-   - ViewModel injection
+   - `ViewModel` injection
    - WorkManager support
    - Navigation component support
 
@@ -1059,7 +1059,7 @@ class MainActivityTest {
 
 ## Common Use Cases
 
-### 1. Repository Pattern
+### 1. `Repository` Pattern
 
 ```kotlin
 @Singleton
@@ -1143,15 +1143,15 @@ object DatabaseModule {
 1. **Simplifies DI setup** - Less boilerplate than raw Dagger
 2. **Provides standard components** - Aligned with Android lifecycle
 3. **Manages scopes** - Automatic lifecycle management
-4. **Integrates with Jetpack** - ViewModel, WorkManager, Navigation
+4. **Integrates with Jetpack** - `ViewModel`, WorkManager, Navigation
 5. **Improves testability** - Easy to swap dependencies in tests
 6. **Compile-time safe** - Errors caught early
 7. **Zero runtime cost** - Code generation, no reflection
 
 **Key annotations:**
-- `@HiltAndroidApp` - Application class
-- `@AndroidEntryPoint` - Activity, Fragment, View, Service
-- `@HiltViewModel` - ViewModel
+- `@HiltAndroidApp` - `Application` class
+- `@AndroidEntryPoint` - `Activity`, `Fragment`, `View`, `Service`
+- `@HiltViewModel` - `ViewModel`
 - `@Inject` - Constructor or field injection
 - `@Module` + `@InstallIn` - Provide dependencies
 - `@Provides` - Provide method
@@ -1172,15 +1172,15 @@ object DatabaseModule {
 1. **Упрощенная настройка** - меньше boilerplate кода чем в Dagger
 2. **Предопределенные компоненты** - привязанные к Android lifecycle
 3. **Управление областями видимости** - автоматическое управление жизненным циклом
-4. **Интеграция с Jetpack** - ViewModel, WorkManager, Navigation
+4. **Интеграция с Jetpack** - `ViewModel`, WorkManager, Navigation
 5. **Улучшенная тестируемость** - легкая замена зависимостей в тестах
 6. **Compile-time безопасность** - ошибки обнаруживаются при компиляции
 
 ### Ключевые Аннотации
 
-- `@HiltAndroidApp` - класс Application
-- `@AndroidEntryPoint` - Activity, Fragment, View, Service
-- `@HiltViewModel` - ViewModel
+- `@HiltAndroidApp` - класс `Application`
+- `@AndroidEntryPoint` - `Activity`, `Fragment`, `View`, `Service`
+- `@HiltViewModel` - `ViewModel`
 - `@Inject` - внедрение в конструктор или поле
 - `@Module` + `@InstallIn` - предоставление зависимостей
 - `@Provides` - метод предоставления

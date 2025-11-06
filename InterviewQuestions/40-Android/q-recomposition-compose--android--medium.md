@@ -33,7 +33,7 @@ tags: [android/performance-rendering, android/ui-compose, android/ui-state, diff
 
 ### Как Работает
 
-В отличие от View (`textView.text = "new"`), Compose перезапускает функцию с новыми данными:
+В отличие от `View` (`textView.text = "new"`), Compose перезапускает функцию с новыми данными:
 
 ```kotlin
 @Composable
@@ -70,8 +70,8 @@ fun UserProfile(viewModel: ProfileViewModel) {
 
 **Триггеры:**
 - `mutableStateOf` changes
-- `collectAsState()` emits from Flow
-- `observeAsState()` for LiveData
+- `collectAsState()` emits from `Flow`
+- `observeAsState()` for `LiveData`
 
 #### 2. Изменения Параметров
 
@@ -272,7 +272,7 @@ fun GoodExample(viewModel: ViewModel) {
 
 ### How it Works
 
-Unlike View (`textView.text = "new"`), Compose re-runs the function with new data:
+Unlike `View` (`textView.text = "new"`), Compose re-runs the function with new data:
 
 ```kotlin
 @Composable
@@ -309,8 +309,8 @@ fun UserProfile(viewModel: ProfileViewModel) {
 
 **Triggers:**
 - `mutableStateOf` changes
-- `collectAsState()` emits from Flow
-- `observeAsState()` for LiveData
+- `collectAsState()` emits from `Flow`
+- `observeAsState()` for `LiveData`
 
 #### 2. Parameter Changes
 
@@ -514,7 +514,7 @@ fun GoodExample(viewModel: ViewModel) {
 ## References
 
 - [[c-jetpack-compose]] - Jetpack Compose concept
-- https://developer.android.com/jetpack/compose/lifecycle - Compose Lifecycle
+- https://developer.android.com/jetpack/compose/lifecycle - Compose `Lifecycle`
 - https://developer.android.com/jetpack/compose/state - State and Compose
 - https://developer.android.com/jetpack/compose/performance - Compose Performance
 

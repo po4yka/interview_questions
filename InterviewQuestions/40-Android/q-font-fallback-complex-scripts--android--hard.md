@@ -170,7 +170,7 @@ class FontCache(private val context: Context) {
 
 ### 4. Rendering Настройки
 
-**TextView optimization:**
+**`TextView` optimization:**
 ```kotlin
 class OptimizedTextView(context: Context) : AppCompatTextView(context) {
     init {
@@ -262,7 +262,7 @@ class TypographyScreenshotTest {
 
 ### 6. Performance Optimization
 
-**Bundle size analysis:**
+**`Bundle` size analysis:**
 ```kotlin
 fun analyzeFontImpact() {
     val fonts = listOf(2.1f, 2.0f, 18.5f, 0.8f) // MB sizes
@@ -480,7 +480,7 @@ class FontCache(private val context: Context) {
 
 ### 4. Rendering Settings
 
-**TextView optimization:**
+**`TextView` optimization:**
 ```kotlin
 class OptimizedTextView(context: Context) : AppCompatTextView(context) {
     init {
@@ -572,7 +572,7 @@ class TypographyScreenshotTest {
 
 ### 6. Performance Optimization
 
-**Bundle size analysis:**
+**`Bundle` size analysis:**
 ```kotlin
 fun analyzeFontImpact() {
     val fonts = listOf(2.1f, 2.0f, 18.5f, 0.8f) // MB sizes
@@ -619,7 +619,7 @@ suspend fun loadScriptFont(script: String): Typeface {
 - **Ignoring text shaping** — complex scripts require contextual forms and ligatures
 - **Poor mixed script alignment** — different scripts have different baselines
 - **No accessibility testing** — large font sizes break complex script rendering
-- **Bundle size neglect** — CJK fonts can add 20+ MB to APK size
+- **`Bundle` size neglect** — CJK fonts can add 20+ MB to APK size
 
 ---
 

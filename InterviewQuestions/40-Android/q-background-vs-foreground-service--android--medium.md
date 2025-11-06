@@ -25,7 +25,7 @@ tags: [android/background-execution, android/service, difficulty/medium]
 ---
 
 # Вопрос (RU)
-> В чём разница между Background и Foreground Service в Android?
+> В чём разница между Background и Foreground `Service` в Android?
 
 ---
 
@@ -38,7 +38,7 @@ tags: [android/background-execution, android/service, difficulty/medium]
 
 ### Ключевые Различия
 
-| Характеристика | Background Service | Foreground Service |
+| Характеристика | Background `Service` | Foreground `Service` |
 |----------------|-------------------|-------------------|
 | Уведомление | Не требуется | Обязательно (непрерывное) |
 | Приоритет процесса | Низкий | Высокий |
@@ -48,7 +48,7 @@ tags: [android/background-execution, android/service, difficulty/medium]
 
 ### Реализация
 
-**✅ Foreground Service**
+**✅ Foreground `Service`**
 ```kotlin
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -69,7 +69,7 @@ class MusicService : Service() {
 context.startForegroundService(Intent(context, MusicService::class.java))
 ```
 
-**❌ Background Service (запрещён с API 26+)**
+**❌ Background `Service` (запрещён с API 26+)**
 ```kotlin
 class BackgroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -108,14 +108,14 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - Типы: `camera`, `connectedDevice`, `dataSync`, `health`, `location`, `mediaPlayback`, `mediaProjection`, `microphone`, `phoneCall`, `remoteMessaging`, `shortService`, `specialUse`, `systemExempted`
 
 **Приоритет процессов**
-1. Foreground (с Foreground Service) - защищён от завершения
+1. Foreground (с Foreground `Service`) - защищён от завершения
 2. Visible - редко завершается
-3. Service (Background Service) - может быть убит при нехватке памяти
+3. `Service` (Background `Service`) - может быть убит при нехватке памяти
 4. Cached - убивается первым
 
 ### Выбор Подхода
 
-**Foreground Service:**
+**Foreground `Service`:**
 - Операция видна пользователю (музыка, навигация, отслеживание тренировки)
 - Требуется немедленное выполнение
 - Длительность > 10 минут
@@ -132,7 +132,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 ### Core Differences
 
-| Feature | Background Service | Foreground Service |
+| Feature | Background `Service` | Foreground `Service` |
 |---------|-------------------|-------------------|
 | Notification | Not required | Mandatory (ongoing) |
 | Process priority | Low | High |
@@ -142,7 +142,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 ### Implementation
 
-**✅ Foreground Service**
+**✅ Foreground `Service`**
 ```kotlin
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -163,7 +163,7 @@ class MusicService : Service() {
 context.startForegroundService(Intent(context, MusicService::class.java))
 ```
 
-**❌ Background Service (prohibited since API 26+)**
+**❌ Background `Service` (prohibited since API 26+)**
 ```kotlin
 class BackgroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -202,14 +202,14 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - Types: `camera`, `connectedDevice`, `dataSync`, `health`, `location`, `mediaPlayback`, `mediaProjection`, `microphone`, `phoneCall`, `remoteMessaging`, `shortService`, `specialUse`, `systemExempted`
 
 **Process Priority**
-1. Foreground (with Foreground Service) - protected from termination
+1. Foreground (with Foreground `Service`) - protected from termination
 2. Visible - rarely killed
-3. Service (Background Service) - can be killed when low on memory
+3. `Service` (Background `Service`) - can be killed when low on memory
 4. Cached - killed first
 
 ### Choosing Approach
 
-**Foreground Service:**
+**Foreground `Service`:**
 - User-visible operation (music, navigation, workout tracking)
 - Immediate execution required
 - Duration > 10 minutes
@@ -255,4 +255,4 @@ WorkManager.getInstance(context).enqueue(workRequest)
  - Notification requirements
 
 ### Advanced (Harder)
-- [[q-service-lifecycle-binding--android--hard]] - Service lifecycle edge cases
+- [[q-service-lifecycle-binding--android--hard]] - `Service` lifecycle edge cases

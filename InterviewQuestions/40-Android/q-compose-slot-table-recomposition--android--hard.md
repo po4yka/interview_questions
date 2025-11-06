@@ -100,7 +100,7 @@ val formatter = remember(locale) {  // ✅ Пересоздание только
 - Пропуск группы: O(1) по размеру группы
 - Вставка/удаление группы: O(n) для gap buffer реорганизации
 
-**Сравнение с View**:
+**Сравнение с `View`**:
 - `View` hierarchy: глубокие деревья с `measure`/`layout` для всех дочерних
 - `Slot Table`: плоская структура, локальная рекомпозиция без полного обхода
 
@@ -172,7 +172,7 @@ val formatter = remember(locale) {  // ✅ Recreates only on locale change
 - Group skip: O(1) in group size
 - Group insert/delete: O(n) for gap buffer reorganization
 
-**Comparison with View**:
+**Comparison with `View`**:
 - `View` hierarchy: deep trees with `measure`/`layout` for all children
 - `Slot Table`: flat structure, local recomposition without full traversal
 
@@ -182,7 +182,7 @@ val formatter = remember(locale) {  // ✅ Recreates only on locale change
 - How do anchors enable list item reordering without losing state?
 - What causes parameter instability and how does it impact skippability?
 - How does the Compose runtime detect which groups need recomposition?
-- What's the memory overhead of Slot Table compared to View hierarchy?
+- What's the memory overhead of Slot Table compared to `View` hierarchy?
 - How does gap buffer reorganization affect performance during rapid list mutations?
 
 ## References

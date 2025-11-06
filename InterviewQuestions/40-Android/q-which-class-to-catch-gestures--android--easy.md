@@ -84,7 +84,7 @@ view.setOnTouchListener { _, event ->
 
 **SimpleOnGestureListener** — adapter класс, позволяет переопределить только нужные методы вместо реализации всего интерфейса `OnGestureListener`.
 
-### В Кастомных View
+### В Кастомных `View`
 
 ```kotlin
 class GestureView(context: Context) : View(context) {
@@ -110,7 +110,7 @@ class GestureView(context: Context) : View(context) {
 
 1. **Всегда возвращайте `true` из `onDown()`** — иначе последующие события не придут
 2. **В Compose используйте Compose gesture APIs** — не создавайте `GestureDetector` вручную
-3. **Для конфликтов в ScrollView** — используйте `requestDisallowInterceptTouchEvent()`
+3. **Для конфликтов в `ScrollView`** — используйте `requestDisallowInterceptTouchEvent()`
 
 ## Answer (EN)
 
@@ -180,7 +180,7 @@ class GestureView(context: Context) : View(context) {
 
 1. **Always return `true` from `onDown()`** — otherwise subsequent events won't arrive
 2. **In Compose, use Compose gesture APIs** — don't create `GestureDetector` manually
-3. **For ScrollView conflicts** — use `requestDisallowInterceptTouchEvent()`
+3. **For `ScrollView` conflicts** — use `requestDisallowInterceptTouchEvent()`
 
 
 ---
@@ -190,7 +190,7 @@ class GestureView(context: Context) : View(context) {
 - How does `ScaleGestureDetector` work for pinch-to-zoom gestures?
 - How do you resolve gesture conflicts in nested scrolling containers?
 - What are the differences between `OnGestureListener` and `SimpleOnGestureListener`?
-- How do Compose gesture APIs compare to View-based `GestureDetector`?
+- How do Compose gesture APIs compare to `View`-based `GestureDetector`?
 
 ## References
 

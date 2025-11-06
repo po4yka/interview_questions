@@ -245,7 +245,7 @@ android {
 **Capabilities:**
 - Each APK contains only the code and resources needed for specific configurations
 - Can split by screen density
-- Can split by Application Binary Interface (ABI)
+- Can split by `Application` Binary Interface (ABI)
 
 **Code example:**
 ```kotlin
@@ -402,9 +402,9 @@ kotlin.code.style=official
 - Configure local environment properties
 - Not checked into version control
 - Properties:
-  - `ndk.dir` - Path to the NDK (deprecated)
-  - `sdk.dir` - Path to the SDK
-  - `cmake.dir` - Path to CMake
+  - `ndk.dir` - `Path` to the NDK (deprecated)
+  - `sdk.dir` - `Path` to the SDK
+  - `cmake.dir` - `Path` to CMake
   - `ndk.symlinkdir` - Symlink to NDK (Android Studio 3.5+)
 
 ```properties
@@ -629,7 +629,7 @@ android {
 **Capabilities:**
 - Each APK contains only the code and resources needed for specific configurations
 - Can split by screen density
-- Can split by Application Binary Interface (ABI)
+- Can split by `Application` Binary Interface (ABI)
 
 **Code example:**
 ```kotlin
@@ -786,9 +786,9 @@ kotlin.code.style=official
 - Configure local environment properties
 - Not checked into version control
 - Properties:
-  - `ndk.dir` - Path to the NDK (deprecated)
-  - `sdk.dir` - Path to the SDK
-  - `cmake.dir` - Path to CMake
+  - `ndk.dir` - `Path` to the NDK (deprecated)
+  - `sdk.dir` - `Path` to the SDK
+  - `cmake.dir` - `Path` to CMake
   - `ndk.symlinkdir` - Symlink to NDK (Android Studio 3.5+)
 
 ```properties
@@ -1010,7 +1010,7 @@ android {
 **Возможности:**
 - Каждый APK содержит только код и ресурсы, необходимые для конкретных конфигураций
 - Можно разделить по плотности экрана
-- Можно разделить по Application Binary Interface (ABI)
+- Можно разделить по `Application` Binary Interface (ABI)
 
 **Пример кода:**
 ```kotlin

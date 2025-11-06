@@ -151,7 +151,7 @@ fun UserProfile() {
 }
 ```
 
-**English Summary**: `remember` stores value across recompositions only (lost on rotation). `rememberSaveable` stores across config changes and process death (uses Bundle). Use `remember` for: temporary UI state, animations, focus. Use `rememberSaveable` for: user input, form data, selections. Custom Saver for complex objects.
+**English Summary**: `remember` stores value across recompositions only (lost on rotation). `rememberSaveable` stores across config changes and process death (uses `Bundle`). Use `remember` for: temporary UI state, animations, focus. Use `rememberSaveable` for: user input, form data, selections. Custom Saver for complex objects.
 
 
 # Question (EN)
@@ -270,7 +270,7 @@ fun UserProfile() {
 }
 ```
 
-**English Summary**: `remember` stores value across recompositions only (lost on rotation). `rememberSaveable` stores across config changes and process death (uses Bundle). Use `remember` for: temporary UI state, animations, focus. Use `rememberSaveable` for: user input, form data, selections. Custom Saver for complex objects.
+**English Summary**: `remember` stores value across recompositions only (lost on rotation). `rememberSaveable` stores across config changes and process death (uses `Bundle`). Use `remember` for: temporary UI state, animations, focus. Use `rememberSaveable` for: user input, form data, selections. Custom Saver for complex objects.
 
 ## Ответ (RU)
 
@@ -323,7 +323,7 @@ fun Counter() {
 - Данные формы
 - Любое состояние которое должно пережить поворот
 
-**Краткое содержание**: `remember` хранит значение только между рекомпозициями (теряется при повороте). `rememberSaveable` хранит при изменениях конфигурации и смерти процесса (использует Bundle). Используйте `remember` для: временного UI состояния, анимаций. Используйте `rememberSaveable` для: пользовательского ввода, данных формы.
+**Краткое содержание**: `remember` хранит значение только между рекомпозициями (теряется при повороте). `rememberSaveable` хранит при изменениях конфигурации и смерти процесса (использует `Bundle`). Используйте `remember` для: временного UI состояния, анимаций. Используйте `rememberSaveable` для: пользовательского ввода, данных формы.
 
 ---
 

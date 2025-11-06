@@ -33,17 +33,17 @@ tags:
 
 # Вопрос (RU)
 
-К каким событиям привязаны методы Activity?
+К каким событиям привязаны методы `Activity`?
 
 ## Answer (EN)
 # Question (EN)
-> Activity Methods and Events
+> `Activity` Methods and Events
 
 ---
 
-Activity lifecycle methods are tied to specific system events that occur during an Activity's lifetime. These methods allow developers to respond to state changes and manage resources appropriately.
+`Activity` lifecycle methods are tied to specific system events that occur during an `Activity`'s lifetime. These methods allow developers to respond to state changes and manage resources appropriately.
 
-### Activity Lifecycle Events and Methods
+### `Activity` `Lifecycle` Events and Methods
 
 ```
 
@@ -67,10 +67,10 @@ onDestroy()  Activity is destroyed
 
 ### Detailed Event Mapping
 
-#### 1. onCreate() - Activity Creation Event
+#### 1. onCreate() - `Activity` Creation Event
 
 **Triggered when:**
-- Activity is first created
+- `Activity` is first created
 - After process death and recreation
 - Configuration change (rotation, language change)
 
@@ -98,10 +98,10 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Use cases:**
-- Set content view
+- `Set` content view
 - Initialize UI components
 - Restore saved state
-- Set up ViewModels
+- `Set` up ViewModels
 - Bind data
 
 ---
@@ -109,7 +109,7 @@ class MainActivity : AppCompatActivity() {
 #### 2. onStart() - Visibility Event
 
 **Triggered when:**
-- Activity is about to become visible
+- `Activity` is about to become visible
 - After onCreate() or onRestart()
 - Returning from background
 
@@ -139,7 +139,7 @@ override fun onStart() {
 #### 3. onResume() - Focus Gained Event
 
 **Triggered when:**
-- Activity is ready for user interaction
+- `Activity` is ready for user interaction
 - After onStart()
 - Returning from onPause()
 - When dialog dismisses
@@ -214,7 +214,7 @@ override fun onPause() {
 #### 5. onStop() - Visibility Lost Event
 
 **Triggered when:**
-- Activity is no longer visible
+- `Activity` is no longer visible
 - User navigated to another activity
 - App moved to background
 - Multi-tasking
@@ -249,7 +249,7 @@ override fun onStop() {
 #### 6. onDestroy() - Destruction Event
 
 **Triggered when:**
-- Activity is finishing (user pressed back)
+- `Activity` is finishing (user pressed back)
 - finish() is called
 - Configuration change (rotation)
 - System destroys activity to reclaim memory
@@ -285,7 +285,7 @@ override fun onDestroy() {
 #### 7. onRestart() - Visibility Regained Event
 
 **Triggered when:**
-- Activity was stopped and is starting again
+- `Activity` was stopped and is starting again
 - User returns to activity from another activity
 - User returns from home screen
 
@@ -309,7 +309,7 @@ override fun onRestart() {
 
 ---
 
-### Complete Lifecycle Example
+### Complete `Lifecycle` Example
 
 ```kotlin
 class DetailActivity : AppCompatActivity() {
@@ -462,7 +462,7 @@ override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 }
 ```
 
-**Lifecycle during configuration change:**
+**`Lifecycle` during configuration change:**
 ```
 onPause()
 onStop()
@@ -524,7 +524,7 @@ onResume()
 [User interacts with app]
 ```
 
-#### Scenario 2: User Presses Home Button
+#### Scenario 2: User Presses Home `Button`
 
 ```
 onPause()
@@ -554,7 +554,7 @@ onRestoreInstanceState()
 onResume()
 ```
 
-#### Scenario 5: User Presses Back Button
+#### Scenario 5: User Presses Back `Button`
 
 ```
 onPause()
@@ -591,7 +591,7 @@ override fun onPause() {
 }
 ```
 
-**2. Use ViewModel for Data**
+**2. Use `ViewModel` for Data**
 ```kotlin
 // - BAD - Lose data on config change
 class MainActivity : AppCompatActivity() {
@@ -633,7 +633,7 @@ override fun onStop() {
 
 | Method | Event | When Called | Use For |
 |--------|-------|-------------|---------|
-| **onCreate()** | Activity created | First launch, config change | Initialize UI, ViewModels |
+| **onCreate()** | `Activity` created | First launch, config change | Initialize UI, ViewModels |
 | **onStart()** | Becoming visible | Before visible to user | Register receivers, start animations |
 | **onResume()** | Has focus | Ready for interaction | Resume camera, sensors, playback |
 | **onPause()** | Losing focus | Another activity foreground | Pause camera, save draft |
@@ -648,13 +648,13 @@ override fun onStop() {
 
 ## Answer (EN)
 # Question (EN)
-> Activity Methods and Events
+> `Activity` Methods and Events
 
 ---
 
-Activity lifecycle methods are tied to specific system events that occur during an Activity's lifetime. These methods allow developers to respond to state changes and manage resources appropriately.
+`Activity` lifecycle methods are tied to specific system events that occur during an `Activity`'s lifetime. These methods allow developers to respond to state changes and manage resources appropriately.
 
-### Activity Lifecycle Events and Methods
+### `Activity` `Lifecycle` Events and Methods
 
 ```
 
@@ -678,10 +678,10 @@ onDestroy()  Activity is destroyed
 
 ### Detailed Event Mapping
 
-#### 1. onCreate() - Activity Creation Event
+#### 1. onCreate() - `Activity` Creation Event
 
 **Triggered when:**
-- Activity is first created
+- `Activity` is first created
 - After process death and recreation
 - Configuration change (rotation, language change)
 
@@ -709,10 +709,10 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Use cases:**
-- Set content view
+- `Set` content view
 - Initialize UI components
 - Restore saved state
-- Set up ViewModels
+- `Set` up ViewModels
 - Bind data
 
 ---
@@ -720,7 +720,7 @@ class MainActivity : AppCompatActivity() {
 #### 2. onStart() - Visibility Event
 
 **Triggered when:**
-- Activity is about to become visible
+- `Activity` is about to become visible
 - After onCreate() or onRestart()
 - Returning from background
 
@@ -750,7 +750,7 @@ override fun onStart() {
 #### 3. onResume() - Focus Gained Event
 
 **Triggered when:**
-- Activity is ready for user interaction
+- `Activity` is ready for user interaction
 - After onStart()
 - Returning from onPause()
 - When dialog dismisses
@@ -825,7 +825,7 @@ override fun onPause() {
 #### 5. onStop() - Visibility Lost Event
 
 **Triggered when:**
-- Activity is no longer visible
+- `Activity` is no longer visible
 - User navigated to another activity
 - App moved to background
 - Multi-tasking
@@ -860,7 +860,7 @@ override fun onStop() {
 #### 6. onDestroy() - Destruction Event
 
 **Triggered when:**
-- Activity is finishing (user pressed back)
+- `Activity` is finishing (user pressed back)
 - finish() is called
 - Configuration change (rotation)
 - System destroys activity to reclaim memory
@@ -896,7 +896,7 @@ override fun onDestroy() {
 #### 7. onRestart() - Visibility Regained Event
 
 **Triggered when:**
-- Activity was stopped and is starting again
+- `Activity` was stopped and is starting again
 - User returns to activity from another activity
 - User returns from home screen
 
@@ -920,7 +920,7 @@ override fun onRestart() {
 
 ---
 
-### Complete Lifecycle Example
+### Complete `Lifecycle` Example
 
 ```kotlin
 class DetailActivity : AppCompatActivity() {
@@ -1073,7 +1073,7 @@ override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 }
 ```
 
-**Lifecycle during configuration change:**
+**`Lifecycle` during configuration change:**
 ```
 onPause()
 onStop()
@@ -1135,7 +1135,7 @@ onResume()
 [User interacts with app]
 ```
 
-#### Scenario 2: User Presses Home Button
+#### Scenario 2: User Presses Home `Button`
 
 ```
 onPause()
@@ -1165,7 +1165,7 @@ onRestoreInstanceState()
 onResume()
 ```
 
-#### Scenario 5: User Presses Back Button
+#### Scenario 5: User Presses Back `Button`
 
 ```
 onPause()
@@ -1202,7 +1202,7 @@ override fun onPause() {
 }
 ```
 
-**2. Use ViewModel for Data**
+**2. Use `ViewModel` for Data**
 ```kotlin
 // - BAD - Lose data on config change
 class MainActivity : AppCompatActivity() {
@@ -1244,7 +1244,7 @@ override fun onStop() {
 
 | Method | Event | When Called | Use For |
 |--------|-------|-------------|---------|
-| **onCreate()** | Activity created | First launch, config change | Initialize UI, ViewModels |
+| **onCreate()** | `Activity` created | First launch, config change | Initialize UI, ViewModels |
 | **onStart()** | Becoming visible | Before visible to user | Register receivers, start animations |
 | **onResume()** | Has focus | Ready for interaction | Resume camera, sensors, playback |
 | **onPause()** | Losing focus | Another activity foreground | Pause camera, save draft |
@@ -1253,7 +1253,7 @@ override fun onStop() {
 | **onRestart()** | Restarting | Returning from stopped | Refresh data |
 
 ## Ответ (RU)
-Методы жизненного цикла Activity привязаны к конкретным системным событиям, которые происходят в течение жизни Activity. Эти методы позволяют разработчикам реагировать на изменения состояния и правильно управлять ресурсами.
+Методы жизненного цикла `Activity` привязаны к конкретным системным событиям, которые происходят в течение жизни `Activity`. Эти методы позволяют разработчикам реагировать на изменения состояния и правильно управлять ресурсами.
 
 ### Основные События И Методы
 
@@ -1322,20 +1322,20 @@ onPause() → onStop() → onDestroy()
 ## References
 
 - [Android Documentation](https://developer.android.com/docs)
-- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-components-besides-activity--android--easy]] - Activity
+- [[q-android-components-besides-activity--android--easy]] - `Activity`
 
 ### Related (Medium)
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
-- [[q-single-activity-pros-cons--android--medium]] - Activity
-- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Activity
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - `Activity`
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Activity`
+- [[q-single-activity-pros-cons--android--medium]] - `Activity`
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - `Activity`
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity`
 
 ### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - `Activity`

@@ -110,7 +110,7 @@ startActivity(intent)
 ```
 
 **2. allowTaskReparenting:**
-Activity can move to a task with the same affinity when it comes to foreground.
+`Activity` can move to a task with the same affinity when it comes to foreground.
 
 ```xml
 <!-- Activity can move to task with same affinity -->
@@ -150,10 +150,10 @@ Activity can move to a task with the same affinity when it comes to foreground.
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components
-- [[q-activity-basics--android--easy]] - Activity basics
+- [[q-activity-basics--android--easy]] - `Activity` basics
 
 ### Related (Same Level)
-- [[q-activity-lifecycle--android--medium]] - Activity lifecycle
+- [[q-activity-lifecycle--android--medium]] - `Activity` lifecycle
 - [[q-android-navigation--android--medium]] - Android navigation
 - [[q-tasks-back-stack--android--medium]] - Task back stack
 

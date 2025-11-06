@@ -53,13 +53,13 @@ tags:
 
 ## Ответ (RU)
 
-**Koin** — легковесный DI фреймворк для Kotlin, использующий **Service Locator паттерн** вместо code generation. Разрешает зависимости в runtime через простой DSL.
+**Koin** — легковесный DI фреймворк для Kotlin, использующий **`Service` Locator паттерн** вместо code generation. Разрешает зависимости в runtime через простой DSL.
 
 ### Koin Vs Dagger/Hilt
 
 | Aspect | Koin | Dagger/Hilt |
 |--------|------|-------------|
-| **Подход** | Service Locator | True DI |
+| **Подход** | `Service` Locator | True DI |
 | **Разрешение** | Runtime | Compile-time |
 | **Code Generation** | ❌ Нет | ✅ kapt/ksp |
 | **Build Speed** | ✅ Быстро | ❌ Медленно |
@@ -74,7 +74,7 @@ tags:
 **Module** - контейнер зависимостей
 **Factory** - новый экземпляр каждый раз
 **Single** - singleton (один экземпляр)
-**ViewModel** - Android ViewModel интеграция
+**`ViewModel`** - Android `ViewModel` интеграция
 
 ### Полная Настройка Koin
 
@@ -198,7 +198,7 @@ class MyApplication : Application() {
 
 ### Использование
 
-**Activity**:
+**`Activity`**:
 
 ```kotlin
 class UserActivity : AppCompatActivity() {
@@ -213,7 +213,7 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-**Fragment**:
+**`Fragment`**:
 
 ```kotlin
 class UserFragment : Fragment() {
@@ -254,7 +254,7 @@ fun UserScreen(userId: String) {
 }
 ```
 
-### Factory Vs Single Vs ViewModel
+### Factory Vs Single Vs `ViewModel`
 
 ```kotlin
 // ❌ Factory - новый экземпляр каждый раз
@@ -329,7 +329,7 @@ class UserRepositoryTest : KoinTest {
 
 **❌ DON'T:**
 - Factory для дорогих объектов (используйте single)
-- Хранить Activity context в singleton (утечка памяти)
+- Хранить `Activity` context в singleton (утечка памяти)
 - Инжектить простые значения (передайте в конструктор)
 - Забывать startKoin() перед использованием
 
@@ -353,13 +353,13 @@ class UserRepositoryTest : KoinTest {
 
 ## Answer (EN)
 
-**Koin** is a lightweight DI framework for Kotlin using **Service Locator pattern** instead of code generation. Resolves dependencies at runtime via simple DSL.
+**Koin** is a lightweight DI framework for Kotlin using **`Service` Locator pattern** instead of code generation. Resolves dependencies at runtime via simple DSL.
 
 ### Koin Vs Dagger/Hilt
 
 | Aspect | Koin | Dagger/Hilt |
 |--------|------|-------------|
-| **Approach** | Service Locator | True DI |
+| **Approach** | `Service` Locator | True DI |
 | **Resolution** | Runtime | Compile-time |
 | **Code Generation** | ❌ None | ✅ kapt/ksp |
 | **Build Speed** | ✅ Fast | ❌ Slow |
@@ -374,7 +374,7 @@ class UserRepositoryTest : KoinTest {
 **Module** - dependency container
 **Factory** - new instance every time
 **Single** - singleton instance
-**ViewModel** - Android ViewModel integration
+**`ViewModel`** - Android `ViewModel` integration
 
 ### Complete Koin Setup
 
@@ -498,7 +498,7 @@ class MyApplication : Application() {
 
 ### Usage
 
-**Activity**:
+**`Activity`**:
 
 ```kotlin
 class UserActivity : AppCompatActivity() {
@@ -513,7 +513,7 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-**Fragment**:
+**`Fragment`**:
 
 ```kotlin
 class UserFragment : Fragment() {
@@ -554,7 +554,7 @@ fun UserScreen(userId: String) {
 }
 ```
 
-### Factory Vs Single Vs ViewModel
+### Factory Vs Single Vs `ViewModel`
 
 ```kotlin
 // ❌ Factory - new instance every time
@@ -629,7 +629,7 @@ class UserRepositoryTest : KoinTest {
 
 **❌ DON'T:**
 - Factory for expensive objects (use single)
-- Store Activity context in singleton (memory leak)
+- Store `Activity` context in singleton (memory leak)
 - Inject simple values (pass in constructor)
 - Forget startKoin() before usage
 

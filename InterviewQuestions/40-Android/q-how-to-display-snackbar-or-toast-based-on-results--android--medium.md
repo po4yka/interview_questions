@@ -33,12 +33,12 @@ How to properly display Toast and Snackbar based on operation results in Android
 - Не требует действий пользователя
 - Исчезает автоматически
 - Не может быть закрыто вручную
-- Использует только Context
+- Использует только `Context`
 
 **Snackbar** — продвинутое уведомление с возможностями:
 - Может содержать кнопку действия
 - Закрывается свайпом
-- Привязывается к конкретному View
+- Привязывается к конкретному `View`
 - Появляется внизу экрана
 
 ### Базовое Использование
@@ -55,7 +55,7 @@ Snackbar.make(view, "Элемент удален", Snackbar.LENGTH_LONG)
     .show()
 ```
 
-### Архитектурный Подход С ViewModel
+### Архитектурный Подход С `ViewModel`
 
 ```kotlin
 // Модель UI-событий
@@ -135,8 +135,8 @@ fun MyScreen(viewModel: MyViewModel) {
 
 - ✅ **Snackbar для действий**: Используйте когда нужно взаимодействие (Undo, Retry)
 - ✅ **Toast для информации**: Простые уведомления без действий
-- ✅ **SharedFlow для событий**: Избегайте повторной отправки при пересоздании UI
-- ✅ **Lifecycle-aware**: Собирайте Flow в `lifecycleScope` или `repeatOnLifecycle`
+- ✅ **`SharedFlow` для событий**: Избегайте повторной отправки при пересоздании UI
+- ✅ **`Lifecycle`-aware**: Собирайте `Flow` в `lifecycleScope` или `repeatOnLifecycle`
 - ❌ **Не используйте Toast из фоновых потоков**: Только из главного потока
 - ❌ **Не злоупотребляйте**: Критичные ошибки лучше показывать через Dialog
 
@@ -148,12 +148,12 @@ fun MyScreen(viewModel: MyViewModel) {
 - Requires no user action
 - Disappears automatically
 - Cannot be dismissed manually
-- Requires only Context
+- Requires only `Context`
 
 **Snackbar** — advanced notification with capabilities:
 - Can contain action button
 - Dismissed by swiping
-- Anchored to specific View
+- Anchored to specific `View`
 - Appears at bottom of screen
 
 ### Basic Usage
@@ -170,7 +170,7 @@ Snackbar.make(view, "Item deleted", Snackbar.LENGTH_LONG)
     .show()
 ```
 
-### Architectural Approach with ViewModel
+### Architectural Approach with `ViewModel`
 
 ```kotlin
 // UI events model
@@ -250,8 +250,8 @@ fun MyScreen(viewModel: MyViewModel) {
 
 - ✅ **Snackbar for actions**: Use when interaction needed (Undo, Retry)
 - ✅ **Toast for information**: Simple notifications without actions
-- ✅ **SharedFlow for events**: Avoid re-emission on UI recreation
-- ✅ **Lifecycle-aware**: Collect Flow in `lifecycleScope` or `repeatOnLifecycle`
+- ✅ **`SharedFlow` for events**: Avoid re-emission on UI recreation
+- ✅ **`Lifecycle`-aware**: Collect `Flow` in `lifecycleScope` or `repeatOnLifecycle`
 - ❌ **Don't use Toast from background threads**: Main thread only
 - ❌ **Don't overuse**: Critical errors better shown via Dialog
 

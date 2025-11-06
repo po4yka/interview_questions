@@ -19,19 +19,19 @@ sources: []
 
 # Вопрос (RU)
 
-> Как передать данные из одной Activity в другую?
+> Как передать данные из одной `Activity` в другую?
 
 # Question (EN)
 
-> How to pass data from one Activity to another?
+> How to pass data from one `Activity` to another?
 
 ---
 
 ## Ответ (RU)
 
-В Android есть несколько способов передачи данных между Activity:
+В Android есть несколько способов передачи данных между `Activity`:
 
-### 1. Intent Extras (Рекомендуется Для Простых данных)
+### 1. `Intent` Extras (Рекомендуется Для Простых данных)
 
 Для примитивных типов и строк:
 
@@ -48,7 +48,7 @@ val name = intent.getStringExtra("user_name")
 val age = intent.getIntExtra("user_age", 0)
 ```
 
-### 2. Parcelable (Рекомендуется Для объектов)
+### 2. `Parcelable` (Рекомендуется Для объектов)
 
 Эффективная передача сложных объектов:
 
@@ -67,7 +67,7 @@ intent.putExtra("user", user)
 val user = intent.getParcelableExtra("user", User::class.java)
 ```
 
-### 3. Bundle (Группировка данных)
+### 3. `Bundle` (Группировка данных)
 
 ```kotlin
 // ✅ Отправка
@@ -83,7 +83,7 @@ intent.extras?.let { bundle ->
 }
 ```
 
-### 4. Activity Result API (Двусторонний обмен)
+### 4. `Activity` Result API (Двусторонний обмен)
 
 ```kotlin
 // ✅ Регистрация лончера
@@ -105,8 +105,8 @@ finish()
 
 **Важные ограничения**:
 
-- **Размер Intent**: До ~500KB (транзакционный буфер 1MB для всех транзакций)
-- **Сериализация**: Parcelable быстрее Serializable в ~10 раз
+- **Размер `Intent`**: До ~500KB (транзакционный буфер 1MB для всех транзакций)
+- **Сериализация**: `Parcelable` быстрее `Serializable` в ~10 раз
 - **Type safety**: Используйте константы для ключей
 
 ```kotlin
@@ -127,7 +127,7 @@ intent.putExtra(Keys.USER_NAME, name)
 
 Android provides several methods for passing data between Activities:
 
-### 1. Intent Extras (Recommended for primitives)
+### 1. `Intent` Extras (Recommended for primitives)
 
 For simple data types:
 
@@ -144,7 +144,7 @@ val name = intent.getStringExtra("user_name")
 val age = intent.getIntExtra("user_age", 0)
 ```
 
-### 2. Parcelable (Recommended for objects)
+### 2. `Parcelable` (Recommended for objects)
 
 Efficient complex object transfer:
 
@@ -163,7 +163,7 @@ intent.putExtra("user", user)
 val user = intent.getParcelableExtra("user", User::class.java)
 ```
 
-### 3. Bundle (Grouping data)
+### 3. `Bundle` (Grouping data)
 
 ```kotlin
 // ✅ Sending
@@ -179,7 +179,7 @@ intent.extras?.let { bundle ->
 }
 ```
 
-### 4. Activity Result API (Bidirectional)
+### 4. `Activity` Result API (Bidirectional)
 
 ```kotlin
 // ✅ Register launcher
@@ -201,8 +201,8 @@ finish()
 
 **Key limitations**:
 
-- **Intent size**: Up to ~500KB (1MB transaction buffer for all transactions)
-- **Serialization**: Parcelable is ~10x faster than Serializable
+- **`Intent` size**: Up to ~500KB (1MB transaction buffer for all transactions)
+- **Serialization**: `Parcelable` is ~10x faster than `Serializable`
 - **Type safety**: Use constants for keys
 
 ```kotlin
@@ -223,18 +223,18 @@ intent.putExtra(Keys.USER_NAME, name)
 
 ## Follow-ups
 
-- What is the Intent transaction buffer size limit?
-- When should you use Parcelable vs Serializable?
+- What is the `Intent` transaction buffer size limit?
+- When should you use `Parcelable` vs `Serializable`?
 - How does Navigation Component handle argument passing?
 - Can you pass non-serializable objects between Activities?
-- How to handle Intent data in multi-process apps?
+- How to handle `Intent` data in multi-process apps?
 
 ## References
 
 - [[c-intent]]
 - [[c-parcelable]]
 - [[c-activity-lifecycle]]
-- Official Android documentation: Intent and Intent Filters
+- Official Android documentation: `Intent` and `Intent` Filters
 
 ## Related Questions
 

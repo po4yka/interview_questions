@@ -264,7 +264,7 @@ testOptions {
 ## References
 
 - [[c-gradle]] - Gradle build system fundamentals
-- [[c-app-bundle]] - Android App Bundle format
+- [[c-app-bundle]] - Android App `Bundle` format
 - [[c-unit-testing]] - Unit testing best practices
 - [[c-encryption]] - Security and encryption concepts
 - https://docs.github.com/actions/automating-builds-and-tests/building-and-testing-java-with-gradle

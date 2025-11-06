@@ -87,7 +87,7 @@ class UserViewModelTest {
 }
 ```
 
-**Инструменты**: JUnit, MockK, Turbine (для Flow), Kotest
+**Инструменты**: JUnit, MockK, Turbine (для `Flow`), Kotest
 
 ### 2. Integration-тесты
 
@@ -151,7 +151,7 @@ fun loginFlow_successfulAuth_navigatesToHome() {
 }
 ```
 
-**Espresso пример** (для View-based UI):
+**Espresso пример** (для `View`-based UI):
 ```kotlin
 @Test
 fun clickButton_displaysToast() {
@@ -216,7 +216,7 @@ class UserViewModelTest {
 }
 ```
 
-**Tools**: JUnit, MockK, Turbine (for Flow), Kotest
+**Tools**: JUnit, MockK, Turbine (for `Flow`), Kotest
 
 ### 2. Integration Tests
 
@@ -280,7 +280,7 @@ fun loginFlow_successfulAuth_navigatesToHome() {
 }
 ```
 
-**Espresso example** (for View-based UI):
+**Espresso example** (for `View`-based UI):
 ```kotlin
 @Test
 fun clickButton_displaysToast() {
@@ -324,9 +324,9 @@ fun clickButton_displaysToast() {
    - Screenshots: visual regression (layout, colors, fonts)
    - Behavioral: user interactions, navigation, state changes
 
-5. **How do you test coroutines and Flow emissions?**
+5. **How do you test coroutines and `Flow` emissions?**
    - `runTest` with `TestDispatcher` for coroutines
-   - `Turbine` library for Flow assertions (`test { awaitItem() }`)
+   - `Turbine` library for `Flow` assertions (`test { awaitItem() }`)
 
 6. **How do you test dependency injection in tests?**
    - Hilt: use `@UninstallModules` + `@TestInstallIn` for test modules

@@ -289,8 +289,8 @@ class MainActivity : AppCompatActivity() {
 
 - [[c-fragments]]
 - [[c-activity-lifecycle]]
-- Android Fragment documentation
-- Fragment transactions best practices
+- Android `Fragment` documentation
+- `Fragment` transactions best practices
 
 ## Related Questions
 
@@ -302,5 +302,5 @@ class MainActivity : AppCompatActivity() {
 - [[q-why-diffutil-needed--android--medium]]
 
 ### Advanced (Harder)
-- Fragment lifecycle with configuration changes
+- `Fragment` lifecycle with configuration changes
 - State restoration strategies

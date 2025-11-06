@@ -33,17 +33,17 @@ tags:
 
 # Вопрос (RU)
 
-> От кого наследуется класс ViewGroup в Android?
+> От кого наследуется класс `ViewGroup` в Android?
 
 # Question (EN)
 
-> What class does ViewGroup inherit from in Android?
+> What class does `ViewGroup` inherit from in Android?
 
 ---
 
 ## Ответ (RU)
 
-**ViewGroup наследуется от класса View** - базового класса для всех UI элементов в Android.
+**`ViewGroup` наследуется от класса `View`** - базового класса для всех UI элементов в Android.
 
 ### Иерархия Наследования
 
@@ -57,9 +57,9 @@ ViewGroup (контейнер для других View)
 Конкретные Layout классы (LinearLayout, RelativeLayout, и т.д.)
 ```
 
-### Ключевые Методы View
+### Ключевые Методы `View`
 
-✅ **Правильно** - View предоставляет базовую функциональность:
+✅ **Правильно** - `View` предоставляет базовую функциональность:
 
 ```kotlin
 abstract class View {
@@ -80,9 +80,9 @@ abstract class View {
 }
 ```
 
-### Дополнительная Функциональность ViewGroup
+### Дополнительная Функциональность `ViewGroup`
 
-ViewGroup расширяет View и добавляет управление дочерними элементами:
+`ViewGroup` расширяет `View` и добавляет управление дочерними элементами:
 
 ```kotlin
 abstract class ViewGroup : View {
@@ -100,7 +100,7 @@ abstract class ViewGroup : View {
 }
 ```
 
-### Пример Пользовательского ViewGroup
+### Пример Пользовательского `ViewGroup`
 
 ```kotlin
 class CustomLayout @JvmOverloads constructor(
@@ -137,11 +137,11 @@ class CustomLayout @JvmOverloads constructor(
 
 ### Почему Это Важно
 
-1. **Полиморфизм** - ViewGroup можно использовать везде, где ожидается View
+1. **Полиморфизм** - `ViewGroup` можно использовать везде, где ожидается `View`
 2. **Единый API** - все UI элементы имеют общие методы
-3. **Гибкость** - можно переопределять методы View в ViewGroup
+3. **Гибкость** - можно переопределять методы `View` в `ViewGroup`
 
-✅ **Правильно** - ViewGroup как View:
+✅ **Правильно** - `ViewGroup` как `View`:
 
 ```kotlin
 fun setViewProperties(view: View) {
@@ -157,7 +157,7 @@ setViewProperties(linearLayout) // Работает, так как LinearLayout 
 
 ## Answer (EN)
 
-**ViewGroup inherits from the View class** - the base class for all UI elements in Android.
+**`ViewGroup` inherits from the `View` class** - the base class for all UI elements in Android.
 
 ### Inheritance Hierarchy
 
@@ -171,9 +171,9 @@ ViewGroup (container for other Views)
 Specific Layout Classes (LinearLayout, RelativeLayout, etc.)
 ```
 
-### Key View Methods
+### Key `View` Methods
 
-✅ **Correct** - View provides base functionality:
+✅ **Correct** - `View` provides base functionality:
 
 ```kotlin
 abstract class View {
@@ -194,9 +194,9 @@ abstract class View {
 }
 ```
 
-### ViewGroup Additional Functionality
+### `ViewGroup` Additional Functionality
 
-ViewGroup extends View and adds child management:
+`ViewGroup` extends `View` and adds child management:
 
 ```kotlin
 abstract class ViewGroup : View {
@@ -214,7 +214,7 @@ abstract class ViewGroup : View {
 }
 ```
 
-### Custom ViewGroup Example
+### Custom `ViewGroup` Example
 
 ```kotlin
 class CustomLayout @JvmOverloads constructor(
@@ -251,11 +251,11 @@ class CustomLayout @JvmOverloads constructor(
 
 ### Why This Matters
 
-1. **Polymorphism** - ViewGroup can be used anywhere View is expected
+1. **Polymorphism** - `ViewGroup` can be used anywhere `View` is expected
 2. **Unified API** - all UI elements share common methods
-3. **Flexibility** - can override View methods in ViewGroup
+3. **Flexibility** - can override `View` methods in `ViewGroup`
 
-✅ **Correct** - ViewGroup as View:
+✅ **Correct** - `ViewGroup` as `View`:
 
 ```kotlin
 fun setViewProperties(view: View) {
@@ -271,15 +271,15 @@ setViewProperties(linearLayout) // Works because LinearLayout extends ViewGroup 
 
 ## Follow-ups
 
-- What are the key differences between View and ViewGroup?
-- Why must ViewGroup override onLayout() as abstract?
-- How does touch event handling differ between View and ViewGroup?
-- What common ViewGroup subclasses are used in Android?
+- What are the key differences between `View` and `ViewGroup`?
+- Why must `ViewGroup` override onLayout() as abstract?
+- How does touch event handling differ between `View` and `ViewGroup`?
+- What common `ViewGroup` subclasses are used in Android?
 
 ## References
 
-- Android Documentation: [View](https://developer.android.com/reference/android/view/View)
-- Android Documentation: [ViewGroup](https://developer.android.com/reference/android/view/ViewGroup)
+- Android Documentation: [`View`](https://developer.android.com/reference/android/view/`View`)
+- Android Documentation: [`ViewGroup`](https://developer.android.com/reference/android/view/`ViewGroup`)
 - Android Developers: [Custom Views](https://developer.android.com/develop/ui/views/layout/custom-views/custom-components)
 
 ## Related Questions

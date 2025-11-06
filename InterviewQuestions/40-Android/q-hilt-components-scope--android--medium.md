@@ -37,7 +37,7 @@ tags:
 ---
 
 ## Answer (EN)
-Hilt provides **predefined components** for Application, Activity, Fragment, ViewModel, and other Android levels.
+Hilt provides **predefined components** for `Application`, `Activity`, `Fragment`, `ViewModel`, and other Android levels.
 
 **To add module:** Use **`@InstallIn(ComponentName::class)`** annotation.
 
@@ -47,14 +47,14 @@ Hilt provides **predefined components** for Application, Activity, Fragment, Vie
 
 | Component | Scope | Lifetime | Android Class |
 |-----------|-------|----------|---------------|
-| **SingletonComponent** | @Singleton | Application | Application |
-| **ActivityRetainedComponent** | @ActivityRetainedScoped | Survives config changes | N/A (ViewModel) |
-| **ViewModelComponent** | @ViewModelScoped | ViewModel | ViewModel |
-| **ActivityComponent** | @ActivityScoped | Activity | Activity |
-| **FragmentComponent** | @FragmentScoped | Fragment | Fragment |
-| **ViewComponent** | @ViewScoped | View | View |
-| **ViewWithFragmentComponent** | @ViewScoped | View in Fragment | View |
-| **ServiceComponent** | @ServiceScoped | Service | Service |
+| **SingletonComponent** | @Singleton | `Application` | `Application` |
+| **ActivityRetainedComponent** | @ActivityRetainedScoped | Survives config changes | N/A (`ViewModel`) |
+| **ViewModelComponent** | @ViewModelScoped | `ViewModel` | `ViewModel` |
+| **ActivityComponent** | @ActivityScoped | `Activity` | `Activity` |
+| **FragmentComponent** | @FragmentScoped | `Fragment` | `Fragment` |
+| **ViewComponent** | @ViewScoped | `View` | `View` |
+| **ViewWithFragmentComponent** | @ViewScoped | `View` in `Fragment` | `View` |
+| **ServiceComponent** | @ServiceScoped | `Service` | `Service` |
 
 ---
 
@@ -101,7 +101,7 @@ class UserRepository @Inject constructor(
 
 ## 2. ViewModelComponent
 
-**Lifetime:** ViewModel (survives configuration changes)
+**Lifetime:** `ViewModel` (survives configuration changes)
 
 ```kotlin
 @Module
@@ -136,7 +136,7 @@ class UserViewModel @Inject constructor(
 
 ## 3. ActivityComponent
 
-**Lifetime:** Activity (destroyed on config change)
+**Lifetime:** `Activity` (destroyed on config change)
 
 ```kotlin
 @Module
@@ -175,7 +175,7 @@ class MainActivity : AppCompatActivity() {
 
 ## 4. FragmentComponent
 
-**Lifetime:** Fragment
+**Lifetime:** `Fragment`
 
 ```kotlin
 @Module
@@ -207,7 +207,7 @@ class UserFragment : Fragment() {
 
 ## 5. ServiceComponent
 
-**Lifetime:** Service
+**Lifetime:** `Service`
 
 ```kotlin
 @Module
@@ -243,7 +243,7 @@ class MusicService : Service() {
 
 ## Complete Example: Multi-Component Setup
 
-### 1. Application Module (Singleton)
+### 1. `Application` Module (Singleton)
 
 ```kotlin
 @Module
@@ -298,7 +298,7 @@ object DatabaseModule {
 }
 ```
 
-### 2. Repository (Singleton)
+### 2. `Repository` (Singleton)
 
 ```kotlin
 @Singleton
@@ -316,7 +316,7 @@ class UserRepository @Inject constructor(
 }
 ```
 
-### 3. ViewModel Module
+### 3. `ViewModel` Module
 
 ```kotlin
 @Module
@@ -347,7 +347,7 @@ class UserViewModel @Inject constructor(
 }
 ```
 
-### 4. Activity
+### 4. `Activity`
 
 ```kotlin
 @AndroidEntryPoint
@@ -483,10 +483,10 @@ ServiceComponent (Service) ← Independent
 | Component | Scope | Use For |
 |-----------|-------|---------|
 | SingletonComponent | @Singleton | App-wide singletons |
-| ViewModelComponent | @ViewModelScoped | ViewModel dependencies |
-| ActivityComponent | @ActivityScoped | Activity-specific |
-| FragmentComponent | @FragmentScoped | Fragment-specific |
-| ServiceComponent | @ServiceScoped | Service-specific |
+| ViewModelComponent | @ViewModelScoped | `ViewModel` dependencies |
+| ActivityComponent | @ActivityScoped | `Activity`-specific |
+| FragmentComponent | @FragmentScoped | `Fragment`-specific |
+| ServiceComponent | @ServiceScoped | `Service`-specific |
 
 **How to add module:**
 
@@ -521,7 +521,7 @@ object MyModule {
 
 
 ## Answer (EN)
-Hilt provides **predefined components** for Application, Activity, Fragment, ViewModel, and other Android levels.
+Hilt provides **predefined components** for `Application`, `Activity`, `Fragment`, `ViewModel`, and other Android levels.
 
 **To add module:** Use **`@InstallIn(ComponentName::class)`** annotation.
 
@@ -531,14 +531,14 @@ Hilt provides **predefined components** for Application, Activity, Fragment, Vie
 
 | Component | Scope | Lifetime | Android Class |
 |-----------|-------|----------|---------------|
-| **SingletonComponent** | @Singleton | Application | Application |
-| **ActivityRetainedComponent** | @ActivityRetainedScoped | Survives config changes | N/A (ViewModel) |
-| **ViewModelComponent** | @ViewModelScoped | ViewModel | ViewModel |
-| **ActivityComponent** | @ActivityScoped | Activity | Activity |
-| **FragmentComponent** | @FragmentScoped | Fragment | Fragment |
-| **ViewComponent** | @ViewScoped | View | View |
-| **ViewWithFragmentComponent** | @ViewScoped | View in Fragment | View |
-| **ServiceComponent** | @ServiceScoped | Service | Service |
+| **SingletonComponent** | @Singleton | `Application` | `Application` |
+| **ActivityRetainedComponent** | @ActivityRetainedScoped | Survives config changes | N/A (`ViewModel`) |
+| **ViewModelComponent** | @ViewModelScoped | `ViewModel` | `ViewModel` |
+| **ActivityComponent** | @ActivityScoped | `Activity` | `Activity` |
+| **FragmentComponent** | @FragmentScoped | `Fragment` | `Fragment` |
+| **ViewComponent** | @ViewScoped | `View` | `View` |
+| **ViewWithFragmentComponent** | @ViewScoped | `View` in `Fragment` | `View` |
+| **ServiceComponent** | @ServiceScoped | `Service` | `Service` |
 
 ---
 
@@ -585,7 +585,7 @@ class UserRepository @Inject constructor(
 
 ## 2. ViewModelComponent
 
-**Lifetime:** ViewModel (survives configuration changes)
+**Lifetime:** `ViewModel` (survives configuration changes)
 
 ```kotlin
 @Module
@@ -620,7 +620,7 @@ class UserViewModel @Inject constructor(
 
 ## 3. ActivityComponent
 
-**Lifetime:** Activity (destroyed on config change)
+**Lifetime:** `Activity` (destroyed on config change)
 
 ```kotlin
 @Module
@@ -659,7 +659,7 @@ class MainActivity : AppCompatActivity() {
 
 ## 4. FragmentComponent
 
-**Lifetime:** Fragment
+**Lifetime:** `Fragment`
 
 ```kotlin
 @Module
@@ -691,7 +691,7 @@ class UserFragment : Fragment() {
 
 ## 5. ServiceComponent
 
-**Lifetime:** Service
+**Lifetime:** `Service`
 
 ```kotlin
 @Module
@@ -727,7 +727,7 @@ class MusicService : Service() {
 
 ## Complete Example: Multi-Component Setup
 
-### 1. Application Module (Singleton)
+### 1. `Application` Module (Singleton)
 
 ```kotlin
 @Module
@@ -782,7 +782,7 @@ object DatabaseModule {
 }
 ```
 
-### 2. Repository (Singleton)
+### 2. `Repository` (Singleton)
 
 ```kotlin
 @Singleton
@@ -800,7 +800,7 @@ class UserRepository @Inject constructor(
 }
 ```
 
-### 3. ViewModel Module
+### 3. `ViewModel` Module
 
 ```kotlin
 @Module
@@ -831,7 +831,7 @@ class UserViewModel @Inject constructor(
 }
 ```
 
-### 4. Activity
+### 4. `Activity`
 
 ```kotlin
 @AndroidEntryPoint
@@ -967,10 +967,10 @@ ServiceComponent (Service) ← Independent
 | Component | Scope | Use For |
 |-----------|-------|---------|
 | SingletonComponent | @Singleton | App-wide singletons |
-| ViewModelComponent | @ViewModelScoped | ViewModel dependencies |
-| ActivityComponent | @ActivityScoped | Activity-specific |
-| FragmentComponent | @FragmentScoped | Fragment-specific |
-| ServiceComponent | @ServiceScoped | Service-specific |
+| ViewModelComponent | @ViewModelScoped | `ViewModel` dependencies |
+| ActivityComponent | @ActivityScoped | `Activity`-specific |
+| FragmentComponent | @FragmentScoped | `Fragment`-specific |
+| ServiceComponent | @ServiceScoped | `Service`-specific |
 
 **How to add module:**
 
@@ -995,7 +995,7 @@ object MyModule {
 ---
 
 ## Ответ (RU)
-Hilt предоставляет **готовые компоненты** для Application, Activity, Fragment, ViewModel и других уровней Android.
+Hilt предоставляет **готовые компоненты** для `Application`, `Activity`, `Fragment`, `ViewModel` и других уровней Android.
 
 **Чтобы добавить модуль:** Используйте аннотацию **`@InstallIn(ComponentName::class)`**.
 
@@ -1004,10 +1004,10 @@ Hilt предоставляет **готовые компоненты** для A
 | Компонент | Scope | Время жизни |
 |-----------|-------|-------------|
 | SingletonComponent | @Singleton | Приложение |
-| ViewModelComponent | @ViewModelScoped | ViewModel |
-| ActivityComponent | @ActivityScoped | Activity |
-| FragmentComponent | @FragmentScoped | Fragment |
-| ServiceComponent | @ServiceScoped | Service |
+| ViewModelComponent | @ViewModelScoped | `ViewModel` |
+| ActivityComponent | @ActivityScoped | `Activity` |
+| FragmentComponent | @FragmentScoped | `Fragment` |
+| ServiceComponent | @ServiceScoped | `Service` |
 
 **Пример:**
 

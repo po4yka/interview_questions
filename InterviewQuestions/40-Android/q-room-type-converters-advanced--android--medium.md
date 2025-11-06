@@ -40,7 +40,7 @@ tags:
 
 ### Type Converter Fundamentals
 
-Room requires TypeConverters to store non-primitive types. The converter must provide bidirectional transformation between your custom type and a type Room can persist (primitives, String, byte arrays).
+Room requires TypeConverters to store non-primitive types. The converter must provide bidirectional transformation between your custom type and a type Room can persist (primitives, `String`, byte arrays).
 
 ### Basic Type Converters Review
 
@@ -267,9 +267,9 @@ class BigDecimalConverters {
 }
 ```
 
-### Collection Converters
+### `Collection` Converters
 
-#### Simple List Converters
+#### Simple `List` Converters
 
 ```kotlin
 class SimpleCollectionConverters {
@@ -310,7 +310,7 @@ class SimpleCollectionConverters {
 }
 ```
 
-#### JSON-Based Collection Converters
+#### JSON-Based `Collection` Converters
 
 For complex objects, use JSON serialization. We'll compare different libraries.
 
@@ -846,7 +846,7 @@ abstract class AppDatabase : RoomDatabase() {
 1. **Creating New Instances**: New Gson() in every converter call
 2. **Not Handling Nulls**: NPE when deserializing null values
 3. **Ignoring Exceptions**: Crashes when JSON parsing fails
-4. **Wrong Collection Type**: List vs Set vs Array confusion
+4. **Wrong `Collection` Type**: `List` vs `Set` vs `Array` confusion
 5. **Enum Ordinal Storage**: Breaks when enum order changes
 6. **Not Testing**: Assume converters work without verification
 7. **Oversized JSON**: Storing huge objects as JSON (use relations instead)
@@ -869,7 +869,7 @@ abstract class AppDatabase : RoomDatabase() {
 Advanced Type Converters in Room enable:
 
 - **Custom Types**: UUID, BigDecimal, Date/Time variants
-- **Enums**: String, ordinal, or custom value storage
+- **Enums**: `String`, ordinal, or custom value storage
 - **Collections**: Lists, Sets, Maps with efficient serialization
 - **Complex Objects**: JSON serialization with Gson/Moshi/kotlinx.serialization
 - **Performance**: 50-70% faster with kotlinx.serialization vs Gson
@@ -896,7 +896,7 @@ Choose serialization strategy based on data complexity, performance requirements
 
 ### Type Converter Fundamentals
 
-Room requires TypeConverters to store non-primitive types. The converter must provide bidirectional transformation between your custom type and a type Room can persist (primitives, String, byte arrays).
+Room requires TypeConverters to store non-primitive types. The converter must provide bidirectional transformation between your custom type and a type Room can persist (primitives, `String`, byte arrays).
 
 ### Basic Type Converters Review
 
@@ -1123,9 +1123,9 @@ class BigDecimalConverters {
 }
 ```
 
-### Collection Converters
+### `Collection` Converters
 
-#### Simple List Converters
+#### Simple `List` Converters
 
 ```kotlin
 class SimpleCollectionConverters {
@@ -1166,7 +1166,7 @@ class SimpleCollectionConverters {
 }
 ```
 
-#### JSON-Based Collection Converters
+#### JSON-Based `Collection` Converters
 
 For complex objects, use JSON serialization. We'll compare different libraries.
 
@@ -1702,7 +1702,7 @@ abstract class AppDatabase : RoomDatabase() {
 1. **Creating New Instances**: New Gson() in every converter call
 2. **Not Handling Nulls**: NPE when deserializing null values
 3. **Ignoring Exceptions**: Crashes when JSON parsing fails
-4. **Wrong Collection Type**: List vs Set vs Array confusion
+4. **Wrong `Collection` Type**: `List` vs `Set` vs `Array` confusion
 5. **Enum Ordinal Storage**: Breaks when enum order changes
 6. **Not Testing**: Assume converters work without verification
 7. **Oversized JSON**: Storing huge objects as JSON (use relations instead)
@@ -1725,7 +1725,7 @@ abstract class AppDatabase : RoomDatabase() {
 Advanced Type Converters in Room enable:
 
 - **Custom Types**: UUID, BigDecimal, Date/Time variants
-- **Enums**: String, ordinal, or custom value storage
+- **Enums**: `String`, ordinal, or custom value storage
 - **Collections**: Lists, Sets, Maps with efficient serialization
 - **Complex Objects**: JSON serialization with Gson/Moshi/kotlinx.serialization
 - **Performance**: 50-70% faster with kotlinx.serialization vs Gson
@@ -1964,7 +1964,7 @@ class GoodConverters {
 Продвинутые Type Converters в Room обеспечивают:
 
 - **Пользовательские типы**: UUID, BigDecimal, Date/Time варианты
-- **Enum'ы**: Хранение как String, ordinal или пользовательское значение
+- **Enum'ы**: Хранение как `String`, ordinal или пользовательское значение
 - **Коллекции**: Lists, Sets, Maps с эффективной сериализацией
 - **Сложные объекты**: JSON сериализация с Gson/Moshi/kotlinx.serialization
 - **Производительность**: На 50-70% быстрее с kotlinx.serialization vs Gson

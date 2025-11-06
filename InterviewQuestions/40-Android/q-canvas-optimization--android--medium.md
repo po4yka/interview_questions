@@ -28,10 +28,10 @@ tags: [android/performance-rendering, android/ui-graphics, android/ui-views, cus
 ---
 
 # Вопрос (RU)
-> Как оптимизировать отрисовку Canvas для достижения 60 FPS?
+> Как оптимизировать отрисовку `Canvas` для достижения 60 FPS?
 
 # Question (EN)
-> How do you optimize Canvas drawing to achieve 60 FPS?
+> How do you optimize `Canvas` drawing to achieve 60 FPS?
 
 ---
 
@@ -83,9 +83,9 @@ setLayerType(LAYER_TYPE_HARDWARE, null)
 
 **Компромисс**: дополнительная память (копия текстуры в GPU); не подходит для часто меняющегося контента.
 
-### 3. Bitmap Кеширование
+### 3. `Bitmap` Кеширование
 
-Рендерьте дорогой контент один раз, сохраните в Bitmap, переиспользуйте.
+Рендерьте дорогой контент один раз, сохраните в `Bitmap`, переиспользуйте.
 
 ```kotlin
 private var cache: Bitmap? = null
@@ -126,7 +126,7 @@ override fun onDraw(canvas: Canvas) {
 
 **Эффект**: ускорение в 10-20 раз для прокручиваемого контента с сотнями элементов.
 
-### 5. Оптимизация Paint
+### 5. Оптимизация `Paint`
 
 ```kotlin
 // ✅ Хорошо: простые настройки
@@ -202,9 +202,9 @@ setLayerType(LAYER_TYPE_HARDWARE, null)
 
 **Trade-off**: extra memory (texture copy on GPU); not suitable for frequently changing content.
 
-### 3. Bitmap Caching
+### 3. `Bitmap` Caching
 
-Render expensive content once, save to Bitmap, reuse.
+Render expensive content once, save to `Bitmap`, reuse.
 
 ```kotlin
 private var cache: Bitmap? = null
@@ -245,7 +245,7 @@ override fun onDraw(canvas: Canvas) {
 
 **Impact**: 10-20x speedup for scrollable content with hundreds of items.
 
-### 5. Paint Optimization
+### 5. `Paint` Optimization
 
 ```kotlin
 // ✅ Good: simple settings
@@ -277,15 +277,15 @@ Analyze via **Android Studio Profiler** → CPU → System Trace.
 
 ## Follow-ups
 
-- How does overdraw affect Canvas performance and how to detect it?
+- How does overdraw affect `Canvas` performance and how to detect it?
 - When should you use LAYER_TYPE_SOFTWARE vs LAYER_TYPE_HARDWARE?
 - How to implement efficient view recycling for scrollable canvas-based lists?
-- What are the memory implications of Bitmap caching for large views?
-- How to optimize Path operations for complex vector graphics?
+- What are the memory implications of `Bitmap` caching for large views?
+- How to optimize `Path` operations for complex vector graphics?
 
 ## References
 
-- [[c-custom-views]] - Custom View fundamentals
+- [[c-custom-views]] - Custom `View` fundamentals
 - [Rendering Performance](https://developer.android.com/topic/performance/rendering)
 - https://developer.android.com/topic/performance/vitals/render
 
@@ -293,7 +293,7 @@ Analyze via **Android Studio Profiler** → CPU → System Trace.
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-custom-view-lifecycle--android--medium]] - Custom View lifecycle basics
+- [[q-custom-view-lifecycle--android--medium]] - Custom `View` lifecycle basics
 - [[q-android-performance-measurement-tools--android--medium]] - Profiling tools overview
 
 ### Related (Same Level)
@@ -302,6 +302,6 @@ Analyze via **Android Studio Profiler** → CPU → System Trace.
 - [[q-anr-application-not-responding--android--medium]] - ANR debugging strategies
 
 ### Advanced (Harder)
-- [[q-canvas-drawing-optimization--android--hard]] - Advanced Canvas techniques
-- [[q-custom-viewgroup-layout--android--hard]] - ViewGroup layout optimization
+- [[q-canvas-drawing-optimization--android--hard]] - Advanced `Canvas` techniques
+- [[q-custom-viewgroup-layout--android--hard]] - `ViewGroup` layout optimization
 - [[q-tiktok-video-feed--android--hard]] - Complex scrolling performance

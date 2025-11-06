@@ -45,7 +45,7 @@ sources:
 ### 1. Инвентаризация и моделирование данных
 
 - Составьте каталог данных: что собираем, зачем, где хранится, как долго.
-- Разделите на категории Play (Data Collection, Sharing, Security Practices).
+- Разделите на категории Play (Data `Collection`, Sharing, Security Practices).
 - Обновляйте модель при изменениях схемы (Room, Proto, network DTO) через статические анализы.
 
 ### 2. Совместная работа с privacy/compliance

@@ -33,7 +33,7 @@ sources: []
 
 **Основные возможности:**
 
-- Автоматически отслеживает утечки Activity, Fragment, ViewModel
+- Автоматически отслеживает утечки `Activity`, `Fragment`, `ViewModel`
 - Работает "из коробки" без конфигурации
 - Визуализирует цепочки удержания объектов
 - Не влияет на production (только debug-сборки)
@@ -102,7 +102,7 @@ class MyViewModel : ViewModel() {
 
 **Key features:**
 
-- Automatically tracks Activity, Fragment, ViewModel leaks
+- Automatically tracks `Activity`, `Fragment`, `ViewModel` leaks
 - Zero configuration — works out of the box
 - Visualizes object retention chains
 - No production impact (debug builds only)
@@ -168,7 +168,7 @@ class MyViewModel : ViewModel() {
 ## Follow-ups
 
 - How does LeakCanary distinguish between expected retained objects and actual leaks?
-- What strategies prevent common leak patterns (static Activity references, inner class listeners)?
+- What strategies prevent common leak patterns (static `Activity` references, inner class listeners)?
 - How do you interpret leak traces to identify the root cause in complex object graphs?
 
 ## References

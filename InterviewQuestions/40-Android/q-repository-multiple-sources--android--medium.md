@@ -41,15 +41,15 @@ tags:
 ---
 
 # Question (EN)
-> How to implement Repository pattern with multiple data sources (network, database, cache)?
+> How to implement `Repository` pattern with multiple data sources (network, database, cache)?
 # Вопрос (RU)
-> Как реализовать паттерн Repository с несколькими источниками данных (сеть, БД, кэш)?
+> Как реализовать паттерн `Repository` с несколькими источниками данных (сеть, БД, кэш)?
 
 ---
 
 ## Answer (EN)
 
-**Repository** abstracts data sources, providing single source of truth and handling caching/synchronization.
+**`Repository`** abstracts data sources, providing single source of truth and handling caching/synchronization.
 
 ### Single Source of Truth Pattern
 
@@ -223,13 +223,13 @@ class ProfileRepository(
 }
 ```
 
-**English Summary**: Repository patterns: **Single source of truth** (DB is source, network updates it). **Cache-first** (memory cache → network → update cache). **Network-first** (network → DB fallback). **Stale-while-revalidate** (show cached, fetch fresh). **Time-based** (check expiry before fetching). Combine multiple sources: preferences → DB → network. Use Flow for reactive updates.
+**English Summary**: `Repository` patterns: **Single source of truth** (DB is source, network updates it). **Cache-first** (memory cache → network → update cache). **Network-first** (network → DB fallback). **Stale-while-revalidate** (show cached, fetch fresh). **Time-based** (check expiry before fetching). Combine multiple sources: preferences → DB → network. Use `Flow` for reactive updates.
 
 
 # Question (EN)
-> How to implement Repository pattern with multiple data sources (network, database, cache)?
+> How to implement `Repository` pattern with multiple data sources (network, database, cache)?
 # Вопрос (RU)
-> Как реализовать паттерн Repository с несколькими источниками данных (сеть, БД, кэш)?
+> Как реализовать паттерн `Repository` с несколькими источниками данных (сеть, БД, кэш)?
 
 ---
 
@@ -239,7 +239,7 @@ class ProfileRepository(
 
 ## Answer (EN)
 
-**Repository** abstracts data sources, providing single source of truth and handling caching/synchronization.
+**`Repository`** abstracts data sources, providing single source of truth and handling caching/synchronization.
 
 ### Single Source of Truth Pattern
 
@@ -413,11 +413,11 @@ class ProfileRepository(
 }
 ```
 
-**English Summary**: Repository patterns: **Single source of truth** (DB is source, network updates it). **Cache-first** (memory cache → network → update cache). **Network-first** (network → DB fallback). **Stale-while-revalidate** (show cached, fetch fresh). **Time-based** (check expiry before fetching). Combine multiple sources: preferences → DB → network. Use Flow for reactive updates.
+**English Summary**: `Repository` patterns: **Single source of truth** (DB is source, network updates it). **Cache-first** (memory cache → network → update cache). **Network-first** (network → DB fallback). **Stale-while-revalidate** (show cached, fetch fresh). **Time-based** (check expiry before fetching). Combine multiple sources: preferences → DB → network. Use `Flow` for reactive updates.
 
 ## Ответ (RU)
 
-**Repository** абстрагирует источники данных, предоставляя единый источник истины и обрабатывая кэширование/синхронизацию.
+**`Repository`** абстрагирует источники данных, предоставляя единый источник истины и обрабатывая кэширование/синхронизацию.
 
 ### Паттерн Единого Источника Истины
 
@@ -490,7 +490,7 @@ class NewsRepository(
 }
 ```
 
-**Краткое содержание**: Паттерны Repository: **Единый источник истины** (БД источник, сеть обновляет её). **Cache-first** (кэш памяти → сеть → обновить кэш). **Network-first** (сеть → БД fallback). **Stale-while-revalidate** (показать кэш, загрузить свежее). **Time-based** (проверить истечение до загрузки). Комбинировать источники: preferences → DB → network. Использовать Flow для реактивных обновлений.
+**Краткое содержание**: Паттерны `Repository`: **Единый источник истины** (БД источник, сеть обновляет её). **Cache-first** (кэш памяти → сеть → обновить кэш). **Network-first** (сеть → БД fallback). **Stale-while-revalidate** (показать кэш, загрузить свежее). **Time-based** (проверить истечение до загрузки). Комбинировать источники: preferences → DB → network. Использовать `Flow` для реактивных обновлений.
 
 ---
 

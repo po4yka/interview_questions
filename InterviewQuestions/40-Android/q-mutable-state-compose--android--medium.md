@@ -187,7 +187,7 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit) {
 - Переиспользуемые stateless компоненты
 - Простое тестирование
 
-### Интеграция С ViewModel
+### Интеграция С `ViewModel`
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -411,7 +411,7 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit) {
 - Reusable stateless components
 - Easy testing
 
-### ViewModel Integration
+### `ViewModel` Integration
 
 ```kotlin
 class UserViewModel : ViewModel() {

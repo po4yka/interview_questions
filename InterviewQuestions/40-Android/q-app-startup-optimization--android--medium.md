@@ -33,13 +33,13 @@ tags: [android/app-startup, android/performance-memory, android/performance-star
 
 ## Ответ (RU)
 
-**Оптимизация запуска** сокращает время холодного/теплого/горячего старта через консолидацию ContentProvider, ленивую инициализацию, отложенное выполнение и измерения производительности.
+**Оптимизация запуска** сокращает время холодного/теплого/горячего старта через консолидацию `ContentProvider`, ленивую инициализацию, отложенное выполнение и измерения производительности.
 
 ### Ключевые Техники
 
-**1. Консолидация ContentProvider**
+**1. Консолидация `ContentProvider`**
 
-Каждый ContentProvider добавляет 20-50ms к старту через IPC-вызовы. App Startup library объединяет инициализацию в один провайдер с разрешением зависимостей.
+Каждый `ContentProvider` добавляет 20-50ms к старту через IPC-вызовы. App Startup library объединяет инициализацию в один провайдер с разрешением зависимостей.
 
 ```kotlin
 // ❌ BEFORE: Multiple providers (120ms overhead)
@@ -121,20 +121,20 @@ override fun onCreate() {
 ### Лучшие Практики
 
 - Измеряйте через Perfetto/systrace перед оптимизацией
-- Инициализируйте только критичные сервисы в Application.onCreate()
+- Инициализируйте только критичные сервисы в `Application`.onCreate()
 - Избегайте синхронного I/O на главном потоке
 - Тестируйте на слабых устройствах
 - Цели: холодный < 500ms, теплый < 300ms, горячий < 100ms
 
 ## Answer (EN)
 
-**Startup optimization** reduces cold/warm/hot start times through ContentProvider consolidation, lazy initialization, deferred execution, and performance measurement.
+**Startup optimization** reduces cold/warm/hot start times through `ContentProvider` consolidation, lazy initialization, deferred execution, and performance measurement.
 
 ### Key Techniques
 
-**1. ContentProvider Consolidation**
+**1. `ContentProvider` Consolidation**
 
-Each ContentProvider adds 20-50ms to startup via IPC calls. App Startup library consolidates initialization into single provider with dependency resolution.
+Each `ContentProvider` adds 20-50ms to startup via IPC calls. App Startup library consolidates initialization into single provider with dependency resolution.
 
 ```kotlin
 // ❌ BEFORE: Multiple providers (120ms overhead)
@@ -216,7 +216,7 @@ override fun onCreate() {
 ### Best Practices
 
 - Measure with Perfetto/systrace before optimizing
-- Initialize only critical services in Application.onCreate()
+- Initialize only critical services in `Application`.onCreate()
 - Avoid synchronous I/O on main thread
 - Test on low-end devices
 - Targets: cold < 500ms, warm < 300ms, hot < 100ms

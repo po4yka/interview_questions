@@ -127,7 +127,7 @@ class SearchViewModel : ViewModel() {
 }
 ```
 
-### С LiveData
+### С `LiveData`
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -149,9 +149,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Data Binding Vs View Binding
+### Data Binding Vs `View` Binding
 
-| Функция | Data Binding | View Binding |
+| Функция | Data Binding | `View` Binding |
 |---------|--------------|--------------|
 | Устраняет `findViewById()` | ✅ | ✅ |
 | Null/Type safety | ✅ | ✅ |
@@ -164,10 +164,10 @@ class MainActivity : AppCompatActivity() {
 
 **Data Binding:**
 - Нужна двусторонняя привязка
-- Используется MVVM с LiveData
+- Используется MVVM с `LiveData`
 - Требуется сократить boilerplate
 
-**View Binding (предпочтительно):**
+**`View` Binding (предпочтительно):**
 - Простой проект
 - Важна скорость сборки
 - Команда предпочитает явность
@@ -256,7 +256,7 @@ class SearchViewModel : ViewModel() {
 }
 ```
 
-### With LiveData
+### With `LiveData`
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -278,9 +278,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Data Binding Vs View Binding
+### Data Binding Vs `View` Binding
 
-| Feature | Data Binding | View Binding |
+| Feature | Data Binding | `View` Binding |
 |---------|--------------|--------------|
 | Eliminates `findViewById()` | ✅ | ✅ |
 | Null/Type safety | ✅ | ✅ |
@@ -293,10 +293,10 @@ class MainActivity : AppCompatActivity() {
 
 **Data Binding:**
 - Need two-way binding
-- Using MVVM with LiveData
+- Using MVVM with `LiveData`
 - Need to reduce boilerplate
 
-**View Binding (preferred):**
+**`View` Binding (preferred):**
 - Simple project
 - Build speed matters
 - Team prefers explicitness
@@ -314,7 +314,7 @@ class MainActivity : AppCompatActivity() {
 ## References
 
 - [Android Data Binding Documentation](https://developer.android.com/topic/libraries/data-binding)
-- [View Binding Documentation](https://developer.android.com/topic/libraries/view-binding)
+- [`View` Binding Documentation](https://developer.android.com/topic/libraries/view-binding)
 
 ## Related Questions
 

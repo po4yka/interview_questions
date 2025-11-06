@@ -38,7 +38,7 @@ sources:
 
 **SQLite** — встроенная реляционная БД без внешних зависимостей, требует ручного SQL и работы с Cursor API.
 
-**Room** — типобезопасная ORM-обёртка над SQLite с compile-time валидацией запросов, генерацией кода и нативной поддержкой корутин/Flow.
+**Room** — типобезопасная ORM-обёртка над SQLite с compile-time валидацией запросов, генерацией кода и нативной поддержкой корутин/`Flow`.
 
 **Realm/MongoDB** — объектная БД с собственным движком (не SQL), поддерживает автоматическую синхронизацию, реактивные запросы, но увеличивает размер APK.
 
@@ -62,7 +62,7 @@ class DbHelper(ctx: Context) : SQLiteOpenHelper(ctx, "app.db", null, 1) {
 
 ### 2. Room — Официальная ORM (рекомендуется)
 
-Генерирует имплементации DAO на этапе компиляции через annotation processing. Предоставляет безопасные suspend-функции и Flow для реактивных обновлений.
+Генерирует имплементации DAO на этапе компиляции через annotation processing. Предоставляет безопасные suspend-функции и `Flow` для реактивных обновлений.
 
 ```kotlin
 @Entity(tableName = "users")
@@ -110,7 +110,7 @@ realm.where<User>().findAllAsync().asFlow().collect { users ->
 | Безопасность типов | ❌ runtime | ✅ compile-time | ✅ compile-time |
 | Кривая обучения | Высокая (Cursor API) | Средняя (SQL + аннотации) | Низкая (OOP) |
 | Миграции | Ручные скрипты | Декларативные Migration | Автоматические (ограниченно) |
-| Реактивность | ❌ | ✅ Flow/LiveData | ✅ встроенная |
+| Реактивность | ❌ | ✅ Flow/`LiveData` | ✅ встроенная |
 
 **Рекомендации:**
 - **Room** — стандарт для production (официальная поддержка Google, интеграция с Jetpack)
@@ -125,7 +125,7 @@ Android offers **three main persistence solutions**: SQLite (native), [[c-room]]
 
 **SQLite** — built-in relational DB with no external dependencies, requires manual SQL and Cursor API handling.
 
-**Room** — type-safe ORM wrapper over SQLite with compile-time query validation, code generation, and native coroutines/Flow support.
+**Room** — type-safe ORM wrapper over SQLite with compile-time query validation, code generation, and native coroutines/`Flow` support.
 
 **Realm/MongoDB** — object database with its own engine (not SQL), supports automatic cloud sync and reactive queries, but increases APK size.
 
@@ -149,7 +149,7 @@ class DbHelper(ctx: Context) : SQLiteOpenHelper(ctx, "app.db", null, 1) {
 
 ### 2. Room — Official ORM (Recommended)
 
-Generates DAO implementations at compile time via annotation processing. Provides safe suspend functions and Flow for reactive updates.
+Generates DAO implementations at compile time via annotation processing. Provides safe suspend functions and `Flow` for reactive updates.
 
 ```kotlin
 @Entity(tableName = "users")
@@ -197,7 +197,7 @@ realm.where<User>().findAllAsync().asFlow().collect { users ->
 | Type safety | ❌ runtime | ✅ compile-time | ✅ compile-time |
 | Learning curve | High (Cursor API) | Medium (SQL + annotations) | Low (OOP) |
 | Migrations | Manual scripts | Declarative Migration | Automatic (limited) |
-| Reactivity | ❌ | ✅ Flow/LiveData | ✅ built-in |
+| Reactivity | ❌ | ✅ Flow/`LiveData` | ✅ built-in |
 
 **Recommendations:**
 - **Room** — production standard (official Google support, Jetpack integration)

@@ -223,7 +223,7 @@ class UndoDeleteAdapter(private val items: MutableList<Item>) :
 
 ## References
 
-- [RecyclerView Official Guide](https://developer.android.com/guide/topics/ui/layout/recyclerview)
+- [`RecyclerView` Official Guide](https://developer.android.com/guide/topics/ui/layout/recyclerview)
 - [DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 - [ListAdapter API Reference](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter)
 
@@ -235,9 +235,9 @@ class UndoDeleteAdapter(private val items: MutableList<Item>) :
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView` optimization
 - [[q-how-to-start-drawing-ui-in-android--android--easy]] - UI fundamentals
-- [[q-view-fundamentals--android--easy]] - View system basics
+- [[q-view-fundamentals--android--easy]] - `View` system basics
 
 ### Related (Same Level)
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose alternative

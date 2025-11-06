@@ -31,23 +31,23 @@ tags:
 ---
 
 # Вопрос (RU)
-> Какие типы данных поддерживает Bundle?
+> Какие типы данных поддерживает `Bundle`?
 
 # Question (EN)
-> What data types does Bundle support?
+> What data types does `Bundle` support?
 
 ---
 
 ## Ответ (RU)
 
-Bundle — key-value контейнер для передачи данных между компонентами Android через IPC. Основан на `Parcel`, использует типизированные методы `put*/get*`.
+`Bundle` — key-value контейнер для передачи данных между компонентами Android через IPC. Основан на `Parcel`, использует типизированные методы `put*/get*`.
 
 **Поддерживаемые типы**:
 - Примитивы и массивы: `Int`, `Long`, `Float`, `Double`, `Boolean`, `Byte`, `Char`, `Short` и их массивы
 - Строки: `String`, `CharSequence`
-- Коллекции: `ArrayList<String>`, `ArrayList<Int>`, `ArrayList<Parcelable>`
+- Коллекции: `ArrayList<`String`>`, `ArrayList<`Int`>`, `ArrayList<`Parcelable`>`
 - Объекты: `Parcelable`, `Serializable`
-- Специальные: `Bundle` (вложенные), `SparseArray<Parcelable>`
+- Специальные: `Bundle` (вложенные), `SparseArray<`Parcelable`>`
 
 **Базовое использование**:
 ```kotlin
@@ -63,7 +63,7 @@ val count = bundle.getInt("count", 0)
 val userId = bundle.getString("user_id") // String?
 ```
 
-**Parcelable vs Serializable**:
+**`Parcelable` vs `Serializable`**:
 ```kotlin
 @Parcelize
 data class Profile(val id: String, val name: String) : Parcelable
@@ -109,14 +109,14 @@ val url = intent.getStringExtra("url")
 
 ## Answer (EN)
 
-Bundle is a key-value container for passing data between Android components via IPC. Built on `Parcel`, uses type-safe `put*/get*` methods.
+`Bundle` is a key-value container for passing data between Android components via IPC. Built on `Parcel`, uses type-safe `put*/get*` methods.
 
 **Supported types**:
 - Primitives and arrays: `Int`, `Long`, `Float`, `Double`, `Boolean`, `Byte`, `Char`, `Short` and their arrays
 - Strings: `String`, `CharSequence`
-- Collections: `ArrayList<String>`, `ArrayList<Int>`, `ArrayList<Parcelable>`
+- Collections: `ArrayList<`String`>`, `ArrayList<`Int`>`, `ArrayList<`Parcelable`>`
 - Objects: `Parcelable`, `Serializable`
-- Special: `Bundle` (nested), `SparseArray<Parcelable>`
+- Special: `Bundle` (nested), `SparseArray<`Parcelable`>`
 
 **Basic usage**:
 ```kotlin
@@ -132,7 +132,7 @@ val count = bundle.getInt("count", 0)
 val userId = bundle.getString("user_id") // String?
 ```
 
-**Parcelable vs Serializable**:
+**`Parcelable` vs `Serializable`**:
 ```kotlin
 @Parcelize
 data class Profile(val id: String, val name: String) : Parcelable
@@ -178,16 +178,16 @@ val url = intent.getStringExtra("url")
 
 ## Follow-ups
 
-- How does Bundle size calculation work and how to measure it before IPC?
-- What's the internal difference between Parcel and Bundle serialization mechanisms?
-- How does Bundle handle versioning when adding/removing fields in Parcelable objects?
-- Why are Context and View references forbidden in Bundle, and what are memory leak implications?
-- How does Navigation Component's Safe Args generate type-safe Bundle accessors at compile time?
+- How does `Bundle` size calculation work and how to measure it before IPC?
+- What's the internal difference between Parcel and `Bundle` serialization mechanisms?
+- How does `Bundle` handle versioning when adding/removing fields in `Parcelable` objects?
+- Why are `Context` and `View` references forbidden in `Bundle`, and what are memory leak implications?
+- How does Navigation Component's Safe Args generate type-safe `Bundle` accessors at compile time?
 
 ## References
 
-- https://developer.android.com/reference/android/os/Bundle
-- https://developer.android.com/reference/android/os/Parcelable
+- https://developer.android.com/reference/android/os/`Bundle`
+- https://developer.android.com/reference/android/os/`Parcelable`
 - https://developer.android.com/guide/components/intents-filters
 
 ## Related Questions
@@ -199,14 +199,14 @@ val url = intent.getStringExtra("url")
 
 
 ### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]] — Understanding Activity/Fragment lifecycle
+- [[q-android-app-components--android--easy]] — Understanding Activity/`Fragment` lifecycle
 - [[q-android-manifest-file--android--easy]] — Component declaration and intent filters
 
 ### Related (Same Level)
-- [[q-parcelable-implementation--android--medium]] — Custom Parcelable objects
-- Intent extras and deep linking patterns
-- ViewModel state preservation via SavedStateHandle
+- [[q-parcelable-implementation--android--medium]] — Custom `Parcelable` objects
+- `Intent` extras and deep linking patterns
+- `ViewModel` state preservation via SavedStateHandle
 
 ### Advanced (Harder)
 - TransactionTooLargeException debugging and IPC size limits
-- Parcelable versioning and backward compatibility strategies
+- `Parcelable` versioning and backward compatibility strategies

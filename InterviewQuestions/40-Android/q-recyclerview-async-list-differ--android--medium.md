@@ -27,7 +27,7 @@ tags:
 - difficulty/medium
 ---
 
-# RecyclerView Async List Diffing
+# `RecyclerView` Async `List` Diffing
 
 # Question (EN)
 > How does AsyncListDiffer work? Explain background thread diffing, comparing AsyncListDiffer vs ListAdapter, handling list mutations safely, and optimizing for large dataset updates.
@@ -39,9 +39,9 @@ tags:
 
 ## Answer (EN)
 
-**AsyncListDiffer** is a helper class that calculates list differences on a background thread and dispatches updates to RecyclerView. It prevents UI freezes when updating large lists.
+**AsyncListDiffer** is a helper class that calculates list differences on a background thread and dispatches updates to `RecyclerView`. It prevents UI freezes when updating large lists.
 
-### The Problem: Blocking UI Thread
+### The Problem: Blocking UI `Thread`
 
 ```kotlin
 //  PROBLEM - Blocks UI thread
@@ -122,7 +122,7 @@ class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 
 ### How AsyncListDiffer Works Internally
 
-**Thread flow:**
+**`Thread` flow:**
 
 ```
 Main Thread                 Background Thread
@@ -144,7 +144,7 @@ Update UI (smooth!)
 - Diff calculation on background executor
 - UI thread stays responsive
 - Updates dispatched on main thread
-- Thread-safe list access
+- `Thread`-safe list access
 
 ---
 
@@ -199,7 +199,7 @@ adapter.submitList(items) // Same API as AsyncListDiffer!
 
 ---
 
-### Thread Safety with submitList()
+### `Thread` Safety with submitList()
 
 **submitList() is thread-safe:**
 
@@ -232,7 +232,7 @@ adapter.submitList(newItems) // Safe!
 
 ---
 
-### Handling List Mutations Safely
+### Handling `List` Mutations Safely
 
 **Problem: Modifying list during diff:**
 
@@ -271,7 +271,7 @@ class SafeViewModel : ViewModel() {
 adapter.submitList(items.toList()) // Creates copy
 ```
 
-**Solution 3: Use StateFlow with immutable lists**
+**Solution 3: Use `StateFlow` with immutable lists**
 
 ```kotlin
 class FlowViewModel : ViewModel() {
@@ -293,7 +293,7 @@ lifecycleScope.launch {
 
 ---
 
-### Commit Callback
+### Commit `Callback`
 
 **Get notified when diff is complete:**
 
@@ -745,7 +745,7 @@ searchView.onQueryTextChange { query ->
 **How it works:**
 - Calculates diff on background executor
 - Dispatches updates on main thread
-- Thread-safe submitList()
+- `Thread`-safe submitList()
 
 **AsyncListDiffer vs ListAdapter:**
 - ListAdapter is built on AsyncListDiffer
@@ -782,9 +782,9 @@ searchView.onQueryTextChange { query ->
 
 ## Answer (EN)
 
-**AsyncListDiffer** is a helper class that calculates list differences on a background thread and dispatches updates to RecyclerView. It prevents UI freezes when updating large lists.
+**AsyncListDiffer** is a helper class that calculates list differences on a background thread and dispatches updates to `RecyclerView`. It prevents UI freezes when updating large lists.
 
-### The Problem: Blocking UI Thread
+### The Problem: Blocking UI `Thread`
 
 ```kotlin
 //  PROBLEM - Blocks UI thread
@@ -865,7 +865,7 @@ class AsyncAdapter : RecyclerView.Adapter<AsyncAdapter.ViewHolder>() {
 
 ### How AsyncListDiffer Works Internally
 
-**Thread flow:**
+**`Thread` flow:**
 
 ```
 Main Thread                 Background Thread
@@ -887,7 +887,7 @@ Update UI (smooth!)
 - Diff calculation on background executor
 - UI thread stays responsive
 - Updates dispatched on main thread
-- Thread-safe list access
+- `Thread`-safe list access
 
 ---
 
@@ -942,7 +942,7 @@ adapter.submitList(items) // Same API as AsyncListDiffer!
 
 ---
 
-### Thread Safety with submitList()
+### `Thread` Safety with submitList()
 
 **submitList() is thread-safe:**
 
@@ -975,7 +975,7 @@ adapter.submitList(newItems) // Safe!
 
 ---
 
-### Handling List Mutations Safely
+### Handling `List` Mutations Safely
 
 **Problem: Modifying list during diff:**
 
@@ -1014,7 +1014,7 @@ class SafeViewModel : ViewModel() {
 adapter.submitList(items.toList()) // Creates copy
 ```
 
-**Solution 3: Use StateFlow with immutable lists**
+**Solution 3: Use `StateFlow` with immutable lists**
 
 ```kotlin
 class FlowViewModel : ViewModel() {
@@ -1036,7 +1036,7 @@ lifecycleScope.launch {
 
 ---
 
-### Commit Callback
+### Commit `Callback`
 
 **Get notified when diff is complete:**
 
@@ -1488,7 +1488,7 @@ searchView.onQueryTextChange { query ->
 **How it works:**
 - Calculates diff on background executor
 - Dispatches updates on main thread
-- Thread-safe submitList()
+- `Thread`-safe submitList()
 
 **AsyncListDiffer vs ListAdapter:**
 - ListAdapter is built on AsyncListDiffer
@@ -1512,7 +1512,7 @@ searchView.onQueryTextChange { query ->
 
 ## Ответ (RU)
 
-**AsyncListDiffer** - это вспомогательный класс, который вычисляет разницу списков в фоновом потоке и отправляет обновления в RecyclerView. Он предотвращает зависание UI при обновлении больших списков.
+**AsyncListDiffer** - это вспомогательный класс, который вычисляет разницу списков в фоновом потоке и отправляет обновления в `RecyclerView`. Он предотвращает зависание UI при обновлении больших списков.
 
 ### Проблема: Блокировка UI Потока
 
@@ -1744,7 +1744,7 @@ class SafeViewModel : ViewModel() {
 adapter.submitList(items.toList()) // Создает копию
 ```
 
-**Решение 3: Используйте StateFlow с неизменяемыми списками**
+**Решение 3: Используйте `StateFlow` с неизменяемыми списками**
 
 ```kotlin
 class FlowViewModel : ViewModel() {
@@ -1766,7 +1766,7 @@ lifecycleScope.launch {
 
 ---
 
-### Callback Завершения
+### `Callback` Завершения
 
 **Получить уведомление, когда diff завершен:**
 
@@ -1989,12 +1989,12 @@ searchView.onQueryTextChange { query ->
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - `View`, Ui
 
 ### Related (Medium)
-- q-rxjava-pagination-recyclerview--android--medium - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
-- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
-- [[q-recyclerview-diffutil-advanced--android--medium]] - View, Ui
+- q-rxjava-pagination-recyclerview--android--medium - `View`, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - `View`, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - `View`, Ui
+- [[q-recyclerview-diffutil-advanced--android--medium]] - `View`, Ui

@@ -250,7 +250,7 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components overview
-- [[q-android-lifecycle--android--easy]] - Lifecycle management basics
+- [[q-android-lifecycle--android--easy]] - `Lifecycle` management basics
 - [[q-workmanager-basics--android--easy]] - WorkManager fundamentals
 
 ### Related (Same Level)

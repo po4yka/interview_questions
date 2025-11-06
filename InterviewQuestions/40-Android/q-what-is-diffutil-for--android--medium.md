@@ -41,7 +41,7 @@ tags:
 
 ---
 
-**DiffUtil** is a utility class in Android that calculates the difference between two lists and outputs a list of update operations that convert the first list into the second one. It's primarily used with RecyclerView to efficiently update only changed items instead of refreshing the entire list.
+**DiffUtil** is a utility class in Android that calculates the difference between two lists and outputs a list of update operations that convert the first list into the second one. It's primarily used with `RecyclerView` to efficiently update only changed items instead of refreshing the entire list.
 
 ### Why Use DiffUtil?
 
@@ -506,7 +506,7 @@ class GoodAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
 
 ---
 
-**DiffUtil** is a utility class in Android that calculates the difference between two lists and outputs a list of update operations that convert the first list into the second one. It's primarily used with RecyclerView to efficiently update only changed items instead of refreshing the entire list.
+**DiffUtil** is a utility class in Android that calculates the difference between two lists and outputs a list of update operations that convert the first list into the second one. It's primarily used with `RecyclerView` to efficiently update only changed items instead of refreshing the entire list.
 
 ### Why Use DiffUtil?
 
@@ -962,7 +962,7 @@ class GoodAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
 
 ## Ответ (RU)
 
-**DiffUtil** — это утилитарный класс в Android, который вычисляет разницу между двумя списками и выдает список операций обновления для преобразования первого списка во второй. Он в основном используется с RecyclerView для эффективного обновления только измененных элементов вместо обновления всего списка.
+**DiffUtil** — это утилитарный класс в Android, который вычисляет разницу между двумя списками и выдает список операций обновления для преобразования первого списка во второй. Он в основном используется с `RecyclerView` для эффективного обновления только измененных элементов вместо обновления всего списка.
 
 ### Зачем Нужен DiffUtil?
 
@@ -1372,7 +1372,7 @@ class LargeListAdapter : RecyclerView.Adapter<LargeListAdapter.ViewHolder>() {
 }
 ```
 
-### Использование В Fragment/Activity
+### Использование В Fragment/`Activity`
 
 Пример интеграции ListAdapter в реальном приложении:
 

@@ -53,7 +53,7 @@ tags:
 
 **1. Multi-Pane Layouts (Master-Detail Pattern)**
 
-До фрагментов на телефонах использовалось две Activity (список → детали). На планшетах это выглядело неэффективно. Фрагменты позволили показывать обе панели одновременно:
+До фрагментов на телефонах использовалось две `Activity` (список → детали). На планшетах это выглядело неэффективно. Фрагменты позволили показывать обе панели одновременно:
 
 ```kotlin
 // ✅ Телефон: один контейнер, фрагменты заменяют друг друга
@@ -79,7 +79,7 @@ class TabletActivity : AppCompatActivity() {
 
 **2. Переиспользование Кода**
 
-Один фрагмент может использоваться в разных Activity:
+Один фрагмент может использоваться в разных `Activity`:
 
 ```kotlin
 class UserListFragment : Fragment() {
@@ -95,9 +95,9 @@ class UserListFragment : Fragment() {
 // ✅ Используется в MainActivity, SettingsActivity, AdminActivity
 ```
 
-**3. Независимый Lifecycle**
+**3. Независимый `Lifecycle`**
 
-Фрагменты имеют собственный жизненный цикл, отдельный от Activity. Это позволяет управлять состоянием UI компонентов независимо:
+Фрагменты имеют собственный жизненный цикл, отдельный от `Activity`. Это позволяет управлять состоянием UI компонентов независимо:
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -113,7 +113,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**4. Back Stack Management**
+**4. Back `Stack` Management**
 
 ```kotlin
 // ✅ Навигация: Fragment3 → Fragment2 → Fragment1 → Exit
@@ -168,7 +168,7 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 - Переиспользование UI компонентов
 - Модульная архитектура
 - Встроенная навигация с back stack
-- Независимый lifecycle от Activity
+- Независимый lifecycle от `Activity`
 
 ### Основные Вызовы
 
@@ -187,7 +187,7 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 - **Используйте современные API** — `viewModels()`, `viewLifecycleOwner`, **`Fragment Result API`**
 - **Правильно управляйте binding** — очищайте ссылки в `onDestroyView()` для предотвращения утечек
 - **Избегайте глубокого nesting** — ограничивайте иерархию вложенных фрагментов
-- **Используйте Shared ViewModel** — для коммуникации между sibling фрагментами
+- **Используйте Shared `ViewModel`** — для коммуникации между sibling фрагментами
 - **Тестируйте configuration changes** — проверяйте сохранение состояния при повороте экрана
 
 ### Типичные Ошибки
@@ -196,7 +196,7 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 - **IllegalStateException** — вызов транзакций после `onSaveInstanceState()`
 - **Проблемы с back stack** — забытые `addToBackStack()` при навигации
 - **Неправильная коммуникация** — использование deprecated `setTargetFragment()`
-- **Переусложнение** — использование фрагментов там, где достаточно простого View
+- **Переусложнение** — использование фрагментов там, где достаточно простого `View`
 
 ## Answer (EN)
 
@@ -248,9 +248,9 @@ class UserListFragment : Fragment() {
 // ✅ Used in MainActivity, SettingsActivity, AdminActivity
 ```
 
-**3. Independent Lifecycle**
+**3. Independent `Lifecycle`**
 
-Fragments have their own lifecycle, separate from Activity. This allows managing UI component state independently:
+Fragments have their own lifecycle, separate from `Activity`. This allows managing UI component state independently:
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -266,7 +266,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**4. Back Stack Management**
+**4. Back `Stack` Management**
 
 ```kotlin
 // ✅ Navigation: Fragment3 → Fragment2 → Fragment1 → Exit
@@ -321,7 +321,7 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 - UI component reusability
 - Modular architecture
 - Built-in navigation with back stack
-- Independent lifecycle from Activity
+- Independent lifecycle from `Activity`
 
 ### Main Challenges
 
@@ -340,7 +340,7 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 - **Use modern APIs** — `viewModels()`, `viewLifecycleOwner`, **`Fragment Result API`**
 - **Proper binding management** — clear references in `onDestroyView()` to prevent leaks
 - **Avoid deep nesting** — limit nested fragment hierarchies
-- **Use Shared ViewModel** — for communication between sibling fragments
+- **Use Shared `ViewModel`** — for communication between sibling fragments
 - **Test configuration changes** — verify state preservation during screen rotation
 
 ### Common Pitfalls
@@ -349,7 +349,7 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 - **IllegalStateException** — calling transactions after `onSaveInstanceState()`
 - **Back stack issues** — forgotten `addToBackStack()` during navigation
 - **Incorrect communication** — using deprecated `setTargetFragment()`
-- **Over-complication** — using fragments where simple View suffices
+- **Over-complication** — using fragments where simple `View` suffices
 
 ---
 
@@ -363,7 +363,7 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 ## References
 
 - Official Android Fragments documentation
-- Fragment lifecycle and best practices guides
+- `Fragment` lifecycle and best practices guides
 - Master-detail pattern implementations
 
 ## Related Questions
@@ -376,12 +376,12 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 
 ### Prerequisites (Easier)
 
-- [[q-save-data-outside-fragment--android--medium]] — Fragment state management
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] — Fragment purpose
+- [[q-save-data-outside-fragment--android--medium]] — `Fragment` state management
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] — `Fragment` purpose
 - [[q-why-use-fragments-when-we-have-activities--android--medium]] — Fragments vs Activities
 
 ### Related (Hard)
 
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] — Fragment architecture
-- [[q-fragments-and-activity-relationship--android--hard]] — Fragment-Activity lifecycle
-- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] — Fragment benefits
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] — `Fragment` architecture
+- [[q-fragments-and-activity-relationship--android--hard]] — `Fragment`-`Activity` lifecycle
+- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] — `Fragment` benefits

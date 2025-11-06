@@ -39,7 +39,7 @@ Android фреймворк широко использует Factory патте�
 
 **1. `LayoutInflater` - Factory Method Pattern**
 
-`LayoutInflater` создает View объекты из XML деклараций без прямых вызовов конструкторов:
+`LayoutInflater` создает `View` объекты из XML деклараций без прямых вызовов конструкторов:
 
 ```kotlin
 // ✅ Factory method создает Views из XML
@@ -81,7 +81,7 @@ mediaPlayer.prepare() // дополнительный шаг
 
 **3. `Intent.createChooser()` - Static Factory Method**
 
-Создает Intent для выбора приложения:
+Создает `Intent` для выбора приложения:
 
 ```kotlin
 val shareIntent = Intent(Intent.ACTION_SEND).apply {
@@ -94,7 +94,7 @@ startActivity(chooser)
 
 ### Custom Factory Implementation
 
-Пример для RecyclerView:
+Пример для `RecyclerView`:
 
 ```kotlin
 class ViewHolderFactory {
@@ -138,7 +138,7 @@ Android framework extensively uses Factory pattern. Main examples: **`LayoutInfl
 
 **1. `LayoutInflater` - Factory Method Pattern**
 
-`LayoutInflater` creates View objects from XML declarations without direct constructor calls:
+`LayoutInflater` creates `View` objects from XML declarations without direct constructor calls:
 
 ```kotlin
 // ✅ Factory method creates Views from XML
@@ -180,7 +180,7 @@ mediaPlayer.prepare() // additional step
 
 **3. `Intent.createChooser()` - Static Factory Method**
 
-Creates Intent for app selection:
+Creates `Intent` for app selection:
 
 ```kotlin
 val shareIntent = Intent(Intent.ACTION_SEND).apply {
@@ -193,7 +193,7 @@ startActivity(chooser)
 
 ### Custom Factory Implementation
 
-Example for RecyclerView:
+Example for `RecyclerView`:
 
 ```kotlin
 class ViewHolderFactory {
@@ -214,7 +214,7 @@ class ViewHolderFactory {
 ### Factory Pattern Benefits in Android
 
 - **Declarative**: XML describes UI, factory creates objects
-- **Extensible**: easy to add new View/Fragment types
+- **Extensible**: easy to add new View/`Fragment` types
 - **Encapsulation**: hides creation complexity (reflection, initialization)
 - **Consistency**: uniform API for object creation
 

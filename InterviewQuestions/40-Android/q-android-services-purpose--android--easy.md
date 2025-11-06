@@ -25,7 +25,7 @@ tags: [android/background-execution, android/lifecycle, android/service, difficu
 ---
 
 # Вопрос (RU)
-> Для чего используются Service-компоненты в Android и когда они необходимы?
+> Для чего используются `Service`-компоненты в Android и когда они необходимы?
 
 # Question (EN)
 > What are Android Services used for and when are they necessary?
@@ -34,11 +34,11 @@ tags: [android/background-execution, android/lifecycle, android/service, difficu
 
 ## Ответ (RU)
 
-**Service** — компонент для длительных операций без UI.
+**`Service`** — компонент для длительных операций без UI.
 
 **Типы Services:**
 
-**1. Foreground Service (рекомендуемый)**
+**1. Foreground `Service` (рекомендуемый)**
 Видимые пользователю операции с обязательным уведомлением:
 
 ```kotlin
@@ -52,7 +52,7 @@ class MusicService : Service() {
 
 Примеры: музыка, навигация, фитнес-трекинг.
 
-**2. Bound Service**
+**2. Bound `Service`**
 IPC между компонентами:
 
 ```kotlin
@@ -61,7 +61,7 @@ inner class LocalBinder : Binder() {
 }
 ```
 
-**3. Started Service (❌ устарел)**
+**3. Started `Service` (❌ устарел)**
 Фоновая работа без привязки к lifecycle. Background execution limits (Android 8+) убивают такие сервисы.
 
 **Современные альтернативы:**
@@ -73,11 +73,11 @@ inner class LocalBinder : Binder() {
 
 ## Answer (EN)
 
-**Service** is a component for long-running operations without UI.
+**`Service`** is a component for long-running operations without UI.
 
-**Service Types:**
+**`Service` Types:**
 
-**1. Foreground Service (recommended)**
+**1. Foreground `Service` (recommended)**
 User-visible operations with mandatory notification:
 
 ```kotlin
@@ -91,7 +91,7 @@ class MusicService : Service() {
 
 Examples: music, navigation, fitness tracking.
 
-**2. Bound Service**
+**2. Bound `Service`**
 IPC between components:
 
 ```kotlin
@@ -100,7 +100,7 @@ inner class LocalBinder : Binder() {
 }
 ```
 
-**3. Started Service (❌ deprecated)**
+**3. Started `Service` (❌ deprecated)**
 Background work not tied to lifecycle. Background execution limits (Android 8+) kill such services.
 
 **Modern alternatives:**
@@ -114,13 +114,13 @@ Background work not tied to lifecycle. Background execution limits (Android 8+) 
 
 - What notification requirements exist for Foreground Services?
 - How do background execution limits affect Services?
-- When to choose WorkManager over Foreground Service?
-- What happens without calling `stopSelf()` in Started Service?
+- When to choose WorkManager over Foreground `Service`?
+- What happens without calling `stopSelf()` in Started `Service`?
 - How does the system prioritize Services during low memory?
 
 ## References
 
-- [[c-service]] - Service component concept
+- [[c-service]] - `Service` component concept
 - [[c-lifecycle]] - Android component lifecycle
 - [[c-workmanager]] - WorkManager for background tasks
 - https://developer.android.com/guide/components/services
@@ -133,9 +133,9 @@ Background work not tied to lifecycle. Background execution limits (Android 8+) 
  - Component lifecycle basics
 
 ### Related
-- [[q-android-service-types--android--easy]] - Service types and lifecycle
+- [[q-android-service-types--android--easy]] - `Service` types and lifecycle
 - [[q-android-async-primitives--android--easy]] - Asynchronous primitives
 
 ### Advanced
 - [[q-android-architectural-patterns--android--medium]] - Architectural patterns for background work
- - Foreground Service restrictions
+ - Foreground `Service` restrictions

@@ -84,7 +84,7 @@ val notification = NotificationCompat.Builder(context, CHANNEL_ID)
 ### 4. Background limits
 
 - Уважайте `POST_NOTIFICATIONS` runtime permission.
-- Foreground Service: для ongoing calls/chat heads: `FOREGROUND_SERVICE_MICROPHONE/CAMERA`.
+- Foreground `Service`: для ongoing calls/chat heads: `FOREGROUND_SERVICE_MICROPHONE/CAMERA`.
 - Android 13+: уведомления для new installs отключены по умолчанию → onboarding flow.
 
 ### 5. Аналитика и UX

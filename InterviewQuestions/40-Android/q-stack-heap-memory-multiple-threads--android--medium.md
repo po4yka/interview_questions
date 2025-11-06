@@ -29,17 +29,17 @@ related:
 ---
 
 # Вопрос (RU)
-> Stack и Heap память для нескольких потоков
+> `Stack` и Heap память для нескольких потоков
 
 # Question (EN)
-> Stack vs Heap Memory In Multithreading
+> `Stack` vs Heap Memory In Multithreading
 
 ---
 
 ## Answer (EN)
 **Yes**, **stack size will change**, but **heap size will remain unchanged** (though load on it will increase).
 
-**Stack Memory:**
+**`Stack` Memory:**
 
 **Each thread gets its own stack** - so more threads = more stack memory.
 
@@ -78,13 +78,13 @@ Heap:                 512 MB (shared)
 
 **Summary:**
 
-- **Stack**: Each thread = separate stack → total stack **increases**
+- **`Stack`**: Each thread = separate stack → total stack **increases**
 - **Heap**: All threads share heap → heap size **unchanged**, load increases
 - **Per thread**: ~1 MB stack overhead
 
 
 # Question (EN)
-> Stack vs Heap Memory In Multithreading
+> `Stack` vs Heap Memory In Multithreading
 
 ---
 
@@ -95,7 +95,7 @@ Heap:                 512 MB (shared)
 ## Answer (EN)
 **Yes**, **stack size will change**, but **heap size will remain unchanged** (though load on it will increase).
 
-**Stack Memory:**
+**`Stack` Memory:**
 
 **Each thread gets its own stack** - so more threads = more stack memory.
 
@@ -134,7 +134,7 @@ Heap:                 512 MB (shared)
 
 **Summary:**
 
-- **Stack**: Each thread = separate stack → total stack **increases**
+- **`Stack`**: Each thread = separate stack → total stack **increases**
 - **Heap**: All threads share heap → heap size **unchanged**, load increases
 - **Per thread**: ~1 MB stack overhead
 
@@ -142,7 +142,7 @@ Heap:                 512 MB (shared)
 
 **Да**, **размер стека изменится**, но **размер кучи останется неизменным** (хотя нагрузка на неё увеличится).
 
-**Память стека (Stack):**
+**Память стека (`Stack`):**
 
 **Каждый поток получает свой собственный стек** - поэтому больше потоков = больше памяти стека.
 

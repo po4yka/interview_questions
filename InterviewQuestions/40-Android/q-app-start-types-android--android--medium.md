@@ -31,7 +31,7 @@ tags: [android/lifecycle, android/performance-startup, difficulty/medium, perfor
 
 ## Ответ (RU)
 
-**Три типа запуска** различаются по состоянию процесса: холодный (процесс не существует), теплый (процесс жив, Activity пересоздается), горячий (Activity возобновляется). Каждый требует специфичной оптимизации с измеримыми метриками.
+**Три типа запуска** различаются по состоянию процесса: холодный (процесс не существует), теплый (процесс жив, `Activity` пересоздается), горячий (`Activity` возобновляется). Каждый требует специфичной оптимизации с измеримыми метриками.
 
 ### Метрики Запуска
 
@@ -124,7 +124,7 @@ class MainActivity : AppCompatActivity() {
 
 ## Answer (EN)
 
-**Three Android app start types** differ by process state: cold (no process), warm (process alive, Activity recreated), hot (Activity resumed). Each requires specific optimization with measurable metrics.
+**Three Android app start types** differ by process state: cold (no process), warm (process alive, `Activity` recreated), hot (`Activity` resumed). Each requires specific optimization with measurable metrics.
 
 ### Startup Metrics
 
@@ -217,15 +217,15 @@ class MainActivity : AppCompatActivity() {
 ## Follow-ups
 
 - How does baseline profile generation impact different startup types and what metrics improve most?
-- What's the relationship between ContentProvider initialization order and cold start performance?
+- What's the relationship between `ContentProvider` initialization order and cold start performance?
 - How do you measure and enforce startup budgets in CI without flaky tests?
 - When should you use App Startup library vs manual lazy initialization for SDK init?
 - How does process death/recreation differ from configuration changes in terms of warm start optimization?
 
 ## References
 
-- [[c-lifecycle]] - Activity and application lifecycle fundamentals
-- [[c-viewmodel]] - State preservation and ViewModel scoping
+- [[c-lifecycle]] - `Activity` and application lifecycle fundamentals
+- [[c-viewmodel]] - State preservation and `ViewModel` scoping
 - https://developer.android.com/topic/performance/vitals/launch-time - App startup performance guide
 - https://developer.android.com/topic/libraries/app-startup - App Startup library documentation
 - https://developer.android.com/topic/performance/baselineprofiles - Baseline profiles implementation guide
@@ -234,7 +234,7 @@ class MainActivity : AppCompatActivity() {
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - Fundamental Android components understanding
- - Activity lifecycle basics
+ - `Activity` lifecycle basics
 
 ### Related (Same Level)
 - [[q-android-performance-measurement-tools--android--medium]] - Profiling and benchmarking tools

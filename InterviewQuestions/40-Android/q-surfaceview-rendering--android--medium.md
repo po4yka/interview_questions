@@ -48,7 +48,7 @@ tags:
 - `SurfaceView` has a dedicated surface buffer while all regular views share one surface buffer that is allocated by ViewRoot
 - In other words, `SurfaceView` costs more resources but provides better performance for intensive rendering
 
-**2. Background Thread Rendering:**
+**2. Background `Thread` Rendering:**
 - Unlike regular views that must be drawn on the UI thread, `SurfaceView` can be updated on a background thread
 - This prevents blocking the UI thread during intensive rendering operations
 - Ideal for games, video playback, camera preview, and other high-frame-rate content
@@ -69,7 +69,7 @@ tags:
 **5. Different Update Timing:**
 - **Regular Views**: Update mechanism is constrained and controlled by the framework
   - Call `view.invalidate()` in UI thread or `view.postInvalidate()` in other threads
-  - View won't update immediately but waits until next VSYNC event
+  - `View` won't update immediately but waits until next VSYNC event
   - VSYNC can be understood as a timer that fires every 16ms for a 60fps screen
   - All normal view updates are synchronized with VSYNC for better smoothness
 
@@ -149,9 +149,9 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 5. **Data Visualization**: Real-time charts and graphs with frequent updates
 6. **AR/VR Applications**: High-performance 3D rendering
 
-**SurfaceView vs Regular View:**
+**SurfaceView vs Regular `View`:**
 
-| Feature | SurfaceView | Regular View |
+| Feature | SurfaceView | Regular `View` |
 |---------|-------------|--------------|
 | Threading | Background thread rendering | UI thread only |
 | Surface Buffer | Dedicated buffer | Shared buffer |
@@ -170,7 +170,7 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 **Best Practices:**
 
 1. Always implement `SurfaceHolder.Callback` to handle lifecycle events
-2. Properly synchronize access to the Canvas between threads
+2. Properly synchronize access to the `Canvas` between threads
 3. Stop rendering thread when surface is destroyed to prevent memory leaks
 4. Use `lockCanvas()` and `unlockCanvasAndPost()` carefully in try-finally blocks
 5. Consider using `TextureView` if you need hardware acceleration and transformations
@@ -196,7 +196,7 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 - `SurfaceView` has a dedicated surface buffer while all regular views share one surface buffer that is allocated by ViewRoot
 - In other words, `SurfaceView` costs more resources but provides better performance for intensive rendering
 
-**2. Background Thread Rendering:**
+**2. Background `Thread` Rendering:**
 - Unlike regular views that must be drawn on the UI thread, `SurfaceView` can be updated on a background thread
 - This prevents blocking the UI thread during intensive rendering operations
 - Ideal for games, video playback, camera preview, and other high-frame-rate content
@@ -217,7 +217,7 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 **5. Different Update Timing:**
 - **Regular Views**: Update mechanism is constrained and controlled by the framework
   - Call `view.invalidate()` in UI thread or `view.postInvalidate()` in other threads
-  - View won't update immediately but waits until next VSYNC event
+  - `View` won't update immediately but waits until next VSYNC event
   - VSYNC can be understood as a timer that fires every 16ms for a 60fps screen
   - All normal view updates are synchronized with VSYNC for better smoothness
 
@@ -297,9 +297,9 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 5. **Data Visualization**: Real-time charts and graphs with frequent updates
 6. **AR/VR Applications**: High-performance 3D rendering
 
-**SurfaceView vs Regular View:**
+**SurfaceView vs Regular `View`:**
 
-| Feature | SurfaceView | Regular View |
+| Feature | SurfaceView | Regular `View` |
 |---------|-------------|--------------|
 | Threading | Background thread rendering | UI thread only |
 | Surface Buffer | Dedicated buffer | Shared buffer |
@@ -318,7 +318,7 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 **Best Practices:**
 
 1. Always implement `SurfaceHolder.Callback` to handle lifecycle events
-2. Properly synchronize access to the Canvas between threads
+2. Properly synchronize access to the `Canvas` between threads
 3. Stop rendering thread when surface is destroyed to prevent memory leaks
 4. Use `lockCanvas()` and `unlockCanvasAndPost()` carefully in try-finally blocks
 5. Consider using `TextureView` if you need hardware acceleration and transformations
@@ -353,7 +353,7 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
   - Обрабатывать жизненный цикл поверхности
 
 **5. Отличная синхронизация обновлений:**
-- **Обычные View**: Механизм обновления ограничен и контролируется фреймворком
+- **Обычные `View`**: Механизм обновления ограничен и контролируется фреймворком
   - Вызов `view.invalidate()` в UI потоке или `view.postInvalidate()` в других потоках
   - Представление не обновляется немедленно, а ждёт следующего события VSYNC
   - VSYNC можно понимать как таймер, который срабатывает каждые 16мс для экрана 60fps
@@ -373,9 +373,9 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 5. **Визуализация данных**: Графики и диаграммы в реальном времени с частыми обновлениями
 6. **AR/VR приложения**: Высокопроизводительный 3D рендеринг
 
-**SurfaceView vs Обычное View:**
+**SurfaceView vs Обычное `View`:**
 
-| Функция | SurfaceView | Обычное View |
+| Функция | SurfaceView | Обычное `View` |
 |---------|-------------|--------------|
 | Потоки | Рендеринг в фоновом потоке | Только UI поток |
 | Буфер поверхности | Выделенный буфер | Общий буфер |
@@ -388,7 +388,7 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 **Лучшие практики:**
 
 1. Всегда реализуйте `SurfaceHolder.Callback` для обработки событий жизненного цикла
-2. Правильно синхронизируйте доступ к Canvas между потоками
+2. Правильно синхронизируйте доступ к `Canvas` между потоками
 3. Останавливайте поток рендеринга при уничтожении поверхности для предотвращения утечек памяти
 4. Используйте `lockCanvas()` и `unlockCanvasAndPost()` осторожно в блоках try-finally
 5. Рассмотрите использование `TextureView`, если нужно аппаратное ускорение и трансформации
@@ -412,15 +412,15 @@ class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Call
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View
-- [[q-viewmodel-pattern--android--easy]] - View
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`
+- [[q-viewmodel-pattern--android--easy]] - `View`
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--android--medium]] - View
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- q-rxjava-pagination-recyclerview--android--medium - View
-- [[q-what-is-viewmodel--android--medium]] - View
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+- [[q-testing-viewmodels-turbine--android--medium]] - `View`
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View`
+- q-rxjava-pagination-recyclerview--android--medium - `View`
+- [[q-what-is-viewmodel--android--medium]] - `View`
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--android--hard]] - View
+- [[q-compose-custom-layout--android--hard]] - `View`

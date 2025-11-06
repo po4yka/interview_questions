@@ -49,7 +49,7 @@ sources:
 - Измерьте размер пакетов, таргетируйте устройства по ABI, texture compression (ETC2/ASTC).
 - Определите зависимости между динамическими фичами и ассетами.
 
-### 2. Настройка App Bundle
+### 2. Настройка App `Bundle`
 
 - `build.gradle`:
 
@@ -117,7 +117,7 @@ assetManager.registerListener { state ->
 ## Answer (EN)
 
 - Classify assets by criticality and size to map them to install-time, fast-follow, or on-demand packs; configure splits (ABI, density, language) appropriately.
-- Define asset pack modules in the App Bundle, set delivery modes, and manage dynamic feature dependencies.
+- Define asset pack modules in the App `Bundle`, set delivery modes, and manage dynamic feature dependencies.
 - Use Play Core to request, monitor, and consume asset packs at runtime, handling progress, cancellation, and storage errors.
 - Take advantage of asset-only updates for content refreshes without full app releases and version assets for A/B support.
 - Monitor delivery health via Play Console/Reporting API, log setup times, and provide user feedback or fallbacks when downloads fail.

@@ -29,17 +29,17 @@ tags:
 
 # Вопрос (RU)
 
-> Что позволяет делать ItemDecoration в RecyclerView?
+> Что позволяет делать ItemDecoration в `RecyclerView`?
 
 # Question (EN)
 
-> What does ItemDecoration allow you to do in RecyclerView?
+> What does ItemDecoration allow you to do in `RecyclerView`?
 
 ---
 
 ## Ответ (RU)
 
-**ItemDecoration** — механизм для добавления визуальных декораций к элементам RecyclerView (разделители, отступы, рамки, заголовки) без изменения самих элементов или адаптера.
+**ItemDecoration** — механизм для добавления визуальных декораций к элементам `RecyclerView` (разделители, отступы, рамки, заголовки) без изменения самих элементов или адаптера.
 
 ### Основные Методы
 
@@ -193,8 +193,8 @@ class SectionHeaderDecoration(
 
 ### Лучшие Практики
 
-1. **Кешируйте Paint/Drawable** — создавайте их в конструкторе, не в onDraw
-2. **Переиспользуйте декорации** — создайте один экземпляр для всех RecyclerView
+1. **Кешируйте Paint/`Drawable`** — создавайте их в конструкторе, не в onDraw
+2. **Переиспользуйте декорации** — создайте один экземпляр для всех `RecyclerView`
 3. **Учитывайте LayoutManager** — проверяйте тип (Linear/Grid/Staggered)
 4. **Не меняйте ViewHolder** — ItemDecoration изолирована от адаптера
 5. **Множественные декорации** — можно комбинировать (порядок важен: первая рисуется снизу)
@@ -211,7 +211,7 @@ val count = recyclerView.itemDecorationCount      // Количество
 
 ## Answer (EN)
 
-**ItemDecoration** is a mechanism for adding visual decorations to RecyclerView items (dividers, spacing, borders, headers) without modifying the items themselves or the adapter.
+**ItemDecoration** is a mechanism for adding visual decorations to `RecyclerView` items (dividers, spacing, borders, headers) without modifying the items themselves or the adapter.
 
 ### Core Methods
 
@@ -365,7 +365,7 @@ class SectionHeaderDecoration(
 
 ### Best Practices
 
-1. **Cache Paint/Drawable objects** — create in constructor, not in onDraw
+1. **Cache Paint/`Drawable` objects** — create in constructor, not in onDraw
 2. **Reuse decorations** — create one instance for all RecyclerViews
 3. **Account for LayoutManager** — check type (Linear/Grid/Staggered)
 4. **Don't modify ViewHolder** — ItemDecoration is isolated from adapter
@@ -385,14 +385,14 @@ val count = recyclerView.itemDecorationCount      // Get count
 
 1. What is the difference between `onDraw` and `onDrawOver`?
 2. How do you create a sticky header using ItemDecoration?
-3. How does ItemDecoration interact with RecyclerView's item animator?
+3. How does ItemDecoration interact with `RecyclerView`'s item animator?
 4. Can you modify item bounds in `getItemOffsets` dynamically based on scroll position?
 5. How would you implement inset dividers (dividers that don't span full width)?
 
 ## References
 
-- [RecyclerView.ItemDecoration Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration)
-- [Android Canvas and Drawing Guide](https://developer.android.com/develop/ui/views/graphics/drawables)
+- [`RecyclerView`.ItemDecoration Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/`RecyclerView`.ItemDecoration)
+- [Android `Canvas` and Drawing Guide](https://developer.android.com/develop/ui/views/graphics/drawables)
 
 ## Related Questions
 
@@ -402,15 +402,15 @@ val count = recyclerView.itemDecorationCount      // Get count
 
 
 ### Prerequisites
-- RecyclerView basics (adapter, ViewHolder pattern)
-- Understanding Android Canvas drawing
+- `RecyclerView` basics (adapter, ViewHolder pattern)
+- Understanding Android `Canvas` drawing
 
 ### Related
-- RecyclerView ViewHolder lifecycle
-- DiffUtil for efficient RecyclerView updates
+- `RecyclerView` ViewHolder lifecycle
+- DiffUtil for efficient `RecyclerView` updates
 - Custom LayoutManagers
 
 ### Advanced
-- RecyclerView item animations with ItemDecoration
+- `RecyclerView` item animations with ItemDecoration
 - Sticky headers implementation
 - Performance optimization for complex decorations

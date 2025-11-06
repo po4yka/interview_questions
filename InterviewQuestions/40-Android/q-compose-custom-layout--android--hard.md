@@ -299,7 +299,7 @@ val policy = object : MeasurePolicy {
 ### Prerequisites (Easier)
 
 ### Related (Same Level)
-- [[q-compose-canvas-graphics--android--hard]] — Canvas for custom drawing, Layout for custom measurement
+- [[q-compose-canvas-graphics--android--hard]] — `Canvas` for custom drawing, Layout for custom measurement
 - [[q-compose-compiler-plugin--android--hard]] — How Compose compiler optimizes layouts
 
 ### Advanced (Harder)

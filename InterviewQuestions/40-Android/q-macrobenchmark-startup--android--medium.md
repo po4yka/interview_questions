@@ -50,8 +50,8 @@ tags:
 
 **Типы запуска:**
 - **Холодный**: процесс не существует, система создает его с нуля (самый медленный, 400-800мс)
-- **Теплый**: процесс существует, Activity пересоздается (200-400мс)
-- **Горячий**: Activity выводится на передний план (50-150мс)
+- **Теплый**: процесс существует, `Activity` пересоздается (200-400мс)
+- **Горячий**: `Activity` выводится на передний план (50-150мс)
 
 **Ключевые возможности:**
 - Измерения на реальном устройстве с Perfetto трассировкой
@@ -212,7 +212,7 @@ macrobenchmark/build/outputs/connected_android_test_additional_output/
 
 **Типичные узкие места:**
 
-1. **Application.onCreate() > 100мс:**
+1. **`Application`.onCreate() > 100мс:**
    - Переместить инициализацию в background
    - Использовать App Startup library для ленивой загрузки
 
@@ -317,8 +317,8 @@ setContent {
 
 **Startup Types:**
 - **Cold**: Process doesn't exist, system creates from scratch (slowest, 400-800ms)
-- **Warm**: Process exists, Activity recreated (200-400ms)
-- **Hot**: Activity brought to foreground (50-150ms)
+- **Warm**: Process exists, `Activity` recreated (200-400ms)
+- **Hot**: `Activity` brought to foreground (50-150ms)
 
 **Key Capabilities:**
 - Real device measurements with Perfetto tracing
@@ -479,7 +479,7 @@ macrobenchmark/build/outputs/connected_android_test_additional_output/
 
 **Common Bottlenecks:**
 
-1. **Application.onCreate() > 100ms:**
+1. **`Application`.onCreate() > 100ms:**
    - Move initialization to background
    - Use App Startup library for lazy loading
 

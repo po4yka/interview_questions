@@ -34,7 +34,7 @@ To start drawing UI on screen in an Android project, you need to follow several 
 
 Use Android Studio to create a new project:
 - File → New → New Project
-- Select "Empty Activity" or "Empty Compose Activity" template
+- Select "Empty `Activity`" or "Empty Compose `Activity`" template
 - Configure project name, package, and minimum SDK
 
 ### 2. Method A: Traditional XML-Based UI
@@ -69,7 +69,7 @@ Create or edit `res/layout/activity_main.xml`:
 </LinearLayout>
 ```
 
-#### Step 2: Connect Layout to Activity
+#### Step 2: Connect Layout to `Activity`
 
 In `MainActivity.kt`:
 
@@ -92,15 +92,15 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### Step 3: Run the Application
+#### Step 3: Run the `Application`
 
 - Connect device or start emulator
 - Click "Run" (green triangle) in Android Studio
 - UI will be displayed on screen
 
-### 2. Method B: View Binding (Recommended for XML)
+### 2. Method B: `View` Binding (Recommended for XML)
 
-#### Step 1: Enable View Binding
+#### Step 1: Enable `View` Binding
 
 In `build.gradle.kts` (Module: app):
 
@@ -112,7 +112,7 @@ android {
 }
 ```
 
-#### Step 2: Use View Binding in Activity
+#### Step 2: Use `View` Binding in `Activity`
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -218,7 +218,7 @@ fun PreviewMyApp() {
 }
 ```
 
-### 4. Custom Drawing (Canvas)
+### 4. Custom Drawing (`Canvas`)
 
 For custom graphics, create a custom view:
 
@@ -373,10 +373,10 @@ Ensure your activity is declared:
 
 **For Custom Drawing:**
 1. Create class extending `View`
-2. Override `onDraw(canvas: Canvas)`
-3. Set as content view or add to layout
+2. Override `onDraw(canvas: `Canvas`)`
+3. `Set` as content view or add to layout
 
-### 8. Essential Activity Lifecycle
+### 8. Essential `Activity` `Lifecycle`
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -401,11 +401,11 @@ class MainActivity : AppCompatActivity() {
 
 ### Key Points
 
-1. **Activity** is the entry point for UI
+1. **`Activity`** is the entry point for UI
 2. **setContentView()** must be called in `onCreate()`
 3. **Layout** can be defined in XML, Compose, or programmatically
 4. **Run the app** on emulator or device to see UI
-5. **Choose one approach**: XML + View Binding OR Compose (recommended for new projects)
+5. **Choose one approach**: XML + `View` Binding OR Compose (recommended for new projects)
 
 ### Common Mistakes
 
@@ -448,7 +448,7 @@ To start drawing UI on screen in an Android project, you need to follow several 
 
 Use Android Studio to create a new project:
 - File → New → New Project
-- Select "Empty Activity" or "Empty Compose Activity" template
+- Select "Empty `Activity`" or "Empty Compose `Activity`" template
 - Configure project name, package, and minimum SDK
 
 ### 2. Method A: Traditional XML-Based UI
@@ -483,7 +483,7 @@ Create or edit `res/layout/activity_main.xml`:
 </LinearLayout>
 ```
 
-#### Step 2: Connect Layout to Activity
+#### Step 2: Connect Layout to `Activity`
 
 In `MainActivity.kt`:
 
@@ -506,15 +506,15 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### Step 3: Run the Application
+#### Step 3: Run the `Application`
 
 - Connect device or start emulator
 - Click "Run" (green triangle) in Android Studio
 - UI will be displayed on screen
 
-### 2. Method B: View Binding (Recommended for XML)
+### 2. Method B: `View` Binding (Recommended for XML)
 
-#### Step 1: Enable View Binding
+#### Step 1: Enable `View` Binding
 
 In `build.gradle.kts` (Module: app):
 
@@ -526,7 +526,7 @@ android {
 }
 ```
 
-#### Step 2: Use View Binding in Activity
+#### Step 2: Use `View` Binding in `Activity`
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -632,7 +632,7 @@ fun PreviewMyApp() {
 }
 ```
 
-### 4. Custom Drawing (Canvas)
+### 4. Custom Drawing (`Canvas`)
 
 For custom graphics, create a custom view:
 
@@ -787,10 +787,10 @@ Ensure your activity is declared:
 
 **For Custom Drawing:**
 1. Create class extending `View`
-2. Override `onDraw(canvas: Canvas)`
-3. Set as content view or add to layout
+2. Override `onDraw(canvas: `Canvas`)`
+3. `Set` as content view or add to layout
 
-### 8. Essential Activity Lifecycle
+### 8. Essential `Activity` `Lifecycle`
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -815,11 +815,11 @@ class MainActivity : AppCompatActivity() {
 
 ### Key Points
 
-1. **Activity** is the entry point for UI
+1. **`Activity`** is the entry point for UI
 2. **setContentView()** must be called in `onCreate()`
 3. **Layout** can be defined in XML, Compose, or programmatically
 4. **Run the app** on emulator or device to see UI
-5. **Choose one approach**: XML + View Binding OR Compose (recommended for new projects)
+5. **Choose one approach**: XML + `View` Binding OR Compose (recommended for new projects)
 
 ### Common Mistakes
 
@@ -845,7 +845,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 Что нужно сделать в Android-проекте чтобы начать рисовать UI на экране?
 
-Чтобы начать рисовать пользовательский интерфейс (UI) на экране в Android-проекте, необходимо выполнить несколько шагов. Сначала создайте Android-проект в Android Studio с шаблоном «Empty Activity». Затем настройте макет, используя XML-файл для определения структуры интерфейса. Подключите макет к активности с помощью метода setContentView() в Activity классе. Если требуется кастомное рисование, создайте собственный класс, унаследованный от View и переопределите метод onDraw(). Наконец, запустите приложение на эмуляторе или реальном устройстве.
+Чтобы начать рисовать пользовательский интерфейс (UI) на экране в Android-проекте, необходимо выполнить несколько шагов. Сначала создайте Android-проект в Android Studio с шаблоном «Empty `Activity`». Затем настройте макет, используя XML-файл для определения структуры интерфейса. Подключите макет к активности с помощью метода setContentView() в `Activity` классе. Если требуется кастомное рисование, создайте собственный класс, унаследованный от `View` и переопределите метод onDraw(). Наконец, запустите приложение на эмуляторе или реальном устройстве.
 
 ---
 

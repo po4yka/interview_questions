@@ -33,20 +33,20 @@ sources:
 ---
 
 # Вопрос (RU)
-> Как создать пользовательские ItemDecorations для RecyclerView?
+> Как создать пользовательские ItemDecorations для `RecyclerView`?
 
 # Question (EN)
-> How to create custom ItemDecorations for RecyclerView?
+> How to create custom ItemDecorations for `RecyclerView`?
 
 ---
 
 ## Ответ (RU)
 
 **Теория ItemDecoration:**
-ItemDecoration позволяет добавлять пользовательскую отрисовку и отступы к элементам RecyclerView без изменения самих элементов. Идеально подходит для разделителей, отступов, sticky headers и визуальных эффектов.
+ItemDecoration позволяет добавлять пользовательскую отрисовку и отступы к элементам `RecyclerView` без изменения самих элементов. Идеально подходит для разделителей, отступов, sticky headers и визуальных эффектов.
 
 **Фазы отрисовки:**
-RecyclerView отрисовывается в 3 фазы:
+`RecyclerView` отрисовывается в 3 фазы:
 1. `onDraw()` - отрисовка ПОД элементами (фоновые украшения)
 2. Отрисовка элементов
 3. `onDrawOver()` - отрисовка НАД элементами (передние украшения, sticky headers)
@@ -129,10 +129,10 @@ recyclerView.addItemDecoration(StickyHeaderDecoration())
 ## Answer (EN)
 
 **ItemDecoration Theory:**
-ItemDecoration allows adding custom drawing and layout offsets to RecyclerView items without modifying the items themselves. Perfect for dividers, spacing, sticky headers, and visual effects.
+ItemDecoration allows adding custom drawing and layout offsets to `RecyclerView` items without modifying the items themselves. Perfect for dividers, spacing, sticky headers, and visual effects.
 
 **Drawing phases:**
-RecyclerView drawing occurs in 3 phases:
+`RecyclerView` drawing occurs in 3 phases:
 1. `onDraw()` - Draw UNDER items (background decorations)
 2. Item views drawn
 3. `onDrawOver()` - Draw OVER items (foreground decorations, sticky headers)
@@ -235,14 +235,14 @@ recyclerView.addItemDecoration(StickyHeaderDecoration())
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-basics--android--easy]] - RecyclerView basics
+- [[q-recyclerview-basics--android--easy]] - `RecyclerView` basics
 - [[q-android-app-components--android--easy]] - App components
 
 ### Related (Same Level)
 - [[q-custom-drawing--android--medium]] - Custom drawing
-- [[q-recyclerview-performance--android--medium]] - RecyclerView performance
+- [[q-recyclerview-performance--android--medium]] - `RecyclerView` performance
 - [[q-ui-customization--android--medium]] - UI customization
 
 ### Advanced (Harder)
-- [[q-recyclerview-advanced--android--hard]] - RecyclerView advanced
-- [[q-canvas-drawing-optimization--android--hard]] - Canvas optimization
+- [[q-recyclerview-advanced--android--hard]] - `RecyclerView` advanced
+- [[q-canvas-drawing-optimization--android--hard]] - `Canvas` optimization

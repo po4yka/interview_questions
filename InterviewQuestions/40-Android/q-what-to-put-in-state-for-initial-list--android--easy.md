@@ -35,7 +35,7 @@ tags:
 > Состояние для начального списка
 
 # Question (EN)
-> State for Initial List
+> State for Initial `List`
 
 ---
 
@@ -112,7 +112,7 @@ class ListViewModel : ViewModel() {
 
 
 # Question (EN)
-> State for Initial List
+> State for Initial `List`
 
 ---
 

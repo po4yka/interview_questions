@@ -19,15 +19,15 @@ sources: []
 
 # Вопрос (RU)
 
-Как зарегистрировать BroadcastReceiver для получения сообщений?
+Как зарегистрировать `BroadcastReceiver` для получения сообщений?
 
 # Question (EN)
 
-How to register BroadcastReceiver to receive messages?
+How to register `BroadcastReceiver` to receive messages?
 
 ## Ответ (RU)
 
-Существует **два способа** регистрации [[c-broadcast-receiver|BroadcastReceiver]]:
+Существует **два способа** регистрации [[c-broadcast-receiver|`BroadcastReceiver`]]:
 
 ### 1. Динамическая Регистрация (Runtime)
 
@@ -123,11 +123,11 @@ class EventBus {
 - **Dynamic:** UI обновления, временные слушатели
 - **Static:** BOOT_COMPLETED, SMS (требует разрешений)
 - **WorkManager:** Фоновые задачи с ограничениями
-- **Flow/LiveData:** Внутриприложенческие события
+- **Flow/`LiveData`:** Внутриприложенческие события
 
 ## Answer (EN)
 
-There are **two ways** to register a [[c-broadcast-receiver|BroadcastReceiver]]:
+There are **two ways** to register a [[c-broadcast-receiver|`BroadcastReceiver`]]:
 
 ### 1. Dynamic Registration (Runtime)
 
@@ -223,20 +223,20 @@ class EventBus {
 - **Dynamic:** UI updates, temporary listeners
 - **Static:** BOOT_COMPLETED, SMS (requires permissions)
 - **WorkManager:** Background tasks with constraints
-- **Flow/LiveData:** In-app events
+- **Flow/`LiveData`:** In-app events
 
 ## Follow-ups
 
 - What happens if you forget to unregister a dynamically registered receiver?
 - How does Android handle priority in ordered broadcasts?
 - What are the security implications of using exported receivers?
-- When should you prefer WorkManager over BroadcastReceiver?
-- How do you test BroadcastReceiver implementations?
+- When should you prefer WorkManager over `BroadcastReceiver`?
+- How do you test `BroadcastReceiver` implementations?
 
 ## References
 
-- [[c-broadcast-receiver]] - BroadcastReceiver concept
-- Android Developers: BroadcastReceiver guide
+- [[c-broadcast-receiver]] - `BroadcastReceiver` concept
+- Android Developers: `BroadcastReceiver` guide
 - Android Developers: Implicit broadcast limitations
 
 ---
@@ -244,10 +244,10 @@ class EventBus {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-broadcastreceiver--android--easy]] - What is BroadcastReceiver
+- [[q-what-is-broadcastreceiver--android--easy]] - What is `BroadcastReceiver`
 
 ### Related (Medium)
-- [[q-what-does-the-lifecycle-library-do--android--medium]] - Lifecycle management
+- [[q-what-does-the-lifecycle-library-do--android--medium]] - `Lifecycle` management
 - [[q-how-animations-work-in-recyclerview--android--medium]] - Component lifecycle
 
 ### Advanced (Harder)

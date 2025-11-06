@@ -19,11 +19,11 @@ tags: [android, android/performance-rendering, android/threads-sync, android/ui-
 
 # Вопрос (RU)
 
-Какой класс следует использовать для отрисовки View в фоновом потоке?
+Какой класс следует использовать для отрисовки `View` в фоновом потоке?
 
 # Question (EN)
 
-Which class should be used to render View in a background thread?
+Which class should be used to render `View` in a background thread?
 
 ---
 
@@ -33,7 +33,7 @@ Which class should be used to render View in a background thread?
 
 ### Почему SurfaceView?
 
-Обычные View обязаны отрисовываться в главном потоке. SurfaceView решает эту проблему:
+Обычные `View` обязаны отрисовываться в главном потоке. SurfaceView решает эту проблему:
 - Имеет отдельный буфер поверхности
 - Позволяет отрисовку из фоновых потоков
 - Обеспечивает высокую производительность для игр и видео
@@ -124,7 +124,7 @@ class CustomTextureView(context: Context) :
 | **Память** | Меньше | Больше |
 | **Трансформации** | Ограничены | Полная поддержка |
 | **Прозрачность** | Нет | Да |
-| **Анимации View** | Нет | Да |
+| **Анимации `View`** | Нет | Да |
 | **Лучше для** | Игры, видео | UI с анимацией |
 
 ### Использование С Корутинами
@@ -170,7 +170,7 @@ class ModernSurfaceView(context: Context) :
 
 ### Best Practices
 
-1. **Всегда освобождать Canvas**: используйте `try-finally` с `unlockCanvasAndPost()`
+1. **Всегда освобождать `Canvas`**: используйте `try-finally` с `unlockCanvasAndPost()`
 2. **Контроль FPS**: избегайте чрезмерной нагрузки на CPU
 3. **Правильная остановка**: используйте флаги и `join()` для завершения потоков
 4. **Синхронизация**: защищайте доступ к общим данным через `synchronized`
@@ -301,7 +301,7 @@ class CustomTextureView(context: Context) :
 | **Memory** | Lower | Higher |
 | **Transformations** | Limited | Full support |
 | **Transparency** | No | Yes |
-| **View animations** | No | Yes |
+| **`View` animations** | No | Yes |
 | **Best for** | Games, video | UI with animation |
 
 ### Using with Coroutines
@@ -385,7 +385,7 @@ override fun surfaceDestroyed(holder: SurfaceHolder) {
 
 ## Follow-ups
 
-1. What are the memory implications of using SurfaceView vs regular View?
+1. What are the memory implications of using SurfaceView vs regular `View`?
 2. How do you handle screen rotation with SurfaceView without losing state?
 3. Can you use hardware acceleration with SurfaceView?
 4. What's the difference between lockCanvas() and lockCanvas(Rect)?
@@ -395,7 +395,7 @@ override fun surfaceDestroyed(holder: SurfaceHolder) {
 
 - [[c-surfaceview]] - SurfaceView concept and architecture
 - [[c-textureview]] - TextureView implementation details
-- [[c-canvas-drawing]] - Canvas API and drawing operations
+- [[c-canvas-drawing]] - `Canvas` API and drawing operations
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Understanding main thread constraints
 - https://developer.android.com/reference/android/view/SurfaceView
 - https://developer.android.com/reference/android/view/TextureView
@@ -404,7 +404,7 @@ override fun surfaceDestroyed(holder: SurfaceHolder) {
 
 ### Prerequisites (Easier)
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread basics
-- [[q-handler-looper-messagequeue--android--medium]] - Thread communication
+- [[q-handler-looper-messagequeue--android--medium]] - `Thread` communication
 
 ### Related (Same Level)
 - [[q-custom-view-drawing--android--hard]] - Custom view implementation

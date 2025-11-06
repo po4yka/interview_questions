@@ -47,7 +47,7 @@ tags:
 
 ### Paparazzi
 
-**Paparazzi** renders Compose/View-based UIs on JVM without devices:
+**Paparazzi** renders Compose/`View`-based UIs on JVM without devices:
 
 ```gradle
 // build.gradle.kts
@@ -656,7 +656,7 @@ paparazzi.snapshot("test1") { }
 
 ### Paparazzi
 
-**Paparazzi** renders Compose/View-based UIs on JVM without devices:
+**Paparazzi** renders Compose/`View`-based UIs on JVM without devices:
 
 ```gradle
 // build.gradle.kts
@@ -1248,7 +1248,7 @@ paparazzi.snapshot("test1") { }
 
 ### Paparazzi
 
-**Paparazzi** рендерит Compose/View UI на JVM без устройств. Быстро, работает в CI без эмулятора.
+**Paparazzi** рендерит Compose/`View` UI на JVM без устройств. Быстро, работает в CI без эмулятора.
 
 ### Shot
 

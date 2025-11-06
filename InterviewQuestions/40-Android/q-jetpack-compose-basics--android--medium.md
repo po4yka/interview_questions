@@ -54,11 +54,11 @@ tags:
 
 ## Answer (EN)
 
-Jetpack Compose is Android's modern declarative UI toolkit that simplifies and accelerates UI development. Unlike the imperative View system, Compose describes what the UI should look like based on the current state, and the framework handles all updates automatically.
+Jetpack Compose is Android's modern declarative UI toolkit that simplifies and accelerates UI development. Unlike the imperative `View` system, Compose describes what the UI should look like based on the current state, and the framework handles all updates automatically.
 
 ### Why Jetpack Compose?
 
-**Traditional View System (Imperative)**:
+**Traditional `View` System (Imperative)**:
 ```kotlin
 // XML layout
 <TextView
@@ -452,7 +452,7 @@ fun RowExample() {
 // Similar arrangement and alignment options as Column
 ```
 
-#### Box - Stack Layout
+#### Box - `Stack` Layout
 
 ```kotlin
 @Composable
@@ -542,7 +542,7 @@ fun LazyListWithKeys(messages: List<Message>) {
 }
 ```
 
-#### ConstraintLayout
+#### `ConstraintLayout`
 
 ```kotlin
 @Composable
@@ -778,7 +778,7 @@ fun ProfileScreen() {
 }
 ```
 
-#### Example 3: Todo List with CRUD Operations
+#### Example 3: Todo `List` with CRUD Operations
 
 ```kotlin
 data class TodoItem(
@@ -914,7 +914,7 @@ fun TodoItemRow(
 }
 ```
 
-### Lifecycle of Composables
+### `Lifecycle` of Composables
 
 Composables have three lifecycle stages:
 
@@ -1040,11 +1040,11 @@ fun ThemedText() {
 
 ## Answer (EN)
 
-Jetpack Compose is Android's modern declarative UI toolkit that simplifies and accelerates UI development. Unlike the imperative View system, Compose describes what the UI should look like based on the current state, and the framework handles all updates automatically.
+Jetpack Compose is Android's modern declarative UI toolkit that simplifies and accelerates UI development. Unlike the imperative `View` system, Compose describes what the UI should look like based on the current state, and the framework handles all updates automatically.
 
 ### Why Jetpack Compose?
 
-**Traditional View System (Imperative)**:
+**Traditional `View` System (Imperative)**:
 ```kotlin
 // XML layout
 <TextView
@@ -1438,7 +1438,7 @@ fun RowExample() {
 // Similar arrangement and alignment options as Column
 ```
 
-#### Box - Stack Layout
+#### Box - `Stack` Layout
 
 ```kotlin
 @Composable
@@ -1528,7 +1528,7 @@ fun LazyListWithKeys(messages: List<Message>) {
 }
 ```
 
-#### ConstraintLayout
+#### `ConstraintLayout`
 
 ```kotlin
 @Composable
@@ -1764,7 +1764,7 @@ fun ProfileScreen() {
 }
 ```
 
-#### Example 3: Todo List with CRUD Operations
+#### Example 3: Todo `List` with CRUD Operations
 
 ```kotlin
 data class TodoItem(
@@ -1900,7 +1900,7 @@ fun TodoItemRow(
 }
 ```
 
-### Lifecycle of Composables
+### `Lifecycle` of Composables
 
 Composables have three lifecycle stages:
 
@@ -2017,7 +2017,7 @@ Jetpack Compose - это современный декларативный UI-и
 
 ### Почему Jetpack Compose?
 
-**Традиционная система View (Императивная)**:
+**Традиционная система `View` (Императивная)**:
 ```kotlin
 // XML макет + код для обновления
 val textView = findViewById<TextView>(R.id.textView)
@@ -2362,7 +2362,7 @@ fun LoadDataExample(userId: String) {
 ### Compose Fundamentals (Medium)
 - [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
 - [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `RecyclerView` in Compose
 - [[q-mutable-state-compose--android--medium]] - MutableState basics
 - [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
 - [[q-compose-remember-derived-state--android--medium]] - Derived state patterns

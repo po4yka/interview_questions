@@ -40,17 +40,17 @@ sources: []
 
 # Вопрос (RU)
 
-> Можно ли подключиться к Service, если Activity запустилась после него?
+> Можно ли подключиться к `Service`, если `Activity` запустилась после него?
 
 # Question (EN)
 
-> If an Activity starts after a Service is already running, can you connect to this Service?
+> If an `Activity` starts after a `Service` is already running, can you connect to this `Service`?
 
 ---
 
 ## Ответ (RU)
 
-Да, Activity может привязаться к уже запущенному Service через механизм binding независимо от порядка их запуска. Привязка обеспечивает прямое взаимодействие через IBinder интерфейс.
+Да, `Activity` может привязаться к уже запущенному `Service` через механизм binding независимо от порядка их запуска. Привязка обеспечивает прямое взаимодействие через IBinder интерфейс.
 
 ### Пример Привязки
 
@@ -104,12 +104,12 @@ class MyActivity : AppCompatActivity() {
 
 - **onBind()** возвращает IBinder для коммуникации
 - **ServiceConnection** получает уведомления о состоянии привязки
-- **BIND_AUTO_CREATE** создаёт Service, если он не запущен
+- **BIND_AUTO_CREATE** создаёт `Service`, если он не запущен
 - Всегда вызывайте `unbindService()` в `onStop()`
 
 ## Answer (EN)
 
-Yes, an Activity can bind to an already-running Service via the binding mechanism, regardless of when each started. Binding provides direct interaction through the IBinder interface.
+Yes, an `Activity` can bind to an already-running `Service` via the binding mechanism, regardless of when each started. Binding provides direct interaction through the IBinder interface.
 
 ### Binding Example
 
@@ -163,16 +163,16 @@ class MyActivity : AppCompatActivity() {
 
 - **onBind()** returns IBinder for communication
 - **ServiceConnection** receives binding state notifications
-- **BIND_AUTO_CREATE** starts Service if not running
+- **BIND_AUTO_CREATE** starts `Service` if not running
 - Always call `unbindService()` in `onStop()`
 
 ---
 
 ## Follow-ups
 
-- What happens if multiple clients bind to the same Service?
+- What happens if multiple clients bind to the same `Service`?
 - When should you use started vs bound Services?
-- How does AIDL enable cross-process Service binding?
+- How does AIDL enable cross-process `Service` binding?
 - What is the difference between BIND_AUTO_CREATE and other binding flags?
 
 ## References
@@ -192,8 +192,8 @@ class MyActivity : AppCompatActivity() {
 - [[q-android-components-besides-activity--android--easy]] - Android components overview
 
 ### Related (Medium)
-- [[q-service-component--android--medium]] - Service fundamentals
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity lifecycle and memory
+- [[q-service-component--android--medium]] - `Service` fundamentals
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - `Activity` lifecycle and memory
 
 ### Advanced (Harder)
 - [[q-design-whatsapp-app--android--hard]] - System design with background services

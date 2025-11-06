@@ -40,7 +40,7 @@ tags:
 ---
 
 ## Answer (EN)
-`remember` сохраняет состояние **только в памяти** во время composition, теряя его при configuration changes (поворот экрана). `rememberSaveable` сохраняет состояние в **Bundle**, переживая configuration changes как `onSaveInstanceState`.
+`remember` сохраняет состояние **только в памяти** во время composition, теряя его при configuration changes (поворот экрана). `rememberSaveable` сохраняет состояние в **`Bundle`**, переживая configuration changes как `onSaveInstanceState`.
 
 ### Remember - Сохранение В Памяти
 
@@ -65,7 +65,7 @@ fun CounterWithRemember() {
 - - **Теряется** при process death
 - - Быстрое, без сериализации
 
-### rememberSaveable - Сохранение В Bundle
+### rememberSaveable - Сохранение В `Bundle`
 
 ```kotlin
 @Composable
@@ -86,7 +86,7 @@ fun CounterWithRememberSaveable() {
 - - Переживает recomposition
 - - **Переживает** configuration changes
 - - **Переживает** process death (в некоторых случаях)
-- WARNING: Требует типы, поддерживающие Bundle (Parcelable/Serializable)
+- WARNING: Требует типы, поддерживающие `Bundle` (Parcelable/`Serializable`)
 
 ### Сравнительная Таблица
 
@@ -95,12 +95,12 @@ fun CounterWithRememberSaveable() {
 | **Recomposition** | - Сохраняется | - Сохраняется |
 | **Configuration change** | - Теряется | - Сохраняется |
 | **Process death** | - Теряется | - Сохраняется* |
-| **Поддерживаемые типы** | Любые | Bundle-compatible |
+| **Поддерживаемые типы** | Любые | `Bundle`-compatible |
 | **Производительность** |  Быстрее |  Медленнее (сериализация) |
-| **Лимит размера** | Нет | 1MB (Bundle limit) |
+| **Лимит размера** | Нет | 1MB (`Bundle` limit) |
 | **Use case** | Временное UI состояние | Важное пользовательское состояние |
 
-\* Process death восстановление работает только если Activity/Fragment корректно сохраняют state
+\* Process death восстановление работает только если Activity/`Fragment` корректно сохраняют state
 
 ### Что Можно Сохранить В rememberSaveable
 
@@ -119,15 +119,15 @@ fun AutoSupportedTypes() {
 ```
 
 **Поддерживаемые типы**:
-- Primitives: Int, Long, Float, Double, Boolean, Char, Byte, Short
-- String
+- Primitives: `Int`, `Long`, `Float`, `Double`, `Boolean`, `Char`, `Byte`, `Short`
+- `String`
 - CharSequence
 - Arrays примитивов: IntArray, LongArray, etc.
-- ArrayList<T> где T - поддерживаемый тип
-- Parcelable
-- Serializable
+- `ArrayList`<T> где T - поддерживаемый тип
+- `Parcelable`
+- `Serializable`
 
-### Custom Типы С Parcelable
+### Custom Типы С `Parcelable`
 
 ```kotlin
 @Parcelize
@@ -153,7 +153,7 @@ fun UserProfile() {
 
 ### Custom Типы С Saver
 
-Для типов, не поддерживающих Parcelable, используйте custom `Saver`:
+Для типов, не поддерживающих `Parcelable`, используйте custom `Saver`:
 
 ```kotlin
 data class FilterState(
@@ -215,7 +215,7 @@ fun ProductFilter() {
 }
 ```
 
-### ListSaver Для List-based Данных
+### ListSaver Для `List`-based Данных
 
 ```kotlin
 data class CartItem(val productId: Int, val quantity: Int)
@@ -240,7 +240,7 @@ fun ShoppingCart() {
 }
 ```
 
-### rememberSaveable С ViewModel
+### rememberSaveable С `ViewModel`
 
 ```kotlin
 @Composable
@@ -317,7 +317,7 @@ fun ExpensiveComputationExample() {
 }
 ```
 
-1. **Состояние, управляемое ViewModel**:
+1. **Состояние, управляемое `ViewModel`**:
 
 ```kotlin
 @Composable
@@ -444,7 +444,7 @@ fun ExpandableCard(title: String, content: String) {
 
 ### Ограничения rememberSaveable
 
-#### 1. Bundle Size Limit (1MB)
+#### 1. `Bundle` Size Limit (1MB)
 
 ```kotlin
 @Composable
@@ -552,7 +552,7 @@ val viewModel: ProductsViewModel = hiltViewModel()
 val products by viewModel.products.collectAsState()
 ```
 
-**4. Комбинируйте с ViewModel правильно**
+**4. Комбинируйте с `ViewModel` правильно**
 
 ```kotlin
 @Composable
@@ -566,7 +566,7 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 }
 ```
 
-**English**: **remember** stores state in memory - survives recomposition but lost on configuration change (rotation). **rememberSaveable** stores state in Bundle - survives configuration changes and process death. Use **remember** for: temporary UI state, performance-critical objects, ViewModel-managed state. Use **rememberSaveable** for: user input (forms, search), scroll position, selected items, expanded/collapsed state. Limitations: rememberSaveable requires Bundle-compatible types (Parcelable/Serializable), has 1MB size limit, slower (serialization overhead). For custom types, implement Parcelable or create custom Saver. Don't use rememberSaveable for large data - use ViewModel instead.
+**English**: **remember** stores state in memory - survives recomposition but lost on configuration change (rotation). **rememberSaveable** stores state in `Bundle` - survives configuration changes and process death. Use **remember** for: temporary UI state, performance-critical objects, `ViewModel`-managed state. Use **rememberSaveable** for: user input (forms, search), scroll position, selected items, expanded/collapsed state. Limitations: rememberSaveable requires `Bundle`-compatible types (Parcelable/`Serializable`), has 1MB size limit, slower (serialization overhead). For custom types, implement `Parcelable` or create custom Saver. Don't use rememberSaveable for large data - use `ViewModel` instead.
 
 
 
@@ -582,7 +582,7 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 
 
 ## Answer (EN)
-`remember` сохраняет состояние **только в памяти** во время composition, теряя его при configuration changes (поворот экрана). `rememberSaveable` сохраняет состояние в **Bundle**, переживая configuration changes как `onSaveInstanceState`.
+`remember` сохраняет состояние **только в памяти** во время composition, теряя его при configuration changes (поворот экрана). `rememberSaveable` сохраняет состояние в **`Bundle`**, переживая configuration changes как `onSaveInstanceState`.
 
 ### Remember - Сохранение В Памяти
 
@@ -607,7 +607,7 @@ fun CounterWithRemember() {
 - - **Теряется** при process death
 - - Быстрое, без сериализации
 
-### rememberSaveable - Сохранение В Bundle
+### rememberSaveable - Сохранение В `Bundle`
 
 ```kotlin
 @Composable
@@ -628,7 +628,7 @@ fun CounterWithRememberSaveable() {
 - - Переживает recomposition
 - - **Переживает** configuration changes
 - - **Переживает** process death (в некоторых случаях)
-- WARNING: Требует типы, поддерживающие Bundle (Parcelable/Serializable)
+- WARNING: Требует типы, поддерживающие `Bundle` (Parcelable/`Serializable`)
 
 ### Сравнительная Таблица
 
@@ -637,12 +637,12 @@ fun CounterWithRememberSaveable() {
 | **Recomposition** | - Сохраняется | - Сохраняется |
 | **Configuration change** | - Теряется | - Сохраняется |
 | **Process death** | - Теряется | - Сохраняется* |
-| **Поддерживаемые типы** | Любые | Bundle-compatible |
+| **Поддерживаемые типы** | Любые | `Bundle`-compatible |
 | **Производительность** |  Быстрее |  Медленнее (сериализация) |
-| **Лимит размера** | Нет | 1MB (Bundle limit) |
+| **Лимит размера** | Нет | 1MB (`Bundle` limit) |
 | **Use case** | Временное UI состояние | Важное пользовательское состояние |
 
-\* Process death восстановление работает только если Activity/Fragment корректно сохраняют state
+\* Process death восстановление работает только если Activity/`Fragment` корректно сохраняют state
 
 ### Что Можно Сохранить В rememberSaveable
 
@@ -661,15 +661,15 @@ fun AutoSupportedTypes() {
 ```
 
 **Поддерживаемые типы**:
-- Primitives: Int, Long, Float, Double, Boolean, Char, Byte, Short
-- String
+- Primitives: `Int`, `Long`, `Float`, `Double`, `Boolean`, `Char`, `Byte`, `Short`
+- `String`
 - CharSequence
 - Arrays примитивов: IntArray, LongArray, etc.
-- ArrayList<T> где T - поддерживаемый тип
-- Parcelable
-- Serializable
+- `ArrayList`<T> где T - поддерживаемый тип
+- `Parcelable`
+- `Serializable`
 
-### Custom Типы С Parcelable
+### Custom Типы С `Parcelable`
 
 ```kotlin
 @Parcelize
@@ -695,7 +695,7 @@ fun UserProfile() {
 
 ### Custom Типы С Saver
 
-Для типов, не поддерживающих Parcelable, используйте custom `Saver`:
+Для типов, не поддерживающих `Parcelable`, используйте custom `Saver`:
 
 ```kotlin
 data class FilterState(
@@ -757,7 +757,7 @@ fun ProductFilter() {
 }
 ```
 
-### ListSaver Для List-based Данных
+### ListSaver Для `List`-based Данных
 
 ```kotlin
 data class CartItem(val productId: Int, val quantity: Int)
@@ -782,7 +782,7 @@ fun ShoppingCart() {
 }
 ```
 
-### rememberSaveable С ViewModel
+### rememberSaveable С `ViewModel`
 
 ```kotlin
 @Composable
@@ -859,7 +859,7 @@ fun ExpensiveComputationExample() {
 }
 ```
 
-1. **Состояние, управляемое ViewModel**:
+1. **Состояние, управляемое `ViewModel`**:
 
 ```kotlin
 @Composable
@@ -986,7 +986,7 @@ fun ExpandableCard(title: String, content: String) {
 
 ### Ограничения rememberSaveable
 
-#### 1. Bundle Size Limit (1MB)
+#### 1. `Bundle` Size Limit (1MB)
 
 ```kotlin
 @Composable
@@ -1094,7 +1094,7 @@ val viewModel: ProductsViewModel = hiltViewModel()
 val products by viewModel.products.collectAsState()
 ```
 
-**4. Комбинируйте с ViewModel правильно**
+**4. Комбинируйте с `ViewModel` правильно**
 
 ```kotlin
 @Composable
@@ -1108,7 +1108,7 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 }
 ```
 
-**English**: **remember** stores state in memory - survives recomposition but lost on configuration change (rotation). **rememberSaveable** stores state in Bundle - survives configuration changes and process death. Use **remember** for: temporary UI state, performance-critical objects, ViewModel-managed state. Use **rememberSaveable** for: user input (forms, search), scroll position, selected items, expanded/collapsed state. Limitations: rememberSaveable requires Bundle-compatible types (Parcelable/Serializable), has 1MB size limit, slower (serialization overhead). For custom types, implement Parcelable or create custom Saver. Don't use rememberSaveable for large data - use ViewModel instead.
+**English**: **remember** stores state in memory - survives recomposition but lost on configuration change (rotation). **rememberSaveable** stores state in `Bundle` - survives configuration changes and process death. Use **remember** for: temporary UI state, performance-critical objects, `ViewModel`-managed state. Use **rememberSaveable** for: user input (forms, search), scroll position, selected items, expanded/collapsed state. Limitations: rememberSaveable requires `Bundle`-compatible types (Parcelable/`Serializable`), has 1MB size limit, slower (serialization overhead). For custom types, implement `Parcelable` or create custom Saver. Don't use rememberSaveable for large data - use `ViewModel` instead.
 
 
 
@@ -1117,7 +1117,7 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 
 Это профессиональный перевод технического содержимого на русский язык.
 
-Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
+Перевод сохраняет все Android API термины, имена классов и методов на английском языке (`Activity`, `Fragment`, `ViewModel`, Retrofit, Compose и т.д.).
 
 Все примеры кода остаются без изменений. Markdown форматирование сохранено.
 
@@ -1158,7 +1158,7 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 ### Related (Medium)
 - [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
 - [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `RecyclerView` in Compose
 - [[q-mutable-state-compose--android--medium]] - MutableState basics
 - [[q-compose-remember-derived-state--android--medium]] - Derived state patterns
 

@@ -217,7 +217,7 @@ LazyVerticalGrid(
 
 ### Prerequisites (Easier)
 - [[q-jetpack-compose-lazy-column--android--easy]] - LazyColumn basics
-- [[q-what-is-known-about-recyclerview--android--easy]] - RecyclerView fundamentals
+- [[q-what-is-known-about-recyclerview--android--easy]] - `RecyclerView` fundamentals
 - [[q-which-layout-for-large-list--android--easy]] - Layout choices for lists
 
 ### Related (Same Level)

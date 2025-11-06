@@ -34,10 +34,10 @@ tags:
 ---
 
 # Вопрос (RU)
-> Как оптимизировать отрисовку в Canvas для достижения 60 FPS в кастомных View?
+> Как оптимизировать отрисовку в `Canvas` для достижения 60 FPS в кастомных `View`?
 
 # Question (EN)
-> How to optimize Canvas drawing to achieve 60 FPS in custom Views?
+> How to optimize `Canvas` drawing to achieve 60 FPS in custom Views?
 
 ---
 
@@ -79,11 +79,11 @@ setLayerType(LAYER_TYPE_HARDWARE, null)
 view.animate().alpha(0f).withLayer() // Автоматически управляет слоем
 ```
 
-**Когда использовать**: сложные Path, многослойные эффекты, частые анимации. До 10x ускорения.
+**Когда использовать**: сложные `Path`, многослойные эффекты, частые анимации. До 10x ускорения.
 
-### 3. Bitmap Кеширование
+### 3. `Bitmap` Кеширование
 
-Дорогостоящие операции отрисовываем один раз в Bitmap, затем только `drawBitmap()`.
+Дорогостоящие операции отрисовываем один раз в `Bitmap`, затем только `drawBitmap()`.
 
 ```kotlin
 private var cache: Bitmap? = null
@@ -170,9 +170,9 @@ view.animate().alpha(0f).withLayer() // Auto-manages layer
 
 **When to use**: complex Paths, multilayer effects, frequent animations. Up to 10x speedup.
 
-### 3. Bitmap Caching
+### 3. `Bitmap` Caching
 
-Expensive operations drawn once to Bitmap, then only `drawBitmap()`.
+Expensive operations drawn once to `Bitmap`, then only `drawBitmap()`.
 
 ```kotlin
 private var cache: Bitmap? = null
@@ -220,17 +220,17 @@ override fun onDraw(canvas: Canvas) {
 **Look for**: allocations in onDraw, frames > 16ms, GC events during drawing.
 
 ## Follow-ups
-- What is overdraw and how does it affect Canvas performance?
+- What is overdraw and how does it affect `Canvas` performance?
 - When should you use `LAYER_TYPE_SOFTWARE` vs `LAYER_TYPE_HARDWARE`?
 - How do RenderNode and DisplayList optimize rendering internally?
-- What are the memory implications of Bitmap caching for large views?
+- What are the memory implications of `Bitmap` caching for large views?
 - How do you profile custom view performance in production builds?
 
 ## References
 
 - [Rendering Performance](https://developer.android.com/topic/performance/rendering)
 - https://developer.android.com/topic/performance/inspect-gpu-rendering
-- https://developer.android.com/reference/android/graphics/Canvas
+- https://developer.android.com/reference/android/graphics/`Canvas`
 - https://developer.android.com/training/custom-views/optimizing-view
 
 
@@ -247,7 +247,7 @@ override fun onDraw(canvas: Canvas) {
 
 ### Related
 - [[q-android-app-lag-analysis--android--medium]] - Diagnosing frame drops
-- Custom View lifecycle and invalidation patterns
+- Custom `View` lifecycle and invalidation patterns
 
 ### Advanced
 - RenderNode API for advanced rendering optimization

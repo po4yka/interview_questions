@@ -192,8 +192,8 @@ Android uses three main measurement units for UI:
 
 | Unit | Use For | Don't Use For |
 |------|---------|---------------|
-| **dp** | View dimensions, margins, icons | Text size |
-| **sp** | Text size only | View dimensions |
+| **dp** | `View` dimensions, margins, icons | Text size |
+| **sp** | Text size only | `View` dimensions |
 | **px** | Rare cases (canvas) | Any UI elements |
 
 ### Density Conversion Table
@@ -327,7 +327,7 @@ textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f)
 - What happens to dp values when device configuration changes (rotation, fold)?
 - How do you test UI with different density buckets and font scales?
 - Why can't you use dp for text and sp for view dimensions?
-- How does Jetpack Compose handle dp/sp differently from View system?
+- How does Jetpack Compose handle dp/sp differently from `View` system?
 
 ## References
 

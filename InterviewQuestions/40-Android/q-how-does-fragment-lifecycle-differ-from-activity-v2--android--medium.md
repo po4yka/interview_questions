@@ -38,24 +38,24 @@ tags:
 
 # Вопрос (RU)
 
-Чем жизненный цикл Fragment отличается от жизненного цикла Activity?
+Чем жизненный цикл `Fragment` отличается от жизненного цикла `Activity`?
 
 # Question (EN)
 
-How does Fragment lifecycle differ from Activity lifecycle?
+How does `Fragment` lifecycle differ from `Activity` lifecycle?
 
 ---
 
 ## Ответ (RU)
 
-Жизненный цикл Fragment сложнее, чем у Activity, потому что **Fragment имеет дополнительные состояния, связанные с View и прикреплением к Activity**. У Fragment 11 коллбэков против 7 у Activity.
+Жизненный цикл `Fragment` сложнее, чем у `Activity`, потому что **`Fragment` имеет дополнительные состояния, связанные с `View` и прикреплением к `Activity`**. У `Fragment` 11 коллбэков против 7 у `Activity`.
 
 ### Ключевые Отличия
 
-1. **Fragment зависит от Activity** — не может существовать самостоятельно
-2. **Отдельный жизненный цикл View** — есть коллбэки для создания/уничтожения View
-3. **Прикрепление/открепление** — Fragment может прикрепляться/открепляться от Activity
-4. **Back stack** — Fragment может оставаться в памяти с уничтоженной View
+1. **`Fragment` зависит от `Activity`** — не может существовать самостоятельно
+2. **Отдельный жизненный цикл `View`** — есть коллбэки для создания/уничтожения `View`
+3. **Прикрепление/открепление** — `Fragment` может прикрепляться/открепляться от `Activity`
+4. **Back stack** — `Fragment` может оставаться в памяти с уничтоженной `View`
 
 ### Сравнение Коллбэков
 
@@ -75,7 +75,7 @@ onDestroy()               → onDestroy()
                           → onDetach()
 ```
 
-### Основной Жизненный Цикл Fragment
+### Основной Жизненный Цикл `Fragment`
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -123,7 +123,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### View Binding С Правильной Очисткой
+### `View` Binding С Правильной Очисткой
 
 ```kotlin
 class SafeFragment : Fragment() {
@@ -172,7 +172,7 @@ class ModernFragment : Fragment() {
 }
 ```
 
-### Back Stack Navigation
+### Back `Stack` Navigation
 
 ```kotlin
 // При replace с addToBackStack:
@@ -215,16 +215,16 @@ override fun onDestroyView() {
 
 ## Answer (EN)
 
-Fragment lifecycle is more complex than Activity lifecycle because **Fragments have additional lifecycle states related to their View and their attachment to an Activity**. Fragments have 11 lifecycle callbacks compared to Activity's 7.
+`Fragment` lifecycle is more complex than `Activity` lifecycle because **Fragments have additional lifecycle states related to their `View` and their attachment to an `Activity`**. Fragments have 11 lifecycle callbacks compared to `Activity`'s 7.
 
 ### Key Differences
 
-1. **Fragment depends on Activity** — cannot exist without an Activity host
-2. **Separate View lifecycle** — Fragment has distinct View creation/destruction callbacks
-3. **Attachment/Detachment** — Fragment can be attached/detached from Activity
-4. **Back stack** — Fragment can remain in memory with destroyed views
+1. **`Fragment` depends on `Activity`** — cannot exist without an `Activity` host
+2. **Separate `View` lifecycle** — `Fragment` has distinct `View` creation/destruction callbacks
+3. **Attachment/Detachment** — `Fragment` can be attached/detached from `Activity`
+4. **Back stack** — `Fragment` can remain in memory with destroyed views
 
-### Lifecycle Callbacks Comparison
+### `Lifecycle` Callbacks Comparison
 
 ```text
 Activity                   Fragment
@@ -242,7 +242,7 @@ onDestroy()               → onDestroy()
                           → onDetach()
 ```
 
-### Basic Fragment Lifecycle
+### Basic `Fragment` `Lifecycle`
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -290,7 +290,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-### View Binding with Proper Cleanup
+### `View` Binding with Proper Cleanup
 
 ```kotlin
 class SafeFragment : Fragment() {
@@ -339,7 +339,7 @@ class ModernFragment : Fragment() {
 }
 ```
 
-### Back Stack Navigation
+### Back `Stack` Navigation
 
 ```kotlin
 // During replace with addToBackStack:
@@ -384,16 +384,16 @@ override fun onDestroyView() {
 
 ## Follow-ups
 
-- What happens to Fragment lifecycle when Activity goes to background?
-- How does setMaxLifecycle() affect Fragment lifecycle?
-- When should you use viewLifecycleOwner vs Fragment's lifecycle?
+- What happens to `Fragment` lifecycle when `Activity` goes to background?
+- How does setMaxLifecycle() affect `Fragment` lifecycle?
+- When should you use viewLifecycleOwner vs `Fragment`'s lifecycle?
 - What lifecycle callbacks are called during configuration changes?
 - How do DialogFragment and BottomSheetFragment lifecycles differ?
 
 ## References
 
-- [Android Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
-- [Fragment Lifecycle API](https://developer.android.com/reference/androidx/fragment/app/Fragment)
+- [Android `Fragment` `Lifecycle`](https://developer.android.com/guide/fragments/lifecycle)
+- [`Fragment` `Lifecycle` API](https://developer.android.com/reference/androidx/fragment/app/`Fragment`)
 - [ViewLifecycleOwner](https://developer.android.com/reference/androidx/lifecycle/ViewLifecycleOwner)
 
 ## Related Questions
@@ -409,10 +409,10 @@ override fun onDestroyView() {
 - [[q-android-project-parts--android--easy]] - Basic Android components
 
 ### Related
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment-Activity relationship
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle details
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Fragment use cases
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment`-`Activity` relationship
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle details
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - `Fragment` use cases
 
 ### Advanced
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Fragment architecture
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - `Fragment` architecture
 - [[q-fragments-and-activity-relationship--android--hard]] - Deep dive into relationship

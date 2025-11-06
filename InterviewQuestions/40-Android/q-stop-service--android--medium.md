@@ -28,35 +28,35 @@ tags:
 ---
 
 # Вопрос (RU)
-> Остановка Service
+> Остановка `Service`
 
 # Question (EN)
-> How To Stop Service
+> How To Stop `Service`
 
 ---
 
 ## Answer (EN)
 The method to stop a service depends on **how it was started**:
 
-1. **Started Service** (via `startService()`):
+1. **Started `Service`** (via `startService()`):
    - From within the service: `stopSelf()`
    - From outside: `stopService(intent)`
 
-2. **Bound Service** (via `bindService()`):
+2. **Bound `Service`** (via `bindService()`):
    - Call `unbindService(connection)`
 
-3. **Foreground Service**:
+3. **Foreground `Service`**:
    - Call `stopForeground()` first, then `stopSelf()` or `stopService()`
 
 ---
 
-## Service Types and Stopping Methods
+## `Service` Types and Stopping Methods
 
-### 1. Started Service
+### 1. Started `Service`
 
 A service started with `startService()` runs **indefinitely** until explicitly stopped.
 
-#### Stop from Within the Service
+#### Stop from Within the `Service`
 
 ```kotlin
 class DownloadService : Service() {
@@ -85,12 +85,12 @@ class DownloadService : Service() {
 
 **Key points:**
 - `stopSelf()` stops the service from within
-- Service stops **after** all work is done
+- `Service` stops **after** all work is done
 - Safe to call even if service is already stopping
 
 ---
 
-#### Stop from Outside (Activity/Fragment)
+#### Stop from Outside (Activity/`Fragment`)
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -160,7 +160,7 @@ stopSelf(3) → Service stops (no active startIds)
 
 ---
 
-### 2. Bound Service
+### 2. Bound `Service`
 
 A service started with `bindService()` runs **as long as clients are bound** to it.
 
@@ -207,7 +207,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-**Service implementation:**
+**`Service` implementation:**
 
 ```kotlin
 class MyService : Service() {
@@ -233,7 +233,7 @@ class MyService : Service() {
 }
 ```
 
-**Lifecycle:**
+**`Lifecycle`:**
 ```
 bindService() → onCreate() → onBind() → Service running
 unbindService() → onUnbind() → onDestroy() → Service stopped
@@ -241,11 +241,11 @@ unbindService() → onUnbind() → onDestroy() → Service stopped
 
 ---
 
-### 3. Foreground Service
+### 3. Foreground `Service`
 
 A foreground service requires **stopping the foreground state** before stopping the service.
 
-#### Stop Foreground Service
+#### Stop Foreground `Service`
 
 ```kotlin
 class MusicPlayerService : Service() {
@@ -301,7 +301,7 @@ class MusicPlayerService : Service() {
 }
 ```
 
-**Stop from Activity:**
+**Stop from `Activity`:**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -332,7 +332,7 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
-## Mixed Service (Started + Bound)
+## Mixed `Service` (Started + Bound)
 
 A service can be **both started and bound**. It stops only when:
 - All clients have **unbound**
@@ -388,7 +388,7 @@ class HybridService : Service() {
 }
 ```
 
-**Lifecycle scenarios:**
+**`Lifecycle` scenarios:**
 
 ```
 Scenario 1: Started only
@@ -416,7 +416,7 @@ unbindService() → onUnbind() → onDestroy()  - Now stops
 
 ---
 
-## Complete Example: Download Service with Stop
+## Complete Example: Download `Service` with Stop
 
 ```kotlin
 class DownloadService : Service() {
@@ -527,7 +527,7 @@ class DownloadService : Service() {
 }
 ```
 
-**Activity:**
+**`Activity`:**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -615,7 +615,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 }
 ```
 
-### Mistake 3: Not Handling Bound Service Properly
+### Mistake 3: Not Handling Bound `Service` Properly
 
 ```kotlin
 // - BAD: stopSelf() while clients are still bound
@@ -664,20 +664,20 @@ class MyService : Service() {
 
 **How to stop a service:**
 
-### **Started Service** (`startService()`)
+### **Started `Service`** (`startService()`)
 - **From within:** `stopSelf()` or `stopSelf(startId)`
 - **From outside:** `stopService(intent)`
-- Service stops when **explicitly stopped**
+- `Service` stops when **explicitly stopped**
 
-### **Bound Service** (`bindService()`)
+### **Bound `Service`** (`bindService()`)
 - **From client:** `unbindService(connection)`
-- Service stops when **all clients unbind**
+- `Service` stops when **all clients unbind**
 
-### **Foreground Service**
+### **Foreground `Service`**
 1. **Stop foreground state:** `stopForeground(STOP_FOREGROUND_REMOVE)`
 2. **Stop service:** `stopSelf()` or `stopService(intent)`
 
-### **Mixed Service** (Started + Bound)
+### **Mixed `Service`** (Started + Bound)
 - Must **unbind all clients** AND **call stopSelf()/stopService()**
 - Order doesn't matter - both must happen
 
@@ -691,7 +691,7 @@ class MyService : Service() {
 
 
 # Question (EN)
-> How To Stop Service
+> How To Stop `Service`
 
 ---
 
@@ -702,25 +702,25 @@ class MyService : Service() {
 ## Answer (EN)
 The method to stop a service depends on **how it was started**:
 
-1. **Started Service** (via `startService()`):
+1. **Started `Service`** (via `startService()`):
    - From within the service: `stopSelf()`
    - From outside: `stopService(intent)`
 
-2. **Bound Service** (via `bindService()`):
+2. **Bound `Service`** (via `bindService()`):
    - Call `unbindService(connection)`
 
-3. **Foreground Service**:
+3. **Foreground `Service`**:
    - Call `stopForeground()` first, then `stopSelf()` or `stopService()`
 
 ---
 
-## Service Types and Stopping Methods
+## `Service` Types and Stopping Methods
 
-### 1. Started Service
+### 1. Started `Service`
 
 A service started with `startService()` runs **indefinitely** until explicitly stopped.
 
-#### Stop from Within the Service
+#### Stop from Within the `Service`
 
 ```kotlin
 class DownloadService : Service() {
@@ -749,12 +749,12 @@ class DownloadService : Service() {
 
 **Key points:**
 - `stopSelf()` stops the service from within
-- Service stops **after** all work is done
+- `Service` stops **after** all work is done
 - Safe to call even if service is already stopping
 
 ---
 
-#### Stop from Outside (Activity/Fragment)
+#### Stop from Outside (Activity/`Fragment`)
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -824,7 +824,7 @@ stopSelf(3) → Service stops (no active startIds)
 
 ---
 
-### 2. Bound Service
+### 2. Bound `Service`
 
 A service started with `bindService()` runs **as long as clients are bound** to it.
 
@@ -871,7 +871,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-**Service implementation:**
+**`Service` implementation:**
 
 ```kotlin
 class MyService : Service() {
@@ -897,7 +897,7 @@ class MyService : Service() {
 }
 ```
 
-**Lifecycle:**
+**`Lifecycle`:**
 ```
 bindService() → onCreate() → onBind() → Service running
 unbindService() → onUnbind() → onDestroy() → Service stopped
@@ -905,11 +905,11 @@ unbindService() → onUnbind() → onDestroy() → Service stopped
 
 ---
 
-### 3. Foreground Service
+### 3. Foreground `Service`
 
 A foreground service requires **stopping the foreground state** before stopping the service.
 
-#### Stop Foreground Service
+#### Stop Foreground `Service`
 
 ```kotlin
 class MusicPlayerService : Service() {
@@ -965,7 +965,7 @@ class MusicPlayerService : Service() {
 }
 ```
 
-**Stop from Activity:**
+**Stop from `Activity`:**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -996,7 +996,7 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
-## Mixed Service (Started + Bound)
+## Mixed `Service` (Started + Bound)
 
 A service can be **both started and bound**. It stops only when:
 - All clients have **unbound**
@@ -1052,7 +1052,7 @@ class HybridService : Service() {
 }
 ```
 
-**Lifecycle scenarios:**
+**`Lifecycle` scenarios:**
 
 ```
 Scenario 1: Started only
@@ -1080,7 +1080,7 @@ unbindService() → onUnbind() → onDestroy()  - Now stops
 
 ---
 
-## Complete Example: Download Service with Stop
+## Complete Example: Download `Service` with Stop
 
 ```kotlin
 class DownloadService : Service() {
@@ -1191,7 +1191,7 @@ class DownloadService : Service() {
 }
 ```
 
-**Activity:**
+**`Activity`:**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -1279,7 +1279,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 }
 ```
 
-### Mistake 3: Not Handling Bound Service Properly
+### Mistake 3: Not Handling Bound `Service` Properly
 
 ```kotlin
 // - BAD: stopSelf() while clients are still bound
@@ -1328,20 +1328,20 @@ class MyService : Service() {
 
 **How to stop a service:**
 
-### **Started Service** (`startService()`)
+### **Started `Service`** (`startService()`)
 - **From within:** `stopSelf()` or `stopSelf(startId)`
 - **From outside:** `stopService(intent)`
-- Service stops when **explicitly stopped**
+- `Service` stops when **explicitly stopped**
 
-### **Bound Service** (`bindService()`)
+### **Bound `Service`** (`bindService()`)
 - **From client:** `unbindService(connection)`
-- Service stops when **all clients unbind**
+- `Service` stops when **all clients unbind**
 
-### **Foreground Service**
+### **Foreground `Service`**
 1. **Stop foreground state:** `stopForeground(STOP_FOREGROUND_REMOVE)`
 2. **Stop service:** `stopSelf()` or `stopService(intent)`
 
-### **Mixed Service** (Started + Bound)
+### **Mixed `Service`** (Started + Bound)
 - Must **unbind all clients** AND **call stopSelf()/stopService()**
 - Order doesn't matter - both must happen
 
@@ -1356,15 +1356,15 @@ class MyService : Service() {
 ## Ответ (RU)
 Способ остановки сервиса зависит от **типа сервиса**:
 
-### **Started Service** (`startService()`)
+### **Started `Service`** (`startService()`)
 - **Внутри сервиса:** `stopSelf()`
 - **Снаружи:** `stopService(intent)`
 
-### **Bound Service** (`bindService()`)
+### **Bound `Service`** (`bindService()`)
 - **Из клиента:** `unbindService(connection)`
 - Сервис останавливается когда все клиенты отвяжутся
 
-### **Foreground Service**
+### **Foreground `Service`**
 1. Остановить foreground: `stopForeground(STOP_FOREGROUND_REMOVE)`
 2. Остановить сервис: `stopSelf()` или `stopService()`
 
@@ -1395,14 +1395,14 @@ class MyService : Service() {
 
 
 ### Prerequisites (Easier)
-- [[q-android-service-types--android--easy]] - Service
+- [[q-android-service-types--android--easy]] - `Service`
 
 ### Related (Medium)
-- [[q-service-component--android--medium]] - Service
-- [[q-foreground-service-types--android--medium]] - Service
-- [[q-when-can-the-system-restart-a-service--android--medium]] - Service
-- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Service
-- [[q-keep-service-running-background--android--medium]] - Service
+- [[q-service-component--android--medium]] - `Service`
+- [[q-foreground-service-types--android--medium]] - `Service`
+- [[q-when-can-the-system-restart-a-service--android--medium]] - `Service`
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - `Service`
+- [[q-keep-service-running-background--android--medium]] - `Service`
 
 ### Advanced (Harder)
-- [[q-service-lifecycle-binding--android--hard]] - Service
+- [[q-service-lifecycle-binding--android--hard]] - `Service`

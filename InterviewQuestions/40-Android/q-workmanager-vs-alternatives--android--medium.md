@@ -18,10 +18,10 @@ sources: []
 ---
 
 # Вопрос (RU)
-> Когда использовать WorkManager vs AlarmManager vs JobScheduler vs Foreground Service?
+> Когда использовать WorkManager vs AlarmManager vs JobScheduler vs Foreground `Service`?
 
 # Question (EN)
-> When to use WorkManager vs AlarmManager vs JobScheduler vs Foreground Service?
+> When to use WorkManager vs AlarmManager vs JobScheduler vs Foreground `Service`?
 
 ---
 
@@ -36,7 +36,7 @@ Android предоставляет несколько API для фоновой 
 |-----|-------------------|---------------------|
 | **WorkManager** | Отложенная работа с гарантией выполнения | Переживает перезагрузки, поддерживает ограничения |
 | **AlarmManager** | Точный тайминг (будильники, напоминания) | Может будить устройство, точность до миллисекунд |
-| **Foreground Service** | Долгие задачи с видимостью пользователю | Обязательное уведомление, защита от kill |
+| **Foreground `Service`** | Долгие задачи с видимостью пользователю | Обязательное уведомление, защита от kill |
 | **JobScheduler** | Прямой доступ к планировщику (API 21+) | WorkManager использует его внутри |
 
 **WorkManager — гарантированное выполнение:**
@@ -74,7 +74,7 @@ alarmManager.setExactAndAllowWhileIdle(
 )
 ```
 
-**Foreground Service — видимая работа:**
+**Foreground `Service` — видимая работа:**
 
 ```kotlin
 // ✅ Правильно: музыкальный плеер с уведомлением
@@ -101,7 +101,7 @@ Android provides multiple APIs for background work with different guarantees and
 |-----|------------|-------------|
 | **WorkManager** | Deferrable guaranteed work | Survives reboots, supports constraints |
 | **AlarmManager** | Exact timing (alarms, reminders) | Can wake device, millisecond precision |
-| **Foreground Service** | Long tasks with user visibility | Mandatory notification, kill protection |
+| **Foreground `Service`** | `Long` tasks with user visibility | Mandatory notification, kill protection |
 | **JobScheduler** | Direct scheduler access (API 21+) | WorkManager uses it internally |
 
 **WorkManager — guaranteed execution:**
@@ -139,7 +139,7 @@ alarmManager.setExactAndAllowWhileIdle(
 )
 ```
 
-**Foreground Service — visible work:**
+**Foreground `Service` — visible work:**
 
 ```kotlin
 // ✅ Correct: music player with notification
@@ -162,7 +162,7 @@ class MusicService : Service() {
 - How does WorkManager handle constraints on different Android versions (API 14+ vs 23+ vs 26+)?
 - What are the battery optimization implications of each approach, and how does Doze mode affect them?
 - How do you migrate from deprecated JobScheduler or AlarmManager APIs to WorkManager?
-- When would you combine multiple approaches (e.g., WorkManager + Foreground Service)?
+- When would you combine multiple approaches (e.g., WorkManager + Foreground `Service`)?
 - What are the trade-offs between exact alarms and inexact window-based alarms for battery life?
 
 ## References
@@ -177,7 +177,7 @@ class MusicService : Service() {
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components
-- [[q-android-lifecycle--android--easy]] - Lifecycle management
+- [[q-android-lifecycle--android--easy]] - `Lifecycle` management
 
 ### Related (Same Level)
 - [[q-workmanager-return-result--android--medium]] - WorkManager results

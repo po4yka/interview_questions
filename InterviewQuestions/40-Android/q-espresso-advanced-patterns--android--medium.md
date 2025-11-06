@@ -51,7 +51,7 @@ tags:
 
 **`IdlingResource`** - синхронизация с async операциями. Espresso ждет пока все ресурсы idle перед выполнением действий.
 
-**Custom Matchers** - специфичные проверки View. Наследуют `TypeSafeMatcher` или `BoundedMatcher`, реализуют matchesSafely() и describeTo().
+**Custom Matchers** - специфичные проверки `View`. Наследуют `TypeSafeMatcher` или `BoundedMatcher`, реализуют matchesSafely() и describeTo().
 
 **Custom ``ViewAction`s`** - сложные UI взаимодействия. Реализуют perform(), getConstraints(), getDescription().
 
@@ -98,7 +98,7 @@ fun testWithNetwork() {
 }
 ```
 
-**2. Custom matcher для RecyclerView**
+**2. Custom matcher для `RecyclerView`**
 
 ```kotlin
 // ✅ Type-safe matcher
@@ -119,13 +119,13 @@ fun withItemCount(count: Int): Matcher<View> {
 
 ```kotlin
 // ✅ Полная реализация
-fun dragToPosition(x: Float, y: Float): `ViewAction` {
+fun dragToPosition(x: `Float`, y: `Float`): `ViewAction` {
     return object : `ViewAction` {
         override fun getConstraints() = isDisplayed()
 
         override fun getDescription() = "drag to ($x, $y)"
 
-        override fun perform(uiController: UiController, view: View) {
+        override fun perform(uiController: UiController, view: `View`) {
             val location = IntArray(2)
             view.getLocationOnScreen(location)
 
@@ -232,21 +232,21 @@ fun testWithNetwork() {
 
 ```kotlin
 // ✅ Type-safe matcher
-fun withItemCount(count: Int): Matcher<View> {
-    return object : `BoundedMatcher`<View, RecyclerView>(RecyclerView::class.java) {
+fun withItemCount(count: `Int`): Matcher<`View`> {
+    return object : `BoundedMatcher`<`View`, `RecyclerView`>(`RecyclerView`::class.java) {
         override fun describeTo(description: Description) {
             description.appendText("has $count items")
         }
 
-        override fun matchesSafely(view: RecyclerView): Boolean {
+        override fun matchesSafely(view: `RecyclerView`): `Boolean` {
             return view.adapter?.itemCount == count
         }
     }
 }
 
 // ❌ Problem: no type safety
-fun badMatcher(count: Int) = object : BaseMatcher<View>() {
-    override fun matches(item: Any?) = (item as? RecyclerView)?.adapter?.itemCount == count
+fun badMatcher(count: `Int`) = object : BaseMatcher<`View`>() {
+    override fun matches(item: Any?) = (item as? `RecyclerView`)?.adapter?.itemCount == count
     override fun describeTo(description: Description) {}
 }
 ```
@@ -255,13 +255,13 @@ fun badMatcher(count: Int) = object : BaseMatcher<View>() {
 
 ```kotlin
 // ✅ Complete implementation
-fun dragToPosition(x: Float, y: Float): `ViewAction` {
+fun dragToPosition(x: `Float`, y: `Float`): `ViewAction` {
     return object : `ViewAction` {
         override fun getConstraints() = isDisplayed()
 
         override fun getDescription() = "drag to ($x, $y)"
 
-        override fun perform(uiController: UiController, view: View) {
+        override fun perform(uiController: UiController, view: `View`) {
             val location = IntArray(2)
             view.getLocationOnScreen(location)
 

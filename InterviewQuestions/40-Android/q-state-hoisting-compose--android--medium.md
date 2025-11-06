@@ -159,7 +159,7 @@ fun CartSummary(
 
 ### State Hoisting Patterns
 
-#### 1. Value + Callback Pattern
+#### 1. Value + `Callback` Pattern
 
 ```kotlin
 // Stateless компонент
@@ -355,7 +355,7 @@ fun ProductListScreen() {
 }
 ```
 
-#### Level 3: ViewModel State
+#### Level 3: `ViewModel` State
 
 ```kotlin
 @HiltViewModel
@@ -448,7 +448,7 @@ fun Screen() {
 - - Need external control of state
 - - Multiple usage scenarios
 - - Testing
-- - State in ViewModel
+- - State in `ViewModel`
 - - Examples: input forms, filters, selected items
 
 ### Practical Examples
@@ -568,7 +568,7 @@ fun ProfileScreen() {
 }
 ```
 
-#### Example 3: Multi-Selection List
+#### Example 3: Multi-Selection `List`
 
 ```kotlin
 @Composable
@@ -731,7 +731,7 @@ fun ProductCard(
 ) { }
 ```
 
-**English**: **State hoisting** moves state from a component up to its caller, making the component stateless (receives value + callback). Benefits: single source of truth, reusability, testability, predictability. Pattern: `value` + `onValueChange` callback. Hoist state to **lowest common ancestor** of all components needing it. Three levels: local UI state (no hoisting), screen-level state (remember), ViewModel state (StateFlow). Use stateless composables for: forms, filters, selections, reusable components. Use stateful composables for: simple UI-only state, animations, scroll. State holder classes (`@Stable`) for complex state logic. Best practices: hoist to appropriate level, use data class for complex state, provide defaults, don't pass entire ViewModel.
+**English**: **State hoisting** moves state from a component up to its caller, making the component stateless (receives value + callback). Benefits: single source of truth, reusability, testability, predictability. Pattern: `value` + `onValueChange` callback. Hoist state to **lowest common ancestor** of all components needing it. Three levels: local UI state (no hoisting), screen-level state (remember), `ViewModel` state (`StateFlow`). Use stateless composables for: forms, filters, selections, reusable components. Use stateful composables for: simple UI-only state, animations, scroll. State holder classes (`@Stable`) for complex state logic. Best practices: hoist to appropriate level, use data class for complex state, provide defaults, don't pass entire `ViewModel`.
 
 
 
@@ -866,7 +866,7 @@ fun CartSummary(
 
 ### State Hoisting Patterns
 
-#### 1. Value + Callback Pattern
+#### 1. Value + `Callback` Pattern
 
 ```kotlin
 // Stateless компонент
@@ -1062,7 +1062,7 @@ fun ProductListScreen() {
 }
 ```
 
-#### Level 3: ViewModel State
+#### Level 3: `ViewModel` State
 
 ```kotlin
 @HiltViewModel
@@ -1155,7 +1155,7 @@ fun Screen() {
 - - Need external control of state
 - - Multiple usage scenarios
 - - Testing
-- - State in ViewModel
+- - State in `ViewModel`
 - - Examples: input forms, filters, selected items
 
 ### Practical Examples
@@ -1275,7 +1275,7 @@ fun ProfileScreen() {
 }
 ```
 
-#### Example 3: Multi-Selection List
+#### Example 3: Multi-Selection `List`
 
 ```kotlin
 @Composable
@@ -1438,7 +1438,7 @@ fun ProductCard(
 ) { }
 ```
 
-**English**: **State hoisting** moves state from a component up to its caller, making the component stateless (receives value + callback). Benefits: single source of truth, reusability, testability, predictability. Pattern: `value` + `onValueChange` callback. Hoist state to **lowest common ancestor** of all components needing it. Three levels: local UI state (no hoisting), screen-level state (remember), ViewModel state (StateFlow). Use stateless composables for: forms, filters, selections, reusable components. Use stateful composables for: simple UI-only state, animations, scroll. State holder classes (`@Stable`) for complex state logic. Best practices: hoist to appropriate level, use data class for complex state, provide defaults, don't pass entire ViewModel.
+**English**: **State hoisting** moves state from a component up to its caller, making the component stateless (receives value + callback). Benefits: single source of truth, reusability, testability, predictability. Pattern: `value` + `onValueChange` callback. Hoist state to **lowest common ancestor** of all components needing it. Three levels: local UI state (no hoisting), screen-level state (remember), `ViewModel` state (`StateFlow`). Use stateless composables for: forms, filters, selections, reusable components. Use stateful composables for: simple UI-only state, animations, scroll. State holder classes (`@Stable`) for complex state logic. Best practices: hoist to appropriate level, use data class for complex state, provide defaults, don't pass entire `ViewModel`.
 
 
 
@@ -1447,7 +1447,7 @@ fun ProductCard(
 
 Это профессиональный перевод технического содержимого на русский язык.
 
-Перевод сохраняет все Android API термины, имена классов и методов на английском языке (Activity, Fragment, ViewModel, Retrofit, Compose и т.д.).
+Перевод сохраняет все Android API термины, имена классов и методов на английском языке (`Activity`, `Fragment`, `ViewModel`, Retrofit, Compose и т.д.).
 
 Все примеры кода остаются без изменений. Markdown форматирование сохранено.
 
@@ -1488,7 +1488,7 @@ fun ProductCard(
 ### Related (Medium)
 - [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
 - [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `RecyclerView` in Compose
 - [[q-mutable-state-compose--android--medium]] - MutableState basics
 - [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
 

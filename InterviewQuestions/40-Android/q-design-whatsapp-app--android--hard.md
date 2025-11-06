@@ -87,7 +87,7 @@ sources:
 
 > How to design WhatsApp for Android?
 
-## Short Version
+## `Short` Version
 
 Design an E2E‑encrypted Android chat for 1-to-1 and small group messaging. The system should ensure low send latency, durable offline delivery, and synchronization across multiple devices for the same user.
 
@@ -114,7 +114,7 @@ Design a complete E2E‑encrypted WhatsApp messenger for Android with the follow
 
 **Technical details (for discussion):**
 - Local data model and indexes (`Room` database)
-- Message ID generation and ordering
+- `Message` ID generation and ordering
 - Delivery/ack states (sent/received/read)
 - Attachment pipeline: encrypt → chunk → resumable upload
 - Notification strategy (Android 13–15, `FCM`, grouping)
@@ -196,7 +196,7 @@ Design a complete E2E‑encrypted WhatsApp messenger for Android with the follow
 Многоэтапный процесс отправки с гарантией доставки и шифрованием:
 
 **Этапы:**
-1.   **Шифрование**: применение `Signal Protocol` Double Ratchet для шифрования plaintext — каждый сеанс имеет уникальные ключи для forward secrecy
+1.   **Шифрование**: применение `Signal Protocol` `Double` Ratchet для шифрования plaintext — каждый сеанс имеет уникальные ключи для forward secrecy
 2.   **Локальная запись**: сохранение сообщения в `Room` database со статусом `pending` — позволяет отображать сообщение в UI до подтверждения доставки (optimistic UI)
 3.   **WebSocket отправка**: отправка зашифрованного сообщения через `WebSocket` для минимальной латентности
 4.   **Server ack**: получение подтверждения от сервера и обновление статуса до `delivered` — гарантия доставки на сервер
@@ -304,7 +304,7 @@ if (!networkAvailable) {
 -   **Использование**: когда пользователь офлайн, отправитель использует pre-key для установки сессии без необходимости интерактивного обмена ключами
 -   **Обновление**: автоматическая загрузка новых pre-keys при исчерпании запаса для непрерывной доступности
 
-**Double Ratchet:**
+**`Double` Ratchet:**
 
 Механизм обновления ключей для обеспечения forward secrecy:
 
@@ -349,9 +349,9 @@ Strong consistency для метаданных пользователей и г�
 
 **S3 (Media):**
 
-Lifecycle management для оптимизации стоимости хранилища:
+`Lifecycle` management для оптимизации стоимости хранилища:
 
--   **Lifecycle policies**: автоматический переход `Standard` → `Glacier` → `Delete` для экономии на неиспользуемых медиа
+-   **`Lifecycle` policies**: автоматический переход `Standard` → `Glacier` → `Delete` для экономии на неиспользуемых медиа
 -   **Pre-signed URLs**: временные подписанные URL с TTL 1 час для безопасного доступа к медиафайлам без раскрытия прямых ссылок
 -   **CDN caching**: кэширование на `CloudFront` edge серверах для глобальной доставки с низкой латентностью
 
@@ -379,7 +379,7 @@ Lifecycle management для оптимизации стоимости храни
 
 **Шардирование (Sharding):**
 
--   **Chat Service**: партиционирование по hash от `userId` через consistent hashing — равномерное распределение нагрузки между инстансами сервиса
+-   **Chat `Service`**: партиционирование по hash от `userId` через consistent hashing — равномерное распределение нагрузки между инстансами сервиса
 -   **Cassandra partitioning**: партиционирование сообщений по `userId` для изоляции данных пользователей и горизонтального масштабирования
 
 **Connection pooling:**
@@ -392,7 +392,7 @@ Lifecycle management для оптимизации стоимости храни
 -   **PostgreSQL**: master-slave replication для масштабирования чтений без нагрузки на master — распределение read-only запросов на replicas
 -   **Cassandra**: RF=3 (Replication Factor) для чтения из nearest datacenter — снижение latency для глобальной аудитории через географическое распределение
 
-**Message queue:**
+**`Message` queue:**
 
 -   **Kafka**: async обработка для `push` уведомлений и analytics событий — неблокирующая обработка для улучшения latency отправки сообщений
 -   **Partitioning**: партиционирование по `userId` для гарантии порядка обработки сообщений одного пользователя
@@ -401,7 +401,7 @@ Lifecycle management для оптимизации стоимости храни
 **Auto-scaling:**
 
 -   **Kubernetes HPA**: автоматическое масштабирование на основе connection count для `WebSocket` gateways — добавление инстансов при росте количества подключений
--   **Queue depth**: масштабирование `Chat Service` workers на основе глубины очереди сообщений — обеспечение обработки пиковых нагрузок
+-   **`Queue` depth**: масштабирование `Chat Service` workers на основе глубины очереди сообщений — обеспечение обработки пиковых нагрузок
 
 ### Оптимизация Производительности
 
@@ -420,7 +420,7 @@ Lifecycle management для оптимизации стоимости храни
 
 **Память:**
 
--   **Message pagination**: загрузка только 20-50 сообщений за раз в UI с lazy loading при скролле — предотвращение перегрузки памяти большими чатами
+-   **`Message` pagination**: загрузка только 20-50 сообщений за раз в UI с lazy loading при скролле — предотвращение перегрузки памяти большими чатами
 -   **Lazy load медиа**: загрузка медиафайлов только при открытии/просмотре, не при загрузке списка чатов
 -   **LRU cache**: кеширование декодированных изображений в памяти с LRU eviction policy (~50MB limit) — быстрый доступ к превью без повторного декодирования
 
@@ -465,14 +465,14 @@ Lifecycle management для оптимизации стоимости храни
 
 **Модель данных:**
 
-**Thread (чат):**
+**`Thread` (чат):**
 -   `threadId`: уникальный идентификатор чата (1-to-1 или группа)
 -   `participants`: список участников чата
 -   `lastMessageId`: ID последнего сообщения для быстрого доступа
 -   `unreadCount`: количество непрочитанных сообщений для badge
 -   `lastActivityAt`: timestamp последней активности для сортировки списка чатов
 
-**Message (сообщение):**
+**`Message` (сообщение):**
 -   `localId`: локальный `ULID` для упорядочивания до получения `globalId` от сервера
 -   `globalId`: уникальный ID от сервера для синхронизации между устройствами
 -   `threadId`: связь с чатом
@@ -500,7 +500,7 @@ Lifecycle management для оптимизации стоимости храни
 
 **Криптография:**
 
--   **Double Ratchet/Noise**: использование `Double Ratchet` алгоритма для 1-to-1 сообщений, `Noise Protocol` для групп
+-   **`Double` Ratchet/Noise**: использование `Double Ratchet` алгоритма для 1-to-1 сообщений, `Noise Protocol` для групп
 -   **Sender-key для групп**: эффективное групповое шифрование через sender keys вместо pairwise сессий
 -   **Per-device identity**: каждый пользователь имеет уникальный identity key на каждом устройстве для безопасности
 -   **Хранение ключей**: `SQLCipher` для зашифрованной БД, `EncryptedFile` для медиафайлов на диске — защита ключей от физического доступа
@@ -644,18 +644,18 @@ Microservices architecture with horizontal scaling:
 
 ### Android Client: Key Flows
 
-**1. Send Message**
+**1. Send `Message`**
 
 Multi-step sending process with delivery guarantee and encryption:
 
 **Steps:**
-1.   **Encryption**: apply `Signal Protocol` Double Ratchet to encrypt plaintext — each session has unique keys for forward secrecy
+1.   **Encryption**: apply `Signal Protocol` `Double` Ratchet to encrypt plaintext — each session has unique keys for forward secrecy
 2.   **Local store**: save message to `Room` database with `pending` status — enables displaying message in UI before delivery confirmation (optimistic UI)
 3.   **WebSocket send**: send encrypted message via `WebSocket` for minimal latency
 4.   **Server ack**: receive server confirmation and update status to `delivered` — guarantee server delivery
 5.   **Recipient receipt**: receive read receipt from recipient and update status to `read` — indicates message read
 
-**2. Receive Message**
+**2. Receive `Message`**
 
 Incoming message processing with decryption and synchronization:
 
@@ -709,7 +709,7 @@ Voice/video call establishment with NAT traversal:
 
 ### Server: Routing
 
-**Service boundaries:**
+**`Service` boundaries:**
 
 -   **`Chat Service`**: route messages by recipient `userId`, store encrypted messages in `Cassandra` (server blind to plaintext — zero-knowledge architecture), deliver via `WebSocket` for online users or `push` for offline, automatic deletion after delivery (TTL 30 days) for storage optimization
 -   **`Presence Service`**: process heartbeat every 30 seconds to track online statuses, cache in `Redis` with 45 second TTL for fast access, `pub/sub` for realtime contact status updates
@@ -725,7 +725,7 @@ Voice/video call establishment with NAT traversal:
 
 **Identity Keys:**
 
--   **Long-term keys**: `ed25519` keys for device authentication — each user has unique identity key pair, public key used for authenticity verification
+-   **`Long`-term keys**: `ed25519` keys for device authentication — each user has unique identity key pair, public key used for authenticity verification
 -   **Validation**: verification via QR code safety numbers — visual comparison of numeric fingerprints to prevent MITM attacks on first session setup
 -   **Storage**: secure private key storage in `Android Keystore` with `StrongBox` support for protection against physical attacks
 
@@ -735,7 +735,7 @@ Voice/video call establishment with NAT traversal:
 -   **Usage**: when user offline, sender uses pre-key to establish session without need for interactive key exchange
 -   **Refresh**: automatic upload of new pre-keys when supply exhausted for continuous availability
 
-**Double Ratchet:**
+**`Double` Ratchet:**
 
 Key update mechanism to ensure forward secrecy:
 
@@ -780,13 +780,13 @@ Fast cache for presence data with TTL-based eviction:
 
 **S3 (Media):**
 
-Lifecycle management for storage cost optimization:
+`Lifecycle` management for storage cost optimization:
 
--   **Lifecycle policies**: automatic transition `Standard` → `Glacier` → `Delete` for savings on unused media
+-   **`Lifecycle` policies**: automatic transition `Standard` → `Glacier` → `Delete` for savings on unused media
 -   **Pre-signed URLs**: temporary signed URLs with 1 hour TTL for secure media access without exposing direct links
 -   **CDN caching**: caching on `CloudFront` edge servers for global delivery with low latency
 
-### Message Delivery
+### `Message` Delivery
 
 **At-least-once delivery guarantee:**
 
@@ -810,7 +810,7 @@ Lifecycle management for storage cost optimization:
 
 **Sharding:**
 
--   **Chat Service**: partition by `userId` hash via consistent hashing — even load distribution across service instances
+-   **Chat `Service`**: partition by `userId` hash via consistent hashing — even load distribution across service instances
 -   **Cassandra partitioning**: partition messages by `userId` to isolate user data and enable horizontal scaling
 
 **Connection pooling:**
@@ -823,7 +823,7 @@ Lifecycle management for storage cost optimization:
 -   **PostgreSQL**: master-slave replication to scale reads without master load — distribute read-only queries to replicas
 -   **Cassandra**: RF=3 (Replication Factor) to read from nearest datacenter — reduce latency for global audience via geographic distribution
 
-**Message queue:**
+**`Message` queue:**
 
 -   **Kafka**: async processing for `push` notifications and analytics events — non-blocking processing to improve message send latency
 -   **Partitioning**: partition by `userId` to guarantee message ordering for same user
@@ -832,7 +832,7 @@ Lifecycle management for storage cost optimization:
 **Auto-scaling:**
 
 -   **Kubernetes HPA**: auto-scale based on connection count for `WebSocket` gateways — add instances on connection growth
--   **Queue depth**: scale `Chat Service` workers based on message queue depth — handle peak loads
+-   **`Queue` depth**: scale `Chat Service` workers based on message queue depth — handle peak loads
 
 ### Performance Optimization
 
@@ -851,7 +851,7 @@ Lifecycle management for storage cost optimization:
 
 **Memory:**
 
--   **Message pagination**: load only 20-50 messages at a time in UI with lazy loading on scroll — prevent memory overload on large chats
+-   **`Message` pagination**: load only 20-50 messages at a time in UI with lazy loading on scroll — prevent memory overload on large chats
 -   **Lazy load media**: load media files only on open/view, not on chat list load
 -   **LRU cache**: cache decoded images in memory with LRU eviction policy (~50MB limit) — fast preview access without re-decoding
 
@@ -896,14 +896,14 @@ Modular structure for independent development and testing:
 
 **Data model:**
 
-**Thread (chat):**
+**`Thread` (chat):**
 -   `threadId`: unique chat identifier (1-to-1 or group)
 -   `participants`: chat participants list
 -   `lastMessageId`: last message ID for fast access
 -   `unreadCount`: unread message count for badge
 -   `lastActivityAt`: last activity timestamp for chat list sorting
 
-**Message:**
+**`Message`:**
 -   `localId`: local `ULID` for ordering before receiving server `globalId`
 -   `globalId`: unique server ID for synchronization across devices
 -   `threadId`: link to chat
@@ -931,7 +931,7 @@ Modular structure for independent development and testing:
 
 **Cryptography:**
 
--   **Double Ratchet/Noise**: use `Double Ratchet` algorithm for 1-to-1 messages, `Noise Protocol` for groups
+-   **`Double` Ratchet/Noise**: use `Double Ratchet` algorithm for 1-to-1 messages, `Noise Protocol` for groups
 -   **Sender-key for groups**: efficient group encryption via sender keys instead of pairwise sessions
 -   **Per-device identity**: each user has unique identity key per device for security
 -   **Key storage**: `SQLCipher` for encrypted DB, `EncryptedFile` for media files on disk — protect keys from physical access
@@ -1018,7 +1018,7 @@ OUTBOX state machine for reliable delivery:
 
 ## References
 
--   [Signal Protocol - Double Ratchet](https://signal.org/docs/specifications/doubleratchet/)
+-   [Signal Protocol - `Double` Ratchet](https://signal.org/docs/specifications/doubleratchet/)
 -   [WebRTC Documentation](https://webrtc.org/)
 -   [Cassandra Documentation](https://cassandra.apache.org/doc/latest/)
 -   [Android WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)

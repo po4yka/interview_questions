@@ -47,9 +47,9 @@ Android applications are built from several **main components**, each with speci
 
 **Main Components:**
 
-**1. Activity** - User Interface
+**1. `Activity`** - User Interface
 
-Provides user interface. Each Activity represents a **single screen**.
+Provides user interface. Each `Activity` represents a **single screen**.
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**2. Service** - Background Operations
+**2. `Service`** - Background Operations
 
 Performs **long-running operations** in background without UI.
 
@@ -73,7 +73,7 @@ class MusicService : Service() {
 }
 ```
 
-**3. BroadcastReceiver** - System Events
+**3. `BroadcastReceiver`** - System Events
 
 Receives and responds to **broadcast messages** from other apps or system.
 
@@ -85,7 +85,7 @@ class NetworkReceiver : BroadcastReceiver() {
 }
 ```
 
-**4. ContentProvider** - Data Sharing
+**4. `ContentProvider`** - Data Sharing
 
 Enables apps to **share data** with other apps.
 
@@ -97,9 +97,9 @@ class MyContentProvider : ContentProvider() {
 }
 ```
 
-**5. Fragment** - UI Portion
+**5. `Fragment`** - UI Portion
 
-Represents a **portion of UI** or behavior in an Activity.
+Represents a **portion of UI** or behavior in an `Activity`.
 
 ```kotlin
 class ProfileFragment : Fragment() {
@@ -109,7 +109,7 @@ class ProfileFragment : Fragment() {
 }
 ```
 
-**6. View** - UI Building Block
+**6. `View`** - UI Building Block
 
 Basic **building block** for UI components.
 
@@ -119,7 +119,7 @@ class CustomButton : View(context) {
 }
 ```
 
-**7. Intent** - Communication
+**7. `Intent`** - Communication
 
 Used for **communication between components**.
 
@@ -132,13 +132,13 @@ startActivity(intent)
 
 | Component | Purpose | Has UI | Example |
 |-----------|---------|--------|---------|
-| Activity | Screen | - Yes | Login screen |
-| Service | Background work | - No | Music player |
-| BroadcastReceiver | Events | - No | Network change |
-| ContentProvider | Data sharing | - No | Contacts |
-| Fragment | UI portion | - Yes | Tab content |
-| View | UI element | - Yes | Button, TextView |
-| Intent | Messaging | - No | Start Activity |
+| `Activity` | Screen | - Yes | Login screen |
+| `Service` | Background work | - No | Music player |
+| `BroadcastReceiver` | Events | - No | Network change |
+| `ContentProvider` | Data sharing | - No | Contacts |
+| `Fragment` | UI portion | - Yes | Tab content |
+| `View` | UI element | - Yes | `Button`, `TextView` |
+| `Intent` | Messaging | - No | Start `Activity` |
 
 
 # Question (EN)
@@ -155,9 +155,9 @@ Android applications are built from several **main components**, each with speci
 
 **Main Components:**
 
-**1. Activity** - User Interface
+**1. `Activity`** - User Interface
 
-Provides user interface. Each Activity represents a **single screen**.
+Provides user interface. Each `Activity` represents a **single screen**.
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -168,7 +168,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**2. Service** - Background Operations
+**2. `Service`** - Background Operations
 
 Performs **long-running operations** in background without UI.
 
@@ -181,7 +181,7 @@ class MusicService : Service() {
 }
 ```
 
-**3. BroadcastReceiver** - System Events
+**3. `BroadcastReceiver`** - System Events
 
 Receives and responds to **broadcast messages** from other apps or system.
 
@@ -193,7 +193,7 @@ class NetworkReceiver : BroadcastReceiver() {
 }
 ```
 
-**4. ContentProvider** - Data Sharing
+**4. `ContentProvider`** - Data Sharing
 
 Enables apps to **share data** with other apps.
 
@@ -205,9 +205,9 @@ class MyContentProvider : ContentProvider() {
 }
 ```
 
-**5. Fragment** - UI Portion
+**5. `Fragment`** - UI Portion
 
-Represents a **portion of UI** or behavior in an Activity.
+Represents a **portion of UI** or behavior in an `Activity`.
 
 ```kotlin
 class ProfileFragment : Fragment() {
@@ -217,7 +217,7 @@ class ProfileFragment : Fragment() {
 }
 ```
 
-**6. View** - UI Building Block
+**6. `View`** - UI Building Block
 
 Basic **building block** for UI components.
 
@@ -227,7 +227,7 @@ class CustomButton : View(context) {
 }
 ```
 
-**7. Intent** - Communication
+**7. `Intent`** - Communication
 
 Used for **communication between components**.
 
@@ -240,13 +240,13 @@ startActivity(intent)
 
 | Component | Purpose | Has UI | Example |
 |-----------|---------|--------|---------|
-| Activity | Screen | - Yes | Login screen |
-| Service | Background work | - No | Music player |
-| BroadcastReceiver | Events | - No | Network change |
-| ContentProvider | Data sharing | - No | Contacts |
-| Fragment | UI portion | - Yes | Tab content |
-| View | UI element | - Yes | Button, TextView |
-| Intent | Messaging | - No | Start Activity |
+| `Activity` | Screen | - Yes | Login screen |
+| `Service` | Background work | - No | Music player |
+| `BroadcastReceiver` | Events | - No | Network change |
+| `ContentProvider` | Data sharing | - No | Contacts |
+| `Fragment` | UI portion | - Yes | Tab content |
+| `View` | UI element | - Yes | `Button`, `TextView` |
+| `Intent` | Messaging | - No | Start `Activity` |
 
 ## Ответ (RU)
 
@@ -254,9 +254,9 @@ Android-приложения создаются из нескольких **ос
 
 **Основные компоненты:**
 
-**1. Activity** - Пользовательский интерфейс
+**1. `Activity`** - Пользовательский интерфейс
 
-Предоставляет пользовательский интерфейс. Каждая Activity представляет **отдельный экран**.
+Предоставляет пользовательский интерфейс. Каждая `Activity` представляет **отдельный экран**.
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -267,7 +267,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**2. Service** - Фоновые операции
+**2. `Service`** - Фоновые операции
 
 Выполняет **длительные операции** в фоне без UI.
 
@@ -280,7 +280,7 @@ class MusicService : Service() {
 }
 ```
 
-**3. BroadcastReceiver** - Системные события
+**3. `BroadcastReceiver`** - Системные события
 
 Принимает и обрабатывает **широковещательные сообщения** от других приложений или системы.
 
@@ -292,7 +292,7 @@ class NetworkReceiver : BroadcastReceiver() {
 }
 ```
 
-**4. ContentProvider** - Обмен данными
+**4. `ContentProvider`** - Обмен данными
 
 Позволяет приложениям **обмениваться данными** с другими приложениями.
 
@@ -304,9 +304,9 @@ class MyContentProvider : ContentProvider() {
 }
 ```
 
-**5. Fragment** - Часть UI
+**5. `Fragment`** - Часть UI
 
-Представляет **часть пользовательского интерфейса** или поведения в Activity.
+Представляет **часть пользовательского интерфейса** или поведения в `Activity`.
 
 ```kotlin
 class ProfileFragment : Fragment() {
@@ -316,7 +316,7 @@ class ProfileFragment : Fragment() {
 }
 ```
 
-**6. View** - Строительный блок UI
+**6. `View`** - Строительный блок UI
 
 Базовый **строительный блок** для компонентов пользовательского интерфейса.
 
@@ -326,7 +326,7 @@ class CustomButton : View(context) {
 }
 ```
 
-**7. Intent** - Связь между компонентами
+**7. `Intent`** - Связь между компонентами
 
 Используется для **связи между компонентами**.
 
@@ -339,13 +339,13 @@ startActivity(intent)
 
 | Компонент | Назначение | Есть UI | Пример |
 |-----------|------------|---------|--------|
-| Activity | Экран | Да | Экран входа |
-| Service | Фоновая работа | Нет | Музыкальный плеер |
-| BroadcastReceiver | События | Нет | Изменение сети |
-| ContentProvider | Обмен данными | Нет | Контакты |
-| Fragment | Часть UI | Да | Содержимое вкладки |
-| View | Элемент UI | Да | Button, TextView |
-| Intent | Обмен сообщениями | Нет | Запуск Activity |
+| `Activity` | Экран | Да | Экран входа |
+| `Service` | Фоновая работа | Нет | Музыкальный плеер |
+| `BroadcastReceiver` | События | Нет | Изменение сети |
+| `ContentProvider` | Обмен данными | Нет | Контакты |
+| `Fragment` | Часть UI | Да | Содержимое вкладки |
+| `View` | Элемент UI | Да | `Button`, `TextView` |
+| `Intent` | Обмен сообщениями | Нет | Запуск `Activity` |
 
 
 ## Follow-ups

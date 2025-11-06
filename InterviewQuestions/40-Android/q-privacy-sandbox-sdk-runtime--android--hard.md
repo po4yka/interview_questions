@@ -174,18 +174,18 @@ class SandboxedAdClient(
 ```
 
 ✅ **AIDL interface** через `Stub.asInterface()`
-✅ **Bundle** для передачи данных
+✅ **`Bundle`** для передачи данных
 ✅ **Result type** для error handling
 
 ### Вызовы Миграции SDK
 
 **1. Архитектурные изменения:**
 - Переход на Binder IPC (вместо прямых вызовов)
-- Сериализация данных через Bundle
+- Сериализация данных через `Bundle`
 - Асинхронные операции обязательны
 
 **2. Функциональные ограничения:**
-- ❌ Persistent storage — приложение должно передавать config через Bundle
+- ❌ Persistent storage — приложение должно передавать config через `Bundle`
 - ❌ Background execution — только в рамках жизненного цикла
 - ❌ Direct permissions — app проверяет permissions, передаёт данные
 
@@ -385,18 +385,18 @@ class SandboxedAdClient(
 ```
 
 ✅ **AIDL interface** via `Stub.asInterface()`
-✅ **Bundle** for data transfer
+✅ **`Bundle`** for data transfer
 ✅ **Result type** for error handling
 
 ### SDK Migration Challenges
 
 **1. Architectural Changes:**
 - Switch to Binder IPC (instead of direct calls)
-- Data serialization via Bundle
+- Data serialization via `Bundle`
 - Async operations mandatory
 
 **2. Functional Limitations:**
-- ❌ Persistent storage — app must pass config via Bundle
+- ❌ Persistent storage — app must pass config via `Bundle`
 - ❌ Background execution — only within lifecycle
 - ❌ Direct permissions — app checks permissions, passes data
 

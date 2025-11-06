@@ -34,7 +34,7 @@ What scope is @Singleton bound to in Dagger/Hilt?
 **Ключевые аспекты:**
 
 - В Dagger: живет столько, сколько живет Component
-- В Hilt: привязан к SingletonComponent (Application lifecycle)
+- В Hilt: привязан к SingletonComponent (`Application` lifecycle)
 - Один экземпляр на компонент, а не на JVM
 - Может вызвать утечки памяти при неправильном использовании
 
@@ -76,10 +76,10 @@ val comp2 = DaggerAppComponent.create()
 
 | Scope | Lifetime | Типичные Use Cases |
 |-------|----------|-------------------|
-| @Singleton | Application | Database, NetworkClient, Analytics |
-| @ActivityRetainedScoped | Config changes | ViewModel data |
-| @ActivityScoped | Activity | Presenter, Navigator |
-| @FragmentScoped | Fragment | Fragment-specific logic |
+| @Singleton | `Application` | Database, NetworkClient, Analytics |
+| @ActivityRetainedScoped | Config changes | `ViewModel` data |
+| @ActivityScoped | `Activity` | Presenter, Navigator |
+| @FragmentScoped | `Fragment` | `Fragment`-specific logic |
 
 **Типичные ошибки:**
 
@@ -112,7 +112,7 @@ class ActivityPresenter
 **Key aspects:**
 
 - In Dagger: lives as long as the Component exists
-- In Hilt: bound to SingletonComponent (Application lifecycle)
+- In Hilt: bound to SingletonComponent (`Application` lifecycle)
 - One instance per component, not per JVM
 - Can cause memory leaks if misused
 
@@ -154,10 +154,10 @@ val comp2 = DaggerAppComponent.create()
 
 | Scope | Lifetime | Typical Use Cases |
 |-------|----------|-------------------|
-| @Singleton | Application | Database, NetworkClient, Analytics |
-| @ActivityRetainedScoped | Config changes | ViewModel data |
-| @ActivityScoped | Activity | Presenter, Navigator |
-| @FragmentScoped | Fragment | Fragment-specific logic |
+| @Singleton | `Application` | Database, NetworkClient, Analytics |
+| @ActivityRetainedScoped | Config changes | `ViewModel` data |
+| @ActivityScoped | `Activity` | Presenter, Navigator |
+| @FragmentScoped | `Fragment` | `Fragment`-specific logic |
 
 **Common mistakes:**
 

@@ -51,15 +51,15 @@ Integration Tests (Multiple Layers)
 
 ### Testing Strategy
 
-**1. ViewModel + Repository + Local Database**
+**1. `ViewModel` + `Repository` + Local Database**
 - Mock: Network API
-- Real: ViewModel, Repository, Room Database
+- Real: `ViewModel`, `Repository`, Room Database
 
-**2. Repository + Network + Cache**
+**2. `Repository` + Network + Cache**
 - Mock: Nothing (use test server or fake)
 - Real: All repository logic
 
-**3. Full Stack (except external services)**
+**3. Full `Stack` (except external services)**
 - Mock: Only external APIs, system services
 - Real: All app layers
 
@@ -158,7 +158,7 @@ class UserRepositoryIntegrationTest {
 }
 ```
 
-### ViewModel + Repository Integration
+### `ViewModel` + `Repository` Integration
 
 ```kotlin
 @ExperimentalCoroutinesTest
@@ -208,7 +208,7 @@ class UserViewModelIntegrationTest {
 }
 ```
 
-### Full Stack Integration Test
+### Full `Stack` Integration Test
 
 ```kotlin
 @HiltAndroidTest
@@ -301,15 +301,15 @@ Integration Tests (Multiple Layers)
 
 ### Testing Strategy
 
-**1. ViewModel + Repository + Local Database**
+**1. `ViewModel` + `Repository` + Local Database**
 - Mock: Network API
-- Real: ViewModel, Repository, Room Database
+- Real: `ViewModel`, `Repository`, Room Database
 
-**2. Repository + Network + Cache**
+**2. `Repository` + Network + Cache**
 - Mock: Nothing (use test server or fake)
 - Real: All repository logic
 
-**3. Full Stack (except external services)**
+**3. Full `Stack` (except external services)**
 - Mock: Only external APIs, system services
 - Real: All app layers
 
@@ -408,7 +408,7 @@ class UserRepositoryIntegrationTest {
 }
 ```
 
-### ViewModel + Repository Integration
+### `ViewModel` + `Repository` Integration
 
 ```kotlin
 @ExperimentalCoroutinesTest
@@ -458,7 +458,7 @@ class UserViewModelIntegrationTest {
 }
 ```
 
-### Full Stack Integration Test
+### Full `Stack` Integration Test
 
 ```kotlin
 @HiltAndroidTest
@@ -532,9 +532,9 @@ class FullStackIntegrationTest {
 
 ### Стратегия Тестирования
 
-1. **ViewModel + Repository + Local Database**: мокируем только сеть
-2. **Repository + Network + Cache**: мокируем минимум
-3. **Full Stack**: мокируем только внешние сервисы
+1. **`ViewModel` + `Repository` + Local Database**: мокируем только сеть
+2. **`Repository` + Network + Cache**: мокируем минимум
+3. **Full `Stack`**: мокируем только внешние сервисы
 
 [Полные примеры приведены в английском разделе]
 

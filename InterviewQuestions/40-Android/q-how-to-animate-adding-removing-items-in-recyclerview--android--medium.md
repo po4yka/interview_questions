@@ -31,10 +31,10 @@ tags:
 ---
 
 # Вопрос (RU)
-> Как анимировать добавление и удаление элементов в RecyclerView
+> Как анимировать добавление и удаление элементов в `RecyclerView`
 
 # Question (EN)
-> How To Animate Adding/Removing Items In RecyclerView
+> How To Animate Adding/Removing Items In `RecyclerView`
 
 ---
 
@@ -44,11 +44,11 @@ tags:
 
 ## EN (expanded)
 
-To animate item additions and removals in RecyclerView, you use **ItemAnimator** (default is **DefaultItemAnimator**) combined with proper adapter notifications or **DiffUtil**.
+To animate item additions and removals in `RecyclerView`, you use **ItemAnimator** (default is **DefaultItemAnimator**) combined with proper adapter notifications or **DiffUtil**.
 
 ### 1. DefaultItemAnimator (Built-in)
 
-RecyclerView includes a default animator:
+`RecyclerView` includes a default animator:
 
 ```kotlin
 recyclerView.itemAnimator = DefaultItemAnimator()
@@ -221,7 +221,7 @@ class CustomItemAnimator : DefaultItemAnimator() {
 recyclerView.itemAnimator = CustomItemAnimator()
 ```
 
-### 6. Advanced Custom Animator
+### 6. Advanced Custom `Animator`
 
 ```kotlin
 class SlideInItemAnimator : SimpleItemAnimator() {
@@ -523,11 +523,11 @@ recyclerView.itemAnimator = DefaultItemAnimator() // Optional, it's default
 
 ## RU (расширенный ответ)
 
-Для анимации добавления и удаления элементов в RecyclerView используется **ItemAnimator** (по умолчанию **DefaultItemAnimator**) в сочетании с правильными уведомлениями адаптера или **DiffUtil**.
+Для анимации добавления и удаления элементов в `RecyclerView` используется **ItemAnimator** (по умолчанию **DefaultItemAnimator**) в сочетании с правильными уведомлениями адаптера или **DiffUtil**.
 
 ### 1. DefaultItemAnimator (Встроенный)
 
-RecyclerView включает анимацию по умолчанию:
+`RecyclerView` включает анимацию по умолчанию:
 
 ```kotlin
 recyclerView.itemAnimator = DefaultItemAnimator()
@@ -949,12 +949,12 @@ recyclerView.itemAnimator = DefaultItemAnimator() // Опционально, э�
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - `View`, Ui
 
 ### Related (Medium)
-- q-rxjava-pagination-recyclerview--android--medium - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
-- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
-- [[q-recyclerview-async-list-differ--android--medium]] - View, Ui
+- q-rxjava-pagination-recyclerview--android--medium - `View`, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - `View`, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - `View`, Ui
+- [[q-recyclerview-async-list-differ--android--medium]] - `View`, Ui

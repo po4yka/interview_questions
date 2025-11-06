@@ -127,11 +127,11 @@ fun main() = application {
 **iOS Integration**:
 - `UIViewController` wrapper → overhead
 - Ограниченная `SwiftUI` interop
-- Lifecycle mapping iOS ↔ Compose
+- `Lifecycle` mapping iOS ↔ Compose
 
 **Web**:
 - `Canvas`-based → проблемы с accessibility
-- Bundle size (минимум ~2 MB)
+- `Bundle` size (минимум ~2 MB)
 
 **Desktop**:
 - Windowing API различия (`macOS`/`Windows`/`Linux`)
@@ -229,11 +229,11 @@ fun main() = application {
 **iOS Integration**:
 - `UIViewController` wrapper → overhead
 - Limited `SwiftUI` interop
-- Lifecycle mapping iOS ↔ Compose
+- `Lifecycle` mapping iOS ↔ Compose
 
 **Web**:
 - `Canvas`-based → accessibility challenges
-- Bundle size (minimum ~2 MB)
+- `Bundle` size (minimum ~2 MB)
 
 **Desktop**:
 - Windowing API differences (`macOS`/`Windows`/`Linux`)

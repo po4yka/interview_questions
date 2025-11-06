@@ -45,7 +45,7 @@ tags:
 
 ## Ответ (RU)
 
-Когда пользователь касается экрана в Android, система вызывает цепочку методов обработки касаний. Основные события: **dispatchTouchEvent()** (распределение), **onInterceptTouchEvent()** (перехват для ViewGroup), **onTouchEvent()** (обработка), и **onClick()** (если настроен).
+Когда пользователь касается экрана в Android, система вызывает цепочку методов обработки касаний. Основные события: **dispatchTouchEvent()** (распределение), **onInterceptTouchEvent()** (перехват для `ViewGroup`), **onTouchEvent()** (обработка), и **onClick()** (если настроен).
 
 ### Поток Событий
 
@@ -94,7 +94,7 @@ override fun onTouchEvent(event: MotionEvent): Boolean {
 }
 ```
 
-**onInterceptTouchEvent()** — перехват для ViewGroup:
+**onInterceptTouchEvent()** — перехват для `ViewGroup`:
 
 ```kotlin
 override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
@@ -152,14 +152,14 @@ Box(modifier = Modifier.pointerInput(Unit) {
 
 - Возвращайте `true` из onTouchEvent() для потребления события
 - onClick() срабатывает только на ACTION_UP без движения
-- ViewGroup может перехватить события детей через onInterceptTouchEvent()
+- `ViewGroup` может перехватить события детей через onInterceptTouchEvent()
 - Всегда вызывайте performClick() при ACTION_UP для accessibility
 
 ## Answer (EN)
 
 When a user touches the screen in Android, the system calls a chain of touch event methods. The main events are: **dispatchTouchEvent()** (distribution), **onInterceptTouchEvent()** (interception for ViewGroups), **onTouchEvent()** (handling), and **onClick()** (if configured).
 
-### Event Flow
+### Event `Flow`
 
 ```kotlin
 // Activity.dispatchTouchEvent()
@@ -264,16 +264,16 @@ Box(modifier = Modifier.pointerInput(Unit) {
 
 - Return `true` from onTouchEvent() to consume the event
 - onClick() only fires on ACTION_UP without movement
-- ViewGroup can intercept child events via onInterceptTouchEvent()
+- `ViewGroup` can intercept child events via onInterceptTouchEvent()
 - Always call performClick() on ACTION_UP for accessibility
 
 ## Follow-ups
 
-- How does touch event propagation differ between View and ViewGroup?
+- How does touch event propagation differ between `View` and `ViewGroup`?
 - What happens when multiple views can handle the same touch event?
 - How do you implement custom gesture detection for complex interactions?
 - What is the difference between consuming an event and letting it propagate?
-- How does Compose's pointer input system differ from View's touch events?
+- How does Compose's pointer input system differ from `View`'s touch events?
 
 ## References
 
@@ -288,7 +288,7 @@ Box(modifier = Modifier.pointerInput(Unit) {
 
 
 ### Prerequisites
-- Understanding View lifecycle and custom views
+- Understanding `View` lifecycle and custom views
 
 ### Related
 - [[q-how-to-create-dynamic-screens-at-runtime--android--hard]]

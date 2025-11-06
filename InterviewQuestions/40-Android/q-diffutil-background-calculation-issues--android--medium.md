@@ -430,7 +430,7 @@ fun updateUsers(newUsers: List<User>) {
 **Problem:**
 
 Complex operations in `areContentsTheSame()` are called multiple times during `DiffUtil` calculation (up to O(N²) times for algorithm). Even on background thread this can lead to:
-- Long computations — `DiffUtil` blocks on heavy operations
+- `Long` computations — `DiffUtil` blocks on heavy operations
 - Repeated computations — same data processed multiple times
 - Increased calculation time — total time increases proportionally to callback complexity
 
@@ -486,7 +486,7 @@ class MessageDiffCallback(
 **Problem:**
 
 `DiffUtil` uses `Myers` algorithm for difference calculation with O(N²) time complexity in worst case. For large lists (>1000 items) this leads to:
-- Long calculations — calculation can take seconds even on background thread
+- `Long` calculations — calculation can take seconds even on background thread
 - Background thread blocking — other operations don't execute
 - UX degradation — UI update delay
 
@@ -730,7 +730,7 @@ override fun onBindViewHolder(
 - [ListAdapter Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter)
 - [AsyncListDiffer Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/AsyncListDiffer)
 - [Paging 3 Library](https://developer.android.com/topic/libraries/architecture/paging/v3-overview)
-- [RecyclerView Optimization](https://developer.android.com/guide/topics/ui/layout/recyclerview#performance)
+- [`RecyclerView` Optimization](https://developer.android.com/guide/topics/ui/layout/recyclerview#performance)
 
 ## Related Questions
 
@@ -740,12 +740,12 @@ override fun onBindViewHolder(
 
 
 ### Prerequisites (Easier)
-- RecyclerView basics and adapter patterns
+- `RecyclerView` basics and adapter patterns
 - Coroutines and background threading
 
 ### Related (Same Level)
 - Main causes of UI lag
-- RecyclerView optimization techniques
+- `RecyclerView` optimization techniques
 
 ### Advanced (Harder)
 - Custom DiffUtil algorithm implementation

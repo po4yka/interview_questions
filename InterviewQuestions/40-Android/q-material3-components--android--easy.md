@@ -35,7 +35,7 @@ sources: []
 > Каковы ключевые различия между Material 2 и Material 3? Перечислите основные компоненты Material 3. Как мигрировать с Material 2 на Material 3?
 
 # Question (EN)
-> What are the key differences between Material 2 and Material 3? List the main Material 3 components and their use cases. How do you migrate from Material 2 to Material 3?
+> What are the key differences between Material 2 and Material 3? `List` the main Material 3 components and their use cases. How do you migrate from Material 2 to Material 3?
 
 ---
 

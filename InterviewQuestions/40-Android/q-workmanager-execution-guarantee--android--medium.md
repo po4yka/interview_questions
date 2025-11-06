@@ -56,7 +56,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 WorkManager автоматически выбирает оптимальный исполнитель:
 - **API 23+**: JobScheduler
-- **API 14-22**: AlarmManager + BroadcastReceiver
+- **API 14-22**: AlarmManager + `BroadcastReceiver`
 
 #### 3. Constraint-based Выполнение
 
@@ -125,7 +125,7 @@ WorkManager автоматически регистрирует BOOT_COMPLETED r
 
 ### Expedited Work (API 31+)
 
-Для срочных задач WorkManager может запуститься как Foreground Service:
+Для срочных задач WorkManager может запуститься как Foreground `Service`:
 
 ```kotlin
 class ExpeditedWorker : CoroutineWorker() {
@@ -157,7 +157,7 @@ WorkManager обеспечивает надежность через:
 - Строгое соблюдение constraints
 - Экспоненциальный backoff для retry
 - Восстановление после перезагрузки через BOOT_COMPLETED
-- Интеграцию с Foreground Service для срочных задач
+- Интеграцию с Foreground `Service` для срочных задач
 
 **Ограничения**: периодические работы не гарантируют точное время выполнения (минимум 15 минут), Doze Mode может отложить выполнение до maintenance window.
 
@@ -192,7 +192,7 @@ SQLite stores: Worker parameters, constraints, retry count, output data.
 
 WorkManager automatically selects the optimal executor:
 - **API 23+**: JobScheduler
-- **API 14-22**: AlarmManager + BroadcastReceiver
+- **API 14-22**: AlarmManager + `BroadcastReceiver`
 
 #### 3. Constraint-based Execution
 
@@ -261,7 +261,7 @@ WorkManager automatically registers a BOOT_COMPLETED receiver that restores all 
 
 ### Expedited Work (API 31+)
 
-For urgent tasks, WorkManager can run as a Foreground Service:
+For urgent tasks, WorkManager can run as a Foreground `Service`:
 
 ```kotlin
 class ExpeditedWorker : CoroutineWorker() {
@@ -293,14 +293,14 @@ WorkManager ensures reliability through:
 - Strict constraint enforcement
 - Exponential backoff for retry
 - Recovery after reboot via BOOT_COMPLETED
-- Foreground Service integration for urgent tasks
+- Foreground `Service` integration for urgent tasks
 
 **Limitations**: periodic work doesn't guarantee exact timing (15-minute minimum), Doze Mode may defer execution to maintenance windows.
 
 ## Follow-ups
 
 1. What happens to WorkManager tasks during Doze Mode?
-2. How do you observe WorkManager progress in a ViewModel?
+2. How do you observe WorkManager progress in a `ViewModel`?
 3. When should you use expedited work vs. foreground service directly?
 4. How does WorkManager handle work chain failures (e.g., if workA fails)?
 5. What are the trade-offs between ExistingWorkPolicy.KEEP vs. REPLACE?

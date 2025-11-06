@@ -42,11 +42,11 @@ tags:
 
 ## Ответ (RU)
 
-**PendingIntent** — это обёртка вокруг Intent, которая позволяет другим компонентам или приложениям выполнить Intent с правами вашего приложения, даже когда оно неактивно. По сути, это токен разрешения для отложенного действия.
+**PendingIntent** — это обёртка вокруг `Intent`, которая позволяет другим компонентам или приложениям выполнить `Intent` с правами вашего приложения, даже когда оно неактивно. По сути, это токен разрешения для отложенного действия.
 
 ### Ключевые Характеристики
 
-- **Отложенное выполнение** — Intent выполняется позже, не сразу
+- **Отложенное выполнение** — `Intent` выполняется позже, не сразу
 - **Делегирование прав** — выполняется с правами вашего приложения
 - **Неизменяемость** — нельзя изменить после создания (FLAG_IMMUTABLE)
 - **Системное использование** — уведомления, AlarmManager, виджеты
@@ -77,11 +77,11 @@ val servicePI = PendingIntent.getService(context, requestCode, intent,
 
 ## Answer (EN)
 
-**PendingIntent** is a wrapper around an Intent that grants other components or applications permission to execute that Intent with your app's permissions, even when your app is not active. Essentially, it's a permission token for deferred actions.
+**PendingIntent** is a wrapper around an `Intent` that grants other components or applications permission to execute that `Intent` with your app's permissions, even when your app is not active. Essentially, it's a permission token for deferred actions.
 
 ### Key Characteristics
 
-- **Deferred execution** — Intent executes later, not immediately
+- **Deferred execution** — `Intent` executes later, not immediately
 - **Permission delegation** — runs with your app's permissions
 - **Immutability** — cannot be modified after creation (FLAG_IMMUTABLE)
 - **System integration** — notifications, AlarmManager, widgets
@@ -186,7 +186,7 @@ class MyWidgetProvider : AppWidgetProvider() {
 
 ## References
 
-- [[q-intent-filters-android--android--medium]] - Intent fundamentals
+- [[q-intent-filters-android--android--medium]] - `Intent` fundamentals
 - [[q-what-unifies-android-components--android--easy]] - Android components
 - https://developer.android.com/reference/android/app/PendingIntent
 - https://developer.android.com/about/versions/12/behavior-changes-12#pending-intent-mutability
@@ -202,11 +202,11 @@ class MyWidgetProvider : AppWidgetProvider() {
 
 
 ### Prerequisites (Easier)
-- [[q-what-unifies-android-components--android--easy]] - Intent basics
+- [[q-what-unifies-android-components--android--easy]] - `Intent` basics
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Android threading
 
 ### Related (Same Level)
-- [[q-intent-filters-android--android--medium]] - Intent deep dive
+- [[q-intent-filters-android--android--medium]] - `Intent` deep dive
 - [[q-anr-application-not-responding--android--medium]] - Background work patterns
 
 ### Advanced (Harder)

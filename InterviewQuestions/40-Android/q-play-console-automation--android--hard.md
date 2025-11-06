@@ -47,9 +47,9 @@ sources:
 
 ### 1. Publishing API как источник правды
 
-- Используйте Google Play Developer Publishing API v3/v4 (Service Account + JSON ключ).
+- Используйте Google Play Developer Publishing API v3/v4 (`Service` Account + JSON ключ).
 - CI/CD pipeline:
-  1. Сборка App Bundle (.aab) + подпись.
+  1. Сборка App `Bundle` (.aab) + подпись.
   2. Загрузка в Play API (`edits.insert`, `bundles.upload`).
   3. Настройка rollout (`tracks.update`, `track=internal`, `alpha`, `production`).
 - Храните release notes в repo (Markdown/JSON), скрипт подтягивает их перед загрузкой.
@@ -75,7 +75,7 @@ sources:
 
 ### 5. Quality Gates
 
-- Перед загрузкой App Bundle запускайте:
+- Перед загрузкой App `Bundle` запускайте:
   - Instrumented tests (Firebase Test Lab / managed devices)
   - App quality report (Gradle `lint`, `detekt`, `security scan`)
   - Size/regression checks (apk diff)

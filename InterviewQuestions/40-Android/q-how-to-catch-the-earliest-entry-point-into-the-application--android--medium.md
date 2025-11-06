@@ -32,14 +32,14 @@ tags:
 > Как поймать самую раннюю точку входа в приложение
 
 # Question (EN)
-> How To Catch The Earliest Entry Point Into The Application
+> How To Catch The Earliest Entry Point Into The `Application`
 
 ---
 
 ## Answer (EN)
-The earliest entry point in an Android application is the `Application.onCreate()` method, which is called before any Activity, Service, or other application components are created. However, ContentProvider initialization happens even earlier.
+The earliest entry point in an Android application is the `Application.onCreate()` method, which is called before any `Activity`, `Service`, or other application components are created. However, `ContentProvider` initialization happens even earlier.
 
-### Application.onCreate() - Standard Entry Point
+### `Application`.onCreate() - Standard Entry Point
 
 ```kotlin
 class MyApplication : Application() {
@@ -87,9 +87,9 @@ class MyApplication : Application() {
 5. Activity.onCreate() / Service.onCreate() / BroadcastReceiver.onReceive()
 ```
 
-### ContentProvider - Earlier Than Application
+### `ContentProvider` - Earlier Than `Application`
 
-ContentProvider initializes **before** Application.onCreate():
+`ContentProvider` initializes **before** `Application`.onCreate():
 
 ```kotlin
 class InitializationProvider : ContentProvider() {
@@ -124,7 +124,7 @@ class InitializationProvider : ContentProvider() {
 </application>
 ```
 
-### Application.attachBaseContext() - Configuration Changes
+### `Application`.attachBaseContext() - Configuration Changes
 
 Called before `onCreate()` for context configuration:
 
@@ -197,7 +197,7 @@ class WorkManagerInitializer : Initializer<WorkManager> {
 </provider>
 ```
 
-### Lifecycle Callbacks - Monitor App State
+### `Lifecycle` Callbacks - Monitor App State
 
 Track when app comes to foreground/background:
 
@@ -240,7 +240,7 @@ class MyApplication : Application() {
 
 ### ProcessLifecycleOwner - Modern Approach
 
-Use Lifecycle library for app lifecycle:
+Use `Lifecycle` library for app lifecycle:
 
 ```kotlin
 class MyApplication : Application() {
@@ -264,7 +264,7 @@ class MyApplication : Application() {
 }
 ```
 
-### Common Initializations in Application.onCreate()
+### Common Initializations in `Application`.onCreate()
 
 ```kotlin
 class MyApplication : Application() {
@@ -336,7 +336,7 @@ class MyApplication : Application() {
 
 
 # Question (EN)
-> How To Catch The Earliest Entry Point Into The Application
+> How To Catch The Earliest Entry Point Into The `Application`
 
 ---
 
@@ -345,9 +345,9 @@ class MyApplication : Application() {
 
 
 ## Answer (EN)
-The earliest entry point in an Android application is the `Application.onCreate()` method, which is called before any Activity, Service, or other application components are created. However, ContentProvider initialization happens even earlier.
+The earliest entry point in an Android application is the `Application.onCreate()` method, which is called before any `Activity`, `Service`, or other application components are created. However, `ContentProvider` initialization happens even earlier.
 
-### Application.onCreate() - Standard Entry Point
+### `Application`.onCreate() - Standard Entry Point
 
 ```kotlin
 class MyApplication : Application() {
@@ -395,9 +395,9 @@ class MyApplication : Application() {
 5. Activity.onCreate() / Service.onCreate() / BroadcastReceiver.onReceive()
 ```
 
-### ContentProvider - Earlier Than Application
+### `ContentProvider` - Earlier Than `Application`
 
-ContentProvider initializes **before** Application.onCreate():
+`ContentProvider` initializes **before** `Application`.onCreate():
 
 ```kotlin
 class InitializationProvider : ContentProvider() {
@@ -432,7 +432,7 @@ class InitializationProvider : ContentProvider() {
 </application>
 ```
 
-### Application.attachBaseContext() - Configuration Changes
+### `Application`.attachBaseContext() - Configuration Changes
 
 Called before `onCreate()` for context configuration:
 
@@ -505,7 +505,7 @@ class WorkManagerInitializer : Initializer<WorkManager> {
 </provider>
 ```
 
-### Lifecycle Callbacks - Monitor App State
+### `Lifecycle` Callbacks - Monitor App State
 
 Track when app comes to foreground/background:
 
@@ -548,7 +548,7 @@ class MyApplication : Application() {
 
 ### ProcessLifecycleOwner - Modern Approach
 
-Use Lifecycle library for app lifecycle:
+Use `Lifecycle` library for app lifecycle:
 
 ```kotlin
 class MyApplication : Application() {
@@ -572,7 +572,7 @@ class MyApplication : Application() {
 }
 ```
 
-### Common Initializations in Application.onCreate()
+### Common Initializations in `Application`.onCreate()
 
 ```kotlin
 class MyApplication : Application() {
@@ -643,11 +643,11 @@ class MyApplication : Application() {
 ```
 
 ## Ответ (RU)
-Для Android точка входа — это метод onCreate класса Application. Его можно переопределить для выполнения начальной логики. В некоторых случаях может понадобиться использование ContentProvider, который инициализируется до Application
+Для Android точка входа — это метод onCreate класса `Application`. Его можно переопределить для выполнения начальной логики. В некоторых случаях может понадобиться использование `ContentProvider`, который инициализируется до `Application`
 
 ## Related Topics
-- Application lifecycle
-- ContentProvider initialization
+- `Application` lifecycle
+- `ContentProvider` initialization
 - App Startup library
 - ProcessLifecycleOwner
 - Dependency injection initialization
@@ -665,7 +665,7 @@ class MyApplication : Application() {
 ## References
 
 - [Android Documentation](https://developer.android.com/docs)
-- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
 
 ## Related Questions

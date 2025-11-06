@@ -139,7 +139,7 @@ freeCompilerArgs += listOf(
 
 ### Практические Решения
 
-**Проблема: ViewModel нестабилен**
+**Проблема: `ViewModel` нестабилен**
 
 ```kotlin
 // ❌ ViewModel не гарантирует стабильность
@@ -157,7 +157,7 @@ fun UserScreen(userState: State<User>) {
 }
 ```
 
-**Проблема: List вызывает лишние рекомпозиции**
+**Проблема: `List` вызывает лишние рекомпозиции**
 
 ```kotlin
 // ❌ MutableList нестабилен
@@ -295,7 +295,7 @@ Report shows parameter stability: `stable count: Int` vs `unstable user: User`.
 
 ### Practical Solutions
 
-**Problem: ViewModel is unstable**
+**Problem: `ViewModel` is unstable**
 
 ```kotlin
 // ❌ ViewModel doesn't guarantee stability
@@ -313,7 +313,7 @@ fun UserScreen(userState: State<User>) {
 }
 ```
 
-**Problem: List causes unnecessary recompositions**
+**Problem: `List` causes unnecessary recompositions**
 
 ```kotlin
 // ❌ MutableList is unstable

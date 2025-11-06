@@ -47,7 +47,7 @@ tags:
 
 **Четыре основных компонента Android:**
 
-**1. Activity** - экран пользовательского интерфейса
+**1. `Activity`** - экран пользовательского интерфейса
 - Представляет один экран с UI
 - Точка взаимодействия пользователя с приложением
 - Пример: экран входа, экран профиля
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**2. Service** - фоновые операции
+**2. `Service`** - фоновые операции
 - Выполняет длительные операции без пользовательского интерфейса
 - Работает в фоновом режиме
 - Пример: воспроизведение музыки, синхронизация данных
@@ -77,7 +77,7 @@ class MusicService : Service() {
 }
 ```
 
-**3. BroadcastReceiver** - обработчик системных событий
+**3. `BroadcastReceiver`** - обработчик системных событий
 - Слушает системные или пользовательские broadcast-сообщения
 - Реагирует на изменения состояния системы
 - Пример: изменение сети, низкий заряд батареи
@@ -91,7 +91,7 @@ class NetworkReceiver : BroadcastReceiver() {
 }
 ```
 
-**4. ContentProvider** - управление и обмен данными
+**4. `ContentProvider`** - управление и обмен данными
 - Централизованное хранилище данных приложения
 - Обеспечивает контролируемый доступ к данным из других приложений
 - Пример: Contacts, MediaStore
@@ -120,7 +120,7 @@ class MyContentProvider : ContentProvider() {
 
 **Four main Android components:**
 
-**1. Activity** - user interface screen
+**1. `Activity`** - user interface screen
 - Represents a single screen with UI
 - Entry point for user interaction
 - Example: login screen, profile screen
@@ -134,7 +134,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**2. Service** - background operations
+**2. `Service`** - background operations
 - Performs long-running operations without UI
 - Runs in background
 - Example: music playback, data synchronization
@@ -150,7 +150,7 @@ class MusicService : Service() {
 }
 ```
 
-**3. BroadcastReceiver** - system event handler
+**3. `BroadcastReceiver`** - system event handler
 - Listens to system-wide or app broadcasts
 - Responds to system state changes
 - Example: network changes, low battery
@@ -164,7 +164,7 @@ class NetworkReceiver : BroadcastReceiver() {
 }
 ```
 
-**4. ContentProvider** - data management and sharing
+**4. `ContentProvider`** - data management and sharing
 - Centralized data storage for application
 - Provides controlled access to data from other apps
 - Example: Contacts, MediaStore
@@ -195,14 +195,14 @@ class MyContentProvider : ContentProvider() {
 
 - How do you communicate between different Android components?
 - What is the difference between foreground and background services?
-- When should you use a BroadcastReceiver vs an event bus?
-- How does ContentProvider handle concurrent data access?
+- When should you use a `BroadcastReceiver` vs an event bus?
+- How does `ContentProvider` handle concurrent data access?
 - What happens if you forget to declare a component in AndroidManifest.xml?
 
 ## References
 
 - [[moc-android]] - Android development overview
-- [Android Developer Guide - Application Fundamentals](https://developer.android.com/guide/components/fundamentals)
+- [Android Developer Guide - `Application` Fundamentals](https://developer.android.com/guide/components/fundamentals)
 
 ## Related Questions
 
@@ -218,7 +218,7 @@ class MyContentProvider : ContentProvider() {
 - [[q-what-unifies-android-components--android--easy]] - Component foundation
 
 ### Related
-- [[q-how-does-activity-lifecycle-work--android--medium]] - Activity lifecycle details
+- [[q-how-does-activity-lifecycle-work--android--medium]] - `Activity` lifecycle details
 - [[q-android-components-besides-activity--android--easy]] - Other component types
 
 ### Advanced

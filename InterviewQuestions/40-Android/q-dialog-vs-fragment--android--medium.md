@@ -49,10 +49,10 @@ sources:
 
 **Ключевые различия:**
 
-| Аспект | Dialog | Fragment |
+| Аспект | Dialog | `Fragment` |
 |--------|--------|----------|
 | **Назначение** | Временные взаимодействия (подтверждения, ошибки, короткий ввод) | Переиспользуемые экраны и модули UI |
-| **Lifecycle** | Упрощенный (show/dismiss, нет полного lifecycle) | Полный lifecycle (onCreate → onViewCreated → onDestroy) |
+| **`Lifecycle`** | Упрощенный (show/dismiss, нет полного lifecycle) | Полный lifecycle (onCreate → onViewCreated → onDestroy) |
 | **Navigation** | Не входит в back stack, закрывается dismiss | Часть Navigation Component, управляется back stack |
 | **Сложность** | Простые формы, один экран | Сложные UI с состоянием, может содержать вложенные компоненты |
 | **Состояние** | Теряется при rotation без DialogFragment | Сохраняется через `onSaveInstanceState` |
@@ -104,7 +104,7 @@ ConfirmDialog().show(supportFragmentManager, "confirm")
 // ⚠️ Важно: использовать getChildFragmentManager() для вложенных диалогов
 ```
 
-**Fragment (Views):**
+**`Fragment` (Views):**
 
 `Fragment` — модульная часть UI с полным lifecycle для построения сложных экранов:
 
@@ -211,7 +211,7 @@ NavHost(navController, startDestination = "profile") {
 - Передача данных между диалогом и родительским `Fragment`/`Activity`
 - Кастомные диалоги с сложной логикой
 
-**Fragment:**
+**`Fragment`:**
 - Полноценные экраны приложения (списки, детали, формы)
 - Навигация через Navigation Component
 - Сложное состояние с `ViewModel` и `LiveData`/`Flow`
@@ -232,18 +232,18 @@ NavHost(navController, startDestination = "profile") {
 5. `onDismiss()` — закрытие диалога
 6. `onDestroy()` — уничтожение фрагмента
 
-**Fragment lifecycle:**
-1. `onAttach()` — прикрепление к Activity
+**`Fragment` lifecycle:**
+1. `onAttach()` — прикрепление к `Activity`
 2. `onCreate()` — создание фрагмента
-3. `onCreateView()` — создание View
-4. `onViewCreated()` — View создана, можно настраивать UI
+3. `onCreateView()` — создание `View`
+4. `onViewCreated()` — `View` создана, можно настраивать UI
 5. `onStart()` — фрагмент видим
 6. `onResume()` — фрагмент активен
 7. `onPause()` — фрагмент приостановлен
 8. `onStop()` — фрагмент остановлен
-9. `onDestroyView()` — View уничтожена
+9. `onDestroyView()` — `View` уничтожена
 10. `onDestroy()` — фрагмент уничтожен
-11. `onDetach()` — открепление от Activity
+11. `onDetach()` — открепление от `Activity`
 
 **Лучшие практики и частые ошибки:**
 
@@ -253,11 +253,11 @@ NavHost(navController, startDestination = "profile") {
 -   **Используйте `DialogFragment`** когда нужен lifecycle (rotation, state preservation) или передача данных
 -   **Частая ошибка**: использование `Dialog` вместо `DialogFragment` приводит к потере состояния при rotation
 
-**Fragment best practices:**
+**`Fragment` best practices:**
 
--   **`viewLifecycleOwner`**: всегда используйте `viewLifecycleOwner` для `LiveData`/`Flow` observers вместо `this` — предотвращает утечки памяти при уничтожении View
+-   **`viewLifecycleOwner`**: всегда используйте `viewLifecycleOwner` для `LiveData`/`Flow` observers вместо `this` — предотвращает утечки памяти при уничтожении `View`
 -   **State preservation**: переопределяйте `onSaveInstanceState()` для сохранения UI состояния (например, scroll position, input text)
--   **Fragment Result API**: используйте Fragment Result API вместо интерфейсов для передачи данных между фрагментами (рекомендуется Google)
+-   **`Fragment` Result API**: используйте `Fragment` Result API вместо интерфейсов для передачи данных между фрагментами (рекомендуется Google)
 
 **Compose best practices:**
 
@@ -280,10 +280,10 @@ NavHost(navController, startDestination = "profile") {
 
 **Key differences:**
 
-| Aspect | Dialog | Fragment |
+| Aspect | Dialog | `Fragment` |
 |--------|--------|----------|
 | **Purpose** | Temporary interactions (confirmations, errors, short input) | Reusable screens and UI modules |
-| **Lifecycle** | Simplified (show/dismiss, no full lifecycle) | Full lifecycle (onCreate → onViewCreated → onDestroy) |
+| **`Lifecycle`** | Simplified (show/dismiss, no full lifecycle) | Full lifecycle (onCreate → onViewCreated → onDestroy) |
 | **Navigation** | Not in back stack, dismissed on close | Part of Navigation Component, managed by back stack |
 | **Complexity** | Simple forms, single screen | Complex UI with state, can contain nested components |
 | **State** | Lost on rotation without DialogFragment | Preserved via `onSaveInstanceState` |
@@ -335,7 +335,7 @@ ConfirmDialog().show(supportFragmentManager, "confirm")
 // ⚠️ Important: use getChildFragmentManager() for nested dialogs
 ```
 
-**Fragment (Views):**
+**`Fragment` (Views):**
 
 `Fragment` is a modular UI part with full lifecycle for building complex screens:
 
@@ -433,7 +433,7 @@ NavHost(navController, startDestination = "profile") {
 **Dialog:**
 - Simple confirmations without need for state preservation
 - Quick error notifications
-- Short data input (e.g., file name input)
+- `Short` data input (e.g., file name input)
 - ⚠️ Do not use when state preservation on rotation needed — use `DialogFragment`
 
 **DialogFragment:**
@@ -442,14 +442,14 @@ NavHost(navController, startDestination = "profile") {
 - Data passing between dialog and parent `Fragment`/`Activity`
 - Custom dialogs with complex logic
 
-**Fragment:**
+**`Fragment`:**
 - Full application screens (lists, details, forms)
 - Navigation via Navigation Component
 - Complex state with `ViewModel` and `LiveData`/`Flow`
 - Reusable UI modules (e.g., toolbar, side menu)
 - Multi-column layouts on tablets (master-detail)
 
-**Lifecycle comparison:**
+**`Lifecycle` comparison:**
 
 **Dialog lifecycle:**
 1. `show()` — dialog displayed
@@ -463,18 +463,18 @@ NavHost(navController, startDestination = "profile") {
 5. `onDismiss()` — dialog dismissed
 6. `onDestroy()` — fragment destroyed
 
-**Fragment lifecycle:**
-1. `onAttach()` — attach to Activity
+**`Fragment` lifecycle:**
+1. `onAttach()` — attach to `Activity`
 2. `onCreate()` — fragment creation
-3. `onCreateView()` — View creation
-4. `onViewCreated()` — View created, can configure UI
+3. `onCreateView()` — `View` creation
+4. `onViewCreated()` — `View` created, can configure UI
 5. `onStart()` — fragment visible
 6. `onResume()` — fragment active
 7. `onPause()` — fragment paused
 8. `onStop()` — fragment stopped
-9. `onDestroyView()` — View destroyed
+9. `onDestroyView()` — `View` destroyed
 10. `onDestroy()` — fragment destroyed
-11. `onDetach()` — detach from Activity
+11. `onDetach()` — detach from `Activity`
 
 **Best practices and common pitfalls:**
 
@@ -484,11 +484,11 @@ NavHost(navController, startDestination = "profile") {
 -   **Use `DialogFragment`** when lifecycle needed (rotation, state preservation) or data passing required
 -   **Common mistake**: using `Dialog` instead of `DialogFragment` leads to state loss on rotation
 
-**Fragment best practices:**
+**`Fragment` best practices:**
 
--   **`viewLifecycleOwner`**: always use `viewLifecycleOwner` for `LiveData`/`Flow` observers instead of `this` — prevents memory leaks on View destruction
+-   **`viewLifecycleOwner`**: always use `viewLifecycleOwner` for `LiveData`/`Flow` observers instead of `this` — prevents memory leaks on `View` destruction
 -   **State preservation**: override `onSaveInstanceState()` to save UI state (e.g., scroll position, input text)
--   **Fragment Result API**: use Fragment Result API instead of interfaces for data passing between fragments (Google recommended)
+-   **`Fragment` Result API**: use `Fragment` Result API instead of interfaces for data passing between fragments (Google recommended)
 
 **Compose best practices:**
 
@@ -532,7 +532,7 @@ NavHost(navController, startDestination = "profile") {
 - [Android Fragments Guide](https://developer.android.com/guide/fragments)
 - [Dialogs in Views](https://developer.android.com/develop/ui/views/components/dialogs)
 - [Dialogs in Compose](https://developer.android.com/develop/ui/compose/components/dialog)
-- [Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
+- [`Fragment` `Lifecycle`](https://developer.android.com/guide/fragments/lifecycle)
 - [Navigation Component](https://developer.android.com/guide/navigation)
 
 ## Related Questions
@@ -543,13 +543,13 @@ NavHost(navController, startDestination = "profile") {
 
 
 ### Prerequisites (Easier)
-- Fragment basics and lifecycle
-- Activity vs Fragment comparison
+- `Fragment` basics and lifecycle
+- `Activity` vs `Fragment` comparison
 
 ### Related (Same Level)
 - BottomSheet vs Dialog comparison
 - Dialog state management
 
 ### Advanced (Harder)
-- Fragment Result API for communication
+- `Fragment` Result API for communication
 - Custom dialog implementation patterns

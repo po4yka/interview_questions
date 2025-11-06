@@ -36,7 +36,7 @@ sources:
 
 ## Ответ (RU)
 
-**Compose Testing** использует семантическое дерево вместо View-иерархии. Тесты выполняются синхронно — фреймворк автоматически ожидает завершения recomposition.
+**Compose Testing** использует семантическое дерево вместо `View`-иерархии. Тесты выполняются синхронно — фреймворк автоматически ожидает завершения recomposition.
 
 ### Ключевые Концепции
 
@@ -132,7 +132,7 @@ fun asyncData_appearsAfterLoad() {
 
 ## Answer (EN)
 
-**Compose Testing** uses a semantic tree instead of View hierarchy. Tests run synchronously — the framework automatically waits for recomposition to complete.
+**Compose Testing** uses a semantic tree instead of `View` hierarchy. Tests run synchronously — the framework automatically waits for recomposition to complete.
 
 ### Key Concepts
 

@@ -19,11 +19,11 @@ tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, grid-layo
 
 # Вопрос (RU)
 
-Как изменить количество колонок в RecyclerView в зависимости от ориентации устройства?
+Как изменить количество колонок в `RecyclerView` в зависимости от ориентации устройства?
 
 # Question (EN)
 
-How do you change the number of columns in RecyclerView based on device orientation?
+How do you change the number of columns in `RecyclerView` based on device orientation?
 
 ---
 
@@ -222,7 +222,7 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 ## Follow-ups
 
 - How does GridLayoutManager handle span sizes for items with different widths?
-- What's the impact of changing spanCount on RecyclerView performance during rotation?
+- What's the impact of changing spanCount on `RecyclerView` performance during rotation?
 - How do you preserve scroll position when spanCount changes?
 - When should you use StaggeredGridLayoutManager vs GridLayoutManager?
 
@@ -234,11 +234,11 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 ## Related Questions
 
 ### Prerequisites
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView basics
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView` basics
 
 ### Related
 - [[q-looper-empty-queue-behavior--android--medium]] - Configuration handling
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose alternative
 
 ### Advanced
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - Advanced RecyclerView patterns
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - Advanced `RecyclerView` patterns

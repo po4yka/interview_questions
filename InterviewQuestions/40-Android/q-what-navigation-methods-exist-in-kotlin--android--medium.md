@@ -137,11 +137,11 @@ val detailsFragment = DetailsFragment.newInstance(itemId)
 navigateToFragment(detailsFragment)
 ```
 
-### 3. Navigation via Intent
+### 3. Navigation via `Intent`
 
 Used for switching between activities or navigating between apps.
 
-#### Explicit Intent (within app)
+#### Explicit `Intent` (within app)
 
 ```kotlin
 // Navigate to specific Activity
@@ -181,7 +181,7 @@ class DetailsActivity : AppCompatActivity() {
 }
 ```
 
-#### Implicit Intent (system or other apps)
+#### Implicit `Intent` (system or other apps)
 
 ```kotlin
 // Open web browser
@@ -299,9 +299,9 @@ fun createDeepLink(itemId: Int): PendingIntent {
 | ------------------- | ----------------------------------- | ---------------------------------------- | --------------------------------------- |
 | Jetpack Navigation  | Modern apps with complex navigation | Type-safe, visual graph, easy back stack | Learning curve, XML configuration       |
 | FragmentTransaction | Simple fragment operations          | Full control, no dependencies            | Manual back stack management            |
-| Explicit Intent     | Activity navigation                 | Simple, well-known                       | Creates new activities, memory overhead |
-| Implicit Intent     | Cross-app navigation                | System integration                       | Requires external app availability      |
-| NavController       | Fragment-based apps                 | Centralized navigation logic             | Requires setup                          |
+| Explicit `Intent`     | `Activity` navigation                 | Simple, well-known                       | Creates new activities, memory overhead |
+| Implicit `Intent`     | Cross-app navigation                | System integration                       | Requires external app availability      |
+| NavController       | `Fragment`-based apps                 | Centralized navigation logic             | Requires setup                          |
 
 ### Best Practices
 
@@ -310,7 +310,7 @@ fun createDeepLink(itemId: Int): PendingIntent {
 3. **Handle back stack** properly to prevent memory leaks
 4. **Use Safe Args** plugin for type-safe argument passing
 5. **Implement deep links** for better user experience
-6. **Consider single-Activity architecture** with Navigation Component
+6. **Consider single-`Activity` architecture** with Navigation Component
 
 ---
 
@@ -323,8 +323,8 @@ fun createDeepLink(itemId: Int): PendingIntent {
 ## References
 
 -   `https://developer.android.com/guide/navigation` — Navigation Component guide
--   `https://developer.android.com/guide/components/fragments` — Fragment transactions
--   `https://developer.android.com/guide/components/intents-filters` — Intent-based navigation
+-   `https://developer.android.com/guide/components/fragments` — `Fragment` transactions
+-   `https://developer.android.com/guide/components/intents-filters` — `Intent`-based navigation
 
 ## Related Questions
 
@@ -337,7 +337,7 @@ fun createDeepLink(itemId: Int): PendingIntent {
 ### Related (Medium)
 
 -   q-navigation-component--android--medium - Navigation Component
--   q-fragment-transactions--android--medium - Fragment transactions
+-   q-fragment-transactions--android--medium - `Fragment` transactions
 -   q-deep-linking-android--android--medium - Deep linking
 
 ---
@@ -452,11 +452,11 @@ val detailsFragment = DetailsFragment.newInstance(itemId)
 navigateToFragment(detailsFragment)
 ```
 
-### 3. Navigation via Intent
+### 3. Navigation via `Intent`
 
 Used for switching between activities or navigating between apps.
 
-#### Explicit Intent (within app)
+#### Explicit `Intent` (within app)
 
 ```kotlin
 // Navigate to specific Activity
@@ -496,7 +496,7 @@ class DetailsActivity : AppCompatActivity() {
 }
 ```
 
-#### Implicit Intent (system or other apps)
+#### Implicit `Intent` (system or other apps)
 
 ```kotlin
 // Open web browser
@@ -614,9 +614,9 @@ fun createDeepLink(itemId: Int): PendingIntent {
 | ------------------- | ----------------------------------- | ---------------------------------------- | --------------------------------------- |
 | Jetpack Navigation  | Modern apps with complex navigation | Type-safe, visual graph, easy back stack | Learning curve, XML configuration       |
 | FragmentTransaction | Simple fragment operations          | Full control, no dependencies            | Manual back stack management            |
-| Explicit Intent     | Activity navigation                 | Simple, well-known                       | Creates new activities, memory overhead |
-| Implicit Intent     | Cross-app navigation                | System integration                       | Requires external app availability      |
-| NavController       | Fragment-based apps                 | Centralized navigation logic             | Requires setup                          |
+| Explicit `Intent`     | `Activity` navigation                 | Simple, well-known                       | Creates new activities, memory overhead |
+| Implicit `Intent`     | Cross-app navigation                | System integration                       | Requires external app availability      |
+| NavController       | `Fragment`-based apps                 | Centralized navigation logic             | Requires setup                          |
 
 ### Best Practices
 
@@ -625,7 +625,7 @@ fun createDeepLink(itemId: Int): PendingIntent {
 3. **Handle back stack** properly to prevent memory leaks
 4. **Use Safe Args** plugin for type-safe argument passing
 5. **Implement deep links** for better user experience
-6. **Consider single-Activity architecture** with Navigation Component
+6. **Consider single-`Activity` architecture** with Navigation Component
 
 ---
 
@@ -638,19 +638,19 @@ fun createDeepLink(itemId: Int): PendingIntent {
 ## References
 
 -   `https://developer.android.com/guide/navigation` — Navigation Component guide
--   `https://developer.android.com/guide/components/fragments` — Fragment transactions
--   `https://developer.android.com/guide/components/intents-filters` — Intent-based navigation
+-   `https://developer.android.com/guide/components/fragments` — `Fragment` transactions
+-   `https://developer.android.com/guide/components/intents-filters` — `Intent`-based navigation
 
 ## Related Questions
 
 ### Related (Medium)
 
 -   q-navigation-component--android--medium - Navigation Component
--   q-fragment-transactions--android--medium - Fragment transactions
+-   q-fragment-transactions--android--medium - `Fragment` transactions
 -   q-deep-linking-android--android--medium - Deep linking
 
 ---
 
 ## Ответ (RU)
 
-Способы навигации в Kotlin: Jetpack Navigation Component — современный способ навигации, основанный на графе навигации и безопасных аргументах. Позволяет легко переходить между фрагментами и активностями, а также управлять состоянием навигации. FragmentTransaction — ручной способ добавления, замены и удаления фрагментов. Navigation через Intent — используется для переключения между активностями или фрагментами внутри приложения или между приложениями. Explicit и Implicit Intents — явные и неявные намерения для навигации между компонентами. NavHostFragment и NavController — связаны с использованием графа навигации для управления фрагментами в приложениях Android.
+Способы навигации в Kotlin: Jetpack Navigation Component — современный способ навигации, основанный на графе навигации и безопасных аргументах. Позволяет легко переходить между фрагментами и активностями, а также управлять состоянием навигации. FragmentTransaction — ручной способ добавления, замены и удаления фрагментов. Navigation через `Intent` — используется для переключения между активностями или фрагментами внутри приложения или между приложениями. Explicit и Implicit Intents — явные и неявные намерения для навигации между компонентами. NavHostFragment и NavController — связаны с использованием графа навигации для управления фрагментами в приложениях Android.

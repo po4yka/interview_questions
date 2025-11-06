@@ -525,4 +525,4 @@ Snackbar(
 - [[q-compose-semantics--android--medium]] — Accessibility with dynamic themes
 
 ### Advanced
-- [[q-why-was-the-lifecycle-library-created--android--hard]] — Lifecycle-aware theming
+- [[q-why-was-the-lifecycle-library-created--android--hard]] — `Lifecycle`-aware theming

@@ -38,7 +38,7 @@ tags:
 
 ---
 
-To create dynamic screens at runtime in Android: Load configuration from server (JSON/XML), use Fragment/View factories, generate UI from description, or use Jetpack Compose/RecyclerView with different ViewTypes.
+To create dynamic screens at runtime in Android: Load configuration from server (JSON/XML), use Fragment/`View` factories, generate UI from description, or use Jetpack Compose/`RecyclerView` with different ViewTypes.
 
 ### 1. Server-Driven UI with JSON
 
@@ -140,7 +140,7 @@ fun DynamicComponent(component: Component) {
 }
 ```
 
-### 3. RecyclerView with Multiple ViewTypes
+### 3. `RecyclerView` with Multiple ViewTypes
 
 ```kotlin
 class DynamicAdapter(
@@ -235,7 +235,7 @@ class DynamicAdapter(
 }
 ```
 
-### 4. Fragment Factory Pattern
+### 4. `Fragment` Factory Pattern
 
 ```kotlin
 class DynamicFragmentFactory(
@@ -396,7 +396,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 
 ---
 
-To create dynamic screens at runtime in Android: Load configuration from server (JSON/XML), use Fragment/View factories, generate UI from description, or use Jetpack Compose/RecyclerView with different ViewTypes.
+To create dynamic screens at runtime in Android: Load configuration from server (JSON/XML), use Fragment/`View` factories, generate UI from description, or use Jetpack Compose/`RecyclerView` with different ViewTypes.
 
 ### 1. Server-Driven UI with JSON
 
@@ -498,7 +498,7 @@ fun DynamicComponent(component: Component) {
 }
 ```
 
-### 3. RecyclerView with Multiple ViewTypes
+### 3. `RecyclerView` with Multiple ViewTypes
 
 ```kotlin
 class DynamicAdapter(
@@ -593,7 +593,7 @@ class DynamicAdapter(
 }
 ```
 
-### 4. Fragment Factory Pattern
+### 4. `Fragment` Factory Pattern
 
 ```kotlin
 class DynamicFragmentFactory(
@@ -745,7 +745,7 @@ class DynamicScreenActivity : AppCompatActivity() {
 
 ## Ответ (RU)
 
-Для создания динамических экранов в runtime в Android: загружать конфигурацию с сервера (JSON/XML), использовать фабрики Fragment/View, генерировать UI из описания, или использовать Jetpack Compose/RecyclerView с разными ViewType.
+Для создания динамических экранов в runtime в Android: загружать конфигурацию с сервера (JSON/XML), использовать фабрики Fragment/`View`, генерировать UI из описания, или использовать Jetpack Compose/`RecyclerView` с разными ViewType.
 
 
 ### 1. Server-Driven UI С JSON Конфигурацией
@@ -837,7 +837,7 @@ fun DynamicComponent(component: Component) {
 }
 ```
 
-### 3. RecyclerView С Множественными ViewType
+### 3. `RecyclerView` С Множественными ViewType
 
 Для сложных списков с разными типами компонентов:
 
@@ -883,7 +883,7 @@ class DynamicAdapter(
 }
 ```
 
-### 4. Fragment Factory Pattern
+### 4. `Fragment` Factory Pattern
 
 Создание фрагментов на основе конфигурации:
 

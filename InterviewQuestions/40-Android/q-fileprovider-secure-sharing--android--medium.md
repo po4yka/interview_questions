@@ -35,11 +35,11 @@ tags: [android/files-media, android/permissions, content-provider, difficulty/me
 
 ## Ответ (RU)
 
-[[c-content-provider|FileProvider]] — специализированный ContentProvider для безопасного межпроцессного обмена файлами через `content://` URI вместо небезопасных `file://` URI. Предоставляет временные гранулярные разрешения без изменения системных прав доступа.
+[[c-content-provider|FileProvider]] — специализированный `ContentProvider` для безопасного межпроцессного обмена файлами через `content://` URI вместо небезопасных `file://` URI. Предоставляет временные гранулярные разрешения без изменения системных прав доступа.
 
 ### Проблема file:// URI
 
-С Android 7.0 (API 24) передача `file://` URI через Intent вызывает `FileUriExposedException`. Причины:
+С Android 7.0 (API 24) передача `file://` URI через `Intent` вызывает `FileUriExposedException`. Причины:
 - `file://` требует глобальных разрешений на чтение (MODE_WORLD_READABLE — deprecated)
 - Получатель имеет доступ ко всей файловой системе отправителя
 - Невозможность отзыва разрешений после передачи
@@ -99,7 +99,7 @@ context.startActivity(Intent.createChooser(intent, null))
 ### Безопасность
 
 **Временные разрешения:**
-- Действуют только пока активен компонент-получатель (Activity/Service)
+- Действуют только пока активен компонент-получатель (Activity/`Service`)
 - Автоматически отзываются при уничтожении получателя
 - Не требуют runtime permissions
 
@@ -115,7 +115,7 @@ context.startActivity(Intent.createChooser(intent, null))
 
 ## Answer (EN)
 
-[[c-content-provider|FileProvider]] is a specialized ContentProvider for secure inter-process file sharing using `content://` URIs instead of insecure `file://` URIs. It provides temporary granular permissions without modifying system file permissions.
+[[c-content-provider|FileProvider]] is a specialized `ContentProvider` for secure inter-process file sharing using `content://` URIs instead of insecure `file://` URIs. It provides temporary granular permissions without modifying system file permissions.
 
 ### The file:// URI Problem
 
@@ -166,9 +166,9 @@ val intent = Intent(Intent.ACTION_SEND).apply {
 context.startActivity(Intent.createChooser(intent, null))
 ```
 
-### Path Types
+### `Path` Types
 
-| Element | System Path | Purpose |
+| Element | System `Path` | Purpose |
 |---------|-------------|---------|
 | `files-path` | `Context.getFilesDir()` | Private app files |
 | `cache-path` | `Context.getCacheDir()` | Temporary cache |
@@ -179,7 +179,7 @@ context.startActivity(Intent.createChooser(intent, null))
 ### Security
 
 **Temporary Permissions:**
-- Active only while recipient component (Activity/Service) is alive
+- Active only while recipient component (Activity/`Service`) is alive
 - Automatically revoked when recipient is destroyed
 - No runtime permissions required
 
@@ -200,7 +200,7 @@ context.startActivity(Intent.createChooser(intent, null))
 - What happens if two apps use the same FileProvider authority?
 
 ## References
-- [[c-content-provider|ContentProvider Architecture]]
+- [[c-content-provider|`ContentProvider` Architecture]]
 - Official docs: https://developer.android.com/reference/androidx/core/content/FileProvider
 - Security guide: https://developer.android.com/training/secure-file-sharing
 
@@ -208,12 +208,12 @@ context.startActivity(Intent.createChooser(intent, null))
 
 ### Prerequisites
 - [[q-android-storage-types--android--medium|Android Storage Types]]
-- [[c-content-provider|ContentProvider Basics]]
+- [[c-content-provider|`ContentProvider` Basics]]
 
 ### Related
 - [[q-runtime-permissions-best-practices--android--medium|Runtime Permissions Best Practices]]
-- [[q-intent-filters-android--android--medium|Intent Filters]]
+- [[q-intent-filters-android--android--medium|`Intent` Filters]]
 
 ### Advanced
-- Custom ContentProvider implementation for advanced file sharing scenarios
+- Custom `ContentProvider` implementation for advanced file sharing scenarios
 - Scoped storage integration with FileProvider (Android 10+)

@@ -52,7 +52,7 @@ interface UserPresenter {
 
 ### 2. Ручное Управление Жизненным Циклом
 
-Presenter не знает о жизненном цикле Activity/Fragment:
+Presenter не знает о жизненном цикле Activity/`Fragment`:
 
 ```kotlin
 // ❌ Нужно помнить про очистку
@@ -64,7 +64,7 @@ override fun onDestroy() {
 
 ### 3. Плохая Поддержка Реактивности
 
-MVP создавался до появления LiveData, Flow и Coroutines:
+MVP создавался до появления `LiveData`, `Flow` и Coroutines:
 
 ```kotlin
 // ❌ Сложно работать с асинхронными данными
@@ -78,9 +78,9 @@ class UserPresenter(private val view: UserView) {
 
 ### 4. Современные Альтернативы Лучше
 
-**MVVM с ViewModel:**
+**MVVM с `ViewModel`:**
 - ✅ Автоматический lifecycle (переживает rotation)
-- ✅ Встроенная поддержка LiveData/Flow
+- ✅ Встроенная поддержка LiveData/`Flow`
 - ✅ Меньше кода
 - ✅ Официальная поддержка Google
 
@@ -94,9 +94,9 @@ class UserPresenter(private val view: UserView) {
 | Критерий | MVP | MVVM |
 |----------|-----|------|
 | Шаблонный код | Много | Мало |
-| Lifecycle | Ручной | Автоматический |
+| `Lifecycle` | Ручной | Автоматический |
 | Rotation | Теряет данные | Сохраняет |
-| Поддержка Flow/LiveData | Нет | Да |
+| Поддержка Flow/`LiveData` | Нет | Да |
 
 ### Резюме
 
@@ -106,7 +106,7 @@ MVP уступает современным паттернам из-за:
 - Отсутствия поддержки реактивных потоков
 - Наличия лучших альтернатив (MVVM, MVI)
 
-Сегодня стандарт — **MVVM** с Jetpack (ViewModel + LiveData/Flow).
+Сегодня стандарт — **MVVM** с Jetpack (`ViewModel` + LiveData/`Flow`).
 
 ## Answer (EN)
 
@@ -131,9 +131,9 @@ interface UserPresenter {
 }
 ```
 
-### 2. Manual Lifecycle Management
+### 2. Manual `Lifecycle` Management
 
-Presenter doesn't know about Activity/Fragment lifecycle:
+Presenter doesn't know about Activity/`Fragment` lifecycle:
 
 ```kotlin
 // ❌ Need to remember cleanup
@@ -145,7 +145,7 @@ override fun onDestroy() {
 
 ### 3. Poor Reactive Support
 
-MVP was created before LiveData, Flow, and Coroutines:
+MVP was created before `LiveData`, `Flow`, and Coroutines:
 
 ```kotlin
 // ❌ Hard to work with async data
@@ -159,9 +159,9 @@ class UserPresenter(private val view: UserView) {
 
 ### 4. Modern Alternatives Are Better
 
-**MVVM with ViewModel:**
+**MVVM with `ViewModel`:**
 - ✅ Automatic lifecycle (survives rotation)
-- ✅ Built-in LiveData/Flow support
+- ✅ Built-in LiveData/`Flow` support
 - ✅ Less code
 - ✅ Official Google support
 
@@ -175,9 +175,9 @@ class UserPresenter(private val view: UserView) {
 | Criteria | MVP | MVVM |
 |----------|-----|------|
 | Boilerplate | High | Low |
-| Lifecycle | Manual | Automatic |
+| `Lifecycle` | Manual | Automatic |
 | Rotation | Loses data | Preserves |
-| Flow/LiveData Support | No | Yes |
+| Flow/`LiveData` Support | No | Yes |
 
 ### Summary
 
@@ -187,17 +187,17 @@ MVP is inferior to modern patterns because of:
 - No reactive streams support
 - Better alternatives exist (MVVM, MVI)
 
-Today's standard is **MVVM** with Jetpack (ViewModel + LiveData/Flow).
+Today's standard is **MVVM** with Jetpack (`ViewModel` + LiveData/`Flow`).
 
 ---
 
 ## Follow-ups
 
-- How does ViewModel survive configuration changes?
+- How does `ViewModel` survive configuration changes?
 - What is the main difference between MVVM and MVI?
 - When would you still use MVP?
 - How does Jetpack Compose change architecture patterns?
-- What is the Repository pattern and how does it work with MVVM?
+- What is the `Repository` pattern and how does it work with MVVM?
 
 ## References
 

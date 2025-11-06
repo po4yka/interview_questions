@@ -34,7 +34,7 @@ tags: [android/architecture-mvvm, android/di-hilt, dagger, dependency-injection,
 
 ## Ответ (RU)
 
-Field injection в Dagger внедряет зависимости в поля класса через `@Inject` **после создания объекта**. Используется для Android компонентов (Activity, Fragment, Service), где конструктор недоступен для модификации.
+Field injection в Dagger внедряет зависимости в поля класса через `@Inject` **после создания объекта**. Используется для Android компонентов (`Activity`, `Fragment`, `Service`), где конструктор недоступен для модификации.
 
 ### Жизненный Цикл
 
@@ -101,11 +101,11 @@ class MainActivity : AppCompatActivity() {
 ### Применимость
 
 **Используйте для:**
-- Android framework компонентов (Activity, Fragment, Service)
+- Android framework компонентов (`Activity`, `Fragment`, `Service`)
 - Классов, созданных системой
 
 **Избегайте для:**
-- ViewModel, Repository, UseCase → constructor injection
+- `ViewModel`, `Repository`, UseCase → constructor injection
 - Тестируемых классов → усложняет моки
 - Новых компонентов → предпочтителен constructor injection
 
@@ -118,9 +118,9 @@ class MainActivity : AppCompatActivity() {
 
 ## Answer (EN)
 
-Field injection in Dagger injects dependencies into class fields via `@Inject` **after object creation**. Used for Android components (Activity, Fragment, Service) where constructor modification is unavailable.
+Field injection in Dagger injects dependencies into class fields via `@Inject` **after object creation**. Used for Android components (`Activity`, `Fragment`, `Service`) where constructor modification is unavailable.
 
-### Lifecycle
+### `Lifecycle`
 
 1. Object creation via default constructor
 2. Component's `inject()` method call
@@ -185,11 +185,11 @@ class MainActivity : AppCompatActivity() {
 ### Applicability
 
 **Use for:**
-- Android framework components (Activity, Fragment, Service)
+- Android framework components (`Activity`, `Fragment`, `Service`)
 - System-created classes
 
 **Avoid for:**
-- ViewModel, Repository, UseCase → constructor injection
+- `ViewModel`, `Repository`, UseCase → constructor injection
 - Testable classes → complicates mocking
 - New components → constructor injection preferred
 
@@ -203,7 +203,7 @@ class MainActivity : AppCompatActivity() {
 ## Follow-ups
 
 - How does Hilt automate inject() calls for Android framework components?
-- Why is constructor injection preferred for ViewModel and Repository classes?
+- Why is constructor injection preferred for `ViewModel` and `Repository` classes?
 - What happens if you access an @Inject field before calling inject()?
 - How does field injection affect unit testing and mocking strategies?
 - What are the performance implications of reflection in field injection?

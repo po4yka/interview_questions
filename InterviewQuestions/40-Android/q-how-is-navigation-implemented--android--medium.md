@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 4. Fragment Navigation (традиционный подход)
+#### 4. `Fragment` Navigation (традиционный подход)
 
 ```kotlin
 // ❌ Ручное управление FragmentTransaction (устаревший подход)
@@ -147,7 +147,7 @@ supportFragmentManager.beginTransaction()
 
 ### Ключевые Концепции
 
-**Back Stack** — стек фрагментов для навигации назад. Navigation Component автоматически управляет back stack.
+**Back `Stack`** — стек фрагментов для навигации назад. Navigation Component автоматически управляет back stack.
 
 **Deep Links** — возможность открыть конкретный экран напрямую:
 
@@ -256,7 +256,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 4. Fragment Navigation (traditional approach)
+#### 4. `Fragment` Navigation (traditional approach)
 
 ```kotlin
 // ❌ Manual FragmentTransaction management (deprecated approach)
@@ -268,7 +268,7 @@ supportFragmentManager.beginTransaction()
 
 ### Key Concepts
 
-**Back Stack** — fragment stack for backward navigation. Navigation Component automatically manages the back stack.
+**Back `Stack`** — fragment stack for backward navigation. Navigation Component automatically manages the back stack.
 
 **Deep Links** — ability to open a specific screen directly:
 
@@ -295,7 +295,7 @@ findNavController().navigate(action)
 - How does Navigation Component handle back stack in nested navigation graphs?
 - What are the differences between `popUpTo` and `popUpToInclusive` in navigation actions?
 - How to implement conditional navigation based on user authentication state?
-- How to migrate from manual Fragment transactions to Navigation Component?
+- How to migrate from manual `Fragment` transactions to Navigation Component?
 - What are the best practices for handling deep links with dynamic parameters?
 
 ## References
@@ -319,7 +319,7 @@ findNavController().navigate(action)
 ### Related (Same Level)
 - [[q-navigation-methods-in-kotlin--android--medium]] - Different navigation techniques
 - [[q-what-navigation-methods-do-you-know--android--medium]] - Navigation patterns overview
-- [[q-activity-navigation-how-it-works--android--medium]] - Activity-based navigation
+- [[q-activity-navigation-how-it-works--android--medium]] - `Activity`-based navigation
 - [[q-compose-navigation-advanced--android--medium]] - Navigation in Jetpack Compose
 
 ### Advanced (Harder)

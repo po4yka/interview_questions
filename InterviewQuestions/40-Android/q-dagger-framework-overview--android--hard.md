@@ -112,10 +112,10 @@ class UserViewModel @Inject constructor(
 ```
 
 **Стандартные Scopes в Hilt:**
-- `@Singleton` — на уровне Application
-- `@ActivityScoped` / `@ActivityRetainedScoped` — Activity/ViewModel
-- `@ViewModelScoped` — ViewModel
-- `@FragmentScoped` — Fragment
+- `@Singleton` — на уровне `Application`
+- `@ActivityScoped` / `@ActivityRetainedScoped` — Activity/`ViewModel`
+- `@ViewModelScoped` — `ViewModel`
+- `@FragmentScoped` — `Fragment`
 
 ### Преимущества Compile-Time DI
 
@@ -127,7 +127,7 @@ class UserViewModel @Inject constructor(
 **Безопасность:**
 - Compile-time проверка циклических зависимостей
 - Гарантия существования всех зависимостей
-- Thread-safe singleton creation
+- `Thread`-safe singleton creation
 
 **Тестируемость:**
 - Простая замена модулей для тестов
@@ -180,7 +180,7 @@ interface AppComponent {
 }
 ```
 
-**Scopes — Lifecycle Management**
+**Scopes — `Lifecycle` Management**
 ```kotlin
 @Singleton  // One instance across entire graph
 class ApiClient @Inject constructor()
@@ -212,10 +212,10 @@ class UserViewModel @Inject constructor(
 ```
 
 **Standard Hilt Scopes:**
-- `@Singleton` — Application level
-- `@ActivityScoped` / `@ActivityRetainedScoped` — Activity/ViewModel
-- `@ViewModelScoped` — ViewModel
-- `@FragmentScoped` — Fragment
+- `@Singleton` — `Application` level
+- `@ActivityScoped` / `@ActivityRetainedScoped` — Activity/`ViewModel`
+- `@ViewModelScoped` — `ViewModel`
+- `@FragmentScoped` — `Fragment`
 
 ### Compile-Time DI Advantages
 
@@ -227,7 +227,7 @@ class UserViewModel @Inject constructor(
 **Safety:**
 - Compile-time cyclic dependency detection
 - Guaranteed existence of all dependencies
-- Thread-safe singleton creation
+- `Thread`-safe singleton creation
 
 **Testability:**
 - Simple module replacement for tests

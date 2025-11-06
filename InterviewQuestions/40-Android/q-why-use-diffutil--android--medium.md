@@ -47,7 +47,7 @@ tags:
 
 ## Ответ (RU)
 
-**DiffUtil** — утилитарный класс, вычисляющий разницу между двумя списками и генерирующий операции обновления. Используется с RecyclerView для эффективного обновления только изменённых элементов.
+**DiffUtil** — утилитарный класс, вычисляющий разницу между двумя списками и генерирующий операции обновления. Используется с `RecyclerView` для эффективного обновления только изменённых элементов.
 
 ### Преимущества
 
@@ -211,7 +211,7 @@ fun updateItems(newItems: List<Item>) {
 
 ## Answer (EN)
 
-**DiffUtil** is a utility class that calculates the difference between two lists and generates update operations. Used with RecyclerView to efficiently update only changed items.
+**DiffUtil** is a utility class that calculates the difference between two lists and generates update operations. Used with `RecyclerView` to efficiently update only changed items.
 
 ### Benefits
 
@@ -400,7 +400,7 @@ fun updateItems(newItems: List<Item>) {
 
 - [DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 - [ListAdapter Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter)
-- [RecyclerView Best Practices](https://developer.android.com/guide/topics/ui/layout/recyclerview)
+- [`RecyclerView` Best Practices](https://developer.android.com/guide/topics/ui/layout/recyclerview)
 
 ---
 

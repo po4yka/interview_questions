@@ -37,7 +37,7 @@ What is known about `@Stable` in Jetpack Compose?
 
 1. **Консистентность equals()** — если `a.equals(b)` возвращает `true`, это будет всегда `true` для тех же экземпляров.
 2. **Нет спонтанных изменений** — свойства не мутируют неожиданно. Изменения происходят только через **явные API** (например, `copy()`).
-3. **Уведомления при мутациях** — если тип допускает изменения, он должен **уведомлять Compose** через observable механизмы (MutableState, Flow).
+3. **Уведомления при мутациях** — если тип допускает изменения, он должен **уведомлять Compose** через observable механизмы (MutableState, `Flow`).
 
 ```kotlin
 // ✅ Стабильный класс с консистентным equals()
@@ -95,7 +95,7 @@ class StableThirdPartyData(private val data: ThirdPartyData) {
 | Изменения после создания | Никогда | Возможны (но observable) |
 | equals() консистентна | Да | Да |
 | Уведомления Compose | N/A | Обязательны при изменении |
-| Типичное применение | Чистые data class | ViewModel, observable state |
+| Типичное применение | Чистые data class | `ViewModel`, observable state |
 
 ### Влияние На Производительность
 
@@ -165,7 +165,7 @@ A type is **stable** if it guarantees:
 
 1. **equals() Consistency** — if `a.equals(b)` returns `true`, it will **always** return `true` for those same instances.
 2. **No Spontaneous Changes** — properties don't mutate unexpectedly. Changes happen only through **explicit APIs** (e.g., `copy()`).
-3. **Notifications on Mutations** — if the type allows mutations, it must **notify Compose** via observable mechanisms (MutableState, Flow).
+3. **Notifications on Mutations** — if the type allows mutations, it must **notify Compose** via observable mechanisms (MutableState, `Flow`).
 
 ```kotlin
 // ✅ Stable class with consistent equals()

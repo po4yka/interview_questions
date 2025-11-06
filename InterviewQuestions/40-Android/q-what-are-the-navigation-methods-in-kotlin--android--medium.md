@@ -95,9 +95,9 @@ class MainActivity : AppCompatActivity() {
 **Преимущества**: Полный контроль, нет зависимостей
 **Недостатки**: Ручное управление back stack, потенциальные утечки памяти
 
-### 3. Intent Navigation
+### 3. `Intent` Navigation
 
-Навигация между Activity или взаимодействие с внешними приложениями.
+Навигация между `Activity` или взаимодействие с внешними приложениями.
 
 ```kotlin
 // ✅ Explicit Intent - внутренняя навигация
@@ -131,7 +131,7 @@ fun openWebPage(url: String) {
 ```
 
 **Преимущества**: Простота, интеграция с системой
-**Недостатки**: Создание новых Activity (накладные расходы памяти)
+**Недостатки**: Создание новых `Activity` (накладные расходы памяти)
 
 ### 4. Deep Links
 
@@ -161,13 +161,13 @@ class MainActivity : AppCompatActivity() {
 |-------|-----------|-------|--------|
 | Jetpack Navigation | Современные приложения | Типобезопасность, визуальный граф | Требует настройки |
 | FragmentTransaction | Простые операции | Полный контроль | Ручное управление |
-| Explicit Intent | Навигация между Activity | Простота | Накладные расходы |
+| Explicit `Intent` | Навигация между `Activity` | Простота | Накладные расходы |
 | Deep Links | Внешняя интеграция | Системная интеграция | Требует конфигурации |
 
 ### Best Practices
 
 1. **Используйте Jetpack Navigation** для новых проектов
-2. **Single-Activity архитектура** с Navigation Component для упрощения
+2. **Single-`Activity` архитектура** с Navigation Component для упрощения
 3. **Safe Args plugin** для типобезопасной передачи аргументов
 4. **Избегайте глубокой вложенности** фрагментов
 5. **Корректное управление back stack** для предотвращения утечек памяти
@@ -222,7 +222,7 @@ class MainActivity : AppCompatActivity() {
 **Pros**: Full control, no dependencies
 **Cons**: Manual back stack management, potential memory leaks
 
-### 3. Intent Navigation
+### 3. `Intent` Navigation
 
 Navigation between Activities or interaction with external apps.
 
@@ -288,13 +288,13 @@ class MainActivity : AppCompatActivity() {
 |--------|----------|------|------|
 | Jetpack Navigation | Modern apps | Type safety, visual graph | Requires setup |
 | FragmentTransaction | Simple operations | Full control | Manual management |
-| Explicit Intent | Activity navigation | Simplicity | Memory overhead |
+| Explicit `Intent` | `Activity` navigation | Simplicity | Memory overhead |
 | Deep Links | External integration | System integration | Requires configuration |
 
 ### Best Practices
 
 1. **Use Jetpack Navigation** for new projects
-2. **Single-Activity architecture** with Navigation Component for simplicity
+2. **Single-`Activity` architecture** with Navigation Component for simplicity
 3. **Safe Args plugin** for type-safe argument passing
 4. **Avoid deep nesting** of fragments
 5. **Proper back stack management** to prevent memory leaks
@@ -312,8 +312,8 @@ class MainActivity : AppCompatActivity() {
 ## References
 
 - [Android Navigation Component Guide](https://developer.android.com/guide/navigation)
-- [Fragment Transactions Best Practices](https://developer.android.com/guide/fragments/transactions)
-- [Activity Result API](https://developer.android.com/training/basics/intents/result)
+- [`Fragment` Transactions Best Practices](https://developer.android.com/guide/fragments/transactions)
+- [`Activity` Result API](https://developer.android.com/training/basics/intents/result)
 
 ## Related Questions
 

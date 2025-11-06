@@ -31,7 +31,7 @@ sources: []
 
 Polling — периодическая проверка данных с сервера. Выбор реализации зависит от требований: частота опроса, работа в фоне, переживание перезагрузки.
 
-### 1. Coroutines + Flow (UI-bound)
+### 1. Coroutines + `Flow` (UI-bound)
 
 Рекомендуемый подход для UI-зависимых задач с автоматической отменой при lifecycle.
 
@@ -68,7 +68,7 @@ class OrderViewModel(private val repo: DataRepository) : ViewModel() {
 ```
 
 **Преимущества**: Простота, lifecycle-aware, автоотмена.
-**Недостатки**: Работает только пока Activity/Fragment активны.
+**Недостатки**: Работает только пока Activity/`Fragment` активны.
 
 ### 2. WorkManager (Background)
 
@@ -166,7 +166,7 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 ### Best Practices
 
-1. **Lifecycle-aware cancellation**: Используйте `viewModelScope` для автоотмены.
+1. **`Lifecycle`-aware cancellation**: Используйте `viewModelScope` для автоотмены.
 2. **Network checks**: Проверяйте доступность сети перед запросом.
 3. **Battery optimization**: Избегайте частых запросов в фоне, используйте WorkManager constraints.
 4. **Error handling**: Используйте exponential backoff для retry.
@@ -174,11 +174,11 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 ### Сравнение Подходов
 
-| Метод | Use Case | Интервал | Lifecycle |
+| Метод | Use Case | Интервал | `Lifecycle` |
 |-------|----------|----------|-----------|
-| Coroutines + Flow | UI-bound | Любой | Привязан к Activity/Fragment |
+| Coroutines + `Flow` | UI-bound | Любой | Привязан к Activity/`Fragment` |
 | WorkManager | Background | ≥15 минут | Переживает перезагрузку |
-| Handler + Runnable | Simple tasks | Любой | Ручное управление |
+| `Handler` + `Runnable` | Simple tasks | Любой | Ручное управление |
 | AlarmManager | Exact timing | Любой | Работает в фоне, battery drain |
 
 ---
@@ -187,7 +187,7 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 Polling is periodic data fetching from a server. Implementation choice depends on requirements: frequency, background execution, surviving device reboot.
 
-### 1. Coroutines + Flow (UI-bound)
+### 1. Coroutines + `Flow` (UI-bound)
 
 Recommended approach for UI-dependent tasks with automatic lifecycle cancellation.
 
@@ -224,7 +224,7 @@ class OrderViewModel(private val repo: DataRepository) : ViewModel() {
 ```
 
 **Pros**: Simple, lifecycle-aware, auto-cancellation.
-**Cons**: Only works while Activity/Fragment is active.
+**Cons**: Only works while Activity/`Fragment` is active.
 
 ### 2. WorkManager (Background)
 
@@ -322,7 +322,7 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 ### Best Practices
 
-1. **Lifecycle-aware cancellation**: Use `viewModelScope` for auto-cancellation.
+1. **`Lifecycle`-aware cancellation**: Use `viewModelScope` for auto-cancellation.
 2. **Network checks**: Verify network availability before requests.
 3. **Battery optimization**: Avoid frequent background polling, use WorkManager constraints.
 4. **Error handling**: Use exponential backoff for retries.
@@ -330,11 +330,11 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 ### Comparison
 
-| Method | Use Case | Interval | Lifecycle |
+| Method | Use Case | Interval | `Lifecycle` |
 |--------|----------|----------|-----------|
-| Coroutines + Flow | UI-bound | Any | Tied to Activity/Fragment |
+| Coroutines + `Flow` | UI-bound | Any | Tied to Activity/`Fragment` |
 | WorkManager | Background | ≥15 min | Survives reboot |
-| Handler + Runnable | Simple tasks | Any | Manual management |
+| `Handler` + `Runnable` | Simple tasks | Any | Manual management |
 | AlarmManager | Exact timing | Any | Background, battery drain |
 
 ---
@@ -350,7 +350,7 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 ## References
 
 - [[c-coroutines]] - Coroutines fundamentals
-- [[c-flow]] - Flow basics and operators
+- [[c-flow]] - `Flow` basics and operators
 - [[c-workmanager]] - WorkManager architecture
 - [Android Background Work Guide](https://developer.android.com/guide/background)
 - [Kotlin Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
@@ -363,8 +363,8 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 ### Related (Same Level)
 - [[q-workmanager-periodic-tasks--android--medium]] - WorkManager periodic execution
-- [[q-coroutine-flow-basics--kotlin--medium]] - Flow operators and transformations
-- [[q-lifecycle-aware-components--android--medium]] - Lifecycle integration
+- [[q-coroutine-flow-basics--kotlin--medium]] - `Flow` operators and transformations
+- [[q-lifecycle-aware-components--android--medium]] - `Lifecycle` integration
 
 ### Advanced (Harder)
 - [[q-background-work--android--hard]] - Complex background task orchestration

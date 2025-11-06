@@ -46,7 +46,7 @@ sources:
 
 ## Ответ (RU)
 
-Оптимизация базы данных в Android требует комплексного подхода: правильная индексация, пакетные операции, асинхронное выполнение и кэширование. Основная цель — обеспечить быстрый отклик UI, минимизировать потребление памяти и предотвратить `ANR` (Application Not Responding).
+Оптимизация базы данных в Android требует комплексного подхода: правильная индексация, пакетные операции, асинхронное выполнение и кэширование. Основная цель — обеспечить быстрый отклик UI, минимизировать потребление памяти и предотвратить `ANR` (`Application` Not Responding).
 
 ### 1. Индексация
 
@@ -153,7 +153,7 @@ class UserRepository @Inject constructor(
 
 ## Answer (EN)
 
-Database optimization in Android requires a comprehensive approach: proper indexing, batch operations, asynchronous execution, and caching. Main goals: ensure fast UI responsiveness, minimize memory consumption, and prevent `ANR` (Application Not Responding).
+Database optimization in Android requires a comprehensive approach: proper indexing, batch operations, asynchronous execution, and caching. Main goals: ensure fast UI responsiveness, minimize memory consumption, and prevent `ANR` (`Application` Not Responding).
 
 ### 1. Indexing
 

@@ -62,7 +62,7 @@ val player = ExoPlayer.Builder(context)
 - Слушатели — `Player.Listener` (один интерфейс вместо EventListener).
 - Используйте `MediaItem.Builder` (поддерживает DRM, Clipping).
 
-### 3. Session & Service
+### 3. Session & `Service`
 
 ```kotlin
 class PlaybackService : MediaSessionService() {

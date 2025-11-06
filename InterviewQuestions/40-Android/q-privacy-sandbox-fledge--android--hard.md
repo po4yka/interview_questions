@@ -276,7 +276,7 @@ FLEDGE (Protected Audience API) enables remarketing without cross-site tracking.
 - **JavaScript Bidding** - Isolated bidding logic execution
 - **k-anonymity** - Minimum audience size for privacy
 
-**Flow:**
+**`Flow`:**
 1. Advertiser adds user to Custom Audience (`joinCustomAudience`)
 2. Publisher requests ad (`selectAds`)
 3. On-device auction evaluates bids from all audiences

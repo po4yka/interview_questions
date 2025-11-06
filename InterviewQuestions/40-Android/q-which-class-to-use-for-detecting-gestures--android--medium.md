@@ -186,7 +186,7 @@ fun GestureExample() {
 - `onDown()` должен возвращать `true`, иначе остальные события не поступят
 - Используйте `SimpleOnGestureListener` вместо полного интерфейса
 - Для масштабирования используйте отдельный `ScaleGestureDetector`
-- Можно комбинировать несколько детекторов в одном View
+- Можно комбинировать несколько детекторов в одном `View`
 
 ---
 
@@ -323,8 +323,8 @@ fun GestureExample() {
 | `onDown()` | Touch down event (must return true) |
 | `onSingleTapUp()` | Single tap |
 | `onSingleTapConfirmed()` | Confirmed single tap (not double) |
-| `onDoubleTap()` | Double tap |
-| `onLongPress()` | Long press |
+| `onDoubleTap()` | `Double` tap |
+| `onLongPress()` | `Long` press |
 | `onScroll()` | Scroll/drag |
 | `onFling()` | Quick swipe |
 
@@ -332,7 +332,7 @@ fun GestureExample() {
 - `onDown()` must return `true` or other events won't be received
 - Use `SimpleOnGestureListener` instead of the full interface
 - For pinch zoom, use separate `ScaleGestureDetector`
-- Multiple detectors can be combined in one View
+- Multiple detectors can be combined in one `View`
 
 ---
 
@@ -362,7 +362,7 @@ fun GestureExample() {
 - [[q-what-are-services-for--android--easy]] - Basic Android components understanding
 
 ### Related (Same Level)
-- [[q-how-to-write-recyclerview-cache-ahead--android--medium]] - Touch handling in RecyclerView
+- [[q-how-to-write-recyclerview-cache-ahead--android--medium]] - Touch handling in `RecyclerView`
 - [[q-dagger-field-injection--android--medium]] - Dependency injection patterns
 
 ### Advanced (Harder)

@@ -90,7 +90,7 @@ class MainActivity : AppCompatActivity() {
 - **Loose coupling** - objects receive dependencies externally
 - **Testability** - easy mocking of real dependencies
 - **Compile-time validation** - dependency graph errors caught before runtime
-- **Lifecycle management** - automatic creation/reuse via scopes
+- **`Lifecycle` management** - automatic creation/reuse via scopes
 
 ### Problem without DI
 

@@ -41,7 +41,7 @@ sources:
 
 ## Ответ (RU)
 
-**FragmentManager** — менеджер для управления фрагментами Activity. Отвечает за:
+**FragmentManager** — менеджер для управления фрагментами `Activity`. Отвечает за:
 - Жизненный цикл фрагментов
 - Back stack (стек возврата)
 - Поиск фрагментов
@@ -76,10 +76,10 @@ tx.replace(R.id.container, MyFragment())
 
 ## Answer (EN)
 
-**FragmentManager** — the manager that controls Activity's fragments. Responsible for:
-- Fragment lifecycle management
+**FragmentManager** — the manager that controls `Activity`'s fragments. Responsible for:
+- `Fragment` lifecycle management
 - Back stack operations
-- Fragment lookup
+- `Fragment` lookup
 
 **FragmentTransaction** — an object for performing fragment operations (add, replace, remove) as an atomic unit of work. Obtained via `fragmentManager.beginTransaction()`.
 
@@ -122,7 +122,7 @@ tx.replace(R.id.container, MyFragment())
 ## References
 
 - [Android Developers: FragmentManager](https://developer.android.com/guide/fragments/fragmentmanager)
-- [Android Developers: Fragment Transactions](https://developer.android.com/guide/fragments/transactions)
+- [Android Developers: `Fragment` Transactions](https://developer.android.com/guide/fragments/transactions)
 
 ## Related Questions
 
@@ -133,15 +133,15 @@ tx.replace(R.id.container, MyFragment())
 
 
 ### Prerequisites (Easier)
-- Fragment basics and lifecycle concepts
-- Activity lifecycle fundamentals
+- `Fragment` basics and lifecycle concepts
+- `Activity` lifecycle fundamentals
 
 ### Related (Same Level)
-- Fragment lifecycle states and callbacks
-- Fragment state loss scenarios and solutions
-- Fragment back stack navigation patterns
+- `Fragment` lifecycle states and callbacks
+- `Fragment` state loss scenarios and solutions
+- `Fragment` back stack navigation patterns
 
 ### Advanced (Harder)
-- Fragment result API and communication patterns
-- Fragment architecture with Navigation Component
+- `Fragment` result API and communication patterns
+- `Fragment` architecture with Navigation Component
 - Custom fragment transitions and animations

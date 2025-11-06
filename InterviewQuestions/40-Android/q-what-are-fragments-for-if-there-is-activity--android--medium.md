@@ -35,11 +35,11 @@ tags:
 
 # Вопрос (RU)
 
-Для чего нужны фрагменты, если есть Activity
+Для чего нужны фрагменты, если есть `Activity`
 
 ## Answer (EN)
 # Question (EN)
-> Fragments vs Activity
+> Fragments vs `Activity`
 
 ---
 
@@ -106,7 +106,7 @@ class DashboardActivity : AppCompatActivity() {
 }
 ```
 
-#### 3. Better Lifecycle Management
+#### 3. Better `Lifecycle` Management
 
 ```kotlin
 class DataFragment : Fragment() {
@@ -132,7 +132,7 @@ class DataFragment : Fragment() {
 }
 ```
 
-#### 4. Navigation and Back Stack
+#### 4. Navigation and Back `Stack`
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -287,9 +287,9 @@ class MainActivity : AppCompatActivity() {
 |---------|-----------|-----------|
 | **Reusability** | Limited | High - reuse in different contexts |
 | **Memory** | Heavy (~5MB each) | Light - share parent resources |
-| **Lifecycle** | Independent | Tied to Activity but separate |
+| **`Lifecycle`** | Independent | Tied to `Activity` but separate |
 | **Navigation** | New window | In-place replacement |
-| **Back Stack** | System managed | FragmentManager managed |
+| **Back `Stack`** | System managed | FragmentManager managed |
 | **UI Modularity** | Full screen | Portion of screen |
 | **Communication** | Intents/Results | Shared ViewModel/Interface |
 | **Adaptation** | Separate activities | Same fragments, different layouts |
@@ -310,7 +310,7 @@ class MainActivity : AppCompatActivity() {
 - External entry points (deep links)
 - Completely different context
 
-### Modern Alternative: Single-Activity Architecture
+### Modern Alternative: Single-`Activity` Architecture
 
 ```kotlin
 // Modern approach: One Activity + Navigation Component
@@ -334,7 +334,7 @@ class MainActivity : AppCompatActivity() {
 
 ## Answer (EN)
 # Question (EN)
-> Fragments vs Activity
+> Fragments vs `Activity`
 
 ---
 
@@ -401,7 +401,7 @@ class DashboardActivity : AppCompatActivity() {
 }
 ```
 
-#### 3. Better Lifecycle Management
+#### 3. Better `Lifecycle` Management
 
 ```kotlin
 class DataFragment : Fragment() {
@@ -427,7 +427,7 @@ class DataFragment : Fragment() {
 }
 ```
 
-#### 4. Navigation and Back Stack
+#### 4. Navigation and Back `Stack`
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -582,9 +582,9 @@ class MainActivity : AppCompatActivity() {
 |---------|-----------|-----------|
 | **Reusability** | Limited | High - reuse in different contexts |
 | **Memory** | Heavy (~5MB each) | Light - share parent resources |
-| **Lifecycle** | Independent | Tied to Activity but separate |
+| **`Lifecycle`** | Independent | Tied to `Activity` but separate |
 | **Navigation** | New window | In-place replacement |
-| **Back Stack** | System managed | FragmentManager managed |
+| **Back `Stack`** | System managed | FragmentManager managed |
 | **UI Modularity** | Full screen | Portion of screen |
 | **Communication** | Intents/Results | Shared ViewModel/Interface |
 | **Adaptation** | Separate activities | Same fragments, different layouts |
@@ -605,7 +605,7 @@ class MainActivity : AppCompatActivity() {
 - External entry points (deep links)
 - Completely different context
 
-### Modern Alternative: Single-Activity Architecture
+### Modern Alternative: Single-`Activity` Architecture
 
 ```kotlin
 // Modern approach: One Activity + Navigation Component
@@ -624,7 +624,7 @@ class MainActivity : AppCompatActivity() {
 
 ## Ответ (RU)
 
-Фрагменты используются для создания многоразовых компонентов пользовательского интерфейса, которые могут быть встроены в различные Activity. Они позволяют более гибко управлять интерфейсом и разделять его на отдельные части, что улучшает модульность приложения. Фрагменты могут быть динамически добавлены или удалены во время выполнения, что упрощает адаптацию интерфейса под разные устройства. В отличие от Activity, фрагменты могут совместно использовать ресурсы внутри одного экрана.
+Фрагменты используются для создания многоразовых компонентов пользовательского интерфейса, которые могут быть встроены в различные `Activity`. Они позволяют более гибко управлять интерфейсом и разделять его на отдельные части, что улучшает модульность приложения. Фрагменты могут быть динамически добавлены или удалены во время выполнения, что упрощает адаптацию интерфейса под разные устройства. В отличие от `Activity`, фрагменты могут совместно использовать ресурсы внутри одного экрана.
 
 ---
 
@@ -645,13 +645,13 @@ class MainActivity : AppCompatActivity() {
 ## Related Questions
 
 ### Related (Medium)
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity, Fragment
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Activity, Fragment
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Activity, Fragment
-- [[q-why-use-fragments-when-we-have-activities--android--medium]] - Activity, Fragment
-- [[q-fragments-vs-activity--android--medium]] - Activity, Fragment
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Activity`, `Fragment`
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Activity`, `Fragment`
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - `Activity`, `Fragment`
+- [[q-why-use-fragments-when-we-have-activities--android--medium]] - `Activity`, `Fragment`
+- [[q-fragments-vs-activity--android--medium]] - `Activity`, `Fragment`
 
 ### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity, Fragment
-- [[q-fragments-and-activity-relationship--android--hard]] - Activity, Fragment
-- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] - Activity, Fragment
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - `Activity`, `Fragment`
+- [[q-fragments-and-activity-relationship--android--hard]] - `Activity`, `Fragment`
+- [[q-what-are-fragments-and-why-are-they-more-convenient-to-use-instead-of-multiple-activities--android--hard]] - `Activity`, `Fragment`

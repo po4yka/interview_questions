@@ -93,7 +93,7 @@ val retrofit = Retrofit.Builder()
     .build()
 ```
 
-### Пример С Repository Паттерном
+### Пример С `Repository` Паттерном
 
 ```kotlin
 // API definition
@@ -229,7 +229,7 @@ val retrofit = Retrofit.Builder()
     .build()
 ```
 
-### Repository Pattern Example
+### `Repository` Pattern Example
 
 ```kotlin
 // API definition

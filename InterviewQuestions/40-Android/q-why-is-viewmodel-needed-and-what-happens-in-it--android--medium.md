@@ -42,19 +42,19 @@ tags:
 
 # Вопрос (RU)
 
-> Зачем нужен ViewModel и что в нем происходит?
+> Зачем нужен `ViewModel` и что в нем происходит?
 
 # Question (EN)
 
-> Why is ViewModel needed and what happens in it?
+> Why is `ViewModel` needed and what happens in it?
 
 ---
 
 ## Ответ (RU)
 
-**ViewModel** - это Android Architecture Component, который хранит UI-состояние и бизнес-логику отдельно от Activity/Fragment, переживая изменения конфигурации (поворот экрана).
+**`ViewModel`** - это Android Architecture Component, который хранит UI-состояние и бизнес-логику отдельно от Activity/`Fragment`, переживая изменения конфигурации (поворот экрана).
 
-### Зачем Нужен ViewModel
+### Зачем Нужен `ViewModel`
 
 #### 1. Переживание Изменений Конфигурации
 
@@ -166,7 +166,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-### Что Происходит В ViewModel
+### Что Происходит В `ViewModel`
 
 #### 1. Управление UI-состоянием
 
@@ -250,7 +250,7 @@ class PostsViewModel(private val repository: PostRepository) : ViewModel() {
 }
 ```
 
-#### 4. Совместное Использование Между Fragment
+#### 4. Совместное Использование Между `Fragment`
 
 ```kotlin
 // Shared ViewModel с областью видимости Activity
@@ -285,7 +285,7 @@ class DetailFragment : Fragment() {
 }
 ```
 
-### Жизненный Цикл ViewModel
+### Жизненный Цикл `ViewModel`
 
 ```
 Activity/Fragment создан
@@ -308,22 +308,22 @@ Activity/Fragment создан
 ✅ **DO**:
 - Используйте `viewModelScope` для корутин
 - Предоставляйте immutable состояние (`LiveData`/`StateFlow`, не `Mutable*`)
-- Держите UI-логику в UI-слое, бизнес-логику в ViewModel
-- Используйте Repository Pattern для разделения источников данных
+- Держите UI-логику в UI-слое, бизнес-логику в `ViewModel`
+- Используйте `Repository` Pattern для разделения источников данных
 
 ❌ **DON'T**:
-- Не передавайте Context в ViewModel (используйте `AndroidViewModel` если нужен Application Context)
-- Не ссылайтесь на View напрямую
-- Не держите Activity/Fragment ссылки (memory leak)
-- Не выполняйте UI-операции в ViewModel
+- Не передавайте `Context` в `ViewModel` (используйте `AndroidViewModel` если нужен `Application` `Context`)
+- Не ссылайтесь на `View` напрямую
+- Не держите Activity/`Fragment` ссылки (memory leak)
+- Не выполняйте UI-операции в `ViewModel`
 
 ---
 
 ## Answer (EN)
 
-**ViewModel** is an Android Architecture Component that stores UI state and business logic separately from Activity/Fragment, surviving configuration changes (screen rotation).
+**`ViewModel`** is an Android Architecture Component that stores UI state and business logic separately from Activity/`Fragment`, surviving configuration changes (screen rotation).
 
-### Why ViewModel is Needed
+### Why `ViewModel` is Needed
 
 #### 1. Configuration Change Survival
 
@@ -415,7 +415,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 }
 ```
 
-#### 3. Automatic Lifecycle Management
+#### 3. Automatic `Lifecycle` Management
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -435,7 +435,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-### What Happens in ViewModel
+### What Happens in `ViewModel`
 
 #### 1. UI State Management
 
@@ -494,7 +494,7 @@ class LoginViewModel : ViewModel() {
 }
 ```
 
-#### 3. Repository Integration and Data Loading
+#### 3. `Repository` Integration and Data Loading
 
 ```kotlin
 class PostsViewModel(private val repository: PostRepository) : ViewModel() {
@@ -554,7 +554,7 @@ class DetailFragment : Fragment() {
 }
 ```
 
-### ViewModel Lifecycle
+### `ViewModel` `Lifecycle`
 
 ```
 Activity/Fragment Created
@@ -577,36 +577,36 @@ Activity/Fragment Created
 ✅ **DO**:
 - Use `viewModelScope` for coroutines
 - Expose immutable state (`LiveData`/`StateFlow`, not `Mutable*`)
-- Keep UI logic in UI layer, business logic in ViewModel
-- Use Repository Pattern to separate data sources
+- Keep UI logic in UI layer, business logic in `ViewModel`
+- Use `Repository` Pattern to separate data sources
 
 ❌ **DON'T**:
-- Don't pass Context to ViewModel (use `AndroidViewModel` if you need Application Context)
+- Don't pass `Context` to `ViewModel` (use `AndroidViewModel` if you need `Application` `Context`)
 - Don't reference Views directly
-- Don't hold Activity/Fragment references (memory leak)
-- Don't perform UI operations in ViewModel
+- Don't hold Activity/`Fragment` references (memory leak)
+- Don't perform UI operations in `ViewModel`
 
 ---
 
 ## Follow-ups
 
-1. **What's the difference between ViewModel and onSaveInstanceState?** ViewModel survives configuration changes but not process death; onSaveInstanceState survives process death but has size limitations (1MB).
+1. **What's the difference between `ViewModel` and onSaveInstanceState?** `ViewModel` survives configuration changes but not process death; onSaveInstanceState survives process death but has size limitations (1MB).
 
-2. **How does ViewModel survive configuration changes internally?** ViewModelStore is retained in non-configuration instance via `onRetainNonConfigurationInstance()`, keyed by Activity/Fragment.
+2. **How does `ViewModel` survive configuration changes internally?** ViewModelStore is retained in non-configuration instance via `onRetainNonConfigurationInstance()`, keyed by Activity/`Fragment`.
 
-3. **When should you use AndroidViewModel vs ViewModel?** Use AndroidViewModel only when you need Application Context (e.g., for resources, ContentResolver). Never pass Activity Context.
+3. **When should you use AndroidViewModel vs `ViewModel`?** Use AndroidViewModel only when you need `Application` `Context` (e.g., for resources, ContentResolver). Never pass `Activity` `Context`.
 
-4. **How to handle one-time events in ViewModel (e.g., navigation)?** Use SingleLiveEvent, Event wrapper, or SharedFlow with replay=0 to prevent re-emission on configuration changes.
+4. **How to handle one-time events in `ViewModel` (e.g., navigation)?** Use SingleLiveEvent, Event wrapper, or `SharedFlow` with replay=0 to prevent re-emission on configuration changes.
 
-5. **Can ViewModel survive process death?** No. Use SavedStateHandle for data that must survive process death (combined with ViewModel for configuration changes).
+5. **Can `ViewModel` survive process death?** No. Use SavedStateHandle for data that must survive process death (combined with `ViewModel` for configuration changes).
 
 ## References
 
 - [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
 - [[q-how-to-save-activity-state--android--medium]] - State preservation strategies
-- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation limits
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - `ViewModel` state preservation limits
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - Comparison of state preservation techniques
-- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
 
 
 ## Related Questions
@@ -625,10 +625,10 @@ Activity/Fragment Created
 ### Related (Same Level)
 - [[q-mvvm-pattern--android--medium]] - MVVM architecture pattern
 - [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
-- [[q-how-to-save-activity-state--android--medium]] - Activity state preservation
-- [[q-how-does-activity-lifecycle-work--android--medium]] - Activity lifecycle
+- [[q-how-to-save-activity-state--android--medium]] - `Activity` state preservation
+- [[q-how-does-activity-lifecycle-work--android--medium]] - `Activity` lifecycle
 
 ### Advanced (Harder)
 - [[q-mvi-architecture--android--hard]] - MVI architecture pattern
-- [[q-offline-first-architecture--android--hard]] - Offline-first with ViewModel
+- [[q-offline-first-architecture--android--hard]] - Offline-first with `ViewModel`
 - [[q-modularization-patterns--android--hard]] - ViewModels in modular architecture

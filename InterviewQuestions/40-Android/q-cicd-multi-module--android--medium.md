@@ -203,7 +203,7 @@ AFFECTED=$(scripts/affected-modules.sh "$CHANGED")
 ```
 
 **Algorithm**:
-1. Map changed files → modules (files in `core/ui/` → module `:core:ui`)
+1. `Map` changed files → modules (files in `core/ui/` → module `:core:ui`)
 2. Find reverse dependencies for each module
 3. Deduplicate and compute minimal set
 

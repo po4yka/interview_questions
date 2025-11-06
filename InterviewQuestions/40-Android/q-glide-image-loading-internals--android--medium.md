@@ -160,7 +160,7 @@ class MemoryCache(maxSize: Int) {
 }
 ```
 
-### 4. Request Lifecycle Management
+### 4. Request `Lifecycle` Management
 
 ```kotlin
 class RequestManager(private val lifecycle: Lifecycle) {
@@ -263,7 +263,7 @@ class EngineJob {
 }
 ```
 
-### 7. Bitmap Pool for Reuse
+### 7. `Bitmap` Pool for Reuse
 
 ```kotlin
 class BitmapPool(maxSize: Int) {
@@ -322,7 +322,7 @@ class DiskCacheManager {
 
 ### 9. Glide Key Differences from Others
 
-| Library | Memory Cache | Disk Cache | Lifecycle | Transformations |
+| Library | Memory Cache | Disk Cache | `Lifecycle` | Transformations |
 |---------|-------------|-----------|-----------|-----------------|
 | **Glide** | LruCache | DiskLruCache | Automatic | Built-in + Custom |
 | **Fresco** | Native memory | File system | Manual | Extensive |
@@ -467,7 +467,7 @@ class MemoryCache(maxSize: Int) {
 }
 ```
 
-### 4. Request Lifecycle Management
+### 4. Request `Lifecycle` Management
 
 ```kotlin
 class RequestManager(private val lifecycle: Lifecycle) {
@@ -570,7 +570,7 @@ class EngineJob {
 }
 ```
 
-### 7. Bitmap Pool for Reuse
+### 7. `Bitmap` Pool for Reuse
 
 ```kotlin
 class BitmapPool(maxSize: Int) {
@@ -629,7 +629,7 @@ class DiskCacheManager {
 
 ### 9. Glide Key Differences from Others
 
-| Library | Memory Cache | Disk Cache | Lifecycle | Transformations |
+| Library | Memory Cache | Disk Cache | `Lifecycle` | Transformations |
 |---------|-------------|-----------|-----------|-----------------|
 | **Glide** | LruCache | DiskLruCache | Automatic | Built-in + Custom |
 | **Fresco** | Native memory | File system | Manual | Extensive |
@@ -679,7 +679,7 @@ Glide.with(context) // Lifecycle-aware
 
 - Автоматическое управление жизненным циклом
 - Дедупликация запросов
-- Повторное использование Bitmap
+- Повторное использование `Bitmap`
 - Эффективное кэширование
 
 ---

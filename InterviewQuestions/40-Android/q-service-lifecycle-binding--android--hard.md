@@ -27,18 +27,18 @@ tags:
 - difficulty/hard
 ---
 
-# Service Lifecycle and Binding - Advanced Patterns
+# `Service` `Lifecycle` and Binding - Advanced Patterns
 
 # Question (EN)
 >
-Explain the Service lifecycle, binding mechanisms, and communication patterns. How do you implement bound services with AIDL? What are the differences between startService() and bindService()? How do you handle service lifecycle in modern Android (12+)?
+Explain the `Service` lifecycle, binding mechanisms, and communication patterns. How do you implement bound services with AIDL? What are the differences between startService() and bindService()? How do you handle service lifecycle in modern Android (12+)?
 
 ## Answer (EN)
 Services are fundamental Android components for background operations, with complex lifecycle management and multiple binding patterns for inter-process communication.
 
-#### Service Lifecycle Fundamentals
+#### `Service` `Lifecycle` Fundamentals
 
-**1. Started Service Lifecycle**
+**1. Started `Service` `Lifecycle`**
 ```kotlin
 class DataSyncService : Service() {
 
@@ -109,7 +109,7 @@ class DataSyncService : Service() {
 }
 ```
 
-**2. Bound Service Lifecycle**
+**2. Bound `Service` `Lifecycle`**
 ```kotlin
 class MusicPlayerService : Service() {
 
@@ -200,7 +200,7 @@ class MusicPlayerService : Service() {
 
 #### Binding to Services
 
-**1. Simple Service Binding**
+**1. Simple `Service` Binding**
 ```kotlin
 class MusicPlayerActivity : ComponentActivity() {
 
@@ -347,7 +347,7 @@ interface IPlayerCallback {
 }
 ```
 
-**2. Implement AIDL Service**
+**2. Implement AIDL `Service`**
 ```kotlin
 class MusicPlayerAidlService : Service() {
 
@@ -714,7 +714,7 @@ class MessengerClient : ComponentActivity() {
 }
 ```
 
-#### Foreground Service Lifecycle (Android 12+)
+#### Foreground `Service` `Lifecycle` (Android 12+)
 
 ```kotlin
 class DownloadForegroundService : Service() {
@@ -810,7 +810,7 @@ class DownloadForegroundService : Service() {
 
 #### Best Practices
 
-1. **Lifecycle Management**:
+1. **`Lifecycle` Management**:
    - Always match bind/unbind calls
    - Handle service death gracefully
    - Use proper return values in onStartCommand
@@ -844,13 +844,13 @@ class DownloadForegroundService : Service() {
 
 1. **Memory Leaks**: Forgetting to unbind or unregister callbacks
 2. **ANR**: Blocking operations on binder thread
-3. **Lifecycle Mismatches**: Binding in onCreate but unbinding in onStop
-4. **No Foreground Notification**: Service killed immediately on Android 12+
-5. **Missing Null Checks**: Service can be null after unbind
+3. **`Lifecycle` Mismatches**: Binding in onCreate but unbinding in onStop
+4. **No Foreground Notification**: `Service` killed immediately on Android 12+
+5. **Missing Null Checks**: `Service` can be null after unbind
 
 ### Summary
 
-Service lifecycle and binding require careful management:
+`Service` lifecycle and binding require careful management:
 - **Started Services**: Use for long-running background tasks
 - **Bound Services**: Use for client-service interaction
 - **AIDL**: For complex cross-process communication
@@ -863,12 +863,12 @@ Key considerations: proper lifecycle management, foreground service compliance, 
 
 # Вопрос (RU)
 >
-Объясните жизненный цикл Service, механизмы binding и паттерны коммуникации. Как реализовать bound services с AIDL? В чем разница между startService() и bindService()? Как управлять жизненным циклом сервисов в современном Android (12+)?
+Объясните жизненный цикл `Service`, механизмы binding и паттерны коммуникации. Как реализовать bound services с AIDL? В чем разница между startService() и bindService()? Как управлять жизненным циклом сервисов в современном Android (12+)?
 
 
 # Question (EN)
 >
-Explain the Service lifecycle, binding mechanisms, and communication patterns. How do you implement bound services with AIDL? What are the differences between startService() and bindService()? How do you handle service lifecycle in modern Android (12+)?
+Explain the `Service` lifecycle, binding mechanisms, and communication patterns. How do you implement bound services with AIDL? What are the differences between startService() and bindService()? How do you handle service lifecycle in modern Android (12+)?
 
 
 ---
@@ -877,9 +877,9 @@ Explain the Service lifecycle, binding mechanisms, and communication patterns. H
 ## Answer (EN)
 Services are fundamental Android components for background operations, with complex lifecycle management and multiple binding patterns for inter-process communication.
 
-#### Service Lifecycle Fundamentals
+#### `Service` `Lifecycle` Fundamentals
 
-**1. Started Service Lifecycle**
+**1. Started `Service` `Lifecycle`**
 ```kotlin
 class DataSyncService : Service() {
 
@@ -950,7 +950,7 @@ class DataSyncService : Service() {
 }
 ```
 
-**2. Bound Service Lifecycle**
+**2. Bound `Service` `Lifecycle`**
 ```kotlin
 class MusicPlayerService : Service() {
 
@@ -1041,7 +1041,7 @@ class MusicPlayerService : Service() {
 
 #### Binding to Services
 
-**1. Simple Service Binding**
+**1. Simple `Service` Binding**
 ```kotlin
 class MusicPlayerActivity : ComponentActivity() {
 
@@ -1188,7 +1188,7 @@ interface IPlayerCallback {
 }
 ```
 
-**2. Implement AIDL Service**
+**2. Implement AIDL `Service`**
 ```kotlin
 class MusicPlayerAidlService : Service() {
 
@@ -1555,7 +1555,7 @@ class MessengerClient : ComponentActivity() {
 }
 ```
 
-#### Foreground Service Lifecycle (Android 12+)
+#### Foreground `Service` `Lifecycle` (Android 12+)
 
 ```kotlin
 class DownloadForegroundService : Service() {
@@ -1651,7 +1651,7 @@ class DownloadForegroundService : Service() {
 
 #### Best Practices
 
-1. **Lifecycle Management**:
+1. **`Lifecycle` Management**:
    - Always match bind/unbind calls
    - Handle service death gracefully
    - Use proper return values in onStartCommand
@@ -1685,13 +1685,13 @@ class DownloadForegroundService : Service() {
 
 1. **Memory Leaks**: Forgetting to unbind or unregister callbacks
 2. **ANR**: Blocking operations on binder thread
-3. **Lifecycle Mismatches**: Binding in onCreate but unbinding in onStop
-4. **No Foreground Notification**: Service killed immediately on Android 12+
-5. **Missing Null Checks**: Service can be null after unbind
+3. **`Lifecycle` Mismatches**: Binding in onCreate but unbinding in onStop
+4. **No Foreground Notification**: `Service` killed immediately on Android 12+
+5. **Missing Null Checks**: `Service` can be null after unbind
 
 ### Summary
 
-Service lifecycle and binding require careful management:
+`Service` lifecycle and binding require careful management:
 - **Started Services**: Use for long-running background tasks
 - **Bound Services**: Use for client-service interaction
 - **AIDL**: For complex cross-process communication
@@ -1704,26 +1704,26 @@ Key considerations: proper lifecycle management, foreground service compliance, 
 
 # Вопрос (RU)
 >
-Объясните жизненный цикл Service, механизмы binding и паттерны коммуникации. Как реализовать bound services с AIDL? В чем разница между startService() и bindService()? Как управлять жизненным циклом сервисов в современном Android (12+)?
+Объясните жизненный цикл `Service`, механизмы binding и паттерны коммуникации. Как реализовать bound services с AIDL? В чем разница между startService() и bindService()? Как управлять жизненным циклом сервисов в современном Android (12+)?
 
 ## Ответ (RU)
 Services — фундаментальные Android-компоненты для фоновых операций со сложным управлением жизненным циклом и множественными паттернами binding для межпроцессной коммуникации.
 
 #### Основы Жизненного Цикла
 
-**Started Service**:
+**Started `Service`**:
 - `onCreate()` → `onStartCommand()` → ... → `onDestroy()`
 - Запускается через `startService()`
 - Работает независимо от клиента
 - Должен сам себя остановить через `stopSelf()`
 
-**Bound Service**:
+**Bound `Service`**:
 - `onCreate()` → `onBind()` → `onUnbind()` → `onDestroy()`
 - Запускается через `bindService()`
 - Живет пока есть привязанные клиенты
 - Предоставляет API через IBinder
 
-**Hybrid Service**:
+**Hybrid `Service`**:
 - Может быть запущен И привязан одновременно
 - Останавливается только когда вызван `stopSelf()` И нет клиентов
 
@@ -1737,13 +1737,13 @@ Services — фундаментальные Android-компоненты для 
 
 **Альтернатива - Messenger**:
 - Проще чем AIDL
-- Message-based коммуникация
-- Один Handler для всех запросов
+- `Message`-based коммуникация
+- Один `Handler` для всех запросов
 - Подходит для простых случаев
 
 #### Android 12+ Ограничения
 
-**Foreground Service**:
+**Foreground `Service`**:
 - Обязательно вызвать `startForeground()` в течение 5 секунд
 - Объявить `foregroundServiceType` в манифесте
 - Запросить соответствующие разрешения
@@ -1812,6 +1812,6 @@ Services — фундаментальные Android-компоненты для 
 
 
 ### Prerequisites (Easier)
-- [[q-service-component--android--medium]] - Service
-- [[q-testing-viewmodels-turbine--android--medium]] - Lifecycle
-- [[q-what-is-viewmodel--android--medium]] - Lifecycle
+- [[q-service-component--android--medium]] - `Service`
+- [[q-testing-viewmodels-turbine--android--medium]] - `Lifecycle`
+- [[q-what-is-viewmodel--android--medium]] - `Lifecycle`

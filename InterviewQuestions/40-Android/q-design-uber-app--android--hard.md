@@ -63,7 +63,7 @@ tags: [android/location, android/networking-http, android/service, architecture,
 
 > How to design Uber for Android?
 
-## Short Version
+## `Short` Version
 
 Design an Android app for requesting rides in a tier‑1 city. The system should support real-time location tracking, nearby driver matching, fare calculation, routing, payment processing, and operation under intermittent connectivity.
 
@@ -72,7 +72,7 @@ Design an Android app for requesting rides in a tier‑1 city. The system should
 Design a complete Uber Android app with the following requirements:
 
 **Performance:**
-- Map interaction: <200ms from input to render
+- `Map` interaction: <200ms from input to render
 - Cold start: <2.5s (p95) on Pixel‑class devices
 - Battery: <3%/hr foreground tracking and <1%/hr background waiting
 
@@ -159,7 +159,7 @@ Design a complete Uber Android app with the following requirements:
 
 -   **Idle режим**: 0.2-0.5 Гц (раз в 2-5 секунд) с `Significant Motion` detection — снижение частоты когда пользователь неподвижен
 -   **В пути**: 1 Гц (раз в секунду) с батчингом 5-10 секунд — сбор координат в буфер для batch отправки
--   **Foreground Service**: обязательный при активной поездке (Android 14+ требует явный `Foreground Service Type`)
+-   **Foreground `Service`**: обязательный при активной поездке (Android 14+ требует явный `Foreground `Service` Type`)
 
 ```kotlin
 // ✅ Location updates with adaptive priority
@@ -467,7 +467,7 @@ Location tracking strategy with adaptive frequency for balance between accuracy 
 
 -   **Idle mode**: 0.2-0.5 Hz (every 2-5 seconds) with `Significant Motion` detection — reduce frequency when user stationary
 -   **En route**: 1 Hz (per second) with 5-10 second batching — collect coordinates in buffer for batch sending
--   **Foreground Service**: required during active trip (Android 14+ requires explicit `Foreground Service Type`)
+-   **Foreground `Service`**: required during active trip (Android 14+ requires explicit `Foreground `Service` Type`)
 
 ```kotlin
 // ✅ Location updates with adaptive priority
@@ -586,7 +586,7 @@ rideRepo.observeRide(rideId)
 
 ### Server: Architecture Analysis
 
-**Service boundaries:**
+**`Service` boundaries:**
 
 -   **`Location Service`**: accepts coordinates from clients, validates movement physics (speed check <150 km/h for spoofing detection), updates geo-index in `Redis Geo` for fast search, publishes events to `Kafka` for downstream services. Stores only hot data (last 30 minutes) for memory optimization.
 -   **`Matching Service`**: performs geo-search for available drivers in radius via `Redis Geo` (`GEORADIUS`), applies scoring algorithm (rating·0.4 + 1/distance·0.3 + 1/ETA·0.3), reserves driver with optimistic lock to prevent double matching, sends push notification to driver. Handles accept/reject with timeout (30 seconds) for automatic cancellation on no response.
@@ -664,7 +664,7 @@ Cache incomplete actions, sync queue, auto-resend on network restore.
 
 Architecture overview: feature-ride-request, feature-trip, maps-ui, location-core, realtime, payments, flags, analytics. UDF/MVI; TripRepository orchestrates Room + network; feature flags for protocols and sampling.
 
-Map performance: frame budget <16ms; offload interpolation/clustering; keep main-thread work minimal.
+`Map` performance: frame budget <16ms; offload interpolation/clustering; keep main-thread work minimal.
 
 Location strategy: FusedLocationProvider; fallback to GNSS+sensor fusion. Sampling idle 0.2–0.5 Hz with significant‑motion; en‑route 1 Hz with 5–10s batching; Kalman smoothing; spoofing checks. Foreground service during active trip.
 

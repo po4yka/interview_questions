@@ -30,11 +30,11 @@ tags:
 
 # Вопрос (RU)
 
-Как изменить количество колонок в RecyclerView в зависимости от ориентации
+Как изменить количество колонок в `RecyclerView` в зависимости от ориентации
 
 ## Answer (EN)
 # Question (EN)
-> How To Change The Number Of Columns In RecyclerView Depending On Orientation
+> How To Change The Number Of Columns In `RecyclerView` Depending On Orientation
 
 ---
 
@@ -163,7 +163,7 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 
 ## Answer (EN)
 # Question (EN)
-> How To Change The Number Of Columns In RecyclerView Depending On Orientation
+> How To Change The Number Of Columns In `RecyclerView` Depending On Orientation
 
 ---
 
@@ -313,9 +313,9 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 
 
 ### Related (Medium)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`, Ui
 
 ### Advanced (Harder)
-- q-rxjava-pagination-recyclerview--android--medium - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
+- q-rxjava-pagination-recyclerview--android--medium - `View`, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - `View`, Ui

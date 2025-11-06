@@ -31,7 +31,7 @@ Compare Koin and Hilt in detail. When would you choose one over the other? Discu
 
 | Аспект | Koin | Hilt |
 |--------|------|------|
-| **Паттерн** | Service Locator | True Dependency Injection |
+| **Паттерн** | `Service` Locator | True Dependency Injection |
 | **Разрешение** | Runtime (рефлексия) | Compile-time (генерация кода) |
 | **Верификация** | Runtime | Compile-time |
 | **Время сборки** | Быстрое | Медленное (kapt/ksp) |
@@ -145,7 +145,7 @@ fun provideRepository(impl: RepositoryImpl): Repository = impl
 
 | Aspect | Koin | Hilt |
 |--------|------|------|
-| **Pattern** | Service Locator | True Dependency Injection |
+| **Pattern** | `Service` Locator | True Dependency Injection |
 | **Resolution** | Runtime (reflection) | Compile-time (code generation) |
 | **Verification** | Runtime | Compile-time |
 | **Build Time** | Fast | Slow (kapt/ksp) |
@@ -212,7 +212,7 @@ class MyApp : Application() {
 - Android-only apps
 - Large-scale projects (50+ modules)
 - Type safety critical
-- Long-term maintenance (5+ years)
+- `Long`-term maintenance (5+ years)
 - Experienced team knows Dagger
 
 ### Best Practices
@@ -255,7 +255,7 @@ fun provideRepository(impl: RepositoryImpl): Repository = impl
 
 ## Follow-ups
 
-- How would you handle scoped dependencies (Activity/Fragment scope) in both frameworks?
+- How would you handle scoped dependencies (Activity/`Fragment` scope) in both frameworks?
 - What are the strategies for migrating from Dagger2 to either Koin or Hilt?
 - How do you test modules with circular dependencies in Koin vs Hilt?
 - Can Koin and Hilt coexist in the same codebase during migration?
@@ -272,7 +272,7 @@ fun provideRepository(impl: RepositoryImpl): Repository = impl
 ### Prerequisites (Easier)
 - [[q-dagger-inject-annotation--android--easy]] - DI basics with annotations
 - [[q-dagger-purpose--android--easy]] - Why use dependency injection
-- [[q-viewmodel-pattern--android--easy]] - ViewModel architecture
+- [[q-viewmodel-pattern--android--easy]] - `ViewModel` architecture
 
 ### Related
 - [[q-what-is-hilt--android--medium]] - Hilt framework overview

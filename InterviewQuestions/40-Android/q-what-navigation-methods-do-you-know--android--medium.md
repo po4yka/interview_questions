@@ -45,7 +45,7 @@ tags:
 
 Android предлагает несколько основных подходов к навигации, каждый из которых решает конкретные архитектурные задачи.
 
-### 1. Activity Navigation (Intent)
+### 1. `Activity` Navigation (`Intent`)
 
 Традиционный подход для навигации между активностями.
 
@@ -147,7 +147,7 @@ URL-based навигация из внешних источников.
 
 ### Best Practices
 
-1. **Single-Activity архитектура** — фрагменты/Compose вместо множественных Activity
+1. **Single-`Activity` архитектура** — фрагменты/Compose вместо множественных `Activity`
 2. **Navigation Component** для новых проектов — type-safe аргументы, визуальный граф
 3. **Правильный back stack** — используйте `popUpTo`, `launchSingleTop` для избежания дубликатов
 4. **Deep links** — для маркетинга и улучшения UX
@@ -156,7 +156,7 @@ URL-based навигация из внешних источников.
 
 Android provides several core navigation approaches, each addressing specific architectural needs.
 
-### 1. Activity Navigation (Intent)
+### 1. `Activity` Navigation (`Intent`)
 
 Traditional approach for navigating between activities.
 
@@ -258,7 +258,7 @@ URL-based navigation from external sources.
 
 ### Best Practices
 
-1. **Single-Activity architecture** — fragments/Compose instead of multiple Activities
+1. **Single-`Activity` architecture** — fragments/Compose instead of multiple Activities
 2. **Navigation Component** for new projects — type-safe arguments, visual graph
 3. **Proper back stack** — use `popUpTo`, `launchSingleTop` to avoid duplicates
 4. **Deep links** — for marketing and improved UX
@@ -268,7 +268,7 @@ URL-based navigation from external sources.
 ## Follow-ups
 
 - How does Navigation Component handle process death and state restoration?
-- What are the trade-offs between single-Activity and multi-Activity architecture?
+- What are the trade-offs between single-`Activity` and multi-`Activity` architecture?
 - How to implement nested navigation graphs for modular features?
 - What's the difference between Deep Links and App Links in terms of security?
 - How to test navigation flows with Espresso or Compose UI tests?
@@ -276,7 +276,7 @@ URL-based navigation from external sources.
 ## References
 
 - Android Developer Documentation: Navigation Component
-- Android Developer Guide: Single-Activity Architecture
+- Android Developer Guide: Single-`Activity` Architecture
 
 ## Related Questions
 
@@ -288,12 +288,12 @@ URL-based navigation from external sources.
 
 ### Prerequisites
 
-- Activity and Fragment lifecycle understanding
-- Intent and Bundle fundamentals
+- `Activity` and `Fragment` lifecycle understanding
+- `Intent` and `Bundle` fundamentals
 
 ### Related
 
-- [[q-activity-navigation-how-it-works--android--medium]] - Deep dive into Activity navigation internals
+- [[q-activity-navigation-how-it-works--android--medium]] - Deep dive into `Activity` navigation internals
 - [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Deep link task stack management
 - [[q-how-navigation-is-implemented-in-android--android--medium]] - Navigation implementation details
 

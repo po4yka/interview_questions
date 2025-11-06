@@ -31,7 +31,7 @@ sources: [https://dagger.dev/hilt/entry-points.html]
 [[c-hilt|Entry Points]] — это интерфейсы, аннотированные `@EntryPoint`, которые предоставляют доступ к зависимостям Hilt в местах, где автоматическая инъекция невозможна. Они служат мостом между графом зависимостей и кодом, который не управляется Hilt.
 
 **Когда использовать:**
-- Content Providers (создаются до Application.onCreate())
+- Content Providers (создаются до `Application`.onCreate())
 - WorkManager Workers (инстанцируются WorkManager)
 - Firebase Services (FCM, Analytics)
 - Broadcast Receivers без @AndroidEntryPoint
@@ -100,7 +100,7 @@ class CustomWorkerFactory : WorkerFactory() {
 }
 ```
 
-**Firebase Messaging Service:**
+**Firebase Messaging `Service`:**
 ```kotlin
 class MyFirebaseService : FirebaseMessagingService() {
 
@@ -144,7 +144,7 @@ interface ActivityEntryPoint {
 - Используйте Entry Points только когда стандартная инъекция невозможна
 - Для WorkManager предпочитайте @HiltWorker вместо Entry Points
 - Кэшируйте полученные зависимости в lazy-свойствах
-- Выбирайте правильный scope компонента (Singleton, Activity, Fragment)
+- Выбирайте правильный scope компонента (Singleton, `Activity`, `Fragment`)
 
 ## Answer (EN)
 
@@ -152,7 +152,7 @@ interface ActivityEntryPoint {
 [[c-hilt|Entry Points]] are interfaces annotated with `@EntryPoint` that provide access to Hilt dependencies in places where automatic injection isn't possible. They bridge the dependency graph with code not managed by Hilt.
 
 **When to use:**
-- Content Providers (created before Application.onCreate())
+- Content Providers (created before `Application`.onCreate())
 - WorkManager Workers (instantiated by WorkManager)
 - Firebase Services (FCM, Analytics)
 - Broadcast Receivers without @AndroidEntryPoint
@@ -221,7 +221,7 @@ class CustomWorkerFactory : WorkerFactory() {
 }
 ```
 
-**Firebase Messaging Service:**
+**Firebase Messaging `Service`:**
 ```kotlin
 class MyFirebaseService : FirebaseMessagingService() {
 
@@ -265,7 +265,7 @@ interface ActivityEntryPoint {
 - Use Entry Points only when standard injection is impossible
 - For WorkManager prefer @HiltWorker over Entry Points
 - Cache retrieved dependencies in lazy properties
-- Choose correct component scope (Singleton, Activity, Fragment)
+- Choose correct component scope (Singleton, `Activity`, `Fragment`)
 
 ---
 
@@ -289,7 +289,7 @@ interface ActivityEntryPoint {
 - Dependency injection patterns in Android
 
 ### Related (Same Level)
-- Hilt ViewModel injection and SavedStateHandle
+- Hilt `ViewModel` injection and SavedStateHandle
 - Custom Hilt components and scopes
 - WorkManager integration with Hilt
 

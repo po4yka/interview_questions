@@ -31,7 +31,7 @@ Room — это ORM-библиотека от Google, предоставляющ
 
 **Ключевые преимущества:**
 - Проверка SQL во время компиляции
-- Интеграция с Flow, LiveData, Coroutines
+- Интеграция с `Flow`, `LiveData`, Coroutines
 - Автоматические миграции схемы
 - Минимум шаблонного кода
 
@@ -82,7 +82,7 @@ Room is Google's ORM library providing an abstraction over SQLite with compile-t
 
 **Key advantages:**
 - SQL verification at compile time
-- Integration with Flow, LiveData, Coroutines
+- Integration with `Flow`, `LiveData`, Coroutines
 - Automatic schema migrations
 - Minimal boilerplate code
 
@@ -135,7 +135,7 @@ abstract class AppDatabase : RoomDatabase() {
 - What are the threading rules for Room operations?
 - How do you implement complex queries with relationships (one-to-many, many-to-many)?
 - What's the difference between `@Insert`, `@Update`, and `@Upsert`?
-- How does Room support RxJava and Kotlin Flow for reactive queries?
+- How does Room support RxJava and Kotlin `Flow` for reactive queries?
 
 ## References
 

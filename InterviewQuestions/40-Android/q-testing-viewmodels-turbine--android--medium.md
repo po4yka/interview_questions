@@ -37,16 +37,16 @@ tags:
 > Тестирование ViewModels с Turbine
 
 # Question (EN)
-> How do you test ViewModels that emit Flow/StateFlow using the Turbine library?
+> How do you test ViewModels that emit Flow/`StateFlow` using the Turbine library?
 
 ---
 
 ## Answer (EN)
 
-**Approach**: Turbine is a testing library that simplifies testing Kotlin Flows by providing a readable API for asserting Flow emissions over time.
+**Approach**: Turbine is a testing library that simplifies testing Kotlin Flows by providing a readable API for asserting `Flow` emissions over time.
 
 **Key Concepts**:
-- Turbine allows you to test Flow emissions sequentially
+- Turbine allows you to test `Flow` emissions sequentially
 - Provides `test {}` extension function for Flows
 - Supports testing multiple emissions, errors, and completion
 - Works well with coroutine test dispatchers
@@ -126,44 +126,44 @@ fun `loadUser emits Error when repository fails`() = runTest {
 ```
 
 **Explanation**:
-1. **test {}** - Turbine's main extension function that collects Flow emissions
+1. **test {}** - Turbine's main extension function that collects `Flow` emissions
 2. **awaitItem()** - Suspends until next emission and returns it
 3. **expectNoEvents()** - Asserts that no more events are emitted
 4. **cancelAndIgnoreRemainingEvents()** - Cancels collection when you don't care about remaining emissions
 5. **runTest** - Coroutine test dispatcher for controlling virtual time
 
 **Benefits**:
-- More readable than manual Flow collection
+- More readable than manual `Flow` collection
 - Built-in timeout handling
 - Clear assertion API
-- Works with StateFlow, SharedFlow, and regular Flows
+- Works with `StateFlow`, `SharedFlow`, and regular Flows
 
 
 
 ## Ответ (RU)
 
-**Подход**: Turbine - это библиотека для тестирования, которая упрощает тестирование Kotlin Flow, предоставляя читаемый API для проверки эмиссий Flow во времени.
+**Подход**: Turbine - это библиотека для тестирования, которая упрощает тестирование Kotlin `Flow`, предоставляя читаемый API для проверки эмиссий `Flow` во времени.
 
 **Ключевые концепции**:
-- Turbine позволяет тестировать эмиссии Flow последовательно
-- Предоставляет расширение `test {}` для Flow
+- Turbine позволяет тестировать эмиссии `Flow` последовательно
+- Предоставляет расширение `test {}` для `Flow`
 - Поддерживает тестирование множественных эмиссий, ошибок и завершения
 - Хорошо работает с тестовыми диспетчерами корутин
 
 **Код**: (см. выше в английской секции)
 
 **Объяснение**:
-1. **test {}** - основная функция-расширение Turbine, которая собирает эмиссии Flow
+1. **test {}** - основная функция-расширение Turbine, которая собирает эмиссии `Flow`
 2. **awaitItem()** - приостанавливается до следующей эмиссии и возвращает её
 3. **expectNoEvents()** - проверяет, что больше нет событий
 4. **cancelAndIgnoreRemainingEvents()** - отменяет сбор, когда остальные эмиссии не важны
 5. **runTest** - тестовый диспетчер корутин для управления виртуальным временем
 
 **Преимущества**:
-- Более читаемо, чем ручной сбор Flow
+- Более читаемо, чем ручной сбор `Flow`
 - Встроенная обработка таймаутов
 - Понятный API для проверок
-- Работает с StateFlow, SharedFlow и обычными Flow
+- Работает с `StateFlow`, `SharedFlow` и обычными `Flow`
 
 ---
 
@@ -172,7 +172,7 @@ fun `loadUser emits Error when repository fails`() = runTest {
 - How do you test multiple Flows simultaneously with Turbine?
 - What's the difference between `awaitItem()` and `expectMostRecentItem()`?
 - How do you handle timeouts in Turbine tests?
-- Can Turbine be used with SharedFlow and hot Flows?
+- Can Turbine be used with `SharedFlow` and hot Flows?
 
 ## References
 

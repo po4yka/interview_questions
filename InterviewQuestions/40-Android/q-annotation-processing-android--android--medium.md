@@ -88,7 +88,7 @@ dependencies { ksp("androidx.room:room-compiler") }
 - Room — SQL-запросы и DAO
 - Hilt/Dagger — DI-граф
 - Moshi/kotlinx.serialization — JSON-сериализация
-- Parcelize — Parcelable-имплементации
+- Parcelize — `Parcelable`-имплементации
 
 **Оптимизация сборки:**
 - KSP вместо KAPT для ускорения в 2x
@@ -147,7 +147,7 @@ dependencies { ksp("androidx.room:room-compiler") }
 - Room — SQL queries and DAO
 - Hilt/Dagger — DI graph
 - Moshi/kotlinx.serialization — JSON serialization
-- Parcelize — Parcelable implementations
+- Parcelize — `Parcelable` implementations
 
 **Build optimization:**
 - KSP instead of KAPT for 2x speedup

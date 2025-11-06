@@ -38,17 +38,17 @@ tags:
 
 # Вопрос (RU)
 
-Как получить сообщения на главном потоке с помощью Handler и Looper?
+Как получить сообщения на главном потоке с помощью `Handler` и `Looper`?
 
 # Question (EN)
 
-How can you receive messages on the main thread using Handler and Looper?
+How can you receive messages on the main thread using `Handler` and `Looper`?
 
 ## Ответ (RU)
 
-**Handler** отправляет сообщения в **MessageQueue** потока, который обрабатывается **Looper**. Чтобы получать сообщения на главном потоке:
+**`Handler`** отправляет сообщения в **MessageQueue** потока, который обрабатывается **`Looper`**. Чтобы получать сообщения на главном потоке:
 
-1. Создайте Handler, привязанный к `Looper.getMainLooper()`
+1. Создайте `Handler`, привязанный к `Looper.getMainLooper()`
 2. Отправьте сообщение из любого потока через `sendMessage()` или `post()`
 3. Обработайте в `handleMessage()` или лямбде
 
@@ -114,9 +114,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Handler Vs Coroutines
+### `Handler` Vs Coroutines
 
-**Handler (традиционный)**:
+**`Handler` (традиционный)**:
 ```kotlin
 fun loadData() {
     Thread {
@@ -137,18 +137,18 @@ fun loadData() {
 ```
 
 **Ключевые моменты:**
-- Главный поток имеет Looper по умолчанию
-- `Looper.getMainLooper()` возвращает Looper главного потока
+- Главный поток имеет `Looper` по умолчанию
+- `Looper.getMainLooper()` возвращает `Looper` главного потока
 - Всегда очищайте сообщения в `onDestroy()` во избежание утечек
-- Для новых проектов предпочитайте coroutines вместо Handler
+- Для новых проектов предпочитайте coroutines вместо `Handler`
 
 ---
 
 ## Answer (EN)
 
-**Handler** posts messages to a thread's **MessageQueue**, which is processed by a **Looper**. To receive messages on the main thread:
+**`Handler`** posts messages to a thread's **MessageQueue**, which is processed by a **`Looper`**. To receive messages on the main thread:
 
-1. Create a Handler bound to `Looper.getMainLooper()`
+1. Create a `Handler` bound to `Looper.getMainLooper()`
 2. Send messages from any thread via `sendMessage()` or `post()`
 3. Process in `handleMessage()` or lambda
 
@@ -214,9 +214,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Handler Vs Coroutines
+### `Handler` Vs Coroutines
 
-**Handler (traditional)**:
+**`Handler` (traditional)**:
 ```kotlin
 fun loadData() {
     Thread {
@@ -237,10 +237,10 @@ fun loadData() {
 ```
 
 **Key Points:**
-- Main thread has a Looper by default
-- `Looper.getMainLooper()` returns the main thread's Looper
+- Main thread has a `Looper` by default
+- `Looper.getMainLooper()` returns the main thread's `Looper`
 - Always clean up messages in `onDestroy()` to prevent leaks
-- For new projects, prefer coroutines over Handler
+- For new projects, prefer coroutines over `Handler`
 
 ---
 
@@ -249,11 +249,11 @@ fun loadData() {
 - How does MessageQueue prioritize messages with different timestamps?
 - What happens if you call `Looper.prepare()` on the main thread?
 - How do `sendMessageAtFrontOfQueue()` and `sendMessageDelayed()` differ?
-- When would you use Handler instead of coroutines in modern Android?
+- When would you use `Handler` instead of coroutines in modern Android?
 
 ## References
 
-- Android Developer Documentation - Handler and Looper
+- Android Developer Documentation - `Handler` and `Looper`
 - Android Developer Documentation - Processes and Threads
 
 ## Related Questions
@@ -270,7 +270,7 @@ fun loadData() {
 
 ### Related
 - [[q-main-thread-android--android--medium]] - Main thread responsibilities
-- [[q-looper-thread-connection--android--medium]] - Looper and thread relationship
+- [[q-looper-thread-connection--android--medium]] - `Looper` and thread relationship
 - [[q-multithreading-tools-android--android--medium]] - Threading tools comparison
 
 ### Advanced

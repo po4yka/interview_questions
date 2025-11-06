@@ -121,7 +121,7 @@ class TaskRepository {
 | **Startup** | 1.5-2.5s (JS bundle load) | 0.5-0.8s (native) |
 | **Animations** | 45-58fps (JS bottleneck) | 60fps+ (native) |
 | **Memory** | Higher (JS VM overhead) | Lower (native) |
-| **List Rendering** | 300-500ms, occasional jank | 150-250ms, smooth 60fps |
+| **`List` Rendering** | 300-500ms, occasional jank | 150-250ms, smooth 60fps |
 
 ### Developer Experience
 
@@ -239,7 +239,7 @@ class TaskRepository {
 | **Startup** | 1.5-2.5s (JS bundle load) | 0.5-0.8s (native) |
 | **Animations** | 45-58fps (JS bottleneck) | 60fps+ (native) |
 | **Memory** | Higher (JS VM overhead) | Lower (native) |
-| **List Rendering** | 300-500ms, occasional jank | 150-250ms, smooth 60fps |
+| **`List` Rendering** | 300-500ms, occasional jank | 150-250ms, smooth 60fps |
 
 ### Developer Experience
 

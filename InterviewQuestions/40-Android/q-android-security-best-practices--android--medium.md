@@ -96,7 +96,7 @@ Network Security Config принудительно использует HTTPS и
 ```
 
 **4. Защита компонентов:**
-Используйте `android:exported="false"` для внутренних Activity/Service/Provider. Валидируйте Intent от внешних источников.
+Используйте `android:exported="false"` для внутренних Activity/Service/Provider. Валидируйте `Intent` от внешних источников.
 
 ```kotlin
 // ✅ Валидация Intent
@@ -204,7 +204,7 @@ Network Security Config enforces HTTPS and certificate pinning to protect agains
 ```
 
 **4. Component Protection:**
-Use `android:exported="false"` for internal Activity/Service/Provider. Validate Intent from external sources.
+Use `android:exported="false"` for internal Activity/Service/Provider. Validate `Intent` from external sources.
 
 ```kotlin
 // ✅ Validate Intent

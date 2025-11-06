@@ -167,7 +167,7 @@ enum class CompilationFilter {
 // Default: SPEED_PROFILE
 ```
 
-**Generational Garbage Collection:**
+**Generational Garbage `Collection`:**
 
 ```kotlin
 // Young generation: new objects, frequent collection (~1-2ms)

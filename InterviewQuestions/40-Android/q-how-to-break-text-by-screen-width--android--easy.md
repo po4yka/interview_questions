@@ -29,7 +29,7 @@ tags: [android, android/ui-graphics, android/ui-views, difficulty/easy]
 
 ## Ответ (RU)
 
-Используйте класс **Paint** и метод **breakText()** для определения количества символов, помещающихся в строку с учетом доступной ширины.
+Используйте класс **`Paint`** и метод **breakText()** для определения количества символов, помещающихся в строку с учетом доступной ширины.
 
 ### Основной Подход
 
@@ -61,7 +61,7 @@ fun breakTextIntoLines(text: String, paint: Paint, maxWidth: Float): List<String
 }
 ```
 
-### В Кастомном View
+### В Кастомном `View`
 
 ```kotlin
 class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attrs) {
@@ -93,13 +93,13 @@ class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attr
 }
 ```
 
-**Важно**: Метод breakText() учитывает размер шрифта, typeface и плотность экрана. Для корректной работы всегда используйте тот же объект Paint, который будет применяться для отрисовки. См. [[c-custom-views]] для деталей реализации.
+**Важно**: Метод breakText() учитывает размер шрифта, typeface и плотность экрана. Для корректной работы всегда используйте тот же объект `Paint`, который будет применяться для отрисовки. См. [[c-custom-views]] для деталей реализации.
 
 ---
 
 ## Answer (EN)
 
-Use the **Paint** class and **breakText()** method to determine how many characters fit in a line based on available width.
+Use the **`Paint`** class and **breakText()** method to determine how many characters fit in a line based on available width.
 
 ### Basic Approach
 
@@ -131,7 +131,7 @@ fun breakTextIntoLines(text: String, paint: Paint, maxWidth: Float): List<String
 }
 ```
 
-### In Custom View
+### In Custom `View`
 
 ```kotlin
 class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attrs) {
@@ -163,13 +163,13 @@ class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attr
 }
 ```
 
-**Important**: The breakText() method accounts for font size, typeface, and screen density. Always use the same Paint object that will be used for drawing. See [[c-custom-views]] for implementation details.
+**Important**: The breakText() method accounts for font size, typeface, and screen density. Always use the same `Paint` object that will be used for drawing. See [[c-custom-views]] for implementation details.
 
 ---
 
 ## Follow-ups
 
-- What's the difference between breakText() and measureText() in Paint?
+- What's the difference between breakText() and measureText() in `Paint`?
 - How does breakText() handle RTL text and bidirectional scripts?
 - When would you use StaticLayout instead of manual breakText() loops?
 
@@ -177,12 +177,12 @@ class CustomTextView(context: Context, attrs: AttributeSet) : View(context, attr
 
 - [[c-custom-views]] - Custom view implementation patterns
 - [[c-views]] - Android view system fundamentals
-- https://developer.android.com/reference/android/graphics/Paint#breakText
+- https://developer.android.com/reference/android/graphics/`Paint`#breakText
 
 ## Related Questions
 
 ### Prerequisites
-- Basic Paint and Canvas usage
+- Basic `Paint` and `Canvas` usage
 - Custom view lifecycle
 
 ### Related

@@ -31,7 +31,7 @@ tags: [android/architecture-mvvm, android/ui-navigation, difficulty/medium, navi
 
 **Основные подходы**:
 
-Android предлагает несколько способов навигации — от традиционных Intent до современного Navigation Component. Выбор зависит от архитектуры приложения и требований.
+Android предлагает несколько способов навигации — от традиционных `Intent` до современного Navigation Component. Выбор зависит от архитектуры приложения и требований.
 
 **1. Jetpack Navigation Component (Рекомендуемый)**
 
@@ -64,9 +64,9 @@ class DetailFragment : Fragment() {
 }
 ```
 
-**2. Intent (Навигация между Activity)**
+**2. `Intent` (Навигация между `Activity`)**
 
-Явные и неявные Intent для перехода между экранами:
+Явные и неявные `Intent` для перехода между экранами:
 
 ```kotlin
 // ✅ Explicit Intent
@@ -107,7 +107,7 @@ supportFragmentManager.beginTransaction()
 ```
 
 **Сложность**: Navigation Component автоматизирует управление BackStack и состоянием
-**Применение**: Navigation Component для новых проектов, Intent для межприложенческой навигации
+**Применение**: Navigation Component для новых проектов, `Intent` для межприложенческой навигации
 
 ---
 
@@ -148,7 +148,7 @@ class DetailFragment : Fragment() {
 }
 ```
 
-**2. Intent (Activity Navigation)**
+**2. `Intent` (`Activity` Navigation)**
 
 Explicit and implicit Intents for screen transitions:
 
@@ -175,7 +175,7 @@ if (intent.resolveActivity(packageManager) != null) {
 }
 ```
 
-**3. FragmentTransaction (Manual Fragment Management)**
+**3. FragmentTransaction (Manual `Fragment` Management)**
 
 ```kotlin
 // ✅ Correct replacement with BackStack
@@ -191,7 +191,7 @@ supportFragmentManager.beginTransaction()
 ```
 
 **Complexity**: Navigation Component automates BackStack and state management
-**Use Cases**: Navigation Component for new projects, Intent for inter-app navigation
+**Use Cases**: Navigation Component for new projects, `Intent` for inter-app navigation
 
 ---
 
@@ -200,23 +200,23 @@ supportFragmentManager.beginTransaction()
 - How to handle deep links with Navigation Component?
 - What are the differences between `popBackStack()` and `popUpTo`?
 - How to pass complex objects between fragments safely?
-- When to use single Activity architecture vs multiple Activities?
+- When to use single `Activity` architecture vs multiple Activities?
 - How to test navigation flows?
 
 ## References
 
 - [[c-navigation-component]] - Jetpack Navigation Component overview
-- [[c-fragments]] - Fragment lifecycle and management
-- [[c-intents]] - Intent system in Android
+- [[c-fragments]] - `Fragment` lifecycle and management
+- [[c-intents]] - `Intent` system in Android
 - Android Developers: Navigation Component Guide
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-how-does-activity-lifecycle-work--android--medium]] - Activity lifecycle basics
+- [[q-how-does-activity-lifecycle-work--android--medium]] - `Activity` lifecycle basics
 
 ### Related (Same Level)
-- [[q-activity-navigation-how-it-works--android--medium]] - Activity navigation details
+- [[q-activity-navigation-how-it-works--android--medium]] - `Activity` navigation details
 - [[q-compose-navigation-advanced--android--medium]] - Compose navigation patterns
 - [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Deep link handling
 

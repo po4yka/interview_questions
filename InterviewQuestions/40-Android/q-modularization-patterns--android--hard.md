@@ -96,7 +96,7 @@ The public interface of a module should be minimal and expose only the essential
 
 There are three essential types of modules that Android studio supports:
 
-- **App modules** are an entry point to your application. They can contain source code, resources, assets and an `AndroidManifest.xml`. The output of an app module is an Android App Bundle (AAB) or an Android Application Package (APK)
+- **App modules** are an entry point to your application. They can contain source code, resources, assets and an `AndroidManifest.xml`. The output of an app module is an Android App `Bundle` (AAB) or an Android `Application` Package (APK)
 - **Library modules** have the same content as the app modules. They are used by other Android modules as a dependency. The output of a library module is an Android Archive (AAR) are structurally identical to app modules but they are compiled to an Android Archive (AAR) file which can later be used by other modules as a dependency. A library module makes it possible to encapsulate and reuse the same logic and resources across many app modules
 - **Kotlin and Java** libraries don't contain any Android resources, assets, or manifest files
 
@@ -166,7 +166,7 @@ The public interface of a module should be minimal and expose only the essential
 
 There are three essential types of modules that Android studio supports:
 
-- **App modules** are an entry point to your application. They can contain source code, resources, assets and an `AndroidManifest.xml`. The output of an app module is an Android App Bundle (AAB) or an Android Application Package (APK)
+- **App modules** are an entry point to your application. They can contain source code, resources, assets and an `AndroidManifest.xml`. The output of an app module is an Android App `Bundle` (AAB) or an Android `Application` Package (APK)
 - **Library modules** have the same content as the app modules. They are used by other Android modules as a dependency. The output of a library module is an Android Archive (AAR) are structurally identical to app modules but they are compiled to an Android Archive (AAR) file which can later be used by other modules as a dependency. A library module makes it possible to encapsulate and reuse the same logic and resources across many app modules
 - **Kotlin and Java** libraries don't contain any Android resources, assets, or manifest files
 
@@ -224,7 +224,7 @@ Since Android modules come with overhead, preferably, you'd want to use the Kotl
 
 Существует три основных типа модулей, которые поддерживает Android Studio:
 
-- **Модули приложений** являются точкой входа в ваше приложение. Они могут содержать исходный код, ресурсы, ассеты и `AndroidManifest.xml`. Результатом модуля приложения является Android App Bundle (AAB) или Android Application Package (APK)
+- **Модули приложений** являются точкой входа в ваше приложение. Они могут содержать исходный код, ресурсы, ассеты и `AndroidManifest.xml`. Результатом модуля приложения является Android App `Bundle` (AAB) или Android `Application` Package (APK)
 - **Модули библиотек** имеют то же содержимое, что и модули приложений. Они используются другими модулями Android в качестве зависимости. Результатом модуля библиотеки является Android Archive (AAR), структурно идентичный модулям приложений, но компилируемый в файл Android Archive (AAR), который позже может быть использован другими модулями в качестве зависимости. Модуль библиотеки позволяет инкапсулировать и повторно использовать одну и ту же логику и ресурсы во многих модулях приложений
 - **Библиотеки Kotlin и Java** не содержат никаких ресурсов Android, ассетов или файлов манифеста
 

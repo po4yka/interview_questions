@@ -32,17 +32,17 @@ tags:
 ---
 
 # Вопрос (RU)
-> Бывает ли потеря состояния у Fragment?
+> Бывает ли потеря состояния у `Fragment`?
 
 # Question (EN)
-> Can Fragment State Loss Occur?
+> Can `Fragment` State Loss Occur?
 
 ---
 
 ## Ответ (RU)
 
 **Определение**
-Потеря состояния фрагмента происходит, когда `FragmentTransaction` выполняется после вызова `onSaveInstanceState()` у Activity. Такая транзакция не сохранится при пересоздании процесса, и изменения UI теряются.
+Потеря состояния фрагмента происходит, когда `FragmentTransaction` выполняется после вызова `onSaveInstanceState()` у `Activity`. Такая транзакция не сохранится при пересоздании процесса, и изменения UI теряются.
 
 **Основные причины**
 
@@ -54,7 +54,7 @@ tags:
    - System kill при нехватке памяти
    - Отсутствие персистентного хранения для критичных данных
 
-3. **Пересоздание Activity**
+3. **Пересоздание `Activity`**
    - Configuration changes (поворот экрана)
    - Возвращение из back stack без сохраненного UI-состояния
 
@@ -124,7 +124,7 @@ fragmentManager.beginTransaction()
 ## Answer (EN)
 
 **Definition**
-Fragment state loss occurs when a `FragmentTransaction` is executed after the host Activity's `onSaveInstanceState()` has been called. Such transactions won't be saved during process recreation, causing UI changes to be lost.
+`Fragment` state loss occurs when a `FragmentTransaction` is executed after the host `Activity`'s `onSaveInstanceState()` has been called. Such transactions won't be saved during process recreation, causing UI changes to be lost.
 
 **Common Causes**
 
@@ -136,7 +136,7 @@ Fragment state loss occurs when a `FragmentTransaction` is executed after the ho
    - System kill due to memory pressure
    - Missing persistent storage for critical data
 
-3. **Activity Recreation**
+3. **`Activity` Recreation**
    - Configuration changes (screen rotation)
    - Returning from back stack without saved UI state
 
@@ -208,7 +208,7 @@ fragmentManager.beginTransaction()
 1. What's the difference between `commit()`, `commitNow()`, and `commitAllowingStateLoss()` in terms of execution timing and state safety?
 2. How does `isStateSaved()` work internally and when exactly does it return true?
 3. How do you handle fragment transactions triggered by asynchronous operations (network, database) safely?
-4. What data should live in ViewModel vs savedInstanceState vs persistent storage (Room, DataStore)?
+4. What data should live in `ViewModel` vs savedInstanceState vs persistent storage (Room, DataStore)?
 5. How does Navigation Component prevent state loss compared to manual FragmentManager usage?
 
 ## References
@@ -222,11 +222,11 @@ fragmentManager.beginTransaction()
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-activity-lifecycle-methods--android--medium]] - Understanding Activity lifecycle is essential for Fragment state management
+- [[q-activity-lifecycle-methods--android--medium]] - Understanding `Activity` lifecycle is essential for `Fragment` state management
 
 ### Related (Same Level)
-- Questions about Fragment lifecycle and state restoration mechanisms
-- Questions about ViewModel and saved state handling
+- Questions about `Fragment` lifecycle and state restoration mechanisms
+- Questions about `ViewModel` and saved state handling
 - Questions about FragmentTransaction commit methods
 
 ### Advanced (Harder)

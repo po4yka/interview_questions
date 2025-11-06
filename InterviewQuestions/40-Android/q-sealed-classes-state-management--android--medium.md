@@ -178,18 +178,18 @@ enum class BadEvent { LOAD, UPDATE, LOGOUT } // No data!
 
 - [[c-sealed-classes]] - Sealed classes concept
 - [[c-mvvm-pattern]] - MVI architecture pattern
-- [[c-state-flow]] - StateFlow for state management
+- [[c-state-flow]] - `StateFlow` for state management
 - https://kotlinlang.org/docs/sealed-classes.html
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - Basic understanding of Kotlin data classes and when expressions
-- Knowledge of ViewModel and StateFlow
+- Knowledge of `ViewModel` and `StateFlow`
 
 ### Related (Same Level)
 - [[q-mvi-architecture--android--hard]] - MVI architecture implementation
-- Questions about StateFlow vs LiveData for state management
+- Questions about `StateFlow` vs `LiveData` for state management
 - Questions about handling loading and error states in Compose
 
 ### Advanced (Harder)

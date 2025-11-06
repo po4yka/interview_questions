@@ -31,9 +31,9 @@ related: [c-fragments, c-activity, c-intent, c-jetpack-compose]
 
 Android предоставляет несколько подходов к навигации между экранами:
 
-**1. Activity Navigation (Intent)** - традиционный способ через Intent для перехода между Activity.
+**1. `Activity` Navigation (`Intent`)** - традиционный способ через `Intent` для перехода между `Activity`.
 
-**2. Fragment Navigation (FragmentManager)** - управление фрагментами внутри одной Activity.
+**2. `Fragment` Navigation (FragmentManager)** - управление фрагментами внутри одной `Activity`.
 
 **3. Navigation Component (Jetpack)** - декларативная навигация с визуальным графом и type-safe аргументами.
 
@@ -45,9 +45,9 @@ Android предоставляет несколько подходов к нав
 
 **7. Compose Navigation** - навигация в Jetpack Compose через NavHost.
 
-### 1. Activity Navigation
+### 1. `Activity` Navigation
 
-Переход между Activity через Intent:
+Переход между `Activity` через `Intent`:
 
 ```kotlin
 // Простой переход
@@ -71,7 +71,7 @@ private val launcher = registerForActivityResult(
 
 **Применение**: разные секции приложения, интеграция с внешними приложениями. Не рекомендуется для внутренней навигации.
 
-### 2. Fragment Navigation
+### 2. `Fragment` Navigation
 
 Управление фрагментами через FragmentManager:
 
@@ -95,7 +95,7 @@ supportFragmentManager.beginTransaction()
     .commit()
 ```
 
-**Применение**: навигация внутри одной Activity, master-detail layouts, вкладки.
+**Применение**: навигация внутри одной `Activity`, master-detail layouts, вкладки.
 
 ### 3. Navigation Component
 
@@ -209,15 +209,15 @@ fun AppNavigation() {
 
 | Метод | Применение | Сложность | Статус |
 |-------|-----------|-----------|--------|
-| Activity (Intent) | Секции приложения | Низкая | Legacy |
-| Fragment (FragmentManager) | Внутренняя навигация | Средняя | Manual |
-| Navigation Component | Fragment навигация | Средняя | Recommended |
+| `Activity` (`Intent`) | Секции приложения | Низкая | Legacy |
+| `Fragment` (FragmentManager) | Внутренняя навигация | Средняя | Manual |
+| Navigation Component | `Fragment` навигация | Средняя | Recommended |
 | Bottom Navigation | Top-level вкладки | Низкая | Common |
 | Drawer Navigation | Много направлений | Средняя | Common |
 | Deep Links | Внешняя/shareable | Высокая | Modern |
 | Compose Navigation | Compose UI | Средняя | Modern |
 
-**Рекомендуемый подход**: Single Activity + Navigation Component для современных приложений, Compose Navigation для Compose-based приложений.
+**Рекомендуемый подход**: Single `Activity` + Navigation Component для современных приложений, Compose Navigation для Compose-based приложений.
 
 ---
 
@@ -225,9 +225,9 @@ fun AppNavigation() {
 
 Android provides several approaches for navigating between screens:
 
-**1. Activity Navigation (Intent)** - traditional Intent-based navigation between Activities.
+**1. `Activity` Navigation (`Intent`)** - traditional `Intent`-based navigation between Activities.
 
-**2. Fragment Navigation (FragmentManager)** - managing fragments within a single Activity.
+**2. `Fragment` Navigation (FragmentManager)** - managing fragments within a single `Activity`.
 
 **3. Navigation Component (Jetpack)** - declarative navigation with visual graph and type-safe arguments.
 
@@ -239,9 +239,9 @@ Android provides several approaches for navigating between screens:
 
 **7. Compose Navigation** - navigation in Jetpack Compose via NavHost.
 
-### 1. Activity Navigation
+### 1. `Activity` Navigation
 
-Navigate between Activities using Intent:
+Navigate between Activities using `Intent`:
 
 ```kotlin
 // Simple navigation
@@ -265,7 +265,7 @@ private val launcher = registerForActivityResult(
 
 **Use cases**: different app sections, external app integration. Not recommended for in-app navigation.
 
-### 2. Fragment Navigation
+### 2. `Fragment` Navigation
 
 Manage fragments via FragmentManager:
 
@@ -289,7 +289,7 @@ supportFragmentManager.beginTransaction()
     .commit()
 ```
 
-**Use cases**: in-app navigation within single Activity, master-detail layouts, tabs.
+**Use cases**: in-app navigation within single `Activity`, master-detail layouts, tabs.
 
 ### 3. Navigation Component
 
@@ -403,22 +403,22 @@ fun AppNavigation() {
 
 | Method | Use Case | Complexity | Status |
 |--------|----------|------------|--------|
-| Activity (Intent) | App sections | Low | Legacy |
-| Fragment (FragmentManager) | In-app navigation | Medium | Manual |
-| Navigation Component | Fragment navigation | Medium | Recommended |
+| `Activity` (`Intent`) | App sections | Low | Legacy |
+| `Fragment` (FragmentManager) | In-app navigation | Medium | Manual |
+| Navigation Component | `Fragment` navigation | Medium | Recommended |
 | Bottom Navigation | Top-level tabs | Low | Common |
 | Drawer Navigation | Many destinations | Medium | Common |
 | Deep Links | External/shareable | High | Modern |
 | Compose Navigation | Compose UI | Medium | Modern |
 
-**Recommended approach**: Single Activity + Navigation Component for modern apps, Compose Navigation for Compose-based apps.
+**Recommended approach**: Single `Activity` + Navigation Component for modern apps, Compose Navigation for Compose-based apps.
 
 ---
 
 ## Follow-ups
 
 - How does Navigation Component handle deep links automatically?
-- What are the differences between Activity result API and deprecated onActivityResult?
+- What are the differences between `Activity` result API and deprecated onActivityResult?
 - How to implement shared element transitions with Navigation Component?
 - How to pass complex objects between destinations safely?
 - What are the best practices for handling back stack in multi-module apps?
@@ -429,7 +429,7 @@ fun AppNavigation() {
 ## References
 
 - [[c-android-navigation]] - Navigation patterns
-- [[c-fragment-lifecycle]] - Fragment lifecycle management
+- [[c-fragment-lifecycle]] - `Fragment` lifecycle management
 - [[c-jetpack-compose]] - Compose fundamentals
 - [Navigation](https://developer.android.com/guide/navigation)
 - https://developer.android.com/jetpack/compose/navigation
@@ -439,8 +439,8 @@ fun AppNavigation() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-intent--android--easy]] - Intent basics
-- [[q-fragment-basics--android--easy]] - Fragment fundamentals
+- [[q-what-is-intent--android--easy]] - `Intent` basics
+- [[q-fragment-basics--android--easy]] - `Fragment` fundamentals
 - [[q-main-android-components--android--easy]] - Android components
 - [[q-android-app-components--android--easy]] - App component types
 

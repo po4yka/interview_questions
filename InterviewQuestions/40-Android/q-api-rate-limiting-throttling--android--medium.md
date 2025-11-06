@@ -91,7 +91,7 @@ class RetryInterceptor(
 }
 ```
 
-### 3. Flow Debounce
+### 3. `Flow` Debounce
 
 Ограничивает частые запросы от пользовательского ввода.
 
@@ -206,7 +206,7 @@ class RetryInterceptor(
 }
 ```
 
-### 3. Flow Debounce
+### 3. `Flow` Debounce
 
 Limits frequent requests from user input.
 
@@ -262,7 +262,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 - How to test rate limiting interceptors with MockWebServer?
 - What's the difference between token bucket and leaky bucket algorithms?
 - How to implement per-endpoint rate limiting with different limits?
-- When to use coroutine delay() vs Thread.sleep() in interceptors?
+- When to use coroutine delay() vs `Thread`.sleep() in interceptors?
 - How to implement adaptive rate limiting based on server response headers?
 
 ## References
@@ -270,7 +270,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 - [[c-okhttp-interceptors]]
 - [[c-networking]]
 - [OkHttp Interceptors](https://square.github.io/okhttp/interceptors/)
-- [Kotlin Flow Operators](https://kotlinlang.org/docs/flow.html)
+- [Kotlin `Flow` Operators](https://kotlinlang.org/docs/flow.html)
 - [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
 
 ## Related Questions

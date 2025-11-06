@@ -82,7 +82,7 @@ fun createBond(device: BluetoothDevice): Flow<BondState> = callbackFlow {
 
 ### 3. GATT Profile Design
 
-**Custom service UUID**: `0000180D-0000-1000-8000-00805F9B34FB` (Health Tracker Service)
+**Custom service UUID**: `0000180D-0000-1000-8000-00805F9B34FB` (Health Tracker `Service`)
 
 **Characteristics**:
 
@@ -112,7 +112,7 @@ fun requestMtu(size: Int = 512) {
 
 **Foreground vs Background**:
 
--   **Active sync**: Foreground Service с notification (обязательно для Android 8+)
+-   **Active sync**: Foreground `Service` с notification (обязательно для Android 8+)
 -   **Periodic sync**: WorkManager с `ExistingPeriodicWorkPolicy.KEEP`, constraints на battery/network
 
 ```kotlin
@@ -201,7 +201,7 @@ data class SyncCursor(
 
 **Conflict resolution**: при дубликатах (same deviceId+timestamp+sequence) предпочитать запись с более поздним `uploadedAt`.
 
-### 8. Permissions Flow
+### 8. Permissions `Flow`
 
 **Runtime permissions** (Android 12+):
 
@@ -304,7 +304,7 @@ fun createBond(device: BluetoothDevice): Flow<BondState> = callbackFlow {
 
 ### 3. GATT Profile Design
 
-**Custom service UUID**: `0000180D-0000-1000-8000-00805F9B34FB` (Health Tracker Service)
+**Custom service UUID**: `0000180D-0000-1000-8000-00805F9B34FB` (Health Tracker `Service`)
 
 **Characteristics**:
 
@@ -334,7 +334,7 @@ fun requestMtu(size: Int = 512) {
 
 **Foreground vs Background**:
 
--   **Active sync**: Foreground Service with notification (required Android 8+)
+-   **Active sync**: Foreground `Service` with notification (required Android 8+)
 -   **Periodic sync**: WorkManager with `ExistingPeriodicWorkPolicy.KEEP`, constraints on battery/network
 
 ```kotlin
@@ -423,7 +423,7 @@ data class SyncCursor(
 
 **Conflict resolution**: on duplicates (same deviceId+timestamp+sequence), prefer record with later `uploadedAt`.
 
-### 8. Permissions Flow
+### 8. Permissions `Flow`
 
 **Runtime permissions** (Android 12+):
 
@@ -507,7 +507,7 @@ data class SyncCursor(
 
 ### Prerequisites (Easier)
 
--   [[q-service-component--android--medium]] - Understanding Service lifecycle and foreground services
+-   [[q-service-component--android--medium]] - Understanding `Service` lifecycle and foreground services
 -   [[q-service-restrictions-why--android--medium]] - Background execution limits on Android 8+
 
 ### Related (Same Level)

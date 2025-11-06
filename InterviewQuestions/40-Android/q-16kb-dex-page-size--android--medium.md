@@ -71,7 +71,7 @@ android {
 ```
 
 **Лучшие практики**:
-- Использовать App Bundle вместо APK
+- Использовать App `Bundle` вместо APK
 - Мониторить размер в CI/CD
 
 ---
@@ -111,7 +111,7 @@ android {
 ```
 
 **Best practices**:
-- Use App Bundle instead of APK
+- Use App `Bundle` instead of APK
 - Monitor size in CI/CD
 
 ---
@@ -129,7 +129,7 @@ android {
 - [[c-gradle]] - Build system
 - [[c-app-bundle]] - App distribution format
 - [R8 Optimization](https://developer.android.com/studio/build/shrink-code)
-- [App Bundle Guide](https://developer.android.com/guide/app-bundle)
+- [App `Bundle` Guide](https://developer.android.com/guide/app-bundle)
 - [DEX Format Specification](https://source.android.com/docs/core/runtime/dex-format)
 
 ## Related Questions

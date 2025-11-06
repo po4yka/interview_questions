@@ -144,7 +144,7 @@ data class ASOMetrics(
 
 **1. Metadata**
 
-Title (50 chars) includes primary keyword + brand. Short description (80 chars) focuses on core benefit. Full description structured: key features → benefits → call to action.
+Title (50 chars) includes primary keyword + brand. `Short` description (80 chars) focuses on core benefit. Full description structured: key features → benefits → call to action.
 
 ```xml
 <!-- ✅ Structured metadata -->
@@ -242,7 +242,7 @@ data class ASOMetrics(
 
 ## References
 
-- [[q-android-app-bundles--android--easy]] - App Bundle optimization for smaller downloads
+- [[q-android-app-bundles--android--easy]] - App `Bundle` optimization for smaller downloads
  - In-app review API for rating optimization
 - [[q-alternative-distribution--android--medium]] - Alternative distribution channels
 - [Play Console Help - Store Listing](https://support.google.com/googleplay/android-developer/answer/9844778)
@@ -259,7 +259,7 @@ data class ASOMetrics(
 
 
 ### Prerequisites (Easier)
-- [[q-android-app-bundles--android--easy]] - Understanding App Bundle format and benefits
+- [[q-android-app-bundles--android--easy]] - Understanding App `Bundle` format and benefits
  - Play Console dashboard and metrics
 
 ### Related (Same Level)

@@ -85,7 +85,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-**2. Программное создание View (традиционный подход)**
+**2. Программное создание `View` (традиционный подход)**
 
 Императивное создание view в коде:
 
@@ -160,7 +160,7 @@ fun ProfileScreen(user: User) {
 
 **Сравнение подходов:**
 
-| Аспект | Jetpack Compose | Программные View |
+| Аспект | Jetpack Compose | Программные `View` |
 |--------|----------------|-------------------|
 | Синтаксис | Декларативный, лаконичный | Императивный, многословный |
 | State management | Встроенный, реактивный | Ручной |
@@ -171,7 +171,7 @@ fun ProfileScreen(user: User) {
 **Рекомендации:**
 
 - ✅ Jetpack Compose для нового кода (декларативный, поддерживаемый)
-- ✅ Программные View для динамического UI в legacy-проектах
+- ✅ Программные `View` для динамического UI в legacy-проектах
 - ✅ Используйте @Preview в Compose для быстрой итерации
 - ✅ Следуйте Material Design для консистентности
 
@@ -307,7 +307,7 @@ fun ProfileScreen(user: User) {
 ## Follow-ups
 
 - How to migrate existing XML layouts to Compose?
-- How to mix Compose and View-based UI in the same project?
+- How to mix Compose and `View`-based UI in the same project?
 - What are the performance differences between Compose and Views?
 - How to create custom layouts in Compose vs programmatic Views?
 - When should you still use XML layouts?

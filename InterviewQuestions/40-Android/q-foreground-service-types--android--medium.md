@@ -25,10 +25,10 @@ sources:
 ---
 
 # Вопрос (RU)
-> Что такое типы Foreground Service в Android? Как правильно реализовать foreground services?
+> Что такое типы Foreground `Service` в Android? Как правильно реализовать foreground services?
 
 # Question (EN)
-> What are Foreground Service types in Android? How do you implement foreground services correctly?
+> What are Foreground `Service` types in Android? How do you implement foreground services correctly?
 
 ---
 
@@ -134,7 +134,7 @@ class MusicService : Service() {
 // ⚠️ Recommendation: use WorkManager instead of foreground services where possible
 ```
 
-**Short Service для быстрых операций:**
+**`Short` `Service` для быстрых операций:**
 ```kotlin
 class QuickUploadService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -162,7 +162,7 @@ class QuickUploadService : Service() {
 **Foreground Services** — services running with a persistent notification, allowing long-running operations to continue in the background. They guarantee that the system won't kill the process during important tasks.
 
 **Why foreground services are needed:**
-- **Long-running operations** — uploading/syncing large data, media playback
+- **`Long`-running operations** — uploading/syncing large data, media playback
 - **Critical functionality** — navigation, health/fitness tracking, VoIP calls
 - **System protection** — prevents process killing during memory pressure
 
@@ -179,7 +179,7 @@ class QuickUploadService : Service() {
 
 **Key requirements:**
 - Persistent notification mandatory (`Notification.ONGOING`)
-- Service type in manifest (Android 10+)
+- `Service` type in manifest (Android 10+)
 - Call `startForeground()` within 5 seconds after start
 - Type-specific permissions required
 
@@ -257,7 +257,7 @@ class MusicService : Service() {
 // ⚠️ Recommendation: use [[c-workmanager]] instead of foreground services where possible
 ```
 
-**Short Service for quick operations:**
+**`Short` `Service` for quick operations:**
 ```kotlin
 class QuickUploadService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -292,7 +292,7 @@ class QuickUploadService : Service() {
 - **Missing notification** — service without ongoing notification will be killed by system
 - **Wrong permissions** — each type requires its own permission
 - **Background launch** — Android 14+ blocks most cases of starting foreground service from background
-- **Service leaks** — forgotten `stopSelf()` leads to constant resource consumption
+- **`Service` leaks** — forgotten `stopSelf()` leads to constant resource consumption
 
 ### Лучшие Практики
 
@@ -328,12 +328,12 @@ class QuickUploadService : Service() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-service-types--android--easy]] - Service types and lifecycle
+- [[q-android-service-types--android--easy]] - `Service` types and lifecycle
 - Basic understanding of Android notifications and notification channels
 
 ### Related (Same Level)
 - [[q-workmanager-vs-alternatives--android--medium]] - Background work comparison
-- Service vs [[c-workmanager]] trade-offs and use cases
+- `Service` vs [[c-workmanager]] trade-offs and use cases
 
 ### Advanced (Harder)
 - Implementing service binding with foreground services

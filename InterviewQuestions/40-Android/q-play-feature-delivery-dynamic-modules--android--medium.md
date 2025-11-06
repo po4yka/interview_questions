@@ -189,7 +189,7 @@ splitInstallManager.startInstall(request)
 
 ## References
 
-- [Android App Bundle](https://developer.android.com/guide/app-bundle)
+- [Android App `Bundle`](https://developer.android.com/guide/app-bundle)
 
 
 ## Related Questions
@@ -204,10 +204,10 @@ splitInstallManager.startInstall(request)
 - [[q-gradle-basics--android--easy]] - Gradle basics
 
 ### Related (Same Level)
-- [[q-app-bundle-basics--android--medium]] - App Bundle basics
+- [[q-app-bundle-basics--android--medium]] - App `Bundle` basics
 - [[q-android-modularization--android--medium]] - Modularization
 - [[q-play-console--android--medium]] - Play Console
 
 ### Advanced (Harder)
-- [[q-app-bundle-advanced--android--hard]] - App Bundle advanced
+- [[q-app-bundle-advanced--android--hard]] - App `Bundle` advanced
 - [[q-android-runtime-internals--android--hard]] - Runtime internals

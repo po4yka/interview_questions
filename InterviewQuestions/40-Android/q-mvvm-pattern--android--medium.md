@@ -19,25 +19,25 @@ tags: [android/architecture-mvvm, android/coroutines, android/lifecycle, archite
 
 # Вопрос (RU)
 
-> Что такое архитектурный паттерн MVVM (Model-View-ViewModel)? Объясните его компоненты и преимущества.
+> Что такое архитектурный паттерн MVVM (Model-`View`-`ViewModel`)? Объясните его компоненты и преимущества.
 
 # Question (EN)
 
-> What is the MVVM (Model-View-ViewModel) architectural pattern? Explain its components and advantages.
+> What is the MVVM (Model-`View`-`ViewModel`) architectural pattern? Explain its components and advantages.
 
 ---
 
 ## Ответ (RU)
 
-**MVVM (Model-View-ViewModel)** — архитектурный паттерн для разделения UI и бизнес-логики через реактивное связывание данных.
+**MVVM (Model-`View`-`ViewModel`)** — архитектурный паттерн для разделения UI и бизнес-логики через реактивное связывание данных.
 
 ### Компоненты
 
-**Model** — источник данных (Repository, Use Cases, domain logic). Независим от UI.
+**Model** — источник данных (`Repository`, Use Cases, domain logic). Независим от UI.
 
-**View** — UI слой (Activity, Fragment, Composable). Наблюдает за ViewModel через LiveData/StateFlow. Не содержит бизнес-логики.
+**`View`** — UI слой (`Activity`, `Fragment`, Composable). Наблюдает за `ViewModel` через LiveData/`StateFlow`. Не содержит бизнес-логики.
 
-**ViewModel** — управляет UI-состоянием, переживает configuration changes, предоставляет данные через observable streams. Не хранит ссылки на View (предотвращает утечки памяти).
+**`ViewModel`** — управляет UI-состоянием, переживает configuration changes, предоставляет данные через observable streams. Не хранит ссылки на `View` (предотвращает утечки памяти).
 
 ### Реализация
 
@@ -82,16 +82,16 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 
 | Плюсы | Минусы |
 |-------|--------|
-| Lifecycle-aware (выживает при rotation) | Избыточен для простых экранов |
+| `Lifecycle`-aware (выживает при rotation) | Избыточен для простых экранов |
 | Тестируемость без UI | Требует знания реактивного программирования |
-| Нет утечек памяти (ViewModel не держит View) | Сложность дизайна для больших экранов |
+| Нет утечек памяти (`ViewModel` не держит `View`) | Сложность дизайна для больших экранов |
 | Separation of concerns | Debugging data binding может быть труден |
 
 ### Сравнение С Другими Паттернами
 
-**vs MVP**: MVVM использует data binding (автоматическое обновление UI), MVP — ручные вызовы через интерфейсы. ViewModel переживает configuration changes, Presenter — нет.
+**vs MVP**: MVVM использует data binding (автоматическое обновление UI), MVP — ручные вызовы через интерфейсы. `ViewModel` переживает configuration changes, Presenter — нет.
 
-**vs MVI**: MVVM допускает multiple state streams, MVI — единый immutable state. MVI явно моделирует user intents, MVVM — методы в ViewModel.
+**vs MVI**: MVVM допускает multiple state streams, MVI — единый immutable state. MVI явно моделирует user intents, MVVM — методы в `ViewModel`.
 
 ### Best Practices
 
@@ -110,15 +110,15 @@ class BadViewModel(private val view: UserView) : ViewModel()
 
 ## Answer (EN)
 
-**MVVM (Model-View-ViewModel)** is an architectural pattern that separates UI from business logic through reactive data binding.
+**MVVM (Model-`View`-`ViewModel`)** is an architectural pattern that separates UI from business logic through reactive data binding.
 
 ### Components
 
-**Model** — data source (Repository, Use Cases, domain logic). Independent of UI.
+**Model** — data source (`Repository`, Use Cases, domain logic). Independent of UI.
 
-**View** — UI layer (Activity, Fragment, Composable). Observes ViewModel via LiveData/StateFlow. No business logic.
+**`View`** — UI layer (`Activity`, `Fragment`, Composable). Observes `ViewModel` via LiveData/`StateFlow`. No business logic.
 
-**ViewModel** — manages UI state, survives configuration changes, exposes data via observable streams. Doesn't hold View references (prevents memory leaks).
+**`ViewModel`** — manages UI state, survives configuration changes, exposes data via observable streams. Doesn't hold `View` references (prevents memory leaks).
 
 ### Implementation
 
@@ -163,16 +163,16 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 
 | Pros | Cons |
 |------|------|
-| Lifecycle-aware (survives rotation) | Overkill for simple screens |
+| `Lifecycle`-aware (survives rotation) | Overkill for simple screens |
 | Testability without UI | Requires reactive programming knowledge |
-| No memory leaks (ViewModel doesn't hold View) | Complex design for large screens |
+| No memory leaks (`ViewModel` doesn't hold `View`) | Complex design for large screens |
 | Separation of concerns | Data binding debugging can be difficult |
 
 ### Comparison with other Patterns
 
-**vs MVP**: MVVM uses data binding (automatic UI updates), MVP uses manual calls via interfaces. ViewModel survives configuration changes, Presenter doesn't.
+**vs MVP**: MVVM uses data binding (automatic UI updates), MVP uses manual calls via interfaces. `ViewModel` survives configuration changes, Presenter doesn't.
 
-**vs MVI**: MVVM allows multiple state streams, MVI has single immutable state. MVI explicitly models user intents, MVVM has methods in ViewModel.
+**vs MVI**: MVVM allows multiple state streams, MVI has single immutable state. MVI explicitly models user intents, MVVM has methods in `ViewModel`.
 
 ### Best Practices
 
@@ -198,7 +198,7 @@ See also [[c-viewmodel]].
 
 ## References
 
-- [[c-viewmodel]] — ViewModel lifecycle and state management
+- [[c-viewmodel]] — `ViewModel` lifecycle and state management
 - Official docs: https://developer.android.com/topic/architecture
 - Android Guide to app architecture: https://developer.android.com/topic/libraries/architecture
 
@@ -206,13 +206,13 @@ See also [[c-viewmodel]].
 
 ### Prerequisites
 
-- [[q-what-is-viewmodel--android--medium]] — What is ViewModel and its lifecycle
+- [[q-what-is-viewmodel--android--medium]] — What is `ViewModel` and its lifecycle
 
 ### Related
 
 - [[q-mvvm-vs-mvp-differences--android--medium]] — MVVM vs MVP comparison
-- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] — ViewModel vs onSavedInstanceState for state preservation
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] — ViewModel purpose and internals
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] — `ViewModel` vs onSavedInstanceState for state preservation
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] — `ViewModel` purpose and internals
 
 ### Advanced
 

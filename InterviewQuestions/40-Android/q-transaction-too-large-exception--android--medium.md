@@ -32,9 +32,9 @@ What is TransactionTooLargeException and how to avoid it?
 **TransactionTooLargeException** — исключение при превышении лимита **1MB в Binder** — IPC-механизме Android для передачи данных между процессами.
 
 **Типичные ситуации:**
-- Передача больших объектов через Intent/Bundle
+- Передача больших объектов через Intent/`Bundle`
 - Сохранение крупных данных в onSaveInstanceState
-- Передача bitmap или списков между Activity/Fragment
+- Передача bitmap или списков между Activity/`Fragment`
 
 ### Основные Решения
 
@@ -58,7 +58,7 @@ bitmap.compress(CompressFormat.JPEG, 90, FileOutputStream(imageFile))
 intent.putExtra("image_path", imageFile.absolutePath)
 ```
 
-**3. ViewModel для Fragment**
+**3. `ViewModel` для `Fragment`**
 
 ```kotlin
 // ✅ Разделяемые данные через ViewModel
@@ -87,7 +87,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 ### Лимиты Binder
 
 - **1 MB** — общий буфер на процесс для всех транзакций
-- Размер Bundle измеряется через Parcel serialization
+- Размер `Bundle` измеряется через Parcel serialization
 - Лимит разделяется между всеми активными IPC-вызовами
 
 ## Answer (EN)
@@ -95,9 +95,9 @@ override fun onSaveInstanceState(outState: Bundle) {
 **TransactionTooLargeException** occurs when data exceeds the **1MB Binder limit** — Android's IPC mechanism for inter-process communication.
 
 **Common scenarios:**
-- Passing large objects via Intent/Bundle
+- Passing large objects via Intent/`Bundle`
 - Saving large data in onSaveInstanceState
-- Transferring bitmaps or lists between Activity/Fragment
+- Transferring bitmaps or lists between Activity/`Fragment`
 
 ### Primary Solutions
 
@@ -121,7 +121,7 @@ bitmap.compress(CompressFormat.JPEG, 90, FileOutputStream(imageFile))
 intent.putExtra("image_path", imageFile.absolutePath)
 ```
 
-**3. ViewModel for fragments**
+**3. `ViewModel` for fragments**
 
 ```kotlin
 // ✅ Share data via ViewModel
@@ -150,7 +150,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 ### Binder Limits
 
 - **1 MB** — total per-process buffer for all transactions
-- Bundle size measured via Parcel serialization
+- `Bundle` size measured via Parcel serialization
 - Limit shared across all active IPC calls
 
 ---
@@ -159,8 +159,8 @@ override fun onSaveInstanceState(outState: Bundle) {
 
 - How does Binder transaction buffer work across multiple concurrent IPC calls?
 - What's the difference between process death and configuration change regarding state restoration?
-- When should you use ContentProvider vs file-based approach for large data sharing?
-- How do you measure Bundle size in production to prevent TransactionTooLargeException?
+- When should you use `ContentProvider` vs file-based approach for large data sharing?
+- How do you measure `Bundle` size in production to prevent TransactionTooLargeException?
 
 ## References
 

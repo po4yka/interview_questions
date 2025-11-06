@@ -38,7 +38,7 @@ tags:
 > Задачи и стек возврата
 
 # Question (EN)
-> Tasks and Back Stack
+> Tasks and Back `Stack`
 
 ---
 
@@ -51,7 +51,7 @@ A **task** is a collection of activities that users interact with when trying to
 
 For example, an email app might have one activity to show a list of new messages. When the user selects a message, a new activity opens to view that message. This new activity is added to the back stack. Then, when the user taps or gestures Back, that new activity finishes and is popped off the stack.
 
-### Lifecycle of a Task and Its Back Stack
+### `Lifecycle` of a Task and Its Back `Stack`
 
 The device Home screen is the starting place for most tasks. When a user touches the icon for an app or shortcut in the app launcher or on the Home screen, that app's task comes to the foreground. If no task exists for the app, then a new task is created and the main activity for that app opens as the root activity in the stack.
 
@@ -98,7 +98,7 @@ These are the principal `<activity>` attributes that you can use to manage tasks
 
 Например, почтовое приложение может иметь одну activity для отображения списка новых сообщений. Когда пользователь выбирает сообщение, открывается новая activity для просмотра этого сообщения. Эта новая activity добавляется в стек возврата. Затем, когда пользователь нажимает или использует жест Назад, эта новая activity завершается и удаляется из стека.
 
-### Lifecycle of a Task and Its Back Stack
+### `Lifecycle` of a Task and Its Back `Stack`
 
 Домашний экран устройства является отправной точкой для большинства задач. Когда пользователь касается значка приложения или ярлыка в средстве запуска приложений или на домашнем экране, задача этого приложения выходит на передний план. Если задачи для приложения не существует, то создается новая задача, и основная activity для этого приложения открывается как корневая activity в стеке.
 
@@ -142,7 +142,7 @@ Android управляет задачами и стеком возврата, п
 
 
 # Question (EN)
-> Tasks and Back Stack
+> Tasks and Back `Stack`
 
 ---
 
@@ -159,7 +159,7 @@ A **task** is a collection of activities that users interact with when trying to
 
 For example, an email app might have one activity to show a list of new messages. When the user selects a message, a new activity opens to view that message. This new activity is added to the back stack. Then, when the user taps or gestures Back, that new activity finishes and is popped off the stack.
 
-### Lifecycle of a Task and Its Back Stack
+### `Lifecycle` of a Task and Its Back `Stack`
 
 The device Home screen is the starting place for most tasks. When a user touches the icon for an app or shortcut in the app launcher or on the Home screen, that app's task comes to the foreground. If no task exists for the app, then a new task is created and the main activity for that app opens as the root activity in the stack.
 
@@ -206,7 +206,7 @@ These are the principal `<activity>` attributes that you can use to manage tasks
 
 Например, почтовое приложение может иметь одну activity для отображения списка новых сообщений. Когда пользователь выбирает сообщение, открывается новая activity для просмотра этого сообщения. Эта новая activity добавляется в стек возврата. Затем, когда пользователь нажимает или использует жест Назад, эта новая activity завершается и удаляется из стека.
 
-### Lifecycle of a Task and Its Back Stack
+### `Lifecycle` of a Task and Its Back `Stack`
 
 Домашний экран устройства является отправной точкой для большинства задач. Когда пользователь касается значка приложения или ярлыка в средстве запуска приложений или на домашнем экране, задача этого приложения выходит на передний план. Если задачи для приложения не существует, то создается новая задача, и основная activity для этого приложения открывается как корневая activity в стеке.
 

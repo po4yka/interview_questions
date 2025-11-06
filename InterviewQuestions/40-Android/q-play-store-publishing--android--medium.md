@@ -22,7 +22,7 @@ tags: [android/ab-testing, android/app-bundle, android/ci-cd, android/play-conso
 
 # Question (EN)
 
-> Explain the Google Play Store publishing process: release tracks, app signing strategies, App Bundle and version management. What are best practices for staged rollouts and A/B testing?
+> Explain the Google Play Store publishing process: release tracks, app signing strategies, App `Bundle` and version management. What are best practices for staged rollouts and A/B testing?
 
 ---
 
@@ -68,7 +68,7 @@ android {
 - Отсутствие backup → потеря доступа к приложению
 - Слабые пароли → компрометация
 
-### 2. App Bundle Configuration
+### 2. App `Bundle` Configuration
 
 ```kotlin
 android {
@@ -266,7 +266,7 @@ jobs:
    - ✅ Мониторить метрики между этапами
    - ❌ Не пропускайте staged rollout
 
-3. **Bundle оптимизация**:
+3. **`Bundle` оптимизация**:
    - ✅ Включить все splits (language, density, ABI)
    - ✅ Dynamic features для больших модулей (>10MB)
    - ✅ Тестировать на разных устройствах
@@ -320,7 +320,7 @@ android {
 - No backup → loss of app access
 - Weak passwords → compromise risk
 
-### 2. App Bundle Configuration
+### 2. App `Bundle` Configuration
 
 ```kotlin
 android {
@@ -518,7 +518,7 @@ jobs:
    - ✅ Monitor metrics between stages
    - ❌ Don't skip staged rollout
 
-3. **Bundle optimization**:
+3. **`Bundle` optimization**:
    - ✅ Enable all splits (language, density, ABI)
    - ✅ Dynamic features for large modules (>10MB)
    - ✅ Test on multiple devices
@@ -544,13 +544,13 @@ jobs:
 - [[c-ci-cd]] - Continuous integration and deployment
 - [[c-feature-flags]] - Feature flag patterns
 - [Play Console Documentation](https://developer.android.com/distribute/console)
-- [App Bundle Guide](https://developer.android.com/guide/app-bundle)
+- [App `Bundle` Guide](https://developer.android.com/guide/app-bundle)
 - [Play App Signing](https://support.google.com/googleplay/android-developer/answer/9842756)
 
 ## Related Questions
 
 ### Prerequisites (Easy)
-- [[q-android-app-bundles--android--easy]] - App Bundle basics and benefits
+- [[q-android-app-bundles--android--easy]] - App `Bundle` basics and benefits
 
 ### Related (Medium)
 - [[q-app-store-optimization--android--medium]] - ASO strategies and best practices

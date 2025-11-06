@@ -19,28 +19,28 @@ tags: [android/background-execution, android/coroutines, android/performance-bat
 
 # Вопрос (RU)
 
-Когда использовать WorkManager vs Coroutines vs Service для фоновой работы в Android?
+Когда использовать WorkManager vs Coroutines vs `Service` для фоновой работы в Android?
 
 # Question (EN)
 
-When should you use WorkManager vs Coroutines vs Service for background work in Android?
+When should you use WorkManager vs Coroutines vs `Service` for background work in Android?
 
 ---
 
 ## Ответ (RU)
 
-**WorkManager**, **Coroutines** и **Service** решают разные задачи фоновой работы в Android.
+**WorkManager**, **Coroutines** и **`Service`** решают разные задачи фоновой работы в Android.
 
 ### Критерии Выбора
 
-| Критерий | WorkManager | Coroutines | Foreground Service |
+| Критерий | WorkManager | Coroutines | Foreground `Service` |
 |----------|-------------|------------|---------------------|
 | **Гарантия выполнения** | Да, даже после reboot | Нет | Пока процесс жив |
 | **Работает при закрытом приложении** | Да | Нет | Foreground - да |
 | **Constraints** (WiFi, charging) | Да | Нет | Нет |
 | **Retry/backoff** | Автоматически | Вручную | Вручную |
 | **Периодические задачи** | Да (min 15 min) | Нет | Вручную |
-| **Use case** | Deferrable гарантированная работа | Async операции в UI | Long-running foreground |
+| **Use case** | Deferrable гарантированная работа | Async операции в UI | `Long`-running foreground |
 
 ### WorkManager
 
@@ -87,7 +87,7 @@ fun scheduleUpload(fileUri: String) {
 
 ### Coroutines
 
-**Когда использовать**: загрузка данных для UI, network запросы для экрана, database операции, Flow-based real-time данных, любая работа привязанная к lifecycle компонента.
+**Когда использовать**: загрузка данных для UI, network запросы для экрана, database операции, `Flow`-based real-time данных, любая работа привязанная к lifecycle компонента.
 
 **Ограничения**: отменяются при закрытии приложения, не переживут process death, нет retry/backoff из коробки.
 
@@ -119,7 +119,7 @@ class ProductsViewModel(private val repository: ProductsRepository) : ViewModel(
 }
 ```
 
-### Foreground Service
+### Foreground `Service`
 
 **Когда использовать**: music/audio player, location tracking, fitness tracking, VoIP calls, active downloads с прогрессом.
 
@@ -256,14 +256,14 @@ class DataSyncManager(
 
 ### Selection Criteria
 
-| Criterion | WorkManager | Coroutines | Foreground Service |
+| Criterion | WorkManager | Coroutines | Foreground `Service` |
 |----------|-------------|------------|---------------------|
 | **Execution Guarantee** | Yes, even after reboot | No | While process alive |
 | **Works When App Closed** | Yes | No | Foreground - yes |
 | **Constraints** (WiFi, charging) | Yes | No | No |
 | **Retry/backoff** | Automatic | Manual | Manual |
 | **Periodic Tasks** | Yes (min 15 min) | No | Manual |
-| **Use Case** | Deferrable guaranteed work | Async UI operations | Long-running foreground |
+| **Use Case** | Deferrable guaranteed work | Async UI operations | `Long`-running foreground |
 
 ### WorkManager
 
@@ -310,7 +310,7 @@ fun scheduleUpload(fileUri: String) {
 
 ### Coroutines
 
-**When to use**: UI data loading, network requests for screens, database operations, Flow-based real-time data, any lifecycle-bound work.
+**When to use**: UI data loading, network requests for screens, database operations, `Flow`-based real-time data, any lifecycle-bound work.
 
 **Limitations**: cancelled when app closes, doesn't survive process death, no out-of-the-box retry/backoff.
 
@@ -342,7 +342,7 @@ class ProductsViewModel(private val repository: ProductsRepository) : ViewModel(
 }
 ```
 
-### Foreground Service
+### Foreground `Service`
 
 **When to use**: music/audio player, location tracking, fitness tracking, VoIP calls, active downloads with progress.
 

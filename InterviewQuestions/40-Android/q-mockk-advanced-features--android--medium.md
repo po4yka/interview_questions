@@ -329,7 +329,7 @@ fun testSuspendFunction() = runTest {
 }
 ```
 
-**Flow mocking:**
+**`Flow` mocking:**
 
 ```kotlin
 interface UserRepository {
@@ -942,7 +942,7 @@ fun testSuspendFunction() = runTest {
 }
 ```
 
-**Flow mocking:**
+**`Flow` mocking:**
 
 ```kotlin
 interface UserRepository {

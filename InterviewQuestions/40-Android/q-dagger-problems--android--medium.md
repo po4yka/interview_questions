@@ -135,7 +135,7 @@ object TestNetworkModule {
 
 **Hilt как эволюция:** стандартизированные компоненты, автоматическая интеграция с Android классами, упрощённое тестирование.
 
-**Альтернативы:** Manual DI (полный контроль), Koin (runtime DI), Service Locator (простота для малых проектов).
+**Альтернативы:** Manual DI (полный контроль), Koin (runtime DI), `Service` Locator (простота для малых проектов).
 
 ## Answer (EN)
 
@@ -168,7 +168,7 @@ fun provideDispatcher1(): CoroutineDispatcher = Dispatchers.IO
 fun provideDispatcher2(): CoroutineDispatcher = Dispatchers.Default
 ```
 
-**2. Long Compilation Times**
+**2. `Long` Compilation Times**
 
 Code generation slows down builds, especially in large projects. Every change in the dependency graph requires full component regeneration, reducing incremental compilation effectiveness and slowing CI/CD pipelines.
 
@@ -238,7 +238,7 @@ object TestNetworkModule {
 
 **Hilt as evolution:** standardized components, automatic Android integration, simplified testing.
 
-**Alternatives:** Manual DI (full control), Koin (runtime DI), Service Locator (simplicity for small projects).
+**Alternatives:** Manual DI (full control), Koin (runtime DI), `Service` Locator (simplicity for small projects).
 
 ---
 

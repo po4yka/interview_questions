@@ -55,7 +55,7 @@ tags:
 
 В MVI существует фундаментальное противоречие: State должен быть воспроизводимым и surviv configuration changes, но события (навигация, toast, snackbar) должны показываться только один раз. Существует несколько паттернов решения этой проблемы.
 
-### 1. SharedFlow С Replay = 0 (Рекомендуемый подход)
+### 1. `SharedFlow` С Replay = 0 (Рекомендуемый подход)
 
 ✅ **Best Practice** - чистое reactive решение для событий:
 
@@ -117,11 +117,11 @@ lifecycleScope.launch {
 }
 ```
 
-**Гарантии**: события не теряются даже если View временно неактивна.
+**Гарантии**: события не теряются даже если `View` временно неактивна.
 
-### 3. EventWrapper Для StateFlow
+### 3. EventWrapper Для `StateFlow`
 
-❌ **Legacy подход** - используется, если нужна совместимость с StateFlow:
+❌ **Legacy подход** - используется, если нужна совместимость с `StateFlow`:
 
 ```kotlin
 data class Event<out T>(private val content: T) {
@@ -224,16 +224,16 @@ fun `event emitted once`() = runTest {
 
 | Сценарий | Решение | Причина |
 |----------|---------|---------|
-| Обычные события (toast, snackbar) | SharedFlow (replay=0) | Простота, потеря некритична |
+| Обычные события (toast, snackbar) | `SharedFlow` (replay=0) | Простота, потеря некритична |
 | Критичные события (оплата, навигация) | Channel | Гарантия доставки |
-| Совместимость с LiveData | EventWrapper | Миграция legacy кода |
+| Совместимость с `LiveData` | EventWrapper | Миграция legacy кода |
 | Сложная бизнес-логика | State + Effects разделение | Чистая архитектура |
 
 ## Answer (EN)
 
 In MVI, there's a fundamental contradiction: State should be reproducible and survive configuration changes, but events (navigation, toast, snackbar) should be shown only once. Several patterns exist to solve this problem.
 
-### 1. SharedFlow with Replay = 0 (Recommended)
+### 1. `SharedFlow` with Replay = 0 (Recommended)
 
 ✅ **Best Practice** - pure reactive solution for events:
 
@@ -270,11 +270,11 @@ class MyViewModel : ViewModel() {
 }
 ```
 
-**Guarantees**: events not lost even if View temporarily inactive.
+**Guarantees**: events not lost even if `View` temporarily inactive.
 
-### 3. EventWrapper for StateFlow
+### 3. EventWrapper for `StateFlow`
 
-❌ **Legacy approach** - use only for StateFlow compatibility:
+❌ **Legacy approach** - use only for `StateFlow` compatibility:
 
 ```kotlin
 data class Event<out T>(private val content: T) {
@@ -353,16 +353,16 @@ fun `event emitted once`() = runTest {
 
 | Scenario | Solution | Reason |
 |----------|---------|---------|
-| Regular events (toast, snackbar) | SharedFlow (replay=0) | Simple, loss non-critical |
+| Regular events (toast, snackbar) | `SharedFlow` (replay=0) | Simple, loss non-critical |
 | Critical events (payment, navigation) | Channel | Delivery guarantee |
-| LiveData compatibility | EventWrapper | Legacy code migration |
+| `LiveData` compatibility | EventWrapper | Legacy code migration |
 | Complex business logic | State + Effects separation | Clean architecture |
 
 ---
 
 ## Follow-ups
 
-1. How does `extraBufferCapacity` differ from `replay` in SharedFlow, and when would you use each?
+1. How does `extraBufferCapacity` differ from `replay` in `SharedFlow`, and when would you use each?
 2. What happens if you emit an event while no collectors are active with `replay = 0` and `extraBufferCapacity = 0`?
 3. How would you implement event priority system where critical events override non-critical ones?
 4. What are the threading implications of using `Channel.CONFLATED` vs `Channel.BUFFERED` for events?
@@ -371,10 +371,10 @@ fun `event emitted once`() = runTest {
 ## References
 
 - [[q-mvi-architecture--android--hard]] - MVI architecture fundamentals
-- [[q-stateflow-flow-sharedflow-livedata--android--medium]] - Flow types comparison
-- [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
-- [Kotlin Flow Documentation - SharedFlow](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/)
-- [Android Lifecycle - repeatOnLifecycle](https://developer.android.com/topic/libraries/architecture/coroutines)
+- [[q-stateflow-flow-sharedflow-livedata--android--medium]] - `Flow` types comparison
+- [[q-sharedflow-stateflow--kotlin--medium]] - `SharedFlow` vs `StateFlow`
+- [Kotlin `Flow` Documentation - `SharedFlow`](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/-shared-flow/)
+- [Android `Lifecycle` - repeatOnLifecycle](https://developer.android.com/topic/libraries/architecture/coroutines)
 
 ## Related Questions
 
@@ -387,8 +387,8 @@ fun `event emitted once`() = runTest {
 
 ### Prerequisites (Medium)
 - [[q-mvi-one-time-events--android--medium]] - Basic one-time events handling
-- [[q-stateflow-flow-sharedflow-livedata--android--medium]] - Flow types overview
-- [[q-stateflow-sharedflow-android--kotlin--medium]] - StateFlow vs SharedFlow usage
+- [[q-stateflow-flow-sharedflow-livedata--android--medium]] - `Flow` types overview
+- [[q-stateflow-sharedflow-android--kotlin--medium]] - `StateFlow` vs `SharedFlow` usage
 
 ### Related (Hard)
 - [[q-mvi-architecture--android--hard]] - MVI architecture deep dive
@@ -396,5 +396,5 @@ fun `event emitted once`() = runTest {
 - [[q-offline-first-architecture--android--hard]] - Offline-first state management
 
 ### Advanced Topics
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Testing Flow-based events
-- [[q-sharedflow-replay-buffer-config--kotlin--medium]] - SharedFlow configuration
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] - Testing `Flow`-based events
+- [[q-sharedflow-replay-buffer-config--kotlin--medium]] - `SharedFlow` configuration

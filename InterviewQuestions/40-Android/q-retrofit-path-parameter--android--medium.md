@@ -43,7 +43,7 @@ How to put a parameter in a specific place in the path for a GET method in Retro
 
 **Механизм:**
 1. В `@GET` укажите плейсхолдер в фигурных скобках: `{имяПараметра}`
-2. Используйте `@Path("имяПараметра")` для связывания параметра метода
+2. Используйте `@`Path`("имяПараметра")` для связывания параметра метода
 
 ```kotlin
 @GET("users/{userId}/posts/{postId}")
@@ -59,7 +59,7 @@ api.getPost("123", "456")
 // URL: GET /users/123/posts/456
 ```
 
-### @Path Vs @Query
+### @`Path` Vs @Query
 
 | Аннотация | Где | Пример URL | Когда использовать |
 |-----------|-----|------------|-------------------|
@@ -142,7 +142,7 @@ In Retrofit, use the **`@Path`** annotation to insert values into specific URL p
 
 **Mechanism:**
 1. Define a placeholder in `@GET` using curly braces: `{parameterName}`
-2. Use `@Path("parameterName")` to bind the method parameter
+2. Use `@`Path`("parameterName")` to bind the method parameter
 
 ```kotlin
 @GET("users/{userId}/posts/{postId}")
@@ -158,7 +158,7 @@ api.getPost("123", "456")
 // URL: GET /users/123/posts/456
 ```
 
-### @Path Vs @Query
+### @`Path` Vs @Query
 
 | Annotation | Location | Example URL | When to Use |
 |------------|----------|-------------|-------------|
@@ -245,7 +245,7 @@ suspend fun getUser(@Path("userId") userId: String)
 
 ## References
 - https://square.github.io/retrofit/ - Official Retrofit documentation
-- https://square.github.io/retrofit/2.x/retrofit/retrofit2/http/Path.html - @Path annotation reference
+- https://square.github.io/retrofit/2.x/retrofit/retrofit2/http/`Path`.html - @`Path` annotation reference
 - https://developer.android.com/training/basics/network-ops - Android networking fundamentals
 
 ## Related Questions

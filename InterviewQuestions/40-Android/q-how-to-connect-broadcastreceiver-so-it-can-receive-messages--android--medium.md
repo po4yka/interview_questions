@@ -29,15 +29,15 @@ tags:
 ---
 
 # Вопрос (RU)
-> Как подключить BroadcastReceiver для получения сообщений
+> Как подключить `BroadcastReceiver` для получения сообщений
 
 # Question (EN)
-> How To Connect BroadcastReceiver So It Can Receive Messages
+> How To Connect `BroadcastReceiver` So It Can Receive Messages
 
 ---
 
 ## Answer (EN)
-BroadcastReceiver can be registered in two ways: statically in AndroidManifest.xml or dynamically in code. Each method has different use cases and lifecycle behaviors.
+`BroadcastReceiver` can be registered in two ways: statically in AndroidManifest.xml or dynamically in code. Each method has different use cases and lifecycle behaviors.
 
 ### Method 1: Static Registration (Manifest)
 
@@ -135,7 +135,7 @@ class MainActivity : AppCompatActivity() {
 -  Only receives broadcasts while registered
 -  Must manually unregister to avoid leaks
 
-### Method 3: Context-Registered Receiver (ContextCompat)
+### Method 3: `Context`-Registered Receiver (ContextCompat)
 
 Modern approach with automatic unregistration:
 
@@ -266,7 +266,7 @@ class SystemBroadcastReceiver : BroadcastReceiver() {
 }
 ```
 
-### Multiple Intent Filters
+### Multiple `Intent` Filters
 
 ```xml
 <!-- Manifest registration with multiple actions -->
@@ -441,7 +441,7 @@ class BestPracticesActivity : AppCompatActivity() {
 
 ### Comparison Table
 
-| Method | When Receives | Lifecycle | Use Case |
+| Method | When Receives | `Lifecycle` | Use Case |
 |--------|--------------|-----------|----------|
 | Manifest | Always (even app closed) | App lifetime | System events |
 | Dynamic | Only when registered | Component lifetime | UI updates |
@@ -450,7 +450,7 @@ class BestPracticesActivity : AppCompatActivity() {
 
 ### Modern Alternatives
 
-For new code, consider these instead of BroadcastReceiver:
+For new code, consider these instead of `BroadcastReceiver`:
 
 ```kotlin
 // Alternative 1: LiveData for internal communication
@@ -486,7 +486,7 @@ class EventBus {
 
 
 # Question (EN)
-> How To Connect BroadcastReceiver So It Can Receive Messages
+> How To Connect `BroadcastReceiver` So It Can Receive Messages
 
 ---
 
@@ -495,7 +495,7 @@ class EventBus {
 
 
 ## Answer (EN)
-BroadcastReceiver can be registered in two ways: statically in AndroidManifest.xml or dynamically in code. Each method has different use cases and lifecycle behaviors.
+`BroadcastReceiver` can be registered in two ways: statically in AndroidManifest.xml or dynamically in code. Each method has different use cases and lifecycle behaviors.
 
 ### Method 1: Static Registration (Manifest)
 
@@ -593,7 +593,7 @@ class MainActivity : AppCompatActivity() {
 -  Only receives broadcasts while registered
 -  Must manually unregister to avoid leaks
 
-### Method 3: Context-Registered Receiver (ContextCompat)
+### Method 3: `Context`-Registered Receiver (ContextCompat)
 
 Modern approach with automatic unregistration:
 
@@ -724,7 +724,7 @@ class SystemBroadcastReceiver : BroadcastReceiver() {
 }
 ```
 
-### Multiple Intent Filters
+### Multiple `Intent` Filters
 
 ```xml
 <!-- Manifest registration with multiple actions -->
@@ -899,7 +899,7 @@ class BestPracticesActivity : AppCompatActivity() {
 
 ### Comparison Table
 
-| Method | When Receives | Lifecycle | Use Case |
+| Method | When Receives | `Lifecycle` | Use Case |
 |--------|--------------|-----------|----------|
 | Manifest | Always (even app closed) | App lifetime | System events |
 | Dynamic | Only when registered | Component lifetime | UI updates |
@@ -908,7 +908,7 @@ class BestPracticesActivity : AppCompatActivity() {
 
 ### Modern Alternatives
 
-For new code, consider these instead of BroadcastReceiver:
+For new code, consider these instead of `BroadcastReceiver`:
 
 ```kotlin
 // Alternative 1: LiveData for internal communication
@@ -943,10 +943,10 @@ class EventBus {
 ```
 
 ## Ответ (RU)
-Подключение BroadcastReceiver в Android состоит из двух основных шагов: создание самого ресивера и его регистрация. Ресивер можно зарегистрировать как статически в манифесте, так и динамически в коде. Создание BroadcastReceiver: создайте класс, который наследуется от BroadcastReceiver и переопределите метод onReceive. Регистрация ресивера: статическая регистрация в манифесте - добавьте элемент <receiver> с соответствующим intent-filter. Динамическая регистрация в коде - используйте registerReceiver и unregisterReceiver в соответствующих жизненных циклах активности.
+Подключение `BroadcastReceiver` в Android состоит из двух основных шагов: создание самого ресивера и его регистрация. Ресивер можно зарегистрировать как статически в манифесте, так и динамически в коде. Создание `BroadcastReceiver`: создайте класс, который наследуется от `BroadcastReceiver` и переопределите метод onReceive. Регистрация ресивера: статическая регистрация в манифесте - добавьте элемент <receiver> с соответствующим intent-filter. Динамическая регистрация в коде - используйте registerReceiver и unregisterReceiver в соответствующих жизненных циклах активности.
 
 ## Related Topics
-- Intent and IntentFilter
+- `Intent` and IntentFilter
 - AndroidManifest.xml
 - System broadcasts
 - WorkManager (modern alternative)

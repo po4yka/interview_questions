@@ -30,15 +30,15 @@ tags:
 ---
 
 # Вопрос (RU)
-> Как создать список как RecyclerView в Compose
+> Как создать список как `RecyclerView` в Compose
 
 # Question (EN)
-> How To Create List Like RecyclerView In Compose
+> How To Create `List` Like `RecyclerView` In Compose
 
 ---
 
 ## Answer (EN)
-In Jetpack Compose, **LazyColumn** and **LazyRow** replace RecyclerView. They efficiently create and display items on demand, similar to RecyclerView's recycling behavior.
+In Jetpack Compose, **LazyColumn** and **LazyRow** replace `RecyclerView`. They efficiently create and display items on demand, similar to `RecyclerView`'s recycling behavior.
 
 ### Basic LazyColumn
 
@@ -287,7 +287,7 @@ fun ListWithStickyHeaders(groupedItems: Map<String, List<Item>>) {
 }
 ```
 
-### LazyRow (Horizontal List)
+### LazyRow (Horizontal `List`)
 
 ```kotlin
 @Composable
@@ -370,7 +370,7 @@ fun AdaptiveGrid(items: List<Item>) {
 }
 ```
 
-### List with Item Animations
+### `List` with Item Animations
 
 ```kotlin
 @Composable
@@ -485,9 +485,9 @@ fun ItemRow(item: Item) {
 }
 ```
 
-### Comparison: RecyclerView Vs LazyColumn
+### Comparison: `RecyclerView` Vs LazyColumn
 
-| Feature | RecyclerView | LazyColumn |
+| Feature | `RecyclerView` | LazyColumn |
 |---------|-------------|------------|
 | **Adapter** | Required | Not needed |
 | **ViewHolder** | Required | Not needed |
@@ -502,7 +502,7 @@ fun ItemRow(item: Item) {
 
 
 # Question (EN)
-> How To Create List Like RecyclerView In Compose
+> How To Create `List` Like `RecyclerView` In Compose
 
 ---
 
@@ -511,7 +511,7 @@ fun ItemRow(item: Item) {
 
 
 ## Answer (EN)
-In Jetpack Compose, **LazyColumn** and **LazyRow** replace RecyclerView. They efficiently create and display items on demand, similar to RecyclerView's recycling behavior.
+In Jetpack Compose, **LazyColumn** and **LazyRow** replace `RecyclerView`. They efficiently create and display items on demand, similar to `RecyclerView`'s recycling behavior.
 
 ### Basic LazyColumn
 
@@ -760,7 +760,7 @@ fun ListWithStickyHeaders(groupedItems: Map<String, List<Item>>) {
 }
 ```
 
-### LazyRow (Horizontal List)
+### LazyRow (Horizontal `List`)
 
 ```kotlin
 @Composable
@@ -843,7 +843,7 @@ fun AdaptiveGrid(items: List<Item>) {
 }
 ```
 
-### List with Item Animations
+### `List` with Item Animations
 
 ```kotlin
 @Composable
@@ -958,9 +958,9 @@ fun ItemRow(item: Item) {
 }
 ```
 
-### Comparison: RecyclerView Vs LazyColumn
+### Comparison: `RecyclerView` Vs LazyColumn
 
-| Feature | RecyclerView | LazyColumn |
+| Feature | `RecyclerView` | LazyColumn |
 |---------|-------------|------------|
 | **Adapter** | Required | Not needed |
 | **ViewHolder** | Required | Not needed |
@@ -974,7 +974,7 @@ fun ItemRow(item: Item) {
 ---
 
 ## Ответ (RU)
-В Jetpack Compose аналогом RecyclerView является LazyColumn и LazyRow.
+В Jetpack Compose аналогом `RecyclerView` является LazyColumn и LazyRow.
 
 **Базовое использование LazyColumn:**
 

@@ -29,15 +29,15 @@ tags:
 ---
 
 # Вопрос (RU)
-> Как добавить кастомные атрибуты к кастомным View
+> Как добавить кастомные атрибуты к кастомным `View`
 
 # Question (EN)
-> How To Add Custom Attributes To Custom View
+> How To Add Custom Attributes To Custom `View`
 
 ---
 
 ## Answer (EN)
-To add custom attributes to a Custom View, you need to: (1) create `attrs.xml` and describe attributes, (2) add them to styleable, (3) retrieve values in Custom View constructor, (4) use attributes in XML or Kotlin.
+To add custom attributes to a Custom `View`, you need to: (1) create `attrs.xml` and describe attributes, (2) add them to styleable, (3) retrieve values in Custom `View` constructor, (4) use attributes in XML or Kotlin.
 
 ### 1. Define Attributes in attrs.xml
 
@@ -73,7 +73,7 @@ To add custom attributes to a Custom View, you need to: (1) create `attrs.xml` a
 </resources>
 ```
 
-### 2. Create Custom View with Attributes
+### 2. Create Custom `View` with Attributes
 
 ```kotlin
 class CircularProgressView @JvmOverloads constructor(
@@ -436,7 +436,7 @@ class CustomButton @JvmOverloads constructor(
 
 
 # Question (EN)
-> How To Add Custom Attributes To Custom View
+> How To Add Custom Attributes To Custom `View`
 
 ---
 
@@ -445,7 +445,7 @@ class CustomButton @JvmOverloads constructor(
 
 
 ## Answer (EN)
-To add custom attributes to a Custom View, you need to: (1) create `attrs.xml` and describe attributes, (2) add them to styleable, (3) retrieve values in Custom View constructor, (4) use attributes in XML or Kotlin.
+To add custom attributes to a Custom `View`, you need to: (1) create `attrs.xml` and describe attributes, (2) add them to styleable, (3) retrieve values in Custom `View` constructor, (4) use attributes in XML or Kotlin.
 
 ### 1. Define Attributes in attrs.xml
 
@@ -481,7 +481,7 @@ To add custom attributes to a Custom View, you need to: (1) create `attrs.xml` a
 </resources>
 ```
 
-### 2. Create Custom View with Attributes
+### 2. Create Custom `View` with Attributes
 
 ```kotlin
 class CircularProgressView @JvmOverloads constructor(
@@ -843,7 +843,7 @@ class CustomButton @JvmOverloads constructor(
 # Как Добавить Кастомные Атрибуты У Кастомного view
 
 ## Ответ (RU)
-Чтобы добавить кастомные атрибуты к Custom View, нужно: (1) создать `attrs.xml` и описать атрибуты, (2) добавить их в styleable, (3) получить значения в конструкторе Custom View, (4) использовать атрибуты в XML или Kotlin.
+Чтобы добавить кастомные атрибуты к Custom `View`, нужно: (1) создать `attrs.xml` и описать атрибуты, (2) добавить их в styleable, (3) получить значения в конструкторе Custom `View`, (4) использовать атрибуты в XML или Kotlin.
 
 ### 1. Определение Атрибутов В attrs.xml
 
@@ -879,7 +879,7 @@ class CustomButton @JvmOverloads constructor(
 </resources>
 ```
 
-### 2. Создание Custom View С Атрибутами
+### 2. Создание Custom `View` С Атрибутами
 
 ```kotlin
 class CircularProgressView @JvmOverloads constructor(
@@ -1260,15 +1260,15 @@ class CustomButton @JvmOverloads constructor(
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View
-- [[q-viewmodel-pattern--android--easy]] - View
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`
+- [[q-viewmodel-pattern--android--easy]] - `View`
 
 ### Related (Medium)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- [[q-testing-viewmodels-turbine--android--medium]] - View
-- q-rxjava-pagination-recyclerview--android--medium - View
-- [[q-what-is-viewmodel--android--medium]] - View
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View`
+- [[q-testing-viewmodels-turbine--android--medium]] - `View`
+- q-rxjava-pagination-recyclerview--android--medium - `View`
+- [[q-what-is-viewmodel--android--medium]] - `View`
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--android--hard]] - View
+- [[q-compose-custom-layout--android--hard]] - `View`

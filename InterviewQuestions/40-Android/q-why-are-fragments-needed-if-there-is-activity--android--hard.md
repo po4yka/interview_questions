@@ -18,17 +18,17 @@ tags: [android, android/architecture-modularization, android/fragment, android/l
 
 # Вопрос (RU)
 
-> Для чего нужны фрагменты если есть Activity?
+> Для чего нужны фрагменты если есть `Activity`?
 
 # Question (EN)
 
-> Why are fragments needed if there is Activity?
+> Why are fragments needed if there is `Activity`?
 
 ---
 
 ## Ответ (RU)
 
-Фрагменты — это модульные компоненты UI внутри Activity с собственным жизненным циклом, которые можно добавлять/удалять во время выполнения.
+Фрагменты — это модульные компоненты UI внутри `Activity` с собственным жизненным циклом, которые можно добавлять/удалять во время выполнения.
 
 ### Ключевые Преимущества
 
@@ -78,7 +78,7 @@ class MasterDetailActivity : AppCompatActivity() {
 
 **3. Динамические интерфейсы**
 
-Замена UI-частей без пересоздания Activity:
+Замена UI-частей без пересоздания `Activity`:
 
 ```kotlin
 // ✅ Динамическая замена с back stack
@@ -125,7 +125,7 @@ Navigation Component для изолированных navigation graphs:
 
 ### Архитектурные Паттерны
 
-**Single Activity Architecture**
+**Single `Activity` Architecture**
 
 ```kotlin
 // ✅ Одна Activity, множество фрагментов
@@ -212,7 +212,7 @@ class MasterDetailActivity : AppCompatActivity() {
 
 **3. Dynamic Interfaces**
 
-Replace UI parts without recreating Activity:
+Replace UI parts without recreating `Activity`:
 
 ```kotlin
 // ✅ Dynamic replacement with back stack
@@ -225,7 +225,7 @@ fun showDetails(itemId: String) {
 }
 ```
 
-**4. Independent Lifecycle Management**
+**4. Independent `Lifecycle` Management**
 
 Each fragment manages its own resources:
 
@@ -259,7 +259,7 @@ Navigation Component for isolated navigation graphs:
 
 ### Architectural Patterns
 
-**Single Activity Architecture**
+**Single `Activity` Architecture**
 
 ```kotlin
 // ✅ One Activity, many fragments
@@ -269,7 +269,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**Fragment Challenges**
+**`Fragment` Challenges**
 
 ```kotlin
 // ❌ FragmentManager complexity
@@ -298,7 +298,7 @@ NavHost(navController, startDestination = "home") {
 
 ## Follow-ups
 
-1. How does Single Activity Architecture impact memory and navigation complexity?
+1. How does Single `Activity` Architecture impact memory and navigation complexity?
 2. What are the specific state restoration issues with fragments vs Compose?
 3. How do nested fragments complicate lifecycle management?
 4. When should you choose fragments over Compose in modern Android?

@@ -33,17 +33,17 @@ tags:
 
 # Question (EN)
 
-> What is BroadcastReceiver?
+> What is `BroadcastReceiver`?
 
 # Вопрос (RU)
 
-> Что такое BroadcastReceiver?
+> Что такое `BroadcastReceiver`?
 
 ---
 
 ## Answer (EN)
 
-**BroadcastReceiver** is one of the fundamental Android components that allows applications to **receive and respond to system-wide or app-specific broadcast messages**. It acts as a listener for Intent broadcasts sent by the Android system or other applications.
+**`BroadcastReceiver`** is one of the fundamental Android components that allows applications to **receive and respond to system-wide or app-specific broadcast messages**. It acts as a listener for `Intent` broadcasts sent by the Android system or other applications.
 
 ### Core Concept
 
@@ -374,7 +374,7 @@ LocalBroadcastManager.getInstance(context)
     .sendBroadcast(Intent("com.example.ACTION"))
 ```
 
-**4. Set receiver exported correctly:**
+**4. `Set` receiver exported correctly:**
 
 ```xml
 <!-- Not accessible by other apps -->
@@ -448,11 +448,11 @@ class AppUpdateReceiver : BroadcastReceiver() {
 
 ### Summary
 
-**BroadcastReceiver is an Android component that:**
+**`BroadcastReceiver` is an Android component that:**
 
 -   Listens for system-wide or app-specific broadcast messages
 -   Can be registered statically (manifest) or dynamically (runtime)
--   Receives Intent broadcasts from system or other apps
+-   Receives `Intent` broadcasts from system or other apps
 -   Executes in main thread (keep onReceive() fast)
 -   Has restrictions on Android 8.0+ for background execution
 
@@ -473,11 +473,11 @@ class AppUpdateReceiver : BroadcastReceiver() {
 
 # Question (EN)
 
-> What is BroadcastReceiver?
+> What is `BroadcastReceiver`?
 
 # Вопрос (RU)
 
-> Что такое BroadcastReceiver?
+> Что такое `BroadcastReceiver`?
 
 ---
 
@@ -487,7 +487,7 @@ class AppUpdateReceiver : BroadcastReceiver() {
 
 ## Answer (EN)
 
-**BroadcastReceiver** is one of the fundamental Android components that allows applications to **receive and respond to system-wide or app-specific broadcast messages**. It acts as a listener for Intent broadcasts sent by the Android system or other applications.
+**`BroadcastReceiver`** is one of the fundamental Android components that allows applications to **receive and respond to system-wide or app-specific broadcast messages**. It acts as a listener for `Intent` broadcasts sent by the Android system or other applications.
 
 ### Core Concept
 
@@ -818,7 +818,7 @@ LocalBroadcastManager.getInstance(context)
     .sendBroadcast(Intent("com.example.ACTION"))
 ```
 
-**4. Set receiver exported correctly:**
+**4. `Set` receiver exported correctly:**
 
 ```xml
 <!-- Not accessible by other apps -->
@@ -892,11 +892,11 @@ class AppUpdateReceiver : BroadcastReceiver() {
 
 ### Summary
 
-**BroadcastReceiver is an Android component that:**
+**`BroadcastReceiver` is an Android component that:**
 
 -   Listens for system-wide or app-specific broadcast messages
 -   Can be registered statically (manifest) or dynamically (runtime)
--   Receives Intent broadcasts from system or other apps
+-   Receives `Intent` broadcasts from system or other apps
 -   Executes in main thread (keep onReceive() fast)
 -   Has restrictions on Android 8.0+ for background execution
 
@@ -916,11 +916,11 @@ class AppUpdateReceiver : BroadcastReceiver() {
 
 ## Ответ (RU)
 
-**BroadcastReceiver** - это один из фундаментальных компонентов Android, который позволяет приложениям **получать и реагировать на широковещательные сообщения** от системы или других приложений.
+**`BroadcastReceiver`** - это один из фундаментальных компонентов Android, который позволяет приложениям **получать и реагировать на широковещательные сообщения** от системы или других приложений.
 
 ### Основная Концепция
 
-BroadcastReceiver работает по принципу publish-subscribe (издатель-подписчик), позволяя приложениям подписываться на определенные события.
+`BroadcastReceiver` работает по принципу publish-subscribe (издатель-подписчик), позволяя приложениям подписываться на определенные события.
 
 ### Типы Широковещательных Сообщений
 
@@ -958,7 +958,7 @@ BroadcastReceiver работает по принципу publish-subscribe (из
 
 ## Follow-ups
 
--   How do Android 8.0+ background execution limits affect BroadcastReceiver usage?
+-   How do Android 8.0+ background execution limits affect `BroadcastReceiver` usage?
 -   When should you use LocalBroadcastManager vs global broadcasts?
 -   What's the difference between ordered and normal broadcasts?
 

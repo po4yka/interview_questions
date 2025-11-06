@@ -35,19 +35,19 @@ tags:
 
 # Вопрос (RU)
 
-> Что такое Intent?
+> Что такое `Intent`?
 
 # Question (EN)
 
-> What is Intent?
+> What is `Intent`?
 
 ## Ответ (RU)
 
-**Intent** — это объект-сообщение, используемый для **связи между компонентами Android** (Activity, Service, BroadcastReceiver) и между приложениями.
+**`Intent`** — это объект-сообщение, используемый для **связи между компонентами Android** (`Activity`, `Service`, `BroadcastReceiver`) и между приложениями.
 
 **Типы:**
 
-**1. Explicit Intent** - Конкретный компонент
+**1. Explicit `Intent`** - Конкретный компонент
 
 ```kotlin
 // Запуск конкретной Activity
@@ -59,7 +59,7 @@ startActivity(intent)
 startService(Intent(this, MusicService::class.java))
 ```
 
-**2. Implicit Intent** - На основе действия
+**2. Implicit `Intent`** - На основе действия
 
 ```kotlin
 // Открыть браузер
@@ -86,15 +86,15 @@ startActivity(intent)
 val name = intent.getStringExtra("name")
 ```
 
-**Итог:** Intent — связующее звено между компонентами Android.
+**Итог:** `Intent` — связующее звено между компонентами Android.
 
 ## Answer (EN)
 
-**Intent** is a messaging object used to **communicate between Android components** (Activity, Service, BroadcastReceiver) and between apps.
+**`Intent`** is a messaging object used to **communicate between Android components** (`Activity`, `Service`, `BroadcastReceiver`) and between apps.
 
 **Types:**
 
-**1. Explicit Intent** — specific component
+**1. Explicit `Intent`** — specific component
 
 ```kotlin
 // ✅ Start specific Activity
@@ -103,7 +103,7 @@ intent.putExtra("user_id", 123)
 startActivity(intent)
 ```
 
-**2. Implicit Intent** — action-based
+**2. Implicit `Intent`** — action-based
 
 ```kotlin
 // ✅ Open browser
@@ -130,14 +130,14 @@ startActivity(intent)
 val name = intent.getStringExtra("name")
 ```
 
-**Summary:** Intent is the glue connecting Android components.
+**Summary:** `Intent` is the glue connecting Android components.
 
 ---
 
 ## Follow-ups
 
 - What are security pitfalls with implicit intents?
-- When to use PendingIntent instead of direct Intent?
+- When to use PendingIntent instead of direct `Intent`?
 - How do intent filters work?
 
 ## References

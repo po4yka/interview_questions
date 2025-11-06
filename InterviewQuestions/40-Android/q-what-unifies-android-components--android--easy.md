@@ -45,9 +45,9 @@ tags:
 ## Answer (EN)
 Main Android components are unified by **three key aspects**:
 
-**1. Context** - Resource Access
+**1. `Context`** - Resource Access
 
-All components **inherit or receive Context** for accessing resources and system services.
+All components **inherit or receive `Context`** for accessing resources and system services.
 
 ```kotlin
 // Activity extends Context
@@ -127,9 +127,9 @@ All main components **must be declared** in the manifest file.
 </manifest>
 ```
 
-**3. Intent** - Communication
+**3. `Intent`** - Communication
 
-All components **interact through Intent**.
+All components **interact through `Intent`**.
 
 ```kotlin
 // Start Activity
@@ -176,19 +176,19 @@ contentResolver.query(
 
 **Main Components Included:**
 
-- - **Activity** - UI screens
-- - **Fragment** - UI portions (not in manifest, but has Context)
-- - **Service** - Background operations
-- - **BroadcastReceiver** - Event listeners
-- - **ContentProvider** - Data sharing
+- - **`Activity`** - UI screens
+- - **`Fragment`** - UI portions (not in manifest, but has `Context`)
+- - **`Service`** - Background operations
+- - **`BroadcastReceiver`** - Event listeners
+- - **`ContentProvider`** - Data sharing
 
 **Summary:**
 
 **Three Pillars of Unity:**
 
-1. **Context**: All access resources/services through Context
+1. **`Context`**: All access resources/services through `Context`
 2. **Manifest**: All declared in AndroidManifest.xml
-3. **Intent**: All communicate via Intent messaging
+3. **`Intent`**: All communicate via `Intent` messaging
 
 
 # Question (EN)
@@ -203,9 +203,9 @@ contentResolver.query(
 ## Answer (EN)
 Main Android components are unified by **three key aspects**:
 
-**1. Context** - Resource Access
+**1. `Context`** - Resource Access
 
-All components **inherit or receive Context** for accessing resources and system services.
+All components **inherit or receive `Context`** for accessing resources and system services.
 
 ```kotlin
 // Activity extends Context
@@ -285,9 +285,9 @@ All main components **must be declared** in the manifest file.
 </manifest>
 ```
 
-**3. Intent** - Communication
+**3. `Intent`** - Communication
 
-All components **interact through Intent**.
+All components **interact through `Intent`**.
 
 ```kotlin
 // Start Activity
@@ -334,24 +334,24 @@ contentResolver.query(
 
 **Main Components Included:**
 
-- - **Activity** - UI screens
-- - **Fragment** - UI portions (not in manifest, but has Context)
-- - **Service** - Background operations
-- - **BroadcastReceiver** - Event listeners
-- - **ContentProvider** - Data sharing
+- - **`Activity`** - UI screens
+- - **`Fragment`** - UI portions (not in manifest, but has `Context`)
+- - **`Service`** - Background operations
+- - **`BroadcastReceiver`** - Event listeners
+- - **`ContentProvider`** - Data sharing
 
 **Summary:**
 
 **Three Pillars of Unity:**
 
-1. **Context**: All access resources/services through Context
+1. **`Context`**: All access resources/services through `Context`
 2. **Manifest**: All declared in AndroidManifest.xml
-3. **Intent**: All communicate via Intent messaging
+3. **`Intent`**: All communicate via `Intent` messaging
 
 ## Ответ (RU)
-Основные компоненты Android-приложения объединяет то, что они все наследуют или получают **Context** для доступа к ресурсам и системным сервисам, объявляются в **AndroidManifest.xml** и взаимодействуют друг с другом через **Intent**.
+Основные компоненты Android-приложения объединяет то, что они все наследуют или получают **`Context`** для доступа к ресурсам и системным сервисам, объявляются в **AndroidManifest.xml** и взаимодействуют друг с другом через **`Intent`**.
 
-Основные компоненты включают: Activity, Fragment, Service, BroadcastReceiver и ContentProvider.
+Основные компоненты включают: `Activity`, `Fragment`, `Service`, `BroadcastReceiver` и `ContentProvider`.
 
 
 ---

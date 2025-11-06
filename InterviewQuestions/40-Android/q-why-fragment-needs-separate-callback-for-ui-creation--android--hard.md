@@ -34,26 +34,26 @@ tags: [
 
 # Вопрос (RU)
 
-> Почему у Fragment отдельный callback для создания UI (`onCreateView()`) вместо создания view в `onCreate()` как у Activity?
+> Почему у `Fragment` отдельный callback для создания UI (`onCreateView()`) вместо создания view в `onCreate()` как у `Activity`?
 
 # Question (EN)
 
-> Why does Fragment have a separate callback for UI creation (`onCreateView()`) instead of creating views in `onCreate()` like Activity?
+> Why does `Fragment` have a separate callback for UI creation (`onCreateView()`) instead of creating views in `onCreate()` like `Activity`?
 
 ---
 
 ## Ответ (RU)
 
-Fragment имеет отдельные lifecycle callbacks (`onCreate()` vs `onCreateView()`) из-за **независимости жизненных циклов Fragment и View**:
+`Fragment` имеет отдельные lifecycle callbacks (`onCreate()` vs `onCreateView()`) из-за **независимости жизненных циклов `Fragment` и `View`**:
 
 **Архитектурные причины**:
-1. **View может быть уничтожен без уничтожения Fragment** (BackStack, ViewPager)
-2. **Fragment может существовать без UI** (headless fragments для retained state)
-3. **Оптимизация памяти** - view освобождается, пока Fragment сохраняет данные
-4. **Configuration changes** - view пересоздается, Fragment и ViewModel выживают
+1. **`View` может быть уничтожен без уничтожения `Fragment`** (BackStack, ViewPager)
+2. **`Fragment` может существовать без UI** (headless fragments для retained state)
+3. **Оптимизация памяти** - view освобождается, пока `Fragment` сохраняет данные
+4. **Configuration changes** - view пересоздается, `Fragment` и `ViewModel` выживают
 5. **ViewLifecycleOwner** - отдельный lifecycle для view-зависимых observers
 
-### Lifecycle Flow
+### `Lifecycle` `Flow`
 
 ```
 Fragment Lifecycle:
@@ -78,7 +78,7 @@ Rotate → onDestroyView() → onCreateView()
 onCreate() НЕ вызывается! Fragment survives
 ```
 
-### Правильная Работа с View References
+### Правильная Работа с `View` References
 
 ✅ **Правильно - ViewBinding**:
 ```kotlin
@@ -185,7 +185,7 @@ onViewCreated() called
 // Нет повторной загрузки данных
 ```
 
-**3. Headless Fragment**:
+**3. Headless `Fragment`**:
 ```kotlin
 // Fragment без UI для retained state
 class DataRetainerFragment : Fragment() {
@@ -250,16 +250,16 @@ class ImageGalleryFragment : Fragment() {
 
 ## Answer (EN)
 
-Fragment has separate lifecycle callbacks (`onCreate()` vs `onCreateView()`) due to **independent Fragment and View lifecycles**:
+`Fragment` has separate lifecycle callbacks (`onCreate()` vs `onCreateView()`) due to **independent `Fragment` and `View` lifecycles**:
 
 **Architectural reasons**:
-1. **View can be destroyed without destroying Fragment** (BackStack, ViewPager)
-2. **Fragment can exist without UI** (headless fragments for retained state)
-3. **Memory optimization** - views released while Fragment retains data
-4. **Configuration changes** - views recreated, Fragment and ViewModel survive
+1. **`View` can be destroyed without destroying `Fragment`** (BackStack, ViewPager)
+2. **`Fragment` can exist without UI** (headless fragments for retained state)
+3. **Memory optimization** - views released while `Fragment` retains data
+4. **Configuration changes** - views recreated, `Fragment` and `ViewModel` survive
 5. **ViewLifecycleOwner** - separate lifecycle for view-dependent observers
 
-### Lifecycle Flow
+### `Lifecycle` `Flow`
 
 ```
 Fragment Lifecycle:
@@ -284,7 +284,7 @@ Rotate → onDestroyView() → onCreateView()
 onCreate() NOT called! Fragment survives
 ```
 
-### Proper View Reference Management
+### Proper `View` Reference Management
 
 ✅ **Correct - ViewBinding**:
 ```kotlin
@@ -391,7 +391,7 @@ onViewCreated() called
 // No data reload needed
 ```
 
-**3. Headless Fragment**:
+**3. Headless `Fragment`**:
 ```kotlin
 // Fragment without UI for retained state
 class DataRetainerFragment : Fragment() {
@@ -456,7 +456,7 @@ class ImageGalleryFragment : Fragment() {
 
 ## Follow-ups
 
-1. **What happens if you observe LiveData using Fragment's lifecycle instead of viewLifecycleOwner?**
+1. **What happens if you observe `LiveData` using `Fragment`'s lifecycle instead of viewLifecycleOwner?**
    - Observer remains active after view destroyed → memory leak
    - Updates attempt on destroyed views → crash
 
@@ -466,44 +466,44 @@ class ImageGalleryFragment : Fragment() {
    - Swipe nearby: `onCreateView()` called, view created
    - Swipe away: `onDestroyView()` called, fragment retained
 
-3. **Why can't Fragment use single lifecycle like Activity?**
+3. **Why can't `Fragment` use single lifecycle like `Activity`?**
    - Fragments used in dynamic containers (ViewPager, BackStack, multi-pane)
    - Need to exist without views for memory efficiency
-   - Activity always has window/decorView (single lifecycle works)
+   - `Activity` always has window/decorView (single lifecycle works)
 
 4. **How to safely pass data between fragments considering view lifecycle?**
-   - Use shared ViewModel (survives view destruction)
+   - Use shared `ViewModel` (survives view destruction)
    - Use FragmentResultListener (lifecycle-aware)
    - Avoid direct fragment references (view may be destroyed)
 
 5. **What's the performance impact of frequent onCreateView/onDestroyView cycles?**
-   - View inflation cost (layout parsing, object creation)
-   - Mitigate with RecyclerView inside Fragment (reuses views)
+   - `View` inflation cost (layout parsing, object creation)
+   - Mitigate with `RecyclerView` inside `Fragment` (reuses views)
    - ViewBinding reduces `findViewById()` overhead
-   - Heavy data in Fragment (onCreate), light view setup (onCreateView)
+   - Heavy data in `Fragment` (onCreate), light view setup (onCreateView)
 
 ---
 
 ## References
 
 - [[c-fragment-lifecycle]] - Complete fragment lifecycle stages
-- [[c-viewmodel]] - ViewModel scope and survival
+- [[c-viewmodel]] - `ViewModel` scope and survival
 - [[c-view-binding]] - Safe view reference management
-- [[c-livedata]] - Lifecycle-aware observers
-- [Android Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
-- [ViewLifecycleOwner](https://developer.android.com/reference/androidx/fragment/app/Fragment#getViewLifecycleOwner())
-- [Fragment Best Practices](https://developer.android.com/guide/fragments/best-practices)
+- [[c-livedata]] - `Lifecycle`-aware observers
+- [Android `Fragment` `Lifecycle`](https://developer.android.com/guide/fragments/lifecycle)
+- [ViewLifecycleOwner](https://developer.android.com/reference/androidx/fragment/app/`Fragment`#getViewLifecycleOwner())
+- [`Fragment` Best Practices](https://developer.android.com/guide/fragments/best-practices)
 
 ---
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-save-data-outside-fragment--android--medium]] - Fragment data retention
+- [[q-save-data-outside-fragment--android--medium]] - `Fragment` data retention
 
 ### Related (Same Level)
 - [[q-shared-preferences--android--easy]] - Data persistence
 - [[q-annotation-processing-android--android--medium]] - Code generation
 
 ### Advanced (Harder)
-- [[q-how-to-write-recyclerview-so-that-it-caches-ahead--android--medium]] - RecyclerView optimization
+- [[q-how-to-write-recyclerview-so-that-it-caches-ahead--android--medium]] - `RecyclerView` optimization

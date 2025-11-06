@@ -37,13 +37,13 @@ tags:
 ---
 
 ## Answer (EN)
-Android provides several powerful systems for creating animations, each suited for different use cases. The main approaches include Property Animations, View Animations, Drawable Animations, and MotionLayout.
+Android provides several powerful systems for creating animations, each suited for different use cases. The main approaches include Property Animations, `View` Animations, `Drawable` Animations, and MotionLayout.
 
 ### 1. Property Animations (Modern Approach)
 
 Property animations are the most powerful and flexible way to animate in Android. They work by changing property values over time.
 
-#### Using ObjectAnimator
+#### Using `ObjectAnimator`
 
 ```kotlin
 // Fade out animation
@@ -113,7 +113,7 @@ AnimatorSet().apply {
 }
 ```
 
-#### ValueAnimator for Custom Properties
+#### `ValueAnimator` for Custom Properties
 
 ```kotlin
 val animator = ValueAnimator.ofInt(0, 100)
@@ -126,7 +126,7 @@ animator.addUpdateListener { animation ->
 animator.start()
 ```
 
-### 2. View Animations (XML-based, Legacy)
+### 2. `View` Animations (XML-based, Legacy)
 
 Simpler but less flexible animations defined in XML or code.
 
@@ -170,7 +170,7 @@ rotateAnimation.duration = 1000
 view.startAnimation(rotateAnimation)
 ```
 
-### 3. Drawable Animations (Frame Animation)
+### 3. `Drawable` Animations (Frame Animation)
 
 Animate through a sequence of drawable resources like a flip book.
 
@@ -359,13 +359,13 @@ override fun onDestroyView() {
 
 
 ## Answer (EN)
-Android provides several powerful systems for creating animations, each suited for different use cases. The main approaches include Property Animations, View Animations, Drawable Animations, and MotionLayout.
+Android provides several powerful systems for creating animations, each suited for different use cases. The main approaches include Property Animations, `View` Animations, `Drawable` Animations, and MotionLayout.
 
 ### 1. Property Animations (Modern Approach)
 
 Property animations are the most powerful and flexible way to animate in Android. They work by changing property values over time.
 
-#### Using ObjectAnimator
+#### Using `ObjectAnimator`
 
 ```kotlin
 // Fade out animation
@@ -435,7 +435,7 @@ AnimatorSet().apply {
 }
 ```
 
-#### ValueAnimator for Custom Properties
+#### `ValueAnimator` for Custom Properties
 
 ```kotlin
 val animator = ValueAnimator.ofInt(0, 100)
@@ -448,7 +448,7 @@ animator.addUpdateListener { animation ->
 animator.start()
 ```
 
-### 2. View Animations (XML-based, Legacy)
+### 2. `View` Animations (XML-based, Legacy)
 
 Simpler but less flexible animations defined in XML or code.
 
@@ -492,7 +492,7 @@ rotateAnimation.duration = 1000
 view.startAnimation(rotateAnimation)
 ```
 
-### 3. Drawable Animations (Frame Animation)
+### 3. `Drawable` Animations (Frame Animation)
 
 Animate through a sequence of drawable resources like a flip book.
 
@@ -671,7 +671,7 @@ override fun onDestroyView() {
 ```
 
 ## Ответ (RU)
-В Android анимации можно создавать с помощью Property Animations, View Animations, Drawable Animations и MotionLayout. Для Property Animations используйте ObjectAnimator для анимации свойств объектов. Для View Animations создайте XML-анимацию и примените её через AnimationUtils.loadAnimation. Для Drawable Animations используйте анимацию кадров в XML и запустите её через AnimationDrawable. Для MotionLayout определите анимацию в MotionScene и примените её к элементам интерфейса.
+В Android анимации можно создавать с помощью Property Animations, `View` Animations, `Drawable` Animations и MotionLayout. Для Property Animations используйте `ObjectAnimator` для анимации свойств объектов. Для `View` Animations создайте XML-анимацию и примените её через AnimationUtils.loadAnimation. Для `Drawable` Animations используйте анимацию кадров в XML и запустите её через AnimationDrawable. Для MotionLayout определите анимацию в MotionScene и примените её к элементам интерфейса.
 
 
 ## Follow-ups

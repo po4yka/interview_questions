@@ -33,19 +33,19 @@ tags:
 ---
 
 # Вопрос (RU)
-> Паттерн ViewModel
+> Паттерн `ViewModel`
 
 # Question (EN)
-> ViewModel Pattern
+> `ViewModel` Pattern
 
 ---
 
 ## Answer (EN)
-ViewModel implements the MVVM (Model-View-ViewModel) pattern. ViewModel is responsible for managing data and business logic, isolating them from the View, which simplifies testing and ensures separation of concerns between layers.
+`ViewModel` implements the MVVM (Model-`View`-`ViewModel`) pattern. `ViewModel` is responsible for managing data and business logic, isolating them from the `View`, which simplifies testing and ensures separation of concerns between layers.
 
 
 # Question (EN)
-> ViewModel Pattern
+> `ViewModel` Pattern
 
 ---
 
@@ -54,24 +54,24 @@ ViewModel implements the MVVM (Model-View-ViewModel) pattern. ViewModel is respo
 
 
 ## Answer (EN)
-ViewModel implements the MVVM (Model-View-ViewModel) pattern. ViewModel is responsible for managing data and business logic, isolating them from the View, which simplifies testing and ensures separation of concerns between layers.
+`ViewModel` implements the MVVM (Model-`View`-`ViewModel`) pattern. `ViewModel` is responsible for managing data and business logic, isolating them from the `View`, which simplifies testing and ensures separation of concerns between layers.
 
 ## Ответ (RU)
 
-ViewModel реализует архитектурный паттерн MVVM (Model-View-ViewModel). ViewModel выполняет роль посредника между Model (данные и бизнес-логика) и View (UI компоненты), обеспечивая четкое разделение ответственности.
+`ViewModel` реализует архитектурный паттерн MVVM (Model-`View`-`ViewModel`). `ViewModel` выполняет роль посредника между Model (данные и бизнес-логика) и `View` (UI компоненты), обеспечивая четкое разделение ответственности.
 
-### Основные Характеристики Паттерна MVVM С ViewModel
+### Основные Характеристики Паттерна MVVM С `ViewModel`
 
-**Model-View-ViewModel (MVVM):**
+**Model-`View`-`ViewModel` (MVVM):**
 - **Model**: Данные и бизнес-логика приложения
-- **View**: UI компоненты (Activity, Fragment, Composable)
-- **ViewModel**: Управляет UI состоянием и обрабатывает бизнес-логику
+- **`View`**: UI компоненты (`Activity`, `Fragment`, Composable)
+- **`ViewModel`**: Управляет UI состоянием и обрабатывает бизнес-логику
 
-**Преимущества использования ViewModel:**
+**Преимущества использования `ViewModel`:**
 
 1. **Разделение ответственности** (Separation of Concerns):
-   - View отвечает только за отображение
-   - ViewModel управляет состоянием и логикой
+   - `View` отвечает только за отображение
+   - `ViewModel` управляет состоянием и логикой
    - Model содержит данные и бизнес-правила
 
 2. **Переживает изменения конфигурации**:
@@ -80,12 +80,12 @@ ViewModel реализует архитектурный паттерн MVVM (Mod
    - Автоматически очищается когда больше не нужен
 
 3. **Упрощенное тестирование**:
-   - ViewModel не зависит от Android framework
+   - `ViewModel` не зависит от Android framework
    - Легко покрывается unit тестами
    - Можно тестировать без UI
 
 4. **Управление жизненным циклом**:
-   - Связан с жизненным циклом Activity/Fragment
+   - Связан с жизненным циклом Activity/`Fragment`
    - Автоматически очищается через onCleared()
    - Предотвращает утечки памяти
 
@@ -163,16 +163,16 @@ sealed class UiState<out T> {
 
 ### Ключевые Принципы MVVM В Android
 
-1. **Однонаправленный поток данных**: View наблюдает за ViewModel, но ViewModel не знает о View
-2. **Reactive подход**: Использование LiveData, StateFlow, Flow для наблюдения за изменениями
-3. **Dependency Injection**: ViewModel получает зависимости через конструктор
-4. **Тестируемость**: ViewModel легко тестируется изолированно от UI
+1. **Однонаправленный поток данных**: `View` наблюдает за `ViewModel`, но `ViewModel` не знает о `View`
+2. **Reactive подход**: Использование `LiveData`, `StateFlow`, `Flow` для наблюдения за изменениями
+3. **Dependency Injection**: `ViewModel` получает зависимости через конструктор
+4. **Тестируемость**: `ViewModel` легко тестируется изолированно от UI
 
 ### Сравнение С Другими Паттернами
 
 **MVVM vs MVP:**
-- MVP: Presenter напрямую управляет View через интерфейс
-- MVVM: ViewModel не знает о View, использует reactive подход
+- MVP: Presenter напрямую управляет `View` через интерфейс
+- MVVM: `ViewModel` не знает о `View`, использует reactive подход
 
 **MVVM vs MVI:**
 - MVI: Более строгий однонаправленный поток с immutable состоянием
@@ -180,7 +180,7 @@ sealed class UiState<out T> {
 
 ### Резюме
 
-ViewModel реализует паттерн MVVM, обеспечивая четкое разделение между UI логикой (ViewModel) и отображением (View). Это упрощает тестирование, делает код более поддерживаемым и решает проблемы с жизненным циклом Android компонентов. ViewModel автоматически сохраняет состояние при изменениях конфигурации и предоставляет удобный способ управления UI состоянием через reactive streams.
+`ViewModel` реализует паттерн MVVM, обеспечивая четкое разделение между UI логикой (`ViewModel`) и отображением (`View`). Это упрощает тестирование, делает код более поддерживаемым и решает проблемы с жизненным циклом Android компонентов. `ViewModel` автоматически сохраняет состояние при изменениях конфигурации и предоставляет удобный способ управления UI состоянием через reactive streams.
 
 
 
@@ -198,7 +198,7 @@ ViewModel реализует паттерн MVVM, обеспечивая чет�
 
 - [Architecture](https://developer.android.com/topic/architecture)
 - [Android Documentation](https://developer.android.com/docs)
-- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
 
 ## Related Questions
@@ -212,6 +212,6 @@ ViewModel реализует паттерн MVVM, обеспечивая чет�
 ### Next Steps (Medium)
 - [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
 - [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
-- [[q-what-is-viewmodel--android--medium]] - What is ViewModel
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
+- [[q-what-is-viewmodel--android--medium]] - What is `ViewModel`
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - `ViewModel` purpose & internals
 

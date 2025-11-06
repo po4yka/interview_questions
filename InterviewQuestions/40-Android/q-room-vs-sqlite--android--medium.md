@@ -38,7 +38,7 @@ tags:
 ## Answer (EN)
 **SQLite** is a **low-level relational database** that requires **manual SQL queries**.
 
-**Room** is a **wrapper/ORM (Object-Relational Mapping) layer over SQLite** that provides a **convenient API with annotations**, supports **LiveData and Flow**, and enables **automatic data migration**.
+**Room** is a **wrapper/ORM (Object-Relational Mapping) layer over SQLite** that provides a **convenient API with annotations**, supports **`LiveData` and `Flow`**, and enables **automatic data migration**.
 
 Room simplifies database operations and makes code more readable, but **internally it still uses SQLite**.
 
@@ -209,7 +209,7 @@ fun getUsers(): List<User> {
 }
 ```
 
-**Room - Built-in Flow/LiveData:**
+**Room - Built-in Flow/`LiveData`:**
 
 ```kotlin
 @Dao
@@ -360,7 +360,7 @@ fun testGetUser() = runTest {
 | **SQL Validation** | Runtime | Compile-time - |
 | **Type Safety** | No | Yes - |
 | **CRUD Operations** | Manual ContentValues | Annotations - |
-| **Reactive (Flow/LiveData)** | No | Yes - |
+| **Reactive (Flow/`LiveData`)** | No | Yes - |
 | **Coroutines Support** | No | Yes - |
 | **Migrations** | Manual | Structured - |
 | **Testing** | Difficult | Easy - |
@@ -439,7 +439,7 @@ class UserRepository(private val userDao: UserDao) {
 - High-level ORM wrapper over SQLite
 - Type-safe, annotation-based API
 - Compile-time SQL validation
-- LiveData/Flow support
+- LiveData/`Flow` support
 - Automatic migrations
 - Easier testing
 - Less boilerplate
@@ -460,7 +460,7 @@ class UserRepository(private val userDao: UserDao) {
 ## Answer (EN)
 **SQLite** is a **low-level relational database** that requires **manual SQL queries**.
 
-**Room** is a **wrapper/ORM (Object-Relational Mapping) layer over SQLite** that provides a **convenient API with annotations**, supports **LiveData and Flow**, and enables **automatic data migration**.
+**Room** is a **wrapper/ORM (Object-Relational Mapping) layer over SQLite** that provides a **convenient API with annotations**, supports **`LiveData` and `Flow`**, and enables **automatic data migration**.
 
 Room simplifies database operations and makes code more readable, but **internally it still uses SQLite**.
 
@@ -631,7 +631,7 @@ fun getUsers(): List<User> {
 }
 ```
 
-**Room - Built-in Flow/LiveData:**
+**Room - Built-in Flow/`LiveData`:**
 
 ```kotlin
 @Dao
@@ -782,7 +782,7 @@ fun testGetUser() = runTest {
 | **SQL Validation** | Runtime | Compile-time - |
 | **Type Safety** | No | Yes - |
 | **CRUD Operations** | Manual ContentValues | Annotations - |
-| **Reactive (Flow/LiveData)** | No | Yes - |
+| **Reactive (Flow/`LiveData`)** | No | Yes - |
 | **Coroutines Support** | No | Yes - |
 | **Migrations** | Manual | Structured - |
 | **Testing** | Difficult | Easy - |
@@ -861,7 +861,7 @@ class UserRepository(private val userDao: UserDao) {
 - High-level ORM wrapper over SQLite
 - Type-safe, annotation-based API
 - Compile-time SQL validation
-- LiveData/Flow support
+- LiveData/`Flow` support
 - Automatic migrations
 - Easier testing
 - Less boilerplate
@@ -873,7 +873,7 @@ class UserRepository(private val userDao: UserDao) {
 
 **SQLite** – это **низкоуровневая реляционная база данных**, которая требует **ручного написания SQL-запросов**.
 
-**Room** – это **обертка/ORM (Object-Relational Mapping) над SQLite**, которая предоставляет **удобный API с аннотациями**, поддерживает **LiveData и Flow**, и обеспечивает **автоматическую миграцию данных**.
+**Room** – это **обертка/ORM (Object-Relational Mapping) над SQLite**, которая предоставляет **удобный API с аннотациями**, поддерживает **`LiveData` и `Flow`**, и обеспечивает **автоматическую миграцию данных**.
 
 Room упрощает работу с базой данных и делает код более читаемым, но **внутри все равно использует SQLite**.
 
@@ -1034,7 +1034,7 @@ fun getUsers(): List<User> {
 }
 ```
 
-**Room - встроенные Flow/LiveData:**
+**Room - встроенные Flow/`LiveData`:**
 
 ```kotlin
 @Dao
@@ -1065,7 +1065,7 @@ viewLifecycleOwner.lifecycleScope.launch {
 | **Проверка SQL** | Во время выполнения | На этапе компиляции |
 | **Типобезопасность** | Нет | Да |
 | **CRUD операции** | Ручные ContentValues | Аннотации |
-| **Реактивность (Flow/LiveData)** | Нет | Да |
+| **Реактивность (Flow/`LiveData`)** | Нет | Да |
 | **Поддержка корутин** | Нет | Да |
 | **Миграции** | Ручные | Структурированные |
 | **Тестирование** | Сложно | Легко |
@@ -1143,7 +1143,7 @@ class UserRepository(private val userDao: UserDao) {
 - Высокоуровневая ORM обертка над SQLite
 - Типобезопасный, основанный на аннотациях API
 - Проверка SQL на этапе компиляции
-- Поддержка LiveData/Flow
+- Поддержка LiveData/`Flow`
 - Автоматические миграции
 - Легкое тестирование
 - Меньше шаблонного кода

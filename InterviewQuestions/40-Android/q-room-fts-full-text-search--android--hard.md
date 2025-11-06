@@ -173,7 +173,7 @@ interface ArticleDao {
 }
 ```
 
-### Repository С Debouncing
+### `Repository` С Debouncing
 
 ```kotlin
 class ArticleRepository(private val dao: ArticleDao) {
@@ -290,7 +290,7 @@ data class ArticleFts(
 - Performance: 10-100x faster than LIKE
 - BM25 relevance ranking
 - highlight() and snippet() functions
-- Boolean operators (AND, OR, NOT)
+- `Boolean` operators (AND, OR, NOT)
 
 ### Basic FTS5 Implementation
 
@@ -418,7 +418,7 @@ interface ArticleDao {
 }
 ```
 
-### Repository with Debouncing
+### `Repository` with Debouncing
 
 ```kotlin
 class ArticleRepository(private val dao: ArticleDao) {

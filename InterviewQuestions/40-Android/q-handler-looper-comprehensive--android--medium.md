@@ -29,24 +29,24 @@ tags:
 ---
 
 # Вопрос (RU)
-> Handler и Looper подробно
+> `Handler` и `Looper` подробно
 
 # Question (EN)
-> Handler Looper Comprehensive
+> `Handler` `Looper` Comprehensive
 
 ---
 
 ## Answer (EN)
 
-Handler и Looper — фундаментальные компоненты Android для межпоточного взаимодействия через очередь сообщений.
+`Handler` и `Looper` — фундаментальные компоненты Android для межпоточного взаимодействия через очередь сообщений.
 
-**Архитектура:** Handler отправляет сообщения → MessageQueue хранит → Looper обрабатывает в цикле. Looper привязывается к потоку через `Looper.prepare()` и `Looper.loop()`. Проверка наличия: `Looper.myLooper()`. Отправка в main thread: `Handler(Looper.getMainLooper()).post { }`.
+**Архитектура:** `Handler` отправляет сообщения → MessageQueue хранит → `Looper` обрабатывает в цикле. `Looper` привязывается к потоку через `Looper.prepare()` и `Looper.loop()`. Проверка наличия: `Looper.myLooper()`. Отправка в main thread: `Handler(`Looper`.getMainLooper()).post { }`.
 
-**Использование:** HandlerThread для фонового потока с Looper. Всегда очищать в `onDestroy()`: `handler.removeCallbacksAndMessages(null)`. Использовать `Message.obtain()` для переиспользования объектов. Избегать утечек памяти через WeakReference.
+**Использование:** HandlerThread для фонового потока с `Looper`. Всегда очищать в `onDestroy()`: `handler.removeCallbacksAndMessages(null)`. Использовать `Message.obtain()` для переиспользования объектов. Избегать утечек памяти через WeakReference.
 
 
 # Question (EN)
-> Handler Looper Comprehensive
+> `Handler` `Looper` Comprehensive
 
 ---
 
@@ -56,17 +56,17 @@ Handler и Looper — фундаментальные компоненты Androi
 
 ## Answer (EN)
 
-Handler и Looper — фундаментальные компоненты Android для межпоточного взаимодействия через очередь сообщений.
+`Handler` и `Looper` — фундаментальные компоненты Android для межпоточного взаимодействия через очередь сообщений.
 
-**Архитектура:** Handler отправляет сообщения → MessageQueue хранит → Looper обрабатывает в цикле. Looper привязывается к потоку через `Looper.prepare()` и `Looper.loop()`. Проверка наличия: `Looper.myLooper()`. Отправка в main thread: `Handler(Looper.getMainLooper()).post { }`.
+**Архитектура:** `Handler` отправляет сообщения → MessageQueue хранит → `Looper` обрабатывает в цикле. `Looper` привязывается к потоку через `Looper.prepare()` и `Looper.loop()`. Проверка наличия: `Looper.myLooper()`. Отправка в main thread: `Handler(`Looper`.getMainLooper()).post { }`.
 
-**Использование:** HandlerThread для фонового потока с Looper. Всегда очищать в `onDestroy()`: `handler.removeCallbacksAndMessages(null)`. Использовать `Message.obtain()` для переиспользования объектов. Избегать утечек памяти через WeakReference.
+**Использование:** HandlerThread для фонового потока с `Looper`. Всегда очищать в `onDestroy()`: `handler.removeCallbacksAndMessages(null)`. Использовать `Message.obtain()` для переиспользования объектов. Избегать утечек памяти через WeakReference.
 
 ## Ответ (RU)
 
-Handler и Looper — это фундаментальные компоненты Android для организации межпоточного взаимодействия и обработки сообщений в очереди.
+`Handler` и `Looper` — это фундаментальные компоненты Android для организации межпоточного взаимодействия и обработки сообщений в очереди.
 
-### 1. Handler-Looper-MessageQueue Architecture
+### 1. `Handler`-`Looper`-MessageQueue Architecture
 
 ```
 Thread
@@ -94,9 +94,9 @@ class Handler {
 }
 ```
 
-### 2. How Looper Binds to a Thread
+### 2. How `Looper` Binds to a `Thread`
 
-Looper создается и привязывается к потоку через `Looper.prepare()` и `Looper.loop()`.
+`Looper` создается и привязывается к потоку через `Looper.prepare()` и `Looper.loop()`.
 
 ```kotlin
 // Создание потока с Looper
@@ -155,11 +155,11 @@ handlerThread.handler.sendMessage(
 ```
 
 **Важно**:
-- `Looper.prepare()` создает Looper и сохраняет его в `ThreadLocal`
+- `Looper.prepare()` создает `Looper` и сохраняет его в `ThreadLocal`
 - `Looper.loop()` — бесконечный цикл, блокирует поток
-- Один поток → один Looper → один MessageQueue
+- Один поток → один `Looper` → один MessageQueue
 
-### 3. Checking for Looper in a Thread
+### 3. Checking for `Looper` in a `Thread`
 
 ```kotlin
 // Проверка есть ли Looper в текущем потоке
@@ -211,9 +211,9 @@ fun isMainThread(): Boolean {
 }
 ```
 
-### 4. Receiving Messages on the Main Thread
+### 4. Receiving Messages on the Main `Thread`
 
-#### Method 1: Handler with Main Looper
+#### Method 1: `Handler` with Main `Looper`
 
 ```kotlin
 class BackgroundTask {
@@ -343,7 +343,7 @@ class NotificationManager {
 
 ### 5. HandlerThread - Ready-Made Solution
 
-Android предоставляет `HandlerThread` — поток с встроенным Looper.
+Android предоставляет `HandlerThread` — поток с встроенным `Looper`.
 
 ```kotlin
 class ImageProcessor {
@@ -385,7 +385,7 @@ processor.processImage("https://example.com/image.jpg") { bitmap ->
 }
 ```
 
-### 6. Message and Runnable
+### 6. `Message` and `Runnable`
 
 ```kotlin
 // Runnable - простые задачи
@@ -412,7 +412,7 @@ val msg3 = Message.obtain(handler, MSG_DATA, data)  // С данными
 // val correct = Message.obtain()  //  ПРАВИЛЬНО
 ```
 
-### 7. Managing the Message Queue
+### 7. Managing the `Message` `Queue`
 
 ```kotlin
 class TaskQueue {
@@ -463,7 +463,7 @@ class TaskQueue {
 }
 ```
 
-### 8. IdleHandler - Execution When Queue is Idle
+### 8. IdleHandler - Execution When `Queue` is Idle
 
 ```kotlin
 class IdleMonitor {
@@ -624,41 +624,41 @@ Looper.getMainLooper().setMessageLogging { log ->
 
 | Компонент | Назначение | Количество на поток |
 |-----------|------------|---------------------|
-| **Looper** | Цикл обработки сообщений | 1 |
-| **MessageQueue** | Очередь сообщений | 1 (внутри Looper) |
-| **Handler** | Отправка/обработка сообщений | Много |
-| **Message** | Данные для передачи | Много |
+| **`Looper`** | Цикл обработки сообщений | 1 |
+| **MessageQueue** | Очередь сообщений | 1 (внутри `Looper`) |
+| **`Handler`** | Отправка/обработка сообщений | Много |
+| **`Message`** | Данные для передачи | Много |
 
 ### Best Practices
 
-1. **Всегда очищать Handler при onDestroy()**
+1. **Всегда очищать `Handler` при onDestroy()**
    ```kotlin
    handler.removeCallbacksAndMessages(null)
    ```
 
-2. **Использовать WeakReference для Activity/Fragment**
+2. **Использовать WeakReference для Activity/`Fragment`**
    ```kotlin
    private val activityRef = WeakReference(activity)
    ```
 
-3. **Предпочитать HandlerThread обычным Thread**
+3. **Предпочитать HandlerThread обычным `Thread`**
    ```kotlin
    val handlerThread = HandlerThread("Background")
    ```
 
-4. **Использовать Message.obtain() вместо конструктора**
+4. **Использовать `Message`.obtain() вместо конструктора**
    ```kotlin
    val msg = Message.obtain()  // Переиспользование
    ```
 
-5. **Проверять Lifecycle перед UI обновлениями**
+5. **Проверять `Lifecycle` перед UI обновлениями**
    ```kotlin
    if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
        updateUI()
    }
    ```
 
-**English**: **Handler** sends messages, **Looper** processes them in a loop, **MessageQueue** stores them. Looper attaches to thread via `Looper.prepare()` and `Looper.loop()`. Check looper exists with `Looper.myLooper()`. Send messages to main thread: `Handler(Looper.getMainLooper()).post { }`. Use `HandlerThread` for background processing. Always clean up handlers in `onDestroy()` to prevent leaks. Use `Message.obtain()` for object reuse.
+**English**: **`Handler`** sends messages, **`Looper`** processes them in a loop, **MessageQueue** stores them. `Looper` attaches to thread via `Looper.prepare()` and `Looper.loop()`. Check looper exists with `Looper.myLooper()`. Send messages to main thread: `Handler(`Looper`.getMainLooper()).post { }`. Use `HandlerThread` for background processing. Always clean up handlers in `onDestroy()` to prevent leaks. Use `Message.obtain()` for object reuse.
 
 
 ## Follow-ups

@@ -143,7 +143,7 @@ val styled = SpannableStringBuilder()
 
 1. **SpannableString** для статического текста — быстрее чем Builder
 2. **SpannableStringBuilder** для динамического текста — эффективнее для множественных изменений
-3. **Кэшировать** стилизованный текст в RecyclerView
+3. **Кэшировать** стилизованный текст в `RecyclerView`
 4. **Избегать** избыточных spans — каждый добавляет overhead
 5. **Переиспользовать** spans когда возможно
 
@@ -250,14 +250,14 @@ val styled = SpannableStringBuilder()
 
 1. **SpannableString** for static text — faster than Builder
 2. **SpannableStringBuilder** for dynamic text — efficient for multiple modifications
-3. **Cache** styled text in RecyclerView
+3. **Cache** styled text in `RecyclerView`
 4. **Avoid** excessive spans — each adds overhead
 5. **Reuse** spans when possible
 
 ## Follow-ups
 
 - How do custom spans differ from framework spans?
-- What's the performance impact of using many spans in a RecyclerView?
+- What's the performance impact of using many spans in a `RecyclerView`?
 - When should you use SpannableStringBuilder vs SpannableString?
 - How do paragraph spans handle text that doesn't end with newline?
 - What are the trade-offs between Spannable vs HTML.fromHtml()?

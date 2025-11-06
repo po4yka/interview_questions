@@ -40,7 +40,7 @@ sources:
 **LaunchedEffect**
 - Запускает корутину в composition scope
 - Автоматически отменяется при изменении ключей или recomposition выходе
-- Для suspend-функций, Flow, асинхронных операций
+- Для suspend-функций, `Flow`, асинхронных операций
 
 **DisposableEffect**
 - Регистрирует внешние ресурсы (listeners, observers, callbacks)
@@ -58,7 +58,7 @@ LaunchedEffect(userId) { // ✅ Перезапуск при изменении u
 }
 ```
 
-**LaunchedEffect + Flow:**
+**LaunchedEffect + `Flow`:**
 ```kotlin
 LaunchedEffect(Unit) { // ✅ Единожды за lifecycle
   viewModel.events.collect { event ->
@@ -100,7 +100,7 @@ DisposableEffect(sensorType) {
 
 | API | Когда использовать |
 |-----|-------------------|
-| **LaunchedEffect** | Suspend-операции, Flow, API calls, таймеры |
+| **LaunchedEffect** | Suspend-операции, `Flow`, API calls, таймеры |
 | **DisposableEffect** | Listeners, observers, native ресурсы, lifecycle callbacks |
 | **rememberCoroutineScope** | Event-driven корутины (клики, swipe) |
 | **SideEffect** | Синхронизация state после recomposition (без suspend) |
@@ -137,7 +137,7 @@ DisposableEffect(Unit) {
 **LaunchedEffect**
 - Launches coroutine in composition scope
 - Auto-cancels on key change or recomposition exit
-- For suspend functions, Flow, async operations
+- For suspend functions, `Flow`, async operations
 
 **DisposableEffect**
 - Registers external resources (listeners, observers, callbacks)
@@ -155,7 +155,7 @@ LaunchedEffect(userId) { // ✅ Restarts when userId changes
 }
 ```
 
-**LaunchedEffect + Flow:**
+**LaunchedEffect + `Flow`:**
 ```kotlin
 LaunchedEffect(Unit) { // ✅ Once per lifecycle
   viewModel.events.collect { event ->
@@ -197,7 +197,7 @@ DisposableEffect(sensorType) {
 
 | API | When to use |
 |-----|-------------|
-| **LaunchedEffect** | Suspend operations, Flow, API calls, timers |
+| **LaunchedEffect** | Suspend operations, `Flow`, API calls, timers |
 | **DisposableEffect** | Listeners, observers, native resources, lifecycle callbacks |
 | **rememberCoroutineScope** | Event-driven coroutines (clicks, swipes) |
 | **SideEffect** | Sync state after recomposition (no suspend) |
@@ -232,7 +232,7 @@ DisposableEffect(Unit) {
 ## Follow-ups
 
 - How does `rememberUpdatedState` prevent unnecessary effect restarts?
-- When should effects live in ViewModel versus Composable?
+- When should effects live in `ViewModel` versus Composable?
 - How to test side effects for proper cleanup and leak prevention?
 - What is the difference between `SideEffect` and `LaunchedEffect`?
 - How do effect keys interact with recomposition and smart recomposition?

@@ -63,7 +63,7 @@ val memoryCache = object : LruCache<String, Bitmap>(cacheSize) {
 }
 ```
 
-**3. Оптимизируйте работу с Bitmap**
+**3. Оптимизируйте работу с `Bitmap`**
 
 ```kotlin
 // ✅ Загружайте только необходимый размер через inSampleSize
@@ -133,7 +133,7 @@ val memoryCache = object : LruCache<String, Bitmap>(cacheSize) {
 }
 ```
 
-**3. Optimize Bitmap Loading**
+**3. Optimize `Bitmap` Loading**
 
 ```kotlin
 // ✅ Load only necessary size via inSampleSize
@@ -169,7 +169,7 @@ override fun onTrimMemory(level: Int) {
 
 - How do you diagnose memory leaks using Android Studio Profiler heap dumps and allocation tracking?
 - When should you use LruCache vs DiskLruCache for different data types?
-- How does Bitmap.Config (ARGB_8888 vs RGB_565) impact memory usage and quality trade-offs?
+- How does `Bitmap`.Config (ARGB_8888 vs RGB_565) impact memory usage and quality trade-offs?
 
 ## References
 

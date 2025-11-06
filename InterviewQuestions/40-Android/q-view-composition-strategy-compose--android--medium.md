@@ -28,12 +28,12 @@ sources: ["https://developer.android.com/jetpack/compose/interop/view-compositio
 ## Ответ (RU)
 
 **Концепция:**
-ViewCompositionStrategy управляет жизненным циклом Composition в ComposeView — определяет, когда освобождать ресурсы. Критично для интеграции Compose в View-based код и предотвращения утечек памяти.
+ViewCompositionStrategy управляет жизненным циклом Composition в ComposeView — определяет, когда освобождать ресурсы. Критично для интеграции Compose в `View`-based код и предотвращения утечек памяти.
 
 **Основные стратегии:**
 
 1. **DisposeOnDetachedFromWindowOrReleasedFromPool** (по умолчанию)
-   - Освобождает Composition при detach от окна или release из RecyclerView pool
+   - Освобождает Composition при detach от окна или release из `RecyclerView` pool
    - Подходит для большинства случаев
 
 ```kotlin
@@ -44,7 +44,7 @@ composeView.setViewCompositionStrategy(
 ```
 
 1. **DisposeOnLifecycleDestroyed**
-   - Привязывает Composition к Lifecycle (Fragment, Activity)
+   - Привязывает Composition к `Lifecycle` (`Fragment`, `Activity`)
    - Освобождается только при onDestroy
 
 ```kotlin
@@ -55,8 +55,8 @@ composeView.setViewCompositionStrategy(
 ```
 
 1. **DisposeOnViewTreeLifecycleDestroyed**
-   - Использует Lifecycle из ViewTreeLifecycleOwner
-   - Для случаев, когда Lifecycle недоступен напрямую
+   - Использует `Lifecycle` из ViewTreeLifecycleOwner
+   - Для случаев, когда `Lifecycle` недоступен напрямую
 
 ```kotlin
 // ✅ Когда lifecycle известен только через ViewTree
@@ -83,20 +83,20 @@ composeView.setViewCompositionStrategy(
 ```
 
 **Выбор стратегии:**
-- **Fragment**: DisposeOnLifecycleDestroyed (viewLifecycleOwner)
-- **RecyclerView**: DisposeOnDetachedFromWindowOrReleasedFromPool (default)
+- **`Fragment`**: DisposeOnLifecycleDestroyed (viewLifecycleOwner)
+- **`RecyclerView`**: DisposeOnDetachedFromWindowOrReleasedFromPool (default)
 - **Dialog/BottomSheet**: DisposeOnDetachedFromWindow
-- **Custom View**: оцените lifetime, обычно default подходит
+- **Custom `View`**: оцените lifetime, обычно default подходит
 
 ## Answer (EN)
 
 **Concept:**
-ViewCompositionStrategy controls Composition lifecycle in ComposeView — determines when to release resources. Critical for integrating Compose into View-based code and preventing memory leaks.
+ViewCompositionStrategy controls Composition lifecycle in ComposeView — determines when to release resources. Critical for integrating Compose into `View`-based code and preventing memory leaks.
 
 **Main Strategies:**
 
 1. **DisposeOnDetachedFromWindowOrReleasedFromPool** (default)
-   - Releases Composition on detach from window or release from RecyclerView pool
+   - Releases Composition on detach from window or release from `RecyclerView` pool
    - Suitable for most cases
 
 ```kotlin
@@ -107,7 +107,7 @@ composeView.setViewCompositionStrategy(
 ```
 
 1. **DisposeOnLifecycleDestroyed**
-   - Binds Composition to Lifecycle (Fragment, Activity)
+   - Binds Composition to `Lifecycle` (`Fragment`, `Activity`)
    - Releases only on onDestroy
 
 ```kotlin
@@ -118,8 +118,8 @@ composeView.setViewCompositionStrategy(
 ```
 
 1. **DisposeOnViewTreeLifecycleDestroyed**
-   - Uses Lifecycle from ViewTreeLifecycleOwner
-   - For cases when Lifecycle isn't directly available
+   - Uses `Lifecycle` from ViewTreeLifecycleOwner
+   - For cases when `Lifecycle` isn't directly available
 
 ```kotlin
 // ✅ When lifecycle known only through ViewTree
@@ -146,17 +146,17 @@ composeView.setViewCompositionStrategy(
 ```
 
 **Strategy Selection:**
-- **Fragment**: DisposeOnLifecycleDestroyed (viewLifecycleOwner)
-- **RecyclerView**: DisposeOnDetachedFromWindowOrReleasedFromPool (default)
+- **`Fragment`**: DisposeOnLifecycleDestroyed (viewLifecycleOwner)
+- **`RecyclerView`**: DisposeOnDetachedFromWindowOrReleasedFromPool (default)
 - **Dialog/BottomSheet**: DisposeOnDetachedFromWindow
-- **Custom View**: evaluate lifetime, usually default works
+- **Custom `View`**: evaluate lifetime, usually default works
 
 ---
 
 ## Follow-ups
 
-- What happens if Fragment rotates with the wrong ViewCompositionStrategy?
-- How does DisposeOnDetachedFromWindowOrReleasedFromPool handle RecyclerView pooling differently from detach?
+- What happens if `Fragment` rotates with the wrong ViewCompositionStrategy?
+- How does DisposeOnDetachedFromWindowOrReleasedFromPool handle `RecyclerView` pooling differently from detach?
 - When would DisposeOnViewTreeLifecycleDestroyed be preferred over DisposeOnLifecycleDestroyed?
 - How do you diagnose memory leaks caused by incorrect ViewCompositionStrategy?
 - Can you manually trigger Composition disposal without detaching ComposeView?
@@ -164,19 +164,19 @@ composeView.setViewCompositionStrategy(
 ## References
 
 - [[c-compose-lifecycle]] - Compose lifecycle management
-- [[c-android-lifecycle]] - Android Lifecycle fundamentals
+- [[c-android-lifecycle]] - Android `Lifecycle` fundamentals
 - Official docs: https://developer.android.com/jetpack/compose/interop/view-composition-strategy
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - [[q-compose-basics--android--easy]] - Compose fundamentals
-- [[q-android-lifecycle--android--easy]] - Lifecycle basics
+- [[q-android-lifecycle--android--easy]] - `Lifecycle` basics
 
 ### Related (Same Level)
 - [[q-custom-view-lifecycle--android--medium]] - Compose lifecycle details
-- [[q-compose-interop-androidview--android--medium]] - Compose-View interop
-- [[q-fragment-lifecycle-viewlifecycle--android--medium]] - Fragment lifecycle nuances
+- [[q-compose-interop-androidview--android--medium]] - Compose-`View` interop
+- [[q-fragment-lifecycle-viewlifecycle--android--medium]] - `Fragment` lifecycle nuances
 
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Performance optimization strategies

@@ -33,11 +33,11 @@ tags:
 
 # Вопрос (RU)
 
-От кого наследуются ViewGroup
+От кого наследуются `ViewGroup`
 
 ## Answer (EN)
 # Question (EN)
-> ViewGroup Inheritance
+> `ViewGroup` Inheritance
 
 ---
 
@@ -55,7 +55,7 @@ ViewGroup (container for other Views)
 Specific Layout Classes (LinearLayout, RelativeLayout, etc.)
 ```
 
-### View Class - The Base
+### `View` Class - The Base
 
 The `View` class is the fundamental building block for all UI components:
 
@@ -88,7 +88,7 @@ abstract class View {
 }
 ```
 
-### ViewGroup - The Container
+### `ViewGroup` - The Container
 
 `ViewGroup` extends `View` and adds functionality for managing child views:
 
@@ -115,9 +115,9 @@ abstract class ViewGroup : View {
 }
 ```
 
-### Key Inherited Properties from View
+### Key Inherited Properties from `View`
 
-Since `ViewGroup` extends `View`, it inherits all View properties and methods:
+Since `ViewGroup` extends `View`, it inherits all `View` properties and methods:
 
 ```kotlin
 class CustomLayout : ViewGroup {
@@ -146,7 +146,7 @@ class CustomLayout : ViewGroup {
 }
 ```
 
-### Practical Example: Custom ViewGroup
+### Practical Example: Custom `ViewGroup`
 
 ```kotlin
 class CustomContainerLayout @JvmOverloads constructor(
@@ -194,9 +194,9 @@ class CustomContainerLayout @JvmOverloads constructor(
 }
 ```
 
-### Common ViewGroup Subclasses
+### Common `ViewGroup` Subclasses
 
-All these classes ultimately inherit from View through ViewGroup:
+All these classes ultimately inherit from `View` through `ViewGroup`:
 
 ```kotlin
 // Linear arrangement
@@ -221,9 +221,9 @@ class GridLayout : ViewGroup()
 ### Why This Inheritance Matters
 
 1. **Unified Interface**: All UI elements share common methods and properties
-2. **Polymorphism**: Can treat ViewGroup as View when needed
+2. **Polymorphism**: Can treat `ViewGroup` as `View` when needed
 3. **Consistent API**: Same event handling, drawing, and lifecycle methods
-4. **Flexibility**: ViewGroup can be used anywhere a View can be used
+4. **Flexibility**: `ViewGroup` can be used anywhere a `View` can be used
 
 ```kotlin
 // ViewGroup can be used as View
@@ -238,10 +238,10 @@ setViewProperties(linearLayout) // Works because LinearLayout extends ViewGroup 
 
 ### Summary
 
-- **ViewGroup** inherits from **View**
-- **View** is the base class for all UI elements
-- **ViewGroup** adds child management capabilities
-- All layouts (LinearLayout, RelativeLayout, etc.) extend ViewGroup
+- **`ViewGroup`** inherits from **`View`**
+- **`View`** is the base class for all UI elements
+- **`ViewGroup`** adds child management capabilities
+- All layouts (`LinearLayout`, `RelativeLayout`, etc.) extend `ViewGroup`
 - This inheritance provides a consistent, unified API for all UI components
 
 
@@ -251,7 +251,7 @@ setViewProperties(linearLayout) // Works because LinearLayout extends ViewGroup 
 
 ## Answer (EN)
 # Question (EN)
-> ViewGroup Inheritance
+> `ViewGroup` Inheritance
 
 ---
 
@@ -269,7 +269,7 @@ ViewGroup (container for other Views)
 Specific Layout Classes (LinearLayout, RelativeLayout, etc.)
 ```
 
-### View Class - The Base
+### `View` Class - The Base
 
 The `View` class is the fundamental building block for all UI components:
 
@@ -302,7 +302,7 @@ abstract class View {
 }
 ```
 
-### ViewGroup - The Container
+### `ViewGroup` - The Container
 
 `ViewGroup` extends `View` and adds functionality for managing child views:
 
@@ -329,9 +329,9 @@ abstract class ViewGroup : View {
 }
 ```
 
-### Key Inherited Properties from View
+### Key Inherited Properties from `View`
 
-Since `ViewGroup` extends `View`, it inherits all View properties and methods:
+Since `ViewGroup` extends `View`, it inherits all `View` properties and methods:
 
 ```kotlin
 class CustomLayout : ViewGroup {
@@ -360,7 +360,7 @@ class CustomLayout : ViewGroup {
 }
 ```
 
-### Practical Example: Custom ViewGroup
+### Practical Example: Custom `ViewGroup`
 
 ```kotlin
 class CustomContainerLayout @JvmOverloads constructor(
@@ -408,9 +408,9 @@ class CustomContainerLayout @JvmOverloads constructor(
 }
 ```
 
-### Common ViewGroup Subclasses
+### Common `ViewGroup` Subclasses
 
-All these classes ultimately inherit from View through ViewGroup:
+All these classes ultimately inherit from `View` through `ViewGroup`:
 
 ```kotlin
 // Linear arrangement
@@ -435,9 +435,9 @@ class GridLayout : ViewGroup()
 ### Why This Inheritance Matters
 
 1. **Unified Interface**: All UI elements share common methods and properties
-2. **Polymorphism**: Can treat ViewGroup as View when needed
+2. **Polymorphism**: Can treat `ViewGroup` as `View` when needed
 3. **Consistent API**: Same event handling, drawing, and lifecycle methods
-4. **Flexibility**: ViewGroup can be used anywhere a View can be used
+4. **Flexibility**: `ViewGroup` can be used anywhere a `View` can be used
 
 ```kotlin
 // ViewGroup can be used as View
@@ -452,15 +452,15 @@ setViewProperties(linearLayout) // Works because LinearLayout extends ViewGroup 
 
 ### Summary
 
-- **ViewGroup** inherits from **View**
-- **View** is the base class for all UI elements
-- **ViewGroup** adds child management capabilities
-- All layouts (LinearLayout, RelativeLayout, etc.) extend ViewGroup
+- **`ViewGroup`** inherits from **`View`**
+- **`View`** is the base class for all UI elements
+- **`ViewGroup`** adds child management capabilities
+- All layouts (`LinearLayout`, `RelativeLayout`, etc.) extend `ViewGroup`
 - This inheritance provides a consistent, unified API for all UI components
 
 ## Ответ (RU)
 
-ViewGroup является наследником класса View, который является базовым для всех элементов пользовательского интерфейса. ViewGroup выступает как контейнер для других View, предоставляя им общую структуру и управление дочерними элементами.
+`ViewGroup` является наследником класса `View`, который является базовым для всех элементов пользовательского интерфейса. `ViewGroup` выступает как контейнер для других `View`, предоставляя им общую структуру и управление дочерними элементами.
 
 ---
 
@@ -481,15 +481,15 @@ ViewGroup является наследником класса View, котор�
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View
-- [[q-viewmodel-pattern--android--easy]] - View
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`
+- [[q-viewmodel-pattern--android--easy]] - `View`
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--android--medium]] - View
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- q-rxjava-pagination-recyclerview--android--medium - View
-- [[q-what-is-viewmodel--android--medium]] - View
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+- [[q-testing-viewmodels-turbine--android--medium]] - `View`
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View`
+- q-rxjava-pagination-recyclerview--android--medium - `View`
+- [[q-what-is-viewmodel--android--medium]] - `View`
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--android--hard]] - View
+- [[q-compose-custom-layout--android--hard]] - `View`

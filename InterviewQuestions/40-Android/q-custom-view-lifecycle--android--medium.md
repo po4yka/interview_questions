@@ -27,16 +27,16 @@ sources: []
 ---
 
 # Вопрос (RU)
-> Каков жизненный цикл Custom View в Android? Какие методы вызываются при создании, отрисовке и удалении view?
+> Каков жизненный цикл Custom `View` в Android? Какие методы вызываются при создании, отрисовке и удалении view?
 
 # Question (EN)
-> What is the Custom View lifecycle in Android? Which methods are called during view creation, drawing, and removal?
+> What is the Custom `View` lifecycle in Android? Which methods are called during view creation, drawing, and removal?
 
 ---
 
 ## Ответ (RU)
 
-**View Lifecycle** определяет последовательность вызовов методов от создания до удаления view:
+**`View` `Lifecycle`** определяет последовательность вызовов методов от создания до удаления view:
 
 ```
 Constructor → onAttachedToWindow → onMeasure → onLayout → onDraw → onDetachedFromWindow
@@ -46,9 +46,9 @@ Constructor → onAttachedToWindow → onMeasure → onLayout → onDraw → onD
 
 #### 1. Constructor — Инициализация
 
-View создается, но еще не присоединена к окну. Размеры неизвестны.
+`View` создается, но еще не присоединена к окну. Размеры неизвестны.
 
-**Действия**: инициализация Paint, загрузка атрибутов XML.
+**Действия**: инициализация `Paint`, загрузка атрибутов XML.
 
 ```kotlin
 class CustomProgressBar @JvmOverloads constructor(
@@ -75,7 +75,7 @@ class CustomProgressBar @JvmOverloads constructor(
 
 #### 2. onAttachedToWindow — Присоединение К Окну
 
-View добавлена в иерархию, можно начинать анимации, регистрировать listeners.
+`View` добавлена в иерархию, можно начинать анимации, регистрировать listeners.
 
 ```kotlin
 override fun onAttachedToWindow() {
@@ -105,9 +105,9 @@ override fun onMeasure(widthSpec: Int, heightSpec: Int) {
 }
 ```
 
-#### 4. onLayout — Позиционирование (для ViewGroup)
+#### 4. onLayout — Позиционирование (для `ViewGroup`)
 
-Для простых View не требуется. ViewGroup использует для размещения потомков.
+Для простых `View` не требуется. `ViewGroup` использует для размещения потомков.
 
 #### 5. onDraw — Отрисовка
 
@@ -130,7 +130,7 @@ override fun onDraw(canvas: Canvas) {
 
 ### Ключевые Правила
 
-1. **Constructor**: инициализация Paint, атрибутов; НЕ использовать размеры
+1. **Constructor**: инициализация `Paint`, атрибутов; НЕ использовать размеры
 2. **onAttachedToWindow**: запуск анимаций, регистрация listeners
 3. **onMeasure**: ВСЕГДА вызывать `setMeasuredDimension()`
 4. **onDraw**: НЕ создавать объекты, НЕ выделять память
@@ -155,19 +155,19 @@ class OptimizedCustomView(context: Context, attrs: AttributeSet?) : View(context
 
 ## Answer (EN)
 
-**View Lifecycle** defines the sequence of method calls from creation to removal:
+**`View` `Lifecycle`** defines the sequence of method calls from creation to removal:
 
 ```
 Constructor → onAttachedToWindow → onMeasure → onLayout → onDraw → onDetachedFromWindow
 ```
 
-### Lifecycle Phases
+### `Lifecycle` Phases
 
 #### 1. Constructor — Initialization
 
-View is created but not yet attached to window. Dimensions unknown.
+`View` is created but not yet attached to window. Dimensions unknown.
 
-**Actions**: initialize Paint, load XML attributes.
+**Actions**: initialize `Paint`, load XML attributes.
 
 ```kotlin
 class CustomProgressBar @JvmOverloads constructor(
@@ -194,7 +194,7 @@ class CustomProgressBar @JvmOverloads constructor(
 
 #### 2. onAttachedToWindow — Attach to Window
 
-View added to hierarchy, safe to start animations, register listeners.
+`View` added to hierarchy, safe to start animations, register listeners.
 
 ```kotlin
 override fun onAttachedToWindow() {
@@ -224,9 +224,9 @@ override fun onMeasure(widthSpec: Int, heightSpec: Int) {
 }
 ```
 
-#### 4. onLayout — Positioning (for ViewGroup)
+#### 4. onLayout — Positioning (for `ViewGroup`)
 
-Not required for simple Views. ViewGroup uses it to position children.
+Not required for simple Views. `ViewGroup` uses it to position children.
 
 #### 5. onDraw — Drawing
 
@@ -249,7 +249,7 @@ override fun onDraw(canvas: Canvas) {
 
 ### Key Rules
 
-1. **Constructor**: initialize Paint, attributes; DO NOT use dimensions
+1. **Constructor**: initialize `Paint`, attributes; DO NOT use dimensions
 2. **onAttachedToWindow**: start animations, register listeners
 3. **onMeasure**: ALWAYS call `setMeasuredDimension()`
 4. **onDraw**: NO object creation, NO memory allocation
@@ -287,7 +287,7 @@ class OptimizedCustomView(context: Context, attrs: AttributeSet?) : View(context
 - [[c-view-lifecycle]]
 - [[c-custom-views]]
 - https://developer.android.com/guide/topics/ui/custom-components
-- https://developer.android.com/reference/android/view/View
+- https://developer.android.com/reference/android/view/`View`
 
 ## Related Questions
 

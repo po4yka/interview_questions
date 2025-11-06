@@ -290,15 +290,15 @@ val id: Identifier = userId             // 4. Interfaces
 
 ### Prerequisites (Easier)
 - [[q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]] - Unit types basics
-- [[q-viewmodel-pattern--android--easy]] - ViewModel patterns
+- [[q-viewmodel-pattern--android--easy]] - `ViewModel` patterns
 
 ### Related (Same Level)
 - [[q-kotlin-data-classes--kotlin--medium]] - Data classes
-- [[q-repository-pattern--android--medium]] - Repository pattern
+- [[q-repository-pattern--android--medium]] - `Repository` pattern
 - [[q-parcelable-implementation--android--medium]] - Efficient data passing
 - [[q-bundle-data-types--android--medium]] - Data serialization
 
 ### Advanced (Harder)
-- [[q-kotlin-context-receivers--android--hard]] - Context receivers deep dive
+- [[q-kotlin-context-receivers--android--hard]] - `Context` receivers deep dive
 - [[q-kotlin-dsl-builders--android--hard]] - DSL builders
 - [[q-android-runtime-internals--android--hard]] - Runtime optimization

@@ -25,10 +25,10 @@ tags: [android/architecture-clean, android/coroutines, android/lifecycle, diffic
 ---
 
 # Вопрос (RU)
-> Как корректно отменять асинхронные запросы в Presenter при изменении состояния жизненного цикла View?
+> Как корректно отменять асинхронные запросы в Presenter при изменении состояния жизненного цикла `View`?
 
 # Question (EN)
-> How to properly cancel async requests in a Presenter when View lifecycle changes?
+> How to properly cancel async requests in a Presenter when `View` lifecycle changes?
 
 ---
 
@@ -196,7 +196,7 @@ fun detach() {
 
 - [[c-coroutines]] — Kotlin coroutines fundamentals
 - [[c-lifecycle]] — Android component lifecycle
-- [[c-mvvm-pattern]] — Model-View-Presenter architecture
+- [[c-mvvm-pattern]] — Model-`View`-Presenter architecture
 - https://developer.android.com/kotlin/coroutines/coroutines-best-practices
 - [UI Layer Architecture](https://developer.android.com/topic/architecture/ui-layer)
 

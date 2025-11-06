@@ -49,7 +49,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-**Решение:** RecyclerView + библиотеки изображений
+**Решение:** `RecyclerView` + библиотеки изображений
 ```kotlin
 // ✅ GOOD - Glide управляет памятью автоматически
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -62,10 +62,10 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```
 
 **Преимущества:**
-- RecyclerView переиспользует views
+- `RecyclerView` переиспользует views
 - Glide/Coil автоматически изменяют размер
 - Memory + disk cache предотвращают повторную загрузку
-- Lifecycle awareness очищает память
+- `Lifecycle` awareness очищает память
 
 ### 2. Медленная Прокрутка
 
@@ -181,7 +181,7 @@ fun loadDataInBackground() {
 }
 ```
 
-**Решение:** LiveData/Flow с lifecycle
+**Решение:** LiveData/`Flow` с lifecycle
 ```kotlin
 // ✅ GOOD - ViewModel - фоновая работа здесь
 class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
@@ -201,8 +201,8 @@ viewModel.items.observe(viewLifecycleOwner) { items ->
 
 **Преимущества:**
 - Автоматический dispatch на main thread
-- Lifecycle-aware (нет утечек памяти)
-- Thread-safe (нет concurrent modification)
+- `Lifecycle`-aware (нет утечек памяти)
+- `Thread`-safe (нет concurrent modification)
 
 ### Лучшие Практики
 
@@ -239,10 +239,10 @@ override fun onViewRecycled(holder: ViewHolder) {
 
 | Проблема | Причина | Решение |
 |---------|---------|---------|
-| Out of Memory | Большие изображения, нет recycling | RecyclerView + Glide/Coil |
+| Out of Memory | Большие изображения, нет recycling | `RecyclerView` + Glide/Coil |
 | Медленная прокрутка | Тяжелые операции в onBindViewHolder | Предобработка данных |
 | Несогласованность | Неправильные adapter updates | DiffUtil, ListAdapter |
-| Многопоточность | Multi-threaded updates | LiveData, Flow |
+| Многопоточность | Multi-threaded updates | `LiveData`, `Flow` |
 | Утечки памяти | Удержание activity references | ViewBinding, lifecycle components |
 | Неверные клики | Position меняется async | Stable IDs, item callbacks |
 
@@ -250,7 +250,7 @@ override fun onViewRecycled(holder: ViewHolder) {
 
 ## Answer (EN)
 
-List elements in Android applications face four main categories of problems: **memory**, **performance**, **data consistency**, and **concurrency**.
+`List` elements in Android applications face four main categories of problems: **memory**, **performance**, **data consistency**, and **concurrency**.
 
 ### 1. Out of Memory (OOM)
 
@@ -270,7 +270,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-**Solution:** RecyclerView + image libraries
+**Solution:** `RecyclerView` + image libraries
 ```kotlin
 // ✅ GOOD - Glide manages memory automatically
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -283,10 +283,10 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```
 
 **Benefits:**
-- RecyclerView recycles views
+- `RecyclerView` recycles views
 - Glide/Coil automatically resize images
 - Memory + disk cache prevent reloading
-- Lifecycle awareness clears memory
+- `Lifecycle` awareness clears memory
 
 ### 2. Lagging Scrolling
 
@@ -402,7 +402,7 @@ fun loadDataInBackground() {
 }
 ```
 
-**Solution:** LiveData/Flow with lifecycle
+**Solution:** LiveData/`Flow` with lifecycle
 ```kotlin
 // ✅ GOOD - ViewModel - background work here
 class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
@@ -422,8 +422,8 @@ viewModel.items.observe(viewLifecycleOwner) { items ->
 
 **Benefits:**
 - Automatic main thread dispatching
-- Lifecycle-aware (no memory leaks)
-- Thread-safe (no concurrent modification)
+- `Lifecycle`-aware (no memory leaks)
+- `Thread`-safe (no concurrent modification)
 
 ### Best Practices
 
@@ -460,10 +460,10 @@ override fun onViewRecycled(holder: ViewHolder) {
 
 | Problem | Cause | Solution |
 |---------|-------|----------|
-| Out of Memory | Large images, no recycling | RecyclerView + Glide/Coil |
+| Out of Memory | Large images, no recycling | `RecyclerView` + Glide/Coil |
 | Lagging scroll | Heavy operations in onBindViewHolder | Pre-process data |
 | Data inconsistency | Incorrect adapter updates | DiffUtil, ListAdapter |
-| Concurrency | Multi-threaded updates | LiveData, Flow |
+| Concurrency | Multi-threaded updates | `LiveData`, `Flow` |
 | Memory leaks | Holding activity references | ViewBinding, lifecycle components |
 | Wrong clicks | Position changes async | Stable IDs, item callbacks |
 
@@ -471,32 +471,32 @@ override fun onViewRecycled(holder: ViewHolder) {
 
 ## Follow-ups
 
-1. How does RecyclerView's ViewHolder pattern reduce memory allocations compared to ListView?
+1. How does `RecyclerView`'s ViewHolder pattern reduce memory allocations compared to `ListView`?
 2. When should you use `notifyItemChanged(position)` vs `submitList()` with DiffUtil?
 3. What's the difference between `DiffUtil.ItemCallback` methods `areItemsTheSame()` and `areContentsTheSame()`?
-4. How can you detect and fix ANR (Application Not Responding) caused by adapter operations?
+4. How can you detect and fix ANR (`Application` Not Responding) caused by adapter operations?
 5. What are the trade-offs between `ListAdapter` and custom `RecyclerView.Adapter` implementations?
 
 ## References
 
-- [[c-recyclerview]] - RecyclerView architecture concept
+- [[c-recyclerview]] - `RecyclerView` architecture concept
 - [[c-diffutil]] - DiffUtil algorithm concept
 - [[c-lifecycle-awareness]] - Android lifecycle components
-- Official: [RecyclerView Best Practices](https://developer.android.com/develop/ui/views/layout/recyclerview)
+- Official: [`RecyclerView` Best Practices](https://developer.android.com/develop/ui/views/layout/recyclerview)
 - Official: [DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-known-about-recyclerview--android--easy]] - RecyclerView basics
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization basics
+- [[q-what-is-known-about-recyclerview--android--easy]] - `RecyclerView` basics
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView` optimization basics
 - [[q-what-problems-can-there-be-with-list-items--android--easy]] - Common list problems overview
 
 ### Related (Same Level)
 - [[q-recyclerview-diffutil-advanced--android--medium]] - Advanced DiffUtil usage
 - [[q-paging-library-3--android--medium]] - Paging for large datasets
 - [[q-recyclerview-async-list-differ--android--medium]] - Async list updates
-- [[q-how-to-animate-adding-removing-items-in-recyclerview--android--medium]] - RecyclerView animations
+- [[q-how-to-animate-adding-removing-items-in-recyclerview--android--medium]] - `RecyclerView` animations
 
 ### Advanced (Harder)
 - [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]] - Large list optimization

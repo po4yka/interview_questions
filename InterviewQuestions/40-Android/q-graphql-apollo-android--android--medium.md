@@ -947,7 +947,7 @@ suspend fun getUser(userId: String): GraphQLResult<GetUserQuery.User> {
 }
 ```
 
-### Complete Repository Implementation
+### Complete `Repository` Implementation
 
 ```kotlin
 import kotlinx.coroutines.flow.Flow
@@ -1081,7 +1081,7 @@ class PostRepository(
 }
 ```
 
-### ViewModel with Apollo
+### `ViewModel` with Apollo
 
 ```kotlin
 import androidx.lifecycle.ViewModel
@@ -2235,7 +2235,7 @@ suspend fun getUser(userId: String): GraphQLResult<GetUserQuery.User> {
 }
 ```
 
-### Complete Repository Implementation
+### Complete `Repository` Implementation
 
 ```kotlin
 import kotlinx.coroutines.flow.Flow
@@ -2369,7 +2369,7 @@ class PostRepository(
 }
 ```
 
-### ViewModel with Apollo
+### `ViewModel` with Apollo
 
 ```kotlin
 import androidx.lifecycle.ViewModel
@@ -2850,7 +2850,7 @@ suspend fun getUser(userId: String): GraphQLResult<GetUserQuery.User> {
 }
 ```
 
-### Полная Реализация Repository
+### Полная Реализация `Repository`
 
 ```kotlin
 class PostRepository(

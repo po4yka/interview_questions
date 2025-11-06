@@ -217,7 +217,7 @@ suspend fun uploadWithResume(file: File): Result<String> {
 2. **Chunked upload** для файлов > 50 MB (chunks по 5 MB)
 3. **Progress tracking** для UX (OkHttp Interceptor)
 4. **Retry logic** с exponential backoff
-5. **Foreground Service** с notification
+5. **Foreground `Service`** с notification
 6. **WiFi-only constraint** для больших файлов (`NetworkType.UNMETERED`)
 7. **Resumable uploads** - сохранение прогресса в SharedPreferences
 
@@ -406,7 +406,7 @@ suspend fun uploadWithResume(file: File): Result<String> {
 2. **Chunked upload** for files > 50 MB (5 MB chunks)
 3. **Progress tracking** for UX (OkHttp Interceptor)
 4. **Retry logic** with exponential backoff
-5. **Foreground Service** with notification
+5. **Foreground `Service`** with notification
 6. **WiFi-only constraint** for large files (`NetworkType.UNMETERED`)
 7. **Resumable uploads** - save progress in SharedPreferences
 
@@ -449,7 +449,7 @@ val constraints = Constraints.Builder()
 
 ### Prerequisites
 - Understanding Kotlin coroutines for async operations
-- Background work strategies in Android (Service vs WorkManager)
+- Background work strategies in Android (`Service` vs WorkManager)
 
 ### Related
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - State preservation across configuration changes

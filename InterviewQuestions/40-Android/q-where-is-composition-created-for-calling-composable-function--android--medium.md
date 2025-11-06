@@ -33,7 +33,7 @@ tags: [android/lifecycle, android/ui-compose, difficulty/medium, jetpack-compose
 
 ### Основные Места Создания
 
-**1. В Activity через ComponentActivity.setContent():**
+**1. В `Activity` через ComponentActivity.setContent():**
 
 ```kotlin
 class MainActivity : ComponentActivity() {
@@ -48,7 +48,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-**2. Во Fragment через ComposeView:**
+**2. Во `Fragment` через ComposeView:**
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -65,7 +65,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**3. В обычной View через ComposeView:**
+**3. В обычной `View` через ComposeView:**
 
 ```kotlin
 class MyCustomView(context: Context) : LinearLayout(context) {
@@ -112,7 +112,7 @@ fun CompositionLifecycle() {
 }
 ```
 
-**Резюме**: Композиция = корневой узел Compose UI, создается в `setContent` или `ComposeView`, привязана к жизненному циклу Activity/Fragment.
+**Резюме**: Композиция = корневой узел Compose UI, создается в `setContent` или `ComposeView`, привязана к жизненному циклу Activity/`Fragment`.
 
 ## Answer (EN)
 
@@ -120,7 +120,7 @@ fun CompositionLifecycle() {
 
 ### Primary Creation Points
 
-**1. In Activity via ComponentActivity.setContent():**
+**1. In `Activity` via ComponentActivity.setContent():**
 
 ```kotlin
 class MainActivity : ComponentActivity() {
@@ -135,7 +135,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-**2. In Fragment via ComposeView:**
+**2. In `Fragment` via ComposeView:**
 
 ```kotlin
 class MyFragment : Fragment() {
@@ -152,7 +152,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-**3. In custom View via ComposeView:**
+**3. In custom `View` via ComposeView:**
 
 ```kotlin
 class MyCustomView(context: Context) : LinearLayout(context) {
@@ -182,7 +182,7 @@ layout.addView(ComposeView(context).apply {
 })
 ```
 
-### Composition Lifecycle
+### Composition `Lifecycle`
 
 ```kotlin
 @Composable
@@ -199,7 +199,7 @@ fun CompositionLifecycle() {
 }
 ```
 
-**Summary**: Composition = root Compose UI node, created in `setContent` or `ComposeView`, tied to Activity/Fragment lifecycle.
+**Summary**: Composition = root Compose UI node, created in `setContent` or `ComposeView`, tied to Activity/`Fragment` lifecycle.
 
 ---
 
@@ -214,7 +214,7 @@ fun CompositionLifecycle() {
 ## References
 
 - [[c-jetpack-compose]] - Core Jetpack Compose concepts
-- [Compose Lifecycle](https://developer.android.com/jetpack/compose/lifecycle)
+- [Compose `Lifecycle`](https://developer.android.com/jetpack/compose/lifecycle)
 - [Understanding Composition](https://developer.android.com/jetpack/compose/mental-model)
 - [Thinking in Compose](https://developer.android.com/jetpack/compose/mental-model)
 

@@ -114,7 +114,7 @@ fun DpExample() {
 
 ### Конвертация Dp ↔ Px
 
-**View System**:
+**`View` System**:
 ```kotlin
 // dp → px
 val density = resources.displayMetrics.density
@@ -156,12 +156,12 @@ fun DpConversion() {
 | Размеры layout      | dp      | `width = 100.dp`    |
 | Отступы/padding     | dp      | `padding(16.dp)`    |
 | Размер текста       | **sp**  | `fontSize = 16.sp`  |
-| Canvas (редко)      | px      | Операции рисования  |
+| `Canvas` (редко)      | px      | Операции рисования  |
 
 ### Best Practices
 
 1. **Всегда используйте dp** для размеров элементов
-2. **Никогда не используйте px** для UI (кроме Canvas)
+2. **Никогда не используйте px** для UI (кроме `Canvas`)
 3. **Используйте sp** для размера текста (не dp!)
 4. **Кратность 4dp или 8dp** для согласованности
 
@@ -246,7 +246,7 @@ fun DpExample() {
 
 ### Converting Dp ↔ Px
 
-**View System**:
+**`View` System**:
 ```kotlin
 // dp → px
 val density = resources.displayMetrics.density
@@ -288,12 +288,12 @@ fun DpConversion() {
 | Layout sizes    | dp     | `width = 100.dp`    |
 | Padding/Margins | dp     | `padding(16.dp)`    |
 | Text size       | **sp** | `fontSize = 16.sp`  |
-| Canvas (rare)   | px     | Drawing operations  |
+| `Canvas` (rare)   | px     | Drawing operations  |
 
 ### Best Practices
 
 1. **Always use dp** for layout dimensions
-2. **Never use px** for UI (except Canvas)
+2. **Never use px** for UI (except `Canvas`)
 3. **Use sp** for text sizes (not dp!)
 4. **Use multiples of 4dp or 8dp** for consistency
 
@@ -312,7 +312,7 @@ textView.layoutParams.width = widthPx
 
 ## Follow-ups
 
-- Когда использовать sp вместо dp (и в Compose, и во View-системе)?
+- Когда использовать sp вместо dp (и в Compose, и во `View`-системе)?
 - Как связаны density buckets и папки ресурсов `drawable-*`/`mipmap-*`?
 - Какие проблемы возникают при смешении px и dp?
 

@@ -42,7 +42,7 @@ tags: [android/datastore, android/performance-memory, difficulty/easy, performan
 
 | Характеристика | commit() | apply() |
 |----------------|----------|---------|
-| Возврат | Boolean (успех/неудача) | Void |
+| Возврат | `Boolean` (успех/неудача) | Void |
 | Выполнение | Синхронное (блокирует поток) | Асинхронное (фоновый поток) |
 | Производительность | Медленнее | Быстрее |
 | Использование | Нужен результат операции | Fire-and-forget (99% случаев) |
@@ -183,7 +183,7 @@ suspend fun savePreference(value: String) {
 
 | Feature | commit() | apply() |
 |---------|----------|---------|
-| Return Type | Boolean (success/failure) | Void |
+| Return Type | `Boolean` (success/failure) | Void |
 | Execution | Synchronous (blocks) | Asynchronous (background) |
 | Performance | Slower | Faster |
 | Use Case | Need immediate result | Fire-and-forget (99% of cases) |
@@ -340,7 +340,7 @@ suspend fun savePreference(value: String) {
 
 ### Related (Same Level)
 - [[q-datastore-preferences-vs-proto--android--easy]] - DataStore types
-- [[q-context-modes-android--android--easy]] - Context.MODE_PRIVATE explained
+- [[q-context-modes-android--android--easy]] - `Context`.MODE_PRIVATE explained
 
 ### Advanced (Harder)
 - [[q-datastore-migration--android--medium]] - Migrating from SharedPreferences

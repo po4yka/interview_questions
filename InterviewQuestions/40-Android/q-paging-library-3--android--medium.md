@@ -64,7 +64,7 @@ class ConcertPagingSource(
 
 ✅ **Best Practice**: используйте `RemoteMediator` для network + database архитектуры
 
-**Pager**: конфигурация и создание Flow
+**Pager**: конфигурация и создание `Flow`
 
 ```kotlin
 class ConcertViewModel(private val dao: ConcertDao) : ViewModel() {
@@ -75,7 +75,7 @@ class ConcertViewModel(private val dao: ConcertDao) : ViewModel() {
 }
 ```
 
-**PagingDataAdapter**: адаптер для RecyclerView
+**PagingDataAdapter**: адаптер для `RecyclerView`
 
 ```kotlin
 class ConcertAdapter : PagingDataAdapter<Concert, ConcertViewHolder>(DIFF_CALLBACK) {
@@ -124,7 +124,7 @@ adapter.addLoadStateListener { loadState ->
 - **Встроенное кэширование**: эффективное использование памяти
 - **Retry/Refresh API**: встроенная обработка ошибок
 - **Prefetching**: предзагрузка данных до прокрутки
-- **Kotlin Flow/LiveData**: нативная поддержка реактивности
+- **Kotlin Flow/`LiveData`**: нативная поддержка реактивности
 
 ❌ **Anti-pattern**: загрузка всех данных сразу без пагинации
 
@@ -165,7 +165,7 @@ class ConcertPagingSource(
 
 ✅ **Best Practice**: use `RemoteMediator` for network + database architecture
 
-**Pager**: configuration and Flow creation
+**Pager**: configuration and `Flow` creation
 
 ```kotlin
 class ConcertViewModel(private val dao: ConcertDao) : ViewModel() {
@@ -176,7 +176,7 @@ class ConcertViewModel(private val dao: ConcertDao) : ViewModel() {
 }
 ```
 
-**PagingDataAdapter**: RecyclerView adapter
+**PagingDataAdapter**: `RecyclerView` adapter
 
 ```kotlin
 class ConcertAdapter : PagingDataAdapter<Concert, ConcertViewHolder>(DIFF_CALLBACK) {
@@ -225,7 +225,7 @@ adapter.addLoadStateListener { loadState ->
 - **Built-in caching**: efficient memory usage
 - **Retry/Refresh API**: built-in error handling
 - **Prefetching**: data preloading before scrolling
-- **Kotlin Flow/LiveData**: native reactivity support
+- **Kotlin Flow/`LiveData`**: native reactivity support
 
 ❌ **Anti-pattern**: loading all data at once without pagination
 
@@ -236,7 +236,7 @@ adapter.addLoadStateListener { loadState ->
 - How does `RemoteMediator` coordinate network and database sources?
 - What's the difference between `refresh`, `prepend`, and `append` load types?
 - How to implement custom retry logic for failed page loads?
-- What are the memory implications of `cachedIn()` vs uncached Flow?
+- What are the memory implications of `cachedIn()` vs uncached `Flow`?
 - How to handle deletions and insertions in paginated lists?
 
 ## References

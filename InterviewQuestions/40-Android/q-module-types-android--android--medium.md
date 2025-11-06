@@ -177,7 +177,7 @@ Test модули используются только для тестиров�
 | Тип модуля | Назначение | Зависимости |
 |------------|-----------|------------|
 | **Data** | Репозитории, источники данных, модели | Core модули |
-| **Feature** | UI, ViewModel, логика функции | Data, Core модули |
+| **Feature** | UI, `ViewModel`, логика функции | Data, Core модули |
 | **App** | Точка входа, навигация, DI | Feature модули |
 | **Common/Core** | Общий код (UI, network, analytics) | Минимальные |
 | **Test** | Фейки, тестовые утилиты | Тестируемые модули |
@@ -332,7 +332,7 @@ Test modules are used for testing purposes only. They contain test code, resourc
 | Module Type | Purpose | Dependencies |
 |------------|---------|--------------|
 | **Data** | Repositories, data sources, models | Core modules |
-| **Feature** | UI, ViewModel, feature logic | Data, Core modules |
+| **Feature** | UI, `ViewModel`, feature logic | Data, Core modules |
 | **App** | Entry point, navigation, DI | Feature modules |
 | **Common/Core** | Shared code (UI, network, analytics) | Minimal |
 | **Test** | Fakes, test utilities | Modules under test |

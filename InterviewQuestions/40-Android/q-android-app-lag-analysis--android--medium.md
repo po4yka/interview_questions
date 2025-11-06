@@ -50,7 +50,7 @@ tags:
 
 ### Причина Лагов
 
-Лаги возникают когда рендеринг кадра превышает 16ms (60 FPS) или UI-поток блокирован. Основные причины: блокировка главного потока, утечки памяти, сложная иерархия View, неоптимизированные списки.
+Лаги возникают когда рендеринг кадра превышает 16ms (60 FPS) или UI-поток блокирован. Основные причины: блокировка главного потока, утечки памяти, сложная иерархия `View`, неоптимизированные списки.
 
 ### Блокировка Главного Потока
 
@@ -144,7 +144,7 @@ StrictMode.setThreadPolicy(
 
 Lag occurs when frame rendering exceeds 16ms (60 FPS) or the UI thread is blocked. Main causes: main thread blocking, memory leaks, complex view hierarchies, unoptimized lists.
 
-### Main Thread Blocking
+### Main `Thread` Blocking
 
 ```kotlin
 // ❌ Synchronous call blocks UI
@@ -184,7 +184,7 @@ lifecycleScope.launch {
 }
 ```
 
-### List Optimization
+### `List` Optimization
 
 ```kotlin
 // ✅ RecyclerView with DiffUtil

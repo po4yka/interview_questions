@@ -18,33 +18,33 @@ tags: [android/activity, android/fragment, android/lifecycle, difficulty/hard, f
 
 # Вопрос (RU)
 
-Почему колбэки Fragment отличаются от колбэков Activity?
+Почему колбэки `Fragment` отличаются от колбэков `Activity`?
 
 # Question (EN)
 
-Why do Fragment callbacks differ from Activity callbacks?
+Why do `Fragment` callbacks differ from `Activity` callbacks?
 
 ---
 
 ## Ответ (RU)
 
-Fragment имеет более сложный lifecycle, чем Activity, из-за **фундаментального архитектурного различия**: Fragment живет внутри Activity и его жизненный цикл зависит от хоста.
+`Fragment` имеет более сложный lifecycle, чем `Activity`, из-за **фундаментального архитектурного различия**: `Fragment` живет внутри `Activity` и его жизненный цикл зависит от хоста.
 
 ### Ключевые Различия
 
-**Activity**: автономный компонент с простым жизненным циклом
+**`Activity`**: автономный компонент с простым жизненным циклом
 ```
 onCreate → onStart → onResume → onPause → onStop → onDestroy
 ```
 
-**Fragment**: вложенный компонент с двумя независимыми циклами
+**`Fragment`**: вложенный компонент с двумя независимыми циклами
 ```
 Fragment lifecycle: onCreate → ... → onDestroy
 View lifecycle:     onCreateView → ... → onDestroyView
 Host lifecycle:     onAttach → ... → onDetach
 ```
 
-### Дополнительные Колбэки Fragment
+### Дополнительные Колбэки `Fragment`
 
 ```kotlin
 // Присоединение к хосту
@@ -63,7 +63,7 @@ onDestroy()                        // Fragment уничтожен
 
 ### Почему Нужны Дополнительные Колбэки?
 
-**1. View может быть уничтожена без уничтожения Fragment**
+**1. `View` может быть уничтожена без уничтожения `Fragment`**
 
 ✅ **Правильно**: Разделенные lifecycle
 ```kotlin
@@ -83,11 +83,11 @@ class MyFragment : Fragment() {
 ```
 
 **Сценарии**:
-- **ViewPager**: View уничтожается при свайпе, Fragment остается
-- **BackStack**: View уничтожается при замене, Fragment в стеке
-- **Configuration change**: View пересоздается, Fragment сохраняется
+- **ViewPager**: `View` уничтожается при свайпе, `Fragment` остается
+- **BackStack**: `View` уничтожается при замене, `Fragment` в стеке
+- **Configuration change**: `View` пересоздается, `Fragment` сохраняется
 
-**2. Fragment зависит от Activity**
+**2. `Fragment` зависит от `Activity`**
 
 ```kotlin
 override fun onAttach(context: Context) {
@@ -102,11 +102,11 @@ override fun onDetach() {
 }
 ```
 
-**Activity** не имеет `onAttach/onDetach` - она автономна.
+**`Activity`** не имеет `onAttach/onDetach` - она автономна.
 
-**3. ViewLifecycleOwner отличается от Fragment lifecycle**
+**3. ViewLifecycleOwner отличается от `Fragment` lifecycle**
 
-❌ **Неправильно**: LiveData с Fragment lifecycle
+❌ **Неправильно**: `LiveData` с `Fragment` lifecycle
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel.data.observe(this) { // Memory leak!
@@ -115,7 +115,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 }
 ```
 
-✅ **Правильно**: LiveData с View lifecycle
+✅ **Правильно**: `LiveData` с `View` lifecycle
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel.data.observe(viewLifecycleOwner) { // Отписка в onDestroyView
@@ -124,9 +124,9 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 }
 ```
 
-### Сравнение Полного Lifecycle
+### Сравнение Полного `Lifecycle`
 
-**Activity**:
+**`Activity`**:
 ```kotlin
 class MyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -142,7 +142,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-**Fragment**:
+**`Fragment`**:
 ```kotlin
 class MyFragment : Fragment() {
     // 1. Присоединение к Activity
@@ -187,40 +187,40 @@ class MyFragment : Fragment() {
 
 ### Архитектурные Причины
 
-Fragment был создан для **модульности UI** и должен:
-1. Существовать в разных Activity (переиспользование)
+`Fragment` был создан для **модульности UI** и должен:
+1. Существовать в разных `Activity` (переиспользование)
 2. Управляться динамически (add/remove/replace)
-3. Выживать в BackStack без View (память)
+3. Выживать в BackStack без `View` (память)
 4. Поддерживать headless режим (без UI)
-5. Координироваться с хостом (жизненный цикл Activity)
+5. Координироваться с хостом (жизненный цикл `Activity`)
 
-Activity - это **автономная точка входа**, ее lifecycle проще потому что:
-1. Создается системой (Intent)
+`Activity` - это **автономная точка входа**, ее lifecycle проще потому что:
+1. Создается системой (`Intent`)
 2. Управляется Task Manager
-3. View всегда существует вместе с Activity
+3. `View` всегда существует вместе с `Activity`
 4. Не зависит от другого компонента
 
 ---
 
 ## Answer (EN)
 
-Fragment has a more complex lifecycle than Activity due to a **fundamental architectural difference**: Fragment lives inside an Activity and its lifecycle depends on the host.
+`Fragment` has a more complex lifecycle than `Activity` due to a **fundamental architectural difference**: `Fragment` lives inside an `Activity` and its lifecycle depends on the host.
 
 ### Key Differences
 
-**Activity**: autonomous component with simple lifecycle
+**`Activity`**: autonomous component with simple lifecycle
 ```
 onCreate → onStart → onResume → onPause → onStop → onDestroy
 ```
 
-**Fragment**: nested component with two independent cycles
+**`Fragment`**: nested component with two independent cycles
 ```
 Fragment lifecycle: onCreate → ... → onDestroy
 View lifecycle:     onCreateView → ... → onDestroyView
 Host lifecycle:     onAttach → ... → onDetach
 ```
 
-### Additional Fragment Callbacks
+### Additional `Fragment` Callbacks
 
 ```kotlin
 // Host attachment
@@ -239,7 +239,7 @@ onDestroy()                        // Fragment destroyed
 
 ### Why Additional Callbacks Are Needed
 
-**1. View can be destroyed without destroying Fragment**
+**1. `View` can be destroyed without destroying `Fragment`**
 
 ✅ **Correct**: Separated lifecycles
 ```kotlin
@@ -259,11 +259,11 @@ class MyFragment : Fragment() {
 ```
 
 **Scenarios**:
-- **ViewPager**: View destroyed on swipe, Fragment remains
-- **BackStack**: View destroyed on replacement, Fragment in stack
-- **Configuration change**: View recreated, Fragment preserved
+- **ViewPager**: `View` destroyed on swipe, `Fragment` remains
+- **BackStack**: `View` destroyed on replacement, `Fragment` in stack
+- **Configuration change**: `View` recreated, `Fragment` preserved
 
-**2. Fragment depends on Activity**
+**2. `Fragment` depends on `Activity`**
 
 ```kotlin
 override fun onAttach(context: Context) {
@@ -278,11 +278,11 @@ override fun onDetach() {
 }
 ```
 
-**Activity** has no `onAttach/onDetach` - it's autonomous.
+**`Activity`** has no `onAttach/onDetach` - it's autonomous.
 
-**3. ViewLifecycleOwner differs from Fragment lifecycle**
+**3. ViewLifecycleOwner differs from `Fragment` lifecycle**
 
-❌ **Wrong**: LiveData with Fragment lifecycle
+❌ **Wrong**: `LiveData` with `Fragment` lifecycle
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel.data.observe(this) { // Memory leak!
@@ -291,7 +291,7 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 }
 ```
 
-✅ **Correct**: LiveData with View lifecycle
+✅ **Correct**: `LiveData` with `View` lifecycle
 ```kotlin
 override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     viewModel.data.observe(viewLifecycleOwner) { // Unsubscribes in onDestroyView
@@ -300,9 +300,9 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 }
 ```
 
-### Full Lifecycle Comparison
+### Full `Lifecycle` Comparison
 
-**Activity**:
+**`Activity`**:
 ```kotlin
 class MyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -318,7 +318,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-**Fragment**:
+**`Fragment`**:
 ```kotlin
 class MyFragment : Fragment() {
     // 1. Attached to Activity
@@ -363,22 +363,22 @@ class MyFragment : Fragment() {
 
 ### Architectural Reasons
 
-Fragment was created for **UI modularity** and must:
+`Fragment` was created for **UI modularity** and must:
 1. Exist in different Activities (reusability)
 2. Be managed dynamically (add/remove/replace)
-3. Survive in BackStack without View (memory)
+3. Survive in BackStack without `View` (memory)
 4. Support headless mode (no UI)
-5. Coordinate with host (Activity lifecycle)
+5. Coordinate with host (`Activity` lifecycle)
 
-Activity is an **autonomous entry point**, its lifecycle is simpler because:
-1. Created by system (Intent)
+`Activity` is an **autonomous entry point**, its lifecycle is simpler because:
+1. Created by system (`Intent`)
 2. Managed by Task Manager
-3. View always exists with Activity
+3. `View` always exists with `Activity`
 4. Independent of other components
 
 ### Real-World Scenarios
 
-**ViewPager Fragment Lifecycle**:
+**ViewPager `Fragment` `Lifecycle`**:
 ```kotlin
 // Page 0 visible
 FragmentA: onCreate() → onCreateView() → onViewCreated()
@@ -437,8 +437,8 @@ class OptimizedFragment : Fragment() {
 }
 ```
 
-**Benefit**: When Fragment in BackStack:
-- View destroyed → freed memory
+**Benefit**: When `Fragment` in BackStack:
+- `View` destroyed → freed memory
 - Data kept → no reload needed
 - Fast restoration when user navigates back
 
@@ -446,37 +446,37 @@ class OptimizedFragment : Fragment() {
 
 ## Follow-ups
 
-1. Why does Fragment have both `onCreate()` and `onCreateView()` when Activity only has `onCreate()`?
-2. What happens if you observe LiveData with `this` instead of `viewLifecycleOwner` in Fragment?
-3. How does `retainInstance = true` affect Fragment lifecycle (deprecated pattern)?
-4. What is the lifecycle of a Fragment in ViewPager vs BackStack?
-5. Why can't Fragment access `requireActivity()` after `onDetach()`?
+1. Why does `Fragment` have both `onCreate()` and `onCreateView()` when `Activity` only has `onCreate()`?
+2. What happens if you observe `LiveData` with `this` instead of `viewLifecycleOwner` in `Fragment`?
+3. How does `retainInstance = true` affect `Fragment` lifecycle (deprecated pattern)?
+4. What is the lifecycle of a `Fragment` in ViewPager vs BackStack?
+5. Why can't `Fragment` access `requireActivity()` after `onDetach()`?
 
 ---
 
 ## References
 
-- [[c-fragments]] - Fragment fundamentals
+- [[c-fragments]] - `Fragment` fundamentals
 - [[c-lifecycle]] - Android lifecycle concepts
 - [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - onCreateView separation
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle comparison
-- [Fragment Lifecycle | Android Developers](https://developer.android.com/guide/fragments/lifecycle)
-- [ViewLifecycleOwner | Android Developers](https://developer.android.com/reference/androidx/fragment/app/Fragment#getViewLifecycleOwner())
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Lifecycle` comparison
+- [`Fragment` `Lifecycle` | Android Developers](https://developer.android.com/guide/fragments/lifecycle)
+- [ViewLifecycleOwner | Android Developers](https://developer.android.com/reference/androidx/fragment/app/`Fragment`#getViewLifecycleOwner())
 
 ---
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-fragment-basics--android--easy]] - Fragment fundamentals
-- [[q-how-does-activity-lifecycle-work--android--medium]] - Activity lifecycle
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment-Activity relationship
+- [[q-fragment-basics--android--easy]] - `Fragment` fundamentals
+- [[q-how-does-activity-lifecycle-work--android--medium]] - `Activity` lifecycle
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment`-`Activity` relationship
 
 ### Related (Same Level)
-- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - View lifecycle separation
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Fragment purpose
+- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - `View` lifecycle separation
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - `Fragment` purpose
 - [[q-fragments-and-activity-relationship--android--hard]] - Architectural patterns
 
 ### Advanced (Harder)
-- [[q-in-what-cases-might-you-need-to-call-commitallowingstateloss--android--hard]] - Fragment state loss
-- [[q-shared-element-transitions--android--hard]] - Fragment transitions
+- [[q-in-what-cases-might-you-need-to-call-commitallowingstateloss--android--hard]] - `Fragment` state loss
+- [[q-shared-element-transitions--android--hard]] - `Fragment` transitions

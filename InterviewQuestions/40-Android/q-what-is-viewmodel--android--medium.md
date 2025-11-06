@@ -40,24 +40,24 @@ tags:
 
 # Вопрос (RU)
 
-Что такое ViewModel в Android?
+Что такое `ViewModel` в Android?
 
 # Question (EN)
 
-What is ViewModel in Android?
+What is `ViewModel` in Android?
 
 ---
 
 ## Ответ (RU)
 
-**ViewModel** — это класс Android Architecture Components, который является **держателем бизнес-логики и состояния уровня экрана**. Его главное преимущество — **автоматическое сохранение состояния при изменениях конфигурации** (поворот экрана, смена языка).
+**`ViewModel`** — это класс Android Architecture Components, который является **держателем бизнес-логики и состояния уровня экрана**. Его главное преимущество — **автоматическое сохранение состояния при изменениях конфигурации** (поворот экрана, смена языка).
 
 ### Ключевые Характеристики
 
-1. **Привязка к области видимости**: ViewModel создается в связке с Activity или Fragment и живет до их завершения
-2. **Переживает пересоздание**: Один экземпляр ViewModel выживает через множественные вызовы `onCreate()` при изменениях конфигурации
+1. **Привязка к области видимости**: `ViewModel` создается в связке с `Activity` или `Fragment` и живет до их завершения
+2. **Переживает пересоздание**: Один экземпляр `ViewModel` выживает через множественные вызовы `onCreate()` при изменениях конфигурации
 3. **Управление данными для UI**: Единственная ответственность — хранить и управлять UI-данными
-4. **Изоляция от UI**: Никогда не должен хранить ссылки на View, Activity, Fragment или Context (кроме ApplicationContext)
+4. **Изоляция от UI**: Никогда не должен хранить ссылки на `View`, `Activity`, `Fragment` или `Context` (кроме ApplicationContext)
 
 ### Базовый Пример Использования
 
@@ -90,13 +90,13 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-### Жизненный Цикл ViewModel
+### Жизненный Цикл `ViewModel`
 
-ViewModel создается при первом вызове `onCreate()` и **уничтожается только при финальном завершении** Activity/Fragment:
+`ViewModel` создается при первом вызове `onCreate()` и **уничтожается только при финальном завершении** Activity/`Fragment`:
 
-- Activity finish → `ViewModel.onCleared()` вызывается
-- Configuration change (rotation) → ViewModel НЕ пересоздается, возвращается тот же экземпляр
-- Fragment detach → `onCleared()` вызывается
+- `Activity` finish → `ViewModel.onCleared()` вызывается
+- Configuration change (rotation) → `ViewModel` НЕ пересоздается, возвращается тот же экземпляр
+- `Fragment` detach → `onCleared()` вызывается
 
 ```kotlin
 class MyViewModel : ViewModel() {
@@ -111,9 +111,9 @@ class MyViewModel : ViewModel() {
 }
 ```
 
-### Коммуникация Между Fragment'ами
+### Коммуникация Между `Fragment`'ами
 
-Shared ViewModel позволяет Fragment'ам общаться без прямых ссылок друг на друга:
+Shared `ViewModel` позволяет `Fragment`'ам общаться без прямых ссылок друг на друга:
 
 ```kotlin
 class SharedViewModel : ViewModel() {
@@ -135,15 +135,15 @@ class FragmentA : Fragment() {
 }
 ```
 
-### Преимущества ViewModel
+### Преимущества `ViewModel`
 
 **1. Автоматическое сохранение состояния**
 
-Без ViewModel данные теряются при rotation и требуют ручного сохранения через `onSaveInstanceState()`.
+Без `ViewModel` данные теряются при rotation и требуют ручного сохранения через `onSaveInstanceState()`.
 
 **2. Разделение ответственности**
 
-ViewModel инкапсулирует бизнес-логику, UI отвечает только за отображение.
+`ViewModel` инкапсулирует бизнес-логику, UI отвечает только за отображение.
 
 **3. Поддержка корутин**
 
@@ -151,11 +151,11 @@ ViewModel инкапсулирует бизнес-логику, UI отвеча�
 
 **4. Тестируемость**
 
-ViewModel легко тестировать без зависимости от Android framework.
+`ViewModel` легко тестировать без зависимости от Android framework.
 
 ### SavedStateHandle Для Process Death
 
-ViewModel НЕ переживает process death (система убивает процесс при нехватке памяти). Для этого используется **SavedStateHandle**:
+`ViewModel` НЕ переживает process death (система убивает процесс при нехватке памяти). Для этого используется **SavedStateHandle**:
 
 ```kotlin
 class SavedStateViewModel(
@@ -206,18 +206,18 @@ private val viewModel by viewModels<UserViewModel> {
 
 ### Резюме
 
-ViewModel — компонент архитектуры для управления UI-данными с учетом жизненного цикла. Переживает configuration changes, изолирует бизнес-логику от UI, поддерживает корутины и DI. Для process death нужен SavedStateHandle.
+`ViewModel` — компонент архитектуры для управления UI-данными с учетом жизненного цикла. Переживает configuration changes, изолирует бизнес-логику от UI, поддерживает корутины и DI. Для process death нужен SavedStateHandle.
 
 ## Answer (EN)
 
-**ViewModel** is an Android Architecture Component class that acts as a **business logic and screen-level state holder**. Its main advantage is **automatic state persistence through configuration changes** (screen rotation, language change).
+**`ViewModel`** is an Android Architecture Component class that acts as a **business logic and screen-level state holder**. Its main advantage is **automatic state persistence through configuration changes** (screen rotation, language change).
 
 ### Key Characteristics
 
-1. **Scope-bound**: ViewModel is created in association with an Activity or Fragment and lives until they finish
-2. **Survives recreation**: A single ViewModel instance survives multiple `onCreate()` calls during configuration changes
+1. **Scope-bound**: `ViewModel` is created in association with an `Activity` or `Fragment` and lives until they finish
+2. **Survives recreation**: A single `ViewModel` instance survives multiple `onCreate()` calls during configuration changes
 3. **UI data management**: Its sole responsibility is to store and manage UI-related data
-4. **UI isolation**: Should never hold references to Views, Activities, Fragments, or Context (except ApplicationContext)
+4. **UI isolation**: Should never hold references to Views, Activities, Fragments, or `Context` (except ApplicationContext)
 
 ### Basic Usage Example
 
@@ -250,13 +250,13 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-### ViewModel Lifecycle
+### `ViewModel` `Lifecycle`
 
-ViewModel is created on the first `onCreate()` call and **destroyed only on final termination** of Activity/Fragment:
+`ViewModel` is created on the first `onCreate()` call and **destroyed only on final termination** of Activity/`Fragment`:
 
-- Activity finish → `ViewModel.onCleared()` is called
-- Configuration change (rotation) → ViewModel NOT recreated, same instance returned
-- Fragment detach → `onCleared()` is called
+- `Activity` finish → `ViewModel.onCleared()` is called
+- Configuration change (rotation) → `ViewModel` NOT recreated, same instance returned
+- `Fragment` detach → `onCleared()` is called
 
 ```kotlin
 class MyViewModel : ViewModel() {
@@ -271,9 +271,9 @@ class MyViewModel : ViewModel() {
 }
 ```
 
-### Inter-Fragment Communication
+### Inter-`Fragment` Communication
 
-Shared ViewModel allows Fragments to communicate without direct references:
+Shared `ViewModel` allows Fragments to communicate without direct references:
 
 ```kotlin
 class SharedViewModel : ViewModel() {
@@ -295,15 +295,15 @@ class FragmentA : Fragment() {
 }
 ```
 
-### ViewModel Benefits
+### `ViewModel` Benefits
 
 **1. Automatic state retention**
 
-Without ViewModel, data is lost on rotation and requires manual saving via `onSaveInstanceState()`.
+Without `ViewModel`, data is lost on rotation and requires manual saving via `onSaveInstanceState()`.
 
 **2. Separation of concerns**
 
-ViewModel encapsulates business logic; UI is only responsible for display.
+`ViewModel` encapsulates business logic; UI is only responsible for display.
 
 **3. Coroutines support**
 
@@ -311,11 +311,11 @@ ViewModel encapsulates business logic; UI is only responsible for display.
 
 **4. Testability**
 
-ViewModel is easy to test without Android framework dependencies.
+`ViewModel` is easy to test without Android framework dependencies.
 
 ### SavedStateHandle for Process Death
 
-ViewModel does NOT survive process death (system kills process under memory pressure). For this, use **SavedStateHandle**:
+`ViewModel` does NOT survive process death (system kills process under memory pressure). For this, use **SavedStateHandle**:
 
 ```kotlin
 class SavedStateViewModel(
@@ -366,22 +366,22 @@ private val viewModel by viewModels<UserViewModel> {
 
 ### Summary
 
-ViewModel is an architecture component for lifecycle-aware UI data management. Survives configuration changes, isolates business logic from UI, supports coroutines and DI. SavedStateHandle is needed for process death scenarios.
+`ViewModel` is an architecture component for lifecycle-aware UI data management. Survives configuration changes, isolates business logic from UI, supports coroutines and DI. SavedStateHandle is needed for process death scenarios.
 
 ---
 
 ## Follow-ups
 
-1. What's the difference between ViewModel and onSaveInstanceState()?
-2. How does SavedStateHandle survive process death while ViewModel doesn't?
+1. What's the difference between `ViewModel` and onSaveInstanceState()?
+2. How does SavedStateHandle survive process death while `ViewModel` doesn't?
 3. When should you use activityViewModels() vs viewModels()?
-4. What happens if ViewModel holds a reference to Activity?
-5. How to test ViewModel with viewModelScope coroutines?
+4. What happens if `ViewModel` holds a reference to `Activity`?
+5. How to test `ViewModel` with viewModelScope coroutines?
 
 ## References
 
-- [ViewModel Overview - Android Developers](https://developer.android.com/topic/libraries/architecture/viewmodel)
-- [ViewModel API Reference](https://developer.android.com/reference/androidx/lifecycle/ViewModel)
+- [`ViewModel` Overview - Android Developers](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [`ViewModel` API Reference](https://developer.android.com/reference/androidx/lifecycle/`ViewModel`)
 - [ViewModels: A Simple Example - Medium](https://medium.com/androiddevelopers/viewmodels-a-simple-example-ed5ac416317e)
 - [[q-mvvm-pattern--android--medium]]
 - [[q-factory-pattern-android--android--medium]]
@@ -397,17 +397,17 @@ ViewModel is an architecture component for lifecycle-aware UI data management. S
 
 ### Prerequisites (Easier)
 
-- [[q-view-methods-and-their-purpose--android--medium]] - Understanding Android View lifecycle
+- [[q-view-methods-and-their-purpose--android--medium]] - Understanding Android `View` lifecycle
 - [[q-mvvm-pattern--android--medium]] - MVVM pattern overview
 
 ### Related (Same Level)
 
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - State preservation comparison
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel internals
-- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel limitations
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - `ViewModel` internals
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - `ViewModel` limitations
 
 ### Advanced (Harder)
 
-- [[q-clean-architecture-android--android--hard]] - Clean Architecture with ViewModel
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture with `ViewModel`
 - [[q-mvi-architecture--android--hard]] - MVI vs MVVM
 - [[q-offline-first-architecture--android--hard]] - Offline-first patterns

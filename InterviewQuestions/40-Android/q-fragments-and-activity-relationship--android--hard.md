@@ -42,23 +42,23 @@ tags:
 ---
 
 # Вопрос (RU)
-> Как существуют и к чему привязаны фрагменты в Activity?
+> Как существуют и к чему привязаны фрагменты в `Activity`?
 
 # Question (EN)
-> How do fragments exist and what are they attached to in Activity?
+> How do fragments exist and what are they attached to in `Activity`?
 
 ---
 
 ## Ответ (RU)
 
-Фрагменты в Android существуют как модульные компоненты, привязанные к Activity через **`FragmentManager`**. Они размещаются в **`ViewGroup`** контейнерах и имеют собственный жизненный цикл, синхронизированный с Activity.
+Фрагменты в Android существуют как модульные компоненты, привязанные к `Activity` через **`FragmentManager`**. Они размещаются в **`ViewGroup`** контейнерах и имеют собственный жизненный цикл, синхронизированный с `Activity`.
 
 ### Механизм Привязки
 
-Фрагменты зависят от Activity для:
+Фрагменты зависят от `Activity` для:
 - **Контекста**: доступ через `requireContext()`, `requireActivity()`
 - **Ресурсов**: строки, drawable, системные сервисы
-- **Жизненного цикла**: синхронизация с Activity
+- **Жизненного цикла**: синхронизация с `Activity`
 - **`ViewGroup`**: физическая точка размещения в UI
 
 ```kotlin
@@ -104,9 +104,9 @@ supportFragmentManager.findFragmentByTag("TAG")?.let {
 }
 ```
 
-### Коммуникация Через Activity
+### Коммуникация Через `Activity`
 
-Фрагменты взаимодействуют через родительскую Activity:
+Фрагменты взаимодействуют через родительскую `Activity`:
 
 ```kotlin
 // ✅ Современный подход - ViewModel
@@ -139,36 +139,36 @@ class DetailFragment : Fragment() {
 ### Ключевые Характеристики
 
 1. **Модульность**: переиспользуются в разных activities
-2. **Зависимость от контекста**: требуют Activity для ресурсов
+2. **Зависимость от контекста**: требуют `Activity` для ресурсов
 3. **Динамичность**: управляются во время выполнения
 4. **Back stack**: поддержка навигации
 
 ### Лучшие Практики
 
-- **Всегда используйте viewLifecycleOwner** — для подписок на LiveData/Flow в Fragment
-- **Проверяйте существование Activity** — перед доступом к `requireActivity()`
-- **Используйте Shared ViewModel** — для коммуникации между Fragment'ами
-- **Правильно управляйте back stack** — используйте теги для поиска Fragment'ов
+- **Всегда используйте viewLifecycleOwner** — для подписок на LiveData/`Flow` в `Fragment`
+- **Проверяйте существование `Activity`** — перед доступом к `requireActivity()`
+- **Используйте Shared `ViewModel`** — для коммуникации между `Fragment`'ами
+- **Правильно управляйте back stack** — используйте теги для поиска `Fragment`'ов
 - **Избегайте утечек памяти** — отписывайтесь от `viewLifecycleOwner` в `onDestroyView`
 
 ### Типичные Ошибки
 
-- **Неправильный LifecycleOwner** — использование Fragment вместо viewLifecycleOwner
-- **Утечка ViewModel** — неправильное использование `activityViewModels()`
-- **Потеря состояния** — забытые `addToBackStack()` при замене Fragment'ов
-- **Проблемы с контекстом** — доступ к Activity в `onDetach()`
+- **Неправильный `LifecycleOwner`** — использование `Fragment` вместо viewLifecycleOwner
+- **Утечка `ViewModel`** — неправильное использование `activityViewModels()`
+- **Потеря состояния** — забытые `addToBackStack()` при замене `Fragment`'ов
+- **Проблемы с контекстом** — доступ к `Activity` в `onDetach()`
 - **Неправильное управление транзакциями** — множественные `commit()` без оптимизации
 
 ## Answer (EN)
 
-Fragments in Android exist as modular components attached to an Activity via **`FragmentManager`**. They reside in **`ViewGroup`** containers and have their own lifecycle synchronized with the Activity.
+Fragments in Android exist as modular components attached to an `Activity` via **`FragmentManager`**. They reside in **`ViewGroup`** containers and have their own lifecycle synchronized with the `Activity`.
 
 ### Attachment Mechanism
 
-Fragments depend on Activity for:
-- **Context**: accessed via `requireContext()`, `requireActivity()`
+Fragments depend on `Activity` for:
+- **`Context`**: accessed via `requireContext()`, `requireActivity()`
 - **Resources**: strings, drawables, system services
-- **Lifecycle**: synchronized with Activity
+- **`Lifecycle`**: synchronized with `Activity`
 - **`ViewGroup`**: physical placement point in UI
 
 ```kotlin
@@ -214,9 +214,9 @@ supportFragmentManager.findFragmentByTag("TAG")?.let {
 }
 ```
 
-### Communication Through Activity
+### Communication Through `Activity`
 
-Fragments communicate via the parent Activity:
+Fragments communicate via the parent `Activity`:
 
 ```kotlin
 // ✅ Modern approach - ViewModel
@@ -249,40 +249,40 @@ class DetailFragment : Fragment() {
 ### Key Characteristics
 
 1. **Modular**: reusable across different activities
-2. **Context-dependent**: require Activity for resources
+2. **`Context`-dependent**: require `Activity` for resources
 3. **Dynamic**: managed at runtime
 4. **Back stack**: navigation history support
 
 ### Best Practices
 
-- **Always use viewLifecycleOwner** — for LiveData/Flow subscriptions in Fragment
-- **Check Activity existence** — before accessing `requireActivity()`
-- **Use Shared ViewModel** — for communication between Fragments
+- **Always use viewLifecycleOwner** — for LiveData/`Flow` subscriptions in `Fragment`
+- **Check `Activity` existence** — before accessing `requireActivity()`
+- **Use Shared `ViewModel`** — for communication between Fragments
 - **Properly manage back stack** — use tags to find Fragments
 - **Avoid memory leaks** — unsubscribe from `viewLifecycleOwner` in `onDestroyView`
 
 ### Common Pitfalls
 
-- **Wrong LifecycleOwner** — using Fragment instead of viewLifecycleOwner
-- **ViewModel leaks** — incorrect usage of `activityViewModels()`
+- **Wrong `LifecycleOwner`** — using `Fragment` instead of viewLifecycleOwner
+- **`ViewModel` leaks** — incorrect usage of `activityViewModels()`
 - **State loss** — forgotten `addToBackStack()` when replacing Fragments
-- **Context issues** — accessing Activity in `onDetach()`
+- **`Context` issues** — accessing `Activity` in `onDetach()`
 - **Transaction management** — multiple `commit()` calls without optimization
 
 ---
 
 ## Follow-ups
 
-- What happens to Fragment state when Activity is destroyed due to configuration change?
-- How does FragmentManager handle back stack when Activity is killed by the system?
+- What happens to `Fragment` state when `Activity` is destroyed due to configuration change?
+- How does FragmentManager handle back stack when `Activity` is killed by the system?
 - What are the differences between `add()`, `replace()`, and `show()/hide()` for fragment transactions?
 - How do you handle fragment communication in a multi-module architecture?
-- What are the lifecycle differences between Fragment's View and Fragment itself?
+- What are the lifecycle differences between `Fragment`'s `View` and `Fragment` itself?
 
 ## References
 
 - [Android Developer Guide - Fragments](https://developer.android.com/guide/fragments)
-- [Android Developer Guide - Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
+- [Android Developer Guide - `Fragment` `Lifecycle`](https://developer.android.com/guide/fragments/lifecycle)
 - [Android Developer Guide - FragmentManager](https://developer.android.com/guide/fragments/fragmentmanager)
 
 ---
@@ -297,15 +297,15 @@ class DetailFragment : Fragment() {
 
 
 ### Prerequisites
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment lifecycle basics
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle comparison
-- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - Fragment purpose
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment` lifecycle basics
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Lifecycle` comparison
+- [[q-what-are-fragments-for-if-there-is-activity--android--medium]] - `Fragment` purpose
 
 ### Related
-- [[q-how-did-fragments-appear-and-why-were-they-started-to-be-used--android--hard]] - Fragment history and rationale
-- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - Lifecycle callbacks differences
+- [[q-how-did-fragments-appear-and-why-were-they-started-to-be-used--android--hard]] - `Fragment` history and rationale
+- [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]] - `Lifecycle` callbacks differences
 
 ### Advanced
-- Fragment state management across configuration changes
-- Fragment transaction animations and transitions
+- `Fragment` state management across configuration changes
+- `Fragment` transaction animations and transitions
 - Nested fragments and child FragmentManager patterns

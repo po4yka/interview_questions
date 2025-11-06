@@ -110,7 +110,7 @@ object RetrofitClient {
 }
 ```
 
-**5. Использовать в Repository**
+**5. Использовать в `Repository`**
 
 ```kotlin
 class UserRepository {
@@ -131,7 +131,7 @@ sealed class Result<out T> {
 }
 ```
 
-**6. Вызвать из ViewModel**
+**6. Вызвать из `ViewModel`**
 
 ```kotlin
 class UserViewModel(
@@ -202,7 +202,7 @@ suspend fun getPosts(
 
 1. **Используйте suspend функции** с корутинами вместо Call<T>
 2. **Оборачивайте в Result/Either** для обработки ошибок
-3. **Выносите в Repository** — не вызывайте API напрямую из ViewModel
+3. **Выносите в `Repository`** — не вызывайте API напрямую из `ViewModel`
 4. **Логируйте только в DEBUG** — HttpLoggingInterceptor с проверкой BuildConfig
 5. **Добавляйте timeouts** в OkHttp (connectTimeout, readTimeout)
 
@@ -289,7 +289,7 @@ object RetrofitClient {
 }
 ```
 
-**5. Use in Repository**
+**5. Use in `Repository`**
 
 ```kotlin
 class UserRepository {
@@ -310,7 +310,7 @@ sealed class Result<out T> {
 }
 ```
 
-**6. Call from ViewModel**
+**6. Call from `ViewModel`**
 
 ```kotlin
 class UserViewModel(
@@ -381,7 +381,7 @@ suspend fun getPosts(
 
 1. **Use suspend functions** with coroutines instead of Call<T>
 2. **Wrap in Result/Either** for error handling
-3. **Extract to Repository** — don't call API directly from ViewModel
+3. **Extract to `Repository`** — don't call API directly from `ViewModel`
 4. **Log only in DEBUG** — HttpLoggingInterceptor with BuildConfig check
 5. **Add timeouts** in OkHttp (connectTimeout, readTimeout)
 
@@ -410,7 +410,7 @@ suspend fun getPosts(
 - [[q-graphql-vs-rest--networking--easy]] - REST API concepts
 
 ### Related (Medium)
-- [[q-flow-testing-turbine--android--medium]] - Testing with Flow
+- [[q-flow-testing-turbine--android--medium]] - Testing with `Flow`
 - [[q-http-protocols-comparison--android--medium]] - HTTP protocols
 - [[q-retrofit-path-parameter--android--medium]] - Retrofit path parameters
 - [[q-retrofit-library--android--medium]] - Retrofit library overview

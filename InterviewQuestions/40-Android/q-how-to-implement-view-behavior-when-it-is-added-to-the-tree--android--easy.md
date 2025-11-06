@@ -36,7 +36,7 @@ tags:
 
 # Вопрос (RU)
 
-Как можно реализовать поведение View при её добавлении в дерево?
+Как можно реализовать поведение `View` при её добавлении в дерево?
 
 # Question (EN)
 
@@ -46,19 +46,19 @@ How to implement view behavior when it is added to the tree?
 
 ## Ответ (RU)
 
-Для реализации поведения View при её добавлении в дерево View используется метод **`onAttachedToWindow()`**, который вызывается, когда View добавляется в окно. Этот метод позволяет выполнять действия, когда View становится видимой для пользователя.
+Для реализации поведения `View` при её добавлении в дерево `View` используется метод **`onAttachedToWindow()`**, который вызывается, когда `View` добавляется в окно. Этот метод позволяет выполнять действия, когда `View` становится видимой для пользователя.
 
-### Основные Методы Жизненного Цикла View
+### Основные Методы Жизненного Цикла `View`
 
-При добавлении View в иерархию:
-1. **Constructor** - создание View
+При добавлении `View` в иерархию:
+1. **Constructor** - создание `View`
 2. **onFinishInflate()** - после inflate из XML
 3. **onAttachedToWindow()** - прикрепление к окну
 4. **onMeasure()** - измерение размера
 5. **onLayout()** - позиционирование
 6. **onDraw()** - отрисовка
 
-При удалении View:
+При удалении `View`:
 1. **onDetachedFromWindow()** - открепление от окна
 
 ### Базовая Реализация
@@ -147,7 +147,7 @@ class SensorView @JvmOverloads constructor(
 }
 ```
 
-#### 3. Lifecycle-aware View
+#### 3. `Lifecycle`-aware `View`
 
 ```kotlin
 class LifecycleAwareView @JvmOverloads constructor(
@@ -203,19 +203,19 @@ myView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener 
 
 ## Answer (EN)
 
-To implement View behavior when it is added to the view tree in Android, use the **`onAttachedToWindow()`** method, which is called when a View is added to a window. This method allows you to perform actions when the View becomes visible to the user.
+To implement `View` behavior when it is added to the view tree in Android, use the **`onAttachedToWindow()`** method, which is called when a `View` is added to a window. This method allows you to perform actions when the `View` becomes visible to the user.
 
-### View Lifecycle Methods
+### `View` `Lifecycle` Methods
 
-When a View is added to the hierarchy:
-1. **Constructor** - View creation
+When a `View` is added to the hierarchy:
+1. **Constructor** - `View` creation
 2. **onFinishInflate()** - Called after inflate from XML
 3. **onAttachedToWindow()** - Attached to window
 4. **onMeasure()** - Size measurement
 5. **onLayout()** - Positioning
 6. **onDraw()** - Drawing
 
-When a View is removed:
+When a `View` is removed:
 1. **onDetachedFromWindow()** - Detached from window
 
 ### Basic Implementation
@@ -272,7 +272,7 @@ class VideoPlayerView @JvmOverloads constructor(
 }
 ```
 
-#### 2. Sensor-Based View
+#### 2. Sensor-Based `View`
 
 ```kotlin
 class SensorView @JvmOverloads constructor(
@@ -304,7 +304,7 @@ class SensorView @JvmOverloads constructor(
 }
 ```
 
-#### 3. Lifecycle-Aware View
+#### 3. `Lifecycle`-Aware `View`
 
 ```kotlin
 class LifecycleAwareView @JvmOverloads constructor(
@@ -364,13 +364,13 @@ myView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener 
 
 - What is the difference between `onAttachedToWindow()` and `onFinishInflate()`?
 - When should you use `addOnAttachStateChangeListener` vs overriding `onAttachedToWindow()`?
-- How does `onAttachedToWindow()` interact with Fragment lifecycle?
+- How does `onAttachedToWindow()` interact with `Fragment` lifecycle?
 - What happens if you don't call `super.onAttachedToWindow()`?
 - Can you use coroutines in `onAttachedToWindow()` safely?
 
 ## References
 
-- Official Android documentation on View lifecycle
+- Official Android documentation on `View` lifecycle
 - Android Developer Guides - Custom Views
 
 ## Related Questions
@@ -381,13 +381,13 @@ myView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener 
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Basic View concepts
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Basic `View` concepts
 
 ### Related (Same Level)
-- [[q-viewmodel-pattern--android--easy]] - View patterns
-- View invalidation and drawing cycle
+- [[q-viewmodel-pattern--android--easy]] - `View` patterns
+- `View` invalidation and drawing cycle
 
 ### Advanced (Harder)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View rendering
-- [[q-testing-viewmodels-turbine--android--medium]] - Testing View-related components
-- Custom View optimization and performance
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` rendering
+- [[q-testing-viewmodels-turbine--android--medium]] - Testing `View`-related components
+- Custom `View` optimization and performance

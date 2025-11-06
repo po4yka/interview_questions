@@ -52,7 +52,7 @@ SSE provides a persistent connection over HTTP that allows servers to push updat
 6. **Text-Based**: UTF-8 text data (JSON commonly used)
 7. **Browser Native Support**: EventSource API in browsers
 
-#### SSE Message Format
+#### SSE `Message` Format
 
 ```
 event: message-type
@@ -356,7 +356,7 @@ sealed class SseEvent {
 }
 ```
 
-#### 2. Typed Event Handler
+#### 2. Typed Event `Handler`
 
 ```kotlin
 import com.google.gson.Gson
@@ -530,7 +530,7 @@ class NotificationFeed(
 }
 ```
 
-#### 4. Repository Integration
+#### 4. `Repository` Integration
 
 ```kotlin
 import kotlinx.coroutines.flow.Flow
@@ -586,7 +586,7 @@ class LiveDataCacheImpl(
 }
 ```
 
-#### 5. ViewModel Integration
+#### 5. `ViewModel` Integration
 
 ```kotlin
 import androidx.lifecycle.ViewModel
@@ -655,15 +655,15 @@ sealed class LiveUpdatesUiState {
 
 ### SSE Vs WebSocket Vs Polling Comparison
 
-| Feature | SSE | WebSocket | Long Polling | Short Polling |
+| Feature | SSE | WebSocket | `Long` Polling | `Short` Polling |
 |---------|-----|-----------|--------------|---------------|
 | **Direction** | Server → Client | Bidirectional | Server → Client | Server → Client |
 | **Protocol** | HTTP | WebSocket (ws://) | HTTP | HTTP |
-| **Connection** | Persistent | Persistent | Long-lived request | Multiple requests |
+| **Connection** | Persistent | Persistent | `Long`-lived request | Multiple requests |
 | **Complexity** | Low | Medium | Medium | Low |
 | **Browser Support** | Native EventSource | Native WebSocket | Requires implementation | Simple fetch |
 | **Reconnection** | Automatic | Manual | Automatic | N/A |
-| **Message Format** | Text (UTF-8) | Binary or Text | Any | Any |
+| **`Message` Format** | Text (UTF-8) | Binary or Text | Any | Any |
 | **Resource Usage** | Low | Medium | Medium | High |
 | **Latency** | Very Low | Very Low | Low | High |
 | **Scalability** | High | Medium | Medium | Low |
@@ -1033,7 +1033,7 @@ SSE provides a persistent connection over HTTP that allows servers to push updat
 6. **Text-Based**: UTF-8 text data (JSON commonly used)
 7. **Browser Native Support**: EventSource API in browsers
 
-#### SSE Message Format
+#### SSE `Message` Format
 
 ```
 event: message-type
@@ -1337,7 +1337,7 @@ sealed class SseEvent {
 }
 ```
 
-#### 2. Typed Event Handler
+#### 2. Typed Event `Handler`
 
 ```kotlin
 import com.google.gson.Gson
@@ -1511,7 +1511,7 @@ class NotificationFeed(
 }
 ```
 
-#### 4. Repository Integration
+#### 4. `Repository` Integration
 
 ```kotlin
 import kotlinx.coroutines.flow.Flow
@@ -1567,7 +1567,7 @@ class LiveDataCacheImpl(
 }
 ```
 
-#### 5. ViewModel Integration
+#### 5. `ViewModel` Integration
 
 ```kotlin
 import androidx.lifecycle.ViewModel
@@ -1636,15 +1636,15 @@ sealed class LiveUpdatesUiState {
 
 ### SSE Vs WebSocket Vs Polling Comparison
 
-| Feature | SSE | WebSocket | Long Polling | Short Polling |
+| Feature | SSE | WebSocket | `Long` Polling | `Short` Polling |
 |---------|-----|-----------|--------------|---------------|
 | **Direction** | Server → Client | Bidirectional | Server → Client | Server → Client |
 | **Protocol** | HTTP | WebSocket (ws://) | HTTP | HTTP |
-| **Connection** | Persistent | Persistent | Long-lived request | Multiple requests |
+| **Connection** | Persistent | Persistent | `Long`-lived request | Multiple requests |
 | **Complexity** | Low | Medium | Medium | Low |
 | **Browser Support** | Native EventSource | Native WebSocket | Requires implementation | Simple fetch |
 | **Reconnection** | Automatic | Manual | Automatic | N/A |
-| **Message Format** | Text (UTF-8) | Binary or Text | Any | Any |
+| **`Message` Format** | Text (UTF-8) | Binary or Text | Any | Any |
 | **Resource Usage** | Low | Medium | Medium | High |
 | **Latency** | Very Low | Very Low | Low | High |
 | **Scalability** | High | Medium | Medium | Low |
@@ -2220,7 +2220,7 @@ data class Notification(
 )
 ```
 
-### Интеграция С Repository
+### Интеграция С `Repository`
 
 ```kotlin
 class LiveDataRepository(
@@ -2245,7 +2245,7 @@ class LiveDataRepository(
 
 ### Сравнение SSE, WebSocket И Polling
 
-| Характеристика | SSE | WebSocket | Long Polling | Short Polling |
+| Характеристика | SSE | WebSocket | `Long` Polling | `Short` Polling |
 |---|---|---|---|---|
 | **Направление** | Сервер → Клиент | Двунаправленное | Сервер → Клиент | Сервер → Клиент |
 | **Протокол** | HTTP | WebSocket (ws://) | HTTP | HTTP |

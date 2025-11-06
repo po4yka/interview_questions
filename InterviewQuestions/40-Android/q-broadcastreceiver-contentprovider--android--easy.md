@@ -27,16 +27,16 @@ tags: [android/broadcast-receiver, android/content-provider, difficulty/easy]
 ---
 
 # Вопрос (RU)
-> Что такое BroadcastReceiver и ContentProvider в Android?
+> Что такое `BroadcastReceiver` и `ContentProvider` в Android?
 
 # Question (EN)
-> What are BroadcastReceiver and ContentProvider in Android?
+> What are `BroadcastReceiver` and `ContentProvider` in Android?
 
 ---
 
 ## Ответ (RU)
 
-### BroadcastReceiver
+### `BroadcastReceiver`
 
 **Компонент для получения системных и пользовательских событий**. Реагирует на широковещательные сообщения (broadcasts) от системы или других приложений.
 
@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 - onReceive() выполняется на main thread (max 10 сек → ANR)
 - Для фоновой работы: WorkManager / JobScheduler
 
-### ContentProvider
+### `ContentProvider`
 
 **Стандартизированный интерфейс для доступа к структурированным данным**. Обеспечивает CRUD операции и обмен данными между приложениями через URI.
 
@@ -122,7 +122,7 @@ val cursor = contentResolver.query(
 
 ## Answer (EN)
 
-### BroadcastReceiver
+### `BroadcastReceiver`
 
 **Component for receiving system and custom events**. Responds to broadcast messages from the system or other applications.
 
@@ -165,7 +165,7 @@ class MainActivity : AppCompatActivity() {
 - onReceive() runs on main thread (max 10 sec → ANR)
 - For background work: WorkManager / JobScheduler
 
-### ContentProvider
+### `ContentProvider`
 
 **Standardized interface for accessing structured data**. Provides CRUD operations and data sharing between apps via URI.
 
@@ -210,11 +210,11 @@ val cursor = contentResolver.query(
 
 ## Follow-ups
 
-- How to avoid ANR in BroadcastReceiver when processing takes > 10 seconds?
+- How to avoid ANR in `BroadcastReceiver` when processing takes > 10 seconds?
 - What's the difference between ordered and normal broadcasts, and when to use each?
-- How to secure ContentProvider with read/write permissions and URI grants?
-- When to choose ContentProvider vs direct database access for data sharing?
-- How to implement UriMatcher for multi-table ContentProvider routing?
+- How to secure `ContentProvider` with read/write permissions and URI grants?
+- When to choose `ContentProvider` vs direct database access for data sharing?
+- How to implement UriMatcher for multi-table `ContentProvider` routing?
 
 ## References
 

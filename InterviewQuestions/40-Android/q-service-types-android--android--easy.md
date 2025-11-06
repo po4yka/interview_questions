@@ -29,19 +29,19 @@ tags: [android/background-execution, android/service, background-tasks, difficul
 
 # Вопрос (RU)
 
-Какие существуют типы Service в Android?
+Какие существуют типы `Service` в Android?
 
 # Question (EN)
 
-What types of Service exist in Android?
+What types of `Service` exist in Android?
 
 ---
 
 ## Ответ (RU)
 
-В Android существуют три основных типа Service:
+В Android существуют три основных типа `Service`:
 
-### 1. Foreground Service
+### 1. Foreground `Service`
 
 Выполняет операции, видимые пользователю, и **обязан** отображать постоянное уведомление (persistent notification). Используется для задач, о которых пользователь должен знать: воспроизведение музыки, навигация, отслеживание тренировки.
 
@@ -51,11 +51,11 @@ val notification = createNotification()
 startForeground(NOTIFICATION_ID, notification)
 ```
 
-### 2. Background Service
+### 2. Background `Service`
 
 Выполняет операции, не требующие прямого взаимодействия с пользователем: синхронизация данных, загрузка файлов.
 
-**Критическое ограничение**: с Android 8.0 (API 26) система жёстко ограничивает Background Services для приложений в фоне. Рекомендуется использовать WorkManager или Foreground Service.
+**Критическое ограничение**: с Android 8.0 (API 26) система жёстко ограничивает Background Services для приложений в фоне. Рекомендуется использовать WorkManager или Foreground `Service`.
 
 ```kotlin
 // ❌ Неправильно: Background Service ограничен с API 26+
@@ -66,7 +66,7 @@ val request = OneTimeWorkRequestBuilder<SyncWorker>().build()
 WorkManager.getInstance(context).enqueue(request)
 ```
 
-### 3. Bound Service
+### 3. Bound `Service`
 
 Предоставляет интерфейс для взаимодействия с другими компонентами через `bindService()`. Работает только пока к нему привязан хотя бы один клиент.
 
@@ -87,9 +87,9 @@ class LocalService : Service() {
 
 ## Answer (EN)
 
-Android has three main types of Service:
+Android has three main types of `Service`:
 
-### 1. Foreground Service
+### 1. Foreground `Service`
 
 Performs user-visible operations and **must** display a persistent notification. Used for tasks the user should be aware of: music playback, navigation, workout tracking.
 
@@ -99,11 +99,11 @@ val notification = createNotification()
 startForeground(NOTIFICATION_ID, notification)
 ```
 
-### 2. Background Service
+### 2. Background `Service`
 
 Performs operations that don't require direct user interaction: data synchronization, file downloads.
 
-**Critical limitation**: since Android 8.0 (API 26), the system strictly limits Background Services for apps in the background. Use WorkManager or Foreground Service instead.
+**Critical limitation**: since Android 8.0 (API 26), the system strictly limits Background Services for apps in the background. Use WorkManager or Foreground `Service` instead.
 
 ```kotlin
 // ❌ Wrong: Background Service is restricted on API 26+
@@ -114,7 +114,7 @@ val request = OneTimeWorkRequestBuilder<SyncWorker>().build()
 WorkManager.getInstance(context).enqueue(request)
 ```
 
-### 3. Bound Service
+### 3. Bound `Service`
 
 Provides an interface for interaction with other components via `bindService()`. Lives only while at least one client is bound to it.
 
@@ -137,15 +137,15 @@ class LocalService : Service() {
 
 ## Follow-ups
 
-- What are Foreground Service types and when were they introduced?
+- What are Foreground `Service` types and when were they introduced?
 - How does WorkManager differ from Services in terms of execution guarantees?
-- What happens to a Bound Service when all clients unbind?
+- What happens to a Bound `Service` when all clients unbind?
 - What are the specific background execution limits on API 26+?
-- Can a Service be both foreground and bound simultaneously?
+- Can a `Service` be both foreground and bound simultaneously?
 
 ## References
 
-- [[c-service]] - Service component fundamentals
+- [[c-service]] - `Service` component fundamentals
 - [[c-workmanager]] - WorkManager architecture
 - https://developer.android.com/guide/components/services
 - https://developer.android.com/guide/background
@@ -156,8 +156,8 @@ class LocalService : Service() {
 - [[q-four-main-components-of-android--android--easy]] - Android components overview
 
 ### Related (Same Level)
-- [[q-service-component--android--medium]] - Service lifecycle and implementation
+- [[q-service-component--android--medium]] - `Service` lifecycle and implementation
 
 ### Advanced (Harder)
-- [[q-foreground-service-types--android--medium]] - Foreground Service type categories
-- [[q-when-can-the-system-restart-a-service--android--medium]] - Service restart behavior
+- [[q-foreground-service-types--android--medium]] - Foreground `Service` type categories
+- [[q-when-can-the-system-restart-a-service--android--medium]] - `Service` restart behavior

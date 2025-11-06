@@ -78,7 +78,7 @@ class SyncTileService : TileService() {
 ### Синхронизация состояния
 
 - Храните состояние в `DataStore`/`Room`; TileService читает напрямую.
-- Подписывайтесь на обновления (Flow) через `lifecycleScope` + `asLiveData()` (TileService context).
+- Подписывайтесь на обновления (`Flow`) через `lifecycleScope` + `asLiveData()` (TileService context).
 - Отправляйте `sendBroadcast`/`TileService.requestListeningState` для обновления.
 
 ### App Shortcuts & Widgets

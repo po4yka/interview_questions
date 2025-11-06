@@ -31,11 +31,11 @@ sources: [https://square.github.io/okhttp/interceptors/]
 OkHttp Interceptors - это цепочка обработчиков, которые перехватывают каждый запрос и ответ. Используются для кросс-cutting concerns: аутентификация, логирование, добавление общих параметров.
 
 **Два типа:**
-- **Application Interceptor** - выполняется до кеширования, видит только запросы приложения
+- **`Application` Interceptor** - выполняется до кеширования, видит только запросы приложения
 - **Network Interceptor** - выполняется после кеширования, видит все сетевые запросы (включая редиректы)
 
 **Порядок выполнения:**
-Application Interceptors → Cache → Network Interceptors → Network
+`Application` Interceptors → Cache → Network Interceptors → Network
 
 ### Пример 1: Авторизация
 
@@ -142,7 +142,7 @@ addInterceptor(HttpLoggingInterceptor().apply {
 
 **Ключевые паттерны:**
 - Используйте DI (Hilt/Koin) для инжекта interceptors
-- Application interceptor для auth, query params
+- `Application` interceptor для auth, query params
 - Network interceptor для логирования сетевых деталей
 - Синхронизация при обновлении токенов
 - Закрывайте Response при retry
@@ -154,11 +154,11 @@ addInterceptor(HttpLoggingInterceptor().apply {
 OkHttp Interceptors are a chain of handlers that intercept every request and response. Used for cross-cutting concerns: authentication, logging, adding common parameters.
 
 **Two types:**
-- **Application Interceptor** - runs before caching, sees only app requests
+- **`Application` Interceptor** - runs before caching, sees only app requests
 - **Network Interceptor** - runs after caching, sees all network requests (including redirects)
 
 **Execution order:**
-Application Interceptors → Cache → Network Interceptors → Network
+`Application` Interceptors → Cache → Network Interceptors → Network
 
 ### Example 1: Authorization
 
@@ -265,7 +265,7 @@ addInterceptor(HttpLoggingInterceptor().apply {
 
 **Key patterns:**
 - Use DI (Hilt/Koin) to inject interceptors
-- Application interceptor for auth, query params
+- `Application` interceptor for auth, query params
 - Network interceptor for logging network details
 - Synchronize token refresh operations
 - Close Response on retry
@@ -275,7 +275,7 @@ addInterceptor(HttpLoggingInterceptor().apply {
 
 ## Follow-ups
 
-- What's the difference between Application and Network interceptors in terms of caching behavior?
+- What's the difference between `Application` and Network interceptors in terms of caching behavior?
 - How do you handle concurrent token refresh requests in interceptors (race condition)?
 - What are the performance implications of adding multiple interceptors?
 - How do you test interceptors in unit tests without making real network calls?

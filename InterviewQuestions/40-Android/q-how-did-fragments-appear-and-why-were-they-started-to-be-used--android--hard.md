@@ -29,7 +29,7 @@ tags: [android/fragment, android/lifecycle, difficulty/hard, ui]
 
 ## Ответ (RU)
 
-**Историческая справка**: Фрагменты появились в Android 3.0 (Honeycomb, 2011) для поддержки планшетов и адаптивных UI. До этого все экраны реализовывались через Activity, что создавало проблемы масштабирования.
+**Историческая справка**: Фрагменты появились в Android 3.0 (Honeycomb, 2011) для поддержки планшетов и адаптивных UI. До этого все экраны реализовывались через `Activity`, что создавало проблемы масштабирования.
 
 ### Основные Причины Появления
 
@@ -76,7 +76,7 @@ class UserProfileFragment : Fragment() {
 ```
 
 **3. Независимый жизненный цикл**
-Фрагменты имеют собственный lifecycle, интегрированный с Activity, что позволяет точнее управлять ресурсами.
+Фрагменты имеют собственный lifecycle, интегрированный с `Activity`, что позволяет точнее управлять ресурсами.
 
 ```kotlin
 // ✅ Lifecycle-aware фрагмент
@@ -111,14 +111,14 @@ fun showDetail(itemId: String) {
 
 ### Современное Состояние
 
-- AndroidX Fragment library с улучшенными API
+- AndroidX `Fragment` library с улучшенными API
 - Navigation Component для навигации
-- Fragment Result API для коммуникации
+- `Fragment` Result API для коммуникации
 - ViewModels с scope привязкой
 
 ## Answer (EN)
 
-**Historical Context**: Fragments were introduced in Android 3.0 (Honeycomb, 2011) to support tablets and adaptive UIs. Previously, all screens were implemented using Activities, which created scaling problems.
+**Historical `Context`**: Fragments were introduced in Android 3.0 (Honeycomb, 2011) to support tablets and adaptive UIs. Previously, all screens were implemented using Activities, which created scaling problems.
 
 ### Key Reasons for Introduction
 
@@ -164,8 +164,8 @@ class UserProfileFragment : Fragment() {
 }
 ```
 
-**3. Independent Lifecycle**
-Fragments have their own lifecycle integrated with Activity, allowing precise resource management.
+**3. Independent `Lifecycle`**
+Fragments have their own lifecycle integrated with `Activity`, allowing precise resource management.
 
 ```kotlin
 // ✅ Lifecycle-aware fragment
@@ -200,9 +200,9 @@ fun showDetail(itemId: String) {
 
 ### Modern State
 
-- AndroidX Fragment library with improved APIs
+- AndroidX `Fragment` library with improved APIs
 - Navigation Component for navigation
-- Fragment Result API for communication
+- `Fragment` Result API for communication
 - ViewModels with scope binding
 
 ---

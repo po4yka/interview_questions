@@ -27,19 +27,19 @@ tags:
 - difficulty/medium
 ---
 
-# RecyclerView DiffUtil Advanced
+# `RecyclerView` DiffUtil Advanced
 
 # Question (EN)
-> How does DiffUtil work internally? Explain the Myers diff algorithm, implementing custom DiffUtil.Callback, using ListAdapter, and optimizing DiffUtil for large datasets.
+> How does DiffUtil work internally? Explain the Myers diff algorithm, implementing custom DiffUtil.`Callback`, using ListAdapter, and optimizing DiffUtil for large datasets.
 
 # Вопрос (RU)
-> Как работает DiffUtil внутренне? Объясните алгоритм Myers diff, реализацию пользовательского DiffUtil.Callback, использование ListAdapter и оптимизацию DiffUtil для больших наборов данных.
+> Как работает DiffUtil внутренне? Объясните алгоритм Myers diff, реализацию пользовательского DiffUtil.`Callback`, использование ListAdapter и оптимизацию DiffUtil для больших наборов данных.
 
 ---
 
 ## Answer (EN)
 
-**DiffUtil** is a utility class that calculates the difference between two lists and outputs a list of update operations. It's essential for efficient RecyclerView updates without full dataset refreshes.
+**DiffUtil** is a utility class that calculates the difference between two lists and outputs a list of update operations. It's essential for efficient `RecyclerView` updates without full dataset refreshes.
 
 ### Why DiffUtil?
 
@@ -668,7 +668,7 @@ override fun getItemId(position: Int): Long {
 - Finds minimum operations
 
 **Implementation options:**
-1. **DiffUtil.Callback** - Full control
+1. **DiffUtil.`Callback`** - Full control
 2. **ListAdapter** - Automatic async (recommended)
 3. **AsyncListDiffer** - Custom adapter with async
 
@@ -688,10 +688,10 @@ override fun getItemId(position: Int): Long {
 
 
 # Question (EN)
-> How does DiffUtil work internally? Explain the Myers diff algorithm, implementing custom DiffUtil.Callback, using ListAdapter, and optimizing DiffUtil for large datasets.
+> How does DiffUtil work internally? Explain the Myers diff algorithm, implementing custom DiffUtil.`Callback`, using ListAdapter, and optimizing DiffUtil for large datasets.
 
 # Вопрос (RU)
-> Как работает DiffUtil внутренне? Объясните алгоритм Myers diff, реализацию пользовательского DiffUtil.Callback, использование ListAdapter и оптимизацию DiffUtil для больших наборов данных.
+> Как работает DiffUtil внутренне? Объясните алгоритм Myers diff, реализацию пользовательского DiffUtil.`Callback`, использование ListAdapter и оптимизацию DiffUtil для больших наборов данных.
 
 ---
 
@@ -701,7 +701,7 @@ override fun getItemId(position: Int): Long {
 
 ## Answer (EN)
 
-**DiffUtil** is a utility class that calculates the difference between two lists and outputs a list of update operations. It's essential for efficient RecyclerView updates without full dataset refreshes.
+**DiffUtil** is a utility class that calculates the difference between two lists and outputs a list of update operations. It's essential for efficient `RecyclerView` updates without full dataset refreshes.
 
 ### Why DiffUtil?
 
@@ -1330,7 +1330,7 @@ override fun getItemId(position: Int): Long {
 - Finds minimum operations
 
 **Implementation options:**
-1. **DiffUtil.Callback** - Full control
+1. **DiffUtil.`Callback`** - Full control
 2. **ListAdapter** - Automatic async (recommended)
 3. **AsyncListDiffer** - Custom adapter with async
 
@@ -1350,7 +1350,7 @@ override fun getItemId(position: Int): Long {
 
 ## Ответ (RU)
 
-**DiffUtil** - это утилитный класс, который вычисляет разницу между двумя списками и выдаёт список операций обновления. Это необходимо для эффективных обновлений RecyclerView без полного обновления набора данных.
+**DiffUtil** - это утилитный класс, который вычисляет разницу между двумя списками и выдаёт список операций обновления. Это необходимо для эффективных обновлений `RecyclerView` без полного обновления набора данных.
 
 ### Зачем DiffUtil?
 
@@ -1839,7 +1839,7 @@ override fun getItemId(position: Int): Long {
 - Находит минимум операций
 
 **Варианты реализации:**
-1. **DiffUtil.Callback** - Полный контроль
+1. **DiffUtil.`Callback`** - Полный контроль
 2. **ListAdapter** - Автоматический async (рекомендуется)
 3. **AsyncListDiffer** - Кастомный адаптер с async
 
@@ -1879,12 +1879,12 @@ override fun getItemId(position: Int): Long {
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - `View`, Ui
 
 ### Related (Medium)
-- q-rxjava-pagination-recyclerview--android--medium - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
-- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
-- [[q-recyclerview-async-list-differ--android--medium]] - View, Ui
+- q-rxjava-pagination-recyclerview--android--medium - `View`, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - `View`, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - `View`, Ui
+- [[q-recyclerview-async-list-differ--android--medium]] - `View`, Ui

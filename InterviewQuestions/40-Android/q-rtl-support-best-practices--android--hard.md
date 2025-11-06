@@ -50,7 +50,7 @@ sources:
 
 ### 2. Layout и ресурсы
 
-- View system: используйте `start`/`end`, `paddingStart/paddingEnd`, `Gravity.START`.
+- `View` system: используйте `start`/`end`, `paddingStart/paddingEnd`, `Gravity.START`.
 - Compose: `Arrangement.Start`/`Alignment.Start` автоматически учитывают `LayoutDirection`.
 - Автоматическое зеркалирование: `drawable` с `android:autoMirrored="true"` для векторных ресурсов.
 - Специальные ресурсы: `drawable-ldrtl`/`layout-ldrtl` при необходимости нестандартного зеркалирования.

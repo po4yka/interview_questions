@@ -35,15 +35,15 @@ sources: []
 
 # Вопрос (RU)
 
-> Что такое Intent Filters в Android и как они работают?
+> Что такое `Intent` Filters в Android и как они работают?
 
 # Question (EN)
 
-> What are Intent Filters in Android and how do they work?
+> What are `Intent` Filters in Android and how do they work?
 
 ## Ответ (RU)
 
-**Intent Filter** — это выражение в манифесте приложения, определяющее типы интентов, которые компонент готов принимать. Фильтры позволяют объявлять возможности компонентов и обеспечивают разрешение неявных намерений.
+**`Intent` Filter** — это выражение в манифесте приложения, определяющее типы интентов, которые компонент готов принимать. Фильтры позволяют объявлять возможности компонентов и обеспечивают разрешение неявных намерений.
 
 ### Основные Компоненты
 
@@ -121,7 +121,7 @@ sources: []
 
 ## Answer (EN)
 
-**Intent Filter** is an expression in the app's manifest that specifies the types of intents a component can receive. Filters allow components to declare their capabilities and enable implicit intent resolution.
+**`Intent` Filter** is an expression in the app's manifest that specifies the types of intents a component can receive. Filters allow components to declare their capabilities and enable implicit intent resolution.
 
 ### Core Components
 
@@ -206,7 +206,7 @@ A filter consists of three elements:
 
 ## References
 
-- Android Developer Documentation: Intent Filters
+- Android Developer Documentation: `Intent` Filters
 - Android Developer Documentation: App Links verification
 
 ## Related Questions
@@ -219,10 +219,10 @@ A filter consists of three elements:
 
 ### Prerequisites (Easier)
 - [[q-what-is-intent--android--easy]] — Basic intent concepts
-- Activity fundamentals and lifecycle
+- `Activity` fundamentals and lifecycle
 
 ### Related (Same Level)
-- [[q-what-are-intents-for--android--medium]] — Intent use cases
+- [[q-what-are-intents-for--android--medium]] — `Intent` use cases
 - Implicit vs explicit intents comparison
 
 ### Advanced (Harder)

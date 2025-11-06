@@ -19,29 +19,29 @@ tags: [android/architecture-mvvm, android/testing-unit, architecture-patterns, d
 
 # Вопрос (RU)
 
-> Что такое архитектурный паттерн MVP (Model-View-Presenter)? Объясните его компоненты и отличия от других паттернов.
+> Что такое архитектурный паттерн MVP (Model-`View`-Presenter)? Объясните его компоненты и отличия от других паттернов.
 
 # Question (EN)
 
-> What is the MVP (Model-View-Presenter) architectural pattern? Explain its components and how it differs from other patterns.
+> What is the MVP (Model-`View`-Presenter) architectural pattern? Explain its components and how it differs from other patterns.
 
 ---
 
 ## Ответ (RU)
 
-**MVP (Model-View-Presenter)** — архитектурный паттерн для разделения ответственности и улучшения тестируемости презентационной логики.
+**MVP (Model-`View`-Presenter)** — архитектурный паттерн для разделения ответственности и улучшения тестируемости презентационной логики.
 
 ### Компоненты MVP
 
 **1. Model** — слой данных, содержит бизнес-логику, взаимодействует с сетью и базой данных, независим от UI.
 
-**2. View** — UI слой, отображает данные и уведомляет Presenter о действиях пользователя. Пассивен — не содержит логику, только показывает то, что говорит Presenter. Реализуется Activity/Fragment.
+**2. `View`** — UI слой, отображает данные и уведомляет Presenter о действиях пользователя. Пассивен — не содержит логику, только показывает то, что говорит Presenter. Реализуется Activity/`Fragment`.
 
-**3. Presenter** — получает данные из Model, применяет UI логику, управляет состоянием View, реагирует на действия пользователя, выступает посредником между Model и View.
+**3. Presenter** — получает данные из Model, применяет UI логику, управляет состоянием `View`, реагирует на действия пользователя, выступает посредником между Model и `View`.
 
 ### Contract Interface
 
-View и Presenter тесно связаны и имеют ссылки друг на друга. Для юнит-тестирования Presenter используется интерфейс View. Связь между Presenter и View определяется в **Contract** интерфейсе, делая код более читаемым.
+`View` и Presenter тесно связаны и имеют ссылки друг на друга. Для юнит-тестирования Presenter используется интерфейс `View`. Связь между Presenter и `View` определяется в **Contract** интерфейсе, делая код более читаемым.
 
 ```kotlin
 // Contract определяет связь View-Presenter
@@ -109,15 +109,15 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 
 ### Преимущества MVP
 
-1. **Тестируемость** — Presenter тестируется независимо с JUnit (mock View)
+1. **Тестируемость** — Presenter тестируется независимо с JUnit (mock `View`)
 2. **Разделение ответственности** — четкие роли для каждого компонента
-3. **Переиспользование** — Presenter можно использовать с разными View
+3. **Переиспользование** — Presenter можно использовать с разными `View`
 4. **Нет Android зависимостей** — Presenter легко тестировать
 
 ### Недостатки MVP
 
 1. **God Presenter** — Presenter может превратиться в огромный класс, если не следовать принципу единственной ответственности
-2. **Утечки памяти** — если Presenter держит ссылку на View после её уничтожения (необходим detachView)
+2. **Утечки памяти** — если Presenter держит ссылку на `View` после её уничтожения (необходим detachView)
 3. **Boilerplate код** — требуется больше кода по сравнению с простыми подходами
 4. **Потеря состояния** — при изменениях конфигурации Presenter пересоздаётся (если не сохранён)
 
@@ -125,11 +125,11 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 
 | Аспект | MVP | MVVM | MVC |
 |--------|-----|------|-----|
-| **View-Presenter/ViewModel** | Двунаправленная связь | Однонаправленная (observable) | Прямая связь |
-| **Ссылка на View** | Presenter знает View | ViewModel не знает View | Controller знает View |
-| **Обновление View** | Явные вызовы интерфейса | Автоматическое (data binding) | Прямые вызовы |
-| **Тестируемость** | Хорошая (mock View) | Отличная (без View) | Средняя |
-| **Lifecycle** | Ручное управление | Автоматическое | Ручное |
+| **`View`-Presenter/`ViewModel`** | Двунаправленная связь | Однонаправленная (observable) | Прямая связь |
+| **Ссылка на `View`** | Presenter знает `View` | `ViewModel` не знает `View` | Controller знает `View` |
+| **Обновление `View`** | Явные вызовы интерфейса | Автоматическое (data binding) | Прямые вызовы |
+| **Тестируемость** | Хорошая (mock `View`) | Отличная (без `View`) | Средняя |
+| **`Lifecycle`** | Ручное управление | Автоматическое | Ручное |
 | **Изменения конфигурации** | Состояние теряется | Состояние сохраняется | Состояние теряется |
 
 ### Best Practices
@@ -158,19 +158,19 @@ view?.showData(data)
 
 ## Answer (EN)
 
-**MVP (Model-View-Presenter)** is an architectural pattern designed to facilitate automated unit testing and improve separation of concerns in presentation logic.
+**MVP (Model-`View`-Presenter)** is an architectural pattern designed to facilitate automated unit testing and improve separation of concerns in presentation logic.
 
 ### MVP Components
 
 **1. Model** — the data layer, handles business logic and communication with network and database layers, provides data to Presenter, independent of UI.
 
-**2. View** — the UI layer, displays data and notifies Presenter about user actions. Passive — contains no logic, only displays what Presenter tells it. Implemented by Activity/Fragment.
+**2. `View`** — the UI layer, displays data and notifies Presenter about user actions. Passive — contains no logic, only displays what Presenter tells it. Implemented by Activity/`Fragment`.
 
-**3. Presenter** — retrieves data from Model, applies UI logic, manages View state, reacts to user input notifications from View, acts as a middleman between Model and View.
+**3. Presenter** — retrieves data from Model, applies UI logic, manages `View` state, reacts to user input notifications from `View`, acts as a middleman between Model and `View`.
 
 ### Contract Interface
 
-Since View and Presenter work closely together, they need references to one another. To make Presenter unit testable with JUnit, View is abstracted as an interface. The relationship between Presenter and its View is defined in a **Contract** interface class, making the code more readable and the connection easier to understand.
+Since `View` and Presenter work closely together, they need references to one another. To make Presenter unit testable with JUnit, `View` is abstracted as an interface. The relationship between Presenter and its `View` is defined in a **Contract** interface class, making the code more readable and the connection easier to understand.
 
 ```kotlin
 // Contract defines View-Presenter relationship
@@ -238,7 +238,7 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 
 ### Advantages of MVP
 
-1. **Testability** — Presenter can be tested independently with JUnit (mock View)
+1. **Testability** — Presenter can be tested independently with JUnit (mock `View`)
 2. **Separation of concerns** — clear responsibilities for each component
 3. **Reusability** — Presenter can be reused with different Views
 4. **No Android dependencies** — Presenter is easy to test
@@ -246,7 +246,7 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 ### Disadvantages of MVP
 
 1. **God Presenter** — Presenter can expand into a huge all-knowing class if single responsibility principle is not followed
-2. **Memory leaks** — if Presenter holds View reference after View is destroyed (need to detach View properly)
+2. **Memory leaks** — if Presenter holds `View` reference after `View` is destroyed (need to detach `View` properly)
 3. **Boilerplate** — requires more code compared to simple approaches
 4. **State loss** — Presenter is typically recreated on configuration changes (unless retained)
 
@@ -254,11 +254,11 @@ class UserActivity : AppCompatActivity(), UserContract.View {
 
 | Aspect | MVP | MVVM | MVC |
 |--------|-----|------|-----|
-| **View-Presenter/ViewModel** | Bidirectional | Unidirectional (observable) | Direct coupling |
-| **View reference** | Presenter knows View | ViewModel doesn't know View | Controller knows View |
-| **View updates** | Explicit interface calls | Automatic (data binding) | Direct calls |
-| **Testability** | Good (mock View) | Excellent (no View) | Moderate |
-| **Lifecycle** | Manual handling | Automatic | Manual |
+| **`View`-Presenter/`ViewModel`** | Bidirectional | Unidirectional (observable) | Direct coupling |
+| **`View` reference** | Presenter knows `View` | `ViewModel` doesn't know `View` | Controller knows `View` |
+| **`View` updates** | Explicit interface calls | Automatic (data binding) | Direct calls |
+| **Testability** | Good (mock `View`) | Excellent (no `View`) | Moderate |
+| **`Lifecycle`** | Manual handling | Automatic | Manual |
 | **Configuration changes** | State lost | State survives | State lost |
 
 ### Best Practices
@@ -291,14 +291,14 @@ view?.showData(data)
 - What strategies can prevent God Presenter anti-pattern?
 - How to implement MVP with coroutines for lifecycle management?
 - When should you prefer MVP over MVVM in modern Android?
-- How to unit test a Presenter with mocked View interface?
+- How to unit test a Presenter with mocked `View` interface?
 
 ## References
 
 - [[c-mvvm-pattern]]
 - [[moc-architecture-patterns]]
 - [Model–view–presenter (Wikipedia)](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter)
-- [Android Architecture Patterns Part 2: Model-View-Presenter](https://medium.com/upday-devs/android-architecture-patterns-part-2-model-view-presenter-8a6faaae14a5)
+- [Android Architecture Patterns Part 2: Model-`View`-Presenter](https://medium.com/upday-devs/android-architecture-patterns-part-2-model-view-presenter-8a6faaae14a5)
 
 ## Related Questions
 

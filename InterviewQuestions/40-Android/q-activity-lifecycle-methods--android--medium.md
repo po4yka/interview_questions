@@ -23,18 +23,18 @@ sources: []
 ---
 
 # Вопрос (RU)
-> Объясните методы жизненного цикла Activity и правила управления ресурсами в них.
+> Объясните методы жизненного цикла `Activity` и правила управления ресурсами в них.
 
 ---
 
 # Question (EN)
-> Explain Activity lifecycle methods and resource management rules within them.
+> Explain `Activity` lifecycle methods and resource management rules within them.
 
 ---
 
 ## Ответ (RU)
 
-Методы жизненного цикла Activity - это callback-функции, вызываемые системой при изменении состояния. Понимание жизненного цикла критично для правильного управления ресурсами и избежания утечек памяти.
+Методы жизненного цикла `Activity` - это callback-функции, вызываемые системой при изменении состояния. Понимание жизненного цикла критично для правильного управления ресурсами и избежания утечек памяти.
 
 ### Основные Методы
 
@@ -44,12 +44,12 @@ onCreate() → onStart() → onResume() → RUNNING
             onRestart() ← onPause() → onStop() → onDestroy()
 ```
 
-- `onCreate()`: Инициализация Activity (создание UI, привязка данных) - вызывается ОДИН раз
-- `onStart()`: Activity становится видимой пользователю
-- `onResume()`: Activity на переднем плане, пользователь может взаимодействовать
-- `onPause()`: Activity теряет фокус - сохранить критичные данные (должен быть БЫСТРЫМ < 1с)
-- `onStop()`: Activity больше не видна - освободить тяжёлые ресурсы
-- `onDestroy()`: Activity уничтожается - финальная очистка
+- `onCreate()`: Инициализация `Activity` (создание UI, привязка данных) - вызывается ОДИН раз
+- `onStart()`: `Activity` становится видимой пользователю
+- `onResume()`: `Activity` на переднем плане, пользователь может взаимодействовать
+- `onPause()`: `Activity` теряет фокус - сохранить критичные данные (должен быть БЫСТРЫМ < 1с)
+- `onStop()`: `Activity` больше не видна - освободить тяжёлые ресурсы
+- `onDestroy()`: `Activity` уничтожается - финальная очистка
 
 ### Правила Управления Ресурсами
 
@@ -90,7 +90,7 @@ class GoodActivity : AppCompatActivity() {
 }
 ```
 
-### Современный Подход: Lifecycle Observer
+### Современный Подход: `Lifecycle` Observer
 
 ```kotlin
 // ✅ Используйте DefaultLifecycleObserver
@@ -114,11 +114,11 @@ lifecycle.addObserver(LocationObserver(locationManager))
 ### Важные Различия
 
 **onPause() vs onStop()**:
-- `onPause()`: Activity частично видна (диалог поверх) - должен быть БЫСТРЫМ
-- `onStop()`: Activity полностью скрыта - можно выполнять более тяжёлые операции
+- `onPause()`: `Activity` частично видна (диалог поверх) - должен быть БЫСТРЫМ
+- `onStop()`: `Activity` полностью скрыта - можно выполнять более тяжёлые операции
 
 **onStop() vs onDestroy()**:
-- `onStop()`: Activity может быть убита системой без вызова `onDestroy()`
+- `onStop()`: `Activity` может быть убита системой без вызова `onDestroy()`
 - `onDestroy()`: Гарантированная очистка только если вызван явно
 
 ### Обработка Конфигурационных Изменений
@@ -140,7 +140,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ## Answer (EN)
 
-Activity lifecycle methods are callbacks invoked by the system during state changes. Understanding the lifecycle is critical for proper resource management and avoiding memory leaks.
+`Activity` lifecycle methods are callbacks invoked by the system during state changes. Understanding the lifecycle is critical for proper resource management and avoiding memory leaks.
 
 ### Core Methods
 
@@ -150,12 +150,12 @@ onCreate() → onStart() → onResume() → RUNNING
             onRestart() ← onPause() → onStop() → onDestroy()
 ```
 
-- `onCreate()`: Initialize Activity (create UI, bind data) - called ONCE
-- `onStart()`: Activity becomes visible to user
-- `onResume()`: Activity in foreground, user can interact
-- `onPause()`: Activity losing focus - save critical data (must be FAST < 1s)
-- `onStop()`: Activity no longer visible - release heavy resources
-- `onDestroy()`: Activity being destroyed - final cleanup
+- `onCreate()`: Initialize `Activity` (create UI, bind data) - called ONCE
+- `onStart()`: `Activity` becomes visible to user
+- `onResume()`: `Activity` in foreground, user can interact
+- `onPause()`: `Activity` losing focus - save critical data (must be FAST < 1s)
+- `onStop()`: `Activity` no longer visible - release heavy resources
+- `onDestroy()`: `Activity` being destroyed - final cleanup
 
 ### Resource Management Rules
 
@@ -196,7 +196,7 @@ class GoodActivity : AppCompatActivity() {
 }
 ```
 
-### Modern Approach: Lifecycle Observer
+### Modern Approach: `Lifecycle` Observer
 
 ```kotlin
 // ✅ Use DefaultLifecycleObserver
@@ -220,11 +220,11 @@ lifecycle.addObserver(LocationObserver(locationManager))
 ### Important Distinctions
 
 **onPause() vs onStop()**:
-- `onPause()`: Activity partially visible (dialog on top) - must be FAST
-- `onStop()`: Activity fully hidden - can perform heavier operations
+- `onPause()`: `Activity` partially visible (dialog on top) - must be FAST
+- `onStop()`: `Activity` fully hidden - can perform heavier operations
 
 **onStop() vs onDestroy()**:
-- `onStop()`: Activity can be killed by system without calling `onDestroy()`
+- `onStop()`: `Activity` can be killed by system without calling `onDestroy()`
 - `onDestroy()`: Guaranteed cleanup only if called explicitly
 
 ### Handling Configuration Changes
@@ -246,9 +246,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ## Follow-ups
 
-- What happens during configuration changes and how does ViewModel survive them?
+- What happens during configuration changes and how does `ViewModel` survive them?
 - When would onDestroy() not be called and how to handle it?
-- How does Fragment lifecycle relate to Activity lifecycle and what are the ordering guarantees?
+- How does `Fragment` lifecycle relate to `Activity` lifecycle and what are the ordering guarantees?
 - What operations should be avoided in onPause() due to performance constraints?
 - How does process death differ from normal lifecycle transitions and what survives it?
 

@@ -33,7 +33,7 @@ How to fix a bad element layout?
 
 ### 1. Уменьшить Вложенность
 
-**Проблема:** Глубокая иерархия View замедляет рендеринг.
+**Проблема:** Глубокая иерархия `View` замедляет рендеринг.
 
 ```xml
 <!-- ❌ Слишком много вложенных layouts -->
@@ -145,7 +145,7 @@ class OptimizedView(context: Context) : View(context) {
 
 ### Инструменты Диагностики
 
-- **Layout Inspector**: View > Tool Windows > Layout Inspector
+- **Layout Inspector**: `View` > Tool Windows > Layout Inspector
 - **GPU Overdraw**: Developer Options > Debug GPU Overdraw
 - **Systrace**: Анализ UI performance
 
@@ -267,7 +267,7 @@ class OptimizedView(context: Context) : View(context) {
 
 ### Diagnostic Tools
 
-- **Layout Inspector**: View > Tool Windows > Layout Inspector
+- **Layout Inspector**: `View` > Tool Windows > Layout Inspector
 - **GPU Overdraw**: Developer Options > Debug GPU Overdraw
 - **Systrace**: UI performance analysis
 
@@ -275,28 +275,28 @@ class OptimizedView(context: Context) : View(context) {
 
 ## Follow-ups
 
-- How to profile layout inflation time in RecyclerView?
-- When should you use ConstraintLayout vs. LinearLayout?
+- How to profile layout inflation time in `RecyclerView`?
+- When should you use `ConstraintLayout` vs. `LinearLayout`?
 - What causes layout thrashing and how to detect it?
 - How does ViewStub compare to GONE visibility?
 - What are the performance implications of nested ConstraintLayouts?
 
 ## References
 
-- [[c-constraintlayout]] - Concept note about ConstraintLayout
-- [[c-view-hierarchy]] - Understanding Android View hierarchy
+- [[c-constraintlayout]] - Concept note about `ConstraintLayout`
+- [[c-view-hierarchy]] - Understanding Android `View` hierarchy
 - Android Developer Documentation: Layout optimization best practices
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization basics
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView` optimization basics
 - [[q-viewmodel-pattern--android--easy]] - Separation of concerns in UI
 
 ### Related (Same Level)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View redraw methods
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` redraw methods
 - [[q-performance-optimization-android--android--medium]] - General performance strategies
 
 ### Advanced (Harder)
 - [[q-testing-viewmodels-turbine--android--medium]] - Testing UI components
-- Custom View performance profiling with Systrace
+- Custom `View` performance profiling with Systrace

@@ -82,7 +82,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ### Навигация В Приложении
 
-#### 1. Activity Navigation
+#### 1. `Activity` Navigation
 
 ```kotlin
 // ✅ Базовый переход
@@ -96,7 +96,7 @@ val intent = Intent(this, MainActivity::class.java).apply {
 startActivity(intent)
 ```
 
-#### 2. Fragment Navigation
+#### 2. `Fragment` Navigation
 
 ```kotlin
 // ✅ FragmentManager
@@ -153,7 +153,7 @@ onBackPressedDispatcher.addCallback(
 
 1. **Уважайте системную навигацию** — не блокируйте жесты назад
 2. **Следуйте соглашениям платформы** — используйте знакомые паттерны
-3. **Сохраняйте состояние** — восстанавливайте навигацию после пересоздания Activity
+3. **Сохраняйте состояние** — восстанавливайте навигацию после пересоздания `Activity`
 4. **Поддержка deep linking** — позволяйте открывать экраны напрямую
 5. **Реализуйте predictive back** — улучшает UX на современных устройствах
 
@@ -185,13 +185,13 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-#### Button Navigation (Legacy)
+#### `Button` Navigation (Legacy)
 
 Three on-screen buttons: Back, Home, Recent Apps.
 
-### Application-Level Navigation
+### `Application`-Level Navigation
 
-#### 1. Activity Navigation
+#### 1. `Activity` Navigation
 
 ```kotlin
 // ✅ Basic transition
@@ -205,7 +205,7 @@ val intent = Intent(this, MainActivity::class.java).apply {
 startActivity(intent)
 ```
 
-#### 2. Fragment Navigation
+#### 2. `Fragment` Navigation
 
 ```kotlin
 // ✅ FragmentManager approach
@@ -262,7 +262,7 @@ onBackPressedDispatcher.addCallback(
 
 1. **Respect system navigation** — don't block back gestures
 2. **Follow platform conventions** — use familiar patterns
-3. **Preserve state** — restore navigation after Activity recreation
+3. **Preserve state** — restore navigation after `Activity` recreation
 4. **Support deep linking** — allow direct screen access
 5. **Implement predictive back** — improves UX on modern devices
 
@@ -274,7 +274,7 @@ onBackPressedDispatcher.addCallback(
 - What are the differences between `launchMode` flags and how do they affect back stack?
 - How would you implement a custom back stack for a complex multi-module navigation?
 - How does Navigation Component handle deep links and argument passing?
-- What are the trade-offs between single-Activity architecture and multi-Activity?
+- What are the trade-offs between single-`Activity` architecture and multi-`Activity`?
 
 ## References
 
@@ -295,7 +295,7 @@ onBackPressedDispatcher.addCallback(
 - [[q-what-navigation-methods-do-you-know--android--medium]] - Overview of navigation approaches
 
 ### Related
-- [[q-activity-navigation-how-it-works--android--medium]] - Activity navigation details
+- [[q-activity-navigation-how-it-works--android--medium]] - `Activity` navigation details
 - [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose navigation
 - [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Deep linking challenges
 

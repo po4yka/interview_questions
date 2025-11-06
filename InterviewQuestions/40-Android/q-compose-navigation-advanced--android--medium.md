@@ -36,7 +36,7 @@ sources:
 
 ### Типы Аргументов
 
-**Path-аргументы** — обязательны, позиционны, часть URL. **Query-аргументы** — опциональны, с дефолтами, передаются через `?key=value`.
+**`Path`-аргументы** — обязательны, позиционны, часть URL. **Query-аргументы** — опциональны, с дефолтами, передаются через `?key=value`.
 
 ```kotlin
 // ✅ Path-аргумент (обязательный)
@@ -103,7 +103,7 @@ composable(
 </intent-filter>
 ```
 
-### Контроль back Stack
+### Контроль back `Stack`
 
 **launchSingleTop** — предотвращает дублирование верхней записи. **popUpTo** — очищает стек до указанного маршрута, `inclusive = true` удаляет и сам маршрут.
 
@@ -122,7 +122,7 @@ nav.navigate("home")
 
 ### Передача Сложных Данных
 
-Для объектов используйте **shared ViewModel** между экранами или **SavedStateHandle** для восстановления после гибели процесса. URL-параметры ограничены размером и типами.
+Для объектов используйте **shared `ViewModel`** между экранами или **SavedStateHandle** для восстановления после гибели процесса. URL-параметры ограничены размером и типами.
 
 ```kotlin
 // ✅ Shared ViewModel
@@ -145,7 +145,7 @@ val data = viewModel.data.collectAsState().value
 
 ### Argument Types
 
-**Path arguments** are required, positional, part of the URL. **Query arguments** are optional, support defaults, passed via `?key=value`.
+**`Path` arguments** are required, positional, part of the URL. **Query arguments** are optional, support defaults, passed via `?key=value`.
 
 ```kotlin
 // ✅ Path argument (required)
@@ -212,7 +212,7 @@ Manifest:
 </intent-filter>
 ```
 
-### Back Stack Control
+### Back `Stack` Control
 
 **launchSingleTop** prevents duplicate top entries. **popUpTo** clears stack to target route, `inclusive = true` removes the target itself.
 
@@ -231,7 +231,7 @@ nav.navigate("home")
 
 ### Passing Complex Data
 
-For objects, use **shared ViewModel** between screens or **SavedStateHandle** for process death restoration. URL parameters have size and type limits.
+For objects, use **shared `ViewModel`** between screens or **SavedStateHandle** for process death restoration. URL parameters have size and type limits.
 
 ```kotlin
 // ✅ Shared ViewModel

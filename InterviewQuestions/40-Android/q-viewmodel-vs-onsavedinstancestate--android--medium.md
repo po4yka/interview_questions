@@ -32,30 +32,30 @@ tags:
 ---
 
 # Вопрос (RU)
-> ViewModel vs OnSavedInstanceState
+> `ViewModel` vs OnSavedInstanceState
 
 # Question (EN)
-> ViewModel vs OnSavedInstanceState
+> `ViewModel` vs OnSavedInstanceState
 
 ---
 
 ## Answer (EN)
-ViewModel and onSaveInstanceState are both mechanisms for preserving data across Activity/Fragment lifecycle events, but they serve different purposes and have different survival guarantees.
+`ViewModel` and onSaveInstanceState are both mechanisms for preserving data across Activity/`Fragment` lifecycle events, but they serve different purposes and have different survival guarantees.
 
 ### Key Differences
 
-| Aspect | ViewModel | onSaveInstanceState |
+| Aspect | `ViewModel` | onSaveInstanceState |
 |--------|-----------|---------------------|
 | **Survives** | Configuration changes | Configuration changes + Process death |
 | **Data size** | Large objects, complex data | Small primitives, limited size (~1MB) |
-| **Storage** | In-memory | Serialized to Bundle |
+| **Storage** | In-memory | Serialized to `Bundle` |
 | **Performance** | Fast (references) | Slower (serialization) |
-| **Lifetime** | Until Activity finishes | Until user explicitly closes |
-| **Data types** | Any objects | Parcelable, Serializable, primitives |
+| **Lifetime** | Until `Activity` finishes | Until user explicitly closes |
+| **Data types** | Any objects | `Parcelable`, `Serializable`, primitives |
 | **Purpose** | UI state and business logic | Critical UI state only |
 | **Threading** | Can hold background operations | Synchronous only |
 
-### ViewModel - Configuration Change Survival
+### `ViewModel` - Configuration Change Survival
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -114,7 +114,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**When ViewModel is cleared**:
+**When `ViewModel` is cleared**:
 ```kotlin
 // ViewModel survives:
 // - Screen rotation
@@ -412,7 +412,7 @@ class FeedViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
 
 ### Summary
 
-**Use ViewModel for**:
+**Use `ViewModel` for**:
 - Large data objects
 - Business logic
 - Configuration change survival
@@ -422,11 +422,11 @@ class FeedViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
 - Process death survival
 - Critical user input
 
-**Best Practice**: Combine ViewModel with SavedStateHandle for robust state management that handles both configuration changes and process death.
+**Best Practice**: Combine `ViewModel` with SavedStateHandle for robust state management that handles both configuration changes and process death.
 
 
 # Question (EN)
-> ViewModel vs OnSavedInstanceState
+> `ViewModel` vs OnSavedInstanceState
 
 ---
 
@@ -435,22 +435,22 @@ class FeedViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
 
 
 ## Answer (EN)
-ViewModel and onSaveInstanceState are both mechanisms for preserving data across Activity/Fragment lifecycle events, but they serve different purposes and have different survival guarantees.
+`ViewModel` and onSaveInstanceState are both mechanisms for preserving data across Activity/`Fragment` lifecycle events, but they serve different purposes and have different survival guarantees.
 
 ### Key Differences
 
-| Aspect | ViewModel | onSaveInstanceState |
+| Aspect | `ViewModel` | onSaveInstanceState |
 |--------|-----------|---------------------|
 | **Survives** | Configuration changes | Configuration changes + Process death |
 | **Data size** | Large objects, complex data | Small primitives, limited size (~1MB) |
-| **Storage** | In-memory | Serialized to Bundle |
+| **Storage** | In-memory | Serialized to `Bundle` |
 | **Performance** | Fast (references) | Slower (serialization) |
-| **Lifetime** | Until Activity finishes | Until user explicitly closes |
-| **Data types** | Any objects | Parcelable, Serializable, primitives |
+| **Lifetime** | Until `Activity` finishes | Until user explicitly closes |
+| **Data types** | Any objects | `Parcelable`, `Serializable`, primitives |
 | **Purpose** | UI state and business logic | Critical UI state only |
 | **Threading** | Can hold background operations | Synchronous only |
 
-### ViewModel - Configuration Change Survival
+### `ViewModel` - Configuration Change Survival
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -509,7 +509,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**When ViewModel is cleared**:
+**When `ViewModel` is cleared**:
 ```kotlin
 // ViewModel survives:
 // - Screen rotation
@@ -807,7 +807,7 @@ class FeedViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
 
 ### Summary
 
-**Use ViewModel for**:
+**Use `ViewModel` for**:
 - Large data objects
 - Business logic
 - Configuration change survival
@@ -817,16 +817,16 @@ class FeedViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
 - Process death survival
 - Critical user input
 
-**Best Practice**: Combine ViewModel with SavedStateHandle for robust state management that handles both configuration changes and process death.
+**Best Practice**: Combine `ViewModel` with SavedStateHandle for robust state management that handles both configuration changes and process death.
 
 ## Ответ (RU)
-ViewModel и onSaveInstanceState служат для сохранения данных при изменении конфигурации активности или фрагмента. ViewModel используется для хранения и управления данными, связанных с UI, которые сохраняются при изменении конфигурации. onSaveInstanceState() используется для сохранения данных в Bundle, который система автоматически передаёт при пересоздании Activity или Fragment. ViewModel хранит данные в памяти до полного уничтожения Activity или Fragment и удобен для сложных объектов. onSaveInstanceState сохраняет данные даже при завершении процесса и подходит для небольших данных.
+`ViewModel` и onSaveInstanceState служат для сохранения данных при изменении конфигурации активности или фрагмента. `ViewModel` используется для хранения и управления данными, связанных с UI, которые сохраняются при изменении конфигурации. onSaveInstanceState() используется для сохранения данных в `Bundle`, который система автоматически передаёт при пересоздании `Activity` или `Fragment`. `ViewModel` хранит данные в памяти до полного уничтожения `Activity` или `Fragment` и удобен для сложных объектов. onSaveInstanceState сохраняет данные даже при завершении процесса и подходит для небольших данных.
 
 ## Related Topics
 - SavedStateHandle
 - Configuration changes
 - Process death
-- Bundle size limitations
+- `Bundle` size limitations
 - State management patterns
 
 
@@ -844,7 +844,7 @@ ViewModel и onSaveInstanceState служат для сохранения дан
 
 - [Architecture](https://developer.android.com/topic/architecture)
 - [Android Documentation](https://developer.android.com/docs)
-- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
 
 ## Related Questions
@@ -855,9 +855,9 @@ ViewModel и onSaveInstanceState служат для сохранения дан
 ### Related (Medium)
 - [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
 - [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
-- [[q-what-is-viewmodel--android--medium]] - What is ViewModel
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel purpose & internals
-- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - ViewModel state preservation
+- [[q-what-is-viewmodel--android--medium]] - What is `ViewModel`
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - `ViewModel` purpose & internals
+- [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]] - `ViewModel` state preservation
 
 ### Advanced (Harder)
 - [[q-mvi-architecture--android--hard]] - MVI architecture pattern

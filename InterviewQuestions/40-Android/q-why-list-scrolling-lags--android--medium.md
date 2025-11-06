@@ -29,7 +29,7 @@ Why might list scrolling lag?
 
 ## Ответ (RU)
 
-Торможение списка происходит из-за проблем производительности в реализации RecyclerView. Основные причины:
+Торможение списка происходит из-за проблем производительности в реализации `RecyclerView`. Основные причины:
 
 ### 1. Неправильное Использование ViewHolder
 
@@ -124,7 +124,7 @@ Glide.with(context)
 </LinearLayout>
 ```
 
-✅ **Хорошо**: Плоская структура ConstraintLayout
+✅ **Хорошо**: Плоская структура `ConstraintLayout`
 
 ```xml
 <ConstraintLayout>
@@ -171,7 +171,7 @@ adapter.submitList(newItems)
 
 ### 6. Отсутствие Кэширования Данных
 
-✅ **Repository pattern с кэшированием**:
+✅ **`Repository` pattern с кэшированием**:
 
 ```kotlin
 class ItemRepository(private val api: ApiService, private val db: ItemDao) {
@@ -205,7 +205,7 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 
 ## Answer (EN)
 
-List scrolling lags due to **RecyclerView performance issues**. Main causes:
+`List` scrolling lags due to **`RecyclerView` performance issues**. Main causes:
 
 ### 1. Incorrect ViewHolder Usage
 
@@ -300,7 +300,7 @@ Glide.with(context)
 </LinearLayout>
 ```
 
-✅ **Good**: Flat ConstraintLayout structure
+✅ **Good**: Flat `ConstraintLayout` structure
 
 ```xml
 <ConstraintLayout>
@@ -347,7 +347,7 @@ adapter.submitList(newItems)
 
 ### 6. Missing Data Caching
 
-✅ **Repository pattern with caching**:
+✅ **`Repository` pattern with caching**:
 
 ```kotlin
 class ItemRepository(private val api: ApiService, private val db: ItemDao) {
@@ -381,27 +381,27 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 
 ## Follow-ups
 
-- How does RecyclerView's ViewHolder recycling mechanism work internally?
+- How does `RecyclerView`'s ViewHolder recycling mechanism work internally?
 - What is the difference between RecycledViewPool and ViewCacheExtension?
-- How can you profile RecyclerView performance using Android Profiler?
+- How can you profile `RecyclerView` performance using Android Profiler?
 - When should you use AsyncListDiffer vs ListAdapter?
-- How does ConstraintLayout improve performance compared to other layouts?
+- How does `ConstraintLayout` improve performance compared to other layouts?
 
 ## References
 
-- [[c-recyclerview]] - RecyclerView architecture and components
+- [[c-recyclerview]] - `RecyclerView` architecture and components
 - [[c-performance-optimization]] - Android performance optimization techniques
-- [[c-repository-pattern]] - Repository pattern for data caching
+- [[c-repository-pattern]] - `Repository` pattern for data caching
 - [Android Performance Patterns](https://developer.android.com/topic/performance)
 
 ## Related Questions
 
 ### Prerequisites (Easy)
-- [[q-what-is-known-about-recyclerview--android--easy]] - RecyclerView basics
+- [[q-what-is-known-about-recyclerview--android--easy]] - `RecyclerView` basics
 - [[q-recyclerview-sethasfixedsize--android--easy]] - setHasFixedSize optimization
 
 ### Related (Medium)
-- [[q-recyclerview-explained--android--medium]] - RecyclerView deep dive
+- [[q-recyclerview-explained--android--medium]] - `RecyclerView` deep dive
 - [[q-recyclerview-diffutil-advanced--android--medium]] - DiffUtil advanced usage
 - [[q-recyclerview-async-list-differ--android--medium]] - AsyncListDiffer patterns
 - [[q-performance-optimization-android--android--medium]] - General performance optimization

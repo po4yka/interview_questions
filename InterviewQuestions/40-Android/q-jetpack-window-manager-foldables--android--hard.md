@@ -37,7 +37,7 @@ sources:
 > Как адаптировать Android-приложение под планшеты и складные устройства с помощью Jetpack Window Manager: обрабатывать WindowSizeClass, posture, hinge и настраивать Compose/Views под разные состояния?
 
 # Question (EN)
-> How do you adapt an Android app for tablets and foldables using Jetpack Window Manager, handling WindowSizeClass, posture, and hinge data to customize Compose/View layouts across states?
+> How do you adapt an Android app for tablets and foldables using Jetpack Window Manager, handling WindowSizeClass, posture, and hinge data to customize Compose/`View` layouts across states?
 
 ---
 
@@ -119,7 +119,7 @@ RuleController.getInstance(context).setRules(
 
 - Compute `WindowSizeClass` per activity and use it to branch UI into compact/medium/expanded experiences.
 - Subscribe to `WindowLayoutInfo` to detect `FoldingFeature` posture, hinge orientation, and separation; adjust layout safe areas accordingly.
-- Apply Activity Embedding rules for View-based UIs, enabling split pane experiences on tablets/foldables.
+- Apply `Activity` Embedding rules for `View`-based UIs, enabling split pane experiences on tablets/foldables.
 - In Compose, leverage `NavigationSuiteScaffold` or adaptive scaffolds, and account for hinge bounds via insets.
 - Test with emulator foldable profiles and `WindowLayoutInfoPublisherRule`; profile recomposition under fold/unfold transitions.
 

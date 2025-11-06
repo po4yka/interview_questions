@@ -19,17 +19,17 @@ tags: [android, android/activity, android/intents-deeplinks, android/ui-navigati
 
 # Вопрос (RU)
 
-Как обработать ситуацию, когда Activity может открыться несколько раз из-за deeplink?
+Как обработать ситуацию, когда `Activity` может открыться несколько раз из-за deeplink?
 
 # Question (EN)
 
-How to handle the situation where Activity can open multiple times due to deeplink?
+How to handle the situation where `Activity` can open multiple times due to deeplink?
 
 ---
 
 ## Ответ (RU)
 
-При использовании deeplink Activity может запускаться многократно, создавая дубликаты в back stack. Существует несколько подходов для предотвращения этой проблемы.
+При использовании deeplink `Activity` может запускаться многократно, создавая дубликаты в back stack. Существует несколько подходов для предотвращения этой проблемы.
 
 ### Проблема
 
@@ -81,11 +81,11 @@ class ProductActivity : AppCompatActivity() {
 ```
 
 **Поведение singleTop**:
-- Activity на вершине стека → вызов `onNewIntent()` (без дубликата)
-- Activity ниже в стеке → создание нового экземпляра
-- Activity отсутствует → создание нового экземпляра
+- `Activity` на вершине стека → вызов `onNewIntent()` (без дубликата)
+- `Activity` ниже в стеке → создание нового экземпляра
+- `Activity` отсутствует → создание нового экземпляра
 
-### Решение 2: Intent Flags
+### Решение 2: `Intent` Flags
 
 Программное управление через флаги:
 
@@ -110,9 +110,9 @@ flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
 ```
 
-### Решение 3: Trampoline Activity Pattern
+### Решение 3: Trampoline `Activity` Pattern
 
-Промежуточная Activity для управления навигацией:
+Промежуточная `Activity` для управления навигацией:
 
 ```xml
 <!-- Trampoline получает все deeplink -->
@@ -198,7 +198,7 @@ class MainActivity : AppCompatActivity() {
 
 **Преимущества Navigation Component**:
 - Автоматическое управление back stack
-- Single Activity pattern
+- Single `Activity` pattern
 - Type-safe аргументы
 
 ### Сравнение Решений
@@ -206,8 +206,8 @@ class MainActivity : AppCompatActivity() {
 | Решение | Плюсы | Минусы | Когда использовать |
 |---------|-------|--------|-------------------|
 | singleTop | Простота, предотвращает дубликаты на вершине | Разрешает дубликаты ниже в стеке | Большинство deeplink сценариев |
-| Intent flags | Гибкость, программный контроль | Требует явного применения | Динамическая логика |
-| Trampoline | Полный контроль маршрутизации | Дополнительная Activity | Сложная маршрутизация |
+| `Intent` flags | Гибкость, программный контроль | Требует явного применения | Динамическая логика |
+| Trampoline | Полный контроль маршрутизации | Дополнительная `Activity` | Сложная маршрутизация |
 | Navigation Component | Современный, type-safe | Кривая обучения | Новые проекты |
 
 ### Best Practices
@@ -221,7 +221,7 @@ class MainActivity : AppCompatActivity() {
 
 ## Answer (EN)
 
-When using deeplinks, an Activity can be launched multiple times creating duplicate instances in the back stack. Several approaches prevent this problem.
+When using deeplinks, an `Activity` can be launched multiple times creating duplicate instances in the back stack. Several approaches prevent this problem.
 
 ### Problem
 
@@ -273,11 +273,11 @@ class ProductActivity : AppCompatActivity() {
 ```
 
 **singleTop behavior**:
-- Activity at top of stack → calls `onNewIntent()` (no duplicate)
-- Activity below in stack → creates new instance
-- Activity not in stack → creates new instance
+- `Activity` at top of stack → calls `onNewIntent()` (no duplicate)
+- `Activity` below in stack → creates new instance
+- `Activity` not in stack → creates new instance
 
-### Solution 2: Intent Flags
+### Solution 2: `Intent` Flags
 
 Programmatic control with flags:
 
@@ -302,7 +302,7 @@ flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
 ```
 
-### Solution 3: Trampoline Activity Pattern
+### Solution 3: Trampoline `Activity` Pattern
 
 Intermediate activity to control navigation:
 
@@ -390,7 +390,7 @@ class MainActivity : AppCompatActivity() {
 
 **Navigation Component benefits**:
 - Automatic back stack management
-- Single Activity pattern
+- Single `Activity` pattern
 - Type-safe arguments
 
 ### Solution Comparison
@@ -398,7 +398,7 @@ class MainActivity : AppCompatActivity() {
 | Solution | Pros | Cons | When to use |
 |----------|------|------|-------------|
 | singleTop | Simple, prevents top duplicates | Allows duplicates below in stack | Most deeplink scenarios |
-| Intent flags | Flexible, programmatic | Requires explicit application | Dynamic logic |
+| `Intent` flags | Flexible, programmatic | Requires explicit application | Dynamic logic |
 | Trampoline | Full routing control | Extra activity | Complex routing |
 | Navigation Component | Modern, type-safe | Learning curve | New projects |
 
@@ -423,20 +423,20 @@ class MainActivity : AppCompatActivity() {
 
 ## References
 
-- [[c-activity-lifecycle]] - Understanding Activity lifecycle
-- [[c-intent-flags]] - Intent flags reference
-- Android Documentation: [Tasks and Back Stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
+- [[c-activity-lifecycle]] - Understanding `Activity` lifecycle
+- [[c-intent-flags]] - `Intent` flags reference
+- Android Documentation: [Tasks and Back `Stack`](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
 - Android Documentation: [Deep Links](https://developer.android.com/training/app-links/deep-linking)
 - Jetpack Navigation: [Navigation Deeplinks](https://developer.android.com/guide/navigation/navigation-deep-link)
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-activity-navigation-how-it-works--android--medium]] - Understanding Activity navigation fundamentals
+- [[q-activity-navigation-how-it-works--android--medium]] - Understanding `Activity` navigation fundamentals
 
 ### Related (Same Level)
 - [[q-compose-navigation-advanced--android--medium]] - Navigation in Compose
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity lifecycle and memory
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - `Activity` lifecycle and memory
 
 ### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Fragment vs Activity architecture decisions
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - `Fragment` vs `Activity` architecture decisions

@@ -28,27 +28,27 @@ tags: [activity, android, android/activity, android/ui-navigation, difficulty/me
 ---
 
 # Вопрос (RU)
-> Что означает в Android-разработке подход Single Activity?
+> Что означает в Android-разработке подход Single `Activity`?
 
 # Question (EN)
-> What does the Single Activity approach mean in Android development?
+> What does the Single `Activity` approach mean in Android development?
 
 ---
 
 ## Ответ (RU)
 
-**Определение**: Подход Single Activity — архитектурный паттерн, при котором всё пользовательское взаимодействие происходит в рамках одной Activity, а различные экраны реализуются через Fragment'ы.
+**Определение**: Подход Single `Activity` — архитектурный паттерн, при котором всё пользовательское взаимодействие происходит в рамках одной `Activity`, а различные экраны реализуются через `Fragment`'ы.
 
 ### Основные Преимущества
 
 **Упрощённое управление состоянием**
-- Один контекст Activity для всего приложения
+- Один контекст `Activity` для всего приложения
 - Передача данных между экранами через Navigation Component
 - Централизованное восстановление состояния
 
 **Производительность**
-- Отсутствие накладных расходов на запуск новых Activity
-- Быстрые переходы между Fragment'ами
+- Отсутствие накладных расходов на запуск новых `Activity`
+- Быстрые переходы между `Fragment`'ами
 - Меньшее потребление памяти
 
 **Улучшенная навигация**
@@ -104,7 +104,7 @@ class ProductListFragment : Fragment() {
 
 ### Сравнение Подходов
 
-**Multi-Activity (традиционный)**
+**Multi-`Activity` (традиционный)**
 ```kotlin
 // ❌ Каждый экран — отдельная Activity
 class ProductListActivity : AppCompatActivity() {
@@ -116,7 +116,7 @@ class ProductListActivity : AppCompatActivity() {
 }
 ```
 
-**Single Activity (современный)**
+**Single `Activity` (современный)**
 ```kotlin
 // ✅ Один контейнер для всех экранов
 class MainActivity : AppCompatActivity() {
@@ -124,9 +124,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Когда Использовать Multi-Activity
+### Когда Использовать Multi-`Activity`
 
-Несмотря на преимущества Single Activity, есть случаи для нескольких Activity:
+Несмотря на преимущества Single `Activity`, есть случаи для нескольких `Activity`:
 
 - **Модульность**: Отдельные feature-модули с собственными входными точками
 - **Различные UI режимы**: Fullscreen видео, picture-in-picture
@@ -136,12 +136,12 @@ class MainActivity : AppCompatActivity() {
 
 ## Answer (EN)
 
-**Definition**: The Single Activity approach is an architectural pattern where all user interaction occurs within one Activity, and different screens are implemented using Fragments.
+**Definition**: The Single `Activity` approach is an architectural pattern where all user interaction occurs within one `Activity`, and different screens are implemented using Fragments.
 
 ### Key Benefits
 
 **Simplified State Management**
-- Single Activity context for the entire app
+- Single `Activity` context for the entire app
 - Data passing between screens via Navigation Component
 - Centralized state restoration
 
@@ -203,7 +203,7 @@ class ProductListFragment : Fragment() {
 
 ### Approach Comparison
 
-**Multi-Activity (traditional)**
+**Multi-`Activity` (traditional)**
 ```kotlin
 // ❌ Each screen is a separate Activity
 class ProductListActivity : AppCompatActivity() {
@@ -215,7 +215,7 @@ class ProductListActivity : AppCompatActivity() {
 }
 ```
 
-**Single Activity (modern)**
+**Single `Activity` (modern)**
 ```kotlin
 // ✅ One container for all screens
 class MainActivity : AppCompatActivity() {
@@ -223,9 +223,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### When to Use Multi-Activity
+### When to Use Multi-`Activity`
 
-Despite Single Activity advantages, there are cases for multiple Activities:
+Despite Single `Activity` advantages, there are cases for multiple Activities:
 
 - **Modularity**: Separate feature modules with their own entry points
 - **Different UI modes**: Fullscreen video, picture-in-picture
@@ -235,28 +235,28 @@ Despite Single Activity advantages, there are cases for multiple Activities:
 
 ## Follow-ups
 
-- How does Single Activity handle configuration changes differently from Multi-Activity?
+- How does Single `Activity` handle configuration changes differently from Multi-`Activity`?
 - What are the implications for Dependency Injection (Hilt/Koin) scoping?
-- How do you share ViewModels between Fragments in Single Activity?
+- How do you share ViewModels between Fragments in Single `Activity`?
 - What's the impact on app startup time and memory footprint?
-- How do you handle different Activity launch modes (singleTask, singleInstance)?
+- How do you handle different `Activity` launch modes (singleTask, singleInstance)?
 
 ## References
 
-- [[c-lifecycle]] - Activity and Fragment lifecycle fundamentals
+- [[c-lifecycle]] - `Activity` and `Fragment` lifecycle fundamentals
 - [Navigation Component Guide](https://developer.android.com/guide/navigation)
-- [Single Activity Architecture](https://www.youtube.com/watch?v=2k8x8V77CrU)
+- [Single `Activity` Architecture](https://www.youtube.com/watch?v=2k8x8V77CrU)
 - [Fragments Guide](https://developer.android.com/guide/fragments)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-components-besides-activity--android--easy]] - Understanding Activity basics
+- [[q-android-components-besides-activity--android--easy]] - Understanding `Activity` basics
 
 ### Related (Medium)
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle details
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment-Activity relationship
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle details
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment`-`Activity` relationship
 - [[q-single-activity-pros-cons--android--medium]] - Detailed pros/cons analysis
 
 ### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Deep dive into Fragment necessity
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Deep dive into `Fragment` necessity

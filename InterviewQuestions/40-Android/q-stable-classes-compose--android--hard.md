@@ -31,8 +31,8 @@ Which classes are automatically inferred as stable in Jetpack Compose?
 
 В Jetpack Compose классы автоматически считаются **stable**, если они:
 - **Data классы** с неизменяемыми свойствами (`val`)
-- **Все свойства имеют stable типы** (String, Int, Float и т.д.)
-- **Не содержат изменяемых коллекций** (MutableList, MutableMap)
+- **Все свойства имеют stable типы** (`String`, `Int`, `Float` и т.д.)
+- **Не содержат изменяемых коллекций** (`MutableList`, MutableMap)
 
 ### Что Такое Stability?
 
@@ -45,7 +45,7 @@ Which classes are automatically inferred as stable in Jetpack Compose?
 
 ### Автоматически Stable Типы
 
-**Примитивы**: Int, Long, Float, Double, Boolean, Char, String
+**Примитивы**: `Int`, `Long`, `Float`, `Double`, `Boolean`, `Char`, `String`
 
 **Immutable data классы**:
 ```kotlin
@@ -161,8 +161,8 @@ unstable class UserProfile {
 
 Classes in Jetpack Compose are automatically considered **stable** if they are:
 - **Data classes** with immutable properties (`val`)
-- **All properties are stable types** (String, Int, Float, etc.)
-- **No mutable collections** (MutableList, MutableMap)
+- **All properties are stable types** (`String`, `Int`, `Float`, etc.)
+- **No mutable collections** (`MutableList`, MutableMap)
 
 ### What is Stability?
 
@@ -175,7 +175,7 @@ Classes in Jetpack Compose are automatically considered **stable** if they are:
 
 ### Automatically Stable Types
 
-**Primitives**: Int, Long, Float, Double, Boolean, Char, String
+**Primitives**: `Int`, `Long`, `Float`, `Double`, `Boolean`, `Char`, `String`
 
 **Immutable data classes**:
 ```kotlin
@@ -292,7 +292,7 @@ unstable class UserProfile {
 1. What happens to recomposition if a class contains a stable property wrapped in an unstable container?
 2. How does @Immutable differ from @Stable annotation?
 3. Can you make a class with private var properties stable using @Stable?
-4. How do kotlinx.collections.immutable types improve performance compared to standard List?
+4. How do kotlinx.collections.immutable types improve performance compared to standard `List`?
 5. What's the performance difference between unstable and stable parameters in a deeply nested Composable tree?
 
 ## References

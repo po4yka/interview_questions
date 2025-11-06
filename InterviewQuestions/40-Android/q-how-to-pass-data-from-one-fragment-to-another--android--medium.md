@@ -28,11 +28,11 @@ sources: []
 
 ## Ответ (RU)
 
-Передача данных между фрагментами может быть реализована несколькими способами. Важно помнить, что фрагменты не должны напрямую обмениваться данными друг с другом — они должны общаться через родительскую Activity или использовать общий [[c-viewmodel]].
+Передача данных между фрагментами может быть реализована несколькими способами. Важно помнить, что фрагменты не должны напрямую обмениваться данными друг с другом — они должны общаться через родительскую `Activity` или использовать общий [[c-viewmodel]].
 
 ### Основные Подходы
 
-**1. Shared ViewModel (Рекомендуется)**
+**1. Shared `ViewModel` (Рекомендуется)**
 
 Современный подход через [[c-viewmodel]], доступный обоим фрагментам через `activityViewModels()`:
 
@@ -70,7 +70,7 @@ class FragmentB : Fragment() {
 }
 ```
 
-**2. Bundle и Arguments**
+**2. `Bundle` и Arguments**
 
 Передача данных при создании фрагмента:
 
@@ -93,7 +93,7 @@ class FragmentB : Fragment() {
 }
 ```
 
-**3. Activity как посредник (Устаревший)**
+**3. `Activity` как посредник (Устаревший)**
 
 ```kotlin
 // ❌ Устаревший подход — создаёт связанность
@@ -113,17 +113,17 @@ class MainActivity : AppCompatActivity(), OnDataPassListener {
 
 | Подход | Когда использовать |
 |--------|-------------------|
-| **Shared ViewModel** | Динамический обмен данными между фрагментами |
-| **Bundle Arguments** | Передача данных при создании фрагмента |
-| **Activity посредник** | Устаревший подход, избегать |
+| **Shared `ViewModel`** | Динамический обмен данными между фрагментами |
+| **`Bundle` Arguments** | Передача данных при создании фрагмента |
+| **`Activity` посредник** | Устаревший подход, избегать |
 
 ## Answer (EN)
 
-Passing data between fragments can be implemented in several ways. It's important to remember that fragments should not directly exchange data with each other — they should communicate through their parent Activity or use a shared [[c-viewmodel]].
+Passing data between fragments can be implemented in several ways. It's important to remember that fragments should not directly exchange data with each other — they should communicate through their parent `Activity` or use a shared [[c-viewmodel]].
 
 ### Main Approaches
 
-**1. Shared ViewModel (Recommended)**
+**1. Shared `ViewModel` (Recommended)**
 
 Modern approach using [[c-viewmodel]] accessible to both fragments via `activityViewModels()`:
 
@@ -161,7 +161,7 @@ class FragmentB : Fragment() {
 }
 ```
 
-**2. Bundle and Arguments**
+**2. `Bundle` and Arguments**
 
 Passing data when creating a fragment:
 
@@ -184,7 +184,7 @@ class FragmentB : Fragment() {
 }
 ```
 
-**3. Activity as Intermediary (Deprecated)**
+**3. `Activity` as Intermediary (Deprecated)**
 
 ```kotlin
 // ❌ Deprecated approach - creates tight coupling
@@ -204,38 +204,38 @@ class MainActivity : AppCompatActivity(), OnDataPassListener {
 
 | Approach | When to use |
 |----------|-------------|
-| **Shared ViewModel** | Dynamic data exchange between fragments |
-| **Bundle Arguments** | Passing data when creating fragment |
-| **Activity intermediary** | Deprecated, avoid |
+| **Shared `ViewModel`** | Dynamic data exchange between fragments |
+| **`Bundle` Arguments** | Passing data when creating fragment |
+| **`Activity` intermediary** | Deprecated, avoid |
 
 ## Follow-ups
 
-- How does shared ViewModel lifecycle differ from fragment lifecycle?
-- What happens if you pass large data via Bundle arguments?
+- How does shared `ViewModel` lifecycle differ from fragment lifecycle?
+- What happens if you pass large data via `Bundle` arguments?
 - How to handle fragment-to-fragment communication in Navigation Component?
-- When should you use FragmentResult API instead of shared ViewModel?
-- How to test fragment communication with shared ViewModel?
+- When should you use FragmentResult API instead of shared `ViewModel`?
+- How to test fragment communication with shared `ViewModel`?
 
 ## References
 
 - [[c-viewmodel]]
 - [[c-fragments]]
 - [[c-activity-lifecycle]]
-- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
 
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment
-- [[q-fragment-basics--android--easy]] - Fragment
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - `Fragment`
+- [[q-fragment-basics--android--easy]] - `Fragment`
 
 ### Related (Medium)
-- [[q-save-data-outside-fragment--android--medium]] - Fragment
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment
-- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - Fragment
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment
-- [[q-how-to-pass-parameters-to-a-fragment--android--easy]] - Fragment
+- [[q-save-data-outside-fragment--android--medium]] - `Fragment`
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment`
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - `Fragment`
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Fragment`
+- [[q-how-to-pass-parameters-to-a-fragment--android--easy]] - `Fragment`
 
 ### Advanced (Harder)
-- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - Fragment
+- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - `Fragment`

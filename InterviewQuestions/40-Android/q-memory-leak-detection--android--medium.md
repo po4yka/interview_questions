@@ -27,10 +27,10 @@ tags: [android/lifecycle, android/performance-memory, android/profiling, difficu
 ---
 
 # Вопрос (RU)
-> Как обнаружить и исправить утечки памяти в Android? Используйте LeakCanary, Memory Profiler. Исправьте утечки Activity/Fragment/ViewModel.
+> Как обнаружить и исправить утечки памяти в Android? Используйте LeakCanary, Memory Profiler. Исправьте утечки Activity/Fragment/`ViewModel`.
 
 # Question (EN)
-> How to identify and fix memory leaks in Android? Use LeakCanary, Memory Profiler, and heap dumps. Fix Activity/Fragment/ViewModel leaks.
+> How to identify and fix memory leaks in Android? Use LeakCanary, Memory Profiler, and heap dumps. Fix Activity/Fragment/`ViewModel` leaks.
 
 ---
 
@@ -60,7 +60,7 @@ dependencies {
 }
 ```
 
-Не требует настройки — автоматически отслеживает Activity/Fragment/ViewModel.
+Не требует настройки — автоматически отслеживает Activity/Fragment/`ViewModel`.
 
 **Настройка:**
 ```kotlin
@@ -98,7 +98,7 @@ class MyRepository {
 
 ### Типичные Утечки
 
-#### 1. Activity — Статические Ссылки
+#### 1. `Activity` — Статические Ссылки
 
 **❌ Утечка:**
 ```kotlin
@@ -130,7 +130,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 2. Activity — Внутренние Классы
+#### 2. `Activity` — Внутренние Классы
 
 **❌ Утечка:**
 ```kotlin
@@ -178,7 +178,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 3. Activity — Слушатели
+#### 3. `Activity` — Слушатели
 
 **❌ Утечка:**
 ```kotlin
@@ -221,7 +221,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 4. Fragment — Ссылки На View
+#### 4. `Fragment` — Ссылки На `View`
 
 **❌ Утечка:**
 ```kotlin
@@ -263,7 +263,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-#### 5. ViewModel — Context
+#### 5. `ViewModel` — `Context`
 
 **❌ Утечка:**
 ```kotlin
@@ -291,7 +291,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 6. LiveData — observeForever
+#### 6. `LiveData` — observeForever
 
 **❌ Утечка:**
 ```kotlin
@@ -354,7 +354,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-#### 8. Bitmap — Кэши
+#### 8. `Bitmap` — Кэши
 
 **❌ Утечка:**
 ```kotlin
@@ -416,12 +416,12 @@ fun dumpHeap() {
 ### Лучшие Практики
 
 1. **LeakCanary в debug** — отлавливайте до продакшна
-2. **Lifecycle-компоненты** — LiveData, ViewModel, lifecycleScope
+2. **`Lifecycle`-компоненты** — `LiveData`, `ViewModel`, lifecycleScope
 3. **WeakReference** для кэшей
 4. **Отменяйте слушатели** в onDestroy/onPause
 5. **Очищайте binding** в onDestroyView
-6. **Application context** для синглтонов
-7. **Избегайте статических Activity ссылок**
+6. **`Application` context** для синглтонов
+7. **Избегайте статических `Activity` ссылок**
 8. **viewModelScope, не GlobalScope**
 9. **Библиотеки изображений** (Coil, Glide)
 10. **Регулярное профилирование**
@@ -452,7 +452,7 @@ dependencies {
 }
 ```
 
-No setup required — automatically monitors Activity/Fragment/ViewModel.
+No setup required — automatically monitors Activity/Fragment/`ViewModel`.
 
 **Configuration:**
 ```kotlin
@@ -490,7 +490,7 @@ class MyRepository {
 
 ### Common Leak Patterns
 
-#### 1. Activity — Static References
+#### 1. `Activity` — Static References
 
 **❌ Leak:**
 ```kotlin
@@ -522,7 +522,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 2. Activity — Inner Classes
+#### 2. `Activity` — Inner Classes
 
 **❌ Leak:**
 ```kotlin
@@ -570,7 +570,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 3. Activity — Listeners
+#### 3. `Activity` — Listeners
 
 **❌ Leak:**
 ```kotlin
@@ -613,7 +613,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 4. Fragment — View References
+#### 4. `Fragment` — `View` References
 
 **❌ Leak:**
 ```kotlin
@@ -655,7 +655,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-#### 5. ViewModel — Context
+#### 5. `ViewModel` — `Context`
 
 **❌ Leak:**
 ```kotlin
@@ -683,7 +683,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 6. LiveData — observeForever
+#### 6. `LiveData` — observeForever
 
 **❌ Leak:**
 ```kotlin
@@ -746,7 +746,7 @@ class MyFragment : Fragment() {
 }
 ```
 
-#### 8. Bitmap — Caches
+#### 8. `Bitmap` — Caches
 
 **❌ Leak:**
 ```kotlin
@@ -808,12 +808,12 @@ fun dumpHeap() {
 ### Best Practices
 
 1. **LeakCanary in debug** — catch before production
-2. **Lifecycle components** — LiveData, ViewModel, lifecycleScope
+2. **`Lifecycle` components** — `LiveData`, `ViewModel`, lifecycleScope
 3. **WeakReference** for caches
 4. **Unregister listeners** in onDestroy/onPause
 5. **Clear binding** in onDestroyView
-6. **Application context** for singletons
-7. **Avoid static Activity references**
+6. **`Application` context** for singletons
+7. **Avoid static `Activity` references**
 8. **Use viewModelScope, not GlobalScope**
 9. **Image libraries** (Coil, Glide)
 10. **Regular profiling**

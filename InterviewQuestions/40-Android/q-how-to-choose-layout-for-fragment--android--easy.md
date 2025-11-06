@@ -31,15 +31,15 @@ tags:
 
 # Вопрос (RU)
 
-Каким образом ты выбираешь layout для Fragment?
+Каким образом ты выбираешь layout для `Fragment`?
 
 # Question (EN)
 
-How do you choose a layout for a Fragment?
+How do you choose a layout for a `Fragment`?
 
 ## Ответ (RU)
 
-В Android фрагментах выбор layout выполняется в методе **onCreateView()** с использованием **LayoutInflater**. Это основной способ преобразования XML-разметки в View объекты.
+В Android фрагментах выбор layout выполняется в методе **onCreateView()** с использованием **LayoutInflater**. Это основной способ преобразования XML-разметки в `View` объекты.
 
 ### Основные Подходы
 
@@ -58,10 +58,10 @@ override fun onCreateView(
 
 **Ключевые параметры:**
 - `inflater` — предоставляется системой
-- `container` — родительская ViewGroup
+- `container` — родительская `ViewGroup`
 - `attachToRoot` — **обязательно false** (FragmentManager сам управляет добавлением)
 
-**2. View Binding** (рекомендуется)
+**2. `View` Binding** (рекомендуется)
 
 ```kotlin
 private var _binding: FragmentExampleBinding? = null
@@ -136,7 +136,7 @@ override fun onDestroyView() {
 
 ## Answer (EN)
 
-In Android fragments, layout selection is performed in the **onCreateView()** method using **LayoutInflater**. This is the primary way to inflate XML layouts into View objects.
+In Android fragments, layout selection is performed in the **onCreateView()** method using **LayoutInflater**. This is the primary way to inflate XML layouts into `View` objects.
 
 ### Main Approaches
 
@@ -155,10 +155,10 @@ override fun onCreateView(
 
 **Key parameters:**
 - `inflater` — provided by the system
-- `container` — parent ViewGroup
+- `container` — parent `ViewGroup`
 - `attachToRoot` — **must be false** (FragmentManager handles attachment)
 
-**2. View Binding** (recommended)
+**2. `View` Binding** (recommended)
 
 ```kotlin
 private var _binding: FragmentExampleBinding? = null
@@ -236,14 +236,14 @@ override fun onDestroyView() {
 ## Follow-ups
 
 - Why must `attachToRoot` be false for fragments?
-- What happens if you don't clean up View Binding references in `onDestroyView()`?
+- What happens if you don't clean up `View` Binding references in `onDestroyView()`?
 - When should you prefer Jetpack Compose over traditional XML layouts?
 - How do resource qualifiers work for different screen sizes and orientations?
 
 ## References
 
-- Official Android documentation: Fragment lifecycle
-- Official Android documentation: View Binding
+- Official Android documentation: `Fragment` lifecycle
+- Official Android documentation: `View` Binding
 - Official Android documentation: LayoutInflater API reference
 
 ## Related Questions
@@ -254,11 +254,11 @@ override fun onDestroyView() {
 
 
 ### Prerequisites
-- [[q-fragment-basics--android--easy|Fragment Basics]]
+- [[q-fragment-basics--android--easy|`Fragment` Basics]]
 
 ### Related
 - [[q-why-user-data-may-disappear-on-screen-rotation--android--hard|Why User Data May Disappear on Screen Rotation]]
 
 ### Advanced
 - Advanced fragment transaction management
-- Fragment result API and communication patterns
+- `Fragment` result API and communication patterns

@@ -110,7 +110,7 @@ fun SvgImage(svgString: String, modifier: Modifier = Modifier) {
 }
 ```
 
-### 4. Пользовательский Drawable
+### 4. Пользовательский `Drawable`
 
 Для полного контроля рендеринга:
 
@@ -147,13 +147,13 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 |--------|--------------|------------|-------------------|
 | AndroidSVG | Простота, контроль | Ручная настройка | Простые случаи, прямая работа со строками |
 | Coil + SVG | Кеширование, современный API | Доп. зависимость | Загрузка из сети, кеширование |
-| Custom Drawable | Полный контроль | Больше кода | Специфичные требования к рендерингу |
+| Custom `Drawable` | Полный контроль | Больше кода | Специфичные требования к рендерингу |
 | Compose | Декларативность | Требует Compose | Compose UI |
 
 ### Важные Моменты
 
 **Память**:
-- Преобразование в Bitmap для больших SVG может вызвать OutOfMemoryError
+- Преобразование в `Bitmap` для больших SVG может вызвать OutOfMemoryError
 - Используйте PictureDrawable для эффективного рендеринга векторов
 
 **Обработка ошибок**:
@@ -166,7 +166,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 
 **Размеры**:
 - SVG может не иметь явных размеров - устанавливайте их программно
-- Используйте scaleType для ImageView согласно требованиям дизайна
+- Используйте scaleType для `ImageView` согласно требованиям дизайна
 
 ## Answer (EN)
 
@@ -251,7 +251,7 @@ fun SvgImage(svgString: String, modifier: Modifier = Modifier) {
 }
 ```
 
-### 4. Custom Drawable
+### 4. Custom `Drawable`
 
 For full rendering control:
 
@@ -288,13 +288,13 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 |----------|-----------|---------------|----------|
 | AndroidSVG | Simplicity, control | Manual setup | Simple cases, direct string handling |
 | Coil + SVG | Caching, modern API | Extra dependency | Network loading, caching needed |
-| Custom Drawable | Full control | More code | Specific rendering requirements |
+| Custom `Drawable` | Full control | More code | Specific rendering requirements |
 | Compose | Declarative | Requires Compose | Compose UI |
 
 ### Key Considerations
 
 **Memory**:
-- Converting large SVGs to Bitmap can cause OutOfMemoryError
+- Converting large SVGs to `Bitmap` can cause OutOfMemoryError
 - Use PictureDrawable for efficient vector rendering
 
 **Error handling**:
@@ -307,7 +307,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 
 **Sizing**:
 - SVG may lack explicit dimensions - set them programmatically
-- Use appropriate ImageView scaleType per design requirements
+- Use appropriate `ImageView` scaleType per design requirements
 
 ---
 
@@ -315,7 +315,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 
 - How to handle SVG animations in Android?
 - What SVG features are not supported by AndroidSVG library?
-- How to optimize SVG loading performance for lists/RecyclerView?
+- How to optimize SVG loading performance for lists/`RecyclerView`?
 - How to apply color filters or tinting to programmatically loaded SVGs?
 - What are the differences between VectorDrawable and SVG in Android?
 
@@ -334,7 +334,7 @@ class SvgDrawable(private val svgString: String) : Drawable() {
 - [[c-jetpack-compose]] - Jetpack Compose basics
 
 ### Related
-- How to load images efficiently in RecyclerView
+- How to load images efficiently in `RecyclerView`
 - Vector drawables vs raster images in Android
 
 ### Advanced

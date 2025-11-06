@@ -241,7 +241,7 @@ class ModelDownloadManager(private val context: Context) {
 
 **Performance:**
 - Throttle: 1 frame/sec для camera, 500ms минимум
-- Thread: Dispatchers.Default для preprocessing
+- `Thread`: Dispatchers.Default для preprocessing
 - Cleanup: всегда close() recognizers
 - Battery: throttling экономит 70% батареи
 
@@ -466,7 +466,7 @@ class ModelDownloadManager(private val context: Context) {
 
 **Performance:**
 - Throttle: 1 frame/sec for camera, 500ms minimum
-- Thread: Dispatchers.Default for preprocessing
+- `Thread`: Dispatchers.Default for preprocessing
 - Cleanup: always close() recognizers
 - Battery: throttling saves 70% battery
 
@@ -498,7 +498,7 @@ class ModelDownloadManager(private val context: Context) {
 ### Prerequisites (Easier)
 - [[q-android-async-primitives--android--easy]] - Async operations basics
 - [[q-databases-android--android--easy]] - Data storage options
-- [[q-view-fundamentals--android--easy]] - View and UI basics
+- [[q-view-fundamentals--android--easy]] - `View` and UI basics
 
 ### Related (Same Level)
 - [[q-camerax-integration--android--medium]] - Advanced CameraX patterns

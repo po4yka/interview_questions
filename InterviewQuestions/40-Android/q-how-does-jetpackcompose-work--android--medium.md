@@ -45,14 +45,14 @@ How does Jetpack Compose work?
 
 ## Ответ (RU)
 
-**Jetpack Compose** - декларативный UI-фреймворк от Google для Android. Вместо XML и императивного управления View, использует Kotlin-функции для описания UI.
+**Jetpack Compose** - декларативный UI-фреймворк от Google для Android. Вместо XML и императивного управления `View`, использует Kotlin-функции для описания UI.
 
 ### Основные Принципы
 
 **Declarative UI**: описываете что должно быть, а не как построить
 **Reactive**: UI автоматически обновляется при изменении данных
 **Component-based**: UI из переиспользуемых функций
-**Kotlin-first**: полная интеграция с корутинами и Flow
+**Kotlin-first**: полная интеграция с корутинами и `Flow`
 
 ### Как Работает Composition
 
@@ -180,14 +180,14 @@ Compose работает через:
 
 ## Answer (EN)
 
-**Jetpack Compose** is Google's declarative UI toolkit for Android. Instead of XML and imperative View manipulation, it uses Kotlin functions to describe UI.
+**Jetpack Compose** is Google's declarative UI toolkit for Android. Instead of XML and imperative `View` manipulation, it uses Kotlin functions to describe UI.
 
 ### Core Principles
 
 **Declarative UI**: describe what the UI should look like, not how to build it
 **Reactive**: UI automatically updates when data changes
 **Component-based**: build UIs from reusable functions
-**Kotlin-first**: full integration with coroutines and Flow
+**Kotlin-first**: full integration with coroutines and `Flow`
 
 ### How Composition Works
 
@@ -338,7 +338,7 @@ Compose works by:
 
 ### Prerequisites
 - Basic Kotlin knowledge with lambdas and delegates
-- Understanding of Android View system basics
+- Understanding of Android `View` system basics
 
 ### Related
 - [[q-cache-implementation-strategies--android--medium]]

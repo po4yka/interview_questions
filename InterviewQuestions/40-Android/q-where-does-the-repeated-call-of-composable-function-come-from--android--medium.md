@@ -212,7 +212,7 @@ fun OptimizedExample() {
 ## References
 
 - [[c-jetpack-compose]] - Core concepts of declarative UI
-- [Compose Lifecycle Documentation](https://developer.android.com/jetpack/compose/lifecycle)
+- [Compose `Lifecycle` Documentation](https://developer.android.com/jetpack/compose/lifecycle)
 - [State and Recomposition](https://developer.android.com/jetpack/compose/state)
 - [Performance Best Practices](https://developer.android.com/jetpack/compose/performance)
 

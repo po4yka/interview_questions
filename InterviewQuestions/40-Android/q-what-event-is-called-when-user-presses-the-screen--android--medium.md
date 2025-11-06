@@ -43,7 +43,7 @@ tags:
 
 When a user presses the screen in Android, the system calls a series of touch event methods. The main events are: **dispatchTouchEvent()**, **onInterceptTouchEvent()** (for ViewGroups), **onTouchEvent()**, and if configured, **onClick()**.
 
-### Touch Event Flow
+### Touch Event `Flow`
 
 ```kotlin
 // Event dispatch flow:
@@ -178,7 +178,7 @@ class ClickableView : View {
 }
 ```
 
-### ViewGroup Touch Interception
+### `ViewGroup` Touch Interception
 
 ```kotlin
 class CustomViewGroup : ViewGroup {
@@ -382,8 +382,8 @@ When user presses screen, Android calls:
 
 1. **ACTION_DOWN** - User touches screen
 2. **dispatchTouchEvent()** - Event distribution starts
-3. **onInterceptTouchEvent()** - Parent can intercept (ViewGroup only)
-4. **onTouchEvent()** - View handles event
+3. **onInterceptTouchEvent()** - Parent can intercept (`ViewGroup` only)
+4. **onTouchEvent()** - `View` handles event
 5. **ACTION_UP** - User lifts finger
 6. **onClick()** - Called if no movement occurred
 
@@ -406,7 +406,7 @@ Key points:
 
 When a user presses the screen in Android, the system calls a series of touch event methods. The main events are: **dispatchTouchEvent()**, **onInterceptTouchEvent()** (for ViewGroups), **onTouchEvent()**, and if configured, **onClick()**.
 
-### Touch Event Flow
+### Touch Event `Flow`
 
 ```kotlin
 // Event dispatch flow:
@@ -541,7 +541,7 @@ class ClickableView : View {
 }
 ```
 
-### ViewGroup Touch Interception
+### `ViewGroup` Touch Interception
 
 ```kotlin
 class CustomViewGroup : ViewGroup {
@@ -745,8 +745,8 @@ When user presses screen, Android calls:
 
 1. **ACTION_DOWN** - User touches screen
 2. **dispatchTouchEvent()** - Event distribution starts
-3. **onInterceptTouchEvent()** - Parent can intercept (ViewGroup only)
-4. **onTouchEvent()** - View handles event
+3. **onInterceptTouchEvent()** - Parent can intercept (`ViewGroup` only)
+4. **onTouchEvent()** - `View` handles event
 5. **ACTION_UP** - User lifts finger
 6. **onClick()** - Called if no movement occurred
 

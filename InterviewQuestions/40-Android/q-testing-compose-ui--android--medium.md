@@ -338,7 +338,7 @@ fun userList_scrolls_to_bottom() {
 }
 ```
 
-### Testing with ViewModel
+### Testing with `ViewModel`
 
 ```kotlin
 class ProductsScreenTest {
@@ -1051,7 +1051,7 @@ fun userList_scrolls_to_bottom() {
 }
 ```
 
-### Testing with ViewModel
+### Testing with `ViewModel`
 
 ```kotlin
 class ProductsScreenTest {
@@ -1463,7 +1463,7 @@ debugImplementation "androidx.compose.ui:ui-test-manifest:1.5.4"
 
 **Test tags (Тестовые теги)**: Лучшая практика для поиска элементов. Используйте `Modifier.testTag("element_id")`. Более стабильны чем текст (локализация). Явно указывают тестируемые элементы. Работают быстрее чем поиск по тексту.
 
-**Паттерны тестирования**: Тестируйте изменения состояния (клик → проверка нового состояния). Тестируйте списки с прокруткой. Тестируйте ViewModel с setContent. Используйте waitUntil для асинхронных операций. Тестируйте навигацию с TestNavHostController. Тестируйте видимость диалогов и нижних листов.
+**Паттерны тестирования**: Тестируйте изменения состояния (клик → проверка нового состояния). Тестируйте списки с прокруткой. Тестируйте `ViewModel` с setContent. Используйте waitUntil для асинхронных операций. Тестируйте навигацию с TestNavHostController. Тестируйте видимость диалогов и нижних листов.
 
 **unmergedTree**: Compose по умолчанию объединяет дочернюю семантику. Используйте `useUnmergedTree = true` для поиска вложенных элементов. Или отключите объединение с помощью модификатора semantics.
 
@@ -1498,7 +1498,7 @@ debugImplementation "androidx.compose.ui:ui-test-manifest:1.5.4"
 ### Related (Medium)
 - [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
 - [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `RecyclerView` in Compose
 - [[q-mutable-state-compose--android--medium]] - MutableState basics
 - [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
 

@@ -25,21 +25,21 @@ sources: []
 ---
 
 # Вопрос (RU)
-> Какие типы Service существуют в Android?
+> Какие типы `Service` существуют в Android?
 
 # Question (EN)
-> What are the types of Service in Android?
+> What are the types of `Service` in Android?
 
 ---
 
 ## Ответ (RU)
 
-Android предоставляет три типа Service:
+Android предоставляет три типа `Service`:
 
-**1. Started Service**
+**1. Started `Service`**
 Запускается через `startService()` и работает независимо до явной остановки или уничтожения системой при нехватке памяти.
 
-**2. Foreground Service**
+**2. Foreground `Service`**
 Выполняет видимую пользователю работу с обязательной нотификацией. Защищен от уничтожения системой. Требует permission и указание типа foreground service.
 
 ```kotlin
@@ -51,7 +51,7 @@ class MusicService : Service() {
 }
 ```
 
-**3. Bound Service**
+**3. Bound `Service`**
 Предоставляет клиент-серверный интерфейс. Живет только пока есть привязанные клиенты.
 
 ```kotlin
@@ -73,18 +73,18 @@ class LocalService : Service() {
 | Bound | — | Зависит от клиентов | IPC между компонентами |
 
 **Ограничения:**
-- Android 8.0+ требует Foreground Service для длительных задач
+- Android 8.0+ требует Foreground `Service` для длительных задач
 - WorkManager предпочтителен для отложенной работы
-- Started Service может быть убит системой
+- Started `Service` может быть убит системой
 
 ## Answer (EN)
 
-Android provides three Service types:
+Android provides three `Service` types:
 
-**1. Started Service**
+**1. Started `Service`**
 Launched via `startService()` and runs independently until explicitly stopped or killed by system under memory pressure.
 
-**2. Foreground Service**
+**2. Foreground `Service`**
 Performs user-visible work with mandatory notification. Protected from system termination. Requires permission and foreground service type declaration.
 
 ```kotlin
@@ -96,7 +96,7 @@ class MusicService : Service() {
 }
 ```
 
-**3. Bound Service**
+**3. Bound `Service`**
 Provides client-server interface. Lives only while clients are bound.
 
 ```kotlin
@@ -111,30 +111,30 @@ class LocalService : Service() {
 
 **Key Differences:**
 
-| Type | Notification | Lifecycle | Use Case |
+| Type | Notification | `Lifecycle` | Use Case |
 |------|-------------|-----------|----------|
 | Started | — | Independent | One-shot background work |
 | Foreground | Required | Independent | Music, navigation, download |
 | Bound | — | Client-dependent | IPC between components |
 
 **Constraints:**
-- Android 8.0+ requires Foreground Service for long-running tasks
+- Android 8.0+ requires Foreground `Service` for long-running tasks
 - WorkManager is preferred for deferrable work
-- Started Service can be killed by system
+- Started `Service` can be killed by system
 
 ---
 
 ## Follow-ups
 
-- What are the Foreground Service types and when are they required?
+- What are the Foreground `Service` types and when are they required?
 - How does `START_STICKY` differ from `START_NOT_STICKY` and `START_REDELIVER_INTENT`?
-- When should you use WorkManager instead of a Service?
-- How do you implement a hybrid Service (both started and bound)?
-- What happens to a Bound Service when the last client unbinds?
+- When should you use WorkManager instead of a `Service`?
+- How do you implement a hybrid `Service` (both started and bound)?
+- What happens to a Bound `Service` when the last client unbinds?
 
 ## References
 
-- [[c-service]] - Service lifecycle and implementation
+- [[c-service]] - `Service` lifecycle and implementation
 - [[c-lifecycle]] - Android component lifecycle
 - https://developer.android.com/guide/components/services
 - https://developer.android.com/guide/components/foreground-services
@@ -146,8 +146,8 @@ class LocalService : Service() {
 
 ### Related
 - [[q-android-async-primitives--android--easy]] - Async execution options
-- Foreground Service types and permissions
+- Foreground `Service` types and permissions
 
 ### Advanced
 - [[q-android-architectural-patterns--android--medium]] - MVVM and service integration
-- Service lifecycle in multi-process architectures
+- `Service` lifecycle in multi-process architectures

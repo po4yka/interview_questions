@@ -41,14 +41,14 @@ sources:
 1. **LaunchedEffect** — запускает корутину, привязанную к композиции; отменяется при изменении ключа или выходе из композиции
 2. **DisposableEffect** — регистрирует внешние ресурсы (слушатели, подписки); требует `onDispose` для очистки
 3. **SideEffect** — синхронизирует состояние Compose с внешними системами после каждой успешной рекомпозиции; без очистки
-4. **produceState** — конвертирует асинхронную работу (Flow, suspend функции) в `State<T>`; корутина автоматически отменяется
+4. **produceState** — конвертирует асинхронную работу (`Flow`, suspend функции) в `State<T>`; корутина автоматически отменяется
 
 **Матрица выбора**:
 
 | Сценарий | API | Причина |
 |----------|-----|---------|
 | Асинхронная загрузка данных | `LaunchedEffect` | Нужна корутина с отменой |
-| Flow → State | `produceState` | Автоматическая конвертация |
+| `Flow` → State | `produceState` | Автоматическая конвертация |
 | Регистрация слушателей | `DisposableEffect` | Нужна очистка ресурсов |
 | Публикация в аналитику | `SideEffect` | Синхронизация без очистки |
 
@@ -132,14 +132,14 @@ DisposableEffect(lifecycleOwner) {
 1. **LaunchedEffect** — launches a coroutine tied to composition; cancels on key change or composition exit
 2. **DisposableEffect** — registers external resources (listeners, subscriptions); requires `onDispose` for cleanup
 3. **SideEffect** — synchronizes Compose state to external systems after every successful recomposition; no cleanup
-4. **produceState** — converts async work (Flow, suspend functions) to `State<T>`; coroutine auto-cancels
+4. **produceState** — converts async work (`Flow`, suspend functions) to `State<T>`; coroutine auto-cancels
 
 **Selection matrix**:
 
 | Scenario | API | Reason |
 |----------|-----|--------|
 | Async data loading | `LaunchedEffect` | Need coroutine with cancellation |
-| Flow → State | `produceState` | Automatic conversion |
+| `Flow` → State | `produceState` | Automatic conversion |
 | Register listeners | `DisposableEffect` | Need resource cleanup |
 | Analytics publishing | `SideEffect` | Sync without cleanup |
 
@@ -218,7 +218,7 @@ DisposableEffect(lifecycleOwner) {
 
 ## Follow-ups
 - How to combine multiple side-effects safely in one composable?
-- When to move effects into ViewModel vs keep in UI layer?
+- When to move effects into `ViewModel` vs keep in UI layer?
 - How does `rememberUpdatedState` prevent unnecessary effect restarts?
 - What's the difference between `LaunchedEffect` and `rememberCoroutineScope`?
 - How to test composables with side effects?

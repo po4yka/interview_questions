@@ -37,27 +37,27 @@ tags:
 
 # Вопрос (RU)
 
-> Что происходит, когда запускается новая Activity? Освобождается ли память предыдущей?
+> Что происходит, когда запускается новая `Activity`? Освобождается ли память предыдущей?
 
 # Question (EN)
 
-> What happens when a new Activity is called? Is memory from the old one freed?
+> What happens when a new `Activity` is called? Is memory from the old one freed?
 
 ---
 
 ## Ответ (RU)
 
-Когда запускается новая Activity, старая **не освобождает память немедленно**. Она проходит через переходы жизненного цикла и остаётся в back stack. Система может освободить её память позже при нехватке памяти.
+Когда запускается новая `Activity`, старая **не освобождает память немедленно**. Она проходит через переходы жизненного цикла и остаётся в back stack. Система может освободить её память позже при нехватке памяти.
 
 ### Последовательность Жизненного Цикла
 
 При вызове `startActivity()`:
 
-1. **Activity A** → `onPause()` (теряет фокус, частично видима)
-2. **Activity B** → `onCreate()` → `onStart()` → `onResume()` (становится активной)
-3. **Activity A** → `onStop()` (больше не видима, но остаётся в back stack)
+1. **`Activity` A** → `onPause()` (теряет фокус, частично видима)
+2. **`Activity` B** → `onCreate()` → `onStart()` → `onResume()` (становится активной)
+3. **`Activity` A** → `onStop()` (больше не видима, но остаётся в back stack)
 
-**Ключевой момент**: Activity A остаётся в памяти в состоянии `STOPPED`, включая все её поля, ViewModel и выделенные ресурсы.
+**Ключевой момент**: `Activity` A остаётся в памяти в состоянии `STOPPED`, включая все её поля, `ViewModel` и выделенные ресурсы.
 
 ### Когда Память Освобождается
 
@@ -79,7 +79,7 @@ override fun onDestroy() {
 
 #### Системное Уничтожение
 
-Когда система испытывает нехватку памяти, она убивает остановленные Activity (от самой старой):
+Когда система испытывает нехватку памяти, она убивает остановленные `Activity` (от самой старой):
 
 ```kotlin
 override fun onSaveInstanceState(outState: Bundle) {
@@ -114,7 +114,7 @@ class MemoryEfficientActivity : AppCompatActivity() {
 }
 ```
 
-### ViewModel Переживает onStop()
+### `ViewModel` Переживает onStop()
 
 ```kotlin
 class DataViewModel : ViewModel() {
@@ -125,7 +125,7 @@ class DataViewModel : ViewModel() {
 }
 ```
 
-**Критическое отличие**: ViewModel очищается только при **явном завершении** Activity, но переживает системное уничтожение для памяти.
+**Критическое отличие**: `ViewModel` очищается только при **явном завершении** `Activity`, но переживает системное уничтожение для памяти.
 
 ### Резюме
 
@@ -135,21 +135,21 @@ class DataViewModel : ViewModel() {
 | Back/`finish()` | ✅ `isFinishing = true` | ✅ Да | Не будет |
 | Системное уничтожение | ✅ `isFinishing = false` | ✅ Да | Через `savedInstanceState` |
 
-**Ответ**: Память **не освобождается** при запуске новой Activity. Освобождается только при явном завершении или системной необходимости.
+**Ответ**: Память **не освобождается** при запуске новой `Activity`. Освобождается только при явном завершении или системной необходимости.
 
 ## Answer (EN)
 
-When a new Activity is launched, the old Activity does **not** immediately free its memory. It transitions through lifecycle callbacks and remains in the back stack. The system may free its memory later under memory pressure.
+When a new `Activity` is launched, the old `Activity` does **not** immediately free its memory. It transitions through lifecycle callbacks and remains in the back stack. The system may free its memory later under memory pressure.
 
-### Lifecycle Sequence
+### `Lifecycle` Sequence
 
 When calling `startActivity()`:
 
-1. **Activity A** → `onPause()` (loses focus, partially visible)
-2. **Activity B** → `onCreate()` → `onStart()` → `onResume()` (becomes active)
-3. **Activity A** → `onStop()` (no longer visible, but stays in back stack)
+1. **`Activity` A** → `onPause()` (loses focus, partially visible)
+2. **`Activity` B** → `onCreate()` → `onStart()` → `onResume()` (becomes active)
+3. **`Activity` A** → `onStop()` (no longer visible, but stays in back stack)
 
-**Key point**: Activity A remains in memory in `STOPPED` state, including all its fields, ViewModel, and allocated resources.
+**Key point**: `Activity` A remains in memory in `STOPPED` state, including all its fields, `ViewModel`, and allocated resources.
 
 ### When Memory IS Freed
 
@@ -206,7 +206,7 @@ class MemoryEfficientActivity : AppCompatActivity() {
 }
 ```
 
-### ViewModel Survives onStop()
+### `ViewModel` Survives onStop()
 
 ```kotlin
 class DataViewModel : ViewModel() {
@@ -217,7 +217,7 @@ class DataViewModel : ViewModel() {
 }
 ```
 
-**Critical distinction**: ViewModel is cleared only on **explicit termination**, but survives system-initiated kills for memory.
+**Critical distinction**: `ViewModel` is cleared only on **explicit termination**, but survives system-initiated kills for memory.
 
 ### Summary
 
@@ -227,19 +227,19 @@ class DataViewModel : ViewModel() {
 | Back/`finish()` | ✅ `isFinishing = true` | ✅ Yes | Won't happen |
 | System kill | ✅ `isFinishing = false` | ✅ Yes | Via `savedInstanceState` |
 
-**Answer**: Memory is **not freed** when a new Activity starts. It's only freed on explicit termination or system necessity.
+**Answer**: Memory is **not freed** when a new `Activity` starts. It's only freed on explicit termination or system necessity.
 
 ## Follow-ups
 
-- How does `onSaveInstanceState()` differ from ViewModel for state preservation?
+- How does `onSaveInstanceState()` differ from `ViewModel` for state preservation?
 - What happens to back stack when `FLAG_ACTIVITY_CLEAR_TOP` is used?
 - How does `onTrimMemory()` callback help prevent system kills?
 - What's the difference between configuration change and process death?
 
 ## References
 
-- [Android Activity Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle)
-- [Tasks and Back Stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
+- [Android `Activity` `Lifecycle`](https://developer.android.com/guide/components/activities/activity-lifecycle)
+- [Tasks and Back `Stack`](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
 
 ## Related Questions
 
@@ -255,11 +255,11 @@ class DataViewModel : ViewModel() {
 
 ### Related
 
-- [[q-activity-lifecycle-methods--android--medium]] - Lifecycle handling
-- [[q-how-does-activity-lifecycle-work--android--medium]] - Activity lifecycle details
+- [[q-activity-lifecycle-methods--android--medium]] - `Lifecycle` handling
+- [[q-how-does-activity-lifecycle-work--android--medium]] - `Activity` lifecycle details
 - [[q-activity-navigation-how-it-works--android--medium]] - Navigation mechanics
 
 ### Advanced
 
-- [[q-fragments-and-activity-relationship--android--hard]] - Fragment lifecycle
-- Activity memory management and process death handling
+- [[q-fragments-and-activity-relationship--android--hard]] - `Fragment` lifecycle
+- `Activity` memory management and process death handling

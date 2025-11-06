@@ -32,21 +32,21 @@ tags:
 ---
 
 # Вопрос (RU)
-> Различия ViewGroup и View
+> Различия `ViewGroup` и `View`
 
 # Question (EN)
-> ViewGroup vs View Differences
+> `ViewGroup` vs `View` Differences
 
 ---
 
 ## Answer (EN)
-### What is ViewGroup?
+### What is `ViewGroup`?
 
-A **ViewGroup** is a special view that can **contain other views** (called children). The view group is the base class for layouts and views containers. This class also defines the `ViewGroup.LayoutParams` class which serves as the base class for layouts parameters.
+A **`ViewGroup`** is a special view that can **contain other views** (called children). The view group is the base class for layouts and views containers. This class also defines the `ViewGroup.LayoutParams` class which serves as the base class for layouts parameters.
 
 ViewGroups are **invisible containers** in which other Views can be placed. The class `ViewGroup` extends the class `View`.
 
-### View Hierarchy
+### `View` Hierarchy
 
 ```
 View (base class)
@@ -60,50 +60,50 @@ ViewGroup (container)
    ... other layouts
 ```
 
-![View hierarchy](https://raw.githubusercontent.com/Kirchhoff-/Android-Interview-Questions/master/Android/res/view_hierarchy.png)
+![`View` hierarchy](https://raw.githubusercontent.com/Kirchhoff-/Android-Interview-Questions/master/Android/res/view_hierarchy.png)
 
 ### Popular ViewGroups
 
-Common layout containers that extend ViewGroup:
+Common layout containers that extend `ViewGroup`:
 
-- **LinearLayout** - arranges children in a single row or column
-- **RelativeLayout** - positions children relative to each other or parent
-- **ConstraintLayout** - flexible constraint-based positioning
-- **FrameLayout** - stacks children on top of each other
+- **`LinearLayout`** - arranges children in a single row or column
+- **`RelativeLayout`** - positions children relative to each other or parent
+- **`ConstraintLayout`** - flexible constraint-based positioning
+- **`FrameLayout`** - stacks children on top of each other
 - **MotionLayout** - animation and transition layout
 - **GridLayout** - arranges children in a grid
 
-### What is View?
+### What is `View`?
 
-**View** represents the basic building block for user interface components. A View occupies a rectangular area on the screen and is responsible for drawing and event handling.
+**`View`** represents the basic building block for user interface components. A `View` occupies a rectangular area on the screen and is responsible for drawing and event handling.
 
 ### Popular Views
 
-Common UI components that extend View:
+Common UI components that extend `View`:
 
-- **TextView** - displays text
-- **ImageView** - displays images
-- **EditText** - editable text field
-- **Button** - clickable button
+- **`TextView`** - displays text
+- **`ImageView`** - displays images
+- **`EditText`** - editable text field
+- **`Button`** - clickable button
 - **SeekBar** - slider control
 - **CheckBox** - checkbox control
 - **RadioButton** - radio button control
 
-### View Vs ViewGroup: Key Differences
+### `View` Vs `ViewGroup`: Key Differences
 
-#### View
+#### `View`
 - **Definition**: Basic building blocks of User Interface (UI) elements in Android
 - **Purpose**: Simple rectangle box which responds to user actions
 - **Hierarchy**: Base class - refers to `android.view.View`
 - **Children**: Cannot contain other views
-- **Examples**: TextView, Button, ImageView, EditText
+- **Examples**: `TextView`, `Button`, `ImageView`, `EditText`
 
-#### ViewGroup
-- **Definition**: Invisible container that holds View and ViewGroup objects
+#### `ViewGroup`
+- **Definition**: Invisible container that holds `View` and `ViewGroup` objects
 - **Purpose**: Base class for Layouts - organizes and positions child views
-- **Hierarchy**: Extends View class
-- **Children**: Can contain multiple View and ViewGroup children
-- **Examples**: LinearLayout, RelativeLayout, ConstraintLayout
+- **Hierarchy**: Extends `View` class
+- **Children**: Can contain multiple `View` and `ViewGroup` children
+- **Examples**: `LinearLayout`, `RelativeLayout`, `ConstraintLayout`
 
 ### Example Comparison
 
@@ -170,7 +170,7 @@ abstract class ViewGroup : View {
 }
 ```
 
-### Custom ViewGroup Example
+### Custom `ViewGroup` Example
 
 ```kotlin
 class CustomContainer @JvmOverloads constructor(
@@ -213,19 +213,19 @@ class CustomContainer @JvmOverloads constructor(
 
 ### Summary Table
 
-| Aspect | View | ViewGroup |
+| Aspect | `View` | `ViewGroup` |
 |--------|------|-----------|
 | **Purpose** | Display content and handle user input | Container for organizing other views |
 | **Can have children?** | - No | - Yes |
 | **Inheritance** | Extends `Object` | Extends `View` |
 | **Visibility** | Visible (draws content) | Usually invisible (container) |
-| **Examples** | TextView, Button, ImageView | LinearLayout, RelativeLayout, FrameLayout |
+| **Examples** | `TextView`, `Button`, `ImageView` | `LinearLayout`, `RelativeLayout`, `FrameLayout` |
 | **Main responsibility** | Drawing and event handling | Child management and layout |
-| **Required methods** | `onDraw()`, `onMeasure()` | `onLayout()` (+ inherited View methods) |
+| **Required methods** | `onDraw()`, `onMeasure()` | `onLayout()` (+ inherited `View` methods) |
 
 ### Key Points to Remember
 
-1. **ViewGroup IS A View** - ViewGroup inherits from View, so it has all View capabilities plus child management
+1. **`ViewGroup` IS A `View`** - `ViewGroup` inherits from `View`, so it has all `View` capabilities plus child management
 2. **Nested containers** - ViewGroups can contain other ViewGroups, creating complex layouts
 3. **Invisible containers** - ViewGroups typically don't draw themselves (except for backgrounds, dividers, etc.)
 4. **Layout responsibility** - ViewGroups are responsible for measuring and positioning their children
@@ -233,7 +233,7 @@ class CustomContainer @JvmOverloads constructor(
 
 
 # Question (EN)
-> ViewGroup vs View Differences
+> `ViewGroup` vs `View` Differences
 
 ---
 
@@ -242,13 +242,13 @@ class CustomContainer @JvmOverloads constructor(
 
 
 ## Answer (EN)
-### What is ViewGroup?
+### What is `ViewGroup`?
 
-A **ViewGroup** is a special view that can **contain other views** (called children). The view group is the base class for layouts and views containers. This class also defines the `ViewGroup.LayoutParams` class which serves as the base class for layouts parameters.
+A **`ViewGroup`** is a special view that can **contain other views** (called children). The view group is the base class for layouts and views containers. This class also defines the `ViewGroup.LayoutParams` class which serves as the base class for layouts parameters.
 
 ViewGroups are **invisible containers** in which other Views can be placed. The class `ViewGroup` extends the class `View`.
 
-### View Hierarchy
+### `View` Hierarchy
 
 ```
 View (base class)
@@ -262,50 +262,50 @@ ViewGroup (container)
    ... other layouts
 ```
 
-![View hierarchy](https://raw.githubusercontent.com/Kirchhoff-/Android-Interview-Questions/master/Android/res/view_hierarchy.png)
+![`View` hierarchy](https://raw.githubusercontent.com/Kirchhoff-/Android-Interview-Questions/master/Android/res/view_hierarchy.png)
 
 ### Popular ViewGroups
 
-Common layout containers that extend ViewGroup:
+Common layout containers that extend `ViewGroup`:
 
-- **LinearLayout** - arranges children in a single row or column
-- **RelativeLayout** - positions children relative to each other or parent
-- **ConstraintLayout** - flexible constraint-based positioning
-- **FrameLayout** - stacks children on top of each other
+- **`LinearLayout`** - arranges children in a single row or column
+- **`RelativeLayout`** - positions children relative to each other or parent
+- **`ConstraintLayout`** - flexible constraint-based positioning
+- **`FrameLayout`** - stacks children on top of each other
 - **MotionLayout** - animation and transition layout
 - **GridLayout** - arranges children in a grid
 
-### What is View?
+### What is `View`?
 
-**View** represents the basic building block for user interface components. A View occupies a rectangular area on the screen and is responsible for drawing and event handling.
+**`View`** represents the basic building block for user interface components. A `View` occupies a rectangular area on the screen and is responsible for drawing and event handling.
 
 ### Popular Views
 
-Common UI components that extend View:
+Common UI components that extend `View`:
 
-- **TextView** - displays text
-- **ImageView** - displays images
-- **EditText** - editable text field
-- **Button** - clickable button
+- **`TextView`** - displays text
+- **`ImageView`** - displays images
+- **`EditText`** - editable text field
+- **`Button`** - clickable button
 - **SeekBar** - slider control
 - **CheckBox** - checkbox control
 - **RadioButton** - radio button control
 
-### View Vs ViewGroup: Key Differences
+### `View` Vs `ViewGroup`: Key Differences
 
-#### View
+#### `View`
 - **Definition**: Basic building blocks of User Interface (UI) elements in Android
 - **Purpose**: Simple rectangle box which responds to user actions
 - **Hierarchy**: Base class - refers to `android.view.View`
 - **Children**: Cannot contain other views
-- **Examples**: TextView, Button, ImageView, EditText
+- **Examples**: `TextView`, `Button`, `ImageView`, `EditText`
 
-#### ViewGroup
-- **Definition**: Invisible container that holds View and ViewGroup objects
+#### `ViewGroup`
+- **Definition**: Invisible container that holds `View` and `ViewGroup` objects
 - **Purpose**: Base class for Layouts - organizes and positions child views
-- **Hierarchy**: Extends View class
-- **Children**: Can contain multiple View and ViewGroup children
-- **Examples**: LinearLayout, RelativeLayout, ConstraintLayout
+- **Hierarchy**: Extends `View` class
+- **Children**: Can contain multiple `View` and `ViewGroup` children
+- **Examples**: `LinearLayout`, `RelativeLayout`, `ConstraintLayout`
 
 ### Example Comparison
 
@@ -372,7 +372,7 @@ abstract class ViewGroup : View {
 }
 ```
 
-### Custom ViewGroup Example
+### Custom `ViewGroup` Example
 
 ```kotlin
 class CustomContainer @JvmOverloads constructor(
@@ -415,19 +415,19 @@ class CustomContainer @JvmOverloads constructor(
 
 ### Summary Table
 
-| Aspect | View | ViewGroup |
+| Aspect | `View` | `ViewGroup` |
 |--------|------|-----------|
 | **Purpose** | Display content and handle user input | Container for organizing other views |
 | **Can have children?** | - No | - Yes |
 | **Inheritance** | Extends `Object` | Extends `View` |
 | **Visibility** | Visible (draws content) | Usually invisible (container) |
-| **Examples** | TextView, Button, ImageView | LinearLayout, RelativeLayout, FrameLayout |
+| **Examples** | `TextView`, `Button`, `ImageView` | `LinearLayout`, `RelativeLayout`, `FrameLayout` |
 | **Main responsibility** | Drawing and event handling | Child management and layout |
-| **Required methods** | `onDraw()`, `onMeasure()` | `onLayout()` (+ inherited View methods) |
+| **Required methods** | `onDraw()`, `onMeasure()` | `onLayout()` (+ inherited `View` methods) |
 
 ### Key Points to Remember
 
-1. **ViewGroup IS A View** - ViewGroup inherits from View, so it has all View capabilities plus child management
+1. **`ViewGroup` IS A `View`** - `ViewGroup` inherits from `View`, so it has all `View` capabilities plus child management
 2. **Nested containers** - ViewGroups can contain other ViewGroups, creating complex layouts
 3. **Invisible containers** - ViewGroups typically don't draw themselves (except for backgrounds, dividers, etc.)
 4. **Layout responsibility** - ViewGroups are responsible for measuring and positioning their children
@@ -435,49 +435,49 @@ class CustomContainer @JvmOverloads constructor(
 
 ## Ответ (RU)
 
-### Что Такое ViewGroup?
+### Что Такое `ViewGroup`?
 
-**ViewGroup** — это специальный view, который может **содержать другие views** (называемые дочерними элементами). ViewGroup является базовым классом для layouts и контейнеров views. Этот класс также определяет класс `ViewGroup.LayoutParams`, который служит базовым классом для параметров layouts.
+**`ViewGroup`** — это специальный view, который может **содержать другие views** (называемые дочерними элементами). `ViewGroup` является базовым классом для layouts и контейнеров views. Этот класс также определяет класс `ViewGroup.LayoutParams`, который служит базовым классом для параметров layouts.
 
 ViewGroups — это **невидимые контейнеры**, в которые могут быть помещены другие Views. Класс `ViewGroup` расширяет класс `View`.
 
-### Что Такое View?
+### Что Такое `View`?
 
-**View** представляет базовый строительный блок для компонентов пользовательского интерфейса. View занимает прямоугольную область на экране и отвечает за отрисовку и обработку событий.
+**`View`** представляет базовый строительный блок для компонентов пользовательского интерфейса. `View` занимает прямоугольную область на экране и отвечает за отрисовку и обработку событий.
 
 ### Ключевые Отличия
 
-**View (Представление)**:
+**`View` (Представление)**:
 - Базовые строительные блоки элементов пользовательского интерфейса
 - Простой прямоугольный блок, который реагирует на действия пользователя
 - Не может содержать дочерние элементы
-- Примеры: TextView, Button, ImageView, EditText
+- Примеры: `TextView`, `Button`, `ImageView`, `EditText`
 
-**ViewGroup (Группа представлений)**:
-- Невидимый контейнер, который содержит View и ViewGroup
+**`ViewGroup` (Группа представлений)**:
+- Невидимый контейнер, который содержит `View` и `ViewGroup`
 - Базовый класс для Layouts
-- Может содержать несколько дочерних View и ViewGroup
-- Примеры: LinearLayout, RelativeLayout, ConstraintLayout, FrameLayout
+- Может содержать несколько дочерних `View` и `ViewGroup`
+- Примеры: `LinearLayout`, `RelativeLayout`, `ConstraintLayout`, `FrameLayout`
 
 ### Популярные ViewGroups
 
-- **LinearLayout** - размещает дочерние элементы в один ряд или столбец
-- **RelativeLayout** - позиционирует дочерние элементы относительно друг друга или родителя
-- **ConstraintLayout** - гибкое позиционирование на основе ограничений
-- **FrameLayout** - накладывает дочерние элементы друг на друга
+- **`LinearLayout`** - размещает дочерние элементы в один ряд или столбец
+- **`RelativeLayout`** - позиционирует дочерние элементы относительно друг друга или родителя
+- **`ConstraintLayout`** - гибкое позиционирование на основе ограничений
+- **`FrameLayout`** - накладывает дочерние элементы друг на друга
 - **MotionLayout** - layout для анимаций и переходов
 
 ### Популярные Views
 
-- **TextView** - отображает текст
-- **ImageView** - отображает изображения
-- **EditText** - редактируемое текстовое поле
-- **Button** - кнопка для нажатия
+- **`TextView`** - отображает текст
+- **`ImageView`** - отображает изображения
+- **`EditText`** - редактируемое текстовое поле
+- **`Button`** - кнопка для нажатия
 - **SeekBar** - элемент управления ползунком
 
 ### Резюме
 
-ViewGroup наследуется от View и добавляет возможность управления дочерними элементами. View — это базовый элемент UI, который не может содержать другие элементы. ViewGroup — это контейнер, который организует и позиционирует дочерние элементы.
+`ViewGroup` наследуется от `View` и добавляет возможность управления дочерними элементами. `View` — это базовый элемент UI, который не может содержать другие элементы. `ViewGroup` — это контейнер, который организует и позиционирует дочерние элементы.
 
 ---
 
@@ -485,9 +485,9 @@ ViewGroup наследуется от View и добавляет возможн�
 
 ## Links
 
-- [View - Android Developers](https://developer.android.com/reference/android/view/View)
-- [ViewGroup - Android Developers](https://developer.android.com/reference/android/view/ViewGroup)
-- [Difference between View and ViewGroup in Android - Stack Overflow](https://stackoverflow.com/questions/27352476/difference-between-view-and-viewgroup-in-android)
+- [`View` - Android Developers](https://developer.android.com/reference/android/view/`View`)
+- [`ViewGroup` - Android Developers](https://developer.android.com/reference/android/view/`ViewGroup`)
+- [Difference between `View` and `ViewGroup` in Android - `Stack` Overflow](https://stackoverflow.com/questions/27352476/difference-between-view-and-viewgroup-in-android)
 - [The life cycle of a view in Android - ProAndroidDev](https://proandroiddev.com/the-life-cycle-of-a-view-in-android-6a2c4665b95e)
 
 ---
@@ -509,10 +509,10 @@ ViewGroup наследуется от View и добавляет возможн�
 ## Related Questions
 
 ### Related (Easy)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View
-- [[q-viewmodel-pattern--android--easy]] - View
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`
+- [[q-viewmodel-pattern--android--easy]] - `View`
 
 ### Advanced (Harder)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- [[q-testing-viewmodels-turbine--android--medium]] - View
-- q-rxjava-pagination-recyclerview--android--medium - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View`
+- [[q-testing-viewmodels-turbine--android--medium]] - `View`
+- q-rxjava-pagination-recyclerview--android--medium - `View`

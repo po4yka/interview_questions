@@ -61,7 +61,7 @@ tags:
 2. Layout complexity (nested hierarchies)
 3. Expensive onDraw() operations
 4. Main thread blocking (I/O, computation)
-5. RecyclerView inefficient adapter
+5. `RecyclerView` inefficient adapter
 6. Large bitmap loading
 7. GC pauses
 
@@ -360,7 +360,7 @@ Developer Options → Debug GPU Overdraw → Show overdraw areas
 <!-- Hierarchy depth: 6 levels, slow measure/layout -->
 ```
 
-** Solution: Flatten with ConstraintLayout**
+** Solution: Flatten with `ConstraintLayout`**
 
 ```xml
 <androidx.constraintlayout.widget.ConstraintLayout>
@@ -371,7 +371,7 @@ Developer Options → Debug GPU Overdraw → Show overdraw areas
 <!-- Hierarchy depth: 2 levels, fast measure/layout -->
 ```
 
-#### 3. RecyclerView Jank
+#### 3. `RecyclerView` Jank
 
 ** Problem: Expensive bind operations**
 
@@ -435,7 +435,7 @@ class OptimizedAdapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-#### 4. View Inflation Jank
+#### 4. `View` Inflation Jank
 
 ** Problem: Inflating views on demand**
 
@@ -492,10 +492,10 @@ chrome trace.html
 
 **Look for:**
 1. **Frame deadline misses**: Red/yellow bars in frame timeline
-2. **Long measure/layout**: > 8ms indicates complexity
+2. **`Long` measure/layout**: > 8ms indicates complexity
 3. **Expensive draw**: > 8ms indicates overdraw or custom drawing
 4. **GC pauses**: "GC" events during frame rendering
-5. **Main thread blocking**: Long operations on UI thread
+5. **Main thread blocking**: `Long` operations on UI thread
 
 **Example Analysis:**
 ```
@@ -603,23 +603,23 @@ class FrameMetricsMonitor {
 1. **Target 60 FPS Minimum**: Modern devices support higher, but 60 FPS is baseline
 2. **Measure Real Devices**: Emulators don't reflect real rendering performance
 3. **Monitor in Production**: Use Firebase Performance to track user experience
-4. **Flatten View Hierarchies**: Use ConstraintLayout to reduce nesting
+4. **Flatten `View` Hierarchies**: Use `ConstraintLayout` to reduce nesting
 5. **Eliminate Overdraw**: Remove unnecessary backgrounds and layers
-6. **Optimize RecyclerView**: Use DiffUtil, ViewHolder pattern, prefetch
+6. **Optimize `RecyclerView`**: Use DiffUtil, ViewHolder pattern, prefetch
 7. **Async Image Loading**: Use Coil/Glide, never load images synchronously
 8. **ViewStub for Rare Views**: Defer inflation of infrequently shown content
 9. **Profile Before Optimizing**: Use systrace to identify actual bottlenecks
 10. **Test on Low-End Devices**: Jank is magnified on slow hardware
-11. **Avoid Main Thread Work**: Move heavy computation to background
+11. **Avoid Main `Thread` Work**: Move heavy computation to background
 12. **Use Jetpack Compose**: Modern UI toolkit with better performance
 
 ### Common Pitfalls
 
 1. **Synchronous Image Loading**: Always use async image libraries
 2. **Complex onDraw()**: Custom drawing should be minimal and cached
-3. **Deeply Nested Layouts**: Flatten hierarchies with ConstraintLayout
+3. **Deeply Nested Layouts**: Flatten hierarchies with `ConstraintLayout`
 4. **Expensive Adapter Binding**: Keep onBindViewHolder() lightweight
-5. **Main Thread I/O**: File/network operations must be async
+5. **Main `Thread` I/O**: File/network operations must be async
 6. **Not Caching Formatted Text**: HTML parsing, regex expensive
 7. **Ignoring Overdraw**: Multiple background layers slow rendering
 8. **Large Bitmaps**: Downsample images to view dimensions
@@ -655,7 +655,7 @@ class FrameMetricsMonitor {
 2. Layout complexity (nested hierarchies)
 3. Expensive onDraw() operations
 4. Main thread blocking (I/O, computation)
-5. RecyclerView inefficient adapter
+5. `RecyclerView` inefficient adapter
 6. Large bitmap loading
 7. GC pauses
 
@@ -954,7 +954,7 @@ Developer Options → Debug GPU Overdraw → Show overdraw areas
 <!-- Hierarchy depth: 6 levels, slow measure/layout -->
 ```
 
-** Solution: Flatten with ConstraintLayout**
+** Solution: Flatten with `ConstraintLayout`**
 
 ```xml
 <androidx.constraintlayout.widget.ConstraintLayout>
@@ -965,7 +965,7 @@ Developer Options → Debug GPU Overdraw → Show overdraw areas
 <!-- Hierarchy depth: 2 levels, fast measure/layout -->
 ```
 
-#### 3. RecyclerView Jank
+#### 3. `RecyclerView` Jank
 
 ** Problem: Expensive bind operations**
 
@@ -1029,7 +1029,7 @@ class OptimizedAdapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-#### 4. View Inflation Jank
+#### 4. `View` Inflation Jank
 
 ** Problem: Inflating views on demand**
 
@@ -1086,10 +1086,10 @@ chrome trace.html
 
 **Look for:**
 1. **Frame deadline misses**: Red/yellow bars in frame timeline
-2. **Long measure/layout**: > 8ms indicates complexity
+2. **`Long` measure/layout**: > 8ms indicates complexity
 3. **Expensive draw**: > 8ms indicates overdraw or custom drawing
 4. **GC pauses**: "GC" events during frame rendering
-5. **Main thread blocking**: Long operations on UI thread
+5. **Main thread blocking**: `Long` operations on UI thread
 
 **Example Analysis:**
 ```
@@ -1197,23 +1197,23 @@ class FrameMetricsMonitor {
 1. **Target 60 FPS Minimum**: Modern devices support higher, but 60 FPS is baseline
 2. **Measure Real Devices**: Emulators don't reflect real rendering performance
 3. **Monitor in Production**: Use Firebase Performance to track user experience
-4. **Flatten View Hierarchies**: Use ConstraintLayout to reduce nesting
+4. **Flatten `View` Hierarchies**: Use `ConstraintLayout` to reduce nesting
 5. **Eliminate Overdraw**: Remove unnecessary backgrounds and layers
-6. **Optimize RecyclerView**: Use DiffUtil, ViewHolder pattern, prefetch
+6. **Optimize `RecyclerView`**: Use DiffUtil, ViewHolder pattern, prefetch
 7. **Async Image Loading**: Use Coil/Glide, never load images synchronously
 8. **ViewStub for Rare Views**: Defer inflation of infrequently shown content
 9. **Profile Before Optimizing**: Use systrace to identify actual bottlenecks
 10. **Test on Low-End Devices**: Jank is magnified on slow hardware
-11. **Avoid Main Thread Work**: Move heavy computation to background
+11. **Avoid Main `Thread` Work**: Move heavy computation to background
 12. **Use Jetpack Compose**: Modern UI toolkit with better performance
 
 ### Common Pitfalls
 
 1. **Synchronous Image Loading**: Always use async image libraries
 2. **Complex onDraw()**: Custom drawing should be minimal and cached
-3. **Deeply Nested Layouts**: Flatten hierarchies with ConstraintLayout
+3. **Deeply Nested Layouts**: Flatten hierarchies with `ConstraintLayout`
 4. **Expensive Adapter Binding**: Keep onBindViewHolder() lightweight
-5. **Main Thread I/O**: File/network operations must be async
+5. **Main `Thread` I/O**: File/network operations must be async
 6. **Not Caching Formatted Text**: HTML parsing, regex expensive
 7. **Ignoring Overdraw**: Multiple background layers slow rendering
 8. **Large Bitmaps**: Downsample images to view dimensions
@@ -1236,7 +1236,7 @@ class FrameMetricsMonitor {
 2. Сложность макета (вложенные иерархии)
 3. Дорогие операции в onDraw()
 4. Блокировка главного потока (I/O, вычисления)
-5. Неэффективный адаптер RecyclerView
+5. Неэффективный адаптер `RecyclerView`
 6. Загрузка больших bitmap
 7. Паузы сборщика мусора (GC)
 
@@ -1483,14 +1483,14 @@ class ModernJankMonitor : AppCompatActivity() {
 #### 2. Сложность Макета
 
 **Проблема:** Глубоко вложенные макеты
-**Решение:** Упростить с помощью ConstraintLayout
+**Решение:** Упростить с помощью `ConstraintLayout`
 
-#### 3. Рывки В RecyclerView
+#### 3. Рывки В `RecyclerView`
 
 **Проблема:** Дорогие операции в onBindViewHolder
 **Решение:** Асинхронные операции и кэширование
 
-#### 4. Рывки При Инфляции View
+#### 4. Рывки При Инфляции `View`
 
 **Проблема:** Инфляция сложных view по требованию
 **Решение:** ViewStub для ленивой инфляции
@@ -1557,11 +1557,11 @@ class FrameMetricsMonitor {
 1.  **Цель - минимум 60 FPS**
 2.  **Измеряйте на реальных устройствах**
 3.  **Мониторьте в продакшене**
-4.  **Упрощайте иерархии View**
+4.  **Упрощайте иерархии `View`**
 5.  **Устраняйте Overdraw**
-6.  **Оптимизируйте RecyclerView**
+6.  **Оптимизируйте `RecyclerView`**
 7.  **Асинхронная загрузка изображений**
-8.  **Используйте ViewStub для редких View**
+8.  **Используйте ViewStub для редких `View`**
 9.  **Профилируйте перед оптимизацией**
 10. **Тестируйте на слабых устройствах**
 11. **Избегайте работы в главном потоке**

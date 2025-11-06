@@ -29,16 +29,16 @@ tags: [android, android/lifecycle, android/performance-rendering, android/thread
 
 ## Ответ (RU)
 
-Главный поток (UI thread) — это центральный поток Android-приложения, который обрабатывает отрисовку интерфейса, пользовательский ввод и системные callback'и. Работает на основе паттерна **Looper + Message Queue**.
+Главный поток (UI thread) — это центральный поток Android-приложения, который обрабатывает отрисовку интерфейса, пользовательский ввод и системные callback'и. Работает на основе паттерна **`Looper` + `Message` `Queue`**.
 
 ### Основные Обязанности
 
 1. **Отрисовка UI**: measure, layout, draw view-иерархии
 2. **Обработка ввода**: touch events, gestures, клавиатура
-3. **Lifecycle callbacks**: Activity/Fragment методы
+3. **`Lifecycle` callbacks**: Activity/`Fragment` методы
 4. **Системные события**: изменения конфигурации, разрешения
 
-### Архитектура Looper
+### Архитектура `Looper`
 
 ```text
 Main Thread
@@ -49,9 +49,9 @@ Main Thread
 ```
 
 **Компоненты**:
-- **Looper**: бесконечный цикл, обрабатывает сообщения последовательно
-- **Message Queue**: очередь задач и сообщений
-- **Handler**: отправляет задачи в очередь
+- **`Looper`**: бесконечный цикл, обрабатывает сообщения последовательно
+- **`Message` `Queue`**: очередь задач и сообщений
+- **`Handler`**: отправляет задачи в очередь
 
 ```kotlin
 // Упрощённая схема работы
@@ -85,12 +85,12 @@ class BadActivity : AppCompatActivity() {
 }
 ```
 
-### ANR (Application Not Responding)
+### ANR (`Application` Not Responding)
 
 Возникает при блокировке главного потока:
 - Input event: >5 секунд без ответа
-- BroadcastReceiver: >10 секунд
-- Service (foreground): >20 секунд
+- `BroadcastReceiver`: >10 секунд
+- `Service` (foreground): >20 секунд
 
 ### Правильные Паттерны
 
@@ -105,7 +105,7 @@ lifecycleScope.launch {
 }
 ```
 
-**Handler + Background Thread**:
+**`Handler` + Background `Thread`**:
 
 ```kotlin
 private val mainHandler = Handler(Looper.getMainLooper())
@@ -140,16 +140,16 @@ if (!isMainThread()) {
 
 ## Answer (EN)
 
-The main thread (UI thread) is Android's central thread handling UI rendering, user input, and system callbacks. It operates on a **Looper + Message Queue** pattern.
+The main thread (UI thread) is Android's central thread handling UI rendering, user input, and system callbacks. It operates on a **`Looper` + `Message` `Queue`** pattern.
 
 ### Core Responsibilities
 
 1. **UI Rendering**: measure, layout, draw view hierarchy
 2. **Input Processing**: touch events, gestures, keyboard
-3. **Lifecycle Callbacks**: Activity/Fragment methods
+3. **`Lifecycle` Callbacks**: Activity/`Fragment` methods
 4. **System Events**: configuration changes, permissions
 
-### Looper Architecture
+### `Looper` Architecture
 
 ```text
 Main Thread
@@ -160,9 +160,9 @@ Main Thread
 ```
 
 **Components**:
-- **Looper**: infinite loop processing messages sequentially
-- **Message Queue**: holds pending tasks and messages
-- **Handler**: posts tasks to the queue
+- **`Looper`**: infinite loop processing messages sequentially
+- **`Message` `Queue`**: holds pending tasks and messages
+- **`Handler`**: posts tasks to the queue
 
 ```kotlin
 // Simplified internal structure
@@ -178,7 +178,7 @@ fun main() {
 **Allowed** (fast operations <16ms):
 - UI updates: `setText()`, `setVisibility()`
 - Simple layout inflation
-- Short computations
+- `Short` computations
 
 **Prohibited** (blocks UI):
 - Network requests
@@ -196,12 +196,12 @@ class BadActivity : AppCompatActivity() {
 }
 ```
 
-### ANR (Application Not Responding)
+### ANR (`Application` Not Responding)
 
 Triggered when main thread is blocked:
 - Input event: >5 seconds without response
-- BroadcastReceiver: >10 seconds
-- Service (foreground): >20 seconds
+- `BroadcastReceiver`: >10 seconds
+- `Service` (foreground): >20 seconds
 
 ### Proper Threading Patterns
 
@@ -216,7 +216,7 @@ lifecycleScope.launch {
 }
 ```
 
-**Handler + Background Thread**:
+**`Handler` + Background `Thread`**:
 
 ```kotlin
 private val mainHandler = Handler(Looper.getMainLooper())
@@ -239,7 +239,7 @@ Choreographer.getInstance().postFrameCallback { frameTimeNanos ->
 }
 ```
 
-**Check Current Thread**:
+**Check Current `Thread`**:
 
 ```kotlin
 fun isMainThread() = Looper.myLooper() == Looper.getMainLooper()
@@ -276,13 +276,13 @@ if (!isMainThread()) {
 ### Related (Same Level)
 
 - [[q-how-does-jetpack-compose-work--android--medium]] — Compose threading model
-- [[q-what-is-known-about-view-lifecycles--android--medium]] — View lifecycle callbacks
+- [[q-what-is-known-about-view-lifecycles--android--medium]] — `View` lifecycle callbacks
 - Coroutines and thread dispatchers
-- Handler and Looper internals
+- `Handler` and `Looper` internals
 
 ### Advanced (Harder)
 
-- Custom Looper implementation for background threads
+- Custom `Looper` implementation for background threads
 - ANR debugging and profiling techniques
 - StrictMode configuration for thread violations
 - Choreographer and frame timing optimization

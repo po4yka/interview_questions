@@ -124,8 +124,8 @@ fun HeavyList(items: List<Item>) {
 **Риск 2: Увеличение APK**
 Включите R8/ProGuard оптимизации: `minifyEnabled = true`, `shrinkResources = true`.
 
-**Риск 3: Сложные кастомные View**
-Используйте Canvas API в Compose для полного контроля над отрисовкой.
+**Риск 3: Сложные кастомные `View`**
+Используйте `Canvas` API в Compose для полного контроля над отрисовкой.
 
 ### План Миграции (50+ экранов)
 
@@ -236,7 +236,7 @@ fun HeavyList(items: List<Item>) {
 Enable R8/ProGuard optimizations: `minifyEnabled = true`, `shrinkResources = true`.
 
 **Risk 3: Complex Custom Views**
-Use Canvas API in Compose for full control over drawing.
+Use `Canvas` API in Compose for full control over drawing.
 
 ### Migration Plan (50+ screens)
 
@@ -253,7 +253,7 @@ Use Canvas API in Compose for full control over drawing.
 
 - How to handle deep link navigation in hybrid Compose/XML setup?
 - What are the testing strategies during migration (UI tests for both stacks)?
-- How to share ViewModel state between XML and Compose screens?
+- How to share `ViewModel` state between XML and Compose screens?
 - What tools exist for automated XML-to-Compose conversion?
 - How to measure and profile performance during migration?
 
@@ -268,11 +268,11 @@ Use Canvas API in Compose for full control over drawing.
 
 ### Prerequisites
 - [[q-jetpack-compose-basics--android--medium]] - Compose basics and core concepts
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View rendering fundamentals
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` rendering fundamentals
 
 ### Related
 - [[q-how-does-jetpack-compose-work--android--medium]] - Compose internals
-- [[q-recyclerview-explained--android--medium]] - RecyclerView patterns
+- [[q-recyclerview-explained--android--medium]] - `RecyclerView` patterns
 - [[q-mutable-state-compose--android--medium]] - State management in Compose
 - [[q-remember-vs-remembersaveable-compose--android--medium]] - State preservation
 

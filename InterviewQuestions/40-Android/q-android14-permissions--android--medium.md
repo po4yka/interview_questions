@@ -248,7 +248,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
 
 ### Prerequisites
 - [[q-android-manifest-file--android--easy]] - AndroidManifest.xml structure and permission declaration
-- Runtime permission model with Activity Result API
+- Runtime permission model with `Activity` Result API
 
 ### Related
 - [[q-android-security-best-practices--android--medium]] - Security implementation patterns and permission best practices

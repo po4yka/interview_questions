@@ -26,22 +26,22 @@ tags: [android/performance-rendering, android/profiling, android/strictmode-anr,
 ---
 
 # Вопрос (RU)
-> Что такое ANR (Application Not Responding) и как его предотвратить?
+> Что такое ANR (`Application` Not Responding) и как его предотвратить?
 
 # Question (EN)
-> What is ANR (Application Not Responding) and how to prevent it?
+> What is ANR (`Application` Not Responding) and how to prevent it?
 
 ---
 
 ## Ответ (RU)
 
-**ANR (Application Not Responding)** — критическая ошибка, возникающая при блокировке UI-потока. Система показывает диалог принудительного завершения приложения.
+**ANR (`Application` Not Responding)** — критическая ошибка, возникающая при блокировке UI-потока. Система показывает диалог принудительного завершения приложения.
 
 **Типы ANR с таймаутами:**
 
 - **Input dispatching**: нет ответа на ввод в течение 5 секунд
-- **Service**: методы сервиса выполняются > 20 сек (background) или > 10 сек (foreground)
-- **BroadcastReceiver**: receiver не завершается за 10 секунд
+- **`Service`**: методы сервиса выполняются > 20 сек (background) или > 10 сек (foreground)
+- **`BroadcastReceiver`**: receiver не завершается за 10 секунд
 
 **Типичные причины блокировки main thread:**
 
@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**BroadcastReceiver и goAsync():**
+**`BroadcastReceiver` и goAsync():**
 
 ```kotlin
 // ✅ goAsync() для асинхронной работы
@@ -117,15 +117,15 @@ if (BuildConfig.DEBUG) {
 
 ## Answer (EN)
 
-**ANR (Application Not Responding)** is a critical error occurring when the UI thread is blocked. The system displays a force-close dialog to the user.
+**ANR (`Application` Not Responding)** is a critical error occurring when the UI thread is blocked. The system displays a force-close dialog to the user.
 
 **ANR Types with Timeouts:**
 
 - **Input dispatching**: no response to input within 5 seconds
-- **Service**: methods take > 20 sec (background) or > 10 sec (foreground)
-- **BroadcastReceiver**: receiver doesn't finish within 10 seconds
+- **`Service`**: methods take > 20 sec (background) or > 10 sec (foreground)
+- **`BroadcastReceiver`**: receiver doesn't finish within 10 seconds
 
-**Common Causes of Main Thread Blocking:**
+**Common Causes of Main `Thread` Blocking:**
 
 ```kotlin
 // ❌ BAD: Blocking main thread
@@ -152,7 +152,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**BroadcastReceiver and goAsync():**
+**`BroadcastReceiver` and goAsync():**
 
 ```kotlin
 // ✅ goAsync() for asynchronous work
@@ -221,7 +221,7 @@ if (BuildConfig.DEBUG) {
 
 ### Prerequisites (Easier)
 - [[q-what-unifies-android-components--android--easy]] - Understanding Android component lifecycle
-- [[q-what-is-broadcastreceiver--android--easy]] - BroadcastReceiver basics
+- [[q-what-is-broadcastreceiver--android--easy]] - `BroadcastReceiver` basics
 
 ### Related (Same Level)
 - [[q-strictmode-debugging--android--medium]] - Using StrictMode for performance debugging

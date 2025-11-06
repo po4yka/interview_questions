@@ -45,7 +45,7 @@ sources:
 
 ## Ответ (RU)
 
-### 1. Foreground Service классификация
+### 1. Foreground `Service` классификация
 
 - Android 13+ требует указать `foregroundServiceType` (`dataSync`, `mediaProjection`, `camera`, `microphone`, `phoneCall`).
 - Для звонков → `FOREGROUND_SERVICE_TYPE_PHONE_CALL` (и `camera`/`microphone`, если видеозвонок).

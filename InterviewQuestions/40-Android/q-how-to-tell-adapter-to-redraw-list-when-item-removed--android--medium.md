@@ -35,11 +35,11 @@ tags:
 
 # Вопрос (RU)
 
-> Как правильно сообщить адаптеру RecyclerView о том, что элемент был удален из списка?
+> Как правильно сообщить адаптеру `RecyclerView` о том, что элемент был удален из списка?
 
 # Question (EN)
 
-> How to tell a RecyclerView adapter that an item has been removed from the list?
+> How to tell a `RecyclerView` adapter that an item has been removed from the list?
 
 ---
 
@@ -323,7 +323,7 @@ Snackbar.make(view, "Deleted", Snackbar.LENGTH_LONG)
 
 ## References
 
-- [RecyclerView Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView)
+- [`RecyclerView` Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/`RecyclerView`)
 - [DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 - [ListAdapter Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter)
 
@@ -335,7 +335,7 @@ Snackbar.make(view, "Deleted", Snackbar.LENGTH_LONG)
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization basics
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView` optimization basics
 - [[q-how-to-start-drawing-ui-in-android--android--easy]] - Android UI fundamentals
 - [[q-why-separate-ui-and-business-logic--android--easy]] - Architecture principles
 
@@ -344,6 +344,6 @@ Snackbar.make(view, "Deleted", Snackbar.LENGTH_LONG)
 - [[q-testing-compose-ui--android--medium]] - UI testing patterns
 
 ### Advanced (Harder)
-- Questions about RecyclerView performance optimization with large datasets
-- Questions about implementing custom ItemAnimator for RecyclerView
+- Questions about `RecyclerView` performance optimization with large datasets
+- Questions about implementing custom ItemAnimator for `RecyclerView`
 - Questions about ConcatAdapter for multiple view types

@@ -60,7 +60,7 @@ UI Layer → Repository (Single Source of Truth) → Room DB + Remote API → Wo
 
 **Принципы:**
 - Локальная БД — единственный источник истины
-- UI читает только из локальной БД через Flow
+- UI читает только из локальной БД через `Flow`
 - Операции CUD пишут локально, затем синхронизируются
 - WorkManager — надежная фоновая синхронизация
 
@@ -82,7 +82,7 @@ data class Article(
 enum class PendingAction { CREATE, UPDATE, DELETE }
 ```
 
-**2. Repository с offline-first паттерном:**
+**2. `Repository` с offline-first паттерном:**
 
 ```kotlin
 class ArticleRepository(
@@ -273,8 +273,8 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 
 **Архитектура:**
 - Локальная БД как единственный источник истины (Single Source of Truth)
-- Repository pattern для изоляции источников данных
-- Reactive UI через Kotlin Flow
+- `Repository` pattern для изоляции источников данных
+- Reactive UI через Kotlin `Flow`
 - Explicit network state handling
 
 **Синхронизация:**
@@ -307,7 +307,7 @@ UI Layer → Repository (Single Source of Truth) → Room DB + Remote API → Wo
 
 **Principles:**
 - Local DB is single source of truth
-- UI reads only from local DB via Flow
+- UI reads only from local DB via `Flow`
 - CUD operations write locally first, then sync
 - WorkManager ensures reliable background sync
 
@@ -329,7 +329,7 @@ data class Article(
 enum class PendingAction { CREATE, UPDATE, DELETE }
 ```
 
-**2. Repository with offline-first pattern:**
+**2. `Repository` with offline-first pattern:**
 
 ```kotlin
 class ArticleRepository(
@@ -520,8 +520,8 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 
 **Architecture:**
 - Local DB as single source of truth
-- Repository pattern to isolate data sources
-- Reactive UI via Kotlin Flow
+- `Repository` pattern to isolate data sources
+- Reactive UI via Kotlin `Flow`
 - Explicit network state handling
 
 **Synchronization:**
@@ -552,7 +552,7 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 
 ## References
 
-- Repository pattern as single source of truth
+- `Repository` pattern as single source of truth
 - WorkManager official documentation
 - Room database best practices
 - [[moc-android]]
@@ -569,7 +569,7 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 ### Prerequisites
 - Room database fundamentals - local database operations
 - WorkManager basics - background task scheduling
-- Kotlin Flow - reactive data streams
+- Kotlin `Flow` - reactive data streams
 
 ### Related
 - [[q-clean-architecture-android--android--hard]] - Clean Architecture in Android

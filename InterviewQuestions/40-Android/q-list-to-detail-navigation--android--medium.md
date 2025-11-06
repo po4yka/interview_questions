@@ -29,11 +29,11 @@ How do you implement navigation from a list to detail screens in Android?
 
 ## Ответ (RU)
 
-Переход от списка к экрану деталей реализуется через **Intent + Bundle** (для Activity), **Navigation Component** (для Fragment) или **shared ViewModel** (для связанных экранов). Современный подход — Single Activity архитектура с Navigation Component и Safe Args для type-safe передачи аргументов.
+Переход от списка к экрану деталей реализуется через **`Intent` + `Bundle`** (для `Activity`), **Navigation Component** (для `Fragment`) или **shared `ViewModel`** (для связанных экранов). Современный подход — Single `Activity` архитектура с Navigation Component и Safe Args для type-safe передачи аргументов.
 
 ### Основные Подходы
 
-**1. Intent + Bundle (Activity → Activity)**
+**1. `Intent` + `Bundle` (`Activity` → `Activity`)**
 
 Передача ID элемента, а не всего объекта:
 
@@ -60,7 +60,7 @@ class UserDetailActivity : AppCompatActivity() {
 intent.putParcelableArrayListExtra("USERS", ArrayList(allUsers))
 ```
 
-**2. Navigation Component + Safe Args (Fragment → Fragment)**
+**2. Navigation Component + Safe Args (`Fragment` → `Fragment`)**
 
 Type-safe навигация с автогенерацией классов:
 
@@ -97,9 +97,9 @@ class UserDetailFragment : Fragment() {
 }
 ```
 
-**3. Shared ViewModel (для связанных экранов)**
+**3. Shared `ViewModel` (для связанных экранов)**
 
-Для master-detail layout или связанных Fragment:
+Для master-detail layout или связанных `Fragment`:
 
 ```kotlin
 // Activity-scoped ViewModel
@@ -140,9 +140,9 @@ class UserDetailFragment : Fragment() {
 
 | Подход | Когда использовать | Преимущества | Недостатки |
 |--------|-------------------|-------------|-----------|
-| **Intent + Bundle** | Legacy multi-activity apps | Простой, знакомый | Boilerplate, не type-safe |
+| **`Intent` + `Bundle`** | Legacy multi-activity apps | Простой, знакомый | Boilerplate, не type-safe |
 | **Navigation Component** | Modern single-activity apps | Type-safe, visual graph | Требует setup |
-| **Shared ViewModel** | Master-detail, связанные экраны | Реактивный, простой | Только для Fragment в одной Activity |
+| **Shared `ViewModel`** | Master-detail, связанные экраны | Реактивный, простой | Только для `Fragment` в одной `Activity` |
 | **Deep Links** | External navigation, URLs | Sharable, indexed | Требует отдельной настройки |
 
 ### Best Practices
@@ -158,7 +158,7 @@ viewModel.loadUser(userId)
 intent.putExtra("USER", user) // Может упасть на больших объектах
 ```
 
-**Используйте ViewModel для загрузки данных:**
+**Используйте `ViewModel` для загрузки данных:**
 ```kotlin
 class UserDetailViewModel(
     private val repository: UserRepository
@@ -197,11 +197,11 @@ NavHost(navController, startDestination = UserListRoute) {
 
 ## Answer (EN)
 
-Navigation from list to detail screens is implemented via **Intent + Bundle** (for Activity), **Navigation Component** (for Fragment), or **shared ViewModel** (for related screens). Modern approach is Single Activity architecture with Navigation Component and Safe Args for type-safe argument passing.
+Navigation from list to detail screens is implemented via **`Intent` + `Bundle`** (for `Activity`), **Navigation Component** (for `Fragment`), or **shared `ViewModel`** (for related screens). Modern approach is Single `Activity` architecture with Navigation Component and Safe Args for type-safe argument passing.
 
 ### Main Approaches
 
-**1. Intent + Bundle (Activity → Activity)**
+**1. `Intent` + `Bundle` (`Activity` → `Activity`)**
 
 Pass ID only, not the entire object:
 
@@ -228,7 +228,7 @@ class UserDetailActivity : AppCompatActivity() {
 intent.putParcelableArrayListExtra("USERS", ArrayList(allUsers))
 ```
 
-**2. Navigation Component + Safe Args (Fragment → Fragment)**
+**2. Navigation Component + Safe Args (`Fragment` → `Fragment`)**
 
 Type-safe navigation with auto-generated classes:
 
@@ -265,7 +265,7 @@ class UserDetailFragment : Fragment() {
 }
 ```
 
-**3. Shared ViewModel (for related screens)**
+**3. Shared `ViewModel` (for related screens)**
 
 For master-detail layout or related Fragments:
 
@@ -308,9 +308,9 @@ class UserDetailFragment : Fragment() {
 
 | Approach | When to Use | Pros | Cons |
 |----------|------------|------|------|
-| **Intent + Bundle** | Legacy multi-activity apps | Simple, familiar | Boilerplate, not type-safe |
+| **`Intent` + `Bundle`** | Legacy multi-activity apps | Simple, familiar | Boilerplate, not type-safe |
 | **Navigation Component** | Modern single-activity apps | Type-safe, visual graph | Requires setup |
-| **Shared ViewModel** | Master-detail, related screens | Reactive, simple | Fragment-only in same Activity |
+| **Shared `ViewModel`** | Master-detail, related screens | Reactive, simple | `Fragment`-only in same `Activity` |
 | **Deep Links** | External navigation, URLs | Sharable, indexed | Requires separate configuration |
 
 ### Best Practices
@@ -326,7 +326,7 @@ viewModel.loadUser(userId)
 intent.putExtra("USER", user) // May crash on large objects
 ```
 
-**Use ViewModel for data loading:**
+**Use `ViewModel` for data loading:**
 ```kotlin
 class UserDetailViewModel(
     private val repository: UserRepository
@@ -367,7 +367,7 @@ NavHost(navController, startDestination = UserListRoute) {
 
 ## Follow-ups
 
-1. What happens if you pass a large Parcelable object through Intent and exceed 1MB TransactionTooLargeException limit?
+1. What happens if you pass a large `Parcelable` object through `Intent` and exceed 1MB TransactionTooLargeException limit?
 2. How does Navigation Component handle back stack when using nested navigation graphs?
 3. How do you implement master-detail pattern for tablets vs phones with different layouts?
 4. What's the difference between `navigate()` and `popUpTo()` + `navigate()` in Navigation Component?
@@ -375,27 +375,27 @@ NavHost(navController, startDestination = UserListRoute) {
 
 ## References
 
-- [[c-fragments]] - Fragment fundamentals
-- [[c-activity]] - Activity lifecycle and Intent handling
-- [[c-viewmodel]] - ViewModel for data loading
+- [[c-fragments]] - `Fragment` fundamentals
+- [[c-activity]] - `Activity` lifecycle and `Intent` handling
+- [[c-viewmodel]] - `ViewModel` for data loading
 - [[c-compose-navigation]] - Compose Navigation patterns
 - [Navigation Component Guide](https://developer.android.com/guide/navigation)
-- [Parcelable and Bundle Best Practices](https://developer.android.com/guide/components/activities/parcelables-and-bundles)
+- [`Parcelable` and `Bundle` Best Practices](https://developer.android.com/guide/components/activities/parcelables-and-bundles)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-fragment-basics--android--easy]] - Fragment basics
-- [[q-what-are-intents-for--android--medium]] - Intent fundamentals
-- [[q-what-is-viewmodel--android--medium]] - ViewModel basics
+- [[q-fragment-basics--android--easy]] - `Fragment` basics
+- [[q-what-are-intents-for--android--medium]] - `Intent` fundamentals
+- [[q-what-is-viewmodel--android--medium]] - `ViewModel` basics
 
 ### Related (Same Level)
 - [[q-compose-navigation-advanced--android--medium]] - Navigation in Compose
-- [[q-activity-navigation-how-it-works--android--medium]] - Activity navigation details
-- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] - Fragment data passing
-- [[q-bundle-data-types--android--medium]] - Bundle types and limits
+- [[q-activity-navigation-how-it-works--android--medium]] - `Activity` navigation details
+- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] - `Fragment` data passing
+- [[q-bundle-data-types--android--medium]] - `Bundle` types and limits
 
 ### Advanced (Harder)
 - [[q-pass-large-data-between-activities--android--hard]] - Handling large data transfers
 - [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Deep link navigation
-- [[q-single-activity-approach--android--medium]] - Single Activity architecture
+- [[q-single-activity-approach--android--medium]] - Single `Activity` architecture

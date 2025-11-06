@@ -55,13 +55,13 @@ suspend fun loadData() {
 }
 ```
 
-**Современные подходы:** [[c-coroutines|Kotlin Coroutines]] (рекомендовано), WorkManager, Flow.
+**Современные подходы:** [[c-coroutines|Kotlin Coroutines]] (рекомендовано), WorkManager, `Flow`.
 
 ### 2. Неоптимизированные Макеты (layouts)
 
 **Проблема:** Сложная иерархия вызывает медленный рендеринг.
 
-**Примеры:** глубоко вложенные LinearLayout, множественные RelativeLayout.
+**Примеры:** глубоко вложенные `LinearLayout`, множественные `RelativeLayout`.
 
 **Решение:** Использовать плоские макеты:
 
@@ -85,7 +85,7 @@ suspend fun loadData() {
 </ConstraintLayout>
 ```
 
-**Best practices:** ConstraintLayout для сложных UI, ViewStub для условно отображаемых view, merge тег для устранения лишних ViewGroup.
+**Best practices:** `ConstraintLayout` для сложных UI, ViewStub для условно отображаемых view, merge тег для устранения лишних `ViewGroup`.
 
 ### 3. Неоптимизированная Работа С Изображениями
 
@@ -119,7 +119,7 @@ imageView.load(imageUrl) {
 
 **Проблема:** Слишком много обновлений UI вызывают избыточный рендеринг.
 
-**Примеры:** обновление всех элементов RecyclerView, избыточный notifyDataSetChanged().
+**Примеры:** обновление всех элементов `RecyclerView`, избыточный notifyDataSetChanged().
 
 **Решение:** Минимизировать и группировать обновления:
 
@@ -170,7 +170,7 @@ AnimatedVisibility(visible = isVisible) {
 
 **7. Overdraw:** Отрисовка пикселей несколько раз. Решение: удалить лишние background, использовать "Debug GPU overdraw" в Developer Options.
 
-**8. Медленные Custom Views:** Неэффективный onDraw(). Решение: избегать аллокаций в onDraw(), кешировать Paint объекты.
+**8. Медленные Custom Views:** Неэффективный onDraw(). Решение: избегать аллокаций в onDraw(), кешировать `Paint` объекты.
 
 ---
 
@@ -178,9 +178,9 @@ AnimatedVisibility(visible = isVisible) {
 
 The main causes of **UI lag** (janky user interface) in Android applications:
 
-### 1. Heavy Operations on Main Thread
+### 1. Heavy Operations on Main `Thread`
 
-**Problem:** Long-running operations block UI rendering.
+**Problem:** `Long`-running operations block UI rendering.
 
 **Examples:** network requests, database queries, file I/O, image processing.
 
@@ -202,7 +202,7 @@ suspend fun loadData() {
 }
 ```
 
-**Modern approaches:** Kotlin Coroutines (recommended), WorkManager, Flow.
+**Modern approaches:** Kotlin Coroutines (recommended), WorkManager, `Flow`.
 
 ### 2. Unoptimized Layouts
 
@@ -232,7 +232,7 @@ suspend fun loadData() {
 </ConstraintLayout>
 ```
 
-**Best practices:** ConstraintLayout to reduce nesting, ViewStub for conditionally displayed views, merge tag to eliminate unnecessary ViewGroups.
+**Best practices:** `ConstraintLayout` to reduce nesting, ViewStub for conditionally displayed views, merge tag to eliminate unnecessary ViewGroups.
 
 ### 3. Unoptimized Image Handling
 
@@ -266,7 +266,7 @@ imageView.load(imageUrl) {
 
 **Problem:** Too many UI updates cause excessive rendering.
 
-**Examples:** updating every item in RecyclerView, excessive notifyDataSetChanged().
+**Examples:** updating every item in `RecyclerView`, excessive notifyDataSetChanged().
 
 **Solution:** Minimize and batch UI updates:
 
@@ -317,7 +317,7 @@ AnimatedVisibility(visible = isVisible) {
 
 **7. Overdraw:** Drawing pixels multiple times wastes GPU. Solution: remove unnecessary backgrounds, use "Debug GPU overdraw" in Developer Options.
 
-**8. Slow Custom Views:** Inefficient onDraw(). Solution: avoid allocations in onDraw(), cache Paint objects.
+**8. Slow Custom Views:** Inefficient onDraw(). Solution: avoid allocations in onDraw(), cache `Paint` objects.
 
 ---
 
@@ -333,7 +333,7 @@ AnimatedVisibility(visible = isVisible) {
 
 - [Android Performance Patterns](https://www.youtube.com/playlist?list=PLWz5rJ2EKKc9CBxr3BVjPTPoDPLdPIFCE)
 - [Systrace Documentation](https://developer.android.com/topic/performance/tracing)
-- [ConstraintLayout Guide](https://developer.android.com/develop/ui/views/layout/constraint-layout)
+- [`ConstraintLayout` Guide](https://developer.android.com/develop/ui/views/layout/constraint-layout)
 - [Kotlin Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
 
 ## Related Questions

@@ -66,7 +66,7 @@ Play Integrity/DeviceCheck signals; bind session к device posture; деград
 
 ### Session
 
-Short‑lived access token + refresh; rotate на risk events; secure cookies в WebView для 3DS flows; CSRF tokens.
+`Short`‑lived access token + refresh; rotate на risk events; secure cookies в WebView для 3DS flows; CSRF tokens.
 
 ### Transaction Signing
 
@@ -110,7 +110,7 @@ Play Integrity/DeviceCheck signals; bind session to device posture; degrade capa
 
 ### Session
 
-Short‑lived access token + refresh; rotate on risk events; secure cookies in WebView for 3DS flows; CSRF tokens.
+`Short`‑lived access token + refresh; rotate on risk events; secure cookies in WebView for 3DS flows; CSRF tokens.
 
 ### Transaction Signing
 

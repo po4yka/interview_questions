@@ -34,7 +34,7 @@ tags: [android/background-execution, android/coroutines, android/networking-http
 
 1. **WorkManager** - гарантированное выполнение в фоне
 2. **Retrofit + OkHttp** - multipart загрузка с прогрессом
-3. **Foreground Service** - видимая пользователю операция
+3. **Foreground `Service`** - видимая пользователю операция
 4. **Chunked Upload** - разбиение на части для файлов >100MB
 5. **Retry Logic** - автоматические повторы при ошибках
 
@@ -260,7 +260,7 @@ class ChunkedUploadWorker(
 
 ✅ **Правильно:**
 - Использовать WorkManager для гарантированного выполнения
-- Показывать Foreground Service для длительных операций
+- Показывать Foreground `Service` для длительных операций
 - Разбивать файлы >100MB на chunks
 - Добавлять constraints (сеть, батарея)
 - Реализовать exponential backoff для retry
@@ -269,7 +269,7 @@ class ChunkedUploadWorker(
 
 ❌ **Неправильно:**
 - Загружать в main thread
-- Использовать Service без Foreground для Android 8+
+- Использовать `Service` без Foreground для Android 8+
 - Не обрабатывать ошибки сети
 - Не показывать прогресс пользователю
 - Хранить большие файлы в памяти целиком
@@ -282,7 +282,7 @@ class ChunkedUploadWorker(
 | **Простая загрузка** | Проще реализация | Не для файлов >100MB |
 | **Chunked upload** | Поддержка pause/resume | Сложнее backend |
 | **WorkManager** | Гарантированное выполнение | Не мгновенный запуск |
-| **Foreground Service** | Приоритет системы | Требует уведомление |
+| **Foreground `Service`** | Приоритет системы | Требует уведомление |
 
 ---
 
@@ -294,7 +294,7 @@ class ChunkedUploadWorker(
 
 1. **WorkManager** - guaranteed background execution
 2. **Retrofit + OkHttp** - multipart upload with progress
-3. **Foreground Service** - user-visible operation
+3. **Foreground `Service`** - user-visible operation
 4. **Chunked Upload** - split files >100MB into parts
 5. **Retry Logic** - automatic retry on failures
 
@@ -520,7 +520,7 @@ class ChunkedUploadWorker(
 
 ✅ **Do:**
 - Use WorkManager for guaranteed execution
-- Show Foreground Service for long operations
+- Show Foreground `Service` for long operations
 - Split files >100MB into chunks
 - Add constraints (network, battery)
 - Implement exponential backoff for retry
@@ -529,7 +529,7 @@ class ChunkedUploadWorker(
 
 ❌ **Don't:**
 - Upload on main thread
-- Use Service without Foreground on Android 8+
+- Use `Service` without Foreground on Android 8+
 - Ignore network errors
 - Hide progress from user
 - Load entire large files into memory
@@ -542,7 +542,7 @@ class ChunkedUploadWorker(
 | **Simple upload** | Easier implementation | Not for files >100MB |
 | **Chunked upload** | Supports pause/resume | More complex backend |
 | **WorkManager** | Guaranteed execution | Not instant start |
-| **Foreground Service** | System priority | Requires notification |
+| **Foreground `Service`** | System priority | Requires notification |
 
 ---
 
@@ -567,7 +567,7 @@ class ChunkedUploadWorker(
 
 ### Prerequisites (Medium)
 - [[q-what-is-workmanager--android--medium]] - WorkManager basics
-- [[q-background-vs-foreground-service--android--medium]] - Service types
+- [[q-background-vs-foreground-service--android--medium]] - `Service` types
 - [[q-multithreading-tools-android--android--medium]] - Threading tools
 - [[q-large-file-upload--android--medium]] - File upload strategies
 

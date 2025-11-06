@@ -53,7 +53,7 @@ What to do if you need a service to continue running in the background?
 
 Для продолжения работы сервиса в фоне выберите правильный подход:
 
-### 1. Foreground Service (Высокий приоритет)
+### 1. Foreground `Service` (Высокий приоритет)
 
 **Когда использовать:**
 - Задача инициирована пользователем и срочна
@@ -178,7 +178,7 @@ class SyncJobService : JobService() {
 
 ### Сравнение Подходов
 
-| Критерий | Foreground Service | WorkManager | JobScheduler |
+| Критерий | Foreground `Service` | WorkManager | JobScheduler |
 |----------|-------------------|-------------|--------------|
 | **Уведомление пользователя** | Требуется | Опционально | Не требуется |
 | **Приоритет** | Высокий | Средний | Низкий |
@@ -241,7 +241,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
 To keep a service running in the background, choose the right approach:
 
-### 1. Foreground Service (High Priority)
+### 1. Foreground `Service` (High Priority)
 
 **When to use:**
 - Task is user-initiated and time-sensitive
@@ -366,7 +366,7 @@ class SyncJobService : JobService() {
 
 ### Comparison
 
-| Criteria | Foreground Service | WorkManager | JobScheduler |
+| Criteria | Foreground `Service` | WorkManager | JobScheduler |
 |----------|-------------------|-------------|--------------|
 | **User notification** | Required | Optional | Not required |
 | **Priority** | High | Medium | Low |
@@ -453,9 +453,9 @@ Is task user-initiated and time-sensitive?
 - [[q-android-service-types--android--easy]] - Types of Android services
 
 ### Related (Same Level)
-- [[q-service-component--android--medium]] - Service component lifecycle
+- [[q-service-component--android--medium]] - `Service` component lifecycle
 - [[q-foreground-service-types--android--medium]] - Foreground service types
-- [[q-when-can-the-system-restart-a-service--android--medium]] - Service restart behavior
+- [[q-when-can-the-system-restart-a-service--android--medium]] - `Service` restart behavior
 - [[q-background-vs-foreground-service--android--medium]] - Comparing service types
 
 ### Advanced (Harder)

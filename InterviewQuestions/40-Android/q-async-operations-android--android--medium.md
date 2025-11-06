@@ -93,7 +93,7 @@ val request = OneTimeWorkRequestBuilder<UploadWorker>()
 
 ### ExecutorService — Java Interop
 
-Thread pools с ручным управлением, используется в легаси коде.
+`Thread` pools с ручным управлением, используется в легаси коде.
 
 ```kotlin
 val executor = Executors.newFixedThreadPool(2)
@@ -106,9 +106,9 @@ executor.execute {
 // ⚠️ Обязательно: executor.shutdown() в onDestroy
 ```
 
-### HandlerThread — Message Queue
+### HandlerThread — `Message` `Queue`
 
-Один фоновый Looper для последовательной обработки.
+Один фоновый `Looper` для последовательной обработки.
 
 ```kotlin
 val handlerThread = HandlerThread("bg").apply { start() }
@@ -215,7 +215,7 @@ val request = OneTimeWorkRequestBuilder<UploadWorker>()
 
 ### ExecutorService — Java Interop
 
-Thread pools with manual management, used in legacy code.
+`Thread` pools with manual management, used in legacy code.
 
 ```kotlin
 val executor = Executors.newFixedThreadPool(2)
@@ -228,9 +228,9 @@ executor.execute {
 // ⚠️ Required: executor.shutdown() in onDestroy
 ```
 
-### HandlerThread — Message Queue
+### HandlerThread — `Message` `Queue`
 
-Single background Looper for sequential processing.
+Single background `Looper` for sequential processing.
 
 ```kotlin
 val handlerThread = HandlerThread("bg").apply { start() }

@@ -34,7 +34,7 @@ tags:
 ---
 
 # Вопрос (RU)
-> Как обрабатывать события касания в пользовательских View? Объясните механизм диспетчеризации, разницу между onTouchEvent() и onInterceptTouchEvent(), и как реализовать пользовательские жесты.
+> Как обрабатывать события касания в пользовательских `View`? Объясните механизм диспетчеризации, разницу между onTouchEvent() и onInterceptTouchEvent(), и как реализовать пользовательские жесты.
 
 # Question (EN)
 > How do you handle touch events in custom views? Explain the touch event dispatch mechanism, the difference between onTouchEvent() and onInterceptTouchEvent(), and how to implement custom gestures.
@@ -58,7 +58,7 @@ Child.onTouchEvent()
 ```
 
 **Ключевые принципы:**
-- Если View возвращает `true` из `ACTION_DOWN`, она получит все последующие события
+- Если `View` возвращает `true` из `ACTION_DOWN`, она получит все последующие события
 - `onInterceptTouchEvent()` позволяет родителю "украсть" события у детей
 - `ACTION_CANCEL` отправляется, когда родитель перехватывает события
 
@@ -142,7 +142,7 @@ class GestureView @JvmOverloads constructor(
 }
 ```
 
-### Перехват Событий В ViewGroup
+### Перехват Событий В `ViewGroup`
 
 `onInterceptTouchEvent()` позволяет родителю перехватывать события:
 
@@ -290,7 +290,7 @@ Child.onTouchEvent()
 ```
 
 **Key Principles:**
-- If a View returns `true` from `ACTION_DOWN`, it will receive all subsequent events
+- If a `View` returns `true` from `ACTION_DOWN`, it will receive all subsequent events
 - `onInterceptTouchEvent()` allows parent to "steal" events from children
 - `ACTION_CANCEL` is sent when parent intercepts events
 
@@ -374,7 +374,7 @@ class GestureView @JvmOverloads constructor(
 }
 ```
 
-### Touch Interception in ViewGroup
+### Touch Interception in `ViewGroup`
 
 `onInterceptTouchEvent()` allows parent to intercept events:
 
@@ -507,7 +507,7 @@ class FlingView @JvmOverloads constructor(
 
 ## Follow-ups
 
-- How do you handle touch events in nested scrollable views (e.g., RecyclerView inside ScrollView)?
+- How do you handle touch events in nested scrollable views (e.g., `RecyclerView` inside `ScrollView`)?
 - How would you implement a custom pinch-to-zoom with rotation gesture?
 - What is the difference between `actionMasked` and `action` in multi-touch scenarios?
 - How do you prevent touch event conflicts between multiple gesture detectors?
@@ -528,12 +528,12 @@ class FlingView @JvmOverloads constructor(
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Basic View concepts
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Basic `View` concepts
 - [[q-viewmodel-pattern--android--easy]] - UI layer patterns
 
 ### Related (Same Level)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View invalidation
-- [[q-what-does-itemdecoration-do--android--medium]] - Custom drawing in RecyclerView
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` invalidation
+- [[q-what-does-itemdecoration-do--android--medium]] - Custom drawing in `RecyclerView`
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--android--hard]] - Custom layouts in Compose

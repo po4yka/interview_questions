@@ -65,7 +65,7 @@ Client: "Here's data" → Server (instant send)
 - Low latency: Instant bidirectional communication
 - Resource friendly: One connection for both directions
 
-### WebSocket Lifecycle
+### WebSocket `Lifecycle`
 
 ```
 
@@ -394,7 +394,7 @@ class WebSocketClient(
 }
 ```
 
-### Chat Application Example
+### Chat `Application` Example
 
 Complete chat application using WebSocket:
 
@@ -874,7 +874,7 @@ private fun ChatInput(
 
 2. **Heartbeat Mechanism**: Detect stale connections early
 
-3. **Message Queue**: Store messages when offline
+3. **`Message` `Queue`**: Store messages when offline
 
 4. **State Management**: Clear connection states for UI
 
@@ -898,7 +898,7 @@ private fun ChatInput(
 
 3. **Memory Leaks**: Not closing WebSocket properly
 
-4. **No Message Queue**: Losing messages when offline
+4. **No `Message` `Queue`**: Losing messages when offline
 
 5. **Fixed Reconnect Delay**: Overwhelming server on mass disconnect
 
@@ -946,7 +946,7 @@ WebSocket implementation provides:
 
 - **Real-Time Communication**: Bidirectional, low-latency messaging
 - **Resilience**: Automatic reconnection with exponential backoff
-- **Reliability**: Message queuing for offline scenarios
+- **Reliability**: `Message` queuing for offline scenarios
 - **Health Monitoring**: Heartbeat mechanism for connection health
 - **User Experience**: Clear connection states and error handling
 - **Resource Efficiency**: Single persistent connection
@@ -991,7 +991,7 @@ Client: "Here's data" → Server (instant send)
 - Low latency: Instant bidirectional communication
 - Resource friendly: One connection for both directions
 
-### WebSocket Lifecycle
+### WebSocket `Lifecycle`
 
 ```
 
@@ -1320,7 +1320,7 @@ class WebSocketClient(
 }
 ```
 
-### Chat Application Example
+### Chat `Application` Example
 
 Complete chat application using WebSocket:
 
@@ -1800,7 +1800,7 @@ private fun ChatInput(
 
 2. **Heartbeat Mechanism**: Detect stale connections early
 
-3. **Message Queue**: Store messages when offline
+3. **`Message` `Queue`**: Store messages when offline
 
 4. **State Management**: Clear connection states for UI
 
@@ -1824,7 +1824,7 @@ private fun ChatInput(
 
 3. **Memory Leaks**: Not closing WebSocket properly
 
-4. **No Message Queue**: Losing messages when offline
+4. **No `Message` `Queue`**: Losing messages when offline
 
 5. **Fixed Reconnect Delay**: Overwhelming server on mass disconnect
 
@@ -1872,7 +1872,7 @@ WebSocket implementation provides:
 
 - **Real-Time Communication**: Bidirectional, low-latency messaging
 - **Resilience**: Automatic reconnection with exponential backoff
-- **Reliability**: Message queuing for offline scenarios
+- **Reliability**: `Message` queuing for offline scenarios
 - **Health Monitoring**: Heartbeat mechanism for connection health
 - **User Experience**: Clear connection states and error handling
 - **Resource Efficiency**: Single persistent connection

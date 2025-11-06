@@ -48,7 +48,7 @@ How to pass a photo to an editor — both within your app and to an external app
 
 ### 1. Внешний Редактор
 
-Используйте Intent с `ACTION_EDIT`:
+Используйте `Intent` с `ACTION_EDIT`:
 
 ```kotlin
 fun openExternalEditor(context: Context, photoUri: Uri) {
@@ -68,7 +68,7 @@ fun openExternalEditor(context: Context, photoUri: Uri) {
 
 ### 2. Внутренний Редактор
 
-**Вариант A: Передача URI через Intent** (РЕКОМЕНДУЕТСЯ)
+**Вариант A: Передача URI через `Intent`** (РЕКОМЕНДУЕТСЯ)
 
 ```kotlin
 fun openInternalEditor(context: Context, photoFile: File) {
@@ -196,7 +196,7 @@ fun PhotoEditorScreen(photoUri: Uri) {
 
 1. **Используйте FileProvider** для Android 7.0+ (обязательно)
 2. **Предоставляйте разрешения URI** для внешних приложений
-3. **Не передавайте большие bitmap** через Intent extras (лимит ~1MB)
+3. **Не передавайте большие bitmap** через `Intent` extras (лимит ~1MB)
 4. **Освобождайте память** — `bitmap.recycle()` в `onDestroy()`
 5. **Сохраняйте временные файлы** в `cacheDir`
 6. **Обрабатывайте ошибки** — проверяйте наличие редактора
@@ -207,7 +207,7 @@ Passing a photo depends on whether it's an external editor (another app) or inte
 
 ### 1. External Editor
 
-Use Intent with `ACTION_EDIT`:
+Use `Intent` with `ACTION_EDIT`:
 
 ```kotlin
 fun openExternalEditor(context: Context, photoUri: Uri) {
@@ -227,7 +227,7 @@ fun openExternalEditor(context: Context, photoUri: Uri) {
 
 ### 2. Internal Editor
 
-**Option A: Pass URI via Intent** (RECOMMENDED)
+**Option A: Pass URI via `Intent`** (RECOMMENDED)
 
 ```kotlin
 fun openInternalEditor(context: Context, photoFile: File) {
@@ -355,7 +355,7 @@ fun PhotoEditorScreen(photoUri: Uri) {
 
 1. **Use FileProvider** for Android 7.0+ (mandatory)
 2. **Grant URI permissions** for external apps
-3. **Don't pass large bitmaps** via Intent extras (limit ~1MB)
+3. **Don't pass large bitmaps** via `Intent` extras (limit ~1MB)
 4. **Free memory** — call `bitmap.recycle()` in `onDestroy()`
 5. **Save temp files** to `cacheDir`
 6. **Handle errors** — check if editor exists
@@ -372,7 +372,7 @@ fun PhotoEditorScreen(photoUri: Uri) {
 
 - Android FileProvider Guide: https://developer.android.com/reference/androidx/core/content/FileProvider
 - Sharing Files Documentation: https://developer.android.com/training/secure-file-sharing
-- Intent Documentation: https://developer.android.com/reference/android/content/Intent
+- `Intent` Documentation: https://developer.android.com/reference/android/content/`Intent`
 
 ## Related Questions
 
@@ -383,7 +383,7 @@ fun PhotoEditorScreen(photoUri: Uri) {
 
 
 ### Prerequisites
-- [[q-what-are-intents-for--android--medium]] — Understanding Intent basics
+- [[q-what-are-intents-for--android--medium]] — Understanding `Intent` basics
 - [[q-android-storage-types--android--medium]] — Storage options in Android
 
 ### Related
@@ -393,5 +393,5 @@ fun PhotoEditorScreen(photoUri: Uri) {
 
 ### Advanced
 - Image optimization and memory management for large photos
-- Custom ContentProvider for complex file sharing scenarios
+- Custom `ContentProvider` for complex file sharing scenarios
 - Implementing image filters and transformations efficiently

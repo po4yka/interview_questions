@@ -32,8 +32,8 @@ What do you know about the Splash Screen API in Android 12+?
 ### Когда Отображается
 
 - **Холодный старт**: процесс приложения не запущен
-- **Тёплый старт**: процесс запущен, но Activity не создана
-- **Не отображается** при горячем старте (Activity уже в памяти)
+- **Тёплый старт**: процесс запущен, но `Activity` не создана
+- **Не отображается** при горячем старте (`Activity` уже в памяти)
 
 ### Ключевые Изменения В Android 12
 
@@ -74,9 +74,9 @@ class MainActivity : Activity() {
     android:theme="@style/Theme.App.Starting">  <!-- ✅ Используем splash тему -->
 ```
 
-### Миграция Существующих Splash Screen Activity
+### Миграция Существующих Splash Screen `Activity`
 
-**Вариант 1: Routing Activity** — используйте `setKeepOnScreenCondition`:
+**Вариант 1: Routing `Activity`** — используйте `setKeepOnScreenCondition`:
 
 ```kotlin
 // ✅ Сохраняем splash screen до завершения роутинга
@@ -92,7 +92,7 @@ class RoutingActivity : Activity() {
 }
 ```
 
-**Вариант 2: Удалить custom Activity** (рекомендуется):
+**Вариант 2: Удалить custom `Activity`** (рекомендуется):
 - Используйте ленивую инициализацию компонентов
 - Показывайте placeholder UI во время загрузки данных
 - Применяйте кэширование для быстрого отображения контента
@@ -104,8 +104,8 @@ class RoutingActivity : Activity() {
 ### When It Shows
 
 - **Cold start**: app process isn't running
-- **Warm start**: process running but Activity not created
-- **No display** on hot start (Activity already in memory)
+- **Warm start**: process running but `Activity` not created
+- **No display** on hot start (`Activity` already in memory)
 
 ### Key Changes in Android 12
 
@@ -148,7 +148,7 @@ class MainActivity : Activity() {
 
 ### Migrating Existing Splash Screen Activities
 
-**Option 1: Routing Activity** — use `setKeepOnScreenCondition`:
+**Option 1: Routing `Activity`** — use `setKeepOnScreenCondition`:
 
 ```kotlin
 // ✅ Keep splash screen until routing completes
@@ -164,7 +164,7 @@ class RoutingActivity : Activity() {
 }
 ```
 
-**Option 2: Remove custom Activity** (recommended):
+**Option 2: Remove custom `Activity`** (recommended):
 - Use lazy initialization for components
 - Show placeholder UI while loading data
 - Apply caching for fast content display
@@ -187,7 +187,7 @@ class RoutingActivity : Activity() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-activity-lifecycle--android--easy]] - Understanding Activity lifecycle
+- [[q-activity-lifecycle--android--easy]] - Understanding `Activity` lifecycle
 - [[q-android-manifest-basics--android--easy]] - Manifest configuration
 
 ### Related (Same Level)

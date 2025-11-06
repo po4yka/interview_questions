@@ -37,7 +37,7 @@ sources: []
 - ✅ Меньше шаблонного кода
 - ✅ Встроенный предпросмотр
 
-**2. Программное создание View** (традиционный подход):
+**2. Программное создание `View`** (традиционный подход):
 - ✅ Полный контроль над созданием
 - ✅ Динамическое создание UI
 - ❌ Императивный стиль
@@ -66,7 +66,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-### Пример Программного Создания View
+### Пример Программного Создания `View`
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -109,7 +109,7 @@ val composeView = ComposeView(context).apply {
 linearLayout.addView(composeView)
 ```
 
-**Рекомендация**: Используйте [[c-jetpack-compose]] для новых проектов, программные View для поддержки legacy кода или специфичных случаев.
+**Рекомендация**: Используйте [[c-jetpack-compose]] для новых проектов, программные `View` для поддержки legacy кода или специфичных случаев.
 
 ## Answer (EN)
 
@@ -121,7 +121,7 @@ Android provides two main approaches to create UI without XML:
 - ✅ Less boilerplate
 - ✅ Built-in preview support
 
-**2. Programmatic View creation** (traditional):
+**2. Programmatic `View` creation** (traditional):
 - ✅ Full control over creation
 - ✅ Dynamic UI generation
 - ❌ Imperative style
@@ -150,7 +150,7 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-### Programmatic View Creation Example
+### Programmatic `View` Creation Example
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -208,10 +208,10 @@ linearLayout.addView(composeView)
 ## References
 
 - [[c-jetpack-compose]] - Modern declarative UI framework
-- [[c-android-views]] - Traditional View system
+- [[c-android-views]] - Traditional `View` system
 - [[moc-android]] - Android development guide
 - [Compose documentation](https://developer.android.com/jetpack/compose)
-- [View system guide](https://developer.android.com/develop/ui/views)
+- [`View` system guide](https://developer.android.com/develop/ui/views)
 
 ## Related Questions
 

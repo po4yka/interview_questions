@@ -56,7 +56,7 @@ KMM — shared business logic (60-70%) с native UI; Flutter — shared UI + log
 
 > Compare Kotlin Multiplatform Mobile (KMM) with Flutter for cross-platform development.
 
-## Short Version
+## `Short` Version
 
 KMM — shared business logic (60-70%) with native UI; Flutter — shared UI + logic (90-95%). KMM for native UX and performance, Flutter for development speed and multi-platform. Trade-offs: KMM higher performance but requires native expertise.
 
@@ -254,7 +254,7 @@ class LocationManager {
 - KMM: Средний (separate UIs)
 - Flutter: Ниже (single codebase)
 
-**Long-term**:
+**`Long`-term**:
 - KMM: Platform updates immediate, future-proof
 - Flutter: Depends on Flutter SDK updates
 
@@ -457,7 +457,7 @@ class LocationManager {
 - KMM: Medium (separate UIs)
 - Flutter: Lower (single codebase)
 
-**Long-term**:
+**`Long`-term**:
 - KMM: Platform updates immediate, future-proof
 - Flutter: Depends on Flutter SDK updates
 

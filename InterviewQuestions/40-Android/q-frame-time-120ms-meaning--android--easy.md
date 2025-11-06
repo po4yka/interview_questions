@@ -97,7 +97,7 @@ Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallba
 - **120мс** — явные тормоза (8 fps)
 - **> 5000мс** — риск ANR
 
-**Решение:** профилировать с помощью Systrace/Perfetto, переносить тяжёлую работу на Dispatchers.Default/IO, оптимизировать layout hierarchy, использовать RecyclerView с DiffUtil.
+**Решение:** профилировать с помощью Systrace/Perfetto, переносить тяжёлую работу на Dispatchers.Default/IO, оптимизировать layout hierarchy, использовать `RecyclerView` с DiffUtil.
 
 ## Answer (EN)
 
@@ -169,7 +169,7 @@ Choreographer.getInstance().postFrameCallback(object : Choreographer.FrameCallba
 - **120ms** — janky (8 fps)
 - **> 5000ms** — ANR risk
 
-**Solution:** Profile with Systrace/Perfetto, move heavy work to Dispatchers.Default/IO, optimize layout hierarchy, use RecyclerView with DiffUtil.
+**Solution:** Profile with Systrace/Perfetto, move heavy work to Dispatchers.Default/IO, optimize layout hierarchy, use `RecyclerView` with DiffUtil.
 
 ---
 

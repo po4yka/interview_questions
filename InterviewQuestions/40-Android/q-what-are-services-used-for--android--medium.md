@@ -39,22 +39,22 @@ What are services used for in Android?
 
 ## Ответ (RU)
 
-**Service** — это компонент Android для длительных фоновых операций без пользовательского интерфейса.
+**`Service`** — это компонент Android для длительных фоновых операций без пользовательского интерфейса.
 
 ### Основные Типы И Применение
 
-**1. Foreground Service** — основной тип для современных версий Android
+**1. Foreground `Service`** — основной тип для современных версий Android
 - **Требование**: обязательное уведомление для пользователя
 - **Применение**: музыкальные плееры, навигация, фитнес-трекинг, загрузка файлов
 
-**2. Background Service** — устарел и ограничен с Android 8.0+
+**2. Background `Service`** — устарел и ограничен с Android 8.0+
 - **Проблема**: мог разряжать батарею, система ограничивает выполнение
 - **Замена**: используйте WorkManager для отложенных фоновых задач
 
-**3. Bound Service** — клиент-серверный интерфейс
-- **Применение**: коммуникация между Activity/Fragment и сервисом, IPC
+**3. Bound `Service`** — клиент-серверный интерфейс
+- **Применение**: коммуникация между Activity/`Fragment` и сервисом, IPC
 
-### Пример Foreground Service
+### Пример Foreground `Service`
 
 ```kotlin
 class MusicPlayerService : Service() {
@@ -89,7 +89,7 @@ class MusicPlayerService : Service() {
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 ```
 
-### Пример Bound Service
+### Пример Bound `Service`
 
 ```kotlin
 class LocationService : Service() {
@@ -108,7 +108,7 @@ class LocationService : Service() {
 }
 ```
 
-**Использование в Activity**:
+**Использование в `Activity`**:
 ```kotlin
 class MainActivity : AppCompatActivity() {
     private var locationService: LocationService? = null
@@ -145,12 +145,12 @@ class MainActivity : AppCompatActivity() {
 
 ### Жизненный Цикл
 
-**Started Service**:
+**Started `Service`**:
 ```
 startService() → onCreate() → onStartCommand() → stopSelf() → onDestroy()
 ```
 
-**Bound Service**:
+**Bound `Service`**:
 ```
 bindService() → onCreate() → onBind() → unbindService() → onDestroy()
 ```
@@ -160,9 +160,9 @@ bindService() → onCreate() → onBind() → unbindService() → onDestroy()
 | Задача | Рекомендация |
 |--------|--------------|
 | Фоновая работа с гарантией выполнения | **WorkManager** |
-| Длительные операции (музыка, навигация) | **Foreground Service** |
+| Длительные операции (музыка, навигация) | **Foreground `Service`** |
 | Запланированные задачи | **AlarmManager** |
-| Коммуникация между компонентами | **Bound Service** |
+| Коммуникация между компонентами | **Bound `Service`** |
 
 **Пример замены на WorkManager**:
 ```kotlin
@@ -195,31 +195,31 @@ WorkManager.getInstance(context).enqueue(workRequest)
 ### Best Practices
 
 1. **Всегда останавливайте сервис**: вызывайте `stopSelf()` когда работа завершена
-2. **Используйте Foreground Service для длительных операций**: с обязательным уведомлением
+2. **Используйте Foreground `Service` для длительных операций**: с обязательным уведомлением
 3. **Очищайте ресурсы в onDestroy()**: освобождайте MediaPlayer, LocationManager и т.д.
-4. **Предпочитайте WorkManager**: для большинства фоновых задач вместо Background Service
+4. **Предпочитайте WorkManager**: для большинства фоновых задач вместо Background `Service`
 5. **Сервисы работают в главном потоке**: используйте корутины или потоки для тяжелой работы
 
 ---
 
 ## Answer (EN)
 
-**Service** is an Android component for long-running background operations without a user interface.
+**`Service`** is an Android component for long-running background operations without a user interface.
 
 ### Main Types and Use Cases
 
-**1. Foreground Service** — primary type for modern Android versions
+**1. Foreground `Service`** — primary type for modern Android versions
 - **Requirement**: must display a notification to the user
 - **Use cases**: music players, navigation, fitness tracking, file uploads
 
-**2. Background Service** — deprecated and restricted since Android 8.0+
+**2. Background `Service`** — deprecated and restricted since Android 8.0+
 - **Problem**: could drain battery, system restricts background execution
 - **Replacement**: use WorkManager for deferrable background tasks
 
-**3. Bound Service** — provides client-server interface
-- **Use cases**: communication between Activity/Fragment and service, IPC
+**3. Bound `Service`** — provides client-server interface
+- **Use cases**: communication between Activity/`Fragment` and service, IPC
 
-### Foreground Service Example
+### Foreground `Service` Example
 
 ```kotlin
 class MusicPlayerService : Service() {
@@ -254,7 +254,7 @@ class MusicPlayerService : Service() {
 <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
 ```
 
-### Bound Service Example
+### Bound `Service` Example
 
 ```kotlin
 class LocationService : Service() {
@@ -273,7 +273,7 @@ class LocationService : Service() {
 }
 ```
 
-**Usage in Activity**:
+**Usage in `Activity`**:
 ```kotlin
 class MainActivity : AppCompatActivity() {
     private var locationService: LocationService? = null
@@ -308,14 +308,14 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Lifecycle
+### `Lifecycle`
 
-**Started Service**:
+**Started `Service`**:
 ```
 startService() → onCreate() → onStartCommand() → stopSelf() → onDestroy()
 ```
 
-**Bound Service**:
+**Bound `Service`**:
 ```
 bindService() → onCreate() → onBind() → unbindService() → onDestroy()
 ```
@@ -325,9 +325,9 @@ bindService() → onCreate() → onBind() → unbindService() → onDestroy()
 | Task | Recommendation |
 |------|----------------|
 | Background work with guaranteed execution | **WorkManager** |
-| Long-running operations (music, navigation) | **Foreground Service** |
+| `Long`-running operations (music, navigation) | **Foreground `Service`** |
 | Scheduled tasks | **AlarmManager** |
-| Component communication | **Bound Service** |
+| Component communication | **Bound `Service`** |
 
 **WorkManager replacement example**:
 ```kotlin
@@ -360,18 +360,18 @@ WorkManager.getInstance(context).enqueue(workRequest)
 ### Best Practices
 
 1. **Always stop the service**: call `stopSelf()` when work is complete
-2. **Use Foreground Service for long operations**: with mandatory notification
+2. **Use Foreground `Service` for long operations**: with mandatory notification
 3. **Cleanup resources in onDestroy()**: release MediaPlayer, LocationManager, etc.
-4. **Prefer WorkManager**: for most background tasks instead of Background Service
+4. **Prefer WorkManager**: for most background tasks instead of Background `Service`
 5. **Services run on main thread**: use coroutines or threads for heavy work
 
 ---
 
 ## Follow-ups
 
-- What happens if you don't call `startForeground()` within 5 seconds for a Foreground Service?
+- What happens if you don't call `startForeground()` within 5 seconds for a Foreground `Service`?
 - How does `START_STICKY` vs `START_NOT_STICKY` affect service restart behavior?
-- When should you use a Bound Service versus SharedViewModel with LiveData/Flow?
+- When should you use a Bound `Service` versus SharedViewModel with LiveData/`Flow`?
 - What are the restrictions on background services introduced in Android 8.0, 12.0?
 - How can you implement a hybrid service that is both started and bound?
 
@@ -392,7 +392,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 ### Related (Same Level)
 - [[q-foreground-service-types--android--medium]] - Foreground service types
-- [[q-when-can-the-system-restart-a-service--android--medium]] - Service restart behavior
+- [[q-when-can-the-system-restart-a-service--android--medium]] - `Service` restart behavior
 - [[q-workmanager-vs-alternatives--android--medium]] - WorkManager comparison
 
 ### Advanced (Harder)

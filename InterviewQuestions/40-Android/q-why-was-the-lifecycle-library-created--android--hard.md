@@ -19,23 +19,23 @@ tags: [android/architecture-mvvm, android/lifecycle, android/performance-memory,
 
 # Вопрос (RU)
 
-Почему была создана библиотека Lifecycle?
+Почему была создана библиотека `Lifecycle`?
 
 # Question (EN)
 
-Why was the Lifecycle library created?
+Why was the `Lifecycle` library created?
 
 ## Ответ (RU)
 
-Библиотека Lifecycle решила пять критических проблем Android-разработки:
+Библиотека `Lifecycle` решила пять критических проблем Android-разработки:
 
-1. **Утечки памяти** — компоненты оставались в памяти после уничтожения Activity
-2. **Крэши** — обновление UI после destroy Activity
+1. **Утечки памяти** — компоненты оставались в памяти после уничтожения `Activity`
+2. **Крэши** — обновление UI после destroy `Activity`
 3. **Boilerplate код** — ручные вызовы lifecycle методов в каждом компоненте
-4. **Сильная связанность** — Activity управляла всеми зависимыми компонентами
-5. **Сложность тестирования** — требовался настоящий Activity для тестов
+4. **Сильная связанность** — `Activity` управляла всеми зависимыми компонентами
+5. **Сложность тестирования** — требовался настоящий `Activity` для тестов
 
-### Проблемы До Lifecycle
+### Проблемы До `Lifecycle`
 
 **Утечка памяти:**
 ```kotlin
@@ -71,7 +71,7 @@ override fun onStop() { myObserver?.onStop() }
 override fun onDestroy() { myObserver?.onDestroy() }
 ```
 
-### Решение С Lifecycle
+### Решение С `Lifecycle`
 
 **Автоматическое управление:**
 ```kotlin
@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**LiveData (lifecycle-aware):**
+**`LiveData` (lifecycle-aware):**
 ```kotlin
 // ✅ Обновляет UI только когда Activity активна
 viewModel.user.observe(this) { user ->
@@ -105,7 +105,7 @@ viewModel.user.observe(this) { user ->
 }
 ```
 
-**ViewModel (переживает rotation):**
+**`ViewModel` (переживает rotation):**
 ```kotlin
 // ✅ Данные сохраняются при screen rotation автоматически
 private val viewModel: UserViewModel by viewModels()
@@ -119,7 +119,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ### Реальный Пример: WebSocket Чат
 
-**До Lifecycle:**
+**До `Lifecycle`:**
 ```kotlin
 // ❌ Ручное управление состоянием
 class ChatActivity : AppCompatActivity() {
@@ -141,7 +141,7 @@ class ChatActivity : AppCompatActivity() {
 }
 ```
 
-**С Lifecycle:**
+**С `Lifecycle`:**
 ```kotlin
 // ✅ Автоматическое управление
 class ChatObserver : DefaultLifecycleObserver {
@@ -166,14 +166,14 @@ class ChatActivity : AppCompatActivity() {
 
 ### Ключевые Компоненты
 
-**LifecycleOwner** — Activity/Fragment реализуют этот интерфейс:
+**`LifecycleOwner`** — Activity/`Fragment` реализуют этот интерфейс:
 ```kotlin
 interface LifecycleOwner {
     val lifecycle: Lifecycle
 }
 ```
 
-**LifecycleObserver** — компоненты автоматически реагируют на события:
+**`LifecycleObserver`** — компоненты автоматически реагируют на события:
 ```kotlin
 interface DefaultLifecycleObserver : LifecycleObserver {
     fun onCreate(owner: LifecycleOwner) {}
@@ -225,15 +225,15 @@ fun testObserver() {
 
 ## Answer (EN)
 
-The Lifecycle library solved five critical Android development problems:
+The `Lifecycle` library solved five critical Android development problems:
 
-1. **Memory leaks** — components stayed in memory after Activity destruction
-2. **Crashes** — UI updates after Activity destroyed
+1. **Memory leaks** — components stayed in memory after `Activity` destruction
+2. **Crashes** — UI updates after `Activity` destroyed
 3. **Boilerplate code** — manual lifecycle method calls in every component
-4. **Tight coupling** — Activity managed all dependent components
-5. **Testing difficulty** — required real Activity for tests
+4. **Tight coupling** — `Activity` managed all dependent components
+5. **Testing difficulty** — required real `Activity` for tests
 
-### Problems Before Lifecycle
+### Problems Before `Lifecycle`
 
 **Memory leaks:**
 ```kotlin
@@ -269,7 +269,7 @@ override fun onStop() { myObserver?.onStop() }
 override fun onDestroy() { myObserver?.onDestroy() }
 ```
 
-### Solution with Lifecycle
+### Solution with `Lifecycle`
 
 **Automatic management:**
 ```kotlin
@@ -293,7 +293,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**LiveData (lifecycle-aware):**
+**`LiveData` (lifecycle-aware):**
 ```kotlin
 // ✅ Updates UI only when Activity is active
 viewModel.user.observe(this) { user ->
@@ -303,7 +303,7 @@ viewModel.user.observe(this) { user ->
 }
 ```
 
-**ViewModel (survives rotation):**
+**`ViewModel` (survives rotation):**
 ```kotlin
 // ✅ Data preserved during screen rotation automatically
 private val viewModel: UserViewModel by viewModels()
@@ -317,7 +317,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ### Real Example: WebSocket Chat
 
-**Before Lifecycle:**
+**Before `Lifecycle`:**
 ```kotlin
 // ❌ Manual state management
 class ChatActivity : AppCompatActivity() {
@@ -339,7 +339,7 @@ class ChatActivity : AppCompatActivity() {
 }
 ```
 
-**With Lifecycle:**
+**With `Lifecycle`:**
 ```kotlin
 // ✅ Automatic management
 class ChatObserver : DefaultLifecycleObserver {
@@ -364,14 +364,14 @@ class ChatActivity : AppCompatActivity() {
 
 ### Key Components
 
-**LifecycleOwner** — Activity/Fragment implement this interface:
+**`LifecycleOwner`** — Activity/`Fragment` implement this interface:
 ```kotlin
 interface LifecycleOwner {
     val lifecycle: Lifecycle
 }
 ```
 
-**LifecycleObserver** — components automatically respond to events:
+**`LifecycleObserver`** — components automatically respond to events:
 ```kotlin
 interface DefaultLifecycleObserver : LifecycleObserver {
     fun onCreate(owner: LifecycleOwner) {}
@@ -423,29 +423,29 @@ fun testObserver() {
 
 ## Follow-ups
 
-- How does LifecycleRegistry enable testability without real Activity instances?
-- What happens if you add LifecycleObserver in onStart() instead of onCreate()?
-- Why does LiveData only emit values in STARTED/RESUMED states?
-- How does ViewModel survive configuration changes internally?
+- How does LifecycleRegistry enable testability without real `Activity` instances?
+- What happens if you add `LifecycleObserver` in onStart() instead of onCreate()?
+- Why does `LiveData` only emit values in STARTED/RESUMED states?
+- How does `ViewModel` survive configuration changes internally?
 - What are the trade-offs of ProcessLifecycleOwner for app-wide lifecycle tracking?
 
 ## References
 
-- [[c-lifecycle]] — Lifecycle-aware components and architecture patterns
-- [[c-viewmodel]] — ViewModel lifecycle and scope
-- [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
-- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
-- [LiveData](https://developer.android.com/topic/libraries/architecture/livedata)
+- [[c-lifecycle]] — `Lifecycle`-aware components and architecture patterns
+- [[c-viewmodel]] — `ViewModel` lifecycle and scope
+- [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- [`LiveData`](https://developer.android.com/topic/libraries/architecture/livedata)
 
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-viewmodel--android--medium]] — ViewModel basics
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] — ViewModel purpose
+- [[q-what-is-viewmodel--android--medium]] — `ViewModel` basics
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] — `ViewModel` purpose
 
 ### Related (Same Level)
 - [[q-testing-viewmodels-turbine--android--medium]] — Testing lifecycle-aware components
 
 ### Advanced (Harder)
-- [[q-service-lifecycle-binding--android--hard]] — Service lifecycle binding patterns
+- [[q-service-lifecycle-binding--android--hard]] — `Service` lifecycle binding patterns

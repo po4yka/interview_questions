@@ -138,7 +138,7 @@ Three compilation stages:
 2. **Runtime** — JIT profiling of active code
 3. **Background optimization** — full AOT compilation during charging and idle
 
-### Improved Garbage Collection
+### Improved Garbage `Collection`
 
 ```kotlin
 // ✅ Concurrent copying GC minimizes pauses

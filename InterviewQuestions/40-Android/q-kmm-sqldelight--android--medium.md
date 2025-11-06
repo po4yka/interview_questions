@@ -233,7 +233,7 @@ CREATE INDEX task_priority ON Task(priority);
 ALTER TABLE Task ADD COLUMN dueDate INTEGER;
 ```
 
-**Manual Migration Handler**:
+**Manual Migration `Handler`**:
 ```kotlin
 // androidMain
 override fun onUpgrade(
@@ -512,7 +512,7 @@ CREATE INDEX task_priority ON Task(priority);
 ALTER TABLE Task ADD COLUMN dueDate INTEGER;
 ```
 
-**Manual Migration Handler**:
+**Manual Migration `Handler`**:
 ```kotlin
 // androidMain
 override fun onUpgrade(

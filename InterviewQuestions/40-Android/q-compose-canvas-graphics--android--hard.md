@@ -23,10 +23,10 @@ tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
 ---
 
 # Вопрос (RU)
-> Как эффективно работать с Canvas и графикой в Jetpack Compose?
+> Как эффективно работать с `Canvas` и графикой в Jetpack Compose?
 
 # Question (EN)
-> How to effectively work with Canvas and graphics in Jetpack Compose?
+> How to effectively work with `Canvas` and graphics in Jetpack Compose?
 
 ---
 
@@ -175,7 +175,7 @@ Canvas(Modifier.graphicsLayer(alpha = 0.9f)) { /* draw */ }
 - When to switch to custom Views for extreme performance cases?
 - How to share drawing caches across recompositions/screens?
 - How to handle complex paths with bezier curves efficiently?
-- What's the difference between `drawWithCache` and `remember` for Canvas?
+- What's the difference between `drawWithCache` and `remember` for `Canvas`?
 
 ## References
 - [[c-compose-state]] - State management in Compose

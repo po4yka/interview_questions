@@ -19,19 +19,19 @@ tags: [android/lifecycle, android/ui-views, android/ui-widgets, difficulty/easy,
 
 # Вопрос (RU)
 
-> Что такое View в Android?
+> Что такое `View` в Android?
 
 # Question (EN)
 
-> What is a View in Android?
+> What is a `View` in Android?
 
 ---
 
 ## Ответ (RU)
 
-**View** — это базовый класс для всех компонентов пользовательского интерфейса в Android. View занимает прямоугольную область на экране и отвечает за отрисовку и обработку событий.
+**`View`** — это базовый класс для всех компонентов пользовательского интерфейса в Android. `View` занимает прямоугольную область на экране и отвечает за отрисовку и обработку событий.
 
-### Иерархия View
+### Иерархия `View`
 
 Все view организованы в **древовидную структуру**. Можно добавлять view:
 - Программно из кода
@@ -95,14 +95,14 @@ progressBar.visibility = View.INVISIBLE
 progressBar.visibility = View.GONE
 ```
 
-### View ID И Поиск
+### `View` ID И Поиск
 
 **findViewById (старый способ):**
 ```kotlin
 val button = findViewById<Button>(R.id.my_button) // ❌ Устаревший
 ```
 
-**View Binding (современный подход):**
+**`View` Binding (современный подход):**
 ```kotlin
 private lateinit var binding: ActivityMainBinding
 
@@ -117,7 +117,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-### Жизненный Цикл View
+### Жизненный Цикл `View`
 
 ```
 Событие → Обработка → requestLayout()/invalidate() → Measure/Layout/Draw
@@ -137,7 +137,7 @@ textView.setTextColor(Color.RED)
 
 ### Потоки И UI
 
-**КРИТИЧЕСКОЕ ПРАВИЛО**: View можно изменять ТОЛЬКО из UI потока.
+**КРИТИЧЕСКОЕ ПРАВИЛО**: `View` можно изменять ТОЛЬКО из UI потока.
 
 ```kotlin
 // ❌ НЕПРАВИЛЬНО - будет крэш
@@ -155,7 +155,7 @@ lifecycleScope.launch {
 }
 ```
 
-### Создание Custom View
+### Создание Custom `View`
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
@@ -185,26 +185,26 @@ class CustomView @JvmOverloads constructor(
 ### Ключевые Практики
 
 1. **XML для статических макетов** — проще визуализировать и поддерживать
-2. **View Binding** вместо findViewById — типобезопасность
+2. **`View` Binding** вместо findViewById — типобезопасность
 3. **UI обновления в main thread** — используйте корутины/handlers
-4. **ConstraintLayout** — минимизирует вложенность
+4. **`ConstraintLayout`** — минимизирует вложенность
 5. **Очистка listeners** — предотвращает утечки памяти
 
 ### Резюме
 
-- View — фундаментальный блок UI, занимает прямоугольную область
+- `View` — фундаментальный блок UI, занимает прямоугольную область
 - Организованы в древовидную иерархию
 - Система однопоточная — изменения только из UI потока
 - `requestLayout()` для размера/позиции, `invalidate()` для внешнего вида
-- ViewGroup — специальный View, содержащий дочерние view
+- `ViewGroup` — специальный `View`, содержащий дочерние view
 
 ---
 
 ## Answer (EN)
 
-**View** is the base class for all user interface components in Android. A View occupies a rectangular area on the screen and is responsible for drawing and event handling.
+**`View`** is the base class for all user interface components in Android. A `View` occupies a rectangular area on the screen and is responsible for drawing and event handling.
 
-### View Hierarchy
+### `View` Hierarchy
 
 All views are arranged in a **tree structure**. You can add views:
 - Programmatically from code
@@ -268,14 +268,14 @@ progressBar.visibility = View.INVISIBLE
 progressBar.visibility = View.GONE
 ```
 
-### View IDs and Lookup
+### `View` IDs and Lookup
 
 **findViewById (legacy approach):**
 ```kotlin
 val button = findViewById<Button>(R.id.my_button) // ❌ Deprecated
 ```
 
-**View Binding (modern approach):**
+**`View` Binding (modern approach):**
 ```kotlin
 private lateinit var binding: ActivityMainBinding
 
@@ -290,7 +290,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-### View Lifecycle
+### `View` `Lifecycle`
 
 ```
 Event → Handle → requestLayout()/invalidate() → Measure/Layout/Draw
@@ -358,34 +358,34 @@ class CustomView @JvmOverloads constructor(
 ### Key Practices
 
 1. **Use XML for static layouts** — easier to visualize and maintain
-2. **View Binding** over findViewById — type safety
+2. **`View` Binding** over findViewById — type safety
 3. **Update UI on main thread** — use coroutines/handlers
-4. **ConstraintLayout** — minimizes nesting
+4. **`ConstraintLayout`** — minimizes nesting
 5. **Clean up listeners** — prevents memory leaks
 
 ### Summary
 
-- View is the fundamental UI building block occupying a rectangular area
+- `View` is the fundamental UI building block occupying a rectangular area
 - Organized in a tree hierarchy
 - Single-threaded system — changes only from UI thread
 - `requestLayout()` for size/position, `invalidate()` for appearance
-- ViewGroup is a special View that contains child views
+- `ViewGroup` is a special `View` that contains child views
 
 ---
 
 ## Follow-ups
 
 1. What's the difference between `invalidate()` and `requestLayout()`?
-2. How does the View drawing process work (measure, layout, draw phases)?
+2. How does the `View` drawing process work (measure, layout, draw phases)?
 3. What are ViewStubs and when should you use them?
-4. How do you prevent memory leaks with View listeners?
+4. How do you prevent memory leaks with `View` listeners?
 5. What's the performance impact of deep view hierarchies?
 
 ## References
 
 - [[c-android-view-system]]
 - [[c-view-lifecycle]]
-- [View API Reference](https://developer.android.com/reference/android/view/View)
+- [`View` API Reference](https://developer.android.com/reference/android/view/`View`)
 - [Custom Views Guide](https://developer.android.com/develop/ui/views/layout/custom-views/custom-components)
 
 ## Related Questions
@@ -394,9 +394,9 @@ class CustomView @JvmOverloads constructor(
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - UI thread basics
 
 ### Related (Same Level)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization
-- [[q-viewmodel-pattern--android--easy]] - ViewModel pattern
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `RecyclerView` optimization
+- [[q-viewmodel-pattern--android--easy]] - `ViewModel` pattern
 
 ### Advanced (Harder)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View redrawing deep dive
-- [[q-fragments-and-activity-relationship--android--hard]] - Fragment lifecycle
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` redrawing deep dive
+- [[q-fragments-and-activity-relationship--android--hard]] - `Fragment` lifecycle

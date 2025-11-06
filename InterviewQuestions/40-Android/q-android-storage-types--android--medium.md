@@ -39,7 +39,7 @@ Android предоставляет четыре основных механиз�
 
 **1. DataStore — настройки приложения**
 
-Асинхронная замена SharedPreferences на основе Kotlin Flow.
+Асинхронная замена SharedPreferences на основе Kotlin `Flow`.
 
 ```kotlin
 // ✅ Типобезопасное чтение/запись
@@ -128,7 +128,7 @@ Android provides four core storage mechanisms, each optimized for specific use c
 
 **1. DataStore — app settings**
 
-Async SharedPreferences replacement based on Kotlin Flow.
+Async SharedPreferences replacement based on Kotlin `Flow`.
 
 ```kotlin
 // ✅ Type-safe read/write
@@ -234,8 +234,8 @@ interface UserDao {
 
 ### Related
 - [[q-android-security-best-practices--android--medium]] - Encryption and secure storage patterns
-- [[q-android-architectural-patterns--android--medium]] - Repository pattern for data layer
+- [[q-android-architectural-patterns--android--medium]] - `Repository` pattern for data layer
 
 ### Advanced
-- Implementing custom ContentProvider for inter-app data sharing
+- Implementing custom `ContentProvider` for inter-app data sharing
 - Optimizing Room performance with indices and query optimization

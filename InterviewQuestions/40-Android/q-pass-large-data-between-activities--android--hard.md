@@ -41,7 +41,7 @@ tags:
 
 # Вопрос (RU)
 
-> Как правильно передать большой объем данных (например, изображение) между Activity?
+> Как правильно передать большой объем данных (например, изображение) между `Activity`?
 
 # Question (EN)
 
@@ -51,7 +51,7 @@ tags:
 
 ## Ответ (RU)
 
-### Проблема: Ограничение Размера Intent
+### Проблема: Ограничение Размера `Intent`
 
 **❌ Неправильно** - передавать большие данные напрямую:
 
@@ -61,12 +61,12 @@ val bitmap = BitmapFactory.decodeResource(resources, R.drawable.large)
 intent.putExtra("image", bitmap)  // Ошибка при размере > 1MB
 ```
 
-**Причина:** Intent использует Binder IPC с лимитом **~1MB** на всю транзакцию.
+**Причина:** `Intent` использует Binder IPC с лимитом **~1MB** на всю транзакцию.
 
 **✅ Правильно** - передавать только ссылку:
 1. Сохранить данные (файл/БД/кэш)
 2. Передать ссылку (URI/ID/путь)
-3. Использовать безопасный доступ (FileProvider/ContentProvider)
+3. Использовать безопасный доступ (FileProvider/`ContentProvider`)
 
 ---
 
@@ -148,7 +148,7 @@ class ViewImageActivity : AppCompatActivity() {
 
 ---
 
-### Решение 2: Shared ViewModel
+### Решение 2: Shared `ViewModel`
 
 **Когда использовать:** Временная передача между Activities в одной задаче.
 
@@ -189,11 +189,11 @@ class ReceiverActivity : AppCompatActivity() {
 
 **✅ Преимущества:**
 - Просто
-- Lifecycle-aware
+- `Lifecycle`-aware
 
 **❌ Недостатки:**
 - Только в рамках одного процесса
-- Очищается при уничтожении Activity
+- Очищается при уничтожении `Activity`
 - Риск утечки памяти
 
 ---
@@ -274,7 +274,7 @@ override fun onDestroy() {
 
 ---
 
-### Решение 5: Custom ContentProvider
+### Решение 5: Custom `ContentProvider`
 
 **Когда использовать:** Обмен данными между приложениями, сложная логика доступа.
 
@@ -322,10 +322,10 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 | Метод | Персистентность | Сложность | Межпроцессный | Рекомендация |
 |-------|----------------|-----------|---------------|--------------|
 | **FileProvider + URI** | ✅ | Средняя | ✅ | **Лучший выбор** |
-| **ViewModel** | ❌ | Низкая | ❌ | Временные данные |
+| **`ViewModel`** | ❌ | Низкая | ❌ | Временные данные |
 | **Database + ID** | ✅ | Высокая | ❌ | Структурированные данные |
 | **Singleton** | ❌ | Низкая | ❌ | Прототипирование |
-| **ContentProvider** | ✅ | Очень высокая | ✅ | Межприложенческий обмен |
+| **`ContentProvider`** | ✅ | Очень высокая | ✅ | Межприложенческий обмен |
 
 ---
 
@@ -339,7 +339,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 - Обрабатывать ошибки доступа
 
 **❌ DON'T:**
-- Не передавать Bitmap/ByteArray в Intent
+- Не передавать Bitmap/ByteArray в `Intent`
 - Не использовать Singleton для production
 - Не забывать отзывать разрешения URI
 - Не хранить большие объекты в памяти дольше необходимого
@@ -358,16 +358,16 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 - Автоматически управляет разрешениями
 - Предотвращает `FileUriExposedException` на Android 7.0+
 
-**ViewModel Lifecycle:**
+**`ViewModel` `Lifecycle`:**
 - Переживает configuration changes
 - НЕ переживает process death
-- Очищается только при финальном уничтожении Activity/Fragment
+- Очищается только при финальном уничтожении Activity/`Fragment`
 
 ---
 
 ## Answer (EN)
 
-### Problem: Intent Size Limit
+### Problem: `Intent` Size Limit
 
 **❌ Wrong** - passing large data directly:
 
@@ -377,12 +377,12 @@ val bitmap = BitmapFactory.decodeResource(resources, R.drawable.large)
 intent.putExtra("image", bitmap)  // Fails if size > 1MB
 ```
 
-**Reason:** Intent uses Binder IPC with **~1MB** limit for entire transaction buffer.
+**Reason:** `Intent` uses Binder IPC with **~1MB** limit for entire transaction buffer.
 
 **✅ Correct** - pass reference only:
 1. Save data (file/database/cache)
 2. Pass reference (URI/ID/path)
-3. Use secure access (FileProvider/ContentProvider)
+3. Use secure access (FileProvider/`ContentProvider`)
 
 ---
 
@@ -464,7 +464,7 @@ class ViewImageActivity : AppCompatActivity() {
 
 ---
 
-### Solution 2: Shared ViewModel
+### Solution 2: Shared `ViewModel`
 
 **When to use:** Temporary sharing between Activities in same task.
 
@@ -505,11 +505,11 @@ class ReceiverActivity : AppCompatActivity() {
 
 **✅ Pros:**
 - Simple
-- Lifecycle-aware
+- `Lifecycle`-aware
 
 **❌ Cons:**
 - Single process only
-- Cleared on Activity destruction
+- Cleared on `Activity` destruction
 - Memory leak risk
 
 ---
@@ -590,7 +590,7 @@ override fun onDestroy() {
 
 ---
 
-### Solution 5: Custom ContentProvider
+### Solution 5: Custom `ContentProvider`
 
 **When to use:** Cross-app data sharing, complex access logic.
 
@@ -638,10 +638,10 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 | Method | Persistence | Complexity | Cross-Process | Recommendation |
 |--------|------------|------------|---------------|----------------|
 | **FileProvider + URI** | ✅ | Medium | ✅ | **Best choice** |
-| **ViewModel** | ❌ | Low | ❌ | Temporary data |
+| **`ViewModel`** | ❌ | Low | ❌ | Temporary data |
 | **Database + ID** | ✅ | High | ❌ | Structured data |
 | **Singleton** | ❌ | Low | ❌ | Prototyping |
-| **ContentProvider** | ✅ | Very high | ✅ | Cross-app sharing |
+| **`ContentProvider`** | ✅ | Very high | ✅ | Cross-app sharing |
 
 ---
 
@@ -655,7 +655,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 - Handle access errors gracefully
 
 **❌ DON'T:**
-- Pass Bitmap/ByteArray in Intent
+- Pass Bitmap/ByteArray in `Intent`
 - Use Singleton for production
 - Forget to revoke URI permissions
 - Keep large objects in memory longer than needed
@@ -674,19 +674,19 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 - Auto-manages permissions
 - Prevents `FileUriExposedException` on Android 7.0+
 
-**ViewModel Lifecycle:**
+**`ViewModel` `Lifecycle`:**
 - Survives configuration changes
 - Does NOT survive process death
-- Cleared only on final Activity/Fragment destruction
+- Cleared only on final Activity/`Fragment` destruction
 
 ---
 
 ## Follow-ups
 
-1. What happens if receiver Activity crashes before consuming the URI? How to handle cleanup?
-2. How to pass large data between apps with different signing certificates using ContentProvider?
-3. What are memory implications of holding Bitmap in ViewModel across multiple Activities?
-4. How to implement streaming large files (>100MB) via ContentProvider without loading into memory?
+1. What happens if receiver `Activity` crashes before consuming the URI? How to handle cleanup?
+2. How to pass large data between apps with different signing certificates using `ContentProvider`?
+3. What are memory implications of holding `Bitmap` in `ViewModel` across multiple Activities?
+4. How to implement streaming large files (>100MB) via `ContentProvider` without loading into memory?
 5. How does Scoped Storage (Android 10+) affect FileProvider implementation? What changes are needed for MediaStore?
 
 ---
@@ -709,7 +709,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 ### Prerequisites (Medium)
 - [[q-how-to-pass-data-from-one-activity-to-another--android--medium]] - Basic data passing
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity lifecycle
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - `Activity` lifecycle
 
 ### Related (Hard)
 - [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Component architecture

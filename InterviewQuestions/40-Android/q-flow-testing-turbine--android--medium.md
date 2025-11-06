@@ -45,12 +45,12 @@ sources:
 ## Ответ (RU)
 
 **Что такое Turbine:**
-Turbine — библиотека для тестирования Kotlin Flow от Cash App, предоставляющая декларативный API для проверки асинхронных эмиссий. Решает проблему недетерминированности Flow-тестов и упрощает верификацию последовательности событий.
+Turbine — библиотека для тестирования Kotlin `Flow` от Cash App, предоставляющая декларативный API для проверки асинхронных эмиссий. Решает проблему недетерминированности `Flow`-тестов и упрощает верификацию последовательности событий.
 
 **Ключевые возможности:**
 - Декларативные методы для проверки эмиссий (`awaitItem`, `awaitComplete`, `awaitError`)
 - Интеграция с `kotlinx-coroutines-test` для контроля виртуального времени
-- Поддержка StateFlow, SharedFlow и холодных Flow
+- Поддержка `StateFlow`, `SharedFlow` и холодных `Flow`
 - Автоматическая очистка ресурсов и обработка отмены
 
 **Основной API:**
@@ -100,7 +100,7 @@ fun `test delayed emission`() = runTest {
 }
 ```
 
-**Тестирование StateFlow в ViewModel:**
+**Тестирование `StateFlow` в `ViewModel`:**
 
 ```kotlin
 class CounterViewModel : ViewModel() {
@@ -206,12 +206,12 @@ stateFlow.test {
 ## Answer (EN)
 
 **What is Turbine:**
-Turbine is a Flow testing library by Cash App that provides a declarative API for verifying asynchronous emissions. It solves the non-determinism problem in Flow tests and simplifies event sequence verification.
+Turbine is a `Flow` testing library by Cash App that provides a declarative API for verifying asynchronous emissions. It solves the non-determinism problem in `Flow` tests and simplifies event sequence verification.
 
 **Key capabilities:**
 - Declarative methods for emission verification (`awaitItem`, `awaitComplete`, `awaitError`)
 - Integration with `kotlinx-coroutines-test` for virtual time control
-- Support for StateFlow, SharedFlow, and cold Flows
+- Support for `StateFlow`, `SharedFlow`, and cold Flows
 - Automatic resource cleanup and cancellation handling
 
 **Core API:**
@@ -261,7 +261,7 @@ fun `test delayed emission`() = runTest {
 }
 ```
 
-**Testing StateFlow in ViewModel:**
+**Testing `StateFlow` in `ViewModel`:**
 
 ```kotlin
 class CounterViewModel : ViewModel() {
@@ -393,6 +393,6 @@ stateFlow.test {
 - [[q-compose-testing--android--medium]] - Testing Compose UI with state Flows
 
 ### Advanced
-- Testing SharedFlow vs StateFlow differences and best practices
-- Advanced Flow operators testing (debounce, combine, flatMapLatest)
-- Testing Flow with custom CoroutineContext and dispatchers
+- Testing `SharedFlow` vs `StateFlow` differences and best practices
+- Advanced `Flow` operators testing (debounce, combine, flatMapLatest)
+- Testing `Flow` with custom CoroutineContext and dispatchers

@@ -60,7 +60,7 @@ The main ways to reduce the size of app are:
 
 ### Upload Your App with Android App Bundles
 
-Upload your app as an Android App Bundle to immediately save app size when you publish to Google Play. Android App Bundle is an upload format that includes all your app's compiled code and resources but defers APK generation and signing to Google Play.
+Upload your app as an Android App `Bundle` to immediately save app size when you publish to Google Play. Android App `Bundle` is an upload format that includes all your app's compiled code and resources but defers APK generation and signing to Google Play.
 
 Google Play's app serving model then uses your app bundle to generate and serve optimized APKs for each user's device configuration so that they download only the code and resources they need to run your app. You don't have to build, sign, and manage multiple APKs to support different devices, and users get smaller, more optimized downloads.
 
@@ -112,7 +112,7 @@ If you know that only a small percentage of your users have devices with specifi
 
 If your app needs only scaled images, you can save even more space by having a single variant of an image in `drawable-nodpi/`. We recommend you include at least an `xxhdpi` image variant in your app.
 
-#### Use Drawable Objects
+#### Use `Drawable` Objects
 
 Some images don't require a static image resource. The framework can dynamically draw the image at runtime instead. `Drawable` objects—or `<shape>` in XML — can take up a tiny amount of space in your APK. In addition, XML `Drawable` objects produce monochromatic images compliant with Material Design guidelines.
 
@@ -171,7 +171,7 @@ Specifically optimize for Android (Go edition) by disabling features that have l
 
 Play Feature Delivery uses advanced capabilities of app bundles, allowing certain features of your app to be delivered conditionally or downloaded on demand. You can use feature modules for custom delivery. A unique benefit of feature modules is the ability to customize how and when different features of your app are downloaded onto devices running Android 5.0 (API level 21) or higher.
 
-#### Reduce Translatable String Size
+#### Reduce Translatable `String` Size
 
 You can use the Android Gradle `resConfigs` property to remove alternative resource files that your app doesn't need. If you're using a library that includes language resources (such as AppCompat or Google Play Services), then your app includes all translated language strings for library messages, regardless of app translation. If you'd like to keep only the languages that your app officially supports, you can specify those languages using the `resConfig` property. Any resources for languages not specified are removed.
 
@@ -231,7 +231,7 @@ The main ways to reduce the size of app are:
 
 ### Upload Your App with Android App Bundles
 
-Upload your app as an Android App Bundle to immediately save app size when you publish to Google Play. Android App Bundle is an upload format that includes all your app's compiled code and resources but defers APK generation and signing to Google Play.
+Upload your app as an Android App `Bundle` to immediately save app size when you publish to Google Play. Android App `Bundle` is an upload format that includes all your app's compiled code and resources but defers APK generation and signing to Google Play.
 
 Google Play's app serving model then uses your app bundle to generate and serve optimized APKs for each user's device configuration so that they download only the code and resources they need to run your app. You don't have to build, sign, and manage multiple APKs to support different devices, and users get smaller, more optimized downloads.
 
@@ -283,7 +283,7 @@ If you know that only a small percentage of your users have devices with specifi
 
 If your app needs only scaled images, you can save even more space by having a single variant of an image in `drawable-nodpi/`. We recommend you include at least an `xxhdpi` image variant in your app.
 
-#### Use Drawable Objects
+#### Use `Drawable` Objects
 
 Some images don't require a static image resource. The framework can dynamically draw the image at runtime instead. `Drawable` objects—or `<shape>` in XML — can take up a tiny amount of space in your APK. In addition, XML `Drawable` objects produce monochromatic images compliant with Material Design guidelines.
 
@@ -342,7 +342,7 @@ Specifically optimize for Android (Go edition) by disabling features that have l
 
 Play Feature Delivery uses advanced capabilities of app bundles, allowing certain features of your app to be delivered conditionally or downloaded on demand. You can use feature modules for custom delivery. A unique benefit of feature modules is the ability to customize how and when different features of your app are downloaded onto devices running Android 5.0 (API level 21) or higher.
 
-#### Reduce Translatable String Size
+#### Reduce Translatable `String` Size
 
 You can use the Android Gradle `resConfigs` property to remove alternative resource files that your app doesn't need. If you're using a library that includes language resources (such as AppCompat or Google Play Services), then your app includes all translated language strings for library messages, regardless of app translation. If you'd like to keep only the languages that your app officially supports, you can specify those languages using the `resConfig` property. Any resources for languages not specified are removed.
 
@@ -390,7 +390,7 @@ You may recognize `&lt;` and `&gt`, as these are escape characters for `<` and `
 
 ### Загрузка Приложения С Помощью Android App Bundles
 
-Загрузите свое приложение как Android App Bundle, чтобы немедленно сэкономить размер приложения при публикации в Google Play. Android App Bundle - это формат загрузки, который включает весь скомпилированный код и ресурсы вашего приложения, но откладывает генерацию и подписание APK на Google Play.
+Загрузите свое приложение как Android App `Bundle`, чтобы немедленно сэкономить размер приложения при публикации в Google Play. Android App `Bundle` - это формат загрузки, который включает весь скомпилированный код и ресурсы вашего приложения, но откладывает генерацию и подписание APK на Google Play.
 
 Модель обслуживания приложений Google Play затем использует ваш app bundle для генерации и обслуживания оптимизированных APK для конфигурации устройства каждого пользователя, чтобы они загружали только код и ресурсы, необходимые для запуска вашего приложения. Вам не нужно создавать, подписывать и управлять несколькими APK для поддержки различных устройств, а пользователи получают меньшие, более оптимизированные загрузки.
 
@@ -442,7 +442,7 @@ Android поддерживает различные плотности экра�
 
 Если вашему приложению нужны только масштабированные изображения, вы можете сэкономить еще больше места, имея один вариант изображения в `drawable-nodpi/`. Мы рекомендуем включить хотя бы вариант изображения `xxhdpi` в ваше приложение.
 
-#### Использование Drawable Объектов
+#### Использование `Drawable` Объектов
 
 Некоторые изображения не требуют статического ресурса изображения. Фреймворк может динамически нарисовать изображение во время выполнения. Объекты `Drawable` - или `<shape>` в XML - могут занимать крошечное количество места в вашем APK. Кроме того, XML-объекты `Drawable` создают монохромные изображения, соответствующие рекомендациям Material Design.
 

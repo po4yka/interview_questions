@@ -110,7 +110,7 @@ OpenTelemetrySdk.builder()
 
 ## Answer (EN)
 
-- Set up OpenTelemetry SDKs with batched exporters, disk buffering, and resource attributes describing the app build.
+- `Set` up OpenTelemetry SDKs with batched exporters, disk buffering, and resource attributes describing the app build.
 - Instrument logs, metrics, and traces across networking, WorkManager, and UI flows; propagate context (correlation IDs).
 - Export telemetry via WorkManager respecting network/power constraints, with sampling and privacy filters.
 - Provide developer toggles for debugging and integrate with backend observability pipelines for correlation.

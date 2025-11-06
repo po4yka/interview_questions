@@ -35,11 +35,11 @@ sources: []
 
 # Вопрос (RU)
 
-> Как создать кастомный ViewGroup? Объясните процесс измерения и компоновки. Реализуйте FlowLayout, который располагает дочерние элементы в ряды с переносом.
+> Как создать кастомный `ViewGroup`? Объясните процесс измерения и компоновки. Реализуйте FlowLayout, который располагает дочерние элементы в ряды с переносом.
 
 # Question (EN)
 
-> How do you create a custom ViewGroup? Explain the measurement and layout process. Implement a FlowLayout that arranges children in rows, wrapping to the next row when needed.
+> How do you create a custom `ViewGroup`? Explain the measurement and layout process. Implement a FlowLayout that arranges children in rows, wrapping to the next row when needed.
 
 ## Ответ (RU)
 
@@ -50,7 +50,7 @@ sources: []
 **Проход 1: `onMeasure`** — определение размеров:
 - Измеряет каждый дочерний элемент через `measureChild()` или `measureChildWithMargins()`
 - Рассчитывает собственный размер на основе размеров детей и `MeasureSpec` от родителя
-- **ОБЯЗАН** вызвать `setMeasuredDimension(width, height)` — без этого View не отрисуется
+- **ОБЯЗАН** вызвать `setMeasuredDimension(width, height)` — без этого `View` не отрисуется
 
 **Проход 2: `onLayout`** — позиционирование:
 - Позиционирует каждый дочерний элемент через `child.layout(left, top, right, bottom)`
@@ -141,8 +141,8 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
 
 **ОБЯЗАТЕЛЬНО:**
 - Измерять всех детей через `measureChild()` или `measureChildWithMargins()` перед расчетом собственного размера
-- Вызывать `setMeasuredDimension()` в конце `onMeasure()` — без этого View не отрисуется
-- Пропускать `GONE` элементы (`child.visibility == View.GONE`) — они не занимают место
+- Вызывать `setMeasuredDimension()` в конце `onMeasure()` — без этого `View` не отрисуется
+- Пропускать `GONE` элементы (`child.visibility == `View`.GONE`) — они не занимают место
 - Учитывать `padding` родителя и `margins` детей при расчете размеров и позиций
 - Использовать `resolveSize()` для учета `MeasureSpec` от родителя
 
@@ -191,7 +191,7 @@ Creating a custom `ViewGroup` requires understanding the two-pass algorithm: **m
 **Pass 1: `onMeasure`** — size determination:
 - Measures each child via `measureChild()` or `measureChildWithMargins()`
 - Calculates its own size based on children's sizes and parent's `MeasureSpec`
-- **MUST** call `setMeasuredDimension(width, height)` — without this, View won't render
+- **MUST** call `setMeasuredDimension(width, height)` — without this, `View` won't render
 
 **Pass 2: `onLayout`** — positioning:
 - Positions each child via `child.layout(left, top, right, bottom)`
@@ -282,8 +282,8 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
 
 **MUST:**
 - Measure all children via `measureChild()` or `measureChildWithMargins()` before calculating own size
-- Call `setMeasuredDimension()` at end of `onMeasure()` — without this, View won't render
-- Skip `GONE` children (`child.visibility == View.GONE`) — they don't take space
+- Call `setMeasuredDimension()` at end of `onMeasure()` — without this, `View` won't render
+- Skip `GONE` children (`child.visibility == `View`.GONE`) — they don't take space
 - Account for parent's `padding` and children's `margins` when calculating sizes and positions
 - Use `resolveSize()` to respect parent's `MeasureSpec`
 
@@ -333,9 +333,9 @@ val startX = if (isRtl) width - paddingRight else paddingLeft
 
 ## References
 
-- [ViewGroup Documentation](https://developer.android.com/reference/android/view/ViewGroup)
+- [`ViewGroup` Documentation](https://developer.android.com/reference/android/view/`ViewGroup`)
 - [Custom Views Guide](https://developer.android.com/guide/topics/ui/custom-components)
-- [View Measurement Process](https://developer.android.com/guide/topics/ui/how-android-draws)
+- [`View` Measurement Process](https://developer.android.com/guide/topics/ui/how-android-draws)
 
 ## Related Questions
 
@@ -346,7 +346,7 @@ val startX = if (isRtl) width - paddingRight else paddingLeft
 
 
 ### Prerequisites (Easier)
-- [[q-custom-view-lifecycle--android--medium]] — View lifecycle and drawing order
+- [[q-custom-view-lifecycle--android--medium]] — `View` lifecycle and drawing order
 - [[q-custom-view-attributes--android--medium]] — Custom XML attributes
 
 ### Related (Same Level)

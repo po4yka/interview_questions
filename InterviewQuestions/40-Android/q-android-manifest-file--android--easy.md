@@ -39,7 +39,7 @@ sources:
 - **Регистрация компонентов** — Activities, Services, BroadcastReceivers, ContentProviders
 - **Управление разрешениями** — системные и пользовательские permissions
 - **Метаданные приложения** — package name, минимальный SDK, иконка, тема
-- **Intent-фильтры** — точки взаимодействия с системой и другими приложениями
+- **`Intent`-фильтры** — точки взаимодействия с системой и другими приложениями
 
 **Минимальная структура:**
 ```xml
@@ -114,7 +114,7 @@ sources:
 - **Component Registration** — Activities, Services, BroadcastReceivers, ContentProviders
 - **Permission Management** — system and custom permissions
 - **App Metadata** — package name, minimum SDK, icon, theme
-- **Intent Filters** — interaction points with system and other apps
+- **`Intent` Filters** — interaction points with system and other apps
 
 **Minimal Structure:**
 ```xml
@@ -200,8 +200,8 @@ sources:
 - [[q-android-app-components--android--easy]] - Understanding app components
 
 ### Related
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle
-- [[q-intent-filters-android--android--medium]] - Intent filter patterns
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle
+- [[q-intent-filters-android--android--medium]] - `Intent` filter patterns
  - Runtime permissions
 
 ### Advanced

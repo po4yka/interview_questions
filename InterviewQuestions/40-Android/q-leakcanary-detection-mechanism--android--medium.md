@@ -35,7 +35,7 @@ LeakCanary обнаруживает утечки памяти через мех�
 
 **1. Интеграция с жизненным циклом**
 
-LeakCanary автоматически отслеживает уничтожение Activity и Fragment через lifecycle observers:
+LeakCanary автоматически отслеживает уничтожение `Activity` и `Fragment` через lifecycle observers:
 
 ```kotlin
 class LeakCanaryLifecycleObserver : LifecycleObserver {
@@ -132,9 +132,9 @@ LeakCanary detects memory leaks through weak references (WeakReference) and life
 
 **Detection Process:**
 
-**1. Lifecycle Integration**
+**1. `Lifecycle` Integration**
 
-LeakCanary automatically tracks Activity and Fragment destruction via lifecycle observers:
+LeakCanary automatically tracks `Activity` and `Fragment` destruction via lifecycle observers:
 
 ```kotlin
 class LeakCanaryLifecycleObserver : LifecycleObserver {
@@ -233,7 +233,7 @@ class MyViewModel : ViewModel() {
 2. How does LeakCanary distinguish between legitimate retained objects and actual leaks?
 3. What is the performance impact of LeakCanary in debug builds?
 4. How does the Shark library analyze heap dumps to identify leak causes?
-5. Can LeakCanary detect leaks in custom objects beyond Activity and Fragment?
+5. Can LeakCanary detect leaks in custom objects beyond `Activity` and `Fragment`?
 
 ## References
 

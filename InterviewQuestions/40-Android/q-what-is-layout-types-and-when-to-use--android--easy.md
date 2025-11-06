@@ -33,7 +33,7 @@ tags: [android, android/ui-views, difficulty/easy, layouts, ui, xml]
 
 ### Основные Типы Layout
 
-#### 1. LinearLayout
+#### 1. `LinearLayout`
 
 Располагает дочерние элементы в одну строку или столбец (вертикально или горизонтально).
 
@@ -60,7 +60,7 @@ tags: [android, android/ui-views, difficulty/easy, layouts, ui, xml]
 - Формы с вертикальным или горизонтальным размещением
 - Когда нужно равномерное распределение веса между дочерними элементами (`layout_weight`)
 
-#### 2. RelativeLayout
+#### 2. `RelativeLayout`
 
 Позиционирует дочерние элементы относительно друг друга или относительно родительского контейнера.
 
@@ -90,9 +90,9 @@ tags: [android, android/ui-views, difficulty/easy, layouts, ui, xml]
 - Нужно избежать глубокой вложенности view-иерархии
 - Создание перекрывающихся view
 
-NOTE: Для новых проектов рекомендуется ConstraintLayout.
+NOTE: Для новых проектов рекомендуется `ConstraintLayout`.
 
-#### 3. ConstraintLayout
+#### 3. `ConstraintLayout`
 
 Обеспечивает гибкую систему constraints для позиционирования элементов относительно друг друга и границ контейнера.
 
@@ -125,7 +125,7 @@ NOTE: Для новых проектов рекомендуется ConstraintLa
 - Адаптивные дизайны для разных размеров экранов
 - Современная Android разработка (рекомендуется по умолчанию)
 
-#### 4. FrameLayout
+#### 4. `FrameLayout`
 
 Создан для размещения одного дочернего view, но может содержать несколько view, наложенных друг на друга.
 
@@ -179,17 +179,17 @@ NOTE: Для новых проектов рекомендуется ConstraintLa
 
 | Layout Type      | Производительность | Гибкость | Сложность | Лучше для        |
 | ---------------- | ------------------ | -------- | --------- | ---------------- |
-| LinearLayout     | Хорошая            | Низкая   | Низкая    | Простые списки   |
-| RelativeLayout   | Средняя            | Средняя  | Средняя   | Legacy приложения|
-| ConstraintLayout | Лучшая             | Высокая  | Средняя   | Современные app  |
-| FrameLayout      | Лучшая             | Низкая   | Низкая    | Overlay          |
+| `LinearLayout`     | Хорошая            | Низкая   | Низкая    | Простые списки   |
+| `RelativeLayout`   | Средняя            | Средняя  | Средняя   | Legacy приложения|
+| `ConstraintLayout` | Лучшая             | Высокая  | Средняя   | Современные app  |
+| `FrameLayout`      | Лучшая             | Низкая   | Низкая    | Overlay          |
 | GridLayout       | Хорошая            | Средняя  | Средняя   | Сетки            |
 
 ### Best Practices
 
-1. **Предпочитайте ConstraintLayout** для сложных макетов
+1. **Предпочитайте `ConstraintLayout`** для сложных макетов
 2. **Избегайте глубокой вложенности** layout-ов (влияет на производительность)
-3. **Используйте merge tag** для устранения избыточных ViewGroup
+3. **Используйте merge tag** для устранения избыточных `ViewGroup`
 4. **Используйте include tag** для переиспользуемых layout-ов
 5. **Учитывайте производительность** при выборе типа layout
 
@@ -199,7 +199,7 @@ A **layout** defines how user interface elements (widgets) are arranged and posi
 
 ### Main Layout Types
 
-#### 1. LinearLayout
+#### 1. `LinearLayout`
 
 Arranges child elements in a single row or column (vertically or horizontally).
 
@@ -226,7 +226,7 @@ Arranges child elements in a single row or column (vertically or horizontally).
 - Forms with vertical or horizontal placement
 - When equal weight distribution is needed among children (`layout_weight`)
 
-#### 2. RelativeLayout
+#### 2. `RelativeLayout`
 
 Positions child elements relative to each other or to the parent container.
 
@@ -256,9 +256,9 @@ Positions child elements relative to each other or to the parent container.
 - Avoiding deep view hierarchies
 - Creating overlapping views
 
-NOTE: For new projects, ConstraintLayout is recommended.
+NOTE: For new projects, `ConstraintLayout` is recommended.
 
-#### 3. ConstraintLayout
+#### 3. `ConstraintLayout`
 
 Provides a flexible constraint system for positioning elements relative to each other and container boundaries.
 
@@ -291,7 +291,7 @@ Provides a flexible constraint system for positioning elements relative to each 
 - Responsive designs adapting to different screen sizes
 - Modern Android development (recommended default)
 
-#### 4. FrameLayout
+#### 4. `FrameLayout`
 
 Designed to hold a single child view, though it can contain multiple views stacked on top of each other.
 
@@ -314,7 +314,7 @@ Designed to hold a single child view, though it can contain multiple views stack
 ```
 
 **When to use:**
-- Fragment containers
+- `Fragment` containers
 - Simple overlays
 - Single view containers
 
@@ -339,21 +339,21 @@ Arranges children in a grid structure.
 **When to use:**
 - Calculator layouts
 - Image galleries
-- Button grids
+- `Button` grids
 
 ### Selection Guidelines
 
 | Layout Type      | Performance | Flexibility | Complexity | Best For          |
 | ---------------- | ----------- | ----------- | ---------- | ----------------- |
-| LinearLayout     | Good        | Low         | Low        | Simple lists      |
-| RelativeLayout   | Moderate    | Moderate    | Moderate   | Legacy apps       |
-| ConstraintLayout | Best        | High        | Moderate   | Modern apps       |
-| FrameLayout      | Best        | Low         | Low        | Overlays          |
+| `LinearLayout`     | Good        | Low         | Low        | Simple lists      |
+| `RelativeLayout`   | Moderate    | Moderate    | Moderate   | Legacy apps       |
+| `ConstraintLayout` | Best        | High        | Moderate   | Modern apps       |
+| `FrameLayout`      | Best        | Low         | Low        | Overlays          |
 | GridLayout       | Good        | Moderate    | Moderate   | Grid structures   |
 
 ### Best Practices
 
-1. **Prefer ConstraintLayout** for complex layouts
+1. **Prefer `ConstraintLayout`** for complex layouts
 2. **Avoid deep nesting** of layouts (affects performance)
 3. **Use merge tags** to eliminate redundant ViewGroups
 4. **Use include tags** for reusable layouts
@@ -363,7 +363,7 @@ Arranges children in a grid structure.
 
 ## Follow-ups
 
-- How does ConstraintLayout improve performance compared to nested LinearLayouts?
+- How does `ConstraintLayout` improve performance compared to nested LinearLayouts?
 - What are the performance implications of deeply nested view hierarchies?
 - How do you optimize layout inflation time for complex screens?
 - When would you choose programmatic layout creation over XML?
@@ -372,7 +372,7 @@ Arranges children in a grid structure.
 
 - [[c-views]] - Understanding Android view hierarchy
 - Official Layout Guide: https://developer.android.com/guide/topics/ui/declaring-layout
-- ConstraintLayout Guide: https://developer.android.com/training/constraint-layout
+- `ConstraintLayout` Guide: https://developer.android.com/training/constraint-layout
 
 ## Related Questions
 
@@ -384,4 +384,4 @@ Arranges children in a grid structure.
 - [[q-annotation-processing--android--medium]] - Annotation processing
 
 ### Advanced (Harder)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View redrawing mechanisms
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` redrawing mechanisms

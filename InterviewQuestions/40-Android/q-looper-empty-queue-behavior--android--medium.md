@@ -37,11 +37,11 @@ tags:
 
 # Вопрос (RU)
 
-> Что происходит, когда поток разбирает пустую очередь сообщений с помощью Looper.loop()?
+> Что происходит, когда поток разбирает пустую очередь сообщений с помощью `Looper`.loop()?
 
 # Question (EN)
 
-> What happens when a thread processes an empty message queue with Looper.loop()?
+> What happens when a thread processes an empty message queue with `Looper`.loop()?
 
 ---
 
@@ -127,7 +127,7 @@ thread.handler.post { println("Message processed") }
 thread.handler.looper.quitSafely()
 ```
 
-### Остановка Looper
+### Остановка `Looper`
 
 ```kotlin
 // ❌ quit() - немедленный выход, отбросить все сообщения
@@ -187,10 +187,10 @@ Message next() {
 
 **Native mechanism:**
 - Uses **epoll_wait** (Linux) instead of busy-waiting
-- Thread state: **RUNNABLE** (blocked in native code, not Java wait())
+- `Thread` state: **RUNNABLE** (blocked in native code, not Java wait())
 - Instant wake-up via **nativeWake()** when message is added
 
-### Example: Thread with Empty Queue
+### Example: `Thread` with Empty `Queue`
 
 ```kotlin
 class LooperThread : Thread("Worker") {
@@ -223,7 +223,7 @@ thread.handler.post { println("Message processed") }
 thread.handler.looper.quitSafely()
 ```
 
-### Stopping Looper
+### Stopping `Looper`
 
 ```kotlin
 // ❌ quit() - immediate exit, discard all messages
@@ -243,11 +243,11 @@ looper.quitSafely()
 - Why does the thread state show RUNNABLE when it's blocked?
 - How does `nativePollOnce()` wake up when a message arrives?
 - What happens if you call `Looper.loop()` twice on the same thread?
-- How does HandlerThread manage Looper lifecycle?
+- How does HandlerThread manage `Looper` lifecycle?
 
 ## References
 
-- [Android Source: Looper.java](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/os/Looper.java)
+- [Android Source: `Looper`.java](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/os/`Looper`.java)
 - [Android Source: MessageQueue.java](https://android.googlesource.com/platform/frameworks/base/+/refs/heads/master/core/java/android/os/MessageQueue.java)
 - [Linux epoll documentation](https://man7.org/linux/man-pages/man7/epoll.7.html)
 
@@ -264,10 +264,10 @@ looper.quitSafely()
 - [[q-why-multithreading-tools--android--easy]] - Threading fundamentals
 
 ### Related (Same Level)
-- [[q-handler-looper-messagequeue-relationship--android--medium]] - Handler Looper MessageQueue
+- [[q-handler-looper-messagequeue-relationship--android--medium]] - `Handler` `Looper` MessageQueue
 - [[q-handlerthread-vs-thread--android--medium]] - HandlerThread comparison
-- [[q-message-scheduling-looper--android--medium]] - Message scheduling
-- [[q-handler-looper-comprehensive--android--medium]] - Handler and Looper deep dive
+- [[q-message-scheduling-looper--android--medium]] - `Message` scheduling
+- [[q-handler-looper-comprehensive--android--medium]] - `Handler` and `Looper` deep dive
 - [[q-multithreading-tools-android--android--medium]] - Threading tools comparison
 
 ### Advanced (Harder)

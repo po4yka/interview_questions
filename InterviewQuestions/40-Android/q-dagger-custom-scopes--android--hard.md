@@ -110,10 +110,10 @@ object UserSessionHolder {
 В **Hilt** кастомные скоупы ограничены, т.к. граф зависимостей управляется автоматически. Можно создавать через `@EntryPoint`, но проще использовать встроенные:
 - `@Singleton` — весь жизненный цикл приложения
 - `@ActivityRetainedScoped` — переживает изменения конфигурации (`ViewModel`-уровень)
-- `@ActivityScoped` — до `onDestroy()` Activity
+- `@ActivityScoped` — до `onDestroy()` `Activity`
 - `@ViewModelScoped` — привязан к `ViewModel`
-- `@FragmentScoped` — до `onDestroy()` Fragment
-- `@ViewScoped` — до уничтожения View
+- `@FragmentScoped` — до `onDestroy()` `Fragment`
+- `@ViewScoped` — до уничтожения `View`
 
 Для произвольных скоупов (например, сессия пользователя) нужен чистый Dagger-компонент вне Hilt-графа или интеграция через `@EntryPoint`.
 
@@ -159,7 +159,7 @@ class UserManager @Inject constructor(
 )
 ```
 
-### Lifecycle Management
+### `Lifecycle` Management
 
 ```kotlin
 object UserSessionHolder {
@@ -195,10 +195,10 @@ object UserSessionHolder {
 **Hilt** limits custom scopes since the dependency graph is managed automatically. You can create via `@EntryPoint`, but built-in scopes are simpler:
 - `@Singleton` — entire application lifetime
 - `@ActivityRetainedScoped` — survives configuration changes (`ViewModel` level)
-- `@ActivityScoped` — until `onDestroy()` of Activity
+- `@ActivityScoped` — until `onDestroy()` of `Activity`
 - `@ViewModelScoped` — tied to `ViewModel`
-- `@FragmentScoped` — until `onDestroy()` of Fragment
-- `@ViewScoped` — until View destruction
+- `@FragmentScoped` — until `onDestroy()` of `Fragment`
+- `@ViewScoped` — until `View` destruction
 
 For arbitrary scopes (e.g., user session), use pure Dagger components outside Hilt graph or integrate via `@EntryPoint`.
 
