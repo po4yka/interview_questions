@@ -14,7 +14,7 @@ language_tags:
   - ru
 status: reviewed
 moc: moc-android
-related: []
+related: [c-content-provider, c-performance-optimization, c-lifecycle]
 created: 2025-10-15
 updated: 2025-10-30
 sources: []

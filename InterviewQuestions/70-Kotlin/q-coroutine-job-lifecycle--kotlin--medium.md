@@ -13,7 +13,7 @@ updated: "2025-10-31"
 tags: ["cancellation", "coroutines", "difficulty/medium", "job", "kotlin", "lifecycle"]
 description: "A comprehensive guide to understanding Job and its lifecycle states in Kotlin coroutines, including parent-child relationships and cancellation mechanisms"
 moc: moc-kotlin
-related: []
+related: [c-coroutines, c-structured-concurrency]
 subtopics: [coroutines, lifecycle]
 ---
 

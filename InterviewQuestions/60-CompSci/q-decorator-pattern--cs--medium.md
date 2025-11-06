@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: []
+related: [c-software-design-patterns, c-kotlin-features]
 created: 2025-10-15
 updated: 2025-01-25
 tags: [decorator, design-patterns, difficulty/medium, gof-patterns, kotlin, structural-patterns, wrapper]

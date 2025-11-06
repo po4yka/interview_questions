@@ -17,7 +17,7 @@ language_tags:
 - ru
 status: reviewed
 moc: moc-android
-related: []
+related: [c-service, c-workmanager, c-lifecycle, c-permissions]
 sources: []
 created: 2025-10-29
 updated: 2025-10-30

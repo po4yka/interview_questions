@@ -13,7 +13,7 @@ created: 2025-10-13
 updated: 2025-10-31
 tags: [android/performance-memory, android/profiling, difficulty/medium, leakcanary, memory-leaks, weakreference]
 moc: moc-android
-related: []
+related: [c-memory-leaks, c-memory-management, c-garbage-collection]
 sources: []
 ---
 

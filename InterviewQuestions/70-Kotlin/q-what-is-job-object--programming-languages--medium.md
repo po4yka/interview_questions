@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: []
+related: [c-coroutines, c-structured-concurrency]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [coroutines, difficulty/medium, job, kotlin, programming-languages]

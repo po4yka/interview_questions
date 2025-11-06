@@ -14,7 +14,7 @@ updated: 2025-10-31
 sources: []
 tags: [android, android/ui-compose, android/ui-navigation, architecture, compose, difficulty/medium, navigation]
 moc: moc-android
-related: []
+related: [c-fragments, c-activity, c-intent, c-jetpack-compose]
 ---
 
 # Вопрос (RU)

@@ -13,7 +13,7 @@ created: 2025-10-13
 updated: 2025-10-30
 tags: [android/performance-memory, android/performance-rendering, android/ui-views, concurrency, difficulty/medium, diffutil, memory, recyclerview]
 moc: moc-android
-related: []
+related: [c-recyclerview, c-memory-leaks, c-performance-optimization, c-viewmodel]
 sources: []
 ---
 

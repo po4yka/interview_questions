@@ -15,7 +15,7 @@ language_tags:
   - ru
 status: reviewed
 moc: moc-android
-related: []
+related: [c-gradle, c-testing, c-unit-testing]
 sources: []
 created: 2025-10-11
 updated: 2025-10-29

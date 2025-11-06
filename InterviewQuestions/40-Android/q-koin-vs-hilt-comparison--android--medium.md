@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: []
+related: [c-dependency-injection, c-hilt, c-dagger]
 created: 2025-10-13
 updated: 2025-10-28
 sources: []

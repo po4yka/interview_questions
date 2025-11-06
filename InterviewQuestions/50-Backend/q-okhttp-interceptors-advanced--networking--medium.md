@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-backend
-related: []
+related: [c-okhttp, c-retrofit, c-coroutines]
 created: 2025-10-15
 updated: 2025-01-27
 sources: []

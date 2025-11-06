@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: []
+related: [c-kotlin-features]
 created: 2025-10-15
 updated: 2025-01-25
 tags: [compilation, delegates, delegation, difficulty/hard, kotlin, kotlin-compiler, programming-languages]

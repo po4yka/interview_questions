@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: []
+related: [c-activity-lifecycle, c-lifecycle, c-views]
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/app-startup, android/ui-animation, android/ui-views, android12, difficulty/medium, splash-screen]

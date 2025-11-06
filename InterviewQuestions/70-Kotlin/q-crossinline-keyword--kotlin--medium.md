@@ -10,7 +10,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: []
+related: [c-kotlin-features]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium, inline-functions, kotlin, lambda, non-local-returns]

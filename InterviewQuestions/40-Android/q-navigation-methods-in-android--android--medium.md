@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: []
+related: [c-fragments, c-activity, c-intent, c-jetpack-compose]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []

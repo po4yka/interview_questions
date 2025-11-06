@@ -18,7 +18,7 @@ language_tags:
 - ru
 status: draft
 moc: moc-android
-related: []
+related: [c-android-keystore, c-encryption, c-permissions]
 sources: []
 created: 2025-10-29
 updated: 2025-10-29
