@@ -45,6 +45,24 @@ Handler и Looper — фундаментальные компоненты Androi
 
 **Использование:** HandlerThread для фонового потока с Looper. Всегда очищать в `onDestroy()`: `handler.removeCallbacksAndMessages(null)`. Использовать `Message.obtain()` для переиспользования объектов. Избегать утечек памяти через WeakReference.
 
+
+# Question (EN)
+> Handler Looper Comprehensive
+
+---
+
+
+---
+
+
+## Answer (EN)
+
+Handler и Looper — фундаментальные компоненты Android для межпоточного взаимодействия через очередь сообщений.
+
+**Архитектура:** Handler отправляет сообщения → MessageQueue хранит → Looper обрабатывает в цикле. Looper привязывается к потоку через `Looper.prepare()` и `Looper.loop()`. Проверка наличия: `Looper.myLooper()`. Отправка в main thread: `Handler(Looper.getMainLooper()).post { }`.
+
+**Использование:** HandlerThread для фонового потока с Looper. Всегда очищать в `onDestroy()`: `handler.removeCallbacksAndMessages(null)`. Использовать `Message.obtain()` для переиспользования объектов. Избегать утечек памяти через WeakReference.
+
 ## Ответ (RU)
 
 Handler и Looper — это фундаментальные компоненты Android для организации межпоточного взаимодействия и обработки сообщений в очереди.

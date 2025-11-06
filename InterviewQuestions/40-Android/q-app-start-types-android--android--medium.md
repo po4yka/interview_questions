@@ -24,6 +24,13 @@ date modified: Saturday, November 1st 2025, 5:43:37 pm
 # Вопрос (RU)
 > Какие существуют типы запуска Android-приложения и как оптимизировать каждый из них?
 
+
+# Question (EN)
+> What are the Android app start types and how do you optimize each?
+
+
+---
+
 ## Ответ (RU)
 
 **Три типа запуска** различаются по состоянию процесса: холодный (процесс не существует), теплый (процесс жив, Activity пересоздается), горячий (Activity возобновляется). Каждый требует специфичной оптимизации с измеримыми метриками.
@@ -116,8 +123,6 @@ class MainActivity : AppCompatActivity() {
 
 ---
 
-# Question (EN)
-> What are the Android app start types and how do you optimize each?
 
 ## Answer (EN)
 

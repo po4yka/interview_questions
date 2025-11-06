@@ -40,6 +40,22 @@ date modified: Saturday, November 1st 2025, 5:43:34 pm
 
 [Comprehensive answer with code examples - AI generated based on topic]
 
+
+# Question (EN)
+> How to schedule local notifications at exact time?
+# Вопрос (RU)
+> Как запланировать локальные уведомления на точное время?
+
+---
+
+
+---
+
+
+## Answer (EN)
+
+[Comprehensive answer with code examples - AI generated based on topic]
+
 ## Ответ (RU)
 
 Для планирования локальных уведомлений на точное время используйте AlarmManager с PendingIntent для точной доставки уведомлений.

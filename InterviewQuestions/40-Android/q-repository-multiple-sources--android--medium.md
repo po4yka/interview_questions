@@ -214,6 +214,196 @@ class ProfileRepository(
 
 **English Summary**: Repository patterns: **Single source of truth** (DB is source, network updates it). **Cache-first** (memory cache → network → update cache). **Network-first** (network → DB fallback). **Stale-while-revalidate** (show cached, fetch fresh). **Time-based** (check expiry before fetching). Combine multiple sources: preferences → DB → network. Use Flow for reactive updates.
 
+
+# Question (EN)
+> How to implement Repository pattern with multiple data sources (network, database, cache)?
+# Вопрос (RU)
+> Как реализовать паттерн Repository с несколькими источниками данных (сеть, БД, кэш)?
+
+---
+
+
+---
+
+
+## Answer (EN)
+
+**Repository** abstracts data sources, providing single source of truth and handling caching/synchronization.
+
+### Single Source of Truth Pattern
+
+```kotlin
+class ProductRepository(
+    private val api: ProductApi,
+    private val dao: ProductDao,
+    private val cache: ProductCache
+) {
+    // Database is single source of truth
+    fun getProducts(): Flow<List<Product>> = flow {
+        // 1. Emit cached/DB data immediately
+        emitAll(dao.observeProducts())
+
+        // 2. Fetch fresh data in background
+        try {
+            val freshProducts = api.getProducts()
+            dao.insertProducts(freshProducts)  // Updates flow above
+        } catch (e: Exception) {
+            // Ignore, using cached data
+        }
+    }
+}
+```
+
+### Cache-First Strategy
+
+```kotlin
+class UserRepository(
+    private val api: UserApi,
+    private val cache: InMemoryCache<User>
+) {
+    suspend fun getUser(id: String): User {
+        // 1. Try cache
+        cache.get(id)?.let { return it }
+
+        // 2. Fetch from network
+        val user = api.getUser(id)
+
+        // 3. Update cache
+        cache.put(id, user)
+
+        return user
+    }
+}
+```
+
+### Network-First with Fallback
+
+```kotlin
+class NewsRepository(
+    private val api: NewsApi,
+    private val dao: NewsDao
+) {
+    suspend fun getNews(): Result<List<News>> {
+        return try {
+            // 1. Try network first
+            val news = api.getNews()
+            dao.insertNews(news)  // Cache for offline
+            Result.success(news)
+        } catch (e: IOException) {
+            // 2. Fallback to cache
+            val cachedNews = dao.getNews()
+            if (cachedNews.isNotEmpty()) {
+                Result.success(cachedNews)
+            } else {
+                Result.failure(e)
+            }
+        }
+    }
+}
+```
+
+### Stale-While-Revalidate
+
+```kotlin
+class ArticleRepository(
+    private val api: ArticleApi,
+    private val dao: ArticleDao
+) {
+    fun getArticles(): Flow<Resource<List<Article>>> = flow {
+        // 1. Emit loading
+        emit(Resource.Loading())
+
+        // 2. Emit cached data (might be stale)
+        val cached = dao.getArticles()
+        if (cached.isNotEmpty()) {
+            emit(Resource.Success(cached))
+        }
+
+        // 3. Fetch fresh data
+        try {
+            val fresh = api.getArticles()
+            dao.insertArticles(fresh)
+            emit(Resource.Success(fresh))
+        } catch (e: Exception) {
+            if (cached.isEmpty()) {
+                emit(Resource.Error(e.message))
+            }
+            // else: keep showing cached data
+        }
+    }
+}
+
+sealed class Resource<T> {
+    class Loading<T> : Resource<T>()
+    data class Success<T>(val data: T) : Resource<T>()
+    data class Error<T>(val message: String?) : Resource<T>()
+}
+```
+
+### Time-Based Caching
+
+```kotlin
+class WeatherRepository(
+    private val api: WeatherApi,
+    private val dao: WeatherDao
+) {
+    private val cacheValidityDuration = 5.minutes
+
+    suspend fun getWeather(city: String): Weather {
+        val cached = dao.getWeather(city)
+
+        // Check if cache is still valid
+        if (cached != null && !isCacheExpired(cached.timestamp)) {
+            return cached
+        }
+
+        // Fetch fresh data
+        val weather = api.getWeather(city)
+        dao.insertWeather(weather.copy(timestamp = System.currentTimeMillis()))
+
+        return weather
+    }
+
+    private fun isCacheExpired(timestamp: Long): Boolean {
+        val now = System.currentTimeMillis()
+        return now - timestamp > cacheValidityDuration.inWholeMilliseconds
+    }
+}
+```
+
+### Combining Multiple Sources
+
+```kotlin
+class ProfileRepository(
+    private val api: ProfileApi,
+    private val dao: ProfileDao,
+    private val preferences: ProfilePreferences
+) {
+    fun getProfile(userId: String): Flow<Profile> = flow {
+        // 1. Emit from preferences (fastest)
+        preferences.getProfile()?.let { emit(it) }
+
+        // 2. Emit from database
+        dao.getProfile(userId)?.let { emit(it) }
+
+        // 3. Fetch from network
+        try {
+            val profile = api.getProfile(userId)
+
+            // Update all layers
+            dao.insertProfile(profile)
+            preferences.saveProfile(profile)
+
+            emit(profile)
+        } catch (e: Exception) {
+            // Already emitted cached data
+        }
+    }
+}
+```
+
+**English Summary**: Repository patterns: **Single source of truth** (DB is source, network updates it). **Cache-first** (memory cache → network → update cache). **Network-first** (network → DB fallback). **Stale-while-revalidate** (show cached, fetch fresh). **Time-based** (check expiry before fetching). Combine multiple sources: preferences → DB → network. Use Flow for reactive updates.
+
 ## Ответ (RU)
 
 **Repository** абстрагирует источники данных, предоставляя единый источник истины и обрабатывая кэширование/синхронизацию.

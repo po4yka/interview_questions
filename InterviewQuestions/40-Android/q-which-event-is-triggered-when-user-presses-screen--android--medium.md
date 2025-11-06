@@ -23,6 +23,14 @@ date modified: Saturday, November 1st 2025, 5:43:30 pm
 
 Какое событие срабатывает когда пользователь нажимает на экран?
 
+
+# Question (EN)
+
+Which event is triggered when user presses the screen?
+
+
+---
+
 ## Ответ (RU)
 
 При нажатии пользователя на экран вызывается событие **ACTION_DOWN**. Это часть системы сенсорных событий, управляемой через `MotionEvent`. Обработка касаний — фундаментальная часть [[c-custom-views]] и взаимодействия с пользователем в Android.
@@ -267,9 +275,6 @@ class ParentView(context: Context) : ViewGroup(context) {
 
 ---
 
-# Question (EN)
-
-Which event is triggered when user presses the screen?
 
 ## Answer (EN)
 

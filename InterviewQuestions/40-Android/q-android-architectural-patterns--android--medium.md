@@ -28,6 +28,13 @@ date modified: Sunday, November 2nd 2025, 12:45:05 pm
 # Вопрос (RU)
 > Какие архитектурные паттерны используются в Android разработке, и чем они отличаются друг от друга?
 
+
+# Question (EN)
+> What are the main architectural patterns used in Android development, and how do they differ?
+
+
+---
+
 ## Ответ (RU)
 
 Android поддерживает несколько архитектурных паттернов: **MVP**, **MVVM**, **MVI** и **Clean Architecture**. Современный стандарт — MVVM с Architecture Components.
@@ -96,8 +103,6 @@ class GetUserUseCase(private val repo: UserRepository) {
 - **MVI**: сложные UI с множеством состояний
 - **Clean Architecture**: многомодульные enterprise-приложения
 
-# Question (EN)
-> What are the main architectural patterns used in Android development, and how do they differ?
 
 ## Answer (EN)
 

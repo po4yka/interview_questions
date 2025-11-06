@@ -30,6 +30,14 @@ date modified: Sunday, November 2nd 2025, 12:54:53 pm
 
 > Какие основные практики безопасности следует применять в Android-приложении?
 
+
+# Question (EN)
+
+> What are the essential security best practices for Android applications?
+
+
+---
+
 ## Ответ (RU)
 
 **Концепция**: Безопасность Android требует defense-in-depth — многоуровневой защиты сети, данных, кода и runtime. Если один слой скомпрометирован, остальные продолжают защищать приложение.
@@ -119,9 +127,6 @@ suspend fun findUser(email: String): User?
 
 ---
 
-# Question (EN)
-
-> What are the essential security best practices for Android applications?
 
 ## Answer (EN)
 

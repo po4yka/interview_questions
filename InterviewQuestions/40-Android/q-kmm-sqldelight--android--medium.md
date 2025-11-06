@@ -23,6 +23,14 @@ date modified: Saturday, November 1st 2025, 5:43:34 pm
 
 > Как использовать SQLDelight для кросс-платформенного управления БД в KMM? Как определять схемы, выполнять миграции, работать с транзакциями и оптимизировать запросы для Android и iOS?
 
+
+# Question (EN)
+
+> How to use SQLDelight for cross-platform database management in KMM? How to define schemas, handle migrations, work with transactions, and optimize queries for Android and iOS?
+
+
+---
+
 ## Ответ (RU)
 
 SQLDelight генерирует type-safe Kotlin API из SQL-запросов, обеспечивая compile-time верификацию и использование platform-specific драйверов (SQLite на Android, SQLite.swift на iOS) при sharing общей database-логики.
@@ -301,9 +309,6 @@ class TaskRepositoryTest {
 
 ---
 
-# Question (EN)
-
-> How to use SQLDelight for cross-platform database management in KMM? How to define schemas, handle migrations, work with transactions, and optimize queries for Android and iOS?
 
 ## Answer (EN)
 

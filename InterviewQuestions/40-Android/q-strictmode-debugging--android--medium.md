@@ -301,6 +301,280 @@ fun getUsers(): List<User> {
 }
 ```
 
+
+# Question (EN)
+> StrictMode Debugging
+
+---
+
+
+---
+
+
+## Answer (EN)
+`StrictMode` is a developer tool which detects things you might be doing by accident and brings them to your attention so you can fix them.
+
+`StrictMode` is most commonly used to catch accidental disk or network access on the application's main thread, where UI operations are received and animations take place. Keeping disk and network operations off the main thread makes for much smoother, more responsive applications. By keeping your application's main thread responsive, you also prevent ANR dialogs from being shown to users.
+
+## Example Usage
+
+Example code to enable from early in your `Application`, `Activity`, or other application component's `Application.onCreate()` method:
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+     super.onCreate(savedInstanceState)
+     StrictMode.setThreadPolicy(
+         StrictMode.ThreadPolicy.Builder()
+         .detectAll()
+         .build()
+     )
+     StrictMode.setVmPolicy(
+         StrictMode.VmPolicy.Builder()
+         .detectAll()
+         .build()
+     )
+ }
+```
+
+You can decide what should happen when a violation is detected. For example, using `StrictMode.ThreadPolicy.Builder.penaltyLog()` you can watch the output of adb logcat while you use your application to see the violations as they happen.
+
+## Penalty Types
+
+`StrictMode` uses penalties to signal violations:
+
+### penaltyLog()
+
+Logs the violation in the system logcat, making it easy to see what went wrong.
+
+```kotlin
+StrictMode.setThreadPolicy(
+    StrictMode.ThreadPolicy.Builder()
+        .detectAll()
+        .penaltyLog()
+        .build()
+)
+```
+
+### penaltyDeath()
+
+A drastic measure, forcing the app to crash on a violation. Useful for catching severe problems immediately.
+
+```kotlin
+StrictMode.setThreadPolicy(
+    StrictMode.ThreadPolicy.Builder()
+        .detectAll()
+        .penaltyDeath()
+        .build()
+)
+```
+
+### penaltyDialog()
+
+This would display a dialog to the user (not typically used in production).
+
+```kotlin
+StrictMode.setThreadPolicy(
+    StrictMode.ThreadPolicy.Builder()
+        .detectAll()
+        .penaltyDialog()
+        .build()
+)
+```
+
+**Note**: The exact policies offered by `StrictMode` have evolved over Android versions.
+
+## Thread Policy
+
+Thread policy detects violations that occur on the main thread:
+
+### Common Detections
+
+- **detectDiskReads()** - Detects when your app reads from disk on the main thread
+- **detectDiskWrites()** - Detects when your app writes to disk on the main thread
+- **detectNetwork()** - Detects when your app does network operations on the main thread
+- **detectCustomSlowCalls()** - Detects when your code does slow operations marked with `StrictMode.noteSlowCall()`
+- **detectAll()** - Enables all thread policy detections
+
+### Example
+
+```kotlin
+StrictMode.setThreadPolicy(
+    StrictMode.ThreadPolicy.Builder()
+        .detectDiskReads()
+        .detectDiskWrites()
+        .detectNetwork()
+        .penaltyLog()
+        .build()
+)
+
+// This will trigger a violation:
+val file = File("/sdcard/test.txt")
+file.writeText("Hello World") // Disk write on main thread!
+```
+
+## VM Policy
+
+VM policy detects violations across your entire application:
+
+### Common Detections
+
+- **detectActivityLeaks()** - Detects when Activity instances are leaked
+- **detectLeakedClosableObjects()** - Detects when closeable objects (like SQLite cursors) are not closed
+- **detectLeakedSqlLiteObjects()** - Detects when SQLite objects are not closed
+- **detectLeakedRegistrationObjects()** - Detects when BroadcastReceiver or ServiceConnection instances are leaked
+- **detectFileUriExposure()** - Detects when file:// URIs are exposed beyond your app
+- **detectAll()** - Enables all VM policy detections
+
+### Example
+
+```kotlin
+StrictMode.setVmPolicy(
+    StrictMode.VmPolicy.Builder()
+        .detectActivityLeaks()
+        .detectLeakedClosableObjects()
+        .penaltyLog()
+        .build()
+)
+
+// This will trigger a violation:
+val cursor = database.query(...) // Not closing cursor causes a leak
+```
+
+## Best Practices
+
+### 1. Enable Only in Debug Builds
+
+```kotlin
+if (BuildConfig.DEBUG) {
+    StrictMode.setThreadPolicy(
+        StrictMode.ThreadPolicy.Builder()
+            .detectAll()
+            .penaltyLog()
+            .build()
+    )
+    StrictMode.setVmPolicy(
+        StrictMode.VmPolicy.Builder()
+            .detectAll()
+            .penaltyLog()
+            .build()
+    )
+}
+```
+
+### 2. Use penaltyLog() in Development
+
+Use `penaltyLog()` during development to catch issues without crashing your app:
+
+```kotlin
+StrictMode.setThreadPolicy(
+    StrictMode.ThreadPolicy.Builder()
+        .detectAll()
+        .penaltyLog() // Just log, don't crash
+        .build()
+)
+```
+
+### 3. Use penaltyDeath() for Critical Issues
+
+For critical violations that should never happen, use `penaltyDeath()` to catch them immediately:
+
+```kotlin
+StrictMode.setThreadPolicy(
+    StrictMode.ThreadPolicy.Builder()
+        .detectNetwork()
+        .penaltyDeath() // Crash on network access from main thread
+        .build()
+)
+```
+
+### 4. Customize for Different Scenarios
+
+```kotlin
+// Strict policy for development
+if (BuildConfig.DEBUG) {
+    StrictMode.setThreadPolicy(
+        StrictMode.ThreadPolicy.Builder()
+            .detectAll()
+            .penaltyDeath()
+            .build()
+    )
+} else {
+    // Lenient policy for production (or disabled)
+    StrictMode.setThreadPolicy(
+        StrictMode.ThreadPolicy.Builder()
+            .permitAll()
+            .build()
+    )
+}
+```
+
+## Common Violations and Fixes
+
+### 1. Network on Main Thread
+
+**Problem:**
+```kotlin
+// - BAD - Network call on main thread
+fun loadData() {
+    val response = httpClient.get("https://api.example.com/data")
+}
+```
+
+**Solution:**
+```kotlin
+// - GOOD - Move to background thread
+suspend fun loadData() = withContext(Dispatchers.IO) {
+    val response = httpClient.get("https://api.example.com/data")
+}
+```
+
+### 2. Disk I/O on Main Thread
+
+**Problem:**
+```kotlin
+// - BAD - Reading file on main thread
+fun loadConfig(): String {
+    return File("config.txt").readText()
+}
+```
+
+**Solution:**
+```kotlin
+// - GOOD - Move to background thread
+suspend fun loadConfig(): String = withContext(Dispatchers.IO) {
+    File("config.txt").readText()
+}
+```
+
+### 3. Leaked Closeable Objects
+
+**Problem:**
+```kotlin
+// - BAD - Cursor not closed
+fun getUsers(): List<User> {
+    val cursor = database.query(...)
+    val users = mutableListOf<User>()
+    while (cursor.moveToNext()) {
+        users.add(User(cursor))
+    }
+    return users
+}
+```
+
+**Solution:**
+```kotlin
+// - GOOD - Close cursor properly
+fun getUsers(): List<User> {
+    database.query(...).use { cursor ->
+        val users = mutableListOf<User>()
+        while (cursor.moveToNext()) {
+            users.add(User(cursor))
+        }
+        return users
+    }
+}
+```
+
 ## Ответ (RU)
 `StrictMode` - это инструмент разработчика, который обнаруживает вещи, которые вы можете делать случайно, и обращает на них ваше внимание, чтобы вы могли их исправить.
 
