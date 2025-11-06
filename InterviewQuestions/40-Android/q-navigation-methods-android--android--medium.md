@@ -439,10 +439,18 @@ fun AppNavigation() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- Related content to be added
+- [[q-what-is-intent--android--easy]] - Intent basics
+- [[q-fragment-basics--android--easy]] - Fragment fundamentals
+- [[q-main-android-components--android--easy]] - Android components
+- [[q-android-app-components--android--easy]] - App component types
 
 ### Related (Same Level)
-- Related content to be added
+- [[q-navigation-methods-in-android--android--medium]] - Navigation methods overview
+- [[q-deep-link-vs-app-link--android--medium]] - Deep linking
+- [[q-single-activity-approach--android--medium]] - Single activity pattern
+- [[q-compose-navigation-advanced--android--medium]] - Compose navigation
 
 ### Advanced (Harder)
-- Related content to be added
+- [[q-shared-element-transitions--android--hard]] - Shared transitions
+- [[q-modularization-patterns--android--hard]] - Multi-module navigation
+- [[q-how-to-create-dynamic-screens-at-runtime--android--hard]] - Dynamic screens

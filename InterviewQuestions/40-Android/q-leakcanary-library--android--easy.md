@@ -180,10 +180,16 @@ class MyViewModel : ViewModel() {
 ## Related Questions
 
 ### Prerequisites
-- Related content to be added
+- [[q-memory-leaks-definition--android--easy]] - Understanding memory leaks basics
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread and memory management
+- [[q-android-async-primitives--android--easy]] - Basic async tools in Android
 
-### Related
-- Related content to be added
+### Related (Same Level)
+- [[q-android-performance-measurement-tools--android--medium]] - Tools for performance profiling
+- [[q-memory-leak-detection--android--medium]] - Memory leak detection strategies
+- [[q-optimize-memory-usage-android--android--medium]] - Memory optimization techniques
 
-### Advanced
-- Related content to be added
+### Advanced (Harder)
+- [[q-leakcanary-detection-mechanism--android--medium]] - How LeakCanary detects leaks
+- [[q-leakcanary-heap-dump-analysis--android--medium]] - Analyzing heap dumps in detail
+- [[q-memory-leak-vs-oom-android--android--medium]] - Memory leaks vs OOM errors

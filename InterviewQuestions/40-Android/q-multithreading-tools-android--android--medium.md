@@ -380,10 +380,17 @@ For new Android development:
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-background-vs-foreground-service--android--medium]]
+- [[q-android-async-primitives--android--easy]] - Basic async primitives in Android
+- [[q-why-multithreading-tools--android--easy]] - Why use multithreading
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread basics
 
 ### Related (Same Level)
-- Related content to be added
+- [[q-background-vs-foreground-service--android--medium]] - Background service types
+- [[q-handler-looper-comprehensive--android--medium]] - Handler and Looper mechanics
+- [[q-looper-empty-queue-behavior--android--medium]] - Looper queue behavior
+- [[q-workmanager-vs-alternatives--android--medium]] - WorkManager comparison
 
 ### Advanced (Harder)
-- Related content to be added
+- [[q-workmanager-chaining--android--hard]] - Complex WorkManager workflows
+- [[q-kotlin-context-receivers--android--hard]] - Advanced context patterns
+- [[q-android-runtime-internals--android--hard]] - ART internals

@@ -503,10 +503,18 @@ binding.drawerLayout.addDrawerListener(
 ## Related Questions
 
 ### Prerequisites (Easier)
-- Related content to be added
+- [[q-what-is-intent--android--easy]] - Understanding Intent basics
+- [[q-fragment-basics--android--easy]] - Fragment fundamentals
+- [[q-main-android-components--android--easy]] - Android component overview
+- [[q-android-app-components--android--easy]] - Core app component types
 
 ### Related (Same Level)
-- Related content to be added
+- [[q-navigation-methods-android--android--medium]] - Alternative navigation patterns
+- [[q-deep-link-vs-app-link--android--medium]] - Deep linking strategies
+- [[q-single-activity-approach--android--medium]] - Single activity architecture
+- [[q-compose-navigation-advanced--android--medium]] - Advanced Compose navigation
 
 ### Advanced (Harder)
-- Related content to be added
+- [[q-shared-element-transitions--android--hard]] - Advanced transitions between screens
+- [[q-modularization-patterns--android--hard]] - Multi-module navigation patterns
+- [[q-how-to-create-dynamic-screens-at-runtime--android--hard]] - Dynamic screen creation

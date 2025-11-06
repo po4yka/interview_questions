@@ -269,8 +269,18 @@ fun provideRepository(impl: RepositoryImpl): Repository = impl
 
 ## Related Questions
 
+### Prerequisites (Easier)
+- [[q-dagger-inject-annotation--android--easy]] - DI basics with annotations
+- [[q-dagger-purpose--android--easy]] - Why use dependency injection
+- [[q-viewmodel-pattern--android--easy]] - ViewModel architecture
+
 ### Related
-- Related content to be added
+- [[q-what-is-hilt--android--medium]] - Hilt framework overview
+- [[q-koin-fundamentals--android--medium]] - Koin fundamentals
+- [[q-hilt-components-scope--android--medium]] - Hilt scoping
+- [[q-koin-scope-management--android--medium]] - Koin scopes
 
 ### Advanced
-- Advanced content to be added
+- [[q-dagger-framework-overview--android--hard]] - Dagger internals
+- [[q-koin-resolution-internals--android--hard]] - Koin resolution mechanism
+- [[q-dagger-custom-scopes--android--hard]] - Custom scopes

@@ -257,7 +257,12 @@ override fun onCreate(savedInstanceState: Bundle?) {
 - [[q-activity-lifecycle--android--easy]] - Activity lifecycle and destruction
 
 ### Related (Same Level)
-- Related content to be added
+- [[q-leakcanary-detection-mechanism--android--medium]] - How LeakCanary detects leaks
+- [[q-memory-leak-detection--android--medium]] - General leak detection strategies
+- [[q-memory-leak-vs-oom-android--android--medium]] - Memory leaks vs OOM
+- [[q-optimize-memory-usage-android--android--medium]] - Memory optimization
 
 ### Advanced (Harder)
-- Related content to be added
+- [[q-android-runtime-internals--android--hard]] - ART runtime and memory
+- [[q-fix-slow-app-startup-legacy--android--hard]] - Performance optimization
+- [[q-sensitive-data-lifecycle--android--hard]] - Data lifecycle management

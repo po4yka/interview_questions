@@ -259,12 +259,18 @@ looper.quitSafely()
 
 
 ### Prerequisites (Easier)
-- Related content to be added
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread basics
+- [[q-android-async-primitives--android--easy]] - Async primitives overview
+- [[q-why-multithreading-tools--android--easy]] - Threading fundamentals
 
 ### Related (Same Level)
-- [[q-handler-looper-messagequeue-relationship--android--medium]]
-- [[q-handlerthread-vs-thread--android--medium]]
-- [[q-message-scheduling-looper--android--medium]]
+- [[q-handler-looper-messagequeue-relationship--android--medium]] - Handler Looper MessageQueue
+- [[q-handlerthread-vs-thread--android--medium]] - HandlerThread comparison
+- [[q-message-scheduling-looper--android--medium]] - Message scheduling
+- [[q-handler-looper-comprehensive--android--medium]] - Handler and Looper deep dive
+- [[q-multithreading-tools-android--android--medium]] - Threading tools comparison
 
 ### Advanced (Harder)
-- Related content to be added
+- [[q-android-runtime-internals--android--hard]] - ART runtime details
+- [[q-recomposition-choreographer--android--hard]] - Choreographer and vsync
+- [[q-how-vsync-and-recomposition-events-are-related--android--hard]] - Frame scheduling

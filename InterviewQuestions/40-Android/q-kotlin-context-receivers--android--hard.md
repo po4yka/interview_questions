@@ -266,8 +266,17 @@ fun openCamera() {
 
 ## Related Questions
 
+### Prerequisites (Medium)
+- [[q-kotlin-value-classes--android--medium]] - Value classes for type safety
+- [[q-koin-vs-hilt-comparison--android--medium]] - Dependency injection patterns
+- [[q-repository-pattern--android--medium]] - Repository pattern basics
+
 ### Related (Same Level)
 - [[q-kotlin-dsl-builders--android--hard]] - DSL builders
+- [[q-dagger-custom-scopes--android--hard]] - Custom DI scopes
+- [[q-koin-resolution-internals--android--hard]] - DI resolution mechanics
 
 ### Advanced (Harder)
-- Advanced content to be added
+- [[q-compose-compiler-plugin--android--hard]] - Compiler plugin mechanics
+- [[q-android-runtime-internals--android--hard]] - Runtime optimizations
+- [[q-kotlin-dsl-builders--android--hard]] - Advanced DSL patterns
