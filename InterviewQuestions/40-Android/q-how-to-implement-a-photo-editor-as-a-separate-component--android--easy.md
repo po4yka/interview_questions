@@ -1,20 +1,43 @@
 ---
 id: android-247
-title: "How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор как отдельный компонент"
-aliases: [Photo Editor Component, Separate Photo Editor, Отдельный компонент редактора, Фоторедактор как компонент]
+title: How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор
+  как отдельный компонент
+aliases:
+- Photo Editor Component
+- Separate Photo Editor
+- Отдельный компонент редактора
+- Фоторедактор как компонент
 topic: android
-subtopics: [fragment, ui-graphics, ui-views]
+subtopics:
+- fragment
+- ui-graphics
+- ui-views
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium, q-workmanager-vs-alternatives--android--medium]
+related:
+- c-fragments
+- q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium
+- q-workmanager-vs-alternatives--android--medium
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android, android/fragment, android/ui-graphics, android/ui-views, bitmap, canvas, difficulty/easy, fragments, imageview, views]
+tags:
+- android
+- android/fragment
+- android/ui-graphics
+- android/ui-views
+- bitmap
+- canvas
+- difficulty/easy
+- fragments
+- imageview
+- views
 date created: Tuesday, October 28th 2025, 9:48:51 am
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
@@ -286,6 +309,11 @@ override fun onDestroyView() {
 - [MediaStore API](https://developer.android.com/training/data-storage/shared/media)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-fragments]]
+
 
 ### Prerequisites (Easier)
 

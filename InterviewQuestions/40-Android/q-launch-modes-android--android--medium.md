@@ -1,30 +1,40 @@
 ---
 id: android-010
-title: "Android Activity Launch Modes / Режимы запуска Activity в Android"
+title: Android Activity Launch Modes / Режимы запуска Activity в Android
 aliases: []
-
-# Classification
 topic: android
-subtopics: [activity, ui-navigation]
+subtopics:
+- activity
+- ui-navigation
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [android/activity, android/navigation, android/task-management, difficulty/medium, en, ru]
+language_tags:
+- android/activity
+- android/navigation
+- android/task-management
+- difficulty/medium
+- en
+- ru
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-kapt-vs-ksp--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium, q-which-event-is-triggered-when-user-presses-screen--android--medium]
-
-# Timestamps
+related:
+- c-compose-navigation
+- c-activity
+- c-fragments
+- q-kapt-vs-ksp--android--medium
+- q-viewmodel-vs-onsavedinstancestate--android--medium
+- q-which-event-is-triggered-when-user-presses-screen--android--medium
 created: 2025-10-05
 updated: 2025-10-05
-
-tags: [android/activity, android/ui-navigation, difficulty/medium, en, ru]
+tags:
+- android/activity
+- android/ui-navigation
+- difficulty/medium
+- en
+- ru
 date created: Sunday, October 12th 2025, 12:27:51 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -254,6 +264,13 @@ The activity can only be running as the root activity of the task, the first act
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-navigation]]
+- [[c-activity]]
+- [[c-fragments]]
+
 
 ### Related (Medium)
 - [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose

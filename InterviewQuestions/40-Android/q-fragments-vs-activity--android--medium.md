@@ -1,20 +1,39 @@
 ---
 id: android-404
-title: "Fragments Vs Activity / Fragments против Activity"
-aliases: ["Fragments Vs Activity", "Fragments против Activity"]
+title: Fragments Vs Activity / Fragments против Activity
+aliases:
+- Fragments Vs Activity
+- Fragments против Activity
 topic: android
-subtopics: [fragment, lifecycle, ui-navigation]
+subtopics:
+- fragment
+- lifecycle
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-fragment-vs-activity-lifecycle--android--medium, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium, q-why-use-fragments-when-we-have-activities--android--medium]
+related:
+- c-compose-navigation
+- c-fragments
+- c-lifecycle
+- q-fragment-vs-activity-lifecycle--android--medium
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-why-use-fragments-when-we-have-activities--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/fragment, android/lifecycle, android/ui-navigation, difficulty/medium, fragments, ui-architecture]
+tags:
+- android/fragment
+- android/lifecycle
+- android/ui-navigation
+- difficulty/medium
+- fragments
+- ui-architecture
 date created: Tuesday, October 28th 2025, 7:38:39 am
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
@@ -210,6 +229,13 @@ findNavController().navigate(
 - [Android Developers: Activity Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-navigation]]
+- [[c-fragments]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites
 - Understanding Activity lifecycle basics

@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-custom-views
 - q-broadcastreceiver-contentprovider--android--easy
 - q-save-data-outside-fragment--android--medium
 - q-spannable-text-styling--android--medium
@@ -960,6 +961,11 @@ if (!isReduceMotionEnabled) {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-custom-views]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui

@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-room
 - q-database-encryption-android--android--medium
 - q-fragments-vs-activity--android--medium
 - q-mvi-handle-one-time-events--android--hard
@@ -973,6 +974,11 @@ class MarkdownRepository(
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-room]]
+
 
 ### Prerequisites (Easier)
 - [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage

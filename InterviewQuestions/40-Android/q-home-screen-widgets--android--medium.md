@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android-components
 - q-recyclerview-viewtypes-delegation--android--medium
 - q-what-is-broadcastreceiver--android--easy
 - q-what-is-known-about-recyclerview--android--easy
@@ -1075,6 +1076,12 @@ RemoteViews поддерживает только определённые layou
 
 ## Related Questions
 
+### Prerequisites / Concepts
+
+- [[c-android-components]]
+
+
 - [[q-recyclerview-viewtypes-delegation--android--medium]]
 - [[q-what-is-broadcastreceiver--android--easy]]
 - [[q-what-is-known-about-recyclerview--android--easy]]
+##

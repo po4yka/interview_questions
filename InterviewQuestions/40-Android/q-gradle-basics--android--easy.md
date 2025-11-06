@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-gradle
 - q-android-runtime-art--android--medium
 - q-large-file-upload--android--medium
 - q-room-transactions-dao--android--medium
@@ -500,6 +501,11 @@ buildTypes {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-gradle]]
+
 
 ### Advanced (Harder)
 - [[q-build-optimization-gradle--android--medium]] - Build

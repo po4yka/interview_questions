@@ -1,19 +1,33 @@
 ---
 id: android-164
-title: "KMM Ktor Networking / Сетевое взаимодействие с Ktor в KMM"
-aliases: ["KMM Ktor Networking", "Сетевое взаимодействие с Ktor в KMM"]
+title: KMM Ktor Networking / Сетевое взаимодействие с Ktor в KMM
+aliases:
+- KMM Ktor Networking
+- Сетевое взаимодействие с Ktor в KMM
 topic: android
-subtopics: [coroutines, networking-http]
+subtopics:
+- coroutines
+- networking-http
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: []
+related:
+- c-coroutines
+- c-retrofit
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android/coroutines, android/networking-http, difficulty/medium, kmm, ktor, multiplatform]
+tags:
+- android/coroutines
+- android/networking-http
+- difficulty/medium
+- kmm
+- ktor
+- multiplatform
 sources: []
 date created: Monday, October 27th 2025, 5:12:45 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
@@ -309,6 +323,12 @@ HttpClient(MockEngine) {
 - Kotlin Multiplatform: https://kotlinlang.org/docs/multiplatform.html
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-coroutines]]
+- [[c-retrofit]]
+
 
 ### Prerequisites (Easier)
 

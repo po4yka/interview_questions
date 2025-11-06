@@ -1,20 +1,38 @@
 ---
 id: android-304
-title: "Which Layout Allows Views To Overlap / Какой layout позволяет View перекрываться"
-aliases: ["Which Layout Allows Views To Overlap", "Какой layout позволяет View перекрываться"]
+title: Which Layout Allows Views To Overlap / Какой layout позволяет View перекрываться
+aliases:
+- Which Layout Allows Views To Overlap
+- Какой layout позволяет View перекрываться
 topic: android
-subtopics: [ui-compose, ui-views]
+subtopics:
+- ui-compose
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-jetpack-compose-lazy-column--android--easy, q-viewgroup-vs-view-differences--android--easy, q-what-is-layout-types-and-when-to-use--android--easy]
+related:
+- c-compose-state
+- c-jetpack-compose
+- q-jetpack-compose-lazy-column--android--easy
+- q-viewgroup-vs-view-differences--android--easy
+- q-what-is-layout-types-and-when-to-use--android--easy
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android, android/ui-compose, android/ui-views, compose, difficulty/easy, framelayout, layouts]
+tags:
+- android
+- android/ui-compose
+- android/ui-views
+- compose
+- difficulty/easy
+- framelayout
+- layouts
 date created: Saturday, November 1st 2025, 12:47:10 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
@@ -363,6 +381,12 @@ fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 ---
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+
 
 ### Prerequisites (Easier)
 - [[q-viewgroup-vs-view-differences--android--easy]] — Understanding View hierarchy

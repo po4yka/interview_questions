@@ -1,20 +1,35 @@
 ---
 id: android-081
-title: "RecyclerView ItemDecoration Advanced / Продвинутый ItemDecoration для RecyclerView"
-aliases: ["RecyclerView ItemDecoration Advanced", "Продвинутый ItemDecoration для RecyclerView"]
+title: RecyclerView ItemDecoration Advanced / Продвинутый ItemDecoration для RecyclerView
+aliases:
+- RecyclerView ItemDecoration Advanced
+- Продвинутый ItemDecoration для RecyclerView
 topic: android
-subtopics: [ui-graphics, ui-views]
+subtopics:
+- ui-graphics
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-itemdecoration, q-recyclerview-basics--android--easy]
+related:
+- c-itemdecoration
+- q-recyclerview-basics--android--easy
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/ui-graphics, android/ui-views, custom-drawing, difficulty/medium, itemdecoration, ui]
-sources: [https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration]
+tags:
+- android/ui-graphics
+- android/ui-views
+- custom-drawing
+- difficulty/medium
+- itemdecoration
+- ui
+sources:
+- https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration
 date created: Saturday, November 1st 2025, 1:04:10 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -215,6 +230,11 @@ recyclerView.addItemDecoration(StickyHeaderDecoration())
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-itemdecoration]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-basics--android--easy]] - RecyclerView basics

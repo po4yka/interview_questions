@@ -1,29 +1,38 @@
 ---
 id: android-482
 title: Context Types in Android / Типы Context в Android
-aliases: [Context Types in Android, Типы Context в Android]
+aliases:
+- Context Types in Android
+- Типы Context в Android
 topic: android
 subtopics:
-  - activity
-  - app-startup
-  - lifecycle
+- activity
+- app-startup
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-activity-lifecycle-methods--android--medium
-  - q-memory-leaks-definition--android--easy
-  - q-usecase-pattern-android--android--medium
+- c-lifecycle
+- c-activity
+- c-activity-lifecycle
+- q-activity-lifecycle-methods--android--medium
+- q-memory-leaks-definition--android--easy
+- q-usecase-pattern-android--android--medium
 created: 2025-10-21
 updated: 2025-10-30
-tags: [android/activity, android/app-startup, android/lifecycle, difficulty/medium]
+tags:
+- android/activity
+- android/app-startup
+- android/lifecycle
+- difficulty/medium
 sources:
-  - https://developer.android.com/reference/android/content/Context
+- https://developer.android.com/reference/android/content/Context
 date created: Thursday, October 30th 2025, 11:56:11 am
 date modified: Sunday, November 2nd 2025, 4:17:33 pm
 ---
@@ -208,6 +217,13 @@ AlertDialog.Builder(this@MyActivity)
 - https://developer.android.com/reference/android/content/Context
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-lifecycle]]
+- [[c-activity]]
+- [[c-activity-lifecycle]]
+
 
 ### Prerequisites
 - [[q-activity-lifecycle-methods--android--medium]]

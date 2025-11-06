@@ -1,30 +1,41 @@
 ---
 id: android-070
-title: "Repository Pattern in Android / Паттерн Repository в Android"
+title: Repository Pattern in Android / Паттерн Repository в Android
 aliases: []
-
-# Classification
 topic: android
-subtopics: [architecture-clean, architecture-mvvm]
+subtopics:
+- architecture-clean
+- architecture-mvvm
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [android/architecture, android/clean-architecture, android/data-layer, android/mvvm, android/repository, difficulty/medium, en, ru]
+language_tags:
+- android/architecture
+- android/clean-architecture
+- android/data-layer
+- android/mvvm
+- android/repository
+- difficulty/medium
+- en
+- ru
 source: internal
 source_note: Created for vault completeness
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-clean-architecture-android--android--hard, q-repository-multiple-sources--android--medium]
-
-# Timestamps
+related:
+- c-clean-architecture
+- c-mvvm
+- c-viewmodel
+- q-clean-architecture-android--android--hard
+- q-repository-multiple-sources--android--medium
 created: 2025-10-12
 updated: 2025-10-31
-
-tags: [android/architecture-clean, android/architecture-mvvm, difficulty/medium, en, ru]
+tags:
+- android/architecture-clean
+- android/architecture-mvvm
+- difficulty/medium
+- en
+- ru
 date created: Saturday, November 1st 2025, 12:47:02 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -1693,6 +1704,13 @@ class UserViewModel @Inject constructor(
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-clean-architecture]]
+- [[c-mvvm]]
+- [[c-viewmodel]]
+
 
 ### Related (Medium)
 - [[q-usecase-pattern-android--android--medium]] - Architecture

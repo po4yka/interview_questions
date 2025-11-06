@@ -1,20 +1,39 @@
 ---
 id: android-327
-title: "Where Does Repeated Call Of Composable Function Come From / Откуда берется повторный вызов Composable функции"
-aliases: ["Where Does Repeated Call Of Composable Function Come From", "Откуда берется повторный вызов Composable функции"]
+title: Where Does Repeated Call Of Composable Function Come From / Откуда берется
+  повторный вызов Composable функции
+aliases:
+- Where Does Repeated Call Of Composable Function Come From
+- Откуда берется повторный вызов Composable функции
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+- ui-compose
+- ui-state
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-how-does-jetpackcompose-work--android--medium]
+related:
+- c-compose-state
+- c-jetpack-compose
+- c-viewmodel
+- q-compose-performance-optimization--android--hard
+- q-compose-stability-skippability--android--hard
+- q-how-does-jetpackcompose-work--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android, android/ui-compose, android/ui-state, compose, difficulty/medium, recomposition]
+tags:
+- android
+- android/ui-compose
+- android/ui-state
+- compose
+- difficulty/medium
+- recomposition
 date created: Wednesday, October 29th 2025, 12:15:21 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
@@ -202,6 +221,13 @@ fun OptimizedRecomposition() {
 - https://developer.android.com/develop/ui/compose/state - State and recomposition
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+- [[c-viewmodel]]
+
 
 ### Prerequisites (Easier)
 - [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose basics

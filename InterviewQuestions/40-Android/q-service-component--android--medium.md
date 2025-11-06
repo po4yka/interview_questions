@@ -1,30 +1,42 @@
 ---
 id: android-008
-title: "Android Service Component / Компонент Service в Android"
+title: Android Service Component / Компонент Service в Android
 aliases: []
-
-# Classification
 topic: android
-subtopics: [background-execution, lifecycle, service]
+subtopics:
+- background-execution
+- lifecycle
+- service
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [android/background-processing, android/components, android/lifecycle, difficulty/medium, en, ru]
+language_tags:
+- android/background-processing
+- android/components
+- android/lifecycle
+- difficulty/medium
+- en
+- ru
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-anr-application-not-responding--android--medium, q-how-to-start-drawing-ui-in-android--android--easy, q-kmm-dependency-injection--multiplatform--medium]
-
-# Timestamps
+related:
+- c-service
+- c-background-tasks
+- c-lifecycle
+- q-anr-application-not-responding--android--medium
+- q-how-to-start-drawing-ui-in-android--android--easy
+- q-kmm-dependency-injection--multiplatform--medium
 created: 2025-10-05
 updated: 2025-10-05
-
-tags: [android/background-execution, android/lifecycle, android/service, difficulty/medium, en, ru]
+tags:
+- android/background-execution
+- android/lifecycle
+- android/service
+- difficulty/medium
+- en
+- ru
 date created: Saturday, November 1st 2025, 12:47:03 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -265,6 +277,13 @@ These two paths aren't entirely separate. You can bind to a service that is alre
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-service]]
+- [[c-background-tasks]]
+- [[c-lifecycle]]
+
 
 ### Related (Medium)
 - [[q-memory-leak-detection--android--medium]] - Performance

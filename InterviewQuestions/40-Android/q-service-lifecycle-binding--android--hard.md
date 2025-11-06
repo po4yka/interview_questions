@@ -1,19 +1,30 @@
 ---
 id: android-325
-title: "Service Lifecycle and Binding / Жизненный цикл и привязка Service"
-aliases: [Service Lifecycle and Binding, Жизненный цикл и привязка Service]
+title: Service Lifecycle and Binding / Жизненный цикл и привязка Service
+aliases:
+- Service Lifecycle and Binding
+- Жизненный цикл и привязка Service
 topic: android
-subtopics: [service]
+subtopics:
+- service
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-to-add-custom-attributes-to-custom-view--android--medium, q-migration-to-compose--android--medium, q-viewmodel-pattern--android--easy]
+related:
+- c-service
+- q-how-to-add-custom-attributes-to-custom-view--android--medium
+- q-migration-to-compose--android--medium
+- q-viewmodel-pattern--android--easy
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/service, difficulty/hard]
+tags:
+- android/service
+- difficulty/hard
 date created: Saturday, November 1st 2025, 12:47:04 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -1796,6 +1807,11 @@ Services — фундаментальные Android-компоненты для 
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-service]]
+
 
 ### Prerequisites (Easier)
 - [[q-service-component--android--medium]] - Service

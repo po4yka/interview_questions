@@ -1,20 +1,35 @@
 ---
 id: android-109
-title: "Spannable Text Styling / Стилизация текста Spannable"
-aliases: ["Spannable Text Styling", "Стилизация текста Spannable"]
+title: Spannable Text Styling / Стилизация текста Spannable
+aliases:
+- Spannable Text Styling
+- Стилизация текста Spannable
 topic: android
-subtopics: [ui-views, ui-widgets]
+subtopics:
+- ui-views
+- ui-widgets
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-10-28
 sources: []
-tags: [android/ui-views, android/ui-widgets, difficulty/medium, spannable, text-styling]
+tags:
+- android/ui-views
+- android/ui-widgets
+- difficulty/medium
+- spannable
+- text-styling
 moc: moc-android
-related: [q-accessibility-text-scaling--android--medium, q-custom-view-attributes--android--medium, q-how-to-break-text-by-screen-width--android--easy]
+related:
+- c-android-components
+- q-accessibility-text-scaling--android--medium
+- q-custom-view-attributes--android--medium
+- q-how-to-break-text-by-screen-width--android--easy
 date created: Saturday, November 1st 2025, 12:47:04 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -256,6 +271,11 @@ val styled = SpannableStringBuilder()
 - [Text Spans Guide](https://developer.android.com/guide/topics/text/spans)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-android-components]]
+
 
 ### Prerequisites (Easier)
 - [[q-view-fundamentals--android--easy]]

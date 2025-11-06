@@ -1,30 +1,35 @@
 ---
 id: android-481
 title: Custom View Animation / Анимация Custom View
-aliases: [Custom View Animation, Анимация Custom View]
+aliases:
+- Custom View Animation
+- Анимация Custom View
 topic: android
 subtopics:
-  - ui-animation
-  - ui-views
+- ui-animation
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - c-choreographer
-  - c-interpolator
-  - c-value-animator
-  - q-canvas-drawing-optimization--android--hard
-  - q-custom-view-lifecycle--android--medium
+- c-choreographer
+- c-interpolator
+- c-value-animator
+- q-canvas-drawing-optimization--android--hard
+- q-custom-view-lifecycle--android--medium
 sources:
-  - https://developer.android.com/guide/topics/graphics/prop-animation
+- https://developer.android.com/guide/topics/graphics/prop-animation
 created: 2025-10-21
 updated: 2025-10-30
-tags: [android/ui-animation, android/ui-views, difficulty/medium]
+tags:
+- android/ui-animation
+- android/ui-views
+- difficulty/medium
 date created: Thursday, October 30th 2025, 11:56:25 am
 date modified: Sunday, November 2nd 2025, 4:23:18 pm
 ---
@@ -361,6 +366,13 @@ class LifecycleAwareAnimatedView : View {
 - [Hardware Acceleration](https://developer.android.com/topic/performance/hardware-accel)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-choreographer]]
+- [[c-interpolator]]
+- [[c-value-animator]]
+
 
 ### Prerequisites (Easier)
 - [[q-custom-view-lifecycle--android--medium]] - Жизненный цикл View для правильной очистки анимаций

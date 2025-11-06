@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-testing
 - q-android-manifest-file--android--easy
 - q-koin-vs-hilt-comparison--dependency-injection--medium
 - q-react-native-comparison--multiplatform--medium
@@ -565,6 +566,11 @@ class FullStackIntegrationTest {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-testing]]
+
 
 ### Related (Medium)
 - [[q-testing-viewmodels-turbine--android--medium]] - Testing

@@ -1,24 +1,35 @@
 ---
 id: android-442
 title: Dalvik vs ART Runtime / Dalvik против ART Runtime
-aliases: [Dalvik vs ART Runtime, Dalvik против ART Runtime]
+aliases:
+- Dalvik vs ART Runtime
+- Dalvik против ART Runtime
 topic: android
 subtopics:
-  - performance-memory
+- performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
-related: []
+related:
+- c-android-components
 created: 2025-10-20
 updated: 2025-01-27
-tags: [android/performance-memory, aot, art, compilation, dalvik, difficulty/medium, jit, runtime]
+tags:
+- android/performance-memory
+- aot
+- art
+- compilation
+- dalvik
+- difficulty/medium
+- jit
+- runtime
 sources:
-  - https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime
+- https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime
 date created: Monday, October 27th 2025, 3:46:58 pm
 date modified: Sunday, November 2nd 2025, 5:37:10 pm
 ---
@@ -137,6 +148,11 @@ APK → .dex bytecode → AOT Compiler (install) → Native code → Execute (fa
 - https://source.android.com/docs/core/runtime
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-android-components]]
+
 
 ### Prerequisites
 - Understanding of virtual machines and bytecode execution

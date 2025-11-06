@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-service
 - q-async-operations-android--android--medium
 - q-derived-state-snapshot-system--jetpack-compose--hard
 - q-how-to-fix-a-bad-element-layout--android--easy
@@ -1389,6 +1390,11 @@ class MyService : Service() {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-service]]
+
 
 ### Prerequisites (Easier)
 - [[q-android-service-types--android--easy]] - Service

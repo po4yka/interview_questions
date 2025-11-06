@@ -1,29 +1,37 @@
 ---
 id: android-040
-title: "Macrobenchmark for App Startup / Macrobenchmark для запуска приложения"
-aliases: ["Macrobenchmark for App Startup", "Macrobenchmark для запуска приложения"]
-
-# Classification
+title: Macrobenchmark for App Startup / Macrobenchmark для запуска приложения
+aliases:
+- Macrobenchmark for App Startup
+- Macrobenchmark для запуска приложения
 topic: android
-subtopics: [profiling, testing-benchmark]
+subtopics:
+- profiling
+- testing-benchmark
 question_kind: android
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-android-performance-measurement-tools--android--medium, q-baseline-profiles-android--android--medium, q-performance-optimization-android--android--medium]
-
-# Timestamps
+related:
+- c-perfetto
+- q-android-performance-measurement-tools--android--medium
+- q-baseline-profiles-android--android--medium
+- q-performance-optimization-android--android--medium
 created: 2025-10-11
 updated: 2025-01-27
-
-tags: [android/profiling, android/testing-benchmark, difficulty/medium, macrobenchmark, perfetto, performance, startup]
+tags:
+- android/profiling
+- android/testing-benchmark
+- difficulty/medium
+- macrobenchmark
+- perfetto
+- performance
+- startup
 date created: Monday, October 27th 2025, 5:12:49 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -586,6 +594,11 @@ Warm startup: 180ms (-44%)
 - https://perfetto.dev/
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-perfetto]]
+
 
 ### Prerequisites
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Basic performance optimization

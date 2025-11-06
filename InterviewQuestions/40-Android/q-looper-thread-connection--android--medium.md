@@ -1,20 +1,34 @@
 ---
 id: android-229
-title: "Looper Thread Connection / Связь Looper и потока"
-aliases: ["Looper Thread Connection", "Связь Looper и потока"]
+title: Looper Thread Connection / Связь Looper и потока
+aliases:
+- Looper Thread Connection
+- Связь Looper и потока
 topic: android
-subtopics: [coroutines, threads-sync]
+subtopics:
+- coroutines
+- threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-handler-looper-main-thread--android--medium]
+related:
+- c-coroutines
+- q-handler-looper-main-thread--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/coroutines, android/threads-sync, difficulty/medium, handler, looper, message-queue]
+tags:
+- android/coroutines
+- android/threads-sync
+- difficulty/medium
+- handler
+- looper
+- message-queue
 date created: Tuesday, October 28th 2025, 9:36:03 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -185,6 +199,11 @@ val handler = Handler(Looper.myLooper()!!)
 - Android Threading Guide
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-coroutines]]
+
 
 ### Prerequisites
 - [[q-handler-looper-main-thread--android--medium]] — Understanding Handler-Looper-Thread relationship

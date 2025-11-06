@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-recyclerview
 - q-broadcastreceiver-contentprovider--android--easy
 - q-compose-ui-testing-advanced--android--hard
 - q-play-store-publishing--distribution--medium
@@ -307,6 +308,11 @@ recyclerView.layoutManager = AdaptiveGridLayoutManager(this, columnWidthPx)
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-recyclerview]]
+
 
 ### Related (Medium)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui

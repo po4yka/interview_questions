@@ -1,20 +1,38 @@
 ---
 id: android-407
-title: "What Are The Navigation Methods In Kotlin / Какие методы навигации в Kotlin"
-aliases: ["Navigation Methods in Kotlin", "Методы навигации в Kotlin"]
+title: What Are The Navigation Methods In Kotlin / Какие методы навигации в Kotlin
+aliases:
+- Navigation Methods in Kotlin
+- Методы навигации в Kotlin
 topic: android
-subtopics: [activity, fragment, ui-navigation]
+subtopics:
+- activity
+- fragment
+- ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-modularization--android--medium, q-dagger-purpose--android--easy, q-inject-router-to-presenter--android--medium]
+related:
+- c-compose-navigation
+- c-activity
+- c-fragments
+- q-android-modularization--android--medium
+- q-dagger-purpose--android--easy
+- q-inject-router-to-presenter--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium, navigation]
+tags:
+- android/activity
+- android/fragment
+- android/ui-navigation
+- difficulty/medium
+- navigation
 date created: Wednesday, October 29th 2025, 11:41:07 am
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
@@ -300,6 +318,13 @@ class MainActivity : AppCompatActivity() {
 - [Activity Result API](https://developer.android.com/training/basics/intents/result)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-navigation]]
+- [[c-activity]]
+- [[c-fragments]]
+
 
 ### Prerequisites (Easier)
 - [[q-fragment-basics--android--easy]]

@@ -1,20 +1,41 @@
 ---
 id: android-240
-title: "How To Draw UI Without XML / Как рисовать UI без XML"
-aliases: [Drawing UI without XML, Jetpack Compose UI, Programmatic UI, Программный UI, Рисование UI без XML]
+title: How To Draw UI Without XML / Как рисовать UI без XML
+aliases:
+- Drawing UI without XML
+- Jetpack Compose UI
+- Programmatic UI
+- Программный UI
+- Рисование UI без XML
 topic: android
-subtopics: [ui-compose, ui-views]
+subtopics:
+- ui-compose
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-how-to-start-drawing-ui-in-android--android--easy, q-testing-compose-ui--android--medium]
+related:
+- c-compose-state
+- c-jetpack-compose
+- q-how-to-create-list-like-recyclerview-in-compose--android--medium
+- q-how-to-start-drawing-ui-in-android--android--easy
+- q-testing-compose-ui--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android, android/ui-compose, android/ui-views, difficulty/medium, jetpack-compose, programmatic-views, ui]
+tags:
+- android
+- android/ui-compose
+- android/ui-views
+- difficulty/medium
+- jetpack-compose
+- programmatic-views
+- ui
 date created: Tuesday, October 28th 2025, 9:49:29 am
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
@@ -300,6 +321,12 @@ fun ProfileScreen(user: User) {
 - [Compose vs Views comparison](https://developer.android.com/jetpack/compose/mental-model)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+
 
 ### Prerequisites (Easier)
 - [[q-how-to-start-drawing-ui-in-android--android--easy]] - UI basics in Android

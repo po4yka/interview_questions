@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-retrofit
 - q-compose-testing--android--medium
 - q-recyclerview-explained--android--medium
 - q-recyclerview-viewtypes-delegation--android--medium
@@ -2506,6 +2507,11 @@ Server-Sent Events предоставляют:
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-retrofit]]
+
 
 ### Prerequisites (Easier)
 - [[q-graphql-vs-rest--networking--easy]] - Networking

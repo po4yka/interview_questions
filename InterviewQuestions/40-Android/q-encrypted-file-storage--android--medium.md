@@ -1,26 +1,38 @@
 ---
 id: android-458
 title: Encrypted File Storage / Зашифрованное хранение файлов
-aliases: [Encrypted File Storage, Зашифрованное хранение файлов]
+aliases:
+- Encrypted File Storage
+- Зашифрованное хранение файлов
 topic: android
 subtopics:
-  - files-media
-  - permissions
+- files-media
+- permissions
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-data-encryption-at-rest--android--medium
+- c-permissions
+- c-scoped-storage-security
+- q-data-encryption-at-rest--android--medium
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/files-media, android/permissions, android/security, difficulty/medium, encryption, file-storage, keystore, security]
+tags:
+- android/files-media
+- android/permissions
+- android/security
+- difficulty/medium
+- encryption
+- file-storage
+- keystore
+- security
 sources:
-  - https://developer.android.com/topic/security/data
+- https://developer.android.com/topic/security/data
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Monday, November 3rd 2025, 10:58:17 am
 ---
@@ -210,6 +222,12 @@ val biometricKey = MasterKey.Builder(context)
 - [Android Keystore System](https://developer.android.com/training/articles/keystore)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-permissions]]
+- [[c-scoped-storage-security]]
+
 
 ### Prerequisites (Easier)
 - Basic file I/O in Android

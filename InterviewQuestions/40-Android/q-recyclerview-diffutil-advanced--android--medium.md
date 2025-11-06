@@ -1,19 +1,30 @@
 ---
 id: android-350
-title: "RecyclerView DiffUtil Advanced / Продвинутый DiffUtil для RecyclerView"
-aliases: [RecyclerView DiffUtil Advanced, Продвинутый DiffUtil для RecyclerView]
+title: RecyclerView DiffUtil Advanced / Продвинутый DiffUtil для RecyclerView
+aliases:
+- RecyclerView DiffUtil Advanced
+- Продвинутый DiffUtil для RecyclerView
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-project-parts--android--easy, q-kmm-production-readiness--multiplatform--hard, q-koin-scope-management--dependency-injection--medium]
+related:
+- c-recyclerview
+- q-android-project-parts--android--easy
+- q-kmm-production-readiness--multiplatform--hard
+- q-koin-scope-management--dependency-injection--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, difficulty/medium]
+tags:
+- android/ui-views
+- difficulty/medium
 date created: Saturday, November 1st 2025, 12:47:01 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -1863,6 +1874,11 @@ override fun getItemId(position: Int): Long {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-recyclerview]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui

@@ -1,20 +1,36 @@
 ---
 id: android-157
-title: "Material3 Dynamic Color Theming / Динамические цвета Material3"
-aliases: ["Material3 Dynamic Color Theming", "Динамические цвета Material3"]
+title: Material3 Dynamic Color Theming / Динамические цвета Material3
+aliases:
+- Material3 Dynamic Color Theming
+- Динамические цвета Material3
 topic: android
-subtopics: [ui-compose, ui-theming]
+subtopics:
+- ui-compose
+- ui-theming
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-compose-semantics--android--medium, q-single-activity-approach--android--medium]
+related:
+- c-compose-state
+- c-jetpack-compose
+- q-compose-semantics--android--medium
+- q-single-activity-approach--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/ui-compose, android/ui-theming, design, difficulty/medium, dynamic-color, material3]
+tags:
+- android/ui-compose
+- android/ui-theming
+- design
+- difficulty/medium
+- dynamic-color
+- material3
 date created: Monday, October 27th 2025, 5:03:21 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -497,6 +513,12 @@ Snackbar(
 - [Material Theme Builder](https://m3.material.io/theme-builder)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+
 
 ### Prerequisites
 - [[q-single-activity-approach--android--medium]] — App architecture for theming

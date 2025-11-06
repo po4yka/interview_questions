@@ -1,19 +1,39 @@
 ---
 id: android-301
-title: "Overdraw Gpu Rendering / Overdraw и GPU рендеринг"
-aliases: ["Overdraw GPU Rendering", "Overdraw и GPU рендеринг"]
+title: Overdraw Gpu Rendering / Overdraw и GPU рендеринг
+aliases:
+- Overdraw GPU Rendering
+- Overdraw и GPU рендеринг
 topic: android
-subtopics: [performance-rendering, profiling, ui-graphics]
+subtopics:
+- performance-rendering
+- profiling
+- ui-graphics
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-performance-measurement-tools--android--medium, q-performance-optimization-android--android--medium, q-what-is-layout-performance-measured-in--android--medium]
+related:
+- c-perfetto
+- c-performance
+- q-android-performance-measurement-tools--android--medium
+- q-performance-optimization-android--android--medium
+- q-what-is-layout-performance-measured-in--android--medium
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android/performance-rendering, android/profiling, android/ui-graphics, difficulty/medium, gpu, overdraw, performance, rendering]
+tags:
+- android/performance-rendering
+- android/profiling
+- android/ui-graphics
+- difficulty/medium
+- gpu
+- overdraw
+- performance
+- rendering
 sources: []
 date created: Saturday, November 1st 2025, 12:47:00 pm
 date modified: Saturday, November 1st 2025, 5:43:33 pm
@@ -186,6 +206,12 @@ override fun onDraw(canvas: Canvas) {
 - [[q-performance-optimization-android--android--medium]]
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-perfetto]]
+- [[c-performance]]
+
 
 ### Prerequisites
 - [[q-what-is-layout-performance-measured-in--android--medium]] — Understanding rendering metrics

@@ -1,20 +1,38 @@
 ---
 id: android-338
-title: "Why Use DiffUtil / Почему использовать DiffUtil"
-aliases: [DiffUtil, DiffUtil в RecyclerView, ListAdapter, RecyclerView DiffUtil]
+title: Why Use DiffUtil / Почему использовать DiffUtil
+aliases:
+- DiffUtil
+- DiffUtil в RecyclerView
+- ListAdapter
+- RecyclerView DiffUtil
 topic: android
-subtopics: [performance-rendering, ui-views]
+subtopics:
+- performance-rendering
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-cicd-pipeline-android--android--medium, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
+related:
+- c-performance
+- q-cicd-pipeline-android--android--medium
+- q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
 created: 2025-10-15
 updated: 2025-10-30
-sources: [https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil]
-tags: [android/performance-rendering, android/ui-views, difficulty/medium, diffutil, performance, recyclerview]
+sources:
+- https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
+tags:
+- android/performance-rendering
+- android/ui-views
+- difficulty/medium
+- diffutil
+- performance
+- recyclerview
 date created: Saturday, November 1st 2025, 12:47:11 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
@@ -389,6 +407,11 @@ fun updateItems(newItems: List<Item>) {
 ---
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-performance]]
+
 
 ### Same Level
 - [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]

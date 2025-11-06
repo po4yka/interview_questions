@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-recyclerview
 - q-network-error-handling-strategies--networking--medium
 - q-what-are-px-dp-sp--android--easy
 - q-what-is-known-about-recyclerview--android--easy
@@ -981,6 +982,11 @@ class ChatListViewModel : ViewModel() {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-recyclerview]]
+
 
 ### Prerequisites (Easier)
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui

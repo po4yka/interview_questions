@@ -1,20 +1,40 @@
 ---
 id: android-315
-title: "How To Tell Adapter To Redraw List If An Item Was Deleted / Как сказать адаптеру перерисовать список если элемент был удален"
-aliases: ["Adapter Redraw on Item Deletion", "Перерисовка адаптера при удалении элемента"]
+title: How To Tell Adapter To Redraw List If An Item Was Deleted / Как сказать адаптеру
+  перерисовать список если элемент был удален
+aliases:
+- Adapter Redraw on Item Deletion
+- Перерисовка адаптера при удалении элемента
 topic: android
-subtopics: [architecture-modularization, ui-views, ui-widgets]
+subtopics:
+- architecture-modularization
+- ui-views
+- ui-widgets
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-mvi-handle-one-time-events--android--hard, q-tasks-back-stack--android--medium, q-view-fundamentals--android--easy]
+related:
+- c-recyclerview
+- q-mvi-handle-one-time-events--android--hard
+- q-tasks-back-stack--android--medium
+- q-view-fundamentals--android--easy
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [adapters, android, android/architecture-modularization, android/ui-views, android/ui-widgets, difficulty/medium, recyclerview, ui]
+tags:
+- adapters
+- android
+- android/architecture-modularization
+- android/ui-views
+- android/ui-widgets
+- difficulty/medium
+- recyclerview
+- ui
 date created: Tuesday, October 28th 2025, 9:12:57 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
@@ -210,6 +230,11 @@ class UndoDeleteAdapter(private val items: MutableList<Item>) :
 - [ListAdapter API Reference](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-recyclerview]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization

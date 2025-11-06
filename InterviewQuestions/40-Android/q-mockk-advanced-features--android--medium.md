@@ -1,19 +1,30 @@
 ---
 id: android-351
-title: "MockK Advanced Features / Продвинутые возможности MockK"
-aliases: [MockK Advanced Features, Продвинутые возможности MockK]
+title: MockK Advanced Features / Продвинутые возможности MockK
+aliases:
+- MockK Advanced Features
+- Продвинутые возможности MockK
 topic: android
-subtopics: [testing-unit]
+subtopics:
+- testing-unit
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-compositionlocal-compose--android--hard, q-mvp-pattern--android--medium, q-why-use-diffutil--android--medium]
+related:
+- c-unit-testing
+- q-compositionlocal-compose--android--hard
+- q-mvp-pattern--android--medium
+- q-why-use-diffutil--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/testing-unit, difficulty/medium]
+tags:
+- android/testing-unit
+- difficulty/medium
 date created: Sunday, October 12th 2025, 12:27:49 pm
 date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
@@ -1300,6 +1311,11 @@ MockK — предпочтительный выбор для Kotlin проект
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-unit-testing]]
+
 
 ### Related (Medium)
 - [[q-testing-viewmodels-turbine--android--medium]] - Testing

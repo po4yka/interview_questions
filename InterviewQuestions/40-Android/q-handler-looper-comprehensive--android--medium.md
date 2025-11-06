@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-coroutines
 - q-cicd-multi-module--devops--medium
 - q-glide-image-loading-internals--android--medium
 - q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
@@ -676,6 +677,12 @@ Looper.getMainLooper().setMessageLogging { log ->
 
 ## Related Questions
 
+### Prerequisites / Concepts
+
+- [[c-coroutines]]
+
+
 - [[q-glide-image-loading-internals--android--medium]]
 - [[q-cicd-multi-module--android--medium]]
 - [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]
+##

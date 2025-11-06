@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-performance
 - q-migration-to-compose--android--medium
 - q-real-time-updates-android--android--medium
 - q-what-are-fragments-for-if-there-is-activity--android--medium
@@ -764,6 +765,12 @@ fun getUsers(): List<User> {
 
 ## Related Questions
 
+### Prerequisites / Concepts
+
+- [[c-performance]]
+
+
 - [[q-real-time-updates-android--android--medium]]
 - [[q-what-are-fragments-for-if-there-is-activity--android--medium]]
 - [[q-migration-to-compose--android--medium]]
+##

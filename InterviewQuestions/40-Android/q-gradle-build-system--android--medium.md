@@ -1,27 +1,36 @@
 ---
 id: android-011
 title: Gradle Build System / Система сборки Gradle
-aliases: [Gradle Build System, Система сборки Gradle]
+aliases:
+- Gradle Build System
+- Система сборки Gradle
 topic: android
 status: draft
 created: 2025-10-05
 updated: 2025-10-31
 difficulty: medium
 subtopics:
-  - build-variants
-  - dependency-management
-  - gradle
+- build-variants
+- dependency-management
+- gradle
 question_kind: theory
 original_language: en
 language_tags:
-  - en
-  - ru
-tags: [android/build-variants, android/dependency-management, android/gradle, build-system, dependency-management, difficulty/medium]
+- en
+- ru
+tags:
+- android/build-variants
+- android/dependency-management
+- android/gradle
+- build-system
+- dependency-management
+- difficulty/medium
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20Gradle.md
 related:
-  - q-cache-implementation-strategies--android--medium
-  - q-kapt-vs-ksp--android--medium
-  - q-what-unites-the-main-components-of-an-android-application--android--medium
+- c-gradle
+- q-cache-implementation-strategies--android--medium
+- q-kapt-vs-ksp--android--medium
+- q-what-unites-the-main-components-of-an-android-application--android--medium
 moc: moc-android
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
@@ -1197,6 +1206,11 @@ sdk.dir=/Users/username/Library/Android/sdk
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-gradle]]
+
 
 ### Prerequisites (Easier)
 - [[q-why-separate-ui-and-business-logic--android--easy]] - Ui

@@ -1,26 +1,38 @@
 ---
 id: android-054
 title: Compose Custom Layout / Кастомный layout в Compose
-aliases: [Compose Custom Layout, Custom Layout Jetpack Compose, Кастомная разметка Compose, Кастомный layout в Compose]
+aliases:
+- Compose Custom Layout
+- Custom Layout Jetpack Compose
+- Кастомная разметка Compose
+- Кастомный layout в Compose
 topic: android
 subtopics:
-  - ui-compose
-  - ui-graphics
+- ui-compose
+- ui-graphics
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-compose-canvas-graphics--android--hard
-  - q-compose-compiler-plugin--android--hard
+- c-layouts
+- c-compose-state
+- c-views
+- q-compose-canvas-graphics--android--hard
+- q-compose-compiler-plugin--android--hard
 sources: []
 created: 2025-10-11
 updated: 2025-11-02
-tags: [android/ui-compose, android/ui-graphics, custom-layout, difficulty/hard, layout-measurement]
+tags:
+- android/ui-compose
+- android/ui-graphics
+- custom-layout
+- difficulty/hard
+- layout-measurement
 date created: Saturday, October 25th 2025, 1:26:31 pm
 date modified: Sunday, November 2nd 2025, 1:37:23 pm
 ---
@@ -278,6 +290,13 @@ val policy = object : MeasurePolicy {
 - [Compose performance best practices](https://developer.android.com/develop/ui/compose/performance)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-layouts]]
+- [[c-compose-state]]
+- [[c-views]]
+
 
 ### Prerequisites (Easier)
 

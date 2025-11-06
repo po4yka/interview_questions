@@ -1,30 +1,37 @@
 ---
 id: android-196
-title: "Which Class To Use For Detecting Gestures / Какой класс использовать для обнаружения жестов"
-aliases: ["Which Class To Use For Detecting Gestures", "Какой класс использовать для обнаружения жестов"]
-
-# Classification
+title: Which Class To Use For Detecting Gestures / Какой класс использовать для обнаружения
+  жестов
+aliases:
+- Which Class To Use For Detecting Gestures
+- Какой класс использовать для обнаружения жестов
 topic: android
-subtopics: [ui-state, ui-views]
+subtopics:
+- ui-state
+- ui-views
 question_kind: android
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-dagger-field-injection--android--medium, q-how-to-write-recyclerview-cache-ahead--android--medium, q-what-are-services-for--android--easy]
-
-# Timestamps
+related:
+- c-compose-state
+- c-viewmodel
+- q-dagger-field-injection--android--medium
+- q-how-to-write-recyclerview-cache-ahead--android--medium
+- q-what-are-services-for--android--easy
 created: 2025-10-15
 updated: 2025-10-29
-
-# Tags (EN only; no leading #)
-tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-events]
+tags:
+- android/ui-state
+- android/ui-views
+- difficulty/medium
+- gestures
+- touch-events
 date created: Wednesday, October 29th 2025, 12:15:08 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
@@ -346,6 +353,12 @@ fun GestureExample() {
 - [Compose Gestures](https://developer.android.com/jetpack/compose/touch-input)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-viewmodel]]
+
 
 ### Prerequisites (Easier)
 - [[q-what-are-services-for--android--easy]] - Basic Android components understanding

@@ -1,19 +1,35 @@
 ---
 id: android-341
-title: "Navigation Methods Android / Методы навигации Android"
-aliases: [Navigation Methods, Методы навигации]
+title: Navigation Methods Android / Методы навигации Android
+aliases:
+- Navigation Methods
+- Методы навигации
 topic: android
-subtopics: [activity, ui-navigation]
+subtopics:
+- activity
+- ui-navigation
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-intent, c-navigation, q-tasks-back-stack--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium]
+related:
+- c-intent
+- c-navigation
+- q-tasks-back-stack--android--medium
+- q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/activity, android/ui-navigation, difficulty/medium, intent, navigation, startActivity]
+tags:
+- android/activity
+- android/ui-navigation
+- difficulty/medium
+- intent
+- navigation
+- startActivity
 date created: Saturday, November 1st 2025, 12:47:09 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
@@ -313,6 +329,12 @@ fun createDeepLink(itemId: Int): PendingIntent {
 -   `https://developer.android.com/guide/components/intents-filters` — Intent-based navigation
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-intent]]
+- [[c-navigation]]
+
 
 ### Related (Medium)
 

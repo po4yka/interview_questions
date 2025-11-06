@@ -1,19 +1,30 @@
 ---
 id: android-224
-title: "RecyclerView AsyncListDiffer / RecyclerView AsyncListDiffer"
-aliases: [AsyncListDiffer, RecyclerView AsyncListDiffer]
+title: RecyclerView AsyncListDiffer / RecyclerView AsyncListDiffer
+aliases:
+- AsyncListDiffer
+- RecyclerView AsyncListDiffer
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-compose-side-effects-advanced--jetpack-compose--hard, q-vector-graphics-animations--graphics--medium, q-what-are-services-used-for--android--medium]
+related:
+- c-recyclerview
+- q-compose-side-effects-advanced--jetpack-compose--hard
+- q-vector-graphics-animations--graphics--medium
+- q-what-are-services-used-for--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/ui-views, difficulty/medium]
+tags:
+- android/ui-views
+- difficulty/medium
 date created: Saturday, November 1st 2025, 12:47:01 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -1973,6 +1984,11 @@ searchView.onQueryTextChange { query ->
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-recyclerview]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui

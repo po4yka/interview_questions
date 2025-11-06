@@ -1,32 +1,40 @@
 ---
 id: android-056
-title: "KAPT to KSP Migration Guide / Руководство по миграции с KAPT на KSP"
+title: KAPT to KSP Migration Guide / Руководство по миграции с KAPT на KSP
 aliases: []
-
-# Classification
 topic: android
 subtopics:
-  - gradle
-  - performance-startup
+- gradle
+- performance-startup
 question_kind: coding
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [android/gradle, android/performance-startup, difficulty/medium, en, ru]
+language_tags:
+- android/gradle
+- android/performance-startup
+- difficulty/medium
+- en
+- ru
 source: Original
 source_note: Annotation processing migration best practices
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [app-startup-optimization, build-optimization-gradle]
-
-# Timestamps
+related:
+- c-gradle
+- c-performance-optimization
+- app-startup-optimization
+- build-optimization-gradle
 created: 2025-10-11
 updated: 2025-10-31
-
-tags: [android/gradle, android/performance-startup, annotation-processing, difficulty/medium, en, kapt, ksp, ru]
+tags:
+- android/gradle
+- android/performance-startup
+- annotation-processing
+- difficulty/medium
+- en
+- kapt
+- ksp
+- ru
 date created: Saturday, October 25th 2025, 1:26:31 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -1496,6 +1504,12 @@ tasks.withType<KspTask> {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-gradle]]
+- [[c-performance-optimization]]
+
 
 ### Related (Medium)
 - [[q-kapt-vs-ksp--android--medium]] - Annotation Processing

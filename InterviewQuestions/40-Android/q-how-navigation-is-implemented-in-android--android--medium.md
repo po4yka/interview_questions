@@ -1,20 +1,41 @@
 ---
 id: android-282
-title: "How Navigation Is Implemented In Android / Как реализована навигация в Android"
-aliases: ["How Navigation Is Implemented In Android", "Navigation Implementation", "Как реализована навигация в Android", "Реализация навигации"]
+title: How Navigation Is Implemented In Android / Как реализована навигация в Android
+aliases:
+- How Navigation Is Implemented In Android
+- Navigation Implementation
+- Как реализована навигация в Android
+- Реализация навигации
 topic: android
-subtopics: [activity, fragment, ui-navigation]
+subtopics:
+- activity
+- fragment
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-activity-navigation-how-it-works--android--medium, q-compose-navigation-advanced--android--medium, q-what-navigation-methods-do-you-know--android--medium]
+related:
+- c-compose-navigation
+- c-activity
+- c-fragments
+- q-activity-navigation-how-it-works--android--medium
+- q-compose-navigation-advanced--android--medium
+- q-what-navigation-methods-do-you-know--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/activity, android/fragment, android/ui-navigation, difficulty/medium, navigation, ui]
+tags:
+- android/activity
+- android/fragment
+- android/ui-navigation
+- difficulty/medium
+- navigation
+- ui
 date created: Tuesday, October 28th 2025, 9:35:54 am
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
@@ -264,6 +285,13 @@ onBackPressedDispatcher.addCallback(
 - [Predictive Back](https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-navigation]]
+- [[c-activity]]
+- [[c-fragments]]
+
 
 ### Prerequisites
 - [[q-what-navigation-methods-do-you-know--android--medium]] - Overview of navigation approaches

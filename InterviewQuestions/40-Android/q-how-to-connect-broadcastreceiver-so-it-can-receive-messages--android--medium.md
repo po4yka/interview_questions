@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-service
 - q-memory-leak-vs-oom-android--android--medium
 - q-state-hoisting-compose--android--medium
 - q-what-is-known-about-methods-that-redraw-view--android--medium
@@ -969,6 +970,11 @@ class EventBus {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-service]]
+
 
 ### Prerequisites (Easier)
 - [[q-broadcastreceiver-contentprovider--android--easy]] - Broadcast

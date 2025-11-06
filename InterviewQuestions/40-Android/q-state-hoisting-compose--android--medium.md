@@ -17,6 +17,9 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-compose-state
+- c-jetpack-compose
+- c-viewmodel
 - q-separate-ui-business-logic--android--easy
 - q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium
 - q-what-is-hilt--android--medium
@@ -1473,6 +1476,13 @@ fun ProductCard(
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+- [[c-viewmodel]]
+
 
 ### Hub
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction

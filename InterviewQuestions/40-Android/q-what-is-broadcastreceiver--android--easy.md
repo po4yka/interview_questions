@@ -1,19 +1,34 @@
 ---
 id: android-395
-title: "BroadcastReceiver / Компонент BroadcastReceiver"
-aliases: [BroadcastReceiver, Компонент BroadcastReceiver]
+title: BroadcastReceiver / Компонент BroadcastReceiver
+aliases:
+- BroadcastReceiver
+- Компонент BroadcastReceiver
 topic: android
-subtopics: [service]
+subtopics:
+- service
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-broadcast-receiver, c-intent, q-what-each-android-component-represents--android--easy, q-what-is-activity-and-what-is-it-used-for--android--medium]
+related:
+- c-broadcast-receiver
+- c-intent
+- q-what-each-android-component-represents--android--easy
+- q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/service, broadcast-receiver, components, difficulty/easy, intent, system-events]
+tags:
+- android/service
+- broadcast-receiver
+- components
+- difficulty/easy
+- intent
+- system-events
 date created: Saturday, November 1st 2025, 12:47:08 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
@@ -955,6 +970,12 @@ BroadcastReceiver работает по принципу publish-subscribe (из
 -   `https://developer.android.com/guide/components/broadcast-exceptions` — Background execution limits
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-broadcast-receiver]]
+- [[c-intent]]
+
 
 ### Related (Easy)
 

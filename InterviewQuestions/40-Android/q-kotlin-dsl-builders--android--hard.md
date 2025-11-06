@@ -1,20 +1,36 @@
 ---
 id: android-061
-title: "Kotlin DSL Builders / Kotlin DSL строители"
-aliases: ["Kotlin DSL Builders", "Kotlin DSL строители"]
+title: Kotlin DSL Builders / Kotlin DSL строители
+aliases:
+- Kotlin DSL Builders
+- Kotlin DSL строители
 topic: android
-subtopics: [coroutines, ui-compose]
+subtopics:
+- coroutines
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-dsl-builders, q-kotlin-lambda-receivers--kotlin--medium]
+related:
+- c-dsl-builders
+- q-kotlin-lambda-receivers--kotlin--medium
 created: 2025-10-12
 updated: 2025-10-31
-tags: [android/coroutines, android/ui-compose, api-design, builders, difficulty/hard, dsl, lambdas]
-sources: [https://kotlinlang.org/docs/type-safe-builders.html]
+tags:
+- android/coroutines
+- android/ui-compose
+- api-design
+- builders
+- difficulty/hard
+- dsl
+- lambdas
+sources:
+- https://kotlinlang.org/docs/type-safe-builders.html
 date created: Monday, October 13th 2025, 7:24:51 am
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -379,6 +395,11 @@ val layout = verticalLayout {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-dsl-builders]]
+
 
 ### Related (Same Level)
 - [[q-kotlin-lambda-expressions--kotlin--medium]] - Lambda receivers

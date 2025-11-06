@@ -17,6 +17,9 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-compose-state
+- c-jetpack-compose
+- c-viewmodel
 - q-accessibility-testing--accessibility--medium
 - q-handler-looper-main-thread--android--medium
 - q-iz-kakikh-bolee-vazhnykh-komponentov-sostoit-compose--programming-languages--medium
@@ -1143,6 +1146,13 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+- [[c-viewmodel]]
+
 
 ### Hub
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction

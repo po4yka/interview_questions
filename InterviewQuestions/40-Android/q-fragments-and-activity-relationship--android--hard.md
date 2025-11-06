@@ -1,31 +1,44 @@
 ---
 id: android-386
 title: Fragments And Activity Relationship / Взаимосвязь Фрагментов И Activity
-aliases: [Fragment Lifecycle Dependency, Fragments And Activity Relationship, Взаимосвязь Фрагментов И Activity, Зависимость жизненного цикла фрагмента]
+aliases:
+- Fragment Lifecycle Dependency
+- Fragments And Activity Relationship
+- Взаимосвязь Фрагментов И Activity
+- Зависимость жизненного цикла фрагмента
 topic: android
 subtopics:
-  - architecture-mvvm
-  - fragment
-  - lifecycle
+- architecture-mvvm
+- fragment
+- lifecycle
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-fragment-vs-activity-lifecycle--android--medium
-  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-  - q-what-are-fragments-for-if-there-is-activity--android--medium
+- c-fragments
+- c-lifecycle
+- c-mvvm
+- q-fragment-vs-activity-lifecycle--android--medium
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-what-are-fragments-for-if-there-is-activity--android--medium
 created: 2025-10-15
 updated: 2025-11-04
 sources:
-  - https://developer.android.com/guide/fragments
-  - https://developer.android.com/guide/fragments/fragmentmanager
-  - https://developer.android.com/guide/fragments/lifecycle
-tags: [android/architecture-mvvm, android/fragment, android/lifecycle, difficulty/hard, fragments, ui]
+- https://developer.android.com/guide/fragments
+- https://developer.android.com/guide/fragments/fragmentmanager
+- https://developer.android.com/guide/fragments/lifecycle
+tags:
+- android/architecture-mvvm
+- android/fragment
+- android/lifecycle
+- difficulty/hard
+- fragments
+- ui
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Tuesday, November 4th 2025, 12:52:10 pm
 ---
@@ -277,6 +290,13 @@ class DetailFragment : Fragment() {
 ---
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-fragments]]
+- [[c-lifecycle]]
+- [[c-mvvm]]
+
 
 ### Prerequisites
 - [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment lifecycle basics

@@ -1,20 +1,34 @@
 ---
 id: android-150
-title: "What Navigation Methods Do You Know / Какие методы навигации вы знаете"
-aliases: ["What Navigation Methods Do You Know", "Какие методы навигации вы знаете"]
+title: What Navigation Methods Do You Know / Какие методы навигации вы знаете
+aliases:
+- What Navigation Methods Do You Know
+- Какие методы навигации вы знаете
 topic: android
-subtopics: [ui-navigation]
+subtopics:
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-activity-navigation-how-it-works--android--medium, q-how-navigation-is-implemented-in-android--android--medium, q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]
+related:
+- c-compose-navigation
+- c-fragments
+- q-activity-navigation-how-it-works--android--medium
+- q-how-navigation-is-implemented-in-android--android--medium
+- q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android, android/ui-navigation, difficulty/medium, navigation]
+tags:
+- android
+- android/ui-navigation
+- difficulty/medium
+- navigation
 date created: Saturday, November 1st 2025, 12:47:09 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
@@ -267,6 +281,12 @@ URL-based navigation from external sources.
 - Android Developer Guide: Single-Activity Architecture
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-navigation]]
+- [[c-fragments]]
+
 
 ### Prerequisites
 

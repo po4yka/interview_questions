@@ -1,25 +1,34 @@
 ---
 id: android-037
 title: Baseline Profiles Optimization / Оптимизация с Baseline Profiles
-aliases: [Baseline Profiles Optimization, Оптимизация с Baseline Profiles]
+aliases:
+- Baseline Profiles Optimization
+- Оптимизация с Baseline Profiles
 topic: android
 subtopics:
-  - gradle
-  - performance-startup
-  - profiling
+- gradle
+- performance-startup
+- profiling
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
-related: []
+related:
+- c-performance-optimization
+- c-performance
+- c-modularization
 sources: []
 created: 2025-10-11
 updated: 2025-10-30
-tags: [android/gradle, android/performance-startup, android/profiling, difficulty/medium]
+tags:
+- android/gradle
+- android/performance-startup
+- android/profiling
+- difficulty/medium
 date created: Thursday, October 30th 2025, 11:51:36 am
 date modified: Sunday, November 2nd 2025, 1:02:35 pm
 ---
@@ -192,6 +201,13 @@ when (status.profileInstallResultCode) {
 - https://developer.android.com/studio/profile/baselineprofiles
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-performance-optimization]]
+- [[c-performance]]
+- [[c-modularization]]
+
 
 ### Prerequisites (Easier)
 - [[q-app-startup-optimization--android--medium]] - Startup optimization fundamentals before AOT compilation

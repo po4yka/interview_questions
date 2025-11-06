@@ -1,19 +1,37 @@
 ---
 id: android-362
-title: "ML Kit Object Detection / Распознавание объектов ML Kit"
-aliases: [ML Kit Barcode Scanning, ML Kit Image Labeling, ML Kit Object Detection, Распознавание объектов ML Kit]
+title: ML Kit Object Detection / Распознавание объектов ML Kit
+aliases:
+- ML Kit Barcode Scanning
+- ML Kit Image Labeling
+- ML Kit Object Detection
+- Распознавание объектов ML Kit
 topic: android
-subtopics: [camera, media]
+subtopics:
+- camera
+- media
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-compose-performance-optimization--android--hard, q-when-can-the-system-restart-a-service--android--medium]
+related:
+- c-media3
+- c-camerax
+- q-compose-performance-optimization--android--hard
+- q-when-can-the-system-restart-a-service--android--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/camera, android/media, barcode-scanning, difficulty/medium, ml-kit, object-detection]
+tags:
+- android/camera
+- android/media
+- barcode-scanning
+- difficulty/medium
+- ml-kit
+- object-detection
 date created: Saturday, November 1st 2025, 12:46:58 pm
 date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
@@ -621,6 +639,12 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 - [TensorFlow Lite Models](https://www.tensorflow.org/lite/models)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-media3]]
+- [[c-camerax]]
+
 
 ### Prerequisites (Easier)
 - [[q-when-can-the-system-restart-a-service--android--medium]]

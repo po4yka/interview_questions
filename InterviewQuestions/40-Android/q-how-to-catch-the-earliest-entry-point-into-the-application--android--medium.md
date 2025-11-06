@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-lifecycle
 - q-jetpack-compose-lazy-column--android--easy
 - q-privacy-sandbox-sdk-runtime--privacy--hard
 - q-retrofit-modify-all-requests--android--hard
@@ -670,6 +671,11 @@ class MyApplication : Application() {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-lifecycle]]
+
 
 ### Prerequisites (Easier)
 - [[q-architecture-components-libraries--android--easy]] - Fundamentals

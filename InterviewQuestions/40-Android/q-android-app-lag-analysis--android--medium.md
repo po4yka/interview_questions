@@ -1,28 +1,37 @@
 ---
 id: android-105
 title: Анализ тормозов приложения Android / Android App Lag Analysis
-aliases: [Android App Lag Analysis, Анализ тормозов приложения Android]
+aliases:
+- Android App Lag Analysis
+- Анализ тормозов приложения Android
 topic: android
 subtopics:
-  - performance-memory
-  - performance-rendering
-  - profiling
+- performance-memory
+- performance-rendering
+- profiling
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - c-android-profiler
-  - c-strictmode
-  - q-android-performance-measurement-tools--android--medium
+- c-android-profiler
+- c-strictmode
+- q-android-performance-measurement-tools--android--medium
 created: 2025-10-13
 updated: 2025-10-29
 sources: []
-tags: [android/performance-memory, android/performance-rendering, android/profiling, difficulty/medium, fps, lag, ui-thread]
+tags:
+- android/performance-memory
+- android/performance-rendering
+- android/profiling
+- difficulty/medium
+- fps
+- lag
+- ui-thread
 date created: Wednesday, October 29th 2025, 4:46:47 pm
 date modified: Sunday, November 2nd 2025, 12:44:44 pm
 ---
@@ -240,6 +249,12 @@ StrictMode.setThreadPolicy(
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-android-profiler]]
+- [[c-strictmode]]
+
 
 ### Prerequisites
 - [[q-android-performance-measurement-tools--android--medium]]

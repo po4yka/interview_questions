@@ -1,32 +1,38 @@
 ---
 id: android-053
-title: "Jank Detection and Frame Metrics / Обнаружение рывков и метрики кадров"
+title: Jank Detection and Frame Metrics / Обнаружение рывков и метрики кадров
 aliases: []
-
-# Classification
 topic: android
 subtopics:
-  - performance-rendering
-  - profiling
+- performance-rendering
+- profiling
 question_kind: coding
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [android/performance-rendering, android/profiling, difficulty/medium, en, ru]
+language_tags:
+- android/performance-rendering
+- android/profiling
+- difficulty/medium
+- en
+- ru
 source: Original
 source_note: Frame rendering performance best practices
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [app-startup-optimization, baseline-profiles-optimization, macrobenchmark-startup]
-
-# Timestamps
+related:
+- c-perfetto
+- c-performance
+- app-startup-optimization
+- baseline-profiles-optimization
+- macrobenchmark-startup
 created: 2025-10-11
 updated: 2025-10-31
-
-tags: [android/performance-rendering, android/profiling, difficulty/medium, en, ru]
+tags:
+- android/performance-rendering
+- android/profiling
+- difficulty/medium
+- en
+- ru
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -1589,6 +1595,12 @@ class FrameMetricsMonitor {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-perfetto]]
+- [[c-performance]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview

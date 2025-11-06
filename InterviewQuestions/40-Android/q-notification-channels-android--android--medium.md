@@ -1,20 +1,36 @@
 ---
 id: android-013
-title: "Notification Channels / Каналы уведомлений"
-aliases: ["Notification Channels", "Каналы уведомлений"]
+title: Notification Channels / Каналы уведомлений
+aliases:
+- Notification Channels
+- Каналы уведомлений
 topic: android
-subtopics: [notifications, ui-widgets]
+subtopics:
+- notifications
+- ui-widgets
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-app-components--android--easy]
+related:
+- c-permissions
+- q-android-app-components--android--easy
 created: 2025-10-05
 updated: 2025-01-25
-tags: [android/notifications, android/ui-widgets, android8, difficulty/medium, importance, notification-channels, notifications]
-sources: [https://developer.android.com/guide/topics/ui/notifiers/notifications]
+tags:
+- android/notifications
+- android/ui-widgets
+- android8
+- difficulty/medium
+- importance
+- notification-channels
+- notifications
+sources:
+- https://developer.android.com/guide/topics/ui/notifiers/notifications
 date created: Monday, October 27th 2025, 6:48:56 pm
 date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
@@ -143,6 +159,11 @@ val notification = NotificationCompat.Builder(this) // ❌ No channel ID
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-permissions]]
+
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components

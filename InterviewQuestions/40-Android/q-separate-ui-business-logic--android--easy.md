@@ -16,6 +16,8 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-mvvm
+- c-viewmodel
 - q-how-to-draw-ui-without-xml--android--easy
 - q-proguard-r8--android--medium
 - q-v-chyom-raznitsa-mezhdu-fragmentmanager-i-fragmenttransaction--programming-languages--medium
@@ -1315,6 +1317,12 @@ ViewModel переживает изменения конфигурации (по
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-mvvm]]
+- [[c-viewmodel]]
+
 
 ### Related (Easy)
 - [[q-why-separate-ui-and-business-logic--android--easy]] - Ui

@@ -1,28 +1,37 @@
 ---
 id: android-074
 title: Cache Implementation Strategies / Стратегии реализации кэша
-aliases: [Cache Implementation Strategies, Стратегии реализации кэша]
+aliases:
+- Cache Implementation Strategies
+- Стратегии реализации кэша
 topic: android
 subtopics:
-  - cache-offline
-  - networking-http
-  - room
+- cache-offline
+- networking-http
+- room
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-android-performance-measurement-tools--android--medium
-  - q-android-storage-types--android--medium
-  - q-database-optimization-android--android--medium
+- c-room
+- c-performance
+- c-room-database
+- q-android-performance-measurement-tools--android--medium
+- q-android-storage-types--android--medium
+- q-database-optimization-android--android--medium
 created: 2025-10-13
 updated: 2025-10-29
 sources: []
-tags: [android/cache-offline, android/networking-http, android/room, difficulty/medium]
+tags:
+- android/cache-offline
+- android/networking-http
+- android/room
+- difficulty/medium
 date created: Thursday, October 30th 2025, 11:13:55 am
 date modified: Sunday, November 2nd 2025, 1:24:15 pm
 ---
@@ -159,6 +168,13 @@ val client = OkHttpClient.Builder()
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-room]]
+- [[c-performance]]
+- [[c-room-database]]
+
 
 ### Prerequisites (Easier)
 - [[q-android-storage-types--android--medium]]

@@ -1,25 +1,34 @@
 ---
 id: android-461
 title: Dark Theme Android / Темная тема Android
-aliases: [Dark Theme Android, Темная тема Android]
+aliases:
+- Dark Theme Android
+- Темная тема Android
 topic: android
 subtopics:
-  - ui-theming
+- ui-theming
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-material-design-theming--android--medium
+- c-android-components
+- q-material-design-theming--android--medium
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/ui-theming, dark-theme, daynight, difficulty/medium, material-design, theming]
+tags:
+- android/ui-theming
+- dark-theme
+- daynight
+- difficulty/medium
+- material-design
+- theming
 sources:
-  - https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
+- https://developer.android.com/guide/topics/ui/look-and-feel/darktheme
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Sunday, November 2nd 2025, 5:51:12 pm
 ---
@@ -212,6 +221,11 @@ class MainActivity : AppCompatActivity() {
 - [Android Dark Theme Guide](https://developer.android.com/develop/ui/views/theming/darktheme)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-android-components]]
+
 
 ### Prerequisites (Easier)
 - Understanding of Android resource system

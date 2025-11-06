@@ -1,20 +1,38 @@
 ---
 id: android-358
-title: "Main Android Components / Основные компоненты Android"
-aliases: ["Main Android Components", "Основные компоненты Android"]
+title: Main Android Components / Основные компоненты Android
+aliases:
+- Main Android Components
+- Основные компоненты Android
 topic: android
-subtopics: [activity, content-provider, service]
+subtopics:
+- activity
+- content-provider
+- service
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-does-activity-lifecycle-work--android--medium, q-jit-vs-aot-compilation--android--medium]
+related:
+- c-service
+- c-activity
+- c-content-provider
+- q-how-does-activity-lifecycle-work--android--medium
+- q-jit-vs-aot-compilation--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android, android/activity, android/content-provider, android/service, components, difficulty/easy]
+tags:
+- android
+- android/activity
+- android/content-provider
+- android/service
+- components
+- difficulty/easy
 date created: Tuesday, October 28th 2025, 9:35:52 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -189,6 +207,13 @@ class MyContentProvider : ContentProvider() {
 - [Android Developer Guide - Application Fundamentals](https://developer.android.com/guide/components/fundamentals)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-service]]
+- [[c-activity]]
+- [[c-content-provider]]
+
 
 ### Prerequisites
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread fundamentals

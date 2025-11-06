@@ -1,20 +1,33 @@
 ---
 id: android-085
-title: "RecyclerView ViewTypes Delegation / Делегирование ViewTypes в RecyclerView"
-aliases: ["RecyclerView ViewTypes Delegation", "Делегирование ViewTypes в RecyclerView"]
+title: RecyclerView ViewTypes Delegation / Делегирование ViewTypes в RecyclerView
+aliases:
+- RecyclerView ViewTypes Delegation
+- Делегирование ViewTypes в RecyclerView
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-recyclerview-viewtypes, q-recyclerview-basics--android--easy]
+related:
+- c-recyclerview-viewtypes
+- q-recyclerview-basics--android--easy
 created: 2025-10-13
 updated: 2025-10-31
-tags: [adapter, android/ui-views, design-patterns, difficulty/medium, view-types]
-sources: [https://developer.android.com/guide/topics/ui/layout/recyclerview]
+tags:
+- adapter
+- android/ui-views
+- design-patterns
+- difficulty/medium
+- view-types
+sources:
+- https://developer.android.com/guide/topics/ui/layout/recyclerview
 date created: Saturday, November 1st 2025, 1:04:11 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -217,6 +230,11 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-recyclerview-viewtypes]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-basics--android--easy]] - RecyclerView basics

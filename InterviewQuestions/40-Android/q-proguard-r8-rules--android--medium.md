@@ -1,20 +1,38 @@
 ---
 id: android-153
-title: "ProGuard/R8 Rules / Правила ProGuard и R8"
-aliases: ["ProGuard/R8 Rules", "Правила ProGuard и R8"]
+title: ProGuard/R8 Rules / Правила ProGuard и R8
+aliases:
+- ProGuard/R8 Rules
+- Правила ProGuard и R8
 topic: android
-subtopics: [build-variants, obfuscation, static-analysis]
+subtopics:
+- build-variants
+- obfuscation
+- static-analysis
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-security-practices-checklist--android--medium, q-database-encryption-android--android--medium, q-encrypted-file-storage--android--medium]
+related:
+- c-gradle
+- q-android-security-practices-checklist--android--medium
+- q-database-encryption-android--android--medium
+- q-encrypted-file-storage--android--medium
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/build-variants, android/obfuscation, android/static-analysis, difficulty/medium, proguard, r8, security]
+tags:
+- android/build-variants
+- android/obfuscation
+- android/static-analysis
+- difficulty/medium
+- proguard
+- r8
+- security
 date created: Saturday, November 1st 2025, 12:47:01 pm
 date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
@@ -625,6 +643,11 @@ class ProguardRulesTest {
 - ProGuard manual for advanced rules
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-gradle]]
+
 
 ### Prerequisites
 - Build variants and configurations (basics)

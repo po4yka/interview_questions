@@ -1,26 +1,35 @@
 ---
 id: android-454
 title: Custom ViewGroup Layout / Layout кастомных ViewGroup
-aliases: [Custom ViewGroup Layout, Layout кастомных ViewGroup]
+aliases:
+- Custom ViewGroup Layout
+- Layout кастомных ViewGroup
 topic: android
 subtopics:
-  - ui-graphics
-  - ui-views
+- ui-graphics
+- ui-views
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-custom-drawable-implementation--android--medium
-  - q-custom-view-attributes--android--medium
-  - q-custom-view-lifecycle--android--medium
+- c-views
+- c-layouts
+- q-custom-drawable-implementation--android--medium
+- q-custom-view-attributes--android--medium
+- q-custom-view-lifecycle--android--medium
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/ui-graphics, android/ui-views, custom-views, difficulty/hard, layout]
+tags:
+- android/ui-graphics
+- android/ui-views
+- custom-views
+- difficulty/hard
+- layout
 sources: []
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Sunday, November 2nd 2025, 5:28:27 pm
@@ -331,6 +340,12 @@ val startX = if (isRtl) width - paddingRight else paddingLeft
 - [View Measurement Process](https://developer.android.com/guide/topics/ui/how-android-draws)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-views]]
+- [[c-layouts]]
+
 
 ### Prerequisites (Easier)
 - [[q-custom-view-lifecycle--android--medium]] — View lifecycle and drawing order

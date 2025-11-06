@@ -1,28 +1,37 @@
 ---
 id: android-052
 title: CI/CD for Multi‑Module Android / CI/CD для мультимодульных Android‑проектов
-aliases: [CI/CD for Multi-Module Android, CI/CD для мультимодульных Android‑проектов]
+aliases:
+- CI/CD for Multi-Module Android
+- CI/CD для мультимодульных Android‑проектов
 topic: android
 subtopics:
-  - architecture-modularization
-  - ci-cd
-  - gradle
+- architecture-modularization
+- ci-cd
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-android-modularization--android--medium
-  - q-build-optimization-gradle--android--medium
-  - q-cicd-automated-testing--android--medium
+- c-modularization
+- c-gradle
+- c-release-engineering
+- q-android-modularization--android--medium
+- q-build-optimization-gradle--android--medium
+- q-cicd-automated-testing--android--medium
 sources: []
 created: 2025-10-11
 updated: 2025-10-29
-tags: [android/architecture-modularization, android/ci-cd, android/gradle, difficulty/medium]
+tags:
+- android/architecture-modularization
+- android/ci-cd
+- android/gradle
+- difficulty/medium
 date created: Thursday, October 30th 2025, 11:18:32 am
 date modified: Sunday, November 2nd 2025, 1:30:03 pm
 ---
@@ -323,6 +332,13 @@ tasks.withType<Test> {
 - [Gradle Configuration Cache](https://docs.gradle.org/current/userguide/configuration_cache.html)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-modularization]]
+- [[c-gradle]]
+- [[c-release-engineering]]
+
 
 ### Prerequisites
 - [[q-android-modularization--android--medium]] — Understanding module boundaries and dependency management

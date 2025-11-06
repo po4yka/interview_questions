@@ -1,19 +1,36 @@
 ---
 id: android-118
-title: "Is LayoutInflater A Singleton And Why / Является ли LayoutInflater синглтоном и почему"
-aliases: ["Is LayoutInflater A Singleton And Why", "Является ли LayoutInflater синглтоном и почему"]
+title: Is LayoutInflater A Singleton And Why / Является ли LayoutInflater синглтоном
+  и почему
+aliases:
+- Is LayoutInflater A Singleton And Why
+- Является ли LayoutInflater синглтоном и почему
 topic: android
-subtopics: [architecture-mvvm, ui-views]
+subtopics:
+- architecture-mvvm
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-home-screen-widgets--android--medium, q-what-design-systems-in-android-have-you-worked-with--android--medium]
+related:
+- c-mvvm
+- c-viewmodel
+- q-home-screen-widgets--android--medium
+- q-what-design-systems-in-android-have-you-worked-with--android--medium
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android, android/architecture-mvvm, android/ui-views, context, difficulty/medium, system-services]
+tags:
+- android
+- android/architecture-mvvm
+- android/ui-views
+- context
+- difficulty/medium
+- system-services
 sources: []
 date created: Monday, October 27th 2025, 3:32:43 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
@@ -147,6 +164,12 @@ class BadAdapter : RecyclerView.Adapter<ViewHolder>() {
 - Android Developer Documentation: System Services and Context
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-mvvm]]
+- [[c-viewmodel]]
+
 
 ### Prerequisites
 - [[q-viewmodel-pattern--android--easy]]

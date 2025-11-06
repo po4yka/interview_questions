@@ -1,20 +1,36 @@
 ---
 id: android-043
 title: Gradle Build Optimization / Оптимизация сборки Gradle
-aliases: ["Gradle Build Optimization", "Оптимизация сборки Gradle"]
+aliases:
+- Gradle Build Optimization
+- Оптимизация сборки Gradle
 topic: android
-subtopics: [build-variants, dependency-management, gradle]
+subtopics:
+- build-variants
+- dependency-management
+- gradle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: []
+related:
+- c-app-bundle
+- c-performance-optimization
+- c-performance
 sources: []
 created: 2025-10-11
 updated: 2025-10-29
-tags: [android/build-variants, android/dependency-management, android/gradle, build-performance, difficulty/medium, gradle]
+tags:
+- android/build-variants
+- android/dependency-management
+- android/gradle
+- build-performance
+- difficulty/medium
+- gradle
 date created: Thursday, October 30th 2025, 11:11:42 am
 date modified: Sunday, November 2nd 2025, 1:03:54 pm
 ---
@@ -232,6 +248,13 @@ Analyze: task timeline, cache hit rates, configuration time, dependency resoluti
 - [Android Build Best Practices](https://developer.android.com/build/optimize-your-build)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-app-bundle]]
+- [[c-performance-optimization]]
+- [[c-performance]]
+
 
 ### Prerequisites (Easier)
 - [[q-android-build-optimization--android--medium]] — General Android build optimization strategies

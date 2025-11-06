@@ -1,20 +1,38 @@
 ---
 id: android-151
-title: "What Happens When A New Activity Is Called Is Memory From The Old One Freed / Что происходит когда вызывается новая Activity освобождается ли память от старой"
-aliases: ["What Happens When A New Activity Is Called Is Memory From The Old One Freed", "Что происходит когда вызывается новая Activity освобождается ли память от старой"]
+title: What Happens When A New Activity Is Called Is Memory From The Old One Freed
+  / Что происходит когда вызывается новая Activity освобождается ли память от старой
+aliases:
+- What Happens When A New Activity Is Called Is Memory From The Old One Freed
+- Что происходит когда вызывается новая Activity освобождается ли память от старой
 topic: android
-subtopics: [lifecycle, performance-memory]
+subtopics:
+- lifecycle
+- performance-memory
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-activity-lifecycle-methods--android--medium, q-activity-navigation-how-it-works--android--medium, q-how-does-activity-lifecycle-work--android--medium]
+related:
+- c-memory-management
+- c-lifecycle
+- q-activity-lifecycle-methods--android--medium
+- q-activity-navigation-how-it-works--android--medium
+- q-how-does-activity-lifecycle-work--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/lifecycle, android/performance-memory, difficulty/medium, lifecycle, performance-memory]
+tags:
+- android
+- android/lifecycle
+- android/performance-memory
+- difficulty/medium
+- lifecycle
+- performance-memory
 date created: Saturday, November 1st 2025, 12:47:08 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
@@ -226,6 +244,12 @@ class DataViewModel : ViewModel() {
 - [Tasks and Back Stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-memory-management]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites
 

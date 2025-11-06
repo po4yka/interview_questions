@@ -1,20 +1,36 @@
 ---
 id: android-141
-title: "What Is Data Binding / Что такое Data Binding"
-aliases: ["Android Data Binding", "Data Binding", "Что такое Data Binding"]
+title: What Is Data Binding / Что такое Data Binding
+aliases:
+- Android Data Binding
+- Data Binding
+- Что такое Data Binding
 topic: android
-subtopics: [architecture-mvvm, ui-views]
+subtopics:
+- architecture-mvvm
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-what-is-known-about-recyclerview--android--easy, q-which-event-is-called-when-user-touches-screen--android--medium]
+related:
+- c-mvvm
+- c-viewmodel
+- q-what-is-known-about-recyclerview--android--easy
+- q-which-event-is-called-when-user-touches-screen--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/architecture-mvvm, android/ui-views, data-binding, difficulty/easy, ui]
+tags:
+- android/architecture-mvvm
+- android/ui-views
+- data-binding
+- difficulty/easy
+- ui
 date created: Saturday, November 1st 2025, 12:47:08 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
@@ -303,6 +319,12 @@ class MainActivity : AppCompatActivity() {
 - [View Binding Documentation](https://developer.android.com/topic/libraries/view-binding)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-mvvm]]
+- [[c-viewmodel]]
+
 
 ### Prerequisites
 - [[q-what-is-known-about-recyclerview--android--easy]] — Understanding Android views first

@@ -1,20 +1,30 @@
 ---
 id: android-309
-title: "What Does ItemDecoration Do / Что делает ItemDecoration"
-aliases: ["ItemDecoration", "Что делает ItemDecoration"]
+title: What Does ItemDecoration Do / Что делает ItemDecoration
+aliases:
+- ItemDecoration
+- Что делает ItemDecoration
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: []
+related:
+- c-recyclerview
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-views, difficulty/medium, itemdecoration, recyclerview]
+tags:
+- android/ui-views
+- difficulty/medium
+- itemdecoration
+- recyclerview
 date created: Saturday, November 1st 2025, 12:47:07 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
@@ -387,6 +397,11 @@ val count = recyclerView.itemDecorationCount      // Get count
 - [Android Canvas and Drawing Guide](https://developer.android.com/develop/ui/views/graphics/drawables)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-recyclerview]]
+
 
 ### Prerequisites
 - RecyclerView basics (adapter, ViewHolder pattern)

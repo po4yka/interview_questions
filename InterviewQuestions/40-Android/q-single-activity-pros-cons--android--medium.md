@@ -1,20 +1,42 @@
 ---
 id: android-171
-title: "Single Activity Pros Cons / Преимущества и недостатки Single Activity"
-aliases: ["Single Activity Pros Cons", "Преимущества и недостатки Single Activity"]
+title: Single Activity Pros Cons / Преимущества и недостатки Single Activity
+aliases:
+- Single Activity Pros Cons
+- Преимущества и недостатки Single Activity
 topic: android
-subtopics: [activity, fragment, ui-navigation]
+subtopics:
+- activity
+- fragment
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-activity-lifecycle-methods--android--medium, q-what-is-activity-and-what-is-it-used-for--android--medium, q-why-are-fragments-needed-if-there-is-activity--android--hard]
+related:
+- c-compose-navigation
+- c-activity
+- c-fragments
+- q-activity-lifecycle-methods--android--medium
+- q-what-is-activity-and-what-is-it-used-for--android--medium
+- q-why-are-fragments-needed-if-there-is-activity--android--hard
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/activity, android/fragment, android/ui-navigation, difficulty/medium, fragment, navigation, single-activity, viewmodel]
+tags:
+- android
+- android/activity
+- android/fragment
+- android/ui-navigation
+- difficulty/medium
+- fragment
+- navigation
+- single-activity
+- viewmodel
 date created: Saturday, November 1st 2025, 12:47:04 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -248,6 +270,13 @@ Single Activity is the **modern Android standard** (especially with Navigation C
 - Official Android documentation: Single Activity architecture guide
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-navigation]]
+- [[c-activity]]
+- [[c-fragments]]
+
 
 ### Prerequisites
 - [[q-activity-lifecycle-methods--android--medium]] — Activity lifecycle understanding needed

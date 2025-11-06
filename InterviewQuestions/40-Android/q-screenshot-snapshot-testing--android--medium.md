@@ -1,19 +1,30 @@
 ---
 id: android-318
-title: "Screenshot and Snapshot Testing / Screenshot и Snapshot тестирование"
-aliases: [Screenshot and Snapshot Testing, Screenshot и Snapshot тестирование]
+title: Screenshot and Snapshot Testing / Screenshot и Snapshot тестирование
+aliases:
+- Screenshot and Snapshot Testing
+- Screenshot и Snapshot тестирование
 topic: android
-subtopics: [testing-ui]
+subtopics:
+- testing-ui
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-hilt-entry-points--di--medium, q-kmm-production-readiness--multiplatform--hard, q-privacy-sandbox-topics-api--privacy--medium]
+related:
+- c-testing
+- q-hilt-entry-points--di--medium
+- q-kmm-production-readiness--multiplatform--hard
+- q-privacy-sandbox-topics-api--privacy--medium
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/testing-ui, difficulty/medium]
+tags:
+- android/testing-ui
+- difficulty/medium
 date created: Saturday, November 1st 2025, 12:47:03 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -1291,6 +1302,11 @@ Screenshot тестирование предотвращает визуальн�
 -   `https://developer.android.com/jetpack/compose/testing` — Compose testing
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-testing]]
+
 
 ### Related (Medium)
 

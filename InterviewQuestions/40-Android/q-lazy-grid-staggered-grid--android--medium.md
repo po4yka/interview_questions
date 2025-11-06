@@ -1,20 +1,35 @@
 ---
 id: android-071
-title: "LazyGrid & LazyStaggeredGrid / LazyGrid и LazyStaggeredGrid"
-aliases: ["LazyGrid & LazyStaggeredGrid", "LazyGrid и LazyStaggeredGrid"]
+title: LazyGrid & LazyStaggeredGrid / LazyGrid и LazyStaggeredGrid
+aliases:
+- LazyGrid & LazyStaggeredGrid
+- LazyGrid и LazyStaggeredGrid
 topic: android
-subtopics: [performance-rendering, ui-compose]
+subtopics:
+- performance-rendering
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-lazy-grid]
+related:
+- c-lazy-grid
 created: 2025-10-12
 updated: 2025-10-31
-tags: [android/performance-rendering, android/ui-compose, difficulty/medium, grid, jetpack-compose, lazy-layout, performance]
-sources: [https://developer.android.com/jetpack/compose/lists]
+tags:
+- android/performance-rendering
+- android/ui-compose
+- difficulty/medium
+- grid
+- jetpack-compose
+- lazy-layout
+- performance
+sources:
+- https://developer.android.com/jetpack/compose/lists
 date created: Sunday, October 12th 2025, 10:43:54 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -201,6 +216,11 @@ LazyVerticalGrid(
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-lazy-grid]]
+
 
 ### Prerequisites (Easier)
 - Related content to be added

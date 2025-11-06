@@ -1,30 +1,45 @@
 ---
 id: android-064
-title: "Jetpack Compose Basics / Основы Jetpack Compose"
+title: Jetpack Compose Basics / Основы Jetpack Compose
 aliases: []
-
-# Classification
 topic: android
-subtopics: [ui-compose, ui-state, ui-views]
+subtopics:
+- ui-compose
+- ui-state
+- ui-views
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [android/declarative-ui, android/jetpack-compose, android/recomposition, android/state, android/ui, difficulty/medium, en, ru]
+language_tags:
+- android/declarative-ui
+- android/jetpack-compose
+- android/recomposition
+- android/state
+- android/ui
+- difficulty/medium
+- en
+- ru
 source: internal
 source_note: Created for vault completeness
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-compose-remember-derived-state--jetpack-compose--medium, q-compose-side-effects-advanced--jetpack-compose--hard, q-compose-stability-skippability--jetpack-compose--hard, q-how-does-jetpack-compose-work--android--medium]
-
-# Timestamps
+related:
+- c-compose-state
+- c-jetpack-compose
+- c-viewmodel
+- q-compose-remember-derived-state--jetpack-compose--medium
+- q-compose-side-effects-advanced--jetpack-compose--hard
+- q-compose-stability-skippability--jetpack-compose--hard
+- q-how-does-jetpack-compose-work--android--medium
 created: 2025-10-12
 updated: 2025-10-12
-
-tags: [android/ui-compose, android/ui-state, android/ui-views, difficulty/medium, en, ru]
+tags:
+- android/ui-compose
+- android/ui-state
+- android/ui-views
+- difficulty/medium
+- en
+- ru
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -2327,6 +2342,13 @@ fun LoadDataExample(userId: String) {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+- [[c-viewmodel]]
+
 
 ### Prerequisites (Easier)
 - [[q-jetpack-compose-lazy-column--android--easy]] - LazyColumn for lists

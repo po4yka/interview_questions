@@ -1,20 +1,36 @@
 ---
 id: android-378
-title: "Touch Event Handling Custom Views / Обработка касаний в пользовательских View"
-aliases: ["Touch Event Handling Custom Views", "Обработка касаний в пользовательских View"]
+title: Touch Event Handling Custom Views / Обработка касаний в пользовательских View
+aliases:
+- Touch Event Handling Custom Views
+- Обработка касаний в пользовательских View
 topic: android
-subtopics: [ui-state, ui-views]
+subtopics:
+- ui-state
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-modularization-patterns--android--hard, q-what-does-itemdecoration-do--android--medium]
+related:
+- c-compose-state
+- c-viewmodel
+- q-modularization-patterns--android--hard
+- q-what-does-itemdecoration-do--android--medium
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/ui-state, android/ui-views, difficulty/medium, gestures, touch-events, views]
+tags:
+- android/ui-state
+- android/ui-views
+- difficulty/medium
+- gestures
+- touch-events
+- views
 date created: Saturday, November 1st 2025, 12:47:05 pm
 date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
@@ -506,6 +522,12 @@ class FlingView @JvmOverloads constructor(
 - [MotionEvent Reference](https://developer.android.com/reference/android/view/MotionEvent)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-viewmodel]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Basic View concepts

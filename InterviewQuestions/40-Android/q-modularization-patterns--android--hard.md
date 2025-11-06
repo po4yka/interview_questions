@@ -1,30 +1,38 @@
 ---
 id: android-005
-title: "Android Modularization Patterns / Паттерны модуляризации в Android"
+title: Android Modularization Patterns / Паттерны модуляризации в Android
 aliases: []
-
-# Classification
 topic: android
-subtopics: [architecture-clean, architecture-modularization]
+subtopics:
+- architecture-clean
+- architecture-modularization
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [android/architecture, android/best-practices, android/modularization, difficulty/hard, en, ru]
+language_tags:
+- android/architecture
+- android/best-practices
+- android/modularization
+- difficulty/hard
+- en
+- ru
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-ot-kogo-nasleduyutsya-viewgroup--programming-languages--easy, q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]
-
-# Timestamps
+related:
+- c-clean-architecture
+- q-does-state-made-in-compose-help-avoid-race-condition--android--medium
+- q-ot-kogo-nasleduyutsya-viewgroup--programming-languages--easy
+- q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
 created: 2025-10-05
 updated: 2025-10-05
-
-tags: [android/architecture-clean, android/architecture-modularization, difficulty/hard, en, ru]
+tags:
+- android/architecture-clean
+- android/architecture-modularization
+- difficulty/hard
+- en
+- ru
 date created: Sunday, October 12th 2025, 12:27:49 pm
 date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
@@ -236,6 +244,11 @@ Since Android modules come with overhead, preferably, you'd want to use the Kotl
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-clean-architecture]]
+
 
 ### Related (Hard)
 - [[q-data-sync-unstable-network--android--hard]] - Networking

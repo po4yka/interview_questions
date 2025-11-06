@@ -1,20 +1,38 @@
 ---
 id: android-166
-title: "Mlkit Face Detection / Распознавание лиц ML Kit"
-aliases: ["ML Kit Face Detection", "Распознавание лиц ML Kit"]
+title: Mlkit Face Detection / Распознавание лиц ML Kit
+aliases:
+- ML Kit Face Detection
+- Распознавание лиц ML Kit
 topic: android
-subtopics: [camera, performance-rendering, ui-graphics]
+subtopics:
+- camera
+- performance-rendering
+- ui-graphics
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-dagger-framework-overview--android--hard, q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]
+related:
+- c-performance
+- c-camerax
+- q-dagger-framework-overview--android--hard
+- q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android/camera, android/performance-rendering, android/ui-graphics, difficulty/medium, face-detection, kotlin, machine-learning]
+tags:
+- android/camera
+- android/performance-rendering
+- android/ui-graphics
+- difficulty/medium
+- face-detection
+- kotlin
+- machine-learning
 date created: Monday, October 27th 2025, 5:12:57 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -402,6 +420,12 @@ fun checkChallenge(challenge: LivenessChallenge, face: Face): Boolean {
 - Android privacy best practices
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-performance]]
+- [[c-camerax]]
+
 
 ### Prerequisites
 - [[q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium]]

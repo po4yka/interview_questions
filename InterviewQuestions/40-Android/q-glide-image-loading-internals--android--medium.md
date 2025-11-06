@@ -1,30 +1,45 @@
 ---
 id: android-034
-title: "How do image loading libraries like Glide work internally? / Как работают библиотеки загрузки изображений вроде Glide?"
+title: How do image loading libraries like Glide work internally? / Как работают библиотеки
+  загрузки изображений вроде Glide?
 aliases: []
-
-# Classification
 topic: android
-subtopics: [cache-offline, files-media, performance-memory]
+subtopics:
+- cache-offline
+- files-media
+- performance-memory
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [android/caching, android/glide, android/image-loading, android/memory-management, difficulty/medium, en, ru]
+language_tags:
+- android/caching
+- android/glide
+- android/image-loading
+- android/memory-management
+- difficulty/medium
+- en
+- ru
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [bitmap-handling, caching, glide, memory-optimization]
-
-# Timestamps
+related:
+- c-memory-management
+- c-database-design
+- c-scoped-storage-security
+- bitmap-handling
+- caching
+- glide
+- memory-optimization
 created: 2025-10-06
 updated: 2025-10-31
-
-tags: [android/cache-offline, android/files-media, android/performance-memory, difficulty/medium, en, ru]
+tags:
+- android/cache-offline
+- android/files-media
+- android/performance-memory
+- difficulty/medium
+- en
+- ru
 date created: Saturday, October 25th 2025, 1:26:31 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
@@ -678,6 +693,13 @@ Glide.with(context) // Lifecycle-aware
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-memory-management]]
+- [[c-database-design]]
+- [[c-scoped-storage-security]]
+
 
 ### Related (Medium)
 - [[q-repository-multiple-sources--android--medium]] - Architecture

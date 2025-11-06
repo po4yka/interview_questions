@@ -1,20 +1,39 @@
 ---
 id: android-339
-title: "How Does Fragment Lifecycle Differ From Activity V2 / Чем жизненный цикл Fragment отличается от Activity v2"
-aliases: ["How Does Fragment Lifecycle Differ From Activity V2", "Чем жизненный цикл Fragment отличается от Activity v2"]
+title: How Does Fragment Lifecycle Differ From Activity V2 / Чем жизненный цикл Fragment
+  отличается от Activity v2
+aliases:
+- How Does Fragment Lifecycle Differ From Activity V2
+- Чем жизненный цикл Fragment отличается от Activity v2
 topic: android
-subtopics: [activity, fragment, lifecycle]
+subtopics:
+- activity
+- fragment
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-project-parts--android--easy, q-how-to-add-custom-attributes-to-custom-view--android--medium, q-workmanager-return-result--android--medium]
+related:
+- c-activity
+- c-fragments
+- c-lifecycle
+- q-android-project-parts--android--easy
+- q-how-to-add-custom-attributes-to-custom-view--android--medium
+- q-workmanager-return-result--android--medium
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android, android/activity, android/fragment, android/lifecycle, difficulty/medium]
+tags:
+- android
+- android/activity
+- android/fragment
+- android/lifecycle
+- difficulty/medium
 date created: Tuesday, October 28th 2025, 9:35:33 am
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
@@ -380,6 +399,13 @@ override fun onDestroyView() {
 - [ViewLifecycleOwner](https://developer.android.com/reference/androidx/lifecycle/ViewLifecycleOwner)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-activity]]
+- [[c-fragments]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites
 - [[q-android-project-parts--android--easy]] - Basic Android components

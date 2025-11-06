@@ -17,6 +17,8 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-retrofit
+- c-room
 - q-databases-android--android--easy
 - q-how-to-choose-layout-for-fragment--android--easy
 - q-webp-image-format-android--android--easy
@@ -971,6 +973,13 @@ fun RssItemCard(
 
 ## Related Questions
 
+### Prerequisites / Concepts
+
+- [[c-retrofit]]
+- [[c-room]]
+
+
 - [[q-how-to-choose-layout-for-fragment--android--easy]]
 - [[q-webp-image-format-android--android--easy]]
 - [[q-databases-android--android--easy]]
+##

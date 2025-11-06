@@ -1,25 +1,38 @@
 ---
 id: android-106
-title: "Looper Empty Queue Behavior / Поведение Looper при пустой очереди"
-aliases: [Looper Blocking Behavior, Looper Empty Queue, Блокировка Looper, Поведение Looper при пустой очереди]
+title: Looper Empty Queue Behavior / Поведение Looper при пустой очереди
+aliases:
+- Looper Blocking Behavior
+- Looper Empty Queue
+- Блокировка Looper
+- Поведение Looper при пустой очереди
 topic: android
 subtopics:
-  - coroutines
-  - threads-sync
+- coroutines
+- threads-sync
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
 related:
-  - q-handler-looper-messagequeue-relationship--android--medium
-  - q-handlerthread-vs-thread--android--medium
-  - q-message-scheduling-looper--android--medium
+- c-coroutines
+- q-handler-looper-messagequeue-relationship--android--medium
+- q-handlerthread-vs-thread--android--medium
+- q-message-scheduling-looper--android--medium
 sources: []
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/coroutines, android/threads-sync, blocking, difficulty/medium, looper, message-queue]
+tags:
+- android/coroutines
+- android/threads-sync
+- blocking
+- difficulty/medium
+- looper
+- message-queue
 date created: Tuesday, October 28th 2025, 9:35:15 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -241,6 +254,11 @@ looper.quitSafely()
 - [Linux epoll documentation](https://man7.org/linux/man-pages/man7/epoll.7.html)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-coroutines]]
+
 
 ### Prerequisites (Easier)
 - Related content to be added

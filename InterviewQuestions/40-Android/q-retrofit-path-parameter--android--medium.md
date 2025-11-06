@@ -1,20 +1,35 @@
 ---
 id: android-289
-title: "Retrofit Path Parameter / Path параметр Retrofit"
-aliases: ["Path параметр Retrofit", "Retrofit Path Parameter"]
+title: Retrofit Path Parameter / Path параметр Retrofit
+aliases:
+- Path параметр Retrofit
+- Retrofit Path Parameter
 topic: android
-subtopics: [networking-http]
+subtopics:
+- networking-http
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-http-protocols-comparison--android--medium, q-retrofit-library--android--medium, q-retrofit-usage-tutorial--android--medium]
+related:
+- c-retrofit
+- q-http-protocols-comparison--android--medium
+- q-retrofit-library--android--medium
+- q-retrofit-usage-tutorial--android--medium
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/networking-http, difficulty/medium, networking, path-parameters, rest-api, retrofit]
+tags:
+- android/networking-http
+- difficulty/medium
+- networking
+- path-parameters
+- rest-api
+- retrofit
 date created: Saturday, November 1st 2025, 12:47:02 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -236,6 +251,11 @@ suspend fun getUser(@Path("userId") userId: String)
 - https://developer.android.com/training/basics/network-ops - Android networking fundamentals
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-retrofit]]
+
 
 ### Prerequisites (Easier)
 - [[q-graphql-vs-rest--networking--easy]] - Understanding REST API fundamentals

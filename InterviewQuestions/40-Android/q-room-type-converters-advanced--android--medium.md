@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-room
 - q-how-to-animate-adding-removing-items-in-recyclerview--android--medium
 - q-tasks-back-stack--android--medium
 - q-what-is-broadcastreceiver--android--easy
@@ -1990,6 +1991,11 @@ class GoodConverters {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-room]]
+
 
 ### Prerequisites (Easier)
 - [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage

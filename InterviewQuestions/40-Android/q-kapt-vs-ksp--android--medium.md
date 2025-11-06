@@ -1,30 +1,37 @@
 ---
 id: android-020
-title: "kapt vs KSP comparison / Сравнение kapt и KSP"
+title: kapt vs KSP comparison / Сравнение kapt и KSP
 aliases: []
-
-# Classification
 topic: android
-subtopics: [gradle]
+subtopics:
+- gradle
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [android/annotation-processing, android/build-performance, android/kapt, android/ksp, difficulty/medium, en, ru]
+language_tags:
+- android/annotation-processing
+- android/build-performance
+- android/kapt
+- android/ksp
+- difficulty/medium
+- en
+- ru
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-fix-slow-app-startup-legacy--android--hard, q-looper-thread-connection--android--medium, q-macrobenchmark-startup--android--medium]
-
-# Timestamps
+related:
+- c-gradle
+- q-fix-slow-app-startup-legacy--android--hard
+- q-looper-thread-connection--android--medium
+- q-macrobenchmark-startup--android--medium
 created: 2025-10-06
 updated: 2025-10-06
-
-tags: [android/gradle, difficulty/medium, en, ru]
+tags:
+- android/gradle
+- difficulty/medium
+- en
+- ru
 date created: Saturday, October 25th 2025, 1:26:29 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -337,6 +344,11 @@ dependencies {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-gradle]]
+
 
 ### Related (Medium)
 - [[q-kapt-ksp-migration--android--medium]] - Kapt

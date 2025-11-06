@@ -1,29 +1,45 @@
 ---
 id: android-096
-title: Почему данные пользователя могут исчезать при повороте экрана? / Why might user data disappear during screen rotation?
-aliases: [Configuration change data loss, Screen rotation data loss, Данные исчезают при повороте, Потеря данных при повороте]
+title: Почему данные пользователя могут исчезать при повороте экрана? / Why might
+  user data disappear during screen rotation?
+aliases:
+- Configuration change data loss
+- Screen rotation data loss
+- Данные исчезают при повороте
+- Потеря данных при повороте
 topic: android
 subtopics:
-  - architecture-mvvm
-  - lifecycle
-  - ui-state
+- architecture-mvvm
+- lifecycle
+- ui-state
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: draft
 moc: moc-android
 related:
-  - q-compose-gesture-detection--android--medium
-  - q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
+- c-compose-state
+- c-lifecycle
+- c-mvvm
+- q-compose-gesture-detection--android--medium
+- q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
 created: 2025-10-13
 updated: 2025-10-30
-tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, configuration-changes, difficulty/hard, lifecycle, state-management, viewmodel]
+tags:
+- android/architecture-mvvm
+- android/lifecycle
+- android/ui-state
+- configuration-changes
+- difficulty/hard
+- lifecycle
+- state-management
+- viewmodel
 sources:
-  - https://developer.android.com/guide/topics/resources/runtime-changes
-  - https://developer.android.com/topic/libraries/architecture/saving-states
+- https://developer.android.com/guide/topics/resources/runtime-changes
+- https://developer.android.com/topic/libraries/architecture/saving-states
 date created: Saturday, November 1st 2025, 12:47:11 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
@@ -711,6 +727,13 @@ Data disappears because:
 - Official Android Documentation: [ViewModel Overview](https://developer.android.com/topic/libraries/architecture/viewmodel)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-lifecycle]]
+- [[c-mvvm]]
+
 
 ### Prerequisites (Medium)
 - [[q-how-to-display-svg-string-as-a-vector-file--android--medium]]

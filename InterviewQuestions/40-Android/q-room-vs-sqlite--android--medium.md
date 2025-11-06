@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-room
 - q-android-runtime-art--android--medium
 - q-compose-navigation-advanced--jetpack-compose--medium
 - q-room-transactions-dao--android--medium
@@ -1169,6 +1170,11 @@ class UserRepository(private val userDao: UserDao) {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-room]]
+
 
 ### Prerequisites (Easier)
 - [[q-sharedpreferences-commit-vs-apply--android--easy]] - Storage

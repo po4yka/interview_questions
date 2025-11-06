@@ -1,25 +1,34 @@
 ---
 id: android-306
 title: FragmentManager vs FragmentTransaction / FragmentManager против FragmentTransaction
-aliases: [FragmentManager vs FragmentTransaction, FragmentManager против FragmentTransaction]
+aliases:
+- FragmentManager vs FragmentTransaction
+- FragmentManager против FragmentTransaction
 topic: android
 subtopics:
-  - fragment
-  - lifecycle
+- fragment
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
-related: []
+related:
+- c-fragments
+- c-lifecycle
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/fragment, android/lifecycle, difficulty/medium, fragmentmanager, fragmenttransaction]
+tags:
+- android/fragment
+- android/lifecycle
+- difficulty/medium
+- fragmentmanager
+- fragmenttransaction
 sources:
-  - https://developer.android.com/guide/fragments/fragmentmanager
+- https://developer.android.com/guide/fragments/fragmentmanager
 date created: Tuesday, October 28th 2025, 7:38:00 am
 date modified: Tuesday, November 4th 2025, 12:46:45 pm
 ---
@@ -118,6 +127,12 @@ tx.replace(R.id.container, MyFragment())
 - [Android Developers: Fragment Transactions](https://developer.android.com/guide/fragments/transactions)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-fragments]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites (Easier)
 - Fragment basics and lifecycle concepts

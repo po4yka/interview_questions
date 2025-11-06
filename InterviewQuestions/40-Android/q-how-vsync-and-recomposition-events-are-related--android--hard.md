@@ -1,20 +1,39 @@
 ---
 id: android-110
-title: "How VSYNC and Recomposition Events Are Related / Как связаны VSYNC и события рекомпозиции"
-aliases: ["VSYNC Recomposition", "VSYNC и рекомпозиция"]
+title: How VSYNC and Recomposition Events Are Related / Как связаны VSYNC и события
+  рекомпозиции
+aliases:
+- VSYNC Recomposition
+- VSYNC и рекомпозиция
 topic: android
-subtopics: [performance-rendering, ui-compose]
+subtopics:
+- performance-rendering
+- ui-compose
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-network-error-handling-strategies--networking--medium]
+related:
+- c-compose-state
+- c-jetpack-compose
+- c-performance
+- q-how-to-create-list-like-recyclerview-in-compose--android--medium
+- q-network-error-handling-strategies--networking--medium
 created: 2025-10-13
 updated: 2025-10-28
 sources: []
-tags: [android, android/performance-rendering, android/ui-compose, compose, difficulty/hard, performance, vsync]
+tags:
+- android
+- android/performance-rendering
+- android/ui-compose
+- compose
+- difficulty/hard
+- performance
+- vsync
 date created: Tuesday, October 28th 2025, 9:12:56 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -266,6 +285,13 @@ Compose automatically adapts to screen refresh rate:
 - [Choreographer Documentation](https://developer.android.com/reference/android/view/Choreographer)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+- [[c-performance]]
+
 
 ### Prerequisites
 - Compose recomposition basics (easy level)

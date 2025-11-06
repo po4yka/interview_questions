@@ -1,20 +1,35 @@
 ---
 id: android-086
-title: "Memory Leaks Definition / Определение утечек памяти"
-aliases: ["Memory Leaks Definition", "Определение утечек памяти"]
+title: Memory Leaks Definition / Определение утечек памяти
+aliases:
+- Memory Leaks Definition
+- Определение утечек памяти
 topic: android
-subtopics: [lifecycle, performance-memory]
+subtopics:
+- lifecycle
+- performance-memory
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-10-28
 sources: []
-tags: [android/lifecycle, android/performance-memory, difficulty/easy, memory-leaks, performance]
+tags:
+- android/lifecycle
+- android/performance-memory
+- difficulty/easy
+- memory-leaks
+- performance
 moc: moc-android
-related: [q-coroutine-memory-leak-detection--kotlin--hard, q-coroutine-memory-leaks--kotlin--hard]
+related:
+- c-memory-management
+- c-lifecycle
+- q-coroutine-memory-leak-detection--kotlin--hard
+- q-coroutine-memory-leaks--kotlin--hard
 date created: Tuesday, October 28th 2025, 9:36:26 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
@@ -244,6 +259,12 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 - [Android Performance: Memory](https://developer.android.com/topic/performance/memory)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-memory-management]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites
 - [[q-primitive-vs-reference-types--programming-languages--easy]] - Understanding references

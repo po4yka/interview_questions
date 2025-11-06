@@ -1,20 +1,38 @@
 ---
 id: android-122
-title: "Room Code Generation Timing / Время генерации кода Room"
-aliases: ["Room Code Generation Timing", "Время генерации кода Room"]
+title: Room Code Generation Timing / Время генерации кода Room
+aliases:
+- Room Code Generation Timing
+- Время генерации кода Room
 topic: android
-subtopics: [gradle, room]
+subtopics:
+- gradle
+- room
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-dagger-framework-overview--android--hard, q-kapt-ksp-migration--android--medium, q-kapt-vs-ksp--android--medium]
+related:
+- c-gradle
+- c-room
+- q-dagger-framework-overview--android--hard
+- q-kapt-ksp-migration--android--medium
+- q-kapt-vs-ksp--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/gradle, android/room, code-generation, compile-time, difficulty/medium, kapt, ksp]
+tags:
+- android/gradle
+- android/room
+- code-generation
+- compile-time
+- difficulty/medium
+- kapt
+- ksp
 date created: Saturday, November 1st 2025, 12:47:02 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -197,6 +215,12 @@ fun getAll(): List<User>
 - KSP vs KAPT performance comparison studies
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-gradle]]
+- [[c-room]]
+
 
 ### Prerequisites
 - Basic annotation processing concepts

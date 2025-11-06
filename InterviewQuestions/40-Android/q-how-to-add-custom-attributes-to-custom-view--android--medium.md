@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android-components
 - q-app-security-best-practices--security--medium
 - q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy
 - q-performance-optimization-android--android--medium
@@ -1254,6 +1255,11 @@ class CustomButton @JvmOverloads constructor(
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-android-components]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - View

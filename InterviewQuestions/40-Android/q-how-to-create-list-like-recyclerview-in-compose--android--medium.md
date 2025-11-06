@@ -17,6 +17,8 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-compose-state
+- c-jetpack-compose
 - q-animated-visibility-vs-content--jetpack-compose--medium
 - q-compose-testing--android--medium
 - q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium
@@ -1135,6 +1137,12 @@ fun RememberScrollState() {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+
 
 ### Hub
 - [[q-jetpack-compose-basics--android--medium]] - Comprehensive Compose introduction

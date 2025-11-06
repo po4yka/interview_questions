@@ -1,26 +1,37 @@
 ---
 id: android-473
 title: DiffUtil Background Calculation Issues / Проблемы фонового вычисления DiffUtil
-aliases: [DiffUtil Background Calculation Issues, DiffUtil background issues, Проблемы DiffUtil в фоне, Проблемы фонового вычисления DiffUtil]
+aliases:
+- DiffUtil Background Calculation Issues
+- DiffUtil background issues
+- Проблемы DiffUtil в фоне
+- Проблемы фонового вычисления DiffUtil
 topic: android
 subtopics:
-  - performance-memory
-  - ui-views
+- performance-memory
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-main-causes-ui-lag--android--medium
+- c-memory-management
+- q-main-causes-ui-lag--android--medium
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/performance-memory, android/ui-views, difficulty/medium, diffutil, performance, recyclerview]
+tags:
+- android/performance-memory
+- android/ui-views
+- difficulty/medium
+- diffutil
+- performance
+- recyclerview
 sources:
-  - https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
+- https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
 date created: Saturday, October 25th 2025, 1:26:31 pm
 date modified: Sunday, November 2nd 2025, 9:53:53 pm
 ---
@@ -724,6 +735,11 @@ override fun onBindViewHolder(
 - [RecyclerView Optimization](https://developer.android.com/guide/topics/ui/layout/recyclerview#performance)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-memory-management]]
+
 
 ### Prerequisites (Easier)
 - RecyclerView basics and adapter patterns

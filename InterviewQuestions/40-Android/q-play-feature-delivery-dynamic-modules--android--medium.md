@@ -1,20 +1,37 @@
 ---
 id: android-007
-title: "Play Feature Delivery and Dynamic Modules / Play Feature Delivery и динамические модули"
-aliases: ["Play Feature Delivery and Dynamic Modules", "Play Feature Delivery и динамические модули"]
+title: Play Feature Delivery and Dynamic Modules / Play Feature Delivery и динамические
+  модули
+aliases:
+- Play Feature Delivery and Dynamic Modules
+- Play Feature Delivery и динамические модули
 topic: android
-subtopics: [app-bundle, architecture-modularization]
+subtopics:
+- app-bundle
+- architecture-modularization
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-play-feature-delivery, q-app-bundle-basics--android--medium]
+related:
+- c-play-feature-delivery
+- q-app-bundle-basics--android--medium
 created: 2025-10-05
 updated: 2025-01-25
-tags: [android/app-bundle, android/architecture-modularization, app-bundle, difficulty/medium, dynamic-modules, modularization, play-feature-delivery]
-sources: [https://developer.android.com/guide/app-bundle/dynamic-delivery]
+tags:
+- android/app-bundle
+- android/architecture-modularization
+- app-bundle
+- difficulty/medium
+- dynamic-modules
+- modularization
+- play-feature-delivery
+sources:
+- https://developer.android.com/guide/app-bundle/dynamic-delivery
 date created: Sunday, October 12th 2025, 12:27:50 pm
 date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
@@ -178,6 +195,11 @@ splitInstallManager.startInstall(request)
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-play-feature-delivery]]
+
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components

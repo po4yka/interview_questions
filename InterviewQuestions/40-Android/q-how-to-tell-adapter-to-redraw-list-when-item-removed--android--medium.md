@@ -1,20 +1,36 @@
 ---
 id: android-374
-title: "How To Tell Adapter To Redraw List When Item Removed / Как сказать адаптеру перерисовать список когда элемент удален"
-aliases: ["How To Tell Adapter To Redraw List", "Как сказать адаптеру перерисовать список"]
+title: How To Tell Adapter To Redraw List When Item Removed / Как сказать адаптеру
+  перерисовать список когда элемент удален
+aliases:
+- How To Tell Adapter To Redraw List
+- Как сказать адаптеру перерисовать список
 topic: android
-subtopics: [ui-animation, ui-views]
+subtopics:
+- ui-animation
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-recyclerview-sethasfixedsize--android--easy]
+related:
+- c-custom-views
+- q-how-to-create-list-like-recyclerview-in-compose--android--medium
+- q-recyclerview-sethasfixedsize--android--easy
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [adapter, android/ui-animation, android/ui-views, difficulty/medium, diffutil, recyclerview]
+tags:
+- adapter
+- android/ui-animation
+- android/ui-views
+- difficulty/medium
+- diffutil
+- recyclerview
 date created: Tuesday, October 28th 2025, 9:11:31 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
@@ -314,6 +330,11 @@ Snackbar.make(view, "Deleted", Snackbar.LENGTH_LONG)
 - [ListAdapter Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-custom-views]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization basics

@@ -1,30 +1,41 @@
 ---
 id: android-030
-title: "Repository Pattern with Multiple Data Sources / Паттерн Repository с несколькими источниками данных"
+title: Repository Pattern with Multiple Data Sources / Паттерн Repository с несколькими
+  источниками данных
 aliases: []
-
-# Classification
 topic: android
-subtopics: [architecture-clean, cache-offline]
+subtopics:
+- architecture-clean
+- cache-offline
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [android/architecture, android/caching, android/data-layer, android/repository, difficulty/medium, en, ru]
+language_tags:
+- android/architecture
+- android/caching
+- android/data-layer
+- android/repository
+- difficulty/medium
+- en
+- ru
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-dagger-field-injection--android--medium, q-does-state-made-in-compose-help-avoid-race-condition--android--medium, q-kmm-ktor-networking--multiplatform--medium]
-
-# Timestamps
+related:
+- c-database-design
+- c-clean-architecture
+- q-dagger-field-injection--android--medium
+- q-does-state-made-in-compose-help-avoid-race-condition--android--medium
+- q-kmm-ktor-networking--multiplatform--medium
 created: 2025-10-06
 updated: 2025-10-06
-
-tags: [android/architecture-clean, android/cache-offline, difficulty/medium, en, ru]
+tags:
+- android/architecture-clean
+- android/cache-offline
+- difficulty/medium
+- en
+- ru
 date created: Saturday, November 1st 2025, 12:47:02 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -495,6 +506,12 @@ class NewsRepository(
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-database-design]]
+- [[c-clean-architecture]]
+
 
 ### Related (Medium)
 - [[q-repository-pattern--android--medium]] - Architecture

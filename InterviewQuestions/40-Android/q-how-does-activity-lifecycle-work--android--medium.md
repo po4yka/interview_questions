@@ -1,19 +1,37 @@
 ---
 id: android-102
-title: "Fragment & Activity Lifecycle Connection / Связь жизненных циклов Fragment и Activity"
-aliases: ["Fragment Lifecycle Connection", "Связь жизненных циклов Fragment и Activity"]
+title: Fragment & Activity Lifecycle Connection / Связь жизненных циклов Fragment
+  и Activity
+aliases:
+- Fragment Lifecycle Connection
+- Связь жизненных циклов Fragment и Activity
 topic: android
-subtopics: [activity, fragment, lifecycle]
+subtopics:
+- activity
+- fragment
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-10-28
-tags: [android, android/activity, android/fragment, android/lifecycle, difficulty/medium]
+tags:
+- android
+- android/activity
+- android/fragment
+- android/lifecycle
+- difficulty/medium
 moc: moc-android
-related: [q-android-runtime-art--android--medium, q-view-composition-strategy-compose--android--medium]
+related:
+- c-activity
+- c-fragments
+- c-lifecycle
+- q-android-runtime-art--android--medium
+- q-view-composition-strategy-compose--android--medium
 sources: []
 date created: Tuesday, October 28th 2025, 9:34:34 am
 date modified: Saturday, November 1st 2025, 5:43:35 pm
@@ -337,6 +355,13 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 - Android Official: [ViewLifecycleOwner](https://developer.android.com/reference/androidx/fragment/app/Fragment#getViewLifecycleOwner())
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-activity]]
+- [[c-fragments]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites (Easier)
 - Activity lifecycle basics — understand Activity states first

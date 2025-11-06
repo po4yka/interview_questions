@@ -1,20 +1,44 @@
 ---
 id: android-160
-title: "Koin Fundamentals / Основы Koin"
-aliases: [Koin DI, Koin Framework, Koin внедрение зависимостей, Service Locator, Основы Koin]
+title: Koin Fundamentals / Основы Koin
+aliases:
+- Koin DI
+- Koin Framework
+- Koin внедрение зависимостей
+- Service Locator
+- Основы Koin
 topic: android
-subtopics: [architecture-clean, di-koin, lifecycle]
+subtopics:
+- architecture-clean
+- di-koin
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-compositionlocal-compose--android--hard, q-how-to-register-broadcastreceiver-to-receive-messages--android--medium, q-recomposition-choreographer--android--hard]
+related:
+- c-clean-architecture
+- c-lifecycle
+- c-dependency-injection
+- q-compositionlocal-compose--android--hard
+- q-how-to-register-broadcastreceiver-to-receive-messages--android--medium
+- q-recomposition-choreographer--android--hard
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/architecture-clean, android/di-koin, android/lifecycle, architecture, difficulty/medium, injection, koin, service-locator]
+tags:
+- android/architecture-clean
+- android/di-koin
+- android/lifecycle
+- architecture
+- difficulty/medium
+- injection
+- koin
+- service-locator
 date created: Tuesday, October 28th 2025, 9:24:37 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
@@ -644,6 +668,13 @@ class UserRepositoryTest : KoinTest {
 - Koin on GitHub: https://github.com/InsertKoinIO/koin
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-clean-architecture]]
+- [[c-lifecycle]]
+- [[c-dependency-injection]]
+
 
 ### Prerequisites (Easier)
 - [[q-what-is-viewmodel--android--medium]]

@@ -1,20 +1,41 @@
 ---
 id: android-296
-title: "MVVM vs MVP Differences / Различия MVVM и MVP"
-aliases: ["MVVM vs MVP", "Различия MVVM и MVP"]
+title: MVVM vs MVP Differences / Различия MVVM и MVP
+aliases:
+- MVVM vs MVP
+- Различия MVVM и MVP
 topic: android
-subtopics: [architecture-clean, architecture-mvvm, lifecycle]
+subtopics:
+- architecture-clean
+- architecture-mvvm
+- lifecycle
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-clean-architecture-android--android--hard, q-mvvm-pattern--android--medium, q-what-is-viewmodel--android--medium]
+related:
+- c-lifecycle
+- c-clean-architecture
+- c-mvvm
+- q-clean-architecture-android--android--hard
+- q-mvvm-pattern--android--medium
+- q-what-is-viewmodel--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/architecture-clean, android/architecture-mvvm, android/lifecycle, architecture-patterns, data-binding, difficulty/medium, presenter, viewmodel]
+tags:
+- android/architecture-clean
+- android/architecture-mvvm
+- android/lifecycle
+- architecture-patterns
+- data-binding
+- difficulty/medium
+- presenter
+- viewmodel
 date created: Tuesday, October 28th 2025, 9:52:28 pm
 date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
@@ -235,6 +256,13 @@ fun `load users emits data`() = runTest {
 - Android Lifecycle documentation: Component lifecycle management
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-lifecycle]]
+- [[c-clean-architecture]]
+- [[c-mvvm]]
+
 
 ### Prerequisites
 - [[q-what-is-viewmodel--android--medium]] - Understanding ViewModel basics

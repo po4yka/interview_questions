@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-recyclerview
 - q-kmm-dependency-injection--multiplatform--medium
 - q-what-does-itemdecoration-do--android--medium
 - q-why-are-fragments-needed-if-there-is-activity--android--hard
@@ -558,6 +559,11 @@ RecyclerView - это мощный, гибкий UI компонент для о
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-recyclerview]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui

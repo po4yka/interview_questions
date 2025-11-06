@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-hilt
 - q-android-security-best-practices--android--medium
 - q-cicd-pipeline-setup--devops--medium
 - q-room-library-definition--android--easy
@@ -1053,6 +1054,11 @@ object AppModule {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-hilt]]
+
 
 ### Prerequisites (Easier)
 - [[q-architecture-components-libraries--android--easy]] - Fundamentals

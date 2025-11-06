@@ -1,26 +1,36 @@
 ---
 id: android-117
 title: Canvas Drawing Optimization / Оптимизация отрисовки Canvas
-aliases: [Canvas Drawing Optimization, Оптимизация отрисовки Canvas]
+aliases:
+- Canvas Drawing Optimization
+- Оптимизация отрисовки Canvas
 topic: android
 subtopics:
-  - performance-rendering
-  - ui-views
+- performance-rendering
+- ui-views
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-android-app-lag-analysis--android--medium
-  - q-android-performance-measurement-tools--android--medium
+- c-performance
+- c-performance-optimization
+- q-android-app-lag-analysis--android--medium
+- q-android-performance-measurement-tools--android--medium
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android/performance-rendering, android/ui-views, canvas, custom-views, difficulty/hard, performance]
+tags:
+- android/performance-rendering
+- android/ui-views
+- canvas
+- custom-views
+- difficulty/hard
+- performance
 date created: Thursday, October 30th 2025, 11:11:20 am
 date modified: Sunday, November 2nd 2025, 1:29:06 pm
 ---
@@ -227,6 +237,12 @@ override fun onDraw(canvas: Canvas) {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-performance]]
+- [[c-performance-optimization]]
+
 
 ### Prerequisites
 - [[q-android-performance-measurement-tools--android--medium]] - Profiling tools and techniques

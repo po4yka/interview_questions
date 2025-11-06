@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-service
 - q-canvas-drawing-optimization--custom-views--hard
 - q-what-is-data-binding--android--easy
 - q-workmanager-chaining--background--hard
@@ -1069,6 +1070,11 @@ startForegroundService(Intent(this, MyService::class.java))
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-service]]
+
 
 ### Prerequisites (Easier)
 - [[q-android-service-types--android--easy]] - Service

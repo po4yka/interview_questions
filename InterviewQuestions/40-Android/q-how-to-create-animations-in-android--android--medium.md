@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-custom-views
 - q-app-start-types-android--android--medium
 - q-data-sync-unstable-network--android--hard
 - q-stable-classes-compose--android--hard
@@ -689,6 +690,12 @@ override fun onDestroyView() {
 
 ## Related Questions
 
+### Prerequisites / Concepts
+
+- [[c-custom-views]]
+
+
 - [[q-stable-classes-compose--android--hard]]
 - [[q-app-start-types-android--android--medium]]
 - [[q-data-sync-unstable-network--android--hard]]
+##

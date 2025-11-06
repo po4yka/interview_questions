@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-android-components
 - q-fragments-history-and-purpose--android--hard
 - q-how-is-navigation-implemented--android--medium
 - q-how-to-add-fragment-synchronously-asynchronously--android--medium
@@ -1078,6 +1079,12 @@ class DynamicScreenActivity : AppCompatActivity() {
 
 ## Related Questions
 
+### Prerequisites / Concepts
+
+- [[c-android-components]]
+
+
 - [[q-fragments-history-and-purpose--android--hard]]
 - [[q-how-to-add-fragment-synchronously-asynchronously--android--medium]]
 - [[q-how-is-navigation-implemented--android--medium]]
+##

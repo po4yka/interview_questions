@@ -1,19 +1,40 @@
 ---
 id: android-177
-title: "If Activity Starts After A Service Can You Connect To This Service / Можно ли подключиться к Service если Activity запустилась после него"
-aliases: ["If Activity Starts After A Service Can You Connect To This Service", "Можно ли подключиться к Service если Activity запустилась после него"]
+title: If Activity Starts After A Service Can You Connect To This Service / Можно
+  ли подключиться к Service если Activity запустилась после него
+aliases:
+- If Activity Starts After A Service Can You Connect To This Service
+- Можно ли подключиться к Service если Activity запустилась после него
 topic: android
-subtopics: [intents-deeplinks, lifecycle, service]
+subtopics:
+- intents-deeplinks
+- lifecycle
+- service
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-components-besides-activity--android--easy, q-design-whatsapp-app--android--hard, q-service-component--android--medium]
+related:
+- c-intent
+- c-service
+- c-lifecycle
+- q-android-components-besides-activity--android--easy
+- q-design-whatsapp-app--android--hard
+- q-service-component--android--medium
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android/intents-deeplinks, android/lifecycle, android/service, binding, difficulty/medium, ipc, service]
+tags:
+- android/intents-deeplinks
+- android/lifecycle
+- android/service
+- binding
+- difficulty/medium
+- ipc
+- service
 sources: []
 date created: Monday, October 27th 2025, 6:42:14 pm
 date modified: Saturday, November 1st 2025, 5:43:34 pm
@@ -161,6 +182,13 @@ class MyActivity : AppCompatActivity() {
 - https://developer.android.com/develop/background-work/services/bound-services
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-intent]]
+- [[c-service]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites (Easier)
 - [[q-android-components-besides-activity--android--easy]] - Android components overview

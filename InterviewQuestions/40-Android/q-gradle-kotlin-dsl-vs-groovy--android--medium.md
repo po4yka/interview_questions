@@ -1,30 +1,37 @@
 ---
 id: android-028
-title: "Gradle Kotlin DSL vs Groovy"
+title: Gradle Kotlin DSL vs Groovy
 aliases: []
-
-# Classification
 topic: android
-subtopics: [gradle]
+subtopics:
+- gradle
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [android/build-tools, android/gradle, android/groovy, android/kotlin-dsl, difficulty/medium, en, ru]
+language_tags:
+- android/build-tools
+- android/gradle
+- android/groovy
+- android/kotlin-dsl
+- difficulty/medium
+- en
+- ru
 source: https://github.com/amitshekhariitbhu/android-interview-questions
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-compose-custom-animations--jetpack-compose--medium, q-how-does-jetpackcompose-work--android--medium, q-what-is-workmanager--android--medium]
-
-# Timestamps
+related:
+- c-gradle
+- q-compose-custom-animations--jetpack-compose--medium
+- q-how-does-jetpackcompose-work--android--medium
+- q-what-is-workmanager--android--medium
 created: 2025-10-06
 updated: 2025-10-06
-
-tags: [android/gradle, difficulty/medium, en, ru]
+tags:
+- android/gradle
+- difficulty/medium
+- en
+- ru
 date created: Saturday, October 25th 2025, 1:26:30 pm
 date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
@@ -408,6 +415,11 @@ android {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-gradle]]
+
 
 ### Related (Medium)
 - [[q-build-optimization-gradle--android--medium]] - Gradle

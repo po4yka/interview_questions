@@ -1,20 +1,35 @@
 ---
 id: android-228
-title: "What Is ViewStub / Что такое ViewStub"
-aliases: ["ViewStub Android", "ViewStub"]
+title: What Is ViewStub / Что такое ViewStub
+aliases:
+- ViewStub Android
+- ViewStub
 topic: android
-subtopics: [performance-rendering, ui-views]
+subtopics:
+- performance-rendering
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-recyclerview-sethasfixedsize--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium]
+related:
+- c-performance
+- q-recyclerview-sethasfixedsize--android--easy
+- q-what-is-known-about-methods-that-redraw-view--android--medium
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android/performance-rendering, android/ui-views, difficulty/medium, lazy-loading, optimization, viewstub]
+tags:
+- android/performance-rendering
+- android/ui-views
+- difficulty/medium
+- lazy-loading
+- optimization
+- viewstub
 date created: Saturday, November 1st 2025, 12:47:09 pm
 date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
@@ -377,6 +392,11 @@ ViewStub is a lightweight lazy inflation mechanism for performance and memory op
 - [Improving Layout Performance - Android Documentation](https://developer.android.com/training/improving-layouts/loading-ondemand)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-performance]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Basic view optimization

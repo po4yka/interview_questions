@@ -1,30 +1,42 @@
 ---
 id: android-004
-title: "Ways to Reduce Android App Size / Способы уменьшения размера Android приложения"
+title: Ways to Reduce Android App Size / Способы уменьшения размера Android приложения
 aliases: []
-
-# Classification
 topic: android
-subtopics: [app-bundle, gradle, performance-memory]
+subtopics:
+- app-bundle
+- gradle
+- performance-memory
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [android/app-bundles, android/optimization, android/resources, difficulty/medium, en, ru]
+language_tags:
+- android/app-bundles
+- android/optimization
+- android/resources
+- difficulty/medium
+- en
+- ru
 source: https://github.com/Kirchhoff-Android-Interview-Questions
 source_note: Kirchhoff Android Interview Questions repository
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium, q-memory-leak-vs-oom-android--android--medium, q-what-do-you-know-about-modifiers--programming-languages--medium]
-
-# Timestamps
+related:
+- c-gradle
+- c-app-bundle
+- c-memory-management
+- q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium
+- q-memory-leak-vs-oom-android--android--medium
+- q-what-do-you-know-about-modifiers--programming-languages--medium
 created: 2025-10-05
 updated: 2025-10-05
-
-tags: [android/app-bundle, android/gradle, android/performance-memory, difficulty/medium, en, ru]
+tags:
+- android/app-bundle
+- android/gradle
+- android/performance-memory
+- difficulty/medium
+- en
+- ru
 date created: Saturday, November 1st 2025, 12:47:02 pm
 date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
@@ -543,6 +555,13 @@ android {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-gradle]]
+- [[c-app-bundle]]
+- [[c-memory-management]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview

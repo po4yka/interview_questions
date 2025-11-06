@@ -1,20 +1,36 @@
 ---
 id: android-430
-title: "Privacy Sandbox SDK Runtime / Privacy Sandbox SDK Runtime"
-aliases: [Privacy Sandbox, Privacy Sandbox SDK Runtime, SDK Runtime, Изоляция SDK]
+title: Privacy Sandbox SDK Runtime / Privacy Sandbox SDK Runtime
+aliases:
+- Privacy Sandbox
+- Privacy Sandbox SDK Runtime
+- SDK Runtime
+- Изоляция SDK
 topic: android
-subtopics: [permissions, privacy-sdks]
+subtopics:
+- permissions
+- privacy-sdks
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-content-provider-security--android--hard, q-custom-sandbox-implementation--android--hard]
+related:
+- c-permissions
+- q-content-provider-security--android--hard
+- q-custom-sandbox-implementation--android--hard
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/permissions, android/privacy-sdks, difficulty/hard, privacy, sandboxing]
+tags:
+- android/permissions
+- android/privacy-sdks
+- difficulty/hard
+- privacy
+- sandboxing
 date created: Saturday, November 1st 2025, 1:03:51 pm
 date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
@@ -469,6 +485,11 @@ class SdkMigrationManager(private val context: Context) {
 - [SdkSandboxManager API](https://developer.android.com/reference/android/app/sdksandbox/SdkSandboxManager)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-permissions]]
+
 
 ### Prerequisites (Easier)
 - [[q-service-thread--android--medium]] - Process/thread fundamentals

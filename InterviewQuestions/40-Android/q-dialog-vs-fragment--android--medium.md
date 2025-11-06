@@ -1,26 +1,36 @@
 ---
 id: android-357
 title: Dialog vs Fragment / Диалог против Фрагмента
-aliases: [Dialog vs Fragment, Диалог против Фрагмента]
+aliases:
+- Dialog vs Fragment
+- Диалог против Фрагмента
 topic: android
 subtopics:
-  - lifecycle
-  - ui-views
+- lifecycle
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
-related: []
+related:
+- c-lifecycle
 created: 2025-10-15
 updated: 2025-11-02
-tags: [android/lifecycle, android/ui-views, dialog, difficulty/medium, fragment, lifecycle, ui]
+tags:
+- android/lifecycle
+- android/ui-views
+- dialog
+- difficulty/medium
+- fragment
+- lifecycle
+- ui
 sources:
-  - https://developer.android.com/develop/ui/views/components/dialogs
-  - https://developer.android.com/guide/fragments
+- https://developer.android.com/develop/ui/views/components/dialogs
+- https://developer.android.com/guide/fragments
 date created: Saturday, October 25th 2025, 4:09:48 pm
 date modified: Sunday, November 2nd 2025, 8:13:08 pm
 ---
@@ -528,6 +538,11 @@ NavHost(navController, startDestination = "profile") {
 - [Navigation Component](https://developer.android.com/guide/navigation)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-lifecycle]]
+
 
 ### Prerequisites (Easier)
 - Fragment basics and lifecycle

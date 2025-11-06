@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-retrofit
 - q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium
 - q-play-app-signing--android--medium
 - q-sharedpreferences-definition--android--easy
@@ -2964,6 +2965,11 @@ GraphQL + Apollo отлично подходит для сложных треб�
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-retrofit]]
+
 
 ### Prerequisites (Easier)
 - [[q-graphql-vs-rest--networking--easy]] - Networking
