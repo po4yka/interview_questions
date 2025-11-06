@@ -1,20 +1,35 @@
 ---
 id: android-485
 title: Design Offline Maps & Navigation / Проектирование офлайн карт и навигации
-aliases: []
+aliases:
+- Design Offline Maps & Navigation
+- Проектирование офлайн карт и навигации
 topic: android
-subtopics: [files-media, location, service]
+subtopics:
+- files-media
+- location
+- service
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-lifecycle, c-workmanager, q-design-uber-app--android--hard]
+related:
+- c-lifecycle
+- c-workmanager
+- q-design-uber-app--android--hard
 sources: []
 created: 2025-10-29
 updated: 2025-10-29
-tags: []
+tags:
+- difficulty/hard
+- android/files-media
+- android/location
+- android/service
+- topic/android
 date created: Wednesday, October 29th 2025, 5:02:58 pm
 date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---

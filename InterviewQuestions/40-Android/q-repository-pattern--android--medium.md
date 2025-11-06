@@ -1,7 +1,9 @@
 ---
 id: android-070
 title: Repository Pattern in Android / Паттерн Repository в Android
-aliases: []
+aliases:
+- Repository Pattern in Android
+- Паттерн Repository в Android
 topic: android
 subtopics:
 - architecture-clean

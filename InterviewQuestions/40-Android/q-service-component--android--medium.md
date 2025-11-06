@@ -1,7 +1,9 @@
 ---
 id: android-008
 title: Android Service Component / Компонент Service в Android
-aliases: []
+aliases:
+- Android Service Component
+- Компонент Service в Android
 topic: android
 subtopics:
 - background-execution

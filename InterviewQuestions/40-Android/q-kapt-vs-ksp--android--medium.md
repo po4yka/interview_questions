@@ -1,7 +1,9 @@
 ---
 id: android-020
 title: kapt vs KSP comparison / Сравнение kapt и KSP
-aliases: []
+aliases:
+- kapt vs KSP comparison
+- Сравнение kapt и KSP
 topic: android
 subtopics:
 - gradle

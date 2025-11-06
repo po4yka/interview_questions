@@ -1,7 +1,9 @@
 ---
 id: android-010
 title: Android Activity Launch Modes / Режимы запуска Activity в Android
-aliases: []
+aliases:
+- Android Activity Launch Modes
+- Режимы запуска Activity в Android
 topic: android
 subtopics:
 - activity

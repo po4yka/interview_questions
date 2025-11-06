@@ -1,7 +1,9 @@
 ---
 id: android-056
 title: KAPT to KSP Migration Guide / Руководство по миграции с KAPT на KSP
-aliases: []
+aliases:
+- KAPT to KSP Migration Guide
+- Руководство по миграции с KAPT на KSP
 topic: android
 subtopics:
 - gradle

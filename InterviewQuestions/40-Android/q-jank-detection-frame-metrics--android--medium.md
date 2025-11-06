@@ -1,7 +1,9 @@
 ---
 id: android-053
 title: Jank Detection and Frame Metrics / Обнаружение рывков и метрики кадров
-aliases: []
+aliases:
+- Jank Detection and Frame Metrics
+- Обнаружение рывков и метрики кадров
 topic: android
 subtopics:
 - performance-rendering

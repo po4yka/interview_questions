@@ -1,7 +1,9 @@
 ---
 id: android-004
 title: Ways to Reduce Android App Size / Способы уменьшения размера Android приложения
-aliases: []
+aliases:
+- Ways to Reduce Android App Size
+- Способы уменьшения размера Android приложения
 topic: android
 subtopics:
 - app-bundle

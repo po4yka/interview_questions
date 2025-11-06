@@ -1,7 +1,9 @@
 ---
 id: android-064
 title: Jetpack Compose Basics / Основы Jetpack Compose
-aliases: []
+aliases:
+- Jetpack Compose Basics
+- Основы Jetpack Compose
 topic: android
 subtopics:
 - ui-compose

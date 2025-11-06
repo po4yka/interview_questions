@@ -2,7 +2,9 @@
 id: android-030
 title: Repository Pattern with Multiple Data Sources / Паттерн Repository с несколькими
   источниками данных
-aliases: []
+aliases:
+- Repository Pattern with Multiple Data Sources
+- Паттерн Repository с несколькими источниками данных
 topic: android
 subtopics:
 - architecture-clean

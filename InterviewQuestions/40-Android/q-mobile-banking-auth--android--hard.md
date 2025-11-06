@@ -1,20 +1,33 @@
 ---
 id: android-490
-title: Design Mobile Banking Auth & Transaction Signing / Проектирование аутентификации и подписания транзакций
-aliases: []
+title: Design Mobile Banking Auth & Transaction Signing / Проектирование аутентификации
+  и подписания транзакций
+aliases:
+- Design Mobile Banking Auth & Transaction Signing
+- Проектирование аутентификации и подписания транзакций
 topic: android
-subtopics: [keystore-crypto, networking-http, permissions]
+subtopics:
+- keystore-crypto
+- networking-http
+- permissions
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
 related: []
 sources: []
 created: 2025-10-29
 updated: 2025-10-29
-tags: []
+tags:
+- difficulty/hard
+- android/keystore-crypto
+- android/networking-http
+- android/permissions
+- topic/android
 date created: Wednesday, October 29th 2025, 5:03:40 pm
 date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---

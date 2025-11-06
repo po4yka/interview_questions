@@ -2,7 +2,9 @@
 id: android-032
 title: How to schedule local notifications at exact time? / Как запланировать локальные
   уведомления на точное время?
-aliases: []
+aliases:
+- How to schedule local notifications at exact time?
+- Как запланировать локальные уведомления на точное время?
 topic: android
 subtopics:
 - background-execution

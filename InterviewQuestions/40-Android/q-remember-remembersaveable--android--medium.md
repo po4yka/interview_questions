@@ -1,7 +1,8 @@
 ---
 id: android-029
 title: remember vs rememberSaveable in Compose
-aliases: []
+aliases:
+- remember vs rememberSaveable in Compose
 topic: android
 subtopics:
 - ui-compose

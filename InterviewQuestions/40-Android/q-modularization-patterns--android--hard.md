@@ -1,7 +1,9 @@
 ---
 id: android-005
 title: Android Modularization Patterns / Паттерны модуляризации в Android
-aliases: []
+aliases:
+- Android Modularization Patterns
+- Паттерны модуляризации в Android
 topic: android
 subtopics:
 - architecture-clean

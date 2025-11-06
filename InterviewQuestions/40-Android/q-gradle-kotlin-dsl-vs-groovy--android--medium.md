@@ -1,7 +1,8 @@
 ---
 id: android-028
 title: Gradle Kotlin DSL vs Groovy
-aliases: []
+aliases:
+- Gradle Kotlin DSL vs Groovy
 topic: android
 subtopics:
 - gradle
