@@ -16,8 +16,6 @@ related: []
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "architecture-patterns", "concept", "databinding", "difficulty/medium", "livedata", "mvvm", "viewmodel"]
-date created: Saturday, October 25th 2025, 12:51:28 pm
-date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # MVVM Pattern / Паттерн MVVM

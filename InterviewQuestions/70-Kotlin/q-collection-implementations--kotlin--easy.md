@@ -14,8 +14,6 @@ related: [q-fan-in-fan-out-channels--kotlin--hard, q-globalscope-antipattern--ko
 created: 2025-10-15
 updated: 2025-10-31
 tags: [collections, difficulty/easy, implementations, kotlin, list, map, programming-languages, set]
-date created: Friday, October 31st 2025, 6:30:09 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 # Какие Есть Реализации Коллекций?
 

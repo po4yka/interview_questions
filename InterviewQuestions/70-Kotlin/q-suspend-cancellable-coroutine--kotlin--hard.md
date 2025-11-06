@@ -3,6 +3,8 @@ id: kotlin-095
 title: "Converting callbacks with suspendCancellableCoroutine / Преобразование callback с suspendCancellableCoroutine"
 topic: kotlin
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-12
 tags: [callbacks, cancellation, coroutines, difficulty/hard, integration, kotlin, suspend]
@@ -14,8 +16,6 @@ subtopics:
   - coroutines
   - integration
   - suspend
-date created: Saturday, November 1st 2025, 12:10:13 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Вопрос (RU)
 > Как преобразовать API на основе callback в suspend функции используя `suspendCancellableCoroutine`? Как обрабатывать отмену, ошибки и состояния гонки?

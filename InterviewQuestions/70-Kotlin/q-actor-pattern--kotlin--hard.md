@@ -30,8 +30,6 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [actor, channels, concurrency, coroutines, difficulty/hard, kotlin, message-passing, state-encapsulation]
-date created: Sunday, October 12th 2025, 3:04:52 pm
-date modified: Sunday, November 2nd 2025, 12:05:07 pm
 ---
 # Вопрос (RU)
 > Что такое паттерн Actor в корутинах Kotlin? Объясните передачу сообщений через каналы, инкапсуляцию состояния и приведите реальные примеры акторов.

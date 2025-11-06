@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-clean, android/performance-rendering, android/room, difficulty/medium, jetpack, pagination, paging, recyclerview]
 sources: [https://github.com/Kirchhoff-/Android-Interview-Questions]
-date created: Saturday, November 1st 2025, 1:03:32 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

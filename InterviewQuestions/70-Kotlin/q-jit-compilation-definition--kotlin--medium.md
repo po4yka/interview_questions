@@ -14,8 +14,6 @@ related: [q-kotlin-reified-types--kotlin--hard, q-testing-coroutine-cancellation
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
-date created: Thursday, October 16th 2025, 5:48:05 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Что Такое JIT?

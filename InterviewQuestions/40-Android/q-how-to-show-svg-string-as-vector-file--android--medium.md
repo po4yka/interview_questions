@@ -1,22 +1,42 @@
 ---
 id: android-294
-title: "How To Show SVG String As Vector File / Как показать SVG строку как векторный файл"
-aliases: ["SVG String Display", "SVG Vector Rendering", "Отображение SVG строки"]
+title: How To Show SVG String As Vector File / Как показать SVG строку как векторный
+  файл
+aliases:
+- SVG String Display
+- SVG Vector Rendering
+- Отображение SVG строки
 topic: android
-subtopics: [ui-compose, ui-graphics, ui-views]
+subtopics:
+- ui-compose
+- ui-graphics
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-vector-graphics-animations--android--medium, q-what-is-known-about-view-lifecycles--android--medium, q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]
+related:
+- c-compose-state
+- c-jetpack-compose
+- q-vector-graphics-animations--android--medium
+- q-what-is-known-about-view-lifecycles--android--medium
+- q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
 created: 2025-10-15
 updated: 2025-10-30
-sources: [https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources]
-tags: [android/ui-compose, android/ui-graphics, android/ui-views, difficulty/medium, image-loading, svg, vector-graphics]
-date created: Saturday, November 1st 2025, 12:46:54 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+sources:
+- https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources
+tags:
+- android/ui-compose
+- android/ui-graphics
+- android/ui-views
+- difficulty/medium
+- image-loading
+- svg
+- vector-graphics
 ---
 
 # Вопрос (RU)
@@ -448,6 +468,12 @@ class SvgViewModel : ViewModel() {
 - https://github.com/BigBadaboom/androidsvg
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+
 
 ### Same Level (Medium)
 - [[q-vector-graphics-animations--android--medium]]

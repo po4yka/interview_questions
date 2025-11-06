@@ -14,8 +14,6 @@ related: [q-channels-basics-types--kotlin--medium, q-coroutine-timeout-withtimeo
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
-date created: Sunday, October 12th 2025, 3:43:41 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Что Такое Inline Функции?
 

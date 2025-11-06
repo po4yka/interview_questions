@@ -13,10 +13,8 @@ updated: "2025-10-31"
 tags: ["cancellation", "coroutines", "difficulty/medium", "error-handling", "kotlin", "timeout"]
 description: "Comprehensive guide to timeout handling in Kotlin coroutines, covering withTimeout, withTimeoutOrNull, TimeoutCancellationException, and practical patterns"
 moc: moc-kotlin
-related: []
+related: [c-coroutines, c-structured-concurrency]
 subtopics: [coroutines, timeout]
-date created: Saturday, November 1st 2025, 1:07:52 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # How to Handle Timeouts in Coroutines: withTimeout Vs withTimeoutOrNull

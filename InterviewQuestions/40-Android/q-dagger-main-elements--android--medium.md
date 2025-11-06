@@ -21,8 +21,6 @@ created: 2025-10-20
 updated: 2025-10-30
 tags: [android/di-hilt, dagger, dependency-injection, difficulty/medium]
 sources: []
-date created: Thursday, October 30th 2025, 12:02:15 pm
-date modified: Sunday, November 2nd 2025, 5:32:00 pm
 ---
 
 # Вопрос (RU)

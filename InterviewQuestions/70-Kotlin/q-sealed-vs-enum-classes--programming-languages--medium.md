@@ -14,8 +14,6 @@ related: [q-primitive-vs-reference-types--programming-languages--easy, q-suspend
 created: 2025-10-15
 updated: 2025-10-31
 tags: [comparison, difficulty/medium, enum, kotlin, oop, programming-languages, sealed-class]
-date created: Friday, October 3rd 2025, 6:48:06 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Каковы Отличия Sealed И Enum Классов В Kotlin?
 

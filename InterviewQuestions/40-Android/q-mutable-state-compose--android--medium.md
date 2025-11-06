@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, difficulty/medium, jetpack-compose, recomposition, state-management]
 sources: []
-date created: Saturday, November 1st 2025, 12:46:59 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

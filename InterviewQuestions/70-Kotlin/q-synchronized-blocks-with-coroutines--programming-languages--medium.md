@@ -14,8 +14,6 @@ related: [q-java-lambda-type--programming-languages--easy, q-proxy-pattern--desi
 created: 2025-10-15
 updated: 2025-10-31
 tags: [coroutines, difficulty/medium, kotlin, programming-languages, synchronization]
-date created: Saturday, October 4th 2025, 10:53:02 am
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Why Not Use Synchronized Blocks with Coroutines?
 

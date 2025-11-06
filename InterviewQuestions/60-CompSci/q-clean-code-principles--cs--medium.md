@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-01-25
 tags: [best-practices, clean-code, code-quality, difficulty/medium, refactoring]
 sources: [https://en.wikipedia.org/wiki/Clean_code]
-date created: Monday, October 13th 2025, 7:50:49 am
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

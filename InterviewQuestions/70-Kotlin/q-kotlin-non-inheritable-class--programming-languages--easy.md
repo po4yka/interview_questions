@@ -14,8 +14,6 @@ related: [q-common-coroutine-mistakes--kotlin--medium, q-kotlin-generics--kotlin
 created: 2025-10-15
 updated: 2025-10-31
 tags: [class-design, classes, difficulty/easy, final, inheritance, keywords, open, programming-languages]
-date created: Friday, October 31st 2025, 6:30:56 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Как В Kotlin Определить Класс, Который Не Может Быть Унаследован?
 

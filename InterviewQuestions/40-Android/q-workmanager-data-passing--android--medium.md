@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-27
 sources: [https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration]
 tags: [android/background-execution, android/coroutines, background-processing, data-passing, difficulty/medium, workmanager]
-date created: Monday, October 27th 2025, 7:02:51 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

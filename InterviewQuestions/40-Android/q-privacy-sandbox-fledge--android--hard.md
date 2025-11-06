@@ -1,22 +1,38 @@
 ---
 id: android-415
-title: "Privacy Sandbox FLEDGE / Privacy Sandbox FLEDGE (Protected Audience API)"
-aliases: [FLEDGE, On-Device Ad Auctions, Privacy Sandbox FLEDGE, Protected Audience API]
+title: Privacy Sandbox FLEDGE / Privacy Sandbox FLEDGE (Protected Audience API)
+aliases:
+- FLEDGE
+- On-Device Ad Auctions
+- Privacy Sandbox FLEDGE
+- Protected Audience API
 topic: android
-subtopics: [privacy-sdks]
+subtopics:
+- privacy-sdks
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-http-protocols-comparison--android--medium, q-retrofit-modify-all-requests--android--hard]
+related:
+- c-permissions
+- q-http-protocols-comparison--android--medium
+- q-retrofit-modify-all-requests--android--hard
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [advertising, android/privacy-sdks, difficulty/hard, fledge, privacy, privacy-sandbox, protected-audience, remarketing]
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
+tags:
+- advertising
+- android/privacy-sdks
+- difficulty/hard
+- fledge
+- privacy
+- privacy-sandbox
+- protected-audience
+- remarketing
 ---
 
 # Вопрос (RU)
@@ -479,6 +495,11 @@ class EcommerceRemarketingManager(
 - [Android Ad Services API](https://developer.android.com/design-for-safety/privacy-sandbox/reference/adservices/packages)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-permissions]]
+
 
 ### Prerequisites (Easier)
 - [[q-http-protocols-comparison--android--medium]] - Network protocols for ad delivery

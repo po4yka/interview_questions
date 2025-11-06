@@ -16,8 +16,6 @@ related: []
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["branching", "concept", "difficulty/medium", "git", "merging", "rebasing", "version-control"]
-date created: Sunday, October 12th 2025, 2:37:10 pm
-date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)

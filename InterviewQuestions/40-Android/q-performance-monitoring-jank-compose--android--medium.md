@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/performance-rendering, android/profiling, android/ui-compose, difficulty/medium, jank, optimization, performance, recomposition]
 sources: [https://developer.android.com/jetpack/compose/performance, https://developer.android.com/topic/performance/vitals/render]
-date created: Saturday, November 1st 2025, 12:47:00 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

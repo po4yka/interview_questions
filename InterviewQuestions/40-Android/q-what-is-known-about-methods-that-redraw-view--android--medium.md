@@ -1,22 +1,40 @@
 ---
 id: android-135
-title: "What Is Known About Methods That Redraw View / Что известно о методах перерисовывающих View"
-aliases: ["Methods That Redraw View", "Методы перерисовки View"]
+title: What Is Known About Methods That Redraw View / Что известно о методах перерисовывающих
+  View
+aliases:
+- Methods That Redraw View
+- Методы перерисовки View
 topic: android
-subtopics: [performance-rendering, ui-graphics, ui-views]
+subtopics:
+- performance-rendering
+- ui-graphics
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-handler-looper-main-thread--android--medium]
+related:
+- c-performance
+- q-handler-looper-main-thread--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/performance-rendering, android/ui-graphics, android/ui-views, difficulty/medium, postInvalidate, rendering, requestLayout, ui, views]
-date created: Saturday, November 1st 2025, 12:47:08 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
+tags:
+- android
+- android/performance-rendering
+- android/ui-graphics
+- android/ui-views
+- difficulty/medium
+- postInvalidate
+- rendering
+- requestLayout
+- ui
+- views
 ---
 
 # Вопрос (RU)
@@ -286,6 +304,11 @@ fun updateSeparately() {
 - Android Source: View.java invalidate/requestLayout implementation
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-performance]]
+
 
 ### Prerequisites
 - Basic understanding of View lifecycle (onMeasure, onLayout, onDraw)

@@ -13,10 +13,8 @@ updated: "2025-10-31"
 tags: ["classes", "data-class", "difficulty/medium", "kotlin-features", "kotlin"]
 description: "Comprehensive guide to Kotlin data classes covering generated methods, copy(), componentN(), destructuring, limitations, and when to use them"
 moc: moc-kotlin
-related: []
+related: [c-kotlin-features, c-equality]
 subtopics: [data-classes]
-date created: Saturday, November 1st 2025, 1:29:10 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Data Classes in Kotlin: Features, Limitations, and Best Practices

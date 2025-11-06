@@ -14,8 +14,6 @@ related: [q-access-modifiers--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
-date created: Saturday, November 1st 2025, 1:26:20 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Какие Типы Конструкторов Есть У Классов В Kotlin?

@@ -1,22 +1,35 @@
 ---
 id: android-149
-title: "Which Class To Catch Gestures / Какой класс для ловли жестов"
-aliases: ["Which Class To Catch Gestures", "Какой класс для ловли жестов"]
+title: Which Class To Catch Gestures / Какой класс для ловли жестов
+aliases:
+- Which Class To Catch Gestures
+- Какой класс для ловли жестов
 topic: android
-subtopics: [ui-views, ui-widgets]
+subtopics:
+- ui-views
+- ui-widgets
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-compose-side-effects-launchedeffect-disposableeffect--android--hard, q-how-does-jetpack-compose-work--android--medium]
+related:
+- c-android-components
+- q-compose-side-effects-launchedeffect-disposableeffect--android--hard
+- q-how-does-jetpack-compose-work--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/ui-views, android/ui-widgets, difficulty/easy, gesture-detector, gestures, ui]
-date created: Monday, October 27th 2025, 3:57:45 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
+tags:
+- android/ui-views
+- android/ui-widgets
+- difficulty/easy
+- gesture-detector
+- gestures
+- ui
 ---
 
 # Вопрос (RU)
@@ -185,6 +198,11 @@ class GestureView(context: Context) : View(context) {
 - https://developer.android.com/jetpack/compose/gestures
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-android-components]]
+
 
 ### Prerequisites
 - Understanding MotionEvent and touch event handling basics

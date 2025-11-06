@@ -1,22 +1,34 @@
 ---
 id: android-278
-title: "Ot Kogo Nasleduyutsya Viewgroup / От кого наследуется ViewGroup"
-aliases: [View Hierarchy, ViewGroup Inheritance, Иерархия View, Наследование ViewGroup]
+title: Ot Kogo Nasleduyutsya Viewgroup / От кого наследуется ViewGroup
+aliases:
+- View Hierarchy
+- ViewGroup Inheritance
+- Иерархия View
+- Наследование ViewGroup
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-canvas-optimization--android--medium, q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy, q-what-does-itemdecoration-do--android--medium]
+related:
+- c-android-components
+- q-canvas-optimization--android--medium
+- q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy
+- q-what-does-itemdecoration-do--android--medium
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android, android/ui-views, difficulty/easy]
-date created: Tuesday, October 28th 2025, 9:50:23 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
+tags:
+- android
+- android/ui-views
+- difficulty/easy
 ---
 
 # Вопрос (RU)
@@ -271,6 +283,11 @@ setViewProperties(linearLayout) // Works because LinearLayout extends ViewGroup 
 - Android Developers: [Custom Views](https://developer.android.com/develop/ui/views/layout/custom-views/custom-components)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-android-components]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]]

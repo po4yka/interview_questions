@@ -13,10 +13,8 @@ updated: "2025-10-31"
 tags: ["coroutines", "difficulty/medium", "error-handling", "job", "kotlin", "supervisorjob"]
 description: "Comprehensive guide to SupervisorJob in Kotlin coroutines, covering independent failure handling, comparison with regular Job, and real-world use cases in Android development"
 moc: moc-kotlin
-related: []
+related: [c-coroutines, c-structured-concurrency]
 subtopics: [coroutines, supervisor-job]
-date created: Saturday, November 1st 2025, 1:29:01 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # SupervisorJob: when and why to Use It?

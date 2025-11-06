@@ -14,8 +14,6 @@ related: [q-kotlin-init-block--kotlin--easy, q-kotlin-lambda-expressions--kotlin
 created: 2025-10-12
 updated: 2025-10-31
 tags: ["coroutines", "difficulty/medium", "kotlin", difficulty/easy]
-date created: Saturday, October 18th 2025, 3:07:33 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # What Makes Flow a Cold Stream?

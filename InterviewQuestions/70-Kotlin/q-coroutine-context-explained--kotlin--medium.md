@@ -25,8 +25,6 @@ created: 2025-10-06
 updated: 2025-10-06
 
 tags: [async-programming, concurrency, coroutine-context, coroutines, difficulty/medium, kotlin]
-date created: Sunday, October 12th 2025, 12:27:46 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 # Вопрос (RU)
 > Что такое CoroutineContext и какие у него основные элементы?

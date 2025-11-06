@@ -1,31 +1,47 @@
 ---
 id: android-468
 title: Design WhatsApp App / Проектирование приложения WhatsApp
-aliases: [Design WhatsApp App, Проектирование приложения WhatsApp]
+aliases:
+- Design WhatsApp App
+- Проектирование приложения WhatsApp
 topic: android
 subtopics:
-  - media
-  - networking-http
-  - service
+- media
+- networking-http
+- service
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-data-sync-unstable-network--android--hard
-  - q-database-encryption-android--android--medium
-  - q-design-instagram-stories--android--hard
+- c-service
+- c-retrofit
+- c-media3
+- q-data-sync-unstable-network--android--hard
+- q-database-encryption-android--android--medium
+- q-design-instagram-stories--android--hard
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/media, android/networking-http, android/service, architecture, cryptography, difficulty/hard, e2ee, messaging, networking, performance, realtime, system-design, websocket]
+tags:
+- android/media
+- android/networking-http
+- android/service
+- architecture
+- cryptography
+- difficulty/hard
+- e2ee
+- messaging
+- networking
+- performance
+- realtime
+- system-design
+- websocket
 sources:
-  - https://signal.org/docs/specifications/doubleratchet/
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 8:06:29 pm
+- https://signal.org/docs/specifications/doubleratchet/
 ---
 
 # Вопрос (RU)
@@ -1010,6 +1026,13 @@ OUTBOX state machine for reliable delivery:
 -   [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-service]]
+- [[c-retrofit]]
+- [[c-media3]]
+
 
 ### Prerequisites (Easier)
 

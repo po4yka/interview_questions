@@ -14,8 +14,6 @@ status: draft
 created: 2025-10-12
 updated: 2025-10-31
 tags: [android, coroutines, debugging, difficulty/hard, kotlin, leakcanary, lifecycle, memory-leaks, profiling]
-date created: Saturday, November 1st 2025, 1:28:52 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # Detecting and Preventing Coroutine Memory Leaks / Обнаружение И Предотвращение Утечек Памяти

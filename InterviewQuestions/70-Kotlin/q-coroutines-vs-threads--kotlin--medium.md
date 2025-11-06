@@ -14,8 +14,6 @@ related: [q-abstract-class-vs-interface--kotlin--medium, q-fan-in-fan-out-channe
 created: 2025-10-15
 updated: 2025-10-31
 tags: [comparison, concurrency, coroutines, difficulty/medium, java, kotlin, programming-languages, threads]
-date created: Friday, October 31st 2025, 6:32:12 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 # В Чем Концептуальное Отличие Корутинов От Потоков В Java
 

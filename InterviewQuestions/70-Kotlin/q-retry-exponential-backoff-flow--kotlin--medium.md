@@ -14,8 +14,6 @@ related: [q-actor-pattern--kotlin--hard, q-coroutine-dispatchers--kotlin--medium
 created: 2025-10-15
 updated: 2025-10-31
 tags: [circuit-breaker, coroutines, difficulty/medium, error-handling, exponential-backoff, flow, kotlin, production, resilience, retry]
-date created: Friday, October 31st 2025, 6:30:29 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Retry and Exponential Backoff Patterns in Flow

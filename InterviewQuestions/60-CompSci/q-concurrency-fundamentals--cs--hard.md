@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-01-25
 tags: [concurrency, difficulty/hard, multithreading, mutexes, race-conditions, synchronization]
 sources: [https://en.wikipedia.org/wiki/Concurrency_(computer_science)]
-date created: Monday, October 13th 2025, 7:54:11 am
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

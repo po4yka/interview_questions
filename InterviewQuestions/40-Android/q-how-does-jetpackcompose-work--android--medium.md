@@ -1,22 +1,38 @@
 ---
 id: android-119
-title: "How Does Jetpack Compose Work / Как работает Jetpack Compose"
-aliases: ["How Does Jetpack Compose Work", "Как работает Jetpack Compose"]
+title: How Does Jetpack Compose Work / Как работает Jetpack Compose
+aliases:
+- How Does Jetpack Compose Work
+- Как работает Jetpack Compose
 topic: android
-subtopics: [architecture-mvvm, ui-compose, ui-state]
+subtopics:
+- architecture-mvvm
+- ui-compose
+- ui-state
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-cache-implementation-strategies--android--medium, q-how-does-activity-lifecycle-work--android--medium, q-how-does-the-main-thread-work--android--medium]
+related:
+- c-compose-state
+- c-jetpack-compose
+- c-mvvm
+- q-cache-implementation-strategies--android--medium
+- q-how-does-activity-lifecycle-work--android--medium
+- q-how-does-the-main-thread-work--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-state, difficulty/medium]
-date created: Monday, October 27th 2025, 3:33:03 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+tags:
+- android
+- android/architecture-mvvm
+- android/ui-compose
+- android/ui-state
+- difficulty/medium
 ---
 
 # Вопрос (RU)
@@ -312,6 +328,13 @@ Compose works by:
 - State management in Compose best practices
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+- [[c-mvvm]]
+
 
 ### Prerequisites
 - Basic Kotlin knowledge with lambdas and delegates

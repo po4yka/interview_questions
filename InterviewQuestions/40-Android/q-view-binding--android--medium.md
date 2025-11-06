@@ -1,32 +1,35 @@
 ---
 id: android-182
-title: "View Binding / Привязка View"
-aliases: ["View Binding", "Привязка View"]
-
-# Classification
+title: View Binding / Привязка View
+aliases:
+- View Binding
+- Привязка View
 topic: android
-subtopics: [gradle, ui-views]
+subtopics:
+- gradle
+- ui-views
 question_kind: android
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-sources: [https://developer.android.com/topic/libraries/view-binding]
-
-# Workflow & relations
+language_tags:
+- en
+- ru
+sources:
+- https://developer.android.com/topic/libraries/view-binding
 status: draft
 moc: moc-android
-related: [q-reduce-apk-size-techniques--android--medium, q-what-is-viewmodel--android--medium]
-
-# Timestamps
+related:
+- c-gradle
+- q-reduce-apk-size-techniques--android--medium
+- q-what-is-viewmodel--android--medium
 created: 2025-10-15
 updated: 2025-10-28
-
-# Tags (EN only; no leading #)
-tags: [android/gradle, android/ui-views, difficulty/medium, type-safety, view-binding]
-date created: Saturday, November 1st 2025, 12:47:06 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
+tags:
+- android/gradle
+- android/ui-views
+- difficulty/medium
+- type-safety
+- view-binding
 ---
 
 # Вопрос (RU)
@@ -193,6 +196,11 @@ override fun onDestroyView() {
 - [Migrating from findViewById](https://medium.com/androiddevelopers/use-view-binding-to-replace-findviewbyid-c83942471fc)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-gradle]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - View hierarchy optimization

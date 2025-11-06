@@ -14,8 +14,6 @@ related: [c-composition, c-inheritance, q-inheritance-vs-composition--oop--mediu
 created: 2025-10-13
 updated: 2025-10-31
 tags: [code-reuse, composition, difficulty/medium, encapsulation, inheritance, oop, relationships]
-date created: Saturday, November 1st 2025, 12:43:03 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Что Известно О Композиции Классов?

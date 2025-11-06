@@ -1,22 +1,39 @@
 ---
 id: android-162
-title: "Handler Looper Main Thread / Handler и Looper главного потока"
-aliases: ["Handler and Looper on Main Thread", "Handler и Looper главного потока"]
+title: Handler Looper Main Thread / Handler и Looper главного потока
+aliases:
+- Handler and Looper on Main Thread
+- Handler и Looper главного потока
 topic: android
-subtopics: [background-execution, threads-sync]
+subtopics:
+- background-execution
+- threads-sync
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-looper-thread-connection--android--medium, q-main-thread-android--android--medium, q-multithreading-tools-android--android--medium]
+related:
+- c-coroutines
+- c-background-tasks
+- q-looper-thread-connection--android--medium
+- q-main-thread-android--android--medium
+- q-multithreading-tools-android--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/background-execution, android/threads-sync, concurrency, difficulty/medium, handler, looper, main-thread, message-queue]
-date created: Monday, October 27th 2025, 5:04:18 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+tags:
+- android/background-execution
+- android/threads-sync
+- concurrency
+- difficulty/medium
+- handler
+- looper
+- main-thread
+- message-queue
 ---
 
 # Вопрос (RU)
@@ -240,6 +257,12 @@ fun loadData() {
 - Android Developer Documentation - Processes and Threads
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-coroutines]]
+- [[c-background-tasks]]
+
 
 ### Prerequisites
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Understanding Android main thread

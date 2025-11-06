@@ -27,8 +27,6 @@ sources: []
 created: 2025-10-06
 updated: 2025-10-30
 tags: [android/build-variants, android/dependency-management, android/gradle, difficulty/medium]
-date created: Thursday, October 30th 2025, 11:36:06 am
-date modified: Sunday, November 2nd 2025, 12:52:35 pm
 ---
 
 # Вопрос (RU)

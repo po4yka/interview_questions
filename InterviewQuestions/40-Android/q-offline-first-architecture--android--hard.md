@@ -1,22 +1,41 @@
 ---
 id: android-097
-title: "Offline First Architecture / Архитектура Offline First"
-aliases: ["Offline First Architecture", "Архитектура Offline First"]
+title: Offline First Architecture / Архитектура Offline First
+aliases:
+- Offline First Architecture
+- Архитектура Offline First
 topic: android
-subtopics: [architecture-clean, cache-offline, room]
+subtopics:
+- architecture-clean
+- cache-offline
+- room
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 created: 2025-10-13
 updated: 2025-10-28
-tags: [android, android/architecture-clean, android/cache-offline, android/room, architecture, difficulty/hard, offline-first, sync, workmanager]
+tags:
+- android
+- android/architecture-clean
+- android/cache-offline
+- android/room
+- architecture
+- difficulty/hard
+- offline-first
+- sync
+- workmanager
 moc: moc-android
-related: [q-clean-architecture-android--android--hard, q-how-to-create-dynamic-screens-at-runtime--android--hard]
+related:
+- c-database-design
+- c-clean-architecture
+- c-room
+- q-clean-architecture-android--android--hard
+- q-how-to-create-dynamic-screens-at-runtime--android--hard
 sources: []
-date created: Tuesday, October 28th 2025, 9:53:45 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -539,6 +558,13 @@ fun getStaleWhileRevalidate(maxAge: Long): Flow<List<Article>> = flow {
 - [[moc-android]]
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-database-design]]
+- [[c-clean-architecture]]
+- [[c-room]]
+
 
 ### Prerequisites
 - Room database fundamentals - local database operations

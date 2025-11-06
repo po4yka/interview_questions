@@ -14,8 +14,6 @@ related: [c-garbage-collection, q-garbage-collector-basics--programming-language
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, garbage-collection, kotlin, memory-management, programming-languages, weak-references]
-date created: Friday, October 31st 2025, 6:29:22 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Вопрос (RU)

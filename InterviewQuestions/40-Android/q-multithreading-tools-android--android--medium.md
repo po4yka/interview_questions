@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-30
 sources: [https://developer.android.com/kotlin/coroutines, https://developer.android.com/topic/libraries/architecture/workmanager]
 tags: [android/background-execution, android/coroutines, android/performance-startup, concurrency, difficulty/medium, rxjava, workmanager]
-date created: Saturday, November 1st 2025, 1:25:23 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -382,10 +380,17 @@ For new Android development:
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-background-vs-foreground-service--android--medium]]
+- [[q-android-async-primitives--android--easy]] - Basic async primitives in Android
+- [[q-why-multithreading-tools--android--easy]] - Why use multithreading
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread basics
 
 ### Related (Same Level)
-- Related content to be added
+- [[q-background-vs-foreground-service--android--medium]] - Background service types
+- [[q-handler-looper-comprehensive--android--medium]] - Handler and Looper mechanics
+- [[q-looper-empty-queue-behavior--android--medium]] - Looper queue behavior
+- [[q-workmanager-vs-alternatives--android--medium]] - WorkManager comparison
 
 ### Advanced (Harder)
-- Related content to be added
+- [[q-workmanager-chaining--android--hard]] - Complex WorkManager workflows
+- [[q-kotlin-context-receivers--android--hard]] - Advanced context patterns
+- [[q-android-runtime-internals--android--hard]] - ART internals

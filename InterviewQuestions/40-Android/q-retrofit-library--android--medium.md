@@ -15,8 +15,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/architecture-mvvm, android/coroutines, android/networking-http, difficulty/medium, networking, rest-api, retrofit]
-date created: Saturday, November 1st 2025, 1:04:11 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)

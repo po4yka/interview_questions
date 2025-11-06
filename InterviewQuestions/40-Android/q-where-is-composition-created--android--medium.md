@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-27
 sources: []
 tags: [android/lifecycle, android/ui-compose, android/ui-views, composition, difficulty/medium, jetpack-compose]
-date created: Monday, October 27th 2025, 6:53:26 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

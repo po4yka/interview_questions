@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-android-surfaces
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -113,10 +112,8 @@ class SyncTileService : TileService() {
 
 ## References
 - [[c-android-surfaces]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/develop/ui/views/quicksettings
 
 ## Related Questions
 
 - [[c-android-surfaces]]
-- [[q-android-coverage-gaps--android--hard]]

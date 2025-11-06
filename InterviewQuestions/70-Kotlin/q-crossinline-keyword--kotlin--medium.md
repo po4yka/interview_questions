@@ -10,12 +10,10 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: []
+related: [c-kotlin-features]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium, inline-functions, kotlin, lambda, non-local-returns]
-date created: Saturday, November 1st 2025, 1:07:52 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 # Зачем Нужен Crossinline?
 

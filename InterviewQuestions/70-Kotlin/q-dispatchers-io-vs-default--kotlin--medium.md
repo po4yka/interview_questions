@@ -14,8 +14,6 @@ related: [q-coroutine-scope-basics--kotlin--easy, q-infix-functions--kotlin--med
 created: 2025-10-15
 updated: 2025-10-31
 tags: [concurrency, coroutines, difficulty/medium, dispatchers, kotlin, threading]
-date created: Friday, October 31st 2025, 6:34:14 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Dispatchers.IO Vs Dispatchers.Default
 

@@ -1,30 +1,41 @@
 ---
 id: android-452
 title: Database Optimization Android / Оптимизация базы данных Android
-aliases: [Database Optimization Android, Оптимизация базы данных Android]
+aliases:
+- Database Optimization Android
+- Оптимизация базы данных Android
 topic: android
 subtopics:
-  - performance-memory
-  - room
+- performance-memory
+- room
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-performance-optimization-android--android--medium
-  - q-room-library-definition--android--easy
-  - q-room-vs-sqlite--android--medium
+- c-room-database
+- c-database-design
+- c-performance-optimization
+- q-performance-optimization-android--android--medium
+- q-room-library-definition--android--easy
+- q-room-vs-sqlite--android--medium
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/performance-memory, android/room, database, difficulty/medium, indexing, optimization, performance, sql]
+tags:
+- android/performance-memory
+- android/room
+- database
+- difficulty/medium
+- indexing
+- optimization
+- performance
+- sql
 sources:
-  - https://developer.android.com/training/data-storage/room
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 7:36:33 pm
+- https://developer.android.com/training/data-storage/room
 ---
 
 # Вопрос (RU)
@@ -263,6 +274,13 @@ class UserRepository @Inject constructor(
 - [SQLite Performance Best Practices](https://sqlite.org/performance.html)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-room-database]]
+- [[c-database-design]]
+- [[c-performance-optimization]]
+
 
 ### Prerequisites (Easier)
 - [[q-room-library-definition--android--easy]] — Understanding `Room` basics

@@ -14,8 +14,6 @@ related: [q-job-vs-supervisorjob--kotlin--medium, q-kotlin-combine-collections--
 created: 2025-10-15
 updated: 2025-10-31
 tags: [caching, coalescing, coroutines, deduplication, difficulty/hard, kotlin, optimization, patterns, performance]
-date created: Friday, October 31st 2025, 6:30:28 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Request Coalescing and Deduplication Patterns

@@ -1,33 +1,43 @@
 ---
 id: android-316
-title: "Why Is ViewModel Needed And What Happens In It / Зачем нужен ViewModel и что в нем происходит"
-aliases: [ViewModel Purpose, ViewModel Responsibilities, Назначение ViewModel, Обязанности ViewModel]
-
-# Classification
+title: Why Is ViewModel Needed And What Happens In It / Зачем нужен ViewModel и что
+  в нем происходит
+aliases:
+- ViewModel Purpose
+- ViewModel Responsibilities
+- Назначение ViewModel
+- Обязанности ViewModel
 topic: android
-subtopics: [architecture-mvvm, lifecycle, ui-state]
+subtopics:
+- architecture-mvvm
+- lifecycle
+- ui-state
 question_kind: android
 difficulty: medium
-
-# Language
 original_language: en
-language_tags: [en, ru]
-
-# Workflow
+language_tags:
+- en
+- ru
 status: draft
-
-# Links
 moc: moc-android
-related: [q-how-to-save-activity-state--android--medium, q-mvvm-pattern--android--medium, q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium]
-
-# Timestamps
+related:
+- c-compose-state
+- c-lifecycle
+- c-mvvm
+- q-how-to-save-activity-state--android--medium
+- q-mvvm-pattern--android--medium
+- q-until-what-point-does-viewmodel-guarantee-state-preservation--android--medium
+- q-viewmodel-vs-onsavedinstancestate--android--medium
 created: 2025-10-15
 updated: 2025-10-30
-
-# Tags
-tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, difficulty/medium, jetpack, mvvm, viewmodel]
-date created: Saturday, November 1st 2025, 12:47:11 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
+tags:
+- android/architecture-mvvm
+- android/lifecycle
+- android/ui-state
+- difficulty/medium
+- jetpack
+- mvvm
+- viewmodel
 ---
 
 # Вопрос (RU)
@@ -600,6 +610,13 @@ Activity/Fragment Created
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-lifecycle]]
+- [[c-mvvm]]
+
 
 ### Prerequisites (Easier)
 - [[q-main-android-components--android--easy]] - Android components overview

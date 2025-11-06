@@ -22,8 +22,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-02
 tags: [android/notifications, android/service, difficulty/medium, foreground-service, service-ui-communication]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 1:27:11 pm
 ---
 
 # Вопрос (RU)

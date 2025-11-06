@@ -21,8 +21,6 @@ created: 2025-10-21
 updated: 2025-10-30
 tags: [android/lifecycle, android/ui-views, custom-view, difficulty/medium, state-management]
 sources: []
-date created: Thursday, October 30th 2025, 12:02:06 pm
-date modified: Sunday, November 2nd 2025, 4:25:49 pm
 ---
 
 # Вопрос (RU)

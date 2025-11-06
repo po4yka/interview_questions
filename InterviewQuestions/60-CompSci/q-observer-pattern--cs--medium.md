@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-25
 tags: [behavioral-patterns, design-patterns, difficulty/medium, flow, gof-patterns, livedata, observer, publish-subscribe]
 sources: [https://refactoring.guru/design-patterns/observer]
-date created: Monday, October 6th 2025, 7:19:01 am
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

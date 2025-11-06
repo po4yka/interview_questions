@@ -1,22 +1,36 @@
 ---
 id: android-016
-title: "Task Affinity in Android / Task Affinity в Android"
-aliases: ["Task Affinity in Android", "Task Affinity в Android"]
+title: Task Affinity in Android / Task Affinity в Android
+aliases:
+- Task Affinity in Android
+- Task Affinity в Android
 topic: android
-subtopics: [activity, ui-navigation]
+subtopics:
+- activity
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-task-affinity]
+related:
+- c-activity-lifecycle
+- c-task-affinity
 created: 2025-10-05
 updated: 2025-01-25
-tags: [activity, android/activity, android/ui-navigation, difficulty/medium, navigation, task-affinity, tasks]
-sources: [https://developer.android.com/guide/components/activities/tasks-and-back-stack]
-date created: Saturday, November 1st 2025, 1:24:35 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
+tags:
+- activity
+- android/activity
+- android/ui-navigation
+- difficulty/medium
+- navigation
+- task-affinity
+- tasks
+sources:
+- https://developer.android.com/guide/components/activities/tasks-and-back-stack
 ---
 
 # Вопрос (RU)
@@ -127,6 +141,12 @@ Activity can move to a task with the same affinity when it comes to foreground.
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-activity-lifecycle]]
+- [[c-task-affinity]]
+
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components

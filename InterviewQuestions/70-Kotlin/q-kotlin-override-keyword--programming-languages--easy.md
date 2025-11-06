@@ -14,8 +14,6 @@ related: [q-coroutine-job-lifecycle--kotlin--medium, q-equality-operators-kotlin
 created: 2025-10-15
 updated: 2025-10-31
 tags: [abstract, difficulty/easy, inheritance, keywords, open, override, polymorphism, programming-languages]
-date created: Friday, October 31st 2025, 6:30:57 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Какое Ключевое Слово Используется Для Определения Метода, Который Должен Быть Переопределен В Подклассе?
 

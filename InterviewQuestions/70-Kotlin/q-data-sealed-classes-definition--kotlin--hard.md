@@ -14,8 +14,6 @@ related: [q-kotlin-channels--kotlin--medium, q-kotlin-sam-conversions--programmi
 created: 2025-10-15
 updated: 2025-10-31
 tags: [data-classes, difficulty/hard, programming-languages, sealed-classes]
-date created: Friday, October 31st 2025, 6:33:11 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 # What Are Data Class and Sealed Classes?
 

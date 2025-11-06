@@ -22,8 +22,6 @@ updated: 2025-10-27
 tags: [android/datastore, android/room, database, difficulty/easy]
 sources:
   - https://developer.android.com/training/data-storage
-date created: Monday, October 27th 2025, 10:28:31 pm
-date modified: Sunday, November 2nd 2025, 7:36:49 pm
 ---
 
 # Вопрос (RU)

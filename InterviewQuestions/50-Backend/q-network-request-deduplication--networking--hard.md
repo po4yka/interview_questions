@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [caching, concurrency, deduplication, difficulty/hard, networking, optimization, performance]
-date created: Tuesday, October 28th 2025, 9:50:49 pm
-date modified: Saturday, November 1st 2025, 5:44:12 pm
 ---
 
 # Вопрос (RU)

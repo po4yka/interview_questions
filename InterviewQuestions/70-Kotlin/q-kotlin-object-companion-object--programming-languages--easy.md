@@ -14,8 +14,6 @@ related: [q-data-class-detailed--kotlin--medium, q-kotlin-flow-basics--kotlin--m
 created: 2025-10-15
 updated: 2025-10-31
 tags: [companion-object, difficulty/easy, object, programming-languages, singleton, static-members]
-date created: Friday, October 31st 2025, 6:30:57 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Что Такое Object / Companion Object?
 

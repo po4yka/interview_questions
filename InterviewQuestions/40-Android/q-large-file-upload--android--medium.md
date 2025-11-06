@@ -1,22 +1,39 @@
 ---
 id: android-116
-title: "Large File Upload / Загрузка больших файлов"
-aliases: ["Large File Upload", "Загрузка больших файлов"]
+title: Large File Upload / Загрузка больших файлов
+aliases:
+- Large File Upload
+- Загрузка больших файлов
 topic: android
-subtopics: [background-execution, files-media, networking-http]
+subtopics:
+- background-execution
+- files-media
+- networking-http
 question_kind: android
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-viewmodel-vs-onsavedinstancestate--android--medium]
+related:
+- c-scoped-storage-security
+- c-retrofit
+- c-background-tasks
+- q-viewmodel-vs-onsavedinstancestate--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/background-execution, android/files-media, android/networking-http, difficulty/medium, file-upload, multipart, retrofit, workmanager]
-date created: Monday, October 27th 2025, 3:33:06 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
+tags:
+- android/background-execution
+- android/files-media
+- android/networking-http
+- difficulty/medium
+- file-upload
+- multipart
+- retrofit
+- workmanager
 ---
 
 # Вопрос (RU)
@@ -422,6 +439,13 @@ val constraints = Constraints.Builder()
 - HTTP multipart/form-data specification
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-scoped-storage-security]]
+- [[c-retrofit]]
+- [[c-background-tasks]]
+
 
 ### Prerequisites
 - Understanding Kotlin coroutines for async operations

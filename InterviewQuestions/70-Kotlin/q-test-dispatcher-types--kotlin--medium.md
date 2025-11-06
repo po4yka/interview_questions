@@ -3,6 +3,8 @@ id: kotlin-067
 title: "StandardTestDispatcher vs UnconfinedTestDispatcher / StandardTestDispatcher против UnconfinedTestDispatcher"
 topic: kotlin
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-12
 tags: [coroutines, difficulty/medium, kotlin, runtest, test-dispatcher, testing]
@@ -13,8 +15,6 @@ subtopics:
   - runtest
   - test-dispatcher
   - testing
-date created: Saturday, November 1st 2025, 12:10:13 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Вопрос (RU)
 > В чем разница между StandardTestDispatcher и UnconfinedTestDispatcher? Когда следует использовать каждый?

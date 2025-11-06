@@ -14,8 +14,6 @@ updated: 2025-10-15
 tags: [adaptive-layouts, difficulty/hard, jetpack-compose, kotlin/adaptive-layouts, kotlin/jetpack-compose, responsive-design, window-size-classes]
 moc: moc-kotlin
 related: [q-compose-custom-layout--kotlin--hard, q-compose-navigation-advanced--kotlin--medium, q-material3-components--kotlin--medium]
-date created: Sunday, October 19th 2025, 1:47:08 pm
-date modified: Sunday, November 2nd 2025, 12:05:08 pm
 ---
 # Вопрос (RU)
 > Как создавать адаптивные layouts в Compose? Что такое window size классы? Как обрабатывать телефоны, планшеты и складные устройства?

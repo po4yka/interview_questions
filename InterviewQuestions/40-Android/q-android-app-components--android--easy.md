@@ -25,8 +25,6 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/activity, android/broadcast-receiver, android/service, difficulty/easy]
-date created: Wednesday, October 29th 2025, 4:47:59 pm
-date modified: Sunday, November 2nd 2025, 12:44:23 pm
 ---
 
 # Вопрос (RU)

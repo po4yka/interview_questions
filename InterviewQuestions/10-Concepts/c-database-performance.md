@@ -16,8 +16,6 @@ related: []
 created: "2025-10-12"
 updated: "2025-10-12"
 tags: ["concept", "database", "difficulty/medium", "indexing", "optimization", "performance", "query-tuning"]
-date created: Sunday, October 12th 2025, 2:28:52 pm
-date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)

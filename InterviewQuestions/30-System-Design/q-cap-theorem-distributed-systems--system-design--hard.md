@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-01-25
 tags: [cap-theorem, consistency, difficulty/hard, distributed-systems, system-design]
 sources: [https://en.wikipedia.org/wiki/CAP_theorem]
-date created: Sunday, October 12th 2025, 8:27:12 pm
-date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

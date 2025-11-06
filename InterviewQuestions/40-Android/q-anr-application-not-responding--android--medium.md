@@ -23,8 +23,6 @@ created: 2025-10-05
 updated: 2025-10-30
 sources: []
 tags: [android/performance-rendering, android/profiling, android/strictmode-anr, debugging, difficulty/medium, performance]
-date created: Thursday, October 30th 2025, 11:43:26 am
-date modified: Sunday, November 2nd 2025, 12:52:50 pm
 ---
 
 # Вопрос (RU)

@@ -25,8 +25,6 @@ updated: 2025-10-28
 
 # Tags (EN only; no leading #)
 tags: [android/background-execution, android/service, background-work, difficulty/medium, foreground-service]
-date created: Saturday, November 1st 2025, 1:24:46 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)

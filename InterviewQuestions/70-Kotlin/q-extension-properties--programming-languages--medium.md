@@ -14,8 +14,6 @@ related: [c-extensions, c-properties, q-extensions-concept--programming-language
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium, extensions, kotlin, programming-languages, properties]
-date created: Friday, October 31st 2025, 6:29:51 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Свойства Какого Вида Можно Добавить Как Расширение
 

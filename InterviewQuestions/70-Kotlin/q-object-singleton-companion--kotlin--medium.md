@@ -15,8 +15,6 @@ created: "2025-10-12"
 updated: 2025-01-25
 tags: [companion-object, difficulty/medium, kotlin, kotlin-features, object-keyword, singleton-pattern]
 sources: [https://kotlinlang.org/docs/object-declarations.html]
-date created: Saturday, November 1st 2025, 12:42:09 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Вопрос (RU)

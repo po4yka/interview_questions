@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-nearby-uwb
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -138,7 +137,6 @@ session.start(params)
 
 ## References
 - [[c-nearby-uwb]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/guide/topics/connectivity/nfc
 - https://developer.android.com/guide/topics/connectivity/uwb
 - https://developers.google.com/nearby/connections/overview
@@ -146,4 +144,3 @@ session.start(params)
 ## Related Questions
 
 - [[c-nearby-uwb]]
-- [[q-android-coverage-gaps--android--hard]]

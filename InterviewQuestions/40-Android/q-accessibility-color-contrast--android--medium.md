@@ -23,8 +23,6 @@ created: 2025-10-11
 updated: 2025-10-29
 tags: [android/ui-accessibility, android/ui-theming, difficulty/medium]
 sources: []
-date created: Wednesday, October 29th 2025, 4:21:05 pm
-date modified: Sunday, November 2nd 2025, 12:07:40 pm
 ---
 
 # Вопрос (RU)

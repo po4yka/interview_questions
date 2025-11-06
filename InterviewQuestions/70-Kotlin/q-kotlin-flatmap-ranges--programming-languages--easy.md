@@ -14,8 +14,6 @@ related: [q-inline-function-limitations--kotlin--medium, q-retry-exponential-bac
 created: 2025-10-15
 updated: 2025-10-31
 tags: [collections, difficulty/easy, flatMap, programming-languages, ranges]
-date created: Friday, October 31st 2025, 6:29:33 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Какой Результат Выполнения Выражения Val Result = (1..3).flatMap { listOf(it, it * 2) }?
 

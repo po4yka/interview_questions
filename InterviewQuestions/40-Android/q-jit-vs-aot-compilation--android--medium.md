@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/gradle, android/performance-startup, android/profiling, aot, art, baseline-profiles, compilation, difficulty/medium, jit]
 sources: []
-date created: Saturday, November 1st 2025, 12:46:55 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

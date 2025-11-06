@@ -14,8 +14,6 @@ related: [q-hashmap-how-it-works--programming-languages--medium, q-solid-princip
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, double, float, floating-point, java, kotlin, programming-languages, switch]
-date created: Friday, October 3rd 2025, 7:03:57 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Работает Ли switch() С double/float?
 

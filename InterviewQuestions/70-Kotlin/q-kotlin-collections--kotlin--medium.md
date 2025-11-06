@@ -30,8 +30,6 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [collections, difficulty/medium, filter, flatmap, kotlin, list, map, operators, sequences, set]
-date created: Sunday, October 12th 2025, 3:02:56 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Вопрос (RU)
 > Что такое коллекции в Kotlin? Объясните List, Set, Map, их изменяемые варианты, операторы коллекций и разницу между Collections и Sequences.

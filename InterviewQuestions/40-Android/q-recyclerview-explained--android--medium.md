@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-recyclerview
 - q-kmm-dependency-injection--multiplatform--medium
 - q-what-does-itemdecoration-do--android--medium
 - q-why-are-fragments-needed-if-there-is-activity--android--hard
@@ -24,8 +25,6 @@ updated: 2025-10-31
 tags:
 - android/ui-views
 - difficulty/medium
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)
@@ -35,6 +34,180 @@ date modified: Saturday, November 1st 2025, 5:43:32 pm
 > RecyclerView Explained
 
 ---
+
+## Answer (EN)
+RecyclerView — это мощный компонент пользовательского интерфейса, предоставляемый библиотекой AndroidX, предназначенный для отображения динамических списков элементов. Он был представлен как улучшенная и более гибкая замена ListView.
+
+### Key Features
+
+#### 1. Efficient View Recycling
+
+Uses ViewHolder pattern for efficient reuse of list items during scrolling.
+
+```kotlin
+class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val textView: TextView = itemView.findViewById(R.id.textView)
+    val imageView: ImageView = itemView.findViewById(R.id.imageView)
+}
+```
+
+This improves performance for large lists since the number of created View objects is limited to only those visible to the user.
+
+#### 2. Flexible Item Display
+
+Supports various layouts through LayoutManager API:
+
+```kotlin
+// Vertical list
+recyclerView.layoutManager = LinearLayoutManager(context)
+
+// Horizontal list
+recyclerView.layoutManager = LinearLayoutManager(
+    context,
+    LinearLayoutManager.HORIZONTAL,
+    false
+)
+
+// Grid
+recyclerView.layoutManager = GridLayoutManager(context, 2)
+
+// Staggered Grid
+recyclerView.layoutManager = StaggeredGridLayoutManager(
+    2,
+    StaggeredGridLayoutManager.VERTICAL
+)
+```
+
+#### 3. Change Animations
+
+Built-in animation support for add, remove, and move operations.
+
+```kotlin
+class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
+    private val items = mutableListOf<String>()
+
+    fun addItem(item: String, position: Int) {
+        items.add(position, item)
+        notifyItemInserted(position)  // Automatic animation
+    }
+
+    fun removeItem(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)  // Automatic animation
+    }
+}
+```
+
+#### 4. Decorations and Dividers
+
+ItemDecoration class makes it easy to add dividers between items.
+
+```kotlin
+class DividerItemDecoration : RecyclerView.ItemDecoration() {
+    override fun onDraw(c: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+        // Draw dividers
+    }
+}
+
+recyclerView.addItemDecoration(DividerItemDecoration())
+```
+
+#### 5. Click Event Handling
+
+Unlike ListView, RecyclerView doesn't have built-in method for handling item clicks, providing more flexibility.
+
+```kotlin
+class MyAdapter : RecyclerView.Adapter<MyViewHolder>() {
+    var onItemClick: ((Int) -> Unit)? = null
+
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.itemView.setOnClickListener {
+            onItemClick?.invoke(position)
+        }
+    }
+}
+
+// Usage
+adapter.onItemClick = { position ->
+    Toast.makeText(context, "Clicked: $position", Toast.LENGTH_SHORT).show()
+}
+```
+
+### Key Components
+
+**Adapter** - responsible for binding data to ViewHolder and creating ViewHolder.
+
+```kotlin
+class MyAdapter(private val items: List<String>) :
+    RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
+
+    class MyViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val textView: TextView = itemView.findViewById(R.id.textView)
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return MyViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        holder.textView.text = items[position]
+    }
+
+    override fun getItemCount() = items.size
+}
+```
+
+**LayoutManager** - manages item positioning inside RecyclerView.
+
+**ViewHolder** - holds references to all Views that need to be filled with data.
+
+### Complete Example
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+
+        // Setup LayoutManager
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        // Create and set adapter
+        val items = listOf("Item 1", "Item 2", "Item 3")
+        val adapter = MyAdapter(items)
+        recyclerView.adapter = adapter
+
+        // Add dividers
+        recyclerView.addItemDecoration(
+            DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
+        )
+    }
+}
+```
+
+### Advantages over ListView
+
+| Aspect | ListView | RecyclerView |
+|--------|----------|--------------|
+| **ViewHolder** | Optional | Mandatory (better performance) |
+| **Layouts** | Vertical only | Vertical, horizontal, grid |
+| **Animations** | No built-in | Built-in animations |
+| **Decorations** | Difficult | ItemDecoration API |
+| **Performance** | Good | Excellent |
+
+
+# Question (EN)
+> RecyclerView Explained
+
+---
+
+
+---
+
 
 ## Answer (EN)
 RecyclerView — это мощный компонент пользовательского интерфейса, предоставляемый библиотекой AndroidX, предназначенный для отображения динамических списков элементов. Он был представлен как улучшенная и более гибкая замена ListView.
@@ -384,6 +557,11 @@ RecyclerView - это мощный, гибкий UI компонент для о
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-recyclerview]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui

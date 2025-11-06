@@ -1,22 +1,34 @@
 ---
 id: android-223
-title: "Measure Project Size / Измерение размера проекта"
-aliases: ["Measure Project Size", "Измерение размера проекта"]
+title: Measure Project Size / Измерение размера проекта
+aliases:
+- Measure Project Size
+- Измерение размера проекта
 topic: android
-subtopics: [architecture-modularization, gradle]
+subtopics:
+- architecture-modularization
+- gradle
 question_kind: theory
 difficulty: easy
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-navigation-is-implemented-in-android--android--medium, q-how-to-write-recyclerview-cache-ahead--android--medium]
+related:
+- c-gradle
+- q-how-navigation-is-implemented-in-android--android--medium
+- q-how-to-write-recyclerview-cache-ahead--android--medium
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android/architecture-modularization, android/gradle, codebase-analysis, difficulty/easy, project-metrics]
-date created: Tuesday, October 28th 2025, 9:35:54 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
+tags:
+- android/architecture-modularization
+- android/gradle
+- codebase-analysis
+- difficulty/easy
+- project-metrics
 ---
 
 # Вопрос (RU)
@@ -327,6 +339,11 @@ Build Time:       2m 15s (incremental)
 - SonarQube documentation for Android projects
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-gradle]]
+
 
 ### Prerequisites (Easier)
 - Project structure basics

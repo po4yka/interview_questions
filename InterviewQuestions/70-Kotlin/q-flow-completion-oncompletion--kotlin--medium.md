@@ -14,8 +14,6 @@ related: [q-access-modifiers--programming-languages--medium, q-kotlin-extension-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
-date created: Saturday, October 18th 2025, 2:42:48 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Flow Completion with onCompletion Operator

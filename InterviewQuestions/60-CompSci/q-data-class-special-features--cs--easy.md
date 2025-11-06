@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-25
 tags: [copy, data-class, difficulty/easy, equals, hashcode, kotlin, programming-languages, tostring]
 sources: [https://kotlinlang.org/docs/data-classes.html]
-date created: Friday, October 3rd 2025, 7:03:57 pm
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

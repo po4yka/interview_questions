@@ -14,8 +14,6 @@ related: [q-kotlin-property-delegates--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [coroutines, difficulty/medium, flow, kotlin, reactive, state-management, stateflow]
-date created: Friday, October 31st 2025, 6:31:34 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # Для Чего Нужен StateFlow?

@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-android-tv
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -127,11 +126,9 @@ channelManager.addProgram(
 
 ## References
 - [[c-android-tv]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/training/tv/start
 - https://developer.android.com/jetpack/compose/tv
 
 ## Related Questions
 
 - [[c-android-tv]]
-- [[q-android-coverage-gaps--android--hard]]

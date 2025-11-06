@@ -30,8 +30,6 @@ created: 2025-10-12
 updated: 2025-11-05
 
 tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, main, threading, unconfined]
-date created: Thursday, October 16th 2025, 4:31:25 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 # Вопрос (RU)
 > Что такое диспетчеры корутин в Kotlin? Объясните диспетчеры Main, IO, Default и Unconfined и когда использовать каждый.

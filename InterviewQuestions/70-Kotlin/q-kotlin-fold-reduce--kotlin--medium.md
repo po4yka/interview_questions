@@ -25,8 +25,6 @@ created: 2025-10-05
 updated: 2025-10-05
 
 tags: [collections, difficulty/medium, fold, functional-programming, kotlin, reduce]
-date created: Sunday, October 12th 2025, 12:27:46 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Вопрос (RU)
 > Какая разница между fold и reduce в Kotlin?

@@ -1,33 +1,46 @@
 ---
 id: android-431
-title: "MVI Handle One Time Events / Обработка одноразовых событий в MVI"
-aliases: [Event Wrapper, MVI One-Time Events, SingleLiveEvent, Обработка событий MVI, Одноразовые события]
-
-# Classification
+title: MVI Handle One Time Events / Обработка одноразовых событий в MVI
+aliases:
+- Event Wrapper
+- MVI One-Time Events
+- SingleLiveEvent
+- Обработка событий MVI
+- Одноразовые события
 topic: android
-subtopics: [architecture-mvi, coroutines, flow, ui-state]
+subtopics:
+- architecture-mvi
+- coroutines
+- flow
+- ui-state
 question_kind: android
 difficulty: hard
-
-# Language
 original_language: ru
-language_tags: [en, ru]
-
-# Workflow
+language_tags:
+- en
+- ru
 status: draft
-
-# Links
 moc: moc-android
-related: [q-mvi-architecture--android--hard, q-mvi-one-time-events--android--medium, q-sharedflow-stateflow--kotlin--medium, q-stateflow-flow-sharedflow-livedata--android--medium]
-
-# Timestamps
+related:
+- c-flow
+- c-compose-state
+- c-coroutines
+- q-mvi-architecture--android--hard
+- q-mvi-one-time-events--android--medium
+- q-sharedflow-stateflow--kotlin--medium
+- q-stateflow-flow-sharedflow-livedata--android--medium
 created: 2025-10-15
 updated: 2025-10-30
-
-# Tags
-tags: [android/architecture-mvi, android/coroutines, android/flow, android/ui-state, architecture-mvi, difficulty/hard, sharedflow, stateflow, viewmodel]
-date created: Saturday, November 1st 2025, 12:46:59 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
+tags:
+- android/architecture-mvi
+- android/coroutines
+- android/flow
+- android/ui-state
+- architecture-mvi
+- difficulty/hard
+- sharedflow
+- stateflow
+- viewmodel
 ---
 
 # Вопрос (RU)
@@ -364,6 +377,13 @@ fun `event emitted once`() = runTest {
 - [Android Lifecycle - repeatOnLifecycle](https://developer.android.com/topic/libraries/architecture/coroutines)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-flow]]
+- [[c-compose-state]]
+- [[c-coroutines]]
+
 
 ### Prerequisites (Medium)
 - [[q-mvi-one-time-events--android--medium]] - Basic one-time events handling

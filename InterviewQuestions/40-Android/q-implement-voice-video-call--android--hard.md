@@ -1,31 +1,38 @@
 ---
 id: android-019
-title: "How to implement Voice/Video Call in Android? / Как реализовать голосовой/видеозвонок в Android?"
-aliases: [Voice Video Call Android, WebRTC Android, Голосовой видеозвонок Android]
-
-# Classification
+title: How to implement Voice/Video Call in Android? / Как реализовать голосовой/видеозвонок
+  в Android?
+aliases:
+- Voice Video Call Android
+- WebRTC Android
+- Голосовой видеозвонок Android
 topic: android
-subtopics: [media, networking-http, websockets]
+subtopics:
+- media
+- networking-http
+- websockets
 question_kind: coding
 difficulty: hard
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-sources: [https://github.com/amitshekhariitbhu/android-interview-questions]
-
-# Workflow & relations
+language_tags:
+- en
+- ru
+sources:
+- https://github.com/amitshekhariitbhu/android-interview-questions
 status: draft
 moc: moc-android
-related: [c-webrtc, c-websockets, q-http-protocols-comparison--android--medium, q-parallel-network-calls-coroutines--kotlin--medium]
-
-# Timestamps
+related:
+- c-webrtc
+- c-websockets
+- q-http-protocols-comparison--android--medium
+- q-parallel-network-calls-coroutines--kotlin--medium
 created: 2025-10-06
 updated: 2025-10-31
-
-tags: [android/media, android/networking-http, android/websockets, difficulty/hard]
-date created: Tuesday, October 28th 2025, 9:11:50 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
+tags:
+- android/media
+- android/networking-http
+- android/websockets
+- difficulty/hard
 ---
 
 # Вопрос (RU)
@@ -600,6 +607,12 @@ fun endCall() {
 - [STUN/TURN Server Setup](https://www.metered.ca/tools/openrelay/)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-webrtc]]
+- [[c-websockets]]
+
 
 ### Prerequisites (Easier)
 - [[q-http-protocols-comparison--android--medium]] - Understanding HTTP/WebSocket protocols

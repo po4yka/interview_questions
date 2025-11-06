@@ -1,28 +1,41 @@
 ---
 id: android-444
-title: Does State Made In Compose Help Avoid Race Condition / Помогает ли State в Compose избежать состояния гонки
-aliases: [Compose State Thread Safety, Does State Made In Compose Help Avoid Race Condition, Thread Safety в Compose State, Помогает ли State в Compose избежать состояния гонки]
+title: Does State Made In Compose Help Avoid Race Condition / Помогает ли State в
+  Compose избежать состояния гонки
+aliases:
+- Compose State Thread Safety
+- Does State Made In Compose Help Avoid Race Condition
+- Thread Safety в Compose State
+- Помогает ли State в Compose избежать состояния гонки
 topic: android
 subtopics:
-  - ui-compose
-  - ui-state
+- ui-compose
+- ui-state
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-derived-state-snapshot-system--android--hard
+- c-compose-state
+- c-jetpack-compose
+- c-viewmodel
+- q-derived-state-snapshot-system--android--hard
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/ui-compose, android/ui-state, compose, concurrency, difficulty/medium, state, thread-safety]
+tags:
+- android/ui-compose
+- android/ui-state
+- compose
+- concurrency
+- difficulty/medium
+- state
+- thread-safety
 sources:
-  - https://developer.android.com/jetpack/compose/state
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Sunday, November 2nd 2025, 10:04:18 pm
+- https://developer.android.com/jetpack/compose/state
 ---
 
 # Вопрос (RU)
@@ -790,6 +803,13 @@ Button2 { viewModel.increment() } // Thread-safe via StateFlow
 - [Coroutines Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+- [[c-viewmodel]]
+
 
 ### Prerequisites (Easier)
 - Compose basics and state management

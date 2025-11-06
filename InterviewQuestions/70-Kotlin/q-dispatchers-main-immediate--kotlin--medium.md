@@ -14,8 +14,6 @@ updated: 2025-10-31
 tags: [android, coroutines, difficulty/medium, dispatchers, immediate, kotlin, main, optimization, performance, ui-thread]
 moc: moc-kotlin
 related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-visibility-modifiers--kotlin--easy]
-date created: Saturday, November 1st 2025, 12:10:12 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Dispatchers.Main.immediate Vs Dispatchers.Main
 

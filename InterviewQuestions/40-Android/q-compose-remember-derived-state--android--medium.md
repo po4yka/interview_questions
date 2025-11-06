@@ -23,8 +23,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-02
 tags: [android/ui-compose, android/ui-state, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 1:43:55 pm
 ---
 
 # Вопрос (RU)

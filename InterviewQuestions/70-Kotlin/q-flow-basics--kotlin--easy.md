@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [cold-flow, coroutines, difficulty/easy, flow, kotlin, reactive, streams]
-date created: Sunday, October 12th 2025, 2:53:50 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Вопрос (RU)
 > Что такое Kotlin Flow? Объясните холодные vs горячие потоки, базовые операторы и когда использовать Flow.

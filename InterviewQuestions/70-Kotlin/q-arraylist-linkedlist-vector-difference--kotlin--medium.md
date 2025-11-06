@@ -14,8 +14,6 @@ related: [q-coroutine-exception-handler--kotlin--medium, q-coroutine-resource-cl
 created: 2025-10-15
 updated: 2025-10-31
 tags: [collections, data structures, difficulty/medium, kotlin]
-date created: Friday, October 31st 2025, 6:29:06 pm
-date modified: Sunday, November 2nd 2025, 12:05:13 pm
 ---
 
 # В Чем Разница ArrayList, LinkedList, Vector

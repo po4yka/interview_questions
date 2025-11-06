@@ -26,8 +26,6 @@ updated: 2025-10-30
 tags: [android/architecture-clean, android/architecture-mvvm, android/di-hilt, dagger, dependency-injection, difficulty/hard, hilt]
 sources:
   - https://dagger.dev/
-date created: Thursday, October 30th 2025, 12:01:59 pm
-date modified: Sunday, November 2nd 2025, 5:31:10 pm
 ---
 
 # Вопрос (RU)

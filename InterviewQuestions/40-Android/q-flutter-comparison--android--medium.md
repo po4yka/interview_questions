@@ -22,8 +22,6 @@ sources:
 created: 2025-10-15
 updated: 2025-11-03
 tags: [android/architecture-clean, android/kmp, cross-platform, difficulty/medium, flutter, multiplatform]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Monday, November 3rd 2025, 3:35:15 pm
 ---
 
 # Вопрос (RU)

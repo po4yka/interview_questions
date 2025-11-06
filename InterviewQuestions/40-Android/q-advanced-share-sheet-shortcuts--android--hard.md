@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-communication-surfaces
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -120,10 +119,8 @@ ShortcutManagerCompat.pushDynamicShortcut(context, shortcut)
 
 ## References
 - [[c-communication-surfaces]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/develop/ui/views/sharing/send
 
 ## Related Questions
 
 - [[c-communication-surfaces]]
-- [[q-android-coverage-gaps--android--hard]]

@@ -1,22 +1,41 @@
 ---
 id: android-197
-title: "What Is Viewmodel / Что такое ViewModel"
-aliases: ["What Is ViewModel", "Что такое ViewModel"]
+title: What Is Viewmodel / Что такое ViewModel
+aliases:
+- What Is ViewModel
+- Что такое ViewModel
 topic: android
-subtopics: [architecture-mvvm, lifecycle, ui-state]
+subtopics:
+- architecture-mvvm
+- lifecycle
+- ui-state
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-factory-pattern-android--android--medium, q-mvvm-pattern--android--medium, q-viewmodel-vs-onsavedinstancestate--android--medium]
+related:
+- c-compose-state
+- c-lifecycle
+- c-mvvm
+- q-factory-pattern-android--android--medium
+- q-mvvm-pattern--android--medium
+- q-viewmodel-vs-onsavedinstancestate--android--medium
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
-tags: [android/architecture-mvvm, android/lifecycle, android/ui-state, architecture, difficulty/medium, mvvm, state-management, viewmodel]
-date created: Saturday, November 1st 2025, 12:47:09 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
+tags:
+- android/architecture-mvvm
+- android/lifecycle
+- android/ui-state
+- architecture
+- difficulty/medium
+- mvvm
+- state-management
+- viewmodel
 ---
 
 # Вопрос (RU)
@@ -368,6 +387,13 @@ ViewModel is an architecture component for lifecycle-aware UI data management. S
 - [[q-factory-pattern-android--android--medium]]
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-lifecycle]]
+- [[c-mvvm]]
+
 
 ### Prerequisites (Easier)
 

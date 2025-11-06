@@ -15,8 +15,6 @@ description: "Comprehensive guide to Parent-child relationships in structured co
 moc: moc-kotlin
 related: [q-coroutine-performance-optimization--kotlin--hard, q-kotlin-collections--kotlin--easy, q-retry-operators-flow--kotlin--medium]
 subtopics: [coroutines, structured-concurrency]
-date created: Friday, October 31st 2025, 6:31:32 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # Parent-child Relationships in Structured Concurrency

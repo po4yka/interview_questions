@@ -1,22 +1,39 @@
 ---
 id: android-147
-title: "Raise Process Priority / Повышение приоритета процесса"
-aliases: ["Raise Process Priority", "Повышение приоритета процесса"]
+title: Raise Process Priority / Повышение приоритета процесса
+aliases:
+- Raise Process Priority
+- Повышение приоритета процесса
 topic: android
-subtopics: [lifecycle, processes, service]
+subtopics:
+- lifecycle
+- processes
+- service
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-network-operations-android--android--medium, q-what-events-are-activity-methods-tied-to--android--medium]
+related:
+- c-service
+- c-lifecycle
+- q-network-operations-android--android--medium
+- q-what-events-are-activity-methods-tied-to--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/lifecycle, android/processes, android/service, difficulty/medium, foreground-service, lifecycle, process-priority, services]
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
+tags:
+- android/lifecycle
+- android/processes
+- android/service
+- difficulty/medium
+- foreground-service
+- lifecycle
+- process-priority
+- services
 ---
 
 # Вопрос (RU)
@@ -278,6 +295,12 @@ val job = JobInfo.Builder(JOB_ID, componentName)
 - Android Documentation: Process and Application Lifecycle
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-service]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites
 - [[q-what-events-are-activity-methods-tied-to--android--medium]] — understanding Activity lifecycle helps with service lifecycle

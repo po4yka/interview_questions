@@ -15,8 +15,6 @@ sources: []
 moc: moc-android
 related: [c-surfaceview, c-textureview, c-threading]
 tags: [android, android/performance-rendering, android/threads-sync, android/ui-graphics, difficulty/hard, graphics, multithreading]
-date created: Wednesday, October 29th 2025, 12:15:33 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

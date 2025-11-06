@@ -1,32 +1,39 @@
 ---
 id: android-298
-title: "Compose Modifiers / Модификаторы в Compose"
-aliases: ["Compose Modifiers", "Jetpack Compose Modifiers", "Модификаторы в Compose"]
-
-# Classification
+title: Compose Modifiers / Модификаторы в Compose
+aliases:
+- Compose Modifiers
+- Jetpack Compose Modifiers
+- Модификаторы в Compose
 topic: android
-subtopics: [ui-compose, ui-state]
+subtopics:
+- ui-compose
+- ui-state
 question_kind: android
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-api-file-upload-server--android--medium, q-reduce-app-size--android--medium, q-where-is-composition-created-for-calling-composable-function--android--medium]
-
-# Timestamps
+related:
+- c-compose-state
+- c-jetpack-compose
+- c-viewmodel
+- q-api-file-upload-server--android--medium
+- q-reduce-app-size--android--medium
+- q-where-is-composition-created-for-calling-composable-function--android--medium
 created: 2025-10-15
 updated: 2025-10-28
-
-# Tags (EN only; no leading #)
-tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, jetpack-compose, modifiers]
-date created: Saturday, November 1st 2025, 12:47:07 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
+tags:
+- android/ui-compose
+- android/ui-state
+- compose
+- difficulty/medium
+- jetpack-compose
+- modifiers
 ---
 
 # Вопрос (RU)
@@ -280,6 +287,13 @@ Text(
 - Custom modifiers guide: https://developer.android.com/jetpack/compose/custom-modifiers
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+- [[c-viewmodel]]
+
 
 ### Prerequisites (Easier)
 - Basic Compose concepts and composable functions

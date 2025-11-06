@@ -10,12 +10,10 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: []
+related: [c-coroutines, c-structured-concurrency]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [coroutines, difficulty/medium, job, kotlin, programming-languages]
-date created: Saturday, October 4th 2025, 10:55:52 am
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # What is the Job Object For?
 

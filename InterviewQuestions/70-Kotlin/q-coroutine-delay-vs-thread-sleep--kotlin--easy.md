@@ -15,8 +15,6 @@ description: "Understanding the fundamental differences between suspending delay
 moc: moc-kotlin
 related: [q-array-vs-list-kotlin--kotlin--easy, q-kotlin-inline-functions--programming-languages--medium, q-kotlin-java-type-differences--programming-languages--medium]
 subtopics: [coroutines, threading]
-date created: Friday, October 31st 2025, 6:31:14 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # delay() Vs Thread.sleep(): What's the Difference?

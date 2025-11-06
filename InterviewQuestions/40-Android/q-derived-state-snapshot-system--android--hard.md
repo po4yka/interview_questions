@@ -1,30 +1,42 @@
 ---
 id: android-464
 title: Derived State Snapshot System / Derived State и система Snapshot
-aliases: [Derived State Snapshot System, Derived State и система Snapshot]
+aliases:
+- Derived State Snapshot System
+- Derived State и система Snapshot
 topic: android
 subtopics:
-  - performance-memory
-  - ui-compose
+- performance-memory
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-compose-performance-optimization--android--hard
-  - q-compose-slot-table-recomposition--android--hard
-  - q-compose-stability-skippability--android--hard
+- c-memory-management
+- c-compose-state
+- c-jetpack-compose
+- q-compose-performance-optimization--android--hard
+- q-compose-slot-table-recomposition--android--hard
+- q-compose-stability-skippability--android--hard
 created: 2025-10-20
 updated: 2025-11-02
-tags: [android/performance-memory, android/ui-compose, compose, derived-state, difficulty/hard, optimization, performance, snapshot, state]
+tags:
+- android/performance-memory
+- android/ui-compose
+- compose
+- derived-state
+- difficulty/hard
+- optimization
+- performance
+- snapshot
+- state
 sources:
-  - https://developer.android.com/jetpack/compose/state
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 7:43:20 pm
+- https://developer.android.com/jetpack/compose/state
 ---
 
 # Вопрос (RU)
@@ -246,6 +258,13 @@ val totalPrice = remember {
 - Memoization optimization techniques
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-memory-management]]
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+
 
 ### Prerequisites (Easier)
 - Basic `Compose` state management (`mutableStateOf`, `remember`)

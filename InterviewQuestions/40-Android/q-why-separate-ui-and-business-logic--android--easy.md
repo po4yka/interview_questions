@@ -1,22 +1,35 @@
 ---
 id: android-129
-title: "Why Separate UI and Business Logic / Зачем разделять UI и бизнес-логику"
-aliases: ["Why Separate UI and Business Logic", "Зачем разделять UI и бизнес-логику"]
+title: Why Separate UI and Business Logic / Зачем разделять UI и бизнес-логику
+aliases:
+- Why Separate UI and Business Logic
+- Зачем разделять UI и бизнес-логику
 topic: android
-subtopics: [architecture-clean, architecture-mvvm]
+subtopics:
+- architecture-clean
+- architecture-mvvm
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-compose-testing--android--medium, q-mvvm-vs-mvp-differences--android--medium]
+related:
+- c-clean-architecture
+- c-mvvm
+- c-viewmodel
+- q-compose-testing--android--medium
+- q-mvvm-vs-mvp-differences--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/architecture-clean, android/architecture-mvvm, difficulty/easy, separation-of-concerns]
-date created: Monday, October 27th 2025, 3:43:10 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
+tags:
+- android/architecture-clean
+- android/architecture-mvvm
+- difficulty/easy
+- separation-of-concerns
 ---
 
 # Вопрос (RU)
@@ -214,6 +227,13 @@ class GetUsersUseCase(private val repository: UserRepository) {
 - https://developer.android.com/topic/libraries/architecture/viewmodel - ViewModel guide
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-clean-architecture]]
+- [[c-mvvm]]
+- [[c-viewmodel]]
+
 
 ### Prerequisites
 

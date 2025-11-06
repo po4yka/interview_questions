@@ -1,22 +1,38 @@
 ---
 id: android-126
-title: "ML Kit Custom Models / Кастомные модели ML Kit"
-aliases: ["ML Kit Custom Models", "Кастомные модели ML Kit"]
+title: ML Kit Custom Models / Кастомные модели ML Kit
+aliases:
+- ML Kit Custom Models
+- Кастомные модели ML Kit
 topic: android
-subtopics: [ab-testing, analytics, performance-memory]
+subtopics:
+- ab-testing
+- analytics
+- performance-memory
 question_kind: android
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-performance-optimization-android--android--medium, q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy]
+related:
+- c-memory-management
+- c-mobile-observability
+- q-performance-optimization-android--android--medium
+- q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/ab-testing, android/analytics, android/performance-memory, difficulty/hard, machine-learning, ml-kit, tensorflow-lite]
-date created: Monday, October 27th 2025, 3:39:17 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
+tags:
+- android/ab-testing
+- android/analytics
+- android/performance-memory
+- difficulty/hard
+- machine-learning
+- ml-kit
+- tensorflow-lite
 ---
 
 # Вопрос (RU)
@@ -400,6 +416,12 @@ Track:
 - https://firebase.google.com/docs/ml
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-memory-management]]
+- [[c-mobile-observability]]
+
 
 ### Prerequisites
 - [[q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy]]

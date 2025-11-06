@@ -14,8 +14,6 @@ related: [c-adapter-pattern, c-diffutil, c-listadapter, c-recyclerview]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [adapter, android/performance-rendering, android/ui-views, difficulty/medium, diffutil, performance, recyclerview]
-date created: Saturday, November 1st 2025, 1:26:27 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

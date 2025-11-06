@@ -16,8 +16,6 @@ related: []
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "broadcast", "components", "concept", "difficulty/medium", "system-events"]
-date created: Saturday, October 25th 2025, 11:06:45 am
-date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Broadcast Receiver / Широковещательный Приемник

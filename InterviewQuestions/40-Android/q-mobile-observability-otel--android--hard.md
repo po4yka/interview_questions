@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-mobile-observability
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -125,11 +124,9 @@ OpenTelemetrySdk.builder()
 
 ## References
 - [[c-mobile-observability]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://opentelemetry.io/docs/instrumentation/android/
 - https://developer.android.com/topic/performance/monitoring
 
 ## Related Questions
 
 - [[c-mobile-observability]]
-- [[q-android-coverage-gaps--android--hard]]

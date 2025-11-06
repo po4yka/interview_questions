@@ -25,8 +25,6 @@ created: 2025-10-05
 updated: 2025-10-05
 
 tags: [delegation, difficulty/medium, initialization, kotlin, lateinit, lazy]
-date created: Friday, October 17th 2025, 9:48:25 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Вопрос (RU)
 > В чем разница между lazy и lateinit в Kotlin?

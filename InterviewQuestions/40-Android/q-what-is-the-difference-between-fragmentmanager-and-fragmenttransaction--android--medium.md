@@ -1,22 +1,40 @@
 ---
 id: android-356
-title: "What Is The Difference Between Fragmentmanager And Fragmenttransaction / В чём разница между FragmentManager и FragmentTransaction"
-aliases: ["FragmentManager vs FragmentTransaction", "Разница между FragmentManager и FragmentTransaction"]
+title: What Is The Difference Between Fragmentmanager And Fragmenttransaction / В
+  чём разница между FragmentManager и FragmentTransaction
+aliases:
+- FragmentManager vs FragmentTransaction
+- Разница между FragmentManager и FragmentTransaction
 topic: android
-subtopics: [fragment, lifecycle, ui-views]
+subtopics:
+- fragment
+- lifecycle
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-can-state-loss-be-related-to-a-fragment--android--medium, q-how-to-choose-layout-for-fragment--android--easy, q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]
+related:
+- c-fragments
+- c-lifecycle
+- q-can-state-loss-be-related-to-a-fragment--android--medium
+- q-how-to-choose-layout-for-fragment--android--easy
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-29
-tags: [android/fragment, android/lifecycle, android/ui-views, difficulty/medium, fragmentmanager, fragments, fragmenttransaction]
-date created: Saturday, November 1st 2025, 12:47:09 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
+tags:
+- android/fragment
+- android/lifecycle
+- android/ui-views
+- difficulty/medium
+- fragmentmanager
+- fragments
+- fragmenttransaction
 ---
 
 # Вопрос (RU)
@@ -226,6 +244,12 @@ transaction.commitNowAllowingStateLoss()
 - Official: [FragmentManager API](https://developer.android.com/reference/androidx/fragment/app/FragmentManager)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-fragments]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites (Easier)
 - [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment basics

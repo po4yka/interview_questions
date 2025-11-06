@@ -25,8 +25,6 @@ tags: [accessibility, android/testing-ui, android/ui-accessibility, android/ui-c
 sources:
   - https://developer.android.com/guide/topics/ui/accessibility
   - https://developer.android.com/jetpack/compose/semantics
-date created: Thursday, October 30th 2025, 11:23:06 am
-date modified: Sunday, November 2nd 2025, 1:44:07 pm
 ---
 
 # Вопрос (RU)

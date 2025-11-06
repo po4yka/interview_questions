@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, mockk, testing, turbine, unit-testing]
-date created: Saturday, November 1st 2025, 1:24:35 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)

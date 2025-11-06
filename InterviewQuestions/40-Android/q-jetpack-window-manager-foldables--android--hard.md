@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-window-size-class
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -133,11 +132,9 @@ RuleController.getInstance(context).setRules(
 
 ## References
 - [[c-window-size-class]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/jetpack/androidx/releases/window
 - https://developer.android.com/guide/topics/large-screens/ideas
 
 ## Related Questions
 
 - [[c-window-size-class]]
-- [[q-android-coverage-gaps--android--hard]]

@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-play-integrity
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -122,11 +121,9 @@ def verify_token(token: str):
 
 ## References
 - [[c-play-integrity]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/google/play/integrity
 - https://cloud.google.com/play-integrity/reference/rest
 
 ## Related Questions
 
 - [[c-play-integrity]]
-- [[q-android-coverage-gaps--android--hard]]

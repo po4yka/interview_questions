@@ -14,8 +14,6 @@ related: [q-continuation-cps-internals--kotlin--hard, q-kotlin-flow-basics--kotl
 created: 2025-10-15
 updated: 2025-10-31
 tags: [atomic, concurrency, difficulty/medium, java, kotlin, synchronized, thread-safety]
-date created: Saturday, November 1st 2025, 1:26:33 pm
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Atomic Vs Synchronized: Когда Использовать

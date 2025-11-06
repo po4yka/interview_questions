@@ -14,8 +14,6 @@ related: [q-executor-service-java--kotlin--medium, q-kotlin-static-variable--pro
 created: 2025-10-15
 updated: 2025-10-31
 tags: [collections, comparison, difficulty/medium, java, null-safety, programming-languages, type-inference, type-system]
-date created: Saturday, November 1st 2025, 12:42:09 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Чем Типы В Kotlin Отличаются От Типов В Java
 

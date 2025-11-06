@@ -14,8 +14,6 @@ updated: 2025-10-31
 tags: [circuit-breaker, coroutines, difficulty/hard, error-handling, kotlin, microservices, patterns, production, resilience]
 moc: moc-kotlin
 related: [q-flatmap-variants-flow--kotlin--medium, q-flow-vs-livedata-comparison--kotlin--medium, q-request-coalescing-deduplication--kotlin--hard]
-date created: Saturday, November 1st 2025, 12:10:11 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # Circuit Breaker Pattern with Coroutines

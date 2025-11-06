@@ -1,25 +1,43 @@
 ---
 id: android-267
-title: "How To Write RecyclerView So That It Caches Ahead / Как написать RecyclerView чтобы он кешировал вперед"
-aliases: [RecyclerView caching, RecyclerView prefetching, Кеширование RecyclerView, Предзагрузка RecyclerView]
+title: How To Write RecyclerView So That It Caches Ahead / Как написать RecyclerView
+  чтобы он кешировал вперед
+aliases:
+- RecyclerView caching
+- RecyclerView prefetching
+- Кеширование RecyclerView
+- Предзагрузка RecyclerView
 topic: android
-subtopics: [performance-memory, performance-rendering, ui-views]
+subtopics:
+- performance-memory
+- performance-rendering
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
 related:
-  - q-how-animations-work-in-recyclerview--android--medium
-  - q-recyclerview-async-list-differ--android--medium
-  - q-recyclerview-sethasfixedsize--android--easy
+- c-memory-management
+- c-performance
+- q-how-animations-work-in-recyclerview--android--medium
+- q-recyclerview-async-list-differ--android--medium
+- q-recyclerview-sethasfixedsize--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
-tags: [android, android/performance-memory, android/performance-rendering, android/ui-views, caching, difficulty/medium, prefetching, recyclerview]
-date created: Saturday, November 1st 2025, 12:46:55 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+tags:
+- android
+- android/performance-memory
+- android/performance-rendering
+- android/ui-views
+- caching
+- difficulty/medium
+- prefetching
+- recyclerview
 ---
 
 # Вопрос (RU)
@@ -325,6 +343,12 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView) {
 ---
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-memory-management]]
+- [[c-performance]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Fixed size optimization

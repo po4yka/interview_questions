@@ -14,8 +14,6 @@ related: [c-app-signing, c-ci-cd, q-in-app-updates--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ab-testing, android/app-bundle, android/ci-cd, android/play-console, difficulty/medium, distribution, release-management]
-date created: Saturday, November 1st 2025, 1:03:34 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

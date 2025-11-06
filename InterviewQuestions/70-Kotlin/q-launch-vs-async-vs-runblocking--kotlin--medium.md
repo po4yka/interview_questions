@@ -14,8 +14,6 @@ related: [q-coroutine-memory-leak-detection--kotlin--hard, q-executor-service-ja
 created: 2025-10-15
 updated: 2025-10-31
 tags: [async, concurrency, coroutines, difficulty/medium, kotlin, launch, runblocking]
-date created: Saturday, November 1st 2025, 12:42:09 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Launch Vs Async Vs RunBlocking
 

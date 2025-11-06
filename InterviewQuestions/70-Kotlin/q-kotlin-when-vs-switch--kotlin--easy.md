@@ -14,8 +14,6 @@ related: [q-channel-buffering-strategies--kotlin--hard, q-cold-vs-hot-flows--kot
 created: 2025-10-15
 updated: 2025-10-31
 tags: [control-flow, difficulty/easy, kotlin, switch, syntax, when]
-date created: Friday, October 31st 2025, 6:29:12 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Какой Оператор Используется Вместо Switch В Kotlin?
 

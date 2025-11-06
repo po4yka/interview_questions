@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/background-execution, android/service, background-tasks, difficulty/medium, reliability, workmanager]
-date created: Wednesday, October 29th 2025, 1:03:11 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

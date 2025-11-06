@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [coroutines, difficulty/medium, kotlin, sharedflow, stateflow, testing, viewmodel]
-date created: Sunday, October 12th 2025, 1:20:44 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Вопрос (RU)
 > Как тестировать StateFlow и SharedFlow в ViewModels? Покрыть стратегии коллекции, библиотеку turbine, TestScope, утверждения и граничные случаи вроде replay cache и conflation.

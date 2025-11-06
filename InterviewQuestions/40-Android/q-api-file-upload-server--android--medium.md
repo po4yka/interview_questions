@@ -24,8 +24,6 @@ related:
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/background-execution, android/files-media, android/networking-http, difficulty/medium, okhttp, retrofit, workmanager]
-date created: Thursday, October 30th 2025, 11:43:56 am
-date modified: Sunday, November 2nd 2025, 12:53:12 pm
 ---
 
 # Вопрос (RU)

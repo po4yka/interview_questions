@@ -21,8 +21,6 @@ created: 2025-10-11
 updated: 2025-10-29
 tags: [a11y, android/testing-ui, android/ui-accessibility, difficulty/medium, testing]
 sources: []
-date created: Wednesday, October 29th 2025, 4:18:42 pm
-date modified: Sunday, November 2nd 2025, 12:08:15 pm
 ---
 
 # Вопрос (RU)

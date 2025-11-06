@@ -244,10 +244,17 @@ cat app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 ## Related Questions
 
 ### Prerequisites (Easier)
-- Related content to be added
+- [[q-android-manifest-file--android--easy]] - Manifest file basics
+- [[q-gradle-basics--android--easy]] - Gradle build system
+- [[q-android-project-parts--android--easy]] - Android project structure
 
 ### Related (Same Level)
-- Related content to be added
+- [[q-module-types-android--android--medium]] - Types of Android modules
+- [[q-android-modularization--android--medium]] - Modularization strategies
+- [[q-build-optimization-gradle--android--medium]] - Gradle optimization
+- [[q-kapt-vs-ksp--android--medium]] - Annotation processing
 
 ### Advanced (Harder)
-- Related content to be added
+- [[q-modularization-patterns--android--hard]] - Advanced modularization
+- [[q-multi-module-best-practices--android--hard]] - Multi-module architecture
+- [[q-android-release-pipeline-cicd--android--hard]] - CI/CD for modules

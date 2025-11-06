@@ -15,8 +15,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/architecture-mvvm, android/lifecycle, android/performance-memory, architecture-components, difficulty/hard, memory-leaks]
-date created: Wednesday, October 29th 2025, 1:02:47 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

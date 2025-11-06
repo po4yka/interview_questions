@@ -14,8 +14,6 @@ related: [q-abstract-factory-pattern--design-patterns--medium, q-builder-pattern
 created: 2025-10-15
 updated: 2025-10-31
 tags: [creational-patterns, design-patterns, difficulty/easy, gof-patterns, singleton]
-date created: Monday, October 6th 2025, 7:18:19 am
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Singleton Pattern

@@ -15,8 +15,6 @@ created: 2025-10-13
 updated: 2025-10-28
 sources: []
 tags: [animation, design, difficulty/medium, material3, motion, transitions]
-date created: Tuesday, October 28th 2025, 9:36:31 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Вопрос (RU)

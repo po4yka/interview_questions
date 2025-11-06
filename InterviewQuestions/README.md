@@ -1,6 +1,4 @@
 ---
-date created: Sunday, October 12th 2025, 1:01:34 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # Obsidian Interview Vault — Full README

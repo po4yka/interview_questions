@@ -16,8 +16,6 @@ tags:
   - surfaces
   - quick-settings
   - shortcuts
-date created: Sunday, November 2nd 2025, 01:25:00 pm
-date modified: Sunday, November 2nd 2025, 01:25:00 pm
 ---
 
 # Summary (EN)

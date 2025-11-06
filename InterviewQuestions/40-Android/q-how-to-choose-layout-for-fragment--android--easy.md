@@ -1,22 +1,32 @@
 ---
 id: android-138
-title: "How To Choose Layout For Fragment / Как выбрать layout для Fragment"
-aliases: ["How To Choose Layout For Fragment", "Как выбрать layout для Fragment"]
+title: How To Choose Layout For Fragment / Как выбрать layout для Fragment
+aliases:
+- How To Choose Layout For Fragment
+- Как выбрать layout для Fragment
 topic: android
-subtopics: [fragment, ui-views]
+subtopics:
+- fragment
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-fragment-basics--android--easy, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
+related:
+- c-fragments
+- q-fragment-basics--android--easy
+- q-why-user-data-may-disappear-on-screen-rotation--android--hard
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/fragment, android/ui-views, difficulty/easy]
-date created: Monday, October 27th 2025, 3:47:26 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+tags:
+- android/fragment
+- android/ui-views
+- difficulty/easy
 ---
 
 # Вопрос (RU)
@@ -237,6 +247,11 @@ override fun onDestroyView() {
 - Official Android documentation: LayoutInflater API reference
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-fragments]]
+
 
 ### Prerequisites
 - [[q-fragment-basics--android--easy|Fragment Basics]]

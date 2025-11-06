@@ -23,8 +23,6 @@ updated: 2025-11-02
 tags: [android/di-hilt, android/lifecycle, dagger, difficulty/medium, hilt, lifecycle, scope]
 sources:
   - https://dagger.dev/api/latest/dagger/Scope.html
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 5:36:51 pm
 ---
 
 # Вопрос (RU)

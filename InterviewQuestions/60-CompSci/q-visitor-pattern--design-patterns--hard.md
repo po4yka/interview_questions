@@ -14,8 +14,6 @@ related: [q-design-patterns-types--design-patterns--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [behavioral-patterns, design-patterns, difficulty/hard, double-dispatch, gof-patterns, visitor]
-date created: Monday, October 6th 2025, 7:30:41 am
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Visitor Pattern

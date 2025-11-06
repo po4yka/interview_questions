@@ -1,32 +1,36 @@
 ---
 id: android-207
-title: "What Is The Main Application Execution Thread / Что такое главный поток выполнения приложения"
-aliases: ["Main Thread", "UI Thread", "Главный поток", "Поток UI"]
-
-# Classification
+title: What Is The Main Application Execution Thread / Что такое главный поток выполнения
+  приложения
+aliases:
+- Main Thread
+- UI Thread
+- Главный поток
+- Поток UI
 topic: android
-subtopics: [lifecycle, performance-rendering, threads-sync]
+subtopics:
+- lifecycle
+- performance-rendering
+- threads-sync
 question_kind: theory
 difficulty: easy
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [c-main-thread, c-threading]
-
-# Timestamps
+related:
+- c-main-thread
+- c-threading
 created: 2025-10-15
 updated: 2025-10-29
-
-# Tags (EN only; no leading #)
-tags: [android/lifecycle, android/performance-rendering, android/threads-sync, difficulty/easy]
-date created: Saturday, November 1st 2025, 1:26:04 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
+tags:
+- android/lifecycle
+- android/performance-rendering
+- android/threads-sync
+- difficulty/easy
 ---
 
 # Вопрос (RU)
@@ -188,6 +192,12 @@ fun isMainThread(): Boolean =
 - [Kotlin Coroutines on Android](https://developer.android.com/kotlin/coroutines)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-main-thread]]
+- [[c-threading]]
+
 
 ### Prerequisites (Easier)
 - [[q-main-android-components--android--easy]] — Basic Android components

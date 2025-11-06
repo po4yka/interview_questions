@@ -14,8 +14,6 @@ related: [c-immutability, c-unidirectional-data-flow]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-mvi, android/coroutines, android/ui-state, architecture, difficulty/hard, state-management, unidirectional-data-flow]
-date created: Saturday, November 1st 2025, 1:25:24 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -623,10 +621,17 @@ class AnalyticsMiddleware : Middleware<LoginIntent, LoginState> {
 ## Related Questions
 
 ### Prerequisites (Medium)
-- Related content to be added
+- [[q-mvvm-pattern--android--medium]] - MVVM architecture pattern
+- [[q-mvp-pattern--android--medium]] - MVP architecture pattern
+- [[q-stateflow-flow-sharedflow-livedata--android--medium]] - State management tools
+- [[q-repository-pattern--android--medium]] - Repository pattern
 
 ### Related (Hard)
-- Related content to be added
+- [[q-clean-architecture-android--android--hard]] - Clean architecture principles
+- [[q-mvi-handle-one-time-events--android--hard]] - One-time events in MVI
+- [[q-offline-first-architecture--android--hard]] - Offline-first patterns
 
 ### Advanced (Hard)
-- Related content to be added
+- [[q-derived-state-snapshot-system--android--hard]] - Derived state systems
+- [[q-compose-slot-table-recomposition--android--hard]] - Compose recomposition internals
+- [[q-observability-sdk--android--hard]] - Production monitoring

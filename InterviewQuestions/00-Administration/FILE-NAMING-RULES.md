@@ -1,6 +1,4 @@
 ---
-date created: Saturday, October 18th 2025, 2:02:21 pm
-date modified: Saturday, November 1st 2025, 5:43:39 pm
 ---
 
 # File Naming Rules

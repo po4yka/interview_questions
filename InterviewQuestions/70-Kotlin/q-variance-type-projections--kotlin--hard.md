@@ -14,8 +14,6 @@ related: [q-equals-hashcode-purpose--kotlin--medium, q-launch-vs-async--kotlin--
 created: 2025-10-15
 updated: 2025-10-31
 tags: [contravariance, covariance, difficulty/hard, generics, kotlin, projections, type-system, variance]
-date created: Friday, October 31st 2025, 6:32:04 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Variance and Type Projections in Kotlin
 

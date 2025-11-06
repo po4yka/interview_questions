@@ -14,8 +14,6 @@ related: [q-class-initialization-order--kotlin--medium, q-variance-type-projecti
 created: 2025-10-15
 updated: 2025-10-31
 tags: [as?, casting, difficulty/easy, programming-languages, safe-cast, type-conversion, type-safety]
-date created: Friday, October 31st 2025, 6:32:39 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Как В Kotlin Привести Переменную Типа Any К Типу String Безопасно, Чтобы Избежать Исключения?
 

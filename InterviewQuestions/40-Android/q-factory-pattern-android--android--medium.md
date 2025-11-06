@@ -21,8 +21,6 @@ related:
 created: 2025-10-20
 updated: 2025-11-03
 tags: [android/architecture-clean, android/ui-views, design-patterns, difficulty/medium, factory-pattern, layout-inflater]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Monday, November 3rd 2025, 11:26:20 am
 ---
 
 # Вопрос (RU)

@@ -15,8 +15,6 @@ tags: ["async", "builders", "coroutines", "difficulty/medium", "kotlin", "launch
 description: "Comprehensive comparison of Kotlin coroutine builders covering return types, blocking vs suspending behavior, use cases, and performance implications"
 moc: moc-kotlin
 related: [q-dispatcher-performance--kotlin--hard, q-kotlin-extension-functions-advanced--kotlin--hard, q-kotlin-inline-functions--kotlin--medium]
-date created: Friday, October 31st 2025, 6:30:42 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # Comparison of All Coroutine Builders: Launch, Async, runBlocking, withContext, coroutineScope, supervisorScope

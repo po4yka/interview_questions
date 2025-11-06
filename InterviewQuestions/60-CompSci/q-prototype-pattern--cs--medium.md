@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-25
 tags: [creational-patterns, design-patterns, difficulty/medium, object-cloning, prototype]
 sources: [https://refactoring.guru/design-patterns/prototype]
-date created: Monday, October 6th 2025, 7:33:01 am
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

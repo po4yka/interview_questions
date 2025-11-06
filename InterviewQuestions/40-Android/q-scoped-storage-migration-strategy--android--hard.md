@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-scoped-storage-security
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -114,11 +113,9 @@ context.contentResolver.query(MediaStore.Files.getContentUri("external"), projec
 ## References
 
 - [[c-scoped-storage-security]]
-- [[q-android-coverage-gaps--android--hard]]
 - [Data Storage](https://developer.android.com/training/data-storage)
 
 
 ## Related Questions
 
 - [[c-scoped-storage-security]]
-- [[q-android-coverage-gaps--android--hard]]

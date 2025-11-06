@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-enterprise-mdm
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -111,11 +110,9 @@ dpm.setLockTaskPackages(adminComponent, arrayOf("com.company.app"))
 
 ## References
 - [[c-enterprise-mdm]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/work/overview
 - https://developer.android.com/work/managed-configurations
 
 ## Related Questions
 
 - [[c-enterprise-mdm]]
-- [[q-android-coverage-gaps--android--hard]]

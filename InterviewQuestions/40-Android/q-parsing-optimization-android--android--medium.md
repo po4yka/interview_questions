@@ -1,22 +1,35 @@
 ---
 id: android-130
-title: "Parsing Optimization Android / Оптимизация парсинга Android"
-aliases: ["Parsing Optimization Android", "Оптимизация парсинга Android"]
+title: Parsing Optimization Android / Оптимизация парсинга Android
+aliases:
+- Parsing Optimization Android
+- Оптимизация парсинга Android
 topic: android
-subtopics: [performance-memory, serialization]
+subtopics:
+- performance-memory
+- serialization
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium]
+related:
+- c-memory-management
+- c-room-database
+- q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/performance-memory, android/serialization, difficulty/medium, json, optimization, xml]
-date created: Monday, October 27th 2025, 3:43:24 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
+tags:
+- android/performance-memory
+- android/serialization
+- difficulty/medium
+- json
+- optimization
+- xml
 ---
 
 # Вопрос (RU)
@@ -281,6 +294,12 @@ fun parseStream(stream: InputStream) = flow {
 - https://developer.android.com/topic/performance - Android performance guide
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-memory-management]]
+- [[c-room-database]]
+
 
 ### Prerequisites (Easier)
 - [[q-how-to-tell-adapter-to-redraw-list-when-item-removed--android--medium]] - UI updates after data changes

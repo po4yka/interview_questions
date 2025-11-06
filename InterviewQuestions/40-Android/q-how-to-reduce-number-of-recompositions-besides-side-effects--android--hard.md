@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-30
 sources: []
 tags: [android, android/performance-rendering, android/ui-compose, compose, difficulty/hard, recomposition]
-date created: Thursday, October 30th 2025, 12:57:11 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

@@ -1,22 +1,42 @@
 ---
 id: android-365
-title: "Pass Large Data Between Activities / Передача больших данных между Activity"
-aliases: [Content URI, FileProvider, Large Data Transfer, Pass Large Data Between Activities, Передача больших данных между Activity]
+title: Pass Large Data Between Activities / Передача больших данных между Activity
+aliases:
+- Content URI
+- FileProvider
+- Large Data Transfer
+- Pass Large Data Between Activities
+- Передача больших данных между Activity
 topic: android
-subtopics: [activity, content-provider, intents-deeplinks]
+subtopics:
+- activity
+- content-provider
+- intents-deeplinks
 question_kind: android
 difficulty: hard
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-android-ipc, q-android-ipc-mechanisms--android--hard, q-android-security-best-practices--android--hard]
+related:
+- c-android-ipc
+- q-android-ipc-mechanisms--android--hard
+- q-android-security-best-practices--android--hard
 created: 2025-10-15
 updated: 2025-10-30
-sources: [Android Content Provider Documentation, Android Developers]
-tags: [android/activity, android/content-provider, android/intents-deeplinks, binder, difficulty/hard, file-provider, ipc]
-date created: Saturday, November 1st 2025, 1:03:32 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
+sources:
+- Android Content Provider Documentation
+- Android Developers
+tags:
+- android/activity
+- android/content-provider
+- android/intents-deeplinks
+- binder
+- difficulty/hard
+- file-provider
+- ipc
 ---
 
 # Вопрос (RU)
@@ -681,6 +701,11 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 ---
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-android-ipc]]
+
 
 ### Prerequisites (Medium)
 - [[q-how-to-pass-data-from-one-activity-to-another--android--medium]] - Basic data passing

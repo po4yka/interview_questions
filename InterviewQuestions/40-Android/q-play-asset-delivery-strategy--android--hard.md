@@ -19,7 +19,6 @@ moc: moc-android
 related:
   - c-release-engineering
   - c-app-bundle
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -134,11 +133,9 @@ assetManager.registerListener { state ->
 ## References
 - [[c-release-engineering]]
 - [[c-app-bundle]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/guide/playcore/asset-delivery
 
 ## Related Questions
 
 - [[c-release-engineering]]
 - [[c-app-bundle]]
-- [[q-android-coverage-gaps--android--hard]]

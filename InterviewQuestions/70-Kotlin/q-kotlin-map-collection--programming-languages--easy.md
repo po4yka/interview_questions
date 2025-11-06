@@ -14,8 +14,6 @@ updated: 2025-10-31
 tags: [collections, difficulty/easy, map, programming-languages]
 moc: moc-kotlin
 related: [q-kotlin-property-delegates--programming-languages--medium, q-visibility-modifiers-kotlin--kotlin--medium]
-date created: Friday, October 31st 2025, 6:30:31 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Расскажи Про Коллекцию Map
 

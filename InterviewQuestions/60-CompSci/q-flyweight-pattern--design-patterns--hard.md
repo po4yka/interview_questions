@@ -14,8 +14,6 @@ related: [c-design-patterns]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [design-patterns, difficulty/hard, flyweight, gof-patterns, memory-optimization, structural-patterns]
-date created: Saturday, November 1st 2025, 1:03:03 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Flyweight Pattern

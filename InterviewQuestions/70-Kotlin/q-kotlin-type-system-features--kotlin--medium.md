@@ -14,8 +14,6 @@ related: [q-kotlin-coroutines-introduction--kotlin--medium, q-testing-viewmodels
 created: 2025-10-15
 updated: 2025-10-31
 tags: [data-classes, difficulty/medium, kotlin, null-safety, sealed-classes, type-inference, type-system]
-date created: Friday, October 31st 2025, 6:28:53 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 # Какие Знаешь Особенности Системы Типов В Kotlin?
 

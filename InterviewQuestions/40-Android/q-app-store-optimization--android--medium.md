@@ -1,28 +1,35 @@
 ---
 id: android-399
 title: App Store Optimization / Оптимизация App Store
-aliases: [App Store Optimization, ASO, Оптимизация App Store]
+aliases:
+- App Store Optimization
+- ASO
+- Оптимизация App Store
 topic: android
 subtopics:
-  - ab-testing
-  - analytics
-  - play-console
+- ab-testing
+- analytics
+- play-console
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-android-app-bundles--android--easy
+- c-performance
+- c-performance-optimization
+- q-android-app-bundles--android--easy
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android/ab-testing, android/analytics, android/play-console, difficulty/medium]
-date created: Thursday, October 30th 2025, 11:43:32 am
-date modified: Sunday, November 2nd 2025, 12:56:52 pm
+tags:
+- android/ab-testing
+- android/analytics
+- android/play-console
+- difficulty/medium
 ---
 
 # Вопрос (RU)
@@ -244,6 +251,12 @@ data class ASOMetrics(
 ---
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-performance]]
+- [[c-performance-optimization]]
+
 
 ### Prerequisites (Easier)
 - [[q-android-app-bundles--android--easy]] - Understanding App Bundle format and benefits

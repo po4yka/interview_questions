@@ -20,8 +20,6 @@ created: 2025-10-15
 updated: 2025-10-29
 tags: [android/activity, android/lifecycle, difficulty/medium, jetpack]
 sources: []
-date created: Wednesday, October 29th 2025, 4:18:27 pm
-date modified: Sunday, November 2nd 2025, 12:43:03 pm
 ---
 
 # Вопрос (RU)

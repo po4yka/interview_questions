@@ -1,22 +1,34 @@
 ---
 id: android-213
-title: "Runtime Permissions Best Practices / Лучшие практики runtime разрешений"
-aliases: ["Runtime Permissions Best Practices", "Лучшие практики runtime разрешений"]
+title: Runtime Permissions Best Practices / Лучшие практики runtime разрешений
+aliases:
+- Runtime Permissions Best Practices
+- Лучшие практики runtime разрешений
 topic: android
-subtopics: [permissions]
+subtopics:
+- permissions
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-security-practices-checklist--android--medium, q-database-encryption-android--android--medium]
+related:
+- c-permissions
+- q-android-security-practices-checklist--android--medium
+- q-database-encryption-android--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android, android/permissions, difficulty/medium, permissions, security, ux]
-date created: Saturday, November 1st 2025, 12:47:03 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
+tags:
+- android
+- android/permissions
+- difficulty/medium
+- permissions
+- security
+- ux
 ---
 
 # Вопрос (RU)
@@ -388,6 +400,11 @@ if (isPermanentlyDenied) {
 - https://developer.android.com/reference/androidx/activity/result/contract/ActivityResultContracts
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-permissions]]
+
 
 ### Prerequisites (Easier)
 

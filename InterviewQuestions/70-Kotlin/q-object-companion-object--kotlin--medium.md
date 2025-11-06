@@ -14,8 +14,6 @@ related: [q-coroutinecontext-composition--kotlin--hard, q-flow-backpressure--kot
 created: 2025-10-15
 updated: 2025-10-31
 tags: [classes, companion-object, difficulty/medium, kotlin, object-keyword, singleton]
-date created: Friday, October 31st 2025, 6:29:55 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Что Такое Object / Companion Object?
 

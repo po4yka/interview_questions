@@ -14,8 +14,6 @@ related: [q-channels-basics-types--kotlin--medium, q-kotlin-native--kotlin--hard
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
-date created: Sunday, October 12th 2025, 12:27:48 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Расскажи Data Классы И Sealed Классы

@@ -25,8 +25,6 @@ updated: 2025-10-28
 
 # Tags (EN only; no leading #)
 tags: [android/testing-instrumented, android/testing-unit, comparison, difficulty/medium, robolectric, strategy]
-date created: Saturday, November 1st 2025, 1:04:41 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)

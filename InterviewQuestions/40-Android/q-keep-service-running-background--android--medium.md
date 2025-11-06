@@ -1,22 +1,42 @@
 ---
 id: android-194
-title: "Keep Service Running Background / Удержание Service в фоне"
-aliases: ["Background Service", "Keep Service Running Background", "Удержание Service в фоне", "Фоновый сервис"]
+title: Keep Service Running Background / Удержание Service в фоне
+aliases:
+- Background Service
+- Keep Service Running Background
+- Удержание Service в фоне
+- Фоновый сервис
 topic: android
-subtopics: [background-execution, coroutines, service]
+subtopics:
+- background-execution
+- coroutines
+- service
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-service-types--android--easy, q-foreground-service-types--android--medium, q-service-component--android--medium]
+related:
+- c-coroutines
+- c-background-tasks
+- c-service
+- q-android-service-types--android--easy
+- q-foreground-service-types--android--medium
+- q-service-component--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android/background-execution, android/coroutines, android/service, difficulty/medium, foreground-service, jobscheduler, workmanager]
-date created: Tuesday, October 28th 2025, 9:24:10 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
+tags:
+- android/background-execution
+- android/coroutines
+- android/service
+- difficulty/medium
+- foreground-service
+- jobscheduler
+- workmanager
 ---
 
 # Вопрос (RU)
@@ -421,6 +441,13 @@ Is task user-initiated and time-sensitive?
 - [JobScheduler API](https://developer.android.com/reference/android/app/job/JobScheduler)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-coroutines]]
+- [[c-background-tasks]]
+- [[c-service]]
+
 
 ### Prerequisites (Easier)
 - [[q-android-service-types--android--easy]] - Types of Android services

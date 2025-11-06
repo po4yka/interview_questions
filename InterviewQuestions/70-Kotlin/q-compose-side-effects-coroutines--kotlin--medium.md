@@ -14,8 +14,6 @@ updated: 2025-10-31
 tags: [android, coroutines, difficulty/medium, jetpack-compose, kotlin, launchedeffect, lifecycle, rememberCoroutineScope, side-effects, state-management]
 moc: moc-kotlin
 related: [q-stateflow-sharedflow--kotlin--medium]
-date created: Saturday, November 1st 2025, 1:28:03 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 # Coroutines and Side Effects in Jetpack Compose
 

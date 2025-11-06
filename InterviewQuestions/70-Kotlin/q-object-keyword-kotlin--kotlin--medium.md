@@ -14,8 +14,6 @@ related: [q-flow-backpressure--kotlin--hard, q-kotlin-intrange--programming-lang
 created: 2025-10-15
 updated: 2025-10-31
 tags: [classes, difficulty/medium, kotlin, object-keyword, singleton]
-date created: Friday, October 31st 2025, 6:29:56 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 # Tell about the Object Keyword in Kotlin
 

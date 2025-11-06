@@ -14,8 +14,6 @@ related: [q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-
 created: 2025-10-13
 updated: 2025-10-31
 tags: [difficulty/easy, equality, equals, hashcode, java, object-comparison, programming-languages]
-date created: Saturday, October 4th 2025, 3:02:36 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Как Сравниваются Объекты В Java?
 

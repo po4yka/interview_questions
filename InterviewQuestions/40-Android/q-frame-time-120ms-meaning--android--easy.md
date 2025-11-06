@@ -15,8 +15,6 @@ tags: [android/performance-rendering, android/profiling, android/strictmode-anr,
 moc: moc-android
 related: [c-android-frame-budget, c-choreographer]
 sources: []
-date created: Tuesday, October 28th 2025, 7:38:35 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-10-18
 
 tags: [android, coroutines, difficulty/medium, flow, kotlin, sharedflow, stateflow]
-date created: Saturday, October 18th 2025, 3:12:22 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Вопрос (RU)
 > Как использовать StateFlow и SharedFlow в Android? Объясните разницу, replay cache, когда использовать каждый и паттерны для ViewModels.

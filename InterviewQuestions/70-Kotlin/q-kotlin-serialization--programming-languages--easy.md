@@ -14,8 +14,6 @@ related: [q-functional-interfaces-vs-type-aliases--kotlin--medium, q-kotlin-non-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [data-persistence, difficulty/easy, json, programming-languages, serialization]
-date created: Friday, October 31st 2025, 6:32:56 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Что Такое Сериализация?
 

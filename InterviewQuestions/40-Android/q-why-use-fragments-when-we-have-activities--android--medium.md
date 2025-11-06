@@ -25,8 +25,6 @@ updated: 2025-10-29
 
 # Tags (EN only; no leading #)
 tags: [activity, android/activity, android/architecture-modularization, android/fragment, difficulty/medium, fragments]
-date created: Wednesday, October 29th 2025, 1:02:04 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

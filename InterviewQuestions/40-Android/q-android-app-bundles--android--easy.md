@@ -24,8 +24,6 @@ updated: 2025-10-29
 sources:
   - https://developer.android.com/guide/app-bundle
 tags: [android/app-bundle, android/gradle, difficulty/easy]
-date created: Wednesday, October 29th 2025, 4:18:34 pm
-date modified: Sunday, November 2nd 2025, 12:44:10 pm
 ---
 
 # Вопрос (RU)

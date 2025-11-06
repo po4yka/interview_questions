@@ -22,8 +22,6 @@ sources: []
 created: 2025-10-11
 updated: 2025-10-29
 tags: [android/architecture-clean, android/architecture-modularization, android/di-hilt, difficulty/hard]
-date created: Thursday, October 30th 2025, 11:18:04 am
-date modified: Sunday, November 2nd 2025, 1:30:35 pm
 ---
 
 # Вопрос (RU)

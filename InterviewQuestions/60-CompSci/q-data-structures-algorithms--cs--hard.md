@@ -15,8 +15,6 @@ created: "2025-10-13"
 updated: 2025-01-25
 tags: [algorithms, big-o, complexity, data-structures, difficulty/hard, dynamic-programming, graphs, recursion, searching, sorting, trees]
 sources: [https://en.wikipedia.org/wiki/Data_structure]
-date created: Monday, October 13th 2025, 8:01:06 am
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-gradle
 - q-android-runtime-art--android--medium
 - q-large-file-upload--android--medium
 - q-room-transactions-dao--android--medium
@@ -28,8 +29,6 @@ tags:
 - build-system
 - dependencies
 - difficulty/easy
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -39,6 +38,151 @@ date modified: Saturday, November 1st 2025, 5:43:35 pm
 > Gradle Basics
 
 ---
+
+## Answer (EN)
+
+**Gradle** is a build automation tool for Android that compiles code, manages dependencies, and creates APK/AAB files.
+
+### Project Structure
+
+```
+MyApp/
+ build.gradle.kts          (Project-level)
+ settings.gradle.kts
+ app/
+    build.gradle.kts      (Module-level)
+```
+
+### Project-level build.gradle
+
+```kotlin
+plugins {
+    id("com.android.application") version "8.2.0" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.20" apply false
+}
+```
+
+### Module-level build.gradle
+
+```kotlin
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
+
+android {
+    namespace = "com.example.app"
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId = "com.example.app"
+        minSdk = 24
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.compose.ui:ui:1.5.4")
+    testImplementation("junit:junit:4.13.2")
+}
+```
+
+### Dependencies
+
+```kotlin
+// Compile + Runtime
+implementation("androidx.core:core-ktx:1.12.0")
+
+// Compile-only (not in APK)
+compileOnly("com.google.android.wearable:wearable:2.9.0")
+
+// API (exposed to consumers)
+api("com.squareup.retrofit2:retrofit:2.9.0")
+
+// Test dependencies
+testImplementation("junit:junit:4.13.2")
+androidTestImplementation("androidx.test:core:1.5.0")
+```
+
+### Build Variants
+
+```kotlin
+buildTypes {
+    debug {
+        applicationIdSuffix = ".debug"
+        buildConfigField("String", "API_URL", "\"https://dev.api.com\"")
+    }
+
+    release {
+        isMinifyEnabled = true
+        buildConfigField("String", "API_URL", "\"https://api.com\"")
+    }
+}
+```
+
+### Product Flavors
+
+```kotlin
+flavorDimensions += "version"
+
+productFlavors {
+    create("free") {
+        dimension = "version"
+        applicationIdSuffix = ".free"
+    }
+
+    create("paid") {
+        dimension = "version"
+        applicationIdSuffix = ".paid"
+    }
+}
+
+// Generates: freeDebug, freeRelease, paidDebug, paidRelease
+```
+
+### Common Gradle Tasks
+
+```bash
+# Build APK
+./gradlew assembleDebug
+./gradlew assembleRelease
+
+# Install app
+./gradlew installDebug
+
+# Run tests
+./gradlew test
+./gradlew connectedAndroidTest
+
+# Clean build
+./gradlew clean
+
+# Show dependencies
+./gradlew app:dependencies
+```
+
+
+# Question (EN)
+> Gradle Basics
+
+---
+
+
+---
+
 
 ## Answer (EN)
 
@@ -355,6 +499,11 @@ buildTypes {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-gradle]]
+
 
 ### Advanced (Harder)
 - [[q-build-optimization-gradle--android--medium]] - Build

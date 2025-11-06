@@ -1,22 +1,34 @@
 ---
 id: android-027
-title: "What is setHasFixedSize(true) in RecyclerView? / Что такое setHasFixedSize(true) в RecyclerView?"
-aliases: ["setHasFixedSize in RecyclerView", "setHasFixedSize в RecyclerView"]
+title: What is setHasFixedSize(true) in RecyclerView? / Что такое setHasFixedSize(true)
+  в RecyclerView?
+aliases:
+- setHasFixedSize in RecyclerView
+- setHasFixedSize в RecyclerView
 topic: android
-subtopics: [performance-memory, ui-views]
+subtopics:
+- performance-memory
+- ui-views
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-handler-looper-main-thread--android--medium, q-what-events-are-activity-methods-tied-to--android--medium]
+related:
+- c-memory-management
+- q-handler-looper-main-thread--android--medium
+- q-what-events-are-activity-methods-tied-to--android--medium
 created: 2025-10-06
 updated: 2025-10-27
-sources: [https://github.com/amitshekhariitbhu/android-interview-questions]
-tags: [android/performance-memory, android/ui-views, difficulty/easy]
-date created: Saturday, November 1st 2025, 12:47:02 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
+sources:
+- https://github.com/amitshekhariitbhu/android-interview-questions
+tags:
+- android/performance-memory
+- android/ui-views
+- difficulty/easy
 ---
 
 # Вопрос (RU)
@@ -229,6 +241,11 @@ recyclerView.setHasFixedSize(true) // Inconsistent with wrap_content!
 - https://developer.android.com/topic/performance/rendering/recyclerview
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-memory-management]]
+
 
 ### Prerequisites
 

@@ -26,8 +26,6 @@ tags: [android/activity, android/lifecycle, android/ui-navigation, back-stack, d
 sources:
   - https://developer.android.com/guide/components/activities/tasks-and-back-stack
   - https://developer.android.com/guide/navigation
-date created: Wednesday, October 29th 2025, 4:18:18 pm
-date modified: Sunday, November 2nd 2025, 12:43:25 pm
 ---
 
 # Вопрос (RU)

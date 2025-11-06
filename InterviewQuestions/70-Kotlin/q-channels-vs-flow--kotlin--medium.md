@@ -25,8 +25,6 @@ created: 2025-10-11
 updated: 2025-10-11
 
 tags: [async, buffering, channels, difficulty/medium, flow, kotlin]
-date created: Friday, October 17th 2025, 11:24:31 am
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 # Вопрос (RU)
 > Когда следует использовать Channels или Flow? Реализуйте буферизованный канал с различными стратегиями емкости и объясните их поведение.

@@ -1,31 +1,36 @@
 ---
 id: android-001
-title: "ProGuard and R8 / ProGuard и R8"
-aliases: ["ProGuard and R8", "ProGuard и R8"]
-
-# Classification
+title: ProGuard and R8 / ProGuard и R8
+aliases:
+- ProGuard and R8
+- ProGuard и R8
 topic: android
-subtopics: [gradle, obfuscation, performance-memory]
+subtopics:
+- gradle
+- obfuscation
+- performance-memory
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-sources: [https://github.com/Kirchhoff-Android-Interview-Questions]
-
-# Workflow & relations
+language_tags:
+- en
+- ru
+sources:
+- https://github.com/Kirchhoff-Android-Interview-Questions
 status: draft
 moc: moc-android
-related: [q-build-optimization-gradle--android--medium, q-reduce-app-size--android--medium]
-
-# Timestamps
+related:
+- c-gradle
+- c-memory-management
+- q-build-optimization-gradle--android--medium
+- q-reduce-app-size--android--medium
 created: 2025-10-05
 updated: 2025-01-27
-
-tags: [android/gradle, android/obfuscation, android/performance-memory, difficulty/medium]
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
+tags:
+- android/gradle
+- android/obfuscation
+- android/performance-memory
+- difficulty/medium
 ---
 
 # Вопрос (RU)
@@ -154,6 +159,12 @@ Alternative: `@Keep` annotation from AndroidX.
 - https://developer.android.com/studio/build/shrink-code
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-gradle]]
+- [[c-memory-management]]
+
 
 ### Prerequisites (Easier)
 - Understanding Gradle build configuration

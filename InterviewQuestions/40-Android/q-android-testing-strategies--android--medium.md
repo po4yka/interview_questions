@@ -1,30 +1,40 @@
 ---
 id: android-175
 title: Android Testing Strategies / Стратегии тестирования Android
-aliases: [Android Testing Strategies, Стратегии тестирования Android]
+aliases:
+- Android Testing Strategies
+- Стратегии тестирования Android
 topic: android
 subtopics:
-  - testing-instrumented
-  - testing-ui
-  - testing-unit
+- testing-instrumented
+- testing-ui
+- testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-android-architectural-patterns--android--medium
-  - q-android-performance-measurement-tools--android--medium
-  - q-android-security-best-practices--android--medium
+- c-testing
+- c-unit-testing
+- q-android-architectural-patterns--android--medium
+- q-android-performance-measurement-tools--android--medium
+- q-android-security-best-practices--android--medium
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android/testing-instrumented, android/testing-ui, android/testing-unit, difficulty/medium, espresso, junit, mockk, testing]
-date created: Thursday, October 30th 2025, 11:36:54 am
-date modified: Sunday, November 2nd 2025, 12:49:59 pm
+tags:
+- android/testing-instrumented
+- android/testing-ui
+- android/testing-unit
+- difficulty/medium
+- espresso
+- junit
+- mockk
+- testing
 ---
 
 # Вопрос (RU)
@@ -344,6 +354,12 @@ fun clickButton_displaysToast() {
 - [[q-android-performance-measurement-tools--android--medium]]
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-testing]]
+- [[c-unit-testing]]
+
 
 ### Prerequisites (Easier)
 - [[q-android-project-parts--android--easy]] — Understanding app structure

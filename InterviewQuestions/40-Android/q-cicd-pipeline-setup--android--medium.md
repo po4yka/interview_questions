@@ -15,13 +15,11 @@ language_tags:
   - ru
 status: reviewed
 moc: moc-android
-related: []
+related: [c-gradle, c-testing, c-unit-testing]
 sources: []
 created: 2025-10-11
 updated: 2025-10-29
 tags: [android/ci-cd, android/gradle, android/testing-unit, automation, devops, difficulty/medium]
-date created: Thursday, October 30th 2025, 11:18:03 am
-date modified: Sunday, November 2nd 2025, 1:30:26 pm
 ---
 
 # Вопрос (RU)

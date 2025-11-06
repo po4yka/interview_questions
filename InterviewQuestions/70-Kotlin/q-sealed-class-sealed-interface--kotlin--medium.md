@@ -14,8 +14,6 @@ related: [q-advanced-coroutine-patterns--kotlin--hard, q-kotlin-enum-classes--ko
 created: 2025-10-12
 updated: 2025-10-31
 tags: [classes, difficulty/medium, kotlin, polymorphism, sealed-classes, sealed-interfaces, when-expression]
-date created: Friday, October 31st 2025, 6:30:53 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Sealed Classes Vs Sealed Interfaces in Kotlin

@@ -1,22 +1,40 @@
 ---
 id: android-124
-title: "How Application Priority Is Determined By The System / Как система определяет приоритет приложения"
-aliases: ["How Application Priority Is Determined", "Как система определяет приоритет приложения"]
+title: How Application Priority Is Determined By The System / Как система определяет
+  приоритет приложения
+aliases:
+- How Application Priority Is Determined
+- Как система определяет приоритет приложения
 topic: android
-subtopics: [lifecycle, performance-memory, processes]
+subtopics:
+- lifecycle
+- performance-memory
+- processes
 question_kind: theory
 difficulty: hard
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-anr-application-not-responding--android--medium, q-what-unites-the-main-components-of-an-android-application--android--medium]
+related:
+- c-memory-management
+- c-lifecycle
+- q-anr-application-not-responding--android--medium
+- q-what-unites-the-main-components-of-an-android-application--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android, android/lifecycle, android/performance-memory, android/processes, difficulty/hard, lifecycle, performance-memory, processes]
-date created: Monday, October 27th 2025, 3:35:47 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+tags:
+- android
+- android/lifecycle
+- android/performance-memory
+- android/processes
+- difficulty/hard
+- lifecycle
+- performance-memory
+- processes
 ---
 
 # Вопрос (RU)
@@ -187,6 +205,12 @@ LMK kills processes starting with highest oom_adj:
 - https://developer.android.com/guide/components/services - Services and process priority
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-memory-management]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites (Easier)
 - [[q-anr-application-not-responding--android--medium]] - ANR fundamentals

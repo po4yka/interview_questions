@@ -15,8 +15,6 @@ tags:
   - observability
   - telemetry
   - logging
-date created: Sunday, November 2nd 2025, 13:05:00 pm
-date modified: Sunday, November 2nd 2025, 13:05:00 pm
 ---
 
 # Summary (EN)

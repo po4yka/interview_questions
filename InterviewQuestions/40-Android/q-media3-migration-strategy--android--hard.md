@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-media3
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -133,11 +132,9 @@ class PlaybackService : MediaSessionService() {
 
 ## References
 - [[c-media3]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/guide/topics/media/media3/getting-started
 - https://medium.com/androiddevelopers/media3-from-exoplayer-migration
 
 ## Related Questions
 
 - [[c-media3]]
-- [[q-android-coverage-gaps--android--hard]]

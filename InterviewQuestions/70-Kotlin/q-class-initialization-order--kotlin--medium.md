@@ -15,8 +15,6 @@ created: "2025-10-12"
 updated: 2025-01-25
 tags: [classes, difficulty/medium, initialization, kotlin, kotlin-features]
 sources: [https://kotlinlang.org/docs/inheritance.html]
-date created: Saturday, November 1st 2025, 1:27:33 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # Вопрос (RU)

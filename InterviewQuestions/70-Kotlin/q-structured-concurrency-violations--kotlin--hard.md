@@ -14,8 +14,6 @@ related: [q-kotlin-advantages-for-android--kotlin--easy]
 created: 2025-10-12
 updated: 2025-10-31
 tags: [anti-patterns, architecture, best-practices, coroutines, difficulty/hard, kotlin, lifecycle, scope, structured-concurrency, violations]
-date created: Saturday, November 1st 2025, 1:29:39 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Structured Concurrency Violations and Escape Hatches / Нарушения Структурной Параллельности

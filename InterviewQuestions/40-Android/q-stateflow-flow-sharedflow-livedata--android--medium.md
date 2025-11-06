@@ -15,8 +15,6 @@ created: 2025-10-26
 updated: 2025-10-26
 tags: [android/coroutines, android/flow, android/ui-state, difficulty/medium, state-management]
 sources: [https://developer.android.com/kotlin/flow/stateflow-and-sharedflow, https://developer.android.com/topic/libraries/architecture/livedata]
-date created: Saturday, November 1st 2025, 12:47:05 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)

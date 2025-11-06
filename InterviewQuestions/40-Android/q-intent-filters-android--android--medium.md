@@ -1,22 +1,36 @@
 ---
 id: android-178
-title: "Intent Filters / Intent Фильтры"
-aliases: ["Intent Filters", "Intent Фильтры", "Фильтры намерений"]
+title: Intent Filters / Intent Фильтры
+aliases:
+- Intent Filters
+- Intent Фильтры
+- Фильтры намерений
 topic: android
-subtopics: [activity, intents-deeplinks]
+subtopics:
+- activity
+- intents-deeplinks
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-what-are-intents-for--android--medium, q-what-is-intent--android--easy]
+related:
+- c-intent
+- c-activity
+- q-what-are-intents-for--android--medium
+- q-what-is-intent--android--easy
 created: 2025-10-15
 updated: 2025-01-27
-tags: [android/activity, android/intents-deeplinks, deep-linking, difficulty/medium, intent-filter]
+tags:
+- android/activity
+- android/intents-deeplinks
+- deep-linking
+- difficulty/medium
+- intent-filter
 sources: []
-date created: Monday, October 27th 2025, 6:45:50 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -196,6 +210,12 @@ A filter consists of three elements:
 - Android Developer Documentation: App Links verification
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-intent]]
+- [[c-activity]]
+
 
 ### Prerequisites (Easier)
 - [[q-what-is-intent--android--easy]] — Basic intent concepts

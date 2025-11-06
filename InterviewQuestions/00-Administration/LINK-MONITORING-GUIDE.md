@@ -1,6 +1,4 @@
 ---
-date created: Sunday, October 12th 2025, 2:19:56 pm
-date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Link Monitoring System Guide

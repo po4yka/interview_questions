@@ -1,27 +1,38 @@
 ---
 id: android-106
-title: "Looper Empty Queue Behavior / Поведение Looper при пустой очереди"
-aliases: [Looper Blocking Behavior, Looper Empty Queue, Блокировка Looper, Поведение Looper при пустой очереди]
+title: Looper Empty Queue Behavior / Поведение Looper при пустой очереди
+aliases:
+- Looper Blocking Behavior
+- Looper Empty Queue
+- Блокировка Looper
+- Поведение Looper при пустой очереди
 topic: android
 subtopics:
-  - coroutines
-  - threads-sync
+- coroutines
+- threads-sync
 question_kind: theory
 difficulty: medium
 original_language: ru
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
 related:
-  - q-handler-looper-messagequeue-relationship--android--medium
-  - q-handlerthread-vs-thread--android--medium
-  - q-message-scheduling-looper--android--medium
+- c-coroutines
+- q-handler-looper-messagequeue-relationship--android--medium
+- q-handlerthread-vs-thread--android--medium
+- q-message-scheduling-looper--android--medium
 sources: []
 created: 2025-10-13
 updated: 2025-10-31
-tags: [android/coroutines, android/threads-sync, blocking, difficulty/medium, looper, message-queue]
-date created: Tuesday, October 28th 2025, 9:35:15 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
+tags:
+- android/coroutines
+- android/threads-sync
+- blocking
+- difficulty/medium
+- looper
+- message-queue
 ---
 
 # Вопрос (RU)
@@ -242,13 +253,24 @@ looper.quitSafely()
 
 ## Related Questions
 
+### Prerequisites / Concepts
+
+- [[c-coroutines]]
+
+
 ### Prerequisites (Easier)
-- Related content to be added
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread basics
+- [[q-android-async-primitives--android--easy]] - Async primitives overview
+- [[q-why-multithreading-tools--android--easy]] - Threading fundamentals
 
 ### Related (Same Level)
-- [[q-handler-looper-messagequeue-relationship--android--medium]]
-- [[q-handlerthread-vs-thread--android--medium]]
-- [[q-message-scheduling-looper--android--medium]]
+- [[q-handler-looper-messagequeue-relationship--android--medium]] - Handler Looper MessageQueue
+- [[q-handlerthread-vs-thread--android--medium]] - HandlerThread comparison
+- [[q-message-scheduling-looper--android--medium]] - Message scheduling
+- [[q-handler-looper-comprehensive--android--medium]] - Handler and Looper deep dive
+- [[q-multithreading-tools-android--android--medium]] - Threading tools comparison
 
 ### Advanced (Harder)
-- Related content to be added
+- [[q-android-runtime-internals--android--hard]] - ART runtime details
+- [[q-recomposition-choreographer--android--hard]] - Choreographer and vsync
+- [[q-how-vsync-and-recomposition-events-are-related--android--hard]] - Frame scheduling

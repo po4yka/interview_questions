@@ -14,8 +14,6 @@ related: [q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [comparison, difficulty/medium, equality, java, operators, programming-languages]
-date created: Friday, October 31st 2025, 6:30:29 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Чем Отличаются Двойное Равно В Java И Kotlin?
 

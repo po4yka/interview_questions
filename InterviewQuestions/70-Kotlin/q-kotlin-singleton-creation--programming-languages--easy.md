@@ -14,8 +14,6 @@ related: [q-coroutine-job-lifecycle--kotlin--medium, q-statein-sharein-flow--kot
 created: 2025-10-15
 updated: 2025-10-31
 tags: [design-patterns, difficulty/easy, programming-languages, singleton]
-date created: Friday, October 31st 2025, 6:32:57 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # How to Create a Singleton in Kotlin?
 

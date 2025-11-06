@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-31
 tags: [activity, android, android/activity, android/intents-deeplinks, android/ui-navigation, difficulty/medium, intent, navigation]
 sources: []
-date created: Tuesday, October 28th 2025, 9:48:44 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

@@ -1,22 +1,40 @@
 ---
 id: android-169
-title: "KMM vs React Native / KMM против React Native"
-aliases: ["KMM vs React Native", "KMM против React Native", "React Native Comparison", "React Native Сравнение"]
+title: KMM vs React Native / KMM против React Native
+aliases:
+- KMM vs React Native
+- KMM против React Native
+- React Native Comparison
+- React Native Сравнение
 topic: android
-subtopics: [architecture-mvvm, kmp]
+subtopics:
+- architecture-mvvm
+- kmp
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-does-jetpackcompose-work--android--medium, q-play-app-signing--android--medium]
+related:
+- c-mvvm
+- c-viewmodel
+- q-how-does-jetpackcompose-work--android--medium
+- q-play-app-signing--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/architecture-mvvm, android/kmp, difficulty/medium, javascript, kmp, kotlin, multiplatform, reactnative]
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
+tags:
+- android/architecture-mvvm
+- android/kmp
+- difficulty/medium
+- javascript
+- kmp
+- kotlin
+- multiplatform
+- reactnative
 ---
 
 # Вопрос (RU)
@@ -277,6 +295,12 @@ class TaskRepository {
 - React Native official documentation
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-mvvm]]
+- [[c-viewmodel]]
+
 
 ### Prerequisites
 - Basic understanding of Kotlin and JavaScript

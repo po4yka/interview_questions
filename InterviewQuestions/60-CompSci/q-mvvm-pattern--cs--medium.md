@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-25
 tags: [android-architecture, data-binding, difficulty/medium, livedata, mvvm, reactive-programming, viewmodel]
 sources: [https://developer.android.com/jetpack/guide]
-date created: Monday, October 6th 2025, 7:38:26 am
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

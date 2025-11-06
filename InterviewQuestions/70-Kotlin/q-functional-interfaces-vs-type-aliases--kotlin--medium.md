@@ -25,8 +25,6 @@ created: 2025-10-05
 updated: 2025-10-05
 
 tags: [difficulty/medium, functional-interfaces, kotlin, sam, type-aliases]
-date created: Thursday, October 16th 2025, 4:43:56 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Вопрос (RU)
 > В чем разница между функциональными интерфейсами и псевдонимами типов в Kotlin?

@@ -15,8 +15,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/camera, android/media, difficulty/medium, image-processing, mlkit, ocr, text-recognition]
-date created: Saturday, November 1st 2025, 1:25:05 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -498,10 +496,17 @@ class ModelDownloadManager(private val context: Context) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- Related content to be added
+- [[q-android-async-primitives--android--easy]] - Async operations basics
+- [[q-databases-android--android--easy]] - Data storage options
+- [[q-view-fundamentals--android--easy]] - View and UI basics
 
 ### Related (Same Level)
 - [[q-camerax-integration--android--medium]] - Advanced CameraX patterns
+- [[q-mlkit-object-detection--android--medium]] - MLKit object detection
+- [[q-biometric-authentication--android--medium]] - Biometric APIs
+- [[q-android-performance-measurement-tools--android--medium]] - Performance profiling
 
 ### Advanced (Harder)
-- Related content to be added
+- [[q-mlkit-custom-models--android--hard]] - Custom ML models
+- [[q-tflite-acceleration-strategies--android--hard]] - TensorFlow Lite optimization
+- [[q-camerax-advanced-pipeline--android--hard]] - Advanced camera features

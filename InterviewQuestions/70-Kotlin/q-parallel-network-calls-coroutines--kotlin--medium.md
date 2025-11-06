@@ -25,8 +25,6 @@ created: 2025-10-06
 updated: 2025-10-31
 
 tags: [async, coroutines, difficulty/medium, kotlin, networking, parallel, performance]
-date created: Saturday, November 1st 2025, 9:25:31 am
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Вопрос (RU)
 > Как выполнить несколько сетевых запросов параллельно с помощью Kotlin корутин?

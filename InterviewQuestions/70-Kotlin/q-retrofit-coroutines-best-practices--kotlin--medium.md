@@ -14,8 +14,6 @@ related: [q-by-keyword-function-call--programming-languages--easy, q-flow-basics
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android, best-practices, coroutines, difficulty/medium, error-handling, kotlin, networking, okhttp, rest-api, retrofit]
-date created: Friday, October 31st 2025, 6:30:28 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Retrofit with Coroutines: Best Practices

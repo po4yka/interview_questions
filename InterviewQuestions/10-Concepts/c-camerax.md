@@ -15,8 +15,6 @@ tags:
   - camera
   - camerax
   - imaging
-date created: Sunday, November 2nd 2025, 12:00:00 pm
-date modified: Sunday, November 2nd 2025, 12:00:00 pm
 ---
 
 # Summary (EN)

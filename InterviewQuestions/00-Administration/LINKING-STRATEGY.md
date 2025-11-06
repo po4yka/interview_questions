@@ -1,6 +1,4 @@
 ---
-date created: Saturday, October 18th 2025, 1:45:13 pm
-date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Linking Strategy for Interview Questions Vault

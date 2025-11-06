@@ -24,8 +24,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-11-02
 tags: [android/compose-multiplatform, android/kmp, android/ui-compose, compose, difficulty/hard, kmp, multiplatform]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Sunday, November 2nd 2025, 1:40:36 pm
 ---
 
 # Вопрос (RU)

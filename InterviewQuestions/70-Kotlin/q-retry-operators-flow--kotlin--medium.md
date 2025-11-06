@@ -25,8 +25,6 @@ created: 2025-10-06
 updated: 2025-10-06
 
 tags: [difficulty/medium, error-handling, flow, kotlin, operators, retry]
-date created: Sunday, October 12th 2025, 2:24:09 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Вопрос (RU)
 > Что такое операторы Retry и RetryWhen в Kotlin Flow? Как они работают?

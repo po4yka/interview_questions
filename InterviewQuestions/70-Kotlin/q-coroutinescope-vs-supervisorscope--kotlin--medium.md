@@ -14,8 +14,6 @@ related: [q-channel-pipelines--kotlin--hard, q-inline-value-classes-performance-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [coroutines, difficulty/medium, error-handling, kotlin, scope, structured-concurrency]
-date created: Friday, October 31st 2025, 6:32:26 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 # coroutineScope Vs supervisorScope: Обработка Ошибок
 

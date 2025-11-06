@@ -14,8 +14,6 @@ related: [c-custom-views, c-gesture-detection, c-touch-events, c-view-lifecycle]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ui-views, difficulty/easy, event-handling, motionevent, touch-events]
-date created: Saturday, November 1st 2025, 1:26:26 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

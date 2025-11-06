@@ -3,6 +3,8 @@ id: kotlin-137
 title: Array Vs List Kotlin
 topic: kotlin
 difficulty: easy
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 tags: [collections, data-structures, difficulty/easy, kotlin]
@@ -17,8 +19,6 @@ subtopics:
   - collections
   - data-structures
   - list
-date created: Saturday, November 1st 2025, 12:09:57 pm
-date modified: Sunday, November 2nd 2025, 12:05:11 pm
 ---
 
 # What is the Difference between Array and List in Kotlin?

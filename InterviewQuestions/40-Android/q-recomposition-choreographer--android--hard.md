@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android/coroutines, android/performance-rendering, android/ui-compose, choreographer, difficulty/hard, vsync]
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

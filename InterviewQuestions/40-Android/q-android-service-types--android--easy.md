@@ -22,8 +22,6 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/background-execution, android/service, difficulty/easy]
 sources: []
-date created: Thursday, October 30th 2025, 11:35:54 am
-date modified: Sunday, November 2nd 2025, 12:49:18 pm
 ---
 
 # Вопрос (RU)

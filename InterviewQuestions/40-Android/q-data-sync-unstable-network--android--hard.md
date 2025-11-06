@@ -23,8 +23,6 @@ updated: 2025-11-02
 tags: [android/architecture-clean, android/networking-http, data-sync, difficulty/hard, networking, offline-first, workmanager]
 sources:
   - https://developer.android.com/guide/background/processing-data/sync
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Sunday, November 2nd 2025, 7:24:21 pm
 ---
 
 # Вопрос (RU)

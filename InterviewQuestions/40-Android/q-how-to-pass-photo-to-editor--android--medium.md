@@ -1,22 +1,37 @@
 ---
 id: android-257
-title: "How To Pass Photo To Editor / Как передать фото в редактор"
-aliases: ["How To Pass Photo To Editor", "Как передать фото в редактор"]
+title: How To Pass Photo To Editor / Как передать фото в редактор
+aliases:
+- How To Pass Photo To Editor
+- Как передать фото в редактор
 topic: android
-subtopics: [files-media, intents-deeplinks, ui-graphics]
+subtopics:
+- files-media
+- intents-deeplinks
+- ui-graphics
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-storage-types--android--medium, q-fileprovider-secure-sharing--android--medium, q-what-are-intents-for--android--medium]
+related:
+- c-intent
+- c-scoped-storage-security
+- q-android-storage-types--android--medium
+- q-fileprovider-secure-sharing--android--medium
+- q-what-are-intents-for--android--medium
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
-tags: [android/files-media, android/intents-deeplinks, android/ui-graphics, difficulty/medium, image-processing]
-date created: Thursday, October 30th 2025, 12:58:05 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+tags:
+- android/files-media
+- android/intents-deeplinks
+- android/ui-graphics
+- difficulty/medium
+- image-processing
 ---
 
 # Вопрос (RU)
@@ -360,6 +375,12 @@ fun PhotoEditorScreen(photoUri: Uri) {
 - Intent Documentation: https://developer.android.com/reference/android/content/Intent
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-intent]]
+- [[c-scoped-storage-security]]
+
 
 ### Prerequisites
 - [[q-what-are-intents-for--android--medium]] — Understanding Intent basics

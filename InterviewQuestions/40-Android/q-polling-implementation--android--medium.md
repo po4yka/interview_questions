@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/background-execution, android/coroutines, android/networking-http, background-tasks, difficulty/medium, polling]
 sources: []
-date created: Saturday, November 1st 2025, 1:03:49 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

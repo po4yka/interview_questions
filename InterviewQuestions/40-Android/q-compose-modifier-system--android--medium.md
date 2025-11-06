@@ -24,8 +24,6 @@ updated: 2025-10-30
 tags: [android/performance-memory, android/ui-compose, difficulty/medium]
 sources:
   - https://developer.android.com/jetpack/compose/modifiers
-date created: Thursday, October 30th 2025, 11:23:05 am
-date modified: Sunday, November 2nd 2025, 1:38:12 pm
 ---
 
 # Вопрос (RU)

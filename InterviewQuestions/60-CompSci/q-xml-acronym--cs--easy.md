@@ -15,8 +15,6 @@ created: 2025-10-13
 updated: 2025-01-25
 tags: [data-format, difficulty/easy, fundamentals, markup-language, xml]
 sources: [https://www.w3.org/XML/]
-date created: Friday, October 3rd 2025, 7:03:56 pm
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

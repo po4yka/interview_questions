@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-25
 tags: [abstraction, bridge, design-patterns, difficulty/hard, gof-patterns, structural-patterns]
 sources: [https://refactoring.guru/design-patterns/bridge]
-date created: Saturday, November 1st 2025, 1:26:52 pm
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

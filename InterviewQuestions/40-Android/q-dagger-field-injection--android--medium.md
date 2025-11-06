@@ -24,8 +24,6 @@ sources: []
 created: 2025-10-20
 updated: 2025-10-30
 tags: [android/architecture-mvvm, android/di-hilt, dagger, dependency-injection, difficulty/medium]
-date created: Thursday, October 30th 2025, 12:02:28 pm
-date modified: Sunday, November 2nd 2025, 5:30:57 pm
 ---
 
 # Вопрос (RU)

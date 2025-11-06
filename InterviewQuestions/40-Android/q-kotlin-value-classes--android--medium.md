@@ -1,22 +1,36 @@
 ---
 id: android-069
-title: "Kotlin Value Classes (Inline Classes) / Value классы в Kotlin"
-aliases: ["Kotlin Value Classes (Inline Classes)", "Value классы в Kotlin"]
+title: Kotlin Value Classes (Inline Classes) / Value классы в Kotlin
+aliases:
+- Kotlin Value Classes (Inline Classes)
+- Value классы в Kotlin
 topic: android
-subtopics: [coroutines, performance-memory]
+subtopics:
+- coroutines
+- performance-memory
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-value-classes, q-kotlin-data-classes--kotlin--medium]
+related:
+- c-value-classes
+- q-kotlin-data-classes--kotlin--medium
 created: 2025-10-12
 updated: 2025-10-31
-tags: [android/coroutines, android/performance-memory, difficulty/medium, inline-classes, performance, type-safety, value-classes]
-sources: [https://kotlinlang.org/docs/inline-classes.html]
-date created: Saturday, October 18th 2025, 2:15:55 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
+tags:
+- android/coroutines
+- android/performance-memory
+- difficulty/medium
+- inline-classes
+- performance
+- type-safety
+- value-classes
+sources:
+- https://kotlinlang.org/docs/inline-classes.html
 ---
 
 # Вопрос (RU)
@@ -269,8 +283,22 @@ val id: Identifier = userId             // 4. Interfaces
 
 ## Related Questions
 
+### Prerequisites / Concepts
+
+- [[c-value-classes]]
+
+
+### Prerequisites (Easier)
+- [[q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]] - Unit types basics
+- [[q-viewmodel-pattern--android--easy]] - ViewModel patterns
+
 ### Related (Same Level)
 - [[q-kotlin-data-classes--kotlin--medium]] - Data classes
+- [[q-repository-pattern--android--medium]] - Repository pattern
+- [[q-parcelable-implementation--android--medium]] - Efficient data passing
+- [[q-bundle-data-types--android--medium]] - Data serialization
 
 ### Advanced (Harder)
-- Advanced content to be added
+- [[q-kotlin-context-receivers--android--hard]] - Context receivers deep dive
+- [[q-kotlin-dsl-builders--android--hard]] - DSL builders
+- [[q-android-runtime-internals--android--hard]] - Runtime optimization

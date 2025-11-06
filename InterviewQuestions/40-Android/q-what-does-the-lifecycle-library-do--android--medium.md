@@ -1,32 +1,37 @@
 ---
 id: android-370
-title: "What Does The Lifecycle Library Do / Что делает библиотека Lifecycle"
-aliases: ["What Does The Lifecycle Library Do", "Что делает библиотека Lifecycle"]
-
-# Classification
+title: What Does The Lifecycle Library Do / Что делает библиотека Lifecycle
+aliases:
+- What Does The Lifecycle Library Do
+- Что делает библиотека Lifecycle
 topic: android
-subtopics: [architecture-mvvm, lifecycle]
+subtopics:
+- architecture-mvvm
+- lifecycle
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-service-lifecycle-binding--android--hard, q-what-is-viewmodel--android--medium, q-why-was-the-lifecycle-library-created--android--hard]
-
-# Timestamps
+related:
+- c-lifecycle
+- c-mvvm
+- c-viewmodel
+- q-service-lifecycle-binding--android--hard
+- q-what-is-viewmodel--android--medium
+- q-why-was-the-lifecycle-library-created--android--hard
 created: 2025-10-15
 updated: 2025-10-29
-
-# Tags (EN only; no leading #)
-tags: [android, android/architecture-mvvm, android/lifecycle, difficulty/medium, lifecycle-aware]
-date created: Saturday, November 1st 2025, 12:47:07 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
+tags:
+- android
+- android/architecture-mvvm
+- android/lifecycle
+- difficulty/medium
+- lifecycle-aware
 ---
 
 # Вопрос (RU)
@@ -303,6 +308,13 @@ class GoodActivity : AppCompatActivity() {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-lifecycle]]
+- [[c-mvvm]]
+- [[c-viewmodel]]
+
 
 ### Prerequisites (Easier)
 - [[q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]] - Basic Android concepts

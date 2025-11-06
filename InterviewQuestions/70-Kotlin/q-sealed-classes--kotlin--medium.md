@@ -3,14 +3,14 @@ id: kotlin-136
 title: "Sealed Classes"
 topic: kotlin
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-13
 tags: [difficulty/medium, kotlin, sealed-classes, type-safety]
 moc: moc-kotlin
 related: [q-channelflow-callbackflow-flow--kotlin--medium, q-heap-pollution-generics--kotlin--hard, q-kotlin-safe-cast--programming-languages--easy, q-sealed-class-sealed-interface--kotlin--medium]
 subtopics: [enums, sealed-classes, when-expression]
-date created: Saturday, November 1st 2025, 12:10:12 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # What is Special about Sealed Classes in Kotlin?

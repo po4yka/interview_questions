@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android/architecture-mvvm, android/coroutines, android/lifecycle, architecture-patterns, difficulty/medium, mvvm, viewmodel]
-date created: Monday, October 27th 2025, 3:37:22 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

@@ -14,8 +14,6 @@ related: [q-executor-service-java--java--medium, q-retry-operators-flow--kotlin-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
-date created: Friday, October 17th 2025, 11:22:05 am
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Вопрос (RU)
 > В чем разница между Kotlin Flow и LiveData? Когда следует использовать каждый из них?

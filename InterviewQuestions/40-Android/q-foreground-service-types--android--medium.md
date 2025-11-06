@@ -22,8 +22,6 @@ updated: 2025-01-27
 tags: [android/background-execution, android/service, difficulty/medium, foreground-service, notifications]
 sources:
   - https://developer.android.com/guide/components/foreground-services
-date created: Monday, October 27th 2025, 3:32:31 pm
-date modified: Monday, November 3rd 2025, 3:57:43 pm
 ---
 
 # Вопрос (RU)

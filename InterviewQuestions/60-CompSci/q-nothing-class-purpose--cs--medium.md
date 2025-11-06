@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-25
 tags: [control-flow, difficulty/medium, exceptions, kotlin, type-system, unreachable-code]
 sources: [https://kotlinlang.org/docs/whatsnew15.html]
-date created: Saturday, October 4th 2025, 6:32:14 pm
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

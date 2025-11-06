@@ -14,8 +14,6 @@ related: [q-debounce-search-coroutines--kotlin--medium, q-dispatcher-performance
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy]
-date created: Saturday, October 18th 2025, 9:34:45 am
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Какой Модификатор Доступа По Умолчанию Используется В Kotlin?

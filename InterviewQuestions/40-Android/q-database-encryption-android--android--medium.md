@@ -21,8 +21,6 @@ updated: 2025-11-02
 tags: [android/keystore-crypto, android/room, database, difficulty/medium, encryption, keystore, room, security, sqlcipher]
 sources:
   - https://developer.android.com/topic/security/data
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 7:27:40 pm
 ---
 
 # Вопрос (RU)

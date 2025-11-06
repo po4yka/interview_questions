@@ -1,6 +1,4 @@
 ---
-date created: Wednesday, October 29th 2025, 4:40:17 pm
-date modified: Saturday, November 1st 2025, 5:43:39 pm
 ---
 
 # Android System Design Checklist

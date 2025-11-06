@@ -1,32 +1,41 @@
 ---
 id: android-244
 title: Чем Жизненный Цикл Fragment Отличается От Activity / Fragment vs Activity Lifecycle
-aliases: [Fragment vs Activity Lifecycle, Чем отличается жизненный цикл Fragment от Activity]
+aliases:
+- Fragment vs Activity Lifecycle
+- Чем отличается жизненный цикл Fragment от Activity
 topic: android
 subtopics:
-  - activity
-  - fragment
-  - lifecycle
+- activity
+- fragment
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-activity-lifecycle-methods--android--medium
-  - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-  - q-what-are-fragments-for-if-there-is-activity--android--medium
+- c-activity
+- c-fragments
+- c-lifecycle
+- q-activity-lifecycle-methods--android--medium
+- q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
+- q-what-are-fragments-for-if-there-is-activity--android--medium
 created: 2025-10-15
 updated: 2025-11-03
 sources:
-  - https://developer.android.com/guide/fragments/lifecycle
-  - https://developer.android.com/topic/libraries/architecture/lifecycle
-tags: [android/activity, android/fragment, android/lifecycle, difficulty/medium, fragments, lifecycle]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Tuesday, November 4th 2025, 12:46:34 pm
+- https://developer.android.com/guide/fragments/lifecycle
+- https://developer.android.com/topic/libraries/architecture/lifecycle
+tags:
+- android/activity
+- android/fragment
+- android/lifecycle
+- difficulty/medium
+- fragments
+- lifecycle
 ---
 
 # Вопрос (RU)
@@ -308,6 +317,13 @@ supportFragmentManager.beginTransaction()
 - [ViewLifecycleOwner Best Practices](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-activity]]
+- [[c-fragments]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites
 - [[q-activity-lifecycle-methods--android--medium]] — Activity lifecycle basics

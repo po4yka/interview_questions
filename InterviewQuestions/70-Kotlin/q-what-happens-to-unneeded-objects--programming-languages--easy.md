@@ -14,8 +14,6 @@ related: [q-java-lambda-type--programming-languages--easy, q-suspend-function-re
 created: 2025-10-15
 updated: 2025-10-31
 tags: [automatic-memory, difficulty/easy, garbage-collection, jvm, kotlin, memory-management, programming-languages]
-date created: Saturday, October 4th 2025, 1:23:34 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Что Происходит С Объектами, Которые Больше Не Нужны?
 

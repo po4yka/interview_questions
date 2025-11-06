@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-27
 tags: [android/build-variants, android/dependency-management, android/gradle, dependency-management, difficulty/medium, gradle, toml]
 sources: [Android Developer Docs, Kirchhoff repo]
-date created: Monday, October 27th 2025, 6:55:47 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

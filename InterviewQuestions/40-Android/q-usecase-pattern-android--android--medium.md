@@ -1,31 +1,34 @@
 ---
 id: android-025
-title: "UseCase Pattern in Android / Паттерн UseCase в Android"
-aliases: ["UseCase Pattern in Android", "Паттерн UseCase в Android"]
-
-# Classification
+title: UseCase Pattern in Android / Паттерн UseCase в Android
+aliases:
+- UseCase Pattern in Android
+- Паттерн UseCase в Android
 topic: android
-subtopics: [architecture-clean, architecture-mvvm, di-hilt]
+subtopics:
+- architecture-clean
+- architecture-mvvm
+- di-hilt
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 sources: []
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [c-clean-architecture, c-repository-pattern, c-usecase-pattern]
-
-# Timestamps
+related:
+- c-clean-architecture
+- c-repository-pattern
+- c-usecase-pattern
 created: 2025-10-06
 updated: 2025-10-28
-
-tags: [android/architecture-clean, android/architecture-mvvm, android/di-hilt, difficulty/medium]
-date created: Saturday, November 1st 2025, 1:24:35 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
+tags:
+- android/architecture-clean
+- android/architecture-mvvm
+- android/di-hilt
+- difficulty/medium
 ---
 
 # Вопрос (RU)
@@ -222,6 +225,13 @@ val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
 - [Guide to app architecture - Android](https://developer.android.com/topic/architecture)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-clean-architecture]]
+- [[c-repository-pattern]]
+- [[c-usecase-pattern]]
+
 
 ### Prerequisites (Easier)
 - [[q-repository-pattern--android--medium]] - Repository pattern basics

@@ -15,8 +15,6 @@ tags: [android/performance-rendering, android/profiling, android/ui-views, diffi
 moc: moc-android
 related: [c-performance-optimization, c-recyclerview, q-performance-optimization-android--android--medium, q-recyclerview-diffutil-advanced--android--medium, q-recyclerview-explained--android--medium]
 sources: []
-date created: Saturday, November 1st 2025, 12:47:11 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

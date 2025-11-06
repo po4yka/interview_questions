@@ -1,22 +1,36 @@
 ---
 id: android-392
-title: "Как сказать адаптеру перерисовать список если элемент был удален / How To Tell Adapter To Redraw List If Element Was Deleted"
-aliases: ["How to tell adapter to redraw list", "RecyclerView adapter update", "Как сказать адаптеру перерисовать список", "Обновление адаптера RecyclerView"]
+title: Как сказать адаптеру перерисовать список если элемент был удален / How To Tell
+  Adapter To Redraw List If Element Was Deleted
+aliases:
+- How to tell adapter to redraw list
+- RecyclerView adapter update
+- Как сказать адаптеру перерисовать список
+- Обновление адаптера RecyclerView
 topic: android
-subtopics: [ui-views]
+subtopics:
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-to-create-list-like-recyclerview-in-compose--android--medium, q-recyclerview-sethasfixedsize--android--easy]
+related:
+- c-recyclerview
+- q-how-to-create-list-like-recyclerview-in-compose--android--medium
+- q-recyclerview-sethasfixedsize--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [adapter, android, android/ui-views, difficulty/medium, recyclerview]
-date created: Tuesday, October 28th 2025, 9:11:36 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+tags:
+- adapter
+- android
+- android/ui-views
+- difficulty/medium
+- recyclerview
 ---
 
 # Вопрос (RU)
@@ -324,6 +338,11 @@ fun ItemList() {
 - Android Documentation: [DiffUtil](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-recyclerview]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView basics

@@ -14,8 +14,6 @@ related: [q-compose-side-effects-coroutines--kotlin--medium, q-kotlin-reified-ty
 created: 2025-10-15
 updated: 2025-10-31
 tags: [also, apply, difficulty/easy, let, programming-languages, run, scope-functions, with]
-date created: Friday, October 31st 2025, 6:32:17 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Какой Оператор В Kotlin Исполняет Блок Кода И Возвращает Его Значение?
 

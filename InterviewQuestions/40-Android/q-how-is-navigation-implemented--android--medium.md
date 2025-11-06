@@ -1,22 +1,39 @@
 ---
 id: android-421
-title: "How Is Navigation Implemented / Как реализована навигация"
-aliases: ["Android Navigation", "How Is Navigation Implemented", "Как реализована навигация", "Навигация в Android"]
+title: How Is Navigation Implemented / Как реализована навигация
+aliases:
+- Android Navigation
+- How Is Navigation Implemented
+- Как реализована навигация
+- Навигация в Android
 topic: android
-subtopics: [fragment, ui-navigation]
+subtopics:
+- fragment
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-navigation-methods-in-kotlin--android--medium, q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy]
+related:
+- c-compose-navigation
+- c-fragments
+- q-navigation-methods-in-kotlin--android--medium
+- q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/fragment, android/ui-navigation, difficulty/medium, fragments, navigation, navigation-component, ui]
-date created: Tuesday, October 28th 2025, 9:35:24 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+tags:
+- android/fragment
+- android/ui-navigation
+- difficulty/medium
+- fragments
+- navigation
+- navigation-component
+- ui
 ---
 
 # Вопрос (RU)
@@ -289,6 +306,12 @@ findNavController().navigate(action)
 - [Material Design: Navigation](https://material.io/design/navigation)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-navigation]]
+- [[c-fragments]]
+
 
 ### Prerequisites (Easier)
 - [[q-what-is-the-layout-called-where-objects-can-overlay-each-other--android--easy]] - Basic UI layout concepts

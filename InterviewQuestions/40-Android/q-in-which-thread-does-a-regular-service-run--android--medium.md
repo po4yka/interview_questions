@@ -1,22 +1,41 @@
 ---
 id: android-335
-title: "In Which Thread Does A Regular Service Run / В каком потоке работает обычный Service"
-aliases: [Main Thread Service, Service Thread, Поток Service, Сервис в главном потоке]
+title: In Which Thread Does A Regular Service Run / В каком потоке работает обычный
+  Service
+aliases:
+- Main Thread Service
+- Service Thread
+- Поток Service
+- Сервис в главном потоке
 topic: android
-subtopics: [lifecycle, service, threads-sync]
+subtopics:
+- lifecycle
+- service
+- threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-android-service-types--android--easy, q-foreground-service-types--android--medium, q-service-component--android--medium]
+related:
+- c-coroutines
+- c-service
+- c-lifecycle
+- q-android-service-types--android--easy
+- q-foreground-service-types--android--medium
+- q-service-component--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
-tags: [android, android/lifecycle, android/service, android/threads-sync, difficulty/medium]
-date created: Tuesday, October 28th 2025, 9:12:00 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
+tags:
+- android
+- android/lifecycle
+- android/service
+- android/threads-sync
+- difficulty/medium
 ---
 
 # Вопрос (RU)
@@ -296,6 +315,13 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 - Android Docs: [Foreground Services](https://developer.android.com/guide/components/foreground-services)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-coroutines]]
+- [[c-service]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites (Easier)
 - [[q-android-service-types--android--easy]]

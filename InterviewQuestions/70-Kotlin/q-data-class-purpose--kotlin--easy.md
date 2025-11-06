@@ -10,12 +10,10 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: []
+related: [c-kotlin-features]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [code-generation, data-classes, difficulty/easy, kotlin]
-date created: Saturday, November 1st 2025, 1:29:19 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Для Чего Нужен Data Class?
 

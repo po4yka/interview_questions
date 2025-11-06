@@ -14,8 +14,6 @@ related: [q-kotlin-default-access-modifier--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy]
-date created: Saturday, November 1st 2025, 1:26:00 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Все Классы Kotlin Наследуются От Any

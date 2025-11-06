@@ -14,8 +14,6 @@ related: [q-coroutine-supervisorjob-use-cases--kotlin--medium, q-kotlin-java-pri
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
-date created: Sunday, October 12th 2025, 12:27:47 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Что Известно Про Типы Any, Unit, Nothing В Kotlin ?

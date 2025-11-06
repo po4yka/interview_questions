@@ -14,8 +14,6 @@ related: [q-data-class-component-functions--programming-languages--easy, q-itera
 created: 2025-10-13
 updated: 2025-10-31
 tags: [collections, difficulty/medium, kotlin, list, programming-languages, sequence]
-date created: Friday, October 3rd 2025, 4:14:02 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # В Чем Разница Между Работой С List И Работой С Sequence
 

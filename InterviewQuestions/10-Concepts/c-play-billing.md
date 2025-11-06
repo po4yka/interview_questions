@@ -14,8 +14,6 @@ tags:
   - concept
   - billing
   - monetization
-date created: Sunday, November 2nd 2025, 12:20:00 pm
-date modified: Sunday, November 2nd 2025, 12:20:00 pm
 ---
 
 # Summary (EN)

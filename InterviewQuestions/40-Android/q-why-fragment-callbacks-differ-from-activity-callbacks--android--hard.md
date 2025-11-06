@@ -14,8 +14,6 @@ related: [c-fragments, c-lifecycle, q-fragment-vs-activity-lifecycle--android--m
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/activity, android/fragment, android/lifecycle, difficulty/hard, fragments, lifecycle]
-date created: Saturday, November 1st 2025, 12:47:11 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

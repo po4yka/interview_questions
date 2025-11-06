@@ -14,8 +14,6 @@ related: [q-equals-hashcode-purpose--kotlin--medium, q-kotlin-object-companion-o
 created: 2025-10-15
 updated: 2025-10-31
 tags: [classes, companion-object, difficulty/hard, kotlin, object-keyword, singleton]
-date created: Friday, October 31st 2025, 6:29:56 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 # What is Object / Companion Object?
 

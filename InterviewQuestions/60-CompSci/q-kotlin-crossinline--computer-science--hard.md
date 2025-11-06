@@ -14,8 +14,6 @@ related: [q-data-class-detailed--kotlin--medium, q-object-singleton-companion--k
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/hard]
-date created: Sunday, October 12th 2025, 12:27:48 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Зачем Нужен Crossinline?

@@ -1,6 +1,4 @@
 ---
-date created: Saturday, November 1st 2025, 3:31:05 pm
-date modified: Saturday, November 1st 2025, 5:44:00 pm
 ---
 
 # AI Prompt Improvements for Senior Developer Standard

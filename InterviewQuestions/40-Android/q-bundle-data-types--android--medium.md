@@ -1,28 +1,33 @@
 ---
 id: android-387
 title: Bundle Data Types / Типы данных Bundle
-aliases: [Bundle Data Types, Типы данных Bundle]
+aliases:
+- Bundle Data Types
+- Типы данных Bundle
 topic: android
 subtopics:
-  - intents-deeplinks
-  - serialization
+- intents-deeplinks
+- serialization
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-android-app-components--android--easy
-  - q-parcelable-implementation--android--medium
+- c-activity
+- c-intent
+- q-android-app-components--android--easy
+- q-parcelable-implementation--android--medium
 created: 2025-10-15
 updated: 2025-11-02
 sources: []
-tags: [android/intents-deeplinks, android/serialization, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 1:24:06 pm
+tags:
+- android/intents-deeplinks
+- android/serialization
+- difficulty/medium
 ---
 
 # Вопрос (RU)
@@ -186,6 +191,12 @@ val url = intent.getStringExtra("url")
 - https://developer.android.com/guide/components/intents-filters
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-activity]]
+- [[c-intent]]
+
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] — Understanding Activity/Fragment lifecycle

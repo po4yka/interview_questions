@@ -1,22 +1,36 @@
 ---
 id: android-155
-title: "Which Event Is Called When User Touches Screen / Какое событие вызывается когда пользователь касается экрана"
-aliases: ["Touch Events", "События касания"]
+title: Which Event Is Called When User Touches Screen / Какое событие вызывается когда
+  пользователь касается экрана
+aliases:
+- Touch Events
+- События касания
 topic: android
-subtopics: [ui-compose, ui-views]
+subtopics:
+- ui-compose
+- ui-views
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-how-to-create-chat-lists-from-a-ui-perspective--android--hard, q-how-to-create-dynamic-screens-at-runtime--android--hard]
+related:
+- c-compose-state
+- c-jetpack-compose
+- q-how-to-create-chat-lists-from-a-ui-perspective--android--hard
+- q-how-to-create-dynamic-screens-at-runtime--android--hard
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/ui-compose, android/ui-views, difficulty/medium, touch-events, ui]
-date created: Monday, October 27th 2025, 4:02:54 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
+tags:
+- android/ui-compose
+- android/ui-views
+- difficulty/medium
+- touch-events
+- ui
 ---
 
 # Вопрос (RU)
@@ -266,6 +280,12 @@ Box(modifier = Modifier.pointerInput(Unit) {
 - Android Developer Docs: Touch and input
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+
 
 ### Prerequisites
 - Understanding View lifecycle and custom views

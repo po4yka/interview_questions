@@ -13,10 +13,8 @@ created: 2025-10-13
 updated: 2025-10-31
 tags: [android/performance-memory, android/profiling, difficulty/medium, leakcanary, memory-leaks, weakreference]
 moc: moc-android
-related: []
+related: [c-memory-leaks, c-memory-management, c-garbage-collection]
 sources: []
-date created: Saturday, November 1st 2025, 1:24:41 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -247,10 +245,17 @@ class MyViewModel : ViewModel() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- Related content to be added
+- [[q-leakcanary-library--android--easy]] - LeakCanary library introduction
+- [[q-memory-leaks-definition--android--easy]] - Memory leak fundamentals
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Threading basics
 
 ### Related (Same Level)
-- Related content to be added
+- [[q-leakcanary-heap-dump-analysis--android--medium]] - Analyzing heap dumps
+- [[q-memory-leak-detection--android--medium]] - Leak detection strategies
+- [[q-android-performance-measurement-tools--android--medium]] - Profiling tools
+- [[q-memory-leak-vs-oom-android--android--medium]] - Memory issues comparison
 
 ### Advanced (Harder)
-- Related content to be added
+- [[q-android-runtime-internals--android--hard]] - Runtime memory management
+- [[q-fix-slow-app-startup-legacy--android--hard]] - App performance tuning
+- [[q-observability-sdk--android--hard]] - Production monitoring

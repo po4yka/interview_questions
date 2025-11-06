@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-01-25
 tags: [api-design, difficulty/medium, http, rest-api, system-design]
 sources: [https://en.wikipedia.org/wiki/Representational_state_transfer]
-date created: Sunday, October 12th 2025, 8:38:24 pm
-date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

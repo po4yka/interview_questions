@@ -16,8 +16,6 @@ tags:
   - automotive
   - android-auto
   - in-car
-date created: Sunday, November 2nd 2025, 12:40:00 pm
-date modified: Sunday, November 2nd 2025, 12:40:00 pm
 ---
 
 # Summary (EN)

@@ -14,8 +14,6 @@ related: [q-hot-vs-cold-flows--programming-languages--medium, q-reference-types-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, extension-functions, functions, kotlin, programming-languages, static-methods]
-date created: Friday, October 3rd 2025, 7:03:57 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # В Чём Отличие Обычного Метода От Extension Метода В Kotlin
 

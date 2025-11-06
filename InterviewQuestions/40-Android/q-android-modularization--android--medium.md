@@ -25,8 +25,6 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-modularization, android/dependency-management, android/gradle, difficulty/medium]
 sources: []
-date created: Thursday, October 30th 2025, 11:26:58 am
-date modified: Sunday, November 2nd 2025, 12:47:47 pm
 ---
 
 # Вопрос (RU)

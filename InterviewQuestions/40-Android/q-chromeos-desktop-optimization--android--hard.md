@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-chromeos-desktop
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -113,10 +112,8 @@ view.setOnDragListener { _, event ->
 
 ## References
 - [[c-chromeos-desktop]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/large-screens/chromeos
 
 ## Related Questions
 
 - [[c-chromeos-desktop]]
-- [[q-android-coverage-gaps--android--hard]]

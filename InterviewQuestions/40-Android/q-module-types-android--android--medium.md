@@ -15,8 +15,6 @@ tags: [android/architecture-modularization, android/build-variants, android/grad
 moc: moc-android
 related: [c-gradle, c-modularization]
 sources: [https://developer.android.com/topic/modularization/patterns]
-date created: Saturday, November 1st 2025, 1:25:21 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -358,8 +356,18 @@ Test modules are used for testing purposes only. They contain test code, resourc
 
 ## Related Questions
 
+### Prerequisites (Easier)
+- [[q-gradle-basics--android--easy]] - Gradle build system basics
+- [[q-android-project-parts--android--easy]] - Android project structure
+- [[q-android-manifest-file--android--easy]] - Manifest configuration
+
 ### Same Level (Medium)
-- Related content to be added
+- [[q-android-modularization--android--medium]] - Modularization strategies
+- [[q-multiple-manifests-multimodule--android--medium]] - Multi-module manifests
+- [[q-build-optimization-gradle--android--medium]] - Gradle optimization
+- [[q-kapt-vs-ksp--android--medium]] - Annotation processing
 
 ### Advanced (Hard)
-- Related content to be added
+- [[q-modularization-patterns--android--hard]] - Advanced module patterns
+- [[q-multi-module-best-practices--android--hard]] - Best practices
+- [[q-android-release-pipeline-cicd--android--hard]] - CI/CD pipelines

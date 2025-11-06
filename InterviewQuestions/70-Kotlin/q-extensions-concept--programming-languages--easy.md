@@ -14,8 +14,6 @@ related: [c-extensions, c-kotlin-features, q-extension-properties--programming-l
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, extension-functions, extensions, kotlin, programming-languages]
-date created: Friday, October 31st 2025, 6:30:12 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Что Такое Extensions?
 

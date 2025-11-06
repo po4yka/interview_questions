@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-custom-views
 - q-bundle-data-types--android--medium
 - q-compositionlocal-advanced--jetpack-compose--medium
 - q-stack-heap-memory-multiple-threads--android--medium
@@ -27,8 +28,6 @@ tags:
 - animations
 - difficulty/medium
 - recyclerview
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -933,7 +932,7 @@ recyclerView.itemAnimator = DefaultItemAnimator() // Опционально, э�
 ## Follow-ups
 
 - [[q-bundle-data-types--android--medium]]
-- [[q-compositionlocal-advanced--jetpack-compose--medium]]
+- [[q-compositionlocal-advanced--android--medium]]
 - [[q-stack-heap-memory-multiple-threads--android--medium]]
 
 
@@ -943,6 +942,11 @@ recyclerView.itemAnimator = DefaultItemAnimator() // Опционально, э�
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-custom-views]]
+
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui

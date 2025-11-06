@@ -18,7 +18,6 @@ status: draft
 moc: moc-android
 related:
   - c-android-auto
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -103,11 +102,9 @@ sources:
 
 ## References
 - [[c-android-auto]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/training/cars/apps
 - https://developer.android.com/training/cars/apps/media
 
 ## Related Questions
 
 - [[c-android-auto]]
-- [[q-android-coverage-gaps--android--hard]]

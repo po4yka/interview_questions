@@ -3,6 +3,8 @@ id: kotlin-091
 title: "CoroutineExceptionHandler: installation and usage / CoroutineExceptionHandler: установка и использование"
 topic: kotlin
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-12
 tags: [ceh, coroutines, difficulty/medium, error-handling, exception-handling, kotlin]
@@ -13,8 +15,6 @@ subtopics:
   - coroutines
   - error-handling
   - exception-handling
-date created: Saturday, November 1st 2025, 12:10:38 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 # Вопрос (RU)
 > Что такое CoroutineExceptionHandler, где его можно установить, и как он работает с разными билдерами корутин (launch vs async)?

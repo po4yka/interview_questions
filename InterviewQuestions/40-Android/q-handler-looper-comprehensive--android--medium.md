@@ -16,6 +16,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-coroutines
 - q-cicd-multi-module--devops--medium
 - q-glide-image-loading-internals--android--medium
 - q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
@@ -25,8 +26,6 @@ tags:
 - android/threads-sync
 - concurrency
 - difficulty/medium
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -36,6 +35,24 @@ date modified: Saturday, November 1st 2025, 5:43:35 pm
 > Handler Looper Comprehensive
 
 ---
+
+## Answer (EN)
+
+Handler и Looper — фундаментальные компоненты Android для межпоточного взаимодействия через очередь сообщений.
+
+**Архитектура:** Handler отправляет сообщения → MessageQueue хранит → Looper обрабатывает в цикле. Looper привязывается к потоку через `Looper.prepare()` и `Looper.loop()`. Проверка наличия: `Looper.myLooper()`. Отправка в main thread: `Handler(Looper.getMainLooper()).post { }`.
+
+**Использование:** HandlerThread для фонового потока с Looper. Всегда очищать в `onDestroy()`: `handler.removeCallbacksAndMessages(null)`. Использовать `Message.obtain()` для переиспользования объектов. Избегать утечек памяти через WeakReference.
+
+
+# Question (EN)
+> Handler Looper Comprehensive
+
+---
+
+
+---
+
 
 ## Answer (EN)
 
@@ -658,6 +675,12 @@ Looper.getMainLooper().setMessageLogging { log ->
 
 ## Related Questions
 
+### Prerequisites / Concepts
+
+- [[c-coroutines]]
+
+
 - [[q-glide-image-loading-internals--android--medium]]
 - [[q-cicd-multi-module--android--medium]]
 - [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]
+##

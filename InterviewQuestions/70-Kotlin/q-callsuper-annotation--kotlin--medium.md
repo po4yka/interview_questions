@@ -10,12 +10,10 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: []
+related: [c-kotlin-features]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android, annotations, best-practices, difficulty/medium, kotlin, lifecycle]
-date created: Saturday, November 1st 2025, 1:27:05 pm
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 # Аннотация @CallSuper
 

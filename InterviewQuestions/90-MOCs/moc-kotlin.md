@@ -5,8 +5,6 @@ kind: moc
 created: 2025-10-12
 updated: 2025-10-12
 tags: [moc, topic/kotlin]
-date created: Sunday, October 12th 2025, 1:07:06 pm
-date modified: Sunday, October 26th 2025, 8:53:02 pm
 ---
 
 # Kotlin — Map of Content

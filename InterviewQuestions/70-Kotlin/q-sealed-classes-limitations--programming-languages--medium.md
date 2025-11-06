@@ -14,8 +14,6 @@ related: [q-what-is-flow--programming-languages--medium, q-what-is-job-object--p
 created: 2025-10-15
 updated: 2025-10-31
 tags: [class-hierarchy, difficulty/medium, kotlin, programming-languages, sealed-classes]
-date created: Friday, October 3rd 2025, 4:39:28 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Какие Есть Ограничения У Sealed Классов?
 

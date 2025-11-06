@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-10-29
 tags: [android/ui-compose, android/ui-views, difficulty/medium, edge-to-edge, immersive, system-ui, windowinsets]
 sources: ["https://developer.android.com/develop/ui/views/layout/edge-to-edge"]
-date created: Wednesday, October 29th 2025, 1:00:50 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -246,7 +244,7 @@ fun VideoPlayer() {
 ### Related (Same Level)
 - [[q-compose-navigation-advanced--android--medium]] - Compose navigation
 - [[q-compose-scaffold--android--medium]] - Compose Scaffold
-- [[q-compose-custom-layout--jetpack-compose--hard]] - Custom layouts
+- [[q-compose-custom-layout--android--hard]] - Custom layouts
 
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Performance optimization

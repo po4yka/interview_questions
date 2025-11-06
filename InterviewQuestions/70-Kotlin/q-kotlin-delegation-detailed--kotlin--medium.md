@@ -25,8 +25,6 @@ created: 2025-10-06
 updated: 2025-10-06
 
 tags: [by-keyword, delegates, delegation, difficulty/medium, kotlin, patterns]
-date created: Sunday, October 12th 2025, 1:56:16 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Вопрос (RU)
 > Объясните паттерн делегирования в Kotlin детально. Что такое делегирование классов и делегирование свойств?

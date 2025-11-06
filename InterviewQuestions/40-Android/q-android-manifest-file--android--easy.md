@@ -23,8 +23,6 @@ updated: 2025-10-30
 tags: [android/app-startup, android/intents-deeplinks, android/permissions, difficulty/easy]
 sources:
   - https://github.com/Kirchhoff-/Android-Interview-Questions
-date created: Thursday, October 30th 2025, 11:26:39 am
-date modified: Sunday, November 2nd 2025, 12:47:38 pm
 ---
 
 # Вопрос (RU)

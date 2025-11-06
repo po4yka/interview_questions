@@ -23,8 +23,6 @@ created: 2025-10-15
 updated: 2025-10-29
 sources: []
 tags: [android/app-bundle, android/billing, android/play-console, difficulty/medium]
-date created: Wednesday, October 29th 2025, 4:19:48 pm
-date modified: Sunday, November 2nd 2025, 12:43:38 pm
 ---
 
 # Вопрос (RU)

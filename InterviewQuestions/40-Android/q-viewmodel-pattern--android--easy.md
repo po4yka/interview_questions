@@ -30,8 +30,6 @@ tags:
 - difficulty/easy
 - mvvm
 - viewmodel
-date created: Saturday, November 1st 2025, 12:47:06 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)
@@ -41,6 +39,19 @@ date modified: Saturday, November 1st 2025, 5:43:31 pm
 > ViewModel Pattern
 
 ---
+
+## Answer (EN)
+ViewModel implements the MVVM (Model-View-ViewModel) pattern. ViewModel is responsible for managing data and business logic, isolating them from the View, which simplifies testing and ensures separation of concerns between layers.
+
+
+# Question (EN)
+> ViewModel Pattern
+
+---
+
+
+---
+
 
 ## Answer (EN)
 ViewModel implements the MVVM (Model-View-ViewModel) pattern. ViewModel is responsible for managing data and business logic, isolating them from the View, which simplifies testing and ensures separation of concerns between layers.

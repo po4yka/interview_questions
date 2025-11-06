@@ -14,8 +14,6 @@ related: [c-garbage-collection, q-garbage-collector-basics--programming-language
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium, garbage-collection, jvm, kotlin, memory-management, programming-languages]
-date created: Friday, October 31st 2025, 6:31:04 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Что Такое Garbage Collector Roots?
 

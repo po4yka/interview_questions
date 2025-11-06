@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-01-25
 tags: [algorithms, avl, bst, data-structures, difficulty/hard, trees]
 sources: [https://en.wikipedia.org/wiki/AVL_tree, https://en.wikipedia.org/wiki/Binary_search_tree]
-date created: Sunday, October 12th 2025, 10:27:52 pm
-date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

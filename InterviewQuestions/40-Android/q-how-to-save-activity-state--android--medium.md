@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-30
 tags: [android, android/activity, android/architecture-mvvm, android/datastore, android/lifecycle, difficulty/medium, state-management]
 sources: []
-date created: Saturday, November 1st 2025, 12:46:54 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

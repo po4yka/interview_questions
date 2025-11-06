@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: []
+related: [c-software-design-patterns, c-dependency-injection, c-kotlin-features]
 created: "2025-10-13"
 updated: 2025-01-25
 tags: [android, behavioral, creational, design-patterns, difficulty/hard, gof, kotlin, structural]
 sources: [https://refactoring.guru/design-patterns]
-date created: Monday, October 13th 2025, 8:04:10 am
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

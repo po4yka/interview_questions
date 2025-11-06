@@ -25,8 +25,6 @@ updated: 2025-10-29
 
 # Tags (EN only; no leading #)
 tags: [android/background-execution, android/coroutines, difficulty/medium, jetpack, scheduled-tasks, workmanager]
-date created: Saturday, November 1st 2025, 1:26:05 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

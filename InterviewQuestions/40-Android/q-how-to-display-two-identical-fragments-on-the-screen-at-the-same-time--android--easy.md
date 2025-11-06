@@ -1,22 +1,41 @@
 ---
 id: android-245
-title: "How To Display Two Identical Fragments On The Screen At The Same Time / Как отобразить два одинаковых Fragment на экране одновременно"
-aliases: [Display Two Identical Fragments, Multiple Fragment Instances, Два одинаковых фрагмента, Несколько экземпляров Fragment]
+title: How To Display Two Identical Fragments On The Screen At The Same Time / Как
+  отобразить два одинаковых Fragment на экране одновременно
+aliases:
+- Display Two Identical Fragments
+- Multiple Fragment Instances
+- Два одинаковых фрагмента
+- Несколько экземпляров Fragment
 topic: android
-subtopics: [fragment, lifecycle, ui-views]
+subtopics:
+- fragment
+- lifecycle
+- ui-views
 question_kind: android
 difficulty: easy
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-fragment-basics--android--easy, q-how-to-choose-layout-for-fragment--android--easy, q-save-data-outside-fragment--android--medium]
+related:
+- c-fragments
+- c-lifecycle
+- q-fragment-basics--android--easy
+- q-how-to-choose-layout-for-fragment--android--easy
+- q-save-data-outside-fragment--android--medium
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
-tags: [android/fragment, android/lifecycle, android/ui-views, difficulty/easy, fragments, ui]
-date created: Tuesday, October 28th 2025, 9:49:43 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
+tags:
+- android/fragment
+- android/lifecycle
+- android/ui-views
+- difficulty/easy
+- fragments
+- ui
 ---
 
 # Вопрос (RU)
@@ -229,6 +248,12 @@ class MainActivity : AppCompatActivity() {
 - [Best Practices for Fragments](https://developer.android.com/guide/fragments/best-practices)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-fragments]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites (Easier)
 - [[q-fragment-basics--android--easy]] - Fragment basics

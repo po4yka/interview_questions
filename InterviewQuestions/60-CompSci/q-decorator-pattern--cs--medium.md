@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-cs
-related: []
+related: [c-software-design-patterns, c-kotlin-features]
 created: 2025-10-15
 updated: 2025-01-25
 tags: [decorator, design-patterns, difficulty/medium, gof-patterns, kotlin, structural-patterns, wrapper]
 sources: [https://refactoring.guru/design-patterns/decorator]
-date created: Monday, October 6th 2025, 7:20:34 am
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

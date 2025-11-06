@@ -1,22 +1,41 @@
 ---
 id: android-136
-title: "Performance Optimization Android / Performance Оптимизация Android"
-aliases: ["Performance Optimization Android", "Performance Оптимизация Android"]
+title: Performance Optimization Android / Performance Оптимизация Android
+aliases:
+- Performance Optimization Android
+- Performance Оптимизация Android
 topic: android
-subtopics: [performance-battery, performance-memory, performance-rendering]
+subtopics:
+- performance-battery
+- performance-memory
+- performance-rendering
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-baseline-profiles-android--android--medium, q-notification-channels-android--android--medium]
+related:
+- c-memory-management
+- c-power-profiling
+- c-performance
+- q-baseline-profiles-android--android--medium
+- q-notification-channels-android--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/performance-battery, android/performance-memory, android/performance-rendering, checklist, difficulty/medium, optimization, performance, performance-memory, performance-rendering]
-date created: Monday, October 27th 2025, 3:42:23 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
+tags:
+- android/performance-battery
+- android/performance-memory
+- android/performance-rendering
+- checklist
+- difficulty/medium
+- optimization
+- performance
+- performance-memory
+- performance-rendering
 ---
 
 # Вопрос (RU)
@@ -503,6 +522,13 @@ android {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-memory-management]]
+- [[c-power-profiling]]
+- [[c-performance]]
+
 
 ### Prerequisites
 - Understanding Activity and Fragment lifecycle is essential for optimization context

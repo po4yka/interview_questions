@@ -14,8 +14,6 @@ related: [q-detect-unused-object--programming-languages--easy, q-java-marker-int
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, phantom-reference, programming-languages, references, soft-reference, strong-reference, weak-reference]
-date created: Saturday, October 4th 2025, 1:22:21 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Все Ли Виды Ссылок Защищают Объект От Удаления?
 

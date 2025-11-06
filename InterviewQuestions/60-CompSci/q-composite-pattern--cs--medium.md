@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-25
 tags: [composite, design-patterns, difficulty/medium, gof-patterns, structural-patterns, tree-structure]
 sources: [https://en.wikipedia.org/wiki/Composite_pattern]
-date created: Monday, October 6th 2025, 7:27:23 am
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

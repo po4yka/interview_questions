@@ -1,31 +1,38 @@
 ---
 id: android-115
 title: Fragments History And Purpose / История и назначение фрагментов
-aliases: [Fragments History And Purpose, История и назначение фрагментов]
+aliases:
+- Fragments History And Purpose
+- История и назначение фрагментов
 topic: android
 subtopics:
-  - fragment
-  - lifecycle
+- fragment
+- lifecycle
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - q-compose-navigation-advanced--android--medium
-  - q-save-data-outside-fragment--android--medium
-  - q-what-are-fragments-for-if-there-is-activity--android--medium
+- c-fragments
+- c-lifecycle
+- q-compose-navigation-advanced--android--medium
+- q-save-data-outside-fragment--android--medium
+- q-what-are-fragments-for-if-there-is-activity--android--medium
 created: 2025-10-15
 updated: 2025-11-04
 sources:
-  - https://developer.android.com/guide/fragments
-  - https://developer.android.com/guide/fragments/lifecycle
-tags: [android/fragment, android/lifecycle, difficulty/hard, fragments, ui]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Tuesday, November 4th 2025, 12:57:32 pm
+- https://developer.android.com/guide/fragments
+- https://developer.android.com/guide/fragments/lifecycle
+tags:
+- android/fragment
+- android/lifecycle
+- difficulty/hard
+- fragments
+- ui
 ---
 
 # Вопрос (RU)
@@ -360,6 +367,12 @@ class ModernFragment : Fragment(R.layout.fragment_modern) {
 - Master-detail pattern implementations
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-fragments]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites (Easier)
 

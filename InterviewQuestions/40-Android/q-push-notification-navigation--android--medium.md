@@ -1,22 +1,43 @@
 ---
 id: android-305
-title: "Push Notification Navigation / Навигация из push уведомлений"
-aliases: [FCM Navigation, Navigation from Notifications, Push Notification Navigation, Навигация из push уведомлений]
+title: Push Notification Navigation / Навигация из push уведомлений
+aliases:
+- FCM Navigation
+- Navigation from Notifications
+- Push Notification Navigation
+- Навигация из push уведомлений
 topic: android
-subtopics: [intents-deeplinks, notifications, ui-navigation]
+subtopics:
+- intents-deeplinks
+- notifications
+- ui-navigation
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-activity-navigation-how-it-works--android--medium, q-compose-navigation-advanced--android--medium, q-what-navigation-methods-do-you-know--android--medium]
+related:
+- c-compose-navigation
+- c-fragments
+- c-intent
+- q-activity-navigation-how-it-works--android--medium
+- q-compose-navigation-advanced--android--medium
+- q-what-navigation-methods-do-you-know--android--medium
 sources: []
 created: 2025-10-15
 updated: 2025-10-31
-tags: [android/intents-deeplinks, android/notifications, android/ui-navigation, deeplink, difficulty/medium, fcm, navigation, notifications]
-date created: Saturday, November 1st 2025, 12:47:01 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
+tags:
+- android/intents-deeplinks
+- android/notifications
+- android/ui-navigation
+- deeplink
+- difficulty/medium
+- fcm
+- navigation
+- notifications
 ---
 
 # Вопрос (RU)
@@ -353,6 +374,13 @@ private fun createIntentWithBackStack(itemId: Int): PendingIntent {
 - [TaskStackBuilder Documentation](https://developer.android.com/reference/androidx/core/app/TaskStackBuilder)
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-compose-navigation]]
+- [[c-fragments]]
+- [[c-intent]]
+
 
 ### Prerequisites (Easier)
 - [[q-how-to-implement-a-photo-editor-as-a-separate-component--android--easy]]

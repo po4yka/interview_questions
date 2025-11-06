@@ -1,32 +1,40 @@
 ---
 id: android-271
 title: Fix Slow App Startup Legacy / Исправление медленного запуска приложения
-aliases: [Fix Slow App Startup in Legacy Project, Исправление медленного запуска приложения в легаси-проекте]
+aliases:
+- Fix Slow App Startup in Legacy Project
+- Исправление медленного запуска приложения в легаси-проекте
 topic: android
 subtopics:
-  - architecture-modularization
-  - performance-startup
-  - profiling
+- architecture-modularization
+- performance-startup
+- profiling
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - en
-  - ru
+- en
+- ru
 status: reviewed
 moc: moc-android
 related:
-  - c-app-startup
-  - c-lazy-initialization
-  - q-android-profiling-tools--android--medium
-  - q-what-are-services-used-for--android--medium
+- c-app-startup
+- c-lazy-initialization
+- q-android-profiling-tools--android--medium
+- q-what-are-services-used-for--android--medium
 sources:
-  - Android App Startup documentation
+- Android App Startup documentation
 created: 2025-10-15
 updated: 2025-11-03
-tags: [android/architecture-modularization, android/performance-startup, android/profiling, app-startup, difficulty/hard, lazy-init, legacy-code, optimization]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Monday, November 3rd 2025, 3:30:51 pm
+tags:
+- android/architecture-modularization
+- android/performance-startup
+- android/profiling
+- app-startup
+- difficulty/hard
+- lazy-init
+- legacy-code
+- optimization
 ---
 
 # Вопрос (RU)
@@ -373,6 +381,12 @@ Effect: 15-30% cold start improvement through pre-compilation.
 - Macrobenchmark library guide
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-app-startup]]
+- [[c-lazy-initialization]]
+
 
 ### Prerequisites
 - [[q-what-are-services-used-for--android--medium]] - Understanding Android components

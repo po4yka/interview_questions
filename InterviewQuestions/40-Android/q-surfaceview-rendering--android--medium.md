@@ -29,8 +29,6 @@ tags:
 - difficulty/medium
 - rendering
 - surfaceview
-date created: Saturday, November 1st 2025, 12:47:05 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)
@@ -40,6 +38,154 @@ date modified: Saturday, November 1st 2025, 5:43:32 pm
 > SurfaceView Rendering
 
 ---
+
+## Answer (EN)
+`SurfaceView` is a special view that provides a dedicated drawing surface embedded inside of a view hierarchy. Unlike regular views, `SurfaceView` can be updated on a background thread, making it ideal for high-performance rendering scenarios.
+
+**Key Characteristics:**
+
+**1. Dedicated Surface Buffer:**
+- `SurfaceView` has a dedicated surface buffer while all regular views share one surface buffer that is allocated by ViewRoot
+- In other words, `SurfaceView` costs more resources but provides better performance for intensive rendering
+
+**2. Background Thread Rendering:**
+- Unlike regular views that must be drawn on the UI thread, `SurfaceView` can be updated on a background thread
+- This prevents blocking the UI thread during intensive rendering operations
+- Ideal for games, video playback, camera preview, and other high-frame-rate content
+
+**3. Hardware Acceleration Limitations:**
+- `SurfaceView` cannot be hardware accelerated (as of Android 4.2 JellyBean)
+- In contrast, 95% of operations on normal views are hardware-accelerated using OpenGL ES
+- However, this trade-off is acceptable for scenarios requiring background thread rendering
+
+**4. Additional Development Complexity:**
+- More work is required to create a customized `SurfaceView`
+- You need to:
+  - Listen to `surfaceCreated/surfaceDestroyed` events
+  - Create and manage a render thread
+  - Synchronize the render thread and main thread properly
+  - Handle the surface lifecycle
+
+**5. Different Update Timing:**
+- **Regular Views**: Update mechanism is constrained and controlled by the framework
+  - Call `view.invalidate()` in UI thread or `view.postInvalidate()` in other threads
+  - View won't update immediately but waits until next VSYNC event
+  - VSYNC can be understood as a timer that fires every 16ms for a 60fps screen
+  - All normal view updates are synchronized with VSYNC for better smoothness
+
+- **SurfaceView**: You have direct control over when and how to render
+  - Can render at any time from the background thread
+  - Not bound to VSYNC timing
+  - Provides more flexibility for custom rendering loops
+
+**Basic Implementation:**
+
+```kotlin
+class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
+
+    private var renderThread: RenderThread? = null
+
+    init {
+        holder.addCallback(this)
+    }
+
+    override fun surfaceCreated(holder: SurfaceHolder) {
+        // Surface is ready, start rendering thread
+        renderThread = RenderThread(holder).apply {
+            start()
+        }
+    }
+
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+        // Surface dimensions changed
+    }
+
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
+        // Stop rendering thread
+        renderThread?.requestStop()
+        renderThread?.join()
+        renderThread = null
+    }
+
+    inner class RenderThread(private val holder: SurfaceHolder) : Thread() {
+        private var running = true
+
+        fun requestStop() {
+            running = false
+        }
+
+        override fun run() {
+            while (running) {
+                val canvas = holder.lockCanvas()
+                try {
+                    // Perform drawing operations
+                    synchronized(holder) {
+                        // Draw on canvas
+                        canvas?.let { drawContent(it) }
+                    }
+                } finally {
+                    if (canvas != null) {
+                        holder.unlockCanvasAndPost(canvas)
+                    }
+                }
+            }
+        }
+
+        private fun drawContent(canvas: Canvas) {
+            // Your drawing code here
+            canvas.drawColor(Color.BLACK)
+            // Draw other content...
+        }
+    }
+}
+```
+
+**Use Cases:**
+
+1. **Game Development**: High frame rate games requiring continuous rendering
+2. **Video Playback**: Smooth video rendering without blocking UI thread
+3. **Camera Preview**: Real-time camera feed display
+4. **Custom Animations**: Complex animations that need precise frame control
+5. **Data Visualization**: Real-time charts and graphs with frequent updates
+6. **AR/VR Applications**: High-performance 3D rendering
+
+**SurfaceView vs Regular View:**
+
+| Feature | SurfaceView | Regular View |
+|---------|-------------|--------------|
+| Threading | Background thread rendering | UI thread only |
+| Surface Buffer | Dedicated buffer | Shared buffer |
+| Hardware Acceleration | Not supported (JB 4.2) | Fully supported |
+| Update Timing | Manual control | VSYNC synchronized |
+| Resource Usage | Higher | Lower |
+| Use Case | High-performance rendering | Standard UI elements |
+| Complexity | More complex | Simpler |
+
+**Modern Alternatives:**
+
+- **TextureView**: Can be hardware-accelerated and supports transformations, but higher memory usage
+- **SurfaceView with Vulkan/OpenGL**: For modern 3D rendering
+- **Jetpack Compose**: For declarative UI with efficient rendering
+
+**Best Practices:**
+
+1. Always implement `SurfaceHolder.Callback` to handle lifecycle events
+2. Properly synchronize access to the Canvas between threads
+3. Stop rendering thread when surface is destroyed to prevent memory leaks
+4. Use `lockCanvas()` and `unlockCanvasAndPost()` carefully in try-finally blocks
+5. Consider using `TextureView` if you need hardware acceleration and transformations
+
+**Source**: [SurfaceView](https://developer.android.com/reference/android/view/SurfaceView)
+
+
+# Question (EN)
+> SurfaceView Rendering
+
+---
+
+
+---
+
 
 ## Answer (EN)
 `SurfaceView` is a special view that provides a dedicated drawing surface embedded inside of a view hierarchy. Unlike regular views, `SurfaceView` can be updated on a background thread, making it ideal for high-performance rendering scenarios.

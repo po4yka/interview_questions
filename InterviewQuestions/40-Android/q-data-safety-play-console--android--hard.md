@@ -18,7 +18,6 @@ status: draft
 moc: moc-android
 related:
   - c-security-hardening
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -107,10 +106,8 @@ sources:
 
 ## References
 - [[c-security-hardening]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://support.google.com/googleplay/android-developer/answer/10787469
 
 ## Related Questions
 
 - [[c-security-hardening]]
-- [[q-android-coverage-gaps--android--hard]]

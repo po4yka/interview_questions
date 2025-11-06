@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/di-koin, android/kmp, DI, difficulty/medium, Koin, Kotlin]
-date created: Tuesday, October 28th 2025, 9:23:40 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

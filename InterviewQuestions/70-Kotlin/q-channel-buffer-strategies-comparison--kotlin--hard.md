@@ -14,8 +14,6 @@ status: draft
 created: 2025-10-12
 updated: 2025-10-31
 tags: [backpressure, buffer, capacity, channels, coroutines, difficulty/hard, kotlin, performance, producer-consumer]
-date created: Saturday, November 1st 2025, 1:27:21 pm
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Channel Buffer Strategies: RENDEZVOUS, BUFFERED, UNLIMITED, CONFLATED / Стратегии Буферизации Каналов

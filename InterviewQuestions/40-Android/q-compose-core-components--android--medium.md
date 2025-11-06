@@ -25,8 +25,6 @@ updated: 2025-11-02
 tags: [android/architecture-mvvm, android/ui-compose, declarative-ui, difficulty/medium, jetpack-compose]
 sources:
   - https://developer.android.com/jetpack/compose/architecture
-date created: Thursday, October 30th 2025, 4:13:12 pm
-date modified: Sunday, November 2nd 2025, 1:34:49 pm
 ---
 
 # Вопрос (RU)

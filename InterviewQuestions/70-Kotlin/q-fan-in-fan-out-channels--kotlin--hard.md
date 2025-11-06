@@ -14,8 +14,6 @@ related: [q-data-sealed-classes-definition--programming-languages--hard, q-deleg
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/hard]
-date created: Sunday, October 12th 2025, 3:43:59 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Fan-in and Fan-out Patterns with Channels
 

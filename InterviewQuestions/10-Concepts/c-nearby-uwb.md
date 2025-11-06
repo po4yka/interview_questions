@@ -16,8 +16,6 @@ tags:
   - connectivity
   - nfc
   - uwb
-date created: Sunday, November 2nd 2025, 12:30:00 pm
-date modified: Sunday, November 2nd 2025, 12:30:00 pm
 ---
 
 # Summary (EN)

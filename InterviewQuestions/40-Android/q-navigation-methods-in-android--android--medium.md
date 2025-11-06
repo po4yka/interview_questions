@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: []
+related: [c-fragments, c-activity, c-intent, c-jetpack-compose]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/architecture-modularization, android/intents-deeplinks, android/ui-navigation, difficulty/medium, navigation, ui]
-date created: Tuesday, October 28th 2025, 9:52:09 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)
@@ -505,10 +503,18 @@ binding.drawerLayout.addDrawerListener(
 ## Related Questions
 
 ### Prerequisites (Easier)
-- Related content to be added
+- [[q-what-is-intent--android--easy]] - Understanding Intent basics
+- [[q-fragment-basics--android--easy]] - Fragment fundamentals
+- [[q-main-android-components--android--easy]] - Android component overview
+- [[q-android-app-components--android--easy]] - Core app component types
 
 ### Related (Same Level)
-- Related content to be added
+- [[q-navigation-methods-android--android--medium]] - Alternative navigation patterns
+- [[q-deep-link-vs-app-link--android--medium]] - Deep linking strategies
+- [[q-single-activity-approach--android--medium]] - Single activity architecture
+- [[q-compose-navigation-advanced--android--medium]] - Advanced Compose navigation
 
 ### Advanced (Harder)
-- Related content to be added
+- [[q-shared-element-transitions--android--hard]] - Advanced transitions between screens
+- [[q-modularization-patterns--android--hard]] - Multi-module navigation patterns
+- [[q-how-to-create-dynamic-screens-at-runtime--android--hard]] - Dynamic screen creation

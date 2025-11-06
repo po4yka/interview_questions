@@ -25,8 +25,6 @@ created: 2025-10-05
 updated: 2025-10-18
 
 tags: [difficulty/medium, dsl, kotlin, readability, type-aliases, types]
-date created: Saturday, October 18th 2025, 3:06:33 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Вопрос (RU)
 > Что такое псевдонимы типов (type aliases) в Kotlin и когда их использовать?

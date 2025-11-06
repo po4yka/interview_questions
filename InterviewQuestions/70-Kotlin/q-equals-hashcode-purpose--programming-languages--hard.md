@@ -14,8 +14,6 @@ related: [c-equality, q-equals-hashcode-contracts--programming-languages--medium
 created: 2025-10-15
 updated: 2025-10-31
 tags: [collections, contracts, difficulty/hard, equality, object-methods, programming-languages]
-date created: Friday, October 31st 2025, 6:29:51 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Why Are Equals and Hashcode Methods Needed?
 

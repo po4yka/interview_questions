@@ -17,6 +17,7 @@ language_tags:
 status: draft
 moc: moc-android
 related:
+- c-fragments
 - q-how-does-jetpackcompose-work--android--medium
 - q-play-app-signing--android--medium
 - q-what-unites-the-main-components-of-an-android-application--android--medium
@@ -25,8 +26,6 @@ updated: 2025-10-31
 tags:
 - android/fragment
 - difficulty/medium
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)
@@ -484,6 +483,11 @@ if (!isStateSaved) {
 
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-fragments]]
+
 
 ### Prerequisites (Easier)
 - [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment

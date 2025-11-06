@@ -14,8 +14,6 @@ related: [q-class-composition--oop--medium, q-launch-vs-async-error-handling--pr
 created: 2025-10-15
 updated: 2025-10-31
 tags: [coroutines, difficulty/easy, flow, kotlin, programming-languages, sharedflow, stateflow]
-date created: Saturday, October 4th 2025, 10:40:14 am
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # SharedFlow Vs StateFlow Differences
 

@@ -14,8 +14,6 @@ related: [q-kotlin-equals-hashcode-purpose--programming-languages--medium, q-kot
 created: 2025-10-15
 updated: 2025-10-31
 tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
-date created: Friday, October 31st 2025, 6:33:32 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 # What Are Data Classes and Sealed Classes Used For?
 

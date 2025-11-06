@@ -10,12 +10,10 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: []
+related: [c-coroutines, c-testing]
 created: 2025-10-12
 updated: 2025-10-31
 tags: [coroutines, deterministic, difficulty/medium, kotlin, runtest, test-dispatcher, testing, timing, virtual-time]
-date created: Saturday, November 1st 2025, 1:29:52 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Testing Coroutine Timing: advanceTimeBy Vs advanceUntilIdle / Тестирование Таймингов Корутин

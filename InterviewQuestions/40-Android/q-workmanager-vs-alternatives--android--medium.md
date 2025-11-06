@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-10-29
 tags: [alarmmanager, android/background-execution, difficulty/medium, foreground-service, jobscheduler, workmanager]
 sources: []
-date created: Wednesday, October 29th 2025, 1:01:02 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

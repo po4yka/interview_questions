@@ -1,22 +1,36 @@
 ---
 id: android-132
-title: "Main Thread Android / Главный поток Android"
-aliases: ["Main Thread Android", "UI Thread", "Главный поток Android", "Поток UI"]
+title: Main Thread Android / Главный поток Android
+aliases:
+- Main Thread Android
+- UI Thread
+- Главный поток Android
+- Поток UI
 topic: android
-subtopics: [lifecycle, threads-sync]
+subtopics:
+- lifecycle
+- threads-sync
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-room-code-generation-timing--android--medium]
+related:
+- c-coroutines
+- c-lifecycle
+- q-room-code-generation-timing--android--medium
 created: 2025-10-15
 updated: 2025-01-27
 sources: []
-tags: [android/lifecycle, android/threads-sync, difficulty/medium, threading, ui-thread]
-date created: Monday, October 27th 2025, 3:41:42 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
+tags:
+- android/lifecycle
+- android/threads-sync
+- difficulty/medium
+- threading
+- ui-thread
 ---
 
 # Вопрос (RU)
@@ -241,6 +255,12 @@ class MyViewModel : ViewModel() {
 - Kotlin Coroutines guide
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-coroutines]]
+- [[c-lifecycle]]
+
 
 ### Prerequisites
 - Understanding of threads and processes in Android

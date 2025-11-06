@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [catch, coroutines, difficulty/medium, error-handling, exception-handling, flow, kotlin]
-date created: Sunday, October 12th 2025, 2:49:28 pm
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 # Вопрос (RU)
 > Как работает оператор catch в Kotlin Flow? Что такое прозрачность исключений и где размещать catch?

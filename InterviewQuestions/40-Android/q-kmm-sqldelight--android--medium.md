@@ -1,27 +1,53 @@
 ---
 id: android-416
-title: "SQLDelight в KMM / SQLDelight in KMM"
-aliases: ["SQLDelight in KMM", "SQLDelight в KMM", "SQLDelight для мультиплатформы"]
+title: SQLDelight в KMM / SQLDelight in KMM
+aliases:
+- SQLDelight in KMM
+- SQLDelight в KMM
+- SQLDelight для мультиплатформы
 topic: android
-subtopics: [kmp, room, sqldelight]
+subtopics:
+- kmp
+- room
+- sqldelight
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [q-annotation-processing-android--android--medium, q-gradle-kotlin-dsl-vs-groovy--android--medium]
+related:
+- c-room
+- q-annotation-processing-android--android--medium
+- q-gradle-kotlin-dsl-vs-groovy--android--medium
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
-tags: [android/kmp, android/room, android/sqldelight, Database, difficulty/medium, KMM, Kotlin, multiplatform, SQLDelight]
-date created: Tuesday, October 28th 2025, 9:23:21 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
+tags:
+- android/kmp
+- android/room
+- android/sqldelight
+- Database
+- difficulty/medium
+- KMM
+- Kotlin
+- multiplatform
+- SQLDelight
 ---
 
 # Вопрос (RU)
 
 > Как использовать SQLDelight для кросс-платформенного управления БД в KMM? Как определять схемы, выполнять миграции, работать с транзакциями и оптимизировать запросы для Android и iOS?
+
+
+# Question (EN)
+
+> How to use SQLDelight for cross-platform database management in KMM? How to define schemas, handle migrations, work with transactions, and optimize queries for Android and iOS?
+
+
+---
 
 ## Ответ (RU)
 
@@ -301,9 +327,6 @@ class TaskRepositoryTest {
 
 ---
 
-# Question (EN)
-
-> How to use SQLDelight for cross-platform database management in KMM? How to define schemas, handle migrations, work with transactions, and optimize queries for Android and iOS?
 
 ## Answer (EN)
 
@@ -599,6 +622,11 @@ class TaskRepositoryTest {
 - Platform-specific database drivers comparison
 
 ## Related Questions
+
+### Prerequisites / Concepts
+
+- [[c-room]]
+
 
 ### Related
 - [[q-annotation-processing-android--android--medium]] - Code generation comparison with SQLDelight

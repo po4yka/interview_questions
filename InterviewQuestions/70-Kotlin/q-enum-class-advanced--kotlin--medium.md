@@ -15,8 +15,6 @@ created: "2025-10-12"
 updated: 2025-01-25
 tags: [advanced-enums, classes, difficulty/medium, enums, kotlin, kotlin-features]
 sources: [https://kotlinlang.org/docs/enum-classes.html]
-date created: Sunday, October 12th 2025, 1:58:08 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Вопрос (RU)

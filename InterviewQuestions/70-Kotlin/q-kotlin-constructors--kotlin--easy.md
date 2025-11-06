@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [constructors, difficulty/easy, init, initialization, kotlin, primary-constructor, secondary-constructor]
-date created: Sunday, October 12th 2025, 2:43:03 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Вопрос (RU)
 > Что такое конструкторы в Kotlin? Объясните первичные конструкторы, вторичные конструкторы и блоки init.

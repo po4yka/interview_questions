@@ -14,8 +14,6 @@ related: [c-coroutines, c-retrofit, c-workmanager]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/background-execution, android/coroutines, android/networking-http, background-processing, difficulty/hard, file-upload, foreground-service, networking, retrofit, workmanager]
-date created: Saturday, November 1st 2025, 1:24:41 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
@@ -568,10 +566,17 @@ class ChunkedUploadWorker(
 ## Related Questions
 
 ### Prerequisites (Medium)
-- Related content to be added
+- [[q-what-is-workmanager--android--medium]] - WorkManager basics
+- [[q-background-vs-foreground-service--android--medium]] - Service types
+- [[q-multithreading-tools-android--android--medium]] - Threading tools
+- [[q-large-file-upload--android--medium]] - File upload strategies
 
 ### Related (Hard)
-- Related content to be added
+- [[q-offline-first-architecture--android--hard]] - Offline data sync
+- [[q-data-sync-unstable-network--android--hard]] - Network resilience
+- [[q-workmanager-chaining--android--hard]] - Complex WorkManager flows
 
 ### Advanced (Hard)
-- Related content to be added
+- [[q-observability-sdk--android--hard]] - Production monitoring
+- [[q-network-security-hardening--android--hard]] - Network security
+- [[q-sensitive-data-lifecycle--android--hard]] - Secure data handling

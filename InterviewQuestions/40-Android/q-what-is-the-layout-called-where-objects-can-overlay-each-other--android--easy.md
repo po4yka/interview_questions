@@ -15,8 +15,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/ui-compose, android/ui-views, box, difficulty/easy, framelayout, layouts]
-date created: Saturday, November 1st 2025, 1:25:40 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
@@ -334,4 +332,4 @@ fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--android--hard]] - Custom layout implementation
-- [[q-compose-gesture-detection--jetpack-compose--medium]] - Gesture handling in overlays
+- [[q-compose-gesture-detection--android--medium]] - Gesture handling in overlays

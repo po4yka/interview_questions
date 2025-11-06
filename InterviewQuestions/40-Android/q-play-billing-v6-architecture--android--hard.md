@@ -18,7 +18,6 @@ status: draft
 moc: moc-android
 related:
   - c-play-billing
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -145,11 +144,9 @@ override fun onPurchasesUpdated(result: BillingResult, purchases: MutableList<Pu
 
 ## References
 - [[c-play-billing]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://developer.android.com/google/play/billing/integrate
 - https://developer.android.com/google/play/billing/migrate-gpblv6
 
 ## Related Questions
 
 - [[c-play-billing]]
-- [[q-android-coverage-gaps--android--hard]]

@@ -14,8 +14,6 @@ related: [q-kotlin-higher-order-functions--kotlin--medium, q-kotlin-type-system-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, let, null-safety, programming-languages, scope-functions]
-date created: Friday, October 31st 2025, 6:30:30 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Для Чего Нужен Let?
 

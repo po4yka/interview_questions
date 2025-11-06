@@ -14,8 +14,6 @@ related: [q-flow-map-operator--programming-languages--medium, q-iterator-pattern
 created: 2025-10-13
 updated: 2025-10-31
 tags: [arraylist, collections, data-structures, difficulty/medium, kotlin, linkedlist, programming-languages]
-date created: Friday, October 3rd 2025, 4:14:01 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Как Будут Вести Себя Linked List И Array List, Если Вставить В Них Элемент?
 

@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
   - c-perfetto
-  - q-android-coverage-gaps--android--hard
 created: 2025-11-02
 updated: 2025-11-02
 tags:
@@ -125,11 +124,9 @@ SQL
 
 ## References
 - [[c-perfetto]]
-- [[q-android-coverage-gaps--android--hard]]
 - https://perfetto.dev/docs/concepts/frame-timeline
 - https://developer.android.com/topic/performance/tracing/perfetto
 
 ## Related Questions
 
 - [[c-perfetto]]
-- [[q-android-coverage-gaps--android--hard]]

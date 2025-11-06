@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [coroutines, difficulty/hard, flow, kotlin, operators, testing]
-date created: Sunday, October 12th 2025, 1:23:06 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Вопрос (RU)
 > Как тестировать операторы и трансформации Flow такие как flatMap, debounce, retry и combine? Покрыть тестирование виртуального времени, использование turbine и стратегии тестирования сложных цепочек flow.

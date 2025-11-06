@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: []
+related: [c-jetpack-compose, c-compose-state, c-viewmodel, c-mvvm]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android, android/architecture-mvvm, android/ui-compose, difficulty/medium, jetpack-compose]
-date created: Tuesday, October 28th 2025, 9:35:10 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

@@ -21,8 +21,6 @@ sources:
 created: 2025-10-20
 updated: 2025-11-03
 tags: [android/testing-instrumented, android/testing-unit, difficulty/medium, fakes, mocks, test-doubles]
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Monday, November 3rd 2025, 11:32:38 am
 ---
 
 # Вопрос (RU)

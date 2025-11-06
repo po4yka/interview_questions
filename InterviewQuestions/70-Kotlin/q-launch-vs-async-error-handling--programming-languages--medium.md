@@ -14,8 +14,6 @@ related: [q-suspend-function-suspension-mechanism--programming-languages--hard, 
 created: 2025-10-15
 updated: 2025-10-31
 tags: [coroutines, difficulty/medium, error-handling, exception-handling, programming-languages]
-date created: Saturday, October 4th 2025, 10:53:49 am
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Error Handling Differences: Launch Vs Async
 

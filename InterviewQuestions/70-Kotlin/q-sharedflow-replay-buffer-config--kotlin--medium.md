@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-10-31
 tags: [backpressure, buffer, configuration, coroutines, difficulty/medium, flow, hot-flow, kotlin, replay, sharedflow]
 contributors: []
-date created: Friday, October 31st 2025, 6:30:54 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # SharedFlow Replay Cache and Buffer Configuration / SharedFlow Replay Cache И Конфигурация Буфера

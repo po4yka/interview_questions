@@ -1,22 +1,35 @@
 ---
 id: android-071
-title: "LazyGrid & LazyStaggeredGrid / LazyGrid и LazyStaggeredGrid"
-aliases: ["LazyGrid & LazyStaggeredGrid", "LazyGrid и LazyStaggeredGrid"]
+title: LazyGrid & LazyStaggeredGrid / LazyGrid и LazyStaggeredGrid
+aliases:
+- LazyGrid & LazyStaggeredGrid
+- LazyGrid и LazyStaggeredGrid
 topic: android
-subtopics: [performance-rendering, ui-compose]
+subtopics:
+- performance-rendering
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
-language_tags: [en, ru]
+language_tags:
+- en
+- ru
 status: draft
 moc: moc-android
-related: [c-lazy-grid]
+related:
+- c-lazy-grid
 created: 2025-10-12
 updated: 2025-10-31
-tags: [android/performance-rendering, android/ui-compose, difficulty/medium, grid, jetpack-compose, lazy-layout, performance]
-sources: [https://developer.android.com/jetpack/compose/lists]
-date created: Sunday, October 12th 2025, 10:43:54 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
+tags:
+- android/performance-rendering
+- android/ui-compose
+- difficulty/medium
+- grid
+- jetpack-compose
+- lazy-layout
+- performance
+sources:
+- https://developer.android.com/jetpack/compose/lists
 ---
 
 # Вопрос (RU)
@@ -203,10 +216,17 @@ LazyVerticalGrid(
 ## Related Questions
 
 ### Prerequisites (Easier)
-- Related content to be added
+- [[q-jetpack-compose-lazy-column--android--easy]] - LazyColumn basics
+- [[q-what-is-known-about-recyclerview--android--easy]] - RecyclerView fundamentals
+- [[q-which-layout-for-large-list--android--easy]] - Layout choices for lists
 
 ### Related (Same Level)
-- Related content to be added
+- [[q-jetpack-compose-basics--android--medium]] - Compose fundamentals
+- [[q-state-hoisting-compose--android--medium]] - State management in Compose
+- [[q-paging-library-3--android--medium]] - Paging with lazy layouts
+- [[q-compose-modifier-order-performance--android--medium]] - Modifier performance
 
 ### Advanced (Harder)
-- Related content to be added
+- [[q-compose-lazy-layout-optimization--android--hard]] - Advanced lazy layout optimization
+- [[q-compose-performance-optimization--android--hard]] - Comprehensive Compose performance
+- [[q-compose-custom-layout--android--hard]] - Custom layout implementations

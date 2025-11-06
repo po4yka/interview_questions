@@ -25,8 +25,6 @@ created: 2025-10-05
 updated: 2025-10-18
 
 tags: [difficulty/medium, functional-programming, kotlin, lambda-expressions, sam-conversion]
-date created: Saturday, October 18th 2025, 3:12:53 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Вопрос (RU)
 > Что такое лямбда-выражения в Kotlin и как они работают?

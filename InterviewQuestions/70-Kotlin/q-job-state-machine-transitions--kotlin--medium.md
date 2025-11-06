@@ -14,8 +14,6 @@ related: [q-fan-in-fan-out--kotlin--hard, q-inline-function-limitations--kotlin-
 created: 2025-10-12
 updated: 2025-10-12
 tags: [difficulty/medium]
-date created: Saturday, November 1st 2025, 1:07:23 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Job State Machine and State Transitions / Job Машина Состояний И Переходы
