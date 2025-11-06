@@ -7,8 +7,10 @@ from datetime import datetime, date
 from typing import Iterable, List
 
 from .base import BaseValidator, Severity
+from .registry import ValidatorRegistry
 
 
+@ValidatorRegistry.register
 class YAMLValidator(BaseValidator):
     """Validate YAML frontmatter and high-level metadata rules."""
 
