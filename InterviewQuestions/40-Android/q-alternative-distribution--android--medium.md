@@ -37,7 +37,7 @@ tags: [android/app-bundle, android/billing, android/play-console, difficulty/med
 
 ## Ответ (RU)
 
-Альтернативное распространение — публикация приложения за пределами Google Play через другие магазины или прямую установку. Необходимо для доступа к региональным рынкам, где Google Play недоступен или не популярен, а также для корпоративных и тестовых сценариев. Все платформы используют [[c-app-bundle|App `Bundle`]] для оптимизации размера.
+Альтернативное распространение — публикация приложения за пределами Google Play через другие магазины или прямую установку. Необходимо для доступа к региональным рынкам, где Google Play недоступен или не популярен, а также для корпоративных и тестовых сценариев. Все платформы используют [[c-app-bundle|App Bundle]] для оптимизации размера.
 
 **Основные платформы:**
 
@@ -130,7 +130,7 @@ object StoreFactory {
 
 ## Answer (EN)
 
-Alternative distribution is publishing apps outside Google Play through other app stores or direct installation. Necessary for accessing regional markets where Google Play is unavailable or less popular, as well as for enterprise and testing scenarios. All platforms use [[c-app-bundle|App `Bundle`]] for size optimization.
+Alternative distribution is publishing apps outside Google Play through other app stores or direct installation. Necessary for accessing regional markets where Google Play is unavailable or less popular, as well as for enterprise and testing scenarios. All platforms use [[c-app-bundle|App Bundle]] for size optimization.
 
 **Major Platforms:**
 
@@ -233,7 +233,7 @@ object StoreFactory {
 
 ## References
 
-- [[c-app-bundle|App `Bundle`]]
+- [[c-app-bundle|App Bundle]]
 - [Samsung Galaxy Store Documentation](https://developer.samsung.com/galaxy-store)
 - [Huawei AppGallery Connect Documentation](https://developer.huawei.com/consumer/en/appgallery)
 - [Amazon Appstore Developer Portal](https://developer.amazon.com/apps-and-games)

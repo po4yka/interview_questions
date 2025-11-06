@@ -27,7 +27,7 @@ sources: []
 
 ## Ответ (RU)
 
-Существует **два способа** регистрации [[c-broadcast-receiver|`BroadcastReceiver`]]:
+Существует **два способа** регистрации [[c-broadcast-receiver|BroadcastReceiver]]:
 
 ### 1. Динамическая Регистрация (Runtime)
 
@@ -127,7 +127,7 @@ class EventBus {
 
 ## Answer (EN)
 
-There are **two ways** to register a [[c-broadcast-receiver|`BroadcastReceiver`]]:
+There are **two ways** to register a [[c-broadcast-receiver|BroadcastReceiver]]:
 
 ### 1. Dynamic Registration (Runtime)
 

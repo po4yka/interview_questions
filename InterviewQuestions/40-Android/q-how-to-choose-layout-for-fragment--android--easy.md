@@ -254,7 +254,7 @@ override fun onDestroyView() {
 
 
 ### Prerequisites
-- [[q-fragment-basics--android--easy|`Fragment` Basics]]
+- [[q-fragment-basics--android--easy|Fragment Basics]]
 
 ### Related
 - [[q-why-user-data-may-disappear-on-screen-rotation--android--hard|Why User Data May Disappear on Screen Rotation]]

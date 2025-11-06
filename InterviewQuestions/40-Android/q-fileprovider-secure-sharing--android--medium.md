@@ -200,7 +200,7 @@ context.startActivity(Intent.createChooser(intent, null))
 - What happens if two apps use the same FileProvider authority?
 
 ## References
-- [[c-content-provider|`ContentProvider` Architecture]]
+- [[c-content-provider|ContentProvider Architecture]]
 - Official docs: https://developer.android.com/reference/androidx/core/content/FileProvider
 - Security guide: https://developer.android.com/training/secure-file-sharing
 
@@ -208,11 +208,11 @@ context.startActivity(Intent.createChooser(intent, null))
 
 ### Prerequisites
 - [[q-android-storage-types--android--medium|Android Storage Types]]
-- [[c-content-provider|`ContentProvider` Basics]]
+- [[c-content-provider|ContentProvider Basics]]
 
 ### Related
 - [[q-runtime-permissions-best-practices--android--medium|Runtime Permissions Best Practices]]
-- [[q-intent-filters-android--android--medium|`Intent` Filters]]
+- [[q-intent-filters-android--android--medium|Intent Filters]]
 
 ### Advanced
 - Custom `ContentProvider` implementation for advanced file sharing scenarios

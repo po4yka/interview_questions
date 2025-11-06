@@ -28,7 +28,7 @@ sources: []
 
 ## Ответ (RU)
 
-Чтобы начать отображать UI в Android, необходимо: (1) создать [[c-activity|`Activity`]], (2) определить layout (разметку), (3) связать их через `setContentView()`.
+Чтобы начать отображать UI в Android, необходимо: (1) создать [[c-activity|Activity]], (2) определить layout (разметку), (3) связать их через `setContentView()`.
 
 ### Основные Способы
 
@@ -87,7 +87,7 @@ class CustomView(context: Context) : View(context) {
 
 ## Answer (EN)
 
-To display UI in Android, you need to: (1) create an [[c-activity|`Activity`]], (2) define a layout, (3) connect them via `setContentView()`.
+To display UI in Android, you need to: (1) create an [[c-activity|Activity]], (2) define a layout, (3) connect them via `setContentView()`.
 
 ### Main Approaches
 

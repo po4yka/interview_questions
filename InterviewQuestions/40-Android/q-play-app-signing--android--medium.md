@@ -303,7 +303,7 @@ keytool -list -v -keystore upload.jks -alias upload
 
 ## References
 
-- [[c-app-bundle|Android App `Bundle`]]
+- [[c-app-bundle|Android App Bundle]]
 - [[c-android-keystore|Android Keystore System]]
 - [[c-gradle|Gradle Build System]]
 - [Play App Signing documentation](https://developer.android.com/studio/publish/app-signing#app-signing-google-play)
@@ -312,7 +312,7 @@ keytool -list -v -keystore upload.jks -alias upload
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-app-bundles--android--easy|What is Android App `Bundle`?]]
+- [[q-android-app-bundles--android--easy|What is Android App Bundle?]]
 - [[q-gradle-basics--android--easy|Gradle basics]]
 
 ### Related (Same Level)

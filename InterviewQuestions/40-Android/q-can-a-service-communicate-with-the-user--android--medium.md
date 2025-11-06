@@ -34,7 +34,7 @@ tags: [android/notifications, android/service, difficulty/medium, foreground-ser
 
 ## Ответ (RU)
 
-**Прямой UI**: Нет. [[c-service|`Service`]] не имеет собственного UI и выполняется в фоновом режиме.
+**Прямой UI**: Нет. [[c-service|Service]] не имеет собственного UI и выполняется в фоновом режиме.
 
 **Способы коммуникации** (от приоритетных к редким):
 
@@ -149,7 +149,7 @@ lifecycleScope.launch {
 
 ## Answer (EN)
 
-**Direct UI**: No. [[c-service|`Service`]] has no UI and runs in the background.
+**Direct UI**: No. [[c-service|Service]] has no UI and runs in the background.
 
 **Communication mechanisms** (from preferred to rare):
 

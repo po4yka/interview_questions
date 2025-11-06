@@ -39,7 +39,7 @@ tags: [android/activity, android/broadcast-receiver, android/service, difficulty
 
 ## Ответ (RU)
 
-Android определяет четыре типа компонентов приложения: **`Activity`**, **[[c-service|`Service`]]**, **[[c-broadcast-receiver|Broadcast Receiver]]** и **[[c-content-provider|Content Provider]]**. Все компоненты объявляются в `AndroidManifest.xml` и взаимодействуют через **`Intent`**.
+Android определяет четыре типа компонентов приложения: **`Activity`**, **[[c-service|Service]]**, **[[c-broadcast-receiver|Broadcast Receiver]]** и **[[c-content-provider|Content Provider]]**. Все компоненты объявляются в `AndroidManifest.xml` и взаимодействуют через **`Intent`**.
 
 ### 1. `Activity`
 
@@ -115,7 +115,7 @@ class ContactsProvider : ContentProvider() {
 
 ## Answer (EN)
 
-Android defines four application components: **`Activity`**, **[[c-service|`Service`]]**, **[[c-broadcast-receiver|Broadcast Receiver]]**, and **[[c-content-provider|Content Provider]]**. All components are declared in `AndroidManifest.xml` and interact via **`Intent`**.
+Android defines four application components: **`Activity`**, **[[c-service|Service]]**, **[[c-broadcast-receiver|Broadcast Receiver]]**, and **[[c-content-provider|Content Provider]]**. All components are declared in `AndroidManifest.xml` and interact via **`Intent`**.
 
 ### 1. `Activity`
 

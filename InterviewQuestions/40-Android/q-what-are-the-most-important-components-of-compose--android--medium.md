@@ -86,7 +86,7 @@ fun StatelessCounter(count: Int, onIncrement: () -> Unit) {
 }
 ```
 
-**Интеграция с [[c-viewmodel|`ViewModel`]]:**
+**Интеграция с [[c-viewmodel|ViewModel]]:**
 
 ```kotlin
 @Composable
@@ -257,7 +257,7 @@ fun StatelessCounter(count: Int, onIncrement: () -> Unit) {
 }
 ```
 
-**[[c-viewmodel|`ViewModel`]] Integration:**
+**[[c-viewmodel|ViewModel]] Integration:**
 
 ```kotlin
 @Composable

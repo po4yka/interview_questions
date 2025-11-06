@@ -38,7 +38,7 @@ tags: [android/app-bundle, android/gradle, android/performance-memory, difficult
 
 ## Ответ (RU)
 
-Уменьшение размера APK критически важно для улучшения конверсии загрузок и пользовательского опыта. Основные подходы включают сжатие кода, оптимизацию ресурсов и использование [[c-app-bundle|Android App `Bundle`]].
+Уменьшение размера APK критически важно для улучшения конверсии загрузок и пользовательского опыта. Основные подходы включают сжатие кода, оптимизацию ресурсов и использование [[c-app-bundle|Android App Bundle]].
 
 ### 1. R8/ProGuard - Сжатие Кода
 
@@ -125,13 +125,13 @@ implementation 'com.google.android.gms:play-services-maps:...'
 ### Лучшие Практики
 
 1. Мониторинг размера APK в CI/CD
-2. Использование [[c-app-bundle|App `Bundle`]] вместо APK
+2. Использование [[c-app-bundle|App Bundle]] вместо APK
 3. Регулярный анализ через APK Analyzer
 4. Dynamic Feature Modules для опциональных компонентов
 
 ## Answer (EN)
 
-Reducing APK size is crucial for improving download conversion rates and user experience. Main approaches include code shrinking, resource optimization, and using [[c-app-bundle|Android App `Bundle`]].
+Reducing APK size is crucial for improving download conversion rates and user experience. Main approaches include code shrinking, resource optimization, and using [[c-app-bundle|Android App Bundle]].
 
 ### 1. R8/ProGuard - Code Shrinking
 
@@ -218,7 +218,7 @@ Size analysis: `./gradlew :app:analyzeReleaseBundle`
 ### Best Practices
 
 1. Monitor APK size in CI/CD
-2. Use [[c-app-bundle|App `Bundle`]] instead of APK
+2. Use [[c-app-bundle|App Bundle]] instead of APK
 3. Regular analysis via APK Analyzer
 4. Dynamic Feature Modules for optional components
 
