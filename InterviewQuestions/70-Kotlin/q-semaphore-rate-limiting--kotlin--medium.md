@@ -3,6 +3,8 @@ id: kotlin-107
 title: "Semaphore for rate limiting and resource pooling / Semaphore для ограничения скорости и пулов ресурсов"
 topic: kotlin
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-12
 tags: [concurrency, coroutines, difficulty/medium, kotlin, rate-limiting, resource-management, semaphore]
@@ -14,8 +16,6 @@ subtopics:
   - rate-limiting
   - resource-pool
   - semaphore
-date created: Saturday, November 1st 2025, 12:10:12 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Вопрос (RU)
 > Как использовать Semaphore в Kotlin корутинах для ограничения скорости и пулов ресурсов? В чем разница между Semaphore и Mutex?

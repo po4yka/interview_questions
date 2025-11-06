@@ -3,6 +3,8 @@ id: kotlin-108
 title: "Race conditions and data races in Kotlin coroutines / Состояния гонки и data race в Kotlin корутинах"
 topic: kotlin
 difficulty: hard
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-12
 tags: [bugs, concurrency, coroutines, data-races, difficulty/hard, kotlin, race-conditions, thread-safety]
@@ -14,8 +16,6 @@ subtopics:
   - coroutines
   - race-conditions
   - thread-safety
-date created: Saturday, November 1st 2025, 12:10:12 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Вопрос (RU)
 > Что такое состояния гонки и data race в Kotlin корутинах? Как их обнаруживать и предотвращать?

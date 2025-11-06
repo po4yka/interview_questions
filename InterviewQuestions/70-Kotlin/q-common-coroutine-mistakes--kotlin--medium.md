@@ -3,6 +3,8 @@ id: kotlin-098
 title: "Top 10 common Kotlin coroutines mistakes and anti-patterns / 10 частых ошибок с Kotlin корутинами"
 topic: kotlin
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-12
 tags: [anti-patterns, best-practices, code-review, coroutines, difficulty/medium, gotchas, kotlin, mistakes]
@@ -14,8 +16,6 @@ subtopics:
   - coroutines
   - gotchas
   - mistakes
-date created: Saturday, November 1st 2025, 12:10:17 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 # Вопрос (RU)
 > Какие самые распространенные ошибки при использовании Kotlin корутин, и как их исправить?

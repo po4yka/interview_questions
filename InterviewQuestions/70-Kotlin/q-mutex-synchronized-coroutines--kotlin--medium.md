@@ -3,6 +3,8 @@ id: kotlin-081
 title: "Mutex vs synchronized in Kotlin coroutines / Mutex vs synchronized в Kotlin корутинах"
 topic: kotlin
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-12
 tags: [concurrency, coroutines, difficulty/medium, kotlin, mutex, synchronization, thread-safety]
@@ -14,8 +16,6 @@ subtopics:
   - mutex
   - synchronization
   - thread-safety
-date created: Saturday, November 1st 2025, 12:10:12 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Вопрос (RU)
 > В чем разница между `Mutex` и `synchronized` в Kotlin корутинах, и когда следует использовать каждый из них?

@@ -3,6 +3,8 @@ id: kotlin-069
 title: "Debugging Kotlin coroutines: tools and techniques / Отладка Kotlin корутин: инструменты и техники"
 topic: kotlin
 difficulty: medium
+original_language: en
+language_tags: [en, ru]
 status: draft
 created: 2025-10-12
 tags: [coroutines, debugging, difficulty/medium, kotlin, profiling, tools, troubleshooting]
@@ -13,8 +15,6 @@ subtopics:
   - debugging
   - profiling
   - troubleshooting
-date created: Saturday, November 1st 2025, 12:10:44 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Вопрос (RU)
 > Какие инструменты и техники доступны для отладки Kotlin корутин? Как идентифицировать deadlock, утечки и проблемы производительности?

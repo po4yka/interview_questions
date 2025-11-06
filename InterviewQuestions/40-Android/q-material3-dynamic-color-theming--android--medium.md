@@ -31,8 +31,6 @@ tags:
 - difficulty/medium
 - dynamic-color
 - material3
-date created: Monday, October 27th 2025, 5:03:21 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)
