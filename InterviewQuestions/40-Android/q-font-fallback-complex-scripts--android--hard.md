@@ -4,8 +4,7 @@ title: Font Fallback for Complex Scripts / Резерв шрифтов для с
 aliases: [Font Fallback for Complex Scripts, Резерв шрифтов для сложных скриптов]
 topic: android
 subtopics:
-  - globalization
-  - typography
+  - i18n-l10n
 question_kind: android
 difficulty: hard
 original_language: ru

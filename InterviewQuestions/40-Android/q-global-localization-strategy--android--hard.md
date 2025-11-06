@@ -6,8 +6,7 @@ aliases:
   - Стратегия глобальной локализации
 topic: android
 subtopics:
-  - globalization
-  - localization
+  - i18n-l10n
 question_kind: android
 difficulty: hard
 original_language: ru
@@ -21,8 +20,7 @@ related:
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/globalization
-  - localization
+  - android/i18n-l10n
   - release
   - difficulty/hard
 sources:

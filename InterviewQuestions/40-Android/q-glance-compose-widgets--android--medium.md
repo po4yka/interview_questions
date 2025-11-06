@@ -6,9 +6,8 @@ aliases:
   - Виджеты Glance на Compose
 topic: android
 subtopics:
-  - widgets
-  - compose
-  - glance
+  - shortcuts-widgets
+  - ui-compose
 question_kind: android
 difficulty: medium
 original_language: ru
@@ -22,9 +21,8 @@ related:
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/widgets
-  - android/glance
-  - compose
+  - android/shortcuts-widgets
+  - android/ui-compose
   - difficulty/medium
 sources:
   - url: https://developer.android.com/jetpack/compose/glance/appwidget

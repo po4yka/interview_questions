@@ -6,9 +6,6 @@ aliases:
   - Jetpack Window Manager для складных устройств
 topic: android
 subtopics:
-  - window-manager
-  - foldable
-  - adaptive-ui
 question_kind: android
 difficulty: hard
 original_language: ru
@@ -22,9 +19,6 @@ related:
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/foldable
-  - android/window-manager
-  - adaptive-ui
   - difficulty/hard
 sources:
   - url: https://developer.android.com/jetpack/androidx/releases/window
