@@ -14,8 +14,6 @@ related: [q-channel-buffer-strategies-comparison--kotlin--hard, q-kotlin-generic
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, kotlin, singleton, type-system, unit, void]
-date created: Friday, October 31st 2025, 6:28:54 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Сколько Инстансов Unit На Одно Приложение
 

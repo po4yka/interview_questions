@@ -30,8 +30,6 @@ tags:
 - gesture-detector
 - gestures
 - ui
-date created: Monday, October 27th 2025, 3:57:45 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

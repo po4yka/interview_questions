@@ -35,8 +35,6 @@ tags:
 - difficulty/hard
 - en
 - ru
-date created: Sunday, October 12th 2025, 12:27:49 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Question (EN)

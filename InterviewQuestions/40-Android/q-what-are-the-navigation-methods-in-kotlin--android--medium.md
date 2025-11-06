@@ -33,8 +33,6 @@ tags:
 - android/ui-navigation
 - difficulty/medium
 - navigation
-date created: Wednesday, October 29th 2025, 11:41:07 am
-date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)

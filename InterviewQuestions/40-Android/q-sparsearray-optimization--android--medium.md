@@ -15,8 +15,6 @@ created: 2025-10-05
 updated: 2025-10-28
 tags: [android/performance-memory, android/profiling, difficulty/medium, memory-optimization, sparsearray]
 sources: []
-date created: Saturday, November 1st 2025, 1:24:28 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)

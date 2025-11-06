@@ -14,8 +14,6 @@ related: [q-flow-exception-handling--kotlin--medium, q-kotlin-inline-functions--
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium, functional-interface, java-interop, kotlin, lambda, sam]
-date created: Friday, October 31st 2025, 6:30:53 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # SAM (Single Abstract Method) Конверсии

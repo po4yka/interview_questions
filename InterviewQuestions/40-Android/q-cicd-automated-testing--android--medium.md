@@ -32,8 +32,6 @@ tags:
 - ci-cd
 - difficulty/medium
 - testing
-date created: Thursday, October 30th 2025, 11:10:59 am
-date modified: Sunday, November 2nd 2025, 1:29:32 pm
 ---
 
 # Вопрос (RU)

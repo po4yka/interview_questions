@@ -14,8 +14,6 @@ related: [c-inheritance, c-java-features, q-interface-vs-abstract-class--program
 created: 2025-10-13
 updated: 2025-10-31
 tags: [difficulty/easy, inheritance, java, object-class, oop, programming-languages]
-date created: Saturday, November 1st 2025, 12:43:06 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # От Какого Объекта Наследуются Все Классы В Java?
 

@@ -32,8 +32,6 @@ tags:
 - difficulty/medium
 - system-services
 sources: []
-date created: Monday, October 27th 2025, 3:32:43 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

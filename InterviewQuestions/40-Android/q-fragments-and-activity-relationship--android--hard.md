@@ -39,8 +39,6 @@ tags:
 - difficulty/hard
 - fragments
 - ui
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Tuesday, November 4th 2025, 12:52:10 pm
 ---
 
 # Вопрос (RU)

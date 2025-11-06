@@ -16,8 +16,6 @@ related: []
 created: "2025-10-18"
 updated: "2025-10-18"
 tags: ["async", "concept", "concurrency", "coroutines", "difficulty/medium", "kotlin", "structured-concurrency"]
-date created: Saturday, October 18th 2025, 3:07:46 pm
-date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)

@@ -14,8 +14,6 @@ related: [q-data-class-detailed--kotlin--medium, q-destructuring-declarations--k
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, equality, operators, programming-languages, reference-equality, structural-equality]
-date created: Friday, October 31st 2025, 6:32:17 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Какой Оператор Используется Для Проверки Равенства Ссылок В Kotlin?
 

@@ -14,8 +14,6 @@ related: [q-channels-vs-flow--kotlin--medium, q-custom-dispatchers-limited-paral
 created: 2025-10-13
 updated: 2025-10-31
 tags: [difficulty/easy]
-date created: Thursday, October 16th 2025, 4:16:12 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Какая Функция Kotlin Используется Для Объединения Двух Коллекций?
 

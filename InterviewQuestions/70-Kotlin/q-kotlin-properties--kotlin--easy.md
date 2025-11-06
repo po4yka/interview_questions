@@ -30,8 +30,6 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [backing-field, delegated-properties, difficulty/easy, getters, kotlin, lateinit, lazy, properties, setters]
-date created: Sunday, October 12th 2025, 2:44:42 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Вопрос (RU)
 > Что такое свойства в Kotlin? Объясните val vs var, пользовательские геттеры и сеттеры, backing fields, lateinit и основы делегирования свойств.

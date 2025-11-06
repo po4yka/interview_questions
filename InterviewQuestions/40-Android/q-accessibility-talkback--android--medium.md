@@ -25,8 +25,6 @@ tags: [accessibility, android/ui-accessibility, android/ui-navigation, difficult
 sources:
   - https://developer.android.com/guide/topics/ui/accessibility
   - https://developer.android.com/jetpack/compose/accessibility
-date created: Wednesday, October 29th 2025, 4:18:49 pm
-date modified: Sunday, November 2nd 2025, 12:08:04 pm
 ---
 
 # Вопрос (RU)

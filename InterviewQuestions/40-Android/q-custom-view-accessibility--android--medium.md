@@ -23,8 +23,6 @@ sources:
 created: 2025-10-21
 updated: 2025-11-02
 tags: [android/ui-accessibility, android/ui-views, difficulty/medium]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Sunday, November 2nd 2025, 4:23:00 pm
 ---
 
 # Вопрос (RU)

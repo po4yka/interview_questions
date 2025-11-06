@@ -35,8 +35,6 @@ related:
 - c-lifecycle
 - q-android-build-optimization--android--medium
 - q-what-each-android-component-represents--android--easy
-date created: Tuesday, October 28th 2025, 7:38:56 am
-date modified: Tuesday, November 4th 2025, 11:46:09 am
 ---
 
 # Вопрос (RU)

@@ -14,8 +14,6 @@ related: [q-flow-performance--kotlin--hard, q-kotlin-null-safety--programming-la
 created: 2025-10-15
 updated: 2025-10-31
 tags: [also, apply, difficulty/medium, kotlin, let, run, scope-functions, with]
-date created: Friday, October 31st 2025, 6:32:39 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Advanced Scope Functions Usage

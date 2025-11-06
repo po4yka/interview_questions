@@ -25,8 +25,6 @@ created: 2025-10-06
 updated: 2025-10-06
 
 tags: [cross-platform, difficulty/hard, kmp, kotlin, kotlin-multiplatform, native]
-date created: Sunday, October 12th 2025, 12:27:46 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Вопрос (RU)
 > Kotlin Multiplatform - Как это работает?

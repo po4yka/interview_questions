@@ -14,8 +14,6 @@ related: [q-kotlin-map-flatmap--kotlin--medium, q-kotlin-sealed-classes-purpose-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium, equality, hashmap, kotlin, object-comparison]
-date created: Friday, October 31st 2025, 6:29:04 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Зачем Нужны Методы Equals И Hashcode?
 

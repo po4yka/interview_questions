@@ -14,8 +14,6 @@ related: [q-kotlin-init-block--kotlin--easy, q-lifecycle-scopes-viewmodelscope-l
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
-date created: Friday, October 17th 2025, 9:46:30 pm
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Можно Ли После by Вызвать Функцию Или Конструктор?

@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [buffered, channel-types, channels, coroutines, difficulty/medium, kotlin, rendezvous]
-date created: Sunday, October 12th 2025, 3:43:52 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # Question (EN)

@@ -16,8 +16,6 @@ related: []
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "app-bundle", "build", "concept", "difficulty/medium", "gradle", "publishing"]
-date created: Saturday, October 25th 2025, 12:50:10 pm
-date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Android App Bundle / Android App Bundle

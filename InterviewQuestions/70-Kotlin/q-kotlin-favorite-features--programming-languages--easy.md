@@ -14,8 +14,6 @@ related: [q-class-initialization-order--kotlin--medium, q-fan-in-fan-out-channel
 created: 2025-10-15
 updated: 2025-10-31
 tags: [coroutines, difficulty/easy, extensions, features, null-safety, overview, programming-languages]
-date created: Friday, October 31st 2025, 6:29:33 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Расскажи Про Три Любимых Фичи В Kotlin
 

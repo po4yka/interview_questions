@@ -16,8 +16,6 @@ related: []
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["android", "automation", "build-system", "concept", "difficulty/medium", "gradle", "groovy", "kotlin-dsl"]
-date created: Saturday, October 25th 2025, 11:06:08 am
-date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Gradle / Gradle

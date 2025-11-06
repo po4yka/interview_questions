@@ -14,8 +14,6 @@ related: []
 created: 2025-10-15
 updated: 2025-10-31
 tags: [advanced, context-receivers, difficulty/hard, dsl, kotlin, receivers, scope-functions]
-date created: Saturday, November 1st 2025, 5:30:55 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 # Context Receivers in Kotlin
 

@@ -1,6 +1,4 @@
 ---
-date created: Saturday, October 18th 2025, 12:50:49 pm
-date modified: Sunday, October 26th 2025, 2:21:59 pm
 ---
 
 # Interview Questions Knowledge Base

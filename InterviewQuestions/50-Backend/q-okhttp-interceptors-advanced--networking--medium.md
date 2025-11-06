@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [authentication, caching, difficulty/medium, interceptors, networking, okhttp, retry]
-date created: Monday, October 27th 2025, 5:14:04 pm
-date modified: Saturday, November 1st 2025, 5:44:13 pm
 ---
 
 # Вопрос (RU)

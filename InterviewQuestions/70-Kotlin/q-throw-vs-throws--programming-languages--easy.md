@@ -14,8 +14,6 @@ related: [q-sealed-vs-enum-classes--programming-languages--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, exceptions, java, kotlin, programming-languages, throw, throws]
-date created: Friday, October 3rd 2025, 7:03:56 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Разница Между Throw И Throws
 

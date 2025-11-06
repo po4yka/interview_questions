@@ -26,8 +26,6 @@ tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 sources:
   - https://developer.android.com/jetpack/compose/mental-model
   - https://developer.android.com/jetpack/compose/performance
-date created: Thursday, October 30th 2025, 11:23:16 am
-date modified: Sunday, November 2nd 2025, 1:41:06 pm
 ---
 
 # Вопрос (RU)

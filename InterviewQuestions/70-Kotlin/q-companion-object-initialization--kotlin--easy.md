@@ -14,8 +14,6 @@ related: []
 created: 2025-10-15
 updated: 2025-10-31
 tags: [companion-objects, difficulty/easy, initialization, programming-languages]
-date created: Saturday, November 1st 2025, 1:27:44 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 # When is Companion Object Initialized?
 

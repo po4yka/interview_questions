@@ -36,8 +36,6 @@ tags:
 - ipc
 - service
 sources: []
-date created: Monday, October 27th 2025, 6:42:14 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

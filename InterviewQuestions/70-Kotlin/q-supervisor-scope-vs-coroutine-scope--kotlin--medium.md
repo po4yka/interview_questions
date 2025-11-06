@@ -25,8 +25,6 @@ created: 2025-10-11
 updated: 2025-10-11
 
 tags: [coroutines, difficulty/medium, error-handling, kotlin, scopes, supervisor]
-date created: Thursday, October 16th 2025, 4:28:10 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Вопрос (RU)
 > Сравните supervisorScope и coroutineScope. Когда использовать каждый? Продемонстрируйте как они по-разному обрабатывают независимые ошибки.

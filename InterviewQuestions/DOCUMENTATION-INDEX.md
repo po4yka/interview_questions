@@ -1,6 +1,4 @@
 ---
-date created: Saturday, November 1st 2025, 5:40:47 pm
-date modified: Saturday, November 1st 2025, 5:43:58 pm
 ---
 
 # Documentation Index - AI Translation System

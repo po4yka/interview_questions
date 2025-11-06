@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-31
 sources: []
 tags: [android, android/networking-http, android/websockets, difficulty/medium, fcm, firebase, networking, real-time, sse, websockets]
-date created: Saturday, November 1st 2025, 1:04:10 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

@@ -14,8 +14,6 @@ related: [c-coroutines, c-flow, q-flow-flatmap-operator--programming-languages--
 created: 2025-10-15
 updated: 2025-10-31
 tags: [coroutines, difficulty/medium, flow, kotlin, operators, programming-languages, reactive]
-date created: Friday, October 31st 2025, 6:30:45 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Flow Map Operator for Type Transformation
 

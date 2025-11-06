@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [android, coroutines, difficulty/medium, flow, kotlin, lifecycle, repeatonlifecycle]
-date created: Sunday, October 12th 2025, 3:39:19 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Вопрос (RU)
 > Что такое repeatOnLifecycle и почему это важно? Объясните как он предотвращает утечки памяти при подписке на Flow, сравнение с launchWhenStarted и лучшие практики.

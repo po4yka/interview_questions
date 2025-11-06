@@ -37,8 +37,6 @@ tags:
 - state
 sources:
 - https://developer.android.com/jetpack/compose/state
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 7:43:20 pm
 ---
 
 # Вопрос (RU)

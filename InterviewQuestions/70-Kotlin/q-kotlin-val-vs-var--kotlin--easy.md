@@ -30,8 +30,6 @@ created: 2025-10-12
 updated: 2025-10-31
 
 tags: [constants, difficulty/easy, immutability, kotlin, mutability, read-only, val, var]
-date created: Saturday, November 1st 2025, 9:25:30 am
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Вопрос (RU)
 > В чём разница между val и var в Kotlin? Когда использовать каждый из них?

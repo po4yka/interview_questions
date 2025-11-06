@@ -15,8 +15,6 @@ sources: []
 tags: [android, android/ui-compose, android/ui-navigation, architecture, compose, difficulty/medium, navigation]
 moc: moc-android
 related: []
-date created: Tuesday, October 28th 2025, 9:51:01 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

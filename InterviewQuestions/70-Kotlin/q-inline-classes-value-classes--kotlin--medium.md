@@ -25,8 +25,6 @@ created: 2025-10-05
 updated: 2025-10-18
 
 tags: [difficulty/medium, inline-class, kotlin, optimization, performance, value-class]
-date created: Saturday, November 1st 2025, 12:43:05 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Вопрос (RU)
 > Что такое встроенные классы (value классы) в Kotlin?

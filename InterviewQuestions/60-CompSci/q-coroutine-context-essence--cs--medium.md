@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-25
 tags: [context, coroutinecontext, coroutines, difficulty/medium, kotlin, programming-languages]
 sources: [https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html]
-date created: Friday, October 3rd 2025, 4:58:01 pm
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

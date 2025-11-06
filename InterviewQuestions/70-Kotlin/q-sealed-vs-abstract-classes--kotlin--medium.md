@@ -14,8 +14,6 @@ related: [q-flow-operators-map-filter--kotlin--medium, q-kotlin-native--kotlin--
 created: 2025-10-15
 updated: 2025-10-31
 tags: [abstract-classes, classes, difficulty/medium, kotlin, polymorphism, sealed-classes]
-date created: Friday, October 31st 2025, 6:30:53 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # В Чем Отличие Sealed Классов От Абстрактных

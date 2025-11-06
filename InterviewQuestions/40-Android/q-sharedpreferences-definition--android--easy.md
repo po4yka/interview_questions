@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android/datastore, data-storage, difficulty/easy, key-value, persistence, sharedpreferences]
-date created: Saturday, November 1st 2025, 12:47:04 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)

@@ -14,8 +14,6 @@ related: [q-database-fundamentals--computer-science--hard, q-oop-principles-deep
 created: 2025-10-13
 updated: 2025-10-31
 tags: [architecture, design-principles, difficulty/medium, dip, isp, lsp, ocp, oop, software-design, solid, srp]
-date created: Saturday, October 4th 2025, 6:57:44 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Что Такое Принципы SOLID?

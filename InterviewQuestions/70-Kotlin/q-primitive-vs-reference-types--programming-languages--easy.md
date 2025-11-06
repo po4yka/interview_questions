@@ -14,8 +14,6 @@ related: [q-adapter-pattern--design-patterns--medium, q-os-fundamentals-concepts
 created: 2025-10-13
 updated: 2025-10-31
 tags: [difficulty/easy, java, kotlin, memory, primitive-types, programming-languages, reference-types]
-date created: Friday, October 3rd 2025, 7:03:57 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # В Чем Разница Примитивного И Ссылочного Типов
 

@@ -15,8 +15,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-01-27
 tags: [android/architecture-mvvm, android/room, android/ui-compose, database, difficulty/medium, offline-first, pagination, paging3]
-date created: Saturday, November 1st 2025, 12:47:03 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Вопрос (RU)

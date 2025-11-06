@@ -14,8 +14,6 @@ related: [c-design-patterns]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [design-patterns, difficulty/medium, facade, gof-patterns, structural-patterns]
-date created: Saturday, November 1st 2025, 1:02:32 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Facade Pattern

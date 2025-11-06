@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [backpressure, channels, cold-stream, coroutines, difficulty/medium, flow, hot-stream, kotlin]
-date created: Tuesday, October 14th 2025, 8:56:38 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # Question (EN)

@@ -16,8 +16,6 @@ related: [q-channel-closing-completion--kotlin--medium, q-kotlin-java-data-types
 created: 2025-10-06
 updated: 2025-10-06
 tags: [access-modifiers, difficulty/medium, encapsulation, kotlin, oop, visibility]
-date created: Sunday, October 5th 2025, 6:51:27 pm
-date modified: Sunday, November 2nd 2025, 12:05:05 pm
 ---
 # Вопрос (RU)
 > Что такое модификаторы доступа в Kotlin и чем они отличаются от Java?

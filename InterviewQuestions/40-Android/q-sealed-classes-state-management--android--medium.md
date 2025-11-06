@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-01-27
 tags: [android/architecture-mvi, android/ui-state, difficulty/medium, mvi, sealed-classes, state-management]
 sources: [https://kotlinlang.org/docs/sealed-classes.html]
-date created: Saturday, November 1st 2025, 12:47:03 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)

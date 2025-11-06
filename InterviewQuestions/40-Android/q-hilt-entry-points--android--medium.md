@@ -15,8 +15,6 @@ created: 2025-10-11
 updated: 2025-01-27
 tags: [android/di-hilt, android/lifecycle, dependency-injection, difficulty/medium, hilt]
 sources: [https://dagger.dev/hilt/entry-points.html]
-date created: Monday, October 27th 2025, 3:36:30 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

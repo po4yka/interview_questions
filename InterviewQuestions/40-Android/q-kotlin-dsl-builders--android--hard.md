@@ -31,8 +31,6 @@ tags:
 - lambdas
 sources:
 - https://kotlinlang.org/docs/type-safe-builders.html
-date created: Monday, October 13th 2025, 7:24:51 am
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

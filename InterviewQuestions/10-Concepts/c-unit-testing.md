@@ -16,8 +16,6 @@ related: []
 created: "2025-10-25"
 updated: "2025-10-25"
 tags: ["concept", "difficulty/medium", "junit", "quality-assurance", "tdd", "testing"]
-date created: Saturday, October 25th 2025, 11:04:38 am
-date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Unit Testing / Модульное Тестирование

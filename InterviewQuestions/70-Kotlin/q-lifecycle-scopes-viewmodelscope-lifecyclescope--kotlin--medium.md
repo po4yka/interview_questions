@@ -14,8 +14,6 @@ related: [q-coroutine-context-detailed--kotlin--hard, q-race-conditions-coroutin
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android, coroutines, difficulty/medium, kotlin, lifecycle, lifecyclescope, viewmodelscope]
-date created: Friday, October 31st 2025, 6:29:12 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # viewModelScope Vs lifecycleScope
 

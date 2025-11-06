@@ -22,8 +22,6 @@ updated: 2025-10-30
 tags: [android/di-hilt, difficulty/hard]
 sources:
   - https://dagger.dev/api/latest/dagger/Component.html
-date created: Thursday, October 30th 2025, 12:45:42 pm
-date modified: Sunday, November 2nd 2025, 5:28:54 pm
 ---
 
 # Вопрос (RU)

@@ -14,8 +14,6 @@ related: [q-crossinline-keyword--kotlin--medium, q-kotlin-java-primitives--progr
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/hard, dsl, extensions, generics, kotlin, receivers]
-date created: Friday, October 31st 2025, 6:28:53 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Advanced Extension Functions

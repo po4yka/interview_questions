@@ -15,8 +15,6 @@ tags: [android/performance-memory, android/profiling, difficulty/medium, leakcan
 moc: moc-android
 related: []
 sources: []
-date created: Saturday, November 1st 2025, 1:24:41 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

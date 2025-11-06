@@ -15,8 +15,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-01-27
 tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, gestures]
-date created: Monday, October 27th 2025, 6:43:03 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

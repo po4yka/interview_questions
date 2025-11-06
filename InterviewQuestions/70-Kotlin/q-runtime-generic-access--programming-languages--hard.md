@@ -14,8 +14,6 @@ related: [q-what-is-garbage-in-gc--programming-languages--easy]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/hard, generics, kotlin, programming-languages, reified, type-erasure]
-date created: Friday, October 3rd 2025, 4:39:28 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Можно Ли Получить В Runtime Доступ К Типу Дженерика?
 

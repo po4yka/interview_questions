@@ -1,6 +1,4 @@
 ---
-date created: Saturday, November 1st 2025, 3:18:52 pm
-date modified: Saturday, November 1st 2025, 5:43:48 pm
 ---
 
 # LM Studio + Qwen3-VL-30B - Quick Start Guide

@@ -15,8 +15,6 @@ created: 2025-10-13
 updated: 2025-10-28
 tags: [android/di-hilt, android/networking-http, authentication, difficulty/hard, interceptor, logging, okhttp]
 sources: [https://square.github.io/okhttp/interceptors/]
-date created: Saturday, November 1st 2025, 1:04:41 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)

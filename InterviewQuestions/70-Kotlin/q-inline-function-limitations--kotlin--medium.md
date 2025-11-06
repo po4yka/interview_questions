@@ -14,8 +14,6 @@ related: [q-coroutine-context-elements--kotlin--hard, q-testing-stateflow-shared
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
-date created: Friday, October 17th 2025, 3:04:07 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # Когда Нельзя Использовать Inline Функции?

@@ -21,8 +21,6 @@ created: 2025-10-21
 updated: 2025-10-30
 tags: [android/ui-theming, android/ui-views, difficulty/medium]
 sources: []
-date created: Thursday, October 30th 2025, 11:56:26 am
-date modified: Sunday, November 2nd 2025, 4:25:13 pm
 ---
 
 # Вопрос (RU)

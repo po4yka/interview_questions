@@ -23,8 +23,6 @@ related:
 created: 2025-10-20
 updated: 2025-10-28
 tags: [android/files-media, android/permissions, content-provider, difficulty/medium, file-sharing, security]
-date created: Tuesday, October 28th 2025, 7:39:08 am
-date modified: Monday, November 3rd 2025, 3:26:09 pm
 ---
 
 # Вопрос (RU)

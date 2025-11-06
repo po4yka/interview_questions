@@ -29,8 +29,6 @@ tags:
 - difficulty/easy
 - material3
 sources: []
-date created: Monday, October 27th 2025, 3:43:58 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Вопрос (RU)

@@ -24,8 +24,6 @@ created: 2025-10-06
 updated: 2025-01-27
 
 tags: [android/architecture-clean, android/architecture-modularization, android/gradle, difficulty/hard]
-date created: Saturday, November 1st 2025, 12:46:58 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

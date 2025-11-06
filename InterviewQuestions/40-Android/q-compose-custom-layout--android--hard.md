@@ -33,8 +33,6 @@ tags:
 - custom-layout
 - difficulty/hard
 - layout-measurement
-date created: Saturday, October 25th 2025, 1:26:31 pm
-date modified: Sunday, November 2nd 2025, 1:37:23 pm
 ---
 
 # Вопрос (RU)

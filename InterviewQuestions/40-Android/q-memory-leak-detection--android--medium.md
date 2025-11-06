@@ -24,8 +24,6 @@ created: 2025-10-11
 updated: 2025-10-28
 
 tags: [android/lifecycle, android/performance-memory, android/profiling, difficulty/medium]
-date created: Tuesday, October 28th 2025, 9:37:26 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

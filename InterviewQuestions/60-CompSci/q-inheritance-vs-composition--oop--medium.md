@@ -14,8 +14,6 @@ related: [c-composition, c-inheritance, q-class-composition--oop--medium, q-inhe
 created: 2025-10-13
 updated: 2025-10-31
 tags: [composition, design-patterns, difficulty/medium, inheritance, oop, relationships]
-date created: Saturday, November 1st 2025, 12:43:04 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Какие Отличия Наследования От Композиции?

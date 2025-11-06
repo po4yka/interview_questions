@@ -25,8 +25,6 @@ updated: 2025-10-03
 
 # Tags
 tags: [difficulty/medium, easy_kotlin, git, lang/ru, rebase, squash, tools, version-control]
-date created: Saturday, November 1st 2025, 12:09:51 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # Question (EN)

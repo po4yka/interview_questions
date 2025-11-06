@@ -14,8 +14,6 @@ related: [q-sealed-class-sealed-interface--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [collections, difficulty/medium, kotlin, lazy-evaluation, performance, sequence]
-date created: Friday, October 31st 2025, 6:29:31 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # List Vs Sequence: Жадные И Ленивые Коллекции
 

@@ -26,8 +26,6 @@ sources:
 created: 2025-10-20
 updated: 2025-11-03
 tags: [android/performance-memory, android/ui-compose, android/ui-views, chat, difficulty/hard, diffutil, paging, performance, recyclerview]
-date created: Saturday, October 25th 2025, 1:26:31 pm
-date modified: Monday, November 3rd 2025, 11:43:13 am
 ---
 
 # Вопрос (RU)

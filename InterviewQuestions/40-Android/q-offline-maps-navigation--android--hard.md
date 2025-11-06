@@ -30,8 +30,6 @@ tags:
 - android/location
 - android/service
 - topic/android
-date created: Wednesday, October 29th 2025, 5:02:58 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

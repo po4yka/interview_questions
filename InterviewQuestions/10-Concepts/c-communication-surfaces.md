@@ -15,8 +15,6 @@ tags:
   - communication
   - notifications
   - sharing
-date created: Sunday, November 2nd 2025, 02:45:00 pm
-date modified: Sunday, November 2nd 2025, 02:45:00 pm
 ---
 
 # Summary (EN)

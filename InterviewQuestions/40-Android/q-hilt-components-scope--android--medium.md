@@ -26,8 +26,6 @@ tags:
 - android/di-hilt
 - dependency-injection
 - difficulty/medium
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

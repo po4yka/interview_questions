@@ -14,8 +14,6 @@ related: [q-job-vs-supervisorjob--kotlin--medium, q-kotlin-final-modifier--progr
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium]
-date created: Sunday, October 12th 2025, 3:43:42 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 
 # В Чем Отличие Между Job И Supervisor Job

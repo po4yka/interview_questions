@@ -14,8 +14,6 @@ related: []
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, programming-languages]
-date created: Saturday, October 4th 2025, 1:21:00 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # О Каком Мусоре Идет Речь В Сборщике Мусора?
 

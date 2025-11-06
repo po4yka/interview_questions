@@ -14,8 +14,6 @@ related: [q-kotlin-advantages-for-android--kotlin--easy, q-kotlin-map-flatmap--k
 created: 2025-10-15
 updated: 2025-10-31
 tags: [dependency-injection, difficulty/medium, initialization, lateinit, programming-languages, properties]
-date created: Friday, October 31st 2025, 6:30:30 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Что Известно О Lateinit?
 

@@ -30,8 +30,6 @@ tags:
 - android/architecture-mvvm
 - difficulty/easy
 - separation-of-concerns
-date created: Monday, October 27th 2025, 3:43:10 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

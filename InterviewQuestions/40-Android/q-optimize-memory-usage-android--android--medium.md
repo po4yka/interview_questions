@@ -15,8 +15,6 @@ tags: [android/performance-memory, android/profiling, difficulty/medium, perform
 moc: moc-android
 related: [c-memory-management, q-how-to-fix-a-bad-element-layout--android--easy, q-list-to-detail-navigation--android--medium]
 sources: []
-date created: Monday, October 27th 2025, 4:02:09 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

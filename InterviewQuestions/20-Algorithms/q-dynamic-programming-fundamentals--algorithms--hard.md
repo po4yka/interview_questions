@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-01-25
 tags: [algorithms, difficulty/hard, dp, dynamic-programming, memoization, optimization]
 sources: [https://en.wikipedia.org/wiki/Dynamic_programming]
-date created: Sunday, October 12th 2025, 9:42:52 pm
-date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

@@ -8,8 +8,6 @@ links: []
 created: 2025-10-30
 updated: 2025-10-30
 tags: [android, concept, jetpack-compose, performance, recomposition, ui]
-date created: Thursday, October 30th 2025, 12:29:34 pm
-date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Summary (EN)

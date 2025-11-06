@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-29
 tags: [accessibility, android/ui-accessibility, android/ui-widgets, difficulty/easy, dp, sp, ui]
 sources: [https://developer.android.com/guide/topics/resources/more-resources#Dimension]
-date created: Saturday, November 1st 2025, 1:25:40 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

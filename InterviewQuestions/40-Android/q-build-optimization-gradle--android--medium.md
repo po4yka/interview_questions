@@ -31,8 +31,6 @@ tags:
 - build-performance
 - difficulty/medium
 - gradle
-date created: Thursday, October 30th 2025, 11:11:42 am
-date modified: Sunday, November 2nd 2025, 1:03:54 pm
 ---
 
 # Вопрос (RU)

@@ -15,8 +15,6 @@ created: "2025-10-12"
 updated: 2025-01-25
 tags: [access-modifiers, difficulty/medium, encapsulation, kotlin, kotlin-features, visibility-modifiers]
 sources: [https://kotlinlang.org/docs/visibility-modifiers.html]
-date created: Saturday, November 1st 2025, 12:42:10 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Вопрос (RU)

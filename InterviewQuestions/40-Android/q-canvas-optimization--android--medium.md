@@ -25,8 +25,6 @@ sources: []
 created: 2025-10-13
 updated: 2025-10-29
 tags: [android/performance-rendering, android/ui-graphics, android/ui-views, custom-views, difficulty/medium, performance]
-date created: Thursday, October 30th 2025, 11:10:52 am
-date modified: Sunday, November 2nd 2025, 1:29:16 pm
 ---
 
 # Вопрос (RU)

@@ -14,8 +14,6 @@ related: [q-kotlin-delegation--programming-languages--easy, q-kotlin-extension-f
 created: 2025-10-15
 updated: 2025-10-31
 tags: [data-formats, difficulty/medium, json, kotlin, serialization]
-date created: Friday, October 31st 2025, 6:30:54 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # What is Serialization?

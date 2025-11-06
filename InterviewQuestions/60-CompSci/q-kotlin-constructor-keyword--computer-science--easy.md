@@ -14,8 +14,6 @@ related: [q-equals-hashcode-contracts--programming-languages--hard]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy]
-date created: Saturday, November 1st 2025, 1:26:01 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Какое Ключевое Слово Используется Для Объявления Параметров Конструктора В Kotlin?

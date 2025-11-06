@@ -14,8 +14,6 @@ related: [c-savedstatehandle, c-viewmodel, q-activity-lifecycle-methods--android
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android, android/lifecycle, android/ui-views, difficulty/medium, recyclerview, scrollview, state-preservation]
-date created: Saturday, November 1st 2025, 12:46:54 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

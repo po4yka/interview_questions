@@ -15,8 +15,6 @@ tags:
   - security
   - compliance
   - privacy
-date created: Sunday, November 2nd 2025, 01:55:00 pm
-date modified: Sunday, November 2nd 2025, 01:55:00 pm
 ---
 
 # Summary (EN)

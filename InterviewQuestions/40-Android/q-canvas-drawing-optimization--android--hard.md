@@ -31,8 +31,6 @@ tags:
 - custom-views
 - difficulty/hard
 - performance
-date created: Thursday, October 30th 2025, 11:11:20 am
-date modified: Sunday, November 2nd 2025, 1:29:06 pm
 ---
 
 # Вопрос (RU)

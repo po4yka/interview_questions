@@ -37,8 +37,6 @@ tags:
 - optimization
 - prefetching
 - recyclerview
-date created: Tuesday, October 28th 2025, 9:12:06 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

@@ -14,8 +14,6 @@ related: [q-launch-vs-async--kotlin--easy, q-semaphore-rate-limiting--kotlin--me
 created: 2025-10-15
 updated: 2025-10-31
 tags: [collections, difficulty/medium, equals, hashcode, object-comparison, programming-languages]
-date created: Friday, October 31st 2025, 6:28:52 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Зачем Нужны Методы Equals И Hashcode?
 

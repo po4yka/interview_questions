@@ -14,8 +14,6 @@ related: [q-callsuper-annotation--kotlin--medium, q-kotlin-native--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [collections, difficulty/medium, kotlin, lazy-evaluation, optimization, performance, sequences]
-date created: Friday, October 31st 2025, 6:30:53 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Sequences Vs Collections Performance
 

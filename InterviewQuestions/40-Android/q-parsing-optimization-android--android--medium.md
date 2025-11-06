@@ -30,8 +30,6 @@ tags:
 - json
 - optimization
 - xml
-date created: Monday, October 27th 2025, 3:43:24 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

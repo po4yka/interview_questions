@@ -31,8 +31,6 @@ tags:
 - difficulty/hard
 - layout
 sources: []
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 5:28:27 pm
 ---
 
 # Вопрос (RU)

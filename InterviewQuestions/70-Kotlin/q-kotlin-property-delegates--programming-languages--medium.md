@@ -14,8 +14,6 @@ related: [q-coroutine-scope-basics--kotlin--easy, q-kotlin-channels--kotlin--med
 created: 2025-10-15
 updated: 2025-10-31
 tags: [delegates, difficulty/medium, programming-languages, property-delegates]
-date created: Friday, October 31st 2025, 6:32:16 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # В Чем Особенность Делегатов Свойств
 

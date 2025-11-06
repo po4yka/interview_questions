@@ -14,8 +14,6 @@ related: [q-sequences-vs-collections-performance--kotlin--medium, q-structured-c
 created: 2025-10-15
 updated: 2025-10-31
 tags: [classes, constructor, design, difficulty/easy, kotlin, singleton]
-date created: Friday, October 31st 2025, 6:29:56 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # How to Programmatically Prohibit Creating a Class Object?

@@ -23,8 +23,6 @@ updated: 2025-10-29
 tags: [android/network-security-config, android/networking-http, android/permissions, difficulty/easy, security]
 sources:
   - https://developer.android.com/training/articles/security-config
-date created: Thursday, October 30th 2025, 11:17:59 am
-date modified: Sunday, November 2nd 2025, 1:30:50 pm
 ---
 
 # Вопрос (RU)

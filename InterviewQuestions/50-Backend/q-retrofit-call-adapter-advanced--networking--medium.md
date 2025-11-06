@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [call-adapter, difficulty/medium, error-handling, networking, result, retrofit, sealed-classes]
-date created: Monday, October 27th 2025, 3:57:02 pm
-date modified: Saturday, November 1st 2025, 5:44:14 pm
 ---
 
 # Вопрос (RU)

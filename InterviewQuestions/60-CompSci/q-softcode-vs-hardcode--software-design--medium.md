@@ -14,8 +14,6 @@ related: [q-extensions-concept--programming-languages--easy, q-flyweight-pattern
 created: 2025-10-13
 updated: 2025-10-31
 tags: [best-practices, configuration, difficulty/medium, flexibility, hardcoding, maintainability, softcoding, software-design]
-date created: Saturday, October 4th 2025, 6:59:00 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Что Такое Софткод?

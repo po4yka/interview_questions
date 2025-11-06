@@ -21,8 +21,6 @@ sources: []
 created: 2025-10-11
 updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, gestures]
-date created: Thursday, October 30th 2025, 11:23:08 am
-date modified: Sunday, November 2nd 2025, 1:37:35 pm
 ---
 
 # Вопрос (RU)

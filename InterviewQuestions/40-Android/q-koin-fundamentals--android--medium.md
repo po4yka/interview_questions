@@ -39,8 +39,6 @@ tags:
 - injection
 - koin
 - service-locator
-date created: Tuesday, October 28th 2025, 9:24:37 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

@@ -36,8 +36,6 @@ tags:
 - sql
 sources:
 - https://developer.android.com/training/data-storage/room
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 7:36:33 pm
 ---
 
 # Вопрос (RU)

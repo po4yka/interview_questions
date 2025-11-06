@@ -28,8 +28,6 @@ tags:
 - android/intents-deeplinks
 - android/serialization
 - difficulty/medium
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 1:24:06 pm
 ---
 
 # Вопрос (RU)

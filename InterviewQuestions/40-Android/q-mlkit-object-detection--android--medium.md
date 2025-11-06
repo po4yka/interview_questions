@@ -32,8 +32,6 @@ tags:
 - difficulty/medium
 - ml-kit
 - object-detection
-date created: Saturday, November 1st 2025, 12:46:58 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

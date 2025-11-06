@@ -14,8 +14,6 @@ related: [q-delegates-compilation--kotlin--hard, q-kotlin-inline-functions--kotl
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy]
-date created: Sunday, October 12th 2025, 3:43:42 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # В Чем Преимущество Kotlin Для Разработки Под Android
 

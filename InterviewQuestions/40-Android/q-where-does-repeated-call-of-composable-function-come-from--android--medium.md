@@ -34,8 +34,6 @@ tags:
 - compose
 - difficulty/medium
 - recomposition
-date created: Wednesday, October 29th 2025, 12:15:21 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

@@ -15,8 +15,6 @@ tags:
   - release-engineering
   - ci-cd
   - quality
-date created: Sunday, November 2nd 2025, 02:20:00 pm
-date modified: Sunday, November 2nd 2025, 02:20:00 pm
 ---
 
 # Summary (EN)

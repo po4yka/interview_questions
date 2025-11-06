@@ -29,8 +29,6 @@ tags:
 - difficulty/easy
 - project-structure
 sources: []
-date created: Thursday, October 30th 2025, 11:26:32 am
-date modified: Sunday, November 2nd 2025, 12:48:18 pm
 ---
 
 # Вопрос (RU)

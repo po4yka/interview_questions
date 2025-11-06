@@ -1,6 +1,4 @@
 ---
-date created: Saturday, November 1st 2025, 3:56:58 pm
-date modified: Saturday, November 1st 2025, 5:43:56 pm
 ---
 
 # Vault Translation Status Report

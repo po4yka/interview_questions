@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/performance-rendering, android/ui-compose, difficulty/hard, immutability, jetpack-compose, recomposition, stability]
-date created: Saturday, November 1st 2025, 1:24:29 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)

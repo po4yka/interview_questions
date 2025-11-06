@@ -14,8 +14,6 @@ related: [q-associatewith-vs-associateby--kotlin--easy, q-coroutine-cancellation
 created: 2025-10-15
 updated: 2025-10-31
 tags: [classes, design-patterns, difficulty/easy, kotlin, object-keyword, singleton]
-date created: Friday, October 31st 2025, 6:31:33 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # What Keyword is Used to Create Singleton Objects in Kotlin?

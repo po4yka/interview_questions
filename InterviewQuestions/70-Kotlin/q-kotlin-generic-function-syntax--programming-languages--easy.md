@@ -14,8 +14,6 @@ related: [q-kotlin-sealed-classes-features--programming-languages--medium, q-ret
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, functions, generics, programming-languages, syntax, type-parameters]
-date created: Friday, October 31st 2025, 6:29:34 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Какой Синтаксис Используется Для Объявления Обобщенной Функции В Kotlin?
 

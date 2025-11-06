@@ -14,8 +14,6 @@ related: [q-design-patterns-types--design-patterns--medium, q-factory-method-pat
 created: 2025-10-15
 updated: 2025-10-31
 tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, hook-method, template-method]
-date created: Monday, October 6th 2025, 7:26:38 am
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Template Method Pattern

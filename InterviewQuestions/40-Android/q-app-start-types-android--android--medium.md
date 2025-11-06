@@ -17,8 +17,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/lifecycle, android/performance-startup, difficulty/medium, performance, startup]
-date created: Thursday, October 30th 2025, 11:43:33 am
-date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

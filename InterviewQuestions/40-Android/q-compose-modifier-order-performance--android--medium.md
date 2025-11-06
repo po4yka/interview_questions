@@ -21,8 +21,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/performance-memory, android/ui-compose, compose, difficulty/medium, optimization]
-date created: Thursday, October 30th 2025, 11:23:09 am
-date modified: Sunday, November 2nd 2025, 1:38:02 pm
 ---
 
 # Вопрос (RU)

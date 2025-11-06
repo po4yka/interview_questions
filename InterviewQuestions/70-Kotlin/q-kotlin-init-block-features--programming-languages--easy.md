@@ -14,8 +14,6 @@ related: [q-kotlin-favorite-features--programming-languages--easy, q-noncancella
 created: 2025-10-15
 updated: 2025-10-31
 tags: [constructors, difficulty/easy, init, initialization, oop, programming-languages]
-date created: Friday, October 31st 2025, 6:29:34 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Есть Какие-то Особенности Использования Init Block?
 

@@ -25,8 +25,6 @@ created: 2025-10-05
 updated: 2025-10-05
 
 tags: [difficulty/medium, functional-programming, interfaces, kotlin, lambdas, sam]
-date created: Sunday, October 12th 2025, 12:27:47 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Вопрос (RU)
 > Что вы знаете о функциональных (SAM) интерфейсах в Kotlin?

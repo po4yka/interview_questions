@@ -34,8 +34,6 @@ tags:
 - looper
 - main-thread
 - message-queue
-date created: Monday, October 27th 2025, 5:04:18 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

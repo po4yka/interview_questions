@@ -14,8 +14,6 @@ related: [q-lambdas-java-kotlin-syntax--programming-languages--medium, q-nothing
 created: 2025-10-13
 updated: 2025-10-31
 tags: [difficulty/easy]
-date created: Saturday, October 18th 2025, 9:35:30 am
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Какие Коллекции Знаешь?
 

@@ -5,8 +5,6 @@ kind: moc
 created: 2025-10-12
 updated: 2025-10-18
 tags: [moc, topic/tools]
-date created: Saturday, October 18th 2025, 2:46:09 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # Tools — Map of Content

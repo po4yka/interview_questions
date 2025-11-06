@@ -23,8 +23,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-mvvm, android/lifecycle, android/room, difficulty/easy, jetpack]
-date created: Thursday, October 30th 2025, 11:43:31 am
-date modified: Sunday, November 2nd 2025, 12:57:11 pm
 ---
 
 # Вопрос (RU)

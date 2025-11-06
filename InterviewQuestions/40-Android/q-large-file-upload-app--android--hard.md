@@ -14,8 +14,6 @@ related: [c-coroutines, c-retrofit, c-workmanager]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/background-execution, android/coroutines, android/networking-http, background-processing, difficulty/hard, file-upload, foreground-service, networking, retrofit, workmanager]
-date created: Saturday, November 1st 2025, 1:24:41 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

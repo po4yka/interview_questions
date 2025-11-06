@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-01-25
 tags: [databases, difficulty/medium, nosql, scalability, sql, system-design]
 sources: [https://en.wikipedia.org/wiki/NoSQL]
-date created: Sunday, October 12th 2025, 8:29:41 pm
-date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

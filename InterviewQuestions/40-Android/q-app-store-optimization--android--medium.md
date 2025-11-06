@@ -30,8 +30,6 @@ tags:
 - android/analytics
 - android/play-console
 - difficulty/medium
-date created: Thursday, October 30th 2025, 11:43:32 am
-date modified: Sunday, November 2nd 2025, 12:56:52 pm
 ---
 
 # Вопрос (RU)

@@ -30,8 +30,6 @@ tags:
 - android/ui-animation
 - android/ui-views
 - difficulty/medium
-date created: Thursday, October 30th 2025, 11:56:25 am
-date modified: Sunday, November 2nd 2025, 4:23:18 pm
 ---
 
 # Вопрос (RU)

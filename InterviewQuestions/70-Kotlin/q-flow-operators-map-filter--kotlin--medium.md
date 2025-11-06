@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [coroutines, difficulty/medium, kotlin]
-date created: Saturday, October 18th 2025, 12:37:18 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Вопрос (RU)
 > Как использовать операторы Flow map, filter, transform? Объясните цепочки операторов и практические паттерны.

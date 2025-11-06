@@ -16,8 +16,6 @@ tags: ["context", "coroutines", "difficulty/hard", "dispatcher", "job", "kotlin"
 description: "Comprehensive guide to What are CoroutineContext elements and how do they combine? in Kotlin coroutines"
 moc: moc-kotlin
 related: [q-coroutine-context-explained--kotlin--medium, q-kotlin-when-expression--programming-languages--easy, q-room-coroutines-flow--kotlin--medium]
-date created: Saturday, November 1st 2025, 5:31:12 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # What Are CoroutineContext Elements and how Do They Combine?

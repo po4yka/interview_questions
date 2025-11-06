@@ -5,8 +5,6 @@ kind: moc
 created: 2025-10-12
 updated: 2025-10-18
 tags: [moc, topic/backend]
-date created: Saturday, October 18th 2025, 2:47:35 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # Backend — Map of Content

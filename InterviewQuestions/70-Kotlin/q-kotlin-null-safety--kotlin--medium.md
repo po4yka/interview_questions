@@ -25,8 +25,6 @@ created: 2025-10-05
 updated: 2025-10-05
 
 tags: [difficulty/medium, kotlin, null-safety, nullability, safe-calls, types]
-date created: Sunday, October 12th 2025, 12:27:46 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Вопрос (RU)
 > Опишите nullability и null-безопасность в Kotlin

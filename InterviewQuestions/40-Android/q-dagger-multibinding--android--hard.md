@@ -22,8 +22,6 @@ created: 2025-10-20
 updated: 2025-11-02
 tags: [android/architecture-modularization, android/di-hilt, dagger, dependency-injection, difficulty/hard, multibinding]
 sources: []
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 5:33:50 pm
 ---
 
 # Вопрос (RU)

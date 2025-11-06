@@ -28,8 +28,6 @@ tags:
 - view-types
 sources:
 - https://developer.android.com/guide/topics/ui/layout/recyclerview
-date created: Saturday, November 1st 2025, 1:04:11 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)

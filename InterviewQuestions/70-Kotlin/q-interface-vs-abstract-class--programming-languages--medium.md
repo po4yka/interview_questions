@@ -14,8 +14,6 @@ related: [c-inheritance, c-oop-concepts, q-class-composition--oop--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [abstract-classes, difficulty/medium, inheritance, interfaces, kotlin, oop, programming-languages]
-date created: Friday, October 31st 2025, 6:31:49 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Что Такое Interface И Чем Он Отличается От Абстрактного Класса?
 

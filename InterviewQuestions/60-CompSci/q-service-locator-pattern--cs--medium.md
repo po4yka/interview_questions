@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-25
 tags: [dependency-management, design-patterns, difficulty/medium, service-discovery, service-locator]
 sources: [https://martinfowler.com/articles/injection.html]
-date created: Monday, October 6th 2025, 7:39:28 am
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

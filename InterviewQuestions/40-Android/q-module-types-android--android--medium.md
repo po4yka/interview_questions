@@ -15,8 +15,6 @@ tags: [android/architecture-modularization, android/build-variants, android/grad
 moc: moc-android
 related: [c-gradle, c-modularization]
 sources: [https://developer.android.com/topic/modularization/patterns]
-date created: Saturday, November 1st 2025, 1:25:21 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

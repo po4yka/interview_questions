@@ -36,8 +36,6 @@ tags:
 - android/service
 - android/threads-sync
 - difficulty/medium
-date created: Tuesday, October 28th 2025, 9:12:00 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

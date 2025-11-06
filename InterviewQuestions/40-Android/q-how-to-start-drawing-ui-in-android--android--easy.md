@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-27
 tags: [android, android/activity, android/ui-views, difficulty/easy, ui]
 sources: []
-date created: Monday, October 27th 2025, 3:42:02 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

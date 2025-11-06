@@ -14,8 +14,6 @@ related: [q-adapter-pattern--design-patterns--medium, q-command-pattern--design-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [behavioral-patterns, design-patterns, difficulty/medium, gof-patterns, state, state-machine]
-date created: Monday, October 6th 2025, 7:23:49 am
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # State Pattern

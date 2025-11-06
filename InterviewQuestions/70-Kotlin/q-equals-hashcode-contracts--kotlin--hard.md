@@ -14,8 +14,6 @@ related: [q-coroutine-exception-handler--kotlin--medium, q-destructuring-declara
 created: 2025-10-15
 updated: 2025-10-31
 tags: [contracts, difficulty/hard, equals, hashcode, programming-languages]
-date created: Friday, October 31st 2025, 6:34:31 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 # Tell about Equals and hashCode Contracts
 

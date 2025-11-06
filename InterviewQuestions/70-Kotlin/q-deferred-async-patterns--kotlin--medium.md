@@ -16,8 +16,6 @@ tags: ["async", "await", "concurrency", "deferred", "difficulty/medium", "parall
 description: "Complete guide to Deferred<T>, async patterns, parallel execution, and advanced async/await usage in Kotlin coroutines"
 moc: moc-kotlin
 related: [q-kotlin-sealed-classes-purpose--programming-languages--medium, q-lifecyclescope-viewmodelscope--kotlin--medium, q-singleton-object-keyword--programming-languages--easy]
-date created: Friday, October 31st 2025, 6:33:46 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Deferred and Async Patterns Deep Dive / Deferred И Async Паттерны Подробно
 

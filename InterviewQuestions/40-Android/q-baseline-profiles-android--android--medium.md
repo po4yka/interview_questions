@@ -29,8 +29,6 @@ tags:
 - aot
 - difficulty/medium
 - performance
-date created: Thursday, October 30th 2025, 11:50:58 am
-date modified: Sunday, November 2nd 2025, 1:02:17 pm
 ---
 
 # Вопрос (RU)

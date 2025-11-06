@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-10-28
 tags: [android/coroutines, android/di-hilt, api-design, context-receivers, difficulty/hard, dsl, experimental]
 sources: [https://kotlinlang.org/docs/whatsnew15.html#context-receivers]
-date created: Tuesday, October 28th 2025, 9:23:51 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

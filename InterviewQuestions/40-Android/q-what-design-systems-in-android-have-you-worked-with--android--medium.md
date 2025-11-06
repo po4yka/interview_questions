@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-28
 sources: []
 tags: [android/ui-theming, android/ui-widgets, design-system, difficulty/medium, material-design, ui]
-date created: Saturday, November 1st 2025, 1:25:38 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)

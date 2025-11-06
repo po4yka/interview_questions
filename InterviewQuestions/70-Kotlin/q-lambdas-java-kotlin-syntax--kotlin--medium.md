@@ -14,8 +14,6 @@ related: [q-advanced-coroutine-patterns--kotlin--hard, q-kotlin-immutable-collec
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium, functional-programming, java, kotlin, lambdas, syntax]
-date created: Friday, October 31st 2025, 6:28:54 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Что Такое Лямбды С Точки Зрения Синтаксиса В Java И Kotlin?
 

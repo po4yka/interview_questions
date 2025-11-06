@@ -22,8 +22,6 @@ updated: 2025-10-30
 tags: [android/di-hilt, dagger, dependency-injection, di-framework, difficulty/easy, hilt]
 sources:
   - https://dagger.dev/
-date created: Thursday, October 30th 2025, 12:02:39 pm
-date modified: Sunday, November 2nd 2025, 5:34:04 pm
 ---
 
 # Вопрос (RU)

@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android/architecture-mvi, architecture, difficulty/medium, events, mvi]
-date created: Monday, October 27th 2025, 5:03:14 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

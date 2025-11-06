@@ -15,8 +15,6 @@ description: "Comprehensive guide to What is Dispatchers.Unconfined and when to 
 moc: moc-kotlin
 related: [q-kotlin-override-keyword--programming-languages--easy, q-parallel-network-calls-coroutines--kotlin--medium, q-partition-function--kotlin--easy]
 subtopics: [coroutines, dispatchers]
-date created: Friday, October 31st 2025, 6:34:25 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # What is Dispatchers.Unconfined and when to Use It?

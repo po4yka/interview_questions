@@ -14,8 +14,6 @@ related: [q-fan-in-fan-out--kotlin--hard, q-kotlin-visibility-modifiers--kotlin-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [classes, data-classes, design, difficulty/medium, kotlin, sealed-classes]
-date created: Saturday, November 1st 2025, 1:01:37 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # Why Are Data Class and Sealed Classes Needed?

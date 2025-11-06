@@ -32,8 +32,6 @@ tags:
 - android/ci-cd
 - android/gradle
 - difficulty/medium
-date created: Thursday, October 30th 2025, 11:18:32 am
-date modified: Sunday, November 2nd 2025, 1:30:03 pm
 ---
 
 # Вопрос (RU)

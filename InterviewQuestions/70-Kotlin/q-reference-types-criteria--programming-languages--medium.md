@@ -14,8 +14,6 @@ related: [q-interface-vs-abstract-class--programming-languages--medium, q-linked
 created: 2025-10-15
 updated: 2025-10-31
 tags: [best-practices, design, difficulty/medium, immutability, kotlin, programming-languages, reference-types]
-date created: Friday, October 3rd 2025, 6:48:06 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Каким Критериям Должны Соответствовать Ссылочные Типы?
 

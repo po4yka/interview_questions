@@ -29,8 +29,6 @@ tags:
 - android/fragment
 - android/lifecycle
 - difficulty/medium
-date created: Monday, October 27th 2025, 5:03:51 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

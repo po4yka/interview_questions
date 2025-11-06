@@ -31,8 +31,6 @@ tags:
 - tasks
 sources:
 - https://developer.android.com/guide/components/activities/tasks-and-back-stack
-date created: Saturday, November 1st 2025, 1:24:35 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)

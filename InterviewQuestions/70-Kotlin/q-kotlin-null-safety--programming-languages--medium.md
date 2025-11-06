@@ -14,8 +14,6 @@ related: [q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-static-vari
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium, elvis, null-safety, nullable, operators, programming-languages, safe-call]
-date created: Friday, October 31st 2025, 6:30:57 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Что Такое Null Safety И Как Это Пишется?
 

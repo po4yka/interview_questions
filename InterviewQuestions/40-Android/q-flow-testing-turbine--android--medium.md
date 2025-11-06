@@ -32,8 +32,6 @@ tags:
 - unit-testing
 sources:
 - https://github.com/cashapp/turbine
-date created: Tuesday, October 28th 2025, 7:39:15 am
-date modified: Monday, November 3rd 2025, 3:31:12 pm
 ---
 
 # Вопрос (RU)

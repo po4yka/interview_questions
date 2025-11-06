@@ -40,8 +40,6 @@ tags:
 sources:
 - https://developer.android.com/guide/topics/resources/runtime-changes
 - https://developer.android.com/topic/libraries/architecture/saving-states
-date created: Saturday, November 1st 2025, 12:47:11 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

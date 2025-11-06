@@ -35,8 +35,6 @@ tags:
 - lazy-init
 - legacy-code
 - optimization
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Monday, November 3rd 2025, 3:30:51 pm
 ---
 
 # Вопрос (RU)

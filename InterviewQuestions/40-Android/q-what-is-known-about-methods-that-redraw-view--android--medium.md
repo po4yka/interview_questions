@@ -35,8 +35,6 @@ tags:
 - requestLayout
 - ui
 - views
-date created: Saturday, November 1st 2025, 12:47:08 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)

@@ -31,8 +31,6 @@ updated: 2025-10-03
 
 # Tags
 tags: [database, relational, primary-key, unique-constraints, indexes, difficulty/medium, easy_kotlin, lang/ru, topic/databases]
-date created: Friday, October 3rd 2025, 4:45:41 pm
-date modified: Wednesday, October 29th 2025, 2:56:25 pm
 ---
 
 # Question (EN)

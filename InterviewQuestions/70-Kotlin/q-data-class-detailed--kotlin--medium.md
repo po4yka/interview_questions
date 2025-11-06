@@ -15,8 +15,6 @@ description: "Comprehensive guide to Kotlin data classes covering generated meth
 moc: moc-kotlin
 related: []
 subtopics: [data-classes]
-date created: Saturday, November 1st 2025, 1:29:10 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # Data Classes in Kotlin: Features, Limitations, and Best Practices

@@ -14,8 +14,6 @@ related: [c-equality, c-java-features, q-equals-hashcode-contracts--programming-
 created: 2025-10-13
 updated: 2025-10-31
 tags: [difficulty/easy, equality, java, object-methods, programming-languages, reference-equality]
-date created: Friday, October 31st 2025, 6:32:22 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Как В Оригинальном Java Equals Работает, Что Он Сравнивает?
 

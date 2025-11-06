@@ -25,8 +25,6 @@ created: 2025-10-05
 updated: 2025-10-18
 
 tags: [constructors, difficulty/easy, init-block, initialization, kotlin]
-date created: Saturday, October 18th 2025, 3:12:23 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Вопрос (RU)
 > Что такое блок init в Kotlin?

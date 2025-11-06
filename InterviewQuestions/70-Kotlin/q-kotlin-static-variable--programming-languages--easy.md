@@ -14,8 +14,6 @@ related: [q-enum-class-advanced--kotlin--medium, q-kotlin-java-data-types--progr
 created: 2025-10-15
 updated: 2025-10-31
 tags: [companion-object, const, difficulty/easy, jvmstatic, programming-languages, static]
-date created: Friday, October 31st 2025, 6:32:57 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Как Сделать Статическую Переменную?
 

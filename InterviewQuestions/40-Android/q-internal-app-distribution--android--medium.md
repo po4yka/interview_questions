@@ -15,8 +15,6 @@ sources: [https://developer.android.com/distribute/best-practices/develop/in-app
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/ci-cd, android/gradle, android/play-console, beta-testing, difficulty/medium, firebase]
-date created: Saturday, November 1st 2025, 1:32:33 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

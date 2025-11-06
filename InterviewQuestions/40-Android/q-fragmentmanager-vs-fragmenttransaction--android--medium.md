@@ -29,8 +29,6 @@ tags:
 - fragmenttransaction
 sources:
 - https://developer.android.com/guide/fragments/fragmentmanager
-date created: Tuesday, October 28th 2025, 7:38:00 am
-date modified: Tuesday, November 4th 2025, 12:46:45 pm
 ---
 
 # Вопрос (RU)

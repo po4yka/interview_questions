@@ -14,8 +14,6 @@ related: [q-circuit-breaker-coroutines--kotlin--hard, q-request-coalescing-dedup
 created: 2025-10-15
 updated: 2025-10-31
 tags: [bottom-type, difficulty/easy, kotlin, nothing, type-system]
-date created: Friday, October 31st 2025, 6:29:31 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 # How Many Instance Types Does Nothing Have?
 

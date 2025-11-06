@@ -14,8 +14,6 @@ related: [q-java-kotlin-abstract-classes-difference--programming-languages--medi
 created: 2025-10-12
 updated: 2025-10-31
 tags: [cancellation, cleanup, coroutines, difficulty/medium, kotlin, noncancellable, resource-management]
-date created: Friday, October 31st 2025, 6:29:31 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # NonCancellable Context for Critical Cleanup Operations / NonCancellable Контекст Для Критических Операций

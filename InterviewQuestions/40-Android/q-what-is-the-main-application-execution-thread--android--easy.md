@@ -31,8 +31,6 @@ tags:
 - android/performance-rendering
 - android/threads-sync
 - difficulty/easy
-date created: Saturday, November 1st 2025, 1:26:04 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

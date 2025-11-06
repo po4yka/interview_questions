@@ -15,8 +15,6 @@ description: "Comprehensive guide to timeout handling in Kotlin coroutines, cove
 moc: moc-kotlin
 related: []
 subtopics: [coroutines, timeout]
-date created: Saturday, November 1st 2025, 1:07:52 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # How to Handle Timeouts in Coroutines: withTimeout Vs withTimeoutOrNull

@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-31
 sources: []
 tags: [adapter, android/ui-views, delegates, difficulty/easy, recyclerview]
-date created: Tuesday, October 28th 2025, 9:48:46 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

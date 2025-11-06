@@ -36,8 +36,6 @@ tags:
 - performance
 - performance-memory
 - performance-rendering
-date created: Monday, October 27th 2025, 3:42:23 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

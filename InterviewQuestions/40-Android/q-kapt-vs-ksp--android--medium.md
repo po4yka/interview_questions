@@ -34,8 +34,6 @@ tags:
 - difficulty/medium
 - en
 - ru
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Question (EN)

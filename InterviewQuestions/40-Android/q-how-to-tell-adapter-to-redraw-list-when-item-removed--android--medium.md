@@ -31,8 +31,6 @@ tags:
 - difficulty/medium
 - diffutil
 - recyclerview
-date created: Tuesday, October 28th 2025, 9:11:31 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

@@ -16,8 +16,6 @@ related: []
 created: "2025-10-23"
 updated: "2025-10-23"
 tags: ["android", "concept", "cryptography", "difficulty/medium", "encryption", "security"]
-date created: Thursday, October 23rd 2025, 1:45:31 pm
-date modified: Saturday, November 1st 2025, 5:43:38 pm
 ---
 
 # Encryption / Шифрование

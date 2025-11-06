@@ -14,8 +14,6 @@ related: [c-coroutines, c-kotlin-features, q-how-to-create-suspend-function--pro
 created: 2025-10-15
 updated: 2025-10-31
 tags: [concurrency, coroutines, difficulty/hard, kotlin, programming-languages, suspension]
-date created: Friday, October 31st 2025, 6:31:27 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # How Suspend Function Detects Suspension?
 

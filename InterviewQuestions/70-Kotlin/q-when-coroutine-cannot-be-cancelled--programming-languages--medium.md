@@ -14,8 +14,6 @@ related: [q-equals-hashcode-rules--programming-languages--medium, q-how-suspend-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [cancellation, coroutines, difficulty/medium, kotlin, programming-languages]
-date created: Saturday, October 4th 2025, 10:48:38 am
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # When Coroutine Cannot Be Cancelled?
 

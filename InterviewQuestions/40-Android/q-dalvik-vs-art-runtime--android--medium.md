@@ -30,8 +30,6 @@ tags:
 - runtime
 sources:
 - https://developer.android.com/guide/practices/verifying-app-behavior-on-runtime
-date created: Monday, October 27th 2025, 3:46:58 pm
-date modified: Sunday, November 2nd 2025, 5:37:10 pm
 ---
 
 # Вопрос (RU)

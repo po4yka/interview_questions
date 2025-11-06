@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-27
 sources: []
 tags: [android, android/background-execution, android/coroutines, background, difficulty/hard, workmanager]
-date created: Monday, October 27th 2025, 6:44:39 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

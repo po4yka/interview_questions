@@ -31,8 +31,6 @@ tags:
 - value-classes
 sources:
 - https://kotlinlang.org/docs/inline-classes.html
-date created: Saturday, October 18th 2025, 2:15:55 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

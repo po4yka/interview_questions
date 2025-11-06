@@ -29,8 +29,6 @@ tags:
 - android
 - android/ui-views
 - difficulty/easy
-date created: Tuesday, October 28th 2025, 9:50:23 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

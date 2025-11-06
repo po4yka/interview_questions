@@ -24,8 +24,6 @@ created: 2025-10-06
 updated: 2025-10-28
 
 tags: [android/cross-platform, android/kmp, difficulty/medium]
-date created: Saturday, November 1st 2025, 1:04:10 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

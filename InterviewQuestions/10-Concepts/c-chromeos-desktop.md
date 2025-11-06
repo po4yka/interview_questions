@@ -15,8 +15,6 @@ tags:
   - chromeos
   - desktop
   - adaptive-ui
-date created: Sunday, November 2nd 2025, 01:35:00 pm
-date modified: Sunday, November 2nd 2025, 01:35:00 pm
 ---
 
 # Summary (EN)

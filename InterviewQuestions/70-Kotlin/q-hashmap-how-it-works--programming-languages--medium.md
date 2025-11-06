@@ -14,8 +14,6 @@ related: [c-collections, c-hash-tables, q-equals-hashcode-contracts--programming
 created: 2025-10-15
 updated: 2025-10-31
 tags: [collections, data-structures, difficulty/medium, hash-tables, hashmap, kotlin, programming-languages]
-date created: Friday, October 31st 2025, 6:31:04 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Как Работает HashMap?
 

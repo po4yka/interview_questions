@@ -14,8 +14,6 @@ related: [q-delegates-compilation--kotlin--hard, q-job-state-machine-transitions
 created: 2025-10-15
 updated: 2025-10-31
 tags: [data-types, difficulty/medium, java, primitives, programming-languages, reference-types, type-system]
-date created: Friday, October 31st 2025, 6:30:00 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Какие Типы Данных Существуют В Java И Kotlin?
 

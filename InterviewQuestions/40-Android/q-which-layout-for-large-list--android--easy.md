@@ -25,8 +25,6 @@ updated: 2025-10-30
 
 # Tags (EN only; no leading #)
 tags: [android/performance-memory, android/ui-views, difficulty/easy, recyclerview]
-date created: Saturday, November 1st 2025, 1:26:26 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

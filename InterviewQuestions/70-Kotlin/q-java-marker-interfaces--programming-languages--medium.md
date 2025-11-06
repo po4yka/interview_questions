@@ -14,8 +14,6 @@ related: [q-delegates-java-compilation--programming-languages--hard, q-java-all-
 created: 2025-10-13
 updated: 2025-10-31
 tags: [cloneable, difficulty/medium, interfaces, java, marker-interface, programming-languages, serializable]
-date created: Saturday, October 4th 2025, 3:02:36 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Перечислите Маркерные Интерфейсы
 

@@ -31,8 +31,6 @@ tags:
 - android/logging-tracing
 - android/performance-startup
 - topic/android
-date created: Wednesday, October 29th 2025, 5:03:55 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

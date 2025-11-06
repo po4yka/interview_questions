@@ -14,8 +14,6 @@ related: [q-stateflow-sharedflow-differences--kotlin--medium, q-suspend-function
 created: 2025-10-15
 updated: 2025-10-31
 tags: [data-classes, difficulty/medium, programming-languages]
-date created: Friday, October 31st 2025, 6:33:06 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 # What Variables Can Be Used in Data Class?
 

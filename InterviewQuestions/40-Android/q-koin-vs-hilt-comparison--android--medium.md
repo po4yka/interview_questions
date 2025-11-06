@@ -15,8 +15,6 @@ created: 2025-10-13
 updated: 2025-10-28
 sources: []
 tags: [android, android/di-hilt, android/di-koin, architecture, di, difficulty/medium, hilt, koin]
-date created: Tuesday, October 28th 2025, 9:26:11 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Вопрос (RU)

@@ -15,8 +15,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android/performance-memory, collections, difficulty/medium, memory-optimization, performance]
-date created: Saturday, November 1st 2025, 1:03:50 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

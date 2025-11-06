@@ -29,8 +29,6 @@ tags:
 - android/architecture-mvvm
 - android/di-hilt
 - difficulty/medium
-date created: Saturday, November 1st 2025, 1:24:35 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)

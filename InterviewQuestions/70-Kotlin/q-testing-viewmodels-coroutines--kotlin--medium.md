@@ -14,8 +14,6 @@ related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-reflection
 created: 2025-10-15
 updated: 2025-10-31
 tags: [android, coroutines, difficulty/medium, kotlin, testing, unit-testing, viewmodel]
-date created: Friday, October 31st 2025, 6:32:04 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 
 # Testing ViewModels with Coroutines

@@ -15,8 +15,6 @@ created: 2025-10-13
 updated: 2025-01-25
 tags: [composition, difficulty/medium, has-a, inheritance, is-a, oop, polymorphism]
 sources: [https://en.wikipedia.org/wiki/Inheritance_(object-oriented_programming)]
-date created: Saturday, November 1st 2025, 1:26:02 pm
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

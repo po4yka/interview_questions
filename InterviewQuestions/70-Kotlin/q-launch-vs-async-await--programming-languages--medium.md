@@ -14,8 +14,6 @@ related: [q-hot-vs-cold-flows--programming-languages--medium, q-iterator-concept
 created: 2025-10-15
 updated: 2025-10-31
 tags: [async, await, coroutines, difficulty/medium, kotlin, launch, programming-languages]
-date created: Friday, October 3rd 2025, 5:21:02 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Чем Launch Отличается От async/await ?
 

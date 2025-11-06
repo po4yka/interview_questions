@@ -20,8 +20,6 @@ created: 2025-10-11
 updated: 2025-10-30
 sources: []
 tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
-date created: Thursday, October 30th 2025, 11:18:11 am
-date modified: Sunday, November 2nd 2025, 1:31:04 pm
 ---
 
 # Вопрос (RU)

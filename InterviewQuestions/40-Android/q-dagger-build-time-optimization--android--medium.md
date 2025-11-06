@@ -23,8 +23,6 @@ updated: 2025-01-27
 tags: [android/di-hilt, android/gradle, difficulty/medium]
 sources:
   - https://dagger.dev/hilt/
-date created: Monday, October 27th 2025, 3:27:45 pm
-date modified: Sunday, November 2nd 2025, 5:28:40 pm
 ---
 
 # Вопрос (RU)

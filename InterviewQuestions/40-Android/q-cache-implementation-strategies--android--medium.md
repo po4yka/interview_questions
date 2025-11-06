@@ -32,8 +32,6 @@ tags:
 - android/networking-http
 - android/room
 - difficulty/medium
-date created: Thursday, October 30th 2025, 11:13:55 am
-date modified: Sunday, November 2nd 2025, 1:24:15 pm
 ---
 
 # Вопрос (RU)

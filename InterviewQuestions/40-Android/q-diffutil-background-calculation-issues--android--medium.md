@@ -32,8 +32,6 @@ tags:
 - recyclerview
 sources:
 - https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil
-date created: Saturday, October 25th 2025, 1:26:31 pm
-date modified: Sunday, November 2nd 2025, 9:53:53 pm
 ---
 
 # Вопрос (RU)

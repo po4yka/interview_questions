@@ -33,8 +33,6 @@ tags:
 - security
 sources:
 - https://developer.android.com/topic/security/data
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Monday, November 3rd 2025, 10:58:17 am
 ---
 
 # Вопрос (RU)

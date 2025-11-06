@@ -36,8 +36,6 @@ tags:
 - difficulty/medium
 - presenter
 - viewmodel
-date created: Tuesday, October 28th 2025, 9:52:28 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

@@ -14,8 +14,6 @@ related: [q-coroutine-job-lifecycle--kotlin--medium, q-testing-viewmodel-corouti
 created: 2025-10-15
 updated: 2025-10-31
 tags: [collections, difficulty/easy, filtering, kotlin, pair, partition]
-date created: Friday, October 31st 2025, 6:29:56 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # partition(): Разделение Коллекции На Две Части

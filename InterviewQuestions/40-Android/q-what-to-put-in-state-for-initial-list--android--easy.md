@@ -29,8 +29,6 @@ tags:
 - difficulty/easy
 - state-management
 - ui
-date created: Saturday, November 1st 2025, 1:26:06 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

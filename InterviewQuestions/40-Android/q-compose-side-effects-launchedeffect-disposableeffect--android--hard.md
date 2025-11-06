@@ -23,8 +23,6 @@ tags: [android/lifecycle, android/ui-compose, compose, difficulty/hard, side-eff
 sources:
   - https://developer.android.com/jetpack/compose/lifecycle
   - https://developer.android.com/jetpack/compose/side-effects
-date created: Thursday, October 30th 2025, 11:51:33 am
-date modified: Sunday, November 2nd 2025, 1:44:38 pm
 ---
 
 # Вопрос (RU)

@@ -22,8 +22,6 @@ created: 2025-10-15
 updated: 2025-10-30
 sources: []
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, owasp, security]
-date created: Thursday, October 30th 2025, 11:43:21 am
-date modified: Sunday, November 2nd 2025, 12:54:53 pm
 ---
 
 # Вопрос (RU)

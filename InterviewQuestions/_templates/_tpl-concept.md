@@ -8,8 +8,6 @@ links: []
 created: '<% tp.date.now("YYYY-MM-DD") %>'
 updated: '<% tp.date.now("YYYY-MM-DD") %>'
 tags: [concept]
-date created: Friday, October 3rd 2025, 3:14:32 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # Summary (EN)

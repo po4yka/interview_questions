@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-01-25
 tags: [algorithms, difficulty/medium, load-balancing, scalability, system-design]
 sources: [https://en.wikipedia.org/wiki/Load_balancing_(computing)]
-date created: Sunday, October 12th 2025, 8:23:57 pm
-date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

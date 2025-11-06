@@ -33,8 +33,6 @@ tags:
 - difficulty/medium
 - looper
 - message-queue
-date created: Tuesday, October 28th 2025, 9:35:15 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

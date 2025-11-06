@@ -22,8 +22,6 @@ created: 2025-10-05
 updated: 2025-10-30
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, security]
 sources: []
-date created: Thursday, October 30th 2025, 11:36:04 am
-date modified: Sunday, November 2nd 2025, 12:49:07 pm
 ---
 
 # Вопрос (RU)

@@ -14,8 +14,6 @@ related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-init-block
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium, java, primitives, programming-languages, types, wrappers]
-date created: Friday, October 31st 2025, 6:30:30 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Какие Примитивы Есть В Kotlin, А Какие В Java?
 

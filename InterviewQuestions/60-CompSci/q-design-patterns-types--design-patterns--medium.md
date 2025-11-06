@@ -14,8 +14,6 @@ related: [c-design-patterns]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [behavioral-patterns, creational-patterns, design-patterns, difficulty/medium, gof-patterns, software-design, structural-patterns]
-date created: Saturday, November 1st 2025, 1:25:48 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Types of Design Patterns

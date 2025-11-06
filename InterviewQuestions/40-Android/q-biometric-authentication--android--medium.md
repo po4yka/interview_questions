@@ -20,8 +20,6 @@ sources: []
 created: 2025-10-12
 updated: 2025-10-30
 tags: [android/keystore-crypto, android/permissions, authentication, biometric, difficulty/medium]
-date created: Thursday, October 30th 2025, 11:51:48 am
-date modified: Sunday, November 2nd 2025, 1:03:02 pm
 ---
 
 # Вопрос (RU)

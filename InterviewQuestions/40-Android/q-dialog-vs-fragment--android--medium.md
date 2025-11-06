@@ -31,8 +31,6 @@ tags:
 sources:
 - https://developer.android.com/develop/ui/views/components/dialogs
 - https://developer.android.com/guide/fragments
-date created: Saturday, October 25th 2025, 4:09:48 pm
-date modified: Sunday, November 2nd 2025, 8:13:08 pm
 ---
 
 # Вопрос (RU)

@@ -22,8 +22,6 @@ updated: 2025-10-30
 tags: [android/ui-compose, android/ui-navigation, difficulty/medium]
 sources:
   - https://developer.android.com/jetpack/compose/navigation
-date created: Thursday, October 30th 2025, 11:23:15 am
-date modified: Sunday, November 2nd 2025, 1:40:55 pm
 ---
 
 # Вопрос (RU)

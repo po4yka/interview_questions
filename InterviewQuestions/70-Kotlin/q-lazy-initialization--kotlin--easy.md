@@ -14,8 +14,6 @@ related: [q-coroutine-cancellation-mechanisms--kotlin--medium, q-coroutinescope-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [delegates, difficulty/easy, initialization, kotlin, lazy, performance]
-date created: Friday, October 31st 2025, 6:29:12 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 # What Function in Kotlin is Used for Lazy Property Initialization?
 

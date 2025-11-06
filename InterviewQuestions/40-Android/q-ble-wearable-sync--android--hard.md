@@ -27,8 +27,6 @@ tags:
 - android/bluetooth
 - android/service
 - topic/android
-date created: Thursday, October 30th 2025, 11:52:47 am
-date modified: Sunday, November 2nd 2025, 1:03:23 pm
 ---
 
 # Вопрос (RU)

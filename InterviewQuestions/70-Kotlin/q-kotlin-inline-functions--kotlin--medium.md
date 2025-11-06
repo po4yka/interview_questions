@@ -25,8 +25,6 @@ created: 2025-10-12
 updated: 2025-10-12
 
 tags: [difficulty/medium, inline-functions, kotlin, lambdas, optimization, performance, reified]
-date created: Sunday, October 12th 2025, 2:02:58 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Вопрос (RU)
 > Что такое inline функции в Kotlin? Объясните их назначение, преимущества, модификаторы (noinline, crossinline), ограничения и приведите практические примеры с анализом производительности.

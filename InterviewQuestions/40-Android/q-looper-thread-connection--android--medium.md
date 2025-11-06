@@ -29,8 +29,6 @@ tags:
 - handler
 - looper
 - message-queue
-date created: Tuesday, October 28th 2025, 9:36:03 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

@@ -35,8 +35,6 @@ tags:
 - espresso
 - idling-resource
 - ui-testing
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Monday, November 3rd 2025, 11:11:56 am
 ---
 
 # Вопрос (RU)

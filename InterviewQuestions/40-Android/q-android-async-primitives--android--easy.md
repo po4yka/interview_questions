@@ -21,8 +21,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/coroutines, android/threads-sync, difficulty/easy]
-date created: Wednesday, October 29th 2025, 4:48:34 pm
-date modified: Sunday, November 2nd 2025, 12:45:17 pm
 ---
 
 # Вопрос (RU)

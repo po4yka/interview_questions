@@ -30,8 +30,6 @@ tags:
 - ui
 sources:
 - https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView.ItemDecoration
-date created: Saturday, November 1st 2025, 1:04:10 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)

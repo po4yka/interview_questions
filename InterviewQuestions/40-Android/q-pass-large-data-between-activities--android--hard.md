@@ -37,8 +37,6 @@ tags:
 - difficulty/hard
 - file-provider
 - ipc
-date created: Saturday, November 1st 2025, 1:03:32 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

@@ -14,8 +14,6 @@ related: [q-play-feature-delivery--android--medium, q-state-hoisting-compose--an
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-mvi, android/di-hilt, android/di-koin, dependency-injection, difficulty/medium, navigation, router]
-date created: Saturday, November 1st 2025, 12:46:55 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

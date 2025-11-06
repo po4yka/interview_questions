@@ -36,8 +36,6 @@ related:
 - q-clean-architecture-android--android--hard
 - q-how-to-create-dynamic-screens-at-runtime--android--hard
 sources: []
-date created: Tuesday, October 28th 2025, 9:53:45 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

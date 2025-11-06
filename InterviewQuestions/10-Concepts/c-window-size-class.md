@@ -15,8 +15,6 @@ tags:
   - window-manager
   - foldable
   - adaptive-ui
-date created: Sunday, November 2nd 2025, 12:10:00 pm
-date modified: Sunday, November 2nd 2025, 12:10:00 pm
 ---
 
 # Summary (EN)

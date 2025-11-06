@@ -29,8 +29,6 @@ tags:
 - android/performance-startup
 - android/profiling
 - difficulty/medium
-date created: Thursday, October 30th 2025, 11:51:36 am
-date modified: Sunday, November 2nd 2025, 1:02:35 pm
 ---
 
 # Вопрос (RU)

@@ -15,8 +15,6 @@ tags:
   - wear
   - health
   - sensors
-date created: Sunday, November 2nd 2025, 12:15:00 pm
-date modified: Sunday, November 2nd 2025, 12:15:00 pm
 ---
 
 # Summary (EN)

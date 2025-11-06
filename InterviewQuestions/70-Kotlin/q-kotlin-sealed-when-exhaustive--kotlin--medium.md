@@ -14,8 +14,6 @@ related: [q-flow-combining-zip-combine--kotlin--medium, q-sequences-detailed--ko
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium, kotlin, result, sealed-classes, state-machine, when-expression]
-date created: Friday, October 31st 2025, 6:32:40 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Sealed Classes and Exhaustive When

@@ -31,8 +31,6 @@ tags:
 - difficulty/medium
 - touch-events
 - ui
-date created: Monday, October 27th 2025, 4:02:54 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

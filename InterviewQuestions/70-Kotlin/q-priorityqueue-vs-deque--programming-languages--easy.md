@@ -14,8 +14,6 @@ related: [q-class-composition--oop--medium, q-what-is-coroutinescope--programmin
 created: 2025-10-15
 updated: 2025-10-31
 tags: [collections, data-structures, deque, difficulty/easy, kotlin, priority-queue, programming-languages, queue]
-date created: Friday, October 3rd 2025, 4:43:42 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Какова Разница Между PriorityQueue И Deque?
 

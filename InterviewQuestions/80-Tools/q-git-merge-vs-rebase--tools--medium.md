@@ -14,8 +14,6 @@ related: [q-git-pull-vs-fetch--tools--easy, q-git-squash-commits--tools--medium]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium, git, merge, rebase, tools, version-control, workflow]
-date created: Friday, October 31st 2025, 6:32:23 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # Question (EN)

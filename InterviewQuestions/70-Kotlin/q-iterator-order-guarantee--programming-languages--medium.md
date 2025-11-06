@@ -14,8 +14,6 @@ related: [c-collections, c-iterators, q-iterator-concept--programming-languages-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [collections, difficulty/medium, iterators, kotlin, programming-languages]
-date created: Friday, October 31st 2025, 6:32:07 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # После Перебирания Данных Итератором, Гарантируется Ли Очередность Получения Этих Данных?
 

@@ -25,8 +25,6 @@ created: 2025-10-11
 updated: 2025-10-11
 
 tags: [backpressure, buffer, difficulty/hard, flow, kotlin, performance]
-date created: Sunday, October 12th 2025, 12:27:46 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Вопрос (RU)
 > Реализуйте обработку противодавления в Flow. Сравните стратегии buffer, conflate и collectLatest с производительными бенчмарками.

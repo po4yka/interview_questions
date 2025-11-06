@@ -42,8 +42,6 @@ tags:
 - websocket
 sources:
 - https://signal.org/docs/specifications/doubleratchet/
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 8:06:29 pm
 ---
 
 # Вопрос (RU)

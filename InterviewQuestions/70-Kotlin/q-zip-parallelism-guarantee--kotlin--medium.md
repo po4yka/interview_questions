@@ -14,8 +14,6 @@ related: [q-partition-function--kotlin--easy]
 created: 2025-10-15
 updated: 2025-10-31
 tags: [coroutines, difficulty/medium, flow, kotlin, operators, zip]
-date created: Saturday, November 1st 2025, 1:01:40 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 
 # Will Zip Guarantee Parallel Execution of 2 Network Requests Launched for Coroutine

@@ -25,8 +25,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/datastore, android/files-media, android/room, difficulty/medium, persistence, storage]
-date created: Thursday, October 30th 2025, 11:36:48 am
-date modified: Sunday, November 2nd 2025, 12:49:47 pm
 ---
 
 # Вопрос (RU)

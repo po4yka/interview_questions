@@ -15,8 +15,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android, android/ui-compose, android/ui-views, difficulty/medium, gesture-detection, motion-event, touch-events]
-date created: Wednesday, October 29th 2025, 12:16:10 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

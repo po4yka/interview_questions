@@ -24,8 +24,6 @@ created: 2025-10-25
 updated: 2025-10-29
 sources: []
 tags: [android/gradle, android/performance-memory, difficulty/medium]
-date created: Wednesday, October 29th 2025, 4:18:15 pm
-date modified: Sunday, November 2nd 2025, 12:07:46 pm
 ---
 
 # Вопрос (RU)

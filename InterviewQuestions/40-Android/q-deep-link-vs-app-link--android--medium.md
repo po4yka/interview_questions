@@ -30,8 +30,6 @@ tags:
 - difficulty/medium
 sources:
 - https://developer.android.com/training/app-links
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Sunday, November 2nd 2025, 7:40:58 pm
 ---
 
 # Вопрос (RU)

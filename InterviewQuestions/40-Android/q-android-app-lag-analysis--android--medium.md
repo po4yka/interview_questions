@@ -32,8 +32,6 @@ tags:
 - fps
 - lag
 - ui-thread
-date created: Wednesday, October 29th 2025, 4:46:47 pm
-date modified: Sunday, November 2nd 2025, 12:44:44 pm
 ---
 
 # Вопрос (RU)

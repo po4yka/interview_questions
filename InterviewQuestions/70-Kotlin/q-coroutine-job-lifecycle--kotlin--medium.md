@@ -15,8 +15,6 @@ description: "A comprehensive guide to understanding Job and its lifecycle state
 moc: moc-kotlin
 related: []
 subtopics: [coroutines, lifecycle]
-date created: Saturday, November 1st 2025, 1:28:34 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # What is a Job and Its Lifecycle in Kotlin Coroutines?

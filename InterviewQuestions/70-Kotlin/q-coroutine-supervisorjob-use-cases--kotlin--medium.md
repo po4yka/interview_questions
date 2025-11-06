@@ -15,8 +15,6 @@ description: "Comprehensive guide to SupervisorJob in Kotlin coroutines, coverin
 moc: moc-kotlin
 related: []
 subtopics: [coroutines, supervisor-job]
-date created: Saturday, November 1st 2025, 1:29:01 pm
-date modified: Saturday, November 1st 2025, 5:43:27 pm
 ---
 
 # SupervisorJob: when and why to Use It?

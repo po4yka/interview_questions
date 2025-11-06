@@ -23,8 +23,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/app-startup, android/performance-memory, android/performance-startup, difficulty/medium]
-date created: Thursday, October 30th 2025, 11:43:03 am
-date modified: Sunday, November 2nd 2025, 12:56:43 pm
 ---
 
 # Вопрос (RU)

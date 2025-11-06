@@ -14,8 +14,6 @@ related: [q-coroutinescope-vs-supervisorscope--kotlin--medium, q-job-state-machi
 created: 2025-10-15
 updated: 2025-10-31
 tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
-date created: Friday, October 31st 2025, 6:33:15 pm
-date modified: Saturday, November 1st 2025, 5:43:22 pm
 ---
 # What is Known about Data Classes and Sealed Classes?
 

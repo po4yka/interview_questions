@@ -15,8 +15,6 @@ tags:
   - performance
   - power
   - energy
-date created: Sunday, November 2nd 2025, 13:00:00 pm
-date modified: Sunday, November 2nd 2025, 13:00:00 pm
 ---
 
 # Summary (EN)

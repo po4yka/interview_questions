@@ -14,8 +14,6 @@ related: [q-catch-operator-flow--kotlin--medium, q-coroutine-scope-basics--kotli
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, elvis, null-checks, null-safety, operators, programming-languages, safe-call]
-date created: Friday, October 31st 2025, 6:30:56 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Каким Образом Осуществлять Проверки На Null?
 

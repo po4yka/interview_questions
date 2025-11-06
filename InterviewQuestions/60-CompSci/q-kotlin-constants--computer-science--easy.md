@@ -14,8 +14,6 @@ related: [q-inline-function-limitations--kotlin--medium, q-kotlin-extensions-ove
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy]
-date created: Sunday, October 12th 2025, 12:27:47 pm
-date modified: Saturday, November 1st 2025, 5:43:29 pm
 ---
 
 # Что Такое Константы И Можно Ли Их Изменять?

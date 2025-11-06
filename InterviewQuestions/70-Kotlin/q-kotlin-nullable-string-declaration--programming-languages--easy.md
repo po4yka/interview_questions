@@ -14,8 +14,6 @@ related: [q-coroutine-job-lifecycle--kotlin--medium, q-kotlin-operator-overloadi
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, null-safety, nullable, programming-languages, string, syntax]
-date created: Friday, October 31st 2025, 6:30:57 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Как Правильно Объявить Переменную Типа Nullable String В Kotlin?
 

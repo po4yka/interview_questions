@@ -23,8 +23,6 @@ updated: 2025-10-30
 tags: [android/ui-compose, android/ui-state, difficulty/hard]
 sources:
   - https://developer.android.com/jetpack/compose/compositionlocal
-date created: Thursday, October 30th 2025, 11:56:59 am
-date modified: Sunday, November 2nd 2025, 4:17:20 pm
 ---
 
 # Вопрос (RU)

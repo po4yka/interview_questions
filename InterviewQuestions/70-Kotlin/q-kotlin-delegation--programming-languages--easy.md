@@ -14,8 +14,6 @@ related: [q-circuit-breaker-coroutines--kotlin--hard, q-coroutine-timeout-withti
 created: 2025-10-13
 updated: 2025-10-31
 tags: [difficulty/easy]
-date created: Saturday, November 1st 2025, 12:42:09 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Что Известно О Делегировании?
 

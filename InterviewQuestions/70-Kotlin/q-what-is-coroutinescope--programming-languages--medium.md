@@ -14,8 +14,6 @@ related: [q-hot-vs-cold-flows--programming-languages--medium, q-template-method-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [coroutines, difficulty/medium, kotlin, programming-languages, scope]
-date created: Saturday, October 4th 2025, 10:52:06 am
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # What is CoroutineScope?
 

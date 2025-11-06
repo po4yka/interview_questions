@@ -22,8 +22,6 @@ sources: []
 created: 2025-10-11
 updated: 2025-10-29
 tags: [android/performance-memory, android/ui-compose, compiler, compose, difficulty/hard, performance]
-date created: Thursday, October 30th 2025, 11:17:58 am
-date modified: Sunday, November 2nd 2025, 1:31:22 pm
 ---
 
 # Вопрос (RU)

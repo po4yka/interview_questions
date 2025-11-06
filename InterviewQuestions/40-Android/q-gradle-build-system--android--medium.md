@@ -32,8 +32,6 @@ related:
 - q-kapt-vs-ksp--android--medium
 - q-what-unites-the-main-components-of-an-android-application--android--medium
 moc: moc-android
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Gradle Build System / Система Сборки Gradle

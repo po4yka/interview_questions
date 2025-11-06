@@ -14,8 +14,6 @@ related: [q-continuation-cps-internals--kotlin--hard, q-fan-in-fan-out-channels-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [collections, difficulty/easy, functions, programming-languages]
-date created: Friday, October 31st 2025, 6:32:16 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 # Что Делает Функция Коллекций partition()?
 

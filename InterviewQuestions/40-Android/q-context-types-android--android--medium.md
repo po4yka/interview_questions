@@ -33,8 +33,6 @@ tags:
 - difficulty/medium
 sources:
 - https://developer.android.com/reference/android/content/Context
-date created: Thursday, October 30th 2025, 11:56:11 am
-date modified: Sunday, November 2nd 2025, 4:17:33 pm
 ---
 
 # Вопрос (RU)

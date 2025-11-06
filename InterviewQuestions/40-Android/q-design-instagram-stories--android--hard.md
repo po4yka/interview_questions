@@ -23,8 +23,6 @@ related:
 created: 2025-10-20
 updated: 2025-11-02
 tags: [android/architecture-clean, android/media, android/service, architecture, difficulty/hard, exoplayer, mediacodec, performance, system-design, workmanager]
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Sunday, November 2nd 2025, 7:52:33 pm
 ---
 
 # Вопрос (RU)

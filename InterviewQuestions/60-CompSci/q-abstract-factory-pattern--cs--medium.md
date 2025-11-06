@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-25
 tags: [abstract-factory, creational-patterns, design-patterns, difficulty/medium, factory, gof-patterns]
 sources: [https://refactoring.guru/design-patterns/abstract-factory]
-date created: Saturday, November 1st 2025, 1:26:52 pm
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

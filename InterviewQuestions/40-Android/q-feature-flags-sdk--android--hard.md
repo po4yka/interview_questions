@@ -24,8 +24,6 @@ sources:
 created: 2025-10-29
 updated: 2025-11-03
 tags: [android/architecture-clean, android/networking-http, android/service, difficulty/hard, experimentation, feature-flags, sdk-design]
-date created: Wednesday, October 29th 2025, 5:03:10 pm
-date modified: Monday, November 3rd 2025, 3:25:55 pm
 ---
 
 # Вопрос (RU)

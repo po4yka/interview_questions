@@ -14,8 +14,6 @@ related: [q-associatewith-vs-associateby--kotlin--easy, q-kotlin-constructor-key
 created: 2025-10-12
 updated: 2025-10-12
 tags: ["buffer", "context-switching", "dispatchers", "flow-operators", "flowon", "performance", difficulty/hard]
-date created: Saturday, October 18th 2025, 3:06:32 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 
 # flowOn Operator and Context Switching in Flows / flowOn Оператор И Переключение Контекста

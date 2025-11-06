@@ -36,8 +36,6 @@ tags:
 - thread-safety
 sources:
 - https://developer.android.com/jetpack/compose/state
-date created: Saturday, October 25th 2025, 1:26:29 pm
-date modified: Sunday, November 2nd 2025, 10:04:18 pm
 ---
 
 # Вопрос (RU)

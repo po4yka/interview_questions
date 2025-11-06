@@ -29,8 +29,6 @@ tags:
 - caching
 - difficulty/medium
 - graphql
-date created: Saturday, October 25th 2025, 1:26:30 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)

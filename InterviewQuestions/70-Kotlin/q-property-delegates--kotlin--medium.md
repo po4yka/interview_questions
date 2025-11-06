@@ -14,8 +14,6 @@ related: [q-coroutine-memory-leak-detection--kotlin--hard, q-dispatchers-unconfi
 created: 2025-10-15
 updated: 2025-10-31
 tags: [delegates, difficulty/medium, kotlin, properties]
-date created: Friday, October 31st 2025, 6:30:28 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # В Чем Особенность Делегатов Свойств

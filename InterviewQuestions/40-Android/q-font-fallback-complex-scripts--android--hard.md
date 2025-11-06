@@ -23,8 +23,6 @@ sources:
   - https://developer.android.com/guide/topics/resources/font-resource
   - https://developer.android.com/guide/topics/text/downloadable-fonts
   - https://material.io/design/typography/international-typography.html
-date created: Monday, November 3rd 2025, 10:07:53 am
-date modified: Monday, November 3rd 2025, 3:51:21 pm
 ---
 
 # Вопрос (RU)

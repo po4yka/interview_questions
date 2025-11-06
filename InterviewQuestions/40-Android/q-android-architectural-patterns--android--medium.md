@@ -21,8 +21,6 @@ created: 2025-10-15
 updated: 2025-10-29
 tags: [android/architecture-clean, android/architecture-mvi, android/architecture-mvvm, difficulty/medium]
 sources: []
-date created: Wednesday, October 29th 2025, 4:47:28 pm
-date modified: Sunday, November 2nd 2025, 12:45:05 pm
 ---
 
 # Вопрос (RU)

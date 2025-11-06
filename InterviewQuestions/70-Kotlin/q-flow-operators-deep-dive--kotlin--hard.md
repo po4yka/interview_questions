@@ -25,8 +25,6 @@ created: 2025-10-11
 updated: 2025-10-11
 
 tags: [async, difficulty/hard, flow, kotlin, operators, transformation]
-date created: Friday, October 17th 2025, 11:26:31 am
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Вопрос (RU)
 > Реализуйте пользовательские операторы Flow. Объясните flatMapConcat vs flatMapMerge vs flatMapLatest с практическими примерами и характеристиками производительности.

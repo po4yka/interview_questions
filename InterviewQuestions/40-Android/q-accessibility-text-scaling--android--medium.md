@@ -27,8 +27,6 @@ tags:
 - android/ui-accessibility
 - android/ui-theming
 - difficulty/medium
-date created: Wednesday, October 29th 2025, 4:20:10 pm
-date modified: Saturday, November 1st 2025, 3:59:48 pm
 ---
 
 # Вопрос (RU)

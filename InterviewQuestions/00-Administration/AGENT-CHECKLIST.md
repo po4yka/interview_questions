@@ -1,6 +1,4 @@
 ---
-date created: Sunday, October 19th 2025, 11:19:01 am
-date modified: Saturday, November 1st 2025, 5:43:39 pm
 ---
 
 # Quick Agent Checklist

@@ -24,8 +24,6 @@ sources:
   - https://developer.android.com/guide/topics/ui/accessibility
   - https://developer.android.com/jetpack/compose/accessibility
 tags: [accessibility, android/ui-accessibility, android/ui-compose, compose, difficulty/medium, semantics, talkback]
-date created: Wednesday, October 29th 2025, 4:19:08 pm
-date modified: Sunday, November 2nd 2025, 12:07:33 pm
 ---
 
 # Вопрос (RU)

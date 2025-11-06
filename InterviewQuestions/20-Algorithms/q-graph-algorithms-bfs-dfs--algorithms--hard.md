@@ -15,8 +15,6 @@ created: 2025-10-12
 updated: 2025-01-25
 tags: [algorithms, bfs, dfs, difficulty/hard, graphs, traversal]
 sources: [https://en.wikipedia.org/wiki/Breadth-first_search, https://en.wikipedia.org/wiki/Depth-first_search]
-date created: Sunday, October 12th 2025, 9:44:02 pm
-date modified: Saturday, November 1st 2025, 5:43:37 pm
 ---
 
 # Вопрос (RU)

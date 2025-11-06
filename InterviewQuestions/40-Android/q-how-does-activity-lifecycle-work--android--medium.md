@@ -33,8 +33,6 @@ related:
 - q-android-runtime-art--android--medium
 - q-view-composition-strategy-compose--android--medium
 sources: []
-date created: Tuesday, October 28th 2025, 9:34:34 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

@@ -14,8 +14,6 @@ related: [c-immutability, c-unidirectional-data-flow]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/architecture-mvi, android/coroutines, android/ui-state, architecture, difficulty/hard, state-management, unidirectional-data-flow]
-date created: Saturday, November 1st 2025, 1:25:24 pm
-date modified: Saturday, November 1st 2025, 5:43:33 pm
 ---
 
 # Вопрос (RU)

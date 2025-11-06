@@ -15,8 +15,6 @@ created: 2025-10-05
 updated: 2025-01-25
 tags: [abstract-class, difficulty/medium, inheritance, interface, kotlin, kotlin-features, oop]
 sources: [https://kotlinlang.org/docs/interfaces.html]
-date created: Sunday, October 5th 2025, 10:54:10 pm
-date modified: Sunday, November 2nd 2025, 12:05:04 pm
 ---
 
 # Вопрос (RU)

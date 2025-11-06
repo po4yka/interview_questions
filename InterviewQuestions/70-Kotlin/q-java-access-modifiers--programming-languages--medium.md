@@ -14,8 +14,6 @@ related: [c-java-features, c-oop-concepts, q-interface-vs-abstract-class--progra
 created: 2025-10-13
 updated: 2025-10-31
 tags: [access-modifiers, difficulty/medium, encapsulation, java, oop, programming-languages]
-date created: Friday, October 31st 2025, 6:32:07 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Как Лучше Всего Использовать Модификаторы Доступа В Java?
 

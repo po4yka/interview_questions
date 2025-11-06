@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-25
 tags: [coroutines, difficulty/medium, flow, kotlin, parallel-requests, zip-operator]
 sources: [https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/zip.html]
-date created: Saturday, October 4th 2025, 10:39:32 am
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

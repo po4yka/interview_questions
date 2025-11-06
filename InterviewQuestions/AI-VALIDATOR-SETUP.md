@@ -1,6 +1,4 @@
 ---
-date created: Saturday, November 1st 2025, 2:57:16 pm
-date modified: Saturday, November 1st 2025, 5:44:00 pm
 ---
 
 # Local AI Validator - Setup & Usage Guide

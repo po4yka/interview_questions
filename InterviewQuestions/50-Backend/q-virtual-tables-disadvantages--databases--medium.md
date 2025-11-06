@@ -31,8 +31,6 @@ updated: 2025-10-03
 
 # Tags
 tags: [database, virtual-tables, views, performance, difficulty/medium, easy_kotlin, lang/ru, topic/databases]
-date created: Friday, October 3rd 2025, 4:45:56 pm
-date modified: Wednesday, October 29th 2025, 2:56:30 pm
 ---
 
 # Question (EN)

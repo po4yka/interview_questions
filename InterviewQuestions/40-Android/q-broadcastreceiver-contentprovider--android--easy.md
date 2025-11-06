@@ -24,8 +24,6 @@ sources:
 created: 2025-10-15
 updated: 2025-10-29
 tags: [android/broadcast-receiver, android/content-provider, difficulty/easy]
-date created: Thursday, October 30th 2025, 11:11:16 am
-date modified: Sunday, November 2nd 2025, 1:03:34 pm
 ---
 
 # Вопрос (RU)

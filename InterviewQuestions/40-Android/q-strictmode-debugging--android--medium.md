@@ -26,8 +26,6 @@ tags:
 - android/performance-rendering
 - difficulty/medium
 source: https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20is%20StrictMode.md
-date created: Saturday, November 1st 2025, 12:47:05 pm
-date modified: Saturday, November 1st 2025, 5:43:32 pm
 ---
 
 # Вопрос (RU)

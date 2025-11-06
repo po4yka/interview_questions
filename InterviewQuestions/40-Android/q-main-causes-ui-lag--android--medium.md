@@ -15,8 +15,6 @@ sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/performance-memory, android/performance-rendering, android/threads-sync, difficulty/medium, performance, threading, ui]
-date created: Tuesday, October 28th 2025, 9:36:21 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

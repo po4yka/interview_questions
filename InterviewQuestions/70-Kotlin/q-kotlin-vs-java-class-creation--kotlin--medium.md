@@ -14,8 +14,6 @@ related: [q-inline-function-limitations--kotlin--medium, q-kotlin-lambda-express
 created: 2025-10-15
 updated: 2025-10-31
 tags: [classes, data-classes, difficulty/medium, java, kotlin, syntax]
-date created: Friday, October 31st 2025, 6:28:54 pm
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Что При Создании Классов В Kotlin Изменились По Сравнению С Java?
 

@@ -31,8 +31,6 @@ tags:
 - difficulty/medium
 - threading
 - ui-thread
-date created: Monday, October 27th 2025, 3:41:42 pm
-date modified: Saturday, November 1st 2025, 5:43:34 pm
 ---
 
 # Вопрос (RU)

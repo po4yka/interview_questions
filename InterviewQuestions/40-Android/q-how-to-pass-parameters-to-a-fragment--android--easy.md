@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-10-30
 sources: []
 tags: [android/fragment, android/serialization, bundle, data-passing, difficulty/easy, fragment]
-date created: Thursday, October 30th 2025, 12:57:36 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

@@ -34,8 +34,6 @@ tags:
 - difficulty/medium
 - fragments
 - ui-architecture
-date created: Tuesday, October 28th 2025, 7:38:39 am
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

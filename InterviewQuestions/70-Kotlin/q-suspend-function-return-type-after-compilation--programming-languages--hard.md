@@ -14,8 +14,6 @@ related: [q-how-to-create-suspend-function--programming-languages--medium, q-jav
 created: 2025-10-15
 updated: 2025-10-31
 tags: [compilation, coroutines, difficulty/hard, kotlin, programming-languages]
-date created: Saturday, October 4th 2025, 10:41:50 am
-date modified: Saturday, November 1st 2025, 5:43:23 pm
 ---
 # Suspend Function Return Type After Compilation
 

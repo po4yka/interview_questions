@@ -35,8 +35,6 @@ tags:
 - junit
 - mockk
 - testing
-date created: Thursday, October 30th 2025, 11:36:54 am
-date modified: Sunday, November 2nd 2025, 12:49:59 pm
 ---
 
 # Вопрос (RU)

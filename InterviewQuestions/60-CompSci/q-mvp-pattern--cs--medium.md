@@ -15,8 +15,6 @@ created: 2025-10-15
 updated: 2025-01-25
 tags: [android-architecture, difficulty/medium, mvi, mvp, mvvm, separation-of-concerns, testability]
 sources: [https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93presenter]
-date created: Monday, October 6th 2025, 7:37:30 am
-date modified: Saturday, November 1st 2025, 5:43:28 pm
 ---
 
 # Вопрос (RU)

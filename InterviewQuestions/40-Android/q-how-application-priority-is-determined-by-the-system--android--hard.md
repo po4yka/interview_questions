@@ -35,8 +35,6 @@ tags:
 - lifecycle
 - performance-memory
 - processes
-date created: Monday, October 27th 2025, 3:35:47 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

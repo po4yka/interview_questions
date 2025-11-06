@@ -37,8 +37,6 @@ tags:
 - image-loading
 - svg
 - vector-graphics
-date created: Saturday, November 1st 2025, 12:46:54 pm
-date modified: Saturday, November 1st 2025, 5:43:35 pm
 ---
 
 # Вопрос (RU)

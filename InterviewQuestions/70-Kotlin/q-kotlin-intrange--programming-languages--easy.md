@@ -14,8 +14,6 @@ related: [q-coroutine-context-elements--kotlin--hard, q-kotlin-constructors--kot
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/easy, intrange, iteration, programming-languages, ranges]
-date created: Friday, October 31st 2025, 6:29:59 pm
-date modified: Saturday, November 1st 2025, 5:43:25 pm
 ---
 # Что Такое IntRange?
 

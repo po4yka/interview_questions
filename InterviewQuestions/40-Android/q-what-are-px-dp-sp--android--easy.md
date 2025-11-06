@@ -25,8 +25,6 @@ updated: 2025-10-28
 
 # Tags (EN only; no leading #)
 tags: [accessibility, android/ui-theming, android/ui-views, difficulty/easy, dp, measurement-units, sp]
-date created: Saturday, November 1st 2025, 1:24:45 pm
-date modified: Saturday, November 1st 2025, 5:43:31 pm
 ---
 
 # Вопрос (RU)

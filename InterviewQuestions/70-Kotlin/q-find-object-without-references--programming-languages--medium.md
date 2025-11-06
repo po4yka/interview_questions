@@ -14,8 +14,6 @@ related: [c-debugging, c-memory-management, q-garbage-collector-basics--programm
 created: 2025-10-15
 updated: 2025-10-31
 tags: [debugging, difficulty/medium, memory-management, memory-profiler, profiling, programming-languages]
-date created: Friday, October 31st 2025, 6:30:13 pm
-date modified: Saturday, November 1st 2025, 5:43:26 pm
 ---
 # Как Найти Объект, Если На Него Нет Ссылок?
 

@@ -14,8 +14,6 @@ related: [q-compose-side-effects-coroutines--kotlin--medium, q-inline-functions-
 created: 2025-10-15
 updated: 2025-10-31
 tags: [difficulty/medium, generics, inline-functions, kotlin, reified, type-system]
-date created: Friday, October 31st 2025, 6:30:28 pm
-date modified: Saturday, November 1st 2025, 5:43:24 pm
 ---
 
 # Зачем Нужен Reified В Kotlin?

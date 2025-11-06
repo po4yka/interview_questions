@@ -1,6 +1,4 @@
 ---
-date created: Saturday, November 1st 2025, 3:45:32 pm
-date modified: Saturday, November 1st 2025, 5:43:52 pm
 ---
 
 # Translation Quality Validation Report

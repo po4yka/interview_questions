@@ -33,8 +33,6 @@ tags:
 - difficulty/easy
 - framelayout
 - layouts
-date created: Saturday, November 1st 2025, 12:47:10 pm
-date modified: Saturday, November 1st 2025, 5:43:30 pm
 ---
 
 # Вопрос (RU)
