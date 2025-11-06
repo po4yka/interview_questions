@@ -20,9 +20,6 @@ status: draft
 moc: moc-android
 related:
 - c-coroutines
-- q-handler-looper-messagequeue-relationship--android--medium
-- q-handlerthread-vs-thread--android--medium
-- q-message-scheduling-looper--android--medium
 sources: []
 created: 2025-10-13
 updated: 2025-10-31
@@ -61,31 +58,31 @@ tags:
 ```java
 // Упрощенная реализация Looper.loop()
 public static void loop() {
-    final MessageQueue queue = myLooper().mQueue;
+ final MessageQueue queue = myLooper().mQueue;
 
-    for (;;) {
-        Message msg = queue.next(); // ✅ БЛОКИРУЕТСЯ здесь при пустой очереди
+ for (;;) {
+ Message msg = queue.next(); // ✅ БЛОКИРУЕТСЯ здесь при пустой очереди
 
-        if (msg == null) return; // Только при quit()
+ if (msg == null) return; // Только при quit()
 
-        msg.target.dispatchMessage(msg);
-    }
+ msg.target.dispatchMessage(msg);
+ }
 }
 ```
 
 ```java
 // MessageQueue.next() блокирует поток
 Message next() {
-    for (;;) {
-        nativePollOnce(ptr, timeout); // ✅ Блокируется в native epoll_wait
+ for (;;) {
+ nativePollOnce(ptr, timeout); // ✅ Блокируется в native epoll_wait
 
-        synchronized (this) {
-            Message msg = mMessages;
-            if (msg != null) return msg;
+ synchronized (this) {
+ Message msg = mMessages;
+ if (msg != null) return msg;
 
-            timeout = -1; // Ждать бесконечно
-        }
-    }
+ timeout = -1; // Ждать бесконечно
+ }
+ }
 }
 ```
 
@@ -98,20 +95,20 @@ Message next() {
 
 ```kotlin
 class LooperThread : Thread("Worker") {
-    lateinit var handler: Handler
-    private val latch = CountDownLatch(1)
+ lateinit var handler: Handler
+ private val latch = CountDownLatch(1)
 
-    override fun run() {
-        Looper.prepare()
-        handler = Handler(Looper.myLooper()!!)
-        latch.countDown()
+ override fun run() {
+ Looper.prepare()
+ handler = Handler(Looper.myLooper()!!)
+ latch.countDown()
 
-        println("Entering loop with EMPTY queue...")
-        Looper.loop() // ✅ Блокируется здесь
-        println("Loop exited")
-    }
+ println("Entering loop with EMPTY queue...")
+ Looper.loop() // ✅ Блокируется здесь
+ println("Loop exited")
+ }
 
-    fun waitReady() = latch.await()
+ fun waitReady() = latch.await()
 }
 
 // Использование
@@ -157,31 +154,31 @@ This is **normal behavior** — the thread stays alive to process future message
 ```java
 // Simplified Looper.loop() implementation
 public static void loop() {
-    final MessageQueue queue = myLooper().mQueue;
+ final MessageQueue queue = myLooper().mQueue;
 
-    for (;;) {
-        Message msg = queue.next(); // ✅ BLOCKS here if queue is empty
+ for (;;) {
+ Message msg = queue.next(); // ✅ BLOCKS here if queue is empty
 
-        if (msg == null) return; // Only when quit() is called
+ if (msg == null) return; // Only when quit() is called
 
-        msg.target.dispatchMessage(msg);
-    }
+ msg.target.dispatchMessage(msg);
+ }
 }
 ```
 
 ```java
 // MessageQueue.next() blocks the thread
 Message next() {
-    for (;;) {
-        nativePollOnce(ptr, timeout); // ✅ Blocks in native epoll_wait
+ for (;;) {
+ nativePollOnce(ptr, timeout); // ✅ Blocks in native epoll_wait
 
-        synchronized (this) {
-            Message msg = mMessages;
-            if (msg != null) return msg;
+ synchronized (this) {
+ Message msg = mMessages;
+ if (msg != null) return msg;
 
-            timeout = -1; // Wait indefinitely
-        }
-    }
+ timeout = -1; // Wait indefinitely
+ }
+ }
 }
 ```
 
@@ -194,20 +191,20 @@ Message next() {
 
 ```kotlin
 class LooperThread : Thread("Worker") {
-    lateinit var handler: Handler
-    private val latch = CountDownLatch(1)
+ lateinit var handler: Handler
+ private val latch = CountDownLatch(1)
 
-    override fun run() {
-        Looper.prepare()
-        handler = Handler(Looper.myLooper()!!)
-        latch.countDown()
+ override fun run() {
+ Looper.prepare()
+ handler = Handler(Looper.myLooper()!!)
+ latch.countDown()
 
-        println("Entering loop with EMPTY queue...")
-        Looper.loop() // ✅ Blocks here
-        println("Loop exited")
-    }
+ println("Entering loop with EMPTY queue...")
+ Looper.loop() // ✅ Blocks here
+ println("Loop exited")
+ }
 
-    fun waitReady() = latch.await()
+ fun waitReady() = latch.await()
 }
 
 // Usage
@@ -257,16 +254,15 @@ looper.quitSafely()
 
 - [[c-coroutines]]
 
-
 ### Prerequisites (Easier)
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread basics
 - [[q-android-async-primitives--android--easy]] - Async primitives overview
 - [[q-why-multithreading-tools--android--easy]] - Threading fundamentals
 
 ### Related (Same Level)
-- [[q-handler-looper-messagequeue-relationship--android--medium]] - `Handler` `Looper` MessageQueue
-- [[q-handlerthread-vs-thread--android--medium]] - HandlerThread comparison
-- [[q-message-scheduling-looper--android--medium]] - `Message` scheduling
+- - `Handler` `Looper` MessageQueue
+- - HandlerThread comparison
+- - `Message` scheduling
 - [[q-handler-looper-comprehensive--android--medium]] - `Handler` and `Looper` deep dive
 - [[q-multithreading-tools-android--android--medium]] - Threading tools comparison
 

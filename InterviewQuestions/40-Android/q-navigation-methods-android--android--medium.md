@@ -55,17 +55,17 @@ startActivity(Intent(this, DetailActivity::class.java))
 
 // С данными
 val intent = Intent(this, DetailActivity::class.java).apply {
-    putExtra("USER_ID", userId)
+ putExtra("USER_ID", userId)
 }
 startActivity(intent)
 
 // ✅ Современный способ получения результата
 private val launcher = registerForActivityResult(
-    ActivityResultContracts.StartActivityForResult()
+ ActivityResultContracts.StartActivityForResult()
 ) { result ->
-    if (result.resultCode == RESULT_OK) {
-        val data = result.data?.getStringExtra("RESULT")
-    }
+ if (result.resultCode == RESULT_OK) {
+ val data = result.data?.getStringExtra("RESULT")
+ }
 }
 ```
 
@@ -78,21 +78,21 @@ private val launcher = registerForActivityResult(
 ```kotlin
 // Замена фрагмента
 supportFragmentManager.beginTransaction()
-    .replace(R.id.container, DetailFragment())
-    .addToBackStack(null)
-    .commit()
+ .replace(R.id.container, DetailFragment())
+ .addToBackStack(null)
+ .commit()
 
 // ✅ С анимацией
 supportFragmentManager.beginTransaction()
-    .setCustomAnimations(
-        R.anim.slide_in_right,
-        R.anim.slide_out_left,
-        R.anim.slide_in_left,
-        R.anim.slide_out_right
-    )
-    .replace(R.id.container, DetailFragment())
-    .addToBackStack(null)
-    .commit()
+ .setCustomAnimations(
+ R.anim.slide_in_right,
+ R.anim.slide_out_left,
+ R.anim.slide_in_left,
+ R.anim.slide_out_right
+ )
+ .replace(R.id.container, DetailFragment())
+ .addToBackStack(null)
+ .commit()
 ```
 
 **Применение**: навигация внутри одной `Activity`, master-detail layouts, вкладки.
@@ -111,12 +111,12 @@ findNavController().navigate(action)
 
 // Получение аргументов
 class DetailFragment : Fragment() {
-    private val args: DetailFragmentArgs by navArgs()
+ private val args: DetailFragmentArgs by navArgs()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val itemId = args.itemId // ✅ Type-safe
-    }
+ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+ super.onViewCreated(view, savedInstanceState)
+ val itemId = args.itemId // ✅ Type-safe
+ }
 }
 ```
 
@@ -146,8 +146,8 @@ bottomNavigationView.setupWithNavController(navController)
 ```kotlin
 // ✅ Интеграция с Navigation Component
 val appBarConfiguration = AppBarConfiguration(
-    setOf(R.id.homeFragment, R.id.settingsFragment),
-    drawerLayout
+ setOf(R.id.homeFragment, R.id.settingsFragment),
+ drawerLayout
 )
 setupActionBarWithNavController(navController, appBarConfiguration)
 ```
@@ -161,7 +161,7 @@ setupActionBarWithNavController(navController, appBarConfiguration)
 ```kotlin
 // В navigation graph
 <fragment android:id="@+id/detailFragment">
-    <deepLink app:uri="myapp://item/{itemId}" />
+ <deepLink app:uri="myapp://item/{itemId}" />
 </fragment>
 
 // ✅ Программная навигация
@@ -178,30 +178,30 @@ findNavController().navigate(uri)
 ```kotlin
 @Composable
 fun AppNavigation() {
-    val navController = rememberNavController()
+ val navController = rememberNavController()
 
-    NavHost(navController, startDestination = "home") {
-        composable("home") {
-            HomeScreen(
-                onNavigate = { itemId ->
-                    navController.navigate("detail/$itemId")
-                }
-            )
-        }
+ NavHost(navController, startDestination = "home") {
+ composable("home") {
+ HomeScreen(
+ onNavigate = { itemId ->
+ navController.navigate("detail/$itemId")
+ }
+ )
+ }
 
-        composable(
-            route = "detail/{itemId}",
-            arguments = listOf(
-                navArgument("itemId") { type = NavType.IntType }
-            )
-        ) { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getInt("itemId")
-            DetailScreen(
-                itemId = itemId,
-                onBack = { navController.navigateUp() }
-            )
-        }
-    }
+ composable(
+ route = "detail/{itemId}",
+ arguments = listOf(
+ navArgument("itemId") { type = NavType.IntType }
+ )
+ ) { backStackEntry ->
+ val itemId = backStackEntry.arguments?.getInt("itemId")
+ DetailScreen(
+ itemId = itemId,
+ onBack = { navController.navigateUp() }
+ )
+ }
+ }
 }
 ```
 
@@ -249,17 +249,17 @@ startActivity(Intent(this, DetailActivity::class.java))
 
 // With data
 val intent = Intent(this, DetailActivity::class.java).apply {
-    putExtra("USER_ID", userId)
+ putExtra("USER_ID", userId)
 }
 startActivity(intent)
 
 // ✅ Modern way to get result
 private val launcher = registerForActivityResult(
-    ActivityResultContracts.StartActivityForResult()
+ ActivityResultContracts.StartActivityForResult()
 ) { result ->
-    if (result.resultCode == RESULT_OK) {
-        val data = result.data?.getStringExtra("RESULT")
-    }
+ if (result.resultCode == RESULT_OK) {
+ val data = result.data?.getStringExtra("RESULT")
+ }
 }
 ```
 
@@ -272,21 +272,21 @@ Manage fragments via FragmentManager:
 ```kotlin
 // Replace fragment
 supportFragmentManager.beginTransaction()
-    .replace(R.id.container, DetailFragment())
-    .addToBackStack(null)
-    .commit()
+ .replace(R.id.container, DetailFragment())
+ .addToBackStack(null)
+ .commit()
 
 // ✅ With animation
 supportFragmentManager.beginTransaction()
-    .setCustomAnimations(
-        R.anim.slide_in_right,
-        R.anim.slide_out_left,
-        R.anim.slide_in_left,
-        R.anim.slide_out_right
-    )
-    .replace(R.id.container, DetailFragment())
-    .addToBackStack(null)
-    .commit()
+ .setCustomAnimations(
+ R.anim.slide_in_right,
+ R.anim.slide_out_left,
+ R.anim.slide_in_left,
+ R.anim.slide_out_right
+ )
+ .replace(R.id.container, DetailFragment())
+ .addToBackStack(null)
+ .commit()
 ```
 
 **Use cases**: in-app navigation within single `Activity`, master-detail layouts, tabs.
@@ -305,12 +305,12 @@ findNavController().navigate(action)
 
 // Get arguments
 class DetailFragment : Fragment() {
-    private val args: DetailFragmentArgs by navArgs()
+ private val args: DetailFragmentArgs by navArgs()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        val itemId = args.itemId // ✅ Type-safe
-    }
+ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+ super.onViewCreated(view, savedInstanceState)
+ val itemId = args.itemId // ✅ Type-safe
+ }
 }
 ```
 
@@ -340,8 +340,8 @@ Side menu for multiple destinations:
 ```kotlin
 // ✅ Integration with Navigation Component
 val appBarConfiguration = AppBarConfiguration(
-    setOf(R.id.homeFragment, R.id.settingsFragment),
-    drawerLayout
+ setOf(R.id.homeFragment, R.id.settingsFragment),
+ drawerLayout
 )
 setupActionBarWithNavController(navController, appBarConfiguration)
 ```
@@ -355,7 +355,7 @@ URI-based navigation:
 ```kotlin
 // In navigation graph
 <fragment android:id="@+id/detailFragment">
-    <deepLink app:uri="myapp://item/{itemId}" />
+ <deepLink app:uri="myapp://item/{itemId}" />
 </fragment>
 
 // ✅ Programmatic navigation
@@ -372,30 +372,30 @@ Navigation in Compose:
 ```kotlin
 @Composable
 fun AppNavigation() {
-    val navController = rememberNavController()
+ val navController = rememberNavController()
 
-    NavHost(navController, startDestination = "home") {
-        composable("home") {
-            HomeScreen(
-                onNavigate = { itemId ->
-                    navController.navigate("detail/$itemId")
-                }
-            )
-        }
+ NavHost(navController, startDestination = "home") {
+ composable("home") {
+ HomeScreen(
+ onNavigate = { itemId ->
+ navController.navigate("detail/$itemId")
+ }
+ )
+ }
 
-        composable(
-            route = "detail/{itemId}",
-            arguments = listOf(
-                navArgument("itemId") { type = NavType.IntType }
-            )
-        ) { backStackEntry ->
-            val itemId = backStackEntry.arguments?.getInt("itemId")
-            DetailScreen(
-                itemId = itemId,
-                onBack = { navController.navigateUp() }
-            )
-        }
-    }
+ composable(
+ route = "detail/{itemId}",
+ arguments = listOf(
+ navArgument("itemId") { type = NavType.IntType }
+ )
+ ) { backStackEntry ->
+ val itemId = backStackEntry.arguments?.getInt("itemId")
+ DetailScreen(
+ itemId = itemId,
+ onBack = { navController.navigateUp() }
+ )
+ }
+ }
 }
 ```
 
@@ -428,13 +428,12 @@ fun AppNavigation() {
 
 ## References
 
-- [[c-android-navigation]] - Navigation patterns
+- - Navigation patterns
 - [[c-fragment-lifecycle]] - `Fragment` lifecycle management
 - [[c-jetpack-compose]] - Compose fundamentals
 - [Navigation](https://developer.android.com/guide/navigation)
 - https://developer.android.com/jetpack/compose/navigation
 ---
-
 
 ## Related Questions
 

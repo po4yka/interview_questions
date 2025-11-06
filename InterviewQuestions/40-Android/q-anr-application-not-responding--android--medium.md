@@ -4,21 +4,21 @@ title: ANR (Application Not Responding) / ANR (Приложение не отв�
 aliases: [ANR (Application Not Responding), ANR (Приложение не отвечает)]
 topic: android
 subtopics:
-  - performance-rendering
-  - profiling
-  - strictmode-anr
+ - performance-rendering
+ - profiling
+ - strictmode-anr
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - en
-  - ru
+ - en
+ - ru
 status: reviewed
 moc: moc-android
 related:
-  - c-coroutines
-  - c-lifecycle
-  - c-workmanager
+ - c-coroutines
+ - c-lifecycle
+ - c-workmanager
 created: 2025-10-05
 updated: 2025-10-30
 sources: []
@@ -48,25 +48,25 @@ tags: [android/performance-rendering, android/profiling, android/strictmode-anr,
 ```kotlin
 // ❌ ПЛОХО: Блокировка main thread
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        File("large.txt").readText()  // I/O блокировка
-        calculatePrimes(1_000_000)    // CPU-интенсивная задача
-        httpClient.get(url).execute() // Синхронный network call
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ File("large.txt").readText() // I/O блокировка
+ calculatePrimes(1_000_000) // CPU-интенсивная задача
+ httpClient.get(url).execute() // Синхронный network call
+ }
 }
 ```
 
 ```kotlin
 // ✅ ХОРОШО: Асинхронное выполнение
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        lifecycleScope.launch(Dispatchers.IO) {
-            val data = File("large.txt").readText()
-            withContext(Dispatchers.Main) { updateUI(data) }
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ lifecycleScope.launch(Dispatchers.IO) {
+ val data = File("large.txt").readText()
+ withContext(Dispatchers.Main) { updateUI(data) }
+ }
+ }
 }
 ```
 
@@ -75,16 +75,16 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 // ✅ goAsync() для асинхронной работы
 class MyReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        val pendingResult = goAsync()
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                database.insert(data)
-            } finally {
-                pendingResult.finish()
-            }
-        }
-    }
+ override fun onReceive(context: Context, intent: Intent) {
+ val pendingResult = goAsync()
+ CoroutineScope(Dispatchers.IO).launch {
+ try {
+ database.insert(data)
+ } finally {
+ pendingResult.finish()
+ }
+ }
+ }
 }
 ```
 
@@ -93,12 +93,12 @@ class MyReceiver : BroadcastReceiver() {
 ```kotlin
 // StrictMode для детекции в debug
 if (BuildConfig.DEBUG) {
-    StrictMode.setThreadPolicy(
-        StrictMode.ThreadPolicy.Builder()
-            .detectAll()
-            .penaltyLog()
-            .build()
-    )
+ StrictMode.setThreadPolicy(
+ StrictMode.ThreadPolicy.Builder()
+ .detectAll()
+ .penaltyLog()
+ .build()
+ )
 }
 ```
 
@@ -130,25 +130,25 @@ if (BuildConfig.DEBUG) {
 ```kotlin
 // ❌ BAD: Blocking main thread
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        File("large.txt").readText()  // I/O blocking
-        calculatePrimes(1_000_000)    // CPU-intensive task
-        httpClient.get(url).execute() // Synchronous network call
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ File("large.txt").readText() // I/O blocking
+ calculatePrimes(1_000_000) // CPU-intensive task
+ httpClient.get(url).execute() // Synchronous network call
+ }
 }
 ```
 
 ```kotlin
 // ✅ GOOD: Asynchronous execution
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        lifecycleScope.launch(Dispatchers.IO) {
-            val data = File("large.txt").readText()
-            withContext(Dispatchers.Main) { updateUI(data) }
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ lifecycleScope.launch(Dispatchers.IO) {
+ val data = File("large.txt").readText()
+ withContext(Dispatchers.Main) { updateUI(data) }
+ }
+ }
 }
 ```
 
@@ -157,16 +157,16 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 // ✅ goAsync() for asynchronous work
 class MyReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        val pendingResult = goAsync()
-        CoroutineScope(Dispatchers.IO).launch {
-            try {
-                database.insert(data)
-            } finally {
-                pendingResult.finish()
-            }
-        }
-    }
+ override fun onReceive(context: Context, intent: Intent) {
+ val pendingResult = goAsync()
+ CoroutineScope(Dispatchers.IO).launch {
+ try {
+ database.insert(data)
+ } finally {
+ pendingResult.finish()
+ }
+ }
+ }
 }
 ```
 
@@ -175,12 +175,12 @@ class MyReceiver : BroadcastReceiver() {
 ```kotlin
 // StrictMode for debug detection
 if (BuildConfig.DEBUG) {
-    StrictMode.setThreadPolicy(
-        StrictMode.ThreadPolicy.Builder()
-            .detectAll()
-            .penaltyLog()
-            .build()
-    )
+ StrictMode.setThreadPolicy(
+ StrictMode.ThreadPolicy.Builder()
+ .detectAll()
+ .penaltyLog()
+ .build()
+ )
 }
 ```
 
@@ -212,10 +212,9 @@ if (BuildConfig.DEBUG) {
 - [[c-lifecycle]]
 - [[c-coroutines]]
 - [[c-workmanager]]
-- [[c-strictmode]]
+- 
 - [ANRs](https://developer.android.com/topic/performance/vitals/anr)
 - https://developer.android.com/topic/performance/anrs/diagnose-and-fix-anrs
-
 
 ## Related Questions
 

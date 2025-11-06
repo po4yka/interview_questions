@@ -21,9 +21,6 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-android-ipc
-- q-android-ipc-mechanisms--android--hard
-- q-android-security-best-practices--android--hard
 created: 2025-10-15
 updated: 2025-10-30
 sources:
@@ -58,7 +55,7 @@ tags:
 ```kotlin
 // TransactionTooLargeException!
 val bitmap = BitmapFactory.decodeResource(resources, R.drawable.large)
-intent.putExtra("image", bitmap)  // Ошибка при размере > 1MB
+intent.putExtra("image", bitmap) // Ошибка при размере > 1MB
 ```
 
 **Причина:** `Intent` использует Binder IPC с лимитом **~1MB** на всю транзакцию.
@@ -78,13 +75,13 @@ intent.putExtra("image", bitmap)  // Ошибка при размере > 1MB
 
 ```kotlin
 <provider
-    android:name="androidx.core.content.FileProvider"
-    android:authorities="${applicationId}.fileprovider"
-    android:exported="false"
-    android:grantUriPermissions="true">
-    <meta-data
-        android:name="android.support.FILE_PROVIDER_PATHS"
-        android:resource="@xml/file_paths" />
+ android:name="androidx.core.content.FileProvider"
+ android:authorities="${applicationId}.fileprovider"
+ android:exported="false"
+ android:grantUriPermissions="true">
+ <meta-data
+ android:name="android.support.FILE_PROVIDER_PATHS"
+ android:resource="@xml/file_paths" />
 </provider>
 ```
 
@@ -92,8 +89,8 @@ intent.putExtra("image", bitmap)  // Ошибка при размере > 1MB
 
 ```xml
 <paths>
-    <cache-path name="cache" path="." />
-    <files-path name="files" path="." />
+ <cache-path name="cache" path="." />
+ <files-path name="files" path="." />
 </paths>
 ```
 
@@ -101,22 +98,22 @@ intent.putExtra("image", bitmap)  // Ошибка при размере > 1MB
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private fun passLargeImage() {
-        // 1. Сохранить в файл
-        val bitmap = loadBitmap()
-        val file = File(cacheDir, "shared_${System.currentTimeMillis()}.jpg")
-        FileOutputStream(file).use { bitmap.compress(Bitmap.CompressFormat.JPEG, 90, it) }
+ private fun passLargeImage() {
+ // 1. Сохранить в файл
+ val bitmap = loadBitmap()
+ val file = File(cacheDir, "shared_${System.currentTimeMillis()}.jpg")
+ FileOutputStream(file).use { bitmap.compress(Bitmap.CompressFormat.JPEG, 90, it) }
 
-        // 2. Получить URI через FileProvider
-        val uri = FileProvider.getUriForFile(this, "$packageName.fileprovider", file)
+ // 2. Получить URI через FileProvider
+ val uri = FileProvider.getUriForFile(this, "$packageName.fileprovider", file)
 
-        // 3. Передать URI с разрешением
-        val intent = Intent(this, ViewImageActivity::class.java).apply {
-            putExtra("imageUri", uri.toString())
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-        startActivity(intent)
-    }
+ // 3. Передать URI с разрешением
+ val intent = Intent(this, ViewImageActivity::class.java).apply {
+ putExtra("imageUri", uri.toString())
+ addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+ }
+ startActivity(intent)
+ }
 }
 ```
 
@@ -124,16 +121,16 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class ViewImageActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val uri = Uri.parse(intent.getStringExtra("imageUri"))
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ val uri = Uri.parse(intent.getStringExtra("imageUri"))
 
-        // Загрузить через ContentResolver
-        contentResolver.openInputStream(uri)?.use { stream ->
-            val bitmap = BitmapFactory.decodeStream(stream)
-            imageView.setImageBitmap(bitmap)
-        }
-    }
+ // Загрузить через ContentResolver
+ contentResolver.openInputStream(uri)?.use { stream ->
+ val bitmap = BitmapFactory.decodeStream(stream)
+ imageView.setImageBitmap(bitmap)
+ }
+ }
 }
 ```
 
@@ -154,36 +151,36 @@ class ViewImageActivity : AppCompatActivity() {
 
 ```kotlin
 class SharedImageViewModel : ViewModel() {
-    private val _bitmap = MutableLiveData<Bitmap?>()
-    val bitmap: LiveData<Bitmap?> = _bitmap
+ private val _bitmap = MutableLiveData<Bitmap?>()
+ val bitmap: LiveData<Bitmap?> = _bitmap
 
-    fun setImage(bitmap: Bitmap) { _bitmap.value = bitmap }
+ fun setImage(bitmap: Bitmap) { _bitmap.value = bitmap }
 
-    override fun onCleared() {
-        _bitmap.value?.recycle()
-    }
+ override fun onCleared() {
+ _bitmap.value?.recycle()
+ }
 }
 
 // Отправитель
 class SenderActivity : AppCompatActivity() {
-    private val viewModel: SharedImageViewModel by viewModels()
+ private val viewModel: SharedImageViewModel by viewModels()
 
-    fun share() {
-        viewModel.setImage(loadBitmap())
-        startActivity(Intent(this, ReceiverActivity::class.java))
-    }
+ fun share() {
+ viewModel.setImage(loadBitmap())
+ startActivity(Intent(this, ReceiverActivity::class.java))
+ }
 }
 
 // Получатель
 class ReceiverActivity : AppCompatActivity() {
-    private val viewModel: SharedImageViewModel by viewModels()
+ private val viewModel: SharedImageViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.bitmap.observe(this) { bitmap ->
-            imageView.setImageBitmap(bitmap)
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ viewModel.bitmap.observe(this) { bitmap ->
+ imageView.setImageBitmap(bitmap)
+ }
+ }
 }
 ```
 
@@ -205,28 +202,28 @@ class ReceiverActivity : AppCompatActivity() {
 ```kotlin
 @Entity(tableName = "images")
 data class ImageEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val filePath: String,
-    val timestamp: Long
+ @PrimaryKey(autoGenerate = true) val id: Long = 0,
+ val filePath: String,
+ val timestamp: Long
 )
 
 // Отправитель
 lifecycleScope.launch {
-    val file = saveToFile(bitmap)
-    val entity = ImageEntity(filePath = file.path, timestamp = now())
-    val id = database.imageDao().insert(entity)
+ val file = saveToFile(bitmap)
+ val entity = ImageEntity(filePath = file.path, timestamp = now())
+ val id = database.imageDao().insert(entity)
 
-    startActivity(Intent(this, ViewActivity::class.java).apply {
-        putExtra("imageId", id)
-    })
+ startActivity(Intent(this, ViewActivity::class.java).apply {
+ putExtra("imageId", id)
+ })
 }
 
 // Получатель
 lifecycleScope.launch {
-    val id = intent.getLongExtra("imageId", -1)
-    val entity = database.imageDao().getById(id)
-    val bitmap = BitmapFactory.decodeFile(entity?.filePath)
-    imageView.setImageBitmap(bitmap)
+ val id = intent.getLongExtra("imageId", -1)
+ val entity = database.imageDao().getById(id)
+ val bitmap = BitmapFactory.decodeFile(entity?.filePath)
+ imageView.setImageBitmap(bitmap)
 }
 ```
 
@@ -246,12 +243,12 @@ lifecycleScope.launch {
 
 ```kotlin
 object ImageHolder {
-    var currentBitmap: Bitmap? = null
+ var currentBitmap: Bitmap? = null
 
-    fun clear() {
-        currentBitmap?.recycle()
-        currentBitmap = null
-    }
+ fun clear() {
+ currentBitmap?.recycle()
+ currentBitmap = null
+ }
 }
 
 // Отправитель
@@ -260,13 +257,13 @@ startActivity(Intent(this, ViewActivity::class.java))
 
 // Получатель
 override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    imageView.setImageBitmap(ImageHolder.currentBitmap)
+ super.onCreate(savedInstanceState)
+ imageView.setImageBitmap(ImageHolder.currentBitmap)
 }
 
 override fun onDestroy() {
-    super.onDestroy()
-    ImageHolder.clear()
+ super.onDestroy()
+ ImageHolder.clear()
 }
 ```
 
@@ -280,26 +277,26 @@ override fun onDestroy() {
 
 ```kotlin
 class ImageContentProvider : ContentProvider() {
-    companion object {
-        const val AUTHORITY = "com.example.app.images"
-        val CONTENT_URI: Uri = Uri.parse("content://$AUTHORITY/images")
-    }
+ companion object {
+ const val AUTHORITY = "com.example.app.images"
+ val CONTENT_URI: Uri = Uri.parse("content://$AUTHORITY/images")
+ }
 
-    override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor? {
-        val imageId = uri.lastPathSegment?.toLongOrNull() ?: return null
-        val file = File(context?.filesDir, "image_$imageId.jpg")
-        return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-    }
+ override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor? {
+ val imageId = uri.lastPathSegment?.toLongOrNull() ?: return null
+ val file = File(context?.filesDir, "image_$imageId.jpg")
+ return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+ }
 
-    // Остальные методы...
+ // Остальные методы...
 }
 
 // Манифест
 <provider
-    android:name=".ImageContentProvider"
-    android:authorities="com.example.app.images"
-    android:exported="true"
-    android:grantUriPermissions="true" />
+ android:name=".ImageContentProvider"
+ android:authorities="com.example.app.images"
+ android:exported="true"
+ android:grantUriPermissions="true" />
 
 // Использование
 val uri = Uri.withAppendedPath(ImageContentProvider.CONTENT_URI, "$imageId")
@@ -374,7 +371,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 ```kotlin
 // TransactionTooLargeException!
 val bitmap = BitmapFactory.decodeResource(resources, R.drawable.large)
-intent.putExtra("image", bitmap)  // Fails if size > 1MB
+intent.putExtra("image", bitmap) // Fails if size > 1MB
 ```
 
 **Reason:** `Intent` uses Binder IPC with **~1MB** limit for entire transaction buffer.
@@ -394,13 +391,13 @@ intent.putExtra("image", bitmap)  // Fails if size > 1MB
 
 ```kotlin
 <provider
-    android:name="androidx.core.content.FileProvider"
-    android:authorities="${applicationId}.fileprovider"
-    android:exported="false"
-    android:grantUriPermissions="true">
-    <meta-data
-        android:name="android.support.FILE_PROVIDER_PATHS"
-        android:resource="@xml/file_paths" />
+ android:name="androidx.core.content.FileProvider"
+ android:authorities="${applicationId}.fileprovider"
+ android:exported="false"
+ android:grantUriPermissions="true">
+ <meta-data
+ android:name="android.support.FILE_PROVIDER_PATHS"
+ android:resource="@xml/file_paths" />
 </provider>
 ```
 
@@ -408,8 +405,8 @@ intent.putExtra("image", bitmap)  // Fails if size > 1MB
 
 ```xml
 <paths>
-    <cache-path name="cache" path="." />
-    <files-path name="files" path="." />
+ <cache-path name="cache" path="." />
+ <files-path name="files" path="." />
 </paths>
 ```
 
@@ -417,22 +414,22 @@ intent.putExtra("image", bitmap)  // Fails if size > 1MB
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private fun passLargeImage() {
-        // 1. Save to file
-        val bitmap = loadBitmap()
-        val file = File(cacheDir, "shared_${System.currentTimeMillis()}.jpg")
-        FileOutputStream(file).use { bitmap.compress(Bitmap.CompressFormat.JPEG, 90, it) }
+ private fun passLargeImage() {
+ // 1. Save to file
+ val bitmap = loadBitmap()
+ val file = File(cacheDir, "shared_${System.currentTimeMillis()}.jpg")
+ FileOutputStream(file).use { bitmap.compress(Bitmap.CompressFormat.JPEG, 90, it) }
 
-        // 2. Get URI via FileProvider
-        val uri = FileProvider.getUriForFile(this, "$packageName.fileprovider", file)
+ // 2. Get URI via FileProvider
+ val uri = FileProvider.getUriForFile(this, "$packageName.fileprovider", file)
 
-        // 3. Pass URI with permission
-        val intent = Intent(this, ViewImageActivity::class.java).apply {
-            putExtra("imageUri", uri.toString())
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        }
-        startActivity(intent)
-    }
+ // 3. Pass URI with permission
+ val intent = Intent(this, ViewImageActivity::class.java).apply {
+ putExtra("imageUri", uri.toString())
+ addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+ }
+ startActivity(intent)
+ }
 }
 ```
 
@@ -440,16 +437,16 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class ViewImageActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val uri = Uri.parse(intent.getStringExtra("imageUri"))
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ val uri = Uri.parse(intent.getStringExtra("imageUri"))
 
-        // Load via ContentResolver
-        contentResolver.openInputStream(uri)?.use { stream ->
-            val bitmap = BitmapFactory.decodeStream(stream)
-            imageView.setImageBitmap(bitmap)
-        }
-    }
+ // Load via ContentResolver
+ contentResolver.openInputStream(uri)?.use { stream ->
+ val bitmap = BitmapFactory.decodeStream(stream)
+ imageView.setImageBitmap(bitmap)
+ }
+ }
 }
 ```
 
@@ -470,36 +467,36 @@ class ViewImageActivity : AppCompatActivity() {
 
 ```kotlin
 class SharedImageViewModel : ViewModel() {
-    private val _bitmap = MutableLiveData<Bitmap?>()
-    val bitmap: LiveData<Bitmap?> = _bitmap
+ private val _bitmap = MutableLiveData<Bitmap?>()
+ val bitmap: LiveData<Bitmap?> = _bitmap
 
-    fun setImage(bitmap: Bitmap) { _bitmap.value = bitmap }
+ fun setImage(bitmap: Bitmap) { _bitmap.value = bitmap }
 
-    override fun onCleared() {
-        _bitmap.value?.recycle()
-    }
+ override fun onCleared() {
+ _bitmap.value?.recycle()
+ }
 }
 
 // Sender
 class SenderActivity : AppCompatActivity() {
-    private val viewModel: SharedImageViewModel by viewModels()
+ private val viewModel: SharedImageViewModel by viewModels()
 
-    fun share() {
-        viewModel.setImage(loadBitmap())
-        startActivity(Intent(this, ReceiverActivity::class.java))
-    }
+ fun share() {
+ viewModel.setImage(loadBitmap())
+ startActivity(Intent(this, ReceiverActivity::class.java))
+ }
 }
 
 // Receiver
 class ReceiverActivity : AppCompatActivity() {
-    private val viewModel: SharedImageViewModel by viewModels()
+ private val viewModel: SharedImageViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.bitmap.observe(this) { bitmap ->
-            imageView.setImageBitmap(bitmap)
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ viewModel.bitmap.observe(this) { bitmap ->
+ imageView.setImageBitmap(bitmap)
+ }
+ }
 }
 ```
 
@@ -521,28 +518,28 @@ class ReceiverActivity : AppCompatActivity() {
 ```kotlin
 @Entity(tableName = "images")
 data class ImageEntity(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    val filePath: String,
-    val timestamp: Long
+ @PrimaryKey(autoGenerate = true) val id: Long = 0,
+ val filePath: String,
+ val timestamp: Long
 )
 
 // Sender
 lifecycleScope.launch {
-    val file = saveToFile(bitmap)
-    val entity = ImageEntity(filePath = file.path, timestamp = now())
-    val id = database.imageDao().insert(entity)
+ val file = saveToFile(bitmap)
+ val entity = ImageEntity(filePath = file.path, timestamp = now())
+ val id = database.imageDao().insert(entity)
 
-    startActivity(Intent(this, ViewActivity::class.java).apply {
-        putExtra("imageId", id)
-    })
+ startActivity(Intent(this, ViewActivity::class.java).apply {
+ putExtra("imageId", id)
+ })
 }
 
 // Receiver
 lifecycleScope.launch {
-    val id = intent.getLongExtra("imageId", -1)
-    val entity = database.imageDao().getById(id)
-    val bitmap = BitmapFactory.decodeFile(entity?.filePath)
-    imageView.setImageBitmap(bitmap)
+ val id = intent.getLongExtra("imageId", -1)
+ val entity = database.imageDao().getById(id)
+ val bitmap = BitmapFactory.decodeFile(entity?.filePath)
+ imageView.setImageBitmap(bitmap)
 }
 ```
 
@@ -562,12 +559,12 @@ lifecycleScope.launch {
 
 ```kotlin
 object ImageHolder {
-    var currentBitmap: Bitmap? = null
+ var currentBitmap: Bitmap? = null
 
-    fun clear() {
-        currentBitmap?.recycle()
-        currentBitmap = null
-    }
+ fun clear() {
+ currentBitmap?.recycle()
+ currentBitmap = null
+ }
 }
 
 // Sender
@@ -576,13 +573,13 @@ startActivity(Intent(this, ViewActivity::class.java))
 
 // Receiver
 override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    imageView.setImageBitmap(ImageHolder.currentBitmap)
+ super.onCreate(savedInstanceState)
+ imageView.setImageBitmap(ImageHolder.currentBitmap)
 }
 
 override fun onDestroy() {
-    super.onDestroy()
-    ImageHolder.clear()
+ super.onDestroy()
+ ImageHolder.clear()
 }
 ```
 
@@ -596,26 +593,26 @@ override fun onDestroy() {
 
 ```kotlin
 class ImageContentProvider : ContentProvider() {
-    companion object {
-        const val AUTHORITY = "com.example.app.images"
-        val CONTENT_URI: Uri = Uri.parse("content://$AUTHORITY/images")
-    }
+ companion object {
+ const val AUTHORITY = "com.example.app.images"
+ val CONTENT_URI: Uri = Uri.parse("content://$AUTHORITY/images")
+ }
 
-    override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor? {
-        val imageId = uri.lastPathSegment?.toLongOrNull() ?: return null
-        val file = File(context?.filesDir, "image_$imageId.jpg")
-        return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
-    }
+ override fun openFile(uri: Uri, mode: String): ParcelFileDescriptor? {
+ val imageId = uri.lastPathSegment?.toLongOrNull() ?: return null
+ val file = File(context?.filesDir, "image_$imageId.jpg")
+ return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+ }
 
-    // Other methods...
+ // Other methods...
 }
 
 // Manifest
 <provider
-    android:name=".ImageContentProvider"
-    android:authorities="com.example.app.images"
-    android:exported="true"
-    android:grantUriPermissions="true" />
+ android:name=".ImageContentProvider"
+ android:authorities="com.example.app.images"
+ android:exported="true"
+ android:grantUriPermissions="true" />
 
 // Usage
 val uri = Uri.withAppendedPath(ImageContentProvider.CONTENT_URI, "$imageId")
@@ -704,8 +701,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 ### Prerequisites / Concepts
 
-- [[c-android-ipc]]
-
+- 
 
 ### Prerequisites (Medium)
 - [[q-how-to-pass-data-from-one-activity-to-another--android--medium]] - Basic data passing
@@ -713,5 +709,5 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 ### Related (Hard)
 - [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Component architecture
-- [[q-android-ipc-mechanisms--android--hard]] - Inter-process communication
+- - Inter-process communication
 - [[q-android-security-best-practices--android--medium]] - Secure file sharing

@@ -29,7 +29,6 @@ related:
 - c-lifecycle
 - q-anr-application-not-responding--android--medium
 - q-how-to-start-drawing-ui-in-android--android--easy
-- q-kmm-dependency-injection--multiplatform--medium
 created: 2025-10-05
 updated: 2025-10-05
 tags:
@@ -72,11 +71,11 @@ To declare your service, add a `<service>` element as a child of the `<applicati
 
 ```xml
 <manifest ... >
-  ...
-  <application ... >
-      <service android:name=".ExampleService" />
-      ...
-  </application>
+ ...
+ <application ... >
+ <service android:name=".ExampleService" />
+ ...
+ </application>
 </manifest>
 ```
 
@@ -115,7 +114,6 @@ The service lifecycle—from when it's created to when it's destroyed—can foll
 
 These two paths aren't entirely separate. You can bind to a service that is already started with `startService()`. For example, you can start a background music service by calling `startService()` with an `Intent` that identifies the music to play. Later, possibly when the user wants to exercise some control over the player or get information about the current song, an activity can bind to the service by calling `bindService()`. In cases such as this, `stopService()` or `stopSelf()` doesn't actually stop the service until all of the clients unbind.
 
-
 # Question (EN)
 > What's `Service`?
 # Вопрос (RU)
@@ -123,9 +121,7 @@ These two paths aren't entirely separate. You can bind to a service that is alre
 
 ---
 
-
 ---
-
 
 ## Answer (EN)
 
@@ -151,11 +147,11 @@ To declare your service, add a `<service>` element as a child of the `<applicati
 
 ```xml
 <manifest ... >
-  ...
-  <application ... >
-      <service android:name=".ExampleService" />
-      ...
-  </application>
+ ...
+ <application ... >
+ <service android:name=".ExampleService" />
+ ...
+ </application>
 </manifest>
 ```
 
@@ -218,11 +214,11 @@ These two paths aren't entirely separate. You can bind to a service that is alre
 
 ```xml
 <manifest ... >
-  ...
-  <application ... >
-      <service android:name=".ExampleService" />
-      ...
-  </application>
+ ...
+ <application ... >
+ <service android:name=".ExampleService" />
+ ...
+ </application>
 </manifest>
 ```
 
@@ -268,13 +264,11 @@ These two paths aren't entirely separate. You can bind to a service that is alre
 - [Android `Service` Tutorial](https://www.vogella.com/tutorials/AndroidServices/article.html)
 - [Android `Service` Tutorial](https://www.survivingwithandroid.com/android-service-tutorial-2/)
 
-
 ## Follow-ups
 
 - [[q-anr-application-not-responding--android--medium]]
 - [[q-how-to-start-drawing-ui-in-android--android--easy]]
-- [[q-kmm-dependency-injection--multiplatform--medium]]
-
+- 
 
 ## Related Questions
 
@@ -283,7 +277,6 @@ These two paths aren't entirely separate. You can bind to a service that is alre
 - [[c-service]]
 - [[c-background-tasks]]
 - [[c-lifecycle]]
-
 
 ### Related (Medium)
 - [[q-memory-leak-detection--android--medium]] - Performance

@@ -19,7 +19,6 @@ moc: moc-android
 related:
 - c-dependency-injection
 - c-hilt
-- q-test-doubles-dependency-injection--testing--medium
 - q-what-is-known-about-recyclerview--android--easy
 created: 2025-10-15
 updated: 2025-10-31
@@ -50,16 +49,16 @@ Dependency Injection is a design pattern where objects receive their dependencie
 ```kotlin
 // Without DI (bad)
 class UserViewModel {
-    private val repository = UserRepository() // Hard-coded dependency
+ private val repository = UserRepository() // Hard-coded dependency
 
-    fun getUser() = repository.fetchUser()
+ fun getUser() = repository.fetchUser()
 }
 
 // With DI (good)
 class UserViewModel(
-    private val repository: UserRepository // Injected dependency
+ private val repository: UserRepository // Injected dependency
 ) {
-    fun getUser() = repository.fetchUser()
+ fun getUser() = repository.fetchUser()
 }
 ```
 
@@ -86,24 +85,24 @@ Hilt solves these problems by providing:
 ```gradle
 // Project-level build.gradle
 buildscript {
-    dependencies {
-        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.48'
-    }
+ dependencies {
+ classpath 'com.google.dagger:hilt-android-gradle-plugin:2.48'
+ }
 }
 
 // App-level build.gradle
 plugins {
-    id 'com.google.dagger.hilt.android'
-    id 'kotlin-kapt'
+ id 'com.google.dagger.hilt.android'
+ id 'kotlin-kapt'
 }
 
 dependencies {
-    implementation 'com.google.dagger:hilt-android:2.48'
-    kapt 'com.google.dagger:hilt-android-compiler:2.48'
+ implementation 'com.google.dagger:hilt-android:2.48'
+ kapt 'com.google.dagger:hilt-android-compiler:2.48'
 
-    // For ViewModels
-    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
-    kapt 'androidx.hilt:hilt-compiler:1.1.0'
+ // For ViewModels
+ implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
+ kapt 'androidx.hilt:hilt-compiler:1.1.0'
 }
 ```
 
@@ -112,7 +111,7 @@ dependencies {
 ```kotlin
 @HiltAndroidApp
 class MyApplication : Application() {
-    // Hilt automatically generates Application component
+ // Hilt automatically generates Application component
 }
 ```
 
@@ -121,16 +120,16 @@ class MyApplication : Application() {
 ```kotlin
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    // Can inject dependencies here
+ // Can inject dependencies here
 
-    @Inject
-    lateinit var userRepository: UserRepository
+ @Inject
+ lateinit var userRepository: UserRepository
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // userRepository is automatically injected
-        userRepository.getUsers()
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ // userRepository is automatically injected
+ userRepository.getUsers()
+ }
 }
 ```
 
@@ -144,17 +143,17 @@ Hilt provides predefined components tied to Android lifecycle:
 
 ```
 SingletonComponent (Application scope)
-    ↓
+ ↓
 ActivityRetainedComponent (ViewModel scope)
-    ↓
+ ↓
 ActivityComponent (Activity scope)
-    ↓
+ ↓
 FragmentComponent (Fragment scope)
-    ↓
+ ↓
 ViewComponent (View scope)
-    ↓
+ ↓
 ViewWithFragmentComponent (View with Fragment scope)
-    ↓
+ ↓
 ServiceComponent (Service scope)
 ```
 
@@ -163,12 +162,12 @@ ServiceComponent (Service scope)
 Hilt provides standard scopes for Android:
 
 ```kotlin
-@Singleton                    // Application lifetime
-@ActivityRetainedScoped       // Survives configuration changes
-@ActivityScoped               // Activity lifetime
-@FragmentScoped               // Fragment lifetime
-@ViewScoped                   // View lifetime
-@ServiceScoped                // Service lifetime
+@Singleton // Application lifetime
+@ActivityRetainedScoped // Survives configuration changes
+@ActivityScoped // Activity lifetime
+@FragmentScoped // Fragment lifetime
+@ViewScoped // View lifetime
+@ServiceScoped // Service lifetime
 ```
 
 ---
@@ -180,34 +179,34 @@ Hilt provides standard scopes for Android:
 ```kotlin
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-    private val savedStateHandle: SavedStateHandle
+ private val userRepository: UserRepository,
+ private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val users = userRepository.getUsers()
-        .asLiveData()
+ val users = userRepository.getUsers()
+ .asLiveData()
 
-    fun loadUser(userId: String) {
-        viewModelScope.launch {
-            val user = userRepository.getUserById(userId)
-            // Update UI
-        }
-    }
+ fun loadUser(userId: String) {
+ viewModelScope.launch {
+ val user = userRepository.getUserById(userId)
+ // Update UI
+ }
+ }
 }
 
 @AndroidEntryPoint
 class UserActivity : AppCompatActivity() {
-    // ViewModel is automatically injected
-    private val viewModel: UserViewModel by viewModels()
+ // ViewModel is automatically injected
+ private val viewModel: UserViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContentView(R.layout.activity_user)
 
-        viewModel.users.observe(this) { users ->
-            displayUsers(users)
-        }
-    }
+ viewModel.users.observe(this) { users ->
+ displayUsers(users)
+ }
+ }
 }
 ```
 
@@ -218,20 +217,20 @@ class UserActivity : AppCompatActivity() {
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://api.example.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
+ @Provides
+ @Singleton
+ fun provideRetrofit(): Retrofit {
+ return Retrofit.Builder()
+ .baseUrl("https://api.example.com/")
+ .addConverterFactory(GsonConverterFactory.create())
+ .build()
+ }
 
-    @Provides
-    @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
-    }
+ @Provides
+ @Singleton
+ fun provideApiService(retrofit: Retrofit): ApiService {
+ return retrofit.create(ApiService::class.java)
+ }
 }
 ```
 
@@ -239,26 +238,26 @@ object AppModule {
 
 ```kotlin
 interface UserRepository {
-    suspend fun getUsers(): List<User>
+ suspend fun getUsers(): List<User>
 }
 
 class UserRepositoryImpl @Inject constructor(
-    private val apiService: ApiService
+ private val apiService: ApiService
 ) : UserRepository {
-    override suspend fun getUsers(): List<User> {
-        return apiService.fetchUsers()
-    }
+ override suspend fun getUsers(): List<User> {
+ return apiService.fetchUsers()
+ }
 }
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
 
-    @Binds
-    @Singleton
-    abstract fun bindUserRepository(
-        impl: UserRepositoryImpl
-    ): UserRepository
+ @Binds
+ @Singleton
+ abstract fun bindUserRepository(
+ impl: UserRepositoryImpl
+ ): UserRepository
 }
 ```
 
@@ -283,36 +282,36 @@ annotation class LoggingInterceptor
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @Provides
-    @AuthInterceptor
-    fun provideAuthInterceptor(): Interceptor {
-        return Interceptor { chain ->
-            val request = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer token")
-                .build()
-            chain.proceed(request)
-        }
-    }
+ @Provides
+ @AuthInterceptor
+ fun provideAuthInterceptor(): Interceptor {
+ return Interceptor { chain ->
+ val request = chain.request().newBuilder()
+ .addHeader("Authorization", "Bearer token")
+ .build()
+ chain.proceed(request)
+ }
+ }
 
-    @Provides
-    @LoggingInterceptor
-    fun provideLoggingInterceptor(): Interceptor {
-        return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-    }
+ @Provides
+ @LoggingInterceptor
+ fun provideLoggingInterceptor(): Interceptor {
+ return HttpLoggingInterceptor().apply {
+ level = HttpLoggingInterceptor.Level.BODY
+ }
+ }
 
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(
-        @AuthInterceptor authInterceptor: Interceptor,
-        @LoggingInterceptor loggingInterceptor: Interceptor
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
-            .addInterceptor(loggingInterceptor)
-            .build()
-    }
+ @Provides
+ @Singleton
+ fun provideOkHttpClient(
+ @AuthInterceptor authInterceptor: Interceptor,
+ @LoggingInterceptor loggingInterceptor: Interceptor
+ ): OkHttpClient {
+ return OkHttpClient.Builder()
+ .addInterceptor(authInterceptor)
+ .addInterceptor(loggingInterceptor)
+ .build()
+ }
 }
 ```
 
@@ -322,26 +321,26 @@ object NetworkModule {
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 interface MyWorkerEntryPoint {
-    fun userRepository(): UserRepository
+ fun userRepository(): UserRepository
 }
 
 class MyWorker(
-    context: Context,
-    params: WorkerParameters
+ context: Context,
+ params: WorkerParameters
 ) : Worker(context, params) {
 
-    override fun doWork(): Result {
-        val appContext = applicationContext.applicationContext
-        val entryPoint = EntryPointAccessors.fromApplication(
-            appContext,
-            MyWorkerEntryPoint::class.java
-        )
+ override fun doWork(): Result {
+ val appContext = applicationContext.applicationContext
+ val entryPoint = EntryPointAccessors.fromApplication(
+ appContext,
+ MyWorkerEntryPoint::class.java
+ )
 
-        val repository = entryPoint.userRepository()
-        // Use repository
+ val repository = entryPoint.userRepository()
+ // Use repository
 
-        return Result.success()
-    }
+ return Result.success()
+ }
 }
 ```
 
@@ -349,38 +348,38 @@ class MyWorker(
 
 ```kotlin
 class UserDetailViewModel @AssistedInject constructor(
-    @Assisted private val userId: String,
-    private val userRepository: UserRepository
+ @Assisted private val userId: String,
+ private val userRepository: UserRepository
 ) : ViewModel() {
 
-    val user = userRepository.getUserById(userId)
-        .asLiveData()
+ val user = userRepository.getUserById(userId)
+ .asLiveData()
 
-    @AssistedFactory
-    interface Factory {
-        fun create(userId: String): UserDetailViewModel
-    }
+ @AssistedFactory
+ interface Factory {
+ fun create(userId: String): UserDetailViewModel
+ }
 }
 
 @AndroidEntryPoint
 class UserDetailActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var viewModelFactory: UserDetailViewModel.Factory
+ @Inject
+ lateinit var viewModelFactory: UserDetailViewModel.Factory
 
-    private val viewModel by lazy {
-        val userId = intent.getStringExtra("USER_ID") ?: ""
-        viewModelFactory.create(userId)
-    }
+ private val viewModel by lazy {
+ val userId = intent.getStringExtra("USER_ID") ?: ""
+ viewModelFactory.create(userId)
+ }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_detail)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContentView(R.layout.activity_user_detail)
 
-        viewModel.user.observe(this) { user ->
-            displayUser(user)
-        }
-    }
+ viewModel.user.observe(this) { user ->
+ displayUser(user)
+ }
+ }
 }
 ```
 
@@ -394,36 +393,36 @@ class UserDetailActivity : AppCompatActivity() {
 @HiltAndroidTest
 class UserViewModelTest {
 
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+ @get:Rule
+ var hiltRule = HiltAndroidRule(this)
 
-    @Inject
-    lateinit var repository: UserRepository
+ @Inject
+ lateinit var repository: UserRepository
 
-    @Before
-    fun init() {
-        hiltRule.inject()
-    }
+ @Before
+ fun init() {
+ hiltRule.inject()
+ }
 
-    @Test
-    fun testLoadUsers() = runTest {
-        val viewModel = UserViewModel(repository, SavedStateHandle())
-        // Test logic
-    }
+ @Test
+ fun testLoadUsers() = runTest {
+ val viewModel = UserViewModel(repository, SavedStateHandle())
+ // Test logic
+ }
 }
 
 @Module
 @TestInstallIn(
-    components = [SingletonComponent::class],
-    replaces = [RepositoryModule::class]
+ components = [SingletonComponent::class],
+ replaces = [RepositoryModule::class]
 )
 abstract class FakeRepositoryModule {
 
-    @Binds
-    @Singleton
-    abstract fun bindUserRepository(
-        fake: FakeUserRepository
-    ): UserRepository
+ @Binds
+ @Singleton
+ abstract fun bindUserRepository(
+ fake: FakeUserRepository
+ ): UserRepository
 }
 ```
 
@@ -434,23 +433,23 @@ abstract class FakeRepositoryModule {
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
 
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+ @get:Rule
+ var hiltRule = HiltAndroidRule(this)
 
-    @get:Rule
-    var activityRule = ActivityScenarioRule(MainActivity::class.java)
+ @get:Rule
+ var activityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    @Before
-    fun init() {
-        hiltRule.inject()
-    }
+ @Before
+ fun init() {
+ hiltRule.inject()
+ }
 
-    @Test
-    fun testUserListDisplayed() {
-        // Test UI
-        onView(withId(R.id.userList))
-            .check(matches(isDisplayed()))
-    }
+ @Test
+ fun testUserListDisplayed() {
+ // Test UI
+ onView(withId(R.id.userList))
+ .check(matches(isDisplayed()))
+ }
 }
 ```
 
@@ -459,34 +458,34 @@ class MainActivityTest {
 ## Benefits of Hilt
 
 1. **Simplified Setup**
-   - Less boilerplate than Dagger
-   - Predefined components for Android
-   - Standard scopes
+ - Less boilerplate than Dagger
+ - Predefined components for Android
+ - Standard scopes
 
 2. **`Lifecycle` Awareness**
-   - Components tied to Android lifecycle
-   - Automatic cleanup
-   - Survives configuration changes
+ - Components tied to Android lifecycle
+ - Automatic cleanup
+ - Survives configuration changes
 
 3. **Compile-Time Safety**
-   - Errors caught at compile-time
-   - Type-safe dependency graph
-   - No runtime dependency resolution
+ - Errors caught at compile-time
+ - Type-safe dependency graph
+ - No runtime dependency resolution
 
 4. **Integration with Jetpack**
-   - `ViewModel` injection
-   - WorkManager support
-   - Navigation component support
+ - `ViewModel` injection
+ - WorkManager support
+ - Navigation component support
 
 5. **Testability**
-   - Easy to replace dependencies in tests
-   - Test-specific modules
-   - Supports both unit and UI tests
+ - Easy to replace dependencies in tests
+ - Test-specific modules
+ - Supports both unit and UI tests
 
 6. **Performance**
-   - No reflection at runtime
-   - Generated code is optimized
-   - Singleton caching
+ - No reflection at runtime
+ - Generated code is optimized
+ - Singleton caching
 
 ---
 
@@ -497,21 +496,21 @@ class MainActivityTest {
 ```kotlin
 @Singleton
 class UserRepository @Inject constructor(
-    private val apiService: ApiService,
-    private val userDao: UserDao
+ private val apiService: ApiService,
+ private val userDao: UserDao
 ) {
-    fun getUsers(): Flow<List<User>> = flow {
-        val cachedUsers = userDao.getAllUsers()
-        emit(cachedUsers)
+ fun getUsers(): Flow<List<User>> = flow {
+ val cachedUsers = userDao.getAllUsers()
+ emit(cachedUsers)
 
-        try {
-            val freshUsers = apiService.fetchUsers()
-            userDao.insertAll(freshUsers)
-            emit(freshUsers)
-        } catch (e: Exception) {
-            // Emit cached data on error
-        }
-    }
+ try {
+ val freshUsers = apiService.fetchUsers()
+ userDao.insertAll(freshUsers)
+ emit(freshUsers)
+ } catch (e: Exception) {
+ // Emit cached data on error
+ }
+ }
 }
 ```
 
@@ -522,24 +521,24 @@ class UserRepository @Inject constructor(
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://api.example.com/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
+ @Provides
+ @Singleton
+ fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+ return Retrofit.Builder()
+ .baseUrl("https://api.example.com/")
+ .client(okHttpClient)
+ .addConverterFactory(GsonConverterFactory.create())
+ .build()
+ }
 
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .build()
-    }
+ @Provides
+ @Singleton
+ fun provideOkHttpClient(): OkHttpClient {
+ return OkHttpClient.Builder()
+ .connectTimeout(30, TimeUnit.SECONDS)
+ .readTimeout(30, TimeUnit.SECONDS)
+ .build()
+ }
 }
 ```
 
@@ -550,20 +549,20 @@ object NetworkModule {
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
-    @Provides
-    @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            "app_database"
-        ).build()
-    }
+ @Provides
+ @Singleton
+ fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+ return Room.databaseBuilder(
+ context,
+ AppDatabase::class.java,
+ "app_database"
+ ).build()
+ }
 
-    @Provides
-    fun provideUserDao(database: AppDatabase): UserDao {
-        return database.userDao()
-    }
+ @Provides
+ fun provideUserDao(database: AppDatabase): UserDao {
+ return database.userDao()
+ }
 }
 ```
 
@@ -597,15 +596,12 @@ object DatabaseModule {
 - Integrating with Jetpack libraries
 - Need testable architecture
 
-
 # Question (EN)
 > Hilt
 
 ---
 
-
 ---
-
 
 ## Answer (EN)
 **Hilt** is a dependency injection (DI) framework developed by Google specifically for Android. It's built on top of **Dagger** and designed to simplify dependency injection setup in Android applications by reducing boilerplate code and providing standardized patterns for Android components.
@@ -617,16 +613,16 @@ Dependency Injection is a design pattern where objects receive their dependencie
 ```kotlin
 // Without DI (bad)
 class UserViewModel {
-    private val repository = UserRepository() // Hard-coded dependency
+ private val repository = UserRepository() // Hard-coded dependency
 
-    fun getUser() = repository.fetchUser()
+ fun getUser() = repository.fetchUser()
 }
 
 // With DI (good)
 class UserViewModel(
-    private val repository: UserRepository // Injected dependency
+ private val repository: UserRepository // Injected dependency
 ) {
-    fun getUser() = repository.fetchUser()
+ fun getUser() = repository.fetchUser()
 }
 ```
 
@@ -653,24 +649,24 @@ Hilt solves these problems by providing:
 ```gradle
 // Project-level build.gradle
 buildscript {
-    dependencies {
-        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.48'
-    }
+ dependencies {
+ classpath 'com.google.dagger:hilt-android-gradle-plugin:2.48'
+ }
 }
 
 // App-level build.gradle
 plugins {
-    id 'com.google.dagger.hilt.android'
-    id 'kotlin-kapt'
+ id 'com.google.dagger.hilt.android'
+ id 'kotlin-kapt'
 }
 
 dependencies {
-    implementation 'com.google.dagger:hilt-android:2.48'
-    kapt 'com.google.dagger:hilt-android-compiler:2.48'
+ implementation 'com.google.dagger:hilt-android:2.48'
+ kapt 'com.google.dagger:hilt-android-compiler:2.48'
 
-    // For ViewModels
-    implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
-    kapt 'androidx.hilt:hilt-compiler:1.1.0'
+ // For ViewModels
+ implementation 'androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03'
+ kapt 'androidx.hilt:hilt-compiler:1.1.0'
 }
 ```
 
@@ -679,7 +675,7 @@ dependencies {
 ```kotlin
 @HiltAndroidApp
 class MyApplication : Application() {
-    // Hilt automatically generates Application component
+ // Hilt automatically generates Application component
 }
 ```
 
@@ -688,16 +684,16 @@ class MyApplication : Application() {
 ```kotlin
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    // Can inject dependencies here
+ // Can inject dependencies here
 
-    @Inject
-    lateinit var userRepository: UserRepository
+ @Inject
+ lateinit var userRepository: UserRepository
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // userRepository is automatically injected
-        userRepository.getUsers()
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ // userRepository is automatically injected
+ userRepository.getUsers()
+ }
 }
 ```
 
@@ -711,17 +707,17 @@ Hilt provides predefined components tied to Android lifecycle:
 
 ```
 SingletonComponent (Application scope)
-    ↓
+ ↓
 ActivityRetainedComponent (ViewModel scope)
-    ↓
+ ↓
 ActivityComponent (Activity scope)
-    ↓
+ ↓
 FragmentComponent (Fragment scope)
-    ↓
+ ↓
 ViewComponent (View scope)
-    ↓
+ ↓
 ViewWithFragmentComponent (View with Fragment scope)
-    ↓
+ ↓
 ServiceComponent (Service scope)
 ```
 
@@ -730,12 +726,12 @@ ServiceComponent (Service scope)
 Hilt provides standard scopes for Android:
 
 ```kotlin
-@Singleton                    // Application lifetime
-@ActivityRetainedScoped       // Survives configuration changes
-@ActivityScoped               // Activity lifetime
-@FragmentScoped               // Fragment lifetime
-@ViewScoped                   // View lifetime
-@ServiceScoped                // Service lifetime
+@Singleton // Application lifetime
+@ActivityRetainedScoped // Survives configuration changes
+@ActivityScoped // Activity lifetime
+@FragmentScoped // Fragment lifetime
+@ViewScoped // View lifetime
+@ServiceScoped // Service lifetime
 ```
 
 ---
@@ -747,34 +743,34 @@ Hilt provides standard scopes for Android:
 ```kotlin
 @HiltViewModel
 class UserViewModel @Inject constructor(
-    private val userRepository: UserRepository,
-    private val savedStateHandle: SavedStateHandle
+ private val userRepository: UserRepository,
+ private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val users = userRepository.getUsers()
-        .asLiveData()
+ val users = userRepository.getUsers()
+ .asLiveData()
 
-    fun loadUser(userId: String) {
-        viewModelScope.launch {
-            val user = userRepository.getUserById(userId)
-            // Update UI
-        }
-    }
+ fun loadUser(userId: String) {
+ viewModelScope.launch {
+ val user = userRepository.getUserById(userId)
+ // Update UI
+ }
+ }
 }
 
 @AndroidEntryPoint
 class UserActivity : AppCompatActivity() {
-    // ViewModel is automatically injected
-    private val viewModel: UserViewModel by viewModels()
+ // ViewModel is automatically injected
+ private val viewModel: UserViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContentView(R.layout.activity_user)
 
-        viewModel.users.observe(this) { users ->
-            displayUsers(users)
-        }
-    }
+ viewModel.users.observe(this) { users ->
+ displayUsers(users)
+ }
+ }
 }
 ```
 
@@ -785,20 +781,20 @@ class UserActivity : AppCompatActivity() {
 @InstallIn(SingletonComponent::class)
 object AppModule {
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://api.example.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
+ @Provides
+ @Singleton
+ fun provideRetrofit(): Retrofit {
+ return Retrofit.Builder()
+ .baseUrl("https://api.example.com/")
+ .addConverterFactory(GsonConverterFactory.create())
+ .build()
+ }
 
-    @Provides
-    @Singleton
-    fun provideApiService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
-    }
+ @Provides
+ @Singleton
+ fun provideApiService(retrofit: Retrofit): ApiService {
+ return retrofit.create(ApiService::class.java)
+ }
 }
 ```
 
@@ -806,26 +802,26 @@ object AppModule {
 
 ```kotlin
 interface UserRepository {
-    suspend fun getUsers(): List<User>
+ suspend fun getUsers(): List<User>
 }
 
 class UserRepositoryImpl @Inject constructor(
-    private val apiService: ApiService
+ private val apiService: ApiService
 ) : UserRepository {
-    override suspend fun getUsers(): List<User> {
-        return apiService.fetchUsers()
-    }
+ override suspend fun getUsers(): List<User> {
+ return apiService.fetchUsers()
+ }
 }
 
 @Module
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
 
-    @Binds
-    @Singleton
-    abstract fun bindUserRepository(
-        impl: UserRepositoryImpl
-    ): UserRepository
+ @Binds
+ @Singleton
+ abstract fun bindUserRepository(
+ impl: UserRepositoryImpl
+ ): UserRepository
 }
 ```
 
@@ -850,36 +846,36 @@ annotation class LoggingInterceptor
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @Provides
-    @AuthInterceptor
-    fun provideAuthInterceptor(): Interceptor {
-        return Interceptor { chain ->
-            val request = chain.request().newBuilder()
-                .addHeader("Authorization", "Bearer token")
-                .build()
-            chain.proceed(request)
-        }
-    }
+ @Provides
+ @AuthInterceptor
+ fun provideAuthInterceptor(): Interceptor {
+ return Interceptor { chain ->
+ val request = chain.request().newBuilder()
+ .addHeader("Authorization", "Bearer token")
+ .build()
+ chain.proceed(request)
+ }
+ }
 
-    @Provides
-    @LoggingInterceptor
-    fun provideLoggingInterceptor(): Interceptor {
-        return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-    }
+ @Provides
+ @LoggingInterceptor
+ fun provideLoggingInterceptor(): Interceptor {
+ return HttpLoggingInterceptor().apply {
+ level = HttpLoggingInterceptor.Level.BODY
+ }
+ }
 
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(
-        @AuthInterceptor authInterceptor: Interceptor,
-        @LoggingInterceptor loggingInterceptor: Interceptor
-    ): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(authInterceptor)
-            .addInterceptor(loggingInterceptor)
-            .build()
-    }
+ @Provides
+ @Singleton
+ fun provideOkHttpClient(
+ @AuthInterceptor authInterceptor: Interceptor,
+ @LoggingInterceptor loggingInterceptor: Interceptor
+ ): OkHttpClient {
+ return OkHttpClient.Builder()
+ .addInterceptor(authInterceptor)
+ .addInterceptor(loggingInterceptor)
+ .build()
+ }
 }
 ```
 
@@ -889,26 +885,26 @@ object NetworkModule {
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 interface MyWorkerEntryPoint {
-    fun userRepository(): UserRepository
+ fun userRepository(): UserRepository
 }
 
 class MyWorker(
-    context: Context,
-    params: WorkerParameters
+ context: Context,
+ params: WorkerParameters
 ) : Worker(context, params) {
 
-    override fun doWork(): Result {
-        val appContext = applicationContext.applicationContext
-        val entryPoint = EntryPointAccessors.fromApplication(
-            appContext,
-            MyWorkerEntryPoint::class.java
-        )
+ override fun doWork(): Result {
+ val appContext = applicationContext.applicationContext
+ val entryPoint = EntryPointAccessors.fromApplication(
+ appContext,
+ MyWorkerEntryPoint::class.java
+ )
 
-        val repository = entryPoint.userRepository()
-        // Use repository
+ val repository = entryPoint.userRepository()
+ // Use repository
 
-        return Result.success()
-    }
+ return Result.success()
+ }
 }
 ```
 
@@ -916,38 +912,38 @@ class MyWorker(
 
 ```kotlin
 class UserDetailViewModel @AssistedInject constructor(
-    @Assisted private val userId: String,
-    private val userRepository: UserRepository
+ @Assisted private val userId: String,
+ private val userRepository: UserRepository
 ) : ViewModel() {
 
-    val user = userRepository.getUserById(userId)
-        .asLiveData()
+ val user = userRepository.getUserById(userId)
+ .asLiveData()
 
-    @AssistedFactory
-    interface Factory {
-        fun create(userId: String): UserDetailViewModel
-    }
+ @AssistedFactory
+ interface Factory {
+ fun create(userId: String): UserDetailViewModel
+ }
 }
 
 @AndroidEntryPoint
 class UserDetailActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var viewModelFactory: UserDetailViewModel.Factory
+ @Inject
+ lateinit var viewModelFactory: UserDetailViewModel.Factory
 
-    private val viewModel by lazy {
-        val userId = intent.getStringExtra("USER_ID") ?: ""
-        viewModelFactory.create(userId)
-    }
+ private val viewModel by lazy {
+ val userId = intent.getStringExtra("USER_ID") ?: ""
+ viewModelFactory.create(userId)
+ }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user_detail)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContentView(R.layout.activity_user_detail)
 
-        viewModel.user.observe(this) { user ->
-            displayUser(user)
-        }
-    }
+ viewModel.user.observe(this) { user ->
+ displayUser(user)
+ }
+ }
 }
 ```
 
@@ -961,36 +957,36 @@ class UserDetailActivity : AppCompatActivity() {
 @HiltAndroidTest
 class UserViewModelTest {
 
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+ @get:Rule
+ var hiltRule = HiltAndroidRule(this)
 
-    @Inject
-    lateinit var repository: UserRepository
+ @Inject
+ lateinit var repository: UserRepository
 
-    @Before
-    fun init() {
-        hiltRule.inject()
-    }
+ @Before
+ fun init() {
+ hiltRule.inject()
+ }
 
-    @Test
-    fun testLoadUsers() = runTest {
-        val viewModel = UserViewModel(repository, SavedStateHandle())
-        // Test logic
-    }
+ @Test
+ fun testLoadUsers() = runTest {
+ val viewModel = UserViewModel(repository, SavedStateHandle())
+ // Test logic
+ }
 }
 
 @Module
 @TestInstallIn(
-    components = [SingletonComponent::class],
-    replaces = [RepositoryModule::class]
+ components = [SingletonComponent::class],
+ replaces = [RepositoryModule::class]
 )
 abstract class FakeRepositoryModule {
 
-    @Binds
-    @Singleton
-    abstract fun bindUserRepository(
-        fake: FakeUserRepository
-    ): UserRepository
+ @Binds
+ @Singleton
+ abstract fun bindUserRepository(
+ fake: FakeUserRepository
+ ): UserRepository
 }
 ```
 
@@ -1001,23 +997,23 @@ abstract class FakeRepositoryModule {
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
 
-    @get:Rule
-    var hiltRule = HiltAndroidRule(this)
+ @get:Rule
+ var hiltRule = HiltAndroidRule(this)
 
-    @get:Rule
-    var activityRule = ActivityScenarioRule(MainActivity::class.java)
+ @get:Rule
+ var activityRule = ActivityScenarioRule(MainActivity::class.java)
 
-    @Before
-    fun init() {
-        hiltRule.inject()
-    }
+ @Before
+ fun init() {
+ hiltRule.inject()
+ }
 
-    @Test
-    fun testUserListDisplayed() {
-        // Test UI
-        onView(withId(R.id.userList))
-            .check(matches(isDisplayed()))
-    }
+ @Test
+ fun testUserListDisplayed() {
+ // Test UI
+ onView(withId(R.id.userList))
+ .check(matches(isDisplayed()))
+ }
 }
 ```
 
@@ -1026,34 +1022,34 @@ class MainActivityTest {
 ## Benefits of Hilt
 
 1. **Simplified Setup**
-   - Less boilerplate than Dagger
-   - Predefined components for Android
-   - Standard scopes
+ - Less boilerplate than Dagger
+ - Predefined components for Android
+ - Standard scopes
 
 2. **`Lifecycle` Awareness**
-   - Components tied to Android lifecycle
-   - Automatic cleanup
-   - Survives configuration changes
+ - Components tied to Android lifecycle
+ - Automatic cleanup
+ - Survives configuration changes
 
 3. **Compile-Time Safety**
-   - Errors caught at compile-time
-   - Type-safe dependency graph
-   - No runtime dependency resolution
+ - Errors caught at compile-time
+ - Type-safe dependency graph
+ - No runtime dependency resolution
 
 4. **Integration with Jetpack**
-   - `ViewModel` injection
-   - WorkManager support
-   - Navigation component support
+ - `ViewModel` injection
+ - WorkManager support
+ - Navigation component support
 
 5. **Testability**
-   - Easy to replace dependencies in tests
-   - Test-specific modules
-   - Supports both unit and UI tests
+ - Easy to replace dependencies in tests
+ - Test-specific modules
+ - Supports both unit and UI tests
 
 6. **Performance**
-   - No reflection at runtime
-   - Generated code is optimized
-   - Singleton caching
+ - No reflection at runtime
+ - Generated code is optimized
+ - Singleton caching
 
 ---
 
@@ -1064,21 +1060,21 @@ class MainActivityTest {
 ```kotlin
 @Singleton
 class UserRepository @Inject constructor(
-    private val apiService: ApiService,
-    private val userDao: UserDao
+ private val apiService: ApiService,
+ private val userDao: UserDao
 ) {
-    fun getUsers(): Flow<List<User>> = flow {
-        val cachedUsers = userDao.getAllUsers()
-        emit(cachedUsers)
+ fun getUsers(): Flow<List<User>> = flow {
+ val cachedUsers = userDao.getAllUsers()
+ emit(cachedUsers)
 
-        try {
-            val freshUsers = apiService.fetchUsers()
-            userDao.insertAll(freshUsers)
-            emit(freshUsers)
-        } catch (e: Exception) {
-            // Emit cached data on error
-        }
-    }
+ try {
+ val freshUsers = apiService.fetchUsers()
+ userDao.insertAll(freshUsers)
+ emit(freshUsers)
+ } catch (e: Exception) {
+ // Emit cached data on error
+ }
+ }
 }
 ```
 
@@ -1089,24 +1085,24 @@ class UserRepository @Inject constructor(
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    @Provides
-    @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://api.example.com/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
+ @Provides
+ @Singleton
+ fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+ return Retrofit.Builder()
+ .baseUrl("https://api.example.com/")
+ .client(okHttpClient)
+ .addConverterFactory(GsonConverterFactory.create())
+ .build()
+ }
 
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .build()
-    }
+ @Provides
+ @Singleton
+ fun provideOkHttpClient(): OkHttpClient {
+ return OkHttpClient.Builder()
+ .connectTimeout(30, TimeUnit.SECONDS)
+ .readTimeout(30, TimeUnit.SECONDS)
+ .build()
+ }
 }
 ```
 
@@ -1117,20 +1113,20 @@ object NetworkModule {
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
 
-    @Provides
-    @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
-        return Room.databaseBuilder(
-            context,
-            AppDatabase::class.java,
-            "app_database"
-        ).build()
-    }
+ @Provides
+ @Singleton
+ fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+ return Room.databaseBuilder(
+ context,
+ AppDatabase::class.java,
+ "app_database"
+ ).build()
+ }
 
-    @Provides
-    fun provideUserDao(database: AppDatabase): UserDao {
-        return database.userDao()
-    }
+ @Provides
+ fun provideUserDao(database: AppDatabase): UserDao {
+ return database.userDao()
+ }
 }
 ```
 
@@ -1194,19 +1190,16 @@ object DatabaseModule {
 - Интеграция с Jetpack библиотеками
 - Необходима тестируемая архитектура
 
-
 ## Follow-ups
 
 - [[c-dependency-injection]]
 - [[c-hilt]]
-- [[q-test-doubles-dependency-injection--testing--medium]]
-
+- [[q-test-doubles-dependency-injection--android--medium]]
 
 ## References
 
 - [Architecture](https://developer.android.com/topic/architecture)
 - [Android Documentation](https://developer.android.com/docs)
-
 
 ## Related Questions
 

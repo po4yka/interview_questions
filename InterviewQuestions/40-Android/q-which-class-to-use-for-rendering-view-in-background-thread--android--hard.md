@@ -13,7 +13,7 @@ created: 2025-10-13
 updated: 2025-10-29
 sources: []
 moc: moc-android
-related: [c-surfaceview, c-textureview, c-threading]
+related: []
 tags: [android, android/performance-rendering, android/threads-sync, android/ui-graphics, difficulty/hard, graphics, multithreading]
 ---
 
@@ -43,40 +43,40 @@ Which class should be used to render `View` in a background thread?
 
 ```kotlin
 class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
-    private var drawingThread: Thread? = null
-    private var isRunning = false
+ private var drawingThread: Thread? = null
+ private var isRunning = false
 
-    init {
-        holder.addCallback(this)
-    }
+ init {
+ holder.addCallback(this)
+ }
 
-    override fun surfaceCreated(holder: SurfaceHolder) {
-        isRunning = true
-        drawingThread = Thread {
-            while (isRunning) {
-                var canvas: Canvas? = null
-                try {
-                    canvas = holder.lockCanvas() // ✅ Захват Canvas для рисования
-                    synchronized(holder) {
-                        canvas?.apply {
-                            drawColor(Color.BLACK)
-                            drawCircle(width / 2f, height / 2f, 100f,
-                                Paint().apply { color = Color.RED })
-                        }
-                    }
-                } finally {
-                    canvas?.let { holder.unlockCanvasAndPost(it) } // ✅ Всегда освобождаем
-                }
-            }
-        }.apply { start() }
-    }
+ override fun surfaceCreated(holder: SurfaceHolder) {
+ isRunning = true
+ drawingThread = Thread {
+ while (isRunning) {
+ var canvas: Canvas? = null
+ try {
+ canvas = holder.lockCanvas() // ✅ Захват Canvas для рисования
+ synchronized(holder) {
+ canvas?.apply {
+ drawColor(Color.BLACK)
+ drawCircle(width / 2f, height / 2f, 100f,
+ Paint().apply { color = Color.RED })
+ }
+ }
+ } finally {
+ canvas?.let { holder.unlockCanvasAndPost(it) } // ✅ Всегда освобождаем
+ }
+ }
+ }.apply { start() }
+ }
 
-    override fun surfaceDestroyed(holder: SurfaceHolder) {
-        isRunning = false
-        drawingThread?.join() // ✅ Ждем завершения потока
-    }
+ override fun surfaceDestroyed(holder: SurfaceHolder) {
+ isRunning = false
+ drawingThread?.join() // ✅ Ждем завершения потока
+ }
 
-    override fun surfaceChanged(holder: SurfaceHolder, format: Int, w: Int, h: Int) {}
+ override fun surfaceChanged(holder: SurfaceHolder, format: Int, w: Int, h: Int) {}
 }
 ```
 
@@ -86,33 +86,33 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 
 ```kotlin
 class CustomTextureView(context: Context) :
-    TextureView(context), TextureView.SurfaceTextureListener {
+ TextureView(context), TextureView.SurfaceTextureListener {
 
-    private var renderThread: Thread? = null
+ private var renderThread: Thread? = null
 
-    init {
-        surfaceTextureListener = this
-    }
+ init {
+ surfaceTextureListener = this
+ }
 
-    override fun onSurfaceTextureAvailable(surface: SurfaceTexture, w: Int, h: Int) {
-        renderThread = Thread {
-            val surf = Surface(surface)
-            while (isAvailable) {
-                val canvas = surf.lockCanvas(null) // ✅ Захват Canvas
-                canvas.drawColor(Color.BLUE)
-                surf.unlockCanvasAndPost(canvas)
-                Thread.sleep(16) // ~60fps
-            }
-        }.apply { start() }
-    }
+ override fun onSurfaceTextureAvailable(surface: SurfaceTexture, w: Int, h: Int) {
+ renderThread = Thread {
+ val surf = Surface(surface)
+ while (isAvailable) {
+ val canvas = surf.lockCanvas(null) // ✅ Захват Canvas
+ canvas.drawColor(Color.BLUE)
+ surf.unlockCanvasAndPost(canvas)
+ Thread.sleep(16) // ~60fps
+ }
+ }.apply { start() }
+ }
 
-    override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
-        renderThread?.join()
-        return true
-    }
+ override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+ renderThread?.join()
+ return true
+ }
 
-    override fun onSurfaceTextureSizeChanged(s: SurfaceTexture, w: Int, h: Int) {}
-    override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
+ override fun onSurfaceTextureSizeChanged(s: SurfaceTexture, w: Int, h: Int) {}
+ override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
 }
 ```
 
@@ -131,40 +131,40 @@ class CustomTextureView(context: Context) :
 
 ```kotlin
 class ModernSurfaceView(context: Context) :
-    SurfaceView(context), SurfaceHolder.Callback {
+ SurfaceView(context), SurfaceHolder.Callback {
 
-    private val scope = CoroutineScope(Dispatchers.Default)
-    private var renderJob: Job? = null
+ private val scope = CoroutineScope(Dispatchers.Default)
+ private var renderJob: Job? = null
 
-    init {
-        holder.addCallback(this)
-    }
+ init {
+ holder.addCallback(this)
+ }
 
-    override fun surfaceCreated(holder: SurfaceHolder) {
-        renderJob = scope.launch {
-            while (isActive) {
-                var canvas: Canvas? = null
-                try {
-                    canvas = holder.lockCanvas()
-                    canvas?.let { draw(it) }
-                } finally {
-                    canvas?.let { holder.unlockCanvasAndPost(it) }
-                }
-                delay(16) // ~60fps
-            }
-        }
-    }
+ override fun surfaceCreated(holder: SurfaceHolder) {
+ renderJob = scope.launch {
+ while (isActive) {
+ var canvas: Canvas? = null
+ try {
+ canvas = holder.lockCanvas()
+ canvas?.let { draw(it) }
+ } finally {
+ canvas?.let { holder.unlockCanvasAndPost(it) }
+ }
+ delay(16) // ~60fps
+ }
+ }
+ }
 
-    override fun surfaceDestroyed(holder: SurfaceHolder) {
-        renderJob?.cancel()
-        scope.cancel()
-    }
+ override fun surfaceDestroyed(holder: SurfaceHolder) {
+ renderJob?.cancel()
+ scope.cancel()
+ }
 
-    override fun surfaceChanged(holder: SurfaceHolder, f: Int, w: Int, h: Int) {}
+ override fun surfaceChanged(holder: SurfaceHolder, f: Int, w: Int, h: Int) {}
 
-    private fun draw(canvas: Canvas) {
-        canvas.drawColor(Color.BLACK)
-    }
+ private fun draw(canvas: Canvas) {
+ canvas.drawColor(Color.BLACK)
+ }
 }
 ```
 
@@ -186,21 +186,21 @@ draw(canvas)
 // ✅ ХОРОШО: Всегда используем finally
 var canvas: Canvas? = null
 try {
-    canvas = holder.lockCanvas()
-    draw(canvas)
+ canvas = holder.lockCanvas()
+ draw(canvas)
 } finally {
-    canvas?.let { holder.unlockCanvasAndPost(it) }
+ canvas?.let { holder.unlockCanvasAndPost(it) }
 }
 
 // ❌ ПЛОХО: Неправильная остановка потока
 override fun surfaceDestroyed(holder: SurfaceHolder) {
-    thread?.interrupt() // Может не сработать
+ thread?.interrupt() // Может не сработать
 }
 
 // ✅ ХОРОШО: Используем флаг и join
 override fun surfaceDestroyed(holder: SurfaceHolder) {
-    isRunning = false
-    thread?.join()
+ isRunning = false
+ thread?.join()
 }
 ```
 
@@ -220,40 +220,40 @@ Regular Views must be drawn on the main thread. SurfaceView solves this by:
 
 ```kotlin
 class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
-    private var drawingThread: Thread? = null
-    private var isRunning = false
+ private var drawingThread: Thread? = null
+ private var isRunning = false
 
-    init {
-        holder.addCallback(this)
-    }
+ init {
+ holder.addCallback(this)
+ }
 
-    override fun surfaceCreated(holder: SurfaceHolder) {
-        isRunning = true
-        drawingThread = Thread {
-            while (isRunning) {
-                var canvas: Canvas? = null
-                try {
-                    canvas = holder.lockCanvas() // ✅ Lock canvas for drawing
-                    synchronized(holder) {
-                        canvas?.apply {
-                            drawColor(Color.BLACK)
-                            drawCircle(width / 2f, height / 2f, 100f,
-                                Paint().apply { color = Color.RED })
-                        }
-                    }
-                } finally {
-                    canvas?.let { holder.unlockCanvasAndPost(it) } // ✅ Always unlock
-                }
-            }
-        }.apply { start() }
-    }
+ override fun surfaceCreated(holder: SurfaceHolder) {
+ isRunning = true
+ drawingThread = Thread {
+ while (isRunning) {
+ var canvas: Canvas? = null
+ try {
+ canvas = holder.lockCanvas() // ✅ Lock canvas for drawing
+ synchronized(holder) {
+ canvas?.apply {
+ drawColor(Color.BLACK)
+ drawCircle(width / 2f, height / 2f, 100f,
+ Paint().apply { color = Color.RED })
+ }
+ }
+ } finally {
+ canvas?.let { holder.unlockCanvasAndPost(it) } // ✅ Always unlock
+ }
+ }
+ }.apply { start() }
+ }
 
-    override fun surfaceDestroyed(holder: SurfaceHolder) {
-        isRunning = false
-        drawingThread?.join() // ✅ Wait for thread completion
-    }
+ override fun surfaceDestroyed(holder: SurfaceHolder) {
+ isRunning = false
+ drawingThread?.join() // ✅ Wait for thread completion
+ }
 
-    override fun surfaceChanged(holder: SurfaceHolder, format: Int, w: Int, h: Int) {}
+ override fun surfaceChanged(holder: SurfaceHolder, format: Int, w: Int, h: Int) {}
 }
 ```
 
@@ -263,33 +263,33 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 
 ```kotlin
 class CustomTextureView(context: Context) :
-    TextureView(context), TextureView.SurfaceTextureListener {
+ TextureView(context), TextureView.SurfaceTextureListener {
 
-    private var renderThread: Thread? = null
+ private var renderThread: Thread? = null
 
-    init {
-        surfaceTextureListener = this
-    }
+ init {
+ surfaceTextureListener = this
+ }
 
-    override fun onSurfaceTextureAvailable(surface: SurfaceTexture, w: Int, h: Int) {
-        renderThread = Thread {
-            val surf = Surface(surface)
-            while (isAvailable) {
-                val canvas = surf.lockCanvas(null) // ✅ Lock canvas
-                canvas.drawColor(Color.BLUE)
-                surf.unlockCanvasAndPost(canvas)
-                Thread.sleep(16) // ~60fps
-            }
-        }.apply { start() }
-    }
+ override fun onSurfaceTextureAvailable(surface: SurfaceTexture, w: Int, h: Int) {
+ renderThread = Thread {
+ val surf = Surface(surface)
+ while (isAvailable) {
+ val canvas = surf.lockCanvas(null) // ✅ Lock canvas
+ canvas.drawColor(Color.BLUE)
+ surf.unlockCanvasAndPost(canvas)
+ Thread.sleep(16) // ~60fps
+ }
+ }.apply { start() }
+ }
 
-    override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
-        renderThread?.join()
-        return true
-    }
+ override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+ renderThread?.join()
+ return true
+ }
 
-    override fun onSurfaceTextureSizeChanged(s: SurfaceTexture, w: Int, h: Int) {}
-    override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
+ override fun onSurfaceTextureSizeChanged(s: SurfaceTexture, w: Int, h: Int) {}
+ override fun onSurfaceTextureUpdated(surface: SurfaceTexture) {}
 }
 ```
 
@@ -308,40 +308,40 @@ class CustomTextureView(context: Context) :
 
 ```kotlin
 class ModernSurfaceView(context: Context) :
-    SurfaceView(context), SurfaceHolder.Callback {
+ SurfaceView(context), SurfaceHolder.Callback {
 
-    private val scope = CoroutineScope(Dispatchers.Default)
-    private var renderJob: Job? = null
+ private val scope = CoroutineScope(Dispatchers.Default)
+ private var renderJob: Job? = null
 
-    init {
-        holder.addCallback(this)
-    }
+ init {
+ holder.addCallback(this)
+ }
 
-    override fun surfaceCreated(holder: SurfaceHolder) {
-        renderJob = scope.launch {
-            while (isActive) {
-                var canvas: Canvas? = null
-                try {
-                    canvas = holder.lockCanvas()
-                    canvas?.let { draw(it) }
-                } finally {
-                    canvas?.let { holder.unlockCanvasAndPost(it) }
-                }
-                delay(16) // ~60fps
-            }
-        }
-    }
+ override fun surfaceCreated(holder: SurfaceHolder) {
+ renderJob = scope.launch {
+ while (isActive) {
+ var canvas: Canvas? = null
+ try {
+ canvas = holder.lockCanvas()
+ canvas?.let { draw(it) }
+ } finally {
+ canvas?.let { holder.unlockCanvasAndPost(it) }
+ }
+ delay(16) // ~60fps
+ }
+ }
+ }
 
-    override fun surfaceDestroyed(holder: SurfaceHolder) {
-        renderJob?.cancel()
-        scope.cancel()
-    }
+ override fun surfaceDestroyed(holder: SurfaceHolder) {
+ renderJob?.cancel()
+ scope.cancel()
+ }
 
-    override fun surfaceChanged(holder: SurfaceHolder, f: Int, w: Int, h: Int) {}
+ override fun surfaceChanged(holder: SurfaceHolder, f: Int, w: Int, h: Int) {}
 
-    private fun draw(canvas: Canvas) {
-        canvas.drawColor(Color.BLACK)
-    }
+ private fun draw(canvas: Canvas) {
+ canvas.drawColor(Color.BLACK)
+ }
 }
 ```
 
@@ -363,21 +363,21 @@ draw(canvas)
 // ✅ GOOD: Always use finally
 var canvas: Canvas? = null
 try {
-    canvas = holder.lockCanvas()
-    draw(canvas)
+ canvas = holder.lockCanvas()
+ draw(canvas)
 } finally {
-    canvas?.let { holder.unlockCanvasAndPost(it) }
+ canvas?.let { holder.unlockCanvasAndPost(it) }
 }
 
 // ❌ BAD: Improper thread stopping
 override fun surfaceDestroyed(holder: SurfaceHolder) {
-    thread?.interrupt() // May not work
+ thread?.interrupt() // May not work
 }
 
 // ✅ GOOD: Use flag and join
 override fun surfaceDestroyed(holder: SurfaceHolder) {
-    isRunning = false
-    thread?.join()
+ isRunning = false
+ thread?.join()
 }
 ```
 
@@ -393,9 +393,9 @@ override fun surfaceDestroyed(holder: SurfaceHolder) {
 
 ## References
 
-- [[c-surfaceview]] - SurfaceView concept and architecture
-- [[c-textureview]] - TextureView implementation details
-- [[c-canvas-drawing]] - `Canvas` API and drawing operations
+- - SurfaceView concept and architecture
+- - TextureView implementation details
+- - `Canvas` API and drawing operations
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Understanding main thread constraints
 - https://developer.android.com/reference/android/view/SurfaceView
 - https://developer.android.com/reference/android/view/TextureView
@@ -404,13 +404,13 @@ override fun surfaceDestroyed(holder: SurfaceHolder) {
 
 ### Prerequisites (Easier)
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread basics
-- [[q-handler-looper-messagequeue--android--medium]] - `Thread` communication
+- - `Thread` communication
 
 ### Related (Same Level)
-- [[q-custom-view-drawing--android--hard]] - Custom view implementation
-- [[q-opengl-with-surfaceview--android--hard]] - Using OpenGL with SurfaceView
-- [[q-video-playback-implementation--android--hard]] - Video rendering with SurfaceView
+- - Custom view implementation
+- - Using OpenGL with SurfaceView
+- - Video rendering with SurfaceView
 
 ### Advanced (Harder)
-- [[q-vulkan-rendering--android--expert]] - Vulkan API for high-performance graphics
-- [[q-renderscript-optimization--android--expert]] - Advanced rendering optimization
+- - Vulkan API for high-performance graphics
+- - Advanced rendering optimization

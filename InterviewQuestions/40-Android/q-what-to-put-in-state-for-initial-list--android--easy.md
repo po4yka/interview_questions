@@ -17,9 +17,6 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-data-loading
-- c-mutablestate
-- c-state-management
 created: 2025-10-13
 updated: 2025-10-31
 tags:
@@ -46,20 +43,20 @@ For the initial list state, you can use an **empty list** if data loads asynchro
 
 ```kotlin
 class ListViewModel : ViewModel() {
-    private val _items = MutableLiveData<List<Item>>()
-    val items: LiveData<List<Item>> = _items
+ private val _items = MutableLiveData<List<Item>>()
+ val items: LiveData<List<Item>> = _items
 
-    init {
-        _items.value = emptyList() // Initial empty state
-        loadItems()
-    }
+ init {
+ _items.value = emptyList() // Initial empty state
+ loadItems()
+ }
 
-    private fun loadItems() {
-        viewModelScope.launch {
-            val data = repository.getItems()
-            _items.value = data
-        }
-    }
+ private fun loadItems() {
+ viewModelScope.launch {
+ val data = repository.getItems()
+ _items.value = data
+ }
+ }
 }
 ```
 
@@ -67,29 +64,29 @@ class ListViewModel : ViewModel() {
 
 ```kotlin
 sealed class UiState<out T> {
-    object Loading : UiState<Nothing>()
-    data class Success<T>(val data: T) : UiState<T>()
-    data class Error(val message: String) : UiState<Nothing>()
+ object Loading : UiState<Nothing>()
+ data class Success<T>(val data: T) : UiState<T>()
+ data class Error(val message: String) : UiState<Nothing>()
 }
 
 class ListViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState<List<Item>>>(UiState.Loading)
-    val uiState: StateFlow<UiState<List<Item>>> = _uiState
+ private val _uiState = MutableStateFlow<UiState<List<Item>>>(UiState.Loading)
+ val uiState: StateFlow<UiState<List<Item>>> = _uiState
 
-    init {
-        loadItems()
-    }
+ init {
+ loadItems()
+ }
 
-    private fun loadItems() {
-        viewModelScope.launch {
-            try {
-                val items = repository.getItems()
-                _uiState.value = UiState.Success(items)
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error(e.message ?: "Unknown error")
-            }
-        }
-    }
+ private fun loadItems() {
+ viewModelScope.launch {
+ try {
+ val items = repository.getItems()
+ _uiState.value = UiState.Success(items)
+ } catch (e: Exception) {
+ _uiState.value = UiState.Error(e.message ?: "Unknown error")
+ }
+ }
+ }
 }
 ```
 
@@ -97,28 +94,25 @@ class ListViewModel : ViewModel() {
 
 ```kotlin
 class ListViewModel : ViewModel() {
-    private val _items = MutableStateFlow(getInitialItems())
-    val items: StateFlow<List<Item>> = _items
+ private val _items = MutableStateFlow(getInitialItems())
+ val items: StateFlow<List<Item>> = _items
 
-    private fun getInitialItems(): List<Item> {
-        return listOf(
-            Item(1, "Item 1"),
-            Item(2, "Item 2"),
-            Item(3, "Item 3")
-        )
-    }
+ private fun getInitialItems(): List<Item> {
+ return listOf(
+ Item(1, "Item 1"),
+ Item(2, "Item 2"),
+ Item(3, "Item 3")
+ )
+ }
 }
 ```
-
 
 # Question (EN)
 > State for Initial `List`
 
 ---
 
-
 ---
-
 
 ## Answer (EN)
 For the initial list state, you can use an **empty list** if data loads asynchronously, or a **pre-prepared static list** if data is known at app startup.
@@ -127,20 +121,20 @@ For the initial list state, you can use an **empty list** if data loads asynchro
 
 ```kotlin
 class ListViewModel : ViewModel() {
-    private val _items = MutableLiveData<List<Item>>()
-    val items: LiveData<List<Item>> = _items
+ private val _items = MutableLiveData<List<Item>>()
+ val items: LiveData<List<Item>> = _items
 
-    init {
-        _items.value = emptyList() // Initial empty state
-        loadItems()
-    }
+ init {
+ _items.value = emptyList() // Initial empty state
+ loadItems()
+ }
 
-    private fun loadItems() {
-        viewModelScope.launch {
-            val data = repository.getItems()
-            _items.value = data
-        }
-    }
+ private fun loadItems() {
+ viewModelScope.launch {
+ val data = repository.getItems()
+ _items.value = data
+ }
+ }
 }
 ```
 
@@ -148,29 +142,29 @@ class ListViewModel : ViewModel() {
 
 ```kotlin
 sealed class UiState<out T> {
-    object Loading : UiState<Nothing>()
-    data class Success<T>(val data: T) : UiState<T>()
-    data class Error(val message: String) : UiState<Nothing>()
+ object Loading : UiState<Nothing>()
+ data class Success<T>(val data: T) : UiState<T>()
+ data class Error(val message: String) : UiState<Nothing>()
 }
 
 class ListViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState<List<Item>>>(UiState.Loading)
-    val uiState: StateFlow<UiState<List<Item>>> = _uiState
+ private val _uiState = MutableStateFlow<UiState<List<Item>>>(UiState.Loading)
+ val uiState: StateFlow<UiState<List<Item>>> = _uiState
 
-    init {
-        loadItems()
-    }
+ init {
+ loadItems()
+ }
 
-    private fun loadItems() {
-        viewModelScope.launch {
-            try {
-                val items = repository.getItems()
-                _uiState.value = UiState.Success(items)
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error(e.message ?: "Unknown error")
-            }
-        }
-    }
+ private fun loadItems() {
+ viewModelScope.launch {
+ try {
+ val items = repository.getItems()
+ _uiState.value = UiState.Success(items)
+ } catch (e: Exception) {
+ _uiState.value = UiState.Error(e.message ?: "Unknown error")
+ }
+ }
+ }
 }
 ```
 
@@ -178,16 +172,16 @@ class ListViewModel : ViewModel() {
 
 ```kotlin
 class ListViewModel : ViewModel() {
-    private val _items = MutableStateFlow(getInitialItems())
-    val items: StateFlow<List<Item>> = _items
+ private val _items = MutableStateFlow(getInitialItems())
+ val items: StateFlow<List<Item>> = _items
 
-    private fun getInitialItems(): List<Item> {
-        return listOf(
-            Item(1, "Item 1"),
-            Item(2, "Item 2"),
-            Item(3, "Item 3")
-        )
-    }
+ private fun getInitialItems(): List<Item> {
+ return listOf(
+ Item(1, "Item 1"),
+ Item(2, "Item 2"),
+ Item(3, "Item 3")
+ )
+ }
 }
 ```
 
@@ -199,20 +193,20 @@ class ListViewModel : ViewModel() {
 
 ```kotlin
 class ListViewModel : ViewModel() {
-    private val _items = MutableLiveData<List<Item>>()
-    val items: LiveData<List<Item>> = _items
+ private val _items = MutableLiveData<List<Item>>()
+ val items: LiveData<List<Item>> = _items
 
-    init {
-        _items.value = emptyList() // Начальное пустое состояние
-        loadItems()
-    }
+ init {
+ _items.value = emptyList() // Начальное пустое состояние
+ loadItems()
+ }
 
-    private fun loadItems() {
-        viewModelScope.launch {
-            val data = repository.getItems()
-            _items.value = data
-        }
-    }
+ private fun loadItems() {
+ viewModelScope.launch {
+ val data = repository.getItems()
+ _items.value = data
+ }
+ }
 }
 ```
 
@@ -220,29 +214,29 @@ class ListViewModel : ViewModel() {
 
 ```kotlin
 sealed class UiState<out T> {
-    object Loading : UiState<Nothing>()
-    data class Success<T>(val data: T) : UiState<T>()
-    data class Error(val message: String) : UiState<Nothing>()
+ object Loading : UiState<Nothing>()
+ data class Success<T>(val data: T) : UiState<T>()
+ data class Error(val message: String) : UiState<Nothing>()
 }
 
 class ListViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState<List<Item>>>(UiState.Loading)
-    val uiState: StateFlow<UiState<List<Item>>> = _uiState
+ private val _uiState = MutableStateFlow<UiState<List<Item>>>(UiState.Loading)
+ val uiState: StateFlow<UiState<List<Item>>> = _uiState
 
-    init {
-        loadItems()
-    }
+ init {
+ loadItems()
+ }
 
-    private fun loadItems() {
-        viewModelScope.launch {
-            try {
-                val items = repository.getItems()
-                _uiState.value = UiState.Success(items)
-            } catch (e: Exception) {
-                _uiState.value = UiState.Error(e.message ?: "Unknown error")
-            }
-        }
-    }
+ private fun loadItems() {
+ viewModelScope.launch {
+ try {
+ val items = repository.getItems()
+ _uiState.value = UiState.Success(items)
+ } catch (e: Exception) {
+ _uiState.value = UiState.Error(e.message ?: "Unknown error")
+ }
+ }
+ }
 }
 ```
 
@@ -250,35 +244,31 @@ class ListViewModel : ViewModel() {
 
 ```kotlin
 class ListViewModel : ViewModel() {
-    private val _items = MutableStateFlow(getInitialItems())
-    val items: StateFlow<List<Item>> = _items
+ private val _items = MutableStateFlow(getInitialItems())
+ val items: StateFlow<List<Item>> = _items
 
-    private fun getInitialItems(): List<Item> {
-        return listOf(
-            Item(1, "Item 1"),
-            Item(2, "Item 2"),
-            Item(3, "Item 3")
-        )
-    }
+ private fun getInitialItems(): List<Item> {
+ return listOf(
+ Item(1, "Item 1"),
+ Item(2, "Item 2"),
+ Item(3, "Item 3")
+ )
+ }
 }
 ```
 
-
 ---
-
 
 ## Follow-ups
 
-- [[c-data-loading]]
-- [[c-mutablestate]]
-- [[c-state-management]]
-
+- 
+- 
+- 
 
 ## References
 
 - [Architecture](https://developer.android.com/topic/architecture)
 - [Android Documentation](https://developer.android.com/docs)
-
 
 ## Related Questions
 
@@ -286,7 +276,7 @@ class ListViewModel : ViewModel() {
 - [[q-list-vs-sequence--programming-languages--medium]] - Data Structures
 
 ### Kotlin Language Features
-- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
+- - Data Structures
 - [[q-array-vs-list-kotlin--kotlin--easy]] - Data Structures
 - [[q-kotlin-collections--kotlin--medium]] - Data Structures
 - [[q-list-vs-sequence--kotlin--medium]] - Data Structures

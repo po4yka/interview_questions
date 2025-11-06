@@ -44,17 +44,17 @@ Jetpack Compose — современный декларативный UI-фре�
 ```kotlin
 @Composable
 fun Greeting(name: String) {
-    Text(text = "Привет, $name!")
+ Text(text = "Привет, $name!")
 }
 
 // ✅ Использование в Activity
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            Greeting("Мир")
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContent {
+ Greeting("Мир")
+ }
+ }
 }
 ```
 
@@ -73,17 +73,17 @@ Compose строит дерево composable-функций — **Composition**.
 ```kotlin
 @Composable
 fun Counter() {
-    var count by remember { mutableStateOf(0) }
+ var count by remember { mutableStateOf(0) }
 
-    Column {
-        // ✅ Перекомпонуется при изменении count
-        Text("Счет: $count")
+ Column {
+ // ✅ Перекомпонуется при изменении count
+ Text("Счет: $count")
 
-        Button(onClick = { count++ }) {
-            // ✅ Никогда не перекомпонуется (статичный контент)
-            Text("Увеличить")
-        }
-    }
+ Button(onClick = { count++ }) {
+ // ✅ Никогда не перекомпонуется (статичный контент)
+ Text("Увеличить")
+ }
+ }
 }
 ```
 
@@ -97,19 +97,19 @@ fun Counter() {
 // ✅ Stateless — переиспользуемый компонент
 @Composable
 fun Counter(count: Int, onIncrement: () -> Unit) {
-    Column {
-        Text("Счет: $count")
-        Button(onClick = onIncrement) {
-            Text("Увеличить")
-        }
-    }
+ Column {
+ Text("Счет: $count")
+ Button(onClick = onIncrement) {
+ Text("Увеличить")
+ }
+ }
 }
 
 // ✅ Stateful — управляющий родитель
 @Composable
 fun CounterScreen() {
-    var count by remember { mutableStateOf(0) }
-    Counter(count = count, onIncrement = { count++ })
+ var count by remember { mutableStateOf(0) }
+ Counter(count = count, onIncrement = { count++ })
 }
 ```
 
@@ -120,16 +120,16 @@ fun CounterScreen() {
 ```kotlin
 @Composable
 fun LifecycleExample() {
-    // ✅ При входе в композицию
-    LaunchedEffect(Unit) {
-        println("Вошел в композицию")
-    }
+ // ✅ При входе в композицию
+ LaunchedEffect(Unit) {
+ println("Вошел в композицию")
+ }
 
-    // ✅ При выходе — cleanup
-    DisposableEffect(Unit) {
-        val listener = setupListener()
-        onDispose { listener.cleanup() }
-    }
+ // ✅ При выходе — cleanup
+ DisposableEffect(Unit) {
+ val listener = setupListener()
+ onDispose { listener.cleanup() }
+ }
 }
 ```
 
@@ -138,23 +138,23 @@ fun LifecycleExample() {
 ```kotlin
 @Composable
 fun EffectsExample(userId: String) {
-    // ✅ Suspending operations, перезапуск при изменении userId
-    LaunchedEffect(userId) {
-        val user = loadUser(userId)
-    }
+ // ✅ Suspending operations, перезапуск при изменении userId
+ LaunchedEffect(userId) {
+ val user = loadUser(userId)
+ }
 
-    // ✅ Cleanup ресурсов
-    DisposableEffect(Unit) {
-        val listener = LocationListener()
-        locationManager.addListener(listener)
-        onDispose { locationManager.removeListener(listener) }
-    }
+ // ✅ Cleanup ресурсов
+ DisposableEffect(Unit) {
+ val listener = LocationListener()
+ locationManager.addListener(listener)
+ onDispose { locationManager.removeListener(listener) }
+ }
 
-    // ✅ Запуск корутин из event handlers
-    val scope = rememberCoroutineScope()
-    Button(onClick = { scope.launch { loadData() } }) {
-        Text("Загрузить")
-    }
+ // ✅ Запуск корутин из event handlers
+ val scope = rememberCoroutineScope()
+ Button(onClick = { scope.launch { loadData() } }) {
+ Text("Загрузить")
+ }
 }
 ```
 
@@ -165,19 +165,19 @@ fun EffectsExample(userId: String) {
 ```kotlin
 // ✅ Правильно: padding → background → clickable
 Text(
-    "Привет",
-    modifier = Modifier
-        .padding(16.dp)           // Сначала отступ
-        .background(Color.Blue)   // Фон включает padding
-        .clickable { /* ... */ }
+ "Привет",
+ modifier = Modifier
+ .padding(16.dp) // Сначала отступ
+ .background(Color.Blue) // Фон включает padding
+ .clickable { /* ... */ }
 )
 
 // ❌ Неправильно: фон без padding
 Text(
-    "Привет",
-    modifier = Modifier
-        .background(Color.Blue)   // Фон без padding
-        .padding(16.dp)           // Отступ снаружи фона
+ "Привет",
+ modifier = Modifier
+ .background(Color.Blue) // Фон без padding
+ .padding(16.dp) // Отступ снаружи фона
 )
 ```
 
@@ -186,25 +186,25 @@ Text(
 ```kotlin
 @Composable
 fun OptimizedList(items: List<Item>) {
-    // ✅ LazyColumn для больших списков
-    LazyColumn {
-        items(items, key = { it.id }) { item ->
-            ItemRow(item)
-        }
-    }
+ // ✅ LazyColumn для больших списков
+ LazyColumn {
+ items(items, key = { it.id }) { item ->
+ ItemRow(item)
+ }
+ }
 }
 
 @Composable
 fun ItemRow(item: Item) {
-    // ✅ derivedStateOf — пересчет только при изменении зависимостей
-    val isExpensive by remember(item) {
-        derivedStateOf { expensiveCalculation(item) }
-    }
+ // ✅ derivedStateOf — пересчет только при изменении зависимостей
+ val isExpensive by remember(item) {
+ derivedStateOf { expensiveCalculation(item) }
+ }
 
-    Row {
-        Text(item.name)
-        if (isExpensive) Icon(Icons.Default.Star, null)
-    }
+ Row {
+ Text(item.name)
+ if (isExpensive) Icon(Icons.Default.Star, null)
+ }
 }
 ```
 
@@ -212,19 +212,19 @@ fun ItemRow(item: Item) {
 
 ```kotlin
 class HomeViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+ private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+ val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 }
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
-    val uiState by viewModel.uiState.collectAsState()
+ val uiState by viewModel.uiState.collectAsState()
 
-    when (uiState) {
-        is UiState.Loading -> LoadingScreen()
-        is UiState.Success -> ContentScreen((uiState as UiState.Success).data)
-        is UiState.Error -> ErrorScreen()
-    }
+ when (uiState) {
+ is UiState.Loading -> LoadingScreen()
+ is UiState.Success -> ContentScreen((uiState as UiState.Success).data)
+ is UiState.Error -> ErrorScreen()
+ }
 }
 ```
 
@@ -240,14 +240,14 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 
 ### Ключевые Отличия От `View` System
 
-| `View` System         | Jetpack Compose           |
+| `View` System | Jetpack Compose |
 | ------------------- | ------------------------- |
-| Императивный        | Декларативный             |
-| XML + код           | Чистый Kotlin             |
-| findViewById        | Прямой доступ             |
-| Ручные обновления   | Автоматическая обновление |
-| `RecyclerView` нужен  | Встроенный LazyColumn     |
-| Сложный lifecycle   | Простой lifecycle         |
+| Императивный | Декларативный |
+| XML + код | Чистый Kotlin |
+| findViewById | Прямой доступ |
+| Ручные обновления | Автоматическая обновление |
+| `RecyclerView` нужен | Встроенный LazyColumn |
+| Сложный lifecycle | Простой lifecycle |
 
 ---
 
@@ -268,17 +268,17 @@ Jetpack Compose is Google's modern declarative UI toolkit for building native An
 ```kotlin
 @Composable
 fun Greeting(name: String) {
-    Text(text = "Hello, $name!")
+ Text(text = "Hello, $name!")
 }
 
 // ✅ Usage in Activity
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            Greeting("World")
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContent {
+ Greeting("World")
+ }
+ }
 }
 ```
 
@@ -297,17 +297,17 @@ When data changes, Compose intelligently recomposes only affected parts.
 ```kotlin
 @Composable
 fun Counter() {
-    var count by remember { mutableStateOf(0) }
+ var count by remember { mutableStateOf(0) }
 
-    Column {
-        // ✅ Recomposes when count changes
-        Text("Count: $count")
+ Column {
+ // ✅ Recomposes when count changes
+ Text("Count: $count")
 
-        Button(onClick = { count++ }) {
-            // ✅ Never recomposes (static content)
-            Text("Increment")
-        }
-    }
+ Button(onClick = { count++ }) {
+ // ✅ Never recomposes (static content)
+ Text("Increment")
+ }
+ }
 }
 ```
 
@@ -321,19 +321,19 @@ fun Counter() {
 // ✅ Stateless — reusable component
 @Composable
 fun Counter(count: Int, onIncrement: () -> Unit) {
-    Column {
-        Text("Count: $count")
-        Button(onClick = onIncrement) {
-            Text("Increment")
-        }
-    }
+ Column {
+ Text("Count: $count")
+ Button(onClick = onIncrement) {
+ Text("Increment")
+ }
+ }
 }
 
 // ✅ Stateful — controlling parent
 @Composable
 fun CounterScreen() {
-    var count by remember { mutableStateOf(0) }
-    Counter(count = count, onIncrement = { count++ })
+ var count by remember { mutableStateOf(0) }
+ Counter(count = count, onIncrement = { count++ })
 }
 ```
 
@@ -344,16 +344,16 @@ fun CounterScreen() {
 ```kotlin
 @Composable
 fun LifecycleExample() {
-    // ✅ On entering composition
-    LaunchedEffect(Unit) {
-        println("Entered composition")
-    }
+ // ✅ On entering composition
+ LaunchedEffect(Unit) {
+ println("Entered composition")
+ }
 
-    // ✅ On leaving — cleanup
-    DisposableEffect(Unit) {
-        val listener = setupListener()
-        onDispose { listener.cleanup() }
-    }
+ // ✅ On leaving — cleanup
+ DisposableEffect(Unit) {
+ val listener = setupListener()
+ onDispose { listener.cleanup() }
+ }
 }
 ```
 
@@ -362,23 +362,23 @@ fun LifecycleExample() {
 ```kotlin
 @Composable
 fun EffectsExample(userId: String) {
-    // ✅ Suspending operations, restart when userId changes
-    LaunchedEffect(userId) {
-        val user = loadUser(userId)
-    }
+ // ✅ Suspending operations, restart when userId changes
+ LaunchedEffect(userId) {
+ val user = loadUser(userId)
+ }
 
-    // ✅ Resource cleanup
-    DisposableEffect(Unit) {
-        val listener = LocationListener()
-        locationManager.addListener(listener)
-        onDispose { locationManager.removeListener(listener) }
-    }
+ // ✅ Resource cleanup
+ DisposableEffect(Unit) {
+ val listener = LocationListener()
+ locationManager.addListener(listener)
+ onDispose { locationManager.removeListener(listener) }
+ }
 
-    // ✅ Launch coroutines from event handlers
-    val scope = rememberCoroutineScope()
-    Button(onClick = { scope.launch { loadData() } }) {
-        Text("Load")
-    }
+ // ✅ Launch coroutines from event handlers
+ val scope = rememberCoroutineScope()
+ Button(onClick = { scope.launch { loadData() } }) {
+ Text("Load")
+ }
 }
 ```
 
@@ -389,19 +389,19 @@ Modifier order is critical!
 ```kotlin
 // ✅ Correct: padding → background → clickable
 Text(
-    "Hello",
-    modifier = Modifier
-        .padding(16.dp)           // Padding first
-        .background(Color.Blue)   // Background includes padding
-        .clickable { /* ... */ }
+ "Hello",
+ modifier = Modifier
+ .padding(16.dp) // Padding first
+ .background(Color.Blue) // Background includes padding
+ .clickable { /* ... */ }
 )
 
 // ❌ Incorrect: background without padding
 Text(
-    "Hello",
-    modifier = Modifier
-        .background(Color.Blue)   // Background without padding
-        .padding(16.dp)           // Padding outside background
+ "Hello",
+ modifier = Modifier
+ .background(Color.Blue) // Background without padding
+ .padding(16.dp) // Padding outside background
 )
 ```
 
@@ -410,25 +410,25 @@ Text(
 ```kotlin
 @Composable
 fun OptimizedList(items: List<Item>) {
-    // ✅ LazyColumn for large lists
-    LazyColumn {
-        items(items, key = { it.id }) { item ->
-            ItemRow(item)
-        }
-    }
+ // ✅ LazyColumn for large lists
+ LazyColumn {
+ items(items, key = { it.id }) { item ->
+ ItemRow(item)
+ }
+ }
 }
 
 @Composable
 fun ItemRow(item: Item) {
-    // ✅ derivedStateOf — recalculate only when dependencies change
-    val isExpensive by remember(item) {
-        derivedStateOf { expensiveCalculation(item) }
-    }
+ // ✅ derivedStateOf — recalculate only when dependencies change
+ val isExpensive by remember(item) {
+ derivedStateOf { expensiveCalculation(item) }
+ }
 
-    Row {
-        Text(item.name)
-        if (isExpensive) Icon(Icons.Default.Star, null)
-    }
+ Row {
+ Text(item.name)
+ if (isExpensive) Icon(Icons.Default.Star, null)
+ }
 }
 ```
 
@@ -436,19 +436,19 @@ fun ItemRow(item: Item) {
 
 ```kotlin
 class HomeViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+ private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+ val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 }
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
-    val uiState by viewModel.uiState.collectAsState()
+ val uiState by viewModel.uiState.collectAsState()
 
-    when (uiState) {
-        is UiState.Loading -> LoadingScreen()
-        is UiState.Success -> ContentScreen((uiState as UiState.Success).data)
-        is UiState.Error -> ErrorScreen()
-    }
+ when (uiState) {
+ is UiState.Loading -> LoadingScreen()
+ is UiState.Success -> ContentScreen((uiState as UiState.Success).data)
+ is UiState.Error -> ErrorScreen()
+ }
 }
 ```
 
@@ -464,14 +464,14 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 
 ### Key Differences From `View` System
 
-| `View` System         | Jetpack Compose       |
+| `View` System | Jetpack Compose |
 | ------------------- | --------------------- |
-| Imperative          | Declarative           |
-| XML + code          | Pure Kotlin           |
-| findViewById        | Direct access         |
-| Manual updates      | Automatic updates     |
-| `RecyclerView` needed | Built-in LazyColumn   |
-| Complex lifecycle   | Simple lifecycle      |
+| Imperative | Declarative |
+| XML + code | Pure Kotlin |
+| findViewById | Direct access |
+| Manual updates | Automatic updates |
+| `RecyclerView` needed | Built-in LazyColumn |
+| Complex lifecycle | Simple lifecycle |
 
 ---
 
@@ -487,7 +487,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 ## References
 
 - [[c-jetpack-compose]]
-- [[c-state-management]]
+- 
 - [[c-mvvm-pattern]]
 - https://developer.android.com/jetpack/compose/mental-model
 - https://developer.android.com/jetpack/compose/lifecycle
@@ -497,7 +497,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 ### Prerequisites (Easier)
 
 ### Related (Same Level)
-- [[q-compose-side-effects--android--medium]] - LaunchedEffect, DisposableEffect, SideEffect
+- - LaunchedEffect, DisposableEffect, SideEffect
 - [[q-compose-semantics--android--medium]] - Performance optimization techniques
 
 ### Advanced (Harder)

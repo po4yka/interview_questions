@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-coroutines, c-serialization, c-workmanager, q-workmanager-execution-guarantee--android--medium]
+related: [c-coroutines, c-workmanager, q-workmanager-execution-guarantee--android--medium]
 created: 2025-10-15
 updated: 2025-10-27
 sources: [https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration]

@@ -17,7 +17,6 @@ status: reviewed
 moc: moc-android
 related:
   - c-activity-lifecycle
-  - c-intent-system
   - q-activity-lifecycle-methods--android--medium
   - q-what-is-intent--android--easy
 created: 2025-10-15

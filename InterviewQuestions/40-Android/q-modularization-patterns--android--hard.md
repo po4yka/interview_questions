@@ -25,7 +25,6 @@ moc: moc-android
 related:
 - c-clean-architecture
 - q-does-state-made-in-compose-help-avoid-race-condition--android--medium
-- q-ot-kogo-nasleduyutsya-viewgroup--programming-languages--easy
 - q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard
 created: 2025-10-05
 updated: 2025-10-05
@@ -102,7 +101,6 @@ There are three essential types of modules that Android studio supports:
 
 Since Android modules come with overhead, preferably, you'd want to use the Kotlin or Java kind as much as possible.
 
-
 # Question (EN)
 > What modularization patterns do you know?
 # Вопрос (RU)
@@ -110,9 +108,7 @@ Since Android modules come with overhead, preferably, you'd want to use the Kotl
 
 ---
 
-
 ---
-
 
 ## Answer (EN)
 
@@ -235,20 +231,17 @@ Since Android modules come with overhead, preferably, you'd want to use the Kotl
 ## References
 - [Common modularization patterns](https://developer.android.com/topic/modularization/patterns)
 
-
 ## Follow-ups
 
 - [[q-does-state-made-in-compose-help-avoid-race-condition--android--medium]]
-- [[q-ot-kogo-nasleduyutsya-viewgroup--programming-languages--easy]]
+- 
 - [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]]
-
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-clean-architecture]]
-
 
 ### Related (Hard)
 - [[q-data-sync-unstable-network--android--hard]] - Networking

@@ -17,7 +17,7 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [c-adapter-pattern, c-recyclerview, c-view-recycling, c-viewholder]
+related: [c-recyclerview]
 
 # Timestamps
 created: 2025-10-15
@@ -53,29 +53,29 @@ tags: [android/performance-memory, android/ui-views, difficulty/easy, recyclervi
 
 ```kotlin
 class MyAdapter(private val items: List<String>) :
-    RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+ RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(R.id.textView)
-    }
+ class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+ val textView: TextView = view.findViewById(R.id.textView)
+ }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_layout, parent, false) // ✅ attachToRoot = false
-        return ViewHolder(view)
-    }
+ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+ val view = LayoutInflater.from(parent.context)
+ .inflate(R.layout.item_layout, parent, false) // ✅ attachToRoot = false
+ return ViewHolder(view)
+ }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = items[position]
-    }
+ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+ holder.textView.text = items[position]
+ }
 
-    override fun getItemCount() = items.size
+ override fun getItemCount() = items.size
 }
 
 // Setup в Activity/Fragment
 recyclerView.apply {
-    layoutManager = LinearLayoutManager(context)
-    adapter = MyAdapter(largeDataset)
+ layoutManager = LinearLayoutManager(context)
+ adapter = MyAdapter(largeDataset)
 }
 ```
 
@@ -123,29 +123,29 @@ For large lists, use **`RecyclerView`** — Android's modern component with view
 
 ```kotlin
 class MyAdapter(private val items: List<String>) :
-    RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+ RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(R.id.textView)
-    }
+ class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+ val textView: TextView = view.findViewById(R.id.textView)
+ }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_layout, parent, false) // ✅ attachToRoot = false
-        return ViewHolder(view)
-    }
+ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+ val view = LayoutInflater.from(parent.context)
+ .inflate(R.layout.item_layout, parent, false) // ✅ attachToRoot = false
+ return ViewHolder(view)
+ }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = items[position]
-    }
+ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+ holder.textView.text = items[position]
+ }
 
-    override fun getItemCount() = items.size
+ override fun getItemCount() = items.size
 }
 
 // Setup in Activity/Fragment
 recyclerView.apply {
-    layoutManager = LinearLayoutManager(context)
-    adapter = MyAdapter(largeDataset)
+ layoutManager = LinearLayoutManager(context)
+ adapter = MyAdapter(largeDataset)
 }
 ```
 
@@ -190,8 +190,8 @@ For small static lists (<20 items):
 ## References
 
 - [[c-recyclerview]] — `RecyclerView` concept
-- [[c-view-recycling]] — `View` recycling pattern
-- [[c-adapter-pattern]] — Adapter design pattern
+- — `View` recycling pattern
+- — Adapter design pattern
 - https://developer.android.com/guide/topics/ui/layout/recyclerview — `RecyclerView` guide
 
 ## Related Questions
@@ -203,11 +203,11 @@ For small static lists (<20 items):
 
 ### Related (Same Level)
 
-- [[q-what-is-viewholder--android--easy]] — ViewHolder pattern
-- [[q-recyclerview-adapter--android--easy]] — `RecyclerView` adapter
+- — ViewHolder pattern
+- — `RecyclerView` adapter
 
 ### Advanced (Harder)
 
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] — Compose LazyColumn
 - [[q-what-do-you-know-about-modifications--android--medium]] — `List` updates
-- [[q-diffutil-recyclerview--android--medium]] — DiffUtil for efficient updates
+- — DiffUtil for efficient updates

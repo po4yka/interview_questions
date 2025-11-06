@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-design-systems, c-material-3, c-material-design]
+related: []
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
@@ -47,9 +47,9 @@ tags: [android/ui-theming, android/ui-widgets, design-system, difficulty/medium,
 ```kotlin
 // ✅ Material 3 тема с динамическими цветами (Android 12+)
 <style name="AppTheme" parent="Theme.Material3.DayNight">
-    <item name="colorPrimary">@color/md_theme_primary</item>
-    <item name="colorOnPrimary">@color/md_theme_on_primary</item>
-    <item name="colorSecondary">@color/md_theme_secondary</item>
+ <item name="colorPrimary">@color/md_theme_primary</item>
+ <item name="colorOnPrimary">@color/md_theme_on_primary</item>
+ <item name="colorSecondary">@color/md_theme_secondary</item>
 </style>
 ```
 
@@ -58,19 +58,19 @@ tags: [android/ui-theming, android/ui-widgets, design-system, difficulty/medium,
 ```xml
 <!-- ✅ MaterialButton с иконкой и скруглением -->
 <com.google.android.material.button.MaterialButton
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Confirm"
-    app:icon="@drawable/ic_check"
-    app:cornerRadius="8dp" />
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Confirm"
+ app:icon="@drawable/ic_check"
+ app:cornerRadius="8dp" />
 
 <!-- ✅ MaterialCardView с elevation -->
 <com.google.android.material.card.MaterialCardView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardElevation="4dp"
-    app:cardCornerRadius="12dp">
-    <!-- Контент карточки -->
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ app:cardElevation="4dp"
+ app:cardCornerRadius="12dp">
+ <!-- Контент карточки -->
 </com.google.android.material.card.MaterialCardView>
 ```
 
@@ -81,22 +81,22 @@ tags: [android/ui-theming, android/ui-widgets, design-system, difficulty/medium,
 ```kotlin
 // ✅ Design tokens для переиспользования
 object DesignTokens {
-    object Colors {
-        val Primary = Color(0xFF1976D2)
-        val Secondary = Color(0xFFFFC107)
-        val Error = Color(0xFFD32F2F)
-    }
+ object Colors {
+ val Primary = Color(0xFF1976D2)
+ val Secondary = Color(0xFFFFC107)
+ val Error = Color(0xFFD32F2F)
+ }
 
-    object Typography {
-        val H1 = TextStyle(fontSize = 32.sp, fontWeight = FontWeight.Bold)
-        val Body1 = TextStyle(fontSize = 16.sp)
-    }
+ object Typography {
+ val H1 = TextStyle(fontSize = 32.sp, fontWeight = FontWeight.Bold)
+ val Body1 = TextStyle(fontSize = 16.sp)
+ }
 
-    object Spacing {
-        val Small = 8.dp
-        val Medium = 16.dp
-        val Large = 24.dp
-    }
+ object Spacing {
+ val Small = 8.dp
+ val Medium = 16.dp
+ val Large = 24.dp
+ }
 }
 ```
 
@@ -135,9 +135,9 @@ A design system is a collection of reusable components, guidelines, and patterns
 ```kotlin
 // ✅ Material 3 theme with dynamic colors (Android 12+)
 <style name="AppTheme" parent="Theme.Material3.DayNight">
-    <item name="colorPrimary">@color/md_theme_primary</item>
-    <item name="colorOnPrimary">@color/md_theme_on_primary</item>
-    <item name="colorSecondary">@color/md_theme_secondary</item>
+ <item name="colorPrimary">@color/md_theme_primary</item>
+ <item name="colorOnPrimary">@color/md_theme_on_primary</item>
+ <item name="colorSecondary">@color/md_theme_secondary</item>
 </style>
 ```
 
@@ -146,19 +146,19 @@ A design system is a collection of reusable components, guidelines, and patterns
 ```xml
 <!-- ✅ MaterialButton with icon and rounded corners -->
 <com.google.android.material.button.MaterialButton
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Confirm"
-    app:icon="@drawable/ic_check"
-    app:cornerRadius="8dp" />
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Confirm"
+ app:icon="@drawable/ic_check"
+ app:cornerRadius="8dp" />
 
 <!-- ✅ MaterialCardView with elevation -->
 <com.google.android.material.card.MaterialCardView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:cardElevation="4dp"
-    app:cardCornerRadius="12dp">
-    <!-- Card content -->
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content"
+ app:cardElevation="4dp"
+ app:cardCornerRadius="12dp">
+ <!-- Card content -->
 </com.google.android.material.card.MaterialCardView>
 ```
 
@@ -169,22 +169,22 @@ Many companies build custom systems on top of Material Design, using **design to
 ```kotlin
 // ✅ Design tokens for reusability
 object DesignTokens {
-    object Colors {
-        val Primary = Color(0xFF1976D2)
-        val Secondary = Color(0xFFFFC107)
-        val Error = Color(0xFFD32F2F)
-    }
+ object Colors {
+ val Primary = Color(0xFF1976D2)
+ val Secondary = Color(0xFFFFC107)
+ val Error = Color(0xFFD32F2F)
+ }
 
-    object Typography {
-        val H1 = TextStyle(fontSize = 32.sp, fontWeight = FontWeight.Bold)
-        val Body1 = TextStyle(fontSize = 16.sp)
-    }
+ object Typography {
+ val H1 = TextStyle(fontSize = 32.sp, fontWeight = FontWeight.Bold)
+ val Body1 = TextStyle(fontSize = 16.sp)
+ }
 
-    object Spacing {
-        val Small = 8.dp
-        val Medium = 16.dp
-        val Large = 24.dp
-    }
+ object Spacing {
+ val Small = 8.dp
+ val Medium = 16.dp
+ val Large = 24.dp
+ }
 }
 ```
 
@@ -215,22 +215,22 @@ object DesignTokens {
 
 ## References
 
-- [[c-material-design]]
-- [[c-design-tokens]]
-- [[c-theming]]
+- 
+- 
+- 
 - [Material Design Guidelines](https://m3.material.io/)
 - [Material Components for Android](https://github.com/material-components/material-components-android)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-material-design--android--easy]]
-- [[q-how-to-apply-theme-to-activity--android--easy]]
+- 
+- 
 
 ### Related (Same Level)
-- [[q-how-to-implement-dark-theme--android--medium]]
-- [[q-how-to-create-custom-view--android--medium]]
+- 
+- 
 
 ### Advanced (Harder)
 - [[q-clean-architecture-android--android--hard]]
-- [[q-how-to-optimize-rendering-performance--android--hard]]
+- 

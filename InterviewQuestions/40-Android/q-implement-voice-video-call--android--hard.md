@@ -1,7 +1,7 @@
 ---
 id: android-019
 title: How to implement Voice/Video Call in Android? / Как реализовать голосовой/видеозвонок
-  в Android?
+ в Android?
 aliases:
 - Voice Video Call Android
 - WebRTC Android
@@ -22,8 +22,6 @@ sources:
 status: draft
 moc: moc-android
 related:
-- c-webrtc
-- c-websockets
 - q-http-protocols-comparison--android--medium
 - q-parallel-network-calls-coroutines--kotlin--medium
 created: 2025-10-06
@@ -55,12 +53,12 @@ tags:
 
 **Архитектура**:
 ```
-Устройство А                    Устройство Б
-    ↓                                ↓
+Устройство А Устройство Б
+ ↓ ↓
 Signaling Server ← WebSocket → Offer/Answer/ICE
-    ↓                                ↓
+ ↓ ↓
 Media P2P (WebRTC) ←──────────→ Audio/Video Stream
-    ↓
+ ↓
 STUN/TURN Server (NAT traversal)
 ```
 
@@ -69,122 +67,122 @@ STUN/TURN Server (NAT traversal)
 **Менеджер WebRTC**:
 ```kotlin
 class WebRTCManager(
-    context: Context,
-    private val signalingClient: SignalingClient
+ context: Context,
+ private val signalingClient: SignalingClient
 ) {
-    private var peerConnection: PeerConnection? = null
-    private var localVideoTrack: VideoTrack? = null
-    private var localAudioTrack: AudioTrack? = null
+ private var peerConnection: PeerConnection? = null
+ private var localVideoTrack: VideoTrack? = null
+ private var localAudioTrack: AudioTrack? = null
 
-    private val _callState = MutableStateFlow(CallState())
-    val callState = _callState.asStateFlow()
+ private val _callState = MutableStateFlow(CallState())
+ val callState = _callState.asStateFlow()
 
-    fun startCall(isVideoCall: Boolean, remotePeerId: String) {
-        createPeerConnection()
-        createMediaStreams(isVideoCall)
+ fun startCall(isVideoCall: Boolean, remotePeerId: String) {
+ createPeerConnection()
+ createMediaStreams(isVideoCall)
 
-        // ✅ Создание offer
-        peerConnection?.createOffer(object : SdpObserver {
-            override fun onCreateSuccess(sdp: SessionDescription) {
-                peerConnection?.setLocalDescription(this, sdp)
-                signalingClient.sendOffer(remotePeerId, sdp.description)
-            }
-            // ... обработка ошибок
-        }, MediaConstraints())
-    }
+ // ✅ Создание offer
+ peerConnection?.createOffer(object : SdpObserver {
+ override fun onCreateSuccess(sdp: SessionDescription) {
+ peerConnection?.setLocalDescription(this, sdp)
+ signalingClient.sendOffer(remotePeerId, sdp.description)
+ }
+ // ... обработка ошибок
+ }, MediaConstraints())
+ }
 
-    private fun createPeerConnection() {
-        val iceServers = listOf(
-            // ✅ STUN для определения публичного IP
-            PeerConnection.IceServer.builder("stun:stun.l.google.com:19302")
-                .createIceServer(),
-            // ✅ TURN для прохода через строгие NAT
-            PeerConnection.IceServer.builder("turn:your-turn-server.com:3478")
-                .setUsername("username")
-                .setPassword("password")
-                .createIceServer()
-        )
+ private fun createPeerConnection() {
+ val iceServers = listOf(
+ // ✅ STUN для определения публичного IP
+ PeerConnection.IceServer.builder("stun:stun.l.google.com:19302")
+ .createIceServer(),
+ // ✅ TURN для прохода через строгие NAT
+ PeerConnection.IceServer.builder("turn:your-turn-server.com:3478")
+ .setUsername("username")
+ .setPassword("password")
+ .createIceServer()
+ )
 
-        val rtcConfig = PeerConnection.RTCConfiguration(iceServers).apply {
-            sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN
-        }
+ val rtcConfig = PeerConnection.RTCConfiguration(iceServers).apply {
+ sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN
+ }
 
-        peerConnection = factory.createPeerConnection(rtcConfig, observer)
-    }
+ peerConnection = factory.createPeerConnection(rtcConfig, observer)
+ }
 
-    private fun createMediaStreams(isVideoCall: Boolean) {
-        // ✅ Аудио трек (всегда)
-        val audioSource = factory.createAudioSource(MediaConstraints())
-        localAudioTrack = factory.createAudioTrack("audio", audioSource)
+ private fun createMediaStreams(isVideoCall: Boolean) {
+ // ✅ Аудио трек (всегда)
+ val audioSource = factory.createAudioSource(MediaConstraints())
+ localAudioTrack = factory.createAudioTrack("audio", audioSource)
 
-        // ✅ Видео трек (опционально)
-        if (isVideoCall) {
-            val videoCapturer = createVideoCapturer()
-            val videoSource = factory.createVideoSource(false)
-            videoCapturer?.initialize(helper, context, videoSource.capturerObserver)
-            videoCapturer?.startCapture(1280, 720, 30)
+ // ✅ Видео трек (опционально)
+ if (isVideoCall) {
+ val videoCapturer = createVideoCapturer()
+ val videoSource = factory.createVideoSource(false)
+ videoCapturer?.initialize(helper, context, videoSource.capturerObserver)
+ videoCapturer?.startCapture(1280, 720, 30)
 
-            localVideoTrack = factory.createVideoTrack("video", videoSource)
-        }
+ localVideoTrack = factory.createVideoTrack("video", videoSource)
+ }
 
-        peerConnection?.addTrack(localAudioTrack)
-        peerConnection?.addTrack(localVideoTrack)
-    }
+ peerConnection?.addTrack(localAudioTrack)
+ peerConnection?.addTrack(localVideoTrack)
+ }
 
-    fun toggleMute() {
-        val muted = !_callState.value.isMuted
-        localAudioTrack?.setEnabled(!muted)
-        _callState.value = _callState.value.copy(isMuted = muted)
-    }
+ fun toggleMute() {
+ val muted = !_callState.value.isMuted
+ localAudioTrack?.setEnabled(!muted)
+ _callState.value = _callState.value.copy(isMuted = muted)
+ }
 
-    fun toggleVideo() {
-        val enabled = !_callState.value.isVideoEnabled
-        localVideoTrack?.setEnabled(enabled)
-        _callState.value = _callState.value.copy(isVideoEnabled = enabled)
-    }
+ fun toggleVideo() {
+ val enabled = !_callState.value.isVideoEnabled
+ localVideoTrack?.setEnabled(enabled)
+ _callState.value = _callState.value.copy(isVideoEnabled = enabled)
+ }
 }
 ```
 
 **Signaling через WebSocket**:
 ```kotlin
 class SignalingClient(private val okHttpClient: OkHttpClient) {
-    private var webSocket: WebSocket? = null
-    private val _messages = MutableSharedFlow<SignalingMessage>()
-    val messages = _messages.asSharedFlow()
+ private var webSocket: WebSocket? = null
+ private val _messages = MutableSharedFlow<SignalingMessage>()
+ val messages = _messages.asSharedFlow()
 
-    fun connect(userId: String) {
-        val request = Request.Builder()
-            .url("wss://your-server.com/ws?userId=$userId")
-            .build()
+ fun connect(userId: String) {
+ val request = Request.Builder()
+ .url("wss://your-server.com/ws?userId=$userId")
+ .build()
 
-        webSocket = okHttpClient.newWebSocket(request, object : WebSocketListener() {
-            override fun onMessage(webSocket: WebSocket, text: String) {
-                val message = Json.decodeFromString<SignalingMessage>(text)
-                scope.launch { _messages.emit(message) }
-            }
-        })
-    }
+ webSocket = okHttpClient.newWebSocket(request, object : WebSocketListener() {
+ override fun onMessage(webSocket: WebSocket, text: String) {
+ val message = Json.decodeFromString<SignalingMessage>(text)
+ scope.launch { _messages.emit(message) }
+ }
+ })
+ }
 
-    fun sendOffer(remotePeerId: String, sdp: String) {
-        send(SignalingMessage.Offer(sdp))
-    }
+ fun sendOffer(remotePeerId: String, sdp: String) {
+ send(SignalingMessage.Offer(sdp))
+ }
 }
 
 // ✅ Модели signaling сообщений
 @Serializable
 sealed class SignalingMessage {
-    @Serializable
-    data class Offer(val sdp: String) : SignalingMessage()
+ @Serializable
+ data class Offer(val sdp: String) : SignalingMessage()
 
-    @Serializable
-    data class Answer(val sdp: String) : SignalingMessage()
+ @Serializable
+ data class Answer(val sdp: String) : SignalingMessage()
 
-    @Serializable
-    data class IceCandidate(
-        val sdpMid: String,
-        val sdpMLineIndex: Int,
-        val sdp: String
-    ) : SignalingMessage()
+ @Serializable
+ data class IceCandidate(
+ val sdpMid: String,
+ val sdpMLineIndex: Int,
+ val sdp: String
+ ) : SignalingMessage()
 }
 ```
 
@@ -192,67 +190,67 @@ sealed class SignalingMessage {
 ```kotlin
 @Composable
 fun VideoCallScreen(viewModel: CallViewModel) {
-    val callState by viewModel.callState.collectAsState()
-    val localVideo by viewModel.localVideoTrack.collectAsState()
-    val remoteVideo by viewModel.remoteVideoTrack.collectAsState()
+ val callState by viewModel.callState.collectAsState()
+ val localVideo by viewModel.localVideoTrack.collectAsState()
+ val remoteVideo by viewModel.remoteVideoTrack.collectAsState()
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        // ✅ Удаленное видео (полный экран)
-        remoteVideo?.let { track ->
-            AndroidView(
-                factory = { context ->
-                    SurfaceViewRenderer(context).apply {
-                        init(EglBase.create().eglBaseContext, null)
-                        track.addSink(this)
-                    }
-                },
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+ Box(modifier = Modifier.fillMaxSize()) {
+ // ✅ Удаленное видео (полный экран)
+ remoteVideo?.let { track ->
+ AndroidView(
+ factory = { context ->
+ SurfaceViewRenderer(context).apply {
+ init(EglBase.create().eglBaseContext, null)
+ track.addSink(this)
+ }
+ },
+ modifier = Modifier.fillMaxSize()
+ )
+ }
 
-        // ✅ Локальное видео (PiP)
-        localVideo?.let { track ->
-            AndroidView(
-                factory = { context ->
-                    SurfaceViewRenderer(context).apply {
-                        init(EglBase.create().eglBaseContext, null)
-                        setZOrderMediaOverlay(true)
-                        track.addSink(this)
-                    }
-                },
-                modifier = Modifier
-                    .size(120.dp, 160.dp)
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp)
-            )
-        }
+ // ✅ Локальное видео (PiP)
+ localVideo?.let { track ->
+ AndroidView(
+ factory = { context ->
+ SurfaceViewRenderer(context).apply {
+ init(EglBase.create().eglBaseContext, null)
+ setZOrderMediaOverlay(true)
+ track.addSink(this)
+ }
+ },
+ modifier = Modifier
+ .size(120.dp, 160.dp)
+ .align(Alignment.TopEnd)
+ .padding(16.dp)
+ )
+ }
 
-        // ✅ Элементы управления
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(32.dp)
-        ) {
-            CallButton(
-                icon = if (callState.isMuted) Icons.Default.MicOff else Icons.Default.Mic,
-                isActive = callState.isMuted,
-                onClick = { viewModel.toggleMute() }
-            )
+ // ✅ Элементы управления
+ Row(
+ modifier = Modifier
+ .align(Alignment.BottomCenter)
+ .padding(32.dp)
+ ) {
+ CallButton(
+ icon = if (callState.isMuted) Icons.Default.MicOff else Icons.Default.Mic,
+ isActive = callState.isMuted,
+ onClick = { viewModel.toggleMute() }
+ )
 
-            CallButton(
-                icon = Icons.Default.CallEnd,
-                isActive = true,
-                onClick = { viewModel.endCall() }
-            )
+ CallButton(
+ icon = Icons.Default.CallEnd,
+ isActive = true,
+ onClick = { viewModel.endCall() }
+ )
 
-            CallButton(
-                icon = if (callState.isVideoEnabled) Icons.Default.Videocam
-                       else Icons.Default.VideocamOff,
-                isActive = !callState.isVideoEnabled,
-                onClick = { viewModel.toggleVideo() }
-            )
-        }
-    }
+ CallButton(
+ icon = if (callState.isVideoEnabled) Icons.Default.Videocam
+ else Icons.Default.VideocamOff,
+ isActive = !callState.isVideoEnabled,
+ onClick = { viewModel.toggleVideo() }
+ )
+ }
+ }
 }
 ```
 
@@ -277,13 +275,13 @@ fun VideoCallScreen(viewModel: CallViewModel) {
 ```kotlin
 // ✅ Обработка состояний ICE
 override fun onIceConnectionChange(state: PeerConnection.IceConnectionState) {
-    when (state) {
-        CONNECTED -> _callState.value = _callState.value.copy(isConnected = true)
-        FAILED, DISCONNECTED -> {
-            _callState.value = _callState.value.copy(isConnected = false)
-            endCall()
-        }
-    }
+ when (state) {
+ CONNECTED -> _callState.value = _callState.value.copy(isConnected = true)
+ FAILED, DISCONNECTED -> {
+ _callState.value = _callState.value.copy(isConnected = false)
+ endCall()
+ }
+ }
 }
 ```
 
@@ -297,8 +295,8 @@ override fun onIceConnectionChange(state: PeerConnection.IceConnectionState) {
 ```kotlin
 // ✅ Правильно
 val permissions = arrayOf(
-    Manifest.permission.CAMERA,
-    Manifest.permission.RECORD_AUDIO
+ Manifest.permission.CAMERA,
+ Manifest.permission.RECORD_AUDIO
 )
 requestPermissions(permissions, REQUEST_CODE)
 ```
@@ -307,11 +305,11 @@ requestPermissions(permissions, REQUEST_CODE)
 ```kotlin
 // ✅ Правильно - dispose всего
 fun endCall() {
-    localAudioTrack?.dispose()
-    localVideoTrack?.dispose()
-    videoCapturer?.stopCapture()
-    videoCapturer?.dispose()
-    peerConnection?.close()
+ localAudioTrack?.dispose()
+ localVideoTrack?.dispose()
+ videoCapturer?.stopCapture()
+ videoCapturer?.dispose()
+ peerConnection?.close()
 }
 ```
 
@@ -329,12 +327,12 @@ fun endCall() {
 
 **Architecture**:
 ```
-Device A                        Device B
-    ↓                               ↓
+Device A Device B
+ ↓ ↓
 Signaling Server ← WebSocket → Offer/Answer/ICE
-    ↓                               ↓
+ ↓ ↓
 Media P2P (WebRTC) ←──────────→ Audio/Video Stream
-    ↓
+ ↓
 STUN/TURN Server (NAT traversal)
 ```
 
@@ -343,122 +341,122 @@ STUN/TURN Server (NAT traversal)
 **WebRTC Manager**:
 ```kotlin
 class WebRTCManager(
-    context: Context,
-    private val signalingClient: SignalingClient
+ context: Context,
+ private val signalingClient: SignalingClient
 ) {
-    private var peerConnection: PeerConnection? = null
-    private var localVideoTrack: VideoTrack? = null
-    private var localAudioTrack: AudioTrack? = null
+ private var peerConnection: PeerConnection? = null
+ private var localVideoTrack: VideoTrack? = null
+ private var localAudioTrack: AudioTrack? = null
 
-    private val _callState = MutableStateFlow(CallState())
-    val callState = _callState.asStateFlow()
+ private val _callState = MutableStateFlow(CallState())
+ val callState = _callState.asStateFlow()
 
-    fun startCall(isVideoCall: Boolean, remotePeerId: String) {
-        createPeerConnection()
-        createMediaStreams(isVideoCall)
+ fun startCall(isVideoCall: Boolean, remotePeerId: String) {
+ createPeerConnection()
+ createMediaStreams(isVideoCall)
 
-        // ✅ Create offer
-        peerConnection?.createOffer(object : SdpObserver {
-            override fun onCreateSuccess(sdp: SessionDescription) {
-                peerConnection?.setLocalDescription(this, sdp)
-                signalingClient.sendOffer(remotePeerId, sdp.description)
-            }
-            // ... error handling
-        }, MediaConstraints())
-    }
+ // ✅ Create offer
+ peerConnection?.createOffer(object : SdpObserver {
+ override fun onCreateSuccess(sdp: SessionDescription) {
+ peerConnection?.setLocalDescription(this, sdp)
+ signalingClient.sendOffer(remotePeerId, sdp.description)
+ }
+ // ... error handling
+ }, MediaConstraints())
+ }
 
-    private fun createPeerConnection() {
-        val iceServers = listOf(
-            // ✅ STUN for public IP discovery
-            PeerConnection.IceServer.builder("stun:stun.l.google.com:19302")
-                .createIceServer(),
-            // ✅ TURN for strict NAT traversal
-            PeerConnection.IceServer.builder("turn:your-turn-server.com:3478")
-                .setUsername("username")
-                .setPassword("password")
-                .createIceServer()
-        )
+ private fun createPeerConnection() {
+ val iceServers = listOf(
+ // ✅ STUN for public IP discovery
+ PeerConnection.IceServer.builder("stun:stun.l.google.com:19302")
+ .createIceServer(),
+ // ✅ TURN for strict NAT traversal
+ PeerConnection.IceServer.builder("turn:your-turn-server.com:3478")
+ .setUsername("username")
+ .setPassword("password")
+ .createIceServer()
+ )
 
-        val rtcConfig = PeerConnection.RTCConfiguration(iceServers).apply {
-            sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN
-        }
+ val rtcConfig = PeerConnection.RTCConfiguration(iceServers).apply {
+ sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN
+ }
 
-        peerConnection = factory.createPeerConnection(rtcConfig, observer)
-    }
+ peerConnection = factory.createPeerConnection(rtcConfig, observer)
+ }
 
-    private fun createMediaStreams(isVideoCall: Boolean) {
-        // ✅ Audio track (always)
-        val audioSource = factory.createAudioSource(MediaConstraints())
-        localAudioTrack = factory.createAudioTrack("audio", audioSource)
+ private fun createMediaStreams(isVideoCall: Boolean) {
+ // ✅ Audio track (always)
+ val audioSource = factory.createAudioSource(MediaConstraints())
+ localAudioTrack = factory.createAudioTrack("audio", audioSource)
 
-        // ✅ Video track (optional)
-        if (isVideoCall) {
-            val videoCapturer = createVideoCapturer()
-            val videoSource = factory.createVideoSource(false)
-            videoCapturer?.initialize(helper, context, videoSource.capturerObserver)
-            videoCapturer?.startCapture(1280, 720, 30)
+ // ✅ Video track (optional)
+ if (isVideoCall) {
+ val videoCapturer = createVideoCapturer()
+ val videoSource = factory.createVideoSource(false)
+ videoCapturer?.initialize(helper, context, videoSource.capturerObserver)
+ videoCapturer?.startCapture(1280, 720, 30)
 
-            localVideoTrack = factory.createVideoTrack("video", videoSource)
-        }
+ localVideoTrack = factory.createVideoTrack("video", videoSource)
+ }
 
-        peerConnection?.addTrack(localAudioTrack)
-        peerConnection?.addTrack(localVideoTrack)
-    }
+ peerConnection?.addTrack(localAudioTrack)
+ peerConnection?.addTrack(localVideoTrack)
+ }
 
-    fun toggleMute() {
-        val muted = !_callState.value.isMuted
-        localAudioTrack?.setEnabled(!muted)
-        _callState.value = _callState.value.copy(isMuted = muted)
-    }
+ fun toggleMute() {
+ val muted = !_callState.value.isMuted
+ localAudioTrack?.setEnabled(!muted)
+ _callState.value = _callState.value.copy(isMuted = muted)
+ }
 
-    fun toggleVideo() {
-        val enabled = !_callState.value.isVideoEnabled
-        localVideoTrack?.setEnabled(enabled)
-        _callState.value = _callState.value.copy(isVideoEnabled = enabled)
-    }
+ fun toggleVideo() {
+ val enabled = !_callState.value.isVideoEnabled
+ localVideoTrack?.setEnabled(enabled)
+ _callState.value = _callState.value.copy(isVideoEnabled = enabled)
+ }
 }
 ```
 
 **Signaling via WebSocket**:
 ```kotlin
 class SignalingClient(private val okHttpClient: OkHttpClient) {
-    private var webSocket: WebSocket? = null
-    private val _messages = MutableSharedFlow<SignalingMessage>()
-    val messages = _messages.asSharedFlow()
+ private var webSocket: WebSocket? = null
+ private val _messages = MutableSharedFlow<SignalingMessage>()
+ val messages = _messages.asSharedFlow()
 
-    fun connect(userId: String) {
-        val request = Request.Builder()
-            .url("wss://your-server.com/ws?userId=$userId")
-            .build()
+ fun connect(userId: String) {
+ val request = Request.Builder()
+ .url("wss://your-server.com/ws?userId=$userId")
+ .build()
 
-        webSocket = okHttpClient.newWebSocket(request, object : WebSocketListener() {
-            override fun onMessage(webSocket: WebSocket, text: String) {
-                val message = Json.decodeFromString<SignalingMessage>(text)
-                scope.launch { _messages.emit(message) }
-            }
-        })
-    }
+ webSocket = okHttpClient.newWebSocket(request, object : WebSocketListener() {
+ override fun onMessage(webSocket: WebSocket, text: String) {
+ val message = Json.decodeFromString<SignalingMessage>(text)
+ scope.launch { _messages.emit(message) }
+ }
+ })
+ }
 
-    fun sendOffer(remotePeerId: String, sdp: String) {
-        send(SignalingMessage.Offer(sdp))
-    }
+ fun sendOffer(remotePeerId: String, sdp: String) {
+ send(SignalingMessage.Offer(sdp))
+ }
 }
 
 // ✅ Signaling message models
 @Serializable
 sealed class SignalingMessage {
-    @Serializable
-    data class Offer(val sdp: String) : SignalingMessage()
+ @Serializable
+ data class Offer(val sdp: String) : SignalingMessage()
 
-    @Serializable
-    data class Answer(val sdp: String) : SignalingMessage()
+ @Serializable
+ data class Answer(val sdp: String) : SignalingMessage()
 
-    @Serializable
-    data class IceCandidate(
-        val sdpMid: String,
-        val sdpMLineIndex: Int,
-        val sdp: String
-    ) : SignalingMessage()
+ @Serializable
+ data class IceCandidate(
+ val sdpMid: String,
+ val sdpMLineIndex: Int,
+ val sdp: String
+ ) : SignalingMessage()
 }
 ```
 
@@ -466,67 +464,67 @@ sealed class SignalingMessage {
 ```kotlin
 @Composable
 fun VideoCallScreen(viewModel: CallViewModel) {
-    val callState by viewModel.callState.collectAsState()
-    val localVideo by viewModel.localVideoTrack.collectAsState()
-    val remoteVideo by viewModel.remoteVideoTrack.collectAsState()
+ val callState by viewModel.callState.collectAsState()
+ val localVideo by viewModel.localVideoTrack.collectAsState()
+ val remoteVideo by viewModel.remoteVideoTrack.collectAsState()
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        // ✅ Remote video (full screen)
-        remoteVideo?.let { track ->
-            AndroidView(
-                factory = { context ->
-                    SurfaceViewRenderer(context).apply {
-                        init(EglBase.create().eglBaseContext, null)
-                        track.addSink(this)
-                    }
-                },
-                modifier = Modifier.fillMaxSize()
-            )
-        }
+ Box(modifier = Modifier.fillMaxSize()) {
+ // ✅ Remote video (full screen)
+ remoteVideo?.let { track ->
+ AndroidView(
+ factory = { context ->
+ SurfaceViewRenderer(context).apply {
+ init(EglBase.create().eglBaseContext, null)
+ track.addSink(this)
+ }
+ },
+ modifier = Modifier.fillMaxSize()
+ )
+ }
 
-        // ✅ Local video (PiP)
-        localVideo?.let { track ->
-            AndroidView(
-                factory = { context ->
-                    SurfaceViewRenderer(context).apply {
-                        init(EglBase.create().eglBaseContext, null)
-                        setZOrderMediaOverlay(true)
-                        track.addSink(this)
-                    }
-                },
-                modifier = Modifier
-                    .size(120.dp, 160.dp)
-                    .align(Alignment.TopEnd)
-                    .padding(16.dp)
-            )
-        }
+ // ✅ Local video (PiP)
+ localVideo?.let { track ->
+ AndroidView(
+ factory = { context ->
+ SurfaceViewRenderer(context).apply {
+ init(EglBase.create().eglBaseContext, null)
+ setZOrderMediaOverlay(true)
+ track.addSink(this)
+ }
+ },
+ modifier = Modifier
+ .size(120.dp, 160.dp)
+ .align(Alignment.TopEnd)
+ .padding(16.dp)
+ )
+ }
 
-        // ✅ Call controls
-        Row(
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(32.dp)
-        ) {
-            CallButton(
-                icon = if (callState.isMuted) Icons.Default.MicOff else Icons.Default.Mic,
-                isActive = callState.isMuted,
-                onClick = { viewModel.toggleMute() }
-            )
+ // ✅ Call controls
+ Row(
+ modifier = Modifier
+ .align(Alignment.BottomCenter)
+ .padding(32.dp)
+ ) {
+ CallButton(
+ icon = if (callState.isMuted) Icons.Default.MicOff else Icons.Default.Mic,
+ isActive = callState.isMuted,
+ onClick = { viewModel.toggleMute() }
+ )
 
-            CallButton(
-                icon = Icons.Default.CallEnd,
-                isActive = true,
-                onClick = { viewModel.endCall() }
-            )
+ CallButton(
+ icon = Icons.Default.CallEnd,
+ isActive = true,
+ onClick = { viewModel.endCall() }
+ )
 
-            CallButton(
-                icon = if (callState.isVideoEnabled) Icons.Default.Videocam
-                       else Icons.Default.VideocamOff,
-                isActive = !callState.isVideoEnabled,
-                onClick = { viewModel.toggleVideo() }
-            )
-        }
-    }
+ CallButton(
+ icon = if (callState.isVideoEnabled) Icons.Default.Videocam
+ else Icons.Default.VideocamOff,
+ isActive = !callState.isVideoEnabled,
+ onClick = { viewModel.toggleVideo() }
+ )
+ }
+ }
 }
 ```
 
@@ -551,13 +549,13 @@ fun VideoCallScreen(viewModel: CallViewModel) {
 ```kotlin
 // ✅ Handle ICE connection states
 override fun onIceConnectionChange(state: PeerConnection.IceConnectionState) {
-    when (state) {
-        CONNECTED -> _callState.value = _callState.value.copy(isConnected = true)
-        FAILED, DISCONNECTED -> {
-            _callState.value = _callState.value.copy(isConnected = false)
-            endCall()
-        }
-    }
+ when (state) {
+ CONNECTED -> _callState.value = _callState.value.copy(isConnected = true)
+ FAILED, DISCONNECTED -> {
+ _callState.value = _callState.value.copy(isConnected = false)
+ endCall()
+ }
+ }
 }
 ```
 
@@ -571,8 +569,8 @@ override fun onIceConnectionChange(state: PeerConnection.IceConnectionState) {
 ```kotlin
 // ✅ Correct
 val permissions = arrayOf(
-    Manifest.permission.CAMERA,
-    Manifest.permission.RECORD_AUDIO
+ Manifest.permission.CAMERA,
+ Manifest.permission.RECORD_AUDIO
 )
 requestPermissions(permissions, REQUEST_CODE)
 ```
@@ -581,11 +579,11 @@ requestPermissions(permissions, REQUEST_CODE)
 ```kotlin
 // ✅ Correct - dispose everything
 fun endCall() {
-    localAudioTrack?.dispose()
-    localVideoTrack?.dispose()
-    videoCapturer?.stopCapture()
-    videoCapturer?.dispose()
-    peerConnection?.close()
+ localAudioTrack?.dispose()
+ localVideoTrack?.dispose()
+ videoCapturer?.stopCapture()
+ videoCapturer?.dispose()
+ peerConnection?.close()
 }
 ```
 
@@ -610,9 +608,8 @@ fun endCall() {
 
 ### Prerequisites / Concepts
 
-- [[c-webrtc]]
-- [[c-websockets]]
-
+- 
+- 
 
 ### Prerequisites (Easier)
 - [[q-http-protocols-comparison--android--medium]] - Understanding HTTP/WebSocket protocols

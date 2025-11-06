@@ -18,7 +18,6 @@ status: draft
 moc: moc-android
 related:
 - c-activity-lifecycle
-- c-task-backstack
 - q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
 - q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
@@ -47,14 +46,14 @@ When the system starts a new `Activity` in Android, the fate of the old `Activit
 When no special flags or configurations are used:
 
 1. **Old `Activity` lifecycle transitions**:
-   - `onPause()` is called
-   - `onStop()` is called
-   - `Activity` remains in the back stack
+ - `onPause()` is called
+ - `onStop()` is called
+ - `Activity` remains in the back stack
 
 2. **New `Activity` lifecycle**:
-   - `onCreate()` is called
-   - `onStart()` is called
-   - `onResume()` is called
+ - `onCreate()` is called
+ - `onStart()` is called
+ - `onResume()` is called
 
 3. **Back navigation**: User can return to old `Activity` via back button
 
@@ -101,15 +100,12 @@ The behavior can also be controlled via `android:launchMode` in AndroidManifest.
 - `singleTask`: `Activity` becomes root of new task
 - `singleInstance`: `Activity` is only member of its task
 
-
 # Question (EN)
 > `Activity` `Lifecycle` on New `Activity`
 
 ---
 
-
 ---
-
 
 ## Answer (EN)
 When the system starts a new `Activity` in Android, the fate of the old `Activity` depends on multiple factors including `Intent` flags, task configuration, and device memory state.
@@ -119,14 +115,14 @@ When the system starts a new `Activity` in Android, the fate of the old `Activit
 When no special flags or configurations are used:
 
 1. **Old `Activity` lifecycle transitions**:
-   - `onPause()` is called
-   - `onStop()` is called
-   - `Activity` remains in the back stack
+ - `onPause()` is called
+ - `onStop()` is called
+ - `Activity` remains in the back stack
 
 2. **New `Activity` lifecycle**:
-   - `onCreate()` is called
-   - `onStart()` is called
-   - `onResume()` is called
+ - `onCreate()` is called
+ - `onStart()` is called
+ - `onResume()` is called
 
 3. **Back navigation**: User can return to old `Activity` via back button
 
@@ -186,19 +182,16 @@ The behavior can also be controlled via `android:launchMode` in AndroidManifest.
 
 ---
 
-
 ## Follow-ups
 
 - [[c-activity-lifecycle]]
-- [[c-task-backstack]]
+- 
 - [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]]
-
 
 ## References
 
 - [Android Documentation](https://developer.android.com/docs)
 - [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
-
 
 ## Related Questions
 

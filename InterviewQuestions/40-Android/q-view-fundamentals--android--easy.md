@@ -42,8 +42,8 @@ tags: [android/lifecycle, android/ui-views, android/ui-widgets, difficulty/easy,
 ViewGroup (LinearLayout)
 ├── TextView (Заголовок)
 ├── ViewGroup (RelativeLayout)
-│   ├── ImageView (Иконка)
-│   └── TextView (Описание)
+│ ├── ImageView (Иконка)
+│ └── TextView (Описание)
 └── Button (Кнопка действия)
 ```
 
@@ -61,24 +61,24 @@ textView.textSize = 18f
 **XML (предпочтительно для статических свойств):**
 ```xml
 <TextView
-    android:id="@+id/textView"
-    android:text="Hello World"
-    android:textColor="#000000"
-    android:textSize="18sp" />
+ android:id="@+id/textView"
+ android:text="Hello World"
+ android:textColor="#000000"
+ android:textSize="18sp" />
 ```
 
 **2. Установка слушателей**
 
 ```kotlin
 button.setOnClickListener {
-    // ✅ Обработка клика
-    Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show()
+ // ✅ Обработка клика
+ Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show()
 }
 
 editText.setOnFocusChangeListener { view, hasFocus ->
-    if (hasFocus) {
-        // Получен фокус
-    }
+ if (hasFocus) {
+ // Получен фокус
+ }
 }
 ```
 
@@ -107,13 +107,13 @@ val button = findViewById<Button>(R.id.my_button) // ❌ Устаревший
 private lateinit var binding: ActivityMainBinding
 
 override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    binding = ActivityMainBinding.inflate(layoutInflater)
-    setContentView(binding.root)
+ super.onCreate(savedInstanceState)
+ binding = ActivityMainBinding.inflate(layoutInflater)
+ setContentView(binding.root)
 
-    binding.myButton.setOnClickListener { // ✅ Типобезопасный доступ
-        // Handle click
-    }
+ binding.myButton.setOnClickListener { // ✅ Типобезопасный доступ
+ // Handle click
+ }
 }
 ```
 
@@ -142,16 +142,16 @@ textView.setTextColor(Color.RED)
 ```kotlin
 // ❌ НЕПРАВИЛЬНО - будет крэш
 Thread {
-    val result = performNetworkCall()
-    textView.text = result // Не в UI потоке!
+ val result = performNetworkCall()
+ textView.text = result // Не в UI потоке!
 }.start()
 
 // ✅ ПРАВИЛЬНО - корутины
 lifecycleScope.launch {
-    val result = withContext(Dispatchers.IO) {
-        performNetworkCall()
-    }
-    textView.text = result // Автоматически в UI потоке
+ val result = withContext(Dispatchers.IO) {
+ performNetworkCall()
+ }
+ textView.text = result // Автоматически в UI потоке
 }
 ```
 
@@ -159,26 +159,26 @@ lifecycleScope.launch {
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+ context: Context,
+ attrs: AttributeSet? = null,
+ defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private val paint = Paint().apply {
-        color = Color.BLUE
-        strokeWidth = 5f
-    }
+ private val paint = Paint().apply {
+ color = Color.BLUE
+ strokeWidth = 5f
+ }
 
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        // ✅ Кастомная отрисовка
-        canvas.drawCircle(width / 2f, height / 2f, 100f, paint)
-    }
+ override fun onDraw(canvas: Canvas) {
+ super.onDraw(canvas)
+ // ✅ Кастомная отрисовка
+ canvas.drawCircle(width / 2f, height / 2f, 100f, paint)
+ }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        // Логика измерения
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    }
+ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+ // Логика измерения
+ super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+ }
 }
 ```
 
@@ -215,8 +215,8 @@ All views are arranged in a **tree structure**. You can add views:
 ViewGroup (LinearLayout)
 ├── TextView (Header)
 ├── ViewGroup (RelativeLayout)
-│   ├── ImageView (Icon)
-│   └── TextView (Description)
+│ ├── ImageView (Icon)
+│ └── TextView (Description)
 └── Button (Action Button)
 ```
 
@@ -234,24 +234,24 @@ textView.textSize = 18f
 **XML (preferred for static properties):**
 ```xml
 <TextView
-    android:id="@+id/textView"
-    android:text="Hello World"
-    android:textColor="#000000"
-    android:textSize="18sp" />
+ android:id="@+id/textView"
+ android:text="Hello World"
+ android:textColor="#000000"
+ android:textSize="18sp" />
 ```
 
 **2. Setting Listeners**
 
 ```kotlin
 button.setOnClickListener {
-    // ✅ Handle click
-    Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show()
+ // ✅ Handle click
+ Toast.makeText(this, "Clicked", Toast.LENGTH_SHORT).show()
 }
 
 editText.setOnFocusChangeListener { view, hasFocus ->
-    if (hasFocus) {
-        // Gained focus
-    }
+ if (hasFocus) {
+ // Gained focus
+ }
 }
 ```
 
@@ -280,13 +280,13 @@ val button = findViewById<Button>(R.id.my_button) // ❌ Deprecated
 private lateinit var binding: ActivityMainBinding
 
 override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    binding = ActivityMainBinding.inflate(layoutInflater)
-    setContentView(binding.root)
+ super.onCreate(savedInstanceState)
+ binding = ActivityMainBinding.inflate(layoutInflater)
+ setContentView(binding.root)
 
-    binding.myButton.setOnClickListener { // ✅ Type-safe access
-        // Handle click
-    }
+ binding.myButton.setOnClickListener { // ✅ Type-safe access
+ // Handle click
+ }
 }
 ```
 
@@ -315,16 +315,16 @@ textView.setTextColor(Color.RED)
 ```kotlin
 // ❌ WRONG - will crash
 Thread {
-    val result = performNetworkCall()
-    textView.text = result // Not on UI thread!
+ val result = performNetworkCall()
+ textView.text = result // Not on UI thread!
 }.start()
 
 // ✅ CORRECT - coroutines
 lifecycleScope.launch {
-    val result = withContext(Dispatchers.IO) {
-        performNetworkCall()
-    }
-    textView.text = result // Automatically on UI thread
+ val result = withContext(Dispatchers.IO) {
+ performNetworkCall()
+ }
+ textView.text = result // Automatically on UI thread
 }
 ```
 
@@ -332,26 +332,26 @@ lifecycleScope.launch {
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+ context: Context,
+ attrs: AttributeSet? = null,
+ defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private val paint = Paint().apply {
-        color = Color.BLUE
-        strokeWidth = 5f
-    }
+ private val paint = Paint().apply {
+ color = Color.BLUE
+ strokeWidth = 5f
+ }
 
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        // ✅ Custom drawing
-        canvas.drawCircle(width / 2f, height / 2f, 100f, paint)
-    }
+ override fun onDraw(canvas: Canvas) {
+ super.onDraw(canvas)
+ // ✅ Custom drawing
+ canvas.drawCircle(width / 2f, height / 2f, 100f, paint)
+ }
 
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        // Custom measurement logic
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    }
+ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+ // Custom measurement logic
+ super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+ }
 }
 ```
 
@@ -383,7 +383,7 @@ class CustomView @JvmOverloads constructor(
 
 ## References
 
-- [[c-android-view-system]]
+- 
 - [[c-view-lifecycle]]
 - [`View` API Reference](https://developer.android.com/reference/android/view/`View`)
 - [Custom Views Guide](https://developer.android.com/develop/ui/views/layout/custom-views/custom-components)

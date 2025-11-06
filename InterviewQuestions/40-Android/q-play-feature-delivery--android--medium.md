@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-build-optimization--android--hard, q-modularization-strategies--android--hard, q-what-is-app-bundle--android--easy]
+related: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android, android/app-bundle, android/build-variants, android/gradle, app-bundle, difficulty/medium, dynamic-modules]
@@ -40,9 +40,9 @@ Google Play генерирует оптимизированные APK для к�
 ```xml
 <!-- AndroidManifest.xml в feature-модуле -->
 <dist:module dist:title="@string/feature_title">
-    <dist:delivery>
-        <dist:install-time />
-    </dist:delivery>
+ <dist:delivery>
+ <dist:install-time />
+ </dist:delivery>
 </dist:module>
 ```
 
@@ -50,29 +50,29 @@ Google Play генерирует оптимизированные APK для к�
 
 ```kotlin
 val request = SplitInstallRequest.newBuilder()
-    .addModule("dynamic_feature")
-    .build()
+ .addModule("dynamic_feature")
+ .build()
 
 splitInstallManager.startInstall(request)
-    .addOnSuccessListener { sessionId ->
-        // ✅ Модуль загружается
-    }
-    .addOnFailureListener { exception ->
-        // ❌ Обработка ошибки
-    }
+ .addOnSuccessListener { sessionId ->
+ // ✅ Модуль загружается
+ }
+ .addOnFailureListener { exception ->
+ // ❌ Обработка ошибки
+ }
 ```
 
 **3. Conditional** — модуль доставляется только на устройства с определёнными возможностями (AR, API level, регион):
 
 ```xml
 <dist:module dist:title="@string/ar_feature">
-    <dist:delivery>
-        <dist:install-time>
-            <dist:conditions>
-                <dist:device-feature dist:name="android.hardware.camera.ar" />
-            </dist:conditions>
-        </dist:install-time>
-    </dist:delivery>
+ <dist:delivery>
+ <dist:install-time>
+ <dist:conditions>
+ <dist:device-feature dist:name="android.hardware.camera.ar" />
+ </dist:conditions>
+ </dist:install-time>
+ </dist:delivery>
 </dist:module>
 ```
 
@@ -81,18 +81,18 @@ splitInstallManager.startInstall(request)
 ```gradle
 // Feature-модуль
 plugins {
-    id 'com.android.dynamic-feature'
+ id 'com.android.dynamic-feature'
 }
 
 dependencies {
-    implementation project(':app')  // ✅ Зависимость от базового модуля
+ implementation project(':app') // ✅ Зависимость от базового модуля
 }
 ```
 
 ```gradle
 // Базовый модуль app/build.gradle
 android {
-    dynamicFeatures = [":feature_camera", ":feature_payment"]
+ dynamicFeatures = [":feature_camera", ":feature_payment"]
 }
 ```
 
@@ -105,23 +105,23 @@ android {
 
 ```kotlin
 private val listener = SplitInstallStateUpdatedListener { state ->
-    when (state.status()) {
-        SplitInstallSessionStatus.DOWNLOADING -> {
-            val progress = state.bytesDownloaded() * 100 /
-                          state.totalBytesToDownload()
-            updateProgress(progress.toInt())
-        }
-        SplitInstallSessionStatus.INSTALLED -> {
-            // ✅ Модуль установлен, может потребоваться recreate()
-            if (state.moduleNames().contains("feature_x")) {
-                recreate()
-            }
-        }
-        SplitInstallSessionStatus.FAILED -> {
-            // ❌ Ошибка установки
-            handleError(state.errorCode())
-        }
-    }
+ when (state.status()) {
+ SplitInstallSessionStatus.DOWNLOADING -> {
+ val progress = state.bytesDownloaded() * 100 /
+ state.totalBytesToDownload()
+ updateProgress(progress.toInt())
+ }
+ SplitInstallSessionStatus.INSTALLED -> {
+ // ✅ Модуль установлен, может потребоваться recreate()
+ if (state.moduleNames().contains("feature_x")) {
+ recreate()
+ }
+ }
+ SplitInstallSessionStatus.FAILED -> {
+ // ❌ Ошибка установки
+ handleError(state.errorCode())
+ }
+ }
 }
 ```
 
@@ -133,10 +133,10 @@ class MyApplication : SplitCompatApplication()
 
 // Вариант 2: Ручная установка
 class MyApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        SplitCompat.install(this)
-    }
+ override fun onCreate() {
+ super.onCreate()
+ SplitCompat.install(this)
+ }
 }
 ```
 
@@ -144,14 +144,14 @@ class MyApplication : Application() {
 
 ```kotlin
 fun isModuleInstalled(moduleName: String): Boolean {
-    return splitInstallManager.installedModules.contains(moduleName)
+ return splitInstallManager.installedModules.contains(moduleName)
 }
 
 // ✅ Всегда проверяйте перед использованием
 if (isModuleInstalled("ar_preview")) {
-    launchARFeature()
+ launchARFeature()
 } else {
-    requestModuleInstall("ar_preview")
+ requestModuleInstall("ar_preview")
 }
 ```
 
@@ -196,9 +196,9 @@ Google Play generates optimized APKs for specific device configurations from App
 ```xml
 <!-- AndroidManifest.xml in feature module -->
 <dist:module dist:title="@string/feature_title">
-    <dist:delivery>
-        <dist:install-time />
-    </dist:delivery>
+ <dist:delivery>
+ <dist:install-time />
+ </dist:delivery>
 </dist:module>
 ```
 
@@ -206,29 +206,29 @@ Google Play generates optimized APKs for specific device configurations from App
 
 ```kotlin
 val request = SplitInstallRequest.newBuilder()
-    .addModule("dynamic_feature")
-    .build()
+ .addModule("dynamic_feature")
+ .build()
 
 splitInstallManager.startInstall(request)
-    .addOnSuccessListener { sessionId ->
-        // ✅ Module is being downloaded
-    }
-    .addOnFailureListener { exception ->
-        // ❌ Handle failure
-    }
+ .addOnSuccessListener { sessionId ->
+ // ✅ Module is being downloaded
+ }
+ .addOnFailureListener { exception ->
+ // ❌ Handle failure
+ }
 ```
 
 **3. Conditional** — module delivered only to devices with specific capabilities (AR, API level, region):
 
 ```xml
 <dist:module dist:title="@string/ar_feature">
-    <dist:delivery>
-        <dist:install-time>
-            <dist:conditions>
-                <dist:device-feature dist:name="android.hardware.camera.ar" />
-            </dist:conditions>
-        </dist:install-time>
-    </dist:delivery>
+ <dist:delivery>
+ <dist:install-time>
+ <dist:conditions>
+ <dist:device-feature dist:name="android.hardware.camera.ar" />
+ </dist:conditions>
+ </dist:install-time>
+ </dist:delivery>
 </dist:module>
 ```
 
@@ -237,18 +237,18 @@ splitInstallManager.startInstall(request)
 ```gradle
 // Feature module
 plugins {
-    id 'com.android.dynamic-feature'
+ id 'com.android.dynamic-feature'
 }
 
 dependencies {
-    implementation project(':app')  // ✅ Dependency on base module
+ implementation project(':app') // ✅ Dependency on base module
 }
 ```
 
 ```gradle
 // Base module app/build.gradle
 android {
-    dynamicFeatures = [":feature_camera", ":feature_payment"]
+ dynamicFeatures = [":feature_camera", ":feature_payment"]
 }
 ```
 
@@ -261,23 +261,23 @@ android {
 
 ```kotlin
 private val listener = SplitInstallStateUpdatedListener { state ->
-    when (state.status()) {
-        SplitInstallSessionStatus.DOWNLOADING -> {
-            val progress = state.bytesDownloaded() * 100 /
-                          state.totalBytesToDownload()
-            updateProgress(progress.toInt())
-        }
-        SplitInstallSessionStatus.INSTALLED -> {
-            // ✅ Module installed, may need recreate()
-            if (state.moduleNames().contains("feature_x")) {
-                recreate()
-            }
-        }
-        SplitInstallSessionStatus.FAILED -> {
-            // ❌ Installation error
-            handleError(state.errorCode())
-        }
-    }
+ when (state.status()) {
+ SplitInstallSessionStatus.DOWNLOADING -> {
+ val progress = state.bytesDownloaded() * 100 /
+ state.totalBytesToDownload()
+ updateProgress(progress.toInt())
+ }
+ SplitInstallSessionStatus.INSTALLED -> {
+ // ✅ Module installed, may need recreate()
+ if (state.moduleNames().contains("feature_x")) {
+ recreate()
+ }
+ }
+ SplitInstallSessionStatus.FAILED -> {
+ // ❌ Installation error
+ handleError(state.errorCode())
+ }
+ }
 }
 ```
 
@@ -289,10 +289,10 @@ class MyApplication : SplitCompatApplication()
 
 // Option 2: Manual installation
 class MyApplication : Application() {
-    override fun onCreate() {
-        super.onCreate()
-        SplitCompat.install(this)
-    }
+ override fun onCreate() {
+ super.onCreate()
+ SplitCompat.install(this)
+ }
 }
 ```
 
@@ -300,14 +300,14 @@ class MyApplication : Application() {
 
 ```kotlin
 fun isModuleInstalled(moduleName: String): Boolean {
-    return splitInstallManager.installedModules.contains(moduleName)
+ return splitInstallManager.installedModules.contains(moduleName)
 }
 
 // ✅ Always check before using
 if (isModuleInstalled("ar_preview")) {
-    launchARFeature()
+ launchARFeature()
 } else {
-    requestModuleInstall("ar_preview")
+ requestModuleInstall("ar_preview")
 }
 ```
 
@@ -350,14 +350,14 @@ if (isModuleInstalled("ar_preview")) {
 ## References
 
 - [[c-app-bundle]]
-- [[c-gradle-build-system]]
+- 
 - https://developer.android.com/guide/playcore/feature-delivery
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
-- [[q-what-is-app-bundle--android--easy]]
+- 
 - [[q-gradle-basics--android--easy]]
 
 ### Related (Same Level)
@@ -368,4 +368,4 @@ if (isModuleInstalled("ar_preview")) {
 ### Advanced (Harder)
 
 - [[q-modularization-patterns--android--hard]]
-- [[q-build-optimization--android--hard]]
+- 

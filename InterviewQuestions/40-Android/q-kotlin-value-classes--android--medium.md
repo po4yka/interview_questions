@@ -17,8 +17,6 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-value-classes
-- q-kotlin-data-classes--kotlin--medium
 created: 2025-10-12
 updated: 2025-10-31
 tags:
@@ -62,8 +60,8 @@ value class Email(val value: String)
 
 // Использование - типобезопасность без накладных расходов
 fun getUser(userId: UserId): User {
-    // Нельзя случайно передать Email
-    return userRepository.findById(userId.value)
+ // Нельзя случайно передать Email
+ return userRepository.findById(userId.value)
 }
 
 val userId = UserId("user123")
@@ -89,19 +87,19 @@ value class UserIdValue(val value: String)
 ```kotlin
 @JvmInline
 value class Email(val value: String) {
-    init {
-        require(value.contains("@")) { "Неверный формат email" }
-        require(value.length <= 100) { "Email слишком длинный" }
-    }
+ init {
+ require(value.contains("@")) { "Неверный формат email" }
+ require(value.length <= 100) { "Email слишком длинный" }
+ }
 
-    fun domain(): String = value.substringAfter("@")
+ fun domain(): String = value.substringAfter("@")
 }
 
 @JvmInline
 value class Quantity(val value: Int) {
-    init {
-        require(value > 0) { "Количество должно быть положительным" }
-    }
+ init {
+ require(value > 0) { "Количество должно быть положительным" }
+ }
 }
 ```
 
@@ -117,23 +115,23 @@ value class OrderId(val value: Long)
 // Измерения и единицы
 @JvmInline
 value class Meters(val value: Double) {
-    fun toKilometers(): Kilometers = Kilometers(value / 1000)
+ fun toKilometers(): Kilometers = Kilometers(value / 1000)
 }
 
 @JvmInline
 value class Kilometers(val value: Double) {
-    fun toMeters(): Meters = Meters(value * 1000)
+ fun toMeters(): Meters = Meters(value * 1000)
 }
 
 // Деньги и валюта
 @JvmInline
 value class USD(val cents: Long) {
-    constructor(dollars: Double) : this((dollars * 100).toLong())
+ constructor(dollars: Double) : this((dollars * 100).toLong())
 
-    fun toDollars(): Double = cents / 100.0
+ fun toDollars(): Double = cents / 100.0
 
-    operator fun plus(other: USD): USD = USD(cents + other.cents)
-    operator fun minus(other: USD): USD = USD(cents - other.cents)
+ operator fun plus(other: USD): USD = USD(cents + other.cents)
+ operator fun minus(other: USD): USD = USD(cents - other.cents)
 }
 ```
 
@@ -143,10 +141,10 @@ value class USD(val cents: Long) {
 value class UserId(val value: String)
 
 // Боксинг происходит в следующих случаях:
-val any: Any = userId                    // 1. Использование как Any
+val any: Any = userId // 1. Использование как Any
 val list: List<UserId> = listOf(userId) // 2. В коллекциях
-val nullable: UserId? = userId          // 3. Nullable типы
-val id: Identifier = userId             // 4. Интерфейсы
+val nullable: UserId? = userId // 3. Nullable типы
+val id: Identifier = userId // 4. Интерфейсы
 
 // Чтобы избежать боксинга:
 // - Используйте value классы напрямую
@@ -175,8 +173,8 @@ value class Email(val value: String)
 
 // Usage - type safety without runtime overhead
 fun getUser(userId: UserId): User {
-    // Can't accidentally pass Email
-    return userRepository.findById(userId.value)
+ // Can't accidentally pass Email
+ return userRepository.findById(userId.value)
 }
 
 val userId = UserId("user123")
@@ -202,19 +200,19 @@ value class UserIdValue(val value: String)
 ```kotlin
 @JvmInline
 value class Email(val value: String) {
-    init {
-        require(value.contains("@")) { "Invalid email format" }
-        require(value.length <= 100) { "Email too long" }
-    }
+ init {
+ require(value.contains("@")) { "Invalid email format" }
+ require(value.length <= 100) { "Email too long" }
+ }
 
-    fun domain(): String = value.substringAfter("@")
+ fun domain(): String = value.substringAfter("@")
 }
 
 @JvmInline
 value class Quantity(val value: Int) {
-    init {
-        require(value > 0) { "Quantity must be positive" }
-    }
+ init {
+ require(value > 0) { "Quantity must be positive" }
+ }
 }
 ```
 
@@ -230,23 +228,23 @@ value class OrderId(val value: Long)
 // Measurements and units
 @JvmInline
 value class Meters(val value: Double) {
-    fun toKilometers(): Kilometers = Kilometers(value / 1000)
+ fun toKilometers(): Kilometers = Kilometers(value / 1000)
 }
 
 @JvmInline
 value class Kilometers(val value: Double) {
-    fun toMeters(): Meters = Meters(value * 1000)
+ fun toMeters(): Meters = Meters(value * 1000)
 }
 
 // Money and currency
 @JvmInline
 value class USD(val cents: Long) {
-    constructor(dollars: Double) : this((dollars * 100).toLong())
+ constructor(dollars: Double) : this((dollars * 100).toLong())
 
-    fun toDollars(): Double = cents / 100.0
+ fun toDollars(): Double = cents / 100.0
 
-    operator fun plus(other: USD): USD = USD(cents + other.cents)
-    operator fun minus(other: USD): USD = USD(cents - other.cents)
+ operator fun plus(other: USD): USD = USD(cents + other.cents)
+ operator fun minus(other: USD): USD = USD(cents - other.cents)
 }
 ```
 
@@ -256,10 +254,10 @@ value class USD(val cents: Long) {
 value class UserId(val value: String)
 
 // Boxing occurs in these cases:
-val any: Any = userId                    // 1. Used as Any
+val any: Any = userId // 1. Used as Any
 val list: List<UserId> = listOf(userId) // 2. In collections
-val nullable: UserId? = userId          // 3. Nullable types
-val id: Identifier = userId             // 4. Interfaces
+val nullable: UserId? = userId // 3. Nullable types
+val id: Identifier = userId // 4. Interfaces
 
 // To avoid boxing:
 // - Use value classes directly
@@ -275,25 +273,22 @@ val id: Identifier = userId             // 4. Interfaces
 - When should you use value classes vs data classes?
 - How do value classes affect binary compatibility?
 
-
 ## References
 
 - [Memory Management](https://developer.android.com/topic/performance/memory-overview)
-
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
-- [[c-value-classes]]
-
+- 
 
 ### Prerequisites (Easier)
 - [[q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]] - Unit types basics
 - [[q-viewmodel-pattern--android--easy]] - `ViewModel` patterns
 
 ### Related (Same Level)
-- [[q-kotlin-data-classes--kotlin--medium]] - Data classes
+- - Data classes
 - [[q-repository-pattern--android--medium]] - `Repository` pattern
 - [[q-parcelable-implementation--android--medium]] - Efficient data passing
 - [[q-bundle-data-types--android--medium]] - Data serialization

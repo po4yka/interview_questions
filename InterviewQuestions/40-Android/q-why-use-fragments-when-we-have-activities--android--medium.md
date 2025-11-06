@@ -47,45 +47,45 @@ tags: [activity, android/activity, android/architecture-modularization, android/
 
 ```kotlin
 class UserProfileFragment : Fragment() {
-    companion object {
-        fun newInstance(userId: String) = UserProfileFragment().apply {
-            arguments = bundleOf("userId" to userId)
-        }
-    }
+ companion object {
+ fun newInstance(userId: String) = UserProfileFragment().apply {
+ arguments = bundleOf("userId" to userId)
+ }
+ }
 }
 
 // ✅ Телефон: полноэкранный режим
 supportFragmentManager.beginTransaction()
-    .replace(R.id.container, UserProfileFragment.newInstance(userId))
-    .commit()
+ .replace(R.id.container, UserProfileFragment.newInstance(userId))
+ .commit()
 
 // ✅ Планшет: часть master-detail layout
 supportFragmentManager.beginTransaction()
-    .replace(R.id.detail_pane, UserProfileFragment.newInstance(userId))
-    .commit()
+ .replace(R.id.detail_pane, UserProfileFragment.newInstance(userId))
+ .commit()
 ```
 
 **2. Адаптивные макеты**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private val isTwoPane get() = findViewById<View>(R.id.detail_pane) != null
+ private val isTwoPane get() = findViewById<View>(R.id.detail_pane) != null
 
-    fun showDetails(item: Item) {
-        val fragment = DetailFragment.newInstance(item.id)
-        if (isTwoPane) {
-            // ✅ Планшет: двухпанельный режим
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.detail_pane, fragment)
-                .commit()
-        } else {
-            // ✅ Телефон: полный экран с back stack
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .addToBackStack(null)
-                .commit()
-        }
-    }
+ fun showDetails(item: Item) {
+ val fragment = DetailFragment.newInstance(item.id)
+ if (isTwoPane) {
+ // ✅ Планшет: двухпанельный режим
+ supportFragmentManager.beginTransaction()
+ .replace(R.id.detail_pane, fragment)
+ .commit()
+ } else {
+ // ✅ Телефон: полный экран с back stack
+ supportFragmentManager.beginTransaction()
+ .replace(R.id.container, fragment)
+ .addToBackStack(null)
+ .commit()
+ }
+ }
 }
 ```
 
@@ -99,7 +99,7 @@ class SettingsActivity : AppCompatActivity()
 
 // ✅ Один Activity + fragments: ~6-7MB
 class MainActivity : AppCompatActivity() {
-    // Fragments делят ресурсы Activity (window, theme, system resources)
+ // Fragments делят ресурсы Activity (window, theme, system resources)
 }
 ```
 
@@ -107,24 +107,24 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class SharedViewModel : ViewModel() {
-    private val _selectedItem = MutableLiveData<Item>()
-    val selectedItem: LiveData<Item> = _selectedItem
+ private val _selectedItem = MutableLiveData<Item>()
+ val selectedItem: LiveData<Item> = _selectedItem
 }
 
 // Fragment 1: List
 class ListFragment : Fragment() {
-    private val viewModel: SharedViewModel by activityViewModels() // ✅ Общая ViewModel
+ private val viewModel: SharedViewModel by activityViewModels() // ✅ Общая ViewModel
 
-    private fun onItemClick(item: Item) = viewModel.selectItem(item)
+ private fun onItemClick(item: Item) = viewModel.selectItem(item)
 }
 
 // Fragment 2: Details
 class DetailFragment : Fragment() {
-    private val viewModel: SharedViewModel by activityViewModels() // ✅ Та же ViewModel
+ private val viewModel: SharedViewModel by activityViewModels() // ✅ Та же ViewModel
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.selectedItem.observe(viewLifecycleOwner) { updateUI(it) }
-    }
+ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+ viewModel.selectedItem.observe(viewLifecycleOwner) { updateUI(it) }
+ }
 }
 ```
 
@@ -149,45 +149,45 @@ Fragments provide **modular UI composition** within a single `Activity`. Key adv
 
 ```kotlin
 class UserProfileFragment : Fragment() {
-    companion object {
-        fun newInstance(userId: String) = UserProfileFragment().apply {
-            arguments = bundleOf("userId" to userId)
-        }
-    }
+ companion object {
+ fun newInstance(userId: String) = UserProfileFragment().apply {
+ arguments = bundleOf("userId" to userId)
+ }
+ }
 }
 
 // ✅ Phone: fullscreen mode
 supportFragmentManager.beginTransaction()
-    .replace(R.id.container, UserProfileFragment.newInstance(userId))
-    .commit()
+ .replace(R.id.container, UserProfileFragment.newInstance(userId))
+ .commit()
 
 // ✅ Tablet: part of master-detail layout
 supportFragmentManager.beginTransaction()
-    .replace(R.id.detail_pane, UserProfileFragment.newInstance(userId))
-    .commit()
+ .replace(R.id.detail_pane, UserProfileFragment.newInstance(userId))
+ .commit()
 ```
 
 **2. Adaptive Layouts**
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private val isTwoPane get() = findViewById<View>(R.id.detail_pane) != null
+ private val isTwoPane get() = findViewById<View>(R.id.detail_pane) != null
 
-    fun showDetails(item: Item) {
-        val fragment = DetailFragment.newInstance(item.id)
-        if (isTwoPane) {
-            // ✅ Tablet: dual-pane layout
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.detail_pane, fragment)
-                .commit()
-        } else {
-            // ✅ Phone: fullscreen with back stack
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .addToBackStack(null)
-                .commit()
-        }
-    }
+ fun showDetails(item: Item) {
+ val fragment = DetailFragment.newInstance(item.id)
+ if (isTwoPane) {
+ // ✅ Tablet: dual-pane layout
+ supportFragmentManager.beginTransaction()
+ .replace(R.id.detail_pane, fragment)
+ .commit()
+ } else {
+ // ✅ Phone: fullscreen with back stack
+ supportFragmentManager.beginTransaction()
+ .replace(R.id.container, fragment)
+ .addToBackStack(null)
+ .commit()
+ }
+ }
 }
 ```
 
@@ -201,7 +201,7 @@ class SettingsActivity : AppCompatActivity()
 
 // ✅ Single Activity + fragments: ~6-7MB
 class MainActivity : AppCompatActivity() {
-    // Fragments share Activity resources (window, theme, system resources)
+ // Fragments share Activity resources (window, theme, system resources)
 }
 ```
 
@@ -209,24 +209,24 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class SharedViewModel : ViewModel() {
-    private val _selectedItem = MutableLiveData<Item>()
-    val selectedItem: LiveData<Item> = _selectedItem
+ private val _selectedItem = MutableLiveData<Item>()
+ val selectedItem: LiveData<Item> = _selectedItem
 }
 
 // Fragment 1: List
 class ListFragment : Fragment() {
-    private val viewModel: SharedViewModel by activityViewModels() // ✅ Shared ViewModel
+ private val viewModel: SharedViewModel by activityViewModels() // ✅ Shared ViewModel
 
-    private fun onItemClick(item: Item) = viewModel.selectItem(item)
+ private fun onItemClick(item: Item) = viewModel.selectItem(item)
 }
 
 // Fragment 2: Details
 class DetailFragment : Fragment() {
-    private val viewModel: SharedViewModel by activityViewModels() // ✅ Same ViewModel
+ private val viewModel: SharedViewModel by activityViewModels() // ✅ Same ViewModel
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        viewModel.selectedItem.observe(viewLifecycleOwner) { updateUI(it) }
-    }
+ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+ viewModel.selectedItem.observe(viewLifecycleOwner) { updateUI(it) }
+ }
 }
 ```
 
@@ -257,18 +257,17 @@ class DetailFragment : Fragment() {
 - [Fragments](https://developer.android.com/guide/fragments)
 - [Navigation](https://developer.android.com/guide/navigation)
 
-
 ## Related Questions
 
 ### Prerequisites (Easier)
 - [[q-what-is-intent--android--easy]] - `Fragment` basics
-- [[q-activity-lifecycle--android--easy]] - `Activity` lifecycle fundamentals
+- - `Activity` lifecycle fundamentals
 
 ### Related (Same Level)
 - [[q-fragment-vs-activity-lifecycle--android--medium]] - `Lifecycle` comparison
-- [[q-fragment-communication--android--medium]] - `Fragment` communication patterns
-- [[q-viewmodel-scope--android--medium]] - `ViewModel` scoping
+- - `Fragment` communication patterns
+- - `ViewModel` scoping
 
 ### Advanced (Harder)
-- [[q-fragment-transaction-optimizations--android--hard]] - Advanced fragment transactions
-- [[q-single-activity-architecture--android--hard]] - Single-`Activity` architecture patterns
+- - Advanced fragment transactions
+- - Single-`Activity` architecture patterns

@@ -16,7 +16,6 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-  - c-android-profiling
   - c-performance-optimization
   - q-android-app-lag-analysis--android--medium
 sources: []

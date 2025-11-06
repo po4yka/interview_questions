@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-views, c-jetpack-compose, q-what-each-android-component-represents--android--easy]
+related: [c-jetpack-compose, q-what-each-android-component-represents--android--easy]
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/ui-compose, android/ui-views, compose, difficulty/easy, ui, views]
@@ -47,22 +47,22 @@ sources: []
 
 ```kotlin
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            MaterialTheme {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text("Hello, Compose!")
-                    Button(onClick = { /* действие */ }) {
-                        Text("Нажми")
-                    }
-                }
-            }
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContent {
+ MaterialTheme {
+ Column(
+ modifier = Modifier.padding(16.dp),
+ verticalArrangement = Arrangement.Center
+ ) {
+ Text("Hello, Compose!")
+ Button(onClick = { /* действие */ }) {
+ Text("Нажми")
+ }
+ }
+ }
+ }
+ }
 }
 ```
 
@@ -70,28 +70,28 @@ class MainActivity : ComponentActivity() {
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
 
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(16.dp, 16.dp, 16.dp, 16.dp)
+ val layout = LinearLayout(this).apply {
+ orientation = LinearLayout.VERTICAL
+ setPadding(16.dp, 16.dp, 16.dp, 16.dp)
 
-            addView(TextView(context).apply {
-                text = "Hello, Android!"
-            })
+ addView(TextView(context).apply {
+ text = "Hello, Android!"
+ })
 
-            addView(Button(context).apply {
-                text = "Нажми"
-                setOnClickListener { /* действие */ }
-            })
-        }
+ addView(Button(context).apply {
+ text = "Нажми"
+ setOnClickListener { /* действие */ }
+ })
+ }
 
-        setContentView(layout)
-    }
+ setContentView(layout)
+ }
 
-    private val Int.dp: Int
-        get() = (this * resources.displayMetrics.density).toInt()
+ private val Int.dp: Int
+ get() = (this * resources.displayMetrics.density).toInt()
 }
 ```
 
@@ -100,11 +100,11 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 // ComposeView в традиционной иерархии View
 val composeView = ComposeView(context).apply {
-    setContent {
-        MaterialTheme {
-            Text("Compose в View")
-        }
-    }
+ setContent {
+ MaterialTheme {
+ Text("Compose в View")
+ }
+ }
 }
 linearLayout.addView(composeView)
 ```
@@ -131,22 +131,22 @@ Android provides two main approaches to create UI without XML:
 
 ```kotlin
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            MaterialTheme {
-                Column(
-                    modifier = Modifier.padding(16.dp),
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text("Hello, Compose!")
-                    Button(onClick = { /* action */ }) {
-                        Text("Click Me")
-                    }
-                }
-            }
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContent {
+ MaterialTheme {
+ Column(
+ modifier = Modifier.padding(16.dp),
+ verticalArrangement = Arrangement.Center
+ ) {
+ Text("Hello, Compose!")
+ Button(onClick = { /* action */ }) {
+ Text("Click Me")
+ }
+ }
+ }
+ }
+ }
 }
 ```
 
@@ -154,28 +154,28 @@ class MainActivity : ComponentActivity() {
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
 
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(16.dp, 16.dp, 16.dp, 16.dp)
+ val layout = LinearLayout(this).apply {
+ orientation = LinearLayout.VERTICAL
+ setPadding(16.dp, 16.dp, 16.dp, 16.dp)
 
-            addView(TextView(context).apply {
-                text = "Hello, Android!"
-            })
+ addView(TextView(context).apply {
+ text = "Hello, Android!"
+ })
 
-            addView(Button(context).apply {
-                text = "Click Me"
-                setOnClickListener { /* action */ }
-            })
-        }
+ addView(Button(context).apply {
+ text = "Click Me"
+ setOnClickListener { /* action */ }
+ })
+ }
 
-        setContentView(layout)
-    }
+ setContentView(layout)
+ }
 
-    private val Int.dp: Int
-        get() = (this * resources.displayMetrics.density).toInt()
+ private val Int.dp: Int
+ get() = (this * resources.displayMetrics.density).toInt()
 }
 ```
 
@@ -184,11 +184,11 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 // ComposeView in traditional View hierarchy
 val composeView = ComposeView(context).apply {
-    setContent {
-        MaterialTheme {
-            Text("Compose in View")
-        }
-    }
+ setContent {
+ MaterialTheme {
+ Text("Compose in View")
+ }
+ }
 }
 linearLayout.addView(composeView)
 ```
@@ -208,7 +208,7 @@ linearLayout.addView(composeView)
 ## References
 
 - [[c-jetpack-compose]] - Modern declarative UI framework
-- [[c-android-views]] - Traditional `View` system
+- - Traditional `View` system
 - [[moc-android]] - Android development guide
 - [Compose documentation](https://developer.android.com/jetpack/compose)
 - [`View` system guide](https://developer.android.com/develop/ui/views)

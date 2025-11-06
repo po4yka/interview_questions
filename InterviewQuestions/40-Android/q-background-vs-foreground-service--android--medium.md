@@ -4,20 +4,20 @@ title: Background vs Foreground Service / Фоновый vs активный с�
 aliases: [Background vs Foreground Service, Фоновый vs активный сервис]
 topic: android
 subtopics:
-  - background-execution
-  - service
+ - background-execution
+ - service
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+ - en
+ - ru
 status: reviewed
 moc: moc-android
 related:
-  - c-service
-  - c-workmanager
-  - q-android-service-types--android--easy
+ - c-service
+ - c-workmanager
+ - q-android-service-types--android--easy
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
@@ -51,18 +51,18 @@ tags: [android/background-execution, android/service, difficulty/medium]
 **✅ Foreground `Service`**
 ```kotlin
 class MusicService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // ОБЯЗАТЕЛЬНО: в течение 5 секунд после startForegroundService()
-        startForeground(NOTIFICATION_ID, buildNotification())
-        playMusic()
-        return START_STICKY
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ // ОБЯЗАТЕЛЬНО: в течение 5 секунд после startForegroundService()
+ startForeground(NOTIFICATION_ID, buildNotification())
+ playMusic()
+ return START_STICKY
+ }
 
-    private fun buildNotification() = NotificationCompat.Builder(this, CHANNEL_ID)
-        .setContentTitle("Воспроизведение музыки")
-        .setSmallIcon(R.drawable.ic_music)
-        .setOngoing(true) // ✅ Непрерывное уведомление
-        .build()
+ private fun buildNotification() = NotificationCompat.Builder(this, CHANNEL_ID)
+ .setContentTitle("Воспроизведение музыки")
+ .setSmallIcon(R.drawable.ic_music)
+ .setOngoing(true) // ✅ Непрерывное уведомление
+ .build()
 }
 
 // Запуск
@@ -72,23 +72,23 @@ context.startForegroundService(Intent(context, MusicService::class.java))
 **❌ Background `Service` (запрещён с API 26+)**
 ```kotlin
 class BackgroundService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // ❌ IllegalStateException: Not allowed to start service Intent
-        performWork()
-        return START_NOT_STICKY
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ // ❌ IllegalStateException: Not allowed to start service Intent
+ performWork()
+ return START_NOT_STICKY
+ }
 }
 ```
 
 **✅ Современная альтернатива: WorkManager**
 ```kotlin
 val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
-    .setConstraints(
-        Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-    )
-    .build()
+ .setConstraints(
+ Constraints.Builder()
+ .setRequiredNetworkType(NetworkType.CONNECTED)
+ .build()
+ )
+ .build()
 
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
@@ -103,7 +103,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - Обязательный тип сервиса в манифесте:
 ```xml
 <service android:name=".MusicService"
-    android:foregroundServiceType="mediaPlayback" />
+ android:foregroundServiceType="mediaPlayback" />
 ```
 - Типы: `camera`, `connectedDevice`, `dataSync`, `health`, `location`, `mediaPlayback`, `mediaProjection`, `microphone`, `phoneCall`, `remoteMessaging`, `shortService`, `specialUse`, `systemExempted`
 
@@ -145,18 +145,18 @@ WorkManager.getInstance(context).enqueue(workRequest)
 **✅ Foreground `Service`**
 ```kotlin
 class MusicService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // REQUIRED: within 5 seconds of startForegroundService()
-        startForeground(NOTIFICATION_ID, buildNotification())
-        playMusic()
-        return START_STICKY
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ // REQUIRED: within 5 seconds of startForegroundService()
+ startForeground(NOTIFICATION_ID, buildNotification())
+ playMusic()
+ return START_STICKY
+ }
 
-    private fun buildNotification() = NotificationCompat.Builder(this, CHANNEL_ID)
-        .setContentTitle("Playing music")
-        .setSmallIcon(R.drawable.ic_music)
-        .setOngoing(true) // ✅ Ongoing notification
-        .build()
+ private fun buildNotification() = NotificationCompat.Builder(this, CHANNEL_ID)
+ .setContentTitle("Playing music")
+ .setSmallIcon(R.drawable.ic_music)
+ .setOngoing(true) // ✅ Ongoing notification
+ .build()
 }
 
 // Starting
@@ -166,23 +166,23 @@ context.startForegroundService(Intent(context, MusicService::class.java))
 **❌ Background `Service` (prohibited since API 26+)**
 ```kotlin
 class BackgroundService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // ❌ IllegalStateException: Not allowed to start service Intent
-        performWork()
-        return START_NOT_STICKY
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ // ❌ IllegalStateException: Not allowed to start service Intent
+ performWork()
+ return START_NOT_STICKY
+ }
 }
 ```
 
 **✅ Modern alternative: WorkManager**
 ```kotlin
 val workRequest = OneTimeWorkRequestBuilder<SyncWorker>()
-    .setConstraints(
-        Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .build()
-    )
-    .build()
+ .setConstraints(
+ Constraints.Builder()
+ .setRequiredNetworkType(NetworkType.CONNECTED)
+ .build()
+ )
+ .build()
 
 WorkManager.getInstance(context).enqueue(workRequest)
 ```
@@ -197,7 +197,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - Mandatory service type in manifest:
 ```xml
 <service android:name=".MusicService"
-    android:foregroundServiceType="mediaPlayback" />
+ android:foregroundServiceType="mediaPlayback" />
 ```
 - Types: `camera`, `connectedDevice`, `dataSync`, `health`, `location`, `mediaPlayback`, `mediaProjection`, `microphone`, `phoneCall`, `remoteMessaging`, `shortService`, `specialUse`, `systemExempted`
 
@@ -236,12 +236,11 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 - [[c-service]]
 - [[c-workmanager]]
-- [[c-notification]]
-- [[c-process-lifecycle]]
+- 
+- 
 - [Foreground Services](https://developer.android.com/develop/background-work/services/foreground-services)
 - https://developer.android.com/develop/background-work/background-tasks
 ---
-
 
 ## Related Questions
 

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-savedstatehandle, c-viewmodel, q-activity-lifecycle-methods--android--medium, q-diffutil-background-calculation-issues--android--medium]
+related: [c-viewmodel, q-activity-lifecycle-methods--android--medium, q-diffutil-background-calculation-issues--android--medium]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android, android/lifecycle, android/ui-views, difficulty/medium, recyclerview, scrollview, state-preservation]
@@ -34,28 +34,28 @@ tags: [android, android/lifecycle, android/ui-views, difficulty/medium, recycler
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private lateinit var scrollView: ScrollView
+ private lateinit var scrollView: ScrollView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContentView(R.layout.activity_main)
 
-        scrollView = findViewById(R.id.scrollView)
+ scrollView = findViewById(R.id.scrollView)
 
-        savedInstanceState?.let {
-            val scrollY = it.getInt(KEY_SCROLL_Y, 0)
-            scrollView.post { scrollView.scrollTo(0, scrollY) }
-        }
-    }
+ savedInstanceState?.let {
+ val scrollY = it.getInt(KEY_SCROLL_Y, 0)
+ scrollView.post { scrollView.scrollTo(0, scrollY) }
+ }
+ }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt(KEY_SCROLL_Y, scrollView.scrollY)
-    }
+ override fun onSaveInstanceState(outState: Bundle) {
+ super.onSaveInstanceState(outState)
+ outState.putInt(KEY_SCROLL_Y, scrollView.scrollY)
+ }
 
-    companion object {
-        private const val KEY_SCROLL_Y = "scroll_y"
-    }
+ companion object {
+ private const val KEY_SCROLL_Y = "scroll_y"
+ }
 }
 ```
 
@@ -65,32 +65,32 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var layoutManager: LinearLayoutManager
+ private lateinit var recyclerView: RecyclerView
+ private lateinit var layoutManager: LinearLayoutManager
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContentView(R.layout.activity_main)
 
-        recyclerView = findViewById(R.id.recyclerView)
-        layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
+ recyclerView = findViewById(R.id.recyclerView)
+ layoutManager = LinearLayoutManager(this)
+ recyclerView.layoutManager = layoutManager
 
-        savedInstanceState?.getParcelable<Parcelable>(KEY_STATE)?.let {
-            layoutManager.onRestoreInstanceState(it)
-        }
-    }
+ savedInstanceState?.getParcelable<Parcelable>(KEY_STATE)?.let {
+ layoutManager.onRestoreInstanceState(it)
+ }
+ }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        layoutManager.onSaveInstanceState()?.let {
-            outState.putParcelable(KEY_STATE, it)
-        }
-    }
+ override fun onSaveInstanceState(outState: Bundle) {
+ super.onSaveInstanceState(outState)
+ layoutManager.onSaveInstanceState()?.let {
+ outState.putParcelable(KEY_STATE, it)
+ }
+ }
 
-    companion object {
-        private const val KEY_STATE = "recycler_state"
-    }
+ companion object {
+ private const val KEY_STATE = "recycler_state"
+ }
 }
 ```
 
@@ -100,67 +100,67 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class ScrollViewModel(
-    private val savedStateHandle: SavedStateHandle
+ private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    var scrollPosition: Int
-        get() = savedStateHandle[KEY_POSITION] ?: 0
-        set(value) { savedStateHandle[KEY_POSITION] = value }
+ var scrollPosition: Int
+ get() = savedStateHandle[KEY_POSITION] ?: 0
+ set(value) { savedStateHandle[KEY_POSITION] = value }
 
-    var scrollOffset: Int
-        get() = savedStateHandle[KEY_OFFSET] ?: 0
-        set(value) { savedStateHandle[KEY_OFFSET] = value }
+ var scrollOffset: Int
+ get() = savedStateHandle[KEY_OFFSET] ?: 0
+ set(value) { savedStateHandle[KEY_OFFSET] = value }
 
-    companion object {
-        private const val KEY_POSITION = "scroll_position"
-        private const val KEY_OFFSET = "scroll_offset"
-    }
+ companion object {
+ private const val KEY_POSITION = "scroll_position"
+ private const val KEY_OFFSET = "scroll_offset"
+ }
 }
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var recyclerView: RecyclerView
-    private val viewModel: ScrollViewModel by viewModels()
+ private lateinit var recyclerView: RecyclerView
+ private val viewModel: ScrollViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContentView(R.layout.activity_main)
 
-        setupRecyclerView()
-        restoreScrollPosition()
-    }
+ setupRecyclerView()
+ restoreScrollPosition()
+ }
 
-    private fun setupRecyclerView() {
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+ private fun setupRecyclerView() {
+ recyclerView = findViewById(R.id.recyclerView)
+ recyclerView.layoutManager = LinearLayoutManager(this)
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(rv: RecyclerView, state: Int) {
-                if (state == RecyclerView.SCROLL_STATE_IDLE) {
-                    saveScrollPosition()
-                }
-            }
-        })
-    }
+ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+ override fun onScrollStateChanged(rv: RecyclerView, state: Int) {
+ if (state == RecyclerView.SCROLL_STATE_IDLE) {
+ saveScrollPosition()
+ }
+ }
+ })
+ }
 
-    private fun saveScrollPosition() {
-        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-        viewModel.scrollPosition = layoutManager.findFirstVisibleItemPosition()
+ private fun saveScrollPosition() {
+ val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+ viewModel.scrollPosition = layoutManager.findFirstVisibleItemPosition()
 
-        layoutManager.findViewByPosition(viewModel.scrollPosition)?.let {
-            viewModel.scrollOffset = it.top
-        }
-    }
+ layoutManager.findViewByPosition(viewModel.scrollPosition)?.let {
+ viewModel.scrollOffset = it.top
+ }
+ }
 
-    private fun restoreScrollPosition() {
-        if (viewModel.scrollPosition > 0) {
-            recyclerView.post {
-                (recyclerView.layoutManager as LinearLayoutManager)
-                    .scrollToPositionWithOffset(
-                        viewModel.scrollPosition,
-                        viewModel.scrollOffset
-                    )
-            }
-        }
-    }
+ private fun restoreScrollPosition() {
+ if (viewModel.scrollPosition > 0) {
+ recyclerView.post {
+ (recyclerView.layoutManager as LinearLayoutManager)
+ .scrollToPositionWithOffset(
+ viewModel.scrollPosition,
+ viewModel.scrollOffset
+ )
+ }
+ }
+ }
 }
 ```
 
@@ -194,28 +194,28 @@ When `Activity` is recreated (rotation, process death), scroll position resets. 
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private lateinit var scrollView: ScrollView
+ private lateinit var scrollView: ScrollView
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContentView(R.layout.activity_main)
 
-        scrollView = findViewById(R.id.scrollView)
+ scrollView = findViewById(R.id.scrollView)
 
-        savedInstanceState?.let {
-            val scrollY = it.getInt(KEY_SCROLL_Y, 0)
-            scrollView.post { scrollView.scrollTo(0, scrollY) }
-        }
-    }
+ savedInstanceState?.let {
+ val scrollY = it.getInt(KEY_SCROLL_Y, 0)
+ scrollView.post { scrollView.scrollTo(0, scrollY) }
+ }
+ }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt(KEY_SCROLL_Y, scrollView.scrollY)
-    }
+ override fun onSaveInstanceState(outState: Bundle) {
+ super.onSaveInstanceState(outState)
+ outState.putInt(KEY_SCROLL_Y, scrollView.scrollY)
+ }
 
-    companion object {
-        private const val KEY_SCROLL_Y = "scroll_y"
-    }
+ companion object {
+ private const val KEY_SCROLL_Y = "scroll_y"
+ }
 }
 ```
 
@@ -225,32 +225,32 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var layoutManager: LinearLayoutManager
+ private lateinit var recyclerView: RecyclerView
+ private lateinit var layoutManager: LinearLayoutManager
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContentView(R.layout.activity_main)
 
-        recyclerView = findViewById(R.id.recyclerView)
-        layoutManager = LinearLayoutManager(this)
-        recyclerView.layoutManager = layoutManager
+ recyclerView = findViewById(R.id.recyclerView)
+ layoutManager = LinearLayoutManager(this)
+ recyclerView.layoutManager = layoutManager
 
-        savedInstanceState?.getParcelable<Parcelable>(KEY_STATE)?.let {
-            layoutManager.onRestoreInstanceState(it)
-        }
-    }
+ savedInstanceState?.getParcelable<Parcelable>(KEY_STATE)?.let {
+ layoutManager.onRestoreInstanceState(it)
+ }
+ }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        layoutManager.onSaveInstanceState()?.let {
-            outState.putParcelable(KEY_STATE, it)
-        }
-    }
+ override fun onSaveInstanceState(outState: Bundle) {
+ super.onSaveInstanceState(outState)
+ layoutManager.onSaveInstanceState()?.let {
+ outState.putParcelable(KEY_STATE, it)
+ }
+ }
 
-    companion object {
-        private const val KEY_STATE = "recycler_state"
-    }
+ companion object {
+ private const val KEY_STATE = "recycler_state"
+ }
 }
 ```
 
@@ -260,67 +260,67 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class ScrollViewModel(
-    private val savedStateHandle: SavedStateHandle
+ private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    var scrollPosition: Int
-        get() = savedStateHandle[KEY_POSITION] ?: 0
-        set(value) { savedStateHandle[KEY_POSITION] = value }
+ var scrollPosition: Int
+ get() = savedStateHandle[KEY_POSITION] ?: 0
+ set(value) { savedStateHandle[KEY_POSITION] = value }
 
-    var scrollOffset: Int
-        get() = savedStateHandle[KEY_OFFSET] ?: 0
-        set(value) { savedStateHandle[KEY_OFFSET] = value }
+ var scrollOffset: Int
+ get() = savedStateHandle[KEY_OFFSET] ?: 0
+ set(value) { savedStateHandle[KEY_OFFSET] = value }
 
-    companion object {
-        private const val KEY_POSITION = "scroll_position"
-        private const val KEY_OFFSET = "scroll_offset"
-    }
+ companion object {
+ private const val KEY_POSITION = "scroll_position"
+ private const val KEY_OFFSET = "scroll_offset"
+ }
 }
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var recyclerView: RecyclerView
-    private val viewModel: ScrollViewModel by viewModels()
+ private lateinit var recyclerView: RecyclerView
+ private val viewModel: ScrollViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContentView(R.layout.activity_main)
 
-        setupRecyclerView()
-        restoreScrollPosition()
-    }
+ setupRecyclerView()
+ restoreScrollPosition()
+ }
 
-    private fun setupRecyclerView() {
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+ private fun setupRecyclerView() {
+ recyclerView = findViewById(R.id.recyclerView)
+ recyclerView.layoutManager = LinearLayoutManager(this)
 
-        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(rv: RecyclerView, state: Int) {
-                if (state == RecyclerView.SCROLL_STATE_IDLE) {
-                    saveScrollPosition()
-                }
-            }
-        })
-    }
+ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+ override fun onScrollStateChanged(rv: RecyclerView, state: Int) {
+ if (state == RecyclerView.SCROLL_STATE_IDLE) {
+ saveScrollPosition()
+ }
+ }
+ })
+ }
 
-    private fun saveScrollPosition() {
-        val layoutManager = recyclerView.layoutManager as LinearLayoutManager
-        viewModel.scrollPosition = layoutManager.findFirstVisibleItemPosition()
+ private fun saveScrollPosition() {
+ val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+ viewModel.scrollPosition = layoutManager.findFirstVisibleItemPosition()
 
-        layoutManager.findViewByPosition(viewModel.scrollPosition)?.let {
-            viewModel.scrollOffset = it.top
-        }
-    }
+ layoutManager.findViewByPosition(viewModel.scrollPosition)?.let {
+ viewModel.scrollOffset = it.top
+ }
+ }
 
-    private fun restoreScrollPosition() {
-        if (viewModel.scrollPosition > 0) {
-            recyclerView.post {
-                (recyclerView.layoutManager as LinearLayoutManager)
-                    .scrollToPositionWithOffset(
-                        viewModel.scrollPosition,
-                        viewModel.scrollOffset
-                    )
-            }
-        }
-    }
+ private fun restoreScrollPosition() {
+ if (viewModel.scrollPosition > 0) {
+ recyclerView.post {
+ (recyclerView.layoutManager as LinearLayoutManager)
+ .scrollToPositionWithOffset(
+ viewModel.scrollPosition,
+ viewModel.scrollOffset
+ )
+ }
+ }
+ }
 }
 ```
 
@@ -358,7 +358,7 @@ class MainActivity : AppCompatActivity() {
 
 ## References
 
-- [[c-savedstatehandle]] - SavedStateHandle concept
+- - SavedStateHandle concept
 - [[c-viewmodel]] - `ViewModel` lifecycle
 - [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle
 - [Saving UI States](https://developer.android.com/topic/libraries/architecture/saving-states)

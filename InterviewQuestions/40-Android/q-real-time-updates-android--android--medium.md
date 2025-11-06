@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-firebase-realtime, c-server-sent-events, c-websockets]
+related: []
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
@@ -35,46 +35,46 @@ Real-time обновления обеспечивают мгновенную с�
 
 ```kotlin
 class WebSocketManager(
-    private val client: OkHttpClient,
-    private val url: String
+ private val client: OkHttpClient,
+ private val url: String
 ) {
-    private var webSocket: WebSocket? = null
-    private val _messages = MutableSharedFlow<Message>()
-    val messages = _messages.asSharedFlow()
+ private var webSocket: WebSocket? = null
+ private val _messages = MutableSharedFlow<Message>()
+ val messages = _messages.asSharedFlow()
 
-    private val _state = MutableStateFlow(State.DISCONNECTED)
-    val state = _state.asStateFlow()
+ private val _state = MutableStateFlow(State.DISCONNECTED)
+ val state = _state.asStateFlow()
 
-    private val listener = object : WebSocketListener() {
-        override fun onOpen(ws: WebSocket, response: Response) {
-            _state.value = State.CONNECTED
-        }
+ private val listener = object : WebSocketListener() {
+ override fun onOpen(ws: WebSocket, response: Response) {
+ _state.value = State.CONNECTED
+ }
 
-        override fun onMessage(ws: WebSocket, text: String) {
-            // ✅ Parse and emit message asynchronously
-            scope.launch {
-                val message = Json.decodeFromString<Message>(text)
-                _messages.emit(message)
-            }
-        }
+ override fun onMessage(ws: WebSocket, text: String) {
+ // ✅ Parse and emit message asynchronously
+ scope.launch {
+ val message = Json.decodeFromString<Message>(text)
+ _messages.emit(message)
+ }
+ }
 
-        override fun onFailure(ws: WebSocket, t: Throwable, response: Response?) {
-            _state.value = State.ERROR
-            scheduleReconnect() // ✅ Auto-reconnect with backoff
-        }
-    }
+ override fun onFailure(ws: WebSocket, t: Throwable, response: Response?) {
+ _state.value = State.ERROR
+ scheduleReconnect() // ✅ Auto-reconnect with backoff
+ }
+ }
 
-    fun connect() {
-        val request = Request.Builder()
-            .url(url)
-            .build()
-        webSocket = client.newWebSocket(request, listener)
-    }
+ fun connect() {
+ val request = Request.Builder()
+ .url(url)
+ .build()
+ webSocket = client.newWebSocket(request, listener)
+ }
 
-    // ❌ Don't forget to disconnect when app goes to background
-    fun disconnect() {
-        webSocket?.close(1000, "Client disconnect")
-    }
+ // ❌ Don't forget to disconnect when app goes to background
+ fun disconnect() {
+ webSocket?.close(1000, "Client disconnect")
+ }
 }
 ```
 
@@ -85,21 +85,21 @@ class WebSocketManager(
 
 ```kotlin
 fun connectSSE(url: String): Flow<ServerEvent> = flow {
-    val request = Request.Builder()
-        .url(url)
-        .addHeader("Accept", "text/event-stream")
-        .build()
+ val request = Request.Builder()
+ .url(url)
+ .addHeader("Accept", "text/event-stream")
+ .build()
 
-    val response = client.newCall(request).execute()
-    val source = response.body?.source()
+ val response = client.newCall(request).execute()
+ val source = response.body?.source()
 
-    while (!source.exhausted()) {
-        val line = source.readUtf8Line()
-        if (line.startsWith("data:")) {
-            val data = line.substring(5).trim()
-            emit(Json.decodeFromString(data))
-        }
-    }
+ while (!source.exhausted()) {
+ val line = source.readUtf8Line()
+ if (line.startsWith("data:")) {
+ val data = line.substring(5).trim()
+ emit(Json.decodeFromString(data))
+ }
+ }
 }
 ```
 
@@ -110,26 +110,26 @@ fun connectSSE(url: String): Flow<ServerEvent> = flow {
 
 ```kotlin
 fun getMessagesFlow(chatId: String): Flow<List<Message>> = callbackFlow {
-    val listener = object : ValueEventListener {
-        override fun onDataChange(snapshot: DataSnapshot) {
-            val messages = snapshot.children.mapNotNull {
-                it.getValue(Message::class.java)
-            }
-            trySend(messages)
-        }
+ val listener = object : ValueEventListener {
+ override fun onDataChange(snapshot: DataSnapshot) {
+ val messages = snapshot.children.mapNotNull {
+ it.getValue(Message::class.java)
+ }
+ trySend(messages)
+ }
 
-        override fun onCancelled(error: DatabaseError) {
-            close(error.toException())
-        }
-    }
+ override fun onCancelled(error: DatabaseError) {
+ close(error.toException())
+ }
+ }
 
-    database.getReference("messages/$chatId")
-        .addValueEventListener(listener)
+ database.getReference("messages/$chatId")
+ .addValueEventListener(listener)
 
-    awaitClose {
-        database.getReference("messages/$chatId")
-            .removeEventListener(listener)
-    }
+ awaitClose {
+ database.getReference("messages/$chatId")
+ .removeEventListener(listener)
+ }
 }
 ```
 
@@ -140,20 +140,20 @@ fun getMessagesFlow(chatId: String): Flow<List<Message>> = callbackFlow {
 
 ```kotlin
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-    override fun onMessageReceived(message: RemoteMessage) {
-        // ✅ Handle data payload for silent updates
-        message.data.let { data ->
-            when (data["type"]) {
-                "new_message" -> fetchAndStore(data["id"])
-                "update" -> syncEntity(data["entity_id"])
-            }
-        }
+ override fun onMessageReceived(message: RemoteMessage) {
+ // ✅ Handle data payload for silent updates
+ message.data.let { data ->
+ when (data["type"]) {
+ "new_message" -> fetchAndStore(data["id"])
+ "update" -> syncEntity(data["entity_id"])
+ }
+ }
 
-        // ✅ Show notification if user is not in app
-        if (!isAppInForeground()) {
-            showNotification(message.notification)
-        }
-    }
+ // ✅ Show notification if user is not in app
+ if (!isAppInForeground()) {
+ showNotification(message.notification)
+ }
+ }
 }
 ```
 
@@ -164,19 +164,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 ```kotlin
 fun startPolling(interval: Long, onUpdate: (List<Message>) -> Unit) {
-    scope.launch {
-        var lastTimestamp = 0L
+ scope.launch {
+ var lastTimestamp = 0L
 
-        while (isActive) {
-            // ✅ Request only new messages since last timestamp
-            val messages = api.getMessages(since = lastTimestamp)
-            if (messages.isNotEmpty()) {
-                onUpdate(messages)
-                lastTimestamp = messages.maxOf { it.timestamp }
-            }
-            delay(interval)
-        }
-    }
+ while (isActive) {
+ // ✅ Request only new messages since last timestamp
+ val messages = api.getMessages(since = lastTimestamp)
+ if (messages.isNotEmpty()) {
+ onUpdate(messages)
+ lastTimestamp = messages.maxOf { it.timestamp }
+ }
+ delay(interval)
+ }
+ }
 }
 ```
 
@@ -188,24 +188,24 @@ fun startPolling(interval: Long, onUpdate: (List<Message>) -> Unit) {
 ```kotlin
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val webSocketManager: WebSocketManager,
-    networkMonitor: NetworkMonitor
+ private val webSocketManager: WebSocketManager,
+ networkMonitor: NetworkMonitor
 ) : ViewModel() {
 
-    init {
-        // ✅ Connect/disconnect based on network availability
-        viewModelScope.launch {
-            networkMonitor.isOnline.collect { online ->
-                if (online) webSocketManager.connect()
-                else webSocketManager.disconnect()
-            }
-        }
-    }
+ init {
+ // ✅ Connect/disconnect based on network availability
+ viewModelScope.launch {
+ networkMonitor.isOnline.collect { online ->
+ if (online) webSocketManager.connect()
+ else webSocketManager.disconnect()
+ }
+ }
+ }
 
-    override fun onCleared() {
-        super.onCleared()
-        webSocketManager.disconnect() // ✅ Clean up on ViewModel destruction
-    }
+ override fun onCleared() {
+ super.onCleared()
+ webSocketManager.disconnect() // ✅ Clean up on ViewModel destruction
+ }
 }
 ```
 
@@ -250,46 +250,46 @@ Real-time updates enable instant data synchronization between server and client.
 
 ```kotlin
 class WebSocketManager(
-    private val client: OkHttpClient,
-    private val url: String
+ private val client: OkHttpClient,
+ private val url: String
 ) {
-    private var webSocket: WebSocket? = null
-    private val _messages = MutableSharedFlow<Message>()
-    val messages = _messages.asSharedFlow()
+ private var webSocket: WebSocket? = null
+ private val _messages = MutableSharedFlow<Message>()
+ val messages = _messages.asSharedFlow()
 
-    private val _state = MutableStateFlow(State.DISCONNECTED)
-    val state = _state.asStateFlow()
+ private val _state = MutableStateFlow(State.DISCONNECTED)
+ val state = _state.asStateFlow()
 
-    private val listener = object : WebSocketListener() {
-        override fun onOpen(ws: WebSocket, response: Response) {
-            _state.value = State.CONNECTED
-        }
+ private val listener = object : WebSocketListener() {
+ override fun onOpen(ws: WebSocket, response: Response) {
+ _state.value = State.CONNECTED
+ }
 
-        override fun onMessage(ws: WebSocket, text: String) {
-            // ✅ Parse and emit message asynchronously
-            scope.launch {
-                val message = Json.decodeFromString<Message>(text)
-                _messages.emit(message)
-            }
-        }
+ override fun onMessage(ws: WebSocket, text: String) {
+ // ✅ Parse and emit message asynchronously
+ scope.launch {
+ val message = Json.decodeFromString<Message>(text)
+ _messages.emit(message)
+ }
+ }
 
-        override fun onFailure(ws: WebSocket, t: Throwable, response: Response?) {
-            _state.value = State.ERROR
-            scheduleReconnect() // ✅ Auto-reconnect with backoff
-        }
-    }
+ override fun onFailure(ws: WebSocket, t: Throwable, response: Response?) {
+ _state.value = State.ERROR
+ scheduleReconnect() // ✅ Auto-reconnect with backoff
+ }
+ }
 
-    fun connect() {
-        val request = Request.Builder()
-            .url(url)
-            .build()
-        webSocket = client.newWebSocket(request, listener)
-    }
+ fun connect() {
+ val request = Request.Builder()
+ .url(url)
+ .build()
+ webSocket = client.newWebSocket(request, listener)
+ }
 
-    // ❌ Don't forget to disconnect when app goes to background
-    fun disconnect() {
-        webSocket?.close(1000, "Client disconnect")
-    }
+ // ❌ Don't forget to disconnect when app goes to background
+ fun disconnect() {
+ webSocket?.close(1000, "Client disconnect")
+ }
 }
 ```
 
@@ -300,21 +300,21 @@ class WebSocketManager(
 
 ```kotlin
 fun connectSSE(url: String): Flow<ServerEvent> = flow {
-    val request = Request.Builder()
-        .url(url)
-        .addHeader("Accept", "text/event-stream")
-        .build()
+ val request = Request.Builder()
+ .url(url)
+ .addHeader("Accept", "text/event-stream")
+ .build()
 
-    val response = client.newCall(request).execute()
-    val source = response.body?.source()
+ val response = client.newCall(request).execute()
+ val source = response.body?.source()
 
-    while (!source.exhausted()) {
-        val line = source.readUtf8Line()
-        if (line.startsWith("data:")) {
-            val data = line.substring(5).trim()
-            emit(Json.decodeFromString(data))
-        }
-    }
+ while (!source.exhausted()) {
+ val line = source.readUtf8Line()
+ if (line.startsWith("data:")) {
+ val data = line.substring(5).trim()
+ emit(Json.decodeFromString(data))
+ }
+ }
 }
 ```
 
@@ -325,26 +325,26 @@ fun connectSSE(url: String): Flow<ServerEvent> = flow {
 
 ```kotlin
 fun getMessagesFlow(chatId: String): Flow<List<Message>> = callbackFlow {
-    val listener = object : ValueEventListener {
-        override fun onDataChange(snapshot: DataSnapshot) {
-            val messages = snapshot.children.mapNotNull {
-                it.getValue(Message::class.java)
-            }
-            trySend(messages)
-        }
+ val listener = object : ValueEventListener {
+ override fun onDataChange(snapshot: DataSnapshot) {
+ val messages = snapshot.children.mapNotNull {
+ it.getValue(Message::class.java)
+ }
+ trySend(messages)
+ }
 
-        override fun onCancelled(error: DatabaseError) {
-            close(error.toException())
-        }
-    }
+ override fun onCancelled(error: DatabaseError) {
+ close(error.toException())
+ }
+ }
 
-    database.getReference("messages/$chatId")
-        .addValueEventListener(listener)
+ database.getReference("messages/$chatId")
+ .addValueEventListener(listener)
 
-    awaitClose {
-        database.getReference("messages/$chatId")
-            .removeEventListener(listener)
-    }
+ awaitClose {
+ database.getReference("messages/$chatId")
+ .removeEventListener(listener)
+ }
 }
 ```
 
@@ -355,20 +355,20 @@ fun getMessagesFlow(chatId: String): Flow<List<Message>> = callbackFlow {
 
 ```kotlin
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-    override fun onMessageReceived(message: RemoteMessage) {
-        // ✅ Handle data payload for silent updates
-        message.data.let { data ->
-            when (data["type"]) {
-                "new_message" -> fetchAndStore(data["id"])
-                "update" -> syncEntity(data["entity_id"])
-            }
-        }
+ override fun onMessageReceived(message: RemoteMessage) {
+ // ✅ Handle data payload for silent updates
+ message.data.let { data ->
+ when (data["type"]) {
+ "new_message" -> fetchAndStore(data["id"])
+ "update" -> syncEntity(data["entity_id"])
+ }
+ }
 
-        // ✅ Show notification if user is not in app
-        if (!isAppInForeground()) {
-            showNotification(message.notification)
-        }
-    }
+ // ✅ Show notification if user is not in app
+ if (!isAppInForeground()) {
+ showNotification(message.notification)
+ }
+ }
 }
 ```
 
@@ -379,19 +379,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 ```kotlin
 fun startPolling(interval: Long, onUpdate: (List<Message>) -> Unit) {
-    scope.launch {
-        var lastTimestamp = 0L
+ scope.launch {
+ var lastTimestamp = 0L
 
-        while (isActive) {
-            // ✅ Request only new messages since last timestamp
-            val messages = api.getMessages(since = lastTimestamp)
-            if (messages.isNotEmpty()) {
-                onUpdate(messages)
-                lastTimestamp = messages.maxOf { it.timestamp }
-            }
-            delay(interval)
-        }
-    }
+ while (isActive) {
+ // ✅ Request only new messages since last timestamp
+ val messages = api.getMessages(since = lastTimestamp)
+ if (messages.isNotEmpty()) {
+ onUpdate(messages)
+ lastTimestamp = messages.maxOf { it.timestamp }
+ }
+ delay(interval)
+ }
+ }
 }
 ```
 
@@ -403,24 +403,24 @@ fun startPolling(interval: Long, onUpdate: (List<Message>) -> Unit) {
 ```kotlin
 @HiltViewModel
 class ChatViewModel @Inject constructor(
-    private val webSocketManager: WebSocketManager,
-    networkMonitor: NetworkMonitor
+ private val webSocketManager: WebSocketManager,
+ networkMonitor: NetworkMonitor
 ) : ViewModel() {
 
-    init {
-        // ✅ Connect/disconnect based on network availability
-        viewModelScope.launch {
-            networkMonitor.isOnline.collect { online ->
-                if (online) webSocketManager.connect()
-                else webSocketManager.disconnect()
-            }
-        }
-    }
+ init {
+ // ✅ Connect/disconnect based on network availability
+ viewModelScope.launch {
+ networkMonitor.isOnline.collect { online ->
+ if (online) webSocketManager.connect()
+ else webSocketManager.disconnect()
+ }
+ }
+ }
 
-    override fun onCleared() {
-        super.onCleared()
-        webSocketManager.disconnect() // ✅ Clean up on ViewModel destruction
-    }
+ override fun onCleared() {
+ super.onCleared()
+ webSocketManager.disconnect() // ✅ Clean up on ViewModel destruction
+ }
 }
 ```
 
@@ -469,21 +469,21 @@ class ChatViewModel @Inject constructor(
 
 ## References
 
-- [[c-websockets]]
-- [[c-firebase-realtime]]
-- [[c-server-sent-events]]
-- [[c-offline-first-architecture]]
+- 
+- 
+- 
+- 
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-networking-in-android--android--medium]]
-- [[q-coroutines-and-flow--kotlin--medium]]
+- [[q-network-operations-android--android--medium]]
+- [[q-room-coroutines-flow--kotlin--medium]]
 
 ### Related
-- [[q-workmanager-background-tasks--android--medium]]
+- 
 - [[q-websocket-implementation--android--medium]]
 
 ### Advanced
-- [[q-distributed-systems-consistency--system-design--hard]]
-- [[q-websocket-scalability--system-design--hard]]
+- 
+- 

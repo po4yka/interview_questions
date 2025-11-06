@@ -18,8 +18,6 @@ moc: moc-android
 related:
 - c-testing
 - q-android-manifest-file--android--easy
-- q-koin-vs-hilt-comparison--dependency-injection--medium
-- q-react-native-comparison--multiplatform--medium
 created: 2025-10-15
 updated: 2025-10-31
 tags:
@@ -42,11 +40,11 @@ Integration tests verify that multiple components work together correctly. They 
 ### Integration Test Pyramid
 
 ```
-    E2E Tests (UI)
-        ↑
+ E2E Tests (UI)
+ ↑
 Integration Tests (Multiple Layers)
-        ↑
-  Unit Tests (Single Components)
+ ↑
+ Unit Tests (Single Components)
 ```
 
 ### Testing Strategy
@@ -68,93 +66,93 @@ Integration Tests (Multiple Layers)
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class UserRepositoryIntegrationTest {
-    private lateinit var database: AppDatabase
-    private lateinit var userDao: UserDao
-    private lateinit var fakeApiService: FakeApiService
-    private lateinit var repository: UserRepository
+ private lateinit var database: AppDatabase
+ private lateinit var userDao: UserDao
+ private lateinit var fakeApiService: FakeApiService
+ private lateinit var repository: UserRepository
 
-    @Before
-    fun setup() {
-        // Use in-memory database
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        database = Room.inMemoryDatabaseBuilder(
-            context,
-            AppDatabase::class.java
-        ).build()
+ @Before
+ fun setup() {
+ // Use in-memory database
+ val context = ApplicationProvider.getApplicationContext<Context>()
+ database = Room.inMemoryDatabaseBuilder(
+ context,
+ AppDatabase::class.java
+ ).build()
 
-        userDao = database.userDao()
-        fakeApiService = FakeApiService()
-        repository = UserRepositoryImpl(userDao, fakeApiService)
-    }
+ userDao = database.userDao()
+ fakeApiService = FakeApiService()
+ repository = UserRepositoryImpl(userDao, fakeApiService)
+ }
 
-    @After
-    fun tearDown() {
-        database.close()
-    }
+ @After
+ fun tearDown() {
+ database.close()
+ }
 
-    @Test
-    fun getUser_cachesInDatabase() = runTest {
-        // Setup
-        fakeApiService.users["1"] = User("1", "John", "john@example.com")
+ @Test
+ fun getUser_cachesInDatabase() = runTest {
+ // Setup
+ fakeApiService.users["1"] = User("1", "John", "john@example.com")
 
-        // First fetch - from network
-        val user1 = repository.getUser("1")
-        assertEquals("John", user1.name)
+ // First fetch - from network
+ val user1 = repository.getUser("1")
+ assertEquals("John", user1.name)
 
-        // Verify cached in database
-        val cached = userDao.getUser("1")
-        assertNotNull(cached)
-        assertEquals("John", cached?.name)
+ // Verify cached in database
+ val cached = userDao.getUser("1")
+ assertNotNull(cached)
+ assertEquals("John", cached?.name)
 
-        // Second fetch - should use cache even if network fails
-        fakeApiService.shouldReturnError = true
-        val user2 = repository.getUser("1")
-        assertEquals("John", user2.name)
-    }
+ // Second fetch - should use cache even if network fails
+ fakeApiService.shouldReturnError = true
+ val user2 = repository.getUser("1")
+ assertEquals("John", user2.name)
+ }
 
-    @Test
-    fun updateUser_syncsWithNetwork() = runTest {
-        // Setup initial user
-        val user = User("1", "John", "john@example.com")
-        userDao.insert(user)
+ @Test
+ fun updateUser_syncsWithNetwork() = runTest {
+ // Setup initial user
+ val user = User("1", "John", "john@example.com")
+ userDao.insert(user)
 
-        // Update
-        val updated = user.copy(name = "Jane")
-        repository.updateUser(updated)
+ // Update
+ val updated = user.copy(name = "Jane")
+ repository.updateUser(updated)
 
-        // Verify database updated
-        val fromDb = userDao.getUser("1")
-        assertEquals("Jane", fromDb?.name)
+ // Verify database updated
+ val fromDb = userDao.getUser("1")
+ assertEquals("Jane", fromDb?.name)
 
-        // Verify network called
-        assertEquals("Jane", fakeApiService.users["1"]?.name)
-    }
+ // Verify network called
+ assertEquals("Jane", fakeApiService.users["1"]?.name)
+ }
 
-    @Test
-    fun observeUser_receivesUpdates() = runTest {
-        val user = User("1", "John", "john@example.com")
-        userDao.insert(user)
+ @Test
+ fun observeUser_receivesUpdates() = runTest {
+ val user = User("1", "John", "john@example.com")
+ userDao.insert(user)
 
-        val values = mutableListOf<User>()
-        val job = launch {
-            repository.observeUser("1").collect {
-                values.add(it)
-            }
-        }
+ val values = mutableListOf<User>()
+ val job = launch {
+ repository.observeUser("1").collect {
+ values.add(it)
+ }
+ }
 
-        delay(100)
+ delay(100)
 
-        // Update user
-        val updated = user.copy(name = "Jane")
-        userDao.update(updated)
+ // Update user
+ val updated = user.copy(name = "Jane")
+ userDao.update(updated)
 
-        delay(100)
+ delay(100)
 
-        job.cancel()
+ job.cancel()
 
-        assertTrue(values.any { it.name == "John" })
-        assertTrue(values.any { it.name == "Jane" })
-    }
+ assertTrue(values.any { it.name == "John" })
+ assertTrue(values.any { it.name == "Jane" })
+ }
 }
 ```
 
@@ -163,48 +161,48 @@ class UserRepositoryIntegrationTest {
 ```kotlin
 @ExperimentalCoroutinesTest
 class UserViewModelIntegrationTest {
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
+ @get:Rule
+ val mainDispatcherRule = MainDispatcherRule()
 
-    private lateinit var viewModel: UserViewModel
-    private lateinit var fakeRepository: FakeUserRepository
+ private lateinit var viewModel: UserViewModel
+ private lateinit var fakeRepository: FakeUserRepository
 
-    @Before
-    fun setup() {
-        fakeRepository = FakeUserRepository()
-        viewModel = UserViewModel(fakeRepository)
-    }
+ @Before
+ fun setup() {
+ fakeRepository = FakeUserRepository()
+ viewModel = UserViewModel(fakeRepository)
+ }
 
-    @Test
-    fun loadUser_success() = runTest {
-        // Setup
-        fakeRepository.addUser(User("1", "John", "john@example.com"))
+ @Test
+ fun loadUser_success() = runTest {
+ // Setup
+ fakeRepository.addUser(User("1", "John", "john@example.com"))
 
-        // Execute
-        viewModel.loadUser("1")
+ // Execute
+ viewModel.loadUser("1")
 
-        // Verify state progression
-        val states = mutableListOf<UiState>()
-        val job = launch {
-            viewModel.uiState.collect { states.add(it) }
-        }
+ // Verify state progression
+ val states = mutableListOf<UiState>()
+ val job = launch {
+ viewModel.uiState.collect { states.add(it) }
+ }
 
-        advanceUntilIdle()
-        job.cancel()
+ advanceUntilIdle()
+ job.cancel()
 
-        assertTrue(states.contains(UiState.Loading))
-        assertTrue(states.any { it is UiState.Success })
-    }
+ assertTrue(states.contains(UiState.Loading))
+ assertTrue(states.any { it is UiState.Success })
+ }
 
-    @Test
-    fun loadUser_error() = runTest {
-        fakeRepository.shouldReturnError = true
+ @Test
+ fun loadUser_error() = runTest {
+ fakeRepository.shouldReturnError = true
 
-        viewModel.loadUser("1")
+ viewModel.loadUser("1")
 
-        val state = viewModel.uiState.value
-        assertTrue(state is UiState.Error)
-    }
+ val state = viewModel.uiState.value
+ assertTrue(state is UiState.Error)
+ }
 }
 ```
 
@@ -213,55 +211,55 @@ class UserViewModelIntegrationTest {
 ```kotlin
 @HiltAndroidTest
 class FullStackIntegrationTest {
-    @get:Rule(order = 0)
-    val hiltRule = HiltAndroidRule(this)
+ @get:Rule(order = 0)
+ val hiltRule = HiltAndroidRule(this)
 
-    @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<MainActivity>()
+ @get:Rule(order = 1)
+ val composeTestRule = createAndroidComposeRule<MainActivity>()
 
-    @Inject
-    lateinit var database: AppDatabase
+ @Inject
+ lateinit var database: AppDatabase
 
-    @Before
-    fun setup() {
-        hiltRule.inject()
-        database.clearAllTables()
-    }
+ @Before
+ fun setup() {
+ hiltRule.inject()
+ database.clearAllTables()
+ }
 
-    @Test
-    fun completeUserFlow() {
-        // 1. Start at empty state
-        composeTestRule.onNodeWithText("No users").assertExists()
+ @Test
+ fun completeUserFlow() {
+ // 1. Start at empty state
+ composeTestRule.onNodeWithText("No users").assertExists()
 
-        // 2. Add user
-        composeTestRule.onNodeWithTag("add_user_button").performClick()
-        composeTestRule.onNodeWithTag("name_input").performTextInput("John")
-        composeTestRule.onNodeWithTag("email_input").performTextInput("john@example.com")
-        composeTestRule.onNodeWithTag("save_button").performClick()
+ // 2. Add user
+ composeTestRule.onNodeWithTag("add_user_button").performClick()
+ composeTestRule.onNodeWithTag("name_input").performTextInput("John")
+ composeTestRule.onNodeWithTag("email_input").performTextInput("john@example.com")
+ composeTestRule.onNodeWithTag("save_button").performClick()
 
-        // 3. Verify user displayed
-        composeTestRule.onNodeWithText("John").assertExists()
-        composeTestRule.onNodeWithText("john@example.com").assertExists()
+ // 3. Verify user displayed
+ composeTestRule.onNodeWithText("John").assertExists()
+ composeTestRule.onNodeWithText("john@example.com").assertExists()
 
-        // 4. Edit user
-        composeTestRule.onNodeWithText("John").performClick()
-        composeTestRule.onNodeWithTag("edit_button").performClick()
-        composeTestRule.onNodeWithTag("name_input").performTextClearance()
-        composeTestRule.onNodeWithTag("name_input").performTextInput("Jane")
-        composeTestRule.onNodeWithTag("save_button").performClick()
+ // 4. Edit user
+ composeTestRule.onNodeWithText("John").performClick()
+ composeTestRule.onNodeWithTag("edit_button").performClick()
+ composeTestRule.onNodeWithTag("name_input").performTextClearance()
+ composeTestRule.onNodeWithTag("name_input").performTextInput("Jane")
+ composeTestRule.onNodeWithTag("save_button").performClick()
 
-        // 5. Verify update
-        composeTestRule.onNodeWithText("Jane").assertExists()
-        composeTestRule.onNodeWithText("John").assertDoesNotExist()
+ // 5. Verify update
+ composeTestRule.onNodeWithText("Jane").assertExists()
+ composeTestRule.onNodeWithText("John").assertDoesNotExist()
 
-        // 6. Delete user
-        composeTestRule.onNodeWithText("Jane").performClick()
-        composeTestRule.onNodeWithTag("delete_button").performClick()
-        composeTestRule.onNodeWithText("Confirm").performClick()
+ // 6. Delete user
+ composeTestRule.onNodeWithText("Jane").performClick()
+ composeTestRule.onNodeWithTag("delete_button").performClick()
+ composeTestRule.onNodeWithText("Confirm").performClick()
 
-        // 7. Verify empty state
-        composeTestRule.onNodeWithText("No users").assertExists()
-    }
+ // 7. Verify empty state
+ composeTestRule.onNodeWithText("No users").assertExists()
+ }
 }
 ```
 
@@ -275,15 +273,12 @@ class FullStackIntegrationTest {
 6. **Test error scenarios** (network failures, database errors)
 7. **Balance coverage with speed** - don't test everything at integration level
 
-
 # Question (EN)
 > Integration Testing Strategies
 
 ---
 
-
 ---
-
 
 ## Answer (EN)
 
@@ -292,11 +287,11 @@ Integration tests verify that multiple components work together correctly. They 
 ### Integration Test Pyramid
 
 ```
-    E2E Tests (UI)
-        ↑
+ E2E Tests (UI)
+ ↑
 Integration Tests (Multiple Layers)
-        ↑
-  Unit Tests (Single Components)
+ ↑
+ Unit Tests (Single Components)
 ```
 
 ### Testing Strategy
@@ -318,93 +313,93 @@ Integration Tests (Multiple Layers)
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class UserRepositoryIntegrationTest {
-    private lateinit var database: AppDatabase
-    private lateinit var userDao: UserDao
-    private lateinit var fakeApiService: FakeApiService
-    private lateinit var repository: UserRepository
+ private lateinit var database: AppDatabase
+ private lateinit var userDao: UserDao
+ private lateinit var fakeApiService: FakeApiService
+ private lateinit var repository: UserRepository
 
-    @Before
-    fun setup() {
-        // Use in-memory database
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        database = Room.inMemoryDatabaseBuilder(
-            context,
-            AppDatabase::class.java
-        ).build()
+ @Before
+ fun setup() {
+ // Use in-memory database
+ val context = ApplicationProvider.getApplicationContext<Context>()
+ database = Room.inMemoryDatabaseBuilder(
+ context,
+ AppDatabase::class.java
+ ).build()
 
-        userDao = database.userDao()
-        fakeApiService = FakeApiService()
-        repository = UserRepositoryImpl(userDao, fakeApiService)
-    }
+ userDao = database.userDao()
+ fakeApiService = FakeApiService()
+ repository = UserRepositoryImpl(userDao, fakeApiService)
+ }
 
-    @After
-    fun tearDown() {
-        database.close()
-    }
+ @After
+ fun tearDown() {
+ database.close()
+ }
 
-    @Test
-    fun getUser_cachesInDatabase() = runTest {
-        // Setup
-        fakeApiService.users["1"] = User("1", "John", "john@example.com")
+ @Test
+ fun getUser_cachesInDatabase() = runTest {
+ // Setup
+ fakeApiService.users["1"] = User("1", "John", "john@example.com")
 
-        // First fetch - from network
-        val user1 = repository.getUser("1")
-        assertEquals("John", user1.name)
+ // First fetch - from network
+ val user1 = repository.getUser("1")
+ assertEquals("John", user1.name)
 
-        // Verify cached in database
-        val cached = userDao.getUser("1")
-        assertNotNull(cached)
-        assertEquals("John", cached?.name)
+ // Verify cached in database
+ val cached = userDao.getUser("1")
+ assertNotNull(cached)
+ assertEquals("John", cached?.name)
 
-        // Second fetch - should use cache even if network fails
-        fakeApiService.shouldReturnError = true
-        val user2 = repository.getUser("1")
-        assertEquals("John", user2.name)
-    }
+ // Second fetch - should use cache even if network fails
+ fakeApiService.shouldReturnError = true
+ val user2 = repository.getUser("1")
+ assertEquals("John", user2.name)
+ }
 
-    @Test
-    fun updateUser_syncsWithNetwork() = runTest {
-        // Setup initial user
-        val user = User("1", "John", "john@example.com")
-        userDao.insert(user)
+ @Test
+ fun updateUser_syncsWithNetwork() = runTest {
+ // Setup initial user
+ val user = User("1", "John", "john@example.com")
+ userDao.insert(user)
 
-        // Update
-        val updated = user.copy(name = "Jane")
-        repository.updateUser(updated)
+ // Update
+ val updated = user.copy(name = "Jane")
+ repository.updateUser(updated)
 
-        // Verify database updated
-        val fromDb = userDao.getUser("1")
-        assertEquals("Jane", fromDb?.name)
+ // Verify database updated
+ val fromDb = userDao.getUser("1")
+ assertEquals("Jane", fromDb?.name)
 
-        // Verify network called
-        assertEquals("Jane", fakeApiService.users["1"]?.name)
-    }
+ // Verify network called
+ assertEquals("Jane", fakeApiService.users["1"]?.name)
+ }
 
-    @Test
-    fun observeUser_receivesUpdates() = runTest {
-        val user = User("1", "John", "john@example.com")
-        userDao.insert(user)
+ @Test
+ fun observeUser_receivesUpdates() = runTest {
+ val user = User("1", "John", "john@example.com")
+ userDao.insert(user)
 
-        val values = mutableListOf<User>()
-        val job = launch {
-            repository.observeUser("1").collect {
-                values.add(it)
-            }
-        }
+ val values = mutableListOf<User>()
+ val job = launch {
+ repository.observeUser("1").collect {
+ values.add(it)
+ }
+ }
 
-        delay(100)
+ delay(100)
 
-        // Update user
-        val updated = user.copy(name = "Jane")
-        userDao.update(updated)
+ // Update user
+ val updated = user.copy(name = "Jane")
+ userDao.update(updated)
 
-        delay(100)
+ delay(100)
 
-        job.cancel()
+ job.cancel()
 
-        assertTrue(values.any { it.name == "John" })
-        assertTrue(values.any { it.name == "Jane" })
-    }
+ assertTrue(values.any { it.name == "John" })
+ assertTrue(values.any { it.name == "Jane" })
+ }
 }
 ```
 
@@ -413,48 +408,48 @@ class UserRepositoryIntegrationTest {
 ```kotlin
 @ExperimentalCoroutinesTest
 class UserViewModelIntegrationTest {
-    @get:Rule
-    val mainDispatcherRule = MainDispatcherRule()
+ @get:Rule
+ val mainDispatcherRule = MainDispatcherRule()
 
-    private lateinit var viewModel: UserViewModel
-    private lateinit var fakeRepository: FakeUserRepository
+ private lateinit var viewModel: UserViewModel
+ private lateinit var fakeRepository: FakeUserRepository
 
-    @Before
-    fun setup() {
-        fakeRepository = FakeUserRepository()
-        viewModel = UserViewModel(fakeRepository)
-    }
+ @Before
+ fun setup() {
+ fakeRepository = FakeUserRepository()
+ viewModel = UserViewModel(fakeRepository)
+ }
 
-    @Test
-    fun loadUser_success() = runTest {
-        // Setup
-        fakeRepository.addUser(User("1", "John", "john@example.com"))
+ @Test
+ fun loadUser_success() = runTest {
+ // Setup
+ fakeRepository.addUser(User("1", "John", "john@example.com"))
 
-        // Execute
-        viewModel.loadUser("1")
+ // Execute
+ viewModel.loadUser("1")
 
-        // Verify state progression
-        val states = mutableListOf<UiState>()
-        val job = launch {
-            viewModel.uiState.collect { states.add(it) }
-        }
+ // Verify state progression
+ val states = mutableListOf<UiState>()
+ val job = launch {
+ viewModel.uiState.collect { states.add(it) }
+ }
 
-        advanceUntilIdle()
-        job.cancel()
+ advanceUntilIdle()
+ job.cancel()
 
-        assertTrue(states.contains(UiState.Loading))
-        assertTrue(states.any { it is UiState.Success })
-    }
+ assertTrue(states.contains(UiState.Loading))
+ assertTrue(states.any { it is UiState.Success })
+ }
 
-    @Test
-    fun loadUser_error() = runTest {
-        fakeRepository.shouldReturnError = true
+ @Test
+ fun loadUser_error() = runTest {
+ fakeRepository.shouldReturnError = true
 
-        viewModel.loadUser("1")
+ viewModel.loadUser("1")
 
-        val state = viewModel.uiState.value
-        assertTrue(state is UiState.Error)
-    }
+ val state = viewModel.uiState.value
+ assertTrue(state is UiState.Error)
+ }
 }
 ```
 
@@ -463,55 +458,55 @@ class UserViewModelIntegrationTest {
 ```kotlin
 @HiltAndroidTest
 class FullStackIntegrationTest {
-    @get:Rule(order = 0)
-    val hiltRule = HiltAndroidRule(this)
+ @get:Rule(order = 0)
+ val hiltRule = HiltAndroidRule(this)
 
-    @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<MainActivity>()
+ @get:Rule(order = 1)
+ val composeTestRule = createAndroidComposeRule<MainActivity>()
 
-    @Inject
-    lateinit var database: AppDatabase
+ @Inject
+ lateinit var database: AppDatabase
 
-    @Before
-    fun setup() {
-        hiltRule.inject()
-        database.clearAllTables()
-    }
+ @Before
+ fun setup() {
+ hiltRule.inject()
+ database.clearAllTables()
+ }
 
-    @Test
-    fun completeUserFlow() {
-        // 1. Start at empty state
-        composeTestRule.onNodeWithText("No users").assertExists()
+ @Test
+ fun completeUserFlow() {
+ // 1. Start at empty state
+ composeTestRule.onNodeWithText("No users").assertExists()
 
-        // 2. Add user
-        composeTestRule.onNodeWithTag("add_user_button").performClick()
-        composeTestRule.onNodeWithTag("name_input").performTextInput("John")
-        composeTestRule.onNodeWithTag("email_input").performTextInput("john@example.com")
-        composeTestRule.onNodeWithTag("save_button").performClick()
+ // 2. Add user
+ composeTestRule.onNodeWithTag("add_user_button").performClick()
+ composeTestRule.onNodeWithTag("name_input").performTextInput("John")
+ composeTestRule.onNodeWithTag("email_input").performTextInput("john@example.com")
+ composeTestRule.onNodeWithTag("save_button").performClick()
 
-        // 3. Verify user displayed
-        composeTestRule.onNodeWithText("John").assertExists()
-        composeTestRule.onNodeWithText("john@example.com").assertExists()
+ // 3. Verify user displayed
+ composeTestRule.onNodeWithText("John").assertExists()
+ composeTestRule.onNodeWithText("john@example.com").assertExists()
 
-        // 4. Edit user
-        composeTestRule.onNodeWithText("John").performClick()
-        composeTestRule.onNodeWithTag("edit_button").performClick()
-        composeTestRule.onNodeWithTag("name_input").performTextClearance()
-        composeTestRule.onNodeWithTag("name_input").performTextInput("Jane")
-        composeTestRule.onNodeWithTag("save_button").performClick()
+ // 4. Edit user
+ composeTestRule.onNodeWithText("John").performClick()
+ composeTestRule.onNodeWithTag("edit_button").performClick()
+ composeTestRule.onNodeWithTag("name_input").performTextClearance()
+ composeTestRule.onNodeWithTag("name_input").performTextInput("Jane")
+ composeTestRule.onNodeWithTag("save_button").performClick()
 
-        // 5. Verify update
-        composeTestRule.onNodeWithText("Jane").assertExists()
-        composeTestRule.onNodeWithText("John").assertDoesNotExist()
+ // 5. Verify update
+ composeTestRule.onNodeWithText("Jane").assertExists()
+ composeTestRule.onNodeWithText("John").assertDoesNotExist()
 
-        // 6. Delete user
-        composeTestRule.onNodeWithText("Jane").performClick()
-        composeTestRule.onNodeWithTag("delete_button").performClick()
-        composeTestRule.onNodeWithText("Confirm").performClick()
+ // 6. Delete user
+ composeTestRule.onNodeWithText("Jane").performClick()
+ composeTestRule.onNodeWithTag("delete_button").performClick()
+ composeTestRule.onNodeWithText("Confirm").performClick()
 
-        // 7. Verify empty state
-        composeTestRule.onNodeWithText("No users").assertExists()
-    }
+ // 7. Verify empty state
+ composeTestRule.onNodeWithText("No users").assertExists()
+ }
 }
 ```
 
@@ -528,7 +523,6 @@ class FullStackIntegrationTest {
 ## Ответ (RU)
 
 Интеграционные тесты проверяют, что несколько компонентов корректно работают вместе. Они тестируют взаимодействие между слоями, используя моки для внешних зависимостей, таких как сеть и системные сервисы.
-
 
 ### Стратегия Тестирования
 
@@ -550,25 +544,21 @@ class FullStackIntegrationTest {
 
 ---
 
-
 ## Follow-ups
 
 - [[q-android-manifest-file--android--easy]]
-- [[q-koin-vs-hilt-comparison--dependency-injection--medium]]
-- [[q-react-native-comparison--multiplatform--medium]]
-
+- 
+- 
 
 ## References
 
 - [Instrumented Tests](https://developer.android.com/training/testing/instrumented-tests)
-
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-testing]]
-
 
 ### Related (Medium)
 - [[q-testing-viewmodels-turbine--android--medium]] - Testing

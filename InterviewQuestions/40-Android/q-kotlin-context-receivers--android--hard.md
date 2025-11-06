@@ -41,15 +41,15 @@ sources: [https://kotlinlang.org/docs/whatsnew15.html#context-receivers]
 // ✅ Множественные контексты
 context(Context, CoroutineScope)
 fun launchAndShowToast(message: String) {
-    launch {
-        delay(1000)
-        Toast.makeText(this@Context, message, Toast.LENGTH_SHORT).show()
-    }
+ launch {
+ delay(1000)
+ Toast.makeText(this@Context, message, Toast.LENGTH_SHORT).show()
+ }
 }
 
 // ❌ Extension-функция — только один receiver
 fun CoroutineScope.showToastInContext(ctx: Context, message: String) {
-    launch { /* Громоздко, передаём Context явно */ }
+ launch { /* Громоздко, передаём Context явно */ }
 }
 ```
 
@@ -62,48 +62,48 @@ interface LoggerProvider { val logger: Logger }
 // ✅ Repository получает зависимости через context
 context(DatabaseProvider, NetworkProvider, LoggerProvider)
 class UserRepository {
-    suspend fun getUser(userId: String): User {
-        logger.log("Getting user: $userId")
+ suspend fun getUser(userId: String): User {
+ logger.log("Getting user: $userId")
 
-        database.userDao().getUser(userId)?.let { return it }
+ database.userDao().getUser(userId)?.let { return it }
 
-        val user = apiService.getUser(userId)
-        database.userDao().insert(user)
-        return user
-    }
+ val user = apiService.getUser(userId)
+ database.userDao().insert(user)
+ return user
+ }
 }
 
 // Использование
 class AppDependencies : DatabaseProvider, NetworkProvider, LoggerProvider {
-    override val database = Room.databaseBuilder(/*...*/).build()
-    override val apiService = Retrofit.Builder().build().create(/*...*/)
-    override val logger = AndroidLogger()
+ override val database = Room.databaseBuilder(/*...*/).build()
+ override val apiService = Retrofit.Builder().build().create(/*...*/)
+ override val logger = AndroidLogger()
 }
 
 class MyViewModel(private val deps: AppDependencies) : ViewModel() {
-    private val userRepository = with(deps) { UserRepository() }
+ private val userRepository = with(deps) { UserRepository() }
 }
 ```
 
 **Логирование как cross-cutting concern:**
 ```kotlin
 interface Logger {
-    fun log(message: String)
-    fun error(message: String, throwable: Throwable? = null)
+ fun log(message: String)
+ fun error(message: String, throwable: Throwable? = null)
 }
 
 context(Logger)
 suspend fun fetchUser(userId: String): User {
-    log("Fetching user: $userId") // ✅ Не передаём logger явно
+ log("Fetching user: $userId") // ✅ Не передаём logger явно
 
-    return try {
-        val user = apiService.getUser(userId)
-        log("User fetched: ${user.name}")
-        user
-    } catch (e: Exception) {
-        error("Failed to fetch user", e) // ✅ Доступно из контекста
-        throw e
-    }
+ return try {
+ val user = apiService.getUser(userId)
+ log("User fetched: ${user.name}")
+ user
+ } catch (e: Exception) {
+ error("Failed to fetch user", e) // ✅ Доступно из контекста
+ throw e
+ }
 }
 ```
 
@@ -111,28 +111,28 @@ suspend fun fetchUser(userId: String): User {
 ```kotlin
 // ✅ Навигация без передачи NavController
 interface NavigationContext {
-    fun navigate(destination: String)
+ fun navigate(destination: String)
 }
 
 context(NavigationContext)
 fun navigateToProfile(userId: String) {
-    navigate("profile/$userId")
+ navigate("profile/$userId")
 }
 
 // ✅ Разрешения
 interface PermissionContext {
-    fun hasPermission(permission: String): Boolean
-    fun requestPermission(permission: String)
+ fun hasPermission(permission: String): Boolean
+ fun requestPermission(permission: String)
 }
 
 context(PermissionContext, Context)
 fun openCamera() {
-    if (hasPermission(Manifest.permission.CAMERA)) {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        this@Context.startActivity(intent)
-    } else {
-        requestPermission(Manifest.permission.CAMERA)
-    }
+ if (hasPermission(Manifest.permission.CAMERA)) {
+ val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+ this@Context.startActivity(intent)
+ } else {
+ requestPermission(Manifest.permission.CAMERA)
+ }
 }
 ```
 
@@ -152,15 +152,15 @@ fun openCamera() {
 // ✅ Multiple contexts
 context(Context, CoroutineScope)
 fun launchAndShowToast(message: String) {
-    launch {
-        delay(1000)
-        Toast.makeText(this@Context, message, Toast.LENGTH_SHORT).show()
-    }
+ launch {
+ delay(1000)
+ Toast.makeText(this@Context, message, Toast.LENGTH_SHORT).show()
+ }
 }
 
 // ❌ Extension function — only one receiver
 fun CoroutineScope.showToastInContext(ctx: Context, message: String) {
-    launch { /* Verbose, pass Context explicitly */ }
+ launch { /* Verbose, pass Context explicitly */ }
 }
 ```
 
@@ -173,48 +173,48 @@ interface LoggerProvider { val logger: Logger }
 // ✅ Repository receives dependencies via context
 context(DatabaseProvider, NetworkProvider, LoggerProvider)
 class UserRepository {
-    suspend fun getUser(userId: String): User {
-        logger.log("Getting user: $userId")
+ suspend fun getUser(userId: String): User {
+ logger.log("Getting user: $userId")
 
-        database.userDao().getUser(userId)?.let { return it }
+ database.userDao().getUser(userId)?.let { return it }
 
-        val user = apiService.getUser(userId)
-        database.userDao().insert(user)
-        return user
-    }
+ val user = apiService.getUser(userId)
+ database.userDao().insert(user)
+ return user
+ }
 }
 
 // Usage
 class AppDependencies : DatabaseProvider, NetworkProvider, LoggerProvider {
-    override val database = Room.databaseBuilder(/*...*/).build()
-    override val apiService = Retrofit.Builder().build().create(/*...*/)
-    override val logger = AndroidLogger()
+ override val database = Room.databaseBuilder(/*...*/).build()
+ override val apiService = Retrofit.Builder().build().create(/*...*/)
+ override val logger = AndroidLogger()
 }
 
 class MyViewModel(private val deps: AppDependencies) : ViewModel() {
-    private val userRepository = with(deps) { UserRepository() }
+ private val userRepository = with(deps) { UserRepository() }
 }
 ```
 
 **Logging as cross-cutting concern:**
 ```kotlin
 interface Logger {
-    fun log(message: String)
-    fun error(message: String, throwable: Throwable? = null)
+ fun log(message: String)
+ fun error(message: String, throwable: Throwable? = null)
 }
 
 context(Logger)
 suspend fun fetchUser(userId: String): User {
-    log("Fetching user: $userId") // ✅ Don't pass logger explicitly
+ log("Fetching user: $userId") // ✅ Don't pass logger explicitly
 
-    return try {
-        val user = apiService.getUser(userId)
-        log("User fetched: ${user.name}")
-        user
-    } catch (e: Exception) {
-        error("Failed to fetch user", e) // ✅ Available from context
-        throw e
-    }
+ return try {
+ val user = apiService.getUser(userId)
+ log("User fetched: ${user.name}")
+ user
+ } catch (e: Exception) {
+ error("Failed to fetch user", e) // ✅ Available from context
+ throw e
+ }
 }
 ```
 
@@ -222,28 +222,28 @@ suspend fun fetchUser(userId: String): User {
 ```kotlin
 // ✅ Navigation without passing NavController
 interface NavigationContext {
-    fun navigate(destination: String)
+ fun navigate(destination: String)
 }
 
 context(NavigationContext)
 fun navigateToProfile(userId: String) {
-    navigate("profile/$userId")
+ navigate("profile/$userId")
 }
 
 // ✅ Permissions
 interface PermissionContext {
-    fun hasPermission(permission: String): Boolean
-    fun requestPermission(permission: String)
+ fun hasPermission(permission: String): Boolean
+ fun requestPermission(permission: String)
 }
 
 context(PermissionContext, Context)
 fun openCamera() {
-    if (hasPermission(Manifest.permission.CAMERA)) {
-        val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        this@Context.startActivity(intent)
-    } else {
-        requestPermission(Manifest.permission.CAMERA)
-    }
+ if (hasPermission(Manifest.permission.CAMERA)) {
+ val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+ this@Context.startActivity(intent)
+ } else {
+ requestPermission(Manifest.permission.CAMERA)
+ }
 }
 ```
 
@@ -260,7 +260,7 @@ fun openCamera() {
 ## References
 
 - [[c-dependency-injection]] - Dependency injection patterns
-- [[c-kotlin-dsl]] - DSL builders in Kotlin
+- - DSL builders in Kotlin
 - [Kotlin `Context` Receivers (KEEP)](https://github.com/Kotlin/KEEP/blob/master/proposals/context-receivers.md)
 - [Kotlin 1.6.20 Release Notes](https://kotlinlang.org/docs/whatsnew1620.html)
 

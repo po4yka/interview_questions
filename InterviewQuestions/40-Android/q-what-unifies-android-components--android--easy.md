@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
 - c-android-components
-- c-context
 - c-intent
 - c-lifecycle
 created: 2025-10-15
@@ -52,35 +51,35 @@ All components **inherit or receive `Context`** for accessing resources and syst
 ```kotlin
 // Activity extends Context
 class MainActivity : AppCompatActivity() {
-    fun accessResources() {
-        // Context methods available directly
-        val string = getString(R.string.app_name)
-        val color = getColor(R.color.primary)
-        val packageManager = packageManager
-    }
+ fun accessResources() {
+ // Context methods available directly
+ val string = getString(R.string.app_name)
+ val color = getColor(R.color.primary)
+ val packageManager = packageManager
+ }
 }
 
 // Service extends Context
 class MusicService : Service() {
-    fun accessSystemServices() {
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    }
+ fun accessSystemServices() {
+ val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+ val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+ }
 }
 
 // BroadcastReceiver receives Context
 class NetworkReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        // Use context parameter
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    }
+ override fun onReceive(context: Context, intent: Intent) {
+ // Use context parameter
+ val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+ }
 }
 
 // Fragment has context
 class ProfileFragment : Fragment() {
-    fun useContext() {
-        requireContext().getString(R.string.title)
-    }
+ fun useContext() {
+ requireContext().getString(R.string.title)
+ }
 }
 ```
 
@@ -92,37 +91,37 @@ All main components **must be declared** in the manifest file.
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application>
-        <!-- Activity -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+ <application>
+ <!-- Activity -->
+ <activity
+ android:name=".MainActivity"
+ android:exported="true">
+ <intent-filter>
+ <action android:name="android.intent.action.MAIN" />
+ <category android:name="android.intent.category.LAUNCHER" />
+ </intent-filter>
+ </activity>
 
-        <!-- Service -->
-        <service
-            android:name=".MusicService"
-            android:exported="false" />
+ <!-- Service -->
+ <service
+ android:name=".MusicService"
+ android:exported="false" />
 
-        <!-- BroadcastReceiver -->
-        <receiver
-            android:name=".NetworkReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
+ <!-- BroadcastReceiver -->
+ <receiver
+ android:name=".NetworkReceiver"
+ android:exported="true">
+ <intent-filter>
+ <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+ </intent-filter>
+ </receiver>
 
-        <!-- ContentProvider -->
-        <provider
-            android:name=".NotesProvider"
-            android:authorities="com.example.notes"
-            android:exported="true" />
-    </application>
+ <!-- ContentProvider -->
+ <provider
+ android:name=".NotesProvider"
+ android:authorities="com.example.notes"
+ android:exported="true" />
+ </application>
 
 </manifest>
 ```
@@ -144,8 +143,8 @@ sendBroadcast(Intent("com.example.CUSTOM_ACTION"))
 
 // Access ContentProvider (implicit Intent usage)
 contentResolver.query(
-    ContactsContract.Contacts.CONTENT_URI,
-    null, null, null, null
+ ContactsContract.Contacts.CONTENT_URI,
+ null, null, null, null
 )
 ```
 
@@ -153,24 +152,16 @@ contentResolver.query(
 
 ```
 
-        AndroidManifest.xml
-  (All components declared here)
+ AndroidManifest.xml
+ (All components declared here)
 
+ Activity Service Receiver
 
+ All inherit/receive Context
 
-
-
-    Activity   Service  Receiver
-
-
-            All inherit/receive Context
-
-
-
-
-           Context & Intent
-          (Unified access &
-           communication)
+ Context & Intent
+ (Unified access &
+ communication)
 
 ```
 
@@ -190,15 +181,12 @@ contentResolver.query(
 2. **Manifest**: All declared in AndroidManifest.xml
 3. **`Intent`**: All communicate via `Intent` messaging
 
-
 # Question (EN)
 > Unified Android Components
 
 ---
 
-
 ---
-
 
 ## Answer (EN)
 Main Android components are unified by **three key aspects**:
@@ -210,35 +198,35 @@ All components **inherit or receive `Context`** for accessing resources and syst
 ```kotlin
 // Activity extends Context
 class MainActivity : AppCompatActivity() {
-    fun accessResources() {
-        // Context methods available directly
-        val string = getString(R.string.app_name)
-        val color = getColor(R.color.primary)
-        val packageManager = packageManager
-    }
+ fun accessResources() {
+ // Context methods available directly
+ val string = getString(R.string.app_name)
+ val color = getColor(R.color.primary)
+ val packageManager = packageManager
+ }
 }
 
 // Service extends Context
 class MusicService : Service() {
-    fun accessSystemServices() {
-        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
-    }
+ fun accessSystemServices() {
+ val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+ val audioManager = getSystemService(Context.AUDIO_SERVICE) as AudioManager
+ }
 }
 
 // BroadcastReceiver receives Context
 class NetworkReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        // Use context parameter
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-    }
+ override fun onReceive(context: Context, intent: Intent) {
+ // Use context parameter
+ val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+ }
 }
 
 // Fragment has context
 class ProfileFragment : Fragment() {
-    fun useContext() {
-        requireContext().getString(R.string.title)
-    }
+ fun useContext() {
+ requireContext().getString(R.string.title)
+ }
 }
 ```
 
@@ -250,37 +238,37 @@ All main components **must be declared** in the manifest file.
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <application>
-        <!-- Activity -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+ <application>
+ <!-- Activity -->
+ <activity
+ android:name=".MainActivity"
+ android:exported="true">
+ <intent-filter>
+ <action android:name="android.intent.action.MAIN" />
+ <category android:name="android.intent.category.LAUNCHER" />
+ </intent-filter>
+ </activity>
 
-        <!-- Service -->
-        <service
-            android:name=".MusicService"
-            android:exported="false" />
+ <!-- Service -->
+ <service
+ android:name=".MusicService"
+ android:exported="false" />
 
-        <!-- BroadcastReceiver -->
-        <receiver
-            android:name=".NetworkReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
-            </intent-filter>
-        </receiver>
+ <!-- BroadcastReceiver -->
+ <receiver
+ android:name=".NetworkReceiver"
+ android:exported="true">
+ <intent-filter>
+ <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+ </intent-filter>
+ </receiver>
 
-        <!-- ContentProvider -->
-        <provider
-            android:name=".NotesProvider"
-            android:authorities="com.example.notes"
-            android:exported="true" />
-    </application>
+ <!-- ContentProvider -->
+ <provider
+ android:name=".NotesProvider"
+ android:authorities="com.example.notes"
+ android:exported="true" />
+ </application>
 
 </manifest>
 ```
@@ -302,8 +290,8 @@ sendBroadcast(Intent("com.example.CUSTOM_ACTION"))
 
 // Access ContentProvider (implicit Intent usage)
 contentResolver.query(
-    ContactsContract.Contacts.CONTENT_URI,
-    null, null, null, null
+ ContactsContract.Contacts.CONTENT_URI,
+ null, null, null, null
 )
 ```
 
@@ -311,24 +299,16 @@ contentResolver.query(
 
 ```
 
-        AndroidManifest.xml
-  (All components declared here)
+ AndroidManifest.xml
+ (All components declared here)
 
+ Activity Service Receiver
 
+ All inherit/receive Context
 
-
-
-    Activity   Service  Receiver
-
-
-            All inherit/receive Context
-
-
-
-
-           Context & Intent
-          (Unified access &
-           communication)
+ Context & Intent
+ (Unified access &
+ communication)
 
 ```
 
@@ -353,22 +333,18 @@ contentResolver.query(
 
 Основные компоненты включают: `Activity`, `Fragment`, `Service`, `BroadcastReceiver` и `ContentProvider`.
 
-
 ---
-
 
 ## Follow-ups
 
 - [[c-android-components]]
-- [[c-context]]
+- 
 - [[c-intent]]
-
 
 ## References
 
 - [Services](https://developer.android.com/develop/background-work/services)
 - [Activities](https://developer.android.com/guide/components/activities)
-
 
 ## Related Questions
 
@@ -376,7 +352,7 @@ contentResolver.query(
 - [[q-architecture-components-libraries--android--easy]] - Fundamentals
 - [[q-android-components-besides-activity--android--easy]] - Fundamentals
 - [[q-main-android-components--android--easy]] - Fundamentals
-- [[q-material3-components--ui-ux-accessibility--easy]] - Fundamentals
+- - Fundamentals
 - [[q-android-app-components--android--easy]] - Fundamentals
 
 ### Advanced (Harder)

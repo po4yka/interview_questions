@@ -17,7 +17,6 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-architecture-patterns
 - c-mvvm-pattern
 - q-viewmodel-vs-onsavedinstancestate--android--medium
 - q-what-is-activity-and-what-is-it-used-for--android--medium
@@ -43,15 +42,12 @@ tags:
 ## Answer (EN)
 `ViewModel` implements the MVVM (Model-`View`-`ViewModel`) pattern. `ViewModel` is responsible for managing data and business logic, isolating them from the `View`, which simplifies testing and ensures separation of concerns between layers.
 
-
 # Question (EN)
 > `ViewModel` Pattern
 
 ---
 
-
 ---
-
 
 ## Answer (EN)
 `ViewModel` implements the MVVM (Model-`View`-`ViewModel`) pattern. `ViewModel` is responsible for managing data and business logic, isolating them from the `View`, which simplifies testing and ensures separation of concerns between layers.
@@ -70,94 +66,94 @@ tags:
 **Преимущества использования `ViewModel`:**
 
 1. **Разделение ответственности** (Separation of Concerns):
-   - `View` отвечает только за отображение
-   - `ViewModel` управляет состоянием и логикой
-   - Model содержит данные и бизнес-правила
+ - `View` отвечает только за отображение
+ - `ViewModel` управляет состоянием и логикой
+ - Model содержит данные и бизнес-правила
 
 2. **Переживает изменения конфигурации**:
-   - Сохраняет данные при повороте экрана
-   - Не пересоздается при configuration changes
-   - Автоматически очищается когда больше не нужен
+ - Сохраняет данные при повороте экрана
+ - Не пересоздается при configuration changes
+ - Автоматически очищается когда больше не нужен
 
 3. **Упрощенное тестирование**:
-   - `ViewModel` не зависит от Android framework
-   - Легко покрывается unit тестами
-   - Можно тестировать без UI
+ - `ViewModel` не зависит от Android framework
+ - Легко покрывается unit тестами
+ - Можно тестировать без UI
 
 4. **Управление жизненным циклом**:
-   - Связан с жизненным циклом `Activity`/`Fragment`
-   - Автоматически очищается через onCleared()
-   - Предотвращает утечки памяти
+ - Связан с жизненным циклом `Activity`/`Fragment`
+ - Автоматически очищается через onCleared()
+ - Предотвращает утечки памяти
 
 ### Пример Реализации MVVM
 
 ```kotlin
 // Model - Domain model или data class
 data class User(
-    val id: Int,
-    val name: String,
-    val email: String
+ val id: Int,
+ val name: String,
+ val email: String
 )
 
 // ViewModel - Управление состоянием и логикой
 class UserViewModel(
-    private val userRepository: UserRepository
+ private val userRepository: UserRepository
 ) : ViewModel() {
 
-    private val _userState = MutableStateFlow<UiState<User>>(UiState.Loading)
-    val userState: StateFlow<UiState<User>> = _userState.asStateFlow()
+ private val _userState = MutableStateFlow<UiState<User>>(UiState.Loading)
+ val userState: StateFlow<UiState<User>> = _userState.asStateFlow()
 
-    fun loadUser(userId: Int) {
-        viewModelScope.launch {
-            _userState.value = UiState.Loading
-            try {
-                val user = userRepository.getUser(userId)
-                _userState.value = UiState.Success(user)
-            } catch (e: Exception) {
-                _userState.value = UiState.Error(e.message ?: "Unknown error")
-            }
-        }
-    }
+ fun loadUser(userId: Int) {
+ viewModelScope.launch {
+ _userState.value = UiState.Loading
+ try {
+ val user = userRepository.getUser(userId)
+ _userState.value = UiState.Success(user)
+ } catch (e: Exception) {
+ _userState.value = UiState.Error(e.message ?: "Unknown error")
+ }
+ }
+ }
 
-    fun updateUser(user: User) {
-        viewModelScope.launch {
-            try {
-                userRepository.updateUser(user)
-                _userState.value = UiState.Success(user)
-            } catch (e: Exception) {
-                _userState.value = UiState.Error(e.message ?: "Update failed")
-            }
-        }
-    }
+ fun updateUser(user: User) {
+ viewModelScope.launch {
+ try {
+ userRepository.updateUser(user)
+ _userState.value = UiState.Success(user)
+ } catch (e: Exception) {
+ _userState.value = UiState.Error(e.message ?: "Update failed")
+ }
+ }
+ }
 }
 
 // View - Fragment отображает данные
 class UserFragment : Fragment() {
 
-    private val viewModel: UserViewModel by viewModels()
+ private val viewModel: UserViewModel by viewModels()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+ super.onViewCreated(view, savedInstanceState)
 
-        // Наблюдаем за изменениями состояния
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.userState.collect { state ->
-                when (state) {
-                    is UiState.Loading -> showLoading()
-                    is UiState.Success -> showUser(state.data)
-                    is UiState.Error -> showError(state.message)
-                }
-            }
-        }
+ // Наблюдаем за изменениями состояния
+ viewLifecycleOwner.lifecycleScope.launch {
+ viewModel.userState.collect { state ->
+ when (state) {
+ is UiState.Loading -> showLoading()
+ is UiState.Success -> showUser(state.data)
+ is UiState.Error -> showError(state.message)
+ }
+ }
+ }
 
-        viewModel.loadUser(userId = 123)
-    }
+ viewModel.loadUser(userId = 123)
+ }
 }
 
 sealed class UiState<out T> {
-    object Loading : UiState<Nothing>()
-    data class Success<T>(val data: T) : UiState<T>()
-    data class Error(val message: String) : UiState<Nothing>()
+ object Loading : UiState<Nothing>()
+ data class Success<T>(val data: T) : UiState<T>()
+ data class Error(val message: String) : UiState<Nothing>()
 }
 ```
 
@@ -182,24 +178,19 @@ sealed class UiState<out T> {
 
 `ViewModel` реализует паттерн MVVM, обеспечивая четкое разделение между UI логикой (`ViewModel`) и отображением (`View`). Это упрощает тестирование, делает код более поддерживаемым и решает проблемы с жизненным циклом Android компонентов. `ViewModel` автоматически сохраняет состояние при изменениях конфигурации и предоставляет удобный способ управления UI состоянием через reactive streams.
 
-
-
 ---
-
 
 ## Follow-ups
 
-- [[c-architecture-patterns]]
+- [[moc-architecture-patterns]]
 - [[c-mvvm-pattern]]
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]]
-
 
 ## References
 
 - [Architecture](https://developer.android.com/topic/architecture)
 - [Android Documentation](https://developer.android.com/docs)
 - [`Lifecycle`](https://developer.android.com/topic/libraries/architecture/lifecycle)
-
 
 ## Related Questions
 

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-lifecycle, c-mvvm, c-savedstate, c-viewmodel]
+related: [c-lifecycle, c-mvvm, c-viewmodel]
 created: 2025-10-15
 updated: 2025-10-29
 sources: []
@@ -48,8 +48,8 @@ Why does user data disappear on screen rotation?
 **1. Переменные не сохранены**
 ```kotlin
 class LoginActivity : AppCompatActivity() {
-    private var username = "" // ❌ Потеряется при повороте
-    private var isLoggingIn = false // ❌ Сбросится в false
+ private var username = "" // ❌ Потеряется при повороте
+ private var isLoggingIn = false // ❌ Сбросится в false
 }
 ```
 
@@ -57,57 +57,57 @@ class LoginActivity : AppCompatActivity() {
 ```xml
 <!-- ❌ Состояние не сохраняется -->
 <EditText
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content" />
 
 <!-- ✅ Автоматическое сохранение -->
 <EditText
-    android:id="@+id/nameField"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+ android:id="@+id/nameField"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content" />
 ```
 
 **3. Не используется `ViewModel`**
 ```kotlin
 // ❌ Данные теряются
 class BadActivity : AppCompatActivity() {
-    private var users: List<User> = emptyList()
+ private var users: List<User> = emptyList()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            users = repository.getUsers() // Повторный запрос при каждом повороте
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ lifecycleScope.launch {
+ users = repository.getUsers() // Повторный запрос при каждом повороте
+ }
+ }
 }
 
 // ✅ Данные сохраняются
 class GoodActivity : AppCompatActivity() {
-    private val viewModel: UserViewModel by viewModels()
+ private val viewModel: UserViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.users.observe(this) { users -> // Запрос один раз
-            displayUsers(users)
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ viewModel.users.observe(this) { users -> // Запрос один раз
+ displayUsers(users)
+ }
+ }
 }
 ```
 
 **4. onSaveInstanceState() не реализован**
 ```kotlin
 class GameActivity : AppCompatActivity() {
-    private var score = 0
+ private var score = 0
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt("SCORE", score) // ✅ Сохраняем
-    }
+ override fun onSaveInstanceState(outState: Bundle) {
+ super.onSaveInstanceState(outState)
+ outState.putInt("SCORE", score) // ✅ Сохраняем
+ }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        score = savedInstanceState?.getInt("SCORE") ?: 0 // ✅ Восстанавливаем
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ score = savedInstanceState?.getInt("SCORE") ?: 0 // ✅ Восстанавливаем
+ }
 }
 ```
 
@@ -116,20 +116,20 @@ class GameActivity : AppCompatActivity() {
 **1. `ViewModel` для UI данных**
 ```kotlin
 class MyViewModel : ViewModel() {
-    val data = MutableLiveData<String>()
-    // ✅ Переживает поворот автоматически
+ val data = MutableLiveData<String>()
+ // ✅ Переживает поворот автоматически
 }
 ```
 
 **2. SavedStateHandle для критического состояния**
 ```kotlin
 class MyViewModel(
-    private val savedStateHandle: SavedStateHandle
+ private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    var counter: Int
-        get() = savedStateHandle["counter"] ?: 0
-        set(value) = savedStateHandle.set("counter", value)
-    // ✅ Переживает поворот И смерть процесса
+ var counter: Int
+ get() = savedStateHandle["counter"] ?: 0
+ set(value) = savedStateHandle.set("counter", value)
+ // ✅ Переживает поворот И смерть процесса
 }
 ```
 
@@ -143,19 +143,19 @@ class MyViewModel(
 
 ```
 Поворот экрана
-    ↓
+ ↓
 onPause()
-    ↓
+ ↓
 onSaveInstanceState() ← СОХРАНИТЬ ДАННЫЕ
-    ↓
+ ↓
 onStop()
-    ↓
+ ↓
 onDestroy() ← Activity УНИЧТОЖЕНА
-    ↓
+ ↓
 onCreate(savedInstanceState) ← НОВАЯ Activity
-    ↓
+ ↓
 onRestoreInstanceState() ← ВОССТАНОВИТЬ ДАННЫЕ
-    ↓
+ ↓
 onResume()
 ```
 
@@ -173,11 +173,11 @@ onResume()
 
 ```kotlin
 class MyViewModel(
-    private val savedStateHandle: SavedStateHandle
+ private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    var uiState: UiState
-        get() = savedStateHandle["state"] ?: UiState.default()
-        set(value) = savedStateHandle.set("state", value)
+ var uiState: UiState
+ get() = savedStateHandle["state"] ?: UiState.default()
+ set(value) = savedStateHandle.set("state", value)
 }
 ```
 
@@ -206,8 +206,8 @@ Screen rotation = configuration change. Android:
 **1. Instance Variables Not Saved**
 ```kotlin
 class LoginActivity : AppCompatActivity() {
-    private var username = "" // ❌ Lost on rotation
-    private var isLoggingIn = false // ❌ Resets to false
+ private var username = "" // ❌ Lost on rotation
+ private var isLoggingIn = false // ❌ Resets to false
 }
 ```
 
@@ -215,57 +215,57 @@ class LoginActivity : AppCompatActivity() {
 ```xml
 <!-- ❌ State not preserved -->
 <EditText
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content" />
 
 <!-- ✅ Automatic preservation -->
 <EditText
-    android:id="@+id/nameField"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content" />
+ android:id="@+id/nameField"
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content" />
 ```
 
 **3. Not Using `ViewModel`**
 ```kotlin
 // ❌ Data lost
 class BadActivity : AppCompatActivity() {
-    private var users: List<User> = emptyList()
+ private var users: List<User> = emptyList()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            users = repository.getUsers() // Re-fetched every rotation
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ lifecycleScope.launch {
+ users = repository.getUsers() // Re-fetched every rotation
+ }
+ }
 }
 
 // ✅ Data preserved
 class GoodActivity : AppCompatActivity() {
-    private val viewModel: UserViewModel by viewModels()
+ private val viewModel: UserViewModel by viewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.users.observe(this) { users -> // Fetched once
-            displayUsers(users)
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ viewModel.users.observe(this) { users -> // Fetched once
+ displayUsers(users)
+ }
+ }
 }
 ```
 
 **4. onSaveInstanceState() Not Implemented**
 ```kotlin
 class GameActivity : AppCompatActivity() {
-    private var score = 0
+ private var score = 0
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putInt("SCORE", score) // ✅ Save
-    }
+ override fun onSaveInstanceState(outState: Bundle) {
+ super.onSaveInstanceState(outState)
+ outState.putInt("SCORE", score) // ✅ Save
+ }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        score = savedInstanceState?.getInt("SCORE") ?: 0 // ✅ Restore
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ score = savedInstanceState?.getInt("SCORE") ?: 0 // ✅ Restore
+ }
 }
 ```
 
@@ -274,20 +274,20 @@ class GameActivity : AppCompatActivity() {
 **1. `ViewModel` for UI Data**
 ```kotlin
 class MyViewModel : ViewModel() {
-    val data = MutableLiveData<String>()
-    // ✅ Survives rotation automatically
+ val data = MutableLiveData<String>()
+ // ✅ Survives rotation automatically
 }
 ```
 
 **2. SavedStateHandle for Critical State**
 ```kotlin
 class MyViewModel(
-    private val savedStateHandle: SavedStateHandle
+ private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    var counter: Int
-        get() = savedStateHandle["counter"] ?: 0
-        set(value) = savedStateHandle.set("counter", value)
-    // ✅ Survives rotation AND process death
+ var counter: Int
+ get() = savedStateHandle["counter"] ?: 0
+ set(value) = savedStateHandle.set("counter", value)
+ // ✅ Survives rotation AND process death
 }
 ```
 
@@ -301,19 +301,19 @@ class MyViewModel(
 
 ```
 Screen rotation
-    ↓
+ ↓
 onPause()
-    ↓
+ ↓
 onSaveInstanceState() ← SAVE DATA
-    ↓
+ ↓
 onStop()
-    ↓
+ ↓
 onDestroy() ← Activity DESTROYED
-    ↓
+ ↓
 onCreate(savedInstanceState) ← NEW Activity
-    ↓
+ ↓
 onRestoreInstanceState() ← RESTORE DATA
-    ↓
+ ↓
 onResume()
 ```
 
@@ -331,11 +331,11 @@ onResume()
 
 ```kotlin
 class MyViewModel(
-    private val savedStateHandle: SavedStateHandle
+ private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    var uiState: UiState
-        get() = savedStateHandle["state"] ?: UiState.default()
-        set(value) = savedStateHandle.set("state", value)
+ var uiState: UiState
+ get() = savedStateHandle["state"] ?: UiState.default()
+ set(value) = savedStateHandle.set("state", value)
 }
 ```
 
@@ -363,12 +363,12 @@ This ensures data survives both configuration changes **and** process death.
 
 ### Prerequisites
 - [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle basics
-- [[q-viewmodel-basics--android--easy]] - Introduction to `ViewModel`
+- - Introduction to `ViewModel`
 
 ### Related
 - [[q-compose-side-effects-advanced--android--hard]] - Side effects in Compose
-- [[q-savedstatehandle-vs-viewmodel--android--medium]] - State preservation strategies
+- - State preservation strategies
 
 ### Advanced
-- [[q-process-death-handling--android--hard]] - Handling process death scenarios
-- [[q-configuration-changes-custom-handling--android--hard]] - Custom configuration change handling
+- - Handling process death scenarios
+- - Custom configuration change handling

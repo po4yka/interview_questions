@@ -17,9 +17,7 @@ status: draft
 moc: moc-android
 related:
 - c-service
-- q-canvas-drawing-optimization--custom-views--hard
 - q-what-is-data-binding--android--easy
-- q-workmanager-chaining--background--hard
 created: 2025-10-15
 updated: 2025-10-31
 tags:
@@ -73,10 +71,10 @@ Android 13 (T) - Notification permissions required
 ```kotlin
 // - WORKED: Start service in background
 class MyApp : Application() {
-    fun doBackgroundWork() {
-        val intent = Intent(this, MyService::class.java)
-        startService(intent) // Worked fine
-    }
+ fun doBackgroundWork() {
+ val intent = Intent(this, MyService::class.java)
+ startService(intent) // Worked fine
+ }
 }
 ```
 
@@ -84,10 +82,10 @@ class MyApp : Application() {
 ```kotlin
 // - THROWS: IllegalStateException
 class MyApp : Application() {
-    fun doBackgroundWork() {
-        val intent = Intent(this, MyService::class.java)
-        startService(intent) // Crashes when app is in background!
-    }
+ fun doBackgroundWork() {
+ val intent = Intent(this, MyService::class.java)
+ startService(intent) // Crashes when app is in background!
+ }
 }
 ```
 
@@ -108,11 +106,11 @@ app is in background
 ```kotlin
 // - BAD: Old approach (pre-Android 8.0)
 class LocationTrackingService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Runs forever, drains battery
-        trackLocationContinuously()
-        return START_STICKY
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ // Runs forever, drains battery
+ trackLocationContinuously()
+ return START_STICKY
+ }
 }
 ```
 
@@ -131,13 +129,13 @@ class LocationTrackingService : Service() {
 ```kotlin
 // - BAD: Service holding Activity reference
 class BadService : Service() {
-    private var activity: MainActivity? = null // Memory leak!
+ private var activity: MainActivity? = null // Memory leak!
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // If Activity is destroyed, service still holds reference
-        activity = intent?.getParcelableExtra("activity")
-        return START_STICKY
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ // If Activity is destroyed, service still holds reference
+ activity = intent?.getParcelableExtra("activity")
+ return START_STICKY
+ }
 }
 ```
 
@@ -163,13 +161,13 @@ Total: 5GB RAM, constant CPU usage
 ```kotlin
 // - MALICIOUS: Spyware service
 class SpywareService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Runs in background, user unaware
-        recordAudio()
-        trackLocation()
-        sendDataToServer()
-        return START_STICKY // Restarts if killed
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ // Runs in background, user unaware
+ recordAudio()
+ trackLocation()
+ sendDataToServer()
+ return START_STICKY // Restarts if killed
+ }
 }
 ```
 
@@ -188,18 +186,18 @@ class SpywareService : Service() {
 ```kotlin
 // - GOOD: Use Foreground Service
 class MyService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(NOTIFICATION_ID, createNotification())
-        doWork()
-        return START_STICKY
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ startForeground(NOTIFICATION_ID, createNotification())
+ doWork()
+ return START_STICKY
+ }
 }
 
 // Start foreground service (allowed)
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-    startForegroundService(intent)
+ startForegroundService(intent)
 } else {
-    startService(intent)
+ startService(intent)
 }
 ```
 
@@ -228,25 +226,25 @@ Apps are categorized into buckets based on usage:
 ```kotlin
 // - DOESN'T WORK: Start activity from background
 class MyService : Service() {
-    fun showActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent) // Blocked on Android 10+
-    }
+ fun showActivity() {
+ val intent = Intent(this, MainActivity::class.java)
+ intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+ startActivity(intent) // Blocked on Android 10+
+ }
 }
 
 // - WORKAROUND: Use full-screen intent notification
 val fullScreenIntent = Intent(this, IncomingCallActivity::class.java)
 val fullScreenPendingIntent = PendingIntent.getActivity(
-    this, 0, fullScreenIntent,
-    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+ this, 0, fullScreenIntent,
+ PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
 )
 
 val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-    .setSmallIcon(R.drawable.ic_call)
-    .setContentTitle("Incoming Call")
-    .setFullScreenIntent(fullScreenPendingIntent, true) // Shows on lock screen
-    .build()
+ .setSmallIcon(R.drawable.ic_call)
+ .setContentTitle("Incoming Call")
+ .setFullScreenIntent(fullScreenPendingIntent, true) // Shows on lock screen
+ .build()
 ```
 
 ---
@@ -258,20 +256,20 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 ```kotlin
 // - RESTRICTED: Exact alarms
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-    // Requires SCHEDULE_EXACT_ALARM permission
-    alarmManager.setExact(
-        AlarmManager.RTC_WAKEUP,
-        triggerTime,
-        pendingIntent
-    )
+ // Requires SCHEDULE_EXACT_ALARM permission
+ alarmManager.setExact(
+ AlarmManager.RTC_WAKEUP,
+ triggerTime,
+ pendingIntent
+ )
 }
 
 // - ALTERNATIVE: Use inexact alarms
 alarmManager.setWindow(
-    AlarmManager.RTC_WAKEUP,
-    triggerTime,
-    10 * 60 * 1000, // 10-minute window
-    pendingIntent
+ AlarmManager.RTC_WAKEUP,
+ triggerTime,
+ 10 * 60 * 1000, // 10-minute window
+ pendingIntent
 )
 ```
 
@@ -293,11 +291,11 @@ When device is stationary and screen off for a while:
 **Maintenance windows:**
 ```
 Screen off
-  ↓
+ ↓
 [30 min] → [Doze] → [Maintenance] (few minutes)
-           ↓
+ ↓
 [60 min] → [Doze] → [Maintenance]
-           ↓
+ ↓
 [120 min] → [Doze] → [Maintenance]
 ```
 
@@ -319,33 +317,33 @@ App enters standby when:
 ### Activities Allowed During Doze
 
 1. **High-priority FCM messages**
-   ```kotlin
-   {
-     "message": {
-       "token": "device_token",
-       "android": {
-         "priority": "high" // Bypasses Doze
-       },
-       "data": {
-         "key": "value"
-       }
-     }
-   }
-   ```
+ ```kotlin
+ {
+ "message": {
+ "token": "device_token",
+ "android": {
+ "priority": "high" // Bypasses Doze
+ },
+ "data": {
+ "key": "value"
+ }
+ }
+ }
+ ```
 
 2. **setAndAllowWhileIdle() alarms**
-   ```kotlin
-   alarmManager.setAndAllowWhileIdle(
-       AlarmManager.RTC_WAKEUP,
-       triggerTime,
-       pendingIntent
-   ) // Works during Doze (limited frequency)
-   ```
+ ```kotlin
+ alarmManager.setAndAllowWhileIdle(
+ AlarmManager.RTC_WAKEUP,
+ triggerTime,
+ pendingIntent
+ ) // Works during Doze (limited frequency)
+ ```
 
 3. **Foreground services**
-   ```kotlin
-   startForegroundService(intent) // Always allowed
-   ```
+ ```kotlin
+ startForegroundService(intent) // Always allowed
+ ```
 
 ---
 
@@ -355,13 +353,13 @@ App enters standby when:
 
 ```kotlin
 val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
-    .setConstraints(
-        Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
-            .build()
-    )
-    .build()
+ .setConstraints(
+ Constraints.Builder()
+ .setRequiredNetworkType(NetworkType.CONNECTED)
+ .setRequiresBatteryNotLow(true)
+ .build()
+ )
+ .build()
 
 WorkManager.getInstance(context).enqueue(uploadWork)
 ```
@@ -380,22 +378,22 @@ For user-visible tasks:
 
 ```kotlin
 class MusicPlayerService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = createNotification()
-        startForeground(NOTIFICATION_ID, notification)
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ val notification = createNotification()
+ startForeground(NOTIFICATION_ID, notification)
 
-        playMusic()
+ playMusic()
 
-        return START_STICKY
-    }
+ return START_STICKY
+ }
 
-    private fun createNotification(): Notification {
-        return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Playing Music")
-            .setContentText(currentSong.title)
-            .setSmallIcon(R.drawable.ic_music)
-            .build()
-    }
+ private fun createNotification(): Notification {
+ return NotificationCompat.Builder(this, CHANNEL_ID)
+ .setContentTitle("Playing Music")
+ .setContentText(currentSong.title)
+ .setSmallIcon(R.drawable.ic_music)
+ .build()
+ }
 }
 ```
 
@@ -413,10 +411,10 @@ For triggered background work:
 
 ```kotlin
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-    override fun onMessageReceived(message: RemoteMessage) {
-        // Triggered by server, bypasses restrictions
-        processBackgroundTask(message.data)
-    }
+ override fun onMessageReceived(message: RemoteMessage) {
+ // Triggered by server, bypasses restrictions
+ processBackgroundTask(message.data)
+ }
 }
 ```
 
@@ -429,18 +427,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 ```kotlin
 // - DON'T: Background service for periodic sync
 class SyncService : Service() {
-    override fun onStartCommand(...): Int {
-        syncData() // Restricted on Android 8.0+
-        return START_STICKY
-    }
+ override fun onStartCommand(...): Int {
+ syncData() // Restricted on Android 8.0+
+ return START_STICKY
+ }
 }
 
 // - DO: WorkManager for periodic work
 val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
-    .setConstraints(Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build())
-    .build()
+ .setConstraints(Constraints.Builder()
+ .setRequiredNetworkType(NetworkType.CONNECTED)
+ .build())
+ .build()
 
 WorkManager.getInstance(context).enqueue(syncWork)
 ```
@@ -452,20 +450,20 @@ WorkManager.getInstance(context).enqueue(syncWork)
 ```kotlin
 // - DON'T: Continuous background processing
 class BadWorker : Worker() {
-    override fun doWork(): Result {
-        while (true) { // Infinite loop!
-            processData()
-            Thread.sleep(1000)
-        }
-    }
+ override fun doWork(): Result {
+ while (true) { // Infinite loop!
+ processData()
+ Thread.sleep(1000)
+ }
+ }
 }
 
 // - DO: Discrete, time-limited tasks
 class GoodWorker : CoroutineWorker() {
-    override suspend fun doWork(): Result {
-        processData() // Completes and exits
-        return Result.success()
-    }
+ override suspend fun doWork(): Result {
+ processData() // Completes and exits
+ return Result.success()
+ }
 }
 ```
 
@@ -522,15 +520,12 @@ startForegroundService(Intent(this, MyService::class.java))
 
 ---
 
-
 # Question (EN)
 > `Service` Restrictions
 
 ---
 
-
 ---
-
 
 ## Answer (EN)
 `Service` restrictions are related to **battery optimization** and **performance**:
@@ -570,10 +565,10 @@ Android 13 (T) - Notification permissions required
 ```kotlin
 // - WORKED: Start service in background
 class MyApp : Application() {
-    fun doBackgroundWork() {
-        val intent = Intent(this, MyService::class.java)
-        startService(intent) // Worked fine
-    }
+ fun doBackgroundWork() {
+ val intent = Intent(this, MyService::class.java)
+ startService(intent) // Worked fine
+ }
 }
 ```
 
@@ -581,10 +576,10 @@ class MyApp : Application() {
 ```kotlin
 // - THROWS: IllegalStateException
 class MyApp : Application() {
-    fun doBackgroundWork() {
-        val intent = Intent(this, MyService::class.java)
-        startService(intent) // Crashes when app is in background!
-    }
+ fun doBackgroundWork() {
+ val intent = Intent(this, MyService::class.java)
+ startService(intent) // Crashes when app is in background!
+ }
 }
 ```
 
@@ -605,11 +600,11 @@ app is in background
 ```kotlin
 // - BAD: Old approach (pre-Android 8.0)
 class LocationTrackingService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Runs forever, drains battery
-        trackLocationContinuously()
-        return START_STICKY
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ // Runs forever, drains battery
+ trackLocationContinuously()
+ return START_STICKY
+ }
 }
 ```
 
@@ -628,13 +623,13 @@ class LocationTrackingService : Service() {
 ```kotlin
 // - BAD: Service holding Activity reference
 class BadService : Service() {
-    private var activity: MainActivity? = null // Memory leak!
+ private var activity: MainActivity? = null // Memory leak!
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // If Activity is destroyed, service still holds reference
-        activity = intent?.getParcelableExtra("activity")
-        return START_STICKY
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ // If Activity is destroyed, service still holds reference
+ activity = intent?.getParcelableExtra("activity")
+ return START_STICKY
+ }
 }
 ```
 
@@ -660,13 +655,13 @@ Total: 5GB RAM, constant CPU usage
 ```kotlin
 // - MALICIOUS: Spyware service
 class SpywareService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Runs in background, user unaware
-        recordAudio()
-        trackLocation()
-        sendDataToServer()
-        return START_STICKY // Restarts if killed
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ // Runs in background, user unaware
+ recordAudio()
+ trackLocation()
+ sendDataToServer()
+ return START_STICKY // Restarts if killed
+ }
 }
 ```
 
@@ -685,18 +680,18 @@ class SpywareService : Service() {
 ```kotlin
 // - GOOD: Use Foreground Service
 class MyService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(NOTIFICATION_ID, createNotification())
-        doWork()
-        return START_STICKY
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ startForeground(NOTIFICATION_ID, createNotification())
+ doWork()
+ return START_STICKY
+ }
 }
 
 // Start foreground service (allowed)
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-    startForegroundService(intent)
+ startForegroundService(intent)
 } else {
-    startService(intent)
+ startService(intent)
 }
 ```
 
@@ -725,25 +720,25 @@ Apps are categorized into buckets based on usage:
 ```kotlin
 // - DOESN'T WORK: Start activity from background
 class MyService : Service() {
-    fun showActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent) // Blocked on Android 10+
-    }
+ fun showActivity() {
+ val intent = Intent(this, MainActivity::class.java)
+ intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+ startActivity(intent) // Blocked on Android 10+
+ }
 }
 
 // - WORKAROUND: Use full-screen intent notification
 val fullScreenIntent = Intent(this, IncomingCallActivity::class.java)
 val fullScreenPendingIntent = PendingIntent.getActivity(
-    this, 0, fullScreenIntent,
-    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+ this, 0, fullScreenIntent,
+ PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
 )
 
 val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-    .setSmallIcon(R.drawable.ic_call)
-    .setContentTitle("Incoming Call")
-    .setFullScreenIntent(fullScreenPendingIntent, true) // Shows on lock screen
-    .build()
+ .setSmallIcon(R.drawable.ic_call)
+ .setContentTitle("Incoming Call")
+ .setFullScreenIntent(fullScreenPendingIntent, true) // Shows on lock screen
+ .build()
 ```
 
 ---
@@ -755,20 +750,20 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 ```kotlin
 // - RESTRICTED: Exact alarms
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-    // Requires SCHEDULE_EXACT_ALARM permission
-    alarmManager.setExact(
-        AlarmManager.RTC_WAKEUP,
-        triggerTime,
-        pendingIntent
-    )
+ // Requires SCHEDULE_EXACT_ALARM permission
+ alarmManager.setExact(
+ AlarmManager.RTC_WAKEUP,
+ triggerTime,
+ pendingIntent
+ )
 }
 
 // - ALTERNATIVE: Use inexact alarms
 alarmManager.setWindow(
-    AlarmManager.RTC_WAKEUP,
-    triggerTime,
-    10 * 60 * 1000, // 10-minute window
-    pendingIntent
+ AlarmManager.RTC_WAKEUP,
+ triggerTime,
+ 10 * 60 * 1000, // 10-minute window
+ pendingIntent
 )
 ```
 
@@ -790,11 +785,11 @@ When device is stationary and screen off for a while:
 **Maintenance windows:**
 ```
 Screen off
-  ↓
+ ↓
 [30 min] → [Doze] → [Maintenance] (few minutes)
-           ↓
+ ↓
 [60 min] → [Doze] → [Maintenance]
-           ↓
+ ↓
 [120 min] → [Doze] → [Maintenance]
 ```
 
@@ -816,33 +811,33 @@ App enters standby when:
 ### Activities Allowed During Doze
 
 1. **High-priority FCM messages**
-   ```kotlin
-   {
-     "message": {
-       "token": "device_token",
-       "android": {
-         "priority": "high" // Bypasses Doze
-       },
-       "data": {
-         "key": "value"
-       }
-     }
-   }
-   ```
+ ```kotlin
+ {
+ "message": {
+ "token": "device_token",
+ "android": {
+ "priority": "high" // Bypasses Doze
+ },
+ "data": {
+ "key": "value"
+ }
+ }
+ }
+ ```
 
 2. **setAndAllowWhileIdle() alarms**
-   ```kotlin
-   alarmManager.setAndAllowWhileIdle(
-       AlarmManager.RTC_WAKEUP,
-       triggerTime,
-       pendingIntent
-   ) // Works during Doze (limited frequency)
-   ```
+ ```kotlin
+ alarmManager.setAndAllowWhileIdle(
+ AlarmManager.RTC_WAKEUP,
+ triggerTime,
+ pendingIntent
+ ) // Works during Doze (limited frequency)
+ ```
 
 3. **Foreground services**
-   ```kotlin
-   startForegroundService(intent) // Always allowed
-   ```
+ ```kotlin
+ startForegroundService(intent) // Always allowed
+ ```
 
 ---
 
@@ -852,13 +847,13 @@ App enters standby when:
 
 ```kotlin
 val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
-    .setConstraints(
-        Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
-            .build()
-    )
-    .build()
+ .setConstraints(
+ Constraints.Builder()
+ .setRequiredNetworkType(NetworkType.CONNECTED)
+ .setRequiresBatteryNotLow(true)
+ .build()
+ )
+ .build()
 
 WorkManager.getInstance(context).enqueue(uploadWork)
 ```
@@ -877,22 +872,22 @@ For user-visible tasks:
 
 ```kotlin
 class MusicPlayerService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = createNotification()
-        startForeground(NOTIFICATION_ID, notification)
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ val notification = createNotification()
+ startForeground(NOTIFICATION_ID, notification)
 
-        playMusic()
+ playMusic()
 
-        return START_STICKY
-    }
+ return START_STICKY
+ }
 
-    private fun createNotification(): Notification {
-        return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Playing Music")
-            .setContentText(currentSong.title)
-            .setSmallIcon(R.drawable.ic_music)
-            .build()
-    }
+ private fun createNotification(): Notification {
+ return NotificationCompat.Builder(this, CHANNEL_ID)
+ .setContentTitle("Playing Music")
+ .setContentText(currentSong.title)
+ .setSmallIcon(R.drawable.ic_music)
+ .build()
+ }
 }
 ```
 
@@ -910,10 +905,10 @@ For triggered background work:
 
 ```kotlin
 class MyFirebaseMessagingService : FirebaseMessagingService() {
-    override fun onMessageReceived(message: RemoteMessage) {
-        // Triggered by server, bypasses restrictions
-        processBackgroundTask(message.data)
-    }
+ override fun onMessageReceived(message: RemoteMessage) {
+ // Triggered by server, bypasses restrictions
+ processBackgroundTask(message.data)
+ }
 }
 ```
 
@@ -926,18 +921,18 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 ```kotlin
 // - DON'T: Background service for periodic sync
 class SyncService : Service() {
-    override fun onStartCommand(...): Int {
-        syncData() // Restricted on Android 8.0+
-        return START_STICKY
-    }
+ override fun onStartCommand(...): Int {
+ syncData() // Restricted on Android 8.0+
+ return START_STICKY
+ }
 }
 
 // - DO: WorkManager for periodic work
 val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
-    .setConstraints(Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build())
-    .build()
+ .setConstraints(Constraints.Builder()
+ .setRequiredNetworkType(NetworkType.CONNECTED)
+ .build())
+ .build()
 
 WorkManager.getInstance(context).enqueue(syncWork)
 ```
@@ -949,20 +944,20 @@ WorkManager.getInstance(context).enqueue(syncWork)
 ```kotlin
 // - DON'T: Continuous background processing
 class BadWorker : Worker() {
-    override fun doWork(): Result {
-        while (true) { // Infinite loop!
-            processData()
-            Thread.sleep(1000)
-        }
-    }
+ override fun doWork(): Result {
+ while (true) { // Infinite loop!
+ processData()
+ Thread.sleep(1000)
+ }
+ }
 }
 
 // - DO: Discrete, time-limited tasks
 class GoodWorker : CoroutineWorker() {
-    override suspend fun doWork(): Result {
-        processData() // Completes and exits
-        return Result.success()
-    }
+ override suspend fun doWork(): Result {
+ processData() // Completes and exits
+ return Result.success()
+ }
 }
 ```
 
@@ -1051,28 +1046,23 @@ startForegroundService(Intent(this, MyService::class.java))
 - Безопасность и приватность
 - Улучшение UX
 
-
 ---
-
 
 ## Follow-ups
 
-- [[q-canvas-drawing-optimization--custom-views--hard]]
+- 
 - [[q-what-is-data-binding--android--easy]]
-- [[q-workmanager-chaining--background--hard]]
-
+- [[q-workmanager-chaining--android--hard]]
 
 ## References
 
 - [Services](https://developer.android.com/develop/background-work/services)
-
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-service]]
-
 
 ### Prerequisites (Easier)
 - [[q-android-service-types--android--easy]] - `Service`

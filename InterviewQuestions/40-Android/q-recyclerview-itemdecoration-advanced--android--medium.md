@@ -17,8 +17,6 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-itemdecoration
-- q-recyclerview-basics--android--easy
 created: 2025-10-13
 updated: 2025-10-31
 tags:
@@ -59,49 +57,49 @@ ItemDecoration позволяет добавлять пользовательс�
 ```kotlin
 // Базовый разделитель
 class SimpleDividerDecoration(
-    context: Context,
-    private val dividerHeight: Int = 1.dpToPx(context)
+ context: Context,
+ private val dividerHeight: Int = 1.dpToPx(context)
 ) : RecyclerView.ItemDecoration() {
 
-    private val paint = Paint().apply {
-        color = Color.LTGRAY
-        style = Paint.Style.FILL
-    }
+ private val paint = Paint().apply {
+ color = Color.LTGRAY
+ style = Paint.Style.FILL
+ }
 
-    // Добавление отступов для разделителя
-    override fun getItemOffsets(
-        outRect: Rect,
-        view: View,
-        parent: RecyclerView,
-        state: RecyclerView.State
-    ) {
-        val position = parent.getChildAdapterPosition(view)
-        if (position != parent.adapter?.itemCount?.minus(1)) {
-            outRect.bottom = dividerHeight
-        }
-    }
+ // Добавление отступов для разделителя
+ override fun getItemOffsets(
+ outRect: Rect,
+ view: View,
+ parent: RecyclerView,
+ state: RecyclerView.State
+ ) {
+ val position = parent.getChildAdapterPosition(view)
+ if (position != parent.adapter?.itemCount?.minus(1)) {
+ outRect.bottom = dividerHeight
+ }
+ }
 
-    // Отрисовка разделителя под элементами
-    override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val left = parent.paddingLeft
-        val right = parent.width - parent.paddingRight
+ // Отрисовка разделителя под элементами
+ override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+ val left = parent.paddingLeft
+ val right = parent.width - parent.paddingRight
 
-        for (i in 0 until parent.childCount) {
-            val child = parent.getChildAt(i)
-            val params = child.layoutParams as RecyclerView.LayoutParams
+ for (i in 0 until parent.childCount) {
+ val child = parent.getChildAt(i)
+ val params = child.layoutParams as RecyclerView.LayoutParams
 
-            val top = child.bottom + params.bottomMargin
-            val bottom = top + dividerHeight
+ val top = child.bottom + params.bottomMargin
+ val bottom = top + dividerHeight
 
-            canvas.drawRect(
-                left.toFloat(),
-                top.toFloat(),
-                right.toFloat(),
-                bottom.toFloat(),
-                paint
-            )
-        }
-    }
+ canvas.drawRect(
+ left.toFloat(),
+ top.toFloat(),
+ right.toFloat(),
+ bottom.toFloat(),
+ paint
+ )
+ }
+ }
 }
 ```
 
@@ -109,14 +107,14 @@ class SimpleDividerDecoration(
 ```kotlin
 class StickyHeaderDecoration : RecyclerView.ItemDecoration() {
 
-    override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        // Отрисовка sticky header над элементами
-        val topChild = parent.getChildAt(0) ?: return
-        val topChildPosition = parent.getChildAdapterPosition(topChild)
+ override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+ // Отрисовка sticky header над элементами
+ val topChild = parent.getChildAt(0) ?: return
+ val topChildPosition = parent.getChildAdapterPosition(topChild)
 
-        // Логика sticky header
-        drawStickyHeader(canvas, parent, topChildPosition)
-    }
+ // Логика sticky header
+ drawStickyHeader(canvas, parent, topChildPosition)
+ }
 }
 ```
 
@@ -145,49 +143,49 @@ ItemDecoration allows adding custom drawing and layout offsets to `RecyclerView`
 ```kotlin
 // Basic divider
 class SimpleDividerDecoration(
-    context: Context,
-    private val dividerHeight: Int = 1.dpToPx(context)
+ context: Context,
+ private val dividerHeight: Int = 1.dpToPx(context)
 ) : RecyclerView.ItemDecoration() {
 
-    private val paint = Paint().apply {
-        color = Color.LTGRAY
-        style = Paint.Style.FILL
-    }
+ private val paint = Paint().apply {
+ color = Color.LTGRAY
+ style = Paint.Style.FILL
+ }
 
-    // Add spacing for divider
-    override fun getItemOffsets(
-        outRect: Rect,
-        view: View,
-        parent: RecyclerView,
-        state: RecyclerView.State
-    ) {
-        val position = parent.getChildAdapterPosition(view)
-        if (position != parent.adapter?.itemCount?.minus(1)) {
-            outRect.bottom = dividerHeight
-        }
-    }
+ // Add spacing for divider
+ override fun getItemOffsets(
+ outRect: Rect,
+ view: View,
+ parent: RecyclerView,
+ state: RecyclerView.State
+ ) {
+ val position = parent.getChildAdapterPosition(view)
+ if (position != parent.adapter?.itemCount?.minus(1)) {
+ outRect.bottom = dividerHeight
+ }
+ }
 
-    // Draw divider under items
-    override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        val left = parent.paddingLeft
-        val right = parent.width - parent.paddingRight
+ // Draw divider under items
+ override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+ val left = parent.paddingLeft
+ val right = parent.width - parent.paddingRight
 
-        for (i in 0 until parent.childCount) {
-            val child = parent.getChildAt(i)
-            val params = child.layoutParams as RecyclerView.LayoutParams
+ for (i in 0 until parent.childCount) {
+ val child = parent.getChildAt(i)
+ val params = child.layoutParams as RecyclerView.LayoutParams
 
-            val top = child.bottom + params.bottomMargin
-            val bottom = top + dividerHeight
+ val top = child.bottom + params.bottomMargin
+ val bottom = top + dividerHeight
 
-            canvas.drawRect(
-                left.toFloat(),
-                top.toFloat(),
-                right.toFloat(),
-                bottom.toFloat(),
-                paint
-            )
-        }
-    }
+ canvas.drawRect(
+ left.toFloat(),
+ top.toFloat(),
+ right.toFloat(),
+ bottom.toFloat(),
+ paint
+ )
+ }
+ }
 }
 ```
 
@@ -195,14 +193,14 @@ class SimpleDividerDecoration(
 ```kotlin
 class StickyHeaderDecoration : RecyclerView.ItemDecoration() {
 
-    override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        // Draw sticky header over items
-        val topChild = parent.getChildAt(0) ?: return
-        val topChildPosition = parent.getChildAdapterPosition(topChild)
+ override fun onDrawOver(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+ // Draw sticky header over items
+ val topChild = parent.getChildAt(0) ?: return
+ val topChildPosition = parent.getChildAdapterPosition(topChild)
 
-        // Sticky header logic
-        drawStickyHeader(canvas, parent, topChildPosition)
-    }
+ // Sticky header logic
+ drawStickyHeader(canvas, parent, topChildPosition)
+ }
 }
 ```
 
@@ -220,29 +218,26 @@ recyclerView.addItemDecoration(StickyHeaderDecoration())
 - How do you optimize ItemDecoration performance?
 - How do you handle ItemDecoration with different view types?
 
-
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
 
-
 ## Related Questions
 
 ### Prerequisites / Concepts
 
-- [[c-itemdecoration]]
-
+- 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-basics--android--easy]] - `RecyclerView` basics
+- - `RecyclerView` basics
 - [[q-android-app-components--android--easy]] - App components
 
 ### Related (Same Level)
-- [[q-custom-drawing--android--medium]] - Custom drawing
-- [[q-recyclerview-performance--android--medium]] - `RecyclerView` performance
-- [[q-ui-customization--android--medium]] - UI customization
+- - Custom drawing
+- [[q-recyclerview-explained--android--medium]] - `RecyclerView` performance
+- - UI customization
 
 ### Advanced (Harder)
-- [[q-recyclerview-advanced--android--hard]] - `RecyclerView` advanced
+- - `RecyclerView` advanced
 - [[q-canvas-drawing-optimization--android--hard]] - `Canvas` optimization

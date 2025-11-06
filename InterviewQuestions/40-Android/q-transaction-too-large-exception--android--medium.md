@@ -63,7 +63,7 @@ intent.putExtra("image_path", imageFile.absolutePath)
 ```kotlin
 // ✅ Разделяемые данные через ViewModel
 class SharedViewModel : ViewModel() {
-    val userData = MutableLiveData<List<User>>()
+ val userData = MutableLiveData<List<User>>()
 }
 
 // В Activity
@@ -78,9 +78,9 @@ private val sharedViewModel: SharedViewModel by activityViewModels()
 ```kotlin
 // ✅ Сохранять только критичное состояние
 override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    outState.putInt("scroll_position", recyclerView.scrollY) // только позиция
-    outState.putInt("selected_id", selectedUser?.id ?: -1)    // только ID
+ super.onSaveInstanceState(outState)
+ outState.putInt("scroll_position", recyclerView.scrollY) // только позиция
+ outState.putInt("selected_id", selectedUser?.id ?: -1) // только ID
 }
 ```
 
@@ -126,7 +126,7 @@ intent.putExtra("image_path", imageFile.absolutePath)
 ```kotlin
 // ✅ Share data via ViewModel
 class SharedViewModel : ViewModel() {
-    val userData = MutableLiveData<List<User>>()
+ val userData = MutableLiveData<List<User>>()
 }
 
 // In Activity
@@ -141,9 +141,9 @@ private val sharedViewModel: SharedViewModel by activityViewModels()
 ```kotlin
 // ✅ Save only critical state
 override fun onSaveInstanceState(outState: Bundle) {
-    super.onSaveInstanceState(outState)
-    outState.putInt("scroll_position", recyclerView.scrollY) // position only
-    outState.putInt("selected_id", selectedUser?.id ?: -1)    // ID only
+ super.onSaveInstanceState(outState)
+ outState.putInt("scroll_position", recyclerView.scrollY) // position only
+ outState.putInt("selected_id", selectedUser?.id ?: -1) // ID only
 }
 ```
 
@@ -164,10 +164,10 @@ override fun onSaveInstanceState(outState: Bundle) {
 
 ## References
 
-- [[c-binder]]
+- 
 - [[c-intent]]
 - [[c-viewmodel]]
-- [[c-savedinstancestate]]
+- 
 
 ## Related Questions
 

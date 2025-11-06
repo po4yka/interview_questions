@@ -17,7 +17,7 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-four-main-components-of-android--android--easy]
+related: []
 
 # Timestamps
 created: 2025-10-15
@@ -73,13 +73,13 @@ WorkManager.getInstance(context).enqueue(request)
 ```kotlin
 // ✅ Пример Bound Service
 class LocalService : Service() {
-    private val binder = LocalBinder()
+ private val binder = LocalBinder()
 
-    inner class LocalBinder : Binder() {
-        fun getService(): LocalService = this@LocalService
-    }
+ inner class LocalBinder : Binder() {
+ fun getService(): LocalService = this@LocalService
+ }
 
-    override fun onBind(intent: Intent): IBinder = binder
+ override fun onBind(intent: Intent): IBinder = binder
 }
 ```
 
@@ -121,13 +121,13 @@ Provides an interface for interaction with other components via `bindService()`.
 ```kotlin
 // ✅ Bound Service example
 class LocalService : Service() {
-    private val binder = LocalBinder()
+ private val binder = LocalBinder()
 
-    inner class LocalBinder : Binder() {
-        fun getService(): LocalService = this@LocalService
-    }
+ inner class LocalBinder : Binder() {
+ fun getService(): LocalService = this@LocalService
+ }
 
-    override fun onBind(intent: Intent): IBinder = binder
+ override fun onBind(intent: Intent): IBinder = binder
 }
 ```
 
@@ -153,7 +153,7 @@ class LocalService : Service() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-four-main-components-of-android--android--easy]] - Android components overview
+- - Android components overview
 
 ### Related (Same Level)
 - [[q-service-component--android--medium]] - `Service` lifecycle and implementation

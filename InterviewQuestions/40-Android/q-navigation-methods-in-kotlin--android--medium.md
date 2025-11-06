@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-fragments, c-navigation-component, q-activity-navigation-how-it-works--android--medium]
+related: [c-fragments, q-activity-navigation-how-it-works--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
 sources: []
@@ -40,27 +40,27 @@ Android предлагает несколько способов навигац�
 ```kotlin
 // ✅ Навигация через NavController
 class HomeFragment : Fragment() {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val navController = findNavController()
+ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+ val navController = findNavController()
 
-        // Простая навигация
-        button.setOnClickListener {
-            navController.navigate(R.id.action_home_to_detail)
-        }
+ // Простая навигация
+ button.setOnClickListener {
+ navController.navigate(R.id.action_home_to_detail)
+ }
 
-        // С аргументами через Safe Args
-        val action = HomeFragmentDirections.actionHomeToDetail(itemId = 123)
-        navController.navigate(action)
-    }
+ // С аргументами через Safe Args
+ val action = HomeFragmentDirections.actionHomeToDetail(itemId = 123)
+ navController.navigate(action)
+ }
 }
 
 // Получение аргументов
 class DetailFragment : Fragment() {
-    private val args: DetailFragmentArgs by navArgs()
+ private val args: DetailFragmentArgs by navArgs()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val itemId = args.itemId
-    }
+ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+ val itemId = args.itemId
+ }
 }
 ```
 
@@ -76,9 +76,9 @@ startActivity(intent)
 
 // Получение данных
 class DetailActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        val itemId = intent.getIntExtra("ITEM_ID", 0)
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ val itemId = intent.getIntExtra("ITEM_ID", 0)
+ }
 }
 
 // ❌ Неявный Intent без проверки
@@ -87,7 +87,7 @@ startActivity(intent) // Может упасть, если нет браузер
 
 // ✅ С проверкой
 if (intent.resolveActivity(packageManager) != null) {
-    startActivity(intent)
+ startActivity(intent)
 }
 ```
 
@@ -96,14 +96,14 @@ if (intent.resolveActivity(packageManager) != null) {
 ```kotlin
 // ✅ Корректная замена с BackStack
 supportFragmentManager.beginTransaction()
-    .replace(R.id.container, DetailFragment())
-    .addToBackStack(null)
-    .commit()
+ .replace(R.id.container, DetailFragment())
+ .addToBackStack(null)
+ .commit()
 
 // ❌ Без addToBackStack
 supportFragmentManager.beginTransaction()
-    .replace(R.id.container, DetailFragment())
-    .commit() // Кнопка Back не вернет на предыдущий экран
+ .replace(R.id.container, DetailFragment())
+ .commit() // Кнопка Back не вернет на предыдущий экран
 ```
 
 **Сложность**: Navigation Component автоматизирует управление BackStack и состоянием
@@ -124,27 +124,27 @@ Modern approach with navigation graph and type-safe arguments:
 ```kotlin
 // ✅ Navigate via NavController
 class HomeFragment : Fragment() {
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val navController = findNavController()
+ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+ val navController = findNavController()
 
-        // Simple navigation
-        button.setOnClickListener {
-            navController.navigate(R.id.action_home_to_detail)
-        }
+ // Simple navigation
+ button.setOnClickListener {
+ navController.navigate(R.id.action_home_to_detail)
+ }
 
-        // With Safe Args
-        val action = HomeFragmentDirections.actionHomeToDetail(itemId = 123)
-        navController.navigate(action)
-    }
+ // With Safe Args
+ val action = HomeFragmentDirections.actionHomeToDetail(itemId = 123)
+ navController.navigate(action)
+ }
 }
 
 // Receiving arguments
 class DetailFragment : Fragment() {
-    private val args: DetailFragmentArgs by navArgs()
+ private val args: DetailFragmentArgs by navArgs()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val itemId = args.itemId
-    }
+ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+ val itemId = args.itemId
+ }
 }
 ```
 
@@ -160,9 +160,9 @@ startActivity(intent)
 
 // Receiving data
 class DetailActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        val itemId = intent.getIntExtra("ITEM_ID", 0)
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ val itemId = intent.getIntExtra("ITEM_ID", 0)
+ }
 }
 
 // ❌ Implicit Intent without checking
@@ -171,7 +171,7 @@ startActivity(intent) // May crash if no browser
 
 // ✅ With check
 if (intent.resolveActivity(packageManager) != null) {
-    startActivity(intent)
+ startActivity(intent)
 }
 ```
 
@@ -180,14 +180,14 @@ if (intent.resolveActivity(packageManager) != null) {
 ```kotlin
 // ✅ Correct replacement with BackStack
 supportFragmentManager.beginTransaction()
-    .replace(R.id.container, DetailFragment())
-    .addToBackStack(null)
-    .commit()
+ .replace(R.id.container, DetailFragment())
+ .addToBackStack(null)
+ .commit()
 
 // ❌ Without addToBackStack
 supportFragmentManager.beginTransaction()
-    .replace(R.id.container, DetailFragment())
-    .commit() // Back button won't return to previous screen
+ .replace(R.id.container, DetailFragment())
+ .commit() // Back button won't return to previous screen
 ```
 
 **Complexity**: Navigation Component automates BackStack and state management
@@ -205,9 +205,9 @@ supportFragmentManager.beginTransaction()
 
 ## References
 
-- [[c-navigation-component]] - Jetpack Navigation Component overview
+- - Jetpack Navigation Component overview
 - [[c-fragments]] - `Fragment` lifecycle and management
-- [[c-intents]] - `Intent` system in Android
+- [[c-intent]] - `Intent` system in Android
 - Android Developers: Navigation Component Guide
 
 ## Related Questions

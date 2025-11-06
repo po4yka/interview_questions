@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-accessibility, c-dimension-units]
+related: [c-accessibility]
 created: 2025-10-15
 updated: 2025-10-29
 tags: [accessibility, android/ui-accessibility, android/ui-widgets, difficulty/easy, dp, sp, ui]
@@ -40,15 +40,15 @@ Android использует две масштабируемые единицы 
 ```xml
 <!-- ✅ Правильно: dp для размеров элементов -->
 <Button
-    android:layout_width="120dp"
-    android:layout_height="48dp"
-    android:padding="16dp"
-    android:textSize="16sp" /> <!-- ✅ sp для текста -->
+ android:layout_width="120dp"
+ android:layout_height="48dp"
+ android:padding="16dp"
+ android:textSize="16sp" /> <!-- ✅ sp для текста -->
 
 <!-- ❌ Неправильно: sp для размеров элемента -->
 <ImageView
-    android:layout_width="64sp"
-    android:layout_height="64sp" /> <!-- Игнорирует настройки пользователя -->
+ android:layout_width="64sp"
+ android:layout_height="64sp" /> <!-- Игнорирует настройки пользователя -->
 ```
 
 **Compose:**
@@ -56,14 +56,14 @@ Android использует две масштабируемые единицы 
 ```kotlin
 // ✅ Правильно
 Text(
-    text = "Hello",
-    fontSize = 16.sp,  // sp для текста
-    modifier = Modifier.padding(16.dp)  // dp для отступов
+ text = "Hello",
+ fontSize = 16.sp, // sp для текста
+ modifier = Modifier.padding(16.dp) // dp для отступов
 )
 
 // ❌ Неправильно
 Box(
-    modifier = Modifier.size(48.sp)  // sp не для размеров контейнера
+ modifier = Modifier.size(48.sp) // sp не для размеров контейнера
 )
 ```
 
@@ -82,15 +82,15 @@ Android uses two scalable measurement units: **dp** (density-independent pixels)
 ```xml
 <!-- ✅ Correct: dp for element dimensions -->
 <Button
-    android:layout_width="120dp"
-    android:layout_height="48dp"
-    android:padding="16dp"
-    android:textSize="16sp" /> <!-- ✅ sp for text -->
+ android:layout_width="120dp"
+ android:layout_height="48dp"
+ android:padding="16dp"
+ android:textSize="16sp" /> <!-- ✅ sp for text -->
 
 <!-- ❌ Wrong: sp for element dimensions -->
 <ImageView
-    android:layout_width="64sp"
-    android:layout_height="64sp" /> <!-- Ignores user preferences -->
+ android:layout_width="64sp"
+ android:layout_height="64sp" /> <!-- Ignores user preferences -->
 ```
 
 **Compose:**
@@ -98,14 +98,14 @@ Android uses two scalable measurement units: **dp** (density-independent pixels)
 ```kotlin
 // ✅ Correct
 Text(
-    text = "Hello",
-    fontSize = 16.sp,  // sp for text
-    modifier = Modifier.padding(16.dp)  // dp for spacing
+ text = "Hello",
+ fontSize = 16.sp, // sp for text
+ modifier = Modifier.padding(16.dp) // dp for spacing
 )
 
 // ❌ Wrong
 Box(
-    modifier = Modifier.size(48.sp)  // sp not for container size
+ modifier = Modifier.size(48.sp) // sp not for container size
 )
 ```
 
@@ -121,7 +121,7 @@ Box(
 
 ## References
 
-- [[c-dp-sp-units]] - Understanding density-independent units
+- - Understanding density-independent units
 - [Android Dimensions Guide](https://developer.android.com/guide/topics/resources/more-resources#Dimension) - Official documentation
 - [Material Design Metrics](https://m2.material.io/design/layout/spacing-methods.html) - Layout metrics and keylines
 - [Compose Units](https://developer.android.com/jetpack/compose/designsystems/custom#unit-types) - Dp and Sp in Compose
@@ -130,12 +130,12 @@ Box(
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - Understanding Android components
-- [[q-compose-basics--android--easy]] - Jetpack Compose fundamentals
+- - Jetpack Compose fundamentals
 
 ### Related (Same Level)
 - [[q-accessibility-color-contrast--android--medium]] - Accessibility best practices
 - [[q-compose-navigation-advanced--android--medium]] - Navigation patterns
-- [[q-android-ui-fundamentals--android--easy]] - UI design principles
+- - UI design principles
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--android--hard]] - Custom layout implementation

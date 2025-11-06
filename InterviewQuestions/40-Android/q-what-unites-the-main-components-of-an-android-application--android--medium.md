@@ -19,8 +19,6 @@ status: draft
 moc: moc-android
 related:
 - c-android-components
-- c-context
-- c-manifest
 - q-what-each-android-component-represents--android--easy
 - q-what-unifies-android-components--android--easy
 created: 2025-10-15
@@ -50,10 +48,10 @@ The main Android components (`Activity`, `Service`, `BroadcastReceiver`, `Conten
 
 ```
 Android Application Components
- Activity        → UI screens
- Service         → Background operations
+ Activity → UI screens
+ Service → Background operations
  BroadcastReceiver → System/app events
- ContentProvider   → Data sharing
+ ContentProvider → Data sharing
 ```
 
 ### Common Characteristics
@@ -64,39 +62,39 @@ All components must be declared in the manifest:
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.app">
+ package="com.example.app">
 
-    <application>
-        <!-- Activity -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+ <application>
+ <!-- Activity -->
+ <activity
+ android:name=".MainActivity"
+ android:exported="true">
+ <intent-filter>
+ <action android:name="android.intent.action.MAIN" />
+ <category android:name="android.intent.category.LAUNCHER" />
+ </intent-filter>
+ </activity>
 
-        <!-- Service -->
-        <service
-            android:name=".MyService"
-            android:exported="false" />
+ <!-- Service -->
+ <service
+ android:name=".MyService"
+ android:exported="false" />
 
-        <!-- BroadcastReceiver -->
-        <receiver
-            android:name=".MyReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+ <!-- BroadcastReceiver -->
+ <receiver
+ android:name=".MyReceiver"
+ android:exported="true">
+ <intent-filter>
+ <action android:name="android.intent.action.BOOT_COMPLETED" />
+ </intent-filter>
+ </receiver>
 
-        <!-- ContentProvider -->
-        <provider
-            android:name=".MyContentProvider"
-            android:authorities="com.example.app.provider"
-            android:exported="false" />
-    </application>
+ <!-- ContentProvider -->
+ <provider
+ android:name=".MyContentProvider"
+ android:authorities="com.example.app.provider"
+ android:exported="false" />
+ </application>
 </manifest>
 ```
 
@@ -149,34 +147,34 @@ All components have access to **`Context`**:
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    // Activity IS a Context
-    fun example() {
-        val context: Context = this
-        val appContext = applicationContext
-    }
+ // Activity IS a Context
+ fun example() {
+ val context: Context = this
+ val appContext = applicationContext
+ }
 }
 
 class MyService : Service() {
-    // Service IS a Context
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val context: Context = this
-        return START_STICKY
-    }
+ // Service IS a Context
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ val context: Context = this
+ return START_STICKY
+ }
 }
 
 class MyReceiver : BroadcastReceiver() {
-    // Receiver RECEIVES a Context
-    override fun onReceive(context: Context, intent: Intent) {
-        // Use context parameter
-    }
+ // Receiver RECEIVES a Context
+ override fun onReceive(context: Context, intent: Intent) {
+ // Use context parameter
+ }
 }
 
 class MyProvider : ContentProvider() {
-    // Provider HAS context property
-    override fun onCreate(): Boolean {
-        val ctx = context
-        return true
-    }
+ // Provider HAS context property
+ override fun onCreate(): Boolean {
+ val ctx = context
+ return true
+ }
 }
 ```
 
@@ -187,33 +185,33 @@ Each component has a **specific lifecycle** managed by the system:
 ```kotlin
 // Activity Lifecycle
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) { }
-    override fun onStart() { }
-    override fun onResume() { }
-    override fun onPause() { }
-    override fun onStop() { }
-    override fun onDestroy() { }
+ override fun onCreate(savedInstanceState: Bundle?) { }
+ override fun onStart() { }
+ override fun onResume() { }
+ override fun onPause() { }
+ override fun onStop() { }
+ override fun onDestroy() { }
 }
 
 // Service Lifecycle
 class MyService : Service() {
-    override fun onCreate() { }
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int { }
-    override fun onBind(intent: Intent?): IBinder? { }
-    override fun onDestroy() { }
+ override fun onCreate() { }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int { }
+ override fun onBind(intent: Intent?): IBinder? { }
+ override fun onDestroy() { }
 }
 
 // BroadcastReceiver Lifecycle
 class MyReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        // Short-lived: must complete within 10 seconds
-    }
+ override fun onReceive(context: Context, intent: Intent) {
+ // Short-lived: must complete within 10 seconds
+ }
 }
 
 // ContentProvider Lifecycle
 class MyProvider : ContentProvider() {
-    override fun onCreate(): Boolean { }
-    // No explicit destroy - lives with application process
+ override fun onCreate(): Boolean { }
+ // No explicit destroy - lives with application process
 }
 ```
 
@@ -224,14 +222,14 @@ All components run in the **same process** by default:
 ```xml
 <!-- Default: all components in same process -->
 <application android:process=":main">
-    <activity android:name=".MainActivity" />
-    <service android:name=".MyService" />
+ <activity android:name=".MainActivity" />
+ <service android:name=".MyService" />
 </application>
 
 <!-- Can specify separate process -->
 <service
-    android:name=".HeavyService"
-    android:process=":background" />
+ android:name=".HeavyService"
+ android:process=":background" />
 ```
 
 #### 7. Permission Requirements
@@ -241,24 +239,24 @@ Components can require **permissions**:
 ```xml
 <!-- Activity requiring permission -->
 <activity
-    android:name=".AdminActivity"
-    android:permission="android.permission.ADMIN_PRIVILEGES" />
+ android:name=".AdminActivity"
+ android:permission="android.permission.ADMIN_PRIVILEGES" />
 
 <!-- Service requiring permission to bind -->
 <service
-    android:name=".SecureService"
-    android:permission="com.example.app.BIND_SERVICE" />
+ android:name=".SecureService"
+ android:permission="com.example.app.BIND_SERVICE" />
 
 <!-- BroadcastReceiver requiring permission to send -->
 <receiver
-    android:name=".SecureReceiver"
-    android:permission="android.permission.RECEIVE_BOOT_COMPLETED" />
+ android:name=".SecureReceiver"
+ android:permission="android.permission.RECEIVE_BOOT_COMPLETED" />
 
 <!-- ContentProvider requiring permissions -->
 <provider
-    android:name=".SecureProvider"
-    android:readPermission="com.example.app.READ_DATA"
-    android:writePermission="com.example.app.WRITE_DATA" />
+ android:name=".SecureProvider"
+ android:readPermission="com.example.app.READ_DATA"
+ android:writePermission="com.example.app.WRITE_DATA" />
 ```
 
 ### Component Comparison Table
@@ -287,18 +285,18 @@ Components can require **permissions**:
 // 5. Interact via Intent/ContentResolver
 
 // Example Service
-class DownloadService : Service() {  // 2. Extend base
-    override fun onCreate() {         // 3. Lifecycle
-        super.onCreate()
-        val ctx: Context = this       // 4. Context access
-    }
+class DownloadService : Service() { // 2. Extend base
+ override fun onCreate() { // 3. Lifecycle
+ super.onCreate()
+ val ctx: Context = this // 4. Context access
+ }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Intent received                  5. Intent interaction
-        return START_STICKY
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ // Intent received 5. Intent interaction
+ return START_STICKY
+ }
 
-    override fun onBind(intent: Intent?): IBinder? = null
+ override fun onBind(intent: Intent?): IBinder? = null
 }
 
 // 1. Manifest:
@@ -326,8 +324,8 @@ contentResolver.query(uri, null, null, null, null)
 
 // BroadcastReceiver → Service
 override fun onReceive(context: Context, intent: Intent) {
-    val serviceIntent = Intent(context, MyService::class.java)
-    context.startService(serviceIntent)
+ val serviceIntent = Intent(context, MyService::class.java)
+ context.startService(serviceIntent)
 }
 ```
 
@@ -342,15 +340,12 @@ Main Android components are united by:
 6. **Process execution** - run in application process
 7. **Permission system** - consistent security model
 
-
 # Question (EN)
 > Android Components Unity
 
 ---
 
-
 ---
-
 
 ## Answer (EN)
 The main Android components (`Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`) share several fundamental characteristics that unite them in the Android framework.
@@ -359,10 +354,10 @@ The main Android components (`Activity`, `Service`, `BroadcastReceiver`, `Conten
 
 ```
 Android Application Components
- Activity        → UI screens
- Service         → Background operations
+ Activity → UI screens
+ Service → Background operations
  BroadcastReceiver → System/app events
- ContentProvider   → Data sharing
+ ContentProvider → Data sharing
 ```
 
 ### Common Characteristics
@@ -373,39 +368,39 @@ All components must be declared in the manifest:
 
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.app">
+ package="com.example.app">
 
-    <application>
-        <!-- Activity -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+ <application>
+ <!-- Activity -->
+ <activity
+ android:name=".MainActivity"
+ android:exported="true">
+ <intent-filter>
+ <action android:name="android.intent.action.MAIN" />
+ <category android:name="android.intent.category.LAUNCHER" />
+ </intent-filter>
+ </activity>
 
-        <!-- Service -->
-        <service
-            android:name=".MyService"
-            android:exported="false" />
+ <!-- Service -->
+ <service
+ android:name=".MyService"
+ android:exported="false" />
 
-        <!-- BroadcastReceiver -->
-        <receiver
-            android:name=".MyReceiver"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+ <!-- BroadcastReceiver -->
+ <receiver
+ android:name=".MyReceiver"
+ android:exported="true">
+ <intent-filter>
+ <action android:name="android.intent.action.BOOT_COMPLETED" />
+ </intent-filter>
+ </receiver>
 
-        <!-- ContentProvider -->
-        <provider
-            android:name=".MyContentProvider"
-            android:authorities="com.example.app.provider"
-            android:exported="false" />
-    </application>
+ <!-- ContentProvider -->
+ <provider
+ android:name=".MyContentProvider"
+ android:authorities="com.example.app.provider"
+ android:exported="false" />
+ </application>
 </manifest>
 ```
 
@@ -458,34 +453,34 @@ All components have access to **`Context`**:
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    // Activity IS a Context
-    fun example() {
-        val context: Context = this
-        val appContext = applicationContext
-    }
+ // Activity IS a Context
+ fun example() {
+ val context: Context = this
+ val appContext = applicationContext
+ }
 }
 
 class MyService : Service() {
-    // Service IS a Context
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val context: Context = this
-        return START_STICKY
-    }
+ // Service IS a Context
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ val context: Context = this
+ return START_STICKY
+ }
 }
 
 class MyReceiver : BroadcastReceiver() {
-    // Receiver RECEIVES a Context
-    override fun onReceive(context: Context, intent: Intent) {
-        // Use context parameter
-    }
+ // Receiver RECEIVES a Context
+ override fun onReceive(context: Context, intent: Intent) {
+ // Use context parameter
+ }
 }
 
 class MyProvider : ContentProvider() {
-    // Provider HAS context property
-    override fun onCreate(): Boolean {
-        val ctx = context
-        return true
-    }
+ // Provider HAS context property
+ override fun onCreate(): Boolean {
+ val ctx = context
+ return true
+ }
 }
 ```
 
@@ -496,33 +491,33 @@ Each component has a **specific lifecycle** managed by the system:
 ```kotlin
 // Activity Lifecycle
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) { }
-    override fun onStart() { }
-    override fun onResume() { }
-    override fun onPause() { }
-    override fun onStop() { }
-    override fun onDestroy() { }
+ override fun onCreate(savedInstanceState: Bundle?) { }
+ override fun onStart() { }
+ override fun onResume() { }
+ override fun onPause() { }
+ override fun onStop() { }
+ override fun onDestroy() { }
 }
 
 // Service Lifecycle
 class MyService : Service() {
-    override fun onCreate() { }
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int { }
-    override fun onBind(intent: Intent?): IBinder? { }
-    override fun onDestroy() { }
+ override fun onCreate() { }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int { }
+ override fun onBind(intent: Intent?): IBinder? { }
+ override fun onDestroy() { }
 }
 
 // BroadcastReceiver Lifecycle
 class MyReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        // Short-lived: must complete within 10 seconds
-    }
+ override fun onReceive(context: Context, intent: Intent) {
+ // Short-lived: must complete within 10 seconds
+ }
 }
 
 // ContentProvider Lifecycle
 class MyProvider : ContentProvider() {
-    override fun onCreate(): Boolean { }
-    // No explicit destroy - lives with application process
+ override fun onCreate(): Boolean { }
+ // No explicit destroy - lives with application process
 }
 ```
 
@@ -533,14 +528,14 @@ All components run in the **same process** by default:
 ```xml
 <!-- Default: all components in same process -->
 <application android:process=":main">
-    <activity android:name=".MainActivity" />
-    <service android:name=".MyService" />
+ <activity android:name=".MainActivity" />
+ <service android:name=".MyService" />
 </application>
 
 <!-- Can specify separate process -->
 <service
-    android:name=".HeavyService"
-    android:process=":background" />
+ android:name=".HeavyService"
+ android:process=":background" />
 ```
 
 #### 7. Permission Requirements
@@ -550,24 +545,24 @@ Components can require **permissions**:
 ```xml
 <!-- Activity requiring permission -->
 <activity
-    android:name=".AdminActivity"
-    android:permission="android.permission.ADMIN_PRIVILEGES" />
+ android:name=".AdminActivity"
+ android:permission="android.permission.ADMIN_PRIVILEGES" />
 
 <!-- Service requiring permission to bind -->
 <service
-    android:name=".SecureService"
-    android:permission="com.example.app.BIND_SERVICE" />
+ android:name=".SecureService"
+ android:permission="com.example.app.BIND_SERVICE" />
 
 <!-- BroadcastReceiver requiring permission to send -->
 <receiver
-    android:name=".SecureReceiver"
-    android:permission="android.permission.RECEIVE_BOOT_COMPLETED" />
+ android:name=".SecureReceiver"
+ android:permission="android.permission.RECEIVE_BOOT_COMPLETED" />
 
 <!-- ContentProvider requiring permissions -->
 <provider
-    android:name=".SecureProvider"
-    android:readPermission="com.example.app.READ_DATA"
-    android:writePermission="com.example.app.WRITE_DATA" />
+ android:name=".SecureProvider"
+ android:readPermission="com.example.app.READ_DATA"
+ android:writePermission="com.example.app.WRITE_DATA" />
 ```
 
 ### Component Comparison Table
@@ -596,18 +591,18 @@ Components can require **permissions**:
 // 5. Interact via Intent/ContentResolver
 
 // Example Service
-class DownloadService : Service() {  // 2. Extend base
-    override fun onCreate() {         // 3. Lifecycle
-        super.onCreate()
-        val ctx: Context = this       // 4. Context access
-    }
+class DownloadService : Service() { // 2. Extend base
+ override fun onCreate() { // 3. Lifecycle
+ super.onCreate()
+ val ctx: Context = this // 4. Context access
+ }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Intent received                  5. Intent interaction
-        return START_STICKY
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ // Intent received 5. Intent interaction
+ return START_STICKY
+ }
 
-    override fun onBind(intent: Intent?): IBinder? = null
+ override fun onBind(intent: Intent?): IBinder? = null
 }
 
 // 1. Manifest:
@@ -635,8 +630,8 @@ contentResolver.query(uri, null, null, null, null)
 
 // BroadcastReceiver → Service
 override fun onReceive(context: Context, intent: Intent) {
-    val serviceIntent = Intent(context, MyService::class.java)
-    context.startService(serviceIntent)
+ val serviceIntent = Intent(context, MyService::class.java)
+ context.startService(serviceIntent)
 }
 ```
 
@@ -659,10 +654,10 @@ Main Android components are united by:
 
 ```
 Компоненты Android приложения
- Activity        → UI экраны
- Service         → Фоновые операции
+ Activity → UI экраны
+ Service → Фоновые операции
  BroadcastReceiver → Системные/приложенческие события
- ContentProvider   → Обмен данными
+ ContentProvider → Обмен данными
 ```
 
 ### Общие Характеристики
@@ -673,31 +668,31 @@ Main Android components are united by:
 
 ```xml
 <manifest>
-    <application>
-        <!-- Activity -->
-        <activity android:name=".MainActivity" android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+ <application>
+ <!-- Activity -->
+ <activity android:name=".MainActivity" android:exported="true">
+ <intent-filter>
+ <action android:name="android.intent.action.MAIN" />
+ <category android:name="android.intent.category.LAUNCHER" />
+ </intent-filter>
+ </activity>
 
-        <!-- Service -->
-        <service android:name=".MyService" android:exported="false" />
+ <!-- Service -->
+ <service android:name=".MyService" android:exported="false" />
 
-        <!-- BroadcastReceiver -->
-        <receiver android:name=".MyReceiver" android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
+ <!-- BroadcastReceiver -->
+ <receiver android:name=".MyReceiver" android:exported="true">
+ <intent-filter>
+ <action android:name="android.intent.action.BOOT_COMPLETED" />
+ </intent-filter>
+ </receiver>
 
-        <!-- ContentProvider -->
-        <provider
-            android:name=".MyContentProvider"
-            android:authorities="com.example.app.provider"
-            android:exported="false" />
-    </application>
+ <!-- ContentProvider -->
+ <provider
+ android:name=".MyContentProvider"
+ android:authorities="com.example.app.provider"
+ android:exported="false" />
+ </application>
 </manifest>
 ```
 
@@ -750,34 +745,34 @@ contentResolver.query(uri, null, null, null, null)
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    // Activity ЯВЛЯЕТСЯ Context
-    fun example() {
-        val context: Context = this
-        val appContext = applicationContext
-    }
+ // Activity ЯВЛЯЕТСЯ Context
+ fun example() {
+ val context: Context = this
+ val appContext = applicationContext
+ }
 }
 
 class MyService : Service() {
-    // Service ЯВЛЯЕТСЯ Context
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val context: Context = this
-        return START_STICKY
-    }
+ // Service ЯВЛЯЕТСЯ Context
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ val context: Context = this
+ return START_STICKY
+ }
 }
 
 class MyReceiver : BroadcastReceiver() {
-    // Receiver ПОЛУЧАЕТ Context
-    override fun onReceive(context: Context, intent: Intent) {
-        // Используем параметр context
-    }
+ // Receiver ПОЛУЧАЕТ Context
+ override fun onReceive(context: Context, intent: Intent) {
+ // Используем параметр context
+ }
 }
 
 class MyProvider : ContentProvider() {
-    // Provider ИМЕЕТ свойство context
-    override fun onCreate(): Boolean {
-        val ctx = context
-        return true
-    }
+ // Provider ИМЕЕТ свойство context
+ override fun onCreate(): Boolean {
+ val ctx = context
+ return true
+ }
 }
 ```
 
@@ -788,32 +783,32 @@ class MyProvider : ContentProvider() {
 ```kotlin
 // Жизненный цикл Activity
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) { }
-    override fun onStart() { }
-    override fun onResume() { }
-    override fun onPause() { }
-    override fun onStop() { }
-    override fun onDestroy() { }
+ override fun onCreate(savedInstanceState: Bundle?) { }
+ override fun onStart() { }
+ override fun onResume() { }
+ override fun onPause() { }
+ override fun onStop() { }
+ override fun onDestroy() { }
 }
 
 // Жизненный цикл Service
 class MyService : Service() {
-    override fun onCreate() { }
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int { }
-    override fun onDestroy() { }
+ override fun onCreate() { }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int { }
+ override fun onDestroy() { }
 }
 
 // Жизненный цикл BroadcastReceiver
 class MyReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        // Короткоживущий: должен завершиться в течение 10 секунд
-    }
+ override fun onReceive(context: Context, intent: Intent) {
+ // Короткоживущий: должен завершиться в течение 10 секунд
+ }
 }
 
 // Жизненный цикл ContentProvider
 class MyProvider : ContentProvider() {
-    override fun onCreate(): Boolean { }
-    // Нет явного destroy - живет с процессом приложения
+ override fun onCreate(): Boolean { }
+ // Нет явного destroy - живет с процессом приложения
 }
 ```
 
@@ -824,14 +819,14 @@ class MyProvider : ContentProvider() {
 ```xml
 <!-- По умолчанию: все компоненты в одном процессе -->
 <application android:process=":main">
-    <activity android:name=".MainActivity" />
-    <service android:name=".MyService" />
+ <activity android:name=".MainActivity" />
+ <service android:name=".MyService" />
 </application>
 
 <!-- Можно указать отдельный процесс -->
 <service
-    android:name=".HeavyService"
-    android:process=":background" />
+ android:name=".HeavyService"
+ android:process=":background" />
 ```
 
 #### 7. Требования Разрешений
@@ -841,24 +836,24 @@ class MyProvider : ContentProvider() {
 ```xml
 <!-- Activity требующий разрешение -->
 <activity
-    android:name=".AdminActivity"
-    android:permission="android.permission.ADMIN_PRIVILEGES" />
+ android:name=".AdminActivity"
+ android:permission="android.permission.ADMIN_PRIVILEGES" />
 
 <!-- Service требующий разрешение для bind -->
 <service
-    android:name=".SecureService"
-    android:permission="com.example.app.BIND_SERVICE" />
+ android:name=".SecureService"
+ android:permission="com.example.app.BIND_SERVICE" />
 
 <!-- BroadcastReceiver требующий разрешение для отправки -->
 <receiver
-    android:name=".SecureReceiver"
-    android:permission="android.permission.RECEIVE_BOOT_COMPLETED" />
+ android:name=".SecureReceiver"
+ android:permission="android.permission.RECEIVE_BOOT_COMPLETED" />
 
 <!-- ContentProvider требующий разрешения -->
 <provider
-    android:name=".SecureProvider"
-    android:readPermission="com.example.app.READ_DATA"
-    android:writePermission="com.example.app.WRITE_DATA" />
+ android:name=".SecureProvider"
+ android:readPermission="com.example.app.READ_DATA"
+ android:writePermission="com.example.app.WRITE_DATA" />
 ```
 
 ### Таблица Сравнения Компонентов
@@ -893,26 +888,26 @@ class MyProvider : ContentProvider() {
 // 2. Расширение базового класса
 class DownloadService : Service() {
 
-    // 3. Переопределение методов жизненного цикла
-    override fun onCreate() {
-        super.onCreate()
-        val ctx: Context = this  // 4. Доступ к Context
-        Log.d("Service", "Сервис создан")
-    }
+ // 3. Переопределение методов жизненного цикла
+ override fun onCreate() {
+ super.onCreate()
+ val ctx: Context = this // 4. Доступ к Context
+ Log.d("Service", "Сервис создан")
+ }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // 5. Intent взаимодействие
-        val url = intent?.getStringExtra("url")
-        // Начать загрузку файла
-        return START_STICKY
-    }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ // 5. Intent взаимодействие
+ val url = intent?.getStringExtra("url")
+ // Начать загрузку файла
+ return START_STICKY
+ }
 
-    override fun onBind(intent: Intent?): IBinder? = null
+ override fun onBind(intent: Intent?): IBinder? = null
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("Service", "Сервис уничтожен")
-    }
+ override fun onDestroy() {
+ super.onDestroy()
+ Log.d("Service", "Сервис уничтожен")
+ }
 }
 ```
 
@@ -937,8 +932,8 @@ contentResolver.query(uri, null, null, null, null)
 
 // BroadcastReceiver → Service
 override fun onReceive(context: Context, intent: Intent) {
-    val serviceIntent = Intent(context, MyService::class.java)
-    context.startService(serviceIntent)
+ val serviceIntent = Intent(context, MyService::class.java)
+ context.startService(serviceIntent)
 }
 ```
 
@@ -948,46 +943,46 @@ override fun onReceive(context: Context, intent: Intent) {
 ```kotlin
 // Activity запускает Service
 class MainActivity : AppCompatActivity() {
-    fun downloadFile(url: String) {
-        val intent = Intent(this, DownloadService::class.java)
-        intent.putExtra("url", url)
-        startService(intent)
-    }
+ fun downloadFile(url: String) {
+ val intent = Intent(this, DownloadService::class.java)
+ intent.putExtra("url", url)
+ startService(intent)
+ }
 }
 
 // Service выполняет загрузку и показывает уведомление
 class DownloadService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val url = intent?.getStringExtra("url") ?: return START_NOT_STICKY
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ val url = intent?.getStringExtra("url") ?: return START_NOT_STICKY
 
-        // Скачивание файла в фоне
-        thread {
-            downloadFileFromUrl(url)
-            showNotification("Загрузка завершена")
-            stopSelf()
-        }
+ // Скачивание файла в фоне
+ thread {
+ downloadFileFromUrl(url)
+ showNotification("Загрузка завершена")
+ stopSelf()
+ }
 
-        return START_NOT_STICKY
-    }
+ return START_NOT_STICKY
+ }
 
-    private fun showNotification(message: String) {
-        // При нажатии откроет Activity
-        val intent = Intent(this, MainActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0, intent, PendingIntent.FLAG_IMMUTABLE
-        )
+ private fun showNotification(message: String) {
+ // При нажатии откроет Activity
+ val intent = Intent(this, MainActivity::class.java)
+ val pendingIntent = PendingIntent.getActivity(
+ this, 0, intent, PendingIntent.FLAG_IMMUTABLE
+ )
 
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Загрузка")
-            .setContentText(message)
-            .setContentIntent(pendingIntent)
-            .build()
+ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+ .setContentTitle("Загрузка")
+ .setContentText(message)
+ .setContentIntent(pendingIntent)
+ .build()
 
-        val notificationManager = getSystemService<NotificationManager>()
-        notificationManager?.notify(1, notification)
-    }
+ val notificationManager = getSystemService<NotificationManager>()
+ notificationManager?.notify(1, notification)
+ }
 
-    override fun onBind(intent: Intent?): IBinder? = null
+ override fun onBind(intent: Intent?): IBinder? = null
 }
 ```
 
@@ -995,39 +990,39 @@ class DownloadService : Service() {
 ```kotlin
 // BroadcastReceiver для системных событий
 class NetworkChangeReceiver : BroadcastReceiver() {
-    override fun onReceive(context: Context, intent: Intent) {
-        when (intent.action) {
-            ConnectivityManager.CONNECTIVITY_ACTION -> {
-                val isConnected = isNetworkAvailable(context)
+ override fun onReceive(context: Context, intent: Intent) {
+ when (intent.action) {
+ ConnectivityManager.CONNECTIVITY_ACTION -> {
+ val isConnected = isNetworkAvailable(context)
 
-                if (isConnected) {
-                    // Запустить Service для синхронизации
-                    val serviceIntent = Intent(context, SyncService::class.java)
-                    context.startService(serviceIntent)
-                }
+ if (isConnected) {
+ // Запустить Service для синхронизации
+ val serviceIntent = Intent(context, SyncService::class.java)
+ context.startService(serviceIntent)
+ }
 
-                // Отправить результат в Activity через LocalBroadcast
-                val broadcastIntent = Intent("NETWORK_STATUS_CHANGED")
-                broadcastIntent.putExtra("isConnected", isConnected)
-                LocalBroadcastManager.getInstance(context)
-                    .sendBroadcast(broadcastIntent)
-            }
-        }
-    }
+ // Отправить результат в Activity через LocalBroadcast
+ val broadcastIntent = Intent("NETWORK_STATUS_CHANGED")
+ broadcastIntent.putExtra("isConnected", isConnected)
+ LocalBroadcastManager.getInstance(context)
+ .sendBroadcast(broadcastIntent)
+ }
+ }
+ }
 
-    private fun isNetworkAvailable(context: Context): Boolean {
-        val cm = context.getSystemService<ConnectivityManager>()
-        val network = cm?.activeNetwork ?: return false
-        val capabilities = cm.getNetworkCapabilities(network) ?: return false
-        return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-    }
+ private fun isNetworkAvailable(context: Context): Boolean {
+ val cm = context.getSystemService<ConnectivityManager>()
+ val network = cm?.activeNetwork ?: return false
+ val capabilities = cm.getNetworkCapabilities(network) ?: return false
+ return capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+ }
 }
 
 // Регистрация в манифесте
 // <receiver android:name=".NetworkChangeReceiver" android:exported="false">
-//     <intent-filter>
-//         <action android:name="android.net.conn.CONNECTIVITY_ACTION"/>
-//     </intent-filter>
+// <intent-filter>
+// <action android:name="android.net.conn.CONNECTIVITY_ACTION"/>
+// </intent-filter>
 // </receiver>
 ```
 
@@ -1035,149 +1030,149 @@ class NetworkChangeReceiver : BroadcastReceiver() {
 ```kotlin
 // ContentProvider для обмена данными между приложениями
 class ContactsProvider : ContentProvider() {
-    private lateinit var database: SQLiteDatabase
+ private lateinit var database: SQLiteDatabase
 
-    companion object {
-        const val AUTHORITY = "com.example.app.contacts"
-        val CONTENT_URI: Uri = Uri.parse("content://$AUTHORITY/contacts")
-    }
+ companion object {
+ const val AUTHORITY = "com.example.app.contacts"
+ val CONTENT_URI: Uri = Uri.parse("content://$AUTHORITY/contacts")
+ }
 
-    override fun onCreate(): Boolean {
-        val dbHelper = DatabaseHelper(context!!)
-        database = dbHelper.writableDatabase
-        return true
-    }
+ override fun onCreate(): Boolean {
+ val dbHelper = DatabaseHelper(context!!)
+ database = dbHelper.writableDatabase
+ return true
+ }
 
-    override fun query(
-        uri: Uri, projection: Array<String>?, selection: String?,
-        selectionArgs: Array<String>?, sortOrder: String?
-    ): Cursor? {
-        return database.query(
-            "contacts", projection, selection,
-            selectionArgs, null, null, sortOrder
-        )
-    }
+ override fun query(
+ uri: Uri, projection: Array<String>?, selection: String?,
+ selectionArgs: Array<String>?, sortOrder: String?
+ ): Cursor? {
+ return database.query(
+ "contacts", projection, selection,
+ selectionArgs, null, null, sortOrder
+ )
+ }
 
-    override fun insert(uri: Uri, values: ContentValues?): Uri? {
-        val id = database.insert("contacts", null, values)
-        return ContentUris.withAppendedId(CONTENT_URI, id)
-    }
+ override fun insert(uri: Uri, values: ContentValues?): Uri? {
+ val id = database.insert("contacts", null, values)
+ return ContentUris.withAppendedId(CONTENT_URI, id)
+ }
 
-    override fun update(
-        uri: Uri, values: ContentValues?,
-        selection: String?, selectionArgs: Array<String>?
-    ): Int {
-        return database.update("contacts", values, selection, selectionArgs)
-    }
+ override fun update(
+ uri: Uri, values: ContentValues?,
+ selection: String?, selectionArgs: Array<String>?
+ ): Int {
+ return database.update("contacts", values, selection, selectionArgs)
+ }
 
-    override fun delete(
-        uri: Uri, selection: String?,
-        selectionArgs: Array<String>?
-    ): Int {
-        return database.delete("contacts", selection, selectionArgs)
-    }
+ override fun delete(
+ uri: Uri, selection: String?,
+ selectionArgs: Array<String>?
+ ): Int {
+ return database.delete("contacts", selection, selectionArgs)
+ }
 
-    override fun getType(uri: Uri): String {
-        return "vnd.android.cursor.dir/vnd.example.contacts"
-    }
+ override fun getType(uri: Uri): String {
+ return "vnd.android.cursor.dir/vnd.example.contacts"
+ }
 }
 
 // Использование из другого приложения
 class AnotherActivity : AppCompatActivity() {
-    fun readContacts() {
-        val uri = Uri.parse("content://com.example.app.contacts/contacts")
-        val cursor = contentResolver.query(uri, null, null, null, null)
+ fun readContacts() {
+ val uri = Uri.parse("content://com.example.app.contacts/contacts")
+ val cursor = contentResolver.query(uri, null, null, null, null)
 
-        cursor?.use {
-            while (it.moveToNext()) {
-                val name = it.getString(it.getColumnIndexOrThrow("name"))
-                val phone = it.getString(it.getColumnIndexOrThrow("phone"))
-                Log.d("Contact", "Name: $name, Phone: $phone")
-            }
-        }
-    }
+ cursor?.use {
+ while (it.moveToNext()) {
+ val name = it.getString(it.getColumnIndexOrThrow("name"))
+ val phone = it.getString(it.getColumnIndexOrThrow("phone"))
+ Log.d("Contact", "Name: $name, Phone: $phone")
+ }
+ }
+ }
 }
 ```
 
 **Сценарий 4: Foreground `Service` для музыкального плеера**
 ```kotlin
 class MusicPlayerService : Service() {
-    private lateinit var mediaPlayer: MediaPlayer
-    private val binder = MusicBinder()
+ private lateinit var mediaPlayer: MediaPlayer
+ private val binder = MusicBinder()
 
-    inner class MusicBinder : Binder() {
-        fun getService(): MusicPlayerService = this@MusicPlayerService
-    }
+ inner class MusicBinder : Binder() {
+ fun getService(): MusicPlayerService = this@MusicPlayerService
+ }
 
-    override fun onCreate() {
-        super.onCreate()
-        mediaPlayer = MediaPlayer()
-    }
+ override fun onCreate() {
+ super.onCreate()
+ mediaPlayer = MediaPlayer()
+ }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        when (intent?.action) {
-            "PLAY" -> playMusic()
-            "PAUSE" -> pauseMusic()
-            "STOP" -> stopMusic()
-        }
+ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+ when (intent?.action) {
+ "PLAY" -> playMusic()
+ "PAUSE" -> pauseMusic()
+ "STOP" -> stopMusic()
+ }
 
-        // Foreground service требует уведомление
-        val notification = createNotification()
-        startForeground(1, notification)
+ // Foreground service требует уведомление
+ val notification = createNotification()
+ startForeground(1, notification)
 
-        return START_STICKY
-    }
+ return START_STICKY
+ }
 
-    override fun onBind(intent: Intent?): IBinder = binder
+ override fun onBind(intent: Intent?): IBinder = binder
 
-    private fun playMusic() {
-        if (!mediaPlayer.isPlaying) {
-            mediaPlayer.start()
-        }
-    }
+ private fun playMusic() {
+ if (!mediaPlayer.isPlaying) {
+ mediaPlayer.start()
+ }
+ }
 
-    private fun pauseMusic() {
-        if (mediaPlayer.isPlaying) {
-            mediaPlayer.pause()
-        }
-    }
+ private fun pauseMusic() {
+ if (mediaPlayer.isPlaying) {
+ mediaPlayer.pause()
+ }
+ }
 
-    private fun stopMusic() {
-        mediaPlayer.stop()
-        stopForeground(true)
-        stopSelf()
-    }
+ private fun stopMusic() {
+ mediaPlayer.stop()
+ stopForeground(true)
+ stopSelf()
+ }
 
-    private fun createNotification(): Notification {
-        val intent = Intent(this, MusicActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(
-            this, 0, intent, PendingIntent.FLAG_IMMUTABLE
-        )
+ private fun createNotification(): Notification {
+ val intent = Intent(this, MusicActivity::class.java)
+ val pendingIntent = PendingIntent.getActivity(
+ this, 0, intent, PendingIntent.FLAG_IMMUTABLE
+ )
 
-        return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Музыкальный плеер")
-            .setContentText("Воспроизведение...")
-            .setSmallIcon(R.drawable.ic_music)
-            .setContentIntent(pendingIntent)
-            .addAction(R.drawable.ic_pause, "Пауза",
-                createPendingIntent("PAUSE"))
-            .addAction(R.drawable.ic_stop, "Стоп",
-                createPendingIntent("STOP"))
-            .build()
-    }
+ return NotificationCompat.Builder(this, CHANNEL_ID)
+ .setContentTitle("Музыкальный плеер")
+ .setContentText("Воспроизведение...")
+ .setSmallIcon(R.drawable.ic_music)
+ .setContentIntent(pendingIntent)
+ .addAction(R.drawable.ic_pause, "Пауза",
+ createPendingIntent("PAUSE"))
+ .addAction(R.drawable.ic_stop, "Стоп",
+ createPendingIntent("STOP"))
+ .build()
+ }
 
-    private fun createPendingIntent(action: String): PendingIntent {
-        val intent = Intent(this, MusicPlayerService::class.java)
-        intent.action = action
-        return PendingIntent.getService(
-            this, 0, intent, PendingIntent.FLAG_IMMUTABLE
-        )
-    }
+ private fun createPendingIntent(action: String): PendingIntent {
+ val intent = Intent(this, MusicPlayerService::class.java)
+ intent.action = action
+ return PendingIntent.getService(
+ this, 0, intent, PendingIntent.FLAG_IMMUTABLE
+ )
+ }
 
-    override fun onDestroy() {
-        mediaPlayer.release()
-        super.onDestroy()
-    }
+ override fun onDestroy() {
+ mediaPlayer.release()
+ super.onDestroy()
+ }
 }
 ```
 
@@ -1217,19 +1212,16 @@ class MusicPlayerService : Service() {
 
 ---
 
-
 ## Follow-ups
 
 - [[c-android-components]]
-- [[c-context]]
-- [[c-manifest]]
-
+- 
+- 
 
 ## References
 
 - [Services](https://developer.android.com/develop/background-work/services)
 - [Activities](https://developer.android.com/guide/components/activities)
-
 
 ## Related Questions
 

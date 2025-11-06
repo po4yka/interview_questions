@@ -16,7 +16,6 @@ status: reviewed
 moc: moc-android
 related:
   - c-compose-recomposition
-  - c-compose-stability
   - q-android-performance-measurement-tools--android--medium
   - q-compose-compiler-plugin--android--hard
   - q-compose-lazy-layout-optimization--android--hard

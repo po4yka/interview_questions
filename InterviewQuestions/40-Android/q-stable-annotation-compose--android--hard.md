@@ -47,15 +47,15 @@ data class User(val id: String, val name: String)
 // ✅ Стабильный класс с observable состоянием
 @Stable
 class Counter {
-    var count by mutableStateOf(0)  // Уведомляет Compose
-        private set
+ var count by mutableStateOf(0) // Уведомляет Compose
+ private set
 
-    fun increment() { count++ }
+ fun increment() { count++ }
 }
 
 // ❌ Не стабильный — мутабельное состояние без уведомлений
 class UnstableCounter {
-    var count: Int = 0  // Compose не узнает об изменениях
+ var count: Int = 0 // Compose не узнает об изменениях
 }
 ```
 
@@ -66,12 +66,12 @@ class UnstableCounter {
 ```kotlin
 @Stable
 interface Repository {
-    val data: String
+ val data: String
 }
 
 @Composable
 fun DataDisplay(repository: Repository) {
-    Text(repository.data)  // Compose может пропустить рекомпозицию
+ Text(repository.data) // Compose может пропустить рекомпозицию
 }
 ```
 
@@ -80,11 +80,11 @@ fun DataDisplay(repository: Repository) {
 ```kotlin
 @Stable
 class StableThirdPartyData(private val data: ThirdPartyData) {
-    val value: String get() = data.value
+ val value: String get() = data.value
 
-    override fun equals(other: Any?) =
-        other is StableThirdPartyData && other.value == value
-    override fun hashCode() = value.hashCode()
+ override fun equals(other: Any?) =
+ other is StableThirdPartyData && other.value == value
+ override fun hashCode() = value.hashCode()
 }
 ```
 
@@ -105,15 +105,15 @@ data class Product(val id: String, val name: String, val price: Double)
 
 @Composable
 fun ProductCard(product: Product) {
-    Text(product.name)
-    Text("$${product.price}")
+ Text(product.name)
+ Text("$${product.price}")
 }
 
 val product = Product("1", "Laptop", 999.99)
 
-ProductCard(product)  // Композиция
-ProductCard(product)  // ✅ Пропущена (тот же экземпляр)
-ProductCard(Product("1", "Laptop", 999.99))  // ✅ Пропущена (equals() true)
+ProductCard(product) // Композиция
+ProductCard(product) // ✅ Пропущена (тот же экземпляр)
+ProductCard(Product("1", "Laptop", 999.99)) // ✅ Пропущена (equals() true)
 
 // ❌ Без @Stable — рекомпозиция каждый раз, даже с тем же экземпляром
 ```
@@ -137,10 +137,10 @@ data class User(val id: String, val name: String)
 
 ```kotlin
 kotlinOptions {
-    freeCompilerArgs += listOf(
-        "-P",
-        "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir}/compose_metrics"
-    )
+ freeCompilerArgs += listOf(
+ "-P",
+ "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir}/compose_metrics"
+ )
 }
 ```
 
@@ -148,8 +148,8 @@ kotlinOptions {
 
 ```
 stable class User {
-  stable val id: String
-  stable val name: String
+ stable val id: String
+ stable val name: String
 }
 ```
 
@@ -175,15 +175,15 @@ data class User(val id: String, val name: String)
 // ✅ Stable class with observable state
 @Stable
 class Counter {
-    var count by mutableStateOf(0)  // Notifies Compose
-        private set
+ var count by mutableStateOf(0) // Notifies Compose
+ private set
 
-    fun increment() { count++ }
+ fun increment() { count++ }
 }
 
 // ❌ Not stable — mutable state without notifications
 class UnstableCounter {
-    var count: Int = 0  // Compose doesn't know about changes
+ var count: Int = 0 // Compose doesn't know about changes
 }
 ```
 
@@ -194,12 +194,12 @@ class UnstableCounter {
 ```kotlin
 @Stable
 interface Repository {
-    val data: String
+ val data: String
 }
 
 @Composable
 fun DataDisplay(repository: Repository) {
-    Text(repository.data)  // Compose can skip recomposition
+ Text(repository.data) // Compose can skip recomposition
 }
 ```
 
@@ -208,11 +208,11 @@ fun DataDisplay(repository: Repository) {
 ```kotlin
 @Stable
 class StableThirdPartyData(private val data: ThirdPartyData) {
-    val value: String get() = data.value
+ val value: String get() = data.value
 
-    override fun equals(other: Any?) =
-        other is StableThirdPartyData && other.value == value
-    override fun hashCode() = value.hashCode()
+ override fun equals(other: Any?) =
+ other is StableThirdPartyData && other.value == value
+ override fun hashCode() = value.hashCode()
 }
 ```
 
@@ -233,15 +233,15 @@ data class Product(val id: String, val name: String, val price: Double)
 
 @Composable
 fun ProductCard(product: Product) {
-    Text(product.name)
-    Text("$${product.price}")
+ Text(product.name)
+ Text("$${product.price}")
 }
 
 val product = Product("1", "Laptop", 999.99)
 
-ProductCard(product)  // Composes
-ProductCard(product)  // ✅ Skipped (same instance)
-ProductCard(Product("1", "Laptop", 999.99))  // ✅ Skipped (equals() true)
+ProductCard(product) // Composes
+ProductCard(product) // ✅ Skipped (same instance)
+ProductCard(Product("1", "Laptop", 999.99)) // ✅ Skipped (equals() true)
 
 // ❌ Without @Stable — recomposes every time, even with same instance
 ```
@@ -265,10 +265,10 @@ Enable Compose compiler metrics in `build.gradle.kts`:
 
 ```kotlin
 kotlinOptions {
-    freeCompilerArgs += listOf(
-        "-P",
-        "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir}/compose_metrics"
-    )
+ freeCompilerArgs += listOf(
+ "-P",
+ "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir}/compose_metrics"
+ )
 }
 ```
 
@@ -276,8 +276,8 @@ Output shows which classes are considered stable:
 
 ```
 stable class User {
-  stable val id: String
-  stable val name: String
+ stable val id: String
+ stable val name: String
 }
 ```
 
@@ -315,4 +315,4 @@ stable class User {
 
 ### Advanced (Hard)
 - [[q-compose-custom-layout--android--hard]] - Custom layout performance
-- [[q-compose-derived-state--android--hard]] - Derived state optimization
+- - Derived state optimization

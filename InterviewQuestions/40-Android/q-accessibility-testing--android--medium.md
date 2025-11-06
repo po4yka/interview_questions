@@ -4,19 +4,19 @@ title: Accessibility Testing / Тестирование доступности
 aliases: [Accessibility Testing, Тестирование доступности]
 topic: android
 subtopics:
-  - testing-ui
-  - ui-accessibility
+ - testing-ui
+ - ui-accessibility
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+ - en
+ - ru
 status: reviewed
 moc: moc-android
 related:
-  - q-accessibility-compose--android--medium
-  - q-accessibility-talkback--android--medium
+ - q-accessibility-compose--android--medium
+ - q-accessibility-talkback--android--medium
 created: 2025-10-11
 updated: 2025-10-29
 tags: [a11y, android/testing-ui, android/ui-accessibility, difficulty/medium, testing]
@@ -50,21 +50,21 @@ sources: []
 ```kotlin
 @Test
 fun testAccessibility() {
-    // ✅ Включить проверки для всех UI-действий
-    AccessibilityChecks.enable()
+ // ✅ Включить проверки для всех UI-действий
+ AccessibilityChecks.enable()
 
-    onView(withId(R.id.submit)).perform(click())
-    // Тест упадёт при проблемах доступности
+ onView(withId(R.id.submit)).perform(click())
+ // Тест упадёт при проблемах доступности
 }
 
 @Test
 fun testContentDescription() {
-    onView(withId(R.id.profile_image)).check { view, _ ->
-        // ✅ Проверить осмысленное описание
-        assertThat(view.contentDescription).isNotEmpty()
-        // ❌ Избегать общих описаний
-        assertThat(view.contentDescription).isNotEqualTo("Image")
-    }
+ onView(withId(R.id.profile_image)).check { view, _ ->
+ // ✅ Проверить осмысленное описание
+ assertThat(view.contentDescription).isNotEmpty()
+ // ❌ Избегать общих описаний
+ assertThat(view.contentDescription).isNotEqualTo("Image")
+ }
 }
 ```
 
@@ -73,31 +73,31 @@ fun testContentDescription() {
 ```kotlin
 @Test
 fun testSemanticProperties() {
-    composeTestRule.setContent {
-        Button(onClick = { }) { Text("Отправить") }
-    }
+ composeTestRule.setContent {
+ Button(onClick = { }) { Text("Отправить") }
+ }
 
-    composeTestRule
-        .onNodeWithText("Отправить")
-        .assertHasClickAction()
-        .assertIsEnabled()
+ composeTestRule
+ .onNodeWithText("Отправить")
+ .assertHasClickAction()
+ .assertIsEnabled()
 }
 
 @Test
 fun testStateDescription() {
-    composeTestRule.setContent {
-        Checkbox(
-            checked = isChecked,
-            onCheckedChange = { },
-            modifier = Modifier.semantics {
-                stateDescription = if (isChecked) "Выбрано" else "Не выбрано"
-            }
-        )
-    }
+ composeTestRule.setContent {
+ Checkbox(
+ checked = isChecked,
+ onCheckedChange = { },
+ modifier = Modifier.semantics {
+ stateDescription = if (isChecked) "Выбрано" else "Не выбрано"
+ }
+ )
+ }
 
-    composeTestRule
-        .onNode(hasStateDescription("Не выбрано"))
-        .assertExists()
+ composeTestRule
+ .onNode(hasStateDescription("Не выбрано"))
+ .assertExists()
 }
 ```
 
@@ -109,14 +109,14 @@ Image(painterResource(R.drawable.icon), contentDescription = null)
 
 // ❌ Touch target меньше 48dp
 IconButton(modifier = Modifier.size(24.dp), onClick = { }) {
-    Icon(Icons.Default.Close, "Close")
+ Icon(Icons.Default.Close, "Close")
 }
 
 // ❌ Недостаточный контраст
 Text(
-    text = "Read more",
-    color = Color.LightGray,
-    modifier = Modifier.background(Color.White)
+ text = "Read more",
+ color = Color.LightGray,
+ modifier = Modifier.background(Color.White)
 )
 ```
 
@@ -145,21 +145,21 @@ Accessibility testing ensures apps are usable by people with disabilities. Andro
 ```kotlin
 @Test
 fun testAccessibility() {
-    // ✅ Enable checks for all UI actions
-    AccessibilityChecks.enable()
+ // ✅ Enable checks for all UI actions
+ AccessibilityChecks.enable()
 
-    onView(withId(R.id.submit)).perform(click())
-    // Test fails if accessibility issues found
+ onView(withId(R.id.submit)).perform(click())
+ // Test fails if accessibility issues found
 }
 
 @Test
 fun testContentDescription() {
-    onView(withId(R.id.profile_image)).check { view, _ ->
-        // ✅ Verify meaningful description
-        assertThat(view.contentDescription).isNotEmpty()
-        // ❌ Avoid generic descriptions
-        assertThat(view.contentDescription).isNotEqualTo("Image")
-    }
+ onView(withId(R.id.profile_image)).check { view, _ ->
+ // ✅ Verify meaningful description
+ assertThat(view.contentDescription).isNotEmpty()
+ // ❌ Avoid generic descriptions
+ assertThat(view.contentDescription).isNotEqualTo("Image")
+ }
 }
 ```
 
@@ -168,31 +168,31 @@ fun testContentDescription() {
 ```kotlin
 @Test
 fun testSemanticProperties() {
-    composeTestRule.setContent {
-        Button(onClick = { }) { Text("Submit") }
-    }
+ composeTestRule.setContent {
+ Button(onClick = { }) { Text("Submit") }
+ }
 
-    composeTestRule
-        .onNodeWithText("Submit")
-        .assertHasClickAction()
-        .assertIsEnabled()
+ composeTestRule
+ .onNodeWithText("Submit")
+ .assertHasClickAction()
+ .assertIsEnabled()
 }
 
 @Test
 fun testStateDescription() {
-    composeTestRule.setContent {
-        Checkbox(
-            checked = isChecked,
-            onCheckedChange = { },
-            modifier = Modifier.semantics {
-                stateDescription = if (isChecked) "Selected" else "Not selected"
-            }
-        )
-    }
+ composeTestRule.setContent {
+ Checkbox(
+ checked = isChecked,
+ onCheckedChange = { },
+ modifier = Modifier.semantics {
+ stateDescription = if (isChecked) "Selected" else "Not selected"
+ }
+ )
+ }
 
-    composeTestRule
-        .onNode(hasStateDescription("Not selected"))
-        .assertExists()
+ composeTestRule
+ .onNode(hasStateDescription("Not selected"))
+ .assertExists()
 }
 ```
 
@@ -204,14 +204,14 @@ Image(painterResource(R.drawable.icon), contentDescription = null)
 
 // ❌ Touch target smaller than 48dp
 IconButton(modifier = Modifier.size(24.dp), onClick = { }) {
-    Icon(Icons.Default.Close, "Close")
+ Icon(Icons.Default.Close, "Close")
 }
 
 // ❌ Insufficient contrast
 Text(
-    text = "Read more",
-    color = Color.LightGray,
-    modifier = Modifier.background(Color.White)
+ text = "Read more",
+ color = Color.LightGray,
+ modifier = Modifier.background(Color.White)
 )
 ```
 
@@ -234,8 +234,8 @@ Text(
 ## References
 
 - [[c-accessibility]] - Accessibility fundamentals
-- [[c-compose-semantics]] - Compose semantics system
-- [[c-espresso-testing]] - Espresso testing framework
+- - Compose semantics system
+- - Espresso testing framework
 - https://developer.android.com/guide/topics/ui/accessibility/testing
 - https://developer.android.com/training/testing/espresso/accessibility-checking
 

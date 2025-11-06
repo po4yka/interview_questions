@@ -17,7 +17,7 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [q-context-in-android--android--easy, q-datastore-preferences--android--medium, q-encrypted-shared-preferences-implementation--android--hard]
+related: []
 
 # Timestamps
 created: 2025-10-15
@@ -45,12 +45,12 @@ SharedPreferences — это механизм Android для хранения п
 
 ```kotlin
 sharedPref.edit {
-    putBoolean("is_logged_in", true)
-    putInt("user_id", 42)
-    putFloat("rating", 4.5f)
-    putLong("timestamp", System.currentTimeMillis())
-    putString("username", "alice")
-    putStringSet("tags", setOf("kotlin", "android"))
+ putBoolean("is_logged_in", true)
+ putInt("user_id", 42)
+ putFloat("rating", 4.5f)
+ putLong("timestamp", System.currentTimeMillis())
+ putString("username", "alice")
+ putStringSet("tags", setOf("kotlin", "android"))
 }
 ```
 
@@ -59,15 +59,15 @@ sharedPref.edit {
 ```kotlin
 // ✅ Именованные preferences
 val prefs = context.getSharedPreferences(
-    "app_settings",
-    Context.MODE_PRIVATE  // Доступ только вашему приложению
+ "app_settings",
+ Context.MODE_PRIVATE // Доступ только вашему приложению
 )
 
 // ✅ Activity-scoped preferences
 class MainActivity : AppCompatActivity() {
-    private val prefs by lazy {
-        getPreferences(Context.MODE_PRIVATE)  // Имя = имя Activity
-    }
+ private val prefs by lazy {
+ getPreferences(Context.MODE_PRIVATE) // Имя = имя Activity
+ }
 }
 ```
 
@@ -76,17 +76,17 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 // ✅ apply() — асинхронная, не блокирует UI
 prefs.edit {
-    putString("theme", "dark")
-    // apply() вызывается автоматически
+ putString("theme", "dark")
+ // apply() вызывается автоматически
 }
 
 // ✅ commit() — синхронная, возвращает boolean
 val success = prefs.edit()
-    .putString("api_key", "xyz123")
-    .commit()  // Блокирует поток до завершения
+ .putString("api_key", "xyz123")
+ .commit() // Блокирует поток до завершения
 
 if (!success) {
-    Log.e("Prefs", "Failed to save")
+ Log.e("Prefs", "Failed to save")
 }
 ```
 
@@ -96,15 +96,15 @@ if (!success) {
 
 ```kotlin
 class SettingsManager(context: Context) {
-    private val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+ private val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
-    var isDarkMode: Boolean
-        get() = prefs.getBoolean("dark_mode", false)
-        set(value) = prefs.edit { putBoolean("dark_mode", value) }
+ var isDarkMode: Boolean
+ get() = prefs.getBoolean("dark_mode", false)
+ set(value) = prefs.edit { putBoolean("dark_mode", value) }
 
-    var language: String
-        get() = prefs.getString("language", "en") ?: "en"
-        set(value) = prefs.edit { putString("language", value) }
+ var language: String
+ get() = prefs.getString("language", "en") ?: "en"
+ set(value) = prefs.edit { putString("language", value) }
 }
 
 // Использование
@@ -125,20 +125,20 @@ settings.isDarkMode = true
 
 ```kotlin
 val masterKey = MasterKey.Builder(context)
-    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-    .build()
+ .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+ .build()
 
 val securePrefs = EncryptedSharedPreferences.create(
-    context,
-    "secure_prefs",
-    masterKey,
-    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+ context,
+ "secure_prefs",
+ masterKey,
+ EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+ EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
 )
 
 // ✅ Ключи и значения шифруются автоматически
 securePrefs.edit {
-    putString("auth_token", "secret_value")
+ putString("auth_token", "secret_value")
 }
 ```
 
@@ -150,12 +150,12 @@ SharedPreferences is an Android mechanism for storing key-value pairs. Data is s
 
 ```kotlin
 sharedPref.edit {
-    putBoolean("is_logged_in", true)
-    putInt("user_id", 42)
-    putFloat("rating", 4.5f)
-    putLong("timestamp", System.currentTimeMillis())
-    putString("username", "alice")
-    putStringSet("tags", setOf("kotlin", "android"))
+ putBoolean("is_logged_in", true)
+ putInt("user_id", 42)
+ putFloat("rating", 4.5f)
+ putLong("timestamp", System.currentTimeMillis())
+ putString("username", "alice")
+ putStringSet("tags", setOf("kotlin", "android"))
 }
 ```
 
@@ -164,15 +164,15 @@ sharedPref.edit {
 ```kotlin
 // ✅ Named preferences
 val prefs = context.getSharedPreferences(
-    "app_settings",
-    Context.MODE_PRIVATE  // Only accessible to your app
+ "app_settings",
+ Context.MODE_PRIVATE // Only accessible to your app
 )
 
 // ✅ Activity-scoped preferences
 class MainActivity : AppCompatActivity() {
-    private val prefs by lazy {
-        getPreferences(Context.MODE_PRIVATE)  // Name = Activity name
-    }
+ private val prefs by lazy {
+ getPreferences(Context.MODE_PRIVATE) // Name = Activity name
+ }
 }
 ```
 
@@ -181,17 +181,17 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 // ✅ apply() — asynchronous, doesn't block UI
 prefs.edit {
-    putString("theme", "dark")
-    // apply() called automatically
+ putString("theme", "dark")
+ // apply() called automatically
 }
 
 // ✅ commit() — synchronous, returns boolean
 val success = prefs.edit()
-    .putString("api_key", "xyz123")
-    .commit()  // Blocks thread until complete
+ .putString("api_key", "xyz123")
+ .commit() // Blocks thread until complete
 
 if (!success) {
-    Log.e("Prefs", "Failed to save")
+ Log.e("Prefs", "Failed to save")
 }
 ```
 
@@ -201,15 +201,15 @@ if (!success) {
 
 ```kotlin
 class SettingsManager(context: Context) {
-    private val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+ private val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
 
-    var isDarkMode: Boolean
-        get() = prefs.getBoolean("dark_mode", false)
-        set(value) = prefs.edit { putBoolean("dark_mode", value) }
+ var isDarkMode: Boolean
+ get() = prefs.getBoolean("dark_mode", false)
+ set(value) = prefs.edit { putBoolean("dark_mode", value) }
 
-    var language: String
-        get() = prefs.getString("language", "en") ?: "en"
-        set(value) = prefs.edit { putString("language", value) }
+ var language: String
+ get() = prefs.getString("language", "en") ?: "en"
+ set(value) = prefs.edit { putString("language", value) }
 }
 
 // Usage
@@ -230,20 +230,20 @@ settings.isDarkMode = true
 
 ```kotlin
 val masterKey = MasterKey.Builder(context)
-    .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-    .build()
+ .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
+ .build()
 
 val securePrefs = EncryptedSharedPreferences.create(
-    context,
-    "secure_prefs",
-    masterKey,
-    EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-    EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+ context,
+ "secure_prefs",
+ masterKey,
+ EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+ EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
 )
 
 // ✅ Keys and values are encrypted automatically
 securePrefs.edit {
-    putString("auth_token", "secret_value")
+ putString("auth_token", "secret_value")
 }
 ```
 
@@ -259,19 +259,19 @@ securePrefs.edit {
 
 ## References
 
-- [[c-android-storage-options]]
-- [[c-encryption-android]]
+- 
+- 
 - https://developer.android.com/training/data-storage/shared-preferences
 - https://developer.android.com/reference/android/content/SharedPreferences
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-context-in-android--android--easy]]
+- 
 
 ### Related
 - [[q-room-relations-embedded--android--medium]]
 - [[q-datastore-preferences-proto--android--medium]]
 
 ### Advanced
-- [[q-encrypted-shared-preferences-implementation--android--hard]]
+- 

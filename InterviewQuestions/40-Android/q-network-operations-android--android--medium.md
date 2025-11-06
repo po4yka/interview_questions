@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-app-components--android--easy, q-koin-vs-hilt-comparison--dependency-injection--medium, q-what-does-the-lifecycle-library-do--android--medium]
+related: [q-android-app-components--android--easy, q-what-does-the-lifecycle-library-do--android--medium]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
@@ -42,28 +42,28 @@ tags: [android/networking-http, difficulty/medium, http, networking]
 ```kotlin
 // Retrofit API interface
 interface ApiService {
-    @GET("users/{id}")
-    suspend fun getUser(@Path("id") userId: Int): User
+ @GET("users/{id}")
+ suspend fun getUser(@Path("id") userId: Int): User
 
-    @POST("users")
-    suspend fun createUser(@Body user: User): User
+ @POST("users")
+ suspend fun createUser(@Body user: User): User
 }
 
 // Создание клиента
 val retrofit = Retrofit.Builder()
-    .baseUrl("https://api.example.com/")
-    .addConverterFactory(GsonConverterFactory.create())
-    .client(okHttpClient)
-    .build()
+ .baseUrl("https://api.example.com/")
+ .addConverterFactory(GsonConverterFactory.create())
+ .client(okHttpClient)
+ .build()
 
 // ✅ Использование с coroutines
 lifecycleScope.launch {
-    try {
-        val user = apiService.getUser(123)
-        updateUI(user)
-    } catch (e: Exception) {
-        handleError(e)
-    }
+ try {
+ val user = apiService.getUser(123)
+ updateUI(user)
+ } catch (e: Exception) {
+ handleError(e)
+ }
 }
 ```
 
@@ -78,17 +78,17 @@ lifecycleScope.launch {
 ```kotlin
 // ❌ НЕПРАВИЛЬНО - NetworkOnMainThreadException
 button.setOnClickListener {
-    val data = fetchData()
+ val data = fetchData()
 }
 
 // ✅ ПРАВИЛЬНО - Dispatchers.IO
 button.setOnClickListener {
-    lifecycleScope.launch(Dispatchers.IO) {
-        val data = fetchData()
-        withContext(Dispatchers.Main) {
-            updateUI(data)
-        }
-    }
+ lifecycleScope.launch(Dispatchers.IO) {
+ val data = fetchData()
+ withContext(Dispatchers.Main) {
+ updateUI(data)
+ }
+ }
 }
 ```
 
@@ -96,8 +96,8 @@ button.setOnClickListener {
 
 ```xml
 <manifest>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+ <uses-permission android:name="android.permission.INTERNET" />
+ <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>
 ```
 
@@ -115,15 +115,15 @@ const val BASE_URL = "http://api.example.com/"
 
 ```kotlin
 suspend fun safeApiCall(): Result<User> {
-    return try {
-        Result.success(apiService.getUser(123))
-    } catch (e: HttpException) {
-        // HTTP ошибка 4xx/5xx
-        Result.failure(e)
-    } catch (e: IOException) {
-        // Сетевая ошибка (нет интернета)
-        Result.failure(e)
-    }
+ return try {
+ Result.success(apiService.getUser(123))
+ } catch (e: HttpException) {
+ // HTTP ошибка 4xx/5xx
+ Result.failure(e)
+ } catch (e: IOException) {
+ // Сетевая ошибка (нет интернета)
+ Result.failure(e)
+ }
 }
 ```
 
@@ -131,15 +131,15 @@ suspend fun safeApiCall(): Result<User> {
 
 ```kotlin
 fun isNetworkAvailable(context: Context): Boolean {
-    val cm = context.getSystemService<ConnectivityManager>() ?: return false
+ val cm = context.getSystemService<ConnectivityManager>() ?: return false
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val network = cm.activeNetwork ?: return false
-        val capabilities = cm.getNetworkCapabilities(network) ?: return false
-        return capabilities.hasCapability(NET_CAPABILITY_INTERNET)
-    } else {
-        return cm.activeNetworkInfo?.isConnected == true
-    }
+ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+ val network = cm.activeNetwork ?: return false
+ val capabilities = cm.getNetworkCapabilities(network) ?: return false
+ return capabilities.hasCapability(NET_CAPABILITY_INTERNET)
+ } else {
+ return cm.activeNetworkInfo?.isConnected == true
+ }
 }
 ```
 
@@ -168,28 +168,28 @@ Android uses several libraries for network operations: from built-in HttpURLConn
 ```kotlin
 // Retrofit API interface
 interface ApiService {
-    @GET("users/{id}")
-    suspend fun getUser(@Path("id") userId: Int): User
+ @GET("users/{id}")
+ suspend fun getUser(@Path("id") userId: Int): User
 
-    @POST("users")
-    suspend fun createUser(@Body user: User): User
+ @POST("users")
+ suspend fun createUser(@Body user: User): User
 }
 
 // Create client
 val retrofit = Retrofit.Builder()
-    .baseUrl("https://api.example.com/")
-    .addConverterFactory(GsonConverterFactory.create())
-    .client(okHttpClient)
-    .build()
+ .baseUrl("https://api.example.com/")
+ .addConverterFactory(GsonConverterFactory.create())
+ .client(okHttpClient)
+ .build()
 
 // ✅ Usage with coroutines
 lifecycleScope.launch {
-    try {
-        val user = apiService.getUser(123)
-        updateUI(user)
-    } catch (e: Exception) {
-        handleError(e)
-    }
+ try {
+ val user = apiService.getUser(123)
+ updateUI(user)
+ } catch (e: Exception) {
+ handleError(e)
+ }
 }
 ```
 
@@ -204,17 +204,17 @@ lifecycleScope.launch {
 ```kotlin
 // ❌ WRONG - NetworkOnMainThreadException
 button.setOnClickListener {
-    val data = fetchData()
+ val data = fetchData()
 }
 
 // ✅ CORRECT - Dispatchers.IO
 button.setOnClickListener {
-    lifecycleScope.launch(Dispatchers.IO) {
-        val data = fetchData()
-        withContext(Dispatchers.Main) {
-            updateUI(data)
-        }
-    }
+ lifecycleScope.launch(Dispatchers.IO) {
+ val data = fetchData()
+ withContext(Dispatchers.Main) {
+ updateUI(data)
+ }
+ }
 }
 ```
 
@@ -222,8 +222,8 @@ button.setOnClickListener {
 
 ```xml
 <manifest>
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+ <uses-permission android:name="android.permission.INTERNET" />
+ <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 </manifest>
 ```
 
@@ -241,15 +241,15 @@ const val BASE_URL = "http://api.example.com/"
 
 ```kotlin
 suspend fun safeApiCall(): Result<User> {
-    return try {
-        Result.success(apiService.getUser(123))
-    } catch (e: HttpException) {
-        // HTTP error 4xx/5xx
-        Result.failure(e)
-    } catch (e: IOException) {
-        // Network error (no internet)
-        Result.failure(e)
-    }
+ return try {
+ Result.success(apiService.getUser(123))
+ } catch (e: HttpException) {
+ // HTTP error 4xx/5xx
+ Result.failure(e)
+ } catch (e: IOException) {
+ // Network error (no internet)
+ Result.failure(e)
+ }
 }
 ```
 
@@ -257,15 +257,15 @@ suspend fun safeApiCall(): Result<User> {
 
 ```kotlin
 fun isNetworkAvailable(context: Context): Boolean {
-    val cm = context.getSystemService<ConnectivityManager>() ?: return false
+ val cm = context.getSystemService<ConnectivityManager>() ?: return false
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-        val network = cm.activeNetwork ?: return false
-        val capabilities = cm.getNetworkCapabilities(network) ?: return false
-        return capabilities.hasCapability(NET_CAPABILITY_INTERNET)
-    } else {
-        return cm.activeNetworkInfo?.isConnected == true
-    }
+ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+ val network = cm.activeNetwork ?: return false
+ val capabilities = cm.getNetworkCapabilities(network) ?: return false
+ return capabilities.hasCapability(NET_CAPABILITY_INTERNET)
+ } else {
+ return cm.activeNetworkInfo?.isConnected == true
+ }
 }
 ```
 
@@ -291,7 +291,7 @@ fun isNetworkAvailable(context: Context): Boolean {
 
 - [[c-retrofit]] - Type-safe HTTP client for Android
 - [[c-okhttp]] - HTTP client library fundamentals
-- [[c-kotlin-coroutines]] - Asynchronous programming in Kotlin
+- - Asynchronous programming in Kotlin
 - [Android Developers: Connect to the network](https://developer.android.com/training/basics/network-ops/connecting)
 - [Retrofit documentation](https://square.github.io/retrofit/)
 - [OkHttp documentation](https://square.github.io/okhttp/)

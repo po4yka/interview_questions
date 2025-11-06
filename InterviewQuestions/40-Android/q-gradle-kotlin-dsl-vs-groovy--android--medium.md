@@ -23,7 +23,6 @@ status: draft
 moc: moc-android
 related:
 - c-gradle
-- q-compose-custom-animations--jetpack-compose--medium
 - q-how-does-jetpackcompose-work--android--medium
 - q-what-is-workmanager--android--medium
 created: 2025-10-06

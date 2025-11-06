@@ -29,9 +29,6 @@ related:
 - c-compose-state
 - c-jetpack-compose
 - c-viewmodel
-- q-compose-remember-derived-state--jetpack-compose--medium
-- q-compose-side-effects-advanced--jetpack-compose--hard
-- q-compose-stability-skippability--jetpack-compose--hard
 - q-how-does-jetpack-compose-work--android--medium
 created: 2025-10-12
 updated: 2025-10-12

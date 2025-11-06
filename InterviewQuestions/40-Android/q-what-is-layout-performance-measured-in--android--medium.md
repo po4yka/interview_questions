@@ -47,22 +47,22 @@ What is layout performance measured in Android?
 
 ```kotlin
 class FrameMonitor {
-    private val choreographer = Choreographer.getInstance()
-    private var lastFrameTime = 0L
+ private val choreographer = Choreographer.getInstance()
+ private var lastFrameTime = 0L
 
-    fun start() {
-        choreographer.postFrameCallback { frameTimeNanos ->
-            if (lastFrameTime != 0L) {
-                val frameTime = (frameTimeNanos - lastFrameTime) / 1_000_000.0
-                // ✅ Корректное измерение между кадрами
-                if (frameTime > 16.67) {
-                    // ❌ Потерян кадр
-                    Log.w("Perf", "Dropped frame: ${frameTime}ms")
-                }
-            }
-            lastFrameTime = frameTimeNanos
-        }
-    }
+ fun start() {
+ choreographer.postFrameCallback { frameTimeNanos ->
+ if (lastFrameTime != 0L) {
+ val frameTime = (frameTimeNanos - lastFrameTime) / 1_000_000.0
+ // ✅ Корректное измерение между кадрами
+ if (frameTime > 16.67) {
+ // ❌ Потерян кадр
+ Log.w("Perf", "Dropped frame: ${frameTime}ms")
+ }
+ }
+ lastFrameTime = frameTimeNanos
+ }
+ }
 }
 ```
 
@@ -70,10 +70,10 @@ class FrameMonitor {
 
 ```kotlin
 window.addOnFrameMetricsAvailableListener { _, metrics, _ ->
-    val total = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
-    val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
-    val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
-    // Анализ фаз рендеринга
+ val total = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
+ val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
+ val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
+ // Анализ фаз рендеринга
 }
 ```
 
@@ -82,10 +82,10 @@ window.addOnFrameMetricsAvailableListener { _, metrics, _ ->
 ```kotlin
 Trace.beginSection("complexOperation")
 try {
-    // ✅ Маркируем критические секции
-    performExpensiveOperation()
+ // ✅ Маркируем критические секции
+ performExpensiveOperation()
 } finally {
-    Trace.endSection()
+ Trace.endSection()
 }
 ```
 
@@ -94,16 +94,16 @@ try {
 ```kotlin
 // build.gradle
 kotlinOptions {
-    freeCompilerArgs += [
-        "-P", "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-        "${project.buildDir}/compose_metrics"
-    ]
+ freeCompilerArgs += [
+ "-P", "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+ "${project.buildDir}/compose_metrics"
+ ]
 }
 
 @Composable
 fun PerformanceTracker() {
-    // ✅ Стабильные параметры минимизируют перекомпоновки
-    val count = remember { mutableStateOf(0) }
+ // ✅ Стабильные параметры минимизируют перекомпоновки
+ val count = remember { mutableStateOf(0) }
 }
 ```
 
@@ -113,19 +113,19 @@ fun PerformanceTracker() {
 
 ```kotlin
 fun analyzeComplexity(view: View): Metrics {
-    var viewCount = 0
-    var maxDepth = 0
+ var viewCount = 0
+ var maxDepth = 0
 
-    fun traverse(v: View, depth: Int) {
-        viewCount++
-        maxDepth = maxOf(maxDepth, depth)
-        (v as? ViewGroup)?.forEach { child ->
-            traverse(child, depth + 1)
-        }
-    }
+ fun traverse(v: View, depth: Int) {
+ viewCount++
+ maxDepth = maxOf(maxDepth, depth)
+ (v as? ViewGroup)?.forEach { child ->
+ traverse(child, depth + 1)
+ }
+ }
 
-    traverse(view, 0)
-    return Metrics(viewCount, maxDepth)
+ traverse(view, 0)
+ return Metrics(viewCount, maxDepth)
 }
 
 // ✅ Целевые значения: views < 80, depth < 10
@@ -164,22 +164,22 @@ Layout performance in Android is measured in **milliseconds (ms)** of rendering 
 
 ```kotlin
 class FrameMonitor {
-    private val choreographer = Choreographer.getInstance()
-    private var lastFrameTime = 0L
+ private val choreographer = Choreographer.getInstance()
+ private var lastFrameTime = 0L
 
-    fun start() {
-        choreographer.postFrameCallback { frameTimeNanos ->
-            if (lastFrameTime != 0L) {
-                val frameTime = (frameTimeNanos - lastFrameTime) / 1_000_000.0
-                // ✅ Correct frame time measurement
-                if (frameTime > 16.67) {
-                    // ❌ Frame dropped
-                    Log.w("Perf", "Dropped frame: ${frameTime}ms")
-                }
-            }
-            lastFrameTime = frameTimeNanos
-        }
-    }
+ fun start() {
+ choreographer.postFrameCallback { frameTimeNanos ->
+ if (lastFrameTime != 0L) {
+ val frameTime = (frameTimeNanos - lastFrameTime) / 1_000_000.0
+ // ✅ Correct frame time measurement
+ if (frameTime > 16.67) {
+ // ❌ Frame dropped
+ Log.w("Perf", "Dropped frame: ${frameTime}ms")
+ }
+ }
+ lastFrameTime = frameTimeNanos
+ }
+ }
 }
 ```
 
@@ -187,10 +187,10 @@ class FrameMonitor {
 
 ```kotlin
 window.addOnFrameMetricsAvailableListener { _, metrics, _ ->
-    val total = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
-    val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
-    val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
-    // Analyze rendering phases
+ val total = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
+ val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
+ val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
+ // Analyze rendering phases
 }
 ```
 
@@ -199,10 +199,10 @@ window.addOnFrameMetricsAvailableListener { _, metrics, _ ->
 ```kotlin
 Trace.beginSection("complexOperation")
 try {
-    // ✅ Mark critical sections
-    performExpensiveOperation()
+ // ✅ Mark critical sections
+ performExpensiveOperation()
 } finally {
-    Trace.endSection()
+ Trace.endSection()
 }
 ```
 
@@ -211,16 +211,16 @@ try {
 ```kotlin
 // build.gradle
 kotlinOptions {
-    freeCompilerArgs += [
-        "-P", "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-        "${project.buildDir}/compose_metrics"
-    ]
+ freeCompilerArgs += [
+ "-P", "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+ "${project.buildDir}/compose_metrics"
+ ]
 }
 
 @Composable
 fun PerformanceTracker() {
-    // ✅ Stable parameters minimize recompositions
-    val count = remember { mutableStateOf(0) }
+ // ✅ Stable parameters minimize recompositions
+ val count = remember { mutableStateOf(0) }
 }
 ```
 
@@ -230,19 +230,19 @@ fun PerformanceTracker() {
 
 ```kotlin
 fun analyzeComplexity(view: View): Metrics {
-    var viewCount = 0
-    var maxDepth = 0
+ var viewCount = 0
+ var maxDepth = 0
 
-    fun traverse(v: View, depth: Int) {
-        viewCount++
-        maxDepth = maxOf(maxDepth, depth)
-        (v as? ViewGroup)?.forEach { child ->
-            traverse(child, depth + 1)
-        }
-    }
+ fun traverse(v: View, depth: Int) {
+ viewCount++
+ maxDepth = maxOf(maxDepth, depth)
+ (v as? ViewGroup)?.forEach { child ->
+ traverse(child, depth + 1)
+ }
+ }
 
-    traverse(view, 0)
-    return Metrics(viewCount, maxDepth)
+ traverse(view, 0)
+ return Metrics(viewCount, maxDepth)
 }
 
 // ✅ Target values: views < 80, depth < 10
@@ -271,11 +271,10 @@ fun analyzeComplexity(view: View): Metrics {
 
 ## References
 
-- [[c-android-profiling]] - Android profiling concepts
+- - Android profiling concepts
 - [[c-jetpack-compose]] - Compose fundamentals
 - [Rendering Performance](https://developer.android.com/topic/performance/rendering)
 - https://developer.android.com/studio/profile/inspect-traces
-
 
 ## Related Questions
 

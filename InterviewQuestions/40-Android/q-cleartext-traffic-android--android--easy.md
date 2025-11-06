@@ -17,7 +17,6 @@ status: reviewed
 moc: moc-android
 related:
   - c-encryption
-  - c-https-tls
 created: 2025-10-06
 updated: 2025-10-29
 tags: [android/network-security-config, android/networking-http, android/permissions, difficulty/easy, security]

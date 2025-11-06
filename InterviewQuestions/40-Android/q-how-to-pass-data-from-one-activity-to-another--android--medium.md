@@ -38,8 +38,8 @@ sources: []
 ```kotlin
 // ✅ Отправка
 val intent = Intent(this, SecondActivity::class.java).apply {
-    putExtra("user_name", "John Doe")
-    putExtra("user_age", 25)
+ putExtra("user_name", "John Doe")
+ putExtra("user_age", 25)
 }
 startActivity(intent)
 
@@ -55,9 +55,9 @@ val age = intent.getIntExtra("user_age", 0)
 ```kotlin
 @Parcelize
 data class User(
-    val id: Int,
-    val name: String,
-    val email: String
+ val id: Int,
+ val name: String,
+ val email: String
 ) : Parcelable
 
 // ✅ Отправка
@@ -72,14 +72,14 @@ val user = intent.getParcelableExtra("user", User::class.java)
 ```kotlin
 // ✅ Отправка
 val bundle = Bundle().apply {
-    putString("name", "Alice")
-    putStringArrayList("tags", arrayListOf("kotlin", "android"))
+ putString("name", "Alice")
+ putStringArrayList("tags", arrayListOf("kotlin", "android"))
 }
 intent.putExtras(bundle)
 
 // ✅ Получение
 intent.extras?.let { bundle ->
-    val name = bundle.getString("name")
+ val name = bundle.getString("name")
 }
 ```
 
@@ -88,11 +88,11 @@ intent.extras?.let { bundle ->
 ```kotlin
 // ✅ Регистрация лончера
 private val launcher = registerForActivityResult(
-    ActivityResultContracts.StartActivityForResult()
+ ActivityResultContracts.StartActivityForResult()
 ) { result ->
-    if (result.resultCode == RESULT_OK) {
-        val data = result.data?.getStringExtra("result")
-    }
+ if (result.resultCode == RESULT_OK) {
+ val data = result.data?.getStringExtra("result")
+ }
 }
 
 // ✅ Запуск Activity
@@ -116,7 +116,7 @@ val name = intent.getStringExtra("user_name") // Опечатка!
 
 // ✅ С type safety
 object Keys {
-    const val USER_NAME = "user_name"
+ const val USER_NAME = "user_name"
 }
 intent.putExtra(Keys.USER_NAME, name)
 ```
@@ -134,8 +134,8 @@ For simple data types:
 ```kotlin
 // ✅ Sending
 val intent = Intent(this, SecondActivity::class.java).apply {
-    putExtra("user_name", "John Doe")
-    putExtra("user_age", 25)
+ putExtra("user_name", "John Doe")
+ putExtra("user_age", 25)
 }
 startActivity(intent)
 
@@ -151,9 +151,9 @@ Efficient complex object transfer:
 ```kotlin
 @Parcelize
 data class User(
-    val id: Int,
-    val name: String,
-    val email: String
+ val id: Int,
+ val name: String,
+ val email: String
 ) : Parcelable
 
 // ✅ Sending
@@ -168,14 +168,14 @@ val user = intent.getParcelableExtra("user", User::class.java)
 ```kotlin
 // ✅ Sending
 val bundle = Bundle().apply {
-    putString("name", "Alice")
-    putStringArrayList("tags", arrayListOf("kotlin", "android"))
+ putString("name", "Alice")
+ putStringArrayList("tags", arrayListOf("kotlin", "android"))
 }
 intent.putExtras(bundle)
 
 // ✅ Receiving
 intent.extras?.let { bundle ->
-    val name = bundle.getString("name")
+ val name = bundle.getString("name")
 }
 ```
 
@@ -184,11 +184,11 @@ intent.extras?.let { bundle ->
 ```kotlin
 // ✅ Register launcher
 private val launcher = registerForActivityResult(
-    ActivityResultContracts.StartActivityForResult()
+ ActivityResultContracts.StartActivityForResult()
 ) { result ->
-    if (result.resultCode == RESULT_OK) {
-        val data = result.data?.getStringExtra("result")
-    }
+ if (result.resultCode == RESULT_OK) {
+ val data = result.data?.getStringExtra("result")
+ }
 }
 
 // ✅ Launch Activity
@@ -212,7 +212,7 @@ val name = intent.getStringExtra("user_name") // Typo!
 
 // ✅ With type safety
 object Keys {
-    const val USER_NAME = "user_name"
+ const val USER_NAME = "user_name"
 }
 intent.putExtra(Keys.USER_NAME, name)
 ```
@@ -232,7 +232,7 @@ intent.putExtra(Keys.USER_NAME, name)
 ## References
 
 - [[c-intent]]
-- [[c-parcelable]]
+- 
 - [[c-activity-lifecycle]]
 - Official Android documentation: `Intent` and `Intent` Filters
 

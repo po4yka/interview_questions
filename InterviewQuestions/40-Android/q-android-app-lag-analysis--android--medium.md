@@ -18,8 +18,6 @@ language_tags:
 status: reviewed
 moc: moc-android
 related:
-- c-android-profiler
-- c-strictmode
 - q-android-performance-measurement-tools--android--medium
 created: 2025-10-13
 updated: 2025-10-29
@@ -57,22 +55,22 @@ tags:
 ```kotlin
 // ❌ Синхронный вызов блокирует UI
 fun loadData() {
-    val users = database.getAllUsers() // Блокировка!
-    val result = heavyComputation(users)
-    updateUI(result)
+ val users = database.getAllUsers() // Блокировка!
+ val result = heavyComputation(users)
+ updateUI(result)
 }
 
 // ✅ Асинхронное выполнение
 fun loadData() {
-    viewModelScope.launch {
-        val users = withContext(Dispatchers.IO) {
-            repository.getAllUsers()
-        }
-        val result = withContext(Dispatchers.Default) {
-            heavyComputation(users)
-        }
-        _uiState.value = UiState.Success(result)
-    }
+ viewModelScope.launch {
+ val users = withContext(Dispatchers.IO) {
+ repository.getAllUsers()
+ }
+ val result = withContext(Dispatchers.Default) {
+ heavyComputation(users)
+ }
+ _uiState.value = UiState.Success(result)
+ }
 }
 ```
 
@@ -81,14 +79,14 @@ fun loadData() {
 ```kotlin
 // ❌ Статическая ссылка на listener
 companion object {
-    private var listener: OnDataListener? = null
+ private var listener: OnDataListener? = null
 }
 
 // ✅ Привязка к жизненному циклу
 lifecycleScope.launch {
-    repeatOnLifecycle(Lifecycle.State.STARTED) {
-        viewModel.data.collect { updateUI(it) }
-    }
+ repeatOnLifecycle(Lifecycle.State.STARTED) {
+ viewModel.data.collect { updateUI(it) }
+ }
 }
 ```
 
@@ -97,8 +95,8 @@ lifecycleScope.launch {
 ```kotlin
 // ✅ RecyclerView с DiffUtil
 recyclerView.apply {
-    setHasFixedSize(true)
-    setItemViewCacheSize(20)
+ setHasFixedSize(true)
+ setItemViewCacheSize(20)
 }
 
 val diff = DiffUtil.calculateDiff(ItemDiffCallback(oldList, newList))
@@ -115,11 +113,11 @@ diff.dispatchUpdatesTo(adapter)
 
 ```kotlin
 StrictMode.setThreadPolicy(
-    StrictMode.ThreadPolicy.Builder()
-        .detectDiskReads()
-        .detectNetwork()
-        .penaltyLog()
-        .build()
+ StrictMode.ThreadPolicy.Builder()
+ .detectDiskReads()
+ .detectNetwork()
+ .penaltyLog()
+ .build()
 )
 ```
 
@@ -149,22 +147,22 @@ Lag occurs when frame rendering exceeds 16ms (60 FPS) or the UI thread is blocke
 ```kotlin
 // ❌ Synchronous call blocks UI
 fun loadData() {
-    val users = database.getAllUsers() // Blocks UI!
-    val result = heavyComputation(users)
-    updateUI(result)
+ val users = database.getAllUsers() // Blocks UI!
+ val result = heavyComputation(users)
+ updateUI(result)
 }
 
 // ✅ Async execution
 fun loadData() {
-    viewModelScope.launch {
-        val users = withContext(Dispatchers.IO) {
-            repository.getAllUsers()
-        }
-        val result = withContext(Dispatchers.Default) {
-            heavyComputation(users)
-        }
-        _uiState.value = UiState.Success(result)
-    }
+ viewModelScope.launch {
+ val users = withContext(Dispatchers.IO) {
+ repository.getAllUsers()
+ }
+ val result = withContext(Dispatchers.Default) {
+ heavyComputation(users)
+ }
+ _uiState.value = UiState.Success(result)
+ }
 }
 ```
 
@@ -173,14 +171,14 @@ fun loadData() {
 ```kotlin
 // ❌ Static reference to listener
 companion object {
-    private var listener: OnDataListener? = null
+ private var listener: OnDataListener? = null
 }
 
 // ✅ Lifecycle-aware collection
 lifecycleScope.launch {
-    repeatOnLifecycle(Lifecycle.State.STARTED) {
-        viewModel.data.collect { updateUI(it) }
-    }
+ repeatOnLifecycle(Lifecycle.State.STARTED) {
+ viewModel.data.collect { updateUI(it) }
+ }
 }
 ```
 
@@ -189,8 +187,8 @@ lifecycleScope.launch {
 ```kotlin
 // ✅ RecyclerView with DiffUtil
 recyclerView.apply {
-    setHasFixedSize(true)
-    setItemViewCacheSize(20)
+ setHasFixedSize(true)
+ setItemViewCacheSize(20)
 }
 
 val diff = DiffUtil.calculateDiff(ItemDiffCallback(oldList, newList))
@@ -207,11 +205,11 @@ diff.dispatchUpdatesTo(adapter)
 
 ```kotlin
 StrictMode.setThreadPolicy(
-    StrictMode.ThreadPolicy.Builder()
-        .detectDiskReads()
-        .detectNetwork()
-        .penaltyLog()
-        .build()
+ StrictMode.ThreadPolicy.Builder()
+ .detectDiskReads()
+ .detectNetwork()
+ .penaltyLog()
+ .build()
 )
 ```
 
@@ -245,14 +243,12 @@ StrictMode.setThreadPolicy(
 - [Performance](https://developer.android.com/topic/performance)
 - [Profiling](https://developer.android.com/studio/profile)
 
-
 ## Related Questions
 
 ### Prerequisites / Concepts
 
-- [[c-android-profiler]]
-- [[c-strictmode]]
-
+- 
+- 
 
 ### Prerequisites
 - [[q-android-performance-measurement-tools--android--medium]]

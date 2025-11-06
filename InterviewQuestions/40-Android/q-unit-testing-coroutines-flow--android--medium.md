@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-coroutines, c-flow, c-mockk, c-testing]
+related: [c-coroutines, c-flow, c-testing]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
@@ -54,12 +54,12 @@ tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium
 ```kotlin
 // ViewModel
 class UserViewModel(private val repo: UserRepository) : ViewModel() {
-    private val _user = MutableStateFlow<User?>(null)
-    val user: StateFlow<User?> = _user.asStateFlow()
+ private val _user = MutableStateFlow<User?>(null)
+ val user: StateFlow<User?> = _user.asStateFlow()
 
-    suspend fun loadUser(id: String) {
-        _user.value = repo.getUser(id)  // ✅ Simple state update
-    }
+ suspend fun loadUser(id: String) {
+ _user.value = repo.getUser(id) // ✅ Simple state update
+ }
 }
 
 // Test
@@ -68,11 +68,11 @@ val mainDispatcherRule = MainDispatcherRule()
 
 @Test
 fun `loadUser updates state`() = runTest {
-    coEvery { repo.getUser("1") } returns User("1", "John")
+ coEvery { repo.getUser("1") } returns User("1", "John")
 
-    viewModel.loadUser("1")
+ viewModel.loadUser("1")
 
-    assertEquals(User("1", "John"), viewModel.user.value)  // ✅ Direct assertion
+ assertEquals(User("1", "John"), viewModel.user.value) // ✅ Direct assertion
 }
 ```
 
@@ -81,28 +81,28 @@ fun `loadUser updates state`() = runTest {
 ```kotlin
 // Repository
 fun observeArticles(): Flow<List<Article>> = flow {
-    while (currentCoroutineContext().isActive) {
-        emit(api.getArticles())
-        delay(5000)
-    }
+ while (currentCoroutineContext().isActive) {
+ emit(api.getArticles())
+ delay(5000)
+ }
 }
 
 // Test
 @Test
 fun `observeArticles emits periodically`() = runTest {
-    val articles1 = listOf(Article("1", "First"))
-    val articles2 = listOf(Article("2", "Second"))
+ val articles1 = listOf(Article("1", "First"))
+ val articles2 = listOf(Article("2", "Second"))
 
-    coEvery { api.getArticles() } returnsMany listOf(articles1, articles2)
+ coEvery { api.getArticles() } returnsMany listOf(articles1, articles2)
 
-    repo.observeArticles().test {
-        assertEquals(articles1, awaitItem())  // ✅ First emission
+ repo.observeArticles().test {
+ assertEquals(articles1, awaitItem()) // ✅ First emission
 
-        testScheduler.advanceTimeBy(5000)
-        assertEquals(articles2, awaitItem())  // ✅ After delay
+ testScheduler.advanceTimeBy(5000)
+ assertEquals(articles2, awaitItem()) // ✅ After delay
 
-        cancelAndIgnoreRemainingEvents()
-    }
+ cancelAndIgnoreRemainingEvents()
+ }
 }
 ```
 
@@ -111,29 +111,29 @@ fun `observeArticles emits periodically`() = runTest {
 ```kotlin
 // ViewModel
 class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
-    private val _query = MutableStateFlow("")
-    val results = _query
-        .debounce(300)
-        .filter { it.length >= 2 }  // ✅ Skip short queries
-        .flatMapLatest { repo.search(it) }
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+ private val _query = MutableStateFlow("")
+ val results = _query
+ .debounce(300)
+ .filter { it.length >= 2 } // ✅ Skip short queries
+ .flatMapLatest { repo.search(it) }
+ .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    fun onQueryChanged(q: String) { _query.value = q }
+ fun onQueryChanged(q: String) { _query.value = q }
 }
 
 // Test
 @Test
 fun `debounce prevents excessive calls`() = runTest {
-    coEvery { repo.search(any()) } returns flowOf(emptyList())
+ coEvery { repo.search(any()) } returns flowOf(emptyList())
 
-    viewModel.onQueryChanged("t")   // ❌ Too short
-    testScheduler.advanceTimeBy(100)
+ viewModel.onQueryChanged("t") // ❌ Too short
+ testScheduler.advanceTimeBy(100)
 
-    viewModel.onQueryChanged("test")  // ✅ Valid
-    testScheduler.advanceTimeBy(400)  // ✅ Past debounce
+ viewModel.onQueryChanged("test") // ✅ Valid
+ testScheduler.advanceTimeBy(400) // ✅ Past debounce
 
-    coVerify(exactly = 1) { repo.search("test") }  // ✅ Only final query
-    coVerify(exactly = 0) { repo.search("t") }     // ✅ Filtered out
+ coVerify(exactly = 1) { repo.search("test") } // ✅ Only final query
+ coVerify(exactly = 0) { repo.search("t") } // ✅ Filtered out
 }
 ```
 
@@ -142,14 +142,14 @@ fun `debounce prevents excessive calls`() = runTest {
 ```kotlin
 // Test rule для замены Dispatchers.Main
 class MainDispatcherRule(
-    private val dispatcher: TestDispatcher = UnconfinedTestDispatcher()
+ private val dispatcher: TestDispatcher = UnconfinedTestDispatcher()
 ) : TestWatcher() {
-    override fun starting(description: Description) {
-        Dispatchers.setMain(dispatcher)
-    }
-    override fun finished(description: Description) {
-        Dispatchers.resetMain()
-    }
+ override fun starting(description: Description) {
+ Dispatchers.setMain(dispatcher)
+ }
+ override fun finished(description: Description) {
+ Dispatchers.resetMain()
+ }
 }
 ```
 
@@ -183,28 +183,28 @@ fun test() = runTest { ... }
 // ❌ WRONG: Тест завершается до выполнения корутины
 @Test
 fun test() = runTest {
-    launch { delay(1000); doWork() }
-    verify { doWork() }  // ❌ Ещё не выполнилось
+ launch { delay(1000); doWork() }
+ verify { doWork() } // ❌ Ещё не выполнилось
 }
 
 // ✅ CORRECT: Продвигаем время
 @Test
 fun test() = runTest {
-    launch { delay(1000); doWork() }
-    testScheduler.advanceUntilIdle()  // ✅ Выполняем все задачи
-    verify { doWork() }
+ launch { delay(1000); doWork() }
+ testScheduler.advanceUntilIdle() // ✅ Выполняем все задачи
+ verify { doWork() }
 }
 
 // ❌ WRONG: Infinite Flow висит
 @Test
 fun test() = runTest {
-    flow.collect { ... }  // ❌ Никогда не завершится
+ flow.collect { ... } // ❌ Никогда не завершится
 }
 
 // ✅ CORRECT: Ограничиваем коллекцию
 @Test
 fun test() = runTest {
-    flow.take(3).test { ... }  // ✅ Завершится после 3 элементов
+ flow.take(3).test { ... } // ✅ Завершится после 3 элементов
 }
 ```
 
@@ -237,12 +237,12 @@ Testing coroutines and `Flow` requires specialized tools: test dispatchers, virt
 ```kotlin
 // ViewModel
 class UserViewModel(private val repo: UserRepository) : ViewModel() {
-    private val _user = MutableStateFlow<User?>(null)
-    val user: StateFlow<User?> = _user.asStateFlow()
+ private val _user = MutableStateFlow<User?>(null)
+ val user: StateFlow<User?> = _user.asStateFlow()
 
-    suspend fun loadUser(id: String) {
-        _user.value = repo.getUser(id)  // ✅ Simple state update
-    }
+ suspend fun loadUser(id: String) {
+ _user.value = repo.getUser(id) // ✅ Simple state update
+ }
 }
 
 // Test
@@ -251,11 +251,11 @@ val mainDispatcherRule = MainDispatcherRule()
 
 @Test
 fun `loadUser updates state`() = runTest {
-    coEvery { repo.getUser("1") } returns User("1", "John")
+ coEvery { repo.getUser("1") } returns User("1", "John")
 
-    viewModel.loadUser("1")
+ viewModel.loadUser("1")
 
-    assertEquals(User("1", "John"), viewModel.user.value)  // ✅ Direct assertion
+ assertEquals(User("1", "John"), viewModel.user.value) // ✅ Direct assertion
 }
 ```
 
@@ -264,28 +264,28 @@ fun `loadUser updates state`() = runTest {
 ```kotlin
 // Repository
 fun observeArticles(): Flow<List<Article>> = flow {
-    while (currentCoroutineContext().isActive) {
-        emit(api.getArticles())
-        delay(5000)
-    }
+ while (currentCoroutineContext().isActive) {
+ emit(api.getArticles())
+ delay(5000)
+ }
 }
 
 // Test
 @Test
 fun `observeArticles emits periodically`() = runTest {
-    val articles1 = listOf(Article("1", "First"))
-    val articles2 = listOf(Article("2", "Second"))
+ val articles1 = listOf(Article("1", "First"))
+ val articles2 = listOf(Article("2", "Second"))
 
-    coEvery { api.getArticles() } returnsMany listOf(articles1, articles2)
+ coEvery { api.getArticles() } returnsMany listOf(articles1, articles2)
 
-    repo.observeArticles().test {
-        assertEquals(articles1, awaitItem())  // ✅ First emission
+ repo.observeArticles().test {
+ assertEquals(articles1, awaitItem()) // ✅ First emission
 
-        testScheduler.advanceTimeBy(5000)
-        assertEquals(articles2, awaitItem())  // ✅ After delay
+ testScheduler.advanceTimeBy(5000)
+ assertEquals(articles2, awaitItem()) // ✅ After delay
 
-        cancelAndIgnoreRemainingEvents()
-    }
+ cancelAndIgnoreRemainingEvents()
+ }
 }
 ```
 
@@ -294,29 +294,29 @@ fun `observeArticles emits periodically`() = runTest {
 ```kotlin
 // ViewModel
 class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
-    private val _query = MutableStateFlow("")
-    val results = _query
-        .debounce(300)
-        .filter { it.length >= 2 }  // ✅ Skip short queries
-        .flatMapLatest { repo.search(it) }
-        .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
+ private val _query = MutableStateFlow("")
+ val results = _query
+ .debounce(300)
+ .filter { it.length >= 2 } // ✅ Skip short queries
+ .flatMapLatest { repo.search(it) }
+ .stateIn(viewModelScope, SharingStarted.Lazily, emptyList())
 
-    fun onQueryChanged(q: String) { _query.value = q }
+ fun onQueryChanged(q: String) { _query.value = q }
 }
 
 // Test
 @Test
 fun `debounce prevents excessive calls`() = runTest {
-    coEvery { repo.search(any()) } returns flowOf(emptyList())
+ coEvery { repo.search(any()) } returns flowOf(emptyList())
 
-    viewModel.onQueryChanged("t")   // ❌ Too short
-    testScheduler.advanceTimeBy(100)
+ viewModel.onQueryChanged("t") // ❌ Too short
+ testScheduler.advanceTimeBy(100)
 
-    viewModel.onQueryChanged("test")  // ✅ Valid
-    testScheduler.advanceTimeBy(400)  // ✅ Past debounce
+ viewModel.onQueryChanged("test") // ✅ Valid
+ testScheduler.advanceTimeBy(400) // ✅ Past debounce
 
-    coVerify(exactly = 1) { repo.search("test") }  // ✅ Only final query
-    coVerify(exactly = 0) { repo.search("t") }     // ✅ Filtered out
+ coVerify(exactly = 1) { repo.search("test") } // ✅ Only final query
+ coVerify(exactly = 0) { repo.search("t") } // ✅ Filtered out
 }
 ```
 
@@ -325,14 +325,14 @@ fun `debounce prevents excessive calls`() = runTest {
 ```kotlin
 // Test rule to replace Dispatchers.Main
 class MainDispatcherRule(
-    private val dispatcher: TestDispatcher = UnconfinedTestDispatcher()
+ private val dispatcher: TestDispatcher = UnconfinedTestDispatcher()
 ) : TestWatcher() {
-    override fun starting(description: Description) {
-        Dispatchers.setMain(dispatcher)
-    }
-    override fun finished(description: Description) {
-        Dispatchers.resetMain()
-    }
+ override fun starting(description: Description) {
+ Dispatchers.setMain(dispatcher)
+ }
+ override fun finished(description: Description) {
+ Dispatchers.resetMain()
+ }
 }
 ```
 
@@ -366,28 +366,28 @@ fun test() = runTest { ... }
 // ❌ WRONG: Test finishes before coroutine executes
 @Test
 fun test() = runTest {
-    launch { delay(1000); doWork() }
-    verify { doWork() }  // ❌ Not executed yet
+ launch { delay(1000); doWork() }
+ verify { doWork() } // ❌ Not executed yet
 }
 
 // ✅ CORRECT: Advance time
 @Test
 fun test() = runTest {
-    launch { delay(1000); doWork() }
-    testScheduler.advanceUntilIdle()  // ✅ Execute all tasks
-    verify { doWork() }
+ launch { delay(1000); doWork() }
+ testScheduler.advanceUntilIdle() // ✅ Execute all tasks
+ verify { doWork() }
 }
 
 // ❌ WRONG: Infinite Flow hangs
 @Test
 fun test() = runTest {
-    flow.collect { ... }  // ❌ Never completes
+ flow.collect { ... } // ❌ Never completes
 }
 
 // ✅ CORRECT: Limit collection
 @Test
 fun test() = runTest {
-    flow.take(3).test { ... }  // ✅ Completes after 3 items
+ flow.take(3).test { ... } // ✅ Completes after 3 items
 }
 ```
 
@@ -407,7 +407,7 @@ fun test() = runTest {
 
 - [[c-coroutines]] — Kotlin coroutines fundamentals
 - [[c-flow]] — `Flow` basics and operators
-- [[c-testing-strategies]] — General testing approaches
+- — General testing approaches
 - [Kotlin Coroutines Test Guide](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
 - [Turbine Documentation](https://github.com/cashapp/turbine)
 - [Testing Coroutines on Android](https://developer.android.com/kotlin/coroutines/test)
@@ -418,14 +418,14 @@ fun test() = runTest {
 
 ### Prerequisites (Easier)
 - [[q-what-is-coroutine--kotlin--easy]] — `Coroutine` basics
-- [[q-what-is-flow--kotlin--easy]] — `Flow` fundamentals
-- [[q-unit-testing-basics--android--easy]] — Unit testing intro
+- — `Flow` fundamentals
+- — Unit testing intro
 
 ### Related (Same Level)
-- [[q-testing-viewmodels--android--medium]] — `ViewModel` testing patterns
+- [[q-testing-viewmodels-turbine--android--medium]] — `ViewModel` testing patterns
 - [[q-testing-compose-ui--android--medium]] — Compose UI testing
 - [[q-coroutine-dispatchers--kotlin--medium]] — Dispatcher types and usage
 
 ### Advanced (Harder)
-- [[q-testing-race-conditions--android--hard]] — Concurrency edge cases
+- — Concurrency edge cases
 - [[q-structured-concurrency--kotlin--hard]] — Complex coroutine hierarchies

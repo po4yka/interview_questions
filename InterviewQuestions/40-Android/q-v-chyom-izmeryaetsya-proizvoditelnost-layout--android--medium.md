@@ -10,7 +10,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-profiler, c-choreographer, c-layout-performance, c-performance]
+related: [c-performance]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
@@ -49,29 +49,29 @@ tags: [android, android/performance-rendering, android/profiling, android/ui-vie
 
 ```kotlin
 class FrameMonitor {
-    private val choreographer = Choreographer.getInstance()
-    private var lastFrameTime = 0L
+ private val choreographer = Choreographer.getInstance()
+ private var lastFrameTime = 0L
 
-    fun start() {
-        choreographer.postFrameCallback(frameCallback)
-    }
+ fun start() {
+ choreographer.postFrameCallback(frameCallback)
+ }
 
-    private val frameCallback = object : Choreographer.FrameCallback {
-        override fun doFrame(frameTimeNanos: Long) {
-            if (lastFrameTime != 0L) {
-                val frameTime = (frameTimeNanos - lastFrameTime) / 1_000_000.0
+ private val frameCallback = object : Choreographer.FrameCallback {
+ override fun doFrame(frameTimeNanos: Long) {
+ if (lastFrameTime != 0L) {
+ val frameTime = (frameTimeNanos - lastFrameTime) / 1_000_000.0
 
-                if (frameTime > 16.67) {
-                    // ❌ Пропущен кадр
-                    Log.w("Frame", "Slow frame: ${frameTime}ms")
-                } else {
-                    // ✅ Кадр в пределах нормы
-                }
-            }
-            lastFrameTime = frameTimeNanos
-            choreographer.postFrameCallback(this) // Следующий кадр
-        }
-    }
+ if (frameTime > 16.67) {
+ // ❌ Пропущен кадр
+ Log.w("Frame", "Slow frame: ${frameTime}ms")
+ } else {
+ // ✅ Кадр в пределах нормы
+ }
+ }
+ lastFrameTime = frameTimeNanos
+ choreographer.postFrameCallback(this) // Следующий кадр
+ }
+ }
 }
 ```
 
@@ -80,19 +80,19 @@ class FrameMonitor {
 ```kotlin
 class DetailedFrameMonitor(activity: Activity) {
 
-    init {
-        activity.window.addOnFrameMetricsAvailableListener(
-            { _, metrics, _ ->
-                val total = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
-                val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
-                val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
+ init {
+ activity.window.addOnFrameMetricsAvailableListener(
+ { _, metrics, _ ->
+ val total = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
+ val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
+ val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
 
-                // ✅ Детальная статистика по фазам
-                Log.d("Metrics", "Total: ${total}ms, Layout: ${layout}ms, Draw: ${draw}ms")
-            },
-            Handler(Looper.getMainLooper())
-        )
-    }
+ // ✅ Детальная статистика по фазам
+ Log.d("Metrics", "Total: ${total}ms, Layout: ${layout}ms, Draw: ${draw}ms")
+ },
+ Handler(Looper.getMainLooper())
+ )
+ }
 }
 ```
 
@@ -101,17 +101,17 @@ class DetailedFrameMonitor(activity: Activity) {
 ```kotlin
 class OptimizedView : View(context) {
 
-    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
-        Trace.beginSection("OptimizedView:measure") // ✅ Начало секции
-        super.onMeasure(widthSpec, heightSpec)
-        Trace.endSection() // ✅ Конец секции
-    }
+ override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+ Trace.beginSection("OptimizedView:measure") // ✅ Начало секции
+ super.onMeasure(widthSpec, heightSpec)
+ Trace.endSection() // ✅ Конец секции
+ }
 
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        Trace.beginSection("OptimizedView:layout")
-        super.onLayout(changed, l, t, r, b)
-        Trace.endSection()
-    }
+ override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+ Trace.beginSection("OptimizedView:layout")
+ super.onLayout(changed, l, t, r, b)
+ Trace.endSection()
+ }
 }
 ```
 
@@ -128,37 +128,37 @@ adb shell atrace --async_stop > trace.html
 
 ```kotlin
 data class LayoutComplexity(
-    val viewCount: Int,
-    val maxDepth: Int
+ val viewCount: Int,
+ val maxDepth: Int
 )
 
 fun analyzeHierarchy(view: View): LayoutComplexity {
-    var viewCount = 0
-    var maxDepth = 0
+ var viewCount = 0
+ var maxDepth = 0
 
-    fun traverse(v: View, depth: Int) {
-        viewCount++
-        maxDepth = maxOf(maxDepth, depth)
+ fun traverse(v: View, depth: Int) {
+ viewCount++
+ maxDepth = maxOf(maxDepth, depth)
 
-        if (v is ViewGroup) {
-            for (i in 0 until v.childCount) {
-                traverse(v.getChildAt(i), depth + 1)
-            }
-        }
-    }
+ if (v is ViewGroup) {
+ for (i in 0 until v.childCount) {
+ traverse(v.getChildAt(i), depth + 1)
+ }
+ }
+ }
 
-    traverse(view, 0)
+ traverse(view, 0)
 
-    return LayoutComplexity(viewCount, maxDepth).also {
-        if (it.maxDepth > 10) {
-            // ❌ Слишком глубокая иерархия
-            Log.w("Layout", "Deep hierarchy: ${it.maxDepth} levels")
-        }
-        if (it.viewCount > 80) {
-            // ❌ Слишком много view
-            Log.w("Layout", "Too many views: ${it.viewCount}")
-        }
-    }
+ return LayoutComplexity(viewCount, maxDepth).also {
+ if (it.maxDepth > 10) {
+ // ❌ Слишком глубокая иерархия
+ Log.w("Layout", "Deep hierarchy: ${it.maxDepth} levels")
+ }
+ if (it.viewCount > 80) {
+ // ❌ Слишком много view
+ Log.w("Layout", "Too many views: ${it.viewCount}")
+ }
+ }
 }
 ```
 
@@ -169,24 +169,24 @@ fun analyzeHierarchy(view: View): LayoutComplexity {
 ```kotlin
 @Composable
 fun MonitoredComposable() {
-    val recompositions = remember { mutableStateOf(0) }
+ val recompositions = remember { mutableStateOf(0) }
 
-    SideEffect {
-        recompositions.value++ // ✅ Считаем перекомпоновки
-    }
+ SideEffect {
+ recompositions.value++ // ✅ Считаем перекомпоновки
+ }
 
-    Text("Recompositions: ${recompositions.value}")
+ Text("Recompositions: ${recompositions.value}")
 }
 ```
 
 Включение метрик в `build.gradle.kts`:
 ```kotlin
 kotlinOptions {
-    freeCompilerArgs += listOf(
-        "-P",
-        "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-        "${project.buildDir}/compose_metrics"
-    )
+ freeCompilerArgs += listOf(
+ "-P",
+ "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+ "${project.buildDir}/compose_metrics"
+ )
 }
 ```
 
@@ -226,29 +226,29 @@ Layout performance is measured in **milliseconds (ms)** of frame rendering time.
 
 ```kotlin
 class FrameMonitor {
-    private val choreographer = Choreographer.getInstance()
-    private var lastFrameTime = 0L
+ private val choreographer = Choreographer.getInstance()
+ private var lastFrameTime = 0L
 
-    fun start() {
-        choreographer.postFrameCallback(frameCallback)
-    }
+ fun start() {
+ choreographer.postFrameCallback(frameCallback)
+ }
 
-    private val frameCallback = object : Choreographer.FrameCallback {
-        override fun doFrame(frameTimeNanos: Long) {
-            if (lastFrameTime != 0L) {
-                val frameTime = (frameTimeNanos - lastFrameTime) / 1_000_000.0
+ private val frameCallback = object : Choreographer.FrameCallback {
+ override fun doFrame(frameTimeNanos: Long) {
+ if (lastFrameTime != 0L) {
+ val frameTime = (frameTimeNanos - lastFrameTime) / 1_000_000.0
 
-                if (frameTime > 16.67) {
-                    // ❌ Dropped frame
-                    Log.w("Frame", "Slow frame: ${frameTime}ms")
-                } else {
-                    // ✅ Frame within budget
-                }
-            }
-            lastFrameTime = frameTimeNanos
-            choreographer.postFrameCallback(this) // Next frame
-        }
-    }
+ if (frameTime > 16.67) {
+ // ❌ Dropped frame
+ Log.w("Frame", "Slow frame: ${frameTime}ms")
+ } else {
+ // ✅ Frame within budget
+ }
+ }
+ lastFrameTime = frameTimeNanos
+ choreographer.postFrameCallback(this) // Next frame
+ }
+ }
 }
 ```
 
@@ -257,19 +257,19 @@ class FrameMonitor {
 ```kotlin
 class DetailedFrameMonitor(activity: Activity) {
 
-    init {
-        activity.window.addOnFrameMetricsAvailableListener(
-            { _, metrics, _ ->
-                val total = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
-                val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
-                val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
+ init {
+ activity.window.addOnFrameMetricsAvailableListener(
+ { _, metrics, _ ->
+ val total = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000.0
+ val layout = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
+ val draw = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
 
-                // ✅ Detailed phase statistics
-                Log.d("Metrics", "Total: ${total}ms, Layout: ${layout}ms, Draw: ${draw}ms")
-            },
-            Handler(Looper.getMainLooper())
-        )
-    }
+ // ✅ Detailed phase statistics
+ Log.d("Metrics", "Total: ${total}ms, Layout: ${layout}ms, Draw: ${draw}ms")
+ },
+ Handler(Looper.getMainLooper())
+ )
+ }
 }
 ```
 
@@ -278,17 +278,17 @@ class DetailedFrameMonitor(activity: Activity) {
 ```kotlin
 class OptimizedView : View(context) {
 
-    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
-        Trace.beginSection("OptimizedView:measure") // ✅ Start section
-        super.onMeasure(widthSpec, heightSpec)
-        Trace.endSection() // ✅ End section
-    }
+ override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+ Trace.beginSection("OptimizedView:measure") // ✅ Start section
+ super.onMeasure(widthSpec, heightSpec)
+ Trace.endSection() // ✅ End section
+ }
 
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        Trace.beginSection("OptimizedView:layout")
-        super.onLayout(changed, l, t, r, b)
-        Trace.endSection()
-    }
+ override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+ Trace.beginSection("OptimizedView:layout")
+ super.onLayout(changed, l, t, r, b)
+ Trace.endSection()
+ }
 }
 ```
 
@@ -305,37 +305,37 @@ adb shell atrace --async_stop > trace.html
 
 ```kotlin
 data class LayoutComplexity(
-    val viewCount: Int,
-    val maxDepth: Int
+ val viewCount: Int,
+ val maxDepth: Int
 )
 
 fun analyzeHierarchy(view: View): LayoutComplexity {
-    var viewCount = 0
-    var maxDepth = 0
+ var viewCount = 0
+ var maxDepth = 0
 
-    fun traverse(v: View, depth: Int) {
-        viewCount++
-        maxDepth = maxOf(maxDepth, depth)
+ fun traverse(v: View, depth: Int) {
+ viewCount++
+ maxDepth = maxOf(maxDepth, depth)
 
-        if (v is ViewGroup) {
-            for (i in 0 until v.childCount) {
-                traverse(v.getChildAt(i), depth + 1)
-            }
-        }
-    }
+ if (v is ViewGroup) {
+ for (i in 0 until v.childCount) {
+ traverse(v.getChildAt(i), depth + 1)
+ }
+ }
+ }
 
-    traverse(view, 0)
+ traverse(view, 0)
 
-    return LayoutComplexity(viewCount, maxDepth).also {
-        if (it.maxDepth > 10) {
-            // ❌ Hierarchy too deep
-            Log.w("Layout", "Deep hierarchy: ${it.maxDepth} levels")
-        }
-        if (it.viewCount > 80) {
-            // ❌ Too many views
-            Log.w("Layout", "Too many views: ${it.viewCount}")
-        }
-    }
+ return LayoutComplexity(viewCount, maxDepth).also {
+ if (it.maxDepth > 10) {
+ // ❌ Hierarchy too deep
+ Log.w("Layout", "Deep hierarchy: ${it.maxDepth} levels")
+ }
+ if (it.viewCount > 80) {
+ // ❌ Too many views
+ Log.w("Layout", "Too many views: ${it.viewCount}")
+ }
+ }
 }
 ```
 
@@ -346,24 +346,24 @@ In Compose, performance is measured by recomposition count:
 ```kotlin
 @Composable
 fun MonitoredComposable() {
-    val recompositions = remember { mutableStateOf(0) }
+ val recompositions = remember { mutableStateOf(0) }
 
-    SideEffect {
-        recompositions.value++ // ✅ Count recompositions
-    }
+ SideEffect {
+ recompositions.value++ // ✅ Count recompositions
+ }
 
-    Text("Recompositions: ${recompositions.value}")
+ Text("Recompositions: ${recompositions.value}")
 }
 ```
 
 Enable metrics in `build.gradle.kts`:
 ```kotlin
 kotlinOptions {
-    freeCompilerArgs += listOf(
-        "-P",
-        "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-        "${project.buildDir}/compose_metrics"
-    )
+ freeCompilerArgs += listOf(
+ "-P",
+ "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+ "${project.buildDir}/compose_metrics"
+ )
 }
 ```
 
@@ -391,9 +391,9 @@ kotlinOptions {
 
 ## References
 
-- [[c-choreographer]] - Frame timing synchronization
-- [[c-systrace]] - System-wide tracing tool
-- [[c-android-profiler]] - Performance profiling tool
+- - Frame timing synchronization
+- - System-wide tracing tool
+- - Performance profiling tool
 - [Android Performance Patterns](https://developer.android.com/topic/performance)
 - [FrameMetrics API](https://developer.android.com/reference/android/view/FrameMetrics)
 - [Compose Performance](https://developer.android.com/jetpack/compose/performance)
@@ -401,7 +401,7 @@ kotlinOptions {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-view-lifecycle--android--easy]]
+- 
 - [[q-recyclerview-sethasfixedsize--android--easy]]
 
 ### Related (Same Level)
@@ -411,4 +411,4 @@ kotlinOptions {
 
 ### Advanced (Harder)
 - [[q-compose-custom-layout--android--hard]]
-- [[q-optimize-complex-recyclerview--android--hard]]
+- 

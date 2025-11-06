@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-background-vs-foreground-service--android--easy]
+related: []
 created: 2025-10-15
 updated: 2025-10-30
 sources: [https://developer.android.com/kotlin/coroutines, https://developer.android.com/topic/libraries/architecture/workmanager]

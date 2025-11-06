@@ -51,15 +51,15 @@ Which classes are automatically inferred as stable in Jetpack Compose?
 ```kotlin
 // ✅ Автоматически stable
 data class User(
-    val id: String,
-    val name: String,
-    val age: Int
+ val id: String,
+ val name: String,
+ val age: Int
 )
 
 @Composable
 fun UserCard(user: User) {
-    // Compose пропускает рекомпозицию, если user не изменился
-    Text("${user.name}, ${user.age}")
+ // Compose пропускает рекомпозицию, если user не изменился
+ Text("${user.name}, ${user.age}")
 }
 ```
 
@@ -69,8 +69,8 @@ fun UserCard(user: User) {
 ```kotlin
 // ❌ НЕ stable - есть var
 data class User(
-    val id: String,
-    var name: String  // изменяемое свойство
+ val id: String,
+ var name: String // изменяемое свойство
 )
 ```
 
@@ -78,12 +78,12 @@ data class User(
 ```kotlin
 // ❌ НЕ stable
 data class Team(
-    val members: MutableList<User>
+ val members: MutableList<User>
 )
 
 // ✅ Stable
 data class Team(
-    val members: List<User>  // неизменяемый интерфейс
+ val members: List<User> // неизменяемый интерфейс
 )
 ```
 
@@ -92,9 +92,9 @@ data class Team(
 **Вариант 1: Data классы с val**:
 ```kotlin
 data class Product(
-    val id: String,
-    val name: String,
-    val price: Double
+ val id: String,
+ val name: String,
+ val price: Double
 )
 ```
 
@@ -102,12 +102,12 @@ data class Product(
 ```kotlin
 @Stable
 class Settings(private val _darkMode: Boolean) {
-    val darkMode: Boolean get() = _darkMode
+ val darkMode: Boolean get() = _darkMode
 
-    override fun equals(other: Any?): Boolean =
-        other is Settings && other._darkMode == _darkMode
+ override fun equals(other: Any?): Boolean =
+ other is Settings && other._darkMode == _darkMode
 
-    override fun hashCode(): Int = _darkMode.hashCode()
+ override fun hashCode(): Int = _darkMode.hashCode()
 }
 ```
 
@@ -116,15 +116,15 @@ class Settings(private val _darkMode: Boolean) {
 ```kotlin
 // Stable параметр
 @Composable
-fun UserCard(user: User) {  // User stable
-    Text(user.name)
+fun UserCard(user: User) { // User stable
+ Text(user.name)
 }
 // ✅ Compose пропускает рекомпозицию, если user не изменился
 
 // Unstable параметр
 @Composable
 fun UserCard(user: UnstableUser) {
-    Text(user.name)
+ Text(user.name)
 }
 // ❌ Compose НЕ МОЖЕТ пропустить рекомпозицию
 ```
@@ -134,24 +134,24 @@ fun UserCard(user: UnstableUser) {
 Включите compiler metrics в `build.gradle.kts`:
 ```kotlin
 android {
-    kotlinOptions {
-        freeCompilerArgs += listOf(
-            "-P",
-            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir}/compose_metrics"
-        )
-    }
+ kotlinOptions {
+ freeCompilerArgs += listOf(
+ "-P",
+ "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir}/compose_metrics"
+ )
+ }
 }
 ```
 
 Вывод покажет:
 ```
 stable class User {
-  stable val id: String
-  stable val name: String
+ stable val id: String
+ stable val name: String
 }
 
 unstable class UserProfile {
-  unstable var name: String  // ← Проблема!
+ unstable var name: String // ← Проблема!
 }
 ```
 
@@ -181,15 +181,15 @@ Classes in Jetpack Compose are automatically considered **stable** if they are:
 ```kotlin
 // ✅ Automatically stable
 data class User(
-    val id: String,
-    val name: String,
-    val age: Int
+ val id: String,
+ val name: String,
+ val age: Int
 )
 
 @Composable
 fun UserCard(user: User) {
-    // Compose skips recomposition if user hasn't changed
-    Text("${user.name}, ${user.age}")
+ // Compose skips recomposition if user hasn't changed
+ Text("${user.name}, ${user.age}")
 }
 ```
 
@@ -199,8 +199,8 @@ fun UserCard(user: User) {
 ```kotlin
 // ❌ NOT stable - has var
 data class User(
-    val id: String,
-    var name: String  // mutable property
+ val id: String,
+ var name: String // mutable property
 )
 ```
 
@@ -208,12 +208,12 @@ data class User(
 ```kotlin
 // ❌ NOT stable
 data class Team(
-    val members: MutableList<User>
+ val members: MutableList<User>
 )
 
 // ✅ Stable
 data class Team(
-    val members: List<User>  // immutable interface
+ val members: List<User> // immutable interface
 )
 ```
 
@@ -222,9 +222,9 @@ data class Team(
 **Option 1: Data classes with val**:
 ```kotlin
 data class Product(
-    val id: String,
-    val name: String,
-    val price: Double
+ val id: String,
+ val name: String,
+ val price: Double
 )
 ```
 
@@ -232,12 +232,12 @@ data class Product(
 ```kotlin
 @Stable
 class Settings(private val _darkMode: Boolean) {
-    val darkMode: Boolean get() = _darkMode
+ val darkMode: Boolean get() = _darkMode
 
-    override fun equals(other: Any?): Boolean =
-        other is Settings && other._darkMode == _darkMode
+ override fun equals(other: Any?): Boolean =
+ other is Settings && other._darkMode == _darkMode
 
-    override fun hashCode(): Int = _darkMode.hashCode()
+ override fun hashCode(): Int = _darkMode.hashCode()
 }
 ```
 
@@ -246,15 +246,15 @@ class Settings(private val _darkMode: Boolean) {
 ```kotlin
 // Stable parameter
 @Composable
-fun UserCard(user: User) {  // User is stable
-    Text(user.name)
+fun UserCard(user: User) { // User is stable
+ Text(user.name)
 }
 // ✅ Compose skips recomposition if user hasn't changed
 
 // Unstable parameter
 @Composable
 fun UserCard(user: UnstableUser) {
-    Text(user.name)
+ Text(user.name)
 }
 // ❌ Compose CANNOT skip recomposition
 ```
@@ -264,24 +264,24 @@ fun UserCard(user: UnstableUser) {
 Enable compiler metrics in `build.gradle.kts`:
 ```kotlin
 android {
-    kotlinOptions {
-        freeCompilerArgs += listOf(
-            "-P",
-            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir}/compose_metrics"
-        )
-    }
+ kotlinOptions {
+ freeCompilerArgs += listOf(
+ "-P",
+ "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${project.buildDir}/compose_metrics"
+ )
+ }
 }
 ```
 
 Output shows:
 ```
 stable class User {
-  stable val id: String
-  stable val name: String
+ stable val id: String
+ stable val name: String
 }
 
 unstable class UserProfile {
-  unstable var name: String  // ← Problem!
+ unstable var name: String // ← Problem!
 }
 ```
 
@@ -298,7 +298,7 @@ unstable class UserProfile {
 ## References
 
 - [[c-compose-recomposition]] - Compose recomposition fundamentals
-- [[c-compose-stability]] - Compose stability concepts
+- - Compose stability concepts
 - [Compose Performance Guide](https://developer.android.com/jetpack/compose/performance)
 - [Compose Compiler Metrics](https://github.com/androidx/androidx/blob/androidx-main/compose/compiler/design/compiler-metrics.md)
 
@@ -306,7 +306,7 @@ unstable class UserProfile {
 
 ### Prerequisites
 - [[q-jetpack-compose-basics--android--medium]] - Compose fundamentals
-- [[q-compose-recomposition--android--medium]] - Recomposition basics
+- [[q-compose-testing--android--medium]] - Recomposition basics
 
 ### Related
 - [[q-compose-stability-skippability--android--hard]] - Stability and skippability

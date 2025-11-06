@@ -36,32 +36,32 @@ tags: [android/coroutines, android/kmp, android/testing-unit, difficulty/medium,
 ```kotlin
 // shared/build.gradle.kts
 kotlin {
-    sourceSets {
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
-                implementation("app.cash.turbine:turbine")
-                implementation("io.mockk:mockk")
-            }
-        }
+ sourceSets {
+ val commonTest by getting {
+ dependencies {
+ implementation(kotlin("test"))
+ implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+ implementation("app.cash.turbine:turbine")
+ implementation("io.mockk:mockk")
+ }
+ }
 
-        val androidUnitTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-                implementation("androidx.test:core")
-            }
-        }
-    }
+ val androidUnitTest by getting {
+ dependencies {
+ implementation(kotlin("test-junit"))
+ implementation("androidx.test:core")
+ }
+ }
+ }
 }
 ```
 
 **Структура директорий:**
 ```
 shared/src/
-  commonTest/kotlin/         # Общие тесты (все платформы)
-  androidUnitTest/kotlin/    # Android-специфичные
-  iosTest/kotlin/            # iOS-специфичные
+ commonTest/kotlin/ # Общие тесты (все платформы)
+ androidUnitTest/kotlin/ # Android-специфичные
+ iosTest/kotlin/ # iOS-специфичные
 ```
 
 ### Unit-тестирование В commonTest
@@ -71,28 +71,28 @@ shared/src/
 ```kotlin
 // ✅ Общий тест - работает на всех платформах
 class TaskRepositoryTest {
-    private lateinit var repository: TaskRepository
-    private lateinit var mockApi: TaskApi
+ private lateinit var repository: TaskRepository
+ private lateinit var mockApi: TaskApi
 
-    @BeforeTest
-    fun setup() {
-        mockApi = mockk()
-        repository = TaskRepositoryImpl(mockApi)
-    }
+ @BeforeTest
+ fun setup() {
+ mockApi = mockk()
+ repository = TaskRepositoryImpl(mockApi)
+ }
 
-    @Test
-    fun `getTasks возвращает кэш при ошибке сети`() = runTest {
-        // Given
-        val cached = listOf(Task(id = "1", title = "Cached"))
-        coEvery { mockApi.fetchTasks() } throws NetworkException()
+ @Test
+ fun `getTasks возвращает кэш при ошибке сети`() = runTest {
+ // Given
+ val cached = listOf(Task(id = "1", title = "Cached"))
+ coEvery { mockApi.fetchTasks() } throws NetworkException()
 
-        // When
-        val result = repository.getTasks()
+ // When
+ val result = repository.getTasks()
 
-        // Then
-        assertTrue(result.isSuccess)
-        assertEquals(cached, result.getOrNull())
-    }
+ // Then
+ assertTrue(result.isSuccess)
+ assertEquals(cached, result.getOrNull())
+ }
 }
 ```
 
@@ -101,17 +101,17 @@ class TaskRepositoryTest {
 ```kotlin
 @Test
 fun `observeTasks эмитит обновления`() = runTest {
-    val tasksFlow = MutableStateFlow(emptyList<Task>())
-    every { mockDatabase.observeTasks() } returns tasksFlow
+ val tasksFlow = MutableStateFlow(emptyList<Task>())
+ every { mockDatabase.observeTasks() } returns tasksFlow
 
-    repository.observeTasks().test {
-        assertEquals(emptyList(), awaitItem())
+ repository.observeTasks().test {
+ assertEquals(emptyList(), awaitItem())
 
-        tasksFlow.value = listOf(Task(id = "1", title = "New"))
-        assertEquals(1, awaitItem().size)
+ tasksFlow.value = listOf(Task(id = "1", title = "New"))
+ assertEquals(1, awaitItem().size)
 
-        cancel()
-    }
+ cancel()
+ }
 }
 ```
 
@@ -122,23 +122,23 @@ fun `observeTasks эмитит обновления`() = runTest {
 ```kotlin
 // ✅ commonTest - объявление
 expect class TestDatabaseDriver {
-    fun createInMemoryDriver(): SqlDriver
+ fun createInMemoryDriver(): SqlDriver
 }
 
 // ✅ androidUnitTest - реализация
 actual class TestDatabaseDriver {
-    actual fun createInMemoryDriver(): SqlDriver {
-        return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).apply {
-            TaskDatabase.Schema.create(this)
-        }
-    }
+ actual fun createInMemoryDriver(): SqlDriver {
+ return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).apply {
+ TaskDatabase.Schema.create(this)
+ }
+ }
 }
 
 // ✅ iosTest - реализация
 actual class TestDatabaseDriver {
-    actual fun createInMemoryDriver(): SqlDriver {
-        return NativeSqliteDriver(TaskDatabase.Schema, name = null)
-    }
+ actual fun createInMemoryDriver(): SqlDriver {
+ return NativeSqliteDriver(TaskDatabase.Schema, name = null)
+ }
 }
 ```
 
@@ -146,21 +146,21 @@ actual class TestDatabaseDriver {
 
 ```kotlin
 class TaskDatabaseTest {
-    private lateinit var driver: SqlDriver
+ private lateinit var driver: SqlDriver
 
-    @BeforeTest
-    fun setup() {
-        driver = TestDatabaseDriver().createInMemoryDriver()
-    }
+ @BeforeTest
+ fun setup() {
+ driver = TestDatabaseDriver().createInMemoryDriver()
+ }
 
-    @Test
-    fun `insertTask сохраняет задачу`() {
-        val task = Task(id = "1", title = "Test")
-        database.taskQueries.insertTask(task)
+ @Test
+ fun `insertTask сохраняет задачу`() {
+ val task = Task(id = "1", title = "Test")
+ database.taskQueries.insertTask(task)
 
-        val retrieved = database.taskQueries.selectById("1")
-        assertEquals(task, retrieved)
-    }
+ val retrieved = database.taskQueries.selectById("1")
+ assertEquals(task, retrieved)
+ }
 }
 ```
 
@@ -169,15 +169,15 @@ class TaskDatabaseTest {
 ```kotlin
 // ✅ commonTest - фейк
 class FakeLogger : PlatformLogger() {
-    val logs = mutableListOf<String>()
+ val logs = mutableListOf<String>()
 
-    override fun log(message: String) {
-        logs.add(message)
-    }
+ override fun log(message: String) {
+ logs.add(message)
+ }
 
-    fun assertLogged(substring: String) {
-        assertTrue(logs.any { it.contains(substring) })
-    }
+ fun assertLogged(substring: String) {
+ assertTrue(logs.any { it.contains(substring) })
+ }
 }
 ```
 
@@ -187,21 +187,21 @@ class FakeLogger : PlatformLogger() {
 
 ```kotlin
 object TestDispatchers : CoroutineDispatchers {
-    override val main = StandardTestDispatcher()
-    override val io = StandardTestDispatcher()
+ override val main = StandardTestDispatcher()
+ override val io = StandardTestDispatcher()
 }
 
 @Test
 fun `loadTasks обновляет состояние`() = runTest {
-    val viewModel = TaskViewModel(
-        repository = mockRepository,
-        dispatchers = TestDispatchers
-    )
+ val viewModel = TaskViewModel(
+ repository = mockRepository,
+ dispatchers = TestDispatchers
+ )
 
-    viewModel.loadTasks()
-    advanceUntilIdle() // Ждем завершения корутин
+ viewModel.loadTasks()
+ advanceUntilIdle() // Ждем завершения корутин
 
-    assertEquals(LoadingState.Success, viewModel.state.value)
+ assertEquals(LoadingState.Success, viewModel.state.value)
 }
 ```
 
@@ -214,20 +214,20 @@ fun `loadTasks обновляет состояние`() = runTest {
 // ✅ Используйте в androidUnitTest
 @RunWith(AndroidJUnit4::class)
 class AndroidPreferencesTest {
-    private lateinit var context: Context
+ private lateinit var context: Context
 
-    @Before
-    fun setup() {
-        context = ApplicationProvider.getApplicationContext()
-    }
+ @Before
+ fun setup() {
+ context = ApplicationProvider.getApplicationContext()
+ }
 
-    @Test
-    fun `saveToken сохраняет токен`() {
-        val prefs = AndroidPreferences(context)
-        prefs.saveToken("token")
+ @Test
+ fun `saveToken сохраняет токен`() {
+ val prefs = AndroidPreferences(context)
+ prefs.saveToken("token")
 
-        assertEquals("token", prefs.getToken())
-    }
+ assertEquals("token", prefs.getToken())
+ }
 }
 ```
 
@@ -235,10 +235,10 @@ class AndroidPreferencesTest {
 
 ```kotlin
 class IOSKeychainTest {
-    @Test
-    fun testIOSSpecificFeature() {
-        // iOS-специфичная логика
-    }
+ @Test
+ fun testIOSSpecificFeature() {
+ // iOS-специфичная логика
+ }
 }
 ```
 
@@ -272,23 +272,23 @@ KMM testing uses shared code in `commonTest` for all platforms, with platform-sp
 ```kotlin
 // shared/build.gradle.kts
 kotlin {
-    sourceSets {
-        val commonTest by getting {
-            dependencies {
-                implementation(kotlin("test"))
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
-                implementation("app.cash.turbine:turbine")
-                implementation("io.mockk:mockk")
-            }
-        }
+ sourceSets {
+ val commonTest by getting {
+ dependencies {
+ implementation(kotlin("test"))
+ implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
+ implementation("app.cash.turbine:turbine")
+ implementation("io.mockk:mockk")
+ }
+ }
 
-        val androidUnitTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-                implementation("androidx.test:core")
-            }
-        }
-    }
+ val androidUnitTest by getting {
+ dependencies {
+ implementation(kotlin("test-junit"))
+ implementation("androidx.test:core")
+ }
+ }
+ }
 }
 ```
 
@@ -299,24 +299,24 @@ kotlin {
 ```kotlin
 // ✅ Shared test - runs on all platforms
 class TaskRepositoryTest {
-    private lateinit var mockApi: TaskApi
+ private lateinit var mockApi: TaskApi
 
-    @BeforeTest
-    fun setup() {
-        mockApi = mockk()
-    }
+ @BeforeTest
+ fun setup() {
+ mockApi = mockk()
+ }
 
-    @Test
-    fun `getTasks returns cache on network error`() = runTest {
-        // Given
-        coEvery { mockApi.fetchTasks() } throws NetworkException()
+ @Test
+ fun `getTasks returns cache on network error`() = runTest {
+ // Given
+ coEvery { mockApi.fetchTasks() } throws NetworkException()
 
-        // When
-        val result = repository.getTasks()
+ // When
+ val result = repository.getTasks()
 
-        // Then
-        assertTrue(result.isSuccess)
-    }
+ // Then
+ assertTrue(result.isSuccess)
+ }
 }
 ```
 
@@ -325,15 +325,15 @@ class TaskRepositoryTest {
 ```kotlin
 @Test
 fun `observeTasks emits updates`() = runTest {
-    repository.observeTasks().test {
-        assertEquals(emptyList(), awaitItem())
+ repository.observeTasks().test {
+ assertEquals(emptyList(), awaitItem())
 
-        // Trigger update
-        repository.addTask(Task(id = "1", title = "New"))
+ // Trigger update
+ repository.addTask(Task(id = "1", title = "New"))
 
-        assertEquals(1, awaitItem().size)
-        cancel()
-    }
+ assertEquals(1, awaitItem().size)
+ cancel()
+ }
 }
 ```
 
@@ -344,22 +344,22 @@ fun `observeTasks emits updates`() = runTest {
 ```kotlin
 // ✅ commonTest - declaration
 expect class TestDatabaseDriver {
-    fun createInMemoryDriver(): SqlDriver
+ fun createInMemoryDriver(): SqlDriver
 }
 
 // ✅ androidUnitTest - implementation
 actual class TestDatabaseDriver {
-    actual fun createInMemoryDriver(): SqlDriver {
-        return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
-    }
+ actual fun createInMemoryDriver(): SqlDriver {
+ return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+ }
 }
 
 // Usage in common tests
 class TaskDatabaseTest {
-    @BeforeTest
-    fun setup() {
-        driver = TestDatabaseDriver().createInMemoryDriver()
-    }
+ @BeforeTest
+ fun setup() {
+ driver = TestDatabaseDriver().createInMemoryDriver()
+ }
 }
 ```
 
@@ -368,11 +368,11 @@ class TaskDatabaseTest {
 ```kotlin
 // ✅ commonTest - fake
 class FakeLogger : PlatformLogger() {
-    val logs = mutableListOf<String>()
+ val logs = mutableListOf<String>()
 
-    override fun log(message: String) {
-        logs.add(message)
-    }
+ override fun log(message: String) {
+ logs.add(message)
+ }
 }
 ```
 
@@ -380,17 +380,17 @@ class FakeLogger : PlatformLogger() {
 
 ```kotlin
 object TestDispatchers : CoroutineDispatchers {
-    override val main = StandardTestDispatcher()
-    override val io = StandardTestDispatcher()
+ override val main = StandardTestDispatcher()
+ override val io = StandardTestDispatcher()
 }
 
 @Test
 fun `loadTasks updates state`() = runTest {
-    val viewModel = TaskViewModel(TestDispatchers)
-    viewModel.loadTasks()
-    advanceUntilIdle()
+ val viewModel = TaskViewModel(TestDispatchers)
+ viewModel.loadTasks()
+ advanceUntilIdle()
 
-    assertEquals(LoadingState.Success, viewModel.state.value)
+ assertEquals(LoadingState.Success, viewModel.state.value)
 }
 ```
 
@@ -403,14 +403,14 @@ fun `loadTasks updates state`() = runTest {
 // ✅ Use in androidUnitTest
 @RunWith(AndroidJUnit4::class)
 class AndroidPreferencesTest {
-    @Test
-    fun `saveToken persists token`() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
-        val prefs = AndroidPreferences(context)
+ @Test
+ fun `saveToken persists token`() {
+ val context = ApplicationProvider.getApplicationContext<Context>()
+ val prefs = AndroidPreferences(context)
 
-        prefs.saveToken("token")
-        assertEquals("token", prefs.getToken())
-    }
+ prefs.saveToken("token")
+ assertEquals("token", prefs.getToken())
+ }
 }
 ```
 
@@ -443,8 +443,8 @@ class AndroidPreferencesTest {
 
 ## References
 
-- [[c-kmm]] - Kotlin Multiplatform Mobile concept
-- [[c-testing-strategies]] - Testing strategies overview
+- - Kotlin Multiplatform Mobile concept
+- - Testing strategies overview
 - [Kotlin Multiplatform Testing](https://kotlinlang.org/docs/multiplatform-run-tests.html)
 - [MockK Documentation](https://mockk.io/)
 - [Turbine - `Flow` Testing Library](https://github.com/cashapp/turbine)

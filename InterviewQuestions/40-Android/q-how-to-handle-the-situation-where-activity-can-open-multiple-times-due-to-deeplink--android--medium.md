@@ -36,7 +36,7 @@ How to handle the situation where `Activity` can open multiple times due to deep
 ```kotlin
 // Пользователь кликает deeplink несколько раз
 // www.example.com/product/123
-// www.example.com/product/123  (снова)
+// www.example.com/product/123 (снова)
 // Результат: дубликаты ProductActivity в стеке
 ```
 
@@ -46,37 +46,37 @@ How to handle the situation where `Activity` can open multiple times due to deep
 
 ```xml
 <activity
-    android:name=".ProductActivity"
-    android:launchMode="singleTop">
-    <intent-filter android:autoVerify="true">
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data
-            android:scheme="https"
-            android:host="www.example.com"
-            android:pathPrefix="/product" />
-    </intent-filter>
+ android:name=".ProductActivity"
+ android:launchMode="singleTop">
+ <intent-filter android:autoVerify="true">
+ <action android:name="android.intent.action.VIEW" />
+ <category android:name="android.intent.category.DEFAULT" />
+ <category android:name="android.intent.category.BROWSABLE" />
+ <data
+ android:scheme="https"
+ android:host="www.example.com"
+ android:pathPrefix="/product" />
+ </intent-filter>
 </activity>
 ```
 
 ```kotlin
 class ProductActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        handleDeeplink(intent)
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ handleDeeplink(intent)
+ }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent) // ✅ Обновить текущий intent
-        handleDeeplink(intent)
-    }
+ override fun onNewIntent(intent: Intent) {
+ super.onNewIntent(intent)
+ setIntent(intent) // ✅ Обновить текущий intent
+ handleDeeplink(intent)
+ }
 
-    private fun handleDeeplink(intent: Intent) {
-        val productId = intent.data?.lastPathSegment
-        loadProduct(productId)
-    }
+ private fun handleDeeplink(intent: Intent) {
+ val productId = intent.data?.lastPathSegment
+ loadProduct(productId)
+ }
 }
 ```
 
@@ -91,9 +91,9 @@ class ProductActivity : AppCompatActivity() {
 
 ```kotlin
 val productIntent = Intent(this, ProductActivity::class.java).apply {
-    // ✅ Лучшая комбинация для deeplink
-    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-    putExtra("product_id", productId)
+ // ✅ Лучшая комбинация для deeplink
+ flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+ putExtra("product_id", productId)
 }
 startActivity(productIntent)
 ```
@@ -117,49 +117,49 @@ flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
 ```xml
 <!-- Trampoline получает все deeplink -->
 <activity
-    android:name=".DeeplinkActivity"
-    android:theme="@android:style/Theme.NoDisplay"
-    android:excludeFromRecents="true"
-    android:noHistory="true">
-    <intent-filter android:autoVerify="true">
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="https" android:host="www.example.com" />
-    </intent-filter>
+ android:name=".DeeplinkActivity"
+ android:theme="@android:style/Theme.NoDisplay"
+ android:excludeFromRecents="true"
+ android:noHistory="true">
+ <intent-filter android:autoVerify="true">
+ <action android:name="android.intent.action.VIEW" />
+ <category android:name="android.intent.category.DEFAULT" />
+ <category android:name="android.intent.category.BROWSABLE" />
+ <data android:scheme="https" android:host="www.example.com" />
+ </intent-filter>
 </activity>
 
 <!-- Целевая Activity с singleTop -->
 <activity
-    android:name=".ProductActivity"
-    android:launchMode="singleTop" />
+ android:name=".ProductActivity"
+ android:launchMode="singleTop" />
 ```
 
 ```kotlin
 class DeeplinkActivity : Activity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
 
-        val data = intent.data ?: run {
-            finish()
-            return
-        }
+ val data = intent.data ?: run {
+ finish()
+ return
+ }
 
-        val targetIntent = when {
-            data.path?.startsWith("/product") == true -> {
-                Intent(this, ProductActivity::class.java).apply {
-                    // ✅ Гарантирует отсутствие дубликатов
-                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    putExtra("product_id", data.lastPathSegment)
-                }
-            }
-            else -> Intent(this, MainActivity::class.java)
-        }
+ val targetIntent = when {
+ data.path?.startsWith("/product") == true -> {
+ Intent(this, ProductActivity::class.java).apply {
+ // ✅ Гарантирует отсутствие дубликатов
+ flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
+ Intent.FLAG_ACTIVITY_SINGLE_TOP
+ putExtra("product_id", data.lastPathSegment)
+ }
+ }
+ else -> Intent(this, MainActivity::class.java)
+ }
 
-        startActivity(targetIntent)
-        finish() // ✅ Обязательно завершить trampoline
-    }
+ startActivity(targetIntent)
+ finish() // ✅ Обязательно завершить trampoline
+ }
 }
 ```
 
@@ -170,29 +170,29 @@ class DeeplinkActivity : Activity() {
 ```xml
 <!-- nav_graph.xml -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:startDestination="@id/homeFragment">
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ app:startDestination="@id/homeFragment">
 
-    <fragment
-        android:id="@+id/productFragment"
-        android:name=".ProductFragment">
-        <deepLink app:uri="https://www.example.com/product/{productId}" />
-    </fragment>
+ <fragment
+ android:id="@+id/productFragment"
+ android:name=".ProductFragment">
+ <deepLink app:uri="https://www.example.com/product/{productId}" />
+ </fragment>
 </navigation>
 ```
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val navController = findNavController(R.id.nav_host_fragment)
-        navController.handleDeepLink(intent)
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ val navController = findNavController(R.id.nav_host_fragment)
+ navController.handleDeepLink(intent)
+ }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        findNavController(R.id.nav_host_fragment).handleDeepLink(intent)
-    }
+ override fun onNewIntent(intent: Intent) {
+ super.onNewIntent(intent)
+ findNavController(R.id.nav_host_fragment).handleDeepLink(intent)
+ }
 }
 ```
 
@@ -228,7 +228,7 @@ When using deeplinks, an `Activity` can be launched multiple times creating dupl
 ```kotlin
 // User clicks deeplink multiple times
 // www.example.com/product/123
-// www.example.com/product/123  (again)
+// www.example.com/product/123 (again)
 // Result: duplicate ProductActivity instances in stack
 ```
 
@@ -238,37 +238,37 @@ Most common solution for deeplinks:
 
 ```xml
 <activity
-    android:name=".ProductActivity"
-    android:launchMode="singleTop">
-    <intent-filter android:autoVerify="true">
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data
-            android:scheme="https"
-            android:host="www.example.com"
-            android:pathPrefix="/product" />
-    </intent-filter>
+ android:name=".ProductActivity"
+ android:launchMode="singleTop">
+ <intent-filter android:autoVerify="true">
+ <action android:name="android.intent.action.VIEW" />
+ <category android:name="android.intent.category.DEFAULT" />
+ <category android:name="android.intent.category.BROWSABLE" />
+ <data
+ android:scheme="https"
+ android:host="www.example.com"
+ android:pathPrefix="/product" />
+ </intent-filter>
 </activity>
 ```
 
 ```kotlin
 class ProductActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        handleDeeplink(intent)
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ handleDeeplink(intent)
+ }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent) // ✅ Update current intent
-        handleDeeplink(intent)
-    }
+ override fun onNewIntent(intent: Intent) {
+ super.onNewIntent(intent)
+ setIntent(intent) // ✅ Update current intent
+ handleDeeplink(intent)
+ }
 
-    private fun handleDeeplink(intent: Intent) {
-        val productId = intent.data?.lastPathSegment
-        loadProduct(productId)
-    }
+ private fun handleDeeplink(intent: Intent) {
+ val productId = intent.data?.lastPathSegment
+ loadProduct(productId)
+ }
 }
 ```
 
@@ -283,9 +283,9 @@ Programmatic control with flags:
 
 ```kotlin
 val productIntent = Intent(this, ProductActivity::class.java).apply {
-    // ✅ Best combination for deeplinks
-    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-    putExtra("product_id", productId)
+ // ✅ Best combination for deeplinks
+ flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+ putExtra("product_id", productId)
 }
 startActivity(productIntent)
 ```
@@ -309,49 +309,49 @@ Intermediate activity to control navigation:
 ```xml
 <!-- Trampoline receives all deeplinks -->
 <activity
-    android:name=".DeeplinkActivity"
-    android:theme="@android:style/Theme.NoDisplay"
-    android:excludeFromRecents="true"
-    android:noHistory="true">
-    <intent-filter android:autoVerify="true">
-        <action android:name="android.intent.action.VIEW" />
-        <category android:name="android.intent.category.DEFAULT" />
-        <category android:name="android.intent.category.BROWSABLE" />
-        <data android:scheme="https" android:host="www.example.com" />
-    </intent-filter>
+ android:name=".DeeplinkActivity"
+ android:theme="@android:style/Theme.NoDisplay"
+ android:excludeFromRecents="true"
+ android:noHistory="true">
+ <intent-filter android:autoVerify="true">
+ <action android:name="android.intent.action.VIEW" />
+ <category android:name="android.intent.category.DEFAULT" />
+ <category android:name="android.intent.category.BROWSABLE" />
+ <data android:scheme="https" android:host="www.example.com" />
+ </intent-filter>
 </activity>
 
 <!-- Target activity with singleTop -->
 <activity
-    android:name=".ProductActivity"
-    android:launchMode="singleTop" />
+ android:name=".ProductActivity"
+ android:launchMode="singleTop" />
 ```
 
 ```kotlin
 class DeeplinkActivity : Activity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
 
-        val data = intent.data ?: run {
-            finish()
-            return
-        }
+ val data = intent.data ?: run {
+ finish()
+ return
+ }
 
-        val targetIntent = when {
-            data.path?.startsWith("/product") == true -> {
-                Intent(this, ProductActivity::class.java).apply {
-                    // ✅ Guarantees no duplicates
-                    flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                            Intent.FLAG_ACTIVITY_SINGLE_TOP
-                    putExtra("product_id", data.lastPathSegment)
-                }
-            }
-            else -> Intent(this, MainActivity::class.java)
-        }
+ val targetIntent = when {
+ data.path?.startsWith("/product") == true -> {
+ Intent(this, ProductActivity::class.java).apply {
+ // ✅ Guarantees no duplicates
+ flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
+ Intent.FLAG_ACTIVITY_SINGLE_TOP
+ putExtra("product_id", data.lastPathSegment)
+ }
+ }
+ else -> Intent(this, MainActivity::class.java)
+ }
 
-        startActivity(targetIntent)
-        finish() // ✅ Always finish trampoline
-    }
+ startActivity(targetIntent)
+ finish() // ✅ Always finish trampoline
+ }
 }
 ```
 
@@ -362,29 +362,29 @@ Modern approach with Jetpack Navigation:
 ```xml
 <!-- nav_graph.xml -->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:startDestination="@id/homeFragment">
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+ app:startDestination="@id/homeFragment">
 
-    <fragment
-        android:id="@+id/productFragment"
-        android:name=".ProductFragment">
-        <deepLink app:uri="https://www.example.com/product/{productId}" />
-    </fragment>
+ <fragment
+ android:id="@+id/productFragment"
+ android:name=".ProductFragment">
+ <deepLink app:uri="https://www.example.com/product/{productId}" />
+ </fragment>
 </navigation>
 ```
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val navController = findNavController(R.id.nav_host_fragment)
-        navController.handleDeepLink(intent)
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ val navController = findNavController(R.id.nav_host_fragment)
+ navController.handleDeepLink(intent)
+ }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        findNavController(R.id.nav_host_fragment).handleDeepLink(intent)
-    }
+ override fun onNewIntent(intent: Intent) {
+ super.onNewIntent(intent)
+ findNavController(R.id.nav_host_fragment).handleDeepLink(intent)
+ }
 }
 ```
 
@@ -424,7 +424,7 @@ class MainActivity : AppCompatActivity() {
 ## References
 
 - [[c-activity-lifecycle]] - Understanding `Activity` lifecycle
-- [[c-intent-flags]] - `Intent` flags reference
+- - `Intent` flags reference
 - Android Documentation: [Tasks and Back `Stack`](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
 - Android Documentation: [Deep Links](https://developer.android.com/training/app-links/deep-linking)
 - Jetpack Navigation: [Navigation Deeplinks](https://developer.android.com/guide/navigation/navigation-deep-link)

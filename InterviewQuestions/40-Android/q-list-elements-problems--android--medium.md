@@ -44,8 +44,8 @@ java.lang.OutOfMemoryError: Failed to allocate a 12345678 byte allocation
 ```kotlin
 // ❌ BAD - Загрузка полноразмерных изображений
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val bitmap = BitmapFactory.decodeFile(photos[position].path) // 4K image!
-    holder.imageView.setImageBitmap(bitmap) // OOM!
+ val bitmap = BitmapFactory.decodeFile(photos[position].path) // 4K image!
+ holder.imageView.setImageBitmap(bitmap) // OOM!
 }
 ```
 
@@ -53,11 +53,11 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```kotlin
 // ✅ GOOD - Glide управляет памятью автоматически
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    Glide.with(holder.itemView.context)
-        .load(photos[position].path)
-        .override(400, 400) // Resize to display size
-        .centerCrop()
-        .into(holder.binding.imageView)
+ Glide.with(holder.itemView.context)
+ .load(photos[position].path)
+ .override(400, 400) // Resize to display size
+ .centerCrop()
+ .into(holder.binding.imageView)
 }
 ```
 
@@ -75,14 +75,14 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```kotlin
 // ❌ BAD - Тяжелые операции при биндинге
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    // Сложные вычисления
-    val processedText = item.text.split(" ").map { it.uppercase() }.joinToString(" ")
+ // Сложные вычисления
+ val processedText = item.text.split(" ").map { it.uppercase() }.joinToString(" ")
 
-    // Синхронный сетевой запрос - БЛОКИРУЕТ UI!
-    val response = api.getUserDetails(item.userId).execute()
+ // Синхронный сетевой запрос - БЛОКИРУЕТ UI!
+ val response = api.getUserDetails(item.userId).execute()
 
-    // Database query - БЛОКИРУЕТ UI!
-    val count = database.getCommentCount(item.id)
+ // Database query - БЛОКИРУЕТ UI!
+ val count = database.getCommentCount(item.id)
 }
 ```
 
@@ -90,26 +90,26 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```kotlin
 // ✅ GOOD - Обработка в ViewModel/Repository
 class ItemViewModel : ViewModel() {
-    val items = repository.getItems()
-        .map { rawItems ->
-            rawItems.map { item ->
-                ProcessedItem(
-                    id = item.id,
-                    processedText = item.text.uppercase(), // Pre-processed
-                    userName = item.userName, // Already fetched
-                    commentCount = item.commentCount // Already counted
-                )
-            }
-        }
-        .asLiveData()
+ val items = repository.getItems()
+ .map { rawItems ->
+ rawItems.map { item ->
+ ProcessedItem(
+ id = item.id,
+ processedText = item.text.uppercase(), // Pre-processed
+ userName = item.userName, // Already fetched
+ commentCount = item.commentCount // Already counted
+ )
+ }
+ }
+ .asLiveData()
 }
 
 // Simple binding - только установка данных
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    holder.binding.apply {
-        textView.text = item.processedText
-        userName.text = item.userName
-    }
+ holder.binding.apply {
+ textView.text = item.processedText
+ userName.text = item.userName
+ }
 }
 ```
 
@@ -123,13 +123,13 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```kotlin
 // ❌ BAD - Прямое изменение списка
 fun addItem(item: Item) {
-    items.add(item)
-    // Забыли notify!
+ items.add(item)
+ // Забыли notify!
 }
 
 fun updateItem(position: Int, item: Item) {
-    items[position] = item
-    notifyDataSetChanged() // Неэффективно, теряет scroll position
+ items[position] = item
+ notifyDataSetChanged() // Неэффективно, теряет scroll position
 }
 ```
 
@@ -138,13 +138,13 @@ fun updateItem(position: Int, item: Item) {
 // ✅ GOOD - ListAdapter с DiffUtil
 class ItemAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
 
-    class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(oldItem: Item, newItem: Item) =
-            oldItem.id == newItem.id
+ class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+ override fun areItemsTheSame(oldItem: Item, newItem: Item) =
+ oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Item, newItem: Item) =
-            oldItem == newItem
-    }
+ override fun areContentsTheSame(oldItem: Item, newItem: Item) =
+ oldItem == newItem
+ }
 }
 
 // Usage - DiffUtil вычисляет изменения автоматически
@@ -172,12 +172,12 @@ android.view.ViewRootImpl$CalledFromWrongThreadException
 ```kotlin
 // ❌ BAD - Обновление из background потока
 fun loadDataInBackground() {
-    Thread {
-        val newItems = api.fetchItems()
-        items.clear() // Изменение из background!
-        items.addAll(newItems)
-        notifyDataSetChanged() // Вызов из background! CRASH!
-    }.start()
+ Thread {
+ val newItems = api.fetchItems()
+ items.clear() // Изменение из background!
+ items.addAll(newItems)
+ notifyDataSetChanged() // Вызов из background! CRASH!
+ }.start()
 }
 ```
 
@@ -185,17 +185,17 @@ fun loadDataInBackground() {
 ```kotlin
 // ✅ GOOD - ViewModel - фоновая работа здесь
 class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
-    val items: LiveData<List<Item>> = repository.getItems()
-        .asLiveData(viewModelScope.coroutineContext)
+ val items: LiveData<List<Item>> = repository.getItems()
+ .asLiveData(viewModelScope.coroutineContext)
 
-    // Или через Flow
-    val itemsFlow = repository.getItemsFlow()
-        .flowOn(Dispatchers.IO)
+ // Или через Flow
+ val itemsFlow = repository.getItemsFlow()
+ .flowOn(Dispatchers.IO)
 }
 
 // Fragment - observe на main потоке
 viewModel.items.observe(viewLifecycleOwner) { items ->
-    adapter.submitList(items) // Всегда на main thread!
+ adapter.submitList(items) // Всегда на main thread!
 }
 ```
 
@@ -209,7 +209,7 @@ viewModel.items.observe(viewLifecycleOwner) { items ->
 **Stable IDs для предотвращения проблем с кликами:**
 ```kotlin
 init {
-    setHasStableIds(true)
+ setHasStableIds(true)
 }
 
 override fun getItemId(position: Int) = items[position].id.toLong()
@@ -219,19 +219,19 @@ override fun getItemId(position: Int) = items[position].id.toLong()
 ```kotlin
 // ✅ GOOD - Use bindingAdapterPosition
 holder.itemView.setOnClickListener {
-    val position = holder.bindingAdapterPosition
-    if (position != RecyclerView.NO_POSITION) {
-        onClick(items[position])
-    }
+ val position = holder.bindingAdapterPosition
+ if (position != RecyclerView.NO_POSITION) {
+ onClick(items[position])
+ }
 }
 ```
 
 **Предотвращение утечек памяти:**
 ```kotlin
 override fun onViewRecycled(holder: ViewHolder) {
-    super.onViewRecycled(holder)
-    holder.binding.root.setOnClickListener(null)
-    Glide.with(holder.binding.imageView).clear(holder.binding.imageView)
+ super.onViewRecycled(holder)
+ holder.binding.root.setOnClickListener(null)
+ Glide.with(holder.binding.imageView).clear(holder.binding.imageView)
 }
 ```
 
@@ -265,8 +265,8 @@ java.lang.OutOfMemoryError: Failed to allocate a 12345678 byte allocation
 ```kotlin
 // ❌ BAD - Loading full-resolution images
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    val bitmap = BitmapFactory.decodeFile(photos[position].path) // 4K image!
-    holder.imageView.setImageBitmap(bitmap) // OOM!
+ val bitmap = BitmapFactory.decodeFile(photos[position].path) // 4K image!
+ holder.imageView.setImageBitmap(bitmap) // OOM!
 }
 ```
 
@@ -274,11 +274,11 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```kotlin
 // ✅ GOOD - Glide manages memory automatically
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    Glide.with(holder.itemView.context)
-        .load(photos[position].path)
-        .override(400, 400) // Resize to display size
-        .centerCrop()
-        .into(holder.binding.imageView)
+ Glide.with(holder.itemView.context)
+ .load(photos[position].path)
+ .override(400, 400) // Resize to display size
+ .centerCrop()
+ .into(holder.binding.imageView)
 }
 ```
 
@@ -296,14 +296,14 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```kotlin
 // ❌ BAD - Heavy operations during binding
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    // Complex calculations
-    val processedText = item.text.split(" ").map { it.uppercase() }.joinToString(" ")
+ // Complex calculations
+ val processedText = item.text.split(" ").map { it.uppercase() }.joinToString(" ")
 
-    // Synchronous network request - BLOCKS UI!
-    val response = api.getUserDetails(item.userId).execute()
+ // Synchronous network request - BLOCKS UI!
+ val response = api.getUserDetails(item.userId).execute()
 
-    // Database query - BLOCKS UI!
-    val count = database.getCommentCount(item.id)
+ // Database query - BLOCKS UI!
+ val count = database.getCommentCount(item.id)
 }
 ```
 
@@ -311,26 +311,26 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```kotlin
 // ✅ GOOD - Processing in ViewModel/Repository
 class ItemViewModel : ViewModel() {
-    val items = repository.getItems()
-        .map { rawItems ->
-            rawItems.map { item ->
-                ProcessedItem(
-                    id = item.id,
-                    processedText = item.text.uppercase(), // Pre-processed
-                    userName = item.userName, // Already fetched
-                    commentCount = item.commentCount // Already counted
-                )
-            }
-        }
-        .asLiveData()
+ val items = repository.getItems()
+ .map { rawItems ->
+ rawItems.map { item ->
+ ProcessedItem(
+ id = item.id,
+ processedText = item.text.uppercase(), // Pre-processed
+ userName = item.userName, // Already fetched
+ commentCount = item.commentCount // Already counted
+ )
+ }
+ }
+ .asLiveData()
 }
 
 // Simple binding - only setting data
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-    holder.binding.apply {
-        textView.text = item.processedText
-        userName.text = item.userName
-    }
+ holder.binding.apply {
+ textView.text = item.processedText
+ userName.text = item.userName
+ }
 }
 ```
 
@@ -344,13 +344,13 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```kotlin
 // ❌ BAD - Direct list modification
 fun addItem(item: Item) {
-    items.add(item)
-    // Forgot to notify!
+ items.add(item)
+ // Forgot to notify!
 }
 
 fun updateItem(position: Int, item: Item) {
-    items[position] = item
-    notifyDataSetChanged() // Inefficient, loses scroll position
+ items[position] = item
+ notifyDataSetChanged() // Inefficient, loses scroll position
 }
 ```
 
@@ -359,13 +359,13 @@ fun updateItem(position: Int, item: Item) {
 // ✅ GOOD - ListAdapter with DiffUtil
 class ItemAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
 
-    class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(oldItem: Item, newItem: Item) =
-            oldItem.id == newItem.id
+ class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+ override fun areItemsTheSame(oldItem: Item, newItem: Item) =
+ oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: Item, newItem: Item) =
-            oldItem == newItem
-    }
+ override fun areContentsTheSame(oldItem: Item, newItem: Item) =
+ oldItem == newItem
+ }
 }
 
 // Usage - DiffUtil calculates changes automatically
@@ -393,12 +393,12 @@ android.view.ViewRootImpl$CalledFromWrongThreadException
 ```kotlin
 // ❌ BAD - Updating from background thread
 fun loadDataInBackground() {
-    Thread {
-        val newItems = api.fetchItems()
-        items.clear() // Modifying from background!
-        items.addAll(newItems)
-        notifyDataSetChanged() // Called from background! CRASH!
-    }.start()
+ Thread {
+ val newItems = api.fetchItems()
+ items.clear() // Modifying from background!
+ items.addAll(newItems)
+ notifyDataSetChanged() // Called from background! CRASH!
+ }.start()
 }
 ```
 
@@ -406,17 +406,17 @@ fun loadDataInBackground() {
 ```kotlin
 // ✅ GOOD - ViewModel - background work here
 class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
-    val items: LiveData<List<Item>> = repository.getItems()
-        .asLiveData(viewModelScope.coroutineContext)
+ val items: LiveData<List<Item>> = repository.getItems()
+ .asLiveData(viewModelScope.coroutineContext)
 
-    // Or using Flow
-    val itemsFlow = repository.getItemsFlow()
-        .flowOn(Dispatchers.IO)
+ // Or using Flow
+ val itemsFlow = repository.getItemsFlow()
+ .flowOn(Dispatchers.IO)
 }
 
 // Fragment - observes on main thread
 viewModel.items.observe(viewLifecycleOwner) { items ->
-    adapter.submitList(items) // Always on main thread!
+ adapter.submitList(items) // Always on main thread!
 }
 ```
 
@@ -430,7 +430,7 @@ viewModel.items.observe(viewLifecycleOwner) { items ->
 **Stable IDs to prevent click issues:**
 ```kotlin
 init {
-    setHasStableIds(true)
+ setHasStableIds(true)
 }
 
 override fun getItemId(position: Int) = items[position].id.toLong()
@@ -440,19 +440,19 @@ override fun getItemId(position: Int) = items[position].id.toLong()
 ```kotlin
 // ✅ GOOD - Use bindingAdapterPosition
 holder.itemView.setOnClickListener {
-    val position = holder.bindingAdapterPosition
-    if (position != RecyclerView.NO_POSITION) {
-        onClick(items[position])
-    }
+ val position = holder.bindingAdapterPosition
+ if (position != RecyclerView.NO_POSITION) {
+ onClick(items[position])
+ }
 }
 ```
 
 **Prevent memory leaks:**
 ```kotlin
 override fun onViewRecycled(holder: ViewHolder) {
-    super.onViewRecycled(holder)
-    holder.binding.root.setOnClickListener(null)
-    Glide.with(holder.binding.imageView).clear(holder.binding.imageView)
+ super.onViewRecycled(holder)
+ holder.binding.root.setOnClickListener(null)
+ Glide.with(holder.binding.imageView).clear(holder.binding.imageView)
 }
 ```
 
@@ -480,8 +480,8 @@ override fun onViewRecycled(holder: ViewHolder) {
 ## References
 
 - [[c-recyclerview]] - `RecyclerView` architecture concept
-- [[c-diffutil]] - DiffUtil algorithm concept
-- [[c-lifecycle-awareness]] - Android lifecycle components
+- - DiffUtil algorithm concept
+- - Android lifecycle components
 - Official: [`RecyclerView` Best Practices](https://developer.android.com/develop/ui/views/layout/recyclerview)
 - Official: [DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 

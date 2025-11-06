@@ -17,7 +17,7 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [c-datastore, c-sharedpreferences]
+related: []
 
 # Timestamps
 created: 2025-10-06
@@ -54,14 +54,14 @@ val prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
 // ❌ commit() блокирует текущий поток до завершения записи
 val success = prefs.edit()
-    .putString("username", "john_doe")
-    .putInt("age", 25)
-    .commit() // Блокирует UI thread!
+ .putString("username", "john_doe")
+ .putInt("age", 25)
+ .commit() // Блокирует UI thread!
 
 if (success) {
-    Log.d("Prefs", "Сохранено успешно")
+ Log.d("Prefs", "Сохранено успешно")
 } else {
-    Log.e("Prefs", "Ошибка сохранения")
+ Log.e("Prefs", "Ошибка сохранения")
 }
 ```
 
@@ -70,9 +70,9 @@ if (success) {
 ```kotlin
 // ✅ apply() возвращается немедленно
 prefs.edit()
-    .putString("username", "john_doe")
-    .putInt("age", 25)
-    .apply() // Не блокирует UI
+ .putString("username", "john_doe")
+ .putInt("age", 25)
+ .apply() // Не блокирует UI
 
 // Этот код выполняется сразу (запись идет в фоне)
 Log.d("Prefs", "apply() вызван, запись происходит в фоне")
@@ -83,20 +83,20 @@ Log.d("Prefs", "apply() вызван, запись происходит в фо�
 ```kotlin
 // Случай 1: Нужен результат операции
 fun saveImportantData(data: String): Boolean {
-    return prefs.edit()
-        .putString("important_data", data)
-        .commit() // Возвращает true/false
+ return prefs.edit()
+ .putString("important_data", data)
+ .commit() // Возвращает true/false
 }
 
 // Случай 2: Уже на фоновом потоке
 suspend fun saveInBackground() = withContext(Dispatchers.IO) {
-    val success = prefs.edit()
-        .putString("data", "value")
-        .commit() // ✅ OK на фоновом потоке
+ val success = prefs.edit()
+ .putString("data", "value")
+ .commit() // ✅ OK на фоновом потоке
 
-    if (!success) {
-        // Обработка ошибки
-    }
+ if (!success) {
+ // Обработка ошибки
+ }
 }
 ```
 
@@ -105,17 +105,17 @@ suspend fun saveInBackground() = withContext(Dispatchers.IO) {
 ```kotlin
 // ✅ Обычные настройки (99% случаев)
 fun saveSettings(darkMode: Boolean, notifications: Boolean) {
-    prefs.edit()
-        .putBoolean("dark_mode", darkMode)
-        .putBoolean("notifications", notifications)
-        .apply() // Fire-and-forget
+ prefs.edit()
+ .putBoolean("dark_mode", darkMode)
+ .putBoolean("notifications", notifications)
+ .apply() // Fire-and-forget
 }
 
 // ✅ Частые обновления (слайдер громкости)
 fun onSliderChanged(value: Int) {
-    prefs.edit()
-        .putInt("volume", value)
-        .apply() // Не блокирует UI при частых вызовах
+ prefs.edit()
+ .putInt("volume", value)
+ .apply() // Не блокирует UI при частых вызовах
 }
 ```
 
@@ -124,28 +124,28 @@ fun onSliderChanged(value: Int) {
 ```kotlin
 // ❌ НЕ ДЕЛАЙТЕ: commit() на главном потоке для некритичных данных
 fun onClick() {
-    prefs.edit()
-        .putLong("last_click", System.currentTimeMillis())
-        .commit() // Может вызвать ANR!
+ prefs.edit()
+ .putLong("last_click", System.currentTimeMillis())
+ .commit() // Может вызвать ANR!
 }
 
 // ❌ НЕ ДЕЛАЙТЕ: игнорирование результата commit()
 prefs.edit()
-    .putString("data", "value")
-    .commit() // Игнорируете результат? Используйте apply()!
+ .putString("data", "value")
+ .commit() // Игнорируете результат? Используйте apply()!
 
 // ✅ ПРАВИЛЬНО: apply() для большинства случаев
 fun savePreference() {
-    prefs.edit()
-        .putString("key", "value")
-        .apply()
+ prefs.edit()
+ .putString("key", "value")
+ .apply()
 }
 
 // ✅ ПРАВИЛЬНО: commit() только когда нужен результат
 fun saveWithValidation(): Boolean {
-    return prefs.edit()
-        .putString("key", "value")
-        .commit()
+ return prefs.edit()
+ .putString("key", "value")
+ .commit()
 }
 ```
 
@@ -157,9 +157,9 @@ val Context.dataStore by preferencesDataStore("settings")
 
 // DataStore всегда асинхронный и type-safe
 suspend fun savePreference(value: String) {
-    context.dataStore.edit { preferences ->
-        preferences[stringPreferencesKey("key")] = value
-    }
+ context.dataStore.edit { preferences ->
+ preferences[stringPreferencesKey("key")] = value
+ }
 }
 ```
 
@@ -167,9 +167,9 @@ suspend fun savePreference(value: String) {
 
 1. **По умолчанию используйте apply()** - подходит для 99% случаев
 2. **Используйте commit() только когда**:
-   - Нужно знать, успешна ли запись
-   - Уже на фоновом потоке
-   - Нужны синхронные гарантии
+ - Нужно знать, успешна ли запись
+ - Уже на фоновом потоке
+ - Нужны синхронные гарантии
 3. **Никогда не используйте commit() на главном потоке** для частых/некритичных записей
 4. **Для нового кода мигрируйте на DataStore**
 
@@ -195,14 +195,14 @@ val prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
 // ❌ commit() blocks current thread until write completes
 val success = prefs.edit()
-    .putString("username", "john_doe")
-    .putInt("age", 25)
-    .commit() // Blocks UI thread!
+ .putString("username", "john_doe")
+ .putInt("age", 25)
+ .commit() // Blocks UI thread!
 
 if (success) {
-    Log.d("Prefs", "Successfully saved")
+ Log.d("Prefs", "Successfully saved")
 } else {
-    Log.e("Prefs", "Failed to save")
+ Log.e("Prefs", "Failed to save")
 }
 ```
 
@@ -211,9 +211,9 @@ if (success) {
 ```kotlin
 // ✅ apply() returns immediately
 prefs.edit()
-    .putString("username", "john_doe")
-    .putInt("age", 25)
-    .apply() // Non-blocking
+ .putString("username", "john_doe")
+ .putInt("age", 25)
+ .apply() // Non-blocking
 
 // This code runs immediately (write happens in background)
 Log.d("Prefs", "apply() called, write may not be complete")
@@ -224,20 +224,20 @@ Log.d("Prefs", "apply() called, write may not be complete")
 ```kotlin
 // Case 1: Need to know if save succeeded
 fun saveImportantData(data: String): Boolean {
-    return prefs.edit()
-        .putString("important_data", data)
-        .commit() // Returns true/false
+ return prefs.edit()
+ .putString("important_data", data)
+ .commit() // Returns true/false
 }
 
 // Case 2: Already on background thread
 suspend fun saveInBackground() = withContext(Dispatchers.IO) {
-    val success = prefs.edit()
-        .putString("data", "value")
-        .commit() // ✅ OK on background thread
+ val success = prefs.edit()
+ .putString("data", "value")
+ .commit() // ✅ OK on background thread
 
-    if (!success) {
-        // Handle failure
-    }
+ if (!success) {
+ // Handle failure
+ }
 }
 ```
 
@@ -246,17 +246,17 @@ suspend fun saveInBackground() = withContext(Dispatchers.IO) {
 ```kotlin
 // ✅ Simple preferences save (99% of cases)
 fun saveSettings(darkMode: Boolean, notifications: Boolean) {
-    prefs.edit()
-        .putBoolean("dark_mode", darkMode)
-        .putBoolean("notifications", notifications)
-        .apply() // Fire and forget
+ prefs.edit()
+ .putBoolean("dark_mode", darkMode)
+ .putBoolean("notifications", notifications)
+ .apply() // Fire and forget
 }
 
 // ✅ Frequent updates (volume slider)
 fun onSliderChanged(value: Int) {
-    prefs.edit()
-        .putInt("volume", value)
-        .apply() // Don't block UI on frequent calls
+ prefs.edit()
+ .putInt("volume", value)
+ .apply() // Don't block UI on frequent calls
 }
 ```
 
@@ -265,28 +265,28 @@ fun onSliderChanged(value: Int) {
 ```kotlin
 // ❌ DON'T: Use commit() on main thread for non-critical data
 fun onClick() {
-    prefs.edit()
-        .putLong("last_click", System.currentTimeMillis())
-        .commit() // Can cause ANR!
+ prefs.edit()
+ .putLong("last_click", System.currentTimeMillis())
+ .commit() // Can cause ANR!
 }
 
 // ❌ DON'T: Ignore return value of commit()
 prefs.edit()
-    .putString("data", "value")
-    .commit() // Ignoring result - use apply() instead!
+ .putString("data", "value")
+ .commit() // Ignoring result - use apply() instead!
 
 // ✅ DO: Use apply() for most cases
 fun savePreference() {
-    prefs.edit()
-        .putString("key", "value")
-        .apply()
+ prefs.edit()
+ .putString("key", "value")
+ .apply()
 }
 
 // ✅ DO: Use commit() only when you need the result
 fun saveWithValidation(): Boolean {
-    return prefs.edit()
-        .putString("key", "value")
-        .commit()
+ return prefs.edit()
+ .putString("key", "value")
+ .commit()
 }
 ```
 
@@ -298,9 +298,9 @@ val Context.dataStore by preferencesDataStore("settings")
 
 // DataStore is always async and type-safe
 suspend fun savePreference(value: String) {
-    context.dataStore.edit { preferences ->
-        preferences[stringPreferencesKey("key")] = value
-    }
+ context.dataStore.edit { preferences ->
+ preferences[stringPreferencesKey("key")] = value
+ }
 }
 ```
 
@@ -308,9 +308,9 @@ suspend fun savePreference(value: String) {
 
 1. **Default to apply()** - suitable for 99% of cases
 2. **Use commit() only when**:
-   - You need to know if the write succeeded
-   - You're already on a background thread
-   - You need synchronous guarantees
+ - You need to know if the write succeeded
+ - You're already on a background thread
+ - You need synchronous guarantees
 3. **Never use commit() on main thread** for frequent/non-critical writes
 4. **Migrate to DataStore for new code**
 
@@ -326,8 +326,8 @@ suspend fun savePreference(value: String) {
 
 ## References
 
-- [[c-datastore]] - Modern data storage solution
-- [[c-sharedpreferences]] - Legacy key-value storage
+- - Modern data storage solution
+- - Legacy key-value storage
 - [[c-coroutines]] - Asynchronous programming in Android
 - [SharedPreferences Documentation](https://developer.android.com/reference/android/content/SharedPreferences)
 - [DataStore Documentation](https://developer.android.com/topic/libraries/architecture/datastore)
@@ -336,13 +336,13 @@ suspend fun savePreference(value: String) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-data-storage-options--android--easy]] - Overview of storage options
+- - Overview of storage options
 
 ### Related (Same Level)
-- [[q-datastore-preferences-vs-proto--android--easy]] - DataStore types
-- [[q-context-modes-android--android--easy]] - `Context`.MODE_PRIVATE explained
+- [[q-datastore-preferences-proto--android--medium]] - DataStore types
+- - `Context`.MODE_PRIVATE explained
 
 ### Advanced (Harder)
-- [[q-datastore-migration--android--medium]] - Migrating from SharedPreferences
+- [[q-room-database-migrations--android--medium]] - Migrating from SharedPreferences
 - [[q-launch-modes-android--android--medium]] - Detecting main thread I/O
-- [[q-performance-memory--android--medium]] - Android performance optimization
+- - Android performance optimization

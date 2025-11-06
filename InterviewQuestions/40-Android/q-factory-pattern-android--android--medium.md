@@ -17,7 +17,6 @@ sources:
 status: reviewed
 moc: moc-android
 related:
-  - c-factory-pattern
 created: 2025-10-20
 updated: 2025-11-03
 tags: [android/architecture-clean, android/ui-views, design-patterns, difficulty/medium, factory-pattern, layout-inflater]

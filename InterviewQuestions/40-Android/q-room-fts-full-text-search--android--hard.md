@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-room-database, q-room-basics-dao-entity--android--easy, q-room-relationships-embedded--android--medium]
+related: [c-room-database]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
@@ -53,20 +53,20 @@ Implement full-text search in Room using FTS4/FTS5. Optimize search performance 
 // ✅ Основная сущность
 @Entity(tableName = "articles")
 data class Article(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-    val title: String,
-    val content: String
+ @PrimaryKey(autoGenerate = true)
+ val id: Long = 0,
+ val title: String,
+ val content: String
 )
 
 // ✅ FTS сущность с внешним содержимым (избегает дублирования)
 @Fts4(contentEntity = Article::class) // Room использует @Fts4 для FTS5
 @Entity(tableName = "articles_fts")
 data class ArticleFts(
-    @PrimaryKey @ColumnInfo(name = "rowid")
-    val rowid: Long,
-    val title: String,    // Индексируется
-    val content: String   // Индексируется
+ @PrimaryKey @ColumnInfo(name = "rowid")
+ val rowid: Long,
+ val title: String, // Индексируется
+ val content: String // Индексируется
 )
 ```
 
@@ -76,35 +76,35 @@ data class ArticleFts(
 @Database(entities = [Article::class, ArticleFts::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
-    override fun onCreate(db: SupportSQLiteDatabase) {
-        super.onCreate(db)
+ override fun onCreate(db: SupportSQLiteDatabase) {
+ super.onCreate(db)
 
-        // ✅ Автоматическая синхронизация при INSERT
-        db.execSQL("""
-            CREATE TRIGGER articles_fts_insert AFTER INSERT ON articles
-            BEGIN
-                INSERT INTO articles_fts (rowid, title, content)
-                VALUES (new.id, new.title, new.content);
-            END
-        """)
+ // ✅ Автоматическая синхронизация при INSERT
+ db.execSQL("""
+ CREATE TRIGGER articles_fts_insert AFTER INSERT ON articles
+ BEGIN
+ INSERT INTO articles_fts (rowid, title, content)
+ VALUES (new.id, new.title, new.content);
+ END
+ """)
 
-        // ✅ Автоматическая синхронизация при UPDATE
-        db.execSQL("""
-            CREATE TRIGGER articles_fts_update AFTER UPDATE ON articles
-            BEGIN
-                UPDATE articles_fts SET title = new.title, content = new.content
-                WHERE rowid = new.id;
-            END
-        """)
+ // ✅ Автоматическая синхронизация при UPDATE
+ db.execSQL("""
+ CREATE TRIGGER articles_fts_update AFTER UPDATE ON articles
+ BEGIN
+ UPDATE articles_fts SET title = new.title, content = new.content
+ WHERE rowid = new.id;
+ END
+ """)
 
-        // ✅ Автоматическая синхронизация при DELETE
-        db.execSQL("""
-            CREATE TRIGGER articles_fts_delete AFTER DELETE ON articles
-            BEGIN
-                DELETE FROM articles_fts WHERE rowid = old.id;
-            END
-        """)
-    }
+ // ✅ Автоматическая синхронизация при DELETE
+ db.execSQL("""
+ CREATE TRIGGER articles_fts_delete AFTER DELETE ON articles
+ BEGIN
+ DELETE FROM articles_fts WHERE rowid = old.id;
+ END
+ """)
+ }
 }
 ```
 
@@ -112,39 +112,39 @@ abstract class AppDatabase : RoomDatabase() {
 
 ```kotlin
 data class ArticleSearchResult(
-    @Embedded val article: Article,
-    val rank: Double  // ✅ BM25 score (меньше = релевантнее)
+ @Embedded val article: Article,
+ val rank: Double // ✅ BM25 score (меньше = релевантнее)
 )
 
 @Dao
 interface ArticleDao {
-    // ✅ Базовый поиск с ранжированием
-    @Query("""
-        SELECT articles.*, bm25(articles_fts) as rank
-        FROM articles
-        INNER JOIN articles_fts ON articles.id = articles_fts.rowid
-        WHERE articles_fts MATCH :query
-        ORDER BY rank
-    """)
-    fun search(query: String): Flow<List<ArticleSearchResult>>
+ // ✅ Базовый поиск с ранжированием
+ @Query("""
+ SELECT articles.*, bm25(articles_fts) as rank
+ FROM articles
+ INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+ WHERE articles_fts MATCH :query
+ ORDER BY rank
+ """)
+ fun search(query: String): Flow<List<ArticleSearchResult>>
 
-    // ✅ Взвешенное ранжирование (title важнее content)
-    @Query("""
-        SELECT articles.*, bm25(articles_fts, 10.0, 1.0) as rank
-        FROM articles INNER JOIN articles_fts ON articles.id = articles_fts.rowid
-        WHERE articles_fts MATCH :query
-        ORDER BY rank LIMIT :limit
-    """)
-    suspend fun searchWeighted(query: String, limit: Int): List<ArticleSearchResult>
+ // ✅ Взвешенное ранжирование (title важнее content)
+ @Query("""
+ SELECT articles.*, bm25(articles_fts, 10.0, 1.0) as rank
+ FROM articles INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+ WHERE articles_fts MATCH :query
+ ORDER BY rank LIMIT :limit
+ """)
+ suspend fun searchWeighted(query: String, limit: Int): List<ArticleSearchResult>
 
-    // ✅ Префиксный поиск для автодополнения
-    @Query("""
-        SELECT articles.* FROM articles
-        INNER JOIN articles_fts ON articles.id = articles_fts.rowid
-        WHERE articles_fts MATCH :query || '*'
-        LIMIT 10
-    """)
-    suspend fun autocomplete(query: String): List<Article>
+ // ✅ Префиксный поиск для автодополнения
+ @Query("""
+ SELECT articles.* FROM articles
+ INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+ WHERE articles_fts MATCH :query || '*'
+ LIMIT 10
+ """)
+ suspend fun autocomplete(query: String): List<Article>
 }
 ```
 
@@ -152,24 +152,24 @@ interface ArticleDao {
 
 ```kotlin
 data class ArticleWithHighlight(
-    @Embedded val article: Article,
-    val highlightedTitle: String,    // ✅ Подсвеченный заголовок
-    val snippet: String,              // ✅ Фрагмент с контекстом
-    val rank: Double
+ @Embedded val article: Article,
+ val highlightedTitle: String, // ✅ Подсвеченный заголовок
+ val snippet: String, // ✅ Фрагмент с контекстом
+ val rank: Double
 )
 
 @Dao
 interface ArticleDao {
-    @Query("""
-        SELECT articles.*,
-               highlight(articles_fts, 0, '<b>', '</b>') as highlightedTitle,
-               snippet(articles_fts, 1, '<mark>', '</mark>', '...', 30) as snippet,
-               bm25(articles_fts) as rank
-        FROM articles INNER JOIN articles_fts ON articles.id = articles_fts.rowid
-        WHERE articles_fts MATCH :query
-        ORDER BY rank LIMIT :limit
-    """)
-    suspend fun searchWithHighlight(query: String, limit: Int): List<ArticleWithHighlight>
+ @Query("""
+ SELECT articles.*,
+ highlight(articles_fts, 0, '<b>', '</b>') as highlightedTitle,
+ snippet(articles_fts, 1, '<mark>', '</mark>', '...', 30) as snippet,
+ bm25(articles_fts) as rank
+ FROM articles INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+ WHERE articles_fts MATCH :query
+ ORDER BY rank LIMIT :limit
+ """)
+ suspend fun searchWithHighlight(query: String, limit: Int): List<ArticleWithHighlight>
 }
 ```
 
@@ -178,25 +178,25 @@ interface ArticleDao {
 ```kotlin
 class ArticleRepository(private val dao: ArticleDao) {
 
-    // ✅ Debouncing для оптимизации UX
-    fun search(queryFlow: Flow<String>): Flow<List<ArticleSearchResult>> {
-        return queryFlow
-            .debounce(300)  // Ждать 300мс после ввода
-            .filter { it.length >= 2 }
-            .distinctUntilChanged()
-            .flatMapLatest { query ->
-                dao.search(sanitize(query))
-            }
-    }
+ // ✅ Debouncing для оптимизации UX
+ fun search(queryFlow: Flow<String>): Flow<List<ArticleSearchResult>> {
+ return queryFlow
+ .debounce(300) // Ждать 300мс после ввода
+ .filter { it.length >= 2 }
+ .distinctUntilChanged()
+ .flatMapLatest { query ->
+ dao.search(sanitize(query))
+ }
+ }
 
-    // ✅ Санитизация для предотвращения ошибок FTS
-    private fun sanitize(query: String): String {
-        return query.trim()
-            .replace("\"", "")   // Удалить кавычки
-            .split("\\s+".toRegex())
-            .filter { it.isNotEmpty() }
-            .joinToString(" AND ")
-    }
+ // ✅ Санитизация для предотвращения ошибок FTS
+ private fun sanitize(query: String): String {
+ return query.trim()
+ .replace("\"", "") // Удалить кавычки
+ .split("\\s+".toRegex())
+ .filter { it.isNotEmpty() }
+ .joinToString(" AND ")
+ }
 }
 ```
 
@@ -238,15 +238,15 @@ data class ArticleFtsSimple(...)
 // ❌ WRONG - Ручная синхронизация (подвержена ошибкам)
 @Transaction
 suspend fun insert(article: Article) {
-    val id = insertArticle(article)
-    insertFts(ArticleFts(id, article.title, article.content))
+ val id = insertArticle(article)
+ insertFts(ArticleFts(id, article.title, article.content))
 }
 
 // ✅ CORRECT - Автоматическая синхронизация через триггеры
 // Просто insert в основную таблицу, триггер обновит FTS
 
 // ❌ WRONG - Не санитизация query
-dao.search(userInput)  // Может вызвать ошибку FTS
+dao.search(userInput) // Может вызвать ошибку FTS
 
 // ✅ CORRECT - Санитизация входных данных
 dao.search(sanitize(userInput))
@@ -254,19 +254,19 @@ dao.search(sanitize(userInput))
 // ❌ WRONG - Индексация всех полей
 @Fts4(contentEntity = Article::class)
 data class ArticleFts(
-    val id: Long,
-    val title: String,
-    val content: String,
-    val metadata: String,  // Не нужно индексировать
-    val timestamps: Long   // Не нужно индексировать
+ val id: Long,
+ val title: String,
+ val content: String,
+ val metadata: String, // Не нужно индексировать
+ val timestamps: Long // Не нужно индексировать
 )
 
 // ✅ CORRECT - Индексация только searchable полей
 @Fts4(contentEntity = Article::class)
 data class ArticleFts(
-    val rowid: Long,
-    val title: String,
-    val content: String
+ val rowid: Long,
+ val title: String,
+ val content: String
 )
 ```
 
@@ -298,20 +298,20 @@ data class ArticleFts(
 // ✅ Main entity
 @Entity(tableName = "articles")
 data class Article(
-    @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
-    val title: String,
-    val content: String
+ @PrimaryKey(autoGenerate = true)
+ val id: Long = 0,
+ val title: String,
+ val content: String
 )
 
 // ✅ FTS entity with external content (avoids duplication)
 @Fts4(contentEntity = Article::class) // Room uses @Fts4 for FTS5
 @Entity(tableName = "articles_fts")
 data class ArticleFts(
-    @PrimaryKey @ColumnInfo(name = "rowid")
-    val rowid: Long,
-    val title: String,    // Indexed
-    val content: String   // Indexed
+ @PrimaryKey @ColumnInfo(name = "rowid")
+ val rowid: Long,
+ val title: String, // Indexed
+ val content: String // Indexed
 )
 ```
 
@@ -321,35 +321,35 @@ data class ArticleFts(
 @Database(entities = [Article::class, ArticleFts::class], version = 1)
 abstract class AppDatabase : RoomDatabase() {
 
-    override fun onCreate(db: SupportSQLiteDatabase) {
-        super.onCreate(db)
+ override fun onCreate(db: SupportSQLiteDatabase) {
+ super.onCreate(db)
 
-        // ✅ Auto-sync on INSERT
-        db.execSQL("""
-            CREATE TRIGGER articles_fts_insert AFTER INSERT ON articles
-            BEGIN
-                INSERT INTO articles_fts (rowid, title, content)
-                VALUES (new.id, new.title, new.content);
-            END
-        """)
+ // ✅ Auto-sync on INSERT
+ db.execSQL("""
+ CREATE TRIGGER articles_fts_insert AFTER INSERT ON articles
+ BEGIN
+ INSERT INTO articles_fts (rowid, title, content)
+ VALUES (new.id, new.title, new.content);
+ END
+ """)
 
-        // ✅ Auto-sync on UPDATE
-        db.execSQL("""
-            CREATE TRIGGER articles_fts_update AFTER UPDATE ON articles
-            BEGIN
-                UPDATE articles_fts SET title = new.title, content = new.content
-                WHERE rowid = new.id;
-            END
-        """)
+ // ✅ Auto-sync on UPDATE
+ db.execSQL("""
+ CREATE TRIGGER articles_fts_update AFTER UPDATE ON articles
+ BEGIN
+ UPDATE articles_fts SET title = new.title, content = new.content
+ WHERE rowid = new.id;
+ END
+ """)
 
-        // ✅ Auto-sync on DELETE
-        db.execSQL("""
-            CREATE TRIGGER articles_fts_delete AFTER DELETE ON articles
-            BEGIN
-                DELETE FROM articles_fts WHERE rowid = old.id;
-            END
-        """)
-    }
+ // ✅ Auto-sync on DELETE
+ db.execSQL("""
+ CREATE TRIGGER articles_fts_delete AFTER DELETE ON articles
+ BEGIN
+ DELETE FROM articles_fts WHERE rowid = old.id;
+ END
+ """)
+ }
 }
 ```
 
@@ -357,39 +357,39 @@ abstract class AppDatabase : RoomDatabase() {
 
 ```kotlin
 data class ArticleSearchResult(
-    @Embedded val article: Article,
-    val rank: Double  // ✅ BM25 score (lower = more relevant)
+ @Embedded val article: Article,
+ val rank: Double // ✅ BM25 score (lower = more relevant)
 )
 
 @Dao
 interface ArticleDao {
-    // ✅ Basic search with ranking
-    @Query("""
-        SELECT articles.*, bm25(articles_fts) as rank
-        FROM articles
-        INNER JOIN articles_fts ON articles.id = articles_fts.rowid
-        WHERE articles_fts MATCH :query
-        ORDER BY rank
-    """)
-    fun search(query: String): Flow<List<ArticleSearchResult>>
+ // ✅ Basic search with ranking
+ @Query("""
+ SELECT articles.*, bm25(articles_fts) as rank
+ FROM articles
+ INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+ WHERE articles_fts MATCH :query
+ ORDER BY rank
+ """)
+ fun search(query: String): Flow<List<ArticleSearchResult>>
 
-    // ✅ Weighted ranking (title more important than content)
-    @Query("""
-        SELECT articles.*, bm25(articles_fts, 10.0, 1.0) as rank
-        FROM articles INNER JOIN articles_fts ON articles.id = articles_fts.rowid
-        WHERE articles_fts MATCH :query
-        ORDER BY rank LIMIT :limit
-    """)
-    suspend fun searchWeighted(query: String, limit: Int): List<ArticleSearchResult>
+ // ✅ Weighted ranking (title more important than content)
+ @Query("""
+ SELECT articles.*, bm25(articles_fts, 10.0, 1.0) as rank
+ FROM articles INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+ WHERE articles_fts MATCH :query
+ ORDER BY rank LIMIT :limit
+ """)
+ suspend fun searchWeighted(query: String, limit: Int): List<ArticleSearchResult>
 
-    // ✅ Prefix search for autocomplete
-    @Query("""
-        SELECT articles.* FROM articles
-        INNER JOIN articles_fts ON articles.id = articles_fts.rowid
-        WHERE articles_fts MATCH :query || '*'
-        LIMIT 10
-    """)
-    suspend fun autocomplete(query: String): List<Article>
+ // ✅ Prefix search for autocomplete
+ @Query("""
+ SELECT articles.* FROM articles
+ INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+ WHERE articles_fts MATCH :query || '*'
+ LIMIT 10
+ """)
+ suspend fun autocomplete(query: String): List<Article>
 }
 ```
 
@@ -397,24 +397,24 @@ interface ArticleDao {
 
 ```kotlin
 data class ArticleWithHighlight(
-    @Embedded val article: Article,
-    val highlightedTitle: String,    // ✅ Highlighted title
-    val snippet: String,              // ✅ Snippet with context
-    val rank: Double
+ @Embedded val article: Article,
+ val highlightedTitle: String, // ✅ Highlighted title
+ val snippet: String, // ✅ Snippet with context
+ val rank: Double
 )
 
 @Dao
 interface ArticleDao {
-    @Query("""
-        SELECT articles.*,
-               highlight(articles_fts, 0, '<b>', '</b>') as highlightedTitle,
-               snippet(articles_fts, 1, '<mark>', '</mark>', '...', 30) as snippet,
-               bm25(articles_fts) as rank
-        FROM articles INNER JOIN articles_fts ON articles.id = articles_fts.rowid
-        WHERE articles_fts MATCH :query
-        ORDER BY rank LIMIT :limit
-    """)
-    suspend fun searchWithHighlight(query: String, limit: Int): List<ArticleWithHighlight>
+ @Query("""
+ SELECT articles.*,
+ highlight(articles_fts, 0, '<b>', '</b>') as highlightedTitle,
+ snippet(articles_fts, 1, '<mark>', '</mark>', '...', 30) as snippet,
+ bm25(articles_fts) as rank
+ FROM articles INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+ WHERE articles_fts MATCH :query
+ ORDER BY rank LIMIT :limit
+ """)
+ suspend fun searchWithHighlight(query: String, limit: Int): List<ArticleWithHighlight>
 }
 ```
 
@@ -423,25 +423,25 @@ interface ArticleDao {
 ```kotlin
 class ArticleRepository(private val dao: ArticleDao) {
 
-    // ✅ Debouncing for better UX
-    fun search(queryFlow: Flow<String>): Flow<List<ArticleSearchResult>> {
-        return queryFlow
-            .debounce(300)  // Wait 300ms after typing
-            .filter { it.length >= 2 }
-            .distinctUntilChanged()
-            .flatMapLatest { query ->
-                dao.search(sanitize(query))
-            }
-    }
+ // ✅ Debouncing for better UX
+ fun search(queryFlow: Flow<String>): Flow<List<ArticleSearchResult>> {
+ return queryFlow
+ .debounce(300) // Wait 300ms after typing
+ .filter { it.length >= 2 }
+ .distinctUntilChanged()
+ .flatMapLatest { query ->
+ dao.search(sanitize(query))
+ }
+ }
 
-    // ✅ Sanitize to prevent FTS errors
-    private fun sanitize(query: String): String {
-        return query.trim()
-            .replace("\"", "")   // Remove quotes
-            .split("\\s+".toRegex())
-            .filter { it.isNotEmpty() }
-            .joinToString(" AND ")
-    }
+ // ✅ Sanitize to prevent FTS errors
+ private fun sanitize(query: String): String {
+ return query.trim()
+ .replace("\"", "") // Remove quotes
+ .split("\\s+".toRegex())
+ .filter { it.isNotEmpty() }
+ .joinToString(" AND ")
+ }
 }
 ```
 
@@ -483,15 +483,15 @@ data class ArticleFtsSimple(...)
 // ❌ WRONG - Manual synchronization (error-prone)
 @Transaction
 suspend fun insert(article: Article) {
-    val id = insertArticle(article)
-    insertFts(ArticleFts(id, article.title, article.content))
+ val id = insertArticle(article)
+ insertFts(ArticleFts(id, article.title, article.content))
 }
 
 // ✅ CORRECT - Automatic sync via triggers
 // Just insert to main table, trigger updates FTS
 
 // ❌ WRONG - No query sanitization
-dao.search(userInput)  // Can cause FTS error
+dao.search(userInput) // Can cause FTS error
 
 // ✅ CORRECT - Sanitize user input
 dao.search(sanitize(userInput))
@@ -499,19 +499,19 @@ dao.search(sanitize(userInput))
 // ❌ WRONG - Index all fields
 @Fts4(contentEntity = Article::class)
 data class ArticleFts(
-    val id: Long,
-    val title: String,
-    val content: String,
-    val metadata: String,  // Don't index
-    val timestamps: Long   // Don't index
+ val id: Long,
+ val title: String,
+ val content: String,
+ val metadata: String, // Don't index
+ val timestamps: Long // Don't index
 )
 
 // ✅ CORRECT - Index only searchable fields
 @Fts4(contentEntity = Article::class)
 data class ArticleFts(
-    val rowid: Long,
-    val title: String,
-    val content: String
+ val rowid: Long,
+ val title: String,
+ val content: String
 )
 ```
 
@@ -529,8 +529,8 @@ data class ArticleFts(
 
 **Concept Notes**:
 - [[c-room-database]] - Room database fundamentals
-- [[c-sqlite-indexes]] - SQLite indexing strategies
-- [[c-bm25-ranking]] - BM25 relevance ranking algorithm
+- - SQLite indexing strategies
+- - BM25 relevance ranking algorithm
 
 **Official Documentation**:
 - [Room FTS Documentation](https://developer.android.com/training/data-storage/room/defining-data#fts)
@@ -540,14 +540,14 @@ data class ArticleFts(
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-room-basics-dao-entity--android--easy]] - Room fundamentals
+- - Room fundamentals
 - [[q-room-relations-embedded--android--medium]] - Room relationships
 
 ### Related (Same Level)
 - [[q-room-transactions-dao--android--medium]] - Transaction handling
 - [[q-room-paging3-integration--android--medium]] - Pagination integration
-- [[q-sqlite-query-optimization--android--hard]] - Query optimization
+- - Query optimization
 
 ### Advanced (Harder)
-- [[q-room-custom-type-converters--android--hard]] - Advanced type converters
-- [[q-multi-module-room-database--android--hard]] - Multi-module Room architecture
+- - Advanced type converters
+- - Multi-module Room architecture

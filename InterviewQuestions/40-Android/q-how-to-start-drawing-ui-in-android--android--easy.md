@@ -36,24 +36,24 @@ sources: []
 ```kotlin
 // ✅ Стандартный подход для View-based UI
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)  // ✅ Связывание layout с Activity
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContentView(R.layout.activity_main) // ✅ Связывание layout с Activity
+ }
 }
 ```
 
 ```xml
 <!-- res/layout/activity_main.xml -->
 <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World" />
+ <TextView
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Hello World" />
 </LinearLayout>
 ```
 
@@ -62,12 +62,12 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 // ✅ Декларативный UI без XML
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {  // ✅ Compose UI вместо setContentView
-            Text("Hello World")
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContent { // ✅ Compose UI вместо setContentView
+ Text("Hello World")
+ }
+ }
 }
 ```
 
@@ -76,11 +76,11 @@ class MainActivity : ComponentActivity() {
 ```kotlin
 // ✅ Низкоуровневая отрисовка через Canvas
 class CustomView(context: Context) : View(context) {
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        val paint = Paint().apply { color = Color.BLUE }
-        canvas.drawCircle(100f, 100f, 50f, paint)
-    }
+ override fun onDraw(canvas: Canvas) {
+ super.onDraw(canvas)
+ val paint = Paint().apply { color = Color.BLUE }
+ canvas.drawCircle(100f, 100f, 50f, paint)
+ }
 }
 ```
 
@@ -95,24 +95,24 @@ To display UI in Android, you need to: (1) create an [[c-activity|`Activity`]], 
 ```kotlin
 // ✅ Standard approach for View-based UI
 class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)  // ✅ Bind layout to Activity
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContentView(R.layout.activity_main) // ✅ Bind layout to Activity
+ }
 }
 ```
 
 ```xml
 <!-- res/layout/activity_main.xml -->
 <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
+ android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World" />
+ <TextView
+ android:layout_width="wrap_content"
+ android:layout_height="wrap_content"
+ android:text="Hello World" />
 </LinearLayout>
 ```
 
@@ -121,12 +121,12 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 // ✅ Declarative UI without XML
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {  // ✅ Compose UI instead of setContentView
-            Text("Hello World")
-        }
-    }
+ override fun onCreate(savedInstanceState: Bundle?) {
+ super.onCreate(savedInstanceState)
+ setContent { // ✅ Compose UI instead of setContentView
+ Text("Hello World")
+ }
+ }
 }
 ```
 
@@ -135,11 +135,11 @@ class MainActivity : ComponentActivity() {
 ```kotlin
 // ✅ Low-level drawing with Canvas
 class CustomView(context: Context) : View(context) {
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        val paint = Paint().apply { color = Color.BLUE }
-        canvas.drawCircle(100f, 100f, 50f, paint)
-    }
+ override fun onDraw(canvas: Canvas) {
+ super.onDraw(canvas)
+ val paint = Paint().apply { color = Color.BLUE }
+ canvas.drawCircle(100f, 100f, 50f, paint)
+ }
 }
 ```
 
@@ -155,7 +155,7 @@ class CustomView(context: Context) : View(context) {
 ## References
 
 - [[c-activity]] - `Activity` lifecycle and fundamentals
-- [[c-android-ui-composition]] - UI composition patterns
+- - UI composition patterns
 - https://developer.android.com/guide/components/activities/intro-activities
 
 ## Related Questions

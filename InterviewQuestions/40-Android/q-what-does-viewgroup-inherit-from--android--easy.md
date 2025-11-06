@@ -16,7 +16,6 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-view-hierarchy
 - c-views
 - q-viewgroup-vs-view-differences--android--easy
 - q-what-layout-allows-overlapping-objects--android--easy
@@ -47,11 +46,11 @@ tags:
 
 ```
 Object
-  ↓
+ ↓
 View (base class for all UI elements)
-  ↓
+ ↓
 ViewGroup (container for other Views)
-  ↓
+ ↓
 Specific Layout Classes (LinearLayout, RelativeLayout, etc.)
 ```
 
@@ -62,29 +61,29 @@ The `View` class is the fundamental building block for all UI components:
 ```kotlin
 // Simplified View class structure
 abstract class View {
-    // Basic properties
-    var visibility: Int
-    var isEnabled: Boolean
-    var isClickable: Boolean
+ // Basic properties
+ var visibility: Int
+ var isEnabled: Boolean
+ var isClickable: Boolean
 
-    // Layout parameters
-    var layoutParams: ViewGroup.LayoutParams
+ // Layout parameters
+ var layoutParams: ViewGroup.LayoutParams
 
-    // Drawing
-    protected open fun onDraw(canvas: Canvas)
+ // Drawing
+ protected open fun onDraw(canvas: Canvas)
 
-    // Measurement
-    protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
+ // Measurement
+ protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
 
-    // Layout
-    protected open fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int)
+ // Layout
+ protected open fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int)
 
-    // Touch events
-    open fun onTouchEvent(event: MotionEvent): Boolean
+ // Touch events
+ open fun onTouchEvent(event: MotionEvent): Boolean
 
-    // Lifecycle
-    protected open fun onAttachedToWindow()
-    protected open fun onDetachedFromWindow()
+ // Lifecycle
+ protected open fun onAttachedToWindow()
+ protected open fun onDetachedFromWindow()
 }
 ```
 
@@ -95,23 +94,23 @@ abstract class View {
 ```kotlin
 // Simplified ViewGroup class structure
 abstract class ViewGroup : View {
-    // Child management
-    fun addView(child: View)
-    fun removeView(child: View)
-    fun removeAllViews()
-    fun getChildAt(index: Int): View
-    fun getChildCount(): Int
+ // Child management
+ fun addView(child: View)
+ fun removeView(child: View)
+ fun removeAllViews()
+ fun getChildAt(index: Int): View
+ fun getChildCount(): Int
 
-    // Layout management
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int)
+ // Layout management
+ override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int)
 
-    // Measurement of children
-    fun measureChild(child: View, parentWidthMeasureSpec: Int, parentHeightMeasureSpec: Int)
-    fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int)
+ // Measurement of children
+ fun measureChild(child: View, parentWidthMeasureSpec: Int, parentHeightMeasureSpec: Int)
+ fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int)
 
-    // Touch event distribution
-    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean
-    fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean)
+ // Touch event distribution
+ override fun onInterceptTouchEvent(ev: MotionEvent): Boolean
+ fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean)
 }
 ```
 
@@ -122,27 +121,27 @@ Since `ViewGroup` extends `View`, it inherits all `View` properties and methods:
 ```kotlin
 class CustomLayout : ViewGroup {
 
-    fun demonstrateInheritedFeatures(context: Context) {
-        // Inherited from View
-        this.visibility = View.VISIBLE
-        this.isEnabled = true
-        this.alpha = 0.5f
-        this.rotation = 45f
-        this.translationX = 100f
-        this.translationY = 100f
+ fun demonstrateInheritedFeatures(context: Context) {
+ // Inherited from View
+ this.visibility = View.VISIBLE
+ this.isEnabled = true
+ this.alpha = 0.5f
+ this.rotation = 45f
+ this.translationX = 100f
+ this.translationY = 100f
 
-        this.setBackgroundColor(Color.RED)
-        this.setPadding(16, 16, 16, 16)
+ this.setBackgroundColor(Color.RED)
+ this.setPadding(16, 16, 16, 16)
 
-        this.setOnClickListener {
-            // Handle click
-        }
+ this.setOnClickListener {
+ // Handle click
+ }
 
-        // ViewGroup-specific features
-        this.addView(TextView(context))
-        this.clipChildren = false
-        this.clipToPadding = false
-    }
+ // ViewGroup-specific features
+ this.addView(TextView(context))
+ this.clipChildren = false
+ this.clipToPadding = false
+ }
 }
 ```
 
@@ -150,47 +149,47 @@ class CustomLayout : ViewGroup {
 
 ```kotlin
 class CustomContainerLayout @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+ context: Context,
+ attrs: AttributeSet? = null,
+ defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
 
-    // Must override onMeasure (inherited from View)
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        var maxWidth = 0
-        var maxHeight = 0
+ // Must override onMeasure (inherited from View)
+ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+ var maxWidth = 0
+ var maxHeight = 0
 
-        // Measure all children
-        measureChildren(widthMeasureSpec, heightMeasureSpec)
+ // Measure all children
+ measureChildren(widthMeasureSpec, heightMeasureSpec)
 
-        // Calculate dimensions based on children
-        for (i in 0 until childCount) {
-            val child = getChildAt(i)
-            maxWidth = maxOf(maxWidth, child.measuredWidth)
-            maxHeight = maxOf(maxHeight, child.measuredHeight)
-        }
+ // Calculate dimensions based on children
+ for (i in 0 until childCount) {
+ val child = getChildAt(i)
+ maxWidth = maxOf(maxWidth, child.measuredWidth)
+ maxHeight = maxOf(maxHeight, child.measuredHeight)
+ }
 
-        // Set measured dimensions (using View's method)
-        setMeasuredDimension(
-            resolveSize(maxWidth, widthMeasureSpec),
-            resolveSize(maxHeight, heightMeasureSpec)
-        )
-    }
+ // Set measured dimensions (using View's method)
+ setMeasuredDimension(
+ resolveSize(maxWidth, widthMeasureSpec),
+ resolveSize(maxHeight, heightMeasureSpec)
+ )
+ }
 
-    // Must override onLayout (inherited from View)
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        // Position all children
-        for (i in 0 until childCount) {
-            val child = getChildAt(i)
-            child.layout(0, 0, child.measuredWidth, child.measuredHeight)
-        }
-    }
+ // Must override onLayout (inherited from View)
+ override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+ // Position all children
+ for (i in 0 until childCount) {
+ val child = getChildAt(i)
+ child.layout(0, 0, child.measuredWidth, child.measuredHeight)
+ }
+ }
 
-    // Can override onDraw (inherited from View)
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        // Custom drawing if needed
-    }
+ // Can override onDraw (inherited from View)
+ override fun onDraw(canvas: Canvas) {
+ super.onDraw(canvas)
+ // Custom drawing if needed
+ }
 }
 ```
 
@@ -228,8 +227,8 @@ class GridLayout : ViewGroup()
 ```kotlin
 // ViewGroup can be used as View
 fun setViewProperties(view: View) {
-    view.visibility = View.VISIBLE
-    view.alpha = 1.0f
+ view.visibility = View.VISIBLE
+ view.alpha = 1.0f
 }
 
 val linearLayout = LinearLayout(context)
@@ -244,10 +243,7 @@ setViewProperties(linearLayout) // Works because LinearLayout extends ViewGroup 
 - All layouts (`LinearLayout`, `RelativeLayout`, etc.) extend `ViewGroup`
 - This inheritance provides a consistent, unified API for all UI components
 
-
-
 ---
-
 
 ## Answer (EN)
 # Question (EN)
@@ -261,11 +257,11 @@ setViewProperties(linearLayout) // Works because LinearLayout extends ViewGroup 
 
 ```
 Object
-  ↓
+ ↓
 View (base class for all UI elements)
-  ↓
+ ↓
 ViewGroup (container for other Views)
-  ↓
+ ↓
 Specific Layout Classes (LinearLayout, RelativeLayout, etc.)
 ```
 
@@ -276,29 +272,29 @@ The `View` class is the fundamental building block for all UI components:
 ```kotlin
 // Simplified View class structure
 abstract class View {
-    // Basic properties
-    var visibility: Int
-    var isEnabled: Boolean
-    var isClickable: Boolean
+ // Basic properties
+ var visibility: Int
+ var isEnabled: Boolean
+ var isClickable: Boolean
 
-    // Layout parameters
-    var layoutParams: ViewGroup.LayoutParams
+ // Layout parameters
+ var layoutParams: ViewGroup.LayoutParams
 
-    // Drawing
-    protected open fun onDraw(canvas: Canvas)
+ // Drawing
+ protected open fun onDraw(canvas: Canvas)
 
-    // Measurement
-    protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
+ // Measurement
+ protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
 
-    // Layout
-    protected open fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int)
+ // Layout
+ protected open fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int)
 
-    // Touch events
-    open fun onTouchEvent(event: MotionEvent): Boolean
+ // Touch events
+ open fun onTouchEvent(event: MotionEvent): Boolean
 
-    // Lifecycle
-    protected open fun onAttachedToWindow()
-    protected open fun onDetachedFromWindow()
+ // Lifecycle
+ protected open fun onAttachedToWindow()
+ protected open fun onDetachedFromWindow()
 }
 ```
 
@@ -309,23 +305,23 @@ abstract class View {
 ```kotlin
 // Simplified ViewGroup class structure
 abstract class ViewGroup : View {
-    // Child management
-    fun addView(child: View)
-    fun removeView(child: View)
-    fun removeAllViews()
-    fun getChildAt(index: Int): View
-    fun getChildCount(): Int
+ // Child management
+ fun addView(child: View)
+ fun removeView(child: View)
+ fun removeAllViews()
+ fun getChildAt(index: Int): View
+ fun getChildCount(): Int
 
-    // Layout management
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int)
+ // Layout management
+ override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int)
 
-    // Measurement of children
-    fun measureChild(child: View, parentWidthMeasureSpec: Int, parentHeightMeasureSpec: Int)
-    fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int)
+ // Measurement of children
+ fun measureChild(child: View, parentWidthMeasureSpec: Int, parentHeightMeasureSpec: Int)
+ fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int)
 
-    // Touch event distribution
-    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean
-    fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean)
+ // Touch event distribution
+ override fun onInterceptTouchEvent(ev: MotionEvent): Boolean
+ fun requestDisallowInterceptTouchEvent(disallowIntercept: Boolean)
 }
 ```
 
@@ -336,27 +332,27 @@ Since `ViewGroup` extends `View`, it inherits all `View` properties and methods:
 ```kotlin
 class CustomLayout : ViewGroup {
 
-    fun demonstrateInheritedFeatures(context: Context) {
-        // Inherited from View
-        this.visibility = View.VISIBLE
-        this.isEnabled = true
-        this.alpha = 0.5f
-        this.rotation = 45f
-        this.translationX = 100f
-        this.translationY = 100f
+ fun demonstrateInheritedFeatures(context: Context) {
+ // Inherited from View
+ this.visibility = View.VISIBLE
+ this.isEnabled = true
+ this.alpha = 0.5f
+ this.rotation = 45f
+ this.translationX = 100f
+ this.translationY = 100f
 
-        this.setBackgroundColor(Color.RED)
-        this.setPadding(16, 16, 16, 16)
+ this.setBackgroundColor(Color.RED)
+ this.setPadding(16, 16, 16, 16)
 
-        this.setOnClickListener {
-            // Handle click
-        }
+ this.setOnClickListener {
+ // Handle click
+ }
 
-        // ViewGroup-specific features
-        this.addView(TextView(context))
-        this.clipChildren = false
-        this.clipToPadding = false
-    }
+ // ViewGroup-specific features
+ this.addView(TextView(context))
+ this.clipChildren = false
+ this.clipToPadding = false
+ }
 }
 ```
 
@@ -364,47 +360,47 @@ class CustomLayout : ViewGroup {
 
 ```kotlin
 class CustomContainerLayout @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
+ context: Context,
+ attrs: AttributeSet? = null,
+ defStyleAttr: Int = 0
 ) : ViewGroup(context, attrs, defStyleAttr) {
 
-    // Must override onMeasure (inherited from View)
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        var maxWidth = 0
-        var maxHeight = 0
+ // Must override onMeasure (inherited from View)
+ override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+ var maxWidth = 0
+ var maxHeight = 0
 
-        // Measure all children
-        measureChildren(widthMeasureSpec, heightMeasureSpec)
+ // Measure all children
+ measureChildren(widthMeasureSpec, heightMeasureSpec)
 
-        // Calculate dimensions based on children
-        for (i in 0 until childCount) {
-            val child = getChildAt(i)
-            maxWidth = maxOf(maxWidth, child.measuredWidth)
-            maxHeight = maxOf(maxHeight, child.measuredHeight)
-        }
+ // Calculate dimensions based on children
+ for (i in 0 until childCount) {
+ val child = getChildAt(i)
+ maxWidth = maxOf(maxWidth, child.measuredWidth)
+ maxHeight = maxOf(maxHeight, child.measuredHeight)
+ }
 
-        // Set measured dimensions (using View's method)
-        setMeasuredDimension(
-            resolveSize(maxWidth, widthMeasureSpec),
-            resolveSize(maxHeight, heightMeasureSpec)
-        )
-    }
+ // Set measured dimensions (using View's method)
+ setMeasuredDimension(
+ resolveSize(maxWidth, widthMeasureSpec),
+ resolveSize(maxHeight, heightMeasureSpec)
+ )
+ }
 
-    // Must override onLayout (inherited from View)
-    override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
-        // Position all children
-        for (i in 0 until childCount) {
-            val child = getChildAt(i)
-            child.layout(0, 0, child.measuredWidth, child.measuredHeight)
-        }
-    }
+ // Must override onLayout (inherited from View)
+ override fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {
+ // Position all children
+ for (i in 0 until childCount) {
+ val child = getChildAt(i)
+ child.layout(0, 0, child.measuredWidth, child.measuredHeight)
+ }
+ }
 
-    // Can override onDraw (inherited from View)
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        // Custom drawing if needed
-    }
+ // Can override onDraw (inherited from View)
+ override fun onDraw(canvas: Canvas) {
+ super.onDraw(canvas)
+ // Custom drawing if needed
+ }
 }
 ```
 
@@ -442,8 +438,8 @@ class GridLayout : ViewGroup()
 ```kotlin
 // ViewGroup can be used as View
 fun setViewProperties(view: View) {
-    view.visibility = View.VISIBLE
-    view.alpha = 1.0f
+ view.visibility = View.VISIBLE
+ view.alpha = 1.0f
 }
 
 val linearLayout = LinearLayout(context)
@@ -464,19 +460,16 @@ setViewProperties(linearLayout) // Works because LinearLayout extends ViewGroup 
 
 ---
 
-
 ## Follow-ups
 
-- [[c-view-hierarchy]]
+- 
 - [[c-views]]
 - [[q-viewgroup-vs-view-differences--android--easy]]
-
 
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
-
 
 ## Related Questions
 

@@ -4,15 +4,15 @@ title: CI/CD Pipeline Setup for Android / Настройка CI/CD пайпла�
 aliases: [CI/CD Pipeline Setup for Android, Настройка CI/CD пайплайна для Android]
 topic: android
 subtopics:
-  - ci-cd
-  - gradle
-  - testing-unit
+ - ci-cd
+ - gradle
+ - testing-unit
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+ - en
+ - ru
 status: reviewed
 moc: moc-android
 related: [c-gradle, c-testing, c-unit-testing]
@@ -52,29 +52,29 @@ GitHub Actions (облачные раннеры + бесплатный мину�
 name: Android CI
 on: [pull_request]
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-      - uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-      - name: Lint & Test
-        run: |
-          ./gradlew lintDebug testDebugUnitTest \
-            --parallel --build-cache --configuration-cache
-      - name: Build APK
-        run: ./gradlew :app:assembleDebug
-      - name: Upload artifacts
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: reports
-          path: '**/build/reports/**'
+ build:
+ runs-on: ubuntu-latest
+ steps:
+ - uses: actions/checkout@v4
+ - uses: actions/setup-java@v4
+ with:
+ distribution: temurin
+ java-version: '17'
+ - uses: gradle/gradle-build-action@v2
+ with:
+ gradle-home-cache-cleanup: true
+ - name: Lint & Test
+ run: |
+ ./gradlew lintDebug testDebugUnitTest \
+ --parallel --build-cache --configuration-cache
+ - name: Build APK
+ run: ./gradlew :app:assembleDebug
+ - name: Upload artifacts
+ if: failure()
+ uses: actions/upload-artifact@v4
+ with:
+ name: reports
+ path: '**/build/reports/**'
 ```
 
 ### Инструментальное Тестирование
@@ -105,29 +105,29 @@ Cache `~/.gradle/caches`, `~/.gradle/wrapper`, dependencies and Build Cache. On 
 name: Android CI
 on: [pull_request]
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-java@v4
-        with:
-          distribution: temurin
-          java-version: '17'
-      - uses: gradle/gradle-build-action@v2
-        with:
-          gradle-home-cache-cleanup: true
-      - name: Lint & Test
-        run: |
-          ./gradlew lintDebug testDebugUnitTest \
-            --parallel --build-cache --configuration-cache
-      - name: Build APK
-        run: ./gradlew :app:assembleDebug
-      - name: Upload artifacts
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: reports
-          path: '**/build/reports/**'
+ build:
+ runs-on: ubuntu-latest
+ steps:
+ - uses: actions/checkout@v4
+ - uses: actions/setup-java@v4
+ with:
+ distribution: temurin
+ java-version: '17'
+ - uses: gradle/gradle-build-action@v2
+ with:
+ gradle-home-cache-cleanup: true
+ - name: Lint & Test
+ run: |
+ ./gradlew lintDebug testDebugUnitTest \
+ --parallel --build-cache --configuration-cache
+ - name: Build APK
+ run: ./gradlew :app:assembleDebug
+ - name: Upload artifacts
+ if: failure()
+ uses: actions/upload-artifact@v4
+ with:
+ name: reports
+ path: '**/build/reports/**'
 ```
 
 ### Instrumented Testing
@@ -144,9 +144,9 @@ Save JUnit XML, lint results, code coverage (Jacoco/Kover). Annotate PRs with co
 - How do you set up incremental builds in monorepo CI configurations?
 
 ## References
-- [[c-gradle-build-system]]
-- [[c-android-testing-pyramid]]
-- [[c-ci-cd-patterns]]
+- 
+- 
+- 
 - https://developer.android.com/studio/build
 - https://docs.gradle.org/current/userguide/build_cache.html
 - https://docs.github.com/en/actions
@@ -155,7 +155,6 @@ Save JUnit XML, lint results, code coverage (Jacoco/Kover). Annotate PRs with co
 
 ### Prerequisites
 - [[q-gradle-basics--android--easy]]
-
 
 ### Related
 - [[q-android-build-optimization--android--medium]]

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-coroutine-basics--kotlin--easy, q-coroutine-flow-basics--kotlin--medium, q-workmanager-periodic-tasks--android--medium]
+related: []
 created: 2025-10-15
 updated: 2025-10-30
 tags: [android/background-execution, android/coroutines, android/networking-http, background-tasks, difficulty/medium, polling]
@@ -38,32 +38,32 @@ Polling — периодическая проверка данных с серв
 ```kotlin
 // Repository
 class DataRepository(private val api: ApiService) {
-    fun pollData(intervalMs: Long = 5000): Flow<Result<Data>> = flow {
-        while (currentCoroutineContext().isActive) {
-            try {
-                emit(Result.success(api.getData()))
-            } catch (e: Exception) {
-                emit(Result.failure(e))
-            }
-            delay(intervalMs)
-        }
-    }.flowOn(Dispatchers.IO)
+ fun pollData(intervalMs: Long = 5000): Flow<Result<Data>> = flow {
+ while (currentCoroutineContext().isActive) {
+ try {
+ emit(Result.success(api.getData()))
+ } catch (e: Exception) {
+ emit(Result.failure(e))
+ }
+ delay(intervalMs)
+ }
+ }.flowOn(Dispatchers.IO)
 
-    // ✅ Polling с условием остановки
-    fun pollUntilComplete(orderId: Int): Flow<Order> = flow {
-        while (currentCoroutineContext().isActive) {
-            val order = api.getOrder(orderId)
-            emit(order)
-            if (order.status == OrderStatus.COMPLETED) break
-            delay(3000)
-        }
-    }.flowOn(Dispatchers.IO)
+ // ✅ Polling с условием остановки
+ fun pollUntilComplete(orderId: Int): Flow<Order> = flow {
+ while (currentCoroutineContext().isActive) {
+ val order = api.getOrder(orderId)
+ emit(order)
+ if (order.status == OrderStatus.COMPLETED) break
+ delay(3000)
+ }
+ }.flowOn(Dispatchers.IO)
 }
 
 // ViewModel
 class OrderViewModel(private val repo: DataRepository) : ViewModel() {
-    val orderStatus = repo.pollUntilComplete(123)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+ val orderStatus = repo.pollUntilComplete(123)
+ .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 }
 ```
 
@@ -76,34 +76,34 @@ class OrderViewModel(private val repo: DataRepository) : ViewModel() {
 
 ```kotlin
 class DataPollingWorker(
-    context: Context,
-    params: WorkerParameters
+ context: Context,
+ params: WorkerParameters
 ) : CoroutineWorker(context, params) {
-    override suspend fun doWork(): Result {
-        return try {
-            val data = RetrofitClient.api.getData()
-            database.dataDao().insert(data)
-            // ✅ Retry с экспоненциальной задержкой
-            Result.success()
-        } catch (e: Exception) {
-            if (runAttemptCount < 3) Result.retry() else Result.failure()
-        }
-    }
+ override suspend fun doWork(): Result {
+ return try {
+ val data = RetrofitClient.api.getData()
+ database.dataDao().insert(data)
+ // ✅ Retry с экспоненциальной задержкой
+ Result.success()
+ } catch (e: Exception) {
+ if (runAttemptCount < 3) Result.retry() else Result.failure()
+ }
+ }
 }
 
 // Планирование
 val constraints = Constraints.Builder()
-    .setRequiredNetworkType(NetworkType.CONNECTED)
-    .setRequiresBatteryNotLow(true)
-    .build()
+ .setRequiredNetworkType(NetworkType.CONNECTED)
+ .setRequiresBatteryNotLow(true)
+ .build()
 
 val request = PeriodicWorkRequestBuilder<DataPollingWorker>(15, TimeUnit.MINUTES)
-    .setConstraints(constraints)
-    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.MINUTES)
-    .build()
+ .setConstraints(constraints)
+ .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.MINUTES)
+ .build()
 
 WorkManager.getInstance(context)
-    .enqueueUniquePeriodicWork("polling", ExistingPeriodicWorkPolicy.KEEP, request)
+ .enqueueUniquePeriodicWork("polling", ExistingPeriodicWorkPolicy.KEEP, request)
 ```
 
 **Преимущества**: Гарантированное выполнение, переживает перезагрузку, battery-aware.
@@ -115,28 +115,28 @@ WorkManager.getInstance(context)
 
 ```kotlin
 class SmartPollingManager(private val repo: DataRepository) {
-    private var interval = 5000L // Начальный интервал
-    private val minInterval = 1000L
-    private val maxInterval = 60000L
+ private var interval = 5000L // Начальный интервал
+ private val minInterval = 1000L
+ private val maxInterval = 60000L
 
-    fun startAdaptivePolling(): Flow<Data> = flow {
-        while (currentCoroutineContext().isActive) {
-            try {
-                val data = repo.getData()
-                emit(data)
-                // ✅ Адаптация интервала
-                interval = if (data.hasChanges) {
-                    max(minInterval, interval / 2) // Чаще при изменениях
-                } else {
-                    min(maxInterval, interval * 2) // Реже при отсутствии
-                }
-            } catch (e: Exception) {
-                // ❌ Не увеличивать интервал слишком агрессивно
-                interval = min(maxInterval, interval * 1.5)
-            }
-            delay(interval)
-        }
-    }.flowOn(Dispatchers.IO)
+ fun startAdaptivePolling(): Flow<Data> = flow {
+ while (currentCoroutineContext().isActive) {
+ try {
+ val data = repo.getData()
+ emit(data)
+ // ✅ Адаптация интервала
+ interval = if (data.hasChanges) {
+ max(minInterval, interval / 2) // Чаще при изменениях
+ } else {
+ min(maxInterval, interval * 2) // Реже при отсутствии
+ }
+ } catch (e: Exception) {
+ // ❌ Не увеличивать интервал слишком агрессивно
+ interval = min(maxInterval, interval * 1.5)
+ }
+ delay(interval)
+ }
+ }.flowOn(Dispatchers.IO)
 }
 ```
 
@@ -146,21 +146,21 @@ Retry-стратегия для устойчивости к ошибкам.
 
 ```kotlin
 fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
-    var attempt = 0
-    var delay = 1000L
+ var attempt = 0
+ var delay = 1000L
 
-    while (attempt < maxAttempts && currentCoroutineContext().isActive) {
-        try {
-            emit(Result.success(api.getData()))
-            delay = 1000L // Сброс при успехе
-            attempt = 0
-        } catch (e: Exception) {
-            emit(Result.failure(e))
-            attempt++
-            delay *= 2 // 1s, 2s, 4s, 8s, 16s
-        }
-        delay(delay)
-    }
+ while (attempt < maxAttempts && currentCoroutineContext().isActive) {
+ try {
+ emit(Result.success(api.getData()))
+ delay = 1000L // Сброс при успехе
+ attempt = 0
+ } catch (e: Exception) {
+ emit(Result.failure(e))
+ attempt++
+ delay *= 2 // 1s, 2s, 4s, 8s, 16s
+ }
+ delay(delay)
+ }
 }.flowOn(Dispatchers.IO)
 ```
 
@@ -194,32 +194,32 @@ Recommended approach for UI-dependent tasks with automatic lifecycle cancellatio
 ```kotlin
 // Repository
 class DataRepository(private val api: ApiService) {
-    fun pollData(intervalMs: Long = 5000): Flow<Result<Data>> = flow {
-        while (currentCoroutineContext().isActive) {
-            try {
-                emit(Result.success(api.getData()))
-            } catch (e: Exception) {
-                emit(Result.failure(e))
-            }
-            delay(intervalMs)
-        }
-    }.flowOn(Dispatchers.IO)
+ fun pollData(intervalMs: Long = 5000): Flow<Result<Data>> = flow {
+ while (currentCoroutineContext().isActive) {
+ try {
+ emit(Result.success(api.getData()))
+ } catch (e: Exception) {
+ emit(Result.failure(e))
+ }
+ delay(intervalMs)
+ }
+ }.flowOn(Dispatchers.IO)
 
-    // ✅ Polling with stop condition
-    fun pollUntilComplete(orderId: Int): Flow<Order> = flow {
-        while (currentCoroutineContext().isActive) {
-            val order = api.getOrder(orderId)
-            emit(order)
-            if (order.status == OrderStatus.COMPLETED) break
-            delay(3000)
-        }
-    }.flowOn(Dispatchers.IO)
+ // ✅ Polling with stop condition
+ fun pollUntilComplete(orderId: Int): Flow<Order> = flow {
+ while (currentCoroutineContext().isActive) {
+ val order = api.getOrder(orderId)
+ emit(order)
+ if (order.status == OrderStatus.COMPLETED) break
+ delay(3000)
+ }
+ }.flowOn(Dispatchers.IO)
 }
 
 // ViewModel
 class OrderViewModel(private val repo: DataRepository) : ViewModel() {
-    val orderStatus = repo.pollUntilComplete(123)
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
+ val orderStatus = repo.pollUntilComplete(123)
+ .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 }
 ```
 
@@ -232,34 +232,34 @@ For guaranteed background execution that survives device reboots.
 
 ```kotlin
 class DataPollingWorker(
-    context: Context,
-    params: WorkerParameters
+ context: Context,
+ params: WorkerParameters
 ) : CoroutineWorker(context, params) {
-    override suspend fun doWork(): Result {
-        return try {
-            val data = RetrofitClient.api.getData()
-            database.dataDao().insert(data)
-            // ✅ Retry with exponential backoff
-            Result.success()
-        } catch (e: Exception) {
-            if (runAttemptCount < 3) Result.retry() else Result.failure()
-        }
-    }
+ override suspend fun doWork(): Result {
+ return try {
+ val data = RetrofitClient.api.getData()
+ database.dataDao().insert(data)
+ // ✅ Retry with exponential backoff
+ Result.success()
+ } catch (e: Exception) {
+ if (runAttemptCount < 3) Result.retry() else Result.failure()
+ }
+ }
 }
 
 // Scheduling
 val constraints = Constraints.Builder()
-    .setRequiredNetworkType(NetworkType.CONNECTED)
-    .setRequiresBatteryNotLow(true)
-    .build()
+ .setRequiredNetworkType(NetworkType.CONNECTED)
+ .setRequiresBatteryNotLow(true)
+ .build()
 
 val request = PeriodicWorkRequestBuilder<DataPollingWorker>(15, TimeUnit.MINUTES)
-    .setConstraints(constraints)
-    .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.MINUTES)
-    .build()
+ .setConstraints(constraints)
+ .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 15, TimeUnit.MINUTES)
+ .build()
 
 WorkManager.getInstance(context)
-    .enqueueUniquePeriodicWork("polling", ExistingPeriodicWorkPolicy.KEEP, request)
+ .enqueueUniquePeriodicWork("polling", ExistingPeriodicWorkPolicy.KEEP, request)
 ```
 
 **Pros**: Guaranteed execution, survives reboot, battery-aware.
@@ -271,28 +271,28 @@ Optimize polling frequency based on results.
 
 ```kotlin
 class SmartPollingManager(private val repo: DataRepository) {
-    private var interval = 5000L // Initial interval
-    private val minInterval = 1000L
-    private val maxInterval = 60000L
+ private var interval = 5000L // Initial interval
+ private val minInterval = 1000L
+ private val maxInterval = 60000L
 
-    fun startAdaptivePolling(): Flow<Data> = flow {
-        while (currentCoroutineContext().isActive) {
-            try {
-                val data = repo.getData()
-                emit(data)
-                // ✅ Adapt interval
-                interval = if (data.hasChanges) {
-                    max(minInterval, interval / 2) // Faster on changes
-                } else {
-                    min(maxInterval, interval * 2) // Slower when stable
-                }
-            } catch (e: Exception) {
-                // ❌ Don't increase interval too aggressively
-                interval = min(maxInterval, interval * 1.5)
-            }
-            delay(interval)
-        }
-    }.flowOn(Dispatchers.IO)
+ fun startAdaptivePolling(): Flow<Data> = flow {
+ while (currentCoroutineContext().isActive) {
+ try {
+ val data = repo.getData()
+ emit(data)
+ // ✅ Adapt interval
+ interval = if (data.hasChanges) {
+ max(minInterval, interval / 2) // Faster on changes
+ } else {
+ min(maxInterval, interval * 2) // Slower when stable
+ }
+ } catch (e: Exception) {
+ // ❌ Don't increase interval too aggressively
+ interval = min(maxInterval, interval * 1.5)
+ }
+ delay(interval)
+ }
+ }.flowOn(Dispatchers.IO)
 }
 ```
 
@@ -302,21 +302,21 @@ Retry strategy for error resilience.
 
 ```kotlin
 fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
-    var attempt = 0
-    var delay = 1000L
+ var attempt = 0
+ var delay = 1000L
 
-    while (attempt < maxAttempts && currentCoroutineContext().isActive) {
-        try {
-            emit(Result.success(api.getData()))
-            delay = 1000L // Reset on success
-            attempt = 0
-        } catch (e: Exception) {
-            emit(Result.failure(e))
-            attempt++
-            delay *= 2 // 1s, 2s, 4s, 8s, 16s
-        }
-        delay(delay)
-    }
+ while (attempt < maxAttempts && currentCoroutineContext().isActive) {
+ try {
+ emit(Result.success(api.getData()))
+ delay = 1000L // Reset on success
+ attempt = 0
+ } catch (e: Exception) {
+ emit(Result.failure(e))
+ attempt++
+ delay *= 2 // 1s, 2s, 4s, 8s, 16s
+ }
+ delay(delay)
+ }
 }.flowOn(Dispatchers.IO)
 ```
 
@@ -358,15 +358,15 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-coroutine-basics--kotlin--easy]] - Basic coroutine usage
-- [[q-retrofit-setup--android--easy]] - Network layer setup
+- [[q-coroutine-scope-basics--kotlin--easy]] - Basic coroutine usage
+- - Network layer setup
 
 ### Related (Same Level)
-- [[q-workmanager-periodic-tasks--android--medium]] - WorkManager periodic execution
-- [[q-coroutine-flow-basics--kotlin--medium]] - `Flow` operators and transformations
-- [[q-lifecycle-aware-components--android--medium]] - `Lifecycle` integration
+- - WorkManager periodic execution
+- [[q-kotlin-flow-basics--kotlin--medium]] - `Flow` operators and transformations
+- - `Lifecycle` integration
 
 ### Advanced (Harder)
-- [[q-background-work--android--hard]] - Complex background task orchestration
+- - Complex background task orchestration
 - [[q-websocket-implementation--android--medium]] - Real-time alternatives to polling
-- [[q-battery-optimization--android--hard]] - Power-efficient background work
+- - Power-efficient background work

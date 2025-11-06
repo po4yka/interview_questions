@@ -43,7 +43,7 @@ sources: []
 ```kotlin
 // build.gradle (app)
 dependencies {
-    debugImplementation("com.squareup.leakcanary:leakcanary-android")  // ✅ Only debug builds
+ debugImplementation("com.squareup.leakcanary:leakcanary-android") // ✅ Only debug builds
 }
 ```
 
@@ -54,10 +54,10 @@ LeakCanary регистрирует lifecycle callbacks и отслеживае�
 ```kotlin
 // LeakCanary автоматически следит за Activity
 override fun onActivityDestroyed(activity: Activity) {
-    AppWatcher.objectWatcher.watch(
-        activity,
-        "Activity#onDestroy() called"
-    )
+ AppWatcher.objectWatcher.watch(
+ activity,
+ "Activity#onDestroy() called"
+ )
 }
 ```
 
@@ -65,13 +65,13 @@ override fun onActivityDestroyed(activity: Activity) {
 
 ```kotlin
 companion object {
-    var activity: Activity? = null  // ❌ Static reference — leak!
+ var activity: Activity? = null // ❌ Static reference — leak!
 }
 
 class MainActivity : AppCompatActivity() {
-    init {
-        activity = this  // ❌ Activity won't be GC'd
-    }
+ init {
+ activity = this // ❌ Activity won't be GC'd
+ }
 }
 ```
 
@@ -79,18 +79,18 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class MyViewModel : ViewModel() {
-    init {
-        AppWatcher.objectWatcher.watch(
-            watchedObject = this,
-            description = "ViewModel cleared"
-        )
-    }
+ init {
+ AppWatcher.objectWatcher.watch(
+ watchedObject = this,
+ description = "ViewModel cleared"
+ )
+ }
 }
 ```
 
 **Альтернативы:**
 
-- [[c-memory-profiler]] — ручной анализ через Android Studio
+- — ручной анализ через Android Studio
 - Perfetto — системная трассировка с полной картиной производительности
 - MAT (Eclipse Memory Analyzer) — детальный анализ heap dump
 
@@ -112,7 +112,7 @@ class MyViewModel : ViewModel() {
 ```kotlin
 // build.gradle (app)
 dependencies {
-    debugImplementation("com.squareup.leakcanary:leakcanary-android")  // ✅ Only debug builds
+ debugImplementation("com.squareup.leakcanary:leakcanary-android") // ✅ Only debug builds
 }
 ```
 
@@ -123,10 +123,10 @@ LeakCanary registers lifecycle callbacks and watches objects after destruction. 
 ```kotlin
 // LeakCanary automatically watches Activity
 override fun onActivityDestroyed(activity: Activity) {
-    AppWatcher.objectWatcher.watch(
-        activity,
-        "Activity#onDestroy() called"
-    )
+ AppWatcher.objectWatcher.watch(
+ activity,
+ "Activity#onDestroy() called"
+ )
 }
 ```
 
@@ -134,13 +134,13 @@ override fun onActivityDestroyed(activity: Activity) {
 
 ```kotlin
 companion object {
-    var activity: Activity? = null  // ❌ Static reference — leak!
+ var activity: Activity? = null // ❌ Static reference — leak!
 }
 
 class MainActivity : AppCompatActivity() {
-    init {
-        activity = this  // ❌ Activity won't be GC'd
-    }
+ init {
+ activity = this // ❌ Activity won't be GC'd
+ }
 }
 ```
 
@@ -148,18 +148,18 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class MyViewModel : ViewModel() {
-    init {
-        AppWatcher.objectWatcher.watch(
-            watchedObject = this,
-            description = "ViewModel cleared"
-        )
-    }
+ init {
+ AppWatcher.objectWatcher.watch(
+ watchedObject = this,
+ description = "ViewModel cleared"
+ )
+ }
 }
 ```
 
 **Alternatives:**
 
-- [[c-memory-profiler]] — manual analysis via Android Studio
+- — manual analysis via Android Studio
 - Perfetto — system tracing with full performance picture
 - MAT (Eclipse Memory Analyzer) — detailed heap dump analysis
 

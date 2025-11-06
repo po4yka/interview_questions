@@ -56,19 +56,19 @@ tags: [android/gradle, android/performance-rendering, android/ui-graphics, diffi
 ```xml
 <!-- res/drawable/ic_home.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
-    <path
-        android:fillColor="@android:color/white"
-        android:pathData="M10,20v-6h4v6h5v-8h3L12,3 2,12h3v8z"/> <!-- ✅ Простые пути -->
+ android:width="24dp"
+ android:height="24dp"
+ android:viewportWidth="24"
+ android:viewportHeight="24">
+ <path
+ android:fillColor="@android:color/white"
+ android:pathData="M10,20v-6h4v6h5v-8h3L12,3 2,12h3v8z"/> <!-- ✅ Простые пути -->
 </vector>
 
 <!-- Использование с динамической раскраской -->
 <ImageView
-    android:src="@drawable/ic_home"
-    app:tint="@color/primary" /> <!-- ✅ Раскраска без новых файлов -->
+ android:src="@drawable/ic_home"
+ app:tint="@color/primary" /> <!-- ✅ Раскраска без новых файлов -->
 ```
 
 **Ограничения:**
@@ -91,8 +91,8 @@ tags: [android/gradle, android/performance-rendering, android/ui-graphics, diffi
 ```xml
 <!-- WebP для фона -->
 <ImageView
-    android:src="@drawable/background_photo" <!-- ✅ .webp формат -->
-    android:scaleType="centerCrop" />
+ android:src="@drawable/background_photo" <!-- ✅ .webp формат -->
+ android:scaleType="centerCrop" />
 ```
 
 **Конвертация:**
@@ -122,7 +122,7 @@ cwebp -q 80 input.png -o output.webp
 - Требует разных файлов для разных плотностей
 
 ```
-res/drawable-mdpi/icon.png    <!-- ❌ Много файлов -->
+res/drawable-mdpi/icon.png <!-- ❌ Много файлов -->
 res/drawable-hdpi/icon.png
 res/drawable-xhdpi/icon.png
 ```
@@ -148,14 +148,14 @@ res/drawable-xhdpi/icon.png
 **Gradle конфигурация:**
 ```kotlin
 android {
-    defaultConfig {
-        vectorDrawables.useSupportLibrary = true // ✅ Поддержка векторов
-    }
-    buildTypes {
-        release {
-            crunchPngs = false // ✅ Отключить PNG оптимизацию, использовать WebP
-        }
-    }
+ defaultConfig {
+ vectorDrawables.useSupportLibrary = true // ✅ Поддержка векторов
+ }
+ buildTypes {
+ release {
+ crunchPngs = false // ✅ Отключить PNG оптимизацию, использовать WebP
+ }
+ }
 }
 ```
 
@@ -180,19 +180,19 @@ Image format choice affects app performance, APK size, and visual quality. The r
 ```xml
 <!-- res/drawable/ic_home.xml -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
-    <path
-        android:fillColor="@android:color/white"
-        android:pathData="M10,20v-6h4v6h5v-8h3L12,3 2,12h3v8z"/> <!-- ✅ Simple paths -->
+ android:width="24dp"
+ android:height="24dp"
+ android:viewportWidth="24"
+ android:viewportHeight="24">
+ <path
+ android:fillColor="@android:color/white"
+ android:pathData="M10,20v-6h4v6h5v-8h3L12,3 2,12h3v8z"/> <!-- ✅ Simple paths -->
 </vector>
 
 <!-- Usage with dynamic tinting -->
 <ImageView
-    android:src="@drawable/ic_home"
-    app:tint="@color/primary" /> <!-- ✅ Tint without new files -->
+ android:src="@drawable/ic_home"
+ app:tint="@color/primary" /> <!-- ✅ Tint without new files -->
 ```
 
 **Limitations:**
@@ -215,8 +215,8 @@ Image format choice affects app performance, APK size, and visual quality. The r
 ```xml
 <!-- WebP for background -->
 <ImageView
-    android:src="@drawable/background_photo" <!-- ✅ .webp format -->
-    android:scaleType="centerCrop" />
+ android:src="@drawable/background_photo" <!-- ✅ .webp format -->
+ android:scaleType="centerCrop" />
 ```
 
 **Conversion:**
@@ -246,7 +246,7 @@ cwebp -q 80 input.png -o output.webp
 - Requires separate files for different densities
 
 ```
-res/drawable-mdpi/icon.png    <!-- ❌ Many files -->
+res/drawable-mdpi/icon.png <!-- ❌ Many files -->
 res/drawable-hdpi/icon.png
 res/drawable-xhdpi/icon.png
 ```
@@ -272,14 +272,14 @@ res/drawable-xhdpi/icon.png
 **Gradle configuration:**
 ```kotlin
 android {
-    defaultConfig {
-        vectorDrawables.useSupportLibrary = true // ✅ Enable vector support
-    }
-    buildTypes {
-        release {
-            crunchPngs = false // ✅ Disable PNG optimization, use WebP
-        }
-    }
+ defaultConfig {
+ vectorDrawables.useSupportLibrary = true // ✅ Enable vector support
+ }
+ buildTypes {
+ release {
+ crunchPngs = false // ✅ Disable PNG optimization, use WebP
+ }
+ }
 }
 ```
 
@@ -295,7 +295,7 @@ android {
 
 ## References
 
-- [[c-android-resources]]
+- [[c-android-surfaces]]
 - [[c-performance-optimization]]
 - https://developer.android.com/develop/ui/views/graphics/vector-drawable-resources
 - https://developer.android.com/develop/ui/views/graphics/drawables

@@ -19,7 +19,6 @@ status: draft
 moc: moc-android
 related:
 - c-activity-lifecycle
-- c-navigation
 - q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
 - q-what-is-activity-and-what-is-it-used-for--android--medium
 created: 2025-10-15
@@ -139,8 +138,6 @@ Android управляет задачами и стеком возврата, п
 - `alwaysRetainTaskState`
 - `finishOnTaskLaunch`
 
-
-
 # Question (EN)
 > Tasks and Back `Stack`
 
@@ -148,9 +145,7 @@ Android управляет задачами и стеком возврата, п
 
 **Русский**: Что вы знаете о задачах и стеке возврата?
 
-
 ---
-
 
 ## Answer (EN)
 **English**:
@@ -247,9 +242,7 @@ Android управляет задачами и стеком возврата, п
 - `alwaysRetainTaskState`
 - `finishOnTaskLaunch`
 
-
 ## Ответ (RU)
-
 
 ## Ответ (RU)
 
@@ -257,13 +250,11 @@ Android управляет задачами и стеком возврата, п
 
 - [Tasks and the back stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
 
-
 ## Follow-ups
 
 - [[c-activity-lifecycle]]
-- [[c-navigation]]
+- 
 - [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]]
-
 
 ## Related Questions
 

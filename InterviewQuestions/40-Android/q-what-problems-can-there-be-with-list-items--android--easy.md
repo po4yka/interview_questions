@@ -17,7 +17,6 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-memory-optimization
 - c-performance
 - c-recyclerview
 created: 2025-10-13
@@ -59,35 +58,35 @@ Problems with list items in Android applications can be diverse. Let's examine s
 // Use RecyclerView instead of ListView
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        private val titleText: TextView = itemView.findViewById(R.id.titleText)
+ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+ private val imageView: ImageView = itemView.findViewById(R.id.imageView)
+ private val titleText: TextView = itemView.findViewById(R.id.titleText)
 
-        fun bind(item: Item) {
-            titleText.text = item.title
+ fun bind(item: Item) {
+ titleText.text = item.title
 
-            // Use image loading library with memory management
-            Glide.with(itemView.context)
-                .load(item.imageUrl)
-                .placeholder(R.drawable.placeholder)
-                .error(R.drawable.error)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .override(300, 300) // Resize images
-                .into(imageView)
-        }
-    }
+ // Use image loading library with memory management
+ Glide.with(itemView.context)
+ .load(item.imageUrl)
+ .placeholder(R.drawable.placeholder)
+ .error(R.drawable.error)
+ .diskCacheStrategy(DiskCacheStrategy.ALL)
+ .override(300, 300) // Resize images
+ .into(imageView)
+ }
+ }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_layout, parent, false)
-        return ViewHolder(view)
-    }
+ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+ val view = LayoutInflater.from(parent.context)
+ .inflate(R.layout.item_layout, parent, false)
+ return ViewHolder(view)
+ }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
-    }
+ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+ holder.bind(items[position])
+ }
 
-    override fun getItemCount() = items.size
+ override fun getItemCount() = items.size
 }
 ```
 
@@ -96,9 +95,9 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 ```kotlin
 // In RecyclerView setup
 recyclerView.apply {
-    setHasFixedSize(true) // If item size is fixed
-    setItemViewCacheSize(20) // Increase view cache
-    recycledViewPool.setMaxRecycledViews(0, 20) // Increase recycled view pool
+ setHasFixedSize(true) // If item size is fixed
+ setItemViewCacheSize(20) // Increase view cache
+ recycledViewPool.setMaxRecycledViews(0, 20) // Increase recycled view pool
 }
 ```
 
@@ -118,27 +117,27 @@ recyclerView.apply {
 // Optimize adapter with ViewHolder pattern
 class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val titleText: TextView = itemView.findViewById(R.id.title)
-        private val descText: TextView = itemView.findViewById(R.id.description)
-        private val imageView: ImageView = itemView.findViewById(R.id.image)
+ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+ private val titleText: TextView = itemView.findViewById(R.id.title)
+ private val descText: TextView = itemView.findViewById(R.id.description)
+ private val imageView: ImageView = itemView.findViewById(R.id.image)
 
-        fun bind(item: Item) {
-            // Avoid heavy operations here
-            titleText.text = item.title
-            descText.text = item.description
+ fun bind(item: Item) {
+ // Avoid heavy operations here
+ titleText.text = item.title
+ descText.text = item.description
 
-            // Load images asynchronously
-            Glide.with(itemView.context)
-                .load(item.imageUrl)
-                .into(imageView)
-        }
-    }
+ // Load images asynchronously
+ Glide.with(itemView.context)
+ .load(item.imageUrl)
+ .into(imageView)
+ }
+ }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // Keep this method lightweight
-        holder.bind(items[position])
-    }
+ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+ // Keep this method lightweight
+ holder.bind(items[position])
+ }
 }
 ```
 
@@ -147,23 +146,23 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 ```xml
 <!-- Use ConstraintLayout to flatten view hierarchy -->
 <androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+ <ImageView
+ android:id="@+id/image"
+ android:layout_width="48dp"
+ android:layout_height="48dp"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+ <TextView
+ android:id="@+id/title"
+ android:layout_width="0dp"
+ android:layout_height="wrap_content"
+ app:layout_constraintStart_toEndOf="@id/image"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
@@ -183,44 +182,44 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 ```kotlin
 // Use DiffUtil for computing changes
 class ItemDiffCallback(
-    private val oldList: List<Item>,
-    private val newList: List<Item>
+ private val oldList: List<Item>,
+ private val newList: List<Item>
 ) : DiffUtil.Callback() {
 
-    override fun getOldListSize() = oldList.size
+ override fun getOldListSize() = oldList.size
 
-    override fun getNewListSize() = newList.size
+ override fun getNewListSize() = newList.size
 
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].id == newList[newItemPosition].id
-    }
+ override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+ return oldList[oldItemPosition].id == newList[newItemPosition].id
+ }
 
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition] == newList[newItemPosition]
-    }
+ override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+ return oldList[oldItemPosition] == newList[newItemPosition]
+ }
 
-    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-        val oldItem = oldList[oldItemPosition]
-        val newItem = newList[newItemPosition]
+ override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+ val oldItem = oldList[oldItemPosition]
+ val newItem = newList[newItemPosition]
 
-        return if (oldItem.title != newItem.title) {
-            "title_changed"
-        } else null
-    }
+ return if (oldItem.title != newItem.title) {
+ "title_changed"
+ } else null
+ }
 }
 
 // Update data efficiently
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
-    private val items = mutableListOf<Item>()
+ private val items = mutableListOf<Item>()
 
-    fun updateData(newItems: List<Item>) {
-        val diffCallback = ItemDiffCallback(items, newItems)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
+ fun updateData(newItems: List<Item>) {
+ val diffCallback = ItemDiffCallback(items, newItems)
+ val diffResult = DiffUtil.calculateDiff(diffCallback)
 
-        items.clear()
-        items.addAll(newItems)
-        diffResult.dispatchUpdatesTo(this)
-    }
+ items.clear()
+ items.addAll(newItems)
+ diffResult.dispatchUpdatesTo(this)
+ }
 }
 ```
 
@@ -229,31 +228,31 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 ```kotlin
 class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemDiffCallback()) {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: Item) {
-            // Bind data
-        }
-    }
+ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+ fun bind(item: Item) {
+ // Bind data
+ }
+ }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_layout, parent, false)
-        return ViewHolder(view)
-    }
+ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+ val view = LayoutInflater.from(parent.context)
+ .inflate(R.layout.item_layout, parent, false)
+ return ViewHolder(view)
+ }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
+ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+ holder.bind(getItem(position))
+ }
 
-    class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem.id == newItem.id
-        }
+ class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+ override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+ return oldItem.id == newItem.id
+ }
 
-        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem == newItem
-        }
-    }
+ override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+ return oldItem == newItem
+ }
+ }
 }
 
 // Usage
@@ -274,38 +273,38 @@ adapter.submitList(newItems)
 ```kotlin
 // Use LiveData or Flow for thread-safe updates
 class MyViewModel : ViewModel() {
-    private val _items = MutableLiveData<List<Item>>()
-    val items: LiveData<List<Item>> = _items
+ private val _items = MutableLiveData<List<Item>>()
+ val items: LiveData<List<Item>> = _items
 
-    fun loadItems() {
-        viewModelScope.launch {
-            val newItems = withContext(Dispatchers.IO) {
-                // Load data from network/database
-                repository.getItems()
-            }
-            // LiveData automatically posts to main thread
-            _items.value = newItems
-        }
-    }
+ fun loadItems() {
+ viewModelScope.launch {
+ val newItems = withContext(Dispatchers.IO) {
+ // Load data from network/database
+ repository.getItems()
+ }
+ // LiveData automatically posts to main thread
+ _items.value = newItems
+ }
+ }
 }
 
 // In Fragment/Activity
 class MyFragment : Fragment() {
-    private val viewModel: MyViewModel by viewModels()
-    private val adapter = ModernAdapter()
+ private val viewModel: MyViewModel by viewModels()
+ private val adapter = ModernAdapter()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+ super.onViewCreated(view, savedInstanceState)
 
-        recyclerView.adapter = adapter
+ recyclerView.adapter = adapter
 
-        // Observe on main thread
-        viewModel.items.observe(viewLifecycleOwner) { items ->
-            adapter.submitList(items)
-        }
+ // Observe on main thread
+ viewModel.items.observe(viewLifecycleOwner) { items ->
+ adapter.submitList(items)
+ }
 
-        viewModel.loadItems()
-    }
+ viewModel.loadItems()
+ }
 }
 ```
 
@@ -313,20 +312,20 @@ class MyFragment : Fragment() {
 
 ```kotlin
 class FlowViewModel : ViewModel() {
-    val items: Flow<List<Item>> = repository.itemsFlow
-        .flowOn(Dispatchers.IO)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+ val items: Flow<List<Item>> = repository.itemsFlow
+ .flowOn(Dispatchers.IO)
+ .stateIn(
+ scope = viewModelScope,
+ started = SharingStarted.WhileSubscribed(5000),
+ initialValue = emptyList()
+ )
 }
 
 // In Fragment
 lifecycleScope.launch {
-    viewModel.items.collect { items ->
-        adapter.submitList(items)
-    }
+ viewModel.items.collect { items ->
+ adapter.submitList(items)
+ }
 }
 ```
 
@@ -338,37 +337,37 @@ lifecycleScope.launch {
 
 ```kotlin
 class ClickableAdapter(
-    private val onItemClick: (Item) -> Unit
+ private val onItemClick: (Item) -> Unit
 ) : ListAdapter<Item, ClickableAdapter.ViewHolder>(ItemDiffCallback()) {
 
-    class ViewHolder(
-        itemView: View,
-        private val onItemClick: (Item) -> Unit
-    ) : RecyclerView.ViewHolder(itemView) {
+ class ViewHolder(
+ itemView: View,
+ private val onItemClick: (Item) -> Unit
+ ) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(item: Item) {
-            itemView.setOnClickListener {
-                onItemClick(item)
-            }
-            // Bind other data
-        }
-    }
+ fun bind(item: Item) {
+ itemView.setOnClickListener {
+ onItemClick(item)
+ }
+ // Bind other data
+ }
+ }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_layout, parent, false)
-        return ViewHolder(view, onItemClick)
-    }
+ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+ val view = LayoutInflater.from(parent.context)
+ .inflate(R.layout.item_layout, parent, false)
+ return ViewHolder(view, onItemClick)
+ }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
+ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+ holder.bind(getItem(position))
+ }
 }
 
 // Usage
 val adapter = ClickableAdapter { item ->
-    // Handle click
-    navigateToDetail(item)
+ // Handle click
+ navigateToDetail(item)
 }
 ```
 
@@ -382,15 +381,15 @@ val adapter = ClickableAdapter { item ->
 // Always use stable IDs
 class StableAdapter : RecyclerView.Adapter<StableAdapter.ViewHolder>() {
 
-    init {
-        setHasStableIds(true)
-    }
+ init {
+ setHasStableIds(true)
+ }
 
-    override fun getItemId(position: Int): Long {
-        return items[position].id.hashCode().toLong()
-    }
+ override fun getItemId(position: Int): Long {
+ return items[position].id.hashCode().toLong()
+ }
 
-    // Rest of adapter implementation
+ // Rest of adapter implementation
 }
 ```
 
@@ -405,15 +404,12 @@ Common problems and solutions:
 5. **Click issues** → Proper click listener implementation
 6. **Positioning issues** → Use stable IDs
 
-
 # Question (EN)
 > `List` Items Problems
 
 ---
 
-
 ---
-
 
 ## Answer (EN)
 Problems with list items in Android applications can be diverse. Let's examine some of the most common problems and their solutions.
@@ -434,35 +430,35 @@ Problems with list items in Android applications can be diverse. Let's examine s
 // Use RecyclerView instead of ListView
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val imageView: ImageView = itemView.findViewById(R.id.imageView)
-        private val titleText: TextView = itemView.findViewById(R.id.titleText)
+ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+ private val imageView: ImageView = itemView.findViewById(R.id.imageView)
+ private val titleText: TextView = itemView.findViewById(R.id.titleText)
 
-        fun bind(item: Item) {
-            titleText.text = item.title
+ fun bind(item: Item) {
+ titleText.text = item.title
 
-            // Use image loading library with memory management
-            Glide.with(itemView.context)
-                .load(item.imageUrl)
-                .placeholder(R.drawable.placeholder)
-                .error(R.drawable.error)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .override(300, 300) // Resize images
-                .into(imageView)
-        }
-    }
+ // Use image loading library with memory management
+ Glide.with(itemView.context)
+ .load(item.imageUrl)
+ .placeholder(R.drawable.placeholder)
+ .error(R.drawable.error)
+ .diskCacheStrategy(DiskCacheStrategy.ALL)
+ .override(300, 300) // Resize images
+ .into(imageView)
+ }
+ }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_layout, parent, false)
-        return ViewHolder(view)
-    }
+ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+ val view = LayoutInflater.from(parent.context)
+ .inflate(R.layout.item_layout, parent, false)
+ return ViewHolder(view)
+ }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
-    }
+ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+ holder.bind(items[position])
+ }
 
-    override fun getItemCount() = items.size
+ override fun getItemCount() = items.size
 }
 ```
 
@@ -471,9 +467,9 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 ```kotlin
 // In RecyclerView setup
 recyclerView.apply {
-    setHasFixedSize(true) // If item size is fixed
-    setItemViewCacheSize(20) // Increase view cache
-    recycledViewPool.setMaxRecycledViews(0, 20) // Increase recycled view pool
+ setHasFixedSize(true) // If item size is fixed
+ setItemViewCacheSize(20) // Increase view cache
+ recycledViewPool.setMaxRecycledViews(0, 20) // Increase recycled view pool
 }
 ```
 
@@ -493,27 +489,27 @@ recyclerView.apply {
 // Optimize adapter with ViewHolder pattern
 class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val titleText: TextView = itemView.findViewById(R.id.title)
-        private val descText: TextView = itemView.findViewById(R.id.description)
-        private val imageView: ImageView = itemView.findViewById(R.id.image)
+ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+ private val titleText: TextView = itemView.findViewById(R.id.title)
+ private val descText: TextView = itemView.findViewById(R.id.description)
+ private val imageView: ImageView = itemView.findViewById(R.id.image)
 
-        fun bind(item: Item) {
-            // Avoid heavy operations here
-            titleText.text = item.title
-            descText.text = item.description
+ fun bind(item: Item) {
+ // Avoid heavy operations here
+ titleText.text = item.title
+ descText.text = item.description
 
-            // Load images asynchronously
-            Glide.with(itemView.context)
-                .load(item.imageUrl)
-                .into(imageView)
-        }
-    }
+ // Load images asynchronously
+ Glide.with(itemView.context)
+ .load(item.imageUrl)
+ .into(imageView)
+ }
+ }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        // Keep this method lightweight
-        holder.bind(items[position])
-    }
+ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+ // Keep this method lightweight
+ holder.bind(items[position])
+ }
 }
 ```
 
@@ -522,23 +518,23 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 ```xml
 <!-- Use ConstraintLayout to flatten view hierarchy -->
 <androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+ android:layout_width="match_parent"
+ android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/image"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+ <ImageView
+ android:id="@+id/image"
+ android:layout_width="48dp"
+ android:layout_height="48dp"
+ app:layout_constraintStart_toStartOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/image"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+ <TextView
+ android:id="@+id/title"
+ android:layout_width="0dp"
+ android:layout_height="wrap_content"
+ app:layout_constraintStart_toEndOf="@id/image"
+ app:layout_constraintEnd_toEndOf="parent"
+ app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 ```
@@ -558,44 +554,44 @@ class OptimizedAdapter : RecyclerView.Adapter<OptimizedAdapter.ViewHolder>() {
 ```kotlin
 // Use DiffUtil for computing changes
 class ItemDiffCallback(
-    private val oldList: List<Item>,
-    private val newList: List<Item>
+ private val oldList: List<Item>,
+ private val newList: List<Item>
 ) : DiffUtil.Callback() {
 
-    override fun getOldListSize() = oldList.size
+ override fun getOldListSize() = oldList.size
 
-    override fun getNewListSize() = newList.size
+ override fun getNewListSize() = newList.size
 
-    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition].id == newList[newItemPosition].id
-    }
+ override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+ return oldList[oldItemPosition].id == newList[newItemPosition].id
+ }
 
-    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        return oldList[oldItemPosition] == newList[newItemPosition]
-    }
+ override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+ return oldList[oldItemPosition] == newList[newItemPosition]
+ }
 
-    override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
-        val oldItem = oldList[oldItemPosition]
-        val newItem = newList[newItemPosition]
+ override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+ val oldItem = oldList[oldItemPosition]
+ val newItem = newList[newItemPosition]
 
-        return if (oldItem.title != newItem.title) {
-            "title_changed"
-        } else null
-    }
+ return if (oldItem.title != newItem.title) {
+ "title_changed"
+ } else null
+ }
 }
 
 // Update data efficiently
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
-    private val items = mutableListOf<Item>()
+ private val items = mutableListOf<Item>()
 
-    fun updateData(newItems: List<Item>) {
-        val diffCallback = ItemDiffCallback(items, newItems)
-        val diffResult = DiffUtil.calculateDiff(diffCallback)
+ fun updateData(newItems: List<Item>) {
+ val diffCallback = ItemDiffCallback(items, newItems)
+ val diffResult = DiffUtil.calculateDiff(diffCallback)
 
-        items.clear()
-        items.addAll(newItems)
-        diffResult.dispatchUpdatesTo(this)
-    }
+ items.clear()
+ items.addAll(newItems)
+ diffResult.dispatchUpdatesTo(this)
+ }
 }
 ```
 
@@ -604,31 +600,31 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 ```kotlin
 class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemDiffCallback()) {
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: Item) {
-            // Bind data
-        }
-    }
+ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+ fun bind(item: Item) {
+ // Bind data
+ }
+ }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_layout, parent, false)
-        return ViewHolder(view)
-    }
+ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+ val view = LayoutInflater.from(parent.context)
+ .inflate(R.layout.item_layout, parent, false)
+ return ViewHolder(view)
+ }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
+ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+ holder.bind(getItem(position))
+ }
 
-    class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem.id == newItem.id
-        }
+ class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
+ override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
+ return oldItem.id == newItem.id
+ }
 
-        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem == newItem
-        }
-    }
+ override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
+ return oldItem == newItem
+ }
+ }
 }
 
 // Usage
@@ -649,38 +645,38 @@ adapter.submitList(newItems)
 ```kotlin
 // Use LiveData or Flow for thread-safe updates
 class MyViewModel : ViewModel() {
-    private val _items = MutableLiveData<List<Item>>()
-    val items: LiveData<List<Item>> = _items
+ private val _items = MutableLiveData<List<Item>>()
+ val items: LiveData<List<Item>> = _items
 
-    fun loadItems() {
-        viewModelScope.launch {
-            val newItems = withContext(Dispatchers.IO) {
-                // Load data from network/database
-                repository.getItems()
-            }
-            // LiveData automatically posts to main thread
-            _items.value = newItems
-        }
-    }
+ fun loadItems() {
+ viewModelScope.launch {
+ val newItems = withContext(Dispatchers.IO) {
+ // Load data from network/database
+ repository.getItems()
+ }
+ // LiveData automatically posts to main thread
+ _items.value = newItems
+ }
+ }
 }
 
 // In Fragment/Activity
 class MyFragment : Fragment() {
-    private val viewModel: MyViewModel by viewModels()
-    private val adapter = ModernAdapter()
+ private val viewModel: MyViewModel by viewModels()
+ private val adapter = ModernAdapter()
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+ super.onViewCreated(view, savedInstanceState)
 
-        recyclerView.adapter = adapter
+ recyclerView.adapter = adapter
 
-        // Observe on main thread
-        viewModel.items.observe(viewLifecycleOwner) { items ->
-            adapter.submitList(items)
-        }
+ // Observe on main thread
+ viewModel.items.observe(viewLifecycleOwner) { items ->
+ adapter.submitList(items)
+ }
 
-        viewModel.loadItems()
-    }
+ viewModel.loadItems()
+ }
 }
 ```
 
@@ -688,20 +684,20 @@ class MyFragment : Fragment() {
 
 ```kotlin
 class FlowViewModel : ViewModel() {
-    val items: Flow<List<Item>> = repository.itemsFlow
-        .flowOn(Dispatchers.IO)
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+ val items: Flow<List<Item>> = repository.itemsFlow
+ .flowOn(Dispatchers.IO)
+ .stateIn(
+ scope = viewModelScope,
+ started = SharingStarted.WhileSubscribed(5000),
+ initialValue = emptyList()
+ )
 }
 
 // In Fragment
 lifecycleScope.launch {
-    viewModel.items.collect { items ->
-        adapter.submitList(items)
-    }
+ viewModel.items.collect { items ->
+ adapter.submitList(items)
+ }
 }
 ```
 
@@ -713,37 +709,37 @@ lifecycleScope.launch {
 
 ```kotlin
 class ClickableAdapter(
-    private val onItemClick: (Item) -> Unit
+ private val onItemClick: (Item) -> Unit
 ) : ListAdapter<Item, ClickableAdapter.ViewHolder>(ItemDiffCallback()) {
 
-    class ViewHolder(
-        itemView: View,
-        private val onItemClick: (Item) -> Unit
-    ) : RecyclerView.ViewHolder(itemView) {
+ class ViewHolder(
+ itemView: View,
+ private val onItemClick: (Item) -> Unit
+ ) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(item: Item) {
-            itemView.setOnClickListener {
-                onItemClick(item)
-            }
-            // Bind other data
-        }
-    }
+ fun bind(item: Item) {
+ itemView.setOnClickListener {
+ onItemClick(item)
+ }
+ // Bind other data
+ }
+ }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_layout, parent, false)
-        return ViewHolder(view, onItemClick)
-    }
+ override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+ val view = LayoutInflater.from(parent.context)
+ .inflate(R.layout.item_layout, parent, false)
+ return ViewHolder(view, onItemClick)
+ }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
+ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+ holder.bind(getItem(position))
+ }
 }
 
 // Usage
 val adapter = ClickableAdapter { item ->
-    // Handle click
-    navigateToDetail(item)
+ // Handle click
+ navigateToDetail(item)
 }
 ```
 
@@ -757,15 +753,15 @@ val adapter = ClickableAdapter { item ->
 // Always use stable IDs
 class StableAdapter : RecyclerView.Adapter<StableAdapter.ViewHolder>() {
 
-    init {
-        setHasStableIds(true)
-    }
+ init {
+ setHasStableIds(true)
+ }
 
-    override fun getItemId(position: Int): Long {
-        return items[position].id.hashCode().toLong()
-    }
+ override fun getItemId(position: Int): Long {
+ return items[position].id.hashCode().toLong()
+ }
 
-    // Rest of adapter implementation
+ // Rest of adapter implementation
 }
 ```
 
@@ -783,22 +779,18 @@ Common problems and solutions:
 ## Ответ (RU)
 Проблемы с элементами списка в Android-приложениях могут быть разнообразными. Давайте рассмотрим некоторые из наиболее распространённых проблем и способы их решения. 1. Переполнение памяти (Out of Memory) - Списки с большим количеством элементов могут вызывать переполнение памяти. Решение: Использовать `RecyclerView` вместо `ListView` и библиотеки для загрузки изображений, такие как Glide или Picasso. 2. Медленная прокрутка (Lagging) - Прокрутка может быть медленной из-за долгой отрисовки элементов. Решение: Оптимизировать адаптер списка и использовать ViewHolder паттерн. 3. Неправильное отображение данных (Data Inconsistency) - Если адаптер неправильно управляет обновлением данных. Решение: Использовать DiffUtil для вычисления изменений в данных и обновления только необходимых элементов. 4. Многопоточность (Concurrency Issues) - Если обновление данных происходит из разных потоков без должной синхронизации. Решение: Использовать `LiveData` или `Flow` из библиотеки Jetpack для обновления в главном потоке.
 
-
 ---
-
 
 ## Follow-ups
 
-- [[c-memory-optimization]]
+- 
 - [[c-performance]]
 - [[c-recyclerview]]
-
 
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
-
 
 ## Related Questions
 
@@ -806,7 +798,7 @@ Common problems and solutions:
 - [[q-list-vs-sequence--programming-languages--medium]] - Data Structures
 
 ### Kotlin Language Features
-- [[q-list-set-map-differences--programming-languages--easy]] - Data Structures
+- - Data Structures
 - [[q-array-vs-list-kotlin--kotlin--easy]] - Data Structures
 - [[q-kotlin-collections--kotlin--medium]] - Data Structures
 - [[q-list-vs-sequence--kotlin--medium]] - Data Structures

@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-navigation-advanced--jetpack-compose--medium, q-flow-testing-turbine--android--medium, q-what-is-data-binding--android--easy]
+related: [q-flow-testing-turbine--android--medium, q-what-is-data-binding--android--easy]
 created: 2025-10-15
 updated: 2025-10-28
 sources: []

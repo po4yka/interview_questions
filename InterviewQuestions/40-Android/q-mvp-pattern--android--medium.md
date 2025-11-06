@@ -10,7 +10,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-architecture-patterns, c-mvvm-pattern, q-android-architectural-patterns--android--medium]
+related: [c-mvvm-pattern, q-android-architectural-patterns--android--medium]
 created: 2025-10-15
 updated: 2025-10-31
 sources: []

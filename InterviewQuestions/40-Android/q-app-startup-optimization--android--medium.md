@@ -4,21 +4,19 @@ title: App Startup Optimization / Оптимизация запуска прил
 aliases: [App Startup Optimization, Оптимизация запуска приложения]
 topic: android
 subtopics:
-  - app-startup
-  - performance-memory
-  - performance-startup
+ - app-startup
+ - performance-memory
+ - performance-startup
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+ - en
+ - ru
 status: reviewed
 moc: moc-android
 related:
-  - c-app-startup
-  - c-content-provider
-  - c-lazy-initialization
+ - c-content-provider
 sources: []
 created: 2025-10-15
 updated: 2025-10-30
@@ -44,18 +42,18 @@ tags: [android/app-startup, android/performance-memory, android/performance-star
 ```kotlin
 // ❌ BEFORE: Multiple providers (120ms overhead)
 class AnalyticsProvider : ContentProvider() {
-    override fun onCreate(): Boolean {
-        Analytics.initialize(context!!)
-        return true
-    }
+ override fun onCreate(): Boolean {
+ Analytics.initialize(context!!)
+ return true
+ }
 }
 
 // ✅ AFTER: App Startup (25ms total)
 class AnalyticsInitializer : Initializer<Analytics> {
-    override fun create(context: Context) =
-        Analytics.initialize(context)
+ override fun create(context: Context) =
+ Analytics.initialize(context)
 
-    override fun dependencies() = emptyList()
+ override fun dependencies() = emptyList()
 }
 ```
 
@@ -65,16 +63,16 @@ class AnalyticsInitializer : Initializer<Analytics> {
 
 ```kotlin
 class MyApplication : Application() {
-    // ✅ Initialize on first access
-    val analytics by lazy {
-        AnalyticsService(this)
-    }
+ // ✅ Initialize on first access
+ val analytics by lazy {
+ AnalyticsService(this)
+ }
 
-    override fun onCreate() {
-        super.onCreate()
-        // ✅ Only critical services
-        initCrashReporting()
-    }
+ override fun onCreate() {
+ super.onCreate()
+ // ✅ Only critical services
+ initCrashReporting()
+ }
 }
 ```
 
@@ -84,14 +82,14 @@ class MyApplication : Application() {
 
 ```kotlin
 class DeferredInitializer : Initializer<Unit> {
-    override fun create(context: Context) {
-        val work = OneTimeWorkRequestBuilder<BackgroundInitWorker>()
-            .setInitialDelay(5, TimeUnit.SECONDS)
-            .build()
+ override fun create(context: Context) {
+ val work = OneTimeWorkRequestBuilder<BackgroundInitWorker>()
+ .setInitialDelay(5, TimeUnit.SECONDS)
+ .build()
 
-        WorkManager.getInstance(context)
-            .enqueue(work)
-    }
+ WorkManager.getInstance(context)
+ .enqueue(work)
+ }
 }
 ```
 
@@ -101,14 +99,14 @@ Trace API создает маркеры в Perfetto для анализа узк
 
 ```kotlin
 override fun onCreate() {
-    Trace.beginSection("Application.onCreate")
-    super.onCreate()
+ Trace.beginSection("Application.onCreate")
+ super.onCreate()
 
-    Trace.beginSection("InitServices")
-    initCrashReporting()
-    Trace.endSection()
+ Trace.beginSection("InitServices")
+ initCrashReporting()
+ Trace.endSection()
 
-    Trace.endSection()
+ Trace.endSection()
 }
 ```
 
@@ -139,18 +137,18 @@ Each `ContentProvider` adds 20-50ms to startup via IPC calls. App Startup librar
 ```kotlin
 // ❌ BEFORE: Multiple providers (120ms overhead)
 class AnalyticsProvider : ContentProvider() {
-    override fun onCreate(): Boolean {
-        Analytics.initialize(context!!)
-        return true
-    }
+ override fun onCreate(): Boolean {
+ Analytics.initialize(context!!)
+ return true
+ }
 }
 
 // ✅ AFTER: App Startup (25ms total)
 class AnalyticsInitializer : Initializer<Analytics> {
-    override fun create(context: Context) =
-        Analytics.initialize(context)
+ override fun create(context: Context) =
+ Analytics.initialize(context)
 
-    override fun dependencies() = emptyList()
+ override fun dependencies() = emptyList()
 }
 ```
 
@@ -160,16 +158,16 @@ Defers object creation until first access. Critical for optional features (push 
 
 ```kotlin
 class MyApplication : Application() {
-    // ✅ Initialize on first access
-    val analytics by lazy {
-        AnalyticsService(this)
-    }
+ // ✅ Initialize on first access
+ val analytics by lazy {
+ AnalyticsService(this)
+ }
 
-    override fun onCreate() {
-        super.onCreate()
-        // ✅ Only critical services
-        initCrashReporting()
-    }
+ override fun onCreate() {
+ super.onCreate()
+ // ✅ Only critical services
+ initCrashReporting()
+ }
 }
 ```
 
@@ -179,14 +177,14 @@ Non-critical initialization runs asynchronously via WorkManager after UI is show
 
 ```kotlin
 class DeferredInitializer : Initializer<Unit> {
-    override fun create(context: Context) {
-        val work = OneTimeWorkRequestBuilder<BackgroundInitWorker>()
-            .setInitialDelay(5, TimeUnit.SECONDS)
-            .build()
+ override fun create(context: Context) {
+ val work = OneTimeWorkRequestBuilder<BackgroundInitWorker>()
+ .setInitialDelay(5, TimeUnit.SECONDS)
+ .build()
 
-        WorkManager.getInstance(context)
-            .enqueue(work)
-    }
+ WorkManager.getInstance(context)
+ .enqueue(work)
+ }
 }
 ```
 
@@ -196,14 +194,14 @@ Trace API creates markers in Perfetto for identifying bottlenecks.
 
 ```kotlin
 override fun onCreate() {
-    Trace.beginSection("Application.onCreate")
-    super.onCreate()
+ Trace.beginSection("Application.onCreate")
+ super.onCreate()
 
-    Trace.beginSection("InitServices")
-    initCrashReporting()
-    Trace.endSection()
+ Trace.beginSection("InitServices")
+ initCrashReporting()
+ Trace.endSection()
 
-    Trace.endSection()
+ Trace.endSection()
 }
 ```
 
@@ -232,11 +230,11 @@ override fun onCreate() {
 ## References
 
 **Concepts:**
-- [[c-app-startup]]
+- 
 - [[c-content-provider]]
-- [[c-lazy-initialization]]
-- [[c-application-class]]
-- [[c-process-lifecycle]]
+- 
+- 
+- 
 
 **Documentation:**
 - [App Startup Library](https://developer.android.com/topic/libraries/app-startup)
@@ -257,4 +255,4 @@ override fun onCreate() {
 
 ### Advanced
 - [[q-android-runtime-internals--android--hard]]
-- [[q-android-process-optimization--android--hard]]
+- 

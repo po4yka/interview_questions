@@ -10,7 +10,7 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-adapter-pattern, c-diffutil, c-listadapter, c-recyclerview]
+related: [c-recyclerview]
 created: 2025-10-15
 updated: 2025-10-30
 tags: [adapter, android/performance-rendering, android/ui-views, difficulty/medium, diffutil, performance, recyclerview]
@@ -36,12 +36,12 @@ tags: [adapter, android/performance-rendering, android/ui-views, difficulty/medi
 
 ```kotlin
 class SimpleAdapter : RecyclerView.Adapter<ViewHolder>() {
-    private var items = listOf<String>()
+ private var items = listOf<String>()
 
-    fun updateItems(newItems: List<String>) {
-        items = newItems
-        notifyDataSetChanged() // Перерисовывает ВСЕ элементы
-    }
+ fun updateItems(newItems: List<String>) {
+ items = newItems
+ notifyDataSetChanged() // Перерисовывает ВСЕ элементы
+ }
 }
 ```
 
@@ -57,26 +57,26 @@ class SimpleAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 ```kotlin
 class ItemDiffCallback(
-    private val oldList: List<User>,
-    private val newList: List<User>
+ private val oldList: List<User>,
+ private val newList: List<User>
 ) : DiffUtil.Callback() {
 
-    override fun getOldListSize() = oldList.size
-    override fun getNewListSize() = newList.size
+ override fun getOldListSize() = oldList.size
+ override fun getNewListSize() = newList.size
 
-    // Сравнение по ID
-    override fun areItemsTheSame(old: Int, new: Int): Boolean =
-        oldList[old].id == newList[new].id
+ // Сравнение по ID
+ override fun areItemsTheSame(old: Int, new: Int): Boolean =
+ oldList[old].id == newList[new].id
 
-    // Сравнение содержимого
-    override fun areContentsTheSame(old: Int, new: Int): Boolean =
-        oldList[old] == newList[new]
+ // Сравнение содержимого
+ override fun areContentsTheSame(old: Int, new: Int): Boolean =
+ oldList[old] == newList[new]
 }
 
 fun updateUsers(newUsers: List<User>) {
-    val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(users, newUsers))
-    users = newUsers
-    diffResult.dispatchUpdatesTo(this)
+ val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(users, newUsers))
+ users = newUsers
+ diffResult.dispatchUpdatesTo(this)
 }
 ```
 
@@ -86,23 +86,23 @@ fun updateUsers(newUsers: List<User>) {
 
 ```kotlin
 override fun getChangePayload(old: Int, new: Int): Any? {
-    val oldUser = oldList[old]
-    val newUser = newList[new]
+ val oldUser = oldList[old]
+ val newUser = newList[new]
 
-    return buildMap {
-        if (oldUser.name != newUser.name) put("name", newUser.name)
-        if (oldUser.status != newUser.status) put("status", newUser.status)
-    }.takeIf { it.isNotEmpty() }
+ return buildMap {
+ if (oldUser.name != newUser.name) put("name", newUser.name)
+ if (oldUser.status != newUser.status) put("status", newUser.status)
+ }.takeIf { it.isNotEmpty() }
 }
 
 override fun onBindViewHolder(holder: ViewHolder, pos: Int, payloads: List<Any>) {
-    if (payloads.isEmpty()) {
-        onBindViewHolder(holder, pos)
-    } else {
-        val changes = payloads[0] as Map<*, *>
-        changes["name"]?.let { holder.updateName(it as String) }
-        changes["status"]?.let { holder.updateStatus(it as Boolean) }
-    }
+ if (payloads.isEmpty()) {
+ onBindViewHolder(holder, pos)
+ } else {
+ val changes = payloads[0] as Map<*, *>
+ changes["name"]?.let { holder.updateName(it as String) }
+ changes["status"]?.let { holder.updateStatus(it as Boolean) }
+ }
 }
 ```
 
@@ -113,17 +113,17 @@ override fun onBindViewHolder(holder: ViewHolder, pos: Int, payloads: List<Any>)
 ```kotlin
 class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 
-    private val differ = AsyncListDiffer(this, object : DiffUtil.ItemCallback<User>() {
-        override fun areItemsTheSame(old: User, new: User) = old.id == new.id
-        override fun areContentsTheSame(old: User, new: User) = old == new
-    })
+ private val differ = AsyncListDiffer(this, object : DiffUtil.ItemCallback<User>() {
+ override fun areItemsTheSame(old: User, new: User) = old.id == new.id
+ override fun areContentsTheSame(old: User, new: User) = old == new
+ })
 
-    fun submitList(list: List<User>) = differ.submitList(list)
+ fun submitList(list: List<User>) = differ.submitList(list)
 
-    override fun getItemCount() = differ.currentList.size
-    override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
-        holder.bind(differ.currentList[pos])
-    }
+ override fun getItemCount() = differ.currentList.size
+ override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
+ holder.bind(differ.currentList[pos])
+ }
 }
 ```
 
@@ -134,19 +134,19 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 ```kotlin
 class UserAdapter : ListAdapter<User, UserAdapter.ViewHolder>(DiffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, type: Int): ViewHolder {
-        val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
-    }
+ override fun onCreateViewHolder(parent: ViewGroup, type: Int): ViewHolder {
+ val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+ return ViewHolder(binding)
+ }
 
-    override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
-        holder.bind(getItem(pos))
-    }
+ override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
+ holder.bind(getItem(pos))
+ }
 
-    object DiffCallback : DiffUtil.ItemCallback<User>() {
-        override fun areItemsTheSame(old: User, new: User) = old.id == new.id
-        override fun areContentsTheSame(old: User, new: User) = old == new
-    }
+ object DiffCallback : DiffUtil.ItemCallback<User>() {
+ override fun areItemsTheSame(old: User, new: User) = old.id == new.id
+ override fun areContentsTheSame(old: User, new: User) = old == new
+ }
 }
 
 // Использование
@@ -160,14 +160,14 @@ adapter.submitList(newUsers)
 ```kotlin
 @Composable
 fun UserList(users: List<User>) {
-    LazyColumn {
-        items(
-            items = users,
-            key = { it.id } // Аналог areItemsTheSame
-        ) { user ->
-            UserItem(user)
-        }
-    }
+ LazyColumn {
+ items(
+ items = users,
+ key = { it.id } // Аналог areItemsTheSame
+ ) { user ->
+ UserItem(user)
+ }
+ }
 }
 ```
 
@@ -187,12 +187,12 @@ fun UserList(users: List<User>) {
 
 ```kotlin
 class SimpleAdapter : RecyclerView.Adapter<ViewHolder>() {
-    private var items = listOf<String>()
+ private var items = listOf<String>()
 
-    fun updateItems(newItems: List<String>) {
-        items = newItems
-        notifyDataSetChanged() // Redraws ALL items
-    }
+ fun updateItems(newItems: List<String>) {
+ items = newItems
+ notifyDataSetChanged() // Redraws ALL items
+ }
 }
 ```
 
@@ -208,26 +208,26 @@ class SimpleAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 ```kotlin
 class ItemDiffCallback(
-    private val oldList: List<User>,
-    private val newList: List<User>
+ private val oldList: List<User>,
+ private val newList: List<User>
 ) : DiffUtil.Callback() {
 
-    override fun getOldListSize() = oldList.size
-    override fun getNewListSize() = newList.size
+ override fun getOldListSize() = oldList.size
+ override fun getNewListSize() = newList.size
 
-    // Compare by ID
-    override fun areItemsTheSame(old: Int, new: Int): Boolean =
-        oldList[old].id == newList[new].id
+ // Compare by ID
+ override fun areItemsTheSame(old: Int, new: Int): Boolean =
+ oldList[old].id == newList[new].id
 
-    // Compare content
-    override fun areContentsTheSame(old: Int, new: Int): Boolean =
-        oldList[old] == newList[new]
+ // Compare content
+ override fun areContentsTheSame(old: Int, new: Int): Boolean =
+ oldList[old] == newList[new]
 }
 
 fun updateUsers(newUsers: List<User>) {
-    val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(users, newUsers))
-    users = newUsers
-    diffResult.dispatchUpdatesTo(this)
+ val diffResult = DiffUtil.calculateDiff(ItemDiffCallback(users, newUsers))
+ users = newUsers
+ diffResult.dispatchUpdatesTo(this)
 }
 ```
 
@@ -237,23 +237,23 @@ fun updateUsers(newUsers: List<User>) {
 
 ```kotlin
 override fun getChangePayload(old: Int, new: Int): Any? {
-    val oldUser = oldList[old]
-    val newUser = newList[new]
+ val oldUser = oldList[old]
+ val newUser = newList[new]
 
-    return buildMap {
-        if (oldUser.name != newUser.name) put("name", newUser.name)
-        if (oldUser.status != newUser.status) put("status", newUser.status)
-    }.takeIf { it.isNotEmpty() }
+ return buildMap {
+ if (oldUser.name != newUser.name) put("name", newUser.name)
+ if (oldUser.status != newUser.status) put("status", newUser.status)
+ }.takeIf { it.isNotEmpty() }
 }
 
 override fun onBindViewHolder(holder: ViewHolder, pos: Int, payloads: List<Any>) {
-    if (payloads.isEmpty()) {
-        onBindViewHolder(holder, pos)
-    } else {
-        val changes = payloads[0] as Map<*, *>
-        changes["name"]?.let { holder.updateName(it as String) }
-        changes["status"]?.let { holder.updateStatus(it as Boolean) }
-    }
+ if (payloads.isEmpty()) {
+ onBindViewHolder(holder, pos)
+ } else {
+ val changes = payloads[0] as Map<*, *>
+ changes["name"]?.let { holder.updateName(it as String) }
+ changes["status"]?.let { holder.updateStatus(it as Boolean) }
+ }
 }
 ```
 
@@ -264,17 +264,17 @@ override fun onBindViewHolder(holder: ViewHolder, pos: Int, payloads: List<Any>)
 ```kotlin
 class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 
-    private val differ = AsyncListDiffer(this, object : DiffUtil.ItemCallback<User>() {
-        override fun areItemsTheSame(old: User, new: User) = old.id == new.id
-        override fun areContentsTheSame(old: User, new: User) = old == new
-    })
+ private val differ = AsyncListDiffer(this, object : DiffUtil.ItemCallback<User>() {
+ override fun areItemsTheSame(old: User, new: User) = old.id == new.id
+ override fun areContentsTheSame(old: User, new: User) = old == new
+ })
 
-    fun submitList(list: List<User>) = differ.submitList(list)
+ fun submitList(list: List<User>) = differ.submitList(list)
 
-    override fun getItemCount() = differ.currentList.size
-    override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
-        holder.bind(differ.currentList[pos])
-    }
+ override fun getItemCount() = differ.currentList.size
+ override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
+ holder.bind(differ.currentList[pos])
+ }
 }
 ```
 
@@ -285,19 +285,19 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
 ```kotlin
 class UserAdapter : ListAdapter<User, UserAdapter.ViewHolder>(DiffCallback) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, type: Int): ViewHolder {
-        val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return ViewHolder(binding)
-    }
+ override fun onCreateViewHolder(parent: ViewGroup, type: Int): ViewHolder {
+ val binding = ItemUserBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+ return ViewHolder(binding)
+ }
 
-    override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
-        holder.bind(getItem(pos))
-    }
+ override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
+ holder.bind(getItem(pos))
+ }
 
-    object DiffCallback : DiffUtil.ItemCallback<User>() {
-        override fun areItemsTheSame(old: User, new: User) = old.id == new.id
-        override fun areContentsTheSame(old: User, new: User) = old == new
-    }
+ object DiffCallback : DiffUtil.ItemCallback<User>() {
+ override fun areItemsTheSame(old: User, new: User) = old.id == new.id
+ override fun areContentsTheSame(old: User, new: User) = old == new
+ }
 }
 
 // Usage
@@ -311,14 +311,14 @@ adapter.submitList(newUsers)
 ```kotlin
 @Composable
 fun UserList(users: List<User>) {
-    LazyColumn {
-        items(
-            items = users,
-            key = { it.id } // Similar to areItemsTheSame
-        ) { user ->
-            UserItem(user)
-        }
-    }
+ LazyColumn {
+ items(
+ items = users,
+ key = { it.id } // Similar to areItemsTheSame
+ ) { user ->
+ UserItem(user)
+ }
+ }
 }
 ```
 
@@ -339,22 +339,22 @@ fun UserList(users: List<User>) {
 ## References
 
 - [[c-recyclerview]]
-- [[c-adapter-pattern]]
-- [[c-myers-diff-algorithm]]
+- 
+- 
 - [Android DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 - [`RecyclerView` Performance](https://developer.android.com/topic/performance/recyclerview)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-basics--android--easy]]
-- [[q-viewholder-pattern--android--easy]]
+- 
+- [[q-viewmodel-pattern--android--easy]]
 
 ### Related (Same Level)
 - [[q-recyclerview-explained--android--medium]]
-- [[q-listadapter-vs-adapter--android--medium]]
-- [[q-payload-updates--android--medium]]
+- 
+- 
 
 ### Advanced (Harder)
-- [[q-custom-diff-algorithm--android--hard]]
-- [[q-recyclerview-memory-leaks--android--hard]]
+- 
+- 

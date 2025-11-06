@@ -17,7 +17,7 @@ sources: []
 # Workflow & relations
 status: draft
 moc: moc-android
-related: [c-background-tasks, c-coroutines, c-jetpack, c-workmanager]
+related: [c-background-tasks, c-coroutines, c-workmanager]
 
 # Timestamps
 created: 2025-10-15
@@ -56,36 +56,36 @@ tags: [android/background-execution, android/coroutines, difficulty/medium, jetp
 ```kotlin
 // 1. Worker — определяет задачу
 class UploadWorker(
-    context: Context,
-    params: WorkerParameters
+ context: Context,
+ params: WorkerParameters
 ) : CoroutineWorker(context, params) {
 
-    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        try {
-            val path = inputData.getString("file_path") ?: return@withContext Result.failure()
-            uploadFile(path)
-            Result.success() // ✅ задача завершена
-        } catch (e: Exception) {
-            if (runAttemptCount < 3) Result.retry() // ✅ повторить с экспоненциальной задержкой
-            else Result.failure() // ❌ окончательный провал
-        }
-    }
+ override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+ try {
+ val path = inputData.getString("file_path") ?: return@withContext Result.failure()
+ uploadFile(path)
+ Result.success() // ✅ задача завершена
+ } catch (e: Exception) {
+ if (runAttemptCount < 3) Result.retry() // ✅ повторить с экспоненциальной задержкой
+ else Result.failure() // ❌ окончательный провал
+ }
+ }
 }
 
 // 2. WorkRequest — описывает когда и как запустить
 val uploadRequest = OneTimeWorkRequestBuilder<UploadWorker>()
-    .setInputData(workDataOf("file_path" to "/path/to/file"))
-    .setConstraints(
-        Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ только при наличии сети
-            .setRequiresBatteryNotLow(true)                // ✅ батарея > 15%
-            .build()
-    )
-    .setBackoffCriteria(
-        BackoffPolicy.EXPONENTIAL,
-        15, TimeUnit.SECONDS // ✅ повторы: 15s → 30s → 60s...
-    )
-    .build()
+ .setInputData(workDataOf("file_path" to "/path/to/file"))
+ .setConstraints(
+ Constraints.Builder()
+ .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ только при наличии сети
+ .setRequiresBatteryNotLow(true) // ✅ батарея > 15%
+ .build()
+ )
+ .setBackoffCriteria(
+ BackoffPolicy.EXPONENTIAL,
+ 15, TimeUnit.SECONDS // ✅ повторы: 15s → 30s → 60s...
+ )
+ .build()
 
 // 3. WorkManager — управляет выполнением
 WorkManager.getInstance(context).enqueue(uploadRequest)
@@ -96,34 +96,34 @@ WorkManager.getInstance(context).enqueue(uploadRequest)
 ```kotlin
 // Последовательно-параллельное выполнение
 WorkManager.getInstance(context)
-    .beginWith(compressWork)                    // Шаг 1: сжатие
-    .then(listOf(uploadWork1, uploadWork2))     // Шаг 2: параллельные загрузки
-    .then(cleanupWork)                          // Шаг 3: очистка
-    .enqueue()
+ .beginWith(compressWork) // Шаг 1: сжатие
+ .then(listOf(uploadWork1, uploadWork2)) // Шаг 2: параллельные загрузки
+ .then(cleanupWork) // Шаг 3: очистка
+ .enqueue()
 ```
 
 ### Мониторинг Выполнения
 
 ```kotlin
 WorkManager.getInstance(context)
-    .getWorkInfoByIdLiveData(uploadRequest.id)
-    .observe(lifecycleOwner) { workInfo ->
-        when (workInfo.state) {
-            WorkInfo.State.RUNNING -> {
-                val progress = workInfo.progress.getInt("progress", 0)
-                updateProgressBar(progress) // ✅ отображаем прогресс
-            }
-            WorkInfo.State.SUCCEEDED -> {
-                val url = workInfo.outputData.getString("uploaded_url")
-                showSuccess(url) // ✅ задача выполнена
-            }
-            WorkInfo.State.FAILED -> {
-                val error = workInfo.outputData.getString("error")
-                showError(error) // ❌ задача провалилась
-            }
-            else -> {}
-        }
-    }
+ .getWorkInfoByIdLiveData(uploadRequest.id)
+ .observe(lifecycleOwner) { workInfo ->
+ when (workInfo.state) {
+ WorkInfo.State.RUNNING -> {
+ val progress = workInfo.progress.getInt("progress", 0)
+ updateProgressBar(progress) // ✅ отображаем прогресс
+ }
+ WorkInfo.State.SUCCEEDED -> {
+ val url = workInfo.outputData.getString("uploaded_url")
+ showSuccess(url) // ✅ задача выполнена
+ }
+ WorkInfo.State.FAILED -> {
+ val error = workInfo.outputData.getString("error")
+ showError(error) // ❌ задача провалилась
+ }
+ else -> {}
+ }
+ }
 ```
 
 ### Когда Использовать
@@ -163,36 +163,36 @@ WorkManager.getInstance(context)
 ```kotlin
 // 1. Worker — defines the task
 class UploadWorker(
-    context: Context,
-    params: WorkerParameters
+ context: Context,
+ params: WorkerParameters
 ) : CoroutineWorker(context, params) {
 
-    override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
-        try {
-            val path = inputData.getString("file_path") ?: return@withContext Result.failure()
-            uploadFile(path)
-            Result.success() // ✅ task completed
-        } catch (e: Exception) {
-            if (runAttemptCount < 3) Result.retry() // ✅ retry with exponential backoff
-            else Result.failure() // ❌ final failure
-        }
-    }
+ override suspend fun doWork(): Result = withContext(Dispatchers.IO) {
+ try {
+ val path = inputData.getString("file_path") ?: return@withContext Result.failure()
+ uploadFile(path)
+ Result.success() // ✅ task completed
+ } catch (e: Exception) {
+ if (runAttemptCount < 3) Result.retry() // ✅ retry with exponential backoff
+ else Result.failure() // ❌ final failure
+ }
+ }
 }
 
 // 2. WorkRequest — describes when and how to run
 val uploadRequest = OneTimeWorkRequestBuilder<UploadWorker>()
-    .setInputData(workDataOf("file_path" to "/path/to/file"))
-    .setConstraints(
-        Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ only when network available
-            .setRequiresBatteryNotLow(true)                // ✅ battery > 15%
-            .build()
-    )
-    .setBackoffCriteria(
-        BackoffPolicy.EXPONENTIAL,
-        15, TimeUnit.SECONDS // ✅ retries: 15s → 30s → 60s...
-    )
-    .build()
+ .setInputData(workDataOf("file_path" to "/path/to/file"))
+ .setConstraints(
+ Constraints.Builder()
+ .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ only when network available
+ .setRequiresBatteryNotLow(true) // ✅ battery > 15%
+ .build()
+ )
+ .setBackoffCriteria(
+ BackoffPolicy.EXPONENTIAL,
+ 15, TimeUnit.SECONDS // ✅ retries: 15s → 30s → 60s...
+ )
+ .build()
 
 // 3. WorkManager — manages execution
 WorkManager.getInstance(context).enqueue(uploadRequest)
@@ -203,34 +203,34 @@ WorkManager.getInstance(context).enqueue(uploadRequest)
 ```kotlin
 // Sequential-parallel execution
 WorkManager.getInstance(context)
-    .beginWith(compressWork)                    // Step 1: compression
-    .then(listOf(uploadWork1, uploadWork2))     // Step 2: parallel uploads
-    .then(cleanupWork)                          // Step 3: cleanup
-    .enqueue()
+ .beginWith(compressWork) // Step 1: compression
+ .then(listOf(uploadWork1, uploadWork2)) // Step 2: parallel uploads
+ .then(cleanupWork) // Step 3: cleanup
+ .enqueue()
 ```
 
 ### Monitoring Execution
 
 ```kotlin
 WorkManager.getInstance(context)
-    .getWorkInfoByIdLiveData(uploadRequest.id)
-    .observe(lifecycleOwner) { workInfo ->
-        when (workInfo.state) {
-            WorkInfo.State.RUNNING -> {
-                val progress = workInfo.progress.getInt("progress", 0)
-                updateProgressBar(progress) // ✅ display progress
-            }
-            WorkInfo.State.SUCCEEDED -> {
-                val url = workInfo.outputData.getString("uploaded_url")
-                showSuccess(url) // ✅ task completed
-            }
-            WorkInfo.State.FAILED -> {
-                val error = workInfo.outputData.getString("error")
-                showError(error) // ❌ task failed
-            }
-            else -> {}
-        }
-    }
+ .getWorkInfoByIdLiveData(uploadRequest.id)
+ .observe(lifecycleOwner) { workInfo ->
+ when (workInfo.state) {
+ WorkInfo.State.RUNNING -> {
+ val progress = workInfo.progress.getInt("progress", 0)
+ updateProgressBar(progress) // ✅ display progress
+ }
+ WorkInfo.State.SUCCEEDED -> {
+ val url = workInfo.outputData.getString("uploaded_url")
+ showSuccess(url) // ✅ task completed
+ }
+ WorkInfo.State.FAILED -> {
+ val error = workInfo.outputData.getString("error")
+ showError(error) // ❌ task failed
+ }
+ else -> {}
+ }
+ }
 ```
 
 ### When to Use
@@ -269,14 +269,14 @@ WorkManager.getInstance(context)
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-service--android--easy]] — Understanding Android `Service` lifecycle
-- [[q-coroutines-basics--kotlin--easy]] — Kotlin coroutines fundamentals
+- [[q-what-is-intent--android--easy]] — Understanding Android `Service` lifecycle
+- [[q-coroutine-scope-basics--kotlin--easy]] — Kotlin coroutines fundamentals
 
 ### Related (Same Level)
-- [[q-coroutines-flow--kotlin--medium]] — Asynchronous data streams with `Flow`
+- [[q-room-coroutines-flow--kotlin--medium]] — Asynchronous data streams with `Flow`
 - [[q-foreground-service-types--android--medium]] — `Long`-running visible background work
-- [[q-jobscheduler--android--medium]] — Lower-level scheduled task API
+- — Lower-level scheduled task API
 
 ### Advanced (Harder)
-- [[q-background-execution-limits--android--hard]] — Android background execution restrictions and workarounds
-- [[q-battery-optimization--android--hard]] — Battery optimization strategies and Doze mode
+- — Android background execution restrictions and workarounds
+- — Battery optimization strategies and Doze mode

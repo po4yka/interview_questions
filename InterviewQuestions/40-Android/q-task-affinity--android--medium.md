@@ -18,7 +18,6 @@ status: draft
 moc: moc-android
 related:
 - c-activity-lifecycle
-- c-task-affinity
 created: 2025-10-05
 updated: 2025-01-25
 tags:
@@ -49,9 +48,9 @@ TaskAffinity определяет, к какой задаче активност
 **Объявление в AndroidManifest:**
 ```xml
 <activity
-    android:name=".WeatherActivity"
-    android:taskAffinity="com.example.weather"
-    android:allowTaskReparenting="true" />
+ android:name=".WeatherActivity"
+ android:taskAffinity="com.example.weather"
+ android:allowTaskReparenting="true" />
 ```
 
 **Когда сродство вступает в силу:**
@@ -73,9 +72,9 @@ startActivity(intent)
 ```xml
 <!-- Активность может переместиться в задачу с тем же сродством -->
 <activity
-    android:name=".WeatherActivity"
-    android:taskAffinity="com.example.weather"
-    android:allowTaskReparenting="true" />
+ android:name=".WeatherActivity"
+ android:taskAffinity="com.example.weather"
+ android:allowTaskReparenting="true" />
 ```
 
 **Практические примеры:**
@@ -91,9 +90,9 @@ TaskAffinity defines which task an activity "prefers" to belong to. By default, 
 **Declaration in AndroidManifest:**
 ```xml
 <activity
-    android:name=".WeatherActivity"
-    android:taskAffinity="com.example.weather"
-    android:allowTaskReparenting="true" />
+ android:name=".WeatherActivity"
+ android:taskAffinity="com.example.weather"
+ android:allowTaskReparenting="true" />
 ```
 
 **When affinity comes into play:**
@@ -115,9 +114,9 @@ startActivity(intent)
 ```xml
 <!-- Activity can move to task with same affinity -->
 <activity
-    android:name=".WeatherActivity"
-    android:taskAffinity="com.example.weather"
-    android:allowTaskReparenting="true" />
+ android:name=".WeatherActivity"
+ android:taskAffinity="com.example.weather"
+ android:allowTaskReparenting="true" />
 ```
 
 **Practical examples:**
@@ -133,30 +132,27 @@ startActivity(intent)
 - What happens when you don't specify taskAffinity?
 - How do you handle taskAffinity with notifications?
 
-
 ## References
 
 - [Navigation](https://developer.android.com/guide/navigation)
 - [Activities](https://developer.android.com/guide/components/activities)
-
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-activity-lifecycle]]
-- [[c-task-affinity]]
-
+- 
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components
-- [[q-activity-basics--android--easy]] - `Activity` basics
+- - `Activity` basics
 
 ### Related (Same Level)
-- [[q-activity-lifecycle--android--medium]] - `Activity` lifecycle
-- [[q-android-navigation--android--medium]] - Android navigation
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity` lifecycle
+- [[q-android-modularization--android--medium]] - Android navigation
 - [[q-tasks-back-stack--android--medium]] - Task back stack
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]] - Runtime internals
-- [[q-activity-launch-modes--android--hard]] - Launch modes
+- - Launch modes
