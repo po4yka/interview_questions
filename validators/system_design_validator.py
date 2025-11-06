@@ -3,8 +3,11 @@
 from __future__ import annotations
 
 from .base import BaseValidator, Severity
+from .config import SYSTEM_DESIGN_SUBSECTIONS, OPTIONAL_VERSION_SUBSECTIONS
+from .registry import ValidatorRegistry
 
 
+@ValidatorRegistry.register
 class SystemDesignValidator(BaseValidator):
     """Validate system design question patterns and recommend best practices."""
 
@@ -34,8 +37,8 @@ class SystemDesignValidator(BaseValidator):
         difficulty = self.frontmatter.get("difficulty")
 
         has_versions = (
-            "## Short Version" in content or
-            "## Краткая Версия" in content
+            OPTIONAL_VERSION_SUBSECTIONS["short"]["en"] in content or
+            OPTIONAL_VERSION_SUBSECTIONS["short"]["ru"] in content
         )
 
         if difficulty == "hard" and not has_versions:
@@ -51,8 +54,8 @@ class SystemDesignValidator(BaseValidator):
         """Check for Requirements subsection in answer."""
         content = self.content
 
-        has_ru_requirements = "### Требования" in content
-        has_en_requirements = "### Requirements" in content
+        has_ru_requirements = SYSTEM_DESIGN_SUBSECTIONS["requirements"]["ru"] in content
+        has_en_requirements = SYSTEM_DESIGN_SUBSECTIONS["requirements"]["en"] in content
 
         if has_ru_requirements and has_en_requirements:
             self.add_passed("Answer includes Requirements sections")
@@ -72,8 +75,8 @@ class SystemDesignValidator(BaseValidator):
         """Check for Architecture subsection in answer."""
         content = self.content
 
-        has_ru_architecture = "### Архитектура" in content
-        has_en_architecture = "### Architecture" in content
+        has_ru_architecture = SYSTEM_DESIGN_SUBSECTIONS["architecture"]["ru"] in content
+        has_en_architecture = SYSTEM_DESIGN_SUBSECTIONS["architecture"]["en"] in content
 
         if has_ru_architecture and has_en_architecture:
             self.add_passed("Answer includes Architecture sections")

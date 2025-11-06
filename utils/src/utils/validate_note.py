@@ -30,14 +30,9 @@ ROOT = _discover_repo_root()
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from validators.android_validator import AndroidValidator  # type: ignore
-from validators.code_format_validator import CodeFormatValidator  # type: ignore
-from validators.content_validator import ContentValidator  # type: ignore
-from validators.format_validator import FormatValidator  # type: ignore
-from validators.link_validator import LinkValidator  # type: ignore
-from validators.system_design_validator import SystemDesignValidator  # type: ignore
-from validators.yaml_validator import YAMLValidator  # type: ignore
-from validators.base import Severity  # type: ignore
+from validators import Severity, ValidatorRegistry  # type: ignore
+# Import all validators to trigger auto-registration
+import validators  # noqa: F401  # type: ignore
 from utils.report_generator import FileResult, ReportGenerator
 from utils.taxonomy_loader import TaxonomyLoader
 from utils.yaml_loader import load_yaml
@@ -90,27 +85,16 @@ def validate_single_file(
 ) -> FileResult:
     """Validate a single file and return the result."""
     frontmatter, body = parse_note(file_path)
-    validators = [
-        YAMLValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
-        ContentValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
-        LinkValidator(
-            content=body,
-            frontmatter=frontmatter,
-            path=str(file_path),
-            taxonomy=taxonomy,
-            index=note_index,
-        ),
-        FormatValidator(
-            content=body,
-            frontmatter=frontmatter,
-            path=str(file_path),
-            taxonomy=taxonomy,
-            vault_root=vault_dir,
-        ),
-        CodeFormatValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
-        AndroidValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
-        SystemDesignValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
-    ]
+
+    # Use the registry to create all registered validators
+    validators = ValidatorRegistry.create_validators(
+        content=body,
+        frontmatter=frontmatter,
+        path=str(file_path),
+        taxonomy=taxonomy,
+        vault_root=vault_dir,
+        note_index=note_index,
+    )
     issues = []
     passed = []
     for validator in validators:

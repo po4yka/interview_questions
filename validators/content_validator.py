@@ -6,44 +6,29 @@ import re
 from pathlib import Path
 
 from .base import BaseValidator, Severity
+from .config import (
+    STRUCTURED_REQUIRED_HEADINGS,
+    GENERIC_FOLLOWUP_PATTERNS,
+    FOLLOWUP_MIN_RECOMMENDED,
+    FOLLOWUP_MAX_RECOMMENDED,
+    MIN_FOLLOWUP_QUESTION_LENGTH,
+    MIN_SUBSECTION_CONTENT_LENGTH,
+    CONCEPT_PREFIX,
+)
+from .registry import ValidatorRegistry
 
 
+@ValidatorRegistry.register
 class ContentValidator(BaseValidator):
-    STRUCTURED_REQUIRED_HEADINGS = {
-        "qna": [
-            "# Вопрос (RU)",
-            "# Question (EN)",
-            "## Ответ (RU)",
-            "## Answer (EN)",
-            "## Follow-ups",
-            "## References",
-            "## Related Questions",
-        ],
-        "concept": [
-            "# Summary (EN)",
-            "## Summary (RU)",
-        ],
-    }
+    """Ensure content follows the bilingual template."""
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        topic = self.frontmatter.get("topic")
         filename = Path(self.path).name
-        if filename.startswith("c-"):
-            self.required_headings = self.STRUCTURED_REQUIRED_HEADINGS["concept"]
+        if filename.startswith(CONCEPT_PREFIX):
+            self.required_headings = STRUCTURED_REQUIRED_HEADINGS["concept"]
         else:
-            self.required_headings = self.STRUCTURED_REQUIRED_HEADINGS["qna"]
-    """Ensure content follows the bilingual template."""
-
-    REQUIRED_HEADINGS = [
-        "# Вопрос (RU)",
-        "# Question (EN)",
-        "## Ответ (RU)",
-        "## Answer (EN)",
-        "## Follow-ups",
-        "## References",
-        "## Related Questions",
-    ]
+            self.required_headings = STRUCTURED_REQUIRED_HEADINGS["qna"]
 
     def validate(self):
         filename = Path(self.path).name
@@ -70,7 +55,7 @@ class ContentValidator(BaseValidator):
 
     def _check_required_headings(self, content: str):
         positions = {}
-        for heading in self.REQUIRED_HEADINGS:
+        for heading in self.required_headings:
             index = content.find(heading)
             if index == -1:
                 self.add_issue(
@@ -79,13 +64,13 @@ class ContentValidator(BaseValidator):
                 )
             else:
                 positions[heading] = index
-        if len(positions) == len(self.REQUIRED_HEADINGS):
+        if len(positions) == len(self.required_headings):
             self.add_passed("All required headings present")
             return positions
         return None
 
     def _check_heading_order(self, positions: dict) -> None:
-        ordered = [positions[h] for h in self.REQUIRED_HEADINGS]
+        ordered = [positions[h] for h in self.required_headings]
         if ordered != sorted(ordered):
             self.add_issue(
                 Severity.ERROR,
@@ -128,13 +113,13 @@ class ContentValidator(BaseValidator):
         # Count bullet points (questions)
         bullets = re.findall(r'^\s*[-*]\s+', followups, re.MULTILINE)
 
-        if len(bullets) < 3:
+        if len(bullets) < FOLLOWUP_MIN_RECOMMENDED:
             self.add_issue(
                 Severity.INFO,
                 f"Follow-ups has {len(bullets)} question(s). "
                 "Consider adding 3-5 meaningful follow-on questions",
             )
-        elif len(bullets) > 7:
+        elif len(bullets) > FOLLOWUP_MAX_RECOMMENDED:
             self.add_issue(
                 Severity.INFO,
                 f"Follow-ups has {len(bullets)} questions. "
@@ -144,15 +129,7 @@ class ContentValidator(BaseValidator):
             self.add_passed(f"Follow-ups has {len(bullets)} questions (good range)")
 
         # Check for generic/low-quality question patterns
-        generic_patterns = [
-            (r'What else\??\s*$', "generic 'What else?'"),
-            (r'Tell me more\??', "generic 'Tell me more'"),
-            (r'Can you explain\??\s*$', "generic 'Can you explain?'"),
-            (r'Anything else\??', "generic 'Anything else?'"),
-            (r'What about\?\s*$', "incomplete 'What about?'"),
-        ]
-
-        for pattern, description in generic_patterns:
+        for pattern, description in GENERIC_FOLLOWUP_PATTERNS:
             if re.search(pattern, followups, re.IGNORECASE):
                 self.add_issue(
                     Severity.WARNING,
@@ -164,7 +141,7 @@ class ContentValidator(BaseValidator):
 
         # Check if questions are too short (likely not detailed enough)
         lines = [line.strip() for line in followups.split('\n') if line.strip().startswith(('-', '*'))]
-        short_questions = [line for line in lines if len(line) < 20]
+        short_questions = [line for line in lines if len(line) < MIN_FOLLOWUP_QUESTION_LENGTH]
 
         if len(short_questions) > len(lines) // 2:  # More than half are short
             self.add_issue(
@@ -291,10 +268,10 @@ class ContentValidator(BaseValidator):
         # Extract text between start and end
         text = content[start_pos + len(start_heading):end_pos].strip()
 
-        if not text or len(text) < 50:  # Minimum 50 chars
+        if not text or len(text) < MIN_SUBSECTION_CONTENT_LENGTH:
             self.add_issue(
                 Severity.WARNING,
-                f"Subsection '{start_heading}' should contain substantial text (>50 chars)",
+                f"Subsection '{start_heading}' should contain substantial text (>{MIN_SUBSECTION_CONTENT_LENGTH} chars)",
             )
 
     @staticmethod

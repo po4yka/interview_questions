@@ -5,8 +5,11 @@ from __future__ import annotations
 import re
 
 from .base import BaseValidator, Severity
+from .config import COMMON_TYPE_NAMES, UNESCAPED_GENERIC_PATTERN
+from .registry import ValidatorRegistry
 
 
+@ValidatorRegistry.register
 class CodeFormatValidator(BaseValidator):
     """
     Validate code formatting rules as specified in NOTE-REVIEW-PROMPT.md.
@@ -44,11 +47,7 @@ class CodeFormatValidator(BaseValidator):
             if is_code_block:
                 continue  # Skip code blocks
 
-            # Pattern: CamelCase type name followed by <...>
-            # Must not be preceded by backtick and not followed by backtick
-            pattern = r'(?<!`)(?<!`)\b([A-Z][a-zA-Z0-9]*)<([^>]+)>(?!`)(?!`)'
-
-            for match in re.finditer(pattern, part):
+            for match in UNESCAPED_GENERIC_PATTERN.finditer(part):
                 type_with_generic = match.group(0)
                 line_num = self.content[:self.content.find(part) + match.start()].count('\n') + 1
 
@@ -75,14 +74,6 @@ class CodeFormatValidator(BaseValidator):
         - Parcelable, Bundle, etc.
         """
 
-        # Common types that should be in backticks when mentioned in text
-        common_types = [
-            'String', 'Int', 'Long', 'Float', 'Double', 'Boolean', 'Char',
-            'ArrayList', 'HashMap', 'HashSet', 'LinkedList',
-            'Bundle', 'Parcelable', 'Serializable',
-            'ViewModel', 'LiveData', 'StateFlow', 'SharedFlow',
-        ]
-
         parts = self._split_by_code_blocks(self.content)
         issues_found = set()
 
@@ -90,7 +81,7 @@ class CodeFormatValidator(BaseValidator):
             if is_code_block:
                 continue
 
-            for type_name in common_types:
+            for type_name in COMMON_TYPE_NAMES:
                 # Look for type name not in backticks
                 # Pattern: type name not preceded/followed by backtick or alphanumeric
                 pattern = rf'(?<!`)\b{re.escape(type_name)}\b(?!`)'

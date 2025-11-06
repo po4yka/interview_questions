@@ -7,8 +7,16 @@ from pathlib import Path
 from typing import Set
 
 from .base import BaseValidator, Severity
+from .config import (
+    RELATED_LINKS_MIN_RECOMMENDED,
+    RELATED_LINKS_MAX_RECOMMENDED,
+    CONCEPT_PREFIX,
+    QUESTION_PREFIX,
+)
+from .registry import ValidatorRegistry
 
 
+@ValidatorRegistry.register
 class LinkValidator(BaseValidator):
     """Ensure internal links resolve and concept references exist."""
 
@@ -86,27 +94,28 @@ class LinkValidator(BaseValidator):
             return
 
         # Check minimum count
-        if len(related) < 2:
+        if len(related) < RELATED_LINKS_MIN_RECOMMENDED:
             self.add_issue(
                 Severity.WARNING,
-                f"Related field has {len(related)} item(s). Recommended: 2-5 items "
+                f"Related field has {len(related)} item(s). "
+                f"Recommended: {RELATED_LINKS_MIN_RECOMMENDED}-{RELATED_LINKS_MAX_RECOMMENDED} items "
                 "(mix of concept links c-... and question links q-...)",
                 field="related",
             )
-        elif len(related) > 5:
+        elif len(related) > RELATED_LINKS_MAX_RECOMMENDED:
             self.add_issue(
                 Severity.INFO,
-                f"Related field has {len(related)} items. Recommended: 2-5 items "
+                f"Related field has {len(related)} items. "
+                f"Recommended: {RELATED_LINKS_MIN_RECOMMENDED}-{RELATED_LINKS_MAX_RECOMMENDED} items "
                 "for focused cross-referencing",
                 field="related",
             )
         else:
-            # Good range: 2-5 items
             self.add_passed(f"Related field has {len(related)} items (optimal range)")
 
         # Check for concept links
-        concept_links = [r for r in related if isinstance(r, str) and r.startswith('c-')]
-        question_links = [r for r in related if isinstance(r, str) and r.startswith('q-')]
+        concept_links = [r for r in related if isinstance(r, str) and r.startswith(CONCEPT_PREFIX)]
+        question_links = [r for r in related if isinstance(r, str) and r.startswith(QUESTION_PREFIX)]
 
         if not concept_links:
             self.add_issue(

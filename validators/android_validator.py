@@ -5,8 +5,10 @@ from __future__ import annotations
 from pathlib import Path
 
 from .base import BaseValidator, Severity
+from .registry import ValidatorRegistry
 
 
+@ValidatorRegistry.register
 class AndroidValidator(BaseValidator):
     """Apply Android specific taxonomy checks."""
 
