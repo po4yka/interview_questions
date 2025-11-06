@@ -44,10 +44,11 @@ tags:
 - ru
 ---
 
-# Question (EN)
-> How do image loading libraries like Glide/Fresco work internally?
 # Вопрос (RU)
 > Как работают библиотеки загрузки изображений вроде Glide/Fresco внутри?
+
+# Question (EN)
+> How do image loading libraries like Glide/Fresco work internally?
 
 ---
 
@@ -344,48 +345,36 @@ Glide.with(context) // Lifecycle-aware
     .into(imageView)
 ```
 
+## Ответ (RU)
+
+Библиотеки загрузки изображений, такие как Glide, Fresco и Coil, решают сложные задачи, связанные с эффективной загрузкой, кэшированием и отображением изображений в Android-приложениях.
+
+
+### Основные Компоненты
+
+1. **Memory Cache** - LruCache для быстрого доступа
+2. **Disk Cache** - Кэш на диске
+3. **Network Fetcher** - Загрузка из сети
+4. **Request Manager** - Управление жизненным циклом
+5. **Transformation Engine** - Преобразование изображений
+
+### Pipeline Загрузки
+
+1. Проверка memory cache
+2. Проверка active resources
+3. Проверка disk cache
+4. Загрузка из сети
+5. Сохранение в кэши
+6. Отображение
+
+### Лучшие Практики
+
+- Автоматическое управление жизненным циклом
+- Дедупликация запросов
+- Повторное использование Bitmap
+- Эффективное кэширование
+
 ---
-
-
-# Question (EN)
-> How do image loading libraries like Glide/Fresco work internally?
-# Вопрос (RU)
-> Как работают библиотеки загрузки изображений вроде Glide/Fresco внутри?
-
----
-
-
----
-
-
-## Answer (EN)
-
-Image loading libraries like Glide, Fresco, and Coil solve complex problems related to loading, caching, and displaying images efficiently in Android applications.
-
-### 1. Core Components of Glide
-
-```kotlin
-// High-level overview of Glide architecture
-
-           Glide Request Manager
-  (Lifecycle-aware request management)
-
-
-
-         Request Coordinator & Engine
-    (Job scheduling, deduplication)
-
-
-
-
-
- Memory        Disk      Network
- Cache         Cache     Fetcher
- (LruCache)    (DiskLRU  (OkHttp)
-
-```
-
-### 2. Loading Pipeline
 
 ```kotlin
 // Simplified Glide loading process

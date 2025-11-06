@@ -28,69 +28,13 @@ tags: [android/architecture-clean, android/networking-http, android/service, dif
 
 # Вопрос (RU)
 
-> Как спроектировать SDK флагов функций и экспериментов для Android?
-
-## Краткая Версия
-
-Спроектируйте SDK флагов функций для Android. Основные требования: динамическое включение/выключение функций, A/B тестирование, <150мс bootstrap, sticky assignments, офлайн кеш с TTL, kill-switch семантика, privacy-safe exposure logging.
-
-## Подробная Версия
-
-Спроектируйте полноценный SDK флагов функций и экспериментов для Android со следующими требованиями:
-
-**Производительность:**
-- Bootstrap <150мс при холодном старте
-- Sticky assignments для consistent user experience
-- Офлайн кеш с TTL для работы без сети
-
-**Функциональность:**
-- Динамическое включение/выключение функций
-- A/B тестирование с targeting rules
-- Kill-switch для мгновенного отключения функций
-- Privacy-safe exposure logging
-
-**Надежность:**
-- Градуальный rollout с автоматическим откатом
-- Schema versioning для backward compatibility
-- Security: signed configs, encrypted storage
-
-**Наблюдаемость:**
-- Метрики bootstrap latency, cache hit rate, evaluation errors
-- Health-gated deployment
-- Distributed tracing для debugging
+> Как спроектировать SDK флагов функций и экспериментов для Android? Основные требования: динамическое включение/выключение функций, A/B тестирование, <150мс bootstrap, sticky assignments, офлайн кеш с TTL, kill-switch семантика, privacy-safe exposure logging. Требования к производительности: Bootstrap <150мс при холодном старте, sticky assignments для consistent user experience, офлайн кеш с TTL. Функциональность: динамическое включение/выключение функций, A/B тестирование с targeting rules, kill-switch для мгновенного отключения функций, privacy-safe exposure logging. Надежность: градуальный rollout с автоматическим откатом, schema versioning для backward compatibility, security: signed configs, encrypted storage. Наблюдаемость: метрики bootstrap latency, cache hit rate, evaluation errors, health-gated deployment, distributed tracing для debugging.
 
 # Question (EN)
 
-> How to design a feature flags & experimentation SDK for Android?
+> How to design a feature flags & experimentation SDK for Android? Key requirements: dynamic feature toggles, A/B testing, <150ms bootstrap, sticky assignments, offline cache with TTL, kill-switch semantics, privacy-safe exposure logging. Performance: bootstrap <150ms on cold start, sticky assignments for consistent user experience, offline cache with TTL for network-independent operation. Functionality: dynamic feature enable/disable, A/B testing with targeting rules, kill-switch for instant feature disable, privacy-safe exposure logging. Reliability: gradual rollout with automatic rollback, schema versioning for backward compatibility, security: signed configs, encrypted storage. Observability: metrics for bootstrap latency, cache hit rate, evaluation errors, health-gated deployment, distributed tracing for debugging.
 
-## Short Version
-
-Design a feature flags SDK for Android. Key requirements: dynamic feature toggles, A/B testing, <150ms bootstrap, sticky assignments, offline cache with TTL, kill-switch semantics, privacy-safe exposure logging.
-
-## Detailed Version
-
-Design a complete feature flags & experimentation SDK for Android with the following requirements:
-
-**Performance:**
-- Bootstrap <150ms on cold start
-- Sticky assignments for consistent user experience
-- Offline cache with TTL for network-independent operation
-
-**Functionality:**
-- Dynamic feature enable/disable
-- A/B testing with targeting rules
-- Kill-switch for instant feature disable
-- Privacy-safe exposure logging
-
-**Reliability:**
-- Gradual rollout with automatic rollback
-- Schema versioning for backward compatibility
-- Security: signed configs, encrypted storage
-
-**Observability:**
-- Metrics for bootstrap latency, cache hit rate, evaluation errors
-- Health-gated deployment
-- Distributed tracing for debugging
+---
 
 ## Ответ (RU)
 

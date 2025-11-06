@@ -26,59 +26,13 @@ tags: [android/architecture-clean, android/kmp, cross-platform, difficulty/mediu
 
 # Вопрос (RU)
 
-> Сравните Kotlin Multiplatform Mobile (KMM) с Flutter для кросс-платформенной разработки.
-
-## Краткая Версия
-
-KMM — shared business logic (60-70%) с native UI; Flutter — shared UI + logic (90-95%). KMM для native UX и performance, Flutter для скорости разработки и multi-platform. Trade-offs: KMM выше производительность но требует native expertise.
-
-## Подробная Версия
-
-Сравните Kotlin Multiplatform Mobile (KMM) с Flutter для кросс-платформенной разработки:
-
-**Архитектурные различия:**
-- KMM: Shared business logic + native UI (Jetpack Compose, SwiftUI)
-- Flutter: Shared UI + logic с platform channels для native APIs
-
-**Производительность:**
-- KMM: 100% native, startup 200-500ms, size 15-25MB
-- Flutter: 95-98% native, startup 400-800ms, size 20-35MB
-
-**Trade-offs:**
-- KMM: Лучшая производительность и UX, но требует separate UI development
-- Flutter: Быстрее разработка и code reuse, но overhead engine
-
-**Когда выбирать:**
-- KMM: Native UX критичен, существующее native app, performance-critical
-- Flutter: Быстрый MVP, custom UI, маленькая команда, multi-platform
+> Сравните Kotlin Multiplatform Mobile (KMM) с Flutter для кросс-платформенной разработки. KMM — shared business logic (60-70%) с native UI; Flutter — shared UI + logic (90-95%). KMM для native UX и performance, Flutter для скорости разработки и multi-platform. Trade-offs: KMM выше производительность но требует native expertise. Архитектурные различия: KMM использует shared business logic + native UI (Jetpack Compose, SwiftUI), Flutter — shared UI + logic с platform channels для native APIs. Производительность: KMM — 100% native, startup 200-500ms, size 15-25MB; Flutter — 95-98% native, startup 400-800ms, size 20-35MB. Trade-offs: KMM лучшая производительность и UX, но требует separate UI development; Flutter быстрее разработка и code reuse, но overhead engine. Когда выбирать: KMM когда native UX критичен, существующее native app, performance-critical; Flutter для быстрого MVP, custom UI, маленькой команды, multi-platform.
 
 # Question (EN)
 
-> Compare Kotlin Multiplatform Mobile (KMM) with Flutter for cross-platform development.
+> Compare Kotlin Multiplatform Mobile (KMM) with Flutter for cross-platform development. KMM — shared business logic (60-70%) with native UI; Flutter — shared UI + logic (90-95%). KMM for native UX and performance, Flutter for development speed and multi-platform. Trade-offs: KMM higher performance but requires native expertise. Architectural differences: KMM uses shared business logic + native UI (Jetpack Compose, SwiftUI), Flutter uses shared UI + logic with platform channels for native APIs. Performance: KMM — 100% native, startup 200-500ms, size 15-25MB; Flutter — 95-98% native, startup 400-800ms, size 20-35MB. Trade-offs: KMM offers better performance and UX but requires separate UI development; Flutter enables faster development and code reuse but has engine overhead. When to choose: KMM when native UX is critical, for existing native apps, performance-critical apps; Flutter for rapid MVP, custom UI, small teams, multi-platform.
 
-## Short Version
-
-KMM — shared business logic (60-70%) with native UI; Flutter — shared UI + logic (90-95%). KMM for native UX and performance, Flutter for development speed and multi-platform. Trade-offs: KMM higher performance but requires native expertise.
-
-## Detailed Version
-
-Compare Kotlin Multiplatform Mobile (KMM) with Flutter for cross-platform development:
-
-**Architectural differences:**
-- KMM: Shared business logic + native UI (Jetpack Compose, SwiftUI)
-- Flutter: Shared UI + logic with platform channels for native APIs
-
-**Performance:**
-- KMM: 100% native, startup 200-500ms, size 15-25MB
-- Flutter: 95-98% native, startup 400-800ms, size 20-35MB
-
-**Trade-offs:**
-- KMM: Better performance and UX, but requires separate UI development
-- Flutter: Faster development and code reuse, but engine overhead
-
-**When to choose:**
-- KMM: Native UX critical, existing native app, performance-critical
-- Flutter: Rapid MVP, custom UI, small team, multi-platform
+---
 
 ## Ответ (RU)
 
