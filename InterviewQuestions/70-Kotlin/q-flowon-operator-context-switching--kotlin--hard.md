@@ -9,6 +9,7 @@ difficulty: hard
 original_language: en
 language_tags: [en]
 status: draft
+# NOTE: This file needs Russian translation (1037 lines of English content)
 moc: moc-kotlin
 related: [q-associatewith-vs-associateby--kotlin--easy, q-kotlin-constructor-keyword--programming-languages--easy, q-retrofit-coroutines-best-practices--kotlin--medium]
 created: 2025-10-12
