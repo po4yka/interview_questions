@@ -64,6 +64,7 @@ class ContentValidator(BaseValidator):
             self._check_section_body(content, "## Answer (EN)", "## Follow-ups")
         self._check_question_blockquote_syntax(content)
         self._check_references(content)
+        self._check_followups_quality(content)
         self._check_optional_question_versions(content)
         return self._summary
 
@@ -114,6 +115,62 @@ class ContentValidator(BaseValidator):
             self.add_issue(
                 Severity.INFO,
                 "References section is present but contains no links",
+            )
+
+    def _check_followups_quality(self, content: str) -> None:
+        """Check Follow-ups section for quality and meaningful questions."""
+        followups = self._extract_section(content, "## Follow-ups")
+
+        if not followups or len(followups.strip()) < 10:
+            # Empty or very short - already caught by required headings check
+            return
+
+        # Count bullet points (questions)
+        bullets = re.findall(r'^\s*[-*]\s+', followups, re.MULTILINE)
+
+        if len(bullets) < 3:
+            self.add_issue(
+                Severity.INFO,
+                f"Follow-ups has {len(bullets)} question(s). "
+                "Consider adding 3-5 meaningful follow-on questions",
+            )
+        elif len(bullets) > 7:
+            self.add_issue(
+                Severity.INFO,
+                f"Follow-ups has {len(bullets)} questions. "
+                "Consider focusing on 3-5 most valuable questions",
+            )
+        else:
+            self.add_passed(f"Follow-ups has {len(bullets)} questions (good range)")
+
+        # Check for generic/low-quality question patterns
+        generic_patterns = [
+            (r'What else\??\s*$', "generic 'What else?'"),
+            (r'Tell me more\??', "generic 'Tell me more'"),
+            (r'Can you explain\??\s*$', "generic 'Can you explain?'"),
+            (r'Anything else\??', "generic 'Anything else?'"),
+            (r'What about\?\s*$', "incomplete 'What about?'"),
+        ]
+
+        for pattern, description in generic_patterns:
+            if re.search(pattern, followups, re.IGNORECASE):
+                self.add_issue(
+                    Severity.WARNING,
+                    f"Follow-ups contain {description} question. "
+                    "Be specific (e.g., 'How would you optimize for memory?' "
+                    "instead of 'What else?')",
+                )
+                break  # Only report once
+
+        # Check if questions are too short (likely not detailed enough)
+        lines = [line.strip() for line in followups.split('\n') if line.strip().startswith(('-', '*'))]
+        short_questions = [line for line in lines if len(line) < 20]
+
+        if len(short_questions) > len(lines) // 2:  # More than half are short
+            self.add_issue(
+                Severity.INFO,
+                f"{len(short_questions)}/{len(lines)} follow-up questions are very short. "
+                "Consider adding more context or detail",
             )
 
     def _check_question_blockquote_syntax(self, content: str) -> None:

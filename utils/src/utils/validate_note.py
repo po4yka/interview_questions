@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import sys
 from collections import Counter
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Iterable, List, Tuple
 
@@ -66,7 +67,116 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Only print summary (suitable for CI).",
     )
+    parser.add_argument(
+        "--parallel",
+        action="store_true",
+        help="Use parallel processing for faster validation of multiple files.",
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=4,
+        help="Number of worker threads for parallel processing (default: 4).",
+    )
     return parser.parse_args()
+
+
+def validate_single_file(
+    file_path: Path,
+    repo_root: Path,
+    vault_dir: Path,
+    taxonomy,
+    note_index: set[str],
+) -> FileResult:
+    """Validate a single file and return the result."""
+    frontmatter, body = parse_note(file_path)
+    validators = [
+        YAMLValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
+        ContentValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
+        LinkValidator(
+            content=body,
+            frontmatter=frontmatter,
+            path=str(file_path),
+            taxonomy=taxonomy,
+            index=note_index,
+        ),
+        FormatValidator(
+            content=body,
+            frontmatter=frontmatter,
+            path=str(file_path),
+            taxonomy=taxonomy,
+            vault_root=vault_dir,
+        ),
+        CodeFormatValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
+        AndroidValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
+        SystemDesignValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
+    ]
+    issues = []
+    passed = []
+    for validator in validators:
+        summary = validator.validate()
+        issues.extend(summary.issues)
+        passed.extend(summary.passed)
+    return FileResult(
+        path=str(file_path.relative_to(repo_root)),
+        issues=issues,
+        passed=passed,
+    )
+
+
+def validate_parallel(
+    targets: List[Path],
+    repo_root: Path,
+    vault_dir: Path,
+    taxonomy,
+    note_index: set[str],
+    max_workers: int = 4,
+    quiet: bool = False,
+) -> List[FileResult]:
+    """Validate files in parallel using ThreadPoolExecutor."""
+    results: List[FileResult] = []
+    total = len(targets)
+
+    if not quiet:
+        print(f"Validating {total} files using {max_workers} workers...", file=sys.stderr)
+
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        # Submit all tasks
+        future_to_path = {
+            executor.submit(
+                validate_single_file,
+                file_path,
+                repo_root,
+                vault_dir,
+                taxonomy,
+                note_index,
+            ): file_path
+            for file_path in targets
+        }
+
+        # Process completed tasks
+        completed = 0
+        for future in as_completed(future_to_path):
+            file_path = future_to_path[future]
+            try:
+                result = future.result()
+                results.append(result)
+                completed += 1
+
+                # Progress indicator
+                if not quiet and completed % 50 == 0:
+                    print(f"Progress: {completed}/{total} files validated", file=sys.stderr)
+            except Exception as e:
+                print(f"Error validating {file_path}: {e}", file=sys.stderr)
+                # Still count it as completed for progress
+                completed += 1
+
+    if not quiet:
+        print(f"Completed: {completed}/{total} files validated", file=sys.stderr)
+
+    # Sort results by path for consistent output
+    results.sort(key=lambda r: r.path)
+    return results
 
 
 def main() -> int:
@@ -86,47 +196,30 @@ def main() -> int:
     taxonomy = TaxonomyLoader(repo_root).load()
     note_index = build_note_index(vault_dir)
 
-    results: List[FileResult] = []
-    exit_code = 0
-
-    for file_path in targets:
-        frontmatter, body = parse_note(file_path)
-        validators = [
-            YAMLValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
-            ContentValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
-            LinkValidator(
-                content=body,
-                frontmatter=frontmatter,
-                path=str(file_path),
-                taxonomy=taxonomy,
-                index=note_index,
-            ),
-            FormatValidator(
-                content=body,
-                frontmatter=frontmatter,
-                path=str(file_path),
-                taxonomy=taxonomy,
-                vault_root=vault_dir,
-            ),
-            CodeFormatValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
-            AndroidValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
-            SystemDesignValidator(content=body, frontmatter=frontmatter, path=str(file_path), taxonomy=taxonomy),
-        ]
-        issues = []
-        passed = []
-        for validator in validators:
-            summary = validator.validate()
-            issues.extend(summary.issues)
-            passed.extend(summary.passed)
-        results.append(
-            FileResult(
-                path=str(file_path.relative_to(repo_root)),
-                issues=issues,
-                passed=passed,
-            )
+    # Choose parallel or sequential processing
+    if args.parallel and len(targets) > 1:
+        results = validate_parallel(
+            targets,
+            repo_root,
+            vault_dir,
+            taxonomy,
+            note_index,
+            max_workers=args.workers,
+            quiet=args.quiet,
         )
-        if any(issue.severity == Severity.CRITICAL for issue in issues):
+    else:
+        # Sequential processing (original behavior)
+        results: List[FileResult] = []
+        for file_path in targets:
+            result = validate_single_file(file_path, repo_root, vault_dir, taxonomy, note_index)
+            results.append(result)
+
+    # Check for critical issues
+    exit_code = 0
+    for result in results:
+        if any(issue.severity == Severity.CRITICAL for issue in result.issues):
             exit_code = 1
+            break
 
     if args.report:
         report_path = Path(args.report)
@@ -187,18 +280,26 @@ def _collect_validatable_files(root: Path) -> List[Path]:
         "validators",
         "utils",
     }
+
+    # Check if root is already a specific folder (e.g., "40-Android")
+    # If so, include files directly in it
+    root_name = root.name
+    is_specific_folder = root_name in allowed_prefixes
+
     result: List[Path] = []
     for candidate in root.rglob("*.md"):
         relative_parts = candidate.relative_to(root).parts
         if not relative_parts:
             continue
         first = relative_parts[0]
-        if len(relative_parts) == 1:
-            # Skip loose files at the root (e.g., overview docs)
+
+        # Skip loose files at vault root, but include if we're in a specific folder
+        if len(relative_parts) == 1 and not is_specific_folder:
             continue
+
         if first in excluded_prefixes:
             continue
-        if allowed_prefixes and first not in allowed_prefixes:
+        if allowed_prefixes and first not in allowed_prefixes and not is_specific_folder:
             continue
         result.append(candidate.resolve())
     return sorted(result)
