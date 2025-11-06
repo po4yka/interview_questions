@@ -6,9 +6,7 @@ aliases:
   - Оптимизация Android-приложения под ChromeOS
 topic: android
 subtopics:
-  - chromeos
-  - desktop
-  - adaptive-ui
+  - foldables-chromeos
 question_kind: android
 difficulty: hard
 original_language: ru
@@ -22,9 +20,7 @@ related:
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/chromeos
-  - android/desktop
-  - adaptive-ui
+  - android/foldables-chromeos
   - difficulty/hard
 sources:
   - url: https://developer.android.com/large-screens/chromeos

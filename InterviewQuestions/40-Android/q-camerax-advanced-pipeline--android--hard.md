@@ -7,8 +7,6 @@ aliases:
 topic: android
 subtopics:
   - camera
-  - camerax
-  - imaging
 question_kind: android
 difficulty: hard
 original_language: ru
@@ -22,9 +20,7 @@ related:
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/camerax
-  - android/imaging
-  - realtime-processing
+  - android/camera
   - difficulty/hard
 sources:
   - url: https://developer.android.com/training/camerax

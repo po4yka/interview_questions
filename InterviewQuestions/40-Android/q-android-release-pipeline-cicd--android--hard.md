@@ -6,7 +6,6 @@ aliases:
   - CI/CD пайплайн релизов Android
 topic: android
 subtopics:
-  - release-engineering
   - ci-cd
 question_kind: android
 difficulty: hard
@@ -21,9 +20,7 @@ related:
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/release
-  - ci/cd
-  - quality
+  - android/ci-cd
   - difficulty/hard
 sources:
   - url: https://developer.android.com/studio/build/build-variants

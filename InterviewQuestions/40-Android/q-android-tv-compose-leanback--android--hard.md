@@ -7,8 +7,7 @@ aliases:
 topic: android
 subtopics:
   - tv
-  - leanback
-  - compose
+  - ui-compose
 question_kind: android
 difficulty: hard
 original_language: ru
@@ -23,8 +22,7 @@ created: 2025-11-02
 updated: 2025-11-02
 tags:
   - android/tv
-  - android/leanback
-  - android/compose-tv
+  - android/ui-compose
   - difficulty/hard
 sources:
   - url: https://developer.android.com/training/tv/start
