@@ -336,7 +336,7 @@ override fun onReceive(context: Context, intent: Intent) {
 Main Android components are united by:
 1. **Manifest declaration** - all must be declared
 2. **System management** - lifecycle controlled by OS
-3. **Intent/ContentResolver communication** - standard interaction pattern
+3. **`Intent`/ContentResolver communication** - standard interaction pattern
 4. **`Context` access** - all have access to Android context
 5. **Defined lifecycles** - predictable state transitions
 6. **Process execution** - run in application process
@@ -645,7 +645,7 @@ override fun onReceive(context: Context, intent: Intent) {
 Main Android components are united by:
 1. **Manifest declaration** - all must be declared
 2. **System management** - lifecycle controlled by OS
-3. **Intent/ContentResolver communication** - standard interaction pattern
+3. **`Intent`/ContentResolver communication** - standard interaction pattern
 4. **`Context` access** - all have access to Android context
 5. **Defined lifecycles** - predictable state transitions
 6. **Process execution** - run in application process
@@ -883,7 +883,7 @@ class MyProvider : ContentProvider() {
 2. Расширение базового класса
 3. Переопределение методов жизненного цикла
 4. Доступ к `Context`
-5. Взаимодействие через Intent/ContentResolver
+5. Взаимодействие через `Intent`/ContentResolver
 
 **Пример `Service`:**
 ```kotlin
@@ -1186,7 +1186,7 @@ class MusicPlayerService : Service() {
 Основные компоненты Android объединены:
 1. **Объявлением в манифесте** - все должны быть объявлены
 2. **Управлением системой** - жизненный цикл контролируется ОС
-3. **Intent/ContentResolver коммуникацией** - стандартный паттерн взаимодействия
+3. **`Intent`/ContentResolver коммуникацией** - стандартный паттерн взаимодействия
 4. **Доступом к `Context`** - все имеют доступ к Android context
 5. **Определенными жизненными циклами** - предсказуемые переходы состояний
 6. **Выполнением в процессе** - выполняются в процессе приложения

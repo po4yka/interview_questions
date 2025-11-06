@@ -636,7 +636,7 @@ Looper.getMainLooper().setMessageLogging { log ->
    handler.removeCallbacksAndMessages(null)
    ```
 
-2. **Использовать WeakReference для Activity/`Fragment`**
+2. **Использовать WeakReference для `Activity`/`Fragment`**
    ```kotlin
    private val activityRef = WeakReference(activity)
    ```

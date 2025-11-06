@@ -166,7 +166,7 @@ class ChatActivity : AppCompatActivity() {
 
 ### Ключевые Компоненты
 
-**`LifecycleOwner`** — Activity/`Fragment` реализуют этот интерфейс:
+**`LifecycleOwner`** — `Activity`/`Fragment` реализуют этот интерфейс:
 ```kotlin
 interface LifecycleOwner {
     val lifecycle: Lifecycle
@@ -364,7 +364,7 @@ class ChatActivity : AppCompatActivity() {
 
 ### Key Components
 
-**`LifecycleOwner`** — Activity/`Fragment` implement this interface:
+**`LifecycleOwner`** — `Activity`/`Fragment` implement this interface:
 ```kotlin
 interface LifecycleOwner {
     val lifecycle: Lifecycle

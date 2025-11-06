@@ -86,7 +86,7 @@ class ProfileActivity : AppCompatActivity() {
 
 **Ограничения:**
 - Максимум ~1 МБ данных
-- Только примитивы и Parcelable/`Serializable` объекты
+- Только примитивы и `Parcelable`/`Serializable` объекты
 - Может не сработать при смерти процесса в фоне
 
 ### 2. `ViewModel` С SavedStateHandle (рекомендуется)
@@ -299,7 +299,7 @@ class ProfileActivity : AppCompatActivity() {
 
 **Limitations:**
 - Maximum ~1 MB of data
-- Only primitives and Parcelable/`Serializable` objects
+- Only primitives and `Parcelable`/`Serializable` objects
 - May not survive process death in background
 
 ### 2. `ViewModel` with SavedStateHandle (recommended)

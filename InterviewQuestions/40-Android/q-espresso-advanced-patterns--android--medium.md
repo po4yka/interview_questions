@@ -169,7 +169,7 @@ onView(withId(R.id.recycler))
 **Matcher hierarchy:**
 - BaseMatcher - базовый класс, минимум type safety
 - `TypeSafeMatcher` - type-safe, для одного типа
-- `BoundedMatcher` - для View подклассов
+- `BoundedMatcher` - для `View` подклассов
 
 **`ViewAction` контракт:**
 - getConstraints() - когда можно выполнить
@@ -232,21 +232,21 @@ fun testWithNetwork() {
 
 ```kotlin
 // ✅ Type-safe matcher
-fun withItemCount(count: `Int`): Matcher<`View`> {
-    return object : `BoundedMatcher`<`View`, `RecyclerView`>(`RecyclerView`::class.java) {
+fun withItemCount(count: Int): Matcher<View> {
+    return object : BoundedMatcher<View, RecyclerView>(RecyclerView::class.java) {
         override fun describeTo(description: Description) {
             description.appendText("has $count items")
         }
 
-        override fun matchesSafely(view: `RecyclerView`): `Boolean` {
+        override fun matchesSafely(view: RecyclerView): Boolean {
             return view.adapter?.itemCount == count
         }
     }
 }
 
 // ❌ Problem: no type safety
-fun badMatcher(count: `Int`) = object : BaseMatcher<`View`>() {
-    override fun matches(item: Any?) = (item as? `RecyclerView`)?.adapter?.itemCount == count
+fun badMatcher(count: Int) = object : BaseMatcher<View>() {
+    override fun matches(item: Any?) = (item as? RecyclerView)?.adapter?.itemCount == count
     override fun describeTo(description: Description) {}
 }
 ```

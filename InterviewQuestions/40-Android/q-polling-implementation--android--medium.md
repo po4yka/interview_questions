@@ -68,7 +68,7 @@ class OrderViewModel(private val repo: DataRepository) : ViewModel() {
 ```
 
 **Преимущества**: Простота, lifecycle-aware, автоотмена.
-**Недостатки**: Работает только пока Activity/`Fragment` активны.
+**Недостатки**: Работает только пока `Activity`/`Fragment` активны.
 
 ### 2. WorkManager (Background)
 
@@ -176,7 +176,7 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 | Метод | Use Case | Интервал | `Lifecycle` |
 |-------|----------|----------|-----------|
-| Coroutines + `Flow` | UI-bound | Любой | Привязан к Activity/`Fragment` |
+| Coroutines + `Flow` | UI-bound | Любой | Привязан к `Activity`/`Fragment` |
 | WorkManager | Background | ≥15 минут | Переживает перезагрузку |
 | `Handler` + `Runnable` | Simple tasks | Любой | Ручное управление |
 | AlarmManager | Exact timing | Любой | Работает в фоне, battery drain |
@@ -224,7 +224,7 @@ class OrderViewModel(private val repo: DataRepository) : ViewModel() {
 ```
 
 **Pros**: Simple, lifecycle-aware, auto-cancellation.
-**Cons**: Only works while Activity/`Fragment` is active.
+**Cons**: Only works while `Activity`/`Fragment` is active.
 
 ### 2. WorkManager (Background)
 
@@ -332,7 +332,7 @@ fun pollWithBackoff(maxAttempts: Int = 5): Flow<Result<Data>> = flow {
 
 | Method | Use Case | Interval | `Lifecycle` |
 |--------|----------|----------|-----------|
-| Coroutines + `Flow` | UI-bound | Any | Tied to Activity/`Fragment` |
+| Coroutines + `Flow` | UI-bound | Any | Tied to `Activity`/`Fragment` |
 | WorkManager | Background | ≥15 min | Survives reboot |
 | `Handler` + `Runnable` | Simple tasks | Any | Manual management |
 | AlarmManager | Exact timing | Any | Background, battery drain |

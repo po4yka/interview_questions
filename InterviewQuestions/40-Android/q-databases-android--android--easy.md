@@ -110,7 +110,7 @@ realm.where<User>().findAllAsync().asFlow().collect { users ->
 | Безопасность типов | ❌ runtime | ✅ compile-time | ✅ compile-time |
 | Кривая обучения | Высокая (Cursor API) | Средняя (SQL + аннотации) | Низкая (OOP) |
 | Миграции | Ручные скрипты | Декларативные Migration | Автоматические (ограниченно) |
-| Реактивность | ❌ | ✅ Flow/`LiveData` | ✅ встроенная |
+| Реактивность | ❌ | ✅ `Flow`/`LiveData` | ✅ встроенная |
 
 **Рекомендации:**
 - **Room** — стандарт для production (официальная поддержка Google, интеграция с Jetpack)
@@ -197,7 +197,7 @@ realm.where<User>().findAllAsync().asFlow().collect { users ->
 | Type safety | ❌ runtime | ✅ compile-time | ✅ compile-time |
 | Learning curve | High (Cursor API) | Medium (SQL + annotations) | Low (OOP) |
 | Migrations | Manual scripts | Declarative Migration | Automatic (limited) |
-| Reactivity | ❌ | ✅ Flow/`LiveData` | ✅ built-in |
+| Reactivity | ❌ | ✅ `Flow`/`LiveData` | ✅ built-in |
 
 **Recommendations:**
 - **Room** — production standard (official Google support, Jetpack integration)

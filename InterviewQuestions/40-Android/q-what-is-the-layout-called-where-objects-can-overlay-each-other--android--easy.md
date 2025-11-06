@@ -310,7 +310,7 @@ fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 1. How do you implement z-index control in `FrameLayout` without modifying add order?
 2. What happens when Box children have the same `zIndex()` value?
 3. How does `FrameLayout` handle measurement and layout of overlapping children?
-4. Can you nest FrameLayout/Box for complex layering scenarios? What's the performance impact?
+4. Can you nest `FrameLayout`/Box for complex layering scenarios? What's the performance impact?
 5. How do you implement drag-and-drop reordering of overlaid elements in both systems?
 
 ## References

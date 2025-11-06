@@ -401,7 +401,7 @@ Common problems and solutions:
 1. **Out of Memory** → Use `RecyclerView`, Glide/Picasso for image loading
 2. **Slow scrolling** → Optimize adapter with ViewHolder, simplify layouts
 3. **Data inconsistency** → Use DiffUtil/ListAdapter for updates
-4. **Concurrency issues** → Use LiveData/`Flow` for thread-safe updates
+4. **Concurrency issues** → Use `LiveData`/`Flow` for thread-safe updates
 5. **Click issues** → Proper click listener implementation
 6. **Positioning issues** → Use stable IDs
 
@@ -776,7 +776,7 @@ Common problems and solutions:
 1. **Out of Memory** → Use `RecyclerView`, Glide/Picasso for image loading
 2. **Slow scrolling** → Optimize adapter with ViewHolder, simplify layouts
 3. **Data inconsistency** → Use DiffUtil/ListAdapter for updates
-4. **Concurrency issues** → Use LiveData/`Flow` for thread-safe updates
+4. **Concurrency issues** → Use `LiveData`/`Flow` for thread-safe updates
 5. **Click issues** → Proper click listener implementation
 6. **Positioning issues** → Use stable IDs
 

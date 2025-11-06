@@ -193,7 +193,7 @@ class SectionHeaderDecoration(
 
 ### Лучшие Практики
 
-1. **Кешируйте Paint/`Drawable`** — создавайте их в конструкторе, не в onDraw
+1. **Кешируйте `Paint`/`Drawable`** — создавайте их в конструкторе, не в onDraw
 2. **Переиспользуйте декорации** — создайте один экземпляр для всех `RecyclerView`
 3. **Учитывайте LayoutManager** — проверяйте тип (Linear/Grid/Staggered)
 4. **Не меняйте ViewHolder** — ItemDecoration изолирована от адаптера
@@ -365,7 +365,7 @@ class SectionHeaderDecoration(
 
 ### Best Practices
 
-1. **Cache Paint/`Drawable` objects** — create in constructor, not in onDraw
+1. **Cache `Paint`/`Drawable` objects** — create in constructor, not in onDraw
 2. **Reuse decorations** — create one instance for all RecyclerViews
 3. **Account for LayoutManager** — check type (Linear/Grid/Staggered)
 4. **Don't modify ViewHolder** — ItemDecoration is isolated from adapter

@@ -35,7 +35,7 @@ tags: [android/architecture-mvvm, android/coroutines, android/lifecycle, archite
 
 **Model** — источник данных (`Repository`, Use Cases, domain logic). Независим от UI.
 
-**`View`** — UI слой (`Activity`, `Fragment`, Composable). Наблюдает за `ViewModel` через LiveData/`StateFlow`. Не содержит бизнес-логики.
+**`View`** — UI слой (`Activity`, `Fragment`, Composable). Наблюдает за `ViewModel` через `LiveData`/`StateFlow`. Не содержит бизнес-логики.
 
 **`ViewModel`** — управляет UI-состоянием, переживает configuration changes, предоставляет данные через observable streams. Не хранит ссылки на `View` (предотвращает утечки памяти).
 
@@ -116,7 +116,7 @@ class BadViewModel(private val view: UserView) : ViewModel()
 
 **Model** — data source (`Repository`, Use Cases, domain logic). Independent of UI.
 
-**`View`** — UI layer (`Activity`, `Fragment`, Composable). Observes `ViewModel` via LiveData/`StateFlow`. No business logic.
+**`View`** — UI layer (`Activity`, `Fragment`, Composable). Observes `ViewModel` via `LiveData`/`StateFlow`. No business logic.
 
 **`ViewModel`** — manages UI state, survives configuration changes, exposes data via observable streams. Doesn't hold `View` references (prevents memory leaks).
 

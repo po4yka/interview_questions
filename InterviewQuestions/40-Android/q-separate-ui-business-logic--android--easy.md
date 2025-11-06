@@ -619,7 +619,7 @@ class UserActivity : AppCompatActivity() {
 | Benefit | Without Separation | With Separation |
 |---------|-------------------|-----------------|
 | **Testing** | Need UI framework | Pure unit tests |
-| **Reusability** | Duplicate logic | Reuse in Activity/Fragment/Compose |
+| **Reusability** | Duplicate logic | Reuse in `Activity`/`Fragment`/Compose |
 | **Maintainability** | Change UI = change logic | Independent changes |
 | **Configuration changes** | Lose state | State preserved |
 | **Team collaboration** | Blocking dependencies | Parallel work |
@@ -1218,7 +1218,7 @@ class UserActivity : AppCompatActivity() {
 | Benefit | Without Separation | With Separation |
 |---------|-------------------|-----------------|
 | **Testing** | Need UI framework | Pure unit tests |
-| **Reusability** | Duplicate logic | Reuse in Activity/Fragment/Compose |
+| **Reusability** | Duplicate logic | Reuse in `Activity`/`Fragment`/Compose |
 | **Maintainability** | Change UI = change logic | Independent changes |
 | **Configuration changes** | Lose state | State preserved |
 | **Team collaboration** | Blocking dependencies | Parallel work |
@@ -1276,7 +1276,7 @@ fun UserListScreen(viewModel: UserListViewModel = viewModel())
 
 #### 4. Командная Работа
 
-Разные команды могут работать параллельно: Backend-команда над `Repository`, команда бизнес-логики над `ViewModel`, UI/UX команда над Activity/Compose.
+Разные команды могут работать параллельно: Backend-команда над `Repository`, команда бизнес-логики над `ViewModel`, UI/UX команда над `Activity`/Compose.
 
 #### 5. Сохранение Состояния
 
@@ -1291,7 +1291,7 @@ fun UserListScreen(viewModel: UserListViewModel = viewModel())
 ### Резюме Преимуществ
 
 - Тестируемость: чистые unit-тесты без UI
-- Переиспользуемость: одна логика для Activity/Fragment/Compose
+- Переиспользуемость: одна логика для `Activity`/`Fragment`/Compose
 - Поддерживаемость: независимые изменения UI и логики
 - Сохранение состояния: данные переживают поворот экрана
 - Командная работа: параллельная работа команд

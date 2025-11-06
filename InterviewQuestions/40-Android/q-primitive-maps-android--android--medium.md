@@ -158,7 +158,7 @@ class StateManager {
 
 **Используйте SparseArray когда:**
 - Коллекция < 1000 элементов
-- Ключи — последовательные Int/`Long`
+- Ключи — последовательные `Int`/`Long`
 - Важна экономия памяти
 - Однопоточный доступ
 
@@ -315,7 +315,7 @@ class StateManager {
 
 **Use SparseArray when:**
 - `Collection` < 1000 elements
-- Keys are sequential Int/`Long`
+- Keys are sequential `Int`/`Long`
 - Memory efficiency is important
 - Single-threaded access
 

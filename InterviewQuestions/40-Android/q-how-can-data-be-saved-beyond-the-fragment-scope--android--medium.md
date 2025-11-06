@@ -159,7 +159,7 @@ class MyApplication : Application() {
 |-------|---------------|---------------|--------|---------------|
 | `ViewModel` | ✅ | ❌ | Средний | UI state |
 | SavedStateHandle | ✅ | ✅ | Маленький | Критическое состояние |
-| Repository/DB | ✅ | ✅ | Большой | Постоянные данные |
+| `Repository`/DB | ✅ | ✅ | Большой | Постоянные данные |
 | Shared `ViewModel` | ✅ | ❌ | Любой | Коммуникация между `Fragment` |
 | `Application` | ✅ | ❌ | Маленький | ❌ Не рекомендуется |
 
@@ -304,7 +304,7 @@ class MyApplication : Application() {
 |--------|---------------|---------------|------|----------|
 | `ViewModel` | ✅ | ❌ | Medium | UI state |
 | SavedStateHandle | ✅ | ✅ | Small | Critical state |
-| Repository/DB | ✅ | ✅ | Large | Persistent data |
+| `Repository`/DB | ✅ | ✅ | Large | Persistent data |
 | Shared `ViewModel` | ✅ | ❌ | Any | `Fragment` communication |
 | `Application` | ✅ | ❌ | Small | ❌ Not recommended |
 

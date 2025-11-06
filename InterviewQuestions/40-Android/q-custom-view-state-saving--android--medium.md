@@ -153,7 +153,7 @@ class ComplexView : View {
 
 - ❌ Отсутствие ID у `View` — состояние не сохранится
 - ❌ Забыть `super.onSaveInstanceState()` — потеря базового состояния
-- ❌ Сохранение Context/`Activity` — утечки памяти
+- ❌ Сохранение `Context`/`Activity` — утечки памяти
 - ❌ Сохранение больших объектов — `TransactionTooLargeException`
 
 ## Answer (EN)
@@ -278,7 +278,7 @@ class ComplexView : View {
 
 - ❌ Missing `View` ID — state won't be saved
 - ❌ Forgetting `super.onSaveInstanceState()` — losing base state
-- ❌ Saving Context/`Activity` — memory leaks
+- ❌ Saving `Context`/`Activity` — memory leaks
 - ❌ Saving large objects — `TransactionTooLargeException`
 
 ---

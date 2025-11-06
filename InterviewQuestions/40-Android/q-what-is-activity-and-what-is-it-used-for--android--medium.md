@@ -419,7 +419,7 @@ class PhotoViewerActivity : AppCompatActivity() {
 - **Don't use `Activity` for**:
 - Sub-sections of a screen (use Fragments)
 - Temporary UI overlays (use DialogFragment)
-- Background operations (use Service/WorkManager)
+- Background operations (use `Service`/WorkManager)
 
 
 # Question (EN)
@@ -810,7 +810,7 @@ class PhotoViewerActivity : AppCompatActivity() {
 - **Don't use `Activity` for**:
 - Sub-sections of a screen (use Fragments)
 - Temporary UI overlays (use DialogFragment)
-- Background operations (use Service/WorkManager)
+- Background operations (use `Service`/WorkManager)
 
 ## Ответ (RU)
 Это компонент приложения, который предоставляет пользовательский интерфейс (UI), с которым пользователи могут взаимодействовать для выполнения различных действий, таких как набор номера телефона, просмотр фотографий, отправка электронной почты и т. д. Каждая активность представляет собой один экран с пользовательским интерфейсом. Если представить приложение как книгу, то активность будет одной страницей этой книги. Основное назначение: предоставление интерфейса пользователя, взаимодействие с пользователем, управление жизненным циклом, переход между экранами и взаимодействие с другими компонентами приложения.

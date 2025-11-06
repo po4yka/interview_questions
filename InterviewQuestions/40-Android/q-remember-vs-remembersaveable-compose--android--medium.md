@@ -86,7 +86,7 @@ fun CounterWithRememberSaveable() {
 - - Переживает recomposition
 - - **Переживает** configuration changes
 - - **Переживает** process death (в некоторых случаях)
-- WARNING: Требует типы, поддерживающие `Bundle` (Parcelable/`Serializable`)
+- WARNING: Требует типы, поддерживающие `Bundle` (`Parcelable`/`Serializable`)
 
 ### Сравнительная Таблица
 
@@ -100,7 +100,7 @@ fun CounterWithRememberSaveable() {
 | **Лимит размера** | Нет | 1MB (`Bundle` limit) |
 | **Use case** | Временное UI состояние | Важное пользовательское состояние |
 
-\* Process death восстановление работает только если Activity/`Fragment` корректно сохраняют state
+\* Process death восстановление работает только если `Activity`/`Fragment` корректно сохраняют state
 
 ### Что Можно Сохранить В rememberSaveable
 
@@ -566,7 +566,7 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 }
 ```
 
-**English**: **remember** stores state in memory - survives recomposition but lost on configuration change (rotation). **rememberSaveable** stores state in `Bundle` - survives configuration changes and process death. Use **remember** for: temporary UI state, performance-critical objects, `ViewModel`-managed state. Use **rememberSaveable** for: user input (forms, search), scroll position, selected items, expanded/collapsed state. Limitations: rememberSaveable requires `Bundle`-compatible types (Parcelable/`Serializable`), has 1MB size limit, slower (serialization overhead). For custom types, implement `Parcelable` or create custom Saver. Don't use rememberSaveable for large data - use `ViewModel` instead.
+**English**: **remember** stores state in memory - survives recomposition but lost on configuration change (rotation). **rememberSaveable** stores state in `Bundle` - survives configuration changes and process death. Use **remember** for: temporary UI state, performance-critical objects, `ViewModel`-managed state. Use **rememberSaveable** for: user input (forms, search), scroll position, selected items, expanded/collapsed state. Limitations: rememberSaveable requires `Bundle`-compatible types (`Parcelable`/`Serializable`), has 1MB size limit, slower (serialization overhead). For custom types, implement `Parcelable` or create custom Saver. Don't use rememberSaveable for large data - use `ViewModel` instead.
 
 
 
@@ -628,7 +628,7 @@ fun CounterWithRememberSaveable() {
 - - Переживает recomposition
 - - **Переживает** configuration changes
 - - **Переживает** process death (в некоторых случаях)
-- WARNING: Требует типы, поддерживающие `Bundle` (Parcelable/`Serializable`)
+- WARNING: Требует типы, поддерживающие `Bundle` (`Parcelable`/`Serializable`)
 
 ### Сравнительная Таблица
 
@@ -642,7 +642,7 @@ fun CounterWithRememberSaveable() {
 | **Лимит размера** | Нет | 1MB (`Bundle` limit) |
 | **Use case** | Временное UI состояние | Важное пользовательское состояние |
 
-\* Process death восстановление работает только если Activity/`Fragment` корректно сохраняют state
+\* Process death восстановление работает только если `Activity`/`Fragment` корректно сохраняют state
 
 ### Что Можно Сохранить В rememberSaveable
 
@@ -1108,7 +1108,7 @@ fun ProfileScreen(viewModel: ProfileViewModel) {
 }
 ```
 
-**English**: **remember** stores state in memory - survives recomposition but lost on configuration change (rotation). **rememberSaveable** stores state in `Bundle` - survives configuration changes and process death. Use **remember** for: temporary UI state, performance-critical objects, `ViewModel`-managed state. Use **rememberSaveable** for: user input (forms, search), scroll position, selected items, expanded/collapsed state. Limitations: rememberSaveable requires `Bundle`-compatible types (Parcelable/`Serializable`), has 1MB size limit, slower (serialization overhead). For custom types, implement `Parcelable` or create custom Saver. Don't use rememberSaveable for large data - use `ViewModel` instead.
+**English**: **remember** stores state in memory - survives recomposition but lost on configuration change (rotation). **rememberSaveable** stores state in `Bundle` - survives configuration changes and process death. Use **remember** for: temporary UI state, performance-critical objects, `ViewModel`-managed state. Use **rememberSaveable** for: user input (forms, search), scroll position, selected items, expanded/collapsed state. Limitations: rememberSaveable requires `Bundle`-compatible types (`Parcelable`/`Serializable`), has 1MB size limit, slower (serialization overhead). For custom types, implement `Parcelable` or create custom Saver. Don't use rememberSaveable for large data - use `ViewModel` instead.
 
 
 

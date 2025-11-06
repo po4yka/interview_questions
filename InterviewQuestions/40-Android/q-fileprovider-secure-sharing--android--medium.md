@@ -99,7 +99,7 @@ context.startActivity(Intent.createChooser(intent, null))
 ### Безопасность
 
 **Временные разрешения:**
-- Действуют только пока активен компонент-получатель (Activity/`Service`)
+- Действуют только пока активен компонент-получатель (`Activity`/`Service`)
 - Автоматически отзываются при уничтожении получателя
 - Не требуют runtime permissions
 
@@ -179,7 +179,7 @@ context.startActivity(Intent.createChooser(intent, null))
 ### Security
 
 **Temporary Permissions:**
-- Active only while recipient component (Activity/`Service`) is alive
+- Active only while recipient component (`Activity`/`Service`) is alive
 - Automatically revoked when recipient is destroyed
 - No runtime permissions required
 

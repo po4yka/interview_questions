@@ -35,7 +35,7 @@ tags: [android, android/lifecycle, android/performance-rendering, android/thread
 
 1. **Отрисовка UI**: measure, layout, draw view-иерархии
 2. **Обработка ввода**: touch events, gestures, клавиатура
-3. **`Lifecycle` callbacks**: Activity/`Fragment` методы
+3. **`Lifecycle` callbacks**: `Activity`/`Fragment` методы
 4. **Системные события**: изменения конфигурации, разрешения
 
 ### Архитектура `Looper`
@@ -146,7 +146,7 @@ The main thread (UI thread) is Android's central thread handling UI rendering, u
 
 1. **UI Rendering**: measure, layout, draw view hierarchy
 2. **Input Processing**: touch events, gestures, keyboard
-3. **`Lifecycle` Callbacks**: Activity/`Fragment` methods
+3. **`Lifecycle` Callbacks**: `Activity`/`Fragment` methods
 4. **System Events**: configuration changes, permissions
 
 ### `Looper` Architecture

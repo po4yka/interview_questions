@@ -32,9 +32,9 @@ What is TransactionTooLargeException and how to avoid it?
 **TransactionTooLargeException** — исключение при превышении лимита **1MB в Binder** — IPC-механизме Android для передачи данных между процессами.
 
 **Типичные ситуации:**
-- Передача больших объектов через Intent/`Bundle`
+- Передача больших объектов через `Intent`/`Bundle`
 - Сохранение крупных данных в onSaveInstanceState
-- Передача bitmap или списков между Activity/`Fragment`
+- Передача bitmap или списков между `Activity`/`Fragment`
 
 ### Основные Решения
 
@@ -95,9 +95,9 @@ override fun onSaveInstanceState(outState: Bundle) {
 **TransactionTooLargeException** occurs when data exceeds the **1MB Binder limit** — Android's IPC mechanism for inter-process communication.
 
 **Common scenarios:**
-- Passing large objects via Intent/`Bundle`
+- Passing large objects via `Intent`/`Bundle`
 - Saving large data in onSaveInstanceState
-- Transferring bitmaps or lists between Activity/`Fragment`
+- Transferring bitmaps or lists between `Activity`/`Fragment`
 
 ### Primary Solutions
 

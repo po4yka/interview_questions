@@ -225,7 +225,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Observable Data
+### `Observable` Data
 
 ```kotlin
 class User : BaseObservable() {

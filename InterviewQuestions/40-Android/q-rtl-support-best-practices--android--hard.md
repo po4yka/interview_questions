@@ -33,10 +33,10 @@ sources:
 ---
 
 # Вопрос (RU)
-> Как обеспечить поддержку RTL (справа налево) в Android-приложении: макеты View/Compose, зеркалирование ресурсов, BiDi-текст, тестирование и интеграция с локалями?
+> Как обеспечить поддержку RTL (справа налево) в Android-приложении: макеты `View`/Compose, зеркалирование ресурсов, BiDi-текст, тестирование и интеграция с локалями?
 
 # Question (EN)
-> How do you ensure robust RTL (right-to-left) support in an Android app, covering View/Compose layouts, resource mirroring, BiDi text handling, testing, and locale integration?
+> How do you ensure robust RTL (right-to-left) support in an Android app, covering `View`/Compose layouts, resource mirroring, BiDi text handling, testing, and locale integration?
 
 ---
 

@@ -37,7 +37,7 @@ tags:
 > Тестирование ViewModels с Turbine
 
 # Question (EN)
-> How do you test ViewModels that emit Flow/`StateFlow` using the Turbine library?
+> How do you test ViewModels that emit `Flow`/`StateFlow` using the Turbine library?
 
 ---
 
@@ -130,7 +130,7 @@ fun `loadUser emits Error when repository fails`() = runTest {
 2. **awaitItem()** - Suspends until next emission and returns it
 3. **expectNoEvents()** - Asserts that no more events are emitted
 4. **cancelAndIgnoreRemainingEvents()** - Cancels collection when you don't care about remaining emissions
-5. **runTest** - Coroutine test dispatcher for controlling virtual time
+5. **runTest** - `Coroutine` test dispatcher for controlling virtual time
 
 **Benefits**:
 - More readable than manual `Flow` collection

@@ -97,7 +97,7 @@ data class UnstableList(val users: MutableList<String>)
 **Когда использовать:**
 - Интерфейсы/абстрактные классы, стабильные по контракту
 - Классы с приватным мутабельным состоянием
-- Observable-паттерны (`StateFlow`, `LiveData`), уведомляющие Compose
+- `Observable`-паттерны (`StateFlow`, `LiveData`), уведомляющие Compose
 
 ```kotlin
 // ✅ Указываем стабильность интерфейса
@@ -253,7 +253,7 @@ data class UnstableList(val users: MutableList<String>)
 **When to use:**
 - Interfaces/abstract classes stable by contract
 - Classes with private mutable state never exposed
-- Observable patterns (`StateFlow`, `LiveData`) that notify Compose
+- `Observable` patterns (`StateFlow`, `LiveData`) that notify Compose
 
 ```kotlin
 // ✅ Tell compiler this interface is stable

@@ -123,7 +123,7 @@ class EventBus {
 - **Dynamic:** UI обновления, временные слушатели
 - **Static:** BOOT_COMPLETED, SMS (требует разрешений)
 - **WorkManager:** Фоновые задачи с ограничениями
-- **Flow/`LiveData`:** Внутриприложенческие события
+- **`Flow`/`LiveData`:** Внутриприложенческие события
 
 ## Answer (EN)
 
@@ -223,7 +223,7 @@ class EventBus {
 - **Dynamic:** UI updates, temporary listeners
 - **Static:** BOOT_COMPLETED, SMS (requires permissions)
 - **WorkManager:** Background tasks with constraints
-- **Flow/`LiveData`:** In-app events
+- **`Flow`/`LiveData`:** In-app events
 
 ## Follow-ups
 

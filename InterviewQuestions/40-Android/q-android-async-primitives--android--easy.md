@@ -39,11 +39,11 @@ Android предоставляет несколько примитивов дл�
 
 **Современные (рекомендуемые):**
 - **[[c-coroutines|Корутины]]** — легковесная конкурентность с lifecycle-aware отменой
-- **`Flow`** — реактивные потоки данных (cold streams + hot StateFlow/`SharedFlow`)
+- **`Flow`** — реактивные потоки данных (cold streams + hot `StateFlow`/`SharedFlow`)
 - **[[c-workmanager|WorkManager]]** — гарантированное выполнение задач, переживающих смерть процесса
 
 **Legacy (устаревшие):**
-- **Handler/`Looper`** — низкоуровневая передача сообщений между потоками
+- **`Handler`/`Looper`** — низкоуровневая передача сообщений между потоками
 - **ExecutorService** — Java thread pool без интеграции с Android lifecycle
 - **RxJava** — функциональное реактивное программирование (требует дисциплины управления подписками)
 - **AsyncTask** — DEPRECATED, утечки памяти при rotation
@@ -153,11 +153,11 @@ Android provides several async primitives:
 
 **Modern (recommended):**
 - **[[c-coroutines|Coroutines]]** — lightweight concurrency with lifecycle-aware cancellation
-- **`Flow`** — reactive data streams (cold streams + hot StateFlow/`SharedFlow`)
+- **`Flow`** — reactive data streams (cold streams + hot `StateFlow`/`SharedFlow`)
 - **[[c-workmanager|WorkManager]]** — guaranteed task execution surviving process death
 
 **Legacy (outdated):**
-- **Handler/`Looper`** — low-level message passing between threads
+- **`Handler`/`Looper`** — low-level message passing between threads
 - **ExecutorService** — Java thread pool without Android lifecycle integration
 - **RxJava** — functional reactive programming (requires disciplined subscription management)
 - **AsyncTask** — DEPRECATED, memory leaks on rotation

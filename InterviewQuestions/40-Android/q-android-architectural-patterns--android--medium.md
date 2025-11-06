@@ -53,7 +53,7 @@ class UserPresenter(private val view: UserContract.View) {
 ```
 
 ### MVVM (Model-`View`-`ViewModel`)
-**Структура**: `View` наблюдает за `ViewModel` через LiveData/`StateFlow`. `ViewModel` переживает configuration changes и автоматически очищается.
+**Структура**: `View` наблюдает за `ViewModel` через `LiveData`/`StateFlow`. `ViewModel` переживает configuration changes и автоматически очищается.
 
 ```kotlin
 // ✅ ViewModel lifecycle-aware, автоматическая отмена корутин
@@ -122,7 +122,7 @@ class UserPresenter(private val view: UserContract.View) {
 ```
 
 ### MVVM (Model-`View`-`ViewModel`)
-**Structure**: `View` observes `ViewModel` via LiveData/`StateFlow`. `ViewModel` survives configuration changes and is automatically cleared.
+**Structure**: `View` observes `ViewModel` via `LiveData`/`StateFlow`. `ViewModel` survives configuration changes and is automatically cleared.
 
 ```kotlin
 // ✅ ViewModel is lifecycle-aware, auto-cancels coroutines

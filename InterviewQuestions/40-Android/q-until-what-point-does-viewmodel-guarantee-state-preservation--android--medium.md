@@ -92,7 +92,7 @@ class MyFragment : Fragment() {
 ### Лучшие Практики
 
 1. **Критичные данные**: SavedStateHandle
-2. **Большие данные**: Repository/Database
+2. **Большие данные**: `Repository`/Database
 3. **Временное UI состояние**: обычные свойства `ViewModel`
 4. **Очистка**: реализуйте onCleared()
 
@@ -170,7 +170,7 @@ class MyFragment : Fragment() {
 ### Best Practices
 
 1. **Critical data**: SavedStateHandle
-2. **Large data**: Repository/Database
+2. **Large data**: `Repository`/Database
 3. **Temporary UI state**: Regular `ViewModel` properties
 4. **Cleanup**: Implement onCleared()
 

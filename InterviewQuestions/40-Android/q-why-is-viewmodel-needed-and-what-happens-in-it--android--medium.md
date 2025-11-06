@@ -52,7 +52,7 @@ tags:
 
 ## Ответ (RU)
 
-**`ViewModel`** - это Android Architecture Component, который хранит UI-состояние и бизнес-логику отдельно от Activity/`Fragment`, переживая изменения конфигурации (поворот экрана).
+**`ViewModel`** - это Android Architecture Component, который хранит UI-состояние и бизнес-логику отдельно от `Activity`/`Fragment`, переживая изменения конфигурации (поворот экрана).
 
 ### Зачем Нужен `ViewModel`
 
@@ -314,14 +314,14 @@ Activity/Fragment создан
 ❌ **DON'T**:
 - Не передавайте `Context` в `ViewModel` (используйте `AndroidViewModel` если нужен `Application` `Context`)
 - Не ссылайтесь на `View` напрямую
-- Не держите Activity/`Fragment` ссылки (memory leak)
+- Не держите `Activity`/`Fragment` ссылки (memory leak)
 - Не выполняйте UI-операции в `ViewModel`
 
 ---
 
 ## Answer (EN)
 
-**`ViewModel`** is an Android Architecture Component that stores UI state and business logic separately from Activity/`Fragment`, surviving configuration changes (screen rotation).
+**`ViewModel`** is an Android Architecture Component that stores UI state and business logic separately from `Activity`/`Fragment`, surviving configuration changes (screen rotation).
 
 ### Why `ViewModel` is Needed
 
@@ -583,7 +583,7 @@ Activity/Fragment Created
 ❌ **DON'T**:
 - Don't pass `Context` to `ViewModel` (use `AndroidViewModel` if you need `Application` `Context`)
 - Don't reference Views directly
-- Don't hold Activity/`Fragment` references (memory leak)
+- Don't hold `Activity`/`Fragment` references (memory leak)
 - Don't perform UI operations in `ViewModel`
 
 ---
@@ -592,7 +592,7 @@ Activity/Fragment Created
 
 1. **What's the difference between `ViewModel` and onSaveInstanceState?** `ViewModel` survives configuration changes but not process death; onSaveInstanceState survives process death but has size limitations (1MB).
 
-2. **How does `ViewModel` survive configuration changes internally?** ViewModelStore is retained in non-configuration instance via `onRetainNonConfigurationInstance()`, keyed by Activity/`Fragment`.
+2. **How does `ViewModel` survive configuration changes internally?** ViewModelStore is retained in non-configuration instance via `onRetainNonConfigurationInstance()`, keyed by `Activity`/`Fragment`.
 
 3. **When should you use AndroidViewModel vs `ViewModel`?** Use AndroidViewModel only when you need `Application` `Context` (e.g., for resources, ContentResolver). Never pass `Activity` `Context`.
 

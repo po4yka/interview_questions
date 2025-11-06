@@ -51,7 +51,7 @@ tags:
 ### Основные Компоненты
 
 **1. `Lifecycle`** — представляет состояние жизненного цикла
-**2. `LifecycleOwner`** — интерфейс, реализуемый Activity/`Fragment`
+**2. `LifecycleOwner`** — интерфейс, реализуемый `Activity`/`Fragment`
 **3. `LifecycleObserver`** — наблюдатель за изменениями жизненного цикла
 
 ### Современный Подход: DefaultLifecycleObserver
@@ -161,7 +161,7 @@ class GoodActivity : AppCompatActivity() {
 }
 ```
 
-**2. Повторное использование** — один observer работает с любыми Activity/`Fragment`
+**2. Повторное использование** — один observer работает с любыми `Activity`/`Fragment`
 
 **3. Тестируемость** — компоненты легко тестировать независимо
 
@@ -174,7 +174,7 @@ The **`Lifecycle` library** provides classes and interfaces to build **lifecycle
 ### Core Components
 
 **1. `Lifecycle`** — represents the lifecycle state
-**2. `LifecycleOwner`** — interface implemented by Activity/`Fragment`
+**2. `LifecycleOwner`** — interface implemented by `Activity`/`Fragment`
 **3. `LifecycleObserver`** — observes lifecycle changes
 
 ### Modern Approach: DefaultLifecycleObserver
@@ -284,7 +284,7 @@ class GoodActivity : AppCompatActivity() {
 }
 ```
 
-**2. Reusability** — same observer works with any Activity/`Fragment`
+**2. Reusability** — same observer works with any `Activity`/`Fragment`
 
 **3. Testability** — components are easily testable independently
 

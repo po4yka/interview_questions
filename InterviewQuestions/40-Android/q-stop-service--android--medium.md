@@ -90,7 +90,7 @@ class DownloadService : Service() {
 
 ---
 
-#### Stop from Outside (Activity/`Fragment`)
+#### Stop from Outside (`Activity`/`Fragment`)
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -754,7 +754,7 @@ class DownloadService : Service() {
 
 ---
 
-#### Stop from Outside (Activity/`Fragment`)
+#### Stop from Outside (`Activity`/`Fragment`)
 
 ```kotlin
 class MainActivity : AppCompatActivity() {

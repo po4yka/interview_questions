@@ -52,7 +52,7 @@ interface UserPresenter {
 
 ### 2. Ручное Управление Жизненным Циклом
 
-Presenter не знает о жизненном цикле Activity/`Fragment`:
+Presenter не знает о жизненном цикле `Activity`/`Fragment`:
 
 ```kotlin
 // ❌ Нужно помнить про очистку
@@ -80,7 +80,7 @@ class UserPresenter(private val view: UserView) {
 
 **MVVM с `ViewModel`:**
 - ✅ Автоматический lifecycle (переживает rotation)
-- ✅ Встроенная поддержка LiveData/`Flow`
+- ✅ Встроенная поддержка `LiveData`/`Flow`
 - ✅ Меньше кода
 - ✅ Официальная поддержка Google
 
@@ -96,7 +96,7 @@ class UserPresenter(private val view: UserView) {
 | Шаблонный код | Много | Мало |
 | `Lifecycle` | Ручной | Автоматический |
 | Rotation | Теряет данные | Сохраняет |
-| Поддержка Flow/`LiveData` | Нет | Да |
+| Поддержка `Flow`/`LiveData` | Нет | Да |
 
 ### Резюме
 
@@ -106,7 +106,7 @@ MVP уступает современным паттернам из-за:
 - Отсутствия поддержки реактивных потоков
 - Наличия лучших альтернатив (MVVM, MVI)
 
-Сегодня стандарт — **MVVM** с Jetpack (`ViewModel` + LiveData/`Flow`).
+Сегодня стандарт — **MVVM** с Jetpack (`ViewModel` + `LiveData`/`Flow`).
 
 ## Answer (EN)
 
@@ -133,7 +133,7 @@ interface UserPresenter {
 
 ### 2. Manual `Lifecycle` Management
 
-Presenter doesn't know about Activity/`Fragment` lifecycle:
+Presenter doesn't know about `Activity`/`Fragment` lifecycle:
 
 ```kotlin
 // ❌ Need to remember cleanup
@@ -161,7 +161,7 @@ class UserPresenter(private val view: UserView) {
 
 **MVVM with `ViewModel`:**
 - ✅ Automatic lifecycle (survives rotation)
-- ✅ Built-in LiveData/`Flow` support
+- ✅ Built-in `LiveData`/`Flow` support
 - ✅ Less code
 - ✅ Official Google support
 
@@ -177,7 +177,7 @@ class UserPresenter(private val view: UserView) {
 | Boilerplate | High | Low |
 | `Lifecycle` | Manual | Automatic |
 | Rotation | Loses data | Preserves |
-| Flow/`LiveData` Support | No | Yes |
+| `Flow`/`LiveData` Support | No | Yes |
 
 ### Summary
 
@@ -187,7 +187,7 @@ MVP is inferior to modern patterns because of:
 - No reactive streams support
 - Better alternatives exist (MVVM, MVI)
 
-Today's standard is **MVVM** with Jetpack (`ViewModel` + LiveData/`Flow`).
+Today's standard is **MVVM** with Jetpack (`ViewModel` + `LiveData`/`Flow`).
 
 ---
 

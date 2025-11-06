@@ -181,7 +181,7 @@ fun loadDataInBackground() {
 }
 ```
 
-**Решение:** LiveData/`Flow` с lifecycle
+**Решение:** `LiveData`/`Flow` с lifecycle
 ```kotlin
 // ✅ GOOD - ViewModel - фоновая работа здесь
 class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
@@ -402,7 +402,7 @@ fun loadDataInBackground() {
 }
 ```
 
-**Solution:** LiveData/`Flow` with lifecycle
+**Solution:** `LiveData`/`Flow` with lifecycle
 ```kotlin
 // ✅ GOOD - ViewModel - background work here
 class ItemViewModel(private val repository: ItemRepository) : ViewModel() {

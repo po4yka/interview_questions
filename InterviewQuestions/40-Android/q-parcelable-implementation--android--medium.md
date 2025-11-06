@@ -112,7 +112,7 @@ object DateParceler : Parceler<Date> {
 ### Ограничения И Best Practices
 
 ❌ **Избегать**:
-- Передача больших объектов через `Intent` (используйте ViewModel/`Repository`)
+- Передача больших объектов через `Intent` (используйте `ViewModel`/`Repository`)
 - Циклические ссылки (приводят к StackOverflowError)
 - Сериализация non-`Parcelable` полей без TypeParceler
 
@@ -124,7 +124,7 @@ object DateParceler : Parceler<Date> {
 
 ### Когда Использовать
 
-- Передача данных через `Intent` между Activity/`Fragment`
+- Передача данных через `Intent` между `Activity`/`Fragment`
 - Аргументы `Fragment` (`setArguments(`Bundle`)`)
 - Сохранение состояния в `onSaveInstanceState`
 - Межпроцессное взаимодействие (AIDL, Messenger)
@@ -214,7 +214,7 @@ object DateParceler : Parceler<Date> {
 ### Limitations and Best Practices
 
 ❌ **Avoid**:
-- Passing large objects through `Intent` (use ViewModel/`Repository`)
+- Passing large objects through `Intent` (use `ViewModel`/`Repository`)
 - Circular references (cause StackOverflowError)
 - Serializing non-`Parcelable` fields without TypeParceler
 
@@ -226,7 +226,7 @@ object DateParceler : Parceler<Date> {
 
 ### When to Use
 
-- Passing data via `Intent` between Activity/`Fragment`
+- Passing data via `Intent` between `Activity`/`Fragment`
 - `Fragment` arguments (`setArguments(`Bundle`)`)
 - Saving state in `onSaveInstanceState`
 - Inter-process communication (AIDL, Messenger)

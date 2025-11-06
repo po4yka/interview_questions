@@ -255,7 +255,7 @@ fun provideRepository(impl: RepositoryImpl): Repository = impl
 
 ## Follow-ups
 
-- How would you handle scoped dependencies (Activity/`Fragment` scope) in both frameworks?
+- How would you handle scoped dependencies (`Activity`/`Fragment` scope) in both frameworks?
 - What are the strategies for migrating from Dagger2 to either Koin or Hilt?
 - How do you test modules with circular dependencies in Koin vs Hilt?
 - Can Koin and Hilt coexist in the same codebase during migration?

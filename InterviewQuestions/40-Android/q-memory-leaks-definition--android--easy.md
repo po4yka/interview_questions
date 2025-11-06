@@ -274,5 +274,5 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 - `RecyclerView` memory efficiency patterns
 
 ### Advanced
-- [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutine-specific memory leaks
+- [[q-coroutine-memory-leaks--kotlin--hard]] - `Coroutine`-specific memory leaks
 - [[q-find-object-without-references--programming-languages--medium]] - Advanced GC behavior

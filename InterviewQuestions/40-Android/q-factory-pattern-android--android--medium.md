@@ -214,7 +214,7 @@ class ViewHolderFactory {
 ### Factory Pattern Benefits in Android
 
 - **Declarative**: XML describes UI, factory creates objects
-- **Extensible**: easy to add new View/`Fragment` types
+- **Extensible**: easy to add new `View`/`Fragment` types
 - **Encapsulation**: hides creation complexity (reflection, initialization)
 - **Consistency**: uniform API for object creation
 

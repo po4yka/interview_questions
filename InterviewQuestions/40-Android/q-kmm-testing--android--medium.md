@@ -376,7 +376,7 @@ class FakeLogger : PlatformLogger() {
 }
 ```
 
-### Coroutine Testing
+### `Coroutine` Testing
 
 ```kotlin
 object TestDispatchers : CoroutineDispatchers {

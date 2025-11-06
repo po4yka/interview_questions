@@ -63,9 +63,9 @@ class UserViewModel : ViewModel() {
 class BadViewModel(val context: Context) : ViewModel()
 ```
 
-**Когда использовать**: любая UI-логика, которая должна пережить recreate Activity/`Fragment`.
+**Когда использовать**: любая UI-логика, которая должна пережить recreate `Activity`/`Fragment`.
 
-### 2) `LiveData` / `StateFlow` — Observable Состояние
+### 2) `LiveData` / `StateFlow` — `Observable` Состояние
 
 **`LiveData`**: lifecycle-aware out-of-the-box; автоматическая отписка; legacy в новых проектах.
 **`StateFlow`**: Kotlin-first; требует manual lifecycle scope; лучшая интеграция с Compose/`Flow`.
@@ -84,7 +84,7 @@ lifecycleScope.launch {
 
 ### 3) Room — Type-safe SQLite ORM
 
-Compile-time SQL validation; аннотации (@Entity, @Dao, @Database); поддержка Flow/`LiveData`; migration automation.
+Compile-time SQL validation; аннотации (@Entity, @Dao, @Database); поддержка `Flow`/`LiveData`; migration automation.
 
 ```kotlin
 @Entity(tableName = "users")
@@ -197,9 +197,9 @@ class UserViewModel : ViewModel() {
 class BadViewModel(val context: Context) : ViewModel()
 ```
 
-**When to use**: any UI logic that should survive Activity/`Fragment` recreate.
+**When to use**: any UI logic that should survive `Activity`/`Fragment` recreate.
 
-### 2) `LiveData` / `StateFlow` — Observable State
+### 2) `LiveData` / `StateFlow` — `Observable` State
 
 **`LiveData`**: lifecycle-aware out-of-the-box; automatic unsubscribe; legacy in new projects.
 **`StateFlow`**: Kotlin-first; requires manual lifecycle scope; better Compose/`Flow` integration.
@@ -218,7 +218,7 @@ lifecycleScope.launch {
 
 ### 3) Room — Type-safe SQLite ORM
 
-Compile-time SQL validation; annotations (@Entity, @Dao, @Database); Flow/`LiveData` support; migration automation.
+Compile-time SQL validation; annotations (@Entity, @Dao, @Database); `Flow`/`LiveData` support; migration automation.
 
 ```kotlin
 @Entity(tableName = "users")

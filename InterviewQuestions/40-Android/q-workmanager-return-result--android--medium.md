@@ -33,7 +33,7 @@ WorkManager возвращает результаты через механиз�
 
 **Основной подход**:
 1. В Worker используем `Result.success(outputData)` для передачи данных
-2. В Activity/`ViewModel` наблюдаем за `WorkInfo` через `LiveData` или `Flow`
+2. В `Activity`/`ViewModel` наблюдаем за `WorkInfo` через `LiveData` или `Flow`
 3. Проверяем состояние `WorkInfo.State.SUCCEEDED`
 4. Извлекаем данные из `workInfo.outputData`
 
@@ -215,7 +215,7 @@ WorkManager returns results through the `outputData` mechanism:
 
 **Core Approach**:
 1. In Worker, use `Result.success(outputData)` to pass data
-2. In Activity/`ViewModel`, observe `WorkInfo` via `LiveData` or `Flow`
+2. In `Activity`/`ViewModel`, observe `WorkInfo` via `LiveData` or `Flow`
 3. Check for `WorkInfo.State.SUCCEEDED` state
 4. Extract data from `workInfo.outputData`
 

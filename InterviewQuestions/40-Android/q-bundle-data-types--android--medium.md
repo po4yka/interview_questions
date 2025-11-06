@@ -199,7 +199,7 @@ val url = intent.getStringExtra("url")
 
 
 ### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]] — Understanding Activity/`Fragment` lifecycle
+- [[q-android-app-components--android--easy]] — Understanding `Activity`/`Fragment` lifecycle
 - [[q-android-manifest-file--android--easy]] — Component declaration and intent filters
 
 ### Related (Same Level)

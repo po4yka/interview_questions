@@ -100,7 +100,7 @@ class UserViewModel : ViewModel() {
 ```
 
 **Преимущества:**
-- ✅ Автоматическая отмена при уничтожении Activity/`ViewModel`
+- ✅ Автоматическая отмена при уничтожении `Activity`/`ViewModel`
 - ✅ Простой синтаксис
 - ✅ Встроенная обработка ошибок
 - ✅ Легко переключаться между потоками
@@ -259,7 +259,7 @@ class UserViewModel : ViewModel() {
 ```
 
 **Advantages:**
-- ✅ Automatic cancellation when Activity/`ViewModel` is destroyed
+- ✅ Automatic cancellation when `Activity`/`ViewModel` is destroyed
 - ✅ Simple syntax
 - ✅ Built-in error handling
 - ✅ Easy thread switching

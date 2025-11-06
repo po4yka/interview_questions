@@ -114,7 +114,7 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 
 | Аспект | MVVM | MVI |
 |--------|------|-----|
-| **State** | Множественные LiveData/`StateFlow` | Единое иммутабельное состояние |
+| **State** | Множественные `LiveData`/`StateFlow` | Единое иммутабельное состояние |
 | **Updates** | Прямые вызовы методов | `Intent`-based |
 | **Data flow** | Bi-directional | Unidirectional |
 | **Testability** | Хорошая | Отличная (pure functions) |
@@ -438,7 +438,7 @@ class UserViewModel(
 
 | Aspect | MVVM | MVI |
 |--------|------|-----|
-| **State** | Multiple LiveData/`StateFlow` | Single immutable state |
+| **State** | Multiple `LiveData`/`StateFlow` | Single immutable state |
 | **Updates** | Direct method calls | `Intent`-based |
 | **Data flow** | Bi-directional | Unidirectional |
 | **Testability** | Good | Excellent (pure functions) |

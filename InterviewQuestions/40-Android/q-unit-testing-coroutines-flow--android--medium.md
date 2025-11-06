@@ -417,7 +417,7 @@ fun test() = runTest {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-coroutine--kotlin--easy]] — Coroutine basics
+- [[q-what-is-coroutine--kotlin--easy]] — `Coroutine` basics
 - [[q-what-is-flow--kotlin--easy]] — `Flow` fundamentals
 - [[q-unit-testing-basics--android--easy]] — Unit testing intro
 

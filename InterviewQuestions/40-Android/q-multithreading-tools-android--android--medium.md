@@ -77,7 +77,7 @@ coroutineScope {
 
 **Области видимости:**
 - `viewModelScope` — привязан к жизненному циклу `ViewModel`
-- `lifecycleScope` — привязан к Activity/`Fragment`
+- `lifecycleScope` — привязан к `Activity`/`Fragment`
 - `GlobalScope` — уровень приложения (осторожно)
 
 **✅ `Flow` для потоков данных:**
@@ -241,9 +241,9 @@ coroutineScope {
 }
 ```
 
-**Coroutine Scopes:**
+**`Coroutine` Scopes:**
 - `viewModelScope` — tied to `ViewModel` lifecycle
-- `lifecycleScope` — tied to Activity/`Fragment` lifecycle
+- `lifecycleScope` — tied to `Activity`/`Fragment` lifecycle
 - `GlobalScope` — application-level scope (use carefully)
 
 **✅ `Flow` for Streams:**

@@ -27,10 +27,10 @@ tags: [android/lifecycle, android/performance-memory, android/profiling, difficu
 ---
 
 # Вопрос (RU)
-> Как обнаружить и исправить утечки памяти в Android? Используйте LeakCanary, Memory Profiler. Исправьте утечки Activity/Fragment/`ViewModel`.
+> Как обнаружить и исправить утечки памяти в Android? Используйте LeakCanary, Memory Profiler. Исправьте утечки `Activity`/`Fragment`/`ViewModel`.
 
 # Question (EN)
-> How to identify and fix memory leaks in Android? Use LeakCanary, Memory Profiler, and heap dumps. Fix Activity/Fragment/`ViewModel` leaks.
+> How to identify and fix memory leaks in Android? Use LeakCanary, Memory Profiler, and heap dumps. Fix `Activity`/`Fragment`/`ViewModel` leaks.
 
 ---
 
@@ -60,7 +60,7 @@ dependencies {
 }
 ```
 
-Не требует настройки — автоматически отслеживает Activity/Fragment/`ViewModel`.
+Не требует настройки — автоматически отслеживает `Activity`/`Fragment`/`ViewModel`.
 
 **Настройка:**
 ```kotlin
@@ -452,7 +452,7 @@ dependencies {
 }
 ```
 
-No setup required — automatically monitors Activity/Fragment/`ViewModel`.
+No setup required — automatically monitors `Activity`/`Fragment`/`ViewModel`.
 
 **Configuration:**
 ```kotlin

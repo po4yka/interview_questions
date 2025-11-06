@@ -89,7 +89,7 @@ fun Counter() {
 | **Recomposition** | - Survives | - Survives |
 | **Config change** | - Lost | - Survives |
 | **Process death** | - Lost | - Survives |
-| **Types supported** | Any | Parcelable/Serializable/primitives |
+| **Types supported** | Any | `Parcelable`/`Serializable`/primitives |
 | **Performance** | Faster | Slightly slower (serialization) |
 
 ### When to Use Each
@@ -208,7 +208,7 @@ fun Counter() {
 | **Recomposition** | - Survives | - Survives |
 | **Config change** | - Lost | - Survives |
 | **Process death** | - Lost | - Survives |
-| **Types supported** | Any | Parcelable/Serializable/primitives |
+| **Types supported** | Any | `Parcelable`/`Serializable`/primitives |
 | **Performance** | Faster | Slightly slower (serialization) |
 
 ### When to Use Each

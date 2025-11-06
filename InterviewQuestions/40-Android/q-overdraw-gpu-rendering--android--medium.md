@@ -60,7 +60,7 @@ What is Overdraw and how to optimize it?
 **Основные причины:**
 
 1. **Избыточные фоны** — background на view, полностью закрытой дочерними элементами
-2. **Глубокая иерархия layouts** — вложенные LinearLayout/`RelativeLayout` с пересекающимися bounds
+2. **Глубокая иерархия layouts** — вложенные `LinearLayout`/`RelativeLayout` с пересекающимися bounds
 3. **Window background** — дефолтный фон окна, дублирующий корневой layout
 4. **Неоптимальный onDraw()** — перерисовка всей области вместо изменённых участков
 
@@ -132,7 +132,7 @@ override fun onDraw(canvas: Canvas) {
 **Root Causes:**
 
 1. **Redundant backgrounds** — background on view completely covered by children
-2. **Deep layout hierarchy** — nested LinearLayout/`RelativeLayout` with overlapping bounds
+2. **Deep layout hierarchy** — nested `LinearLayout`/`RelativeLayout` with overlapping bounds
 3. **Window background** — default window background duplicating root layout
 4. **Inefficient onDraw()** — redrawing entire area instead of changed regions
 

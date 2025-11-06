@@ -112,7 +112,7 @@ fun CompositionLifecycle() {
 }
 ```
 
-**Резюме**: Композиция = корневой узел Compose UI, создается в `setContent` или `ComposeView`, привязана к жизненному циклу Activity/`Fragment`.
+**Резюме**: Композиция = корневой узел Compose UI, создается в `setContent` или `ComposeView`, привязана к жизненному циклу `Activity`/`Fragment`.
 
 ## Answer (EN)
 
@@ -199,7 +199,7 @@ fun CompositionLifecycle() {
 }
 ```
 
-**Summary**: Composition = root Compose UI node, created in `setContent` or `ComposeView`, tied to Activity/`Fragment` lifecycle.
+**Summary**: Composition = root Compose UI node, created in `setContent` or `ComposeView`, tied to `Activity`/`Fragment` lifecycle.
 
 ---
 

@@ -124,7 +124,7 @@ adapter.addLoadStateListener { loadState ->
 - **Встроенное кэширование**: эффективное использование памяти
 - **Retry/Refresh API**: встроенная обработка ошибок
 - **Prefetching**: предзагрузка данных до прокрутки
-- **Kotlin Flow/`LiveData`**: нативная поддержка реактивности
+- **Kotlin `Flow`/`LiveData`**: нативная поддержка реактивности
 
 ❌ **Anti-pattern**: загрузка всех данных сразу без пагинации
 
@@ -225,7 +225,7 @@ adapter.addLoadStateListener { loadState ->
 - **Built-in caching**: efficient memory usage
 - **Retry/Refresh API**: built-in error handling
 - **Prefetching**: data preloading before scrolling
-- **Kotlin Flow/`LiveData`**: native reactivity support
+- **Kotlin `Flow`/`LiveData`**: native reactivity support
 
 ❌ **Anti-pattern**: loading all data at once without pagination
 

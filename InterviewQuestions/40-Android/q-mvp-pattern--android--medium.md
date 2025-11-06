@@ -35,7 +35,7 @@ tags: [android/architecture-mvvm, android/testing-unit, architecture-patterns, d
 
 **1. Model** — слой данных, содержит бизнес-логику, взаимодействует с сетью и базой данных, независим от UI.
 
-**2. `View`** — UI слой, отображает данные и уведомляет Presenter о действиях пользователя. Пассивен — не содержит логику, только показывает то, что говорит Presenter. Реализуется Activity/`Fragment`.
+**2. `View`** — UI слой, отображает данные и уведомляет Presenter о действиях пользователя. Пассивен — не содержит логику, только показывает то, что говорит Presenter. Реализуется `Activity`/`Fragment`.
 
 **3. Presenter** — получает данные из Model, применяет UI логику, управляет состоянием `View`, реагирует на действия пользователя, выступает посредником между Model и `View`.
 
@@ -164,7 +164,7 @@ view?.showData(data)
 
 **1. Model** — the data layer, handles business logic and communication with network and database layers, provides data to Presenter, independent of UI.
 
-**2. `View`** — the UI layer, displays data and notifies Presenter about user actions. Passive — contains no logic, only displays what Presenter tells it. Implemented by Activity/`Fragment`.
+**2. `View`** — the UI layer, displays data and notifies Presenter about user actions. Passive — contains no logic, only displays what Presenter tells it. Implemented by `Activity`/`Fragment`.
 
 **3. Presenter** — retrieves data from Model, applies UI logic, manages `View` state, reacts to user input notifications from `View`, acts as a middleman between Model and `View`.
 

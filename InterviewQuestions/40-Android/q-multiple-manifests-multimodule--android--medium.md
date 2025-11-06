@@ -40,7 +40,7 @@ sources: [
 В многомодульных проектах каждый модуль имеет свой **AndroidManifest.xml** для:
 
 1. **Модульной независимости** - модуль объявляет только свои зависимости
-2. **Инкапсуляции компонентов** - Activity/Service/Provider локализованы в модуле
+2. **Инкапсуляции компонентов** - `Activity`/`Service`/Provider локализованы в модуле
 3. **Автоматического слияния** - build система объединяет все манифесты в один
 
 ### Принцип работы
@@ -135,7 +135,7 @@ cat app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 In multi-module projects, each module has its own **AndroidManifest.xml** for:
 
 1. **Modular independence** - module declares only its own dependencies
-2. **Component encapsulation** - Activity/Service/Provider scoped to module
+2. **Component encapsulation** - `Activity`/`Service`/Provider scoped to module
 3. **Automatic merging** - build system merges all manifests into one
 
 ### How it works

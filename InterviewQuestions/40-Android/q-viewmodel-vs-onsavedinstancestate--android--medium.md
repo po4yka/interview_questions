@@ -40,7 +40,7 @@ tags:
 ---
 
 ## Answer (EN)
-`ViewModel` and onSaveInstanceState are both mechanisms for preserving data across Activity/`Fragment` lifecycle events, but they serve different purposes and have different survival guarantees.
+`ViewModel` and onSaveInstanceState are both mechanisms for preserving data across `Activity`/`Fragment` lifecycle events, but they serve different purposes and have different survival guarantees.
 
 ### Key Differences
 
@@ -435,7 +435,7 @@ class FeedViewModel(private val savedStateHandle: SavedStateHandle) : ViewModel(
 
 
 ## Answer (EN)
-`ViewModel` and onSaveInstanceState are both mechanisms for preserving data across Activity/`Fragment` lifecycle events, but they serve different purposes and have different survival guarantees.
+`ViewModel` and onSaveInstanceState are both mechanisms for preserving data across `Activity`/`Fragment` lifecycle events, but they serve different purposes and have different survival guarantees.
 
 ### Key Differences
 

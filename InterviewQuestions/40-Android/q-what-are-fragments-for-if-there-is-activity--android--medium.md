@@ -291,7 +291,7 @@ class MainActivity : AppCompatActivity() {
 | **Navigation** | New window | In-place replacement |
 | **Back `Stack`** | System managed | FragmentManager managed |
 | **UI Modularity** | Full screen | Portion of screen |
-| **Communication** | Intents/Results | Shared ViewModel/Interface |
+| **Communication** | Intents/Results | Shared `ViewModel`/Interface |
 | **Adaptation** | Separate activities | Same fragments, different layouts |
 
 ### When to Use Fragments
@@ -586,7 +586,7 @@ class MainActivity : AppCompatActivity() {
 | **Navigation** | New window | In-place replacement |
 | **Back `Stack`** | System managed | FragmentManager managed |
 | **UI Modularity** | Full screen | Portion of screen |
-| **Communication** | Intents/Results | Shared ViewModel/Interface |
+| **Communication** | Intents/Results | Shared `ViewModel`/Interface |
 | **Adaptation** | Separate activities | Same fragments, different layouts |
 
 ### When to Use Fragments

@@ -42,7 +42,7 @@ Android Jetpack — набор библиотек от Google для упрощ�
 
 **`ViewModel`** — сохраняет UI-данные при конфигурационных изменениях
 **Room** — type-safe ORM для SQLite с compile-time проверками
-**`Lifecycle`** — отслеживает жизненный цикл Activity/`Fragment`
+**`Lifecycle`** — отслеживает жизненный цикл `Activity`/`Fragment`
 **Navigation** — декларативная навигация между экранами
 
 ```kotlin
@@ -130,7 +130,7 @@ Android Jetpack is Google's suite of libraries for simplified Android developmen
 
 **`ViewModel`** — survives configuration changes like screen rotation
 **Room** — type-safe ORM for SQLite with compile-time verification
-**`Lifecycle`** — tracks Activity/`Fragment` lifecycle states
+**`Lifecycle`** — tracks `Activity`/`Fragment` lifecycle states
 **Navigation** — declarative screen navigation
 
 ```kotlin

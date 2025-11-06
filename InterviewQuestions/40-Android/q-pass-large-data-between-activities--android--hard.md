@@ -72,7 +72,7 @@ intent.putExtra("image", bitmap)  // Ошибка при размере > 1MB
 
 ### Решение 1: FileProvider + URI (Рекомендуется)
 
-**Когда использовать:** Изображения, видео, документы между Activity/приложениями.
+**Когда использовать:** Изображения, видео, документы между `Activity`/приложениями.
 
 **Шаг 1:** Настройка FileProvider в `AndroidManifest.xml`:
 
@@ -339,7 +339,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 - Обрабатывать ошибки доступа
 
 **❌ DON'T:**
-- Не передавать Bitmap/ByteArray в `Intent`
+- Не передавать `Bitmap`/ByteArray в `Intent`
 - Не использовать Singleton для production
 - Не забывать отзывать разрешения URI
 - Не хранить большие объекты в памяти дольше необходимого
@@ -350,7 +350,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 **Binder Transaction Buffer:**
 - Общий буфер для всех IPC-транзакций процесса (~1MB)
-- Включает все одновременные Intent/AIDL/Binder-вызовы
+- Включает все одновременные `Intent`/AIDL/Binder-вызовы
 - Превышение вызывает `TransactionTooLargeException`
 
 **FileProvider Security:**
@@ -361,7 +361,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 **`ViewModel` `Lifecycle`:**
 - Переживает configuration changes
 - НЕ переживает process death
-- Очищается только при финальном уничтожении Activity/`Fragment`
+- Очищается только при финальном уничтожении `Activity`/`Fragment`
 
 ---
 
@@ -655,7 +655,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 - Handle access errors gracefully
 
 **❌ DON'T:**
-- Pass Bitmap/ByteArray in `Intent`
+- Pass `Bitmap`/ByteArray in `Intent`
 - Use Singleton for production
 - Forget to revoke URI permissions
 - Keep large objects in memory longer than needed
@@ -666,7 +666,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 **Binder Transaction Buffer:**
 - Shared buffer for all process IPC transactions (~1MB)
-- Includes all concurrent Intent/AIDL/Binder calls
+- Includes all concurrent `Intent`/AIDL/Binder calls
 - Exceeding limit throws `TransactionTooLargeException`
 
 **FileProvider Security:**
@@ -677,7 +677,7 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 **`ViewModel` `Lifecycle`:**
 - Survives configuration changes
 - Does NOT survive process death
-- Cleared only on final Activity/`Fragment` destruction
+- Cleared only on final `Activity`/`Fragment` destruction
 
 ---
 

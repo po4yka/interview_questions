@@ -40,7 +40,7 @@ interface MutableState<T> : State<T> {
 ```
 
 **Ключевые характеристики:**
-- **Observable** — автоматически уведомляет подписчиков
+- **`Observable`** — автоматически уведомляет подписчиков
 - **Триггерит рекомпозицию** — UI элементы перерисовываются
 - **Типобезопасность** — строгая типизация через `<T>`
 - **Переживает рекомпозицию** — работает с `remember`
@@ -264,7 +264,7 @@ interface MutableState<T> : State<T> {
 ```
 
 **Key characteristics:**
-- **Observable** — automatically notifies subscribers
+- **`Observable`** — automatically notifies subscribers
 - **Triggers recomposition** — UI elements redraw automatically
 - **Type-safe** — strongly typed via `<T>`
 - **Survives recomposition** — works with `remember`

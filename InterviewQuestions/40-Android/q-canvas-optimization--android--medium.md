@@ -42,7 +42,7 @@ tags: [android/performance-rendering, android/ui-graphics, android/ui-views, cus
 
 ### 1. Паттерн Без Аллокаций
 
-Создавайте Paint/Path/Rect/Matrix как поля класса. Переиспользуйте через `reset()`/`set()`.
+Создавайте `Paint`/`Path`/Rect/Matrix как поля класса. Переиспользуйте через `reset()`/`set()`.
 
 ```kotlin
 class OptimizedView : View {
@@ -161,7 +161,7 @@ override fun onDraw(canvas: Canvas) {
 
 ### 1. Zero-Allocation Pattern
 
-Create Paint/Path/Rect/Matrix as class fields. Reuse via `reset()`/`set()`.
+Create `Paint`/`Path`/Rect/Matrix as class fields. Reuse via `reset()`/`set()`.
 
 ```kotlin
 class OptimizedView : View {

@@ -111,7 +111,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-**Listener без отписки:**
+**`Listener` без отписки:**
 ```kotlin
 // ❌ Anonymous listener держит Activity
 override fun onCreate(savedInstanceState: Bundle?) {
@@ -214,7 +214,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-**Listener without unsubscribe:**
+**`Listener` without unsubscribe:**
 ```kotlin
 // ❌ Anonymous listener holds Activity
 override fun onCreate(savedInstanceState: Bundle?) {

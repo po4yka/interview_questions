@@ -1372,7 +1372,7 @@ class LargeListAdapter : RecyclerView.Adapter<LargeListAdapter.ViewHolder>() {
 }
 ```
 
-### Использование В Fragment/`Activity`
+### Использование В `Fragment`/`Activity`
 
 Пример интеграции ListAdapter в реальном приложении:
 

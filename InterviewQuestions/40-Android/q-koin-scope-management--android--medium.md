@@ -55,7 +55,7 @@ tags:
 
 **Типы Scope**:
 1. **Root Scope** - на уровне приложения
-2. **Component Scope** - привязан к Activity/`Fragment`
+2. **Component Scope** - привязан к `Activity`/`Fragment`
 3. **Named Scope** - пользовательские логические границы
 
 **Преимущества**:
@@ -220,7 +220,7 @@ class SessionManager(private val koin: Koin) {
 
 **Scope Types**:
 1. **Root Scope** - `Application`-wide, never closes
-2. **Component Scope** - Tied to Activity/`Fragment` lifecycle
+2. **Component Scope** - Tied to `Activity`/`Fragment` lifecycle
 3. **Named Scope** - Custom logical boundaries
 
 **Benefits**:

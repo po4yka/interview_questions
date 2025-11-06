@@ -302,7 +302,7 @@ class UserViewModelTest {
 
 ---
 
-### Coroutine Mocking
+### `Coroutine` Mocking
 
 MockK has first-class support for suspend functions:
 
@@ -585,7 +585,7 @@ fun testConstructorMock() {
 | **Final classes** |  Works by default |  Needs mockito-inline |
 | **DSL style** |  every/verify |  when/verify |
 | **Relaxed mocks** |  Built-in |  Manual configuration |
-| **Coroutine support** |  coEvery/coVerify |  Limited |
+| **`Coroutine` support** |  coEvery/coVerify |  Limited |
 
 ---
 
@@ -915,7 +915,7 @@ class UserViewModelTest {
 
 ---
 
-### Coroutine Mocking
+### `Coroutine` Mocking
 
 MockK has first-class support for suspend functions:
 
@@ -1198,7 +1198,7 @@ fun testConstructorMock() {
 | **Final classes** |  Works by default |  Needs mockito-inline |
 | **DSL style** |  every/verify |  when/verify |
 | **Relaxed mocks** |  Built-in |  Manual configuration |
-| **Coroutine support** |  coEvery/coVerify |  Limited |
+| **`Coroutine` support** |  coEvery/coVerify |  Limited |
 
 ---
 

@@ -145,7 +145,7 @@ class DetailFragment : Fragment() {
 
 ### Лучшие Практики
 
-- **Всегда используйте viewLifecycleOwner** — для подписок на LiveData/`Flow` в `Fragment`
+- **Всегда используйте viewLifecycleOwner** — для подписок на `LiveData`/`Flow` в `Fragment`
 - **Проверяйте существование `Activity`** — перед доступом к `requireActivity()`
 - **Используйте Shared `ViewModel`** — для коммуникации между `Fragment`'ами
 - **Правильно управляйте back stack** — используйте теги для поиска `Fragment`'ов
@@ -255,7 +255,7 @@ class DetailFragment : Fragment() {
 
 ### Best Practices
 
-- **Always use viewLifecycleOwner** — for LiveData/`Flow` subscriptions in `Fragment`
+- **Always use viewLifecycleOwner** — for `LiveData`/`Flow` subscriptions in `Fragment`
 - **Check `Activity` existence** — before accessing `requireActivity()`
 - **Use Shared `ViewModel`** — for communication between Fragments
 - **Properly manage back stack** — use tags to find Fragments

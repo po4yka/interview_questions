@@ -113,7 +113,7 @@ class UserViewModel @Inject constructor(
 
 **Стандартные Scopes в Hilt:**
 - `@Singleton` — на уровне `Application`
-- `@ActivityScoped` / `@ActivityRetainedScoped` — Activity/`ViewModel`
+- `@ActivityScoped` / `@ActivityRetainedScoped` — `Activity`/`ViewModel`
 - `@ViewModelScoped` — `ViewModel`
 - `@FragmentScoped` — `Fragment`
 
@@ -213,7 +213,7 @@ class UserViewModel @Inject constructor(
 
 **Standard Hilt Scopes:**
 - `@Singleton` — `Application` level
-- `@ActivityScoped` / `@ActivityRetainedScoped` — Activity/`ViewModel`
+- `@ActivityScoped` / `@ActivityRetainedScoped` — `Activity`/`ViewModel`
 - `@ViewModelScoped` — `ViewModel`
 - `@FragmentScoped` — `Fragment`
 

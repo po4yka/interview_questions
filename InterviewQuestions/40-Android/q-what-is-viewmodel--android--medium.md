@@ -92,7 +92,7 @@ class UserActivity : AppCompatActivity() {
 
 ### Жизненный Цикл `ViewModel`
 
-`ViewModel` создается при первом вызове `onCreate()` и **уничтожается только при финальном завершении** Activity/`Fragment`:
+`ViewModel` создается при первом вызове `onCreate()` и **уничтожается только при финальном завершении** `Activity`/`Fragment`:
 
 - `Activity` finish → `ViewModel.onCleared()` вызывается
 - Configuration change (rotation) → `ViewModel` НЕ пересоздается, возвращается тот же экземпляр
@@ -252,7 +252,7 @@ class UserActivity : AppCompatActivity() {
 
 ### `ViewModel` `Lifecycle`
 
-`ViewModel` is created on the first `onCreate()` call and **destroyed only on final termination** of Activity/`Fragment`:
+`ViewModel` is created on the first `onCreate()` call and **destroyed only on final termination** of `Activity`/`Fragment`:
 
 - `Activity` finish → `ViewModel.onCleared()` is called
 - Configuration change (rotation) → `ViewModel` NOT recreated, same instance returned

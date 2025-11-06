@@ -61,7 +61,7 @@ tags: [android/testing-instrumented, android/testing-unit, comparison, difficult
 
 **Подходит для:**
 - Тестирование `ViewModel` с Android-зависимостями
-- Проверка жизненного цикла Activity/`Fragment`
+- Проверка жизненного цикла `Activity`/`Fragment`
 - Тестирование Resources, `Context`, SharedPreferences
 - Создание `Intent` и навигация
 - Быстрая обратная связь в CI
@@ -213,7 +213,7 @@ class UserProfileE2ETest {
 
 **Good for:**
 - Testing ViewModels with Android dependencies
-- Verifying Activity/`Fragment` lifecycle
+- Verifying `Activity`/`Fragment` lifecycle
 - Testing Resources, `Context`, SharedPreferences
 - `Intent` creation and navigation
 - Fast CI feedback

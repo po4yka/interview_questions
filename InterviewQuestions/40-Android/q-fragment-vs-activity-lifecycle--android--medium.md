@@ -272,7 +272,7 @@ supportFragmentManager.beginTransaction()
 
 ### Best Practices
 
-- **Always use viewLifecycleOwner** — for LiveData/`Flow` subscriptions in `Fragment`
+- **Always use viewLifecycleOwner** — for `LiveData`/`Flow` subscriptions in `Fragment`
 - **Avoid memory leaks** — cancel subscriptions in `onDestroyView`
 - **Save state properly** — use `Bundle` for UI state, `ViewModel` for business data
 - **Test lifecycle** — verify behavior during configuration changes
@@ -288,7 +288,7 @@ supportFragmentManager.beginTransaction()
 
 ### Лучшие Практики
 
-- **Всегда используйте viewLifecycleOwner** — для подписок на LiveData/`Flow` в `Fragment`
+- **Всегда используйте viewLifecycleOwner** — для подписок на `LiveData`/`Flow` в `Fragment`
 - **Избегайте утечек памяти** — отменяйте подписки в `onDestroyView`
 - **Правильно сохраняйте состояние** — используйте `Bundle` для UI состояния, `ViewModel` для бизнес-данных
 - **Тестируйте lifecycle** — проверяйте поведение при configuration changes

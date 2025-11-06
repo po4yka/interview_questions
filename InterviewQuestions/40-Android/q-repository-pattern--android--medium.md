@@ -229,7 +229,7 @@ class ProductRepository(
 **Benefits:**
 - UI always shows consistent data
 - Network failures don't break UI
-- Automatic updates via Flow/`LiveData`
+- Automatic updates via `Flow`/`LiveData`
 - No state management needed in UI
 
 ### Caching Strategies
@@ -967,7 +967,7 @@ class ProductRepository(
 **Benefits:**
 - UI always shows consistent data
 - Network failures don't break UI
-- Automatic updates via Flow/`LiveData`
+- Automatic updates via `Flow`/`LiveData`
 - No state management needed in UI
 
 ### Caching Strategies
@@ -1596,7 +1596,7 @@ class ProductRepository(
 **Преимущества:**
 - UI всегда показывает консистентные данные
 - Сбои сети не ломают UI
-- Автоматические обновления через Flow/`LiveData`
+- Автоматические обновления через `Flow`/`LiveData`
 - Не нужно управлять состоянием в UI
 
 ### Стратегии Кэширования

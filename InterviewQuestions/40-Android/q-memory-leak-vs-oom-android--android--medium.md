@@ -382,7 +382,7 @@ class MemoryMonitor {
 ### Related
 - [[q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium]] - UI lifecycle and memory
 - [[q-play-feature-delivery-dynamic-modules--android--medium]] - Memory-efficient modularization
-- [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutine-specific memory issues
+- [[q-coroutine-memory-leaks--kotlin--hard]] - `Coroutine`-specific memory issues
 
 ### Advanced
 - [[q-coroutine-memory-leak-detection--kotlin--hard]] - Advanced leak detection strategies

@@ -29,7 +29,7 @@ After getting a result inside Presenter, how to notify the `View`?
 
 ## Ответ (RU)
 
-В MVP-архитектуре Presenter отвечает за бизнес-логику, а `View` — за отображение. Presenter не должен знать об Android-специфике `View` (Activity/`Fragment`), поэтому используется абстракция через интерфейс.
+В MVP-архитектуре Presenter отвечает за бизнес-логику, а `View` — за отображение. Presenter не должен знать об Android-специфике `View` (`Activity`/`Fragment`), поэтому используется абстракция через интерфейс.
 
 ### 1. Интерфейсный Контракт (Interface Contract) ✅
 
@@ -123,7 +123,7 @@ val presenter = DataPresenter(
 - Может привести к memory leak если не управлять жизненным циклом
 - Сложнее тестировать множественные callback
 
-### 3. LiveData/`StateFlow` (Гибридный подход)
+### 3. `LiveData`/`StateFlow` (Гибридный подход)
 
 Если используется переход к MVVM, Presenter может эмитить состояния:
 
@@ -202,7 +202,7 @@ fun notifyView(data: Data) {
 
 ## Answer (EN)
 
-In MVP architecture, the Presenter handles business logic while the `View` handles display. The Presenter should not know Android-specific details about the `View` (Activity/`Fragment`), so abstraction through interfaces is used.
+In MVP architecture, the Presenter handles business logic while the `View` handles display. The Presenter should not know Android-specific details about the `View` (`Activity`/`Fragment`), so abstraction through interfaces is used.
 
 ### 1. Interface Contract ✅
 
@@ -296,7 +296,7 @@ val presenter = DataPresenter(
 - Can lead to memory leaks if lifecycle not managed
 - Harder to test multiple callbacks
 
-### 3. LiveData/`StateFlow` (Hybrid Approach)
+### 3. `LiveData`/`StateFlow` (Hybrid Approach)
 
 If transitioning to MVVM, the Presenter can emit states:
 

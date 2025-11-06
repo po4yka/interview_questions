@@ -52,7 +52,7 @@ What are services used for in Android?
 - **Замена**: используйте WorkManager для отложенных фоновых задач
 
 **3. Bound `Service`** — клиент-серверный интерфейс
-- **Применение**: коммуникация между Activity/`Fragment` и сервисом, IPC
+- **Применение**: коммуникация между `Activity`/`Fragment` и сервисом, IPC
 
 ### Пример Foreground `Service`
 
@@ -217,7 +217,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 - **Replacement**: use WorkManager for deferrable background tasks
 
 **3. Bound `Service`** — provides client-server interface
-- **Use cases**: communication between Activity/`Fragment` and service, IPC
+- **Use cases**: communication between `Activity`/`Fragment` and service, IPC
 
 ### Foreground `Service` Example
 
@@ -371,7 +371,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 
 - What happens if you don't call `startForeground()` within 5 seconds for a Foreground `Service`?
 - How does `START_STICKY` vs `START_NOT_STICKY` affect service restart behavior?
-- When should you use a Bound `Service` versus SharedViewModel with LiveData/`Flow`?
+- When should you use a Bound `Service` versus SharedViewModel with `LiveData`/`Flow`?
 - What are the restrictions on background services introduced in Android 8.0, 12.0?
 - How can you implement a hybrid service that is both started and bound?
 
