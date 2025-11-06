@@ -6,8 +6,7 @@ aliases:
   - Руководство Android Auto
 topic: android
 subtopics:
-  - automotive
-  - android-auto
+  - auto
 question_kind: android
 difficulty: hard
 original_language: ru
@@ -21,8 +20,7 @@ related:
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/automotive
-  - android/android-auto
+  - android/auto
   - difficulty/hard
 sources:
   - url: https://developer.android.com/training/cars/apps

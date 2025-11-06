@@ -6,9 +6,8 @@ aliases:
   - Расширенный ShareSheet и ярлыки
 topic: android
 subtopics:
-  - communication
-  - sharing
-  - shortcuts
+  - shortcuts-widgets
+  - intents-deeplinks
 question_kind: android
 difficulty: hard
 original_language: ru
@@ -22,9 +21,8 @@ related:
 created: 2025-11-02
 updated: 2025-11-02
 tags:
-  - android/sharing
-  - android/shortcuts
-  - communication
+  - android/shortcuts-widgets
+  - android/intents-deeplinks
   - difficulty/hard
 sources:
   - url: https://developer.android.com/develop/ui/views/sharing/send
