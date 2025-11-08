@@ -58,11 +58,8 @@ def get_openrouter_model(model_name: str = "anthropic/claude-sonnet-4") -> OpenA
     )
 
 
-# Agent for initial technical review
-technical_review_agent = Agent(
-    model=get_openrouter_model,
-    result_type=TechnicalReviewResult,
-    system_prompt="""You are an expert technical reviewer for interview preparation notes.
+# System prompts
+TECHNICAL_REVIEW_PROMPT = """You are an expert technical reviewer for interview preparation notes.
 
 Your task is to review notes for technical accuracy and factual correctness.
 
@@ -85,15 +82,9 @@ If you find technical issues, correct them while preserving:
 - All markdown headings and sections
 - Bilingual content organization
 
-Return the corrected text with clear explanation of changes.""",
-)
+Return the corrected text with clear explanation of changes."""
 
-
-# Agent for fixing formatting and structure issues
-issue_fix_agent = Agent(
-    model=get_openrouter_model,
-    result_type=IssueFixResult,
-    system_prompt="""You are an expert at fixing formatting and structural issues in Markdown notes.
+ISSUE_FIX_PROMPT = """You are an expert at fixing formatting and structural issues in Markdown notes.
 
 You will receive:
 1. The current note text
@@ -120,8 +111,25 @@ CRITICAL RULES (from vault documentation):
 4. No emoji anywhere
 5. status: draft for AI-modified notes
 
-Fix each issue precisely and return the corrected text.""",
-)
+Fix each issue precisely and return the corrected text."""
+
+
+def get_technical_review_agent() -> Agent:
+    """Get the technical review agent (lazy initialization)."""
+    return Agent(
+        model=get_openrouter_model(),
+        result_type=TechnicalReviewResult,
+        system_prompt=TECHNICAL_REVIEW_PROMPT,
+    )
+
+
+def get_issue_fix_agent() -> Agent:
+    """Get the issue fix agent (lazy initialization)."""
+    return Agent(
+        model=get_openrouter_model(),
+        result_type=IssueFixResult,
+        system_prompt=ISSUE_FIX_PROMPT,
+    )
 
 
 async def run_technical_review(
@@ -147,7 +155,8 @@ Note content:
 Check for technical correctness, code accuracy, and completeness.
 If you find issues, fix them while preserving structure and formatting."""
 
-    result = await technical_review_agent.run(prompt)
+    agent = get_technical_review_agent()
+    result = await agent.run(prompt)
     return result.data
 
 
@@ -180,5 +189,6 @@ CURRENT NOTE CONTENT:
 Fix ALL issues while preserving meaning and following vault rules.
 Return the corrected text."""
 
-    result = await issue_fix_agent.run(prompt)
+    agent = get_issue_fix_agent()
+    result = await agent.run(prompt)
     return result.data

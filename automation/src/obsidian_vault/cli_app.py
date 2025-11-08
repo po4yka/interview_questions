@@ -633,9 +633,18 @@ def llm_review(
         from obsidian_vault.llm_review import create_review_graph
 
         # Collect notes matching pattern
-        from obsidian_vault.utils.common import collect_validatable_files
+        if pattern.startswith("InterviewQuestions/"):
+            # Use glob directly on vault_dir with the sub-pattern
+            search_pattern = pattern.replace("InterviewQuestions/", "", 1)
+            notes = list(vault_dir.glob(search_pattern))
+            # Filter to only .md files
+            notes = [n for n in notes if n.suffix == ".md" and n.is_file()]
+        else:
+            # Fallback to full pattern matching
+            from obsidian_vault.utils.common import collect_validatable_files
 
-        notes = list(collect_validatable_files(repo_root / pattern.split("/")[0]))
+            notes = list(collect_validatable_files(repo_root / pattern.split("/")[0]))
+
         if not notes:
             console.print(f"[yellow]⚠[/yellow] No notes found matching pattern: {pattern}")
             raise typer.Exit(code=0)
