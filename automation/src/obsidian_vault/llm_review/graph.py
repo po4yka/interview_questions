@@ -228,6 +228,12 @@ class ReviewGraph:
         Returns:
             "continue" or "done"
         """
+        logger.debug(
+            f"Decision point - iteration: {state.iteration}/{state.max_iterations}, "
+            f"issues: {len(state.issues)}, error: {state.error is not None}, "
+            f"completed: {state.completed}"
+        )
+
         # Check if max iterations reached
         if state.iteration >= state.max_iterations:
             logger.warning(f"Max iterations ({state.max_iterations}) reached")
@@ -239,7 +245,7 @@ class ReviewGraph:
 
         # Check if there are issues to fix
         if not state.has_any_issues():
-            logger.success("No issues remaining")
+            logger.success("No issues remaining - workflow complete")
             state.add_history_entry("decision", "Stopping: no issues remaining")
             return "done"
 
@@ -251,12 +257,15 @@ class ReviewGraph:
 
         # Check if completed flag is set
         if state.completed:
-            logger.info("Completed flag set")
+            logger.info("Completed flag set - stopping iteration")
             state.add_history_entry("decision", "Stopping: completed flag set")
             return "done"
 
         # Continue fixing
-        logger.info(f"Continuing (iteration {state.iteration}/{state.max_iterations})")
+        logger.info(
+            f"Continuing to iteration {state.iteration + 1} - "
+            f"{len(state.issues)} issue(s) remaining"
+        )
         state.add_history_entry("decision", f"Continuing to iteration {state.iteration + 1}")
         return "continue"
 
@@ -269,8 +278,17 @@ class ReviewGraph:
         Returns:
             Final state after processing
         """
+        logger.info(f"=" * 70)
+        logger.info(f"Processing note: {note_path.name}")
+        logger.debug(f"Full path: {note_path}")
+
         # Read the note
-        original_text = note_path.read_text(encoding="utf-8")
+        try:
+            original_text = note_path.read_text(encoding="utf-8")
+            logger.debug(f"Read {len(original_text)} characters from note")
+        except Exception as e:
+            logger.error(f"Failed to read note {note_path}: {e}")
+            raise
 
         # Initialize state
         initial_state = NoteReviewState(
@@ -279,12 +297,31 @@ class ReviewGraph:
             current_text=original_text,
             max_iterations=self.max_iterations,
         )
+        logger.debug(f"Initialized state with max_iterations={self.max_iterations}")
 
         # Run the graph
-        logger.info(f"Starting review workflow for {note_path}")
-        final_state = await self.graph.ainvoke(initial_state)
+        logger.info(f"Starting LangGraph workflow for {note_path.name}")
+        try:
+            final_state = await self.graph.ainvoke(initial_state)
+            logger.debug("LangGraph workflow completed")
+        except Exception as e:
+            logger.error(f"LangGraph workflow failed for {note_path}: {e}")
+            raise
 
-        logger.success(f"Completed review for {note_path}")
+        # Log final results
+        logger.success(
+            f"Completed review for {note_path.name} - "
+            f"changed: {final_state.changed}, "
+            f"iterations: {final_state.iteration}, "
+            f"final_issues: {len(final_state.issues)}"
+        )
+
+        if final_state.error:
+            logger.error(f"Workflow ended with error: {final_state.error}")
+
+        logger.debug(f"Workflow history: {len(final_state.history)} entries")
+        logger.info(f"=" * 70)
+
         return final_state
 
 
@@ -301,17 +338,33 @@ def create_review_graph(
     Returns:
         Configured ReviewGraph instance
     """
+    logger.info("Initializing ReviewGraph")
+    logger.debug(f"Vault root: {vault_root}")
+    logger.debug(f"Max iterations: {max_iterations}")
+
     # Discover repo root
     repo_root = vault_root.parent if vault_root.name == "InterviewQuestions" else vault_root
+    logger.debug(f"Repo root: {repo_root}")
 
     # Load taxonomy
-    logger.debug("Loading taxonomy")
-    taxonomy = TaxonomyLoader(repo_root).load()
+    logger.info("Loading taxonomy from TAXONOMY.md")
+    try:
+        taxonomy = TaxonomyLoader(repo_root).load()
+        logger.debug(f"Taxonomy loaded - topics: {len(taxonomy.topics) if hasattr(taxonomy, 'topics') else 'unknown'}")
+    except Exception as e:
+        logger.error(f"Failed to load taxonomy: {e}")
+        raise
 
     # Build note index
-    logger.debug("Building note index")
-    note_index = build_note_index(vault_root)
+    logger.info("Building note index")
+    try:
+        note_index = build_note_index(vault_root)
+        logger.debug(f"Note index built - {len(note_index)} notes indexed")
+    except Exception as e:
+        logger.error(f"Failed to build note index: {e}")
+        raise
 
+    logger.success("ReviewGraph initialized successfully")
     return ReviewGraph(
         vault_root=vault_root,
         taxonomy=taxonomy,
