@@ -383,16 +383,51 @@ class ReviewGraph:
             date_str = now.strftime('%Y-%m-%d')
             id_str = now.strftime('%Y%m%d-%H%M%S')
 
+            # Determine topic from concept name (fallback to general if unknown)
+            # Common mappings for concept topics
+            topic_keywords = {
+                'kotlin': 'kotlin',
+                'android': 'android',
+                'algorithm': 'algorithms',
+                'data-structure': 'data-structures',
+                'design': 'system-design',
+                'pattern': 'architecture-patterns',
+            }
+            topic = 'programming-languages'  # Default fallback
+            for keyword, topic_value in topic_keywords.items():
+                if keyword in concept_name.lower():
+                    topic = topic_value
+                    break
+
+            # Determine MOC based on topic
+            topic_to_moc = {
+                'kotlin': 'moc-kotlin',
+                'android': 'moc-android',
+                'algorithms': 'moc-algorithms',
+                'data-structures': 'moc-algorithms',
+                'system-design': 'moc-system-design',
+                'architecture-patterns': 'moc-system-design',
+                'programming-languages': 'moc-kotlin',
+            }
+            moc = topic_to_moc.get(topic, 'moc-cs')
+
             content = f"""---
-id: 'ivc-{id_str}'
-title: {concept_title}
-aliases: [{concept_title}]
-kind: concept
+id: "{id_str}"
+title: "{concept_title} / {concept_title}"
+aliases: ["{concept_title}"]
 summary: "Foundational concept for interview preparation"
-links: []
-created: '{date_str}'
-updated: '{date_str}'
-tags: [concept, auto-generated]
+topic: "{topic}"
+subtopics: ["general"]
+question_kind: "theory"
+difficulty: "medium"
+original_language: "en"
+language_tags: ["en", "ru"]
+status: "draft"
+moc: "{moc}"
+related: []
+created: "{date_str}"
+updated: "{date_str}"
+tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 ---
 
 # Summary (EN)
@@ -401,13 +436,17 @@ tags: [concept, auto-generated]
 
 *This concept file was auto-generated. Please expand with detailed information.*
 
-# Сводка (RU)
+# Краткое Описание (RU)
 
 {concept_title} - фундаментальная концепция в разработке программного обеспечения.
 
 *Этот файл концепции был создан автоматически. Пожалуйста, дополните его подробной информацией.*
 
-## Use Cases / Trade-offs
+## Key Points (EN)
+
+- To be documented
+
+## Ключевые Моменты (RU)
 
 - To be documented
 

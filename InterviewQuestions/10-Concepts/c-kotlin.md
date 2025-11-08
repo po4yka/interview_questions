@@ -1,13 +1,20 @@
 ---
-id: 'ivc-20251108-170105'
-title: Kotlin
-aliases: [Kotlin]
-kind: concept
-summary: "Foundational concept for interview preparation"
-links: []
-created: '2025-11-08'
-updated: '2025-11-08'
-tags: [concept, auto-generated]
+id: "20251108-170105"
+title: "Kotlin / Котлин"
+aliases: ["Kotlin", "Котлин"]
+summary: "Modern JVM programming language with concise syntax and null safety"
+topic: "kotlin"
+subtopics: ["language-features"]
+question_kind: "theory"
+difficulty: "easy"
+original_language: "en"
+language_tags: ["en", "ru"]
+status: "draft"
+moc: "moc-kotlin"
+related: []
+created: "2025-11-08"
+updated: "2025-11-08"
+tags: ["kotlin", "concept", "programming-languages", "difficulty/easy", "auto-generated"]
 ---
 
 # Summary (EN)
