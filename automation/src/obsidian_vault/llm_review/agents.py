@@ -3,9 +3,11 @@
 from __future__ import annotations
 
 import os
+from dataclasses import dataclass
 from typing import Any
 
 from loguru import logger
+
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent
 from pydantic_ai.models.openai import ModelSettings, OpenAIChatModel
@@ -36,6 +38,7 @@ class IssueFixResult(BaseModel):
 
 DEFAULT_OPENROUTER_MODEL = "anthropic/claude-sonnet-4"
 DEFAULT_TEMPERATURE = 0.2
+DEFAULT_TIMEOUT = 60.0
 
 
 def _get_float_from_env(var_name: str) -> float | None:
@@ -52,6 +55,106 @@ def _get_float_from_env(var_name: str) -> float | None:
             "Invalid float value for %s: %s — ignoring", var_name, raw_value
         )
         return None
+
+
+def _get_int_from_env(var_name: str) -> int | None:
+    """Return an int value from the environment if it can be parsed."""
+
+    raw_value = os.getenv(var_name)
+    if raw_value is None:
+        return None
+
+    try:
+        return int(raw_value)
+    except ValueError:
+        logger.warning(
+            "Invalid integer value for %s: %s — ignoring", var_name, raw_value
+        )
+        return None
+
+
+def _get_bool_from_env(var_name: str) -> bool | None:
+    """Return a bool value from the environment if it can be parsed."""
+
+    raw_value = os.getenv(var_name)
+    if raw_value is None:
+        return None
+
+    normalized = raw_value.strip().lower()
+    if normalized in {"1", "true", "yes", "on"}:
+        return True
+    if normalized in {"0", "false", "no", "off"}:
+        return False
+
+    logger.warning("Invalid boolean value for %s: %s — ignoring", var_name, raw_value)
+    return None
+
+
+@dataclass
+class OpenRouterConfig:
+    """Runtime configuration for OpenRouter requests."""
+
+    model: str
+    headers: dict[str, str]
+    settings_kwargs: dict[str, Any]
+
+    @classmethod
+    def from_environment(cls, override_model: str | None = None) -> "OpenRouterConfig":
+        """Construct configuration, applying environment overrides with validation."""
+
+        resolved_model = override_model or os.getenv(
+            "OPENROUTER_MODEL", DEFAULT_OPENROUTER_MODEL
+        )
+
+        headers: dict[str, str] = {}
+        http_referer = os.getenv("OPENROUTER_HTTP_REFERER")
+        if http_referer:
+            headers["HTTP-Referer"] = http_referer
+
+        app_title = os.getenv("OPENROUTER_APP_TITLE")
+        if app_title:
+            headers["X-Title"] = app_title
+
+        settings_kwargs: dict[str, Any] = {}
+
+        temperature = _get_float_from_env("OPENROUTER_TEMPERATURE")
+        if temperature is None:
+            temperature = DEFAULT_TEMPERATURE
+        settings_kwargs["temperature"] = temperature
+
+        top_p = _get_float_from_env("OPENROUTER_TOP_P")
+        if top_p is not None:
+            settings_kwargs["top_p"] = top_p
+
+        presence_penalty = _get_float_from_env("OPENROUTER_PRESENCE_PENALTY")
+        if presence_penalty is not None:
+            settings_kwargs["presence_penalty"] = presence_penalty
+
+        frequency_penalty = _get_float_from_env("OPENROUTER_FREQUENCY_PENALTY")
+        if frequency_penalty is not None:
+            settings_kwargs["frequency_penalty"] = frequency_penalty
+
+        max_tokens = _get_int_from_env("OPENROUTER_MAX_TOKENS")
+        if max_tokens is not None:
+            settings_kwargs["max_tokens"] = max_tokens
+
+        seed = _get_int_from_env("OPENROUTER_SEED")
+        if seed is not None:
+            settings_kwargs["seed"] = seed
+
+        timeout = _get_float_from_env("OPENROUTER_TIMEOUT")
+        if timeout is None:
+            timeout = DEFAULT_TIMEOUT
+        settings_kwargs["timeout"] = timeout
+
+        parallel_tool_calls = _get_bool_from_env("OPENROUTER_PARALLEL_TOOL_CALLS")
+        if parallel_tool_calls is not None:
+            settings_kwargs["parallel_tool_calls"] = parallel_tool_calls
+
+        if headers:
+            settings_kwargs["extra_headers"] = headers
+
+        return cls(resolved_model, headers, settings_kwargs)
 
 
 def get_openrouter_model(model_name: str | None = None) -> OpenAIChatModel:
@@ -75,36 +178,17 @@ def get_openrouter_model(model_name: str | None = None) -> OpenAIChatModel:
             "Get your API key from https://openrouter.ai/keys"
         )
 
-    resolved_model = model_name or os.getenv(
-        "OPENROUTER_MODEL", DEFAULT_OPENROUTER_MODEL
+    config = OpenRouterConfig.from_environment(model_name)
+    logger.debug(
+        "Initializing OpenRouter model: %s (settings: %s)",
+        config.model,
+        {k: v for k, v in config.settings_kwargs.items() if k != "extra_headers"},
     )
-    logger.debug(f"Initializing OpenRouter model: {resolved_model}")
 
-    headers: dict[str, str] = {}
-    http_referer = os.getenv("OPENROUTER_HTTP_REFERER")
-    if http_referer:
-        headers["HTTP-Referer"] = http_referer
-
-    app_title = os.getenv("OPENROUTER_APP_TITLE")
-    if app_title:
-        headers["X-Title"] = app_title
-
-    temperature = _get_float_from_env("OPENROUTER_TEMPERATURE")
-    if temperature is None:
-        temperature = DEFAULT_TEMPERATURE
-
-    top_p = _get_float_from_env("OPENROUTER_TOP_P")
-
-    settings_kwargs: dict[str, Any] = {"temperature": temperature}
-    if top_p is not None:
-        settings_kwargs["top_p"] = top_p
-    if headers:
-        settings_kwargs["extra_headers"] = headers
-
-    settings = ModelSettings(**settings_kwargs)
+    settings = ModelSettings(**config.settings_kwargs)
 
     return OpenAIChatModel(
-        resolved_model,
+        config.model,
         provider=OpenAIProvider(
             base_url="https://openrouter.ai/api/v1",
             api_key=api_key,
@@ -114,33 +198,34 @@ def get_openrouter_model(model_name: str | None = None) -> OpenAIChatModel:
 
 
 # System prompts
-TECHNICAL_REVIEW_PROMPT = """You are the **technical accuracy reviewer** for bilingual interview-preparation notes.
+TECHNICAL_REVIEW_PROMPT = """You are the **technical accuracy reviewer** for bilingual Obsidian interview notes.
 
-PRIMARY GOAL
-- Confirm every technical statement, code sample, algorithm analysis, and terminology usage is factually correct.
-- Apply the smallest possible change set to fix inaccuracies while preserving author voice and formatting.
+REFERENCE MATERIAL (non-exhaustive):
+- 00-Administration/AI-Agents/AGENT-CHECKLIST.md — vault compliance rules.
+- 00-Administration/AI-Agents/NOTE-REVIEW-PROMPT.md — review workflow expectations.
+
+PRIMARY GOALS
+- Validate every technical statement, algorithm explanation, complexity analysis, and code example for factual accuracy.
+- Keep changes surgical and respect the existing formatting, bilingual order (RU first), and author voice.
 
 REVIEW PROCEDURE
-1. Read the entire note (including RU/EN sections) to understand intent.
-2. Verify:
-   - Explanations match accepted computer science knowledge.
-   - Code snippets compile/run conceptually and solve the stated task.
-   - Big-O or resource analyses are mathematically sound.
-   - Terminology is used precisely in both languages.
-3. Compare EN/RU sections for semantic alignment when edits are required.
-4. Only edit text that is technically incorrect, incomplete, or misleading.
+1. Read the entire note (RU + EN) to understand scope, question, and solution.
+2. Cross-check against standard CS/Android/system design knowledge and the vault rules above.
+3. Confirm blockquoted questions, YAML integrity, and section ordering remain intact (do not edit YAML fields).
+4. When an issue is found, update the minimal fragment in **both languages** so they stay semantically aligned.
+5. If correctness cannot be confirmed with high confidence, flag the concern instead of guessing.
 
 NEVER DO
-- Modify YAML frontmatter or metadata formatting.
-- Reorder headings, lists, or sections that are already valid.
-- Introduce new concepts, references, or files that are not in the source note.
-- Paraphrase correct passages or rewrite entire paragraphs without a technical reason.
+- Modify or regenerate YAML frontmatter, aliases, tags, or metadata formatting.
+- Reorder headings, lists, code blocks, or sections that already follow vault conventions.
+- Introduce new references, concepts, or files that are absent from the original note.
+- Rewrite large sections merely for style; only change content when technically necessary.
 
 EDITING RULES
-- Make surgical edits in-place; keep unaffected surrounding text identical.
-- Update both language sections when a change is required for accuracy.
-- Preserve Markdown syntax, spacing, and bilingual structure.
-- If unsure about correctness, flag the issue in ``issues_found`` rather than guessing.
+- Preserve Markdown syntax, indentation, spacing, wikilinks, and bilingual structure.
+- Keep RU and EN sections technically equivalent after edits.
+- Prefer explicit corrections over vague wording; show the right complexity, edge cases, and terminology.
+- Use ``issues_found`` to list each discrete technical problem (empty when none were found).
 
 OUTPUT FORMAT
 Respond **only** with a JSON object matching ``TechnicalReviewResult``:
@@ -151,14 +236,13 @@ Respond **only** with a JSON object matching ``TechnicalReviewResult``:
   "changes_made": bool,
   "explanation": str
 }
-- ``revised_text`` must contain the full note text, unchanged when no edits are necessary.
-- ``issues_found`` should list precise technical problems that were discovered (empty list if none).
-- ``explanation`` should summarise the review approach and key fixes (or confirm no changes).
+- ``revised_text`` must contain the full note text, identical to the input when no corrections are needed.
+- ``explanation`` summarises the verification steps and key fixes (or explicitly states that no issues were found).
 
 QUALITY BAR
-- Treat ambiguous claims as issues that require clarification.
-- Double-check algorithm complexity, edge cases, and platform specifics before accepting them.
-- Ensure final content in both languages remains aligned and technically rigorous.
+- Treat ambiguous or underspecified claims as issues that must be resolved or flagged.
+- Double-check complexity analysis, edge cases, and platform-specific guidance against senior-level expectations.
+- Ensure the final RU and EN content remains technically rigorous and mutually consistent.
 """
 
 ISSUE_FIX_PROMPT = """You are an expert at fixing formatting and structural issues in Markdown notes.
