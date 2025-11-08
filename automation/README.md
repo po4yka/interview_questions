@@ -28,6 +28,25 @@ cd automation
 pip install -e .
 ```
 
+### Development Installation
+
+To install with development dependencies (testing, linting, type checking):
+
+```bash
+cd automation
+uv sync --extra dev
+
+# Or with pip
+pip install -e ".[dev]"
+```
+
+This includes:
+- **pytest** - Testing framework
+- **pytest-cov** - Code coverage reporting
+- **ruff** - Fast Python linter and formatter
+- **mypy** - Static type checker
+- **types-pyyaml** - Type stubs for PyYAML
+
 ## Quick Start
 
 The automation tools are accessed via a unified `vault` CLI with subcommands:
@@ -318,12 +337,37 @@ vault check-translations
 
 ## Requirements
 
-- Python >= 3.11
-- PyYAML >= 6.0
+### Runtime
+- Python >= 3.11 (3.11, 3.12, 3.13 supported)
+- PyYAML >= 6.0.2
+
+### Build
+- setuptools >= 75.0.0
+- wheel
+
+### Development (Optional)
+- pytest >= 8.0.0
+- pytest-cov >= 5.0.0
+- ruff >= 0.8.0 (linting and formatting)
+- mypy >= 1.13.0 (type checking)
+- types-pyyaml >= 6.0.12 (type stubs)
 
 ## Testing
 
 Tests will be added in the `tests/` directory (future enhancement).
+
+Run linting and type checking:
+
+```bash
+# Format code
+uv run ruff format .
+
+# Lint code
+uv run ruff check .
+
+# Type check
+uv run mypy src/
+```
 
 ## Documentation
 
@@ -334,7 +378,14 @@ Tests will be added in the `tests/` directory (future enhancement).
 
 ## Version History
 
-### 0.3.0 (Current)
+### 0.3.1 (Current)
+- **Updated dependencies**: PyYAML >= 6.0.2, setuptools >= 75.0.0
+- **Python 3.13 support**: Added support for Python 3.13
+- **Development tooling**: Added optional dev dependencies (pytest, ruff, mypy)
+- **Tool configuration**: Added ruff, mypy, and pytest configuration to pyproject.toml
+- **Enhanced build**: Added wheel to build requirements
+
+### 0.3.0
 - **Consolidated CLI**: Single `vault` command with subcommands
 - **Removed duplication**: Eliminated ~400 lines of duplicate code
 - **Shared utilities**: Created `utils/common.py` with shared functions
