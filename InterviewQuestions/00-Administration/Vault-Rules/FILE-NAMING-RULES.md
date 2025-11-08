@@ -687,10 +687,10 @@ q-activity-lifecycle--android--easy.md
 ## References
 
 ### Related Documents
-- **Controlled vocabularies**: `00-Administration/TAXONOMY.md`
-- **Agent instructions**: `00-Administration/AGENTS.md`
-- **Quick checklist**: `00-Administration/AGENT-CHECKLIST.md`
-- **Linking strategy**: `00-Administration/LINKING-STRATEGY.md`
+- **Controlled vocabularies**: `00-Administration/Vault-Rules/TAXONOMY.md`
+- **Agent instructions**: `AGENTS.md`
+- **Quick checklist**: `00-Administration/AI-Agents/AGENT-CHECKLIST.md`
+- **Linking strategy**: `00-Administration/Linking-System/LINKING-STRATEGY.md`
 - **Templates**: `_templates/_tpl-qna.md`, `_tpl-concept.md`, `_tpl-moc.md`
 - **Claude Code setup**: `.claude/README.md`
 - **Cursor AI rules**: `.cursor/rules/`

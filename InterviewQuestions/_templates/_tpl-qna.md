@@ -4,7 +4,7 @@ title: <%- tp.file.title %>
 aliases: []
 
 # Classification
-topic: <%* /* choose one from TAXONOMY.md */ %>
+topic: <%* /* choose one from 00-Administration/Vault-Rules/TAXONOMY.md */ %>
 subtopics: []                  # 0-3; for Android use Android subtopics list]
 question_kind: coding          # coding | theory | system-design | android
 difficulty: easy               # easy | medium | hard

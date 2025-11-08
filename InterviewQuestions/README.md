@@ -8,7 +8,7 @@ A complete, **bilingual (EN/RU)**, personal Obsidian vault for technical intervi
 > **For LLM Agents**:
 > - **Cursor AI**: Rules are in `../.cursorrules` (auto-loaded)
 > - **General agents**: [AGENTS.md](AGENTS.md) for task instructions
-> - **Quick reference**: [AGENT-CHECKLIST.md](AGENT-CHECKLIST.md) for validation
+> - **Quick reference**: [AGENT-CHECKLIST.md](00-Administration/AI-Agents/AGENT-CHECKLIST.md) for validation
 > - **Gemini CLI**: [GEMINI.md](GEMINI.md) for command-line workflows
 
 ---

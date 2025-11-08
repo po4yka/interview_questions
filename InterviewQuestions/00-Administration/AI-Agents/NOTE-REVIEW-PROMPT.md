@@ -61,7 +61,7 @@ VALIDATION PASSED (0 errors, 0 warnings)
 ```
 ✗ ERROR: Invalid topic 'programming'. Must be one of: algorithms, android, kotlin, ...
 ```
-**Fix**: Check TAXONOMY.md for valid topics. Replace with correct value.
+**Fix**: Check Vault-Rules/TAXONOMY.md for valid topics. Replace with correct value.
 
 **Error 3: Question Missing Blockquote**
 ```
@@ -102,7 +102,7 @@ VALIDATION PASSED (0 errors, 0 warnings)
 ✗ ERROR: Invalid Android subtopic 'compose'
   Valid options: ui-compose, ui-state, ui-navigation, ...
 ```
-**Fix**: Check TAXONOMY.md Android subtopics list. Use `ui-compose` not `compose`.
+**Fix**: Check Vault-Rules/TAXONOMY.md Android subtopics list. Use `ui-compose` not `compose`.
 
 **Error 8: Missing Difficulty Tag**
 ```
@@ -139,9 +139,9 @@ When validation fails or issues arise, follow these decision trees:
 Validation failed?
 ├─ Yes → Review validator output
 │   ├─ Missing required field?
-│   │   └─ Add field from TAXONOMY.md → Re-run validation
+│   │   └─ Add field from Vault-Rules/TAXONOMY.md → Re-run validation
 │   ├─ Invalid value?
-│   │   └─ Check TAXONOMY.md → Use valid value → Re-run validation
+│   │   └─ Check Vault-Rules/TAXONOMY.md → Use valid value → Re-run validation
 │   ├─ Syntax error?
 │   │   └─ Fix YAML syntax (no tabs, proper spacing) → Re-run validation
 │   ├─ Formatting error?
@@ -307,7 +307,7 @@ aliases:
   - Example Title
   - Пример названия
 topic: <matches folder mapping below>
-subtopics: [controlled values]       # see TAXONOMY.md
+subtopics: [controlled values]       # see Vault-Rules/TAXONOMY.md
 question_kind: theory | coding | android | system-design   # pick the accurate value
 difficulty: easy | medium | hard
 original_language: en | ru

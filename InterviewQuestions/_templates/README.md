@@ -191,7 +191,7 @@ Choose topic from TAXONOMY.md:
 - `system-design` - System design questions
 - `git` - Git version control
 
-**See**: `/00-Administration/TAXONOMY.md` for complete list
+**See**: `/00-Administration/Vault-Rules/TAXONOMY.md` for complete list
 
 ---
 
@@ -206,7 +206,7 @@ For Android questions, choose 1-3 subtopics from TAXONOMY.md:
 - `testing-unit` - For unit testing
 - `room` - For Room database
 
-**See**: `/00-Administration/TAXONOMY.md` for complete Android subtopics list
+**See**: `/00-Administration/Vault-Rules/TAXONOMY.md` for complete Android subtopics list
 
 ---
 
@@ -377,8 +377,8 @@ Before committing a new file, verify:
 
 ## Additional Resources
 
-- **Taxonomy**: `/00-Administration/TAXONOMY.md` - Complete list of topics and subtopics
-- **File Naming**: `/00-Administration/FILE-NAMING-RULES.md` - Detailed naming rules
+- **Taxonomy**: `/00-Administration/Vault-Rules/TAXONOMY.md` - Complete list of topics and subtopics
+- **File Naming**: `/00-Administration/Vault-Rules/FILE-NAMING-RULES.md` - Detailed naming rules
 - **Existing Files**: Check similar files in target folder for examples
 
 ---

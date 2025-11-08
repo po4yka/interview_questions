@@ -647,9 +647,9 @@ tags: [android/ui-compose, android/lifecycle, compose, difficulty/medium]
 ## References
 
 - **Full vault rules**: `00-Administration/README.md`
-- **Agent instructions**: `00-Administration/AGENTS.md`
-- **Quick checklist**: `00-Administration/AGENT-CHECKLIST.md`
-- **Link health monitoring**: `00-Administration/LINK-HEALTH-DASHBOARD.md`
+- **Agent instructions**: `AGENTS.md`
+- **Quick checklist**: `00-Administration/AI-Agents/AGENT-CHECKLIST.md`
+- **Link health monitoring**: `00-Administration/Linking-System/LINK-HEALTH-DASHBOARD.md`
 - **Templates**: `_templates/_tpl-qna.md`, `_tpl-concept.md`, `_tpl-moc.md`
 - **Cursor AI rules**: `.cursor/rules/` (modern MDC format)
 - **Claude Code**: `.claude/README.md`, `.claude/custom_instructions.md`

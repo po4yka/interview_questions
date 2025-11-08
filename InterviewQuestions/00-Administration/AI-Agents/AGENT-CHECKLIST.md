@@ -5,8 +5,8 @@
 
 **Purpose**: Fast reference checklist for creating and validating vault notes.
 
-**For detailed instructions**: See 00-Administration/AGENTS.md
-**For controlled vocabularies**: See TAXONOMY.md
+**For detailed instructions**: See AGENTS.md
+**For controlled vocabularies**: See Vault-Rules/TAXONOMY.md
 
 **Last Updated**: 2025-10-18
 
@@ -15,7 +15,7 @@
 ## Critical Rules (Always Follow)
 
 -   REQUIRED: Both EN and RU in same file
--   REQUIRED: Exactly ONE topic from TAXONOMY.md
+-   REQUIRED: Exactly ONE topic from Vault-Rules/TAXONOMY.md
 -   REQUIRED: Tags are English-only (Russian in aliases/content only)
 -   REQUIRED: Set status: draft (never reviewed/ready)
 -   REQUIRED: Link to ≥1 MOC and ≥2 related items
@@ -30,7 +30,7 @@
 
 ### 1. Preparation
 
--   [ ] Read TAXONOMY.md for valid `topic` and `subtopics`
+-   [ ] Read Vault-Rules/TAXONOMY.md for valid `topic` and `subtopics`
 -   [ ] Determine correct folder (MUST match `topic`)
 -   [ ] Choose correct template:
     -   Q&A: `_templates/_tpl-qna.md`
@@ -58,7 +58,7 @@
 - [ ] aliases: [EN Title, RU Заголовок] (array with both)
 
 # REQUIRED: Classification
-- [ ] topic: <value> (exactly ONE from TAXONOMY.md)
+- [ ] topic: <value> (exactly ONE from Vault-Rules/TAXONOMY.md)
 - [ ] subtopics: [value1, value2] (1-3 values, Android: controlled list)
 - [ ] question_kind: coding | theory | system-design | android
 - [ ] difficulty: easy | medium | hard
@@ -214,7 +214,7 @@ tags: [leetcode, массивы]              # FORBIDDEN - Russian in tags
 ```yaml
 # REQUIRED: Controlled subtopics
 - [ ] subtopics: [value1, value2, value3]
-      MUST choose from Android subtopics list in TAXONOMY.md
+      MUST choose from Android subtopics list in Vault-Rules/TAXONOMY.md
       Examples: ui-compose, lifecycle, coroutines, room, testing-unit, etc.
 
 # REQUIRED: Mirror to tags
@@ -276,7 +276,7 @@ moc: moc-android
 ### Metadata Quality
 
 -   [ ] All required YAML fields present
--   [ ] topic is valid (from TAXONOMY.md)
+-   [ ] topic is valid (from Vault-Rules/TAXONOMY.md)
 -   [ ] subtopics are valid (Android: from Android list)
 -   [ ] difficulty is easy|medium|hard
 -   [ ] status is draft (NEVER reviewed/ready for agents)
@@ -509,20 +509,20 @@ tags: [android/ui-compose, android/ui-state, compose, difficulty/medium]
 
 ## When Uncertain
 
-1. **Check TAXONOMY.md** for valid topic/subtopic/difficulty values
+1. **Check Vault-Rules/TAXONOMY.md** for valid topic/subtopic/difficulty values
 2. **Check templates** in `_templates/` for correct structure
 3. **Set status: draft** and let human decide
 4. **Ask the user** if requirements are ambiguous
-5. **Review 00-Administration/AGENTS.md** for detailed instructions
+5. **Review AGENTS.md** for detailed instructions
 
 ---
 
 ## References
 
--   **Controlled vocabularies**: `00-Administration/TAXONOMY.md`
--   **Detailed agent instructions**: `00-Administration/AGENTS.md`
+-   **Controlled vocabularies**: `00-Administration/Vault-Rules/TAXONOMY.md`
+-   **Detailed agent instructions**: `AGENTS.md`
 -   **Full vault rules**: `00-Administration/README.md`
--   **Link health dashboard**: `00-Administration/LINK-HEALTH-DASHBOARD.md`
+-   **Link health dashboard**: `00-Administration/Linking-System/LINK-HEALTH-DASHBOARD.md`
 -   **Templates**: `_templates/_tpl-qna.md`, `_tpl-concept.md`, `_tpl-moc.md`
 -   **Claude Code setup**: `.claude/README.md`, `.claude/custom_instructions.md`
 -   **Claude Code commands**: `.claude/commands/` (create-qna, validate, translate, etc.)

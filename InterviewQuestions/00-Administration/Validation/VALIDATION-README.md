@@ -235,7 +235,7 @@ source .venv/bin/activate
 
 ### "TAXONOMY.md Not found"
 
-Run from vault root directory or check path to `00-Administration/TAXONOMY.md`.
+Run from vault root directory or check path to `00-Administration/Vault-Rules/TAXONOMY.md`.
 
 ### "Invalid YAML frontmatter"
 
@@ -299,9 +299,9 @@ To add new validation rules:
 
 ## Support
 
-- **Documentation**: `00-Administration/NOTE-REVIEW-PROMPT.md`
-- **Taxonomy**: `00-Administration/TAXONOMY.md`
-- **Rules**: `00-Administration/AGENTS.md`
+- **Documentation**: `00-Administration/AI-Agents/NOTE-REVIEW-PROMPT.md`
+- **Taxonomy**: `00-Administration/Vault-Rules/TAXONOMY.md`
+- **Rules**: `AGENTS.md`
 - **Issues**: Report in vault documentation
 
 ---

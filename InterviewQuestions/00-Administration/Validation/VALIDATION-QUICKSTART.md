@@ -57,6 +57,6 @@ uv run --project utils python -m utils.validate_note 70-Kotlin/ --quiet
 
 ## See Also
 
-- Full docs: `VALIDATION-README.md`
-- Review prompt: `00-Administration/NOTE-REVIEW-PROMPT.md`
-- Taxonomy: `00-Administration/TAXONOMY.md`
+- Full docs: `Validation/VALIDATION-README.md`
+- Review prompt: `00-Administration/AI-Agents/NOTE-REVIEW-PROMPT.md`
+- Taxonomy: `00-Administration/Vault-Rules/TAXONOMY.md`

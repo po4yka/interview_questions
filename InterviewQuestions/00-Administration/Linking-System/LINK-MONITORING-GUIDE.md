@@ -45,7 +45,7 @@ Your vault now has a comprehensive automated link monitoring system built with *
 
 ---
 
-### 3. **LINK-HEALTH-DASHBOARD.md** (Comprehensive Analysis)
+### 3. **Linking-System/LINK-HEALTH-DASHBOARD.md** (Comprehensive Analysis)
 **Location**: `/00-Administration/`
 **Purpose**: Full detailed analysis and action items
 **Usage**: Weekly or after making changes
@@ -78,7 +78,7 @@ Your vault now has a comprehensive automated link monitoring system built with *
 
 ### Weekly Maintenance
 
-1. **Open LINK-HEALTH-DASHBOARD.md**
+1. **Open Linking-System/LINK-HEALTH-DASHBOARD.md**
    - Review overall health score
    - Check "Action Items" section
    - Take screenshot to track progress
@@ -161,7 +161,7 @@ Overall Health = (Link Integrity × 50%) +
 
 **Detection**: Checks all `[[...]]` patterns and verifies target exists
 
-**Priority**: High 
+**Priority**: High
 
 ---
 
@@ -291,7 +291,7 @@ Priority 4: Structure → Enhances quality
 ## Sample Improvement Workflow
 
 ### Week 1: Initial Assessment
-1. Open LINK-HEALTH-DASHBOARD.md
+1. Open Linking-System/LINK-HEALTH-DASHBOARD.md
 2. Take screenshot of health score (e.g., 72%)
 3. Note: 45 broken links, 20 orphans, 30 missing structure
 
@@ -312,7 +312,7 @@ Priority 4: Structure → Enhances quality
 2. Include references in 15 files
 3. New health score: 92% (+7%)
 
-**Result**: 72% → 92% in one month! 
+**Result**: 72% → 92% in one month!
 
 ---
 
@@ -344,7 +344,7 @@ for (let file of files) {
 ## Maintenance Checklist
 
 ### Monthly
-- [ ] Review LINK-HEALTH-DASHBOARD.md
+- [ ] Review Linking-System/LINK-HEALTH-DASHBOARD.md
 - [ ] Take health score screenshot
 - [ ] Fix top 10 broken links
 - [ ] Add 10 cross-references
@@ -364,7 +364,7 @@ for (let file of files) {
 |------|-----------|----------|
 | Quick status | LINK-MONITOR.md | Root |
 | Daily navigation | Homepage.md | Root |
-| Full analysis | LINK-HEALTH-DASHBOARD.md | 00-Administration/ |
+| Full analysis | Linking-System/LINK-HEALTH-DASHBOARD.md | 00-Administration/ |
 | Action plan | BROKEN_LINKS_QUICK_REFERENCE.md | Root |
 | Historical data | LINK_ANALYSIS_REPORT.md | Root |
 

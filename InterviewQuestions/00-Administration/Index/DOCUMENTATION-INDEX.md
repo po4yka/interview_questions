@@ -22,7 +22,7 @@
 
 ### For Users
 
-**1. LM-STUDIO-QUICKSTART.md**
+**1. AI-Integration/LM-STUDIO-QUICKSTART.md**
 - Quick setup for LM Studio integration
 - Your Qwen3-VL-30B configuration
 - Essential commands for translation
@@ -34,7 +34,7 @@
 - Quick reference
 - **Audience**: Daily users
 
-**3. VALIDATION-README.md**
+**3. Validation/VALIDATION-README.md**
 - Complete validation system documentation
 - All available options and flags
 - Advanced usage patterns
@@ -139,8 +139,8 @@
 
 | Document | Purpose | Audience |
 |----------|---------|----------|
-| VALIDATION-QUICKSTART.md | Quick commands | New users |
-| VALIDATION-README.md | Complete guide | Power users |
+| Validation/VALIDATION-QUICKSTART.md | Quick commands | New users |
+| Validation/VALIDATION-README.md | Complete guide | Power users |
 
 ---
 
@@ -148,10 +148,10 @@
 
 ```
 Start Here
-    ├── LM-STUDIO-QUICKSTART.md (Setup)
+    ├── AI-Integration/LM-STUDIO-QUICKSTART.md (Setup)
     │
-    ├── VALIDATION-QUICKSTART.md (Basic usage)
-    │   └── VALIDATION-README.md (Advanced usage)
+    ├── Validation/VALIDATION-QUICKSTART.md (Basic usage)
+    │   └── Validation/VALIDATION-README.md (Advanced usage)
     │
     ├── BILINGUAL-COVERAGE-FINAL-REPORT.md (Current status) ⭐
     │   ├── FULL-VAULT-VALIDATION-REPORT.md (Details)
@@ -272,8 +272,8 @@ The following documents have been superseded by current reports:
 → See **TRANSLATION-QUALITY-VALIDATION.md** (Score: 94/100)
 
 **Q: What commands are available?**
-→ See **VALIDATION-QUICKSTART.md** for basics
-→ See **VALIDATION-README.md** for complete reference
+→ See **Validation/VALIDATION-QUICKSTART.md** for basics
+→ See **Validation/VALIDATION-README.md** for complete reference
 
 **Q: How was the system built?**
 → See **FINAL-IMPLEMENTATION-STATUS.md**

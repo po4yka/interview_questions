@@ -20,16 +20,16 @@ Claude Code automatically loads custom instructions from `.claude/custom_instruc
 - Bilingual (EN/RU) vault structure
 - YAML frontmatter requirements
 - File naming conventions
-- Controlled vocabularies from TAXONOMY.md
+- Controlled vocabularies from Vault-Rules/TAXONOMY.md
 - Linking requirements
 - No emoji rule
 
 **Key Files**:
-- **Full rules**: `00-Administration/AGENTS.md`
+- **Full rules**: `AGENTS.md`
 - **Quick checklist**: `00-Administration/AGENT-CHECKLIST.md`
-- **Controlled vocabularies**: `00-Administration/TAXONOMY.md`
-- **File naming rules**: `00-Administration/FILE-NAMING-RULES.md`
-- **Linking strategy**: `00-Administration/LINKING-STRATEGY.md`
+- **Controlled vocabularies**: `00-Administration/Vault-Rules/TAXONOMY.md`
+- **File naming rules**: `00-Administration/Vault-Rules/FILE-NAMING-RULES.md`
+- **Linking strategy**: `00-Administration/Linking-System/LINKING-STRATEGY.md`
 - **Templates**: `_templates/_tpl-qna.md`, `_tpl-concept.md`, `_tpl-moc.md`
 - **Claude Code setup**: `.claude/README.md`
 - **Slash commands**: `.claude/commands/*.md`
@@ -369,7 +369,7 @@ moc-kotlin.md
 moc-algorithms.md
 ```
 
-**See**: `00-Administration/FILE-NAMING-RULES.md` for complete rules
+**See**: `00-Administration/Vault-Rules/FILE-NAMING-RULES.md` for complete rules
 
 ---
 
@@ -377,7 +377,7 @@ moc-algorithms.md
 
 ### Topics (Choose Exactly ONE)
 
-**CRITICAL**: MUST match value from `00-Administration/TAXONOMY.md`
+**CRITICAL**: MUST match value from `00-Administration/Vault-Rules/TAXONOMY.md`
 
 ```yaml
 # Core Technical
@@ -408,7 +408,7 @@ language_tags: [en] | [ru] | [en, ru]
 status: draft | reviewed | ready | retired  # AI uses draft only
 ```
 
-**See**: `00-Administration/TAXONOMY.md` for complete lists
+**See**: `00-Administration/Vault-Rules/TAXONOMY.md` for complete lists
 
 ---
 
@@ -444,7 +444,7 @@ testing-unit, testing-instrumented, testing-ui,
 gradle, build-variants, dependency-management
 ```
 
-**See**: `00-Administration/TAXONOMY.md` for complete Android subtopics list
+**See**: `00-Administration/Vault-Rules/TAXONOMY.md` for complete Android subtopics list
 
 ---
 
@@ -726,7 +726,7 @@ q-coroutine-basics--kotlin--easy.md
 ### Check Vault Health
 Use the link health dashboard in Obsidian:
 ```
-Open: 00-Administration/LINK-HEALTH-DASHBOARD.md
+Open: 00-Administration/Linking-System/LINK-HEALTH-DASHBOARD.md
 ```
 
 This dashboard shows:
@@ -812,12 +812,12 @@ Similar Kotlin note: 70-Kotlin/q-coroutine-basics--kotlin--easy.md
 ## Resources
 
 ### Vault Documentation
-- **Agent instructions**: `00-Administration/AGENTS.md`
+- **Agent instructions**: `AGENTS.md`
 - **Quick checklist**: `00-Administration/AGENT-CHECKLIST.md`
-- **Controlled vocabularies**: `00-Administration/TAXONOMY.md`
-- **File naming rules**: `00-Administration/FILE-NAMING-RULES.md`
-- **Linking strategy**: `00-Administration/LINKING-STRATEGY.md`
-- **Link health**: `00-Administration/LINK-HEALTH-DASHBOARD.md`
+- **Controlled vocabularies**: `00-Administration/Vault-Rules/TAXONOMY.md`
+- **File naming rules**: `00-Administration/Vault-Rules/FILE-NAMING-RULES.md`
+- **Linking strategy**: `00-Administration/Linking-System/LINKING-STRATEGY.md`
+- **Link health**: `00-Administration/Linking-System/LINK-HEALTH-DASHBOARD.md`
 
 ### Templates
 - **Q&A template**: `_templates/_tpl-qna.md`
@@ -920,7 +920,7 @@ Claude Code is configured to work seamlessly with this vault:
 - No emoji in notes
 - Validate against TAXONOMY.md
 
-**For Help**: Check `.claude/README.md` or `00-Administration/AGENTS.md`
+**For Help**: Check `.claude/README.md` or `AGENTS.md`
 
 ---
 

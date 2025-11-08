@@ -371,7 +371,7 @@ Use LINK-HEALTH-DASHBOARD.md to:
 
 ### Key Metrics Dashboard
 
-Track progress using: `00-Administration/LINK-HEALTH-DASHBOARD.md`
+Track progress using: `00-Administration/Linking-System/LINK-HEALTH-DASHBOARD.md`
 
 ### Current Metrics (2025-10-18)
 
@@ -409,7 +409,7 @@ Track progress using: `00-Administration/LINK-HEALTH-DASHBOARD.md`
 
 ### Immediate Actions (Week 1)
 1. **Run Link Health Dashboard**
-   - Open `00-Administration/LINK-HEALTH-DASHBOARD.md` in Obsidian
+   - Open `00-Administration/Linking-System/LINK-HEALTH-DASHBOARD.md` in Obsidian
    - Review current orphan files list
    - Identify highest-priority orphans
 
@@ -496,10 +496,10 @@ Track progress using: `00-Administration/LINK-HEALTH-DASHBOARD.md`
 ## Resources
 
 ### Related Documents
-- `00-Administration/LINK-HEALTH-DASHBOARD.md` - Live health metrics (use this!)
-- `00-Administration/TAXONOMY.md` - Controlled vocabularies
-- `00-Administration/AGENTS.md` - Agent instructions
-- `00-Administration/AGENT-CHECKLIST.md` - Quick reference
+- `00-Administration/Linking-System/LINK-HEALTH-DASHBOARD.md` - Live health metrics (use this!)
+- `00-Administration/Vault-Rules/TAXONOMY.md` - Controlled vocabularies
+- `AGENTS.md` - Agent instructions
+- `00-Administration/AI-Agents/AGENT-CHECKLIST.md` - Quick reference
 - `.claude/README.md` - Claude Code setup guide
 
 ### Vault Statistics

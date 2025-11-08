@@ -117,7 +117,7 @@ if (statusRows.length) {
 
 ### Documentation
 - [Vault Documentation](00-Administration/README.md)
-- [File Naming Rules](00-Administration/FILE-NAMING-RULES.md)
+- [File Naming Rules](00-Administration/Vault-Rules/FILE-NAMING-RULES.md)
 - [Import Progress Report](00-Administration/SOURCE-IMPORT-PROGRESS.md)
 
 ### Templates
