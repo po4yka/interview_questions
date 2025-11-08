@@ -8,7 +8,7 @@ from typing import Any
 from loguru import logger
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent
-from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.models.openai import ModelSettings, OpenAIChatModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
 
@@ -34,11 +34,32 @@ class IssueFixResult(BaseModel):
     changes_made: bool = Field(description="Whether any changes were made")
 
 
-def get_openrouter_model(model_name: str = "anthropic/claude-sonnet-4") -> OpenAIChatModel:
+DEFAULT_OPENROUTER_MODEL = "anthropic/claude-sonnet-4"
+DEFAULT_TEMPERATURE = 0.2
+
+
+def _get_float_from_env(var_name: str) -> float | None:
+    """Return a float value from the environment if it can be parsed."""
+
+    raw_value = os.getenv(var_name)
+    if raw_value is None:
+        return None
+
+    try:
+        return float(raw_value)
+    except ValueError:
+        logger.warning(
+            "Invalid float value for %s: %s — ignoring", var_name, raw_value
+        )
+        return None
+
+
+def get_openrouter_model(model_name: str | None = None) -> OpenAIChatModel:
     """Get an OpenRouter model configured for use with PydanticAI.
 
     Args:
-        model_name: The model identifier (default: Polaris Alpha via Claude Sonnet 4)
+        model_name: Optional model identifier override. If omitted, uses the
+            ``OPENROUTER_MODEL`` environment variable or the default model.
 
     Returns:
         Configured OpenAIChatModel instance
@@ -54,49 +75,91 @@ def get_openrouter_model(model_name: str = "anthropic/claude-sonnet-4") -> OpenA
             "Get your API key from https://openrouter.ai/keys"
         )
 
-    logger.debug(f"Initializing OpenRouter model: {model_name}")
+    resolved_model = model_name or os.getenv(
+        "OPENROUTER_MODEL", DEFAULT_OPENROUTER_MODEL
+    )
+    logger.debug(f"Initializing OpenRouter model: {resolved_model}")
+
+    headers: dict[str, str] = {}
+    http_referer = os.getenv("OPENROUTER_HTTP_REFERER")
+    if http_referer:
+        headers["HTTP-Referer"] = http_referer
+
+    app_title = os.getenv("OPENROUTER_APP_TITLE")
+    if app_title:
+        headers["X-Title"] = app_title
+
+    temperature = _get_float_from_env("OPENROUTER_TEMPERATURE")
+    if temperature is None:
+        temperature = DEFAULT_TEMPERATURE
+
+    top_p = _get_float_from_env("OPENROUTER_TOP_P")
+
+    settings_kwargs: dict[str, Any] = {"temperature": temperature}
+    if top_p is not None:
+        settings_kwargs["top_p"] = top_p
+    if headers:
+        settings_kwargs["extra_headers"] = headers
+
+    settings = ModelSettings(**settings_kwargs)
+
     return OpenAIChatModel(
-        model_name,
+        resolved_model,
         provider=OpenAIProvider(
             base_url="https://openrouter.ai/api/v1",
             api_key=api_key,
         ),
+        settings=settings,
     )
 
 
 # System prompts
-TECHNICAL_REVIEW_PROMPT = """You are an expert technical reviewer for interview preparation notes.
+TECHNICAL_REVIEW_PROMPT = """You are the **technical accuracy reviewer** for bilingual interview-preparation notes.
 
-Your task is to review notes for technical accuracy and factual correctness.
+PRIMARY GOAL
+- Confirm every technical statement, code sample, algorithm analysis, and terminology usage is factually correct.
+- Apply the smallest possible change set to fix inaccuracies while preserving author voice and formatting.
 
-FOCUS ON:
-- Technical accuracy of explanations
-- Correctness of code examples
-- Logical consistency
-- Completeness of technical content
-- Accuracy of complexity analysis (Big-O notation)
+REVIEW PROCEDURE
+1. Read the entire note (including RU/EN sections) to understand intent.
+2. Verify:
+   - Explanations match accepted computer science knowledge.
+   - Code snippets compile/run conceptually and solve the stated task.
+   - Big-O or resource analyses are mathematically sound.
+   - Terminology is used precisely in both languages.
+3. Compare EN/RU sections for semantic alignment when edits are required.
+4. Only edit text that is technically incorrect, incomplete, or misleading.
 
-DO NOT:
-- Change formatting or structure (this will be handled separately)
-- Modify YAML frontmatter
-- Change language-specific sections
-- Alter bilingual structure (EN/RU sections)
-- Rewrite entire sections unnecessarily
+NEVER DO
+- Modify YAML frontmatter or metadata formatting.
+- Reorder headings, lists, or sections that are already valid.
+- Introduce new concepts, references, or files that are not in the source note.
+- Paraphrase correct passages or rewrite entire paragraphs without a technical reason.
 
-CRITICAL: Make ONLY targeted, surgical changes to fix technical issues.
-- Change ONLY the specific words, lines, or code that are incorrect
-- DO NOT rewrite entire paragraphs if only a word or phrase needs fixing
-- DO NOT restructure sections that are already correct
-- Preserve all other content exactly as-is
+EDITING RULES
+- Make surgical edits in-place; keep unaffected surrounding text identical.
+- Update both language sections when a change is required for accuracy.
+- Preserve Markdown syntax, spacing, and bilingual structure.
+- If unsure about correctness, flag the issue in ``issues_found`` rather than guessing.
 
-If you find technical issues, correct them while preserving:
-- The original structure and formatting
-- All YAML frontmatter
-- All markdown headings and sections
-- Bilingual content organization
-- All surrounding content that is already correct
+OUTPUT FORMAT
+Respond **only** with a JSON object matching ``TechnicalReviewResult``:
+{
+  "has_issues": bool,
+  "issues_found": list[str],
+  "revised_text": str,
+  "changes_made": bool,
+  "explanation": str
+}
+- ``revised_text`` must contain the full note text, unchanged when no edits are necessary.
+- ``issues_found`` should list precise technical problems that were discovered (empty list if none).
+- ``explanation`` should summarise the review approach and key fixes (or confirm no changes).
 
-Return the corrected text with clear explanation of ONLY the specific changes made."""
+QUALITY BAR
+- Treat ambiguous claims as issues that require clarification.
+- Double-check algorithm complexity, edge cases, and platform specifics before accepting them.
+- Ensure final content in both languages remains aligned and technically rigorous.
+"""
 
 ISSUE_FIX_PROMPT = """You are an expert at fixing formatting and structural issues in Markdown notes.
 
@@ -173,15 +236,14 @@ async def run_technical_review(
     logger.debug(f"Starting technical review for: {note_path}")
     logger.debug(f"Note length: {len(note_text)} characters")
 
-    prompt = f"""Review this interview question note for technical accuracy.
-
-Note path: {note_path}
-
-Note content:
-{note_text}
-
-Check for technical correctness, code accuracy, and completeness.
-If you find issues, fix them while preserving structure and formatting."""
+    prompt = (
+        "Review the following interview question note for technical accuracy, "
+        "code correctness, and completeness while preserving formatting.\n\n"
+        f"Note path: {note_path}\n\n"
+        "```markdown\n"
+        f"{note_text}\n"
+        "```"
+    )
 
     try:
         agent = get_technical_review_agent()
