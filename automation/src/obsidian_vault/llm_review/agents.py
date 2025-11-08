@@ -36,6 +36,22 @@ class IssueFixResult(BaseModel):
     changes_made: bool = Field(description="Whether any changes were made")
 
 
+class MetadataSanityResult(BaseModel):
+    """Result of metadata/frontmatter sanity check."""
+
+    has_issues: bool = Field(description="Whether metadata issues were found")
+    issues_found: list[str] = Field(
+        default_factory=list,
+        description="List of metadata sanity issues (topic consistency, timestamp freshness, bilingual ordering)",
+    )
+    warnings: list[str] = Field(
+        default_factory=list, description="Non-critical warnings about metadata"
+    )
+    suggestions: list[str] = Field(
+        default_factory=list, description="Suggestions for improvement"
+    )
+
+
 DEFAULT_OPENROUTER_MODEL = "anthropic/claude-sonnet-4"
 DEFAULT_TEMPERATURE = 0.2
 DEFAULT_TIMEOUT = 60.0
@@ -283,6 +299,63 @@ CRITICAL RULES (from vault documentation):
 
 Fix each issue precisely with minimal changes and return the corrected text."""
 
+METADATA_SANITY_PROMPT = """You are a metadata/frontmatter sanity checker for Obsidian interview notes.
+
+Your job is to perform a LIGHTWEIGHT, HIGH-LEVEL sanity check on YAML frontmatter and document structure BEFORE detailed validators run. Focus on issues that would cause validator churn or are easy to spot early.
+
+WHAT TO CHECK:
+
+1. **YAML Structural Integrity**:
+   - Is YAML frontmatter present and parseable?
+   - Are required fields present (id, title, topic, difficulty, moc, related, tags)?
+   - Are field types correct (lists vs strings, no nested objects where not expected)?
+
+2. **Topic Consistency**:
+   - Does the `topic` field match the file's folder location?
+   - Is the MOC field appropriate for the topic?
+   - Example: topic=kotlin should be in 70-Kotlin/ folder with moc=moc-kotlin
+
+3. **Timestamp Freshness**:
+   - Are `created` and `updated` dates present?
+   - Is `updated` date >= `created` date?
+   - Are dates in the future (likely error)?
+   - Format check: YYYY-MM-DD
+
+4. **Bilingual Structure Ordering**:
+   - Does the note have both EN and RU sections?
+   - Are sections in the expected order?
+   - Required sections present: "# Question (EN)", "# Вопрос (RU)", "## Answer (EN)", "## Ответ (RU)"
+
+5. **Common Formatting Issues**:
+   - Brackets in YAML fields that shouldn't have them (moc field)?
+   - Double brackets in YAML arrays (related field)?
+   - Russian characters in tags (should be English only)?
+
+WHAT NOT TO CHECK:
+- Detailed content validation (leave for validators)
+- Technical accuracy (leave for technical review)
+- Specific tag requirements beyond English-only
+- Link validity
+- Code correctness
+
+OUTPUT FORMAT:
+Return a JSON object matching `MetadataSanityResult`:
+{
+  "has_issues": bool,
+  "issues_found": list[str],  // Critical/error-level issues
+  "warnings": list[str],      // Non-critical warnings
+  "suggestions": list[str]    // Optional improvements
+}
+
+Be concise and specific. Each issue should be actionable and help guide the fix agent.
+Examples:
+- "YAML field 'moc' contains brackets: '[[moc-kotlin]]' (should be 'moc-kotlin')"
+- "Topic 'kotlin' but file in '40-Android/' folder (should be '70-Kotlin/')"
+- "Missing required section: '# Question (EN)'"
+- "Date 'updated' (2024-01-01) is earlier than 'created' (2025-01-01)"
+- "Tags contain Russian characters: ['корутины'] (should be English only)"
+"""
+
 
 def get_technical_review_agent() -> Agent:
     """Get the technical review agent (lazy initialization)."""
@@ -301,6 +374,16 @@ def get_issue_fix_agent() -> Agent:
         model=get_openrouter_model(),
         output_type=IssueFixResult,
         system_prompt=ISSUE_FIX_PROMPT,
+    )
+
+
+def get_metadata_sanity_agent() -> Agent:
+    """Get the metadata sanity check agent (lazy initialization)."""
+    logger.debug("Creating metadata sanity check agent")
+    return Agent(
+        model=get_openrouter_model(),
+        output_type=MetadataSanityResult,
+        system_prompt=METADATA_SANITY_PROMPT,
     )
 
 
@@ -402,4 +485,53 @@ Return the corrected text."""
         return result.output
     except Exception as e:
         logger.error(f"Issue fixing failed for {note_path}: {e}")
+        raise
+
+
+async def run_metadata_sanity_check(
+    note_text: str, note_path: str, **kwargs: Any
+) -> MetadataSanityResult:
+    """Run metadata/frontmatter sanity check on a note.
+
+    Args:
+        note_text: The note content to check
+        note_path: Path to the note (for context)
+        **kwargs: Additional context
+
+    Returns:
+        MetadataSanityResult with findings
+    """
+    logger.debug(f"Starting metadata sanity check for: {note_path}")
+    logger.debug(f"Note length: {len(note_text)} characters")
+
+    prompt = (
+        "Perform a high-level metadata/frontmatter sanity check on this note. "
+        "Focus on YAML structure, topic consistency, timestamps, and bilingual sections.\n\n"
+        f"Note path: {note_path}\n\n"
+        "```markdown\n"
+        f"{note_text}\n"
+        "```"
+    )
+
+    try:
+        agent = get_metadata_sanity_agent()
+        logger.debug("Running metadata sanity agent...")
+        result = await agent.run(prompt)
+
+        logger.debug(
+            f"Metadata sanity check complete - "
+            f"has_issues: {result.output.has_issues}, "
+            f"issues_found: {len(result.output.issues_found)}, "
+            f"warnings: {len(result.output.warnings)}, "
+            f"suggestions: {len(result.output.suggestions)}"
+        )
+
+        if result.output.has_issues:
+            logger.warning(
+                f"Metadata sanity check found {len(result.output.issues_found)} issue(s)"
+            )
+
+        return result.output
+    except Exception as e:
+        logger.error(f"Metadata sanity check failed for {note_path}: {e}")
         raise
