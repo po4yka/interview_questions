@@ -1,0 +1,191 @@
+name: Validate Notes
+
+on:
+  pull_request:
+    paths:
+      - 'InterviewQuestions/**/*.md'
+      - 'automation/**'
+      - '.github/workflows/validate-notes.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'InterviewQuestions/**/*.md'
+      - 'automation/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  validate:
+    name: Validate Changed Notes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Install automation package
+        run: |
+          cd automation
+          uv sync
+
+      - name: Get changed Markdown files
+        id: changed-files
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            BASE_REF="${{ github.event.pull_request.base.sha }}"
+          else
+            BASE_REF="HEAD^"
+          fi
+
+          # Get changed .md files in InterviewQuestions/
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMR $BASE_REF HEAD | grep 'InterviewQuestions/.*\.md$' || echo "")
+
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No Markdown files changed"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+          else
+            echo "Changed files:"
+            echo "$CHANGED_FILES"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+
+            # Save to file for validation
+            echo "$CHANGED_FILES" > changed_files.txt
+          fi
+
+      - name: Validate changed notes
+        if: steps.changed-files.outputs.has_changes == 'true'
+        run: |
+          cd automation
+
+          # Collect validation errors
+          VALIDATION_FAILED=0
+
+          # Validate each changed file
+          while IFS= read -r file; do
+            if [ -f "../$file" ]; then
+              echo "Validating: $file"
+              uv run vault validate "../$file" || VALIDATION_FAILED=1
+            fi
+          done < ../changed_files.txt
+
+          # Exit with error if any validation failed
+          if [ $VALIDATION_FAILED -eq 1 ]; then
+            echo "ERROR: Validation failed for one or more files"
+            exit 1
+          fi
+
+      - name: Generate validation report for changed files
+        if: steps.changed-files.outputs.has_changes == 'true'
+        run: |
+          cd automation
+
+          # Create a temporary directory for changed file validation
+          mkdir -p ../changed-notes-temp
+
+          # Copy changed files to temp directory preserving structure
+          while IFS= read -r file; do
+            if [ -f "../$file" ]; then
+              mkdir -p "../changed-notes-temp/$(dirname "$file")"
+              cp "../$file" "../changed-notes-temp/$file"
+            fi
+          done < ../changed_files.txt
+
+          # Generate validation report only for changed files
+          # Note: This generates a focused report on changed files only
+          echo "# Validation Report - Changed Files" > ../validation-report.md
+          echo "" >> ../validation-report.md
+          echo "**Files validated**: $(wc -l < ../changed_files.txt)" >> ../validation-report.md
+          echo "" >> ../validation-report.md
+
+          # Validate each file and append to report
+          while IFS= read -r file; do
+            if [ -f "../$file" ]; then
+              echo "## $file" >> ../validation-report.md
+              echo "" >> ../validation-report.md
+              uv run vault validate "../$file" >> ../validation-report.md 2>&1 || true
+              echo "" >> ../validation-report.md
+              echo "---" >> ../validation-report.md
+              echo "" >> ../validation-report.md
+            fi
+          done < ../changed_files.txt
+
+      - name: Upload validation report
+        if: steps.changed-files.outputs.has_changes == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report
+          path: validation-report.md
+          retention-days: 30
+
+      - name: Comment PR with validation results
+        if: github.event_name == 'pull_request' && steps.changed-files.outputs.has_changes == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const fs = require('fs');
+
+            // Read validation report
+            let report = '';
+            try {
+              report = fs.readFileSync('validation-report.md', 'utf8');
+            } catch (e) {
+              report = 'Validation report not found';
+            }
+
+            // Create comment body
+            const body = `## Validation Results
+
+            ${report}
+
+            <details>
+            <summary>Validation Details</summary>
+
+            - **Workflow**: ${{ github.workflow }}
+            - **Run**: [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            - **Commit**: ${{ github.sha }}
+
+            </details>`;
+
+            // Post comment
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: body
+            });
+
+      - name: Validation summary
+        if: steps.changed-files.outputs.has_changes == 'true'
+        run: |
+          echo "### Validation Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ -f "validation-report.md" ]; then
+            cat validation-report.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "All validations passed!" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: No changes detected
+        if: steps.changed-files.outputs.has_changes == 'false'
+        run: |
+          echo "No Markdown files changed - skipping validation"
+          echo "### No Changes Detected" >> $GITHUB_STEP_SUMMARY
+          echo "No Markdown files were changed in this PR." >> $GITHUB_STEP_SUMMARY

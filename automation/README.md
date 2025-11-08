@@ -11,8 +11,11 @@ This package provides a unified, professional automation framework for:
 - **Reporting**: Missing translations and quality reports
 - **Graph Analytics**: Link/backlink graph analysis, orphan detection, network statistics
 - **Modern CLI**: Beautiful terminal UI with typer + rich (tables, colors, progress bars)
+- **CI/CD Integration**: GitHub Actions workflows for automated validation and reporting
 
 All automation code is now consolidated in a single, well-organized location with proper Python packaging.
+
+**NEW**: GitHub Actions CI/CD system now available! See [../.github/README.md](../.github/README.md) for automated validation, health reporting, and more.
 
 ## Installation
 
@@ -806,6 +809,26 @@ uv run mypy src/
 
 See LICENSE file in repository root.
 
+## CI/CD Integration
+
+The automation package is integrated with GitHub Actions for continuous validation and reporting:
+
+**Workflows**:
+- **Validate Notes** (PR checks) - Validates all changed notes before merge
+- **Vault Health Report** (daily) - Generates comprehensive health reports
+- **Normalize Concepts** (manual) - Standardizes concept frontmatter
+- **Graph Export** (weekly) - Exports vault graph for analysis
+
+**Benefits**:
+- Automated quality checks on every PR
+- Daily health monitoring
+- Historical tracking via separate branches
+- Automatic issue creation for critical problems
+
+**Documentation**: See [../.github/README.md](../.github/README.md) for complete CI/CD documentation.
+
+**Quick Reference**: See [../.github/WORKFLOWS-QUICK-REFERENCE.md](../.github/WORKFLOWS-QUICK-REFERENCE.md) for common tasks.
+
 ## Contributing
 
 When adding new automation:
@@ -819,6 +842,7 @@ When adding new automation:
 4. Update documentation (README and docstrings)
 5. Use type hints
 6. Follow existing code style
+7. Consider CI/CD integration for new features
 
 ## Support
 

@@ -1,0 +1,74 @@
+name: Vault Health Issue
+description: Report vault health issues (broken links, orphans, etc.)
+title: "[Health]: "
+labels: ["vault-health", "automated"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This template is for reporting vault health issues.
+        These are typically auto-created by the daily health workflow.
+
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Health Issue Type
+      description: What type of health issue is this?
+      options:
+        - Broken links
+        - Orphaned notes
+        - Missing translations
+        - Missing MOC links
+        - Missing related links
+        - YAML validation errors
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: affected-files
+    attributes:
+      label: Affected Files
+      description: List the affected files
+      placeholder: |
+        - InterviewQuestions/70-Kotlin/q-example1--kotlin--medium.md
+        - InterviewQuestions/40-Android/q-example2--android--hard.md
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: details
+    attributes:
+      label: Issue Details
+      description: Provide details about the health issue
+      placeholder: |
+        Broken links detected:
+        - [[non-existent-note]]
+        - [[another-missing-note]]
+      render: markdown
+    validations:
+      required: true
+
+  - type: textarea
+    id: report-link
+    attributes:
+      label: Health Report Link
+      description: Link to the full health report (if available)
+      placeholder: https://github.com/YOUR_ORG/YOUR_REPO/tree/reports/vault-reports
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: How critical is this issue?
+      options:
+        - Low (informational)
+        - Medium (should fix)
+        - High (must fix)
+        - Critical (blocking)
+      default: 1
+    validations:
+      required: true
