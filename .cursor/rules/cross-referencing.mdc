@@ -9,8 +9,8 @@ alwaysApply: true
 ## Required Links
 Every Q&A note MUST link to:
 - At least one **Concept note** (`c-*`) in the content body
-- At least one **MOC** (`moc-*`) in the YAML `moc` field
-- Related questions in the YAML `related` field
+- At least one **MOC** (`moc-*`) in the YAML `moc` field (WITHOUT brackets)
+- Related questions in the YAML `related` field (array, WITHOUT double brackets)
 
 ## Link Syntax
 - Use proper Obsidian syntax: `[[note-name]]`

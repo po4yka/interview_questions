@@ -80,10 +80,8 @@ sources:
 
 # Workflow & relations
 status: draft              # draft | reviewed | ready
-moc: [[moc-algorithms]]    # link to Map of Content
-related:                   # optional cross-links
-  - [[c-hash-map]]
-  - [[q-three-sum--algorithms--medium]]
+moc: moc-algorithms        # link to Map of Content (WITHOUT brackets)
+related: [c-hash-map, q-three-sum--algorithms--medium]  # cross-links (array, WITHOUT double brackets)
 
 # Timestamps (ISO8601)
 created: 2025-09-28
@@ -99,6 +97,31 @@ tags: [leetcode, arrays, hash-map, difficulty/easy]
 - `tags` must be English, descriptive, reusable
 - Use namespaces for controlled vocabularies: `difficulty/easy`, `lang/kotlin`, `platform/android`
 - Always update `updated` timestamp when modifying content
+
+## Critical Rules (Always Follow)
+
+### REQUIRED Rules
+
+1. **Both EN and RU in same file** - NEVER split languages into separate files
+2. **Exactly ONE topic** from TAXONOMY.md - NEVER use multiple topics
+3. **English-only tags** - Russian goes in `aliases` and content only
+4. **Status: draft** - ALWAYS use `draft` for AI-created/modified notes
+5. **Link to MOC and concepts** - Every Q&A MUST link to ≥1 MOC and ≥2 related items
+6. **No emoji** - Use text equivalents: REQUIRED, FORBIDDEN, WARNING, NOTE
+7. **Folder matches topic** - File MUST be in folder matching its `topic` field
+
+### FORBIDDEN Rules
+
+- FORBIDDEN: Splitting EN/RU into separate files
+- FORBIDDEN: Russian in tags
+- FORBIDDEN: Multiple topics in `topic` field
+- FORBIDDEN: Setting `status: reviewed` or `status: ready` (only humans can)
+- FORBIDDEN: Brackets in YAML `moc` field
+- FORBIDDEN: Double brackets in YAML `related` field
+- FORBIDDEN: Emoji anywhere in vault notes
+- FORBIDDEN: File in wrong folder (not matching topic)
+
+---
 
 ## Note Body Template (Bilingual Structure)
 
@@ -212,6 +235,22 @@ SORT updated DESC
 - Consider excluding heavy caches from version control
 - Keep `.obsidian` folder to preserve plugin settings
 
+## YAML Format Rules
+
+**CORRECT**:
+```yaml
+moc: moc-algorithms                    # NO brackets
+related: [c-hash-map, c-array]         # Array WITHOUT double brackets
+tags: [leetcode, arrays, difficulty/easy]  # English only
+```
+
+**WRONG**:
+```yaml
+moc: [[moc-algorithms]]                # FORBIDDEN - has brackets
+related: [[c-hash-map]], [[c-array]]   # FORBIDDEN - double brackets
+tags: [leetcode, массивы]              # FORBIDDEN - Russian in tags
+```
+
 ## AI Agent Specific Instructions
 
 **When creating new content:**
@@ -251,3 +290,9 @@ SORT updated DESC
 - Periodically audit and merge near-duplicates (e.g., `hashmap` vs `hash-map`)
 - Use consistent naming patterns
 - Maintain controlled vocabularies with namespaces
+
+## Emoji Rule
+
+**FORBIDDEN**: Do not use emoji anywhere in vault notes or agent-created content. Use text equivalents instead: REQUIRED, FORBIDDEN, WARNING, NOTE.
+
+This rule applies to all content - English, Russian, documentation, and YAML frontmatter. Keep the vault clean and professional.

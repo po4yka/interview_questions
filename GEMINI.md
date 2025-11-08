@@ -82,10 +82,8 @@ sources:
 
 # Workflow & relations
 status: draft              # draft | reviewed | ready
-moc: [[moc-topic]]         # link to Map of Content
-related:                   # cross-references
-  - [[related-note-1]]
-  - [[related-note-2]]
+moc: moc-topic             # link to Map of Content (WITHOUT brackets)
+related: [related-note-1, related-note-2]  # cross-references (array, WITHOUT double brackets)
 
 # Timestamps (ISO8601 format)
 created: 2025-01-XX
@@ -172,6 +170,31 @@ Comprehensive explanation of the solution in English.
 - Include Russian comments only when they add significant value
 - Provide clean, readable code examples
 - Include complexity analysis (Big O notation)
+
+## Critical Rules (Always Follow)
+
+### REQUIRED Rules
+
+1. **Both EN and RU in same file** - NEVER split languages into separate files
+2. **Exactly ONE topic** from TAXONOMY.md - NEVER use multiple topics
+3. **English-only tags** - Russian goes in `aliases` and content only
+4. **Status: draft** - ALWAYS use `draft` for AI-created/modified notes
+5. **Link to MOC and concepts** - Every Q&A MUST link to ≥1 MOC and ≥2 related items
+6. **No emoji** - Use text equivalents: REQUIRED, FORBIDDEN, WARNING, NOTE
+7. **Folder matches topic** - File MUST be in folder matching its `topic` field
+
+### FORBIDDEN Rules
+
+- FORBIDDEN: Splitting EN/RU into separate files
+- FORBIDDEN: Russian in tags
+- FORBIDDEN: Multiple topics in `topic` field
+- FORBIDDEN: Setting `status: reviewed` or `status: ready` (only humans can)
+- FORBIDDEN: Brackets in YAML `moc` field
+- FORBIDDEN: Double brackets in YAML `related` field
+- FORBIDDEN: Emoji anywhere in vault notes
+- FORBIDDEN: File in wrong folder (not matching topic)
+
+---
 
 ## Cross-Reference & Linking Strategy
 
@@ -278,3 +301,25 @@ If you encounter:
 - **Inconsistent tags**: Follow the English-only, namespaced approach
 
 Remember: This is a personal knowledge base designed for interview preparation. Focus on creating high-quality, well-organized content that supports effective learning and review.
+
+## YAML Format Rules
+
+**CORRECT**:
+```yaml
+moc: moc-algorithms                    # NO brackets
+related: [c-hash-map, c-array]         # Array WITHOUT double brackets
+tags: [leetcode, arrays, difficulty/easy]  # English only
+```
+
+**WRONG**:
+```yaml
+moc: [[moc-algorithms]]                # FORBIDDEN - has brackets
+related: [[c-hash-map]], [[c-array]]   # FORBIDDEN - double brackets
+tags: [leetcode, массивы]              # FORBIDDEN - Russian in tags
+```
+
+## Emoji Rule
+
+**FORBIDDEN**: Do not use emoji anywhere in vault notes or agent-created content. Use text equivalents instead: REQUIRED, FORBIDDEN, WARNING, NOTE.
+
+This rule applies to all content - English, Russian, documentation, and YAML frontmatter. Keep the vault clean and professional.

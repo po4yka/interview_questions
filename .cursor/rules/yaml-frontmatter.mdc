@@ -27,8 +27,8 @@ sources: []                # external sources
 
 # Workflow & relations
 status: draft              # draft | reviewed | ready
-moc: [[moc-topic]]         # link to Map of Content
-related: []                # cross-references
+moc: moc-topic             # link to Map of Content (WITHOUT brackets)
+related: [note1, note2]    # cross-references (array, WITHOUT double brackets)
 
 # Timestamps (ISO8601)
 created: 2025-01-XX

@@ -30,3 +30,9 @@ alwaysApply: true
 - Include follow-up questions and edge cases where relevant
 - Provide external references and source links
 - Maintain consistent formatting throughout the vault
+
+## Emoji Rule
+- **FORBIDDEN**: Do not use emoji anywhere in vault notes or agent-created content
+- Use text equivalents instead: REQUIRED, FORBIDDEN, WARNING, NOTE
+- This rule applies to all content - English, Russian, documentation, and YAML frontmatter
+- Keep the vault clean and professional
