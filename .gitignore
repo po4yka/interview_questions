@@ -63,6 +63,123 @@ build/
 *.rar
 *.7z
 
+# AI/ML specific files
+# Model files and checkpoints
+*.ckpt
+*.h5
+*.pb
+*.onnx
+*.pkl
+*.joblib
+*.model
+*.weights
+*.pth
+*.pt
+
+# AI/ML cache and temporary files
+.cache/
+*/cache/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# AI/ML datasets and data files
+data/
+datasets/
+*.csv
+*.jsonl
+*.parquet
+*.feather
+*.hdf5
+
+# AI tool configurations and secrets
+.env
+.env.*
+.env.local
+.env.development
+.env.production
+config.local.*
+settings.local.*
+credentials.*
+*.key
+*.pem
+*.crt
+secrets.*
+*.secret
+api_keys.*
+*.token
+
+# AI tool logs and outputs
+logs/
+*.log
+ai_logs/
+lm_studio_logs/
+validation_reports/
+*.report
+*.output
+
+# LM Studio and AI server files
+lm-studio/
+*.gguf
+models/
+checkpoints/
+
+# AI validation and processing artifacts
+*.validation
+temp/
+.tmp/
+*.tmp
+processing/
+output/
+artifacts/
+
+# Additional Python virtual environments (for AI/ML projects)
+.conda/
+conda/
+miniconda/
+miniforge/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# Additional IDE and editor files
+*.swp
+*.swo
+*~
+.nfs*
+.directory
+.Trash-*
+
+# AI/ML framework specific
+.tensorboard/
+lightning_logs/
+wandb/
+mlruns/
+comet.ml/
+aim/
+.clearml/
+dvc/
+pytorch_lightning/
+ray_results/
+
 # Personal notes and drafts (if any)
 personal/
 private/
