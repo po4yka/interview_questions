@@ -1,6 +1,6 @@
 [project]
 name = "obsidian-vault"
-version = "0.2.0"
+version = "0.3.0"
 description = "Comprehensive automation tools for the Interview Questions Obsidian vault"
 requires-python = ">=3.11"
 dependencies = ["pyyaml>=6.0"]
@@ -17,9 +17,7 @@ classifiers = [
 ]
 
 [project.scripts]
-validate-notes = "obsidian_vault.scripts.validate_note:main"
-normalize-concepts = "obsidian_vault.scripts.normalize_concepts:normalize_concepts"
-list-missing-ru = "obsidian_vault.scripts.list_missing_ru_sections:main"
+vault = "obsidian_vault.cli:main"
 
 [build-system]
 requires = ["setuptools>=67"]

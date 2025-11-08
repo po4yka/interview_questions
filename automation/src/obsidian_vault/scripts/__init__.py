@@ -1,7 +1,7 @@
-"""Executable scripts for vault maintenance and validation."""
+"""Executable scripts for vault maintenance and validation.
 
-__all__ = [
-    "validate_note",
-    "list_missing_ru_sections",
-    "normalize_concepts",
-]
+Note: Individual scripts have been consolidated into the unified CLI (cli.py).
+Use the 'vault' command with subcommands instead.
+"""
+
+__all__ = []

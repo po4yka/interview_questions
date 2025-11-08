@@ -30,30 +30,28 @@ pip install -e .
 
 ## Quick Start
 
-After installation, you can use the command-line tools directly:
+The automation tools are accessed via a unified `vault` CLI with subcommands:
 
 ```bash
+# Show available commands
+uv run --project automation vault --help
+
 # Validate notes
-validate-notes InterviewQuestions/40-Android
+uv run --project automation vault validate InterviewQuestions/40-Android
 
-# Normalize concept notes
-normalize-concepts
+# Normalize concept frontmatter
+uv run --project automation vault normalize
 
-# Find missing Russian translations
-list-missing-ru
+# Find missing translations
+uv run --project automation vault check-translations
 ```
 
-Or use the Python module directly:
+After installation to your environment, the `vault` command is available directly:
 
 ```bash
-# Validate notes
-uv run --project automation python -m obsidian_vault.scripts.validate_note InterviewQuestions/40-Android
-
-# Normalize concepts
-uv run --project automation python -m obsidian_vault.scripts.normalize_concepts
-
-# List missing translations
-uv run --project automation python -m obsidian_vault.scripts.list_missing_ru_sections
+vault validate InterviewQuestions/40-Android
+vault normalize
+vault check-translations
 ```
 
 ## Structure
@@ -66,6 +64,7 @@ automation/
 ├── src/
 │   └── obsidian_vault/         # Main package
 │       ├── __init__.py
+│       ├── cli.py              # Unified CLI with subcommands
 │       ├── validators/         # Validation framework
 │       │   ├── __init__.py
 │       │   ├── base.py         # Base validator class
@@ -81,14 +80,12 @@ automation/
 │       │   └── README.md       # Validator documentation
 │       ├── utils/              # Utility helpers
 │       │   ├── __init__.py
+│       │   ├── common.py       # Shared utilities (repo discovery, parsing, etc.)
 │       │   ├── yaml_loader.py
 │       │   ├── taxonomy_loader.py
 │       │   └── report_generator.py
-│       └── scripts/            # Executable scripts
-│           ├── __init__.py
-│           ├── validate_note.py
-│           ├── normalize_concepts.py
-│           └── list_missing_ru_sections.py
+│       └── scripts/            # (Deprecated - use CLI instead)
+│           └── __init__.py
 └── tests/                      # Tests (future)
     └── __init__.py
 ```
@@ -116,60 +113,68 @@ Utility helpers used across scripts and validators:
 - `taxonomy_loader.py` - Taxonomy file loading and parsing
 - `report_generator.py` - Validation report generation
 
-### Scripts
+### CLI (cli.py)
 
-Executable automation scripts:
+Unified command-line interface with three subcommands:
 
-- `validate_note.py` - Main validation orchestrator with parallel processing
-- `normalize_concepts.py` - Normalize concept note frontmatter
-- `list_missing_ru_sections.py` - Find notes missing translations
+- **vault validate** - Comprehensive note validation with parallel processing support
+- **vault normalize** - Normalize concept note frontmatter with dry-run support
+- **vault check-translations** - Find notes missing Russian or English translations
+
+All three commands consolidated from individual scripts into a single, maintainable CLI tool.
 
 ## Usage Examples
+
+All commands use the `vault` CLI with subcommands. For convenience, prefix with `uv run --project automation`:
 
 ### Validate a Single File
 
 ```bash
-validate-notes InterviewQuestions/40-Android/q-compose-state--android--medium.md
+vault validate InterviewQuestions/40-Android/q-compose-state--android--medium.md
 ```
 
 ### Validate a Folder
 
 ```bash
-validate-notes InterviewQuestions/40-Android
+vault validate InterviewQuestions/40-Android
 ```
 
 ### Validate Entire Vault
 
 ```bash
-validate-notes --all
+vault validate --all
 ```
 
 ### Parallel Validation
 
 ```bash
 # Use 4 workers (default)
-validate-notes InterviewQuestions/40-Android --parallel
+vault validate InterviewQuestions/40-Android --parallel
 
 # Use 8 workers
-validate-notes InterviewQuestions/40-Android --parallel --workers 8
+vault validate InterviewQuestions/40-Android --parallel --workers 8
 ```
 
 ### Quiet Mode (CI-friendly)
 
 ```bash
-validate-notes InterviewQuestions/40-Android --quiet
+vault validate InterviewQuestions/40-Android --quiet
 ```
 
 ### Generate Report
 
 ```bash
-validate-notes InterviewQuestions/40-Android --report report.md
+vault validate InterviewQuestions/40-Android --report report.md
 ```
 
 ### Normalize Concept Notes
 
 ```bash
-normalize-concepts
+# Preview changes without modifying files
+vault normalize --dry-run
+
+# Apply normalization
+vault normalize
 ```
 
 This will:
@@ -181,10 +186,14 @@ This will:
 ### Find Missing Translations
 
 ```bash
-list-missing-ru
+# Print to stdout
+vault check-translations
+
+# Save to file
+vault check-translations --output missing.txt
 ```
 
-Outputs a list of notes missing Russian or English sections to `missing_ru_sections.txt`.
+Finds notes missing Russian or English content sections.
 
 ## Development
 
@@ -194,9 +203,9 @@ This package follows Python best practices:
 
 - **Proper imports**: No more `sys.path.insert()` hacks
 - **Single location**: All automation in one place
-- **Clear hierarchy**: validators → utils → scripts
-- **Entry points**: Command-line tools via `[project.scripts]`
-- **Extensible**: Easy to add new validators, utils, or scripts
+- **Clear hierarchy**: validators → utils → cli
+- **Unified CLI**: Single entry point with subcommands
+- **Extensible**: Easy to add new validators, utils, or CLI commands
 
 ### Adding a New Validator
 
@@ -235,31 +244,40 @@ __all__ = [
 
 3. Done! The validator will be auto-discovered via the registry.
 
-### Adding a New Script
+### Adding a New CLI Command
 
-1. Create a new file in `src/obsidian_vault/scripts/`:
+Add a new subcommand to the unified CLI in `src/obsidian_vault/cli.py`:
+
+1. Create the command function:
 
 ```python
-def main():
-    """Script description."""
+def cmd_my_command(args: argparse.Namespace) -> int:
+    """My new command implementation."""
     # Implementation
-    pass
-
-if __name__ == '__main__':
-    main()
+    return 0
 ```
 
-2. Add entry point in `pyproject.toml`:
+2. Add the subcommand parser in `main()`:
 
-```toml
-[project.scripts]
-my-script = "obsidian_vault.scripts.my_script:main"
+```python
+my_parser = subparsers.add_parser(
+    "my-command",
+    help="Description of my command",
+)
+my_parser.add_argument("--option", help="Optional argument")
 ```
 
-3. Reinstall package:
+3. Add the command handler:
+
+```python
+elif args.command == "my-command":
+    return cmd_my_command(args)
+```
+
+4. Test it:
 
 ```bash
-uv sync
+vault my-command --help
 ```
 
 ## Migration from Old Structure
@@ -274,23 +292,28 @@ This has been consolidated into the new `automation/` directory with proper Pyth
 
 ### Old vs New Usage
 
-**Old:**
+**v0.1 (scattered scripts):**
 ```bash
-# Had to use complex paths and sys.path hacks
+# Three separate scripts with sys.path hacks
 uv run --project utils python -m utils.validate_note InterviewQuestions/40-Android
 python scripts/normalize_concepts.py
 python scripts/list_missing_ru_sections.py
 ```
 
-**New:**
+**v0.2 (consolidated directory):**
 ```bash
-# Clean command-line tools
+# Clean command-line tools, still separate
 validate-notes InterviewQuestions/40-Android
 normalize-concepts
 list-missing-ru
+```
 
-# Or via Python module
-uv run --project automation python -m obsidian_vault.scripts.validate_note InterviewQuestions/40-Android
+**v0.3 (unified CLI) - Current:**
+```bash
+# Single CLI with subcommands
+vault validate InterviewQuestions/40-Android
+vault normalize
+vault check-translations
 ```
 
 ## Requirements
@@ -311,7 +334,13 @@ Tests will be added in the `tests/` directory (future enhancement).
 
 ## Version History
 
-### 0.2.0 (Current)
+### 0.3.0 (Current)
+- **Consolidated CLI**: Single `vault` command with subcommands
+- **Removed duplication**: Eliminated ~400 lines of duplicate code
+- **Shared utilities**: Created `utils/common.py` with shared functions
+- **Breaking change**: Old individual commands (`validate-notes`, `normalize-concepts`, `list-missing-ru`) replaced with `vault` subcommands
+
+### 0.2.0
 - Reorganized into unified `automation/` directory
 - Proper Python package structure
 - Command-line entry points
@@ -331,8 +360,11 @@ When adding new automation:
 
 1. Follow the package structure
 2. Use proper imports (no sys.path hacks)
-3. Add to appropriate module (validators/utils/scripts)
-4. Update documentation
+3. Add to appropriate module:
+   - New validators → `validators/`
+   - Shared utilities → `utils/common.py`
+   - New CLI commands → `cli.py` as subcommands
+4. Update documentation (README and docstrings)
 5. Use type hints
 6. Follow existing code style
 

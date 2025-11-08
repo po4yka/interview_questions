@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable, List
 
-from validators.base import Severity, ValidationIssue  # type: ignore
+from obsidian_vault.validators.base import Severity, ValidationIssue
 
 
 @dataclass
