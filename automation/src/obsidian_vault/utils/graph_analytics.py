@@ -4,18 +4,23 @@ This module provides advanced vault analysis using obsidiantools library:
 - Link/backlink graph analysis
 - Orphaned note detection
 - Hub/authority identification
+- Community detection (clustering)
 - Metadata extraction
 - Network statistics
 """
 
 from __future__ import annotations
 
+from collections import Counter
 from collections.abc import Iterable
 from pathlib import Path
 
 import networkx as nx
 import pandas as pd
+from networkx.algorithms import community as nx_community
 from obsidiantools.api import Vault
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 
 class VaultGraph:
@@ -249,6 +254,382 @@ class VaultGraph:
         }
 
         return quality
+
+    def detect_communities(
+        self, algorithm: str = "louvain", min_size: int = 2
+    ) -> list[dict[str, any]]:
+        """
+        Detect communities (clusters) of related notes using graph algorithms.
+
+        Args:
+            algorithm: Community detection algorithm - 'louvain', 'greedy', or 'label_propagation'
+            min_size: Minimum community size to include in results
+
+        Returns:
+            List of communities, each with id, size, notes, and inferred topics
+        """
+        # Convert directed graph to undirected for community detection
+        undirected_graph = self.graph.to_undirected()
+
+        # Detect communities using the specified algorithm
+        if algorithm == "louvain":
+            # Louvain method (best for modularity optimization)
+            communities_gen = nx_community.louvain_communities(undirected_graph, seed=42)
+        elif algorithm == "greedy":
+            # Greedy modularity maximization
+            communities_gen = nx_community.greedy_modularity_communities(undirected_graph)
+        elif algorithm == "label_propagation":
+            # Label propagation (fast, non-deterministic)
+            communities_gen = nx_community.label_propagation_communities(undirected_graph)
+        else:
+            raise ValueError(f"Unknown algorithm: {algorithm}")
+
+        # Convert to list and filter by size
+        communities = [set(c) for c in communities_gen if len(c) >= min_size]
+
+        # Sort by size (largest first)
+        communities.sort(key=len, reverse=True)
+
+        # Build community data with topics
+        result = []
+        for i, comm in enumerate(communities):
+            notes_list = sorted(list(comm))
+            topics = self._infer_community_topics(notes_list)
+
+            result.append(
+                {
+                    "id": i,
+                    "size": len(comm),
+                    "notes": notes_list,
+                    "topics": topics,
+                    "density": self._calculate_community_density(comm, undirected_graph),
+                }
+            )
+
+        return result
+
+    def _infer_community_topics(self, notes: list[str]) -> list[tuple[str, int]]:
+        """
+        Infer topics/themes for a community based on note names and patterns.
+
+        Args:
+            notes: List of note names in the community
+
+        Returns:
+            List of (topic, count) tuples, sorted by frequency
+        """
+        topics = []
+
+        # Extract topics from filenames
+        for note in notes:
+            # Extract from filename patterns like "q-something--topic--difficulty.md"
+            if "--" in note:
+                parts = note.split("--")
+                if len(parts) >= 2:
+                    topic = parts[1].strip()
+                    topics.append(topic)
+
+            # Extract from folder-like patterns (e.g., "40-Android/")
+            if "/" in note:
+                folder = note.split("/")[0]
+                # Extract topic from folder name (e.g., "40-Android" -> "android")
+                if "-" in folder:
+                    topic = folder.split("-", 1)[1].lower()
+                    topics.append(topic)
+
+            # Extract from common prefixes (q-, c-, moc-)
+            if note.startswith("moc-"):
+                topics.append("moc")
+            elif note.startswith("c-"):
+                topics.append("concept")
+            elif note.startswith("q-"):
+                topics.append("question")
+
+        # Count topics and return top ones
+        topic_counts = Counter(topics)
+        return topic_counts.most_common(5)
+
+    def _calculate_community_density(self, community: set, graph: nx.Graph) -> float:
+        """
+        Calculate the density of connections within a community.
+
+        Args:
+            community: Set of nodes in the community
+            graph: NetworkX graph (undirected)
+
+        Returns:
+            Density value (0.0 to 1.0)
+        """
+        subgraph = graph.subgraph(community)
+        return nx.density(subgraph)
+
+    def analyze_community_connections(
+        self, communities: list[dict[str, any]]
+    ) -> list[dict[str, any]]:
+        """
+        Analyze connections between different communities.
+
+        Args:
+            communities: List of communities from detect_communities()
+
+        Returns:
+            List of inter-community connections with counts
+        """
+        # Build mapping of note -> community_id
+        note_to_community = {}
+        for comm in communities:
+            for note in comm["notes"]:
+                note_to_community[note] = comm["id"]
+
+        # Count connections between communities
+        connections = {}
+        for u, v in self.graph.edges():
+            comm_u = note_to_community.get(u)
+            comm_v = note_to_community.get(v)
+
+            if comm_u is not None and comm_v is not None and comm_u != comm_v:
+                # Sort to avoid counting A->B and B->A separately
+                edge = tuple(sorted([comm_u, comm_v]))
+                connections[edge] = connections.get(edge, 0) + 1
+
+        # Convert to list and sort by connection count
+        result = [
+            {"source": src, "target": tgt, "connections": count}
+            for (src, tgt), count in connections.items()
+        ]
+        result.sort(key=lambda x: x["connections"], reverse=True)
+
+        return result
+
+    def suggest_links(
+        self,
+        note_name: str | None = None,
+        top_k: int = 5,
+        min_similarity: float = 0.3,
+        exclude_existing: bool = True,
+    ) -> dict[str, list[tuple[str, float]]]:
+        """
+        Suggest missing links using ML-based content similarity (TF-IDF + cosine similarity).
+
+        Args:
+            note_name: Specific note to get suggestions for (None = all notes)
+            top_k: Number of suggestions per note
+            min_similarity: Minimum similarity threshold (0.0-1.0)
+            exclude_existing: Exclude notes that already have links
+
+        Returns:
+            Dictionary mapping note names to list of (suggested_note, similarity_score) tuples
+        """
+        # Read all note contents
+        note_contents = self._read_note_contents()
+
+        if not note_contents:
+            return {}
+
+        # Get list of notes in order
+        notes_list = list(note_contents.keys())
+
+        # If specific note requested, ensure it exists
+        if note_name and note_name not in notes_list:
+            raise ValueError(f"Note not found: {note_name}")
+
+        # Vectorize note contents using TF-IDF
+        vectorizer = TfidfVectorizer(
+            max_features=1000,  # Limit vocabulary size
+            stop_words="english",  # Remove common English words
+            ngram_range=(1, 2),  # Use unigrams and bigrams
+            min_df=2,  # Ignore terms that appear in fewer than 2 documents
+        )
+
+        try:
+            tfidf_matrix = vectorizer.fit_transform([note_contents[note] for note in notes_list])
+        except ValueError:
+            # Not enough documents or vocabulary
+            return {}
+
+        # Calculate cosine similarity matrix
+        similarity_matrix = cosine_similarity(tfidf_matrix)
+
+        # Build suggestions
+        suggestions = {}
+
+        # Determine which notes to process
+        notes_to_process = [note_name] if note_name else notes_list
+
+        for note in notes_to_process:
+            if note not in notes_list:
+                continue
+
+            note_idx = notes_list.index(note)
+            similarities = similarity_matrix[note_idx]
+
+            # Get existing links if we should exclude them
+            existing_links = set()
+            if exclude_existing:
+                # Get both outgoing and incoming links
+                if note in self.graph.nodes():
+                    existing_links = set(self.graph.successors(note)) | set(
+                        self.graph.predecessors(note)
+                    )
+
+            # Build candidate suggestions
+            candidates = []
+            for i, sim in enumerate(similarities):
+                other_note = notes_list[i]
+
+                # Skip self
+                if other_note == note:
+                    continue
+
+                # Skip if below threshold
+                if sim < min_similarity:
+                    continue
+
+                # Skip if already linked
+                if exclude_existing and other_note in existing_links:
+                    continue
+
+                candidates.append((other_note, float(sim)))
+
+            # Sort by similarity and take top K
+            candidates.sort(key=lambda x: x[1], reverse=True)
+            suggestions[note] = candidates[:top_k]
+
+        return suggestions
+
+    def _read_note_contents(self) -> dict[str, str]:
+        """
+        Read content of all notes in the vault.
+
+        Returns:
+            Dictionary mapping note names to their content (without frontmatter)
+        """
+        import frontmatter
+
+        note_contents = {}
+
+        for note_name in self.graph.nodes():
+            try:
+                # Try to find the note file
+                note_path = self._find_note_file(note_name)
+                if not note_path:
+                    continue
+
+                # Read and parse the note
+                with open(note_path, encoding="utf-8") as f:
+                    post = frontmatter.load(f)
+
+                # Use content without frontmatter
+                content = post.content.strip()
+
+                # Extract meaningful text (remove links, special chars, etc.)
+                content = self._clean_content(content)
+
+                if content:
+                    note_contents[note_name] = content
+
+            except Exception:
+                # Skip notes that can't be read
+                continue
+
+        return note_contents
+
+    def _find_note_file(self, note_name: str) -> Path | None:
+        """
+        Find the file path for a note name.
+
+        Args:
+            note_name: Note name (may or may not include .md)
+
+        Returns:
+            Path to note file, or None if not found
+        """
+        # Try with .md extension
+        if not note_name.endswith(".md"):
+            search_name = f"{note_name}.md"
+        else:
+            search_name = note_name
+
+        # Search for the file
+        for note_path in self.vault_path.rglob(search_name):
+            if note_path.is_file():
+                return note_path
+
+        # Try without extension
+        if note_name.endswith(".md"):
+            base_name = note_name[:-3]
+            for note_path in self.vault_path.rglob(f"{base_name}.md"):
+                if note_path.is_file():
+                    return note_path
+
+        return None
+
+    def _clean_content(self, content: str) -> str:
+        """
+        Clean markdown content for ML processing.
+
+        Args:
+            content: Raw markdown content
+
+        Returns:
+            Cleaned text suitable for TF-IDF
+        """
+        import re
+
+        # Remove wiki links [[...]]
+        content = re.sub(r"\[\[([^\]]+)\]\]", r"\1", content)
+
+        # Remove markdown links [text](url)
+        content = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", content)
+
+        # Remove code blocks
+        content = re.sub(r"```[\s\S]*?```", " ", content)
+        content = re.sub(r"`[^`]+`", " ", content)
+
+        # Remove headers
+        content = re.sub(r"#+\s+", " ", content)
+
+        # Remove special markdown characters
+        content = re.sub(r"[*_~`]", " ", content)
+
+        # Normalize whitespace
+        content = re.sub(r"\s+", " ", content)
+
+        return content.strip()
+
+    def analyze_link_predictions(
+        self, suggestions: dict[str, list[tuple[str, float]]]
+    ) -> dict[str, any]:
+        """
+        Analyze statistics about link predictions.
+
+        Args:
+            suggestions: Output from suggest_links()
+
+        Returns:
+            Dictionary with prediction statistics
+        """
+        if not suggestions:
+            return {
+                "total_notes_analyzed": 0,
+                "total_suggestions": 0,
+                "avg_suggestions_per_note": 0.0,
+                "avg_similarity": 0.0,
+            }
+
+        total_suggestions = sum(len(sugg) for sugg in suggestions.values())
+        all_similarities = [sim for sugg in suggestions.values() for _, sim in sugg]
+
+        return {
+            "total_notes_analyzed": len(suggestions),
+            "total_suggestions": total_suggestions,
+            "avg_suggestions_per_note": (
+                total_suggestions / len(suggestions) if suggestions else 0.0
+            ),
+            "avg_similarity": sum(all_similarities) / len(all_similarities) if all_similarities else 0.0,
+            "min_similarity": min(all_similarities) if all_similarities else 0.0,
+            "max_similarity": max(all_similarities) if all_similarities else 0.0,
+        }
 
 
 def generate_link_health_report(vault_path: Path) -> str:

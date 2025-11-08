@@ -708,6 +708,97 @@ def cmd_graph_export(args: argparse.Namespace) -> int:
         return 1
 
 
+def cmd_communities(args: argparse.Namespace) -> int:
+    """Detect communities (clusters) of related notes."""
+    repo_root = discover_repo_root()
+    vault_dir = repo_root / "InterviewQuestions"
+
+    if not vault_dir.exists():
+        print("InterviewQuestions directory not found.", file=sys.stderr)
+        return 1
+
+    try:
+        print(f"Detecting communities using {args.algorithm} algorithm...", file=sys.stderr)
+        vg = VaultGraph(vault_dir)
+        communities = vg.detect_communities(algorithm=args.algorithm, min_size=args.min_size)
+
+        if not communities:
+            print("No communities found.")
+            return 0
+
+        # Limit to top N if specified
+        if args.top:
+            communities = communities[:args.top]
+
+        # Print summary
+        print("=" * 80)
+        print(f"Vault Communities ({args.algorithm} algorithm)")
+        print("=" * 80)
+        print()
+
+        for comm in communities:
+            topics_str = ", ".join([f"{topic}({count})" for topic, count in comm["topics"][:3]])
+            print(f"Community {comm['id']}:")
+            print(f"  Size: {comm['size']} notes")
+            print(f"  Density: {comm['density']:.3f}")
+            if topics_str:
+                print(f"  Topics: {topics_str}")
+
+            if args.show_notes:
+                print("  Notes:")
+                for note in comm["notes"][:10]:  # Limit to first 10
+                    print(f"    - {note}")
+                if len(comm["notes"]) > 10:
+                    print(f"    ...and {len(comm['notes']) - 10} more")
+
+            print()
+
+        # Print statistics
+        total_notes = sum(c["size"] for c in communities)
+        avg_size = total_notes / len(communities) if communities else 0
+        avg_density = sum(c["density"] for c in communities) / len(communities) if communities else 0
+
+        print("Statistics:")
+        print(f"  Total communities: {len(communities)}")
+        print(f"  Total notes in communities: {total_notes}")
+        print(f"  Average community size: {avg_size:.1f}")
+        print(f"  Average community density: {avg_density:.3f}")
+
+        # Write output file if requested
+        if args.output:
+            output_lines = [
+                f"# Vault Communities ({args.algorithm} algorithm)\n\n",
+                f"**Total Communities**: {len(communities)}\n",
+                f"**Algorithm**: {args.algorithm}\n",
+                f"**Minimum Size**: {args.min_size}\n\n",
+                "---\n\n",
+            ]
+
+            for comm in communities:
+                output_lines.append(f"## Community {comm['id']}\n\n")
+                output_lines.append(f"- **Size**: {comm['size']} notes\n")
+                output_lines.append(f"- **Density**: {comm['density']:.3f}\n")
+
+                if comm["topics"]:
+                    topics_str = ", ".join([f"{t}({c})" for t, c in comm["topics"]])
+                    output_lines.append(f"- **Topics**: {topics_str}\n")
+
+                output_lines.append("\n**Notes**:\n\n")
+                for note in comm["notes"]:
+                    output_lines.append(f"- {note}\n")
+
+                output_lines.append("\n---\n\n")
+
+            Path(args.output).write_text("".join(output_lines), encoding="utf-8")
+            print(f"\nCommunities report written to {args.output}")
+
+        return 0
+
+    except Exception as e:
+        print(f"Error detecting communities: {e}", file=sys.stderr)
+        return 1
+
+
 # ============================================================================
 # Main CLI
 # ============================================================================
@@ -852,6 +943,43 @@ def main() -> int:
         help="Export format (default: auto-detect from file extension)",
     )
 
+    # Communities command
+    communities_parser = subparsers.add_parser(
+        "communities",
+        help="Detect communities (clusters) of related notes",
+    )
+    communities_parser.add_argument(
+        "--algorithm",
+        "-a",
+        choices=["louvain", "greedy", "label_propagation"],
+        default="louvain",
+        help="Community detection algorithm (default: louvain)",
+    )
+    communities_parser.add_argument(
+        "--min-size",
+        "-m",
+        type=int,
+        default=2,
+        help="Minimum community size (default: 2)",
+    )
+    communities_parser.add_argument(
+        "--top",
+        "-n",
+        type=int,
+        help="Show only top N communities",
+    )
+    communities_parser.add_argument(
+        "--show-notes",
+        action="store_true",
+        help="Show notes in each community",
+    )
+    communities_parser.add_argument(
+        "--output",
+        "-o",
+        type=str,
+        help="Write results to file",
+    )
+
     args = parser.parse_args()
 
     if not args.command:
@@ -874,6 +1002,8 @@ def main() -> int:
         return cmd_link_report(args)
     elif args.command == "graph-export":
         return cmd_graph_export(args)
+    elif args.command == "communities":
+        return cmd_communities(args)
     else:
         parser.print_help()
         return 1

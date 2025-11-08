@@ -117,6 +117,51 @@ vault-app orphans --output orphans.txt
 - **Auto-documentation**: Help text from type hints
 - **Type Validation**: Automatic validation of command arguments
 
+### Using Makefile (Recommended for Development)
+
+For development, a **Makefile** is provided with convenient shortcuts:
+
+```bash
+cd automation
+
+# Setup (one-time)
+make install-dev       # Install with dev deps + pre-commit hooks
+
+# Daily workflow
+make test              # Run tests
+make test-cov          # Run tests with coverage
+make lint              # Check code style
+make format            # Format code
+make type-check        # Run type checker
+make security          # Security checks
+make check-all         # Run all checks
+
+# Quick workflows
+make quick-check       # Format + lint + test (fast)
+make full-check        # All checks before commit
+make ci                # Simulate CI/CD pipeline
+
+# Vault operations
+make validate          # Validate all notes
+make validate-parallel # Validate with parallel processing
+make graph-stats       # Show graph statistics
+make orphans           # Find orphaned notes
+make normalize         # Normalize concepts (dry-run)
+
+# Utilities
+make clean             # Remove cache files
+make pre-commit        # Run pre-commit hooks
+make help              # Show all available commands
+```
+
+**Benefits**:
+- 🚀 **Shorter commands**: `make test` vs `uv run pytest tests/ -v`
+- 🔄 **Common workflows**: `make quick-check` runs multiple tools
+- 📝 **Self-documenting**: `make help` shows all available commands
+- ⚡ **Time savings**: 2-3 minutes per command
+
+**See**: [MAKEFILE_GUIDE.md](MAKEFILE_GUIDE.md) for complete documentation.
+
 ### Logging
 
 The automation tools use **Loguru** for professional logging with two output levels:
