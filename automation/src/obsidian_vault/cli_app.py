@@ -560,6 +560,158 @@ def graph_export(
         raise typer.Exit(code=1)
 
 
+@app.command()
+def communities(
+    algorithm: str = typer.Option(
+        "louvain",
+        "--algorithm",
+        "-a",
+        help="Algorithm: louvain, greedy, or label_propagation",
+    ),
+    min_size: int = typer.Option(2, "--min-size", "-m", help="Minimum community size"),
+    top_n: Optional[int] = typer.Option(None, "--top", "-n", help="Show only top N communities"),
+    show_notes: bool = typer.Option(False, "--show-notes", help="Show notes in each community"),
+    output: Optional[str] = typer.Option(None, "--output", "-o", help="Write results to file"),
+):
+    """
+    Detect communities (clusters) of related notes using graph algorithms.
+
+    Communities are groups of notes that are more densely connected to each
+    other than to notes outside the group. Useful for understanding vault
+    organization and discovering hidden topic clusters.
+    """
+    logger.info(f"Detecting communities using {algorithm} algorithm")
+    try:
+        repo_root = discover_repo_root()
+        vault_dir = repo_root / "InterviewQuestions"
+
+        if not vault_dir.exists():
+            console.print("[red]✗[/red] InterviewQuestions directory not found")
+            logger.error(f"Vault directory not found: {vault_dir}")
+            raise typer.Exit(code=1)
+
+        with console.status("[bold green]Analyzing vault communities...", spinner="dots"):
+            logger.debug("Building vault graph")
+            vg = VaultGraph(vault_dir)
+            logger.debug(f"Detecting communities with algorithm={algorithm}, min_size={min_size}")
+            communities_data = vg.detect_communities(algorithm=algorithm, min_size=min_size)
+
+        if not communities_data:
+            console.print("[yellow]⚠[/yellow] No communities found")
+            logger.warning("No communities detected")
+            return
+
+        # Limit to top N if specified
+        if top_n:
+            communities_data = communities_data[:top_n]
+
+        logger.success(f"Detected {len(communities_data)} communities")
+
+        # Create summary table
+        summary_table = Table(
+            title=f"Vault Communities ({algorithm} algorithm)",
+            show_header=True,
+            header_style="bold cyan",
+        )
+        summary_table.add_column("ID", style="cyan", no_wrap=True)
+        summary_table.add_column("Size", justify="right", style="magenta")
+        summary_table.add_column("Density", justify="right", style="green")
+        summary_table.add_column("Top Topics", style="yellow")
+
+        for comm in communities_data:
+            topics_str = ", ".join(
+                [f"{topic} ({count})" for topic, count in comm["topics"][:3]]
+            )
+            summary_table.add_row(
+                str(comm["id"]),
+                str(comm["size"]),
+                f"{comm['density']:.3f}",
+                topics_str or "—",
+            )
+
+        console.print(summary_table)
+
+        # Show detailed notes if requested
+        if show_notes:
+            console.print()
+            for comm in communities_data:
+                panel_content = []
+                panel_content.append(f"[bold]Size:[/bold] {comm['size']} notes")
+                panel_content.append(f"[bold]Density:[/bold] {comm['density']:.3f}")
+
+                if comm["topics"]:
+                    topics_str = ", ".join([f"{t} ({c})" for t, c in comm["topics"]])
+                    panel_content.append(f"[bold]Topics:[/bold] {topics_str}")
+
+                panel_content.append("\n[bold]Notes:[/bold]")
+                for note in comm["notes"][:10]:  # Limit to first 10
+                    panel_content.append(f"  • {note}")
+                if len(comm["notes"]) > 10:
+                    panel_content.append(f"  [dim]...and {len(comm['notes']) - 10} more[/dim]")
+
+                console.print(
+                    Panel(
+                        "\n".join(panel_content),
+                        title=f"Community {comm['id']}",
+                        border_style="blue",
+                    )
+                )
+
+        # Generate text output if requested
+        if output:
+            output_lines = [
+                f"# Vault Communities ({algorithm} algorithm)\n",
+                f"**Total Communities**: {len(communities_data)}\n",
+                f"**Algorithm**: {algorithm}\n",
+                f"**Minimum Size**: {min_size}\n\n",
+                "---\n\n",
+            ]
+
+            for comm in communities_data:
+                output_lines.append(f"## Community {comm['id']}\n\n")
+                output_lines.append(f"- **Size**: {comm['size']} notes\n")
+                output_lines.append(f"- **Density**: {comm['density']:.3f}\n")
+
+                if comm["topics"]:
+                    topics_str = ", ".join([f"{t} ({c})" for t, c in comm["topics"]])
+                    output_lines.append(f"- **Topics**: {topics_str}\n")
+
+                output_lines.append("\n**Notes**:\n\n")
+                for note in comm["notes"]:
+                    output_lines.append(f"- {note}\n")
+
+                output_lines.append("\n---\n\n")
+
+            Path(output).write_text("".join(output_lines), encoding="utf-8")
+            console.print(f"\n[green]✓[/green] Communities report written to {output}")
+            logger.info(f"Communities report written to {output}")
+
+        # Show statistics
+        total_notes = sum(c["size"] for c in communities_data)
+        avg_size = total_notes / len(communities_data) if communities_data else 0
+        avg_density = (
+            sum(c["density"] for c in communities_data) / len(communities_data)
+            if communities_data
+            else 0
+        )
+
+        console.print(f"\n[bold]Statistics:[/bold]")
+        console.print(f"  Total communities: {len(communities_data)}")
+        console.print(f"  Total notes in communities: {total_notes}")
+        console.print(f"  Average community size: {avg_size:.1f}")
+        console.print(f"  Average community density: {avg_density:.3f}")
+
+        logger.success(
+            f"Community detection complete: {len(communities_data)} communities, "
+            f"{total_notes} notes"
+        )
+
+    except Exception as e:
+        console.print(f"[red]✗ Error:[/red] {e}")
+        logger.exception(f"Community detection failed: {e}")
+        raise typer.Exit(code=1)
+
+
 # ============================================================================
 # LLM Review Command
 # ============================================================================

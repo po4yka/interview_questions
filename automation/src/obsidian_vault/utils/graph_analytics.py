@@ -4,17 +4,20 @@ This module provides advanced vault analysis using obsidiantools library:
 - Link/backlink graph analysis
 - Orphaned note detection
 - Hub/authority identification
+- Community detection (clustering)
 - Metadata extraction
 - Network statistics
 """
 
 from __future__ import annotations
 
+from collections import Counter
 from collections.abc import Iterable
 from pathlib import Path
 
 import networkx as nx
 import pandas as pd
+from networkx.algorithms import community as nx_community
 from obsidiantools.api import Vault
 
 
@@ -249,6 +252,152 @@ class VaultGraph:
         }
 
         return quality
+
+    def detect_communities(
+        self, algorithm: str = "louvain", min_size: int = 2
+    ) -> list[dict[str, any]]:
+        """
+        Detect communities (clusters) of related notes using graph algorithms.
+
+        Args:
+            algorithm: Community detection algorithm - 'louvain', 'greedy', or 'label_propagation'
+            min_size: Minimum community size to include in results
+
+        Returns:
+            List of communities, each with id, size, notes, and inferred topics
+        """
+        # Convert directed graph to undirected for community detection
+        undirected_graph = self.graph.to_undirected()
+
+        # Detect communities using the specified algorithm
+        if algorithm == "louvain":
+            # Louvain method (best for modularity optimization)
+            communities_gen = nx_community.louvain_communities(undirected_graph, seed=42)
+        elif algorithm == "greedy":
+            # Greedy modularity maximization
+            communities_gen = nx_community.greedy_modularity_communities(undirected_graph)
+        elif algorithm == "label_propagation":
+            # Label propagation (fast, non-deterministic)
+            communities_gen = nx_community.label_propagation_communities(undirected_graph)
+        else:
+            raise ValueError(f"Unknown algorithm: {algorithm}")
+
+        # Convert to list and filter by size
+        communities = [set(c) for c in communities_gen if len(c) >= min_size]
+
+        # Sort by size (largest first)
+        communities.sort(key=len, reverse=True)
+
+        # Build community data with topics
+        result = []
+        for i, comm in enumerate(communities):
+            notes_list = sorted(list(comm))
+            topics = self._infer_community_topics(notes_list)
+
+            result.append(
+                {
+                    "id": i,
+                    "size": len(comm),
+                    "notes": notes_list,
+                    "topics": topics,
+                    "density": self._calculate_community_density(comm, undirected_graph),
+                }
+            )
+
+        return result
+
+    def _infer_community_topics(self, notes: list[str]) -> list[tuple[str, int]]:
+        """
+        Infer topics/themes for a community based on note names and patterns.
+
+        Args:
+            notes: List of note names in the community
+
+        Returns:
+            List of (topic, count) tuples, sorted by frequency
+        """
+        topics = []
+
+        # Extract topics from filenames
+        for note in notes:
+            # Extract from filename patterns like "q-something--topic--difficulty.md"
+            if "--" in note:
+                parts = note.split("--")
+                if len(parts) >= 2:
+                    topic = parts[1].strip()
+                    topics.append(topic)
+
+            # Extract from folder-like patterns (e.g., "40-Android/")
+            if "/" in note:
+                folder = note.split("/")[0]
+                # Extract topic from folder name (e.g., "40-Android" -> "android")
+                if "-" in folder:
+                    topic = folder.split("-", 1)[1].lower()
+                    topics.append(topic)
+
+            # Extract from common prefixes (q-, c-, moc-)
+            if note.startswith("moc-"):
+                topics.append("moc")
+            elif note.startswith("c-"):
+                topics.append("concept")
+            elif note.startswith("q-"):
+                topics.append("question")
+
+        # Count topics and return top ones
+        topic_counts = Counter(topics)
+        return topic_counts.most_common(5)
+
+    def _calculate_community_density(self, community: set, graph: nx.Graph) -> float:
+        """
+        Calculate the density of connections within a community.
+
+        Args:
+            community: Set of nodes in the community
+            graph: NetworkX graph (undirected)
+
+        Returns:
+            Density value (0.0 to 1.0)
+        """
+        subgraph = graph.subgraph(community)
+        return nx.density(subgraph)
+
+    def analyze_community_connections(
+        self, communities: list[dict[str, any]]
+    ) -> list[dict[str, any]]:
+        """
+        Analyze connections between different communities.
+
+        Args:
+            communities: List of communities from detect_communities()
+
+        Returns:
+            List of inter-community connections with counts
+        """
+        # Build mapping of note -> community_id
+        note_to_community = {}
+        for comm in communities:
+            for note in comm["notes"]:
+                note_to_community[note] = comm["id"]
+
+        # Count connections between communities
+        connections = {}
+        for u, v in self.graph.edges():
+            comm_u = note_to_community.get(u)
+            comm_v = note_to_community.get(v)
+
+            if comm_u is not None and comm_v is not None and comm_u != comm_v:
+                # Sort to avoid counting A->B and B->A separately
+                edge = tuple(sorted([comm_u, comm_v]))
+                connections[edge] = connections.get(edge, 0) + 1
+
+        # Convert to list and sort by connection count
+        result = [
+            {"source": src, "target": tgt, "connections": count}
+            for (src, tgt), count in connections.items()
+        ]
+        result.sort(key=lambda x: x["connections"], reverse=True)
+
+        return result
 
 
 def generate_link_health_report(vault_path: Path) -> str:

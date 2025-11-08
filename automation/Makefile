@@ -193,6 +193,14 @@ check-translations: ## Find notes missing translations
 	@echo "$(BLUE)Checking for missing translations...$(RESET)"
 	uv run vault check-translations
 
+communities: ## Detect note communities/clusters
+	@echo "$(BLUE)Detecting vault communities...$(RESET)"
+	uv run vault-app communities --algorithm louvain
+
+communities-detailed: ## Detect communities with detailed notes
+	@echo "$(BLUE)Detecting vault communities (detailed)...$(RESET)"
+	uv run vault-app communities --algorithm louvain --show-notes
+
 #=============================================================================
 # Cleaning
 #=============================================================================
