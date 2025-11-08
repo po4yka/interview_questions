@@ -80,6 +80,24 @@ DEFAULT_TEMPERATURE = 0.2
 DEFAULT_TIMEOUT = 60.0
 
 
+@dataclass
+class AgentModelSettings:
+    """Per-agent model configuration overrides.
+
+    Allows fine-tuning model behavior for different agent types.
+    If a field is None, it will use the value from environment variables
+    or the default configuration.
+    """
+
+    model: str | None = None
+    temperature: float | None = None
+    top_p: float | None = None
+    max_tokens: int | None = None
+    presence_penalty: float | None = None
+    frequency_penalty: float | None = None
+    timeout: float | None = None
+
+
 def _get_float_from_env(var_name: str) -> float | None:
     """Return a float value from the environment if it can be parsed."""
 
@@ -196,12 +214,18 @@ class OpenRouterConfig:
         return cls(resolved_model, headers, settings_kwargs)
 
 
-def get_openrouter_model(model_name: str | None = None) -> OpenAIChatModel:
+def get_openrouter_model(
+    model_name: str | None = None,
+    agent_settings: AgentModelSettings | None = None,
+) -> OpenAIChatModel:
     """Get an OpenRouter model configured for use with PydanticAI.
 
     Args:
         model_name: Optional model identifier override. If omitted, uses the
             ``OPENROUTER_MODEL`` environment variable or the default model.
+        agent_settings: Optional per-agent configuration overrides. If provided,
+            these settings will override the base configuration from environment
+            variables for this specific agent instance.
 
     Returns:
         Configured OpenAIChatModel instance
@@ -217,7 +241,26 @@ def get_openrouter_model(model_name: str | None = None) -> OpenAIChatModel:
             "Get your API key from https://openrouter.ai/keys"
         )
 
+    # Start with base configuration from environment
     config = OpenRouterConfig.from_environment(model_name)
+
+    # Apply per-agent overrides if provided
+    if agent_settings:
+        if agent_settings.model is not None:
+            config.model = agent_settings.model
+        if agent_settings.temperature is not None:
+            config.settings_kwargs["temperature"] = agent_settings.temperature
+        if agent_settings.top_p is not None:
+            config.settings_kwargs["top_p"] = agent_settings.top_p
+        if agent_settings.max_tokens is not None:
+            config.settings_kwargs["max_tokens"] = agent_settings.max_tokens
+        if agent_settings.presence_penalty is not None:
+            config.settings_kwargs["presence_penalty"] = agent_settings.presence_penalty
+        if agent_settings.frequency_penalty is not None:
+            config.settings_kwargs["frequency_penalty"] = agent_settings.frequency_penalty
+        if agent_settings.timeout is not None:
+            config.settings_kwargs["timeout"] = agent_settings.timeout
+
     logger.debug(
         "Initializing OpenRouter model: %s (settings: %s)",
         config.model,
@@ -446,41 +489,95 @@ The goal is to catch serious problems that would mislead interview candidates, n
 """
 
 
+# Agent-specific model settings
+# These defaults balance creativity vs determinism for each agent's role
+
+TECHNICAL_REVIEW_SETTINGS = AgentModelSettings(
+    # Slightly higher temperature for creative technical insight
+    # but not too high to avoid hallucinations
+    temperature=0.3,
+    # Lower penalties to allow varied phrasing when explaining technical concepts
+    presence_penalty=0.0,
+    frequency_penalty=0.1,
+)
+
+ISSUE_FIX_SETTINGS = AgentModelSettings(
+    # Lower temperature for deterministic, conservative fixes
+    temperature=0.1,
+    # Higher penalties to discourage repetition and encourage precise, minimal changes
+    presence_penalty=0.3,
+    frequency_penalty=0.3,
+)
+
+METADATA_SANITY_SETTINGS = AgentModelSettings(
+    # Very low temperature for structured, deterministic metadata validation
+    temperature=0.1,
+    # Moderate penalties for clear, concise issue reporting
+    presence_penalty=0.2,
+    frequency_penalty=0.2,
+)
+
+QA_VERIFICATION_SETTINGS = AgentModelSettings(
+    # Moderate temperature for thorough, creative verification
+    # Needs to think critically and find edge cases
+    temperature=0.3,
+    # Lower penalties to allow comprehensive issue exploration
+    presence_penalty=0.1,
+    frequency_penalty=0.1,
+)
+
+
 def get_technical_review_agent() -> Agent:
-    """Get the technical review agent (lazy initialization)."""
-    logger.debug("Creating technical review agent")
+    """Get the technical review agent (lazy initialization).
+
+    Uses slightly higher temperature (0.3) for creative technical insight
+    while maintaining accuracy.
+    """
+    logger.debug("Creating technical review agent with custom settings")
     return Agent(
-        model=get_openrouter_model(),
+        model=get_openrouter_model(agent_settings=TECHNICAL_REVIEW_SETTINGS),
         output_type=TechnicalReviewResult,
         system_prompt=TECHNICAL_REVIEW_PROMPT,
     )
 
 
 def get_issue_fix_agent() -> Agent:
-    """Get the issue fix agent (lazy initialization)."""
-    logger.debug("Creating issue fix agent")
+    """Get the issue fix agent (lazy initialization).
+
+    Uses lower temperature (0.1) and higher penalties (0.3) for
+    deterministic, conservative fixes with minimal changes.
+    """
+    logger.debug("Creating issue fix agent with custom settings")
     return Agent(
-        model=get_openrouter_model(),
+        model=get_openrouter_model(agent_settings=ISSUE_FIX_SETTINGS),
         output_type=IssueFixResult,
         system_prompt=ISSUE_FIX_PROMPT,
     )
 
 
 def get_metadata_sanity_agent() -> Agent:
-    """Get the metadata sanity check agent (lazy initialization)."""
-    logger.debug("Creating metadata sanity check agent")
+    """Get the metadata sanity check agent (lazy initialization).
+
+    Uses very low temperature (0.1) for structured, deterministic
+    metadata validation.
+    """
+    logger.debug("Creating metadata sanity check agent with custom settings")
     return Agent(
-        model=get_openrouter_model(),
+        model=get_openrouter_model(agent_settings=METADATA_SANITY_SETTINGS),
         output_type=MetadataSanityResult,
         system_prompt=METADATA_SANITY_PROMPT,
     )
 
 
 def get_qa_verification_agent() -> Agent:
-    """Get the QA verification agent (lazy initialization)."""
-    logger.debug("Creating QA verification agent")
+    """Get the QA verification agent (lazy initialization).
+
+    Uses moderate temperature (0.3) for thorough, creative verification
+    to find edge cases and quality issues.
+    """
+    logger.debug("Creating QA verification agent with custom settings")
     return Agent(
-        model=get_openrouter_model(),
+        model=get_openrouter_model(agent_settings=QA_VERIFICATION_SETTINGS),
         output_type=QAVerificationResult,
         system_prompt=QA_VERIFICATION_PROMPT,
     )
