@@ -33,28 +33,37 @@ def parse_note(path: Path) -> tuple[dict, str]:
     """
     Parse a markdown note into frontmatter and body.
 
+    Now uses python-frontmatter + ruamel.yaml for robust parsing
+    with order and comment preservation.
+
     Args:
         path: Path to the markdown file
 
     Returns:
         Tuple of (frontmatter dict, body text)
     """
-    from obsidian_vault.utils.yaml_loader import load_yaml
+    from obsidian_vault.utils.frontmatter import load_frontmatter
 
-    text = path.read_text(encoding="utf-8")
-    if not text.startswith("---"):
-        return {}, text
-
-    lines = text.splitlines()
     try:
-        end = lines[1:].index("---") + 1
-    except ValueError:
-        return {}, text
+        return load_frontmatter(path)
+    except Exception:
+        # Fallback to old parsing method if new one fails
+        from obsidian_vault.utils.yaml_loader import load_yaml
 
-    frontmatter_text = "\n".join(lines[1:end])
-    body = "\n".join(lines[end + 1 :])
-    frontmatter = load_yaml(frontmatter_text)
-    return frontmatter or {}, body
+        text = path.read_text(encoding="utf-8")
+        if not text.startswith("---"):
+            return {}, text
+
+        lines = text.splitlines()
+        try:
+            end = lines[1:].index("---") + 1
+        except ValueError:
+            return {}, text
+
+        frontmatter_text = "\n".join(lines[1:end])
+        body = "\n".join(lines[end + 1 :])
+        frontmatter = load_yaml(frontmatter_text)
+        return frontmatter or {}, body
 
 
 def build_note_index(vault_dir: Path) -> set[str]:

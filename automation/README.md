@@ -118,6 +118,7 @@ automation/
 │       ├── utils/              # Utility helpers
 │       │   ├── __init__.py
 │       │   ├── common.py       # Shared utilities (repo discovery, parsing, etc.)
+│       │   ├── frontmatter.py  # Robust YAML frontmatter with order/comment preservation
 │       │   ├── yaml_loader.py
 │       │   ├── taxonomy_loader.py
 │       │   ├── report_generator.py
@@ -148,6 +149,7 @@ Comprehensive validation framework with auto-discovery registry. See `src/obsidi
 Utility helpers used across scripts and validators:
 
 - `common.py` - Shared utilities (repo discovery, note parsing, file collection, YAML dumping)
+- `frontmatter.py` - **Robust frontmatter handling** with python-frontmatter + ruamel.yaml (preserves order and comments)
 - `yaml_loader.py` - YAML loading with error handling
 - `taxonomy_loader.py` - Taxonomy file loading and parsing
 - `report_generator.py` - Validation report generation
@@ -342,6 +344,55 @@ Supported formats:
 - **JSON** - Node-link data format
 - **CSV** - Simple edge list
 
+### Programmatic Frontmatter Editing
+
+The new frontmatter module provides robust YAML handling with order and comment preservation:
+
+```python
+from pathlib import Path
+from obsidian_vault.utils import (
+    load_frontmatter,
+    update_frontmatter,
+    dump_frontmatter,
+    FrontmatterHandler
+)
+
+# Load frontmatter and content
+note_path = Path("InterviewQuestions/40-Android/q-compose-state--android--medium.md")
+frontmatter, content = load_frontmatter(note_path)
+
+# Update specific fields (preserves order and comments)
+update_frontmatter(
+    note_path,
+    updates={"status": "reviewed", "updated": "2025-01-08"},
+    remove_keys=["draft"]
+)
+
+# Create new note with frontmatter
+new_frontmatter = {
+    "id": "kotlin-042",
+    "title": "Coroutine Context / Контекст корутин",
+    "topic": "kotlin",
+    "difficulty": "medium",
+    "tags": ["kotlin", "coroutines", "difficulty/medium"]
+}
+new_content = "# Question\n\nWhat is coroutine context?"
+
+markdown = dump_frontmatter(new_frontmatter, new_content)
+Path("new-note.md").write_text(markdown)
+
+# Advanced: use FrontmatterHandler for custom YAML configuration
+handler = FrontmatterHandler()
+fm, body = handler.load(note_path)
+handler.dump(fm, body, Path("output.md"))
+```
+
+**Key Benefits:**
+- **Order Preservation**: Fields stay in the order you define them
+- **Comment Preservation**: Comments in YAML frontmatter are maintained
+- **Round-trip Safe**: Read → Modify → Write preserves structure
+- **Backward Compatible**: Drop-in replacement for existing `parse_note()` function
+
 ## Development
 
 ### Package Layout
@@ -468,6 +519,8 @@ vault check-translations
 ### Runtime
 - Python >= 3.11 (3.11, 3.12, 3.13 supported)
 - PyYAML >= 6.0.2
+- python-frontmatter >= 1.0.0 (YAML frontmatter extraction/insertion)
+- ruamel.yaml >= 0.18.0 (order and comment preservation for YAML)
 - obsidiantools >= 0.10.0 (graph analytics)
 - pandas >= 2.0.0 (data processing for graph analytics)
 - networkx >= 3.0 (graph analysis)
@@ -509,7 +562,16 @@ uv run mypy src/
 
 ## Version History
 
-### 0.4.0 (Current)
+### 0.5.0 (Current)
+- **Robust Frontmatter Handling**: Integrated python-frontmatter + ruamel.yaml
+- **Order Preservation**: YAML fields now maintain their original order
+- **Comment Preservation**: Comments in frontmatter are preserved during edits
+- **New Frontmatter Module**: Created `utils/frontmatter.py` with FrontmatterHandler class
+- **Enhanced parse_note**: Updated to use new frontmatter library with fallback
+- **New Dependencies**: python-frontmatter >= 1.0.0, ruamel.yaml >= 0.18.0
+- **Backward Compatible**: Existing code continues to work seamlessly
+
+### 0.4.0
 - **Graph Analytics**: Integrated obsidiantools for advanced vault analysis
 - **New CLI Commands**:
   - `vault graph-stats` - Network statistics and link quality metrics

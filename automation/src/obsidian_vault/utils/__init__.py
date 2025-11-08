@@ -9,6 +9,13 @@ from .common import (
     listify,
     parse_note,
 )
+from .frontmatter import (
+    FrontmatterHandler,
+    dump_frontmatter,
+    load_frontmatter,
+    load_frontmatter_text,
+    update_frontmatter,
+)
 from .report_generator import FileResult, ReportGenerator
 from .taxonomy_loader import TaxonomyLoader
 from .yaml_loader import load_yaml
@@ -24,6 +31,12 @@ __all__ = [
     "listify",
     # YAML loading
     "load_yaml",
+    # Frontmatter (robust YAML with order/comment preservation)
+    "FrontmatterHandler",
+    "load_frontmatter",
+    "load_frontmatter_text",
+    "dump_frontmatter",
+    "update_frontmatter",
     # Taxonomy
     "TaxonomyLoader",
     # Reporting
