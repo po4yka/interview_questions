@@ -108,12 +108,11 @@ vault-app orphans --output orphans.txt
 ```
 
 **Features:**
-- 🎨 **Rich Tables**: Beautiful formatted tables with box-drawing characters
-- 🌈 **Color Output**: Syntax highlighting and semantic colors
-- 📊 **Progress Bars**: Visual feedback for long-running operations
-- ✨ **Emojis**: Icons for better visual scanning
-- 📖 **Auto-documentation**: Help text from type hints
-- ✅ **Type Validation**: Automatic validation of command arguments
+- **Rich Tables**: Beautiful formatted tables with box-drawing characters
+- **Color Output**: Syntax highlighting and semantic colors
+- **Progress Bars**: Visual feedback for long-running operations
+- **Auto-documentation**: Help text from type hints
+- **Type Validation**: Automatic validation of command arguments
 
 ## Structure
 
@@ -207,7 +206,6 @@ The **vault-app** version adds:
 - Rich tables with box-drawing characters
 - Color-coded output (errors=red, warnings=yellow, info=blue)
 - Progress bars for long operations
-- Emojis for visual scanning
 - Better formatted help text
 
 ## Usage Examples
@@ -304,14 +302,14 @@ Example output:
 Vault Network Statistics
 ================================================================================
 
-📊 Basic Metrics:
+Basic Metrics:
   Total Notes:          1684
   Total Links:          6548
   Average Degree:       7.78
   Network Density:      0.0023
   Connected Components: 33
 
-🔗 Link Quality:
+Link Quality:
   Reciprocal Links:     438
   Unidirectional Links: 5672
   Orphaned Notes:       25 (1.5%)
@@ -679,7 +677,6 @@ uv run mypy src/
   - Beautiful formatted tables with box-drawing characters
   - Color-coded output (red=errors, yellow=warnings, blue=info)
   - Progress bars and spinners for long operations
-  - Emojis for visual scanning (📋📊🔍🔗💾)
   - Auto-generated help from type hints
 - **Dual CLI**: Both `vault` (argparse) and `vault-app` (typer+rich) available
 - **New Dependencies**: typer >= 0.12.0, rich >= 13.0.0

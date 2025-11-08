@@ -533,14 +533,14 @@ def cmd_graph_stats(args: argparse.Namespace) -> int:
         print("=" * 80)
         print("Vault Network Statistics")
         print("=" * 80)
-        print(f"\n📊 Basic Metrics:")
+        print(f"\nBasic Metrics:")
         print(f"  Total Notes:          {stats['total_notes']}")
         print(f"  Total Links:          {stats['total_links']}")
         print(f"  Average Degree:       {stats['average_degree']:.2f}")
         print(f"  Network Density:      {stats['density']:.4f}")
         print(f"  Connected Components: {stats['connected_components']}")
 
-        print(f"\n🔗 Link Quality:")
+        print(f"\nLink Quality:")
         print(f"  Reciprocal Links:     {quality['reciprocal_links']}")
         print(f"  Unidirectional Links: {quality['unidirectional_links']}")
         print(f"  Orphaned Notes:       {stats['orphaned_notes']} ({quality['orphaned_ratio']:.1%})")
@@ -549,14 +549,14 @@ def cmd_graph_stats(args: argparse.Namespace) -> int:
         if args.hubs:
             hubs = vg.get_hub_notes(args.hubs)
             if hubs:
-                print(f"\n📤 Top {args.hubs} Hub Notes (Most Outgoing Links):")
+                print(f"\nTop {args.hubs} Hub Notes (Most Outgoing Links):")
                 for note, degree in hubs:
                     print(f"  {note}: {degree} outgoing")
 
         if args.authorities:
             authorities = vg.get_authority_notes(args.authorities)
             if authorities:
-                print(f"\n📥 Top {args.authorities} Authority Notes (Most Incoming Links):")
+                print(f"\nTop {args.authorities} Authority Notes (Most Incoming Links):")
                 for note, degree in authorities:
                     print(f"  {note}: {degree} incoming")
 

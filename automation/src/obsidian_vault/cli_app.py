@@ -41,7 +41,7 @@ from obsidian_vault.validators import Severity, ValidatorRegistry
 # Create Typer app and Rich console
 app = typer.Typer(
     name="vault-app",
-    help="🗂️  Obsidian Interview Questions vault automation toolkit",
+    help="Obsidian Interview Questions vault automation toolkit",
     add_completion=False,
     rich_markup_mode="rich",
 )
@@ -73,7 +73,7 @@ def validate(
     quiet: bool = typer.Option(False, "--quiet", "-q", help="Only print summary"),
 ):
     """
-    📋 Validate vault notes for structure, format, and quality.
+    Validate vault notes for structure, format, and quality.
 
     Checks YAML frontmatter, content structure, links, and more.
     """
@@ -266,7 +266,7 @@ def graph_stats(
     authorities: Optional[int] = typer.Option(None, "--authorities", "-a", help="Show top N authority notes"),
 ):
     """
-    📊 Display vault network statistics and link quality metrics.
+    Display vault network statistics and link quality metrics.
 
     Shows total notes, links, density, orphaned notes, and more.
     """
@@ -284,7 +284,7 @@ def graph_stats(
             quality = vg.analyze_link_quality()
 
         # Create main statistics table
-        table = Table(title="📊 Vault Network Statistics", show_header=True, header_style="bold cyan")
+        table = Table(title="Vault Network Statistics", show_header=True, header_style="bold cyan")
         table.add_column("Metric", style="cyan", no_wrap=True)
         table.add_column("Value", justify="right", style="magenta")
 
@@ -305,7 +305,7 @@ def graph_stats(
         if hubs:
             hub_notes = vg.get_hub_notes(hubs)
             if hub_notes:
-                hub_table = Table(title=f"📤 Top {hubs} Hub Notes", show_header=True, header_style="bold green")
+                hub_table = Table(title=f"Top {hubs} Hub Notes", show_header=True, header_style="bold green")
                 hub_table.add_column("Note", style="cyan")
                 hub_table.add_column("Outgoing Links", justify="right", style="green")
 
@@ -319,7 +319,7 @@ def graph_stats(
             authority_notes = vg.get_authority_notes(authorities)
             if authority_notes:
                 auth_table = Table(
-                    title=f"📥 Top {authorities} Authority Notes",
+                    title=f"Top {authorities} Authority Notes",
                     show_header=True,
                     header_style="bold blue",
                 )
@@ -341,7 +341,7 @@ def orphans(
     output: Optional[str] = typer.Option(None, "--output", "-o", help="Write results to file"),
 ):
     """
-    🔍 Find orphaned notes (no incoming or outgoing links).
+    Find orphaned notes (no incoming or outgoing links).
 
     Helps identify disconnected content that needs linking.
     """
@@ -379,7 +379,7 @@ def broken_links(
     output: Optional[str] = typer.Option(None, "--output", "-o", help="Write results to file"),
 ):
     """
-    🔗 Find notes with broken links (links to non-existent notes).
+    Find notes with broken links (links to non-existent notes).
 
     Helps maintain vault integrity by identifying missing link targets.
     """
@@ -428,7 +428,7 @@ def link_report(
     output: Optional[str] = typer.Option(None, "--output", "-o", help="Output file path"),
 ):
     """
-    📋 Generate comprehensive markdown link health report.
+    Generate comprehensive markdown link health report.
 
     Creates a detailed report with statistics, orphans, hubs, and authorities.
     """
@@ -462,7 +462,7 @@ def graph_export(
     ),
 ):
     """
-    💾 Export vault graph to various formats for external analysis.
+    Export vault graph to various formats for external analysis.
 
     Supports GEXF, GraphML, JSON, and CSV formats.
     """
