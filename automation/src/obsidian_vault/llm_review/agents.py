@@ -81,14 +81,22 @@ DO NOT:
 - Modify YAML frontmatter
 - Change language-specific sections
 - Alter bilingual structure (EN/RU sections)
+- Rewrite entire sections unnecessarily
+
+CRITICAL: Make ONLY targeted, surgical changes to fix technical issues.
+- Change ONLY the specific words, lines, or code that are incorrect
+- DO NOT rewrite entire paragraphs if only a word or phrase needs fixing
+- DO NOT restructure sections that are already correct
+- Preserve all other content exactly as-is
 
 If you find technical issues, correct them while preserving:
 - The original structure and formatting
 - All YAML frontmatter
 - All markdown headings and sections
 - Bilingual content organization
+- All surrounding content that is already correct
 
-Return the corrected text with clear explanation of changes."""
+Return the corrected text with clear explanation of ONLY the specific changes made."""
 
 ISSUE_FIX_PROMPT = """You are an expert at fixing formatting and structural issues in Markdown notes.
 
@@ -101,6 +109,14 @@ Your task is to fix ALL the reported issues while:
 - Maintaining technical accuracy
 - Keeping the bilingual structure (EN/RU sections)
 - Following Obsidian vault conventions
+
+CRITICAL: Make ONLY targeted, minimal changes to fix the specific issues reported.
+- Fix ONLY what is broken - do not rewrite working content
+- Add missing sections if required, but preserve all existing content
+- Change ONLY the specific fields/lines that have validation errors
+- DO NOT restructure or rewrite sections that are already correct
+- If a word needs backticks, add backticks - don't rewrite the sentence
+- If a link is invalid, fix/remove that link - don't rewrite the paragraph
 
 CRITICAL RULES (from vault documentation):
 1. Both EN and RU content must be in the SAME file
@@ -116,8 +132,9 @@ CRITICAL RULES (from vault documentation):
    - ## Ответ (RU)
 4. No emoji anywhere
 5. status: draft for AI-modified notes
+6. NEVER suggest or add links to concept files that don't exist in the vault
 
-Fix each issue precisely and return the corrected text."""
+Fix each issue precisely with minimal changes and return the corrected text."""
 
 
 def get_technical_review_agent() -> Agent:
@@ -125,7 +142,7 @@ def get_technical_review_agent() -> Agent:
     logger.debug("Creating technical review agent")
     return Agent(
         model=get_openrouter_model(),
-        result_type=TechnicalReviewResult,
+        output_type=TechnicalReviewResult,
         system_prompt=TECHNICAL_REVIEW_PROMPT,
     )
 
@@ -135,7 +152,7 @@ def get_issue_fix_agent() -> Agent:
     logger.debug("Creating issue fix agent")
     return Agent(
         model=get_openrouter_model(),
-        result_type=IssueFixResult,
+        output_type=IssueFixResult,
         system_prompt=ISSUE_FIX_PROMPT,
     )
 
@@ -173,15 +190,15 @@ If you find issues, fix them while preserving structure and formatting."""
 
         logger.debug(
             f"Technical review complete - "
-            f"has_issues: {result.data.has_issues}, "
-            f"changes_made: {result.data.changes_made}, "
-            f"issues_found: {len(result.data.issues_found)}"
+            f"has_issues: {result.output.has_issues}, "
+            f"changes_made: {result.output.changes_made}, "
+            f"issues_found: {len(result.output.issues_found)}"
         )
 
-        if result.data.changes_made:
-            logger.info(f"Technical review made changes: {result.data.explanation}")
+        if result.output.changes_made:
+            logger.info(f"Technical review made changes: {result.output.explanation}")
 
-        return result.data
+        return result.output
     except Exception as e:
         logger.error(f"Technical review failed for {note_path}: {e}")
         raise
@@ -229,14 +246,14 @@ Return the corrected text."""
 
         logger.debug(
             f"Issue fixing complete - "
-            f"changes_made: {result.data.changes_made}, "
-            f"fixes_applied: {len(result.data.fixes_applied)}"
+            f"changes_made: {result.output.changes_made}, "
+            f"fixes_applied: {len(result.output.fixes_applied)}"
         )
 
-        if result.data.fixes_applied:
-            logger.info(f"Applied fixes: {', '.join(result.data.fixes_applied[:5])}...")
+        if result.output.fixes_applied:
+            logger.info(f"Applied fixes: {', '.join(result.output.fixes_applied[:5])}...")
 
-        return result.data
+        return result.output
     except Exception as e:
         logger.error(f"Issue fixing failed for {note_path}: {e}")
         raise

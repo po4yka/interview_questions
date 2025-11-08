@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import re
 from dataclasses import replace
+from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -219,6 +221,108 @@ class ReviewGraph:
                 "history": history_updates,
             }
 
+    def _create_missing_concept_files(self, issues: list[ReviewIssue]) -> list[str]:
+        """Create missing concept files referenced in validation issues.
+
+        Args:
+            issues: List of validation issues
+
+        Returns:
+            List of created concept file names
+        """
+        created_files = []
+
+        # Pattern to match concept file names (c-*.md)
+        concept_pattern = re.compile(r'c-[\w-]+(?:\.md)?')
+
+        # Extract all concept file references from issue messages
+        concept_files = set()
+        for issue in issues:
+            matches = concept_pattern.findall(issue.message)
+            for match in matches:
+                # Ensure .md extension
+                if not match.endswith('.md'):
+                    match = f"{match}.md"
+                concept_files.add(match)
+
+        if not concept_files:
+            return created_files
+
+        logger.debug(f"Found {len(concept_files)} concept file references in issues")
+
+        # Path to 10-Concepts directory
+        concepts_dir = self.vault_root / "10-Concepts"
+        if not concepts_dir.exists():
+            logger.warning(f"Concepts directory not found: {concepts_dir}")
+            return created_files
+
+        # Create missing concept files
+        for concept_file in concept_files:
+            concept_path = concepts_dir / concept_file
+
+            # Skip if file already exists
+            if concept_path.exists():
+                continue
+
+            # Extract concept name from filename (remove c- prefix and .md extension)
+            concept_name = concept_file.replace('c-', '').replace('.md', '')
+            # Convert kebab-case to Title Case
+            concept_title = ' '.join(word.capitalize() for word in concept_name.split('-'))
+
+            # Generate concept file content
+            now = datetime.now()
+            date_str = now.strftime('%Y-%m-%d')
+            id_str = now.strftime('%Y%m%d-%H%M%S')
+
+            content = f"""---
+id: 'ivc-{id_str}'
+title: {concept_title}
+aliases: [{concept_title}]
+kind: concept
+summary: "Foundational concept for interview preparation"
+links: []
+created: '{date_str}'
+updated: '{date_str}'
+tags: [concept, auto-generated]
+---
+
+# Summary (EN)
+
+{concept_title} is a fundamental concept in software development.
+
+*This concept file was auto-generated. Please expand with detailed information.*
+
+# Сводка (RU)
+
+{concept_title} - фундаментальная концепция в разработке программного обеспечения.
+
+*Этот файл концепции был создан автоматически. Пожалуйста, дополните его подробной информацией.*
+
+## Use Cases / Trade-offs
+
+- To be documented
+
+## References
+
+- To be documented
+"""
+
+            try:
+                # Write the concept file
+                concept_path.write_text(content, encoding='utf-8')
+                logger.info(f"Created missing concept file: {concept_file}")
+                created_files.append(concept_file)
+
+                # Add to note index so it can be referenced
+                # Remove .md extension for note index
+                concept_id = concept_file.replace('.md', '')
+                self.note_index.add(concept_id)
+
+            except Exception as e:
+                logger.error(f"Failed to create concept file {concept_file}: {e}")
+
+        return created_files
+
     async def _llm_fix_issues(self, state: NoteReviewStateDict) -> dict[str, Any]:
         """Node: LLM fixes formatting/structure issues.
 
@@ -237,6 +341,18 @@ class ReviewGraph:
                 "llm_fix_issues", f"Attempting to fix {len(state_obj.issues)} issues"
             )
         )
+
+        # Auto-create missing concept files before attempting fixes
+        created_concepts = self._create_missing_concept_files(state_obj.issues)
+        if created_concepts:
+            logger.info(f"Auto-created {len(created_concepts)} missing concept files")
+            history_updates.append(
+                state_obj.add_history_entry(
+                    "llm_fix_issues",
+                    f"Auto-created missing concept files: {', '.join(created_concepts)}",
+                    created_files=created_concepts,
+                )
+            )
 
         try:
             # Convert issues to string descriptions
@@ -410,13 +526,13 @@ class ReviewGraph:
 
 def create_review_graph(
     vault_root: Path,
-    max_iterations: int = 5,
+    max_iterations: int = 10,
 ) -> ReviewGraph:
     """Create a ReviewGraph instance with loaded taxonomy and note index.
 
     Args:
         vault_root: Path to the vault root
-        max_iterations: Maximum fix iterations per note
+        max_iterations: Maximum fix iterations per note (default: 10)
 
     Returns:
         Configured ReviewGraph instance

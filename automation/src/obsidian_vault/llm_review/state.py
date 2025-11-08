@@ -71,7 +71,7 @@ class NoteReviewState:
 
     # Flags and metadata
     changed: bool = False
-    max_iterations: int = 5
+    max_iterations: int = 10
     completed: bool = False
     error: str | None = None
 
