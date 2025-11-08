@@ -3,7 +3,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Literal
+from typing import Annotated, Any, Literal, Mapping, TypedDict, cast
+
+
+def _append_history(
+    existing: list[dict[str, Any]], new_entries: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """Aggregator that appends new history entries."""
+
+    return [*existing, *new_entries]
 
 from obsidian_vault.validators.base import ValidationIssue
 
@@ -26,6 +34,22 @@ class ReviewIssue:
             field=issue.field,
             line=issue.line,
         )
+
+
+class NoteReviewStateDict(TypedDict, total=False):
+    """Typed dictionary representation used by LangGraph."""
+
+    note_path: str
+    original_text: str
+    current_text: str
+    issues: list[ReviewIssue]
+    iteration: int
+    changed: bool
+    max_iterations: int
+    completed: bool
+    error: str | None
+    history: Annotated[list[dict[str, Any]], _append_history]
+    decision: str | None
 
 
 @dataclass
@@ -52,10 +76,60 @@ class NoteReviewState:
     error: str | None = None
 
     # History tracking (optional, for debugging/reporting)
-    history: list[dict] = field(default_factory=list)
+    history: list[dict[str, Any]] = field(default_factory=list)
+    decision: str | None = None
 
-    def add_history_entry(self, node: str, message: str, **kwargs) -> None:
-        """Add an entry to the history log."""
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any]) -> "NoteReviewState":
+        """Create state from a mapping, copying mutable fields."""
+
+        issues = [
+            issue
+            if isinstance(issue, ReviewIssue)
+            else ReviewIssue(
+                severity=issue["severity"],
+                message=issue["message"],
+                field=issue.get("field"),
+                line=issue.get("line"),
+            )
+            for issue in data.get("issues", [])
+        ]
+
+        history = [dict(entry) for entry in data.get("history", [])]
+
+        return cls(
+            note_path=cast(str, data["note_path"]),
+            original_text=cast(str, data["original_text"]),
+            current_text=cast(str, data.get("current_text", data["original_text"])),
+            issues=issues,
+            iteration=cast(int, data.get("iteration", 0)),
+            changed=cast(bool, data.get("changed", False)),
+            max_iterations=cast(int, data.get("max_iterations", 5)),
+            completed=cast(bool, data.get("completed", False)),
+            error=data.get("error"),
+            history=history,
+            decision=data.get("decision"),
+        )
+
+    def to_dict(self) -> NoteReviewStateDict:
+        """Convert state to a typed dictionary for LangGraph."""
+
+        return {
+            "note_path": self.note_path,
+            "original_text": self.original_text,
+            "current_text": self.current_text,
+            "issues": list(self.issues),
+            "iteration": self.iteration,
+            "changed": self.changed,
+            "max_iterations": self.max_iterations,
+            "completed": self.completed,
+            "error": self.error,
+            "history": [dict(entry) for entry in self.history],
+            "decision": self.decision,
+        }
+
+    def add_history_entry(self, node: str, message: str, **kwargs) -> dict[str, Any]:
+        """Add an entry to the history log and return it."""
         entry = {
             "iteration": self.iteration,
             "node": node,
@@ -63,6 +137,7 @@ class NoteReviewState:
             **kwargs,
         }
         self.history.append(entry)
+        return entry
 
     def has_critical_issues(self) -> bool:
         """Check if there are any critical issues."""
