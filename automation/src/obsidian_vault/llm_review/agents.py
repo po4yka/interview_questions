@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import os
+from dataclasses import dataclass
 from typing import Any
 
 from loguru import logger
+
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent
-from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.models.openai import ModelSettings, OpenAIChatModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
 
@@ -34,11 +36,133 @@ class IssueFixResult(BaseModel):
     changes_made: bool = Field(description="Whether any changes were made")
 
 
-def get_openrouter_model(model_name: str = "anthropic/claude-sonnet-4") -> OpenAIChatModel:
+DEFAULT_OPENROUTER_MODEL = "anthropic/claude-sonnet-4"
+DEFAULT_TEMPERATURE = 0.2
+DEFAULT_TIMEOUT = 60.0
+
+
+def _get_float_from_env(var_name: str) -> float | None:
+    """Return a float value from the environment if it can be parsed."""
+
+    raw_value = os.getenv(var_name)
+    if raw_value is None:
+        return None
+
+    try:
+        return float(raw_value)
+    except ValueError:
+        logger.warning(
+            "Invalid float value for %s: %s — ignoring", var_name, raw_value
+        )
+        return None
+
+
+def _get_int_from_env(var_name: str) -> int | None:
+    """Return an int value from the environment if it can be parsed."""
+
+    raw_value = os.getenv(var_name)
+    if raw_value is None:
+        return None
+
+    try:
+        return int(raw_value)
+    except ValueError:
+        logger.warning(
+            "Invalid integer value for %s: %s — ignoring", var_name, raw_value
+        )
+        return None
+
+
+def _get_bool_from_env(var_name: str) -> bool | None:
+    """Return a bool value from the environment if it can be parsed."""
+
+    raw_value = os.getenv(var_name)
+    if raw_value is None:
+        return None
+
+    normalized = raw_value.strip().lower()
+    if normalized in {"1", "true", "yes", "on"}:
+        return True
+    if normalized in {"0", "false", "no", "off"}:
+        return False
+
+    logger.warning("Invalid boolean value for %s: %s — ignoring", var_name, raw_value)
+    return None
+
+
+@dataclass
+class OpenRouterConfig:
+    """Runtime configuration for OpenRouter requests."""
+
+    model: str
+    headers: dict[str, str]
+    settings_kwargs: dict[str, Any]
+
+    @classmethod
+    def from_environment(cls, override_model: str | None = None) -> "OpenRouterConfig":
+        """Construct configuration, applying environment overrides with validation."""
+
+        resolved_model = override_model or os.getenv(
+            "OPENROUTER_MODEL", DEFAULT_OPENROUTER_MODEL
+        )
+
+        headers: dict[str, str] = {}
+        http_referer = os.getenv("OPENROUTER_HTTP_REFERER")
+        if http_referer:
+            headers["HTTP-Referer"] = http_referer
+
+        app_title = os.getenv("OPENROUTER_APP_TITLE")
+        if app_title:
+            headers["X-Title"] = app_title
+
+        settings_kwargs: dict[str, Any] = {}
+
+        temperature = _get_float_from_env("OPENROUTER_TEMPERATURE")
+        if temperature is None:
+            temperature = DEFAULT_TEMPERATURE
+        settings_kwargs["temperature"] = temperature
+
+        top_p = _get_float_from_env("OPENROUTER_TOP_P")
+        if top_p is not None:
+            settings_kwargs["top_p"] = top_p
+
+        presence_penalty = _get_float_from_env("OPENROUTER_PRESENCE_PENALTY")
+        if presence_penalty is not None:
+            settings_kwargs["presence_penalty"] = presence_penalty
+
+        frequency_penalty = _get_float_from_env("OPENROUTER_FREQUENCY_PENALTY")
+        if frequency_penalty is not None:
+            settings_kwargs["frequency_penalty"] = frequency_penalty
+
+        max_tokens = _get_int_from_env("OPENROUTER_MAX_TOKENS")
+        if max_tokens is not None:
+            settings_kwargs["max_tokens"] = max_tokens
+
+        seed = _get_int_from_env("OPENROUTER_SEED")
+        if seed is not None:
+            settings_kwargs["seed"] = seed
+
+        timeout = _get_float_from_env("OPENROUTER_TIMEOUT")
+        if timeout is None:
+            timeout = DEFAULT_TIMEOUT
+        settings_kwargs["timeout"] = timeout
+
+        parallel_tool_calls = _get_bool_from_env("OPENROUTER_PARALLEL_TOOL_CALLS")
+        if parallel_tool_calls is not None:
+            settings_kwargs["parallel_tool_calls"] = parallel_tool_calls
+
+        if headers:
+            settings_kwargs["extra_headers"] = headers
+
+        return cls(resolved_model, headers, settings_kwargs)
+
+
+def get_openrouter_model(model_name: str | None = None) -> OpenAIChatModel:
     """Get an OpenRouter model configured for use with PydanticAI.
 
     Args:
-        model_name: The model identifier (default: Polaris Alpha via Claude Sonnet 4)
+        model_name: Optional model identifier override. If omitted, uses the
+            ``OPENROUTER_MODEL`` environment variable or the default model.
 
     Returns:
         Configured OpenAIChatModel instance
@@ -54,49 +178,72 @@ def get_openrouter_model(model_name: str = "anthropic/claude-sonnet-4") -> OpenA
             "Get your API key from https://openrouter.ai/keys"
         )
 
-    logger.debug(f"Initializing OpenRouter model: {model_name}")
+    config = OpenRouterConfig.from_environment(model_name)
+    logger.debug(
+        "Initializing OpenRouter model: %s (settings: %s)",
+        config.model,
+        {k: v for k, v in config.settings_kwargs.items() if k != "extra_headers"},
+    )
+
+    settings = ModelSettings(**config.settings_kwargs)
+
     return OpenAIChatModel(
-        model_name,
+        config.model,
         provider=OpenAIProvider(
             base_url="https://openrouter.ai/api/v1",
             api_key=api_key,
         ),
+        settings=settings,
     )
 
 
 # System prompts
-TECHNICAL_REVIEW_PROMPT = """You are an expert technical reviewer for interview preparation notes.
+TECHNICAL_REVIEW_PROMPT = """You are the **technical accuracy reviewer** for bilingual Obsidian interview notes.
 
-Your task is to review notes for technical accuracy and factual correctness.
+REFERENCE MATERIAL (non-exhaustive):
+- 00-Administration/AI-Agents/AGENT-CHECKLIST.md — vault compliance rules.
+- 00-Administration/AI-Agents/NOTE-REVIEW-PROMPT.md — review workflow expectations.
 
-FOCUS ON:
-- Technical accuracy of explanations
-- Correctness of code examples
-- Logical consistency
-- Completeness of technical content
-- Accuracy of complexity analysis (Big-O notation)
+PRIMARY GOALS
+- Validate every technical statement, algorithm explanation, complexity analysis, and code example for factual accuracy.
+- Keep changes surgical and respect the existing formatting, bilingual order (RU first), and author voice.
 
-DO NOT:
-- Change formatting or structure (this will be handled separately)
-- Modify YAML frontmatter
-- Change language-specific sections
-- Alter bilingual structure (EN/RU sections)
-- Rewrite entire sections unnecessarily
+REVIEW PROCEDURE
+1. Read the entire note (RU + EN) to understand scope, question, and solution.
+2. Cross-check against standard CS/Android/system design knowledge and the vault rules above.
+3. Confirm blockquoted questions, YAML integrity, and section ordering remain intact (do not edit YAML fields).
+4. When an issue is found, update the minimal fragment in **both languages** so they stay semantically aligned.
+5. If correctness cannot be confirmed with high confidence, flag the concern instead of guessing.
 
-CRITICAL: Make ONLY targeted, surgical changes to fix technical issues.
-- Change ONLY the specific words, lines, or code that are incorrect
-- DO NOT rewrite entire paragraphs if only a word or phrase needs fixing
-- DO NOT restructure sections that are already correct
-- Preserve all other content exactly as-is
+NEVER DO
+- Modify or regenerate YAML frontmatter, aliases, tags, or metadata formatting.
+- Reorder headings, lists, code blocks, or sections that already follow vault conventions.
+- Introduce new references, concepts, or files that are absent from the original note.
+- Rewrite large sections merely for style; only change content when technically necessary.
 
-If you find technical issues, correct them while preserving:
-- The original structure and formatting
-- All YAML frontmatter
-- All markdown headings and sections
-- Bilingual content organization
-- All surrounding content that is already correct
+EDITING RULES
+- Preserve Markdown syntax, indentation, spacing, wikilinks, and bilingual structure.
+- Keep RU and EN sections technically equivalent after edits.
+- Prefer explicit corrections over vague wording; show the right complexity, edge cases, and terminology.
+- Use ``issues_found`` to list each discrete technical problem (empty when none were found).
 
-Return the corrected text with clear explanation of ONLY the specific changes made."""
+OUTPUT FORMAT
+Respond **only** with a JSON object matching ``TechnicalReviewResult``:
+{
+  "has_issues": bool,
+  "issues_found": list[str],
+  "revised_text": str,
+  "changes_made": bool,
+  "explanation": str
+}
+- ``revised_text`` must contain the full note text, identical to the input when no corrections are needed.
+- ``explanation`` summarises the verification steps and key fixes (or explicitly states that no issues were found).
+
+QUALITY BAR
+- Treat ambiguous or underspecified claims as issues that must be resolved or flagged.
+- Double-check complexity analysis, edge cases, and platform-specific guidance against senior-level expectations.
+- Ensure the final RU and EN content remains technically rigorous and mutually consistent.
+"""
 
 ISSUE_FIX_PROMPT = """You are an expert at fixing formatting and structural issues in Markdown notes.
 
@@ -173,15 +320,14 @@ async def run_technical_review(
     logger.debug(f"Starting technical review for: {note_path}")
     logger.debug(f"Note length: {len(note_text)} characters")
 
-    prompt = f"""Review this interview question note for technical accuracy.
-
-Note path: {note_path}
-
-Note content:
-{note_text}
-
-Check for technical correctness, code accuracy, and completeness.
-If you find issues, fix them while preserving structure and formatting."""
+    prompt = (
+        "Review the following interview question note for technical accuracy, "
+        "code correctness, and completeness while preserving formatting.\n\n"
+        f"Note path: {note_path}\n\n"
+        "```markdown\n"
+        f"{note_text}\n"
+        "```"
+    )
 
     try:
         agent = get_technical_review_agent()
