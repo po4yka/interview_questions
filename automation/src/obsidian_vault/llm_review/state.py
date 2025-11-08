@@ -50,6 +50,8 @@ class NoteReviewStateDict(TypedDict, total=False):
     error: str | None
     history: Annotated[list[dict[str, Any]], _append_history]
     decision: str | None
+    qa_verification_passed: bool | None
+    qa_verification_summary: str | None
 
 
 @dataclass
@@ -74,6 +76,10 @@ class NoteReviewState:
     max_iterations: int = 10
     completed: bool = False
     error: str | None = None
+
+    # QA verification tracking
+    qa_verification_passed: bool | None = None
+    qa_verification_summary: str | None = None
 
     # History tracking (optional, for debugging/reporting)
     history: list[dict[str, Any]] = field(default_factory=list)
@@ -107,6 +113,8 @@ class NoteReviewState:
             max_iterations=cast(int, data.get("max_iterations", 5)),
             completed=cast(bool, data.get("completed", False)),
             error=data.get("error"),
+            qa_verification_passed=data.get("qa_verification_passed"),
+            qa_verification_summary=data.get("qa_verification_summary"),
             history=history,
             decision=data.get("decision"),
         )
@@ -124,6 +132,8 @@ class NoteReviewState:
             "max_iterations": self.max_iterations,
             "completed": self.completed,
             "error": self.error,
+            "qa_verification_passed": self.qa_verification_passed,
+            "qa_verification_summary": self.qa_verification_summary,
             "history": [dict(entry) for entry in self.history],
             "decision": self.decision,
         }

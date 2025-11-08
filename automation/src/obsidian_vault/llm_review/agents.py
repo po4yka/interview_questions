@@ -52,6 +52,29 @@ class MetadataSanityResult(BaseModel):
     )
 
 
+class QAVerificationResult(BaseModel):
+    """Result of final QA/critic verification before marking as complete."""
+
+    is_acceptable: bool = Field(
+        description="Whether the note is acceptable to mark as complete (no critical issues)"
+    )
+    factual_errors: list[str] = Field(
+        default_factory=list,
+        description="Any factual or technical errors found in the final content",
+    )
+    bilingual_parity_issues: list[str] = Field(
+        default_factory=list,
+        description="Issues where EN and RU content are not semantically equivalent",
+    )
+    quality_concerns: list[str] = Field(
+        default_factory=list,
+        description="Non-critical quality concerns or improvements suggested",
+    )
+    summary: str = Field(
+        description="Brief summary of the verification result and overall note quality"
+    )
+
+
 DEFAULT_OPENROUTER_MODEL = "anthropic/claude-sonnet-4"
 DEFAULT_TEMPERATURE = 0.2
 DEFAULT_TIMEOUT = 60.0
@@ -356,6 +379,72 @@ Examples:
 - "Tags contain Russian characters: ['корутины'] (should be English only)"
 """
 
+QA_VERIFICATION_PROMPT = """You are the **final QA/critic agent** for bilingual Obsidian interview notes.
+
+Your role is to perform a FINAL verification check AFTER all validator issues have been resolved and before marking the note as complete.
+
+PRIMARY GOALS:
+1. Verify no new factual/technical errors were introduced during the fix iterations
+2. Confirm bilingual parity (EN and RU sections are semantically equivalent)
+3. Assess overall note quality and identify any remaining risks
+4. Provide a clear pass/fail decision with reasoning
+
+WHAT TO CHECK:
+
+1. **Factual Accuracy**:
+   - Technical statements, algorithm explanations, complexity analysis
+   - Code examples are correct and runnable
+   - No incorrect claims or outdated information
+   - Platform-specific guidance is accurate
+
+2. **Bilingual Parity**:
+   - RU and EN sections convey the same technical information
+   - No missing translations or semantic drift between languages
+   - Code examples and technical terms are consistent
+   - Both versions are complete and equivalent
+
+3. **Content Quality**:
+   - Answer is complete and addresses the question
+   - Explanation is clear and well-structured
+   - Technical depth is appropriate for the difficulty level
+   - No placeholder or incomplete sections (except "Follow-ups" which is optional)
+
+4. **Format Integrity** (quick check):
+   - YAML frontmatter is present and looks reasonable
+   - Required sections exist (Question EN/RU, Answer EN/RU)
+   - No obvious formatting issues
+
+WHAT NOT TO CHECK:
+- Detailed YAML validation (validators already checked this)
+- Specific tag requirements (validators already checked this)
+- Link validity (validators already checked this)
+- Style preferences (accept author's voice)
+
+OUTPUT FORMAT:
+Return a JSON object matching `QAVerificationResult`:
+{
+  "is_acceptable": bool,  // true = safe to complete, false = needs more work
+  "factual_errors": list[str],  // Critical technical errors that MUST be fixed
+  "bilingual_parity_issues": list[str],  // EN/RU semantic mismatches
+  "quality_concerns": list[str],  // Non-critical improvements or warnings
+  "summary": str  // 2-3 sentence summary of verification result
+}
+
+DECISION CRITERIA:
+- Set `is_acceptable = true` if:
+  - No factual errors
+  - No bilingual parity issues
+  - Content is complete and correct (quality_concerns are acceptable)
+
+- Set `is_acceptable = false` if:
+  - Any factual/technical errors exist
+  - EN and RU content are not equivalent
+  - Answer is incomplete or incorrect
+
+Be thorough but pragmatic. Minor style issues should go in quality_concerns, not block completion.
+The goal is to catch serious problems that would mislead interview candidates, not to demand perfection.
+"""
+
 
 def get_technical_review_agent() -> Agent:
     """Get the technical review agent (lazy initialization)."""
@@ -384,6 +473,16 @@ def get_metadata_sanity_agent() -> Agent:
         model=get_openrouter_model(),
         output_type=MetadataSanityResult,
         system_prompt=METADATA_SANITY_PROMPT,
+    )
+
+
+def get_qa_verification_agent() -> Agent:
+    """Get the QA verification agent (lazy initialization)."""
+    logger.debug("Creating QA verification agent")
+    return Agent(
+        model=get_openrouter_model(),
+        output_type=QAVerificationResult,
+        system_prompt=QA_VERIFICATION_PROMPT,
     )
 
 
@@ -534,4 +633,65 @@ async def run_metadata_sanity_check(
         return result.output
     except Exception as e:
         logger.error(f"Metadata sanity check failed for {note_path}: {e}")
+        raise
+
+
+async def run_qa_verification(
+    note_text: str, note_path: str, iteration_count: int, **kwargs: Any
+) -> QAVerificationResult:
+    """Run final QA/critic verification on a note before marking complete.
+
+    This agent performs a final check to ensure:
+    - No factual errors were introduced during fixes
+    - Bilingual parity is maintained
+    - Overall quality is acceptable
+
+    Args:
+        note_text: The final note content to verify
+        note_path: Path to the note (for context)
+        iteration_count: Number of fix iterations that were performed
+        **kwargs: Additional context
+
+    Returns:
+        QAVerificationResult with verification findings and pass/fail decision
+    """
+    logger.debug(f"Starting QA verification for: {note_path}")
+    logger.debug(f"Note length: {len(note_text)} characters, iterations: {iteration_count}")
+
+    prompt = (
+        "Perform a final QA/critic verification on this note. "
+        "All validator issues have been resolved. Your job is to ensure no factual errors "
+        "were introduced, bilingual parity is maintained, and overall quality is acceptable.\n\n"
+        f"Note path: {note_path}\n"
+        f"Fix iterations performed: {iteration_count}\n\n"
+        "```markdown\n"
+        f"{note_text}\n"
+        "```"
+    )
+
+    try:
+        agent = get_qa_verification_agent()
+        logger.debug("Running QA verification agent...")
+        result = await agent.run(prompt)
+
+        logger.debug(
+            f"QA verification complete - "
+            f"is_acceptable: {result.output.is_acceptable}, "
+            f"factual_errors: {len(result.output.factual_errors)}, "
+            f"bilingual_parity_issues: {len(result.output.bilingual_parity_issues)}, "
+            f"quality_concerns: {len(result.output.quality_concerns)}"
+        )
+
+        if not result.output.is_acceptable:
+            logger.warning(
+                f"QA verification found issues preventing completion: "
+                f"{len(result.output.factual_errors)} factual errors, "
+                f"{len(result.output.bilingual_parity_issues)} parity issues"
+            )
+        else:
+            logger.success(f"QA verification passed: {result.output.summary}")
+
+        return result.output
+    except Exception as e:
+        logger.error(f"QA verification failed for {note_path}: {e}")
         raise
