@@ -8,7 +8,7 @@ from typing import Any
 from loguru import logger
 from pydantic import BaseModel, Field
 from pydantic_ai import Agent
-from pydantic_ai.models.openai import OpenAIChatModel
+from pydantic_ai.models.openai import OpenAIModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
 
@@ -34,14 +34,14 @@ class IssueFixResult(BaseModel):
     changes_made: bool = Field(description="Whether any changes were made")
 
 
-def get_openrouter_model(model_name: str = "anthropic/claude-sonnet-4") -> OpenAIChatModel:
+def get_openrouter_model(model_name: str = "anthropic/claude-sonnet-4") -> OpenAIModel:
     """Get an OpenRouter model configured for use with PydanticAI.
 
     Args:
         model_name: The model identifier (default: Polaris Alpha via Claude Sonnet 4)
 
     Returns:
-        Configured OpenAIChatModel instance
+        Configured OpenAIModel instance
 
     Raises:
         ValueError: If OPENROUTER_API_KEY is not set
@@ -55,7 +55,7 @@ def get_openrouter_model(model_name: str = "anthropic/claude-sonnet-4") -> OpenA
         )
 
     logger.debug(f"Initializing OpenRouter model: {model_name}")
-    return OpenAIChatModel(
+    return OpenAIModel(
         model_name,
         provider=OpenAIProvider(
             base_url="https://openrouter.ai/api/v1",
