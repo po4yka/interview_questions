@@ -173,15 +173,15 @@ If you find issues, fix them while preserving structure and formatting."""
 
         logger.debug(
             f"Technical review complete - "
-            f"has_issues: {result.data.has_issues}, "
-            f"changes_made: {result.data.changes_made}, "
-            f"issues_found: {len(result.data.issues_found)}"
+            f"has_issues: {result.output.has_issues}, "
+            f"changes_made: {result.output.changes_made}, "
+            f"issues_found: {len(result.output.issues_found)}"
         )
 
-        if result.data.changes_made:
-            logger.info(f"Technical review made changes: {result.data.explanation}")
+        if result.output.changes_made:
+            logger.info(f"Technical review made changes: {result.output.explanation}")
 
-        return result.data
+        return result.output
     except Exception as e:
         logger.error(f"Technical review failed for {note_path}: {e}")
         raise
@@ -229,14 +229,14 @@ Return the corrected text."""
 
         logger.debug(
             f"Issue fixing complete - "
-            f"changes_made: {result.data.changes_made}, "
-            f"fixes_applied: {len(result.data.fixes_applied)}"
+            f"changes_made: {result.output.changes_made}, "
+            f"fixes_applied: {len(result.output.fixes_applied)}"
         )
 
-        if result.data.fixes_applied:
-            logger.info(f"Applied fixes: {', '.join(result.data.fixes_applied[:5])}...")
+        if result.output.fixes_applied:
+            logger.info(f"Applied fixes: {', '.join(result.output.fixes_applied[:5])}...")
 
-        return result.data
+        return result.output
     except Exception as e:
         logger.error(f"Issue fixing failed for {note_path}: {e}")
         raise
