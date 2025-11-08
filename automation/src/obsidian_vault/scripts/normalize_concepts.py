@@ -7,11 +7,10 @@ from pathlib import Path
 
 import sys
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "utils" / "src"))
+from obsidian_vault.utils.yaml_loader import load_yaml
 
-from utils.yaml_loader import load_yaml  # type: ignore
-
-ROOT = Path(__file__).resolve().parents[1]
+# Find the repo root (should be 4 levels up from this file: automation/src/obsidian_vault/scripts/normalize_concepts.py)
+ROOT = Path(__file__).resolve().parents[4]
 CONCEPT_DIR = ROOT / "InterviewQuestions" / "10-Concepts"
 
 ALLOWED_TOPICS = {

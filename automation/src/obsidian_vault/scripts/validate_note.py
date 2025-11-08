@@ -27,15 +27,13 @@ def _discover_repo_root() -> Path:
 
 
 ROOT = _discover_repo_root()
-if str(ROOT) not in sys.path:
-    sys.path.insert(0, str(ROOT))
 
-from validators import Severity, ValidatorRegistry  # type: ignore
+from obsidian_vault.validators import Severity, ValidatorRegistry
 # Import all validators to trigger auto-registration
-import validators  # noqa: F401  # type: ignore
-from utils.report_generator import FileResult, ReportGenerator
-from utils.taxonomy_loader import TaxonomyLoader
-from utils.yaml_loader import load_yaml
+import obsidian_vault.validators  # noqa: F401
+from obsidian_vault.utils.report_generator import FileResult, ReportGenerator
+from obsidian_vault.utils.taxonomy_loader import TaxonomyLoader
+from obsidian_vault.utils.yaml_loader import load_yaml
 
 
 def parse_args() -> argparse.Namespace:
