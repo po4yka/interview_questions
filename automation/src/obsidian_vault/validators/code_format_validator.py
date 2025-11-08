@@ -43,13 +43,13 @@ class CodeFormatValidator(BaseValidator):
 
         issues_found = []
 
-        for part_idx, (part, is_code_block) in enumerate(parts):
+        for _part_idx, (part, is_code_block) in enumerate(parts):
             if is_code_block:
                 continue  # Skip code blocks
 
             for match in UNESCAPED_GENERIC_PATTERN.finditer(part):
                 type_with_generic = match.group(0)
-                line_num = self.content[:self.content.find(part) + match.start()].count('\n') + 1
+                line_num = self.content[: self.content.find(part) + match.start()].count("\n") + 1
 
                 # Avoid duplicate reporting
                 if type_with_generic not in issues_found:
@@ -84,14 +84,17 @@ class CodeFormatValidator(BaseValidator):
             for type_name in COMMON_TYPE_NAMES:
                 # Look for type name not in backticks
                 # Pattern: type name not preceded/followed by backtick or alphanumeric
-                pattern = rf'(?<!`)\b{re.escape(type_name)}\b(?!`)'
+                pattern = rf"(?<!`)\b{re.escape(type_name)}\b(?!`)"
 
                 matches = list(re.finditer(pattern, part))
                 if matches and type_name not in issues_found:
                     issues_found.add(type_name)
                     # Only report first occurrence to avoid spam
                     first_match = matches[0]
-                    line_num = self.content[:self.content.find(part) + first_match.start()].count('\n') + 1
+                    line_num = (
+                        self.content[: self.content.find(part) + first_match.start()].count("\n")
+                        + 1
+                    )
 
                     self.add_issue(
                         Severity.WARNING,
@@ -113,13 +116,13 @@ class CodeFormatValidator(BaseValidator):
         parts = []
 
         # Pattern to match code blocks (``` ... ```)
-        code_block_pattern = r'```[\s\S]*?```'
+        code_block_pattern = r"```[\s\S]*?```"
 
         last_end = 0
         for match in re.finditer(code_block_pattern, content):
             # Add text before code block
             if match.start() > last_end:
-                parts.append((content[last_end:match.start()], False))
+                parts.append((content[last_end : match.start()], False))
 
             # Add code block
             parts.append((match.group(0), True))

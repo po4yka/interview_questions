@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from .base import BaseValidator, Severity
-from .config import SYSTEM_DESIGN_SUBSECTIONS, OPTIONAL_VERSION_SUBSECTIONS
+from .config import OPTIONAL_VERSION_SUBSECTIONS, SYSTEM_DESIGN_SUBSECTIONS
 from .registry import ValidatorRegistry
 
 
@@ -17,9 +17,8 @@ class SystemDesignValidator(BaseValidator):
         difficulty = self.frontmatter.get("difficulty")
         topic = self.frontmatter.get("topic")
 
-        is_system_design = (
-            question_kind == "system-design" or
-            (topic == "android" and difficulty == "hard" and question_kind == "android")
+        is_system_design = question_kind == "system-design" or (
+            topic == "android" and difficulty == "hard" and question_kind == "android"
         )
 
         if not is_system_design:
@@ -37,8 +36,8 @@ class SystemDesignValidator(BaseValidator):
         difficulty = self.frontmatter.get("difficulty")
 
         has_versions = (
-            OPTIONAL_VERSION_SUBSECTIONS["short"]["en"] in content or
-            OPTIONAL_VERSION_SUBSECTIONS["short"]["ru"] in content
+            OPTIONAL_VERSION_SUBSECTIONS["short"]["en"] in content
+            or OPTIONAL_VERSION_SUBSECTIONS["short"]["ru"] in content
         )
 
         if difficulty == "hard" and not has_versions:

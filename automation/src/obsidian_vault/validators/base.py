@@ -4,7 +4,6 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List, Optional
 
 
 class Severity(str, Enum):
@@ -22,16 +21,16 @@ class ValidationIssue:
 
     severity: Severity
     message: str
-    field: Optional[str] = None
-    line: Optional[int] = None
+    field: str | None = None
+    line: int | None = None
 
 
 @dataclass
 class ValidationSummary:
     """Holds issues and passed checks for a validator run."""
 
-    issues: List[ValidationIssue] = field(default_factory=list)
-    passed: List[str] = field(default_factory=list)
+    issues: list[ValidationIssue] = field(default_factory=list)
+    passed: list[str] = field(default_factory=list)
 
 
 class BaseValidator:
@@ -45,11 +44,11 @@ class BaseValidator:
         self._summary = ValidationSummary()
 
     @property
-    def issues(self) -> List[ValidationIssue]:
+    def issues(self) -> list[ValidationIssue]:
         return self._summary.issues
 
     @property
-    def passed(self) -> List[str]:
+    def passed(self) -> list[str]:
         return self._summary.passed
 
     def add_issue(
@@ -57,8 +56,8 @@ class BaseValidator:
         severity: Severity,
         message: str,
         *,
-        field: Optional[str] = None,
-        line: Optional[int] = None,
+        field: str | None = None,
+        line: int | None = None,
     ) -> None:
         """Record a validation issue."""
 

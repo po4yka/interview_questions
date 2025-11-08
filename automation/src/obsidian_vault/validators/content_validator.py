@@ -7,13 +7,13 @@ from pathlib import Path
 
 from .base import BaseValidator, Severity
 from .config import (
-    STRUCTURED_REQUIRED_HEADINGS,
-    GENERIC_FOLLOWUP_PATTERNS,
-    FOLLOWUP_MIN_RECOMMENDED,
+    CONCEPT_PREFIX,
     FOLLOWUP_MAX_RECOMMENDED,
+    FOLLOWUP_MIN_RECOMMENDED,
+    GENERIC_FOLLOWUP_PATTERNS,
     MIN_FOLLOWUP_QUESTION_LENGTH,
     MIN_SUBSECTION_CONTENT_LENGTH,
-    CONCEPT_PREFIX,
+    STRUCTURED_REQUIRED_HEADINGS,
 )
 from .registry import ValidatorRegistry
 
@@ -80,9 +80,7 @@ class ContentValidator(BaseValidator):
             self.add_passed("Heading order valid")
 
     def _check_section_body(self, content: str, start: str, end: str) -> None:
-        pattern = re.compile(
-            rf"{re.escape(start)}\s*(.*?)\s*{re.escape(end)}", re.DOTALL
-        )
+        pattern = re.compile(rf"{re.escape(start)}\s*(.*?)\s*{re.escape(end)}", re.DOTALL)
         match = pattern.search(content)
         if not match:
             # Already reported missing headings; avoid duplicate errors.
@@ -96,7 +94,11 @@ class ContentValidator(BaseValidator):
 
     def _check_references(self, content: str) -> None:
         references_section = self._extract_section(content, "## References")
-        if references_section and "[[" not in references_section and "http" not in references_section:
+        if (
+            references_section
+            and "[[" not in references_section
+            and "http" not in references_section
+        ):
             self.add_issue(
                 Severity.INFO,
                 "References section is present but contains no links",
@@ -111,7 +113,7 @@ class ContentValidator(BaseValidator):
             return
 
         # Count bullet points (questions)
-        bullets = re.findall(r'^\s*[-*]\s+', followups, re.MULTILINE)
+        bullets = re.findall(r"^\s*[-*]\s+", followups, re.MULTILINE)
 
         if len(bullets) < FOLLOWUP_MIN_RECOMMENDED:
             self.add_issue(
@@ -140,7 +142,9 @@ class ContentValidator(BaseValidator):
                 break  # Only report once
 
         # Check if questions are too short (likely not detailed enough)
-        lines = [line.strip() for line in followups.split('\n') if line.strip().startswith(('-', '*'))]
+        lines = [
+            line.strip() for line in followups.split("\n") if line.strip().startswith(("-", "*"))
+        ]
         short_questions = [line for line in lines if len(line) < MIN_FOLLOWUP_QUESTION_LENGTH]
 
         if len(short_questions) > len(lines) // 2:  # More than half are short
@@ -156,14 +160,18 @@ class ContentValidator(BaseValidator):
         # Pattern: heading followed by optional blank lines, then check for blockquote
         patterns = [
             (r"# Вопрос \(RU\)\s*\n(?:\s*\n)*((?!>)[^\n])", "Russian question", "# Вопрос (RU)"),
-            (r"# Question \(EN\)\s*\n(?:\s*\n)*((?!>)[^\n])", "English question", "# Question (EN)"),
+            (
+                r"# Question \(EN\)\s*\n(?:\s*\n)*((?!>)[^\n])",
+                "English question",
+                "# Question (EN)",
+            ),
         ]
 
         for pattern, lang_label, heading in patterns:
             match = re.search(pattern, content)
             if match:
                 # Get the line number for better error reporting
-                lines_before = content[:match.start()].count('\n')
+                lines_before = content[: match.start()].count("\n")
                 self.add_issue(
                     Severity.ERROR,
                     f"{lang_label} missing blockquote syntax: expected '>' after '{heading}' heading",
@@ -172,10 +180,9 @@ class ContentValidator(BaseValidator):
             else:
                 # Check if heading exists and has blockquote
                 heading_pattern = rf"{re.escape(heading)}\s*\n(?:\s*\n)*>"
-                if re.search(heading_pattern, content):
-                    # Only mark as passed if we found the heading with proper blockquote
-                    if lang_label == "English question":  # Only log once
-                        self.add_passed("Questions use blockquote syntax (>)")
+                if re.search(heading_pattern, content) and lang_label == "English question":
+                    # Only mark as passed if we found the heading with proper blockquote and only log once
+                    self.add_passed("Questions use blockquote syntax (>)")
 
     def _check_optional_question_versions(self, content: str) -> None:
         """Validate optional Short/Detailed Version subsections for system design questions."""
@@ -231,9 +238,7 @@ class ContentValidator(BaseValidator):
             )
 
         if has_ru_detailed:
-            self._check_subsection_has_content(
-                content, "## Подробная Версия", ["# Question (EN)"]
-            )
+            self._check_subsection_has_content(content, "## Подробная Версия", ["# Question (EN)"])
 
         if has_en_short:
             self._check_subsection_has_content(
@@ -241,12 +246,10 @@ class ContentValidator(BaseValidator):
             )
 
         if has_en_detailed:
-            self._check_subsection_has_content(
-                content, "## Detailed Version", ["## Ответ (RU)"]
-            )
+            self._check_subsection_has_content(content, "## Detailed Version", ["## Ответ (RU)"])
 
         # Log success if used correctly
-        if (has_ru_short and has_en_short and has_ru_detailed and has_en_detailed):
+        if has_ru_short and has_en_short and has_ru_detailed and has_en_detailed:
             self.add_passed("Optional question versions (Short/Detailed) present and aligned")
 
     def _check_subsection_has_content(
@@ -266,7 +269,7 @@ class ContentValidator(BaseValidator):
                 end_pos = pos
 
         # Extract text between start and end
-        text = content[start_pos + len(start_heading):end_pos].strip()
+        text = content[start_pos + len(start_heading) : end_pos].strip()
 
         if not text or len(text) < MIN_SUBSECTION_CONTENT_LENGTH:
             self.add_issue(
@@ -276,8 +279,6 @@ class ContentValidator(BaseValidator):
 
     @staticmethod
     def _extract_section(content: str, heading: str) -> str:
-        pattern = re.compile(
-            rf"{re.escape(heading)}\s*(.*?)(\n## |\Z)", re.DOTALL
-        )
+        pattern = re.compile(rf"{re.escape(heading)}\s*(.*?)(\n## |\Z)", re.DOTALL)
         match = pattern.search(content)
         return match.group(1).strip() if match else ""

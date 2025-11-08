@@ -27,11 +27,11 @@ STRUCTURED_REQUIRED_HEADINGS = {
 
 # Generic/low-quality follow-up question patterns to detect
 GENERIC_FOLLOWUP_PATTERNS = [
-    (r'What else\??\s*$', "generic 'What else?'"),
-    (r'Tell me more\??', "generic 'Tell me more'"),
-    (r'Can you explain\??\s*$', "generic 'Can you explain?'"),
-    (r'Anything else\??', "generic 'Anything else?'"),
-    (r'What about\?\s*$', "incomplete 'What about?'"),
+    (r"What else\??\s*$", "generic 'What else?'"),
+    (r"Tell me more\??", "generic 'Tell me more'"),
+    (r"Can you explain\??\s*$", "generic 'Can you explain?'"),
+    (r"Anything else\??", "generic 'Anything else?'"),
+    (r"What about\?\s*$", "incomplete 'What about?'"),
 ]
 
 # Recommended follow-up question count ranges
@@ -50,9 +50,7 @@ MIN_FOLLOWUP_QUESTION_LENGTH = 20
 # ============================================================================
 
 # Filename pattern for question notes
-FILENAME_PATTERN = re.compile(
-    r"^q-[a-z0-9-]+--[a-z0-9-]+--(easy|medium|hard)\.md$"
-)
+FILENAME_PATTERN = re.compile(r"^q-[a-z0-9-]+--[a-z0-9-]+--(easy|medium|hard)\.md$")
 
 # Topic to folder mapping
 TOPIC_TO_FOLDER_MAPPING = {
@@ -134,9 +132,7 @@ COMMON_TYPE_NAMES = [
 ]
 
 # Pattern for detecting unescaped generic types (e.g., ArrayList<String>)
-UNESCAPED_GENERIC_PATTERN = re.compile(
-    r'(?<!`)(?<!`)\b([A-Z][a-zA-Z0-9]*)<([^>]+)>(?!`)(?!`)'
-)
+UNESCAPED_GENERIC_PATTERN = re.compile(r"(?<!`)(?<!`)\b([A-Z][a-zA-Z0-9]*)<([^>]+)>(?!`)(?!`)")
 
 # ============================================================================
 # Link Quality Constants

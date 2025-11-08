@@ -2,18 +2,16 @@
 
 from __future__ import annotations
 
-import os
-import re
 from pathlib import Path
 
 from .base import BaseValidator, Severity
 from .config import (
-    FILENAME_PATTERN,
-    TOPIC_TO_FOLDER_MAPPING,
-    CONCEPTS_FOLDER,
-    MOCS_FOLDER,
     CONCEPT_PREFIX,
+    CONCEPTS_FOLDER,
+    FILENAME_PATTERN,
     MOC_PREFIX,
+    MOCS_FOLDER,
+    TOPIC_TO_FOLDER_MAPPING,
 )
 from .registry import ValidatorRegistry
 

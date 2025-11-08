@@ -3,15 +3,13 @@
 from __future__ import annotations
 
 import re
-from pathlib import Path
-from typing import Set
 
 from .base import BaseValidator, Severity
 from .config import (
-    RELATED_LINKS_MIN_RECOMMENDED,
-    RELATED_LINKS_MAX_RECOMMENDED,
     CONCEPT_PREFIX,
     QUESTION_PREFIX,
+    RELATED_LINKS_MAX_RECOMMENDED,
+    RELATED_LINKS_MIN_RECOMMENDED,
 )
 from .registry import ValidatorRegistry
 
@@ -29,7 +27,7 @@ class LinkValidator(BaseValidator):
         frontmatter: dict,
         path: str,
         taxonomy,
-        index: Set[str],
+        index: set[str],
     ):
         super().__init__(content=content, frontmatter=frontmatter, path=path, taxonomy=taxonomy)
         self.index = index
@@ -115,7 +113,9 @@ class LinkValidator(BaseValidator):
 
         # Check for concept links
         concept_links = [r for r in related if isinstance(r, str) and r.startswith(CONCEPT_PREFIX)]
-        question_links = [r for r in related if isinstance(r, str) and r.startswith(QUESTION_PREFIX)]
+        question_links = [
+            r for r in related if isinstance(r, str) and r.startswith(QUESTION_PREFIX)
+        ]
 
         if not concept_links:
             self.add_issue(
