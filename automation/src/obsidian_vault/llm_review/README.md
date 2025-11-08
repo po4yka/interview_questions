@@ -20,13 +20,15 @@ This module implements an automated system for reviewing and improving Markdown 
 
 2. **AI Agents** (`agents.py`)
    - `technical_review_agent`: Reviews technical/factual correctness
+   - `metadata_sanity_agent`: Lightweight frontmatter/structure check
    - `issue_fix_agent`: Fixes formatting and structure issues
    - OpenRouter integration with Polaris Alpha model
 
 3. **Workflow** (`graph.py`)
    - `ReviewGraph`: LangGraph-based orchestration
-   - Three main nodes:
+   - Four main nodes:
      - `initial_llm_review`: Technical review phase
+     - `metadata_sanity_check`: High-level metadata validation
      - `run_validators`: Runs existing validation scripts
      - `llm_fix_issues`: Iterative issue fixing
 
@@ -45,8 +47,14 @@ This module implements an automated system for reviewing and improving Markdown 
            │
            ▼
 ┌─────────────────────┐
+│ Metadata Sanity     │  ← NEW: Lightweight YAML/structure check
+│  (metadata_check)   │     Catches schema problems early
+└──────────┬──────────┘
+           │
+           ▼
+┌─────────────────────┐
 │  Run Validators     │  ← Existing automation
-│  (format/structure) │
+│  (format/structure) │     Merges metadata findings
 └──────────┬──────────┘
            │
            ▼
@@ -158,7 +166,38 @@ The initial LLM review phase checks:
 - Completeness of technical content
 - Accuracy of complexity analysis (Big-O notation)
 
-### 2. Iterative Fixing
+### 2. Metadata Sanity Check (NEW)
+
+A lightweight validation layer that runs BEFORE detailed validators to catch common schema problems early:
+
+**YAML Structural Integrity**:
+- Is frontmatter present and parseable?
+- Are required fields present (id, title, topic, difficulty, etc.)?
+- Are field types correct (lists vs strings)?
+
+**Topic Consistency**:
+- Does the `topic` field match the file's folder location?
+- Is the MOC field appropriate for the topic?
+- Example: topic=kotlin should be in 70-Kotlin/ with moc=moc-kotlin
+
+**Timestamp Freshness**:
+- Are `created` and `updated` dates present and valid?
+- Is `updated` >= `created`?
+- Are dates in the correct format (YYYY-MM-DD)?
+
+**Bilingual Structure Ordering**:
+- Are both EN and RU sections present?
+- Are required sections in expected order?
+- Sections: "# Question (EN)", "# Вопрос (RU)", "## Answer (EN)", "## Ответ (RU)"
+
+**Common Formatting Issues**:
+- Brackets in YAML fields that shouldn't have them (moc field)?
+- Double brackets in YAML arrays (related field)?
+- Russian characters in tags (should be English only)?
+
+This phase significantly reduces validator churn by catching and fixing structural problems before detailed validation runs.
+
+### 3. Iterative Fixing
 
 The fix loop addresses:
 

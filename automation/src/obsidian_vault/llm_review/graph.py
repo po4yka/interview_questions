@@ -15,7 +15,11 @@ from obsidian_vault.utils import TaxonomyLoader, build_note_index, parse_note
 from obsidian_vault.utils.frontmatter import load_frontmatter_text
 from obsidian_vault.validators import ValidatorRegistry
 
-from .agents import run_issue_fixing, run_technical_review
+from .agents import (
+    run_issue_fixing,
+    run_metadata_sanity_check,
+    run_technical_review,
+)
 from .state import NoteReviewState, NoteReviewStateDict, ReviewIssue
 
 if TYPE_CHECKING:
@@ -54,12 +58,14 @@ class ReviewGraph:
 
         # Add nodes
         workflow.add_node("initial_llm_review", self._initial_llm_review)
+        workflow.add_node("metadata_sanity_check", self._metadata_sanity_check)
         workflow.add_node("run_validators", self._run_validators)
         workflow.add_node("llm_fix_issues", self._llm_fix_issues)
 
         # Define edges
         workflow.add_edge(START, "initial_llm_review")
-        workflow.add_edge("initial_llm_review", "run_validators")
+        workflow.add_edge("initial_llm_review", "metadata_sanity_check")
+        workflow.add_edge("metadata_sanity_check", "run_validators")
 
         # Conditional edge from validators
         workflow.add_conditional_edges(
@@ -136,6 +142,101 @@ class ReviewGraph:
                 "history": history_updates,
             }
 
+    async def _metadata_sanity_check(self, state: NoteReviewStateDict) -> dict[str, Any]:
+        """Node: Lightweight metadata/frontmatter sanity check.
+
+        Args:
+            state: Current state
+
+        Returns:
+            State updates
+        """
+        state_obj = NoteReviewState.from_dict(state)
+        state_obj.decision = None
+        history_updates: list[dict[str, Any]] = []
+
+        logger.info(f"Running metadata sanity check for {state_obj.note_path}")
+        history_updates.append(
+            state_obj.add_history_entry(
+                "metadata_sanity_check", "Starting metadata/frontmatter sanity check"
+            )
+        )
+
+        try:
+            result = await run_metadata_sanity_check(
+                note_text=state_obj.current_text,
+                note_path=state_obj.note_path,
+            )
+
+            updates: dict[str, Any] = {}
+
+            # Convert metadata findings to ReviewIssues and add to state
+            metadata_issues = []
+            for issue in result.issues_found:
+                metadata_issues.append(
+                    ReviewIssue(
+                        severity="ERROR",
+                        message=f"[Metadata] {issue}",
+                        field="frontmatter",
+                    )
+                )
+
+            for warning in result.warnings:
+                metadata_issues.append(
+                    ReviewIssue(
+                        severity="WARNING",
+                        message=f"[Metadata] {warning}",
+                        field="frontmatter",
+                    )
+                )
+
+            if metadata_issues:
+                # Add metadata issues to the state so validators can see them
+                updates["issues"] = metadata_issues
+                logger.info(
+                    f"Metadata sanity check found {len(result.issues_found)} issue(s) "
+                    f"and {len(result.warnings)} warning(s)"
+                )
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "metadata_sanity_check",
+                        f"Found {len(result.issues_found)} issue(s) and {len(result.warnings)} warning(s)",
+                        issues=result.issues_found,
+                        warnings=result.warnings,
+                    )
+                )
+            else:
+                logger.info("No metadata issues found")
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "metadata_sanity_check", "No metadata issues found"
+                    )
+                )
+
+            if result.suggestions:
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "metadata_sanity_check",
+                        f"Suggestions: {', '.join(result.suggestions)}",
+                    )
+                )
+
+            updates["history"] = history_updates
+            return updates
+
+        except Exception as e:
+            logger.error(f"Error in metadata sanity check: {e}")
+            history_updates.append(
+                state_obj.add_history_entry(
+                    "metadata_sanity_check", f"Error during metadata sanity check: {e}"
+                )
+            )
+            return {
+                "error": f"Metadata sanity check failed: {e}",
+                "completed": True,
+                "history": history_updates,
+            }
+
     async def _run_validators(self, state: NoteReviewStateDict) -> dict[str, Any]:
         """Node: Run existing validation scripts.
 
@@ -180,7 +281,15 @@ class ReviewGraph:
             # Convert to ReviewIssue
             review_issues = [ReviewIssue.from_validation_issue(issue) for issue in all_issues]
 
-            logger.info(f"Found {len(review_issues)} issues")
+            # Merge with any existing metadata issues from previous node
+            if state_obj.issues:
+                logger.debug(
+                    f"Merging {len(state_obj.issues)} existing metadata issues "
+                    f"with {len(review_issues)} validator issues"
+                )
+                review_issues = state_obj.issues + review_issues
+
+            logger.info(f"Found {len(review_issues)} total issues")
             history_updates.append(
                 state_obj.add_history_entry(
                     "run_validators",

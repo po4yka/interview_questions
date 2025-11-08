@@ -45,7 +45,7 @@ This will:
 
 ## What It Does
 
-The LLM review system performs two phases for each note:
+The LLM review system performs three phases for each note:
 
 ### Phase 1: Technical Review
 
@@ -56,7 +56,19 @@ Uses AI (Polaris Alpha via OpenRouter) to review:
 - **Completeness**: Is important information missing?
 - **Complexity analysis**: Is Big-O notation accurate?
 
-### Phase 2: Iterative Fixing
+### Phase 2: Metadata Sanity Check
+
+Lightweight AI-powered check of frontmatter and structure BEFORE detailed validators run:
+
+- **YAML integrity**: Is frontmatter present and parseable?
+- **Topic consistency**: Does topic match folder location and MOC?
+- **Timestamp freshness**: Are created/updated dates valid and consistent?
+- **Bilingual structure**: Are EN/RU sections present and in correct order?
+- **Common formatting**: Brackets in YAML, Russian in tags, etc.
+
+This phase catches schema problems early, reducing validator churn and providing clearer guidance to the fix agent.
+
+### Phase 3: Iterative Fixing
 
 Runs existing vault validators, then uses AI to fix:
 
