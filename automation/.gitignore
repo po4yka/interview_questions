@@ -1,0 +1,38 @@
+# Python caches and artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Build outputs
+build/
+dist/
+*.egg-info/
+.eggs/
+pip-wheel-metadata/
+
+# Virtual environments & tooling metadata
+.venv/
+.env
+.env.*
+.python-version
+.nox/
+.cache/
+.uv/
+
+# Test, lint, and coverage outputs
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+.coverage
+.coverage.*
+coverage.xml
+
+# Dependency lockfiles generated locally
+uv.lock
+
+# Editors & OS
+.DS_Store
+.idea/
+.vscode/
+*.log
