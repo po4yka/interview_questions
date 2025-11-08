@@ -10,6 +10,7 @@ This package provides a unified, professional automation framework for:
 - **Normalization**: Automated frontmatter normalization for concept notes
 - **Reporting**: Missing translations and quality reports
 - **Graph Analytics**: Link/backlink graph analysis, orphan detection, network statistics
+- **Modern CLI**: Beautiful terminal UI with typer + rich (tables, colors, progress bars)
 
 All automation code is now consolidated in a single, well-organized location with proper Python packaging.
 
@@ -91,6 +92,29 @@ vault graph-stats
 vault orphans
 ```
 
+### Modern CLI (Typer + Rich)
+
+The package also includes `vault-app`, a modern CLI with beautiful terminal output:
+
+```bash
+# Same commands, enhanced output with tables, colors, and progress bars
+uv run --project automation vault-app graph-stats
+uv run --project automation vault-app orphans
+uv run --project automation vault-app validate --all
+
+# After installation
+vault-app graph-stats --hubs 10 --authorities 10
+vault-app orphans --output orphans.txt
+```
+
+**Features:**
+- 🎨 **Rich Tables**: Beautiful formatted tables with box-drawing characters
+- 🌈 **Color Output**: Syntax highlighting and semantic colors
+- 📊 **Progress Bars**: Visual feedback for long-running operations
+- ✨ **Emojis**: Icons for better visual scanning
+- 📖 **Auto-documentation**: Help text from type hints
+- ✅ **Type Validation**: Automatic validation of command arguments
+
 ## Structure
 
 ```
@@ -101,7 +125,8 @@ automation/
 ├── src/
 │   └── obsidian_vault/         # Main package
 │       ├── __init__.py
-│       ├── cli.py              # Unified CLI with subcommands
+│       ├── cli.py              # Unified CLI with subcommands (argparse)
+│       ├── cli_app.py          # Modern CLI (typer + rich)
 │       ├── validators/         # Validation framework
 │       │   ├── __init__.py
 │       │   ├── base.py         # Base validator class
@@ -157,23 +182,33 @@ Utility helpers used across scripts and validators:
 - `report_generator.py` - Validation report generation
 - `graph_analytics.py` - Graph analytics using obsidiantools (link graphs, orphans, hubs, authorities)
 
-### CLI (cli.py)
+### CLI (cli.py & cli_app.py)
 
-Unified command-line interface with eight subcommands:
+**Two CLI options available:**
+
+1. **`vault`** (cli.py) - Original argparse-based CLI
+2. **`vault-app`** (cli_app.py) - Modern typer + rich CLI with beautiful output
+
+Both provide the same eight subcommands:
 
 **Content Validation:**
-- **vault validate** - Comprehensive note validation with parallel processing support
-- **vault normalize** - Normalize concept note frontmatter with dry-run support
-- **vault check-translations** - Find notes missing Russian or English translations
+- **validate** - Comprehensive note validation with parallel processing support
+- **normalize** - Normalize concept note frontmatter with dry-run support
+- **check-translations** - Find notes missing Russian or English translations
 
 **Graph Analytics:**
-- **vault graph-stats** - Display vault network statistics and link quality metrics
-- **vault orphans** - Find orphaned notes (no incoming or outgoing links)
-- **vault broken-links** - Find notes with broken links (links to non-existent notes)
-- **vault link-report** - Generate comprehensive markdown link health report
-- **vault graph-export** - Export vault graph to various formats (GEXF, GraphML, JSON, CSV)
+- **graph-stats** - Display vault network statistics and link quality metrics
+- **orphans** - Find orphaned notes (no incoming or outgoing links)
+- **broken-links** - Find notes with broken links (links to non-existent notes)
+- **link-report** - Generate comprehensive markdown link health report
+- **graph-export** - Export vault graph to various formats (GEXF, GraphML, JSON, CSV)
 
-All commands consolidated from individual scripts into a single, maintainable CLI tool.
+The **vault-app** version adds:
+- Rich tables with box-drawing characters
+- Color-coded output (errors=red, warnings=yellow, info=blue)
+- Progress bars for long operations
+- Emojis for visual scanning
+- Better formatted help text
 
 ## Usage Examples
 
@@ -594,6 +629,8 @@ vault check-translations
 - python-frontmatter >= 1.0.0 (YAML frontmatter extraction/insertion)
 - ruamel.yaml >= 0.18.0 (order and comment preservation for YAML)
 - marko >= 2.0.0 (AST-based Markdown parsing)
+- typer >= 0.12.0 (modern CLI framework with type hints)
+- rich >= 13.0.0 (beautiful terminal formatting)
 - obsidiantools >= 0.10.0 (graph analytics)
 - pandas >= 2.0.0 (data processing for graph analytics)
 - networkx >= 3.0 (graph analysis)
@@ -635,7 +672,20 @@ uv run mypy src/
 
 ## Version History
 
-### 0.6.0 (Current)
+### 0.7.0 (Current)
+- **Modern CLI**: Integrated typer + rich for beautiful terminal output
+- **New CLI Application**: Created `cli_app.py` with typer-based modern CLI
+- **Rich Terminal Features**:
+  - Beautiful formatted tables with box-drawing characters
+  - Color-coded output (red=errors, yellow=warnings, blue=info)
+  - Progress bars and spinners for long operations
+  - Emojis for visual scanning (📋📊🔍🔗💾)
+  - Auto-generated help from type hints
+- **Dual CLI**: Both `vault` (argparse) and `vault-app` (typer+rich) available
+- **New Dependencies**: typer >= 0.12.0, rich >= 13.0.0
+- **Enhanced UX**: Better error messages, validation, and formatted output
+
+### 0.6.0
 - **Markdown Parsing**: Integrated marko for AST-based Markdown analysis
 - **New Markdown Module**: Created `utils/markdown.py` with MarkdownAnalyzer class
 - **Content Analysis Features**:
