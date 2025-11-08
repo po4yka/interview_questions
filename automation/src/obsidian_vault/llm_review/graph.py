@@ -18,6 +18,7 @@ from obsidian_vault.validators import ValidatorRegistry
 from .agents import (
     run_issue_fixing,
     run_metadata_sanity_check,
+    run_qa_verification,
     run_technical_review,
 )
 from .state import NoteReviewState, NoteReviewStateDict, ReviewIssue
@@ -61,6 +62,7 @@ class ReviewGraph:
         workflow.add_node("metadata_sanity_check", self._metadata_sanity_check)
         workflow.add_node("run_validators", self._run_validators)
         workflow.add_node("llm_fix_issues", self._llm_fix_issues)
+        workflow.add_node("qa_verification", self._qa_verification)
 
         # Define edges
         workflow.add_edge(START, "initial_llm_review")
@@ -73,12 +75,23 @@ class ReviewGraph:
             self._should_continue_fixing,
             {
                 "continue": "llm_fix_issues",
+                "qa_verify": "qa_verification",
                 "done": END,
             },
         )
 
         # After fixing, go back to validators
         workflow.add_edge("llm_fix_issues", "run_validators")
+
+        # Conditional edge from QA verification
+        workflow.add_conditional_edges(
+            "qa_verification",
+            self._should_continue_after_qa,
+            {
+                "continue": "llm_fix_issues",
+                "done": END,
+            },
+        )
 
         return workflow.compile()
 
@@ -580,8 +593,119 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 "decision": None,
             }
 
+    async def _qa_verification(self, state: NoteReviewStateDict) -> dict[str, Any]:
+        """Node: Final QA/critic verification before marking as complete.
+
+        This node runs ONLY when validator issues are resolved, to ensure:
+        - No factual errors were introduced during fixes
+        - Bilingual parity is maintained
+        - Overall quality is acceptable
+
+        Args:
+            state: Current state
+
+        Returns:
+            State updates
+        """
+        state_obj = NoteReviewState.from_dict(state)
+        history_updates: list[dict[str, Any]] = []
+
+        logger.info(f"Running final QA verification for {state_obj.note_path}")
+        history_updates.append(
+            state_obj.add_history_entry(
+                "qa_verification",
+                f"Running final QA verification (after {state_obj.iteration} iterations)",
+            )
+        )
+
+        try:
+            result = await run_qa_verification(
+                note_text=state_obj.current_text,
+                note_path=state_obj.note_path,
+                iteration_count=state_obj.iteration,
+            )
+
+            updates: dict[str, Any] = {
+                "qa_verification_passed": result.is_acceptable,
+                "qa_verification_summary": result.summary,
+                "history": history_updates,
+            }
+
+            if result.is_acceptable:
+                logger.success(f"QA verification passed: {result.summary}")
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "qa_verification",
+                        f"✓ QA verification passed: {result.summary}",
+                        quality_concerns=result.quality_concerns,
+                    )
+                )
+                updates["completed"] = True
+                updates["decision"] = "done"
+            else:
+                logger.warning(f"QA verification found issues that need fixing")
+
+                # Convert QA findings to ReviewIssues that can be fixed
+                qa_issues = []
+                for error in result.factual_errors:
+                    qa_issues.append(
+                        ReviewIssue(
+                            severity="ERROR",
+                            message=f"[QA] Factual error: {error}",
+                            field="content",
+                        )
+                    )
+                for issue in result.bilingual_parity_issues:
+                    qa_issues.append(
+                        ReviewIssue(
+                            severity="ERROR",
+                            message=f"[QA] Bilingual parity: {issue}",
+                            field="content",
+                        )
+                    )
+
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "qa_verification",
+                        f"✗ QA verification failed: {len(result.factual_errors)} factual errors, "
+                        f"{len(result.bilingual_parity_issues)} parity issues",
+                        factual_errors=result.factual_errors,
+                        bilingual_parity_issues=result.bilingual_parity_issues,
+                        quality_concerns=result.quality_concerns,
+                    )
+                )
+
+                # Add QA issues to state for fixing
+                updates["issues"] = qa_issues
+                updates["decision"] = "continue"
+
+            return updates
+
+        except Exception as e:
+            logger.error(f"Error in QA verification: {e}")
+            history_updates.append(
+                state_obj.add_history_entry(
+                    "qa_verification", f"Error during QA verification: {e}"
+                )
+            )
+            return {
+                "error": f"QA verification failed: {e}",
+                "completed": True,
+                "decision": "done",
+                "history": history_updates,
+            }
+
     def _compute_decision(self, state: NoteReviewState) -> tuple[str, str]:
-        """Compute the next step decision and corresponding history message."""
+        """Compute the next step decision and corresponding history message.
+
+        Decision logic:
+        1. If max iterations reached -> done
+        2. If error occurred -> done
+        3. If completed flag set -> done
+        4. If no validator issues AND QA not run yet -> qa_verify
+        5. If no validator issues AND QA passed -> done
+        6. If validator issues remain -> continue
+        """
 
         logger.debug(
             "Evaluating decision",
@@ -590,16 +714,12 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             issues=len(state.issues),
             error=state.error,
             completed=state.completed,
+            qa_verification_passed=state.qa_verification_passed,
         )
 
         if state.iteration >= state.max_iterations:
             message = f"Stopping: max iterations ({state.max_iterations}) reached"
             logger.warning(message)
-            return "done", message
-
-        if not state.has_any_issues():
-            message = "Stopping: no issues remaining"
-            logger.success("No issues remaining - workflow complete")
             return "done", message
 
         if state.error:
@@ -611,6 +731,24 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             message = "Stopping: completed flag set"
             logger.info("Completed flag set - stopping iteration")
             return "done", message
+
+        # NEW: If no validator issues, route through QA verification
+        if not state.has_any_issues():
+            # If QA hasn't been run yet, route to QA verification
+            if state.qa_verification_passed is None:
+                message = "No validator issues - routing to QA verification"
+                logger.info(message)
+                return "qa_verify", message
+            # If QA passed, we're done
+            elif state.qa_verification_passed:
+                message = "Stopping: no issues remaining and QA verification passed"
+                logger.success("Workflow complete - QA verification passed")
+                return "done", message
+            # If QA failed, issues were added back to state, so continue fixing
+            else:
+                message = f"Continuing: QA verification found issues to fix"
+                logger.info(message)
+                return "continue", message
 
         message = f"Continuing to iteration {state.iteration + 1}"
         logger.info(
@@ -626,7 +764,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             state: Current state
 
         Returns:
-            "continue" or "done"
+            "continue", "qa_verify", or "done"
         """
         state_obj = NoteReviewState.from_dict(state)
 
@@ -640,6 +778,31 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
         decision, _ = self._compute_decision(state_obj)
         return decision
+
+    def _should_continue_after_qa(self, state: NoteReviewStateDict) -> str:
+        """Determine if we should continue after QA verification.
+
+        Args:
+            state: Current state
+
+        Returns:
+            "continue" (if QA found issues to fix) or "done" (if QA passed)
+        """
+        state_obj = NoteReviewState.from_dict(state)
+
+        if state_obj.decision:
+            logger.debug(
+                "Decision already set by QA verification node",
+                decision=state_obj.decision,
+            )
+            return state_obj.decision
+
+        # This should not normally happen as the QA verification node sets the decision
+        # But as a fallback, check the QA verification result
+        if state_obj.qa_verification_passed:
+            return "done"
+        else:
+            return "continue"
 
     async def process_note(self, note_path: Path) -> NoteReviewState:
         """Process a single note through the review workflow.
