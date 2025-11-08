@@ -77,10 +77,12 @@ jobs:
 
       - name: Generate summary report
         run: |
-          cat > reports/VAULT-HEALTH-SUMMARY.md << 'EOF'
+          TIMESTAMP=$(date -u '+%Y-%m-%d %H:%M:%S UTC')
+
+          cat > reports/VAULT-HEALTH-SUMMARY.md << EOF
           # Vault Health Report
 
-          **Generated**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')
+          **Generated**: ${TIMESTAMP}
           **Repository**: ${{ github.repository }}
           **Commit**: ${{ github.sha }}
 
@@ -154,8 +156,16 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-          # Create reports branch if it doesn't exist
-          git fetch origin reports:reports 2>/dev/null || git checkout -b reports
+          # Check if reports branch exists on remote
+          if git ls-remote --heads origin reports | grep -q reports; then
+            echo "Reports branch exists, fetching..."
+            git fetch origin reports
+            git checkout reports
+          else
+            echo "Reports branch does not exist, creating..."
+            git checkout --orphan reports
+            git rm -rf . || true
+          fi
 
           # Copy reports
           mkdir -p vault-reports
@@ -169,7 +179,7 @@ jobs:
 
       - name: Push reports
         run: |
-          git push origin reports
+          git push origin reports --force-with-lease || git push origin reports --set-upstream
 
       - name: Create GitHub Issue for critical problems
         if: hashFiles('reports/broken-links.txt') != '' || hashFiles('reports/orphaned-notes.txt') != ''

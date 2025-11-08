@@ -13,6 +13,11 @@ on:
       - 'InterviewQuestions/**/*.md'
       - 'automation/**'
 
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
 jobs:
   validate:
     name: Validate Changed Notes
@@ -69,21 +74,57 @@ jobs:
         run: |
           cd automation
 
+          # Collect validation errors
+          VALIDATION_FAILED=0
+
           # Validate each changed file
           while IFS= read -r file; do
             if [ -f "../$file" ]; then
               echo "Validating: $file"
-              uv run vault validate "../$file" || exit 1
+              uv run vault validate "../$file" || VALIDATION_FAILED=1
             fi
           done < ../changed_files.txt
 
-      - name: Generate validation report
+          # Exit with error if any validation failed
+          if [ $VALIDATION_FAILED -eq 1 ]; then
+            echo "❌ Validation failed for one or more files"
+            exit 1
+          fi
+
+      - name: Generate validation report for changed files
         if: steps.changed-files.outputs.has_changes == 'true'
         run: |
           cd automation
 
-          # Generate comprehensive validation report
-          uv run vault validate --all --report ../validation-report.md --quiet
+          # Create a temporary directory for changed file validation
+          mkdir -p ../changed-notes-temp
+
+          # Copy changed files to temp directory preserving structure
+          while IFS= read -r file; do
+            if [ -f "../$file" ]; then
+              mkdir -p "../changed-notes-temp/$(dirname "$file")"
+              cp "../$file" "../changed-notes-temp/$file"
+            fi
+          done < ../changed_files.txt
+
+          # Generate validation report only for changed files
+          # Note: This generates a focused report on changed files only
+          echo "# Validation Report - Changed Files" > ../validation-report.md
+          echo "" >> ../validation-report.md
+          echo "**Files validated**: $(wc -l < ../changed_files.txt)" >> ../validation-report.md
+          echo "" >> ../validation-report.md
+
+          # Validate each file and append to report
+          while IFS= read -r file; do
+            if [ -f "../$file" ]; then
+              echo "## $file" >> ../validation-report.md
+              echo "" >> ../validation-report.md
+              uv run vault validate "../$file" >> ../validation-report.md 2>&1 || true
+              echo "" >> ../validation-report.md
+              echo "---" >> ../validation-report.md
+              echo "" >> ../validation-report.md
+            fi
+          done < ../changed_files.txt
 
       - name: Upload validation report
         if: steps.changed-files.outputs.has_changes == 'true'

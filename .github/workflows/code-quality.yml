@@ -1,0 +1,131 @@
+name: Code Quality
+
+on:
+  pull_request:
+    paths:
+      - 'automation/**/*.py'
+      - '.github/workflows/code-quality.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'automation/**/*.py'
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lint:
+    name: Lint Python Code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Install automation package with dev dependencies
+        run: |
+          cd automation
+          uv sync --extra dev
+
+      - name: Run ruff linter
+        run: |
+          cd automation
+          echo "Running ruff check..."
+          uv run ruff check src/ --output-format=github || true
+
+      - name: Run ruff formatter check
+        run: |
+          cd automation
+          echo "Checking code formatting..."
+          uv run ruff format --check src/ || true
+
+      - name: Generate lint report
+        run: |
+          cd automation
+          echo "# Code Quality Report" > ../lint-report.md
+          echo "" >> ../lint-report.md
+          echo "## Ruff Linter" >> ../lint-report.md
+          echo "" >> ../lint-report.md
+          echo "\`\`\`" >> ../lint-report.md
+          uv run ruff check src/ >> ../lint-report.md 2>&1 || true
+          echo "\`\`\`" >> ../lint-report.md
+
+      - name: Upload lint report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lint-report
+          path: lint-report.md
+          retention-days: 30
+
+      - name: Add lint summary
+        run: |
+          if [ -f "lint-report.md" ]; then
+            echo "# Code Quality Summary" >> $GITHUB_STEP_SUMMARY
+            cat lint-report.md >> $GITHUB_STEP_SUMMARY
+          fi
+
+  type-check:
+    name: Type Check Python Code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Install automation package with dev dependencies
+        run: |
+          cd automation
+          uv sync --extra dev
+
+      - name: Run mypy type checker
+        run: |
+          cd automation
+          echo "Running mypy type checker..."
+          uv run mypy src/ --pretty || true
+
+      - name: Generate type check report
+        run: |
+          cd automation
+          echo "# Type Check Report" > ../type-check-report.md
+          echo "" >> ../type-check-report.md
+          echo "\`\`\`" >> ../type-check-report.md
+          uv run mypy src/ >> ../type-check-report.md 2>&1 || true
+          echo "\`\`\`" >> ../type-check-report.md
+
+      - name: Upload type check report
+        uses: actions/upload-artifact@v4
+        with:
+          name: type-check-report
+          path: type-check-report.md
+          retention-days: 30
+
+      - name: Add type check summary
+        run: |
+          if [ -f "type-check-report.md" ]; then
+            echo "# Type Check Summary" >> $GITHUB_STEP_SUMMARY
+            cat type-check-report.md >> $GITHUB_STEP_SUMMARY
+          fi
