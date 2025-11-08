@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Optional
 
 import typer
+from dotenv import load_dotenv
 from loguru import logger
 from rich.console import Console
 from rich.panel import Panel
@@ -39,6 +40,12 @@ from obsidian_vault.utils import (
 )
 from obsidian_vault.utils.graph_analytics import VaultGraph, generate_link_health_report
 from obsidian_vault.validators import Severity, ValidatorRegistry
+
+# Load environment variables from .env file
+# Search for .env in current directory, automation directory, and repo root
+load_dotenv()  # Load from current directory
+load_dotenv(dotenv_path=Path(__file__).parent.parent.parent.parent / ".env")  # Repo root
+load_dotenv(dotenv_path=Path(__file__).parent.parent.parent / ".env")  # Automation directory
 
 # Initialize logging
 setup_logging()
