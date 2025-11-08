@@ -1,0 +1,107 @@
+# Pre-commit hooks for Obsidian Interview Questions vault
+# Install: pip install pre-commit && pre-commit install
+# Run manually: pre-commit run --all-files
+
+repos:
+  # Standard pre-commit hooks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: '\.md$'  # Don't trim markdown (may affect formatting)
+      - id: end-of-file-fixer
+        exclude: '\.md$'
+      - id: check-yaml
+        args: ['--unsafe']  # Allow custom YAML tags
+      - id: check-toml
+      - id: check-json
+      - id: check-added-large-files
+        args: ['--maxkb=1000']
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+      - id: detect-private-key
+
+  # Ruff - Fast Python linter and formatter
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.0
+    hooks:
+      # Run the linter
+      - id: ruff
+        args: [--fix, --exit-non-zero-on-fix]
+        files: ^automation/
+      # Run the formatter
+      - id: ruff-format
+        files: ^automation/
+
+  # Mypy - Static type checker
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.13.0
+    hooks:
+      - id: mypy
+        files: ^automation/src/
+        args:
+          - --config-file=automation/pyproject.toml
+          - --python-version=3.11
+        additional_dependencies:
+          - types-pyyaml>=6.0.12
+          - pyyaml>=6.0.2
+          - typer>=0.12.0
+          - rich>=13.0.0
+          - loguru>=0.7.0
+
+  # Prettier - Format Markdown, YAML, JSON
+  - repo: https://github.com/pre-commit/mirrors-prettier
+    rev: v3.1.0
+    hooks:
+      - id: prettier
+        types_or: [markdown, yaml, json]
+        exclude: '^(InterviewQuestions/|automation/uv\.lock)'
+        args: ['--prose-wrap=preserve', '--print-width=100']
+
+  # Markdownlint - Markdown style checking
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.39.0
+    hooks:
+      - id: markdownlint
+        args: ['--fix', '--disable', 'MD013', 'MD033', 'MD041']
+        exclude: '^InterviewQuestions/'  # Don't lint vault notes (they have special format)
+
+  # Check Python docstrings
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.3.0
+    hooks:
+      - id: pydocstyle
+        files: ^automation/src/
+        args:
+          - --convention=google
+          - --add-ignore=D100,D104,D105,D107  # Ignore missing docstrings in some places
+
+  # Security linting with Bandit
+  - repo: https://github.com/PyCQA/bandit
+    rev: '1.7.7'
+    hooks:
+      - id: bandit
+        args: ['-c', 'automation/pyproject.toml']
+        files: ^automation/src/
+        additional_dependencies: ['bandit[toml]']
+
+  # Shellcheck - Shell script linting
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.6
+    hooks:
+      - id: shellcheck
+
+# Configuration for pre-commit.ci (optional)
+ci:
+  autofix_commit_msg: |
+    [pre-commit.ci] auto fixes from pre-commit hooks
+
+    for more information, see https://pre-commit.ci
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: '[pre-commit.ci] pre-commit autoupdate'
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false
