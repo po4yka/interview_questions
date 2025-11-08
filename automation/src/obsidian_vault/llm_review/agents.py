@@ -125,7 +125,7 @@ def get_technical_review_agent() -> Agent:
     logger.debug("Creating technical review agent")
     return Agent(
         model=get_openrouter_model(),
-        result_type=TechnicalReviewResult,
+        output_type=TechnicalReviewResult,
         system_prompt=TECHNICAL_REVIEW_PROMPT,
     )
 
@@ -135,7 +135,7 @@ def get_issue_fix_agent() -> Agent:
     logger.debug("Creating issue fix agent")
     return Agent(
         model=get_openrouter_model(),
-        result_type=IssueFixResult,
+        output_type=IssueFixResult,
         system_prompt=ISSUE_FIX_PROMPT,
     )
 
