@@ -333,6 +333,11 @@ class ReviewGraph:
     def _create_missing_concept_files(self, issues: list[ReviewIssue]) -> list[str]:
         """Create missing concept files referenced in validation issues.
 
+        IMPORTANT: Concept files must use the FULL Q&A frontmatter schema to pass validation.
+        Validators expect all required fields (topic, subtopics, difficulty, moc, related, etc.)
+        even for concept files. See InterviewQuestions/10-Concepts/c-dependency-injection.md
+        for reference.
+
         Args:
             issues: List of validation issues
 
@@ -459,6 +464,27 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 # Write the concept file
                 concept_path.write_text(content, encoding='utf-8')
                 logger.info(f"Created missing concept file: {concept_file}")
+
+                # Verify the generated file has valid frontmatter
+                try:
+                    from obsidian_vault.utils.frontmatter import load_frontmatter
+                    fm, _ = load_frontmatter(concept_path)
+
+                    # Check for critical required fields
+                    required = ['id', 'title', 'topic', 'difficulty', 'moc', 'related', 'tags']
+                    missing = [f for f in required if f not in fm]
+
+                    if missing:
+                        logger.error(
+                            f"Auto-generated concept file {concept_file} is missing required fields: {missing}. "
+                            f"This is a bug in the auto-generation template and should be reported."
+                        )
+                    else:
+                        logger.debug(f"Verified {concept_file} has all required frontmatter fields")
+
+                except Exception as verify_err:
+                    logger.warning(f"Could not verify frontmatter for {concept_file}: {verify_err}")
+
                 created_files.append(concept_file)
 
                 # Add to note index so it can be referenced
