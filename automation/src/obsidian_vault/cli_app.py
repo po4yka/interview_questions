@@ -561,6 +561,198 @@ def graph_export(
 
 
 # ============================================================================
+# LLM Review Command
+# ============================================================================
+
+
+@app.command()
+def llm_review(
+    pattern: str = typer.Option(
+        "InterviewQuestions/**/*.md",
+        "--pattern",
+        "-p",
+        help="Glob pattern for notes to process",
+    ),
+    dry_run: bool = typer.Option(
+        True,
+        "--dry-run/--no-dry-run",
+        help="Preview changes without modifying files",
+    ),
+    max_iterations: int = typer.Option(
+        5,
+        "--max-iterations",
+        "-m",
+        help="Maximum fix iterations per note",
+    ),
+    backup: bool = typer.Option(
+        True,
+        "--backup/--no-backup",
+        help="Create backups before modifying files",
+    ),
+    report: Optional[str] = typer.Option(
+        None,
+        "--report",
+        "-r",
+        help="Write detailed report to file",
+    ),
+):
+    """
+    Review and fix notes using LLM (PydanticAI + LangGraph).
+
+    This command uses AI to:
+    1. Review notes for technical accuracy
+    2. Fix formatting and structure issues
+    3. Ensure compliance with vault rules
+
+    Requires OPENROUTER_API_KEY environment variable.
+    """
+    import asyncio
+    from pathlib import Path
+
+    logger.info("Starting LLM-based note review")
+
+    try:
+        # Check for API key
+        import os
+
+        if not os.getenv("OPENROUTER_API_KEY"):
+            console.print(
+                "[red]✗[/red] OPENROUTER_API_KEY environment variable not set\n"
+                "Get your API key from https://openrouter.ai/keys"
+            )
+            raise typer.Exit(code=1)
+
+        repo_root = discover_repo_root()
+        vault_dir = repo_root / "InterviewQuestions"
+
+        if not vault_dir.exists():
+            console.print("[red]✗[/red] InterviewQuestions directory not found")
+            raise typer.Exit(code=1)
+
+        # Import LLM review module
+        from obsidian_vault.llm_review import create_review_graph
+
+        # Collect notes matching pattern
+        from obsidian_vault.utils.common import collect_validatable_files
+
+        notes = list(collect_validatable_files(repo_root / pattern.split("/")[0]))
+        if not notes:
+            console.print(f"[yellow]⚠[/yellow] No notes found matching pattern: {pattern}")
+            raise typer.Exit(code=0)
+
+        console.print(f"\n[bold]Found {len(notes)} note(s) to review[/bold]\n")
+
+        if dry_run:
+            console.print("[yellow]⚠[/yellow] DRY RUN MODE - No files will be modified\n")
+
+        # Create review graph
+        with console.status("[bold green]Initializing LLM review system...", spinner="dots"):
+            review_graph = create_review_graph(
+                vault_root=vault_dir,
+                max_iterations=max_iterations,
+            )
+
+        # Process notes
+        results = []
+
+        async def process_all():
+            for note_path in notes:
+                console.print(f"[cyan]Processing:[/cyan] {note_path.relative_to(repo_root)}")
+                state = await review_graph.process_note(note_path)
+                results.append((note_path, state))
+
+                # Show summary
+                if state.error:
+                    console.print(f"  [red]✗[/red] Error: {state.error}")
+                elif state.changed:
+                    console.print(
+                        f"  [green]✓[/green] Modified "
+                        f"({state.iteration} iteration(s), {len(state.issues)} final issue(s))"
+                    )
+                else:
+                    console.print("  [green]✓[/green] No changes needed")
+
+                # Save if not dry-run
+                if not dry_run and state.changed:
+                    if backup:
+                        backup_path = note_path.with_suffix(".md.backup")
+                        backup_path.write_text(state.original_text, encoding="utf-8")
+                        console.print(f"  [dim]Backup: {backup_path.name}[/dim]")
+
+                    note_path.write_text(state.current_text, encoding="utf-8")
+                    console.print(f"  [dim]Saved changes to {note_path.name}[/dim]")
+
+                console.print()
+
+        asyncio.run(process_all())
+
+        # Generate summary
+        total = len(results)
+        modified = sum(1 for _, state in results if state.changed)
+        errors = sum(1 for _, state in results if state.error)
+
+        table = Table(title="LLM Review Summary", show_header=True, header_style="bold cyan")
+        table.add_column("Metric", style="cyan")
+        table.add_column("Count", justify="right", style="magenta")
+
+        table.add_row("Notes Processed", str(total))
+        table.add_row("Modified", f"[{'yellow' if dry_run else 'green'}]{modified}[/]")
+        table.add_row("Errors", f"[{'red' if errors > 0 else 'green'}]{errors}[/]")
+        table.add_row("Unchanged", str(total - modified - errors))
+
+        console.print(table)
+
+        # Generate detailed report if requested
+        if report:
+            report_lines = ["# LLM Review Report\n"]
+            report_lines.append(f"**Total notes**: {total}\n")
+            report_lines.append(f"**Modified**: {modified}\n")
+            report_lines.append(f"**Errors**: {errors}\n")
+            report_lines.append(f"**Dry run**: {dry_run}\n")
+            report_lines.append("\n---\n\n")
+
+            for note_path, state in results:
+                report_lines.append(f"## {note_path.relative_to(repo_root)}\n\n")
+                report_lines.append(f"**Changed**: {state.changed}\n")
+                report_lines.append(f"**Iterations**: {state.iteration}\n")
+                report_lines.append(f"**Final issues**: {len(state.issues)}\n")
+
+                if state.error:
+                    report_lines.append(f"**Error**: {state.error}\n")
+
+                if state.history:
+                    report_lines.append("\n**History**:\n")
+                    for entry in state.history:
+                        report_lines.append(
+                            f"- [{entry['iteration']}] {entry['node']}: {entry['message']}\n"
+                        )
+
+                report_lines.append("\n---\n\n")
+
+            Path(report).write_text("".join(report_lines), encoding="utf-8")
+            console.print(f"\n[green]✓[/green] Report written to {report}")
+
+        logger.success(
+            f"LLM review complete: {total} notes, {modified} modified, {errors} errors"
+        )
+
+        if errors > 0:
+            raise typer.Exit(code=1)
+
+    except ImportError as e:
+        console.print(
+            f"[red]✗ Error:[/red] LLM review dependencies not installed\n"
+            f"Install with: pip install pydantic-ai langgraph\n"
+            f"Details: {e}"
+        )
+        raise typer.Exit(code=1)
+    except Exception as e:
+        console.print(f"[red]✗ Error:[/red] {e}")
+        logger.exception(f"LLM review failed: {e}")
+        raise typer.Exit(code=1)
+
+
+# ============================================================================
 # Main entry point
 # ============================================================================
 
