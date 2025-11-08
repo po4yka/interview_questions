@@ -87,7 +87,7 @@ jobs:
 
           # Exit with error if any validation failed
           if [ $VALIDATION_FAILED -eq 1 ]; then
-            echo "❌ Validation failed for one or more files"
+            echo "ERROR: Validation failed for one or more files"
             exit 1
           fi
 
