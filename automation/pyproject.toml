@@ -1,12 +1,13 @@
 [project]
 name = "obsidian-vault"
-version = "0.5.0"
+version = "0.6.0"
 description = "Comprehensive automation tools for the Interview Questions Obsidian vault"
 requires-python = ">=3.11"
 dependencies = [
     "pyyaml>=6.0.2",
     "python-frontmatter>=1.0.0",
     "ruamel.yaml>=0.18.0",
+    "marko>=2.0.0",
     "obsidiantools>=0.10.0",
     "pandas>=2.0.0",
     "networkx>=3.0",

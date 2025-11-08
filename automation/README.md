@@ -119,6 +119,7 @@ automation/
 │       │   ├── __init__.py
 │       │   ├── common.py       # Shared utilities (repo discovery, parsing, etc.)
 │       │   ├── frontmatter.py  # Robust YAML frontmatter with order/comment preservation
+│       │   ├── markdown.py     # AST-based Markdown parsing with marko
 │       │   ├── yaml_loader.py
 │       │   ├── taxonomy_loader.py
 │       │   ├── report_generator.py
@@ -150,6 +151,7 @@ Utility helpers used across scripts and validators:
 
 - `common.py` - Shared utilities (repo discovery, note parsing, file collection, YAML dumping)
 - `frontmatter.py` - **Robust frontmatter handling** with python-frontmatter + ruamel.yaml (preserves order and comments)
+- `markdown.py` - **AST-based Markdown parsing** with marko (heading extraction, wikilinks, content analysis)
 - `yaml_loader.py` - YAML loading with error handling
 - `taxonomy_loader.py` - Taxonomy file loading and parsing
 - `report_generator.py` - Validation report generation
@@ -393,6 +395,76 @@ handler.dump(fm, body, Path("output.md"))
 - **Round-trip Safe**: Read → Modify → Write preserves structure
 - **Backward Compatible**: Drop-in replacement for existing `parse_note()` function
 
+### Markdown Content Analysis
+
+The new markdown module provides AST-based Markdown parsing for content analysis:
+
+```python
+from pathlib import Path
+from obsidian_vault.utils import (
+    MarkdownAnalyzer,
+    parse_markdown,
+    parse_markdown_file,
+    extract_headings,
+    extract_wikilinks,
+    has_required_headings
+)
+
+# Parse markdown text
+markdown_text = """
+# Question (EN)
+What is a coroutine?
+
+See [[c-coroutines]] for background.
+
+## Answer (EN)
+A coroutine is a suspendable function.
+"""
+
+analyzer = parse_markdown(markdown_text)
+
+# Extract headings
+headings = analyzer.get_headings()
+for h in headings:
+    print(f"Level {h['level']}: {h['text']}")
+# Output:
+# Level 1: Question (EN)
+# Level 2: Answer (EN)
+
+# Extract Obsidian wikilinks
+wikilinks = analyzer.get_wikilinks()
+print(wikilinks)  # ['c-coroutines']
+
+# Check for required headings
+has_question = analyzer.has_heading("Question (EN)", level=1)
+print(has_question)  # True
+
+# Count code blocks
+code_blocks = analyzer.count_code_blocks()
+
+# Parse from file
+note_path = Path("InterviewQuestions/70-Kotlin/q-coroutine-basics--kotlin--easy.md")
+analyzer = parse_markdown_file(note_path)
+headings = analyzer.get_headings()
+wikilinks = analyzer.get_wikilinks()
+
+# Get text between headings
+text = analyzer.get_text_between_headings("Question (EN)", "Answer (EN)")
+
+# Convenience functions
+headings = extract_headings(markdown_text)
+wikilinks = extract_wikilinks(markdown_text)
+result = has_required_headings(markdown_text, ["Question (EN)", "Answer (EN)", "References"])
+# {'Question (EN)': True, 'Answer (EN)': True, 'References': False}
+```
+
+**Key Features:**
+- **AST-based Parsing**: Uses marko for CommonMark-compliant parsing
+- **Heading Extraction**: Extract all headings with levels and text
+- **Wikilink Support**: Parse Obsidian-style `[[links]]` and `[[link|alias]]`
+- **Content Analysis**: Count code blocks, check for required sections
+- **Text Extraction**: Get content between headings for validation
+
 ## Development
 
 ### Package Layout
@@ -521,6 +593,7 @@ vault check-translations
 - PyYAML >= 6.0.2
 - python-frontmatter >= 1.0.0 (YAML frontmatter extraction/insertion)
 - ruamel.yaml >= 0.18.0 (order and comment preservation for YAML)
+- marko >= 2.0.0 (AST-based Markdown parsing)
 - obsidiantools >= 0.10.0 (graph analytics)
 - pandas >= 2.0.0 (data processing for graph analytics)
 - networkx >= 3.0 (graph analysis)
@@ -562,7 +635,20 @@ uv run mypy src/
 
 ## Version History
 
-### 0.5.0 (Current)
+### 0.6.0 (Current)
+- **Markdown Parsing**: Integrated marko for AST-based Markdown analysis
+- **New Markdown Module**: Created `utils/markdown.py` with MarkdownAnalyzer class
+- **Content Analysis Features**:
+  - Extract headings with levels and text
+  - Parse Obsidian-style wikilinks `[[note]]` and `[[note|alias]]`
+  - Count code blocks and analyze structure
+  - Check for required headings
+  - Extract text between headings
+  - Get standard Markdown links
+- **New Convenience Functions**: `extract_headings`, `extract_wikilinks`, `has_required_headings`
+- **New Dependency**: marko >= 2.0.0 (CommonMark-compliant parser)
+
+### 0.5.0
 - **Robust Frontmatter Handling**: Integrated python-frontmatter + ruamel.yaml
 - **Order Preservation**: YAML fields now maintain their original order
 - **Comment Preservation**: Comments in frontmatter are preserved during edits

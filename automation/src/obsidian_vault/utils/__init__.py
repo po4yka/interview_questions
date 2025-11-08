@@ -16,6 +16,14 @@ from .frontmatter import (
     load_frontmatter_text,
     update_frontmatter,
 )
+from .markdown import (
+    MarkdownAnalyzer,
+    extract_headings,
+    extract_wikilinks,
+    has_required_headings,
+    parse_markdown,
+    parse_markdown_file,
+)
 from .report_generator import FileResult, ReportGenerator
 from .taxonomy_loader import TaxonomyLoader
 from .yaml_loader import load_yaml
@@ -37,6 +45,13 @@ __all__ = [
     "load_frontmatter_text",
     "dump_frontmatter",
     "update_frontmatter",
+    # Markdown (AST-based parsing and analysis)
+    "MarkdownAnalyzer",
+    "parse_markdown",
+    "parse_markdown_file",
+    "extract_headings",
+    "extract_wikilinks",
+    "has_required_headings",
     # Taxonomy
     "TaxonomyLoader",
     # Reporting
