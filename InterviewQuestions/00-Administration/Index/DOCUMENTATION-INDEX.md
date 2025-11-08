@@ -12,8 +12,8 @@
 ## Quick Start
 
 **New to the system?** Start here:
-1. **LM-STUDIO-QUICKSTART.md** - 5-minute setup guide for your LM Studio
-2. **VALIDATION-QUICKSTART.md** - Basic validation commands
+1. **AI-Integration/LM-STUDIO-QUICKSTART.md** - 5-minute setup guide for your LM Studio
+2. **Validation/VALIDATION-QUICKSTART.md** - Basic validation commands
 3. **BILINGUAL-COVERAGE-FINAL-REPORT.md** - Current vault status
 
 ---
@@ -115,7 +115,7 @@
 
 | Document | Purpose | Audience |
 |----------|---------|----------|
-| LM-STUDIO-QUICKSTART.md | Quick setup | First-time users |
+| AI-Integration/LM-STUDIO-QUICKSTART.md | Quick setup | First-time users |
 | AI-VALIDATOR-SETUP.md | Technical details | Maintainers |
 | FINAL-IMPLEMENTATION-STATUS.md | System overview | Stakeholders |
 
@@ -171,7 +171,7 @@ Start Here
 ## Recommended Reading Order
 
 ### For New Users
-1. **LM-STUDIO-QUICKSTART.md** - Setup (5 min)
+1. **AI-Integration/LM-STUDIO-QUICKSTART.md** - Setup (5 min)
 2. **VALIDATION-QUICKSTART.md** - Basic commands (5 min)
 3. **BILINGUAL-COVERAGE-FINAL-REPORT.md** - Current status (10 min)
 
@@ -263,7 +263,7 @@ The following documents have been superseded by current reports:
 ### Common Questions
 
 **Q: How do I start using the AI translator?**
-→ See **LM-STUDIO-QUICKSTART.md** sections 1-3
+→ See **AI-Integration/LM-STUDIO-QUICKSTART.md** sections 1-3
 
 **Q: What's the current vault status?**
 → See **BILINGUAL-COVERAGE-FINAL-REPORT.md**
@@ -318,7 +318,7 @@ This documentation set provides complete coverage of the AI translation system:
 - ✅ Current status reports
 - ✅ Complete system overview
 
-**Start with**: LM-STUDIO-QUICKSTART.md → VALIDATION-QUICKSTART.md → BILINGUAL-COVERAGE-FINAL-REPORT.md
+**Start with**: AI-Integration/LM-STUDIO-QUICKSTART.md → Validation/VALIDATION-QUICKSTART.md → BILINGUAL-COVERAGE-FINAL-REPORT.md
 
 **Total reading time**: 20 minutes to get productive
 

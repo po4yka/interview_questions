@@ -30,20 +30,32 @@ This repository documents a **personal** Obsidian vault designed for building an
 
 ```
 📄 README.md (this file - located at root level)
-📁 InterviewQuestions/    # Main content directory (nesting level 0)
-    ├─ Algorithms/     # coding interview problems, LeetCode-style (nesting level 1)
-    ├─ Android/        # platform, APIs, patterns, pitfalls (nesting level 1)
-    ├─ Behavioural/    # optional; non-technical (nesting level 1)
-    ├─ CompSci/        # computer science concepts (nesting level 1)
-    ├─ Data Structures/ # data structure implementations (nesting level 1)
-    └─ System Design/  # scenarios, components, trade-offs (nesting level 1)
+📁 InterviewQuestions/    # Main content directory
+├── 00-Administration/   # Administrative documentation and guides
+├── 10-Concepts/         # Reusable theory and concept notes
+├── 20-Algorithms/       # Coding interview problems, LeetCode-style
+├── 30-System-Design/    # System design scenarios and trade-offs
+├── 40-Android/          # Android platform, APIs, patterns, pitfalls
+├── 50-Backend/          # Backend, databases, and server-side topics
+├── 60-CompSci/          # Computer science fundamentals
+├── 70-Kotlin/           # Kotlin language and ecosystem
+├── 80-Tools/            # Development tools and workflows
+├── 90-MOCs/            # Maps of Content (topic hubs)
+├── _templates/          # Templater templates for new notes
+├── config/              # Configuration files
+├── scripts/             # Utility scripts
+├── utils/               # Python utilities and validation tools
+└── validators/          # AI validation and processing modules
 ```
 
 **Notes**
 
-* Files **belong to exactly one topic folder**. Use tags/links for cross-cutting concerns (e.g., `hash-table`, `graphs`).
-* Concept notes live in **Concepts** and are referenced by many questions.
-* MOCs (hub notes) live in **MOCs** and index a topic via links and/or Dataview.
+* **00-Administration/** contains administrative documentation, guides, and system documentation organized in subfolders
+* Files **belong to exactly one topic folder** (20-Algorithms, 40-Android, etc.). Use tags/links for cross-cutting concerns (e.g., `hash-table`, `graphs`).
+* **10-Concepts/** contains reusable theory and concept notes referenced by many questions.
+* **90-MOCs/** contains Maps of Content (hub notes) that index topics via links and Dataview queries.
+* **_templates/** contains Templater templates for creating new notes consistently.
+* **utils/** and **validators/** contain Python tools for AI-assisted content validation and processing.
 
 ---
 
@@ -85,10 +97,8 @@ sources:
 
 # Workflow & relations
 status: draft              # draft | reviewed | ready
-moc: [[moc-algorithms]]    # link to Map of Content
-related:                   # optional cross-links
-  - [[c-hash-map]]
-  - [[q-three-sum--algorithms--medium]]
+moc: moc-algorithms        # link to Map of Content (WITHOUT brackets)
+related: [c-hash-map, q-three-sum--algorithms--medium]  # cross-links (array, WITHOUT double brackets)
 
 # Timestamps (ISO8601)
 created: 2025-09-28
@@ -275,14 +285,30 @@ tags: []
 
 ---
 
-## LLM Workflows (Optional, Reviewed)
+## AI Tools & Workflows
 
-* **Translate sections**: Select "Вопрос (RU)" -> generate "Question (EN)" -> human review.
-* **Normalize YAML**: Ask model to validate/repair keys (`topic`, `difficulty`, `tags`).
-* **Summarize**: Generate a 1–2 line TL;DR for the top of the answer sections.
-* **Cross-linking suggestions**: Ask for 3–5 related concepts/questions to link.
+The vault includes comprehensive AI-assisted workflows for content creation, validation, and maintenance.
 
-**Rule**: All LLM changes remain **draft** until reviewed; update `status` to `reviewed/ready` after verification.
+### AI Agent Guidelines
+- **AGENTS.md**: General AI agent instructions for the entire project
+- **GEMINI.md**: Specific guidance for Gemini CLI usage
+- **CLAUDE.md**: Claude Code integration and workflows
+- **.cursor/rules/**: Cursor AI editor rules for automated assistance
+
+### AI Integration
+- **LM Studio**: Local AI processing setup for translation and validation
+- **Validation Tools**: Python-based content validation with AI assistance
+- **Agent Checklists**: Standardized workflows for AI-assisted content creation
+
+### Administrative Documentation
+Located in `00-Administration/` with organized subfolders:
+- **AI-Agents/**: Agent checklists and prompts
+- **AI-Integration/**: Tool setup guides
+- **Validation/**: Content validation systems
+- **Vault-Rules/**: Taxonomy and file naming rules
+- **Linking-System/**: Link health monitoring and MOCs
+
+**Rule**: All AI-generated content remains **draft** until human review; update `status` to `reviewed/ready` after verification.
 
 ---
 
@@ -298,20 +324,38 @@ tags: []
 
 ## Backup & Sync
 
-* Use Git (commit early/often). Consider excluding heavy caches; keep `.obsidian` to preserve plugin settings.
-* Cross-device: Obsidian Sync or your preferred encrypted sync; keep IDs stable across devices.
+* Use Git (commit early/often). The `.gitignore` file excludes AI model files, cache directories, and sensitive configuration
+* Cross-device: Obsidian Sync or your preferred encrypted sync; keep IDs stable across devices
+* AI tools: LM Studio configurations and validation artifacts are automatically ignored
 
 ---
 
 ## Quickstart
 
-1. Create the folder layout.
-2. Install plugins: Dataview, Templater (optional: MetaEdit, Tag Wrangler, Breadcrumbs).
-3. Add `_tpl-qna.md` template and bind a hotkey.
-4. Create a first concept note (e.g., `c-hash-map.md`).
-5. Create a first question (e.g., `q-two-sum--algorithms--easy.md`) via the template.
-6. Fill EN/RU sections; add YAML; link to concept + MOC; tag properly.
-7. Use MOC + Dataview to surface and review.
+### Basic Setup
+1. Clone the repository and open in Obsidian
+2. Install plugins: Dataview, Templater (optional: MetaEdit, Tag Wrangler, Breadcrumbs)
+3. Review `00-Administration/README.md` for documentation structure
+4. Check `00-Administration/Index/DOCUMENTATION-INDEX.md` for quick start guides
+
+### Content Creation
+1. Review `AGENTS.md` for AI agent guidelines and rules
+2. Use templates from `_templates/` for consistent note creation
+3. Follow the file naming conventions from `00-Administration/Vault-Rules/FILE-NAMING-RULES.md`
+4. Use taxonomy from `00-Administration/Vault-Rules/TAXONOMY.md` for topics and tags
+5. Create concept notes in `10-Concepts/` and questions in appropriate topic folders
+6. Fill EN/RU sections; add complete YAML frontmatter; link to concepts + MOCs
+
+### AI-Assisted Workflows
+1. Set up LM Studio following `00-Administration/AI-Integration/LM-STUDIO-QUICKSTART.md`
+2. Use validation tools from `utils/` and `validators/`
+3. Follow agent checklists from `00-Administration/AI-Agents/`
+4. Monitor link health with `00-Administration/Linking-System/LINK-HEALTH-DASHBOARD.md`
+
+### Exploration
+1. Start with `00-Administration/Linking-System/00-MOC-Start-Here.md` for topic overview
+2. Use MOCs in `90-MOCs/` and Dataview queries for content discovery
+3. Check recent updates and link health regularly
 
 ---
 

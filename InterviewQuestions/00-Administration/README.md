@@ -54,11 +54,28 @@ For common tasks:
 - **Validation needed?** → `Validation/VALIDATION-QUICKSTART.md`
 - **Check link health?** → `Linking-System/LINK-HEALTH-DASHBOARD.md`
 
+## AI Tools Integration
+
+This documentation system integrates with multiple AI tools:
+- **Cursor AI**: Uses `.cursor/rules/` for automated assistance
+- **Claude Code**: Follows `CLAUDE.md` workflows
+- **Gemini CLI**: Uses `GEMINI.md` for command-line operations
+- **LM Studio**: Local AI processing via `AI-Integration/LM-STUDIO-QUICKSTART.md`
+
+## Related Files
+
+- Root `README.md` - Main project overview
+- `AGENTS.md` - General AI agent guidelines
+- `GEMINI.md` - Gemini CLI specific guidance
+- `CLAUDE.md` - Claude Code integration
+- `.gitignore` - Excludes AI artifacts and sensitive files
+
 ## Maintenance
 
 When adding new documentation:
 1. Determine the appropriate subfolder based on content
 2. Update this README if adding new subfolders
 3. Update cross-references in other documents as needed
+4. Test AI tool integrations if adding new workflows
 
 Last updated: 2025-11-08
