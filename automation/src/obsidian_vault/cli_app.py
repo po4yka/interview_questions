@@ -712,6 +712,147 @@ def communities(
         raise typer.Exit(code=1)
 
 
+@app.command()
+def suggest_links(
+    note: Optional[str] = typer.Option(None, "--note", "-n", help="Specific note to analyze"),
+    top_k: int = typer.Option(5, "--top", "-k", help="Number of suggestions per note"),
+    min_similarity: float = typer.Option(
+        0.3, "--min-similarity", "-s", help="Minimum similarity threshold (0.0-1.0)"
+    ),
+    include_existing: bool = typer.Option(
+        False, "--include-existing", help="Include already linked notes"
+    ),
+    output: Optional[str] = typer.Option(None, "--output", "-o", help="Write results to file"),
+):
+    """
+    Suggest missing links using ML-based content similarity (TF-IDF).
+
+    Uses machine learning to analyze note content and suggest related notes
+    that should be linked but currently aren't. Based on TF-IDF vectorization
+    and cosine similarity.
+    """
+    logger.info("Analyzing notes for link suggestions using ML")
+    try:
+        repo_root = discover_repo_root()
+        vault_dir = repo_root / "InterviewQuestions"
+
+        if not vault_dir.exists():
+            console.print("[red]✗[/red] InterviewQuestions directory not found")
+            logger.error(f"Vault directory not found: {vault_dir}")
+            raise typer.Exit(code=1)
+
+        with console.status(
+            "[bold green]Analyzing note content with TF-IDF...", spinner="dots"
+        ):
+            logger.debug("Building vault graph")
+            vg = VaultGraph(vault_dir)
+            logger.debug(
+                f"Generating link suggestions: note={note}, top_k={top_k}, "
+                f"min_similarity={min_similarity}"
+            )
+            suggestions = vg.suggest_links(
+                note_name=note,
+                top_k=top_k,
+                min_similarity=min_similarity,
+                exclude_existing=not include_existing,
+            )
+
+        if not suggestions:
+            console.print("[yellow]⚠[/yellow] No link suggestions found")
+            logger.warning("No link suggestions generated")
+            return
+
+        # Analyze statistics
+        stats = vg.analyze_link_predictions(suggestions)
+        logger.success(
+            f"Generated {stats['total_suggestions']} suggestions "
+            f"for {stats['total_notes_analyzed']} notes"
+        )
+
+        # Display results
+        if note and note in suggestions:
+            # Show suggestions for specific note
+            console.print(
+                f"\n[bold cyan]Link Suggestions for {note}[/bold cyan] (top {top_k})\n"
+            )
+
+            table = Table(show_header=True, header_style="bold cyan")
+            table.add_column("Rank", style="cyan", width=6)
+            table.add_column("Suggested Note", style="green")
+            table.add_column("Similarity", justify="right", style="yellow")
+
+            for i, (suggested_note, similarity) in enumerate(suggestions[note], 1):
+                table.add_row(str(i), suggested_note, f"{similarity:.3f}")
+
+            console.print(table)
+
+        else:
+            # Show summary for all notes
+            console.print(
+                f"\n[bold cyan]Link Suggestions Summary[/bold cyan] "
+                f"(showing top {min(10, len(suggestions))} notes with suggestions)\n"
+            )
+
+            # Sort by number of suggestions
+            sorted_notes = sorted(suggestions.items(), key=lambda x: len(x[1]), reverse=True)[
+                :10
+            ]
+
+            for note_name, note_suggestions in sorted_notes:
+                if not note_suggestions:
+                    continue
+
+                console.print(f"\n[bold]{note_name}[/bold]")
+                for i, (suggested, sim) in enumerate(note_suggestions, 1):
+                    console.print(f"  {i}. {suggested} (similarity: {sim:.3f})")
+
+        # Show statistics
+        console.print(f"\n[bold]Statistics:[/bold]")
+        console.print(f"  Notes analyzed: {stats['total_notes_analyzed']}")
+        console.print(f"  Total suggestions: {stats['total_suggestions']}")
+        console.print(f"  Avg suggestions per note: {stats['avg_suggestions_per_note']:.1f}")
+        console.print(f"  Avg similarity: {stats['avg_similarity']:.3f}")
+        console.print(f"  Similarity range: {stats['min_similarity']:.3f} - {stats['max_similarity']:.3f}")
+
+        # Write to file if requested
+        if output:
+            output_lines = [
+                "# Link Suggestions (ML-Based)\n\n",
+                f"**Algorithm**: TF-IDF + Cosine Similarity\n",
+                f"**Minimum Similarity**: {min_similarity}\n",
+                f"**Top K**: {top_k}\n\n",
+                "## Statistics\n\n",
+                f"- **Notes Analyzed**: {stats['total_notes_analyzed']}\n",
+                f"- **Total Suggestions**: {stats['total_suggestions']}\n",
+                f"- **Avg Suggestions/Note**: {stats['avg_suggestions_per_note']:.1f}\n",
+                f"- **Avg Similarity**: {stats['avg_similarity']:.3f}\n\n",
+                "---\n\n",
+            ]
+
+            # Sort all notes alphabetically
+            sorted_all = sorted(suggestions.items())
+
+            for note_name, note_sugg in sorted_all:
+                if not note_sugg:
+                    continue
+
+                output_lines.append(f"## {note_name}\n\n")
+                for i, (suggested, sim) in enumerate(note_sugg, 1):
+                    output_lines.append(f"{i}. [[{suggested}]] (similarity: {sim:.3f})\n")
+                output_lines.append("\n")
+
+            Path(output).write_text("".join(output_lines), encoding="utf-8")
+            console.print(f"\n[green]✓[/green] Link suggestions written to {output}")
+            logger.info(f"Link suggestions written to {output}")
+
+        logger.success("Link suggestion analysis complete")
+
+    except Exception as e:
+        console.print(f"[red]✗ Error:[/red] {e}")
+        logger.exception(f"Link suggestion failed: {e}")
+        raise typer.Exit(code=1)
+
+
 # ============================================================================
 # LLM Review Command
 # ============================================================================

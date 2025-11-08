@@ -201,6 +201,14 @@ communities-detailed: ## Detect communities with detailed notes
 	@echo "$(BLUE)Detecting vault communities (detailed)...$(RESET)"
 	uv run vault-app communities --algorithm louvain --show-notes
 
+suggest-links: ## Suggest missing links using ML (TF-IDF)
+	@echo "$(BLUE)Analyzing notes for link suggestions...$(RESET)"
+	uv run vault-app suggest-links --top 5 --min-similarity 0.3
+
+suggest-links-report: ## Generate full link suggestions report
+	@echo "$(BLUE)Generating link suggestions report...$(RESET)"
+	uv run vault-app suggest-links --top 10 --output ../reports/link-suggestions.md
+
 #=============================================================================
 # Cleaning
 #=============================================================================
