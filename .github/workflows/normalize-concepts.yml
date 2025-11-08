@@ -1,0 +1,98 @@
+name: Normalize Concepts
+
+on:
+  # Manual trigger only to prevent accidental runs
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run (preview changes without applying)'
+        required: false
+        type: boolean
+        default: true
+
+jobs:
+  normalize:
+    name: Normalize Concept Frontmatter
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Install automation package
+        run: |
+          cd automation
+          uv sync
+
+      - name: Run normalization (dry-run)
+        if: inputs.dry_run == true
+        run: |
+          cd automation
+          echo "Running normalization in DRY-RUN mode..."
+          uv run vault normalize --dry-run > ../normalization-preview.txt
+
+          echo "### Normalization Preview (Dry Run)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat ../normalization-preview.txt >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Run normalization (apply changes)
+        if: inputs.dry_run == false
+        run: |
+          cd automation
+          echo "Running normalization with ACTUAL CHANGES..."
+          uv run vault normalize > ../normalization-results.txt
+
+          echo "### Normalization Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat ../normalization-results.txt >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+
+      - name: Upload results
+        uses: actions/upload-artifact@v4
+        with:
+          name: normalization-results
+          path: normalization-*.txt
+          retention-days: 30
+
+      - name: Create Pull Request with changes
+        if: inputs.dry_run == false
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: normalize concept frontmatter'
+          title: 'Automated: Normalize concept frontmatter'
+          body: |
+            ## Automated Normalization
+
+            This PR contains automated normalization of concept note frontmatter.
+
+            **Changes**:
+            - Normalized YAML field ordering
+            - Inferred missing fields from tags
+            - Set correct MOC references
+            - Ensured consistent date formatting
+
+            **Workflow**: [Normalize Concepts](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+
+            Please review the changes before merging.
+          branch: automated/normalize-concepts
+          delete-branch: true
+          labels: |
+            automated
+            normalization

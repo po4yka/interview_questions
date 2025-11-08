@@ -1,0 +1,127 @@
+name: Graph Export
+
+on:
+  # Run weekly on Sundays at 00:00 UTC
+  schedule:
+    - cron: '0 0 * * 0'
+
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      format:
+        description: 'Export format'
+        required: true
+        type: choice
+        options:
+          - all
+          - gexf
+          - graphml
+          - json
+          - csv
+        default: 'all'
+
+permissions:
+  contents: write
+
+jobs:
+  export:
+    name: Export Vault Graph
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Install automation package
+        run: |
+          cd automation
+          uv sync
+
+      - name: Export graphs
+        run: |
+          cd automation
+          mkdir -p ../graph-exports
+
+          TIMESTAMP=$(date -u '+%Y%m%d-%H%M%S')
+          FORMAT="${{ inputs.format || 'all' }}"
+
+          echo "Exporting vault graph (format: $FORMAT)..."
+
+          if [ "$FORMAT" = "all" ] || [ "$FORMAT" = "gexf" ]; then
+            echo "Exporting GEXF..."
+            uv run vault graph-export ../graph-exports/vault-graph-${TIMESTAMP}.gexf
+          fi
+
+          if [ "$FORMAT" = "all" ] || [ "$FORMAT" = "graphml" ]; then
+            echo "Exporting GraphML..."
+            uv run vault graph-export ../graph-exports/vault-graph-${TIMESTAMP}.graphml
+          fi
+
+          if [ "$FORMAT" = "all" ] || [ "$FORMAT" = "json" ]; then
+            echo "Exporting JSON..."
+            uv run vault graph-export ../graph-exports/vault-graph-${TIMESTAMP}.json
+          fi
+
+          if [ "$FORMAT" = "all" ] || [ "$FORMAT" = "csv" ]; then
+            echo "Exporting CSV..."
+            uv run vault graph-export ../graph-exports/vault-graph-${TIMESTAMP}.csv
+          fi
+
+          # Create latest symlinks
+          if [ -f "../graph-exports/vault-graph-${TIMESTAMP}.gexf" ]; then
+            cp "../graph-exports/vault-graph-${TIMESTAMP}.gexf" "../graph-exports/vault-graph-latest.gexf"
+          fi
+
+          if [ -f "../graph-exports/vault-graph-${TIMESTAMP}.json" ]; then
+            cp "../graph-exports/vault-graph-${TIMESTAMP}.json" "../graph-exports/vault-graph-latest.json"
+          fi
+
+      - name: Upload graph exports
+        uses: actions/upload-artifact@v4
+        with:
+          name: vault-graph-exports
+          path: graph-exports/
+          retention-days: 90
+
+      - name: Commit exports to repository
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          # Switch to graph-exports branch
+          git fetch origin graph-exports:graph-exports 2>/dev/null || git checkout -b graph-exports
+
+          # Copy exports
+          mkdir -p exports
+          cp -r graph-exports/* exports/
+
+          # Add timestamp
+          echo "Last updated: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" > exports/last-updated.txt
+
+          git add exports/
+          git commit -m "chore: update graph exports [skip ci]" || echo "No changes to commit"
+
+      - name: Push exports
+        run: |
+          git push origin graph-exports
+
+      - name: Add summary
+        run: |
+          echo "# Graph Export Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "**Format**: ${{ inputs.format || 'all' }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Exported files:" >> $GITHUB_STEP_SUMMARY
+          ls -lh graph-exports/ >> $GITHUB_STEP_SUMMARY
