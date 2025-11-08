@@ -879,7 +879,7 @@ def llm_review(
         help="Preview changes without modifying files",
     ),
     max_iterations: int = typer.Option(
-        5,
+        10,
         "--max-iterations",
         "-m",
         help="Maximum fix iterations per note",

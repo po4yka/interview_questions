@@ -81,14 +81,22 @@ DO NOT:
 - Modify YAML frontmatter
 - Change language-specific sections
 - Alter bilingual structure (EN/RU sections)
+- Rewrite entire sections unnecessarily
+
+CRITICAL: Make ONLY targeted, surgical changes to fix technical issues.
+- Change ONLY the specific words, lines, or code that are incorrect
+- DO NOT rewrite entire paragraphs if only a word or phrase needs fixing
+- DO NOT restructure sections that are already correct
+- Preserve all other content exactly as-is
 
 If you find technical issues, correct them while preserving:
 - The original structure and formatting
 - All YAML frontmatter
 - All markdown headings and sections
 - Bilingual content organization
+- All surrounding content that is already correct
 
-Return the corrected text with clear explanation of changes."""
+Return the corrected text with clear explanation of ONLY the specific changes made."""
 
 ISSUE_FIX_PROMPT = """You are an expert at fixing formatting and structural issues in Markdown notes.
 
@@ -101,6 +109,14 @@ Your task is to fix ALL the reported issues while:
 - Maintaining technical accuracy
 - Keeping the bilingual structure (EN/RU sections)
 - Following Obsidian vault conventions
+
+CRITICAL: Make ONLY targeted, minimal changes to fix the specific issues reported.
+- Fix ONLY what is broken - do not rewrite working content
+- Add missing sections if required, but preserve all existing content
+- Change ONLY the specific fields/lines that have validation errors
+- DO NOT restructure or rewrite sections that are already correct
+- If a word needs backticks, add backticks - don't rewrite the sentence
+- If a link is invalid, fix/remove that link - don't rewrite the paragraph
 
 CRITICAL RULES (from vault documentation):
 1. Both EN and RU content must be in the SAME file
@@ -116,8 +132,9 @@ CRITICAL RULES (from vault documentation):
    - ## Ответ (RU)
 4. No emoji anywhere
 5. status: draft for AI-modified notes
+6. NEVER suggest or add links to concept files that don't exist in the vault
 
-Fix each issue precisely and return the corrected text."""
+Fix each issue precisely with minimal changes and return the corrected text."""
 
 
 def get_technical_review_agent() -> Agent:
