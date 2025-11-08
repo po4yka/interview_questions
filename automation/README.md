@@ -114,6 +114,54 @@ vault-app orphans --output orphans.txt
 - **Auto-documentation**: Help text from type hints
 - **Type Validation**: Automatic validation of command arguments
 
+### Logging
+
+The automation tools use **Loguru** for professional logging with two output levels:
+
+**Console Logging (INFO level):**
+- Useful, concise messages shown during command execution
+- Operation start/completion messages
+- Warnings and errors
+- Success confirmations
+
+**File Logging (DEBUG level):**
+- Detailed diagnostic information
+- Full stack traces for exceptions
+- Debug messages with function/line numbers
+- Stored in `~/.cache/obsidian-vault/vault.log`
+- Automatic rotation (10 MB per file)
+- 1 week retention
+
+**Example log file location:**
+```bash
+# View recent logs
+tail -f ~/.cache/obsidian-vault/vault.log
+
+# Check log file
+cat ~/.cache/obsidian-vault/vault.log
+```
+
+**Log file format:**
+```
+2025-11-08 10:27:40.390 | INFO     | obsidian_vault.cli_app:orphans:379 | Finding orphaned notes
+2025-11-08 10:27:41.523 | DEBUG    | obsidian_vault.utils.graph_analytics:__init__:32 | Building vault graph
+2025-11-08 10:27:45.789 | SUCCESS  | obsidian_vault.cli_app:orphans:395 | No orphaned notes found
+```
+
+**Programmatic configuration:**
+```python
+from obsidian_vault.utils import setup_logging
+
+# Configure logging (optional - auto-configured by CLI)
+setup_logging(
+    console_level="INFO",    # Console output level
+    file_level="DEBUG",      # File output level
+    log_file=Path("custom.log"),  # Optional custom log file
+    rotation="10 MB",        # File rotation size
+    retention="1 week"       # Log retention period
+)
+```
+
 ## Structure
 
 ```
@@ -144,6 +192,7 @@ automation/
 │       │   ├── common.py       # Shared utilities (repo discovery, parsing, etc.)
 │       │   ├── frontmatter.py  # Robust YAML frontmatter with order/comment preservation
 │       │   ├── markdown.py     # AST-based Markdown parsing with marko
+│       │   ├── logging_config.py  # Loguru-based logging configuration
 │       │   ├── yaml_loader.py
 │       │   ├── taxonomy_loader.py
 │       │   ├── report_generator.py
@@ -176,6 +225,7 @@ Utility helpers used across scripts and validators:
 - `common.py` - Shared utilities (repo discovery, note parsing, file collection, YAML dumping)
 - `frontmatter.py` - **Robust frontmatter handling** with python-frontmatter + ruamel.yaml (preserves order and comments)
 - `markdown.py` - **AST-based Markdown parsing** with marko (heading extraction, wikilinks, content analysis)
+- `logging_config.py` - **Professional logging** with Loguru (console INFO, file DEBUG, rotation, retention)
 - `yaml_loader.py` - YAML loading with error handling
 - `taxonomy_loader.py` - Taxonomy file loading and parsing
 - `report_generator.py` - Validation report generation
@@ -670,7 +720,21 @@ uv run mypy src/
 
 ## Version History
 
-### 0.7.0 (Current)
+### 0.8.0 (Current)
+- **Professional Logging**: Integrated Loguru for comprehensive logging
+- **Dual-Level Logging**:
+  - Console: INFO level with useful, concise messages
+  - File: DEBUG level with detailed diagnostic information
+- **Automatic Log Management**:
+  - File rotation (10 MB per file)
+  - 1 week retention
+  - Stored in `~/.cache/obsidian-vault/vault.log`
+- **Enhanced Error Tracking**: Full stack traces in log files
+- **New Logging Module**: Created `utils/logging_config.py` with setup functions
+- **New Dependency**: loguru >= 0.7.0
+- **CLI Integration**: All commands now use structured logging
+
+### 0.7.0
 - **Modern CLI**: Integrated typer + rich for beautiful terminal output
 - **New CLI Application**: Created `cli_app.py` with typer-based modern CLI
 - **Rich Terminal Features**:

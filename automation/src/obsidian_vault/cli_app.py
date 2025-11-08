@@ -20,6 +20,7 @@ from pathlib import Path
 from typing import Optional
 
 import typer
+from loguru import logger
 from rich.console import Console
 from rich.panel import Panel
 from rich.progress import Progress, SpinnerColumn, TextColumn
@@ -34,9 +35,13 @@ from obsidian_vault.utils import (
     collect_validatable_files,
     discover_repo_root,
     parse_note,
+    setup_logging,
 )
 from obsidian_vault.utils.graph_analytics import VaultGraph, generate_link_health_report
 from obsidian_vault.validators import Severity, ValidatorRegistry
+
+# Initialize logging
+setup_logging()
 
 # Create Typer app and Rich console
 app = typer.Typer(
@@ -77,12 +82,16 @@ def validate(
 
     Checks YAML frontmatter, content structure, links, and more.
     """
+    logger.info("Starting validation")
     try:
         repo_root = discover_repo_root()
         vault_dir = repo_root / "InterviewQuestions"
+        logger.debug(f"Repository root: {repo_root}")
+        logger.debug(f"Vault directory: {vault_dir}")
 
         if not vault_dir.exists():
             console.print("[red]✗[/red] InterviewQuestions directory not found")
+            logger.error(f"Vault directory not found: {vault_dir}")
             raise typer.Exit(code=1)
 
         # Determine targets
@@ -109,7 +118,11 @@ def validate(
 
         if not targets:
             console.print("[yellow]⚠[/yellow] No Markdown notes found")
+            logger.warning("No Markdown notes found to validate")
             raise typer.Exit(code=1)
+
+        logger.info(f"Found {len(targets)} file(s) to validate")
+        logger.debug(f"Targets: {[str(t) for t in targets[:5]]}{'...' if len(targets) > 5 else ''}")
 
         # Load taxonomy and note index
         with Progress(
@@ -119,7 +132,9 @@ def validate(
             transient=True,
         ) as progress:
             progress.add_task("Loading taxonomy and building note index...", total=None)
+            logger.debug("Loading taxonomy")
             taxonomy = TaxonomyLoader(repo_root).load()
+            logger.debug("Building note index")
             note_index = build_note_index(vault_dir)
 
         # Validate files
@@ -137,10 +152,15 @@ def validate(
             for result in results
         )
 
+        total_issues = sum(len(result.issues) for result in results)
+        logger.info(f"Validation complete: {total_issues} issue(s) found")
+        logger.debug(f"Critical issues: {has_critical}")
+
         # Generate report if requested
         if report:
             ReportGenerator(results).write_markdown(Path(report))
             console.print(f"\n[green]✓[/green] Report written to {report}")
+            logger.info(f"Validation report written to {report}")
 
         # Display results
         if quiet:
@@ -148,10 +168,12 @@ def validate(
         else:
             _print_detailed_results(results)
 
+        logger.success("Validation complete" if not has_critical else "Validation complete with critical issues")
         raise typer.Exit(code=1 if has_critical else 0)
 
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
+        logger.exception(f"Validation failed with error: {e}")
         raise typer.Exit(code=1)
 
 
@@ -270,17 +292,23 @@ def graph_stats(
 
     Shows total notes, links, density, orphaned notes, and more.
     """
+    logger.info("Analyzing vault graph statistics")
     try:
         repo_root = discover_repo_root()
         vault_dir = repo_root / "InterviewQuestions"
+        logger.debug(f"Vault directory: {vault_dir}")
 
         if not vault_dir.exists():
             console.print("[red]✗[/red] InterviewQuestions directory not found")
+            logger.error(f"Vault directory not found: {vault_dir}")
             raise typer.Exit(code=1)
 
         with console.status("[bold green]Analyzing vault graph...", spinner="dots"):
+            logger.debug("Building vault graph")
             vg = VaultGraph(vault_dir)
+            logger.debug("Calculating network statistics")
             stats = vg.get_network_statistics()
+            logger.debug("Analyzing link quality")
             quality = vg.analyze_link_quality()
 
         # Create main statistics table
@@ -331,8 +359,11 @@ def graph_stats(
 
                 console.print("\n", auth_table)
 
+        logger.success(f"Graph statistics complete: {stats['total_notes']} notes, {stats['total_links']} links")
+
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
+        logger.exception(f"Graph stats failed with error: {e}")
         raise typer.Exit(code=1)
 
 
@@ -345,12 +376,14 @@ def orphans(
 
     Helps identify disconnected content that needs linking.
     """
+    logger.info("Finding orphaned notes")
     try:
         repo_root = discover_repo_root()
         vault_dir = repo_root / "InterviewQuestions"
 
         if not vault_dir.exists():
             console.print("[red]✗[/red] InterviewQuestions directory not found")
+            logger.error(f"Vault directory not found: {vault_dir}")
             raise typer.Exit(code=1)
 
         with console.status("[bold green]Finding orphaned notes...", spinner="dots"):
@@ -359,7 +392,11 @@ def orphans(
 
         if not orphan_notes:
             console.print("[green]✓[/green] No orphaned notes found! All notes have at least one link.")
+            logger.success("No orphaned notes found")
             return
+
+        logger.warning(f"Found {len(orphan_notes)} orphaned notes")
+        logger.debug(f"Orphaned notes: {orphan_notes[:5]}{'...' if len(orphan_notes) > 5 else ''}")
 
         console.print(f"\n[yellow]Found {len(orphan_notes)} orphaned notes:[/yellow]\n")
         for note in orphan_notes:
@@ -368,9 +405,11 @@ def orphans(
         if output:
             Path(output).write_text("\n".join(orphan_notes), encoding="utf-8")
             console.print(f"\n[green]✓[/green] Wrote {len(orphan_notes)} orphaned notes to {output}")
+            logger.info(f"Wrote orphaned notes to {output}")
 
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
+        logger.exception(f"Orphans command failed with error: {e}")
         raise typer.Exit(code=1)
 
 
@@ -383,12 +422,14 @@ def broken_links(
 
     Helps maintain vault integrity by identifying missing link targets.
     """
+    logger.info("Finding broken links")
     try:
         repo_root = discover_repo_root()
         vault_dir = repo_root / "InterviewQuestions"
 
         if not vault_dir.exists():
             console.print("[red]✗[/red] InterviewQuestions directory not found")
+            logger.error(f"Vault directory not found: {vault_dir}")
             raise typer.Exit(code=1)
 
         with console.status("[bold green]Finding broken links...", spinner="dots"):
@@ -397,9 +438,11 @@ def broken_links(
 
         if not broken:
             console.print("[green]✓[/green] No broken links found! All links point to existing notes.")
+            logger.success("No broken links found")
             return
 
         total_broken = sum(len(targets) for targets in broken.values())
+        logger.error(f"Found {len(broken)} notes with {total_broken} broken links")
         console.print(f"\n[red]Found {len(broken)} notes with {total_broken} broken links:[/red]\n")
 
         for source, targets in sorted(broken.items()):
@@ -415,11 +458,13 @@ def broken_links(
                     lines.append(f"  - {target}")
             Path(output).write_text("\n".join(lines), encoding="utf-8")
             console.print(f"\n[green]✓[/green] Wrote broken links report to {output}")
+            logger.info(f"Wrote broken links report to {output}")
 
         raise typer.Exit(code=1)
 
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
+        logger.exception(f"Broken links command failed with error: {e}")
         raise typer.Exit(code=1)
 
 
@@ -432,25 +477,31 @@ def link_report(
 
     Creates a detailed report with statistics, orphans, hubs, and authorities.
     """
+    logger.info("Generating link health report")
     try:
         repo_root = discover_repo_root()
         vault_dir = repo_root / "InterviewQuestions"
 
         if not vault_dir.exists():
             console.print("[red]✗[/red] InterviewQuestions directory not found")
+            logger.error(f"Vault directory not found: {vault_dir}")
             raise typer.Exit(code=1)
 
         with console.status("[bold green]Generating link health report...", spinner="dots"):
+            logger.debug("Generating comprehensive link health report")
             report = generate_link_health_report(vault_dir)
 
         if output:
             Path(output).write_text(report, encoding="utf-8")
             console.print(f"[green]✓[/green] Link health report written to {output}")
+            logger.success(f"Link health report written to {output}")
         else:
             console.print(report)
+            logger.success("Link health report generated")
 
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
+        logger.exception(f"Link report command failed with error: {e}")
         raise typer.Exit(code=1)
 
 
@@ -466,12 +517,14 @@ def graph_export(
 
     Supports GEXF, GraphML, JSON, and CSV formats.
     """
+    logger.info(f"Exporting graph to {output}")
     try:
         repo_root = discover_repo_root()
         vault_dir = repo_root / "InterviewQuestions"
 
         if not vault_dir.exists():
             console.print("[red]✗[/red] InterviewQuestions directory not found")
+            logger.error(f"Vault directory not found: {vault_dir}")
             raise typer.Exit(code=1)
 
         output_path = Path(output)
@@ -488,17 +541,22 @@ def graph_export(
             }
             export_format = format_map.get(output_path.suffix.lower(), "gexf")
 
+        logger.debug(f"Export format: {export_format}")
+
         with console.status(f"[bold green]Exporting graph to {export_format.upper()}...", spinner="dots"):
             vg = VaultGraph(vault_dir)
             vg.export_graph_data(output_path, format=export_format)
 
         console.print(f"[green]✓[/green] Graph exported to {output_path} (format: {export_format})")
+        logger.success(f"Graph exported to {output_path} (format: {export_format})")
 
     except ValueError as e:
         console.print(f"[red]✗ Error:[/red] {e}")
+        logger.error(f"Invalid export format: {e}")
         raise typer.Exit(code=1)
     except Exception as e:
         console.print(f"[red]✗ Error:[/red] {e}")
+        logger.exception(f"Graph export failed with error: {e}")
         raise typer.Exit(code=1)
 
 

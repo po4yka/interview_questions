@@ -16,6 +16,16 @@ from .frontmatter import (
     load_frontmatter_text,
     update_frontmatter,
 )
+from .logging_config import (
+    critical,
+    debug,
+    error,
+    get_logger,
+    info,
+    setup_logging,
+    success,
+    warning,
+)
 from .markdown import (
     MarkdownAnalyzer,
     extract_headings,
@@ -45,6 +55,15 @@ __all__ = [
     "load_frontmatter_text",
     "dump_frontmatter",
     "update_frontmatter",
+    # Logging (loguru-based)
+    "setup_logging",
+    "get_logger",
+    "debug",
+    "info",
+    "warning",
+    "error",
+    "critical",
+    "success",
     # Markdown (AST-based parsing and analysis)
     "MarkdownAnalyzer",
     "parse_markdown",
