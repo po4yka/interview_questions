@@ -392,15 +392,15 @@ Override the default model:
 
 ```python
 # In agents.py
-from pydantic_ai.models.openai import OpenAIModel
+from pydantic_ai.models.openai import OpenAIChatModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
-def get_openrouter_model(model_name: str = "anthropic/claude-3.5-sonnet") -> OpenAIModel:
+def get_openrouter_model(model_name: str = "anthropic/claude-3.5-sonnet") -> OpenAIChatModel:
     # Or use environment variable
     model_name = os.getenv("OPENROUTER_MODEL", model_name)
     api_key = os.getenv("OPENROUTER_API_KEY")
 
-    return OpenAIModel(
+    return OpenAIChatModel(
         model_name,
         provider=OpenAIProvider(
             base_url="https://openrouter.ai/api/v1",
