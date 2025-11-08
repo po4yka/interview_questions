@@ -6,6 +6,11 @@ Commands:
 - vault validate: Comprehensive note validation
 - vault normalize: Normalize concept frontmatter
 - vault check-translations: Find notes missing translations
+- vault graph-stats: Display vault network statistics
+- vault orphans: Find orphaned notes (no links)
+- vault broken-links: Find notes with broken links
+- vault link-report: Generate comprehensive link health report
+- vault graph-export: Export vault graph to various formats
 """
 
 from __future__ import annotations
@@ -31,6 +36,7 @@ from obsidian_vault.utils import (
     listify,
     parse_note,
 )
+from obsidian_vault.utils.graph_analytics import VaultGraph, generate_link_health_report
 from obsidian_vault.validators import Severity, ValidatorRegistry
 
 # ============================================================================
@@ -506,6 +512,203 @@ def cmd_check_translations(args: argparse.Namespace) -> int:
 
 
 # ============================================================================
+# Graph Analytics Commands
+# ============================================================================
+
+
+def cmd_graph_stats(args: argparse.Namespace) -> int:
+    """Display vault network statistics."""
+    repo_root = discover_repo_root()
+    vault_dir = repo_root / "InterviewQuestions"
+
+    if not vault_dir.exists():
+        print("InterviewQuestions directory not found.", file=sys.stderr)
+        return 1
+
+    try:
+        vg = VaultGraph(vault_dir)
+        stats = vg.get_network_statistics()
+        quality = vg.analyze_link_quality()
+
+        print("=" * 80)
+        print("Vault Network Statistics")
+        print("=" * 80)
+        print(f"\n📊 Basic Metrics:")
+        print(f"  Total Notes:          {stats['total_notes']}")
+        print(f"  Total Links:          {stats['total_links']}")
+        print(f"  Average Degree:       {stats['average_degree']:.2f}")
+        print(f"  Network Density:      {stats['density']:.4f}")
+        print(f"  Connected Components: {stats['connected_components']}")
+
+        print(f"\n🔗 Link Quality:")
+        print(f"  Reciprocal Links:     {quality['reciprocal_links']}")
+        print(f"  Unidirectional Links: {quality['unidirectional_links']}")
+        print(f"  Orphaned Notes:       {stats['orphaned_notes']} ({quality['orphaned_ratio']:.1%})")
+        print(f"  Isolated Notes:       {stats['isolated_notes']} ({quality['isolated_ratio']:.1%})")
+
+        if args.hubs:
+            hubs = vg.get_hub_notes(args.hubs)
+            if hubs:
+                print(f"\n📤 Top {args.hubs} Hub Notes (Most Outgoing Links):")
+                for note, degree in hubs:
+                    print(f"  {note}: {degree} outgoing")
+
+        if args.authorities:
+            authorities = vg.get_authority_notes(args.authorities)
+            if authorities:
+                print(f"\n📥 Top {args.authorities} Authority Notes (Most Incoming Links):")
+                for note, degree in authorities:
+                    print(f"  {note}: {degree} incoming")
+
+        print()
+        return 0
+
+    except Exception as e:
+        print(f"Error analyzing vault graph: {e}", file=sys.stderr)
+        return 1
+
+
+def cmd_orphans(args: argparse.Namespace) -> int:
+    """Find orphaned notes (no incoming or outgoing links)."""
+    repo_root = discover_repo_root()
+    vault_dir = repo_root / "InterviewQuestions"
+
+    if not vault_dir.exists():
+        print("InterviewQuestions directory not found.", file=sys.stderr)
+        return 1
+
+    try:
+        vg = VaultGraph(vault_dir)
+        orphans = vg.get_orphaned_notes()
+
+        if not orphans:
+            print("No orphaned notes found. All notes have at least one link!")
+            return 0
+
+        print(f"Found {len(orphans)} orphaned notes (no incoming or outgoing links):\n")
+        for note in orphans:
+            print(f"  - {note}")
+
+        if args.output:
+            output_path = Path(args.output)
+            output_path.write_text("\n".join(orphans), encoding="utf-8")
+            print(f"\nWrote {len(orphans)} orphaned notes to {output_path}")
+
+        return 0
+
+    except Exception as e:
+        print(f"Error finding orphaned notes: {e}", file=sys.stderr)
+        return 1
+
+
+def cmd_broken_links(args: argparse.Namespace) -> int:
+    """Find notes with broken links (links to non-existent notes)."""
+    repo_root = discover_repo_root()
+    vault_dir = repo_root / "InterviewQuestions"
+
+    if not vault_dir.exists():
+        print("InterviewQuestions directory not found.", file=sys.stderr)
+        return 1
+
+    try:
+        vg = VaultGraph(vault_dir)
+        broken = vg.get_broken_links()
+
+        if not broken:
+            print("No broken links found. All links point to existing notes!")
+            return 0
+
+        total_broken = sum(len(targets) for targets in broken.values())
+        print(f"Found {len(broken)} notes with {total_broken} broken links:\n")
+
+        for source, targets in sorted(broken.items()):
+            print(f"  {source}:")
+            for target in targets:
+                print(f"    → {target} (missing)")
+
+        if args.output:
+            output_path = Path(args.output)
+            lines = []
+            for source, targets in sorted(broken.items()):
+                lines.append(f"{source}:")
+                for target in targets:
+                    lines.append(f"  - {target}")
+            output_path.write_text("\n".join(lines), encoding="utf-8")
+            print(f"\nWrote broken links report to {output_path}")
+
+        return 1 if broken else 0
+
+    except Exception as e:
+        print(f"Error finding broken links: {e}", file=sys.stderr)
+        return 1
+
+
+def cmd_link_report(args: argparse.Namespace) -> int:
+    """Generate comprehensive link health report."""
+    repo_root = discover_repo_root()
+    vault_dir = repo_root / "InterviewQuestions"
+
+    if not vault_dir.exists():
+        print("InterviewQuestions directory not found.", file=sys.stderr)
+        return 1
+
+    try:
+        report = generate_link_health_report(vault_dir)
+
+        if args.output:
+            output_path = Path(args.output)
+            output_path.write_text(report, encoding="utf-8")
+            print(f"Link health report written to {output_path}")
+        else:
+            print(report)
+
+        return 0
+
+    except Exception as e:
+        print(f"Error generating link health report: {e}", file=sys.stderr)
+        return 1
+
+
+def cmd_graph_export(args: argparse.Namespace) -> int:
+    """Export vault graph to various formats."""
+    repo_root = discover_repo_root()
+    vault_dir = repo_root / "InterviewQuestions"
+
+    if not vault_dir.exists():
+        print("InterviewQuestions directory not found.", file=sys.stderr)
+        return 1
+
+    try:
+        vg = VaultGraph(vault_dir)
+        output_path = Path(args.output)
+
+        # Determine format from extension if not specified
+        format_map = {
+            ".gexf": "gexf",
+            ".graphml": "graphml",
+            ".json": "json",
+            ".csv": "csv",
+        }
+
+        export_format = args.format
+        if not export_format:
+            suffix = output_path.suffix.lower()
+            export_format = format_map.get(suffix, "gexf")
+
+        vg.export_graph_data(output_path, format=export_format)
+        print(f"Graph exported to {output_path} (format: {export_format})")
+
+        return 0
+
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        return 1
+    except Exception as e:
+        print(f"Error exporting graph: {e}", file=sys.stderr)
+        return 1
+
+
+# ============================================================================
 # Main CLI
 # ============================================================================
 
@@ -578,6 +781,77 @@ def main() -> int:
         help="Write results to file (default: print to stdout)",
     )
 
+    # Graph statistics command
+    stats_parser = subparsers.add_parser(
+        "graph-stats",
+        help="Display vault network statistics and link quality metrics",
+    )
+    stats_parser.add_argument(
+        "--hubs",
+        type=int,
+        metavar="N",
+        help="Show top N hub notes (most outgoing links)",
+    )
+    stats_parser.add_argument(
+        "--authorities",
+        type=int,
+        metavar="N",
+        help="Show top N authority notes (most incoming links)",
+    )
+
+    # Orphans command
+    orphans_parser = subparsers.add_parser(
+        "orphans",
+        help="Find orphaned notes (no incoming or outgoing links)",
+    )
+    orphans_parser.add_argument(
+        "--output",
+        "-o",
+        type=str,
+        help="Write results to file (default: print to stdout)",
+    )
+
+    # Broken links command
+    broken_parser = subparsers.add_parser(
+        "broken-links",
+        help="Find notes with broken links (links to non-existent notes)",
+    )
+    broken_parser.add_argument(
+        "--output",
+        "-o",
+        type=str,
+        help="Write results to file (default: print to stdout)",
+    )
+
+    # Link health report command
+    report_parser = subparsers.add_parser(
+        "link-report",
+        help="Generate comprehensive markdown link health report",
+    )
+    report_parser.add_argument(
+        "--output",
+        "-o",
+        type=str,
+        help="Output file path (default: print to stdout)",
+    )
+
+    # Graph export command
+    export_parser = subparsers.add_parser(
+        "graph-export",
+        help="Export vault graph to various formats for external analysis",
+    )
+    export_parser.add_argument(
+        "output",
+        type=str,
+        help="Output file path",
+    )
+    export_parser.add_argument(
+        "--format",
+        "-f",
+        choices=["gexf", "graphml", "json", "csv"],
+        help="Export format (default: auto-detect from file extension)",
+    )
+
     args = parser.parse_args()
 
     if not args.command:
@@ -590,6 +864,16 @@ def main() -> int:
         return cmd_normalize(args)
     elif args.command == "check-translations":
         return cmd_check_translations(args)
+    elif args.command == "graph-stats":
+        return cmd_graph_stats(args)
+    elif args.command == "orphans":
+        return cmd_orphans(args)
+    elif args.command == "broken-links":
+        return cmd_broken_links(args)
+    elif args.command == "link-report":
+        return cmd_link_report(args)
+    elif args.command == "graph-export":
+        return cmd_graph_export(args)
     else:
         parser.print_help()
         return 1

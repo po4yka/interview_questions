@@ -9,6 +9,7 @@ This package provides a unified, professional automation framework for:
 - **Validation**: Comprehensive note validation (YAML, content, links, format, code)
 - **Normalization**: Automated frontmatter normalization for concept notes
 - **Reporting**: Missing translations and quality reports
+- **Graph Analytics**: Link/backlink graph analysis, orphan detection, network statistics
 
 All automation code is now consolidated in a single, well-organized location with proper Python packaging.
 
@@ -63,6 +64,21 @@ uv run --project automation vault normalize
 
 # Find missing translations
 uv run --project automation vault check-translations
+
+# Analyze vault graph statistics
+uv run --project automation vault graph-stats --hubs 10 --authorities 10
+
+# Find orphaned notes
+uv run --project automation vault orphans
+
+# Find broken links
+uv run --project automation vault broken-links
+
+# Generate link health report
+uv run --project automation vault link-report --output report.md
+
+# Export graph for external analysis
+uv run --project automation vault graph-export vault-graph.json
 ```
 
 After installation to your environment, the `vault` command is available directly:
@@ -71,6 +87,8 @@ After installation to your environment, the `vault` command is available directl
 vault validate InterviewQuestions/40-Android
 vault normalize
 vault check-translations
+vault graph-stats
+vault orphans
 ```
 
 ## Structure
@@ -102,7 +120,8 @@ automation/
 │       │   ├── common.py       # Shared utilities (repo discovery, parsing, etc.)
 │       │   ├── yaml_loader.py
 │       │   ├── taxonomy_loader.py
-│       │   └── report_generator.py
+│       │   ├── report_generator.py
+│       │   └── graph_analytics.py  # Graph analysis using obsidiantools
 │       └── scripts/            # (Deprecated - use CLI instead)
 │           └── __init__.py
 └── tests/                      # Tests (future)
@@ -128,19 +147,29 @@ Comprehensive validation framework with auto-discovery registry. See `src/obsidi
 
 Utility helpers used across scripts and validators:
 
+- `common.py` - Shared utilities (repo discovery, note parsing, file collection, YAML dumping)
 - `yaml_loader.py` - YAML loading with error handling
 - `taxonomy_loader.py` - Taxonomy file loading and parsing
 - `report_generator.py` - Validation report generation
+- `graph_analytics.py` - Graph analytics using obsidiantools (link graphs, orphans, hubs, authorities)
 
 ### CLI (cli.py)
 
-Unified command-line interface with three subcommands:
+Unified command-line interface with eight subcommands:
 
+**Content Validation:**
 - **vault validate** - Comprehensive note validation with parallel processing support
 - **vault normalize** - Normalize concept note frontmatter with dry-run support
 - **vault check-translations** - Find notes missing Russian or English translations
 
-All three commands consolidated from individual scripts into a single, maintainable CLI tool.
+**Graph Analytics:**
+- **vault graph-stats** - Display vault network statistics and link quality metrics
+- **vault orphans** - Find orphaned notes (no incoming or outgoing links)
+- **vault broken-links** - Find notes with broken links (links to non-existent notes)
+- **vault link-report** - Generate comprehensive markdown link health report
+- **vault graph-export** - Export vault graph to various formats (GEXF, GraphML, JSON, CSV)
+
+All commands consolidated from individual scripts into a single, maintainable CLI tool.
 
 ## Usage Examples
 
@@ -213,6 +242,105 @@ vault check-translations --output missing.txt
 ```
 
 Finds notes missing Russian or English content sections.
+
+### Analyze Vault Graph
+
+```bash
+# Display network statistics
+vault graph-stats
+
+# Show top 10 hub notes (most outgoing links)
+vault graph-stats --hubs 10
+
+# Show top 10 authority notes (most incoming links)
+vault graph-stats --authorities 10
+
+# Show both
+vault graph-stats --hubs 10 --authorities 10
+```
+
+Example output:
+```
+================================================================================
+Vault Network Statistics
+================================================================================
+
+📊 Basic Metrics:
+  Total Notes:          1684
+  Total Links:          6548
+  Average Degree:       7.78
+  Network Density:      0.0023
+  Connected Components: 33
+
+🔗 Link Quality:
+  Reciprocal Links:     438
+  Unidirectional Links: 5672
+  Orphaned Notes:       25 (1.5%)
+  Isolated Notes:       217 (12.9%)
+```
+
+### Find Orphaned Notes
+
+```bash
+# List orphaned notes (no incoming or outgoing links)
+vault orphans
+
+# Save to file
+vault orphans --output orphans.txt
+```
+
+### Check for Broken Links
+
+```bash
+# Find and display broken links
+vault broken-links
+
+# Save to file
+vault broken-links --output broken.txt
+```
+
+### Generate Link Health Report
+
+```bash
+# Display comprehensive markdown report
+vault link-report
+
+# Save to file
+vault link-report --output link-health-report.md
+```
+
+The report includes:
+- Network statistics (nodes, edges, density, components)
+- Link quality metrics (reciprocal vs unidirectional links)
+- Orphaned notes list
+- Top hub notes (most outgoing links)
+- Top authority notes (most incoming links)
+- Broken links (if any)
+
+### Export Graph for Analysis
+
+```bash
+# Export to JSON (auto-detected from extension)
+vault graph-export vault-graph.json
+
+# Export to CSV (edge list)
+vault graph-export vault-graph.csv
+
+# Export to GEXF (for Gephi visualization)
+vault graph-export vault-graph.gexf
+
+# Export to GraphML (for yEd, Cytoscape)
+vault graph-export vault-graph.graphml
+
+# Explicit format specification
+vault graph-export output.txt --format json
+```
+
+Supported formats:
+- **GEXF** - Graph Exchange XML Format (for Gephi)
+- **GraphML** - Graph Markup Language (for yEd, Cytoscape)
+- **JSON** - Node-link data format
+- **CSV** - Simple edge list
 
 ## Development
 
@@ -340,6 +468,9 @@ vault check-translations
 ### Runtime
 - Python >= 3.11 (3.11, 3.12, 3.13 supported)
 - PyYAML >= 6.0.2
+- obsidiantools >= 0.10.0 (graph analytics)
+- pandas >= 2.0.0 (data processing for graph analytics)
+- networkx >= 3.0 (graph analysis)
 
 ### Build
 - setuptools >= 75.0.0
@@ -378,7 +509,18 @@ uv run mypy src/
 
 ## Version History
 
-### 0.3.1 (Current)
+### 0.4.0 (Current)
+- **Graph Analytics**: Integrated obsidiantools for advanced vault analysis
+- **New CLI Commands**:
+  - `vault graph-stats` - Network statistics and link quality metrics
+  - `vault orphans` - Find orphaned notes (no links)
+  - `vault broken-links` - Detect broken links
+  - `vault link-report` - Generate comprehensive link health report
+  - `vault graph-export` - Export graph to GEXF, GraphML, JSON, CSV
+- **New Dependencies**: obsidiantools >= 0.10.0, pandas >= 2.0.0, networkx >= 3.0
+- **Graph Analytics Module**: Created `utils/graph_analytics.py` with VaultGraph class
+
+### 0.3.1
 - **Updated dependencies**: PyYAML >= 6.0.2, setuptools >= 75.0.0
 - **Python 3.13 support**: Added support for Python 3.13
 - **Development tooling**: Added optional dev dependencies (pytest, ruff, mypy)
