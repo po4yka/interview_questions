@@ -15,29 +15,28 @@ import datetime as dt
 import re
 import sys
 from collections import Counter
+from collections.abc import Iterable
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
-from typing import Iterable
 
+import obsidian_vault.validators  # noqa: F401 - triggers auto-registration
 from obsidian_vault.utils import (
-    discover_repo_root,
-    parse_note,
-    build_note_index,
-    collect_markdown_files,
-    collect_validatable_files,
-    dump_yaml,
-    listify,
-    TaxonomyLoader,
     FileResult,
     ReportGenerator,
+    TaxonomyLoader,
+    build_note_index,
+    collect_validatable_files,
+    discover_repo_root,
+    dump_yaml,
+    listify,
+    parse_note,
 )
 from obsidian_vault.validators import Severity, ValidatorRegistry
-import obsidian_vault.validators  # noqa: F401 - triggers auto-registration
-
 
 # ============================================================================
 # Validation Command
 # ============================================================================
+
 
 def cmd_validate(args: argparse.Namespace) -> int:
     """Run comprehensive note validation."""
@@ -174,7 +173,9 @@ def _validate_parallel(
     return results
 
 
-def _determine_validation_targets(args: argparse.Namespace, repo_root: Path, vault_dir: Path) -> list[Path]:
+def _determine_validation_targets(
+    args: argparse.Namespace, repo_root: Path, vault_dir: Path
+) -> list[Path]:
     """Determine which files to validate based on args."""
     if args.all:
         return collect_validatable_files(vault_dir)
@@ -243,6 +244,7 @@ def _print_quiet_summary(results: Iterable[FileResult]) -> None:
 # ============================================================================
 # Normalize Command
 # ============================================================================
+
 
 def cmd_normalize(args: argparse.Namespace) -> int:
     """Normalize concept note frontmatter."""
@@ -430,7 +432,7 @@ def _build_moc_map(taxonomy) -> dict[str, str]:
 
 def _normalize_id(frontmatter: dict) -> str:
     """Normalize note ID from frontmatter."""
-    ID_PATTERN = re.compile(r"^(\d{8}-\d{6})$")
+    id_pattern = re.compile(r"^(\d{8}-\d{6})$")
 
     raw_id = frontmatter.get("id")
     if isinstance(raw_id, str):
@@ -439,7 +441,7 @@ def _normalize_id(frontmatter: dict) -> str:
             candidate = raw_id[4:]
         elif raw_id.startswith("iv-"):
             candidate = raw_id[3:]
-        if ID_PATTERN.match(candidate):
+        if id_pattern.match(candidate):
             return candidate
 
     # Fallback to created date or current timestamp
@@ -464,6 +466,7 @@ def _normalize_date(value) -> str:
 # ============================================================================
 # Check Translations Command
 # ============================================================================
+
 
 def cmd_check_translations(args: argparse.Namespace) -> int:
     """Find notes missing Russian or English translations."""
@@ -505,6 +508,7 @@ def cmd_check_translations(args: argparse.Namespace) -> int:
 # ============================================================================
 # Main CLI
 # ============================================================================
+
 
 def main() -> int:
     """Main CLI entry point."""

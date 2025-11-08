@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, List
+from typing import Any
 
 try:
     import yaml  # type: ignore
@@ -22,10 +22,10 @@ def load_yaml(text: str) -> dict:
     return _simple_yaml_parse(text.splitlines())
 
 
-def _simple_yaml_parse(lines: List[str]) -> Dict[str, Any]:
+def _simple_yaml_parse(lines: list[str]) -> dict[str, Any]:
     """Parse a limited subset of YAML (sufficient for the vault schema)."""
 
-    result: Dict[str, Any] = {}
+    result: dict[str, Any] = {}
     i = 0
     while i < len(lines):
         raw = lines[i]
@@ -45,8 +45,10 @@ def _simple_yaml_parse(lines: List[str]) -> Dict[str, Any]:
     return result
 
 
-def _consume_block_value(lines: List[str], index: int, key: str, result: Dict[str, Any], indent: int) -> int:
-    items: List[Any] = []
+def _consume_block_value(
+    lines: list[str], index: int, key: str, result: dict[str, Any], indent: int
+) -> int:
+    items: list[Any] = []
     temp_index = index
     while temp_index < len(lines):
         raw = lines[temp_index]
@@ -74,8 +76,8 @@ def _consume_block_value(lines: List[str], index: int, key: str, result: Dict[st
     return temp_index
 
 
-def _consume_nested_dict(lines: List[str], index: int, indent: int):
-    obj: Dict[str, Any] = {}
+def _consume_nested_dict(lines: list[str], index: int, indent: int):
+    obj: dict[str, Any] = {}
     temp_index = index
     while temp_index < len(lines):
         raw = lines[temp_index]
@@ -92,7 +94,9 @@ def _consume_nested_dict(lines: List[str], index: int, indent: int):
     return obj, temp_index
 
 
-def _consume_additional_kv(lines: List[str], index: int, accumulator: Dict[str, Any], indent: int) -> int:
+def _consume_additional_kv(
+    lines: list[str], index: int, accumulator: dict[str, Any], indent: int
+) -> int:
     temp_index = index
     while temp_index < len(lines):
         raw = lines[temp_index]

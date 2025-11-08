@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, List, Type
+from typing import TYPE_CHECKING
 
 from .base import BaseValidator
 
@@ -14,10 +14,10 @@ if TYPE_CHECKING:
 class ValidatorRegistry:
     """Registry for managing and instantiating validators."""
 
-    _validators: List[Type[BaseValidator]] = []
+    _validators: list[type[BaseValidator]] = []
 
     @classmethod
-    def register(cls, validator_class: Type[BaseValidator]) -> Type[BaseValidator]:
+    def register(cls, validator_class: type[BaseValidator]) -> type[BaseValidator]:
         """Register a validator class.
 
         Args:
@@ -31,7 +31,7 @@ class ValidatorRegistry:
         return validator_class
 
     @classmethod
-    def get_all_validators(cls) -> List[Type[BaseValidator]]:
+    def get_all_validators(cls) -> list[type[BaseValidator]]:
         """Get all registered validator classes.
 
         Returns:
@@ -46,10 +46,10 @@ class ValidatorRegistry:
         content: str,
         frontmatter: dict,
         path: str,
-        taxonomy: "TaxonomyLoader",
+        taxonomy: TaxonomyLoader,
         vault_root: Path | None = None,
         note_index: set[str] | None = None,
-    ) -> List[BaseValidator]:
+    ) -> list[BaseValidator]:
         """Create instances of all registered validators.
 
         Args:

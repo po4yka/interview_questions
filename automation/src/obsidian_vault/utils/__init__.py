@@ -1,17 +1,17 @@
 """Utility helpers used by validation tooling."""
 
 from .common import (
-    discover_repo_root,
-    parse_note,
     build_note_index,
     collect_markdown_files,
     collect_validatable_files,
+    discover_repo_root,
     dump_yaml,
     listify,
+    parse_note,
 )
-from .yaml_loader import load_yaml
-from .taxonomy_loader import TaxonomyLoader
 from .report_generator import FileResult, ReportGenerator
+from .taxonomy_loader import TaxonomyLoader
+from .yaml_loader import load_yaml
 
 __all__ = [
     # Common utilities

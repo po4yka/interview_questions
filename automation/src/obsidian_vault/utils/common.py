@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
-from typing import Tuple
 
 
 def discover_repo_root() -> Path:
@@ -30,7 +29,7 @@ def discover_repo_root() -> Path:
     return Path.cwd()
 
 
-def parse_note(path: Path) -> Tuple[dict, str]:
+def parse_note(path: Path) -> tuple[dict, str]:
     """
     Parse a markdown note into frontmatter and body.
 
@@ -53,7 +52,7 @@ def parse_note(path: Path) -> Tuple[dict, str]:
         return {}, text
 
     frontmatter_text = "\n".join(lines[1:end])
-    body = "\n".join(lines[end + 1:])
+    body = "\n".join(lines[end + 1 :])
     frontmatter = load_yaml(frontmatter_text)
     return frontmatter or {}, body
 
@@ -154,6 +153,7 @@ def dump_yaml(data: dict) -> str:
     Returns:
         YAML-formatted string
     """
+
     def format_scalar(value):
         if value is None:
             return "null"

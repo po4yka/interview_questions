@@ -43,8 +43,7 @@ class AndroidValidator(BaseValidator):
         if missing:
             self.add_issue(
                 Severity.ERROR,
-                "Android tags must mirror subtopics: missing "
-                + ", ".join(missing),
+                "Android tags must mirror subtopics: missing " + ", ".join(missing),
                 field="tags",
             )
         else:

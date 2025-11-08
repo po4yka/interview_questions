@@ -5,13 +5,12 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Set
 
 
 @dataclass
 class Taxonomy:
-    topics: Set[str] = field(default_factory=set)
-    android_subtopics: Set[str] = field(default_factory=set)
+    topics: set[str] = field(default_factory=set)
+    android_subtopics: set[str] = field(default_factory=set)
 
 
 class TaxonomyLoader:
@@ -30,7 +29,7 @@ class TaxonomyLoader:
         taxonomy.android_subtopics = self._parse_android_subtopics(text)
         return taxonomy
 
-    def _parse_topics(self, text: str) -> Set[str]:
+    def _parse_topics(self, text: str) -> set[str]:
         pattern = re.compile(r"### Valid Topics.*?```yaml(.*?)```", re.DOTALL)
         match = pattern.search(text)
         if not match:
@@ -46,10 +45,8 @@ class TaxonomyLoader:
                 topics.add(token)
         return topics
 
-    def _parse_android_subtopics(self, text: str) -> Set[str]:
-        pattern = re.compile(
-            r"### Android Subtopics.*?```yaml(.*?)```", re.DOTALL
-        )
+    def _parse_android_subtopics(self, text: str) -> set[str]:
+        pattern = re.compile(r"### Android Subtopics.*?```yaml(.*?)```", re.DOTALL)
         match = pattern.search(text)
         if not match:
             return set()

@@ -3,18 +3,18 @@
 from __future__ import annotations
 
 from collections import Counter
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, List
 
-from obsidian_vault.validators.base import Severity, ValidationIssue
+from obsidian_vault.validators.base import ValidationIssue
 
 
 @dataclass
 class FileResult:
     path: str
-    issues: List[ValidationIssue]
-    passed: List[str]
+    issues: list[ValidationIssue]
+    passed: list[str]
 
 
 class ReportGenerator:
@@ -26,7 +26,7 @@ class ReportGenerator:
     def write_markdown(self, report_path: Path) -> None:
         if report_path.parent:
             report_path.parent.mkdir(parents=True, exist_ok=True)
-        lines: List[str] = []
+        lines: list[str] = []
         lines.append("# Validation Report")
         lines.append("")
         lines.extend(self._build_summary_section())
@@ -35,7 +35,7 @@ class ReportGenerator:
             lines.extend(self._build_file_section(result))
         report_path.write_text("\n".join(lines), encoding="utf-8")
 
-    def _build_summary_section(self) -> List[str]:
+    def _build_summary_section(self) -> list[str]:
         severity_counter = Counter()
         for result in self.results:
             for issue in result.issues:
@@ -48,7 +48,7 @@ class ReportGenerator:
             lines.append(f"- {severity}: {count}")
         return lines
 
-    def _build_file_section(self, result: FileResult) -> List[str]:
+    def _build_file_section(self, result: FileResult) -> list[str]:
         lines = [f"## {result.path}", ""]
         if result.issues:
             lines.append("### Issues")

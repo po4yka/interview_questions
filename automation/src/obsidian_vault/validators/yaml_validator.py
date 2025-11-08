@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 import re
-from datetime import datetime, date
-from typing import Iterable, List
+from collections.abc import Iterable
+from datetime import date, datetime
 
 from .base import BaseValidator, Severity
 from .registry import ValidatorRegistry
@@ -146,16 +146,12 @@ class YAMLValidator(BaseValidator):
         else:
             self.add_passed("topic value valid")
 
-    def _check_subtopics(self, subtopics: List[str] | None) -> None:
+    def _check_subtopics(self, subtopics: list[str] | None) -> None:
         if subtopics is None:
-            self.add_issue(
-                Severity.ERROR, "subtopics list missing", field="subtopics"
-            )
+            self.add_issue(Severity.ERROR, "subtopics list missing", field="subtopics")
             return
         if not isinstance(subtopics, list) or not subtopics:
-            self.add_issue(
-                Severity.ERROR, "subtopics must be a non-empty list", field="subtopics"
-            )
+            self.add_issue(Severity.ERROR, "subtopics must be a non-empty list", field="subtopics")
             return
         if len(subtopics) > 3:
             self.add_issue(
@@ -186,7 +182,7 @@ class YAMLValidator(BaseValidator):
         else:
             self.add_passed("difficulty value valid")
 
-    def _check_languages(self, original: str | None, tags: List[str] | None) -> None:
+    def _check_languages(self, original: str | None, tags: list[str] | None) -> None:
         if original not in self.ALLOWED_LANGUAGES:
             self.add_issue(
                 Severity.ERROR,
@@ -194,9 +190,7 @@ class YAMLValidator(BaseValidator):
                 field="original_language",
             )
         if not tags or not isinstance(tags, list):
-            self.add_issue(
-                Severity.ERROR, "language_tags must be a list", field="language_tags"
-            )
+            self.add_issue(Severity.ERROR, "language_tags must be a list", field="language_tags")
             return
         invalid = [val for val in tags if val not in self.ALLOWED_LANGUAGES]
         if invalid:
@@ -230,9 +224,7 @@ class YAMLValidator(BaseValidator):
             self.add_issue(Severity.ERROR, "moc missing", field="moc")
             return
         if "[" in moc or "]" in moc:
-            self.add_issue(
-                Severity.ERROR, "moc must not contain brackets", field="moc"
-            )
+            self.add_issue(Severity.ERROR, "moc must not contain brackets", field="moc")
             return
 
         # TAXONOMY-aware check: use mapping instead of simple moc-{topic}
@@ -263,9 +255,7 @@ class YAMLValidator(BaseValidator):
             self.add_issue(Severity.ERROR, "related field missing", field="related")
             return
         if not isinstance(related, list):
-            self.add_issue(
-                Severity.ERROR, "related must be a list of note ids", field="related"
-            )
+            self.add_issue(Severity.ERROR, "related must be a list of note ids", field="related")
             return
         if not related:
             self.add_issue(
@@ -291,7 +281,9 @@ class YAMLValidator(BaseValidator):
     def _validate_date(self, value, field: str) -> None:
         if not value:
             # Use WARNING instead of ERROR to be lenient with existing notes
-            self.add_issue(Severity.WARNING, f"{field} missing (recommended for new notes)", field=field)
+            self.add_issue(
+                Severity.WARNING, f"{field} missing (recommended for new notes)", field=field
+            )
             return
         # Accept both datetime.date and datetime.datetime objects from YAML parsing
         if isinstance(value, (datetime, date)):
