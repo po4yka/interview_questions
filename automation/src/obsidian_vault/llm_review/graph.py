@@ -11,11 +11,12 @@ from typing import TYPE_CHECKING, Any
 from langgraph.graph import END, START, StateGraph
 from loguru import logger
 
-from obsidian_vault.utils import TaxonomyLoader, build_note_index, parse_note
+from obsidian_vault.utils import TaxonomyLoader, build_note_index
 from obsidian_vault.utils.frontmatter import load_frontmatter_text
 from obsidian_vault.validators import ValidatorRegistry
 
 from .agents import (
+    run_bilingual_parity_check,
     run_concept_enrichment,
     run_issue_fixing,
     run_metadata_sanity_check,
@@ -62,6 +63,7 @@ class ReviewGraph:
         workflow.add_node("initial_llm_review", self._initial_llm_review)
         workflow.add_node("metadata_sanity_check", self._metadata_sanity_check)
         workflow.add_node("run_validators", self._run_validators)
+        workflow.add_node("check_bilingual_parity", self._check_bilingual_parity)
         workflow.add_node("llm_fix_issues", self._llm_fix_issues)
         workflow.add_node("qa_verification", self._qa_verification)
 
@@ -70,9 +72,12 @@ class ReviewGraph:
         workflow.add_edge("initial_llm_review", "metadata_sanity_check")
         workflow.add_edge("metadata_sanity_check", "run_validators")
 
-        # Conditional edge from validators
+        # After validators, check bilingual parity
+        workflow.add_edge("run_validators", "check_bilingual_parity")
+
+        # Conditional edge from bilingual parity check
         workflow.add_conditional_edges(
-            "run_validators",
+            "check_bilingual_parity",
             self._should_continue_fixing,
             {
                 "continue": "llm_fix_issues",
@@ -341,6 +346,95 @@ class ReviewGraph:
                 "error": f"Validation failed: {e}",
                 "completed": True,
                 "decision": "done",
+                "history": history_updates,
+            }
+
+    async def _check_bilingual_parity(self, state: NoteReviewStateDict) -> dict[str, Any]:
+        """Node: Check bilingual parity between EN and RU sections.
+
+        This node runs EARLY in the loop (after validators) to catch translation
+        drift before the QA stage, reducing recycle time when parity issues exist.
+
+        Args:
+            state: Current state
+
+        Returns:
+            State updates
+        """
+        state_obj = NoteReviewState.from_dict(state)
+        state_obj.decision = None
+        history_updates: list[dict[str, Any]] = []
+
+        logger.info(f"Running bilingual parity check for {state_obj.note_path}")
+        history_updates.append(
+            state_obj.add_history_entry(
+                "check_bilingual_parity", "Starting bilingual parity check"
+            )
+        )
+
+        try:
+            result = await run_bilingual_parity_check(
+                note_text=state_obj.current_text,
+                note_path=state_obj.note_path,
+            )
+
+            updates: dict[str, Any] = {"history": history_updates}
+
+            # Convert parity findings to ReviewIssues and add to state
+            parity_issues = []
+            for issue in result.parity_issues:
+                parity_issues.append(
+                    ReviewIssue(
+                        severity="ERROR",
+                        message=f"[Parity] {issue}",
+                        field="content",
+                    )
+                )
+            for section in result.missing_sections:
+                parity_issues.append(
+                    ReviewIssue(
+                        severity="ERROR",
+                        message=f"[Parity] Missing section: {section}",
+                        field="content",
+                    )
+                )
+
+            if parity_issues:
+                # Merge parity issues with existing validator issues
+                all_issues = (state_obj.issues or []) + parity_issues
+                updates["issues"] = all_issues
+                logger.warning(
+                    f"Parity check found {len(result.parity_issues)} issue(s) "
+                    f"and {len(result.missing_sections)} missing section(s)"
+                )
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "check_bilingual_parity",
+                        f"Found {len(parity_issues)} parity issue(s)",
+                        parity_issues=result.parity_issues,
+                        missing_sections=result.missing_sections,
+                    )
+                )
+            else:
+                logger.info("Bilingual parity check passed")
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "check_bilingual_parity", "No parity issues found"
+                    )
+                )
+
+            return updates
+
+        except Exception as e:
+            logger.error(f"Error in bilingual parity check: {e}")
+            history_updates.append(
+                state_obj.add_history_entry(
+                    "check_bilingual_parity", f"Error during parity check: {e}"
+                )
+            )
+            return {
+                "error": f"Bilingual parity check failed: {e}",
+                "completed": True,
                 "history": history_updates,
             }
 
@@ -681,7 +775,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 updates["completed"] = True
                 updates["decision"] = "done"
             else:
-                logger.warning(f"QA verification found issues that need fixing")
+                logger.warning("QA verification found issues that need fixing")
 
                 # Convert QA findings to ReviewIssues that can be fixed
                 qa_issues = []
@@ -784,7 +878,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 return "done", message
             # If QA failed, issues were added back to state, so continue fixing
             else:
-                message = f"Continuing: QA verification found issues to fix"
+                message = "Continuing: QA verification found issues to fix"
                 logger.info(message)
                 return "continue", message
 
@@ -851,7 +945,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         Returns:
             Final state after processing
         """
-        logger.info(f"=" * 70)
+        logger.info("=" * 70)
         logger.info(f"Processing note: {note_path.name}")
         logger.debug(f"Full path: {note_path}")
 
@@ -894,7 +988,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             logger.error(f"Workflow ended with error: {final_state.error}")
 
         logger.debug(f"Workflow history: {len(final_state.history)} entries")
-        logger.info(f"=" * 70)
+        logger.info("=" * 70)
 
         return final_state
 
