@@ -217,15 +217,30 @@ class NoteReviewState:
         )
 
     def record_current_issues(self) -> None:
-        """Record the current issues as a signature for oscillation detection."""
+        """Record the current issues as a signature for oscillation detection.
+
+        Only records ERROR and CRITICAL level issues to prevent false oscillation
+        detection on low-severity style issues (like type name formatting).
+        WARNING-level issues can legitimately oscillate as the fix agent balances
+        different constraints.
+        """
         # Create a signature from current issues (severity + message)
+        # ONLY track ERROR/CRITICAL for oscillation detection
+        # WARNING-level issues (style, formatting) are allowed to oscillate
         current_signatures = {
-            f"{issue.severity}:{issue.message}" for issue in self.issues
+            f"{issue.severity}:{issue.message}"
+            for issue in self.issues
+            if issue.severity in ("ERROR", "CRITICAL")
         }
         self.issue_history.append(current_signatures)
 
     def detect_oscillation(self) -> tuple[bool, str | None]:
         """Detect if the same issues are reappearing across iterations.
+
+        IMPORTANT: Only checks ERROR/CRITICAL level issues for oscillation.
+        WARNING-level issues (style, formatting) are allowed to oscillate without
+        triggering the circuit breaker, as they may represent legitimate trade-offs
+        (e.g., type name backticks vs. natural language readability).
 
         Detection strategies:
         1. Immediate reversal (N-1): Same issue fixed then reappears

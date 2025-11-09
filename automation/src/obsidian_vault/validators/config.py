@@ -78,6 +78,8 @@ QUESTION_PREFIX = "q-"
 # ============================================================================
 
 # Common type names that should be wrapped in backticks
+# NOTE: Excludes overly-generic words that have natural language meanings
+# (Context, Flow, Coroutine) to prevent oscillation on stylistic issues
 COMMON_TYPE_NAMES = [
     # Java/Kotlin primitives and basic types
     "String",
@@ -103,14 +105,14 @@ COMMON_TYPE_NAMES = [
     "Queue",
     "Deque",
     "Stack",
-    # Android types
+    # Android types (specific classes only, not generic words)
     "Activity",
     "Fragment",
     "View",
     "ViewGroup",
     "Intent",
     "Bundle",
-    "Context",
+    # "Context",  # REMOVED - too generic, has natural language meaning
     "Application",
     "Service",
     "BroadcastReceiver",
@@ -120,8 +122,8 @@ COMMON_TYPE_NAMES = [
     "MutableLiveData",
     "StateFlow",
     "SharedFlow",
-    "Flow",
-    "Coroutine",
+    # "Flow",  # REMOVED - too generic, has natural language meaning
+    # "Coroutine",  # REMOVED - too generic, has natural language meaning
     "Parcelable",
     "Serializable",
     # Common patterns

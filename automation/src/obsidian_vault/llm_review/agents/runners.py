@@ -627,6 +627,16 @@ async def run_qa_verification(
         logger.debug("Running QA verification agent...")
         result = await agent.run(prompt)
 
+        # Defensive: ensure list fields are never None (fallback to empty list)
+        # This prevents "argument of type 'NoneType' is not iterable" errors
+        # when LLM doesn't properly populate these fields
+        if result.output.factual_errors is None:
+            result.output.factual_errors = []
+        if result.output.bilingual_parity_issues is None:
+            result.output.bilingual_parity_issues = []
+        if result.output.quality_concerns is None:
+            result.output.quality_concerns = []
+
         logger.debug(
             f"QA verification complete - "
             f"is_acceptable: {result.output.is_acceptable}, "
