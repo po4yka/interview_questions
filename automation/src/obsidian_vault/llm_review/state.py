@@ -54,6 +54,7 @@ class NoteReviewStateDict(TypedDict, total=False):
     qa_verification_summary: str | None
     qa_failure_summary: str | None
     requires_human_review: bool
+    issue_history: list[set[str]]  # Track issue signatures per iteration for oscillation detection
 
 
 @dataclass
@@ -89,6 +90,9 @@ class NoteReviewState:
     history: list[dict[str, Any]] = field(default_factory=list)
     decision: str | None = None
 
+    # Oscillation detection (track issue signatures per iteration)
+    issue_history: list[set[str]] = field(default_factory=list)
+
     @classmethod
     def from_dict(cls, data: Mapping[str, Any]) -> "NoteReviewState":
         """Create state from a mapping, copying mutable fields."""
@@ -106,6 +110,7 @@ class NoteReviewState:
         ]
 
         history = [dict(entry) for entry in data.get("history", [])]
+        issue_history = [set(entry) for entry in data.get("issue_history", [])]
 
         return cls(
             note_path=cast(str, data["note_path"]),
@@ -123,6 +128,7 @@ class NoteReviewState:
             qa_failure_summary=data.get("qa_failure_summary"),
             history=history,
             decision=data.get("decision"),
+            issue_history=issue_history,
         )
 
     def to_dict(self) -> NoteReviewStateDict:
@@ -144,6 +150,7 @@ class NoteReviewState:
             "qa_failure_summary": self.qa_failure_summary,
             "history": [dict(entry) for entry in self.history],
             "decision": self.decision,
+            "issue_history": [list(entry) for entry in self.issue_history],
         }
 
     def add_history_entry(self, node: str, message: str, **kwargs) -> dict[str, Any]:
@@ -173,3 +180,48 @@ class NoteReviewState:
             and not self.completed
             and self.error is None
         )
+
+    def record_current_issues(self) -> None:
+        """Record the current issues as a signature for oscillation detection."""
+        # Create a signature from current issues (severity + message)
+        current_signatures = {
+            f"{issue.severity}:{issue.message}" for issue in self.issues
+        }
+        self.issue_history.append(current_signatures)
+
+    def detect_oscillation(self) -> tuple[bool, str | None]:
+        """Detect if the same issues are reappearing across iterations.
+
+        Returns:
+            (is_oscillating, explanation) tuple
+        """
+        if len(self.issue_history) < 3:
+            # Need at least 3 iterations to detect oscillation
+            return False, None
+
+        # Check if issues from iteration N reappear in iteration N+2 or N+3
+        # This indicates the fixes are being undone
+        current_issues = self.issue_history[-1]
+
+        # Check against issues 2-3 iterations ago
+        for i in range(2, min(4, len(self.issue_history))):
+            if i >= len(self.issue_history):
+                break
+
+            previous_issues = self.issue_history[-i]
+            common_issues = current_issues & previous_issues
+
+            if len(common_issues) > 0:
+                # Calculate what percentage of current issues are reappearing
+                oscillation_rate = len(common_issues) / len(current_issues) if current_issues else 0
+
+                if oscillation_rate > 0.5:  # More than 50% of issues are repeating
+                    explanation = (
+                        f"Oscillation detected: {len(common_issues)} issue(s) from "
+                        f"iteration {self.iteration - i + 1} reappeared in iteration {self.iteration}. "
+                        f"This suggests conflicting validators or unstable fixes. "
+                        f"Repeating issues: {list(common_issues)[:3]}"  # Show first 3
+                    )
+                    return True, explanation
+
+        return False, None

@@ -92,6 +92,7 @@ class ReviewGraph:
         taxonomy: TaxonomyLoaderType,
         note_index: set[str],
         max_iterations: int = 5,
+        dry_run: bool = False,
     ):
         """Initialize the review graph.
 
@@ -100,11 +101,13 @@ class ReviewGraph:
             taxonomy: Loaded taxonomy
             note_index: Set of all note IDs in the vault
             max_iterations: Maximum fix iterations per note
+            dry_run: If True, don't write any files to disk (validation only)
         """
         self.vault_root = vault_root
         self.taxonomy = taxonomy
         self.note_index = note_index
         self.max_iterations = max_iterations
+        self.dry_run = dry_run
         self.graph = self._build_graph()
 
     def _build_graph(self) -> StateGraph:
@@ -349,6 +352,61 @@ class ReviewGraph:
                 issues=all_review_issues,
                 iteration=state_obj.iteration + 1,
             )
+
+            # STEP 4: Calculate convergence metrics
+            previous_issue_count = len(state_obj.issues)
+            current_issue_count = len(all_review_issues)
+
+            if previous_issue_count > 0:
+                improvement = previous_issue_count - current_issue_count
+                improvement_rate = (improvement / previous_issue_count) * 100
+
+                logger.info(
+                    f"[Iteration {next_state.iteration}/{state_obj.max_iterations}] "
+                    f"Issues: {current_issue_count} (was {previous_issue_count}, "
+                    f"Δ{improvement:+d}, {improvement_rate:+.1f}%)"
+                )
+
+                # Warn if convergence is slowing or stalling
+                if improvement <= 0:
+                    logger.warning(
+                        f"Convergence stalled: Issue count not decreasing "
+                        f"(iteration {next_state.iteration})"
+                    )
+                elif improvement_rate < 20:
+                    logger.warning(
+                        f"Slow convergence: Only {improvement_rate:.1f}% improvement "
+                        f"(iteration {next_state.iteration})"
+                    )
+
+                history_updates.append(
+                    next_state.add_history_entry(
+                        "convergence_metrics",
+                        f"Convergence: {improvement:+d} issues ({improvement_rate:+.1f}%)",
+                        previous_issues=previous_issue_count,
+                        current_issues=current_issue_count,
+                        improvement=improvement,
+                        improvement_rate=improvement_rate,
+                    )
+                )
+
+            # STEP 5: Record issues for oscillation detection
+            next_state.record_current_issues()
+
+            # STEP 6: Check for oscillation
+            is_oscillating, oscillation_msg = next_state.detect_oscillation()
+            if is_oscillating:
+                logger.warning(f"Oscillation detected: {oscillation_msg}")
+                next_state.requires_human_review = True
+                next_state.error = f"Oscillation detected: {oscillation_msg}"
+                history_updates.append(
+                    next_state.add_history_entry(
+                        "oscillation_detection",
+                        oscillation_msg,
+                        oscillation_detected=True,
+                    )
+                )
+
             decision, decision_message = self._compute_decision(next_state)
             next_state.decision = decision
             history_updates.append(
@@ -360,6 +418,9 @@ class ReviewGraph:
                 "iteration": next_state.iteration,
                 "decision": decision,
                 "history": history_updates,
+                "issue_history": next_state.issue_history,
+                "requires_human_review": next_state.requires_human_review,
+                "error": next_state.error,
             }
 
         except Exception as e:
@@ -649,68 +710,73 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 """
 
             try:
-                # Write the concept file
-                concept_path.write_text(content, encoding='utf-8')
-                logger.info(f"Created missing concept file: {concept_file}")
+                # Write the concept file (unless in dry-run mode)
+                if self.dry_run:
+                    logger.info(f"DRY RUN: Would create concept file: {concept_file}")
+                else:
+                    concept_path.write_text(content, encoding='utf-8')
+                    logger.info(f"Created missing concept file: {concept_file}")
 
-                # Verify the generated file has valid frontmatter
-                try:
-                    from obsidian_vault.utils.frontmatter import load_frontmatter
-                    fm, _ = load_frontmatter(concept_path)
+                    # Verify the generated file has valid frontmatter
+                    try:
+                        from obsidian_vault.utils.frontmatter import load_frontmatter
+                        fm, _ = load_frontmatter(concept_path)
 
-                    # Check for critical required fields
-                    required = ['id', 'title', 'topic', 'difficulty', 'moc', 'related', 'tags']
-                    missing = [f for f in required if f not in fm]
+                        # Check for critical required fields
+                        required = ['id', 'title', 'topic', 'difficulty', 'moc', 'related', 'tags']
+                        missing = [f for f in required if f not in fm]
 
-                    if missing:
-                        logger.error(
-                            f"Auto-generated concept file {concept_file} is missing required fields: {missing}. "
-                            f"This is a bug in the auto-generation template and should be reported."
-                        )
-                    else:
-                        logger.debug(f"Verified {concept_file} has all required frontmatter fields")
+                        if missing:
+                            logger.error(
+                                f"Auto-generated concept file {concept_file} is missing required fields: {missing}. "
+                                f"This is a bug in the auto-generation template and should be reported."
+                            )
+                        else:
+                            logger.debug(f"Verified {concept_file} has all required frontmatter fields")
 
-                except Exception as verify_err:
-                    logger.warning(f"Could not verify frontmatter for {concept_file}: {verify_err}")
+                    except Exception as verify_err:
+                        logger.warning(f"Could not verify frontmatter for {concept_file}: {verify_err}")
 
                 created_files.append(concept_file)
 
-                # Add to note index so it can be referenced
+                # Add to note index so it can be referenced (even in dry-run, for validation)
                 # Remove .md extension for note index
                 concept_id = concept_file.replace('.md', '')
                 self.note_index.add(concept_id)
 
                 # Enrich the concept stub with meaningful content using knowledge-gap agent
-                try:
-                    logger.info(f"Enriching concept stub for {concept_name}...")
-                    enrichment_result = await run_concept_enrichment(
-                        concept_stub=content,
-                        concept_name=concept_name,
-                        topic=topic,
-                        referencing_notes=None,  # TODO: Could extract from issues/context
-                    )
-
-                    # Write enriched content back to file
-                    concept_path.write_text(enrichment_result.enriched_content, encoding='utf-8')
-                    logger.success(
-                        f"Enriched concept file {concept_file}: {enrichment_result.explanation}"
-                    )
-
-                    if enrichment_result.added_sections:
-                        logger.debug(
-                            f"Added/enriched sections: {', '.join(enrichment_result.added_sections)}"
+                # Skip enrichment in dry-run mode since we don't write the file anyway
+                if not self.dry_run:
+                    try:
+                        logger.info(f"Enriching concept stub for {concept_name}...")
+                        enrichment_result = await run_concept_enrichment(
+                            concept_stub=content,
+                            concept_name=concept_name,
+                            topic=topic,
+                            referencing_notes=None,  # TODO: Could extract from issues/context
                         )
 
-                    if enrichment_result.key_concepts:
-                        logger.debug(
-                            f"Key concepts covered: {', '.join(enrichment_result.key_concepts)}"
+                        # Write enriched content back to file
+                        concept_path.write_text(enrichment_result.enriched_content, encoding='utf-8')
+                        logger.success(
+                            f"Enriched concept file {concept_file}: {enrichment_result.explanation}"
                         )
 
-                except Exception as enrich_err:
-                    logger.warning(
-                        f"Failed to enrich concept file {concept_file}, keeping generic stub: {enrich_err}"
-                    )
-                    # Continue with generic stub if enrichment fails
+                        if enrichment_result.added_sections:
+                            logger.debug(
+                                f"Added/enriched sections: {', '.join(enrichment_result.added_sections)}"
+                            )
+
+                        if enrichment_result.key_concepts:
+                            logger.debug(
+                                f"Key concepts covered: {', '.join(enrichment_result.key_concepts)}"
+                            )
+
+                    except Exception as enrich_err:
+                        logger.warning(
+                            f"Failed to enrich concept file {concept_file}, keeping generic stub: {enrich_err}"
+                        )
+                        # Continue with generic stub if enrichment fails
 
             except Exception as e:
                 logger.error("Failed to create concept file {}: {}", concept_file, e)
@@ -1157,26 +1223,34 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         )
         logger.debug(f"Initialized state with max_iterations={self.max_iterations}")
 
-        # Run the graph
+        # Run the graph with timing
+        import time
+        start_time = time.time()
         logger.info(f"Starting LangGraph workflow for {note_path.name}")
         try:
             final_state_dict = await self.graph.ainvoke(initial_state.to_dict())
             final_state = NoteReviewState.from_dict(final_state_dict)
-            logger.debug("LangGraph workflow completed")
+            elapsed_time = time.time() - start_time
+            logger.debug(f"LangGraph workflow completed in {elapsed_time:.2f}s")
         except Exception as e:
             logger.error("LangGraph workflow failed for {}: {}", note_path, e)
             raise
 
-        # Log final results
+        # Log final results with detailed metrics
+        elapsed_time = time.time() - start_time
         logger.success(
             f"Completed review for {note_path.name} - "
             f"changed: {final_state.changed}, "
             f"iterations: {final_state.iteration}, "
-            f"final_issues: {len(final_state.issues)}"
+            f"final_issues: {len(final_state.issues)}, "
+            f"time: {elapsed_time:.2f}s"
         )
 
         if final_state.error:
             logger.error(f"Workflow ended with error: {final_state.error}")
+
+        if final_state.requires_human_review:
+            logger.warning(f"Note requires human review: {note_path.name}")
 
         logger.debug(f"Workflow history: {len(final_state.history)} entries")
         logger.info("=" * 70)
@@ -1187,12 +1261,14 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 def create_review_graph(
     vault_root: Path,
     max_iterations: int = 10,
+    dry_run: bool = False,
 ) -> ReviewGraph:
     """Create a ReviewGraph instance with loaded taxonomy and note index.
 
     Args:
         vault_root: Path to the vault root
         max_iterations: Maximum fix iterations per note (default: 10)
+        dry_run: If True, don't write any files to disk (validation only)
 
     Returns:
         Configured ReviewGraph instance
@@ -1200,6 +1276,7 @@ def create_review_graph(
     logger.info("Initializing ReviewGraph")
     logger.debug(f"Vault root: {vault_root}")
     logger.debug(f"Max iterations: {max_iterations}")
+    logger.debug(f"Dry run mode: {dry_run}")
 
     # Discover repo root
     repo_root = vault_root.parent if vault_root.name == "InterviewQuestions" else vault_root
@@ -1229,4 +1306,5 @@ def create_review_graph(
         taxonomy=taxonomy,
         note_index=note_index,
         max_iterations=max_iterations,
+        dry_run=dry_run,
     )

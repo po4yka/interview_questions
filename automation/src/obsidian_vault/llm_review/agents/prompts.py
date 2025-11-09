@@ -93,6 +93,44 @@ CRITICAL: Make ONLY targeted, minimal changes to fix the specific issues reporte
 - If a word needs backticks, add backticks - don't rewrite the sentence
 - If a link is invalid, fix/remove that link - don't rewrite the paragraph
 
+BILINGUAL PARITY FIXING (for [Parity] issues):
+When fixing bilingual parity issues, follow this systematic approach:
+
+1. **For Missing Sections** (e.g., "[Parity] Missing section: Follow-ups"):
+   - Locate the equivalent section in the other language (EN if RU is missing, or vice versa)
+   - Copy the STRUCTURE and CONTENT of that section
+   - Translate prose/descriptions to the target language
+   - Keep code blocks, formulas, and technical notation IDENTICAL
+   - Maintain the same heading level and formatting
+
+2. **For Content Depth Mismatches** (e.g., "[Parity] EN has 3 examples, RU has 1 example"):
+   - Find the EN content that needs to be matched
+   - Create equivalent RU content with the SAME structure:
+     * Same number of examples/code blocks/bullet points
+     * Same technical details and complexity
+     * Same code (don't rewrite code, only translate comments)
+   - Translate explanatory text while preserving technical terms
+
+3. **For Code Block Parity**:
+   - Code itself should be IDENTICAL in both languages
+   - Only translate:
+     * Code comments (// This is a comment → // Это комментарий)
+     * Function/variable names if they're in prose (usually keep as-is)
+   - Preserve indentation, syntax, and structure exactly
+
+4. **For Example/List Parity**:
+   - Match the NUMBER of items (if EN has 3 bullet points, RU must have 3)
+   - Match the STRUCTURE (nested lists, code + explanation, etc.)
+   - Translate the text content, keep technical notation
+
+5. **Quality Checks for Parity Fixes**:
+   - After adding RU content, verify it matches EN in:
+     * Number of subsections
+     * Number of code blocks
+     * Number of examples/bullet points
+     * Technical depth and detail level
+   - Don't add creative new content—mirror what's in the reference language
+
 CRITICAL RULES (from vault documentation):
 1. Both EN and RU content must be in the SAME file
 2. YAML frontmatter format:
@@ -100,14 +138,20 @@ CRITICAL RULES (from vault documentation):
    - related: [file1, file2] (array format, NO double brackets)
    - tags must be English-only
    - Exactly ONE topic from taxonomy
-3. Required sections:
-   - # Question (EN)
-   - # Вопрос (RU)
-   - ## Answer (EN)
-   - ## Ответ (RU)
+3. Required sections IN ORDER (RU first, then EN):
+   - # Вопрос (RU)     ← RU question FIRST
+   - # Question (EN)    ← EN question SECOND
+   - ## Ответ (RU)      ← RU answer THIRD
+   - ## Answer (EN)     ← EN answer FOURTH
 4. No emoji anywhere
 5. status: draft for AI-modified notes
-6. NEVER suggest or add links to concept files that don't exist in the vault
+6. You may reference concept files that have been auto-created during this review session
+   - The system may have created missing concept files before you run
+   - If a validator suggests adding a concept link, it's safe to add it
+   - Only avoid inventing entirely new concept files on your own
+
+IMPORTANT: Section order matters! RU sections must come before EN sections.
+When reordering, move entire sections with all their content intact.
 
 Fix each issue precisely with minimal changes and return the corrected text."""
 
@@ -135,8 +179,8 @@ WHAT TO CHECK:
 
 4. **Bilingual Structure Ordering**:
    - Does the note have both EN and RU sections?
-   - Are sections in the expected order?
-   - Required sections present: "# Question (EN)", "# Вопрос (RU)", "## Answer (EN)", "## Ответ (RU)"
+   - Are sections in the expected order (RU first, then EN)?
+   - Required sections present in order: "# Вопрос (RU)", "# Question (EN)", "## Ответ (RU)", "## Answer (EN)"
 
 5. **Common Formatting Issues**:
    - Brackets in YAML fields that shouldn't have them (moc field)?
@@ -249,8 +293,8 @@ PRIMARY GOALS:
 WHAT TO CHECK:
 
 1. **Section Completeness**:
-   - Both "# Question (EN)" and "# Вопрос (RU)" exist
-   - Both "## Answer (EN)" and "## Ответ (RU)" exist
+   - Both "# Вопрос (RU)" and "# Question (EN)" exist (in that order)
+   - Both "## Ответ (RU)" and "## Answer (EN)" exist (in that order)
    - Optional sections (Follow-ups, References, Related Questions) are present in both languages if in one
    - No orphaned sections in only one language
 
@@ -306,7 +350,15 @@ DECISION CRITERIA:
 - Set `has_parity_issues = true` if you find any semantic mismatches or missing content
 - Set `has_parity_issues = false` if EN and RU are semantically equivalent (minor wording differences are OK)
 
-Be precise and specific in identifying parity issues. The goal is to ensure interview candidates get equivalent content regardless of language preference.
+IMPORTANT: Be precise and specific in identifying parity issues to help the fixing agent.
+
+When reporting parity issues, use this format:
+- For missing sections: "Missing RU section: [exact section name from EN]" (e.g., "Missing RU section: Best Practices")
+- For content depth: "RU [section] has [count] [items], EN has [count] [items]" (e.g., "RU Answer has 1 code example, EN Answer has 3 code examples")
+- For missing subsections: "EN Answer has subsection '[name]', RU Answer lacks this subsection" (e.g., "EN Answer has subsection 'ImageProcessingPipeline', RU Answer lacks this subsection")
+- For semantic differences: Specify the exact technical detail that differs (e.g., "EN says O(n log n) complexity, RU says O(n²)")
+
+The goal is to ensure interview candidates get equivalent content regardless of language preference.
 """
 
 CONCEPT_ENRICHMENT_PROMPT = """You are a **knowledge-gap agent** that enriches auto-generated concept stub files.
