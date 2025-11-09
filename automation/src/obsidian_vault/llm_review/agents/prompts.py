@@ -93,6 +93,44 @@ CRITICAL: Make ONLY targeted, minimal changes to fix the specific issues reporte
 - If a word needs backticks, add backticks - don't rewrite the sentence
 - If a link is invalid, fix/remove that link - don't rewrite the paragraph
 
+BILINGUAL PARITY FIXING (for [Parity] issues):
+When fixing bilingual parity issues, follow this systematic approach:
+
+1. **For Missing Sections** (e.g., "[Parity] Missing section: Follow-ups"):
+   - Locate the equivalent section in the other language (EN if RU is missing, or vice versa)
+   - Copy the STRUCTURE and CONTENT of that section
+   - Translate prose/descriptions to the target language
+   - Keep code blocks, formulas, and technical notation IDENTICAL
+   - Maintain the same heading level and formatting
+
+2. **For Content Depth Mismatches** (e.g., "[Parity] EN has 3 examples, RU has 1 example"):
+   - Find the EN content that needs to be matched
+   - Create equivalent RU content with the SAME structure:
+     * Same number of examples/code blocks/bullet points
+     * Same technical details and complexity
+     * Same code (don't rewrite code, only translate comments)
+   - Translate explanatory text while preserving technical terms
+
+3. **For Code Block Parity**:
+   - Code itself should be IDENTICAL in both languages
+   - Only translate:
+     * Code comments (// This is a comment → // Это комментарий)
+     * Function/variable names if they're in prose (usually keep as-is)
+   - Preserve indentation, syntax, and structure exactly
+
+4. **For Example/List Parity**:
+   - Match the NUMBER of items (if EN has 3 bullet points, RU must have 3)
+   - Match the STRUCTURE (nested lists, code + explanation, etc.)
+   - Translate the text content, keep technical notation
+
+5. **Quality Checks for Parity Fixes**:
+   - After adding RU content, verify it matches EN in:
+     * Number of subsections
+     * Number of code blocks
+     * Number of examples/bullet points
+     * Technical depth and detail level
+   - Don't add creative new content—mirror what's in the reference language
+
 CRITICAL RULES (from vault documentation):
 1. Both EN and RU content must be in the SAME file
 2. YAML frontmatter format:
@@ -309,7 +347,15 @@ DECISION CRITERIA:
 - Set `has_parity_issues = true` if you find any semantic mismatches or missing content
 - Set `has_parity_issues = false` if EN and RU are semantically equivalent (minor wording differences are OK)
 
-Be precise and specific in identifying parity issues. The goal is to ensure interview candidates get equivalent content regardless of language preference.
+IMPORTANT: Be precise and specific in identifying parity issues to help the fixing agent.
+
+When reporting parity issues, use this format:
+- For missing sections: "Missing RU section: [exact section name from EN]" (e.g., "Missing RU section: Best Practices")
+- For content depth: "RU [section] has [count] [items], EN has [count] [items]" (e.g., "RU Answer has 1 code example, EN Answer has 3 code examples")
+- For missing subsections: "EN Answer has subsection '[name]', RU Answer lacks this subsection" (e.g., "EN Answer has subsection 'ImageProcessingPipeline', RU Answer lacks this subsection")
+- For semantic differences: Specify the exact technical detail that differs (e.g., "EN says O(n log n) complexity, RU says O(n²)")
+
+The goal is to ensure interview candidates get equivalent content regardless of language preference.
 """
 
 CONCEPT_ENRICHMENT_PROMPT = """You are a **knowledge-gap agent** that enriches auto-generated concept stub files.
