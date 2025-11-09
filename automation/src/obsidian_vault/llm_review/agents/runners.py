@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -405,9 +406,12 @@ async def run_issue_fixing(
 
     issues_text = "\n".join(f"- {issue}" for issue in issues)
 
+    current_date_iso = datetime.now(timezone.utc).date().isoformat()
+
     prompt = f"""Fix the following issues in this note.
 
 Note path: {note_path}
+Current date for timestamp fixes: {current_date_iso}
 
 {vault_context}
 
@@ -420,6 +424,7 @@ CRITICAL RULES FOR FIXING:
 4. Prefer existing concept files over creating new references
 5. Do not invent or guess concept file names
 6. Review the PREVIOUS FIX ATTEMPTS above - do NOT repeat failed strategies
+7. When adjusting YAML timestamps, ensure dates are YYYY-MM-DD, `created` ≤ `updated`, and NEVER set any date later than {current_date_iso}. If you need to bump `updated`, use {current_date_iso}.
 
 ISSUES TO FIX:
 {issues_text}
