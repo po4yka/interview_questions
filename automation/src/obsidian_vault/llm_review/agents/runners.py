@@ -155,7 +155,7 @@ def _build_related_notes_context(
                         + (f" - {summary}..." if summary else "")
                     )
                 except Exception as e:
-                    logger.debug(f"Failed to read related note {note_name}: {e}")
+                    logger.debug("Failed to read related note {}: {}", note_name, e)
                     context_parts.append(f"  - {note_name}: (error reading file)")
             else:
                 context_parts.append(f"  - {note_name}: (file not found)")
@@ -163,7 +163,7 @@ def _build_related_notes_context(
         return "\n".join(context_parts)
 
     except Exception as e:
-        logger.debug(f"Error building related notes context: {e}")
+        logger.debug("Error building related notes context: {}", e)
         return f"Related notes context: Error ({str(e)})"
 
 
@@ -243,7 +243,10 @@ async def run_technical_review(
 
         return result.output
     except Exception as e:
-        logger.error(f"Technical review failed for {note_path}: {e}")
+        # Enhanced error logging for debugging JSON parsing issues
+        logger.error("Technical review failed for {}: {}", note_path, e)
+        logger.debug("Exception type: {}", type(e).__name__)
+        logger.debug("Exception details: {}", repr(e))
         raise
 
 
@@ -298,7 +301,7 @@ Return the corrected text."""
 
         return result.output
     except Exception as e:
-        logger.error(f"Issue fixing failed for {note_path}: {e}")
+        logger.error("Issue fixing failed for {}: {}", note_path, e)
         raise
 
 
@@ -347,7 +350,7 @@ async def run_metadata_sanity_check(
 
         return result.output
     except Exception as e:
-        logger.error(f"Metadata sanity check failed for {note_path}: {e}")
+        logger.error("Metadata sanity check failed for {}: {}", note_path, e)
         raise
 
 
@@ -408,7 +411,7 @@ async def run_qa_verification(
 
         return result.output
     except Exception as e:
-        logger.error(f"QA verification failed for {note_path}: {e}")
+        logger.error("QA verification failed for {}: {}", note_path, e)
         raise
 
 
@@ -480,7 +483,7 @@ Return the enriched content with meaningful definitions, key points, and context
 
         return result.output
     except Exception as e:
-        logger.error(f"Concept enrichment failed for {concept_name}: {e}")
+        logger.error("Concept enrichment failed for {}: {}", concept_name, e)
         raise
 
 
@@ -535,7 +538,7 @@ async def run_bilingual_parity_check(
 
         return result.output
     except Exception as e:
-        logger.error(f"Bilingual parity check failed for {note_path}: {e}")
+        logger.error("Bilingual parity check failed for {}: {}", note_path, e)
         raise
 
 
@@ -627,5 +630,5 @@ Analyze why the automated workflow could not resolve these issues and provide sp
 
         return result.output
     except Exception as e:
-        logger.error(f"QA failure summary failed for {note_path}: {e}")
+        logger.error("QA failure summary failed for {}: {}", note_path, e)
         raise
