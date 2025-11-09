@@ -7,6 +7,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-13
+updated: 2025-10-13
 tags: [difficulty/medium, kotlin, sealed-classes, type-safety]
 moc: moc-kotlin
 related: [q-channelflow-callbackflow-flow--kotlin--medium, q-heap-pollution-generics--kotlin--hard, q-kotlin-safe-cast--programming-languages--easy, q-sealed-class-sealed-interface--kotlin--medium]

@@ -7,6 +7,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-12
+updated: 2025-10-12
 tags: [coroutines, difficulty/medium, kotlin, runtest, test-dispatcher, testing]
 moc: moc-kotlin
 related: [q-channelflow-callbackflow-flow--kotlin--medium, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-flow-backpressure--kotlin--hard, q-inline-function-limitations--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium]

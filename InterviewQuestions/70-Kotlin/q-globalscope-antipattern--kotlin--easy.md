@@ -7,7 +7,7 @@ subtopics: []
 question_kind: theory
 difficulty: easy
 original_language: en
-language_tags: []
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-object-companion-object--kotlin--medium, q-test-dispatcher-types--kotlin--medium]

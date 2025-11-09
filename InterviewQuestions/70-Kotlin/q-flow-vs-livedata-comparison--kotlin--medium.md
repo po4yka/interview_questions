@@ -7,7 +7,7 @@ subtopics: []
 question_kind: theory
 difficulty: medium
 original_language: en
-language_tags: []
+language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
 related: [q-executor-service-java--java--medium, q-retry-operators-flow--kotlin--medium, q-testing-flow-operators--kotlin--hard]

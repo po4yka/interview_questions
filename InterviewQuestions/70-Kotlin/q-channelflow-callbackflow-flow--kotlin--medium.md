@@ -7,6 +7,7 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-12
+updated: 2025-10-12
 tags: [builders, callbackflow, channelflow, coroutines, difficulty/medium, flow, kotlin]
 moc: moc-kotlin
 related: [q-channel-pipelines--kotlin--hard, q-common-coroutine-mistakes--kotlin--medium, q-compose-side-effects-coroutines--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
