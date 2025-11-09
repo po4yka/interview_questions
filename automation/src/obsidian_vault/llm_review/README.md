@@ -112,13 +112,19 @@ vault-app llm-review \
 
 ```python
 from pathlib import Path
-from obsidian_vault.llm_review import create_review_graph
+from obsidian_vault.llm_review import (
+    CompletionMode,
+    ProcessingProfile,
+    create_review_graph,
+)
 
 # Create the review graph
 vault_root = Path("InterviewQuestions")
 graph = create_review_graph(
     vault_root=vault_root,
-    max_iterations=5
+    max_iterations=5,
+    completion_mode=CompletionMode.STANDARD,
+    processing_profile=ProcessingProfile.THOROUGH,
 )
 
 # Process a single note
@@ -130,7 +136,26 @@ if state.changed:
     print(f"Modified: {state.iteration} iterations")
     print(f"Final issues: {len(state.issues)}")
     print(f"History: {state.history}")
+
+# Access analytics from the session
+print(graph.get_analytics_summary())
 ```
+
+## Processing Profiles & Analytics
+
+The review workflow provides multiple processing profiles that trade execution
+time for stability or thoroughness. Select the appropriate profile via the
+`processing_profile` argument when creating the graph.
+
+| Profile | Description |
+|---------|-------------|
+| `ProcessingProfile.BALANCED` | Default behaviour. Keeps validator concurrency and smart selection for faster runs. |
+| `ProcessingProfile.STABILITY` | Runs metadata/parity helpers sequentially to improve determinism and aid debugging. |
+| `ProcessingProfile.THOROUGH` | Always executes the full validator suite and adds two extra iterations for maximum coverage. |
+
+Analytics are collected automatically per note. Retrieve granular data with
+`ReviewGraph.get_note_analytics(path)` or fetch aggregate metrics using
+`ReviewGraph.get_analytics_summary()`.
 
 ## Configuration
 
@@ -153,6 +178,7 @@ export OPENROUTER_MODEL="anthropic/claude-sonnet-4"
 | `max_iterations` | `5` | Max fix iterations per note |
 | `backup` | `true` | Create `.md.backup` files |
 | `report` | `None` | Path for detailed report |
+| `processing_profile` | `balanced` | Choose between balanced, stability, or thorough modes |
 
 ## Features
 
