@@ -20,6 +20,7 @@ from .agents import (
     run_concept_enrichment,
     run_issue_fixing,
     run_metadata_sanity_check,
+    run_qa_failure_summary,
     run_qa_verification,
     run_technical_review,
 )
@@ -36,6 +37,7 @@ class ReviewGraph:
     ----------------------
     START → initial_llm_review → run_validators (includes metadata check each iteration)
       → check_bilingual_parity → [decision] → llm_fix_issues (loop) OR qa_verification (final)
+      → [on failure] → summarize_qa_failures → END
 
     METADATA VALIDATION STRATEGY:
     -----------------------------
@@ -43,6 +45,13 @@ class ReviewGraph:
     This ensures that any YAML changes made by the fix agent are re-validated on subsequent
     iterations, closing the gap where auto-created concept files or repaired frontmatter
     fields would bypass validation.
+
+    QA FAILURE HANDLING:
+    --------------------
+    When the workflow reaches max iterations with unresolved issues or QA verification fails
+    repeatedly, the summarize_qa_failures node is triggered to create an actionable summary
+    for human follow-up. This prevents the workflow from silently failing without providing
+    context about what went wrong and what needs manual attention.
 
     EXAMPLE DEBUG LOG TRACE (typical iteration):
     --------------------------------------------
@@ -109,6 +118,7 @@ class ReviewGraph:
         workflow.add_node("check_bilingual_parity", self._check_bilingual_parity)
         workflow.add_node("llm_fix_issues", self._llm_fix_issues)
         workflow.add_node("qa_verification", self._qa_verification)
+        workflow.add_node("summarize_qa_failures", self._summarize_qa_failures)
 
         # Define edges
         workflow.add_edge(START, "initial_llm_review")
@@ -124,6 +134,7 @@ class ReviewGraph:
             {
                 "continue": "llm_fix_issues",
                 "qa_verify": "qa_verification",
+                "summarize_failures": "summarize_qa_failures",
                 "done": END,
             },
         )
@@ -137,9 +148,13 @@ class ReviewGraph:
             self._should_continue_after_qa,
             {
                 "continue": "llm_fix_issues",
+                "summarize_failures": "summarize_qa_failures",
                 "done": END,
             },
         )
+
+        # After summarizing failures, end the workflow
+        workflow.add_edge("summarize_qa_failures", END)
 
         return workflow.compile()
 
@@ -876,16 +891,105 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 "history": history_updates,
             }
 
+    async def _summarize_qa_failures(self, state: NoteReviewStateDict) -> dict[str, Any]:
+        """Node: Summarize QA failures when max iterations reached or persistent issues.
+
+        This node runs when the workflow cannot resolve all issues automatically,
+        creating an actionable summary for human follow-up.
+
+        Args:
+            state: Current state
+
+        Returns:
+            State updates with failure summary
+        """
+        state_obj = NoteReviewState.from_dict(state)
+        history_updates: list[dict[str, Any]] = []
+
+        logger.warning(
+            f"Summarizing QA failures for {state_obj.note_path} "
+            f"(iterations: {state_obj.iteration}/{state_obj.max_iterations})"
+        )
+        history_updates.append(
+            state_obj.add_history_entry(
+                "summarize_qa_failures",
+                f"Creating failure summary for manual follow-up "
+                f"(iterations: {state_obj.iteration}/{state_obj.max_iterations})",
+            )
+        )
+
+        try:
+            # Format unresolved issues
+            issue_descriptions = [
+                f"[{issue.severity}] {issue.message}"
+                + (f" (field: {issue.field})" if issue.field else "")
+                for issue in state_obj.issues
+            ]
+
+            result = await run_qa_failure_summary(
+                note_text=state_obj.current_text,
+                note_path=state_obj.note_path,
+                history=state_obj.history,
+                unresolved_issues=issue_descriptions,
+                qa_verification_summary=state_obj.qa_verification_summary,
+                iteration_count=state_obj.iteration,
+                max_iterations=state_obj.max_iterations,
+            )
+
+            # Store the human-readable summary in state
+            updates: dict[str, Any] = {
+                "qa_failure_summary": result.human_readable_summary,
+                "completed": True,
+                "history": history_updates,
+            }
+
+            logger.warning(
+                f"QA failure summary for {state_obj.note_path}:\n"
+                f"Failure type: {result.failure_type}\n"
+                f"Unresolved issues: {len(result.unresolved_issues)}\n"
+                f"Recommended actions: {len(result.recommended_actions)}\n"
+                f"Summary: {result.human_readable_summary}"
+            )
+
+            history_updates.append(
+                state_obj.add_history_entry(
+                    "summarize_qa_failures",
+                    f"Created failure summary: {result.failure_type}",
+                    failure_type=result.failure_type,
+                    unresolved_issues=result.unresolved_issues,
+                    iteration_summary=result.iteration_summary,
+                    recommended_actions=result.recommended_actions,
+                    qa_failure_reasons=result.qa_failure_reasons,
+                    human_readable_summary=result.human_readable_summary,
+                )
+            )
+
+            return updates
+
+        except Exception as e:
+            logger.error(f"Error summarizing QA failures: {e}")
+            history_updates.append(
+                state_obj.add_history_entry(
+                    "summarize_qa_failures", f"Error creating failure summary: {e}"
+                )
+            )
+            return {
+                "qa_failure_summary": f"Failed to create summary: {e}",
+                "completed": True,
+                "history": history_updates,
+            }
+
     def _compute_decision(self, state: NoteReviewState) -> tuple[str, str]:
         """Compute the next step decision and corresponding history message.
 
         Decision logic:
-        1. If max iterations reached -> done
-        2. If error occurred -> done
-        3. If completed flag set -> done
-        4. If no validator/parity issues AND QA not run yet -> qa_verify
-        5. If no validator/parity issues AND QA passed -> done
-        6. If validator/parity issues remain -> continue (fix loop)
+        1. If max iterations reached AND (issues remain OR QA failed) -> summarize_failures
+        2. If max iterations reached AND no issues AND QA passed -> done
+        3. If error occurred -> done
+        4. If completed flag set -> done
+        5. If no validator/parity issues AND QA not run yet -> qa_verify
+        6. If no validator/parity issues AND QA passed -> done
+        7. If validator/parity issues remain -> continue (fix loop)
         """
 
         # Detailed debug logging for decision evaluation
@@ -899,9 +1003,21 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         )
 
         if state.iteration >= state.max_iterations:
-            message = f"Stopping: max iterations ({state.max_iterations}) reached"
-            logger.warning(message)
-            return "done", message
+            # Check if there are unresolved issues or QA failed
+            has_unresolved_issues = state.has_any_issues()
+            qa_failed = state.qa_verification_passed is False
+
+            if has_unresolved_issues or qa_failed:
+                message = (
+                    f"Max iterations ({state.max_iterations}) reached with unresolved issues - "
+                    f"triggering failure summarizer"
+                )
+                logger.warning(message)
+                return "summarize_failures", message
+            else:
+                message = f"Stopping: max iterations ({state.max_iterations}) reached"
+                logger.warning(message)
+                return "done", message
 
         if state.error:
             message = f"Stopping: error occurred: {state.error}"
