@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
-from pydantic import BaseModel, Field
+from typing import Any
+
+from pydantic import BaseModel, Field, model_validator
 
 
 class TechnicalReviewResult(BaseModel):
@@ -64,6 +66,17 @@ class QAVerificationResult(BaseModel):
     summary: str = Field(
         description="Brief summary of the verification result and overall note quality"
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def _coerce_optional_lists(cls, values: Any) -> Any:
+        """Ensure optional list fields default to empty lists when None."""
+
+        if isinstance(values, dict):
+            for key in ("factual_errors", "bilingual_parity_issues", "quality_concerns"):
+                if values.get(key) is None:
+                    values[key] = []
+        return values
 
 
 class BilingualParityResult(BaseModel):
@@ -132,3 +145,14 @@ class QAFailureSummaryResult(BaseModel):
     human_readable_summary: str = Field(
         description="Concise 3-5 sentence summary for human reviewer explaining what went wrong and what needs attention"
     )
+
+    @model_validator(mode="before")
+    @classmethod
+    def _coerce_optional_failure_lists(cls, values: Any) -> Any:
+        """Ensure list fields are empty lists when the agent returns null."""
+
+        if isinstance(values, dict):
+            for key in ("unresolved_issues", "recommended_actions", "qa_failure_reasons"):
+                if values.get(key) is None:
+                    values[key] = []
+        return values
