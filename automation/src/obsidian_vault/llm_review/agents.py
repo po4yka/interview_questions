@@ -75,6 +75,25 @@ class QAVerificationResult(BaseModel):
     )
 
 
+class BilingualParityResult(BaseModel):
+    """Result of bilingual parity check between EN and RU sections."""
+
+    has_parity_issues: bool = Field(
+        description="Whether parity issues were found between EN and RU content"
+    )
+    parity_issues: list[str] = Field(
+        default_factory=list,
+        description="List of semantic mismatches or missing translations between EN and RU",
+    )
+    missing_sections: list[str] = Field(
+        default_factory=list,
+        description="Sections that exist in one language but not the other",
+    )
+    summary: str = Field(
+        description="Brief summary of the parity check result"
+    )
+
+
 class ConceptEnrichmentResult(BaseModel):
     """Result of enriching an auto-generated concept stub with meaningful content."""
 
@@ -511,6 +530,81 @@ Be thorough but pragmatic. Minor style issues should go in quality_concerns, not
 The goal is to catch serious problems that would mislead interview candidates, not to demand perfection.
 """
 
+BILINGUAL_PARITY_PROMPT = """You are a **bilingual parity checker** for Obsidian interview notes.
+
+Your role is to verify that English (EN) and Russian (RU) sections are semantically equivalent and technically consistent.
+
+This check runs EARLY in the review loop (after validators) to catch translation drift BEFORE the final QA stage, reducing recycle time.
+
+PRIMARY GOALS:
+1. Verify EN and RU sections convey the same technical information
+2. Detect missing translations or incomplete sections
+3. Identify semantic drift where one language has more/different details than the other
+4. Flag technical inconsistencies between language versions
+
+WHAT TO CHECK:
+
+1. **Section Completeness**:
+   - Both "# Question (EN)" and "# Вопрос (RU)" exist
+   - Both "## Answer (EN)" and "## Ответ (RU)" exist
+   - Optional sections (Follow-ups, References, Related Questions) are present in both languages if in one
+   - No orphaned sections in only one language
+
+2. **Semantic Equivalence**:
+   - Question and answer convey the same technical meaning in both languages
+   - Code explanations are consistent (same algorithms, same complexity analysis)
+   - Key technical terms are translated accurately
+   - Examples and edge cases are covered in both languages
+
+3. **Content Depth Parity**:
+   - One language version is not significantly longer or more detailed than the other
+   - Both versions cover the same technical points
+   - No important details present in only one language
+   - Trade-offs, pros/cons are equivalent
+
+4. **Technical Accuracy Across Languages**:
+   - Complexity analysis matches (e.g., both say O(n), not O(n) vs O(n log n))
+   - Algorithm names/techniques are consistent
+   - Code examples are identical or semantically equivalent
+   - Platform-specific details match
+
+WHAT NOT TO CHECK:
+- Technical factual accuracy (already handled by technical_review agent)
+- YAML frontmatter validation (already handled by metadata_sanity and validators)
+- Code correctness (already handled by technical_review)
+- Formatting/style issues (already handled by validators)
+
+OUTPUT FORMAT:
+Return a JSON object matching `BilingualParityResult`:
+{
+  "has_parity_issues": bool,  // true if EN and RU are not equivalent
+  "parity_issues": list[str],  // Specific semantic mismatches or drift
+  "missing_sections": list[str],  // Sections present in one language but not the other
+  "summary": str  // 1-2 sentence summary of parity status
+}
+
+EXAMPLES OF PARITY ISSUES:
+
+**Missing Translation**:
+- "EN Answer section explains recursion with 3 examples, RU Answer section only has 1 example"
+- "Follow-ups section exists in EN but missing in RU"
+
+**Semantic Drift**:
+- "EN says time complexity is O(n log n), RU says O(n²)"
+- "EN explains HashMap collision handling, RU explanation omits collision handling"
+- "RU version includes trade-offs discussion not present in EN"
+
+**Incomplete Content**:
+- "EN Question is a full paragraph, RU Question is only one sentence"
+- "EN code example has detailed comments, RU code example lacks comments"
+
+DECISION CRITERIA:
+- Set `has_parity_issues = true` if you find any semantic mismatches or missing content
+- Set `has_parity_issues = false` if EN and RU are semantically equivalent (minor wording differences are OK)
+
+Be precise and specific in identifying parity issues. The goal is to ensure interview candidates get equivalent content regardless of language preference.
+"""
+
 CONCEPT_ENRICHMENT_PROMPT = """You are a **knowledge-gap agent** that enriches auto-generated concept stub files.
 
 Your role is to transform generic placeholder content into meaningful, technically accurate concept documentation suitable for interview preparation.
@@ -663,6 +757,15 @@ CONCEPT_ENRICHMENT_SETTINGS = AgentModelSettings(
     frequency_penalty=0.1,
 )
 
+BILINGUAL_PARITY_SETTINGS = AgentModelSettings(
+    # Low temperature for consistent, deterministic parity checking
+    # Should be precise and analytical, not creative
+    temperature=0.2,
+    # Moderate penalties for clear, concise issue reporting
+    presence_penalty=0.2,
+    frequency_penalty=0.2,
+)
+
 
 def get_technical_review_agent() -> Agent:
     """Get the technical review agent (lazy initialization).
@@ -731,6 +834,20 @@ def get_concept_enrichment_agent() -> Agent:
         model=get_openrouter_model(agent_settings=CONCEPT_ENRICHMENT_SETTINGS),
         output_type=ConceptEnrichmentResult,
         system_prompt=CONCEPT_ENRICHMENT_PROMPT,
+    )
+
+
+def get_bilingual_parity_agent() -> Agent:
+    """Get the bilingual parity check agent (lazy initialization).
+
+    Uses low temperature (0.2) for consistent, deterministic parity checking
+    to catch translation drift early in the review loop.
+    """
+    logger.debug("Creating bilingual parity check agent with custom settings")
+    return Agent(
+        model=get_openrouter_model(agent_settings=BILINGUAL_PARITY_SETTINGS),
+        output_type=BilingualParityResult,
+        system_prompt=BILINGUAL_PARITY_PROMPT,
     )
 
 
@@ -1014,4 +1131,59 @@ Return the enriched content with meaningful definitions, key points, and context
         return result.output
     except Exception as e:
         logger.error(f"Concept enrichment failed for {concept_name}: {e}")
+        raise
+
+
+async def run_bilingual_parity_check(
+    note_text: str, note_path: str, **kwargs: Any
+) -> BilingualParityResult:
+    """Check bilingual parity between EN and RU sections.
+
+    This check runs early in the review loop (after validators) to catch
+    translation drift before the final QA stage, reducing recycle time.
+
+    Args:
+        note_text: The note content to check
+        note_path: Path to the note (for context)
+        **kwargs: Additional context
+
+    Returns:
+        BilingualParityResult with parity findings
+    """
+    logger.debug(f"Starting bilingual parity check for: {note_path}")
+    logger.debug(f"Note length: {len(note_text)} characters")
+
+    prompt = (
+        "Check bilingual parity between EN and RU sections in this note. "
+        "Verify that both languages convey the same technical information and that "
+        "no sections are missing in one language.\n\n"
+        f"Note path: {note_path}\n\n"
+        "```markdown\n"
+        f"{note_text}\n"
+        "```"
+    )
+
+    try:
+        agent = get_bilingual_parity_agent()
+        logger.debug("Running bilingual parity agent...")
+        result = await agent.run(prompt)
+
+        logger.debug(
+            f"Bilingual parity check complete - "
+            f"has_parity_issues: {result.output.has_parity_issues}, "
+            f"parity_issues: {len(result.output.parity_issues)}, "
+            f"missing_sections: {len(result.output.missing_sections)}"
+        )
+
+        if result.output.has_parity_issues:
+            logger.warning(
+                f"Parity check found {len(result.output.parity_issues)} issue(s) "
+                f"and {len(result.output.missing_sections)} missing section(s)"
+            )
+        else:
+            logger.success(f"Bilingual parity check passed: {result.output.summary}")
+
+        return result.output
+    except Exception as e:
+        logger.error(f"Bilingual parity check failed for {note_path}: {e}")
         raise
