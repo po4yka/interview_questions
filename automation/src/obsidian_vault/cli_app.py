@@ -1022,6 +1022,7 @@ def llm_review(
             review_graph = create_review_graph(
                 vault_root=vault_dir,
                 max_iterations=max_iterations,
+                dry_run=dry_run,
             )
 
         # Process notes

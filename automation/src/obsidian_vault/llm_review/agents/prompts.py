@@ -107,7 +107,10 @@ CRITICAL RULES (from vault documentation):
    - ## Ответ (RU)
 4. No emoji anywhere
 5. status: draft for AI-modified notes
-6. NEVER suggest or add links to concept files that don't exist in the vault
+6. You may reference concept files that have been auto-created during this review session
+   - The system may have created missing concept files before you run
+   - If a validator suggests adding a concept link, it's safe to add it
+   - Only avoid inventing entirely new concept files on your own
 
 Fix each issue precisely with minimal changes and return the corrected text."""
 
