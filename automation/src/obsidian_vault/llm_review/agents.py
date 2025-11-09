@@ -117,6 +117,32 @@ class ConceptEnrichmentResult(BaseModel):
     )
 
 
+class QAFailureSummaryResult(BaseModel):
+    """Result of summarizing repeated QA failures for human follow-up."""
+
+    failure_type: str = Field(
+        description="Classification of failure: 'max_iterations_reached' | 'qa_verification_failed' | 'persistent_issues'"
+    )
+    unresolved_issues: list[str] = Field(
+        default_factory=list,
+        description="List of issues that could not be automatically resolved",
+    )
+    iteration_summary: str = Field(
+        description="Summary of what happened across iterations (e.g., 'Fixed 8/12 issues, 4 remained unresolved')"
+    )
+    recommended_actions: list[str] = Field(
+        default_factory=list,
+        description="Specific actionable steps for manual review/fixing",
+    )
+    qa_failure_reasons: list[str] = Field(
+        default_factory=list,
+        description="Specific reasons why QA verification failed (factual errors, parity issues, etc.)",
+    )
+    human_readable_summary: str = Field(
+        description="Concise 3-5 sentence summary for human reviewer explaining what went wrong and what needs attention"
+    )
+
+
 DEFAULT_OPENROUTER_MODEL = "anthropic/claude-sonnet-4"
 DEFAULT_TEMPERATURE = 0.2
 DEFAULT_TIMEOUT = 60.0
@@ -735,6 +761,116 @@ Test Concept is a software testing approach that validates individual units of c
 ```
 """
 
+QA_FAILURE_SUMMARY_PROMPT = """You are a **QA failure summarizer** that creates actionable reports when automated review reaches max iterations without passing QA.
+
+Your role is to analyze the review history and create a concise, actionable summary for human follow-up when the automated workflow cannot resolve all issues.
+
+INPUT CONTEXT:
+You will receive:
+1. The current note text (with remaining issues)
+2. Full workflow history showing all iterations and what was attempted
+3. List of unresolved validation/QA issues
+4. QA verification results (if QA was run)
+5. Number of iterations performed vs max allowed
+
+PRIMARY GOALS:
+1. Identify the root cause of why automated fixing failed
+2. Summarize what was accomplished vs what remains
+3. Provide specific, actionable recommendations for manual intervention
+4. Classify the type of failure (max iterations, persistent QA issues, etc.)
+5. Create a human-readable summary suitable for a GitHub comment or PR review
+
+WHAT TO ANALYZE:
+
+1. **Failure Pattern Recognition**:
+   - Did the same issues appear repeatedly across iterations?
+   - Did fixes introduce new issues (churn)?
+   - Did QA verification fail consistently on the same points?
+   - Were issues technical (factual errors) or structural (formatting)?
+
+2. **Issue Categorization**:
+   - Which issues were successfully fixed?
+   - Which issues remained unresolved after all iterations?
+   - Are unresolved issues related (e.g., all about bilingual parity)?
+   - Which issues are blocking vs nice-to-have?
+
+3. **Root Cause Analysis**:
+   - Why couldn't the automated agents fix these issues?
+   - Are the issues too complex for automated fixing?
+   - Do they require domain expertise or human judgment?
+   - Are there contradictory requirements or ambiguous validation rules?
+
+4. **Actionable Recommendations**:
+   - What specific manual edits would resolve the issues?
+   - Which files/sections need human review?
+   - Should validation rules be adjusted?
+   - Are there broader patterns suggesting systematic issues?
+
+OUTPUT FORMAT:
+Return a JSON object matching `QAFailureSummaryResult`:
+{
+  "failure_type": str,  // 'max_iterations_reached' | 'qa_verification_failed' | 'persistent_issues'
+  "unresolved_issues": list[str],  // Clear list of what still needs fixing
+  "iteration_summary": str,  // E.g., "Fixed 8/12 issues across 5 iterations, 4 remain unresolved"
+  "recommended_actions": list[str],  // Specific steps for human reviewer
+  "qa_failure_reasons": list[str],  // Why QA verification failed (if applicable)
+  "human_readable_summary": str  // 3-5 sentence executive summary
+}
+
+EXAMPLES OF GOOD OUTPUT:
+
+**Scenario: Persistent bilingual parity issues**
+```json
+{
+  "failure_type": "qa_verification_failed",
+  "unresolved_issues": [
+    "EN Answer section includes 3 code examples, RU Answer section only has 1 example",
+    "RU explanation of time complexity is less detailed than EN version"
+  ],
+  "iteration_summary": "Fixed 10/12 issues across 5 iterations. YAML and structural issues resolved, but bilingual parity issues persisted.",
+  "recommended_actions": [
+    "Manually translate the 2 missing code examples in RU Answer section",
+    "Expand RU complexity explanation to match EN version detail",
+    "Review both language versions to ensure semantic equivalence"
+  ],
+  "qa_failure_reasons": [
+    "Bilingual parity: EN and RU content depth mismatch in Answer section",
+    "Translation completeness: Missing examples in Russian version"
+  ],
+  "human_readable_summary": "The automated review successfully fixed YAML metadata and structural formatting issues but could not resolve bilingual parity problems. The English version contains more detailed examples and explanations than the Russian version. Manual translation and content expansion is needed to achieve semantic equivalence between both language versions."
+}
+```
+
+**Scenario: Max iterations on complex validation issues**
+```json
+{
+  "failure_type": "max_iterations_reached",
+  "unresolved_issues": [
+    "[Metadata] Topic 'kotlin' but MOC field is 'moc-android' (should be 'moc-kotlin')",
+    "[Parity] EN code example uses different algorithm than RU code example",
+    "Missing required section: 'Follow-ups'"
+  ],
+  "iteration_summary": "Reached max iterations (5/5). Fixed 6 issues, 3 remain unresolved due to conflicting requirements.",
+  "recommended_actions": [
+    "Manually update MOC field in YAML frontmatter from 'moc-android' to 'moc-kotlin'",
+    "Align RU code example to use same algorithm as EN version (currently using different approaches)",
+    "Add 'Follow-ups' section with 2-3 related questions or edge cases"
+  ],
+  "qa_failure_reasons": [],
+  "human_readable_summary": "The workflow reached maximum iterations (5) while attempting to resolve metadata and bilingual consistency issues. The main blocker is conflicting topic/MOC metadata that requires manual reconciliation. Additionally, the Russian code example uses a different algorithmic approach than the English version, requiring human judgment to decide which approach to standardize on. A Follow-ups section also needs to be added manually."
+}
+```
+
+QUALITY CRITERIA:
+- Be specific: Don't just say "fix bilingual issues", say exactly which sections need work
+- Be actionable: Provide steps a human can immediately act on
+- Be concise: The human_readable_summary should be 3-5 sentences max
+- Be diagnostic: Explain WHY the automation failed, not just WHAT failed
+- Be helpful: Prioritize recommendations by impact (blocking issues first)
+
+Focus on creating a summary that saves the human reviewer time by clearly explaining what happened, what needs to be done, and why the automation couldn't handle it.
+"""
+
 
 # Agent-specific model settings
 # These defaults balance creativity vs determinism for each agent's role
@@ -789,6 +925,15 @@ BILINGUAL_PARITY_SETTINGS = AgentModelSettings(
     # Moderate penalties for clear, concise issue reporting
     presence_penalty=0.2,
     frequency_penalty=0.2,
+)
+
+QA_FAILURE_SUMMARY_SETTINGS = AgentModelSettings(
+    # Moderate temperature for analytical summarization with diagnostic insight
+    # Needs to analyze patterns and provide actionable recommendations
+    temperature=0.3,
+    # Lower penalties to allow comprehensive analysis and varied recommendations
+    presence_penalty=0.1,
+    frequency_penalty=0.1,
 )
 
 
@@ -873,6 +1018,20 @@ def get_bilingual_parity_agent() -> Agent:
         model=get_openrouter_model(agent_settings=BILINGUAL_PARITY_SETTINGS),
         output_type=BilingualParityResult,
         system_prompt=BILINGUAL_PARITY_PROMPT,
+    )
+
+
+def get_qa_failure_summary_agent() -> Agent:
+    """Get the QA failure summarizer agent (lazy initialization).
+
+    Uses moderate temperature (0.3) for analytical summarization to diagnose
+    why automated review failed and provide actionable recommendations.
+    """
+    logger.debug("Creating QA failure summary agent with custom settings")
+    return Agent(
+        model=get_openrouter_model(agent_settings=QA_FAILURE_SUMMARY_SETTINGS),
+        output_type=QAFailureSummaryResult,
+        system_prompt=QA_FAILURE_SUMMARY_PROMPT,
     )
 
 
@@ -1382,4 +1541,96 @@ async def run_bilingual_parity_check(
         return result.output
     except Exception as e:
         logger.error(f"Bilingual parity check failed for {note_path}: {e}")
+        raise
+
+
+async def run_qa_failure_summary(
+    note_text: str,
+    note_path: str,
+    history: list[dict[str, Any]],
+    unresolved_issues: list[str],
+    qa_verification_summary: str | None,
+    iteration_count: int,
+    max_iterations: int,
+    **kwargs: Any,
+) -> QAFailureSummaryResult:
+    """Summarize repeated QA failures for human follow-up.
+
+    This agent triggers when the workflow reaches max iterations or QA verification
+    fails repeatedly, creating an actionable summary for manual review.
+
+    Args:
+        note_text: The current note content (with remaining issues)
+        note_path: Path to the note (for context)
+        history: Full workflow history showing all iterations
+        unresolved_issues: List of issues that could not be resolved
+        qa_verification_summary: Summary from QA verification (if run)
+        iteration_count: Number of iterations performed
+        max_iterations: Maximum iterations allowed
+        **kwargs: Additional context
+
+    Returns:
+        QAFailureSummaryResult with failure analysis and recommendations
+    """
+    logger.debug(f"Starting QA failure summary for: {note_path}")
+    logger.debug(
+        f"Iterations: {iteration_count}/{max_iterations}, "
+        f"Unresolved issues: {len(unresolved_issues)}"
+    )
+
+    # Format history for context
+    history_summary = []
+    for entry in history:
+        iteration = entry.get("iteration", "?")
+        node = entry.get("node", "unknown")
+        message = entry.get("message", "")
+        history_summary.append(f"[Iteration {iteration}] {node}: {message}")
+
+    history_text = "\n".join(history_summary)
+
+    # Format unresolved issues
+    issues_text = "\n".join(f"- {issue}" for issue in unresolved_issues)
+
+    prompt = f"""Analyze this failed automated review and create an actionable summary for human follow-up.
+
+Note path: {note_path}
+Iterations: {iteration_count}/{max_iterations}
+QA Verification Status: {'Run - Failed' if qa_verification_summary else 'Not Run'}
+
+WORKFLOW HISTORY:
+{history_text}
+
+UNRESOLVED ISSUES:
+{issues_text}
+
+QA VERIFICATION SUMMARY:
+{qa_verification_summary or 'QA verification was not run (did not reach QA stage)'}
+
+CURRENT NOTE CONTENT:
+```markdown
+{note_text}
+```
+
+Analyze why the automated workflow could not resolve these issues and provide specific, actionable recommendations for manual review."""
+
+    try:
+        agent = get_qa_failure_summary_agent()
+        logger.debug("Running QA failure summary agent...")
+        result = await agent.run(prompt)
+
+        logger.info(
+            f"QA failure summary complete - "
+            f"Failure type: {result.output.failure_type}, "
+            f"Unresolved: {len(result.output.unresolved_issues)}, "
+            f"Recommendations: {len(result.output.recommended_actions)}"
+        )
+
+        logger.warning(
+            f"Automated review failed for {note_path}:\n"
+            f"{result.output.human_readable_summary}"
+        )
+
+        return result.output
+    except Exception as e:
+        logger.error(f"QA failure summary failed for {note_path}: {e}")
         raise

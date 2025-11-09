@@ -52,6 +52,7 @@ class NoteReviewStateDict(TypedDict, total=False):
     decision: str | None
     qa_verification_passed: bool | None
     qa_verification_summary: str | None
+    qa_failure_summary: str | None
 
 
 @dataclass
@@ -80,6 +81,7 @@ class NoteReviewState:
     # QA verification tracking
     qa_verification_passed: bool | None = None
     qa_verification_summary: str | None = None
+    qa_failure_summary: str | None = None
 
     # History tracking (optional, for debugging/reporting)
     history: list[dict[str, Any]] = field(default_factory=list)
@@ -115,6 +117,7 @@ class NoteReviewState:
             error=data.get("error"),
             qa_verification_passed=data.get("qa_verification_passed"),
             qa_verification_summary=data.get("qa_verification_summary"),
+            qa_failure_summary=data.get("qa_failure_summary"),
             history=history,
             decision=data.get("decision"),
         )
@@ -134,6 +137,7 @@ class NoteReviewState:
             "error": self.error,
             "qa_verification_passed": self.qa_verification_passed,
             "qa_verification_summary": self.qa_verification_summary,
+            "qa_failure_summary": self.qa_failure_summary,
             "history": [dict(entry) for entry in self.history],
             "decision": self.decision,
         }
