@@ -247,6 +247,22 @@ async def run_technical_review(
         logger.error("Technical review failed for {}: {}", note_path, e)
         logger.debug("Exception type: {}", type(e).__name__)
         logger.debug("Exception details: {}", repr(e))
+
+        # Check if it's a JSON parsing error and provide more context
+        error_msg = str(e)
+        if "Invalid JSON" in error_msg or "EOF while parsing" in error_msg:
+            logger.error(
+                "JSON parsing error detected. This usually means the LLM response was truncated. "
+                "Check that max_tokens is set appropriately and the model supports the requested output length."
+            )
+            # Extract the problematic JSON if available
+            if "input_value=" in error_msg:
+                import re
+                match = re.search(r"input_value='([^']*)'", error_msg)
+                if match:
+                    truncated_json = match.group(1)
+                    logger.debug("Truncated JSON received from LLM: {}", truncated_json[:200])
+
         raise
 
 
