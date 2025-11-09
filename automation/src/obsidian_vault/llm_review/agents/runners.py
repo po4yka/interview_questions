@@ -426,29 +426,90 @@ CRITICAL RULES FOR FIXING:
 6. Review the PREVIOUS FIX ATTEMPTS above - do NOT repeat failed strategies
 7. When adjusting YAML timestamps, ensure dates are YYYY-MM-DD, `created` ≤ `updated`, and NEVER set any date later than {current_date_iso}. If you need to bump `updated`, use {current_date_iso}.
 
-COMMON METADATA FIX PATTERNS:
+COMMON METADATA FIX PATTERNS (with concrete examples):
 
-**Date Consistency**:
-- If `updated` date is EARLIER than `created` date → Set `updated: {current_date_iso}`
-- Example fix: `created: 2025-10-05` and `updated: 2025-01-25` → Change to `updated: {current_date_iso}`
-- NEVER modify `created` date, only fix `updated` to be >= `created`
+**Pattern 1: Timestamp Ordering Violation**
+Problem: created date is AFTER updated date (violates temporal logic)
+❌ BEFORE:
+```yaml
+created: 2025-10-05  # October
+updated: 2025-01-25  # January (8 months earlier!)
+```
+✅ AFTER:
+```yaml
+created: 2025-10-05  # Keep original creation date
+updated: {current_date_iso}  # Fix updated to current date
+```
+RULE: NEVER modify `created`, only fix `updated` to be >= `created`
 
-**YAML Formatting**:
-- Sources must be YAML list format with quoted URLs
-- WRONG: `sources: https://example.com`
-- CORRECT: `sources: ["https://example.com"]`
-- Multiple sources: `sources: ["https://url1.com", "https://url2.com"]`
+**Pattern 2: Unquoted URLs in YAML**
+Problem: URLs in sources array are not quoted (invalid YAML syntax)
+❌ BEFORE:
+```yaml
+sources: [https://kotlinlang.org/docs/interfaces.html]
+```
+✅ AFTER:
+```yaml
+sources: ["https://kotlinlang.org/docs/interfaces.html"]
+```
+Multiple URLs:
+```yaml
+sources: ["https://url1.com", "https://url2.com"]
+```
 
-**Link Validation**:
-- If wikilink [[c-foo]] doesn't exist in available concepts → Remove it OR replace with existing concept
-- Example: [[c-oop-fundamentals]] not found → Check if [[c-oop]], [[c-object-oriented]], etc. exist
-- Do NOT add broken wikilinks - use only valid files from the available lists above
+**Pattern 3: Broken Wikilink (missing concept file)**
+Problem: Link to concept file that doesn't exist in vault
+❌ BEFORE:
+```yaml
+related: [c-oop-fundamentals, q-foo--kotlin--easy]
+```
+Check available concepts list - if c-oop-fundamentals not found, replace with existing:
+✅ AFTER:
+```yaml
+related: [c-kotlin, q-foo--kotlin--easy]  # Use existing c-kotlin instead
+```
+RULE: ONLY use concepts/files from the available lists above - NO invented links!
 
-**Related Field Requirements**:
-- Must include at least 1 concept link (c-...) for foundational knowledge
-- Must include 2+ total related items (concepts + Q&As)
-- Example: `related: [c-kotlin, c-coroutines, q-coroutine-basics--kotlin--easy]`
-- Select related items from the available concepts and Q&A files lists above
+**Pattern 4: Insufficient Related Links**
+Problem: related field has <2 items or missing concept link
+❌ BEFORE:
+```yaml
+related: [q-data-class--kotlin--medium]  # Only 1 item, no concept
+```
+✅ AFTER:
+```yaml
+related: [c-kotlin, c-classes, q-data-class--kotlin--medium]  # 2 concepts + 1 Q&A
+```
+RULE: Include ≥1 concept (c-*) + ≥2 total items from available lists
+
+**Pattern 5: Missing RU Sections (bilingual parity)**
+Problem: EN sections present but RU counterparts missing
+❌ BEFORE:
+```markdown
+## Follow-ups
+- Question 1
+- Question 2
+
+## References
+- [[c-kotlin]]
+```
+✅ AFTER:
+```markdown
+## Дополнительные вопросы (RU)
+- Вопрос 1
+- Вопрос 2
+
+## Ссылки (RU)
+- [[c-kotlin]]
+
+## Follow-ups
+- Question 1
+- Question 2
+
+## References
+- [[c-kotlin]]
+```
+RULE: RU sections MUST come before EN sections, preserve content parity
 
 ISSUES TO FIX:
 {issues_text}

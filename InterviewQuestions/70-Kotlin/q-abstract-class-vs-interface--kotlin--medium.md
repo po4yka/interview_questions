@@ -12,9 +12,9 @@ status: draft
 moc: moc-kotlin
 related: [q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
 created: 2025-10-05
-updated: 2025-01-25
+updated: 2025-11-09
 tags: [abstract-class, difficulty/medium, inheritance, interface, kotlin, kotlin-features, oop]
-sources: [https://kotlinlang.org/docs/interfaces.html]
+sources: ["https://kotlinlang.org/docs/interfaces.html"]
 ---
 
 # Вопрос (RU)
@@ -110,6 +110,30 @@ interface Test {
     private fun privateMethod() {} // ✅ Kotlin 1.4+
 }
 ```
+
+## Дополнительные вопросы (RU)
+
+- Когда выбирать абстрактный класс вместо интерфейса?
+- Чем sealed классы отличаются от абстрактных?
+- Эволюция интерфейсов и методы по умолчанию?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- https://kotlinlang.org/docs/interfaces.html
+
+## Связанные вопросы (RU)
+
+### Базовые (Легче)
+- [[q-kotlin-enum-classes--kotlin--easy]] - Базовые классы
+
+### Того же уровня (Medium)
+- [[q-inheritance-open-final--kotlin--medium]] - Наследование
+- [[q-inner-nested-classes--kotlin--medium]] - Классы
+- [[q-data-class-detailed--kotlin--medium]] - Data классы
+
+### Продвинутые (Сложнее)
+- [[q-kotlin-reified-types--kotlin--hard]] - Reified типы
 
 ---
 
@@ -207,7 +231,7 @@ interface Test {
 
 ## References
 
-- [[c-oop-fundamentals]]
+- [[c-kotlin]]
 - https://kotlinlang.org/docs/interfaces.html
 
 ## Related Questions
