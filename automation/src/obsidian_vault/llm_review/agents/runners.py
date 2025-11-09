@@ -8,6 +8,7 @@ from typing import Any
 
 from loguru import logger
 from pydantic_ai import Agent
+from pydantic_ai.exceptions import AgentRunError, ModelHTTPError, UserError
 
 from obsidian_vault.exceptions import LLMResponseError
 from obsidian_vault.utils.retry import async_retry
@@ -249,6 +250,10 @@ async def run_technical_review(
         logger.debug("Running technical review agent with taxonomy and related notes context...")
         result = await agent.run(prompt)
 
+        # Log the raw result for debugging
+        logger.debug(f"Agent run result type: {type(result)}")
+        logger.debug(f"Agent run result.output type: {type(result.output)}")
+
         logger.debug(
             f"Technical review complete - "
             f"has_issues: {result.output.has_issues}, "
@@ -260,31 +265,69 @@ async def run_technical_review(
             logger.info(f"Technical review made changes: {result.output.explanation}")
 
         return result.output
-    except (ValueError, json.JSONDecodeError) as e:
-        # Enhanced error logging for JSON parsing issues
+    except AgentRunError as e:
+        # pydantic-ai specific error when the agent fails to run
         error_msg = str(e)
-        logger.error("Technical review failed for {} due to JSON parsing error: {}", note_path, e)
+        logger.error("Technical review agent run failed for {}: {}", note_path, e)
+        logger.debug("Exception type: {}", type(e).__name__)
+        logger.debug("Exception details: {}", repr(e))
+
+        # Extract error details if available
+        response_excerpt = None
+        if hasattr(e, '__cause__') and e.__cause__:
+            logger.debug("Underlying cause: {} - {}", type(e.__cause__).__name__, e.__cause__)
+            # Try to extract from the cause if it's a Pydantic error
+            cause = e.__cause__
+            if hasattr(cause, 'errors'):
+                logger.debug("Pydantic validation errors: {}", cause.errors())
+                response_excerpt = str(cause.errors()[:3])  # First 3 errors
+            else:
+                response_excerpt = str(cause)[:500]
+
+        # Raise custom exception with context
+        raise LLMResponseError(
+            "LLM agent run failed. "
+            "This usually means the model returned an invalid response format, "
+            "the response was truncated, or there was a validation error. "
+            "Check agent settings, model capacity, and response format.",
+            response_excerpt=response_excerpt,
+            note_path=note_path,
+        ) from e
+    except (ValueError, json.JSONDecodeError) as e:
+        # Enhanced error logging for JSON parsing and Pydantic validation issues
+        error_msg = str(e)
+        logger.error("Technical review failed for {} due to validation error: {}", note_path, e)
         logger.debug("Exception type: {}", type(e).__name__)
         logger.debug("Exception details: {}", repr(e))
 
         # Extract problematic JSON excerpt if available
         response_excerpt = None
-        if "input_value=" in error_msg:
+
+        # Try to extract from Pydantic validation error
+        if hasattr(e, 'errors'):
+            # Pydantic ValidationError
+            logger.debug("Pydantic validation errors: {}", e.errors())
+            response_excerpt = str(e.errors()[:3])  # First 3 errors
+        elif "input_value=" in error_msg:
+            # Extract from error message
             import re
             match = re.search(r"input_value='([^']*)'", error_msg)
             if match:
                 response_excerpt = match.group(1)
-                logger.debug("Truncated JSON received from LLM: {}", response_excerpt[:200])
+
+        if response_excerpt:
+            logger.debug("Problematic response excerpt: {}", response_excerpt[:500])
 
         # Raise custom exception with context
         raise LLMResponseError(
             "LLM returned invalid or truncated JSON response. "
-            "This usually means max_tokens is too low or the model truncated the output. "
+            "This usually means max_tokens is too low, the model truncated the output, "
+            "or the response format doesn't match the expected schema. "
             "Check agent settings and model capacity.",
             response_excerpt=response_excerpt,
             note_path=note_path,
         ) from e
-    except (ConnectionError, TimeoutError) as e:
+    except (ConnectionError, TimeoutError, ModelHTTPError) as e:
         # Log network errors (will be retried by decorator)
         logger.warning(
             "Network error during technical review for {}: {} - Will retry",

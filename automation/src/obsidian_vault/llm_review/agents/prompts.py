@@ -56,13 +56,13 @@ EDITING RULES
 
 OUTPUT FORMAT
 Respond **only** with a JSON object matching ``TechnicalReviewResult``:
-{
+{{
   "has_issues": bool,
   "issues_found": list[str],
   "revised_text": str,
   "changes_made": bool,
   "explanation": str
-}
+}}
 - ``revised_text`` must contain the full note text, identical to the input when no corrections are needed.
 - ``explanation`` summarises the verification steps and key fixes (or explicitly states that no issues were found).
 
