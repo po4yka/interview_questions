@@ -1823,6 +1823,46 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             )
             return "continue"
 
+    def _resolve_note_path_key(self, note_path: Path) -> str:
+        """Return a stable key for analytics and fix memory tracking."""
+
+        try:
+            return str(note_path.relative_to(self.vault_root.parent))
+        except ValueError:
+            logger.debug(
+                "Note path %s is outside the repository root; using absolute path",
+                note_path,
+            )
+            return str(note_path)
+
+    def _create_error_state(
+        self,
+        note_path_key: str,
+        *,
+        original_text: str,
+        error_message: str,
+        iteration: int = 0,
+        issues: list[ReviewIssue] | None = None,
+        history_node: str = "process_note",
+        history_message: str | None = None,
+    ) -> NoteReviewState:
+        """Build a :class:`NoteReviewState` representing a terminal error."""
+
+        state = NoteReviewState(
+            note_path=note_path_key,
+            original_text=original_text,
+            current_text=original_text,
+            issues=list(issues) if issues else [],
+            iteration=iteration,
+            max_iterations=self.max_iterations,
+        )
+        state.error = error_message
+        state.requires_human_review = True
+        state.completed = True
+        state.changed = False
+        state.add_history_entry(history_node, history_message or error_message)
+        return state
+
     async def process_note(self, note_path: Path) -> NoteReviewState:
         """Process a single note through the review workflow.
 
@@ -1830,21 +1870,50 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             note_path: Path to the note file
 
         Returns:
-            Final state after processing
+            Final state after processing. If a fatal error occurs, the returned
+            state will have ``error`` and ``requires_human_review`` populated so
+            callers can surface the failure without crashing the batch run.
         """
+
+        import time
+
         logger.info("=" * 70)
         logger.info(f"Processing note: {note_path.name}")
         logger.debug(f"Full path: {note_path}")
+
+        note_path_key = self._resolve_note_path_key(note_path)
+        self.analytics.start_note(
+            note_path_key,
+            profile=self.processing_profile.value,
+        )
+
+        start_time = time.time()
 
         # Read the note
         try:
             original_text = note_path.read_text(encoding="utf-8")
             logger.debug(f"Read {len(original_text)} characters from note")
-        except Exception as e:
+        except Exception as e:  # pragma: no cover - defensive I/O guard
             logger.error("Failed to read note {}: {}", note_path, e)
-            raise
-
-        note_path_key = str(note_path.relative_to(self.vault_root.parent))
+            error_message = f"Failed to read note: {e}"
+            error_state = self._create_error_state(
+                note_path_key,
+                original_text="",
+                error_message=error_message,
+                history_node="read_note",
+            )
+            elapsed = time.time() - start_time
+            self.analytics.finalize(
+                note_path_key,
+                iterations=error_state.iteration,
+                final_issue_count=len(error_state.issues),
+                elapsed_seconds=elapsed,
+                qa_passed=None,
+                error=error_message,
+                requires_human_review=True,
+            )
+            logger.info("=" * 70)
+            return error_state
 
         # Initialize state
         initial_state = NoteReviewState(
@@ -1855,19 +1924,11 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         )
         logger.debug(f"Initialized state with max_iterations={self.max_iterations}")
 
-        self.analytics.start_note(
-            note_path_key,
-            profile=self.processing_profile.value,
-        )
-
         # PHASE 1 FIX: Clear Fix Memory for this note to start fresh
         if note_path_key in self.fix_memory:
             self.fix_memory[note_path_key].clear()
             logger.debug("Cleared existing Fix Memory for this note")
 
-        # Run the graph with timing
-        import time
-        start_time = time.time()
         logger.info(f"Starting LangGraph workflow for {note_path.name}")
         try:
             final_state_dict = await self.graph.ainvoke(initial_state.to_dict())
@@ -1876,16 +1937,27 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             logger.debug(f"LangGraph workflow completed in {elapsed_time:.2f}s")
         except Exception as e:
             logger.error("LangGraph workflow failed for {}: {}", note_path, e)
+            elapsed = time.time() - start_time
+            error_message = str(e)
+            error_state = self._create_error_state(
+                note_path_key,
+                original_text=initial_state.current_text,
+                error_message=error_message,
+                iteration=initial_state.iteration,
+                issues=initial_state.issues,
+                history_message=f"Workflow failed: {error_message}",
+            )
             self.analytics.finalize(
                 note_path_key,
-                iterations=initial_state.iteration,
-                final_issue_count=len(initial_state.issues),
-                elapsed_seconds=time.time() - start_time,
+                iterations=error_state.iteration,
+                final_issue_count=len(error_state.issues),
+                elapsed_seconds=elapsed,
                 qa_passed=None,
-                error=str(e),
+                error=error_message,
                 requires_human_review=True,
             )
-            raise
+            logger.info("=" * 70)
+            return error_state
 
         # Log final results with detailed metrics
         elapsed_time = time.time() - start_time
