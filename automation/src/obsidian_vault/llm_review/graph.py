@@ -210,6 +210,17 @@ class ReviewGraph:
 
         except Exception as e:
             logger.error("Error in technical review: {}", e)
+            logger.error("Exception type: {}", type(e).__name__)
+            logger.error("Exception details: {}", repr(e))
+
+            # Log underlying cause if available
+            if hasattr(e, '__cause__') and e.__cause__:
+                logger.error("Underlying cause: {} - {}", type(e.__cause__).__name__, e.__cause__)
+
+            # Log traceback for debugging
+            import traceback
+            logger.error("Traceback:\n{}", ''.join(traceback.format_exception(type(e), e, e.__traceback__)))
+
             history_updates.append(
                 state_obj.add_history_entry(
                     "initial_llm_review", f"Error during technical review: {e}"
