@@ -764,12 +764,15 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                     )
                 )
             else:
-                logger.warning("No fixes could be applied")
+                logger.warning("No fixes could be applied - escalating to human review")
                 history_updates.append(
-                    state_obj.add_history_entry("llm_fix_issues", "No fixes applied")
+                    state_obj.add_history_entry(
+                        "llm_fix_issues",
+                        "No fixes applied - requires human review",
+                    )
                 )
-                # Stop iteration if no fixes can be applied
-                updates["completed"] = True
+                # Escalate to human review instead of silently marking as completed
+                updates["requires_human_review"] = True
 
             updates["history"] = history_updates
             updates.setdefault("decision", None)
@@ -983,13 +986,14 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         """Compute the next step decision and corresponding history message.
 
         Decision logic:
-        1. If max iterations reached AND (issues remain OR QA failed) -> summarize_failures
-        2. If max iterations reached AND no issues AND QA passed -> done
-        3. If error occurred -> done
-        4. If completed flag set -> done
-        5. If no validator/parity issues AND QA not run yet -> qa_verify
-        6. If no validator/parity issues AND QA passed -> done
-        7. If validator/parity issues remain -> continue (fix loop)
+        1. If requires_human_review flag set -> summarize_failures (ESCALATION)
+        2. If max iterations reached AND (issues remain OR QA failed) -> summarize_failures
+        3. If max iterations reached AND no issues AND QA passed -> done
+        4. If error occurred -> done
+        5. If completed flag set -> done
+        6. If no validator/parity issues AND QA not run yet -> qa_verify
+        7. If no validator/parity issues AND QA passed -> done
+        8. If validator/parity issues remain -> continue (fix loop)
         """
 
         # Detailed debug logging for decision evaluation
@@ -999,8 +1003,19 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             f"issues={len(state.issues)}, "
             f"error={state.error is not None}, "
             f"completed={state.completed}, "
+            f"requires_human_review={state.requires_human_review}, "
             f"qa_passed={state.qa_verification_passed}"
         )
+
+        # NEW: Check for escalation flag first (failed fix attempts)
+        if state.requires_human_review:
+            message = (
+                f"Fix agent could not apply changes - escalating to human review "
+                f"(iteration {state.iteration}/{state.max_iterations}, "
+                f"{len(state.issues)} unresolved issue(s))"
+            )
+            logger.warning(message)
+            return "summarize_failures", message
 
         if state.iteration >= state.max_iterations:
             # Check if there are unresolved issues or QA failed

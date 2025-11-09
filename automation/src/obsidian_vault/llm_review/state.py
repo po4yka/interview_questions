@@ -53,6 +53,7 @@ class NoteReviewStateDict(TypedDict, total=False):
     qa_verification_passed: bool | None
     qa_verification_summary: str | None
     qa_failure_summary: str | None
+    requires_human_review: bool
 
 
 @dataclass
@@ -77,6 +78,7 @@ class NoteReviewState:
     max_iterations: int = 10
     completed: bool = False
     error: str | None = None
+    requires_human_review: bool = False
 
     # QA verification tracking
     qa_verification_passed: bool | None = None
@@ -115,6 +117,7 @@ class NoteReviewState:
             max_iterations=cast(int, data.get("max_iterations", 5)),
             completed=cast(bool, data.get("completed", False)),
             error=data.get("error"),
+            requires_human_review=cast(bool, data.get("requires_human_review", False)),
             qa_verification_passed=data.get("qa_verification_passed"),
             qa_verification_summary=data.get("qa_verification_summary"),
             qa_failure_summary=data.get("qa_failure_summary"),
@@ -135,6 +138,7 @@ class NoteReviewState:
             "max_iterations": self.max_iterations,
             "completed": self.completed,
             "error": self.error,
+            "requires_human_review": self.requires_human_review,
             "qa_verification_passed": self.qa_verification_passed,
             "qa_verification_summary": self.qa_verification_summary,
             "qa_failure_summary": self.qa_failure_summary,
