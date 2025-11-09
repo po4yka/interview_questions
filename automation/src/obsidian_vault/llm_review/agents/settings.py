@@ -14,6 +14,9 @@ TECHNICAL_REVIEW_SETTINGS = AgentModelSettings(
     # Lower penalties to allow varied phrasing when explaining technical concepts
     presence_penalty=0.0,
     frequency_penalty=0.1,
+    # Set sufficient max_tokens to ensure complete JSON responses
+    # Technical reviews typically need full note text + analysis
+    max_tokens=8192,
 )
 
 ISSUE_FIX_SETTINGS = AgentModelSettings(
@@ -22,6 +25,8 @@ ISSUE_FIX_SETTINGS = AgentModelSettings(
     # Higher penalties to discourage repetition and encourage precise, minimal changes
     presence_penalty=0.3,
     frequency_penalty=0.3,
+    # Set sufficient max_tokens for fixing issues and returning full note text
+    max_tokens=8192,
 )
 
 METADATA_SANITY_SETTINGS = AgentModelSettings(
@@ -30,6 +35,8 @@ METADATA_SANITY_SETTINGS = AgentModelSettings(
     # Moderate penalties for clear, concise issue reporting
     presence_penalty=0.2,
     frequency_penalty=0.2,
+    # Metadata checks produce compact JSON, but set reasonable limit
+    max_tokens=2048,
 )
 
 QA_VERIFICATION_SETTINGS = AgentModelSettings(
@@ -39,6 +46,8 @@ QA_VERIFICATION_SETTINGS = AgentModelSettings(
     # Lower penalties to allow comprehensive issue exploration
     presence_penalty=0.1,
     frequency_penalty=0.1,
+    # QA verification may produce detailed findings
+    max_tokens=4096,
 )
 
 CONCEPT_ENRICHMENT_SETTINGS = AgentModelSettings(
@@ -48,6 +57,8 @@ CONCEPT_ENRICHMENT_SETTINGS = AgentModelSettings(
     # Lower penalties to allow varied technical vocabulary and comprehensive coverage
     presence_penalty=0.0,
     frequency_penalty=0.1,
+    # Concept enrichment needs space for full bilingual content
+    max_tokens=8192,
 )
 
 BILINGUAL_PARITY_SETTINGS = AgentModelSettings(
@@ -57,6 +68,8 @@ BILINGUAL_PARITY_SETTINGS = AgentModelSettings(
     # Moderate penalties for clear, concise issue reporting
     presence_penalty=0.2,
     frequency_penalty=0.2,
+    # Parity checks produce compact JSON with issue lists
+    max_tokens=2048,
 )
 
 QA_FAILURE_SUMMARY_SETTINGS = AgentModelSettings(
@@ -66,4 +79,6 @@ QA_FAILURE_SUMMARY_SETTINGS = AgentModelSettings(
     # Lower penalties to allow comprehensive analysis and varied recommendations
     presence_penalty=0.1,
     frequency_penalty=0.1,
+    # Failure summaries need space for detailed analysis
+    max_tokens=4096,
 )
