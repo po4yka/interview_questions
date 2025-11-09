@@ -806,7 +806,10 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             try:
                 # Write the concept file (unless in dry-run mode)
                 if self.dry_run:
-                    logger.info(f"DRY RUN: Would create concept file: {concept_file}")
+                    logger.info(
+                        f"DRY RUN: Would create concept file: {concept_file} "
+                        f"(in production, this would resolve broken link issues)"
+                    )
                 else:
                     concept_path.write_text(content, encoding='utf-8')
                     logger.info(f"Created missing concept file: {concept_file}")
@@ -833,10 +836,19 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
                 created_files.append(concept_file)
 
-                # Add to note index so it can be referenced (even in dry-run, for validation)
-                # Remove .md extension for note index
-                concept_id = concept_file.replace('.md', '')
-                self.note_index.add(concept_id)
+                # QUICK WIN FIX: Only add to note index if file was actually created
+                # In dry-run mode, don't add to index to prevent false positives
+                # (validators would think file exists when it doesn't)
+                if not self.dry_run:
+                    # Remove .md extension for note index
+                    concept_id = concept_file.replace('.md', '')
+                    self.note_index.add(concept_id)
+                    logger.debug(f"Added {concept_id} to note index")
+                else:
+                    logger.debug(
+                        f"DRY RUN: Skipping note_index update for {concept_file} "
+                        "(would cause false positives in validation)"
+                    )
 
                 # Enrich the concept stub with meaningful content using knowledge-gap agent
                 # Skip enrichment in dry-run mode since we don't write the file anyway
