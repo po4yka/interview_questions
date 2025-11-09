@@ -36,6 +36,21 @@ class ReviewIssue:
         )
 
 
+@dataclass
+class FixAttempt:
+    """Record of a single fix attempt during the review workflow.
+
+    Tracks what issues were targeted, what fixes were applied, and the outcome.
+    This helps prevent the fixer from repeating failed strategies.
+    """
+
+    iteration: int
+    issues_targeted: list[str]  # Issue messages that were targeted
+    fixes_applied: list[str]    # Descriptions of fixes that were applied
+    result: Literal["success", "partial", "failed", "reverted"]
+    issues_remaining: list[str]  # Issues that remained after fixing
+
+
 class NoteReviewStateDict(TypedDict, total=False):
     """Typed dictionary representation used by LangGraph."""
 
@@ -55,6 +70,7 @@ class NoteReviewStateDict(TypedDict, total=False):
     qa_failure_summary: str | None
     requires_human_review: bool
     issue_history: list[set[str]]  # Track issue signatures per iteration for oscillation detection
+    fix_attempts: list[FixAttempt]  # Track fix attempts to prevent repeated mistakes
 
 
 @dataclass
@@ -93,6 +109,9 @@ class NoteReviewState:
     # Oscillation detection (track issue signatures per iteration)
     issue_history: list[set[str]] = field(default_factory=list)
 
+    # Fix attempt tracking (prevent repeated mistakes)
+    fix_attempts: list[FixAttempt] = field(default_factory=list)
+
     @classmethod
     def from_dict(cls, data: Mapping[str, Any]) -> "NoteReviewState":
         """Create state from a mapping, copying mutable fields."""
@@ -112,6 +131,20 @@ class NoteReviewState:
         history = [dict(entry) for entry in data.get("history", [])]
         issue_history = [set(entry) for entry in data.get("issue_history", [])]
 
+        # Convert fix_attempts from dicts to FixAttempt objects
+        fix_attempts = [
+            attempt
+            if isinstance(attempt, FixAttempt)
+            else FixAttempt(
+                iteration=attempt["iteration"],
+                issues_targeted=attempt["issues_targeted"],
+                fixes_applied=attempt["fixes_applied"],
+                result=attempt["result"],
+                issues_remaining=attempt["issues_remaining"],
+            )
+            for attempt in data.get("fix_attempts", [])
+        ]
+
         return cls(
             note_path=cast(str, data["note_path"]),
             original_text=cast(str, data["original_text"]),
@@ -129,6 +162,7 @@ class NoteReviewState:
             history=history,
             decision=data.get("decision"),
             issue_history=issue_history,
+            fix_attempts=fix_attempts,
         )
 
     def to_dict(self) -> NoteReviewStateDict:
@@ -151,6 +185,7 @@ class NoteReviewState:
             "history": [dict(entry) for entry in self.history],
             "decision": self.decision,
             "issue_history": [list(entry) for entry in self.issue_history],
+            "fix_attempts": list(self.fix_attempts),
         }
 
     def add_history_entry(self, node: str, message: str, **kwargs) -> dict[str, Any]:

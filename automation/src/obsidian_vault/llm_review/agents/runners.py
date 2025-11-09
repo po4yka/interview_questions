@@ -360,6 +360,7 @@ async def run_issue_fixing(
             - available_concepts: List of concept file basenames
             - available_qa_files: List of Q&A file basenames
             - valid_moc_files: List of MOC file basenames
+            - fix_history: Formatted string of previous fix attempts
 
     Returns:
         IssueFixResult with corrected text
@@ -374,6 +375,7 @@ async def run_issue_fixing(
     available_concepts = kwargs.get('available_concepts', [])
     available_qa_files = kwargs.get('available_qa_files', [])
     valid_moc_files = kwargs.get('valid_moc_files', [])
+    fix_history = kwargs.get('fix_history', 'No previous fix attempts in this session.')
 
     # Build vault index context
     context_parts = []
@@ -409,12 +411,15 @@ Note path: {note_path}
 
 {vault_context}
 
+{fix_history}
+
 CRITICAL RULES FOR FIXING:
 1. When adding concept links ([[c-...]]), ONLY use concepts from the available list above
 2. When adding MOC links, ONLY use MOC files from the available list above
 3. If a required concept doesn't exist in the list, DO NOT add a broken link - note the missing file instead
 4. Prefer existing concept files over creating new references
 5. Do not invent or guess concept file names
+6. Review the PREVIOUS FIX ATTEMPTS above - do NOT repeat failed strategies
 
 ISSUES TO FIX:
 {issues_text}

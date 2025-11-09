@@ -900,6 +900,51 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             )
             return False, reason
 
+    def _format_fix_history(self, fix_attempts: list) -> str:
+        """Format fix attempt history for fixer agent context.
+
+        Args:
+            fix_attempts: List of FixAttempt objects
+
+        Returns:
+            Formatted string describing previous fix attempts
+        """
+        if not fix_attempts:
+            return "No previous fix attempts in this session."
+
+        # Limit to last 5 attempts to avoid token bloat
+        recent_attempts = fix_attempts[-5:]
+
+        lines = ["PREVIOUS FIX ATTEMPTS (learn from these):"]
+        for attempt in recent_attempts:
+            result_emoji = {
+                "success": "✓",
+                "partial": "~",
+                "failed": "✗",
+                "reverted": "↩"
+            }.get(attempt.result, "?")
+
+            lines.append(
+                f"\nIteration {attempt.iteration} [{result_emoji} {attempt.result}]:"
+            )
+            lines.append(f"  Targeted: {len(attempt.issues_targeted)} issue(s)")
+
+            if attempt.fixes_applied:
+                lines.append(f"  Applied: {', '.join(attempt.fixes_applied[:3])}")
+                if len(attempt.fixes_applied) > 3:
+                    lines.append(f"    ...and {len(attempt.fixes_applied) - 3} more")
+
+            if attempt.issues_remaining:
+                lines.append(f"  Still had: {len(attempt.issues_remaining)} issue(s) after")
+
+            # Add learning point for failed attempts
+            if attempt.result in ("failed", "reverted"):
+                lines.append("  ⚠ This approach didn't work - try a different strategy!")
+
+        lines.append("\nIMPORTANT: Do NOT repeat failed approaches. Learn from the patterns above.")
+
+        return "\n".join(lines)
+
     async def _llm_fix_issues(self, state: NoteReviewStateDict) -> dict[str, Any]:
         """Node: LLM fixes formatting/structure issues.
 
@@ -951,6 +996,10 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 f"{len(valid_moc_files)} MOCs"
             )
 
+            # Format fix history to provide context about previous attempts
+            fix_history = self._format_fix_history(state_obj.fix_attempts)
+            logger.debug(f"Providing fix history: {len(state_obj.fix_attempts)} previous attempt(s)")
+
             result = await run_issue_fixing(
                 note_text=state_obj.current_text,
                 issues=issue_descriptions,
@@ -958,6 +1007,17 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 available_concepts=available_concepts,
                 available_qa_files=available_qa_files,
                 valid_moc_files=valid_moc_files,
+                fix_history=fix_history,
+            )
+
+            # Record this fix attempt (will be updated with remaining issues after validation)
+            from .state import FixAttempt
+            attempt = FixAttempt(
+                iteration=state_obj.iteration,
+                issues_targeted=[issue.message for issue in state_obj.issues],
+                fixes_applied=result.fixes_applied if result.changes_made else [],
+                result="success" if result.changes_made else "failed",
+                issues_remaining=[],  # Will be filled in next iteration by validators
             )
 
             updates: dict[str, Any] = {}
@@ -982,6 +1042,10 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 )
                 # Escalate to human review instead of silently marking as completed
                 updates["requires_human_review"] = True
+
+            # Add this fix attempt to the history
+            updated_attempts = state_obj.fix_attempts + [attempt]
+            updates["fix_attempts"] = updated_attempts
 
             updates["history"] = history_updates
             updates.setdefault("decision", None)
