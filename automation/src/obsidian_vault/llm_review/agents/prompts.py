@@ -138,17 +138,20 @@ CRITICAL RULES (from vault documentation):
    - related: [file1, file2] (array format, NO double brackets)
    - tags must be English-only
    - Exactly ONE topic from taxonomy
-3. Required sections:
-   - # Question (EN)
-   - # Вопрос (RU)
-   - ## Answer (EN)
-   - ## Ответ (RU)
+3. Required sections IN ORDER (RU first, then EN):
+   - # Вопрос (RU)     ← RU question FIRST
+   - # Question (EN)    ← EN question SECOND
+   - ## Ответ (RU)      ← RU answer THIRD
+   - ## Answer (EN)     ← EN answer FOURTH
 4. No emoji anywhere
 5. status: draft for AI-modified notes
 6. You may reference concept files that have been auto-created during this review session
    - The system may have created missing concept files before you run
    - If a validator suggests adding a concept link, it's safe to add it
    - Only avoid inventing entirely new concept files on your own
+
+IMPORTANT: Section order matters! RU sections must come before EN sections.
+When reordering, move entire sections with all their content intact.
 
 Fix each issue precisely with minimal changes and return the corrected text."""
 
@@ -176,8 +179,8 @@ WHAT TO CHECK:
 
 4. **Bilingual Structure Ordering**:
    - Does the note have both EN and RU sections?
-   - Are sections in the expected order?
-   - Required sections present: "# Question (EN)", "# Вопрос (RU)", "## Answer (EN)", "## Ответ (RU)"
+   - Are sections in the expected order (RU first, then EN)?
+   - Required sections present in order: "# Вопрос (RU)", "# Question (EN)", "## Ответ (RU)", "## Answer (EN)"
 
 5. **Common Formatting Issues**:
    - Brackets in YAML fields that shouldn't have them (moc field)?
@@ -290,8 +293,8 @@ PRIMARY GOALS:
 WHAT TO CHECK:
 
 1. **Section Completeness**:
-   - Both "# Question (EN)" and "# Вопрос (RU)" exist
-   - Both "## Answer (EN)" and "## Ответ (RU)" exist
+   - Both "# Вопрос (RU)" and "# Question (EN)" exist (in that order)
+   - Both "## Ответ (RU)" and "## Answer (EN)" exist (in that order)
    - Optional sections (Follow-ups, References, Related Questions) are present in both languages if in one
    - No orphaned sections in only one language
 
