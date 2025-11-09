@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from typing import Any
 
+from loguru import logger
+
 try:
     import yaml  # type: ignore
 except ModuleNotFoundError:  # pragma: no cover
@@ -11,14 +13,39 @@ except ModuleNotFoundError:  # pragma: no cover
 
 
 def load_yaml(text: str) -> dict:
-    """Load YAML frontmatter, falling back to a lightweight parser."""
+    """Load YAML frontmatter, falling back to a lightweight parser.
 
+    Args:
+        text: YAML text to parse
+
+    Returns:
+        Parsed dictionary, or empty dict if parsing fails
+
+    Note:
+        Logs warnings when parsing fails but returns empty dict for backward compatibility.
+        For strict error handling, use parse_note() which raises VaultParsingError.
+    """
     if yaml is not None:
         try:
             data = yaml.safe_load(text)
-        except Exception:
+        except yaml.YAMLError as e:
+            logger.warning(
+                "PyYAML parsing failed: {} ({}). Falling back to simple parser.",
+                str(e),
+                type(e).__name__,
+            )
+            # Fall through to simple parser instead of returning empty dict
+            return _simple_yaml_parse(text.splitlines())
+        except Exception as e:
+            logger.error(
+                "Unexpected error during YAML parsing: {} ({}). Returning empty dict.",
+                str(e),
+                type(e).__name__,
+            )
             return {}
         return data or {}
+
+    # Use simple parser if PyYAML not available
     return _simple_yaml_parse(text.splitlines())
 
 

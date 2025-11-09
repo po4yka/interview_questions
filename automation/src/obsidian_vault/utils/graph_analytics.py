@@ -17,6 +17,7 @@ from pathlib import Path
 
 import networkx as nx
 import pandas as pd
+from loguru import logger
 from networkx.algorithms import community as nx_community
 from obsidiantools.api import Vault
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -443,8 +444,12 @@ class VaultGraph:
 
         try:
             tfidf_matrix = vectorizer.fit_transform([note_contents[note] for note in notes_list])
-        except ValueError:
-            # Not enough documents or vocabulary
+        except ValueError as e:
+            # Not enough documents or vocabulary for TF-IDF
+            logger.warning(
+                "TF-IDF vectorization failed (likely insufficient documents/vocabulary): {}",
+                str(e),
+            )
             return {}
 
         # Calculate cosine similarity matrix
@@ -528,8 +533,24 @@ class VaultGraph:
                 if content:
                     note_contents[note_name] = content
 
-            except Exception:
-                # Skip notes that can't be read
+            except FileNotFoundError:
+                logger.debug("Note file not found for '{}', skipping", note_name)
+                continue
+            except UnicodeDecodeError as e:
+                logger.warning(
+                    "Failed to decode note '{}' (encoding issue): {}, skipping",
+                    note_name,
+                    str(e),
+                )
+                continue
+            except Exception as e:
+                # Log other unexpected errors but continue processing
+                logger.warning(
+                    "Failed to read note '{}': {} ({}), skipping",
+                    note_name,
+                    str(e),
+                    type(e).__name__,
+                )
                 continue
 
         return note_contents

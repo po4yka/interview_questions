@@ -2,11 +2,15 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
 from loguru import logger
 from pydantic_ai import Agent
+
+from obsidian_vault.exceptions import LLMResponseError
+from obsidian_vault.utils.retry import async_retry
 
 from .config import get_openrouter_model
 from .factories import (
@@ -167,6 +171,12 @@ def _build_related_notes_context(
         return f"Related notes context: Error ({str(e)})"
 
 
+@async_retry(
+    max_attempts=3,
+    initial_delay=2.0,
+    retry_on=(ConnectionError, TimeoutError),
+    skip_on=(ValueError, KeyError, LLMResponseError),
+)
 async def run_technical_review(
     note_text: str,
     note_path: str,
@@ -176,6 +186,9 @@ async def run_technical_review(
     **kwargs: Any
 ) -> TechnicalReviewResult:
     """Run technical review on a note with taxonomy and related notes context.
+
+    This function includes retry logic for transient network errors.
+    JSON parsing errors and validation errors are not retried.
 
     Args:
         note_text: The note content to review
@@ -187,6 +200,11 @@ async def run_technical_review(
 
     Returns:
         TechnicalReviewResult with findings and revised text
+
+    Raises:
+        LLMResponseError: If the LLM returns invalid or truncated JSON
+        ConnectionError: If network connection fails (after retries)
+        TimeoutError: If request times out (after retries)
     """
     logger.debug(f"Starting technical review for: {note_path}")
     logger.debug(f"Note length: {len(note_text)} characters")
@@ -242,27 +260,47 @@ async def run_technical_review(
             logger.info(f"Technical review made changes: {result.output.explanation}")
 
         return result.output
-    except Exception as e:
-        # Enhanced error logging for debugging JSON parsing issues
-        logger.error("Technical review failed for {}: {}", note_path, e)
+    except (ValueError, json.JSONDecodeError) as e:
+        # Enhanced error logging for JSON parsing issues
+        error_msg = str(e)
+        logger.error("Technical review failed for {} due to JSON parsing error: {}", note_path, e)
         logger.debug("Exception type: {}", type(e).__name__)
         logger.debug("Exception details: {}", repr(e))
 
-        # Check if it's a JSON parsing error and provide more context
-        error_msg = str(e)
-        if "Invalid JSON" in error_msg or "EOF while parsing" in error_msg:
-            logger.error(
-                "JSON parsing error detected. This usually means the LLM response was truncated. "
-                "Check that max_tokens is set appropriately and the model supports the requested output length."
-            )
-            # Extract the problematic JSON if available
-            if "input_value=" in error_msg:
-                import re
-                match = re.search(r"input_value='([^']*)'", error_msg)
-                if match:
-                    truncated_json = match.group(1)
-                    logger.debug("Truncated JSON received from LLM: {}", truncated_json[:200])
+        # Extract problematic JSON excerpt if available
+        response_excerpt = None
+        if "input_value=" in error_msg:
+            import re
+            match = re.search(r"input_value='([^']*)'", error_msg)
+            if match:
+                response_excerpt = match.group(1)
+                logger.debug("Truncated JSON received from LLM: {}", response_excerpt[:200])
 
+        # Raise custom exception with context
+        raise LLMResponseError(
+            "LLM returned invalid or truncated JSON response. "
+            "This usually means max_tokens is too low or the model truncated the output. "
+            "Check agent settings and model capacity.",
+            response_excerpt=response_excerpt,
+            note_path=note_path,
+        ) from e
+    except (ConnectionError, TimeoutError) as e:
+        # Log network errors (will be retried by decorator)
+        logger.warning(
+            "Network error during technical review for {}: {} - Will retry",
+            note_path,
+            str(e),
+        )
+        raise
+    except Exception as e:
+        # Log unexpected errors
+        logger.error(
+            "Unexpected error during technical review for {}: {} ({})",
+            note_path,
+            str(e),
+            type(e).__name__,
+        )
+        logger.exception("Full traceback:")
         raise
 
 
