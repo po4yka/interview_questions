@@ -30,7 +30,38 @@ if TYPE_CHECKING:
 
 
 class ReviewGraph:
-    """LangGraph workflow for reviewing and fixing notes."""
+    """LangGraph workflow for reviewing and fixing notes.
+
+    WORKFLOW ARCHITECTURE:
+    ----------------------
+    START → initial_llm_review → metadata_sanity_check → run_validators
+      → check_bilingual_parity → [decision] → llm_fix_issues (loop) OR qa_verification (final)
+
+    EXAMPLE DEBUG LOG TRACE (typical iteration):
+    --------------------------------------------
+    INFO: Running validators (iteration 1)
+    DEBUG: Found 3 total issues
+    DEBUG: Pre-parity state: 3 existing validator issue(s)
+    INFO: Running bilingual parity check for note.md (iteration 1)
+    WARNING: Parity check found 2 new parity issue(s) - total issues: 3 validator + 2 parity = 5
+    DEBUG: Parity issues: ['EN Answer has 3 examples, RU Answer has 1 example']
+    DEBUG: [Decision] Evaluating next step: iteration=1/5, issues=5, error=False, completed=False, qa_passed=None
+    INFO: [Parity Check Complete] Decision=continue, TotalIssues=5 (validator=3, parity=2), Iteration=1/5
+    INFO: Fixing 5 issues
+    INFO: Applied fixes: ['Fixed YAML field moc', 'Added missing RU examples', ...]
+
+    [Loop back to validators...]
+
+    INFO: Running validators (iteration 2)
+    DEBUG: Found 0 total issues
+    DEBUG: Pre-parity state: 0 existing validator issue(s)
+    INFO: Running bilingual parity check for note.md (iteration 2)
+    INFO: Bilingual parity check passed - 0 validator issue(s) remain
+    DEBUG: [Decision] Evaluating next step: iteration=2/5, issues=0, error=False, completed=False, qa_passed=None
+    INFO: No validator issues - routing to QA verification
+    INFO: Running final QA verification for note.md
+    SUCCESS: QA verification passed: All content accurate, bilingual parity maintained
+    """
 
     def __init__(
         self,
@@ -355,20 +386,39 @@ class ReviewGraph:
         This node runs EARLY in the loop (after validators) to catch translation
         drift before the QA stage, reducing recycle time when parity issues exist.
 
+        ITERATION FLOW EXPLANATION:
+        1. Validators run first and add issues to state (e.g., YAML errors, missing tags)
+        2. This parity check runs and MERGES its issues with validator issues
+        3. Decision logic evaluates TOTAL issue count (validators + parity)
+        4. If ANY issues exist → route to llm_fix_issues
+        5. llm_fix_issues attempts to fix ALL issues (both types)
+        6. Loop back to validators (step 1) for next iteration
+        7. When NO issues remain → route to qa_verification (final gate)
+
+        This ensures validator issues and parity issues are fixed together in the
+        same loop, reducing the number of iterations needed.
+
         Args:
             state: Current state
 
         Returns:
-            State updates
+            State updates with merged issues and decision
         """
         state_obj = NoteReviewState.from_dict(state)
         state_obj.decision = None
         history_updates: list[dict[str, Any]] = []
 
-        logger.info(f"Running bilingual parity check for {state_obj.note_path}")
+        logger.info(
+            f"Running bilingual parity check for {state_obj.note_path} "
+            f"(iteration {state_obj.iteration})"
+        )
+        logger.debug(
+            f"Pre-parity state: {len(state_obj.issues)} existing validator issue(s)"
+        )
         history_updates.append(
             state_obj.add_history_entry(
-                "check_bilingual_parity", "Starting bilingual parity check"
+                "check_bilingual_parity",
+                f"Starting bilingual parity check (iteration {state_obj.iteration})",
             )
         )
 
@@ -399,34 +449,63 @@ class ReviewGraph:
                     )
                 )
 
+            existing_issue_count = len(state_obj.issues) if state_obj.issues else 0
+
             if parity_issues:
                 # Merge parity issues with existing validator issues
                 all_issues = (state_obj.issues or []) + parity_issues
                 updates["issues"] = all_issues
                 logger.warning(
-                    f"Parity check found {len(result.parity_issues)} issue(s) "
-                    f"and {len(result.missing_sections)} missing section(s)"
+                    f"Parity check found {len(parity_issues)} new parity issue(s) - "
+                    f"total issues: {existing_issue_count} validator + "
+                    f"{len(parity_issues)} parity = {len(all_issues)}"
                 )
+                logger.debug(f"Parity issues: {result.parity_issues}")
+                if result.missing_sections:
+                    logger.debug(f"Missing sections: {result.missing_sections}")
                 history_updates.append(
                     state_obj.add_history_entry(
                         "check_bilingual_parity",
-                        f"Found {len(parity_issues)} parity issue(s)",
+                        f"Found {len(parity_issues)} parity issue(s) - "
+                        f"merged with {existing_issue_count} validator issue(s)",
                         parity_issues=result.parity_issues,
                         missing_sections=result.missing_sections,
                     )
                 )
             else:
-                logger.info("Bilingual parity check passed")
+                logger.info(
+                    f"Bilingual parity check passed - {existing_issue_count} "
+                    f"validator issue(s) remain"
+                )
                 history_updates.append(
                     state_obj.add_history_entry(
-                        "check_bilingual_parity", "No parity issues found"
+                        "check_bilingual_parity", f"No parity issues found: {result.summary}"
                     )
                 )
+
+            # Compute and log decision for consistency with validators
+            next_state = replace(state_obj, issues=updates.get("issues", state_obj.issues))
+            decision, decision_message = self._compute_decision(next_state)
+            updates["decision"] = decision
+            logger.debug(f"Parity check decision: {decision} - {decision_message}")
+            history_updates.append(
+                next_state.add_history_entry("decision", decision_message)
+            )
+
+            # Summary log for debugging
+            final_issue_count = len(next_state.issues) if next_state.issues else 0
+            logger.info(
+                f"[Parity Check Complete] "
+                f"Decision={decision}, "
+                f"TotalIssues={final_issue_count} "
+                f"(validator={existing_issue_count}, parity={len(parity_issues)}), "
+                f"Iteration={state_obj.iteration}/{state_obj.max_iterations}"
+            )
 
             return updates
 
         except Exception as e:
-            logger.error(f"Error in bilingual parity check: {e}")
+            logger.error(f"Error in bilingual parity check: {e}", exc_info=True)
             history_updates.append(
                 state_obj.add_history_entry(
                     "check_bilingual_parity", f"Error during parity check: {e}"
@@ -834,19 +913,19 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         1. If max iterations reached -> done
         2. If error occurred -> done
         3. If completed flag set -> done
-        4. If no validator issues AND QA not run yet -> qa_verify
-        5. If no validator issues AND QA passed -> done
-        6. If validator issues remain -> continue
+        4. If no validator/parity issues AND QA not run yet -> qa_verify
+        5. If no validator/parity issues AND QA passed -> done
+        6. If validator/parity issues remain -> continue (fix loop)
         """
 
+        # Detailed debug logging for decision evaluation
         logger.debug(
-            "Evaluating decision",
-            iteration=state.iteration,
-            max_iterations=state.max_iterations,
-            issues=len(state.issues),
-            error=state.error,
-            completed=state.completed,
-            qa_verification_passed=state.qa_verification_passed,
+            f"[Decision] Evaluating next step: "
+            f"iteration={state.iteration}/{state.max_iterations}, "
+            f"issues={len(state.issues)}, "
+            f"error={state.error is not None}, "
+            f"completed={state.completed}, "
+            f"qa_passed={state.qa_verification_passed}"
         )
 
         if state.iteration >= state.max_iterations:
