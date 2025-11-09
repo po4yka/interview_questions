@@ -3,8 +3,10 @@
 from __future__ import annotations
 
 import re
+from collections import Counter
 from dataclasses import replace
 from datetime import datetime
+from enum import Enum
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
@@ -28,6 +30,39 @@ from .state import NoteReviewState, NoteReviewStateDict, ReviewIssue
 
 if TYPE_CHECKING:
     from obsidian_vault.utils.taxonomy_loader import TaxonomyLoader as TaxonomyLoaderType
+
+
+class CompletionMode(str, Enum):
+    """Completion strictness modes for validation.
+
+    Determines how strict the system is about remaining issues before completion.
+    """
+    STRICT = "strict"           # Block on any issue
+    STANDARD = "standard"       # Allow minor warnings (recommended)
+    PERMISSIVE = "permissive"   # Allow some errors (use with caution)
+
+
+# Thresholds: {severity: max_allowed_count}
+COMPLETION_THRESHOLDS = {
+    CompletionMode.STRICT: {
+        "CRITICAL": 0,
+        "ERROR": 0,
+        "WARNING": 0,
+        "INFO": float('inf'),  # Informational never blocks
+    },
+    CompletionMode.STANDARD: {
+        "CRITICAL": 0,
+        "ERROR": 0,
+        "WARNING": 3,  # Allow up to 3 warnings
+        "INFO": float('inf'),
+    },
+    CompletionMode.PERMISSIVE: {
+        "CRITICAL": 0,
+        "ERROR": 2,   # Allow up to 2 errors (use cautiously)
+        "WARNING": 10,  # Allow up to 10 warnings
+        "INFO": float('inf'),
+    },
+}
 
 
 class ReviewGraph:
@@ -93,6 +128,7 @@ class ReviewGraph:
         note_index: set[str],
         max_iterations: int = 5,
         dry_run: bool = False,
+        completion_mode: CompletionMode = CompletionMode.STANDARD,
     ):
         """Initialize the review graph.
 
@@ -102,12 +138,14 @@ class ReviewGraph:
             note_index: Set of all note IDs in the vault
             max_iterations: Maximum fix iterations per note
             dry_run: If True, don't write any files to disk (validation only)
+            completion_mode: Strictness level for issue completion (default: STANDARD)
         """
         self.vault_root = vault_root
         self.taxonomy = taxonomy
         self.note_index = note_index
         self.max_iterations = max_iterations
         self.dry_run = dry_run
+        self.completion_mode = completion_mode
         self.graph = self._build_graph()
 
     def _build_graph(self) -> StateGraph:
@@ -783,6 +821,130 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
         return created_files
 
+    def _get_concept_files(self) -> list[str]:
+        """Return list of available concept file basenames (without .md).
+
+        Returns:
+            List like ['c-kotlin-coroutines-basics', 'c-coroutines', ...]
+        """
+        concepts_dir = self.vault_root / "10-Concepts"
+        if not concepts_dir.exists():
+            return []
+
+        return sorted([
+            f.stem for f in concepts_dir.glob("c-*.md")
+        ])
+
+    def _get_qa_files(self) -> list[str]:
+        """Return list of available Q&A file basenames (without .md).
+
+        Returns:
+            List like ['q-coroutine-basics--kotlin--easy', ...]
+        """
+        qa_files = []
+        for folder in self.vault_root.glob("*/"):
+            if folder.name.startswith("00-") or folder.name.startswith("10-") or folder.name.startswith("90-"):
+                continue  # Skip admin, concepts, MOCs
+            qa_files.extend([f.stem for f in folder.glob("q-*.md")])
+        return sorted(qa_files)
+
+    def _get_moc_files(self) -> list[str]:
+        """Return list of available MOC file basenames (without .md).
+
+        Returns:
+            List like ['moc-kotlin', 'moc-android', ...]
+        """
+        mocs_dir = self.vault_root / "90-MOCs"
+        if not mocs_dir.exists():
+            return []
+
+        return sorted([
+            f.stem for f in mocs_dir.glob("moc-*.md")
+        ])
+
+    def _should_issues_block_completion(self, issues: list[ReviewIssue]) -> tuple[bool, str]:
+        """Check if issues should block completion based on severity thresholds.
+
+        Args:
+            issues: List of current issues
+
+        Returns:
+            (should_block, reason) tuple
+        """
+        if not issues:
+            return False, "No issues remaining"
+
+        # Count issues by severity
+        severity_counts = Counter(issue.severity for issue in issues)
+
+        # Get thresholds for current mode
+        thresholds = COMPLETION_THRESHOLDS[self.completion_mode]
+
+        # Check if any severity exceeds its threshold
+        blocking_severities = []
+        for severity, count in severity_counts.items():
+            max_allowed = thresholds.get(severity, 0)
+            if count > max_allowed:
+                blocking_severities.append(f"{severity}:{count}>{max_allowed}")
+
+        if blocking_severities:
+            reason = (
+                f"Issues exceed {self.completion_mode.value} mode thresholds: "
+                f"{', '.join(blocking_severities)}"
+            )
+            return True, reason
+        else:
+            summary = ', '.join(f"{sev}:{cnt}" for sev, cnt in severity_counts.items())
+            reason = (
+                f"Issues within {self.completion_mode.value} mode thresholds: {summary}"
+            )
+            return False, reason
+
+    def _format_fix_history(self, fix_attempts: list) -> str:
+        """Format fix attempt history for fixer agent context.
+
+        Args:
+            fix_attempts: List of FixAttempt objects
+
+        Returns:
+            Formatted string describing previous fix attempts
+        """
+        if not fix_attempts:
+            return "No previous fix attempts in this session."
+
+        # Limit to last 5 attempts to avoid token bloat
+        recent_attempts = fix_attempts[-5:]
+
+        lines = ["PREVIOUS FIX ATTEMPTS (learn from these):"]
+        for attempt in recent_attempts:
+            result_emoji = {
+                "success": "✓",
+                "partial": "~",
+                "failed": "✗",
+                "reverted": "↩"
+            }.get(attempt.result, "?")
+
+            lines.append(
+                f"\nIteration {attempt.iteration} [{result_emoji} {attempt.result}]:"
+            )
+            lines.append(f"  Targeted: {len(attempt.issues_targeted)} issue(s)")
+
+            if attempt.fixes_applied:
+                lines.append(f"  Applied: {', '.join(attempt.fixes_applied[:3])}")
+                if len(attempt.fixes_applied) > 3:
+                    lines.append(f"    ...and {len(attempt.fixes_applied) - 3} more")
+
+            if attempt.issues_remaining:
+                lines.append(f"  Still had: {len(attempt.issues_remaining)} issue(s) after")
+
+            # Add learning point for failed attempts
+            if attempt.result in ("failed", "reverted"):
+                lines.append("  ⚠ This approach didn't work - try a different strategy!")
+
+        lines.append("\nIMPORTANT: Do NOT repeat failed approaches. Learn from the patterns above.")
+
+        return "\n".join(lines)
+
     async def _llm_fix_issues(self, state: NoteReviewStateDict) -> dict[str, Any]:
         """Node: LLM fixes formatting/structure issues.
 
@@ -822,10 +984,40 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 for issue in state_obj.issues
             ]
 
+            # Get available file indexes to help fixer make valid link suggestions
+            available_concepts = self._get_concept_files()
+            available_qa_files = self._get_qa_files()
+            valid_moc_files = self._get_moc_files()
+
+            logger.debug(
+                f"Providing fixer with vault index: "
+                f"{len(available_concepts)} concepts, "
+                f"{len(available_qa_files)} Q&As, "
+                f"{len(valid_moc_files)} MOCs"
+            )
+
+            # Format fix history to provide context about previous attempts
+            fix_history = self._format_fix_history(state_obj.fix_attempts)
+            logger.debug(f"Providing fix history: {len(state_obj.fix_attempts)} previous attempt(s)")
+
             result = await run_issue_fixing(
                 note_text=state_obj.current_text,
                 issues=issue_descriptions,
                 note_path=state_obj.note_path,
+                available_concepts=available_concepts,
+                available_qa_files=available_qa_files,
+                valid_moc_files=valid_moc_files,
+                fix_history=fix_history,
+            )
+
+            # Record this fix attempt (will be updated with remaining issues after validation)
+            from .state import FixAttempt
+            attempt = FixAttempt(
+                iteration=state_obj.iteration,
+                issues_targeted=[issue.message for issue in state_obj.issues],
+                fixes_applied=result.fixes_applied if result.changes_made else [],
+                result="success" if result.changes_made else "failed",
+                issues_remaining=[],  # Will be filled in next iteration by validators
             )
 
             updates: dict[str, Any] = {}
@@ -850,6 +1042,10 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 )
                 # Escalate to human review instead of silently marking as completed
                 updates["requires_human_review"] = True
+
+            # Add this fix attempt to the history
+            updated_attempts = state_obj.fix_attempts + [attempt]
+            updates["fix_attempts"] = updated_attempts
 
             updates["history"] = history_updates
             updates.setdefault("decision", None)
@@ -1121,30 +1317,30 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             logger.info("Completed flag set - stopping iteration")
             return "done", message
 
-        # NEW: If no validator issues, route through QA verification
-        if not state.has_any_issues():
-            # If QA hasn't been run yet, route to QA verification
+        # NEW: Check if remaining issues should block completion based on severity
+        should_block, block_reason = self._should_issues_block_completion(state.issues)
+
+        if not should_block:
+            # If issues don't block AND QA hasn't been run yet, route to QA
             if state.qa_verification_passed is None:
-                message = "No validator issues - routing to QA verification"
+                message = f"Issues don't block completion ({block_reason}) - routing to QA verification"
                 logger.info(message)
                 return "qa_verify", message
             # If QA passed, we're done
             elif state.qa_verification_passed:
-                message = "Stopping: no issues remaining and QA verification passed"
+                message = f"Stopping: {block_reason} and QA verification passed"
                 logger.success("Workflow complete - QA verification passed")
                 return "done", message
             # If QA failed, issues were added back to state, so continue fixing
             else:
-                message = "Continuing: QA verification found issues to fix"
+                message = f"Continuing: QA verification found issues to fix (previous: {block_reason})"
                 logger.info(message)
                 return "continue", message
-
-        message = f"Continuing to iteration {state.iteration + 1}"
-        logger.info(
-            f"Continuing to iteration {state.iteration + 1} - "
-            f"{len(state.issues)} issue(s) remaining"
-        )
-        return "continue", message
+        else:
+            # Issues block completion - continue fixing
+            message = f"Continuing to iteration {state.iteration + 1} ({block_reason})"
+            logger.info(message)
+            return "continue", message
 
     def _should_continue_fixing(self, state: NoteReviewStateDict) -> str:
         """Determine if we should continue the fix loop.
@@ -1262,6 +1458,7 @@ def create_review_graph(
     vault_root: Path,
     max_iterations: int = 10,
     dry_run: bool = False,
+    completion_mode: CompletionMode = CompletionMode.STANDARD,
 ) -> ReviewGraph:
     """Create a ReviewGraph instance with loaded taxonomy and note index.
 
@@ -1269,6 +1466,7 @@ def create_review_graph(
         vault_root: Path to the vault root
         max_iterations: Maximum fix iterations per note (default: 10)
         dry_run: If True, don't write any files to disk (validation only)
+        completion_mode: Strictness level for completion (default: STANDARD)
 
     Returns:
         Configured ReviewGraph instance
@@ -1277,6 +1475,7 @@ def create_review_graph(
     logger.debug(f"Vault root: {vault_root}")
     logger.debug(f"Max iterations: {max_iterations}")
     logger.debug(f"Dry run mode: {dry_run}")
+    logger.debug(f"Completion mode: {completion_mode.value}")
 
     # Discover repo root
     repo_root = vault_root.parent if vault_root.name == "InterviewQuestions" else vault_root
@@ -1307,4 +1506,5 @@ def create_review_graph(
         note_index=note_index,
         max_iterations=max_iterations,
         dry_run=dry_run,
+        completion_mode=completion_mode,
     )

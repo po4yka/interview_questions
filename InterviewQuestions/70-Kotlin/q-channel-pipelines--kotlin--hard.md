@@ -8,8 +8,6 @@ topic: kotlin
 subtopics:
   - channels
   - coroutines
-  - fan-in
-  - fan-out
   - pipelines
 question_kind: theory
 difficulty: hard
@@ -41,7 +39,7 @@ tags: [backpressure, channels, coroutines, difficulty/hard, fan-in, fan-out, kot
 
 ## Ответ (RU)
 
-Конвейеры каналов - это мощный паттерн для построения систем конкурентной обработки данных, где корутины производят, трансформируют и потребляют данные через серию соединенных каналов.
+Конвейеры каналов - это мощный паттерн для построения систем конкурентной обработки данных, где корутины производят, трансформируют и потребляют данные через серию соединенных каналов. Этот паттерн основан на фундаментальных принципах [[c-kotlin-coroutines-basics|корутин Kotlin]].
 
 ### Основные Концепции
 
@@ -377,7 +375,7 @@ class BackpressureExample {
 
 ## Answer (EN)
 
-Channel pipelines are a powerful pattern for building concurrent data processing systems where coroutines produce, transform, and consume data through a series of connected channels. This pattern enables efficient parallel processing, load distribution, and resource management.
+Channel pipelines are a powerful pattern for building concurrent data processing systems where coroutines produce, transform, and consume data through a series of connected channels. This pattern is built on the fundamental concepts of [[c-kotlin-coroutines-basics|Kotlin coroutines]] and enables efficient parallel processing, load distribution, and resource management.
 
 ### Core Concepts
 
@@ -656,7 +654,7 @@ class FanInProcessor {
 // ...
 ```
 
-### Fan-In with Priority Queue
+### Fan-In with `PriorityQueue`
 
 ```kotlin
 class PriorityFanIn {

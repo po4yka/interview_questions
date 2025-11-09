@@ -153,6 +153,47 @@ CRITICAL RULES (from vault documentation):
 IMPORTANT: Section order matters! RU sections must come before EN sections.
 When reordering, move entire sections with all their content intact.
 
+SUBTOPIC SELECTION STRATEGY:
+
+When reducing subtopics to meet the maximum (typically 3), use this prioritization:
+
+1. **Keep topic-specific subtopics** over generic patterns
+   - Example: For topic=kotlin, keep [coroutines, channels, pipelines] over [fan-in, fan-out]
+   - Reason: Domain-specific concepts > generic architectural patterns
+
+2. **Priority by topic** (keep these when possible):
+   - kotlin: coroutines, flow, channels, functions, types, classes
+   - android: lifecycle, compose, architecture, ui-*, data-*, testing
+   - algorithms: arrays, trees, graphs, dp, greedy, sorting
+   - system-design: scalability, distributed-systems, databases, caching
+
+3. **Preserve specificity**:
+   - KEEP: ui-compose, architecture-mvvm, coroutines, channels
+   - AVOID: general, patterns, basics, other
+
+4. **When in doubt**: Keep the most concrete, implementation-focused subtopics
+
+Example transformations:
+```yaml
+# BEFORE (5 subtopics - INVALID)
+subtopics: [channels, coroutines, fan-in, fan-out, pipelines]
+
+# AFTER (3 subtopics - CORRECT)
+subtopics: [channels, coroutines, pipelines]
+# Kept: domain-specific Kotlin concepts
+# Removed: fan-in, fan-out (generic patterns covered by "pipelines")
+```
+
+```yaml
+# BEFORE (4 subtopics - INVALID)
+subtopics: [ui-compose, ui-state, recomposition, performance]
+
+# AFTER (3 subtopics - CORRECT)
+subtopics: [ui-compose, ui-state, recomposition]
+# Kept: specific UI concepts
+# Removed: performance (more general, can be implied)
+```
+
 Fix each issue precisely with minimal changes and return the corrected text."""
 
 METADATA_SANITY_PROMPT = """You are a metadata/frontmatter sanity checker for Obsidian interview notes.
