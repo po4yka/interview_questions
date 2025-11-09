@@ -26,9 +26,12 @@ from .agents import (
     run_qa_verification,
     run_technical_review,
 )
+from .atomic_related_fixer import AtomicRelatedFixer  # PHASE 3 FIX
 from .fix_memory import FixMemory  # PHASE 1 FIX
+from .smart_code_parity import SmartCodeParityChecker  # PHASE 3 FIX
 from .smart_validators import SmartValidatorSelector  # PHASE 2 FIX
 from .state import NoteReviewState, NoteReviewStateDict, ReviewIssue
+from .strict_qa_criteria import StrictQAVerifier  # PHASE 3 FIX
 from .timestamp_policy import TimestampPolicy  # PHASE 2 FIX
 
 if TYPE_CHECKING:
@@ -154,6 +157,10 @@ class ReviewGraph:
         # PHASE 2 FIX: Add Timestamp Policy and Smart Validator Selector
         self.timestamp_policy = TimestampPolicy(vault_root)
         self.smart_selector = SmartValidatorSelector()
+        # PHASE 3 FIX: Add Atomic Related Fixer, Smart Code Parity, and Strict QA
+        self.atomic_related = AtomicRelatedFixer()
+        self.code_parity = SmartCodeParityChecker()
+        self.strict_qa = StrictQAVerifier()
         self.graph = self._build_graph()
 
     def _build_graph(self) -> StateGraph:
@@ -1086,6 +1093,11 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             memory = self._get_fix_memory(state_obj.note_path)
             logger.debug(f"Fix Memory status: {memory.get_summary()}")
 
+            # PHASE 3 FIX: Generate additional rules for fixer prompt
+            atomic_related_rules = self.atomic_related.format_rules_for_prompt()
+            code_parity_rules = self.code_parity.format_rules_for_prompt()
+            timestamp_rules = self.timestamp_policy.format_rule_for_prompt()
+
             result = await run_issue_fixing(
                 note_text=state_obj.current_text,
                 issues=issue_descriptions,
@@ -1094,6 +1106,10 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 available_qa_files=available_qa_files,
                 valid_moc_files=valid_moc_files,
                 fix_history=fix_history,
+                # PHASE 3 FIX: Add strict rules to fixer prompt
+                atomic_related_rules=atomic_related_rules,
+                code_parity_rules=code_parity_rules,
+                timestamp_rules=timestamp_rules,
             )
 
             # Record this fix attempt (will be updated with remaining issues after validation)
@@ -1213,10 +1229,71 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         )
 
         try:
+            # PHASE 3 FIX: Apply strict QA criteria first (pre-check before LLM)
+            strict_result = self.strict_qa.verify(
+                current_issues=state_obj.issues,
+                history=state_obj.history,
+                issue_history=state_obj.issue_history,
+                iteration=state_obj.iteration,
+            )
+
+            logger.debug(f"Strict QA pre-check: {strict_result.summary}")
+
+            # If strict QA fails, don't even bother with LLM verification
+            if not strict_result.should_pass:
+                logger.warning(
+                    f"Strict QA pre-check FAILED: {len(strict_result.blocking_reasons)} blocking reason(s)"
+                )
+
+                # Convert blocking reasons to issues
+                qa_issues = []
+                for reason in strict_result.blocking_reasons:
+                    qa_issues.append(
+                        ReviewIssue(
+                            severity=reason.severity,
+                            message=f"[QA] {reason.message}",
+                            field="qa_check",
+                        )
+                    )
+
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "strict_qa_precheck",
+                        f"✗ Strict QA pre-check failed: {strict_result.summary}",
+                        blocking_reasons=[r.message for r in strict_result.blocking_reasons],
+                        warnings=strict_result.warnings,
+                    )
+                )
+
+                # Return failure without calling LLM QA
+                return {
+                    "qa_verification_passed": False,
+                    "qa_verification_summary": strict_result.summary,
+                    "qa_failure_summary": f"Strict QA pre-check failed: {strict_result.summary}",
+                    "issues": qa_issues,
+                    "decision": "continue",  # Continue fixing
+                    "history": history_updates,
+                }
+
+            # If strict QA passes, proceed with LLM verification
+            logger.info("Strict QA pre-check PASSED - proceeding to LLM verification")
+            history_updates.append(
+                state_obj.add_history_entry(
+                    "strict_qa_precheck",
+                    f"✓ Strict QA pre-check passed: {strict_result.summary}",
+                    warnings=strict_result.warnings,
+                )
+            )
+
+            # Generate QA criteria for LLM prompt
+            qa_criteria = self.strict_qa.format_rules_for_qa_agent()
+
             result = await run_qa_verification(
                 note_text=state_obj.current_text,
                 note_path=state_obj.note_path,
                 iteration_count=state_obj.iteration,
+                # PHASE 3 FIX: Add strict criteria to QA prompt
+                qa_criteria=qa_criteria,
             )
 
             updates: dict[str, Any] = {
