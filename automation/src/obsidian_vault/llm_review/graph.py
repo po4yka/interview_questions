@@ -26,7 +26,13 @@ from .agents import (
     run_qa_verification,
     run_technical_review,
 )
+from .atomic_related_fixer import AtomicRelatedFixer  # PHASE 3 FIX
+from .fix_memory import FixMemory  # PHASE 1 FIX
+from .smart_code_parity import SmartCodeParityChecker  # PHASE 3 FIX
+from .smart_validators import SmartValidatorSelector  # PHASE 2 FIX
 from .state import NoteReviewState, NoteReviewStateDict, ReviewIssue
+from .strict_qa_criteria import StrictQAVerifier  # PHASE 3 FIX
+from .timestamp_policy import TimestampPolicy  # PHASE 2 FIX
 
 if TYPE_CHECKING:
     from obsidian_vault.utils.taxonomy_loader import TaxonomyLoader as TaxonomyLoaderType
@@ -146,6 +152,15 @@ class ReviewGraph:
         self.max_iterations = max_iterations
         self.dry_run = dry_run
         self.completion_mode = completion_mode
+        # PHASE 1 FIX: Add Fix Memory to track already-fixed fields
+        self.fix_memory: dict[str, FixMemory] = {}  # Keyed by note_path
+        # PHASE 2 FIX: Add Timestamp Policy and Smart Validator Selector
+        self.timestamp_policy = TimestampPolicy(vault_root)
+        self.smart_selector = SmartValidatorSelector()
+        # PHASE 3 FIX: Add Atomic Related Fixer, Smart Code Parity, and Strict QA
+        self.atomic_related = AtomicRelatedFixer()
+        self.code_parity = SmartCodeParityChecker()
+        self.strict_qa = StrictQAVerifier()
         self.graph = self._build_graph()
 
     def _build_graph(self) -> StateGraph:
@@ -276,6 +291,9 @@ class ReviewGraph:
     async def _run_validators(self, state: NoteReviewStateDict) -> dict[str, Any]:
         """Node: Run metadata checks and structural validation scripts.
 
+        PHASE 1 FIX: This node now runs metadata, structural, AND parity checks
+        IN PARALLEL using asyncio.gather to reduce iteration count.
+
         This node now performs BOTH metadata sanity checks AND structural validation
         on every iteration, ensuring that YAML changes made by the fix agent are
         re-validated in subsequent iterations.
@@ -299,50 +317,140 @@ class ReviewGraph:
         )
 
         try:
-            # STEP 1: Run metadata sanity check (runs every iteration now)
+            # PHASE 2 FIX: Smart validator selection based on what changed
+            import asyncio
+
+            # Detect what changed (if iteration > 1)
+            selected_validators = []
+            if state_obj.iteration == 0:
+                # First iteration: run all validators
+                selected_validators = ["metadata", "structural", "parity"]
+                logger.info("Iteration 1: Running all validators")
+            else:
+                # Use smart selection based on changes
+                diff = self.smart_selector.detect_changes(
+                    state_obj.original_text,
+                    state_obj.current_text
+                )
+                selected_validators = self.smart_selector.select_validators(
+                    diff,
+                    state_obj.iteration + 1
+                )
+
+                # Log savings
+                calls_saved, pct_saved = self.smart_selector.estimate_savings(
+                    selected_validators, total_validators=3
+                )
+                if calls_saved > 0:
+                    logger.info(
+                        f"Smart selection saved {calls_saved} validator call(s) ({pct_saved:.0f}%)"
+                    )
+
+            # PHASE 1 FIX: Run selected validators IN PARALLEL
+            # This includes metadata, structural, AND parity checks concurrently
             logger.info(
-                f"Running metadata sanity check for {state_obj.note_path} "
+                f"Running {len(selected_validators)} validator(s) in parallel for {state_obj.note_path} "
                 f"(iteration {state_obj.iteration + 1})"
             )
-            metadata_result = await run_metadata_sanity_check(
-                note_text=state_obj.current_text,
-                note_path=state_obj.note_path,
-            )
 
-            # Convert metadata findings to ReviewIssues
-            metadata_issues = []
-            for issue in metadata_result.issues_found:
-                metadata_issues.append(
-                    ReviewIssue(
-                        severity="ERROR",
-                        message=f"[Metadata] {issue}",
-                        field="frontmatter",
-                    )
+            # Build tasks for selected validators
+            tasks = {}
+            if "metadata" in selected_validators:
+                tasks["metadata"] = run_metadata_sanity_check(
+                    note_text=state_obj.current_text,
+                    note_path=state_obj.note_path,
                 )
-            for warning in metadata_result.warnings:
-                metadata_issues.append(
-                    ReviewIssue(
-                        severity="WARNING",
-                        message=f"[Metadata] {warning}",
-                        field="frontmatter",
-                    )
+            if "parity" in selected_validators:
+                tasks["parity"] = run_bilingual_parity_check(
+                    note_text=state_obj.current_text,
+                    note_path=state_obj.note_path,
                 )
 
-            if metadata_issues:
-                logger.info(
-                    f"Metadata sanity check found {len(metadata_result.issues_found)} issue(s) "
-                    f"and {len(metadata_result.warnings)} warning(s)"
-                )
-                history_updates.append(
-                    state_obj.add_history_entry(
-                        "metadata_sanity_check",
-                        f"Found {len(metadata_result.issues_found)} issue(s) and {len(metadata_result.warnings)} warning(s)",
-                        issues=metadata_result.issues_found,
-                        warnings=metadata_result.warnings,
-                    )
-                )
+            # Execute selected validators in parallel
+            if tasks:
+                results = await asyncio.gather(*tasks.values())
+                # Map results back to validator names
+                result_map = dict(zip(tasks.keys(), results))
+                metadata_result = result_map.get("metadata")
+                parity_result = result_map.get("parity")
             else:
-                logger.debug("No metadata issues found")
+                metadata_result = None
+                parity_result = None
+
+            # Convert metadata findings to ReviewIssues (if validator ran)
+            metadata_issues = []
+            if metadata_result is not None:
+                for issue in metadata_result.issues_found:
+                    metadata_issues.append(
+                        ReviewIssue(
+                            severity="ERROR",
+                            message=f"[Metadata] {issue}",
+                            field="frontmatter",
+                        )
+                    )
+                for warning in metadata_result.warnings:
+                    metadata_issues.append(
+                        ReviewIssue(
+                            severity="WARNING",
+                            message=f"[Metadata] {warning}",
+                            field="frontmatter",
+                        )
+                    )
+
+                if metadata_issues:
+                    logger.info(
+                        f"Metadata sanity check found {len(metadata_result.issues_found)} issue(s) "
+                        f"and {len(metadata_result.warnings)} warning(s)"
+                    )
+                    history_updates.append(
+                        state_obj.add_history_entry(
+                            "metadata_sanity_check",
+                            f"Found {len(metadata_result.issues_found)} issue(s) and {len(metadata_result.warnings)} warning(s)",
+                            issues=metadata_result.issues_found,
+                            warnings=metadata_result.warnings,
+                        )
+                    )
+                else:
+                    logger.debug("No metadata issues found")
+            else:
+                logger.debug("Metadata validator skipped (no changes)")
+
+            # PHASE 2 FIX: Process parity results (if validator ran)
+            parity_issues = []
+            if parity_result is not None:
+                for issue in parity_result.parity_issues:
+                    parity_issues.append(
+                        ReviewIssue(
+                            severity="ERROR",
+                            message=f"[Parity] {issue}",
+                            field="content",
+                        )
+                    )
+                for section in parity_result.missing_sections:
+                    parity_issues.append(
+                        ReviewIssue(
+                            severity="ERROR",
+                            message=f"[Parity] Missing section: {section}",
+                            field="content",
+                        )
+                    )
+
+                if parity_issues:
+                    logger.info(
+                        f"Parity check found {len(parity_issues)} issue(s)"
+                    )
+                    history_updates.append(
+                        state_obj.add_history_entry(
+                            "bilingual_parity_check",
+                            f"Found {len(parity_issues)} parity issue(s)",
+                            parity_issues=parity_result.parity_issues,
+                            missing_sections=parity_result.missing_sections,
+                        )
+                    )
+                else:
+                    logger.debug("No parity issues found")
+            else:
+                logger.debug("Parity validator skipped (no changes)")
 
             # STEP 2: Run structural validators
             logger.debug("Running structural validators...")
@@ -369,18 +477,20 @@ class ReviewGraph:
                 ReviewIssue.from_validation_issue(issue) for issue in structural_issues
             ]
 
-            # STEP 3: Merge metadata and structural issues
-            all_review_issues = metadata_issues + structural_review_issues
+            # STEP 3: Merge metadata, structural, AND parity issues (PHASE 1 FIX)
+            all_review_issues = metadata_issues + structural_review_issues + parity_issues
 
             logger.info(
                 f"Found {len(all_review_issues)} total issues "
-                f"({len(metadata_issues)} metadata + {len(structural_review_issues)} structural)"
+                f"({len(metadata_issues)} metadata + {len(structural_review_issues)} structural + "
+                f"{len(parity_issues)} parity)"
             )
             history_updates.append(
                 state_obj.add_history_entry(
                     "run_validators",
                     f"Found {len(all_review_issues)} total issues "
-                    f"({len(metadata_issues)} metadata + {len(structural_review_issues)} structural)",
+                    f"({len(metadata_issues)} metadata + {len(structural_review_issues)} structural + "
+                    f"{len(parity_issues)} parity)",
                     issues=[f"{i.severity}: {i.message}" for i in all_review_issues],
                 )
             )
@@ -476,128 +586,70 @@ class ReviewGraph:
             }
 
     async def _check_bilingual_parity(self, state: NoteReviewStateDict) -> dict[str, Any]:
-        """Node: Check bilingual parity between EN and RU sections.
+        """Node: Record issue history for oscillation detection.
 
-        This node runs EARLY in the loop (after validators) to catch translation
-        drift before the QA stage, reducing recycle time when parity issues exist.
+        PHASE 1 FIX: This node is now a pass-through since parity checking
+        has been moved to run in parallel with validators in _run_validators.
 
-        ITERATION FLOW EXPLANATION:
-        1. Validators run first and add issues to state (e.g., YAML errors, missing tags)
-        2. This parity check runs and MERGES its issues with validator issues
-        3. Decision logic evaluates TOTAL issue count (validators + parity)
-        4. If ANY issues exist → route to llm_fix_issues
-        5. llm_fix_issues attempts to fix ALL issues (both types)
-        6. Loop back to validators (step 1) for next iteration
-        7. When NO issues remain → route to qa_verification (final gate)
-
-        This ensures validator issues and parity issues are fixed together in the
-        same loop, reducing the number of iterations needed.
+        This node now serves to:
+        1. Record current issues for oscillation detection
+        2. Compute the decision for next step
+        3. Maintain the graph structure for backward compatibility
 
         Args:
             state: Current state
 
         Returns:
-            State updates with merged issues and decision
+            State updates with decision
         """
         state_obj = NoteReviewState.from_dict(state)
         state_obj.decision = None
         history_updates: list[dict[str, Any]] = []
 
-        logger.info(
-            f"Running bilingual parity check for {state_obj.note_path} "
-            f"(iteration {state_obj.iteration})"
-        )
         logger.debug(
-            f"Pre-parity state: {len(state_obj.issues)} existing validator issue(s)"
+            f"Recording issue state for oscillation detection (iteration {state_obj.iteration})"
         )
-        history_updates.append(
-            state_obj.add_history_entry(
-                "check_bilingual_parity",
-                f"Starting bilingual parity check (iteration {state_obj.iteration})",
-            )
+
+        # PHASE 1 FIX: Record current issues for oscillation detection
+        state_obj.record_current_issues()
+        logger.debug(
+            f"Issue history now has {len(state_obj.issue_history)} snapshot(s)"
         )
 
         try:
-            result = await run_bilingual_parity_check(
-                note_text=state_obj.current_text,
-                note_path=state_obj.note_path,
-            )
-
-            updates: dict[str, Any] = {"history": history_updates}
-
-            # Convert parity findings to ReviewIssues and add to state
-            parity_issues = []
-            for issue in result.parity_issues:
-                parity_issues.append(
-                    ReviewIssue(
-                        severity="ERROR",
-                        message=f"[Parity] {issue}",
-                        field="content",
-                    )
-                )
-            for section in result.missing_sections:
-                parity_issues.append(
-                    ReviewIssue(
-                        severity="ERROR",
-                        message=f"[Parity] Missing section: {section}",
-                        field="content",
-                    )
-                )
-
+            # Parity check already ran in parallel with validators
+            # Just log the current state
             existing_issue_count = len(state_obj.issues) if state_obj.issues else 0
-
-            if parity_issues:
-                # Merge parity issues with existing validator issues
-                all_issues = (state_obj.issues or []) + parity_issues
-                updates["issues"] = all_issues
-                logger.warning(
-                    f"Parity check found {len(parity_issues)} new parity issue(s) - "
-                    f"total issues: {existing_issue_count} validator + "
-                    f"{len(parity_issues)} parity = {len(all_issues)}"
-                )
-                logger.debug(f"Parity issues: {result.parity_issues}")
-                if result.missing_sections:
-                    logger.debug(f"Missing sections: {result.missing_sections}")
-                history_updates.append(
-                    state_obj.add_history_entry(
-                        "check_bilingual_parity",
-                        f"Found {len(parity_issues)} parity issue(s) - "
-                        f"merged with {existing_issue_count} validator issue(s)",
-                        parity_issues=result.parity_issues,
-                        missing_sections=result.missing_sections,
-                    )
-                )
-            else:
-                logger.info(
-                    f"Bilingual parity check passed - {existing_issue_count} "
-                    f"validator issue(s) remain"
-                )
-                history_updates.append(
-                    state_obj.add_history_entry(
-                        "check_bilingual_parity", f"No parity issues found: {result.summary}"
-                    )
-                )
-
-            # Compute and log decision for consistency with validators
-            next_state = replace(state_obj, issues=updates.get("issues", state_obj.issues))
-            decision, decision_message = self._compute_decision(next_state)
-            updates["decision"] = decision
-            logger.debug(f"Parity check decision: {decision} - {decision_message}")
+            logger.info(
+                f"Total issues after parallel validation: {existing_issue_count}"
+            )
             history_updates.append(
-                next_state.add_history_entry("decision", decision_message)
+                state_obj.add_history_entry(
+                    "check_bilingual_parity",
+                    f"Recorded issue state with {existing_issue_count} issue(s) for oscillation detection"
+                    )
+                )
+
+            # Compute and log decision
+            decision, decision_message = self._compute_decision(state_obj)
+            logger.debug(f"Decision after issue recording: {decision} - {decision_message}")
+            history_updates.append(
+                state_obj.add_history_entry("decision", decision_message)
             )
 
             # Summary log for debugging
-            final_issue_count = len(next_state.issues) if next_state.issues else 0
             logger.info(
-                f"[Parity Check Complete] "
+                f"[Issue Recording Complete] "
                 f"Decision={decision}, "
-                f"TotalIssues={final_issue_count} "
-                f"(validator={existing_issue_count}, parity={len(parity_issues)}), "
+                f"TotalIssues={existing_issue_count}, "
                 f"Iteration={state_obj.iteration}/{state_obj.max_iterations}"
             )
 
-            return updates
+            return {
+                "decision": decision,
+                "issue_history": [list(s) for s in state_obj.issue_history],
+                "history": history_updates,
+            }
 
         except Exception as e:
             logger.error("Error in bilingual parity check: {}", e, exc_info=True)
@@ -900,22 +952,55 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             )
             return False, reason
 
-    def _format_fix_history(self, fix_attempts: list) -> str:
+    def _get_fix_memory(self, note_path: str) -> FixMemory:
+        """Get or create FixMemory for a note.
+
+        PHASE 1 FIX: Returns a FixMemory instance that tracks already-fixed fields
+        to prevent oscillation.
+
+        Args:
+            note_path: Path to the note
+
+        Returns:
+            FixMemory instance for this note
+        """
+        if note_path not in self.fix_memory:
+            self.fix_memory[note_path] = FixMemory()
+            logger.debug(f"Created new FixMemory for {note_path}")
+        return self.fix_memory[note_path]
+
+    def _format_fix_history(self, fix_attempts: list, note_path: str, current_iteration: int) -> str:
         """Format fix attempt history for fixer agent context.
+
+        PHASE 1 FIX: Now includes Fix Memory context to prevent re-fixing.
 
         Args:
             fix_attempts: List of FixAttempt objects
+            note_path: Path to current note
+            current_iteration: Current iteration number
 
         Returns:
-            Formatted string describing previous fix attempts
+            Formatted string describing previous fix attempts and fixed fields
         """
+        lines = []
+
+        # PHASE 1 FIX: Add Fix Memory context first
+        memory = self._get_fix_memory(note_path)
+        memory_context = memory.get_context_for_fixer(current_iteration)
+        lines.append(memory_context)
+        lines.append("")
+        lines.append("=" * 70)
+        lines.append("")
+
+        # Original fix history logic
         if not fix_attempts:
-            return "No previous fix attempts in this session."
+            lines.append("No previous fix attempts in this session.")
+            return "\n".join(lines)
 
         # Limit to last 5 attempts to avoid token bloat
         recent_attempts = fix_attempts[-5:]
 
-        lines = ["PREVIOUS FIX ATTEMPTS (learn from these):"]
+        lines.append("PREVIOUS FIX ATTEMPTS (learn from these):")
         for attempt in recent_attempts:
             result_emoji = {
                 "success": "✓",
@@ -996,9 +1081,22 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 f"{len(valid_moc_files)} MOCs"
             )
 
-            # Format fix history to provide context about previous attempts
-            fix_history = self._format_fix_history(state_obj.fix_attempts)
+            # PHASE 1 FIX: Format fix history with Fix Memory context
+            fix_history = self._format_fix_history(
+                state_obj.fix_attempts,
+                state_obj.note_path,
+                state_obj.iteration
+            )
             logger.debug(f"Providing fix history: {len(state_obj.fix_attempts)} previous attempt(s)")
+
+            # PHASE 1 FIX: Get Fix Memory for this note
+            memory = self._get_fix_memory(state_obj.note_path)
+            logger.debug(f"Fix Memory status: {memory.get_summary()}")
+
+            # PHASE 3 FIX: Generate additional rules for fixer prompt
+            atomic_related_rules = self.atomic_related.format_rules_for_prompt()
+            code_parity_rules = self.code_parity.format_rules_for_prompt()
+            timestamp_rules = self.timestamp_policy.format_rule_for_prompt()
 
             result = await run_issue_fixing(
                 note_text=state_obj.current_text,
@@ -1008,6 +1106,10 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 available_qa_files=available_qa_files,
                 valid_moc_files=valid_moc_files,
                 fix_history=fix_history,
+                # PHASE 3 FIX: Add strict rules to fixer prompt
+                atomic_related_rules=atomic_related_rules,
+                code_parity_rules=code_parity_rules,
+                timestamp_rules=timestamp_rules,
             )
 
             # Record this fix attempt (will be updated with remaining issues after validation)
@@ -1032,6 +1134,42 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                         fixes=result.fixes_applied,
                     )
                 )
+
+                # PHASE 1 FIX: Extract what was fixed and update Fix Memory
+                try:
+                    # Parse YAML before and after to detect changes
+                    yaml_before, _ = load_frontmatter_text(state_obj.current_text)
+                    yaml_after, _ = load_frontmatter_text(result.revised_text)
+
+                    if yaml_before and yaml_after:
+                        memory.extract_fixes_from_description(
+                            result.fixes_applied,
+                            yaml_before,
+                            yaml_after,
+                            state_obj.iteration
+                        )
+                        logger.debug(f"Updated Fix Memory: {memory.get_summary()}")
+
+                        # Check for regressions
+                        regressions = memory.detect_regressions(yaml_after, state_obj.iteration)
+                        if regressions:
+                            logger.error(
+                                f"REGRESSION DETECTED: {len(regressions)} field(s) were "
+                                f"modified that were already fixed in previous iterations!"
+                            )
+                            for regression in regressions:
+                                logger.error(f"  - {regression}")
+                            # Add regressions to history for debugging
+                            history_updates.append(
+                                state_obj.add_history_entry(
+                                    "fix_memory_regression",
+                                    f"Detected {len(regressions)} regression(s)",
+                                    regressions=regressions,
+                                )
+                            )
+                except Exception as mem_err:
+                    logger.warning(f"Failed to update Fix Memory: {mem_err}")
+
             else:
                 logger.warning("No fixes could be applied - escalating to human review")
                 history_updates.append(
@@ -1091,10 +1229,71 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         )
 
         try:
+            # PHASE 3 FIX: Apply strict QA criteria first (pre-check before LLM)
+            strict_result = self.strict_qa.verify(
+                current_issues=state_obj.issues,
+                history=state_obj.history,
+                issue_history=state_obj.issue_history,
+                iteration=state_obj.iteration,
+            )
+
+            logger.debug(f"Strict QA pre-check: {strict_result.summary}")
+
+            # If strict QA fails, don't even bother with LLM verification
+            if not strict_result.should_pass:
+                logger.warning(
+                    f"Strict QA pre-check FAILED: {len(strict_result.blocking_reasons)} blocking reason(s)"
+                )
+
+                # Convert blocking reasons to issues
+                qa_issues = []
+                for reason in strict_result.blocking_reasons:
+                    qa_issues.append(
+                        ReviewIssue(
+                            severity=reason.severity,
+                            message=f"[QA] {reason.message}",
+                            field="qa_check",
+                        )
+                    )
+
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "strict_qa_precheck",
+                        f"✗ Strict QA pre-check failed: {strict_result.summary}",
+                        blocking_reasons=[r.message for r in strict_result.blocking_reasons],
+                        warnings=strict_result.warnings,
+                    )
+                )
+
+                # Return failure without calling LLM QA
+                return {
+                    "qa_verification_passed": False,
+                    "qa_verification_summary": strict_result.summary,
+                    "qa_failure_summary": f"Strict QA pre-check failed: {strict_result.summary}",
+                    "issues": qa_issues,
+                    "decision": "continue",  # Continue fixing
+                    "history": history_updates,
+                }
+
+            # If strict QA passes, proceed with LLM verification
+            logger.info("Strict QA pre-check PASSED - proceeding to LLM verification")
+            history_updates.append(
+                state_obj.add_history_entry(
+                    "strict_qa_precheck",
+                    f"✓ Strict QA pre-check passed: {strict_result.summary}",
+                    warnings=strict_result.warnings,
+                )
+            )
+
+            # Generate QA criteria for LLM prompt
+            qa_criteria = self.strict_qa.format_rules_for_qa_agent()
+
             result = await run_qa_verification(
                 note_text=state_obj.current_text,
                 note_path=state_obj.note_path,
                 iteration_count=state_obj.iteration,
+                # PHASE 3 FIX: Add strict criteria to QA prompt
+                qa_criteria=qa_criteria,
             )
 
             updates: dict[str, Any] = {
@@ -1260,13 +1459,14 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
         Decision logic:
         1. If requires_human_review flag set -> summarize_failures (ESCALATION)
-        2. If max iterations reached AND (issues remain OR QA failed) -> summarize_failures
-        3. If max iterations reached AND no issues AND QA passed -> done
-        4. If error occurred -> done
-        5. If completed flag set -> done
-        6. If no validator/parity issues AND QA not run yet -> qa_verify
-        7. If no validator/parity issues AND QA passed -> done
-        8. If validator/parity issues remain -> continue (fix loop)
+        2. PHASE 1 FIX: If oscillation detected -> summarize_failures (CIRCUIT BREAKER)
+        3. If max iterations reached AND (issues remain OR QA failed) -> summarize_failures
+        4. If max iterations reached AND no issues AND QA passed -> done
+        5. If error occurred -> done
+        6. If completed flag set -> done
+        7. If no validator/parity issues AND QA not run yet -> qa_verify
+        8. If no validator/parity issues AND QA passed -> done
+        9. If validator/parity issues remain -> continue (fix loop)
         """
 
         # Detailed debug logging for decision evaluation
@@ -1288,6 +1488,18 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 f"{len(state.issues)} unresolved issue(s))"
             )
             logger.warning(message)
+            return "summarize_failures", message
+
+        # PHASE 1 FIX: Circuit breaker for oscillation detection
+        # Check if issues are oscillating (repeating across iterations)
+        is_oscillating, oscillation_explanation = state.detect_oscillation()
+        if is_oscillating:
+            message = (
+                f"CIRCUIT BREAKER TRIGGERED: Oscillation detected - stopping iteration. "
+                f"{oscillation_explanation}"
+            )
+            logger.error(message)
+            # Mark for human review since automated fixes are stuck in a loop
             return "summarize_failures", message
 
         if state.iteration >= state.max_iterations:
@@ -1418,6 +1630,12 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             max_iterations=self.max_iterations,
         )
         logger.debug(f"Initialized state with max_iterations={self.max_iterations}")
+
+        # PHASE 1 FIX: Clear Fix Memory for this note to start fresh
+        note_path_str = str(note_path.relative_to(self.vault_root.parent))
+        if note_path_str in self.fix_memory:
+            self.fix_memory[note_path_str].clear()
+            logger.debug("Cleared existing Fix Memory for this note")
 
         # Run the graph with timing
         import time

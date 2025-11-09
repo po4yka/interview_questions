@@ -953,6 +953,11 @@ def llm_review(
         "-c",
         help="Completion strictness: strict (no issues), standard (allow warnings), permissive (allow some errors)",
     ),
+    max_concurrent: int = typer.Option(
+        5,
+        "--max-concurrent",
+        help="Maximum number of notes to process concurrently (PHASE 2 FIX)",
+    ),
     backup: bool = typer.Option(
         True,
         "--backup/--no-backup",
@@ -1042,37 +1047,55 @@ def llm_review(
                 completion_mode=mode,
             )
 
-        # Process notes
+        # PHASE 2 FIX: Process notes in parallel with semaphore
         results = []
 
         async def process_all():
-            for note_path in notes:
-                console.print(f"[cyan]Processing:[/cyan] {note_path.relative_to(repo_root)}")
-                state = await review_graph.process_note(note_path)
-                results.append((note_path, state))
+            """Process notes in parallel with concurrency limit."""
+            # PHASE 2 FIX: Semaphore to limit concurrent processing
+            semaphore = asyncio.Semaphore(max_concurrent)
 
-                # Show summary
-                if state.error:
-                    console.print(f"  [red]✗[/red] Error: {state.error}")
-                elif state.changed:
-                    console.print(
-                        f"  [green]✓[/green] Modified "
-                        f"({state.iteration} iteration(s), {len(state.issues)} final issue(s))"
-                    )
+            async def process_one(note_path: Path) -> tuple[Path, any]:
+                """Process a single note with semaphore control."""
+                async with semaphore:
+                    console.print(f"[cyan]Processing:[/cyan] {note_path.relative_to(repo_root)}")
+                    state = await review_graph.process_note(note_path)
+
+                    # Show summary
+                    if state.error:
+                        console.print(f"  [red]✗[/red] Error: {state.error}")
+                    elif state.changed:
+                        console.print(
+                            f"  [green]✓[/green] Modified "
+                            f"({state.iteration} iteration(s), {len(state.issues)} final issue(s))"
+                        )
+                    else:
+                        console.print("  [green]✓[/green] No changes needed")
+
+                    # Save if not dry-run
+                    if not dry_run and state.changed:
+                        if backup:
+                            backup_path = note_path.with_suffix(".md.backup")
+                            backup_path.write_text(state.original_text, encoding="utf-8")
+                            console.print(f"  [dim]Backup: {backup_path.name}[/dim]")
+
+                        note_path.write_text(state.current_text, encoding="utf-8")
+                        console.print(f"  [dim]Saved changes to {note_path.name}[/dim]")
+
+                    console.print()
+                    return (note_path, state)
+
+            # PHASE 2 FIX: Process all notes concurrently
+            console.print(f"[bold]Processing up to {max_concurrent} notes concurrently[/bold]\n")
+            tasks = [process_one(note_path) for note_path in notes]
+            results_list = await asyncio.gather(*tasks, return_exceptions=True)
+
+            # Collect results, handling exceptions
+            for result in results_list:
+                if isinstance(result, Exception):
+                    console.print(f"  [red]✗[/red] Error: {result}")
                 else:
-                    console.print("  [green]✓[/green] No changes needed")
-
-                # Save if not dry-run
-                if not dry_run and state.changed:
-                    if backup:
-                        backup_path = note_path.with_suffix(".md.backup")
-                        backup_path.write_text(state.original_text, encoding="utf-8")
-                        console.print(f"  [dim]Backup: {backup_path.name}[/dim]")
-
-                    note_path.write_text(state.current_text, encoding="utf-8")
-                    console.print(f"  [dim]Saved changes to {note_path.name}[/dim]")
-
-                console.print()
+                    results.append(result)
 
         asyncio.run(process_all())
 
