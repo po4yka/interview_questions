@@ -34,13 +34,23 @@ class ReviewGraph:
 
     WORKFLOW ARCHITECTURE:
     ----------------------
-    START → initial_llm_review → metadata_sanity_check → run_validators
+    START → initial_llm_review → run_validators (includes metadata check each iteration)
       → check_bilingual_parity → [decision] → llm_fix_issues (loop) OR qa_verification (final)
+
+    METADATA VALIDATION STRATEGY:
+    -----------------------------
+    Metadata sanity checks now run INSIDE the validator loop (not just once at the start).
+    This ensures that any YAML changes made by the fix agent are re-validated on subsequent
+    iterations, closing the gap where auto-created concept files or repaired frontmatter
+    fields would bypass validation.
 
     EXAMPLE DEBUG LOG TRACE (typical iteration):
     --------------------------------------------
     INFO: Running validators (iteration 1)
-    DEBUG: Found 3 total issues
+    INFO: Running metadata sanity check for note.md (iteration 1)
+    DEBUG: Metadata sanity check found 2 issue(s)
+    DEBUG: Running structural validators...
+    DEBUG: Found 3 total issues (2 metadata + 1 structural)
     DEBUG: Pre-parity state: 3 existing validator issue(s)
     INFO: Running bilingual parity check for note.md (iteration 1)
     WARNING: Parity check found 2 new parity issue(s) - total issues: 3 validator + 2 parity = 5
@@ -53,6 +63,9 @@ class ReviewGraph:
     [Loop back to validators...]
 
     INFO: Running validators (iteration 2)
+    INFO: Running metadata sanity check for note.md (iteration 2)
+    DEBUG: No metadata issues found
+    DEBUG: Running structural validators...
     DEBUG: Found 0 total issues
     DEBUG: Pre-parity state: 0 existing validator issue(s)
     INFO: Running bilingual parity check for note.md (iteration 2)
@@ -92,7 +105,6 @@ class ReviewGraph:
 
         # Add nodes
         workflow.add_node("initial_llm_review", self._initial_llm_review)
-        workflow.add_node("metadata_sanity_check", self._metadata_sanity_check)
         workflow.add_node("run_validators", self._run_validators)
         workflow.add_node("check_bilingual_parity", self._check_bilingual_parity)
         workflow.add_node("llm_fix_issues", self._llm_fix_issues)
@@ -100,8 +112,7 @@ class ReviewGraph:
 
         # Define edges
         workflow.add_edge(START, "initial_llm_review")
-        workflow.add_edge("initial_llm_review", "metadata_sanity_check")
-        workflow.add_edge("metadata_sanity_check", "run_validators")
+        workflow.add_edge("initial_llm_review", "run_validators")
 
         # After validators, check bilingual parity
         workflow.add_edge("run_validators", "check_bilingual_parity")
@@ -195,103 +206,12 @@ class ReviewGraph:
                 "history": history_updates,
             }
 
-    async def _metadata_sanity_check(self, state: NoteReviewStateDict) -> dict[str, Any]:
-        """Node: Lightweight metadata/frontmatter sanity check.
-
-        Args:
-            state: Current state
-
-        Returns:
-            State updates
-        """
-        state_obj = NoteReviewState.from_dict(state)
-        state_obj.decision = None
-        history_updates: list[dict[str, Any]] = []
-
-        logger.info(f"Running metadata sanity check for {state_obj.note_path}")
-        history_updates.append(
-            state_obj.add_history_entry(
-                "metadata_sanity_check", "Starting metadata/frontmatter sanity check"
-            )
-        )
-
-        try:
-            result = await run_metadata_sanity_check(
-                note_text=state_obj.current_text,
-                note_path=state_obj.note_path,
-            )
-
-            updates: dict[str, Any] = {}
-
-            # Convert metadata findings to ReviewIssues and add to state
-            metadata_issues = []
-            for issue in result.issues_found:
-                metadata_issues.append(
-                    ReviewIssue(
-                        severity="ERROR",
-                        message=f"[Metadata] {issue}",
-                        field="frontmatter",
-                    )
-                )
-
-            for warning in result.warnings:
-                metadata_issues.append(
-                    ReviewIssue(
-                        severity="WARNING",
-                        message=f"[Metadata] {warning}",
-                        field="frontmatter",
-                    )
-                )
-
-            if metadata_issues:
-                # Add metadata issues to the state so validators can see them
-                updates["issues"] = metadata_issues
-                logger.info(
-                    f"Metadata sanity check found {len(result.issues_found)} issue(s) "
-                    f"and {len(result.warnings)} warning(s)"
-                )
-                history_updates.append(
-                    state_obj.add_history_entry(
-                        "metadata_sanity_check",
-                        f"Found {len(result.issues_found)} issue(s) and {len(result.warnings)} warning(s)",
-                        issues=result.issues_found,
-                        warnings=result.warnings,
-                    )
-                )
-            else:
-                logger.info("No metadata issues found")
-                history_updates.append(
-                    state_obj.add_history_entry(
-                        "metadata_sanity_check", "No metadata issues found"
-                    )
-                )
-
-            if result.suggestions:
-                history_updates.append(
-                    state_obj.add_history_entry(
-                        "metadata_sanity_check",
-                        f"Suggestions: {', '.join(result.suggestions)}",
-                    )
-                )
-
-            updates["history"] = history_updates
-            return updates
-
-        except Exception as e:
-            logger.error(f"Error in metadata sanity check: {e}")
-            history_updates.append(
-                state_obj.add_history_entry(
-                    "metadata_sanity_check", f"Error during metadata sanity check: {e}"
-                )
-            )
-            return {
-                "error": f"Metadata sanity check failed: {e}",
-                "completed": True,
-                "history": history_updates,
-            }
-
     async def _run_validators(self, state: NoteReviewStateDict) -> dict[str, Any]:
-        """Node: Run existing validation scripts.
+        """Node: Run metadata checks and structural validation scripts.
+
+        This node now performs BOTH metadata sanity checks AND structural validation
+        on every iteration, ensuring that YAML changes made by the fix agent are
+        re-validated in subsequent iterations.
 
         Args:
             state: Current state
@@ -312,7 +232,53 @@ class ReviewGraph:
         )
 
         try:
-            # Parse the current note text to get frontmatter and body
+            # STEP 1: Run metadata sanity check (runs every iteration now)
+            logger.info(
+                f"Running metadata sanity check for {state_obj.note_path} "
+                f"(iteration {state_obj.iteration + 1})"
+            )
+            metadata_result = await run_metadata_sanity_check(
+                note_text=state_obj.current_text,
+                note_path=state_obj.note_path,
+            )
+
+            # Convert metadata findings to ReviewIssues
+            metadata_issues = []
+            for issue in metadata_result.issues_found:
+                metadata_issues.append(
+                    ReviewIssue(
+                        severity="ERROR",
+                        message=f"[Metadata] {issue}",
+                        field="frontmatter",
+                    )
+                )
+            for warning in metadata_result.warnings:
+                metadata_issues.append(
+                    ReviewIssue(
+                        severity="WARNING",
+                        message=f"[Metadata] {warning}",
+                        field="frontmatter",
+                    )
+                )
+
+            if metadata_issues:
+                logger.info(
+                    f"Metadata sanity check found {len(metadata_result.issues_found)} issue(s) "
+                    f"and {len(metadata_result.warnings)} warning(s)"
+                )
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "metadata_sanity_check",
+                        f"Found {len(metadata_result.issues_found)} issue(s) and {len(metadata_result.warnings)} warning(s)",
+                        issues=metadata_result.issues_found,
+                        warnings=metadata_result.warnings,
+                    )
+                )
+            else:
+                logger.debug("No metadata issues found")
+
+            # STEP 2: Run structural validators
+            logger.debug("Running structural validators...")
             frontmatter, body = load_frontmatter_text(state_obj.current_text)
 
             # Create validators
@@ -326,34 +292,35 @@ class ReviewGraph:
             )
 
             # Run all validators
-            all_issues = []
+            structural_issues = []
             for validator in validators:
                 summary = validator.validate()
-                all_issues.extend(summary.issues)
+                structural_issues.extend(summary.issues)
 
             # Convert to ReviewIssue
-            review_issues = [ReviewIssue.from_validation_issue(issue) for issue in all_issues]
+            structural_review_issues = [
+                ReviewIssue.from_validation_issue(issue) for issue in structural_issues
+            ]
 
-            # Merge with any existing metadata issues from previous node
-            if state_obj.issues:
-                logger.debug(
-                    f"Merging {len(state_obj.issues)} existing metadata issues "
-                    f"with {len(review_issues)} validator issues"
-                )
-                review_issues = state_obj.issues + review_issues
+            # STEP 3: Merge metadata and structural issues
+            all_review_issues = metadata_issues + structural_review_issues
 
-            logger.info(f"Found {len(review_issues)} total issues")
+            logger.info(
+                f"Found {len(all_review_issues)} total issues "
+                f"({len(metadata_issues)} metadata + {len(structural_review_issues)} structural)"
+            )
             history_updates.append(
                 state_obj.add_history_entry(
                     "run_validators",
-                    f"Found {len(review_issues)} issues",
-                    issues=[f"{i.severity}: {i.message}" for i in review_issues],
+                    f"Found {len(all_review_issues)} total issues "
+                    f"({len(metadata_issues)} metadata + {len(structural_review_issues)} structural)",
+                    issues=[f"{i.severity}: {i.message}" for i in all_review_issues],
                 )
             )
 
             next_state = replace(
                 state_obj,
-                issues=review_issues,
+                issues=all_review_issues,
                 iteration=state_obj.iteration + 1,
             )
             decision, decision_message = self._compute_decision(next_state)
@@ -363,7 +330,7 @@ class ReviewGraph:
             )
 
             return {
-                "issues": review_issues,
+                "issues": all_review_issues,
                 "iteration": next_state.iteration,
                 "decision": decision,
                 "history": history_updates,
