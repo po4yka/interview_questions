@@ -84,6 +84,60 @@ The system iterates (up to 5 times by default) until:
 - Maximum iterations reached, OR
 - No more fixes can be applied
 
+### Phase 4: Knowledge-Gap Agent (Concept Enrichment)
+
+**NEW**: When validators complain about missing concept files, the system now:
+
+1. **Auto-creates concept stub files** with valid YAML frontmatter (as before)
+2. **Enriches stubs with meaningful content** using the knowledge-gap agent
+3. **Drafts seed content** instead of generic placeholders:
+   - Technical definitions (2-4 sentences explaining WHAT, WHY, WHERE)
+   - 3-5 key points covering essential aspects
+   - Usage examples and common scenarios (when relevant)
+   - Proper bilingual parity (EN/RU sections with equivalent content)
+
+**Example transformation**:
+
+Before (generic stub):
+```markdown
+# Summary (EN)
+
+Test Concept is a fundamental concept in software development.
+
+## Key Points (EN)
+
+- To be documented
+```
+
+After (enriched):
+```markdown
+# Summary (EN)
+
+Test Concept is a software testing approach that validates individual units of code
+in isolation from dependencies. It forms the foundation of automated testing strategies,
+enabling rapid feedback during development and facilitating refactoring.
+
+## Key Points (EN)
+
+- **Isolation**: Tests run independently without external dependencies
+- **Fast execution**: Unit tests should complete in milliseconds
+- **Test structure**: Follow the Arrange-Act-Assert (AAA) pattern
+- **Mocking**: Use test doubles to isolate the system under test
+- **Coverage**: Aim for high code coverage while focusing on meaningful scenarios
+```
+
+**Benefits**:
+- **Reduced validator churn**: Concept files have meaningful content from the start
+- **Better downstream passes**: Validators see complete documentation instead of placeholders
+- **Improved vault quality**: Auto-generated concepts are actually useful for interview prep
+- **Human intervention still needed**: Files marked `status: draft` with disclaimer for human review
+
+**How it works**:
+- Agent uses taxonomy context (topic, subtopics) to infer relevant content
+- Can incorporate excerpts from Q&A notes that reference the concept
+- Preserves YAML frontmatter exactly as-is (no modifications)
+- Falls back to generic stub if enrichment fails (graceful degradation)
+
 ## Usage Examples
 
 ### Review Specific Folder

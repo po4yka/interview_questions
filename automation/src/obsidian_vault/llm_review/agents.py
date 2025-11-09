@@ -75,6 +75,29 @@ class QAVerificationResult(BaseModel):
     )
 
 
+class ConceptEnrichmentResult(BaseModel):
+    """Result of enriching an auto-generated concept stub with meaningful content."""
+
+    enriched_content: str = Field(
+        description="The enriched concept note with meaningful definitions, examples, and references"
+    )
+    added_sections: list[str] = Field(
+        default_factory=list,
+        description="List of sections that were added or significantly enriched",
+    )
+    key_concepts: list[str] = Field(
+        default_factory=list,
+        description="Key technical concepts covered in the enriched content",
+    )
+    related_concepts: list[str] = Field(
+        default_factory=list,
+        description="Suggested related concept files (without c- prefix or .md extension)",
+    )
+    explanation: str = Field(
+        description="Brief explanation of what was enriched and the knowledge sources used"
+    )
+
+
 DEFAULT_OPENROUTER_MODEL = "anthropic/claude-sonnet-4"
 DEFAULT_TEMPERATURE = 0.2
 DEFAULT_TIMEOUT = 60.0
@@ -488,6 +511,111 @@ Be thorough but pragmatic. Minor style issues should go in quality_concerns, not
 The goal is to catch serious problems that would mislead interview candidates, not to demand perfection.
 """
 
+CONCEPT_ENRICHMENT_PROMPT = """You are a **knowledge-gap agent** that enriches auto-generated concept stub files.
+
+Your role is to transform generic placeholder content into meaningful, technically accurate concept documentation suitable for interview preparation.
+
+INPUT CONTEXT:
+You will receive:
+1. An auto-generated concept stub with valid YAML frontmatter but generic placeholder content
+2. The concept name/topic to document
+3. Topic/subtopic context from taxonomy
+4. Excerpts from Q&A notes that reference this concept (if available)
+
+PRIMARY GOALS:
+1. Write a clear, concise definition/summary of the concept (2-4 sentences)
+2. Identify 3-5 key points that capture the essential aspects
+3. Provide brief usage examples or common scenarios
+4. Suggest related concepts (if relevant)
+5. Maintain bilingual structure (EN/RU sections)
+
+CONTENT REQUIREMENTS:
+
+1. **Summary Sections**:
+   - Replace "is a fundamental concept in software development" with a SPECIFIC technical definition
+   - Explain WHAT it is, WHY it matters, and WHERE it's commonly used
+   - Keep it concise (2-4 sentences) but informative
+
+2. **Key Points Sections**:
+   - Replace "To be documented" with 3-5 concrete bullet points
+   - Each point should be a distinct, important aspect of the concept
+   - Focus on technical characteristics, use cases, or trade-offs
+   - Be specific but concise (1-2 lines per point)
+
+3. **Use Cases / Trade-offs** (add if relevant):
+   - When to use this concept
+   - Common scenarios or patterns
+   - Advantages and disadvantages
+
+4. **References** (add if possible):
+   - Replace "To be documented" with relevant documentation links
+   - Official docs, reputable articles, or standard references
+   - Avoid adding references if you're uncertain about URLs
+
+5. **Bilingual Parity**:
+   - Ensure EN and RU sections convey the same technical information
+   - Translate definitions accurately, maintaining technical precision
+   - Use proper Russian technical terminology
+
+CRITICAL RULES:
+1. DO NOT modify YAML frontmatter (keep it exactly as-is)
+2. DO NOT add wikilinks to concepts that don't exist (you won't know what exists)
+3. DO NOT invent URLs or references - only add if you're confident they're correct
+4. DO NOT make up technical details - be accurate or stay generic
+5. DO preserve the note structure (section ordering, markdown formatting)
+6. DO maintain the "auto-generated" disclaimer at the bottom of each section
+
+QUALITY BAR:
+- Definitions should be technically accurate and interview-relevant
+- Key points should help a candidate understand the concept quickly
+- Content should be more valuable than "To be documented" but NOT a full tutorial
+- Think "concise technical summary" not "comprehensive guide"
+
+OUTPUT FORMAT:
+Return a JSON object matching `ConceptEnrichmentResult`:
+{
+  "enriched_content": str,        // Full note text with enriched content
+  "added_sections": list[str],    // Sections that were enriched
+  "key_concepts": list[str],      // Technical concepts covered
+  "related_concepts": list[str],  // Suggested related concepts (names only, no c- or .md)
+  "explanation": str              // Brief explanation of enrichment
+}
+
+EXAMPLES OF GOOD ENRICHMENT:
+
+**Before (generic)**:
+```
+# Summary (EN)
+
+Test Concept is a fundamental concept in software development.
+```
+
+**After (enriched)**:
+```
+# Summary (EN)
+
+Test Concept is a software testing approach that validates individual units of code in isolation from dependencies. It forms the foundation of automated testing strategies, enabling rapid feedback during development and facilitating refactoring. Commonly implemented using frameworks like JUnit (Java), pytest (Python), or JUnit/Mockito (Kotlin/Android).
+```
+
+**Before (generic)**:
+```
+## Key Points (EN)
+
+- To be documented
+```
+
+**After (enriched)**:
+```
+## Key Points (EN)
+
+- **Isolation**: Tests run independently without external dependencies (databases, networks, file systems)
+- **Fast execution**: Unit tests should complete in milliseconds to enable rapid feedback loops
+- **Test structure**: Follow the Arrange-Act-Assert (AAA) pattern for clarity and maintainability
+- **Mocking**: Use test doubles (mocks, stubs, fakes) to isolate the system under test
+- **Coverage**: Aim for high code coverage while focusing on meaningful test scenarios
+```
+"""
+
 
 # Agent-specific model settings
 # These defaults balance creativity vs determinism for each agent's role
@@ -523,6 +651,15 @@ QA_VERIFICATION_SETTINGS = AgentModelSettings(
     temperature=0.3,
     # Lower penalties to allow comprehensive issue exploration
     presence_penalty=0.1,
+    frequency_penalty=0.1,
+)
+
+CONCEPT_ENRICHMENT_SETTINGS = AgentModelSettings(
+    # Moderate-high temperature for creative, knowledge-rich content generation
+    # Needs to synthesize information and provide meaningful explanations
+    temperature=0.4,
+    # Lower penalties to allow varied technical vocabulary and comprehensive coverage
+    presence_penalty=0.0,
     frequency_penalty=0.1,
 )
 
@@ -580,6 +717,20 @@ def get_qa_verification_agent() -> Agent:
         model=get_openrouter_model(agent_settings=QA_VERIFICATION_SETTINGS),
         output_type=QAVerificationResult,
         system_prompt=QA_VERIFICATION_PROMPT,
+    )
+
+
+def get_concept_enrichment_agent() -> Agent:
+    """Get the concept enrichment agent (lazy initialization).
+
+    Uses moderate-high temperature (0.4) for creative, knowledge-rich
+    content generation to transform generic stubs into meaningful documentation.
+    """
+    logger.debug("Creating concept enrichment agent with custom settings")
+    return Agent(
+        model=get_openrouter_model(agent_settings=CONCEPT_ENRICHMENT_SETTINGS),
+        output_type=ConceptEnrichmentResult,
+        system_prompt=CONCEPT_ENRICHMENT_PROMPT,
     )
 
 
@@ -791,4 +942,76 @@ async def run_qa_verification(
         return result.output
     except Exception as e:
         logger.error(f"QA verification failed for {note_path}: {e}")
+        raise
+
+
+async def run_concept_enrichment(
+    concept_stub: str,
+    concept_name: str,
+    topic: str,
+    referencing_notes: list[str] | None = None,
+    **kwargs: Any,
+) -> ConceptEnrichmentResult:
+    """Enrich an auto-generated concept stub with meaningful content.
+
+    This agent transforms generic placeholder content into a useful technical summary
+    with definitions, key points, and examples.
+
+    Args:
+        concept_stub: The auto-generated concept file content (with generic placeholders)
+        concept_name: Name of the concept (e.g., "dependency-injection", "coroutines")
+        topic: Topic/domain from taxonomy (e.g., "kotlin", "android", "architecture-patterns")
+        referencing_notes: Optional list of Q&A note excerpts that reference this concept
+        **kwargs: Additional context
+
+    Returns:
+        ConceptEnrichmentResult with enriched content and metadata
+    """
+    logger.debug(f"Starting concept enrichment for: {concept_name} (topic: {topic})")
+
+    # Build context from referencing notes
+    references_context = ""
+    if referencing_notes:
+        logger.debug(f"Including {len(referencing_notes)} referencing notes as context")
+        references_context = "\n\nREFERENCING NOTES (for context):\n"
+        references_context += "\n---\n".join(referencing_notes[:5])  # Limit to 5 for token efficiency
+
+    prompt = f"""Enrich this auto-generated concept stub with meaningful technical content.
+
+CONCEPT NAME: {concept_name}
+TOPIC/DOMAIN: {topic}
+
+CURRENT STUB CONTENT:
+```markdown
+{concept_stub}
+```
+{references_context}
+
+Transform the generic placeholder content into a concise, technically accurate summary suitable for interview preparation.
+Focus on:
+1. Clear definition in Summary sections (replace generic text)
+2. 3-5 concrete key points (replace "To be documented")
+3. Maintain bilingual parity (EN and RU sections must convey same information)
+4. Preserve YAML frontmatter exactly as-is
+5. Keep the structure and section ordering
+
+Return the enriched content with meaningful definitions, key points, and context."""
+
+    try:
+        agent = get_concept_enrichment_agent()
+        logger.debug("Running concept enrichment agent...")
+        result = await agent.run(prompt)
+
+        logger.debug(
+            f"Concept enrichment complete - "
+            f"added_sections: {len(result.output.added_sections)}, "
+            f"key_concepts: {len(result.output.key_concepts)}, "
+            f"related_concepts: {len(result.output.related_concepts)}"
+        )
+
+        logger.info(f"Enriched concept '{concept_name}': {result.output.explanation}")
+
+        return result.output
+    except Exception as e:
+        logger.error(f"Concept enrichment failed for {concept_name}: {e}")
         raise

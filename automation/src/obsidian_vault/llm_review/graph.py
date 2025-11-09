@@ -16,6 +16,7 @@ from obsidian_vault.utils.frontmatter import load_frontmatter_text
 from obsidian_vault.validators import ValidatorRegistry
 
 from .agents import (
+    run_concept_enrichment,
     run_issue_fixing,
     run_metadata_sanity_check,
     run_qa_verification,
@@ -343,8 +344,13 @@ class ReviewGraph:
                 "history": history_updates,
             }
 
-    def _create_missing_concept_files(self, issues: list[ReviewIssue]) -> list[str]:
-        """Create missing concept files referenced in validation issues.
+    async def _create_missing_concept_files(self, issues: list[ReviewIssue]) -> list[str]:
+        """Create and enrich missing concept files referenced in validation issues.
+
+        This method:
+        1. Creates concept stub files with valid YAML frontmatter
+        2. Enriches stubs with meaningful content using the knowledge-gap agent
+        3. Writes enriched content back to the concept file
 
         IMPORTANT: Concept files must use the FULL Q&A frontmatter schema to pass validation.
         Validators expect all required fields (topic, subtopics, difficulty, moc, related, etc.)
@@ -505,6 +511,38 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 concept_id = concept_file.replace('.md', '')
                 self.note_index.add(concept_id)
 
+                # Enrich the concept stub with meaningful content using knowledge-gap agent
+                try:
+                    logger.info(f"Enriching concept stub for {concept_name}...")
+                    enrichment_result = await run_concept_enrichment(
+                        concept_stub=content,
+                        concept_name=concept_name,
+                        topic=topic,
+                        referencing_notes=None,  # TODO: Could extract from issues/context
+                    )
+
+                    # Write enriched content back to file
+                    concept_path.write_text(enrichment_result.enriched_content, encoding='utf-8')
+                    logger.success(
+                        f"Enriched concept file {concept_file}: {enrichment_result.explanation}"
+                    )
+
+                    if enrichment_result.added_sections:
+                        logger.debug(
+                            f"Added/enriched sections: {', '.join(enrichment_result.added_sections)}"
+                        )
+
+                    if enrichment_result.key_concepts:
+                        logger.debug(
+                            f"Key concepts covered: {', '.join(enrichment_result.key_concepts)}"
+                        )
+
+                except Exception as enrich_err:
+                    logger.warning(
+                        f"Failed to enrich concept file {concept_file}, keeping generic stub: {enrich_err}"
+                    )
+                    # Continue with generic stub if enrichment fails
+
             except Exception as e:
                 logger.error(f"Failed to create concept file {concept_file}: {e}")
 
@@ -529,8 +567,8 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             )
         )
 
-        # Auto-create missing concept files before attempting fixes
-        created_concepts = self._create_missing_concept_files(state_obj.issues)
+        # Auto-create and enrich missing concept files before attempting fixes
+        created_concepts = await self._create_missing_concept_files(state_obj.issues)
         if created_concepts:
             logger.info(f"Auto-created {len(created_concepts)} missing concept files")
             history_updates.append(
