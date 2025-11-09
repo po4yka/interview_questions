@@ -14,14 +14,14 @@ Example Usage:
     memory = FixMemory()
 
     # After fixing a field in iteration 1
-    memory.mark_fixed("metadata.created", "2024-10-12", iteration=1)
-    memory.mark_fixed("metadata.updated", "2025-11-09", iteration=1)
+    memory.mark_fixed("created", "2024-10-12", iteration=1)
+    memory.mark_fixed("updated", "2025-11-09", iteration=1)
 
     # In iteration 2, check before fixing
-    if memory.is_fixed("metadata.created"):
+    if memory.is_fixed("created"):
         # Skip this fix to avoid regression
-        value = memory.get_fixed_value("metadata.created")
-        logger.info(f"Field 'metadata.created' already fixed to '{value}' - skipping")
+        value = memory.get_fixed_value("created")
+        logger.info(f"Field 'created' already fixed to '{value}' - skipping")
 
     # Detect regressions
     regressions = memory.detect_regressions(new_yaml_data)
@@ -75,7 +75,8 @@ class FixMemory:
         """Record that a field was fixed.
 
         Args:
-            field_path: Dot-notation path to the field (e.g., "metadata.created")
+            field_path: YAML field key (e.g., "created", "updated") or
+                       nested path with dots (e.g., "parent.child")
             value: The value that was set
             iteration: Which iteration this fix was made in
             description: Human-readable description of what was fixed
@@ -287,9 +288,11 @@ class FixMemory:
 
             if before_val != after_val:
                 # Field was modified - mark as fixed
+                # FIX: Use direct field name, not "metadata." prefix
+                # YAML frontmatter has fields at root level, not under 'metadata' key
                 description = self._infer_fix_description(field, fix_descriptions)
                 self.mark_fixed(
-                    f"metadata.{field}",
+                    field,  # Direct field name matches YAML structure
                     after_val,
                     iteration,
                     description,

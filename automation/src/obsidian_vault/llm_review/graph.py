@@ -586,15 +586,17 @@ class ReviewGraph:
             }
 
     async def _check_bilingual_parity(self, state: NoteReviewStateDict) -> dict[str, Any]:
-        """Node: Record issue history for oscillation detection.
+        """Node: Compute decision after validation.
 
         PHASE 1 FIX: This node is now a pass-through since parity checking
         has been moved to run in parallel with validators in _run_validators.
 
+        OSCILLATION FIX: Issue recording happens in run_validators only.
+        This node does NOT record issues to prevent duplicate entries.
+
         This node now serves to:
-        1. Record current issues for oscillation detection
-        2. Compute the decision for next step
-        3. Maintain the graph structure for backward compatibility
+        1. Compute the decision for next step
+        2. Maintain the graph structure for backward compatibility
 
         Args:
             state: Current state
@@ -606,14 +608,13 @@ class ReviewGraph:
         state_obj.decision = None
         history_updates: list[dict[str, Any]] = []
 
+        # OSCILLATION FIX: Issue recording already happened in run_validators()
+        # This node only computes decision, no duplicate recording
         logger.debug(
-            f"Recording issue state for oscillation detection (iteration {state_obj.iteration})"
+            f"Using existing issue recording from validators (iteration {state_obj.iteration})"
         )
-
-        # PHASE 1 FIX: Record current issues for oscillation detection
-        state_obj.record_current_issues()
         logger.debug(
-            f"Issue history now has {len(state_obj.issue_history)} snapshot(s)"
+            f"Issue history has {len(state_obj.issue_history)} snapshot(s)"
         )
 
         try:
@@ -626,7 +627,7 @@ class ReviewGraph:
             history_updates.append(
                 state_obj.add_history_entry(
                     "check_bilingual_parity",
-                    f"Recorded issue state with {existing_issue_count} issue(s) for oscillation detection"
+                    f"Using issue state with {existing_issue_count} issue(s) for decision"
                     )
                 )
 

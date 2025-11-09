@@ -426,6 +426,30 @@ CRITICAL RULES FOR FIXING:
 6. Review the PREVIOUS FIX ATTEMPTS above - do NOT repeat failed strategies
 7. When adjusting YAML timestamps, ensure dates are YYYY-MM-DD, `created` ≤ `updated`, and NEVER set any date later than {current_date_iso}. If you need to bump `updated`, use {current_date_iso}.
 
+COMMON METADATA FIX PATTERNS:
+
+**Date Consistency**:
+- If `updated` date is EARLIER than `created` date → Set `updated: {current_date_iso}`
+- Example fix: `created: 2025-10-05` and `updated: 2025-01-25` → Change to `updated: {current_date_iso}`
+- NEVER modify `created` date, only fix `updated` to be >= `created`
+
+**YAML Formatting**:
+- Sources must be YAML list format with quoted URLs
+- WRONG: `sources: https://example.com`
+- CORRECT: `sources: ["https://example.com"]`
+- Multiple sources: `sources: ["https://url1.com", "https://url2.com"]`
+
+**Link Validation**:
+- If wikilink [[c-foo]] doesn't exist in available concepts → Remove it OR replace with existing concept
+- Example: [[c-oop-fundamentals]] not found → Check if [[c-oop]], [[c-object-oriented]], etc. exist
+- Do NOT add broken wikilinks - use only valid files from the available lists above
+
+**Related Field Requirements**:
+- Must include at least 1 concept link (c-...) for foundational knowledge
+- Must include 2+ total related items (concepts + Q&As)
+- Example: `related: [c-kotlin, c-coroutines, q-coroutine-basics--kotlin--easy]`
+- Select related items from the available concepts and Q&A files lists above
+
 ISSUES TO FIX:
 {issues_text}
 
