@@ -27,7 +27,9 @@ from .agents import (
     run_technical_review,
 )
 from .fix_memory import FixMemory  # PHASE 1 FIX
+from .smart_validators import SmartValidatorSelector  # PHASE 2 FIX
 from .state import NoteReviewState, NoteReviewStateDict, ReviewIssue
+from .timestamp_policy import TimestampPolicy  # PHASE 2 FIX
 
 if TYPE_CHECKING:
     from obsidian_vault.utils.taxonomy_loader import TaxonomyLoader as TaxonomyLoaderType
@@ -149,6 +151,9 @@ class ReviewGraph:
         self.completion_mode = completion_mode
         # PHASE 1 FIX: Add Fix Memory to track already-fixed fields
         self.fix_memory: dict[str, FixMemory] = {}  # Keyed by note_path
+        # PHASE 2 FIX: Add Timestamp Policy and Smart Validator Selector
+        self.timestamp_policy = TimestampPolicy(vault_root)
+        self.smart_selector = SmartValidatorSelector()
         self.graph = self._build_graph()
 
     def _build_graph(self) -> StateGraph:
@@ -305,99 +310,140 @@ class ReviewGraph:
         )
 
         try:
-            # PHASE 1 FIX: Run all validators IN PARALLEL
-            # This includes metadata, structural, AND parity checks concurrently
+            # PHASE 2 FIX: Smart validator selection based on what changed
             import asyncio
 
-            # STEP 1: Run metadata sanity check in parallel with parity check
+            # Detect what changed (if iteration > 1)
+            selected_validators = []
+            if state_obj.iteration == 0:
+                # First iteration: run all validators
+                selected_validators = ["metadata", "structural", "parity"]
+                logger.info("Iteration 1: Running all validators")
+            else:
+                # Use smart selection based on changes
+                diff = self.smart_selector.detect_changes(
+                    state_obj.original_text,
+                    state_obj.current_text
+                )
+                selected_validators = self.smart_selector.select_validators(
+                    diff,
+                    state_obj.iteration + 1
+                )
+
+                # Log savings
+                calls_saved, pct_saved = self.smart_selector.estimate_savings(
+                    selected_validators, total_validators=3
+                )
+                if calls_saved > 0:
+                    logger.info(
+                        f"Smart selection saved {calls_saved} validator call(s) ({pct_saved:.0f}%)"
+                    )
+
+            # PHASE 1 FIX: Run selected validators IN PARALLEL
+            # This includes metadata, structural, AND parity checks concurrently
             logger.info(
-                f"Running ALL validators in parallel for {state_obj.note_path} "
+                f"Running {len(selected_validators)} validator(s) in parallel for {state_obj.note_path} "
                 f"(iteration {state_obj.iteration + 1})"
             )
 
-            # Run metadata check and parity check in parallel
-            metadata_task = run_metadata_sanity_check(
-                note_text=state_obj.current_text,
-                note_path=state_obj.note_path,
-            )
-            parity_task = run_bilingual_parity_check(
-                note_text=state_obj.current_text,
-                note_path=state_obj.note_path,
-            )
+            # Build tasks for selected validators
+            tasks = {}
+            if "metadata" in selected_validators:
+                tasks["metadata"] = run_metadata_sanity_check(
+                    note_text=state_obj.current_text,
+                    note_path=state_obj.note_path,
+                )
+            if "parity" in selected_validators:
+                tasks["parity"] = run_bilingual_parity_check(
+                    note_text=state_obj.current_text,
+                    note_path=state_obj.note_path,
+                )
 
-            # Execute in parallel
-            metadata_result, parity_result = await asyncio.gather(
-                metadata_task, parity_task
-            )
+            # Execute selected validators in parallel
+            if tasks:
+                results = await asyncio.gather(*tasks.values())
+                # Map results back to validator names
+                result_map = dict(zip(tasks.keys(), results))
+                metadata_result = result_map.get("metadata")
+                parity_result = result_map.get("parity")
+            else:
+                metadata_result = None
+                parity_result = None
 
-            # Convert metadata findings to ReviewIssues
+            # Convert metadata findings to ReviewIssues (if validator ran)
             metadata_issues = []
-            for issue in metadata_result.issues_found:
-                metadata_issues.append(
-                    ReviewIssue(
-                        severity="ERROR",
-                        message=f"[Metadata] {issue}",
-                        field="frontmatter",
+            if metadata_result is not None:
+                for issue in metadata_result.issues_found:
+                    metadata_issues.append(
+                        ReviewIssue(
+                            severity="ERROR",
+                            message=f"[Metadata] {issue}",
+                            field="frontmatter",
+                        )
                     )
-                )
-            for warning in metadata_result.warnings:
-                metadata_issues.append(
-                    ReviewIssue(
-                        severity="WARNING",
-                        message=f"[Metadata] {warning}",
-                        field="frontmatter",
+                for warning in metadata_result.warnings:
+                    metadata_issues.append(
+                        ReviewIssue(
+                            severity="WARNING",
+                            message=f"[Metadata] {warning}",
+                            field="frontmatter",
+                        )
                     )
-                )
 
-            if metadata_issues:
-                logger.info(
-                    f"Metadata sanity check found {len(metadata_result.issues_found)} issue(s) "
-                    f"and {len(metadata_result.warnings)} warning(s)"
-                )
-                history_updates.append(
-                    state_obj.add_history_entry(
-                        "metadata_sanity_check",
-                        f"Found {len(metadata_result.issues_found)} issue(s) and {len(metadata_result.warnings)} warning(s)",
-                        issues=metadata_result.issues_found,
-                        warnings=metadata_result.warnings,
+                if metadata_issues:
+                    logger.info(
+                        f"Metadata sanity check found {len(metadata_result.issues_found)} issue(s) "
+                        f"and {len(metadata_result.warnings)} warning(s)"
                     )
-                )
+                    history_updates.append(
+                        state_obj.add_history_entry(
+                            "metadata_sanity_check",
+                            f"Found {len(metadata_result.issues_found)} issue(s) and {len(metadata_result.warnings)} warning(s)",
+                            issues=metadata_result.issues_found,
+                            warnings=metadata_result.warnings,
+                        )
+                    )
+                else:
+                    logger.debug("No metadata issues found")
             else:
-                logger.debug("No metadata issues found")
+                logger.debug("Metadata validator skipped (no changes)")
 
-            # PHASE 1 FIX: Process parity results (ran in parallel)
+            # PHASE 2 FIX: Process parity results (if validator ran)
             parity_issues = []
-            for issue in parity_result.parity_issues:
-                parity_issues.append(
-                    ReviewIssue(
-                        severity="ERROR",
-                        message=f"[Parity] {issue}",
-                        field="content",
+            if parity_result is not None:
+                for issue in parity_result.parity_issues:
+                    parity_issues.append(
+                        ReviewIssue(
+                            severity="ERROR",
+                            message=f"[Parity] {issue}",
+                            field="content",
+                        )
                     )
-                )
-            for section in parity_result.missing_sections:
-                parity_issues.append(
-                    ReviewIssue(
-                        severity="ERROR",
-                        message=f"[Parity] Missing section: {section}",
-                        field="content",
+                for section in parity_result.missing_sections:
+                    parity_issues.append(
+                        ReviewIssue(
+                            severity="ERROR",
+                            message=f"[Parity] Missing section: {section}",
+                            field="content",
+                        )
                     )
-                )
 
-            if parity_issues:
-                logger.info(
-                    f"Parity check found {len(parity_issues)} issue(s)"
-                )
-                history_updates.append(
-                    state_obj.add_history_entry(
-                        "bilingual_parity_check",
-                        f"Found {len(parity_issues)} parity issue(s)",
-                        parity_issues=parity_result.parity_issues,
-                        missing_sections=parity_result.missing_sections,
+                if parity_issues:
+                    logger.info(
+                        f"Parity check found {len(parity_issues)} issue(s)"
                     )
-                )
+                    history_updates.append(
+                        state_obj.add_history_entry(
+                            "bilingual_parity_check",
+                            f"Found {len(parity_issues)} parity issue(s)",
+                            parity_issues=parity_result.parity_issues,
+                            missing_sections=parity_result.missing_sections,
+                        )
+                    )
+                else:
+                    logger.debug("No parity issues found")
             else:
-                logger.debug("No parity issues found")
+                logger.debug("Parity validator skipped (no changes)")
 
             # STEP 2: Run structural validators
             logger.debug("Running structural validators...")
