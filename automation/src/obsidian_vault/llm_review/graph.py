@@ -783,6 +783,47 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
         return created_files
 
+    def _get_concept_files(self) -> list[str]:
+        """Return list of available concept file basenames (without .md).
+
+        Returns:
+            List like ['c-kotlin-coroutines-basics', 'c-coroutines', ...]
+        """
+        concepts_dir = self.vault_root / "10-Concepts"
+        if not concepts_dir.exists():
+            return []
+
+        return sorted([
+            f.stem for f in concepts_dir.glob("c-*.md")
+        ])
+
+    def _get_qa_files(self) -> list[str]:
+        """Return list of available Q&A file basenames (without .md).
+
+        Returns:
+            List like ['q-coroutine-basics--kotlin--easy', ...]
+        """
+        qa_files = []
+        for folder in self.vault_root.glob("*/"):
+            if folder.name.startswith("00-") or folder.name.startswith("10-") or folder.name.startswith("90-"):
+                continue  # Skip admin, concepts, MOCs
+            qa_files.extend([f.stem for f in folder.glob("q-*.md")])
+        return sorted(qa_files)
+
+    def _get_moc_files(self) -> list[str]:
+        """Return list of available MOC file basenames (without .md).
+
+        Returns:
+            List like ['moc-kotlin', 'moc-android', ...]
+        """
+        mocs_dir = self.vault_root / "90-MOCs"
+        if not mocs_dir.exists():
+            return []
+
+        return sorted([
+            f.stem for f in mocs_dir.glob("moc-*.md")
+        ])
+
     async def _llm_fix_issues(self, state: NoteReviewStateDict) -> dict[str, Any]:
         """Node: LLM fixes formatting/structure issues.
 
@@ -822,10 +863,25 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 for issue in state_obj.issues
             ]
 
+            # Get available file indexes to help fixer make valid link suggestions
+            available_concepts = self._get_concept_files()
+            available_qa_files = self._get_qa_files()
+            valid_moc_files = self._get_moc_files()
+
+            logger.debug(
+                f"Providing fixer with vault index: "
+                f"{len(available_concepts)} concepts, "
+                f"{len(available_qa_files)} Q&As, "
+                f"{len(valid_moc_files)} MOCs"
+            )
+
             result = await run_issue_fixing(
                 note_text=state_obj.current_text,
                 issues=issue_descriptions,
                 note_path=state_obj.note_path,
+                available_concepts=available_concepts,
+                available_qa_files=available_qa_files,
+                valid_moc_files=valid_moc_files,
             )
 
             updates: dict[str, Any] = {}

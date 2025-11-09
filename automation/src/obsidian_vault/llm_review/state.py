@@ -192,15 +192,38 @@ class NoteReviewState:
     def detect_oscillation(self) -> tuple[bool, str | None]:
         """Detect if the same issues are reappearing across iterations.
 
+        Detection strategies:
+        1. Immediate reversal (N-1): Same issue fixed then reappears
+        2. Cycle detection (N-2, N-3): Issues repeat in a pattern
+        3. No progress: Issue count not decreasing
+
         Returns:
             (is_oscillating, explanation) tuple
         """
+        # STRATEGY 1: Immediate reversal detection
+        # Check if issue from previous iteration reappeared
+        if len(self.issue_history) >= 2:
+            current_issues = self.issue_history[-1]
+            previous_issues = self.issue_history[-2]
+
+            # Check for exact match (issue disappeared and came back)
+            # This shouldn't happen if fixes are working
+            reverted_issues = current_issues & previous_issues
+
+            if len(reverted_issues) > 0 and len(reverted_issues) == len(current_issues):
+                # ALL current issues are from previous iteration = oscillation
+                explanation = (
+                    f"Oscillation detected: All {len(reverted_issues)} issue(s) from "
+                    f"iteration {self.iteration - 1} reappeared in iteration {self.iteration}. "
+                    f"Fixer likely reversed its own changes. "
+                    f"Issues: {list(reverted_issues)[:3]}"
+                )
+                return True, explanation
+
+        # STRATEGY 2: Original cycle detection (existing logic)
         if len(self.issue_history) < 3:
-            # Need at least 3 iterations to detect oscillation
             return False, None
 
-        # Check if issues from iteration N reappear in iteration N+2 or N+3
-        # This indicates the fixes are being undone
         current_issues = self.issue_history[-1]
 
         # Check against issues 2-3 iterations ago
@@ -212,7 +235,6 @@ class NoteReviewState:
             common_issues = current_issues & previous_issues
 
             if len(common_issues) > 0:
-                # Calculate what percentage of current issues are reappearing
                 oscillation_rate = len(common_issues) / len(current_issues) if current_issues else 0
 
                 if oscillation_rate > 0.5:  # More than 50% of issues are repeating
@@ -220,7 +242,21 @@ class NoteReviewState:
                         f"Oscillation detected: {len(common_issues)} issue(s) from "
                         f"iteration {self.iteration - i + 1} reappeared in iteration {self.iteration}. "
                         f"This suggests conflicting validators or unstable fixes. "
-                        f"Repeating issues: {list(common_issues)[:3]}"  # Show first 3
+                        f"Repeating issues: {list(common_issues)[:3]}"
+                    )
+                    return True, explanation
+
+        # STRATEGY 3: No-progress detection
+        if len(self.issue_history) >= 3:
+            last_3_counts = [len(issues) for issues in self.issue_history[-3:]]
+
+            # If issue count hasn't decreased in last 3 iterations
+            if last_3_counts[0] <= last_3_counts[1] <= last_3_counts[2]:
+                # AND they're all the same count
+                if last_3_counts[0] == last_3_counts[2]:
+                    explanation = (
+                        f"Oscillation detected: Issue count stuck at {last_3_counts[0]} "
+                        f"for 3 consecutive iterations. No progress being made."
                     )
                     return True, explanation
 

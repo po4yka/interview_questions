@@ -356,7 +356,10 @@ async def run_issue_fixing(
         note_text: Current note content
         issues: List of issues to fix
         note_path: Path to the note
-        **kwargs: Additional context
+        **kwargs: Additional context including:
+            - available_concepts: List of concept file basenames
+            - available_qa_files: List of Q&A file basenames
+            - valid_moc_files: List of MOC file basenames
 
     Returns:
         IssueFixResult with corrected text
@@ -367,11 +370,51 @@ async def run_issue_fixing(
     for i, issue in enumerate(issues, 1):
         logger.debug(f"  Issue {i}: {issue[:100]}...")  # Log first 100 chars
 
+    # Extract vault index from kwargs
+    available_concepts = kwargs.get('available_concepts', [])
+    available_qa_files = kwargs.get('available_qa_files', [])
+    valid_moc_files = kwargs.get('valid_moc_files', [])
+
+    # Build vault index context
+    context_parts = []
+    if available_concepts:
+        # Limit to avoid token bloat
+        concept_sample = available_concepts[:100]
+        context_parts.append(
+            f"AVAILABLE CONCEPT FILES (use ONLY these for concept links):\n"
+            f"{', '.join(concept_sample)}"
+            + (f"\n...and {len(available_concepts) - 100} more" if len(available_concepts) > 100 else "")
+        )
+
+    if valid_moc_files:
+        context_parts.append(
+            f"AVAILABLE MOC FILES:\n{', '.join(valid_moc_files)}"
+        )
+
+    if available_qa_files:
+        # Sample Q&As for context (limit to 50 to avoid token limits)
+        qa_sample = available_qa_files[:50]
+        context_parts.append(
+            f"AVAILABLE Q&A FILES (sample):\n{', '.join(qa_sample)}"
+            + (f"\n...and {len(available_qa_files) - 50} more" if len(available_qa_files) > 50 else "")
+        )
+
+    vault_context = "\n\n".join(context_parts) if context_parts else "No vault index available."
+
     issues_text = "\n".join(f"- {issue}" for issue in issues)
 
-    prompt = f"""Fix the following issues in this note:
+    prompt = f"""Fix the following issues in this note.
 
 Note path: {note_path}
+
+{vault_context}
+
+CRITICAL RULES FOR FIXING:
+1. When adding concept links ([[c-...]]), ONLY use concepts from the available list above
+2. When adding MOC links, ONLY use MOC files from the available list above
+3. If a required concept doesn't exist in the list, DO NOT add a broken link - note the missing file instead
+4. Prefer existing concept files over creating new references
+5. Do not invent or guess concept file names
 
 ISSUES TO FIX:
 {issues_text}
