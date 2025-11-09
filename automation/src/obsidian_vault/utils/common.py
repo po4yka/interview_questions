@@ -5,6 +5,10 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+from loguru import logger
+
+from obsidian_vault.exceptions import VaultParsingError
+
 
 def discover_repo_root() -> Path:
     """
@@ -46,23 +50,57 @@ def parse_note(path: Path) -> tuple[dict, str]:
 
     try:
         return load_frontmatter(path)
-    except Exception:
+    except Exception as e:
+        # Log the primary parsing failure with details
+        logger.debug(
+            "Primary frontmatter parser failed for {}: {} ({}). "
+            "Falling back to legacy parser.",
+            path.name,
+            str(e),
+            type(e).__name__,
+        )
+
         # Fallback to old parsing method if new one fails
         from obsidian_vault.utils.yaml_loader import load_yaml
 
-        text = path.read_text(encoding="utf-8")
+        try:
+            text = path.read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError) as read_error:
+            logger.error("Failed to read file {}: {}", path, read_error)
+            raise VaultParsingError(
+                path, "Failed to read file", original_error=read_error
+            ) from read_error
+
         if not text.startswith("---"):
+            logger.debug("No frontmatter found in {}", path.name)
             return {}, text
 
         lines = text.splitlines()
         try:
             end = lines[1:].index("---") + 1
-        except ValueError:
+        except ValueError as ve:
+            logger.warning(
+                "Malformed frontmatter in {} (missing closing ---). "
+                "Treating entire file as body.",
+                path.name,
+            )
             return {}, text
 
         frontmatter_text = "\n".join(lines[1:end])
         body = "\n".join(lines[end + 1 :])
-        frontmatter = load_yaml(frontmatter_text)
+
+        try:
+            frontmatter = load_yaml(frontmatter_text)
+        except Exception as yaml_error:
+            logger.error(
+                "YAML parsing failed for {} even with fallback parser: {}",
+                path.name,
+                yaml_error,
+            )
+            raise VaultParsingError(
+                path, "YAML parsing failed", original_error=yaml_error
+            ) from yaml_error
+
         return frontmatter or {}, body
 
 
