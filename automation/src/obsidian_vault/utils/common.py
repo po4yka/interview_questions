@@ -213,3 +213,101 @@ def listify(value) -> list[str]:
     if isinstance(value, list):
         return [str(item) for item in value]
     return [str(value)]
+
+
+def safe_resolve_path(user_path: str, base_path: Path) -> Path:
+    """
+    Safely resolve user-provided path relative to base directory.
+
+    Prevents path traversal attacks by ensuring resolved path
+    is within the base directory.
+
+    Args:
+        user_path: User-provided path (may be relative or absolute)
+        base_path: Base directory (must be absolute)
+
+    Returns:
+        Resolved absolute path within base_path
+
+    Raises:
+        ValueError: If resolved path is outside base_path
+
+    Example:
+        >>> base = Path("/vault")
+        >>> safe_resolve_path("40-Android", base)
+        Path("/vault/40-Android")
+        >>> safe_resolve_path("../../../etc/passwd", base)
+        ValueError: Path traversal not allowed
+    """
+    # Ensure base path is absolute
+    base_path = base_path.resolve()
+
+    # Resolve the target path
+    target_path = (base_path / user_path).resolve()
+
+    # Ensure target is within base (prevents path traversal)
+    try:
+        target_path.relative_to(base_path)
+    except ValueError:
+        raise ValueError(
+            f"Path traversal not allowed: '{user_path}' "
+            f"resolves outside base directory {base_path}"
+        )
+
+    return target_path
+
+
+def ensure_vault_exists(repo_root: Path) -> Path:
+    """
+    Ensure vault directory exists or raise ValueError.
+
+    Args:
+        repo_root: Repository root path
+
+    Returns:
+        Path to validated vault directory
+
+    Raises:
+        ValueError: If vault directory not found
+
+    Example:
+        >>> repo_root = Path("/path/to/repo")
+        >>> vault_dir = ensure_vault_exists(repo_root)
+    """
+    vault_dir = repo_root / "InterviewQuestions"
+    if not vault_dir.exists():
+        raise ValueError(f"InterviewQuestions directory not found at {vault_dir}")
+    return vault_dir
+
+
+def validate_choice(value: str, valid_choices: set[str], case_sensitive: bool = False) -> str:
+    """
+    Validate that a value is in a set of valid choices.
+
+    Args:
+        value: Value to validate
+        valid_choices: Set of valid choices
+        case_sensitive: Whether comparison is case-sensitive (default: False)
+
+    Returns:
+        Validated value (normalized to lowercase if not case-sensitive)
+
+    Raises:
+        ValueError: If value is not in valid_choices
+
+    Example:
+        >>> validate_choice("GEXF", {"gexf", "json", "csv"})
+        'gexf'
+        >>> validate_choice("invalid", {"gexf", "json"})
+        ValueError: Invalid choice 'invalid'...
+    """
+    normalized = value if case_sensitive else value.lower().strip()
+    choices_to_check = valid_choices if case_sensitive else {c.lower() for c in valid_choices}
+
+    if normalized not in choices_to_check:
+        choices_str = ", ".join(sorted(valid_choices))
+        raise ValueError(
+            f"Invalid choice '{value}'. Must be one of: {choices_str}"
+        )
+
+    return normalized

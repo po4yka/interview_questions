@@ -89,35 +89,59 @@ def validate(
 
     Checks YAML frontmatter, content structure, links, and more.
     """
+    from obsidian_vault.utils import ensure_vault_exists, safe_resolve_path
+
     logger.info("Starting validation")
     try:
         repo_root = discover_repo_root()
-        vault_dir = repo_root / "InterviewQuestions"
         logger.debug(f"Repository root: {repo_root}")
-        logger.debug(f"Vault directory: {vault_dir}")
 
-        if not vault_dir.exists():
-            console.print("[red]✗[/red] InterviewQuestions directory not found")
-            logger.error(f"Vault directory not found: {vault_dir}")
+        try:
+            vault_dir = ensure_vault_exists(repo_root)
+            logger.debug(f"Vault directory: {vault_dir}")
+        except ValueError as e:
+            console.print(f"[red]✗[/red] {e}")
+            logger.error(f"Vault directory not found: {e}")
             raise typer.Exit(code=1)
 
         # Determine targets
         if all:
             targets = collect_validatable_files(vault_dir)
         elif path:
-            explicit = Path(path)
-            candidates = [explicit, repo_root / path, vault_dir / path]
-            targets = []
-            for candidate in candidates:
-                if candidate.exists():
-                    if candidate.is_file() and candidate.suffix.lower() == ".md":
-                        targets = [candidate.resolve()]
-                        break
-                    if candidate.is_dir():
-                        targets = collect_validatable_files(candidate)
-                        break
-            if not targets:
-                console.print(f"[red]✗[/red] Path not found: {path}")
+            # Security: Prevent path traversal attacks
+            try:
+                # Try resolving relative to vault_dir first (most common case)
+                safe_path = safe_resolve_path(path, vault_dir)
+            except ValueError:
+                # If that fails, try relative to repo_root
+                try:
+                    safe_path = safe_resolve_path(path, repo_root)
+                except ValueError as e:
+                    console.print(
+                        f"[red]✗[/red] Invalid path: {e}\n\n"
+                        f"Valid path examples:\n"
+                        f"  • InterviewQuestions/40-Android\n"
+                        f"  • 40-Android/q-compose-state--android--medium.md\n"
+                        f"  • Or use --all to validate entire vault"
+                    )
+                    raise typer.Exit(code=1)
+
+            # Check if resolved path exists and is valid
+            if not safe_path.exists():
+                console.print(
+                    f"[red]✗[/red] Path not found: {path}\n\n"
+                    f"Valid path examples:\n"
+                    f"  • InterviewQuestions/40-Android\n"
+                    f"  • 40-Android/q-compose-state--android--medium.md"
+                )
+                raise typer.Exit(code=1)
+
+            if safe_path.is_file() and safe_path.suffix.lower() == ".md":
+                targets = [safe_path]
+            elif safe_path.is_dir():
+                targets = collect_validatable_files(safe_path)
+            else:
+                console.print(f"[red]✗[/red] Invalid path: {path} is not a markdown file or directory")
                 raise typer.Exit(code=1)
         else:
             console.print("[yellow]⚠[/yellow] Either provide a path or use --all")
@@ -299,15 +323,19 @@ def graph_stats(
 
     Shows total notes, links, density, orphaned notes, and more.
     """
+    from obsidian_vault.utils import ensure_vault_exists
+
     logger.info("Analyzing vault graph statistics")
     try:
         repo_root = discover_repo_root()
-        vault_dir = repo_root / "InterviewQuestions"
-        logger.debug(f"Vault directory: {vault_dir}")
+        logger.debug(f"Repository root: {repo_root}")
 
-        if not vault_dir.exists():
-            console.print("[red]✗[/red] InterviewQuestions directory not found")
-            logger.error(f"Vault directory not found: {vault_dir}")
+        try:
+            vault_dir = ensure_vault_exists(repo_root)
+            logger.debug(f"Vault directory: {vault_dir}")
+        except ValueError as e:
+            console.print(f"[red]✗[/red] {e}")
+            logger.error(f"Vault directory error: {e}")
             raise typer.Exit(code=1)
 
         with console.status("[bold green]Analyzing vault graph...", spinner="dots"):
@@ -383,14 +411,17 @@ def orphans(
 
     Helps identify disconnected content that needs linking.
     """
+    from obsidian_vault.utils import ensure_vault_exists
+
     logger.info("Finding orphaned notes")
     try:
         repo_root = discover_repo_root()
-        vault_dir = repo_root / "InterviewQuestions"
 
-        if not vault_dir.exists():
-            console.print("[red]✗[/red] InterviewQuestions directory not found")
-            logger.error(f"Vault directory not found: {vault_dir}")
+        try:
+            vault_dir = ensure_vault_exists(repo_root)
+        except ValueError as e:
+            console.print(f"[red]✗[/red] {e}")
+            logger.error(f"Vault directory error: {e}")
             raise typer.Exit(code=1)
 
         with console.status("[bold green]Finding orphaned notes...", spinner="dots"):
@@ -429,14 +460,17 @@ def broken_links(
 
     Helps maintain vault integrity by identifying missing link targets.
     """
+    from obsidian_vault.utils import ensure_vault_exists
+
     logger.info("Finding broken links")
     try:
         repo_root = discover_repo_root()
-        vault_dir = repo_root / "InterviewQuestions"
 
-        if not vault_dir.exists():
-            console.print("[red]✗[/red] InterviewQuestions directory not found")
-            logger.error(f"Vault directory not found: {vault_dir}")
+        try:
+            vault_dir = ensure_vault_exists(repo_root)
+        except ValueError as e:
+            console.print(f"[red]✗[/red] {e}")
+            logger.error(f"Vault directory error: {e}")
             raise typer.Exit(code=1)
 
         with console.status("[bold green]Finding broken links...", spinner="dots"):
@@ -484,14 +518,17 @@ def link_report(
 
     Creates a detailed report with statistics, orphans, hubs, and authorities.
     """
+    from obsidian_vault.utils import ensure_vault_exists
+
     logger.info("Generating link health report")
     try:
         repo_root = discover_repo_root()
-        vault_dir = repo_root / "InterviewQuestions"
 
-        if not vault_dir.exists():
-            console.print("[red]✗[/red] InterviewQuestions directory not found")
-            logger.error(f"Vault directory not found: {vault_dir}")
+        try:
+            vault_dir = ensure_vault_exists(repo_root)
+        except ValueError as e:
+            console.print(f"[red]✗[/red] {e}")
+            logger.error(f"Vault directory error: {e}")
             raise typer.Exit(code=1)
 
         with console.status("[bold green]Generating link health report...", spinner="dots"):
@@ -524,14 +561,17 @@ def graph_export(
 
     Supports GEXF, GraphML, JSON, and CSV formats.
     """
+    from obsidian_vault.utils import ensure_vault_exists, validate_choice
+
     logger.info(f"Exporting graph to {output}")
     try:
         repo_root = discover_repo_root()
-        vault_dir = repo_root / "InterviewQuestions"
 
-        if not vault_dir.exists():
-            console.print("[red]✗[/red] InterviewQuestions directory not found")
-            logger.error(f"Vault directory not found: {vault_dir}")
+        try:
+            vault_dir = ensure_vault_exists(repo_root)
+        except ValueError as e:
+            console.print(f"[red]✗[/red] {e}")
+            logger.error(f"Vault directory error: {e}")
             raise typer.Exit(code=1)
 
         output_path = Path(output)
@@ -547,6 +587,16 @@ def graph_export(
                 ".csv": "csv",
             }
             export_format = format_map.get(output_path.suffix.lower(), "gexf")
+
+        # Validate export format
+        try:
+            export_format = validate_choice(
+                export_format,
+                {"gexf", "graphml", "json", "csv"}
+            )
+        except ValueError as e:
+            console.print(f"[red]✗ Error:[/red] {e}")
+            raise typer.Exit(code=1)
 
         logger.debug(f"Export format: {export_format}")
 
@@ -587,14 +637,24 @@ def communities(
     other than to notes outside the group. Useful for understanding vault
     organization and discovering hidden topic clusters.
     """
+    from obsidian_vault.utils import ensure_vault_exists, validate_choice
+
+    # Validate algorithm choice early
+    try:
+        algorithm = validate_choice(algorithm, {"louvain", "greedy", "label_propagation"})
+    except ValueError as e:
+        console.print(f"[red]✗[/red] {e}")
+        raise typer.Exit(code=1)
+
     logger.info(f"Detecting communities using {algorithm} algorithm")
     try:
         repo_root = discover_repo_root()
-        vault_dir = repo_root / "InterviewQuestions"
 
-        if not vault_dir.exists():
-            console.print("[red]✗[/red] InterviewQuestions directory not found")
-            logger.error(f"Vault directory not found: {vault_dir}")
+        try:
+            vault_dir = ensure_vault_exists(repo_root)
+        except ValueError as e:
+            console.print(f"[red]✗[/red] {e}")
+            logger.error(f"Vault directory error: {e}")
             raise typer.Exit(code=1)
 
         with console.status("[bold green]Analyzing vault communities...", spinner="dots"):
@@ -738,14 +798,17 @@ def suggest_links(
     that should be linked but currently aren't. Based on TF-IDF vectorization
     and cosine similarity.
     """
+    from obsidian_vault.utils import ensure_vault_exists
+
     logger.info("Analyzing notes for link suggestions using ML")
     try:
         repo_root = discover_repo_root()
-        vault_dir = repo_root / "InterviewQuestions"
 
-        if not vault_dir.exists():
-            console.print("[red]✗[/red] InterviewQuestions directory not found")
-            logger.error(f"Vault directory not found: {vault_dir}")
+        try:
+            vault_dir = ensure_vault_exists(repo_root)
+        except ValueError as e:
+            console.print(f"[red]✗[/red] {e}")
+            logger.error(f"Vault directory error: {e}")
             raise typer.Exit(code=1)
 
         with console.status(

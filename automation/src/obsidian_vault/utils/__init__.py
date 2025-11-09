@@ -6,8 +6,11 @@ from .common import (
     collect_validatable_files,
     discover_repo_root,
     dump_yaml,
+    ensure_vault_exists,
     listify,
     parse_note,
+    safe_resolve_path,
+    validate_choice,
 )
 from .frontmatter import (
     FrontmatterHandler,
@@ -47,6 +50,10 @@ __all__ = [
     "collect_validatable_files",
     "dump_yaml",
     "listify",
+    # Security utilities
+    "safe_resolve_path",
+    "ensure_vault_exists",
+    "validate_choice",
     # YAML loading
     "load_yaml",
     # Frontmatter (robust YAML with order/comment preservation)

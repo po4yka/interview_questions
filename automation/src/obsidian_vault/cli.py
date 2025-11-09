@@ -46,11 +46,14 @@ from obsidian_vault.validators import Severity, ValidatorRegistry
 
 def cmd_validate(args: argparse.Namespace) -> int:
     """Run comprehensive note validation."""
-    repo_root = discover_repo_root()
-    vault_dir = repo_root / "InterviewQuestions"
+    from obsidian_vault.utils import ensure_vault_exists
 
-    if not vault_dir.exists():
-        print("InterviewQuestions directory not found. Run from repository root.", file=sys.stderr)
+    repo_root = discover_repo_root()
+
+    try:
+        vault_dir = ensure_vault_exists(repo_root)
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
     targets = _determine_validation_targets(args, repo_root, vault_dir)
@@ -183,6 +186,8 @@ def _determine_validation_targets(
     args: argparse.Namespace, repo_root: Path, vault_dir: Path
 ) -> list[Path]:
     """Determine which files to validate based on args."""
+    from obsidian_vault.utils import safe_resolve_path
+
     if args.all:
         return collect_validatable_files(vault_dir)
 
@@ -190,20 +195,43 @@ def _determine_validation_targets(
         print("Either provide a path or use --all", file=sys.stderr)
         return []
 
-    explicit = Path(args.path)
-    candidates = [
-        explicit,
-        repo_root / args.path,
-        vault_dir / args.path,
-    ]
-    for candidate in candidates:
-        if candidate.exists():
-            if candidate.is_file() and candidate.suffix.lower() == ".md":
-                return [candidate.resolve()]
-            if candidate.is_dir():
-                return collect_validatable_files(candidate)
+    # Security: Prevent path traversal attacks
+    try:
+        # Try resolving relative to vault_dir first (most common case)
+        safe_path = safe_resolve_path(args.path, vault_dir)
+    except ValueError:
+        # If that fails, try relative to repo_root
+        try:
+            safe_path = safe_resolve_path(args.path, repo_root)
+        except ValueError as e:
+            print(
+                f"Invalid path: {e}\n\n"
+                f"Valid path examples:\n"
+                f"  - InterviewQuestions/40-Android\n"
+                f"  - 40-Android/q-compose-state--android--medium.md\n"
+                f"  - Or use --all to validate entire vault",
+                file=sys.stderr
+            )
+            return []
 
-    print(f"Path not found: {args.path}", file=sys.stderr)
+    # Check if resolved path exists and is valid
+    if not safe_path.exists():
+        print(
+            f"Path not found: {args.path}\n\n"
+            f"Valid path examples:\n"
+            f"  - InterviewQuestions/40-Android\n"
+            f"  - 40-Android/q-compose-state--android--medium.md\n"
+            f"  - Or use --all to validate entire vault",
+            file=sys.stderr
+        )
+        return []
+
+    if safe_path.is_file() and safe_path.suffix.lower() == ".md":
+        return [safe_path]
+    if safe_path.is_dir():
+        return collect_validatable_files(safe_path)
+
+    print(f"Invalid path: {args.path} is not a markdown file or directory", file=sys.stderr)
     return []
 
 
@@ -476,11 +504,14 @@ def _normalize_date(value) -> str:
 
 def cmd_check_translations(args: argparse.Namespace) -> int:
     """Find notes missing Russian or English translations."""
-    repo_root = discover_repo_root()
-    vault_dir = repo_root / "InterviewQuestions"
+    from obsidian_vault.utils import ensure_vault_exists
 
-    if not vault_dir.exists():
-        print("InterviewQuestions directory not found.", file=sys.stderr)
+    repo_root = discover_repo_root()
+
+    try:
+        vault_dir = ensure_vault_exists(repo_root)
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
     note_files = list(vault_dir.glob("**/q-*.md"))
@@ -518,11 +549,14 @@ def cmd_check_translations(args: argparse.Namespace) -> int:
 
 def cmd_graph_stats(args: argparse.Namespace) -> int:
     """Display vault network statistics."""
-    repo_root = discover_repo_root()
-    vault_dir = repo_root / "InterviewQuestions"
+    from obsidian_vault.utils import ensure_vault_exists
 
-    if not vault_dir.exists():
-        print("InterviewQuestions directory not found.", file=sys.stderr)
+    repo_root = discover_repo_root()
+
+    try:
+        vault_dir = ensure_vault_exists(repo_root)
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
     try:
@@ -570,11 +604,14 @@ def cmd_graph_stats(args: argparse.Namespace) -> int:
 
 def cmd_orphans(args: argparse.Namespace) -> int:
     """Find orphaned notes (no incoming or outgoing links)."""
-    repo_root = discover_repo_root()
-    vault_dir = repo_root / "InterviewQuestions"
+    from obsidian_vault.utils import ensure_vault_exists
 
-    if not vault_dir.exists():
-        print("InterviewQuestions directory not found.", file=sys.stderr)
+    repo_root = discover_repo_root()
+
+    try:
+        vault_dir = ensure_vault_exists(repo_root)
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
     try:
@@ -603,11 +640,14 @@ def cmd_orphans(args: argparse.Namespace) -> int:
 
 def cmd_broken_links(args: argparse.Namespace) -> int:
     """Find notes with broken links (links to non-existent notes)."""
-    repo_root = discover_repo_root()
-    vault_dir = repo_root / "InterviewQuestions"
+    from obsidian_vault.utils import ensure_vault_exists
 
-    if not vault_dir.exists():
-        print("InterviewQuestions directory not found.", file=sys.stderr)
+    repo_root = discover_repo_root()
+
+    try:
+        vault_dir = ensure_vault_exists(repo_root)
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
     try:
@@ -645,11 +685,14 @@ def cmd_broken_links(args: argparse.Namespace) -> int:
 
 def cmd_link_report(args: argparse.Namespace) -> int:
     """Generate comprehensive link health report."""
-    repo_root = discover_repo_root()
-    vault_dir = repo_root / "InterviewQuestions"
+    from obsidian_vault.utils import ensure_vault_exists
 
-    if not vault_dir.exists():
-        print("InterviewQuestions directory not found.", file=sys.stderr)
+    repo_root = discover_repo_root()
+
+    try:
+        vault_dir = ensure_vault_exists(repo_root)
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
     try:
@@ -671,11 +714,14 @@ def cmd_link_report(args: argparse.Namespace) -> int:
 
 def cmd_graph_export(args: argparse.Namespace) -> int:
     """Export vault graph to various formats."""
-    repo_root = discover_repo_root()
-    vault_dir = repo_root / "InterviewQuestions"
+    from obsidian_vault.utils import ensure_vault_exists, validate_choice
 
-    if not vault_dir.exists():
-        print("InterviewQuestions directory not found.", file=sys.stderr)
+    repo_root = discover_repo_root()
+
+    try:
+        vault_dir = ensure_vault_exists(repo_root)
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
     try:
@@ -695,6 +741,16 @@ def cmd_graph_export(args: argparse.Namespace) -> int:
             suffix = output_path.suffix.lower()
             export_format = format_map.get(suffix, "gexf")
 
+        # Validate export format
+        try:
+            export_format = validate_choice(
+                export_format,
+                {"gexf", "graphml", "json", "csv"}
+            )
+        except ValueError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            return 1
+
         vg.export_graph_data(output_path, format=export_format)
         print(f"Graph exported to {output_path} (format: {export_format})")
 
@@ -710,17 +766,30 @@ def cmd_graph_export(args: argparse.Namespace) -> int:
 
 def cmd_communities(args: argparse.Namespace) -> int:
     """Detect communities (clusters) of related notes."""
-    repo_root = discover_repo_root()
-    vault_dir = repo_root / "InterviewQuestions"
+    from obsidian_vault.utils import ensure_vault_exists, validate_choice
 
-    if not vault_dir.exists():
-        print("InterviewQuestions directory not found.", file=sys.stderr)
+    repo_root = discover_repo_root()
+
+    try:
+        vault_dir = ensure_vault_exists(repo_root)
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
         return 1
 
     try:
-        print(f"Detecting communities using {args.algorithm} algorithm...", file=sys.stderr)
+        # Validate algorithm choice
+        try:
+            algorithm = validate_choice(
+                args.algorithm,
+                {"louvain", "greedy", "label_propagation"}
+            )
+        except ValueError as e:
+            print(f"Error: {e}", file=sys.stderr)
+            return 1
+
+        print(f"Detecting communities using {algorithm} algorithm...", file=sys.stderr)
         vg = VaultGraph(vault_dir)
-        communities = vg.detect_communities(algorithm=args.algorithm, min_size=args.min_size)
+        communities = vg.detect_communities(algorithm=algorithm, min_size=args.min_size)
 
         if not communities:
             print("No communities found.")
