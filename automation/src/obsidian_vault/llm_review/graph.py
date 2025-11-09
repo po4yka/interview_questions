@@ -8,7 +8,7 @@ from dataclasses import replace
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, TypedDict
 
 from langgraph.graph import END, START, StateGraph
 from loguru import logger
@@ -26,6 +26,7 @@ from .agents import (
     run_qa_verification,
     run_technical_review,
 )
+from .analytics import ReviewAnalyticsRecorder
 from .atomic_related_fixer import AtomicRelatedFixer  # PHASE 3 FIX
 from .deterministic_fixer import DeterministicFixer  # QUICK WIN FIX
 from .fix_memory import FixMemory  # PHASE 1 FIX
@@ -68,6 +69,53 @@ COMPLETION_THRESHOLDS = {
         "ERROR": 2,   # Allow up to 2 errors (use cautiously)
         "WARNING": 10,  # Allow up to 10 warnings
         "INFO": float('inf'),
+    },
+}
+
+
+class ProcessingProfile(str, Enum):
+    """Operating modes that trade cost for stability or thoroughness."""
+
+    BALANCED = "balanced"
+    STABILITY = "stability"
+    THOROUGH = "thorough"
+
+
+class _ProfileSettings(TypedDict):
+    """Internal configuration flags for a :class:`ProcessingProfile`."""
+
+    parallel_validators: bool
+    smart_selection: bool
+    full_validator_pass: bool
+    iteration_bonus: int
+    enable_analytics: bool
+
+
+PROFILE_SETTINGS: dict[ProcessingProfile, _ProfileSettings] = {
+    ProcessingProfile.BALANCED: {
+        "parallel_validators": True,
+        "smart_selection": True,
+        "full_validator_pass": False,
+        "iteration_bonus": 0,
+        "enable_analytics": True,
+    },
+    ProcessingProfile.STABILITY: {
+        # Run validators sequentially to reduce contention while keeping
+        # adaptive selection to avoid unnecessary work.
+        "parallel_validators": False,
+        "smart_selection": True,
+        "full_validator_pass": False,
+        "iteration_bonus": 0,
+        "enable_analytics": True,
+    },
+    ProcessingProfile.THOROUGH: {
+        # Aggressive quality mode: always execute the full validator suite and
+        # allow extra iterations to chase down lingering issues.
+        "parallel_validators": False,
+        "smart_selection": False,
+        "full_validator_pass": True,
+        "iteration_bonus": 2,
+        "enable_analytics": True,
     },
 }
 
@@ -136,6 +184,8 @@ class ReviewGraph:
         max_iterations: int = 5,
         dry_run: bool = False,
         completion_mode: CompletionMode = CompletionMode.STANDARD,
+        processing_profile: ProcessingProfile = ProcessingProfile.BALANCED,
+        enable_analytics: bool | None = None,
     ):
         """Initialize the review graph.
 
@@ -146,11 +196,26 @@ class ReviewGraph:
             max_iterations: Maximum fix iterations per note
             dry_run: If True, don't write any files to disk (validation only)
             completion_mode: Strictness level for issue completion (default: STANDARD)
+            processing_profile: Workflow mode that balances stability vs throughput
+            enable_analytics: Optional override to enable/disable analytics capture
         """
         self.vault_root = vault_root
         self.taxonomy = taxonomy
         self.note_index = note_index
-        self.max_iterations = max_iterations
+        profile_settings = PROFILE_SETTINGS[processing_profile]
+        self.processing_profile = processing_profile
+        self.parallel_validators = profile_settings["parallel_validators"]
+        self.use_smart_selection = profile_settings["smart_selection"]
+        self.force_full_validator_pass = profile_settings["full_validator_pass"]
+
+        bonus_iterations = profile_settings["iteration_bonus"]
+        if bonus_iterations:
+            logger.info(
+                "Processing profile %s grants %d additional iteration(s)",
+                processing_profile.value,
+                bonus_iterations,
+            )
+        self.max_iterations = max_iterations + bonus_iterations
         self.dry_run = dry_run
         self.completion_mode = completion_mode
         # PHASE 1 FIX: Add Fix Memory to track already-fixed fields
@@ -164,6 +229,12 @@ class ReviewGraph:
         self.strict_qa = StrictQAVerifier()
         # QUICK WIN FIX: Add Deterministic Fixer for simple rule-based fixes
         self.deterministic_fixer = DeterministicFixer()
+        analytics_enabled = (
+            profile_settings["enable_analytics"]
+            if enable_analytics is None
+            else enable_analytics
+        )
+        self.analytics = ReviewAnalyticsRecorder(enabled=analytics_enabled)
         self.graph = self._build_graph()
 
     def _build_graph(self) -> StateGraph:
@@ -320,44 +391,48 @@ class ReviewGraph:
         )
 
         try:
-            # PHASE 2 FIX: Smart validator selection based on what changed
             import asyncio
 
-            # Detect what changed (if iteration > 1)
-            selected_validators = []
-            if state_obj.iteration == 0:
-                # First iteration: run all validators
+            # Determine which validator helpers should run this iteration.
+            selected_validators: list[str] = []
+            if state_obj.iteration == 0 or self.force_full_validator_pass:
                 selected_validators = ["metadata", "structural", "parity"]
-                logger.info("Iteration 1: Running all validators")
+                logger.info(
+                    "Iteration %d: Running full validator suite",
+                    state_obj.iteration + 1,
+                )
             else:
-                # Use smart selection based on changes
-                diff = self.smart_selector.detect_changes(
-                    state_obj.original_text,
-                    state_obj.current_text
-                )
-                selected_validators = self.smart_selector.select_validators(
-                    diff,
-                    state_obj.iteration + 1
-                )
-
-                # Log savings
-                calls_saved, pct_saved = self.smart_selector.estimate_savings(
-                    selected_validators, total_validators=3
-                )
-                if calls_saved > 0:
-                    logger.info(
-                        f"Smart selection saved {calls_saved} validator call(s) ({pct_saved:.0f}%)"
+                if self.use_smart_selection:
+                    diff = self.smart_selector.detect_changes(
+                        state_obj.original_text,
+                        state_obj.current_text,
+                    )
+                    selected_validators = self.smart_selector.select_validators(
+                        diff,
+                        state_obj.iteration + 1,
                     )
 
-            # PHASE 1 FIX: Run selected validators IN PARALLEL
-            # This includes metadata, structural, AND parity checks concurrently
+                    calls_saved, pct_saved = self.smart_selector.estimate_savings(
+                        selected_validators,
+                        total_validators=3,
+                    )
+                    if calls_saved > 0:
+                        logger.info(
+                            "Smart selection saved %d validator call(s) (%.0f%%)",
+                            calls_saved,
+                            pct_saved,
+                        )
+                else:
+                    selected_validators = ["metadata", "structural", "parity"]
+
             logger.info(
-                f"Running {len(selected_validators)} validator(s) in parallel for {state_obj.note_path} "
-                f"(iteration {state_obj.iteration + 1})"
+                "Running %d validator helper(s) for %s using %s execution",
+                len(selected_validators),
+                state_obj.note_path,
+                "parallel" if self.parallel_validators else "sequential",
             )
 
-            # Build tasks for selected validators
-            tasks = {}
+            tasks: dict[str, Any] = {}
             if "metadata" in selected_validators:
                 tasks["metadata"] = run_metadata_sanity_check(
                     note_text=state_obj.current_text,
@@ -369,11 +444,17 @@ class ReviewGraph:
                     note_path=state_obj.note_path,
                 )
 
-            # Execute selected validators in parallel
             if tasks:
-                results = await asyncio.gather(*tasks.values())
-                # Map results back to validator names
-                result_map = dict(zip(tasks.keys(), results))
+                task_items = list(tasks.items())
+                if self.parallel_validators and len(task_items) > 1:
+                    results = await asyncio.gather(*[coro for _, coro in task_items])
+                else:
+                    results = []
+                    for _, coro in task_items:
+                        results.append(await coro)
+                result_map = {
+                    name: result for (name, _), result in zip(task_items, results)
+                }
                 metadata_result = result_map.get("metadata")
                 parity_result = result_map.get("parity")
             else:
@@ -503,6 +584,23 @@ class ReviewGraph:
                 issues=all_review_issues,
                 iteration=state_obj.iteration + 1,
             )
+
+            # Record analytics for this iteration
+            try:
+                self.analytics.record_iteration(
+                    state_obj.note_path,
+                    iteration=next_state.iteration,
+                    metadata_issues=len(metadata_issues),
+                    structural_issues=len(structural_review_issues),
+                    parity_issues=len(parity_issues),
+                )
+            except Exception as analytics_error:  # pragma: no cover - defensive
+                logger.warning(
+                    "Failed to record analytics for %s iteration %d: %s",
+                    state_obj.note_path,
+                    next_state.iteration,
+                    analytics_error,
+                )
 
             # STEP 4: Calculate convergence metrics
             previous_issue_count = len(state_obj.issues)
@@ -1356,6 +1454,12 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 )
 
                 # Return failure without calling LLM QA
+                self.analytics.record_qa_attempt(
+                    state_obj.note_path,
+                    iteration=state_obj.iteration,
+                    passed=False,
+                    summary=strict_result.summary,
+                )
                 return {
                     "qa_verification_passed": False,
                     "qa_verification_summary": strict_result.summary,
@@ -1391,6 +1495,13 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 "qa_verification_summary": result.summary,
                 "history": history_updates,
             }
+
+            self.analytics.record_qa_attempt(
+                state_obj.note_path,
+                iteration=state_obj.iteration,
+                passed=result.is_acceptable,
+                summary=result.summary,
+            )
 
             if result.is_acceptable:
                 logger.success(f"QA verification passed: {result.summary}")
@@ -1448,6 +1559,12 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 state_obj.add_history_entry(
                     "qa_verification", f"Error during QA verification: {e}"
                 )
+            )
+            self.analytics.record_qa_attempt(
+                state_obj.note_path,
+                iteration=state_obj.iteration,
+                passed=None,
+                summary=str(e),
             )
             return {
                 "error": f"QA verification failed: {e}",
@@ -1661,9 +1778,15 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 iteration=state_obj.iteration,
                 decision=state_obj.decision,
             )
+            self.analytics.set_iteration_decision(
+                state_obj.note_path, state_obj.iteration, state_obj.decision
+            )
             return state_obj.decision
 
         decision, _ = self._compute_decision(state_obj)
+        self.analytics.set_iteration_decision(
+            state_obj.note_path, state_obj.iteration, decision
+        )
         return decision
 
     def _should_continue_after_qa(self, state: NoteReviewStateDict) -> str:
@@ -1682,13 +1805,22 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 "Decision already set by QA verification node",
                 decision=state_obj.decision,
             )
+            self.analytics.set_iteration_decision(
+                state_obj.note_path, state_obj.iteration, state_obj.decision
+            )
             return state_obj.decision
 
         # This should not normally happen as the QA verification node sets the decision
         # But as a fallback, check the QA verification result
         if state_obj.qa_verification_passed:
+            self.analytics.set_iteration_decision(
+                state_obj.note_path, state_obj.iteration, "done"
+            )
             return "done"
         else:
+            self.analytics.set_iteration_decision(
+                state_obj.note_path, state_obj.iteration, "continue"
+            )
             return "continue"
 
     async def process_note(self, note_path: Path) -> NoteReviewState:
@@ -1712,19 +1844,25 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             logger.error("Failed to read note {}: {}", note_path, e)
             raise
 
+        note_path_key = str(note_path.relative_to(self.vault_root.parent))
+
         # Initialize state
         initial_state = NoteReviewState(
-            note_path=str(note_path.relative_to(self.vault_root.parent)),
+            note_path=note_path_key,
             original_text=original_text,
             current_text=original_text,
             max_iterations=self.max_iterations,
         )
         logger.debug(f"Initialized state with max_iterations={self.max_iterations}")
 
+        self.analytics.start_note(
+            note_path_key,
+            profile=self.processing_profile.value,
+        )
+
         # PHASE 1 FIX: Clear Fix Memory for this note to start fresh
-        note_path_str = str(note_path.relative_to(self.vault_root.parent))
-        if note_path_str in self.fix_memory:
-            self.fix_memory[note_path_str].clear()
+        if note_path_key in self.fix_memory:
+            self.fix_memory[note_path_key].clear()
             logger.debug("Cleared existing Fix Memory for this note")
 
         # Run the graph with timing
@@ -1738,6 +1876,15 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             logger.debug(f"LangGraph workflow completed in {elapsed_time:.2f}s")
         except Exception as e:
             logger.error("LangGraph workflow failed for {}: {}", note_path, e)
+            self.analytics.finalize(
+                note_path_key,
+                iterations=initial_state.iteration,
+                final_issue_count=len(initial_state.issues),
+                elapsed_seconds=time.time() - start_time,
+                qa_passed=None,
+                error=str(e),
+                requires_human_review=True,
+            )
             raise
 
         # Log final results with detailed metrics
@@ -1756,10 +1903,63 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         if final_state.requires_human_review:
             logger.warning(f"Note requires human review: {note_path.name}")
 
+        self.analytics.finalize(
+            note_path_key,
+            iterations=final_state.iteration,
+            final_issue_count=len(final_state.issues),
+            elapsed_seconds=elapsed_time,
+            qa_passed=final_state.qa_verification_passed,
+            error=final_state.error,
+            requires_human_review=final_state.requires_human_review,
+        )
+
         logger.debug(f"Workflow history: {len(final_state.history)} entries")
         logger.info("=" * 70)
 
         return final_state
+
+    def get_note_analytics(self, note_path: str) -> dict[str, Any] | None:
+        """Return analytics for a specific note path if recorded."""
+
+        note_data = self.analytics.get_note(note_path)
+        if not note_data:
+            return None
+
+        return {
+            "note_path": note_data.note_path,
+            "profile": note_data.profile,
+            "iterations": note_data.iterations,
+            "final_issue_count": note_data.final_issue_count,
+            "initial_issue_count": note_data.initial_issue_count,
+            "issues_resolved": note_data.issues_resolved,
+            "elapsed_seconds": note_data.elapsed_seconds,
+            "qa_passed": note_data.qa_passed,
+            "requires_human_review": note_data.requires_human_review,
+            "qa_attempts": [
+                {
+                    "iteration": qa.iteration,
+                    "passed": qa.passed,
+                    "summary": qa.summary,
+                }
+                for qa in note_data.qa_attempts
+            ],
+            "iterations_detail": [
+                {
+                    "iteration": stats.iteration,
+                    "metadata_issues": stats.metadata_issues,
+                    "structural_issues": stats.structural_issues,
+                    "parity_issues": stats.parity_issues,
+                    "total_issues": stats.total_issues,
+                    "decision": stats.decision,
+                }
+                for stats in note_data.iteration_stats
+            ],
+        }
+
+    def get_analytics_summary(self) -> dict[str, Any]:
+        """Return aggregated analytics for the current review session."""
+
+        return self.analytics.summary()
 
 
 def create_review_graph(
@@ -1767,6 +1967,8 @@ def create_review_graph(
     max_iterations: int = 10,
     dry_run: bool = False,
     completion_mode: CompletionMode = CompletionMode.STANDARD,
+    processing_profile: ProcessingProfile = ProcessingProfile.BALANCED,
+    enable_analytics: bool | None = None,
 ) -> ReviewGraph:
     """Create a ReviewGraph instance with loaded taxonomy and note index.
 
@@ -1775,6 +1977,8 @@ def create_review_graph(
         max_iterations: Maximum fix iterations per note (default: 10)
         dry_run: If True, don't write any files to disk (validation only)
         completion_mode: Strictness level for completion (default: STANDARD)
+        processing_profile: Workflow mode controlling stability/throughput trade-offs
+        enable_analytics: Optional override for analytics capture (defaults per profile)
 
     Returns:
         Configured ReviewGraph instance
@@ -1784,6 +1988,9 @@ def create_review_graph(
     logger.debug(f"Max iterations: {max_iterations}")
     logger.debug(f"Dry run mode: {dry_run}")
     logger.debug(f"Completion mode: {completion_mode.value}")
+    logger.debug(f"Processing profile: {processing_profile.value}")
+    if enable_analytics is not None:
+        logger.debug(f"Analytics enabled override: {enable_analytics}")
 
     # Discover repo root
     repo_root = vault_root.parent if vault_root.name == "InterviewQuestions" else vault_root
@@ -1815,4 +2022,6 @@ def create_review_graph(
         max_iterations=max_iterations,
         dry_run=dry_run,
         completion_mode=completion_mode,
+        processing_profile=processing_profile,
+        enable_analytics=enable_analytics,
     )
