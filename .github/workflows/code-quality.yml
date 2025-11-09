@@ -40,49 +40,108 @@ jobs:
           uv sync --extra dev
 
       - name: Run ruff linter
+        id: ruff
         continue-on-error: true
         run: |
           cd automation
           echo "Running ruff check..."
-          uv run ruff check src/ --output-format=github
+          set -o pipefail
+          uv run ruff check src/ --output-format=github | tee ../ruff-check.log
+          status=${PIPESTATUS[0]}
+          printf "exit_code=%s\n" "$status" >> "$GITHUB_OUTPUT"
+          exit $status
 
       - name: Run ruff formatter check
+        id: ruff-format
         continue-on-error: true
         run: |
           cd automation
           echo "Checking code formatting..."
-          uv run ruff format --check src/
+          set -o pipefail
+          uv run ruff format --check src/ | tee ../ruff-format.log
+          status=${PIPESTATUS[0]}
+          printf "exit_code=%s\n" "$status" >> "$GITHUB_OUTPUT"
+          exit $status
 
       - name: Generate lint report
         if: always()
         run: |
-          cd automation
-          echo "# Code Quality Report" > ../lint-report.md
-          echo "" >> ../lint-report.md
-          echo "## Ruff Linter" >> ../lint-report.md
-          echo "" >> ../lint-report.md
-          echo "\`\`\`" >> ../lint-report.md
-          uv run ruff check src/ >> ../lint-report.md 2>&1 || echo "No issues found" >> ../lint-report.md
-          echo "\`\`\`" >> ../lint-report.md
+          echo "# Code Quality Report" > lint-report.md
+          echo "" >> lint-report.md
+          if [ -f "ruff-check.log" ]; then
+            echo "## Ruff Linter" >> lint-report.md
+            echo "" >> lint-report.md
+            echo "\`\`\`" >> lint-report.md
+            cat ruff-check.log >> lint-report.md
+            echo "\`\`\`" >> lint-report.md
+            echo "" >> lint-report.md
+          fi
+          if [ -f "ruff-format.log" ]; then
+            echo "## Ruff Formatter" >> lint-report.md
+            echo "" >> lint-report.md
+            echo "\`\`\`" >> lint-report.md
+            cat ruff-format.log >> lint-report.md
+            echo "\`\`\`" >> lint-report.md
+            echo "" >> lint-report.md
+          fi
+
+      - name: Create lint summary
+        if: always()
+        id: lint-summary
+        run: |
+          python <<'PY'
+          import os
+          from pathlib import Path
+
+          report = Path("lint-report.md")
+          summary = Path("lint-summary.md")
+
+          if not report.exists():
+              summary.write_text("# Code Quality Summary\n\nLint report not generated.\n", encoding="utf-8")
+              with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+                  fh.write("has_failures=false\n")
+              raise SystemExit(0)
+
+          ruff_exit = "${{ steps.ruff.outputs.exit_code }}"
+          fmt_exit = "${{ steps['ruff-format'].outputs.exit_code }}"
+
+          status_lines = ["# Code Quality Summary", ""]
+          status_lines.append("| Check | Status |")
+          status_lines.append("| --- | --- |")
+          status_lines.append(f"| Ruff lint | {'Failed' if ruff_exit not in ('', '0') else 'Passed'} |")
+          status_lines.append(f"| Ruff format | {'Failed' if fmt_exit not in ('', '0') else 'Passed'} |")
+          summary.write_text("\n".join(status_lines) + "\n", encoding="utf-8")
+
+          has_failures = any(code not in ("", "0") for code in (ruff_exit, fmt_exit))
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"has_failures={'true' if has_failures else 'false'}\n")
+          PY
 
       - name: Upload lint report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: lint-report
-          path: lint-report.md
+          path: |
+            lint-report.md
+            lint-summary.md
           retention-days: 30
 
       - name: Add lint summary
         if: always()
         run: |
-          if [ -f "lint-report.md" ]; then
-            echo "# Code Quality Summary" >> $GITHUB_STEP_SUMMARY
-            cat lint-report.md >> $GITHUB_STEP_SUMMARY
+          if [ -f "lint-summary.md" ]; then
+            cat lint-summary.md >> $GITHUB_STEP_SUMMARY
           else
             echo "# Code Quality Summary" >> $GITHUB_STEP_SUMMARY
             echo "Lint report not generated" >> $GITHUB_STEP_SUMMARY
           fi
+
+      - name: Fail workflow for lint issues
+        if: ${{ steps.lint-summary.outputs.has_failures == 'true' }}
+        run: |
+          echo "Lint checks reported failures"
+          exit 1
 
   type-check:
     name: Type Check Python Code
@@ -108,37 +167,176 @@ jobs:
           uv sync --extra dev
 
       - name: Run mypy type checker
+        id: mypy
         continue-on-error: true
         run: |
           cd automation
           echo "Running mypy type checker..."
-          uv run mypy src/ --pretty
+          set -o pipefail
+          uv run mypy src/ --pretty | tee ../mypy.log
+          status=${PIPESTATUS[0]}
+          printf "exit_code=%s\n" "$status" >> "$GITHUB_OUTPUT"
+          exit $status
 
       - name: Generate type check report
         if: always()
         run: |
-          cd automation
-          echo "# Type Check Report" > ../type-check-report.md
-          echo "" >> ../type-check-report.md
-          echo "\`\`\`" >> ../type-check-report.md
-          uv run mypy src/ >> ../type-check-report.md 2>&1 || echo "No issues found" >> ../type-check-report.md
-          echo "\`\`\`" >> ../type-check-report.md
+          echo "# Type Check Report" > type-check-report.md
+          echo "" >> type-check-report.md
+          if [ -f "mypy.log" ]; then
+            echo "\`\`\`" >> type-check-report.md
+            cat mypy.log >> type-check-report.md
+            echo "\`\`\`" >> type-check-report.md
+          fi
+
+      - name: Create type check summary
+        if: always()
+        id: type-summary
+        run: |
+          python <<'PY'
+          import os
+          from pathlib import Path
+
+          report = Path("type-check-report.md")
+          summary = Path("type-check-summary.md")
+
+          if not report.exists():
+              summary.write_text("# Type Check Summary\n\nType check report not generated.\n", encoding="utf-8")
+              with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+                  fh.write("has_failures=false\n")
+              raise SystemExit(0)
+
+          mypy_exit = "${{ steps.mypy.outputs.exit_code }}"
+          status_lines = ["# Type Check Summary", "", "| Check | Status |", "| --- | --- |"]
+          status_lines.append(f"| mypy | {'Failed' if mypy_exit not in ('', '0') else 'Passed'} |")
+          summary.write_text("\n".join(status_lines) + "\n", encoding="utf-8")
+
+          has_failures = mypy_exit not in ("", "0")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"has_failures={'true' if has_failures else 'false'}\n")
+          PY
 
       - name: Upload type check report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: type-check-report
-          path: type-check-report.md
+          path: |
+            type-check-report.md
+            type-check-summary.md
           retention-days: 30
 
       - name: Add type check summary
         if: always()
         run: |
-          if [ -f "type-check-report.md" ]; then
-            echo "# Type Check Summary" >> $GITHUB_STEP_SUMMARY
-            cat type-check-report.md >> $GITHUB_STEP_SUMMARY
+          if [ -f "type-check-summary.md" ]; then
+            cat type-check-summary.md >> $GITHUB_STEP_SUMMARY
           else
             echo "# Type Check Summary" >> $GITHUB_STEP_SUMMARY
             echo "Type check report not generated" >> $GITHUB_STEP_SUMMARY
           fi
+
+      - name: Fail workflow for type check issues
+        if: ${{ steps.type-summary.outputs.has_failures == 'true' }}
+        run: |
+          echo "Type checks reported failures"
+          exit 1
+
+  tests:
+    name: Run Test Suite
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Install automation package with dev dependencies
+        run: |
+          cd automation
+          uv sync --extra dev
+
+      - name: Run pytest
+        id: pytest
+        continue-on-error: true
+        run: |
+          cd automation
+          echo "Running pytest..."
+          set -o pipefail
+          uv run pytest --maxfail=1 --disable-warnings -q | tee ../pytest.log
+          status=${PIPESTATUS[0]}
+          printf "exit_code=%s\n" "$status" >> "$GITHUB_OUTPUT"
+          exit $status
+
+      - name: Generate test report
+        if: always()
+        run: |
+          echo "# Test Report" > test-report.md
+          echo "" >> test-report.md
+          if [ -f "pytest.log" ]; then
+            echo "\`\`\`" >> test-report.md
+            cat pytest.log >> test-report.md
+            echo "\`\`\`" >> test-report.md
+          fi
+
+      - name: Create test summary
+        if: always()
+        id: test-summary
+        run: |
+          python <<'PY'
+          import os
+          from pathlib import Path
+
+          report = Path("test-report.md")
+          summary = Path("test-summary.md")
+
+          if not report.exists():
+              summary.write_text("# Test Summary\n\nTest report not generated.\n", encoding="utf-8")
+              with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+                  fh.write("has_failures=false\n")
+              raise SystemExit(0)
+
+          pytest_exit = "${{ steps.pytest.outputs.exit_code }}"
+          status_lines = ["# Test Summary", "", "| Check | Status |", "| --- | --- |"]
+          status_lines.append(f"| pytest | {'Failed' if pytest_exit not in ('', '0') else 'Passed'} |")
+          summary.write_text("\n".join(status_lines) + "\n", encoding="utf-8")
+
+          has_failures = pytest_exit not in ("", "0")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"has_failures={'true' if has_failures else 'false'}\n")
+          PY
+
+      - name: Upload test artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report
+          path: |
+            test-report.md
+            test-summary.md
+          retention-days: 30
+
+      - name: Add test summary
+        if: always()
+        run: |
+          if [ -f "test-summary.md" ]; then
+            cat test-summary.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "# Test Summary" >> $GITHUB_STEP_SUMMARY
+            echo "Test report not generated" >> $GITHUB_STEP_SUMMARY
+          fi
+
+      - name: Fail workflow for test failures
+        if: ${{ steps.test-summary.outputs.has_failures == 'true' }}
+        run: |
+          echo "Tests reported failures"
+          exit 1

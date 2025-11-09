@@ -68,69 +68,121 @@ jobs:
             echo "$CHANGED_FILES" > changed_files.txt
           fi
 
-      - name: Validate changed notes
+      - name: Prepare changed notes workspace
         if: steps.changed-files.outputs.has_changes == 'true'
         run: |
-          cd automation
-
-          # Collect validation errors
-          VALIDATION_FAILED=0
-
-          # Validate each changed file
+          rm -rf changed-notes-temp
+          mkdir -p changed-notes-temp
           while IFS= read -r file; do
-            if [ -f "../$file" ]; then
-              echo "Validating: $file"
-              uv run vault validate "../$file" || VALIDATION_FAILED=1
+            if [ -f "$file" ]; then
+              mkdir -p "changed-notes-temp/$(dirname "$file")"
+              cp "$file" "changed-notes-temp/$file"
             fi
-          done < ../changed_files.txt
+          done < changed_files.txt
 
-          # Exit with error if any validation failed
-          if [ $VALIDATION_FAILED -eq 1 ]; then
-            echo "ERROR: Validation failed for one or more files"
-            exit 1
-          fi
-
-      - name: Generate validation report for changed files
+      - name: Run focused validation
         if: steps.changed-files.outputs.has_changes == 'true'
+        id: run-validation
+        continue-on-error: true
         run: |
           cd automation
+          set -o pipefail
+          uv run vault validate ../changed-notes-temp --report ../validation-report.md --quiet | tee ../validation-console.log
+          status=${PIPESTATUS[0]}
+          printf "exit_code=%s\n" "$status" >> "$GITHUB_OUTPUT"
+          exit $status
 
-          # Create a temporary directory for changed file validation
-          mkdir -p ../changed-notes-temp
+      - name: Create validation summary
+        if: steps.changed-files.outputs.has_changes == 'true'
+        id: summarize
+        run: |
+          python <<'PY'
+          import os
+          from collections import Counter
+          from pathlib import Path
 
-          # Copy changed files to temp directory preserving structure
-          while IFS= read -r file; do
-            if [ -f "../$file" ]; then
-              mkdir -p "../changed-notes-temp/$(dirname "$file")"
-              cp "../$file" "../changed-notes-temp/$file"
-            fi
-          done < ../changed_files.txt
+          report_path = Path("validation-report.md")
+          summary_path = Path("validation-summary.md")
 
-          # Generate validation report only for changed files
-          # Note: This generates a focused report on changed files only
-          echo "# Validation Report - Changed Files" > ../validation-report.md
-          echo "" >> ../validation-report.md
-          echo "**Files validated**: $(wc -l < ../changed_files.txt)" >> ../validation-report.md
-          echo "" >> ../validation-report.md
+          if not report_path.exists():
+              summary_path.write_text("# Validation Summary\n\nValidation report not generated.\n", encoding="utf-8")
+              with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+                  fh.write("has_errors=false\n")
+                  fh.write("has_critical=false\n")
+                  fh.write("issue_count=0\n")
+                  fh.write("validated_files=0\n")
+              raise SystemExit(0)
 
-          # Validate each file and append to report
-          while IFS= read -r file; do
-            if [ -f "../$file" ]; then
-              echo "## $file" >> ../validation-report.md
-              echo "" >> ../validation-report.md
-              uv run vault validate "../$file" >> ../validation-report.md 2>&1 || true
-              echo "" >> ../validation-report.md
-              echo "---" >> ../validation-report.md
-              echo "" >> ../validation-report.md
-            fi
-          done < ../changed_files.txt
+          lines = report_path.read_text(encoding="utf-8").splitlines()
+          severity_counts = Counter()
+          file_counts = Counter()
+          all_files: list[str] = []
+          current_file: str | None = None
 
-      - name: Upload validation report
+          for line in lines:
+              if line.startswith("## "):
+                  header = line[3:].strip()
+                  if header == "Summary":
+                      current_file = None
+                      continue
+                  current_file = header
+                  if header not in all_files:
+                      all_files.append(header)
+              elif line.startswith("- **"):
+                  parts = line.split("**")
+                  if len(parts) >= 3:
+                      severity = parts[1]
+                      severity_counts[severity] += 1
+                      if current_file:
+                          file_counts[current_file] += 1
+
+          total_files = len(all_files)
+          total_issues = sum(severity_counts.values())
+
+          summary_lines: list[str] = ["# Validation Summary", "", f"- Files validated: {total_files}", f"- Issues found: {total_issues}", ""]
+
+          if severity_counts:
+              summary_lines.append("| Severity | Count |")
+              summary_lines.append("| --- | --- |")
+              for severity in ("CRITICAL", "ERROR", "WARNING", "INFO"):
+                  if severity_counts.get(severity, 0) or severity in ("CRITICAL", "ERROR"):
+                      summary_lines.append(f"| {severity} | {severity_counts.get(severity, 0)} |")
+              summary_lines.append("")
+          else:
+              summary_lines.append("All files passed without issues.")
+              summary_lines.append("")
+
+          if file_counts:
+              summary_lines.append("## Files with issues")
+              summary_lines.append("")
+              summary_lines.append("| File | Issues |")
+              summary_lines.append("| --- | --- |")
+              for file_path, count in file_counts.most_common():
+                  summary_lines.append(f"| {file_path} | {count} |")
+              summary_lines.append("")
+
+          summary_path.write_text("\n".join(summary_lines) + "\n", encoding="utf-8")
+
+          has_errors = any(severity_counts.get(level, 0) > 0 for level in ("CRITICAL", "ERROR"))
+          has_critical = severity_counts.get("CRITICAL", 0) > 0
+
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"has_errors={'true' if has_errors else 'false'}\n")
+              fh.write(f"has_critical={'true' if has_critical else 'false'}\n")
+              fh.write(f"issue_count={total_issues}\n")
+              fh.write(f"validated_files={total_files}\n")
+          PY
+
+      - name: Upload validation artifacts
         if: steps.changed-files.outputs.has_changes == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: validation-report
-          path: validation-report.md
+          path: |
+            validation-report.md
+            validation-summary.md
+            validation-console.log
+            changed_files.txt
           retention-days: 30
 
       - name: Comment PR with validation results
@@ -141,29 +193,33 @@ jobs:
           script: |
             const fs = require('fs');
 
-            // Read validation report
-            let report = '';
-            try {
-              report = fs.readFileSync('validation-report.md', 'utf8');
-            } catch (e) {
-              report = 'Validation report not found';
-            }
+            const summary = fs.existsSync('validation-summary.md')
+              ? fs.readFileSync('validation-summary.md', 'utf8')
+              : '# Validation Summary\n\nSummary not available.';
+            const report = fs.existsSync('validation-report.md')
+              ? fs.readFileSync('validation-report.md', 'utf8')
+              : 'Validation report not found.';
 
-            // Create comment body
             const body = `## Validation Results
 
-            ${report}
+${summary}
 
-            <details>
-            <summary>Validation Details</summary>
+<details>
+<summary>Full validation report</summary>
 
-            - **Workflow**: ${{ github.workflow }}
-            - **Run**: [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-            - **Commit**: ${{ github.sha }}
+${report}
 
-            </details>`;
+</details>
 
-            // Post comment
+<details>
+<summary>Workflow details</summary>
+
+- **Workflow**: ${{ github.workflow }}
+- **Run**: [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+- **Commit**: ${{ github.sha }}
+
+</details>`;
+
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
@@ -174,14 +230,18 @@ jobs:
       - name: Validation summary
         if: steps.changed-files.outputs.has_changes == 'true'
         run: |
-          echo "### Validation Complete" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          if [ -f "validation-report.md" ]; then
-            cat validation-report.md >> $GITHUB_STEP_SUMMARY
+          if [ -f "validation-summary.md" ]; then
+            cat validation-summary.md >> $GITHUB_STEP_SUMMARY
           else
-            echo "All validations passed!" >> $GITHUB_STEP_SUMMARY
+            echo "# Validation Summary" >> $GITHUB_STEP_SUMMARY
+            echo "Validation report not generated." >> $GITHUB_STEP_SUMMARY
           fi
+
+      - name: Fail on validation issues
+        if: steps.changed-files.outputs.has_changes == 'true' && (steps.summarize.outputs.has_errors == 'true' || steps.run-validation.outputs.exit_code != '0')
+        run: |
+          echo "Validation detected errors."
+          exit 1
 
       - name: No changes detected
         if: steps.changed-files.outputs.has_changes == 'false'
