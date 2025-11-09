@@ -6,6 +6,11 @@ Comprehensive Python automation tools for maintaining the Interview Questions Ob
 
 This package provides a unified, professional automation framework for:
 
+- **LLM Review**: AI-powered note review, correction, and knowledge-gap filling (NEW)
+  - Technical accuracy review and automated fixing
+  - Metadata sanity checks and YAML repair
+  - Concept stub enrichment with meaningful content
+  - Iterative validation and improvement
 - **Validation**: Comprehensive note validation (YAML, content, links, format, code)
 - **Normalization**: Automated frontmatter normalization for concept notes
 - **Reporting**: Missing translations and quality reports
@@ -762,6 +767,7 @@ uv run mypy src/
 ## Documentation
 
 - **This file**: Overview and usage
+- **LLM_REVIEW.md**: LLM-powered review system with knowledge-gap agent (NEW)
 - **validators/README.md**: Detailed validator documentation
 - **../AGENTS.md**: AI agent instructions for vault maintenance
 - **../CLAUDE.md**: Claude Code agent guide
