@@ -947,6 +947,12 @@ def llm_review(
         "-m",
         help="Maximum fix iterations per note",
     ),
+    completion_mode: str = typer.Option(
+        "standard",
+        "--completion-mode",
+        "-c",
+        help="Completion strictness: strict (no issues), standard (allow warnings), permissive (allow some errors)",
+    ),
     backup: bool = typer.Option(
         True,
         "--backup/--no-backup",
@@ -993,7 +999,17 @@ def llm_review(
             raise typer.Exit(code=1)
 
         # Import LLM review module
-        from obsidian_vault.llm_review import create_review_graph
+        from obsidian_vault.llm_review import create_review_graph, CompletionMode
+
+        # Validate and convert completion_mode
+        try:
+            mode = CompletionMode(completion_mode.lower())
+        except ValueError:
+            console.print(
+                f"[red]✗[/red] Invalid completion mode: {completion_mode}\n"
+                f"Valid options: strict, standard, permissive"
+            )
+            raise typer.Exit(code=1)
 
         # Collect notes matching pattern
         if pattern.startswith("InterviewQuestions/"):
@@ -1023,6 +1039,7 @@ def llm_review(
                 vault_root=vault_dir,
                 max_iterations=max_iterations,
                 dry_run=dry_run,
+                completion_mode=mode,
             )
 
         # Process notes
