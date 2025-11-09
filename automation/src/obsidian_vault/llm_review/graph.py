@@ -209,7 +209,7 @@ class ReviewGraph:
             return updates
 
         except Exception as e:
-            logger.error(f"Error in technical review: {e}")
+            logger.error("Error in technical review: {}", e)
             history_updates.append(
                 state_obj.add_history_entry(
                     "initial_llm_review", f"Error during technical review: {e}"
@@ -352,7 +352,7 @@ class ReviewGraph:
             }
 
         except Exception as e:
-            logger.error(f"Error running validators: {e}")
+            logger.error("Error running validators: {}", e)
             history_updates.append(
                 state_obj.add_history_entry(
                     "run_validators", f"Error during validation: {e}"
@@ -490,7 +490,7 @@ class ReviewGraph:
             return updates
 
         except Exception as e:
-            logger.error(f"Error in bilingual parity check: {e}", exc_info=True)
+            logger.error("Error in bilingual parity check: {}", e, exc_info=True)
             history_updates.append(
                 state_obj.add_history_entry(
                     "check_bilingual_parity", f"Error during parity check: {e}"
@@ -702,7 +702,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                     # Continue with generic stub if enrichment fails
 
             except Exception as e:
-                logger.error(f"Failed to create concept file {concept_file}: {e}")
+                logger.error("Failed to create concept file {}: {}", concept_file, e)
 
         return created_files
 
@@ -779,7 +779,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             return updates
 
         except Exception as e:
-            logger.error(f"Error fixing issues: {e}")
+            logger.error("Error fixing issues: {}", e)
             history_updates.append(
                 state_obj.add_history_entry(
                     "llm_fix_issues", f"Error applying fixes: {e}"
@@ -881,7 +881,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             return updates
 
         except Exception as e:
-            logger.error(f"Error in QA verification: {e}")
+            logger.error("Error in QA verification: {}", e)
             history_updates.append(
                 state_obj.add_history_entry(
                     "qa_verification", f"Error during QA verification: {e}"
@@ -970,7 +970,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             return updates
 
         except Exception as e:
-            logger.error(f"Error summarizing QA failures: {e}")
+            logger.error("Error summarizing QA failures: {}", e)
             history_updates.append(
                 state_obj.add_history_entry(
                     "summarize_qa_failures", f"Error creating failure summary: {e}"
@@ -1134,7 +1134,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             original_text = note_path.read_text(encoding="utf-8")
             logger.debug(f"Read {len(original_text)} characters from note")
         except Exception as e:
-            logger.error(f"Failed to read note {note_path}: {e}")
+            logger.error("Failed to read note {}: {}", note_path, e)
             raise
 
         # Initialize state
@@ -1153,7 +1153,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             final_state = NoteReviewState.from_dict(final_state_dict)
             logger.debug("LangGraph workflow completed")
         except Exception as e:
-            logger.error(f"LangGraph workflow failed for {note_path}: {e}")
+            logger.error("LangGraph workflow failed for {}: {}", note_path, e)
             raise
 
         # Log final results
@@ -1200,7 +1200,7 @@ def create_review_graph(
         taxonomy = TaxonomyLoader(repo_root).load()
         logger.debug(f"Taxonomy loaded - topics: {len(taxonomy.topics) if hasattr(taxonomy, 'topics') else 'unknown'}")
     except Exception as e:
-        logger.error(f"Failed to load taxonomy: {e}")
+        logger.error("Failed to load taxonomy: {}", e)
         raise
 
     # Build note index
@@ -1209,7 +1209,7 @@ def create_review_graph(
         note_index = build_note_index(vault_root)
         logger.debug(f"Note index built - {len(note_index)} notes indexed")
     except Exception as e:
-        logger.error(f"Failed to build note index: {e}")
+        logger.error("Failed to build note index: {}", e)
         raise
 
     logger.success("ReviewGraph initialized successfully")

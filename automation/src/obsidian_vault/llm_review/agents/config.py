@@ -11,7 +11,7 @@ from pydantic_ai.models.openai import ModelSettings, OpenAIChatModel
 from pydantic_ai.providers.openai import OpenAIProvider
 
 
-DEFAULT_OPENROUTER_MODEL = "anthropic/claude-sonnet-4"
+DEFAULT_OPENROUTER_MODEL = "openrouter/polaris-alpha"
 DEFAULT_TEMPERATURE = 0.2
 DEFAULT_TIMEOUT = 60.0
 
