@@ -23,8 +23,6 @@ from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-
-import yaml
 from loguru import logger
 
 from obsidian_vault.utils.frontmatter import load_frontmatter_text
@@ -56,7 +54,12 @@ class DeterministicFixer:
             "timestamp_order": re.compile(
                 r"'created'.*after.*'updated'|temporal logic", re.IGNORECASE
             ),
-            "missing_timestamp": re.compile(r"Missing.*(?:created|updated)", re.IGNORECASE),
+            "missing_timestamp": re.compile(
+                r"Missing.*(?:created|updated)", re.IGNORECASE
+            ),
+            "type_name_backticks": re.compile(
+                r"Type name '([^']+)' found without backticks", re.IGNORECASE
+            ),
         }
 
     def can_fix(self, issues: list[ReviewIssue]) -> bool:
@@ -90,12 +93,13 @@ class DeterministicFixer:
         Returns:
             DeterministicFixResult with changes and fixes applied
         """
-        fixes_applied = []
-        issues_fixed = []
+        fixes_applied: list[str] = []
+        issues_fixed: list[str] = []
         current_text = note_text
 
         # Parse YAML frontmatter
         yaml_data, body = load_frontmatter_text(current_text)
+        body_text = body
 
         if not yaml_data:
             logger.debug("No YAML frontmatter found - skipping deterministic fixes")
@@ -140,9 +144,38 @@ class DeterministicFixer:
                         issues_fixed.append(issue.message)
                         changes_made = True
 
+        # Fix 4: Wrap common type names in backticks outside code blocks
+        processed_type_names: set[str] = set()
+        type_pattern = self.fix_patterns["type_name_backticks"]
+        for issue in issues:
+            match = type_pattern.search(issue.message)
+            if not match:
+                continue
+
+            type_name = match.group(1)
+            if type_name in processed_type_names:
+                continue
+
+            updated_body, wrapped = self._wrap_type_name_in_body(body_text, type_name)
+            if wrapped:
+                body_text = updated_body
+                fixes_applied.append(f"Wrapped type name `{type_name}` in backticks")
+                issues_fixed.append(issue.message)
+                changes_made = True
+                logger.debug(
+                    "Wrapped type name '{}' in backticks deterministically", type_name
+                )
+            else:
+                logger.debug(
+                    "No occurrences of type name '{}' found for deterministic wrapping",
+                    type_name,
+                )
+
+            processed_type_names.add(type_name)
+
         if changes_made:
-            # Reconstruct note with fixed YAML
-            current_text = self._reconstruct_note(yaml_data, body)
+            # Reconstruct note with fixed YAML/body updates
+            current_text = self._reconstruct_note(yaml_data, body_text)
             logger.info(
                 f"Deterministic fixer applied {len(fixes_applied)} fix(es), "
                 f"resolved {len(issues_fixed)} issue(s)"
@@ -269,6 +302,50 @@ class DeterministicFixer:
 
         # Use frontmatter utility for clean YAML formatting
         return dump_frontmatter(yaml_data, body)
+
+    def _wrap_type_name_in_body(self, body: str, type_name: str) -> tuple[str, bool]:
+        """Wrap occurrences of a type name in backticks outside code blocks."""
+
+        segments = self._split_by_code_blocks(body)
+        pattern = re.compile(rf"(?<!`)\b{re.escape(type_name)}\b(?!`)")
+
+        updated_segments: list[str] = []
+        total_replacements = 0
+
+        for segment, is_code_block in segments:
+            if is_code_block:
+                updated_segments.append(segment)
+                continue
+
+            replaced_segment, replacements = pattern.subn(
+                lambda match: f"`{match.group(0)}`", segment
+            )
+            updated_segments.append(replaced_segment)
+            total_replacements += replacements
+
+        if total_replacements == 0:
+            return body, False
+
+        return "".join(updated_segments), True
+
+    def _split_by_code_blocks(self, content: str) -> list[tuple[str, bool]]:
+        """Split content into (segment, is_code_block) tuples."""
+
+        parts: list[tuple[str, bool]] = []
+        code_block_pattern = re.compile(r"```[\s\S]*?```")
+
+        last_end = 0
+        for match in code_block_pattern.finditer(content):
+            if match.start() > last_end:
+                parts.append((content[last_end : match.start()], False))
+
+            parts.append((match.group(0), True))
+            last_end = match.end()
+
+        if last_end < len(content):
+            parts.append((content[last_end:], False))
+
+        return parts if parts else [(content, False)]
 
     def get_fixable_issue_count(self, issues: list[ReviewIssue]) -> int:
         """Count how many issues can be fixed deterministically.
