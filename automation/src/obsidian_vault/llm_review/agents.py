@@ -332,12 +332,35 @@ PRIMARY GOALS
 - Validate every technical statement, algorithm explanation, complexity analysis, and code example for factual accuracy.
 - Keep changes surgical and respect the existing formatting, bilingual order (RU first), and author voice.
 
+TAXONOMY CONTEXT
+You have access to the vault's controlled vocabularies to ground your technical assessments:
+
+**Valid Topics** (choose exactly ONE):
+{valid_topics}
+
+**Android Subtopics** (when topic=android):
+{android_subtopics}
+
+**Topic→Folder Mapping**:
+{topic_folder_mapping}
+
+Use this taxonomy to:
+- Verify that technical content aligns with the declared topic and subtopics
+- Validate that Android-specific content follows Android platform conventions
+- Ensure terminology and concepts are appropriate for the topic domain
+- Check that complexity expectations match the topic area (e.g., system-design vs algorithms)
+
+RELATED NOTES CONTEXT
+{related_notes_context}
+
 REVIEW PROCEDURE
 1. Read the entire note (RU + EN) to understand scope, question, and solution.
-2. Cross-check against standard CS/Android/system design knowledge and the vault rules above.
-3. Confirm blockquoted questions, YAML integrity, and section ordering remain intact (do not edit YAML fields).
-4. When an issue is found, update the minimal fragment in **both languages** so they stay semantically aligned.
-5. If correctness cannot be confirmed with high confidence, flag the concern instead of guessing.
+2. **Cross-reference with taxonomy**: Verify technical content matches the declared topic/subtopics and uses canonical terminology from the taxonomy.
+3. **Leverage related notes**: Use related note summaries to ensure consistency with existing vault knowledge and avoid contradictions.
+4. Cross-check against standard CS/Android/system design knowledge and the vault rules above.
+5. Confirm blockquoted questions, YAML integrity, and section ordering remain intact (do not edit YAML fields).
+6. When an issue is found, update the minimal fragment in **both languages** so they stay semantically aligned.
+7. If correctness cannot be confirmed with high confidence, flag the concern instead of guessing.
 
 NEVER DO
 - Modify or regenerate YAML frontmatter, aliases, tags, or metadata formatting.
@@ -350,6 +373,7 @@ EDITING RULES
 - Keep RU and EN sections technically equivalent after edits.
 - Prefer explicit corrections over vague wording; show the right complexity, edge cases, and terminology.
 - Use ``issues_found`` to list each discrete technical problem (empty when none were found).
+- Ensure technical terminology aligns with the topic domain from the taxonomy.
 
 OUTPUT FORMAT
 Respond **only** with a JSON object matching ``TechnicalReviewResult``:
@@ -367,6 +391,7 @@ QUALITY BAR
 - Treat ambiguous or underspecified claims as issues that must be resolved or flagged.
 - Double-check complexity analysis, edge cases, and platform-specific guidance against senior-level expectations.
 - Ensure the final RU and EN content remains technically rigorous and mutually consistent.
+- Verify technical accuracy against both general knowledge AND the taxonomy context provided.
 """
 
 ISSUE_FIX_PROMPT = """You are an expert at fixing formatting and structural issues in Markdown notes.
@@ -851,14 +876,159 @@ def get_bilingual_parity_agent() -> Agent:
     )
 
 
+def _build_taxonomy_context(taxonomy) -> dict[str, str]:
+    """Build taxonomy context for the technical review prompt.
+
+    Args:
+        taxonomy: Taxonomy object with topics and android_subtopics
+
+    Returns:
+        Dictionary with formatted taxonomy context strings
+    """
+    from obsidian_vault.utils.taxonomy_loader import Taxonomy
+
+    if taxonomy is None or not isinstance(taxonomy, Taxonomy):
+        return {
+            "valid_topics": "Not available",
+            "android_subtopics": "Not available",
+            "topic_folder_mapping": "Not available",
+        }
+
+    # Format topics list
+    topics_list = sorted(taxonomy.topics) if taxonomy.topics else []
+    valid_topics = ", ".join(topics_list) if topics_list else "Not available"
+
+    # Format Android subtopics
+    android_subs = sorted(taxonomy.android_subtopics) if taxonomy.android_subtopics else []
+    android_subtopics = ", ".join(android_subs) if android_subs else "Not available"
+
+    # Topic → Folder mapping (canonical mapping from TAXONOMY.md)
+    topic_folder_mapping = """
+    algorithms → 20-Algorithms/
+    data-structures → 20-Algorithms/ (or 60-CompSci/)
+    system-design → 30-System-Design/
+    android → 40-Android/
+    kotlin → 70-Kotlin/
+    databases → 50-Backend/
+    networking → 50-Backend/ (or 60-CompSci/)
+    operating-systems → 60-CompSci/
+    concurrency → 60-CompSci/ (or 70-Kotlin/ if Kotlin-specific)
+    tools → 80-Tools/
+    """
+
+    return {
+        "valid_topics": valid_topics,
+        "android_subtopics": android_subtopics,
+        "topic_folder_mapping": topic_folder_mapping.strip(),
+    }
+
+
+def _build_related_notes_context(
+    note_path: str,
+    vault_root,
+    note_index: set[str] | None = None,
+) -> str:
+    """Build context from related notes mentioned in frontmatter.
+
+    Args:
+        note_path: Path to the current note
+        vault_root: Path to vault root
+        note_index: Set of available note filenames
+
+    Returns:
+        Formatted string with related notes context
+    """
+    from pathlib import Path
+    from obsidian_vault.utils.common import parse_note
+
+    if vault_root is None or note_index is None:
+        return "Related notes context: Not available"
+
+    try:
+        # Parse the current note to get frontmatter
+        current_path = Path(vault_root) / note_path if not Path(note_path).is_absolute() else Path(note_path)
+        if not current_path.exists():
+            return "Related notes context: Not available (note not found)"
+
+        frontmatter, _ = parse_note(current_path)
+
+        # Extract related notes from frontmatter
+        related = frontmatter.get("related", [])
+        if not related:
+            return "Related notes context: No related notes specified in frontmatter"
+
+        # Ensure related is a list
+        if isinstance(related, str):
+            related = [related]
+
+        # Build context from related notes
+        context_parts = ["Related notes context (from frontmatter):"]
+
+        for note_name in related[:5]:  # Limit to 5 related notes to avoid context bloat
+            # Add .md extension if not present
+            if not note_name.endswith(".md"):
+                note_name_with_ext = f"{note_name}.md"
+            else:
+                note_name_with_ext = note_name
+
+            # Check if note exists in index
+            if note_name_with_ext not in note_index:
+                context_parts.append(f"  - {note_name}: (file not found in vault)")
+                continue
+
+            # Try to find and read the related note
+            related_note_path = None
+            for path in Path(vault_root).rglob(note_name_with_ext):
+                related_note_path = path
+                break
+
+            if related_note_path and related_note_path.exists():
+                try:
+                    rel_frontmatter, rel_body = parse_note(related_note_path)
+                    title = rel_frontmatter.get("title", note_name)
+                    topic = rel_frontmatter.get("topic", "unknown")
+
+                    # Extract first paragraph from body as summary
+                    summary = ""
+                    for line in rel_body.split("\n"):
+                        line = line.strip()
+                        if line and not line.startswith("#") and not line.startswith(">"):
+                            summary = line[:150]  # First 150 chars
+                            break
+
+                    context_parts.append(
+                        f"  - {note_name} (topic: {topic}): {title}"
+                        + (f" - {summary}..." if summary else "")
+                    )
+                except Exception as e:
+                    logger.debug(f"Failed to read related note {note_name}: {e}")
+                    context_parts.append(f"  - {note_name}: (error reading file)")
+            else:
+                context_parts.append(f"  - {note_name}: (file not found)")
+
+        return "\n".join(context_parts)
+
+    except Exception as e:
+        logger.debug(f"Error building related notes context: {e}")
+        return f"Related notes context: Error ({str(e)})"
+
+
 async def run_technical_review(
-    note_text: str, note_path: str, **kwargs: Any
+    note_text: str,
+    note_path: str,
+    taxonomy = None,
+    vault_root = None,
+    note_index: set[str] | None = None,
+    **kwargs: Any
 ) -> TechnicalReviewResult:
-    """Run technical review on a note.
+    """Run technical review on a note with taxonomy and related notes context.
 
     Args:
         note_text: The note content to review
         note_path: Path to the note (for context)
+        taxonomy: Taxonomy object with controlled vocabularies
+        vault_root: Path to vault root (for reading related notes)
+        note_index: Set of available note filenames
         **kwargs: Additional context
 
     Returns:
@@ -866,6 +1036,33 @@ async def run_technical_review(
     """
     logger.debug(f"Starting technical review for: {note_path}")
     logger.debug(f"Note length: {len(note_text)} characters")
+
+    # Build taxonomy context
+    taxonomy_context = _build_taxonomy_context(taxonomy)
+    logger.debug(f"Taxonomy context: {len(taxonomy_context.get('valid_topics', ''))} topics")
+
+    # Build related notes context
+    related_notes_context = _build_related_notes_context(
+        note_path=note_path,
+        vault_root=vault_root,
+        note_index=note_index,
+    )
+    logger.debug(f"Related notes context: {len(related_notes_context)} chars")
+
+    # Format the system prompt with context
+    formatted_system_prompt = TECHNICAL_REVIEW_PROMPT.format(
+        valid_topics=taxonomy_context["valid_topics"],
+        android_subtopics=taxonomy_context["android_subtopics"],
+        topic_folder_mapping=taxonomy_context["topic_folder_mapping"],
+        related_notes_context=related_notes_context,
+    )
+
+    # Create agent with contextualized system prompt
+    agent = Agent(
+        model=get_openrouter_model(agent_settings=TECHNICAL_REVIEW_SETTINGS),
+        output_type=TechnicalReviewResult,
+        system_prompt=formatted_system_prompt,
+    )
 
     prompt = (
         "Review the following interview question note for technical accuracy, "
@@ -877,8 +1074,7 @@ async def run_technical_review(
     )
 
     try:
-        agent = get_technical_review_agent()
-        logger.debug("Running technical review agent...")
+        logger.debug("Running technical review agent with taxonomy and related notes context...")
         result = await agent.run(prompt)
 
         logger.debug(

@@ -154,6 +154,9 @@ class ReviewGraph:
             result = await run_technical_review(
                 note_text=state_obj.current_text,
                 note_path=state_obj.note_path,
+                taxonomy=self.taxonomy,
+                vault_root=self.vault_root,
+                note_index=self.note_index,
             )
 
             updates: dict[str, Any] = {}

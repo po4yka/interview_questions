@@ -18,7 +18,7 @@ class TaxonomyLoader:
 
     def __init__(self, vault_root: Path):
         self.vault_root = vault_root
-        self.taxonomy_path = vault_root / "InterviewQuestions" / "00-Administration" / "TAXONOMY.md"
+        self.taxonomy_path = vault_root / "InterviewQuestions" / "00-Administration" / "Vault-Rules" / "TAXONOMY.md"
 
     def load(self) -> Taxonomy:
         taxonomy = Taxonomy()
