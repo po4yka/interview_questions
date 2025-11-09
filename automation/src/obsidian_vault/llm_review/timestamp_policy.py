@@ -141,10 +141,13 @@ class TimestampPolicy:
                 updated = datetime.strptime(str(yaml_data["updated"]), self.DATE_FORMAT).date()
 
                 if created > updated:
-                    suggestions.append(
+                    issues.append(
                         f"'created' ({created}) is after 'updated' ({updated}) - "
-                        f"this is unusual but not necessarily wrong"
+                        f"this violates temporal logic and must be corrected"
                     )
+                    # Mark both as invalid since we can't determine which is wrong
+                    created_valid = False
+                    updated_valid = False
             except (ValueError, TypeError):
                 pass  # Already caught above
 
@@ -299,7 +302,13 @@ STRICT TIMESTAMP POLICY (PHASE 2 FIX - FOLLOW EXACTLY):
 4. IF timestamp is in the FUTURE:
    - Replace with current date: {current_date}
 
-5. NEVER "update" timestamps just because they're old
+5. IF 'created' is AFTER 'updated' (temporal logic violation):
+   - This is CRITICAL ERROR - violates causality
+   - Set 'updated' to current date (most recent change is now)
+   - Keep 'created' unchanged (original creation date is authoritative)
+   - Example: created: 2025-10-05, updated: 2025-01-25 → created: 2025-10-05, updated: 2025-11-09
+
+6. NEVER "update" timestamps just because they're old
    - Old timestamps are often correct (file created in the past)
    - Only fix if actually INVALID
 

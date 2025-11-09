@@ -27,6 +27,7 @@ from .agents import (
     run_technical_review,
 )
 from .atomic_related_fixer import AtomicRelatedFixer  # PHASE 3 FIX
+from .deterministic_fixer import DeterministicFixer  # QUICK WIN FIX
 from .fix_memory import FixMemory  # PHASE 1 FIX
 from .smart_code_parity import SmartCodeParityChecker  # PHASE 3 FIX
 from .smart_validators import SmartValidatorSelector  # PHASE 2 FIX
@@ -161,6 +162,8 @@ class ReviewGraph:
         self.atomic_related = AtomicRelatedFixer()
         self.code_parity = SmartCodeParityChecker()
         self.strict_qa = StrictQAVerifier()
+        # QUICK WIN FIX: Add Deterministic Fixer for simple rule-based fixes
+        self.deterministic_fixer = DeterministicFixer()
         self.graph = self._build_graph()
 
     def _build_graph(self) -> StateGraph:
@@ -1063,7 +1066,65 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             )
 
         try:
-            # Convert issues to string descriptions
+            # QUICK WIN FIX: Try deterministic fixer first for simple issues
+            # This reduces LLM calls and improves reliability
+            deterministic_result = self.deterministic_fixer.fix(
+                note_text=state_obj.current_text,
+                issues=state_obj.issues,
+                note_path=state_obj.note_path,
+            )
+
+            if deterministic_result.changes_made:
+                logger.info(
+                    f"Deterministic fixer applied {len(deterministic_result.fixes_applied)} fix(es), "
+                    f"resolved {len(deterministic_result.issues_fixed)} issue(s)"
+                )
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "deterministic_fixer",
+                        f"Applied {len(deterministic_result.fixes_applied)} deterministic fix(es)",
+                        fixes=deterministic_result.fixes_applied,
+                        issues_fixed=deterministic_result.issues_fixed,
+                    )
+                )
+
+                # Update current text with deterministic fixes
+                state_obj.current_text = deterministic_result.revised_text
+
+                # Remove fixed issues from the list
+                remaining_issues = [
+                    issue for issue in state_obj.issues
+                    if issue.message not in deterministic_result.issues_fixed
+                ]
+
+                if len(remaining_issues) == 0:
+                    # All issues fixed deterministically - no need for LLM
+                    logger.success("All issues resolved by deterministic fixer - skipping LLM")
+                    return {
+                        "current_text": deterministic_result.revised_text,
+                        "changed": True,
+                        "fix_attempts": state_obj.fix_attempts + [
+                            {
+                                "iteration": state_obj.iteration,
+                                "issues_targeted": [i.message for i in state_obj.issues],
+                                "fixes_applied": deterministic_result.fixes_applied,
+                                "result": "success",
+                                "issues_remaining": [],
+                            }
+                        ],
+                        "history": history_updates,
+                        "decision": None,
+                    }
+
+                # Update issues to only remaining ones
+                state_obj.issues = remaining_issues
+                logger.info(
+                    f"Deterministic fixer left {len(remaining_issues)} issue(s) for LLM"
+                )
+            else:
+                logger.debug("No issues can be fixed deterministically - using LLM for all")
+
+            # Convert remaining issues to string descriptions
             issue_descriptions = [
                 f"[{issue.severity}] {issue.message}"
                 + (f" (field: {issue.field})" if issue.field else "")
@@ -1151,7 +1212,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                         )
                         logger.debug(f"Updated Fix Memory: {memory.get_summary()}")
 
-                        # Check for regressions
+                        # QUICK WIN FIX: Check for regressions and BLOCK them
                         regressions = memory.detect_regressions(yaml_after, state_obj.iteration)
                         if regressions:
                             logger.error(
@@ -1160,14 +1221,30 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                             )
                             for regression in regressions:
                                 logger.error(f"  - {regression}")
+
                             # Add regressions to history for debugging
                             history_updates.append(
                                 state_obj.add_history_entry(
                                     "fix_memory_regression",
-                                    f"Detected {len(regressions)} regression(s)",
+                                    f"BLOCKED: Detected {len(regressions)} regression(s)",
                                     regressions=regressions,
                                 )
                             )
+
+                            # BLOCK THE FIX - Don't apply changes that cause regressions
+                            logger.warning(
+                                "BLOCKING fix due to regressions - reverting to previous state"
+                            )
+
+                            # Don't update current_text (keep previous version)
+                            # Set error and escalate to human review
+                            return {
+                                "error": f"Fix caused {len(regressions)} regression(s): {regressions[0]}",
+                                "requires_human_review": True,
+                                "history": history_updates,
+                                "decision": "summarize_failures",
+                                "changed": False,  # Don't apply regressive changes
+                            }
                 except Exception as mem_err:
                     logger.warning(f"Failed to update Fix Memory: {mem_err}")
 
