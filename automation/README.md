@@ -6,7 +6,8 @@ Comprehensive Python automation tools for maintaining the Interview Questions Ob
 
 This package provides a unified, professional automation framework for:
 
-- **LLM Review**: AI-powered note review, correction, and knowledge-gap filling (NEW)
+- **Anki Ingestion**: Generate bilingual interview notes from article URLs with Firecrawl parsing and automated review (NEW)
+- **LLM Review**: AI-powered note review, correction, and knowledge-gap filling
   - Technical accuracy review and automated fixing
   - Metadata sanity checks and YAML repair
   - Concept stub enrichment with meaningful content
@@ -109,10 +110,12 @@ The package also includes `vault-app`, a modern CLI with beautiful terminal outp
 uv run --project automation vault-app graph-stats
 uv run --project automation vault-app orphans
 uv run --project automation vault-app validate --all
+uv run --project automation vault-app anki-ingest "https://example.com/article" --dry-run
 
 # After installation
 vault-app graph-stats --hubs 10 --authorities 10
 vault-app orphans --output orphans.txt
+vault-app anki-ingest "https://example.com/article" --max-cards 2
 ```
 
 **Features:**

@@ -15,6 +15,7 @@ Use `vault-app` for this enhanced version.
 from __future__ import annotations
 
 import json
+import os
 import sys
 from enum import Enum
 from pathlib import Path
@@ -29,6 +30,8 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 from rich.text import Text
 
+from obsidian_vault.anki_generation.workflow import AnkiIngestionWorkflow, WorkflowConfig
+from obsidian_vault.llm_review import CompletionMode, ProcessingProfile
 from obsidian_vault.technical_validation import TechnicalValidationFlow
 from obsidian_vault.utils import (
     FileResult,
@@ -1230,6 +1233,115 @@ def llm_review(
         logger.exception(f"LLM review failed: {e}")
         raise typer.Exit(code=1)
 
+
+@app.command("anki-ingest")
+def anki_ingest(
+    url: str = typer.Argument(..., help="URL of the article to convert into Q&A notes"),
+    max_cards: int = typer.Option(3, "--max-cards", help="Maximum number of cards to generate"),
+    dry_run: bool = typer.Option(
+        False,
+        "--dry-run/--no-dry-run",
+        help="If enabled, do not write files or run review; only show a preview",
+    ),
+    completion_mode: str = typer.Option(
+        "standard",
+        "--completion-mode",
+        help="Completion strictness for automated review (strict | standard | permissive)",
+    ),
+    processing_profile: str = typer.Option(
+        "balanced",
+        "--profile",
+        help="Processing profile for review (balanced | stability | thorough)",
+    ),
+    review_iterations: int = typer.Option(
+        6,
+        "--review-iterations",
+        help="Maximum number of automated fix iterations during review",
+    ),
+):
+    """Generate new bilingual notes from an external article using Firecrawl + LLM."""
+
+    if max_cards < 1 or max_cards > 5:
+        console.print("[red]✗[/red] max-cards must be between 1 and 5")
+        raise typer.Exit(code=1)
+
+    if not os.getenv("FIRECRAWL_API_KEY"):
+        console.print(
+            "[red]✗[/red] FIRECRAWL_API_KEY environment variable not set."
+            "\nCreate a Firecrawl account and set the API key to fetch articles."
+        )
+        raise typer.Exit(code=1)
+
+    if not os.getenv("OPENROUTER_API_KEY"):
+        console.print(
+            "[red]✗[/red] OPENROUTER_API_KEY environment variable not set."
+            "\nObtain an API key from https://openrouter.ai/keys and export it before running."
+        )
+        raise typer.Exit(code=1)
+
+    try:
+        mode = CompletionMode(completion_mode.lower())
+    except ValueError:
+        console.print(
+            f"[red]✗[/red] Invalid completion mode: {completion_mode}\n"
+            "Valid options: strict, standard, permissive"
+        )
+        raise typer.Exit(code=1)
+
+    try:
+        profile = ProcessingProfile(processing_profile.lower())
+    except ValueError:
+        console.print(
+            f"[red]✗[/red] Invalid processing profile: {processing_profile}\n"
+            "Valid options: balanced, stability, thorough"
+        )
+        raise typer.Exit(code=1)
+
+    console.print(Panel.fit(f"[bold]Fetching and processing article:[/bold]\n{url}"))
+    workflow = AnkiIngestionWorkflow()
+    config = WorkflowConfig(
+        max_cards=max_cards,
+        dry_run=dry_run,
+        completion_mode=mode,
+        processing_profile=profile,
+        review_iterations=review_iterations,
+    )
+
+    try:
+        result = workflow.run(url, config=config)
+    except Exception as exc:  # pragma: no cover - top-level workflow guard
+        console.print(f"[red]✗ Error:[/red] {exc}")
+        logger.exception("Anki ingestion workflow failed: {}", exc)
+        raise typer.Exit(code=1)
+
+    created_count = len(result.created_paths)
+    duplicates_count = len(result.skipped_duplicates)
+    console.print()
+    summary_table = Table(title="Anki Ingestion Summary", show_header=True, header_style="bold cyan")
+    summary_table.add_column("Metric", style="cyan")
+    summary_table.add_column("Value", style="magenta", justify="right")
+    summary_table.add_row("Generated cards", str(len(result.generated_cards)))
+    summary_table.add_row("Written notes", str(created_count))
+    summary_table.add_row("Skipped duplicates", str(duplicates_count))
+    summary_table.add_row("Dry run", "Yes" if dry_run else "No")
+    console.print(summary_table)
+
+    if result.created_paths:
+        console.print("\n[bold]Created notes:[/bold]")
+        for path in result.created_paths:
+            console.print(f"  • {path}")
+
+    if result.skipped_duplicates:
+        console.print("\n[yellow]⚠[/yellow] Skipped potential duplicates:")
+        for slug in result.skipped_duplicates:
+            console.print(f"  • {slug}")
+
+    if dry_run:
+        console.print(
+            "\n[yellow]⚠[/yellow] Dry run mode was enabled. No files were written and review did not run."
+        )
+
+    logger.success("Anki ingestion completed", created=created_count, duplicates=duplicates_count)
 
 if __name__ == "__main__":
     app()
