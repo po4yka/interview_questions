@@ -6,8 +6,8 @@ Comprehensive Python automation tools for maintaining the Interview Questions Ob
 
 This package provides a unified, professional automation framework for:
 
-- **Q&A Ingestion**: Generate bilingual interview notes from article URLs with Firecrawl parsing and automated review (NEW)
-- **Coverage Gap Analysis**: Evaluate existing notes, propose missing Q&A pairs, and optionally create + review them automatically (NEW)
+- **Q&A Ingestion**: Generate bilingual interview notes from article URLs with Firecrawl parsing and automated review
+- **Coverage Gap Analysis**: Evaluate existing notes, propose missing Q&A pairs, and optionally create + review them automatically
 - **LLM Review**: AI-powered note review, correction, and knowledge-gap filling
   - Technical accuracy review and automated fixing
   - Metadata sanity checks and YAML repair
