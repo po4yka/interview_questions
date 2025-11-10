@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from obsidian_vault.llm_review.state import NoteReviewState, ReviewIssue
+from obsidian_vault.validators.base import Severity
 
 
 def _make_state() -> NoteReviewState:
@@ -37,6 +38,33 @@ def test_warning_only_issues_do_not_trigger_oscillation():
     # The raw history still records the warnings for analytics.
     assert all(
         entry == {"WARNING:[Metadata] created timestamp is in the future"}
+        for entry in state.issue_history
+    )
+
+
+def test_enum_severity_warnings_stay_non_blocking():
+    """Enum severities should normalize to non-blocking WARNING signatures."""
+
+    state = _make_state()
+
+    warning_issue = ReviewIssue(
+        severity=Severity.WARNING,
+        message="Note should include at least one concept link ([[c-...]]) in content body",
+        field="content",
+    )
+
+    for iteration in range(2):
+        state.iteration = iteration
+        state.issues = [warning_issue]
+        state.record_current_issues()
+
+    is_oscillating, explanation = state.detect_oscillation()
+
+    assert not is_oscillating
+    assert explanation is None
+    assert all(
+        entry
+        == {"WARNING:Note should include at least one concept link ([[c-...]]) in content body"}
         for entry in state.issue_history
     )
 

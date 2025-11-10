@@ -234,10 +234,28 @@ class NoteReviewState:
     def record_current_issues(self) -> None:
         """Record the current issues as a signature for oscillation detection."""
         # Create a signature from current issues (severity + message)
-        current_signatures = {
-            f"{issue.severity}:{issue.message}"
-            for issue in self.issues
-        }
+        current_signatures = set()
+
+        for issue in self.issues:
+            severity = issue.severity
+
+            # Severity is usually a plain string, but some callers may pass the
+            # Enum instance directly (e.g., Severity.WARNING). Converting via
+            # `.value` preserves the canonical "WARNING" form so downstream
+            # filters treat it as non-blocking.
+            if hasattr(severity, "value"):
+                enum_value = getattr(severity, "value")
+                if isinstance(enum_value, str):
+                    severity = enum_value
+                else:
+                    severity = str(enum_value)
+
+            severity_str = str(severity)
+            if severity_str.startswith("Severity."):
+                severity_str = severity_str.split(".", 1)[1]
+
+            current_signatures.add(f"{severity_str}:{issue.message}")
+
         self.issue_history.append(current_signatures)
 
     def detect_oscillation(self) -> tuple[bool, str | None]:
