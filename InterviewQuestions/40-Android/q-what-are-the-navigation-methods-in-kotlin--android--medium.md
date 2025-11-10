@@ -72,8 +72,8 @@ class HomeFragment : Fragment() {
 }
 ```
 
-**Преимущества**: Типобезопасность, визуальный граф, централизованное управление back stack
-**Недостатки**: Требует настройки, зависимость от XML-конфигурации
+**Преимущества**: Типобезопасность, визуальный граф, централизованное управление back stack.
+**Недостатки**: Требует настройки, в классическом варианте использует XML-граф (но есть и альтернативные варианты конфигурации).
 
 ### 2. FragmentTransaction
 
@@ -85,15 +85,17 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, fragment)
             if (addToBackStack) addToBackStack(null)
-            commit() // ❌ Синхронно - может вызвать IllegalStateException
-            // ✅ Используйте commitAllowingStateLoss() или commitNow()
+            // ✅ Стандартный вариант — commit(), вызывать до сохранения состояния
+            commit()
+            // ⚠️ commitNow() выполняет транзакцию немедленно и имеет другие ограничения.
+            // ⚠️ commitAllowingStateLoss() позволяет избежать IllegalStateException ценой возможной потери состояния.
         }
     }
 }
 ```
 
-**Преимущества**: Полный контроль, нет зависимостей
-**Недостатки**: Ручное управление back stack, потенциальные утечки памяти
+**Преимущества**: Полный контроль, нет дополнительных зависимостей.
+**Недостатки**: Ручное управление back stack, повышенный риск ошибок и утечек памяти.
 
 ### 3. Intent Navigation
 
@@ -121,56 +123,62 @@ class MainActivity : AppCompatActivity() {
 }
 
 // ✅ Implicit Intent - системная навигация
-fun openWebPage(url: String) {
+fun Context.openWebPage(url: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     startActivity(intent)
 }
 
-// ❌ startActivityForResult() - deprecated
+// ❌ startActivityForResult() - устарел
 // ✅ Используйте Activity Result API
 ```
 
-**Преимущества**: Простота, интеграция с системой
-**Недостатки**: Создание новых Activity (накладные расходы памяти)
+**Преимущества**: Простота, интеграция с системой.
+**Недостатки**: Создание новых Activity (накладные расходы, необходимость управления жизненным циклом).
 
 ### 4. Deep Links
 
 Навигация по URI для интеграции с внешними источниками.
 
-```kotlin
-// Определение в navigation graph
-<fragment android:id="@+id/detailsFragment">
+```xml
+<!-- Определение deep link в navigation graph -->
+<fragment
+    android:id="@+id/detailsFragment"
+    android:name="com.example.DetailsFragment">
     <deepLink
-        app:uri="myapp://details/{itemId}"
-        android:autoVerify="true" />
+        app:uri="myapp://details/{itemId}" />
 </fragment>
+```
 
-// ✅ Обработка deep link
+```kotlin
+// ✅ Обработка deep link с NavController
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         val navController = findNavController(R.id.nav_host_fragment)
         navController.handleDeepLink(intent)
     }
 }
 ```
 
+> Для верифицируемых deep links (`android:autoVerify="true"`) настройка выполняется в `AndroidManifest.xml` внутри `<intent-filter>`, а не в navigation graph.
+
 ### Сравнение Подходов
 
 | Метод | Применение | Плюсы | Минусы |
 |-------|-----------|-------|--------|
 | Jetpack Navigation | Современные приложения | Типобезопасность, визуальный граф | Требует настройки |
-| FragmentTransaction | Простые операции | Полный контроль | Ручное управление |
-| Explicit Intent | Навигация между Activity | Простота | Накладные расходы |
-| Deep Links | Внешняя интеграция | Системная интеграция | Требует конфигурации |
+| FragmentTransaction | Гибкая работа с фрагментами | Полный контроль | Ручное управление |
+| Explicit/Implicit Intent | Навигация между Activity и в систему | Простота, интеграция | Накладные расходы |
+| Deep Links | Внешняя интеграция | Переходы из других приложений/URL | Требует конфигурации |
 
 ### Best Practices
 
-1. **Используйте Jetpack Navigation** для новых проектов
-2. **Single-Activity архитектура** с Navigation Component для упрощения
-3. **Safe Args plugin** для типобезопасной передачи аргументов
-4. **Избегайте глубокой вложенности** фрагментов
-5. **Корректное управление back stack** для предотвращения утечек памяти
+1. **По возможности используйте Jetpack Navigation** для новых проектов, особенно с Single-Activity архитектурой.
+2. **Single-Activity архитектура** с Navigation Component упрощает навигацию и back stack.
+3. **Safe Args plugin** для типобезопасной передачи аргументов между destination.
+4. **Избегайте глубокой вложенности** фрагментов и сложных графов.
+5. **Корректное управление back stack** и жизненным циклом для предотвращения утечек памяти и неконсистентного UI.
 
 ## Answer (EN)
 
@@ -178,7 +186,7 @@ Android offers several navigation approaches, each suited for different architec
 
 ### 1. Jetpack Navigation Component
 
-Modern recommended approach with type-safe arguments and visual navigation graph.
+Modern recommended approach with type-safe arguments and a visual navigation graph.
 
 ```kotlin
 // ✅ Simple navigation with type-safe arguments
@@ -199,12 +207,12 @@ class HomeFragment : Fragment() {
 }
 ```
 
-**Pros**: Type safety, visual graph, centralized back stack management
-**Cons**: Requires setup, XML configuration dependency
+**Pros**: Type safety, visual graph, centralized back stack management.
+**Cons**: Requires setup; traditionally uses XML navigation graphs (alternative configuration options also exist).
 
 ### 2. FragmentTransaction
 
-Manual fragment management for full lifecycle control.
+Manual fragment management for full lifecycle and transaction control.
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
@@ -212,15 +220,17 @@ class MainActivity : AppCompatActivity() {
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, fragment)
             if (addToBackStack) addToBackStack(null)
-            commit() // ❌ Synchronous - can throw IllegalStateException
-            // ✅ Use commitAllowingStateLoss() or commitNow()
+            // ✅ Standard approach — commit(), called before state is saved
+            commit()
+            // ⚠️ commitNow() executes synchronously with additional constraints.
+            // ⚠️ commitAllowingStateLoss() avoids IllegalStateException at the cost of possible state loss.
         }
     }
 }
 ```
 
-**Pros**: Full control, no dependencies
-**Cons**: Manual back stack management, potential memory leaks
+**Pros**: Full control, no extra libraries required.
+**Cons**: Manual back stack handling, higher risk of errors and memory leaks.
 
 ### 3. Intent Navigation
 
@@ -248,7 +258,7 @@ class MainActivity : AppCompatActivity() {
 }
 
 // ✅ Implicit Intent - system navigation
-fun openWebPage(url: String) {
+fun Context.openWebPage(url: String) {
     val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
     startActivity(intent)
 }
@@ -257,47 +267,53 @@ fun openWebPage(url: String) {
 // ✅ Use Activity Result API instead
 ```
 
-**Pros**: Simplicity, system integration
-**Cons**: Creates new Activities (memory overhead)
+**Pros**: Simplicity, tight system integration.
+**Cons**: Creates new Activities (overhead, lifecycle management complexity).
 
 ### 4. Deep Links
 
-URI-based navigation for external integration.
+URI-based navigation for integration with external sources.
+
+```xml
+<!-- Define deep link in navigation graph -->
+<fragment
+    android:id="@+id/detailsFragment"
+    android:name="com.example.DetailsFragment">
+    <deepLink
+        app:uri="myapp://details/{itemId}" />
+</fragment>
+```
 
 ```kotlin
-// Define in navigation graph
-<fragment android:id="@+id/detailsFragment">
-    <deepLink
-        app:uri="myapp://details/{itemId}"
-        android:autoVerify="true" />
-</fragment>
-
-// ✅ Handle deep link
+// ✅ Handle deep link with NavController
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         val navController = findNavController(R.id.nav_host_fragment)
         navController.handleDeepLink(intent)
     }
 }
 ```
 
+> For verifiable app links (`android:autoVerify="true"`), configuration is done in `AndroidManifest.xml` within an `<intent-filter>`, not in the navigation graph.
+
 ### Comparison
 
 | Method | Use Case | Pros | Cons |
 |--------|----------|------|------|
 | Jetpack Navigation | Modern apps | Type safety, visual graph | Requires setup |
-| FragmentTransaction | Simple operations | Full control | Manual management |
-| Explicit Intent | Activity navigation | Simplicity | Memory overhead |
-| Deep Links | External integration | System integration | Requires configuration |
+| FragmentTransaction | Flexible fragment management | Full control | Manual management |
+| Explicit/Implicit Intent | Activity and system navigation | Simplicity, integration | Overhead |
+| Deep Links | External integration | Entry from other apps/URLs | Requires configuration |
 
 ### Best Practices
 
-1. **Use Jetpack Navigation** for new projects
-2. **Single-Activity architecture** with Navigation Component for simplicity
-3. **Safe Args plugin** for type-safe argument passing
-4. **Avoid deep nesting** of fragments
-5. **Proper back stack management** to prevent memory leaks
+1. **Prefer Jetpack Navigation** for new projects where suitable, especially with Single-Activity architecture.
+2. **Single-Activity architecture** with Navigation Component can simplify navigation and back stack handling.
+3. **Use Safe Args plugin** for type-safe argument passing between destinations.
+4. **Avoid deep nesting** of fragments and overly complex graphs.
+5. **Ensure proper back stack and lifecycle management** to prevent leaks and inconsistent UI.
 
 ---
 

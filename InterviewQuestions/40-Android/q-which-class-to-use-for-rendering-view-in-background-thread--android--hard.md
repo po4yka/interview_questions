@@ -10,41 +10,44 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-updated: 2025-10-29
+updated: 2025-11-10
 sources: []
 moc: moc-android
-related: [c-surfaceview, c-textureview, c-threading]
+related: [c-android-surfaces]
 tags: [android, android/performance-rendering, android/threads-sync, android/ui-graphics, difficulty/hard, graphics, multithreading]
+
 ---
 
 # Вопрос (RU)
 
-Какой класс следует использовать для отрисовки View в фоновом потоке?
+> Какой класс следует использовать для отрисовки `View`-подобного контента в фоновом потоке, не нарушая ограничения главного потока?
 
 # Question (EN)
 
-Which class should be used to render View in a background thread?
+> Which class should be used to render `View`-like content from a background thread without violating main thread constraints?
 
 ---
 
 ## Ответ (RU)
 
-**SurfaceView** — основной класс для отрисовки в фоновом потоке. Он предоставляет отдельный буфер поверхности, который можно обновлять вне главного потока через `Canvas` и `SurfaceHolder.lockCanvas()`.
+**SurfaceView** — основной специализированный класс для организации отрисовки в отдельной поверхности, которую можно обновлять из фонового потока. Он предоставляет отдельный буфер поверхности, который может обновляться вне главного потока через `Canvas` и `SurfaceHolder.lockCanvas()`.
+
+Важно: стандартная иерархия `View` должна измеряться, раскладываться и отрисовываться в главном потоке. `SurfaceView` (и аналогично низкоуровневое использование `Surface`/`TextureView`) предоставляет отдельную поверхность, не нарушая этого правила.
 
 ### Почему SurfaceView?
 
-Обычные View обязаны отрисовываться в главном потоке. SurfaceView решает эту проблему:
+Обычные `View` обязаны отрисовываться в главном потоке. SurfaceView решает эту задачу за счет отдельной поверхности:
 - Имеет отдельный буфер поверхности
-- Позволяет отрисовку из фоновых потоков
+- Позволяет отрисовку на этот буфер из фоновых потоков
 - Обеспечивает высокую производительность для игр и видео
-- Не блокирует UI поток
+- Снижает нагрузку на UI-поток, так как основная работа происходит вне него (но события `SurfaceHolder.Callback` приходят в UI-поток, и неправильное использование все еще может его блокировать)
 
 ### Базовая Реализация SurfaceView
 
 ```kotlin
 class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private var drawingThread: Thread? = null
-    private var isRunning = false
+    @Volatile private var isRunning = false
 
     init {
         holder.addCallback(this)
@@ -60,20 +63,26 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
                     synchronized(holder) {
                         canvas?.apply {
                             drawColor(Color.BLACK)
-                            drawCircle(width / 2f, height / 2f, 100f,
-                                Paint().apply { color = Color.RED })
+                            drawCircle(
+                                width / 2f,
+                                height / 2f,
+                                100f,
+                                Paint().apply { color = Color.RED }
+                            )
                         }
                     }
                 } finally {
                     canvas?.let { holder.unlockCanvasAndPost(it) } // ✅ Всегда освобождаем
                 }
+                // Рекомендуется ограничивать FPS, чтобы не загружать CPU на 100%
+                Thread.sleep(16) // ~60fps; подберите под задачу
             }
         }.apply { start() }
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         isRunning = false
-        drawingThread?.join() // ✅ Ждем завершения потока
+        drawingThread?.join() // ✅ Ждем завершения потока после выхода из цикла
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, w: Int, h: Int) {}
@@ -82,32 +91,45 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 
 ### TextureView Как Альтернатива
 
-**TextureView** — современная альтернатива с поддержкой трансформаций:
+**TextureView** — современная альтернатива с поддержкой трансформаций и участия в обычной иерархии `View`. Для низкоуровневой отрисовки также можно использовать фоновые потоки, рисуя в `Surface`, полученный из его `SurfaceTexture`.
 
 ```kotlin
 class CustomTextureView(context: Context) :
     TextureView(context), TextureView.SurfaceTextureListener {
 
     private var renderThread: Thread? = null
+    @Volatile private var isRunning = false
 
     init {
         surfaceTextureListener = this
     }
 
     override fun onSurfaceTextureAvailable(surface: SurfaceTexture, w: Int, h: Int) {
+        val surf = Surface(surface)
+        isRunning = true
         renderThread = Thread {
-            val surf = Surface(surface)
-            while (isAvailable) {
-                val canvas = surf.lockCanvas(null) // ✅ Захват Canvas
-                canvas.drawColor(Color.BLUE)
-                surf.unlockCanvasAndPost(canvas)
-                Thread.sleep(16) // ~60fps
+            try {
+                while (isRunning && isAvailable) {
+                    var canvas: Canvas? = null
+                    try {
+                        canvas = surf.lockCanvas(null) // ✅ Захват Canvas
+                        canvas.drawColor(Color.BLUE)
+                    } finally {
+                        canvas?.let { surf.unlockCanvasAndPost(it) }
+                    }
+                    Thread.sleep(16) // ~60fps
+                }
+            } finally {
+                surf.release()
             }
         }.apply { start() }
     }
 
     override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+        // Останавливаем цикл и ждем завершения потока перед уничтожением поверхности
+        isRunning = false
         renderThread?.join()
+        renderThread = null
         return true
     }
 
@@ -120,19 +142,22 @@ class CustomTextureView(context: Context) :
 
 | Характеристика | SurfaceView | TextureView |
 |----------------|-------------|-------------|
-| **Производительность** | Выше | Хорошая |
-| **Память** | Меньше | Больше |
-| **Трансформации** | Ограничены | Полная поддержка |
-| **Прозрачность** | Нет | Да |
-| **Анимации View** | Нет | Да |
-| **Лучше для** | Игры, видео | UI с анимацией |
+| **Производительность** | Как правило выше для полноэкранного/интенсивного рендеринга (отдельная поверхность, композитится отдельно) | Обычно хорошая, но с накладными расходами, участвует в иерархии `View` |
+| **Память** | Обычно меньше | Может быть выше из-за текстур и участия в компоновке |
+| **Трансформации** | Очень ограничены (не обычный `View`-контент) | Полная поддержка (scale, rotate, alpha и т.д.) |
+| **Прозрачность** | Ограничена; классический SurfaceView перекрывает подлежащие `View` | Да, поддерживает полупрозрачность |
+| **Анимации `View`** | Неприменимы напрямую к контенту поверхности | Полная поддержка стандартных `View`-анимаций |
+| **Лучше для** | Игры, видео, высокопроизводительный full-screen рендеринг | UI с анимацией, встраиваемое видео, эффекты поверх UI |
 
-### Использование С Корутинами
+(Это типичные сценарии, а не жесткие правила; выбор зависит от конкретного кейса.)
+
+### Использование с корутинами
 
 ```kotlin
 class ModernSurfaceView(context: Context) :
     SurfaceView(context), SurfaceHolder.Callback {
 
+    // Важно: используем не-main Dispatcher, чтобы рендер действительно шел вне UI-потока
     private val scope = CoroutineScope(Dispatchers.Default)
     private var renderJob: Job? = null
 
@@ -156,7 +181,11 @@ class ModernSurfaceView(context: Context) :
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
+        // Останавливаем конкретную задачу рендеринга
         renderJob?.cancel()
+        renderJob = null
+        // При использовании общего scope для нескольких задач, отмену всего scope делайте осознанно.
+        // Здесь предполагается, что scope посвящен только этому SurfaceView:
         scope.cancel()
     }
 
@@ -170,58 +199,63 @@ class ModernSurfaceView(context: Context) :
 
 ### Best Practices
 
-1. **Всегда освобождать Canvas**: используйте `try-finally` с `unlockCanvasAndPost()`
-2. **Контроль FPS**: избегайте чрезмерной нагрузки на CPU
-3. **Правильная остановка**: используйте флаги и `join()` для завершения потоков
-4. **Синхронизация**: защищайте доступ к общим данным через `synchronized`
+1. **Всегда освобождать Canvas**: используйте `try-finally` с `unlockCanvasAndPost()`.
+2. **Контроль FPS**: ограничивайте частоту кадров (`sleep`/`delay` или временная логика), чтобы не загружать CPU на 100%.
+3. **Правильная остановка**: перед `join()` сначала меняйте флаг/отменяйте Job, чтобы цикл вышел и поток/корутина завершились.
+4. **Синхронизация**: защищайте доступ к общим данным (`synchronized`, другие средства синхронизации), если к ним обращаются несколько потоков.
+5. **Учитывайте lifecycle**: корректно реагируйте на `surfaceCreated`/`surfaceDestroyed`/`onSurfaceTextureAvailable`/`onSurfaceTextureDestroyed`.
 
 ### Типичные Ошибки
 
 ```kotlin
 // ❌ ПЛОХО: Не освобожден Canvas
 canvas = holder.lockCanvas()
-draw(canvas)
-// Забыли вызвать unlock!
+// ... рисование ...
+// Забыли вызвать unlockCanvasAndPost!
 
 // ✅ ХОРОШО: Всегда используем finally
 var canvas: Canvas? = null
 try {
     canvas = holder.lockCanvas()
-    draw(canvas)
+    // ... рисование ...
 } finally {
     canvas?.let { holder.unlockCanvasAndPost(it) }
 }
 
 // ❌ ПЛОХО: Неправильная остановка потока
 override fun surfaceDestroyed(holder: SurfaceHolder) {
-    thread?.interrupt() // Может не сработать
+    thread?.interrupt() // Может не сработать и оставить поток живым
 }
 
 // ✅ ХОРОШО: Используем флаг и join
+@Volatile private var isRunning = true
+
 override fun surfaceDestroyed(holder: SurfaceHolder) {
-    isRunning = false
+    isRunning = false // Цикл в потоке завершится
     thread?.join()
 }
 ```
 
 ## Answer (EN)
 
-**SurfaceView** is the primary class for background thread rendering. It provides a dedicated drawing surface buffer that can be updated off the main thread using `Canvas` via `SurfaceHolder.lockCanvas()`.
+**SurfaceView** is the primary specialized class for rendering into a separate surface that can be updated from a background thread. It exposes a dedicated drawing buffer that can be updated off the main thread using a `Canvas` obtained via `SurfaceHolder.lockCanvas()`.
+
+Important: the standard `View` hierarchy must be measured, laid out, and drawn on the main thread. `SurfaceView` (and similarly low-level use of `Surface`/`TextureView`) provides a separate surface so you can render off the UI thread without violating this rule.
 
 ### Why SurfaceView?
 
-Regular Views must be drawn on the main thread. SurfaceView solves this by:
-- Having a separate surface buffer
-- Allowing drawing from background threads
-- Providing better performance for games and video
-- Not blocking the UI thread
+Regular Views must be drawn on the main thread. SurfaceView addresses this by using a separate surface:
+- Has its own surface buffer
+- Allows drawing to that buffer from background threads
+- Provides high performance for games and video
+- Reduces load on the UI thread because heavy rendering runs off the main thread (though `SurfaceHolder.Callback` events still come on the UI thread, and misusing them can block it)
 
 ### Basic SurfaceView Implementation
 
 ```kotlin
 class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
     private var drawingThread: Thread? = null
-    private var isRunning = false
+    @Volatile private var isRunning = false
 
     init {
         holder.addCallback(this)
@@ -237,20 +271,26 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
                     synchronized(holder) {
                         canvas?.apply {
                             drawColor(Color.BLACK)
-                            drawCircle(width / 2f, height / 2f, 100f,
-                                Paint().apply { color = Color.RED })
+                            drawCircle(
+                                width / 2f,
+                                height / 2f,
+                                100f,
+                                Paint().apply { color = Color.RED }
+                            )
                         }
                     }
                 } finally {
                     canvas?.let { holder.unlockCanvasAndPost(it) } // ✅ Always unlock
                 }
+                // Recommend frame limiting to avoid 100% CPU usage
+                Thread.sleep(16) // ~60fps; tune for your use case
             }
         }.apply { start() }
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
         isRunning = false
-        drawingThread?.join() // ✅ Wait for thread completion
+        drawingThread?.join() // ✅ Wait for thread completion after loop exits
     }
 
     override fun surfaceChanged(holder: SurfaceHolder, format: Int, w: Int, h: Int) {}
@@ -259,32 +299,45 @@ class GameView(context: Context) : SurfaceView(context), SurfaceHolder.Callback 
 
 ### TextureView Alternative
 
-**TextureView** is a modern alternative with transformation support:
+**TextureView** is a modern alternative that supports transformations and participates in the normal `View` hierarchy. For low-level rendering, you can also use a background thread to draw into a `Surface` backed by its `SurfaceTexture`.
 
 ```kotlin
 class CustomTextureView(context: Context) :
     TextureView(context), TextureView.SurfaceTextureListener {
 
     private var renderThread: Thread? = null
+    @Volatile private var isRunning = false
 
     init {
         surfaceTextureListener = this
     }
 
     override fun onSurfaceTextureAvailable(surface: SurfaceTexture, w: Int, h: Int) {
+        val surf = Surface(surface)
+        isRunning = true
         renderThread = Thread {
-            val surf = Surface(surface)
-            while (isAvailable) {
-                val canvas = surf.lockCanvas(null) // ✅ Lock canvas
-                canvas.drawColor(Color.BLUE)
-                surf.unlockCanvasAndPost(canvas)
-                Thread.sleep(16) // ~60fps
+            try {
+                while (isRunning && isAvailable) {
+                    var canvas: Canvas? = null
+                    try {
+                        canvas = surf.lockCanvas(null) // ✅ Lock canvas
+                        canvas.drawColor(Color.BLUE)
+                    } finally {
+                        canvas?.let { surf.unlockCanvasAndPost(it) }
+                    }
+                    Thread.sleep(16) // ~60fps
+                }
+            } finally {
+                surf.release()
             }
         }.apply { start() }
     }
 
     override fun onSurfaceTextureDestroyed(surface: SurfaceTexture): Boolean {
+        // Stop loop and wait for render thread before releasing surface
+        isRunning = false
         renderThread?.join()
+        renderThread = null
         return true
     }
 
@@ -297,12 +350,14 @@ class CustomTextureView(context: Context) :
 
 | Feature | SurfaceView | TextureView |
 |---------|-------------|-------------|
-| **Performance** | Higher | Good |
-| **Memory** | Lower | Higher |
-| **Transformations** | Limited | Full support |
-| **Transparency** | No | Yes |
-| **View animations** | No | Yes |
-| **Best for** | Games, video | UI with animation |
+| **Performance** | Typically higher for fullscreen / heavy rendering (separate surface, separate composition) | Generally good; participates in `View` hierarchy with some overhead |
+| **Memory** | Typically lower | May be higher due to textures and `View` hierarchy participation |
+| **Transformations** | Very limited (not standard `View` content) | Full support (scale, rotate, alpha, etc.) |
+| **Transparency** | Limited; classic SurfaceView sits in a separate layer and obscures below | Yes, supports transparency |
+| **`View` animations** | Not directly applicable to surface content | Fully supports standard `View` animations |
+| **Best for** | Games, video, high-performance fullscreen rendering | Animated/transformable UI, embedded video, effects within UI |
+
+(These are typical guidelines, not absolute rules; choose based on your use case.)
 
 ### Using with Coroutines
 
@@ -310,6 +365,7 @@ class CustomTextureView(context: Context) :
 class ModernSurfaceView(context: Context) :
     SurfaceView(context), SurfaceHolder.Callback {
 
+    // Important: use a non-main Dispatcher so rendering is off the UI thread
     private val scope = CoroutineScope(Dispatchers.Default)
     private var renderJob: Job? = null
 
@@ -333,7 +389,10 @@ class ModernSurfaceView(context: Context) :
     }
 
     override fun surfaceDestroyed(holder: SurfaceHolder) {
+        // Stop just the rendering job first
         renderJob?.cancel()
+        renderJob = null
+        // If this scope is dedicated solely to this view, it's safe to cancel it here.
         scope.cancel()
     }
 
@@ -347,36 +406,39 @@ class ModernSurfaceView(context: Context) :
 
 ### Best Practices
 
-1. **Always unlock canvas**: use `try-finally` with `unlockCanvasAndPost()`
-2. **Control FPS**: avoid excessive CPU usage
-3. **Proper shutdown**: use flags and `join()` to stop threads
-4. **Synchronization**: protect shared data access with `synchronized`
+1. **Always unlock the canvas**: use `try-finally` with `unlockCanvasAndPost()`.
+2. **Control FPS**: limit frame rate (`sleep`/`delay` or time-based logic) to avoid pegging the CPU.
+3. **Proper shutdown**: before calling `join()`, flip the running flag / cancel jobs so loops exit cleanly.
+4. **Synchronization**: protect shared data access (`synchronized` or other primitives) when multiple threads are involved.
+5. **Respect lifecycle**: handle `surfaceCreated`/`surfaceDestroyed`/`onSurfaceTextureAvailable`/`onSurfaceTextureDestroyed` correctly.
 
 ### Common Mistakes
 
 ```kotlin
 // ❌ BAD: Canvas not unlocked
 canvas = holder.lockCanvas()
-draw(canvas)
-// Forgot to unlock!
+// ... drawing ...
+// Forgot to call unlockCanvasAndPost!
 
 // ✅ GOOD: Always use finally
 var canvas: Canvas? = null
 try {
     canvas = holder.lockCanvas()
-    draw(canvas)
+    // ... drawing ...
 } finally {
     canvas?.let { holder.unlockCanvasAndPost(it) }
 }
 
 // ❌ BAD: Improper thread stopping
 override fun surfaceDestroyed(holder: SurfaceHolder) {
-    thread?.interrupt() // May not work
+    thread?.interrupt() // May not stop the loop / thread safely
 }
 
 // ✅ GOOD: Use flag and join
+@Volatile private var isRunning = true
+
 override fun surfaceDestroyed(holder: SurfaceHolder) {
-    isRunning = false
+    isRunning = false // Loop exits
     thread?.join()
 }
 ```
@@ -385,18 +447,16 @@ override fun surfaceDestroyed(holder: SurfaceHolder) {
 
 ## Follow-ups
 
-1. What are the memory implications of using SurfaceView vs regular View?
-2. How do you handle screen rotation with SurfaceView without losing state?
-3. Can you use hardware acceleration with SurfaceView?
-4. What's the difference between lockCanvas() and lockCanvas(Rect)?
-5. How do you implement double buffering with SurfaceView?
+1. What are the trade-offs between using `SurfaceView` and `TextureView` for high-frequency rendering?
+2. How would you synchronize game logic and rendering threads when using `SurfaceView`?
+3. How do lifecycle changes (pause/resume, configuration changes) affect a `SurfaceView`-based renderer?
+4. How can you profile and debug jank or dropped frames when drawing via `SurfaceView`?
+5. In which scenarios is it still preferable to keep rendering on the main thread despite `SurfaceView` availability?
 
 ## References
 
-- [[c-surfaceview]] - SurfaceView concept and architecture
-- [[c-textureview]] - TextureView implementation details
-- [[c-canvas-drawing]] - Canvas API and drawing operations
-- [[q-what-is-the-main-application-execution-thread--android--easy]] - Understanding main thread constraints
+- [[c-android-surfaces]]
+- [[q-what-is-the-main-application-execution-thread--android--easy]]
 - https://developer.android.com/reference/android/view/SurfaceView
 - https://developer.android.com/reference/android/view/TextureView
 
@@ -404,13 +464,9 @@ override fun surfaceDestroyed(holder: SurfaceHolder) {
 
 ### Prerequisites (Easier)
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread basics
-- [[q-handler-looper-messagequeue--android--medium]] - Thread communication
 
 ### Related (Same Level)
-- [[q-custom-view-drawing--android--hard]] - Custom view implementation
-- [[q-opengl-with-surfaceview--android--hard]] - Using OpenGL with SurfaceView
-- [[q-video-playback-implementation--android--hard]] - Video rendering with SurfaceView
+- (missing: related custom view / OpenGL / video playback questions)
 
 ### Advanced (Harder)
-- [[q-vulkan-rendering--android--expert]] - Vulkan API for high-performance graphics
-- [[q-renderscript-optimization--android--expert]] - Advanced rendering optimization
+- (missing: advanced Vulkan / optimization questions)

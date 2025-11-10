@@ -4,22 +4,24 @@ title: Compose Canvas & Graphics / Canvas и графика в Compose
 aliases: [Canvas и графика в Compose, Compose Canvas & Graphics]
 topic: android
 subtopics:
-  - ui-compose
-  - ui-graphics
-question_kind: android
+- ui-compose
+- ui-graphics
+question_kind: conceptual
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - c-jetpack-compose
+- c-jetpack-compose
+- q-android-performance-measurement-tools--android--medium
 created: 2025-10-11
-updated: 2025-10-30
+updated: 2025-11-10
 sources: []
 tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
+
 ---
 
 # Вопрос (RU)
@@ -32,28 +34,47 @@ tags: [android/ui-compose, android/ui-graphics, difficulty/hard]
 
 ## Ответ (RU)
 
-### Основные Концепции
-- **DrawScope**: рисование в immediate-режиме внутри `Canvas(modifier) { ... }`
-- **State**: рекомпозиция триггерит перерисовку; минимизируйте записи состояния в hot paths
-- **Remember/кэширование**: предвычисляйте пути/битмапы; избегайте аллокаций в draw-лямбдах
-- **Clipping/alpha/layers**: применяйте только где нужно (дорого); предпочитайте геометрические тесты
+### Краткий вариант
+- Используйте `Canvas`, `DrawScope` и `drawWithCache` для точного контроля рисования.
+- Кэшируйте дорогие вычисления (`Path`, `ImageBitmap`) через `remember`/`drawWithCache`, избегайте аллокаций в каждом кадре.
+- Минимизируйте `alpha`, сложный клиппинг и лишние слои.
+- Профилируйте через Perfetto и бенчмарки, измеряйте реальную нагрузку.
 
-### Паттерны
+### Подробный вариант
+
+#### Основные Концепции
+- `DrawScope`: рисование в immediate-режиме внутри `Canvas(modifier) { ... }`.
+- Состояние: рекомпозиция триггерит перерисовку; минимизируйте записи состояния и вычисления в горячих участках.
+- `remember` / `drawWithCache` / кэширование: предвычисляйте пути/битмапы и другие дорогие структуры; избегайте лишних аллокаций в `draw`-лямбдах, особенно на каждый кадр.
+- Clipping / alpha / слои: применяйте только где нужно (дорого по производительности); по возможности используйте геометрическую отсечку до клиппинга/отрисовки.
+
+#### Паттерны
 
 **Кэширование дорогих фигур**:
 ```kotlin
-// ✅ ПРАВИЛЬНО: предвычисление path в remember
+// ✅ ПРАВИЛЬНО: предвычисление path в remember с учетом параметров
 @Composable
 fun Star(modifier: Modifier = Modifier, points: Int, size: Size) {
   val path = remember(points, size) { buildStarPath(points, size) }
   Canvas(modifier) { drawPath(path, color = Color.Yellow) }
 }
 
-// ❌ НЕПРАВИЛЬНО: создание path при каждой отрисовке
+// Пример для размера, зависящего от Canvas: используйте drawWithCache
+@Composable
+fun StarCanvas(modifier: Modifier = Modifier, points: Int) {
+  Canvas(modifier.drawWithCache {
+    val path = buildStarPath(points, size) // size из DrawScope
+    onDrawBehind {
+      drawPath(path, color = Color.Yellow)
+    }
+  })
+}
+
+// ❌ НЕПРАВИЛЬНО: создание path при каждой отрисовке без необходимости
 @Composable
 fun SlowStar(modifier: Modifier = Modifier, points: Int, size: Size) {
   Canvas(modifier) {
-    val path = buildStarPath(points, size) // аллокация в draw!
+    val path = buildStarPath(points, size) // лишняя аллокация в draw на каждом кадре
     drawPath(path, color = Color.Yellow)
   }
 }
@@ -61,7 +82,7 @@ fun SlowStar(modifier: Modifier = Modifier, points: Int, size: Size) {
 
 **Переиспользование объектов**:
 ```kotlin
-// ✅ ПРАВИЛЬНО: reset вместо новых Path
+// ✅ ПРАВИЛЬНО: reset вместо создания нового Path каждый раз
 @Composable
 fun Lines(modifier: Modifier = Modifier, data: List<Offset>) {
   val path = remember { Path() }
@@ -78,52 +99,73 @@ fun Lines(modifier: Modifier = Modifier, data: List<Offset>) {
 
 **Clipping по видимым границам**:
 ```kotlin
-// ✅ ПРАВИЛЬНО: отрисовка только видимых элементов
+// ✅ ПРАВИЛЬНО: отрисовка только видимых элементов (геометрическая отсечка)
 Canvas(Modifier.fillMaxSize()) {
-  val clip = clipBounds
+  val clip = clipBounds // локальные координаты DrawScope
   items.forEach { item ->
-    if (item.bounds.overlaps(clip)) drawItem(item)
+    if (item.bounds.overlaps(clip)) { // bounds в тех же координатах
+      drawItem(item)
+    }
   }
 }
 ```
 
 **Слои для анимаций**:
 ```kotlin
-// ✅ ИСПОЛЬЗУЙТЕ ЭКОНОМНО: graphicsLayer для GPU-акселерации
+// ✅ ИСПОЛЬЗУЙТЕ ЭКОНОМНО: graphicsLayer для GPU-акселерации трансформаций/альфы
 Canvas(Modifier.graphicsLayer(alpha = 0.9f)) { /* draw */ }
 ```
 
-### Чеклист Производительности
-- Предвычисляйте пути/битмапы в `remember`; никаких новых объектов в draw
-- Используйте `Stroke`/`Brush` осторожно; избегайте лишнего альфа-блендинга
-- Клиппинг только когда нужно; предпочитайте геометрическую отсечку
-- Профилируйте с Perfetto + `Trace.beginSection` в custom коде
-- Бенчмаркинг с Macrobenchmark (render jank, frame time)
+#### Чеклист Производительности
+- Предвычисляйте пути/битмапы в `remember` или `drawWithCache`; минимизируйте создание новых объектов в `onDraw`/`onDrawBehind`.
+- Используйте `Stroke`/`Brush` осторожно; избегайте лишнего альфа-блендинга и сложных градиентов без необходимости.
+- Клиппинг только когда нужно; по возможности сначала выполняйте геометрическую отсечку.
+- Профилируйте с Perfetto + `Trace.beginSection` в кастомном коде рисования.
+- Бенчмаркинг с Macrobenchmark (render jank, frame time).
 
 ## Answer (EN)
 
-### Core Concepts
-- **DrawScope**: immediate mode drawing inside `Canvas(modifier) { ... }`
-- **State**: recomposition drives re-draw; minimize state writes in hot paths
-- **Remember/caching**: precompute paths/bitmaps; avoid allocations in draw lambdas
-- **Clipping/alpha/layers**: apply only where needed (costly); prefer geometry tests
+### Short Version
+- Use `Canvas`, `DrawScope`, and `drawWithCache` for precise drawing control.
+- Cache expensive computations (`Path`, `ImageBitmap`) via `remember`/`drawWithCache`; avoid per-frame allocations.
+- Minimize `alpha`, complex clipping, and unnecessary layers.
+- Profile with Perfetto and benchmarks; measure real-world performance.
 
-### Patterns
+### Detailed Version
+
+#### Core Concepts
+- `DrawScope`: immediate-mode drawing inside `Canvas(modifier) { ... }`.
+- State: recomposition drives redraw; minimize state writes and heavy work in hot paths.
+- `remember` / `drawWithCache` / caching: precompute paths/bitmaps and other expensive structures; avoid unnecessary allocations inside draw lambdas, especially per-frame.
+- Clipping / alpha / layers: use only where needed (can be costly); prefer geometric culling before clipping/drawing when possible.
+
+#### Patterns
 
 **Caching expensive shapes**:
 ```kotlin
-// ✅ CORRECT: precompute path in remember
+// ✅ CORRECT: precompute path in remember, based on stable parameters
 @Composable
 fun Star(modifier: Modifier = Modifier, points: Int, size: Size) {
   val path = remember(points, size) { buildStarPath(points, size) }
   Canvas(modifier) { drawPath(path, color = Color.Yellow) }
 }
 
-// ❌ WRONG: creating path on every draw
+// Example when size depends on Canvas: use drawWithCache
+@Composable
+fun StarCanvas(modifier: Modifier = Modifier, points: Int) {
+  Canvas(modifier.drawWithCache {
+    val path = buildStarPath(points, size) // size from DrawScope
+    onDrawBehind {
+      drawPath(path, color = Color.Yellow)
+    }
+  })
+}
+
+// ❌ WRONG: rebuilding path on every draw without need
 @Composable
 fun SlowStar(modifier: Modifier = Modifier, points: Int, size: Size) {
   Canvas(modifier) {
-    val path = buildStarPath(points, size) // allocation in draw!
+    val path = buildStarPath(points, size) // unnecessary allocation in draw each frame
     drawPath(path, color = Color.Yellow)
   }
 }
@@ -131,7 +173,7 @@ fun SlowStar(modifier: Modifier = Modifier, points: Int, size: Size) {
 
 **Reusing objects**:
 ```kotlin
-// ✅ CORRECT: reset instead of new Path
+// ✅ CORRECT: reset instead of allocating a new Path each time
 @Composable
 fun Lines(modifier: Modifier = Modifier, data: List<Offset>) {
   val path = remember { Path() }
@@ -148,27 +190,29 @@ fun Lines(modifier: Modifier = Modifier, data: List<Offset>) {
 
 **Clipping to visible bounds**:
 ```kotlin
-// ✅ CORRECT: draw only visible items
+// ✅ CORRECT: draw only visible items (geometric culling)
 Canvas(Modifier.fillMaxSize()) {
-  val clip = clipBounds
+  val clip = clipBounds // local DrawScope coordinates
   items.forEach { item ->
-    if (item.bounds.overlaps(clip)) drawItem(item)
+    if (item.bounds.overlaps(clip)) { // bounds in the same coordinate space
+      drawItem(item)
+    }
   }
 }
 ```
 
 **Layers for animations**:
 ```kotlin
-// ✅ USE SPARINGLY: graphicsLayer for GPU acceleration
+// ✅ USE SPARINGLY: graphicsLayer for GPU-accelerated transforms/alpha
 Canvas(Modifier.graphicsLayer(alpha = 0.9f)) { /* draw */ }
 ```
 
 ### Performance Checklist
-- Precompute paths/bitmaps in `remember`; no new objects in draw
-- Use `Stroke`/`Brush` judiciously; avoid unnecessary alpha blending
-- Clip only when needed; prefer geometric culling
-- Profile with Perfetto + `Trace.beginSection` in custom code
-- Benchmark with Macrobenchmark (render jank, frame time)
+- Precompute paths/bitmaps using `remember` or `drawWithCache`; minimize new allocations in `onDraw`/`onDrawBehind`.
+- Use `Stroke`/`Brush` judiciously; avoid unnecessary alpha blending and complex gradients when not needed.
+- Clip only when necessary; prefer geometric culling before drawing.
+- Profile with Perfetto + `Trace.beginSection` in custom drawing code.
+- Benchmark with Macrobenchmark (render jank, frame time).
 
 ## Follow-ups
 - How to structure state for large canvases (tiling/virtualization)?

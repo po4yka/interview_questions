@@ -43,11 +43,11 @@ tags:
 
 ## Ответ (RU)
 
-**Цель производительности**: 60 FPS = 16.67 мс на кадр, `onDraw()` должен занимать < 5 мс, нулевые аллокации на кадр.
+**Цель производительности**: 60 FPS = 16.67 мс на кадр. Стремимся к тому, чтобы `onDraw()` обычно занимал < 5 мс, избегал лишних аллокаций и не вызывал GC во время анимаций.
 
-### 1. Нулевые Аллокации Памяти
+### 1. Нулевые Аллокации Памяти (по возможности)
 
-Создание объектов в `onDraw()` вызывает GC паузы и пропуски кадров.
+Создание объектов в `onDraw()` вызывает давление на GC и может приводить к пропускам кадров, особенно при частых обновлениях (анимации).
 
 ```kotlin
 class OptimizedView(context: Context) : View(context) {
@@ -62,81 +62,94 @@ class OptimizedView(context: Context) : View(context) {
     path.moveTo(0f, 0f)
     path.lineTo(width.toFloat(), height.toFloat())
 
-    // ❌ val newPaint = Paint() // НИКОГДА не создавать объекты здесь
+    // 🚫 Избегать систематического создания новых объектов здесь в каждом кадре
+    // val newPaint = Paint()
   }
 }
 ```
 
+Принцип: не обязательно «абсолютный ноль», но регулярных аллокаций в каждом кадре следует избегать.
+
 ### 2. Аппаратное Ускорение
 
-GPU кеширует содержимое слоя, минуя CPU повторную отрисовку.
+Аппаратное ускорение (GPU) может ускорить сложную отрисовку, работать с слоями и эффектами и разгрузить CPU, но не всегда даёт выигрыш и поддерживается не для всех операций.
 
 ```kotlin
-// ✅ Для статичного сложного контента
+// ✅ Для статичного или редко меняющегося сложного контента
 setLayerType(LAYER_TYPE_HARDWARE, null)
 
 // ✅ Временно для анимаций
 view.animate().alpha(0f).withLayer() // Автоматически управляет слоем
 ```
 
-**Когда использовать**: сложные Path, многослойные эффекты, частые анимации. До 10x ускорения.
+**Когда использовать**: сложные Path, многослойные эффекты, дорогие операции, которые можно кешировать в слое. Оценивать профилированием; прирост зависит от устройства и сценария и не гарантирован.
 
 ### 3. Bitmap Кеширование
 
-Дорогостоящие операции отрисовываем один раз в Bitmap, затем только `drawBitmap()`.
+Дорогостоящие операции выполняем один раз в `Bitmap`, затем в `onDraw()` только `drawBitmap()`.
 
 ```kotlin
 private var cache: Bitmap? = null
 private var isDirty = true
 
 override fun onDraw(canvas: Canvas) {
-  if (isDirty) {
-    cache = Bitmap.createBitmap(width, height, ARGB_8888)
-    Canvas(cache!!).drawComplexContent() // ✅ Дорогая операция один раз
+  if (isDirty || cache == null || cache!!.width != width || cache!!.height != height) {
+    cache?.recycle()
+    if (width > 0 && height > 0) {
+      cache = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+      val cacheCanvas = Canvas(cache!!)
+      cacheCanvas.drawComplexContent() // ✅ Дорогая операция один раз/при изменениях
+    }
     isDirty = false
   }
-  canvas.drawBitmap(cache!!, 0f, 0f, null) // ✅ Быстрая операция
+  cache?.let {
+    canvas.drawBitmap(it, 0f, 0f, null) // ✅ Быстрая операция
+  }
 }
 ```
 
-Инвалидировать кеш при изменении данных: `isDirty = true; invalidate()`.
+Инвалидируйте кеш при изменении данных или размеров: `isDirty = true; invalidate()` / `requestLayout()`.
 
 ### 4. Clipping (отсечение)
 
-Отрисовываем только видимую область viewport.
+Отрисовываем только видимую область (viewport) и не рисуем элементы за её пределами.
 
 ```kotlin
 override fun onDraw(canvas: Canvas) {
-  val bounds = canvas.clipBounds // ✅ Видимая область
+  val bounds = canvas.clipBounds // ✅ Текущая видимая область после клиппинга
+  // При необходимости можно дополнительно ограничить область: canvas.clipRect(...)
   visibleItems(bounds).forEach { item ->
     canvas.drawItem(item) // Отрисовка только видимого
   }
 }
 ```
 
-Для списков из тысяч элементов ускорение до 20x.
+Эффект зависит от сцены: для списков из тысяч элементов или сложной геометрии выигрыш может быть очень значительным, но конкретный множитель нужно подтверждать профилированием.
 
 ### 5. Профилирование
 
 ```kotlin
 override fun onDraw(canvas: Canvas) {
-  Trace.beginSection("MyView.onDraw") // ✅ Трейс для Systrace
+  Trace.beginSection("MyView.onDraw") // ✅ Trace для System Tracing / Perfetto
   // отрисовка
   Trace.endSection()
 }
 ```
 
-**Инструменты**: Android Profiler (CPU/Memory), GPU Rendering Profile (Settings > Developer Options), Systrace.
+**Инструменты**:
+- Android Profiler (CPU/Memory)
+- Inspect GPU Rendering / Profile HWUI rendering (Developer Options)
+- System Tracing / Perfetto (современная замена классического Systrace)
 
-**Что искать**: аллокации в onDraw, кадры > 16 мс, GC события во время отрисовки.
+**Что искать**: аллокации в `onDraw`, кадры > 16 мс, GC-события во время отрисовки, тяжёлые операции на UI-потоке.
 
 ## Answer (EN)
 
-**Performance target**: 60 FPS = 16.67ms per frame, `onDraw()` should take < 5ms, zero allocations per frame.
+**Performance target**: 60 FPS = 16.67ms per frame. Aim for `onDraw()` to typically stay under ~5ms, avoid unnecessary allocations, and prevent GC during animations.
 
-### 1. Zero Allocations
+### 1. Zero Allocations (as much as possible)
 
-Creating objects in `onDraw()` triggers GC pauses and frame drops.
+Allocating new objects in `onDraw()` increases GC pressure and can cause frame drops, especially under continuous animations.
 
 ```kotlin
 class OptimizedView(context: Context) : View(context) {
@@ -151,73 +164,86 @@ class OptimizedView(context: Context) : View(context) {
     path.moveTo(0f, 0f)
     path.lineTo(width.toFloat(), height.toFloat())
 
-    // ❌ val newPaint = Paint() // NEVER allocate here
+    // 🚫 Avoid systematic per-frame allocations here
+    // val newPaint = Paint()
   }
 }
 ```
 
+Principle: aim to minimize per-frame allocations; "absolute zero" is an ideal, but regular allocations in every frame should be avoided.
+
 ### 2. Hardware Acceleration
 
-GPU caches layer content, bypassing CPU redraw.
+Hardware acceleration (GPU) can speed up complex rendering, handle layers and effects and offload work from the CPU, but it is not universally faster and some operations are still CPU-bound or unsupported.
 
 ```kotlin
-// ✅ For static complex content
+// ✅ For static or rarely changing complex content
 setLayerType(LAYER_TYPE_HARDWARE, null)
 
 // ✅ Temporarily for animations
 view.animate().alpha(0f).withLayer() // Auto-manages layer
 ```
 
-**When to use**: complex Paths, multilayer effects, frequent animations. Up to 10x speedup.
+**When to use**: complex Paths, multi-layer effects, expensive drawing that can be cached into a layer. Always verify with profiling; actual speedup is device- and case-dependent.
 
 ### 3. Bitmap Caching
 
-Expensive operations drawn once to Bitmap, then only `drawBitmap()`.
+Render expensive content once into a `Bitmap`, then in `onDraw()` only call `drawBitmap()`.
 
 ```kotlin
 private var cache: Bitmap? = null
 private var isDirty = true
 
 override fun onDraw(canvas: Canvas) {
-  if (isDirty) {
-    cache = Bitmap.createBitmap(width, height, ARGB_8888)
-    Canvas(cache!!).drawComplexContent() // ✅ Expensive once
+  if (isDirty || cache == null || cache!!.width != width || cache!!.height != height) {
+    cache?.recycle()
+    if (width > 0 && height > 0) {
+      cache = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+      val cacheCanvas = Canvas(cache!!)
+      cacheCanvas.drawComplexContent() // ✅ Expensive only on changes
+    }
     isDirty = false
   }
-  canvas.drawBitmap(cache!!, 0f, 0f, null) // ✅ Fast operation
+  cache?.let {
+    canvas.drawBitmap(it, 0f, 0f, null) // ✅ Fast operation
+  }
 }
 ```
 
-Invalidate cache on data change: `isDirty = true; invalidate()`.
+Invalidate cache on data or size changes: `isDirty = true; invalidate()` / `requestLayout()`.
 
 ### 4. Clipping
 
-Draw only visible viewport region.
+Draw only the visible viewport area and skip items outside it.
 
 ```kotlin
 override fun onDraw(canvas: Canvas) {
-  val bounds = canvas.clipBounds // ✅ Visible area
+  val bounds = canvas.clipBounds // ✅ Current visible area after clipping
+  // Optionally further restrict: canvas.clipRect(...)
   visibleItems(bounds).forEach { item ->
     canvas.drawItem(item) // Draw only visible
   }
 }
 ```
 
-For lists with thousands of items, up to 20x speedup.
+Actual gain is content-dependent: for large lists or complex geometry the speedup can be substantial, but any numeric factor should be validated via profiling.
 
 ### 5. Profiling
 
 ```kotlin
 override fun onDraw(canvas: Canvas) {
-  Trace.beginSection("MyView.onDraw") // ✅ Trace for Systrace
+  Trace.beginSection("MyView.onDraw") // ✅ Trace for System Tracing / Perfetto
   // drawing
   Trace.endSection()
 }
 ```
 
-**Tools**: Android Profiler (CPU/Memory), GPU Rendering Profile (Settings > Developer Options), Systrace.
+**Tools**:
+- Android Profiler (CPU/Memory)
+- Inspect GPU Rendering / Profile HWUI rendering (Developer Options)
+- System Tracing / Perfetto (modern replacement for classic Systrace)
 
-**Look for**: allocations in onDraw, frames > 16ms, GC events during drawing.
+**Look for**: allocations in `onDraw`, frames > 16ms, GC events during drawing, heavy work on the UI thread.
 
 ## Follow-ups
 - What is overdraw and how does it affect Canvas performance?

@@ -4,25 +4,26 @@ title: Async Operations in Android / Асинхронные операции в 
 aliases: [Async Operations in Android, Асинхронные операции в Android]
 topic: android
 subtopics:
-  - background-execution
-  - coroutines
-  - threads-sync
+- background-execution
+- coroutines
+- threads-sync
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - c-coroutines
-  - c-lifecycle
-  - q-android-async-primitives--android--easy
+- c-coroutines
+- c-lifecycle
+- q-android-async-primitives--android--easy
 created: 2025-10-15
 updated: 2025-10-30
 sources: []
 tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/medium]
+
 ---
 
 # Вопрос (RU)
@@ -106,7 +107,7 @@ executor.execute {
 // ⚠️ Обязательно: executor.shutdown() в onDestroy
 ```
 
-### HandlerThread — Message Queue
+### HandlerThread — Message `Queue`
 
 Один фоновый Looper для последовательной обработки.
 
@@ -228,7 +229,7 @@ executor.execute {
 // ⚠️ Required: executor.shutdown() in onDestroy
 ```
 
-### HandlerThread — Message Queue
+### HandlerThread — Message `Queue`
 
 Single background Looper for sequential processing.
 
@@ -279,6 +280,14 @@ disposables.add(
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как выбрать между WorkManager и ForegroundService для долгих задач?
+- Каковы компромиссы между разными типами `Dispatchers` в корутинах?
+- Как обрабатывать распространение отмены через несколько уровней repository/domain?
+- Когда использовать `async/await` по сравнению с `withContext` в корутинах?
+- Как тестировать корутин-основанный асинхронный код с `TestDispatcher`?
+
 ## Follow-ups
 
 - How do you choose between WorkManager and ForegroundService for long-running tasks?
@@ -287,25 +296,38 @@ disposables.add(
 - When should you use `async/await` vs `withContext` in coroutines?
 - How do you test coroutine-based async code with TestDispatchers?
 
+## Ссылки (RU)
+
+- [[c-coroutines]]
+- [[c-lifecycle]]
+- [Kotlin Coroutines](https://developer.android.com/kotlin/coroutines)
+- [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
+
 ## References
 
 - [[c-coroutines]]
 - [[c-lifecycle]]
-- [[c-structured-concurrency]]
 - [Kotlin Coroutines](https://developer.android.com/kotlin/coroutines)
 - [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 
+## Связанные вопросы (RU)
+
+### База (проще)
+- [[q-android-async-primitives--android--easy]]
+
+### Связанные (тот же уровень)
+- [[q-android-performance-measurement-tools--android--medium]]
+
+### Продвинутое (сложнее)
+- [[q-android-runtime-internals--android--hard]]
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - [[q-android-async-primitives--android--easy]]
 
-
 ### Related (Same Level)
-- [[q-anr-application-not-responding--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
-
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]]

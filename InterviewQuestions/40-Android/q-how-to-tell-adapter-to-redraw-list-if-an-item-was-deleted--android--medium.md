@@ -49,33 +49,38 @@ tags:
 
 ## Ответ (RU)
 
-Если удалился элемент из списка, нужно: (1) Удалить его из списка данных, (2) Сообщить Adapter, чтобы он перерисовал только изменённые элементы, используя специфичные notify методы.
+Если удалился элемент из списка, нужно: (1) Удалить его из списка данных, (2) Сообщить Adapter, чтобы он перерисовал только изменённые элементы, используя специфичные notify-методы (а не всегда весь список целиком).
 
 ### Три Подхода
 
-**1. Базовый notify метод**
+**1. Базовые notify-методы**
 
 ```kotlin
 class MyAdapter(private val items: MutableList<Item>) : RecyclerView.Adapter<ViewHolder>() {
 
-    // ❌ ПЛОХО: Обновляет весь список, нет анимаций
+    // ❌ НЕЭФФЕКТИВНО: Обновляет весь список, нет анимаций, используется только если
+    // поменялись данные всего списка или точные изменения сложно определить
     fun removeItemBad(position: Int) {
         items.removeAt(position)
         notifyDataSetChanged()
     }
 
-    // ✅ ХОРОШО: Обновляет только затронутый элемент
+    // ✅ ПРЕДПОЧТИТЕЛЬНО: Сообщает об удалении позиции, даёт плавную анимацию
     fun removeItem(position: Int) {
         items.removeAt(position)
         notifyItemRemoved(position)  // Плавная анимация
+        // При жёсткой привязке логики к позициям можно дополнительно вызвать
+        // notifyItemRangeChanged(position, itemCount - position)
     }
 }
 ```
 
-**2. ListAdapter с DiffUtil (Рекомендуется)**
+**2. ListAdapter с DiffUtil (Рекомендуется для динамических списков)**
 
 ```kotlin
-class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(ItemDiffCallback()) {
+class MyAdapter : ListAdapter<Item, MyAdapter.ItemViewHolder>(ItemDiffCallback()) {
+
+    class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     private class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
         override fun areItemsTheSame(oldItem: Item, newItem: Item) =
@@ -86,7 +91,7 @@ class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(ItemDiffCallback()) {
 
     fun removeItem(item: Item) {
         val newList = currentList.toMutableList().apply { remove(item) }
-        submitList(newList)  // ✅ DiffUtil автоматически вычисляет изменения
+        submitList(newList)  // ✅ DiffUtil автоматически вычисляет изменения и анимации
     }
 }
 ```
@@ -117,47 +122,52 @@ class UndoDeleteAdapter(private val items: MutableList<Item>) :
 ### Сравнение Методов
 
 | Метод | Анимация | Производительность | Случай использования |
-|-------|----------|-------------------|---------------------|
-| `notifyDataSetChanged()` | Нет | Плохая | Избегайте |
-| `notifyItemRemoved()` | Да | Хорошая | Одиночные удаления |
-| `ListAdapter` + DiffUtil | Да | Отличная | Рекомендуется для всех случаев |
+|-------|----------|-------------------|----------------------|
+| `notifyDataSetChanged()` | Нет | Ниже (перерисовка всего списка) | Когда изменения глобальные или сложно посчитать дифф |
+| `notifyItemRemoved()` | Да | Хорошая | Одиночные/локальные удаления |
+| `ListAdapter` + DiffUtil | Да | Отличная | Динамические списки, частые обновления |
 
 ### Ключевые Правила
 
-1. **Всегда используйте** `notifyItemRemoved()` вместо `notifyDataSetChanged()`
-2. **Для современных приложений** — `ListAdapter` с DiffUtil
-3. **Обновляйте данные ПЕРЕД** вызовом notify
-4. **Для UX** — добавьте undo через Snackbar
+1. По возможности используйте точечные notify-методы (`notifyItemRemoved`, `notifyItemInserted`, `notifyItemChanged`, `notifyItemRange...`) вместо `notifyDataSetChanged()`.
+2. Для современных приложений и динамических списков предпочтителен `ListAdapter` с DiffUtil.
+3. Обновляйте данные ДО вызова notify-методов.
+4. Для лучшего UX можно добавить undo через Snackbar.
 
 ## Answer (EN)
 
-If an item was deleted from the list, you need to: (1) Remove it from the data list, (2) Tell Adapter to redraw only changed items using specific notify methods.
+If an item was deleted from the list, you need to: (1) Remove it from the data list, (2) Tell the Adapter to redraw only the changed items using specific notify methods (instead of always refreshing the whole list).
 
 ### Three Approaches
 
-**1. Basic notify method**
+**1. Basic notify methods**
 
 ```kotlin
 class MyAdapter(private val items: MutableList<Item>) : RecyclerView.Adapter<ViewHolder>() {
 
-    // ❌ BAD: Refreshes entire list, no animations
+    // ❌ INEFFICIENT: Refreshes entire list, no animations; use only when
+    // the whole dataset changed or you cannot reasonably compute precise changes
     fun removeItemBad(position: Int) {
         items.removeAt(position)
         notifyDataSetChanged()
     }
 
-    // ✅ GOOD: Only updates affected item
+    // ✅ PREFERRED: Notifies about item removal, gives smooth animation
     fun removeItem(position: Int) {
         items.removeAt(position)
         notifyItemRemoved(position)  // Smooth animation
+        // If your logic is tightly bound to adapter positions, you may also call:
+        // notifyItemRangeChanged(position, itemCount - position)
     }
 }
 ```
 
-**2. ListAdapter with DiffUtil (Recommended)**
+**2. ListAdapter with DiffUtil (Recommended for dynamic lists)**
 
 ```kotlin
-class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(ItemDiffCallback()) {
+class MyAdapter : ListAdapter<Item, MyAdapter.ItemViewHolder>(ItemDiffCallback()) {
+
+    class ItemViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
     private class ItemDiffCallback : DiffUtil.ItemCallback<Item>() {
         override fun areItemsTheSame(oldItem: Item, newItem: Item) =
@@ -168,7 +178,7 @@ class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(ItemDiffCallback()) {
 
     fun removeItem(item: Item) {
         val newList = currentList.toMutableList().apply { remove(item) }
-        submitList(newList)  // ✅ DiffUtil automatically calculates changes
+        submitList(newList)  // ✅ DiffUtil calculates changes and animations automatically
     }
 }
 ```
@@ -200,16 +210,16 @@ class UndoDeleteAdapter(private val items: MutableList<Item>) :
 
 | Method | Animation | Performance | Use Case |
 |--------|-----------|------------|----------|
-| `notifyDataSetChanged()` | No | Poor | Avoid |
-| `notifyItemRemoved()` | Yes | Good | Single deletions |
-| `ListAdapter` + DiffUtil | Yes | Excellent | Recommended for all cases |
+| `notifyDataSetChanged()` | No | Lower (redraws entire list) | When changes are global or diff is hard to compute |
+| `notifyItemRemoved()` | Yes | Good | Single/local deletions |
+| `ListAdapter` + DiffUtil | Yes | Excellent | Dynamic lists with frequent updates |
 
 ### Key Rules
 
-1. **Always use** `notifyItemRemoved()` instead of `notifyDataSetChanged()`
-2. **For modern apps** — `ListAdapter` with DiffUtil
-3. **Update data BEFORE** calling notify
-4. **For UX** — add undo via Snackbar
+1. Prefer precise notify methods (`notifyItemRemoved`, `notifyItemInserted`, `notifyItemChanged`, `notifyItemRange...`) over `notifyDataSetChanged()` when you know what changed.
+2. For modern apps and dynamic lists, `ListAdapter` with DiffUtil is generally the best choice.
+3. Update your data BEFORE calling notify methods.
+4. For better UX, add undo via Snackbar.
 
 ---
 

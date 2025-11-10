@@ -57,13 +57,15 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator
 
     fun removeItem(position: Int) {
         val newList = currentList.toMutableList()
-        newList.removeAt(position)
-        submitList(newList)  // DiffUtil работает автоматически
+        if (position in newList.indices) {
+            newList.removeAt(position)
+            submitList(newList)  // DiffUtil работает автоматически
+        }
     }
 
     object ItemComparator : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(old: Item, new: Item) = old.id == new.id
-        override fun areContentsTheSame(old: Item, new: Item) = old == new
+        override fun areItemsTheSame(oldItem: Item, newItem: Item) = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: Item, newItem: Item) = oldItem == newItem
     }
 }
 ```
@@ -86,18 +88,22 @@ class SmartAdapter : RecyclerView.Adapter<ViewHolder>() {
 **3. Прямое уведомление**
 
 ```kotlin
-// ✅ Для простых случаев
+// ✅ Для простых случаев при ручном управлении списком
 fun removeItem(position: Int) {
-    items.removeAt(position)
-    notifyItemRemoved(position)
-    // Обновить индексы следующих элементов
-    notifyItemRangeChanged(position, items.size)
+    if (position in items.indices) {
+        items.removeAt(position)
+        notifyItemRemoved(position)
+        // При необходимости обновить отображаемые позиции следующих элементов
+        // notifyItemRangeChanged(position, items.size - position)
+    }
 }
 
 // ❌ Избегать - перерисовывает весь список
 fun removeItemBad(position: Int) {
-    items.removeAt(position)
-    notifyDataSetChanged()  // Неэффективно, теряются анимации
+    if (position in items.indices) {
+        items.removeAt(position)
+        notifyDataSetChanged()  // Неэффективно, теряются анимации
+    }
 }
 ```
 
@@ -108,17 +114,22 @@ val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
     0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
 ) {
     override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-        val position = viewHolder.adapterPosition
-        val item = adapter.currentList[position]
+        val position = viewHolder.bindingAdapterPosition
+        if (position == RecyclerView.NO_POSITION) return
 
-        val newList = adapter.currentList.toMutableList()
-        newList.removeAt(position)
+        val currentList = adapter.currentList
+        if (position !in currentList.indices) return
+
+        val item = currentList[position]
+        val newList = currentList.toMutableList().apply { removeAt(position) }
         adapter.submitList(newList)
 
         Snackbar.make(recyclerView, "Элемент удален", Snackbar.LENGTH_LONG)
             .setAction("Отменить") {
-                val restoreList = adapter.currentList.toMutableList()
-                restoreList.add(position, item)
+                val restoreList = adapter.currentList.toMutableList().apply {
+                    val safePosition = position.coerceIn(0, size)
+                    add(safePosition, item)
+                }
                 adapter.submitList(restoreList)
             }
             .show()
@@ -129,20 +140,20 @@ itemTouchHelper.attachToRecyclerView(recyclerView)
 
 ### Важные Особенности
 
-**Всегда используйте adapterPosition**
+**Всегда используйте актуальную позицию ViewHolder**
 
 ```kotlin
-// ❌ Неправильно - позиция может устареть
+// ❌ Неправильно - позиция из параметра может устареть
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.deleteButton.setOnClickListener {
         removeItem(position)  // position может быть неактуальной!
     }
 }
 
-// ✅ Правильно - получаем текущую позицию
+// ✅ Правильно - получаем текущую позицию холдера
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.deleteButton.setOnClickListener {
-        val currentPos = holder.adapterPosition
+        val currentPos = holder.bindingAdapterPosition
         if (currentPos != RecyclerView.NO_POSITION) {
             removeItem(currentPos)
         }
@@ -150,9 +161,11 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
+(При отсутствии ConcatAdapter допустимо использовать `adapterPosition`, но `bindingAdapterPosition` более универсален.)
+
 ### Jetpack Compose
 
-В Compose обновления списка автоматические через State:
+В Compose обновления списка происходят автоматически через состояние:
 
 ```kotlin
 @Composable
@@ -162,7 +175,7 @@ fun ItemList() {
     LazyColumn {
         items(
             items = items,
-            key = { it.id }  // Важно для анимаций
+            key = { it.id }  // Важно для корректных анимаций и сохранения состояния
         ) { item ->
             ItemRow(
                 item = item,
@@ -175,11 +188,11 @@ fun ItemList() {
 
 ### Лучшие Практики
 
-1. **ListAdapter** - выбор по умолчанию для нового кода
-2. **Стабильные ключи** - используйте `key = { it.id }` для правильных анимаций
-3. **Избегайте `notifyDataSetChanged()`** - теряются анимации и производительность
-4. **Функция отмены** - улучшает UX через Snackbar
-5. **`adapterPosition`** - используйте вместо параметра `position`
+1. **ListAdapter** - выбор по умолчанию для нового кода.
+2. **Стабильные ключи** - используйте `key = { it.id }` для правильных анимаций и восстановления состояния.
+3. **Избегайте `notifyDataSetChanged()`** - теряются анимации и ухудшается производительность.
+4. **Функция отмены** - улучшает UX через Snackbar, особенно для удаления.
+5. **Используйте актуальную позицию (`bindingAdapterPosition`/`adapterPosition`) вместо параметра `position`.**
 
 ---
 
@@ -197,13 +210,15 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator
 
     fun removeItem(position: Int) {
         val newList = currentList.toMutableList()
-        newList.removeAt(position)
-        submitList(newList)  // DiffUtil works automatically
+        if (position in newList.indices) {
+            newList.removeAt(position)
+            submitList(newList)  // DiffUtil works automatically
+        }
     }
 
     object ItemComparator : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(old: Item, new: Item) = old.id == new.id
-        override fun areContentsTheSame(old: Item, new: Item) = old == new
+        override fun areItemsTheSame(oldItem: Item, newItem: Item) = oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: Item, newItem: Item) = oldItem == newItem
     }
 }
 ```
@@ -226,18 +241,22 @@ class SmartAdapter : RecyclerView.Adapter<ViewHolder>() {
 **3. Direct Notification**
 
 ```kotlin
-// ✅ For simple cases
+// ✅ For simple cases with manual list management
 fun removeItem(position: Int) {
-    items.removeAt(position)
-    notifyItemRemoved(position)
-    // Update indices of following items
-    notifyItemRangeChanged(position, items.size)
+    if (position in items.indices) {
+        items.removeAt(position)
+        notifyItemRemoved(position)
+        // Optionally update following items' bound positions if UI depends on adapter position
+        // notifyItemRangeChanged(position, items.size - position)
+    }
 }
 
 // ❌ Avoid - redraws entire list
 fun removeItemBad(position: Int) {
-    items.removeAt(position)
-    notifyDataSetChanged()  // Inefficient, loses animations
+    if (position in items.indices) {
+        items.removeAt(position)
+        notifyDataSetChanged()  // Inefficient, loses animations
+    }
 }
 ```
 
@@ -248,17 +267,22 @@ val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
     0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
 ) {
     override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
-        val position = viewHolder.adapterPosition
-        val item = adapter.currentList[position]
+        val position = viewHolder.bindingAdapterPosition
+        if (position == RecyclerView.NO_POSITION) return
 
-        val newList = adapter.currentList.toMutableList()
-        newList.removeAt(position)
+        val currentList = adapter.currentList
+        if (position !in currentList.indices) return
+
+        val item = currentList[position]
+        val newList = currentList.toMutableList().apply { removeAt(position) }
         adapter.submitList(newList)
 
         Snackbar.make(recyclerView, "Item deleted", Snackbar.LENGTH_LONG)
             .setAction("Undo") {
-                val restoreList = adapter.currentList.toMutableList()
-                restoreList.add(position, item)
+                val restoreList = adapter.currentList.toMutableList().apply {
+                    val safePosition = position.coerceIn(0, size)
+                    add(safePosition, item)
+                }
                 adapter.submitList(restoreList)
             }
             .show()
@@ -269,20 +293,20 @@ itemTouchHelper.attachToRecyclerView(recyclerView)
 
 ### Important Considerations
 
-**Always use adapterPosition**
+**Always use the holder's current position**
 
 ```kotlin
-// ❌ Wrong - position may become stale
+// ❌ Wrong - position parameter may become stale
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.deleteButton.setOnClickListener {
         removeItem(position)  // position may be outdated!
     }
 }
 
-// ✅ Correct - get current position
+// ✅ Correct - get current holder position
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.deleteButton.setOnClickListener {
-        val currentPos = holder.adapterPosition
+        val currentPos = holder.bindingAdapterPosition
         if (currentPos != RecyclerView.NO_POSITION) {
             removeItem(currentPos)
         }
@@ -290,9 +314,11 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
+(When not using ConcatAdapter, `adapterPosition` is acceptable; `bindingAdapterPosition` is safer in general.)
+
 ### Jetpack Compose
 
-In Compose, list updates are automatic through State:
+In Compose, list updates are driven by State:
 
 ```kotlin
 @Composable
@@ -302,7 +328,7 @@ fun ItemList() {
     LazyColumn {
         items(
             items = items,
-            key = { it.id }  // Important for animations
+            key = { it.id }  // Important for animations and state preservation
         ) { item ->
             ItemRow(
                 item = item,
@@ -315,11 +341,11 @@ fun ItemList() {
 
 ### Best Practices
 
-1. **ListAdapter** - default choice for new code
-2. **Stable keys** - use `key = { it.id }` for proper animations
-3. **Avoid `notifyDataSetChanged()`** - loses animations and performance
-4. **Undo functionality** - improves UX through Snackbar
-5. **`adapterPosition`** - use instead of `position` parameter
+1. **ListAdapter** - default choice for new code.
+2. **Stable keys** - use `key = { it.id }` for proper animations and state.
+3. **Avoid `notifyDataSetChanged()`** - it loses animations and hurts performance.
+4. **Undo functionality** - improves UX, especially when deleting items.
+5. **Use the current position (`bindingAdapterPosition`/`adapterPosition`) instead of the `position` parameter.**
 
 ---
 

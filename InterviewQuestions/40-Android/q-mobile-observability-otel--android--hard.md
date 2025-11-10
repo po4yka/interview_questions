@@ -2,35 +2,38 @@
 id: android-627
 title: Mobile Observability with OpenTelemetry / Наблюдаемость на Android с OpenTelemetry
 aliases:
-  - Mobile Observability with OpenTelemetry
-  - Наблюдаемость на Android с OpenTelemetry
+- Mobile Observability with OpenTelemetry
+- Наблюдаемость на Android с OpenTelemetry
 topic: android
 subtopics:
-  - observability
-  - telemetry
-  - logging
-question_kind: android
+- logging-tracing
+- monitoring-slo
+- performance-battery
+question_kind: conceptual
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-mobile-observability
+- moc-android
+- q-android-performance-measurement-tools--android--medium
 created: 2025-11-02
-updated: 2025-11-02
+updated: 2025-11-10
 tags:
-  - android/observability
-  - telemetry
-  - opentelemetry
-  - difficulty/hard
+- android/logging-tracing
+- android/monitoring-slo
+- android/performance-battery
+- opentelemetry
+- difficulty/hard
 sources:
-  - url: https://opentelemetry.io/docs/instrumentation/android/
-    note: OpenTelemetry Android docs
-  - url: https://developer.android.com/topic/performance/monitoring
-    note: Monitoring best practices
+- url: "https://opentelemetry.io/docs/instrumentation/android/"
+  note: OpenTelemetry Android docs
+- url: "https://developer.android.com/topic/performance/monitoring"
+  note: Monitoring best practices
+
 ---
 
 # Вопрос (RU)
@@ -43,18 +46,44 @@ sources:
 
 ## Ответ (RU)
 
-### 1. Архитектура
+## Краткий ответ
 
-- **SDK слой**: OpenTelemetry API (`Meter`, `Tracer`, `Logger`).
+- Используем OpenTelemetry SDK на Android для трёх сигналов: логи, метрики, трассы.
+- Централизованная инициализация провайдеров/экспортеров, буферизация и batching.
+- Экспорт через `WorkManager`/фоновые задачи с `Constraints`, sampling и privacy-фильтрами.
+- Учитываем батарею, сеть, офлайн-режим и требования приватности.
+
+## Подробный ответ
+
+### Требования
+
+- Функциональные:
+  - Собор структурированных логов, метрик и трассировок.
+  - Корреляция сигналов (trace/span id, user/session id без PII).
+  - Надёжная доставка: буферизация, retry, offline-режим.
+- Нефункциональные:
+  - Минимальное влияние на батарею, сеть и производительность.
+  - Соблюдение приватности и законодательных требований.
+  - Конфигурируемость (sampling, feature flags, opt-in/opt-out).
+
+### Архитектура
+
+- **SDK слой**: OpenTelemetry API (`Meter`, `Tracer`, `Logger`), включая провайдеры и экспортеры для всех трёх сигналов.
 - **Transport слой**: OTLP exporter (gRPC/HTTP) с batching.
-- **Storage**: Disk buffer (Proto/DataStore) для offline.
-- **Governance**: sampling, privacy filters, opt-in UI.
+- **Storage**: Disk buffer (например, Proto/DataStore или SQLite) для offline и сглаживания пиков.
+- **Governance**: sampling, privacy-фильтры, opt-in/opt-out UI и developer toggles.
 
-### 2. Инициализация
+### Инициализация
 
 ```kotlin
 val resource = Resource.getDefault()
-    .merge(Resource.create(Attributes.of(AttributeKey.stringKey("service.name"), "android-app")))
+    .merge(
+        Resource.create(
+            Attributes.of(
+                AttributeKey.stringKey("service.name"), "android-app",
+            )
+        )
+    )
 
 val meterProvider = SdkMeterProvider.builder()
     .setResource(resource)
@@ -70,6 +99,11 @@ val tracerProvider = SdkTracerProvider.builder()
     .addSpanProcessor(BatchSpanProcessor.builder(otlpTraceExporter).build())
     .build()
 
+val loggerProvider = SdkLoggerProvider.builder()
+    .setResource(resource)
+    .addLogRecordProcessor(BatchLogRecordProcessor.builder(otlpLogExporter).build())
+    .build()
+
 OpenTelemetrySdk.builder()
     .setMeterProvider(meterProvider)
     .setTracerProvider(tracerProvider)
@@ -77,56 +111,157 @@ OpenTelemetrySdk.builder()
     .buildAndRegisterGlobal()
 ```
 
-- Используйте lazy init и DI (Singleton scope).
-- Для gRPC используйте компрессию + TLS.
+- Используйте lazy init и DI (Singleton scope) для провайдеров/экспортеров.
+- Для OTLP/gRPC используйте TLS и по возможности компрессию.
+- Инициализацию выполняйте в `Application` или через startup/DI, избегая тяжёлых операций на UI-потоке.
 
-### 3. Инструментирование
+### Инструментирование
 
-- **Логи**: `Logger.logRecordBuilder()` с ключами `event`, `userJourneyId`.
-- **Метрики**: `LongCounter` для событий, `Histogram` для latency.
-- **Трейсы**: `Tracer.spanBuilder("login.request")` + attributes (network type, experiment).
-- Интегрируйте с gRPC/OkHttp interceptors, WorkManager listeners.
+- **Логи**: `Logger.logRecordBuilder()` с структурированными ключами (`event`, `screen`, `userJourneyId` и др.), без PII.
+- **Метрики**: `LongCounter` для событий, `Histogram` для latency и размеров payload, `ObservableGauge` для state-based метрик.
+- **Трейсы**: `Tracer.spanBuilder("login.request")` + атрибуты (network type, feature flag/experiment, result). Пропагируйте контекст через слои.
+- Интегрируйте с gRPC/OkHttp interceptors, WorkManager listeners, ключевыми use-cases и критичными UI-флоу.
 
-### 4. Сбор и отправка
+### Сбор и отправка
 
-- BatchSpanProcessor (max queue size, export interval).
-- Offline storage: Proto DataStore с eviction.
-- Upload через WorkManager (constraints: unmetered + charging).
-- Обрабатывайте backpressure (drop oldest spans).
+- Используйте `BatchSpanProcessor` / `BatchLogRecordProcessor` (max queue size, export interval) для снижения накладных расходов.
+- Offline storage: буферизация (например, через DataStore/SQLite/файлы) с eviction-политикой (drop oldest) для ограничения диска.
+- Экспорт через `WorkManager` или собственный фоновый сервис c использованием `Constraints` (например, `requiredNetworkType = UNMETERED` при необходимости, `requiresCharging = true` для тяжёлых экспортов).
+- Обрабатывайте backpressure: ограничивайте размер очереди и при переполнении сбрасывайте самые старые элементы или менее критичные сигналы.
 
-### 5. Оптимизация
+### Оптимизация
 
-- Sampling (trace-based, ratio = 0.05) для снижения нагрузки.
-- Battery-aware: suspend exports при `BatteryManager.isCharging` false (optional).
-- Privacy: redact PII, хэшировать идентификаторы, respect `LIMIT_AD_TRACKING`.
+- Sampling (например, `TraceIdRatioBasedSampler(0.05)`) для снижения нагрузки на сеть и бекенд, особенно для трассировок.
+- Battery-aware: передавайте ограничения в `WorkManager` через `Constraints` и учитывайте системные сигналы (Doze, background restrictions), а не поллинг `BatteryManager` в рантайме.
+- Privacy: удаляйте/маскируйте PII, хэшируйте идентификаторы, уважайте настройки пользователя (opt-out из аналитики/треккинга) и требования Google Play/OS.
 
-### 6. Наблюдение & Debug
+### Наблюдение и отладка
 
-- Локально используйте `InMemorySpanExporter` + debug view.
-- Добавьте toggle в developer settings для verbose logs.
-- Интегрируйте с Crashlytics/Sentry (breadcrumbs).
+- Локально используйте `InMemorySpanExporter` / консольные экспортеры для отладки.
+- Добавьте переключатели в developer settings для verbose-телеметрии и включения детализированных трасс.
+- Интегрируйте с Crashlytics/Sentry: используйте OpenTelemetry-данные как breadcrumbs и для корреляции с трассами/метриками.
 
 ---
 
 ## Answer (EN)
 
-- Set up OpenTelemetry SDKs with batched exporters, disk buffering, and resource attributes describing the app build.
-- Instrument logs, metrics, and traces across networking, WorkManager, and UI flows; propagate context (correlation IDs).
-- Export telemetry via WorkManager respecting network/power constraints, with sampling and privacy filters.
-- Provide developer toggles for debugging and integrate with backend observability pipelines for correlation.
+## Short Version
+
+- Use OpenTelemetry SDK on Android for logs, metrics, and traces.
+- Centralized initialization of providers/exporters with buffering and batching.
+- Export via `WorkManager`/background jobs with `Constraints`, plus sampling and privacy filters.
+- Respect battery, network, offline behavior, and privacy requirements.
+
+## Detailed Version
+
+### Requirements
+
+- Functional:
+  - Collect structured logs, metrics, and traces.
+  - Correlate signals (trace/span id, user/session id without PII).
+  - Reliable delivery with buffering, retries, and offline support.
+- Non-functional:
+  - Minimal impact on battery, data usage, and performance.
+  - Strong privacy and regulatory compliance.
+  - Configurability (sampling, feature flags, opt-in/opt-out).
+
+### Architecture
+
+- SDK layer: OpenTelemetry API (`Meter`, `Tracer`, `Logger`) with providers and exporters for all three signals.
+- Transport layer: OTLP exporter (gRPC/HTTP) with batching.
+- Storage: disk buffer (e.g., Proto/DataStore or SQLite) for offline and smoothing peaks.
+- Governance: sampling, privacy filters, opt-in/opt-out UI, and developer toggles.
+
+### Initialization
+
+```kotlin
+val resource = Resource.getDefault()
+    .merge(
+        Resource.create(
+            Attributes.of(
+                AttributeKey.stringKey("service.name"), "android-app",
+            )
+        )
+    )
+
+val meterProvider = SdkMeterProvider.builder()
+    .setResource(resource)
+    .registerMetricReader(
+        PeriodicMetricReader.builder(otlpMetricExporter)
+            .setInterval(Duration.ofMinutes(1))
+            .build()
+    )
+    .build()
+
+val tracerProvider = SdkTracerProvider.builder()
+    .setResource(resource)
+    .addSpanProcessor(BatchSpanProcessor.builder(otlpTraceExporter).build())
+    .build()
+
+val loggerProvider = SdkLoggerProvider.builder()
+    .setResource(resource)
+    .addLogRecordProcessor(BatchLogRecordProcessor.builder(otlpLogExporter).build())
+    .build()
+
+OpenTelemetrySdk.builder()
+    .setMeterProvider(meterProvider)
+    .setTracerProvider(tracerProvider)
+    .setLoggerProvider(loggerProvider)
+    .buildAndRegisterGlobal()
+```
+
+- Use lazy initialization and DI (singleton scope) for providers/exporters.
+- Use TLS (and compression when appropriate) for OTLP/gRPC.
+- Initialize in `Application` or via a startup/DI mechanism, avoiding heavy work on the main thread.
+
+### Instrumentation
+
+- Logs: use `Logger.logRecordBuilder()` with structured keys (e.g., `event`, `screen`, `userJourneyId`), no PII.
+- Metrics: use `LongCounter` for events, `Histogram` for latency and payload sizes, `ObservableGauge` for state-based metrics.
+- Traces: use `Tracer.spanBuilder("login.request")` with attributes (network type, feature flag/experiment, result). Propagate context across layers.
+- Integrate instrumentation with gRPC/OkHttp interceptors, WorkManager listeners, and critical UI flows.
+
+### Collection and Export
+
+- Use `BatchSpanProcessor` / `BatchLogRecordProcessor` (configure max queue size and export interval) to reduce overhead.
+- Offline storage: buffer data (e.g., using DataStore/SQLite/files) with an eviction policy (drop oldest) to cap disk usage.
+- Export via `WorkManager` or a background component with appropriate `Constraints` (e.g., `requiredNetworkType = UNMETERED` when needed, `requiresCharging = true` for heavy exports).
+- Handle backpressure: cap queue sizes and on overflow drop oldest or less critical telemetry.
+
+### Optimization
+
+- Sampling (e.g., `TraceIdRatioBasedSampler(0.05)`) to limit trace volume and backend load.
+- Battery-aware behavior: rely on `WorkManager` constraints and respect system features (Doze, background restrictions) instead of manual `BatteryManager` polling loops.
+- Privacy: redact/mask PII, hash identifiers, respect user analytics/tracking opt-out settings and Google Play/OS policies.
+
+### Observability and Debugging
+
+- For local debugging, use `InMemorySpanExporter` / console exporters.
+- Provide developer settings toggles for verbose telemetry and detailed traces.
+- Integrate with Crashlytics/Sentry and use OpenTelemetry signals as breadcrumbs and for correlating with traces/metrics.
 
 ---
 
-## Follow-ups
-- Как объединить Mobile telemetry с серверными трассами (context propagation)?
-- Какие стратегии для differential privacy при сборе метрик?
-- Как отслеживать бюджет телеметрии (квоты на передачу данных)?
+## Follow-ups (RU)
+- Как объединить мобильные трассы с серверными (context propagation end-to-end)?
+- Какие стратегии применять для differential privacy при сборе метрик?
+- Как контролировать бюджет телеметрии (квоты на передачу данных и размер хранилища)?
 
-## References
-- [[c-mobile-observability]]
+## Follow-ups (EN)
+- How to link mobile traces with backend traces (end-to-end context propagation)?
+- What strategies can be used for differential privacy in telemetry collection?
+- How to manage a telemetry budget (data transfer quotas and storage limits)?
+
+## References (RU)
+- [[moc-android]]
+- "https://opentelemetry.io/docs/instrumentation/android/"
+- "https://developer.android.com/topic/performance/monitoring"
+
+## References (EN)
+- [[moc-android]]
 - https://opentelemetry.io/docs/instrumentation/android/
 - https://developer.android.com/topic/performance/monitoring
 
 ## Related Questions
 
-- [[c-mobile-observability]]
+- [[q-android-performance-measurement-tools--android--medium]]

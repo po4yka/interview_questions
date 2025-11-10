@@ -19,18 +19,16 @@ status: draft
 moc: moc-android
 related:
 - c-app-bundle
-- c-performance-optimization
-- c-performance
+- q-android-build-optimization--android--medium
 sources: []
 created: 2025-10-11
-updated: 2025-10-29
+updated: 2025-11-10
 tags:
 - android/build-variants
 - android/dependency-management
 - android/gradle
-- build-performance
+- android/ci-cd
 - difficulty/medium
-- gradle
 ---
 
 # Вопрос (RU)
@@ -43,11 +41,11 @@ tags:
 
 ## Ответ (RU)
 
-### Ключевые Стратегии
+### Ключевые стратегии
 
-**1. Configuration Cache** — крупнейший выигрыш для чистых сборок
-- Кэширует фазу конфигурации; последующие сборки пропускают переконфигурацию
-- Требования: отсутствие побочных эффектов во время конфигурации, использование Provider API
+**1. Configuration Cache** — один из крупнейших выигрышей для чистых сборок
+- Кэширует фазу конфигурации; последующие сборки пропускают повторную конфигурацию
+- Требования: отсутствие побочных эффектов во время конфигурации, использование Provider API для ленивой оценки
 
 ```kotlin
 // ❌ Чтение переменных окружения напрямую во время конфигурации
@@ -61,6 +59,8 @@ android {
   }
 }
 ```
+
+При включении configuration cache внимательно отслеживайте предупреждения о несовместимых задачах и плагинах в выводе Gradle и документации билда и устраняйте конкретные задачи/плагины, нарушающие требования (побочные эффекты, чтение/запись во время конфигурации, неиспользование Provider API).
 
 **2. Build Cache (локальный + удаленный)**
 - Переиспользование выходов задач между сборками и машинами
@@ -78,7 +78,7 @@ buildCache {
 ```
 
 **3. KSP вместо KAPT**
-- KSP избегает генерации Java-стабов; обычно в 2× быстрее
+- KSP избегает генерации Java-стабов; обычно заметно быстрее (часто до ~2×)
 - Поддерживается: Room, Hilt, Moshi
 
 ```kotlin
@@ -86,18 +86,26 @@ buildCache {
 plugins { kotlin("kapt") }
 dependencies { kapt(libs.room.compiler) }
 
-// ✅ Быстрый KSP
+// ✅ Более быстрый KSP
 plugins { id("com.google.devtools.ksp") }
 dependencies { ksp(libs.room.compiler) }
 ```
 
 **4. Модуляризация**
 - Разделение на модули уменьшает поверхность пересборки
-- Используйте `api` vs `implementation` осознанно — `implementation` скрывает зависимости от downstream-модулей
+- Осознанно используйте `api` vs `implementation` — `implementation` скрывает зависимости от downstream-модулей и уменьшает количество модулей, которые нужно пересобирать
+
+```kotlin
+// ❌ Раскрывает внутренние зависимости
+dependencies { api(libs.retrofit) }
+
+// ✅ Скрывает детали реализации
+dependencies { implementation(libs.retrofit) }
+```
 
 **5. Version Catalogs**
-- Централизация версий ускоряет sync
-- Избегайте динамических версий (`+`) — они делают кэш бесполезным
+- Централизация версий упрощает управление зависимостями и помогает избежать дублирования и рассинхронизации
+- Избегайте динамических версий (`+`) — они делают кэширование и воспроизводимые сборки менее эффективными
 
 ```toml
 # libs.versions.toml
@@ -109,20 +117,45 @@ compose = "<version>"
 compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
 ```
 
-### Профилирование
+### Профилирование и измерение
 
-Используйте build scans для измерения:
+Используйте build scans для измерения и поиска узких мест:
 ```bash
 ./gradlew assembleDebug --scan --configuration-cache --build-cache
 ```
 
 Анализируйте: timeline задач, cache hit rates, время конфигурации, разрешение зависимостей.
+При включении configuration cache внимательно отслеживайте сообщения о несовместимости и корректируйте соответствующие задачи и плагины.
+
+### Оптимизация CI/CD
+
+```yaml
+# Пример для GitHub Actions
+- uses: gradle/gradle-build-action@v2
+  with:
+    cache-read-only: false  # ✅ Разрешить запись в кэш (настройте под вашу среду)
+
+- run: |
+    ./gradlew assembleRelease \
+      --configuration-cache \
+      --build-cache \
+      --parallel \
+      --no-daemon  # ✅ Типично для короткоживущих CI-агентов; адаптируйте, если ваш CI эффективно переиспользует daemon
+```
+
+### Частые ошибки
+
+- Динамические версии (`1.+`) ухудшают эффективность кэшей
+- I/O во время конфигурации и изменяемое глобальное состояние ломают configuration cache
+- Слишком много очень мелких модулей повышает накладные расходы
+- Неправильное или неполное объявление входов/выходов задач
+- Использование абсолютных путей во входах/выходах задач или аргументах мешает повторному использованию кэша
 
 ## Answer (EN)
 
 ### Key Strategies
 
-**1. Configuration Cache** — largest single win for clean builds
+**1. Configuration Cache** — one of the largest wins for clean builds
 - Caches the configuration phase; subsequent builds skip reconfiguration
 - Requirements: no side effects during configuration, use Provider API for lazy evaluation
 
@@ -138,6 +171,8 @@ android {
   }
 }
 ```
+
+When enabling configuration cache, carefully watch Gradle output for incompatibility warnings and docs, and fix specific tasks/plugins that violate requirements (side effects, config-time I/O, not using Provider API).
 
 **2. Build Cache (local + remote)**
 - Reuses task outputs across builds and machines
@@ -155,7 +190,7 @@ buildCache {
 ```
 
 **3. KSP instead of KAPT**
-- KSP avoids Java stub generation; typically 2× faster
+- KSP avoids Java stub generation; typically significantly faster (often up to around 2×)
 - Supported by: Room, Hilt, Moshi
 
 ```kotlin
@@ -163,14 +198,14 @@ buildCache {
 plugins { kotlin("kapt") }
 dependencies { kapt(libs.room.compiler) }
 
-// ✅ Fast KSP
+// ✅ Faster KSP
 plugins { id("com.google.devtools.ksp") }
 dependencies { ksp(libs.room.compiler) }
 ```
 
 **4. Modularization**
 - Breaking into modules reduces rebuild surface
-- Use `api` vs `implementation` intentionally — `implementation` hides dependencies from downstream modules
+- Use `api` vs `implementation` intentionally — `implementation` hides dependencies from downstream modules and reduces the number of modules that must be recompiled
 
 ```kotlin
 // ❌ Exposes internal dependencies
@@ -181,8 +216,8 @@ dependencies { implementation(libs.retrofit) }
 ```
 
 **5. Version Catalogs**
-- Centralized version management speeds up sync
-- Avoid dynamic versions (`+`) — they invalidate caches
+- Centralized version management simplifies dependency maintenance and avoids duplication/misalignment
+- Avoid dynamic versions (`+`) — they hurt caching and reproducibility
 
 ```toml
 # libs.versions.toml
@@ -202,6 +237,7 @@ Use build scans to identify bottlenecks:
 ```
 
 Analyze: task timeline, cache hit rates, configuration time, dependency resolution.
+When enabling configuration cache, watch for reported incompatibilities and fix offending tasks/plugins.
 
 ### CI/CD Optimization
 
@@ -209,23 +245,23 @@ Analyze: task timeline, cache hit rates, configuration time, dependency resoluti
 # GitHub Actions example
 - uses: gradle/gradle-build-action@v2
   with:
-    cache-read-only: false  # ✅ Enable cache writes
+    cache-read-only: false  # ✅ Allow cache writes (tune per environment)
 
 - run: |
     ./gradlew assembleRelease \
       --configuration-cache \
       --build-cache \
       --parallel \
-      --no-daemon  # ✅ CI doesn't benefit from daemon
+      --no-daemon  # ✅ Typical for short-lived CI agents; adjust if your CI reuses the daemon effectively
 ```
 
 ### Common Pitfalls
 
-- Dynamic versions (`1.+`) invalidate caches
-- Configuration-time I/O breaks configuration cache
-- Too many small modules increase overhead
+- Dynamic versions (`1.+`) invalidate or reduce effectiveness of caches
+- Configuration-time I/O and mutable global state break configuration cache
+- Too many very small modules can increase overhead
 - Not declaring task inputs/outputs properly
-- Absolute paths in task arguments
+- Using absolute paths in task inputs/outputs or arguments can break cache reuse
 
 ---
 
@@ -250,18 +286,12 @@ Analyze: task timeline, cache hit rates, configuration time, dependency resoluti
 ### Prerequisites / Concepts
 
 - [[c-app-bundle]]
-- [[c-performance-optimization]]
-- [[c-performance]]
-
 
 ### Prerequisites (Easier)
 - [[q-android-build-optimization--android--medium]] — General Android build optimization strategies
-- [[q-gradle-basics--android--easy]] — Gradle fundamentals and build lifecycle
 
 ### Related (Same Level)
 - [[q-android-modularization--android--medium]] — Module structure for better build performance
-- [[q-baseline-profiles-optimization--android--medium]] — Runtime and build-time optimization
- — Managing dependencies efficiently
 
 ### Advanced (Harder)
 - [[q-cicd-pipeline-android--android--medium]] — CI/CD setup with build caching

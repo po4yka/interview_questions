@@ -47,7 +47,7 @@ tags:
 
 ## Ответ (RU)
 
-В Android существует два основных способа создания макетов с наложением элементов:
+В Android существует два основных простых варианта для наложения элементов (перекрытия):
 
 ### FrameLayout (Система View)
 
@@ -57,7 +57,7 @@ tags:
 - Дочерние элементы рисуются в порядке добавления
 - Позиционирование через `layout_gravity` (center, top|start, bottom|end и т.д.)
 - Оптимален для одного основного view с небольшими наложениями
-- Z-порядок определяется очередностью добавления
+- Z-порядок по умолчанию определяется очередностью добавления (может быть изменён через `elevation`/`translationZ`)
 
 **Пример: Изображение со значком**:
 
@@ -107,8 +107,10 @@ val frameLayout = FrameLayout(context).apply {
 
 **Типичные use cases**:
 - Экран загрузки поверх контента
-- Значки на изображениях (notifications badge)
+- Значки на изображениях (notification badge)
 - Простые наложения с затемнением
+
+> Также перекрытие можно получить и в других контейнерах (например, `ConstraintLayout`, `RelativeLayout`) при соответствующей конфигурации, но для простого наложения обычно используют именно `FrameLayout`.
 
 ---
 
@@ -126,7 +128,7 @@ val frameLayout = FrameLayout(context).apply {
 
 ```kotlin
 @Composable
-fun BadgedImage(count: Int) {
+fun BadgedImage(count: Int, imageUrl: String) {
     Box(modifier = Modifier.size(100.dp)) {
         // ✅ Базовый слой
         AsyncImage(
@@ -135,7 +137,7 @@ fun BadgedImage(count: Int) {
             modifier = Modifier.fillMaxSize()
         )
 
-        // ✅ Badge с правильным z-index
+        // ✅ Badge с правильным порядком отрисовки / z-index
         if (count > 0) {
             Box(
                 modifier = Modifier
@@ -164,13 +166,20 @@ fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         content()
 
-        // ✅ Правильно: блокирует взаимодействие
+        // ✅ Затемнение-оверлей поверх контента
         if (isLoading) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black.copy(alpha = 0.7f))
-                    .clickable(enabled = false) { },  // ✅ Блокирует клики
+                    .pointerInput(Unit) {
+                        // Поглощаем все события, чтобы блокировать взаимодействие под оверлеем
+                        awaitPointerEventScope {
+                            while (true) {
+                                awaitPointerEvent()
+                            }
+                        }
+                    },
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
@@ -189,22 +198,23 @@ fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 | **Система** | View System | Jetpack Compose |
 | **Определение** | XML/Kotlin | @Composable функция |
 | **Выравнивание** | `layout_gravity` | `Modifier.align()` |
-| **Z-контроль** | Порядок добавления | Порядок + `zIndex()` |
-| **Производительность** | Базовая отрисовка | Recomposition overhead |
+| **Z-контроль** | Порядок добавления (+ `elevation`/`translationZ`) | Порядок + `zIndex()` |
+| **Производительность** | Простая отрисовка | Overhead рекомпозиции |
 
 ---
 
 **Резюме**:
 - **FrameLayout** — для View System, простое наложение views
 - **Box** — для Compose, декларативное наложение composables
-- Оба используют принцип "последний сверху" по умолчанию
+- Оба по умолчанию используют принцип "последний сверху"
 - Box предоставляет более гибкий контроль через модификаторы
+- Для сложных схем позиционирования и перекрытия могут использоваться `ConstraintLayout`/другие контейнеры
 
 ---
 
 ## Answer (EN)
 
-In Android, there are two main approaches for creating layouts where UI elements can overlap:
+In Android, there are two main simple approaches for creating layouts where UI elements can overlap:
 
 ### FrameLayout (View System)
 
@@ -214,7 +224,7 @@ In Android, there are two main approaches for creating layouts where UI elements
 - Children are drawn in the order they're added
 - Positioning via `layout_gravity` (center, top|start, bottom|end, etc.)
 - Optimal for one primary view with small overlays
-- Z-order determined by addition sequence
+- Z-order by default is determined by addition sequence (can be adjusted via `elevation`/`translationZ`)
 
 **Example: Image with badge**:
 
@@ -267,6 +277,8 @@ val frameLayout = FrameLayout(context).apply {
 - Badges on images (notification badge)
 - Simple overlays with dimming
 
+> Note: Overlapping can also be achieved in other containers (e.g., `ConstraintLayout`, `RelativeLayout`) with appropriate constraints/attributes, but `FrameLayout` is typically used for simple overlays.
+
 ---
 
 ### Box (Jetpack Compose)
@@ -283,7 +295,7 @@ val frameLayout = FrameLayout(context).apply {
 
 ```kotlin
 @Composable
-fun BadgedImage(count: Int) {
+fun BadgedImage(count: Int, imageUrl: String) {
     Box(modifier = Modifier.size(100.dp)) {
         // ✅ Base layer
         AsyncImage(
@@ -292,7 +304,7 @@ fun BadgedImage(count: Int) {
             modifier = Modifier.fillMaxSize()
         )
 
-        // ✅ Badge with proper z-index
+        // ✅ Badge with correct drawing order / z-index
         if (count > 0) {
             Box(
                 modifier = Modifier
@@ -321,13 +333,20 @@ fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         content()
 
-        // ✅ Correct: blocks interaction
+        // ✅ Dimmed overlay drawn above the content
         if (isLoading) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black.copy(alpha = 0.7f))
-                    .clickable(enabled = false) { },  // ✅ Blocks clicks
+                    .pointerInput(Unit) {
+                        // Consume all pointer events to block interaction under the overlay
+                        awaitPointerEventScope {
+                            while (true) {
+                                awaitPointerEvent()
+                            }
+                        }
+                    },
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
@@ -346,16 +365,17 @@ fun ContentWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 | **System** | View System | Jetpack Compose |
 | **Definition** | XML/Kotlin | @Composable function |
 | **Alignment** | `layout_gravity` | `Modifier.align()` |
-| **Z-control** | Addition order | Order + `zIndex()` |
-| **Performance** | Basic rendering | Recomposition overhead |
+| **Z-control** | Addition order (+ `elevation`/`translationZ`) | Order + `zIndex()` |
+| **Performance** | Simple rendering | Recomposition overhead |
 
 ---
 
 **Summary**:
-- **FrameLayout** — for View System, simple view overlay
+- **FrameLayout** — for the View System, simple view overlay
 - **Box** — for Compose, declarative composable overlay
 - Both use "last on top" principle by default
 - Box provides more flexible control via modifiers
+- `ConstraintLayout` or other containers can be used for more complex overlapping/positioning scenarios
 
 ---
 

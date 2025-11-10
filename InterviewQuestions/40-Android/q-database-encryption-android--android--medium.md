@@ -31,17 +31,17 @@ sources:
 
 ## Ответ (RU)
 
-Шифрование базы данных в Android защищает данные в покое (at rest). Основное решение — `SQLCipher` с `Room`, в сочетании с `Android Keystore` для управления ключами. Это обеспечивает прозрачное шифрование без изменения логики работы с базой данных.
+Шифрование базы данных в Android защищает данные в покое (at rest). Типичное практическое решение — `SQLCipher` с `Room`, в сочетании с `Android Keystore` для безопасного управления ключами/паролем. Это обеспечивает прозрачное шифрование без изменения логики работы с базой данных.
 
 ### Архитектура Шифрования
 
 **Компоненты:**
-- **`SQLCipher`** — прозрачное `AES-256` шифрование для SQLite (совместимо с `Room`)
-- **`Android Keystore`** — аппаратное хранение ключей шифрования (hardware-backed TEE)
+- **`SQLCipher`** — прозрачное шифрование (обычно `AES-256`) для SQLite (совместимо с `Room`)
+- **`Android Keystore`** — защищенное (по возможности hardware-backed) хранение ключей
 - **`Room + SupportFactory`** — интеграция зашифрованной БД с `Room` (прозрачная для разработчика)
 
 **Принцип работы:**
-Данные шифруются перед записью на диск (`AES-256` в режиме `CBC` или `GCM`), ключи хранятся в `Keystore` (не извлекаемы даже при root-доступе на устройствах с TEE), расшифровка происходит автоматически при чтении через `SupportFactory`.
+Данные шифруются перед записью на диск (например, с использованием `AES-256` согласно реализации `SQLCipher`), ключ или passphrase защищен через `Android Keystore`, расшифровка происходит автоматически при чтении через `SupportFactory`.
 
 ### Реализация
 
@@ -67,14 +67,15 @@ abstract class AppDatabase : RoomDatabase() {
 val db = AppDatabase.build(context, "hardcoded_password".toByteArray())
 ```
 
-**2. Управление ключами через Keystore:**
+**2. Управление ключами через Keystore (паттерн):**
+
+Важно: ключи, сгенерированные в `Android Keystore` как `SecretKey`, часто неэкспортируемы (`encoded == null`) при hardware-backed хранении и не могут напрямую использоваться как passphrase для `SQLCipher`. Рекомендуемый подход — использовать ключ из Keystore для шифрования/дешифрования отдельно сгенерированного случайного passphrase, который хранится на диске в зашифрованном виде.
 
 ```kotlin
-// ✅ Правильно: генерация и извлечение ключа из Keystore
 object KeystoreManager {
-    private const val KEY_ALIAS = "db_encryption_key"
+    private const val KEY_ALIAS = "db_key_wrapper"
 
-    fun getOrCreateKey(): ByteArray {
+    fun getOrCreateWrappingKey(): SecretKey {
         val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
 
         if (!keyStore.containsAlias(KEY_ALIAS)) {
@@ -84,67 +85,88 @@ object KeystoreManager {
                     KEY_ALIAS,
                     KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
                 )
-                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                .setUserAuthenticationRequired(false) // или true для биометрии
-                .build()
+                    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                    .setUserAuthenticationRequired(false) // или true для привязки к биометрии/lock screen
+                    .build()
             )
             keyGen.generateKey()
         }
 
-        return (keyStore.getKey(KEY_ALIAS, null) as SecretKey).encoded
+        val key = keyStore.getKey(KEY_ALIAS, null) as SecretKey
+        return key
+    }
+}
+
+// Пример: генерация и хранение passphrase (упрощённо, без обработки ошибок и деталей формата)
+
+fun getOrCreateSqlCipherPassphrase(context: Context): ByteArray {
+    val file = File(context.filesDir, "db_passphrase.enc")
+    val wrappingKey = KeystoreManager.getOrCreateWrappingKey()
+
+    return if (file.exists()) {
+        // расшифровать passphrase из файла с помощью wrappingKey
+        decryptPassphrase(file.readBytes(), wrappingKey)
+    } else {
+        val passphrase = ByteArray(32).also { SecureRandom().nextBytes(it) }
+        val encrypted = encryptPassphrase(passphrase, wrappingKey)
+        file.writeBytes(encrypted)
+        passphrase
     }
 }
 ```
 
+(Реализация `encryptPassphrase`/`decryptPassphrase` предполагает использование `AES-GCM` с IV и тегом аутентичности; детали могут обсуждаться на интервью.)
+
 **3. Интеграция:**
 
 ```kotlin
-// ✅ Правильно: инициализация с безопасным ключом
+// ✅ Правильно: инициализация с passphrase, защищённым через Keystore
 class DatabaseProvider @Inject constructor(private val context: Context) {
     val database: AppDatabase by lazy {
-        AppDatabase.build(context, KeystoreManager.getOrCreateKey())
+        val passphrase = getOrCreateSqlCipherPassphrase(context)
+        AppDatabase.build(context, passphrase)
     }
 }
 
-// ❌ Неправильно: передача user-provided пароля напрямую
-// Проблема: пользователи выбирают слабые пароли
+// ❌ Неправильно: передача пользовательского пароля напрямую как единственный секрет
+// Проблема: пользователи выбирают слабые пароли; используйте его максимум как вход для KDF + доп. секрет.
 ```
 
 ### Компромиссы
 
 **Производительность:**
-- Накладные расходы ~10-15% на операции чтения/записи (шифрование/дешифрование)
-- Инициализация БД медленнее на ~50-100ms (генерация ключа, проверка целостности)
-- Решение: кэширование расшифрованных данных, асинхронные операции через `Coroutines`, оптимизация индексов
+- Накладные расходы ~10–15% на операции чтения/записи (шифрование/дешифрование) — оценка, зависящая от устройства и нагрузки
+- Инициализация БД может быть медленнее на ~десятки миллисекунд (генерация/получение ключа, проверка целостности)
+- Решения: кэширование данных, асинхронные операции через `Coroutines`, оптимизация запросов и индексов
 
 **Безопасность:**
-- `Keystore` защищен hardware-backed TEE на современных устройствах (API 23+) — ключи хранятся в отдельном защищенном пространстве
-- Ключи не извлекаются даже при root-доступе (на устройствах с TEE/StrongBox) — физическая изоляция
-- Уязвимость: если устройство скомпрометировано во время работы приложения — расшифрованные данные доступны в памяти
-- Ограничение: legacy устройства без TEE используют software-backed хранилище (менее безопасно)
+- При hardware-backed `Keystore` (TEE/StrongBox) ключи хранятся в изолированном окружении и неэкспортируемы даже при root-доступе
+- На устройствах без TEE ключи могут быть только software-backed и потенциально уязвимее
+- Уязвимость: если устройство скомпрометировано во время работы приложения, расшифрованные данные доступны в памяти и через активный процесс
 
 ### Лучшие Практики
 
-- **Используйте `Android Keystore`** — никогда не храните ключи в `SharedPreferences`, файлах или коде
-- **Биометрическая аутентификация** — для особо критичных данных используйте `setUserAuthenticationRequired(true)` с `setUserAuthenticationValidityDurationSeconds(-1)` (требуется биометрия при каждом доступе)
-- **Тестируйте миграции** — `SQLCipher` требует re-encryption при обновлениях ключей (создайте новый ключ, перешифруйте данные старым, сохраните новым)
-- **StrongBox Keystore** — используйте на устройствах с API 28+ где доступен (`setIsStrongBoxBacked(true)`) — максимальная защита
-- **Ротация ключей** — периодически обновляйте ключи шифрования для долгосрочной безопасности
+- **Используйте `Android Keystore`** — никогда не храните ключи/пароли в открытом виде в `SharedPreferences`, файлах или коде
+- **Храните passphrase непрямо** — генерируйте случайный passphrase для `SQLCipher`, шифруйте его ключом из Keystore и храните только зашифрованную версию
+- **Биометрическая аутентификация** — для особо критичных данных используйте `setUserAuthenticationRequired(true)` (и при необходимости `setUserAuthenticationValidityDurationSeconds(...)`) для связывания доступа с биометрией/экраном блокировки
+- **Тестируйте миграции** — при смене ключей/passphrase требуется корректное пере-шифрование БД (создать новый passphrase, расшифровать старым, зашифровать новым)
+- **StrongBox Keystore** — при наличии на устройствах (API 28+) можно использовать `setIsStrongBoxBacked(true)` для максимальной защиты ключей
+- **Ротация ключей** — периодически обновляйте ключи и passphrase, продумывая безопасный процесс ротации и отката
 
 ## Answer (EN)
 
-Database encryption in Android protects data at rest. The primary solution is `SQLCipher` with `Room`, combined with `Android Keystore` for key management. This provides transparent encryption without changing database logic.
+Database encryption in Android protects data at rest. A common practical solution is `SQLCipher` with `Room`, combined with `Android Keystore` for secure key/passphrase management. This provides transparent encryption without changing the database access API.
 
 ### Encryption Architecture
 
 **Components:**
-- **`SQLCipher`** — transparent `AES-256` encryption for SQLite (compatible with `Room`)
-- **`Android Keystore`** — hardware-backed key storage (hardware-backed TEE)
+- **`SQLCipher`** — transparent encryption (typically `AES-256`) for SQLite (compatible with `Room`)
+- **`Android Keystore`** — secure (preferably hardware-backed) key storage
 - **`Room + SupportFactory`** — integration of encrypted DB with `Room` (transparent to developer)
 
 **How it works:**
-Data encrypted before writing to disk (`AES-256` in `CBC` or `GCM` mode), keys stored in `Keystore` (non-extractable even with root access on TEE devices), decryption happens automatically on read via `SupportFactory`.
+Data is encrypted before being written to disk (for example with `AES-256` as implemented by SQLCipher). The key or passphrase is protected via `Android Keystore`. Decryption happens automatically on reads via `SupportFactory` when you provide the correct passphrase.
 
 ### Implementation
 
@@ -170,14 +192,15 @@ abstract class AppDatabase : RoomDatabase() {
 val db = AppDatabase.build(context, "hardcoded_password".toByteArray())
 ```
 
-**2. Key Management via Keystore:**
+**2. Key Management via Keystore (pattern):**
+
+Important: `SecretKey`s generated inside `AndroidKeyStore` are often non-exportable (`encoded == null`) when hardware-backed, so they cannot be used directly as the `SQLCipher` passphrase. Recommended pattern is to use the Keystore key to encrypt/decrypt a randomly generated passphrase that is stored on disk in encrypted form.
 
 ```kotlin
-// ✅ Correct: generating and retrieving key from Keystore
 object KeystoreManager {
-    private const val KEY_ALIAS = "db_encryption_key"
+    private const val KEY_ALIAS = "db_key_wrapper"
 
-    fun getOrCreateKey(): ByteArray {
+    fun getOrCreateWrappingKey(): SecretKey {
         val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
 
         if (!keyStore.containsAlias(KEY_ALIAS)) {
@@ -187,53 +210,74 @@ object KeystoreManager {
                     KEY_ALIAS,
                     KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
                 )
-                .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                .setUserAuthenticationRequired(false) // or true for biometrics
-                .build()
+                    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
+                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
+                    .setUserAuthenticationRequired(false) // or true to bind to biometrics/lock screen
+                    .build()
             )
             keyGen.generateKey()
         }
 
-        return (keyStore.getKey(KEY_ALIAS, null) as SecretKey).encoded
+        val key = keyStore.getKey(KEY_ALIAS, null) as SecretKey
+        return key
+    }
+}
+
+// Example: creating and storing SQLCipher passphrase (simplified, without error handling and full format details)
+
+fun getOrCreateSqlCipherPassphrase(context: Context): ByteArray {
+    val file = File(context.filesDir, "db_passphrase.enc")
+    val wrappingKey = KeystoreManager.getOrCreateWrappingKey()
+
+    return if (file.exists()) {
+        // decrypt passphrase from file using wrappingKey
+        decryptPassphrase(file.readBytes(), wrappingKey)
+    } else {
+        val passphrase = ByteArray(32).also { SecureRandom().nextBytes(it) }
+        val encrypted = encryptPassphrase(passphrase, wrappingKey)
+        file.writeBytes(encrypted)
+        passphrase
     }
 }
 ```
 
+(`encryptPassphrase`/`decryptPassphrase` would typically use AES-GCM with IV + auth tag; details can be explored in the interview.)
+
 **3. Integration:**
 
 ```kotlin
-// ✅ Correct: initialization with secure key
+// ✅ Correct: initialization with a passphrase protected via Keystore
 class DatabaseProvider @Inject constructor(private val context: Context) {
     val database: AppDatabase by lazy {
-        AppDatabase.build(context, KeystoreManager.getOrCreateKey())
+        val passphrase = getOrCreateSqlCipherPassphrase(context)
+        AppDatabase.build(context, passphrase)
     }
 }
 
-// ❌ Wrong: passing user-provided password directly
-// Problem: users choose weak passwords
+// ❌ Wrong: using user-provided password directly as the only secret
+// Problem: user passwords are weak; at most derive a key via KDF and combine with device-held secret.
 ```
 
 ### Trade-offs
 
 **Performance:**
-- ~10-15% overhead on read/write operations (encryption/decryption)
-- Database initialization slower by ~50-100ms (key generation, integrity check)
-- Solution: caching decrypted data, async operations via `Coroutines`, index optimization
+- Roughly 10–15% overhead on read/write operations (encryption/decryption), depending on device and workload
+- Database initialization may be slower by tens of milliseconds (key retrieval/generation, integrity checks)
+- Mitigations: caching data, asynchronous work via Coroutines, query/index optimization
 
 **Security:**
-- `Keystore` protected by hardware-backed TEE on modern devices (API 23+) — keys stored in separate secure enclave
-- Keys not extractable even with root access (on TEE/StrongBox devices) — physical isolation
-- Vulnerability: if device compromised while app is running — decrypted data accessible in memory
-- Limitation: legacy devices without TEE use software-backed storage (less secure)
+- With hardware-backed `Keystore` (TEE/StrongBox), keys are stored in an isolated environment and are non-extractable even with root access
+- On devices without TEE keys may be software-backed only and more susceptible to extraction
+- Vulnerability: if the device is compromised while the app is running, decrypted data can be accessed from memory or active process
 
 ### Best Practices
 
-- **Use `Android Keystore`** — never store keys in `SharedPreferences`, files, or code
-- **Biometric authentication** — for highly sensitive data use `setUserAuthenticationRequired(true)` with `setUserAuthenticationValidityDurationSeconds(-1)` (requires biometrics on each access)
-- **Test migrations** — `SQLCipher` requires re-encryption when updating keys (create new key, re-encrypt data with old, save with new)
-- **StrongBox Keystore** — use on devices with API 28+ where available (`setIsStrongBoxBacked(true)`) — maximum protection
-- **Key rotation** — periodically update encryption keys for long-term security
+- **Use `Android Keystore`** — never store keys/passphrases in plaintext in `SharedPreferences`, files, or source code
+- **Store passphrase indirectly** — generate a random passphrase for `SQLCipher`, encrypt it with a Keystore key, and store only the encrypted blob
+- **Biometric authentication** — for highly sensitive data, use `setUserAuthenticationRequired(true)` (and optionally `setUserAuthenticationValidityDurationSeconds(...)`) to bind decryption to biometrics/lock screen
+- **Test migrations** — when changing keys/passphrases you must correctly re-encrypt the DB (new passphrase, decrypt with old, encrypt with new)
+- **StrongBox Keystore** — where available on API 28+ devices, use `setIsStrongBoxBacked(true)` for maximum key protection
+- **Key rotation** — periodically rotate keys and passphrases with a well-defined, tested process
 
 
 ## Follow-ups

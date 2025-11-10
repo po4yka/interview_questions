@@ -1,12 +1,11 @@
 ---
 id: android-387
-title: Bundle Data Types / Типы данных Bundle
+title: Типы данных Bundle / Bundle Data Types
 aliases:
-- Bundle Data Types
 - Типы данных Bundle
+- Bundle Data Types
 topic: android
 subtopics:
-- intents-deeplinks
 - serialization
 question_kind: android
 difficulty: medium
@@ -14,74 +13,89 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - c-activity
-- c-intent
 - q-android-app-components--android--easy
 - q-parcelable-implementation--android--medium
-created: 2025-10-15
-updated: 2025-11-02
+created: 2024-10-15
+updated: 2025-11-10
 sources: []
 tags:
-- android/intents-deeplinks
 - android/serialization
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
-> Какие типы данных поддерживает Bundle?
+> Какие типы данных поддерживает `Bundle`?
 
 # Question (EN)
-> What data types does Bundle support?
+> What data types does `Bundle` support?
 
 ---
 
 ## Ответ (RU)
 
-Bundle — key-value контейнер для передачи данных между компонентами Android через IPC. Основан на `Parcel`, использует типизированные методы `put*/get*`.
+`Bundle` — это контейнер «ключ-значение» для передачи данных между компонентами Android (например, аргументы `Activity`/`Fragment`, `savedInstanceState`, extras `Intent`, IPC). Он построен поверх `Parcel` и предоставляет типизированные методы `put*/get*`.
 
-**Поддерживаемые типы**:
-- Примитивы и массивы: `Int`, `Long`, `Float`, `Double`, `Boolean`, `Byte`, `Char`, `Short` и их массивы
-- Строки: `String`, `CharSequence`
-- Коллекции: `ArrayList<String>`, `ArrayList<Int>`, `ArrayList<Parcelable>`
-- Объекты: `Parcelable`, `Serializable`
-- Специальные: `Bundle` (вложенные), `SparseArray<Parcelable>`
+**Основные поддерживаемые типы** (API 34+, не исчерпывающий список, но ключевые категории):
+- Примитивы и массивы:
+  - `boolean`, `byte`, `char`, `short`, `int`, `long`, `float`, `double`
+  - `boolean[]`, `byte[]`, `char[]`, `short[]`, `int[]`, `long[]`, `float[]`, `double[]`
+- Строки:
+  - `String`, `String[]`
+  - `CharSequence`, `CharSequence[]`
+- Коллекции (для отдельных поддерживаемых типов элементов):
+  - `ArrayList<`String`>`
+  - `ArrayList<CharSequence>`
+  - `ArrayList<Integer>` (через `putIntegerArrayList`)
+  - `ArrayList<`Parcelable`>` (через `putParcelableArrayList`)
+- Объекты:
+  - `Parcelable`
+  - `Parcelable[]`
+  - `Serializable` (включая массивы/коллекции, если их элементы реализуют `Serializable`)
+- Специальные типы:
+  - вложенный `Bundle`
+  - `SparseArray<`Parcelable`>` (через `putSparseParcelableArray`)
+
+(Другие типы нужно конвертировать в поддерживаемую форму или реализовать `Parcelable`/`Serializable`, чтобы корректно сохранять в `Bundle`.)
 
 **Базовое использование**:
 ```kotlin
-// ✅ Type-safe API предотвращает ошибки каста
+// ✅ API типизирован по имени метода, что снижает риск ClassCastException:
+// используйте согласованные пары put*/get* для одного и того же ключа.
 val bundle = Bundle().apply {
     putString("user_id", "12345")
     putInt("count", 42)
     putStringArrayList("tags", arrayListOf("kotlin", "android"))
 }
 
-// ✅ Безопасное чтение с default значениями
+// ✅ Безопасное чтение со значениями по умолчанию
 val count = bundle.getInt("count", 0)
 val userId = bundle.getString("user_id") // String?
 ```
 
-**Parcelable vs Serializable**:
+**`Parcelable` vs `Serializable`**:
 ```kotlin
 @Parcelize
 data class Profile(val id: String, val name: String) : Parcelable
 
-// ✅ Parcelable: fast, no reflection, Android-оптимизирован
+// ✅ Parcelable: оптимизирован под Android, без рефлексии, обычно заметно быстрее Serializable
 bundle.putParcelable("profile", Profile("1", "Alice"))
 
-// ❌ Serializable: медленнее в 10x, рефлексия, legacy
+// ⚠️ Serializable: использует рефлексию, обычно медленнее и менее эффективен по памяти; оставлен в основном для совместимости
 bundle.putSerializable("data", hashMapOf("key" to "value"))
 ```
 
 **Коллекции и массивы**:
 ```kotlin
-// ✅ Typed collections для Parcelable
+// ✅ Типизированные коллекции для Parcelable
 val profiles = arrayListOf(Profile("1", "Alice"), Profile("2", "Bob"))
 bundle.putParcelableArrayList("profiles", profiles)
 
-// ✅ SparseArray для int ключей (экономия памяти)
+// ✅ SparseArray для int-ключей (более эффективен по памяти)
 val sparse = SparseArray<Profile>().apply {
     put(1, Profile("1", "Alice"))
     put(2, Profile("2", "Bob"))
@@ -90,18 +104,18 @@ bundle.putSparseParcelableArray("sparse_profiles", sparse)
 ```
 
 **Критические ограничения**:
-- Размер: ~1MB для IPC через `Binder` (`TransactionTooLargeException`)
-- Запрещено: `lambda`, `Thread`, `Socket`, `Context`, `View`, `Handler`
-- Альтернативы для больших данных: `URI`, `ViewModel`, files, `WorkManager`, `ContentProvider`
-- Не thread-safe без явной синхронизации
+- Размер: около 1MB для данных, передающихся через транзакции `Binder` (риск `TransactionTooLargeException`).
+- Нельзя класть объекты, не являющиеся `Parcelable` или `Serializable`, такие как `Context`, `View`, `Thread`, `Handler`, `Socket` и т.п. Это приводит к ошибкам выполнения или утечкам/некорректному поведению.
+- Альтернативы для больших данных: `Uri`, файлы, `ViewModel`, `WorkManager`, `ContentProvider`.
+- `Bundle` не является потокобезопасным без явной синхронизации.
 
 **Безопасность**:
 ```kotlin
-// ❌ Опасно: внешние данные без проверки
+// ❌ Опасно: использовать внешние extras без проверки
 val intent = getIntent()
-val untrusted = intent.getStringExtra("url") // может быть "javascript:..."
+val untrusted = intent.getStringExtra("url") // может содержать произвольные потенциально опасные данные
 
-// ✅ Валидация перед использованием
+// ✅ Пример простой валидации:
 val url = intent.getStringExtra("url")
     ?.takeIf { it.startsWith("https://") }
     ?: return
@@ -109,38 +123,54 @@ val url = intent.getStringExtra("url")
 
 ## Answer (EN)
 
-Bundle is a key-value container for passing data between Android components via IPC. Built on `Parcel`, uses type-safe `put*/get*` methods.
+`Bundle` is a key-value container for passing data between Android components (e.g., `Activity`/`Fragment` arguments, savedInstanceState, `Intent` extras, and IPC). It is built on top of `Parcel` and exposes typed `put*/get*` methods.
 
-**Supported types**:
-- Primitives and arrays: `Int`, `Long`, `Float`, `Double`, `Boolean`, `Byte`, `Char`, `Short` and their arrays
-- Strings: `String`, `CharSequence`
-- Collections: `ArrayList<String>`, `ArrayList<Int>`, `ArrayList<Parcelable>`
-- Objects: `Parcelable`, `Serializable`
-- Special: `Bundle` (nested), `SparseArray<Parcelable>`
+**Key supported types** (API 34+, not exhaustive, but main categories):
+- Primitives and arrays:
+  - `boolean`, `byte`, `char`, `short`, `int`, `long`, `float`, `double`
+  - `boolean[]`, `byte[]`, `char[]`, `short[]`, `int[]`, `long[]`, `float[]`, `double[]`
+- Strings:
+  - `String`, `String[]`
+  - `CharSequence`, `CharSequence[]`
+- Collections (for specific element types):
+  - `ArrayList<`String`>`
+  - `ArrayList<CharSequence>`
+  - `ArrayList<Integer>` (via `putIntegerArrayList`)
+  - `ArrayList<`Parcelable`>` (via `putParcelableArrayList`)
+- Objects:
+  - `Parcelable`
+  - `Parcelable[]`
+  - `Serializable` (including arrays/collections when they implement `Serializable`)
+- Special:
+  - nested `Bundle`
+  - `SparseArray<`Parcelable`>` (via `putSparseParcelableArray`)
+
+(Other types must be converted to one of the supported forms or implement `Parcelable`/`Serializable` to be stored correctly.)
 
 **Basic usage**:
 ```kotlin
-// ✅ Type-safe API prevents cast errors
+// ✅ The API is typed per method name, reducing ClassCastException risk:
+// use matching put*/get* pairs for the same key.
 val bundle = Bundle().apply {
     putString("user_id", "12345")
     putInt("count", 42)
     putStringArrayList("tags", arrayListOf("kotlin", "android"))
 }
 
-// ✅ Safe reading with default values
+// ✅ Safe reading with defaults
 val count = bundle.getInt("count", 0)
 val userId = bundle.getString("user_id") // String?
 ```
 
-**Parcelable vs Serializable**:
+**`Parcelable` vs `Serializable`**:
 ```kotlin
 @Parcelize
 data class Profile(val id: String, val name: String) : Parcelable
 
-// ✅ Parcelable: fast, no reflection, Android-optimized
+// ✅ Parcelable: Android-optimized, no reflection, typically significantly faster than Serializable
 bundle.putParcelable("profile", Profile("1", "Alice"))
 
-// ❌ Serializable: 10x slower, uses reflection, legacy
+// ⚠️ Serializable: uses reflection, often noticeably slower and less memory-efficient; kept mainly for compatibility
 bundle.putSerializable("data", hashMapOf("key" to "value"))
 ```
 
@@ -159,30 +189,44 @@ bundle.putSparseParcelableArray("sparse_profiles", sparse)
 ```
 
 **Critical limitations**:
-- Size: ~1MB for IPC via `Binder` (`TransactionTooLargeException`)
-- Forbidden: `lambda`, `Thread`, `Socket`, `Context`, `View`, `Handler`
-- Alternatives for large data: `URI`, `ViewModel`, files, `WorkManager`, `ContentProvider`
-- Not thread-safe without explicit synchronization
+- Size: around 1MB limit for data sent via `Binder` transactions (`TransactionTooLargeException`).
+- Do not put objects that are not `Parcelable` or `Serializable`, such as `Context`, `View`, `Thread`, `Handler`, `Socket`, etc. Doing so either fails at runtime or leads to leaks/incorrect behavior.
+- Alternatives for large payloads: `Uri`, files, `ViewModel`, `WorkManager`, `ContentProvider`.
+- `Bundle` is not thread-safe without explicit synchronization.
 
 **Security**:
 ```kotlin
-// ❌ Dangerous: external data without validation
+// ❌ Dangerous: using external extras without validation
 val intent = getIntent()
-val untrusted = intent.getStringExtra("url") // could be "javascript:..."
+val untrusted = intent.getStringExtra("url") // can contain arbitrary, potentially unsafe data
 
-// ✅ Validate before use
+// ✅ Example of simple validation:
 val url = intent.getStringExtra("url")
     ?.takeIf { it.startsWith("https://") }
     ?: return
 ```
 
+## Дополнительные вопросы (RU)
+
+- Как оценить размер `Bundle` и риск `TransactionTooLargeException` при IPC?
+- В чем внутренние различия между сериализацией в `Parcel` и хранением данных в `Bundle`?
+- Как `Bundle` ведет себя при изменении полей в `Parcelable` (добавление/удаление) с точки зрения совместимости?
+- Почему нельзя класть `Context` и `View` в `Bundle` и какие утечки памяти это может вызвать?
+- Как Navigation Component Safe Args генерирует типобезопасные обертки над `Bundle` на этапе компиляции?
+
 ## Follow-ups
 
-- How does Bundle size calculation work and how to measure it before IPC?
-- What's the internal difference between Parcel and Bundle serialization mechanisms?
-- How does Bundle handle versioning when adding/removing fields in Parcelable objects?
-- Why are Context and View references forbidden in Bundle, and what are memory leak implications?
-- How does Navigation Component's Safe Args generate type-safe Bundle accessors at compile time?
+- How does `Bundle` size calculation work and how to measure it before IPC?
+- What's the internal difference between Parcel and `Bundle` serialization mechanisms?
+- How does `Bundle` handle versioning when adding/removing fields in `Parcelable` objects?
+- Why are `Context` and `View` references forbidden in `Bundle`, and what are memory leak implications?
+- How does Navigation Component's Safe Args generate type-safe `Bundle` accessors at compile time?
+
+## Ссылки (RU)
+
+- https://developer.android.com/reference/android/os/Bundle
+- https://developer.android.com/reference/android/os/Parcelable
+- https://developer.android.com/guide/components/intents-filters
 
 ## References
 
@@ -190,23 +234,34 @@ val url = intent.getStringExtra("url")
 - https://developer.android.com/reference/android/os/Parcelable
 - https://developer.android.com/guide/components/intents-filters
 
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-activity]]
+
+### Предпосылки (проще)
+- [[q-android-app-components--android--easy]] — понимание компонентов приложения и их связи
+
+### Похожие (того же уровня)
+- [[q-parcelable-implementation--android--medium]] — реализация собственных `Parcelable` объектов
+
+### Продвинутые (сложнее)
+- Анализ и отладка `TransactionTooLargeException` и лимитов IPC
+- Стратегии версионирования `Parcelable` и обеспечения обратной совместимости
+
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-activity]]
-- [[c-intent]]
-
 
 ### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]] — Understanding Activity/Fragment lifecycle
-- [[q-android-manifest-file--android--easy]] — Component declaration and intent filters
+- [[q-android-app-components--android--easy]] — Understanding app components and their relations
 
 ### Related (Same Level)
-- [[q-parcelable-implementation--android--medium]] — Custom Parcelable objects
-- Intent extras and deep linking patterns
-- ViewModel state preservation via SavedStateHandle
+- [[q-parcelable-implementation--android--medium]] — Custom `Parcelable` objects
 
 ### Advanced (Harder)
 - TransactionTooLargeException debugging and IPC size limits
-- Parcelable versioning and backward compatibility strategies
+- `Parcelable` versioning and backward compatibility strategies

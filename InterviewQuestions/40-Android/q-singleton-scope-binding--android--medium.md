@@ -3,7 +3,7 @@ id: android-324
 title: "Singleton Scope Binding / Привязка Singleton скоупа"
 aliases: ["Singleton Scope Binding", "Привязка Singleton скоупа"]
 topic: android
-subtopics: [di-hilt, lifecycle]
+subtopics: [di-hilt]
 question_kind: android
 difficulty: medium
 original_language: ru
@@ -12,18 +12,19 @@ status: draft
 moc: moc-android
 related: [c-dependency-injection, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 sources: []
-tags: [android/di-hilt, android/lifecycle, dagger, dependency-injection, difficulty/medium, hilt, scope]
+tags: [android/di-hilt, dagger, dependency-injection, difficulty/medium, hilt, scope]
+
 ---
 
 # Вопрос (RU)
 
-К какому scope привязан @Singleton в Dagger/Hilt?
+> К какому scope привязан @Singleton в Dagger/Hilt?
 
 # Question (EN)
 
-What scope is @Singleton bound to in Dagger/Hilt?
+> What scope is @Singleton bound to in Dagger/Hilt?
 
 ---
 
@@ -34,7 +35,7 @@ What scope is @Singleton bound to in Dagger/Hilt?
 **Ключевые аспекты:**
 
 - В Dagger: живет столько, сколько живет Component
-- В Hilt: привязан к SingletonComponent (Application lifecycle)
+- В Hilt: привязан к SingletonComponent (`Application` lifecycle)
 - Один экземпляр на компонент, а не на JVM
 - Может вызвать утечки памяти при неправильном использовании
 
@@ -76,10 +77,10 @@ val comp2 = DaggerAppComponent.create()
 
 | Scope | Lifetime | Типичные Use Cases |
 |-------|----------|-------------------|
-| @Singleton | Application | Database, NetworkClient, Analytics |
-| @ActivityRetainedScoped | Config changes | ViewModel data |
-| @ActivityScoped | Activity | Presenter, Navigator |
-| @FragmentScoped | Fragment | Fragment-specific logic |
+| @Singleton | `Application` | Database, NetworkClient, Analytics |
+| @ActivityRetainedScoped | Config changes | `ViewModel` data |
+| @ActivityScoped | `Activity` | Presenter, Navigator |
+| @FragmentScoped | `Fragment` | `Fragment`-specific logic |
 
 **Типичные ошибки:**
 
@@ -112,7 +113,7 @@ class ActivityPresenter
 **Key aspects:**
 
 - In Dagger: lives as long as the Component exists
-- In Hilt: bound to SingletonComponent (Application lifecycle)
+- In Hilt: bound to SingletonComponent (`Application` lifecycle)
 - One instance per component, not per JVM
 - Can cause memory leaks if misused
 
@@ -154,10 +155,10 @@ val comp2 = DaggerAppComponent.create()
 
 | Scope | Lifetime | Typical Use Cases |
 |-------|----------|-------------------|
-| @Singleton | Application | Database, NetworkClient, Analytics |
-| @ActivityRetainedScoped | Config changes | ViewModel data |
-| @ActivityScoped | Activity | Presenter, Navigator |
-| @FragmentScoped | Fragment | Fragment-specific logic |
+| @Singleton | `Application` | Database, NetworkClient, Analytics |
+| @ActivityRetainedScoped | Config changes | `ViewModel` data |
+| @ActivityScoped | `Activity` | Presenter, Navigator |
+| @FragmentScoped | `Fragment` | `Fragment`-specific logic |
 
 **Common mistakes:**
 
@@ -185,6 +186,14 @@ class ActivityPresenter
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Что произойдет, если создать несколько Dagger-компонентов с @Singleton-биндингами?
+- Чем @ActivityRetainedScoped отличается от @Singleton при конфигурационных изменениях?
+- Можно ли использовать кастомные scope'ы и как определяется время жизни компонента?
+- Каковы последствия для тестирования при использовании синглтонов, привязанных к компоненту?
+- Как отлаживать утечки памяти, вызванные некорректным использованием scope'ов?
+
 ## Follow-ups
 
 - What happens if you create multiple Dagger components with @Singleton bindings?
@@ -193,11 +202,30 @@ class ActivityPresenter
 - What are the testing implications of component-scoped singletons?
 - How do you debug memory leaks caused by improper scope usage?
 
+## Ссылки (RU)
+
+- [[c-dependency-injection]]
+- [Hilt Component Scopes](https://developer.android.com/training/dependency-injection/hilt-android#component-scopes)
+- [Dagger Scopes](https://dagger.dev/dev-guide/custom-scopes)
+
 ## References
 
 - [[c-dependency-injection]]
 - [Hilt Component Scopes](https://developer.android.com/training/dependency-injection/hilt-android#component-scopes)
 - [Dagger Scopes](https://dagger.dev/dev-guide/custom-scopes)
+
+## Похожие вопросы (RU)
+
+### Предпосылки (проще)
+- [[c-dependency-injection]] - Понимание основ DI
+
+### Связанные (тот же уровень)
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]]
+
+### Продвинутые (сложнее)
+- Реализация кастомных scope'ов и иерархии компонентов
+- DI-архитектура с несколькими модулями и скоупированными компонентами
+- Обнаружение и предотвращение утечек памяти в скоупированных зависимостях
 
 ## Related Questions
 

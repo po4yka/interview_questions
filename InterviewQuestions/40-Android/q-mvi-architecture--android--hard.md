@@ -10,23 +10,24 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-immutability, c-unidirectional-data-flow]
+related: [c-android, c-android-ui-composition]
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/architecture-mvi, android/coroutines, android/ui-state, architecture, difficulty/hard, state-management, unidirectional-data-flow]
+
 ---
 
 # Вопрос (RU)
-> Объясните архитектурный паттерн MVI (Model-View-Intent). В чем его ключевые отличия от MVVM?
+> Объясните архитектурный паттерн MVI (Model-`View`-`Intent`). В чем его ключевые отличия от MVVM?
 
 # Question (EN)
-> Explain the MVI (Model-View-Intent) architecture pattern. How does it differ from MVVM?
+> Explain the MVI (Model-`View`-`Intent`) architecture pattern. How does it differ from MVVM?
 
 ---
 
 ## Ответ (RU)
 
-**MVI (Model-View-Intent)** - архитектурный паттерн с **unidirectional data flow** (однонаправленным потоком данных), где UI состояние иммутабельно и изменяется только через явные намерения (Intents).
+**MVI (Model-`View`-`Intent`)** - архитектурный паттерн с **unidirectional data flow** (однонаправленным потоком данных), где UI состояние иммутабельно и изменяется только через явные намерения (`Intent`).
 
 ### Компоненты MVI
 
@@ -35,10 +36,10 @@ tags: [android/architecture-mvi, android/coroutines, android/ui-state, architect
 Intent → Processor → Model → View → Intent
 ```
 
-1. **Intent** - намерения пользователя (клик, ввод текста, загрузка данных)
+1. **`Intent`** - намерения пользователя (клик, ввод текста, загрузка данных)
 2. **Model** - иммутабельное состояние UI (data class)
-3. **View** - отрисовывает UI на основе Model
-4. **Processor** - обрабатывает Intent → создает новый Model
+3. **`View`** - отрисовывает UI на основе Model
+4. **Processor** - обрабатывает `Intent` → создает новый Model (Reducer / UseCase / Middleware)
 
 ### Базовая Реализация
 
@@ -66,13 +67,13 @@ class UserViewModel(
     fun processIntent(intent: UserIntent) {
         when (intent) {
             is UserIntent.LoadUser -> loadUser(intent.userId)
-            is UserIntent.RetryLoading -> retry()
+            is UserIntent.RetryLoading -> loadUser(/* last used id or cached params */ 1)
         }
     }
 
     private fun loadUser(userId: Int) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
+            _state.value = _state.value.copy(isLoading = true, error = null)
 
             try {
                 val user = repository.getUser(userId)
@@ -92,18 +93,23 @@ class UserViewModel(
 
 // View - отправляет Intent, рендерит State
 @Composable
-fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
+fun UserScreen(
+    userId: Int,
+    viewModel: UserViewModel = hiltViewModel()
+) {
     val state by viewModel.state.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.processIntent(UserIntent.LoadUser(userId = 1))
+    LaunchedEffect(userId) {
+        viewModel.processIntent(UserIntent.LoadUser(userId))
     }
 
     when {
         state.isLoading -> LoadingIndicator()
         state.error != null -> ErrorView(
             message = state.error!!,
-            onRetry = { viewModel.processIntent(UserIntent.RetryLoading) }
+            onRetry = {
+                viewModel.processIntent(UserIntent.RetryLoading)
+            }
         )
         state.user != null -> UserContent(state.user!!)
     }
@@ -114,8 +120,8 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 
 | Аспект | MVVM | MVI |
 |--------|------|-----|
-| **State** | Множественные LiveData/StateFlow | Единое иммутабельное состояние |
-| **Updates** | Прямые вызовы методов | Intent-based |
+| **State** | Множественные `LiveData`/`StateFlow` | Единое иммутабельное состояние |
+| **Updates** | Прямые вызовы методов | `Intent`-based |
 | **Data flow** | Bi-directional | Unidirectional |
 | **Testability** | Хорошая | Отличная (pure functions) |
 | **Boilerplate** | Меньше | Больше |
@@ -126,10 +132,11 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 
 ### Side Effects - Одноразовые События
 
-✅ **Правильно**: State для UI, Channel для событий
+✅ **Правильно**: State для UI, отдельный поток для событий (`Channel`/`SharedFlow`)
 
 ```kotlin
 // State - для постоянного UI
+
 data class LoginState(
     val email: String = "",
     val isLoading: Boolean = false,
@@ -142,16 +149,20 @@ sealed class LoginSideEffect {
     data class ShowToast(val message: String) : LoginSideEffect()
 }
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(
+    private val authRepository: AuthRepository
+) : ViewModel() {
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state.asStateFlow()
 
-    private val _sideEffect = Channel<LoginSideEffect>()
+    private val _sideEffect = Channel<LoginSideEffect>(Channel.BUFFERED)
     val sideEffect = _sideEffect.receiveAsFlow()
 
     fun processIntent(intent: LoginIntent) {
         when (intent) {
             is LoginIntent.LoginClicked -> login()
+            is LoginIntent.EmailChanged ->
+                _state.value = _state.value.copy(email = intent.email, emailError = null)
         }
     }
 
@@ -160,12 +171,12 @@ class LoginViewModel : ViewModel() {
             _state.value = _state.value.copy(isLoading = true)
 
             try {
-                val user = authRepository.login(...)
+                val user = authRepository.login(/* ... */)
                 _state.value = _state.value.copy(isLoading = false)
                 _sideEffect.send(LoginSideEffect.NavigateToHome(user.id))
             } catch (e: Exception) {
                 _state.value = _state.value.copy(isLoading = false)
-                _sideEffect.send(LoginSideEffect.ShowToast(e.message))
+                _sideEffect.send(LoginSideEffect.ShowToast(e.message ?: "Login error"))
             }
         }
     }
@@ -173,7 +184,11 @@ class LoginViewModel : ViewModel() {
 
 // View - обрабатываем side effects
 @Composable
-fun LoginScreen(viewModel: LoginViewModel) {
+fun LoginScreen(
+    viewModel: LoginViewModel,
+    onNavigateToHome: (Int) -> Unit,
+    showToast: (String) -> Unit
+) {
     val state by viewModel.state.collectAsState()
 
     LaunchedEffect(Unit) {
@@ -186,6 +201,8 @@ fun LoginScreen(viewModel: LoginViewModel) {
             }
         }
     }
+
+    // UI рендерится на основе state
 }
 ```
 
@@ -193,9 +210,11 @@ fun LoginScreen(viewModel: LoginViewModel) {
 
 ```kotlin
 // Плохо - навигация в State
+
 data class LoginState(
+    val email: String = "",
     val isLoading: Boolean = false,
-    val navigateToHome: Boolean = false  // Проблема: не сбросится автоматически
+    val navigateToHome: Boolean = false  // Проблема: не сбросится автоматически, переиспользуется при recreate
 )
 ```
 
@@ -213,12 +232,18 @@ object LoginReducer {
             is LoginIntent.LoginStarted -> state.copy(isLoading = true)
             is LoginIntent.LoginSuccess -> state.copy(isLoading = false)
             is LoginIntent.LoginFailed -> state.copy(isLoading = false)
+            is LoginIntent.LoginClicked -> state // side effect отдельно
         }
     }
 }
 
 // ViewModel использует Reducer
-class LoginViewModel : ViewModel() {
+class LoginReducerViewModel(
+    private val authRepository: AuthRepository
+) : ViewModel() {
+    private val _state = MutableStateFlow(LoginState())
+    val state: StateFlow<LoginState> = _state.asStateFlow()
+
     fun processIntent(intent: LoginIntent) {
         // ✅ Применяем чистую функцию
         _state.value = LoginReducer.reduce(_state.value, intent)
@@ -226,7 +251,13 @@ class LoginViewModel : ViewModel() {
         // Side effects отдельно
         when (intent) {
             is LoginIntent.LoginClicked -> performLogin()
-            else -> {}
+            else -> Unit
+        }
+    }
+
+    private fun performLogin() {
+        viewModelScope.launch {
+            // ... side-effectful login, диспатч LoginStarted/LoginSuccess/LoginFailed
         }
     }
 }
@@ -285,7 +316,9 @@ interface Middleware<I, S> {
     suspend fun process(intent: I, state: S, dispatch: (I) -> Unit)
 }
 
-class AnalyticsMiddleware : Middleware<LoginIntent, LoginState> {
+class AnalyticsMiddleware(
+    private val analytics: Analytics
+) : Middleware<LoginIntent, LoginState> {
     override suspend fun process(
         intent: LoginIntent,
         state: LoginState,
@@ -296,20 +329,25 @@ class AnalyticsMiddleware : Middleware<LoginIntent, LoginState> {
                 analytics.logEvent("login_attempt")
             is LoginIntent.LoginSuccess ->
                 analytics.logEvent("login_success")
+            else -> Unit
         }
     }
 }
 
-class LoginViewModel(
-    private val middlewares: List<Middleware<LoginIntent, LoginState>>
+class LoginWithMiddlewareViewModel(
+    private val middlewares: List<Middleware<LoginIntent, LoginState>>,
+    private val reducer: (LoginState, LoginIntent) -> LoginState
 ) : ViewModel() {
+    private val _state = MutableStateFlow(LoginState())
+    val state: StateFlow<LoginState> = _state.asStateFlow()
+
     fun processIntent(intent: LoginIntent) {
         viewModelScope.launch {
-            // ✅ Выполняем middleware
+            // ✅ Выполняем middleware (side effects)
             middlewares.forEach { it.process(intent, _state.value, ::processIntent) }
 
-            // Применяем reducer
-            _state.value = LoginReducer.reduce(_state.value, intent)
+            // Применяем reducer (pure)
+            _state.value = reducer(_state.value, intent)
         }
     }
 }
@@ -354,22 +392,22 @@ class DebuggableViewModel<I, S>(
 
 ✅ **Правильно**:
 - Единое иммутабельное состояние (data class)
-- Все действия через Intent
-- Side effects через Channel/SharedFlow
+- Все действия через `Intent`
+- Side effects через `Channel` (BUFFERED)/`SharedFlow`
 - Reducer - чистые функции
 - `state.copy()` для изменений
 
 ❌ **Неправильно**:
 - Мутация state: `_state.value.items.add(item)`
 - События в State: `navigateToHome: Boolean`
-- Прямые вызовы методов вместо Intent
+- Прямые вызовы методов вместо `Intent` (в MVI-контексте)
 - Множественные источники состояния
 
 ---
 
 ## Answer (EN)
 
-**MVI (Model-View-Intent)** is an architecture pattern with **unidirectional data flow**, where UI state is immutable and changes only through explicit Intents.
+**MVI (Model-`View`-`Intent`)** is an architecture pattern with **unidirectional data flow**, where UI state is immutable and changes only through explicit `Intent`s.
 
 ### MVI Components
 
@@ -378,10 +416,10 @@ class DebuggableViewModel<I, S>(
 Intent → Processor → Model → View → Intent
 ```
 
-1. **Intent** - user actions/events
+1. **`Intent`** - user actions/events
 2. **Model** - single immutable UI state
-3. **View** - renders UI from Model
-4. **Processor** - processes Intent → creates new Model
+3. **`View`** - renders UI from Model
+4. **Processor** - processes `Intent` → creates new Model (Reducer / UseCase / Middleware)
 
 ### Basic Implementation
 
@@ -409,13 +447,13 @@ class UserViewModel(
     fun processIntent(intent: UserIntent) {
         when (intent) {
             is UserIntent.LoadUser -> loadUser(intent.userId)
-            is UserIntent.RetryLoading -> retry()
+            is UserIntent.RetryLoading -> loadUser(/* last used id or cached params */ 1)
         }
     }
 
     private fun loadUser(userId: Int) {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
+            _state.value = _state.value.copy(isLoading = true, error = null)
 
             try {
                 val user = repository.getUser(userId)
@@ -432,14 +470,38 @@ class UserViewModel(
         }
     }
 }
+
+// View - sends Intents, renders State
+@Composable
+fun UserScreen(
+    userId: Int,
+    viewModel: UserViewModel = hiltViewModel()
+) {
+    val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(userId) {
+        viewModel.processIntent(UserIntent.LoadUser(userId))
+    }
+
+    when {
+        state.isLoading -> LoadingIndicator()
+        state.error != null -> ErrorView(
+            message = state.error!!,
+            onRetry = {
+                viewModel.processIntent(UserIntent.RetryLoading)
+            }
+        )
+        state.user != null -> UserContent(state.user!!)
+    }
+}
 ```
 
 ### MVI Vs MVVM
 
 | Aspect | MVVM | MVI |
 |--------|------|-----|
-| **State** | Multiple LiveData/StateFlow | Single immutable state |
-| **Updates** | Direct method calls | Intent-based |
+| **State** | Multiple `LiveData`/`StateFlow` | Single immutable state |
+| **Updates** | Direct method calls | `Intent`-based |
 | **Data flow** | Bi-directional | Unidirectional |
 | **Testability** | Good | Excellent (pure functions) |
 | **Boilerplate** | Less | More |
@@ -450,10 +512,11 @@ class UserViewModel(
 
 ### Side Effects - One-time Events
 
-✅ **Correct**: State for UI, Channel for events
+✅ **Correct**: State for UI, separate stream for events (`Channel`/`SharedFlow`)
 
 ```kotlin
 // State - for persistent UI
+
 data class LoginState(
     val email: String = "",
     val isLoading: Boolean = false,
@@ -466,16 +529,20 @@ sealed class LoginSideEffect {
     data class ShowToast(val message: String) : LoginSideEffect()
 }
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(
+    private val authRepository: AuthRepository
+) : ViewModel() {
     private val _state = MutableStateFlow(LoginState())
     val state: StateFlow<LoginState> = _state.asStateFlow()
 
-    private val _sideEffect = Channel<LoginSideEffect>()
+    private val _sideEffect = Channel<LoginSideEffect>(Channel.BUFFERED)
     val sideEffect = _sideEffect.receiveAsFlow()
 
     fun processIntent(intent: LoginIntent) {
         when (intent) {
             is LoginIntent.LoginClicked -> login()
+            is LoginIntent.EmailChanged ->
+                _state.value = _state.value.copy(email = intent.email, emailError = null)
         }
     }
 
@@ -484,15 +551,38 @@ class LoginViewModel : ViewModel() {
             _state.value = _state.value.copy(isLoading = true)
 
             try {
-                val user = authRepository.login(...)
+                val user = authRepository.login(/* ... */)
                 _state.value = _state.value.copy(isLoading = false)
                 _sideEffect.send(LoginSideEffect.NavigateToHome(user.id))
             } catch (e: Exception) {
                 _state.value = _state.value.copy(isLoading = false)
-                _sideEffect.send(LoginSideEffect.ShowToast(e.message))
+                _sideEffect.send(LoginSideEffect.ShowToast(e.message ?: "Login error"))
             }
         }
     }
+}
+
+// View - handles side effects
+@Composable
+fun LoginScreen(
+    viewModel: LoginViewModel,
+    onNavigateToHome: (Int) -> Unit,
+    showToast: (String) -> Unit
+) {
+    val state by viewModel.state.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
+                is LoginSideEffect.NavigateToHome ->
+                    onNavigateToHome(effect.userId)
+                is LoginSideEffect.ShowToast ->
+                    showToast(effect.message)
+            }
+        }
+    }
+
+    // UI renders based on state
 }
 ```
 
@@ -500,8 +590,11 @@ class LoginViewModel : ViewModel() {
 
 ```kotlin
 // Bad - navigation in State
+
 data class LoginState(
-    val navigateToHome: Boolean = false  // Won't reset automatically
+    val email: String = "",
+    val isLoading: Boolean = false,
+    val navigateToHome: Boolean = false  // Won't reset automatically, may retrigger on recreate
 )
 ```
 
@@ -518,12 +611,19 @@ object LoginReducer {
             )
             is LoginIntent.LoginStarted -> state.copy(isLoading = true)
             is LoginIntent.LoginSuccess -> state.copy(isLoading = false)
+            is LoginIntent.LoginFailed -> state.copy(isLoading = false)
+            is LoginIntent.LoginClicked -> state // handle side effect separately
         }
     }
 }
 
 // ViewModel uses Reducer
-class LoginViewModel : ViewModel() {
+class LoginReducerViewModel(
+    private val authRepository: AuthRepository
+) : ViewModel() {
+    private val _state = MutableStateFlow(LoginState())
+    val state: StateFlow<LoginState> = _state.asStateFlow()
+
     fun processIntent(intent: LoginIntent) {
         // ✅ Apply pure function
         _state.value = LoginReducer.reduce(_state.value, intent)
@@ -531,9 +631,28 @@ class LoginViewModel : ViewModel() {
         // Side effects separately
         when (intent) {
             is LoginIntent.LoginClicked -> performLogin()
-            else -> {}
+            else -> Unit
         }
     }
+
+    private fun performLogin() {
+        viewModelScope.launch {
+            // ... side-effectful login, dispatch LoginStarted/LoginSuccess/LoginFailed
+        }
+    }
+}
+
+// ✅ Easy to test
+@Test
+fun `reducer is pure function`() {
+    val state = LoginState(email = "old@test.com")
+    val intent = LoginIntent.EmailChanged("new@test.com")
+
+    val result1 = LoginReducer.reduce(state, intent)
+    val result2 = LoginReducer.reduce(state, intent)
+
+    assertEquals(result1, result2)
+    assertEquals("old@test.com", state.email)  // Original not mutated
 }
 ```
 
@@ -559,6 +678,14 @@ data class PaginationState(
     val hasMore: Boolean = true,
     val isLoadingMore: Boolean = false
 )
+
+// Intent covers all user actions
+sealed class ProductListIntent {
+    data class SearchQueryChanged(val query: String) : ProductListIntent()
+    data class CategorySelected(val category: Category?) : ProductListIntent()
+    object LoadMore : ProductListIntent()
+    object Refresh : ProductListIntent()
+}
 ```
 
 ### Middleware for Cross-Cutting Concerns
@@ -569,7 +696,9 @@ interface Middleware<I, S> {
     suspend fun process(intent: I, state: S, dispatch: (I) -> Unit)
 }
 
-class AnalyticsMiddleware : Middleware<LoginIntent, LoginState> {
+class AnalyticsMiddleware(
+    private val analytics: Analytics
+) : Middleware<LoginIntent, LoginState> {
     override suspend fun process(
         intent: LoginIntent,
         state: LoginState,
@@ -580,6 +709,60 @@ class AnalyticsMiddleware : Middleware<LoginIntent, LoginState> {
                 analytics.logEvent("login_attempt")
             is LoginIntent.LoginSuccess ->
                 analytics.logEvent("login_success")
+            else -> Unit
+        }
+    }
+}
+
+class LoginWithMiddlewareViewModel(
+    private val middlewares: List<Middleware<LoginIntent, LoginState>>,
+    private val reducer: (LoginState, LoginIntent) -> LoginState
+) : ViewModel() {
+    private val _state = MutableStateFlow(LoginState())
+    val state: StateFlow<LoginState> = _state.asStateFlow()
+
+    fun processIntent(intent: LoginIntent) {
+        viewModelScope.launch {
+            // ✅ Run middleware (side effects)
+            middlewares.forEach { it.process(intent, _state.value, ::processIntent) }
+
+            // Apply reducer (pure)
+            _state.value = reducer(_state.value, intent)
+        }
+    }
+}
+```
+
+### Time Travel Debugging
+
+```kotlin
+// Keep history of states for debugging
+class DebuggableViewModel<I, S>(
+    initialState: S,
+    private val reducer: (S, I) -> S
+) : ViewModel() {
+    private val _state = MutableStateFlow(initialState)
+    val state: StateFlow<S> = _state.asStateFlow()
+
+    private val stateHistory = mutableListOf<Pair<I, S>>()
+
+    fun processIntent(intent: I) {
+        val newState = reducer(_state.value, intent)
+        stateHistory.add(intent to newState)
+        _state.value = newState
+    }
+
+    // Time travel
+    fun replayTo(index: Int) {
+        if (index in stateHistory.indices) {
+            _state.value = stateHistory[index].second
+        }
+    }
+
+    fun undo() {
+        if (stateHistory.size > 1) {
+            stateHistory.removeLast()
+            _state.value = stateHistory.last().second
         }
     }
 }
@@ -589,34 +772,33 @@ class AnalyticsMiddleware : Middleware<LoginIntent, LoginState> {
 
 ✅ **Correct**:
 - Single immutable state (data class)
-- All actions through Intent
-- Side effects through Channel/SharedFlow
+- All actions through `Intent`
+- Side effects via `Channel` (BUFFERED)/`SharedFlow`
 - Reducer - pure functions
-- Use `state.copy()` for changes
+- Use `state.copy()` for state changes
 
 ❌ **Wrong**:
-- State mutation: `_state.value.items.add(item)`
+- Mutating state: `_state.value.items.add(item)`
 - Events in State: `navigateToHome: Boolean`
-- Direct method calls instead of Intent
-- Multiple state sources
+- Direct method calls instead of Intents (in an MVI setup)
+- Multiple independent state sources
 
 ---
 
 ## Follow-ups
 
-1. How to handle complex state machines with multiple async operations in MVI?
-2. When to use nested states vs flat state structure?
-3. How to implement undo/redo functionality using MVI?
-4. What are the trade-offs of using Middleware vs inline side effect handling?
-5. How to optimize performance when state updates frequently?
+1. How would you structure MVI for a screen that has multiple independent widgets (e.g., search, filters, pagination, and selection) to avoid state explosion?
+2. How do you handle long-running jobs and cancellation (e.g., search suggestions) in MVI with coroutines and `Flow`?
+3. How would you model error handling and retries in MVI to keep reducers pure and predictable?
+4. What are the trade-offs of using a generic MVI framework vs a lightweight, feature-specific implementation?
+5. How can you integrate MVI with Jetpack Compose navigation and deep links?
 
 ## References
 
-- [[c-unidirectional-data-flow]] - Unidirectional data flow concept
-- [[c-immutability]] - Immutability in Kotlin
-- [[c-state-management]] - State management patterns
+- [[c-android-ui-composition]] - Android UI composition and state
+- [[c-android]] - Android platform and components overview
 - [[moc-android]] - Android development hub
-- https://developer.android.com/topic/architecture - Android architecture guide
+- https://developer.android.com/topic/architecture
 
 ## Related Questions
 

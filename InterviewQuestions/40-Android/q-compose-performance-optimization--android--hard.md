@@ -12,20 +12,19 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
   - c-compose-recomposition
-  - c-compose-stability
   - q-android-performance-measurement-tools--android--medium
   - q-compose-compiler-plugin--android--hard
   - q-compose-lazy-layout-optimization--android--hard
 created: 2025-10-20
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/performance-memory, android/ui-compose, difficulty/hard]
 sources:
-  - https://developer.android.com/jetpack/compose/mental-model
-  - https://developer.android.com/jetpack/compose/performance
+  - "https://developer.android.com/jetpack/compose/mental-model"
+  - "https://developer.android.com/jetpack/compose/performance"
 ---
 
 # Вопрос (RU)
@@ -40,27 +39,46 @@ sources:
 
 ## Ответ (RU)
 
+### Краткий вариант
+
+- Минимизируйте область рекомпозиции за счет декомпозиции UI и гранулярного состояния.
+- Обеспечьте стабильность входных данных (`@Immutable`, `@Stable`, стабильные колбэки).
+- Используйте `remember` и `derivedStateOf` для кэширования и производных вычислений.
+- Оптимизируйте lazy-списки (ключи, `contentType`, prefetch).
+- Сокращайте аллокации и измеряйте эффект с помощью инструментов профилирования.
+
+### Подробный вариант
+
 ### Принципы Оптимизации
 
-1. **Минимизация области рекомпозиции** — разбивать UI на мелкие компоненты, наблюдать за гранулярным состоянием
-2. **Стабильность входных данных** — использовать immutable/@Stable классы, стабильные колбэки
-3. **Предвычисление** — `remember`/`derivedStateOf` для тяжелых вычислений
-4. **Переиспользование в lazy-списках** — ключи, contentType, item prefetch
-5. **Снижение аллокаций** — кэшировать shapes/brushes/painters, избегать создания объектов в composable
-6. **Измерение** — Layout Inspector, Perfetto, compiler metrics для валидации оптимизаций
+1. **Минимизация области рекомпозиции** — разбивать UI на мелкие компоненты, наблюдать за гранулярным состоянием; следить, чтобы каждый composable получал только реально необходимые ему данные.
+2. **Стабильность входных данных** — использовать immutable/@Stable классы, по возможности стабильные колбэки и параметры.
+3. **Предвычисление** — `remember`/`derivedStateOf` для тяжелых вычислений или производных значений.
+4. **Переиспользование в lazy-списках** — ключи, `contentType`, item prefetch.
+5. **Снижение аллокаций** — кэшировать shapes/brushes/painters, избегать лишнего создания объектов в composable-функциях.
+6. **Измерение** — Layout Inspector, Perfetto, Macrobenchmark, compiler metrics для валидации оптимизаций.
+
+### Архитектура
+
+- Разбивайте экран на независимые composable, каждый из которых читает только свой участок состояния.
+- Держите состояние как можно ближе к месту использования, избегайте избыточного проброса.
+- Используйте стабильные модели и явно управляемые точки рекомпозиции (container + leaf-компоненты).
 
 ### Ключевые Техники
 
 **1. Гранулярное наблюдение состояния**
 
 ```kotlin
-// ✅ Наблюдаем за полями раздельно — ограничивает scope рекомпозиции
+// ✅ Наблюдаем за полями раздельно — ограничиваем scope рекомпозиции этого уровня
 val title by vm.title.collectAsState()
 val count by vm.count.collectAsState()
-Header(title)  // рекомпозирует только Header при изменении title
-Counter(count) // рекомпозирует только Counter при изменении count
+Header(title)  // рекомпозируется только Header при изменении title
+Counter(count) // рекомпозируется только Counter при изменении count
 
-// ❌ Наблюдаем за всем объектом — рекомпозирует весь Screen
+// ⚠️ Наблюдаем за всем объектом — Screen(state) будет пересоздаваться целиком,
+// если Screen пробрасывает state дальше без разделения.
+// Если внутри Screen состояние грамотно "расщеплено" по дочерним composable,
+// scope рекомпозиции все еще может быть локализован.
 val state by vm.uiState.collectAsState()
 Screen(state)
 ```
@@ -68,25 +86,35 @@ Screen(state)
 **2. Стабильные колбэки**
 
 ```kotlin
-// ✅ Method reference стабилен
+// ✅ Method reference обычно стабилен, если vm стабилен
 Button(onClick = vm::onSubmit) { Text("Submit") }
 
-// ✅ remember с пустыми ключами стабилен
+// ✅ remember с пустыми ключами — создаст лямбду один раз,
+// важно, чтобы vm был стабилен
 val onClick = remember { { vm.onSubmit() } }
+Button(onClick = onClick) { Text("Submit") }
 
-// ❌ Захват изменяемого состояния — нестабильный колбэк
+// ❌ Захват изменяемого состояния без remember может порождать
+// новую лямбду на каждую рекомпозицию и мешать пропускам
 var count by mutableStateOf(0)
-Button({ vm.submit(count) }) { Text("Go") }
+Button(onClick = { vm.submit(count) }) { Text("Go") }
 ```
 
 **3. Immutable/@Stable модели**
 
 ```kotlin
-// ✅ Компилятор пропускает рекомпозицию при equals
-@Immutable data class Product(val id: String, val name: String, val price: Double)
+// ✅ @Immutable сообщает компилятору, что экземпляры этого типа
+// не меняют внутреннее состояние после создания.
+// Это помогает безопасно пропускать рекомпозиции,
+// когда ссылка на объект не изменилась.
+@Immutable
+data class Product(val id: String, val name: String, val price: Double)
 
-// ✅ Стабильный класс с изменяемым состоянием
-@Stable class UiState {
+// ✅ @Stable сообщает, какие свойства могут меняться, не меняя "идентичность" объекта.
+// Изменения стабильных observable-свойств (mutableStateOf) триггерят только
+// те composable, которые их читают.
+@Stable
+class UiState {
     var loading by mutableStateOf(false)
     var error by mutableStateOf<String?>(null)
 }
@@ -95,18 +123,21 @@ Button({ vm.submit(count) }) { Text("Go") }
 **4. derivedStateOf для вычислений**
 
 ```kotlin
-// ✅ Вычисляется только при изменении firstVisibleItemIndex
+// ✅ Вычисляется только при изменении зависимостей (firstVisibleItemIndex)
 val listState = rememberLazyListState()
 val showFab by remember {
     derivedStateOf { listState.firstVisibleItemIndex > 3 }
 }
-if (showFab) FloatingActionButton(onClick = {}) { Icon(...) }
+if (showFab) {
+    FloatingActionButton(onClick = {}) { Icon(/* ... */) }
+}
 ```
 
 **5. Lazy-списки: ключи и contentType**
 
 ```kotlin
-// ✅ Ключи для стабильности, contentType для переиспользования
+// ✅ Ключи для стабильной идентификации, contentType для эффективного переиспользования
+// Лучше использовать стабильные и относительно крупные contentType, а не уникальные значения для каждого item
 LazyColumn {
     items(
         items = products,
@@ -120,34 +151,53 @@ LazyColumn {
 
 ### Инструменты Измерения
 
-- **Layout Inspector** — счетчики рекомпозиции, пропусков, visual bounds
-- **Perfetto/Systrace** — frame timing, jank detection, correlation со всплесками
-- **Compiler metrics** — проверка skippability/stability классов
-- **Macrobenchmark** — startup, jank, frame metrics под реальной нагрузкой
+- **Layout Inspector** — счетчики рекомпозиции и пропусков, визуальные границы.
+- **Perfetto/Systrace** — frame timing, jank detection, корреляция всплесков нагрузки с рекомпозициями/измерениями.
+- **Compiler metrics** — отчеты компилятора Compose (включаются через Gradle-флаги) для анализа stability/skippability composable-функций и типов.
+- **Macrobenchmark** — измерение startup, jank и frame metrics под реальной нагрузкой.
 
 ## Answer (EN)
 
+### Short Version
+
+- Minimize recomposition scope via decomposition and granular state.
+- Ensure stable inputs (`@Immutable`, `@Stable`, stable callbacks).
+- Use `remember` and `derivedStateOf` for caching and derived calculations.
+- Optimize lazy lists (keys, `contentType`, prefetch).
+- Reduce allocations and validate changes with profiling tools.
+
+### Detailed Version
+
 ### Optimization Principles
 
-1. **Minimize recomposition scope** — split UI into granular composables, observe fine-grained state
-2. **Stable inputs** — use immutable/@Stable classes, stable callbacks
-3. **Precomputation** — `remember`/`derivedStateOf` for expensive calculations
-4. **Lazy list reuse** — keys, contentType, item prefetch
-5. **Reduce allocations** — cache shapes/brushes/painters, avoid object creation in composables
-6. **Measurement** — Layout Inspector, Perfetto, compiler metrics to validate optimizations
+1. **Minimize recomposition scope** — split UI into small composables, expose and observe only the specific state each composable needs.
+2. **Stable inputs** — use immutable/@Stable classes and, where possible, stable callbacks and parameters.
+3. **Precomputation** — use `remember`/`derivedStateOf` for expensive or derived calculations.
+4. **Lazy list reuse** — keys, `contentType`, item prefetch.
+5. **Reduce allocations** — cache shapes/brushes/painters, avoid unnecessary object creation inside composables.
+6. **Measurement** — Layout Inspector, Perfetto, Macrobenchmark, compiler metrics to validate optimizations.
+
+### Architecture
+
+- Split the screen into independent composables, each reading only its own slice of state.
+- Keep state as close as possible to where it is used, avoid unnecessary propagation.
+- Use stable models and explicit recomposition boundaries (container + leaf components).
 
 ### Key Techniques
 
 **1. Granular state observation**
 
 ```kotlin
-// ✅ Observe fields separately — limits recomposition scope
+// ✅ Observe fields separately — limits recomposition scope at this level
 val title by vm.title.collectAsState()
 val count by vm.count.collectAsState()
-Header(title)  // recomposes only Header when title changes
-Counter(count) // recomposes only Counter when count changes
+Header(title)  // only Header recomposes when title changes
+Counter(count) // only Counter recomposes when count changes
 
-// ❌ Observe entire object — recomposes entire Screen
+// ⚠️ Observing the whole object — Screen(state) will recompose as a whole
+// if it forwards state without splitting it.
+// If Screen internally decomposes state per child composable,
+// recomposition can still be scoped.
 val state by vm.uiState.collectAsState()
 Screen(state)
 ```
@@ -155,25 +205,33 @@ Screen(state)
 **2. Stable callbacks**
 
 ```kotlin
-// ✅ Method reference is stable
+// ✅ Method reference is usually stable if vm is stable
 Button(onClick = vm::onSubmit) { Text("Submit") }
 
-// ✅ remember with empty keys is stable
+// ✅ remember with empty keys creates the lambda once;
+// this is effective when vm itself is stable
 val onClick = remember { { vm.onSubmit() } }
+Button(onClick = onClick) { Text("Submit") }
 
-// ❌ Capturing mutable state — unstable callback
+// ❌ Capturing mutable state without remember may allocate
+// a new lambda on each recomposition and hurt skipping
 var count by mutableStateOf(0)
-Button({ vm.submit(count) }) { Text("Go") }
+Button(onClick = { vm.submit(count) }) { Text("Go") }
 ```
 
 **3. Immutable/@Stable models**
 
 ```kotlin
-// ✅ Compiler skips recomposition on equals
-@Immutable data class Product(val id: String, val name: String, val price: Double)
+// ✅ @Immutable tells the compiler instances do not mutate internally
+// so if the reference does not change, recomposition can often be skipped safely.
+@Immutable
+data class Product(val id: String, val name: String, val price: Double)
 
-// ✅ Stable class with mutable state
-@Stable class UiState {
+// ✅ @Stable declares how changes affect identity.
+// Changes to observable stable properties (mutableStateOf) trigger
+// recomposition only for composables that read them.
+@Stable
+class UiState {
     var loading by mutableStateOf(false)
     var error by mutableStateOf<String?>(null)
 }
@@ -182,18 +240,21 @@ Button({ vm.submit(count) }) { Text("Go") }
 **4. derivedStateOf for computations**
 
 ```kotlin
-// ✅ Recomputes only when firstVisibleItemIndex changes
+// ✅ Recomputes only when its dependencies (firstVisibleItemIndex) change
 val listState = rememberLazyListState()
 val showFab by remember {
     derivedStateOf { listState.firstVisibleItemIndex > 3 }
 }
-if (showFab) FloatingActionButton(onClick = {}) { Icon(...) }
+if (showFab) {
+    FloatingActionButton(onClick = {}) { Icon(/* ... */) }
+}
 ```
 
 **5. Lazy lists: keys and contentType**
 
 ```kotlin
-// ✅ Keys for stability, contentType for item reuse
+// ✅ Keys for stable identification, contentType for efficient item reuse.
+// Prefer stable, relatively coarse content types over per-item unique values.
 LazyColumn {
     items(
         items = products,
@@ -207,10 +268,10 @@ LazyColumn {
 
 ### Measurement Tools
 
-- **Layout Inspector** — recomposition counts, skips, visual bounds
-- **Perfetto/Systrace** — frame timing, jank detection, correlation with recomposition spikes
-- **Compiler metrics** — validate class skippability/stability
-- **Macrobenchmark** — startup, jank, frame metrics under real load
+- **Layout Inspector** — recomposition and skip counters, visual bounds.
+- **Perfetto/Systrace** — frame timing, jank detection, correlating spikes with recompositions/measure phases.
+- **Compiler metrics** — Compose compiler reports (enabled via Gradle flags) to inspect stability/skippability of composables and types.
+- **Macrobenchmark** — startup, jank, frame metrics under realistic workloads.
 
 ---
 

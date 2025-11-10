@@ -10,26 +10,30 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-fragments-vs-activity--android--medium, q-which-class-to-catch-gestures--android--easy]
+related: [q-fragments-vs-activity--android--medium, q-which-class-to-catch-gestures--android--easy, c-custom-views]
 sources: []
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 tags: [android, android/ui-views, android/ui-widgets, difficulty/easy, gestures]
+
 ---
 
 # Вопрос (RU)
 
-Какой класс можно использовать что бы ловить разные жесты?
+> Какой класс можно использовать чтобы ловить разные жесты?
 
 # Question (EN)
 
-Which class can be used to detect different gestures?
+> Which class can be used to detect different gestures?
 
 ---
 
 ## Ответ (RU)
 
-Для обработки жестов в Android используйте класс **GestureDetector**. Он отслеживает стандартные жесты: tap, double tap, long press, fling, scroll.
+Для обработки стандартных жестов в Android используйте класс **GestureDetector**.
+Для жестов масштабирования (pinch-zoom) — **ScaleGestureDetector**.
+
+Он отслеживает типичные жесты: tap, double tap, long press, fling, scroll.
 
 ### Базовое Использование
 
@@ -41,7 +45,11 @@ class GestureActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        gestureDetector = GestureDetector(this, MyGestureListener())
+        val listener = MyGestureListener()
+        gestureDetector = GestureDetector(this, listener).apply {
+            // ✅ Нужен для обработки double tap через onDoubleTap()
+            setOnDoubleTapListener(listener)
+        }
 
         findViewById<View>(R.id.touchArea).setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event) // ✅ Делегирование обработки жестов
@@ -49,7 +57,8 @@ class GestureActivity : AppCompatActivity() {
     }
 
     private inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
-        override fun onDown(e: MotionEvent): Boolean = true // ✅ Обязательно для срабатывания других методов
+        override fun onDown(e: MotionEvent): Boolean = true
+        // ✅ onDown должен вернуть true, чтобы жесты на основе последующих событий (scroll, fling и др.) обрабатывались
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
             // Одиночное касание
@@ -111,6 +120,12 @@ class SwipeGestureListener : GestureDetector.SimpleOnGestureListener() {
         }
         return false
     }
+
+    // Пример пользовательских обработчиков направлений (НЕ часть SDK)
+    private fun onSwipeRight() { /* ... */ }
+    private fun onSwipeLeft() { /* ... */ }
+    private fun onSwipeUp() { /* ... */ }
+    private fun onSwipeDown() { /* ... */ }
 }
 ```
 
@@ -149,6 +164,7 @@ fun GestureExample() {
         modifier = Modifier
             .fillMaxSize()
             .pointerInput(Unit) {
+                // В Compose используются pointer input-детекторы (не GestureDetector из View API)
                 detectTapGestures(
                     onTap = { /* tap */ },
                     onDoubleTap = { /* double tap */ },
@@ -159,14 +175,19 @@ fun GestureExample() {
 }
 ```
 
-**Основные классы:**
-- **GestureDetector** — стандартные жесты (tap, fling, scroll)
+**Основные классы (`View` API):**
+- **GestureDetector** — стандартные жесты (tap, fling, scroll, и др.)
 - **ScaleGestureDetector** — pinch-zoom
 - **SimpleOnGestureListener** — базовый класс с пустыми реализациями
 
+---
+
 ## Answer (EN)
 
-To handle gestures in Android, use the **GestureDetector** class. It tracks standard gestures: tap, double tap, long press, fling, scroll.
+To handle standard gestures in Android, use the **GestureDetector** class.
+For scaling gestures (pinch-zoom), use **ScaleGestureDetector**.
+
+GestureDetector can track common gestures: tap, double tap, long press, fling, scroll.
 
 ### Basic Usage
 
@@ -178,7 +199,11 @@ class GestureActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        gestureDetector = GestureDetector(this, MyGestureListener())
+        val listener = MyGestureListener()
+        gestureDetector = GestureDetector(this, listener).apply {
+            // ✅ Required for handling double-tap via onDoubleTap()
+            setOnDoubleTapListener(listener)
+        }
 
         findViewById<View>(R.id.touchArea).setOnTouchListener { _, event ->
             gestureDetector.onTouchEvent(event) // ✅ Delegate gesture handling
@@ -186,7 +211,8 @@ class GestureActivity : AppCompatActivity() {
     }
 
     private inner class MyGestureListener : GestureDetector.SimpleOnGestureListener() {
-        override fun onDown(e: MotionEvent): Boolean = true // ✅ Required for other methods to trigger
+        override fun onDown(e: MotionEvent): Boolean = true
+        // ✅ onDown must return true so that subsequent gesture callbacks (scroll, fling, etc.) are triggered
 
         override fun onSingleTapUp(e: MotionEvent): Boolean {
             // Single tap
@@ -248,6 +274,12 @@ class SwipeGestureListener : GestureDetector.SimpleOnGestureListener() {
         }
         return false
     }
+
+    // Example custom handlers for directions (NOT part of the SDK)
+    private fun onSwipeRight() { /* ... */ }
+    private fun onSwipeLeft() { /* ... */ }
+    private fun onSwipeUp() { /* ... */ }
+    private fun onSwipeDown() { /* ... */ }
 }
 ```
 
@@ -286,6 +318,7 @@ fun GestureExample() {
         modifier = Modifier
             .fillMaxSize()
             .pointerInput(Unit) {
+                // In Compose, pointer input detectors are used (not the View-based GestureDetector)
                 detectTapGestures(
                     onTap = { /* tap */ },
                     onDoubleTap = { /* double tap */ },
@@ -296,24 +329,48 @@ fun GestureExample() {
 }
 ```
 
-**Key Classes:**
-- **GestureDetector** — standard gestures (tap, fling, scroll)
+**Key Classes (`View` API):**
+- **GestureDetector** — standard gestures (tap, fling, scroll, etc.)
 - **ScaleGestureDetector** — pinch-zoom
 - **SimpleOnGestureListener** — base class with empty implementations
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как комбинировать несколько детекторов жестов на одном `View`?
+- В чем разница между `onSingleTapUp` и `onSingleTapConfirmed`?
+- Как реализовать собственные мультитач-жесты, помимо pinch-zoom?
+- Как обрабатывать конфликты жестов (например, scroll vs fling)?
+
 ## Follow-ups
 
-- How to combine multiple gesture detectors on the same View?
+- How to combine multiple gesture detectors on the same `View`?
 - What's the difference between `onSingleTapUp` and `onSingleTapConfirmed`?
 - How to implement custom multi-touch gestures beyond pinch-zoom?
 - How to handle gesture conflicts (e.g., scroll vs fling)?
+
+## Ссылки (RU)
+
+- [[c-custom-views]]
+- [Android Developer: Handle Touch and Input](https://developer.android.com/develop/ui/views/touch-and-input)
 
 ## References
 
 - [[c-custom-views]]
 - [Android Developer: Handle Touch and Input](https://developer.android.com/develop/ui/views/touch-and-input)
+
+## Связанные вопросы (RU)
+
+### Необходимые знания
+- [[q-which-class-to-catch-gestures--android--easy]] - Базовая обработка touch-событий
+
+### Связанные
+- [[q-fragments-vs-activity--android--medium]] - Контекст жизненного цикла компонентов
+
+### Продвинутое
+- Кастомные речогнутые мультитач-распознаватели жестов
+- Стратегии разрешения конфликтов жестов
 
 ## Related Questions
 

@@ -1,7 +1,6 @@
 ---
 id: android-080
-title: Stack vs Heap Memory In Multithreading / Stack и Heap память для нескольких
-  потоков
+title: Stack vs Heap Memory In Multithreading / Stack и Heap память для нескольких потоков
 aliases:
 - Stack vs Heap Memory In Multithreading
 - Stack и Heap память для нескольких потоков
@@ -17,196 +16,207 @@ language_tags:
 - ru
 status: draft
 created: 2025-10-13
-updated: 2025-10-31
+updated: 2025-11-10
 tags:
 - android/performance-memory
 - android/threads-sync
 - difficulty/medium
 moc: moc-android
 related:
-- c-coroutines
 - c-memory-management
+- c-coroutines
 ---
 
 # Вопрос (RU)
-> Stack и Heap память для нескольких потоков
+> `Stack` и Heap память для нескольких потоков
 
 # Question (EN)
-> Stack vs Heap Memory In Multithreading
+> `Stack` vs Heap Memory In Multithreading
 
 ---
-
-## Answer (EN)
-**Yes**, **stack size will change**, but **heap size will remain unchanged** (though load on it will increase).
-
-**Stack Memory:**
-
-**Each thread gets its own stack** - so more threads = more stack memory.
-
-```kotlin
-// Each thread has its own stack
-Thread {
-    val localVar = 10  // Stored in this thread's stack
-    recursiveFunction()  // Uses this thread's stack
-}.start()
-```
-
-**Heap Memory:**
-
-**All threads share the same heap** - heap size doesn't grow with threads, but contention increases.
-
-```kotlin
-// All threads share the same heap
-val sharedObject = MyObject()  // Allocated in shared heap
-
-Thread {
-    val obj1 = MyObject()  // Same heap
-}.start()
-```
-
-**Memory Calculation:**
-
-```
-Main thread stack:    8 MB
-Worker thread stack:  1 MB each
-Heap:                 512 MB (shared)
-
-1 thread:    8 + 0 + 512 = 520 MB
-10 threads:  8 + 10 + 512 = 530 MB
-100 threads: 8 + 100 + 512 = 620 MB
-```
-
-**Summary:**
-
-- **Stack**: Each thread = separate stack → total stack **increases**
-- **Heap**: All threads share heap → heap size **unchanged**, load increases
-- **Per thread**: ~1 MB stack overhead
-
-
-# Question (EN)
-> Stack vs Heap Memory In Multithreading
-
----
-
-
----
-
-
-## Answer (EN)
-**Yes**, **stack size will change**, but **heap size will remain unchanged** (though load on it will increase).
-
-**Stack Memory:**
-
-**Each thread gets its own stack** - so more threads = more stack memory.
-
-```kotlin
-// Each thread has its own stack
-Thread {
-    val localVar = 10  // Stored in this thread's stack
-    recursiveFunction()  // Uses this thread's stack
-}.start()
-```
-
-**Heap Memory:**
-
-**All threads share the same heap** - heap size doesn't grow with threads, but contention increases.
-
-```kotlin
-// All threads share the same heap
-val sharedObject = MyObject()  // Allocated in shared heap
-
-Thread {
-    val obj1 = MyObject()  // Same heap
-}.start()
-```
-
-**Memory Calculation:**
-
-```
-Main thread stack:    8 MB
-Worker thread stack:  1 MB each
-Heap:                 512 MB (shared)
-
-1 thread:    8 + 0 + 512 = 520 MB
-10 threads:  8 + 10 + 512 = 530 MB
-100 threads: 8 + 100 + 512 = 620 MB
-```
-
-**Summary:**
-
-- **Stack**: Each thread = separate stack → total stack **increases**
-- **Heap**: All threads share heap → heap size **unchanged**, load increases
-- **Per thread**: ~1 MB stack overhead
 
 ## Ответ (RU)
 
-**Да**, **размер стека изменится**, но **размер кучи останется неизменным** (хотя нагрузка на неё увеличится).
+В многопоточных Android-приложениях стек и куча ведут себя по-разному относительно потоков.
 
-**Память стека (Stack):**
+- У каждого потока свой собственный стек.
+- Все потоки внутри одного процесса приложения разделяют одну кучу, управляемую рантаймом (ART).
 
-**Каждый поток получает свой собственный стек** - поэтому больше потоков = больше памяти стека.
+Итого:
+- Общий расход памяти под стеки растёт с количеством потоков (отдельный стек на каждый поток).
+- Куча общая; её максимальный размер не зависит от количества потоков, но фактическое использование кучи может расти, если дополнительные потоки создают больше объектов.
+
+**Память стека (`Stack`):**
+
+Каждый поток Java/Kotlin получает собственный стек для:
+- локальных переменных
+- кадров вызовов методов
+- адресов возврата
 
 ```kotlin
 // Каждый поток имеет свой стек
 Thread {
-    val localVar = 10  // Хранится в стеке этого потока
+    val localVar = 10  // Хранится в стеке этого потока (примитив/локальная ссылка)
     recursiveFunction()  // Использует стек этого потока
 }.start()
 ```
 
+Ключевые моменты:
+- Размер стека на поток обычно составляет от сотен КБ до нескольких МБ и может настраиваться.
+- Больше потоков → больше суммарной памяти, зарезервированной/используемой под стеки.
+
 **Память кучи (Heap):**
 
-**Все потоки разделяют одну кучу** - размер кучи не увеличивается с количеством потоков, но возрастает конкуренция за доступ.
+Все потоки в одном процессе Android-приложения используют общую кучу:
 
 ```kotlin
 // Все потоки разделяют одну кучу
 val sharedObject = MyObject()  // Выделяется в общей куче
 
 Thread {
-    val obj1 = MyObject()  // Та же куча
+    val obj1 = MyObject()  // Также выделяется в той же общей куче
 }.start()
 ```
 
-**Расчёт памяти:**
+Ключевые моменты:
+- Куча общая для всех потоков процесса.
+- Максимальный размер кучи ограничен системой для процесса; он сам по себе не увеличивается только из-за роста числа потоков.
+- Однако при появлении дополнительных потоков, которые делают больше выделений, увеличивается фактическое использование кучи и нагрузка на GC/синхронизацию.
 
-```
-Стек главного потока:     8 MB
-Стек рабочего потока:     1 MB каждый
-Куча:                     512 MB (общая)
+**Иллюстративный расчёт памяти (пример):**
 
-1 поток:     8 + 0 + 512 = 520 MB
-10 потоков:  8 + 10 + 512 = 530 MB
-100 потоков: 8 + 100 + 512 = 620 MB
+Предположим (только для наглядности):
+- Стек главного потока:     8 MB
+- Стек рабочего потока:     1 MB каждый
+- Максимальный heap процесса: 512 MB (общий)
+
+Тогда:
 ```
+1 поток:     8 + 0*1 + (использование heap ≤ 512) MB
+10 потоков:  8 + 10*1 + (использование heap ≤ 512) MB
+100 потоков: 8 + 100*1 + (использование heap ≤ 512) MB
+```
+
+Это демонстрирует:
+- Суммарный резерв под стеки растёт линейно с количеством потоков.
+- Куча остаётся одной общей областью с фиксированным верхним пределом; фактическое использование зависит от количества выделений, а не от числа потоков напрямую.
 
 **Итог:**
 
-- **Стек**: Каждый поток = отдельный стек → общий стек **увеличивается**
-- **Куча**: Все потоки разделяют кучу → размер кучи **не меняется**, нагрузка растёт
-- **На поток**: ~1 MB дополнительного стека
+- Стек:
+  - Отдельный стек на каждый поток.
+  - Больше потоков → больше суммарный расход памяти под стеки.
+- Куча:
+  - Одна общая куча на процесс (для всех потоков).
+  - Максимальный размер не зависит от количества потоков; фактическое использование и нагрузка (GC/синхронизация) могут расти при большем числе потоков и выделений.
+- Практическое правило:
+  - Каждый OS-поток имеет заметные накладные расходы на стек; большое количество потоков существенно увеличивает потребление памяти.
 
+## Answer (EN)
+
+In a multithreaded Android app, stack and heap behave differently with respect to threads.
+
+- Each thread has its own stack.
+- All threads in the same process share a single heap managed by the runtime (ART).
+
+So:
+- Total stack usage increases as you create more threads (one stack per thread).
+- The process heap is shared; its maximum limit does not depend on the number of threads, but actual heap usage can grow if those threads allocate more objects.
+
+**`Stack` Memory:**
+
+Each Java/Kotlin thread gets its own stack for:
+- local variables
+- method call frames
+- return addresses
+
+```kotlin
+// Each thread has its own stack
+Thread {
+    val localVar = 10  // Stored in this thread's stack (primitive/local reference)
+    recursiveFunction()  // Uses this thread's stack frames
+}.start()
+```
+
+Key points:
+- Per-thread stack size is typically on the order of hundreds of KB to a few MB and is configurable.
+- More threads → more total memory reserved/used for stacks.
+
+**Heap Memory:**
+
+All threads within the same Android app process share one heap:
+
+```kotlin
+// All threads share the same heap
+val sharedObject = MyObject()  // Allocated in the shared heap
+
+Thread {
+    val obj1 = MyObject()  // Also allocated in the same shared heap
+}.start()
+```
+
+Key points:
+- Heap is common for all threads in the process.
+- The maximum heap size is bounded per process by the system; it does not inherently increase just because you create more threads.
+- However, if additional threads allocate objects, overall heap usage (within that fixed limit) increases, and contention/GC pressure can grow.
+
+**Illustrative Memory Calculation (example only):**
+
+Assume (for illustration):
+- Main thread stack:    8 MB
+- Worker thread stack:  1 MB each
+- Max heap for process: 512 MB (shared)
+
+Then:
+```
+1 thread:    8 + 0*1 + (heap usage ≤ 512) MB
+10 threads:  8 + 10*1 + (heap usage ≤ 512) MB
+100 threads: 8 + 100*1 + (heap usage ≤ 512) MB
+```
+
+This shows:
+- Total potential stack reservation grows linearly with thread count.
+- Heap remains one shared region with a fixed upper bound; actual heap usage depends on allocations, not on the thread count alone.
+
+**Summary:**
+
+- `Stack`:
+  - One separate stack per thread.
+  - More threads → higher total stack memory usage.
+- Heap:
+  - Single shared heap per process (for all threads).
+  - Max size independent of thread count; actual usage and GC/lock contention may increase with more threads doing allocations.
+- Rule of thumb:
+  - Each OS thread has non-trivial stack overhead; many threads can significantly increase memory usage.
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как использование большого числа потоков влияет на частоту и паузы GC в Android-приложении?
+- Какова роль пулинга потоков при оптимизации памяти?
+- Какие альтернативы большому количеству потоков существуют в Android (например, [[c-coroutines]])?
+- Как подобрать оптимальный размер стека для потоков в Android?
+- Как диагностировать чрезмерное потребление heap из-за фоновых потоков?
 
 ## Follow-ups
 
-- [[c-coroutines]]
-- [[c-memory-management]]
+- How does creating many threads affect GC frequency and pause times in an Android app?
+- What is the role of thread pools in memory optimization?
+- What alternatives to creating many threads exist in Android (for example, [[c-coroutines]])?
+- How do you choose an optimal stack size for threads on Android?
+- How can you diagnose excessive heap usage caused by background threads?
 
+## Ссылки
+
+- [Memory Management](https://developer.android.com/topic/performance/memory-overview)
 
 ## References
 
 - [Memory Management](https://developer.android.com/topic/performance/memory-overview)
 
-
 ## Related Questions
 
-### Kotlin Language Features
-- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Concurrency
-- [[q-channel-pipelines--kotlin--hard]] - Concurrency
-- [[q-coroutines-vs-threads--programming-languages--medium]] - Concurrency
-- [[q-deferred-async-patterns--kotlin--medium]] - Concurrency
-- [[q-produce-actor-builders--kotlin--medium]] - Concurrency
-- [[q-actor-pattern--kotlin--hard]] - Concurrency
-- [[q-testing-viewmodel-coroutines--kotlin--medium]] - Concurrency
+- [[q-android-runtime-art--android--medium]]
+- [[q-android-performance-measurement-tools--android--medium]]
+- [[q-android-app-lag-analysis--android--medium]]

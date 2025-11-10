@@ -20,7 +20,7 @@ related:
 - c-permissions
 - q-android-app-components--android--easy
 created: 2025-10-05
-updated: 2025-01-25
+updated: 2025-11-10
 tags:
 - android/notifications
 - android/ui-widgets
@@ -30,7 +30,7 @@ tags:
 - notification-channels
 - notifications
 sources:
-- https://developer.android.com/guide/topics/ui/notifiers/notifications
+- "https://developer.android.com/guide/topics/ui/notifiers/notifications"
 ---
 
 # Вопрос (RU)
@@ -44,31 +44,34 @@ sources:
 ## Ответ (RU)
 
 **Теория:**
-Каналы уведомлений (Android 8.0+) позволяют группировать уведомления по типам и дают пользователям контроль над каждым типом отдельно.
+Каналы уведомлений (Android 8.0+, API 26+) позволяют группировать уведомления по типам и дают пользователям тонкий контроль над поведением каждого типа (звук, вибрация, важность, блокировка и т.п.). На Android 8.0+ каждое уведомление должно быть привязано к каналу.
 
 **Основные концепции:**
-- Каждый канал имеет уникальный ID и уровень важности
-- Пользователи могут изменять настройки каналов
-- Каналы нельзя удалить после создания
+- Каждый канал имеет уникальный ID и уровень важности.
+- Пользователи могут изменять настройки каналов в системных настройках.
+- Приложение может создавать и удалять каналы программно (через `NotificationManager.createNotificationChannel()` и `deleteNotificationChannel()`), но не может изменить важность уже существующего канала после того, как он был создан и/или изменён пользователем.
+- Если канал был удалён пользователем, приложение не может "тихо" вернуть его с теми же параметрами без явного участия пользователя.
 
 **Код:**
 ```kotlin
-// ✅ Создание канала уведомлений
+// ✅ Создание канала уведомлений (только для Android 8.0+)
 private fun createNotificationChannel() {
-    val channelId = "messages" // ✅ Уникальный идентификатор
-    val importance = NotificationManager.IMPORTANCE_HIGH // ✅ Уровень важности
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val channelId = "messages" // ✅ Уникальный идентификатор
+        val importance = NotificationManager.IMPORTANCE_HIGH // ✅ Уровень важности
 
-    val channel = NotificationChannel(channelId, "Messages", importance).apply {
-        description = "Incoming messages"
-        enableLights(true) // ✅ Включить световой индикатор
-        enableVibration(true) // ✅ Включить вибрацию
+        val channel = NotificationChannel(channelId, "Messages", importance).apply {
+            description = "Incoming messages"
+            enableLights(true) // ✅ Включить световой индикатор
+            enableVibration(true) // ✅ Включить вибрацию
+        }
+
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
     }
-
-    getSystemService(NotificationManager::class.java)
-        .createNotificationChannel(channel)
 }
 
-// ✅ Использование канала
+// ✅ Использование канала (на Android 8.0+ ID обязателен для targetSdkVersion 26+)
 fun showNotification(title: String, content: String) {
     val notification = NotificationCompat.Builder(this, "messages") // ✅ Указываем ID канала
         .setSmallIcon(R.drawable.ic_message)
@@ -80,46 +83,49 @@ fun showNotification(title: String, content: String) {
     NotificationManagerCompat.from(this).notify(1, notification)
 }
 
-// ❌ Без канала на Android 8+ уведомление не отобразится
+// ❌ Для приложений с targetSdkVersion 26+ на Android 8.0+ уведомление без канала не отобразится
 val notification = NotificationCompat.Builder(this) // ❌ Нет ID канала
     .setContentTitle("Test")
     .build()
 ```
 
-**Уровни важности:**
-- `IMPORTANCE_HIGH` - звук и визуальное прерывание
-- `IMPORTANCE_DEFAULT` - звук, без визуального прерывания
-- `IMPORTANCE_LOW` - без звука
-- `IMPORTANCE_MIN` - минимальное отображение
+**Уровни важности (основные):**
+- `IMPORTANCE_HIGH` — звук + заметное визуальное прерывание (heads-up/баннер, в зависимости от настроек).
+- `IMPORTANCE_DEFAULT` — звук + обычное визуальное отображение (значок в статус-баре, разворачиваемое уведомление).
+- `IMPORTANCE_LOW` — без звука, но уведомление видно в шторке.
+- `IMPORTANCE_MIN` — минимальное отображение, без звука и без навязчивого показа.
 
 ## Answer (EN)
 
 **Theory:**
-Notification channels (Android 8.0+) allow grouping notifications by type and give users control over each type separately.
+Notification channels (Android 8.0+, API 26+) allow grouping notifications by type and give users fine-grained control over each type (sound, vibration, importance, blocking, etc.). On Android 8.0+ every notification must be associated with a channel.
 
 **Main concepts:**
-- Each channel has unique ID and importance level
-- Users can modify channel settings
-- Channels cannot be deleted after creation
+- Each channel has a unique ID and an importance level.
+- Users can modify channel settings in system settings.
+- The app can create and delete channels programmatically (via `NotificationManager.createNotificationChannel()` and `deleteNotificationChannel()`), but cannot change the importance of an existing channel once it has been created and/or modified by the user.
+- If a channel is deleted by the user, the app cannot silently recreate it with the same behavior without explicit user involvement.
 
 **Code:**
 ```kotlin
-// ✅ Create notification channel
+// ✅ Create notification channel (only on Android 8.0+)
 private fun createNotificationChannel() {
-    val channelId = "messages" // ✅ Unique identifier
-    val importance = NotificationManager.IMPORTANCE_HIGH // ✅ Importance level
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+        val channelId = "messages" // ✅ Unique identifier
+        val importance = NotificationManager.IMPORTANCE_HIGH // ✅ Importance level
 
-    val channel = NotificationChannel(channelId, "Messages", importance).apply {
-        description = "Incoming messages"
-        enableLights(true) // ✅ Enable lights
-        enableVibration(true) // ✅ Enable vibration
+        val channel = NotificationChannel(channelId, "Messages", importance).apply {
+            description = "Incoming messages"
+            enableLights(true) // ✅ Enable lights
+            enableVibration(true) // ✅ Enable vibration
+        }
+
+        val notificationManager = getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
     }
-
-    getSystemService(NotificationManager::class.java)
-        .createNotificationChannel(channel)
 }
 
-// ✅ Use channel
+// ✅ Use channel (on Android 8.0+ channel ID is mandatory for targetSdkVersion 26+)
 fun showNotification(title: String, content: String) {
     val notification = NotificationCompat.Builder(this, "messages") // ✅ Specify channel ID
         .setSmallIcon(R.drawable.ic_message)
@@ -131,30 +137,58 @@ fun showNotification(title: String, content: String) {
     NotificationManagerCompat.from(this).notify(1, notification)
 }
 
-// ❌ Without channel on Android 8+ notification won't show
+// ❌ For apps with targetSdkVersion 26+ on Android 8.0+ a notification without a channel will not be shown
 val notification = NotificationCompat.Builder(this) // ❌ No channel ID
     .setContentTitle("Test")
     .build()
 ```
 
-**Importance levels:**
-- `IMPORTANCE_HIGH` - sound and visual interruption
-- `IMPORTANCE_DEFAULT` - sound, no visual interruption
-- `IMPORTANCE_LOW` - no sound
-- `IMPORTANCE_MIN` - minimal display
+**Importance levels (main ones):**
+- `IMPORTANCE_HIGH` - plays sound and shows a prominent visual interruption (e.g. heads-up), depending on settings.
+- `IMPORTANCE_DEFAULT` - plays sound and shows standard visual UI (status bar icon, shade entry).
+- `IMPORTANCE_LOW` - no sound, but visible in the notification shade.
+- `IMPORTANCE_MIN` - minimal visibility, no sound and not attention-grabbing.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как вы будете работать с каналами уведомлений на разных версиях Android (до и после Android 8.0)?
+- Какие лучшие практики по названию и организации каналов уведомлений?
+- Как поступать, если пользователи отключили звук/важность канала, критичного для функциональности приложения?
+- Как реализовать разные каналы для разных типов событий (сообщения, системные алерты, маркетинг) и не переусложнить настройки?
+- Как обновить конфигурацию каналов при изменении требований продукта, учитывая, что важность канала изменить нельзя?
 
 ## Follow-ups
 
 - How do you handle notification channels for different Android versions?
 - What are best practices for channel naming and organization?
+- How do you handle situations when users lower the importance or mute a critical notification channel?
+- How do you structure channels for different types of events (messages, alerts, marketing) without overwhelming users?
+- How do you update channel configuration when product requirements change, given that importance cannot be changed?
 
+## Ссылки (RU)
+
+- [Notifications](https://developer.android.com/develop/ui/views/notifications)
 
 ## References
 
 - [Notifications](https://developer.android.com/develop/ui/views/notifications)
 
+## Связанные вопросы (RU)
+
+### Базовые понятия / Концепции
+
+- [[c-permissions]]
+
+### Предпосылки (проще)
+
+- [[q-android-app-components--android--easy]] — Компоненты приложения
+
+### Связанные (того же уровня)
+
+- Android-сервисы и фоновая работа
+- Обработка разрешений
 
 ## Related Questions
 

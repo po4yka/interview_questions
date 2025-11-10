@@ -12,9 +12,10 @@ status: draft
 moc: moc-android
 related: [c-jetpack-compose, q-how-does-jetpack-compose-work--android--medium, q-mutable-state-compose--android--medium]
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags: [android, android/architecture-mvvm, android/coroutines, android/ui-compose, difficulty/medium, jetpack-compose]
+
 ---
 
 # Вопрос (RU)
@@ -51,8 +52,8 @@ fun UserProfile(user: User) {
 
 **Ключевые характеристики:**
 - Могут вызываться только из других `@Composable` функций
-- Выполняются многократно и в любом порядке (idempotent)
-- Не возвращают значения, только описывают UI-дерево
+- Могут вызываться многократно; порядок и частота вызовов определяются движком композиции, поэтому функции должны быть детерминированными и без побочных эффектов
+- Обычно не возвращают значения, а описывают UI-дерево (выход — составная функция)
 
 ### 2. State И Recomposition
 
@@ -86,19 +87,19 @@ fun StatelessCounter(count: Int, onIncrement: () -> Unit) {
 }
 ```
 
-**Интеграция с [[c-viewmodel|ViewModel]]:**
+**Интеграция с [[c-viewmodel|`ViewModel`]]:**
 
 ```kotlin
 @Composable
 fun CounterScreen(viewModel: CounterViewModel = viewModel()) {
-    val count by viewModel.count.collectAsState() // StateFlow → State
+    val count by viewModel.count.collectAsState() // StateFlow → State в жизненно-осознанной среде Android
     // ...
 }
 ```
 
 ### 3. Modifiers
 
-Изменяют внешний вид, поведение и layout. **Порядок применения критичен:**
+Изменяют внешний вид, поведение и layout. **Порядок применения влияет на результат:**
 
 ```kotlin
 Text(
@@ -109,11 +110,11 @@ Text(
         .padding(8.dp)         // отступ внутри фона
 )
 
-// ❌ Неправильный порядок может сломать layout
+// Разный порядок меняет семантику (сначала размер, затем отступ или наоборот)
 Box(
     Modifier
-        .size(100.dp)          // ✅ размер сначала
-        .padding(16.dp)        // затем отступы
+        .padding(16.dp)        // внешний отступ
+        .size(100.dp)          // размер области после учета отступа
 )
 ```
 
@@ -158,6 +159,7 @@ fun EffectHandlers(userId: String) {
     }
 
     // ✅ derivedStateOf — производное состояние, оптимизирует recomposition
+    var text by remember { mutableStateOf("") }
     val wordCount by remember {
         derivedStateOf { text.split(" ").count { it.isNotBlank() } }
     }
@@ -166,7 +168,7 @@ fun EffectHandlers(userId: String) {
 
 ### 6. Material Components
 
-Готовые UI-компоненты по Material Design: `Button`, `TextField`, `Card`, `Scaffold`, `TopAppBar`, `NavigationBar`.
+Готовые UI-компоненты по Material Design (например, из библиотеки Material3), построенные поверх базового Compose UI: `Button`, `TextField`, `Card`, `Scaffold`, `TopAppBar`, `NavigationBar`.
 
 ### 7. Theme System
 
@@ -222,8 +224,8 @@ fun UserProfile(user: User) {
 
 **Key characteristics:**
 - Only callable from other `@Composable` functions
-- Execute multiple times and in any order (idempotent)
-- Don't return values, only describe UI tree
+- May be invoked multiple times; order and frequency are controlled by the composition engine, so they must be deterministic and side-effect free
+- Typically don't return values; they describe the UI tree (their output is the composed UI)
 
 ### 2. State and Recomposition
 
@@ -257,19 +259,19 @@ fun StatelessCounter(count: Int, onIncrement: () -> Unit) {
 }
 ```
 
-**[[c-viewmodel|ViewModel]] Integration:**
+**[[c-viewmodel|`ViewModel`]] Integration:**
 
 ```kotlin
 @Composable
 fun CounterScreen(viewModel: CounterViewModel = viewModel()) {
-    val count by viewModel.count.collectAsState() // StateFlow → State
+    val count by viewModel.count.collectAsState() // StateFlow → State in Android lifecycle-aware context
     // ...
 }
 ```
 
 ### 3. Modifiers
 
-Modify appearance, behavior, and layout. **Order matters:**
+Modify appearance, behavior, and layout. **Order affects the result:**
 
 ```kotlin
 Text(
@@ -280,11 +282,11 @@ Text(
         .padding(8.dp)         // padding inside background
 )
 
-// ❌ Wrong order can break layout
+// Different order changes semantics (outer vs inner padding / constraints)
 Box(
     Modifier
-        .size(100.dp)          // ✅ size first
-        .padding(16.dp)        // then padding
+        .padding(16.dp)        // outer padding
+        .size(100.dp)          // size of the box after padding
 )
 ```
 
@@ -329,6 +331,7 @@ fun EffectHandlers(userId: String) {
     }
 
     // ✅ derivedStateOf — derived state, optimizes recomposition
+    var text by remember { mutableStateOf("") }
     val wordCount by remember {
         derivedStateOf { text.split(" ").count { it.isNotBlank() } }
     }
@@ -337,7 +340,7 @@ fun EffectHandlers(userId: String) {
 
 ### 6. Material Components
 
-Pre-built UI components following Material Design: `Button`, `TextField`, `Card`, `Scaffold`, `TopAppBar`, `NavigationBar`.
+Pre-built UI components following Material Design (e.g., from Material3), built on top of core Compose UI: `Button`, `TextField`, `Card`, `Scaffold`, `TopAppBar`, `NavigationBar`.
 
 ### 7. Theme System
 
@@ -371,6 +374,13 @@ MaterialTheme(
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как работает область действия (scope) рекомпозиции и как её оптимизировать с помощью аннотаций `@Stable` и `@Immutable`?
+- Каковы trade-off'ы использования `LaunchedEffect`, `DisposableEffect` и `SideEffect` для управления побочными эффектами?
+- Как `derivedStateOf` оптимизирует рекомпозицию по сравнению с прямыми вычислениями на каждом рендере?
+- Когда стоит использовать `rememberSaveable` вместо `remember` для сохранения состояния?
+
 ## Follow-ups
 
 - How does recomposition scope work and how can you optimize it using `@Stable` and `@Immutable` annotations?
@@ -378,10 +388,32 @@ MaterialTheme(
 - How does `derivedStateOf` optimize recomposition compared to direct state calculations?
 - When should you use `rememberSaveable` versus `remember` for state persistence?
 
+## Ссылки (RU)
+
+- [[c-jetpack-compose]] — основы Jetpack Compose
+- [[c-viewmodel]] — архитектура `ViewModel`
+
 ## References
 
 - [[c-jetpack-compose]] — Jetpack Compose fundamentals
-- [[c-viewmodel]] — ViewModel architecture
+- [[c-viewmodel]] — `ViewModel` architecture
+
+## Связанные вопросы (RU)
+
+### Предпосылки
+
+- Введение в основы Compose (см. соответствующий MOC или материалы по основам Jetpack Compose)
+
+### Связанные
+
+- [[q-how-does-jetpack-compose-work--android--medium]] — Как работает Compose "под капотом"
+- [[q-mutable-state-compose--android--medium]] — Основы `MutableState`
+- [[q-remember-vs-remembersaveable-compose--android--medium]] — Стратегии сохранения состояния
+
+### Продвинутые
+
+- [[q-compose-stability-skippability--android--hard]] — Оптимизация стабильности и skippability
+- [[q-stable-classes-compose--android--hard]] — Продвинутые паттерны стабильности
 
 ## Related Questions
 

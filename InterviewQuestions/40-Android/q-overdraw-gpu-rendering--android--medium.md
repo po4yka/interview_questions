@@ -24,7 +24,7 @@ related:
 - q-performance-optimization-android--android--medium
 - q-what-is-layout-performance-measured-in--android--medium
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags:
 - android/performance-rendering
 - android/profiling
@@ -35,15 +35,16 @@ tags:
 - performance
 - rendering
 sources: []
+
 ---
 
 # Вопрос (RU)
 
-Что такое Overdraw и как его оптимизировать?
+> Что такое Overdraw и как его оптимизировать?
 
 # Question (EN)
 
-What is Overdraw and how to optimize it?
+> What is Overdraw and how to optimize it?
 
 ## Ответ (RU)
 
@@ -51,18 +52,20 @@ What is Overdraw and how to optimize it?
 
 **Обнаружение:**
 
-Инструмент **Debug GPU Overdraw** (Developer Options) визуализирует проблемные зоны:
-- **Синий** — 1x overdraw (приемлемо)
-- **Зелёный** — 2x overdraw (целевой уровень для большинства UI)
-- **Розовый** — 3x overdraw (требует внимания)
-- **Красный** — 4x+ overdraw (критично, нужна оптимизация)
+Инструмент **Debug GPU Overdraw** (Developer Options) визуализирует, сколько раз каждый пиксель был перерисован:
+- **Синий** — исходный цвет содержимого (0 дополнительных слоёв, без overdraw)
+- **Зелёный** — 1x overdraw (1 дополнительный слой поверх базового, обычно приемлемо)
+- **Светло-красный / розовый** — 2x overdraw (нужно контролировать)
+- **Тёмно-красный** — 3x+ overdraw (критично, нужна оптимизация)
+
+(Оттенки могут незначительно отличаться между версиями Android, важно относительная интенсивность цвета: чем "краснее", тем хуже.)
 
 **Основные причины:**
 
 1. **Избыточные фоны** — background на view, полностью закрытой дочерними элементами
 2. **Глубокая иерархия layouts** — вложенные LinearLayout/RelativeLayout с пересекающимися bounds
 3. **Window background** — дефолтный фон окна, дублирующий корневой layout
-4. **Неоптимальный onDraw()** — перерисовка всей области вместо изменённых участков
+4. **Неоптимальный onDraw()** — перерисовка всей области вместо изменённых участков либо отрисовка вне реально видимых границ
 
 **Стратегии оптимизации:**
 
@@ -96,16 +99,21 @@ What is Overdraw and how to optimize it?
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setBackgroundDrawable(null) // если корневой layout покрывает весь экран
+        // Если корневой layout полностью покрывает окно, фон можно убрать,
+        // чтобы избежать лишнего слоя отрисовки.
+        window.setBackgroundDrawable(null)
         setContentView(R.layout.activity_main)
     }
 }
 ```
 
 ```kotlin
-// ✅ clipRect() в кастомных View
+// ✅ clipRect() в кастомных View (аккуратно)
 override fun onDraw(canvas: Canvas) {
-    canvas.clipRect(visibleBounds) // отрисовка только видимой области
+    // Ограничивать область рисования имеет смысл только если это существенно
+    // уменьшает количество реально отрисовываемых пикселей;
+    // сами операции clipping тоже имеют стоимость.
+    canvas.clipRect(visibleBounds)
     // рендеринг контента
 }
 ```
@@ -114,27 +122,29 @@ override fun onDraw(canvas: Canvas) {
 
 - **ConstraintLayout** вместо вложенных Linear/Relative — уменьшает глубину иерархии
 - **ViewStub** для редко показываемых элементов — ленивая инициализация
-- **Профилирование** — Systrace/Perfetto для анализа GPU load
-- **Целевой уровень** — максимум 2x overdraw (зелёный) для основных экранов
+- **Профилирование** — Perfetto / Android Studio профайлеры для анализа GPU и рендеринга (Systrace устарел, заменён современными инструментами)
+- **Целевой уровень** — стремиться к минимуму слоёв; 0–1 дополнительный слой (зелёный) для основных экранов считается хорошей практикой, интенсивный красный — сигнал к оптимизации
 
 ## Answer (EN)
 
-**Overdraw** is multiple rendering of the same pixel within a single frame. Occurs with layered UI elements, redundant backgrounds, or deeply nested layouts. Degrades performance by wasting GPU time on rendering hidden pixels.
+**Overdraw** is multiple rendering of the same pixel within a single frame. It occurs with layered UI elements, redundant backgrounds, or deeply nested layouts. It degrades performance by wasting GPU time on drawing pixels that end up hidden.
 
 **Detection:**
 
-**Debug GPU Overdraw** tool (Developer Options) visualizes problem areas:
-- **Blue** — 1x overdraw (acceptable)
-- **Green** — 2x overdraw (target level for most UI)
-- **Pink** — 3x overdraw (needs attention)
-- **Red** — 4x+ overdraw (critical, optimization required)
+The **Debug GPU Overdraw** tool (Developer Options) visualizes how many times each pixel is redrawn:
+- **Blue** — original content color (0 extra layers, no overdraw)
+- **Green** — 1x overdraw (1 extra layer on top of base, usually acceptable)
+- **Light red / pink** — 2x overdraw (should be monitored)
+- **Dark red** — 3x+ overdraw (critical, optimization required)
+
+(Exact shades may vary across Android versions; the key is that "more red" means worse.)
 
 **Root Causes:**
 
-1. **Redundant backgrounds** — background on view completely covered by children
+1. **Redundant backgrounds** — background on a view that is fully covered by its children
 2. **Deep layout hierarchy** — nested LinearLayout/RelativeLayout with overlapping bounds
-3. **Window background** — default window background duplicating root layout
-4. **Inefficient onDraw()** — redrawing entire area instead of changed regions
+3. **Window background** — default window background duplicating the root layout
+4. **Inefficient onDraw()** — redrawing the entire area instead of changed regions, or drawing outside the actually visible bounds
 
 **Optimization Strategies:**
 
@@ -168,16 +178,20 @@ override fun onDraw(canvas: Canvas) {
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setBackgroundDrawable(null) // if root layout covers entire screen
+        // If the root layout fully covers the window, removing the window background
+        // avoids an extra overdraw layer.
+        window.setBackgroundDrawable(null)
         setContentView(R.layout.activity_main)
     }
 }
 ```
 
 ```kotlin
-// ✅ clipRect() in custom Views
+// ✅ clipRect() in custom Views (with care)
 override fun onDraw(canvas: Canvas) {
-    canvas.clipRect(visibleBounds) // draw only visible area
+    // Use clipping only when it meaningfully reduces the number of drawn pixels;
+    // clip operations themselves have a cost.
+    canvas.clipRect(visibleBounds)
     // render content
 }
 ```
@@ -186,12 +200,12 @@ override fun onDraw(canvas: Canvas) {
 
 - **ConstraintLayout** instead of nested Linear/Relative — reduces hierarchy depth
 - **ViewStub** for rarely shown elements — lazy initialization
-- **Profiling** — Systrace/Perfetto for GPU load analysis
-- **Target level** — max 2x overdraw (green) for primary screens
+- **Profiling** — use Perfetto / Android Studio profilers to analyze GPU and rendering (Systrace is deprecated and replaced by modern tools)
+- **Target level** — aim to minimize layers; 0–1 extra layer (green) on primary screens is a good baseline, heavy dark red areas indicate issues that require optimization
 
 ## Follow-ups
 
-- How does Compose handle overdraw compared to View system?
+- How does Compose handle overdraw compared to `View` system?
 - What's the performance impact of translucent views on overdraw?
 - How to optimize overdraw in RecyclerView with complex items?
 - When is clipRect() applicable and when does it add overhead?

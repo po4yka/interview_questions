@@ -4,25 +4,23 @@ title: AndroidManifest.xml / Файл манифеста Android
 aliases: [AndroidManifest.xml, Файл манифеста Android]
 topic: android
 subtopics:
-  - app-startup
-  - intents-deeplinks
-  - permissions
+- app-startup
+- intents-deeplinks
+- permissions
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
-related:
-  - q-android-app-components--android--easy
-  - q-intent-filters-android--android--medium
+related: [c-android, q-android-app-components--android--easy, q-intent-filters-android--android--medium]
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/app-startup, android/intents-deeplinks, android/permissions, difficulty/easy]
 sources:
-  - https://github.com/Kirchhoff-/Android-Interview-Questions
+- "https://github.com/Kirchhoff-/Android-Interview-Questions"
 ---
 
 # Вопрос (RU)
@@ -35,11 +33,13 @@ sources:
 
 **AndroidManifest.xml** — главный конфигурационный файл приложения, объявляющий его структуру системе Android.
 
+См. также: [[c-android]].
+
 **Основные функции:**
 - **Регистрация компонентов** — Activities, Services, BroadcastReceivers, ContentProviders
 - **Управление разрешениями** — системные и пользовательские permissions
 - **Метаданные приложения** — package name, минимальный SDK, иконка, тема
-- **Intent-фильтры** — точки взаимодействия с системой и другими приложениями
+- **`Intent`-фильтры** — точки взаимодействия с системой и другими приложениями
 
 **Минимальная структура:**
 ```xml
@@ -110,11 +110,13 @@ sources:
 
 **AndroidManifest.xml** is the main configuration file that declares the app's structure to the Android system.
 
+See also: [[c-android]].
+
 **Core Functions:**
 - **Component Registration** — Activities, Services, BroadcastReceivers, ContentProviders
 - **Permission Management** — system and custom permissions
 - **App Metadata** — package name, minimum SDK, icon, theme
-- **Intent Filters** — interaction points with system and other apps
+- **`Intent` Filters** — interaction points with system and other apps
 
 **Minimal Structure:**
 ```xml
@@ -181,7 +183,7 @@ sources:
 </manifest>
 ```
 
-## Follow-ups
+## Дополнительные вопросы (RU)
 
 - Как разрешаются конфликты при слиянии манифестов из нескольких библиотек?
 - Какие атрибуты `<uses-feature>` влияют на видимость в Play Store?
@@ -189,21 +191,44 @@ sources:
 - Можно ли полностью отказаться от AndroidManifest.xml в модульных приложениях?
 - Как проверить итоговый merged manifest перед релизом?
 
-## References
+## Follow-ups (EN)
 
-- [[c-permissions]] - Permission system deep dive
-- https://developer.android.com/guide/topics/manifest/manifest-intro - Official manifest guide
+- How are conflicts resolved when merging manifests from multiple libraries?
+- Which `<uses-feature>` attributes affect visibility in the Play Store?
+- What is the difference between `protectionLevel="signature"` and `"signatureOrSystem"`?
+- Is it possible to completely avoid using AndroidManifest.xml in modular applications?
+- How can you inspect the final merged manifest before release?
 
-## Related Questions
+## Ссылки (RU)
+
+- https://developer.android.com/guide/topics/manifest/manifest-intro — Официальное руководство по манифесту
+
+## References (EN)
+
+- https://developer.android.com/guide/topics/manifest/manifest-intro — Official manifest guide
+
+## Связанные вопросы (RU)
+
+### Базовые знания
+- [[q-android-app-components--android--easy]] — Понимание компонентов приложения
+
+### Связанные
+- [[q-activity-lifecycle-methods--android--medium]] — Жизненный цикл `Activity`
+- [[q-intent-filters-android--android--medium]] — Паттерны `Intent`-фильтров
+
+### Продвинутые
+- Стратегии слияния манифестов
+- [[q-android-security-practices-checklist--android--medium]] — Рекомендации по безопасности
+
+## Related Questions (EN)
 
 ### Prerequisites
-- [[q-android-app-components--android--easy]] - Understanding app components
+- [[q-android-app-components--android--easy]] — Understanding app components
 
 ### Related
-- [[q-activity-lifecycle-methods--android--medium]] - Activity lifecycle
-- [[q-intent-filters-android--android--medium]] - Intent filter patterns
- - Runtime permissions
+- [[q-activity-lifecycle-methods--android--medium]] — `Activity` lifecycle
+- [[q-intent-filters-android--android--medium]] — `Intent` filter patterns
 
 ### Advanced
 - Manifest merge strategies
-- [[q-android-security-practices-checklist--android--medium]] - Security best practices
+- [[q-android-security-practices-checklist--android--medium]] — Security best practices

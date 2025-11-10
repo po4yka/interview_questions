@@ -17,18 +17,18 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-threading
-- c-views
+- c-android-surfaces
 - q-viewgroup-vs-view-differences--android--easy
 - q-what-methods-redraw-views--android--medium
-created: 2025-10-15
-updated: 2025-10-31
+created: 2023-10-15
+updated: 2025-11-10
 tags:
 - android/performance-rendering
 - android/ui-views
 - difficulty/medium
 - rendering
 - surfaceview
+
 ---
 
 # Вопрос (RU)
@@ -39,388 +39,354 @@ tags:
 
 ---
 
-## Answer (EN)
-`SurfaceView` is a special view that provides a dedicated drawing surface embedded inside of a view hierarchy. Unlike regular views, `SurfaceView` can be updated on a background thread, making it ideal for high-performance rendering scenarios.
-
-**Key Characteristics:**
-
-**1. Dedicated Surface Buffer:**
-- `SurfaceView` has a dedicated surface buffer while all regular views share one surface buffer that is allocated by ViewRoot
-- In other words, `SurfaceView` costs more resources but provides better performance for intensive rendering
-
-**2. Background Thread Rendering:**
-- Unlike regular views that must be drawn on the UI thread, `SurfaceView` can be updated on a background thread
-- This prevents blocking the UI thread during intensive rendering operations
-- Ideal for games, video playback, camera preview, and other high-frame-rate content
-
-**3. Hardware Acceleration Limitations:**
-- `SurfaceView` cannot be hardware accelerated (as of Android 4.2 JellyBean)
-- In contrast, 95% of operations on normal views are hardware-accelerated using OpenGL ES
-- However, this trade-off is acceptable for scenarios requiring background thread rendering
-
-**4. Additional Development Complexity:**
-- More work is required to create a customized `SurfaceView`
-- You need to:
-  - Listen to `surfaceCreated/surfaceDestroyed` events
-  - Create and manage a render thread
-  - Synchronize the render thread and main thread properly
-  - Handle the surface lifecycle
-
-**5. Different Update Timing:**
-- **Regular Views**: Update mechanism is constrained and controlled by the framework
-  - Call `view.invalidate()` in UI thread or `view.postInvalidate()` in other threads
-  - View won't update immediately but waits until next VSYNC event
-  - VSYNC can be understood as a timer that fires every 16ms for a 60fps screen
-  - All normal view updates are synchronized with VSYNC for better smoothness
-
-- **SurfaceView**: You have direct control over when and how to render
-  - Can render at any time from the background thread
-  - Not bound to VSYNC timing
-  - Provides more flexibility for custom rendering loops
-
-**Basic Implementation:**
-
-```kotlin
-class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
-
-    private var renderThread: RenderThread? = null
-
-    init {
-        holder.addCallback(this)
-    }
-
-    override fun surfaceCreated(holder: SurfaceHolder) {
-        // Surface is ready, start rendering thread
-        renderThread = RenderThread(holder).apply {
-            start()
-        }
-    }
-
-    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-        // Surface dimensions changed
-    }
-
-    override fun surfaceDestroyed(holder: SurfaceHolder) {
-        // Stop rendering thread
-        renderThread?.requestStop()
-        renderThread?.join()
-        renderThread = null
-    }
-
-    inner class RenderThread(private val holder: SurfaceHolder) : Thread() {
-        private var running = true
-
-        fun requestStop() {
-            running = false
-        }
-
-        override fun run() {
-            while (running) {
-                val canvas = holder.lockCanvas()
-                try {
-                    // Perform drawing operations
-                    synchronized(holder) {
-                        // Draw on canvas
-                        canvas?.let { drawContent(it) }
-                    }
-                } finally {
-                    if (canvas != null) {
-                        holder.unlockCanvasAndPost(canvas)
-                    }
-                }
-            }
-        }
-
-        private fun drawContent(canvas: Canvas) {
-            // Your drawing code here
-            canvas.drawColor(Color.BLACK)
-            // Draw other content...
-        }
-    }
-}
-```
-
-**Use Cases:**
-
-1. **Game Development**: High frame rate games requiring continuous rendering
-2. **Video Playback**: Smooth video rendering without blocking UI thread
-3. **Camera Preview**: Real-time camera feed display
-4. **Custom Animations**: Complex animations that need precise frame control
-5. **Data Visualization**: Real-time charts and graphs with frequent updates
-6. **AR/VR Applications**: High-performance 3D rendering
-
-**SurfaceView vs Regular View:**
-
-| Feature | SurfaceView | Regular View |
-|---------|-------------|--------------|
-| Threading | Background thread rendering | UI thread only |
-| Surface Buffer | Dedicated buffer | Shared buffer |
-| Hardware Acceleration | Not supported (JB 4.2) | Fully supported |
-| Update Timing | Manual control | VSYNC synchronized |
-| Resource Usage | Higher | Lower |
-| Use Case | High-performance rendering | Standard UI elements |
-| Complexity | More complex | Simpler |
-
-**Modern Alternatives:**
-
-- **TextureView**: Can be hardware-accelerated and supports transformations, but higher memory usage
-- **SurfaceView with Vulkan/OpenGL**: For modern 3D rendering
-- **Jetpack Compose**: For declarative UI with efficient rendering
-
-**Best Practices:**
-
-1. Always implement `SurfaceHolder.Callback` to handle lifecycle events
-2. Properly synchronize access to the Canvas between threads
-3. Stop rendering thread when surface is destroyed to prevent memory leaks
-4. Use `lockCanvas()` and `unlockCanvasAndPost()` carefully in try-finally blocks
-5. Consider using `TextureView` if you need hardware acceleration and transformations
-
-**Source**: [SurfaceView](https://developer.android.com/reference/android/view/SurfaceView)
-
-
-# Question (EN)
-> SurfaceView Rendering
-
----
-
-
----
-
-
-## Answer (EN)
-`SurfaceView` is a special view that provides a dedicated drawing surface embedded inside of a view hierarchy. Unlike regular views, `SurfaceView` can be updated on a background thread, making it ideal for high-performance rendering scenarios.
-
-**Key Characteristics:**
-
-**1. Dedicated Surface Buffer:**
-- `SurfaceView` has a dedicated surface buffer while all regular views share one surface buffer that is allocated by ViewRoot
-- In other words, `SurfaceView` costs more resources but provides better performance for intensive rendering
-
-**2. Background Thread Rendering:**
-- Unlike regular views that must be drawn on the UI thread, `SurfaceView` can be updated on a background thread
-- This prevents blocking the UI thread during intensive rendering operations
-- Ideal for games, video playback, camera preview, and other high-frame-rate content
-
-**3. Hardware Acceleration Limitations:**
-- `SurfaceView` cannot be hardware accelerated (as of Android 4.2 JellyBean)
-- In contrast, 95% of operations on normal views are hardware-accelerated using OpenGL ES
-- However, this trade-off is acceptable for scenarios requiring background thread rendering
-
-**4. Additional Development Complexity:**
-- More work is required to create a customized `SurfaceView`
-- You need to:
-  - Listen to `surfaceCreated/surfaceDestroyed` events
-  - Create and manage a render thread
-  - Synchronize the render thread and main thread properly
-  - Handle the surface lifecycle
-
-**5. Different Update Timing:**
-- **Regular Views**: Update mechanism is constrained and controlled by the framework
-  - Call `view.invalidate()` in UI thread or `view.postInvalidate()` in other threads
-  - View won't update immediately but waits until next VSYNC event
-  - VSYNC can be understood as a timer that fires every 16ms for a 60fps screen
-  - All normal view updates are synchronized with VSYNC for better smoothness
-
-- **SurfaceView**: You have direct control over when and how to render
-  - Can render at any time from the background thread
-  - Not bound to VSYNC timing
-  - Provides more flexibility for custom rendering loops
-
-**Basic Implementation:**
-
-```kotlin
-class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
-
-    private var renderThread: RenderThread? = null
-
-    init {
-        holder.addCallback(this)
-    }
-
-    override fun surfaceCreated(holder: SurfaceHolder) {
-        // Surface is ready, start rendering thread
-        renderThread = RenderThread(holder).apply {
-            start()
-        }
-    }
-
-    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
-        // Surface dimensions changed
-    }
-
-    override fun surfaceDestroyed(holder: SurfaceHolder) {
-        // Stop rendering thread
-        renderThread?.requestStop()
-        renderThread?.join()
-        renderThread = null
-    }
-
-    inner class RenderThread(private val holder: SurfaceHolder) : Thread() {
-        private var running = true
-
-        fun requestStop() {
-            running = false
-        }
-
-        override fun run() {
-            while (running) {
-                val canvas = holder.lockCanvas()
-                try {
-                    // Perform drawing operations
-                    synchronized(holder) {
-                        // Draw on canvas
-                        canvas?.let { drawContent(it) }
-                    }
-                } finally {
-                    if (canvas != null) {
-                        holder.unlockCanvasAndPost(canvas)
-                    }
-                }
-            }
-        }
-
-        private fun drawContent(canvas: Canvas) {
-            // Your drawing code here
-            canvas.drawColor(Color.BLACK)
-            // Draw other content...
-        }
-    }
-}
-```
-
-**Use Cases:**
-
-1. **Game Development**: High frame rate games requiring continuous rendering
-2. **Video Playback**: Smooth video rendering without blocking UI thread
-3. **Camera Preview**: Real-time camera feed display
-4. **Custom Animations**: Complex animations that need precise frame control
-5. **Data Visualization**: Real-time charts and graphs with frequent updates
-6. **AR/VR Applications**: High-performance 3D rendering
-
-**SurfaceView vs Regular View:**
-
-| Feature | SurfaceView | Regular View |
-|---------|-------------|--------------|
-| Threading | Background thread rendering | UI thread only |
-| Surface Buffer | Dedicated buffer | Shared buffer |
-| Hardware Acceleration | Not supported (JB 4.2) | Fully supported |
-| Update Timing | Manual control | VSYNC synchronized |
-| Resource Usage | Higher | Lower |
-| Use Case | High-performance rendering | Standard UI elements |
-| Complexity | More complex | Simpler |
-
-**Modern Alternatives:**
-
-- **TextureView**: Can be hardware-accelerated and supports transformations, but higher memory usage
-- **SurfaceView with Vulkan/OpenGL**: For modern 3D rendering
-- **Jetpack Compose**: For declarative UI with efficient rendering
-
-**Best Practices:**
-
-1. Always implement `SurfaceHolder.Callback` to handle lifecycle events
-2. Properly synchronize access to the Canvas between threads
-3. Stop rendering thread when surface is destroyed to prevent memory leaks
-4. Use `lockCanvas()` and `unlockCanvasAndPost()` carefully in try-finally blocks
-5. Consider using `TextureView` if you need hardware acceleration and transformations
-
-**Source**: [SurfaceView](https://developer.android.com/reference/android/view/SurfaceView)
-
 ## Ответ (RU)
-`SurfaceView` — это специальное представление, которое предоставляет выделенную поверхность для рисования, встроенную в иерархию представлений. В отличие от обычных представлений, `SurfaceView` может обновляться в фоновом потоке, что делает его идеальным для сценариев высокопроизводительного рендеринга.
+`SurfaceView` — это специальное представление, которое предоставляет выделенную поверхность (`Surface`) для рисования, встроенную в иерархию `View`. В отличие от обычных `View`, `SurfaceView` предоставляет доступ к своей поверхности, так что рисование можно выполнять из отдельного потока, что полезно для тяжёлого или высокочастотного рендеринга.
 
 **Ключевые характеристики:**
 
 **1. Выделенный буфер поверхности:**
-- `SurfaceView` имеет выделенный буфер поверхности, в то время как все обычные представления используют один общий буфер, выделяемый ViewRoot
-- Другими словами, `SurfaceView` требует больше ресурсов, но обеспечивает лучшую производительность для интенсивного рендеринга
+- `SurfaceView` имеет собственный отдельный буфер поверхности (через `Surface`), который композицируется SurfaceFlinger, тогда как обычные `View` рисуются в общий буфер окна, управляемый `ViewRootImpl`.
+- Это увеличивает накладные расходы, но позволяет независимо производить контент `SurfaceView` относительно остальной иерархии.
 
 **2. Рендеринг в фоновом потоке:**
-- В отличие от обычных представлений, которые должны рисоваться в UI потоке, `SurfaceView` может обновляться в фоновом потоке
-- Это предотвращает блокировку UI потока во время интенсивных операций рендеринга
-- Идеально подходит для игр, воспроизведения видео, предварительного просмотра камеры и другого контента с высокой частотой кадров
+- Обычные `View` должны отрисовываться во фреймворковом пайплайне на UI-потоке.
+- В случае `SurfaceView` код отрисовки может вызывать `lockCanvas()` и рисовать в `Surface` из отдельного потока (например, игрового цикла), не блокируя UI-поток.
+- При этом операции жизненного цикла `View` (добавление в иерархию, layout и т.п.) остаются на главном потоке; выносится только рисование в `Surface`.
+- Типичные сценарии: игры, видео, превью камеры, контент с высокой частотой кадров.
 
-**3. Ограничения аппаратного ускорения:**
-- `SurfaceView` не может быть аппаратно ускорен (начиная с Android 4.2 JellyBean)
-- В отличие от этого, 95% операций на обычных представлениях аппаратно ускоряются с использованием OpenGL ES
-- Однако этот компромисс приемлем для сценариев, требующих рендеринга в фоновом потоке
+**3. Аппаратное ускорение и композиция:**
+- Исторически (например, около Android 4.2) содержимое `SurfaceView` не шло через обычный hardware-accelerated пайплайн отрисовки `View`.
+- В современных версиях Android `SurfaceView` по-прежнему обрабатывается отдельно: содержимое генерируется независимо (часто с использованием GPU или медиадекодеров) и затем композицируется системой; оно не участвует в тех же самых шагах аппаратно ускоренного рендеринга, как обычные `View`.
+- Обычные `View`, при включённом hardware acceleration для приложения, как правило, аппаратно ускорены.
 
 **4. Дополнительная сложность разработки:**
-- Для создания пользовательского `SurfaceView` требуется больше работы
-- Необходимо:
-  - Слушать события `surfaceCreated/surfaceDestroyed`
-  - Создавать и управлять потоком рендеринга
-  - Правильно синхронизировать поток рендеринга и главный поток
-  - Обрабатывать жизненный цикл поверхности
+- Для создания пользовательского `SurfaceView` требуется больше кода:
+  - Реализовать и зарегистрировать `SurfaceHolder.Callback` для обработки `surfaceCreated`, `surfaceChanged`, `surfaceDestroyed`.
+  - Создать и управлять отдельным потоком рендеринга.
+  - Корректно синхронизировать доступ между потоком рендеринга и главным потоком.
+  - Правильно обрабатывать жизненный цикл поверхности (пересоздание, изменение размера, уничтожение).
 
-**5. Отличная синхронизация обновлений:**
-- **Обычные View**: Механизм обновления ограничен и контролируется фреймворком
-  - Вызов `view.invalidate()` в UI потоке или `view.postInvalidate()` в других потоках
-  - Представление не обновляется немедленно, а ждёт следующего события VSYNC
-  - VSYNC можно понимать как таймер, который срабатывает каждые 16мс для экрана 60fps
-  - Все обновления обычных представлений синхронизируются с VSYNC для лучшей плавности
+**5. Тайминг обновлений и VSYNC:**
+- **Обычные `View`:**
+  - Используются `view.invalidate()` на UI-потоке или `view.postInvalidate()` из других потоков.
+  - Отрисовка планируется фреймворком и синхронизируется с VSYNC (например, каждые ~16 мс при 60 Гц) для плавности.
 
-- **SurfaceView**: Вы имеете прямой контроль над тем, когда и как выполнять рендеринг
-  - Можно рендерить в любое время из фонового потока
-  - Не привязан к таймингу VSYNC
-  - Обеспечивает большую гибкость для пользовательских циклов рендеринга
+- **SurfaceView**:
+  - Ваш цикл рендеринга может сам вызывать блокировку канваса и рисовать по своему расписанию из другого потока.
+  - Подача кадров инициируется приложением, но отображение кадров всё равно синхронизируется композитором системы с VSYNC.
+  - Это даёт большую гибкость (собственный frame pacing), но при неправильной настройке можно тратить лишние ресурсы или наблюдать схожие с tearing артефакты при несогласованной подаче кадров.
+
+**Базовая реализация (пример):**
+
+```kotlin
+class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
+
+    @Volatile
+    private var renderThread: RenderThread? = null
+
+    init {
+        holder.addCallback(this)
+    }
+
+    override fun surfaceCreated(holder: SurfaceHolder) {
+        // Поверхность готова, запускаем поток рендеринга
+        val thread = RenderThread(holder)
+        renderThread = thread
+        thread.start()
+    }
+
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+        // При необходимости обрабатываем изменение размера или формата
+    }
+
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
+        // Останавливаем поток рендеринга и ждём его завершения
+        val thread = renderThread
+        thread?.requestStop()
+        thread?.join()
+        renderThread = null
+    }
+
+    private inner class RenderThread(private val surfaceHolder: SurfaceHolder) : Thread() {
+        @Volatile
+        private var running = true
+
+        fun requestStop() {
+            running = false
+            interrupt()
+        }
+
+        override fun run() {
+            while (running) {
+                var canvas: Canvas? = null
+                try {
+                    canvas = surfaceHolder.lockCanvas()
+                    if (canvas != null) {
+                        synchronized(surfaceHolder) {
+                            drawContent(canvas)
+                        }
+                    }
+                } finally {
+                    if (canvas != null) {
+                        surfaceHolder.unlockCanvasAndPost(canvas)
+                    }
+                }
+
+                // Опционально: простая регулировка частоты кадров
+                // sleep(16) // ~60fps (с обработкой InterruptedException при необходимости)
+            }
+        }
+
+        private fun drawContent(canvas: Canvas) {
+            canvas.drawColor(Color.BLACK)
+            // Рисуем остальной контент...
+        }
+    }
+}
+```
 
 **Варианты использования:**
 
-1. **Разработка игр**: Игры с высокой частотой кадров, требующие непрерывного рендеринга
-2. **Воспроизведение видео**: Плавный рендеринг видео без блокировки UI потока
-3. **Предварительный просмотр камеры**: Отображение потока камеры в реальном времени
-4. **Пользовательские анимации**: Сложные анимации, требующие точного управления кадрами
-5. **Визуализация данных**: Графики и диаграммы в реальном времени с частыми обновлениями
-6. **AR/VR приложения**: Высокопроизводительный 3D рендеринг
+1. Разработка игр: высокая частота кадров и непрерывный рендеринг.
+2. Воспроизведение видео: отрисовка декодированных кадров без блокировки UI.
+3. Предпросмотр камеры: поток камеры в реальном времени.
+4. Пользовательские анимации с собственным циклом рендеринга.
+5. Визуализация данных в реальном времени.
+6. AR/VR или 3D-рендеринг (часто через OpenGL/Vulkan и `SurfaceView`/`SurfaceTexture`).
 
-**SurfaceView vs Обычное View:**
+**SurfaceView vs обычное `View`:**
 
-| Функция | SurfaceView | Обычное View |
+| Функция | SurfaceView | Обычное `View` |
 |---------|-------------|--------------|
-| Потоки | Рендеринг в фоновом потоке | Только UI поток |
-| Буфер поверхности | Выделенный буфер | Общий буфер |
-| Аппаратное ускорение | Не поддерживается | Полностью поддерживается |
-| Время обновления | Ручной контроль | Синхронизация с VSYNC |
-| Использование ресурсов | Выше | Ниже |
-| Вариант использования | Высокопроизводительный рендеринг | Стандартные UI элементы |
-| Сложность | Более сложный | Проще |
+| Потоки | Можно рисовать в `Surface` из фонового потока; жизненный цикл `View` — в главном потоке | Отрисовка управляется фреймворком на UI-потоке |
+| Буфер поверхности | Выделенный `Surface` / отдельный буфер, отдельная композиция | Рисование в общий буфер окна |
+| Аппаратное ускорение | Отдельный путь композиции; не участвует в обычном HW-accelerated пайплайне `View` | Использует стандартный аппаратно ускоренный пайплайн `View` (при включении) |
+| Время обновления | Цикл рендеринга управляется приложением; показ кадров синхронизирован с VSYNC | Управляется фреймворком; синхронизация с VSYNC |
+| Использование ресурсов | Выше; отдельные буферы и композиция | Ниже; общий буфер |
+| Варианты использования | Видео, камера, игры, произвольный real-time рендеринг | Стандартные UI-элементы |
+| Сложность | Выше; ручной жизненный цикл и потоки | Ниже |
+
+**Современные альтернативы:**
+
+- `TextureView`: `View`, чьё содержимое рендерится в `SurfaceTexture`, поддерживает трансформации и полностью участвует в композиции иерархии `View`; может потреблять больше памяти и имеет иные характеристики.
+- `SurfaceView` с OpenGL/Vulkan или медиадекодерами для продвинутого рендеринга и низкой задержки.
+- Jetpack Compose + обычные `View` для большинства стандартных UI-сценариев (не прямой аналог `SurfaceView`, но подходит там, где не требуется отдельная поверхность и ручной цикл рендеринга).
 
 **Лучшие практики:**
 
-1. Всегда реализуйте `SurfaceHolder.Callback` для обработки событий жизненного цикла
-2. Правильно синхронизируйте доступ к Canvas между потоками
-3. Останавливайте поток рендеринга при уничтожении поверхности для предотвращения утечек памяти
-4. Используйте `lockCanvas()` и `unlockCanvasAndPost()` осторожно в блоках try-finally
-5. Рассмотрите использование `TextureView`, если нужно аппаратное ускорение и трансформации
+1. Всегда реализуйте `SurfaceHolder.Callback` для обработки событий жизненного цикла.
+2. Корректно синхронизируйте доступ к `Surface`/`Canvas` между потоками; не удерживайте блокировки дольше необходимого.
+3. Останавливайте поток рендеринга в `surfaceDestroyed` и дожидайтесь его завершения, чтобы избежать утечек и сбоев.
+4. Всегда вызывайте `unlockCanvasAndPost()` в `finally` после `lockCanvas()`.
+5. Осознанно выбирайте между `SurfaceView` и `TextureView` на основе требований:
+   - `SurfaceView` — когда важны отдельная поверхность, низкая задержка и возможность вывода из декодеров/рендеров напрямую.
+   - `TextureView` — когда важны анимации, трансформации, прозрачность и интеграция в сложную UI-иерархию.
+   - Рассматривайте современные подходы (например, комбинирование с Jetpack Compose), если не требуется ручной низкоуровневый рендеринг.
 
 ---
 
+## Answer (EN)
+`SurfaceView` is a special view that provides a dedicated drawing surface embedded inside of a view hierarchy. Unlike regular views, `SurfaceView` exposes its `Surface` so it can be drawn to from a separate thread, which is useful for high-frequency or heavy rendering workloads.
+
+**Key Characteristics:**
+
+**1. Dedicated Surface Buffer:**
+- `SurfaceView` has its own separate surface buffer (backed by a `Surface`) that is composited by SurfaceFlinger, while regular views are drawn into the window's shared surface managed by `ViewRootImpl`.
+- This separation adds some overhead but allows `SurfaceView` content to be produced independently from the normal view hierarchy rendering.
+
+**2. Background Thread Rendering:**
+- Regular views must be drawn on the UI thread via the framework's rendering pipeline.
+- With `SurfaceView`, your rendering code can lock the `Surface` and draw from a dedicated background thread (e.g., a game loop) without blocking the UI thread.
+- Lifecycle and view operations (`addView`, layout, etc.) must still happen on the main thread; only drawing into the `Surface` is offloaded.
+- Common use cases: games, video playback, camera preview, and other high-frame-rate content.
+
+**3. Hardware Acceleration and Compositing:**
+- Historically (e.g., around Android 4.2), `SurfaceView` content itself was not drawn through the normal view hardware-acceleration pipeline.
+- Modern Android still treats `SurfaceView` differently from regular views: its content is produced separately (often using GPU or media decoders) and then composited by the system. It does not participate in the same view-level hardware-accelerated canvas pipeline as normal views.
+- Regular views are typically hardware-accelerated when app-wide hardware acceleration is enabled.
+
+**4. Additional Development Complexity:**
+- More work is required to create a customized `SurfaceView`:
+  - Implement and register `SurfaceHolder.Callback` to handle `surfaceCreated`, `surfaceChanged`, and `surfaceDestroyed`.
+  - Create and manage a render thread for continuous or heavy drawing.
+  - Properly synchronize access between the render thread and the main thread.
+  - Correctly handle the surface lifecycle (recreation, size changes, destruction).
+
+**5. Update Timing and VSYNC:**
+- **Regular Views**:
+  - Use `view.invalidate()` on the UI thread or `view.postInvalidate()` from other threads.
+  - Drawing is scheduled by the framework and synchronized with display VSYNC (e.g., every ~16ms at 60Hz) for smooth animations.
+
+- **SurfaceView**:
+  - Your render loop can lock the canvas and draw whenever needed from a background thread.
+  - Submission of frames is driven by your code, but display of those frames is still synchronized by the system's compositor with VSYNC.
+  - This gives more flexibility (e.g., custom frame pacing), but misuse can lead to tearing-like artifacts or wasted work if you draw far more often than the display refresh.
+
+**Basic Implementation:**
+
+```kotlin
+class MySurfaceView(context: Context) : SurfaceView(context), SurfaceHolder.Callback {
+
+    @Volatile
+    private var renderThread: RenderThread? = null
+
+    init {
+        holder.addCallback(this)
+    }
+
+    override fun surfaceCreated(holder: SurfaceHolder) {
+        // Surface is ready, start rendering thread
+        val thread = RenderThread(holder)
+        renderThread = thread
+        thread.start()
+    }
+
+    override fun surfaceChanged(holder: SurfaceHolder, format: Int, width: Int, height: Int) {
+        // Optionally handle size or format changes
+    }
+
+    override fun surfaceDestroyed(holder: SurfaceHolder) {
+        // Stop rendering thread and wait for it to finish
+        val thread = renderThread
+        thread?.requestStop()
+        thread?.join()
+        renderThread = null
+    }
+
+    private inner class RenderThread(private val surfaceHolder: SurfaceHolder) : Thread() {
+        @Volatile
+        private var running = true
+
+        fun requestStop() {
+            running = false
+            interrupt()
+        }
+
+        override fun run() {
+            while (running) {
+                var canvas: Canvas? = null
+                try {
+                    canvas = surfaceHolder.lockCanvas()
+                    if (canvas != null) {
+                        synchronized(surfaceHolder) {
+                            drawContent(canvas)
+                        }
+                    }
+                } finally {
+                    if (canvas != null) {
+                        surfaceHolder.unlockCanvasAndPost(canvas)
+                    }
+                }
+
+                // Optional: simple frame pacing or sleep
+                // sleep(16) // ~60fps (handle InterruptedException if used)
+            }
+        }
+
+        private fun drawContent(canvas: Canvas) {
+            canvas.drawColor(Color.BLACK)
+            // Draw other content...
+        }
+    }
+}
+```
+
+**Use Cases:**
+
+1. Game development: high frame rate, continuous rendering.
+2. Video playback: rendering decoded frames without blocking UI.
+3. Camera preview: real-time camera feed.
+4. Custom animations with their own rendering loop.
+5. Real-time data visualization.
+6. AR/VR or 3D rendering (often via OpenGL/Vulkan, sometimes using `SurfaceView` or `SurfaceTexture`).
+
+**SurfaceView vs Regular `View`:**
+
+| Feature | SurfaceView | Regular `View` |
+|---------|-------------|--------------|
+| Threading | Can render to Surface from a background thread; view lifecycle on main thread | Rendering driven by framework on main (UI) thread |
+| Surface Buffer | Dedicated `Surface` / buffer, separately composited | Drawn into window's shared surface |
+| Hardware Acceleration | Separate composition path; does not use normal view HW-accel pipeline | Uses standard hardware-accelerated view pipeline (when enabled) |
+| Update Timing | App-controlled render loop; frames still displayed with VSYNC | Framework-controlled; VSYNC-synchronized |
+| Resource Usage | Higher; separate buffers and composition | Lower; shared buffers |
+| Typical Use Cases | Video, camera, games, custom real-time rendering | Standard UI elements |
+| Complexity | Higher; manual lifecycle + threading | Lower |
+
+**Modern Alternatives:**
+
+- `TextureView`: A view whose content is rendered into a `SurfaceTexture`, supports transformations and participates in view hierarchy composition; may use more memory and has different behavior characteristics.
+- `SurfaceView` with OpenGL/Vulkan or media decoders for advanced rendering.
+- Jetpack Compose + regular views for most standard UI (not a drop-in replacement for `SurfaceView`, but relevant for where you do not need a separate surface).
+
+**Best Practices:**
+
+1. Always implement `SurfaceHolder.Callback` to handle lifecycle events.
+2. Properly synchronize access to the `Surface`/`Canvas` between threads; avoid holding locks longer than needed.
+3. Stop the rendering thread in `surfaceDestroyed` and ensure it finishes to avoid leaks or crashes.
+4. Always pair `lockCanvas()` with `unlockCanvasAndPost()` in a `try/finally` block.
+5. Choose consciously between `SurfaceView` and `TextureView` based on requirements:
+   - `SurfaceView` when you need a separate surface, low latency, or a direct producer (media decoder / GL / Vulkan).
+   - `TextureView` when you need transformations, animations, transparency, and seamless integration in complex layouts.
+   - Consider modern UI approaches (e.g., Jetpack Compose) when low-level control is not required.
+
+---
+
+## Дополнительные вопросы (RU)
+
+- Объясните, почему для интенсивного рендеринга (`игры`, `камера`, `видео`) предпочтительно использовать отдельный поток с `SurfaceView`, а не перегружать UI-поток.
+- Когда на практике стоит предпочесть `TextureView` вместо `SurfaceView` (учитывая требования к трансформациям, прозрачности и вложенности в сложный layout)?
+- Как бы вы реализовали безопасное завершение потока рендеринга при уничтожении `Surface` в условиях частых изменений конфигурации?
+- Как обеспечить согласованность частоты кадров рендеринга в `SurfaceView` с VSYNC, чтобы избежать артефактов и избыточной нагрузки на систему?
+- Какие проблемы с композицией и наложением других `View` вокруг `SurfaceView` вы можете ожидать и как их минимизировать?
 
 ## Follow-ups
 
-- [[c-threading]]
-- [[c-views]]
+- [[c-android-surfaces]]
 - [[q-viewgroup-vs-view-differences--android--easy]]
+- [[q-what-methods-redraw-views--android--medium]]
+- In which scenarios would you prefer `SurfaceView` over `TextureView` when building a complex UI?
+- How would you profile `SurfaceView` rendering performance (tools and approaches)?
 
+---
+
+## Ссылки (RU)
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [SurfaceView](https://developer.android.com/reference/android/view/SurfaceView)
 
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
-- [Android Documentation](https://developer.android.com/docs)
+- [SurfaceView](https://developer.android.com/reference/android/view/SurfaceView)
 
+---
+
+## Связанные вопросы (RU)
+
+### База (проще)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`
+- [[q-viewmodel-pattern--android--easy]] - `View`
+
+### Средний уровень
+- [[q-testing-viewmodels-turbine--android--medium]] - `View`
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View`
+- [[q-what-is-viewmodel--android--medium]] - `View`
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`
+
+### Продвинутый (сложнее)
+- [[q-compose-custom-layout--android--hard]] - `View`
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View
-- [[q-viewmodel-pattern--android--easy]] - View
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`
+- [[q-viewmodel-pattern--android--easy]] - `View`
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--android--medium]] - View
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- q-rxjava-pagination-recyclerview--android--medium - View
-- [[q-what-is-viewmodel--android--medium]] - View
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+- [[q-testing-viewmodels-turbine--android--medium]] - `View`
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View`
+- [[q-what-is-viewmodel--android--medium]] - `View`
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--android--hard]] - View
+- [[q-compose-custom-layout--android--hard]] - `View`

@@ -6,7 +6,6 @@ aliases:
 - Время генерации кода Room
 topic: android
 subtopics:
-- gradle
 - room
 question_kind: theory
 difficulty: medium
@@ -17,39 +16,35 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-gradle
 - c-room
 - q-dagger-framework-overview--android--hard
 - q-kapt-ksp-migration--android--medium
 - q-kapt-vs-ksp--android--medium
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags:
-- android/gradle
 - android/room
-- code-generation
-- compile-time
 - difficulty/medium
-- kapt
-- ksp
 ---
 
 # Вопрос (RU)
 
-В какой момент генерируется код при использовании SQLite/Room?
+> В какой момент генерируется код при использовании SQLite/Room?
 
 # Question (EN)
 
-When is code generated when using SQLite/Room?
+> When is code generated when using SQLite/Room?
 
 ## Ответ (RU)
 
-**Room** генерирует код **на этапе компиляции** через процессоры аннотаций: **kapt** или **KSP**.
+**Room** генерирует код **на этапе компиляции** в процессе сборки Gradle через процессоры аннотаций (`kapt` или `KSP`). Генерация выполняется во время соответствующих задач сборки (annotation processing), до упаковки APK/AAB, а не в рантайме приложения.
 
-**SQLite** сам по себе не генерирует код - это runtime библиотека. Room как слой абстракции над SQLite использует annotation processing для генерации реализаций DAO и Database классов.
+**SQLite** — это встраиваемый движок базы данных, а не фреймворк кодогенерации и не annotation processor. Он не генерирует код за вас; с ним вы либо пишете SQL вручную, либо используете библиотеки-обертки (такие как Room), которые уже занимаются генерацией вспомогательного кода на этапе сборки.
 
-### Процесс Генерации
+Room как слой абстракции над SQLite использует annotation processing для генерации реализаций DAO и Database классов и для compile-time валидации сущностей и запросов на основе известных ему моделей.
+
+### Процесс генерации
 
 1. **Аннотированный код**
 ```kotlin
@@ -71,60 +66,70 @@ interface UserDao {
 
 2. **Конфигурация процессора**
 ```kotlin
-// kapt (медленнее, Java API)
+// kapt (использует Java Annotation Processing API)
 dependencies {
     kapt "androidx.room:room-compiler"
 }
 
-// KSP (в 2 раза быстрее, Kotlin API) ✅ рекомендуется
+// KSP (использует Kotlin Symbol Processing API) ✅ рекомендуется для новых проектов
 dependencies {
     ksp "androidx.room:room-compiler"
 }
 ```
 
-3. **Генерируемая реализация** (в `build/generated/`)
+> На практике KSP для Room обычно быстрее и лучше интегрируется с Kotlin и инкрементальной компиляцией, но выигрыш в производительности зависит от проекта и не является гарантированным фиксированным "2x".
+
+3. **Генерируемая реализация** (примерно, в `build/generated/`) — упрощённый псевдокод
 ```kotlin
 class UserDao_Impl : UserDao {
     override fun getAll(): List<User> {
         val statement = RoomSQLiteQuery.acquire("SELECT * FROM user", 0)
-        // ✅ Генерируется маппинг курсора в объекты
-        return executeSqlQuery(statement) { cursor ->
-            User(cursor.getInt(0), cursor.getString(1))
+        // ✅ Генерируется код, который выполняет запрос и маппит Cursor в User
+        val cursor = db.query(statement)
+        val result = mutableListOf<User>()
+        while (cursor.moveToNext()) {
+            result.add(User(cursor.getInt(0), cursor.getString(1)))
         }
+        cursor.close()
+        return result
     }
 }
 ```
 
-### Kapt Vs KSP
+### Kapt vs KSP
 
 | Аспект | kapt | KSP |
 |--------|------|-----|
-| API | Java | Kotlin |
-| Скорость | Базовая | 2x быстрее |
-| Инкрементальная компиляция | Ограниченная | Полная |
+| API | Java Annotation Processing | Kotlin Symbol Processing |
+| Скорость | Обычно медленнее для Kotlin-heavy проектов | Как правило быстрее за счёт работы с Kotlin-символами |
+| Инкрементальная компиляция | Ограниченная поддержка | Лучшая поддержка, более точная инкрементальность |
 
-**Рекомендация:** KSP для новых проектов.
+**Рекомендация:** использовать KSP для новых проектов и при миграции, если это поддерживается версиями Room и Gradle.
 
-### Валидация На Этапе Компиляции
+### Валидация на этапе компиляции
 
 ```kotlin
-@Query("SELECT * FROM usres") // ❌ Ошибка: таблица не существует
+@Query("SELECT * FROM usres") // ❌ Ошибка: таблица не существует (по данным Room о сущностях)
 fun getAll(): List<User>
 
-// Результат компиляции:
-// error: no such table: usres
+// Результат компиляции (Room annotation processor):
+// error: There is a problem with the query: no such table: usres
 ```
 
 **Преимущества:**
-- Ошибки в SQL обнаруживаются до запуска приложения
-- Type safety: автоматическая типизация результатов
-- Нет runtime reflection - лучшая производительность
+- Ошибки в SQL и несоответствия схемы (по информации, известной Room на этапе компиляции) обнаруживаются до запуска приложения.
+- Type safety: сопоставление типов Kotlin/Java и колонок проверяется на этапе генерации кода.
+- Нет runtime reflection — выше предсказуемость и, как правило, лучшая производительность.
+
+> Ограничение: проверки основаны на описанных `@Entity`/`@Dao` и известных миграциях; динамически создаваемые таблицы или изменения вне модели Room могут привести к ошибкам уже в рантайме.
 
 ## Answer (EN)
 
-**Room** generates code **at compile time** using annotation processors: **kapt** or **KSP**.
+**Room** generates code **at compile time** during the Gradle build via annotation processors (`kapt` or `KSP`). Generation happens in the relevant build tasks (annotation processing) before the APK/AAB is packaged, not at application runtime.
 
-**SQLite** itself doesn't generate code - it's a runtime library. Room as an abstraction layer over SQLite uses annotation processing to generate DAO and Database implementations.
+**SQLite** is an embedded database engine, not a code generation framework or annotation processor. It does not generate code for you; you either write SQL manually or use wrapper libraries (such as Room) that perform helper code generation at build time.
+
+Room, as an abstraction layer over SQLite, uses annotation processing to generate implementations of DAO and Database classes, and to perform compile-time validation of entities and queries based on its known schema model.
 
 ### Generation Process
 
@@ -148,87 +153,131 @@ interface UserDao {
 
 2. **Processor Configuration**
 ```kotlin
-// kapt (slower, Java API)
+// kapt (uses Java Annotation Processing API)
 dependencies {
     kapt "androidx.room:room-compiler"
 }
 
-// KSP (2x faster, Kotlin API) ✅ recommended
+// KSP (uses Kotlin Symbol Processing API) ✅ recommended for new projects
 dependencies {
     ksp "androidx.room:room-compiler"
 }
 ```
 
-3. **Generated Implementation** (in `build/generated/`)
+> In practice, Room with KSP is typically faster and integrates better with Kotlin and incremental builds, but the "2x faster" figure is project-dependent and not a guaranteed constant.
+
+3. **Generated Implementation** (roughly, in `build/generated/`) — simplified pseudocode
 ```kotlin
 class UserDao_Impl : UserDao {
     override fun getAll(): List<User> {
         val statement = RoomSQLiteQuery.acquire("SELECT * FROM user", 0)
-        // ✅ Generates cursor-to-object mapping
-        return executeSqlQuery(statement) { cursor ->
-            User(cursor.getInt(0), cursor.getString(1))
+        // ✅ Generated code executes the query and maps the Cursor to User
+        val cursor = db.query(statement)
+        val result = mutableListOf<User>()
+        while (cursor.moveToNext()) {
+            result.add(User(cursor.getInt(0), cursor.getString(1)))
         }
+        cursor.close()
+        return result
     }
 }
 ```
 
-### Kapt Vs KSP
+### Kapt vs KSP
 
 | Aspect | kapt | KSP |
 |--------|------|-----|
-| API | Java | Kotlin |
-| Speed | Baseline | 2x faster |
-| Incremental | Limited | Full |
+| API | Java Annotation Processing | Kotlin Symbol Processing |
+| Speed | Often slower for Kotlin-heavy projects | Typically faster due to direct Kotlin symbol access |
+| Incremental | Limited support | Better, more precise incremental behavior |
 
-**Recommendation:** KSP for new projects.
+**Recommendation:** Prefer KSP for new projects and when migrating, if supported by your Room/Gradle setup.
 
 ### Compile-Time Validation
 
 ```kotlin
-@Query("SELECT * FROM usres") // ❌ Error: table doesn't exist
+@Query("SELECT * FROM usres") // ❌ Error: table doesn't exist (according to Room's known entities)
 fun getAll(): List<User>
 
-// Compilation result:
-// error: no such table: usres
+// Compilation result (from Room annotation processor):
+// error: There is a problem with the query: no such table: usres
 ```
 
 **Benefits:**
-- SQL errors caught before app runs
-- Type safety: automatic result typing
-- No runtime reflection - better performance
+- SQL and schema mismatch errors (based on Room's model) are caught before the app runs.
+- Type safety: mapping between columns and Kotlin/Java types is checked during code generation.
+- No runtime reflection, leading to more predictable and often better performance.
+
+> Limitation: validation is based on `@Entity`/`@Dao` definitions and known migrations; dynamic schema changes or objects created outside Room can still cause runtime errors.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как Room обрабатывает миграции схемы с использованием сгенерированного кода?
+- Каковы компромиссы между инкрементальной компиляцией `kapt` и `KSP`?
+- Чем compile-time валидация Room отличается от runtime-ошибок при работе с "сырым" SQLite?
+- Могут ли annotation processors получать доступ к схеме базы данных на этапе компиляции?
+- Как KSP достигает улучшения производительности по сравнению с `kapt` на практике?
 
 ## Follow-ups
 
 - How does Room handle schema migrations with generated code?
-- What are the trade-offs between kapt and KSP incremental compilation?
+- What are the trade-offs between `kapt` and `KSP` incremental compilation?
 - How does Room's compile-time validation differ from raw SQLite runtime errors?
 - Can annotation processors access database schema at compile time?
-- How does KSP achieve 2x performance improvement over kapt?
+- How does KSP achieve performance improvements over `kapt` in practice?
+
+## Ссылки (RU)
+
+- [[c-room]]
+- Официальная документация по Room (developer.android.com)
 
 ## References
 
-- Android Room Documentation
-- KSP vs KAPT performance comparison studies
+- [[c-room]]
+- Official Android Room documentation (developer.android.com)
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-room]]
+
+### Предпосылки
+
+- Базовые представления о работе annotation processing
+- Понимание различий между генерацией кода на этапе компиляции и в рантайме
+
+### Связанные
+
+- [[q-dagger-framework-overview--android--hard]] — другой фреймворк, использующий annotation processing
+- [[q-kapt-ksp-migration--android--medium]]
+- [[q-kapt-vs-ksp--android--medium]]
+
+### Продвинутое
+
+- Реализация собственного annotation processor
+- Архитектура Room в multi-module проектах
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
-- [[c-gradle]]
 - [[c-room]]
 
-
 ### Prerequisites
+
 - Basic annotation processing concepts
 - Understanding of compile-time vs runtime code generation
 
 ### Related
+
 - [[q-dagger-framework-overview--android--hard]] - Another annotation processing framework
-- Room migration strategies
-- Type converters in Room
+- [[q-kapt-ksp-migration--android--medium]]
+- [[q-kapt-vs-ksp--android--medium]]
 
 ### Advanced
+
 - Custom annotation processor implementation
 - Multi-module Room database architecture

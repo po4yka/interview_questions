@@ -20,15 +20,15 @@ status: draft
 moc: moc-android
 related:
 - c-clean-architecture
-- c-repository-pattern
-- c-usecase-pattern
+- q-android-architectural-patterns--android--medium
 created: 2025-10-06
-updated: 2025-10-28
+updated: 2025-11-10
 tags:
 - android/architecture-clean
 - android/architecture-mvvm
 - android/di-hilt
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
@@ -41,7 +41,7 @@ tags:
 
 ## Ответ (RU)
 
-**UseCase** (или Interactor) — компонент domain-слоя, инкапсулирующий одну бизнес-операцию. Делает логику переиспользуемой, тестируемой и изолирует ViewModel от деталей repository.
+**UseCase** (или Interactor) — компонент domain-слоя, инкапсулирующий одну законченную бизнес-операцию или сценарий. Делает логику переиспользуемой, тестируемой и изолирует `ViewModel` от деталей repository и data sources.
 
 ### Базовая Реализация
 
@@ -71,31 +71,36 @@ class UserViewModel(
 
 ### Когда Использовать
 
-**✅ Использовать:**
-- Сложная бизнес-логика (валидация, трансформации, вычисления)
+**✅ Использовать (особенно оправдано), когда:**
+- Есть сложная бизнес-логика (валидация, трансформации, вычисления)
 - Задействовано несколько repositories/data sources
-- Логика переиспользуется между несколькими ViewModels
+- Логика переиспользуется между несколькими ViewModels или модулями
 - Нужна изоляция и тестируемость бизнес-правил
+- Хотим стабильный контракт domain-слоя между UI и данными
 
-**❌ НЕ использовать:**
-- Простой вызов одного метода repository без логики
-- Соотношение 1:1 с repository методом
-- Добавляет ненужный слой абстракции
+**⚠️ Замечание:**
+- Допустимы "тонкие" UseCase'ы, которые сейчас лишь делегируют один вызов repository, если они обеспечивают единообразный подход, помогают тестировать UI независимо от data layer и могут эволюционировать вместе с бизнес-логикой.
+
+**❌ Избегать, если:**
+- Вводится дополнительный слой только "ради паттерна", без пользы для читаемости, тестируемости или изоляции
+- Для каждого метода репозитория механически создаётся UseCase без осмысленных границ или сценариев
 
 ```kotlin
-// ❌ BAD - Бесполезный UseCase без бизнес-логики
+// ❌ BAD - Бесполезный UseCase, добавленный механически без границ сценария
 class GetProductsUseCase(private val repo: ProductRepository) {
-    suspend operator fun invoke() = repo.getProducts() // Просто проксирует
+    suspend operator fun invoke() = repo.getProducts() // Просто проксирует и не даёт дополнительных преимуществ
 }
-// Лучше: вызвать repository напрямую из ViewModel
+// В таком случае можно вызывать repository напрямую из ViewModel,
+// либо осмысленно оформить это как часть конкретного сценария.
 
-// ✅ GOOD - UseCase с реальной бизнес-логикой
+// ✅ GOOD - UseCase с реальной бизнес-логикой/сценарием
 class PurchaseProductUseCase(
     private val productRepo: ProductRepository,
     private val paymentRepo: PaymentRepository,
     private val analytics: Analytics
 ) {
     suspend operator fun invoke(productId: String): Result<Purchase> {
+        // Упрощённый пример: в реальном коде нужно обрабатывать ошибки
         val product = productRepo.getProduct(productId)
         val payment = paymentRepo.processPayment(product.price)
         analytics.logPurchase(productId, product.price)
@@ -107,7 +112,7 @@ class PurchaseProductUseCase(
 ### UseCase С Реактивными Данными
 
 ```kotlin
-// ✅ UseCase возвращающий Flow для реактивных обновлений
+// ✅ UseCase, возвращающий Flow для реактивных обновлений
 class ObserveCartItemsUseCase(
     private val cartRepo: CartRepository
 ) {
@@ -122,16 +127,16 @@ val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
     .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 ```
 
-**Краткое содержание**: UseCase инкапсулирует бизнес-операцию domain-слоя. Использовать для: сложной логики, нескольких data sources, переиспользования. НЕ использовать для простых вызовов repository. Реализация: `operator fun invoke()`, может возвращать Flow для реактивности.
+**Краткое содержание**: UseCase инкапсулирует бизнес-операцию domain-слоя и служит стабильным контрактом между UI и бизнес-логикой. Использовать для: сложной логики, нескольких data sources, переиспользования и изоляции. Избегать бессмысленных слоёв без ценности. Реализация: `operator fun invoke()`, возможен `Flow` для реактивности.
 
 ## Answer (EN)
 
-**UseCase** (or Interactor) is a domain layer component that encapsulates a single business operation. Makes logic reusable, testable, and isolates ViewModel from repository details.
+A **UseCase** (or Interactor) is a domain layer component that encapsulates a single cohesive business operation or scenario. It makes logic reusable, testable, and isolates the `ViewModel` from repository and data source details.
 
 ### Basic Implementation
 
 ```kotlin
-// ✅ Simple UseCase for single repository
+// ✅ Simple UseCase for a single repository
 class GetUserUseCase(
     private val repository: UserRepository
 ) {
@@ -156,31 +161,36 @@ class UserViewModel(
 
 ### When to Use
 
-**✅ Use when:**
-- Complex business logic (validation, transformations, calculations)
-- Multiple repositories/data sources involved
-- Logic reused across multiple ViewModels
-- Need isolation and testability of business rules
+**✅ Use (especially justified) when:**
+- There is complex business logic (validation, transformations, calculations)
+- Multiple repositories/data sources are involved
+- Logic is reused across multiple ViewModels or modules
+- You need isolation and testability of business rules
+- You want a stable domain-layer contract between UI and data
 
-**❌ Don't use when:**
-- Simple single repository method call without logic
-- One-to-one mapping to repository method
-- Adds unnecessary abstraction layer
+**⚠️ Note:**
+- "Thin" UseCases that currently delegate to a single repository call can be acceptable if they provide a consistent approach, allow UI to be tested independently of the data layer, and are expected to evolve with business rules.
+
+**❌ Avoid when:**
+- You add another layer only "for the sake of the pattern" without benefits for readability, testability, or isolation
+- You mechanically create a UseCase per repository method without meaningful boundaries or scenarios
 
 ```kotlin
-// ❌ BAD - Useless UseCase without business logic
+// ❌ BAD - Useless UseCase added mechanically without a clear scenario boundary
 class GetProductsUseCase(private val repo: ProductRepository) {
-    suspend operator fun invoke() = repo.getProducts() // Just proxies
+    suspend operator fun invoke() = repo.getProducts() // Just proxies and adds no real value
 }
-// Better: call repository directly from ViewModel
+// In such a case, you can call the repository directly from the ViewModel,
+// or refactor this into a more meaningful scenario-specific UseCase.
 
-// ✅ GOOD - UseCase with real business logic
+// ✅ GOOD - UseCase with real business logic / scenario
 class PurchaseProductUseCase(
     private val productRepo: ProductRepository,
     private val paymentRepo: PaymentRepository,
     private val analytics: Analytics
 ) {
     suspend operator fun invoke(productId: String): Result<Purchase> {
+        // Simplified example: in real code, handle errors from product/payment operations
         val product = productRepo.getProduct(productId)
         val payment = paymentRepo.processPayment(product.price)
         analytics.logPurchase(productId, product.price)
@@ -207,15 +217,23 @@ val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
     .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
 ```
 
-**Summary**: UseCase encapsulates domain layer business operation. Use for: complex logic, multiple data sources, reusability. Don't use for simple repository calls. Implementation: `operator fun invoke()`, can return Flow for reactivity.
+**Summary**: A UseCase encapsulates a domain-layer business operation and acts as a stable contract between UI and business logic. Use it for complex logic, multiple data sources, and reuse/isolated testing. Avoid meaningless layers without value. Implementation: `operator fun invoke()`, may return a `Flow` for reactive scenarios.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+1. Как тестировать UseCase в изоляции от репозиториев?
+2. Должен ли UseCase управлять потоками выполнения или полагаться на репозитории?
+3. Как обрабатывать несколько параметров в UseCase (data class vs отдельные аргументы)?
+4. Когда использовать `suspend fun invoke()` против `fun invoke(): Flow<T>`?
+5. Как UseCase вписывается в многомодульную архитектуру?
 
 ## Follow-ups
 
 1. How to test UseCases in isolation from repositories?
 2. Should UseCases handle threading or rely on repositories?
-3. How to handle multiple parameters in UseCases (data class vs varargs)?
+3. How to handle multiple parameters in UseCases (data class vs separate arguments)?
 4. When to use `suspend fun invoke()` vs `fun invoke(): Flow<T>`?
 5. How do UseCases fit in multi-module architecture?
 
@@ -229,15 +247,12 @@ val cartItems: StateFlow<List<CartItem>> = observeCartItemsUseCase()
 ### Prerequisites / Concepts
 
 - [[c-clean-architecture]]
-- [[c-repository-pattern]]
-- [[c-usecase-pattern]]
 
 
 ### Prerequisites (Easier)
 - [[q-repository-pattern--android--medium]] - Repository pattern basics
 
 ### Related (Same Level)
-- [[q-viewmodel-livedata--android--medium]] - ViewModel basics
 - [[q-kmm-dependency-injection--android--medium]] - DI fundamentals
 
 ### Advanced (Harder)

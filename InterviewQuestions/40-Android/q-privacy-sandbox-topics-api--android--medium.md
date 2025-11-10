@@ -1,6 +1,6 @@
 ---
 id: android-388
-title: "Privacy Sandbox Topics API / Privacy Sandbox Topics API"
+title: "Topics API в Privacy Sandbox / Privacy Sandbox Topics API"
 aliases: ["Privacy Sandbox Topics API", "Topics API"]
 topic: android
 subtopics: [privacy-sdks]
@@ -10,50 +10,58 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-app-permissions-runtime--android--medium]
+related: [moc-android]
 sources: []
-created: 2025-10-15
-updated: 2025-10-31
+created: 2024-10-10
+updated: 2025-11-10
 tags: [advertising, android/privacy-sdks, difficulty/medium, privacy, privacy-sandbox, topics-api, user-privacy]
 ---
 
 # Вопрос (RU)
 
-Что такое Topics API в Privacy Sandbox для Android? Как он обеспечивает рекламу на основе интересов с сохранением приватности?
+> Что такое Topics API в Privacy Sandbox для Android? Как он обеспечивает рекламу на основе интересов с сохранением приватности?
 
 # Question (EN)
 
-What is the Privacy Sandbox Topics API in Android? How does it provide privacy-preserving interest-based advertising?
+> What is the Privacy Sandbox Topics API in Android? How does it provide privacy-preserving interest-based advertising?
 
 ---
 
 ## Ответ (RU)
 
-Topics API — это механизм Privacy Sandbox, который обеспечивает рекламу на основе интересов без кросс-приложенского отслеживания. Темы интересов вычисляются на устройстве на основе использования приложений за последние 3 недели и хранятся локально.
+Topics API — это механизм Privacy Sandbox, который обеспечивает рекламу на основе интересов без кросс-приложенческого отслеживания с использованием стабильных идентификаторов. Темы интересов определяются на устройстве на основе активности пользователя в приложениях и наблюдений со стороны интегрированных рекламных SDK за последние несколько недель и хранятся локально; приложения и зарегистрированные ad tech SDK получают доступ только к итоговым темам.
+
+См. также: [[moc-android]]
 
 ### Ключевые Принципы
 
 **Как работает:**
-- Система определяет 3-5 тем из таксономии (~350 категорий: Спорт, Путешествия, Технологии)
-- Темы обновляются еженедельно на основе использования приложений
-- Каждый вызов API возвращает одну тему за эпоху (неделю)
-- В 5% случаев возвращается случайная тема (plausible deniability)
-- Темы доступны только приложениям, которые их "наблюдали"
+- Система определяет до 3 наиболее релевантных тем за каждую эпоху (неделю) из таксономии (сотни категорий, например: Спорт, Путешествия, Технологии).
+- Темы пересчитываются еженедельно на основе использования приложений и SDK-наблюдений.
+- При запросе Topics API поверхность (приложение/SDK) получает ограниченное подмножество тем; доступны только темы, которые были "наблюдаемы" (связаны с этим приложением или SDK и их контентом).
+- В части запросов (например, около 5%) может возвращаться случайная тема для правдоподобного отрицания (plausible deniability).
 
-**Privacy гарантии:**
-- Вычисления только на устройстве
-- Нет persistent идентификаторов
-- Нет передачи истории просмотров
-- Пользовательский контроль и прозрачность
+**Гарантии приватности (упрощённо):**
+- Вычисления выполняются на устройстве, Topics формируются локально.
+- Нет использования стабильных кросс-приложенческих идентификаторов наподобие Advertising ID внутри Topics API.
+- Доступен только ограниченный набор грубых (coarse-grained) тем, а не подробная история активности.
+- Пользователь получает контроль и прозрачность (системные настройки Privacy Sandbox, возможность отключить Topics).
 
-### Базовая Реализация
+### Базовая Реализация (упрощённый пример)
+
+Ниже — концептуальный пример для Android 13+ с использованием TopicsManager. Фактические сигнатуры и доступность могут отличаться в зависимости от версии библиотек `adservices` / `adservices-ext` и среды (device vs emulator); см. официальную документацию.
 
 ```kotlin
-import android.adservices.topics.TopicsManager
 import android.adservices.topics.GetTopicsRequest
+import android.adservices.topics.TopicsManager
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 class TopicsApiManager(private val context: Context) {
@@ -61,24 +69,34 @@ class TopicsApiManager(private val context: Context) {
     private val topicsManager: TopicsManager? =
         context.getSystemService(TopicsManager::class.java)
 
-    // ✅ Корректно: проверка доступности API перед использованием
+    private val executor: Executor = Executors.newSingleThreadExecutor()
+
+    // ✅ Проверяем доступность API и оборачиваем callback в suspend-функцию
     suspend fun getTopics(): Result<List<Int>> {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            return Result.failure(UnsupportedOperationException("Topics API requires Android 13+"))
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || topicsManager == null) {
+            return Result.failure(UnsupportedOperationException("Topics API requires Android 13+ and available TopicsManager"))
         }
 
         return try {
             val request = GetTopicsRequest.Builder()
+                // Должно совпадать с зарегистрированным именем ad tech SDK
                 .setAdsSdkName("com.example.ads")
-                .setShouldRecordObservation(true)  // ✅ Записываем observation
+                .setShouldRecordObservation(true)
                 .build()
 
-            val response = topicsManager?.getTopics(request, Executors.newSingleThreadExecutor()) { result ->
-                result.onSuccess { it.topics }
-                result.onFailure { e -> throw e }
+            val topics = suspendCoroutine<List<Int>> { cont ->
+                topicsManager.getTopics(request, executor) { outcome ->
+                    outcome
+                        .onSuccess { response ->
+                            cont.resume(response.topics.map { it.topicId })
+                        }
+                        .onFailure { e ->
+                            cont.resumeWithException(e)
+                        }
+                }
             }
 
-            Result.success(response?.topics?.map { it.topicId } ?: emptyList())
+            Result.success(topics)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -97,7 +115,7 @@ class PrivacyPreservingAdManager(
         val topicsResult = topicsManager.getTopics()
 
         return if (topicsResult.isSuccess) {
-            // ✅ Используем темы для таргетинга без user ID
+            // ✅ Используем темы как один из сигналов, без создания устойчивого кросс-приложенческого профиля
             requestAdsWithTopics(topicsResult.getOrThrow())
         } else {
             // ✅ Fallback на контекстную рекламу
@@ -106,10 +124,10 @@ class PrivacyPreservingAdManager(
     }
 
     private suspend fun requestAdsWithTopics(topics: List<Int>): Result<List<Ad>> {
-        // ❌ НИКОГДА: не комбинируем с идентификаторами пользователя
-        // val userId = getUserId()  // FORBIDDEN
+        // ⚠ Рекомендуется НЕ комбинировать Topics с устойчивыми user ID / Advertising ID
+        // и соблюдать требования политики и локального законодательства.
 
-        // ✅ Отправляем только темы на сервер
+        // ✅ Отправляем на сервер только ограниченные сигналы (topics + контекст)
         return adServerClient.requestAds(
             AdRequest(
                 topics = topics,
@@ -127,16 +145,16 @@ class PrivacySandboxControls(private val context: Context) {
 
     private val prefs = context.getSharedPreferences("privacy_sandbox", Context.MODE_PRIVATE)
 
-    // ✅ Явный запрос согласия с понятным объяснением
+    // ✅ Явный запрос согласия с понятным объяснением (если требуется вашей юридической моделью)
     suspend fun requestTopicsConsent(activity: Activity): Boolean {
         return showConsentDialog(
             activity,
             title = "Персонализированная реклама",
             message = """
-                Приложение использует Topics API для показа релевантной рекламы:
+                Приложение использует Topics API для показа более релевантной рекламы:
                 • Темы определяются на вашем устройстве
-                • Данные не покидают устройство
-                • Вы можете отключить в любой момент
+                • Серверам передаются только тематики, а не подробная история активности
+                • Вы можете отключить использование таких тем в любое время
             """.trimIndent()
         )
     }
@@ -152,33 +170,32 @@ class PrivacySandboxControls(private val context: Context) {
 
 ### Best Practices
 
-1. **Проверка доступности**: всегда проверяйте Android 13+ перед вызовом
-2. **Fallback механизм**: используйте контекстную рекламу, если Topics недоступен
-3. **Запись observation**: устанавливайте `setShouldRecordObservation(true)` для корректной работы
-4. **Изоляция от идентификаторов**: никогда не комбинируйте Topics с user ID или advertising ID
-5. **Прозрачность**: объясняйте пользователям механизм работы
-6. **Уважение выбора**: немедленно прекращайте использование при opt-out
+1. **Проверка доступности**: всегда проверяйте Android 13+ и наличие `TopicsManager`/совместимой библиотеки перед вызовом.
+2. **Fallback механизм**: используйте контекстную рекламу, если Topics недоступен или запрос завершился с ошибкой.
+3. **Запись observation**: устанавливайте `setShouldRecordObservation(true)` там, где требуется, чтобы система могла учитывать взаимодействия.
+4. **Минимизация идентификаторов**: не используйте Topics для построения долгоживущих персональных профилей; избегайте связывания с устойчивыми ID.
+5. **Прозрачность**: объясняйте пользователям механизм работы и дайте ссылку на настройки.
+6. **Уважение выбора**: немедленно прекращайте использование при opt-out на уровне приложения или системных настроек.
 
 ### Распространённые Ошибки
 
 ```kotlin
-// ❌ Не проверяется доступность API
-val topics = topicsManager.getTopics()  // Crash на Android < 13
+// ❌ Нет проверки доступности API / версии
+val topics = topicsManager.getTopics()  // Риск краша или некорректной работы на устройствах без поддержки
 
-// ❌ Комбинируется с user ID
-requestAds(userId = "123", topics = topics)  // Нарушение privacy
+// ❌ Игнорируется отказ / ошибки API
+// Нет fallback → потеря дохода и ухудшение UX
 
-// ❌ Нет fallback механизма
-if (topics.isEmpty()) return emptyList()  // Нет рекламы
-
-// ✅ Корректная реализация
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-    val topics = topicsManager.getTopics().getOrNull()
-    if (topics != null) {
+// ✅ Корректный паттерн (упрощённо)
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && topicsManager != null) {
+    val topics = topicsApiManager.getTopics().getOrNull()
+    if (!topics.isNullOrEmpty()) {
         requestAdsWithTopics(topics)
     } else {
         requestContextualAds()  // Fallback
     }
+} else {
+    requestContextualAds()  // Fallback для старых устройств
 }
 ```
 
@@ -186,31 +203,39 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
 ## Answer (EN)
 
-Topics API is a Privacy Sandbox mechanism that enables interest-based advertising without cross-app tracking. Interest topics are computed on-device based on app usage over the last 3 weeks and stored locally.
+The Topics API is a Privacy Sandbox mechanism that enables interest-based advertising without using stable cross-app identifiers. Interest topics are determined on-device based on user activity in apps and observations from integrated ad tech SDKs over recent weeks and stored locally; apps and registered ad tech SDKs only access aggregated topics, not raw history.
+
+See also: [[moc-android]]
 
 ### Core Principles
 
 **How it works:**
-- System determines 3-5 topics from taxonomy (~350 categories: Sports, Travel, Technology)
-- Topics update weekly based on app usage
-- Each API call returns one topic per epoch (week)
-- 5% of the time returns random topic (plausible deniability)
-- Topics only available to apps that "observed" them
+- The system selects up to 3 top topics per epoch (week) from a taxonomy (hundreds of coarse categories such as Sports, Travel, Technology).
+- Topics are recomputed weekly based on app usage and SDK observations.
+- When calling the Topics API, a given surface (app/SDK) receives a limited subset of topics; only topics that were "observable" for that app/SDK and its content are eligible.
+- In a fraction of calls (e.g., around 5%), a random topic may be returned to provide plausible deniability.
 
-**Privacy guarantees:**
-- On-device computation only
-- No persistent identifiers
-- No browsing history transmission
-- User control and transparency
+**Privacy guarantees (high-level):**
+- Topics are computed on-device; classification happens locally.
+- No stable cross-app identifiers like Advertising ID are used within the Topics API.
+- Only a small set of coarse topics is exposed instead of detailed browsing/app history.
+- Users have control and transparency via system Privacy Sandbox settings, including the ability to turn off Topics.
 
-### Basic Implementation
+### Basic Implementation (simplified)
+
+Below is a conceptual example for Android 13+ using `TopicsManager`. Exact signatures and availability depend on `adservices` / `adservices-ext` versions and environment; always check the official docs.
 
 ```kotlin
-import android.adservices.topics.TopicsManager
 import android.adservices.topics.GetTopicsRequest
+import android.adservices.topics.TopicsManager
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
+import java.util.concurrent.Executor
+import java.util.concurrent.Executors
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 class TopicsApiManager(private val context: Context) {
@@ -218,24 +243,34 @@ class TopicsApiManager(private val context: Context) {
     private val topicsManager: TopicsManager? =
         context.getSystemService(TopicsManager::class.java)
 
-    // ✅ Correct: check API availability before use
+    private val executor: Executor = Executors.newSingleThreadExecutor()
+
+    // ✅ Check API availability and wrap callback into a suspend function
     suspend fun getTopics(): Result<List<Int>> {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
-            return Result.failure(UnsupportedOperationException("Topics API requires Android 13+"))
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || topicsManager == null) {
+            return Result.failure(UnsupportedOperationException("Topics API requires Android 13+ and available TopicsManager"))
         }
 
         return try {
             val request = GetTopicsRequest.Builder()
+                // Must match the registered ad tech SDK name
                 .setAdsSdkName("com.example.ads")
-                .setShouldRecordObservation(true)  // ✅ Record observation
+                .setShouldRecordObservation(true)
                 .build()
 
-            val response = topicsManager?.getTopics(request, Executors.newSingleThreadExecutor()) { result ->
-                result.onSuccess { it.topics }
-                result.onFailure { e -> throw e }
+            val topics = suspendCoroutine<List<Int>> { cont ->
+                topicsManager.getTopics(request, executor) { outcome ->
+                    outcome
+                        .onSuccess { response ->
+                            cont.resume(response.topics.map { it.topicId })
+                        }
+                        .onFailure { e ->
+                            cont.resumeWithException(e)
+                        }
+                }
             }
 
-            Result.success(response?.topics?.map { it.topicId } ?: emptyList())
+            Result.success(topics)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -254,7 +289,7 @@ class PrivacyPreservingAdManager(
         val topicsResult = topicsManager.getTopics()
 
         return if (topicsResult.isSuccess) {
-            // ✅ Use topics for targeting without user ID
+            // ✅ Use topics as one of the signals without creating a stable cross-app profile
             requestAdsWithTopics(topicsResult.getOrThrow())
         } else {
             // ✅ Fallback to contextual ads
@@ -263,10 +298,10 @@ class PrivacyPreservingAdManager(
     }
 
     private suspend fun requestAdsWithTopics(topics: List<Int>): Result<List<Ad>> {
-        // ❌ NEVER: don't combine with user identifiers
-        // val userId = getUserId()  // FORBIDDEN
+        // ⚠ Recommended: do NOT combine Topics with long-lived user identifiers / Advertising ID;
+        // comply with platform policies and applicable regulations.
 
-        // ✅ Send only topics to server
+        // ✅ Send only limited signals (topics + contextual data) to your ad server
         return adServerClient.requestAds(
             AdRequest(
                 topics = topics,
@@ -284,16 +319,16 @@ class PrivacySandboxControls(private val context: Context) {
 
     private val prefs = context.getSharedPreferences("privacy_sandbox", Context.MODE_PRIVATE)
 
-    // ✅ Explicit consent request with clear explanation
+    // ✅ Explicit consent with clear explanation (if required by your legal/compliance model)
     suspend fun requestTopicsConsent(activity: Activity): Boolean {
         return showConsentDialog(
             activity,
             title = "Personalized Ads",
             message = """
-                App uses Topics API to show relevant ads:
-                • Topics determined on your device
-                • Data doesn't leave your device
-                • You can disable anytime
+                This app uses the Topics API to show more relevant ads:
+                • Topics are determined on your device
+                • Only coarse topics, not detailed activity history, are shared
+                • You can disable this at any time
             """.trimIndent()
         )
     }
@@ -309,33 +344,32 @@ class PrivacySandboxControls(private val context: Context) {
 
 ### Best Practices
 
-1. **Availability check**: always verify Android 13+ before calling
-2. **Fallback mechanism**: use contextual ads if Topics unavailable
-3. **Record observation**: set `setShouldRecordObservation(true)` for correct operation
-4. **Isolation from identifiers**: never combine Topics with user ID or advertising ID
-5. **Transparency**: explain the mechanism to users
-6. **Respect choice**: immediately stop using on opt-out
+1. **Availability check**: always verify Android 13+ and `TopicsManager`/compatible client presence before calling.
+2. **Fallback mechanism**: use contextual ads if Topics is unavailable or fails.
+3. **Record observation**: set `setShouldRecordObservation(true)` where appropriate so the system can consider interactions.
+4. **Minimize identifiers**: avoid using Topics to build long-lived personal profiles; avoid combining with stable identifiers.
+5. **Transparency**: clearly explain to users how Topics is used and link to relevant settings.
+6. **Respect choice**: immediately stop using Topics when users opt out in-app or via system settings.
 
 ### Common Mistakes
 
 ```kotlin
-// ❌ API availability not checked
-val topics = topicsManager.getTopics()  // Crash on Android < 13
+// ❌ API availability not checked / wrong environment assumptions
+val topics = topicsManager.getTopics()  // Risk of crash or unsupported behavior
 
-// ❌ Combined with user ID
-requestAds(userId = "123", topics = topics)  // Privacy violation
+// ❌ Ignoring API failures / no fallback
+// Leads to revenue loss and poor UX
 
-// ❌ No fallback mechanism
-if (topics.isEmpty()) return emptyList()  // No ads shown
-
-// ✅ Correct implementation
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-    val topics = topicsManager.getTopics().getOrNull()
-    if (topics != null) {
+// ✅ Correct pattern (simplified)
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && topicsApiManager != null) {
+    val topics = topicsApiManager.getTopics().getOrNull()
+    if (!topics.isNullOrEmpty()) {
         requestAdsWithTopics(topics)
     } else {
         requestContextualAds()  // Fallback
     }
+} else {
+    requestContextualAds()  // Fallback on older devices
 }
 ```
 
@@ -351,20 +385,18 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 
 ## References
 
-- [[c-privacy-by-design]] - Privacy design patterns
-- [[c-gdpr-compliance]] - GDPR requirements
 - Android Privacy Sandbox documentation: https://developer.android.com/design-for-safety/privacy-sandbox/topics
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-app-permissions-runtime--android--medium]] - Runtime permissions
-- [[q-gdpr-compliance-android--android--medium]] - GDPR compliance basics
+
+_None_
 
 ### Related
-- [[q-data-storage-security--android--medium]] - Secure data storage
-- [[q-advertising-id-best-practices--android--medium]] - Advertising ID handling
+
+_None_
 
 ### Advanced
-- [[q-fledge-protected-audience-api--android--hard]] - FLEDGE API
-- [[q-attribution-reporting-api--android--hard]] - Attribution API
+
+_None_

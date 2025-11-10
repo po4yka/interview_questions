@@ -2,28 +2,20 @@
 id: android-023
 title: "React Native vs Flutter comparison / Сравнение React Native и Flutter"
 aliases: ["React Native vs Flutter", "Сравнение React Native и Flutter"]
-
-# Classification
 topic: android
-subtopics: [kmp]
+subtopics: [ui-views, ui-compose, kmp]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
-sources: [https://github.com/amitshekhariitbhu/android-interview-questions]
-
-# Workflow & relations
+sources: ["https://github.com/amitshekhariitbhu/android-interview-questions"]
 status: draft
 moc: moc-android
-related: [q-android-ui-toolkit-basics--android--easy, q-native-vs-cross-platform--android--easy]
-
-# Timestamps
+related: [q-android-app-components--android--easy]
 created: 2025-10-06
-updated: 2025-10-28
+updated: 2025-11-10
+tags: [android/ui-views, android/ui-compose, android/kmp, difficulty/medium]
 
-tags: [android/cross-platform, android/kmp, difficulty/medium]
 ---
 
 # Вопрос (RU)
@@ -38,17 +30,19 @@ tags: [android/cross-platform, android/kmp, difficulty/medium]
 
 ## Ответ (RU)
 
-**React Native** (Facebook) и **Flutter** (Google) — ведущие фреймворки для кроссплатформенной разработки. Ключевые различия:
+**React Native** (Facebook/Meta) и **Flutter** (Google) — ведущие фреймворки для кроссплатформенной разработки. Ключевые различия:
+
+См. также: [[c-cross-platform-development]]
 
 ### Архитектура
 
 **React Native:**
-- JavaScript-движок (Hermes/JSC) взаимодействует с нативными модулями через Bridge
-- Рендерит нативные UI-компоненты (Button, Text, View)
-- Требует явных нативных модулей для платформенных API
+- JavaScript-движок (Hermes/JSC) выполняет JS-код и взаимодействует с нативными модулями через механизм межъязыкового взаимодействия (исторически JSON Bridge; в новой архитектуре — JSI + Fabric + TurboModules с более эффективной моделью)
+- Использует нативные UI-компоненты платформы (например, `View`, Text, Button на Android/iOS)
+- Для доступа к платформенным API требуются нативные модули (Android/iOS), экспортирующие функциональность в JS
 
 ```kotlin
-// ✅ React Native: нативный модуль для Android
+// ✅ React Native: нативный модуль для Android (упрощённый пример)
 class ToastModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
 
@@ -56,28 +50,32 @@ class ToastModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun show(message: String) {
-        Toast.makeText(reactApplicationContext, message, LENGTH_SHORT).show()
+        Toast.makeText(reactApplicationContext, message, Toast.LENGTH_SHORT).show()
     }
 }
 ```
 
 **Flutter:**
-- Dart VM компилируется в нативный код (ARM/x64)
-- Skia Canvas рендерит собственные UI-виджеты (Material/Cupertino)
-- Platform Channels для взаимодействия с нативными API
+- В режиме разработки использует Dart VM с JIT, в релизных сборках для мобильных платформ Dart-код компилируется AOT в нативный код (ARM/x64), без отдельной VM в рантайме
+- Графический движок (Skia) рендерит собственные UI-виджеты (Material/Cupertino и др.) поверх холста, не опираясь напрямую на нативные виджеты
+- Использует Platform Channels (и другие механизмы, например FFI) для взаимодействия c нативными API
 
 ```kotlin
-// ✅ Flutter: платформенный канал для Android
+// ✅ Flutter: платформенный канал для Android (упрощённый пример)
 class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.example/toast"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-        MethodChannel(flutterEngine.dartExecutor, CHANNEL).setMethodCallHandler { call, result ->
-            if (call.method == "showToast") {
-                Toast.makeText(this, call.arguments as String, LENGTH_SHORT).show()
-                result.success(null)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
+            .setMethodCallHandler { call, result ->
+                if (call.method == "showToast") {
+                    val message = call.arguments as? String ?: ""
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    result.success(null)
+                } else {
+                    result.notImplemented()
+                }
             }
-        }
     }
 }
 ```
@@ -85,14 +83,14 @@ class MainActivity : FlutterActivity() {
 ### Производительность
 
 **React Native:**
-- 60 FPS для простых UI
-- Bridge-узкое место при интенсивном взаимодействии JS ↔ Native
-- Новая архитектура (JSI + Fabric) устраняет Bridge
+- Может обеспечивать 60 FPS для простых и средних по сложности UI при корректном использовании FlatList, мемоизации и оптимизации рендеринга
+- Историческая проблема — узкое место "bridge" при частых/объёмных обменах данными JS ↔ Native (анимации, большие списки, gesture events)
+- Новая архитектура (JSI + Fabric + TurboModules) снижает накладные расходы и делает взаимодействие более прямым и предсказуемым, уменьшая зависимость от старого сериализованного bridge
 
 **Flutter:**
-- Стабильные 60/120 FPS
-- Нет моста — прямые вызовы через FFI
-- Меньшее потребление памяти для сложных анимаций
+- Спроектирован для достижения плавных 60/120 FPS при рендеринге, особенно для сложной графики и анимаций, если не блокировать основной изолят и не перегружать кадр
+- Нет исторического JS-bridge: UI и логика на Dart взаимодействуют с движком напрямую, а нативные вызовы идут через эффективные канал/FFI механизмы
+- Производительность и потребление памяти обычно более предсказуемы, но не гарантированы автоматически — всё зависит от реализации
 
 ```dart
 // ✅ Flutter: оптимизированный рендеринг списков
@@ -103,13 +101,14 @@ ListView.builder(
 ```
 
 ```javascript
-// ❌ React Native: может лагать на больших списках без оптимизации
+// ⚠️ React Native: большие списки без оптимизации могут лагать
 <FlatList
   data={items}
-  renderItem={({item}) => <Text>{item.title}</Text>}
-  // ✅ Оптимизация:
+  renderItem={({ item }) => <Text>{item.title}</Text>}
+  // ✅ Базовая оптимизация:
   removeClippedSubviews={true}
   maxToRenderPerBatch={10}
+  windowSize={5}
 />
 ```
 
@@ -117,36 +116,37 @@ ListView.builder(
 
 | Критерий | React Native | Flutter |
 |----------|-------------|---------|
-| **Библиотеки** | NPM (2M+ пакетов) | pub.dev (40K+ пакетов) |
-| **Нативная интеграция** | Прямой доступ к Android/iOS либам | Через Platform Channels |
-| **Обновление зависимостей** | Чаще breaking changes | Стабильная версионность |
-| **Сообщество** | Больше (2015) | Быстрорастущее (2017) |
+| **Библиотеки** | NPM (много пакетов, включая RN-специфичные) | pub.dev (десятки тысяч пакетов, ориентированных на Flutter/Dart) |
+| **Нативная интеграция** | Через нативные модули/bridged-вызовы к Android/iOS | Через Platform Channels/FFI к Android/iOS |
+| **Обновление зависимостей** | Возможны частые изменения API и поддержка не всех пакетов | Сильная централизация экосистемы, относительно предсказуемая семантическая версионность SDK |
+| **Сообщество** | Большое, зрелое (старт ~2015) | Быстрорастущее (старт ~2017) |
 
 ### Сценарии Использования
 
-**Выбирайте React Native:**
-- Команда с опытом JavaScript/TypeScript
-- Нужна глубокая интеграция с веб-экосистемой (shared-код)
-- Прототипирование с существующими React-компонентами
-- Требуется множество готовых нативных модулей из NPM
+**Выбирайте React Native, если:**
+- Команда сильна в JavaScript/TypeScript и React
+- Нужна интеграция с веб-экосистемой и частичный шаринг логики (не UI) с React web
+- Важна возможность быстро прототипировать с использованием знакомой React-парадигмы
+- Планируется активное использование существующих RN-библиотек и нативных модулей из NPM
 
-**Выбирайте Flutter:**
-- Критична высокая производительность (60+ FPS анимации)
-- Нужен pixel-perfect UI, идентичный на всех платформах
-- Desktop/Web приложения (одна кодовая база для 6 платформ)
-- Предпочтение строгой типизации (Dart) vs динамической (JS)
+**Выбирайте Flutter, если:**
+- Критична высокая и предсказуемая производительность UI/анимаций
+- Нужен максимально консистентный pixel-perfect UI на разных платформах
+- Важна поддержка мобильных, веб и desktop из одной кодовой базы
+- Предпочитаете статически типизированный язык (Dart) и единообразие стека
 
 ### Trade-offs
 
-```kotlin
-// ❌ React Native: требует синхронизации стилей с нативными изменениями
-<View style={{backgroundColor: colors.primary}}>
+```jsx
+// ⚠️ React Native: визуальный вид и стили могут зависеть от нативных компонент платформы,
+// требуется учитывать изменения платформенных стилей
+<View style={{ backgroundColor: colors.primary }}>
   <Button title="Native Button" />
 </View>
 ```
 
 ```dart
-// ✅ Flutter: полный контроль над пикселями, независимость от платформы
+// ✅ Flutter: полный контроль над пикселями, UI не зависит от нативных виджетов платформы
 Container(
   color: Theme.of(context).primaryColor,
   child: ElevatedButton(child: Text('Flutter Button')),
@@ -154,30 +154,32 @@ Container(
 ```
 
 **React Native:**
-- ➕ Быстрый старт для JS-разработчиков
-- ➕ Нативный look-and-feel из коробки
-- ➖ Сложность отладки Bridge-проблем
-- ➖ Фрагментация версий в экосистеме
+- Быстрый вход для JS/React-разработчиков
+- Использует нативные компоненты и даёт платформенный look-and-feel
+- Потенциальные сложности при отладке проблем на границе JS ↔ Native
+- Разнородное качество и поддержка сторонних пакетов, риски фрагментации
 
 **Flutter:**
-- ➕ Предсказуемый рендеринг на всех устройствах
-- ➕ Hot reload с сохранением состояния
-- ➖ Большие размеры APK/IPA (4+ MB минимум)
-- ➖ Меньше готовых нативных решений
+- Предсказуемый собственный рендеринг на разных устройствах
+- Мощный hot reload/hot restart (особенно удобен в разработке UI)
+- Более крупный минимальный размер приложения за счёт движка и рантайма
+- Меньше "из коробки" нативных модулей под специфичные платформенные фичи, иногда требуется писать собственные плагины
 
 ## Answer (EN)
 
-**React Native** (Facebook) and **Flutter** (Google) are leading cross-platform frameworks. Key differences:
+**React Native** (Facebook/Meta) and **Flutter** (Google) are leading cross-platform frameworks. Key differences:
+
+See also: [[c-cross-platform-development]]
 
 ### Architecture
 
 **React Native:**
-- JavaScript engine (Hermes/JSC) communicates with native modules via Bridge
-- Renders native UI components (Button, Text, View)
-- Requires explicit native modules for platform APIs
+- A JavaScript engine (Hermes/JSC) executes JS code and communicates with native modules via a cross-language mechanism (historically a serialized JSON bridge; in the new architecture: JSI + Fabric + TurboModules with a more efficient model)
+- Uses platform-native UI components (e.g., `View`, Text, Button on Android/iOS)
+- Requires native modules (Android/iOS) to expose platform APIs to JS
 
 ```kotlin
-// ✅ React Native: native module for Android
+// ✅ React Native: native module for Android (simplified example)
 class ToastModule(reactContext: ReactApplicationContext) :
     ReactContextBaseJavaModule(reactContext) {
 
@@ -185,28 +187,32 @@ class ToastModule(reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun show(message: String) {
-        Toast.makeText(reactApplicationContext, message, LENGTH_SHORT).show()
+        Toast.makeText(reactApplicationContext, message, Toast.LENGTH_SHORT).show()
     }
 }
 ```
 
 **Flutter:**
-- Dart VM compiles to native code (ARM/x64)
-- Skia Canvas renders custom UI widgets (Material/Cupertino)
-- Platform Channels for native API interaction
+- Uses a Dart VM with JIT in development; for mobile release builds Dart code is AOT-compiled to native machine code (ARM/x64), without a separate Dart VM at runtime
+- The Skia-based rendering engine draws Flutter's own widgets (Material/Cupertino, etc.) directly to a canvas instead of relying on platform-native widgets
+- Uses Platform Channels (and other mechanisms such as FFI) to interact with native APIs
 
 ```kotlin
-// ✅ Flutter: platform channel for Android
+// ✅ Flutter: platform channel for Android (simplified example)
 class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.example/toast"
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-        MethodChannel(flutterEngine.dartExecutor, CHANNEL).setMethodCallHandler { call, result ->
-            if (call.method == "showToast") {
-                Toast.makeText(this, call.arguments as String, LENGTH_SHORT).show()
-                result.success(null)
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
+            .setMethodCallHandler { call, result ->
+                if (call.method == "showToast") {
+                    val message = call.arguments as? String ?: ""
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    result.success(null)
+                } else {
+                    result.notImplemented()
+                }
             }
-        }
     }
 }
 ```
@@ -214,14 +220,14 @@ class MainActivity : FlutterActivity() {
 ### Performance
 
 **React Native:**
-- 60 FPS for simple UIs
-- Bridge bottleneck during intensive JS ↔ Native communication
-- New architecture (JSI + Fabric) eliminates Bridge
+- Can deliver 60 FPS for many UIs when using FlatList, memoization, and avoiding unnecessary re-renders
+- Historical bottleneck is the JS ↔ Native bridge for frequent/large data exchanges (animations, large lists, gesture/event floods)
+- The new architecture (JSI + Fabric + TurboModules) reduces overhead and dependence on the old serialized bridge model, enabling more direct and efficient interaction
 
 **Flutter:**
-- Consistent 60/120 FPS
-- No bridge — direct FFI calls
-- Lower memory footprint for complex animations
+- Designed to hit smooth 60/120 FPS rendering, especially for complex graphics and animations, assuming frames are not overloaded
+- No traditional JS-style bridge: Dart code talks to the engine directly, and native calls go through efficient channel/FFI mechanisms
+- Typically offers more predictable performance characteristics, but not guaranteed automatically — still depends on implementation
 
 ```dart
 // ✅ Flutter: optimized list rendering
@@ -232,13 +238,14 @@ ListView.builder(
 ```
 
 ```javascript
-// ❌ React Native: can lag on large lists without optimization
+// ⚠️ React Native: large lists without optimization can stutter
 <FlatList
   data={items}
-  renderItem={({item}) => <Text>{item.title}</Text>}
-  // ✅ Optimization:
+  renderItem={({ item }) => <Text>{item.title}</Text>}
+  // ✅ Basic optimization:
   removeClippedSubviews={true}
   maxToRenderPerBatch={10}
+  windowSize={5}
 />
 ```
 
@@ -246,36 +253,37 @@ ListView.builder(
 
 | Criterion | React Native | Flutter |
 |-----------|-------------|---------|
-| **Libraries** | NPM (2M+ packages) | pub.dev (40K+ packages) |
-| **Native integration** | Direct access to Android/iOS libs | Via Platform Channels |
-| **Dependency updates** | More breaking changes | Stable versioning |
-| **Community** | Larger (since 2015) | Rapidly growing (since 2017) |
+| **Libraries** | NPM (a huge ecosystem, including RN-specific packages) | pub.dev (tens of thousands of Dart/Flutter packages) |
+| **Native integration** | Via native modules/bridged calls to Android/iOS | Via Platform Channels/FFI to Android/iOS |
+| **Dependency updates** | Potential for breaking changes and uneven package maintenance | Strongly curated core SDK, relatively predictable semantic versioning |
+| **Community** | Large, mature (since ~2015) | Rapidly growing (since ~2017) |
 
 ### Use Cases
 
-**Choose React Native:**
-- Team with JavaScript/TypeScript expertise
-- Deep integration with web ecosystem (shared code)
-- Prototyping with existing React components
-- Need many ready-made native modules from NPM
+**Choose React Native if:**
+- Your team is strong in JavaScript/TypeScript and React
+- You need integration with the web ecosystem and partial logic sharing (not UI) with React web
+- You want fast prototyping using the familiar React paradigm
+- You plan to leverage existing RN libraries and native modules from NPM
 
-**Choose Flutter:**
-- High performance critical (60+ FPS animations)
-- Pixel-perfect UI identical across platforms
-- Desktop/Web apps (single codebase for 6 platforms)
-- Preference for strong typing (Dart) vs dynamic (JS)
+**Choose Flutter if:**
+- High and predictable UI/animation performance is critical
+- You need a highly consistent, pixel-perfect UI across platforms
+- You target mobile, web, and desktop from a single codebase
+- You prefer a statically typed language (Dart) and a unified stack
 
 ### Trade-offs
 
-```kotlin
-// ❌ React Native: requires style sync with native changes
-<View style={{backgroundColor: colors.primary}}>
+```jsx
+// ⚠️ React Native: visual appearance and styles depend on platform-native components,
+// so you must account for platform style changes
+<View style={{ backgroundColor: colors.primary }}>
   <Button title="Native Button" />
 </View>
 ```
 
 ```dart
-// ✅ Flutter: full pixel control, platform-independent
+// ✅ Flutter: full pixel-level control; UI is independent of platform-native widgets
 Container(
   color: Theme.of(context).primaryColor,
   child: ElevatedButton(child: Text('Flutter Button')),
@@ -283,16 +291,16 @@ Container(
 ```
 
 **React Native:**
-- ➕ Fast start for JS developers
-- ➕ Native look-and-feel out of the box
-- ➖ Bridge debugging complexity
-- ➖ Ecosystem version fragmentation
+- Fast onboarding for JS/React developers
+- Uses native components, providing a platform-consistent look-and-feel
+- Potential debugging complexity at the JS ↔ Native boundary
+- Ecosystem quality/maintenance can be inconsistent; risk of fragmentation
 
 **Flutter:**
-- ➕ Predictable rendering across devices
-- ➕ Hot reload with state preservation
-- ➖ Larger APK/IPA sizes (4+ MB minimum)
-- ➖ Fewer ready-made native solutions
+- Predictable, engine-controlled rendering across devices
+- Powerful hot reload/hot restart (especially for rapid UI iteration)
+- Larger minimum app size due to bundling the engine/runtime
+- Fewer ready-made plugins for very niche native integrations; sometimes you must write your own
 
 ---
 
@@ -306,8 +314,6 @@ Container(
 
 ## References
 
-- [[c-cross-platform-mobile]]
-- [[c-kotlin-multiplatform]]
 - [React Native New Architecture](https://reactnative.dev/docs/the-new-architecture/landing-page)
 - [Flutter Architecture Overview](https://docs.flutter.dev/resources/architectural-overview)
 - [Performance Comparison Study](https://medium.com/swlh/flutter-vs-react-native-vs-native-deep-performance-comparison)
@@ -315,15 +321,7 @@ Container(
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-native-vs-cross-platform--android--easy]] - Native vs cross-platform trade-offs
-- [[q-android-ui-toolkit-basics--android--easy]] - Android UI fundamentals
+- [[q-android-app-components--android--easy]] - Android app components overview
 
 ### Related (Medium)
-- [[q-kotlin-multiplatform-overview--kotlin--hard]] - Kotlin Multiplatform approach
-- [[q-compose-vs-xml--android--medium]] - UI toolkit comparison within Android
-- [[q-webview-vs-native--android--medium]] - Hybrid approaches
-
-### Advanced (Harder)
-- [[q-flutter-engine-internals--android--hard]] - Flutter rendering pipeline
-- [[q-react-native-bridge-optimization--android--hard]] - Bridge performance tuning
-- [[q-cross-platform-security--android--hard]] - Security in cross-platform frameworks
+- [[q-android-architectural-patterns--android--medium]] - Android architectural patterns overview

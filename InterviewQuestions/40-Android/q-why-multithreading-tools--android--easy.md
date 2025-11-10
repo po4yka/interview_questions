@@ -10,20 +10,21 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-coroutines, c-main-thread, c-multithreading, c-workmanager]
+related: [c-coroutines, c-workmanager]
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/background-execution, android/coroutines, android/threads-sync, difficulty/easy]
-sources: [https://developer.android.com/guide/background, https://developer.android.com/kotlin/coroutines]
+sources: ["https://developer.android.com/guide/background", "https://developer.android.com/kotlin/coroutines"]
+
 ---
 
 # Вопрос (RU)
 
-Для чего нужна многопоточность в Android и какие инструменты использовать?
+> Для чего нужна многопоточность в Android и какие инструменты использовать?
 
 # Question (EN)
 
-Why is multithreading needed in Android and which tools should be used?
+> Why is multithreading needed in Android and which tools should be used?
 
 ---
 
@@ -32,11 +33,11 @@ Why is multithreading needed in Android and which tools should be used?
 ### Зачем Нужна Многопоточность
 
 **Проблема:** UI поток (Main Thread) выполняет:
-- Отрисовку интерфейса (60 FPS = 16ms на кадр)
+- Отрисовку интерфейса (60 FPS ≈ 16ms на кадр)
 - Обработку событий пользователя
 - Lifecycle callbacks
 
-Если блокировать UI поток > 5 секунд → **ANR** (Application Not Responding)
+Если долго блокировать UI поток (сотни миллисекунд и более), интерфейс начинает лагать, а при длительной блокировке (порядка нескольких секунд, например около 5s для обработки ввода) система может показать **ANR** (`Application` Not Responding).
 
 ❌ **Плохо: Блокировка UI потока**
 ```kotlin
@@ -100,14 +101,14 @@ class UserViewModel : ViewModel() {
 ```
 
 **Преимущества:**
-- ✅ Автоматическая отмена при уничтожении Activity/ViewModel
+- ✅ При использовании lifecycleScope/viewModelScope корутины автоматически отменяются при уничтожении соответствующего компонента
 - ✅ Простой синтаксис
-- ✅ Встроенная обработка ошибок
-- ✅ Легко переключаться между потоками
+- ✅ Удобная обработка ошибок (structured concurrency, try/catch, supervisor scopes)
+- ✅ Легко переключаться между контекстами (например, IO/Main)
 
 #### 2. WorkManager
 
-**Гарантированное выполнение фоновых задач**
+**Отложенное и надёжное выполнение фоновых задач**
 
 ```kotlin
 class SyncWorker(context: Context, params: WorkerParameters)
@@ -136,9 +137,9 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 ```
 
 **Преимущества:**
-- ✅ Работает даже после перезапуска приложения
+- ✅ Может продолжать выполнение задач после перезапуска приложения
 - ✅ Учитывает состояние системы (батарея, сеть)
-- ✅ Гарантированное выполнение
+- ✅ Стремится гарантировать выполнение при соблюдении ограничений и доступности соответствующих сервисов
 
 **Когда использовать:** Синхронизация данных, загрузка файлов, очистка кэша
 
@@ -182,7 +183,7 @@ Dispatchers.Main
 
 ### Правило
 
-> Если операция занимает > **16ms** (один кадр), выполняйте её в фоновом потоке
+> Практическое правило: если операция может занять больше бюджета кадра (≈16ms) и её результат не нужен немедленно для отрисовки UI, выполняйте её в фоновом потоке.
 
 ---
 
@@ -191,11 +192,11 @@ Dispatchers.Main
 ### Why Multithreading is Needed
 
 **Problem:** The UI thread (Main Thread) handles:
-- UI rendering (60 FPS = 16ms per frame)
+- UI rendering (60 FPS ≈ 16ms per frame)
 - User interaction events
 - Lifecycle callbacks
 
-If you block the UI thread for > 5 seconds → **ANR** (Application Not Responding)
+If you block the UI thread for a noticeable time (hundreds of milliseconds or more), the UI starts to stutter, and if it is blocked for a long time (on the order of several seconds, e.g. around 5s for input dispatch), the system may show an **ANR** (`Application` Not Responding).
 
 ❌ **Bad: Blocking UI Thread**
 ```kotlin
@@ -259,14 +260,14 @@ class UserViewModel : ViewModel() {
 ```
 
 **Advantages:**
-- ✅ Automatic cancellation when Activity/ViewModel is destroyed
+- ✅ When using lifecycleScope/viewModelScope, coroutines are automatically cancelled when the corresponding component is destroyed
 - ✅ Simple syntax
-- ✅ Built-in error handling
-- ✅ Easy thread switching
+- ✅ Convenient error handling via structured concurrency, try/catch, supervisor scopes
+- ✅ Easy to switch between contexts (e.g., IO/Main)
 
 #### 2. WorkManager
 
-**Guaranteed background job execution**
+**Deferred and reliable background job execution**
 
 ```kotlin
 class SyncWorker(context: Context, params: WorkerParameters)
@@ -295,9 +296,9 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 ```
 
 **Advantages:**
-- ✅ Survives app restarts
+- ✅ Can continue work after app restarts
 - ✅ Respects system conditions (battery, network)
-- ✅ Guaranteed execution
+- ✅ Aims to guarantee execution as long as constraints are met and required services are available
 
 **When to use:** Data sync, file uploads, cache cleanup
 
@@ -322,7 +323,7 @@ class MainActivity : AppCompatActivity() {
 ```
 
 ❌ **Drawbacks:**
-- Creates new thread each time (inefficient)
+- Creates a new thread each time (inefficient)
 - No automatic cancellation
 - Manual thread management needed
 
@@ -341,9 +342,17 @@ Dispatchers.Main
 
 ### Rule of Thumb
 
-> If an operation takes > **16ms** (one frame), run it on a background thread
+> Practical guideline: if an operation can exceed the frame budget (~16ms) and its result is not needed immediately for the current frame's rendering, run it on a background thread.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+1. Что произойдёт, если выполнить сетевой запрос в главном потоке?
+2. В чём разница между `Dispatchers.IO` и `Dispatchers.Default`?
+3. В каких случаях стоит использовать WorkManager вместо только корутин?
+4. Как lifecycleScope и viewModelScope помогают избежать утечек памяти?
+5. Что такое ANR и как его предотвратить?
 
 ## Follow-ups
 
@@ -353,24 +362,43 @@ Dispatchers.Main
 4. How do lifecycleScope and viewModelScope prevent memory leaks?
 5. What is ANR and how to prevent it?
 
+## Ссылки (RU)
+
+- [[c-coroutines]]
+- [[c-workmanager]]
+- [[moc-android]]
+- [Руководство по фоновой работе в Android](https://developer.android.com/guide/background)
+- [Kotlin Coroutines на Android](https://developer.android.com/kotlin/coroutines)
+- [Руководство по WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
+
 ## References
 
 - [[c-coroutines]]
-- [[c-multithreading]]
-- [[c-anr]]
+- [[c-workmanager]]
 - [[moc-android]]
 - [Android Background Work Guide](https://developer.android.com/guide/background)
 - [Kotlin Coroutines on Android](https://developer.android.com/kotlin/coroutines)
 - [WorkManager Guide](https://developer.android.com/topic/libraries/architecture/workmanager)
 
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- (нет соответствующей локализованной ссылки)
+
+### Похожие (тот же уровень)
+- [[q-repository-multiple-sources--android--medium]]
+
+### Продвинутые (сложнее)
+- [[q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard]]
+- [[q-how-to-display-snackbar-or-toast-based-on-results--android--medium]]
+
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-ui-thread--android--easy]]
+- (no matching localized prerequisite link)
 
 ### Related (Same Level)
 - [[q-repository-multiple-sources--android--medium]]
-- [[q-coroutine-basics--kotlin--easy]]
 
 ### Advanced (Harder)
 - [[q-how-to-reduce-number-of-recompositions-besides-side-effects--android--hard]]

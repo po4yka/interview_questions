@@ -15,14 +15,14 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
-- c-turbine-testing
+- c-flow
 - q-compose-testing--android--medium
 - q-unit-testing-coroutines-flow--android--medium
 created: 2025-10-12
-updated: 2025-10-28
+updated: 2025-11-10
 tags:
 - android/coroutines
 - android/flow
@@ -31,7 +31,9 @@ tags:
 - turbine
 - unit-testing
 sources:
-- https://github.com/cashapp/turbine
+- "https://github.com/cashapp/turbine"
+
+
 ---
 
 # Вопрос (RU)
@@ -45,13 +47,13 @@ sources:
 ## Ответ (RU)
 
 **Что такое Turbine:**
-Turbine — библиотека для тестирования Kotlin Flow от Cash App, предоставляющая декларативный API для проверки асинхронных эмиссий. Решает проблему недетерминированности Flow-тестов и упрощает верификацию последовательности событий.
+Turbine — библиотека для тестирования Kotlin `Flow` от Cash App, предоставляющая декларативный API для проверки асинхронных эмиссий. Упрощает верификацию последовательности событий и уменьшает недетерминизм `Flow`-тестов за счет явного ожидания элементов, завершения и ошибок.
 
 **Ключевые возможности:**
 - Декларативные методы для проверки эмиссий (`awaitItem`, `awaitComplete`, `awaitError`)
 - Интеграция с `kotlinx-coroutines-test` для контроля виртуального времени
-- Поддержка StateFlow, SharedFlow и холодных Flow
-- Автоматическая очистка ресурсов и обработка отмены
+- Поддержка `StateFlow`, `SharedFlow` и холодных `Flow`
+- Автоматическая очистка ресурсов и корректная обработка отмены
 
 **Основной API:**
 
@@ -84,7 +86,7 @@ fun `test flow error`() = runTest {
     }
 }
 
-// ✅ Проверка отсутствия событий
+// ✅ Проверка отложенной эмиссии и отсутствия событий
 @Test
 fun `test delayed emission`() = runTest {
     val flow = flow {
@@ -93,14 +95,19 @@ fun `test delayed emission`() = runTest {
     }
 
     flow.test {
-        expectNoEvents()           // нет эмиссий до истечения delay
-        advanceTimeBy(100)
+        expectNoEvents()              // на старте нет эмиссий
+    }
+
+    advanceTimeBy(100)                // управление виртуальным временем в runTest
+
+    flow.test {
         assertEquals(42, awaitItem())
+        awaitComplete()
     }
 }
 ```
 
-**Тестирование StateFlow в ViewModel:**
+**Тестирование `StateFlow` в `ViewModel`:**
 
 ```kotlin
 class CounterViewModel : ViewModel() {
@@ -112,7 +119,7 @@ class CounterViewModel : ViewModel() {
 
 @Test
 fun `increment updates state correctly`() = runTest {
-    Dispatchers.setMain(StandardTestDispatcher())
+    Dispatchers.setMain(StandardTestDispatcher(testScheduler))
     val viewModel = CounterViewModel()
 
     viewModel.count.test {
@@ -159,16 +166,16 @@ fun `load transitions through states correctly`() = runTest {
     val viewModel = DataViewModel(mockRepo)
 
     viewModel.state.test {
-        assertTrue(awaitItem() is UiState.Loading)  // начальное
+        assertTrue(awaitItem() is UiState.Loading)  // начальное состояние
+    }
 
-        viewModel.load()
-        advanceUntilIdle()  // ✅ пропускаем виртуальное время до завершения корутин
+    viewModel.load()
+    advanceUntilIdle()  // ✅ пропускаем виртуальное время до завершения корутин
 
-        // ❌ НЕ используйте skipItems() без понимания, сколько эмиссий пропустить
+    viewModel.state.test {
         val final = awaitItem()
         assertTrue(final is UiState.Success)
         assertEquals("result", (final as UiState.Success).data)
-
         cancelAndIgnoreRemainingEvents()
     }
 }
@@ -183,7 +190,7 @@ flow.test {
     // тест зависнет, ожидая завершения Flow
 }
 
-// ✅ Всегда явно завершайте
+// ✅ Всегда явно завершаете ожидание
 flow.test {
     assertEquals(1, awaitItem())
     awaitComplete()  // или cancelAndIgnoreRemainingEvents()
@@ -206,13 +213,13 @@ stateFlow.test {
 ## Answer (EN)
 
 **What is Turbine:**
-Turbine is a Flow testing library by Cash App that provides a declarative API for verifying asynchronous emissions. It solves the non-determinism problem in Flow tests and simplifies event sequence verification.
+Turbine is a Kotlin `Flow` testing library by Cash App that provides a declarative API for verifying asynchronous emissions. It simplifies event sequence verification and reduces test non-determinism through explicit waiting for items, completion, and errors.
 
 **Key capabilities:**
 - Declarative methods for emission verification (`awaitItem`, `awaitComplete`, `awaitError`)
 - Integration with `kotlinx-coroutines-test` for virtual time control
-- Support for StateFlow, SharedFlow, and cold Flows
-- Automatic resource cleanup and cancellation handling
+- Support for `StateFlow`, `SharedFlow`, and cold Flows
+- Automatic resource cleanup and proper cancellation handling
 
 **Core API:**
 
@@ -245,7 +252,7 @@ fun `test flow error`() = runTest {
     }
 }
 
-// ✅ Verifying no events
+// ✅ Verifying delayed emission and no events
 @Test
 fun `test delayed emission`() = runTest {
     val flow = flow {
@@ -254,14 +261,19 @@ fun `test delayed emission`() = runTest {
     }
 
     flow.test {
-        expectNoEvents()           // no emissions before delay expires
-        advanceTimeBy(100)
+        expectNoEvents()              // no emissions at the beginning
+    }
+
+    advanceTimeBy(100)                // virtual time control in runTest
+
+    flow.test {
         assertEquals(42, awaitItem())
+        awaitComplete()
     }
 }
 ```
 
-**Testing StateFlow in ViewModel:**
+**Testing `StateFlow` in `ViewModel`:**
 
 ```kotlin
 class CounterViewModel : ViewModel() {
@@ -273,7 +285,7 @@ class CounterViewModel : ViewModel() {
 
 @Test
 fun `increment updates state correctly`() = runTest {
-    Dispatchers.setMain(StandardTestDispatcher())
+    Dispatchers.setMain(StandardTestDispatcher(testScheduler))
     val viewModel = CounterViewModel()
 
     viewModel.count.test {
@@ -321,15 +333,15 @@ fun `load transitions through states correctly`() = runTest {
 
     viewModel.state.test {
         assertTrue(awaitItem() is UiState.Loading)  // initial state
+    }
 
-        viewModel.load()
-        advanceUntilIdle()  // ✅ skip virtual time until coroutines complete
+    viewModel.load()
+    advanceUntilIdle()  // ✅ advance virtual time until coroutines complete
 
-        // ❌ DON'T use skipItems() without knowing how many emissions to skip
+    viewModel.state.test {
         val final = awaitItem()
         assertTrue(final is UiState.Success)
         assertEquals("result", (final as UiState.Success).data)
-
         cancelAndIgnoreRemainingEvents()
     }
 }
@@ -344,7 +356,7 @@ flow.test {
     // test will hang waiting for Flow completion
 }
 
-// ✅ Always explicitly finish
+// ✅ Always explicitly finish waiting
 flow.test {
     assertEquals(1, awaitItem())
     awaitComplete()  // or cancelAndIgnoreRemainingEvents()
@@ -366,6 +378,15 @@ stateFlow.test {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как Turbine обрабатывает backpressure при тестировании высокочастотных эмиссий?
+- В чем разница между методами `test()` и `testIn()`, и когда какой использовать?
+- Как тестировать холодные и горячие Flows с помощью Turbine?
+- Когда использовать `expectNoEvents()` vs `expectMostRecentItem()`?
+- Как тестировать Flows с несколькими коллекторами с помощью Turbine?
+- Как Turbine интегрируется с управлением виртуальным временем `TestScope`?
+
 ## Follow-ups
 
 - How does Turbine handle backpressure when testing high-frequency emissions?
@@ -375,17 +396,39 @@ stateFlow.test {
 - How to test Flows with multiple collectors using Turbine?
 - How does Turbine integrate with TestScope's virtual time control?
 
+## Ссылки (RU)
+
+- Официальная документация Turbine: https://github.com/cashapp/turbine
+- Руководство по `kotlinx-coroutines-test`: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/
+- [[c-flow]] — основы `Flow` и операторов
+
 ## References
 
 - Official Turbine documentation: https://github.com/cashapp/turbine
 - kotlinx-coroutines-test guide: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/
+- [[c-flow]] — Flow basics and operators
+
+## Похожие вопросы (RU)
+
+### Предпосылки / Концепты
+
+- [[c-flow]] — концепты и операторы `Flow`
+
+### Связанные
+- [[q-unit-testing-coroutines-flow--android--medium]] - Тестирование корутин и `Flow`
+- [[q-compose-testing--android--medium]] - Тестирование `ViewModel` с `Flow`
+- [[q-compose-testing--android--medium]] - Тестирование Compose UI с состоянием на `Flow`
+
+### Продвинутое
+- Тестирование различий и практик между `SharedFlow` и `StateFlow`
+- Продвинутое тестирование операторов `Flow` (debounce, combine, flatMapLatest)
+- Тестирование `Flow` с кастомным `CoroutineContext` и диспетчерами
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
-- [[c-turbine-testing]]
-
+- [[c-flow]] - Flow concepts and operators
 
 ### Related
 - [[q-unit-testing-coroutines-flow--android--medium]] - Testing coroutines and Flows
@@ -393,6 +436,6 @@ stateFlow.test {
 - [[q-compose-testing--android--medium]] - Testing Compose UI with state Flows
 
 ### Advanced
-- Testing SharedFlow vs StateFlow differences and best practices
-- Advanced Flow operators testing (debounce, combine, flatMapLatest)
-- Testing Flow with custom CoroutineContext and dispatchers
+- Testing `SharedFlow` vs `StateFlow` differences and best practices
+- Advanced `Flow` operators testing (debounce, combine, flatMapLatest)
+- Testing `Flow` with custom CoroutineContext and dispatchers

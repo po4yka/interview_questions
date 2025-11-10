@@ -6,7 +6,6 @@ aliases:
 - Различия MVVM и MVP
 topic: android
 subtopics:
-- architecture-clean
 - architecture-mvvm
 - lifecycle
 question_kind: theory
@@ -20,22 +19,17 @@ moc: moc-android
 related:
 - c-lifecycle
 - c-clean-architecture
-- c-mvvm
 - q-clean-architecture-android--android--hard
 - q-mvvm-pattern--android--medium
-- q-what-is-viewmodel--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 tags:
-- android/architecture-clean
 - android/architecture-mvvm
 - android/lifecycle
 - architecture-patterns
-- data-binding
 - difficulty/medium
-- presenter
-- viewmodel
+
 ---
 
 # Вопрос (RU)
@@ -48,25 +42,28 @@ tags:
 
 ## Ответ (RU)
 
-**MVVM (Model-View-ViewModel)** и **MVP (Model-View-Presenter)** — архитектурные паттерны для разделения ответственности, различающиеся механизмом связи View с бизнес-логикой.
+**MVVM (Model-`View`-`ViewModel`)** и **MVP (Model-`View`-Presenter)** — архитектурные паттерны для разделения ответственности, различающиеся механизмом связи `View` с бизнес-логикой.
 
 **Ключевые различия:**
 
-**1. Связь View и логики**
+**1. Связь `View` и логики**
 
 **MVP** — явная двусторонняя связь через интерфейс:
-- Presenter содержит ссылку на View (интерфейс)
-- View явно вызывает методы Presenter
-- Presenter явно вызывает методы View для обновления UI
+- Presenter содержит ссылку на `View` (интерфейс)
+- `View` явно вызывает методы Presenter
+- Presenter явно вызывает методы `View` для обновления UI
 
 ```kotlin
-// MVP
+// MVP (упрощенный пример)
 interface UserListView {
     fun showUsers(users: List<User>)
     fun showError(message: String)
 }
 
-class UserListPresenter(private val view: UserListView) {
+class UserListPresenter(
+    private val view: UserListView,
+    private val repository: UserRepository
+) {
     fun loadUsers() {
         repository.getUsers { result ->
             // ✅ Явное управление View через интерфейс
@@ -80,13 +77,16 @@ class UserListPresenter(private val view: UserListView) {
 ```
 
 **MVVM** — слабая связь через наблюдаемые данные:
-- ViewModel не знает о View (отсутствие ссылки)
-- View подписывается на данные ViewModel (LiveData, StateFlow)
-- UI обновляется автоматически при изменении данных
+- `ViewModel` не знает о `View` (отсутствие ссылки)
+- `View` подписывается на данные `ViewModel` (`LiveData`, `StateFlow` и т.п.)
+- UI обновляется реактивно при изменении данных
 
 ```kotlin
-// MVVM
-class UserListViewModel : ViewModel() {
+// MVVM (упрощенный пример)
+class UserListViewModel(
+    private val repository: UserRepository
+) : ViewModel() {
+
     private val _users = MutableStateFlow<List<User>>(emptyList())
     val users: StateFlow<List<User>> = _users.asStateFlow()
 
@@ -98,10 +98,10 @@ class UserListViewModel : ViewModel() {
     }
 }
 
-// View подписывается на изменения
+// View подписывается на изменения с учетом жизненного цикла (пример для Activity/Fragment)
 lifecycleScope.launch {
     viewModel.users.collect { users ->
-        adapter.submitList(users) // Автообновление
+        adapter.submitList(users) // Реактивное обновление UI
     }
 }
 ```
@@ -110,28 +110,30 @@ lifecycleScope.launch {
 
 | Аспект | MVP | MVVM |
 |--------|-----|------|
-| **Конфигурационные изменения** | Presenter пересоздается, данные теряются | ViewModel сохраняется через `ViewModelStore` |
-| **Утечки памяти** | Риск при хранении ссылки на View | Отсутствует (нет ссылки на View) |
-| **Lifecycle-aware** | Требует ручной обработки | Встроенная поддержка через `LifecycleObserver` |
+| **Конфигурационные изменения** | По умолчанию Presenter пересоздаётся вместе с `View`; сохранение состояния требует ручной реализации (retain, кеш, SavedState и т.п.) | `ViewModel` по умолчанию переживает конфигурационные изменения через `ViewModelStore` |
+| **Утечки памяти** | Есть риск при хранении сильной ссылки на `View` и неправильной очистке | Риск ниже, так как `ViewModel` не должен держать ссылку на `View`; утечки всё ещё возможны при нарушении этого правила |
+| **Lifecycle-aware** | Требует ручной обработки жизненного цикла для отписок/освобождения ресурсов | Стандартные компоненты (`ViewModel`, `LiveData`, `Flow` с repeatOnLifecycle и т.п.) интегрируются с жизненным циклом фреймворка |
 
 **3. Тестируемость**
 
 ```kotlin
-// MVP — требуется mock View
+// MVP — обычно требуется mock View (упрощенный пример)
 @Test
 fun `load users shows data`() {
     val mockView = mock<UserListView>()
-    val presenter = UserListPresenter(mockView)
+    val fakeRepository = FakeUserRepository()
+    val presenter = UserListPresenter(mockView, fakeRepository)
 
     presenter.loadUsers()
 
     verify(mockView).showUsers(any())
 }
 
-// MVVM — View не нужен
+// MVVM — тестируем ViewModel без настоящей View (упрощенный пример)
 @Test
 fun `load users emits data`() = runTest {
-    val viewModel = UserListViewModel()
+    val fakeRepository = FakeUserRepository()
+    val viewModel = UserListViewModel(fakeRepository)
 
     viewModel.loadUsers()
 
@@ -140,30 +142,33 @@ fun `load users emits data`() = runTest {
 ```
 
 **Выбор паттерна:**
-- **MVP**: Легаси-проекты, точный контроль обновлений UI, отсутствие Jetpack
-- **MVVM**: Современные Android-приложения с Jetpack, реактивное программирование, упрощенное тестирование
+- **MVP**: Легаси-проекты, отсутствие Jetpack-компонентов, необходимость точного контроля вызовов `View` (но требует большего ручного управления жизненным циклом)
+- **MVVM**: Современные Android-приложения с Jetpack, реактивное программирование, упрощённое управление жизненным циклом и тестирование
 
 ## Answer (EN)
 
-**MVVM (Model-View-ViewModel)** and **MVP (Model-View-Presenter)** are architectural patterns for separating concerns, differing in how the View communicates with business logic.
+**MVVM (Model-`View`-`ViewModel`)** and **MVP (Model-`View`-Presenter)** are architectural patterns for separating concerns, differing mainly in how the `View` is connected to business logic.
 
 **Key Differences:**
 
-**1. View-Logic Binding**
+**1. `View`-Logic Binding**
 
 **MVP** — explicit bidirectional binding via interface:
-- Presenter holds reference to View (interface)
-- View explicitly calls Presenter methods
-- Presenter explicitly calls View methods to update UI
+- Presenter holds a reference to the `View` (interface)
+- `View` explicitly calls Presenter methods
+- Presenter explicitly calls `View` methods to update UI
 
 ```kotlin
-// MVP
+// MVP (simplified example)
 interface UserListView {
     fun showUsers(users: List<User>)
     fun showError(message: String)
 }
 
-class UserListPresenter(private val view: UserListView) {
+class UserListPresenter(
+    private val view: UserListView,
+    private val repository: UserRepository
+) {
     fun loadUsers() {
         repository.getUsers { result ->
             // ✅ Explicit View control via interface
@@ -177,13 +182,16 @@ class UserListPresenter(private val view: UserListView) {
 ```
 
 **MVVM** — loose coupling via observable data:
-- ViewModel doesn't know about View (no reference)
-- View subscribes to ViewModel data (LiveData, StateFlow)
-- UI updates automatically on data changes
+- `ViewModel` does not know about the `View` (no reference)
+- `View` subscribes to `ViewModel` data (`LiveData`, `StateFlow`, etc.)
+- UI updates reactively when data changes
 
 ```kotlin
-// MVVM
-class UserListViewModel : ViewModel() {
+// MVVM (simplified example)
+class UserListViewModel(
+    private val repository: UserRepository
+) : ViewModel() {
+
     private val _users = MutableStateFlow<List<User>>(emptyList())
     val users: StateFlow<List<User>> = _users.asStateFlow()
 
@@ -195,10 +203,10 @@ class UserListViewModel : ViewModel() {
     }
 }
 
-// View subscribes to changes
+// View subscribes to changes with lifecycle awareness (e.g., in Activity/Fragment)
 lifecycleScope.launch {
     viewModel.users.collect { users ->
-        adapter.submitList(users) // Auto-update
+        adapter.submitList(users) // Reactive UI updates
     }
 }
 ```
@@ -207,28 +215,30 @@ lifecycleScope.launch {
 
 | Aspect | MVP | MVVM |
 |--------|-----|------|
-| **Configuration changes** | Presenter recreated, data lost | ViewModel survives via `ViewModelStore` |
-| **Memory leaks** | Risk when holding View reference | None (no View reference) |
-| **Lifecycle-aware** | Manual handling required | Built-in support via `LifecycleObserver` |
+| **Configuration changes** | By default, Presenter is recreated with the `View`; retaining state requires manual handling (retained instances, cache, SavedState, etc.) | `ViewModel` survives configuration changes by default via `ViewModelStore` |
+| **Memory leaks** | Risk if holding a strong `View` reference and not clearing it properly | Lower risk because `ViewModel` should not hold `View` references; leaks still possible if this rule is broken |
+| **Lifecycle-aware** | Requires manual lifecycle handling for subscriptions/resources | Standard components (`ViewModel`, `LiveData`, `Flow` with repeatOnLifecycle, etc.) integrate with the framework lifecycle |
 
 **3. Testability**
 
 ```kotlin
-// MVP — requires mock View
+// MVP — usually needs a mocked View (simplified example)
 @Test
 fun `load users shows data`() {
     val mockView = mock<UserListView>()
-    val presenter = UserListPresenter(mockView)
+    val fakeRepository = FakeUserRepository()
+    val presenter = UserListPresenter(mockView, fakeRepository)
 
     presenter.loadUsers()
 
     verify(mockView).showUsers(any())
 }
 
-// MVVM — no View needed
+// MVVM — test ViewModel without a real View (simplified example)
 @Test
 fun `load users emits data`() = runTest {
-    val viewModel = UserListViewModel()
+    val fakeRepository = FakeUserRepository()
+    val viewModel = UserListViewModel(fakeRepository)
 
     viewModel.loadUsers()
 
@@ -237,21 +247,20 @@ fun `load users emits data`() = runTest {
 ```
 
 **Pattern Selection:**
-- **MVP**: Legacy projects, precise UI update control, no Jetpack
-- **MVVM**: Modern Android with Jetpack, reactive programming, simplified testing
+- **MVP**: Legacy projects, environments without Jetpack components, cases requiring very explicit control over `View` calls (but with more manual lifecycle management)
+- **MVVM**: Modern Android apps with Jetpack, reactive style, simpler lifecycle handling and testing
 
 ## Follow-ups
 
 - How does MVI compare to MVVM and MVP?
 - When would you use MVP over MVVM in new projects?
 - How to handle one-time events (navigation, toasts) in MVVM?
-- What are the memory implications of holding View references in Presenters?
+- What are the memory implications of holding `View` references in Presenters?
 
 ## References
 
-- Official Android Architecture Guide: Modern app architecture
-- Jetpack ViewModel documentation: Lifecycle-aware data holders
-- Android Lifecycle documentation: Component lifecycle management
+- [[c-clean-architecture]]
+- [[c-lifecycle]]
 
 ## Related Questions
 
@@ -259,19 +268,14 @@ fun `load users emits data`() = runTest {
 
 - [[c-lifecycle]]
 - [[c-clean-architecture]]
-- [[c-mvvm]]
 
 
 ### Prerequisites
-- [[q-what-is-viewmodel--android--medium]] - Understanding ViewModel basics
+- [[q-what-is-viewmodel--android--medium]] - Understanding `ViewModel` basics
 
 ### Related
 - [[q-mvvm-pattern--android--medium]] - MVVM pattern explained
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] - ViewModel internals
-- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] - State preservation comparison
+- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
 
 ### Advanced
 - [[q-mvi-architecture--android--hard]] - MVI architecture pattern
-- [[q-clean-architecture-android--android--hard]] - Clean Architecture principles
-- [[q-mvi-handle-one-time-events--android--hard]] - One-time event handling
-

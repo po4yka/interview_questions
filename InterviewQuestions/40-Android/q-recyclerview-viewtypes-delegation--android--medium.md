@@ -16,10 +16,10 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-recyclerview-viewtypes
-- q-recyclerview-basics--android--easy
+- q-recyclerview-explained--android--medium
+- c-android
 created: 2025-10-13
-updated: 2025-10-31
+updated: 2025-11-10
 tags:
 - adapter
 - android/ui-views
@@ -27,7 +27,8 @@ tags:
 - difficulty/medium
 - view-types
 sources:
-- https://developer.android.com/guide/topics/ui/layout/recyclerview
+- "https://developer.android.com/guide/topics/ui/layout/recyclerview"
+
 ---
 
 # Вопрос (RU)
@@ -44,12 +45,12 @@ sources:
 ViewTypes позволяют отображать разные макеты в одном RecyclerView (заголовки, элементы, футеры, реклама). Правильная реализация критична для производительности и поддерживаемости гетерогенных списков.
 
 **Основные компоненты:**
-- `getItemViewType()` - определяет тип view для позиции
-- `onCreateViewHolder()` - создает ViewHolder по типу
-- `onBindViewHolder()` - привязывает данные к ViewHolder
+- `getItemViewType(position)` — определяет тип view для позиции; его результат используется фреймворком при вызове `onCreateViewHolder(parent, viewType)`
+- `onCreateViewHolder(parent, viewType)` — создает `ViewHolder` по полученному типу
+- `onBindViewHolder(holder, position)` — привязывает данные к соответствующему `ViewHolder`
 
 ```kotlin
-// Базовый адаптер с множественными типами
+// Базовый адаптер с множественными типами (упрощённый пример)
 class MultiTypeAdapter(private val items: List<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -82,6 +83,7 @@ class MultiTypeAdapter(private val items: List<Any>) : RecyclerView.Adapter<Recy
         }
     }
 }
+// На практике вместо List<Any> лучше использовать типизированные модели (например, sealed-классы ниже) для типобезопасности.
 ```
 
 **Sealed классы для типобезопасности:**
@@ -103,9 +105,16 @@ sealed class ListItem {
 ```
 
 **Adapter Delegation Pattern:**
-Делегирование позволяет разделить логику разных типов элементов на отдельные адаптеры.
+Делегирование позволяет разделить логику разных типов элементов на отдельные делегаты и тем самым упростить адаптер.
 
 ```kotlin
+// Пример контракта делегата (упрощённо)
+interface AdapterDelegate<T> {
+    fun isForViewType(items: List<T>, position: Int): Boolean
+    fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
+    fun onBindViewHolder(items: List<T>, position: Int, holder: RecyclerView.ViewHolder)
+}
+
 // Делегат для заголовка
 class HeaderDelegate : AdapterDelegate<ListItem> {
     override fun isForViewType(items: List<ListItem>, position: Int): Boolean {
@@ -123,6 +132,10 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
         (holder as HeaderViewHolder).bind(header)
     }
 }
+
+// В реальном адаптере регистрируются несколько делегатов, и каждый вызов
+// getItemViewType / onCreateViewHolder / onBindViewHolder проксируется
+// к подходящему делегату по isForViewType.
 ```
 
 ## Answer (EN)
@@ -131,12 +144,12 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 ViewTypes allow displaying different layouts in the same RecyclerView (headers, items, footers, ads). Proper implementation is critical for performance and maintainability of heterogeneous lists.
 
 **Main components:**
-- `getItemViewType()` - determines view type for position
-- `onCreateViewHolder()` - creates ViewHolder by type
-- `onBindViewHolder()` - binds data to ViewHolder
+- `getItemViewType(position)` - determines view type for a position; its result is used by the framework when calling `onCreateViewHolder(parent, viewType)`
+- `onCreateViewHolder(parent, viewType)` - creates a `ViewHolder` based on the given type
+- `onBindViewHolder(holder, position)` - binds data to the appropriate `ViewHolder`
 
 ```kotlin
-// Basic adapter with multiple types
+// Basic adapter with multiple types (simplified example)
 class MultiTypeAdapter(private val items: List<Any>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -169,6 +182,7 @@ class MultiTypeAdapter(private val items: List<Any>) : RecyclerView.Adapter<Recy
         }
     }
 }
+// In real-world code, prefer typed models (e.g., the sealed classes below) over List<Any> for better type safety.
 ```
 
 **Sealed classes for type safety:**
@@ -190,9 +204,16 @@ sealed class ListItem {
 ```
 
 **Adapter Delegation Pattern:**
-Delegation allows separating logic for different item types into separate adapters.
+Delegation allows separating logic for different item types into dedicated delegates, simplifying the main adapter.
 
 ```kotlin
+// Example of a delegate contract (simplified)
+interface AdapterDelegate<T> {
+    fun isForViewType(items: List<T>, position: Int): Boolean
+    fun onCreateViewHolder(parent: ViewGroup): RecyclerView.ViewHolder
+    fun onBindViewHolder(items: List<T>, position: Int, holder: RecyclerView.ViewHolder)
+}
+
 // Delegate for header
 class HeaderDelegate : AdapterDelegate<ListItem> {
     override fun isForViewType(items: List<ListItem>, position: Int): Boolean {
@@ -210,9 +231,19 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
         (holder as HeaderViewHolder).bind(header)
     }
 }
+
+// In a real adapter, multiple delegates are registered, and each call to
+// getItemViewType / onCreateViewHolder / onBindViewHolder is routed
+// to the appropriate delegate based on isForViewType.
 ```
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как оптимизировать производительность при использовании нескольких типов `View`?
+- В чем преимущества использования делегирования адаптера?
+- Как эффективно обрабатывать изменения типов `View`?
 
 ## Follow-ups
 
@@ -220,29 +251,40 @@ class HeaderDelegate : AdapterDelegate<ListItem> {
 - What are the benefits of using adapter delegation?
 - How do you handle view type changes efficiently?
 
+## Ссылки (RU)
 
-## References
+- [Views](https://developer.android.com/develop/ui/views)
+- [Документация Android](https://developer.android.com/docs)
+
+## References (EN)
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
 
+## Связанные вопросы (RU)
 
-## Related Questions
+### Предпосылки / Концепции
+
+
+### Предпосылки (Проще)
+- [[q-android-app-components--android--easy]] - Компоненты приложения
+
+### Связанные (Того же уровня)
+- [[q-recyclerview-explained--android--medium]] - Объяснение RecyclerView
+
+### Продвинутые (Сложнее)
+- [[q-android-runtime-internals--android--hard]] - Внутреннее устройство Runtime
+
+## Related Questions (EN)
 
 ### Prerequisites / Concepts
 
-- [[c-recyclerview-viewtypes]]
-
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-basics--android--easy]] - RecyclerView basics
 - [[q-android-app-components--android--easy]] - App components
 
 ### Related (Same Level)
-- [[q-adapter-patterns--android--medium]] - Adapter patterns
-- [[q-recyclerview-explained--android--medium]] - RecyclerView performance
-- [[q-viewholder-pattern--android--medium]] - ViewHolder pattern
+- [[q-recyclerview-explained--android--medium]] - RecyclerView explanation
 
 ### Advanced (Harder)
-- [[q-recyclerview-advanced--android--hard]] - RecyclerView advanced
 - [[q-android-runtime-internals--android--hard]] - Runtime internals

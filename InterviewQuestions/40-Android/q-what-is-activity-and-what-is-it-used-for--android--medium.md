@@ -7,7 +7,6 @@ aliases:
 topic: android
 subtopics:
 - activity
-- lifecycle
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -22,808 +21,814 @@ related:
 - q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium
 - q-what-each-android-component-represents--android--easy
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags:
-- activity
 - android/activity
-- android/lifecycle
-- components
 - difficulty/medium
-- ui
 ---
 
 # Вопрос (RU)
-> Компонент Activity
+> Компонент `Activity`
 
 # Question (EN)
-> Activity
+> `Activity`
 
 ---
-
-## Answer (EN)
-Activity is a core component of an Android application that provides a user interface with which users can interact to perform various actions such as dialing a phone, viewing photos, sending emails, etc. Each Activity represents a single screen with a user interface.
-
-### Activity as a Page in a Book
-
-If you imagine an application as a book, then an Activity is one page of that book. Each page (Activity) has its own content and purpose, and users can navigate between pages.
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // This Activity displays the main screen
-        setupMainScreen()
-    }
-
-    private fun setupMainScreen() {
-        // Configure buttons, lists, and other UI elements
-        findViewById<Button>(R.id.viewPhotosButton).setOnClickListener {
-            // Navigate to photo viewing Activity
-            startActivity(Intent(this, PhotoGalleryActivity::class.java))
-        }
-
-        findViewById<Button>(R.id.dialButton).setOnClickListener {
-            // Navigate to dialer Activity
-            val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1234567890"))
-            startActivity(dialIntent)
-        }
-    }
-}
-```
-
-### Main Purposes of Activity
-
-#### 1. Providing User Interface
-
-Activity is responsible for displaying the UI and making it interactive:
-
-```kotlin
-class PhotoGalleryActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_photo_gallery)
-
-        // Display photos in a grid
-        val recyclerView = findViewById<RecyclerView>(R.id.photoGrid)
-        recyclerView.layoutManager = GridLayoutManager(this, 3)
-        recyclerView.adapter = PhotoAdapter(getPhotos())
-    }
-
-    private fun getPhotos(): List<Photo> {
-        // Load photos from storage or network
-        return photoRepository.getAllPhotos()
-    }
-}
-```
-
-#### 2. User Interaction Handling
-
-Activity processes user input and responds to it:
-
-```kotlin
-class EmailComposeActivity : AppCompatActivity() {
-
-    private lateinit var toEditText: EditText
-    private lateinit var subjectEditText: EditText
-    private lateinit var messageEditText: EditText
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_email_compose)
-
-        toEditText = findViewById(R.id.toEditText)
-        subjectEditText = findViewById(R.id.subjectEditText)
-        messageEditText = findViewById(R.id.messageEditText)
-
-        // Handle send button click
-        findViewById<Button>(R.id.sendButton).setOnClickListener {
-            sendEmail()
-        }
-
-        // Handle attach file button click
-        findViewById<Button>(R.id.attachButton).setOnClickListener {
-            selectFile()
-        }
-
-        // Validate email address as user types
-        toEditText.addTextChangedListener { text ->
-            validateEmailAddress(text.toString())
-        }
-    }
-
-    private fun sendEmail() {
-        val to = toEditText.text.toString()
-        val subject = subjectEditText.text.toString()
-        val message = messageEditText.text.toString()
-
-        // Send email via email app or API
-        val emailIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "message/rfc822"
-            putExtra(Intent.EXTRA_EMAIL, arrayOf(to))
-            putExtra(Intent.EXTRA_SUBJECT, subject)
-            putExtra(Intent.EXTRA_TEXT, message)
-        }
-
-        if (emailIntent.resolveActivity(packageManager) != null) {
-            startActivity(Intent.createChooser(emailIntent, "Send email"))
-        }
-    }
-
-    private fun selectFile() {
-        // Open file picker
-    }
-
-    private fun validateEmailAddress(email: String) {
-        // Validate email format
-    }
-}
-```
-
-#### 3. Lifecycle Management
-
-Activity manages resources throughout its lifecycle:
-
-```kotlin
-class VideoPlayerActivity : AppCompatActivity() {
-
-    private lateinit var player: VideoPlayer
-    private lateinit var videoView: VideoView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_video_player)
-
-        // Initialize player
-        player = VideoPlayer(this)
-        videoView = findViewById(R.id.videoView)
-
-        val videoUrl = intent.getStringExtra("video_url")
-        player.setDataSource(videoUrl)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // Prepare video when Activity becomes visible
-        player.prepare()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Start playback when Activity is in foreground
-        player.play()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // Pause playback when Activity loses focus
-        player.pause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // Release resources when Activity is no longer visible
-        player.stop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // Clean up player
-        player.release()
-    }
-}
-```
-
-#### 4. Screen Transitions
-
-Activity enables navigation between different screens:
-
-```kotlin
-class ProductListActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_product_list)
-
-        val recyclerView = findViewById<RecyclerView>(R.id.productRecyclerView)
-        val adapter = ProductAdapter { product ->
-            // Navigate to product details when item clicked
-            navigateToProductDetails(product)
-        }
-
-        recyclerView.adapter = adapter
-        adapter.submitList(getProducts())
-    }
-
-    private fun navigateToProductDetails(product: Product) {
-        val intent = Intent(this, ProductDetailActivity::class.java).apply {
-            putExtra("product_id", product.id)
-            putExtra("product_name", product.name)
-        }
-        startActivity(intent)
-    }
-
-    private fun getProducts(): List<Product> {
-        return productRepository.getProducts()
-    }
-}
-
-class ProductDetailActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_product_detail)
-
-        // Receive data from previous Activity
-        val productId = intent.getIntExtra("product_id", -1)
-        val productName = intent.getStringExtra("product_name")
-
-        // Display product details
-        loadProductDetails(productId)
-    }
-
-    private fun loadProductDetails(productId: Int) {
-        val product = productRepository.getProductById(productId)
-        // Display product information
-    }
-}
-```
-
-#### 5. Component Interaction
-
-Activity interacts with other Android components:
-
-```kotlin
-class MainDashboardActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dashboard)
-
-        // Start a Service for background download
-        findViewById<Button>(R.id.downloadButton).setOnClickListener {
-            val serviceIntent = Intent(this, DownloadService::class.java).apply {
-                putExtra("file_url", "https://example.com/file.zip")
-            }
-            startService(serviceIntent)
-        }
-
-        // Register BroadcastReceiver for download completion
-        registerDownloadReceiver()
-
-        // Query ContentProvider for user data
-        loadUserDataFromProvider()
-
-        // Schedule work with WorkManager
-        scheduleBackgroundSync()
-    }
-
-    private fun registerDownloadReceiver() {
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                Toast.makeText(context, "Download complete", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        val filter = IntentFilter("com.example.DOWNLOAD_COMPLETE")
-        registerReceiver(receiver, filter)
-    }
-
-    private fun loadUserDataFromProvider() {
-        val uri = Uri.parse("content://com.example.provider/users")
-        val cursor = contentResolver.query(uri, null, null, null, null)
-
-        cursor?.use {
-            // Process user data
-        }
-    }
-
-    private fun scheduleBackgroundSync() {
-        val workRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
-            .build()
-
-        WorkManager.getInstance(this).enqueue(workRequest)
-    }
-}
-```
-
-### Real-World Examples
-
-#### Dialing Phone
-```kotlin
-class DialerActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dialer)
-
-        findViewById<Button>(R.id.dialButton).setOnClickListener {
-            val phoneNumber = findViewById<EditText>(R.id.phoneNumberInput).text.toString()
-            dialPhoneNumber(phoneNumber)
-        }
-    }
-
-    private fun dialPhoneNumber(phoneNumber: String) {
-        val intent = Intent(Intent.ACTION_DIAL).apply {
-            data = Uri.parse("tel:$phoneNumber")
-        }
-        startActivity(intent)
-    }
-}
-```
-
-#### Viewing Photos
-```kotlin
-class PhotoViewerActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_photo_viewer)
-
-        val photoUri = intent.getParcelableExtra<Uri>("photo_uri")
-
-        findViewById<ImageView>(R.id.photoImageView).apply {
-            setImageURI(photoUri)
-        }
-
-        // Implement zoom, share, delete functionality
-        setupPhotoActions()
-    }
-
-    private fun setupPhotoActions() {
-        findViewById<Button>(R.id.shareButton).setOnClickListener {
-            sharePhoto()
-        }
-
-        findViewById<Button>(R.id.deleteButton).setOnClickListener {
-            deletePhoto()
-        }
-    }
-
-    private fun sharePhoto() {
-        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "image/*"
-            putExtra(Intent.EXTRA_STREAM, intent.getParcelableExtra<Uri>("photo_uri"))
-        }
-        startActivity(Intent.createChooser(shareIntent, "Share photo"))
-    }
-
-    private fun deletePhoto() {
-        // Delete photo and finish Activity
-    }
-}
-```
-
-### Activity Properties
-
-| Property | Description |
-|----------|-------------|
-| **Single Screen** | Each Activity typically represents one screen |
-| **Independent** | Can be started by other apps (if exported) |
-| **Managed by System** | Lifecycle controlled by Android |
-| **Has Intent Filter** | Can respond to specific intents |
-| **Resource Owner** | Manages its own UI resources |
-| **Context Provider** | Provides application context |
-
-### When to Use Activity
-
-- **Use Activity for**:
-- Distinct screens in your app
-- Entry points from other apps
-- Different task flows
-- Full-screen experiences
-
-- **Don't use Activity for**:
-- Sub-sections of a screen (use Fragments)
-- Temporary UI overlays (use DialogFragment)
-- Background operations (use Service/WorkManager)
-
-
-# Question (EN)
-> Activity
-
----
-
-
----
-
-
-## Answer (EN)
-Activity is a core component of an Android application that provides a user interface with which users can interact to perform various actions such as dialing a phone, viewing photos, sending emails, etc. Each Activity represents a single screen with a user interface.
-
-### Activity as a Page in a Book
-
-If you imagine an application as a book, then an Activity is one page of that book. Each page (Activity) has its own content and purpose, and users can navigate between pages.
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // This Activity displays the main screen
-        setupMainScreen()
-    }
-
-    private fun setupMainScreen() {
-        // Configure buttons, lists, and other UI elements
-        findViewById<Button>(R.id.viewPhotosButton).setOnClickListener {
-            // Navigate to photo viewing Activity
-            startActivity(Intent(this, PhotoGalleryActivity::class.java))
-        }
-
-        findViewById<Button>(R.id.dialButton).setOnClickListener {
-            // Navigate to dialer Activity
-            val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1234567890"))
-            startActivity(dialIntent)
-        }
-    }
-}
-```
-
-### Main Purposes of Activity
-
-#### 1. Providing User Interface
-
-Activity is responsible for displaying the UI and making it interactive:
-
-```kotlin
-class PhotoGalleryActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_photo_gallery)
-
-        // Display photos in a grid
-        val recyclerView = findViewById<RecyclerView>(R.id.photoGrid)
-        recyclerView.layoutManager = GridLayoutManager(this, 3)
-        recyclerView.adapter = PhotoAdapter(getPhotos())
-    }
-
-    private fun getPhotos(): List<Photo> {
-        // Load photos from storage or network
-        return photoRepository.getAllPhotos()
-    }
-}
-```
-
-#### 2. User Interaction Handling
-
-Activity processes user input and responds to it:
-
-```kotlin
-class EmailComposeActivity : AppCompatActivity() {
-
-    private lateinit var toEditText: EditText
-    private lateinit var subjectEditText: EditText
-    private lateinit var messageEditText: EditText
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_email_compose)
-
-        toEditText = findViewById(R.id.toEditText)
-        subjectEditText = findViewById(R.id.subjectEditText)
-        messageEditText = findViewById(R.id.messageEditText)
-
-        // Handle send button click
-        findViewById<Button>(R.id.sendButton).setOnClickListener {
-            sendEmail()
-        }
-
-        // Handle attach file button click
-        findViewById<Button>(R.id.attachButton).setOnClickListener {
-            selectFile()
-        }
-
-        // Validate email address as user types
-        toEditText.addTextChangedListener { text ->
-            validateEmailAddress(text.toString())
-        }
-    }
-
-    private fun sendEmail() {
-        val to = toEditText.text.toString()
-        val subject = subjectEditText.text.toString()
-        val message = messageEditText.text.toString()
-
-        // Send email via email app or API
-        val emailIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "message/rfc822"
-            putExtra(Intent.EXTRA_EMAIL, arrayOf(to))
-            putExtra(Intent.EXTRA_SUBJECT, subject)
-            putExtra(Intent.EXTRA_TEXT, message)
-        }
-
-        if (emailIntent.resolveActivity(packageManager) != null) {
-            startActivity(Intent.createChooser(emailIntent, "Send email"))
-        }
-    }
-
-    private fun selectFile() {
-        // Open file picker
-    }
-
-    private fun validateEmailAddress(email: String) {
-        // Validate email format
-    }
-}
-```
-
-#### 3. Lifecycle Management
-
-Activity manages resources throughout its lifecycle:
-
-```kotlin
-class VideoPlayerActivity : AppCompatActivity() {
-
-    private lateinit var player: VideoPlayer
-    private lateinit var videoView: VideoView
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_video_player)
-
-        // Initialize player
-        player = VideoPlayer(this)
-        videoView = findViewById(R.id.videoView)
-
-        val videoUrl = intent.getStringExtra("video_url")
-        player.setDataSource(videoUrl)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // Prepare video when Activity becomes visible
-        player.prepare()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Start playback when Activity is in foreground
-        player.play()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        // Pause playback when Activity loses focus
-        player.pause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // Release resources when Activity is no longer visible
-        player.stop()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // Clean up player
-        player.release()
-    }
-}
-```
-
-#### 4. Screen Transitions
-
-Activity enables navigation between different screens:
-
-```kotlin
-class ProductListActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_product_list)
-
-        val recyclerView = findViewById<RecyclerView>(R.id.productRecyclerView)
-        val adapter = ProductAdapter { product ->
-            // Navigate to product details when item clicked
-            navigateToProductDetails(product)
-        }
-
-        recyclerView.adapter = adapter
-        adapter.submitList(getProducts())
-    }
-
-    private fun navigateToProductDetails(product: Product) {
-        val intent = Intent(this, ProductDetailActivity::class.java).apply {
-            putExtra("product_id", product.id)
-            putExtra("product_name", product.name)
-        }
-        startActivity(intent)
-    }
-
-    private fun getProducts(): List<Product> {
-        return productRepository.getProducts()
-    }
-}
-
-class ProductDetailActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_product_detail)
-
-        // Receive data from previous Activity
-        val productId = intent.getIntExtra("product_id", -1)
-        val productName = intent.getStringExtra("product_name")
-
-        // Display product details
-        loadProductDetails(productId)
-    }
-
-    private fun loadProductDetails(productId: Int) {
-        val product = productRepository.getProductById(productId)
-        // Display product information
-    }
-}
-```
-
-#### 5. Component Interaction
-
-Activity interacts with other Android components:
-
-```kotlin
-class MainDashboardActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dashboard)
-
-        // Start a Service for background download
-        findViewById<Button>(R.id.downloadButton).setOnClickListener {
-            val serviceIntent = Intent(this, DownloadService::class.java).apply {
-                putExtra("file_url", "https://example.com/file.zip")
-            }
-            startService(serviceIntent)
-        }
-
-        // Register BroadcastReceiver for download completion
-        registerDownloadReceiver()
-
-        // Query ContentProvider for user data
-        loadUserDataFromProvider()
-
-        // Schedule work with WorkManager
-        scheduleBackgroundSync()
-    }
-
-    private fun registerDownloadReceiver() {
-        val receiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context, intent: Intent) {
-                Toast.makeText(context, "Download complete", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-        val filter = IntentFilter("com.example.DOWNLOAD_COMPLETE")
-        registerReceiver(receiver, filter)
-    }
-
-    private fun loadUserDataFromProvider() {
-        val uri = Uri.parse("content://com.example.provider/users")
-        val cursor = contentResolver.query(uri, null, null, null, null)
-
-        cursor?.use {
-            // Process user data
-        }
-    }
-
-    private fun scheduleBackgroundSync() {
-        val workRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
-            .build()
-
-        WorkManager.getInstance(this).enqueue(workRequest)
-    }
-}
-```
-
-### Real-World Examples
-
-#### Dialing Phone
-```kotlin
-class DialerActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_dialer)
-
-        findViewById<Button>(R.id.dialButton).setOnClickListener {
-            val phoneNumber = findViewById<EditText>(R.id.phoneNumberInput).text.toString()
-            dialPhoneNumber(phoneNumber)
-        }
-    }
-
-    private fun dialPhoneNumber(phoneNumber: String) {
-        val intent = Intent(Intent.ACTION_DIAL).apply {
-            data = Uri.parse("tel:$phoneNumber")
-        }
-        startActivity(intent)
-    }
-}
-```
-
-#### Viewing Photos
-```kotlin
-class PhotoViewerActivity : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_photo_viewer)
-
-        val photoUri = intent.getParcelableExtra<Uri>("photo_uri")
-
-        findViewById<ImageView>(R.id.photoImageView).apply {
-            setImageURI(photoUri)
-        }
-
-        // Implement zoom, share, delete functionality
-        setupPhotoActions()
-    }
-
-    private fun setupPhotoActions() {
-        findViewById<Button>(R.id.shareButton).setOnClickListener {
-            sharePhoto()
-        }
-
-        findViewById<Button>(R.id.deleteButton).setOnClickListener {
-            deletePhoto()
-        }
-    }
-
-    private fun sharePhoto() {
-        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "image/*"
-            putExtra(Intent.EXTRA_STREAM, intent.getParcelableExtra<Uri>("photo_uri"))
-        }
-        startActivity(Intent.createChooser(shareIntent, "Share photo"))
-    }
-
-    private fun deletePhoto() {
-        // Delete photo and finish Activity
-    }
-}
-```
-
-### Activity Properties
-
-| Property | Description |
-|----------|-------------|
-| **Single Screen** | Each Activity typically represents one screen |
-| **Independent** | Can be started by other apps (if exported) |
-| **Managed by System** | Lifecycle controlled by Android |
-| **Has Intent Filter** | Can respond to specific intents |
-| **Resource Owner** | Manages its own UI resources |
-| **Context Provider** | Provides application context |
-
-### When to Use Activity
-
-- **Use Activity for**:
-- Distinct screens in your app
-- Entry points from other apps
-- Different task flows
-- Full-screen experiences
-
-- **Don't use Activity for**:
-- Sub-sections of a screen (use Fragments)
-- Temporary UI overlays (use DialogFragment)
-- Background operations (use Service/WorkManager)
 
 ## Ответ (RU)
-Это компонент приложения, который предоставляет пользовательский интерфейс (UI), с которым пользователи могут взаимодействовать для выполнения различных действий, таких как набор номера телефона, просмотр фотографий, отправка электронной почты и т. д. Каждая активность представляет собой один экран с пользовательским интерфейсом. Если представить приложение как книгу, то активность будет одной страницей этой книги. Основное назначение: предоставление интерфейса пользователя, взаимодействие с пользователем, управление жизненным циклом, переход между экранами и взаимодействие с другими компонентами приложения.
+Активность (`Activity`) — это базовый компонент Android-приложения, который обычно представляет один экран, с которым пользователь может взаимодействовать. `Activity`:
+- отображает и управляет пользовательским интерфейсом,
+- обрабатывает действия и ввод пользователя,
+- участвует в жизненном цикле, управляемом системой,
+- обеспечивает переходы между экранами и взаимодействие с другими компонентами.
+
+### `Activity` как страница книги
+
+Если представить приложение как книгу, то `Activity` — это одна "страница" этой книги. Каждая страница (`Activity`) имеет собственный контент и назначение, а пользователь может переходить между такими страницами.
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Эта Activity отображает главный экран
+        setupMainScreen()
+    }
+
+    private fun setupMainScreen() {
+        // Настройка кнопок, списков и других элементов UI
+        findViewById<Button>(R.id.viewPhotosButton).setOnClickListener {
+            // Переход к Activity просмотра фотографий
+            startActivity(Intent(this, PhotoGalleryActivity::class.java))
+        }
+
+        findViewById<Button>(R.id.dialButton).setOnClickListener {
+            // Открыть звонилку через неявный Intent
+            val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1234567890"))
+            startActivity(dialIntent)
+        }
+    }
+}
+```
+
+### Основные назначения `Activity`
+
+#### 1. Предоставление пользовательского интерфейса
+
+`Activity` отвечает за отображение UI и обеспечение интерактивности:
+
+```kotlin
+class PhotoGalleryActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_photo_gallery)
+
+        // Отображение фотографий в сетке
+        val recyclerView = findViewById<RecyclerView>(R.id.photoGrid)
+        recyclerView.layoutManager = GridLayoutManager(this, 3)
+        recyclerView.adapter = PhotoAdapter(getPhotos())
+    }
+
+    private fun getPhotos(): List<Photo> {
+        // Загрузка фотографий из хранилища или сети
+        return photoRepository.getAllPhotos()
+    }
+}
+```
+
+#### 2. Обработка пользовательских действий
+
+`Activity` обрабатывает ввод пользователя и реагирует на него:
+
+```kotlin
+class EmailComposeActivity : AppCompatActivity() {
+
+    private lateinit var toEditText: EditText
+    private lateinit var subjectEditText: EditText
+    private lateinit var messageEditText: EditText
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_email_compose)
+
+        toEditText = findViewById(R.id.toEditText)
+        subjectEditText = findViewById(R.id.subjectEditText)
+        messageEditText = findViewById(R.id.messageEditText)
+
+        // Обработка нажатия на кнопку отправки
+        findViewById<Button>(R.id.sendButton).setOnClickListener {
+            sendEmail()
+        }
+
+        // Обработка выбора файла для вложения
+        findViewById<Button>(R.id.attachButton).setOnClickListener {
+            selectFile()
+        }
+
+        // Валидация email-адреса по мере ввода
+        toEditText.addTextChangedListener { text ->
+            validateEmailAddress(text.toString())
+        }
+    }
+
+    private fun sendEmail() {
+        val to = toEditText.text.toString()
+        val subject = subjectEditText.text.toString()
+        val message = messageEditText.text.toString()
+
+        // Отправка письма через почтовое приложение
+        val emailIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "message/rfc822"
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(to))
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+            putExtra(Intent.EXTRA_TEXT, message)
+        }
+
+        if (emailIntent.resolveActivity(packageManager) != null) {
+            startActivity(Intent.createChooser(emailIntent, "Send email"))
+        }
+    }
+
+    private fun selectFile() {
+        // Открыть файловый менеджер для выбора файла
+    }
+
+    private fun validateEmailAddress(email: String) {
+        // Проверить формат email-адреса
+    }
+}
+```
+
+#### 3. Управление жизненным циклом
+
+`Activity` управляет ресурсами в рамках своего жизненного цикла. Пример демонстрирует привязку использования ресурсов к колбэкам жизненного цикла (класс `VideoPlayer` условный):
+
+```kotlin
+class VideoPlayerActivity : AppCompatActivity() {
+
+    private lateinit var player: VideoPlayer
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_video_player)
+
+        player = VideoPlayer(this)
+        val videoUrl = intent.getStringExtra("video_url")
+        if (videoUrl != null) {
+            player.setDataSource(videoUrl)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // Подготовить видео, когда Activity становится видимой
+        player.prepare()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Начать воспроизведение, когда Activity на переднем плане
+        player.play()
+    }
+
+    override fun onPause() {
+        // Приостановить воспроизведение, когда Activity частично скрыта
+        player.pause()
+        super.onPause()
+    }
+
+    override fun onStop() {
+        // Остановить воспроизведение, когда Activity больше не видна
+        player.stop()
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        // Освободить ресурсы плеера
+        player.release()
+        super.onDestroy()
+    }
+}
+```
+
+#### 4. Переходы между экранами
+
+`Activity` обеспечивает навигацию между экранами с помощью `Intent`:
+
+```kotlin
+class ProductListActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_product_list)
+
+        val recyclerView = findViewById<RecyclerView>(R.id.productRecyclerView)
+        val adapter = ProductAdapter { product ->
+            // Переход к экрану деталей товара при клике
+            navigateToProductDetails(product)
+        }
+
+        recyclerView.adapter = adapter
+        adapter.submitList(getProducts())
+    }
+
+    private fun navigateToProductDetails(product: Product) {
+        val intent = Intent(this, ProductDetailActivity::class.java).apply {
+            putExtra("product_id", product.id)
+            putExtra("product_name", product.name)
+        }
+        startActivity(intent)
+    }
+
+    private fun getProducts(): List<Product> {
+        return productRepository.getProducts()
+    }
+}
+
+class ProductDetailActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_product_detail)
+
+        // Получение данных из предыдущей Activity
+        val productId = intent.getIntExtra("product_id", -1)
+        val productName = intent.getStringExtra("product_name")
+
+        // Отобразить детали товара
+        loadProductDetails(productId)
+    }
+
+    private fun loadProductDetails(productId: Int) {
+        val product = productRepository.getProductById(productId)
+        // Показать информацию о товаре
+    }
+}
+```
+
+#### 5. Взаимодействие с другими компонентами
+
+`Activity` взаимодействует с другими компонентами Android: `Service`, `BroadcastReceiver`, `ContentProvider`, WorkManager:
+
+```kotlin
+class MainDashboardActivity : AppCompatActivity() {
+
+    private var downloadReceiver: BroadcastReceiver? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_dashboard)
+
+        // Запуск Service для фоновой загрузки (упрощенный пример)
+        findViewById<Button>(R.id.downloadButton).setOnClickListener {
+            val serviceIntent = Intent(this, DownloadService::class.java).apply {
+                putExtra("file_url", "https://example.com/file.zip")
+            }
+            startService(serviceIntent)
+        }
+
+        // Регистрация BroadcastReceiver для получения события об окончании загрузки
+        registerDownloadReceiver()
+
+        // Загрузка данных пользователя из ContentProvider
+        loadUserDataFromProvider()
+
+        // Планирование фоновой синхронизации через WorkManager
+        scheduleBackgroundSync()
+    }
+
+    private fun registerDownloadReceiver() {
+        downloadReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                Toast.makeText(context, "Download complete", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val filter = IntentFilter("com.example.DOWNLOAD_COMPLETE")
+        registerReceiver(downloadReceiver, filter)
+    }
+
+    override fun onDestroy() {
+        downloadReceiver?.let { unregisterReceiver(it) }
+        super.onDestroy()
+    }
+
+    private fun loadUserDataFromProvider() {
+        val uri = Uri.parse("content://com.example.provider/users")
+        val cursor = contentResolver.query(uri, null, null, null, null)
+
+        cursor?.use {
+            // Обработка данных пользователя
+        }
+    }
+
+    private fun scheduleBackgroundSync() {
+        val workRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS).build()
+        WorkManager.getInstance(this).enqueue(workRequest)
+    }
+}
+```
+
+### Практические примеры
+
+#### Набор номера телефона
+
+```kotlin
+class DialerActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_dialer)
+
+        findViewById<Button>(R.id.dialButton).setOnClickListener {
+            val phoneNumber = findViewById<EditText>(R.id.phoneNumberInput).text.toString()
+            dialPhoneNumber(phoneNumber)
+        }
+    }
+
+    private fun dialPhoneNumber(phoneNumber: String) {
+        val intent = Intent(Intent.ACTION_DIAL).apply {
+            data = Uri.parse("tel:$phoneNumber")
+        }
+        startActivity(intent)
+    }
+}
+```
+
+#### Просмотр фотографий
+
+```kotlin
+class PhotoViewerActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_photo_viewer)
+
+        val photoUri = intent.getParcelableExtra<Uri>("photo_uri")
+
+        findViewById<ImageView>(R.id.photoImageView).apply {
+            setImageURI(photoUri)
+        }
+
+        // Реализация масштабирования, шаринга и удаления
+        setupPhotoActions()
+    }
+
+    private fun setupPhotoActions() {
+        findViewById<Button>(R.id.shareButton).setOnClickListener {
+            sharePhoto()
+        }
+
+        findViewById<Button>(R.id.deleteButton).setOnClickListener {
+            deletePhoto()
+        }
+    }
+
+    private fun sharePhoto() {
+        val uriToShare = intent.getParcelableExtra<Uri>("photo_uri")
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "image/*"
+            putExtra(Intent.EXTRA_STREAM, uriToShare)
+        }
+        startActivity(Intent.createChooser(shareIntent, "Share photo"))
+    }
+
+    private fun deletePhoto() {
+        // Удалить фото при наличии прав и закрыть Activity
+        // contentResolver.delete(photoUri, null, null)
+        finish()
+    }
+}
+```
+
+### Свойства `Activity`
+
+- Один сфокусированный экран или точка входа.
+- Может быть запущена другими приложениями (если экспортирована и объявлены нужные `intent-filter`).
+- Жизненным циклом управляет фреймворк Android.
+- Может обрабатывать конкретные `Intent` при наличии соответствующих фильтров.
+- Управляет собственным UI и связанными ресурсами.
+- Является `Context`; для контекста приложения используется `applicationContext`.
+
+### Когда использовать `Activity`
+
+Используйте новую `Activity`, когда:
+- нужен отдельный, логически самостоятельный экран или поток взаимодействия;
+- это точка входа извне (deep links, implicit intents, launcher-иконки);
+- требуется полноэкранный или крупный пользовательский сценарий.
+
+Предпочитайте другие компоненты вместо новой `Activity`, когда:
+- нужно разбить экран на части — используйте `Fragment` или навигацию на уровне composable;
+- нужна временная накладка/диалог — используйте `Dialog`, `DialogFragment` или элементы внутри текущего экрана;
+- требуется длительная или фоновая работа — используйте `Service`, WorkManager, корутины и т.п., а не держите `Activity` живой.
+
+---
+
+## Answer (EN)
+`Activity` is a core component of an Android application that typically represents a single screen with which users can interact. It:
+- provides a visual user interface,
+- handles user input,
+- participates in a well-defined lifecycle managed by the system,
+- coordinates navigation and interaction with other components.
+
+Activities are usually the entry points into an app or into distinct user flows (e.g., dialing a phone number, viewing photos, composing an email).
+
+### `Activity` as a Page in a Book
+
+If you imagine an application as a book, then an `Activity` is one "page" of that book. Each page (`Activity`) has its own content and purpose, and users can navigate between pages.
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // This Activity displays the main screen
+        setupMainScreen()
+    }
+
+    private fun setupMainScreen() {
+        // Configure buttons, lists, and other UI elements
+        findViewById<Button>(R.id.viewPhotosButton).setOnClickListener {
+            // Navigate to photo viewing Activity
+            startActivity(Intent(this, PhotoGalleryActivity::class.java))
+        }
+
+        findViewById<Button>(R.id.dialButton).setOnClickListener {
+            // Open dialer app via implicit intent
+            val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:1234567890"))
+            startActivity(dialIntent)
+        }
+    }
+}
+```
+
+### Main Purposes of `Activity`
+
+#### 1. Providing User Interface
+
+`Activity` is responsible for displaying the UI and making it interactive:
+
+```kotlin
+class PhotoGalleryActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_photo_gallery)
+
+        // Display photos in a grid
+        val recyclerView = findViewById<RecyclerView>(R.id.photoGrid)
+        recyclerView.layoutManager = GridLayoutManager(this, 3)
+        recyclerView.adapter = PhotoAdapter(getPhotos())
+    }
+
+    private fun getPhotos(): List<Photo> {
+        // Load photos from storage or network
+        return photoRepository.getAllPhotos()
+    }
+}
+```
+
+#### 2. User Interaction Handling
+
+`Activity` processes user input and responds to it:
+
+```kotlin
+class EmailComposeActivity : AppCompatActivity() {
+
+    private lateinit var toEditText: EditText
+    private lateinit var subjectEditText: EditText
+    private lateinit var messageEditText: EditText
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_email_compose)
+
+        toEditText = findViewById(R.id.toEditText)
+        subjectEditText = findViewById(R.id.subjectEditText)
+        messageEditText = findViewById(R.id.messageEditText)
+
+        // Handle send button click
+        findViewById<Button>(R.id.sendButton).setOnClickListener {
+            sendEmail()
+        }
+
+        // Handle attach file button click
+        findViewById<Button>(R.id.attachButton).setOnClickListener {
+            selectFile()
+        }
+
+        // Validate email address as user types
+        toEditText.addTextChangedListener { text ->
+            validateEmailAddress(text.toString())
+        }
+    }
+
+    private fun sendEmail() {
+        val to = toEditText.text.toString()
+        val subject = subjectEditText.text.toString()
+        val message = messageEditText.text.toString()
+
+        // Send email via email app
+        val emailIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "message/rfc822"
+            putExtra(Intent.EXTRA_EMAIL, arrayOf(to))
+            putExtra(Intent.EXTRA_SUBJECT, subject)
+            putExtra(Intent.EXTRA_TEXT, message)
+        }
+
+        if (emailIntent.resolveActivity(packageManager) != null) {
+            startActivity(Intent.createChooser(emailIntent, "Send email"))
+        }
+    }
+
+    private fun selectFile() {
+        // Open file picker
+    }
+
+    private fun validateEmailAddress(email: String) {
+        // Validate email format
+    }
+}
+```
+
+#### 3. Lifecycle Management
+
+`Activity` manages resources throughout its lifecycle. This example illustrates binding resource usage to lifecycle callbacks (the VideoPlayer class is hypothetical):
+
+```kotlin
+class VideoPlayerActivity : AppCompatActivity() {
+
+    private lateinit var player: VideoPlayer
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_video_player)
+
+        player = VideoPlayer(this)
+        val videoUrl = intent.getStringExtra("video_url")
+        if (videoUrl != null) {
+            player.setDataSource(videoUrl)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // Prepare video when Activity becomes visible
+        player.prepare()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Start playback when Activity is in foreground
+        player.play()
+    }
+
+    override fun onPause() {
+        // Pause playback when Activity is partially obscured
+        player.pause()
+        super.onPause()
+    }
+
+    override fun onStop() {
+        // Stop playback when Activity is no longer visible
+        player.stop()
+        super.onStop()
+    }
+
+    override fun onDestroy() {
+        // Clean up player resources
+        player.release()
+        super.onDestroy()
+    }
+}
+```
+
+#### 4. Screen Transitions
+
+`Activity` enables navigation between different screens (Activities) using intents:
+
+```kotlin
+class ProductListActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_product_list)
+
+        val recyclerView = findViewById<RecyclerView>(R.id.productRecyclerView)
+        val adapter = ProductAdapter { product ->
+            // Navigate to product details when item clicked
+            navigateToProductDetails(product)
+        }
+
+        recyclerView.adapter = adapter
+        adapter.submitList(getProducts())
+    }
+
+    private fun navigateToProductDetails(product: Product) {
+        val intent = Intent(this, ProductDetailActivity::class.java).apply {
+            putExtra("product_id", product.id)
+            putExtra("product_name", product.name)
+        }
+        startActivity(intent)
+    }
+
+    private fun getProducts(): List<Product> {
+        return productRepository.getProducts()
+    }
+}
+
+class ProductDetailActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_product_detail)
+
+        // Receive data from previous Activity
+        val productId = intent.getIntExtra("product_id", -1)
+        val productName = intent.getStringExtra("product_name")
+
+        // Display product details
+        loadProductDetails(productId)
+    }
+
+    private fun loadProductDetails(productId: Int) {
+        val product = productRepository.getProductById(productId)
+        // Display product information
+    }
+}
+```
+
+#### 5. Component Interaction
+
+`Activity` interacts with other Android components such as Services, BroadcastReceivers, ContentProviders, and WorkManager:
+
+```kotlin
+class MainDashboardActivity : AppCompatActivity() {
+
+    private var downloadReceiver: BroadcastReceiver? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_dashboard)
+
+        // Start a Service for background download (simplified example)
+        findViewById<Button>(R.id.downloadButton).setOnClickListener {
+            val serviceIntent = Intent(this, DownloadService::class.java).apply {
+                putExtra("file_url", "https://example.com/file.zip")
+            }
+            startService(serviceIntent)
+        }
+
+        // Register BroadcastReceiver for download completion
+        registerDownloadReceiver()
+
+        // Query ContentProvider for user data
+        loadUserDataFromProvider()
+
+        // Schedule work with WorkManager
+        scheduleBackgroundSync()
+    }
+
+    private fun registerDownloadReceiver() {
+        downloadReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context, intent: Intent) {
+                Toast.makeText(context, "Download complete", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        val filter = IntentFilter("com.example.DOWNLOAD_COMPLETE")
+        registerReceiver(downloadReceiver, filter)
+    }
+
+    override fun onDestroy() {
+        downloadReceiver?.let { unregisterReceiver(it) }
+        super.onDestroy()
+    }
+
+    private fun loadUserDataFromProvider() {
+        val uri = Uri.parse("content://com.example.provider/users")
+        val cursor = contentResolver.query(uri, null, null, null, null)
+
+        cursor?.use {
+            // Process user data
+        }
+    }
+
+    private fun scheduleBackgroundSync() {
+        val workRequest = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS).build()
+        WorkManager.getInstance(this).enqueue(workRequest)
+    }
+}
+```
+
+### Real-World Examples
+
+#### Dialing Phone
+
+```kotlin
+class DialerActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_dialer)
+
+        findViewById<Button>(R.id.dialButton).setOnClickListener {
+            val phoneNumber = findViewById<EditText>(R.id.phoneNumberInput).text.toString()
+            dialPhoneNumber(phoneNumber)
+        }
+    }
+
+    private fun dialPhoneNumber(phoneNumber: String) {
+        val intent = Intent(Intent.ACTION_DIAL).apply {
+            data = Uri.parse("tel:$phoneNumber")
+        }
+        startActivity(intent)
+    }
+}
+```
+
+#### Viewing Photos
+
+```kotlin
+class PhotoViewerActivity : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_photo_viewer)
+
+        val photoUri = intent.getParcelableExtra<Uri>("photo_uri")
+
+        findViewById<ImageView>(R.id.photoImageView).apply {
+            setImageURI(photoUri)
+        }
+
+        // Implement zoom, share, delete functionality
+        setupPhotoActions()
+    }
+
+    private fun setupPhotoActions() {
+        findViewById<Button>(R.id.shareButton).setOnClickListener {
+            sharePhoto()
+        }
+
+        findViewById<Button>(R.id.deleteButton).setOnClickListener {
+            deletePhoto()
+        }
+    }
+
+    private fun sharePhoto() {
+        val uriToShare = intent.getParcelableExtra<Uri>("photo_uri")
+        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+            type = "image/*"
+            putExtra(Intent.EXTRA_STREAM, uriToShare)
+        }
+        startActivity(Intent.createChooser(shareIntent, "Share photo"))
+    }
+
+    private fun deletePhoto() {
+        // Delete photo if permitted and finish Activity
+        // contentResolver.delete(photoUri, null, null)
+        finish()
+    }
+}
+```
+
+### `Activity` Properties
+
+- Single Screen: typically represents one focused screen or entry point.
+- Independent: can be started by other apps (if exported via manifest).
+- Managed by System: lifecycle is controlled by the Android framework.
+- Has `Intent` Filter: can respond to specific intents when intent filters are declared.
+- Resource Owner: manages its own UI and related resources.
+- Is a `Context`: `Activity` is a `Context`; for application-wide context use `applicationContext`.
+
+### When to Use `Activity`
+
+- Use an `Activity` for:
+  - Distinct screens or flows in your app.
+  - Entry points from other apps (deep links, implicit intents, launchers).
+  - Full-screen or major user experiences.
+
+- Prefer other components instead of a new `Activity` for:
+  - Sub-sections of a screen (use Fragments or composable destinations).
+  - Temporary UI overlays (use DialogFragment, dialogs, or in-view UI).
+  - Background operations (use `Service`, WorkManager, coroutines, etc.).
+
+---
 
 ## Related Topics
-- Activity lifecycle
-- Intent system
-- Fragment vs Activity
-- Single Activity architecture
+- `Activity` lifecycle
+- `Intent` system
+- `Fragment` vs `Activity`
+- Single `Activity` architecture
 - Task and back stack
 
 ---
-
 
 ## Follow-ups
 
@@ -831,24 +836,22 @@ class PhotoViewerActivity : AppCompatActivity() {
 - [[c-android-components]]
 - [[q-what-are-activity-lifecycle-methods-and-how-do-they-work--android--medium]]
 
-
 ## References
 
 - [Android Documentation](https://developer.android.com/docs)
 - [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle)
 
-
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-components-besides-activity--android--easy]] - Activity
+- [[q-android-components-besides-activity--android--easy]] - `Activity`
 
 ### Related (Medium)
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Activity
-- [[q-single-activity-pros-cons--android--medium]] - Activity
-- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Activity
-- [[q-activity-lifecycle-methods--android--medium]] - Activity
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - `Activity`
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Activity`
+- [[q-single-activity-pros-cons--android--medium]] - `Activity`
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - `Activity`
+- [[q-activity-lifecycle-methods--android--medium]] - `Activity`
 
 ### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Activity
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - `Activity`

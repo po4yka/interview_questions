@@ -30,6 +30,7 @@ tags:
 - android/intents-deeplinks
 - android/notifications
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
@@ -42,83 +43,202 @@ tags:
 
 ## Ответ (RU)
 
-**PendingIntent** — это обёртка вокруг Intent, которая позволяет другим компонентам или приложениям выполнить Intent с правами вашего приложения, даже когда оно неактивно. По сути, это токен разрешения для отложенного действия.
+**PendingIntent** — это обёртка вокруг `Intent`, которая позволяет другим компонентам или приложениям позже выполнить этот `Intent` с правами вашего приложения, даже когда оно неактивно. По сути, это токен разрешения для отложенного действия, выдаваемый системой.
 
 ### Ключевые Характеристики
 
-- **Отложенное выполнение** — Intent выполняется позже, не сразу
-- **Делегирование прав** — выполняется с правами вашего приложения
-- **Неизменяемость** — нельзя изменить после создания (FLAG_IMMUTABLE)
-- **Системное использование** — уведомления, AlarmManager, виджеты
+- **Отложенное выполнение** — `Intent` выполняется позже, не сразу
+- **Делегирование прав** — действие выполняется с правами вашего приложения
+- **Контролируемая изменяемость**:
+  - по умолчанию PendingIntent может быть изменяемым;
+  - начиная с Android 12+ при создании нужно явно указать `FLAG_IMMUTABLE` или `FLAG_MUTABLE`;
+  - `FLAG_IMMUTABLE` делает PendingIntent неизменяемым после создания (рекомендуется, если нет необходимости менять данные);
+- **Системное использование** — активно используется системой: уведомления, AlarmManager, App Widgets и другие механизмы, которым нужно выполнить код от имени вашего приложения.
 
 ### Три Типа PendingIntent
 
 ```kotlin
 // 1. Для Activity (открыть экран)
-val activityPI = PendingIntent.getActivity(context, requestCode, intent,
-    PendingIntent.FLAG_IMMUTABLE)  // ✅ Рекомендуется для Android 12+
+val activityPI = PendingIntent.getActivity(
+    context,
+    requestCode,
+    intent,
+    PendingIntent.FLAG_IMMUTABLE // ✅ Рекомендуется, если не требуется изменяемость
+)
 
 // 2. Для BroadcastReceiver (событие)
-val broadcastPI = PendingIntent.getBroadcast(context, requestCode, intent,
-    PendingIntent.FLAG_IMMUTABLE)
+val broadcastPI = PendingIntent.getBroadcast(
+    context,
+    requestCode,
+    intent,
+    PendingIntent.FLAG_IMMUTABLE // или FLAG_MUTABLE, если принимающая сторона должна изменять/читать данные динамически
+)
 
 // 3. Для Service (фоновая работа)
-val servicePI = PendingIntent.getService(context, requestCode, intent,
-    PendingIntent.FLAG_IMMUTABLE)
+val servicePI = PendingIntent.getService(
+    context,
+    requestCode,
+    intent,
+    PendingIntent.FLAG_IMMUTABLE
+)
 ```
 
 **Основные флаги:**
-- `FLAG_IMMUTABLE` — неизменяемый (✅ безопасно, используй по умолчанию)
-- `FLAG_MUTABLE` — изменяемый (❌ только если действительно нужно)
-- `FLAG_UPDATE_CURRENT` — обновить существующий (✅ для обновления extras)
-- `FLAG_NO_CREATE` — не создавать, вернуть null если не существует (✅ для проверки)
+- `FLAG_IMMUTABLE` — делает PendingIntent неизменяемым (✅ безопасно, используй по умолчанию, если не требуется изменяемость)
+- `FLAG_MUTABLE` — разрешает изменять/читать вложенный `Intent` (используй только если действительно нужно, например, для inline-reply, bubbles, RemoteInput)
+- `FLAG_UPDATE_CURRENT` — обновить существующий PendingIntent (✅ для обновления extras)
+- `FLAG_NO_CREATE` — не создавать новый, вернуть null если не существует (✅ для проверки перед использованием)
+
+### Примеры Использования
+
+#### Сценарий 1: Уведомления
+
+```kotlin
+fun showNotification(context: Context) {
+    val intent = Intent(context, MainActivity::class.java)
+    val pendingIntent = PendingIntent.getActivity(
+        context,
+        0,
+        intent,
+        PendingIntent.FLAG_IMMUTABLE // На Android 12+ требуется явно указать mutability
+    )
+
+    val notification = NotificationCompat.Builder(context, "channel_id")
+        .setContentTitle("New Message")
+        .setContentIntent(pendingIntent) // Нажатие на уведомление открывает Activity
+        .build()
+}
+```
+
+#### Сценарий 2: AlarmManager
+
+```kotlin
+fun scheduleAlarm(context: Context, triggerTime: Long) {
+    val intent = Intent(context, AlarmReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(
+        context,
+        0,
+        intent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        // Используй FLAG_MUTABLE, если AlarmReceiver или система должны иметь доступ к изменяемому Intent
+    )
+
+    context.getSystemService(AlarmManager::class.java)
+        .setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
+}
+
+fun cancelAlarm(context: Context) {
+    val intent = Intent(context, AlarmReceiver::class.java)
+    val pendingIntent = PendingIntent.getBroadcast(
+        context,
+        0,
+        intent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
+    )
+
+    pendingIntent?.let {
+        context.getSystemService(AlarmManager::class.java).cancel(it)
+        it.cancel() // Опционально инвалидируем PendingIntent, если он больше не нужен
+    }
+}
+```
+
+#### Сценарий 3: App Widgets
+
+```kotlin
+class MyWidgetProvider : AppWidgetProvider() {
+    override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, ids: IntArray) {
+        ids.forEach { widgetId ->
+            val intent = Intent(context, MainActivity::class.java)
+            val pendingIntent = PendingIntent.getActivity(
+                context,
+                widgetId, // ✅ Уникальный requestCode на каждый виджет
+                intent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
+
+            val views = RemoteViews(context.packageName, R.layout.widget_layout)
+            views.setOnClickPendingIntent(R.id.widget_root, pendingIntent)
+            appWidgetManager.updateAppWidget(widgetId, views)
+        }
+    }
+}
+```
+
+### Best Practices (RU)
+
+1. Явно указывай `FLAG_IMMUTABLE` или `FLAG_MUTABLE` на Android 12+.
+2. Используй `FLAG_IMMUTABLE` по умолчанию для безопасности, если нет реальной необходимости в изменяемости.
+3. Используй уникальные `requestCode` для различения PendingIntent с одинаковыми `Intent`-параметрами.
+4. `FLAG_UPDATE_CURRENT` — когда нужно обновлять extras уже существующего PendingIntent.
+5. Для PendingIntent, доступных другим приложениям, старайся использовать явные `Intent` (конкретный компонент) для снижения риска перехвата; implicit `Intent` допустим в контролируемых сценариях.
+6. При долгоживущих или повторяющихся задачах, которые больше не нужны, можно вызвать `cancel()`, чтобы инвалидировать PendingIntent и избежать неожиданных срабатываний.
 
 ---
 
 ## Answer (EN)
 
-**PendingIntent** is a wrapper around an Intent that grants other components or applications permission to execute that Intent with your app's permissions, even when your app is not active. Essentially, it's a permission token for deferred actions.
+**PendingIntent** is a wrapper around an `Intent` that allows other components or applications to execute that `Intent` later with your app's identity and permissions, even when your app is not running in the foreground. Essentially, it is a permission token for deferred actions, issued and validated by the system.
 
 ### Key Characteristics
 
-- **Deferred execution** — Intent executes later, not immediately
-- **Permission delegation** — runs with your app's permissions
-- **Immutability** — cannot be modified after creation (FLAG_IMMUTABLE)
-- **System integration** — notifications, AlarmManager, widgets
+- **Deferred execution** — the `Intent` is executed later, not immediately.
+- **Permission delegation** — runs with your app's permissions/identity.
+- **Controlled mutability**:
+  - by default a PendingIntent can be mutable;
+  - starting from Android 12+, you must explicitly specify `FLAG_IMMUTABLE` or `FLAG_MUTABLE` when creating it;
+  - `FLAG_IMMUTABLE` makes the wrapped `Intent` unchangeable via the PendingIntent after creation (recommended when mutation is not needed).
+- **System integration** — heavily used by the system: notifications, AlarmManager, app widgets, and other mechanisms needing to act on behalf of your app.
 
 ### Three Types of PendingIntent
 
 ```kotlin
 // 1. For Activity (launch screen)
-val activityPI = PendingIntent.getActivity(context, requestCode, intent,
-    PendingIntent.FLAG_IMMUTABLE)  // ✅ Recommended for Android 12+
+val activityPI = PendingIntent.getActivity(
+    context,
+    requestCode,
+    intent,
+    PendingIntent.FLAG_IMMUTABLE // ✅ Recommended when you don't need mutability
+)
 
 // 2. For BroadcastReceiver (event)
-val broadcastPI = PendingIntent.getBroadcast(context, requestCode, intent,
-    PendingIntent.FLAG_IMMUTABLE)
+val broadcastPI = PendingIntent.getBroadcast(
+    context,
+    requestCode,
+    intent,
+    PendingIntent.FLAG_IMMUTABLE // or FLAG_MUTABLE if the receiver/system must work with dynamic data
+)
 
 // 3. For Service (background work)
-val servicePI = PendingIntent.getService(context, requestCode, intent,
-    PendingIntent.FLAG_IMMUTABLE)
+val servicePI = PendingIntent.getService(
+    context,
+    requestCode,
+    intent,
+    PendingIntent.FLAG_IMMUTABLE
+)
 ```
 
 **Essential Flags:**
-- `FLAG_IMMUTABLE` — immutable (✅ safe, use by default)
-- `FLAG_MUTABLE` — mutable (❌ only if truly necessary)
-- `FLAG_UPDATE_CURRENT` — update existing (✅ for updating extras)
-- `FLAG_NO_CREATE` — don't create, return null if doesn't exist (✅ for checking)
+- `FLAG_IMMUTABLE` — makes the PendingIntent immutable (✅ safe, prefer by default when mutability is not required).
+- `FLAG_MUTABLE` — allows the wrapped `Intent` to be modified/read via the PendingIntent (use only when truly necessary, e.g., for inline reply, bubbles, RemoteInput, some notification features).
+- `FLAG_UPDATE_CURRENT` — update an existing PendingIntent (✅ for updating extras for the same type of operation).
+- `FLAG_NO_CREATE` — do not create; return null if it does not exist (✅ for checking before use).
 
 ### Use Case 1: Notifications
 
 ```kotlin
 fun showNotification(context: Context) {
     val intent = Intent(context, MainActivity::class.java)
-    val pendingIntent = PendingIntent.getActivity(context, 0, intent,
-        PendingIntent.FLAG_IMMUTABLE)  // ✅ Required for Android 12+
+    val pendingIntent = PendingIntent.getActivity(
+        context,
+        0,
+        intent,
+        PendingIntent.FLAG_IMMUTABLE // On Android 12+, you must explicitly specify mutability
+    )
 
     val notification = NotificationCompat.Builder(context, "channel_id")
         .setContentTitle("New Message")
-        .setContentIntent(pendingIntent)  // Notification tap opens Activity
+        .setContentIntent(pendingIntent) // Notification tap opens Activity
         .build()
 }
 ```
@@ -128,8 +248,13 @@ fun showNotification(context: Context) {
 ```kotlin
 fun scheduleAlarm(context: Context, triggerTime: Long) {
     val intent = Intent(context, AlarmReceiver::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT)
+    val pendingIntent = PendingIntent.getBroadcast(
+        context,
+        0,
+        intent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        // Use FLAG_MUTABLE instead when the receiver or system must access/modify dynamic extras via the PendingIntent
+    )
 
     context.getSystemService(AlarmManager::class.java)
         .setExact(AlarmManager.RTC_WAKEUP, triggerTime, pendingIntent)
@@ -137,12 +262,16 @@ fun scheduleAlarm(context: Context, triggerTime: Long) {
 
 fun cancelAlarm(context: Context) {
     val intent = Intent(context, AlarmReceiver::class.java)
-    val pendingIntent = PendingIntent.getBroadcast(context, 0, intent,
-        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE)  // ✅ Check if exists
+    val pendingIntent = PendingIntent.getBroadcast(
+        context,
+        0,
+        intent,
+        PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_NO_CREATE
+    )
 
     pendingIntent?.let {
         context.getSystemService(AlarmManager::class.java).cancel(it)
-        it.cancel()  // Clean up PendingIntent
+        it.cancel() // Optionally invalidate the PendingIntent if it should no longer fire
     }
 }
 ```
@@ -154,9 +283,12 @@ class MyWidgetProvider : AppWidgetProvider() {
     override fun onUpdate(context: Context, appWidgetManager: AppWidgetManager, ids: IntArray) {
         ids.forEach { widgetId ->
             val intent = Intent(context, MainActivity::class.java)
-            val pendingIntent = PendingIntent.getActivity(context,
-                widgetId,  // ✅ Unique requestCode per widget
-                intent, PendingIntent.FLAG_IMMUTABLE)
+            val pendingIntent = PendingIntent.getActivity(
+                context,
+                widgetId, // ✅ Unique requestCode per widget
+                intent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
 
             val views = RemoteViews(context.packageName, R.layout.widget_layout)
             views.setOnClickPendingIntent(R.id.widget_root, pendingIntent)
@@ -168,13 +300,22 @@ class MyWidgetProvider : AppWidgetProvider() {
 
 ### Best Practices
 
-1. **FLAG_IMMUTABLE by default** — required for Android 12+
-2. **Unique requestCodes** — use different codes for different PendingIntents
-3. **FLAG_UPDATE_CURRENT** — to update extras in existing PendingIntent
-4. **Explicit Intents** — always specify concrete component for security
-5. **Cancel when done** — call `cancel()` to clean up unused PendingIntents
+1. On Android 12+, always explicitly specify `FLAG_IMMUTABLE` or `FLAG_MUTABLE`.
+2. Prefer `FLAG_IMMUTABLE` by default for security when you do not need to mutate the PendingIntent.
+3. Use unique `requestCode` values to distinguish different PendingIntents that otherwise have the same `Intent`.
+4. Use `FLAG_UPDATE_CURRENT` when you need to update extras of an existing PendingIntent.
+5. When exposing PendingIntents to other apps or untrusted callers, prefer explicit Intents (with a concrete component) to reduce hijacking/forgery risks; implicit Intents can be acceptable in controlled scenarios.
+6. For long-lived/repeating operations you no longer need, consider calling `cancel()` (and canceling via the relevant manager, e.g., AlarmManager) to prevent unintended future executions.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как `requestCode` влияет на равенство и обновление PendingIntent?
+- Когда следует использовать `FLAG_MUTABLE` вместо `FLAG_IMMUTABLE`?
+- Как использовать PendingIntent совместно с WorkManager для фоновых задач?
+- Что произойдет, если не вызывать `cancel()` для PendingIntent после использования?
+- Как отлаживать проблемы безопасности PendingIntent на Android 12+?
 
 ## Follow-ups
 
@@ -184,14 +325,44 @@ class MyWidgetProvider : AppWidgetProvider() {
 - What happens if you don't cancel a PendingIntent after use?
 - How to debug PendingIntent security vulnerabilities in Android 12+?
 
+---
+
+## Ссылки (RU)
+
+- [[q-intent-filters-android--android--medium]] - основы `Intent`
+- [[q-what-unifies-android-components--android--easy]] - компоненты Android
+- https://developer.android.com/reference/android/app/PendingIntent
+- https://developer.android.com/about/versions/12/behavior-changes-12#pending-intent-mutability
+
 ## References
 
-- [[q-intent-filters-android--android--medium]] - Intent fundamentals
+- [[q-intent-filters-android--android--medium]] - `Intent` fundamentals
 - [[q-what-unifies-android-components--android--easy]] - Android components
 - https://developer.android.com/reference/android/app/PendingIntent
 - https://developer.android.com/about/versions/12/behavior-changes-12#pending-intent-mutability
 
 ---
+
+## Связанные вопросы (RU)
+
+### Предварительные знания / Концепции
+
+- [[c-intent]]
+- [[c-permissions]]
+
+### Предварительные (проще)
+
+- [[q-what-unifies-android-components--android--easy]] - основы `Intent`
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - поток выполнения в Android
+
+### Связанные (средний уровень)
+
+- [[q-intent-filters-android--android--medium]] - подробности об `Intent`
+- [[q-anr-application-not-responding--android--medium]] - паттерны фоновой работы
+
+### Продвинутые (сложнее)
+
+- [[q-how-application-priority-is-determined-by-the-system--android--hard]] - жизненный цикл процессов
 
 ## Related Questions
 
@@ -202,11 +373,11 @@ class MyWidgetProvider : AppWidgetProvider() {
 
 
 ### Prerequisites (Easier)
-- [[q-what-unifies-android-components--android--easy]] - Intent basics
+- [[q-what-unifies-android-components--android--easy]] - `Intent` basics
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Android threading
 
 ### Related (Same Level)
-- [[q-intent-filters-android--android--medium]] - Intent deep dive
+- [[q-intent-filters-android--android--medium]] - `Intent` deep dive
 - [[q-anr-application-not-responding--android--medium]] - Background work patterns
 
 ### Advanced (Harder)

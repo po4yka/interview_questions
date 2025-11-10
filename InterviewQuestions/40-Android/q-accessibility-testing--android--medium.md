@@ -4,23 +4,25 @@ title: Accessibility Testing / Тестирование доступности
 aliases: [Accessibility Testing, Тестирование доступности]
 topic: android
 subtopics:
-  - testing-ui
-  - ui-accessibility
+- testing-ui
+- ui-accessibility
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - q-accessibility-compose--android--medium
-  - q-accessibility-talkback--android--medium
+- c-accessibility
+- q-accessibility-compose--android--medium
+- q-accessibility-talkback--android--medium
 created: 2025-10-11
-updated: 2025-10-29
+updated: 2025-11-10
 tags: [a11y, android/testing-ui, android/ui-accessibility, difficulty/medium, testing]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -37,7 +39,7 @@ sources: []
 
 **Ручное тестирование с TalkBack:**
 - Все интерактивные элементы доступны через свайп
-- ContentDescription осмысленный (не "Image", а "User profile photo")
+- `contentDescription` осмысленный для значимых элементов (не "Image", а "Фотография профиля пользователя"), декоративные изображения без смысла помечены `contentDescription = null`
 - Проверка custom actions и live regions
 
 **Accessibility Scanner:**
@@ -52,6 +54,7 @@ sources: []
 fun testAccessibility() {
     // ✅ Включить проверки для всех UI-действий
     AccessibilityChecks.enable()
+        .setRunChecksFromRootView(true)
 
     onView(withId(R.id.submit)).perform(click())
     // Тест упадёт при проблемах доступности
@@ -60,7 +63,7 @@ fun testAccessibility() {
 @Test
 fun testContentDescription() {
     onView(withId(R.id.profile_image)).check { view, _ ->
-        // ✅ Проверить осмысленное описание
+        // ✅ Проверить осмысленное описание для значимого изображения
         assertThat(view.contentDescription).isNotEmpty()
         // ❌ Избегать общих описаний
         assertThat(view.contentDescription).isNotEqualTo("Image")
@@ -74,11 +77,11 @@ fun testContentDescription() {
 @Test
 fun testSemanticProperties() {
     composeTestRule.setContent {
-        Button(onClick = { }) { Text("Отправить") }
+        Button(onClick = { }) { Text("Submit") }
     }
 
     composeTestRule
-        .onNodeWithText("Отправить")
+        .onNodeWithText("Submit")
         .assertHasClickAction()
         .assertIsEnabled()
 }
@@ -86,17 +89,19 @@ fun testSemanticProperties() {
 @Test
 fun testStateDescription() {
     composeTestRule.setContent {
+        var isChecked by remember { mutableStateOf(false) }
+
         Checkbox(
             checked = isChecked,
-            onCheckedChange = { },
+            onCheckedChange = { isChecked = it },
             modifier = Modifier.semantics {
-                stateDescription = if (isChecked) "Выбрано" else "Не выбрано"
+                stateDescription = if (isChecked) "Selected" else "Not selected"
             }
         )
     }
 
     composeTestRule
-        .onNode(hasStateDescription("Не выбрано"))
+        .onNode(hasStateDescription("Not selected"))
         .assertExists()
 }
 ```
@@ -104,7 +109,7 @@ fun testStateDescription() {
 **Типичные ошибки:**
 
 ```kotlin
-// ❌ Отсутствует contentDescription
+// ❌ Нет описания у значимого изображения
 Image(painterResource(R.drawable.icon), contentDescription = null)
 
 // ❌ Touch target меньше 48dp
@@ -124,7 +129,7 @@ Text(
 - Тестируйте на реальных устройствах (эмуляторы неточны для TalkBack)
 - Интегрируйте проверки в CI/CD
 - Проверяйте разные настройки: масштаб шрифта, высокую контрастность
-- Используйте semantic testing вместо implementation details
+- Используйте semantic testing вместо проверки деталей реализации
 
 ## Answer (EN)
 
@@ -132,7 +137,7 @@ Accessibility testing ensures apps are usable by people with disabilities. Andro
 
 **Manual Testing with TalkBack:**
 - All interactive elements reachable via swipe
-- ContentDescription meaningful (not "Image", but "User profile photo")
+- `contentDescription` is meaningful for important elements (not "Image", but "User profile photo"), decorative images with no meaning are marked with `contentDescription = null`
 - Test custom actions and live regions
 
 **Accessibility Scanner:**
@@ -147,6 +152,7 @@ Accessibility testing ensures apps are usable by people with disabilities. Andro
 fun testAccessibility() {
     // ✅ Enable checks for all UI actions
     AccessibilityChecks.enable()
+        .setRunChecksFromRootView(true)
 
     onView(withId(R.id.submit)).perform(click())
     // Test fails if accessibility issues found
@@ -155,7 +161,7 @@ fun testAccessibility() {
 @Test
 fun testContentDescription() {
     onView(withId(R.id.profile_image)).check { view, _ ->
-        // ✅ Verify meaningful description
+        // ✅ Verify meaningful description for a non-decorative image
         assertThat(view.contentDescription).isNotEmpty()
         // ❌ Avoid generic descriptions
         assertThat(view.contentDescription).isNotEqualTo("Image")
@@ -181,9 +187,11 @@ fun testSemanticProperties() {
 @Test
 fun testStateDescription() {
     composeTestRule.setContent {
+        var isChecked by remember { mutableStateOf(false) }
+
         Checkbox(
             checked = isChecked,
-            onCheckedChange = { },
+            onCheckedChange = { isChecked = it },
             modifier = Modifier.semantics {
                 stateDescription = if (isChecked) "Selected" else "Not selected"
             }
@@ -199,7 +207,7 @@ fun testStateDescription() {
 **Common Issues:**
 
 ```kotlin
-// ❌ Missing contentDescription
+// ❌ Missing contentDescription for a meaningful image
 Image(painterResource(R.drawable.icon), contentDescription = null)
 
 // ❌ Touch target smaller than 48dp
@@ -216,28 +224,52 @@ Text(
 ```
 
 **Best Practices:**
-- Test on real devices (emulators inaccurate for TalkBack)
+- Test on real devices (emulators can be inaccurate for TalkBack)
 - Integrate checks into CI/CD
 - Test different settings: font scale, high contrast
 - Use semantic testing instead of implementation details
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как `AccessibilityChecks.enable()` влияет на время выполнения тестов в CI-пайплайнах?
+- Какие семантические свойства должны предоставлять кастомные компоненты Compose для совместимости с TalkBack?
+- Как тестировать доступность для динамического контента, обновляемого через `StateFlow`?
+- Какие стратегии использовать для тестирования доступности в мультимодульных проектах?
+- Как сбалансировать покрытие тестами доступности и общее время выполнения тест-сьюта?
+
 ## Follow-ups
 
-- How does AccessibilityChecks.enable() impact test execution time in CI pipelines?
+- How does `AccessibilityChecks.enable()` impact test execution time in CI pipelines?
 - What semantic properties must custom Compose components expose for TalkBack compatibility?
-- How do you test accessibility for dynamic content updating via StateFlow?
+- How do you test accessibility for dynamic content updating via `StateFlow`?
 - What strategies handle accessibility testing across multi-module projects?
 - How do you balance accessibility test coverage with test suite execution constraints?
 
-## References
+## Ссылки (RU)
 
-- [[c-accessibility]] - Accessibility fundamentals
-- [[c-compose-semantics]] - Compose semantics system
-- [[c-espresso-testing]] - Espresso testing framework
+- [[c-accessibility]]
 - https://developer.android.com/guide/topics/ui/accessibility/testing
 - https://developer.android.com/training/testing/espresso/accessibility-checking
+
+## References
+
+- [[c-accessibility]]
+- https://developer.android.com/guide/topics/ui/accessibility/testing
+- https://developer.android.com/training/testing/espresso/accessibility-checking
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-testing-compose-ui--android--medium]] - основы тестирования Compose UI
+
+### Связанные (того же уровня)
+- [[q-accessibility-compose--android--medium]] - реализация доступности
+- [[q-accessibility-talkback--android--medium]] - интеграция TalkBack
+- [[q-compose-testing--android--medium]] - паттерны тестирования Compose
+
+### Продвинутые (сложнее)
 
 ## Related Questions
 
@@ -250,4 +282,3 @@ Text(
 - [[q-compose-testing--android--medium]] - Compose testing patterns
 
 ### Advanced (Harder)
-

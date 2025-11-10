@@ -19,11 +19,10 @@ status: draft
 moc: moc-android
 related:
 - c-mvvm
-- c-viewmodel
 - q-what-is-known-about-recyclerview--android--easy
 - q-which-event-is-called-when-user-touches-screen--android--medium
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags:
 - android/architecture-mvvm
@@ -31,6 +30,7 @@ tags:
 - data-binding
 - difficulty/easy
 - ui
+
 ---
 
 # Вопрос (RU)
@@ -45,14 +45,14 @@ tags:
 
 ## Ответ (RU)
 
-**Data Binding** — библиотека Android для прямой привязки UI-компонентов к источникам данных, устраняющая необходимость в `findViewById()` и синхронизации UI вручную.
+**Data Binding** — библиотека Android для прямой привязки UI-компонентов к источникам данных, устраняющая необходимость в `findViewById()` во многих случаях и упрощающая синхронизацию UI с данными за счёт генерации binding-классов на основе layout-файлов.
 
 ### Ключевые Возможности
 
-1. **Устраняет `findViewById()`** — прямой доступ к view
+1. **Устраняет `findViewById()`** — прямой доступ к view через сгенерированные binding-классы
 2. **Двусторонняя привязка** — автоматическое обновление при изменении данных
 3. **Язык выражений** — логика прямо в XML
-4. **Null-безопасность** — встроенные проверки
+4. **Null-безопасность** — типобезопасные ссылки на view
 
 ### Настройка
 
@@ -98,8 +98,10 @@ class MainActivity : AppCompatActivity() {
 
 ### Наблюдаемые Данные
 
+Альтернативный вариант — сделать модель наблюдаемой:
+
 ```kotlin
-class User : BaseObservable() {
+class ObservableUser : BaseObservable() {
     @get:Bindable
     var name: String = ""
         set(value) {
@@ -109,6 +111,7 @@ class User : BaseObservable() {
 }
 
 // UI автоматически обновляется
+val user = ObservableUser()
 user.name = "Jane"  // TextView обновится автоматически
 ```
 
@@ -123,11 +126,11 @@ user.name = "Jane"  // TextView обновится автоматически
 ```kotlin
 class SearchViewModel : ViewModel() {
     val query = MutableLiveData("")
-    // Изменения в EditText автоматически обновят query
+    // Изменения в EditText автоматически обновят query и наоборот
 }
 ```
 
-### С LiveData
+### С `LiveData`
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -139,6 +142,9 @@ class UserViewModel : ViewModel() {
 }
 
 class MainActivity : AppCompatActivity() {
+    private val viewModel: UserViewModel by viewModels()
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -149,39 +155,39 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Data Binding Vs View Binding
+### Data Binding Vs `View` Binding
 
-| Функция | Data Binding | View Binding |
+| Функция | Data Binding | `View` Binding |
 |---------|--------------|--------------|
 | Устраняет `findViewById()` | ✅ | ✅ |
 | Null/Type safety | ✅ | ✅ |
 | Двусторонняя привязка | ✅ | ❌ |
 | Выражения в XML | ✅ | ❌ |
 | Скорость сборки | Медленнее | Быстрее |
-| Рекомендация Google | ❌ | ✅ |
+| Рекомендация Google | Рекомендуется при необходимости выражений/двусторонней привязки | Рекомендуется по умолчанию для безопасного доступа к view |
 
 ### Когда Использовать
 
 **Data Binding:**
 - Нужна двусторонняя привязка
-- Используется MVVM с LiveData
-- Требуется сократить boilerplate
+- Используется MVVM с `LiveData` / `Observable`-типами
+- Требуется сократить boilerplate и вынести простую логику отображения в XML
 
-**View Binding (предпочтительно):**
+**`View` Binding (часто предпочтительнее по умолчанию):**
 - Простой проект
 - Важна скорость сборки
-- Команда предпочитает явность
+- Команда предпочитает явный код без логики в XML
 
 ## Answer (EN)
 
-**Data Binding** is an Android library for direct binding of UI components to data sources, eliminating the need for `findViewById()` and manual UI synchronization.
+**Data Binding** is an Android library for directly binding UI components to data sources, eliminating the need for `findViewById()` in many cases and simplifying UI synchronization by generating binding classes based on layout files.
 
 ### Key Features
 
-1. **Eliminates `findViewById()`** — direct view access
-2. **Two-way binding** — automatic updates on data changes
+1. **Eliminates `findViewById()`** — direct view access via generated binding classes
+2. **Two-way binding** — automatic updates when data changes
 3. **Expression language** — logic directly in XML
-4. **Null safety** — built-in null checks
+4. **Null safety** — type-safe view references
 
 ### Setup
 
@@ -225,10 +231,12 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Observable Data
+### `Observable` Data
+
+An alternative is to make the model observable:
 
 ```kotlin
-class User : BaseObservable() {
+class ObservableUser : BaseObservable() {
     @get:Bindable
     var name: String = ""
         set(value) {
@@ -238,6 +246,7 @@ class User : BaseObservable() {
 }
 
 // UI updates automatically
+val user = ObservableUser()
 user.name = "Jane"  // TextView updates automatically
 ```
 
@@ -252,11 +261,11 @@ user.name = "Jane"  // TextView updates automatically
 ```kotlin
 class SearchViewModel : ViewModel() {
     val query = MutableLiveData("")
-    // Changes in EditText automatically update query
+    // Changes in EditText automatically update query and vice versa
 }
 ```
 
-### With LiveData
+### With `LiveData`
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -268,6 +277,9 @@ class UserViewModel : ViewModel() {
 }
 
 class MainActivity : AppCompatActivity() {
+    private val viewModel: UserViewModel by viewModels()
+    private lateinit var binding: ActivityMainBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
@@ -278,28 +290,28 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-### Data Binding Vs View Binding
+### Data Binding Vs `View` Binding
 
-| Feature | Data Binding | View Binding |
+| Feature | Data Binding | `View` Binding |
 |---------|--------------|--------------|
 | Eliminates `findViewById()` | ✅ | ✅ |
 | Null/Type safety | ✅ | ✅ |
 | Two-way binding | ✅ | ❌ |
 | Expressions in XML | ✅ | ❌ |
 | Build speed | Slower | Faster |
-| Google recommendation | ❌ | ✅ |
+| Google recommendation | Recommended when you need expressions/two-way binding | Recommended by default for safe view access |
 
 ### When to Use
 
 **Data Binding:**
 - Need two-way binding
-- Using MVVM with LiveData
-- Need to reduce boilerplate
+- Using MVVM with `LiveData` / observable types
+- Want to reduce boilerplate and move simple UI logic into XML
 
-**View Binding (preferred):**
+**`View` Binding (often preferred by default):**
 - Simple project
 - Build speed matters
-- Team prefers explicitness
+- Team prefers explicit code without logic in XML
 
 ---
 
@@ -314,15 +326,13 @@ class MainActivity : AppCompatActivity() {
 ## References
 
 - [Android Data Binding Documentation](https://developer.android.com/topic/libraries/data-binding)
-- [View Binding Documentation](https://developer.android.com/topic/libraries/view-binding)
+- [`View` Binding Documentation](https://developer.android.com/topic/libraries/view-binding)
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-mvvm]]
-- [[c-viewmodel]]
-
 
 ### Prerequisites
 - [[q-what-is-known-about-recyclerview--android--easy]] — Understanding Android views first

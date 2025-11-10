@@ -3,17 +3,18 @@ id: android-215
 title: "Inject Router To Presenter / Инъекция Router в Presenter"
 aliases: ["Inject Router To Presenter", "Router DI", "Инъекция Router в Presenter", "Инъекция роутера"]
 topic: android
-subtopics: [architecture-mvi, di-hilt, di-koin]
+subtopics: [architecture-mvvm, di-hilt, ui-navigation]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-play-feature-delivery--android--medium, q-state-hoisting-compose--android--medium]
+related: [c-dependency-injection, q-play-feature-delivery--android--medium, q-state-hoisting-compose--android--medium]
 created: 2025-10-15
-updated: 2025-10-30
-tags: [android/architecture-mvi, android/di-hilt, android/di-koin, dependency-injection, difficulty/medium, navigation, router]
+updated: 2025-11-10
+tags: [android/architecture-mvvm, android/di-hilt, android/ui-navigation, dependency-injection, difficulty/medium, navigation, router]
+
 ---
 
 # Вопрос (RU)
@@ -28,7 +29,7 @@ tags: [android/architecture-mvi, android/di-hilt, android/di-koin, dependency-in
 
 ## Ответ (RU)
 
-Для внедрения роутера в презентер используйте **Dependency Injection (DI)** фреймворки. Они обеспечивают слабую связанность, упрощают тестирование и позволяют следовать SOLID-принципам.
+Для внедрения роутера в презентер используйте **Dependency Injection (DI)** фреймворки. Они обеспечивают слабую связанность, упрощают тестирование и позволяют лучше следовать SOLID-принципам.
 
 **Основные подходы**:
 
@@ -36,10 +37,10 @@ tags: [android/architecture-mvi, android/di-hilt, android/di-koin, dependency-in
 2. **Dagger 2** — compile-time DI, больше контроля
 3. **Koin** — runtime DI, Kotlin DSL, простая настройка
 
-### Ключевой Паттерн: Interface-Based Router
+### Ключевой паттерн: Router через интерфейс
 
 ```kotlin
-// ✅ Интерфейс роутера — абстрагирует навигацию
+// ✅ Интерфейс роутера — абстрагирует детали реализации навигации
 interface Router {
     fun navigateToDetails(itemId: String)
     fun navigateToSettings()
@@ -47,27 +48,34 @@ interface Router {
 }
 ```
 
-### Пример С Hilt (Рекомендуется)
+### Пример с Hilt (Рекомендуется)
+
+Важно: `NavController` привязан к `NavHostFragment` и обычно не инжектится напрямую как зависимость на уровне `ActivityComponent`/`SingletonComponent`. Вместо этого инжектируйте абстракцию `Router`, а внутри реализации получайте `NavController` из актуального `Fragment`/`View` (или передавайте его в методах), чтобы избежать проблем с жизненным циклом.
 
 ```kotlin
-// Реализация роутера
-class AppRouter @Inject constructor(
-    private val navController: NavController
-) : Router {
+// Реализация роутера, завязанная на NavController
+class AppRouter @Inject constructor() : Router {
+
+    // Получение NavController должно быть безопасно по жизненному циклу,
+    // например, через слабую ссылку на Activity/Fragment или через callback.
+    private fun navController(fragment: Fragment): NavController =
+        fragment.findNavController()
+
     override fun navigateToDetails(itemId: String) {
-        navController.navigate("details/$itemId")
+        // пример: навигация должна выполняться с актуального fragment/navController
+        // navController(currentFragment).navigate("details/$itemId")
     }
 
     override fun navigateToSettings() {
-        navController.navigate("settings")
+        // navController(currentFragment).navigate("settings")
     }
 
     override fun navigateBack() {
-        navController.popBackStack()
+        // navController(currentFragment).popBackStack()
     }
 }
 
-// Модуль Hilt
+// Модуль Hilt — биндим интерфейс на реализацию без нарушения жизненного цикла
 @Module
 @InstallIn(ActivityComponent::class)
 abstract class NavigationModule {
@@ -75,7 +83,7 @@ abstract class NavigationModule {
     abstract fun bindRouter(impl: AppRouter): Router
 }
 
-// ✅ Презентер с конструкторной инъекцией
+// ✅ Презентер с конструкторной инъекцией Router
 class ProductListPresenter @Inject constructor(
     private val router: Router,
     private val repository: ProductRepository
@@ -92,16 +100,19 @@ class ProductListFragment : Fragment() {
 }
 ```
 
-### Пример С Koin
+Этот пример демонстрирует идею: презентер получает `Router` по интерфейсу, а конкретная реализация `Router` знает, как работать с `NavController`/`Activity`/`Fragment`. Важно спроектировать `Router` так, чтобы он не держал долгоживущих ссылок на `NavController`.
+
+### Пример с Koin
 
 ```kotlin
 // Модуль Koin
 val navigationModule = module {
+    // Router с областью жизни Activity или конкретного навигационного контейнера
     scope<MainActivity> {
         scoped<Router> {
-            NavigationRouter(
-                findNavController = { (getSource() as MainActivity).findNavController(R.id.nav_host_fragment) }
-            )
+            // Реализация должна безопасно получать NavController,
+            // например, через activity.findNavController(...)
+            AppRouter()
         }
     }
 }
@@ -118,16 +129,19 @@ class ProductListFragment : Fragment() {
 }
 ```
 
-### Тестирование С Mock Роутером
+Здесь также ключевая идея: презентер получает `Router` по интерфейсу, а детали получения `NavController` инкапсулируются в реализации роутера и должны быть согласованы с областью жизни (scope).
+
+### Тестирование с mock Router
 
 ```kotlin
-class ProductPresenterTest {
+class ProductListPresenterTest {
     private val mockRouter = mockk<Router>(relaxed = true)
-    private lateinit var presenter: ProductPresenter
+    private val mockRepository = mockk<ProductRepository>()
+    private lateinit var presenter: ProductListPresenter
 
     @Before
     fun setup() {
-        presenter = ProductPresenter(router = mockRouter, repository = mockRepository)
+        presenter = ProductListPresenter(router = mockRouter, repository = mockRepository)
     }
 
     @Test
@@ -139,27 +153,27 @@ class ProductPresenterTest {
 }
 ```
 
-### Преимущества DI Для Роутеров
+### Преимущества DI для роутеров
 
-1. **Слабая связанность** — презентер не зависит от NavController
-2. **Легкое тестирование** — mock-роутер в unit-тестах
-3. **Single Responsibility** — презентер не знает о навигации
-4. **Переиспользование** — один роутер для многих презентеров
-5. **Изоляция модулей** — feature модули не зависят от реализации навигации
+1. **Слабая связанность** — презентер зависит только от интерфейса `Router`, а не от `NavController`
+2. **Легкое тестирование** — можно подменить роутер на mock/stub в unit-тестах
+3. **Разделение ответственностей** — презентационная логика не знает деталей реализации навигации
+4. **Переиспользование** — один `Router` (или набор интерфейсов) для многих презентеров
+5. **Изоляция модулей** — feature-модули зависят от абстракций навигации, а не от конкретного стека
 
 ### Best Practices
 
 ```kotlin
-// ✅ GOOD: Interface + constructor injection
+// ✅ GOOD: интерфейс + конструкторная инъекция
 class Presenter @Inject constructor(private val router: Router)
 
-// ❌ BAD: Direct NavController dependency
+// ❌ BAD: прямая зависимость от NavController в презентере
 class Presenter @Inject constructor(private val navController: NavController)
 
-// ✅ GOOD: Activity-scoped router
+// ✅ GOOD: Router, живущий не дольше Activity/host компонента
 @InstallIn(ActivityComponent::class)
 
-// ❌ BAD: Singleton router with NavController (lifecycle issues)
+// ❌ BAD: Singleton Router, держащий NavController (проблемы с жизненным циклом)
 @InstallIn(SingletonComponent::class)
 ```
 
@@ -167,9 +181,9 @@ class Presenter @Inject constructor(private val navController: NavController)
 
 ## Answer (EN)
 
-To inject a router into a presenter, use **Dependency Injection (DI)** frameworks. They ensure loose coupling, facilitate testing, and help follow SOLID principles.
+To inject a router into a presenter, use **Dependency Injection (DI)** frameworks. They ensure loose coupling, make testing easier, and help better adhere to SOLID principles.
 
-**Main Approaches**:
+**Main approaches**:
 
 1. **Hilt** — official Android DI, minimal boilerplate
 2. **Dagger 2** — compile-time DI, more control
@@ -178,7 +192,7 @@ To inject a router into a presenter, use **Dependency Injection (DI)** framework
 ### Key Pattern: Interface-Based Router
 
 ```kotlin
-// ✅ Router interface — abstracts navigation logic
+// ✅ Router interface — abstracts navigation implementation details
 interface Router {
     fun navigateToDetails(itemId: String)
     fun navigateToSettings()
@@ -188,25 +202,32 @@ interface Router {
 
 ### Hilt Example (Recommended)
 
+Important: `NavController` is tied to a `NavHostFragment` and usually should not be injected as a long-lived dependency at `ActivityComponent`/`SingletonComponent` level. Instead, inject a `Router` abstraction into the presenter and let the router implementation deal with obtaining/using the current `NavController` safely.
+
 ```kotlin
-// Router implementation
-class AppRouter @Inject constructor(
-    private val navController: NavController
-) : Router {
+// Router implementation that works with NavController
+class AppRouter @Inject constructor() : Router {
+
+    // NavController access must respect the lifecycle,
+    // e.g., via a weak reference to Activity/Fragment or a callback.
+    private fun navController(fragment: Fragment): NavController =
+        fragment.findNavController()
+
     override fun navigateToDetails(itemId: String) {
-        navController.navigate("details/$itemId")
+        // Example: perform navigation using the current fragment/navController
+        // navController(currentFragment).navigate("details/$itemId")
     }
 
     override fun navigateToSettings() {
-        navController.navigate("settings")
+        // navController(currentFragment).navigate("settings")
     }
 
     override fun navigateBack() {
-        navController.popBackStack()
+        // navController(currentFragment).popBackStack()
     }
 }
 
-// Hilt module
+// Hilt module — bind interface to implementation without breaking lifecycle constraints
 @Module
 @InstallIn(ActivityComponent::class)
 abstract class NavigationModule {
@@ -214,7 +235,7 @@ abstract class NavigationModule {
     abstract fun bindRouter(impl: AppRouter): Router
 }
 
-// ✅ Presenter with constructor injection
+// ✅ Presenter with constructor-injected Router
 class ProductListPresenter @Inject constructor(
     private val router: Router,
     private val repository: ProductRepository
@@ -231,16 +252,19 @@ class ProductListFragment : Fragment() {
 }
 ```
 
+This example illustrates the idea: the presenter depends only on the `Router` interface, and the `Router` implementation encapsulates the `NavController`/host component details. It is crucial to design the router so it does not hold long-lived references to a specific `NavController` instance.
+
 ### Koin Example
 
 ```kotlin
 // Koin module
 val navigationModule = module {
+    // Router scoped to Activity or specific navigation host
     scope<MainActivity> {
         scoped<Router> {
-            NavigationRouter(
-                findNavController = { (getSource() as MainActivity).findNavController(R.id.nav_host_fragment) }
-            )
+            // Implementation must obtain NavController safely,
+            // for example via activity.findNavController(...)
+            AppRouter()
         }
     }
 }
@@ -257,16 +281,19 @@ class ProductListFragment : Fragment() {
 }
 ```
 
+Again, the key idea: the presenter gets an interface-based `Router`, and the router implementation (with proper scoping) handles how to reach the `NavController` or other navigation primitives.
+
 ### Testing With Mock Router
 
 ```kotlin
-class ProductPresenterTest {
+class ProductListPresenterTest {
     private val mockRouter = mockk<Router>(relaxed = true)
-    private lateinit var presenter: ProductPresenter
+    private val mockRepository = mockk<ProductRepository>()
+    private lateinit var presenter: ProductListPresenter
 
     @Before
     fun setup() {
-        presenter = ProductPresenter(router = mockRouter, repository = mockRepository)
+        presenter = ProductListPresenter(router = mockRouter, repository = mockRepository)
     }
 
     @Test
@@ -280,11 +307,11 @@ class ProductPresenterTest {
 
 ### Benefits of DI for Routers
 
-1. **Loose coupling** — presenter doesn't depend on NavController
-2. **Easy testing** — mock router in unit tests
-3. **Single Responsibility** — presenter doesn't handle navigation
-4. **Reusability** — one router for multiple presenters
-5. **Module isolation** — feature modules don't depend on navigation implementation
+1. **Loose coupling** — presenter depends only on `Router` interface, not `NavController`
+2. **Easy testing** — router can be mocked/stubbed in unit tests
+3. **Separation of concerns** — presentation logic is decoupled from navigation implementation details
+4. **Reusability** — one `Router` (or a set of interfaces) can be reused across multiple presenters
+5. **Module isolation** — feature modules depend on navigation abstractions instead of concrete navigation stack
 
 ### Best Practices
 
@@ -292,45 +319,66 @@ class ProductPresenterTest {
 // ✅ GOOD: Interface + constructor injection
 class Presenter @Inject constructor(private val router: Router)
 
-// ❌ BAD: Direct NavController dependency
+// ❌ BAD: Direct NavController dependency inside presenter
 class Presenter @Inject constructor(private val navController: NavController)
 
-// ✅ GOOD: Activity-scoped router
+// ✅ GOOD: Router scoped no longer than Activity/host component
 @InstallIn(ActivityComponent::class)
 
-// ❌ BAD: Singleton router with NavController (lifecycle issues)
+// ❌ BAD: Singleton Router holding NavController (lifecycle issues)
 @InstallIn(SingletonComponent::class)
 ```
 
 ---
 
+## Дополнительные вопросы (RU)
+
+1. Как обрабатывать результаты навигации (например, выбор способа оплаты и возврат результата вызывающему экрану), сохраняя презентер независимым от конкретных навигационных API?
+2. Как спроектировать абстракцию `Router`, которая одинаково хорошо работает и с навигацией на базе `Activity`, и с навигацией на базе `Fragment`?
+3. Как правильно задавать области жизни (scope) для `Router` в мульти-модульных проектах, чтобы избежать утечек `NavController` или ссылок на `Activity`?
+4. Как сочетать абстракции `Router` с `ViewModel`/MVI, представляя навигацию как события состояния?
+5. Как тестировать навигационные сценарии end-to-end при использовании интерфейса `Router` (например, с помощью Espresso или Robolectric)?
+
 ## Follow-ups
 
-1. How to handle navigation results (e.g., selecting payment method and returning result to caller)?
-2. How to implement deep link routing in multi-module app with feature-based navigation?
-3. What are the lifecycle implications of different DI scopes (Activity vs Fragment) for routers?
-4. How to test navigation flows in integration tests without mocking the router?
-5. How to migrate from Activity-based navigation (Intent) to Fragment-based (NavController) while keeping presenters unchanged?
+1. How to handle navigation results (e.g., selecting payment method and returning result to caller) while keeping the presenter unaware of concrete navigation APIs?
+2. How to design a router abstraction that works consistently across both `Activity`-based and `Fragment`-based navigation?
+3. How to scope routers correctly in multi-module projects to avoid leaking `NavController` or `Activity` references?
+4. How to combine `Router` abstractions with `ViewModel`/MVI state to model navigation as events?
+5. How to test navigation flows end-to-end when using a router interface (e.g., with Espresso or Robolectric)?
+
+## Ссылки (RU)
+
+- [[c-dependency-injection]] — Принципы DI
+- [Hilt Documentation]("https://developer.android.com/training/dependency-injection/hilt-android")
+- [Koin Documentation]("https://insert-koin.io/")
+- [Navigation Component Guide]("https://developer.android.com/guide/navigation")
 
 ## References
 
 - [[c-dependency-injection]] — DI principles
-- [[c-navigation-component]] — Android Navigation Component
-- [[c-mvvm-pattern]] — Presenter pattern
-- [Hilt Documentation](https://developer.android.com/training/dependency-injection/hilt-android)
-- [Koin Documentation](https://insert-koin.io/)
-- [Navigation Component Guide](https://developer.android.com/guide/navigation)
+- [Hilt Documentation]("https://developer.android.com/training/dependency-injection/hilt-android")
+- [Koin Documentation]("https://insert-koin.io/")
+- [Navigation Component Guide]("https://developer.android.com/guide/navigation")
+
+## Связанные вопросы (RU)
+
+### База (Проще)
+- [[q-play-feature-delivery--android--medium]] — Фиче-модули и навигация
+
+### Похожие (Тот же уровень)
+- [[q-state-hoisting-compose--android--medium]] — Паттерны управления состоянием
+
+### Продвинутые (Сложнее)
+- [[q-android-modularization--android--medium]] — Навигация и границы модулей
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-dependency-injection--android--easy]] — DI basics
-- [[q-hilt-vs-koin--android--easy]] — DI framework comparison
+- [[q-play-feature-delivery--android--medium]] — Feature modules with navigation
 
 ### Related (Same Level)
-- [[q-play-feature-delivery--android--medium]] — Feature modules with navigation
 - [[q-state-hoisting-compose--android--medium]] — State management patterns
 
 ### Advanced (Harder)
-- [[q-multi-module-navigation--android--hard]] — Deep link routing across modules
-- [[q-navigation-result-api--android--hard]] — Navigation with results
+- [[q-android-modularization--android--medium]] — Navigation and module boundaries

@@ -2,28 +2,20 @@
 id: android-031
 title: "commit() vs apply() in SharedPreferences / commit() против apply() в SharedPreferences"
 aliases: ["commit() vs apply() in SharedPreferences", "commit() против apply() в SharedPreferences"]
-
-# Classification
 topic: android
-subtopics: [datastore, performance-memory]
+subtopics: [datastore]
 question_kind: android
 difficulty: easy
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 sources: []
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [c-datastore, c-sharedpreferences]
-
-# Timestamps
+related: [q-android-storage-types--android--medium]
 created: 2025-10-06
-updated: 2025-10-28
+updated: 2025-11-10
+tags: [android/datastore, difficulty/easy, performance, sharedpreferences]
 
-tags: [android/datastore, android/performance-memory, difficulty/easy, performance, sharedpreferences]
 ---
 
 # Вопрос (RU)
@@ -36,23 +28,24 @@ tags: [android/datastore, android/performance-memory, difficulty/easy, performan
 
 ## Ответ (RU)
 
-**Ключевая разница**: `commit()` работает синхронно и возвращает результат, `apply()` работает асинхронно в фоновом потоке.
+**Ключевая разница**: `commit()` работает синхронно и возвращает результат успешности записи на диск, `apply()` сразу обновляет данные в памяти и планирует запись на диск асинхронно, не блокируя вызывающий поток.
 
 ### Быстрое Сравнение
 
 | Характеристика | commit() | apply() |
 |----------------|----------|---------|
-| Возврат | Boolean (успех/неудача) | Void |
-| Выполнение | Синхронное (блокирует поток) | Асинхронное (фоновый поток) |
-| Производительность | Медленнее | Быстрее |
-| Использование | Нужен результат операции | Fire-and-forget (99% случаев) |
+| Возврат | `Boolean` (успех/неудача записи на диск) | Void |
+| Выполнение | Полностью синхронное (обновление памяти + запись на диск, блокирует поток) | Обновление памяти синхронно, запись на диск асинхронно |
+| Видимость для читателей | После завершения commit() данные гарантированно записаны и видимы | Данные доступны другим читателям сразу после вызова (из памяти), запись на диск может еще идти |
+| Производительность | Медленнее, может блокировать UI | Быстрее с точки зрения вызывающего потока, меньше риск блокировок |
+| Использование | Нужен результат/гарантия записи на диск | Fire-and-forget (большинство случаев) |
 
 ### Пример 1: commit() - Синхронный
 
 ```kotlin
 val prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
-// ❌ commit() блокирует текущий поток до завершения записи
+// ❌ commit() блокирует текущий поток до завершения записи на диск
 val success = prefs.edit()
     .putString("username", "john_doe")
     .putInt("age", 25)
@@ -65,23 +58,24 @@ if (success) {
 }
 ```
 
-### Пример 2: apply() - Асинхронный
+### Пример 2: apply() - Асинхронная запись на диск
 
 ```kotlin
-// ✅ apply() возвращается немедленно
+// ✅ apply() синхронно обновляет память и сразу возвращается
 prefs.edit()
     .putString("username", "john_doe")
     .putInt("age", 25)
-    .apply() // Не блокирует UI
+    .apply() // Не блокирует UI при записи на диск
 
-// Этот код выполняется сразу (запись идет в фоне)
-Log.d("Prefs", "apply() вызван, запись происходит в фоне")
+// Этот код выполняется сразу; данные уже доступны через SharedPreferences,
+// хотя физическая запись на диск может еще выполняться в фоне
+Log.d("Prefs", "apply() вызван, запись на диск выполняется асинхронно")
 ```
 
 ### Пример 3: Когда Использовать commit()
 
 ```kotlin
-// Случай 1: Нужен результат операции
+// Случай 1: Нужен результат операции (гарантия записи на диск)
 fun saveImportantData(data: String): Boolean {
     return prefs.edit()
         .putString("important_data", data)
@@ -95,7 +89,7 @@ suspend fun saveInBackground() = withContext(Dispatchers.IO) {
         .commit() // ✅ OK на фоновом потоке
 
     if (!success) {
-        // Обработка ошибки
+        // Обработка ошибки (например, проблема с файловой системой)
     }
 }
 ```
@@ -103,7 +97,7 @@ suspend fun saveInBackground() = withContext(Dispatchers.IO) {
 ### Пример 4: Когда Использовать apply()
 
 ```kotlin
-// ✅ Обычные настройки (99% случаев)
+// ✅ Обычные настройки (большинство случаев)
 fun saveSettings(darkMode: Boolean, notifications: Boolean) {
     prefs.edit()
         .putBoolean("dark_mode", darkMode)
@@ -126,7 +120,7 @@ fun onSliderChanged(value: Int) {
 fun onClick() {
     prefs.edit()
         .putLong("last_click", System.currentTimeMillis())
-        .commit() // Может вызвать ANR!
+        .commit() // Может вызвать лаги и в крайних случаях ANR
 }
 
 // ❌ НЕ ДЕЛАЙТЕ: игнорирование результата commit()
@@ -141,7 +135,7 @@ fun savePreference() {
         .apply()
 }
 
-// ✅ ПРАВИЛЬНО: commit() только когда нужен результат
+// ✅ ПРАВИЛЬНО: commit() только когда нужен результат/гарантия
 fun saveWithValidation(): Boolean {
     return prefs.edit()
         .putString("key", "value")
@@ -155,7 +149,8 @@ fun saveWithValidation(): Boolean {
 // Для нового кода используйте DataStore вместо SharedPreferences
 val Context.dataStore by preferencesDataStore("settings")
 
-// DataStore всегда асинхронный и type-safe
+// Preferences DataStore асинхронен и использует типизированные ключи,
+// Proto DataStore дает полную типобезопасность через proto-схему
 suspend fun savePreference(value: String) {
     context.dataStore.edit { preferences ->
         preferences[stringPreferencesKey("key")] = value
@@ -165,35 +160,36 @@ suspend fun savePreference(value: String) {
 
 ### Best Practices
 
-1. **По умолчанию используйте apply()** - подходит для 99% случаев
+1. **По умолчанию используйте apply()** — подходит для большинства сценариев, снижает риск блокировки UI.
 2. **Используйте commit() только когда**:
-   - Нужно знать, успешна ли запись
+   - Нужно знать, успешна ли запись на диск
    - Уже на фоновом потоке
-   - Нужны синхронные гарантии
-3. **Никогда не используйте commit() на главном потоке** для частых/некритичных записей
-4. **Для нового кода мигрируйте на DataStore**
+   - Требуются строгие синхронные гарантии
+3. **Не используйте commit() на главном потоке** для частых или некритичных записей.
+4. **Для нового кода рассматривайте миграцию на DataStore**, учитывая его асинхронную природу и более надежную модель.
 
 ---
 
 ## Answer (EN)
 
-**Key Difference**: `commit()` is synchronous and returns a result, `apply()` is asynchronous and runs on a background thread.
+**Key Difference**: `commit()` is fully synchronous and reports whether data was persisted to disk; `apply()` updates the in-memory state synchronously and schedules the disk write asynchronously without blocking the caller thread.
 
 ### Quick Comparison
 
 | Feature | commit() | apply() |
 |---------|----------|---------|
-| Return Type | Boolean (success/failure) | Void |
-| Execution | Synchronous (blocks) | Asynchronous (background) |
-| Performance | Slower | Faster |
-| Use Case | Need immediate result | Fire-and-forget (99% of cases) |
+| Return Type | `Boolean` (success/failure of disk write) | Void |
+| Execution | Fully synchronous (memory update + disk write, blocks caller) | Memory update is synchronous, disk write is asynchronous |
+| Visibility | After commit() returns, data is guaranteed written to disk and visible | Data becomes visible to readers immediately; disk write may still be in progress |
+| Performance | Slower, can block (risk on main thread) | Faster from caller perspective, avoids disk I/O blocking |
+| Use Case | Need confirmation/guarantee of persistence | Fire-and-forget (most cases) |
 
 ### Example 1: commit() - Synchronous
 
 ```kotlin
 val prefs = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
-// ❌ commit() blocks current thread until write completes
+// ❌ commit() blocks current thread until data is written to disk
 val success = prefs.edit()
     .putString("username", "john_doe")
     .putInt("age", 25)
@@ -206,23 +202,24 @@ if (success) {
 }
 ```
 
-### Example 2: apply() - Asynchronous
+### Example 2: apply() - Asynchronous Disk Write
 
 ```kotlin
-// ✅ apply() returns immediately
+// ✅ apply() updates memory synchronously and returns immediately
 prefs.edit()
     .putString("username", "john_doe")
     .putInt("age", 25)
-    .apply() // Non-blocking
+    .apply() // Non-blocking disk write
 
-// This code runs immediately (write happens in background)
-Log.d("Prefs", "apply() called, write may not be complete")
+// This code runs immediately; updated values are already visible via SharedPreferences,
+// while the actual disk persistence is handled in the background
+Log.d("Prefs", "apply() called, disk write is scheduled asynchronously")
 ```
 
 ### Example 3: When to Use commit()
 
 ```kotlin
-// Case 1: Need to know if save succeeded
+// Case 1: Need to know if save succeeded (disk persistence)
 fun saveImportantData(data: String): Boolean {
     return prefs.edit()
         .putString("important_data", data)
@@ -236,7 +233,7 @@ suspend fun saveInBackground() = withContext(Dispatchers.IO) {
         .commit() // ✅ OK on background thread
 
     if (!success) {
-        // Handle failure
+        // Handle failure (e.g., filesystem issues)
     }
 }
 ```
@@ -244,7 +241,7 @@ suspend fun saveInBackground() = withContext(Dispatchers.IO) {
 ### Example 4: When to Use apply()
 
 ```kotlin
-// ✅ Simple preferences save (99% of cases)
+// ✅ Simple preference saves (most cases)
 fun saveSettings(darkMode: Boolean, notifications: Boolean) {
     prefs.edit()
         .putBoolean("dark_mode", darkMode)
@@ -256,7 +253,7 @@ fun saveSettings(darkMode: Boolean, notifications: Boolean) {
 fun onSliderChanged(value: Int) {
     prefs.edit()
         .putInt("volume", value)
-        .apply() // Don't block UI on frequent calls
+        .apply() // Avoid blocking UI on frequent writes
 }
 ```
 
@@ -267,13 +264,13 @@ fun onSliderChanged(value: Int) {
 fun onClick() {
     prefs.edit()
         .putLong("last_click", System.currentTimeMillis())
-        .commit() // Can cause ANR!
+        .commit() // May cause jank and, in worst cases, ANR
 }
 
 // ❌ DON'T: Ignore return value of commit()
 prefs.edit()
     .putString("data", "value")
-    .commit() // Ignoring result - use apply() instead!
+    .commit() // Ignoring result? Prefer apply() here.
 
 // ✅ DO: Use apply() for most cases
 fun savePreference() {
@@ -282,7 +279,7 @@ fun savePreference() {
         .apply()
 }
 
-// ✅ DO: Use commit() only when you need the result
+// ✅ DO: Use commit() only when you need result/guarantee
 fun saveWithValidation(): Boolean {
     return prefs.edit()
         .putString("key", "value")
@@ -293,10 +290,11 @@ fun saveWithValidation(): Boolean {
 ### Modern Alternative: DataStore
 
 ```kotlin
-// For new code, use DataStore instead of SharedPreferences
+// For new code, consider DataStore instead of SharedPreferences
 val Context.dataStore by preferencesDataStore("settings")
 
-// DataStore is always async and type-safe
+// Preferences DataStore is asynchronous and uses typed keys;
+// Proto DataStore provides full type safety via a schema
 suspend fun savePreference(value: String) {
     context.dataStore.edit { preferences ->
         preferences[stringPreferencesKey("key")] = value
@@ -306,29 +304,26 @@ suspend fun savePreference(value: String) {
 
 ### Best Practices
 
-1. **Default to apply()** - suitable for 99% of cases
+1. **Default to apply()** — suitable for most scenarios and reduces UI blocking risk.
 2. **Use commit() only when**:
-   - You need to know if the write succeeded
+   - You must know if the write to disk succeeded
    - You're already on a background thread
-   - You need synchronous guarantees
-3. **Never use commit() on main thread** for frequent/non-critical writes
-4. **Migrate to DataStore for new code**
+   - You require strict synchronous guarantees
+3. **Avoid commit() on main thread** for frequent or non-critical writes.
+4. **Prefer DataStore for new code**, leveraging its asynchronous behavior and stronger data consistency model.
 
 ---
 
 ## Follow-ups
 
-1. What happens if multiple apply() calls are made in quick succession?
-2. Can commit() fail, and what are the common failure scenarios?
-3. How does SharedPreferences handle concurrent writes from multiple threads?
-4. What are the performance implications of using SharedPreferences vs DataStore?
-5. How can you migrate existing SharedPreferences data to DataStore?
+1. How does SharedPreferences batch or coalesce multiple apply() calls, and what are the implications?
+2. In which scenarios is commit() strictly required despite its blocking nature?
+3. How does SharedPreferences behave with concurrent edits from multiple threads or processes?
+4. What are the trade-offs between SharedPreferences and DataStore in terms of consistency, performance, and error handling?
+5. How would you safely migrate critical SharedPreferences data to DataStore in a production app?
 
 ## References
 
-- [[c-datastore]] - Modern data storage solution
-- [[c-sharedpreferences]] - Legacy key-value storage
-- [[c-coroutines]] - Asynchronous programming in Android
 - [SharedPreferences Documentation](https://developer.android.com/reference/android/content/SharedPreferences)
 - [DataStore Documentation](https://developer.android.com/topic/libraries/architecture/datastore)
 - [Migration Guide: SharedPreferences to DataStore](https://developer.android.com/codelabs/android-preferences-datastore)
@@ -336,13 +331,11 @@ suspend fun savePreference(value: String) {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-data-storage-options--android--easy]] - Overview of storage options
+- [[q-android-storage-types--android--medium]] - Overview of storage options
 
 ### Related (Same Level)
-- [[q-datastore-preferences-vs-proto--android--easy]] - DataStore types
-- [[q-context-modes-android--android--easy]] - Context.MODE_PRIVATE explained
+- [[q-android-app-bundles--android--easy]] - App `Bundle` basics
 
 ### Advanced (Harder)
-- [[q-datastore-migration--android--medium]] - Migrating from SharedPreferences
-- [[q-launch-modes-android--android--medium]] - Detecting main thread I/O
-- [[q-performance-memory--android--medium]] - Android performance optimization
+- [[q-android-runtime-art--android--medium]] - Android Runtime internals
+- [[q-android-performance-measurement-tools--android--medium]] - Performance tools on Android

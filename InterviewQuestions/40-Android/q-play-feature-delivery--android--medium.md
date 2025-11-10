@@ -10,20 +10,21 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-build-optimization--android--hard, q-modularization-strategies--android--hard, q-what-is-app-bundle--android--easy]
+related: [c-app-bundle, c-gradle, q-android-build-optimization--android--medium]
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android, android/app-bundle, android/build-variants, android/gradle, app-bundle, difficulty/medium, dynamic-modules]
 sources: []
+
 ---
 
 # Вопрос (RU)
 
-Что вы знаете о Play Feature Delivery?
+> Что вы знаете о Play Feature Delivery?
 
 # Question (EN)
 
-What do you know about Play Feature Delivery?
+> What do you know about Play Feature Delivery?
 
 ---
 
@@ -31,7 +32,7 @@ What do you know about Play Feature Delivery?
 
 **Play Feature Delivery** — технология Android App Bundles для условной доставки или загрузки функций по требованию. Позволяет уменьшить размер первоначальной установки и доставлять функциональность только когда она необходима пользователю.
 
-Google Play генерирует оптимизированные APK для конкретной конфигурации устройства из App Bundle, поэтому пользователи загружают только нужный код и ресурсы.
+Google Play генерирует оптимизированные APK для конкретной конфигурации устройства из App `Bundle`, поэтому пользователи загружают только нужный код и ресурсы.
 
 ### Типы Доставки Модулей
 
@@ -46,7 +47,7 @@ Google Play генерирует оптимизированные APK для к�
 </dist:module>
 ```
 
-**2. On-demand** — модуль загружается после установки, когда пользователю нужна функция:
+**2. On-demand** — модуль загружается после установки, когда пользователю нужна функция (запрашивается через Play Core / Play In-App Updates/Delivery API):
 
 ```kotlin
 val request = SplitInstallRequest.newBuilder()
@@ -62,19 +63,22 @@ splitInstallManager.startInstall(request)
     }
 ```
 
-**3. Conditional** — модуль доставляется только на устройства с определёнными возможностями (AR, API level, регион):
+**3. Conditional** — модуль доставляется только на устройства с определёнными возможностями (например, определённые device features, API level, регион):
 
 ```xml
 <dist:module dist:title="@string/ar_feature">
     <dist:delivery>
         <dist:install-time>
             <dist:conditions>
-                <dist:device-feature dist:name="android.hardware.camera.ar" />
+                <!-- пример условия по возможности устройства -->
+                <dist:device-feature dist:name="android.hardware.camera.arcore" />
             </dist:conditions>
         </dist:install-time>
     </dist:delivery>
 </dist:module>
 ```
+
+Отдельного типа "deferred" в манифесте нет: отложенная (deferred) доставка реализуется как on-demand, когда модуль запрашивается из приложения в более поздний момент.
 
 ### Конфигурация Feature-модуля
 
@@ -98,7 +102,7 @@ android {
 
 **Что НЕ включать в feature-модуль:**
 - Конфигурации подписи (используется из базового модуля)
-- `minifyEnabled` (настраивается только в базовом модуле)
+- `minifyEnabled` (обычно настраивается в базовом модуле для всего бандла)
 - `versionCode`, `versionName` (берутся из базового модуля)
 
 ### Мониторинг Загрузки
@@ -107,9 +111,11 @@ android {
 private val listener = SplitInstallStateUpdatedListener { state ->
     when (state.status()) {
         SplitInstallSessionStatus.DOWNLOADING -> {
-            val progress = state.bytesDownloaded() * 100 /
-                          state.totalBytesToDownload()
-            updateProgress(progress.toInt())
+            if (state.totalBytesToDownload() > 0L) {
+                val progress = state.bytesDownloaded() * 100 /
+                               state.totalBytesToDownload()
+                updateProgress(progress.toInt())
+            }
         }
         SplitInstallSessionStatus.INSTALLED -> {
             // ✅ Модуль установлен, может потребоваться recreate()
@@ -125,7 +131,7 @@ private val listener = SplitInstallStateUpdatedListener { state ->
 }
 ```
 
-### SplitCompat — Доступ К Загруженным Модулям
+### SplitCompat — Доступ к Загруженным Модулям
 
 ```kotlin
 // Вариант 1: Наследование от SplitCompatApplication
@@ -139,6 +145,8 @@ class MyApplication : Application() {
     }
 }
 ```
+
+SplitCompat (или SplitCompatApplication) необходим для корректной работы динамических модулей на более старых версиях Android и для сценариев, где требуется поддержка split-APK-загрузки. На современных устройствах (Android 10+) с Play Feature Delivery часть функциональности может работать и без него, но использование SplitCompat остаётся рекомендуемой практикой для обратной совместимости.
 
 ### Проверка Установки Модуля
 
@@ -157,19 +165,19 @@ if (isModuleInstalled("ar_preview")) {
 
 ### Ограничения
 
-1. **Лимит модулей**: 50+ feature-модулей → проблемы производительности
-2. **Removable install-time**: максимум 10 модулей
-3. **Минимальная версия**: Android 5.0+ для on-demand доставки
-4. **SplitCompat**: обязателен для доступа к модулям
-5. **Exported activities**: feature-модули не должны экспортировать активности (модуль может быть не загружен)
+1. **Количество модулей**: слишком большое число feature-модулей (десятки) приводит к усложнению сборки и потенциальным проблемам с производительностью загрузки и обновлений. Планируйте структуру модулей разумно.
+2. **Install-time модули, которые могут быть удалены**: количество таких модулей должно быть ограничено (например, не более ~10) для поддержания стабильности, времени установки и размера; это практическая рекомендация, а не строгое жёсткое ограничение.
+3. **Минимальная версия**: Play Feature Delivery с on-demand доставкой поддерживается на устройствах Android 5.0+ (API 21+) через механизмы split APK.
+4. **SplitCompat**: требуется для поддержки динамических модулей на старых версиях Android и для корректного доступа к ресурсам и классам сплит-APK; учитывайте это при таргетинге широкого набора устройств.
+5. **Exported activities**: технически могут быть экспортированы из feature-модулей, но внешние точки входа должны корректно обрабатывать случаи, когда модуль ещё не установлен (например, вызывать установку или показывать fallback), чтобы избежать сбоев.
 
 ### Преимущества
 
-- Уменьшение размера первоначальной установки на 30-60%
+- Существенное уменьшение размера первоначальной установки
 - Модульная архитектура и лучшая организация кода
 - Целевая доставка по конфигурации устройства
 - Возможность удаления неиспользуемых модулей
-- Быстрые обновления отдельных модулей
+- Более быстрые и изолированные обновления функциональности
 
 ### Примеры Использования
 
@@ -178,7 +186,7 @@ if (isModuleInstalled("ar_preview")) {
 :feature:auth (install-time — логин/регистрация)
 :feature:seller (on-demand — функции для продавцов)
 :feature:ar_preview (conditional — 3D-превью для AR-устройств)
-:feature:analytics (deferred — фоновая загрузка аналитики)
+:feature:analytics (on-demand/deferred — модуль аналитики, загружаемый позже в фоне)
 ```
 
 ---
@@ -202,7 +210,7 @@ Google Play generates optimized APKs for specific device configurations from App
 </dist:module>
 ```
 
-**2. On-demand** — module downloaded after installation when user needs the feature:
+**2. On-demand** — module downloaded after installation when user needs the feature (requested via Play Core / Play Feature Delivery APIs):
 
 ```kotlin
 val request = SplitInstallRequest.newBuilder()
@@ -218,19 +226,22 @@ splitInstallManager.startInstall(request)
     }
 ```
 
-**3. Conditional** — module delivered only to devices with specific capabilities (AR, API level, region):
+**3. Conditional** — module delivered only to devices with specific capabilities (e.g., certain device features, API level, region):
 
 ```xml
 <dist:module dist:title="@string/ar_feature">
     <dist:delivery>
         <dist:install-time>
             <dist:conditions>
-                <dist:device-feature dist:name="android.hardware.camera.ar" />
+                <!-- example of a device capability condition -->
+                <dist:device-feature dist:name="android.hardware.camera.arcore" />
             </dist:conditions>
         </dist:install-time>
     </dist:delivery>
 </dist:module>
 ```
+
+There is no separate "deferred" delivery type in the manifest: deferred delivery is implemented as on-demand delivery, where the app requests the module at a later time.
 
 ### Feature Module Configuration
 
@@ -254,7 +265,7 @@ android {
 
 **What NOT to include in feature module:**
 - Signing configurations (inherited from base module)
-- `minifyEnabled` (configured only in base module)
+- `minifyEnabled` (typically configured in the base module for the whole bundle)
 - `versionCode`, `versionName` (taken from base module)
 
 ### Download Monitoring
@@ -263,9 +274,11 @@ android {
 private val listener = SplitInstallStateUpdatedListener { state ->
     when (state.status()) {
         SplitInstallSessionStatus.DOWNLOADING -> {
-            val progress = state.bytesDownloaded() * 100 /
-                          state.totalBytesToDownload()
-            updateProgress(progress.toInt())
+            if (state.totalBytesToDownload() > 0L) {
+                val progress = state.bytesDownloaded() * 100 /
+                               state.totalBytesToDownload()
+                updateProgress(progress.toInt())
+            }
         }
         SplitInstallSessionStatus.INSTALLED -> {
             // ✅ Module installed, may need recreate()
@@ -296,6 +309,8 @@ class MyApplication : Application() {
 }
 ```
 
+SplitCompat (or SplitCompatApplication) is required to support dynamic feature modules properly on older Android versions and scenarios that rely on split-APK loading. On modern devices (Android 10+) with Play Feature Delivery, many usages work without it, but using SplitCompat remains a recommended practice for broad compatibility.
+
 ### Checking Module Installation
 
 ```kotlin
@@ -313,19 +328,19 @@ if (isModuleInstalled("ar_preview")) {
 
 ### Limitations
 
-1. **Module limit**: 50+ feature modules → performance issues
-2. **Removable install-time**: max 10 modules
-3. **Minimum version**: Android 5.0+ for on-demand delivery
-4. **SplitCompat**: required for module access
-5. **Exported activities**: feature modules should not export activities (module may not be downloaded)
+1. **Number of modules**: a very high number of feature modules (dozens) complicates build, delivery, and runtime performance. Design module boundaries carefully.
+2. **Removable install-time modules**: the number of install-time modules that can later be uninstalled should be kept limited (for example, not more than roughly 10) to avoid size and management issues; this is a practical guideline rather than a strict hard cap.
+3. **Minimum Android version**: Play Feature Delivery with on-demand delivery works on Android 5.0+ (API 21+) devices via split APK support.
+4. **SplitCompat**: required for proper dynamic module support on older Android versions and for reliable access to resources/classes from split APKs; consider this when targeting a wide device range.
+5. **Exported activities**: technically can be exported from feature modules, but external entry points must handle the case when the module is not installed yet (e.g., trigger installation or show a fallback) to prevent crashes.
 
 ### Benefits
 
-- 30-60% reduction in initial download size
+- Significant reduction of initial download size
 - Modular architecture and better code organization
 - Targeted delivery based on device configuration
 - Ability to uninstall unused modules
-- Fast updates of individual modules
+- Faster and more isolated updates for specific features
 
 ### Example Use Cases
 
@@ -334,8 +349,41 @@ if (isModuleInstalled("ar_preview")) {
 :feature:auth (install-time — login/registration)
 :feature:seller (on-demand — seller functionality)
 :feature:ar_preview (conditional — 3D preview for AR devices)
-:feature:analytics (deferred — background analytics download)
+:feature:analytics (on-demand/deferred — analytics module downloaded later in background)
 ```
+
+---
+
+## Следующие вопросы / Follow-ups (RU)
+
+1. Как вы обрабатываете жизненный цикл динамически загружаемых `Activity` из feature-модулей?
+2. Что происходит, если пользователь пытается открыть функциональность модуля, который не удалось загрузить?
+3. Как работают ProGuard/R8 и обфускация кода с динамическими модулями?
+4. Могут ли feature-модули напрямую шарить ресурсы или код друг с другом без базового модуля?
+5. Какие стратегии тестирования вы используете для on-demand модулей (локально, на стенде, в продакшене)?
+
+## Ссылки (RU)
+
+- [[c-app-bundle]]
+- [[c-gradle]]
+- https://developer.android.com/guide/playcore/feature-delivery
+
+## Связанные вопросы (RU)
+
+### Базовые (проще)
+
+- [[q-android-app-bundles--android--easy]]
+- [[q-gradle-basics--android--easy]]
+
+### Связанные (средний уровень)
+
+- [[q-android-runtime-art--android--medium]]
+- [[q-android-build-optimization--android--medium]]
+
+### Продвинутые (сложнее)
+
+- [[q-android-modularization--android--medium]]
+- [[q-android-release-pipeline-cicd--android--hard]]
 
 ---
 
@@ -350,22 +398,22 @@ if (isModuleInstalled("ar_preview")) {
 ## References
 
 - [[c-app-bundle]]
-- [[c-gradle-build-system]]
+- [[c-gradle]]
 - https://developer.android.com/guide/playcore/feature-delivery
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
-- [[q-what-is-app-bundle--android--easy]]
+- [[q-android-app-bundles--android--easy]]
 - [[q-gradle-basics--android--easy]]
 
 ### Related (Same Level)
 
-- [[q-anr-application-not-responding--android--medium]]
-- [[q-handler-looper-comprehensive--android--medium]]
+- [[q-android-runtime-art--android--medium]]
+- [[q-android-build-optimization--android--medium]]
 
 ### Advanced (Harder)
 
-- [[q-modularization-patterns--android--hard]]
-- [[q-build-optimization--android--hard]]
+- [[q-android-modularization--android--medium]]
+- [[q-android-release-pipeline-cicd--android--hard]]

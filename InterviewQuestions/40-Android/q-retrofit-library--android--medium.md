@@ -10,20 +10,20 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-http-client, c-rest-api, q-what-is-rest-api--networking--easy]
+related: [c-android, c-coroutines, q-coroutine-exception-handling--kotlin--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 tags: [android/architecture-mvvm, android/coroutines, android/networking-http, difficulty/medium, networking, rest-api, retrofit]
 ---
 
 # Вопрос (RU)
 
-Что из себя представляет Retrofit и зачем он нужен в Android-разработке?
+> Что из себя представляет Retrofit и зачем он нужен в Android-разработке?
 
 # Question (EN)
 
-What is Retrofit and why is it needed in Android development?
+> What is Retrofit and why is it needed in Android development?
 
 ## Ответ (RU)
 
@@ -51,7 +51,7 @@ interface ApiService {
 ```kotlin
 val retrofit = Retrofit.Builder()
     .baseUrl("https://api.example.com/")
-    .addConverterFactory(GsonConverterFactory.create())  // ✅ JSON → POJO
+    .addConverterFactory(GsonConverterFactory.create())  // ✅ JSON → POJO/data class
     .build()
 
 data class User(val id: Int, val name: String)  // ✅ Auto-mapped
@@ -60,18 +60,19 @@ data class User(val id: Int, val name: String)  // ✅ Auto-mapped
 **3. Интеграция с корутинами**
 
 ```kotlin
-// ✅ Modern: suspend functions
+// ✅ Рекомендуемый подход: suspend-функции с корутинами
 viewModelScope.launch {
     try {
         val user = apiService.getUser(123)
-        _state.value = Success(user)
+        _state.value = Success(user)  // _state: например, MutableStateFlow или LiveData
     } catch (e: HttpException) {
         _state.value = Error(e.code())  // 404, 500, etc.
     }
 }
 
-// ❌ Legacy: callback-based (avoid)
-apiService.getUser(123).enqueue(object : Callback<User> { ... })
+// Поддерживается и callback-API (Call<T>),
+// но в современном корутинном коде обычно предпочтительнее suspend-функции.
+apiService.getUser(123).enqueue(object : Callback<User> { /* ... */ })
 ```
 
 **4. Настройка через OkHttp**
@@ -89,11 +90,13 @@ val client = OkHttpClient.Builder()
     .build()
 
 val retrofit = Retrofit.Builder()
+    .baseUrl("https://api.example.com/")
     .client(client)
+    .addConverterFactory(GsonConverterFactory.create())
     .build()
 ```
 
-### Пример С Repository Паттерном
+### Пример с Repository-паттерном
 
 ```kotlin
 // API definition
@@ -108,12 +111,15 @@ class RepoRepository(private val api: GitHubApi) {
         try {
             Result.success(api.getRepos(username))
         } catch (e: Exception) {
-            Result.failure(e)  // ✅ Handle errors at repository level
+            Result.failure(e)  // ✅ Обработка ошибок на уровне репозитория
         }
 }
 
 // ViewModel
 class RepoViewModel(private val repo: RepoRepository) : ViewModel() {
+    private val _state = MutableStateFlow<List<Repo>>(emptyList())
+    val state: StateFlow<List<Repo>> = _state
+
     fun loadRepos() = viewModelScope.launch {
         repo.fetchRepos("square").onSuccess { repos ->
             _state.value = repos
@@ -122,11 +128,16 @@ class RepoViewModel(private val repo: RepoRepository) : ViewModel() {
 }
 ```
 
-### HTTP Методы И Формы
+### HTTP Методы и Формы
 
 ```kotlin
 interface ApiService {
-    @GET @POST @PUT @DELETE @PATCH  // Standard methods
+    // Примеры HTTP-методов объявляются по одному на функцию:
+    @GET("items")
+    suspend fun getItems(): List<Item>
+
+    @POST("items")
+    suspend fun createItem(@Body item: Item): Item
 
     @FormUrlEncoded  // ✅ application/x-www-form-urlencoded
     @POST("login")
@@ -159,11 +170,11 @@ suspend fun <T> safeCall(call: suspend () -> T): ApiResult<T> =
     }
 ```
 
-**Итого**: Retrofit превращает HTTP API в идиоматичный Kotlin код, убирая boilerplate для networking логики.
+**Итого**: Retrofit превращает HTTP API в идиоматичный Kotlin-код, убирая boilerplate для networking-логики.
 
 ## Answer (EN)
 
-**Retrofit** is a type-safe HTTP client by Square that transforms REST APIs into Kotlin/Java interfaces. Simplifies networking via declarative annotation-based approach.
+**Retrofit** is a type-safe HTTP client by Square that transforms REST APIs into Kotlin/Java interfaces. It simplifies networking via a declarative, annotation-based approach.
 
 ### Key Capabilities
 
@@ -187,7 +198,7 @@ interface ApiService {
 ```kotlin
 val retrofit = Retrofit.Builder()
     .baseUrl("https://api.example.com/")
-    .addConverterFactory(GsonConverterFactory.create())  // ✅ JSON → POJO
+    .addConverterFactory(GsonConverterFactory.create())  // ✅ JSON → POJO/data class
     .build()
 
 data class User(val id: Int, val name: String)  // ✅ Auto-mapped
@@ -196,18 +207,19 @@ data class User(val id: Int, val name: String)  // ✅ Auto-mapped
 **3. Coroutines Integration**
 
 ```kotlin
-// ✅ Modern: suspend functions
+// ✅ Recommended: suspend functions with coroutines
 viewModelScope.launch {
     try {
         val user = apiService.getUser(123)
-        _state.value = Success(user)
+        _state.value = Success(user)  // _state: e.g., MutableStateFlow or LiveData
     } catch (e: HttpException) {
         _state.value = Error(e.code())  // 404, 500, etc.
     }
 }
 
-// ❌ Legacy: callback-based (avoid)
-apiService.getUser(123).enqueue(object : Callback<User> { ... })
+// Callback-based Call<T> API is still supported,
+// but suspend functions are usually preferred in modern coroutine-based code.
+apiService.getUser(123).enqueue(object : Callback<User> { /* ... */ })
 ```
 
 **4. OkHttp Customization**
@@ -225,7 +237,9 @@ val client = OkHttpClient.Builder()
     .build()
 
 val retrofit = Retrofit.Builder()
+    .baseUrl("https://api.example.com/")
     .client(client)
+    .addConverterFactory(GsonConverterFactory.create())
     .build()
 ```
 
@@ -250,6 +264,9 @@ class RepoRepository(private val api: GitHubApi) {
 
 // ViewModel
 class RepoViewModel(private val repo: RepoRepository) : ViewModel() {
+    private val _state = MutableStateFlow<List<Repo>>(emptyList())
+    val state: StateFlow<List<Repo>> = _state
+
     fun loadRepos() = viewModelScope.launch {
         repo.fetchRepos("square").onSuccess { repos ->
             _state.value = repos
@@ -262,7 +279,12 @@ class RepoViewModel(private val repo: RepoRepository) : ViewModel() {
 
 ```kotlin
 interface ApiService {
-    @GET @POST @PUT @DELETE @PATCH  // Standard methods
+    // HTTP method annotations are used one per function, for example:
+    @GET("items")
+    suspend fun getItems(): List<Item>
+
+    @POST("items")
+    suspend fun createItem(@Body item: Item): Item
 
     @FormUrlEncoded  // ✅ application/x-www-form-urlencoded
     @POST("login")
@@ -295,37 +317,35 @@ suspend fun <T> safeCall(call: suspend () -> T): ApiResult<T> =
     }
 ```
 
-**Summary**: Retrofit transforms HTTP APIs into idiomatic Kotlin code, eliminating networking boilerplate.
+**Summary**: Retrofit transforms HTTP APIs into idiomatic Kotlin code, removing much of the networking boilerplate.
 
 ---
 
 ## Follow-ups
 
-1. How does Retrofit handle response caching and what's the role of OkHttp's cache interceptor?
-2. What are the differences between Retrofit's `Call<T>`, `suspend` functions, and `Flow<T>` return types?
-3. How would you implement request retry logic with exponential backoff in Retrofit?
-4. What's the proper way to handle multipart uploads with progress tracking?
-5. When should you use custom `Converter.Factory` vs. built-in ones (Gson, Moshi)?
+1. How does Retrofit integrate with [[c-coroutines]] and structured concurrency in Android apps?
+2. How would you choose between different call adapters (e.g. coroutines, RxJava, `Call<T>`) when using Retrofit?
+3. How can you design error-handling and result wrappers (e.g. `sealed class`) around Retrofit calls in a clean architecture setup?
+4. How would you configure different Retrofit instances (base URLs, interceptors, timeouts) for staging/production with dependency injection (e.g. [[c-dagger]])?
+5. How can you combine Retrofit with response caching and logging using OkHttp interceptors?
 
 ## References
 
-- [[c-http-client]] - HTTP client fundamentals
-- [[c-rest-api]] - REST API design principles
-- [[c-serialization]] - JSON serialization patterns
+- [[c-coroutines]]
 - https://square.github.io/retrofit/ - Official Retrofit documentation
 - https://square.github.io/okhttp/ - OkHttp documentation
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-rest-api--networking--easy]]
-- [[q-kotlin-suspend-functions--kotlin--easy]]
+- [[q-android-app-components--android--easy]]
+- [[q-android-manifest-file--android--easy]]
 
 ### Related (Same Level)
-- [[q-okhttp-vs-retrofit--android--medium]]
-- [[q-repository-pattern--architecture-patterns--medium]]
+- [[q-android-architectural-patterns--android--medium]]
+- [[q-android-lint-tool--android--medium]]
 - [[q-coroutine-exception-handling--kotlin--medium]]
 
 ### Advanced (Harder)
-- [[q-custom-retrofit-call-adapter--android--hard]]
-- [[q-network-request-deduplication--networking--hard]]
+- [[q-android-runtime-internals--android--hard]]
+- [[q-android-build-optimization--android--medium]]

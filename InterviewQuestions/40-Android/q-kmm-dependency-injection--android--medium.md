@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-dependency-injection, c-koin]
+related: [c-dependency-injection]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 sources: []
 tags: [android/di-koin, android/kmp, DI, difficulty/medium, Koin, Kotlin]
+
 ---
 
 # Вопрос (RU)
@@ -29,7 +30,7 @@ tags: [android/di-koin, android/kmp, DI, difficulty/medium, Koin, Kotlin]
 
 ## Ответ (RU)
 
-**Подход**: KMM DI требует унифицированного решения для всех платформ с поддержкой platform-specific реализаций. Koin - оптимальный выбор для KMM благодаря поддержке multiplatform.
+**Подход**: KMM DI требует унифицированного решения для всех платформ с поддержкой platform-specific реализаций. Koin — один из популярных вариантов для KMM благодаря официальной поддержке multiplatform.
 
 ### Koin Для KMM
 
@@ -49,7 +50,7 @@ val networkModule = module {
 
 val repositoryModule = module {
     single<TaskRepository> {
-        TaskRepositoryImpl(api = get(), database = get())
+        TaskRepositoryImpl(api = get(), databaseDriverFactory = get())
     }
 }
 
@@ -61,9 +62,9 @@ val sharedModules = listOf(networkModule, repositoryModule)
 ```kotlin
 // androidMain
 val androidModule = module {
-    single { androidContext() }
-    single { DatabaseDriverFactory(get()) }
-    single<SecureStorage> { AndroidSecureStorage(get()) }
+    // androidContext передается при инициализации в startKoin, его не нужно регистрировать как single
+    single { DatabaseDriverFactory(androidContext()) }
+    single<SecureStorage> { AndroidSecureStorage(androidContext()) }
 }
 
 // iosMain
@@ -130,36 +131,38 @@ actual class DatabaseDriverFactory {
 ### Сравнение DI Фреймворков
 
 **Koin**:
-- ✅ Multiplatform (Android, iOS, Desktop, Web)
-- ✅ Простая настройка, DSL
-- ✅ Нет code generation
-- ❌ Runtime resolution, нет compile-time safety
-- ❌ Runtime errors
+- Multiplatform (Android, iOS, Desktop, Web)
+- Простая настройка, DSL
+- Нет code generation
+- Runtime resolution, нет compile-time safety
+- Возможны runtime-ошибки при неверной конфигурации
 
 **Dagger/Hilt**:
-- ✅ Compile-time verification
-- ✅ Лучшая производительность
-- ✅ Type-safe
-- ❌ Android-only, не работает на iOS
-- ❌ Сложная настройка, boilerplate
+- Compile-time verification
+- Лучшая производительность
+- Type-safe
+- Android-only, не используется на iOS в KMM shared-коде
+- Сложная настройка, boilerplate
 
 **Manual DI**:
-- ✅ Полный контроль, работает везде
-- ✅ Без framework dependencies
-- ❌ Много boilerplate кода
-- ❌ Manual lifecycle, нет scope management
+- Полный контроль, работает везде
+- Без framework dependencies
+- Много boilerplate кода
+- Ручное управление жизненным циклом, нет встроенного scope management
 
 ### Рекомендации
 
-**Для KMM**: Koin (максимальное переиспользование, consistency)
-**Для Android-only**: Dagger/Hilt (compile-time safety)
-**Для простых проектов**: Manual DI (полный контроль)
+**Для KMM**: Чаще всего используется Koin (много платформ из коробки, единый стиль DI), либо manual DI для максимальной прозрачности.
+
+**Для Android-only**: Dagger/Hilt (compile-time safety, оптимизация).
+
+**Для простых проектов**: Manual DI (полный контроль, минимальные зависимости).
 
 ---
 
 ## Answer (EN)
 
-**Approach**: KMM DI requires a unified solution across platforms while supporting platform-specific implementations. Koin provides the most seamless multiplatform DI solution.
+**Approach**: KMM DI requires a unified solution across platforms while supporting platform-specific implementations. Koin is one of the popular options for KMM thanks to official multiplatform support.
 
 ### Koin For KMM
 
@@ -179,7 +182,7 @@ val networkModule = module {
 
 val repositoryModule = module {
     single<TaskRepository> {
-        TaskRepositoryImpl(api = get(), database = get())
+        TaskRepositoryImpl(api = get(), databaseDriverFactory = get())
     }
 }
 
@@ -191,9 +194,9 @@ val sharedModules = listOf(networkModule, repositoryModule)
 ```kotlin
 // androidMain
 val androidModule = module {
-    single { androidContext() }
-    single { DatabaseDriverFactory(get()) }
-    single<SecureStorage> { AndroidSecureStorage(get()) }
+    // androidContext is provided to Koin in startKoin, no need to register it as a single
+    single { DatabaseDriverFactory(androidContext()) }
+    single<SecureStorage> { AndroidSecureStorage(androidContext()) }
 }
 
 // iosMain
@@ -260,49 +263,68 @@ actual class DatabaseDriverFactory {
 ### DI Framework Comparison
 
 **Koin**:
-- ✅ Multiplatform (Android, iOS, Desktop, Web)
-- ✅ Simple setup, DSL
-- ✅ No code generation
-- ❌ Runtime resolution, no compile-time safety
-- ❌ Runtime errors
+- Multiplatform (Android, iOS, Desktop, Web)
+- Simple setup, DSL
+- No code generation
+- Runtime resolution, no compile-time safety
+- Potential runtime errors if misconfigured
 
 **Dagger/Hilt**:
-- ✅ Compile-time verification
-- ✅ Better performance
-- ✅ Type-safe
-- ❌ Android-only, doesn't work on iOS
-- ❌ Complex setup, boilerplate
+- Compile-time verification
+- Better performance
+- Type-safe
+- Android-only, not used on iOS in shared KMM code
+- Complex setup, boilerplate
 
 **Manual DI**:
-- ✅ Full control, works everywhere
-- ✅ No framework dependencies
-- ❌ Lots of boilerplate
-- ❌ Manual lifecycle, no scope management
+- Full control, works everywhere
+- No framework dependencies
+- Lots of boilerplate
+- Manual lifecycle handling, no built-in scope management
 
 ### Recommendations
 
-**For KMM**: Koin (maximum code sharing, consistency)
-**For Android-only**: Dagger/Hilt (compile-time safety)
-**For simple projects**: Manual DI (full control)
+**For KMM**: Commonly Koin (good multiplatform support, consistent DI style) or manual DI for maximum simplicity/explicitness.
+
+**For Android-only**: Dagger/Hilt (compile-time safety, performance).
+
+**For simple projects**: Manual DI (full control, minimal dependencies).
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как тестировать модули Koin в KMM?
+- Каковы лучшие практики внедрения `ViewModel` в KMM?
+- Как обрабатывать зависимости, учитывающие жизненный цикл, на iOS?
+- Когда использовать `factory` против `single` scope в Koin?
+- Как мигрировать с Dagger на Koin в KMM?
 
 ## Follow-ups
 
 - How do you test Koin modules in KMM?
-- What are best practices for ViewModel injection in KMM?
+- What are best practices for `ViewModel` injection in KMM?
 - How do you handle lifecycle-aware dependencies in iOS?
 - When should you use factory vs single scope in Koin?
 - How do you migrate from Dagger to Koin in KMM?
 
+## Ссылки (RU)
+
+- [[c-dependency-injection]]
+- [[moc-android]]
+- https://insert-koin.io/docs/reference/koin-mp/kmp
+- https://kotlinlang.org/docs/multiplatform.html
+
 ## References
 
 - [[c-dependency-injection]]
-- [[c-koin]]
 - [[moc-android]]
 - https://insert-koin.io/docs/reference/koin-mp/kmp
-- [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
+- https://kotlinlang.org/docs/multiplatform.html
 
+## Связанные вопросы (RU)
+
+### Продвинутые (сложнее)
 
 ## Related Questions
 

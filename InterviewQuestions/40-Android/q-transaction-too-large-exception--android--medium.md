@@ -12,29 +12,30 @@ status: draft
 moc: moc-android
 related: [q-viewmodel-vs-onsavedinstancestate--android--medium, q-what-is-intent--android--easy, q-why-user-data-may-disappear-on-screen-rotation--android--hard]
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags: [android/intents-deeplinks, android/lifecycle, android/performance-memory, binder, difficulty/medium, exceptions, intent, savedinstancestate]
+
 ---
 
 # Вопрос (RU)
 
-Что такое TransactionTooLargeException и как его избежать?
+> Что такое TransactionTooLargeException и как его избежать?
 
 # Question (EN)
 
-What is TransactionTooLargeException and how to avoid it?
+> What is TransactionTooLargeException and how to avoid it?
 
 ---
 
 ## Ответ (RU)
 
-**TransactionTooLargeException** — исключение при превышении лимита **1MB в Binder** — IPC-механизме Android для передачи данных между процессами.
+**TransactionTooLargeException** — исключение, возникающее при превышении допустимого размера данных в Binder-транзакции (ориентировочно около **1MB на транзакцию**), используемой Android для IPC и взаимодействия компонентов (даже внутри одного процесса).
 
 **Типичные ситуации:**
-- Передача больших объектов через Intent/Bundle
+- Передача больших объектов через `Intent`/`Bundle` (между `Activity`, `Fragment`, `Service`, в том числе внутри одного процесса)
 - Сохранение крупных данных в onSaveInstanceState
-- Передача bitmap или списков между Activity/Fragment
+- Передача bitmap или больших списков между `Activity`/`Fragment`
 
 ### Основные Решения
 
@@ -42,7 +43,7 @@ What is TransactionTooLargeException and how to avoid it?
 
 ```kotlin
 // ❌ Передача всего объекта
-intent.putExtra("user", largeUser) // может превысить 1MB
+intent.putExtra("user", largeUser) // может превысить лимит Binder-транзакции
 
 // ✅ Передача только ID
 intent.putExtra("user_id", userId)
@@ -58,7 +59,7 @@ bitmap.compress(CompressFormat.JPEG, 90, FileOutputStream(imageFile))
 intent.putExtra("image_path", imageFile.absolutePath)
 ```
 
-**3. ViewModel для Fragment**
+**3. `ViewModel` для `Fragment`**
 
 ```kotlin
 // ✅ Разделяемые данные через ViewModel
@@ -69,35 +70,37 @@ class SharedViewModel : ViewModel() {
 // В Activity
 sharedViewModel.userData.value = largeList
 
-// Во Fragment - без Bundle
+// Во Fragment - без передачи через Bundle
 private val sharedViewModel: SharedViewModel by activityViewModels()
 ```
 
 **4. Минимизация onSaveInstanceState**
 
 ```kotlin
-// ✅ Сохранять только критичное состояние
+// ✅ Сохранять только критичное и компактное состояние
 override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    outState.putInt("scroll_position", recyclerView.scrollY) // только позиция
-    outState.putInt("selected_id", selectedUser?.id ?: -1)    // только ID
+    val layoutManager = recyclerView.layoutManager as? LinearLayoutManager
+    val firstVisible = layoutManager?.findFirstVisibleItemPosition() ?: 0
+    outState.putInt("scroll_position", firstVisible) // позиция элемента, а не пиксели
+    outState.putInt("selected_id", selectedUser?.id ?: -1) // только ID
 }
 ```
 
 ### Лимиты Binder
 
-- **1 MB** — общий буфер на процесс для всех транзакций
-- Размер Bundle измеряется через Parcel serialization
-- Лимит разделяется между всеми активными IPC-вызовами
+- Практический предел — около **1 MB на одну Binder-транзакцию** (включая служебные данные сериализации через Parcel)
+- Также существует общий пул буфера Binder, разделяемый между транзакциями процесса; крупные или параллельные транзакции могут привести к ошибке до достижения номинального предела
+- Поэтому следует избегать передачи крупных структур данных через `Intent`/`Bundle` и onSaveInstanceState
 
 ## Answer (EN)
 
-**TransactionTooLargeException** occurs when data exceeds the **1MB Binder limit** — Android's IPC mechanism for inter-process communication.
+**TransactionTooLargeException** is thrown when the data sent in a Binder transaction exceeds the allowed size (approximately **1 MB per transaction**), used by Android for IPC and component communication (including within the same process).
 
 **Common scenarios:**
-- Passing large objects via Intent/Bundle
+- Passing large objects via `Intent`/`Bundle` (between `Activity`, `Fragment`, `Service`, including in-process)
 - Saving large data in onSaveInstanceState
-- Transferring bitmaps or lists between Activity/Fragment
+- Transferring bitmaps or large lists between `Activity`/`Fragment`
 
 ### Primary Solutions
 
@@ -105,7 +108,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 
 ```kotlin
 // ❌ Passing entire object
-intent.putExtra("user", largeUser) // may exceed 1MB
+intent.putExtra("user", largeUser) // may exceed Binder transaction limit
 
 // ✅ Pass ID only
 intent.putExtra("user_id", userId)
@@ -121,7 +124,7 @@ bitmap.compress(CompressFormat.JPEG, 90, FileOutputStream(imageFile))
 intent.putExtra("image_path", imageFile.absolutePath)
 ```
 
-**3. ViewModel for fragments**
+**3. `ViewModel` for fragments**
 
 ```kotlin
 // ✅ Share data via ViewModel
@@ -139,45 +142,66 @@ private val sharedViewModel: SharedViewModel by activityViewModels()
 **4. Minimize onSaveInstanceState**
 
 ```kotlin
-// ✅ Save only critical state
+// ✅ Save only critical and compact state
 override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
-    outState.putInt("scroll_position", recyclerView.scrollY) // position only
-    outState.putInt("selected_id", selectedUser?.id ?: -1)    // ID only
+    val layoutManager = recyclerView.layoutManager as? LinearLayoutManager
+    val firstVisible = layoutManager?.findFirstVisibleItemPosition() ?: 0
+    outState.putInt("scroll_position", firstVisible) // item position, not pixel offset
+    outState.putInt("selected_id", selectedUser?.id ?: -1) // ID only
 }
 ```
 
 ### Binder Limits
 
-- **1 MB** — total per-process buffer for all transactions
-- Bundle size measured via Parcel serialization
-- Limit shared across all active IPC calls
+- Practical cap is about **1 MB per Binder transaction** (including Parcel overhead)
+- There is also a shared Binder buffer pool used by transactions in the process; large or concurrent transactions can fail before the nominal cap is reached
+- Therefore avoid sending large data structures via `Intent`/`Bundle` and onSaveInstanceState
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как работает буфер Binder-транзакций при нескольких одновременных IPC-вызовах?
+- В чем разница между смертью процесса и изменением конфигурации с точки зрения восстановления состояния?
+- Когда стоит использовать `ContentProvider` вместо файлового подхода для обмена большими данными?
+- Как измерять размер `Bundle` в продакшене, чтобы предотвратить TransactionTooLargeException?
 
 ## Follow-ups
 
 - How does Binder transaction buffer work across multiple concurrent IPC calls?
 - What's the difference between process death and configuration change regarding state restoration?
-- When should you use ContentProvider vs file-based approach for large data sharing?
-- How do you measure Bundle size in production to prevent TransactionTooLargeException?
+- When should you use `ContentProvider` vs file-based approach for large data sharing?
+- How do you measure `Bundle` size in production to prevent TransactionTooLargeException?
+
+## Ссылки (RU)
+
+- [[c-intent]]
 
 ## References
 
-- [[c-binder]]
 - [[c-intent]]
-- [[c-viewmodel]]
-- [[c-savedinstancestate]]
+
+## Связанные вопросы (RU)
+
+### Предварительные
+- [[q-what-is-intent--android--easy]]
+
+### Связанные
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]]
+- [[q-why-user-data-may-disappear-on-screen-rotation--android--hard]]
+
+### Продвинутые
+- [[q-why-user-data-may-disappear-on-screen-rotation--android--hard]]
 
 ## Related Questions
 
 ### Prerequisites
 - [[q-what-is-intent--android--easy]]
-- [[q-what-is-viewmodel--android--medium]]
 
 ### Related
 - [[q-viewmodel-vs-onsavedinstancestate--android--medium]]
-- [[q-what-is-workmanager--android--medium]]
+- [[q-why-user-data-may-disappear-on-screen-rotation--android--hard]]
 
 ### Advanced
 - [[q-why-user-data-may-disappear-on-screen-rotation--android--hard]]

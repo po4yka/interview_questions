@@ -8,33 +8,34 @@ topic: android
 subtopics:
 - architecture-modularization
 - performance-startup
-- profiling
+- monitoring-slo
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - c-app-startup
-- c-lazy-initialization
-- q-android-profiling-tools--android--medium
+- q-android-performance-measurement-tools--android--medium
 - q-what-are-services-used-for--android--medium
 sources:
-- Android App Startup documentation
+- "https://developer.android.com/topic/performance/vitals/launch-time"
+- "https://developer.android.com/topic/performance/baselineprofiles/overview"
 created: 2025-10-15
-updated: 2025-11-03
+updated: 2025-11-10
 tags:
 - android/architecture-modularization
 - android/performance-startup
-- android/profiling
+- android/monitoring-slo
 - app-startup
 - difficulty/hard
 - lazy-init
 - legacy-code
 - optimization
+
 ---
 
 # Вопрос (RU)
@@ -43,74 +44,64 @@ tags:
 
 ## Краткая Версия
 
-Оптимизируйте запуск legacy Android приложения: профилируйте bottleneck'ы, перенесите тяжелую инициализацию в фон, используйте lazy loading и Baseline Profiles для 15-30% улучшения производительности.
+Оптимизируйте запуск legacy Android приложения: профилируйте bottleneck'ы, перенесите тяжелую инициализацию в фон, используйте lazy loading и Baseline Profiles для ощутимого (типично 15–30%+) улучшения производительности холодного старта.
 
 ## Подробная Версия
 
 Систематически оптимизируйте медленный запуск legacy Android приложения:
 
 **Профилирование:**
-- Используйте Android Profiler для выявления узких мест
-- Измерьте холодный/теплый/горячий старт с целевыми показателями <2с/<1с/<500мс
+- Используйте Android Studio Profiler и системную трассировку (Perfetto / System Tracing) для выявления узких мест
+- Измерьте холодный/тёплый/горячий старт; ориентиры: холодный <2с, тёплый <1с, горячий <500мс (на целевых устройствах)
 
 **Оптимизация инициализации:**
-- Перенесите тяжелые операции из Application.onCreate() в фоновые потоки
-- Используйте Jetpack App Startup для отложенной инициализации компонентов
-- Примените lazy initialization через dependency injection
+- Перенесите тяжёлые операции из `Application.onCreate()` в фоновые потоки или отложенный запуск
+- Используйте Jetpack App Startup для декларативной инициализации компонентов и управления зависимостями
+- Примените отложенную инициализацию (lazy initialization) через dependency injection и ленивый доступ
 
 **Архитектурные улучшения:**
-- Разбейте монолитную инициализацию на модули с зависимостями
-- Используйте Baseline Profiles для AOT-компиляции критических путей
+- Разбейте монолитную инициализацию на независимые модули с явными зависимостями
+- Используйте Baseline Profiles для AOT-компиляции критических путей запуска
 - Реализуйте постепенный rollout оптимизаций с измерением метрик
-
-# Question (EN)
-
-> How would you approach fixing slow app startup in a legacy Android project?
-
-## Short Version
-
-Optimize legacy Android app startup: profile bottlenecks, move heavy initialization to background, use lazy loading and Baseline Profiles for 15-30% performance improvement.
-
-## Detailed Version
-
-Systematically optimize slow startup in legacy Android application:
-
-**Profiling:**
-- Use Android Profiler to identify bottlenecks
-- Measure cold/warm/hot start with targets <2s/<1s/<500ms
-
-**Initialization Optimization:**
-- Move heavy operations from Application.onCreate() to background threads
-- Use Jetpack App Startup for deferred component initialization
-- Apply lazy initialization through dependency injection
-
-**Architectural Improvements:**
-- Break monolithic initialization into modules with dependencies
-- Use Baseline Profiles for AOT compilation of critical paths
-- Implement gradual rollout of optimizations with metrics measurement
-
----
 
 ## Ответ (RU)
 
 **Подход:** Систематическая оптимизация с измеримыми результатами через профилирование, отложенную инициализацию и архитектурные улучшения.
 
+### Требования
+
+**Функциональные:**
+- Приложение должно отображать первый интерактивный экран без ошибок и неполадок инициализации.
+- Критические сервисы (логирование, краш-репортинг, безопасность) должны быть корректно инициализированы.
+
+**Нефункциональные:**
+- Сократить время холодного старта до приемлемых значений для целевых устройств.
+- Обеспечить стабильность и предсказуемость старта (без ANR, без долгих «белых экранов»).
+- Гарантировать возможность измерения и мониторинга метрик старта в dev/prod.
+
+### Архитектура
+
+- Вынесение тяжёлой инициализации из `Application.onCreate()` и экранов первого показа в отдельные компоненты и фоновые задачи.
+- Использование Jetpack App Startup для декларативного описания зависимостей и порядка инициализации.
+- Применение DI для ленивой загрузки зависимостей и разделения зон ответственности.
+- Интеграция Baseline Profiles и macrobenchmark-тестов как части сборочного конвейера.
+
 ### Теоретические Основы
 
 **Типы запуска приложения:**
-- **Холодный старт** — приложение запускается с нуля, требует полной инициализации
-- **Теплый старт** — приложение уже запущено но уничтожено процессом, данные частично кешированы
-- **Горячий старт** — приложение уже активно, перезапуск из background
+- **Холодный старт** — приложение запускается с нуля: процесс отсутствует, происходит полная инициализация.
+- **Тёплый старт** — приложение уже было запущено; возможны варианты (процесс ещё жив или был пересоздан), часть ресурсов/данных уже прогружена или кеширована, и требуется меньше работы, чем при холодном старте.
+- **Горячий старт** — активность возвращается на экран из background при живом процессе, без полной реконструкции приложения.
 
 **Критические факторы производительности:**
-- **Application.onCreate()** — блокирует UI-поток, должен содержать только критические инициализации
-- **Lazy initialization** — отложенная загрузка компонентов при первом обращении
-- **Baseline Profiles** — AOT-компиляция критических путей для 15-30% улучшения производительности
-- **App Startup library** — управление порядком инициализации компонентов с зависимостями
+- **`Application.onCreate()`** — выполняется в UI-потоке; должен содержать только критические инициализации, минимальные по времени.
+- **Lazy initialization** — отложенная загрузка компонентов при первом реальном обращении вместо запуска "всё сразу".
+- **Baseline Profiles** — профили для AOT-компиляции критических путей, способные дать значимое улучшение холодного старта.
+- **App Startup library** — декларативное управление порядком инициализации компонентов и их зависимостей.
 
 **1. Профилирование и анализ**
 
-Используйте Android Profiler и Systrace для выявления узких мест:
+Используйте Android Studio Profiler и системную трассировку (Perfetto / System Tracing) для выявления узких мест; при необходимости можно анализировать трассы уровня платформы.
 
 ```kotlin
 // ✅ Трассировка критических участков
@@ -118,20 +109,23 @@ Trace.beginSection("DatabaseInit")
 initDatabase()
 Trace.endSection()
 
-// ✅ Macrobenchmark для точных измерений
+// ✅ Macrobenchmark для точных измерений (MacrobenchmarkRule / JUnit Rule)
 @Test
 fun startupBenchmark() = benchmarkRule.measureRepeated(
     packageName = "com.example.app",
     metrics = listOf(StartupTimingMetric()),
     iterations = 5
-) { pressHome(); startActivityAndWait() }
+) {
+    pressHome()
+    startActivityAndWait()
+}
 ```
 
-Анализируйте метрики: холодный старт (cold), теплый (warm), горячий (hot). Целевые значения для production: холодный старт < 2 сек, теплый < 1 сек.
+Анализируйте метрики: холодный, тёплый, горячий старт на разных девайсах и сборках. Целевые значения задавайте под свои UX-требования и класс устройств (часто: холодный < 2 сек, тёплый < 1 сек).
 
-**2. Оптимизация Application.onCreate()**
+**2. Оптимизация `Application.onCreate()`**
 
-Критично: только crash reporting и критические системы инициализируются синхронно.
+Критично: синхронно инициализируются только crash reporting / logging, критические security-настройки и минимальный набор необходимых зависимостей для первого экрана.
 
 ```kotlin
 class MyApp : Application() {
@@ -140,20 +134,19 @@ class MyApp : Application() {
         // ✅ Только критическое
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
-        // ❌ Плохо: блокирует UI-поток
+        // ❌ Плохо: блокирует UI-поток при старте
         // initDatabase()
         // initNetworking()
 
-        // ✅ Отложенная инициализация через App Startup
-        AppInitializer.getInstance(this)
-            .initializeComponent(WorkManagerInitializer::class.java)
+        // ✅ Декларативная инициализация через App Startup (пример)
+        // Остальные Initializer'ы регистрируются в манифесте и будут выполнены фреймворком
     }
 }
 ```
 
 **3. Jetpack App Startup + Lazy Init**
 
-Используйте App Startup для управления порядком инициализации компонентов:
+Используйте App Startup для управления порядком инициализации компонентов и явного описания зависимостей. Не инициируйте компоненты вручную, если за вас это делает библиотека (например, WorkManager).
 
 ```kotlin
 class NetworkInitializer : Initializer<ApiClient> {
@@ -166,7 +159,7 @@ class NetworkInitializer : Initializer<ApiClient> {
     override fun dependencies() = emptyList<Class<Initializer<*>>>()
 }
 
-// ✅ Ленивая инициализация через Hilt
+// ✅ Ленивая инициализация через DI (например, Hilt)
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -174,24 +167,24 @@ object AppModule {
     @Singleton
     fun provideDatabase(app: Application): AppDatabase =
         Room.databaseBuilder(app, AppDatabase::class.java, "db")
-            .build() // Создание только при первом обращении
+            .build() // Экземпляр создаётся при первом реальном запросе этого зависимого компонента
 }
 ```
 
-**4. Оптимизация Activity startup**
+**4. Оптимизация запуска `Activity`**
 
-Перенесите тяжелую работу в ViewModel + coroutines:
+Перенесите тяжёлую работу из `Activity.onCreate()` в `ViewModel` / фоновый поток, не блокируя построение первого кадра UI.
 
 ```kotlin
 // ❌ Плохо: блокирует onCreate
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loadUserData() // Синхронная операция!
+        loadUserData() // Синхронная тяжёлая операция!
     }
 }
 
-// ✅ Хорошо: async в ViewModel
+// ✅ Хорошо: асинхронно во ViewModel
 class MainViewModel @Inject constructor(
     private val repository: UserRepository
 ) : ViewModel() {
@@ -202,52 +195,98 @@ class MainViewModel @Inject constructor(
 
 **5. Baseline Profiles**
 
-Используйте Baseline Profiles для AOT-компиляции критических путей:
+Используйте Baseline Profiles для предкомпиляции критических путей (например, запуск, первый экран). В современных проектах это настраивается через отдельный baseline profile модуль / Gradle-плагин; профили генерируются Macrobenchmark-тестами или пишутся вручную.
+
+Пример фрагмента профиля (упрощённый пример записи методов):
 
 ```kotlin
-// baseline-prof.txt
+// baseline-prof.txt (упрощённый пример записи методов)
 HSPLcom/example/app/MainActivity;-><init>()V
 HSPLcom/example/app/MainActivity;->onCreate(Landroid/os/Bundle;)V
 ```
 
-Эффект: 15-30% улучшение холодного старта через предкомпиляцию.
+Эффект: ускорение холодного старта за счёт предкомпиляции часто используемых путей (типично двузначный прирост, но зависит от приложения и устройств).
 
 ### Лучшие Практики
 
-- **Измеряйте до и после** — устанавливайте baseline метрики перед оптимизациями
-- **Постепенные изменения** — внедряйте оптимизации поэтапно для изоляции эффектов
-- **Профилируйте на target устройствах** — тестируйте на устройствах с Android 10+ для Baseline Profiles
-- **Мониторьте в production** — отслеживайте startup метрики после релиза
-- **Используйте App Startup** — для управления зависимостями инициализации компонентов
+- **Измеряйте до и после** — устанавливайте baseline-метрики перед оптимизациями.
+- **Постепенные изменения** — внедряйте оптимизации поэтапно для изоляции эффектов.
+- **Профилируйте на целевых устройствах** — учитывайте реальные девайсы и версии Android; Baseline Profiles применяются движком ART на поддерживаемых версиях.
+- **Мониторьте в production** — отслеживайте startup-метрики после релиза.
+- **Используйте App Startup** — чтобы явно управлять зависимостями инициализации компонентов вместо хаотичного кода в `Application.onCreate()`.
 
 ### Типичные Ошибки
 
-- **Блокировка UI-потока в onCreate()** — приводит к ANR и плохому UX
-- **Инициализация всего сразу** — монолитная загрузка всех компонентов
-- **Отсутствие baseline измерений** — невозможно оценить эффективность оптимизаций
-- **Игнорирование warm/hot стартов** — фокус только на cold start
-- **Ручная инициализация без зависимостей** — race conditions и неправильный порядок
+- **Блокировка UI-потока в onCreate()** — приводит к ANR и плохому UX.
+- **Инициализация всего сразу** — монолитная загрузка всех компонентов при старте.
+- **Отсутствие baseline-измерений** — невозможно оценить эффективность оптимизаций.
+- **Игнорирование warm/hot стартов** — фокус только на cold start.
+- **Ручная инициализация без явных зависимостей** — race conditions и неправильный порядок инициализации.
+
+# Question (EN)
+
+> How would you approach fixing slow app startup in a legacy Android project?
+
+## Short Version
+
+Optimize legacy Android app startup: profile bottlenecks, move heavy initialization to background or defer it, use lazy loading and Baseline Profiles for a noticeable (typically 15–30%+) cold-start performance improvement.
+
+## Detailed Version
+
+Systematically optimize slow startup in a legacy Android application:
+
+**Profiling:**
+- Use Android Studio Profiler and system tracing (Perfetto / System Tracing) to identify bottlenecks
+- Measure cold/warm/hot start; targets: cold <2s, warm <1s, hot <500ms (on target devices)
+
+**Initialization Optimization:**
+- Move heavy operations from `Application.onCreate()` to background threads or deferred execution
+- Use Jetpack App Startup for declarative component initialization and dependency management
+- Apply lazy initialization through dependency injection and on-demand access
+
+**Architectural Improvements:**
+- Break monolithic initialization into independent modules with explicit dependencies
+- Use Baseline Profiles for AOT compilation of critical startup paths
+- Implement gradual rollout of optimizations with metrics measurement
 
 ## Answer (EN)
 
 **Approach:** Systematic optimization with measurable results through profiling, deferred initialization, and architectural improvements.
 
+### Requirements
+
+**Functional:**
+- App must show the first interactive screen reliably without initialization failures.
+- Critical services (logging, crash reporting, security) must be properly initialized.
+
+**Non-functional:**
+- Reduce cold start time to acceptable values for target devices.
+- Ensure stable and predictable startup (no ANRs, no long blank screens).
+- Ensure startup performance metrics can be measured and monitored in dev/prod.
+
+### Architecture
+
+- Move heavy initialization out of `Application.onCreate()` and first-screen code into dedicated components and background tasks.
+- Use Jetpack App Startup to declaratively describe dependencies and initialization order.
+- Use DI for lazy-loaded dependencies and clear separation of concerns.
+- Integrate Baseline Profiles and macrobenchmark tests into the build pipeline.
+
 ### Theoretical Foundations
 
 **App startup types:**
-- **Cold start** — app launches from scratch, requires full initialization
-- **Warm start** — app was launched but process was killed, data partially cached
-- **Hot start** — app already active, restart from background
+- **Cold start** — app launches from scratch with no existing process; full initialization is required.
+- **Warm start** — app was previously launched; some state/resources are retained (process may be kept or recreated), so less work is needed compared to a cold start.
+- **Hot start** — activity comes back to foreground from background with an alive process and no full reconstruction.
 
 **Critical performance factors:**
-- **Application.onCreate()** — blocks UI thread, should contain only critical initializations
-- **Lazy initialization** — deferred loading of components on first access
-- **Baseline Profiles** — AOT compilation of critical paths for 15-30% performance improvement
-- **App Startup library** — managing component initialization order with dependencies
+- **`Application.onCreate()`** — runs on the UI thread and should contain only minimal critical initializations.
+- **Lazy initialization** — defer component initialization until first real use instead of doing everything at startup.
+- **Baseline Profiles** — profiles for AOT compilation of critical paths that can significantly improve cold start.
+- **App Startup library** — declarative management of component initialization order and dependencies.
 
 **1. Profiling and Analysis**
 
-Use Android Profiler and Systrace to identify bottlenecks:
+Use Android Studio Profiler and system tracing (Perfetto / System Tracing) to identify bottlenecks; inspect traces when startup time is unclear.
 
 ```kotlin
 // ✅ Trace critical sections
@@ -255,20 +294,23 @@ Trace.beginSection("DatabaseInit")
 initDatabase()
 Trace.endSection()
 
-// ✅ Macrobenchmark for precise measurements
+// ✅ Macrobenchmark for precise measurements (MacrobenchmarkRule / JUnit Rule)
 @Test
 fun startupBenchmark() = benchmarkRule.measureRepeated(
     packageName = "com.example.app",
     metrics = listOf(StartupTimingMetric()),
     iterations = 5
-) { pressHome(); startActivityAndWait() }
+) {
+    pressHome()
+    startActivityAndWait()
+}
 ```
 
-Analyze metrics: cold start, warm start, hot start. Production targets: cold start < 2s, warm < 1s.
+Analyze metrics for cold, warm, and hot starts across devices and builds. Set targets based on UX expectations and device class (commonly: cold < 2s, warm < 1s).
 
-**2. Optimize Application.onCreate()**
+**2. Optimize `Application.onCreate()`**
 
-Critical: only crash reporting and essential systems initialize synchronously.
+Key rule: initialize synchronously only crash reporting/logging, critical security configuration, and the minimal dependencies required to show the first screen.
 
 ```kotlin
 class MyApp : Application() {
@@ -277,20 +319,19 @@ class MyApp : Application() {
         // ✅ Critical only
         FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
 
-        // ❌ Bad: blocks UI thread
+        // ❌ Bad: blocks UI thread on startup
         // initDatabase()
         // initNetworking()
 
-        // ✅ Deferred init via App Startup
-        AppInitializer.getInstance(this)
-            .initializeComponent(WorkManagerInitializer::class.java)
+        // ✅ Use App Startup for declarative initialization (example)
+        // Other Initializers are registered in the manifest and executed by the framework.
     }
 }
 ```
 
 **3. Jetpack App Startup + Lazy Init**
 
-Use App Startup to manage component initialization order:
+Use App Startup to manage component initialization order and define dependencies explicitly. Avoid manual explicit initialization when the library already integrates via its own Initializer (e.g., WorkManager).
 
 ```kotlin
 class NetworkInitializer : Initializer<ApiClient> {
@@ -303,7 +344,7 @@ class NetworkInitializer : Initializer<ApiClient> {
     override fun dependencies() = emptyList<Class<Initializer<*>>>()
 }
 
-// ✅ Lazy init via Hilt
+// ✅ Lazy init via DI (e.g., Hilt)
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -311,20 +352,20 @@ object AppModule {
     @Singleton
     fun provideDatabase(app: Application): AppDatabase =
         Room.databaseBuilder(app, AppDatabase::class.java, "db")
-            .build() // Created only on first access
+            .build() // Instance is created on first actual request for this dependency
 }
 ```
 
-**4. Optimize Activity Startup**
+**4. Optimize `Activity` Startup**
 
-Move heavy work to ViewModel + coroutines:
+Move heavy work out of `Activity.onCreate()` into `ViewModel` / background work so the first frame is rendered quickly.
 
 ```kotlin
 // ❌ Bad: blocks onCreate
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        loadUserData() // Synchronous operation!
+        loadUserData() // Heavy synchronous operation!
     }
 }
 
@@ -339,31 +380,33 @@ class MainViewModel @Inject constructor(
 
 **5. Baseline Profiles**
 
-Use Baseline Profiles for AOT compilation of critical paths:
+Use Baseline Profiles to precompile critical startup paths (e.g., app launch, first screen). In modern setups this is configured via a dedicated baseline profile module / Gradle plugin, with profiles generated by Macrobenchmark tests or authored manually.
+
+Illustrative snippet of a profile entry:
 
 ```kotlin
-// baseline-prof.txt
+// baseline-prof.txt (simplified example)
 HSPLcom/example/app/MainActivity;-><init>()V
 HSPLcom/example/app/MainActivity;->onCreate(Landroid/os/Bundle;)V
 ```
 
-Effect: 15-30% cold start improvement through pre-compilation.
+Effect: improved cold start via precompilation of hot code paths (often double-digit percentage gains, device/app dependent).
 
 ### Best Practices
 
-- **Measure before and after** — establish baseline metrics before optimizations
-- **Incremental changes** — implement optimizations gradually to isolate effects
-- **Profile on target devices** — test on Android 10+ devices for Baseline Profiles
-- **Monitor in production** — track startup metrics after release
-- **Use App Startup** — for managing component initialization dependencies
+- **Measure before and after** — establish baseline metrics before applying optimizations.
+- **Incremental changes** — introduce optimizations gradually to isolate their impact.
+- **Profile on target devices** — reflect real devices and Android versions; Baseline Profiles are consumed by ART where supported.
+- **Monitor in production** — track startup metrics after release.
+- **Use App Startup** — to explicitly manage initialization dependencies instead of uncontrolled logic in `Application.onCreate()`.
 
 ### Common Pitfalls
 
-- **Blocking UI thread in onCreate()** — leads to ANR and poor UX
-- **Initialize everything at once** — monolithic loading of all components
-- **No baseline measurements** — impossible to evaluate optimization effectiveness
-- **Ignoring warm/hot starts** — focus only on cold start
-- **Manual initialization without dependencies** — race conditions and wrong order
+- **Blocking UI thread in onCreate()** — leads to ANRs and poor UX.
+- **Initializing everything at once** — monolithic loading of all components at startup.
+- **No baseline measurements** — impossible to evaluate effectiveness of optimizations.
+- **Ignoring warm/hot starts** — focusing only on cold start.
+- **Manual initialization without explicit dependencies** — race conditions and incorrect initialization order.
 
 ---
 
@@ -373,23 +416,26 @@ Effect: 15-30% cold start improvement through pre-compilation.
 - What trade-offs exist between App Startup library and manual initialization?
 - How do you measure startup performance in CI/CD pipeline?
 - What's the impact of ProGuard/R8 optimization on startup time?
-- How would you prioritize initialization for 20+ SDKs in Application.onCreate()?
+- How would you prioritize initialization for 20+ SDKs in `Application.onCreate()`?
 
 ## References
 
 - Android Baseline Profiles documentation
 - Macrobenchmark library guide
+- "https://developer.android.com/topic/performance/vitals/launch-time"
+- "https://developer.android.com/topic/performance/baselineprofiles/overview"
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-app-startup]]
-- [[c-lazy-initialization]]
-
+- [[q-android-performance-measurement-tools--android--medium]]
 
 ### Prerequisites
+
 - [[q-what-are-services-used-for--android--medium]] - Understanding Android components
 
 ### Related
-- [[q-android-lint-tool--android--medium]] - Profiling techniques
+
+- [[q-android-performance-measurement-tools--android--medium]] - Profiling and measurement tools

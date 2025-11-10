@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/performance-memory, android/performance-rendering, android/ui-views, concurrency, difficulty/medium, diffutil, memory, recyclerview]
 moc: moc-android
-related: [c-recyclerview, c-memory-leaks, c-performance-optimization, c-viewmodel]
+related: [q-android-app-components--android--easy, q-android-app-bundles--android--easy]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -63,9 +64,9 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
 **Преимущества:**
 - RecyclerView переиспользует views
-- Glide/Coil автоматически изменяют размер
+- Glide/Coil автоматически изменяют размер изображений
 - Memory + disk cache предотвращают повторную загрузку
-- Lifecycle awareness очищает память
+- Lifecycle awareness помогает корректно освобождать память
 
 ### 2. Медленная Прокрутка
 
@@ -75,13 +76,15 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```kotlin
 // ❌ BAD - Тяжелые операции при биндинге
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    val item = items[position]
+
     // Сложные вычисления
     val processedText = item.text.split(" ").map { it.uppercase() }.joinToString(" ")
 
     // Синхронный сетевой запрос - БЛОКИРУЕТ UI!
     val response = api.getUserDetails(item.userId).execute()
 
-    // Database query - БЛОКИРУЕТ UI!
+    // Синхронный запрос к БД - БЛОКИРУЕТ UI!
     val count = database.getCommentCount(item.id)
 }
 ```
@@ -89,14 +92,14 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 **Решение:** Предобработка данных
 ```kotlin
 // ✅ GOOD - Обработка в ViewModel/Repository
-class ItemViewModel : ViewModel() {
-    val items = repository.getItems()
+class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
+    val items: LiveData<List<ProcessedItem>> = repository.getItems()
         .map { rawItems ->
             rawItems.map { item ->
                 ProcessedItem(
                     id = item.id,
                     processedText = item.text.uppercase(), // Pre-processed
-                    userName = item.userName, // Already fetched
+                    userName = item.userName, // Already fetched/derived
                     commentCount = item.commentCount // Already counted
                 )
             }
@@ -104,8 +107,9 @@ class ItemViewModel : ViewModel() {
         .asLiveData()
 }
 
-// Simple binding - только установка данных
+// Простой биндинг - только установка уже подготовленных данных
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    val item = getItem(position)
     holder.binding.apply {
         textView.text = item.processedText
         userName.text = item.userName
@@ -113,7 +117,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-**Паттерн:** Prepare data → Bind data (не "Bind data → Process data")
+**Паттерн:** Prepare data → Bind data (не "Bind data → Process data").
 
 ### 3. Несогласованность Данных
 
@@ -129,7 +133,7 @@ fun addItem(item: Item) {
 
 fun updateItem(position: Int, item: Item) {
     items[position] = item
-    notifyDataSetChanged() // Неэффективно, теряет scroll position
+    notifyDataSetChanged() // Неэффективно, нет точечных обновлений
 }
 ```
 
@@ -147,15 +151,15 @@ class ItemAdapter : ListAdapter<Item, ViewHolder>(ItemDiffCallback()) {
     }
 }
 
-// Usage - DiffUtil вычисляет изменения автоматически
+// Использование - DiffUtil вычисляет изменения автоматически
 adapter.submitList(newItems)
 ```
 
 **Преимущества:**
 - Автоматический расчет diff (обновляются только измененные элементы)
 - Плавные анимации вставок/удалений
-- Сохраняет scroll position
-- Type-safe (нельзя изменить внутренний список напрямую)
+- Корректная работа с положениями элементов и их состоянием
+- Более безопасный API (нельзя напрямую изменять внутренний список ListAdapter)
 
 ### 4. Проблемы Многопоточности
 
@@ -174,54 +178,63 @@ android.view.ViewRootImpl$CalledFromWrongThreadException
 fun loadDataInBackground() {
     Thread {
         val newItems = api.fetchItems()
-        items.clear() // Изменение из background!
+        items.clear() // Изменение коллекции из background!
         items.addAll(newItems)
-        notifyDataSetChanged() // Вызов из background! CRASH!
+        notifyDataSetChanged() // Вызов из background! Потенциальный CRASH!
     }.start()
 }
 ```
 
-**Решение:** LiveData/Flow с lifecycle
+**Решение:** `LiveData`/`Flow` с учетом lifecycle
 ```kotlin
 // ✅ GOOD - ViewModel - фоновая работа здесь
 class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
+    // repository.getItems() возвращает Flow<List<Item>> или другой асинхронный источник
     val items: LiveData<List<Item>> = repository.getItems()
-        .asLiveData(viewModelScope.coroutineContext)
+        .asLiveData() // Коллекция и эмиссия доставляются на main thread
 
-    // Или через Flow
-    val itemsFlow = repository.getItemsFlow()
-        .flowOn(Dispatchers.IO)
+    // Или через Flow для более гибкой обработки
+    val itemsFlow: Flow<List<Item>> = repository.getItemsFlow()
+        .flowOn(Dispatchers.IO) // upstream на IO, коллекция (submitList) делается на main thread
 }
 
 // Fragment - observe на main потоке
 viewModel.items.observe(viewLifecycleOwner) { items ->
-    adapter.submitList(items) // Всегда на main thread!
+    adapter.submitList(items) // Всегда вызывается на main thread!
 }
 ```
 
 **Преимущества:**
-- Автоматический dispatch на main thread
-- Lifecycle-aware (нет утечек памяти)
-- Thread-safe (нет concurrent modification)
+- Доставка обновлений в UI на main thread
+- Lifecycle-aware (меньше утечек памяти, корректная отписка)
+- Меньше шансов получить concurrent modification за счет единообразного потока обновлений
 
 ### Лучшие Практики
 
-**Stable IDs для предотвращения проблем с кликами:**
+**Stable IDs для предотвращения проблем с кликами и переиспользованием:**
 ```kotlin
-init {
-    setHasStableIds(true)
-}
+// Для обычного RecyclerView.Adapter с собственным списком
+class ItemAdapter : RecyclerView.Adapter<ViewHolder>() {
 
-override fun getItemId(position: Int) = items[position].id.toLong()
+    private val items: List<Item> = listOf()
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long = items[position].id.toLong()
+}
 ```
+
+(При использовании ListAdapter stable IDs должны рассчитываться на основе getItem(position), без прямой модификации внутреннего списка.)
 
 **Безопасная обработка кликов:**
 ```kotlin
-// ✅ GOOD - Use bindingAdapterPosition
+// ✅ GOOD - Используем bindingAdapterPosition
 holder.itemView.setOnClickListener {
     val position = holder.bindingAdapterPosition
     if (position != RecyclerView.NO_POSITION) {
-        onClick(items[position])
+        onClick(getItem(position))
     }
 }
 ```
@@ -231,9 +244,11 @@ holder.itemView.setOnClickListener {
 override fun onViewRecycled(holder: ViewHolder) {
     super.onViewRecycled(holder)
     holder.binding.root.setOnClickListener(null)
-    Glide.with(holder.binding.imageView).clear(holder.binding.imageView)
+    Glide.with(holder.itemView.context).clear(holder.binding.imageView)
 }
 ```
+
+Также см. официальные рекомендации по `RecyclerView` и `DiffUtil` для более глубокого понимания.
 
 ### Таблица Решений
 
@@ -242,15 +257,15 @@ override fun onViewRecycled(holder: ViewHolder) {
 | Out of Memory | Большие изображения, нет recycling | RecyclerView + Glide/Coil |
 | Медленная прокрутка | Тяжелые операции в onBindViewHolder | Предобработка данных |
 | Несогласованность | Неправильные adapter updates | DiffUtil, ListAdapter |
-| Многопоточность | Multi-threaded updates | LiveData, Flow |
-| Утечки памяти | Удержание activity references | ViewBinding, lifecycle components |
-| Неверные клики | Position меняется async | Stable IDs, item callbacks |
+| Многопоточность | Multi-threaded updates | `LiveData`, `Flow` (обновления на main thread) |
+| Утечки памяти | Удержание ссылок на `Activity`/`Context`, ресурсы не очищаются | ViewBinding, lifecycle components, очистка в onViewRecycled/onViewDetached |
+| Неверные клики | Position меняется async | Stable IDs (при необходимости), item callbacks с bindingAdapterPosition |
 
 ---
 
 ## Answer (EN)
 
-List elements in Android applications face four main categories of problems: **memory**, **performance**, **data consistency**, and **concurrency**.
+`List` elements in Android applications face four main categories of problems: **memory**, **performance**, **data consistency**, and **concurrency**.
 
 ### 1. Out of Memory (OOM)
 
@@ -285,8 +300,8 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 **Benefits:**
 - RecyclerView recycles views
 - Glide/Coil automatically resize images
-- Memory + disk cache prevent reloading
-- Lifecycle awareness clears memory
+- Memory + disk cache prevent redundant loading
+- Lifecycle awareness helps free memory correctly
 
 ### 2. Lagging Scrolling
 
@@ -296,13 +311,15 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 ```kotlin
 // ❌ BAD - Heavy operations during binding
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    val item = items[position]
+
     // Complex calculations
     val processedText = item.text.split(" ").map { it.uppercase() }.joinToString(" ")
 
     // Synchronous network request - BLOCKS UI!
     val response = api.getUserDetails(item.userId).execute()
 
-    // Database query - BLOCKS UI!
+    // Synchronous database query - BLOCKS UI!
     val count = database.getCommentCount(item.id)
 }
 ```
@@ -310,14 +327,14 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 **Solution:** Pre-process data
 ```kotlin
 // ✅ GOOD - Processing in ViewModel/Repository
-class ItemViewModel : ViewModel() {
-    val items = repository.getItems()
+class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
+    val items: LiveData<List<ProcessedItem>> = repository.getItems()
         .map { rawItems ->
             rawItems.map { item ->
                 ProcessedItem(
                     id = item.id,
                     processedText = item.text.uppercase(), // Pre-processed
-                    userName = item.userName, // Already fetched
+                    userName = item.userName, // Already fetched/derived
                     commentCount = item.commentCount // Already counted
                 )
             }
@@ -325,8 +342,9 @@ class ItemViewModel : ViewModel() {
         .asLiveData()
 }
 
-// Simple binding - only setting data
+// Simple binding - only setting prepared data
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+    val item = getItem(position)
     holder.binding.apply {
         textView.text = item.processedText
         userName.text = item.userName
@@ -334,7 +352,7 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-**Pattern:** Prepare data → Bind data (not "Bind data → Process data")
+**Pattern:** Prepare data → Bind data (not "Bind data → Process data").
 
 ### 3. Data Inconsistency
 
@@ -350,7 +368,7 @@ fun addItem(item: Item) {
 
 fun updateItem(position: Int, item: Item) {
     items[position] = item
-    notifyDataSetChanged() // Inefficient, loses scroll position
+    notifyDataSetChanged() // Inefficient, no granular updates
 }
 ```
 
@@ -375,8 +393,8 @@ adapter.submitList(newItems)
 **Benefits:**
 - Automatic diff calculation (only changed items updated)
 - Smooth animations for insertions/deletions
-- Preserves scroll position
-- Type-safe (can't modify internal list directly)
+- Correct handling of item positions and state
+- Safer API (cannot directly mutate ListAdapter's internal list)
 
 ### 4. Concurrency Issues
 
@@ -395,23 +413,24 @@ android.view.ViewRootImpl$CalledFromWrongThreadException
 fun loadDataInBackground() {
     Thread {
         val newItems = api.fetchItems()
-        items.clear() // Modifying from background!
+        items.clear() // Modifying collection from background!
         items.addAll(newItems)
-        notifyDataSetChanged() // Called from background! CRASH!
+        notifyDataSetChanged() // Called from background! Potential CRASH!
     }.start()
 }
 ```
 
-**Solution:** LiveData/Flow with lifecycle
+**Solution:** `LiveData`/`Flow` with lifecycle awareness
 ```kotlin
 // ✅ GOOD - ViewModel - background work here
 class ItemViewModel(private val repository: ItemRepository) : ViewModel() {
+    // repository.getItems() returns Flow<List<Item>> or another async source
     val items: LiveData<List<Item>> = repository.getItems()
-        .asLiveData(viewModelScope.coroutineContext)
+        .asLiveData() // Collected and delivered to observers on main thread
 
-    // Or using Flow
-    val itemsFlow = repository.getItemsFlow()
-        .flowOn(Dispatchers.IO)
+    // Or using Flow for more flexibility
+    val itemsFlow: Flow<List<Item>> = repository.getItemsFlow()
+        .flowOn(Dispatchers.IO) // upstream on IO; collect and submitList on main thread
 }
 
 // Fragment - observes on main thread
@@ -421,20 +440,28 @@ viewModel.items.observe(viewLifecycleOwner) { items ->
 ```
 
 **Benefits:**
-- Automatic main thread dispatching
-- Lifecycle-aware (no memory leaks)
-- Thread-safe (no concurrent modification)
+- UI updates dispatched on the main thread
+- Lifecycle-aware (fewer memory leaks, proper unsubscribing)
+- Reduced risk of concurrent modification via a single source of truth
 
 ### Best Practices
 
-**Stable IDs to prevent click issues:**
+**Stable IDs to prevent click/reuse issues:**
 ```kotlin
-init {
-    setHasStableIds(true)
-}
+// For a regular RecyclerView.Adapter with its own list
+class ItemAdapter : RecyclerView.Adapter<ViewHolder>() {
 
-override fun getItemId(position: Int) = items[position].id.toLong()
+    private val items: List<Item> = listOf()
+
+    init {
+        setHasStableIds(true)
+    }
+
+    override fun getItemId(position: Int): Long = items[position].id.toLong()
+}
 ```
+
+(When using ListAdapter, stable IDs should be based on getItem(position), and you should not mutate the internal list directly.)
 
 **Safe click handling:**
 ```kotlin
@@ -442,7 +469,7 @@ override fun getItemId(position: Int) = items[position].id.toLong()
 holder.itemView.setOnClickListener {
     val position = holder.bindingAdapterPosition
     if (position != RecyclerView.NO_POSITION) {
-        onClick(items[position])
+        onClick(getItem(position))
     }
 }
 ```
@@ -452,9 +479,11 @@ holder.itemView.setOnClickListener {
 override fun onViewRecycled(holder: ViewHolder) {
     super.onViewRecycled(holder)
     holder.binding.root.setOnClickListener(null)
-    Glide.with(holder.binding.imageView).clear(holder.binding.imageView)
+    Glide.with(holder.itemView.context).clear(holder.binding.imageView)
 }
 ```
+
+Also see official `RecyclerView` and `DiffUtil` documentation for more details.
 
 ### Solution Table
 
@@ -463,42 +492,32 @@ override fun onViewRecycled(holder: ViewHolder) {
 | Out of Memory | Large images, no recycling | RecyclerView + Glide/Coil |
 | Lagging scroll | Heavy operations in onBindViewHolder | Pre-process data |
 | Data inconsistency | Incorrect adapter updates | DiffUtil, ListAdapter |
-| Concurrency | Multi-threaded updates | LiveData, Flow |
-| Memory leaks | Holding activity references | ViewBinding, lifecycle components |
-| Wrong clicks | Position changes async | Stable IDs, item callbacks |
+| Concurrency | Multi-threaded updates | `LiveData`, `Flow` (updates on main thread) |
+| Memory leaks | Holding `Activity`/`Context` references, not clearing resources | ViewBinding, lifecycle components, cleanup in onViewRecycled/onViewDetached |
+| Wrong clicks | Position changes async | Stable IDs (when needed), item callbacks with bindingAdapterPosition |
 
 ---
 
 ## Follow-ups
 
-1. How does RecyclerView's ViewHolder pattern reduce memory allocations compared to ListView?
-2. When should you use `notifyItemChanged(position)` vs `submitList()` with DiffUtil?
-3. What's the difference between `DiffUtil.ItemCallback` methods `areItemsTheSame()` and `areContentsTheSame()`?
-4. How can you detect and fix ANR (Application Not Responding) caused by adapter operations?
-5. What are the trade-offs between `ListAdapter` and custom `RecyclerView.Adapter` implementations?
+1. How does RecyclerView's `ViewHolder` pattern reduce memory allocations compared to `ListView`?
+2. When should you use `notifyItemChanged(position)` vs `submitList()` with a `DiffUtil`-backed `ListAdapter`?
+3. What's the difference between `DiffUtil.ItemCallback` methods `areItemsTheSame()` and `areContentsTheSame()` and how does this influence item change animations?
+4. How can you detect and fix ANR ("Application Not Responding") issues caused by heavy work inside `onBindViewHolder` or other adapter callbacks?
+5. How would you design a `ViewModel` + `Flow` pipeline to safely update a paginated `RecyclerView` from multiple data sources (e.g., network + cache)?
 
 ## References
 
-- [[c-recyclerview]] - RecyclerView architecture concept
-- [[c-diffutil]] - DiffUtil algorithm concept
-- [[c-lifecycle-awareness]] - Android lifecycle components
 - Official: [RecyclerView Best Practices](https://developer.android.com/develop/ui/views/layout/recyclerview)
 - Official: [DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-known-about-recyclerview--android--easy]] - RecyclerView basics
-- [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization basics
-- [[q-what-problems-can-there-be-with-list-items--android--easy]] - Common list problems overview
+- [[q-android-app-components--android--easy]] - Android app components basics
 
 ### Related (Same Level)
-- [[q-recyclerview-diffutil-advanced--android--medium]] - Advanced DiffUtil usage
-- [[q-paging-library-3--android--medium]] - Paging for large datasets
-- [[q-recyclerview-async-list-differ--android--medium]] - Async list updates
-- [[q-how-to-animate-adding-removing-items-in-recyclerview--android--medium]] - RecyclerView animations
+- [[q-android-lint-tool--android--medium]] - Static analysis for Android
 
 ### Advanced (Harder)
-- [[q-what-should-you-pay-attention-to-in-order-to-optimize-a-large-list--android--hard]] - Large list optimization
-- [[q-fast-chat-rendering--android--hard]] - High-performance list rendering
-- [[q-compose-lazy-layout-optimization--android--hard]] - Compose lazy list optimization
+- [[q-android-performance-measurement-tools--android--medium]] - Performance tools for Android

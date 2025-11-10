@@ -12,18 +12,19 @@ status: draft
 moc: moc-android
 related: [q-android-architectural-patterns--android--medium, q-how-animations-work-in-recyclerview--android--medium, q-navigation-methods-in-kotlin--android--medium]
 sources: []
-created: 2025-10-15
-updated: 2025-10-28
+created: 2024-10-15
+updated: 2024-10-15
 tags: [android, android/architecture-mvvm, android/ui-compose, android/ui-views, difficulty/medium, notifications, snackbar, toast]
+
 ---
 
 # Вопрос (RU)
 
-Как правильно отображать Toast и Snackbar в зависимости от результатов операций в Android-приложении?
+> Как правильно отображать Toast и Snackbar в зависимости от результатов операций в Android-приложении?
 
 # Question (EN)
 
-How to properly display Toast and Snackbar based on operation results in Android applications?
+> How to properly display Toast and Snackbar based on operation results in Android applications?
 
 ## Ответ (RU)
 
@@ -32,13 +33,13 @@ How to properly display Toast and Snackbar based on operation results in Android
 **Toast** — простое временное уведомление без взаимодействия:
 - Не требует действий пользователя
 - Исчезает автоматически
-- Не может быть закрыто вручную
-- Использует только Context
+- Не может быть закрыто вручную (без использования дополнительных обходных решений)
+- Использует только `Context`
 
 **Snackbar** — продвинутое уведомление с возможностями:
 - Может содержать кнопку действия
-- Закрывается свайпом
-- Привязывается к конкретному View
+- Закрывается свайпом или по действию
+- Привязывается к конкретному `View`
 - Появляется внизу экрана
 
 ### Базовое Использование
@@ -55,7 +56,7 @@ Snackbar.make(view, "Элемент удален", Snackbar.LENGTH_LONG)
     .show()
 ```
 
-### Архитектурный Подход С ViewModel
+### Архитектурный Подход С `ViewModel`
 
 ```kotlin
 // Модель UI-событий
@@ -65,7 +66,7 @@ sealed class UiMessage {
 }
 
 class MyViewModel : ViewModel() {
-    private val _messages = MutableSharedFlow<UiMessage>()
+    private val _messages = MutableSharedFlow<UiMessage>(replay = 0)
     val messages: SharedFlow<UiMessage> = _messages.asSharedFlow()
 
     suspend fun performAction() {
@@ -78,15 +79,19 @@ class MyViewModel : ViewModel() {
     }
 }
 
-// ✅ В Activity/Fragment
-lifecycleScope.launch {
+// ✅ В Activity/Fragment (lifecycle-aware)
+repeatOnLifecycle(Lifecycle.State.STARTED) {
     viewModel.messages.collect { message ->
         when (message) {
-            is UiMessage.Success -> Toast.makeText(this@MyActivity, message.text, Toast.LENGTH_SHORT).show()
+            is UiMessage.Success ->
+                Toast.makeText(this@MyActivity, message.text, Toast.LENGTH_SHORT).show()
             is UiMessage.Error -> {
                 Snackbar.make(binding.root, message.text, Snackbar.LENGTH_LONG).apply {
                     if (message.canRetry) {
-                        setAction("Повтор") { viewModel.performAction() }
+                        setAction("Повтор") { 
+                            // Повторный запуск операции через ViewModel
+                            lifecycleScope.launch { viewModel.performAction() }
+                        }
                     }
                 }.show()
             }
@@ -115,8 +120,9 @@ fun MyScreen(viewModel: MyViewModel) {
                         actionLabel = if (message.canRetry) "Повтор" else null,
                         duration = SnackbarDuration.Long
                     )
-                    if (result == SnackbarResult.ActionPerformed) {
-                        // Выполнить повторную попытку
+                    if (result == SnackbarResult.ActionPerformed && message.canRetry) {
+                        // Выполнить повторную попытку через ViewModel
+                        viewModel.performRetry()
                     }
                 }
             }
@@ -133,10 +139,10 @@ fun MyScreen(viewModel: MyViewModel) {
 
 ### Best Practices
 
-- ✅ **Snackbar для действий**: Используйте когда нужно взаимодействие (Undo, Retry)
+- ✅ **Snackbar для действий**: Используйте, когда нужно взаимодействие (Undo, Retry)
 - ✅ **Toast для информации**: Простые уведомления без действий
-- ✅ **SharedFlow для событий**: Избегайте повторной отправки при пересоздании UI
-- ✅ **Lifecycle-aware**: Собирайте Flow в `lifecycleScope` или `repeatOnLifecycle`
+- ✅ **`SharedFlow` для одноразовых событий**: Сконфигурируйте без `replay`, чтобы избежать повторного показа при пересоздании UI
+- ✅ **Lifecycle-aware**: Собирайте `Flow` в `repeatOnLifecycle` или аналогичных API, привязанных к жизненному циклу
 - ❌ **Не используйте Toast из фоновых потоков**: Только из главного потока
 - ❌ **Не злоупотребляйте**: Критичные ошибки лучше показывать через Dialog
 
@@ -147,13 +153,13 @@ fun MyScreen(viewModel: MyViewModel) {
 **Toast** — simple temporary notification without interaction:
 - Requires no user action
 - Disappears automatically
-- Cannot be dismissed manually
-- Requires only Context
+- Cannot be dismissed manually (without workaround APIs)
+- Requires only `Context`
 
 **Snackbar** — advanced notification with capabilities:
-- Can contain action button
-- Dismissed by swiping
-- Anchored to specific View
+- Can contain an action button
+- Can be dismissed by swiping or via action
+- Anchored to a specific `View`
 - Appears at bottom of screen
 
 ### Basic Usage
@@ -170,7 +176,7 @@ Snackbar.make(view, "Item deleted", Snackbar.LENGTH_LONG)
     .show()
 ```
 
-### Architectural Approach with ViewModel
+### Architectural Approach with `ViewModel`
 
 ```kotlin
 // UI events model
@@ -180,7 +186,7 @@ sealed class UiMessage {
 }
 
 class MyViewModel : ViewModel() {
-    private val _messages = MutableSharedFlow<UiMessage>()
+    private val _messages = MutableSharedFlow<UiMessage>(replay = 0)
     val messages: SharedFlow<UiMessage> = _messages.asSharedFlow()
 
     suspend fun performAction() {
@@ -193,15 +199,19 @@ class MyViewModel : ViewModel() {
     }
 }
 
-// ✅ In Activity/Fragment
-lifecycleScope.launch {
+// ✅ In Activity/Fragment (lifecycle-aware)
+repeatOnLifecycle(Lifecycle.State.STARTED) {
     viewModel.messages.collect { message ->
         when (message) {
-            is UiMessage.Success -> Toast.makeText(this@MyActivity, message.text, Toast.LENGTH_SHORT).show()
+            is UiMessage.Success ->
+                Toast.makeText(this@MyActivity, message.text, Toast.LENGTH_SHORT).show()
             is UiMessage.Error -> {
                 Snackbar.make(binding.root, message.text, Snackbar.LENGTH_LONG).apply {
                     if (message.canRetry) {
-                        setAction("Retry") { viewModel.performAction() }
+                        setAction("Retry") { 
+                            // Trigger retry via ViewModel
+                            lifecycleScope.launch { viewModel.performAction() }
+                        }
                     }
                 }.show()
             }
@@ -230,8 +240,9 @@ fun MyScreen(viewModel: MyViewModel) {
                         actionLabel = if (message.canRetry) "Retry" else null,
                         duration = SnackbarDuration.Long
                     )
-                    if (result == SnackbarResult.ActionPerformed) {
-                        // Execute retry
+                    if (result == SnackbarResult.ActionPerformed && message.canRetry) {
+                        // Execute retry via ViewModel
+                        viewModel.performRetry()
                     }
                 }
             }
@@ -248,12 +259,12 @@ fun MyScreen(viewModel: MyViewModel) {
 
 ### Best Practices
 
-- ✅ **Snackbar for actions**: Use when interaction needed (Undo, Retry)
+- ✅ **Snackbar for actions**: Use when interaction is needed (Undo, Retry)
 - ✅ **Toast for information**: Simple notifications without actions
-- ✅ **SharedFlow for events**: Avoid re-emission on UI recreation
-- ✅ **Lifecycle-aware**: Collect Flow in `lifecycleScope` or `repeatOnLifecycle`
+- ✅ **`SharedFlow` for one-off events**: Configure without `replay` to avoid re-showing events on UI recreation
+- ✅ **Lifecycle-aware**: Collect `Flow` in `repeatOnLifecycle` or equivalent lifecycle-aware scopes
 - ❌ **Don't use Toast from background threads**: Main thread only
-- ❌ **Don't overuse**: Critical errors better shown via Dialog
+- ❌ **Don't overuse**: Critical errors are better shown via Dialog
 
 ## Follow-ups
 

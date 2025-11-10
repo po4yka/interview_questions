@@ -11,17 +11,19 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
+  - c-dagger
+  - c-dependency-injection
   - q-dagger-framework-overview--android--hard
   - q-dagger-inject-annotation--android--easy
   - q-dagger-main-elements--android--medium
 created: 2025-10-20
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/di-hilt, dagger, dependency-injection, di-framework, difficulty/easy, hilt]
 sources:
-  - https://dagger.dev/
+  - "https://dagger.dev/"
 ---
 
 # Вопрос (RU)
@@ -38,7 +40,7 @@ sources:
 
 - **Слабая связанность** - объекты получают зависимости извне
 - **Тестируемость** - простая замена реальных зависимостей на моки
-- **Compile-time проверка** - ошибки графа обнаруживаются до сборки
+- **Compile-time проверка** - ошибки графа зависимостей обнаруживаются на этапе компиляции
 - **Управление lifecycle** - автоматическое создание/переиспользование через scopes
 
 ### Проблема Без DI
@@ -51,7 +53,7 @@ class UserRepository {
 }
 ```
 
-**Проблемы:** тесная связанность, дублирование логики создания, невозможность тестирования.
+**Проблемы:** тесная связанность, дублирование логики создания, сложность тестирования.
 
 ### Решение С Dagger
 
@@ -66,6 +68,8 @@ class MainActivity : AppCompatActivity() {
     @Inject lateinit var repository: UserRepository  // ✅ Автоинжект
 }
 ```
+
+Зависимости `ApiService` и `UserDatabase` должны быть предоставлены через Dagger/Hilt (модули и компоненты), после чего Dagger сгенерирует код для их внедрения.
 
 ### Hilt - Упрощение Для Android
 
@@ -89,20 +93,20 @@ class MainActivity : AppCompatActivity() {
 
 - **Loose coupling** - objects receive dependencies externally
 - **Testability** - easy mocking of real dependencies
-- **Compile-time validation** - dependency graph errors caught before runtime
+- **Compile-time validation** - dependency graph errors are caught at compile time
 - **Lifecycle management** - automatic creation/reuse via scopes
 
 ### Problem without DI
 
 ```kotlin
 class UserRepository {
-    // ❌ Tight coupling, cannot test
+    // ❌ Tight coupling, cannot easily replace in tests
     private val api = RetrofitClient.create()
     private val db = Room.databaseBuilder(...)
 }
 ```
 
-**Issues:** tight coupling, duplication of creation logic, impossible to test.
+**Issues:** tight coupling, duplicated creation logic, harder to test.
 
 ### Solution with Dagger
 
@@ -118,6 +122,8 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
+The `ApiService` and `UserDatabase` dependencies must be provided via Dagger/Hilt (modules and components), after which Dagger generates the code to inject them.
+
 ### Hilt - Android Simplification
 
 **Hilt** automates Dagger setup for Android lifecycle:
@@ -132,7 +138,15 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-## Follow-ups
+## Дополнительные вопросы (RU)
+
+- В чем разница между Dagger и Hilt?
+- Как работает compile-time валидация в Dagger?
+- Что такое scopes и как они управляют жизненным циклом объектов?
+- Как вы будете тестировать класс с зависимостями, предоставленными через Dagger?
+- Когда стоит использовать constructor injection vs field injection?
+
+## Follow-ups (EN)
 
 - What's the difference between Dagger and Hilt?
 - How does compile-time validation work in Dagger?
@@ -140,13 +154,31 @@ class MainActivity : AppCompatActivity() {
 - How would you test a class with Dagger dependencies?
 - When should you use constructor injection vs field injection?
 
-## References
+## Ссылки (RU)
+
+- [[c-dependency-injection]]
+- Официальная документация Dagger: https://dagger.dev/
+- Руководство по Hilt: https://developer.android.com/training/dependency-injection/hilt-android
+
+## References (EN)
 
 - [[c-dependency-injection]]
 - Official Dagger documentation: https://dagger.dev/
 - Hilt guide: https://developer.android.com/training/dependency-injection/hilt-android
 
-## Related Questions
+## Связанные вопросы (RU)
+
+### Базовые знания
+- Что такое dependency injection и зачем он нужен?
+
+### Связанные (тот же уровень)
+- [[q-dagger-inject-annotation--android--easy]]
+
+### Продвинутые (сложнее)
+- [[q-dagger-main-elements--android--medium]]
+- [[q-dagger-framework-overview--android--hard]]
+
+## Related Questions (EN)
 
 ### Prerequisites
 - What is dependency injection and why use it?

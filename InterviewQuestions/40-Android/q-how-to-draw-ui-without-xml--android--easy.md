@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-android-views, c-jetpack-compose, q-what-each-android-component-represents--android--easy]
+related: [c-android-ui-composition-basics, c-jetpack-compose, q-what-each-android-component-represents--android--easy]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 tags: [android/ui-compose, android/ui-views, compose, difficulty/easy, ui, views]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -37,7 +38,7 @@ sources: []
 - ✅ Меньше шаблонного кода
 - ✅ Встроенный предпросмотр
 
-**2. Программное создание View** (традиционный подход):
+**2. Программное создание `View`** (традиционный подход):
 - ✅ Полный контроль над созданием
 - ✅ Динамическое создание UI
 - ❌ Императивный стиль
@@ -57,7 +58,7 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Text("Hello, Compose!")
                     Button(onClick = { /* действие */ }) {
-                        Text("Нажми")
+                        Text("Click Me")
                     }
                 }
             }
@@ -66,32 +67,33 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-### Пример Программного Создания View
+### Пример Программного Создания `View`
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val density = resources.displayMetrics.density
+
         val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(16.dp, 16.dp, 16.dp, 16.dp)
+            // Конвертация dp в px при программной разметке
+            val padding = (16 * density).toInt()
+            setPadding(padding, padding, padding, padding)
 
             addView(TextView(context).apply {
                 text = "Hello, Android!"
             })
 
             addView(Button(context).apply {
-                text = "Нажми"
+                text = "Click Me"
                 setOnClickListener { /* действие */ }
             })
         }
 
         setContentView(layout)
     }
-
-    private val Int.dp: Int
-        get() = (this * resources.displayMetrics.density).toInt()
 }
 ```
 
@@ -102,14 +104,14 @@ class MainActivity : AppCompatActivity() {
 val composeView = ComposeView(context).apply {
     setContent {
         MaterialTheme {
-            Text("Compose в View")
+            Text("Compose in View")
         }
     }
 }
 linearLayout.addView(composeView)
 ```
 
-**Рекомендация**: Используйте [[c-jetpack-compose]] для новых проектов, программные View для поддержки legacy кода или специфичных случаев.
+**Рекомендация**: Используйте [[c-jetpack-compose]] для новых проектов, программные `View` для поддержки legacy кода или специфичных случаев.
 
 ## Answer (EN)
 
@@ -121,7 +123,7 @@ Android provides two main approaches to create UI without XML:
 - ✅ Less boilerplate
 - ✅ Built-in preview support
 
-**2. Programmatic View creation** (traditional):
+**2. Programmatic `View` creation** (traditional):
 - ✅ Full control over creation
 - ✅ Dynamic UI generation
 - ❌ Imperative style
@@ -150,16 +152,20 @@ class MainActivity : ComponentActivity() {
 }
 ```
 
-### Programmatic View Creation Example
+### Programmatic `View` Creation Example
 
 ```kotlin
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val density = resources.displayMetrics.density
+
         val layout = LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
-            setPadding(16.dp, 16.dp, 16.dp, 16.dp)
+            // Convert dp to px when building UI programmatically
+            val padding = (16 * density).toInt()
+            setPadding(padding, padding, padding, padding)
 
             addView(TextView(context).apply {
                 text = "Hello, Android!"
@@ -173,9 +179,6 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(layout)
     }
-
-    private val Int.dp: Int
-        get() = (this * resources.displayMetrics.density).toInt()
 }
 ```
 
@@ -197,6 +200,14 @@ linearLayout.addView(composeView)
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Каковы особенности производительности Compose по сравнению с программными `View`?
+- Как обрабатывать сложные макеты при программном создании UI?
+- Можно ли сочетать Compose и традиционные `View` на одном экране?
+- В каких случаях лучше выбрать программные `View` вместо Compose?
+- Как тестировать UI, созданный без XML?
+
 ## Follow-ups
 
 - What are the performance implications of Compose vs programmatic Views?
@@ -205,13 +216,33 @@ linearLayout.addView(composeView)
 - When would you choose programmatic Views over Compose?
 - How do you test UI created without XML?
 
+## Ссылки (RU)
+
+- [[c-jetpack-compose]] — современный декларативный UI-фреймворк
+- [[c-android-ui-composition-basics]] — базовые принципы традиционной иерархии `View`
+- [[moc-android]] — гид по Android-разработке
+- [Документация Compose](https://developer.android.com/jetpack/compose)
+- [Руководство по системе `View`](https://developer.android.com/develop/ui/views)
+
 ## References
 
 - [[c-jetpack-compose]] - Modern declarative UI framework
-- [[c-android-views]] - Traditional View system
+- [[c-android-ui-composition-basics]] - Basics of traditional `View` hierarchy
 - [[moc-android]] - Android development guide
 - [Compose documentation](https://developer.android.com/jetpack/compose)
-- [View system guide](https://developer.android.com/develop/ui/views)
+- [`View` system guide](https://developer.android.com/develop/ui/views)
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- [[q-what-each-android-component-represents--android--easy]] - Обзор компонентов Android
+
+### Похожие (такой же уровень)
+- [[q-why-separate-ui-and-business-logic--android--easy]] - Архитектура UI
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Базовые сведения о UI
+
+### Продвинутые (сложнее)
+- [[q-compose-testing--android--medium]] - Оптимизация рекомпозиции
 
 ## Related Questions
 

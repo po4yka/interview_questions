@@ -12,18 +12,19 @@ status: draft
 moc: moc-android
 related: [c-compose-state, c-jetpack-compose, q-compose-remember-derived-state--android--medium, q-remember-vs-remembersaveable-compose--android--medium, q-state-hoisting-compose--android--medium]
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/ui-compose, android/ui-state, difficulty/medium, jetpack-compose, recomposition, state-management]
 sources: []
+
 ---
 
 # Вопрос (RU)
 
-Что такое MutableState в Compose?
+> Что такое `MutableState` в Compose?
 
 # Question (EN)
 
-What is MutableState in Compose?
+> What is `MutableState` in Compose?
 
 ---
 
@@ -40,10 +41,10 @@ interface MutableState<T> : State<T> {
 ```
 
 **Ключевые характеристики:**
-- **Observable** — автоматически уведомляет подписчиков
-- **Триггерит рекомпозицию** — UI элементы перерисовываются
+- **`Observable`** — автоматически уведомляет подписчиков
+- **Триггерит рекомпозицию** — UI-элементы перерисовываются при изменении значения
 - **Типобезопасность** — строгая типизация через `<T>`
-- **Переживает рекомпозицию** — работает с `remember`
+- **Переживает рекомпозицию** — при корректном размещении (например, внутри `remember`) значение не теряется между рекомпозициями
 
 ### Создание Состояния
 
@@ -73,7 +74,7 @@ fun Counter() {
 
 ### Как Работает Отслеживание
 
-Compose автоматически подписывает composable на изменения состояния:
+Compose автоматически отслеживает, какие composable-функции читают состояние, и подписывает соответствующие участки дерева на его изменения.
 
 ```kotlin
 @Composable
@@ -82,15 +83,17 @@ fun UserProfile() {
     var age by remember { mutableStateOf(0) }
 
     Column {
-        Text("Имя: $name")  // ✅ Подписан на name
-        Text("Возраст: $age")  // ✅ Подписан на age
+        Text("Имя: $name")  // ✅ Рекомпозируется при изменении name
+        Text("Возраст: $age")  // ✅ Рекомпозируется при изменении age
 
-        Button(onClick = { name = "Иван" }) {  // Триггерит ТОЛЬКО Text с name
+        Button(onClick = { name = "John" }) {
             Text("Изменить имя")
         }
     }
 }
 ```
+
+При изменении `name` будет запланирована рекомпозиция для той части композиции, где читается `name` (и её поддерева); аналогично для `age`. Гранулярность рекомпозиции зависит от структуры composable-функций.
 
 ### MutableState Vs Обычная Переменная
 
@@ -98,7 +101,7 @@ fun UserProfile() {
 ```kotlin
 @Composable
 fun Counter() {
-    var count = 0  // ❌ Не работает
+    var count = 0  // ❌ Не работает как состояние
 
     Button(onClick = { count++ }) {  // count меняется, но UI не обновляется
         Text("Count: $count")
@@ -110,9 +113,9 @@ fun Counter() {
 ```kotlin
 @Composable
 fun Counter() {
-    var count by remember { mutableStateOf(0) }  // ✅ Работает
+    var count by remember { mutableStateOf(0) }  // ✅ Работает как состояние
 
-    Button(onClick = { count++ }) {  // Триггерит рекомпозицию
+    Button(onClick = { count++ }) {  // Триггерит рекомпозицию для чтений count
         Text("Count: $count")
     }
 }
@@ -120,15 +123,42 @@ fun Counter() {
 
 ### Remember Vs Без Remember
 
-**❌ Без remember:**
+Важно, где создаётся `MutableState`:
+
+**Проблемный случай внутри composable без remember:**
 ```kotlin
-var count by mutableStateOf(0)  // ❌ Сбрасывается на каждой рекомпозиции
+@Composable
+fun Counter() {
+    var count by mutableStateOf(0)  // ⚠️ Состояние создаётся заново при каждом вызове функции
+
+    Button(onClick = { count++ }) {
+        Text("Count: $count")
+    }
+}
 ```
 
-**✅ С remember:**
+Такой код будет работать некорректно как "счётчик", потому что при каждом новом запуске композиции создаётся новый экземпляр состояния. Обычно здесь следует использовать `remember`:
+
+**✅ С remember внутри composable:**
 ```kotlin
-var count by remember { mutableStateOf(0) }  // ✅ Кэшируется между рекомпозициями
+@Composable
+fun Counter() {
+    var count by remember { mutableStateOf(0) }  // ✅ Сохраняется между рекомпозициями
+
+    Button(onClick = { count++ }) {
+        Text("Count: $count")
+    }
+}
 ```
+
+**✅ Без remember на устойчивом уровне:**
+```kotlin
+class CounterState {
+    var count by mutableStateOf(0)  // ✅ Можно хранить в ViewModel или state-holder классе
+}
+```
+
+Здесь `mutableStateOf` используется корректно, потому что объект `CounterState` живёт дольше одной рекомпозиции.
 
 ### Типы Состояний
 
@@ -143,17 +173,17 @@ var isEnabled by remember { mutableStateOf(false) }
 ```kotlin
 data class User(val id: String, val name: String, val age: Int)
 
-var user by remember { mutableStateOf(User("1", "Алиса", 25)) }
+var user by remember { mutableStateOf(User("1", "Alice", 25)) }
 user = user.copy(age = 26)  // ✅ Создаёт новый объект, триггерит рекомпозицию
 ```
 
 **Коллекции:**
 ```kotlin
-// ✅ Immutable List
+// ✅ Неизменяемый список
 var items by remember { mutableStateOf(listOf<String>()) }
 items = items + "Новый элемент"  // Создаёт новый список
 
-// ✅ Mutable observable list
+// ✅ Наблюдаемый изменяемый список
 val items = remember { mutableStateListOf<String>() }
 items.add("Новый элемент")  // Триггерит рекомпозицию напрямую
 ```
@@ -184,14 +214,14 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit) {
 
 **Преимущества:**
 - Единственный источник истины
-- Переиспользуемые stateless компоненты
+- Переиспользуемые stateless-компоненты
 - Простое тестирование
 
-### Интеграция С ViewModel
+### Интеграция с `ViewModel`
 
 ```kotlin
 class UserViewModel : ViewModel() {
-    private val _user = MutableStateFlow(User("1", "Алиса", 25))
+    private val _user = MutableStateFlow(User("1", "Alice", 25))
     val user: StateFlow<User> = _user.asStateFlow()
 
     fun updateAge(newAge: Int) {
@@ -201,7 +231,7 @@ class UserViewModel : ViewModel() {
 
 @Composable
 fun UserProfile(viewModel: UserViewModel = viewModel()) {
-    val user by viewModel.user.collectAsState()  // ✅ StateFlow → State
+    val user by viewModel.user.collectAsState()  // ✅ StateFlow → State, используется аналогично MutableState
 
     Column {
         Text("Возраст: ${user.age}")
@@ -212,10 +242,12 @@ fun UserProfile(viewModel: UserViewModel = viewModel()) {
 }
 ```
 
+Здесь `ViewModel` использует состояние на основе `Flow`, которое в UI представлено как Compose-`State`. С точки зрения подписки и рекомпозиции оно ведёт себя аналогично `MutableState`.
+
 ### Оптимизация Производительности
 
 **Умная рекомпозиция:**
-Compose перерисовывает ТОЛЬКО composables, читающие изменённое состояние.
+Compose пытается рекомпозировать только те части дерева, которые читают изменившееся состояние (и их поддеревья), исходя из границ composable-функций.
 
 ```kotlin
 @Composable
@@ -224,8 +256,8 @@ fun Screen() {
     var count2 by remember { mutableStateOf(0) }
 
     Column {
-        Text("Count 1: $count1")  // ✅ Перерисуется только при изменении count1
-        Text("Count 2: $count2")  // ✅ Перерисуется только при изменении count2
+        Text("Count 1: $count1")  // ✅ Рекомпозируется при изменении count1
+        Text("Count 2: $count2")  // ✅ Рекомпозируется при изменении count2
     }
 }
 ```
@@ -236,7 +268,7 @@ fun Screen() {
 fun ItemList(items: List<Item>) {
     var filter by remember { mutableStateOf("") }
 
-    // ✅ Пересчитывается ТОЛЬКО когда items или filter изменились
+    // ✅ Пересчитывается только когда items или filter изменились
     val filteredItems by remember {
         derivedStateOf {
             items.filter { it.name.contains(filter, ignoreCase = true) }
@@ -264,10 +296,10 @@ interface MutableState<T> : State<T> {
 ```
 
 **Key characteristics:**
-- **Observable** — automatically notifies subscribers
-- **Triggers recomposition** — UI elements redraw automatically
+- **`Observable`** — automatically notifies dependents
+- **Triggers recomposition** — UI elements are redrawn when the value changes
 - **Type-safe** — strongly typed via `<T>`
-- **Survives recomposition** — works with `remember`
+- **Survives recomposition** — when placed correctly (e.g., inside `remember`), the value is preserved across recompositions
 
 ### Creating State
 
@@ -297,7 +329,7 @@ fun Counter() {
 
 ### How Tracking Works
 
-Compose automatically subscribes composables to state changes:
+Compose automatically tracks which composable functions read a given state and schedules recomposition for those parts of the composition tree when the state changes.
 
 ```kotlin
 @Composable
@@ -306,15 +338,17 @@ fun UserProfile() {
     var age by remember { mutableStateOf(0) }
 
     Column {
-        Text("Name: $name")  // ✅ Subscribed to name
-        Text("Age: $age")  // ✅ Subscribed to age
+        Text("Name: $name")  // ✅ Recomposes when name changes
+        Text("Age: $age")    // ✅ Recomposes when age changes
 
-        Button(onClick = { name = "John" }) {  // Triggers ONLY Text with name
+        Button(onClick = { name = "John" }) {
             Text("Change Name")
         }
     }
 }
 ```
+
+When `name` changes, Compose schedules recomposition for the scope where `name` is read (and its subtree); similarly for `age`. The exact granularity depends on how your composables are structured.
 
 ### MutableState Vs Regular Variable
 
@@ -322,7 +356,7 @@ fun UserProfile() {
 ```kotlin
 @Composable
 fun Counter() {
-    var count = 0  // ❌ Doesn't work
+    var count = 0  // ❌ Not treated as state
 
     Button(onClick = { count++ }) {  // count changes, but UI doesn't update
         Text("Count: $count")
@@ -334,9 +368,9 @@ fun Counter() {
 ```kotlin
 @Composable
 fun Counter() {
-    var count by remember { mutableStateOf(0) }  // ✅ Works
+    var count by remember { mutableStateOf(0) }  // ✅ Works as state
 
-    Button(onClick = { count++ }) {  // Triggers recomposition
+    Button(onClick = { count++ }) {  // Triggers recomposition for readers of count
         Text("Count: $count")
     }
 }
@@ -344,15 +378,42 @@ fun Counter() {
 
 ### Remember Vs Without Remember
 
-**❌ Without remember:**
+What matters is where `MutableState` is created:
+
+**Problematic case inside a composable without remember:**
 ```kotlin
-var count by mutableStateOf(0)  // ❌ Resets on every recomposition
+@Composable
+fun Counter() {
+    var count by mutableStateOf(0)  // ⚠️ New state instance created on each invocation
+
+    Button(onClick = { count++ }) {
+        Text("Count: $count")
+    }
+}
 ```
 
-**✅ With remember:**
+This won't behave as a stable counter because each new composition pass creates a new state instance. In this scenario you should use `remember`:
+
+**✅ With remember inside a composable:**
 ```kotlin
-var count by remember { mutableStateOf(0) }  // ✅ Cached across recompositions
+@Composable
+fun Counter() {
+    var count by remember { mutableStateOf(0) }  // ✅ Preserved across recompositions
+
+    Button(onClick = { count++ }) {
+        Text("Count: $count")
+    }
+}
 ```
+
+**✅ Without remember at a stable scope:**
+```kotlin
+class CounterState {
+    var count by mutableStateOf(0)  // ✅ Safe when the holder outlives individual recompositions
+}
+```
+
+Here `mutableStateOf` is used correctly because the `CounterState` instance is not recreated on each recomposition (e.g., it's stored in a `ViewModel` or other state holder).
 
 ### State Types
 
@@ -375,7 +436,7 @@ user = user.copy(age = 26)  // ✅ Creates new object, triggers recomposition
 ```kotlin
 // ✅ Immutable List
 var items by remember { mutableStateOf(listOf<String>()) }
-items = items + "New Item"  // Creates new list
+items = items + "New Item"  // Creates a new list
 
 // ✅ Mutable observable list
 val items = remember { mutableStateListOf<String>() }
@@ -384,7 +445,7 @@ items.add("New Item")  // Triggers recomposition directly
 
 ### State Hoisting
 
-**Pattern:** state lives in parent, passed down via parameters.
+**Pattern:** state lives in the parent and is passed down via parameters.
 
 ```kotlin
 @Composable
@@ -409,9 +470,9 @@ fun SearchBar(query: String, onQueryChange: (String) -> Unit) {
 **Benefits:**
 - Single source of truth
 - Reusable stateless components
-- Easy testing
+- Easier testing
 
-### ViewModel Integration
+### `ViewModel` Integration
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -425,7 +486,7 @@ class UserViewModel : ViewModel() {
 
 @Composable
 fun UserProfile(viewModel: UserViewModel = viewModel()) {
-    val user by viewModel.user.collectAsState()  // ✅ StateFlow → State
+    val user by viewModel.user.collectAsState()  // ✅ StateFlow → State, consumed similarly to MutableState
 
     Column {
         Text("Age: ${user.age}")
@@ -436,10 +497,12 @@ fun UserProfile(viewModel: UserViewModel = viewModel()) {
 }
 ```
 
+Here the `ViewModel` exposes `Flow`-based state, which is collected into a Compose `State`. From the UI perspective it behaves similarly to `MutableState` regarding observation and recomposition.
+
 ### Performance Optimization
 
 **Smart Recomposition:**
-Compose redraws ONLY composables reading the changed state.
+Compose attempts to recompose only those parts of the UI tree that read the changed state (and their subtrees), based on composable function boundaries.
 
 ```kotlin
 @Composable
@@ -448,8 +511,8 @@ fun Screen() {
     var count2 by remember { mutableStateOf(0) }
 
     Column {
-        Text("Count 1: $count1")  // ✅ Recomposes only when count1 changes
-        Text("Count 2: $count2")  // ✅ Recomposes only when count2 changes
+        Text("Count 1: $count1")  // ✅ Recomposes when count1 changes
+        Text("Count 2: $count2")  // ✅ Recomposes when count2 changes
     }
 }
 ```
@@ -460,7 +523,7 @@ fun Screen() {
 fun ItemList(items: List<Item>) {
     var filter by remember { mutableStateOf("") }
 
-    // ✅ Recalculates ONLY when items or filter change
+    // ✅ Recalculates only when items or filter change
     val filteredItems by remember {
         derivedStateOf {
             items.filter { it.name.contains(filter, ignoreCase = true) }
@@ -475,13 +538,29 @@ fun ItemList(items: List<Item>) {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+1. Когда следует использовать `rememberSaveable` вместо `remember`?
+2. Чем `derivedStateOf` отличается от вычисляемых свойств или простых геттеров?
+3. Что произойдёт, если забыть использовать `remember` с `mutableStateOf` внутри composable?
+4. Как разделять состояние между несколькими экранами в навигации Compose?
+5. Каковы последствия для производительности при хранении больших объектов в `MutableState`?
+
 ## Follow-ups
 
 1. When should you use `rememberSaveable` instead of `remember`?
 2. How does `derivedStateOf` differ from computed properties?
-3. What happens if you forget to use `remember` with `mutableStateOf`?
+3. What happens if you forget to use `remember` with `mutableStateOf` inside a composable?
 4. How do you share state between multiple screens in Compose Navigation?
-5. What are the performance implications of putting large objects in MutableState?
+5. What are the performance implications of putting large objects in `MutableState`?
+
+## Источники (RU)
+
+- [[c-compose-state]] — концепции управления состоянием в Compose
+- [[c-jetpack-compose]] — основы Jetpack Compose
+- [[c-compose-recomposition]] — механика рекомпозиции
+- "State in Compose" в официальной документации: https://developer.android.com/jetpack/compose/state
+- Ментальная модель Compose: https://developer.android.com/jetpack/compose/mental-model
 
 ## References
 
@@ -490,6 +569,23 @@ fun ItemList(items: List<Item>) {
 - [[c-compose-recomposition]] - Recomposition mechanics
 - https://developer.android.com/jetpack/compose/state
 - https://developer.android.com/jetpack/compose/mental-model
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-jetpack-compose-basics--android--medium]] - основы Compose
+
+### Связанные (такой же уровень)
+- [[q-state-hoisting-compose--android--medium]] - паттерны подъёма состояния
+- [[q-remember-vs-remembersaveable-compose--android--medium]] - варианты `remember`
+- [[q-compose-remember-derived-state--android--medium]] - использование `derivedStateOf`
+- [[q-recomposition-compose--android--medium]] - механика рекомпозиции
+- [[q-how-mutablestate-notifies--android--medium]] - как `MutableState` уведомляет об изменениях
+
+### Продвинутое (сложнее)
+- [[q-compose-stability-skippability--android--hard]] - стабильность и возможность пропуска рекомпозиции
+- [[q-stable-classes-compose--android--hard]] - аннотация `@Stable`
+- [[q-compose-performance-optimization--android--hard]] - оптимизация производительности
 
 ## Related Questions
 

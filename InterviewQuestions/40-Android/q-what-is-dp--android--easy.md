@@ -84,7 +84,7 @@ pixels = dp × (device dpi / 160)
 ```xml
 <Button
     android:layout_width="200dp"   <!-- ✅ Используем dp -->
-    android:layout_height="48dp"   <!-- ✅ Минимальный размер touch target -->
+    android:layout_height="48dp"   <!-- ✅ Частый рекомендуемый минимальный размер области касания -->
     android:padding="16dp"         <!-- ✅ Стандартный отступ Material -->
     android:text="Submit" />
 ```
@@ -99,7 +99,7 @@ fun DpExample() {
             onClick = { },
             modifier = Modifier
                 .width(200.dp)
-                .height(48.dp)  // ✅ Минимальный touch target
+                .height(48.dp)  // ✅ Частый рекомендуемый минимальный touch target
         ) {
             Text("Submit")
         }
@@ -116,12 +116,12 @@ fun DpExample() {
 
 **View System**:
 ```kotlin
-// dp → px
+// dp → px (упрощённый пример; в реальных проектах используйте Context-специфичные ресурсы)
 val density = resources.displayMetrics.density
-val px = (100 * density).toInt()  // ✅ Правильно
+val px = (100 * density).toInt()
 
-// Extension
-val Int.dp: Int
+// Extension (демонстрационный; привязан к системным ресурсам и не учитывает контекст)
+val Int.dpToPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 ```
 
@@ -137,13 +137,13 @@ fun DpConversion() {
 ### Стандартные Значения Material Design
 
 ```kotlin
-// Отступы
+// Отступы (часто используемые значения)
 8.dp   // Малый
 16.dp  // Стандартный (самый частый)
 24.dp  // Большой
 
 // Touch targets
-48.dp  // Минимальный размер для касания
+48.dp  // Исторически рекомендуемый минимум области касания в Android
 
 // Иконки
 24.dp  // Стандартная иконка
@@ -151,27 +151,27 @@ fun DpConversion() {
 
 ### Dp Vs Px Vs Sp
 
-| Случай использования | Единица | Пример              |
-|---------------------|---------|---------------------|
-| Размеры layout      | dp      | `width = 100.dp`    |
-| Отступы/padding     | dp      | `padding(16.dp)`    |
-| Размер текста       | **sp**  | `fontSize = 16.sp`  |
-| Canvas (редко)      | px      | Операции рисования  |
+| Случай использования        | Единица | Пример              |
+|-----------------------------|---------|---------------------|
+| Размеры layout              | dp      | `width = 100.dp`    |
+| Отступы/padding/margin      | dp      | `padding(16.dp)`    |
+| Размер текста               | **sp**  | `fontSize = 16.sp`  |
+| Canvas и низкоуровневый UI  | px      | Операции рисования  |
 
 ### Best Practices
 
-1. **Всегда используйте dp** для размеров элементов
-2. **Никогда не используйте px** для UI (кроме Canvas)
+1. **Предпочитайте dp** для размеров элементов
+2. **Избегайте px** для высокоуровневого UI (кроме случаев, когда API уже возвращает px или для Canvas/кастомного рисования)
 3. **Используйте sp** для размера текста (не dp!)
 4. **Кратность 4dp или 8dp** для согласованности
 
 ### Частые Ошибки
 
 ```kotlin
-// ❌ ПЛОХО: Использование px
+// ❌ ПЛОХО: Жёсткое значение в px
 textView.layoutParams.width = 100  // Это px!
 
-// ✅ ХОРОШО: Конвертация dp в px
+// ✅ ХОРОШО: Конвертация dp в px с учётом плотности
 val widthPx = (100 * density).toInt()
 textView.layoutParams.width = widthPx
 ```
@@ -216,7 +216,7 @@ pixels = dp × (device dpi / 160)
 ```xml
 <Button
     android:layout_width="200dp"   <!-- ✅ Use dp -->
-    android:layout_height="48dp"   <!-- ✅ Minimum touch target -->
+    android:layout_height="48dp"   <!-- ✅ Commonly recommended minimum touch target height -->
     android:padding="16dp"         <!-- ✅ Standard Material padding -->
     android:text="Submit" />
 ```
@@ -231,7 +231,7 @@ fun DpExample() {
             onClick = { },
             modifier = Modifier
                 .width(200.dp)
-                .height(48.dp)  // ✅ Minimum touch target
+                .height(48.dp)  // ✅ Commonly recommended minimum touch target
         ) {
             Text("Submit")
         }
@@ -248,12 +248,12 @@ fun DpExample() {
 
 **View System**:
 ```kotlin
-// dp → px
+// dp → px (simplified; in real apps prefer Context-specific resources)
 val density = resources.displayMetrics.density
-val px = (100 * density).toInt()  // ✅ Correct
+val px = (100 * density).toInt()  // ✅ Correct for the given resources
 
-// Extension
-val Int.dp: Int
+// Extension (demonstration; uses system resources and ignores current configuration)
+val Int.dpToPx: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 ```
 
@@ -269,41 +269,41 @@ fun DpConversion() {
 ### Material Design Standard Values
 
 ```kotlin
-// Spacing
+// Spacing (commonly used values)
 8.dp   // Small
 16.dp  // Standard (most common)
 24.dp  // Large
 
 // Touch targets
-48.dp  // Minimum touch target size
+48.dp  // Historically recommended minimum touch target size on Android
 
 // Icons
-24.dp  // Standard icon
+24.dp  // Standard icon size
 ```
 
 ### Dp Vs Px Vs Sp
 
-| Use Case         | Unit   | Example             |
-|-----------------|--------|---------------------|
-| Layout sizes    | dp     | `width = 100.dp`    |
-| Padding/Margins | dp     | `padding(16.dp)`    |
-| Text size       | **sp** | `fontSize = 16.sp`  |
-| Canvas (rare)   | px     | Drawing operations  |
+| Use Case               | Unit   | Example             |
+|------------------------|--------|---------------------|
+| Layout sizes           | dp     | `width = 100.dp`    |
+| Padding/Margins        | dp     | `padding(16.dp)`    |
+| Text size              | **sp** | `fontSize = 16.sp`  |
+| Canvas / low-level UI  | px     | Drawing operations  |
 
 ### Best Practices
 
-1. **Always use dp** for layout dimensions
-2. **Never use px** for UI (except Canvas)
+1. **Prefer dp** for layout dimensions
+2. **Avoid px** for high-level UI (except when APIs return px or for Canvas/custom drawing)
 3. **Use sp** for text sizes (not dp!)
 4. **Use multiples of 4dp or 8dp** for consistency
 
 ### Common Mistakes
 
 ```kotlin
-// ❌ BAD: Using px
+// ❌ BAD: Hard-coded px
 textView.layoutParams.width = 100  // This is px!
 
-// ✅ GOOD: Convert dp to px
+// ✅ GOOD: Convert dp to px using density
 val widthPx = (100 * density).toInt()
 textView.layoutParams.width = widthPx
 ```

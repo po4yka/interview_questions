@@ -1,7 +1,6 @@
 ---
 id: android-019
-title: How to implement Voice/Video Call in Android? / Как реализовать голосовой/видеозвонок
-  в Android?
+title: How to implement Voice/Video Call in Android? / Как реализовать голосовой/видеозвонок в Android?
 aliases:
 - Voice Video Call Android
 - WebRTC Android
@@ -18,12 +17,10 @@ language_tags:
 - en
 - ru
 sources:
-- https://github.com/amitshekhariitbhu/android-interview-questions
+- "https://github.com/amitshekhariitbhu/android-interview-questions"
 status: draft
 moc: moc-android
 related:
-- c-webrtc
-- c-websockets
 - q-http-protocols-comparison--android--medium
 - q-parallel-network-calls-coroutines--kotlin--medium
 created: 2025-10-06
@@ -45,13 +42,13 @@ tags:
 
 ## Ответ (RU)
 
-**Подход**: Использование WebRTC для peer-to-peer аудио/видео связи с низкой задержкой
+**Подход**: Использование WebRTC для peer-to-peer аудио/видео связи с низкой задержкой (при необходимости с ретрансляцией через TURN)
 
 **Ключевые компоненты**:
-- **PeerConnection** - управление P2P соединением
-- **MediaStream** - обработка аудио/видео потоков
-- **ICE/STUN/TURN** - проход через NAT/файрволы
-- **Signaling Server** - обмен метаданными (WebSocket)
+- **PeerConnection** — управление P2P соединением и медиа-треками
+- **MediaStream/MediaTracks** — обработка аудио/видео (в современном API упор на треки)
+- **ICE/STUN/TURN** — проход через NAT/файрволы
+- **Signaling Server** — обмен SDP и ICE-кандидатами (обычно WebSocket)
 
 **Архитектура**:
 ```
@@ -66,39 +63,52 @@ STUN/TURN Server (NAT traversal)
 
 ### Основная Реализация
 
+(Упрощённый пример, фокус на идее, а не на полном продакшн-коде.)
+
 **Менеджер WebRTC**:
 ```kotlin
 class WebRTCManager(
-    context: Context,
-    private val signalingClient: SignalingClient
+    private val context: Context,
+    private val signalingClient: SignalingClient,
+    private val peerConnectionFactory: PeerConnectionFactory,
+    private val eglBase: EglBase
 ) {
     private var peerConnection: PeerConnection? = null
     private var localVideoTrack: VideoTrack? = null
     private var localAudioTrack: AudioTrack? = null
+    private var videoCapturer: VideoCapturer? = null
 
     private val _callState = MutableStateFlow(CallState())
     val callState = _callState.asStateFlow()
 
     fun startCall(isVideoCall: Boolean, remotePeerId: String) {
         createPeerConnection()
-        createMediaStreams(isVideoCall)
+        createMediaTracks(isVideoCall)
 
-        // ✅ Создание offer
+        val constraints = MediaConstraints()
         peerConnection?.createOffer(object : SdpObserver {
             override fun onCreateSuccess(sdp: SessionDescription) {
-                peerConnection?.setLocalDescription(this, sdp)
-                signalingClient.sendOffer(remotePeerId, sdp.description)
+                // Устанавливаем локальное SDP и отправляем через signaling
+                peerConnection?.setLocalDescription(object : SdpObserver {
+                    override fun onSetSuccess() {
+                        signalingClient.sendOffer(remotePeerId, sdp)
+                    }
+                    override fun onSetFailure(p0: String?) {}
+                    override fun onCreateSuccess(p0: SessionDescription?) {}
+                    override fun onCreateFailure(p0: String?) {}
+                }, sdp)
             }
-            // ... обработка ошибок
-        }, MediaConstraints())
+            override fun onSetSuccess() {}
+            override fun onCreateFailure(error: String?) {}
+            override fun onSetFailure(error: String?) {}
+        }, constraints)
     }
 
     private fun createPeerConnection() {
         val iceServers = listOf(
-            // ✅ STUN для определения публичного IP
-            PeerConnection.IceServer.builder("stun:stun.l.google.com:19302")
-                .createIceServer(),
-            // ✅ TURN для прохода через строгие NAT
+            // STUN для определения публичного IP
+            PeerConnection.IceServer.builder("stun:stun.l.google.com:19302").createIceServer(),
+            // TURN для прохода через строгие NAT (обязателен для продакшена)
             PeerConnection.IceServer.builder("turn:your-turn-server.com:3478")
                 .setUsername("username")
                 .setPassword("password")
@@ -109,26 +119,54 @@ class WebRTCManager(
             sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN
         }
 
-        peerConnection = factory.createPeerConnection(rtcConfig, observer)
+        peerConnection = peerConnectionFactory.createPeerConnection(rtcConfig, object : PeerConnection.Observer {
+            override fun onIceCandidate(candidate: IceCandidate) {
+                // Отправка кандидата удалённому пиру
+                signalingClient.sendIceCandidate(candidate)
+            }
+            override fun onIceConnectionChange(newState: PeerConnection.IceConnectionState) {
+                when (newState) {
+                    PeerConnection.IceConnectionState.CONNECTED ->
+                        _callState.value = _callState.value.copy(isConnected = true)
+
+                    PeerConnection.IceConnectionState.FAILED,
+                    PeerConnection.IceConnectionState.DISCONNECTED -> {
+                        _callState.value = _callState.value.copy(isConnected = false)
+                        endCall()
+                    }
+
+                    else -> Unit
+                }
+            }
+            override fun onTrack(transceiver: RtpTransceiver?) {
+                // Здесь подключаем remoteVideoTrack/remoteAudioTrack к UI
+            }
+            // Остальные методы опущены для краткости
+        })
     }
 
-    private fun createMediaStreams(isVideoCall: Boolean) {
-        // ✅ Аудио трек (всегда)
-        val audioSource = factory.createAudioSource(MediaConstraints())
-        localAudioTrack = factory.createAudioTrack("audio", audioSource)
+    private fun createMediaTracks(isVideoCall: Boolean) {
+        // Аудио трек (всегда)
+        val audioSource = peerConnectionFactory.createAudioSource(MediaConstraints())
+        localAudioTrack = peerConnectionFactory.createAudioTrack("audio", audioSource)
+        localAudioTrack?.setEnabled(true)
+        peerConnection?.addTrack(localAudioTrack)
 
-        // ✅ Видео трек (опционально)
+        // Видео трек (опционально)
         if (isVideoCall) {
-            val videoCapturer = createVideoCapturer()
-            val videoSource = factory.createVideoSource(false)
-            videoCapturer?.initialize(helper, context, videoSource.capturerObserver)
+            videoCapturer = createVideoCapturer()
+            val videoSource = peerConnectionFactory.createVideoSource(false)
+            videoCapturer?.initialize(
+                SurfaceTextureHelper.create("CaptureThread", eglBase.eglBaseContext),
+                context,
+                videoSource.capturerObserver
+            )
             videoCapturer?.startCapture(1280, 720, 30)
 
-            localVideoTrack = factory.createVideoTrack("video", videoSource)
+            localVideoTrack = peerConnectionFactory.createVideoTrack("video", videoSource)
+            localVideoTrack?.setEnabled(true)
+            peerConnection?.addTrack(localVideoTrack)
         }
-
-        peerConnection?.addTrack(localAudioTrack)
-        peerConnection?.addTrack(localVideoTrack)
     }
 
     fun toggleMute() {
@@ -139,15 +177,38 @@ class WebRTCManager(
 
     fun toggleVideo() {
         val enabled = !_callState.value.isVideoEnabled
-        localVideoTrack?.setEnabled(enabled)
         _callState.value = _callState.value.copy(isVideoEnabled = enabled)
+        localVideoTrack?.setEnabled(enabled)
+    }
+
+    fun endCall() {
+        videoCapturer?.run {
+            try { stopCapture() } catch (_: Exception) {}
+            dispose()
+        }
+        videoCapturer = null
+
+        localVideoTrack?.dispose()
+        localVideoTrack = null
+
+        localAudioTrack?.dispose()
+        localAudioTrack = null
+
+        peerConnection?.close()
+        peerConnection = null
+
+        _callState.value = CallState()
     }
 }
 ```
 
-**Signaling через WebSocket**:
+**Signaling через WebSocket** (упрощённо):
 ```kotlin
-class SignalingClient(private val okHttpClient: OkHttpClient) {
+class SignalingClient(
+    private val okHttpClient: OkHttpClient,
+    private val json: Json,
+    private val scope: CoroutineScope
+) {
     private var webSocket: WebSocket? = null
     private val _messages = MutableSharedFlow<SignalingMessage>()
     val messages = _messages.asSharedFlow()
@@ -159,25 +220,44 @@ class SignalingClient(private val okHttpClient: OkHttpClient) {
 
         webSocket = okHttpClient.newWebSocket(request, object : WebSocketListener() {
             override fun onMessage(webSocket: WebSocket, text: String) {
-                val message = Json.decodeFromString<SignalingMessage>(text)
+                val message = json.decodeFromString<SignalingMessage>(text)
                 scope.launch { _messages.emit(message) }
             }
         })
     }
 
-    fun sendOffer(remotePeerId: String, sdp: String) {
-        send(SignalingMessage.Offer(sdp))
+    fun sendOffer(remotePeerId: String, sdp: SessionDescription) {
+        val msg = SignalingMessage.Offer(remotePeerId, sdp.description)
+        send(msg)
+    }
+
+    fun sendAnswer(remotePeerId: String, sdp: SessionDescription) {
+        val msg = SignalingMessage.Answer(remotePeerId, sdp.description)
+        send(msg)
+    }
+
+    fun sendIceCandidate(candidate: IceCandidate) {
+        val msg = SignalingMessage.IceCandidate(
+            sdpMid = candidate.sdpMid ?: "",
+            sdpMLineIndex = candidate.sdpMLineIndex,
+            sdp = candidate.sdp
+        )
+        send(msg)
+    }
+
+    private fun send(message: SignalingMessage) {
+        val jsonText = json.encodeToString(SignalingMessage.serializer(), message)
+        webSocket?.send(jsonText)
     }
 }
 
-// ✅ Модели signaling сообщений
 @Serializable
 sealed class SignalingMessage {
     @Serializable
-    data class Offer(val sdp: String) : SignalingMessage()
+    data class Offer(val to: String, val sdp: String) : SignalingMessage()
 
     @Serializable
-    data class Answer(val sdp: String) : SignalingMessage()
+    data class Answer(val to: String, val sdp: String) : SignalingMessage()
 
     @Serializable
     data class IceCandidate(
@@ -188,7 +268,7 @@ sealed class SignalingMessage {
 }
 ```
 
-**UI (Jetpack Compose)**:
+**UI (Jetpack Compose)** (идея подключения SurfaceViewRenderer к VideoTrack):
 ```kotlin
 @Composable
 fun VideoCallScreen(viewModel: CallViewModel) {
@@ -197,12 +277,12 @@ fun VideoCallScreen(viewModel: CallViewModel) {
     val remoteVideo by viewModel.remoteVideoTrack.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // ✅ Удаленное видео (полный экран)
+        // Удалённое видео (полный экран)
         remoteVideo?.let { track ->
             AndroidView(
                 factory = { context ->
                     SurfaceViewRenderer(context).apply {
-                        init(EglBase.create().eglBaseContext, null)
+                        init(viewModel.eglBase.eglBaseContext, null)
                         track.addSink(this)
                     }
                 },
@@ -210,12 +290,12 @@ fun VideoCallScreen(viewModel: CallViewModel) {
             )
         }
 
-        // ✅ Локальное видео (PiP)
+        // Локальное видео (PiP)
         localVideo?.let { track ->
             AndroidView(
                 factory = { context ->
                     SurfaceViewRenderer(context).apply {
-                        init(EglBase.create().eglBaseContext, null)
+                        init(viewModel.eglBase.eglBaseContext, null)
                         setZOrderMediaOverlay(true)
                         track.addSink(this)
                     }
@@ -227,7 +307,7 @@ fun VideoCallScreen(viewModel: CallViewModel) {
             )
         }
 
-        // ✅ Элементы управления
+        // Элементы управления
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -260,42 +340,45 @@ fun VideoCallScreen(viewModel: CallViewModel) {
 
 **1. Серверная инфраструктура**:
 - STUN серверы для определения публичного IP
-- TURN серверы для прохода через строгие NAT (критично!)
-- Signaling сервер для обмена метаданными
+- TURN серверы для прохода через строгие NAT (критично для реальных условий)
+- Signaling сервер для обмена SDP и ICE-кандидатами (WebSocket/HTTP + auth)
 
 **2. Управление ресурсами**:
-- Остановка видео при переходе в фон
-- Правильный dispose всех треков и connection
-- Управление audio focus через AudioManager
+- Остановка/приостановка видео при переходе в фон
+- Корректное освобождение треков, источников, capturer и PeerConnection
+- Управление audio focus через AudioManager / AudioAttributes
 
 **3. Производительность**:
-- Адаптивный битрейт в зависимости от сети
-- Использование FLAG_KEEP_SCREEN_ON
-- Мониторинг качества соединения (ICE state)
+- Адаптивный битрейт и разрешение в зависимости от сети
+- Использование FLAG_KEEP_SCREEN_ON для экрана во время звонка
+- Мониторинг качества соединения (ICE state, RTT, packet loss)
 
 **4. Обработка ошибок**:
 ```kotlin
-// ✅ Обработка состояний ICE
 override fun onIceConnectionChange(state: PeerConnection.IceConnectionState) {
     when (state) {
-        CONNECTED -> _callState.value = _callState.value.copy(isConnected = true)
-        FAILED, DISCONNECTED -> {
+        PeerConnection.IceConnectionState.CONNECTED ->
+            _callState.value = _callState.value.copy(isConnected = true)
+
+        PeerConnection.IceConnectionState.FAILED,
+        PeerConnection.IceConnectionState.DISCONNECTED -> {
             _callState.value = _callState.value.copy(isConnected = false)
             endCall()
         }
+
+        else -> Unit
     }
 }
 ```
 
 ### Типичные Ошибки
 
-**❌ Не настроен TURN сервер**:
+**❌ Нет TURN сервера**:
 - Звонки не работают за NAT/файрволом
 - Решение: всегда настраивать TURN в дополнение к STUN
 
-**❌ Не запрошены runtime разрешения**:
+**❌ Не запрошены runtime-разрешения**:
 ```kotlin
-// ✅ Правильно
 val permissions = arrayOf(
     Manifest.permission.CAMERA,
     Manifest.permission.RECORD_AUDIO
@@ -303,15 +386,23 @@ val permissions = arrayOf(
 requestPermissions(permissions, REQUEST_CODE)
 ```
 
-**❌ Утечка ресурсов**:
+**❌ Утечки ресурсов**:
 ```kotlin
-// ✅ Правильно - dispose всего
 fun endCall() {
-    localAudioTrack?.dispose()
+    videoCapturer?.run {
+        try { stopCapture() } catch (_: Exception) {}
+        dispose()
+    }
+    videoCapturer = null
+
     localVideoTrack?.dispose()
-    videoCapturer?.stopCapture()
-    videoCapturer?.dispose()
+    localVideoTrack = null
+
+    localAudioTrack?.dispose()
+    localAudioTrack = null
+
     peerConnection?.close()
+    peerConnection = null
 }
 ```
 
@@ -319,13 +410,13 @@ fun endCall() {
 
 ## Answer (EN)
 
-**Approach**: Use WebRTC for peer-to-peer audio/video communication with low latency
+**Approach**: Use WebRTC for low-latency peer-to-peer audio/video communication (with TURN relay when direct P2P is not possible).
 
 **Core Components**:
-- **PeerConnection** - manages P2P connection
-- **MediaStream** - handles audio/video streams
+- **PeerConnection** - manages the peer connection and media tracks
+- **MediaStream/MediaTracks** - handle audio/video (modern APIs focus on tracks)
 - **ICE/STUN/TURN** - NAT traversal
-- **Signaling Server** - exchanges metadata (WebSocket)
+- **Signaling Server** - exchanges SDP and ICE candidates (typically via WebSocket)
 
 **Architecture**:
 ```
@@ -340,39 +431,52 @@ STUN/TURN Server (NAT traversal)
 
 ### Core Implementation
 
+(Simplified example focusing on architecture; not full production-ready code.)
+
 **WebRTC Manager**:
 ```kotlin
 class WebRTCManager(
-    context: Context,
-    private val signalingClient: SignalingClient
+    private val context: Context,
+    private val signalingClient: SignalingClient,
+    private val peerConnectionFactory: PeerConnectionFactory,
+    private val eglBase: EglBase
 ) {
     private var peerConnection: PeerConnection? = null
     private var localVideoTrack: VideoTrack? = null
     private var localAudioTrack: AudioTrack? = null
+    private var videoCapturer: VideoCapturer? = null
 
     private val _callState = MutableStateFlow(CallState())
     val callState = _callState.asStateFlow()
 
     fun startCall(isVideoCall: Boolean, remotePeerId: String) {
         createPeerConnection()
-        createMediaStreams(isVideoCall)
+        createMediaTracks(isVideoCall)
 
-        // ✅ Create offer
+        val constraints = MediaConstraints()
         peerConnection?.createOffer(object : SdpObserver {
             override fun onCreateSuccess(sdp: SessionDescription) {
-                peerConnection?.setLocalDescription(this, sdp)
-                signalingClient.sendOffer(remotePeerId, sdp.description)
+                // Set local SDP and send it via signaling
+                peerConnection?.setLocalDescription(object : SdpObserver {
+                    override fun onSetSuccess() {
+                        signalingClient.sendOffer(remotePeerId, sdp)
+                    }
+                    override fun onSetFailure(p0: String?) {}
+                    override fun onCreateSuccess(p0: SessionDescription?) {}
+                    override fun onCreateFailure(p0: String?) {}
+                }, sdp)
             }
-            // ... error handling
-        }, MediaConstraints())
+            override fun onSetSuccess() {}
+            override fun onCreateFailure(error: String?) {}
+            override fun onSetFailure(error: String?) {}
+        }, constraints)
     }
 
     private fun createPeerConnection() {
         val iceServers = listOf(
-            // ✅ STUN for public IP discovery
-            PeerConnection.IceServer.builder("stun:stun.l.google.com:19302")
-                .createIceServer(),
-            // ✅ TURN for strict NAT traversal
+            // STUN for public IP discovery
+            PeerConnection.IceServer.builder("stun:stun.l.google.com:19302").createIceServer(),
+            // TURN for strict NAT traversal (required for production)
             PeerConnection.IceServer.builder("turn:your-turn-server.com:3478")
                 .setUsername("username")
                 .setPassword("password")
@@ -383,26 +487,53 @@ class WebRTCManager(
             sdpSemantics = PeerConnection.SdpSemantics.UNIFIED_PLAN
         }
 
-        peerConnection = factory.createPeerConnection(rtcConfig, observer)
+        peerConnection = peerConnectionFactory.createPeerConnection(rtcConfig, object : PeerConnection.Observer {
+            override fun onIceCandidate(candidate: IceCandidate) {
+                signalingClient.sendIceCandidate(candidate)
+            }
+            override fun onIceConnectionChange(newState: PeerConnection.IceConnectionState) {
+                when (newState) {
+                    PeerConnection.IceConnectionState.CONNECTED ->
+                        _callState.value = _callState.value.copy(isConnected = true)
+
+                    PeerConnection.IceConnectionState.FAILED,
+                    PeerConnection.IceConnectionState.DISCONNECTED -> {
+                        _callState.value = _callState.value.copy(isConnected = false)
+                        endCall()
+                    }
+
+                    else -> Unit
+                }
+            }
+            override fun onTrack(transceiver: RtpTransceiver?) {
+                // Attach remote video/audio tracks to UI here
+            }
+            // Other callbacks omitted for brevity
+        })
     }
 
-    private fun createMediaStreams(isVideoCall: Boolean) {
-        // ✅ Audio track (always)
-        val audioSource = factory.createAudioSource(MediaConstraints())
-        localAudioTrack = factory.createAudioTrack("audio", audioSource)
+    private fun createMediaTracks(isVideoCall: Boolean) {
+        // Audio track (always)
+        val audioSource = peerConnectionFactory.createAudioSource(MediaConstraints())
+        localAudioTrack = peerConnectionFactory.createAudioTrack("audio", audioSource)
+        localAudioTrack?.setEnabled(true)
+        peerConnection?.addTrack(localAudioTrack)
 
-        // ✅ Video track (optional)
+        // Video track (optional)
         if (isVideoCall) {
-            val videoCapturer = createVideoCapturer()
-            val videoSource = factory.createVideoSource(false)
-            videoCapturer?.initialize(helper, context, videoSource.capturerObserver)
+            videoCapturer = createVideoCapturer()
+            val videoSource = peerConnectionFactory.createVideoSource(false)
+            videoCapturer?.initialize(
+                SurfaceTextureHelper.create("CaptureThread", eglBase.eglBaseContext),
+                context,
+                videoSource.capturerObserver
+            )
             videoCapturer?.startCapture(1280, 720, 30)
 
-            localVideoTrack = factory.createVideoTrack("video", videoSource)
+            localVideoTrack = peerConnectionFactory.createVideoTrack("video", videoSource)
+            localVideoTrack?.setEnabled(true)
+            peerConnection?.addTrack(localVideoTrack)
         }
-
-        peerConnection?.addTrack(localAudioTrack)
-        peerConnection?.addTrack(localVideoTrack)
     }
 
     fun toggleMute() {
@@ -413,15 +544,38 @@ class WebRTCManager(
 
     fun toggleVideo() {
         val enabled = !_callState.value.isVideoEnabled
-        localVideoTrack?.setEnabled(enabled)
         _callState.value = _callState.value.copy(isVideoEnabled = enabled)
+        localVideoTrack?.setEnabled(enabled)
+    }
+
+    fun endCall() {
+        videoCapturer?.run {
+            try { stopCapture() } catch (_: Exception) {}
+            dispose()
+        }
+        videoCapturer = null
+
+        localVideoTrack?.dispose()
+        localVideoTrack = null
+
+        localAudioTrack?.dispose()
+        localAudioTrack = null
+
+        peerConnection?.close()
+        peerConnection = null
+
+        _callState.value = CallState()
     }
 }
 ```
 
-**Signaling via WebSocket**:
+**Signaling via WebSocket** (simplified):
 ```kotlin
-class SignalingClient(private val okHttpClient: OkHttpClient) {
+class SignalingClient(
+    private val okHttpClient: OkHttpClient,
+    private val json: Json,
+    private val scope: CoroutineScope
+) {
     private var webSocket: WebSocket? = null
     private val _messages = MutableSharedFlow<SignalingMessage>()
     val messages = _messages.asSharedFlow()
@@ -433,25 +587,43 @@ class SignalingClient(private val okHttpClient: OkHttpClient) {
 
         webSocket = okHttpClient.newWebSocket(request, object : WebSocketListener() {
             override fun onMessage(webSocket: WebSocket, text: String) {
-                val message = Json.decodeFromString<SignalingMessage>(text)
+                val message = json.decodeFromString<SignalingMessage>(text)
                 scope.launch { _messages.emit(message) }
             }
         })
     }
 
-    fun sendOffer(remotePeerId: String, sdp: String) {
-        send(SignalingMessage.Offer(sdp))
+    fun sendOffer(remotePeerId: String, sdp: SessionDescription) {
+        send(SignalingMessage.Offer(remotePeerId, sdp.description))
+    }
+
+    fun sendAnswer(remotePeerId: String, sdp: SessionDescription) {
+        send(SignalingMessage.Answer(remotePeerId, sdp.description))
+    }
+
+    fun sendIceCandidate(candidate: IceCandidate) {
+        send(
+            SignalingMessage.IceCandidate(
+                sdpMid = candidate.sdpMid ?: "",
+                sdpMLineIndex = candidate.sdpMLineIndex,
+                sdp = candidate.sdp
+            )
+        )
+    }
+
+    private fun send(message: SignalingMessage) {
+        val jsonText = json.encodeToString(SignalingMessage.serializer(), message)
+        webSocket?.send(jsonText)
     }
 }
 
-// ✅ Signaling message models
 @Serializable
 sealed class SignalingMessage {
     @Serializable
-    data class Offer(val sdp: String) : SignalingMessage()
+    data class Offer(val to: String, val sdp: String) : SignalingMessage()
 
     @Serializable
-    data class Answer(val sdp: String) : SignalingMessage()
+    data class Answer(val to: String, val sdp: String) : SignalingMessage()
 
     @Serializable
     data class IceCandidate(
@@ -471,12 +643,12 @@ fun VideoCallScreen(viewModel: CallViewModel) {
     val remoteVideo by viewModel.remoteVideoTrack.collectAsState()
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // ✅ Remote video (full screen)
+        // Remote video (full screen)
         remoteVideo?.let { track ->
             AndroidView(
                 factory = { context ->
                     SurfaceViewRenderer(context).apply {
-                        init(EglBase.create().eglBaseContext, null)
+                        init(viewModel.eglBase.eglBaseContext, null)
                         track.addSink(this)
                     }
                 },
@@ -484,12 +656,12 @@ fun VideoCallScreen(viewModel: CallViewModel) {
             )
         }
 
-        // ✅ Local video (PiP)
+        // Local video (PiP)
         localVideo?.let { track ->
             AndroidView(
                 factory = { context ->
                     SurfaceViewRenderer(context).apply {
-                        init(EglBase.create().eglBaseContext, null)
+                        init(viewModel.eglBase.eglBaseContext, null)
                         setZOrderMediaOverlay(true)
                         track.addSink(this)
                     }
@@ -501,7 +673,7 @@ fun VideoCallScreen(viewModel: CallViewModel) {
             )
         }
 
-        // ✅ Call controls
+        // Call controls
         Row(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -534,29 +706,33 @@ fun VideoCallScreen(viewModel: CallViewModel) {
 
 **1. Server Infrastructure**:
 - STUN servers for public IP discovery
-- TURN servers for strict NAT traversal (critical!)
-- Signaling server for metadata exchange
+- TURN servers for strict NAT traversal (critical in real-world scenarios)
+- Signaling server for exchanging SDP and ICE candidates (WebSocket/HTTP with auth)
 
 **2. Resource Management**:
-- Stop video when app goes to background
-- Proper disposal of all tracks and connections
-- Manage audio focus via AudioManager
+- Pause/stop video when app goes to background (or follow product requirements)
+- Properly release tracks, sources, capturer, and PeerConnection
+- Manage audio focus via AudioManager / AudioAttributes
 
 **3. Performance**:
-- Adaptive bitrate based on network quality
-- Use FLAG_KEEP_SCREEN_ON
-- Monitor connection quality (ICE state)
+- Adaptive bitrate and resolution based on network conditions
+- Use FLAG_KEEP_SCREEN_ON while in active call
+- Monitor connection quality (ICE state, RTT, packet loss)
 
 **4. Error Handling**:
 ```kotlin
-// ✅ Handle ICE connection states
 override fun onIceConnectionChange(state: PeerConnection.IceConnectionState) {
     when (state) {
-        CONNECTED -> _callState.value = _callState.value.copy(isConnected = true)
-        FAILED, DISCONNECTED -> {
+        PeerConnection.IceConnectionState.CONNECTED ->
+            _callState.value = _callState.value.copy(isConnected = true)
+
+        PeerConnection.IceConnectionState.FAILED,
+        PeerConnection.IceConnectionState.DISCONNECTED -> {
             _callState.value = _callState.value.copy(isConnected = false)
             endCall()
         }
+
+        else -> Unit
     }
 }
 ```
@@ -569,7 +745,6 @@ override fun onIceConnectionChange(state: PeerConnection.IceConnectionState) {
 
 **❌ Missing runtime permissions**:
 ```kotlin
-// ✅ Correct
 val permissions = arrayOf(
     Manifest.permission.CAMERA,
     Manifest.permission.RECORD_AUDIO
@@ -579,17 +754,33 @@ requestPermissions(permissions, REQUEST_CODE)
 
 **❌ Resource leaks**:
 ```kotlin
-// ✅ Correct - dispose everything
 fun endCall() {
-    localAudioTrack?.dispose()
+    videoCapturer?.run {
+        try { stopCapture() } catch (_: Exception) {}
+        dispose()
+    }
+    videoCapturer = null
+
     localVideoTrack?.dispose()
-    videoCapturer?.stopCapture()
-    videoCapturer?.dispose()
+    localVideoTrack = null
+
+    localAudioTrack?.dispose()
+    localAudioTrack = null
+
     peerConnection?.close()
+    peerConnection = null
 }
 ```
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как реализовать шаринг экрана во время видеозвонка?
+- Как обрабатывать переподключение сети во время активного звонка?
+- Как реализовать групповые видеозвонки (несколько участников)?
+- Как оптимизировать расход батареи при длительных видеозвонках?
+- Как адаптировать качество связи в зависимости от состояния сети?
 
 ## Follow-ups
 
@@ -599,6 +790,13 @@ fun endCall() {
 - How to optimize battery consumption during long video calls?
 - How to handle call quality adaptation based on network conditions?
 
+## Ссылки (RU)
+
+- [WebRTC Official](https://webrtc.org/)
+- [WebRTC for Android](https://webrtc.github.io/webrtc-org/native-code/android/)
+- [Google Codelabs - WebRTC](https://codelabs.developers.google.com/codelabs/webrtc-web)
+- [STUN/TURN Server Setup](https://www.metered.ca/tools/openrelay/)
+
 ## References
 
 - [WebRTC Official](https://webrtc.org/)
@@ -606,13 +804,30 @@ fun endCall() {
 - [Google Codelabs - WebRTC](https://codelabs.developers.google.com/codelabs/webrtc-web)
 - [STUN/TURN Server Setup](https://www.metered.ca/tools/openrelay/)
 
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепты
+
+- [[c-android]]
+
+### Предпосылки (Проще)
+- [[q-http-protocols-comparison--android--medium]] - Понимание протоколов HTTP/WebSocket
+- [[q-parallel-network-calls-coroutines--kotlin--medium]] - Асинхронные сетевые операции
+
+### Родственные (Такой же уровень)
+- [[q-design-instagram-stories--android--hard]] - Работа с медиа
+- [[q-data-sync-unstable-network--android--hard]] - Надежность сети
+- [[q-design-whatsapp-app--android--hard]] - Реал-тайм обмен сообщениями
+
+### Продвинутые (Сложнее)
+- Проектирование масштабируемой системы видеоконференций
+- Реализация сквозного шифрования для видеозвонков
+
 ## Related Questions
 
 ### Prerequisites / Concepts
 
-- [[c-webrtc]]
-- [[c-websockets]]
-
+- [[c-android]]
 
 ### Prerequisites (Easier)
 - [[q-http-protocols-comparison--android--medium]] - Understanding HTTP/WebSocket protocols

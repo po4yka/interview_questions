@@ -3,18 +3,19 @@ id: android-402
 title: "Internal App Distribution / Внутреннее распространение приложения"
 aliases: [Beta Testing Distribution, Firebase App Distribution, Google Play Internal Testing, Internal App Distribution, Внутреннее распространение приложения]
 topic: android
-subtopics: [ci-cd, gradle, play-console]
+subtopics: [ci-cd, play-console]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-ci-cd-pipelines, c-gradle, q-android-app-bundles--android--easy]
-sources: [https://developer.android.com/distribute/best-practices/develop/in-app-review, https://firebase.google.com/docs/app-distribution]
+related: [c-gradle, q-android-app-bundles--android--easy]
+sources: ["https://developer.android.com/distribute/best-practices/develop/in-app-review", "https://firebase.google.com/docs/app-distribution"]
 created: 2025-10-15
-updated: 2025-10-30
-tags: [android/ci-cd, android/gradle, android/play-console, beta-testing, difficulty/medium, firebase]
+updated: 2025-11-10
+tags: [android/ci-cd, android/play-console, beta-testing, difficulty/medium, firebase]
+
 ---
 
 # Вопрос (RU)
@@ -44,11 +45,11 @@ plugins {
 android {
     buildTypes {
         getByName("debug") {
+            // Для примера: реальных секретов и service account файлов в app-модуле быть не должно
             firebaseAppDistribution {
-                artifactType = "APK"
+                artifactType = "APK" // или "AAB" в зависимости от артефакта сборки
                 releaseNotesFile = "release-notes/debug.txt"
                 groups = "qa-team, internal-testers"
-                serviceCredentialsFile = "firebase-service-account.json"
             }
         }
 
@@ -59,7 +60,8 @@ android {
 
             firebaseAppDistribution {
                 groups = "qa-team"
-                releaseNotes = generateReleaseNotes() // Auto-generated
+                // В реальном CI release notes обычно передаются параметром или из файла
+                releaseNotes = generateReleaseNotes()
             }
         }
     }
@@ -67,11 +69,15 @@ android {
 
 fun generateReleaseNotes(): String = buildString {
     appendLine("Build: ${System.getenv("BUILD_NUMBER") ?: "local"}")
-    appendLine("Commit: ${getGitCommitHash()}")
     appendLine("Changes:")
-    appendLine(getRecentCommits())
+    appendLine("- Auto-generated release notes")
 }
 ```
+
+(Для полноты на собеседовании кандидат должен упомянуть, что:
+- загрузка в Firebase App Distribution обычно выполняется из CI, используя service account через секреты;
+- артефакты: APK или AAB в зависимости от стратегии;
+- не допускается включать service account JSON в репозиторий или APK.)
 
 **CI/CD Integration (GitHub Actions)**
 
@@ -91,8 +97,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Build APK
-        run: ./gradlew assembleDebug
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build QA APK
+        run: ./gradlew assembleQa
 
       - name: Upload to Firebase
         uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -100,15 +112,15 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           groups: qa-team, internal-testers
-          file: app/build/outputs/apk/debug/app-debug.apk
-          releaseNotes: ${{ steps.release_notes.outputs.RELEASE_NOTES }}
+          file: app/build/outputs/apk/qa/app-qa.apk
+          releaseNotes: "Automated QA build from CI"
 
       - name: Notify Slack
         uses: slackapi/slack-github-action@v1
         with:
           payload: |
             {
-              "text": "✅ New build available: #${{ github.run_number }}"
+              "text": "New QA build available: #${{ github.run_number }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -137,7 +149,7 @@ class FeedbackManager @Inject constructor(
                 "buildNumber" to BuildConfig.VERSION_CODE
             )
 
-            screenshot?.let { feedbackData["screenshot"] = uploadScreenshot(it) }
+            screenshot?.let { /* uploadScreenshot(it) и сохранить ссылку */ }
 
             firestore.collection("feedback")
                 .add(feedbackData)
@@ -169,9 +181,11 @@ enum class FeedbackType {
 }
 ```
 
+(Код приведён как схема: для production-решения нужно реализовать uploadScreenshot и продумать права доступа к данным.)
+
 ### Google Play Internal Testing
 
-**Play Console API Integration**
+**Play Console API Integration (упрощённый пример)**
 
 ```kotlin
 class PlayConsoleUploader @Inject constructor(
@@ -182,6 +196,7 @@ class PlayConsoleUploader @Inject constructor(
         apkFile: File,
         releaseNotes: String
     ) {
+        // В реальном проекте следует использовать актуальную версию Google API Client / REST
         val credential = GoogleCredential.fromStream(
             serviceAccountKey.byteInputStream()
         ).createScoped(AndroidPublisherScopes.all())
@@ -192,24 +207,25 @@ class PlayConsoleUploader @Inject constructor(
             credential
         ).setApplicationName("AppDistributionTool").build()
 
-        // Create edit
         val edit = publisher.edits().insert(packageName, null).execute()
         val editId = edit.id
 
         try {
-            // Upload APK
             val apkUpload = publisher.edits().apks()
-                .upload(packageName, editId, FileContent("application/vnd.android.package-archive", apkFile))
+                .upload(
+                    packageName,
+                    editId,
+                    FileContent("application/vnd.android.package-archive", apkFile)
+                )
                 .execute()
 
-            // Assign to internal track
             val track = Track().apply {
-                this.track = "internal"
+                track = "internal"
                 releases = listOf(
                     TrackRelease().apply {
                         versionCodes = listOf(apkUpload.versionCode.toLong())
                         status = "completed"
-                        this.releaseNotes = listOf(
+                        releaseNotes = listOf(
                             LocalizedText().apply {
                                 language = "en-US"
                                 text = releaseNotes
@@ -231,6 +247,10 @@ class PlayConsoleUploader @Inject constructor(
     }
 }
 ```
+
+(Важно: Internal Testing в Play Console:
+- распространяет приложение через Play Store с соблюдением политик и подписи через Play;
+- подходит для быстрого распространения среди доверенных тестировщиков.)
 
 ### Enterprise Distribution (MDM)
 
@@ -259,7 +279,7 @@ class EnterpriseManagedConfig {
 }
 ```
 
-**MDM Compliance Checking**
+**MDM Compliance Checking (пример)**
 
 ```kotlin
 @Singleton
@@ -278,24 +298,26 @@ class MdmComplianceChecker @Inject constructor(
             as DevicePolicyManager
         val issues = mutableListOf<String>()
 
-        // ✅ Check encryption
+        // Check encryption (пример проверки)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (dpm.storageEncryptionStatus != DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE) {
                 issues.add("Device storage not encrypted")
             }
         }
 
-        // ✅ Check screen lock
+        // Check screen lock policy
         if (!dpm.isActivePasswordSufficient) {
             issues.add("Screen lock insufficient")
         }
 
-        // ❌ Check developer options
+        // Пример дополнительной проверки: наличие включенных developer options может
+        // рассматриваться политикой компании как риск
         if (Settings.Global.getInt(
             context.contentResolver,
             Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0
-        ) == 1) {
-            issues.add("Developer options enabled")
+        ) == 1
+        ) {
+            issues.add("Developer options enabled (review per policy)")
         }
 
         return ComplianceResult(issues.isEmpty(), issues)
@@ -312,51 +334,51 @@ data class ComplianceResult(
 
 **1. Test Group Management**
 - Сегментация: QA, beta-testers, stakeholders, internal
-- Rotation тестировщиков для избежания feedback bias
-- Четкие guidelines для каждой группы
-- Ограниченный размер групп (10-50 человек)
+- Ротация тестировщиков для избежания feedback bias
+- Чёткие guidelines для каждой группы
+- Контролируемый размер групп (например, 10–50 человек на сценарий)
 
 **2. Release Notes Automation**
-- Auto-generate из git commits
+- Автоматическая генерация из git commits или changelog
 - Включать build number + commit hash
-- Highlight breaking changes и known issues
-- Ссылка на detailed changelog
+- Выделять breaking changes и known issues
+- Давать ссылку на подробный changelog
 
 **3. Feedback Collection**
-- In-app механизм (shake to report)
-- Auto-capture screenshots и device info
-- Категоризация (bug/feature/UX)
-- Follow-up с тестировщиками
+- In-app механизм (shake to report / отдельный экран)
+- Автоматический захват скриншота и device info
+- Категоризация (bug/feature/UX и т.п.)
+- Follow-up с тестировщиками по критичным репортам
 
 **4. CI/CD Automation**
 - Автоматическая сборка на commit в develop/staging
-- Автоматический upload в Firebase/Play Console
-- Notifications в Slack/Teams
-- Monitoring download и feedback metrics
+- Автоматическая загрузка в Firebase App Distribution или Play Internal Testing
+- Уведомления в Slack/Teams
+- Мониторинг загрузок и объёма/качества обратной связи
 
 **5. Security**
-- ✅ Protect service account credentials (secrets management)
-- ✅ Use short-lived access tokens
-- ✅ Restrict distribution to trusted testers
-- ❌ Не включать debug features в production builds
-- ❌ Не хранить credentials в git
+- Хранить service account credentials только в секретах CI/CD
+- Использовать short-lived tokens, где возможно
+- Ограничивать доступ к сборкам только доверенным тестировщикам
+- Не включать debug-фичи и чувствительные флаги в production builds
+- Не хранить credentials в git/в APK
 
 ### Common Pitfalls
 
-❌ **Manual distribution**: Медленно и error-prone
-❌ **Poor release notes**: Тестировщики не знают что тестировать
-❌ **No feedback mechanism**: Невозможно собрать structured feedback
-❌ **Mixing test groups**: Путаница в feedback от разных аудиторий
-❌ **Ignored feedback**: Тестировщики теряют motivation
+- Ручное распространение: медленно и подвержено ошибкам
+- Плохие release notes: тестировщики не знают, что тестировать
+- Отсутствие feedback-механизма: невозможно собрать структурированный feedback
+- Смешивание тестовых групп: путаница в обратной связи
+- Игнорирование feedback: тестировщики теряют мотивацию
 
 ### Summary
 
 Ключевые компоненты внутреннего распространения:
-- **Firebase App Distribution**: Быстрое автоматизированное распространение
-- **Google Play Internal Testing**: Official pre-release трек (до 100 тестировщиков)
-- **Enterprise MDM**: Managed configuration для корпоративных устройств
-- **In-App Feedback**: Structured сбор отзывов с device info
-- **CI/CD Integration**: Полностью автоматизированный pipeline
+- Firebase App Distribution: быстрое автоматизированное распространение билдов напрямую тестировщикам
+- Google Play Internal Testing: официальный pre-release трек через Play Store для доверенных тестеров
+- Enterprise MDM: managed configuration и контроль политики для корпоративных устройств
+- In-App Feedback: структурированный сбор отзывов с device info
+- CI/CD Integration: полностью автоматизированный pipeline от коммита до дистрибуции
 
 ## Answer (EN)
 
@@ -375,11 +397,11 @@ plugins {
 android {
     buildTypes {
         getByName("debug") {
+            // Example only: do not keep real secrets or service account files in the app module
             firebaseAppDistribution {
-                artifactType = "APK"
+                artifactType = "APK" // or "AAB" depending on your artifact
                 releaseNotesFile = "release-notes/debug.txt"
                 groups = "qa-team, internal-testers"
-                serviceCredentialsFile = "firebase-service-account.json"
             }
         }
 
@@ -390,7 +412,8 @@ android {
 
             firebaseAppDistribution {
                 groups = "qa-team"
-                releaseNotes = generateReleaseNotes() // Auto-generated
+                // In real CI pipelines, release notes are usually provided via params or file
+                releaseNotes = generateReleaseNotes()
             }
         }
     }
@@ -398,11 +421,15 @@ android {
 
 fun generateReleaseNotes(): String = buildString {
     appendLine("Build: ${System.getenv("BUILD_NUMBER") ?: "local"}")
-    appendLine("Commit: ${getGitCommitHash()}")
     appendLine("Changes:")
-    appendLine(getRecentCommits())
+    appendLine("- Auto-generated release notes")
 }
 ```
+
+(For interviews, the candidate should note that:
+- Firebase App Distribution upload is typically done from CI using a service account injected via secrets;
+- artifacts can be APK or AAB depending on distribution strategy;
+- service account JSON must not be committed to repo or packaged into the app.)
 
 **CI/CD Integration (GitHub Actions)**
 
@@ -422,8 +449,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Build APK
-        run: ./gradlew assembleDebug
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - name: Build QA APK
+        run: ./gradlew assembleQa
 
       - name: Upload to Firebase
         uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -431,15 +464,15 @@ jobs:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           groups: qa-team, internal-testers
-          file: app/build/outputs/apk/debug/app-debug.apk
-          releaseNotes: ${{ steps.release_notes.outputs.RELEASE_NOTES }}
+          file: app/build/outputs/apk/qa/app-qa.apk
+          releaseNotes: "Automated QA build from CI"
 
       - name: Notify Slack
         uses: slackapi/slack-github-action@v1
         with:
           payload: |
             {
-              "text": "✅ New build available: #${{ github.run_number }}"
+              "text": "New QA build available: #${{ github.run_number }}"
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
@@ -468,7 +501,7 @@ class FeedbackManager @Inject constructor(
                 "buildNumber" to BuildConfig.VERSION_CODE
             )
 
-            screenshot?.let { feedbackData["screenshot"] = uploadScreenshot(it) }
+            screenshot?.let { /* uploadScreenshot(it) and store URL */ }
 
             firestore.collection("feedback")
                 .add(feedbackData)
@@ -500,9 +533,11 @@ enum class FeedbackType {
 }
 ```
 
+(Note: this is a conceptual example; production code must implement screenshot upload and secure data access.)
+
 ### Google Play Internal Testing
 
-**Play Console API Integration**
+**Play Console API Integration (simplified example)**
 
 ```kotlin
 class PlayConsoleUploader @Inject constructor(
@@ -513,6 +548,7 @@ class PlayConsoleUploader @Inject constructor(
         apkFile: File,
         releaseNotes: String
     ) {
+        // In a real project use the current Google API Client / REST approach
         val credential = GoogleCredential.fromStream(
             serviceAccountKey.byteInputStream()
         ).createScoped(AndroidPublisherScopes.all())
@@ -523,24 +559,25 @@ class PlayConsoleUploader @Inject constructor(
             credential
         ).setApplicationName("AppDistributionTool").build()
 
-        // Create edit
         val edit = publisher.edits().insert(packageName, null).execute()
         val editId = edit.id
 
         try {
-            // Upload APK
             val apkUpload = publisher.edits().apks()
-                .upload(packageName, editId, FileContent("application/vnd.android.package-archive", apkFile))
+                .upload(
+                    packageName,
+                    editId,
+                    FileContent("application/vnd.android.package-archive", apkFile)
+                )
                 .execute()
 
-            // Assign to internal track
             val track = Track().apply {
-                this.track = "internal"
+                track = "internal"
                 releases = listOf(
                     TrackRelease().apply {
                         versionCodes = listOf(apkUpload.versionCode.toLong())
                         status = "completed"
-                        this.releaseNotes = listOf(
+                        releaseNotes = listOf(
                             LocalizedText().apply {
                                 language = "en-US"
                                 text = releaseNotes
@@ -562,6 +599,10 @@ class PlayConsoleUploader @Inject constructor(
     }
 }
 ```
+
+(Key points about Play Console Internal Testing:
+- installs via Google Play, enforcing Play policies and app signing;
+- suitable for fast distribution to trusted testers.)
 
 ### Enterprise Distribution (MDM)
 
@@ -590,7 +631,7 @@ class EnterpriseManagedConfig {
 }
 ```
 
-**MDM Compliance Checking**
+**MDM Compliance Checking (example)**
 
 ```kotlin
 @Singleton
@@ -609,24 +650,25 @@ class MdmComplianceChecker @Inject constructor(
             as DevicePolicyManager
         val issues = mutableListOf<String>()
 
-        // ✅ Check encryption
+        // Check encryption (example)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (dpm.storageEncryptionStatus != DevicePolicyManager.ENCRYPTION_STATUS_ACTIVE) {
                 issues.add("Device storage not encrypted")
             }
         }
 
-        // ✅ Check screen lock
+        // Check screen lock policy
         if (!dpm.isActivePasswordSufficient) {
             issues.add("Screen lock insufficient")
         }
 
-        // ❌ Check developer options
+        // Example: depending on corporate policy, enabled developer options may be considered a risk
         if (Settings.Global.getInt(
             context.contentResolver,
             Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0
-        ) == 1) {
-            issues.add("Developer options enabled")
+        ) == 1
+        ) {
+            issues.add("Developer options enabled (review per policy)")
         }
 
         return ComplianceResult(issues.isEmpty(), issues)
@@ -645,49 +687,49 @@ data class ComplianceResult(
 - Segmentation: QA, beta-testers, stakeholders, internal
 - Rotate testers to avoid feedback bias
 - Clear guidelines for each group
-- Limited group sizes (10-50 people)
+- Controlled group sizes (e.g., 10–50 people per scenario)
 
 **2. Release Notes Automation**
-- Auto-generate from git commits
+- Auto-generate from git commits or changelog
 - Include build number + commit hash
 - Highlight breaking changes and known issues
 - Link to detailed changelog
 
 **3. Feedback Collection**
-- In-app mechanism (shake to report)
+- In-app mechanism (shake to report / dedicated screen)
 - Auto-capture screenshots and device info
-- Categorization (bug/feature/UX)
-- Follow-up with testers
+- Categorization (bug/feature/UX, etc.)
+- Follow up with testers on critical reports
 
 **4. CI/CD Automation**
 - Automatic build on commit to develop/staging
-- Automatic upload to Firebase/Play Console
+- Automatic upload to Firebase App Distribution or Play Internal Testing
 - Notifications to Slack/Teams
 - Monitor download and feedback metrics
 
 **5. Security**
-- ✅ Protect service account credentials (secrets management)
-- ✅ Use short-lived access tokens
-- ✅ Restrict distribution to trusted testers
-- ❌ Don't include debug features in production builds
-- ❌ Don't store credentials in git
+- Store service account credentials only in CI/CD secrets
+- Use short-lived tokens where possible
+- Restrict distribution to trusted testers
+- Do not ship debug-only features and sensitive flags in production builds
+- Do not store credentials in git or inside the APK
 
 ### Common Pitfalls
 
-❌ **Manual distribution**: Slow and error-prone
-❌ **Poor release notes**: Testers don't know what to test
-❌ **No feedback mechanism**: Can't collect structured feedback
-❌ **Mixing test groups**: Confusion in feedback from different audiences
-❌ **Ignored feedback**: Testers lose motivation
+- Manual distribution: slow and error-prone
+- Poor release notes: testers don't know what to test
+- No feedback mechanism: can't collect structured feedback
+- Mixing test groups: confusion in feedback from different audiences
+- Ignored feedback: testers lose motivation
 
 ### Summary
 
 Key components of internal distribution:
-- **Firebase App Distribution**: Rapid automated distribution
-- **Google Play Internal Testing**: Official pre-release track (up to 100 testers)
-- **Enterprise MDM**: Managed configuration for corporate devices
-- **In-App Feedback**: Structured feedback collection with device info
-- **CI/CD Integration**: Fully automated pipeline
+- Firebase App Distribution: fast automated distribution of builds directly to testers
+- Google Play Internal Testing: official pre-release track via Play Store for trusted testers
+- Enterprise MDM: managed configuration and policy control for corporate devices
+- In-App Feedback: structured feedback collection with device info
+- CI/CD Integration: fully automated pipeline from commit to distribution
 
 ---
 
@@ -702,7 +744,6 @@ Key components of internal distribution:
 ## References
 
 - [[c-gradle]] - Build system configuration
-- [[c-ci-cd-pipelines]] - Continuous integration and deployment
 - Firebase App Distribution: https://firebase.google.com/docs/app-distribution
 - Play Console Internal Testing: https://support.google.com/googleplay/android-developer/answer/9845334
 - Android Enterprise: https://developers.google.com/android/work
@@ -710,11 +751,9 @@ Key components of internal distribution:
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-app-bundles--android--easy]] - App Bundle format for distribution
+- [[q-android-app-bundles--android--easy]] - App `Bundle` format for distribution
 - [[q-gradle-basics--android--easy]] - Gradle build system fundamentals
 
 ### Related (Same Level)
 
 ### Advanced (Harder)
-- [[q-feature-flags-remote-config--android--hard]] - Dynamic feature rollout
-- [[q-security-obfuscation--android--hard]] - Code obfuscation for beta builds

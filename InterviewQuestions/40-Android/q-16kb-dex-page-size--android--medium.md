@@ -38,81 +38,101 @@ tags: [android/gradle, android/performance-memory, difficulty/medium]
 
 ## Ответ (RU)
 
-Проблема размера страницы DEX 16KB - это проблема выравнивания памяти в Android 6.0+, вызывающая раздувание размера приложения при оптимизации с R8/ProGuard.
+Проблема «16KB DEX page size» относится к тому, как DEX-код и связанные данные выравниваются и отображаются страницами памяти (обычно 16 КБ) в рантайме ART на некоторых версиях Android. Определённые варианты раскладки DEX могут приводить к неэффективному использованию 16 КБ страниц и, как следствие, к заметному росту размера установочного артефакта и к большему объёму загружаемых данных.
 
-**Причина**: Android использует страницы по 16 KB для DEX-файлов. ID методов выравниваются по границам страниц, создавая пустое место:
+Это не баг R8/ProGuard как таковых, а эффект того, как их оптимизации (переупаковка, переупорядочивание, уменьшение числа методов/классов) взаимодействуют с 16 КБ выравниванием секций/страниц.
+
+**Причина (упрощённо)**: при загрузке и оптимизации DEX рантайм использует страницы фиксированного размера (16 КБ). Если данные (классы, методы, таблицы индексов и др.) размещены так, что границы страниц попадают в «неудачные» места, часть пространства на странице остаётся неиспользованной, а следующий блок данных переносится на новую страницу. При определённом расположении и количестве методов это может накопить значительное количество «пустого» пространства.
+
+Условная иллюстрация:
 
 ```
-Без выравнивания: [Header][Strings][Methods][Code]
-С выравниванием:  [Header][Strings][Padding][Methods][Code]  ✅ Правильно
-                                   ^^^^^^^^ Потерянное место   ❌ Неэффективно
+Оптимально:      [Data A.......][Data B.......]
+Неоптимально:    [Data A..padding][Data B......]
+                             ^^^^^ Потерянное место
 ```
 
-**Влияние**:
-- Малые приложения (< 5 MB): +20-40% размера
-- Большие приложения (> 50 MB): +5-15% размера
+**Влияние (типично, не гарантированно)**:
+- Малые приложения (< 5 MB): рост размера может достигать ~20–40%
+- Большие приложения (> 50 MB): увеличение обычно меньше, порядка нескольких–десяти процентов
 
-**Решение**:
+Фактический эффект зависит от структуры DEX, порядка методов/классов и конфигурации сборки.
+
+**Решение / смягчение**:
+
+- Использовать актуальные версии Android Gradle Plugin (AGP), D8 и R8, в которых реализованы улучшения раскладки DEX и упаковки.
+- Включить минификацию и шринк ресурсов для релизных сборок, но отслеживать реальные размеры артефактов, так как изменения порядка/количества элементов могут как уменьшить, так и увеличить потери на выравнивании.
+
+Пример базовой конфигурации:
+
 ```kotlin
-// ✅ Обновить AGP до последней версии
 plugins {
-    id("com.android.application") version "8.2+"  // ✅ Автоматическая оптимизация
+    id("com.android.application") version "8.2+" // пример актуальной версии; используйте свежий AGP
 }
 
-// ✅ Включить R8
 android {
     buildTypes {
         release {
-            isMinifyEnabled = true          // ✅ Обязательно
-            isShrinkResources = true        // ✅ Рекомендуется
+            isMinifyEnabled = true          // Включает R8 (AGP 3.4+ по умолчанию вместо ProGuard)
+            isShrinkResources = true        // Дополнительное уменьшение размера APK/AAB
         }
     }
 }
 ```
 
 **Лучшие практики**:
-- Использовать App Bundle вместо APK
-- Мониторить размер в CI/CD
+- Использовать App Bundle вместо монолитного APK, чтобы уменьшить итоговый размер загружаемого пользователю пакета.
+- Мониторить размер DEX и финальных артефактов в CI/CD и сравнивать сборки при изменении конфигурации R8/AGP.
 
 ---
 
 ## Answer (EN)
 
-The 16 KB DEX page size issue is a memory alignment problem affecting Android 6.0+ that causes app bloat when optimized with R8/ProGuard.
+The "16KB DEX page size" issue refers to how DEX code and related data are laid out and mapped into memory using fixed-size pages (commonly 16 KB) by the ART runtime on some Android versions. Certain DEX layouts can lead to inefficient use of these 16 KB pages, causing noticeable increases in installable artifact size and the amount of data that must be loaded.
 
-**Cause**: Android uses 16 KB pages for DEX files. Method IDs align to page boundaries, creating wasted padding:
+This is not a bug in R8/ProGuard themselves. Instead, their optimizations (repackaging, reordering, shrinking methods/classes) can interact with 16 KB page alignment of sections/pages in a way that exposes or worsens padding overhead.
+
+**Cause (simplified)**: when DEX files are loaded/optimized, the runtime works with fixed-size memory pages (e.g., 16 KB). If sections of the DEX (classes, methods, index tables, etc.) are arranged such that page boundaries cut through them unfavorably, part of a page can remain unused while the next section is pushed onto a new page. Depending on method/class counts and ordering, this accumulated padding can become significant.
+
+Illustrative view:
 
 ```
-Without alignment: [Header][Strings][Methods][Code]
-With alignment:    [Header][Strings][Padding][Methods][Code]  ✅ Correct
-                                    ^^^^^^^^ Wasted space      ❌ Inefficient
+Optimal:       [Data A.......][Data B.......]
+Suboptimal:    [Data A..padding][Data B......]
+                          ^^^^^ Wasted space
 ```
 
-**Impact**:
-- Small apps (< 5 MB): +20-40% size increase
-- Large apps (> 50 MB): +5-15% size increase
+**Impact (typical, not guaranteed)**:
+- Small apps (< 5 MB): size increase can reach roughly ~20–40%
+- Large apps (> 50 MB): increases are usually smaller, on the order of several to low tens of percent
 
-**Solution**:
+The actual impact depends on DEX structure, method/class ordering, and build configuration.
+
+**Mitigation / solution**:
+
+- Use up-to-date versions of the Android Gradle Plugin (AGP), D8, and R8, which include improvements to DEX layout and packing.
+- Enable code shrinking and resource shrinking for release builds, while monitoring resulting artifact sizes, since changes in ordering/counts can either reduce or, in some edge cases, increase alignment-related padding.
+
+Example baseline configuration:
+
 ```kotlin
-// ✅ Upgrade to latest AGP
 plugins {
-    id("com.android.application") version "8.2+"  // ✅ Auto-optimization
+    id("com.android.application") version "8.2+" // example of a recent AGP; prefer latest stable
 }
 
-// ✅ Enable R8
 android {
     buildTypes {
         release {
-            isMinifyEnabled = true          // ✅ Required
-            isShrinkResources = true        // ✅ Recommended
+            isMinifyEnabled = true          // Enables R8 (default instead of ProGuard in AGP 3.4+)
+            isShrinkResources = true        // Further reduces APK/AAB size
         }
     }
 }
 ```
 
 **Best practices**:
-- Use App Bundle instead of APK
-- Monitor size in CI/CD
+- Use App Bundles instead of a single universal APK to reduce what each user downloads.
+- Track DEX and artifact sizes in CI/CD and compare builds when changing R8/AGP configurations.
 
 ---
 

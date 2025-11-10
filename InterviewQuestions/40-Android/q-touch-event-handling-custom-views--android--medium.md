@@ -31,13 +31,14 @@ tags:
 - gestures
 - touch-events
 - views
+
 ---
 
 # Вопрос (RU)
-> Как обрабатывать события касания в пользовательских View? Объясните механизм диспетчеризации, разницу между onTouchEvent() и onInterceptTouchEvent(), и как реализовать пользовательские жесты.
+> Как обрабатывать события касания в пользовательских `View`? Объясните механизм диспетчеризации, разницу между `onTouchEvent()` и `onInterceptTouchEvent()`, и как реализовать пользовательские жесты.
 
 # Question (EN)
-> How do you handle touch events in custom views? Explain the touch event dispatch mechanism, the difference between onTouchEvent() and onInterceptTouchEvent(), and how to implement custom gestures.
+> How do you handle touch events in custom views? Explain the touch event dispatch mechanism, the difference between `onTouchEvent()` and `onInterceptTouchEvent()`, and how to implement custom gestures.
 
 ---
 
@@ -45,22 +46,26 @@ tags:
 
 ### Механизм Диспетчеризации Событий
 
-Android использует трехэтапный механизм обработки касаний:
+Android использует цепочку диспетчеризации касаний через активность и иерархию `View`:
 
 ```
 Activity.dispatchTouchEvent()
+    ↓
+Window / DecorView
     ↓
 ViewGroup.dispatchTouchEvent()
     ↓
 ViewGroup.onInterceptTouchEvent() → true? → ViewGroup.onTouchEvent()
     ↓ false
+Child.dispatchTouchEvent()
+    ↓
 Child.onTouchEvent()
 ```
 
 **Ключевые принципы:**
-- Если View возвращает `true` из `ACTION_DOWN`, она получит все последующие события
-- `onInterceptTouchEvent()` позволяет родителю "украсть" события у детей
-- `ACTION_CANCEL` отправляется, когда родитель перехватывает события
+- Если `View` возвращает `true` на `ACTION_DOWN` (через `onTouchEvent()` или обработчик), система считает, что она хочет обрабатывать этот жест, и будет направлять ей последующие события того же жеста, пока родитель не перехватит или событие не будет отменено (`ACTION_CANCEL`).
+- `onInterceptTouchEvent()` позволяет родительскому `ViewGroup` решать, отправлять ли события детям или перехватить их и обрабатывать самому. Решение обычно принимается начиная с `ACTION_DOWN` и может измениться на `MOVE` при выполнении условий (например, превышен `touchSlop`).
+- Когда родитель начинает перехватывать уже идущий жест, дочерняя `View` получает `ACTION_CANCEL` и больше не будет получать события этого жеста.
 
 ### Базовая Обработка Касаний
 
@@ -71,31 +76,47 @@ class DraggableView @JvmOverloads constructor(
 
     private var lastX = 0f
     private var lastY = 0f
+    private var isDragging = false
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
+        when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 lastX = event.x
                 lastY = event.y
-                parent.requestDisallowInterceptTouchEvent(true) // ✅ Запретить родителю перехватывать
-                return true // ✅ Обязательно вернуть true для получения последующих событий
+                parent?.requestDisallowInterceptTouchEvent(true) // ✅ Запретить родителю перехватывать, пока обрабатываем жест
+                // Возвращаем true, если хотим взять под контроль этот жест
+                return true
             }
 
             MotionEvent.ACTION_MOVE -> {
                 val dx = event.x - lastX
                 val dy = event.y - lastY
+                if (dx != 0f || dy != 0f) {
+                    isDragging = true
+                }
                 translationX += dx
                 translationY += dy
                 return true
             }
 
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                parent.requestDisallowInterceptTouchEvent(false)
-                performClick() // ✅ Для доступности
+            MotionEvent.ACTION_UP -> {
+                parent?.requestDisallowInterceptTouchEvent(false)
+                if (!isDragging) {
+                    // Обрабатываем как клик, только если фактически не было перетаскивания
+                    performClick()
+                }
+                isDragging = false
+                return true
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                parent?.requestDisallowInterceptTouchEvent(false)
+                // Жест отменён, клик не вызываем
+                isDragging = false
                 return true
             }
         }
-        return super.onTouchEvent(event) // ❌ Если забыть return true в ACTION_DOWN
+        return super.onTouchEvent(event)
     }
 
     override fun performClick(): Boolean {
@@ -105,7 +126,7 @@ class DraggableView @JvmOverloads constructor(
 }
 ```
 
-### Использование GestureDetector
+### Использование `GestureDetector`
 
 `GestureDetector` обрабатывает стандартные жесты: tap, double-tap, long-press, fling, scroll.
 
@@ -117,7 +138,10 @@ class GestureView @JvmOverloads constructor(
     private val gestureDetector = GestureDetector(
         context,
         object : GestureDetector.SimpleOnGestureListener() {
-            override fun onDown(e: MotionEvent) = true // ✅ Обязательно true
+            override fun onDown(e: MotionEvent): Boolean {
+                // ✅ Должен вернуть true, чтобы получить последующие события для жестов
+                return true
+            }
 
             override fun onSingleTapUp(e: MotionEvent): Boolean {
                 performClick()
@@ -130,21 +154,27 @@ class GestureView @JvmOverloads constructor(
                 velocityX: Float,
                 velocityY: Float
             ): Boolean {
-                // Обработка свайпа
+                // Обработка свайпа / флинга
                 return true
             }
         }
     )
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        // ✅ Полагаться на GestureDetector; super вызываем только если он не обработал
         return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+        return true
     }
 }
 ```
 
-### Перехват Событий В ViewGroup
+### Перехват Событий в `ViewGroup`
 
-`onInterceptTouchEvent()` позволяет родителю перехватывать события:
+`onInterceptTouchEvent()` позволяет родителю перехватывать события до того, как они дойдут до детей:
 
 ```kotlin
 class SwipeToDeleteLayout @JvmOverloads constructor(
@@ -152,37 +182,62 @@ class SwipeToDeleteLayout @JvmOverloads constructor(
 ) : FrameLayout(context, attrs) {
 
     private var startX = 0f
+    private var isSwiping = false
+
+    private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
+        when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 startX = event.x
-                return false // ✅ Не перехватывать, дать детям попробовать
+                isSwiping = false
+                // Не перехватываем сразу, дадим детям шанс
+                return false
             }
 
             MotionEvent.ACTION_MOVE -> {
                 val deltaX = event.x - startX
-                if (abs(deltaX) > touchSlop) { // ❌ Перехватить только при превышении порога
-                    return true // Начать перехват
+                if (kotlin.math.abs(deltaX) > touchSlop) {
+                    // ✅ Начинаем перехватывать, как только понимаем, что это наш жест
+                    isSwiping = true
+                    return true
                 }
+            }
+
+            MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
+                isSwiping = false
             }
         }
         return false
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
+        when (event.actionMasked) {
             MotionEvent.ACTION_MOVE -> {
-                translationX = event.x - startX
-                return true
-            }
-            MotionEvent.ACTION_UP -> {
-                if (abs(translationX) > width / 2) {
-                    animate().translationX(width.toFloat()).alpha(0f).start()
-                } else {
-                    animate().translationX(0f).start()
+                if (isSwiping) {
+                    translationX = event.x - startX
+                    return true
                 }
-                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                if (isSwiping) {
+                    if (kotlin.math.abs(translationX) > width / 2) {
+                        animate().translationX(width.toFloat()).alpha(0f).start()
+                    } else {
+                        animate().translationX(0f).start()
+                    }
+                    isSwiping = false
+                    return true
+                }
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                if (isSwiping) {
+                    animate().translationX(0f).start()
+                    isSwiping = false
+                    return true
+                }
             }
         }
         return super.onTouchEvent(event)
@@ -190,7 +245,7 @@ class SwipeToDeleteLayout @JvmOverloads constructor(
 }
 ```
 
-### Мультитач И ScaleGestureDetector
+### Мультитач и `ScaleGestureDetector`
 
 ```kotlin
 class ZoomableView @JvmOverloads constructor(
@@ -212,6 +267,7 @@ class ZoomableView @JvmOverloads constructor(
     )
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        // Передаём все события детектору. Возвращаем true, если этот View всегда обрабатывает масштабирование.
         scaleDetector.onTouchEvent(event)
         return true
     }
@@ -225,51 +281,71 @@ class ZoomableView @JvmOverloads constructor(
 }
 ```
 
-### Отслеживание Скорости (VelocityTracker)
+### Отслеживание Скорости (`VelocityTracker`)
 
 ```kotlin
 class FlingView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    private val velocityTracker = VelocityTracker.obtain()
+    private var velocityTracker: VelocityTracker? = null
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        velocityTracker.addMovement(event) // ✅ Добавить движение
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> return true
-            MotionEvent.ACTION_UP -> {
-                velocityTracker.computeCurrentVelocity(1000) // px/sec
-                val velocityX = velocityTracker.xVelocity
-
-                if (abs(velocityX) > minFlingVelocity) {
-                    startFlingAnimation(velocityX)
+        when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                if (velocityTracker == null) {
+                    velocityTracker = VelocityTracker.obtain()
+                } else {
+                    velocityTracker?.clear()
                 }
+                velocityTracker?.addMovement(event)
+                return true
+            }
 
-                velocityTracker.clear() // ✅ Очистить для следующего жеста
+            MotionEvent.ACTION_MOVE -> {
+                velocityTracker?.addMovement(event)
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                velocityTracker?.apply {
+                    addMovement(event)
+                    computeCurrentVelocity(1000) // px/sec
+                    val velocityX = xVelocity
+
+                    val vc = ViewConfiguration.get(context)
+                    val minFlingVelocity = vc.scaledMinimumFlingVelocity
+
+                    if (kotlin.math.abs(velocityX) > minFlingVelocity) {
+                        startFlingAnimation(velocityX)
+                    }
+
+                    recycle()
+                }
+                velocityTracker = null
+                return true
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                velocityTracker?.recycle()
+                velocityTracker = null
                 return true
             }
         }
         return super.onTouchEvent(event)
     }
-
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        velocityTracker.recycle() // ✅ Освободить ресурсы
-    }
 }
 ```
 
-### Лучшие Практики
+### Лучшие практики
 
-1. **Возвращайте true из ACTION_DOWN** — иначе не получите последующие события
-2. **Переопределяйте performClick()** — для accessibility services
-3. **Обрабатывайте ACTION_CANCEL** — родитель может отменить жест
-4. **Используйте requestDisallowInterceptTouchEvent(true)** — когда нужен эксклюзивный контроль
-5. **Освобождайте VelocityTracker** — вызывайте recycle() в onDetachedFromWindow()
-6. **Предоставляйте тактильную обратную связь** — performHapticFeedback() для улучшения UX
-7. **Проверяйте границы** — используйте ViewConfiguration.get(context).scaledTouchSlop
+1. Возвращайте `true` из `ACTION_DOWN`, когда `View` намерена обрабатывать жест — иначе система не закрепит за ней последующие события этого жеста.
+2. Переопределяйте `performClick()` — для поддержки accessibility-сервисов и единообразной обработки кликов.
+3. Обрабатывайте `ACTION_CANCEL` — родитель или система могут отменить жест (перехват, системный жест и т.п.).
+4. Используйте `requestDisallowInterceptTouchEvent(true)` — когда дочернему `View` требуется эксклюзивный контроль над жестом (например, горизонтальный скролл внутри вертикального).
+5. Корректно управляйте `VelocityTracker` — очищайте/рециклируйте при завершении/отмене жеста, избегайте утечек.
+6. Предоставляйте тактильную обратную связь — `performHapticFeedback()` улучшает UX для важных действий.
+7. Используйте `ViewConfiguration` — `scaledTouchSlop`, `scaledMinimumFlingVelocity` и т.п. для устойчивого поведения на разных устройствах.
 
 ---
 
@@ -277,22 +353,26 @@ class FlingView @JvmOverloads constructor(
 
 ### Touch Event Dispatch Mechanism
 
-Android uses a three-stage touch handling mechanism:
+Android uses a touch dispatch chain through the `Activity` and the `View` hierarchy:
 
 ```
 Activity.dispatchTouchEvent()
+    ↓
+Window / DecorView
     ↓
 ViewGroup.dispatchTouchEvent()
     ↓
 ViewGroup.onInterceptTouchEvent() → true? → ViewGroup.onTouchEvent()
     ↓ false
+Child.dispatchTouchEvent()
+    ↓
 Child.onTouchEvent()
 ```
 
 **Key Principles:**
-- If a View returns `true` from `ACTION_DOWN`, it will receive all subsequent events
-- `onInterceptTouchEvent()` allows parent to "steal" events from children
-- `ACTION_CANCEL` is sent when parent intercepts events
+- If a `View` returns `true` for `ACTION_DOWN` (via `onTouchEvent()` or a listener), the system treats it as interested in this gesture and will deliver subsequent events of that gesture to it, as long as the parent does not intercept and the gesture is not canceled (`ACTION_CANCEL`).
+- `onInterceptTouchEvent()` allows a parent `ViewGroup` to decide whether to pass events to its children or intercept and handle them itself. The decision typically starts at `ACTION_DOWN` and may change on `MOVE` when movement exceeds certain thresholds (e.g., `touchSlop`).
+- When a parent starts intercepting an ongoing gesture, the child receives `ACTION_CANCEL` and will no longer receive events for that gesture.
 
 ### Basic Touch Handling
 
@@ -303,31 +383,47 @@ class DraggableView @JvmOverloads constructor(
 
     private var lastX = 0f
     private var lastY = 0f
+    private var isDragging = false
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
+        when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 lastX = event.x
                 lastY = event.y
-                parent.requestDisallowInterceptTouchEvent(true) // ✅ Prevent parent interception
-                return true // ✅ Must return true to receive subsequent events
+                parent?.requestDisallowInterceptTouchEvent(true) // ✅ Ask parent not to intercept while handling this gesture
+                // Return true if we intend to handle this gesture
+                return true
             }
 
             MotionEvent.ACTION_MOVE -> {
                 val dx = event.x - lastX
                 val dy = event.y - lastY
+                if (dx != 0f || dy != 0f) {
+                    isDragging = true
+                }
                 translationX += dx
                 translationY += dy
                 return true
             }
 
-            MotionEvent.ACTION_UP, MotionEvent.ACTION_CANCEL -> {
-                parent.requestDisallowInterceptTouchEvent(false)
-                performClick() // ✅ For accessibility
+            MotionEvent.ACTION_UP -> {
+                parent?.requestDisallowInterceptTouchEvent(false)
+                if (!isDragging) {
+                    // Treat as click only if there was effectively no drag
+                    performClick()
+                }
+                isDragging = false
+                return true
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                parent?.requestDisallowInterceptTouchEvent(false)
+                // Gesture canceled; do not trigger click
+                isDragging = false
                 return true
             }
         }
-        return super.onTouchEvent(event) // ❌ If you forget to return true in ACTION_DOWN
+        return super.onTouchEvent(event)
     }
 
     override fun performClick(): Boolean {
@@ -337,7 +433,7 @@ class DraggableView @JvmOverloads constructor(
 }
 ```
 
-### Using GestureDetector
+### Using `GestureDetector`
 
 `GestureDetector` handles standard gestures: tap, double-tap, long-press, fling, scroll.
 
@@ -349,7 +445,10 @@ class GestureView @JvmOverloads constructor(
     private val gestureDetector = GestureDetector(
         context,
         object : GestureDetector.SimpleOnGestureListener() {
-            override fun onDown(e: MotionEvent) = true // ✅ Must return true
+            override fun onDown(e: MotionEvent): Boolean {
+                // ✅ Must return true to receive further events for this gesture
+                return true
+            }
 
             override fun onSingleTapUp(e: MotionEvent): Boolean {
                 performClick()
@@ -362,21 +461,27 @@ class GestureView @JvmOverloads constructor(
                 velocityX: Float,
                 velocityY: Float
             ): Boolean {
-                // Handle swipe
+                // Handle swipe / fling
                 return true
             }
         }
     )
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        // ✅ Rely on GestureDetector; fall back to super only if it did not handle
         return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+        return true
     }
 }
 ```
 
-### Touch Interception in ViewGroup
+### Touch Interception in `ViewGroup`
 
-`onInterceptTouchEvent()` allows parent to intercept events:
+`onInterceptTouchEvent()` allows a parent to intercept events before they reach children:
 
 ```kotlin
 class SwipeToDeleteLayout @JvmOverloads constructor(
@@ -384,37 +489,63 @@ class SwipeToDeleteLayout @JvmOverloads constructor(
 ) : FrameLayout(context, attrs) {
 
     private var startX = 0f
+    private var isSwiping = false
+
+    private val touchSlop = ViewConfiguration.get(context).scaledTouchSlop
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
+        when (event.actionMasked) {
             MotionEvent.ACTION_DOWN -> {
                 startX = event.x
-                return false // ✅ Don't intercept, let children try first
+                isSwiping = false
+                // Do not intercept immediately; let children try first
+                return false
             }
 
             MotionEvent.ACTION_MOVE -> {
                 val deltaX = event.x - startX
-                if (abs(deltaX) > touchSlop) { // ✅ Intercept only when threshold exceeded
-                    return true // Start intercepting
+                if (kotlin.math.abs(deltaX) > touchSlop) {
+                    // ✅ Start intercepting once we detect a horizontal swipe gesture
+                    isSwiping = true
+                    return true
                 }
+            }
+
+            MotionEvent.ACTION_CANCEL, MotionEvent.ACTION_UP -> {
+                isSwiping = false
             }
         }
         return false
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
+        when (event.actionMasked) {
             MotionEvent.ACTION_MOVE -> {
-                translationX = event.x - startX
-                return true
-            }
-            MotionEvent.ACTION_UP -> {
-                if (abs(translationX) > width / 2) {
-                    animate().translationX(width.toFloat()).alpha(0f).start()
-                } else {
-                    animate().translationX(0f).start()
+                if (isSwiping) {
+                    translationX = event.x - startX
+                    return true
                 }
-                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                if (isSwiping) {
+                    if (kotlin.math.abs(translationX) > width / 2) {
+                        animate().translationX(width.toFloat()).alpha(0f).start()
+                    } else {
+                        animate().translationX(0f).start()
+                    }
+                    isSwiping = false
+                    return true
+                }
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                if (isSwiping) {
+                    // Reset state when gesture is canceled
+                    animate().translationX(0f).start()
+                    isSwiping = false
+                    return true
+                }
             }
         }
         return super.onTouchEvent(event)
@@ -422,7 +553,7 @@ class SwipeToDeleteLayout @JvmOverloads constructor(
 }
 ```
 
-### Multi-touch and ScaleGestureDetector
+### Multi-touch and `ScaleGestureDetector`
 
 ```kotlin
 class ZoomableView @JvmOverloads constructor(
@@ -444,6 +575,8 @@ class ZoomableView @JvmOverloads constructor(
     )
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
+        // Forward all events to the detector. Returning true means this View
+        // consistently handles scaling gestures.
         scaleDetector.onTouchEvent(event)
         return true
     }
@@ -464,46 +597,74 @@ class FlingView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : View(context, attrs) {
 
-    private val velocityTracker = VelocityTracker.obtain()
+    private var velocityTracker: VelocityTracker? = null
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
-        velocityTracker.addMovement(event) // ✅ Add movement
-
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> return true
-            MotionEvent.ACTION_UP -> {
-                velocityTracker.computeCurrentVelocity(1000) // px/sec
-                val velocityX = velocityTracker.xVelocity
-
-                if (abs(velocityX) > minFlingVelocity) {
-                    startFlingAnimation(velocityX)
+        when (event.actionMasked) {
+            MotionEvent.ACTION_DOWN -> {
+                if (velocityTracker == null) {
+                    velocityTracker = VelocityTracker.obtain()
+                } else {
+                    velocityTracker?.clear()
                 }
+                velocityTracker?.addMovement(event)
+                return true
+            }
 
-                velocityTracker.clear() // ✅ Clear for next gesture
+            MotionEvent.ACTION_MOVE -> {
+                velocityTracker?.addMovement(event)
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                velocityTracker?.apply {
+                    addMovement(event)
+                    computeCurrentVelocity(1000) // px/sec
+                    val velocityX = xVelocity
+
+                    val vc = ViewConfiguration.get(context)
+                    val minFlingVelocity = vc.scaledMinimumFlingVelocity
+
+                    if (kotlin.math.abs(velocityX) > minFlingVelocity) {
+                        startFlingAnimation(velocityX)
+                    }
+
+                    recycle()
+                }
+                velocityTracker = null
+                return true
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                velocityTracker?.recycle()
+                velocityTracker = null
                 return true
             }
         }
         return super.onTouchEvent(event)
-    }
-
-    override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        velocityTracker.recycle() // ✅ Release resources
     }
 }
 ```
 
 ### Best Practices
 
-1. **Return true from ACTION_DOWN** — or you won't receive subsequent events
-2. **Override performClick()** — for accessibility services
-3. **Handle ACTION_CANCEL** — parent may cancel gesture
-4. **Use requestDisallowInterceptTouchEvent(true)** — when you need exclusive control
-5. **Recycle VelocityTracker** — call recycle() in onDetachedFromWindow()
-6. **Provide haptic feedback** — performHapticFeedback() improves UX
-7. **Respect boundaries** — use ViewConfiguration.get(context).scaledTouchSlop
+1. Return `true` from `ACTION_DOWN` when your `View` intends to handle the gesture — otherwise the system will not route subsequent events of that gesture to it.
+2. Override `performClick()` — to support accessibility services and provide a single place for click behavior.
+3. Handle `ACTION_CANCEL` — the parent or system (e.g., another gesture, window change) may cancel the gesture.
+4. Use `requestDisallowInterceptTouchEvent(true)` — when a child needs exclusive control over a gesture (e.g., horizontal scroll inside a vertical parent).
+5. Manage `VelocityTracker` correctly — clear/recycle on gesture end/cancel to avoid leaks and incorrect velocities.
+6. Provide haptic feedback where appropriate — `performHapticFeedback()` can improve UX for critical interactions.
+7. Use `ViewConfiguration` — `scaledTouchSlop`, `scaledMinimumFlingVelocity`, etc., for device-consistent gesture thresholds.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать события касания во вложенных скроллируемых `View` (например, `RecyclerView` внутри `ScrollView`)?
+- Как можно реализовать пользовательский жест pinch-to-zoom с поворотом?
+- В чем разница между `actionMasked` и `action` в сценариях с мультитачем?
+- Как избежать конфликтов обработки касаний между несколькими детекторами жестов?
+- Как реализовать пользовательское определение свайпа от края, минимизируя конфликты с системными жестами?
 
 ## Follow-ups
 
@@ -513,11 +674,39 @@ class FlingView @JvmOverloads constructor(
 - How do you prevent touch event conflicts between multiple gesture detectors?
 - How would you implement custom edge swipe detection while avoiding conflicts with system gestures?
 
+## Ссылки (RU)
+
+- [Документация по обработке касаний в Android](https://developer.android.com/develop/ui/views/touch-and-input/gestures)
+- [Справка по `ViewConfiguration`](https://developer.android.com/reference/android/view/ViewConfiguration)
+- [Справка по `MotionEvent`](https://developer.android.com/reference/android/view/MotionEvent)
+
 ## References
 
 - [Android Touch Event Documentation](https://developer.android.com/develop/ui/views/touch-and-input/gestures)
 - [ViewConfiguration Reference](https://developer.android.com/reference/android/view/ViewConfiguration)
 - [MotionEvent Reference](https://developer.android.com/reference/android/view/MotionEvent)
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепты
+
+- [[c-compose-state]]
+- [[c-viewmodel]]
+
+### Предпосылки (проще)
+
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Базовые концепции `View`
+- [[q-viewmodel-pattern--android--easy]] - Паттерны слоя UI
+
+### Похожие (того же уровня)
+
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - Инвалидация `View`
+- [[q-what-does-itemdecoration-do--android--medium]] - Кастомный рисунок в `RecyclerView`
+
+### Продвинутое (сложнее)
+
+- [[q-compose-custom-layout--android--hard]] - Кастомные лейауты в Compose
+- [[q-modularization-patterns--android--hard]] - Архитектура для крупных проектов
 
 ## Related Questions
 
@@ -526,13 +715,12 @@ class FlingView @JvmOverloads constructor(
 - [[c-compose-state]]
 - [[c-viewmodel]]
 
-
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Basic View concepts
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Basic `View` concepts
 - [[q-viewmodel-pattern--android--easy]] - UI layer patterns
 
 ### Related (Same Level)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View invalidation
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` invalidation
 - [[q-what-does-itemdecoration-do--android--medium]] - Custom drawing in RecyclerView
 
 ### Advanced (Harder)

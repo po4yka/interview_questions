@@ -10,30 +10,31 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-android-memory-optimization--android--medium, q-boxing-unboxing--kotlin--easy, q-collections-basics--kotlin--easy, q-hashmap-vs-sparsearray--android--medium, q-kotlin-boxing-unboxing--kotlin--easy, q-recyclerview-optimization--android--medium]
+related: [q-reduce-apk-size-techniques--android--medium, q-where-is-composition-created--android--medium, q-recyclerview-explained--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags: [android/performance-memory, collections, difficulty/medium, memory-optimization, performance]
+
 ---
 
 # Вопрос (RU)
 
-Какие специализированные Map-коллекции для примитивных типов предоставляет Android SDK? Когда и почему их следует использовать вместо стандартных HashMap?
+> Какие специализированные `Map`-коллекции для примитивных типов предоставляет Android SDK? Когда и почему их следует использовать вместо стандартных `HashMap`?
 
 # Question (EN)
 
-What specialized Map collections for primitive types does Android SDK provide? When and why should they be used instead of standard HashMap?
+> What specialized `Map` collections for primitive types does Android SDK provide? When and why should they be used instead of standard `HashMap`?
 
 ---
 
 ## Ответ (RU)
 
-Android предоставляет оптимизированные коллекции для примитивных типов, которые избегают автоупаковки (boxing) и значительно эффективнее стандартных HashMap для небольших коллекций (< 1000 элементов).
+Android предоставляет оптимизированные коллекции для целочисленных ключей и примитивных значений, которые минимизируют автоупаковку (boxing) и часто оказываются более эффективными по памяти, чем стандартные `HashMap` при работе с относительно небольшими коллекциями (порядка сотен элементов).
 
 ### Основные Типы
 
-**1. SparseArray\<E\> — Int → Object**
+**1. `SparseArray<E>` — `Int` → Object**
 
 ```kotlin
 import android.util.SparseArray
@@ -42,11 +43,11 @@ val userCache = SparseArray<User>()
 userCache.put(1, User("Alice"))
 userCache.put(100, User("Bob"))
 
-val user = userCache.get(1)  // ✅ Нет boxing для ключа
+val user = userCache.get(1)  // ✅ Нет boxing для ключа (int хранится как примитив)
 val size = userCache.size()
 ```
 
-**2. SparseIntArray — Int → Int**
+**2. SparseIntArray — `Int` → `Int`**
 
 ```kotlin
 import android.util.SparseIntArray
@@ -55,12 +56,12 @@ val viewCounts = SparseIntArray()
 viewCounts.put(101, 95)
 
 fun incrementCount(id: Int) {
-    val current = viewCounts.get(id, 0)  // ✅ Default value: 0
+    val current = viewCounts.get(id, 0)  // ✅ Значение по умолчанию: 0
     viewCounts.put(id, current + 1)
 }
 ```
 
-**3. SparseBooleanArray — Int → Boolean**
+**3. SparseBooleanArray — `Int` → `Boolean`**
 
 ```kotlin
 import android.util.SparseBooleanArray
@@ -74,7 +75,7 @@ fun isSelected(position: Int): Boolean {
 }
 ```
 
-**4. LongSparseArray\<E\> — Long → Object**
+**4. `LongSparseArray<E>` — `Long` → Object**
 
 ```kotlin
 import android.util.LongSparseArray
@@ -84,32 +85,31 @@ val timestamp = System.currentTimeMillis()
 timestampCache.put(timestamp, Event("Click"))
 ```
 
+(В современных проектах также часто используют реализации из `androidx.collection.*`, например `androidx.collection.LongSparseArray`, которые обеспечивают аналогичное поведение.)
+
 ### Производительность
 
-**HashMap проблемы:**
-- Int → Integer требует 16 байт вместо 4
-- Каждая операция создаёт временные объекты
-- Увеличенная нагрузка на GC
-- Хэш-таблица занимает дополнительную память
+**`HashMap`: особенности при использовании примитивных ключей/значений:**
+- Для хранения примитивов используются объекты-обёртки (например, `Int` → `Integer`), что приводит к дополнительным накладным расходам по памяти и может создавать лишние объекты.
+- Дополнительная структура хэш-таблицы занимает память сверх самих записей.
 
-**SparseArray преимущества:**
-- Нет boxing: примитивы хранятся напрямую
-- ~50% меньше памяти (24 vs 56 байт на элемент)
-- Быстрее для < 1000 элементов
-- Меньше давление на GC
+**SparseArray и аналоги: преимущества:**
+- Нет boxing для ключей типа `int`/`long` (они хранятся во внутренних массивах примитивов).
+- Меньше накладных расходов по памяти по сравнению с `HashMap<Int, T>` или `HashMap<Long, T>`; на практических измерениях часто выигрывает порядка десятков процентов, но точные значения зависят от реализации и версии платформы.
+- Снижение давления на GC за счёт уменьшения количества объектов.
 
-**Ограничения:**
-- O(log n) поиск vs O(1) в HashMap
-- Медленнее для > 10K элементов
-- Оптимизирован для последовательных ключей
-- Не thread-safe
+**Ограничения и нюансы:**
+- Поиск — O(log n), так как ключи хранятся в отсортированном массиве и используется бинарный поиск, в то время как у `HashMap` ожидаемо O(1) в среднем.
+- При очень больших коллекциях (тысячи–десятки тысяч элементов и выше) `HashMap` часто оказывается быстрее по времени доступа; точка перелома зависит от конкретного сценария и профилирования.
+- Эффективнее всего при работе с целочисленными ключами, которые относительно упорядочены или добавляются монотонно (особенно при использовании `append()`), но не требуется строго последовательных значений.
+- Не являются потокобезопасными (аналогично обычному `HashMap`).
 
 ### Практическое Применение
 
 **RecyclerView адаптер:**
 ```kotlin
 class Adapter : RecyclerView.Adapter<ViewHolder>() {
-    private val expandedItems = SparseBooleanArray()  // ✅ Флаги состояния
+    private val expandedItems = SparseBooleanArray()  // ✅ Флаги состояния по позициям/ID
 
     fun toggleExpanded(position: Int) {
         val isExpanded = expandedItems.get(position, false)
@@ -119,7 +119,7 @@ class Adapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-**ViewModel с кэшем:**
+**`ViewModel` с кэшем:**
 ```kotlin
 class UserViewModel : ViewModel() {
     private val users = SparseArray<User>()          // ✅ Int → User
@@ -156,41 +156,42 @@ class StateManager {
 
 ### Правила Использования
 
-**Используйте SparseArray когда:**
-- Коллекция < 1000 элементов
-- Ключи — последовательные Int/Long
-- Важна экономия памяти
-- Однопоточный доступ
+**Используйте SparseArray и родственные коллекции когда:**
+- Ключи — целочисленные (`int` или `long`), значения часто примитивные или объекты, привязанные к таким ключам (ID ресурсов, view ID, позиции и т.п.).
+- Важна экономия памяти и снижение количества объектов-обёрток.
+- Размер коллекции обычно не слишком велик (сотни–несколько тысяч элементов), и профилирование показывает выигрыши.
+- Доступ — из одного потока или вы сами обеспечиваете синхронизацию.
 
-**Используйте HashMap когда:**
-- Коллекция > 10K элементов
-- Ключи — случайные или несортированные
-- Критична скорость поиска O(1)
-- Нужен многопоточный доступ (ConcurrentHashMap)
+**Используйте `HashMap` (или `ConcurrentHashMap`) когда:**
+- Нужны произвольные типы ключей (`String`, сложные объекты и т.п.).
+- Коллекция очень большая и критично среднее время доступа O(1).
+- Требуется потокобезопасный доступ (например, `ConcurrentHashMap`), или проще масштабировать через стандартные concurrent-структуры.
 
-### Миграция С HashMap
+### Миграция с `HashMap`
 
 ```kotlin
-// ❌ До: HashMap с boxing
+// ❌ До: HashMap с boxing для ключей Int
 val cache = HashMap<Int, String>()
 cache[id] = value
 cache.remove(id)
 cache.containsKey(id)
 
-// ✅ После: SparseArray без boxing
-val cache = SparseArray<String>()
-cache.put(id, value)
-cache.remove(id)
-cache.indexOfKey(id) >= 0
+// ✅ После: SparseArray без boxing для ключей
+val cache2 = SparseArray<String>()
+cache2.put(id, value)
+cache2.remove(id)
+val exists = cache2.indexOfKey(id) >= 0
 ```
+
+---
 
 ## Answer (EN)
 
-Android provides optimized collections for primitive types that avoid boxing overhead and are significantly more efficient than standard HashMap for small collections (< 1000 elements).
+Android provides optimized collections for integer keys and primitive-like mappings that minimize boxing overhead and can be more memory-efficient than standard `HashMap` when dealing with relatively small to moderate collections (on the order of hundreds of elements) with int/long keys.
 
 ### Main Types
 
-**1. SparseArray\<E\> — Int → Object**
+**1. `SparseArray<E>` — `Int` → Object**
 
 ```kotlin
 import android.util.SparseArray
@@ -199,11 +200,11 @@ val userCache = SparseArray<User>()
 userCache.put(1, User("Alice"))
 userCache.put(100, User("Bob"))
 
-val user = userCache.get(1)  // ✅ No boxing for key
+val user = userCache.get(1)  // ✅ No boxing for the int key
 val size = userCache.size()
 ```
 
-**2. SparseIntArray — Int → Int**
+**2. SparseIntArray — `Int` → `Int`**
 
 ```kotlin
 import android.util.SparseIntArray
@@ -217,7 +218,7 @@ fun incrementCount(id: Int) {
 }
 ```
 
-**3. SparseBooleanArray — Int → Boolean**
+**3. SparseBooleanArray — `Int` → `Boolean`**
 
 ```kotlin
 import android.util.SparseBooleanArray
@@ -231,7 +232,7 @@ fun isSelected(position: Int): Boolean {
 }
 ```
 
-**4. LongSparseArray\<E\> — Long → Object**
+**4. `LongSparseArray<E>` — `Long` → Object**
 
 ```kotlin
 import android.util.LongSparseArray
@@ -241,32 +242,31 @@ val timestamp = System.currentTimeMillis()
 timestampCache.put(timestamp, Event("Click"))
 ```
 
+(In modern projects you may also use `androidx.collection.*` variants such as `androidx.collection.LongSparseArray` which provide similar behavior.)
+
 ### Performance
 
-**HashMap problems:**
-- Int → Integer requires 16 bytes instead of 4
-- Every operation creates temporary objects
-- Increased GC pressure
-- Hash table requires additional memory
+**`HashMap` characteristics when used with primitive-like keys/values:**
+- Requires wrapper objects (e.g., `Int` → `Integer`) for primitive keys/values, which adds memory overhead and may create additional objects.
+- Hash table structure itself introduces extra memory overhead.
 
-**SparseArray advantages:**
-- No boxing: primitives stored directly
-- ~50% less memory (24 vs 56 bytes per entry)
-- Faster for < 1000 elements
-- Less GC pressure
+**SparseArray-family advantages:**
+- No boxing for int/long keys (stored in primitive arrays internally).
+- Lower memory overhead compared to `HashMap<Int, T>` / `HashMap<Long, T>` in many practical scenarios; the exact numbers are implementation-dependent.
+- Reduced GC pressure due to fewer allocated objects.
 
-**Limitations:**
-- O(log n) lookup vs O(1) in HashMap
-- Slower for > 10K elements
-- Optimized for sequential keys
-- Not thread-safe
+**Limitations and trade-offs:**
+- Lookup is O(log n) because keys are stored in a sorted array and found via binary search; `HashMap` offers expected O(1) average-time lookup.
+- For very large maps (thousands to tens of thousands of entries and above), `HashMap` often wins in raw access speed; the crossover point is heuristic and should be validated with profiling.
+- Works best with integer keys that are relatively ordered or append-increasing (especially when using `append()`), but keys do not have to be strictly sequential.
+- Not thread-safe (similar to regular `HashMap`).
 
 ### Practical Use Cases
 
 **RecyclerView adapter:**
 ```kotlin
 class Adapter : RecyclerView.Adapter<ViewHolder>() {
-    private val expandedItems = SparseBooleanArray()  // ✅ State flags
+    private val expandedItems = SparseBooleanArray()  // ✅ State flags by position/ID
 
     fun toggleExpanded(position: Int) {
         val isExpanded = expandedItems.get(position, false)
@@ -276,7 +276,7 @@ class Adapter : RecyclerView.Adapter<ViewHolder>() {
 }
 ```
 
-**ViewModel with cache:**
+**`ViewModel` with cache:**
 ```kotlin
 class UserViewModel : ViewModel() {
     private val users = SparseArray<User>()          // ✅ Int → User
@@ -313,62 +313,75 @@ class StateManager {
 
 ### Usage Guidelines
 
-**Use SparseArray when:**
-- Collection < 1000 elements
-- Keys are sequential Int/Long
-- Memory efficiency is important
-- Single-threaded access
+**Use SparseArray and related collections when:**
+- Keys are integers (`int` or `long`), often representing IDs, positions, or resource identifiers.
+- Memory efficiency and reduced allocations/GC are important.
+- Collection size is typically not extremely large (hundreds to a few thousands), and profiling indicates benefits.
+- Access is single-threaded, or you provide your own synchronization.
 
-**Use HashMap when:**
-- Collection > 10K elements
-- Keys are random or unsorted
-- O(1) lookup speed is critical
-- Multi-threaded access needed (ConcurrentHashMap)
+**Use `HashMap` (or `ConcurrentHashMap`) when:**
+- You need arbitrary key types (`String`, complex objects, etc.).
+- The map is very large and O(1) average-time lookup is critical.
+- You require thread-safe access and prefer using standard concurrent collections.
 
-### Migration from HashMap
+### Migration from `HashMap`
 
 ```kotlin
-// ❌ Before: HashMap with boxing
+// ❌ Before: HashMap with boxing for Int keys
 val cache = HashMap<Int, String>()
 cache[id] = value
 cache.remove(id)
 cache.containsKey(id)
 
-// ✅ After: SparseArray without boxing
-val cache = SparseArray<String>()
-cache.put(id, value)
-cache.remove(id)
-cache.indexOfKey(id) >= 0
+// ✅ After: SparseArray without boxing for keys
+val cache2 = SparseArray<String>()
+cache2.put(id, value)
+cache2.remove(id)
+val exists = cache2.indexOfKey(id) >= 0
 ```
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Что происходит, когда `SparseArray` исчерпывает ёмкость? Масштабируется ли она автоматически, как `ArrayList`?
+- Как `SparseArray` ведёт себя при конкурентных модификациях? Какие исключения могут возникать?
+- Можно ли использовать `SparseArray` вместе с состоянием в Jetpack Compose? Какие есть особенности?
+- Как реализовать потокобезопасный доступ к `SparseArray` без существенной потери производительности?
+- Каковы особенности потребления памяти при хранении крупных объектов в качестве значений в `SparseArray`?
+
 ## Follow-ups
 
-- What happens when SparseArray runs out of capacity? Does it automatically resize like ArrayList?
+- What happens when SparseArray runs out of capacity? Does it automatically resize like `ArrayList`?
 - How does SparseArray handle concurrent modifications? What exceptions might be thrown?
 - Can you use SparseArray with Jetpack Compose State? Are there any considerations?
 - How do you implement thread-safe access to SparseArray without significant performance degradation?
 - What are the memory implications of storing large objects as values in SparseArray?
 
+## Ссылки (RU)
+
+- Документация Android SDK: [SparseArray](https://developer.android.com/reference/android/util/SparseArray)
+- Android Performance Patterns: [Memory Churn and Performance](https://www.youtube.com/playlist?list=PLWz5rJ2EKKc9CBxr3BVjPTPoDPLdPIFCE)
+
 ## References
 
 - Android SDK Documentation: [SparseArray](https://developer.android.com/reference/android/util/SparseArray)
 - Android Performance Patterns: [Memory Churn and Performance](https://www.youtube.com/playlist?list=PLWz5rJ2EKKc9CBxr3BVjPTPoDPLdPIFCE)
-- [[c-memory-optimization]]
-- [[c-collections-android]]
+
+## Связанные вопросы (RU)
+
+### Предпосылки
+- [[q-reduce-apk-size-techniques--android--medium]] — Подходы к оптимизации размера и косвенно памяти
+- [[q-where-is-composition-created--android--medium]] — Управление состоянием в Compose
+
+### Похожие
+- [[q-recyclerview-explained--android--medium]] — Паттерны производительности RecyclerView
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-kotlin-boxing-unboxing--kotlin--easy]] - Understanding autoboxing overhead
-- [[q-hashmap-internals--data-structures--medium]] - How HashMap works internally
-
-### Related
 - [[q-reduce-apk-size-techniques--android--medium]] - Memory optimization techniques
 - [[q-where-is-composition-created--android--medium]] - State management in Compose
-- [[q-recyclerview-explained--android--medium]] - RecyclerView performance patterns
 
-### Advanced
-- [[q-memory-profiling-android--android--hard]] - Profiling memory usage with Android Studio
-- [[q-custom-collections-android--android--hard]] - Implementing custom optimized collections
+### Related
+- [[q-recyclerview-explained--android--medium]] - RecyclerView performance patterns

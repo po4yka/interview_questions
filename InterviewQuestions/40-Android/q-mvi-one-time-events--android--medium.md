@@ -12,9 +12,10 @@ status: draft
 moc: moc-android
 related: [c-lifecycle, c-viewmodel, q-mvi-architecture--android--hard]
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvi, architecture, difficulty/medium, events, mvi]
+
 ---
 
 # Вопрос (RU)
@@ -29,7 +30,7 @@ tags: [android/architecture-mvi, architecture, difficulty/medium, events, mvi]
 
 ## Ответ (RU)
 
-В MVI State должен быть immutable и содержать только постоянные UI данные. Одноразовые события (navigation, toasts, snackbars) обрабатываются отдельно через **SharedFlow** с `replay = 0` или **Channel**.
+В MVI State должен быть immutable и содержать только постоянные UI данные. Одноразовые события (navigation, toasts, snackbars) обрабатываются отдельно через **`SharedFlow`** с `replay = 0` или **Channel**.
 
 **Проблема**: хранение событий в State приводит к их повторному срабатыванию при пересоздании экрана.
 
@@ -41,11 +42,12 @@ data class UiState(
 )
 ```
 
-**Решение 1: SharedFlow (рекомендуется для Compose)**
+**Решение 1: `SharedFlow` (рекомендуется для Compose)**
 
 ```kotlin
 sealed class UiEvent {
     data class ShowToast(val message: String) : UiEvent()
+    data class ShowError(val message: String) : UiEvent()
     data class Navigate(val route: String) : UiEvent()
 }
 
@@ -55,12 +57,14 @@ data class UiState(
     // ✅ Никаких одноразовых событий
 )
 
-class UserViewModel @Inject constructor() : ViewModel() {
+class UserViewModel @Inject constructor(
+    private val repository: UserRepository
+) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    // ✅ SharedFlow для событий с replay = 0
-    private val _events = MutableSharedFlow<UiEvent>()
+    // ✅ SharedFlow для событий c явным replay = 0
+    private val _events = MutableSharedFlow<UiEvent>(replay = 0)
     val events: SharedFlow<UiEvent> = _events.asSharedFlow()
 
     fun loadUsers() {
@@ -89,10 +93,13 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
     val context = LocalContext.current
 
     // ✅ LaunchedEffect для событий
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
             when (event) {
                 is UiEvent.ShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+                is UiEvent.ShowError -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
                 is UiEvent.Navigate -> { /* Навигация */ }
@@ -119,7 +126,7 @@ class UserFragment : Fragment() {
 }
 ```
 
-**Решение 2: Channel (проще для single subscriber)**
+**Решение 2: Channel (проще и надёжнее для одного потребителя)**
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -134,18 +141,20 @@ class UserViewModel : ViewModel() {
 }
 ```
 
+> Channel по своей природе соответствует "горячему" потоку одноразовых событий и предполагает одного потребителя: при нескольких коллекторах события будут разделяться между ними, поэтому его стоит использовать там, где есть один предсказуемый подписчик.
+
 **Сравнение подходов**:
 
 | Подход | Плюсы | Минусы | Use Case |
 |--------|-------|--------|----------|
-| **SharedFlow** | Множественные подписчики, контроль replay | Чуть сложнее API | Compose, современные проекты |
-| **Channel** | Простой API, FIFO гарантия | Только один подписчик | Простые случаи |
+| **`SharedFlow`** | Множественные подписчики, контроль replay | Чуть сложнее API | Compose, современные проекты |
+| **Channel** | Простой API, FIFO гарантии, хорошо подходит для одного потребителя | События распределяются между несколькими коллекторами, не подходит для широковещательных событий | Простые случаи с одним подписчиком |
 
 **Best Practices**:
 
-1. **Разделяйте State и Events**: State - постоянные данные, Events - одноразовые действия
-2. **Правильный scope**: `LaunchedEffect(Unit)` в Compose, `repeatOnLifecycle` в Views
-3. **Тестируйте события**: собирайте в список, проверяйте наличие ожидаемых событий
+1. **Разделяйте State и Events**: State - постоянные данные, Events - одноразовые действия.
+2. **Правильный scope**: используйте `LaunchedEffect` с стабильным ключом (например, `viewModel`) в Compose и `repeatOnLifecycle` во `View`-D для безопасного сбора событий.
+3. **Тестируйте события**: собирайте их в список из `SharedFlow`/`Channel` и проверяйте наличие ожидаемых событий.
 
 ```kotlin
 @Test
@@ -165,7 +174,7 @@ fun `loadUsers failure emits error event`() = runTest {
 
 ## Answer (EN)
 
-In MVI, State should be immutable and contain only persistent UI data. One-time events (navigation, toasts, snackbars) are handled separately via **SharedFlow** with `replay = 0` or **Channel**.
+In MVI, State should be immutable and contain only persistent UI data. One-time events (navigation, toasts, snackbars) should be handled separately via **`SharedFlow`** with `replay = 0` or a **Channel**.
 
 **Problem**: storing events in State causes them to re-trigger on screen recreation.
 
@@ -177,11 +186,12 @@ data class UiState(
 )
 ```
 
-**Solution 1: SharedFlow (recommended for Compose)**
+**Solution 1: `SharedFlow` (recommended for Compose)**
 
 ```kotlin
 sealed class UiEvent {
     data class ShowToast(val message: String) : UiEvent()
+    data class ShowError(val message: String) : UiEvent()
     data class Navigate(val route: String) : UiEvent()
 }
 
@@ -191,12 +201,14 @@ data class UiState(
     // ✅ No one-time events
 )
 
-class UserViewModel @Inject constructor() : ViewModel() {
+class UserViewModel @Inject constructor(
+    private val repository: UserRepository
+) : ViewModel() {
     private val _uiState = MutableStateFlow(UiState())
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
-    // ✅ SharedFlow for events with replay = 0
-    private val _events = MutableSharedFlow<UiEvent>()
+    // ✅ SharedFlow for events with explicit replay = 0
+    private val _events = MutableSharedFlow<UiEvent>(replay = 0)
     val events: SharedFlow<UiEvent> = _events.asSharedFlow()
 
     fun loadUsers() {
@@ -225,10 +237,13 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
     val context = LocalContext.current
 
     // ✅ LaunchedEffect for events
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel) {
         viewModel.events.collect { event ->
             when (event) {
                 is UiEvent.ShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+                is UiEvent.ShowError -> {
                     Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
                 }
                 is UiEvent.Navigate -> { /* Navigation */ }
@@ -255,7 +270,7 @@ class UserFragment : Fragment() {
 }
 ```
 
-**Solution 2: Channel (simpler for single subscriber)**
+**Solution 2: Channel (simpler and more reliable for a single consumer)**
 
 ```kotlin
 class UserViewModel : ViewModel() {
@@ -270,18 +285,20 @@ class UserViewModel : ViewModel() {
 }
 ```
 
+> A Channel naturally models a "hot" stream of one-time events with a single consumer: with multiple collectors, events are distributed between them, so it should be used where you have one predictable subscriber.
+
 **Comparison**:
 
 | Approach | Pros | Cons | Use Case |
 |----------|------|------|----------|
-| **SharedFlow** | Multiple subscribers, replay control | Slightly complex API | Compose, modern projects |
-| **Channel** | Simple API, FIFO guarantee | Single subscriber only | Simple cases |
+| **`SharedFlow`** | Multiple subscribers, replay control | Slightly more complex API | Compose, modern projects |
+| **Channel** | Simple API, FIFO guarantees, good for a single consumer | Events are distributed between multiple collectors, not suitable for broadcast-style events | Simple cases with a single subscriber |
 
 **Best Practices**:
 
-1. **Separate State and Events**: State - persistent data, Events - one-time actions
-2. **Correct scope**: `LaunchedEffect(Unit)` in Compose, `repeatOnLifecycle` in Views
-3. **Test events**: collect to list, verify expected events
+1. **Separate State and Events**: State = persistent data, Events = one-time actions.
+2. **Correct scope**: use `LaunchedEffect` with a stable key (e.g. `viewModel`) in Compose and `repeatOnLifecycle` in Views for safe event collection.
+3. **Test events**: collect from `SharedFlow`/`Channel` into a list and assert expected events.
 
 ```kotlin
 @Test
@@ -305,26 +322,26 @@ fun `loadUsers failure emits error event`() = runTest {
 
 - How to handle events when multiple subscribers are needed?
 - What happens to events emitted before UI subscribes?
-- How to test SharedFlow vs Channel in ViewModels?
-- When to use `extraBufferCapacity` in SharedFlow?
+- How to test `SharedFlow` vs Channel in ViewModels?
+- When to use `extraBufferCapacity` in `SharedFlow`?
 - How to prevent event loss during configuration changes?
 
 ## References
 
-- [[c-viewmodel]] - ViewModel fundamentals
+- [[c-viewmodel]] - `ViewModel` fundamentals
 - [[c-lifecycle]] - Android Lifecycle
 
 ## Related Questions
 
 ### Prerequisites
 
-- [[q-what-is-viewmodel--android--medium]] - ViewModel basics
-- [[q-channel-flow-comparison--kotlin--medium]] - Channel vs Flow comparison
+- [[q-what-is-viewmodel--android--medium]] - `ViewModel` basics
+- [[q-channel-flow-comparison--kotlin--medium]] - Channel vs `Flow` comparison
 
 ### Related
 
 - [[q-mvvm-vs-mvp-differences--android--medium]] - MVVM vs MVP comparison
-- [[q-stateflow-flow-sharedflow-livedata--android--medium]] - StateFlow vs SharedFlow vs LiveData
+- [[q-stateflow-flow-sharedflow-livedata--android--medium]] - `StateFlow` vs `SharedFlow` vs `LiveData`
 
 ### Advanced
 

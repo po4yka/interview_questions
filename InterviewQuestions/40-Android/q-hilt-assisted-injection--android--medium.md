@@ -1,8 +1,9 @@
 ---
 id: android-049
-title: Hilt Assisted Injection / Hilt Assisted Injection
+title: Hilt Assisted Injection
 aliases:
 - Hilt Assisted Injection
+- Hilt Ассистированный инжект
 topic: android
 subtopics:
 - architecture-mvvm
@@ -16,10 +17,10 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-assisted-injection
+- c-dagger
 - q-hilt-entry-points--android--medium
 created: 2025-10-11
-updated: 2025-10-31
+updated: 2025-11-10
 tags:
 - android/architecture-mvvm
 - android/di-hilt
@@ -29,7 +30,8 @@ tags:
 - difficulty/medium
 - hilt
 sources:
-- https://dagger.dev/hilt/assisted-injection.html
+- "https://dagger.dev/hilt/assisted-injection.html"
+
 ---
 
 # Вопрос (RU)
@@ -43,24 +45,25 @@ sources:
 ## Ответ (RU)
 
 **Теория Assisted Injection:**
-Assisted Injection позволяет смешивать зависимости, предоставляемые Dagger, с runtime-параметрами, которые вы предоставляете при создании экземпляра. Это полезно когда нужно создать объекты, требующие как внедрённые зависимости, так и пользовательские данные.
+Assisted Injection позволяет смешивать зависимости, предоставляемые Dagger/Hilt, с runtime-параметрами, которые вы передаёте при создании экземпляра. Это полезно, когда нужно создавать объекты, которым одновременно требуются внедрённые зависимости (через DI-контейнер) и значения, известные только в момент вызова (например, ID, DTO, callback).
 
 **Основные концепции:**
-- Смешивает DI-зависимости с runtime-параметрами
-- Использует `@AssistedInject` для конструктора
-- Использует `@Assisted` для runtime-параметров
-- Генерирует factory через `@AssistedFactory`
-- Автоматически создаёт реализацию factory
+- Смешивает DI-зависимости с runtime-параметрами.
+- Использует `@AssistedInject` для конструктора.
+- Использует `@Assisted` для runtime-параметров.
+- Генерирует factory через `@AssistedFactory`.
+- Реализация factory автоматически генерируется Dagger/Hilt, что избавляет от ручной поддержки фабрик.
 
 **Проблема без Assisted Injection:**
 ```kotlin
-// Проблема: нельзя внедрить runtime-данные
+// Проблема: нельзя напрямую внедрить runtime-данные без явного биндинга
 class UserRepository @Inject constructor(
     private val apiService: ApiService,
-    private val userId: String // ОШИБКА: Dagger не знает это!
+    private val userId: String // ОШИБКА: Dagger не знает, как предоставить этот параметр!
 )
 
-// Проблема: ручная factory теряет DI преимущества
+// Вариант: ручная factory. Работает, но требует явной реализации
+// и не использует автогенерацию и контракт Assisted Injection.
 interface UserRepositoryFactory {
     fun create(userId: String): UserRepository
 }
@@ -70,7 +73,7 @@ class UserRepositoryFactoryImpl @Inject constructor(
     private val database: Database
 ) : UserRepositoryFactory {
     override fun create(userId: String): UserRepository {
-        return UserRepository(apiService, database, userId)
+        return UserRepository(apiService, userId)
     }
 }
 ```
@@ -79,10 +82,10 @@ class UserRepositoryFactoryImpl @Inject constructor(
 ```kotlin
 // Смешиваем внедрённые и runtime-зависимости
 class UserRepository @AssistedInject constructor(
-    // Зависимости, предоставляемые Dagger
+    // Зависимости, предоставляемые Dagger/Hilt
     private val apiService: ApiService,
     private val database: Database,
-    // Runtime-параметр, предоставляемый вами
+    // Runtime-параметр, предоставляемый вызывающей стороной
     @Assisted private val userId: String
 ) {
     suspend fun getUserData(): User {
@@ -94,7 +97,7 @@ class UserRepository @AssistedInject constructor(
     }
 }
 
-// Factory автоматически генерируется Dagger
+// Factory автоматически генерируется Dagger/Hilt
 @AssistedFactory
 interface UserRepositoryFactory {
     fun create(userId: String): UserRepository
@@ -111,7 +114,8 @@ class UserViewModel @Inject constructor(
     // Создаём repository с внедрёнными и runtime-параметрами
     private val repository = userRepositoryFactory.create(userId)
 
-    val userData = repository.getUserData()
+    // В реальном коде это обычно оборачивается в LiveData/Flow, здесь упрощённый пример
+    suspend fun loadUser(): User = repository.getUserData()
 }
 ```
 
@@ -160,7 +164,7 @@ class TransferProcessor @AssistedInject constructor(
 
 @AssistedFactory
 interface TransferProcessorFactory {
-    // Имена параметров в factory должны совпадать с именами @Assisted
+    // Имена в factory должны совпадать с именами в @Assisted
     fun create(
         @Assisted("fromUserId") fromUserId: String,
         @Assisted("toUserId") toUserId: String,
@@ -173,7 +177,7 @@ interface TransferProcessorFactory {
 ```kotlin
 @HiltWorker
 class DataSyncWorker @AssistedInject constructor(
-    // Assisted-параметры от WorkManager
+    // Assisted-параметры от WorkManager (Context и WorkerParameters всегда помечаются @Assisted)
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
     // Внедрённые зависимости
@@ -191,7 +195,7 @@ class DataSyncWorker @AssistedInject constructor(
             when (syncType) {
                 "full" -> syncAll()
                 "incremental" -> syncIncremental()
-                else -> Result.failure()
+                else -> return Result.failure()
             }
 
             notificationManager.showSuccess("Синхронизация завершена")
@@ -255,7 +259,7 @@ class ProductViewHolder @AssistedInject constructor(
     fun bind(product: Product) {
         currentProduct = product
         titleView.text = product.title
-        priceView.text = "$${product.price}"
+        priceView.text = "${'$'}${product.price}"
         imageLoader.load(product.imageUrl, imageView)
     }
 }
@@ -269,24 +273,25 @@ interface ProductViewHolderFactory {
 ## Answer (EN)
 
 **Assisted Injection Theory:**
-Assisted Injection allows mixing dependencies provided by Dagger with runtime parameters that you provide when creating an instance. This is useful when you need to create objects that require both injected dependencies and user-provided data.
+Assisted Injection allows mixing dependencies provided by Dagger/Hilt with runtime parameters that you pass when creating an instance. This is useful when you need to create objects that require both container-provided dependencies and values only known at call time (e.g., IDs, DTOs, callbacks).
 
 **Main concepts:**
-- Mixes DI dependencies with runtime parameters
-- Uses `@AssistedInject` for constructor
-- Uses `@Assisted` for runtime parameters
-- Generates factory through `@AssistedFactory`
-- Automatically creates factory implementation
+- Mixes DI-managed dependencies with runtime parameters.
+- Uses `@AssistedInject` on the constructor.
+- Uses `@Assisted` for runtime parameters.
+- Declares a factory via `@AssistedFactory`.
+- The factory implementation is automatically generated by Dagger/Hilt, avoiding manual factory boilerplate.
 
 **Problem without Assisted Injection:**
 ```kotlin
-// Problem: can't inject runtime data
+// Problem: cannot directly inject runtime data without an explicit binding
 class UserRepository @Inject constructor(
     private val apiService: ApiService,
-    private val userId: String // ERROR: Dagger doesn't know this!
+    private val userId: String // ERROR: Dagger doesn't know how to provide this parameter!
 )
 
-// Problem: manual factory loses DI benefits
+// Option: manual factory. It works but requires a hand-written implementation
+// and doesn't leverage Assisted Injection's generated factories.
 interface UserRepositoryFactory {
     fun create(userId: String): UserRepository
 }
@@ -296,7 +301,7 @@ class UserRepositoryFactoryImpl @Inject constructor(
     private val database: Database
 ) : UserRepositoryFactory {
     override fun create(userId: String): UserRepository {
-        return UserRepository(apiService, database, userId)
+        return UserRepository(apiService, userId)
     }
 }
 ```
@@ -305,10 +310,10 @@ class UserRepositoryFactoryImpl @Inject constructor(
 ```kotlin
 // Mix injected and runtime dependencies
 class UserRepository @AssistedInject constructor(
-    // Dependencies provided by Dagger
+    // Dependencies provided by Dagger/Hilt
     private val apiService: ApiService,
     private val database: Database,
-    // Runtime parameter provided by you
+    // Runtime parameter provided by the caller
     @Assisted private val userId: String
 ) {
     suspend fun getUserData(): User {
@@ -320,13 +325,13 @@ class UserRepository @AssistedInject constructor(
     }
 }
 
-// Factory is automatically generated by Dagger
+// Factory is automatically generated by Dagger/Hilt
 @AssistedFactory
 interface UserRepositoryFactory {
     fun create(userId: String): UserRepository
 }
 
-// Usage: inject factory, call with runtime data
+// Usage: inject the factory and call it with runtime data
 class UserViewModel @Inject constructor(
     private val userRepositoryFactory: UserRepositoryFactory,
     savedStateHandle: SavedStateHandle
@@ -337,7 +342,8 @@ class UserViewModel @Inject constructor(
     // Create repository with both injected and runtime params
     private val repository = userRepositoryFactory.create(userId)
 
-    val userData = repository.getUserData()
+    // In real code you'd usually expose LiveData/Flow; simplified here
+    suspend fun loadUser(): User = repository.getUserData()
 }
 ```
 
@@ -386,7 +392,7 @@ class TransferProcessor @AssistedInject constructor(
 
 @AssistedFactory
 interface TransferProcessorFactory {
-    // Parameter names in factory must match @Assisted names
+    // Names in the factory must match the names in @Assisted
     fun create(
         @Assisted("fromUserId") fromUserId: String,
         @Assisted("toUserId") toUserId: String,
@@ -399,7 +405,7 @@ interface TransferProcessorFactory {
 ```kotlin
 @HiltWorker
 class DataSyncWorker @AssistedInject constructor(
-    // Assisted parameters from WorkManager
+    // Assisted parameters from WorkManager (Context and WorkerParameters are always @Assisted)
     @Assisted context: Context,
     @Assisted params: WorkerParameters,
     // Injected dependencies
@@ -417,7 +423,7 @@ class DataSyncWorker @AssistedInject constructor(
             when (syncType) {
                 "full" -> syncAll()
                 "incremental" -> syncIncremental()
-                else -> Result.failure()
+                else -> return Result.failure()
             }
 
             notificationManager.showSuccess("Sync completed")
@@ -481,7 +487,7 @@ class ProductViewHolder @AssistedInject constructor(
     fun bind(product: Product) {
         currentProduct = product
         titleView.text = product.title
-        priceView.text = "$${product.price}"
+        priceView.text = "${'$'}${product.price}"
         imageLoader.load(product.imageUrl, imageView)
     }
 }
@@ -494,33 +500,58 @@ interface ProductViewHolderFactory {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как Assisted Injection влияет на производительность по сравнению со стандартным внедрением?
+- Какие стратегии тестирования Assisted Injection вы используете?
+- В каких случаях следует избегать Assisted Injection?
+
 ## Follow-ups
 
 - How does Assisted Injection affect performance compared to standard injection?
 - What are the testing strategies for Assisted Injection?
 - When should you avoid using Assisted Injection?
 
+## Ссылки (RU)
+
+- [Architecture](https://developer.android.com/topic/architecture)
+- [Android Documentation](https://developer.android.com/docs)
 
 ## References
 
 - [Architecture](https://developer.android.com/topic/architecture)
 - [Android Documentation](https://developer.android.com/docs)
 
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-dagger]]
+
+### Предпосылки (проще)
+
+### Похожие (того же уровня)
+
+- [[q-hilt-entry-points--android--medium]] - Entry Points
+- [[q-kmm-dependency-injection--android--medium]] - DI паттерны
+
+### Продвинутые (сложнее)
+
+- [[q-dagger-multibinding--android--hard]] - Multibinding
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
-- [[c-assisted-injection]]
-
+- [[c-dagger]]
 
 ### Prerequisites (Easier)
 
 ### Related (Same Level)
+
 - [[q-hilt-entry-points--android--medium]] - Entry Points
-- [[q-hilt-viewmodel-injection--android--medium]] - ViewModel injection
 - [[q-kmm-dependency-injection--android--medium]] - DI patterns
 
 ### Advanced (Harder)
+
 - [[q-dagger-multibinding--android--hard]] - Multibinding
-- [[q-hilt-testing--android--hard]] - Hilt testing

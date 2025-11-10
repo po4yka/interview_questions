@@ -45,13 +45,16 @@ tags: [android/architecture-mvvm, android/testing-unit, android/ui-compose, diff
 ```kotlin
 // ✅ Постепенная интеграция - минимальный риск
 class MainActivity : AppCompatActivity() {
+    private val viewModel: MainViewModel by viewModels() // пример Activity-скоупа для стейта
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main) // XML layout
 
         findViewById<ComposeView>(R.id.composeView).setContent {
             MaterialTheme {
-                UserProfileCard(user = viewModel.currentUser.collectAsState().value)
+                val user by viewModel.currentUser.collectAsState()
+                UserProfileCard(user = user)
             }
         }
     }
@@ -59,10 +62,10 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Этап 3: AndroidView для legacy-компонентов**
-Используйте XML views внутри Compose через `AndroidView`:
+Используйте XML views внутри Compose через `AndroidView` (пример упрощён — для production-MapView потребуется корректная привязка к lifecycle):
 
 ```kotlin
-// ✅ Обратная интеграция - для сложных кастомных View
+// ✅ Обратная интеграция - для сложных кастомных View (упрощённый пример)
 @Composable
 fun LegacyMapView(location: Location) {
     AndroidView(
@@ -73,6 +76,7 @@ fun LegacyMapView(location: Location) {
             }
         }
     )
+    // В реальном проекте обеспечьте вызовы onStart/onResume/onPause/... через Lifecycle
 }
 ```
 
@@ -91,15 +95,15 @@ app/
 - Или Compose Navigation с `AndroidViewBinding` для legacy-экранов
 
 **Этап 6: Design System**
-Создавайте Compose-версии UI-компонентов параллельно с XML. В переходный период поддерживайте оба варианта.
+Создавайте Compose-версии UI-компонентов параллельно с XML. В переходный период поддерживайте оба варианта и постепенно удаляйте неиспользуемые XML-компоненты.
 
 ### Общие Паттерны Миграции
 
 - `RecyclerView` → `LazyColumn` / `LazyRow`
 - `ViewPager2` → `HorizontalPager`
 - `Fragment` → `@Composable` function
-- `LiveData.observe()` → `collectAsState()`
-- `findViewById()` → State hoisting
+- `LiveData.observe()` → `collectAsState()` / `collectAsStateWithLifecycle()`
+- `findViewById()` → State hoisting и передачa стейта через параметры
 
 ### Риски И Решения
 
@@ -113,16 +117,18 @@ fun HeavyList(items: List<Item>) {
     LazyColumn { items(sorted) { ItemRow(it) } }
 }
 
-// ✅ Хорошо - кешируем результат
+// ✅ Лучше - кешируем результат для неизменяемых входных данных
 @Composable
 fun HeavyList(items: List<Item>) {
     val sorted = remember(items) { items.sortedBy { it.name } }
     LazyColumn { items(sorted, key = { it.id }) { ItemRow(it) } }
 }
+// При использовании одного и того же list-объекта убедитесь, что изменения создают новый список,
+// иначе remember не пересчитает результат.
 ```
 
 **Риск 2: Увеличение APK**
-Включите R8/ProGuard оптимизации: `minifyEnabled = true`, `shrinkResources = true`.
+Включите R8/ProGuard оптимизации: `minifyEnabled = true`, `shrinkResources = true`. По мере миграции удаляйте дублирующиеся XML-ресурсы и старые View-библиотеки, чтобы избежать роста размера.
 
 **Риск 3: Сложные кастомные View**
 Используйте Canvas API в Compose для полного контроля над отрисовкой.
@@ -156,13 +162,16 @@ Embed Compose components in existing screens via `ComposeView`:
 ```kotlin
 // ✅ Gradual integration - minimal risk
 class MainActivity : AppCompatActivity() {
+    private val viewModel: MainViewModel by viewModels() // example Activity-scoped state
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main) // XML layout
 
         findViewById<ComposeView>(R.id.composeView).setContent {
             MaterialTheme {
-                UserProfileCard(user = viewModel.currentUser.collectAsState().value)
+                val user by viewModel.currentUser.collectAsState()
+                UserProfileCard(user = user)
             }
         }
     }
@@ -170,10 +179,10 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Phase 3: AndroidView for Legacy Components**
-Use XML views inside Compose via `AndroidView`:
+Use XML views inside Compose via `AndroidView` (simplified example — production MapView requires proper lifecycle handling):
 
 ```kotlin
-// ✅ Reverse integration - for complex custom Views
+// ✅ Reverse integration - for complex custom Views (simplified)
 @Composable
 fun LegacyMapView(location: Location) {
     AndroidView(
@@ -184,6 +193,7 @@ fun LegacyMapView(location: Location) {
             }
         }
     )
+    // In a real project, ensure onStart/onResume/onPause/... are forwarded via Lifecycle
 }
 ```
 
@@ -202,15 +212,15 @@ app/
 - Or Compose Navigation with `AndroidViewBinding` for legacy screens
 
 **Phase 6: Design System**
-Create Compose versions of UI components in parallel with XML. Support both during transition period.
+Create Compose versions of UI components in parallel with XML. Support both during transition and gradually remove unused XML components.
 
 ### Common Migration Patterns
 
 - `RecyclerView` → `LazyColumn` / `LazyRow`
 - `ViewPager2` → `HorizontalPager`
 - `Fragment` → `@Composable` function
-- `LiveData.observe()` → `collectAsState()`
-- `findViewById()` → State hoisting
+- `LiveData.observe()` → `collectAsState()` / `collectAsStateWithLifecycle()`
+- `findViewById()` → State hoisting and passing state via parameters
 
 ### Risks and Solutions
 
@@ -224,19 +234,21 @@ fun HeavyList(items: List<Item>) {
     LazyColumn { items(sorted) { ItemRow(it) } }
 }
 
-// ✅ Good - caches result
+// ✅ Better - cache result for immutable input lists
 @Composable
 fun HeavyList(items: List<Item>) {
     val sorted = remember(items) { items.sortedBy { it.name } }
     LazyColumn { items(sorted, key = { it.id }) { ItemRow(it) } }
 }
+// When reusing the same list instance, ensure mutations create a new list,
+// otherwise remember will not recompute.
 ```
 
 **Risk 2: APK Size Increase**
-Enable R8/ProGuard optimizations: `minifyEnabled = true`, `shrinkResources = true`.
+Enable R8/ProGuard optimizations: `minifyEnabled = true`, `shrinkResources = true`. As you migrate, remove duplicate XML resources and old View-based libraries to avoid unnecessary size growth.
 
 **Risk 3: Complex Custom Views**
-Use Canvas API in Compose for full control over drawing.
+Use Canvas API in Compose for full drawing control.
 
 ### Migration Plan (50+ screens)
 

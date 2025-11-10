@@ -60,23 +60,29 @@ Design a short‑video feed for Android. Targets: cold start <2.0s (p95), first 
 
 ### Воспроизведение
 
-HLS/DASH с сегментами ~1с; включить low‑latency режим где доступен. ExoPlayer: фоновый prefetch и быстрый старт; отключен seek pre-roll; переиспользование surface для избежания GL churn.
+HLS/DASH с сегментами ~1с; включить low‑latency режим где доступен. ExoPlayer: быстрая инициализация, использование CacheDataSource/MediaSource для сегментного кеширования и частично скачанных сегментов, переиспользование surface для избежания GL churn. Seek pre-roll отключён, если продуктом не требуется.
+
+ABR: ограничивать варианты профилями устройства и сети; prefetch ориентировать на текущий/ожидаемый bitrate, чтобы не тратить трафик и кеш.
 
 ### Prefetch
 
-Пока просматривается элемент i, префетч первых 2–3 сегментов элемента i+1 и thumbnails для i+2..i+5. Отмена при быстрой прокрутке. Эвристический throttle на metered/low‑battery.
+Пока просматривается элемент i, префетч первых 2–3 сегментов i+1 (с учётом выбранного/ожидаемого bitrate) и thumbnails для i+2..i+5. Prefetch выполняется только при активном экране/foreground-сценарии, отменяется при быстрой прокрутке. Эвристический throttle на metered/low‑battery.
 
 ### Кеширование
 
-LRU по last‑played и возрасту с лимитом 300MB; хранить только первые N сегментов для холодных видео для минимизации write‑amplification. Персист позиции просмотра.
+LRU по last‑played и возрасту с лимитом 300MB. Использовать сегментный кеш (ExoPlayer Cache) и хранить только первые N сегментов для холодных видео для минимизации write‑amplification. Гарантировать неполный кеш (частичные сегменты) для быстрого старта на следующем просмотре. Персист позиции просмотра.
 
 ### Загрузка
 
-Hardware MediaCodec H.264 (HEVC под флагом); GOP=1с; CBR‑biased VBR. Чанки 4–8MB с SHA‑256; возобновление с offset negotiation; TLS; опционально клиентское AES‑GCM шифрование. Генерация poster frame + blur превью; pre‑upload metadata.
+Hardware MediaCodec H.264 (HEVC под флагом); GOP=1с; CBR‑biased VBR. Чанки 4–8MB с SHA‑256; возобновление с offset negotiation; TLS; опционально клиентское AES‑GCM шифрование.
+
+Для длинных/критичных загрузок использовать Foreground Service + WorkManager (expedited / с ограничениями) в соответствии с требованиями Android 11–15, с видимым уведомлением для пользователя. Генерация poster frame + blur превью на устройстве; отправка pre‑upload metadata.
 
 ### Фон/Питание
 
-WorkManager для загрузок с constraints; backoff с server hints. Воспроизведение адаптирует битрейт и frame rate при термальных событиях.
+WorkManager для отложенных загрузок с constraints; backoff с server hints. Prefetch ограничивать только foreground-воспроизведением, без долгоживущих фоновых задач, чтобы не нарушать ограничения ОС.
+
+Воспроизведение адаптирует bitrate и (при необходимости) frame rate при термальных событиях через callbacks thermal API/PerformanceHint и настройки ExoPlayer (ограничение резолюции/bitrate).
 
 ### Наблюдаемость
 
@@ -104,39 +110,45 @@ Modules: feed-ui, player-core (ExoPlayer), media-cache, prefetcher, uploader, an
 
 ### Playback
 
-HLS/DASH with ~1s segments; enable low‑latency mode where available. Configure ExoPlayer with background prefetch and fast start; seek pre-roll disabled; surface reuse to avoid GL churn.
+Use HLS/DASH with ~1s segments; enable low-latency mode where available. Configure ExoPlayer for fast startup, using CacheDataSource/MediaSource for segment-level caching and partial segment reuse; reuse the same Surface to avoid GL churn. Disable seek pre-roll if not required by the product.
+
+ABR: constrain variants based on device/network profiles; align prefetch with the current/likely bitrate to avoid wasting bandwidth and cache.
 
 ### Prefetch
 
-While viewing item i, prefetch first 2–3 segments of i+1 and thumbnails for i+2..i+5. Cancel on rapid scroll. Heuristic throttle on metered/low‑battery.
+While viewing item i, prefetch the first 2–3 segments of i+1 (using the selected/expected bitrate) and thumbnails for i+2..i+5. Run prefetch only while the app/screen is in foreground and cancel on rapid scroll. Apply heuristic throttling on metered networks / low battery.
 
 ### Caching
 
-LRU by last‑played and age with 300MB cap; keep first N segments only for cold videos to minimize write‑amplification. Persist watch position.
+Use an LRU policy by last-played and age with a 300MB cap. Rely on ExoPlayer's segment cache; for cold videos store only the first N segments to reduce write amplification. Allow partial cache for segments to speed up future starts. Persist watch position.
 
 ### Upload
 
-Hardware MediaCodec H.264 (HEVC via flag); GOP=1s; CBR‑biased VBR. Chunk 4–8MB with SHA‑256; resumable with offset negotiation; TLS; optional client‑side AES‑GCM encrypt. Generate poster frame + blurred preview; pre‑upload metadata.
+Use hardware MediaCodec for H.264 (HEVC behind a flag); GOP=1s; CBR-biased VBR. Chunk uploads into 4–8MB pieces with SHA-256; support resumable uploads with offset negotiation; use TLS; optionally encrypt chunks client-side with AES-GCM.
+
+For long/critical uploads, use a Foreground Service combined with WorkManager (expedited/with constraints) per Android 11–15 requirements, with a visible notification so the OS does not kill the job silently. Generate a poster frame + blurred preview on-device; send pre-upload metadata.
 
 ### Background/Power
 
-Rely on WorkManager for uploads with constraints; backoff with server hints. Playback adapts bitrate and frame rate under thermal events.
+Use WorkManager for deferred uploads with constraints; apply backoff with server hints. Restrict prefetch to foreground playback (no long-running background prefetch loops) to comply with OS limits.
+
+Handle thermal events by adapting bitrate and, if needed, frame rate using thermal/PerformanceHint APIs and ExoPlayer configuration (e.g., cap resolution/bitrate on high thermal states).
 
 ### Observability
 
-Startup p95, first‑frame time, rebuffer%, cache hit rate, upload retry histogram, crash/ANR. Health gates with automated rollback.
+Track startup p95, first-frame time, rebuffer%, cache hit rate, upload retry histogram, crash/ANR. Use health gates with automated rollback.
 
 ### Testing
 
-Throttled networks, CDN outage drills, device matrix perf, process‑death, scroll‑storm tests.
+Test with throttled networks, CDN outage drills, a representative device matrix for performance, process-death, and scroll-storm scenarios.
 
 ### Sequencing
 
-MVP (basic playback + simple upload) → Prefetch/cache → ABR/LL‑HLS → Thermal adaptations.
+MVP (basic playback + simple upload) → Prefetch/cache → ABR/LL-HLS → Thermal adaptations.
 
 ### Tradeoffs
 
-Short segments improve start but add overhead; use HTTP/2 and tuned prefetch to compensate. HEVC saves bandwidth but risks compatibility—flag‑guard.
+Short segments improve startup but add overhead; mitigate via HTTP/2 and tuned prefetch. HEVC saves bandwidth but has compatibility risks—protect behind flags.
 
 ---
 

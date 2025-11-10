@@ -1,12 +1,7 @@
 ---
 id: android-265
 title: "Multiple Manifests Multimodule / Множественные манифесты в мультимодульных проектах"
-aliases: [
-  "Multiple Manifests Multimodule",
-  "Множественные манифесты в мультимодульных проектах",
-  "Android Manifest Merging",
-  "Слияние манифестов Android"
-]
+aliases: ["Multiple Manifests Multimodule", "Множественные манифесты в мультимодульных проектах", "Android Manifest Merging", "Слияние манифестов Android"]
 topic: android
 subtopics: [architecture-modularization, gradle, dependency-management]
 question_kind: theory
@@ -15,14 +10,12 @@ original_language: ru
 language_tags: [ru, en]
 status: draft
 moc: moc-android
-related: [c-gradle, c-android-manifest]
+related: [c-gradle, q-android-manifest-file--android--easy, q-android-modularization--android--medium]
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/architecture-modularization, android/gradle, android/dependency-management, manifest-merging, modularization, difficulty/medium]
-sources: [
-  "https://developer.android.com/build/manage-manifests",
-  "https://developer.android.com/studio/build/manifest-merge"
-]
+sources: ["https://developer.android.com/build/manage-manifests", "https://developer.android.com/studio/build/manifest-merge"]
+
 ---
 
 # Вопрос (RU)
@@ -39,9 +32,9 @@ sources: [
 
 В многомодульных проектах каждый модуль имеет свой **AndroidManifest.xml** для:
 
-1. **Модульной независимости** - модуль объявляет только свои зависимости
-2. **Инкапсуляции компонентов** - Activity/Service/Provider локализованы в модуле
-3. **Автоматического слияния** - build система объединяет все манифесты в один
+1. **Модульной независимости** - модуль описывает свои компоненты, permissions, intent-filter'ы и требования к среде, не засоряя основной манифест
+2. **Инкапсуляции компонентов** - `Activity`/`Service`/Provider локализованы в модуле и явно декларируются там
+3. **Автоматического слияния** - build-система (Gradle + manifest merger) объединяет все манифесты в один итоговый
 
 ### Принцип работы
 
@@ -60,7 +53,7 @@ project/
 ```xml
 <!-- feature-camera/src/main/AndroidManifest.xml -->
 <manifest package="com.example.feature.camera">
-    <!-- ✅ Модуль сам объявляет свои зависимости -->
+    <!-- ✅ Модуль сам объявляет свои требования к платформе -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
 
@@ -74,9 +67,9 @@ project/
 ```
 
 **Преимущества:**
-- Удалили модуль → автоматически удалились permissions и компоненты
-- Модуль переносится между проектами без изменений
-- Ясно, какому модулю нужны какие разрешения
+- Удалили модуль → автоматически удалились его permissions и компоненты из итогового манифеста
+- Модуль проще переносить между проектами (минимум правок)
+- Ясно, какому модулю нужны какие разрешения и компоненты
 
 ### Приоритет слияния
 
@@ -96,27 +89,27 @@ project/
 <manifest xmlns:tools="http://schemas.android.com/tools">
     <activity
         android:name=".LoginActivity"
-        tools:replace="android:screenOrientation" />  <!-- Заменить атрибут -->
+        tools:replace="android:screenOrientation" />  <!-- Заменить атрибут при конфликте -->
 </manifest>
 ```
 
-**Merge tools:**
-- `tools:node="merge"` - слияние (по умолчанию)
-- `tools:node="replace"` - замена узла целиком
-- `tools:node="remove"` - удаление узла
-- `tools:replace="attr"` - замена конкретного атрибута
+**Merge tools (основные):**
+- `tools:node="merge"` - поведение слияния по умолчанию (явно указывать обычно не нужно)
+- `tools:node="replace"` - заменить узел целиком
+- `tools:node="remove"` - удалить узел из итогового манифеста
+- `tools:replace="attr"` - заменить конкретный атрибут при конфликте значений
 
 ### Best practices
 
 ✅ **DO:**
-- App манифест минимален - только launcher activity и Application
-- Feature-модули самодостаточны - объявляют всё необходимое
-- Library-модули без `<application>` - только permissions
+- Держать app-манифест минимальным: `application`, launcher activity, high-level настройки
+- Пусть feature-модули будут самодостаточными: объявляют свои компоненты, permissions, intent-filter'ы
+- В library-модулях обычно не определять свой `<application>`, если нет специфической причины
 
 ❌ **DON'T:**
-- Дублировать permissions в app манифесте (они придут из модулей)
-- Хардкодить `android:authorities` (используй `${applicationId}`)
-- Игнорировать merge conflicts (проверяй Merged Manifest tab)
+- Специально дублировать permissions в app-манифесте, если они уже объявлены в модулях (manifest merger подтянет их автоматически; дубли не ломают сборку, но засоряют файл)
+- Хардкодить `android:authorities` (используй `${applicationId}` для уникальности в разных сборках)
+- Игнорировать merge conflicts (проверяй вкладку Merged Manifest и логи manifest merger)
 
 ### Просмотр результата
 
@@ -134,9 +127,9 @@ cat app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 
 In multi-module projects, each module has its own **AndroidManifest.xml** for:
 
-1. **Modular independence** - module declares only its own dependencies
-2. **Component encapsulation** - Activity/Service/Provider scoped to module
-3. **Automatic merging** - build system merges all manifests into one
+1. **Modular independence** - the module describes its own components, permissions, intent filters, and requirements without polluting the main manifest
+2. **Component encapsulation** - Activities/Services/Providers are declared in and scoped to the module that owns them
+3. **Automatic merging** - the build system (Gradle + manifest merger) combines all manifests into a single final manifest
 
 ### How it works
 
@@ -155,7 +148,7 @@ project/
 ```xml
 <!-- feature-camera/src/main/AndroidManifest.xml -->
 <manifest package="com.example.feature.camera">
-    <!-- ✅ Module declares its own dependencies -->
+    <!-- ✅ Module declares its own platform requirements -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-feature android:name="android.hardware.camera" />
 
@@ -169,9 +162,9 @@ project/
 ```
 
 **Benefits:**
-- Remove module → permissions and components auto-removed
-- Module portable between projects without changes
-- Clear ownership of permissions per module
+- Removing a module → its permissions and components are automatically removed from the final merged manifest
+- Module is easier to move between projects (minimal changes needed)
+- Clear ownership of permissions/components per module
 
 ### Merge priority
 
@@ -191,29 +184,29 @@ project/
 <manifest xmlns:tools="http://schemas.android.com/tools">
     <activity
         android:name=".LoginActivity"
-        tools:replace="android:screenOrientation" />  <!-- Replace attribute -->
+        tools:replace="android:screenOrientation" />  <!-- Replace attribute on conflict -->
 </manifest>
 ```
 
-**Merge tools:**
-- `tools:node="merge"` - merge nodes (default)
+**Merge tools (key ones):**
+- `tools:node="merge"` - default merge behavior (usually implicit)
 - `tools:node="replace"` - replace entire node
-- `tools:node="remove"` - remove node
-- `tools:replace="attr"` - replace specific attribute
+- `tools:node="remove"` - remove node from final manifest
+- `tools:replace="attr"` - replace specific attribute value on conflict
 
 ### Best practices
 
 ✅ **DO:**
-- Keep app manifest minimal - only launcher activity and Application
-- Make feature modules self-contained - declare everything needed
-- Library modules without `<application>` - only permissions
+- Keep the app manifest minimal: `application`, launcher activity, high-level configuration
+- Make feature modules self-contained: declare their own components, permissions, intent filters
+- In library modules, usually avoid defining a dedicated `<application>` unless there is a strong reason
 
 ❌ **DON'T:**
-- Duplicate permissions in app manifest (they come from modules)
-- Hardcode `android:authorities` (use `${applicationId}`)
-- Ignore merge conflicts (check Merged Manifest tab)
+- Intentionally duplicate permissions in the app manifest if already declared in modules (manifest merger will bring them into the final manifest; duplicates are allowed but add noise)
+- Hardcode `android:authorities` (use `${applicationId}` to keep authorities unique across variants)
+- Ignore merge conflicts (review the Merged Manifest tab and manifest merger logs)
 
-### View merged result
+### `View` merged result
 
 **Android Studio:** `app/AndroidManifest.xml` → **Merged Manifest** tab
 
@@ -225,36 +218,54 @@ cat app/build/intermediates/merged_manifests/debug/AndroidManifest.xml
 
 ---
 
+## Дополнительные вопросы (RU)
+
+1. Как в Android Studio анализировать и отлаживать конфликты слияния манифестов (Merged Manifest, логи manifest merger)?
+2. Что произойдет, если два модуля объявят одно и то же разрешение с разными атрибутами или protectionLevel?
+3. Чем `tools:node="removeAll"` отличается от `tools:node="remove"` при работе с потомками элементов?
+4. Могут ли library/feature-модули переопределять атрибуты, определенные в app-манифесте, и в каких случаях это сработает?
+5. Как исключить или переопределить конкретные элементы манифеста, приходящие из зависимостей (AAR-библиотек)?
+
 ## Follow-ups
 
-1. How to debug manifest merge conflicts in Android Studio?
-2. What happens when two modules declare the same permission with different protection levels?
-3. How does `tools:node="removeAll"` differ from `tools:node="remove"`?
-4. Can library modules override attributes in the app manifest?
-5. How to exclude specific manifest entries from a dependency module?
+1. How can you inspect and debug manifest merge issues in Android Studio (Merged Manifest view, merger logs)?
+2. What happens if two modules declare the same permission with different attributes or protection levels?
+3. How does `tools:node="removeAll"` differ from `tools:node="remove"` when working with child elements?
+4. Can library/feature modules override attributes defined in the app manifest, and in which scenarios will this apply?
+5. How can you exclude or override specific manifest entries coming from dependency AARs?
+
+## Ссылки (RU)
+
+- [[c-gradle]]
+- [Управление несколькими файлами манифеста](https://developer.android.com/build/manage-manifests)
+- [Инструмент слияния манифестов](https://developer.android.com/studio/build/manifest-merge)
 
 ## References
 
 - [[c-gradle]]
-- [[c-android-manifest]]
-- [[c-modularization]]
 - [Merge multiple manifest files](https://developer.android.com/build/manage-manifests)
 - [Manifest merge tool](https://developer.android.com/studio/build/manifest-merge)
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-android-manifest-file--android--easy]] - Основы файла манифеста
+- [[q-android-project-parts--android--easy]] - Структура Android-проекта
+
+### Связанные (такой же уровень)
+- [[q-android-modularization--android--medium]] - Стратегии модульности
+
+### Продвинутые (сложнее)
+- [[q-android-release-pipeline-cicd--android--hard]] - CI/CD и релизный пайплайн для мультимодульных проектов
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - [[q-android-manifest-file--android--easy]] - Manifest file basics
-- [[q-gradle-basics--android--easy]] - Gradle build system
 - [[q-android-project-parts--android--easy]] - Android project structure
 
 ### Related (Same Level)
-- [[q-module-types-android--android--medium]] - Types of Android modules
 - [[q-android-modularization--android--medium]] - Modularization strategies
-- [[q-build-optimization-gradle--android--medium]] - Gradle optimization
-- [[q-kapt-vs-ksp--android--medium]] - Annotation processing
 
 ### Advanced (Harder)
-- [[q-modularization-patterns--android--hard]] - Advanced modularization
-- [[q-multi-module-best-practices--android--hard]] - Multi-module architecture
-- [[q-android-release-pipeline-cicd--android--hard]] - CI/CD for modules
+- [[q-android-release-pipeline-cicd--android--hard]] - CI/CD for multi-module setups

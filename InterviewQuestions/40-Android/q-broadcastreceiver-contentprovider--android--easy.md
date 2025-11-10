@@ -4,44 +4,47 @@ title: BroadcastReceiver and ContentProvider / BroadcastReceiver и ContentProvi
 aliases: [BroadcastReceiver and ContentProvider, BroadcastReceiver и ContentProvider]
 topic: android
 subtopics:
-  - broadcast-receiver
-  - content-provider
+- broadcast-receiver
+- content-provider
 question_kind: android
 difficulty: easy
 original_language: ru
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - q-android-app-components--android--easy
-  - q-android-manifest-file--android--easy
-  - q-android-service-types--android--easy
+- c-broadcast-receiver
+- c-content-provider
+- q-android-app-components--android--easy
+- q-android-manifest-file--android--easy
+- q-android-service-types--android--easy
 sources:
-  - https://developer.android.com/guide/components/broadcasts
-  - https://developer.android.com/guide/topics/providers/content-provider-basics
+- "https://developer.android.com/guide/components/broadcasts"
+- "https://developer.android.com/guide/topics/providers/content-provider-basics"
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-11-10
 tags: [android/broadcast-receiver, android/content-provider, difficulty/easy]
+
 ---
 
 # Вопрос (RU)
-> Что такое BroadcastReceiver и ContentProvider в Android?
+> Что такое `BroadcastReceiver` и `ContentProvider` в Android?
 
 # Question (EN)
-> What are BroadcastReceiver and ContentProvider in Android?
+> What are `BroadcastReceiver` and `ContentProvider` in Android?
 
 ---
 
 ## Ответ (RU)
 
-### BroadcastReceiver
+### `BroadcastReceiver`
 
 **Компонент для получения системных и пользовательских событий**. Реагирует на широковещательные сообщения (broadcasts) от системы или других приложений.
 
 **Виды broadcasts**:
-- System: ACTION_BATTERY_LOW, ACTION_BOOT_COMPLETED, CONNECTIVITY_CHANGE
+- System: ACTION_BATTERY_LOW, ACTION_BOOT_COMPLETED, ACTION_POWER_CONNECTED
 - Custom: события между компонентами приложения
 
 **Регистрация**:
@@ -50,7 +53,7 @@ tags: [android/broadcast-receiver, android/content-provider, difficulty/easy]
 class MainActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            // Обработка < 10 сек (иначе ANR)
+            // Обработка должна быть быстрой (< ~10 сек, иначе риск ANR)
         }
     }
 
@@ -66,8 +69,8 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-```kotlin
-// ❌ Статическая в Manifest (ограничена с API 26+)
+```xml
+// ✅ Статическая в Manifest (для определённых системных и явных broadcast'ов доступна и после API 26)
 <receiver android:name=".MyReceiver">
     <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -76,19 +79,27 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Критичные ограничения**:
-- onReceive() выполняется на main thread (max 10 сек → ANR)
-- Для фоновой работы: WorkManager / JobScheduler
+- `onReceive()` обычно вызывается в main thread; обработка должна быть быстрой (долгие операции → риск ANR)
+- Для длительной фоновой работы использовать `WorkManager` / `JobScheduler` / `ForegroundService`
+- Начиная с API 26 большинство неявных broadcast'ов для сторонних приложений ограничены; использовать явные или разрешённые системные события
 
-### ContentProvider
+### `ContentProvider`
 
 **Стандартизированный интерфейс для доступа к структурированным данным**. Обеспечивает CRUD операции и обмен данными между приложениями через URI.
 
-**Базовая реализация**:
+**Базовая реализация (упрощённый пример)**:
 ```kotlin
 class ContactsProvider : ContentProvider() {
+    override fun onCreate(): Boolean {
+        // Инициализация БД / ресурсов
+        return true
+    }
+
     override fun query(
-        uri: Uri, projection: Array<String>?,
-        selection: String?, selectionArgs: Array<String>?,
+        uri: Uri,
+        projection: Array<String>?,
+        selection: String?,
+        selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? = db.query(...)
 
@@ -97,6 +108,19 @@ class ContactsProvider : ContentProvider() {
         context?.contentResolver?.notifyChange(uri, null)
         return ContentUris.withAppendedId(uri, id)
     }
+
+    override fun update(
+        uri: Uri,
+        values: ContentValues?,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): Int = db.update(...)
+
+    override fun delete(
+        uri: Uri,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): Int = db.delete(...)
 
     override fun getType(uri: Uri): String? = when (uriMatcher.match(uri)) {
         CONTACTS -> "vnd.android.cursor.dir/vnd.app.contact"
@@ -111,7 +135,13 @@ class ContactsProvider : ContentProvider() {
 // Чтение контактов
 val cursor = contentResolver.query(
     ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-    arrayOf(DISPLAY_NAME, NUMBER), null, null, null
+    arrayOf(
+        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+        ContactsContract.CommonDataKinds.Phone.NUMBER
+    ),
+    null,
+    null,
+    null
 )
 ```
 
@@ -122,12 +152,12 @@ val cursor = contentResolver.query(
 
 ## Answer (EN)
 
-### BroadcastReceiver
+### `BroadcastReceiver`
 
 **Component for receiving system and custom events**. Responds to broadcast messages from the system or other applications.
 
 **Broadcast types**:
-- System: ACTION_BATTERY_LOW, ACTION_BOOT_COMPLETED, CONNECTIVITY_CHANGE
+- System: ACTION_BATTERY_LOW, ACTION_BOOT_COMPLETED, ACTION_POWER_CONNECTED
 - Custom: events between app components
 
 **Registration**:
@@ -136,7 +166,7 @@ val cursor = contentResolver.query(
 class MainActivity : AppCompatActivity() {
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
-            // Process < 10 sec (otherwise ANR)
+            // Keep work fast (< ~10 sec; long work may cause ANR)
         }
     }
 
@@ -152,8 +182,8 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-```kotlin
-// ❌ Static in Manifest (restricted since API 26+)
+```xml
+// ✅ Static in Manifest (still valid for certain system and explicit broadcasts on API 26+)
 <receiver android:name=".MyReceiver">
     <intent-filter>
         <action android:name="android.intent.action.BOOT_COMPLETED"/>
@@ -162,19 +192,27 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Critical constraints**:
-- onReceive() runs on main thread (max 10 sec → ANR)
-- For background work: WorkManager / JobScheduler
+- `onReceive()` is usually called on the main thread; work must be quick (long work → ANR risk)
+- For long-running background work: use `WorkManager` / `JobScheduler` / a `ForegroundService`
+- Since API 26, most implicit broadcasts for third-party apps are restricted; use explicit broadcasts or allowed system actions
 
-### ContentProvider
+### `ContentProvider`
 
 **Standardized interface for accessing structured data**. Provides CRUD operations and data sharing between apps via URI.
 
-**Basic implementation**:
+**Basic implementation (simplified example)**:
 ```kotlin
 class ContactsProvider : ContentProvider() {
+    override fun onCreate(): Boolean {
+        // Initialize DB / resources
+        return true
+    }
+
     override fun query(
-        uri: Uri, projection: Array<String>?,
-        selection: String?, selectionArgs: Array<String>?,
+        uri: Uri,
+        projection: Array<String>?,
+        selection: String?,
+        selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? = db.query(...)
 
@@ -183,6 +221,19 @@ class ContactsProvider : ContentProvider() {
         context?.contentResolver?.notifyChange(uri, null)
         return ContentUris.withAppendedId(uri, id)
     }
+
+    override fun update(
+        uri: Uri,
+        values: ContentValues?,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): Int = db.update(...)
+
+    override fun delete(
+        uri: Uri,
+        selection: String?,
+        selectionArgs: Array<String>?
+    ): Int = db.delete(...)
 
     override fun getType(uri: Uri): String? = when (uriMatcher.match(uri)) {
         CONTACTS -> "vnd.android.cursor.dir/vnd.app.contact"
@@ -197,7 +248,13 @@ class ContactsProvider : ContentProvider() {
 // Reading contacts
 val cursor = contentResolver.query(
     ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-    arrayOf(DISPLAY_NAME, NUMBER), null, null, null
+    arrayOf(
+        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+        ContactsContract.CommonDataKinds.Phone.NUMBER
+    ),
+    null,
+    null,
+    null
 )
 ```
 
@@ -210,11 +267,11 @@ val cursor = contentResolver.query(
 
 ## Follow-ups
 
-- How to avoid ANR in BroadcastReceiver when processing takes > 10 seconds?
+- How to avoid ANR in `BroadcastReceiver` when processing takes > 10 seconds?
 - What's the difference between ordered and normal broadcasts, and when to use each?
-- How to secure ContentProvider with read/write permissions and URI grants?
-- When to choose ContentProvider vs direct database access for data sharing?
-- How to implement UriMatcher for multi-table ContentProvider routing?
+- How to secure `ContentProvider` with read/write permissions and URI grants?
+- When to choose `ContentProvider` vs direct database access for data sharing?
+- How to implement `UriMatcher` for multi-table `ContentProvider` routing?
 
 ## References
 

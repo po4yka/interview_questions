@@ -12,9 +12,10 @@ status: draft
 moc: moc-android
 related: [c-jetpack-compose, c-compose-state, c-viewmodel, c-mvvm]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 sources: []
 tags: [android, android/architecture-mvvm, android/ui-compose, difficulty/medium, jetpack-compose]
+
 ---
 
 # Вопрос (RU)
@@ -60,7 +61,7 @@ class MainActivity : ComponentActivity() {
 
 ### Composition Tree & Slot Table
 
-Compose строит дерево composable-функций — **Composition**. Внутри использует **slot table** (gap buffer) для эффективного отслеживания:
+Compose строит дерево composable-функций — **Composition**. Внутри использует **slot table** (структура на основе gap buffer) для эффективного отслеживания:
 
 - Активных composables и их позиций
 - Объектов состояния и запоминаемых значений
@@ -80,14 +81,15 @@ fun Counter() {
         Text("Счет: $count")
 
         Button(onClick = { count++ }) {
-            // ✅ Никогда не перекомпонуется (статичный контент)
+            // ⚠️ Содержимое может быть пропущено при рекомпозиции,
+            // если Compose определит, что оно не изменилось
             Text("Увеличить")
         }
     }
 }
 ```
 
-**Процесс**: Изменение state → Compose помечает зависимые composables невалидными → Перевыполняются только невалидные → UI обновляется.
+**Процесс**: Изменение state → Compose помечает зависимые composables невалидными → Перевыполняются только невалидные участки дерева → UI обновляется.
 
 ### Управление Состоянием
 
@@ -208,7 +210,7 @@ fun ItemRow(item: Item) {
 }
 ```
 
-### Интеграция С ViewModel
+### Интеграция С `ViewModel`
 
 ```kotlin
 class HomeViewModel : ViewModel() {
@@ -218,6 +220,7 @@ class HomeViewModel : ViewModel() {
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
+    // Для простоты примера используется collectAsState без указания LifecycleOwner
     val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
@@ -236,18 +239,18 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 2. **Layout** — измерение и позиционирование элементов
 3. **Drawing** — рендеринг пикселей на экран
 
-**Slot Table** использует gap buffer для эффективного хранения состояния и минимизации перевыделения памяти при рекомпозиции.
+**Slot Table** использует структуру на основе gap buffer для эффективного хранения состояния и минимизации перевыделения памяти при рекомпозиции.
 
-### Ключевые Отличия От View System
+### Ключевые Отличия От `View` System
 
-| View System         | Jetpack Compose           |
+| `View` System         | Jetpack Compose           |
 | ------------------- | ------------------------- |
 | Императивный        | Декларативный             |
 | XML + код           | Чистый Kotlin             |
 | findViewById        | Прямой доступ             |
-| Ручные обновления   | Автоматическая обновление |
+| Ручные обновления   | Автоматическое обновление |
 | RecyclerView нужен  | Встроенный LazyColumn     |
-| Сложный lifecycle   | Простой lifecycle         |
+| Сложный lifecycle   | Более унифицированный lifecycle |
 
 ---
 
@@ -284,7 +287,7 @@ class MainActivity : ComponentActivity() {
 
 ### Composition Tree & Slot Table
 
-Compose builds a tree of composable functions called **Composition**. Internally, it uses a **slot table** (gap buffer) to efficiently track:
+Compose builds a tree of composable functions called **Composition**. Internally, it uses a **slot table** (a gap buffer–based structure) to efficiently track:
 
 - Active composables and their positions
 - State objects and remembered values
@@ -304,14 +307,15 @@ fun Counter() {
         Text("Count: $count")
 
         Button(onClick = { count++ }) {
-            // ✅ Never recomposes (static content)
+            // ⚠️ The content can be skipped during recomposition
+            // when Compose determines it has not changed
             Text("Increment")
         }
     }
 }
 ```
 
-**Process**: State change → Compose marks dependent composables invalid → Only invalid composables re-execute → UI updates.
+**Process**: State change → Compose marks dependent composables invalid → Only invalid parts of the tree re-execute → UI updates.
 
 ### State Management
 
@@ -432,7 +436,7 @@ fun ItemRow(item: Item) {
 }
 ```
 
-### Integration With ViewModel
+### Integration With `ViewModel`
 
 ```kotlin
 class HomeViewModel : ViewModel() {
@@ -442,6 +446,7 @@ class HomeViewModel : ViewModel() {
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
+    // For simplicity, collectAsState is used without explicit LifecycleOwner
     val uiState by viewModel.uiState.collectAsState()
 
     when (uiState) {
@@ -460,20 +465,29 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 2. **Layout** — measure and position elements
 3. **Drawing** — render pixels to screen
 
-**Slot Table** uses a gap buffer for efficient state storage and minimal memory reallocation during recomposition.
+**Slot Table** uses a gap buffer–based structure for efficient state storage and to minimize memory reallocations during recomposition.
 
-### Key Differences From View System
+### Key Differences From `View` System
 
-| View System         | Jetpack Compose       |
-| ------------------- | --------------------- |
-| Imperative          | Declarative           |
-| XML + code          | Pure Kotlin           |
-| findViewById        | Direct access         |
-| Manual updates      | Automatic updates     |
-| RecyclerView needed | Built-in LazyColumn   |
-| Complex lifecycle   | Simple lifecycle      |
+| `View` System         | Jetpack Compose                 |
+| ------------------- | ------------------------------- |
+| Imperative          | Declarative                     |
+| XML + code          | Pure Kotlin                     |
+| findViewById        | Direct access                   |
+| Manual updates      | Automatic updates               |
+| RecyclerView needed | Built-in LazyColumn             |
+| Complex lifecycle   | More unified, composition-based lifecycle |
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как Compose определяет, какие composable-функции нужно рекомпозировать?
+- В чем разница между `remember` и `rememberSaveable`?
+- Когда стоит использовать `LaunchedEffect` vs `DisposableEffect`?
+- Как Compose обрабатывает изменения конфигурации?
+- Что такое стабильные типы и почему они важны для производительности?
+- Как порядок модификаторов влияет на layout и отрисовку?
 
 ## Follow-ups
 
@@ -484,20 +498,37 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 - What are stable types and why are they important for performance?
 - How does modifier order affect layout and drawing?
 
-## References
+## Ссылки (RU)
 
 - [[c-jetpack-compose]]
-- [[c-state-management]]
 - [[c-mvvm-pattern]]
 - https://developer.android.com/jetpack/compose/mental-model
 - https://developer.android.com/jetpack/compose/lifecycle
+
+## References
+
+- [[c-jetpack-compose]]
+- [[c-mvvm-pattern]]
+- https://developer.android.com/jetpack/compose/mental-model
+- https://developer.android.com/jetpack/compose/lifecycle
+
+## Связанные вопросы (RU)
+
+### Базовые (проще)
+
+### Похожие (средний уровень)
+- [[q-compose-semantics--android--medium]] - Техники оптимизации производительности
+
+### Продвинутые (сложнее)
+- [[q-compose-stability-skippability--android--hard]] - Аннотации стабильности и оптимизация рекомпозиции
+- [[q-compose-custom-layout--android--hard]] - Реализация кастомного layout
+- [[q-compose-slot-table-recomposition--android--hard]] - Подробный разбор механики slot table
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
 ### Related (Same Level)
-- [[q-compose-side-effects--android--medium]] - LaunchedEffect, DisposableEffect, SideEffect
 - [[q-compose-semantics--android--medium]] - Performance optimization techniques
 
 ### Advanced (Harder)

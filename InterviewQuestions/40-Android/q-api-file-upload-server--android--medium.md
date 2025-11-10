@@ -4,26 +4,26 @@ title: API File Upload Server / Загрузка файлов на сервер 
 aliases: [API File Upload Server, Загрузка файлов на сервер через API]
 topic: android
 subtopics:
-  - background-execution
-  - files-media
-  - networking-http
+- background-execution
+- files-media
+- networking-http
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 sources: []
-status: reviewed
+status: draft
 moc: moc-android
 related:
-  - c-multipart-form-data
-  - c-okhttp
-  - c-retrofit
-  - c-workmanager
+- c-okhttp
+- c-workmanager
+- q-android-storage-types--android--medium
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/background-execution, android/files-media, android/networking-http, difficulty/medium, okhttp, retrofit, workmanager]
+
 ---
 
 # Вопрос (RU)
@@ -38,7 +38,7 @@ tags: [android/background-execution, android/files-media, android/networking-htt
 
 ## Ответ (RU)
 
-Загрузка файлов использует HTTP multipart/form-data через [[c-retrofit|Retrofit]] с [[c-okhttp|OkHttp]]. Критические аспекты: отслеживание прогресса, фоновая загрузка через [[c-workmanager|WorkManager]], обработка сетевых ошибок и сжатие изображений.
+Загрузка файлов обычно реализуется через HTTP `multipart/form-data` с использованием [[c-retrofit|Retrofit]] и [[c-okhttp|OkHttp]]. Критические аспекты: формирование multipart-запроса, работа с `Uri` и `ContentResolver`, отслеживание прогресса, фоновая загрузка через [[c-workmanager|WorkManager]], обработка сетевых ошибок и сжатие изображений.
 
 ### 1. Базовая Загрузка Через Retrofit
 
@@ -48,40 +48,62 @@ interface FileUploadApi {
     @POST("upload")
     suspend fun uploadFile(
         @Part file: MultipartBody.Part,
-        @Part("description") description: RequestBody
+        @Part("description") description: RequestBody? = null
     ): Response<UploadResponse>
 }
 
-// ✅ Suspend функция с Result для обработки ошибок
-suspend fun uploadFile(file: File): Result<UploadResponse> = runCatching {
-    val requestBody = file.asRequestBody("image/*".toMediaType())
-    val part = MultipartBody.Part.createFormData("file", file.name, requestBody)
-    val description = "Photo upload".toRequestBody("text/plain".toMediaType())
+suspend fun uploadFile(
+    context: Context,
+    uri: Uri,
+    descriptionText: String? = null
+): Result<UploadResponse> = runCatching {
+    val contentResolver = context.contentResolver
 
-    api.uploadFile(part, description).body() ?: throw IOException("Empty response")
+    val mimeType = contentResolver.getType(uri) ?: "application/octet-stream"
+
+    val requestBody = object : RequestBody() {
+        override fun contentType(): MediaType? = mimeType.toMediaTypeOrNull()
+        override fun writeTo(sink: BufferedSink) {
+            contentResolver.openInputStream(uri)?.use { input ->
+                sink.writeAll(input.source())
+            } ?: throw IOException("Cannot open input stream")
+        }
+    }
+
+    val fileName = "upload_${System.currentTimeMillis()}"
+    val part = MultipartBody.Part.createFormData("file", fileName, requestBody)
+
+    val description = descriptionText
+        ?.toRequestBody("text/plain".toMediaType())
+
+    val response = api.uploadFile(part, description)
+    if (!response.isSuccessful) throw HttpException(response)
+    response.body() ?: throw IOException("Empty response body")
 }
 ```
 
 **Ключевые моменты**:
-- `@Multipart` для multipart/form-data
-- `@Part` для отдельных полей
-- `asRequestBody()` создает тело запроса с MIME типом
-- `Result<T>` для безопасной обработки ошибок
+- `@Multipart` для `multipart/form-data`.
+- `@Part` для отдельных полей.
+- Для `Uri` используем `ContentResolver` (особенно важно с scoped storage).
+- `Result<T>` через `runCatching` для безопасной обработки ошибок.
 
 ### 2. Отслеживание Прогресса
 
 ```kotlin
-// ✅ Обёртка RequestBody для отслеживания записи байтов
+// Обёртка RequestBody для отслеживания прогресса
 class ProgressRequestBody(
     private val delegate: RequestBody,
     private val onProgress: (uploaded: Long, total: Long) -> Unit
 ) : RequestBody() {
-    override fun contentType() = delegate.contentType()
-    override fun contentLength() = delegate.contentLength()
+
+    override fun contentType(): MediaType? = delegate.contentType()
+    override fun contentLength(): Long = delegate.contentLength()
 
     override fun writeTo(sink: BufferedSink) {
         val total = contentLength()
         var uploaded = 0L
+
         val forwardingSink = object : ForwardingSink(sink) {
             override fun write(source: Buffer, byteCount: Long) {
                 super.write(source, byteCount)
@@ -89,15 +111,21 @@ class ProgressRequestBody(
                 onProgress(uploaded, total)
             }
         }
-        delegate.writeTo(forwardingSink.buffer())
+
+        val bufferedSink = forwardingSink.buffer()
+        delegate.writeTo(bufferedSink)
+        bufferedSink.flush()
     }
 }
 
-// Использование
-val progressBody = ProgressRequestBody(requestBody) { uploaded, total ->
-    val progress = (uploaded * 100 / total).toInt()
+// Использование: оборачиваем исходный RequestBody
+val baseRequestBody: RequestBody = /* исходный RequestBody для файла */
+val progressBody = ProgressRequestBody(baseRequestBody) { uploaded, total ->
+    val progress = if (total > 0) (uploaded * 100 / total).toInt() else 0
     _uploadProgress.value = progress
 }
+
+val part = MultipartBody.Part.createFormData("file", fileName, progressBody)
 ```
 
 ### 3. Фоновая Загрузка Через WorkManager
@@ -112,17 +140,17 @@ class FileUploadWorker(
         val uri = inputData.getString("file_uri")?.let(Uri::parse)
             ?: return Result.failure()
 
-        return uploadFile(uri).fold(
+        return uploadFile(applicationContext, uri).fold(
             onSuccess = {
-                setProgress(workDataOf("progress" to 100))
+                setProgressAsync(workDataOf("progress" to 100))
                 Result.success()
             },
             onFailure = { e ->
-                // ✅ Retry с exponential backoff при сетевых ошибках
-                if (e is IOException && runAttemptCount < 3) {
+                // Retry с exponential backoff при сетевых ошибках
+                return@fold if (e is IOException && runAttemptCount < 3) {
                     Result.retry()
                 } else {
-                    Result.failure(workDataOf("error" to e.message))
+                    Result.failure(workDataOf("error" to (e.message ?: "unknown error")))
                 }
             }
         )
@@ -132,9 +160,11 @@ class FileUploadWorker(
 // Планирование загрузки
 val uploadRequest = OneTimeWorkRequestBuilder<FileUploadWorker>()
     .setInputData(workDataOf("file_uri" to uri.toString()))
-    .setConstraints(Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build())
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
     .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 30, TimeUnit.SECONDS)
     .build()
 
@@ -142,16 +172,22 @@ WorkManager.getInstance(context).enqueue(uploadRequest)
 ```
 
 **Преимущества WorkManager**:
-- Переживает рестарт приложения
-- Автоматический retry с backoff
-- Работает только при наличии сети
-- Встроенный механизм прогресса
+- Переживает рестарт приложения.
+- Автоматический retry с backoff.
+- Выполняется только при наличии сети (через Constraints).
+- Поддержка прогресса задач.
 
 ### 4. Сжатие Изображений
 
 ```kotlin
-// ✅ Уменьшаем размер для экономии трафика
-suspend fun compressImage(uri: Uri, quality: Int = 80): File = withContext(Dispatchers.IO) {
+// Уменьшаем размер для экономии трафика
+suspend fun compressImage(
+    context: Context,
+    uri: Uri,
+    quality: Int = 80
+): File = withContext(Dispatchers.IO) {
+    val contentResolver = context.contentResolver
+
     val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
     } else {
@@ -159,7 +195,7 @@ suspend fun compressImage(uri: Uri, quality: Int = 80): File = withContext(Dispa
         MediaStore.Images.Media.getBitmap(contentResolver, uri)
     }
 
-    val compressed = File(cacheDir, "compressed_${System.currentTimeMillis()}.jpg")
+    val compressed = File(context.cacheDir, "compressed_${System.currentTimeMillis()}.jpg")
     compressed.outputStream().use { out ->
         bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out)
     }
@@ -167,27 +203,46 @@ suspend fun compressImage(uri: Uri, quality: Int = 80): File = withContext(Dispa
 }
 ```
 
-### 5. Полный Пример ViewModel
+### 5. Полный Пример `ViewModel`
 
 ```kotlin
 class FileUploadViewModel @Inject constructor(
-    private val uploadApi: FileUploadApi,
-    private val workManager: WorkManager
+    private val uploadApi: FileUploadApi
 ) : ViewModel() {
 
     private val _uploadState = MutableStateFlow<UploadState>(UploadState.Idle)
     val uploadState = _uploadState.asStateFlow()
 
-    fun uploadFile(uri: Uri) {
+    fun uploadFile(context: Context, uri: Uri) {
         viewModelScope.launch {
             _uploadState.value = UploadState.Compressing
-            val compressed = compressImage(uri)
+            val compressed = compressImage(context, uri)
 
-            _uploadState.value = UploadState.Uploading(0)
-            uploadApi.uploadFile(compressed).fold(
-                onSuccess = { _uploadState.value = UploadState.Success },
-                onFailure = { _uploadState.value = UploadState.Error(it.message) }
+            val mimeType = context.contentResolver.getType(uri) ?: "image/jpeg"
+            val requestBody = compressed
+                .asRequestBody(mimeType.toMediaType())
+
+            val progressBody = ProgressRequestBody(requestBody) { uploaded, total ->
+                val progress = if (total > 0) (uploaded * 100 / total).toInt() else 0
+                _uploadState.value = UploadState.Uploading(progress)
+            }
+
+            val part = MultipartBody.Part.createFormData(
+                "file",
+                compressed.name,
+                progressBody
             )
+
+            val result = runCatching {
+                val response = uploadApi.uploadFile(part)
+                if (!response.isSuccessful) throw HttpException(response)
+            }
+
+            result.onSuccess {
+                _uploadState.value = UploadState.Success
+            }.onFailure {
+                _uploadState.value = UploadState.Error(it.message)
+            }
         }
     }
 }
@@ -205,15 +260,15 @@ sealed class UploadState {
 
 | Аспект | Рекомендация | Причина |
 |--------|-------------|---------|
-| **Сжатие** | JPEG 80% для фото | Оптимальный баланс качества и размера |
-| **Retry** | 3 попытки с exponential backoff | Учитывает временные сетевые проблемы |
-| **Размер** | < 10MB для мобильных сетей | Избегаем таймаутов и лимитов оператора |
-| **Фоновая загрузка** | WorkManager вместо Service | Гарантированная доставка, экономия батареи |
-| **Разрешения** | READ_MEDIA_IMAGES для Android 13+ | Granular media permissions |
+| Сжатие | JPEG 80% для фото | Баланс качества и размера |
+| Retry | До 3 попыток с exponential backoff | Учитывает временные сетевые проблемы |
+| Размер | < 10MB для мобильных сетей (по возможности) | Снижение риска таймаутов и ограничений |
+| Фоновая загрузка | WorkManager вместо `Service` | Гарантированные условия выполнения, экономия батареи |
+| Разрешения | READ_MEDIA_IMAGES / READ_EXTERNAL_STORAGE в зависимости от API | Корректная работа с медиа-файлами и scoped storage |
 
 ## Answer (EN)
 
-File upload uses HTTP multipart/form-data via [[c-retrofit|Retrofit]] with [[c-okhttp|OkHttp]]. Critical aspects: progress tracking, background upload via [[c-workmanager|WorkManager]], network error handling, and image compression.
+File upload is typically implemented using HTTP `multipart/form-data` via [[c-retrofit|Retrofit]] with [[c-okhttp|OkHttp]]. Critical aspects: building the multipart request, working with `Uri` and `ContentResolver`, progress tracking, background upload via [[c-workmanager|WorkManager]], network error handling, and image compression.
 
 ### 1. Basic Upload via Retrofit
 
@@ -223,40 +278,62 @@ interface FileUploadApi {
     @POST("upload")
     suspend fun uploadFile(
         @Part file: MultipartBody.Part,
-        @Part("description") description: RequestBody
+        @Part("description") description: RequestBody? = null
     ): Response<UploadResponse>
 }
 
-// ✅ Suspend function with Result for error handling
-suspend fun uploadFile(file: File): Result<UploadResponse> = runCatching {
-    val requestBody = file.asRequestBody("image/*".toMediaType())
-    val part = MultipartBody.Part.createFormData("file", file.name, requestBody)
-    val description = "Photo upload".toRequestBody("text/plain".toMediaType())
+suspend fun uploadFile(
+    context: Context,
+    uri: Uri,
+    descriptionText: String? = null
+): Result<UploadResponse> = runCatching {
+    val contentResolver = context.contentResolver
 
-    api.uploadFile(part, description).body() ?: throw IOException("Empty response")
+    val mimeType = contentResolver.getType(uri) ?: "application/octet-stream"
+
+    val requestBody = object : RequestBody() {
+        override fun contentType(): MediaType? = mimeType.toMediaTypeOrNull()
+        override fun writeTo(sink: BufferedSink) {
+            contentResolver.openInputStream(uri)?.use { input ->
+                sink.writeAll(input.source())
+            } ?: throw IOException("Cannot open input stream")
+        }
+    }
+
+    val fileName = "upload_${System.currentTimeMillis()}"
+    val part = MultipartBody.Part.createFormData("file", fileName, requestBody)
+
+    val description = descriptionText
+        ?.toRequestBody("text/plain".toMediaType())
+
+    val response = api.uploadFile(part, description)
+    if (!response.isSuccessful) throw HttpException(response)
+    response.body() ?: throw IOException("Empty response body")
 }
 ```
 
 **Key points**:
-- `@Multipart` for multipart/form-data
-- `@Part` for individual fields
-- `asRequestBody()` creates request body with MIME type
-- `Result<T>` for safe error handling
+- `@Multipart` for `multipart/form-data`.
+- `@Part` for individual fields.
+- Use `ContentResolver` with `Uri` (important for scoped storage).
+- Use `Result<T>` / `runCatching` for safer error handling.
 
 ### 2. Progress Tracking
 
 ```kotlin
-// ✅ RequestBody wrapper to track byte writes
+// RequestBody wrapper to track upload progress
 class ProgressRequestBody(
     private val delegate: RequestBody,
     private val onProgress: (uploaded: Long, total: Long) -> Unit
 ) : RequestBody() {
-    override fun contentType() = delegate.contentType()
-    override fun contentLength() = delegate.contentLength()
+
+    override fun contentType(): MediaType? = delegate.contentType()
+    override fun contentLength(): Long = delegate.contentLength()
 
     override fun writeTo(sink: BufferedSink) {
         val total = contentLength()
         var uploaded = 0L
+
         val forwardingSink = object : ForwardingSink(sink) {
             override fun write(source: Buffer, byteCount: Long) {
                 super.write(source, byteCount)
@@ -264,15 +341,21 @@ class ProgressRequestBody(
                 onProgress(uploaded, total)
             }
         }
-        delegate.writeTo(forwardingSink.buffer())
+
+        val bufferedSink = forwardingSink.buffer()
+        delegate.writeTo(bufferedSink)
+        bufferedSink.flush()
     }
 }
 
-// Usage
-val progressBody = ProgressRequestBody(requestBody) { uploaded, total ->
-    val progress = (uploaded * 100 / total).toInt()
+// Usage: wrap the original RequestBody
+val baseRequestBody: RequestBody = /* original RequestBody for file */
+val progressBody = ProgressRequestBody(baseRequestBody) { uploaded, total ->
+    val progress = if (total > 0) (uploaded * 100 / total).toInt() else 0
     _uploadProgress.value = progress
 }
+
+val part = MultipartBody.Part.createFormData("file", fileName, progressBody)
 ```
 
 ### 3. Background Upload via WorkManager
@@ -287,17 +370,17 @@ class FileUploadWorker(
         val uri = inputData.getString("file_uri")?.let(Uri::parse)
             ?: return Result.failure()
 
-        return uploadFile(uri).fold(
+        return uploadFile(applicationContext, uri).fold(
             onSuccess = {
-                setProgress(workDataOf("progress" to 100))
+                setProgressAsync(workDataOf("progress" to 100))
                 Result.success()
             },
             onFailure = { e ->
-                // ✅ Retry with exponential backoff on network errors
-                if (e is IOException && runAttemptCount < 3) {
+                // Retry with exponential backoff on network errors
+                return@fold if (e is IOException && runAttemptCount < 3) {
                     Result.retry()
                 } else {
-                    Result.failure(workDataOf("error" to e.message))
+                    Result.failure(workDataOf("error" to (e.message ?: "unknown error")))
                 }
             }
         )
@@ -307,9 +390,11 @@ class FileUploadWorker(
 // Schedule upload
 val uploadRequest = OneTimeWorkRequestBuilder<FileUploadWorker>()
     .setInputData(workDataOf("file_uri" to uri.toString()))
-    .setConstraints(Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build())
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
     .setBackoffCriteria(BackoffPolicy.EXPONENTIAL, 30, TimeUnit.SECONDS)
     .build()
 
@@ -317,16 +402,22 @@ WorkManager.getInstance(context).enqueue(uploadRequest)
 ```
 
 **WorkManager advantages**:
-- Survives app restart
-- Automatic retry with backoff
-- Works only with network connection
-- Built-in progress mechanism
+- Survives app restart.
+- Automatic retry with backoff.
+- Runs only when network is available (via Constraints).
+- Built-in support for reporting progress.
 
 ### 4. Image Compression
 
 ```kotlin
-// ✅ Reduce size to save bandwidth
-suspend fun compressImage(uri: Uri, quality: Int = 80): File = withContext(Dispatchers.IO) {
+// Reduce size to save bandwidth
+suspend fun compressImage(
+    context: Context,
+    uri: Uri,
+    quality: Int = 80
+): File = withContext(Dispatchers.IO) {
+    val contentResolver = context.contentResolver
+
     val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
         ImageDecoder.decodeBitmap(ImageDecoder.createSource(contentResolver, uri))
     } else {
@@ -334,7 +425,7 @@ suspend fun compressImage(uri: Uri, quality: Int = 80): File = withContext(Dispa
         MediaStore.Images.Media.getBitmap(contentResolver, uri)
     }
 
-    val compressed = File(cacheDir, "compressed_${System.currentTimeMillis()}.jpg")
+    val compressed = File(context.cacheDir, "compressed_${System.currentTimeMillis()}.jpg")
     compressed.outputStream().use { out ->
         bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out)
     }
@@ -342,27 +433,46 @@ suspend fun compressImage(uri: Uri, quality: Int = 80): File = withContext(Dispa
 }
 ```
 
-### 5. Complete ViewModel Example
+### 5. Complete `ViewModel` Example
 
 ```kotlin
 class FileUploadViewModel @Inject constructor(
-    private val uploadApi: FileUploadApi,
-    private val workManager: WorkManager
+    private val uploadApi: FileUploadApi
 ) : ViewModel() {
 
     private val _uploadState = MutableStateFlow<UploadState>(UploadState.Idle)
     val uploadState = _uploadState.asStateFlow()
 
-    fun uploadFile(uri: Uri) {
+    fun uploadFile(context: Context, uri: Uri) {
         viewModelScope.launch {
             _uploadState.value = UploadState.Compressing
-            val compressed = compressImage(uri)
+            val compressed = compressImage(context, uri)
 
-            _uploadState.value = UploadState.Uploading(0)
-            uploadApi.uploadFile(compressed).fold(
-                onSuccess = { _uploadState.value = UploadState.Success },
-                onFailure = { _uploadState.value = UploadState.Error(it.message) }
+            val mimeType = context.contentResolver.getType(uri) ?: "image/jpeg"
+            val requestBody = compressed
+                .asRequestBody(mimeType.toMediaType())
+
+            val progressBody = ProgressRequestBody(requestBody) { uploaded, total ->
+                val progress = if (total > 0) (uploaded * 100 / total).toInt() else 0
+                _uploadState.value = UploadState.Uploading(progress)
+            }
+
+            val part = MultipartBody.Part.createFormData(
+                "file",
+                compressed.name,
+                progressBody
             )
+
+            val result = runCatching {
+                val response = uploadApi.uploadFile(part)
+                if (!response.isSuccessful) throw HttpException(response)
+            }
+
+            result.onSuccess {
+                _uploadState.value = UploadState.Success
+            }.onFailure {
+                _uploadState.value = UploadState.Error(it.message)
+            }
         }
     }
 }
@@ -380,11 +490,11 @@ sealed class UploadState {
 
 | Aspect | Recommendation | Reason |
 |--------|---------------|--------|
-| **Compression** | JPEG 80% for photos | Optimal quality-size balance |
-| **Retry** | 3 attempts with exponential backoff | Handles temporary network issues |
-| **Size** | < 10MB for mobile networks | Avoids timeouts and carrier limits |
-| **Background upload** | WorkManager instead of Service | Guaranteed delivery, battery efficient |
-| **Permissions** | READ_MEDIA_IMAGES for Android 13+ | Granular media permissions |
+| Compression | JPEG 80% for photos | Good quality-size balance |
+| Retry | Up to 3 attempts with exponential backoff | Handles temporary network issues |
+| Size | Prefer < 10MB over mobile networks when possible | Reduces risk of timeouts and carrier limits |
+| Background upload | Use WorkManager instead of a plain `Service` | Better execution guarantees, battery efficiency |
+| Permissions | Use READ_MEDIA_IMAGES / READ_EXTERNAL_STORAGE as appropriate for API level | Correct access to media under scoped storage |
 
 ---
 

@@ -10,32 +10,32 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-framelayout, c-layout-types]
+related: [q-what-is-known-about-methods-that-redraw-view--android--medium, c-android-ui-composition]
 sources: []
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-11-10
 tags: [android/ui-compose, android/ui-views, box, difficulty/easy, framelayout, layouts]
 ---
 
 # Вопрос (RU)
 
-Как называется layout, в котором UI-элементы могут наслаиваться друг на друга?
+> Как называется layout, в котором UI-элементы могут наслаиваться друг на друга?
 
 # Question (EN)
 
-What is the layout called where UI elements can overlay each other?
-
----
+> What is the layout called where UI elements can overlay each other?
 
 ## Ответ (RU)
 
-В Android существует два основных контейнера для наложения элементов:
+В Android наиболее часто для наложения элементов используются два контейнера:
 
-**FrameLayout** (View System) — традиционный контейнер, где дочерние элементы накладываются друг на друга в порядке добавления. Последний добавленный элемент рисуется сверху.
+**FrameLayout** (`View` System) — традиционный контейнер, где дочерние элементы накладываются друг на друга в порядке добавления. Последний добавленный элемент рисуется сверху (также на порядок влияет `elevation`/`translationZ` для L+).
 
 **Box** (Jetpack Compose) — современный composable-контейнер с аналогичной логикой наложения.
 
-### FrameLayout (View System)
+См. также: [[c-android-ui-composition]].
+
+### FrameLayout (`View` System)
 
 Основное использование — простые случаи наложения: badge поверх изображения, loading overlay, FAB поверх контента.
 
@@ -65,8 +65,11 @@ What is the layout called where UI elements can overlay each other?
 
 ```kotlin
 // ✅ Программное создание FrameLayout
+val sizeInPx = (100 * context.resources.displayMetrics.density).toInt()
+val badgeSizeInPx = (24 * context.resources.displayMetrics.density).toInt()
+
 val container = FrameLayout(context).apply {
-    layoutParams = FrameLayout.LayoutParams(100.dp, 100.dp)
+    layoutParams = FrameLayout.LayoutParams(sizeInPx, sizeInPx)
 }
 
 val avatar = ImageView(context).apply {
@@ -77,7 +80,11 @@ val avatar = ImageView(context).apply {
 val badge = TextView(context).apply {
     text = "5"
     setBackgroundResource(R.drawable.circle_red)
-    layoutParams = FrameLayout.LayoutParams(24.dp, 24.dp, Gravity.TOP or Gravity.END)
+    layoutParams = FrameLayout.LayoutParams(
+        badgeSizeInPx,
+        badgeSizeInPx,
+        Gravity.TOP or Gravity.END
+    )
 }
 
 container.addView(avatar)
@@ -131,13 +138,18 @@ fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         content()
 
-        // ✅ Overlay блокирует клики на основной контент
         if (isLoading) {
+            // ✅ Overlay перекрывает контент и перехватывает клики
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black.copy(alpha = 0.8f))
-                    .clickable(enabled = false) {},  // Блокировка interaction
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        // Пустой onClick: перехватываем события, не пробрасывая вниз
+                    },
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
@@ -156,26 +168,28 @@ fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 
 | Характеристика | FrameLayout | Box (Compose) |
 |----------------|-------------|---------------|
-| Система | View System | Jetpack Compose |
-| Порядок слоёв | Последний сверху | Последний сверху |
+| Система | `View` System | Jetpack Compose |
+| Порядок слоёв | Последний сверху (и `elevation`/`translationZ` на L+) | Последний сверху |
 | Позиционирование | `layout_gravity` | `Modifier.align()` |
-| Z-ordering | Только порядок добавления | `zIndex()` + порядок |
+| Z-ordering | Порядок добавления + `elevation`/`translationZ` | `zIndex()` + порядок |
 
 **Выбор:**
-- FrameLayout — для legacy View-based UI
+- FrameLayout — для legacy `View`-based UI
 - Box — для новых Compose UI
 
 ## Answer (EN)
 
-Android provides two main containers for overlaying elements:
+In Android, the most commonly used containers for overlaying elements are:
 
-**FrameLayout** (View System) — traditional container where children stack in the order they're added. Last child draws on top.
+**FrameLayout** (`View` System) — traditional container where children stack in the order they're added. The last child is drawn on top (on L+ `elevation`/`translationZ` also affect drawing order).
 
-**Box** (Jetpack Compose) — modern composable with similar layering logic.
+**Box** (Jetpack Compose) — modern composable container with similar layering behavior.
 
-### FrameLayout (View System)
+See also: [[c-android-ui-composition]].
 
-Primary use cases: simple overlays like badges over images, loading overlays, FABs over content.
+### FrameLayout (`View` System)
+
+Typical use cases: simple overlays such as badges over images, loading overlays, FABs over content.
 
 **Example: Positioned Overlay**
 
@@ -203,8 +217,11 @@ Primary use cases: simple overlays like badges over images, loading overlays, FA
 
 ```kotlin
 // ✅ Programmatic FrameLayout
+val sizeInPx = (100 * context.resources.displayMetrics.density).toInt()
+val badgeSizeInPx = (24 * context.resources.displayMetrics.density).toInt()
+
 val container = FrameLayout(context).apply {
-    layoutParams = FrameLayout.LayoutParams(100.dp, 100.dp)
+    layoutParams = FrameLayout.LayoutParams(sizeInPx, sizeInPx)
 }
 
 val avatar = ImageView(context).apply {
@@ -215,7 +232,11 @@ val avatar = ImageView(context).apply {
 val badge = TextView(context).apply {
     text = "5"
     setBackgroundResource(R.drawable.circle_red)
-    layoutParams = FrameLayout.LayoutParams(24.dp, 24.dp, Gravity.TOP or Gravity.END)
+    layoutParams = FrameLayout.LayoutParams(
+        badgeSizeInPx,
+        badgeSizeInPx,
+        Gravity.TOP or Gravity.END
+    )
 }
 
 container.addView(avatar)
@@ -229,7 +250,7 @@ container.addView(badge)  // Added last = draws on top
 
 ### Box (Jetpack Compose)
 
-Declarative FrameLayout equivalent. Positioning via `Modifier.align()`, z-order control via `zIndex()` or add order.
+Declarative equivalent of FrameLayout. Positioning via `Modifier.align()`, z-order control via `zIndex()` or add order.
 
 **Example: Basic Overlay**
 
@@ -269,13 +290,18 @@ fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
     Box(modifier = Modifier.fillMaxSize()) {
         content()
 
-        // ✅ Overlay blocks clicks on main content
         if (isLoading) {
+            // ✅ Overlay covers content and intercepts clicks
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(Color.Black.copy(alpha = 0.8f))
-                    .clickable(enabled = false) {},  // Block interactions
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }
+                    ) {
+                        // Empty onClick: consume events so they do not pass through
+                    },
                 contentAlignment = Alignment.Center
             ) {
                 CircularProgressIndicator()
@@ -294,16 +320,22 @@ fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 
 | Feature | FrameLayout | Box (Compose) |
 |---------|-------------|---------------|
-| System | View System | Jetpack Compose |
-| Layer Order | Last on top | Last on top |
+| System | `View` System | Jetpack Compose |
+| Layer Order | Last on top (plus `elevation`/`translationZ` on L+) | Last on top |
 | Positioning | `layout_gravity` | `Modifier.align()` |
-| Z-ordering | Add order only | `zIndex()` + order |
+| Z-ordering | Add order + `elevation`/`translationZ` | `zIndex()` + order |
 
 **Choice:**
-- FrameLayout — for legacy View-based UI
-- Box — for new Compose UI
+- FrameLayout — for legacy `View`-based UIs
+- Box — for new Compose UIs
 
----
+## Дополнительные вопросы (RU)
+
+1. Как управлять порядком наложения (z-index) во `FrameLayout`, не изменяя порядок добавления дочерних вью?
+2. Что произойдет, если у нескольких дочерних composable в `Box` одинаковое значение `zIndex()`?
+3. Как `FrameLayout` измеряет и раскладывает перекрывающиеся дочерние элементы?
+4. Можно ли вкладывать несколько `FrameLayout`/`Box` для сложных слоёв, и как это влияет на производительность?
+5. Как реализовать drag-and-drop перераспределение перекрывающихся элементов в обоих подходах?
 
 ## Follow-ups
 
@@ -313,21 +345,38 @@ fun ScreenWithLoading(isLoading: Boolean, content: @Composable () -> Unit) {
 4. Can you nest FrameLayout/Box for complex layering scenarios? What's the performance impact?
 5. How do you implement drag-and-drop reordering of overlaid elements in both systems?
 
-## References
+## Ссылки (RU)
 
-- [[c-framelayout]] - FrameLayout deep dive
-- [[c-box-compose]] - Box composable patterns
 - https://developer.android.com/reference/android/widget/FrameLayout
 - https://developer.android.com/jetpack/compose/layouts/basics
+
+## References
+
+- https://developer.android.com/reference/android/widget/FrameLayout
+- https://developer.android.com/jetpack/compose/layouts/basics
+
+## Связанные вопросы (RU)
+
+### Пререквизиты (проще)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - основы `View`
+- [[q-viewmodel-pattern--android--easy]] - основы архитектуры
+
+### Связанные (тот же уровень)
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - отрисовка `View`
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - layout-ы в Compose
+
+### Продвинутые (сложнее)
+- [[q-compose-custom-layout--android--hard]] - реализация кастомных layout-ов
+- [[q-compose-gesture-detection--android--medium]] - обработка жестов в overlay-сценариях
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View fundamentals
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View` fundamentals
 - [[q-viewmodel-pattern--android--easy]] - Architecture basics
 
 ### Related (Same Level)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View rendering
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` rendering
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose layouts
 
 ### Advanced (Harder)

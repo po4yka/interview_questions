@@ -12,7 +12,7 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
   - c-compose-recomposition
@@ -21,10 +21,10 @@ related:
   - q-compose-modifier-order-performance--android--medium
   - q-compose-stability-skippability--android--hard
 created: 2025-10-13
-updated: 2025-11-02
+updated: 2025-11-10
 tags: [android/architecture-mvvm, android/ui-compose, declarative-ui, difficulty/medium, jetpack-compose]
 sources:
-  - https://developer.android.com/jetpack/compose/architecture
+  - "https://developer.android.com/jetpack/compose/architecture"
 ---
 
 # Вопрос (RU)
@@ -163,6 +163,14 @@ Column(
 
 **8. Theme System** — centralized styling through `MaterialTheme`.
 
+## Дополнительные вопросы (RU)
+
+- Как recomposition в Compose отличается от традиционных обновлений `View`?
+- Каковы последствия для производительности при подъёме состояния (state hoisting)?
+- Как отлаживать проблемы с recomposition в Compose?
+- Когда следует использовать `LaunchedEffect` vs `DisposableEffect` vs `SideEffect`?
+- Как Compose обрабатывает изменения конфигурации по сравнению с традиционными `View`?
+
 ## Follow-ups
 
 - How does Compose's recomposition differ from traditional `View` updates?
@@ -171,6 +179,14 @@ Column(
 - When should you use `LaunchedEffect` vs `DisposableEffect` vs `SideEffect`?
 - How does Compose handle configuration changes compared to traditional `View`s?
 
+## Ссылки (RU)
+
+- [[c-compose-state]]
+- [[c-compose-recomposition]]
+- [[c-mvvm-pattern]]
+- https://developer.android.com/jetpack/compose/architecture
+- https://developer.android.com/jetpack/compose/mental-model
+
 ## References
 
 - [[c-compose-state]]
@@ -178,6 +194,20 @@ Column(
 - [[c-mvvm-pattern]]
 - https://developer.android.com/jetpack/compose/architecture
 - https://developer.android.com/jetpack/compose/mental-model
+
+## Связанные вопросы (RU)
+
+### Предпосылки (Проще)
+- Понимание декларативных UI-паттернов
+- Базовые знания Kotlin
+
+### Связанные (Тот же уровень)
+- [[q-compose-modifier-order-performance--android--medium]] — Оптимизация порядка `Modifier`
+- Паттерны и лучшие практики управления состоянием
+
+### Продвинутые (Сложнее)
+- [[q-compose-stability-skippability--android--hard]] — Стабильность и возможность пропуска
+- [[q-compose-performance-optimization--android--hard]] — Оптимизация производительности
 
 ## Related Questions
 

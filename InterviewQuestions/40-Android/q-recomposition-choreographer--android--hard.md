@@ -10,57 +10,62 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-recomposition-compose--android--medium]
+related: [c-jetpack-compose, q-compose-performance-optimization--android--hard, q-compose-stability-skippability--android--hard, q-recomposition-compose--android--medium]
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags: [android/coroutines, android/performance-rendering, android/ui-compose, choreographer, difficulty/hard, vsync]
 ---
 
 # Вопрос (RU)
 
-Рекомпозиция происходит в рандомное время или по команде Choreographer?
+> Рекомпозиция происходит в рандомное время или по команде Choreographer?
 
 # Question (EN)
 
-Does recomposition happen at random times or on command from Choreographer?
+> Does recomposition happen at random times or on command from Choreographer?
 
 ## Ответ (RU)
 
-Рекомпозиция **контролируется Android Choreographer**, который синхронизирован с **VSYNC** (вертикальная синхронизация).
+Рекомпозиция в Compose запускается **рантаймом Compose** в ответ на изменения состояния и координируется с **Android Choreographer**, который синхронизирован с сигналами **VSYNC** (вертикальная синхронизация) для отрисовки кадров. Это не случайный процесс.
 
-**Процесс:**
-1. Изменение `MutableState` устанавливает флаг "UI требует перерисовки"
-2. Choreographer ждет следующий сигнал VSYNC
-3. При VSYNC запускается рекомпозиция (не случайно!)
-4. Перерисовываются только измененные элементы
+**Упрощённый процесс:**
+1. Изменение `MutableState` помечает соответствующие composable-области как "невалидные" (требуют рекомпозиции).
+2. Рантайм Compose планирует задачу рекомпозиции; для отображения на экране изменения синхронизируются с кадровыми колбэками `Choreographer`.
+3. На очередном кадре (колбэк `Choreographer`, выровненный по VSYNC) выполняется рекомпозиция для помеченных областей и подготавливается обновлённое дерево для отрисовки.
+4. Обновлённый UI передаётся в систему отрисовки; перерисовываются только те composable-области, которые были инвалидированы (Compose использует пропуски/skip-группы, а не полный diff всех элементов).
 
-**Choreographer** — системный компонент Android, координирующий рендеринг с частотой дисплея (60Hz или 120Hz). Обеспечивает плавность (60fps), энергоэффективность и батчинг изменений. Тесно связан с [[c-jetpack-compose|Jetpack Compose]].
+**Важно:** Choreographer не "управляет" логикой Compose напрямую, он предоставляет VSYNC-синхронизированные колбэки, которые Compose использует для планирования применения изменений и рисования кадров.
 
-**Бюджет кадра:**
-- 60Hz: 16.67ms
-- 120Hz: 8.33ms
+**Choreographer** — системный компонент Android, координирующий обработку ввода, layout/traversal и рендеринг с частотой дисплея (например, 60Hz или 120Hz). Это помогает добиться плавности, энергоэффективности и батчинга изменений. Jetpack Compose опирается на этот механизм через интеграцию с платформой.
+
+**Бюджет кадра (пример):**
+- 60Hz: ~16.67ms
+- 120Hz: ~8.33ms
+
+В этот бюджет входят: обработка ввода, рекомпозиция, измерение, размещение и рисование.
 
 ```kotlin
 @Composable
 fun Counter() {
     var count by remember { mutableStateOf(0) }
 
-    Button(onClick = { count++ }) { // ✅ Изменение батчируется до VSYNC
+    Button(onClick = { count++ }) { // ✅ Изменение попадает в список инвалидаций и будет обработано до ближайшего кадра
         Text("Счетчик: $count")
     }
 }
 
-// Таймлайн:
-// 0ms: count++ → флаг установлен
-// 16.67ms: VSYNC → рекомпозиция только Text
-// 33.34ms: кадр на экране
+// Упрощённая временная шкала (60Hz):
+// 0ms: onClick → count++ → соответствующие области помечены для рекомпозиции
+// До ~16.67ms: рантайм планирует рекомпозицию в окне текущего/следующего кадра
+// ~16.67ms: Choreographer кадр → выполняется рекомпозиция помеченных composable и последующий draw
+// Если всё укладывается в бюджет, обновлённый кадр отображается без джанка
 ```
 
-**Ключевые преимущества:**
-- **Плавность:** VSYNC-синхронизация предотвращает рывки
-- **Батчинг:** множественные изменения состояния → одна рекомпозиция
-- **Энергоэффективность:** предсказуемые пробуждения CPU
+**Ключевые эффекты VSYNC-координации:**
+- **Плавность:** выравнивание под VSYNC снижает вероятность разрывов и рывков.
+- **Батчинг:** несколько изменений состояния до следующего кадра могут быть обработаны в одной волне рекомпозиции.
+- **Энергоэффективность:** работа по обновлению UI концентрируется вокруг кадров, избегая лишних пробуждений.
 
 **Dropped frames (пропущенные кадры):**
 
@@ -70,51 +75,58 @@ fun SlowComposition() {
     var count by remember { mutableStateOf(0) }
 
     val result = remember(count) {
-        Thread.sleep(20) // ❌ 20ms > бюджета 16.67ms → джанк!
+        Thread.sleep(20) // ❌ Блокирует главный поток во время рекомпозиции > бюджета кадра → джанк
         count * 2
     }
     Text("Результат: $result")
 }
 ```
 
-**Важно:** Держите рекомпозицию **< 8ms** для поддержки 120Hz дисплеев.
+Если суммарное время рекомпозиции + layout + draw (и другого кода на главном потоке) превышает бюджет кадра, кадр будет пропущен.
+
+**Важно:** Для дисплеев 120Hz (бюджет ~8.33ms) критично, чтобы вся работа кадра на главном потоке (включая рекомпозицию) укладывалась в этот интервал. Это не жёсткое правило "рекомпозиция < 8ms", но ориентир: не допускайте тяжёлой логики в рекомпозиции на главном потоке.
 
 ## Answer (EN)
 
-Recomposition is **controlled by Android Choreographer**, synchronized with **VSYNC** (vertical sync) signals.
+In Compose, recomposition is started by the **Compose runtime** in response to state changes and is coordinated with **Android Choreographer**, which is synchronized with **VSYNC** signals for frame rendering. It is not random.
 
-**Process:**
-1. `MutableState` change sets a flag "UI needs redraw"
-2. Choreographer waits for the next VSYNC signal
-3. On VSYNC, recomposition is triggered (not random!)
-4. Only changed UI elements are recomposed
+**Simplified process:**
+1. A `MutableState` change marks the corresponding composable scopes as invalid and needing recomposition.
+2. The Compose runtime schedules recomposition work; for what appears on screen, this work is aligned with `Choreographer` frame callbacks.
+3. On the next frame (`Choreographer` callback aligned with VSYNC), the invalidated composables are recomposed and an updated tree is prepared.
+4. The updated UI is sent to the rendering pipeline; only invalidated composable regions are recomposed and redrawn (Compose uses skip groups/smart invalidation rather than a full virtual DOM diff).
 
-**Choreographer** is Android's system component coordinating frame rendering with the display refresh rate (60Hz or 120Hz). It ensures smooth 60fps, battery efficiency, and batching of state changes. Tightly integrated with [[c-jetpack-compose|Jetpack Compose]].
+**Important:** Choreographer does not directly "control" Compose logic; it provides VSYNC-aligned callbacks that Compose uses to schedule applying changes and drawing frames.
 
-**Frame budget:**
-- 60Hz: 16.67ms
-- 120Hz: 8.33ms
+**Choreographer** is an Android system component that coordinates input, layout/traversal, and rendering with the display refresh rate (e.g., 60Hz or 120Hz). This improves smoothness, power efficiency, and batching. Jetpack Compose leverages this mechanism through the platform.
+
+**Frame budget (example):**
+- 60Hz: ~16.67ms
+- 120Hz: ~8.33ms
+
+This budget covers input processing, recomposition, measure, layout, and drawing.
 
 ```kotlin
 @Composable
 fun Counter() {
     var count by remember { mutableStateOf(0) }
 
-    Button(onClick = { count++ }) { // ✅ Change batched until VSYNC
+    Button(onClick = { count++ }) { // ✅ Change is enqueued as invalidation and handled before the next frame
         Text("Count: $count")
     }
 }
 
-// Timeline:
-// 0ms: count++ → flag set
-// 16.67ms: VSYNC → recompose only Text
-// 33.34ms: frame displayed
+// Simplified timeline (60Hz):
+// 0ms: onClick → count++ → corresponding scopes are marked invalid
+// Until ~16.67ms: runtime schedules recomposition within the current/next frame window
+// ~16.67ms: Choreographer frame → invalidated composables are recomposed and then drawn
+// If all work fits the budget, the updated frame is shown without jank
 ```
 
-**Key benefits:**
-- **Smoothness:** VSYNC synchronization prevents jank
-- **Batching:** multiple state changes → single recomposition
-- **Energy efficiency:** predictable CPU wake-ups
+**Key effects of VSYNC coordination:**
+- **Smoothness:** VSYNC alignment reduces tearing and visible jank.
+- **Batching:** multiple state changes before the next frame can be handled in a single recomposition pass.
+- **Energy efficiency:** UI work is concentrated around frame boundaries instead of waking up arbitrarily.
 
 **Dropped frames:**
 
@@ -124,14 +136,16 @@ fun SlowComposition() {
     var count by remember { mutableStateOf(0) }
 
     val result = remember(count) {
-        Thread.sleep(20) // ❌ 20ms > 16.67ms budget → jank!
+        Thread.sleep(20) // ❌ Blocks the main thread during recomposition beyond the frame budget → jank
         count * 2
     }
     Text("Result: $result")
 }
 ```
 
-**Important:** Keep recomposition **< 8ms** for smooth 120Hz display support.
+If the total time for recomposition + layout + draw (and other main-thread work) exceeds the frame budget, the frame is skipped.
+
+**Important:** For 120Hz displays (~8.33ms budget), the entire main-thread frame work, including recomposition, needs to stay within that time. This is a practical guideline rather than a strict "recomposition must always be < 8ms" rule; avoid heavy blocking work inside recomposition on the main thread.
 
 ---
 

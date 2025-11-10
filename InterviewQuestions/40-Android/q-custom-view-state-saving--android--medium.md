@@ -4,41 +4,45 @@ title: Custom View State Saving / Сохранение состояния Custom
 aliases: [Custom View State Saving, Сохранение состояния Custom View]
 topic: android
 subtopics:
-  - lifecycle
-  - ui-views
+- lifecycle
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - q-activity-lifecycle-methods--android--medium
-  - q-custom-view-lifecycle--android--medium
+- c-custom-views
+- q-activity-lifecycle-methods--android--medium
+- q-custom-view-lifecycle--android--medium
 created: 2025-10-21
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/lifecycle, android/ui-views, custom-view, difficulty/medium, state-management]
 sources: []
+
 ---
 
 # Вопрос (RU)
-> Как реализовать сохранение состояния в Custom View при configuration changes?
+> Как реализовать сохранение состояния в Custom `View` при configuration changes?
 
 # Question (EN)
-> How to implement state saving in Custom View during configuration changes?
+> How to implement state saving in Custom `View` during configuration changes?
 
 ---
 
 ## Ответ (RU)
 
-**State saving** в custom views обеспечивает выживание UI состояния при configuration changes (поворот экрана) и process death. Система вызывает `onSaveInstanceState()` и `onRestoreInstanceState()` автоматически, если View имеет ID.
+**State saving** в custom views обеспечивает выживание UI состояния при configuration changes (поворот экрана) и process death. Для `View`, которая имеет стабильный `id` и включена в иерархию, где родительский `ViewGroup` сохраняет состояние, система через механизм `ViewGroup` вызывает `onSaveInstanceState()` и `onRestoreInstanceState()`.
+
+См. также: [[c-custom-views]]
 
 ### Концепция
 
-Custom View должен самостоятельно управлять своим состоянием через `Parcelable`. Ключевые принципы:
-- Использовать `BaseSavedState` для сохранения родительского состояния
+Custom `View` должен самостоятельно управлять своим состоянием через `Parcelable`. Ключевые принципы:
+- Использовать `BaseSavedState` (обычно `View.BaseSavedState`) для сохранения родительского состояния
 - Реализовать `Parcelable.Creator` для десериализации
 - Всегда вызывать `super` методы
 - Проверять тип состояния при восстановлении
@@ -144,26 +148,30 @@ class ComplexView : View {
 
 ### Ключевые Правила
 
-1. **ID обязателен** — View должен иметь `android:id` в layout
-2. **BaseSavedState** — использовать для сохранения цепочки наследования
-3. **Проверка типов** — state может быть null или другого типа
-4. **Минимизация** — сохранять только критичное состояние (< 500 KB)
+1. **ID обязателен** — `View` должен иметь стабильный `android:id` и быть частью иерархии, в которой родительский `ViewGroup` сохраняет состояние; иначе `onSaveInstanceState()`/`onRestoreInstanceState()` для него не будут задействованы.
+2. **BaseSavedState** — использовать для сохранения цепочки наследования.
+3. **Проверка типов** — state может быть `null` или другого типа.
+4. **Минимизация** — сохранять только критичное состояние (< 500 KB).
+5. **SaveEnabled** — убедиться, что `isSaveEnabled` не отключён (`android:saveEnabled="false"` выключит сохранение состояния `View`).
 
 ### Pitfalls
 
-- ❌ Отсутствие ID у View — состояние не сохранится
-- ❌ Забыть `super.onSaveInstanceState()` — потеря базового состояния
-- ❌ Сохранение Context/Activity — утечки памяти
-- ❌ Сохранение больших объектов — `TransactionTooLargeException`
+- Отсутствие ID у `View` — состояние не сохранится как часть стандартного механизма сохранения иерархии.
+- `saveEnabled = false` — отключает участие `View` в сохранении состояния.
+- Забыть `super.onSaveInstanceState()` — потеря базового состояния.
+- Сохранение `Context`/`Activity` — утечки памяти.
+- Сохранение больших объектов — `TransactionTooLargeException`.
 
 ## Answer (EN)
 
-**State saving** in custom views ensures UI state survival during configuration changes (screen rotation) and process death. The system calls `onSaveInstanceState()` and `onRestoreInstanceState()` automatically if the View has an ID.
+**State saving** in custom views ensures UI state survival during configuration changes (screen rotation) and process death. For a `View` that has a stable `id` and is included in a hierarchy whose parent `ViewGroup` participates in state saving, the system (via the parent) calls `onSaveInstanceState()` and `onRestoreInstanceState()` for it.
+
+See also: [[c-custom-views]]
 
 ### Concept
 
 Custom Views must manage their state through `Parcelable`. Key principles:
-- Use `BaseSavedState` to preserve parent state
+- Use `BaseSavedState` (commonly `View.BaseSavedState`) to preserve parent state
 - Implement `Parcelable.Creator` for deserialization
 - Always call `super` methods
 - Check state type during restoration
@@ -269,31 +277,40 @@ class ComplexView : View {
 
 ### Key Rules
 
-1. **ID required** — View must have `android:id` in layout
-2. **BaseSavedState** — use to preserve inheritance chain
-3. **Type checking** — state can be null or different type
-4. **Minimize** — save only critical state (< 500 KB)
+1. **ID required** — `View` must have a stable `android:id` and be part of a hierarchy whose parent `ViewGroup` saves states; otherwise its `onSaveInstanceState()`/`onRestoreInstanceState()` will not participate in the standard hierarchy-based mechanism.
+2. **BaseSavedState** — use to preserve the inheritance chain.
+3. **Type checking** — state can be `null` or a different type.
+4. **Minimize** — save only critical state (< 500 KB).
+5. **SaveEnabled** — ensure `isSaveEnabled` is not disabled (`android:saveEnabled="false"` will prevent view state from being saved).
 
 ### Pitfalls
 
-- ❌ Missing View ID — state won't be saved
-- ❌ Forgetting `super.onSaveInstanceState()` — losing base state
-- ❌ Saving Context/Activity — memory leaks
-- ❌ Saving large objects — `TransactionTooLargeException`
+- Missing `View` ID — state will not be saved as part of the standard hierarchy state saving.
+- `saveEnabled = false` — prevents this `View` from participating in state saving.
+- Forgetting `super.onSaveInstanceState()` — losing base state.
+- Saving `Context`/`Activity` — memory leaks.
+- Saving large objects — `TransactionTooLargeException`.
 
 ---
 
-## Follow-ups
+## Дополнительные вопросы (RU)
 
-1. Как тестировать state restoration с process death?
-2. В чём разница между `onSaveInstanceState` View и Activity?
-3. Как сохранять состояние ViewGroup с множественными children?
-4. Какие ограничения на размер Bundle для saved state?
-5. Когда использовать ViewModel вместо View state saving?
+1. Как тестировать восстановление состояния Custom `View` при уничтожении процесса (process death)?
+2. В чём разница между `onSaveInstanceState` у `View` и у `Activity`/`Fragment`?
+3. Как подходить к сохранению состояния для `ViewGroup` с динамическими дочерними `View`?
+4. Какие ограничения на размер данных для сохранения состояния и как избежать `TransactionTooLargeException`?
+5. В каких случаях лучше использовать `ViewModel` или `SavedStateHandle` вместо механизма сохранения состояния `View`?
+
+## Follow-ups (EN)
+
+1. How can you test restoring the state of a Custom `View` after process death?
+2. What is the difference between `onSaveInstanceState` in a `View` versus in an `Activity`/`Fragment`?
+3. How should you handle state saving for a `ViewGroup` with dynamic child `View`s?
+4. What are the data size limitations for state saving and how to avoid `TransactionTooLargeException`?
+5. In which cases is it better to use `ViewModel` or `SavedStateHandle` instead of the `View` state saving mechanism?
 
 ## References
 
-- [[c-lifecycle]]
 - [Saving UI States](https://developer.android.com/topic/libraries/architecture/saving-states)
 - [Parcelable and Bundle](https://developer.android.com/reference/android/os/Parcelable)
 

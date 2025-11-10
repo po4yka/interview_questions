@@ -20,11 +20,10 @@ status: draft
 moc: moc-android
 related:
 - c-mvvm
-- c-viewmodel
 - q-how-does-jetpackcompose-work--android--medium
 - q-play-app-signing--android--medium
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags:
 - android/architecture-mvvm
@@ -35,6 +34,7 @@ tags:
 - kotlin
 - multiplatform
 - reactnative
+
 ---
 
 # Вопрос (RU)
@@ -50,236 +50,277 @@ Compare Kotlin Multiplatform Mobile with React Native. What are the architectura
 ### Архитектурные Различия
 
 **React Native**: JavaScript-слой → JS Bridge → Native модули → Platform SDK
-- UI в JSX, логика в JavaScript
-- Все данные через bridge (serialization/deserialization)
+- UI в JSX/TSX, логика в JavaScript/TypeScript
+- Взаимодействие с нативным слоем через bridge (marshalling/serialization параметров и результатов)
 - JavaScriptCore/Hermes runtime
 
-**KMM**: Native UI → Shared Kotlin → Platform SDK
-- UI native (Compose/SwiftUI)
-- Логика в Kotlin, компилируется в native код
-- Нет bridge, прямой доступ
+**KMM**: Native UI → Shared Kotlin (multiplatform) → Platform SDK
+- UI нативный (Android Views/Compose, iOS UIKit/SwiftUI)
+- Общая бизнес-логика на Kotlin, компилируется в JVM-байткод на Android и в native бинарники (Kotlin/Native) на iOS и других платформах
+- Нет JavaScript-bridge; используется прямой interop с нативными API (FFI/генерируемые биндинги), overhead обычно существенно ниже, чем при JS-bridge
 
 ### Bridge Overhead
 
 **React Native**:
 ```javascript
-// ❌ Bridge overhead: JSON serialization + crossing + deserialization
+// ❌ Пример с ощутимым bridge overhead: сериализация + переход через bridge + десериализация
 const result = await NativeModules.DataProcessor
-  .processData(JSON.stringify(data));  // 50-130ms overhead
+  .processData(JSON.stringify(data));
 const parsed = JSON.parse(result);
+// Фактические задержки зависят от объёма данных, частоты вызовов и реализации,
+// но частые/тяжёлые обмены через bridge могут становиться bottleneck.
 ```
 
 **KMM**:
 ```kotlin
-// ✅ Direct native call, zero overhead
+// ✅ Прямой вызов общей логики без JS-bridge
 class DataProcessor {
-    fun processData(): List<Item> = /* ... */  // 5-15ms
+    fun processData(): List<Item> = /* ... */
 }
-val result = DataProcessor().processData()  // No serialization
+
+val result = DataProcessor().processData()  // Нет JSON-сериализации между слоями UI и shared-кодом
+// Есть накладные расходы обычного вызова/interop, но они близки к нативным.
 ```
 
-**Performance**: KMM 10x faster for data-intensive operations.
+**Производительность**: при вычислительно и data-intensive задачах общая логика в KMM обычно ближе к нативной по скорости,
+так как избегает частых JS-bridge переходов. Конкретный выигрыш зависит от профиля нагрузки и реализации и не является гарантированным «10x» во всех случаях.
 
 ### Type Safety
 
 **React Native**:
 ```javascript
-// ❌ Type safety lost across bridge
-const jsonResult = await taskModule.getTasks();  // Returns string
-const tasks: Task[] = JSON.parse(jsonResult);    // Runtime parsing
-// Risk: runtime errors if structure changes
+// ❌ Без строгой типизации и контрактов через bridge повышен риск runtime-ошибок
+const jsonResult = await taskModule.getTasks();  // Возвращает строку
+const tasks = JSON.parse(jsonResult);            // Проверка структуры только в runtime
 ```
+- При использовании TypeScript/`Flow` можно получить сильную статическую типизацию JS-слоя,
+  но контракты поверх native bridge по-прежнему требуют внимательного согласования и остаются уязвимыми к рассинхронизации типов.
 
 **KMM**:
 ```kotlin
-// ✅ Full compile-time type safety
+// ✅ Полная статическая типизация в общем Kotlin-коде
 @Serializable
 data class Task(val id: String, val title: String)
 
 class TaskRepository {
     suspend fun getTasks(): List<Task> = api.fetchTasks()
 }
-// Refactoring safe, IDE autocomplete, no manual parsing
+// Безопасное рефакторингом пространство, автодополнение, строгие сигнатуры между модулями.
 ```
 
 ### Code Sharing
 
-**React Native**: 90-95% code reuse (including UI)
-- Single JSX UI for both platforms
-- Hot reload for fast iteration
-- Requires bridge calls for data
+**React Native**: потенциально 90%+ reuse (включая UI)
+- Единый JSX/TSX UI для обеих платформ
+- Быстрая итерация (fast refresh)
+- Доступ к нативным возможностям через bridge (готовые модули или собственные)
 
-**KMM**: 60-70% code reuse (business logic only)
-- Separate native UI (Compose/SwiftUI)
-- Direct access to shared code
-- Platform-specific UI development
+**KMM**: обычно 50-80% reuse (бизнес-логика, data layer, общие модули)
+- Отдельные нативные UI (Compose/Views на Android, SwiftUI/UIKit на iOS)
+- Прямой доступ к общему коду из нативных слоёв
+- Платформенно-специфичная реализация UI и отдельных API
 
 ### Performance Benchmarks
 
 | Metric | React Native | KMM |
 |--------|--------------|-----|
-| **Startup** | 1.5-2.5s (JS bundle load) | 0.5-0.8s (native) |
-| **Animations** | 45-58fps (JS bottleneck) | 60fps+ (native) |
-| **Memory** | Higher (JS VM overhead) | Lower (native) |
-| **List Rendering** | 300-500ms, occasional jank | 150-250ms, smooth 60fps |
+| **Startup** | Чаще выше накладные расходы из-за загрузки JS bundle и инициализации VM | Ближе к нативному startup, т.к. общая логика интегрируется в нативное приложение |
+| **Animations** | Возможны задержки при heavy JS-логике или частых bridge-вызовах; modern RN (Fabric/JSTurbo/JSI, Reanimated) снижает проблему | Нативный рендеринг (Compose/SwiftUI и др.), обычно стабильные 60fps при корректной реализации |
+| **Memory** | Выше за счёт JS VM и дополнительных слоёв | Как правило ниже, ближе к нативным приложениям |
+| **`List` Rendering** | При больших списках и тяжёлых JS-обработках возможен jank из-за bridge/JS нагрузки | Нативные списки с доступом к общему коду дают предсказуемое поведение и лучшую устойчивость |
+
+(Числовые значения сильно зависят от конкретного приложения и реализации; важно объяснить принципы, а не опираться на жёсткие универсальные цифры.)
 
 ### Developer Experience
 
 **React Native**:
-- ✅ Hot reload (instant updates)
-- ✅ Large JavaScript ecosystem (npm)
-- ✅ React knowledge transferable
-- ❌ Bridge debugging complexity
-- ❌ Type safety lost across bridge
+- ✅ Fast Refresh / hot reload
+- ✅ Большая экосистема JavaScript/TypeScript (npm)
+- ✅ Переносимость знаний React
+- ❌ Потенциальная сложность отладки bridge и различий платформенных модулей
+- ❌ Типобезопасность интерфейсов native ↔ JS требует дисциплины и инструментов
 
 **KMM**:
-- ✅ Full type safety
-- ✅ No bridge complexity
-- ✅ Gradual adoption (existing apps)
-- ❌ Slower builds (30-80s)
-- ❌ Separate UI implementations
+- ✅ Статическая типизация Kotlin и общая модель для бизнес-логики
+- ✅ Отсутствие JS-bridge, привычный для Android-разработчиков стек инструментов
+- ✅ Плавное внедрение в существующие нативные приложения (начиная с отдельных модулей)
+- ❌ Более тяжёлые сборки и настройка мультиплатформенного проекта
+- ❌ Необходимость поддержки отдельных нативных UI-команд или экспертизы
 
 ### Ecosystem Maturity
 
-**React Native**: Very mature (2015, Meta-backed)
-- 15,000+ specific packages
-- Large community, abundant jobs
-- Popular: react-navigation, react-native-firebase
+**React Native**: зрелая экосистема (c 2015, поддерживается Meta)
+- Множество плагинов и библиотек, большая community
+- Популярные решения: react-navigation, react-native-firebase и др.
 
-**KMM**: Maturing (stable since 2020, JetBrains/Google)
-- 500+ multiplatform libraries
-- Growing community and adoption
-- Popular: Ktor, SQLDelight, Koin, kotlinx.serialization
+**KMM**: активно развивающаяся экосистема (Kotlin Multiplatform стабилизируется постепенно; поддержка JetBrains, участие Google)
+- Сотни multiplatform-библиотек
+- Примеры: Ktor, SQLDelight, Koin, kotlinx.serialization, kotlinx.coroutines
 
 ### Platform Feature Access
 
-**React Native**: 4-16 week delay waiting for community modules
-**KMM**: Day-zero access via Kotlin/Native interop
+**React Native**:
+- Доступ к платформенным возможностям возможен сразу через собственные native-модули
+- На популярные функции часто можно полагаться на community-пакеты, но иногда приходится ждать обновлений или писать обвязку самостоятельно
+
+**KMM**:
+- Day-zero доступ к платформенным API через Kotlin/Native interop и expect/actual
+- Нет зависимости от наличия JS-обёрток; platform-specific код можно реализовать напрямую
 
 ### When to Choose
 
-**React Native**: JavaScript/React team, fast MVP, hot reload critical, cross-platform UI acceptable
-**KMM**: Kotlin expertise, native UX critical, performance/type-safety important, existing Android app
+**React Native**:
+- Сильная команда JavaScript/React
+- Быстрый MVP и shared UI — приоритет
+- Быстрая итерация и наличие готовых UI-компонентов критичны
 
-**Examples**: React Native (Meta, Discord, Shopify), KMM (Netflix SDK, Cash App, VMware)
+**KMM**:
+- Сильная Kotlin/Android-компетенция
+- Критичны нативный UX, производительность и типобезопасность
+- Уже есть нативные приложения, в которые нужно добавить общий слой логики без замены UI
+
+**Examples**:
+- React Native: используется в продуктах Meta, Discord, Shopify и др.
+- KMM: используется в продакшене рядом компаний (включая крупные), часто для общих SDK/модулей между Android и iOS.
 
 ## Answer (EN)
 
 ### Architectural Differences
 
 **React Native**: JavaScript layer → JS Bridge → Native modules → Platform SDK
-- UI in JSX, logic in JavaScript
-- All data through bridge (serialization/deserialization)
+- UI in JSX/TSX, logic in JavaScript/TypeScript
+- Interaction with native layer via bridge (parameter/result marshalling/serialization)
 - JavaScriptCore/Hermes runtime
 
-**KMM**: Native UI → Shared Kotlin → Platform SDK
-- Native UI (Compose/SwiftUI)
-- Logic in Kotlin, compiles to native
-- No bridge, direct access
+**KMM**: Native UI → Shared Kotlin (multiplatform) → Platform SDK
+- Native UI (Android Views/Compose, iOS UIKit/SwiftUI)
+- Shared business logic in Kotlin; compiled to JVM bytecode on Android and native binaries (Kotlin/Native) on iOS/other targets
+- No JavaScript bridge; uses direct interop with platform APIs (FFI/generated bindings), with overhead typically much lower than a JS bridge
 
 ### Bridge Overhead
 
 **React Native**:
 ```javascript
-// ❌ Bridge overhead: JSON serialization + crossing + deserialization
+// ❌ Example with noticeable bridge overhead: serialization + crossing + deserialization
 const result = await NativeModules.DataProcessor
-  .processData(JSON.stringify(data));  // 50-130ms overhead
+  .processData(JSON.stringify(data));
 const parsed = JSON.parse(result);
+// Actual latency depends on payload size, call frequency, and implementation,
+// but heavy/very frequent bridge traffic can become a bottleneck.
 ```
 
 **KMM**:
 ```kotlin
-// ✅ Direct native call, zero overhead
+// ✅ Direct call into shared logic without a JS bridge
 class DataProcessor {
-    fun processData(): List<Item> = /* ... */  // 5-15ms
+    fun processData(): List<Item> = /* ... */
 }
-val result = DataProcessor().processData()  // No serialization
+
+val result = DataProcessor().processData()  // No JSON serialization between UI and shared layer
+// There is normal call/interop overhead, but it's close to native function calls.
 ```
 
-**Performance**: KMM 10x faster for data-intensive operations.
+**Performance**: for compute- and data-intensive operations, KMM shared logic usually behaves closer to fully native implementations
+because it avoids frequent JS bridge crossings. Any "X times faster" claim is highly workload-dependent and should not be treated as universal.
 
 ### Type Safety
 
 **React Native**:
 ```javascript
-// ❌ Type safety lost across bridge
+// ❌ Without strong typing and explicit contracts over the bridge, runtime errors are more likely
 const jsonResult = await taskModule.getTasks();  // Returns string
-const tasks: Task[] = JSON.parse(jsonResult);    // Runtime parsing
-// Risk: runtime errors if structure changes
+const tasks = JSON.parse(jsonResult);            // Structure validated only at runtime
 ```
+- With TypeScript or `Flow` you can have strong static typing on the JavaScript side,
+  but native ↔ JS bridge contracts still require discipline and tooling to keep types in sync.
 
 **KMM**:
 ```kotlin
-// ✅ Full compile-time type safety
+// ✅ Strong compile-time type safety in shared Kotlin code
 @Serializable
 data class Task(val id: String, val title: String)
 
 class TaskRepository {
     suspend fun getTasks(): List<Task> = api.fetchTasks()
 }
-// Refactoring safe, IDE autocomplete, no manual parsing
+// Safer refactoring, IDE support, and strict signatures between modules.
 ```
 
 ### Code Sharing
 
-**React Native**: 90-95% code reuse (including UI)
-- Single JSX UI for both platforms
-- Hot reload for fast iteration
-- Requires bridge calls for data
+**React Native**: potentially 90%+ reuse (including UI)
+- Single JSX/TSX UI for both platforms
+- Fast Refresh for rapid iteration
+- Uses bridge calls (community or custom native modules) for native capabilities
 
-**KMM**: 60-70% code reuse (business logic only)
-- Separate native UI (Compose/SwiftUI)
-- Direct access to shared code
-- Platform-specific UI development
+**KMM**: typically around 50-80% reuse (business logic, data, shared modules)
+- Separate native UIs (Compose/Views on Android, SwiftUI/UIKit on iOS)
+- Direct access to shared code from platform UI layers
+- UI and some APIs remain platform-specific by design
 
 ### Performance Benchmarks
 
 | Metric | React Native | KMM |
 |--------|--------------|-----|
-| **Startup** | 1.5-2.5s (JS bundle load) | 0.5-0.8s (native) |
-| **Animations** | 45-58fps (JS bottleneck) | 60fps+ (native) |
-| **Memory** | Higher (JS VM overhead) | Lower (native) |
-| **List Rendering** | 300-500ms, occasional jank | 150-250ms, smooth 60fps |
+| **Startup** | Often higher overhead due to JS bundle loading and VM initialization | Closer to native startup; shared code is integrated into a native app |
+| **Animations** | May suffer when heavy JS work or frequent bridge calls are on the critical path; newer RN stack (Fabric/JSI/Reanimated) mitigates this | Native rendering (Compose/SwiftUI/etc.), typically smooth 60fps when implemented correctly |
+| **Memory** | Generally higher due to JS VM and extra layers | Generally lower, closer to native |
+| **`List` Rendering** | Large lists with complex JS logic can jank if constrained by JS/bridge | Native list components with shared logic give more predictable performance |
+
+(Numeric values are highly app-specific; focus on principles rather than treating any specific numbers as universal.)
 
 ### Developer Experience
 
 **React Native**:
-- ✅ Hot reload (instant updates)
-- ✅ Large JavaScript ecosystem (npm)
-- ✅ React knowledge transferable
-- ❌ Bridge debugging complexity
-- ❌ Type safety lost across bridge
+- ✅ Fast Refresh/hot reload
+- ✅ Large JavaScript/TypeScript ecosystem (npm)
+- ✅ React skills are directly applicable
+- ❌ Bridge and platform-specific modules can complicate debugging
+- ❌ Strong typing across the native bridge requires careful contracts and tooling
 
 **KMM**:
-- ✅ Full type safety
-- ✅ No bridge complexity
-- ✅ Gradual adoption (existing apps)
-- ❌ Slower builds (30-80s)
-- ❌ Separate UI implementations
+- ✅ Strong static typing with Kotlin and a unified model for business logic
+- ✅ No JS bridge, familiar tooling for Kotlin/Android developers
+- ✅ Gradual adoption into existing native apps (start with shared modules)
+- ❌ Heavier build setup and configuration for multiplatform projects
+- ❌ Separate native UI implementations to design, build, and maintain
 
 ### Ecosystem Maturity
 
-**React Native**: Very mature (2015, Meta-backed)
-- 15,000+ specific packages
-- Large community, abundant jobs
-- Popular: react-navigation, react-native-firebase
+**React Native**: mature ecosystem (since 2015, backed by Meta)
+- Many libraries and integrations
+- Large community and hiring pool
+- Popular libraries: react-navigation, react-native-firebase, etc.
 
-**KMM**: Maturing (stable since 2020, JetBrains/Google)
-- 500+ multiplatform libraries
-- Growing community and adoption
-- Popular: Ktor, SQLDelight, Koin, kotlinx.serialization
+**KMM**: growing ecosystem (Kotlin Multiplatform stabilizing; led by JetBrains with Google involvement)
+- Hundreds of multiplatform libraries
+- Common choices: Ktor, SQLDelight, Koin, kotlinx.serialization, kotlinx.coroutines
 
 ### Platform Feature Access
 
-**React Native**: 4-16 week delay waiting for community modules
-**KMM**: Day-zero access via Kotlin/Native interop
+**React Native**:
+- Native capabilities available immediately via custom native modules
+- For many features you can rely on community packages; sometimes you wait for updates or write/maintain your own wrappers
+
+**KMM**:
+- Day-zero access to platform APIs through Kotlin/Native interop and expect/actual mechanisms
+- No dependency on JS wrappers; platform-specific implementations can be written directly in Kotlin or native languages
 
 ### When to Choose
 
-**React Native**: JavaScript/React team, fast MVP, hot reload critical, cross-platform UI acceptable
-**KMM**: Kotlin expertise, native UX critical, performance/type-safety important, existing Android app
+**React Native**:
+- Strong JavaScript/React team
+- Need for rapid cross-platform UI delivery and fast iteration
+- Willingness to accept some overhead/complexity of the bridge for higher UI code reuse
 
-**Examples**: React Native (Meta, Discord, Shopify), KMM (Netflix SDK, Cash App, VMware)
+**KMM**:
+- Strong Kotlin/Android expertise
+- Native UX/performance and type safety are high priorities
+- Existing native apps where you want to share business logic without replacing the UI tech stack
+
+**Examples**:
+- React Native: used in products by Meta, Discord, Shopify, and others.
+- KMM: adopted in production by several companies (including large ones), often for shared modules/SDKs across Android and iOS.
 
 ## Follow-ups
 
@@ -291,16 +332,14 @@ class TaskRepository {
 
 ## References
 
-- Kotlin Multiplatform documentation
-- React Native official documentation
+- [Kotlin Multiplatform documentation](https://kotlinlang.org/docs/multiplatform.html)
+- [React Native official documentation](https://reactnative.dev/docs/getting-started)
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-mvvm]]
-- [[c-viewmodel]]
-
 
 ### Prerequisites
 - Basic understanding of Kotlin and JavaScript

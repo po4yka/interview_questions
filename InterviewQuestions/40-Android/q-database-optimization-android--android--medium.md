@@ -68,7 +68,7 @@ data class User(
 )
 ```
 
-**Trade-offs:** индекс занимает дополнительную память (~10-20% размера таблицы) и замедляет `INSERT`/`UPDATE` на 15-30%, так как требуется обновление структуры индекса. Используйте индексы только для часто запрашиваемых колонок и избегайте избыточной индексации.
+**Trade-offs:** индексы занимают дополнительную память и замедляют `INSERT`/`UPDATE`, так как при каждой записи нужно обновлять структуру индекса. В типичных сценариях накладные расходы могут быть заметны (например, рост размера таблицы и замедление вставок), поэтому индексы имеет смысл добавлять только для часто используемых колонок и избегать избыточной индексации. Конкретные цифры зависят от данных и нагрузки, их нужно проверять профилированием.
 
 ### 2. Пакетные Операции
 
@@ -78,13 +78,16 @@ data class User(
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUsers(users: List<User>)  // ✅ Одна транзакция
+    suspend fun insertUsers(users: List<User>)  // ✅ Одна транзакция для списка
 
     @Transaction  // ✅ Гарантирует атомарность
     suspend fun syncUsers(local: List<User>, remote: List<User>) {
         deleteUsers(local)
         insertUsers(remote)
     }
+
+    @Delete
+    suspend fun deleteUsers(users: List<User>)
 }
 
 // ❌ Плохо: каждый insert - отдельная транзакция
@@ -94,24 +97,24 @@ users.forEach { dao.insertUser(it) }
 dao.insertUsers(users)
 ```
 
-**Производительность:** пакетная вставка 1000 записей ~50x быстрее поштучной (одна транзакция вместо 1000). Это особенно важно для синхронизации данных и bulk-операций.
+**Производительность:** пакетная вставка большого количества записей обычно на порядок быстрее поштучной (меньше открытых транзакций и fsync). Точный выигрыш (например, 10x–50x) зависит от устройства и размера данных, поэтому его нужно измерять на целевой среде.
 
 ### 3. Асинхронность И Реактивность
 
-Используйте `suspend` функции и `Flow` для предотвращения `ANR`:
+Используйте `suspend` функции и `Flow` (Room KTX) для предотвращения `ANR`, чтобы не выполнять операции с БД на главном потоке:
 
 ```kotlin
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users")
-    suspend fun getUsers(): List<User>  // ✅ Для одноразовых запросов
+    suspend fun getUsers(): List<User>  // ✅ Для одноразовых запросов (Room выполняет на рабочем потоке)
 
     @Query("SELECT * FROM users")
     fun observeUsers(): Flow<List<User>>  // ✅ Для автоматических обновлений UI
 }
 ```
 
-`Room` автоматически выполняет операции на `Dispatchers.IO`, поэтому не требуется явно переключать контекст. Для `Flow` используйте `flowOn(Dispatchers.IO)` при необходимости дополнительного контроля.
+Room для `suspend` и `Flow` DAO-методов использует собственный пул потоков и предотвращает выполнение этих запросов на главном потоке, но он не переключает корутины на `Dispatchers.IO` автоматически. Вызовы необходимо делать из подходящего контекста (обычно `Dispatchers.IO` или `viewModelScope` с off-main контекстом), а при необходимости дополнительного контроля использовать `flowOn(...)`.
 
 ### 4. Оптимизация Запросов
 
@@ -124,7 +127,7 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE active = 1")
     suspend fun getActiveUsers(): List<User>
 
-    // ✅ Только нужные поля
+    // ✅ Только нужные поля (отдельный DTO)
     @Query("SELECT id, name FROM users WHERE active = 1 LIMIT 100")
     suspend fun getActiveUserNames(): List<UserName>
 
@@ -136,20 +139,27 @@ interface UserDao {
 
 ### 5. Кэширование
 
-LRU кэш для горячих данных:
+LRU-кэш для горячих данных:
 
 ```kotlin
 class UserRepository @Inject constructor(
     private val dao: UserDao
 ) {
-    private val cache = LruCache<Long, User>(maxSize = 100)  // ✅ ~100 записей в памяти
+    private val cache = LruCache<Long, User>(100)  // ✅ ~100 записей в памяти
 
-    suspend fun getUser(id: Long): User? =
-        cache[id] ?: dao.getUserById(id)?.also { cache.put(id, it) }
+    suspend fun getUser(id: Long): User? {
+        val cached = cache.get(id)
+        if (cached != null) return cached
+        val fromDb = dao.getUserById(id)
+        if (fromDb != null) {
+            cache.put(id, fromDb)
+        }
+        return fromDb
+    }
 }
 ```
 
-**Trade-off:** использует память (~10-100 KB в зависимости от размера объектов). Регулируйте размер кэша (`maxSize`) в зависимости от доступной памяти устройства. Используйте `LruCache` для автоматического удаления наименее используемых элементов при достижении лимита.
+**Trade-off:** использует память (объем зависит от размера объектов). Регулируйте размер кэша в зависимости от доступной памяти устройства. `LruCache` автоматически удаляет наименее используемые элементы при достижении лимита.
 
 ## Answer (EN)
 
@@ -175,7 +185,7 @@ data class User(
 )
 ```
 
-**Trade-offs:** indexes consume additional memory (~10-20% of table size) and slow down `INSERT`/`UPDATE` by 15-30% as index structure must be updated. Use indexes only for frequently queried columns and avoid over-indexing.
+**Trade-offs:** indexes consume additional space and add overhead to `INSERT`/`UPDATE` because index structures must be updated on each write. In typical scenarios, this overhead can be significant (larger DB file, slower writes), so add indexes only for frequently used columns and avoid over-indexing. Exact impact is data- and workload-dependent and should be verified via profiling.
 
 ### 2. Batch Operations
 
@@ -185,13 +195,16 @@ Group operations into transactions to reduce overhead:
 @Dao
 interface UserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUsers(users: List<User>)  // ✅ Single transaction
+    suspend fun insertUsers(users: List<User>)  // ✅ Single transaction for the list
 
     @Transaction  // ✅ Guarantees atomicity
     suspend fun syncUsers(local: List<User>, remote: List<User>) {
         deleteUsers(local)
         insertUsers(remote)
     }
+
+    @Delete
+    suspend fun deleteUsers(users: List<User>)
 }
 
 // ❌ Bad: each insert is a separate transaction
@@ -201,28 +214,28 @@ users.forEach { dao.insertUser(it) }
 dao.insertUsers(users)
 ```
 
-**Performance:** batch insert of 1000 records is ~50x faster than individual inserts (one transaction instead of 1000). This is especially important for data synchronization and bulk operations.
+**Performance:** bulk inserting many records is usually an order of magnitude faster than inserting them one by one (fewer transactions and fsync calls). The exact speedup (e.g., 10x–50x) depends on device and data size, so always measure on the target environment.
 
 ### 3. Asynchronicity And Reactivity
 
-Use `suspend` functions and `Flow` to prevent `ANR`:
+Use `suspend` functions and `Flow` (Room KTX) to avoid running DB work on the main thread and prevent `ANR`:
 
 ```kotlin
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users")
-    suspend fun getUsers(): List<User>  // ✅ For one-time queries
+    suspend fun getUsers(): List<User>  // ✅ For one-time queries (Room runs on a background thread for suspend DAO)
 
     @Query("SELECT * FROM users")
     fun observeUsers(): Flow<List<User>>  // ✅ For automatic UI updates
 }
 ```
 
-`Room` automatically executes operations on `Dispatchers.IO`, so explicit context switching is not required. For `Flow`, use `flowOn(Dispatchers.IO)` when additional control is needed.
+For `suspend` and `Flow` DAO methods, Room uses its own background executors and disallows main-thread access by default, but it does not automatically switch coroutines to `Dispatchers.IO`. Call these APIs from an appropriate coroutine context (commonly `Dispatchers.IO` or `viewModelScope` with off-main context) and apply `flowOn(...)` when you need additional control.
 
 ### 4. Query Optimization
 
-Minimize the volume of data read:
+Minimize the amount of data read:
 
 ```kotlin
 @Dao
@@ -231,7 +244,7 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE active = 1")
     suspend fun getActiveUsers(): List<User>
 
-    // ✅ Only needed fields
+    // ✅ Only needed fields (separate DTO)
     @Query("SELECT id, name FROM users WHERE active = 1 LIMIT 100")
     suspend fun getActiveUserNames(): List<UserName>
 
@@ -249,14 +262,21 @@ LRU cache for hot data:
 class UserRepository @Inject constructor(
     private val dao: UserDao
 ) {
-    private val cache = LruCache<Long, User>(maxSize = 100)  // ✅ ~100 records in memory
+    private val cache = LruCache<Long, User>(100)  // ✅ ~100 records in memory
 
-    suspend fun getUser(id: Long): User? =
-        cache[id] ?: dao.getUserById(id)?.also { cache.put(id, it) }
+    suspend fun getUser(id: Long): User? {
+        val cached = cache.get(id)
+        if (cached != null) return cached
+        val fromDb = dao.getUserById(id)
+        if (fromDb != null) {
+            cache.put(id, fromDb)
+        }
+        return fromDb
+    }
 }
 ```
 
-**Trade-off:** uses memory (~10-100 KB depending on object size). Adjust cache size (`maxSize`) based on available device memory. `LruCache` automatically evicts least recently used items when limit is reached.
+**Trade-off:** consumes memory (depends on object size). Adjust cache size according to available device memory. `LruCache` automatically evicts least recently used items when the limit is reached.
 
 
 ## Follow-ups

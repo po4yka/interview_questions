@@ -17,9 +17,9 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-lazy-grid
+- q-compose-lazy-layout-optimization--android--hard
 created: 2025-10-12
-updated: 2025-10-31
+updated: 2025-11-10
 tags:
 - android/performance-rendering
 - android/ui-compose
@@ -29,7 +29,7 @@ tags:
 - lazy-layout
 - performance
 sources:
-- https://developer.android.com/jetpack/compose/lists
+- "https://developer.android.com/jetpack/compose/lists"
 ---
 
 # Вопрос (RU)
@@ -43,12 +43,13 @@ sources:
 ## Ответ (RU)
 
 **Теория LazyGrid:**
-LazyGrid - это композабл для отображения элементов в виде сетки с ленивой загрузкой. Оптимизирует производительность, создавая только видимые элементы. Поддерживает фиксированные и адаптивные колонки.
+Под "LazyGrid" в Jetpack Compose обычно подразумеваются ленивые сеточные компоновщики `LazyVerticalGrid` и `LazyHorizontalGrid`. Они отображают элементы в виде сетки с ленивой загрузкой: композируют и размещают только элементы в видимой области (и немного вокруг неё для плавного скролла), а вышедшие за пределы вьюпорта элементы могут быть удалены из композиции.
 
 **Основные типы:**
-- `LazyVerticalGrid` - вертикальная прокрутка
-- `LazyHorizontalGrid` - горизонтальная прокрутка
-- `LazyVerticalStaggeredGrid` - сетка с переменной высотой элементов
+- `LazyVerticalGrid` — вертикальная прокрутка
+- `LazyHorizontalGrid` — горизонтальная прокрутка
+- `LazyVerticalStaggeredGrid` — вертикальная сетка с переменной высотой элементов
+- `LazyHorizontalStaggeredGrid` — горизонтальная сетка с переменным размером по поперечной оси
 
 **Типы колонок:**
 ```kotlin
@@ -73,7 +74,11 @@ LazyVerticalGrid(
         count = items.size,
         span = { index ->
             // Каждый 4-й элемент занимает все колонки
-            GridItemSpan(if (index % 4 == 0) maxLineSpan else 1)
+            if (index % 4 == 0) {
+                GridItemSpan(maxLineSpan)
+            } else {
+                GridItemSpan(1)
+            }
         }
     ) { index ->
         GridItem(items[index])
@@ -105,14 +110,14 @@ LazyVerticalStaggeredGrid(
 
 **Оптимизация производительности:**
 ```kotlin
-// Использование ключей для оптимизации
+// Использование стабильных ключей и contentType для оптимизации
 LazyVerticalGrid(
     columns = GridCells.Fixed(2)
 ) {
     items(
         count = items.size,
-        key = { items[it].id }, // Обязательно для производительности
-        contentType = { items[it]::class } // Помогает переиспользованию
+        key = { items[it].id }, // Рекомендуется для стабильной идентичности и переиспользования
+        contentType = { items[it]::class } // Помогает переиспользовать слоты для схожих типов
     ) { index ->
         ItemCard(items[index])
     }
@@ -122,12 +127,13 @@ LazyVerticalGrid(
 ## Answer (EN)
 
 **LazyGrid Theory:**
-LazyGrid is a composable for displaying items in a grid layout with lazy loading. Optimizes performance by creating only visible items. Supports fixed and adaptive columns.
+In Jetpack Compose, "LazyGrid" typically refers to the lazy grid composables `LazyVerticalGrid` and `LazyHorizontalGrid`. They display items in a grid layout with lazy behavior: only items within (and slightly around) the visible viewport are composed and laid out, and items scrolled far off-screen may be disposed.
 
 **Main types:**
 - `LazyVerticalGrid` - vertical scrolling
 - `LazyHorizontalGrid` - horizontal scrolling
-- `LazyVerticalStaggeredGrid` - grid with variable item heights
+- `LazyVerticalStaggeredGrid` - vertical grid with variable item heights
+- `LazyHorizontalStaggeredGrid` - horizontal grid with variable size along the cross axis
 
 **Column types:**
 ```kotlin
@@ -152,7 +158,11 @@ LazyVerticalGrid(
         count = items.size,
         span = { index ->
             // Every 4th item spans all columns
-            GridItemSpan(if (index % 4 == 0) maxLineSpan else 1)
+            if (index % 4 == 0) {
+                GridItemSpan(maxLineSpan)
+            } else {
+                GridItemSpan(1)
+            }
         }
     ) { index ->
         GridItem(items[index])
@@ -184,14 +194,14 @@ LazyVerticalStaggeredGrid(
 
 **Performance optimization:**
 ```kotlin
-// Using keys for optimization
+// Using stable keys and contentType to help performance and state stability
 LazyVerticalGrid(
     columns = GridCells.Fixed(2)
 ) {
     items(
         count = items.size,
-        key = { items[it].id }, // Essential for performance
-        contentType = { items[it]::class } // Helps reuse
+        key = { items[it].id }, // Recommended for stable item identity and reuse
+        contentType = { items[it]::class } // Helps reuse slots for similar item types
     ) { index ->
         ItemCard(items[index])
     }

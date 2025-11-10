@@ -35,25 +35,27 @@ sources: []
 ## Ответ (RU)
 
 **Принцип многоуровневой защиты (Defense-in-Depth):**
-Android использует изоляцию процессов, систему разрешений, [[c-encryption|шифрование]] данных и защищенную сетевую коммуникацию. Каждый уровень защищает от конкретных векторов атак.
+Android использует изоляцию процессов, систему разрешений, [[c-encryption|шифрование]] данных и защищенную сетевую коммуникацию. Каждый уровень должен рассматриваться как отдельный барьер против конкретных векторов атак.
 
 **1. Система разрешений:**
-Runtime permissions контролируют доступ к чувствительным ресурсам. Signature-permissions защищают внутренние API от сторонних приложений.
+Runtime permissions контролируют доступ к чувствительным ресурсам. Signature-permissions защищают внутренние API от сторонних приложений (доступ предоставляется только приложениям с той же подписью).
 
 ```xml
-<!-- ✅ Защита внутреннего API -->
+<!-- ✅ Защита внутреннего API: доступ только приложениям с той же подписью -->
 <permission
     android:name="com.myapp.INTERNAL_API"
     android:protectionLevel="signature" />
 
+<!-- Если компонент должен быть доступен только своим приложениям с той же подписью,
+     android:exported="true" и android:permission с signature-permission -->
 <activity
     android:name=".AdminActivity"
     android:permission="com.myapp.INTERNAL_API"
-    android:exported="false" />
+    android:exported="true" />
 ```
 
 **2. Безопасное хранение данных:**
-Jetpack Security (EncryptedSharedPreferences, EncryptedFile) использует [[c-encryption|AES-256-GCM]] с ключами из Android Keystore, защищенными аппаратно.
+Jetpack Security (EncryptedSharedPreferences, EncryptedFile) при использовании MasterKey с схемой AES256_GCM применяет [[c-encryption|AES-256-GCM]] и ключи из Android Keystore, предпочтительно с аппаратной защитой, если устройство поддерживает.
 
 ```kotlin
 // ✅ Шифрование чувствительных данных
@@ -74,10 +76,14 @@ val encryptedPrefs = EncryptedSharedPreferences.create(
 ```
 
 **3. Сетевая безопасность:**
-Network Security Config принудительно использует HTTPS и certificate pinning для защиты от MITM атак.
+Network Security Config помогает:
+- запретить незашифрованный HTTP-трафик (`cleartextTrafficPermitted="false"`),
+- ограничить доверенные CA через trust anchors.
+
+Сам по себе Network Security Config не реализует certificate pinning; для пиннинга нужно использовать дополнительные механизмы (например, кастомный TrustManager или поддержку пиннинга в HTTP-клиенте).
 
 ```xml
-<!-- ✅ Network Security Config -->
+<!-- ✅ Network Security Config: запрет cleartext и настройка trust anchors -->
 <network-security-config>
     <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
@@ -87,16 +93,12 @@ Network Security Config принудительно использует HTTPS и
 
     <domain-config>
         <domain includeSubdomains="true">api.myapp.com</domain>
-        <pin-set expiration="2026-01-01">
-            <pin digest="SHA-256">base64hash==</pin>
-            <pin digest="SHA-256">backup_hash==</pin>
-        </pin-set>
     </domain-config>
 </network-security-config>
 ```
 
 **4. Защита компонентов:**
-Используйте `android:exported="false"` для внутренних Activity/Service/Provider. Валидируйте Intent от внешних источников.
+Используйте `android:exported="false"` для внутренних Activity/Service/Provider, которые не должны вызываться извне. Для экспортируемых компонентов валидируйте Intent от внешних источников.
 
 ```kotlin
 // ✅ Валидация Intent
@@ -114,7 +116,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ```
 
 **5. WebView безопасность:**
-Отключите JavaScript если не требуется, заблокируйте file:// доступ, валидируйте JS-нативное взаимодействие.
+Отключите JavaScript, если не требуется, заблокируйте file:// доступ, избегайте загрузки недоверенного контента при наличии `addJavascriptInterface`, валидируйте JS-нативное взаимодействие.
 
 ```kotlin
 // ✅ Минимальные разрешения
@@ -125,7 +127,7 @@ webView.settings.apply {
     mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
 }
 
-// Безопасный JavascriptInterface
+// Использовать JavascriptInterface только с доверенным контентом
 webView.addJavascriptInterface(object {
     @JavascriptInterface
     fun sendMessage(msg: String) {
@@ -135,33 +137,35 @@ webView.addJavascriptInterface(object {
 ```
 
 **Дополнительные меры:**
-- R8/ProGuard для обфускации кода
-- BiometricPrompt для криптографически стойкой аутентификации
-- Android Lint/StrictMode для выявления уязвимостей
-- Dependency scanning (OWASP Dependency-Check)
+- Используйте R8/ProGuard для обфускации кода (понимая, что это не защита, а усложнение анализа)
+- Используйте BiometricPrompt для криптографически стойкой аутентификации пользователей
+- Используйте Android Lint/StrictMode для выявления потенциальных уязвимостей и неправильного использования API
+- Выполняйте анализ зависимостей (например, OWASP Dependency-Check) для поиска известных уязвимостей
 
 ## Answer (EN)
 
 **Defense-in-Depth Principle:**
-Android employs process isolation, permission system, data [[c-encryption|encryption]], and secure network communication. Each layer protects against specific attack vectors.
+Android employs process isolation, a permission system, data [[c-encryption|encryption]], and secure network communication. Each layer should be treated as a separate barrier against specific attack vectors.
 
 **1. Permission System:**
-Runtime permissions control access to sensitive resources. Signature-permissions protect internal APIs from third-party apps.
+Runtime permissions control access to sensitive resources. Signature-permissions protect internal APIs from third-party apps (only apps signed with the same certificate can access them).
 
 ```xml
-<!-- ✅ Protect internal API -->
+<!-- ✅ Protect internal API: only apps signed with the same key can access it -->
 <permission
     android:name="com.myapp.INTERNAL_API"
     android:protectionLevel="signature" />
 
+<!-- If the component is meant to be accessible only to same-signature apps,
+     use android:exported="true" with a signature-level permission -->
 <activity
     android:name=".AdminActivity"
     android:permission="com.myapp.INTERNAL_API"
-    android:exported="false" />
+    android:exported="true" />
 ```
 
 **2. Secure Data Storage:**
-Jetpack Security (EncryptedSharedPreferences, EncryptedFile) uses [[c-encryption|AES-256-GCM]] with keys from Android Keystore with hardware-backed protection.
+Jetpack Security (EncryptedSharedPreferences, EncryptedFile), when using a MasterKey with AES256_GCM scheme, relies on [[c-encryption|AES-256-GCM]] and keys stored in Android Keystore, preferably hardware-backed when available.
 
 ```kotlin
 // ✅ Encrypt sensitive data
@@ -182,10 +186,14 @@ val encryptedPrefs = EncryptedSharedPreferences.create(
 ```
 
 **3. Network Security:**
-Network Security Config enforces HTTPS and certificate pinning to protect against MITM attacks.
+Network Security Config helps to:
+- disable cleartext HTTP traffic (`cleartextTrafficPermitted="false"`),
+- restrict trusted CAs via trust anchors.
+
+By itself, Network Security Config does not implement certificate pinning; pinning must be handled separately (e.g., via a custom TrustManager or HTTP client pinning support).
 
 ```xml
-<!-- ✅ Network Security Config -->
+<!-- ✅ Network Security Config: disable cleartext and configure trust anchors -->
 <network-security-config>
     <base-config cleartextTrafficPermitted="false">
         <trust-anchors>
@@ -195,16 +203,12 @@ Network Security Config enforces HTTPS and certificate pinning to protect agains
 
     <domain-config>
         <domain includeSubdomains="true">api.myapp.com</domain>
-        <pin-set expiration="2026-01-01">
-            <pin digest="SHA-256">base64hash==</pin>
-            <pin digest="SHA-256">backup_hash==</pin>
-        </pin-set>
     </domain-config>
 </network-security-config>
 ```
 
 **4. Component Protection:**
-Use `android:exported="false"` for internal Activity/Service/Provider. Validate Intent from external sources.
+Use `android:exported="false"` for internal Activity/Service/Provider components that must not be invoked externally. For exported components, always validate Intents from external sources.
 
 ```kotlin
 // ✅ Validate Intent
@@ -222,7 +226,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ```
 
 **5. WebView Security:**
-Disable JavaScript unless required, block file:// access, validate JS-native interactions.
+Disable JavaScript unless required, block file:// access, avoid loading untrusted content when `addJavascriptInterface` is used, and validate JS-native interactions.
 
 ```kotlin
 // ✅ Minimal permissions
@@ -233,7 +237,7 @@ webView.settings.apply {
     mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
 }
 
-// Secure JavascriptInterface
+// Use JavascriptInterface only with trusted content
 webView.addJavascriptInterface(object {
     @JavascriptInterface
     fun sendMessage(msg: String) {
@@ -243,10 +247,10 @@ webView.addJavascriptInterface(object {
 ```
 
 **Additional Measures:**
-- R8/ProGuard for code obfuscation
-- BiometricPrompt for cryptographically strong authentication
-- Android Lint/StrictMode to detect vulnerabilities
-- Dependency scanning (OWASP Dependency-Check)
+- Use R8/ProGuard for code obfuscation (understanding it is not a strong security control, but raises the bar for reverse engineering)
+- Use BiometricPrompt for cryptographically strong user authentication
+- Use Android Lint/StrictMode to detect potential vulnerabilities and API misuses
+- Perform dependency scanning (e.g., OWASP Dependency-Check) to catch known vulnerabilities
 
 ---
 
@@ -262,7 +266,6 @@ webView.addJavascriptInterface(object {
 
 - [[c-encryption]] - Encryption fundamentals
 - [[c-permissions]] - Android permissions system
-- [[c-android-keystore]] - Android Keystore system
 - https://developer.android.com/topic/security/best-practices
 - https://owasp.org/www-project-mobile-app-security/
 

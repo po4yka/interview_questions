@@ -1,7 +1,6 @@
 ---
 id: android-444
-title: Does State Made In Compose Help Avoid Race Condition / Помогает ли State в
-  Compose избежать состояния гонки
+title: Does State in Compose Help Avoid Race Conditions / Помогает ли State в Compose избежать состояния гонки
 aliases:
 - Compose State Thread Safety
 - Does State Made In Compose Help Avoid Race Condition
@@ -17,25 +16,21 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - c-compose-state
 - c-jetpack-compose
-- c-viewmodel
 - q-derived-state-snapshot-system--android--hard
 created: 2025-10-20
-updated: 2025-11-02
+updated: 2025-11-10
 tags:
 - android/ui-compose
 - android/ui-state
-- compose
-- concurrency
 - difficulty/medium
-- state
-- thread-safety
 sources:
-- https://developer.android.com/jetpack/compose/state
+- "https://developer.android.com/jetpack/compose/state"
+
 ---
 
 # Вопрос (RU)
@@ -48,60 +43,64 @@ sources:
 
 ## Ответ (RU)
 
-**Нет**, `MutableState` в `Compose` не гарантирует thread safety. `MutableState` — это обертка над простым значением, которая не содержит внутренних механизмов синхронизации потоков. При одновременном изменении состояния несколькими потоками возникают race conditions, которые могут привести к потере обновлений, некорректному состоянию UI, и даже к крашам приложения. Понимание механизмов thread safety в `Compose` критично для написания корректного асинхронного кода.
+**Нет**, `MutableState` в `Compose` сам по себе не гарантирует отсутствия race condition и не является универсальным thread-safe примитивом. Он построен на системе snapshot-состояния, которая обеспечивает согласованность чтения/записи внутри своих правил, но **не защищает** от одновременных небезопасных изменений из разных потоков без использования правильных механизмов (main thread, snapshot API или других средств синхронизации). При некорректном параллельном доступе возможно неконсистентное состояние UI, потеря обновлений и ошибки.
 
 ### Основные Проблемы
 
-**1. MutableState не thread-safe**
+**1. MutableState не является общим thread-safe примитивом**
 
 **Проблема:**
 
-`MutableState` не является thread-safe типом. Внутренне `MutableState` хранит значение в обычной переменной (`var value: T`), без использования синхронизации (`synchronized`, `volatile`, атомарных операций). Это означает:
-- **Потеря обновлений** — при одновременной записи из разных потоков одно из обновлений может быть потеряно
-- **Некорректное чтение** — чтение из фонового потока может вернуть устаревшее значение
-- **Undefined behavior** — доступ из фоновых потоков к `MutableState` может привести к непредсказуемому поведению
+`MutableState` не предназначен как обычный thread-safe контейнер наподобие `Atomic*`. Он интегрирован с snapshot-системой Compose, которая ожидает, что изменения UI-состояния будут происходить согласованно (обычно — на главном потоке или через корректные snapshot-операции). Если одновременно изменять одно и то же состояние из разных потоков без координации, можно получить:
+- **Потерю обновлений** — одно из изменений перезапишет другое
+- **Некорректное состояние** — разные части UI могут наблюдать разные значения
+- Потенциальные ошибки работы snapshot-системы
+
+Важно: это не «магически защищённый» от гонок тип. Отвечает разработчик — как организованы потоки и точки записи.
 
 **Решение:**
 
-Использовать `MutableState` только на главном потоке (Main thread), где выполняются все операции UI. Для обновлений из фоновых потоков использовать `withContext(Dispatchers.Main)` или `Dispatchers.Main.immediate`.
+- Обновлять UI-состояние (`MutableState`) из одного, предсказуемого контекста (как правило, main thread), либо
+- Использовать официальные snapshot-утилиты и/или дополнительные примитивы синхронизации при межпоточных изменениях.
+
+Практический и рекомендуемый путь для UI:
+- Выполнять работу в фоновых потоках
+- Публиковать результат обратно в UI через main dispatcher или слой, гарантирующий согласованные обновления (`ViewModel` + `Flow`/`StateFlow`)
 
 ```kotlin
-// ❌ ПЛОХО - race condition при одновременном доступе
+// ❌ ПЛОХО - изменение состояния из "сырых" фоновых потоков без координации
 @Composable
 fun UnsafeCounter() {
     var count by remember { mutableStateOf(0) }
     Button(onClick = {
-        // ⚠️ ОПАСНО: изменение state из фонового потока
         Thread {
-            count++ // Может потерять обновления или вызвать краш
+            // ⚠️ Риск: запись в snapshot-состояние из произвольного потока без соблюдения правил
+            count++
         }.start()
     }) { Text("Increment: $count") }
 }
 
-// ✅ ХОРОШО - только Main thread
+// ✅ ХОРОШО - все изменения происходят в UI-потоке
 @Composable
 fun SafeCounter() {
     var count by remember { mutableStateOf(0) }
     Button(onClick = {
-        count++ // Безопасно: выполняется на главном потоке
+        count++
     }) { Text("Increment: $count") }
 }
 
-// ✅ ХОРОШО - обновление из фонового потока через Main Dispatcher
+// ✅ ХОРОШО - асинхронная работа в фоне, публикация результата в UI-потоке
 @Composable
 fun SafeAsyncCounter() {
     var count by remember { mutableStateOf(0) }
     val scope = rememberCoroutineScope()
     Button(onClick = {
         scope.launch {
-            // Выполнение тяжелой работы на IO потоке
             val result = withContext(Dispatchers.IO) {
                 heavyCalculation()
             }
-            // Обновление state на главном потоке
-            withContext(Dispatchers.Main) {
-                count = result
-            }
+            // Главное: обновление snapshot-состояния из согласованного (обычно main) контекста
+            count = result
         }
     }) { Text("Count: $count") }
 }
@@ -111,48 +110,46 @@ fun SafeAsyncCounter() {
 
 **Проблема:**
 
-Прямое изменение `MutableState` из фоновых потоков (IO, Default, Unconfined) приводит к:
-- **Undefined behavior** — `Compose` ожидает, что все изменения state происходят на главном потоке
-- **Отсутствие recomposition** — изменения из фоновых потоков могут не вызывать перекомпозицию UI
-- **Нарушение snapshot system** — внутренняя система снимков состояния `Compose` может работать некорректно
+Прямое изменение `MutableState` из фоновых потоков (IO, Default и т.п.) без соблюдения правил snapshot-системы может приводить к неконсистентности и трудноотлавливаемым багам. На практике это выглядит как:
+- пропущенные или странно упорядоченные recomposition,
+- логически некорректное состояние,
+- сложные для отладки эффекты при одновременных записях.
 
-**Решение:**
+**Важно:** snapshot-система поддерживает работу с несколькими потоками через свои API, но это уже продвинутый сценарий. Для типичного UI-кода рекомендуется модель: фон → main → обновление состояния.
 
-Использовать `withContext(Dispatchers.Main)` или `Dispatchers.Main.immediate` для всех обновлений `MutableState`. Предпочтительно использовать `Dispatchers.Main.immediate` для немедленных обновлений без задержек.
+**Решение (рекомендуемый путь для UI-кода):**
+
+Использовать `rememberCoroutineScope()` или `ViewModel` scope и переключаться на `Dispatchers.IO` только для фоновой работы, возвращая результат в UI через основной контекст.
 
 ```kotlin
-// ❌ ПЛОХО - изменение state из фонового потока
+// ❌ ПЛОХО - прямое изменение state в IO scope
 @Composable
 fun UnsafeAsyncCounter() {
     var count by remember { mutableStateOf(0) }
     Button(onClick = {
         CoroutineScope(Dispatchers.IO).launch {
-            // ⚠️ ОПАСНО: прямое изменение state из IO потока
-            count = heavyCalculation() // Undefined behavior, может не вызвать recomposition
+            // ⚠️ Неконтролируемая запись в snapshot-состояние из фонового потока
+            count = heavyCalculation()
         }
     }) { Text("Calculate: $count") }
 }
 
-// ✅ ХОРОШО - обновление через Main Dispatcher
+// ✅ ХОРОШО - работа в фоне, публикация из согласованного контекста
 @Composable
 fun SafeAsyncCounter() {
     var count by remember { mutableStateOf(0) }
     val scope = rememberCoroutineScope()
     Button(onClick = {
         scope.launch {
-            // Тяжелая работа на IO потоке
             val result = withContext(Dispatchers.IO) {
                 heavyCalculation()
             }
-            // Безопасное обновление state на главном потоке
-            withContext(Dispatchers.Main.immediate) {
-                count = result // Гарантированное обновление и recomposition
-            }
+            count = result
         }
     }) { Text("Calculate: $count") }
 }
 
-// ✅ ХОРОШО - альтернатива с LaunchedEffect для автоматической отмены
+// ✅ ХОРОШО - альтернатива с LaunchedEffect
 @Composable
 fun SafeAsyncCounterWithEffect() {
     var count by remember { mutableStateOf(0) }
@@ -162,7 +159,6 @@ fun SafeAsyncCounterWithEffect() {
         val result = withContext(Dispatchers.IO) {
             heavyCalculation()
         }
-        // Автоматически выполняется на главном потоке
         count = result
     }
 
@@ -176,31 +172,33 @@ fun SafeAsyncCounterWithEffect() {
 
 **Проблема:**
 
-Когда несколько `@Composable` функций напрямую изменяют один и тот же `MutableState`, возникают проблемы:
-- **Race conditions** — одновременные изменения из разных компонентов могут конфликтовать
-- **Нарушение Single Source of Truth** — несколько источников истины для одного состояния
-- **Сложность отладки** — трудно отследить, какой компонент изменил состояние
-- **Отсутствие жизненного цикла** — `remember { mutableStateOf() }` не сохраняется при конфигурационных изменениях
+Когда несколько `@Composable` напрямую изменяют один и тот же `MutableState`, возникают проблемы архитектуры и согласованности:
+- **Нарушение Single Source of Truth** — непонятно, где находится главный источник данных
+- **Сложность отладки** — трудно отследить, кто изменил состояние
+- **Отсутствие жизненного цикла** — `remember { mutableStateOf() }` не переживает конфигурационные изменения
+- При одновременном доступе из разных потоков — классические race conditions
+
+Важно: два обработчика кликов в одном потоке, последовательно меняющих одно значение, сами по себе не создают data race. Проблема возникает, когда появляются конкурентные записи или плохо спроектированное разделение ответственности.
 
 **Решение:**
 
-Использовать `ViewModel` с `StateFlow` или `MutableStateFlow` для shared state. `StateFlow` является thread-safe и обеспечивает правильный жизненный цикл состояния.
+Использовать `ViewModel` с `StateFlow`/`MutableStateFlow` или другим четко определённым слоем состояния для shared state. `StateFlow` предоставляет потокобезопасные обновления и интеграцию с жизненным циклом.
 
 ```kotlin
-// ❌ ПЛОХО - shared mutable state без синхронизации
+// ❌ ПЛОХО - общий mutable state в UI-слое
 @Composable
 fun ParentComponent() {
     var sharedState by remember { mutableStateOf(0) }
-    // ⚠️ ОПАСНО: два компонента изменяют один state одновременно
+
     ChildComponent1(sharedState) {
-        sharedState++ // Race condition при одновременном клике
+        sharedState++
     }
     ChildComponent2(sharedState) {
-        sharedState++ // Потеря обновлений
+        sharedState++
     }
 }
 
-// ✅ ХОРОШО - ViewModel с StateFlow для shared state
+// ✅ ХОРОШО - ViewModel как единый источник истины
 @Composable
 fun ParentComponent(viewModel: SharedViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
@@ -213,24 +211,24 @@ class SharedViewModel : ViewModel() {
     val state: StateFlow<Int> = _state.asStateFlow()
 
     fun increment() {
-        _state.value++ // Thread-safe операция
+        _state.update { it + 1 } // Потокобезопасное инкрементирование
     }
 }
 
-// ✅ ХОРОШО - альтернатива с Flow для реактивного обновления
+// ✅ ХОРОШО - пример с Flow-источником
 @Composable
 fun ParentComponentWithFlow(viewModel: SharedViewModel = hiltViewModel()) {
-    val state by viewModel.stateFlow.collectAsState(initial = 0)
+    val state by viewModel.state.collectAsState()
     ChildComponent1(state) { viewModel.increment() }
     ChildComponent2(state) { viewModel.increment() }
 }
 ```
 
-### Решения И Паттерны Thread Safety
+### Решения и паттерны потокобезопасности
 
-**1. Корутины с Main Dispatcher**
+**1. Корутины с согласованным контекстом (обычно Main)**
 
-Использование `withContext(Dispatchers.Main)` или `Dispatchers.Main.immediate` для всех обновлений `MutableState`:
+Рекомендуется выполнять фоновые операции в соответствующих диспетчерах и обновлять UI-состояние из одного согласованного контекста (как правило, main):
 
 ```kotlin
 @Composable
@@ -240,14 +238,10 @@ fun SafeAsyncComponent() {
 
     Button(onClick = {
         scope.launch {
-            // Тяжелая работа на фоновом потоке
             val result = withContext(Dispatchers.IO) {
                 performBackgroundWork()
             }
-            // Безопасное обновление на главном потоке
-            withContext(Dispatchers.Main.immediate) {
-                state = result
-            }
+            state = result
         }
     }) {
         Text("Update")
@@ -255,35 +249,35 @@ fun SafeAsyncComponent() {
 }
 ```
 
-**2. ViewModel с StateFlow для shared state**
+**2. `ViewModel` с `StateFlow` для shared state**
 
-`StateFlow` является thread-safe и гарантирует, что все обновления происходят безопасно:
+`StateFlow` и `MutableStateFlow` обеспечивают потокобезопасные обновления состояния.
 
 ```kotlin
-class MyViewModel : ViewModel() {
+class MyViewModel<T>(initialValue: T) : ViewModel() {
     private val _state = MutableStateFlow(initialValue)
     val state: StateFlow<T> = _state.asStateFlow()
 
     fun updateState(newValue: T) {
-        // Thread-safe операция: StateFlow использует CAS (Compare-And-Swap)
         _state.value = newValue
     }
 
-    fun increment() {
-        _state.update { it + 1 } // Атомарная операция
+    fun incrementInt(by: Int = 1) {
+        // Только для Int-состояний; пример использования update для атомарности
+        (_state as? MutableStateFlow<Int>)?.update { it + by }
     }
 }
 
 @Composable
-fun MyScreen(viewModel: MyViewModel = hiltViewModel()) {
+fun MyScreen(viewModel: MyViewModel<SomeType> = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
     // Безопасное использование shared state
 }
 ```
 
-**3. Snapshot State для внутренней синхронизации**
+**3. SnapshotFlow для интеграции со `Flow`**
 
-Для простых случаев можно использовать `snapshotFlow` для преобразования `State` в `Flow`:
+Для наблюдения за snapshot-состоянием в корутинах используйте `snapshotFlow`:
 
 ```kotlin
 @Composable
@@ -293,9 +287,8 @@ fun ComponentWithSnapshotFlow() {
     LaunchedEffect(Unit) {
         snapshotFlow { count }
             .filter { it > 10 }
-            .collect {
-                // Реакция на изменения count только на главном потоке
-                performAction(it)
+            .collect { value ->
+                performAction(value)
             }
     }
 }
@@ -303,7 +296,7 @@ fun ComponentWithSnapshotFlow() {
 
 **4. Классическая синхронизация (Mutex/Channel) для сложных случаев**
 
-Для более сложных случаев с множественными обновлениями можно использовать `Mutex` или `Channel`:
+Для сложных сценариев с множественными конкурентными обновлениями используйте примитивы синхронизации на уровне бизнес-логики:
 
 ```kotlin
 class ThreadSafeCounter {
@@ -316,19 +309,15 @@ class ThreadSafeCounter {
         }
     }
 
-    suspend fun getCount(): Int {
-        return mutex.withLock {
-            _count
-        }
-    }
+    suspend fun getCount(): Int = mutex.withLock { _count }
 }
 
 @Composable
-fun ComponentWithMutex(viewModel: MyViewModel = hiltViewModel()) {
+fun ComponentWithMutex(viewModel: ThreadSafeCounterViewModel = hiltViewModel()) {
     val scope = rememberCoroutineScope()
     Button(onClick = {
         scope.launch {
-            viewModel.increment() // Thread-safe через Mutex
+            viewModel.increment()
         }
     }) {
         Text("Increment")
@@ -336,38 +325,37 @@ fun ComponentWithMutex(viewModel: MyViewModel = hiltViewModel()) {
 }
 ```
 
-### Лучшие Практики И Рекомендации
+### Лучшие практики и рекомендации
 
 **Архитектурные решения:**
 
--   **Использовать `MutableState` только на главном потоке** — все изменения должны происходить через `Dispatchers.Main` или `Dispatchers.Main.immediate`
--   **Использовать `ViewModel` для shared state** — `StateFlow` предоставляет thread-safe механизм для состояния, разделяемого между компонентами
--   **Избегать прямых изменений из фоновых потоков** — всегда использовать `withContext(Dispatchers.Main)` для обновлений `MutableState`
--   **Использовать `rememberCoroutineScope()`** — для корректного управления жизненным циклом корутин в `@Composable` функциях
--   **Предпочитать `Dispatchers.Main.immediate`** — для немедленных обновлений без задержек на планировщик
+- Использовать `MutableState` для локального UI-состояния и обновлять его из одного согласованного контекста
+- Для разделяемого состояния использовать `ViewModel` + `StateFlow`/`Flow`
+- Не писать в `MutableState` из произвольных фоновых потоков без понимания snapshot-системы и/или доп. синхронизации
+- Использовать `rememberCoroutineScope()` и `ViewModel` scope для корректного управления корутинами
 
 **Оптимизация производительности:**
 
--   **Минимизировать количество обновлений state** — батчить обновления, когда возможно
--   **Использовать `derivedStateOf` для вычисляемых значений** — избегать лишних recomposition при вычислении производных состояний
--   **Правильно управлять жизненным циклом корутин** — использовать `rememberCoroutineScope()` вместо глобальных scope
+- Минимизировать количество обновлений состояния, по возможности объединять
+- Использовать `derivedStateOf` для производных значений, чтобы снизить количество recomposition
+- Следить за временем выполнения в main dispatcher; тяжёлую работу выносить в фон
 
 **Когда использовать что:**
 
--   **`MutableState`**: для локального состояния внутри одного `@Composable` компонента
--   **`StateFlow` в `ViewModel`**: для shared state между несколькими компонентами
--   **`Flow` + `collectAsState()`**: для реактивных обновлений из внешних источников (сеть, база данных)
--   **`snapshotFlow`**: для преобразования `State` в `Flow` для использования в других реактивных цепочках
+- `MutableState`: локальное состояние одного composable / небольшого дерева
+- `StateFlow` в `ViewModel`: разделяемое состояние между несколькими экранами/компонентами
+- `Flow` + `collectAsState()`: реактивные источники (сеть, БД и т.п.)
+- `snapshotFlow`: мост между snapshot-состоянием и `Flow`
 
-### Типичные Ошибки
+### Типичные ошибки
 
-**Проблема 1: Изменение state в LaunchedEffect без проверки потока**
+**Проблема 1: Изменение state в LaunchedEffect только в фоновом контексте**
 
 ```kotlin
 // ❌ ПЛОХО
 LaunchedEffect(Unit) {
     withContext(Dispatchers.IO) {
-        state = fetchData() // Может вызвать проблемы
+        state = fetchData() // Запись в snapshot-состояние из фонового контекста
     }
 }
 
@@ -376,83 +364,87 @@ LaunchedEffect(Unit) {
     val data = withContext(Dispatchers.IO) {
         fetchData()
     }
-    withContext(Dispatchers.Main) {
-        state = data
-    }
+    state = data
 }
 ```
 
-**Проблема 2: Одновременное изменение одного state из разных мест**
+**Проблема 2: Нескоординированные записи в shared state**
 
 ```kotlin
 // ❌ ПЛОХО
 var counter by remember { mutableStateOf(0) }
 Button1 { counter++ }
-Button2 { counter++ } // Race condition
+Button2 { counter++ }
+// В одном потоке это не data race, но сложно масштабировать и контролировать ответственность
 
 // ✅ ХОРОШО
 val viewModel: CounterViewModel = hiltViewModel()
 val counter by viewModel.counter.collectAsState()
 Button1 { viewModel.increment() }
-Button2 { viewModel.increment() } // Thread-safe через StateFlow
+Button2 { viewModel.increment() }
 ```
+
+---
 
 ## Answer (EN)
 
-**No**, `MutableState` in `Compose` does not guarantee thread safety. `MutableState` is a wrapper around a simple value that does not contain internal thread synchronization mechanisms. Concurrent state modifications from multiple threads cause race conditions that can lead to lost updates, incorrect UI state, and even app crashes. Understanding thread safety mechanisms in `Compose` is critical for writing correct asynchronous code.
+**No**, `MutableState` in Compose does not by itself prevent race conditions and is not a general-purpose thread-safe primitive. It is built on the snapshot state system, which ensures consistency under its own rules, but it does **not** protect you from unsafe concurrent modifications from multiple threads without proper coordination (main thread confinement, snapshot APIs, or additional synchronization). Incorrect concurrent access can lead to inconsistent UI state, lost updates, and hard-to-debug issues.
 
 ### Main Issues
 
-**1. MutableState not thread-safe**
+**1. MutableState is not a general-purpose thread-safe primitive**
 
 **Problem:**
 
-`MutableState` is not a thread-safe type. Internally, `MutableState` stores value in a regular variable (`var value: T`), without using synchronization (`synchronized`, `volatile`, atomic operations). This means:
-- **Lost updates** — concurrent writes from different threads can cause one update to be lost
-- **Incorrect reads** — reading from background thread may return stale value
-- **Undefined behavior** — accessing `MutableState` from background threads can lead to unpredictable behavior
+`MutableState` is not meant to be used like `Atomic*` types. It is integrated with Compose's snapshot system, which assumes that UI state changes are performed in a coordinated manner (typically on the main thread or via proper snapshot operations). If you update the same state concurrently from multiple threads without coordination, you can get:
+- **Lost updates** — one write overwrites another
+- **Inconsistent state** — different parts of UI may observe different values
+- Snapshot-related anomalies
+
+It is not "magically" race-free; you remain responsible for designing safe access patterns.
 
 **Solution:**
 
-Use `MutableState` only on main thread where all UI operations execute. For updates from background threads, use `withContext(Dispatchers.Main)` or `Dispatchers.Main.immediate`.
+- Update UI `MutableState` from a single, predictable context (commonly the main thread), or
+- Use official snapshot utilities and/or synchronization primitives when doing cross-thread updates.
+
+A practical recommended pattern for UI:
+- Do heavy work on background threads
+- Publish results to UI via a confined context (main dispatcher, `ViewModel` with `Flow`/`StateFlow`, etc.)
 
 ```kotlin
-// ❌ BAD - race condition on concurrent access
+// ❌ BAD - raw background thread writes into snapshot state
 @Composable
 fun UnsafeCounter() {
     var count by remember { mutableStateOf(0) }
     Button(onClick = {
-        // ⚠️ DANGEROUS: modifying state from background thread
         Thread {
-            count++ // May lose updates or cause crash
+            // ⚠️ Risky: writing snapshot state from an arbitrary thread without proper rules
+            count++
         }.start()
     }) { Text("Increment: $count") }
 }
 
-// ✅ GOOD - Main thread only
+// ✅ GOOD - all updates happen in UI context
 @Composable
 fun SafeCounter() {
     var count by remember { mutableStateOf(0) }
     Button(onClick = {
-        count++ // Safe: executes on main thread
+        count++
     }) { Text("Increment: $count") }
 }
 
-// ✅ GOOD - update from background thread via Main Dispatcher
+// ✅ GOOD - background work, result applied from a coordinated context
 @Composable
 fun SafeAsyncCounter() {
     var count by remember { mutableStateOf(0) }
     val scope = rememberCoroutineScope()
     Button(onClick = {
         scope.launch {
-            // Perform heavy work on IO thread
             val result = withContext(Dispatchers.IO) {
                 heavyCalculation()
             }
-            // Update state on main thread
-            withContext(Dispatchers.Main) {
-                count = result
-            }
+            count = result
         }
     }) { Text("Count: $count") }
 }
@@ -462,48 +454,46 @@ fun SafeAsyncCounter() {
 
 **Problem:**
 
-Direct modification of `MutableState` from background threads (IO, Default, Unconfined) leads to:
-- **Undefined behavior** — `Compose` expects all state changes to occur on main thread
-- **Missing recomposition** — changes from background threads may not trigger UI recomposition
-- **Snapshot system violation** — internal `Compose` snapshot system may work incorrectly
+Directly modifying `MutableState` from background dispatchers (IO, Default, etc.) without respecting snapshot rules can result in:
+- logically inconsistent state,
+- surprising recomposition behavior,
+- snapshot system issues when multiple writes interleave.
 
-**Solution:**
+**Note:** The snapshot system itself supports multi-threaded usage via its APIs, but that is an advanced use case. For regular app code, prefer the simple pattern: background work → UI context → state update.
 
-Use `withContext(Dispatchers.Main)` or `Dispatchers.Main.immediate` for all `MutableState` updates. Prefer `Dispatchers.Main.immediate` for immediate updates without delays.
+**Solution (recommended for typical UI code):**
+
+Use `rememberCoroutineScope()` or `ViewModel` scope, switch to `Dispatchers.IO` only for heavy work, and apply state changes from a consistent context.
 
 ```kotlin
-// ❌ BAD - modifying state from background thread
+// ❌ BAD - writing snapshot state directly in IO scope
 @Composable
 fun UnsafeAsyncCounter() {
     var count by remember { mutableStateOf(0) }
     Button(onClick = {
         CoroutineScope(Dispatchers.IO).launch {
-            // ⚠️ DANGEROUS: direct state modification from IO thread
-            count = heavyCalculation() // Undefined behavior, may not trigger recomposition
+            // ⚠️ Risky cross-thread write
+            count = heavyCalculation()
         }
     }) { Text("Calculate: $count") }
 }
 
-// ✅ GOOD - update via Main Dispatcher
+// ✅ GOOD - compute in background, update from coordinated context
 @Composable
 fun SafeAsyncCounter() {
     var count by remember { mutableStateOf(0) }
     val scope = rememberCoroutineScope()
     Button(onClick = {
         scope.launch {
-            // Heavy work on IO thread
             val result = withContext(Dispatchers.IO) {
                 heavyCalculation()
             }
-            // Safe state update on main thread
-            withContext(Dispatchers.Main.immediate) {
-                count = result // Guaranteed update and recomposition
-            }
+            count = result
         }
     }) { Text("Calculate: $count") }
 }
 
-// ✅ GOOD - alternative with LaunchedEffect for automatic cancellation
+// ✅ GOOD - alternative with LaunchedEffect
 @Composable
 fun SafeAsyncCounterWithEffect() {
     var count by remember { mutableStateOf(0) }
@@ -513,7 +503,6 @@ fun SafeAsyncCounterWithEffect() {
         val result = withContext(Dispatchers.IO) {
             heavyCalculation()
         }
-        // Automatically executes on main thread
         count = result
     }
 
@@ -527,31 +516,33 @@ fun SafeAsyncCounterWithEffect() {
 
 **Problem:**
 
-When multiple `@Composable` functions directly modify the same `MutableState`, problems arise:
-- **Race conditions** — concurrent modifications from different components can conflict
-- **Single Source of Truth violation** — multiple sources of truth for one state
-- **Debugging complexity** — difficult to track which component modified state
-- **Missing lifecycle** — `remember { mutableStateOf() }` doesn't persist across configuration changes
+When multiple composables directly mutate the same `MutableState`, you run into architectural and consistency issues:
+- **Single Source of Truth violation**
+- **Debugging difficulties**
+- No configuration-change survival for `remember` state
+- If those writes become concurrent (e.g., from different threads) — actual race conditions
+
+Note: Two click handlers on the same thread incrementing the same variable are not, by themselves, a data race; problems arise from poor separation of concerns or true concurrency.
 
 **Solution:**
 
-Use `ViewModel` with `StateFlow` or `MutableStateFlow` for shared state. `StateFlow` is thread-safe and provides proper state lifecycle.
+Use a `ViewModel` with `StateFlow` / `MutableStateFlow` (or similar) as the single source of truth for shared state. `StateFlow` provides thread-safe updates and integrates well with Compose.
 
 ```kotlin
-// ❌ BAD - shared mutable state without synchronization
+// ❌ BAD - shared mutable state purely in UI layer
 @Composable
 fun ParentComponent() {
     var sharedState by remember { mutableStateOf(0) }
-    // ⚠️ DANGEROUS: two components modify same state simultaneously
+
     ChildComponent1(sharedState) {
-        sharedState++ // Race condition on simultaneous clicks
+        sharedState++
     }
     ChildComponent2(sharedState) {
-        sharedState++ // Lost updates
+        sharedState++
     }
 }
 
-// ✅ GOOD - ViewModel with StateFlow for shared state
+// ✅ GOOD - ViewModel provides centralized shared state
 @Composable
 fun ParentComponent(viewModel: SharedViewModel = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
@@ -564,14 +555,14 @@ class SharedViewModel : ViewModel() {
     val state: StateFlow<Int> = _state.asStateFlow()
 
     fun increment() {
-        _state.value++ // Thread-safe operation
+        _state.update { it + 1 }
     }
 }
 
-// ✅ GOOD - alternative with Flow for reactive updates
+// ✅ GOOD - Flow-based reactive updates (same state property)
 @Composable
 fun ParentComponentWithFlow(viewModel: SharedViewModel = hiltViewModel()) {
-    val state by viewModel.stateFlow.collectAsState(initial = 0)
+    val state by viewModel.state.collectAsState()
     ChildComponent1(state) { viewModel.increment() }
     ChildComponent2(state) { viewModel.increment() }
 }
@@ -579,9 +570,9 @@ fun ParentComponentWithFlow(viewModel: SharedViewModel = hiltViewModel()) {
 
 ### Thread Safety Solutions and Patterns
 
-**1. Coroutines with Main Dispatcher**
+**1. Coroutines with a consistent context (usually Main)**
 
-Using `withContext(Dispatchers.Main)` or `Dispatchers.Main.immediate` for all `MutableState` updates:
+Use background dispatchers for heavy work, and apply UI state updates from a single coordinated context (commonly Main):
 
 ```kotlin
 @Composable
@@ -591,14 +582,10 @@ fun SafeAsyncComponent() {
 
     Button(onClick = {
         scope.launch {
-            // Heavy work on background thread
             val result = withContext(Dispatchers.IO) {
                 performBackgroundWork()
             }
-            // Safe update on main thread
-            withContext(Dispatchers.Main.immediate) {
-                state = result
-            }
+            state = result
         }
     }) {
         Text("Update")
@@ -606,35 +593,34 @@ fun SafeAsyncComponent() {
 }
 ```
 
-**2. ViewModel with StateFlow for shared state**
+**2. `ViewModel` with `StateFlow` for shared state**
 
-`StateFlow` is thread-safe and guarantees that all updates occur safely:
+`StateFlow` / `MutableStateFlow` provide thread-safe, observable state.
 
 ```kotlin
-class MyViewModel : ViewModel() {
+class MyViewModel<T>(initialValue: T) : ViewModel() {
     private val _state = MutableStateFlow(initialValue)
     val state: StateFlow<T> = _state.asStateFlow()
 
     fun updateState(newValue: T) {
-        // Thread-safe operation: StateFlow uses CAS (Compare-And-Swap)
         _state.value = newValue
     }
 
-    fun increment() {
-        _state.update { it + 1 } // Atomic operation
+    fun incrementInt(by: Int = 1) {
+        (_state as? MutableStateFlow<Int>)?.update { it + by }
     }
 }
 
 @Composable
-fun MyScreen(viewModel: MyViewModel = hiltViewModel()) {
+fun MyScreen(viewModel: MyViewModel<SomeType> = hiltViewModel()) {
     val state by viewModel.state.collectAsState()
     // Safe usage of shared state
 }
 ```
 
-**3. Snapshot State for internal synchronization**
+**3. SnapshotFlow for integrating snapshot state with `Flow`**
 
-For simple cases, use `snapshotFlow` to transform `State` to `Flow`:
+Use `snapshotFlow` to observe snapshot state changes in coroutines:
 
 ```kotlin
 @Composable
@@ -644,17 +630,16 @@ fun ComponentWithSnapshotFlow() {
     LaunchedEffect(Unit) {
         snapshotFlow { count }
             .filter { it > 10 }
-            .collect {
-                // React to count changes only on main thread
-                performAction(it)
+            .collect { value ->
+                performAction(value)
             }
     }
 }
 ```
 
-**4. Mutex synchronization for complex cases**
+**4. Mutex / Channels for complex concurrency**
 
-For more complex cases with multiple concurrent updates, use `Mutex` or `Channel`:
+For complex scenarios with real concurrent writers, use explicit synchronization in your domain layer:
 
 ```kotlin
 class ThreadSafeCounter {
@@ -667,19 +652,15 @@ class ThreadSafeCounter {
         }
     }
 
-    suspend fun getCount(): Int {
-        return mutex.withLock {
-            _count
-        }
-    }
+    suspend fun getCount(): Int = mutex.withLock { _count }
 }
 
 @Composable
-fun ComponentWithMutex(viewModel: MyViewModel = hiltViewModel()) {
+fun ComponentWithMutex(viewModel: ThreadSafeCounterViewModel = hiltViewModel()) {
     val scope = rememberCoroutineScope()
     Button(onClick = {
         scope.launch {
-            viewModel.increment() // Thread-safe via Mutex
+            viewModel.increment()
         }
     }) {
         Text("Increment")
@@ -691,34 +672,33 @@ fun ComponentWithMutex(viewModel: MyViewModel = hiltViewModel()) {
 
 **Architectural decisions:**
 
--   **Use `MutableState` only on main thread** — all changes must occur through `Dispatchers.Main` or `Dispatchers.Main.immediate`
--   **Use `ViewModel` for shared state** — `StateFlow` provides thread-safe mechanism for state shared between components
--   **Avoid direct modifications from background threads** — always use `withContext(Dispatchers.Main)` for `MutableState` updates
--   **Use `rememberCoroutineScope()`** — for correct lifecycle management of coroutines in `@Composable` functions
--   **Prefer `Dispatchers.Main.immediate`** — for immediate updates without scheduler delays
+- Use `MutableState` for local UI state and mutate it from a single coordinated context
+- Use `ViewModel` + `StateFlow`/`Flow` for shared or long-lived state
+- Do not write into `MutableState` from arbitrary background threads without understanding snapshot rules or using extra synchronization
+- Use `rememberCoroutineScope()` and `ViewModel` scopes to manage coroutine lifecycles
 
 **Performance optimization:**
 
--   **Minimize number of state updates** — batch updates when possible
--   **Use `derivedStateOf` for computed values** — avoid unnecessary recomposition when computing derived states
--   **Properly manage coroutine lifecycle** — use `rememberCoroutineScope()` instead of global scopes
+- Minimize state write frequency; batch updates where reasonable
+- Use `derivedStateOf` for computed values to avoid unnecessary recompositions
+- Keep heavy work off the main thread; only apply results on the coordinated/UI context
 
 **When to use what:**
 
--   **`MutableState`**: for local state within single `@Composable` component
--   **`StateFlow` in `ViewModel`**: for shared state between multiple components
--   **`Flow` + `collectAsState()`**: for reactive updates from external sources (network, database)
--   **`snapshotFlow`**: to transform `State` to `Flow` for use in other reactive chains
+- `MutableState`: local state within a single composable or small tree
+- `StateFlow` in `ViewModel`: shared state between screens/components
+- `Flow` + `collectAsState()`: reactive external sources (network, DB, etc.)
+- `snapshotFlow`: convert snapshot state to `Flow` for use in coroutine/`Flow` pipelines
 
 ### Common Pitfalls
 
-**Problem 1: Modifying state in LaunchedEffect without thread check**
+**Problem 1: Updating state only from a background context in LaunchedEffect**
 
 ```kotlin
 // ❌ BAD
 LaunchedEffect(Unit) {
     withContext(Dispatchers.IO) {
-        state = fetchData() // May cause issues
+        state = fetchData() // Writing into snapshot state from background context
     }
 }
 
@@ -727,80 +707,70 @@ LaunchedEffect(Unit) {
     val data = withContext(Dispatchers.IO) {
         fetchData()
     }
-    withContext(Dispatchers.Main) {
-        state = data
-    }
+    state = data
 }
 ```
 
-**Problem 2: Simultaneous modification of same state from different places**
+**Problem 2: Uncoordinated writers to shared state**
 
 ```kotlin
 // ❌ BAD
 var counter by remember { mutableStateOf(0) }
 Button1 { counter++ }
-Button2 { counter++ } // Race condition
+Button2 { counter++ }
+// On its own this is single-threaded, but scales poorly and blurs responsibilities
 
 // ✅ GOOD
 val viewModel: CounterViewModel = hiltViewModel()
 val counter by viewModel.counter.collectAsState()
 Button1 { viewModel.increment() }
-Button2 { viewModel.increment() } // Thread-safe via StateFlow
+Button2 { viewModel.increment() }
 ```
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Когда использовать `StateFlow` vs `MutableState` в архитектуре на основе Compose?
+- Как snapshot-система в Compose концептуально обрабатывает конкурентные изменения?
+- Как правильно обновлять состояние Compose из фоновых корутин, не нарушая правила snapshot-системы?
+- Как выстроить разделяемое состояние с `ViewModel` и `StateFlow`, чтобы избежать гонок?
+- Как отлаживать и обнаруживать race condition, связанные с обновлениями состояния в Compose?
+
 ## Follow-ups
 
-**Базовая теория:**
-- Как работает система снимков (snapshot system) в `Compose` внутри?
-- Что происходит, когда несколько потоков одновременно изменяют `MutableState`?
-- В чем разница между thread-safe и thread-unsafe типами в Kotlin?
+- When to use `StateFlow` vs `MutableState` in Compose-based architecture?
+- How does the snapshot system in Compose handle concurrent modifications conceptually?
+- How to correctly update Compose state from background coroutines without violating snapshot rules?
+- How to structure shared state with `ViewModel` and `StateFlow` to avoid race conditions?
+- How to debug and detect race conditions related to Compose state updates?
 
-**Практические вопросы:**
-- Когда использовать `StateFlow` vs `MutableState`?
-- Как отлаживать race conditions в `Compose` state?
-- Как правильно обновлять state из фоновых корутин?
+## Ссылки (RU)
 
-**Производительность:**
-- Как минимизировать количество recomposition при обновлении state?
-- Когда использовать `Dispatchers.Main` vs `Dispatchers.Main.immediate`?
-- Как оптимизировать обновления shared state между компонентами?
-
-**Архитектура:**
-- Как правильно структурировать state management в больших приложениях?
-- Когда использовать `ViewModel` vs локальный `remember` state?
-- Как обрабатывать ошибки при обновлении state из фоновых потоков?
-- Как обеспечить thread safety при работе с `Flow` и `StateFlow`?
-
-**Basic theory:**
-- How does snapshot system work internally in `Compose`?
-- What happens when multiple threads simultaneously modify `MutableState`?
-- What's the difference between thread-safe and thread-unsafe types in Kotlin?
-
-**Practical questions:**
-- When to use `StateFlow` vs `MutableState`?
-- How to debug race conditions in `Compose` state?
-- How to correctly update state from background coroutines?
-
-**Performance:**
-- How to minimize number of recomposition when updating state?
-- When to use `Dispatchers.Main` vs `Dispatchers.Main.immediate`?
-- How to optimize shared state updates between components?
-
-**Architecture:**
-- How to properly structure state management in large applications?
-- When to use `ViewModel` vs local `remember` state?
-- How to handle errors when updating state from background threads?
-- How to ensure thread safety when working with `Flow` and `StateFlow`?
+- [Документация по состоянию в Compose](https://developer.android.com/jetpack/compose/state)
+- [`StateFlow` и `SharedFlow`](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [Hoisting состояния в Compose](https://developer.android.com/jetpack/compose/state-hoisting)
+- [Потокобезопасность в Kotlin](https://kotlinlang.org/docs/thread-safety.html)
+- [Диспетчеры корутин](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 
 ## References
 
 - [Compose State Documentation](https://developer.android.com/jetpack/compose/state)
-- [StateFlow and SharedFlow](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [`StateFlow` and `SharedFlow`](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 - [Compose State Hoisting](https://developer.android.com/jetpack/compose/state-hoisting)
 - [Thread Safety in Kotlin](https://kotlinlang.org/docs/thread-safety.html)
 - [Coroutines Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепты
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+
+### Связанные (того же уровня)
+
+- [[q-derived-state-snapshot-system--android--hard]]
 
 ## Related Questions
 
@@ -808,19 +778,7 @@ Button2 { viewModel.increment() } // Thread-safe via StateFlow
 
 - [[c-compose-state]]
 - [[c-jetpack-compose]]
-- [[c-viewmodel]]
-
-
-### Prerequisites (Easier)
-- Compose basics and state management
-- Coroutines and background threading
-- Kotlin concurrency fundamentals
 
 ### Related (Same Level)
-- Derived state and snapshot system in Compose
-- ViewModel state management patterns
 
-### Advanced (Harder)
 - [[q-derived-state-snapshot-system--android--hard]]
-- Custom thread-safe state implementations
-- Advanced Flow patterns for state synchronization

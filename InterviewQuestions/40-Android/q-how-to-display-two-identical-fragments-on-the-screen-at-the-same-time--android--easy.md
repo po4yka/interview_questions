@@ -50,7 +50,7 @@ tags:
 
 ## Ответ (RU)
 
-Добавьте два экземпляра одного класса Fragment в разные контейнеры макета Activity. Каждый экземпляр работает независимо с собственным состоянием.
+Добавьте два независимых экземпляра одного класса Fragment в разные контейнеры макета Activity. Каждый экземпляр работает независимо с собственным состоянием. Нельзя добавлять один и тот же экземпляр Fragment в несколько контейнеров — для каждого контейнера нужен свой экземпляр.
 
 ### Основной Подход
 
@@ -89,7 +89,11 @@ class CounterFragment : Fragment() {
     ): View {
         val title = arguments?.getString(ARG_TITLE) ?: "Counter"
         savedInstanceState?.let { count = it.getInt(KEY_COUNT, 0) }
-        // Setup UI
+
+        // Пример простого UI (важно вернуть View)
+        return TextView(requireContext()).apply {
+            text = "$title: $count"
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -118,10 +122,16 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container_1,
-                     CounterFragment.newInstance("Counter 1"), "fragment_1")
-                .add(R.id.fragment_container_2,
-                     CounterFragment.newInstance("Counter 2"), "fragment_2")
+                .add(
+                    R.id.fragment_container_1,
+                    CounterFragment.newInstance("Counter 1"),
+                    "fragment_1"
+                )
+                .add(
+                    R.id.fragment_container_2,
+                    CounterFragment.newInstance("Counter 2"),
+                    "fragment_2"
+                )
                 .commit()
         }
     }
@@ -130,19 +140,21 @@ class MainActivity : AppCompatActivity() {
 
 ### Ключевые Принципы
 
-✅ **Используйте уникальные теги** - для идентификации экземпляров
-✅ **Проверяйте savedInstanceState** - чтобы не создавать дубликаты при пересоздании Activity
-✅ **Сохраняйте состояние** - каждый Fragment независимо сохраняет свое состояние
-✅ **Factory-метод newInstance()** - стандартный паттерн для передачи аргументов
+✅ **Используйте уникальные теги** — для идентификации экземпляров.
+✅ **Проверяйте savedInstanceState** — чтобы не создавать дубликаты при пересоздании Activity.
+✅ **Сохраняйте состояние по отдельности** — каждый Fragment независимо сохраняет своё состояние.
+✅ **Factory-метод newInstance()** — стандартный паттерн для передачи аргументов и создания отдельных экземпляров.
+✅ **Отдельный экземпляр на контейнер** — один и тот же объект Fragment нельзя добавить в несколько контейнеров.
 
-❌ Не создавайте фрагменты повторно при каждом onCreate()
-❌ Не используйте один тег для разных экземпляров
+❌ Не создавайте фрагменты повторно при каждом onCreate().
+❌ Не используйте один тег для разных экземпляров.
+❌ Не пытайтесь переиспользовать один экземпляр Fragment для нескольких контейнеров.
 
 ---
 
 ## Answer (EN)
 
-Add two instances of the same Fragment class to separate container views in the Activity layout. Each instance maintains independent state.
+Add two independent instances of the same Fragment class to separate container views in the Activity layout. Each instance maintains its own state. You cannot attach the same Fragment instance to multiple containers — each container must get its own instance.
 
 ### Basic Approach
 
@@ -181,7 +193,11 @@ class CounterFragment : Fragment() {
     ): View {
         val title = arguments?.getString(ARG_TITLE) ?: "Counter"
         savedInstanceState?.let { count = it.getInt(KEY_COUNT, 0) }
-        // Setup UI
+
+        // Simple example UI (must return a View)
+        return TextView(requireContext()).apply {
+            text = "$title: $count"
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -210,10 +226,16 @@ class MainActivity : AppCompatActivity() {
 
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
-                .add(R.id.fragment_container_1,
-                     CounterFragment.newInstance("Counter 1"), "fragment_1")
-                .add(R.id.fragment_container_2,
-                     CounterFragment.newInstance("Counter 2"), "fragment_2")
+                .add(
+                    R.id.fragment_container_1,
+                    CounterFragment.newInstance("Counter 1"),
+                    "fragment_1"
+                )
+                .add(
+                    R.id.fragment_container_2,
+                    CounterFragment.newInstance("Counter 2"),
+                    "fragment_2"
+                )
                 .commit()
         }
     }
@@ -222,13 +244,15 @@ class MainActivity : AppCompatActivity() {
 
 ### Key Principles
 
-✅ **Use unique tags** - to identify fragment instances
-✅ **Check savedInstanceState** - to avoid creating duplicates on Activity recreation
-✅ **Save state independently** - each Fragment manages its own state
-✅ **Factory method newInstance()** - standard pattern for passing arguments
+✅ **Use unique tags** — to identify fragment instances.
+✅ **Check savedInstanceState** — to avoid creating duplicates on Activity recreation.
+✅ **Save state independently** — each Fragment manages its own state.
+✅ **Factory method newInstance()** — standard pattern for passing arguments and creating distinct instances.
+✅ **One instance per container** — you cannot add the same Fragment object to multiple containers.
 
-❌ Don't recreate fragments on every onCreate()
-❌ Don't use the same tag for different instances
+❌ Don't recreate fragments on every onCreate().
+❌ Don't use the same tag for different instances.
+❌ Don't try to reuse a single Fragment instance for multiple containers.
 
 ---
 

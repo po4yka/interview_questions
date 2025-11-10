@@ -1,7 +1,6 @@
 ---
 id: android-156
-title: Is Fragment Lifecycle Connected To Activity Or Independent / Связан ли жизненный
-  цикл Fragment с Activity или независим
+title: Is Fragment Lifecycle Connected To Activity Or Independent / Связан ли жизненный цикл Fragment с Activity или независим
 aliases:
 - Fragment Lifecycle Connection
 - Связь жизненного цикла Fragment
@@ -22,32 +21,33 @@ related:
 - c-lifecycle
 - q-how-to-add-fragment-synchronously-asynchronously--android--medium
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags:
 - android
 - android/fragment
 - android/lifecycle
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
 
-> Связан ли жизненный цикл Fragment с Activity или независим?
+> Связан ли жизненный цикл `Fragment` с `Activity` или независим?
 
 # Question (EN)
 
-> Is the Fragment lifecycle connected to the Activity or independent?
+> Is the `Fragment` lifecycle connected to the `Activity` or independent?
 
 ---
 
 ## Ответ (RU)
 
-Fragment lifecycle **тесно связан и зависит от** Activity-хоста. Fragment не может существовать без Activity и никогда не может быть в более активном состоянии.
+`Fragment` lifecycle **тесно связан и зависит от** `Activity`-хоста. `Fragment` не может существовать без `Activity` и никогда не может быть в более активном состоянии.
 
 ### Основные Принципы
 
-**Правило:** Fragment никогда не может быть активнее своей Activity.
+**Правило:** `Fragment` никогда не может быть активнее своей `Activity`.
 
 ```kotlin
 // ❌ Невозможная ситуация
@@ -59,7 +59,7 @@ Activity: onResume() -> Fragment: onResume()
 Activity: onPause() -> Fragment: onPause()
 ```
 
-### Жизненный Цикл Fragment
+### Жизненный Цикл `Fragment`
 
 ```kotlin
 class LifecycleFragment : Fragment() {
@@ -131,7 +131,7 @@ class LifecycleFragment : Fragment() {
 
 ### ViewLifecycleOwner
 
-Современные Fragment имеют два lifecycle:
+Современные `Fragment` имеют два lifecycle:
 
 ```kotlin
 class ModernFragment : Fragment() {
@@ -160,7 +160,7 @@ class ModernFragment : Fragment() {
 }
 ```
 
-### Транзакции Fragment
+### Транзакции `Fragment`
 
 ```kotlin
 // Fragment в back stack
@@ -179,19 +179,19 @@ supportFragmentManager.beginTransaction()
 
 ### Ключевые Моменты
 
-1. Fragment **зависит** от Activity lifecycle
-2. Fragment имеет **дополнительные** коллбэки (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach)
-3. Fragment никогда не **активнее** Activity
-4. **Два lifecycle**: Fragment и View (используйте viewLifecycleOwner)
-5. View может уничтожаться и создаваться заново, пока Fragment существует
+1. `Fragment` **зависит** от `Activity` lifecycle
+2. `Fragment` имеет **дополнительные** коллбэки (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach)
+3. `Fragment` никогда не **активнее** `Activity`
+4. **Два lifecycle**: `Fragment` и `View` (используйте viewLifecycleOwner)
+5. `View` может уничтожаться и создаваться заново, пока `Fragment` существует
 
 ## Answer (EN)
 
-The Fragment lifecycle is **connected to and dependent on** its host Activity's lifecycle. A Fragment cannot exist without an Activity and can never be in a more active state than its host.
+The `Fragment` lifecycle is **connected to and dependent on** its host `Activity`'s lifecycle. A `Fragment` cannot exist without an `Activity` and can never be in a more active state than its host.
 
 ### Core Principle
 
-**Rule:** A Fragment can never be more active than its Activity.
+**Rule:** A `Fragment` can never be more active than its `Activity`.
 
 ```kotlin
 // ❌ Impossible situation
@@ -203,7 +203,7 @@ Activity: onResume() -> Fragment: onResume()
 Activity: onPause() -> Fragment: onPause()
 ```
 
-### Fragment Lifecycle Callbacks
+### `Fragment` Lifecycle Callbacks
 
 ```kotlin
 class LifecycleFragment : Fragment() {
@@ -304,7 +304,7 @@ class ModernFragment : Fragment() {
 }
 ```
 
-### Fragment Transactions
+### `Fragment` Transactions
 
 ```kotlin
 // Fragment in back stack
@@ -323,26 +323,60 @@ supportFragmentManager.beginTransaction()
 
 ### Key Points
 
-1. Fragment is **dependent** on Activity lifecycle
-2. Fragment has **additional** callbacks (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach)
-3. Fragment is never **more active** than Activity
-4. **Two lifecycles**: Fragment and View (use viewLifecycleOwner)
-5. View can be destroyed and recreated while Fragment exists
+1. `Fragment` is **dependent** on `Activity` lifecycle
+2. `Fragment` has **additional** callbacks (onAttach, onCreateView, onViewCreated, onDestroyView, onDetach)
+3. `Fragment` is never **more active** than `Activity`
+4. **Two lifecycles**: `Fragment` and `View` (use viewLifecycleOwner)
+5. `View` can be destroyed and recreated while `Fragment` exists
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как ведет себя жизненный цикл `Fragment` при изменениях конфигурации?
+- В чем разница между `lifecycle` и `viewLifecycleOwner`?
+- Что происходит с жизненным циклом `Fragment` при добавлении в back stack?
+- Как жизненный цикл вложенного `Fragment` зависит от родительского `Fragment`?
+- Каковы последствия использования неправильного lifecycle owner для наблюдения `LiveData`?
+
 ## Follow-ups
 
-- How does Fragment lifecycle behave during configuration changes?
+- How does `Fragment` lifecycle behave during configuration changes?
 - What's the difference between `lifecycle` and `viewLifecycleOwner`?
-- What happens to Fragment lifecycle when added to back stack?
-- How does nested Fragment lifecycle depend on parent Fragment?
-- What are the implications of using wrong lifecycle owner for LiveData observation?
+- What happens to `Fragment` lifecycle when added to back stack?
+- How does nested `Fragment` lifecycle depend on parent `Fragment`?
+- What are the implications of using wrong lifecycle owner for `LiveData` observation?
+
+## Ссылки (RU)
+
+- Android Developer Docs: `Fragment` Lifecycle
+- Android Developer Docs: ViewLifecycleOwner
 
 ## References
 
-- Android Developer Docs: Fragment Lifecycle
+- Android Developer Docs: `Fragment` Lifecycle
 - Android Developer Docs: ViewLifecycleOwner
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-fragments]]
+- [[c-lifecycle]]
+
+### Предпосылки
+
+- Базовое понимание жизненного цикла `Activity`
+- Основы `Fragment`
+
+### Связанные
+
+- [[q-how-to-add-fragment-synchronously-asynchronously--android--medium]]
+
+### Продвинутые
+
+- Связь жизненного цикла и скоупа `ViewModel` в `Fragment`
+- Управление жизненным циклом вложенных `Fragment`
 
 ## Related Questions
 
@@ -351,14 +385,16 @@ supportFragmentManager.beginTransaction()
 - [[c-fragments]]
 - [[c-lifecycle]]
 
-
 ### Prerequisites
-- Basic understanding of Activity lifecycle
-- Fragment fundamentals
+
+- Basic understanding of `Activity` lifecycle
+- `Fragment` fundamentals
 
 ### Related
+
 - [[q-how-to-add-fragment-synchronously-asynchronously--android--medium]]
 
 ### Advanced
-- Fragment ViewModel scope and lifecycle
-- Nested Fragment lifecycle management
+
+- `Fragment` `ViewModel` scope and lifecycle
+- Nested `Fragment` lifecycle management

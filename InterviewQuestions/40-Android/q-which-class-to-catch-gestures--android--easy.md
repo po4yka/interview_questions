@@ -8,7 +8,6 @@ topic: android
 subtopics:
 - ui-views
 - ui-widgets
-question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
@@ -21,7 +20,7 @@ related:
 - q-compose-side-effects-launchedeffect-disposableeffect--android--hard
 - q-how-does-jetpack-compose-work--android--medium
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags:
 - android/ui-views
@@ -30,6 +29,7 @@ tags:
 - gesture-detector
 - gestures
 - ui
+
 ---
 
 # Вопрос (RU)
@@ -49,9 +49,11 @@ tags:
 ### Основное Использование
 
 ```kotlin
+import kotlin.math.abs
+
 // ✅ Правильно: использовать SimpleOnGestureListener
 gestureDetector = GestureDetector(context, object : SimpleOnGestureListener() {
-    override fun onDown(e: MotionEvent): Boolean = true  // ✅ Обязательно вернуть true
+    override fun onDown(e: MotionEvent): Boolean = true  // ✅ Обычно нужно вернуть true, если хотите обрабатывать дальнейшие жесты
 
     override fun onFling(
         e1: MotionEvent?,
@@ -68,6 +70,13 @@ gestureDetector = GestureDetector(context, object : SimpleOnGestureListener() {
         }
         return true
     }
+
+    // Для обработки double tap также можно переопределить методы OnDoubleTapListener,
+    // которые предоставляет SimpleOnGestureListener
+    override fun onDoubleTap(e: MotionEvent): Boolean {
+        handleDoubleTap()
+        return true
+    }
 })
 
 view.setOnTouchListener { _, event ->
@@ -77,14 +86,14 @@ view.setOnTouchListener { _, event ->
 
 **Ключевые методы:**
 - `onSingleTapUp()` — одиночное касание
-- `onDoubleTap()` — двойное касание
+- `onDoubleTap()` — двойное касание (через `OnDoubleTapListener` / `SimpleOnGestureListener`)
 - `onLongPress()` — долгое нажатие
 - `onFling()` — быстрый свайп (получаете `velocityX/Y`)
 - `onScroll()` — перетаскивание
 
-**SimpleOnGestureListener** — adapter класс, позволяет переопределить только нужные методы вместо реализации всего интерфейса `OnGestureListener`.
+**SimpleOnGestureListener** — adapter-класс, позволяет переопределить только нужные методы вместо реализации всего интерфейса `OnGestureListener`.
 
-### В Кастомных View
+### В Кастомных `View`
 
 ```kotlin
 class GestureView(context: Context) : View(context) {
@@ -96,7 +105,7 @@ class GestureView(context: Context) : View(context) {
     }
 
     inner class GestureListener : SimpleOnGestureListener() {
-        override fun onDown(e: MotionEvent): Boolean = true  // ✅ Критично
+        override fun onDown(e: MotionEvent): Boolean = true  // ✅ Обычно критично для получения последующих событий
     }
 }
 ```
@@ -108,9 +117,10 @@ class GestureView(context: Context) : View(context) {
 
 ### Best Practices
 
-1. **Всегда возвращайте `true` из `onDown()`** — иначе последующие события не придут
-2. **В Compose используйте Compose gesture APIs** — не создавайте `GestureDetector` вручную
-3. **Для конфликтов в ScrollView** — используйте `requestDisallowInterceptTouchEvent()`
+1. **Обычно возвращайте `true` из `onDown()`**, если хотите получать `onScroll`, `onFling` и другие последующие события для этого жеста. Если вы сознательно не хотите обрабатывать последовательность, можно вернуть `false`.
+2. **В Compose используйте Compose gesture APIs** — не создавайте `GestureDetector` вручную.
+3. **Для конфликтов в ScrollView** — используйте `requestDisallowInterceptTouchEvent()`.
+4. **Для double tap** — используйте `OnDoubleTapListener` или соответствующие методы `SimpleOnGestureListener`.
 
 ## Answer (EN)
 
@@ -119,9 +129,11 @@ Use **GestureDetector** to handle standard gestures: taps, swipes, long presses,
 ### Basic Usage
 
 ```kotlin
+import kotlin.math.abs
+
 // ✅ Correct: use SimpleOnGestureListener
 gestureDetector = GestureDetector(context, object : SimpleOnGestureListener() {
-    override fun onDown(e: MotionEvent): Boolean = true  // ✅ Must return true
+    override fun onDown(e: MotionEvent): Boolean = true  // ✅ Typically must return true if you want to receive further gesture events
 
     override fun onFling(
         e1: MotionEvent?,
@@ -138,6 +150,13 @@ gestureDetector = GestureDetector(context, object : SimpleOnGestureListener() {
         }
         return true
     }
+
+    // For double-tap handling you can also override OnDoubleTapListener methods
+    // provided by SimpleOnGestureListener
+    override fun onDoubleTap(e: MotionEvent): Boolean {
+        handleDoubleTap()
+        return true
+    }
 })
 
 view.setOnTouchListener { _, event ->
@@ -147,7 +166,7 @@ view.setOnTouchListener { _, event ->
 
 **Key methods:**
 - `onSingleTapUp()` — single tap
-- `onDoubleTap()` — double tap
+- `onDoubleTap()` — double tap (via `OnDoubleTapListener` / `SimpleOnGestureListener`)
 - `onLongPress()` — long press
 - `onFling()` — fast swipe (provides `velocityX/Y`)
 - `onScroll()` — drag gesture
@@ -166,7 +185,7 @@ class GestureView(context: Context) : View(context) {
     }
 
     inner class GestureListener : SimpleOnGestureListener() {
-        override fun onDown(e: MotionEvent): Boolean = true  // ✅ Critical
+        override fun onDown(e: MotionEvent): Boolean = true  // ✅ Usually critical to receive subsequent events
     }
 }
 ```
@@ -178,24 +197,57 @@ class GestureView(context: Context) : View(context) {
 
 ### Best Practices
 
-1. **Always return `true` from `onDown()`** — otherwise subsequent events won't arrive
-2. **In Compose, use Compose gesture APIs** — don't create `GestureDetector` manually
-3. **For ScrollView conflicts** — use `requestDisallowInterceptTouchEvent()`
-
+1. **Usually return `true` from `onDown()`** if you want to receive `onScroll`, `onFling`, and other subsequent events in that gesture sequence. If you intentionally don't want to handle the sequence, you may return `false`.
+2. **In Compose, use Compose gesture APIs** — don't create `GestureDetector` manually.
+3. **For ScrollView conflicts** — use `requestDisallowInterceptTouchEvent()`.
+4. **For double tap** — use `OnDoubleTapListener` or the relevant `SimpleOnGestureListener` overrides.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как работает `ScaleGestureDetector` для жестов pinch-to-zoom?
+- Как решать конфликты жестов во вложенных скроллируемых контейнерах?
+- В чем различия между `OnGestureListener` и `SimpleOnGestureListener`?
+- Как жестовые API в Compose соотносятся с `GestureDetector` во `View`-основанном UI?
 
 ## Follow-ups
 
 - How does `ScaleGestureDetector` work for pinch-to-zoom gestures?
 - How do you resolve gesture conflicts in nested scrolling containers?
 - What are the differences between `OnGestureListener` and `SimpleOnGestureListener`?
-- How do Compose gesture APIs compare to View-based `GestureDetector`?
+- How do Compose gesture APIs compare to `View`-based `GestureDetector`?
+
+## Ссылки (RU)
+
+- https://developer.android.com/reference/android/view/GestureDetector
+- https://developer.android.com/jetpack/compose/gestures
 
 ## References
 
 - https://developer.android.com/reference/android/view/GestureDetector
 - https://developer.android.com/jetpack/compose/gestures
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-android-components]]
+
+### Предпосылки
+
+- Понимание `MotionEvent` и основ обработки touch-событий
+
+### Связанные
+
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]]
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]]
+
+### Продвинутое
+
+- Обработка мультитач-жестов (pinch, rotate)
+- Кастомные распознаватели жестов с использованием `MotionEvent`
+- Разрешение конфликтов жестов в сложных layout-ах
 
 ## Related Questions
 
@@ -203,15 +255,17 @@ class GestureView(context: Context) : View(context) {
 
 - [[c-android-components]]
 
-
 ### Prerequisites
+
 - Understanding MotionEvent and touch event handling basics
 
 ### Related
+
 - [[q-what-is-known-about-methods-that-redraw-view--android--medium]]
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]]
 
 ### Advanced
+
 - Multi-touch gesture handling (pinch, rotate)
 - Custom gesture recognizers with `MotionEvent`
 - Resolving gesture conflicts in complex layouts

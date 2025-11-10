@@ -4,25 +4,26 @@ title: CI/CD Pipeline for Android / CI/CD пайплайн для Android
 aliases: [CI/CD Pipeline for Android, CI/CD пайплайн для Android]
 topic: android
 subtopics:
-  - ci-cd
-  - gradle
-  - testing-instrumented
+- ci-cd
+- gradle
+- testing-instrumented
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - q-build-optimization-gradle--android--medium
-  - q-cicd-automated-testing--android--medium
-  - q-cicd-deployment-automation--android--medium
+- q-build-optimization-gradle--android--medium
+- q-cicd-automated-testing--android--medium
+- q-cicd-deployment-automation--android--medium
 created: 2025-10-11
-updated: 2025-10-29
+updated: 2025-11-10
 sources: []
 tags: [android/ci-cd, android/gradle, android/testing-instrumented, difficulty/medium]
+
 ---
 
 # Вопрос (RU)
@@ -35,14 +36,14 @@ tags: [android/ci-cd, android/gradle, android/testing-instrumented, difficulty/m
 
 ## Ответ (RU)
 
-### Цели Пайплайна
+### Цели пайплайна
 
 * **Скорость**: проверки PR ≤10 минут на средних проектах
 * **Воспроизводимость**: Gradle wrapper, зафиксированные версии SDK/build-tools
 * **Безопасность**: OIDC для Play Console (без долгоживущих ключей), secret scanning
 * **Надёжность**: минимальная flakiness, детерминированные релизы
 
-### Основные Этапы
+### Основные этапы
 
 **1. Setup**
 ```yaml
@@ -76,7 +77,7 @@ tasks.withType<Test> {
 }
 ```
 * Kover/Jacoco для покрытия (XML + HTML)
-* Fail на новых flaky в изменённых модулях
+* Отслеживание и карантин новых flaky-тестов в изменённых модулях на основе истории запусков
 
 **4. Build**
 ```bash
@@ -109,15 +110,15 @@ testOptions {
 
 **Кэширование**
 * Configuration cache + remote build cache
-* AVD images cache
-* Gradle wrapper, dependencies, build outputs
+* Кэш образов AVD
+* Gradle wrapper, зависимости, build outputs
 
 **Параллелизм**
-* `--parallel` + tune `org.gradle.workers.max`
+* `--parallel` + настройка `org.gradle.workers.max`
 * Независимые jobs (checks/tests/build)
-* Matrix runs по API levels
+* Matrix-запуски по уровням API
 
-### Quality Gates
+### Quality Gates (RU)
 
 | Gate | Threshold | Action |
 |------|-----------|--------|
@@ -126,7 +127,7 @@ testOptions {
 | Security | High/Critical CVE | Block merge |
 | Tests | ≥99% pass rate | Quarantine flaky |
 
-### Release Workflow
+### Release Workflow (RU)
 
 ```yaml
 # Staged rollout
@@ -138,9 +139,9 @@ testOptions {
 ```
 
 **Rollback strategy**:
-* Halt rollout при падении crash-free users
-* Size budget enforcement (max delta MB)
-* ANR rate monitoring
+* Остановить rollout при падении crash-free users
+* Контроль бюджета размера (max delta MB)
+* Мониторинг уровня ANR
 
 ## Answer (EN)
 
@@ -185,7 +186,7 @@ tasks.withType<Test> {
 }
 ```
 * Kover/Jacoco for coverage (XML + HTML)
-* Fail on new flaky in changed modules
+* Track and quarantine newly flaky tests in changed modules based on run history
 
 **4. Build**
 ```bash
@@ -253,6 +254,14 @@ testOptions {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать flaky-тесты в CI, не блокируя полностью PR?
+- Каковы компромиссы между локальным и удалённым build cache?
+- Как реализовать zero-downtime откаты релизов Android?
+- По каким метрикам принимать решение о продвижении staged rollout (crash rate, ANR, install success)?
+- Как безопасно хранить ключи подписи и API credentials в облачном CI?
+
 ## Follow-ups
 
 - How do you handle flaky tests in CI without blocking PRs entirely?
@@ -261,16 +270,42 @@ testOptions {
 - What metrics determine staged rollout promotion decisions (crash rate, ANR, install success)?
 - How do you secure signing keys and API credentials in cloud CI environments?
 
-## References
+## Ссылки (RU)
 
-- [[c-gradle]] - Gradle build system fundamentals
-- [[c-app-bundle]] - Android App Bundle format
-- [[c-unit-testing]] - Unit testing best practices
-- [[c-encryption]] - Security and encryption concepts
+- [[c-app-bundle]]
+- [[c-encryption]]
 - https://docs.github.com/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
 - https://developer.android.com/studio/test/gradle-managed-devices
 - https://docs.gradle.org/current/userguide/configuration_cache.html
 - https://github.com/Triple-T/gradle-play-publisher
+
+## References
+
+- [[c-app-bundle]]
+- [[c-encryption]]
+- https://docs.github.com/actions/automating-builds-and-tests/building-and-testing-java-with-gradle
+- https://developer.android.com/studio/test/gradle-managed-devices
+- https://docs.gradle.org/current/userguide/configuration_cache.html
+- https://github.com/Triple-T/gradle-play-publisher
+
+## Связанные вопросы (RU)
+
+### Базовые (проще)
+- [[q-build-optimization-gradle--android--medium]] — основы оптимизации сборки Gradle
+- [[q-cicd-automated-testing--android--medium]] — стратегии автоматизации тестирования
+- Понимание жизненного цикла и задач Gradle
+
+### На том же уровне
+- [[q-cicd-deployment-automation--android--medium]] — детали автоматизации деплоя
+- Управление зависимостями Gradle и version catalogs
+- Стратегии шардинга и параллелизации Android-тестов
+- Конфигурация ProGuard/R8 для релизных сборок
+
+### Продвинутые (сложнее)
+- Продвинутая оптимизация build cache и интеграция Gradle Enterprise
+- Кастомные Gradle-плагины для автоматизации CI/CD
+- Мультимодульная архитектура Android для эффективности CI
+- Dynamic Feature Modules и стратегии staged rollout
 
 ## Related Questions
 

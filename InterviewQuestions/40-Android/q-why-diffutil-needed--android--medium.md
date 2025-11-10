@@ -1,7 +1,7 @@
 ---
 id: android-367
 title: "Why DiffUtil Needed / Зачем нужен DiffUtil"
-aliases: [AsyncListDiffer, DiffUtil, ListAdapter, Зачем DiffUtil]
+aliases: [AsyncListDiffer, DiffUtil, ListAdapter]
 topic: android
 subtopics: [performance-rendering, ui-views]
 question_kind: android
@@ -10,10 +10,11 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-adapter-pattern, c-diffutil, c-listadapter, c-recyclerview]
+related: [c-android-components, c-recyclerview, q-android-app-components--android--easy]
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [adapter, android/performance-rendering, android/ui-views, difficulty/medium, diffutil, performance, recyclerview]
+
 ---
 
 # Вопрос (RU)
@@ -46,12 +47,12 @@ class SimpleAdapter : RecyclerView.Adapter<ViewHolder>() {
 ```
 
 **Последствия `notifyDataSetChanged()`:**
-- Полная перерисовка всех элементов (медленно)
-- Отсутствие анимаций
-- Потеря позиции скролла
-- Расход CPU/GPU ресурсов
+- Полная перерисовка всех элементов (дороже по ресурсам)
+- Отсутствие точечных анимаций изменений/перемещений
+- Повышенная нагрузка на CPU/GPU, возможные подлагивания
+- Сложнее оптимизировать обновления для больших списков
 
-### DiffUtil.Callback
+### DiffUtil.`Callback`
 
 **✅ Базовое использование:**
 
@@ -80,6 +81,8 @@ fun updateUsers(newUsers: List<User>) {
 }
 ```
 
+> На практике списки, переданные в DiffUtil, должны рассматриваться как неизменяемые во время вычисления diff, чтобы избежать некорректных результатов.
+
 ### Частичное Обновление Через Payload
 
 **✅ Оптимизация для больших объектов:**
@@ -99,6 +102,7 @@ override fun onBindViewHolder(holder: ViewHolder, pos: Int, payloads: List<Any>)
     if (payloads.isEmpty()) {
         onBindViewHolder(holder, pos)
     } else {
+        // В реальном коде стоит корректно обработать все payloads и проверить типы
         val changes = payloads[0] as Map<*, *>
         changes["name"]?.let { holder.updateName(it as String) }
         changes["status"]?.let { holder.updateStatus(it as Boolean) }
@@ -126,6 +130,8 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 }
 ```
+
+> AsyncListDiffer вычисляет diff в фоне и применяет обновления на главном потоке, ожидая, что переданные списки не будут изменяться после передачи.
 
 ### ListAdapter (рекомендуется)
 
@@ -163,7 +169,7 @@ fun UserList(users: List<User>) {
     LazyColumn {
         items(
             items = users,
-            key = { it.id } // Аналог areItemsTheSame
+            key = { it.id } // Аналог areItemsTheSame: стабильный ключ для элемента
         ) { user ->
             UserItem(user)
         }
@@ -171,15 +177,15 @@ fun UserList(users: List<User>) {
 }
 ```
 
-**Производительность (1000 элементов, 50 изменений):**
-- `notifyDataSetChanged()`: ~100ms, 1000 перерисовок
-- `DiffUtil`: ~25ms (15ms расчет + 10ms обновление), 50 перерисовок
+**Производительность (пример для иллюстрации, не точный бенчмарк):**
+- `notifyDataSetChanged()`: полная перерисовка (дороже, чем нужно)
+- `DiffUtil`: рассчитывает изменения и обновляет только изменившиеся элементы, уменьшает перерисовки и нагрузку
 
 ---
 
 ## Answer (EN)
 
-**DiffUtil** is a utility that calculates the difference between two lists and generates minimal update operations for RecyclerView.
+**DiffUtil** is a utility that calculates the difference between two lists and generates a minimal set of update operations for RecyclerView.
 
 ### Problem Without DiffUtil
 
@@ -197,12 +203,12 @@ class SimpleAdapter : RecyclerView.Adapter<ViewHolder>() {
 ```
 
 **Issues with `notifyDataSetChanged()`:**
-- Complete redraw of all items (slow)
-- No animations
-- Lost scroll position
-- Wasted CPU/GPU resources
+- Full redraw of all items (more expensive than necessary)
+- No fine-grained change/move animations
+- Increased CPU/GPU usage, potential jank
+- Harder to optimize updates for large lists
 
-### DiffUtil.Callback
+### DiffUtil.`Callback`
 
 **✅ Basic usage:**
 
@@ -231,6 +237,8 @@ fun updateUsers(newUsers: List<User>) {
 }
 ```
 
+> In practice, lists passed to DiffUtil should be treated as immutable during diff calculation to avoid inconsistent results.
+
 ### Partial Updates via Payload
 
 **✅ Optimization for large objects:**
@@ -250,6 +258,7 @@ override fun onBindViewHolder(holder: ViewHolder, pos: Int, payloads: List<Any>)
     if (payloads.isEmpty()) {
         onBindViewHolder(holder, pos)
     } else {
+        // In real code, you should handle all payloads and validate their types
         val changes = payloads[0] as Map<*, *>
         changes["name"]?.let { holder.updateName(it as String) }
         changes["status"]?.let { holder.updateStatus(it as Boolean) }
@@ -277,6 +286,8 @@ class AsyncAdapter : RecyclerView.Adapter<ViewHolder>() {
     }
 }
 ```
+
+> AsyncListDiffer computes the diff off the main thread and applies updates on the main thread, assuming the provided lists are not modified after submission.
 
 ### ListAdapter (recommended)
 
@@ -314,7 +325,7 @@ fun UserList(users: List<User>) {
     LazyColumn {
         items(
             items = users,
-            key = { it.id } // Similar to areItemsTheSame
+            key = { it.id } // Similar to areItemsTheSame: stable key for each item
         ) { user ->
             UserItem(user)
         }
@@ -322,15 +333,15 @@ fun UserList(users: List<User>) {
 }
 ```
 
-**Performance (1000 items, 50 changes):**
-- `notifyDataSetChanged()`: ~100ms, 1000 redraws
-- `DiffUtil`: ~25ms (15ms calculation + 10ms updates), 50 redraws
+**Performance (illustrative example, not an exact benchmark):**
+- `notifyDataSetChanged()`: redraws all items (more work than necessary)
+- `DiffUtil`: computes changes and updates only modified items, reducing redraws and resource usage
 
 ---
 
 ## Follow-ups
 
-- How does DiffUtil's Myers algorithm work internally?
+- How does DiffUtil's algorithm work internally?
 - When should you use `DiffUtil.calculateDiff(detectMoves = true)`?
 - What are the performance implications of DiffUtil on the main thread?
 - How does `submitList()` handle rapid consecutive updates?
@@ -339,22 +350,16 @@ fun UserList(users: List<User>) {
 ## References
 
 - [[c-recyclerview]]
-- [[c-adapter-pattern]]
-- [[c-myers-diff-algorithm]]
 - [Android DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 - [RecyclerView Performance](https://developer.android.com/topic/performance/recyclerview)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-basics--android--easy]]
-- [[q-viewholder-pattern--android--easy]]
+- [[q-android-app-components--android--easy]]
 
 ### Related (Same Level)
 - [[q-recyclerview-explained--android--medium]]
-- [[q-listadapter-vs-adapter--android--medium]]
-- [[q-payload-updates--android--medium]]
 
 ### Advanced (Harder)
-- [[q-custom-diff-algorithm--android--hard]]
-- [[q-recyclerview-memory-leaks--android--hard]]
+- [[q-android-runtime-art--android--medium]]

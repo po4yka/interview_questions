@@ -7,7 +7,6 @@ aliases:
 topic: android
 subtopics:
 - ci-cd
-- gradle
 - testing-instrumented
 - testing-unit
 question_kind: android
@@ -16,17 +15,16 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
-- c-gradle-build-cache
-- c-test-sharding
+- c-gradle
+- q-android-release-pipeline-cicd--android--hard
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-11-10
 sources: []
 tags:
 - android/ci-cd
-- android/gradle
 - android/testing-instrumented
 - android/testing-unit
 - ci-cd
@@ -44,10 +42,10 @@ tags:
 
 ## Ответ (RU)
 
-### Архитектура Пайплайна
+### Архитектура пайплайна
 
 **Pre-merge (быстрая обратная связь < 10 мин)**:
-- Статический анализ (lint/detekt)
+- Статический анализ (`lint`/`detekt`)
 - Юнит-тесты (JVM)
 - Критические UI-тесты (sharded)
 - Генерация отчетов и артефактов
@@ -58,7 +56,7 @@ tags:
 - Device farm на разных API/размерах
 - Производительность и метрики
 
-### Стратегии Тестирования
+### Стратегии тестирования
 
 ```kotlin
 // ✅ Unit-тесты: быстрые, изолированные, мокируем Android API
@@ -76,14 +74,14 @@ class ViewModelTest {
 ```
 
 ```kotlin
-// ✅ Инструментальные: реальное устройство, проверка UI
+// ✅ Инструментальные: реальное устройство, проверка UI (Compose)
 @RunWith(AndroidJUnit4::class)
 class LoginFlowTest {
-    @get:Rule val composeRule = createComposeRule()
+    @get:Rule
+    val composeRule = createAndroidComposeRule<MainActivity>()
 
     @Test
     fun loginWithValidCredentials_navigatesToHome() {
-        composeRule.setContent { LoginScreen() }
         composeRule.onNodeWithTag("email").performTextInput("test@test.com")
         composeRule.onNodeWithTag("submit").performClick()
         composeRule.onNodeWithTag("home").assertIsDisplayed()
@@ -107,7 +105,7 @@ fun loadData() {
 }
 ```
 
-### Оптимизация Скорости
+### Оптимизация скорости
 
 ```yaml
 # ✅ GitHub Actions с кэшированием
@@ -122,6 +120,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+      # Для надёжности в Android CI обычно явно настраивают SDK/NDK при необходимости
       - uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: false
@@ -150,12 +149,14 @@ android {
     }
 }
 
-// CI: запуск шардов параллельно
-./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.numShards=4 \
+// CI: запуск нескольких шардов параллельно разными job'ами
+// Пример одного шарда (shardIndex меняется от 0 до numShards-1)
+./gradlew connectedDebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.numShards=4 \
   -Pandroid.testInstrumentationRunnerArguments.shardIndex=0
 ```
 
-### Управление Нестабильными Тестами
+### Управление нестабильными тестами
 
 ```kotlin
 // ✅ Стратегия карантина для flaky тестов
@@ -165,25 +166,25 @@ fun animationTest() {
     // Тест в карантине, не блокирует PR
 }
 
-// CI: автоматический retry
-./gradlew test --rerun-tasks --max-parallel-forks=4 \
+// CI: автоматический retry (пример для инструментальных тестов)
+./gradlew connectedDebugAndroidTest \
   -Pandroid.testInstrumentationRunnerArguments.numAttempts=3
 ```
 
-### Отчетность И Артефакты
+### Отчетность и артефакты
 
 **Что сохранять**:
 - JUnit XML (для CI-системы)
-- HTML отчеты (lint, test results)
+- HTML отчеты (lint, результаты тестов)
 - Jacoco покрытие (объединенное: unit + instrumented)
 - APK/AAB для QA
 
 **Визуализация**:
-- Inline-аннотации для провалов
+- Inline-аннотации для падений
 - Дашборд с трендами (coverage, flakiness)
-- Ссылки на device farm результаты
+- Ссылки на результаты device farm
 
-### Безопасность В CI
+### Безопасность в CI
 
 ```yaml
 # ✅ Подписание APK в защищенной среде
@@ -208,7 +209,7 @@ fun animationTest() {
 ### Pipeline Architecture
 
 **Pre-merge (fast feedback < 10 min)**:
-- Static analysis (lint/detekt)
+- Static analysis (`lint`/`detekt`)
 - Unit tests (JVM)
 - Critical UI tests (sharded)
 - Generate reports and artifacts
@@ -237,14 +238,14 @@ class ViewModelTest {
 ```
 
 ```kotlin
-// ✅ Instrumented: real device, UI verification
+// ✅ Instrumented: real device, UI verification (Compose)
 @RunWith(AndroidJUnit4::class)
 class LoginFlowTest {
-    @get:Rule val composeRule = createComposeRule()
+    @get:Rule
+    val composeRule = createAndroidComposeRule<MainActivity>()
 
     @Test
     fun loginWithValidCredentials_navigatesToHome() {
-        composeRule.setContent { LoginScreen() }
         composeRule.onNodeWithTag("email").performTextInput("test@test.com")
         composeRule.onNodeWithTag("submit").performClick()
         composeRule.onNodeWithTag("home").assertIsDisplayed()
@@ -283,6 +284,7 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
+      # In Android CI it's usually safer to configure SDK/NDK explicitly if needed
       - uses: gradle/gradle-build-action@v2
         with:
           cache-read-only: false
@@ -311,8 +313,10 @@ android {
     }
 }
 
-// CI: run shards in parallel
-./gradlew connectedDebugAndroidTest -Pandroid.testInstrumentationRunnerArguments.numShards=4 \
+// CI: run multiple shards in parallel via separate jobs
+// Example for one shard (shardIndex varies from 0 to numShards-1)
+./gradlew connectedDebugAndroidTest \
+  -Pandroid.testInstrumentationRunnerArguments.numShards=4 \
   -Pandroid.testInstrumentationRunnerArguments.shardIndex=0
 ```
 
@@ -326,8 +330,8 @@ fun animationTest() {
     // Test in quarantine, doesn't block PRs
 }
 
-// CI: automatic retry
-./gradlew test --rerun-tasks --max-parallel-forks=4 \
+// CI: automatic retry (example for instrumented tests)
+./gradlew connectedDebugAndroidTest \
   -Pandroid.testInstrumentationRunnerArguments.numAttempts=3
 ```
 
@@ -364,6 +368,14 @@ fun animationTest() {
   run: ./gradlew --write-verification-metadata sha256
 ```
 
+## Дополнительные вопросы (RU)
+
+- Как поддерживать процесс карантина нестабильных тестов и отслеживать метрики снижения flaky-тестов со временем?
+- Какие критерии определяют состав pre-merge и nightly-наборов тестов для оптимального баланса стоимости и качества сигнала?
+- Как эффективно шардировать инструментальные тесты по девайсам и ретраить только упавшие шарды?
+- Какая комбинация локального, удаленного и конфигурационного кэширования даёт лучшую производительность CI?
+- Как интегрировать требования по покрытию кода без значительного увеличения времени проверки PR?
+
 ## Follow-ups
 
 - How to maintain a flaky test quarantine process and track deflake metrics over time?
@@ -371,6 +383,12 @@ fun animationTest() {
 - How to effectively shard instrumented tests across devices and retry only failed shards?
 - What combination of local, remote, and configuration caching gives best CI performance?
 - How to integrate code coverage requirements without adding significant overhead to PR checks?
+
+## Ссылки (RU)
+
+- https://docs.gradle.org/current/userguide/build_cache.html - Gradle build cache
+- https://developer.android.com/studio/test - Основы тестирования Android
+- https://docs.github.com/actions - Документация GitHub Actions
 
 ## References
 
@@ -382,9 +400,7 @@ fun animationTest() {
 
 ### Prerequisites / Concepts
 
-- [[c-gradle-build-cache]]
-- [[c-test-sharding]]
-
+- [[c-gradle]]
 
 ### Prerequisites (Easier)
 - [[q-android-testing-strategies--android--medium]] - Testing strategies overview
@@ -393,4 +409,3 @@ fun animationTest() {
 ### Related (Same Level)
 - [[q-android-lint-tool--android--medium]] - Static analysis with Android Lint
 - [[q-build-optimization-gradle--android--medium]] - Gradle build optimization
-

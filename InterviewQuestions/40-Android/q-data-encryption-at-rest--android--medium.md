@@ -31,21 +31,23 @@ sources:
 
 ## Ответ (RU)
 
-**Шифрование в покое** защищает данные на устройстве от несанкционированного доступа даже при физическом компрометировании. Android предлагает три основных решения: `EncryptedSharedPreferences` (токены, настройки), `SQLCipher` (базы данных), `EncryptedFile` (файлы). Все они используют `Android Keystore` для безопасного хранения ключей шифрования.
+**Шифрование в покое** защищает данные на устройстве от несанкционированного доступа даже при физическом компрометировании. Android предлагает три типичных решения: `EncryptedSharedPreferences` (токены, настройки), `SQLCipher` (базы данных), `EncryptedFile` (файлы). `EncryptedSharedPreferences` и `EncryptedFile` используют `Android Keystore` для безопасного хранения ключей (через `MasterKey`/`EncryptedFile` API). Для `SQLCipher` ключ (пароль) вы предоставляете сами, и рекомендуется защищать его с помощью `Android Keystore`.
 
 ### Ключевые Принципы
 
 **Архитектура:**
-- Данные шифруются `AES-256-GCM` перед записью на диск (аутентифицированное шифрование)
-- Ключи хранятся в `Android Keystore` (аппаратная защита на поддерживаемых устройствах через StrongBox)
-- Автоматическое управление жизненным циклом ключей через `MasterKey` API
-- Двухуровневая защита: шифрование ключей (envelope encryption) + шифрование данных
+- Данные шифруются (например, `AES-256-GCM`) перед записью на диск (аутентифицированное шифрование)
+- Ключи или ключи-обёртки хранятся в `Android Keystore` (при наличии — аппаратная защита через StrongBox на поддерживаемых устройствах)
+- Автоматическое управление жизненным циклом ключей через `MasterKey` API для Jetpack Security компонентов
+- Двухуровневая защита (envelope encryption): мастер-ключ в Keystore шифрует (оборачивает) рабочие ключи/пароли, которыми шифруются данные
 
 | Подход | Использование | Производительность | Сложность |
 |--------|--------------|-------------------|-----------|
-| `EncryptedSharedPreferences` | Токены, настройки | Быстро (~5% overhead) | Простая |
-| `SQLCipher` | Базы данных | Умеренно (~15-20% overhead) | Средняя |
-| `EncryptedFile` | Медиа, документы | Медленно (зависит от размера) | Средняя |
+| `EncryptedSharedPreferences` | Токены, настройки | Быстро (небольшой overhead, обычно единицы миллисекунд) | Простая |
+| `SQLCipher` | Базы данных | Умеренно (заметный overhead, зависит от нагрузки/устройства) | Средняя |
+| `EncryptedFile` | Медиа, документы | Медленнее (зависит от размера файлов) | Средняя |
+
+(Оценки производительности приблизительные и зависят от устройства, размера данных и шаблонов доступа.)
 
 ### 1. EncryptedSharedPreferences
 
@@ -69,9 +71,13 @@ class SecurePrefsManager(context: Context) {
 }
 ```
 
-**Важно:** `EncryptedSharedPreferences` шифрует как ключи (`AES256_SIV` — детерминированное), так и значения (`AES256_GCM` — аутентифицированное). Для критичных данных используйте `commit()` вместо `apply()` для синхронной записи и гарантии сохранения.
+**Важно:** `EncryptedSharedPreferences` шифрует и ключи (`AES256_SIV` — детерминированное шифрование), и значения (`AES256_GCM` — аутентифицированное шифрование). Для критичных данных при необходимости гарантировать немедленную запись используйте `commit()` вместо `apply()` (но с учётом возможного влияния на производительность).
 
 ### 2. SQLCipher Для Room
+
+Рекомендуемый паттерн — не хранить пароль для SQLCipher в открытом виде, а сгенерировать случайный passphrase и зашифровать его с помощью ключа из `Android Keystore` (envelope encryption).
+
+Упрощённый пример (иллюстративный, без обработки ошибок и миграций):
 
 ```kotlin
 @Database(entities = [User::class], version = 1)
@@ -86,73 +92,80 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         private fun getOrCreatePassphrase(context: Context): String {
-            val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
-            return if (keyStore.containsAlias("db_key")) {
-                val secretKey = keyStore.getKey("db_key", null) as SecretKey
-                Base64.encodeToString(secretKey.encoded, Base64.NO_WRAP)
-            } else {
-                val keyGen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
-                val spec = KeyGenParameterSpec.Builder("db_key",
-                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-                    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                    .setRandomizedEncryptionRequired(false)
-                    .build()
-                keyGen.init(spec)
-                Base64.encodeToString(keyGen.generateKey().encoded, Base64.NO_WRAP)
+            val encryptedPrefs = context.getSharedPreferences("sqlcipher_keys", Context.MODE_PRIVATE)
+            val existing = encryptedPrefs.getString("db_passphrase", null)
+            if (existing != null) return existing
+
+            // Сгенерировать криптостойкий случайный passphrase
+            val passphraseBytes = ByteArray(32).also {
+                SecureRandom().nextBytes(it)
             }
+            val passphrase = Base64.encodeToString(passphraseBytes, Base64.NO_WRAP)
+
+            // При желании: зашифровать passphrase с помощью ключа из Android Keystore
+            // Здесь опущено для краткости; важно, что passphrase не хардкодится
+
+            encryptedPrefs.edit().putString("db_passphrase", passphrase).commit()
+            return passphrase
         }
     }
 }
 ```
 
+Ключевые моменты:
+- Не используйте ключи, сгенерированные в `AndroidKeyStore`, напрямую как passphrase `SQLCipher` (такие ключи обычно неэкспортируемые, `secretKey.encoded == null`).
+- Вместо этого: мастер-ключ в Keystore + сгенерированный случайный passphrase для SQLCipher, который хранится только в зашифрованном виде (envelope encryption).
+
 ### 3. Управление Ключами
 
 **Критичные аспекты:**
-- Используйте `StrongBox Keymaster` (API 28+) для аппаратной изоляции: `setIsStrongBoxBacked(true)` — ключи хранятся в отдельном чипе, недоступном даже root-доступу
-- Привязка к биометрии: `setUserAuthenticationRequired(true)` + `setUserAuthenticationValidityDurationSeconds(-1)` — ключ доступен только после аутентификации пользователя
-- Ротация ключей: при компрометации создавайте новый `MasterKey`, перешифровывайте данные старым ключом и сохраняйте новым
+- Используйте `StrongBox Keymaster` (API 28+) для аппаратной изоляции там, где он доступен: `setIsStrongBoxBacked(true)` при конфигурации ключа; необходимо обрабатывать случаи, когда устройство не поддерживает StrongBox.
+- Привязка к биометрии / аутентификации пользователя: `setUserAuthenticationRequired(true)` и `setUserAuthenticationValidityDurationSeconds(...)` — ключ доступен только после успешной аутентификации пользователя.
+- Ротация ключей: при компрометации или по политике безопасности создавайте новый мастер-ключ, расшифровывайте данные старым ключом и перешифровывайте новым.
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО: ключ в коде — легко извлечь из APK
+// ❌ НЕПРАВИЛЬНО: жёстко заданный ключ в коде — легко извлечь из APK
 val hardcodedKey = "my_secret_key_123"
 
-// ✅ ПРАВИЛЬНО: ключ в Keystore с биометрией
+// ✅ ПРАВИЛЬНО: ключ в Keystore, опционально с требованием аутентификации
 val masterKey = MasterKey.Builder(context)
     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-    .setUserAuthenticationRequired(true, 30) // требует аутентификацию каждые 30 сек
+    // requires user authentication every 30 seconds for key use (если политика подходит)
+    .setUserAuthenticationRequired(true, 30)
     .build()
 ```
 
 ### Производительность
 
-**Бенчмарки (средние значения):**
-- `EncryptedSharedPreferences`: 1-2ms на операцию чтения/записи (незначительный overhead)
-- `SQLCipher`: +15-20% времени выполнения запросов по сравнению с обычным SQLite (приемлемо для большинства случаев)
-- `EncryptedFile`: зависит от размера (1MB файл ~50-100ms)
+**Приблизительно (будет отличаться в зависимости от устройства и сценария):**
+- `EncryptedSharedPreferences`: обычно +1-2ms на операцию чтения/записи по сравнению с обычными `SharedPreferences`.
+- `SQLCipher`: дополнительный overhead при чтении/записи/индексации; для многих приложений укладывается в +десятки процентов, но требует профилирования.
+- `EncryptedFile`: стоимость зависит в основном от размера файла и I/O; для файлов ~1MB задержка может составлять десятки миллисекунд.
 
 **Оптимизации:**
-- Минимизируйте количество операций шифрования/дешифрования — кешируйте часто используемые данные
-- Используйте батчинг для `SQLCipher` (транзакции) — группировка операций снижает overhead
-- Кешируйте расшифрованные данные в памяти с осторожностью (риск утечки через дампы памяти) — очищайте кеш при выходе из приложения
+- Минимизируйте количество операций шифрования/дешифрования — кешируйте часто используемые данные (с осознанным управлением сроком жизни и очисткой).
+- Используйте батчинг и транзакции с `SQLCipher` для снижения относительного overhead.
+- Кешируйте расшифрованные данные в памяти осторожно (возможность утечек через дампы памяти, бэкапы, логирование); очищайте чувствительный кеш при выходе из приложения и при блокировке.
 
 ## Answer (EN)
 
-**Encryption at rest** protects data on the device from unauthorized access even when physically compromised. Android offers three primary solutions: `EncryptedSharedPreferences` (tokens, settings), `SQLCipher` (databases), `EncryptedFile` (files). All use `Android Keystore` for secure key storage.
+**Encryption at rest** protects data on the device from unauthorized access even when it is physically compromised. Android offers three typical solutions: `EncryptedSharedPreferences` (tokens, settings), `SQLCipher` (databases), `EncryptedFile` (files). `EncryptedSharedPreferences` and `EncryptedFile` use the `Android Keystore` for key storage via the Jetpack Security APIs. For `SQLCipher`, you supply the key (passphrase) yourself and should protect it using the `Android Keystore`.
 
 ### Core Principles
 
 **Architecture:**
-- Data encrypted with `AES-256-GCM` before disk write (authenticated encryption)
-- Keys stored in `Android Keystore` (hardware-backed on supported devices via StrongBox)
-- Automatic key lifecycle management via `MasterKey` API
-- Two-tier protection: key encryption (envelope encryption) + data encryption
+- Data is encrypted (e.g., `AES-256-GCM`) before being written to disk (authenticated encryption)
+- Keys or wrapping keys are stored in `Android Keystore` (hardware-backed with StrongBox on supported devices)
+- Automatic key lifecycle management via `MasterKey` API for Jetpack Security components
+- Two-tier protection (envelope encryption): a Keystore master key encrypts (wraps) working keys/passwords that encrypt the data
 
 | Approach | Use Case | Performance | Complexity |
 |----------|----------|-------------|------------|
-| `EncryptedSharedPreferences` | Tokens, settings | Fast (~5% overhead) | Simple |
-| `SQLCipher` | Databases | Moderate (~15-20% overhead) | Medium |
-| `EncryptedFile` | Media, documents | Slow (size-dependent) | Medium |
+| `EncryptedSharedPreferences` | Tokens, settings | Fast (small overhead, usually a few ms) | Simple |
+| `SQLCipher` | Databases | Moderate (noticeable overhead, load/device-dependent) | Medium |
+| `EncryptedFile` | Media, documents | Slower (file-size dependent) | Medium |
+
+(Performance numbers are approximate and depend on device, data size, and access patterns.)
 
 ### 1. EncryptedSharedPreferences
 
@@ -176,9 +189,13 @@ class SecurePrefsManager(context: Context) {
 }
 ```
 
-**Important:** `EncryptedSharedPreferences` encrypts both keys (`AES256_SIV` — deterministic) and values (`AES256_GCM` — authenticated). For critical data use `commit()` instead of `apply()` for synchronous writes and guaranteed persistence.
+**Important:** `EncryptedSharedPreferences` encrypts both keys (`AES256_SIV` — deterministic) and values (`AES256_GCM` — authenticated). For critical data where you need immediate persistence guarantees, prefer `commit()` over `apply()`, while being aware of its potential performance impact.
 
 ### 2. SQLCipher for Room
+
+Recommended pattern: do not store the SQLCipher passphrase in plaintext or hardcoded. Instead, generate a strong random passphrase and protect it via a key stored in the `Android Keystore` (envelope encryption).
+
+Simplified example (illustrative; omits error handling and migrations):
 
 ```kotlin
 @Database(entities = [User::class], version = 1)
@@ -193,61 +210,66 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         private fun getOrCreatePassphrase(context: Context): String {
-            val keyStore = KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
-            return if (keyStore.containsAlias("db_key")) {
-                val secretKey = keyStore.getKey("db_key", null) as SecretKey
-                Base64.encodeToString(secretKey.encoded, Base64.NO_WRAP)
-            } else {
-                val keyGen = KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
-                val spec = KeyGenParameterSpec.Builder("db_key",
-                    KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT)
-                    .setBlockModes(KeyProperties.BLOCK_MODE_GCM)
-                    .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_NONE)
-                    .setRandomizedEncryptionRequired(false)
-                    .build()
-                keyGen.init(spec)
-                Base64.encodeToString(keyGen.generateKey().encoded, Base64.NO_WRAP)
+            val prefs = context.getSharedPreferences("sqlcipher_keys", Context.MODE_PRIVATE)
+            val existing = prefs.getString("db_passphrase", null)
+            if (existing != null) return existing
+
+            // Generate cryptographically strong random passphrase
+            val passphraseBytes = ByteArray(32).also {
+                SecureRandom().nextBytes(it)
             }
+            val passphrase = Base64.encodeToString(passphraseBytes, Base64.NO_WRAP)
+
+            // Optionally: encrypt this passphrase with an Android Keystore key before storing.
+            // Kept simple here; key must not be hardcoded.
+
+            prefs.edit().putString("db_passphrase", passphrase).commit()
+            return passphrase
         }
     }
 }
 ```
 
+Key points:
+- Do not use `AndroidKeyStore`-generated AES keys directly as the SQLCipher passphrase (they are typically non-exportable; `secretKey.encoded` is null).
+- Instead, use a Keystore master key to encrypt (wrap) a randomly generated passphrase that SQLCipher uses.
+
 ### 3. Key Management
 
 **Critical aspects:**
-- Use `StrongBox Keymaster` (API 28+) for hardware isolation: `setIsStrongBoxBacked(true)` — keys stored in separate chip, inaccessible even to root
-- Biometric binding: `setUserAuthenticationRequired(true)` + `setUserAuthenticationValidityDurationSeconds(-1)` — key accessible only after user authentication
-- Key rotation: on compromise create new `MasterKey`, re-encrypt data with old key and save with new one
+- Use `StrongBox Keymaster` (API 28+) for hardware isolation where supported: call `setIsStrongBoxBacked(true)` when configuring the key and gracefully handle devices that do not support StrongBox.
+- Biometric / user-auth binding: `setUserAuthenticationRequired(true)` with `setUserAuthenticationValidityDurationSeconds(...)` — key usage requires successful user authentication according to your policy.
+- Key rotation: upon suspected compromise or per policy, create a new master key, decrypt data with the old key, and re-encrypt with the new key.
 
 ```kotlin
 // ❌ WRONG: hardcoded key — easily extractable from APK
 val hardcodedKey = "my_secret_key_123"
 
-// ✅ CORRECT: Keystore key with biometric
+// ✅ CORRECT: Keystore-backed key, optionally requiring authentication
 val masterKey = MasterKey.Builder(context)
     .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
-    .setUserAuthenticationRequired(true, 30) // requires auth every 30 sec
+    // requires authentication every 30 seconds for key usage (if appropriate for your UX/policy)
+    .setUserAuthenticationRequired(true, 30)
     .build()
 ```
 
 ### Performance
 
-**Benchmarks (average values):**
-- `EncryptedSharedPreferences`: 1-2ms per read/write operation (negligible overhead)
-- `SQLCipher`: +15-20% query execution time vs plain SQLite (acceptable for most cases)
-- `EncryptedFile`: size-dependent (1MB file ~50-100ms)
+**Approximate (device- and workload-dependent):**
+- `EncryptedSharedPreferences`: typically +1–2 ms per read/write vs plain `SharedPreferences`.
+- `SQLCipher`: overhead on queries and writes; often within tens of percent vs plain SQLite but must be profiled for your access patterns.
+- `EncryptedFile`: overhead scales with file size and I/O; a ~1MB file may add tens of ms.
 
 **Optimizations:**
-- Minimize encryption/decryption operations — cache frequently used data
-- Use batching for `SQLCipher` (transactions) — grouping operations reduces overhead
-- Cache decrypted data in memory cautiously (memory dump leak risk) — clear cache on app exit
+- Minimize encryption/decryption operations — cache frequently used values with careful lifecycle and invalidation.
+- Use batching and transactions with `SQLCipher` to amortize overhead across multiple operations.
+- Cache decrypted data in memory cautiously (risk of leaks via memory dumps, logs, etc.); clear sensitive caches on app exit/lock.
 
 ## Follow-ups
 
 - How to migrate from plain to encrypted database without data loss?
-- What happens to encrypted data when user changes device PIN/pattern?
-- How to implement key rotation for `SQLCipher` database?
+- What happens to encrypted data when the user changes device PIN/pattern?
+- How to implement key rotation for a `SQLCipher` database?
 - What's the impact of `StrongBox` vs software-backed keys on performance?
 - How to handle key loss or device reset scenarios?
 

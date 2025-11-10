@@ -2,28 +2,20 @@
 id: android-018
 title: "Multi-module Architecture Best Practices / Лучшие практики мульти-модульной архитектуры"
 aliases: ["Multi-module Architecture", "Мульти-модульная архитектура"]
-
-# Classification
 topic: android
 subtopics: [architecture-clean, architecture-modularization, gradle]
 question_kind: theory
 difficulty: hard
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
-sources: [https://github.com/amitshekhariitbhu/android-interview-questions]
-
-# Workflow & relations
+sources: ["https://github.com/amitshekhariitbhu/android-interview-questions"]
 status: draft
 moc: moc-android
-related: [q-android-jetpack-overview--android--easy, q-how-compose-draws-on-screen--android--hard]
-
-# Timestamps
+related: [c-modularization, c-gradle, q-android-jetpack-overview--android--easy, q-how-compose-draws-on-screen--android--hard]
 created: 2025-10-06
-updated: 2025-01-27
-
+updated: 2025-11-10
 tags: [android/architecture-clean, android/architecture-modularization, android/gradle, difficulty/hard]
+
 ---
 
 # Вопрос (RU)
@@ -40,14 +32,14 @@ tags: [android/architecture-clean, android/architecture-modularization, android/
 
 ### Типы Модулей
 
-**1. app** - Главный модуль приложения, связывает feature модули
+**1. app** - Главный модуль приложения (`:app`), связывает feature-модули
 **2. feature** - Изолированные функции (auth, profile, settings)
 **3. core** - Переиспользуемые утилиты (ui, network, database)
 **4. data** - Слой данных с [[c-repository-pattern|repository pattern]]
 
 ```text
 app/
- ├── app/                # Главный модуль
+ ├── app/                # Главный модуль (:app)
  ├── feature/
  │   ├── auth/          # ✅ Независимый feature
  │   ├── profile/       # ✅ Независимый feature
@@ -63,7 +55,7 @@ app/
 
 ### Правила Зависимостей
 
-**Критическое правило**: Feature модули НЕ зависят друг от друга
+**Критическое правило**: Feature-модули НЕ зависят друг от друга напрямую.
 
 ```kotlin
 // ❌ ПЛОХО - Feature зависит от feature
@@ -74,7 +66,7 @@ app/
 // :feature:profile -> :core:ui, :data:user
 ```
 
-**Коммуникация через [[c-dependency-injection|инверсию зависимостей]]**:
+**Коммуникация через [[c-dependency-injection|инверсию зависимостей]]** (псевдокод для иллюстрации):
 
 ```kotlin
 // core/navigation
@@ -93,7 +85,7 @@ class LoginViewModel(private val navigator: Navigator) {
 // app - реализует интерфейс
 class AppNavigator : Navigator {
     override fun navigateToProfile(userId: String) {
-        // Связывает features
+        // Связывает features (детали NavController опущены)
         navController.navigate("profile/$userId")
     }
 }
@@ -105,10 +97,11 @@ class AppNavigator : Navigator {
 
 ```kotlin
 // buildSrc/.../AndroidFeatureConventionPlugin.kt
+// (или предпочтительно отдельный convention-проект через includedBuild)
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            // ✅ Единая конфигурация для всех features
+            // ✅ Единая конфигурация для всех feature-модулей
             pluginManager.apply("com.android.library")
             extensions.configure<LibraryExtension> {
                 compileSdk = 34
@@ -119,45 +112,52 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
 }
 ```
 
-**2. Version catalogs** для управления зависимостями:
+**2. Version catalogs** для управления зависимостями (упрощённый пример):
 
 ```toml
 # gradle/libs.versions.toml
-[libraries]
-androidx-compose-ui = "androidx.compose.ui:ui"
-hilt-android = "com.google.dagger:hilt-android"
+[versions]
+compose = "1.7.0"
 
-# build.gradle.kts
+[libraries]
+androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+hilt-android = { module = "com.google.dagger:hilt-android", version = "2.52" }
+```
+
+```kotlin
+// build.gradle.kts
 dependencies {
-    // ✅ Централизованные версии
+    // ✅ Централизованные версии через aliases
     implementation(libs.androidx.compose.ui)
 }
 ```
 
-**3. API vs Implementation**:
+**3. API vs implementation**:
 
 ```kotlin
 dependencies {
-    // ✅ implementation - скрывает зависимости
+    // ✅ implementation - скрывает транзитивные зависимости
     implementation(project(":core:ui"))
 
-    // ❌ api - экспонирует всем потребителям
+    // ❌ api - экспонирует транзитивные зависимости всем потребителям
     api(project(":core:network"))
 }
 ```
 
 ### Когда Использовать
 
-**Используйте для:**
-- Команды 5+ разработчиков
-- 50,000+ строк кода
-- Несколько приложений с общим кодом
-- Долгие сборки (>5 минут)
+(Практические ориентиры, а не жёсткие правила.)
 
-**Не нужно для:**
-- Маленькие приложения (<10,000 строк)
+**Используйте, когда:**
+- Команда 5+ разработчиков
+- Кодовая база около 50 000+ строк
+- Несколько приложений с общим кодом
+- Долгие сборки (например, > 5 минут) мешают развитию
+
+**Можно не усложнять архитектуру, когда:**
+- Маленькие приложения (< 10 000 строк)
 - Прототипы и MVP
-- Единственный разработчик
+- Единственный разработчик и короткие времена сборки
 
 ### Типичные Ошибки
 
@@ -179,18 +179,18 @@ dependencies {
 
 ## Answer (EN)
 
-[[c-modularization|Multi-module architecture]] splits app into independent modules for scalability, faster builds, and parallel development.
+[[c-modularization|Multi-module architecture]] splits the app into independent modules for scalability, faster builds, and parallel development.
 
 ### Module Types
 
-**1. app** - Main application module, wires feature modules together
+**1. app** - Main application module (`:app`), wires feature modules together
 **2. feature** - Isolated features (auth, profile, settings)
 **3. core** - Reusable utilities (ui, network, database)
 **4. data** - Data layer with [[c-repository-pattern|repository pattern]]
 
 ```text
 app/
- ├── app/                # Main module
+ ├── app/                # Main module (:app)
  ├── feature/
  │   ├── auth/          # ✅ Independent feature
  │   ├── profile/       # ✅ Independent feature
@@ -206,7 +206,7 @@ app/
 
 ### Dependency Rules
 
-**Critical rule**: Feature modules do NOT depend on each other
+**Critical rule**: Feature modules do NOT depend on each other directly.
 
 ```kotlin
 // ❌ BAD - Feature depends on feature
@@ -217,7 +217,7 @@ app/
 // :feature:profile -> :core:ui, :data:user
 ```
 
-**Communication via [[c-dependency-injection|dependency inversion]]**:
+**Communication via [[c-dependency-injection|dependency inversion]]** (pseudo-code for illustration):
 
 ```kotlin
 // core/navigation
@@ -236,7 +236,7 @@ class LoginViewModel(private val navigator: Navigator) {
 // app - implements interface
 class AppNavigator : Navigator {
     override fun navigateToProfile(userId: String) {
-        // Wires features together
+        // Wires features (NavController wiring omitted)
         navController.navigate("profile/$userId")
     }
 }
@@ -248,10 +248,11 @@ class AppNavigator : Navigator {
 
 ```kotlin
 // buildSrc/.../AndroidFeatureConventionPlugin.kt
+// (or preferably a separate convention module via includedBuild)
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
-            // ✅ Single configuration for all features
+            // ✅ Single configuration for all feature modules
             pluginManager.apply("com.android.library")
             extensions.configure<LibraryExtension> {
                 compileSdk = 34
@@ -262,45 +263,52 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
 }
 ```
 
-**2. Version catalogs** for dependency management:
+**2. Version catalogs** for dependency management (simplified example):
 
 ```toml
 # gradle/libs.versions.toml
-[libraries]
-androidx-compose-ui = "androidx.compose.ui:ui"
-hilt-android = "com.google.dagger:hilt-android"
+[versions]
+compose = "1.7.0"
 
-# build.gradle.kts
+[libraries]
+androidx-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+hilt-android = { module = "com.google.dagger:hilt-android", version = "2.52" }
+```
+
+```kotlin
+// build.gradle.kts
 dependencies {
-    // ✅ Centralized versions
+    // ✅ Centralized versions via aliases
     implementation(libs.androidx.compose.ui)
 }
 ```
 
-**3. API vs Implementation**:
+**3. API vs implementation**:
 
 ```kotlin
 dependencies {
     // ✅ implementation - hides transitive deps
     implementation(project(":core:ui"))
 
-    // ❌ api - exposes to all consumers
+    // ❌ api - exposes transitive deps to all consumers
     api(project(":core:network"))
 }
 ```
 
 ### When to Use
 
-**Use for:**
-- Teams of 5+ developers
-- 50,000+ lines of code
-- Multiple apps sharing code
-- Long builds (>5 minutes)
+(Pragmatic guidelines, not strict thresholds.)
 
-**Not needed for:**
-- Small apps (<10,000 lines)
+**Use when:**
+- Team of ~5+ developers
+- Codebase around 50,000+ LOC or growing
+- Multiple apps share code
+- Long build times (e.g., > 5 minutes) slow down development
+
+**You may skip complex modularization when:**
+- Small apps (<10,000 LOC)
 - Prototypes and MVPs
-- Solo developers
+- Solo developers with fast builds
 
 ### Common Mistakes
 

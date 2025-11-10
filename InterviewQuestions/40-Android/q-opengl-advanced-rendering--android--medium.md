@@ -10,9 +10,9 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-custom-views-canvas--android--medium, q-vulkan-basics--android--hard]
+related: [q-custom-view-animation--android--medium, c-android-surfaces]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 sources: []
 tags: [3d-graphics, android/performance-rendering, android/profiling, android/ui-graphics, difficulty/medium, opengl-es, rendering, shaders]
 ---
@@ -29,7 +29,9 @@ tags: [3d-graphics, android/performance-rendering, android/profiling, android/ui
 
 ## Ответ (RU)
 
-OpenGL ES — основной API Android для 3D-графики и продвинутого 2D-рендеринга. Понимание продвинутых техник критично для высокопроизводительных графических приложений.
+OpenGL ES — основной API Android для 3D-графики и продвинутого 2D-рендеринга. Понимание продвинутых техник (буферные объекты, FBO, сложные шейдеры, post-processing) критично для высокопроизводительных графических приложений.
+
+См. также: [[c-android-surfaces]].
 
 ### Основные Компоненты
 
@@ -62,7 +64,7 @@ class CustomRenderer(private val context: Context) : GLSurfaceView.Renderer {
 ```
 
 **Пользовательские шейдеры:**
-ShaderProgram обёртка для компиляции и управления шейдерами.
+ShaderProgram — обёртка для компиляции и управления шейдерами.
 
 ```kotlin
 class ShaderProgram(vertexCode: String, fragmentCode: String) {
@@ -89,6 +91,10 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
         GLES30.glDeleteShader(fragmentShader)
     }
 
+    fun use() {
+        GLES30.glUseProgram(programId)
+    }
+
     fun setMatrix4(name: String, matrix: FloatArray) {
         val location = uniformLocations.getOrPut(name) {
             GLES30.glGetUniformLocation(programId, name)
@@ -98,11 +104,11 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
 }
 ```
 
-**VAO/VBO для геометрии:**
-Эффективное управление вершинными данными через Vertex Array Objects.
+**VAO/VBO/EBO для геометрии:**
+Эффективное управление вершинными данными через Vertex Array Objects и индексированные draw calls.
 
 ```kotlin
-class Mesh(vertices: FloatArray, indices: IntArray, val stride: Int = 8) {
+class Mesh(vertices: FloatArray, indices: IntArray, private val stride: Int = 8) {
     private val vao: Int
     private val vbo: Int
     private val ebo: Int
@@ -120,20 +126,49 @@ class Mesh(vertices: FloatArray, indices: IntArray, val stride: Int = 8) {
 
         // ✅ Upload vertex data once
         val vertexBuffer = ByteBuffer.allocateDirect(vertices.size * 4)
-            .order(ByteOrder.nativeOrder()).asFloatBuffer()
-            .put(vertices).position(0)
-        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vbo)
-        GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, vertices.size * 4,
-            vertexBuffer, GLES30.GL_STATIC_DRAW)
+            .order(ByteOrder.nativeOrder())
+            .asFloatBuffer()
+        vertexBuffer.put(vertices).position(0)
 
-        // Position (3) + Normal (3) + TexCoord (2)
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vbo)
+        GLES30.glBufferData(
+            GLES30.GL_ARRAY_BUFFER,
+            vertices.size * 4,
+            vertexBuffer,
+            GLES30.GL_STATIC_DRAW
+        )
+
+        // ✅ Upload index data
+        val indexBuffer = ByteBuffer.allocateDirect(indices.size * 4)
+            .order(ByteOrder.nativeOrder())
+            .asIntBuffer()
+        indexBuffer.put(indices).position(0)
+
+        GLES30.glBindBuffer(GLES30.GL_ELEMENT_ARRAY_BUFFER, ebo)
+        GLES30.glBufferData(
+            GLES30.GL_ELEMENT_ARRAY_BUFFER,
+            indices.size * 4,
+            indexBuffer,
+            GLES30.GL_STATIC_DRAW
+        )
+
+        // Position (3) + Normal (3) + TexCoord (2) in одном интерливнутом буфере
+        val strideBytes = stride * 4
+        // attribute 0: position
         GLES30.glEnableVertexAttribArray(0)
-        GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, stride * 4, 0)
+        GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, strideBytes, 0)
+        // attribute 1: normal
+        GLES30.glEnableVertexAttribArray(1)
+        GLES30.glVertexAttribPointer(1, 3, GLES30.GL_FLOAT, false, strideBytes, 3 * 4)
+        // attribute 2: texCoord
+        GLES30.glEnableVertexAttribArray(2)
+        GLES30.glVertexAttribPointer(2, 2, GLES30.GL_FLOAT, false, strideBytes, 6 * 4)
 
         GLES30.glBindVertexArray(0)
     }
 
     fun draw(shader: ShaderProgram) {
+        shader.use()
         GLES30.glBindVertexArray(vao)
         GLES30.glDrawElements(GLES30.GL_TRIANGLES, indexCount, GLES30.GL_UNSIGNED_INT, 0)
         GLES30.glBindVertexArray(0)
@@ -155,19 +190,65 @@ class Texture private constructor(val textureId: Int) {
         fun loadFromBitmap(bitmap: Bitmap): Texture {
             val textureIds = IntArray(1)
             GLES30.glGenTextures(1, textureIds, 0)
-            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureIds[0])
+            val id = textureIds[0]
+            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, id)
 
             // ✅ Set filtering for quality
-            GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_LINEAR_MIPMAP_LINEAR)
-            GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_LINEAR)
+            GLES30.glTexParameteri(
+                GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MIN_FILTER,
+                GLES30.GL_LINEAR_MIPMAP_LINEAR
+            )
+            GLES30.glTexParameteri(
+                GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MAG_FILTER,
+                GLES30.GL_LINEAR
+            )
 
             GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, bitmap, 0)
             GLES30.glGenerateMipmap(GLES30.GL_TEXTURE_2D)
 
+            // Опционально: задать wrapping-режимы
+            // GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_REPEAT)
+            // GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_REPEAT)
+
+            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0)
             bitmap.recycle()
-            return Texture(textureIds[0])
+            return Texture(id)
+        }
+
+        // Текстура для использования в качестве render target
+        fun createRenderTexture(width: Int, height: Int): Texture {
+            val textureIds = IntArray(1)
+            GLES30.glGenTextures(1, textureIds, 0)
+            val id = textureIds[0]
+            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, id)
+
+            GLES30.glTexImage2D(
+                GLES30.GL_TEXTURE_2D,
+                0,
+                GLES30.GL_RGBA,
+                width,
+                height,
+                0,
+                GLES30.GL_RGBA,
+                GLES30.GL_UNSIGNED_BYTE,
+                null
+            )
+
+            GLES30.glTexParameteri(
+                GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MIN_FILTER,
+                GLES30.GL_LINEAR
+            )
+            GLES30.glTexParameteri(
+                GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MAG_FILTER,
+                GLES30.GL_LINEAR
+            )
+
+            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0)
+            return Texture(id)
         }
     }
 }
@@ -190,23 +271,36 @@ class Framebuffer(width: Int, height: Int) {
 
         // Color attachment
         colorTexture = Texture.createRenderTexture(width, height)
-        GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER,
-            GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D,
-            colorTexture.textureId, 0)
+        GLES30.glFramebufferTexture2D(
+            GLES30.GL_FRAMEBUFFER,
+            GLES30.GL_COLOR_ATTACHMENT0,
+            GLES30.GL_TEXTURE_2D,
+            colorTexture.textureId,
+            0
+        )
 
         // Depth attachment
         val rboIds = IntArray(1)
         GLES30.glGenRenderbuffers(1, rboIds, 0)
         depthRenderbuffer = rboIds[0]
         GLES30.glBindRenderbuffer(GLES30.GL_RENDERBUFFER, depthRenderbuffer)
-        GLES30.glRenderbufferStorage(GLES30.GL_RENDERBUFFER,
-            GLES30.GL_DEPTH_COMPONENT16, width, height)
-        GLES30.glFramebufferRenderbuffer(GLES30.GL_FRAMEBUFFER,
-            GLES30.GL_DEPTH_ATTACHMENT, GLES30.GL_RENDERBUFFER, depthRenderbuffer)
+        GLES30.glRenderbufferStorage(
+            GLES30.GL_RENDERBUFFER,
+            GLES30.GL_DEPTH_COMPONENT16,
+            width,
+            height
+        )
+        GLES30.glFramebufferRenderbuffer(
+            GLES30.GL_FRAMEBUFFER,
+            GLES30.GL_DEPTH_ATTACHMENT,
+            GLES30.GL_RENDERBUFFER,
+            depthRenderbuffer
+        )
 
         // ✅ Always check completeness
         if (GLES30.glCheckFramebufferStatus(GLES30.GL_FRAMEBUFFER)
-            != GLES30.GL_FRAMEBUFFER_COMPLETE) {
+            != GLES30.GL_FRAMEBUFFER_COMPLETE
+        ) {
             throw RuntimeException("Framebuffer incomplete")
         }
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0)
@@ -253,12 +347,14 @@ class Framebuffer(width: Int, height: Int) {
 
 ## Answer (EN)
 
-OpenGL ES is Android's primary API for 3D graphics and advanced 2D rendering. Understanding advanced techniques is critical for high-performance graphics applications.
+OpenGL ES is Android's primary API for 3D graphics and advanced 2D rendering. Understanding advanced techniques (buffer objects, FBOs, complex shaders, post-processing) is critical for high-performance graphics applications.
+
+See also: [[c-android-surfaces]].
 
 ### Core Components
 
 **GLSurfaceView and Renderer:**
-Manage OpenGL context through GLSurfaceView with custom Renderer.
+Manage OpenGL context through GLSurfaceView with a custom Renderer.
 
 ```kotlin
 class CustomRenderer(private val context: Context) : GLSurfaceView.Renderer {
@@ -313,6 +409,10 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
         GLES30.glDeleteShader(fragmentShader)
     }
 
+    fun use() {
+        GLES30.glUseProgram(programId)
+    }
+
     fun setMatrix4(name: String, matrix: FloatArray) {
         val location = uniformLocations.getOrPut(name) {
             GLES30.glGetUniformLocation(programId, name)
@@ -322,11 +422,11 @@ class ShaderProgram(vertexCode: String, fragmentCode: String) {
 }
 ```
 
-**VAO/VBO for Geometry:**
-Efficient vertex data management through Vertex Array Objects.
+**VAO/VBO/EBO for Geometry:**
+Efficient vertex data management via Vertex Array Objects and indexed draw calls.
 
 ```kotlin
-class Mesh(vertices: FloatArray, indices: IntArray, val stride: Int = 8) {
+class Mesh(vertices: FloatArray, indices: IntArray, private val stride: Int = 8) {
     private val vao: Int
     private val vbo: Int
     private val ebo: Int
@@ -344,20 +444,49 @@ class Mesh(vertices: FloatArray, indices: IntArray, val stride: Int = 8) {
 
         // ✅ Upload vertex data once
         val vertexBuffer = ByteBuffer.allocateDirect(vertices.size * 4)
-            .order(ByteOrder.nativeOrder()).asFloatBuffer()
-            .put(vertices).position(0)
-        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vbo)
-        GLES30.glBufferData(GLES30.GL_ARRAY_BUFFER, vertices.size * 4,
-            vertexBuffer, GLES30.GL_STATIC_DRAW)
+            .order(ByteOrder.nativeOrder())
+            .asFloatBuffer()
+        vertexBuffer.put(vertices).position(0)
 
-        // Position (3) + Normal (3) + TexCoord (2)
+        GLES30.glBindBuffer(GLES30.GL_ARRAY_BUFFER, vbo)
+        GLES30.glBufferData(
+            GLES30.GL_ARRAY_BUFFER,
+            vertices.size * 4,
+            vertexBuffer,
+            GLES30.GL_STATIC_DRAW
+        )
+
+        // ✅ Upload index data
+        val indexBuffer = ByteBuffer.allocateDirect(indices.size * 4)
+            .order(ByteOrder.nativeOrder())
+            .asIntBuffer()
+        indexBuffer.put(indices).position(0)
+
+        GLES30.glBindBuffer(GLES30.GL_ELEMENT_ARRAY_BUFFER, ebo)
+        GLES30.glBufferData(
+            GLES30.GL_ELEMENT_ARRAY_BUFFER,
+            indices.size * 4,
+            indexBuffer,
+            GLES30.GL_STATIC_DRAW
+        )
+
+        // Position (3) + Normal (3) + TexCoord (2) in a single interleaved buffer
+        val strideBytes = stride * 4
+        // attribute 0: position
         GLES30.glEnableVertexAttribArray(0)
-        GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, stride * 4, 0)
+        GLES30.glVertexAttribPointer(0, 3, GLES30.GL_FLOAT, false, strideBytes, 0)
+        // attribute 1: normal
+        GLES30.glEnableVertexAttribArray(1)
+        GLES30.glVertexAttribPointer(1, 3, GLES30.GL_FLOAT, false, strideBytes, 3 * 4)
+        // attribute 2: texCoord
+        GLES30.glEnableVertexAttribArray(2)
+        GLES30.glVertexAttribPointer(2, 2, GLES30.GL_FLOAT, false, strideBytes, 6 * 4)
 
         GLES30.glBindVertexArray(0)
     }
 
     fun draw(shader: ShaderProgram) {
+        shader.use()
         GLES30.glBindVertexArray(vao)
         GLES30.glDrawElements(GLES30.GL_TRIANGLES, indexCount, GLES30.GL_UNSIGNED_INT, 0)
         GLES30.glBindVertexArray(0)
@@ -379,19 +508,65 @@ class Texture private constructor(val textureId: Int) {
         fun loadFromBitmap(bitmap: Bitmap): Texture {
             val textureIds = IntArray(1)
             GLES30.glGenTextures(1, textureIds, 0)
-            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, textureIds[0])
+            val id = textureIds[0]
+            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, id)
 
             // ✅ Set filtering for quality
-            GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_LINEAR_MIPMAP_LINEAR)
-            GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D,
-                GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_LINEAR)
+            GLES30.glTexParameteri(
+                GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MIN_FILTER,
+                GLES30.GL_LINEAR_MIPMAP_LINEAR
+            )
+            GLES30.glTexParameteri(
+                GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MAG_FILTER,
+                GLES30.GL_LINEAR
+            )
 
             GLUtils.texImage2D(GLES30.GL_TEXTURE_2D, 0, bitmap, 0)
             GLES30.glGenerateMipmap(GLES30.GL_TEXTURE_2D)
 
+            // Optional: set wrapping modes as needed
+            // GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_REPEAT)
+            // GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_REPEAT)
+
+            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0)
             bitmap.recycle()
-            return Texture(textureIds[0])
+            return Texture(id)
+        }
+
+        // Texture configured as a render target
+        fun createRenderTexture(width: Int, height: Int): Texture {
+            val textureIds = IntArray(1)
+            GLES30.glGenTextures(1, textureIds, 0)
+            val id = textureIds[0]
+            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, id)
+
+            GLES30.glTexImage2D(
+                GLES30.GL_TEXTURE_2D,
+                0,
+                GLES30.GL_RGBA,
+                width,
+                height,
+                0,
+                GLES30.GL_RGBA,
+                GLES30.GL_UNSIGNED_BYTE,
+                null
+            )
+
+            GLES30.glTexParameteri(
+                GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MIN_FILTER,
+                GLES30.GL_LINEAR
+            )
+            GLES30.glTexParameteri(
+                GLES30.GL_TEXTURE_2D,
+                GLES30.GL_TEXTURE_MAG_FILTER,
+                GLES30.GL_LINEAR
+            )
+
+            GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, 0)
+            return Texture(id)
         }
     }
 }
@@ -414,23 +589,36 @@ class Framebuffer(width: Int, height: Int) {
 
         // Color attachment
         colorTexture = Texture.createRenderTexture(width, height)
-        GLES30.glFramebufferTexture2D(GLES30.GL_FRAMEBUFFER,
-            GLES30.GL_COLOR_ATTACHMENT0, GLES30.GL_TEXTURE_2D,
-            colorTexture.textureId, 0)
+        GLES30.glFramebufferTexture2D(
+            GLES30.GL_FRAMEBUFFER,
+            GLES30.GL_COLOR_ATTACHMENT0,
+            GLES30.GL_TEXTURE_2D,
+            colorTexture.textureId,
+            0
+        )
 
         // Depth attachment
         val rboIds = IntArray(1)
         GLES30.glGenRenderbuffers(1, rboIds, 0)
         depthRenderbuffer = rboIds[0]
         GLES30.glBindRenderbuffer(GLES30.GL_RENDERBUFFER, depthRenderbuffer)
-        GLES30.glRenderbufferStorage(GLES30.GL_RENDERBUFFER,
-            GLES30.GL_DEPTH_COMPONENT16, width, height)
-        GLES30.glFramebufferRenderbuffer(GLES30.GL_FRAMEBUFFER,
-            GLES30.GL_DEPTH_ATTACHMENT, GLES30.GL_RENDERBUFFER, depthRenderbuffer)
+        GLES30.glRenderbufferStorage(
+            GLES30.GL_RENDERBUFFER,
+            GLES30.GL_DEPTH_COMPONENT16,
+            width,
+            height
+        )
+        GLES30.glFramebufferRenderbuffer(
+            GLES30.GL_FRAMEBUFFER,
+            GLES30.GL_DEPTH_ATTACHMENT,
+            GLES30.GL_RENDERBUFFER,
+            depthRenderbuffer
+        )
 
         // ✅ Always check completeness
         if (GLES30.glCheckFramebufferStatus(GLES30.GL_FRAMEBUFFER)
-            != GLES30.GL_FRAMEBUFFER_COMPLETE) {
+            != GLES30.GL_FRAMEBUFFER_COMPLETE
+        ) {
             throw RuntimeException("Framebuffer incomplete")
         }
         GLES30.glBindFramebuffer(GLES30.GL_FRAMEBUFFER, 0)
@@ -447,13 +635,13 @@ class Framebuffer(width: Int, height: Int) {
 
 **Vertex Data:**
 - Use VAOs for efficient attribute management
-- Interleave attributes in single buffer
+- Interleave attributes in a single buffer
 - Use indices to eliminate vertex duplication
 
 **Textures:**
 - Generate mipmaps for filtered textures
 - Use compression (ETC2, ASTC) to save memory
-- Apply texture atlas for small textures
+- Apply texture atlases for small textures
 
 **Rendering Performance:**
 - Minimize OpenGL state changes
@@ -475,6 +663,14 @@ class Framebuffer(width: Int, height: Int) {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как реализовать instanced rendering для повторяющейся геометрии?
+- В чем различия между GLSL ES и десктопным GLSL?
+- Как отлаживать проблемы рендеринга в OpenGL ES?
+- Какие форматы сжатия текстур поддерживаются на разных Android-устройствах?
+- Как реализовать deferred shading в OpenGL ES?
+
 ## Follow-ups
 
 - How do you implement instanced rendering for repeated geometry?
@@ -483,12 +679,26 @@ class Framebuffer(width: Int, height: Int) {
 - What compression formats are supported across different Android devices?
 - How do you implement deferred shading in OpenGL ES?
 
+## Ссылки (RU)
+
+- OpenGL ES 3.0 Programming Guide
+- Android OpenGL ES документация
+
 ## References
 
-- [[c-android-graphics-pipeline]]
-- [[c-shader-programming]]
 - OpenGL ES 3.0 Programming Guide
 - Android OpenGL ES documentation
+
+## Связанные вопросы (RU)
+
+### Базовые знания
+- [[q-custom-view-animation--android--medium]] — Рендеринг 2D на Canvas
+
+### Связанные
+- [[q-jank-detection-frame-metrics--android--medium]] — Мониторинг производительности
+
+### Продвинутое
+- (Требуются заметки о compute shaders и PBR-рендеринге, когда будут доступны)
 
 ## Related Questions
 
@@ -497,8 +707,6 @@ class Framebuffer(width: Int, height: Int) {
 
 ### Related
 - [[q-jank-detection-frame-metrics--android--medium]] — Performance monitoring
-- [[q-vulkan-basics--android--hard]] — Next-gen graphics API
 
 ### Advanced
-- [[q-compute-shaders--android--hard]] — GPU compute operations
-- [[q-pbr-rendering--android--hard]] — Physically-based rendering
+- (Requires notes on compute shaders and PBR rendering once available)

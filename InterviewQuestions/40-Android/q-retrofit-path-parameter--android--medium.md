@@ -21,7 +21,7 @@ related:
 - q-retrofit-library--android--medium
 - q-retrofit-usage-tutorial--android--medium
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 sources: []
 tags:
 - android/networking-http
@@ -33,10 +33,10 @@ tags:
 ---
 
 # Вопрос (RU)
-Как в Retrofit в GET-методе поставить атрибут в конкретное место пути?
+> Как в Retrofit в GET-методе поставить атрибут в конкретное место пути?
 
 # Question (EN)
-How to put a parameter in a specific place in the path for a GET method in Retrofit?
+> How to put a parameter in a specific place in the path for a GET method in Retrofit?
 
 ## Ответ (RU)
 В Retrofit используйте аннотацию **`@Path`** для подстановки значений в URL.
@@ -85,7 +85,7 @@ suspend fun getProduct(
 @GET("users/{userId}/posts")
 suspend fun getUserPosts(
     @Path("userId") userId: String,     // ✅ Обязательный ID в пути
-    @Query("page") page: Int,           // ✅ Опциональная пагинация
+    @Query("page") page: Int,           // ✅ Например, опциональная пагинация (можно задать значение по умолчанию)
     @Query("limit") limit: Int = 20
 ): Response<List<Post>>
 
@@ -95,7 +95,7 @@ suspend fun getUserPosts(
 
 ### URL-кодирование
 
-Retrofit автоматически кодирует спецсимволы:
+Retrofit по умолчанию URL-кодирует специальные символы в значениях `@Path`.
 
 ```kotlin
 @GET("search/{query}")
@@ -105,17 +105,33 @@ api.search("hello world")
 // URL: /search/hello%20world (пробел → %20)
 ```
 
-Для отключения кодирования (например, для путей с `/`):
+Чтобы не перекодировать уже закодированное значение и сохранить специальные символы (например, `/`) как есть, используйте `encoded = true`:
 
 ```kotlin
 @GET("files/{path}")
 suspend fun getFile(
-    @Path(value = "path", encoded = true) filePath: String  // ❌ Слеши НЕ кодируются
+    @Path(value = "path", encoded = true) filePath: String  // ✅ Retrofit не будет повторно кодировать значение; слеши остаются как есть
 ): Response<FileContent>
 
 api.getFile("folder/subfolder/file.txt")
 // URL: /files/folder/subfolder/file.txt
 ```
+
+### Повторное использование плейсхолдера
+
+В одном URL можно несколько раз использовать один и тот же плейсхолдер имени, если он соответствует одному параметру метода:
+
+```kotlin
+@GET("repos/{owner}/{repo}/compare/{base}...{head}")
+suspend fun compareCommits(
+    @Path("owner") owner: String,
+    @Path("repo") repo: String,
+    @Path("base") base: String,
+    @Path("head") head: String
+): Response<CompareResult>
+```
+
+(Например, `{owner}` и `{repo}` могут использоваться несколько раз в сложных путях; главное — чтобы имя в `@Path` совпадало с плейсхолдером.)
 
 ### Типичные Ошибки
 
@@ -130,7 +146,7 @@ suspend fun getUser(@Path("id") userId: String)
 
 // ❌ НЕПРАВИЛЬНО: имена не совпадают
 @GET("users/{userId}")
-suspend fun getUser(@Path("id") userId: String)  // Error!
+suspend fun getUser(@Path("id") userId: String)  // Ошибка: {userId} != "id"
 
 // ✅ ПРАВИЛЬНО: имена совпадают
 @GET("users/{userId}")
@@ -184,7 +200,7 @@ suspend fun getProduct(
 @GET("users/{userId}/posts")
 suspend fun getUserPosts(
     @Path("userId") userId: String,     // ✅ Required ID in path
-    @Query("page") page: Int,           // ✅ Optional pagination
+    @Query("page") page: Int,           // ✅ For example, optional pagination (can use a default)
     @Query("limit") limit: Int = 20
 ): Response<List<Post>>
 
@@ -194,7 +210,7 @@ suspend fun getUserPosts(
 
 ### URL Encoding
 
-Retrofit automatically encodes special characters:
+By default Retrofit URL-encodes special characters in `@Path` values.
 
 ```kotlin
 @GET("search/{query}")
@@ -204,17 +220,33 @@ api.search("hello world")
 // URL: /search/hello%20world (space → %20)
 ```
 
-To disable encoding (e.g., for paths with `/`):
+To avoid re-encoding an already-encoded value and to preserve reserved characters (e.g. `/`) as-is, use `encoded = true`:
 
 ```kotlin
 @GET("files/{path}")
 suspend fun getFile(
-    @Path(value = "path", encoded = true) filePath: String  // ❌ Slashes NOT encoded
+    @Path(value = "path", encoded = true) filePath: String  // ✅ Retrofit won't re-encode; slashes remain as-is
 ): Response<FileContent>
 
 api.getFile("folder/subfolder/file.txt")
 // URL: /files/folder/subfolder/file.txt
 ```
+
+### Reusing placeholders
+
+You can use the same placeholder name multiple times in the URL as long as it maps to a single method parameter:
+
+```kotlin
+@GET("repos/{owner}/{repo}/compare/{base}...{head}")
+suspend fun compareCommits(
+    @Path("owner") owner: String,
+    @Path("repo") repo: String,
+    @Path("base") base: String,
+    @Path("head") head: String
+): Response<CompareResult>
+```
+
+(For example, complex paths can repeat `{owner}` or `{repo}`; the key rule is that the name in `@Path` must match the placeholder.)
 
 ### Common Mistakes
 
@@ -229,7 +261,7 @@ suspend fun getUser(@Path("id") userId: String)
 
 // ❌ WRONG: names don't match
 @GET("users/{userId}")
-suspend fun getUser(@Path("id") userId: String)  // Error!
+suspend fun getUser(@Path("id") userId: String)  // Error: {userId} != "id"
 
 // ✅ CORRECT: names match
 @GET("users/{userId}")

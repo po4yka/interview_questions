@@ -72,20 +72,20 @@ tags:
 Последовательность вызовов модификаторов влияет на финальный результат.
 
 ```kotlin
-// ❌ Фон не покрывает padding
+// ✅ Фон рисуется вокруг содержимого, включая padding
 Text(
-    "Wrong order",
-    modifier = Modifier
-        .padding(16.dp)      // сначала padding
-        .background(Color.Blue) // потом фон
-)
-
-// ✅ Фон покрывает padding
-Text(
-    "Correct order",
+    "Background inside padding",
     modifier = Modifier
         .background(Color.Blue) // сначала фон
-        .padding(16.dp)      // потом padding
+        .padding(16.dp)         // затем внутренний отступ
+)
+
+// ✅ Padding снаружи фона: фон НЕ покрывает внешний отступ
+Text(
+    "Background without outer padding",
+    modifier = Modifier
+        .padding(16.dp)         // внешний отступ
+        .background(Color.Blue) // фон только внутри области после padding
 )
 ```
 
@@ -141,26 +141,25 @@ var isSelected by remember { mutableStateOf(false) }
 
 Text(
     "Toggle",
-    modifier = Modifier
-        .then(  // ✅ условное применение модификатора
-            if (isSelected)
-                Modifier.background(Color.Blue)
-            else
-                Modifier.border(1.dp, Color.Gray)
-        )
+    modifier = Modifier.then( // ✅ условное объединение с дополнительным Modifier
+        if (isSelected)
+            Modifier.background(Color.Blue)
+        else
+            Modifier.border(1.dp, Color.Gray)
+    )
 )
 ```
 
 ### Best Practices
 
-1. **Порядок важен** — применяйте модификаторы в логическом порядке (layout → appearance → behavior)
-2. **Переиспользование** — создавайте именованные цепочки для консистентности
-3. **Extension функции** — оборачивайте сложные комбинации в переиспользуемые модификаторы
-4. **Stateful modifiers** — используйте `Modifier.composed {}` для модификаторов с состоянием
+1. **Порядок важен** — понимайте, как каждый модификатор влияет на размер, измерение и рисование; меняя порядок, вы меняете результат.
+2. **Переиспользование** — создавайте именованные цепочки для консистентности.
+3. **Extension функции** — оборачивайте сложные комбинации в переиспользуемые модификаторы.
+4. **Stateful modifiers** — используйте `Modifier.composed {}` для модификаторов с состоянием или побочными эффектами.
 
 ## Answer (EN)
 
-**Modifiers** in Jetpack Compose are a declarative system for decorating and modifying UI component behavior. They apply through method chaining and allow configuring appearance, size, padding, behavior, and effects.
+**Modifiers** in Jetpack Compose are a declarative system for decorating and modifying UI component behavior. They are applied via chained calls and allow configuring appearance, size, padding, behavior, and effects.
 
 ### Core Categories
 
@@ -184,20 +183,20 @@ Text(
 The sequence of modifier calls affects the final result.
 
 ```kotlin
-// ❌ Background doesn't cover padding
+// ✅ Background is drawn around content including its padding
 Text(
-    "Wrong order",
-    modifier = Modifier
-        .padding(16.dp)      // padding first
-        .background(Color.Blue) // then background
-)
-
-// ✅ Background covers padding
-Text(
-    "Correct order",
+    "Background inside padding",
     modifier = Modifier
         .background(Color.Blue) // background first
-        .padding(16.dp)      // then padding
+        .padding(16.dp)         // then inner padding
+)
+
+// ✅ Padding outside background: background does NOT cover the outer padding area
+Text(
+    "Background without outer padding",
+    modifier = Modifier
+        .padding(16.dp)         // outer padding
+        .background(Color.Blue) // background only inside the padded area
 )
 ```
 
@@ -253,22 +252,21 @@ var isSelected by remember { mutableStateOf(false) }
 
 Text(
     "Toggle",
-    modifier = Modifier
-        .then(  // ✅ conditional modifier application
-            if (isSelected)
-                Modifier.background(Color.Blue)
-            else
-                Modifier.border(1.dp, Color.Gray)
-        )
+    modifier = Modifier.then( // ✅ conditional merge with an extra Modifier
+        if (isSelected)
+            Modifier.background(Color.Blue)
+        else
+            Modifier.border(1.dp, Color.Gray)
+    )
 )
 ```
 
 ### Best Practices
 
-1. **Order matters** — apply modifiers in logical order (layout → appearance → behavior)
-2. **Reusability** — create named chains for consistency
-3. **Extension functions** — wrap complex combinations into reusable modifiers
-4. **Stateful modifiers** — use `Modifier.composed {}` for modifiers with state
+1. **Order matters** — understand how each modifier affects measurement, layout, and drawing; reordering changes the outcome.
+2. **Reusability** — create named chains for consistency.
+3. **Extension functions** — wrap complex combinations into reusable modifiers.
+4. **Stateful modifiers** — use `Modifier.composed {}` for modifiers with state or side effects.
 
 ---
 

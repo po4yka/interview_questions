@@ -7,7 +7,7 @@ aliases:
 topic: android
 status: draft
 created: 2025-10-05
-updated: 2025-10-31
+updated: 2025-11-10
 difficulty: medium
 subtopics:
 - build-variants
@@ -32,824 +32,68 @@ related:
 - q-kapt-vs-ksp--android--medium
 - q-what-unites-the-main-components-of-an-android-application--android--medium
 moc: moc-android
+
 ---
-
-# Gradle Build System / Система Сборки Gradle
-
-# Question (EN)
->
 
 # Вопрос (RU)
->
-
----
-
-## Answer (EN)
-### What is Gradle?
-
-Gradle is an open-source build automation tool flexible enough to build almost any type of software. Gradle makes few assumptions about what you're trying to build or how to build it. This makes Gradle particularly flexible.
-
-### Gradle in Android
-
-Android Studio uses Gradle to automate and manage the build process while letting you define flexible, custom build configurations.
-
-**Key components:**
-- **Gradle**: The build toolkit
-- **Android Gradle Plugin**: Works with the build toolkit to provide processes and configurable settings specific to building and testing Android apps
-
-**Key features:**
-- Each build configuration can define its own set of code and resources
-- Reuse parts common to all versions of your app
-- Run independent of Android Studio (command line, CI/CD servers)
-
-### Language Support
-
-Gradle runs on:
-- **Groovy DSL** (Domain Specific Language) - traditional syntax
-- **Kotlin DSL** - modern, type-safe alternative
-
-### Android Build Glossary
-
-Gradle and the Android Gradle plugin help you configure the following aspects of your build:
-
-#### 1. Build Types
-
-**Definition**: Build types define certain properties that Gradle uses when building and packaging your app.
-
-**Characteristics:**
-- Typically configured for different stages of your development lifecycle
-- At least one build type must be defined
-- Android Studio creates `debug` and `release` build types by default
-
-**Examples:**
-- **Debug build type**: Enables debug options, signs with debug key
-- **Release build type**: May shrink, obfuscate, and sign with release key for distribution
-
-**Code example:**
-```kotlin
-android {
-    buildTypes {
-        debug {
-            applicationIdSuffix = ".debug"
-            debuggable = true
-        }
-        release {
-            minifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-}
-```
-
-#### 2. Product Flavors
-
-**Definition**: Product flavors represent different versions of your app that you can release to users.
-
-**Characteristics:**
-- Optional - must be created manually
-- Can use different code and resources
-- Share and reuse parts common to all versions
-
-**Examples:**
-- Free and paid versions
-- Different white-label versions
-- API-level specific versions
-
-**Code example:**
-```kotlin
-android {
-    flavorDimensions += "version"
-    productFlavors {
-        create("free") {
-            dimension = "version"
-            applicationIdSuffix = ".free"
-        }
-        create("paid") {
-            dimension = "version"
-            applicationIdSuffix = ".paid"
-        }
-    }
-}
-```
-
-#### 3. Build Variants
-
-**Definition**: A build variant is a cross-product of build type and product flavor.
-
-**Characteristics:**
-- The configuration Gradle uses to build your app
-- Not configured directly - formed from build types and product flavors
-- Used to build different versions during development and for distribution
-
-**Examples:**
-- If you have `debug` and `release` build types
-- And `free` and `paid` product flavors
-- You get 4 build variants:
-  - `freeDebug`
-  - `freeRelease`
-  - `paidDebug`
-  - `paidRelease`
-
-#### 4. Manifest Entries
-
-**Definition**: Values you can specify for some properties of the manifest file in the build variant configuration.
-
-**Characteristics:**
-- Build values override existing values in the manifest file
-- Useful for generating multiple variants with different properties
-- Manifest merger tool merges settings when multiple manifests are present
-
-**Code example:**
-```kotlin
-android {
-    defaultConfig {
-        applicationId = "com.example.myapp"
-        minSdk = 21
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-    }
-}
-```
-
-#### 5. Dependencies
-
-**Definition**: The build system manages project dependencies from your local file system and from remote repositories.
-
-**Benefits:**
-- No need to manually search, download, and copy binary packages
-- Automatic dependency resolution
-- Transitive dependency support
-
-#### 6. Signing
-
-**Definition**: The build system lets you specify signing settings in the build configuration.
-
-**Characteristics:**
-- Can automatically sign your app during the build process
-- Debug version: Signed with default key and certificate (no password prompt)
-- Release version: Not signed unless you explicitly define a signing configuration
-
-**Code example:**
-```kotlin
-android {
-    signingConfigs {
-        create("release") {
-            storeFile = file("keystore.jks")
-            storePassword = "password"
-            keyAlias = "key"
-            keyPassword = "password"
-        }
-    }
-    buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("release")
-        }
-    }
-}
-```
-
-#### 7. Code and Resource Shrinking
-
-**Definition**: The build system lets you specify a different ProGuard rules file for each build variant.
-
-**Features:**
-- Built-in shrinking tools (R8)
-- Shrinks code and resources
-- Helps reduce APK or AAB size
-- Different rules for different build variants
-
-**Code example:**
-```kotlin
-android {
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-}
-```
-
-#### 8. Multiple APK Support
-
-**Definition**: The build system can automatically build different APKs.
-
-**Capabilities:**
-- Each APK contains only the code and resources needed for specific configurations
-- Can split by screen density
-- Can split by Application Binary Interface (ABI)
-
-**Code example:**
-```kotlin
-android {
-    splits {
-        abi {
-            isEnable = true
-            reset()
-            include("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
-            isUniversalApk = true
-        }
-    }
-}
-```
-
-### Build Configuration Files
-
-When starting a new project, Android Studio automatically creates Gradle files based on sensible defaults.
-
-#### Project File Structure
-
-```
- MyApp/                    # Project
-     build.gradle.kts      # Top-level build file
-     settings.gradle.kts   # Settings file
-     app/                  # Module
-         build.gradle.kts  # Module-level build file
-         libs/
-         src/
-             main/         # Source set
-                 java/
-                    com.example.myapp
-                 res/
-                    drawable/
-                    values/
-                    ...
-                 AndroidManifest.xml
-```
-
-#### 1. The Gradle Settings File
-
-**File**: `settings.gradle.kts` (Kotlin DSL) or `settings.gradle` (Groovy DSL)
-
-**Location**: Root project directory
-
-**Purpose**:
-- Defines project-level repository settings
-- Specifies which modules to include when building your app
-- Multi-module projects need to specify each module for the final build
-
-**Example:**
-```kotlin
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "MyApp"
-include(":app")
-```
-
-#### 2. The Top-Level Build File
-
-**File**: `build.gradle.kts` (Kotlin DSL) or `build.gradle` (Groovy DSL)
-
-**Location**: Root project directory
-
-**Purpose**:
-- Defines dependencies that apply to all modules in your project
-- Contains code to clean your build directory
-
-**Example:**
-```kotlin
-plugins {
-    id("com.android.application") version "8.1.0" apply false
-    id("com.android.library") version "8.1.0" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.0" apply false
-}
-
-tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
-}
-```
-
-#### 3. The Module-Level Build File
-
-**File**: `build.gradle.kts` (Kotlin DSL) or `build.gradle` (Groovy DSL)
-
-**Location**: Each `project/module/` directory
-
-**Purpose**:
-- Configure build settings for the specific module
-- Provide custom packaging options
-- Define additional build types and product flavors
-- Override settings in `main/` app manifest or top-level build script
-
-**Example:**
-```kotlin
-plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-}
-
-android {
-    namespace = "com.example.myapp"
-    compileSdk = 34
-
-    defaultConfig {
-        applicationId = "com.example.myapp"
-        minSdk = 21
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-}
-```
-
-#### 4. Gradle Properties Files
-
-Two properties files in the root project directory specify settings for the Gradle build toolkit:
-
-**`gradle.properties`**:
-- Configure project-wide Gradle settings
-- Example: Gradle daemon's maximum heap size
-
-```properties
-org.gradle.jvmargs=-Xmx2048m
-android.useAndroidX=true
-kotlin.code.style=official
-```
-
-**`local.properties`**:
-- Configure local environment properties
-- Not checked into version control
-- Properties:
-  - `ndk.dir` - Path to the NDK (deprecated)
-  - `sdk.dir` - Path to the SDK
-  - `cmake.dir` - Path to CMake
-  - `ndk.symlinkdir` - Symlink to NDK (Android Studio 3.5+)
-
-```properties
-sdk.dir=/Users/username/Library/Android/sdk
-```
-
----
-
-
-
+> Что такое система сборки Gradle в Android и какие ключевые понятия (типы сборки, product flavors, build variants, настройки манифеста, зависимости, подпись, shrink, multiple APK, конфигурационные файлы) нужно знать для собеседования?
 
 # Question (EN)
->
-
-# Вопрос (RU)
->
+> What is the Gradle build system in Android, and which key concepts (build types, product flavors, build variants, manifest configuration, dependencies, signing, shrinking, multiple APKs, configuration files) should you know for an interview?
 
 ---
-
-
----
-
-
-## Answer (EN)
-### What is Gradle?
-
-Gradle is an open-source build automation tool flexible enough to build almost any type of software. Gradle makes few assumptions about what you're trying to build or how to build it. This makes Gradle particularly flexible.
-
-### Gradle in Android
-
-Android Studio uses Gradle to automate and manage the build process while letting you define flexible, custom build configurations.
-
-**Key components:**
-- **Gradle**: The build toolkit
-- **Android Gradle Plugin**: Works with the build toolkit to provide processes and configurable settings specific to building and testing Android apps
-
-**Key features:**
-- Each build configuration can define its own set of code and resources
-- Reuse parts common to all versions of your app
-- Run independent of Android Studio (command line, CI/CD servers)
-
-### Language Support
-
-Gradle runs on:
-- **Groovy DSL** (Domain Specific Language) - traditional syntax
-- **Kotlin DSL** - modern, type-safe alternative
-
-### Android Build Glossary
-
-Gradle and the Android Gradle plugin help you configure the following aspects of your build:
-
-#### 1. Build Types
-
-**Definition**: Build types define certain properties that Gradle uses when building and packaging your app.
-
-**Characteristics:**
-- Typically configured for different stages of your development lifecycle
-- At least one build type must be defined
-- Android Studio creates `debug` and `release` build types by default
-
-**Examples:**
-- **Debug build type**: Enables debug options, signs with debug key
-- **Release build type**: May shrink, obfuscate, and sign with release key for distribution
-
-**Code example:**
-```kotlin
-android {
-    buildTypes {
-        debug {
-            applicationIdSuffix = ".debug"
-            debuggable = true
-        }
-        release {
-            minifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-}
-```
-
-#### 2. Product Flavors
-
-**Definition**: Product flavors represent different versions of your app that you can release to users.
-
-**Characteristics:**
-- Optional - must be created manually
-- Can use different code and resources
-- Share and reuse parts common to all versions
-
-**Examples:**
-- Free and paid versions
-- Different white-label versions
-- API-level specific versions
-
-**Code example:**
-```kotlin
-android {
-    flavorDimensions += "version"
-    productFlavors {
-        create("free") {
-            dimension = "version"
-            applicationIdSuffix = ".free"
-        }
-        create("paid") {
-            dimension = "version"
-            applicationIdSuffix = ".paid"
-        }
-    }
-}
-```
-
-#### 3. Build Variants
-
-**Definition**: A build variant is a cross-product of build type and product flavor.
-
-**Characteristics:**
-- The configuration Gradle uses to build your app
-- Not configured directly - formed from build types and product flavors
-- Used to build different versions during development and for distribution
-
-**Examples:**
-- If you have `debug` and `release` build types
-- And `free` and `paid` product flavors
-- You get 4 build variants:
-  - `freeDebug`
-  - `freeRelease`
-  - `paidDebug`
-  - `paidRelease`
-
-#### 4. Manifest Entries
-
-**Definition**: Values you can specify for some properties of the manifest file in the build variant configuration.
-
-**Characteristics:**
-- Build values override existing values in the manifest file
-- Useful for generating multiple variants with different properties
-- Manifest merger tool merges settings when multiple manifests are present
-
-**Code example:**
-```kotlin
-android {
-    defaultConfig {
-        applicationId = "com.example.myapp"
-        minSdk = 21
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-    }
-}
-```
-
-#### 5. Dependencies
-
-**Definition**: The build system manages project dependencies from your local file system and from remote repositories.
-
-**Benefits:**
-- No need to manually search, download, and copy binary packages
-- Automatic dependency resolution
-- Transitive dependency support
-
-#### 6. Signing
-
-**Definition**: The build system lets you specify signing settings in the build configuration.
-
-**Characteristics:**
-- Can automatically sign your app during the build process
-- Debug version: Signed with default key and certificate (no password prompt)
-- Release version: Not signed unless you explicitly define a signing configuration
-
-**Code example:**
-```kotlin
-android {
-    signingConfigs {
-        create("release") {
-            storeFile = file("keystore.jks")
-            storePassword = "password"
-            keyAlias = "key"
-            keyPassword = "password"
-        }
-    }
-    buildTypes {
-        release {
-            signingConfig = signingConfigs.getByName("release")
-        }
-    }
-}
-```
-
-#### 7. Code and Resource Shrinking
-
-**Definition**: The build system lets you specify a different ProGuard rules file for each build variant.
-
-**Features:**
-- Built-in shrinking tools (R8)
-- Shrinks code and resources
-- Helps reduce APK or AAB size
-- Different rules for different build variants
-
-**Code example:**
-```kotlin
-android {
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-}
-```
-
-#### 8. Multiple APK Support
-
-**Definition**: The build system can automatically build different APKs.
-
-**Capabilities:**
-- Each APK contains only the code and resources needed for specific configurations
-- Can split by screen density
-- Can split by Application Binary Interface (ABI)
-
-**Code example:**
-```kotlin
-android {
-    splits {
-        abi {
-            isEnable = true
-            reset()
-            include("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
-            isUniversalApk = true
-        }
-    }
-}
-```
-
-### Build Configuration Files
-
-When starting a new project, Android Studio automatically creates Gradle files based on sensible defaults.
-
-#### Project File Structure
-
-```
- MyApp/                    # Project
-     build.gradle.kts      # Top-level build file
-     settings.gradle.kts   # Settings file
-     app/                  # Module
-         build.gradle.kts  # Module-level build file
-         libs/
-         src/
-             main/         # Source set
-                 java/
-                    com.example.myapp
-                 res/
-                    drawable/
-                    values/
-                    ...
-                 AndroidManifest.xml
-```
-
-#### 1. The Gradle Settings File
-
-**File**: `settings.gradle.kts` (Kotlin DSL) or `settings.gradle` (Groovy DSL)
-
-**Location**: Root project directory
-
-**Purpose**:
-- Defines project-level repository settings
-- Specifies which modules to include when building your app
-- Multi-module projects need to specify each module for the final build
-
-**Example:**
-```kotlin
-pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-rootProject.name = "MyApp"
-include(":app")
-```
-
-#### 2. The Top-Level Build File
-
-**File**: `build.gradle.kts` (Kotlin DSL) or `build.gradle` (Groovy DSL)
-
-**Location**: Root project directory
-
-**Purpose**:
-- Defines dependencies that apply to all modules in your project
-- Contains code to clean your build directory
-
-**Example:**
-```kotlin
-plugins {
-    id("com.android.application") version "8.1.0" apply false
-    id("com.android.library") version "8.1.0" apply false
-    id("org.jetbrains.kotlin.android") version "1.9.0" apply false
-}
-
-tasks.register("clean", Delete::class) {
-    delete(rootProject.buildDir)
-}
-```
-
-#### 3. The Module-Level Build File
-
-**File**: `build.gradle.kts` (Kotlin DSL) or `build.gradle` (Groovy DSL)
-
-**Location**: Each `project/module/` directory
-
-**Purpose**:
-- Configure build settings for the specific module
-- Provide custom packaging options
-- Define additional build types and product flavors
-- Override settings in `main/` app manifest or top-level build script
-
-**Example:**
-```kotlin
-plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-}
-
-android {
-    namespace = "com.example.myapp"
-    compileSdk = 34
-
-    defaultConfig {
-        applicationId = "com.example.myapp"
-        minSdk = 21
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
-    }
-
-    buildTypes {
-        release {
-            isMinifyEnabled = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
-}
-```
-
-#### 4. Gradle Properties Files
-
-Two properties files in the root project directory specify settings for the Gradle build toolkit:
-
-**`gradle.properties`**:
-- Configure project-wide Gradle settings
-- Example: Gradle daemon's maximum heap size
-
-```properties
-org.gradle.jvmargs=-Xmx2048m
-android.useAndroidX=true
-kotlin.code.style=official
-```
-
-**`local.properties`**:
-- Configure local environment properties
-- Not checked into version control
-- Properties:
-  - `ndk.dir` - Path to the NDK (deprecated)
-  - `sdk.dir` - Path to the SDK
-  - `cmake.dir` - Path to CMake
-  - `ndk.symlinkdir` - Symlink to NDK (Android Studio 3.5+)
-
-```properties
-sdk.dir=/Users/username/Library/Android/sdk
-```
-
----
-
-
 
 ## Ответ (RU)
-### Что Такое Gradle?
+### Что такое Gradle?
 
-Gradle - это инструмент автоматизации сборки с открытым исходным кодом, достаточно гибкий для сборки почти любого типа программного обеспечения. Gradle делает мало предположений о том, что вы пытаетесь собрать или как это собрать. Это делает Gradle особенно гибким.
+Gradle — это инструмент автоматизации сборки с открытым исходным кодом, достаточно гибкий для сборки почти любого типа программного обеспечения. Gradle делает мало предположений о том, что вы собираете и как вы это делаете, что делает его особенно гибким.
 
-### Gradle В Android
+### Gradle в Android
 
-Android Studio использует Gradle для автоматизации и управления процессом сборки, позволяя вам определять гибкие, настраиваемые конфигурации сборки.
+Android Studio использует Gradle для автоматизации и управления процессом сборки, позволяя определять гибкие, настраиваемые конфигурации сборки.
 
 **Ключевые компоненты:**
-- **Gradle**: Инструментарий для сборки
-- **Android Gradle Plugin**: Работает с инструментарием сборки для предоставления процессов и настраиваемых параметров, специфичных для сборки и тестирования приложений Android
+- **Gradle**: инструментарий для сборки.
+- **Android Gradle Plugin (AGP)**: интегрируется с Gradle и предоставляет задачи, соглашения и настраиваемые параметры, специфичные для сборки и тестирования Android-приложений.
 
 **Ключевые возможности:**
-- Каждая конфигурация сборки может определять свой собственный набор кода и ресурсов
-- Повторное использование частей, общих для всех версий вашего приложения
-- Работа независимо от Android Studio (командная строка, серверы CI/CD)
+- Каждая конфигурация сборки может определять свой собственный набор кода и ресурсов.
+- Общие части кода и ресурсов могут использоваться совместно между вариантами.
+- Сборка может выполняться независимо от Android Studio (командная строка, CI/CD-серверы).
 
-### Поддержка Языков
+### Поддержка языков
 
-Gradle работает на:
-- **Groovy DSL** (Domain Specific Language) - традиционный синтаксис
-- **Kotlin DSL** - современная, типобезопасная альтернатива
+Gradle использует скрипты на:
+- **Groovy DSL** (Domain Specific Language) — традиционный синтаксис.
+- **Kotlin DSL** — современная, типобезопасная альтернатива.
 
-### Глоссарий Сборки Android
+### Глоссарий сборки Android
 
-Gradle и плагин Android Gradle помогают настроить следующие аспекты вашей сборки:
+Gradle и плагин Android Gradle помогают настраивать следующие аспекты сборки:
 
-#### 1. Типы Сборки (Build Types)
+#### 1. Типы сборки (Build Types)
 
-**Определение**: Типы сборки определяют определенные свойства, которые Gradle использует при сборке и упаковке вашего приложения.
+**Определение**: типы сборки определяют свойства, которые Gradle использует при сборке и упаковке приложения.
 
 **Характеристики:**
-- Обычно настраиваются для разных этапов вашего жизненного цикла разработки
-- Должен быть определен хотя бы один тип сборки
-- Android Studio создает типы сборки `debug` и `release` по умолчанию
+- Обычно настраиваются для разных этапов жизненного цикла разработки.
+- Должен быть определён как минимум один тип сборки.
+- Android Studio по умолчанию создаёт типы сборки `debug` и `release`.
 
 **Примеры:**
-- **Тип сборки Debug**: Включает параметры отладки, подписывается отладочным ключом
-- **Тип сборки Release**: Может сжимать, обфусцировать и подписывать релизным ключом для распространения
+- **Тип сборки Debug**: включает параметры отладки, по умолчанию использует отладочную конфигурацию подписания.
+- **Тип сборки Release**: обычно включает сжатие/обфускацию кода и использует релизную конфигурацию подписания для распространения.
 
-**Пример кода:**
+**Пример кода (Kotlin DSL, стиль AGP 8+):**
 ```kotlin
 android {
     buildTypes {
         debug {
             applicationIdSuffix = ".debug"
-            debuggable = true
+            isDebuggable = true
         }
         release {
-            minifyEnabled = true
+            isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -859,19 +103,19 @@ android {
 }
 ```
 
-#### 2. Варианты Продукта (Product Flavors)
+#### 2. Варианты продукта (Product Flavors)
 
-**Определение**: Варианты продукта представляют различные версии вашего приложения, которые вы можете выпускать для пользователей.
+**Определение**: варианты продукта представляют разные версии приложения, которые можно выпускать для пользователей.
 
 **Характеристики:**
-- Опциональны - должны создаваться вручную
-- Могут использовать разный код и ресурсы
-- Совместно используют и повторно используют части, общие для всех версий
+- Опциональны и создаются вручную.
+- Могут использовать различный код и ресурсы.
+- Общие части могут переиспользоваться между вариантами.
 
 **Примеры:**
-- Бесплатная и платная версии
-- Различные white-label версии
-- Версии, специфичные для уровня API
+- Бесплатная и платная версии.
+- Различные white-label версии.
+- Версии, специфичные для определённых уровней API.
 
 **Пример кода:**
 ```kotlin
@@ -890,32 +134,32 @@ android {
 }
 ```
 
-#### 3. Варианты Сборки (Build Variants)
+#### 3. Варианты сборки (Build Variants)
 
-**Определение**: Вариант сборки - это перекрестное произведение типа сборки и варианта продукта.
+**Определение**: вариант сборки — это декартово произведение типа сборки и по одному варианту продукта из каждого измерения.
 
 **Характеристики:**
-- Конфигурация, которую Gradle использует для сборки вашего приложения
-- Не настраивается напрямую - формируется из типов сборки и вариантов продукта
-- Используется для сборки различных версий во время разработки и для распространения
+- Представляет конкретную конфигурацию, которую Gradle использует для сборки приложения.
+- Не настраивается напрямую — формируется из типов сборки, вариантов продукта и их настроек.
+- Используется для сборки различных версий во время разработки и для публикации.
 
 **Примеры:**
-- Если у вас есть типы сборки `debug` и `release`
-- И варианты продукта `free` и `paid`
-- Вы получите 4 варианта сборки:
+- Если есть типы сборки `debug` и `release`,
+- и варианты продукта `free` и `paid`,
+- получится 4 варианта сборки:
   - `freeDebug`
   - `freeRelease`
   - `paidDebug`
   - `paidRelease`
 
-#### 4. Записи Манифеста (Manifest Entries)
+#### 4. Записи манифеста (Manifest Entries)
 
-**Определение**: Значения, которые вы можете указать для некоторых свойств файла манифеста в конфигурации варианта сборки.
+**Определение**: некоторые свойства манифеста (например, `applicationId`, `versionName`, плейсхолдеры) могут настраиваться для разных типов сборки и вариантов продукта, чтобы итоговый манифест варианта получал нужные значения.
 
 **Характеристики:**
-- Значения сборки переопределяют существующие значения в файле манифеста
-- Полезно для генерации нескольких вариантов с различными свойствами
-- Инструмент слияния манифестов объединяет настройки, когда присутствует несколько манифестов
+- Значения из `defaultConfig`, `buildTypes`, `productFlavors` и `manifestPlaceholders` могут переопределять или параметризовать значения в `AndroidManifest.xml`.
+- Полезно для генерации нескольких вариантов с различными свойствами (например, разные authorities, схемы).
+- Инструмент слияния манифестов объединяет настройки из всех источников манифестов.
 
 **Пример кода:**
 ```kotlin
@@ -932,12 +176,12 @@ android {
 
 #### 5. Зависимости (Dependencies)
 
-**Определение**: Система сборки управляет зависимостями проекта из вашей локальной файловой системы и из удаленных репозиториев.
+**Определение**: система сборки управляет зависимостями проекта из локальной файловой системы и удалённых репозиториев.
 
 **Преимущества:**
-- Не нужно вручную искать, загружать и копировать бинарные пакеты
-- Автоматическое разрешение зависимостей
-- Поддержка транзитивных зависимостей
+- Не нужно вручную искать, загружать и копировать бинарные пакеты.
+- Автоматическое разрешение зависимостей.
+- Поддержка транзитивных зависимостей.
 
 **Пример кода:**
 ```kotlin
@@ -951,14 +195,14 @@ dependencies {
 
 #### 6. Подписание (Signing)
 
-**Определение**: Система сборки позволяет указать настройки подписания в конфигурации сборки.
+**Определение**: система сборки позволяет указать настройки подписания в конфигурации сборки.
 
 **Характеристики:**
-- Может автоматически подписывать ваше приложение во время процесса сборки
-- Версия Debug: Подписана ключом и сертификатом по умолчанию (без запроса пароля)
-- Версия Release: Не подписана, если вы явно не определили конфигурацию подписания
+- Может автоматически подписывать приложение во время сборки, если для типа сборки задана конфигурация подписания.
+- Debug-версии: подписываются отладочным ключом по умолчанию.
+- Release-версии: по умолчанию не подписаны; обычно настраиваются с собственной конфигурацией подписания для публикации.
 
-**Пример кода:**
+**Пример кода (НЕ хардкодить секреты в реальных проектах):**
 ```kotlin
 android {
     signingConfigs {
@@ -977,15 +221,15 @@ android {
 }
 ```
 
-#### 7. Сжатие Кода И Ресурсов
+#### 7. Сжатие кода и ресурсов
 
-**Определение**: Система сборки позволяет указать различный файл правил ProGuard для каждого варианта сборки.
+**Определение**: система сборки позволяет включать сжатие кода и ресурсов для отдельных типов/вариантов сборки и задавать отдельные файлы правил.
 
 **Возможности:**
-- Встроенные инструменты сжатия (R8)
-- Сжимает код и ресурсы
-- Помогает уменьшить размер APK или AAB
-- Различные правила для разных вариантов сборки
+- Используется R8 как стандартный инструмент shrink/obfuscate.
+- Уменьшает объём кода и ресурсов.
+- Помогает снизить размер APK или AAB.
+- Для разных вариантов можно использовать разные правила.
 
 **Пример кода:**
 ```kotlin
@@ -1003,21 +247,21 @@ android {
 }
 ```
 
-#### 8. Поддержка Нескольких APK
+#### 8. Поддержка нескольких APK
 
-**Определение**: Система сборки может автоматически создавать различные APK.
+**Определение**: система сборки может автоматически собирать разные APK из одного модуля для разных конфигураций устройств.
 
 **Возможности:**
-- Каждый APK содержит только код и ресурсы, необходимые для конкретных конфигураций
-- Можно разделить по плотности экрана
-- Можно разделить по Application Binary Interface (ABI)
+- Каждый APK содержит только код и ресурсы, необходимые для конкретных конфигураций.
+- Можно разделять по плотности экрана.
+- Можно разделять по ABI (`Application` Binary Interface).
 
-**Пример кода:**
+**Пример кода (ABI splits):**
 ```kotlin
 android {
     splits {
         abi {
-            isEnable = true
+            isEnable = true // Для блока abi splits используется isEnable в Kotlin DSL
             reset()
             include("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
             isUniversalApk = true
@@ -1026,11 +270,11 @@ android {
 }
 ```
 
-### Файлы Конфигурации Сборки
+### Файлы конфигурации сборки
 
-При создании нового проекта Android Studio автоматически создает файлы Gradle на основе разумных значений по умолчанию.
+При создании нового проекта Android Studio автоматически создаёт Gradle-файлы на основе разумных значений по умолчанию.
 
-#### Структура Файлов Проекта
+#### Структура файлов проекта
 
 ```
  MyApp/                    # Проект
@@ -1040,7 +284,7 @@ android {
          build.gradle.kts  # Файл сборки уровня модуля
          libs/
          src/
-             main/         # Набор источников
+             main/         # Набор исходников
                  java/
                     com.example.myapp
                  res/
@@ -1050,16 +294,16 @@ android {
                  AndroidManifest.xml
 ```
 
-#### 1. Файл Настроек Gradle
+#### 1. Файл настроек Gradle
 
 **Файл**: `settings.gradle.kts` (Kotlin DSL) или `settings.gradle` (Groovy DSL)
 
-**Расположение**: Корневая директория проекта
+**Расположение**: корневая директория проекта.
 
 **Назначение**:
-- Определяет настройки репозитория уровня проекта
-- Указывает, какие модули включать при сборке вашего приложения
-- Многомодульные проекты должны указывать каждый модуль для финальной сборки
+- Определяет настройки репозиториев и управления плагинами на уровне проекта.
+- Указывает, какие модули включать при сборке приложения.
+- В многомодульных проектах каждый модуль должен быть явно включён, чтобы участвовать в сборке.
 
 **Пример:**
 ```kotlin
@@ -1083,15 +327,16 @@ rootProject.name = "MyApp"
 include(":app")
 ```
 
-#### 2. Файл Сборки Верхнего Уровня
+#### 2. Файл сборки верхнего уровня
 
 **Файл**: `build.gradle.kts` (Kotlin DSL) или `build.gradle` (Groovy DSL)
 
-**Расположение**: Корневая директория проекта
+**Расположение**: корневая директория проекта.
 
 **Назначение**:
-- Определяет зависимости, применимые ко всем модулям в вашем проекте
-- Содержит код для очистки вашей директории сборки
+- Задаёт версии и подключает плагины, используемые модулями (через `apply false`).
+- Опционально содержит общие настройки или зависимости для модулей.
+- Часто содержит вспомогательные задачи (например, `clean`) для всего проекта.
 
 **Пример:**
 ```kotlin
@@ -1106,17 +351,17 @@ tasks.register("clean", Delete::class) {
 }
 ```
 
-#### 3. Файл Сборки Уровня Модуля
+#### 3. Файл сборки уровня модуля
 
 **Файл**: `build.gradle.kts` (Kotlin DSL) или `build.gradle` (Groovy DSL)
 
-**Расположение**: Каждая директория `project/module/`
+**Расположение**: каждая директория `project/module/`.
 
 **Назначение**:
-- Настройка параметров сборки для конкретного модуля
-- Предоставление пользовательских опций упаковки
-- Определение дополнительных типов сборки и вариантов продукта
-- Переопределение настроек в манифесте приложения `main/` или скрипте сборки верхнего уровня
+- Настраивает параметры сборки для конкретного модуля.
+- Определяет параметры упаковки.
+- Определяет дополнительные типы сборки и варианты продукта.
+- Уточняет или переопределяет настройки относительно файла сборки верхнего уровня.
 
 **Пример:**
 ```kotlin
@@ -1154,13 +399,13 @@ dependencies {
 }
 ```
 
-#### 4. Файлы Свойств Gradle
+#### 4. Файлы свойств Gradle
 
-Два файла свойств в корневой директории проекта указывают настройки для инструментария сборки Gradle:
+Два файла свойств в корневой директории проекта задают настройки для инструментария сборки Gradle:
 
 **`gradle.properties`**:
-- Настройка параметров Gradle на уровне проекта
-- Пример: Максимальный размер кучи демона Gradle
+- Настройки Gradle на уровне проекта.
+- Пример: максимальный размер кучи Gradle Daemon.
 
 ```properties
 org.gradle.jvmargs=-Xmx2048m
@@ -1169,19 +414,414 @@ kotlin.code.style=official
 ```
 
 **`local.properties`**:
-- Настройка свойств локального окружения
-- Не включается в систему контроля версий
-- Свойства:
-  - `ndk.dir` - Путь к NDK (устарело)
-  - `sdk.dir` - Путь к SDK
-  - `cmake.dir` - Путь к CMake
-  - `ndk.symlinkdir` - Символическая ссылка на NDK (Android Studio 3.5+)
+- Настройки локального окружения.
+- Не добавляется в систему контроля версий.
+- Распространённые свойства:
+  - `sdk.dir` — путь к Android SDK.
+  - `ndk.dir` — путь к NDK (устарело, предпочтительно использовать NDK через SDK).
+  - `cmake.dir` — путь к CMake.
+  - `ndk.symlinkdir` — символьная ссылка на NDK (Android Studio 3.5+).
 
 ```properties
 sdk.dir=/Users/username/Library/Android/sdk
 ```
 
 ---
+
+## Answer (EN)
+### What is Gradle?
+
+Gradle is an open-source build automation tool flexible enough to build almost any type of software. Gradle makes few assumptions about what you're trying to build or how to build it, which makes it particularly flexible.
+
+### Gradle in Android
+
+Android Studio uses Gradle to automate and manage the build process while letting you define flexible, custom build configurations.
+
+**Key components:**
+- **Gradle**: The build toolkit.
+- **Android Gradle Plugin (AGP)**: Integrates with Gradle to provide tasks, conventions, and configurable settings specific to building and testing Android apps.
+
+**Key features:**
+- Each build configuration can define its own set of code and resources.
+- Common code and resources can be shared across variants.
+- Builds can run independently of Android Studio (command line, CI/CD servers).
+
+### Language Support
+
+Gradle build scripts use:
+- **Groovy DSL** (Domain Specific Language) — traditional syntax.
+- **Kotlin DSL** — modern, type-safe alternative.
+
+### Android Build Glossary
+
+Gradle and the Android Gradle Plugin help you configure the following aspects of your build:
+
+#### 1. Build Types
+
+**Definition**: Build types define properties that Gradle uses when building and packaging your app.
+
+**Characteristics:**
+- Typically configured for different stages of your development lifecycle.
+- At least one build type must be defined.
+- Android Studio creates `debug` and `release` build types by default.
+
+**Examples:**
+- **Debug build type**: Enables debug options, uses the debug signing config by default.
+- **Release build type**: Typically enables code shrinking/obfuscation and uses a release signing config for distribution.
+
+**Code example (Kotlin DSL, AGP 8+ style):**
+```kotlin
+android {
+    buildTypes {
+        debug {
+            applicationIdSuffix = ".debug"
+            isDebuggable = true
+        }
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+}
+```
+
+#### 2. Product Flavors
+
+**Definition**: Product flavors represent different variants of your app that you can release to users.
+
+**Characteristics:**
+- Optional — must be created manually.
+- Can use different code and resources.
+- Share and reuse parts common to all versions.
+
+**Examples:**
+- Free and paid versions.
+- Different white-label versions.
+- API-level specific versions.
+
+**Code example:**
+```kotlin
+android {
+    flavorDimensions += "version"
+    productFlavors {
+        create("free") {
+            dimension = "version"
+            applicationIdSuffix = ".free"
+        }
+        create("paid") {
+            dimension = "version"
+            applicationIdSuffix = ".paid"
+        }
+    }
+}
+```
+
+#### 3. Build Variants
+
+**Definition**: A build variant is the cross-product of a build type and one flavor from each flavor dimension.
+
+**Characteristics:**
+- Represents the concrete configuration Gradle uses to build your app.
+- Not configured directly — formed from build types, product flavors, and their settings.
+- Used to build different versions during development and for distribution.
+
+**Examples:**
+- With `debug` and `release` build types,
+- and `free` and `paid` product flavors,
+- you get 4 build variants:
+  - `freeDebug`
+  - `freeRelease`
+  - `paidDebug`
+  - `paidRelease`
+
+#### 4. Manifest Entries
+
+**Definition**: Certain manifest properties (for example, `applicationId`, `versionName`, placeholders) can be configured per build type/flavor so that the merged manifest for each variant gets specific values.
+
+**Characteristics:**
+- Build configuration values (e.g., from `defaultConfig`, `buildTypes`, `productFlavors`, `manifestPlaceholders`) can override or parameterize values in `AndroidManifest.xml`.
+- Useful for generating multiple variants with different properties (e.g., different authorities, schemes).
+- The manifest merger tool combines settings from all manifest sources.
+
+**Code example:**
+```kotlin
+android {
+    defaultConfig {
+        applicationId = "com.example.myapp"
+        minSdk = 21
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+    }
+}
+```
+
+#### 5. Dependencies
+
+**Definition**: The build system manages project dependencies from your local file system and remote repositories.
+
+**Benefits:**
+- No need to manually search, download, and copy binary packages.
+- Automatic dependency resolution.
+- Transitive dependency support.
+
+**Code example:**
+```kotlin
+dependencies {
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.5")
+}
+```
+
+#### 6. Signing
+
+**Definition**: The build system lets you specify signing settings in the build configuration.
+
+**Characteristics:**
+- Can automatically sign your app during the build process when a signing configuration is associated with a build type.
+- Debug builds: Signed with the default debug key and certificate.
+- Release builds: Not signed by default; typically configured with a custom signing config for distribution.
+
+**Code example (DO NOT hardcode secrets in real projects):**
+```kotlin
+android {
+    signingConfigs {
+        create("release") {
+            storeFile = file("keystore.jks")
+            storePassword = "password"
+            keyAlias = "key"
+            keyPassword = "password"
+        }
+    }
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+}
+```
+
+#### 7. Code and Resource Shrinking
+
+**Definition**: The build system lets you enable code and resource shrinking per build type/variant and associate specific rules files.
+
+**Features:**
+- Uses R8 as the default code shrinker.
+- Shrinks code and resources.
+- Helps reduce APK or AAB size.
+- Different rules can be applied for different build variants.
+
+**Code example:**
+```kotlin
+android {
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+}
+```
+
+#### 8. Multiple APK Support
+
+**Definition**: The build system can automatically build different APKs from the same module for different device configurations.
+
+**Capabilities:**
+- Each APK contains only the code and resources needed for specific configurations.
+- Can split by screen density.
+- Can split by `Application` Binary Interface (ABI).
+
+**Code example (ABI splits):**
+```kotlin
+android {
+    splits {
+        abi {
+            isEnable = true // AGP Kotlin DSL uses isEnable for the abi splits block
+            reset()
+            include("x86", "x86_64", "armeabi-v7a", "arm64-v8a")
+            isUniversalApk = true
+        }
+    }
+}
+```
+
+### Build Configuration Files
+
+When starting a new project, Android Studio automatically creates Gradle files based on sensible defaults.
+
+#### Project File Structure
+
+```
+ MyApp/                    # Project
+     build.gradle.kts      # Top-level build file
+     settings.gradle.kts   # Settings file
+     app/                  # Module
+         build.gradle.kts  # Module-level build file
+         libs/
+         src/
+             main/         # Source set
+                 java/
+                    com.example.myapp
+                 res/
+                    drawable/
+                    values/
+                    ...
+                 AndroidManifest.xml
+```
+
+#### 1. The Gradle Settings File
+
+**File**: `settings.gradle.kts` (Kotlin DSL) or `settings.gradle` (Groovy DSL)
+
+**Location**: Root project directory.
+
+**Purpose**:
+- Defines project-level repository and plugin-management settings.
+- Specifies which modules to include when building your app.
+- In multi-module projects, each module must be included to participate in the build.
+
+**Example:**
+```kotlin
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "MyApp"
+include(":app")
+```
+
+#### 2. The Top-Level Build File
+
+**File**: `build.gradle.kts` (Kotlin DSL) or `build.gradle` (Groovy DSL)
+
+**Location**: Root project directory.
+
+**Purpose**:
+- Applies and versions plugins that can be used by modules (with `apply false`).
+- Optionally defines common configuration or dependencies shared across modules.
+- Often defines convenience tasks (e.g., a `clean` task) for the whole project.
+
+**Example:**
+```kotlin
+plugins {
+    id("com.android.application") version "8.1.0" apply false
+    id("com.android.library") version "8.1.0" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.0" apply false
+}
+
+tasks.register("clean", Delete::class) {
+    delete(rootProject.buildDir)
+}
+```
+
+#### 3. The Module-Level Build File
+
+**File**: `build.gradle.kts` (Kotlin DSL) or `build.gradle` (Groovy DSL)
+
+**Location**: Each `project/module/` directory.
+
+**Purpose**:
+- Configure build settings for the specific module.
+- Provide custom packaging options.
+- Define additional build types and product flavors.
+- Override or refine settings relative to the top-level build script.
+
+**Example:**
+```kotlin
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
+
+android {
+    namespace = "com.example.myapp"
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId = "com.example.myapp"
+        minSdk = 21
+        targetSdk = 34
+        versionCode = 1
+        versionName = "1.0"
+    }
+
+    buildTypes {
+        release {
+            isMinifyEnabled = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.appcompat:appcompat:1.6.1")
+}
+```
+
+#### 4. Gradle Properties Files
+
+Two properties files in the root project directory specify settings for the Gradle build toolkit:
+
+**`gradle.properties`**:
+- Configure project-wide Gradle settings.
+- Example: Gradle daemon's maximum heap size.
+
+```properties
+org.gradle.jvmargs=-Xmx2048m
+android.useAndroidX=true
+kotlin.code.style=official
+```
+
+**`local.properties`**:
+- Configure local environment properties.
+- Not checked into version control.
+- Common properties:
+  - `sdk.dir` - Path to the Android SDK.
+  - `ndk.dir` - Path to the NDK (deprecated in favor of using SDK-managed NDK).
+  - `cmake.dir` - Path to CMake.
+  - `ndk.symlinkdir` - Symlink to NDK (Android Studio 3.5+).
+
+```properties
+sdk.dir=/Users/username/Library/Android/sdk
+```
+
+---
+
+## Ссылки (RU)
+
+- [Android Developer Docs: Configure your build](https://developer.android.com/build)
+- [Gradle Docs: What is Gradle?](https://docs.gradle.org/current/userguide/what_is_gradle.html)
+- [Medium: Gradle Basics for Android Developers](https://medium.com/android-dev-corner/gradle-basics-for-android-developers-9d7a3bf062bb)
+- [Kodeco: Gradle Tutorial for Android: Getting Started](https://www.kodeco.com/249-gradle-tutorial-for-android-getting-started)
+- [Build Type, Product Flavor, Build Variant](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/Build%20Type%2C%20Product%20Flavor%2C%20Build%20Variant.md)
+- [ProGuard](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What's%20Proguard.md)
+- [App Bundles](https://github.com/Kirchhoff-/Android-Interview-Questions/blob/master/Android/What%20do%20you%20know%20about%20App%20Bundles.md)
 
 ## References
 
@@ -1195,6 +835,11 @@ sdk.dir=/Users/username/Library/Android/sdk
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- [[q-cache-implementation-strategies--android--medium]]
+- [[q-kapt-vs-ksp--android--medium]]
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]]
 
 ## Follow-ups
 
@@ -1202,6 +847,27 @@ sdk.dir=/Users/username/Library/Android/sdk
 - [[q-kapt-vs-ksp--android--medium]]
 - [[q-what-unites-the-main-components-of-an-android-application--android--medium]]
 
+---
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепты
+
+- [[c-gradle]]
+
+### Предпосылки (проще)
+- [[q-why-separate-ui-and-business-logic--android--easy]] - UI
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - UI
+
+### Связанные (Medium)
+- [[q-dagger-build-time-optimization--android--medium]] - Build, UI
+- [[q-build-optimization-gradle--android--medium]] - Build, UI
+- [[q-android-build-optimization--android--medium]] - Build, UI
+- [[q-kapt-ksp-migration--android--medium]] - Build
+- [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Build
+
+### Продвинутые (Hard)
+- [[q-kotlin-dsl-builders--android--hard]] - Build, UI
 
 ## Related Questions
 
@@ -1209,17 +875,16 @@ sdk.dir=/Users/username/Library/Android/sdk
 
 - [[c-gradle]]
 
-
 ### Prerequisites (Easier)
-- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
-- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
+- [[q-why-separate-ui-and-business-logic--android--easy]] - UI
+- [[q-how-to-start-drawing-ui-in-android--android--easy]] - UI
 
 ### Related (Medium)
-- [[q-dagger-build-time-optimization--android--medium]] - Build, Ui
-- [[q-build-optimization-gradle--android--medium]] - Build, Ui
-- [[q-android-build-optimization--android--medium]] - Build, Ui
+- [[q-dagger-build-time-optimization--android--medium]] - Build, UI
+- [[q-build-optimization-gradle--android--medium]] - Build, UI
+- [[q-android-build-optimization--android--medium]] - Build, UI
 - [[q-kapt-ksp-migration--android--medium]] - Build
 - [[q-gradle-kotlin-dsl-vs-groovy--android--medium]] - Build
 
 ### Advanced (Harder)
-- [[q-kotlin-dsl-builders--android--hard]] - Build, Ui
+- [[q-kotlin-dsl-builders--android--hard]] - Build, UI

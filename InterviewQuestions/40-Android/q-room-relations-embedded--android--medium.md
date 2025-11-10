@@ -17,14 +17,14 @@ sources: []
 # Workflow
 status: draft
 moc: moc-android
-related: [c-database-relations, c-room-database]
+related: [c-database-design, c-room-database]
 
 # Timestamps
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 
 # Tags
-tags: [android/architecture-clean, android/room, database, difficulty/medium, embedded, relations]
+tags: [android/architecture-clean, android/room, difficulty/medium, embedded, relations]
 ---
 
 # Вопрос (RU)
@@ -39,7 +39,7 @@ tags: [android/architecture-clean, android/room, database, difficulty/medium, em
 
 ## Ответ (RU)
 
-Room предоставляет два механизма для работы с связями: `@Embedded` для встраивания объектов в одну таблицу и `@Relation` для моделирования связей между отдельными сущностями.
+Room предоставляет два механизма для работы со связями: `@Embedded` для встраивания объектов в одну таблицу и `@Relation` для моделирования связей между отдельными сущностями.
 
 ### @Embedded — Встраивание Объектов
 
@@ -63,6 +63,11 @@ data class User(
 **Префиксы для избежания конфликтов**:
 
 ```kotlin
+data class Coordinates(
+    val lat: Double,
+    val lon: Double
+)
+
 @Entity(tableName = "stores")
 data class Store(
     @PrimaryKey val storeId: Long,
@@ -90,13 +95,15 @@ data class User(
         childColumns = ["authorId"],
         onDelete = ForeignKey.CASCADE
     )],
-    indices = [Index("authorId")]  // ✅ Критически важно для производительности
+    indices = [Index("authorId")]  // ✅ Важно для производительности при JOIN
 )
+
 data class Post(
     @PrimaryKey val postId: Long,
     val authorId: Long,
     val content: String
 )
+
 
 data class UserWithPosts(
     @Embedded val user: User,
@@ -109,7 +116,7 @@ data class UserWithPosts(
 
 @Dao
 interface UserDao {
-    @Transaction  // ✅ Обязательна для атомарности
+    @Transaction  // ✅ Рекомендуется для корректной загрузки связанных данных одним консистентным запросом
     @Query("SELECT * FROM users WHERE userId = :id")
     suspend fun getUserWithPosts(id: Long): UserWithPosts?
 }
@@ -131,13 +138,15 @@ data class Course(@PrimaryKey val courseId: Long, val code: String)
         ForeignKey(entity = Student::class, parentColumns = ["studentId"], childColumns = ["studentId"], onDelete = ForeignKey.CASCADE),
         ForeignKey(entity = Course::class, parentColumns = ["courseId"], childColumns = ["courseId"], onDelete = ForeignKey.CASCADE)
     ],
-    indices = [Index("studentId"), Index("courseId")]  // ✅ Обязательные индексы
+    indices = [Index("studentId"), Index("courseId")]  // ✅ Рекомендуется для производительности
 )
+
 data class Enrollment(
     val studentId: Long,
     val courseId: Long,
     val grade: String? = null  // ✅ Дополнительные данные связи
 )
+
 
 data class StudentWithCourses(
     @Embedded val student: Student,
@@ -154,7 +163,7 @@ interface EnrollmentDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun enroll(enrollment: Enrollment)
 
-    @Transaction
+    @Transaction  // ✅ Обеспечивает консистентную загрузку данных
     @Query("SELECT * FROM students WHERE studentId = :id")
     suspend fun getStudentWithCourses(id: Long): StudentWithCourses?
 }
@@ -162,18 +171,18 @@ interface EnrollmentDao {
 
 ### Ключевые Принципы
 
-1. **Foreign Keys обязательны**: Гарантируют целостность данных на уровне БД
-2. **Индексы критичны**: Индексируйте все внешние ключи (иначе JOIN будет медленным)
-3. **@Transaction обязательна**: Обеспечивает атомарность при загрузке связей
-4. **CASCADE для parent-child**: Автоматически удаляет дочерние записи
-5. **Ленивая загрузка**: Не загружайте все связи заранее, используйте пагинацию для больших списков
+1. **Внешние ключи**: Рекомендуются для гарантии целостности данных на уровне БД, но не являются строго обязательными для работы `@Relation` (она опирается на соответствие значений колонок).
+2. **Индексы**: Индексируйте колонки, используемые как внешние ключи и в условиях JOIN — это важно для производительности, хотя не строго обязательно.
+3. **@Transaction**: Используйте при запросах, которые читают несколько связанных сущностей или выполняют несколько запросов подряд, чтобы получить консистентные данные.
+4. **CASCADE**: `onDelete = CASCADE` удобно для связей parent-child, но включайте его только если логика домена требует автоматического удаления дочерних записей.
+5. **Загрузка данных**: Room не делает "ленивую" загрузку автоматически. Связанные данные по `@Relation` подгружаются в рамках соответствующего DAO-метода. Для больших наборов данных используйте отдельные запросы, лимиты, пагинацию и/или Paging 3.
 
 **Сравнение @Embedded vs @Relation**:
 
 | Критерий | @Embedded | @Relation |
 |----------|-----------|-----------|
 | Таблицы | Одна | Несколько |
-| Производительность | Быстрая (без JOIN) | Медленнее (JOIN) |
+| Производительность | Быстрая (без JOIN или с минимальными операциями) | Потенциально медленнее (JOIN / дополнительные запросы) |
 | Нормализация | Денормализована | Нормализована |
 | Использование | Address, Coordinates | One-to-many, Many-to-many |
 
@@ -203,6 +212,11 @@ data class User(
 **Prefixes to avoid conflicts**:
 
 ```kotlin
+data class Coordinates(
+    val lat: Double,
+    val lon: Double
+)
+
 @Entity(tableName = "stores")
 data class Store(
     @PrimaryKey val storeId: Long,
@@ -230,13 +244,15 @@ data class User(
         childColumns = ["authorId"],
         onDelete = ForeignKey.CASCADE
     )],
-    indices = [Index("authorId")]  // ✅ Critical for performance
+    indices = [Index("authorId")]  // ✅ Important for JOIN performance
 )
+
 data class Post(
     @PrimaryKey val postId: Long,
     val authorId: Long,
     val content: String
 )
+
 
 data class UserWithPosts(
     @Embedded val user: User,
@@ -249,7 +265,7 @@ data class UserWithPosts(
 
 @Dao
 interface UserDao {
-    @Transaction  // ✅ Required for atomicity
+    @Transaction  // ✅ Recommended to ensure related data is loaded in a consistent way
     @Query("SELECT * FROM users WHERE userId = :id")
     suspend fun getUserWithPosts(id: Long): UserWithPosts?
 }
@@ -271,13 +287,15 @@ data class Course(@PrimaryKey val courseId: Long, val code: String)
         ForeignKey(entity = Student::class, parentColumns = ["studentId"], childColumns = ["studentId"], onDelete = ForeignKey.CASCADE),
         ForeignKey(entity = Course::class, parentColumns = ["courseId"], childColumns = ["courseId"], onDelete = ForeignKey.CASCADE)
     ],
-    indices = [Index("studentId"), Index("courseId")]  // ✅ Required indices
+    indices = [Index("studentId"), Index("courseId")]  // ✅ Recommended indices for performance
 )
+
 data class Enrollment(
     val studentId: Long,
     val courseId: Long,
     val grade: String? = null  // ✅ Additional relationship data
 )
+
 
 data class StudentWithCourses(
     @Embedded val student: Student,
@@ -294,7 +312,7 @@ interface EnrollmentDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun enroll(enrollment: Enrollment)
 
-    @Transaction
+    @Transaction  // ✅ Ensures a consistent load of the related data
     @Query("SELECT * FROM students WHERE studentId = :id")
     suspend fun getStudentWithCourses(id: Long): StudentWithCourses?
 }
@@ -302,18 +320,18 @@ interface EnrollmentDao {
 
 ### Key Principles
 
-1. **Foreign Keys are mandatory**: Guarantee data integrity at database level
-2. **Indices are critical**: Index all foreign keys (otherwise JOINs will be slow)
-3. **@Transaction is required**: Ensures atomicity when loading relations
-4. **CASCADE for parent-child**: Automatically deletes child records
-5. **Lazy loading**: Don't load all relations upfront, use pagination for large lists
+1. **Foreign Keys**: Recommended to guarantee data integrity at the database level, but `@Relation` itself relies on matching column values and does not require foreign keys to function.
+2. **Indices**: Index the columns used as foreign keys and in JOINs/WHERE clauses for performance; not strictly required, but important in real apps.
+3. **@Transaction**: Use when reading multiple related entities or performing multi-step queries so the result is consistent.
+4. **CASCADE**: `onDelete = CASCADE` is useful for parent-child relationships but should be enabled only if your business logic expects automatic child deletion.
+5. **Data loading**: Room does not provide implicit lazy loading. `@Relation` data is loaded as part of the DAO method execution. For large datasets, design dedicated queries with limits, pagination, and/or Paging 3.
 
 **Comparison @Embedded vs @Relation**:
 
 | Criterion | @Embedded | @Relation |
 |-----------|-----------|-----------|
 | Tables | Single | Multiple |
-| Performance | Fast (no JOIN) | Slower (JOIN) |
+| Performance | Fast (no JOIN or minimal overhead) | Potentially slower (JOIN/additional queries) |
 | Normalization | Denormalized | Normalized |
 | Use Case | Address, Coordinates | One-to-many, Many-to-many |
 
@@ -330,8 +348,6 @@ interface EnrollmentDao {
 ## References
 
 - [[c-room-database]]
-- [[c-database-relations]]
-- [[c-database-normalization]]
 - https://developer.android.com/training/data-storage/room/relationships
 - https://developer.android.com/reference/androidx/room/Relation
 - https://developer.android.com/reference/androidx/room/Embedded
@@ -350,5 +366,3 @@ interface EnrollmentDao {
 
 ### Advanced (Harder)
 - [[q-room-fts-full-text-search--android--hard]] — Full-text search in Room
-- [[q-room-paging3-integration--room--hard]] — Integrating Room with Paging 3
-- [[q-room-multidb-sharding--room--hard]] — Multi-database architecture

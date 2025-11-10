@@ -3,37 +3,38 @@ id: android-375
 title: "How To Pass Parameters To Fragment / Как передать параметры во Fragment"
 aliases: ["Fragment arguments", "Fragment Bundle", "How To Pass Parameters To Fragment", "Как передать параметры во Fragment"]
 topic: android
-subtopics: [fragment, lifecycle]
+subtopics: [fragment]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-fragment-basics--android--easy, q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-how-to-pass-data-from-one-fragment-to-another--android--medium]
+related: [c-android-components, q-fragment-basics--android--easy, q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium, q-how-to-pass-data-from-one-fragment-to-another--android--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 sources: []
-tags: [android, android/fragment, android/lifecycle, arguments, bundle, difficulty/medium, fragment]
+tags: [android, android/fragment, difficulty/medium, fragment]
+
 ---
 
 # Вопрос (RU)
 
-Как передать параметры во фрагмент?
+> Как передать параметры во фрагмент?
 
 # Question (EN)
 
-How to pass parameters to a Fragment?
+> How to pass parameters to a `Fragment`?
 
 ---
 
 ## Ответ (RU)
 
-Рекомендуемый и безопасный способ передачи параметров во Fragment в Android — использование **Bundle** через свойство `arguments` фрагмента. Этот подход поддерживается системой Android и сохраняет данные при изменении конфигурации.
+Рекомендуемый и безопасный способ передачи параметров во `Fragment` в Android — использование **`Bundle`** через свойство `arguments` фрагмента. Этот подход поддерживается системой Android и сохраняет данные при изменении конфигурации.
 
 ### Основные Подходы
 
-**1. Базовый подход — Bundle с фабричным методом**
+**1. Базовый подход — `Bundle` с фабричным методом**
 
 ```kotlin
 class DetailsFragment : Fragment() {
@@ -67,7 +68,7 @@ class DetailsFragment : Fragment() {
 val fragment = DetailsFragment.newInstance(itemId = 42, itemName = "Item")
 ```
 
-**2. Kotlin-способ с requireArguments() и lazy**
+**2. Kotlin-способ с `requireArguments()` и `lazy`**
 
 ```kotlin
 class UserFragment : Fragment() {
@@ -93,7 +94,7 @@ class UserFragment : Fragment() {
 }
 ```
 
-**3. Передача сложных объектов — Parcelable**
+**3. Передача сложных объектов — `Parcelable`**
 
 ```kotlin
 @Parcelize
@@ -122,22 +123,22 @@ class ProfileFragment : Fragment() {
 
 ### Лучшие Практики
 
-1. **Всегда используйте Bundle и arguments** — не передавайте данные через конструктор или сеттеры
-2. **Создавайте фабричные методы** (newInstance) в companion object
-3. **Извлекайте аргументы в onCreate()**, не в конструкторе
-4. **Используйте requireArguments()** для обязательных параметров
-5. **Используйте константы** для ключей аргументов
-6. **Предпочитайте Parcelable** вместо Serializable (лучше производительность)
+1. Всегда используйте `Bundle` и `arguments` — не передавайте данные через конструктор или сеттеры
+2. Создавайте фабричные методы (`newInstance`) в `companion object`
+3. Извлекайте аргументы в `onCreate()`, не в конструкторе
+4. Используйте `requireArguments()` для обязательных параметров
+5. Используйте константы для ключей аргументов
+6. Предпочитайте `Parcelable` вместо `Serializable` (лучше производительность)
 
 ### Распространенные Ошибки
 
 ```kotlin
-// ❌ НЕПРАВИЛЬНО — конструктор (данные теряются при повороте экрана)
+// ❌ Неправильно — конструктор (данные теряются при повороте экрана)
 class WrongFragment(private val itemId: Int) : Fragment() {
-    // Данные потеряются при изменении конфигурации!
+    // Данные потеряются при изменении конфигурации
 }
 
-// ❌ НЕПРАВИЛЬНО — сеттеры (небезопасно при изменении конфигурации)
+// ❌ Неправильно — сеттеры (небезопасно при изменении конфигурации)
 class WrongFragment : Fragment() {
     private var itemId: Int = 0
     fun setItemId(id: Int) {
@@ -145,7 +146,7 @@ class WrongFragment : Fragment() {
     }
 }
 
-// ✅ ПРАВИЛЬНО — Bundle
+// ✅ Правильно — Bundle
 class CorrectFragment : Fragment() {
     companion object {
         private const val ARG_ITEM_ID = "item_id"
@@ -163,11 +164,11 @@ class CorrectFragment : Fragment() {
 
 ## Answer (EN)
 
-The recommended and safe way to pass parameters to a Fragment in Android is using **Bundle** with the fragment's `arguments` property. This approach is supported by the Android system and survives configuration changes.
+The recommended and safe way to pass parameters to a `Fragment` in Android is using **`Bundle`** with the fragment's `arguments` property. This approach is supported by the Android system and survives configuration changes.
 
 ### Key Approaches
 
-**1. Basic Approach — Bundle with Factory Method**
+**1. Basic Approach — `Bundle` with Factory Method**
 
 ```kotlin
 class DetailsFragment : Fragment() {
@@ -201,7 +202,7 @@ class DetailsFragment : Fragment() {
 val fragment = DetailsFragment.newInstance(itemId = 42, itemName = "Item")
 ```
 
-**2. Kotlin Way with requireArguments() and Lazy**
+**2. Kotlin Way with `requireArguments()` and Lazy**
 
 ```kotlin
 class UserFragment : Fragment() {
@@ -227,7 +228,7 @@ class UserFragment : Fragment() {
 }
 ```
 
-**3. Passing Complex Objects — Parcelable**
+**3. Passing Complex Objects — `Parcelable`**
 
 ```kotlin
 @Parcelize
@@ -256,12 +257,12 @@ class ProfileFragment : Fragment() {
 
 ### Best Practices
 
-1. **Always use Bundle and arguments** — never pass data via constructor or setters
-2. **Create factory methods** (newInstance) in companion object
-3. **Extract arguments in onCreate()**, not in constructors
-4. **Use requireArguments()** for required parameters
-5. **Use constants** for argument keys
-6. **Prefer Parcelable** over Serializable (better performance)
+1. Always use `Bundle` and `arguments` — never pass data via constructor or setters
+2. Create factory methods (`newInstance`) in `companion object`
+3. Extract arguments in `onCreate()`, not in constructors
+4. Use `requireArguments()` for required parameters
+5. Use constants for argument keys
+6. Prefer `Parcelable` over `Serializable` (better performance)
 
 ### Common Mistakes
 
@@ -295,33 +296,58 @@ class CorrectFragment : Fragment() {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Что произойдет, если не использовать `Bundle` и передавать данные через конструктор?
+- Как `Bundle` переживает изменения конфигурации, например поворот экрана?
+- Когда следует использовать `Parcelable` vs `Serializable` для сложных объектов?
+- Как плагин Safe Args в Navigation Component улучшает типобезопасность?
+- Каковы ограничения по объему данных, передаваемых через `Bundle`?
+
+## Ссылки (RU)
+
+- [Документация Android - Fragments](https://developer.android.com/guide/fragments)
+- [Navigation Component Safe Args](https://developer.android.com/guide/navigation/navigation-pass-data#Safe-args)
+- См. также: [[c-android-components]]
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-fragment-basics--android--easy]] — основы `Fragment`
+
+### Похожие (тот же уровень)
+- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] — передача данных между `Fragment`
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] — жизненный цикл `Fragment`
+
+### Продвинутое (сложнее)
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] — потеря состояния `Fragment`
+- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] — архитектурные особенности `Fragment`
+
+---
+
 ## Follow-ups
 
-- What happens if you don't use Bundle and pass data via constructor?
-- How does Bundle survive configuration changes like screen rotation?
-- When should you use Parcelable vs Serializable for complex objects?
+- What happens if you don't use `Bundle` and pass data via constructor?
+- How does `Bundle` survive configuration changes like screen rotation?
+- When should you use `Parcelable` vs `Serializable` for complex objects?
 - How does the Navigation Component's Safe Args plugin improve type safety?
-- What are the memory limits for data passed through Bundle?
+- What are the memory limits for data passed through `Bundle`?
 
 ## References
 
-- [[c-fragment-lifecycle]] - Fragment lifecycle fundamentals
-- [[c-bundle]] - Bundle data structure
-- [[c-parcelable]] - Parcelable implementation
 - [Android Documentation - Fragments](https://developer.android.com/guide/fragments)
 - [Navigation Component Safe Args](https://developer.android.com/guide/navigation/navigation-pass-data#Safe-args)
+- See also: [[c-android-components]]
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-fragment-basics--android--easy]] - Fragment fundamentals
-- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment layout basics
+- [[q-fragment-basics--android--easy]] - `Fragment` fundamentals
 
 ### Related (Same Level)
-- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] - Fragment communication
-- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - Fragment lifecycle
-- [[q-save-data-outside-fragment--android--medium]] - Fragment state persistence
+- [[q-how-to-pass-data-from-one-fragment-to-another--android--medium]] - `Fragment` communication
+- [[q-how-does-fragment-lifecycle-differ-from-activity-v2--android--medium]] - `Fragment` lifecycle
 
 ### Advanced (Harder)
-- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - Fragment state loss
-- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - Fragment architecture
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - `Fragment` state loss
+- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - `Fragment` architecture

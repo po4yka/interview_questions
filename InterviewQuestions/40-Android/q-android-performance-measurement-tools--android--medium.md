@@ -4,25 +4,26 @@ title: Android Performance Measurement Tools / Инструменты измер
 aliases: [Android Performance Measurement Tools, Инструменты измерения производительности Android]
 topic: android
 subtopics:
-  - performance-memory
-  - profiling
-  - testing-benchmark
+- performance-memory
+- profiling
+- testing-benchmark
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - c-android-profiling
-  - c-performance-optimization
-  - q-android-app-lag-analysis--android--medium
+- c-android-basics
+- c-performance
+- q-android-app-lag-analysis--android--medium
 sources: []
 created: 2025-10-13
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/performance-memory, android/profiling, android/testing-benchmark, difficulty/medium, optimization, performance]
+
 ---
 
 # Вопрос (RU)
@@ -41,41 +42,54 @@ tags: [android/performance-memory, android/profiling, android/testing-benchmark,
 
 **1. Profiling в реальном времени**
 - **Android Profiler** (Android Studio): CPU, память, сеть, энергопотребление в режиме реального времени
-- **GPU Rendering**: визуализация времени отрисовки кадров (цель: 16ms для 60fps)
-- **Layout Inspector**: анализ иерархии View и композиции
+- **GPU Rendering / Profile GPU Rendering**: визуализация времени отрисовки кадров (цель: ~16ms для 60fps)
+- **Layout Inspector**: анализ иерархии `View` и композиции
 
-**2. Автоматизированные бенчмарки**
+**2. Автоматизированные микробенчмарки (Jetpack Benchmark)**
 
-Jetpack Benchmark Library обеспечивает точные, воспроизводимые измерения:
+Jetpack Benchmark Library обеспечивает точные, воспроизводимые измерения. Данные и окружение готовятся отдельно от измеряемого блока.
 
 ```kotlin
-// Microbenchmark - производительность отдельного метода
+// Microbenchmark - производительность отдельного метода (упрощённый пример)
 @RunWith(AndroidJUnit4::class)
 class SortBenchmark {
     @get:Rule
-    val benchmark = BenchmarkRule()
+    val benchmarkRule = BenchmarkRule()
+
+    private lateinit var data: List<Int>
+
+    @Before
+    fun setup() {
+        data = List(10_000) { Random.nextInt() }
+    }
 
     @Test
     fun sortLargeList() {
-        val data = List(10_000) { Random.nextInt() }
-        benchmark.measureRepeated {
-            data.sorted() // ✅ Изолированное измерение без setup overhead
+        benchmarkRule.measureRepeated {
+            // Measure only sorting, avoiding extra allocation overhead in the block
+            data.sorted()
         }
     }
 }
 ```
 
-**3. Macrobenchmark - UI scenarios**
+**3. Macrobenchmark - UI сценарии и запуск приложения**
 
 ```kotlin
+@get:Rule
+val macrobenchmarkRule = MacrobenchmarkRule()
+
 @Test
-fun appStartup() = benchmarkRule.measureRepeated(
+fun appStartup() = macrobenchmarkRule.measureRepeated(
     packageName = "com.app",
-    metrics = listOf(StartupTimingMetric())
+    metrics = listOf(StartupTimingMetric()),
+    iterations = 5,
+    startupMode = StartupMode.COLD
 ) {
     pressHome()
-    startActivityAndWait() // ✅ Время холодного старта без JIT warmup
+    startActivityAndWait()
 }
+// Measures cold startup explicitly via StartupMode.COLD; real setups may also use Baseline Profiles / compilation configuration
 ```
 
 **4. StrictMode - детекция блокировок главного потока**
@@ -83,94 +97,108 @@ fun appStartup() = benchmarkRule.measureRepeated(
 ```kotlin
 if (BuildConfig.DEBUG) {
     StrictMode.setThreadPolicy(
-        ThreadPolicy.Builder()
-            .detectDiskReads()   // ✅ Обнаруживает файловые операции
-            .detectNetwork()     // ✅ Обнаруживает сетевые вызовы
+        StrictMode.ThreadPolicy.Builder()
+            .detectDiskReads()   // Detects file operations on the main thread
+            .detectDiskWrites()
+            .detectNetwork()     // Detects network calls on the main thread
             .penaltyLog()
             .build()
     )
 }
-// ❌ НЕ включать в production builds
+// DO NOT enable in production builds
 ```
 
 **5. Perfetto - системная трассировка**
 
-Анализирует низкоуровневые события: планирование CPU, frames, binder calls, memory allocations. Запускается через System Tracing в Android Studio или CLI.
+Анализирует низкоуровневые события: планирование CPU, кадры, binder calls, выделения памяти. Запускается через System Tracing / Record trace (в Android Studio или на устройстве) или из CLI, затем анализируется в Perfetto UI.
 
 ### Выбор Инструмента
 
-| Проблема                  | Инструмент                      |
-|---------------------------|---------------------------------|
-| UI jank, пропуск кадров   | GPU Rendering + Macrobenchmark  |
-| CPU hotspots              | Android Profiler + Perfetto     |
-| Утечки памяти             | Android Profiler Memory         |
-| Регрессии производительности | Microbenchmark в CI/CD       |
-| Медленный старт           | Macrobenchmark + Baseline Profiles |
+| Проблема                      | Инструмент                              |
+|------------------------------|-----------------------------------------|
+| UI jank, пропуск кадров      | GPU Rendering + Macrobenchmark          |
+| CPU hotspots                 | Android Profiler + Perfetto             |
+| Утечки памяти                | Android Profiler Memory                 |
+| Регрессии производительности | Microbenchmark в CI/CD                  |
+| Медленный старт              | Macrobenchmark + Baseline Profiles      |
 
 ### Паттерны Корректных Измерений
 
 ```kotlin
-// ✅ JIT warmup перед измерением
+// JIT warmup перед измерением (для релевантных сценариев)
 repeat(100) { operation() }
 
-// ✅ Множественные итерации для статистической значимости
+// Множественные итерации для статистической значимости
 val times = (1..1000).map { measureNanos { operation() } }
 
-// ✅ Исключение выбросов (outliers)
+// Исключение выбросов (outliers)
 val trimmedMean = times.sorted()
     .drop(times.size / 10)
     .take(times.size * 8 / 10)
     .average()
 ```
 
-**Trade-offs:**
-- Microbenchmark: точность vs. реальное окружение (тесты изолированы от system load)
-- Profiler: детализация vs. overhead (может замедлять приложение на 20-30%)
+**Компромиссы:**
+- Microbenchmark: высокая точность vs. оторванность от реального окружения (тесты изолированы от system load)
+- Profiler: детализация vs. overhead (может заметно замедлять приложение)
 - Perfetto: системный контекст vs. сложность интерпретации
 
 ## Answer (EN)
 
-**Performance measurement tools** identify bottlenecks through quantitative analysis. Principle: establish baseline metrics, measure changes systematically, select the right tool for the specific task.
+**Performance measurement tools** identify bottlenecks through quantitative analysis. Principle: establish baseline metrics, measure changes systematically, and select the right tool for the specific task.
 
 ### Main Tool Categories
 
 **1. Real-time Profiling**
 - **Android Profiler** (Android Studio): CPU, memory, network, energy consumption in real-time
-- **GPU Rendering**: frame timing visualization (target: 16ms for 60fps)
-- **Layout Inspector**: View hierarchy and composition analysis
+- **GPU Rendering / Profile GPU Rendering**: frame timing visualization (target around 16ms for 60fps)
+- **Layout Inspector**: `View` hierarchy and composition analysis
 
-**2. Automated Benchmarks**
+**2. Automated Microbenchmarks (Jetpack Benchmark)**
 
-Jetpack Benchmark Library provides precise, reproducible measurements:
+Jetpack Benchmark Library provides precise, reproducible measurements. Test data and environment should be prepared outside the measured block.
 
 ```kotlin
-// Microbenchmark - isolated method performance
+// Microbenchmark - isolated method performance (simplified example)
 @RunWith(AndroidJUnit4::class)
 class SortBenchmark {
     @get:Rule
-    val benchmark = BenchmarkRule()
+    val benchmarkRule = BenchmarkRule()
+
+    private lateinit var data: List<Int>
+
+    @Before
+    fun setup() {
+        data = List(10_000) { Random.nextInt() }
+    }
 
     @Test
     fun sortLargeList() {
-        val data = List(10_000) { Random.nextInt() }
-        benchmark.measureRepeated {
-            data.sorted() // ✅ Isolated measurement without setup overhead
+        benchmarkRule.measureRepeated {
+            // Measure only sorting, avoiding extra allocation overhead in the block
+            data.sorted()
         }
     }
 }
 ```
 
-**3. Macrobenchmark - UI scenarios**
+**3. Macrobenchmark - UI scenarios and app startup**
 
 ```kotlin
+@get:Rule
+val macrobenchmarkRule = MacrobenchmarkRule()
+
 @Test
-fun appStartup() = benchmarkRule.measureRepeated(
+fun appStartup() = macrobenchmarkRule.measureRepeated(
     packageName = "com.app",
-    metrics = listOf(StartupTimingMetric())
+    metrics = listOf(StartupTimingMetric()),
+    iterations = 5,
+    startupMode = StartupMode.COLD
 ) {
     pressHome()
-    startActivityAndWait() // ✅ Cold startup time without JIT warmup
+    startActivityAndWait()
 }
+// Measures cold startup explicitly via StartupMode.COLD; real setups may also use Baseline Profiles / compilation configuration
 ```
 
 **4. StrictMode - main thread blocking detection**
@@ -178,40 +206,41 @@ fun appStartup() = benchmarkRule.measureRepeated(
 ```kotlin
 if (BuildConfig.DEBUG) {
     StrictMode.setThreadPolicy(
-        ThreadPolicy.Builder()
-            .detectDiskReads()   // ✅ Detects file operations
-            .detectNetwork()     // ✅ Detects network calls
+        StrictMode.ThreadPolicy.Builder()
+            .detectDiskReads()   // Detects file operations on the main thread
+            .detectDiskWrites()
+            .detectNetwork()     // Detects network calls on the main thread
             .penaltyLog()
             .build()
     )
 }
-// ❌ DO NOT enable in production builds
+// DO NOT enable in production builds
 ```
 
 **5. Perfetto - system tracing**
 
-Analyzes low-level events: CPU scheduling, frames, binder calls, memory allocations. Launched via System Tracing in Android Studio or CLI.
+Analyzes low-level events: CPU scheduling, frames, binder calls, memory allocations. Started via System Tracing / Record trace (in Android Studio or on-device) or CLI, then inspected in Perfetto UI.
 
 ### Tool Selection
 
-| Problem                   | Tool                            |
-|---------------------------|---------------------------------|
-| UI jank, frame drops      | GPU Rendering + Macrobenchmark  |
-| CPU hotspots              | Android Profiler + Perfetto     |
-| Memory leaks              | Android Profiler Memory         |
-| Performance regressions   | Microbenchmark in CI/CD         |
-| Slow startup              | Macrobenchmark + Baseline Profiles |
+| Problem                     | Tool                                   |
+|-----------------------------|----------------------------------------|
+| UI jank, frame drops        | GPU Rendering + Macrobenchmark         |
+| CPU hotspots                | Android Profiler + Perfetto            |
+| Memory leaks                | Android Profiler Memory                |
+| Performance regressions     | Microbenchmark in CI/CD                |
+| Slow startup                | Macrobenchmark + Baseline Profiles     |
 
 ### Correct Measurement Patterns
 
 ```kotlin
-// ✅ JIT warmup before measurement
+// JIT warmup before measurement (where applicable)
 repeat(100) { operation() }
 
-// ✅ Multiple iterations for statistical significance
+// Multiple iterations for statistical significance
 val times = (1..1000).map { measureNanos { operation() } }
 
-// ✅ Exclude outliers
+// Exclude outliers
 val trimmedMean = times.sorted()
     .drop(times.size / 10)
     .take(times.size * 8 / 10)
@@ -219,11 +248,19 @@ val trimmedMean = times.sorted()
 ```
 
 **Trade-offs:**
-- Microbenchmark: precision vs. real environment (tests isolated from system load)
-- Profiler: detail level vs. overhead (can slow app by 20-30%)
-- Perfetto: system context vs. interpretation complexity
+- Microbenchmark: precision vs. lack of full real-world environment (tests isolated from system load)
+- Profiler: detail vs. overhead (can noticeably slow down the app)
+- Perfetto: rich system context vs. complexity of interpretation
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как интегрировать Jetpack Benchmark в CI/CD для автоматического выявления регрессий производительности?
+- Какие метрики памяти в Android Profiler помогают отличить утечки от нормального роста?
+- Как коррелировать события в трассах Perfetto с пользовательским jank с помощью кастомных trace markers?
+- Какие подходы измерения наиболее эффективны для оптимизации под устройства начального уровня?
+- Как устанавливать базовые метрики производительности при добавлении новой фичи в существующий код?
 
 ## Follow-ups
 
@@ -233,12 +270,25 @@ val trimmedMean = times.sorted()
 - Which measurement approaches are most effective for low-end device optimization?
 - How to establish baseline performance metrics when adding a new feature to an existing codebase?
 
-## References
+## Ссылки (RU)
 
-- [[c-performance-optimization]]
+- [[c-performance]]
 - [Performance](https://developer.android.com/topic/performance)
 - https://developer.android.com/studio/profile/benchmark
 
+## References
+
+- [[c-performance]]
+- [Performance](https://developer.android.com/topic/performance)
+- https://developer.android.com/studio/profile/benchmark
+
+## Связанные вопросы (RU)
+
+### Предпосылки
+- [[q-android-app-lag-analysis--android--medium]] - Понимание проблем производительности и jank
+
+### Связано
+- [[q-android-build-optimization--android--medium]] - Оптимизация сборки и времени компиляции
 
 ## Related Questions
 
@@ -247,5 +297,3 @@ val trimmedMean = times.sorted()
 
 ### Related
 - [[q-android-build-optimization--android--medium]] - Build and compile-time performance
- - Memory leak detection techniques
- - Rendering performance optimization

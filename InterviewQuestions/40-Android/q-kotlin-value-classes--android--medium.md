@@ -1,36 +1,35 @@
 ---
-id: android-069
+id: kotlin-069
 title: Kotlin Value Classes (Inline Classes) / Value классы в Kotlin
 aliases:
 - Kotlin Value Classes (Inline Classes)
 - Value классы в Kotlin
-topic: android
+topic: kotlin
 subtopics:
-- coroutines
-- performance-memory
-question_kind: android
+- types
+question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
 - en
 - ru
 status: draft
-moc: moc-android
+moc: moc-kotlin
 related:
-- c-value-classes
-- q-kotlin-data-classes--kotlin--medium
+- c-concepts--kotlin--medium
+- q-android-runtime-art--android--medium
 created: 2025-10-12
-updated: 2025-10-31
+updated: 2025-11-10
 tags:
-- android/coroutines
-- android/performance-memory
+- kotlin/types
 - difficulty/medium
 - inline-classes
 - performance
 - type-safety
 - value-classes
 sources:
-- https://kotlinlang.org/docs/inline-classes.html
+- "https://kotlinlang.org/docs/inline-classes.html"
+
 ---
 
 # Вопрос (RU)
@@ -44,13 +43,13 @@ sources:
 ## Ответ (RU)
 
 **Теория value классов:**
-Value классы (ранее inline классы) предоставляют типобезопасные обёртки вокруг примитивных типов без накладных расходов во время выполнения. Они инлайнятся во время компиляции, обеспечивая типобезопасность без потери производительности.
+Value классы (ранее inline классы) предоставляют типобезопасные обёртки вокруг значений (часто примитивов или простых типов) с минимальными накладными расходами. При прямом использовании они, как правило, представляются как сырое значение без дополнительного объекта, обеспечивая типобезопасность почти без потери производительности. В случаях, когда это невозможно, происходит боксинг.
 
 **Основные особенности:**
-- Только одно `val` свойство в первичном конструкторе
-- Требуется аннотация `@JvmInline`
-- Нулевые накладные расходы при прямом использовании
-- Боксинг происходит при использовании как Any, в коллекциях, nullable
+- Ровно одно `val` свойство в первичном конструкторе (поддержка `var` отсутствует)
+- Требуется аннотация `@JvmInline` для использования на JVM
+- При прямом использовании обычно нет дополнительного объекта (репрезентация как значение)
+- Боксинг может происходить при использовании как `Any`, в обобщённых контекстах, для nullable-типов и при приведении к интерфейсам
 
 **Базовое определение:**
 ```kotlin
@@ -60,7 +59,7 @@ value class UserId(val value: String)
 @JvmInline
 value class Email(val value: String)
 
-// Использование - типобезопасность без накладных расходов
+// Использование — типобезопасность с минимальными накладными расходами
 fun getUser(userId: UserId): User {
     // Нельзя случайно передать Email
     return userRepository.findById(userId.value)
@@ -73,16 +72,17 @@ val email = Email("user@example.com")
 
 **Сравнение с data классами:**
 ```kotlin
-// Data класс - выделение объекта в куче
+// Data класс — почти всегда создаётся объект в куче
 data class UserIdData(val value: String)
 
-// Value класс - нет выделения объекта
+// Value класс — при большинстве прямых использований представляется как само значение
 @JvmInline
 value class UserIdValue(val value: String)
 
-// Memory usage:
-// Data класс: ~16 байт (заголовок объекта + ссылка)
-// Value класс: 0 дополнительных байт
+// Память (упрощённо, для JVM):
+// Data класс: объект с заголовком + хранение поля
+// Value класс: без дополнительного объекта при небоксовом представлении;
+// при боксинге создаётся объект-обёртка.
 ```
 
 **Валидация в value классах:**
@@ -142,28 +142,33 @@ value class USD(val cents: Long) {
 @JvmInline
 value class UserId(val value: String)
 
-// Боксинг происходит в следующих случаях:
-val any: Any = userId                    // 1. Использование как Any
-val list: List<UserId> = listOf(userId) // 2. В коллекциях
-val nullable: UserId? = userId          // 3. Nullable типы
-val id: Identifier = userId             // 4. Интерфейсы
+val userId = UserId("u1")
 
-// Чтобы избежать боксинга:
-// - Используйте value классы напрямую
-// - Избегайте nullable когда возможно
-// - Рассмотрите обычные классы для коллекций
+// Боксинг может происходить в следующих случаях:
+val any: Any = userId                     // 1. Использование как Any
+val list: List<UserId> = listOf(userId)   // 2. В обобщениях и коллекциях в определённых ситуациях
+val nullable: UserId? = userId            // 3. Nullable типы (обычно боксинг)
+// val id: Identifier = userId           // 4. При приведении к интерфейсу (вынуждает боксинг)
+
+// Чтобы уменьшить вероятность боксинга:
+// - Используйте value классы напрямую в сигнатурах
+// - Избегайте nullable при необходимости максимальной оптимизации
+// - Помните, что при некоторых использованиях (Any, интерфейсы, nullable) объект всё же создаётся
 ```
+
+**Доп. замечание:**
+- `value class` — это стабильная эволюция идеи `inline class`: синтаксис и ограничения схожи, но терминология и реализация уточнены; старый синтаксис `inline class` теперь не рекомендуется.
 
 ## Answer (EN)
 
 **Value Classes Theory:**
-Value classes (formerly inline classes) provide type-safe wrappers around primitive types without runtime overhead. They are inlined at compile time, providing type safety without performance loss.
+Value classes (formerly inline classes) provide type-safe wrappers around values (often primitives or simple types) with minimal runtime overhead. When used directly, they are typically represented as the underlying value without an extra object, providing type safety with near-zero cost. When this is not possible, boxing is used.
 
 **Main features:**
-- Only one `val` property in primary constructor
-- Requires `@JvmInline` annotation
-- Zero overhead when used directly
-- Boxing occurs when used as Any, in collections, nullable
+- Exactly one `val` property in the primary constructor (`var` is not allowed)
+- Requires `@JvmInline` annotation on the JVM
+- When used directly, usually no additional object allocation (represented as the underlying value)
+- Boxing may occur when used as `Any`, in generic contexts, for nullable types, or when converted to interfaces
 
 **Basic definition:**
 ```kotlin
@@ -173,7 +178,7 @@ value class UserId(val value: String)
 @JvmInline
 value class Email(val value: String)
 
-// Usage - type safety without runtime overhead
+// Usage — type safety with minimal overhead
 fun getUser(userId: UserId): User {
     // Can't accidentally pass Email
     return userRepository.findById(userId.value)
@@ -186,16 +191,16 @@ val email = Email("user@example.com")
 
 **Comparison with data classes:**
 ```kotlin
-// Data class - heap object allocation
+// Data class — almost always a heap object allocation
 data class UserIdData(val value: String)
 
-// Value class - no object allocation
+// Value class — in most direct usages represented as the raw value
 @JvmInline
 value class UserIdValue(val value: String)
 
-// Memory usage:
-// Data class: ~16 bytes (object header + reference)
-// Value class: 0 extra bytes
+// Memory usage (simplified, for JVM):
+// Data class: full object with header + field storage
+// Value class: no separate object when unboxed; when boxed, an object wrapper is allocated.
 ```
 
 **Validation in value classes:**
@@ -255,19 +260,30 @@ value class USD(val cents: Long) {
 @JvmInline
 value class UserId(val value: String)
 
-// Boxing occurs in these cases:
-val any: Any = userId                    // 1. Used as Any
-val list: List<UserId> = listOf(userId) // 2. In collections
-val nullable: UserId? = userId          // 3. Nullable types
-val id: Identifier = userId             // 4. Interfaces
+val userId = UserId("u1")
 
-// To avoid boxing:
-// - Use value classes directly
-// - Avoid nullable when possible
-// - Consider regular classes for collections
+// Boxing may occur in these cases:
+val any: Any = userId                     // 1. Used as Any
+val list: List<UserId> = listOf(userId)   // 2. In generics/collections in certain cases
+val nullable: UserId? = userId            // 3. Nullable types (commonly boxed)
+// val id: Identifier = userId           // 4. When treated as an interface type
+
+// To reduce boxing:
+// - Use value classes directly in APIs
+// - Avoid nullable value-class types when you are optimizing hot paths
+// - Be aware that Any/interface/nullable usages will typically allocate a wrapper
 ```
 
+**Extra note:**
+- `value class` is the stabilized evolution of `inline class`; the old `inline class` syntax is deprecated in favor of `value class` with essentially the same conceptual model but refined semantics.
+
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем разница между value классами и inline классами?
+- Когда стоит использовать value классы, а когда data классы?
+- Как value классы влияют на бинарную совместимость?
 
 ## Follow-ups
 
@@ -275,30 +291,34 @@ val id: Identifier = userId             // 4. Interfaces
 - When should you use value classes vs data classes?
 - How do value classes affect binary compatibility?
 
+## Ссылки (RU)
+
+- [Kotlin Value Classes (официальная документация)](https://kotlinlang.org/docs/inline-classes.html)
 
 ## References
 
-- [Memory Management](https://developer.android.com/topic/performance/memory-overview)
-
+- [Kotlin Value Classes (official docs)](https://kotlinlang.org/docs/inline-classes.html)
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
-- [[c-value-classes]]
+- [[c-concepts--kotlin--medium]]
 
 
 ### Prerequisites (Easier)
+
 - [[q-what-is-the-difference-between-measurement-units-like-dp-and-sp--android--easy]] - Unit types basics
-- [[q-viewmodel-pattern--android--easy]] - ViewModel patterns
+- [[q-viewmodel-pattern--android--easy]] - `ViewModel` patterns
 
 ### Related (Same Level)
-- [[q-kotlin-data-classes--kotlin--medium]] - Data classes
+
+- [[q-android-runtime-art--android--medium]] - Android Runtime (ART)
 - [[q-repository-pattern--android--medium]] - Repository pattern
 - [[q-parcelable-implementation--android--medium]] - Efficient data passing
 - [[q-bundle-data-types--android--medium]] - Data serialization
 
 ### Advanced (Harder)
-- [[q-kotlin-context-receivers--android--hard]] - Context receivers deep dive
+
 - [[q-kotlin-dsl-builders--android--hard]] - DSL builders
 - [[q-android-runtime-internals--android--hard]] - Runtime optimization

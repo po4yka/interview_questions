@@ -3,17 +3,18 @@ id: android-258
 title: "Play Store Publishing / Публикация в Play Store"
 aliases: [App Bundle, Google Play Publishing, Play Store Publishing, Staged Rollout, Публикация в Play Store]
 topic: android
-subtopics: [ab-testing, app-bundle, ci-cd, play-console]
+subtopics: [ab-testing, app-bundle, play-console]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-app-signing, c-ci-cd, q-in-app-updates--android--medium]
+related: [c-app-bundle, q-android-app-bundles--android--easy]
 created: 2025-10-15
-updated: 2025-10-30
-tags: [android/ab-testing, android/app-bundle, android/ci-cd, android/play-console, difficulty/medium, distribution, release-management]
+updated: 2025-11-10
+tags: [android/ab-testing, android/app-bundle, android/play-console, difficulty/medium, distribution, release-management]
+
 ---
 
 # Вопрос (RU)
@@ -22,22 +23,23 @@ tags: [android/ab-testing, android/app-bundle, android/ci-cd, android/play-conso
 
 # Question (EN)
 
-> Explain the Google Play Store publishing process: release tracks, app signing strategies, App Bundle and version management. What are best practices for staged rollouts and A/B testing?
+> Explain the Google Play Store publishing process: release tracks, app signing strategies, App `Bundle` and version management. What are best practices for staged rollouts and A/B testing?
 
 ---
 
 ## Ответ (RU)
 
-**Суть**: Публикация в Play Store включает настройку подписи приложения, управление релизами через треки, оптимизацию доставки через App Bundles и постепенное развертывание с мониторингом.
+**Суть**: Публикация в Play Store включает настройку подписи приложения (включая Play App Signing и upload key), управление релизами через треки, оптимизацию доставки через App Bundles и постепенное развертывание с мониторингом.
 
 ### 1. Play App Signing
 
-**✅ Рекомендуемый подход**:
+**✅ Рекомендуемый подход (upload key локально, signing key у Google)**:
 ```kotlin
 // app/build.gradle.kts
 android {
     signingConfigs {
         create("release") {
+            // Upload key, используемый для подписи артефактов перед загрузкой в Play
             storeFile = file("../keystore/upload-keystore.jks")
             storePassword = System.getenv("UPLOAD_KEYSTORE_PASSWORD")
             keyAlias = System.getenv("UPLOAD_KEY_ALIAS")
@@ -59,16 +61,16 @@ android {
 ```
 
 **Преимущества Play App Signing**:
-- Google хранит app signing key (можно сбросить upload key)
-- Автоматическая оптимизация APK
-- Безопасное восстановление при компрометации ключа
+- Google хранит основной app signing key (можно сбросить upload key при компрометации)
+- Google генерирует и раздаёт оптимизированные APK из App `Bundle` (Split APKs / APKs по конфигурации)
+- Возможность безопасного восстановления при компрометации upload key (без потери подписи приложения)
 
 **❌ Частые ошибки**:
 - Коммит keystore в git → утечка ключей
-- Отсутствие backup → потеря доступа к приложению
-- Слабые пароли → компрометация
+- Отсутствие backup upload keystore и учётных данных → сложности с управлением релизами
+- Слабые пароли → компрометация ключей
 
-### 2. App Bundle Configuration
+### 2. App `Bundle` Configuration
 
 ```kotlin
 android {
@@ -98,9 +100,12 @@ class FeatureManager(context: Context) {
         splitInstallManager.registerListener { state ->
             when (state.status()) {
                 SplitInstallSessionStatus.DOWNLOADING -> {
-                    val progress = (state.bytesDownloaded() * 100 /
-                        state.totalBytesToDownload()).toInt()
-                    onProgress(progress)
+                    val totalBytes = state.totalBytesToDownload()
+                    if (totalBytes > 0L) {
+                        val progress = (state.bytesDownloaded() * 100 /
+                            totalBytes).toInt()
+                        onProgress(progress)
+                    }
                 }
                 SplitInstallSessionStatus.INSTALLED -> {
                     // Готово к использованию
@@ -114,7 +119,7 @@ class FeatureManager(context: Context) {
 
 ### 3. Управление Версиями
 
-**✅ Semantic Versioning**:
+**✅ Semantic Versioning (пример формулы для versionCode)**:
 ```kotlin
 object AppVersion {
     private const val MAJOR = 2
@@ -133,14 +138,16 @@ android {
 }
 ```
 
+Важно: versionCode должен строго увеличиваться между релизами.
+
 ### 4. Треки Релизов
 
 | Трек | Тестеров | Review | Использование |
 |------|----------|--------|---------------|
-| Internal | до 100 | Нет | QA команда, daily builds |
-| Closed (Alpha) | до 50K | Нет | Early adopters, beta features |
-| Open (Beta) | ∞ | Нет | Публичный beta, stress testing |
-| Production | ∞ | Да | Все пользователи |
+| Internal | до 100 | Обычно быстрее, возможна проверка политик | QA команда, daily builds |
+| Closed (Alpha) | до 50K | Проверка на соответствие требованиям может применяться | Early adopters, beta features |
+| Open (Beta) | ∞ | Может применяться review и проверки | Публичный beta, нагрузочное тестирование |
+| Production | ∞ | Полный review/политики | Все пользователи |
 
 **Автоматизация с Fastlane**:
 ```ruby
@@ -150,7 +157,7 @@ lane :production do
   upload_to_play_store(
     track: 'production',
     aab: 'app/build/outputs/bundle/release/app-release.aab',
-    rollout: '0.05' # Начать с 5%
+    rollout: '0.05' # Начать с 5% (пример)
   )
 end
 
@@ -165,27 +172,29 @@ end
 
 ### 5. Staged Rollout Стратегия
 
-**✅ Рекомендуемый план**:
+**✅ Примерный план** (адаптируйте под метрики продукта):
 ```
-День 1:  5%  → мониторить crash rate, ANR
-День 3:  20% → проверить reviews, vitals
-День 5:  50% → финальная проверка
+День 1:  5%  → мониторить crash rate, ANR, ключевые бизнес-метрики
+День 3:  20% → проверить reviews, vitals, технические и продуктовые сигналы
+День 5:  50% → финальная проверка стабильности
 День 7:  100% → полный rollout
 ```
 
 **Метрики для мониторинга**:
-- Crash-free rate (должен быть >99.5%)
-- ANR rate (<0.47% для Android 13+)
-- Negative reviews spike
-- Play Console vitals (bad behavior thresholds)
+- Crash-free rate (цель: >99.5%, ориентируйтесь на Play Console bad behavior thresholds)
+- ANR rate (держать ниже порогов Play Console для "bad behavior", метрика зависит от версии и категории)
+- Спайки негативных отзывов
+- Play Console vitals, технические ошибки, бизнес-метрики
 
-**❌ Halt rollout если**:
-- Crash rate вырос на >0.5%
-- ANR rate вырос на >0.2%
-- Critical bug reports
-- Negative reviews spike >20%
+**❌ Остановить или откатить rollout если (примерные пороги)**:
+- Crash rate вырос относительно предыдущей версии более чем на ~0.5 п.п.
+- ANR rate вырос более чем на ~0.2 п.п. или приближается к bad behavior thresholds
+- Появились критические баги (платежи, логин, потеря данных)
+- Наблюдается значимый (>~20%) рост негативных отзывов, связанных с новым релизом
 
-### 6. A/B Testing С Firebase
+### 6. A/B Testing с Firebase
+
+Для A/B тестов обычно используют Firebase Remote Config совместно с Firebase A/B Testing (эксперименты настраиваются в консоли, а приложение читает значения флагов).
 
 ```kotlin
 @Singleton
@@ -220,6 +229,8 @@ fun CheckoutScreen(viewModel: CheckoutViewModel) {
 }
 ```
 
+Важно: сегментацию, распределение трафика и цели эксперимента настраиваем в Firebase Console, а в коде только считываем значения Remote Config / флагов и логируем события.
+
 ### 7. CI/CD Pipeline
 
 ```yaml
@@ -241,6 +252,8 @@ jobs:
       - name: Build Bundle
         env:
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+          UPLOAD_KEY_ALIAS: ${{ secrets.UPLOAD_KEY_ALIAS }}
+          UPLOAD_KEY_PASSWORD: ${{ secrets.UPLOAD_KEY_PASSWORD }}
         run: ./gradlew bundleRelease
 
       - name: Upload to Play Store
@@ -255,41 +268,43 @@ jobs:
 **Best Practices**:
 
 1. **Безопасность**:
-   - ✅ Play App Signing (Google управляет signing key)
-   - ✅ Переменные окружения для секретов
-   - ✅ Backup keystore в безопасном месте
-   - ❌ Никогда не коммитьте keystore в git
+   - ✅ Play App Signing (Google управляет основным signing key)
+   - ✅ Использовать upload key отдельно от signing key
+   - ✅ Переменные окружения / секреты CI для хранения чувствительных данных
+   - ✅ Backup upload keystore и доступов в безопасном месте
+   - ❌ Никогда не коммитьте keystore и сервисные ключи в git
 
 2. **Release стратегия**:
-   - ✅ Internal → Closed → Open → Production
-   - ✅ Staged rollout: 5% → 20% → 50% → 100%
-   - ✅ Мониторить метрики между этапами
-   - ❌ Не пропускайте staged rollout
+   - ✅ Internal → Closed → Open → Production (по необходимости)
+   - ✅ Staged rollout: например 5% → 20% → 50% → 100%
+   - ✅ Мониторить метрики между этапами и быть готовым остановить rollout
+   - ❌ Не пропускайте staged rollout для крупных изменений
 
-3. **Bundle оптимизация**:
-   - ✅ Включить все splits (language, density, ABI)
-   - ✅ Dynamic features для больших модулей (>10MB)
-   - ✅ Тестировать на разных устройствах
-   - ❌ Не превышать 150MB initial download
+3. **`Bundle` оптимизация**:
+   - ✅ Включить splits (language, density, ABI) для уменьшения размера доставляемых APK
+   - ✅ Использовать Dynamic Feature Modules для тяжёлых/редко используемых фич
+   - ✅ Тестировать App `Bundle` и dynamic features на разных устройствах и конфигурациях
+   - ❌ Учитывать ограничения размера: итоговые APK/установки не должны превышать лимитов Play
 
 4. **Мониторинг**:
-   - ✅ Play Console vitals (crash rate, ANR)
+   - ✅ Play Console vitals (crash rate, ANR, excessive wakeups и т.п.)
    - ✅ Pre-launch reports
-   - ✅ User reviews мониторинг
-   - ✅ Analytics для A/B тестов
+   - ✅ Мониторинг пользовательских отзывов
+   - ✅ Analytics / Firebase для оценки A/B тестов и поведенческих метрик
 
 ## Answer (EN)
 
-**Core**: Play Store publishing involves app signing setup, release management through tracks, delivery optimization via App Bundles, and gradual rollouts with monitoring.
+**Core**: Play Store publishing involves app signing setup (including Play App Signing with a separate upload key), release management through tracks, delivery optimization via App Bundles, and gradual rollouts with monitoring.
 
 ### 1. Play App Signing
 
-**✅ Recommended approach**:
+**✅ Recommended approach (upload key locally, signing key managed by Google)**:
 ```kotlin
 // app/build.gradle.kts
 android {
     signingConfigs {
         create("release") {
+            // Upload key used to sign artifacts before uploading to Play
             storeFile = file("../keystore/upload-keystore.jks")
             storePassword = System.getenv("UPLOAD_KEYSTORE_PASSWORD")
             keyAlias = System.getenv("UPLOAD_KEY_ALIAS")
@@ -311,16 +326,16 @@ android {
 ```
 
 **Play App Signing benefits**:
-- Google manages app signing key (can reset upload key)
-- Automatic APK optimization
-- Secure recovery on key compromise
+- Google stores and manages the primary app signing key (you can reset the upload key if compromised)
+- Google generates and serves optimized APKs from your App `Bundle` (configuration/split APKs)
+- Safer recovery if the upload key is compromised without losing your package signature
 
 **❌ Common mistakes**:
 - Committing keystore to git → key leakage
-- No backup → loss of app access
-- Weak passwords → compromise risk
+- No backup of upload keystore/credentials → operational risk
+- Weak passwords → increased compromise risk
 
-### 2. App Bundle Configuration
+### 2. App `Bundle` Configuration
 
 ```kotlin
 android {
@@ -350,9 +365,12 @@ class FeatureManager(context: Context) {
         splitInstallManager.registerListener { state ->
             when (state.status()) {
                 SplitInstallSessionStatus.DOWNLOADING -> {
-                    val progress = (state.bytesDownloaded() * 100 /
-                        state.totalBytesToDownload()).toInt()
-                    onProgress(progress)
+                    val totalBytes = state.totalBytesToDownload()
+                    if (totalBytes > 0L) {
+                        val progress = (state.bytesDownloaded() * 100 /
+                            totalBytes).toInt()
+                        onProgress(progress)
+                    }
                 }
                 SplitInstallSessionStatus.INSTALLED -> {
                     // Ready to use
@@ -366,7 +384,7 @@ class FeatureManager(context: Context) {
 
 ### 3. Version Management
 
-**✅ Semantic Versioning**:
+**✅ Semantic Versioning (example versionCode formula)**:
 ```kotlin
 object AppVersion {
     private const val MAJOR = 2
@@ -385,14 +403,16 @@ android {
 }
 ```
 
+Important: versionCode must strictly increase between releases.
+
 ### 4. Release Tracks
 
 | Track | Testers | Review | Use Case |
 |-------|---------|--------|----------|
-| Internal | up to 100 | No | QA team, daily builds |
-| Closed (Alpha) | up to 50K | No | Early adopters, beta features |
-| Open (Beta) | ∞ | No | Public beta, stress testing |
-| Production | ∞ | Yes | All users |
+| Internal | up to 100 | Typically faster, policy checks may still apply | QA team, daily builds |
+| Closed (Alpha) | up to 50K | Policy/compliance checks may apply | Early adopters, beta features |
+| Open (Beta) | ∞ | Review/checks may apply | Public beta, stress testing |
+| Production | ∞ | Full policy/review | All users |
 
 **Fastlane automation**:
 ```ruby
@@ -402,7 +422,7 @@ lane :production do
   upload_to_play_store(
     track: 'production',
     aab: 'app/build/outputs/bundle/release/app-release.aab',
-    rollout: '0.05' # Start with 5%
+    rollout: '0.05' # Start with 5% (example)
   )
 end
 
@@ -417,27 +437,29 @@ end
 
 ### 5. Staged Rollout Strategy
 
-**✅ Recommended plan**:
+**✅ Example plan** (tune to your product and risk):
 ```
-Day 1:  5%  → monitor crash rate, ANR
-Day 3:  20% → check reviews, vitals
-Day 5:  50% → final verification
+Day 1:  5%  → monitor crash rate, ANR, key metrics
+Day 3:  20% → check reviews, vitals, technical and business signals
+Day 5:  50% → final stability verification
 Day 7:  100% → complete rollout
 ```
 
 **Metrics to monitor**:
-- Crash-free rate (should be >99.5%)
-- ANR rate (<0.47% for Android 13+)
-- Negative reviews spike
-- Play Console vitals (bad behavior thresholds)
+- Crash-free rate (target >99.5%, use Play Console bad behavior thresholds as guidance)
+- ANR rate (keep below Play Console "bad behavior" thresholds; exact values depend on OS versions/category)
+- Spikes in negative reviews
+- Play Console vitals, technical errors, key product metrics
 
-**❌ Halt rollout if**:
-- Crash rate increased by >0.5%
-- ANR rate increased by >0.2%
-- Critical bug reports
-- Negative reviews spike >20%
+**❌ Halt or roll back rollout if (example guardrails)**:
+- Crash rate increases vs previous version by more than ~0.5 percentage points
+- ANR rate increases by more than ~0.2 percentage points or approaches bad behavior thresholds
+- Critical bug reports (login, payments, data loss, etc.)
+- Significant (>~20%) spike in negative reviews clearly tied to the new release
 
 ### 6. A/B Testing with Firebase
+
+Typically use Firebase Remote Config together with Firebase A/B Testing: experiments are defined in the Firebase Console; the app simply reads Remote Config values / flags.
 
 ```kotlin
 @Singleton
@@ -472,6 +494,8 @@ fun CheckoutScreen(viewModel: CheckoutViewModel) {
 }
 ```
 
+Key point: audience targeting, traffic allocation, and goals are configured in the Firebase Console; code should be responsible for reading flags and logging exposures/events.
+
 ### 7. CI/CD Pipeline
 
 ```yaml
@@ -493,6 +517,8 @@ jobs:
       - name: Build Bundle
         env:
           UPLOAD_KEYSTORE_PASSWORD: ${{ secrets.UPLOAD_KEYSTORE_PASSWORD }}
+          UPLOAD_KEY_ALIAS: ${{ secrets.UPLOAD_KEY_ALIAS }}
+          UPLOAD_KEY_PASSWORD: ${{ secrets.UPLOAD_KEY_PASSWORD }}
         run: ./gradlew bundleRelease
 
       - name: Upload to Play Store
@@ -507,56 +533,78 @@ jobs:
 **Best Practices**:
 
 1. **Security**:
-   - ✅ Play App Signing (Google manages signing key)
-   - ✅ Environment variables for secrets
-   - ✅ Backup keystore securely
-   - ❌ Never commit keystore to git
+   - ✅ Use Play App Signing (Google manages the primary signing key)
+   - ✅ Use a dedicated upload key separate from the app signing key
+   - ✅ Use environment/CI secrets for sensitive data
+   - ✅ Store upload keystore and credentials securely with backups
+   - ❌ Never commit keystores or service account keys to git
 
 2. **Release strategy**:
-   - ✅ Internal → Closed → Open → Production
-   - ✅ Staged rollout: 5% → 20% → 50% → 100%
-   - ✅ Monitor metrics between stages
-   - ❌ Don't skip staged rollout
+   - ✅ Use Internal → Closed → Open → Production when appropriate
+   - ✅ Use staged rollout (e.g., 5% → 20% → 50% → 100%)
+   - ✅ Monitor metrics between stages and be ready to pause/rollback
+   - ❌ Avoid skipping staged rollout for risky releases
 
-3. **Bundle optimization**:
-   - ✅ Enable all splits (language, density, ABI)
-   - ✅ Dynamic features for large modules (>10MB)
-   - ✅ Test on multiple devices
-   - ❌ Don't exceed 150MB initial download
+3. **`Bundle` optimization**:
+   - ✅ Enable splits (language, density, ABI) to reduce delivered APK size
+   - ✅ Use Dynamic Feature Modules for large/optional features
+   - ✅ Test App Bundles and dynamic features on multiple devices/configurations
+   - ❌ Respect Google Play size limits: ensure delivered APK/install size stays within allowed limits
 
 4. **Monitoring**:
-   - ✅ Play Console vitals (crash rate, ANR)
-   - ✅ Pre-launch reports
-   - ✅ User reviews monitoring
-   - ✅ Analytics for A/B tests
+   - ✅ Use Play Console vitals (crash rate, ANR, wakelocks, etc.)
+   - ✅ Use Pre-launch reports
+   - ✅ Monitor user reviews
+   - ✅ Use analytics/Firebase to measure A/B test impact and key behaviors
+
+## Дополнительные вопросы (RU)
+
+1. Как вы обрабатываете сценарии отката, если во время staged rollout обнаруживаются критические проблемы?
+2. Как организовать управление файлами ProGuard mapping между несколькими релизами?
+3. Как реализовать условную доставку dynamic feature-модулей в зависимости от возможностей устройства?
+4. Какие стратегии вы используете для локального тестирования App Bundles до загрузки в Play Console?
+5. Как вы автоматизируете генерацию и локализацию release notes в рамках CI/CD?
 
 ## Follow-ups
 
-1. How do you handle rollback scenarios if critical issues are discovered during staged rollout?
-2. What are the best practices for managing ProGuard mapping files across multiple releases?
+1. How do you handle rollback scenarios if critical issues are discovered during a staged rollout?
+2. What are best practices for managing ProGuard mapping files across multiple releases?
 3. How do you implement conditional delivery for dynamic features based on device capabilities?
 4. What strategies exist for testing App Bundles locally before uploading to Play Console?
 5. How do you manage multi-language release notes generation and localization in CI/CD?
 
+## Ссылки (RU)
+
+- [[c-app-bundle]]
+- Play Console документация: https://developer.android.com/distribute/console
+- Руководство по App `Bundle`: https://developer.android.com/guide/app-bundle
+- Play App Signing: https://support.google.com/googleplay/android-developer/answer/9842756
+
 ## References
 
-- [[c-app-signing]] - App signing and keystore management
-- [[c-ci-cd]] - Continuous integration and deployment
-- [[c-feature-flags]] - Feature flag patterns
-- [Play Console Documentation](https://developer.android.com/distribute/console)
-- [App Bundle Guide](https://developer.android.com/guide/app-bundle)
-- [Play App Signing](https://support.google.com/googleplay/android-developer/answer/9842756)
+- [[c-app-bundle]]
+- Play Console Documentation: https://developer.android.com/distribute/console
+- App `Bundle` Guide: https://developer.android.com/guide/app-bundle
+- Play App Signing: https://support.google.com/googleplay/android-developer/answer/9842756
+
+## Связанные вопросы (RU)
+
+### База (Easy)
+- [[q-android-app-bundles--android--easy]] - Основы и преимущества App `Bundle`
+
+### Связанные (Medium)
+- [[q-app-store-optimization--android--medium]] - Стратегии и практики ASO
+
+### Продвинутые (Hard)
+- [[q-kmm-architecture--android--hard]] - Сложная модульная архитектура с dynamic features
 
 ## Related Questions
 
 ### Prerequisites (Easy)
-- [[q-android-app-bundles--android--easy]] - App Bundle basics and benefits
+- [[q-android-app-bundles--android--easy]] - App `Bundle` basics and benefits
 
 ### Related (Medium)
 - [[q-app-store-optimization--android--medium]] - ASO strategies and best practices
-- [[q-in-app-updates--android--medium]] - In-app update implementation
-- [[q-gradle-build-variants--android--medium]] - Build configuration management
 
 ### Advanced (Hard)
 - [[q-kmm-architecture--android--hard]] - Complex modularization with dynamic features
-- [[q-enterprise-app-distribution--android--hard]] - Enterprise deployment strategies

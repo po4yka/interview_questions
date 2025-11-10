@@ -20,7 +20,7 @@ related:
 - c-coroutines
 - c-retrofit
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 tags:
 - android/coroutines
 - android/networking-http
@@ -41,11 +41,11 @@ sources: []
 
 ## Ответ (RU)
 
-Ktor — рекомендуемый HTTP-клиент для Kotlin Multiplatform, предоставляющий единый API с platform-optimized движками (OkHttp для Android, NSURLSession для iOS) и comprehensive поддержкой плагинов.
+Ktor — один из основных HTTP-клиентов для Kotlin Multiplatform от JetBrains, предоставляющий единый API с platform-optimized движками (OkHttp для Android, NSURLSession/Darwin для iOS) и широкую поддержку плагинов.
 
 ### Основная Конфигурация
 
-**Зависимости**: добавьте `ktor-client-core` в `commonMain`, platform-specific движки (`ktor-client-android`, `ktor-client-darwin`) в соответствующие sourceSet'ы, плагины для serialization, logging, auth.
+**Зависимости**: добавьте `ktor-client-core` в `commonMain`, platform-specific движки (например, `ktor-client-okhttp` или `ktor-client-android` для Android, `ktor-client-darwin` для iOS) в соответствующие sourceSet'ы, плагины для serialization, logging, auth.
 
 **Фабрика клиента**:
 ```kotlin
@@ -60,54 +60,63 @@ object HttpClientFactory {
             install(HttpTimeout) {
                 requestTimeoutMillis = 30_000
             }
-            expectSuccess = true // ❌ Отключено = ручная обработка
+            // true: 4xx/5xx выбросят исключение; false: проверяем статус вручную
+            expectSuccess = false
         }
     }
 }
 ```
 
-**Platform-specific движки**: используйте `expect/actual` для конфигурации OkHttp (Android) и NSURLSession (iOS), например таймауты, proxy settings.
+**Platform-specific движки**: используйте `expect/actual` для конфигурации OkHttp (Android) и NSURLSession/Darwin (iOS), например таймауты, proxy settings, TLS.
 
 ### Аутентификация
 
-**Bearer tokens**:
+**Bearer tokens** (пример для общей конфигурации клиента):
 ```kotlin
 // ✅ Auth plugin с auto-refresh
-install(Auth) {
-    bearer {
-        loadTokens {
-            BearerTokens(
-                accessToken = tokenProvider.getAccessToken() ?: "",
-                refreshToken = tokenProvider.getRefreshToken() ?: ""
-            )
-        }
-        refreshTokens {
-            val response = client.post("auth/refresh") {
-                markAsRefreshTokenRequest()
-                setBody(RefreshTokenRequest(tokenProvider.getRefreshToken()))
-            }.body<TokenResponse>()
+val client = HttpClient { 
+    install(Auth) {
+        bearer {
+            loadTokens {
+                val access = tokenProvider.getAccessToken()
+                val refresh = tokenProvider.getRefreshToken()
+                if (access != null && refresh != null) {
+                    BearerTokens(access, refresh)
+                } else {
+                    null // нет токенов — без авторизации
+                }
+            }
+            refreshTokens {
+                val refresh = tokenProvider.getRefreshToken()
+                    ?: throw IllegalStateException("No refresh token")
 
-            tokenProvider.saveTokens(response.accessToken, response.refreshToken)
-            BearerTokens(response.accessToken, response.refreshToken)
+                val response = client.post("auth/refresh") {
+                    markAsRefreshTokenRequest()
+                    setBody(RefreshTokenRequest(refresh))
+                }.body<TokenResponse>()
+
+                tokenProvider.saveTokens(response.accessToken, response.refreshToken)
+                BearerTokens(response.accessToken, response.refreshToken)
+            }
         }
     }
 }
 ```
 
-**Обработка 401**: используйте `HttpResponseValidator` для перехвата Unauthorized, очищайте токены и сигнализируйте UI о необходимости повторной авторизации.
+**Обработка 401**: используйте `HttpResponseValidator` или обработку исключений из `expectSuccess`/`ClientRequestException` для перехвата Unauthorized, очищайте токены и сигнализируйте UI о необходимости повторной авторизации.
 
 ### Retry Logic
 
-**Exponential backoff**:
+**Exponential backoff** (упрощённый пример, важно всегда возвращать ответ или кидать исключение):
 ```kotlin
 // ✅ Interceptor с умными повторами
 client.plugin(HttpSend).intercept { request ->
     var attempt = 0
-    while (attempt < maxRetries) {
+    while (true) {
         attempt++
         try {
             val response = execute(request)
-            // ✅ Retry на 5xx, 429, timeout
+            // ✅ Retry на 5xx, 429, timeout (если включено в retryableStatusCodes)
             if (response.status in retryableStatusCodes && attempt < maxRetries) {
                 delay((1000L * (1 shl (attempt - 1))).coerceAtMost(30_000L))
                 continue
@@ -124,42 +133,49 @@ client.plugin(HttpSend).intercept { request ->
 }
 ```
 
-**Retryable условия**: timeout errors, `UnknownHostException`, 5xx codes, 429 с `Retry-After` header.
+**Retryable условия**: timeout errors, сетевые ошибки (например, отсутствие хоста или подключения) и временные статусы сервера: 5xx коды, 429 (с учётом `Retry-After` header). В `commonMain` избегайте прямой зависимости от JVM-специфичных исключений: обрабатывайте их либо через общие типы (`IOException` в JVM-модуле), либо через абстракции/обёртки.
 
 ### Обработка Ошибок
 
-**Type-safe errors**:
+**Type-safe errors** (пример маппинга с явным UnknownError):
 ```kotlin
-sealed class NetworkError : Exception() {
+sealed class NetworkError(message: String? = null) : Exception(message) {
     data class HttpError(val statusCode: HttpStatusCode, val errorBody: String?) : NetworkError()
     object TimeoutError : NetworkError()
     object NoInternetError : NetworkError()
+    data class UnknownError(val reason: String) : NetworkError(reason)
 }
 
-// ✅ Маппинг исключений
-fun mapException(e: Exception): NetworkError = when (e) {
+// ✅ Маппинг исключений (пример для JVM, адаптируйте под платформы)
+fun mapException(e: Throwable): NetworkError = when (e) {
     is HttpRequestTimeoutException -> NetworkError.TimeoutError
+    is UnresolvedAddressException, // Ktor/JVM для проблем DNS/сети
     is UnknownHostException -> NetworkError.NoInternetError
     is ClientRequestException -> NetworkError.HttpError(e.response.status, null)
     else -> NetworkError.UnknownError(e.message ?: "Unknown")
 }
 ```
 
-**Network monitoring**: используйте platform-specific APIs (`ConnectivityManager` на Android, `NWPathMonitor` на iOS) для проверки доступности сети перед запросами.
+В multiplatform-коде избегайте использования JVM-специфичных типов напрямую: вынесите детали в платформенные реализации или оборачивайте в свои error-типы.
+
+**Network monitoring**: используйте platform-specific APIs (`ConnectivityManager` / `NetworkCallback` на Android, `NWPathMonitor` на iOS) для отслеживания доступности сети и информирования слоя данных/UI. Это дополняет, но не заменяет обработку исключений.
 
 ### Advanced Features
 
-**Interceptors**: используйте `HttpSend.intercept` для analytics logging, response caching, custom headers.
+**Interceptors / плагины**: используйте `HttpSend.intercept` и/или собственные плагины Ktor для:
+- логирования и аналитики,
+- добавления общих заголовков,
+- кэширования ответов (в связке с storage-слоем).
 
-**File upload/download**: используйте `MultiPartFormDataContent` для upload с `onUpload` callback, `get` с `onDownload` для прогресса.
+**File upload/download**: используйте `MultiPartFormDataContent` для upload; для прогресса реализуйте чтение/запись потоков блоками и коллбеки/flows, так как универсальные `onUpload`/`onDownload` коллбеки зависят от конкретной версии и реализации клиента.
 
-**GraphQL**: оборачивайте запросы в `GraphQLRequest(query, variables)`, парсите `GraphQLResponse<T>` с `errors` handling.
+**GraphQL**: оборачивайте запросы в свою модель `GraphQLRequest(query, variables)` и парсьте `GraphQLResponse<T>` с обработкой `errors` — это логический слой поверх Ktor.
 
 ### Тестирование
 
 ```kotlin
 // ✅ MockEngine для unit-тестов
-HttpClient(MockEngine) {
+val client = HttpClient(MockEngine) {
     engine {
         addHandler { request ->
             respond(
@@ -171,15 +187,15 @@ HttpClient(MockEngine) {
 }
 ```
 
-**Резюме**: Ktor обеспечивает unified multiplatform networking с platform-optimized движками, comprehensive auth/retry/error handling, extensible plugin system. Ключевые моменты: правильная обработка ошибок, retry стратегии с exponential backoff, secure token management, platform-specific оптимизации.
+**Резюме**: Ktor обеспечивает единый multiplatform HTTP-клиент с platform-optimized движками, плагинами для аутентификации, ретраев и обработки ошибок. Ключевые моменты: корректная стратегия retry с exponential backoff, безопасное управление токенами, platform-specific оптимизации и единый слой маппинга ошибок между Android и iOS.
 
 ## Answer (EN)
 
-Ktor is the recommended HTTP client for Kotlin Multiplatform, providing a unified API with platform-optimized engines (OkHttp for Android, NSURLSession for iOS) and comprehensive plugin support.
+Ktor is one of the primary HTTP clients for Kotlin Multiplatform from JetBrains, providing a unified API with platform-optimized engines (OkHttp for Android, NSURLSession/Darwin for iOS) and rich plugin support.
 
 ### Basic Configuration
 
-**Dependencies**: Add `ktor-client-core` to `commonMain`, platform-specific engines (`ktor-client-android`, `ktor-client-darwin`) to respective sourceSets, plugins for serialization, logging, auth.
+**Dependencies**: Add `ktor-client-core` to `commonMain`, platform-specific engines (e.g., `ktor-client-okhttp` or `ktor-client-android` for Android, `ktor-client-darwin` for iOS) to respective sourceSets, plus plugins for serialization, logging, and auth.
 
 **Client factory**:
 ```kotlin
@@ -194,54 +210,63 @@ object HttpClientFactory {
             install(HttpTimeout) {
                 requestTimeoutMillis = 30_000
             }
-            expectSuccess = true // ❌ Disabled = manual error handling
+            // true: 4xx/5xx throw exceptions; false: handle status codes manually
+            expectSuccess = false
         }
     }
 }
 ```
 
-**Platform-specific engines**: Use `expect/actual` to configure OkHttp (Android) and NSURLSession (iOS) with timeouts, proxy settings.
+**Platform-specific engines**: Use `expect/actual` to configure OkHttp (Android) and NSURLSession/Darwin (iOS) for timeouts, proxy settings, TLS, etc.
 
 ### Authentication
 
-**Bearer tokens**:
+**Bearer tokens** (example applied inside client configuration):
 ```kotlin
 // ✅ Auth plugin with auto-refresh
-install(Auth) {
-    bearer {
-        loadTokens {
-            BearerTokens(
-                accessToken = tokenProvider.getAccessToken() ?: "",
-                refreshToken = tokenProvider.getRefreshToken() ?: ""
-            )
-        }
-        refreshTokens {
-            val response = client.post("auth/refresh") {
-                markAsRefreshTokenRequest()
-                setBody(RefreshTokenRequest(tokenProvider.getRefreshToken()))
-            }.body<TokenResponse>()
+val client = HttpClient {
+    install(Auth) {
+        bearer {
+            loadTokens {
+                val access = tokenProvider.getAccessToken()
+                val refresh = tokenProvider.getRefreshToken()
+                if (access != null && refresh != null) {
+                    BearerTokens(access, refresh)
+                } else {
+                    null // no tokens yet
+                }
+            }
+            refreshTokens {
+                val refresh = tokenProvider.getRefreshToken()
+                    ?: throw IllegalStateException("No refresh token")
 
-            tokenProvider.saveTokens(response.accessToken, response.refreshToken)
-            BearerTokens(response.accessToken, response.refreshToken)
+                val response = client.post("auth/refresh") {
+                    markAsRefreshTokenRequest()
+                    setBody(RefreshTokenRequest(refresh))
+                }.body<TokenResponse>()
+
+                tokenProvider.saveTokens(response.accessToken, response.refreshToken)
+                BearerTokens(response.accessToken, response.refreshToken)
+            }
         }
     }
 }
 ```
 
-**Handle 401**: Use `HttpResponseValidator` to intercept Unauthorized, clear tokens and signal UI to re-authenticate.
+**Handle 401**: Use `HttpResponseValidator` or exceptions from `expectSuccess` / `ClientRequestException` to intercept Unauthorized, clear tokens, and signal the UI to re-authenticate.
 
 ### Retry Logic
 
-**Exponential backoff**:
+**Exponential backoff** (simplified; must always return or throw):
 ```kotlin
 // ✅ Interceptor with smart retries
 client.plugin(HttpSend).intercept { request ->
     var attempt = 0
-    while (attempt < maxRetries) {
+    while (true) {
         attempt++
         try {
             val response = execute(request)
-            // ✅ Retry on 5xx, 429, timeout
+            // ✅ Retry on 5xx, 429, timeout (if included in retryableStatusCodes)
             if (response.status in retryableStatusCodes && attempt < maxRetries) {
                 delay((1000L * (1 shl (attempt - 1))).coerceAtMost(30_000L))
                 continue
@@ -258,42 +283,49 @@ client.plugin(HttpSend).intercept { request ->
 }
 ```
 
-**Retryable conditions**: timeout errors, `UnknownHostException`, 5xx codes, 429 with `Retry-After` header.
+**Retryable conditions**: timeout errors, network connectivity errors, and transient server statuses: 5xx codes, 429 (respecting the `Retry-After` header). In `commonMain`, avoid direct use of JVM-specific exceptions like `UnknownHostException`; handle such details in platform modules or via your own abstraction.
 
 ### Error Handling
 
-**Type-safe errors**:
+**Type-safe errors** (with an explicit UnknownError type):
 ```kotlin
-sealed class NetworkError : Exception() {
+sealed class NetworkError(message: String? = null) : Exception(message) {
     data class HttpError(val statusCode: HttpStatusCode, val errorBody: String?) : NetworkError()
     object TimeoutError : NetworkError()
     object NoInternetError : NetworkError()
+    data class UnknownError(val reason: String) : NetworkError(reason)
 }
 
-// ✅ Exception mapping
-fun mapException(e: Exception): NetworkError = when (e) {
+// ✅ Exception mapping (example for JVM; adapt to each platform)
+fun mapException(e: Throwable): NetworkError = when (e) {
     is HttpRequestTimeoutException -> NetworkError.TimeoutError
+    is UnresolvedAddressException,
     is UnknownHostException -> NetworkError.NoInternetError
     is ClientRequestException -> NetworkError.HttpError(e.response.status, null)
     else -> NetworkError.UnknownError(e.message ?: "Unknown")
 }
 ```
 
-**Network monitoring**: Use platform-specific APIs (`ConnectivityManager` on Android, `NWPathMonitor` on iOS) to check network availability before requests.
+In multiplatform code, avoid tying yourself to platform-specific exception types; surface them as `NetworkError` (or similar) using platform-specific implementations.
+
+**Network monitoring**: Use platform-specific APIs (`ConnectivityManager` / `NetworkCallback` on Android, `NWPathMonitor` on iOS) to track connectivity and inform your data/UI layer. This complements, but does not replace, proper exception handling on requests.
 
 ### Advanced Features
 
-**Interceptors**: Use `HttpSend.intercept` for analytics logging, response caching, custom headers.
+**Interceptors / plugins**: Use `HttpSend.intercept` and custom plugins for:
+- analytics and logging,
+- common headers,
+- integration with your caching/offline layer.
 
-**File upload/download**: Use `MultiPartFormDataContent` for upload with `onUpload` callback, `get` with `onDownload` for progress.
+**File upload/download**: Use `MultiPartFormDataContent` for uploads. For progress reporting, read/write content in chunks and invoke callbacks/Flows; Ktor's built-in hooks vary by version and engine, so rely on explicit streaming logic for portable progress tracking.
 
-**GraphQL**: Wrap queries in `GraphQLRequest(query, variables)`, parse `GraphQLResponse<T>` with `errors` handling.
+**GraphQL**: Wrap HTTP calls with your own `GraphQLRequest(query, variables)` and parse `GraphQLResponse<T>` with `errors` handling; this is a layer built on top of Ktor.
 
 ### Testing
 
 ```kotlin
 // ✅ MockEngine for unit tests
-HttpClient(MockEngine) {
+val client = HttpClient(MockEngine) {
     engine {
         addHandler { request ->
             respond(
@@ -305,7 +337,7 @@ HttpClient(MockEngine) {
 }
 ```
 
-**Summary**: Ktor provides unified multiplatform networking with platform-optimized engines, comprehensive auth/retry/error handling, extensible plugin system. Key considerations: proper error handling, retry strategies with exponential backoff, secure token management, platform-specific optimizations.
+**Summary**: Ktor provides a unified multiplatform HTTP client with platform-optimized engines and plugins for authentication, retries, and error handling. Key considerations: robust error mapping, retry strategies with exponential backoff, secure token management, and platform-specific optimizations while keeping a shared API across Android and iOS.
 
 ---
 

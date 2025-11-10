@@ -51,9 +51,9 @@ tags:
 
 ## Ответ (RU)
 
-SQLDelight генерирует type-safe Kotlin API из SQL-запросов, обеспечивая compile-time верификацию и использование platform-specific драйверов (SQLite на Android, SQLite.swift на iOS) при sharing общей database-логики.
+SQLDelight генерирует type-safe Kotlin API из SQL-запросов, обеспечивая compile-time верификацию и использование platform-specific драйверов (AndroidSqliteDriver на Android, NativeSqliteDriver на iOS) при шаринге общей database-логики.
 
-#### Настройка И Конфигурация
+#### Настройка и конфигурация
 
 **Gradle Configuration**:
 ```kotlin
@@ -67,7 +67,6 @@ sqldelight {
     databases {
         create("TaskDatabase") {
             packageName.set("com.example.db")
-            generateAsync.set(true)
             verifyMigrations.set(true)
         }
     }
@@ -86,11 +85,14 @@ kotlin {
         iosMain.dependencies {
             implementation("app.cash.sqldelight:native-driver:2.0+")
         }
+        commonTest.dependencies {
+            implementation("app.cash.sqldelight:sqlite-driver:2.0+") // для in-memory/JVM тестов
+        }
     }
 }
 ```
 
-#### Определение Схемы
+#### Определение схемы
 
 **SQL Schema** (`Task.sq`):
 ```sql
@@ -123,9 +125,13 @@ SELECT * FROM Task
 WHERE userId = :userId
 ORDER BY priority DESC;
 
+selectById:
+SELECT * FROM Task
+WHERE id = :id;
+
 insertTask:
 INSERT INTO Task (id, title, completed, priority, dueDate, userId)
-VALUES (?, ?, ?, ?, ?, ?);
+VALUES (:id, :title, :completed, :priority, :dueDate, :userId);
 
 updateTask:
 UPDATE Task SET
@@ -149,8 +155,7 @@ actual class DatabaseDriverFactory(private val context: Context) {
             callback = object : AndroidSqliteDriver.Callback(TaskDatabase.Schema) {
                 override fun onOpen(db: SupportSQLiteDatabase) {
                     super.onOpen(db)
-                    // ✅ Enable WAL for better concurrency
-                    db.execSQL("PRAGMA journal_mode=WAL;")
+                    // ✅ Дополнительная настройка по необходимости
                     db.execSQL("PRAGMA foreign_keys=ON;")
                 }
             }
@@ -166,20 +171,13 @@ actual class DatabaseDriverFactory {
     actual fun createDriver(): SqlDriver {
         return NativeSqliteDriver(
             schema = TaskDatabase.Schema,
-            name = "task.db",
-            onConfiguration = { config ->
-                config.copy(
-                    extendedConfig = DatabaseConfiguration.Extended(
-                        foreignKeyConstraints = true
-                    )
-                )
-            }
+            name = "task.db"
         )
     }
 }
 ```
 
-#### Использование Type-Safe API
+#### Использование type-safe API
 
 ```kotlin
 // commonMain
@@ -212,10 +210,19 @@ class TaskRepository(
         )
     }
 
-    // ✅ Transaction для bulk операций
+    // ✅ Transaction для bulk операций без suspend внутри блока транзакции
     suspend fun insertMultiple(tasks: List<Task>) = withContext(dispatchers.io) {
         queries.transaction {
-            tasks.forEach { insertTask(it) }
+            tasks.forEach { task ->
+                queries.insertTask(
+                    id = task.id,
+                    title = task.title,
+                    completed = task.completed,
+                    priority = task.priority.toLong(),
+                    dueDate = task.dueDate,
+                    userId = task.userId
+                )
+            }
         }
     }
 }
@@ -223,30 +230,19 @@ class TaskRepository(
 
 #### Миграции
 
+Для SQLDelight 2.x миграции обычно задаются `.sqm` файлами. Пример:
+
 **Migration Files** (`.sqm`):
 ```sql
--- migrations/1.sqm
+-- src/commonMain/sqldelight/com/example/db/migrations/1.sqm
 ALTER TABLE Task ADD COLUMN priority INTEGER NOT NULL DEFAULT 0;
 CREATE INDEX task_priority ON Task(priority);
 
--- migrations/2.sqm
+-- src/commonMain/sqldelight/com/example/db/migrations/2.sqm
 ALTER TABLE Task ADD COLUMN dueDate INTEGER;
 ```
 
-**Manual Migration Handler**:
-```kotlin
-// androidMain
-override fun onUpgrade(
-    db: SupportSQLiteDatabase,
-    oldVersion: Int,
-    newVersion: Int
-) {
-    when (oldVersion) {
-        1 -> db.execSQL("ALTER TABLE Task ADD COLUMN priority INTEGER DEFAULT 0")
-        2 -> db.execSQL("ALTER TABLE Task ADD COLUMN dueDate INTEGER")
-    }
-}
-```
+При включённом `verifyMigrations = true` SQLDelight проверяет согласованность схемы и миграций. Ручная реализация `onUpgrade` в драйвере при этом обычно не требуется и может конфликтовать с auto-generated миграциями.
 
 #### Оптимизация
 
@@ -263,9 +259,16 @@ LIMIT :limit OFFSET :offset;
 ```kotlin
 suspend fun insertBatch(tasks: List<Task>) = withContext(dispatchers.io) {
     queries.transaction {
-        // ✅ Chunk по 500 для избежания SQL variable limit
-        tasks.chunked(500).forEach { batch ->
-            batch.forEach { queries.insertTask(...) }
+        // ✅ Пример групповых вставок внутри одной транзакции
+        tasks.forEach { task ->
+            queries.insertTask(
+                id = task.id,
+                title = task.title,
+                completed = task.completed,
+                priority = task.priority.toLong(),
+                dueDate = task.dueDate,
+                userId = task.userId
+            )
         }
     }
 }
@@ -297,20 +300,20 @@ class TaskRepositoryTest {
 
     @BeforeTest
     fun setup() {
-        // ✅ In-memory database для unit-тестов
+        // ✅ In-memory database для unit-тестов (JVM)
         val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
         TaskDatabase.Schema.create(driver)
         repository = TaskRepository(
-            object : DatabaseDriverFactory {
-                override fun createDriver() = driver
+            driverFactory = object : DatabaseDriverFactory(/* platform stub if needed */) {
+                fun createDriver(): SqlDriver = driver
             },
-            TestDispatchers
+            dispatchers = TestDispatchers
         )
     }
 
     @Test
     fun insertAndRetrieveTask() = runTest {
-        val task = Task(id = "1", title = "Test", ...)
+        val task = Task(id = "1", title = "Test", /* ... */)
         repository.insertTask(task)
         val retrieved = repository.getTaskById("1")
         assertEquals(task, retrieved)
@@ -318,19 +321,20 @@ class TaskRepositoryTest {
 }
 ```
 
+(Тестовый пример концептуальный; в реальном KMM-проекте `DatabaseDriverFactory` обычно объявляется как `expect`/`actual`, и для JVM-тестов можно использовать отдельную реализацию.)
+
 #### Best Practices
 
-1. **Schema Design**: используйте foreign keys, indexes для frequently queried columns, partial indexes для filtered queries
-2. **Transactions**: группируйте related operations, держите transactions короткими, handle errors properly
-3. **Performance**: включайте WAL mode на Android, используйте batching для bulk operations, pagination для больших datasets
-4. **Migrations**: тестируйте thoroughly, используйте `verifyMigrations` в development, документируйте schema changes
+1. **Schema Design**: используйте foreign keys, индексы для часто запрашиваемых колонок, partial indexes для фильтрованных запросов.
+2. **Transactions**: группируйте связанные операции, держите транзакции короткими, обрабатывайте ошибки; избегайте `suspend` внутри блока `transaction {}`.
+3. **Performance**: используйте batching для bulk операций, pagination для больших datasets; дополнительные PRAGMA-настройки применяйте осознанно.
+4. **Migrations**: тестируйте миграции, используйте `verifyMigrations`, избегайте дублирования логики миграций между `.sqm` и ручным `onUpgrade`.
 
 ---
 
-
 ## Answer (EN)
 
-SQLDelight generates type-safe Kotlin APIs from SQL statements, providing compile-time verification and platform-specific drivers (SQLite on Android, SQLite.swift on iOS) while sharing database logic across platforms.
+SQLDelight generates type-safe Kotlin APIs from SQL statements, providing compile-time verification and platform-specific drivers (AndroidSqliteDriver on Android, NativeSqliteDriver on iOS) while sharing database logic across platforms.
 
 #### Setup and Configuration
 
@@ -346,7 +350,6 @@ sqldelight {
     databases {
         create("TaskDatabase") {
             packageName.set("com.example.db")
-            generateAsync.set(true)
             verifyMigrations.set(true)
         }
     }
@@ -364,6 +367,9 @@ kotlin {
         }
         iosMain.dependencies {
             implementation("app.cash.sqldelight:native-driver:2.0+")
+        }
+        commonTest.dependencies {
+            implementation("app.cash.sqldelight:sqlite-driver:2.0+") // for in-memory/JVM tests
         }
     }
 }
@@ -402,9 +408,13 @@ SELECT * FROM Task
 WHERE userId = :userId
 ORDER BY priority DESC;
 
+selectById:
+SELECT * FROM Task
+WHERE id = :id;
+
 insertTask:
 INSERT INTO Task (id, title, completed, priority, dueDate, userId)
-VALUES (?, ?, ?, ?, ?, ?);
+VALUES (:id, :title, :completed, :priority, :dueDate, :userId);
 
 updateTask:
 UPDATE Task SET
@@ -428,8 +438,7 @@ actual class DatabaseDriverFactory(private val context: Context) {
             callback = object : AndroidSqliteDriver.Callback(TaskDatabase.Schema) {
                 override fun onOpen(db: SupportSQLiteDatabase) {
                     super.onOpen(db)
-                    // ✅ Enable WAL for better concurrency
-                    db.execSQL("PRAGMA journal_mode=WAL;")
+                    // ✅ Additional tuning if needed
                     db.execSQL("PRAGMA foreign_keys=ON;")
                 }
             }
@@ -445,14 +454,7 @@ actual class DatabaseDriverFactory {
     actual fun createDriver(): SqlDriver {
         return NativeSqliteDriver(
             schema = TaskDatabase.Schema,
-            name = "task.db",
-            onConfiguration = { config ->
-                config.copy(
-                    extendedConfig = DatabaseConfiguration.Extended(
-                        foreignKeyConstraints = true
-                    )
-                )
-            }
+            name = "task.db"
         )
     }
 }
@@ -491,10 +493,19 @@ class TaskRepository(
         )
     }
 
-    // ✅ Transaction for bulk operations
+    // ✅ Transaction for bulk operations without suspend calls inside the transaction block
     suspend fun insertMultiple(tasks: List<Task>) = withContext(dispatchers.io) {
         queries.transaction {
-            tasks.forEach { insertTask(it) }
+            tasks.forEach { task ->
+                queries.insertTask(
+                    id = task.id,
+                    title = task.title,
+                    completed = task.completed,
+                    priority = task.priority.toLong(),
+                    dueDate = task.dueDate,
+                    userId = task.userId
+                )
+            }
         }
     }
 }
@@ -502,30 +513,19 @@ class TaskRepository(
 
 #### Migrations
 
+For SQLDelight 2.x, migrations are typically defined via `.sqm` files. Example:
+
 **Migration Files** (`.sqm`):
 ```sql
--- migrations/1.sqm
+-- src/commonMain/sqldelight/com/example/db/migrations/1.sqm
 ALTER TABLE Task ADD COLUMN priority INTEGER NOT NULL DEFAULT 0;
 CREATE INDEX task_priority ON Task(priority);
 
--- migrations/2.sqm
+-- src/commonMain/sqldelight/com/example/db/migrations/2.sqm
 ALTER TABLE Task ADD COLUMN dueDate INTEGER;
 ```
 
-**Manual Migration Handler**:
-```kotlin
-// androidMain
-override fun onUpgrade(
-    db: SupportSQLiteDatabase,
-    oldVersion: Int,
-    newVersion: Int
-) {
-    when (oldVersion) {
-        1 -> db.execSQL("ALTER TABLE Task ADD COLUMN priority INTEGER DEFAULT 0")
-        2 -> db.execSQL("ALTER TABLE Task ADD COLUMN dueDate INTEGER")
-    }
-}
-```
+With `verifyMigrations = true`, SQLDelight validates that migrations produce the expected schema. A manual `onUpgrade` implementation in the driver is generally not needed and can conflict with SQLDelight-managed migrations.
 
 #### Optimization
 
@@ -542,9 +542,16 @@ LIMIT :limit OFFSET :offset;
 ```kotlin
 suspend fun insertBatch(tasks: List<Task>) = withContext(dispatchers.io) {
     queries.transaction {
-        // ✅ Chunk by 500 to avoid SQL variable limit
-        tasks.chunked(500).forEach { batch ->
-            batch.forEach { queries.insertTask(...) }
+        // ✅ Example of batched inserts within a single transaction
+        tasks.forEach { task ->
+            queries.insertTask(
+                id = task.id,
+                title = task.title,
+                completed = task.completed,
+                priority = task.priority.toLong(),
+                dueDate = task.dueDate,
+                userId = task.userId
+            )
         }
     }
 }
@@ -576,20 +583,20 @@ class TaskRepositoryTest {
 
     @BeforeTest
     fun setup() {
-        // ✅ In-memory database for unit tests
+        // ✅ In-memory database for JVM unit tests
         val driver = JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
         TaskDatabase.Schema.create(driver)
         repository = TaskRepository(
-            object : DatabaseDriverFactory {
-                override fun createDriver() = driver
+            driverFactory = object : DatabaseDriverFactory(/* platform stub if needed */) {
+                fun createDriver(): SqlDriver = driver
             },
-            TestDispatchers
+            dispatchers = TestDispatchers
         )
     }
 
     @Test
     fun insertAndRetrieveTask() = runTest {
-        val task = Task(id = "1", title = "Test", ...)
+        val task = Task(id = "1", title = "Test", /* ... */)
         repository.insertTask(task)
         val retrieved = repository.getTaskById("1")
         assertEquals(task, retrieved)
@@ -597,12 +604,14 @@ class TaskRepositoryTest {
 }
 ```
 
+(This test snippet is conceptual; in a real KMM setup, `DatabaseDriverFactory` is usually declared as `expect`/`actual`, and tests use a dedicated test driver implementation.)
+
 #### Best Practices
 
-1. **Schema Design**: use foreign keys, indexes for frequently queried columns, partial indexes for filtered queries
-2. **Transactions**: group related operations, keep transactions short, handle errors properly
-3. **Performance**: enable WAL mode on Android, use batching for bulk operations, pagination for large datasets
-4. **Migrations**: test thoroughly, use `verifyMigrations` in development, document schema changes
+1. **Schema Design**: use foreign keys, indexes for frequently queried columns, partial indexes for filtered queries.
+2. **Transactions**: group related operations, keep transactions short, handle errors; avoid `suspend` calls inside `transaction {}` blocks.
+3. **Performance**: use batching for bulk operations, pagination for large datasets; apply extra PRAGMA tuning only when appropriate.
+4. **Migrations**: test migrations, use `verifyMigrations`, and avoid duplicating migration logic between `.sqm` files and manual `onUpgrade`.
 
 ---
 

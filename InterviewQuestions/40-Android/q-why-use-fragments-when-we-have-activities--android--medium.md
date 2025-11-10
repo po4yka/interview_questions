@@ -2,29 +2,20 @@
 id: android-390
 title: "Why Use Fragments When We Have Activities / Зачем использовать Fragment когда есть Activity"
 aliases: ["Why Use Fragments When We Have Activities", "Зачем использовать Fragment когда есть Activity"]
-
-# Classification
 topic: android
-subtopics: [activity, architecture-modularization, fragment]
+subtopics: [activity, fragment]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 sources: []
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-fragment-lifecycle, c-fragments]
-
-# Timestamps
+related: [c-activity-lifecycle, q-fragment-vs-activity-lifecycle--android--medium]
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-11-10
+tags: [android/activity, android/fragment, difficulty/medium]
 
-# Tags (EN only; no leading #)
-tags: [activity, android/activity, android/architecture-modularization, android/fragment, difficulty/medium, fragments]
 ---
 
 # Вопрос (RU)
@@ -39,7 +30,9 @@ tags: [activity, android/activity, android/architecture-modularization, android/
 
 ## Ответ (RU)
 
-Фрагменты обеспечивают **модульную композицию UI** внутри одного Activity. Ключевые преимущества: переиспользуемые компоненты, адаптивные макеты для планшетов/телефонов, эффективное управление памятью и упрощённая внутриэкранная навигация.
+Фрагменты обеспечивают **модульную композицию UI** внутри одного `Activity`. Ключевые преимущества: переиспользуемые компоненты, адаптивные макеты для планшетов/телефонов, более гибкое управление навигацией и жизненным циклом, а также удобная организация взаимодействия между частями экрана.
+
+Важно: фрагменты не являются обязательными (особенно с появлением Jetpack Compose и простых много-`Activity` приложений), но они полезны там, где нужна модульность и сложная навигация внутри одного `Activity`.
 
 ### Основные Причины
 
@@ -89,31 +82,41 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**3. Эффективность памяти**
+**3. Управление ресурсами и навигацией**
 
 ```kotlin
-// ❌ Несколько Activity: ~5MB × 3 = ~15MB
+// Подход с несколькими Activity
 class ListActivity : AppCompatActivity()
 class DetailActivity : AppCompatActivity()
 class SettingsActivity : AppCompatActivity()
 
-// ✅ Один Activity + fragments: ~6-7MB
+// Подход с одним Activity и несколькими Fragment
 class MainActivity : AppCompatActivity() {
-    // Fragments делят ресурсы Activity (window, theme, system resources)
+    // Fragments разделяют ресурсы Activity (window, theme, system resources),
+    // а переходы между экранами могут выполняться внутри одного Activity.
 }
 ```
 
-**4. Shared ViewModel для коммуникации**
+Фрагменты сами по себе не гарантируют меньший расход памяти, но позволяют:
+- уменьшить накладные расходы на создание новых `Activity`,
+- повторно использовать `Activity` и инфраструктуру (window, decorView, темы),
+- централизовать логику навигации и state handling в одном `Activity`.
+
+**4. Shared `ViewModel` для коммуникации**
 
 ```kotlin
 class SharedViewModel : ViewModel() {
     private val _selectedItem = MutableLiveData<Item>()
     val selectedItem: LiveData<Item> = _selectedItem
+
+    fun selectItem(item: Item) {
+        _selectedItem.value = item
+    }
 }
 
 // Fragment 1: List
 class ListFragment : Fragment() {
-    private val viewModel: SharedViewModel by activityViewModels() // ✅ Общая ViewModel
+    private val viewModel: SharedViewModel by activityViewModels() // ✅ Общая ViewModel для Activity
 
     private fun onItemClick(item: Item) = viewModel.selectItem(item)
 }
@@ -135,13 +138,15 @@ class DetailFragment : Fragment() {
 | Bottom/Tab navigation | Независимые разделы приложения |
 | Master-detail layouts | Deep links/entry points |
 | Адаптивные макеты | Различные task flows |
-| ViewPager screens | Полностью разный контекст |
+| ViewPager/screens с прокруткой | Полностью разный контекст |
 
 ---
 
 ## Answer (EN)
 
-Fragments provide **modular UI composition** within a single Activity. Key advantages: reusable components, adaptive layouts for tablets/phones, efficient memory management, and simplified in-screen navigation.
+Fragments provide **modular UI composition** within a single `Activity`. Key advantages: reusable components, adaptive layouts for tablets/phones, more flexible navigation and lifecycle handling, and convenient communication between parts of the screen.
+
+Important: fragments are not mandatory (especially with Jetpack Compose and simple multi-`Activity` apps), but they are valuable when you need modularity and complex in-`Activity` navigation.
 
 ### Core Reasons
 
@@ -191,31 +196,41 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**3. Memory Efficiency**
+**3. Resource and Navigation Management**
 
 ```kotlin
-// ❌ Multiple Activities: ~5MB × 3 = ~15MB
+// Multiple-Activity approach
 class ListActivity : AppCompatActivity()
 class DetailActivity : AppCompatActivity()
 class SettingsActivity : AppCompatActivity()
 
-// ✅ Single Activity + fragments: ~6-7MB
+// Single-Activity with multiple Fragments
 class MainActivity : AppCompatActivity() {
-    // Fragments share Activity resources (window, theme, system resources)
+    // Fragments share the Activity resources (window, theme, system resources),
+    // and navigation between screens can happen within a single Activity.
 }
 ```
 
-**4. Shared ViewModel for Communication**
+Fragments themselves do not guarantee lower memory usage, but they allow you to:
+- reduce overhead of creating multiple Activities,
+- reuse the same `Activity` and its infrastructure (window, decorView, themes),
+- centralize navigation and state handling within a single `Activity`.
+
+**4. Shared `ViewModel` for Communication**
 
 ```kotlin
 class SharedViewModel : ViewModel() {
     private val _selectedItem = MutableLiveData<Item>()
     val selectedItem: LiveData<Item> = _selectedItem
+
+    fun selectItem(item: Item) {
+        _selectedItem.value = item
+    }
 }
 
 // Fragment 1: List
 class ListFragment : Fragment() {
-    private val viewModel: SharedViewModel by activityViewModels() // ✅ Shared ViewModel
+    private val viewModel: SharedViewModel by activityViewModels() // ✅ Shared across Activity
 
     private fun onItemClick(item: Item) = viewModel.selectItem(item)
 }
@@ -237,38 +252,56 @@ class DetailFragment : Fragment() {
 | Bottom/Tab navigation | Independent app sections |
 | Master-detail layouts | Deep links/entry points |
 | Adaptive layouts | Different task flows |
-| ViewPager screens | Completely different context |
+| ViewPager/scrollable screens | Completely different context |
 
 ---
 
+## Follow-ups (RU)
+
+- Как соотносится жизненный цикл `Fragment` и `Activity`?
+- Каковы производственные последствия использования вложенных фрагментов?
+- Как Navigation Component упрощает управление транзакциями фрагментов?
+- Каковы лучшие практики паттернов коммуникации между фрагментами?
+- Когда следует избегать использования фрагментов?
+
 ## Follow-ups
 
-- How does Fragment lifecycle relate to Activity lifecycle?
+- How does `Fragment` lifecycle relate to `Activity` lifecycle?
 - What are the performance implications of nested fragments?
 - How does Navigation Component simplify fragment transactions?
 - What are best practices for fragment communication patterns?
 - When should you avoid using fragments?
 
-## References
+## References (RU)
 
-- [[c-fragments]] - Fragment fundamentals
-- [[c-activity-lifecycle]] - Activity lifecycle concepts
-- [[c-viewmodel]] - ViewModel architecture component
+- [[c-activity-lifecycle]] - жизненный цикл `Activity`
 - [Fragments](https://developer.android.com/guide/fragments)
 - [Navigation](https://developer.android.com/guide/navigation)
 
+## References
+
+- [[c-activity-lifecycle]] - `Activity` lifecycle concepts
+- [Fragments](https://developer.android.com/guide/fragments)
+- [Navigation](https://developer.android.com/guide/navigation)
+
+## Related Questions (RU)
+
+### База (проще)
+- [[q-what-is-intent--android--easy]] - основы `Intent`
+
+### Связанные (тот же уровень)
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - сравнение жизненных циклов
+
+### Продвинутые (сложнее)
+- [[q-android-architectural-patterns--android--medium]] - архитектурные подходы в Android
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-intent--android--easy]] - Fragment basics
-- [[q-activity-lifecycle--android--easy]] - Activity lifecycle fundamentals
+- [[q-what-is-intent--android--easy]] - `Intent` basics
 
 ### Related (Same Level)
 - [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle comparison
-- [[q-fragment-communication--android--medium]] - Fragment communication patterns
-- [[q-viewmodel-scope--android--medium]] - ViewModel scoping
 
 ### Advanced (Harder)
-- [[q-fragment-transaction-optimizations--android--hard]] - Advanced fragment transactions
-- [[q-single-activity-architecture--android--hard]] - Single-Activity architecture patterns
+- [[q-android-architectural-patterns--android--medium]] - Android architectural approaches

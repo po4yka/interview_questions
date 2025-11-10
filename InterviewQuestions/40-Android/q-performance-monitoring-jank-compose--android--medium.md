@@ -29,18 +29,21 @@ sources: [https://developer.android.com/jetpack/compose/performance, https://dev
 
 ## Ответ (RU)
 
-**Jank** - "замирания" UI когда frame rate падает ниже 60fps (>16.67ms per frame). Главные причины в Compose: избыточные recompositions, медленные вычисления, неоптимизированные списки, блокировка UI thread.
+**Jank** — "замирания" UI, когда кадр не укладывается в отведённый слот времени для текущей частоты обновления экрана (например, >16.67ms для 60 Гц, >11.11ms для 90 Гц). Главные причины в Compose: избыточные recompositions, тяжёлые вычисления в UI-потоке, неоптимизированные списки, блокировка main thread I/O/синхронными операциями, неэффективная работа с состоянием.
 
 ### Инструменты Обнаружения
 
-**1. Layout Inspector** - визуализация recompositions (красные границы, count, timing)
-**2. Composition Tracing** - профилирование частоты recomposition в Android Studio Profiler
-**3. Macrobenchmark** - измерение frame timing, jank count, P50/P90/P95/P99 метрики
-**4. FrameMetrics API** - runtime мониторинг jank в production
+**1. Layout Inspector** — визуализация деревьев Compose, подсветка частоты recomposition (Highlight recompositions), просмотр слоёв и измерений.
+
+**2. Composition Tracing** — трассировка composable-функций и их recomposition в Android Studio Profiler (Compose Tracing / System Trace) для поиска горячих участков.
+
+**3. Macrobenchmark** — измерение времени рендеринга и scroll, frame timing, jank count, percentiles (P50/P90/P95/P99) для типичных сценариев.
+
+**4. FrameMetrics API** — runtime-мониторинг frame-таймингов и jank в production-сборках.
 
 ### Ключевые Техники Оптимизации
 
-**remember** - кэширование дорогих вычислений:
+**remember** — кэширование дорогих вычислений внутри composable:
 
 ```kotlin
 // ❌ Вычисляется каждый recompose
@@ -58,10 +61,10 @@ fun ExpensiveList(items: List<Item>) {
 }
 ```
 
-**derivedStateOf** - recompose только когда derived значение изменилось:
+**derivedStateOf** — вычислять производное значение и подписываться только на его изменения, чтобы избежать лишних recomposition потребителей:
 
 ```kotlin
-// ❌ Recompose при КАЖДОМ scroll pixel
+// ❌ showButton читается напрямую из listState и может часто меняться
 @Composable
 fun ScrollableList() {
     val listState = rememberLazyListState()
@@ -69,7 +72,7 @@ fun ScrollableList() {
     // ...
 }
 
-// ✅ Recompose только когда условие изменилось (0 → 1+)
+// ✅ Потребители showButton будут обновляться только при изменении условия (0 → 1+ и обратно)
 @Composable
 fun ScrollableList() {
     val listState = rememberLazyListState()
@@ -80,28 +83,32 @@ fun ScrollableList() {
 }
 ```
 
-**@Stable/@Immutable** - стабильные классы для smart recomposition:
+**@Stable/@Immutable** — помощь Compose в определении стабильности типов для более агрессивного пропуска recomposition:
 
 ```kotlin
-// ❌ Нестабильный класс - всегда recompose
+// ⚠️ Нестабильный из-за MutableList: изменения могут не отслеживаться корректно Compose runtime
 data class User(val name: String, val posts: MutableList<Post>)
 
-// ✅ Стабильный класс - recompose только при изменении
+// ✅ Иммутабельная структура данных лучше согласуется с моделью стабильности
 @Immutable
 data class User(val name: String, val posts: List<Post>)
 ```
 
-**Правила Stability**: Primitives/val stable, var unstable, immutable collections stable, mutable unstable, классы требуют `@Stable`/`@Immutable`.
+**Упрощённые правила Stability (Compose)**:
+- стабильность определяется моделью стабильности Compose, а не только `val`/`var`;
+- примитивные типы и большинство стандартных неизменяемых типов считаются стабильными;
+- mutable-коллекции и изменяемые поля (`var`) могут делать тип нестабильным для Compose;
+- аннотации `@Stable` / `@Immutable` помогают явно задать контракт, но требуют соблюдения его условий (отсутствие скрытых мутаций и т.п.).
 
-**LazyColumn keys** - стабильные unique keys предотвращают recomposition:
+**LazyColumn keys** — стабильные уникальные keys помогают сохранить идентичность элементов при изменении списка:
 
 ```kotlin
-// ❌ Без key - полный recompose при изменении порядка
+// ❌ Без key при изменении порядка Compose может пересоздавать элементы
 LazyColumn {
     items(products) { product -> ProductItem(product) }
 }
 
-// ✅ С key - recompose только измененных элементов
+// ✅ С ключами Compose лучше сохраняет состояние и избегает лишних пересозданий при reorder/insert/remove
 LazyColumn {
     items(products, key = { it.id }) { product -> ProductItem(product) }
 }
@@ -120,11 +127,11 @@ fun scrollBenchmark() = benchmarkRule.measureRepeated(
     list.scroll(Direction.DOWN, 1f)
 }
 
-// Результат: frameDurationCpuMs P50 16.2, P90 18.1, P95 22.3, P99 45.2
+// Пример результатов: frameDurationCpuMs P50 16.2, P90 18.1, P95 22.3, P99 45.2
 // jankyFrames count 12 (из 100 frames)
 ```
 
-**Метрики**: P50 (median), P90/P95/P99 percentiles, Jank = frame >16.67ms.
+**Метрики**: P50 (median), P90/P95/P99 (percentile), `jankyFrames` — кадры, превысившие целевую длительность для текущей частоты обновления.
 
 ### Production Мониторинг
 
@@ -132,14 +139,18 @@ fun scrollBenchmark() = benchmarkRule.measureRepeated(
 
 ```kotlin
 activity.window.addOnFrameMetricsAvailableListener({ _, metrics, _ ->
-    val duration = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000
-    if (duration > 16.67) {
-        analytics.logEvent("jank_detected", mapOf("duration_ms" to duration))
+    val durationNs = metrics.getMetric(FrameMetrics.TOTAL_DURATION)
+    val durationMs = durationNs / 1_000_000.0
+    val frameIntervalMs = 16.67 // пример для 60 Гц; для 90/120 Гц порог меньше
+    if (durationMs > frameIntervalMs) {
+        analytics.logEvent("jank_detected", mapOf("duration_ms" to durationMs))
     }
 }, Handler(Looper.getMainLooper()))
 ```
 
-**Baseline Profiles** - AOT compilation для быстрого startup:
+(В реальном приложении порог следует привязать к фактической частоте экрана.)
+
+**Baseline Profiles** — заранее сгенерированные профили для AOT/JIT-оптимизации критичных путей (startup и ключевые user flows):
 
 ```kotlin
 @Test
@@ -156,53 +167,66 @@ fun generateBaselineProfile() = rule.collect(
 ### Частые Ошибки
 
 ```kotlin
-// ❌ 1. Lambda создает новый объект каждый recompose
-Button(onClick = { viewModel.increment() }) { Text("Click") }
+// ❌ 1. Тяжёлая логика внутри lambda/onClick или создание больших объектов на каждый recompose
+Button(onClick = { 
+    // тяжёлая работа здесь приведёт к jank
+    viewModel.increment()
+}) { Text("Click") }
 
-// ✅ remember lambda
-val onClick = remember(viewModel) { { viewModel.increment() } }
-Button(onClick = onClick) { Text("Click") }
+// ✅ Вынести тяжёлую работу из composable/onClick, либо использовать event-хендлер без лишних захватов
+@Composable
+fun CounterButton(viewModel: CounterViewModel) {
+    val onClick = remember(viewModel) { { viewModel.increment() } }
+    Button(onClick = onClick) { Text("Click") }
+}
 
-// ❌ 2. Чтение всего State когда нужна часть
+// ❌ 2. Подписка composable на большее состояние, чем необходимо
 @Composable
 fun BadComponent(state: AppState) {
     val user = state.user
-    val products = state.products // Не используется!
+    val products = state.products // Не используется, но держит зависимость от всего state
     Text(user.name)
 }
 
-// ✅ Читаем только необходимое
+// ✅ Сужаем зависимости до реально используемых полей
 @Composable
 fun GoodComponent(state: AppState) {
     val userName = state.user.name
     Text(userName)
 }
 
-// ❌ 3. Modifier создается каждый recompose
+// ❌ 3. Создание тяжёлых Modifier / объектов каждый recompose (например, сложные background/shadow/graphics)
 Column(modifier = Modifier.fillMaxSize().padding(16.dp).background(Color.White)) { }
 
-// ✅ Переиспользуем Modifier
+// ✅ Hoist/remember действительно тяжёлые объекты; простые цепочки Modifier обычно недороги
 private val containerModifier = Modifier.fillMaxSize().padding(16.dp)
-Column(modifier = containerModifier) { }
+
+@Composable
+fun Container(content: @Composable () -> Unit) {
+    Column(modifier = containerModifier) { content() }
+}
 ```
 
 ## Answer (EN)
 
-**Jank** is UI "stuttering" when frame rate drops below 60fps (>16.67ms per frame). Main causes in Compose: excessive recompositions, slow computations, unoptimized lists, blocking UI thread.
+"Jank" is UI stuttering when a frame misses its rendering deadline for the current display refresh rate (e.g., >16.67ms on 60Hz, >11.11ms on 90Hz). Main causes in Compose: excessive recompositions, heavy work on the UI thread, unoptimized lists, blocking calls on the main thread, and inefficient state usage.
 
 ### Detection Tools
 
-**1. Layout Inspector** - visualize recompositions (red borders, count, timing)
-**2. Composition Tracing** - profile recomposition frequency in Android Studio Profiler
-**3. Macrobenchmark** - measure frame timing, jank count, P50/P90/P95/P99 metrics
-**4. FrameMetrics API** - runtime jank monitoring in production
+**1. Layout Inspector** - visualize Compose hierarchy, enable "Highlight recompositions" to see how often composables are redrawn, inspect layers and measurements.
+
+**2. Composition Tracing** - use Compose tracing/System Trace in Android Studio Profiler to inspect which composables recompose and how often.
+
+**3. Macrobenchmark** - measure rendering and scroll performance, frame timing, jank count, and percentiles (P50/P90/P95/P99) for critical user journeys.
+
+**4. FrameMetrics API** - monitor frame timings and jank at runtime in production builds.
 
 ### Key Optimization Techniques
 
-**remember** - cache expensive computations:
+**remember** - cache expensive computations inside a composable:
 
 ```kotlin
-// ❌ Recomputed every recompose
+// ❌ Recomputed on every recomposition
 @Composable
 fun ExpensiveList(items: List<Item>) {
     val processed = items.map { processItem(it) }
@@ -217,10 +241,10 @@ fun ExpensiveList(items: List<Item>) {
 }
 ```
 
-**derivedStateOf** - recompose only when derived value changes:
+**derivedStateOf** - compute derived values and only recompose dependents when that value changes:
 
 ```kotlin
-// ❌ Recompose on EVERY scroll pixel
+// ❌ showButton depends directly on listState and may change frequently
 @Composable
 fun ScrollableList() {
     val listState = rememberLazyListState()
@@ -228,7 +252,7 @@ fun ScrollableList() {
     // ...
 }
 
-// ✅ Recompose only when condition changes (0 → 1+)
+// ✅ Consumers of showButton update only when the condition changes (0 → 1+ and back)
 @Composable
 fun ScrollableList() {
     val listState = rememberLazyListState()
@@ -239,28 +263,32 @@ fun ScrollableList() {
 }
 ```
 
-**@Stable/@Immutable** - mark classes stable for smart recomposition:
+**@Stable/@Immutable** - help Compose understand which types are stable for smarter skipping behavior:
 
 ```kotlin
-// ❌ Unstable class - always recompose
+// ⚠️ Unstable due to MutableList: mutations are not observable for Compose and can break expectations
 data class User(val name: String, val posts: MutableList<Post>)
 
-// ✅ Stable class - recompose only when changed
+// ✅ Immutable data structure fits Compose stability model better
 @Immutable
 data class User(val name: String, val posts: List<Post>)
 ```
 
-**Stability rules**: Primitives/val stable, var unstable, immutable collections stable, mutable unstable, classes need `@Stable`/`@Immutable` annotation.
+**Stability basics (Compose)**:
+- stability is defined by Compose's stability model, not just `val` vs `var`;
+- primitive types and most standard immutable types are treated as stable;
+- mutable collections and mutable properties (`var`) can make a type unstable for skipping;
+- `@Stable` / `@Immutable` annotations declare contracts that you must honor (no hidden mutations, etc.).
 
-**LazyColumn keys** - stable unique keys prevent unnecessary recomposition:
+**LazyColumn keys** - use stable unique keys to preserve item identity and state when the list changes:
 
 ```kotlin
-// ❌ No key - full recompose on order change
+// ❌ Without keys, reordering can cause items to be recreated and state to be misaligned
 LazyColumn {
     items(products) { product -> ProductItem(product) }
 }
 
-// ✅ With key - recompose only changed items
+// ✅ With keys, Compose can better keep item identity/state across reorder/insert/remove
 LazyColumn {
     items(products, key = { it.id }) { product -> ProductItem(product) }
 }
@@ -279,11 +307,11 @@ fun scrollBenchmark() = benchmarkRule.measureRepeated(
     list.scroll(Direction.DOWN, 1f)
 }
 
-// Result: frameDurationCpuMs P50 16.2, P90 18.1, P95 22.3, P99 45.2
+// Example results: frameDurationCpuMs P50 16.2, P90 18.1, P95 22.3, P99 45.2
 // jankyFrames count 12 (out of 100 frames)
 ```
 
-**Metrics**: P50 (median), P90/P95/P99 percentiles, Jank = frame >16.67ms.
+**Metrics**: P50 (median), P90/P95/P99 (percentiles), `jankyFrames` are frames exceeding the target duration for the current refresh rate.
 
 ### Production Monitoring
 
@@ -291,14 +319,18 @@ fun scrollBenchmark() = benchmarkRule.measureRepeated(
 
 ```kotlin
 activity.window.addOnFrameMetricsAvailableListener({ _, metrics, _ ->
-    val duration = metrics.getMetric(FrameMetrics.TOTAL_DURATION) / 1_000_000
-    if (duration > 16.67) {
-        analytics.logEvent("jank_detected", mapOf("duration_ms" to duration))
+    val durationNs = metrics.getMetric(FrameMetrics.TOTAL_DURATION)
+    val durationMs = durationNs / 1_000_000.0
+    val frameIntervalMs = 16.67 // example threshold for 60Hz; use lower values for 90/120Hz
+    if (durationMs > frameIntervalMs) {
+        analytics.logEvent("jank_detected", mapOf("duration_ms" to durationMs))
     }
 }, Handler(Looper.getMainLooper()))
 ```
 
-**Baseline Profiles** - AOT compilation for fast startup:
+(In a real app, base the threshold on the actual display refresh rate.)
+
+**Baseline Profiles** - pre-generated profiles that guide AOT/JIT to optimize hot code paths (app startup and key user flows):
 
 ```kotlin
 @Test
@@ -315,34 +347,44 @@ fun generateBaselineProfile() = rule.collect(
 ### Common Mistakes
 
 ```kotlin
-// ❌ 1. Lambda creates new object every recompose
-Button(onClick = { viewModel.increment() }) { Text("Click") }
+// ❌ 1. Doing heavy work in onClick or capturing frequently changing state in lambdas used deep in the tree
+Button(onClick = {
+    // heavy work here will cause jank
+    viewModel.increment()
+}) { Text("Click") }
 
-// ✅ remember lambda
-val onClick = remember(viewModel) { { viewModel.increment() } }
-Button(onClick = onClick) { Text("Click") }
+// ✅ Move heavy work out of composition and avoid unnecessary captures
+@Composable
+fun CounterButton(viewModel: CounterViewModel) {
+    val onClick = remember(viewModel) { { viewModel.increment() } }
+    Button(onClick = onClick) { Text("Click") }
+}
 
-// ❌ 2. Reading entire State when only need part
+// ❌ 2. Subscribing a composable to more state than it actually needs
 @Composable
 fun BadComponent(state: AppState) {
     val user = state.user
-    val products = state.products // Not used!
+    val products = state.products // Not used, but ties recomposition to full state
     Text(user.name)
 }
 
-// ✅ Read only what's needed
+// ✅ Narrow dependencies to the specific fields you use
 @Composable
 fun GoodComponent(state: AppState) {
     val userName = state.user.name
     Text(userName)
 }
 
-// ❌ 3. Modifier created every recompose
+// ❌ 3. Allocating heavy Modifiers/objects on every recomposition
 Column(modifier = Modifier.fillMaxSize().padding(16.dp).background(Color.White)) { }
 
-// ✅ Reuse Modifier
+// ✅ Hoist/remember actually heavy objects; simple Modifier chains are usually cheap
 private val containerModifier = Modifier.fillMaxSize().padding(16.dp)
-Column(modifier = containerModifier) { }
+
+@Composable
+fun Container(content: @Composable () -> Unit) {
+    Column(modifier = containerModifier) { content() }
+}
 ```
 
 ---

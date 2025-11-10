@@ -1,7 +1,6 @@
 ---
 id: android-247
-title: How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор
-  как отдельный компонент
+title: How To Implement A Photo Editor As A Separate Component / Как реализовать фоторедактор как отдельный компонент
 aliases:
 - Photo Editor Component
 - Separate Photo Editor
@@ -25,7 +24,7 @@ related:
 - q-how-to-tell-adapter-to-redraw-list-if-element-was-deleted--android--medium
 - q-workmanager-vs-alternatives--android--medium
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 sources: []
 tags:
 - android
@@ -38,6 +37,7 @@ tags:
 - fragments
 - imageview
 - views
+
 ---
 
 # Вопрос (RU)
@@ -52,32 +52,60 @@ tags:
 
 ## Ответ (RU)
 
-Фоторедактор реализуется как Fragment с ImageView для отображения и методами обработки Bitmap. Используйте Matrix для трансформаций и ColorMatrix для фильтров.
+Фоторедактор можно реализовать как переиспользуемый `Fragment` с ImageView для отображения и методами обработки Bitmap внутри фрагмента. Для трансформаций используйте Matrix, для базовых цветовых эффектов — ColorMatrix. Важно чётко определить API фрагмента (например, newInstance для передачи URI и callback для результата), чтобы компонент был изолирован от конкретной `Activity`.
 
 ### Основной Компонент
 
 ```kotlin
-// ✅ Fragment-based photo editor
+// ✅ Fragment-based photo editor (упрощённый пример)
 class PhotoEditorFragment : Fragment() {
-    private lateinit var binding: FragmentPhotoEditorBinding
+    private var _binding: FragmentPhotoEditorBinding? = null
+    private val binding get() = _binding!!
+
     private var originalBitmap: Bitmap? = null
     private var editedBitmap: Bitmap? = null
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentPhotoEditorBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         loadImage()
-        setupListeners()
+        setupListeners() // предполагается, что тут кнопки вызывают rotate/applyFilter/save
     }
 
     private fun loadImage() {
         val imageUri = arguments?.getParcelable<Uri>("image_uri")
         imageUri?.let { uri ->
-            originalBitmap = ImageDecoder.decodeBitmap(
-                ImageDecoder.createSource(requireContext().contentResolver, uri)
-            )
+            val source = ImageDecoder.createSource(requireContext().contentResolver, uri)
+            originalBitmap = ImageDecoder.decodeBitmap(source) { decoder, _, _ ->
+                // Базовый пример: подстройка размера при необходимости
+                decoder.isMutableRequired = true
+            }
             editedBitmap = originalBitmap?.copy(Bitmap.Config.ARGB_8888, true)
             binding.photoImageView.setImageBitmap(editedBitmap)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Не вызываем recycle() вручную, чтобы избежать использования уже рецикленных Bitmap.
+        _binding = null
+    }
+
+    companion object {
+        fun newInstance(imageUri: Uri): PhotoEditorFragment {
+            return PhotoEditorFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable("image_uri", imageUri)
+                }
+            }
         }
     }
 }
@@ -86,20 +114,21 @@ class PhotoEditorFragment : Fragment() {
 ### Базовые Операции
 
 ```kotlin
-// ✅ Rotate image
+// ✅ Rotate image (пример трансформации)
 private fun rotateImage() {
     editedBitmap?.let { bitmap ->
         val matrix = Matrix().apply { postRotate(90f) }
-        editedBitmap = Bitmap.createBitmap(
+        val rotated = Bitmap.createBitmap(
             bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true
         )
-        binding.photoImageView.setImageBitmap(editedBitmap)
+        editedBitmap = rotated
+        binding.photoImageView.setImageBitmap(rotated)
     }
 }
 
-// ✅ Apply grayscale filter
+// ✅ Apply grayscale filter (пример ColorMatrix)
 private fun applyGrayscaleFilter(source: Bitmap): Bitmap {
-    val result = Bitmap.createBitmap(source.width, source.height, source.config)
+    val result = Bitmap.createBitmap(source.width, source.height, Bitmap.Config.ARGB_8888)
     val paint = Paint().apply {
         colorFilter = ColorMatrixColorFilter(
             ColorMatrix().apply { setSaturation(0f) }
@@ -108,15 +137,19 @@ private fun applyGrayscaleFilter(source: Bitmap): Bitmap {
     Canvas(result).drawBitmap(source, 0f, 0f, paint)
     return result
 }
+
+// Аналогично можно задать ColorMatrix для яркости/контраста,
+// изменяя элементы матрицы, а не через "готовые" параметры.
 ```
 
 ### Интеграция
 
 ```kotlin
-// ✅ Use as fragment
+// ✅ Использование как отдельного фрагмента
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
         val imageUri = intent.getParcelableExtra<Uri>("image_uri")
         imageUri?.let { uri ->
@@ -131,7 +164,7 @@ class MainActivity : AppCompatActivity() {
 ### Сохранение Изменений
 
 ```kotlin
-// ✅ Save to MediaStore
+// ✅ Save to MediaStore (Android 10+ подход)
 private fun saveImage() {
     editedBitmap?.let { bitmap ->
         val contentValues = ContentValues().apply {
@@ -154,50 +187,73 @@ private fun saveImage() {
 ```
 
 **Управление памятью**:
-```kotlin
-// ✅ Recycle bitmaps
-override fun onDestroyView() {
-    super.onDestroyView()
-    originalBitmap?.recycle()
-    editedBitmap?.recycle()
-}
-```
+
+- Используйте конфигурацию декодирования (например, масштабирование под размер контейнера), чтобы избежать OutOfMemoryError на больших изображениях.
+- Не вызывайте `bitmap.recycle()` вручную без строгого контроля владения объектом; в типичном фрагмент-компоненте достаточно полагаться на GC и освобождение ссылок при уничтожении view.
 
 **Ключевые моменты**:
-- Fragment для переиспользования
+- `Fragment` как переиспользуемый компонент с чётким API (передача входных данных и возврат результата)
 - Matrix для трансформаций (rotate, scale, translate)
-- ColorMatrix для фильтров (brightness, contrast, saturation)
+- ColorMatrix для цветовых эффектов (grayscale, корректировки через матрицу)
 - MediaStore для сохранения результата
-- Recycling bitmaps для освобождения памяти
+- Корректная работа с `View` Binding и освобождение ссылок для предотвращения утечек
 
 ## Answer (EN)
 
-Photo editor is implemented as a Fragment with ImageView for display and Bitmap processing methods. Use Matrix for transformations and ColorMatrix for filters.
+You can implement the photo editor as a reusable `Fragment` with an ImageView for display and Bitmap processing methods inside the fragment. Use Matrix for transformations and ColorMatrix for basic color effects. Define a clear fragment API (e.g., newInstance for input URI and a callback/interface for the result) to keep it independent from a specific `Activity`.
 
 ### Core Component
 
 ```kotlin
-// ✅ Fragment-based photo editor
+// ✅ Fragment-based photo editor (simplified example)
 class PhotoEditorFragment : Fragment() {
-    private lateinit var binding: FragmentPhotoEditorBinding
+    private var _binding: FragmentPhotoEditorBinding? = null
+    private val binding get() = _binding!!
+
     private var originalBitmap: Bitmap? = null
     private var editedBitmap: Bitmap? = null
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentPhotoEditorBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         loadImage()
-        setupListeners()
+        setupListeners() // assume buttons call rotate/applyFilter/save
     }
 
     private fun loadImage() {
         val imageUri = arguments?.getParcelable<Uri>("image_uri")
         imageUri?.let { uri ->
-            originalBitmap = ImageDecoder.decodeBitmap(
-                ImageDecoder.createSource(requireContext().contentResolver, uri)
-            )
+            val source = ImageDecoder.createSource(requireContext().contentResolver, uri)
+            originalBitmap = ImageDecoder.decodeBitmap(source) { decoder, _, _ ->
+                // Basic example: adjust if you need downscaling
+                decoder.isMutableRequired = true
+            }
             editedBitmap = originalBitmap?.copy(Bitmap.Config.ARGB_8888, true)
             binding.photoImageView.setImageBitmap(editedBitmap)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // Do not manually call recycle() here: avoid using recycled bitmaps.
+        _binding = null
+    }
+
+    companion object {
+        fun newInstance(imageUri: Uri): PhotoEditorFragment {
+            return PhotoEditorFragment().apply {
+                arguments = Bundle().apply {
+                    putParcelable("image_uri", imageUri)
+                }
+            }
         }
     }
 }
@@ -206,20 +262,21 @@ class PhotoEditorFragment : Fragment() {
 ### Basic Operations
 
 ```kotlin
-// ✅ Rotate image
+// ✅ Rotate image (transformation example)
 private fun rotateImage() {
     editedBitmap?.let { bitmap ->
         val matrix = Matrix().apply { postRotate(90f) }
-        editedBitmap = Bitmap.createBitmap(
+        val rotated = Bitmap.createBitmap(
             bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true
         )
-        binding.photoImageView.setImageBitmap(editedBitmap)
+        editedBitmap = rotated
+        binding.photoImageView.setImageBitmap(rotated)
     }
 }
 
-// ✅ Apply grayscale filter
+// ✅ Apply grayscale filter (ColorMatrix example)
 private fun applyGrayscaleFilter(source: Bitmap): Bitmap {
-    val result = Bitmap.createBitmap(source.width, source.height, source.config)
+    val result = Bitmap.createBitmap(source.width, source.height, Bitmap.Config.ARGB_8888)
     val paint = Paint().apply {
         colorFilter = ColorMatrixColorFilter(
             ColorMatrix().apply { setSaturation(0f) }
@@ -228,15 +285,19 @@ private fun applyGrayscaleFilter(source: Bitmap): Bitmap {
     Canvas(result).drawBitmap(source, 0f, 0f, paint)
     return result
 }
+
+// Similarly, you can configure ColorMatrix values for brightness/contrast
+// instead of expecting built-in parameters.
 ```
 
 ### Integration
 
 ```kotlin
-// ✅ Use as fragment
+// ✅ Use as a separate fragment
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
 
         val imageUri = intent.getParcelableExtra<Uri>("image_uri")
         imageUri?.let { uri ->
@@ -251,7 +312,7 @@ class MainActivity : AppCompatActivity() {
 ### Saving Changes
 
 ```kotlin
-// ✅ Save to MediaStore
+// ✅ Save to MediaStore (Android 10+ style)
 private fun saveImage() {
     editedBitmap?.let { bitmap ->
         val contentValues = ContentValues().apply {
@@ -274,21 +335,16 @@ private fun saveImage() {
 ```
 
 **Memory Management**:
-```kotlin
-// ✅ Recycle bitmaps
-override fun onDestroyView() {
-    super.onDestroyView()
-    originalBitmap?.recycle()
-    editedBitmap?.recycle()
-}
-```
+
+- Use proper decode configuration (e.g., downscaling to view/container size) to avoid OutOfMemoryError with large images.
+- Avoid calling `bitmap.recycle()` manually unless you have strict ownership control; in a typical fragment component, releasing references on view destruction and letting GC handle it is safer.
 
 **Key Points**:
-- Fragment for reusability
+- `Fragment` as a reusable component with a clear API (input and output contracts)
 - Matrix for transformations (rotate, scale, translate)
-- ColorMatrix for filters (brightness, contrast, saturation)
-- MediaStore for saving results
-- Recycling bitmaps to free memory
+- ColorMatrix for color effects (grayscale and other adjustments via matrix values)
+- MediaStore for saving result images
+- Correct `View` Binding usage and releasing references to prevent leaks
 
 ---
 
@@ -320,4 +376,3 @@ override fun onDestroyView() {
 
 ### Advanced (Harder)
 - [[q-workmanager-vs-alternatives--android--medium]]
-- [[q-custom-view-optimization--android--hard]]

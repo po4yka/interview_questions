@@ -12,14 +12,14 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
-  - c-compose-modifiers
+  - c-jetpack-compose
   - c-compose-state
 sources: []
 created: 2025-10-11
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/ui-compose, android/ui-state, compose, difficulty/medium, gestures]
 ---
 
@@ -60,9 +60,11 @@ Box(
     )
 )
 
-// ✅ scrollable: обработка скролла без layout
+// ✅ verticalScroll: вертикальный скролл с ScrollState
 val scrollState = rememberScrollState()
-Column(Modifier.scrollable(scrollState, Orientation.Vertical)) {
+Column(
+    modifier = Modifier.verticalScroll(scrollState)
+) {
     // контент
 }
 ```
@@ -83,7 +85,7 @@ Box(
 )
 ```
 
-**Важно**: ключ `Unit` сохраняет корутину; если передать зависимость, pointerInput пересоздаётся.
+**Важно**: ключ `Unit` сохраняет корутину; если передать зависимость, `pointerInput` будет пересоздаваться при её изменении.
 
 ### Drag С Многомерным Движением
 
@@ -94,7 +96,7 @@ Box(
         .offset { IntOffset(offset.x.toInt(), offset.y.toInt()) }
         .pointerInput(Unit) {
             detectDragGestures { change, dragAmount ->
-                change.consume() // ✅ предотвращаем всплытие
+                change.consume() // ✅ помечаем событие как обработанное для этого распознавателя
                 offset += dragAmount
             }
         }
@@ -112,7 +114,7 @@ val nestedScrollConnection = remember {
             available: Offset,
             source: NestedScrollSource
         ): Offset {
-            // ✅ родитель перехватывает до дочернего
+            // ✅ пример: родитель перехватывает восходящий скролл
             return if (available.y < 0) available else Offset.Zero
         }
     }
@@ -123,9 +125,9 @@ Column(Modifier.nestedScroll(nestedScrollConnection)) { /* ... */ }
 ### Best Practices
 
 - Используйте high-level модификаторы (`clickable`, `draggable`) для стандартных жестов
-- Избегайте аллокаций внутри pointerInput — выносите состояние через `remember`
-- Учитывайте touch slop — система игнорирует движения < 8dp для предотвращения случайных срабатываний
-- Вызывайте `change.consume()` в `detectDragGestures`, чтобы предотвратить всплытие события
+- Избегайте аллокаций внутри `pointerInput` — выносите состояние через `remember`
+- Учитывайте touch slop — система игнорирует очень малые движения (порядка 8dp) для предотвращения случайных срабатываний
+- Вызывайте `change.consume()` (или соответствующий consume-метод) в `detectDragGestures`, когда хотите пометить событие как обработанное данным жестом
 
 ## Answer (EN)
 
@@ -156,9 +158,11 @@ Box(
     )
 )
 
-// ✅ scrollable: scroll handling without layout
+// ✅ verticalScroll: vertical scroll with ScrollState
 val scrollState = rememberScrollState()
-Column(Modifier.scrollable(scrollState, Orientation.Vertical)) {
+Column(
+    modifier = Modifier.verticalScroll(scrollState)
+) {
     // content
 }
 ```
@@ -179,7 +183,7 @@ Box(
 )
 ```
 
-**Important**: key `Unit` persists the coroutine; if you pass a dependency, pointerInput recreates.
+**Important**: the `Unit` key keeps the coroutine scope; if you pass a changing dependency, `pointerInput` will be recreated when it changes.
 
 ### Drag with Multi-dimensional Movement
 
@@ -190,7 +194,7 @@ Box(
         .offset { IntOffset(offset.x.toInt(), offset.y.toInt()) }
         .pointerInput(Unit) {
             detectDragGestures { change, dragAmount ->
-                change.consume() // ✅ prevent event bubbling
+                change.consume() // ✅ mark event as handled for this recognizer
                 offset += dragAmount
             }
         }
@@ -208,7 +212,7 @@ val nestedScrollConnection = remember {
             available: Offset,
             source: NestedScrollSource
         ): Offset {
-            // ✅ parent intercepts before child
+            // ✅ example: parent intercepts upward scroll
             return if (available.y < 0) available else Offset.Zero
         }
     }
@@ -219,9 +223,17 @@ Column(Modifier.nestedScroll(nestedScrollConnection)) { /* ... */ }
 ### Best Practices
 
 - Use high-level modifiers (`clickable`, `draggable`) for standard gestures
-- Avoid allocations inside pointerInput — hoist state via `remember`
-- Account for touch slop — system ignores movements < 8dp to prevent accidental triggers
-- Call `change.consume()` in `detectDragGestures` to prevent event bubbling
+- Avoid allocations inside `pointerInput` — hoist state via `remember`
+- Account for touch slop — the system ignores very small movements (around 8dp) to prevent accidental triggers
+- Call `change.consume()` (or appropriate consume method) in `detectDragGestures` when you want to mark the event as handled by that gesture
+
+## Дополнительные вопросы (RU)
+
+- Как предотвратить конфликты жестов при комбинировании обработки нажатий и перетаскиваний в одном composable?
+- Какова роль `change.consume()` в кастомной обработке жестов?
+- Как работает модификатор `transformable` для мультитач-жестов (pinch, pan, rotate)?
+- Когда стоит использовать `AwaitPointerEventScope` напрямую вместо detect* хелперов?
+- Как кооперация nested scroll влияет на производительность в глубоко вложенных списках?
 
 ## Follow-ups
 
@@ -231,11 +243,27 @@ Column(Modifier.nestedScroll(nestedScrollConnection)) { /* ... */ }
 - When to use `AwaitPointerEventScope` directly instead of detect* helpers?
 - How does nested scroll cooperation affect performance in deeply nested lists?
 
+## Ссылки (RU)
+
+- [[c-compose-state]]
+- https://developer.android.com/develop/ui/compose/touch-input/pointer-input
+- https://developer.android.com/develop/ui/compose/touch-input/gestures
+
 ## References
 
 - [[c-compose-state]]
 - https://developer.android.com/develop/ui/compose/touch-input/pointer-input
 - https://developer.android.com/develop/ui/compose/touch-input/gestures
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+
+### Связанные (средний уровень)
+
+### Продвинутые (сложнее)
+- [[q-compose-custom-layout--android--hard]]
+- [[q-compose-performance-optimization--android--hard]]
 
 ## Related Questions
 

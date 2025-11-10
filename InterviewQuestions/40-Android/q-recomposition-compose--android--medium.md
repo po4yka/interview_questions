@@ -12,9 +12,10 @@ status: draft
 moc: moc-android
 related: [c-jetpack-compose, q-compose-performance-optimization--android--hard, q-jetpack-compose-basics--android--medium]
 created: 2025-10-12
-updated: 2025-10-27
-sources: [https://developer.android.com/jetpack/compose/lifecycle]
+updated: 2025-11-10
+sources: ["https://developer.android.com/jetpack/compose/lifecycle"]
 tags: [android/performance-rendering, android/ui-compose, android/ui-state, difficulty/medium, jetpack-compose, performance, recomposition, state]
+
 ---
 
 # Вопрос (RU)
@@ -29,11 +30,11 @@ tags: [android/performance-rendering, android/ui-compose, android/ui-state, diff
 
 ## Ответ (RU)
 
-**Рекомпозиция** — процесс повторного выполнения composable функций при изменении параметров или состояния. См. [[c-jetpack-compose]].
+**Рекомпозиция** — процесс повторного выполнения composable-функций при изменении отслеживаемых параметров или состояния. См. [[c-jetpack-compose]].
 
 ### Как Работает
 
-В отличие от View (`textView.text = "new"`), Compose перезапускает функцию с новыми данными:
+В отличие от `View` (`textView.text = "new"`), Compose переисполняет composable-функции с новыми данными.
 
 ```kotlin
 @Composable
@@ -48,8 +49,8 @@ fun Counter() {
 
 **Что происходит:**
 1. Клик → `count` меняется с 0 на 1
-2. Compose обнаруживает изменение
-3. Функция `Counter()` выполняется заново
+2. Compose фиксирует изменение State
+3. Функция `Counter()` повторно выполняется (частично или целиком в зависимости от структуры)
 4. UI обновляется
 
 ### Что Триггерит Рекомпозицию?
@@ -69,9 +70,9 @@ fun UserProfile(viewModel: ProfileViewModel) {
 ```
 
 **Триггеры:**
-- `mutableStateOf` changes
-- `collectAsState()` emits from Flow
-- `observeAsState()` for LiveData
+- изменения значений `mutableStateOf`
+- новые значения из `Flow` через `collectAsState()`
+- новые значения из `LiveData` через `observeAsState()`
 
 #### 2. Изменения Параметров
 
@@ -93,7 +94,7 @@ fun Parent() {
 
 ### Область Рекомпозиции (Scoping)
 
-Compose делает рекомпозицию **в максимально узкой области**:
+Compose стремится рекомпозировать **минимально необходимую область** вокруг мест, где прочитано изменившееся состояние. Насколько локальной получится рекомпозиция, зависит от того, где читается state и как структурированы composable-функции.
 
 ```kotlin
 @Composable
@@ -102,10 +103,10 @@ fun Screen() {
     var bottomCounter by remember { mutableStateOf(0) }
 
     Column {
-        Text("Top: $topCounter") // ✅ Только это при изменении topCounter
+        Text("Top: $topCounter") // ✅ В основном затрагивается при изменении topCounter
         Button(onClick = { topCounter++ }) { Text("Top") }
 
-        Text("Bottom: $bottomCounter") // ✅ Только это при изменении bottomCounter
+        Text("Bottom: $bottomCounter") // ✅ В основном затрагивается при изменении bottomCounter
         Button(onClick = { bottomCounter++ }) { Text("Bottom") }
     }
 }
@@ -113,31 +114,33 @@ fun Screen() {
 
 ### Стабильность И Пропуск Рекомпозиции
 
-Compose **пропускает рекомпозицию** если параметры стабильны и не изменились:
+Compose может **пропускать рекомпозицию** для вызова composable, если:
+- параметры стабильны (stable) по модели стабильности Compose
+- и их значения (по `equals`) не изменились.
 
 ```kotlin
 // ✅ Стабильно: Примитивы
 @Composable
-fun Counter(count: Int) // Пропускает если count не изменился
+fun Counter(count: Int) // Может быть пропущен, если count не изменился
 
 // ✅ Стабильно: @Immutable
 @Immutable
 data class User(val id: String, val name: String)
 
 @Composable
-fun UserCard(user: User) // Пропускает если user тот же экземпляр
+fun UserCard(user: User) // Может быть пропущен, если user — тот же экземпляр и его поля не меняются
 
-// ❌ Нестабильно: List
+// ⚠️ По умолчанию нестабильно: List
 @Composable
-fun ItemList(items: List<Item>) // ВСЕГДА делает рекомпозицию
+fun ItemList(items: List<Item>) // Обрабатывается как нестабильный параметр
 ```
 
-**Почему `List` нестабилен?** Kotlin's `List` = `java.util.List`, может быть изменён извне.
+**Почему `List` считается нестабильным?** По модели стабильности Compose обычные `List`/`MutableList` не дают гарантий неизменяемости и могут концептуально меняться без смены ссылки, поэтому Compose не может безопасно относиться к ним как к stable-типам. Это увеличивает вероятность рекомпозиции при изменениях, но не означает "безусловная рекомпозиция каждый кадр".
 
 #### Решение: Сделать Стабильным
 
 ```kotlin
-// Option 1: @Stable wrapper
+// Option 1: @Stable-обертка
 @Stable
 data class ItemsState(val items: List<Item>)
 
@@ -145,7 +148,7 @@ data class ItemsState(val items: List<Item>)
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun ItemList(items: ImmutableList<Item>) // ✅ Стабильно
+fun ItemList(items: ImmutableList<Item>) // ✅ Тип может быть тривиально стабильным
 ```
 
 ### Контроль Рекомпозиции
@@ -155,11 +158,11 @@ fun ItemList(items: ImmutableList<Item>) // ✅ Стабильно
 ```kotlin
 @Composable
 fun ExpensiveCalculation() {
-    // ❌ ПЛОХО: Пересчитывает каждый раз
+    // ❌ ПЛОХО: Пересчитывает на каждую рекомпозицию этого вызова
     val result = expensiveComputation()
 
-    // ✅ ХОРОШО: Вычисляет только один раз
-    val result = remember { expensiveComputation() }
+    // ✅ ХОРОШО: Вычисляет один раз для данного места и сохраняет до изменения ключей/жизненного цикла
+    val rememberedResult = remember { expensiveComputation() }
 }
 ```
 
@@ -168,7 +171,7 @@ fun ExpensiveCalculation() {
 ```kotlin
 @Composable
 fun FilteredList(items: List<Item>, query: String) {
-    // ✅ Пересчёт ТОЛЬКО при изменении query
+    // ✅ Пересчет только при изменении query (или items, если добавить их в ключи)
     val filteredItems = remember(query) {
         items.filter { it.name.contains(query, ignoreCase = true) }
     }
@@ -186,10 +189,11 @@ fun FilteredList(items: List<Item>, query: String) {
 ```kotlin
 @Composable
 fun ScrollToTopButton(listState: LazyListState) {
-    // ❌ ПЛОХО: Рекомпозиция на КАЖДЫЙ пиксель
-    val showButton = listState.firstVisibleItemIndex > 0
+    // ❌ Наивно: showButton вычисляется напрямую и будет читаться при каждом изменении listState
+    // val showButton = listState.firstVisibleItemIndex > 0
 
-    // ✅ ХОРОШО: Только при пересечении порога
+    // ✅ derivedStateOf: пересчитывается при изменении зависимостей
+    // и триггерит рекомпозицию только при изменении результата по equals
     val showButton by remember {
         derivedStateOf {
             listState.firstVisibleItemIndex > 0
@@ -204,51 +208,55 @@ fun ScrollToTopButton(listState: LazyListState) {
 }
 ```
 
-**Почему?** `derivedStateOf` батчит изменения и уведомляет только при изменении boolean результата.
+**Почему это помогает?** `derivedStateOf` отслеживает чтения внутри лямбды и уведомляет только когда итоговое значение действительно меняется, уменьшая число лишних рекомпозиций потребителей.
 
 ### Распространённые Ошибки
 
-#### 1. Нестабильность Лямбд
+#### 1. Лямбды и стабильность
 
 ```kotlin
-// ❌ ПЛОХО: Новая лямбда каждый раз
+// При таком объявлении формально создается новая лямбда на каждую рекомпозицию,
+// но большинство Material-компонентов оптимизированы для обработки таких onClick.
 @Composable
-fun BadButton(viewModel: ViewModel) {
+fun LambdaButton(viewModel: ViewModel) {
     Button(onClick = { viewModel.doAction() }) {
         Text("Клик")
     }
 }
 
-// ✅ ХОРОШО: Ссылка на метод стабильна
+// Использование ссылок на методы или remember для колбеков может снизить шум изменений
+// при передаче колбеков глубже по иерархии.
 @Composable
-fun GoodButton(viewModel: ViewModel) {
+fun MethodRefButton(viewModel: ViewModel) {
     Button(onClick = viewModel::doAction) {
         Text("Клик")
     }
 }
 ```
 
+Главная идея: избегать нестабильных/каждый раз новых параметров там, где они передаются дальше и могут вызывать лишние рекомпозиции дочерних composable.
+
 #### 2. Чтение Состояния Слишком Высоко
 
 ```kotlin
-// ❌ ПЛОХО: Вся Column делает рекомпозицию
+// ❌ ПЛОХО: Вся Column рекомпозируется при любом изменении uiState
 @Composable
 fun BadExample(viewModel: ViewModel) {
     val uiState by viewModel.uiState.collectAsState()
 
     Column {
         Text(uiState.title)
-        ExpensiveComponent() // ❌ Ненужная рекомпозиция
+        ExpensiveComponent() // ❌ Может рекомпозироваться вместе с Column из-за uiState
         Text(uiState.subtitle)
     }
 }
 
-// ✅ ХОРОШО: Узкая область
+// ✅ ХОРОШО: Узкая область — состояние читается ближе к месту использования
 @Composable
 fun GoodExample(viewModel: ViewModel) {
     Column {
-        TitleText(viewModel) // ✅ Независимая рекомпозиция
-        ExpensiveComponent() // ✅ Никогда не делает рекомпозицию
+        TitleText(viewModel) // ✅ Независимая рекомпозиция для title-состояния
+        ExpensiveComponent() // ✅ Не зависит от uiState → не рекомпозируется из-за его изменений
         SubtitleText(viewModel)
     }
 }
@@ -256,23 +264,23 @@ fun GoodExample(viewModel: ViewModel) {
 
 ### Best Practices
 
-1. **State hoisting** — поднимать к ближайшему общему предку
-2. **Стабильные параметры** — `@Immutable` и `@Stable`
-3. **Узкая область** — читать состояние близко к использованию
-4. **Ключи в списках** — `key` в `items()`
-5. **Derived state** — `derivedStateOf` для вычислений
-6. **Remember дорогих операций** — кэшировать с `remember`
-7. **Ссылки на методы** — `viewModel::action` вместо `{ viewModel.action() }`
+1. **State hoisting** — поднимать состояние к ближайшему общему предку.
+2. **Стабильные параметры** — использовать типы, совместимые с моделью стабильности (`@Immutable`, `@Stable`, иммутабельные коллекции), где это оправдано.
+3. **Узкая область** — читать состояние как можно ближе к месту использования.
+4. **Ключи в списках** — использовать `key` в `items()` для устойчивой идентификации.
+5. **Derived state** — применять `derivedStateOf` для вычисляемых значений на основе других состояний.
+6. **Remember дорогих операций** — кэшировать с `remember`, чтобы не повторять тяжелые вычисления на каждую рекомпозицию.
+7. **Стабильные колбеки при глубокой передаче** — по возможности использовать method reference или `remember` для колбеков, которые пробрасываются вниз по дереву.
 
 ---
 
 ## Answer (EN)
 
-**Recomposition** is re-executing composable functions when parameters or observed state changes. See [[c-jetpack-compose]].
+**Recomposition** is the process of re-executing composable functions when tracked parameters or observable state change. See [[c-jetpack-compose]].
 
 ### How it Works
 
-Unlike View (`textView.text = "new"`), Compose re-runs the function with new data:
+Unlike the classic `View` system (`textView.text = "new"`), Compose re-runs composable functions with new data.
 
 ```kotlin
 @Composable
@@ -287,9 +295,9 @@ fun Counter() {
 
 **What happens:**
 1. Click → `count` changes from 0 to 1
-2. Compose detects change
-3. `Counter()` re-executes
-4. UI updates
+2. Compose observes the State change
+3. `Counter()` is scheduled for recomposition (partially or fully depending on structure)
+4. The UI is updated
 
 ### What Triggers Recomposition?
 
@@ -308,9 +316,9 @@ fun UserProfile(viewModel: ProfileViewModel) {
 ```
 
 **Triggers:**
-- `mutableStateOf` changes
-- `collectAsState()` emits from Flow
-- `observeAsState()` for LiveData
+- changes to `mutableStateOf` values
+- emissions from `Flow` via `collectAsState()`
+- `LiveData` updates via `observeAsState()`
 
 #### 2. Parameter Changes
 
@@ -332,7 +340,7 @@ fun Parent() {
 
 ### Recomposition Scoping
 
-Compose recomposes at the **narrowest scope possible**:
+Compose tries to recompose at the **narrowest possible scope** around where the changed state is read. How narrow it actually is depends on where you read state and how your composables are structured.
 
 ```kotlin
 @Composable
@@ -341,10 +349,10 @@ fun Screen() {
     var bottomCounter by remember { mutableStateOf(0) }
 
     Column {
-        Text("Top: $topCounter") // ✅ Only this when topCounter changes
+        Text("Top: $topCounter") // ✅ Primarily affected when topCounter changes
         Button(onClick = { topCounter++ }) { Text("Top") }
 
-        Text("Bottom: $bottomCounter") // ✅ Only this when bottomCounter changes
+        Text("Bottom: $bottomCounter") // ✅ Primarily affected when bottomCounter changes
         Button(onClick = { bottomCounter++ }) { Text("Bottom") }
     }
 }
@@ -352,28 +360,30 @@ fun Screen() {
 
 ### Stability and Skipping
 
-Compose **skips recomposition** if parameters are stable and unchanged:
+Compose can **skip recomposition** for a composable call when:
+- its parameters are stable according to Compose's stability model, and
+- their values (by `equals`) have not changed.
 
 ```kotlin
-// ✅ Stable: Primitives
+// ✅ Stable: primitives
 @Composable
-fun Counter(count: Int) // Skips if count unchanged
+fun Counter(count: Int) // May be skipped if count is unchanged
 
 // ✅ Stable: @Immutable
 @Immutable
 data class User(val id: String, val name: String)
 
 @Composable
-fun UserCard(user: User) // Skips if same instance
+fun UserCard(user: User) // May be skipped if the same instance is passed and it doesn't mutate
 
-// ❌ Unstable: List
+// ⚠️ By default unstable: List
 @Composable
-fun ItemList(items: List<Item>) // ALWAYS recomposes
+fun ItemList(items: List<Item>) // Treated as having an unstable parameter
 ```
 
-**Why is `List` unstable?** Kotlin's `List` = `java.util.List`, could be mutated elsewhere.
+**Why is `List` treated as unstable?** In Compose's stability model, regular `List`/`MutableList` do not provide immutability guarantees and can conceptually change without a new reference, so Compose cannot safely assume they are stable types. This increases the likelihood of recomposition when they change; it does not mean "unconditionally recompose every frame."
 
-#### Solution: Make Stable
+#### Solution: Make It Stable
 
 ```kotlin
 // Option 1: @Stable wrapper
@@ -384,7 +394,7 @@ data class ItemsState(val items: List<Item>)
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
-fun ItemList(items: ImmutableList<Item>) // ✅ Stable
+fun ItemList(items: ImmutableList<Item>) // ✅ Type can be trivially stable
 ```
 
 ### Controlling Recomposition
@@ -394,11 +404,11 @@ fun ItemList(items: ImmutableList<Item>) // ✅ Stable
 ```kotlin
 @Composable
 fun ExpensiveCalculation() {
-    // ❌ BAD: Recalculates every time
+    // ❌ BAD: Recomputed on every recomposition of this call site
     val result = expensiveComputation()
 
-    // ✅ GOOD: Calculates once
-    val result = remember { expensiveComputation() }
+    // ✅ GOOD: Computed once for this call site and retained across recompositions
+    val rememberedResult = remember { expensiveComputation() }
 }
 ```
 
@@ -407,7 +417,7 @@ fun ExpensiveCalculation() {
 ```kotlin
 @Composable
 fun FilteredList(items: List<Item>, query: String) {
-    // ✅ Recalculates ONLY when query changes
+    // ✅ Recalculates only when query changes (or include items in keys if needed)
     val filteredItems = remember(query) {
         items.filter { it.name.contains(query, ignoreCase = true) }
     }
@@ -425,10 +435,11 @@ fun FilteredList(items: List<Item>, query: String) {
 ```kotlin
 @Composable
 fun ScrollToTopButton(listState: LazyListState) {
-    // ❌ BAD: Recomposes on EVERY scroll pixel
-    val showButton = listState.firstVisibleItemIndex > 0
+    // Naive (commented out): direct read would participate in recomposition whenever listState changes
+    // val showButton = listState.firstVisibleItemIndex > 0
 
-    // ✅ GOOD: Only when threshold crossed
+    // ✅ derivedStateOf: tracks reads inside, recomputes on dependency changes,
+    // and notifies only when the resulting value actually changes by equals
     val showButton by remember {
         derivedStateOf {
             listState.firstVisibleItemIndex > 0
@@ -443,51 +454,55 @@ fun ScrollToTopButton(listState: LazyListState) {
 }
 ```
 
-**Why?** `derivedStateOf` batches changes and notifies only when boolean result changes.
+**Why does this help?** `derivedStateOf` tracks dependencies and triggers recomposition of its consumers only when the computed value changes, reducing unnecessary recompositions.
 
 ### Common Pitfalls
 
-#### 1. Lambda Instability
+#### 1. Lambdas and Stability
 
 ```kotlin
-// ❌ BAD: New lambda each time
+// Formally creates a new lambda each recomposition,
+// but Material components are optimized for typical onClick lambdas.
 @Composable
-fun BadButton(viewModel: ViewModel) {
+fun LambdaButton(viewModel: ViewModel) {
     Button(onClick = { viewModel.doAction() }) {
         Text("Click")
     }
 }
 
-// ✅ GOOD: Method reference is stable
+// Using method references or remember for callbacks can reduce change noise
+// when callbacks are passed deeper down the tree.
 @Composable
-fun GoodButton(viewModel: ViewModel) {
+fun MethodRefButton(viewModel: ViewModel) {
     Button(onClick = viewModel::doAction) {
         Text("Click")
     }
 }
 ```
 
+Key idea: avoid unnecessarily unstable/changing parameters especially when they are forwarded to child composables and can cause extra recompositions.
+
 #### 2. Reading State Too High
 
 ```kotlin
-// ❌ BAD: Entire Column recomposes
+// ❌ BAD: Entire Column recomposes for any uiState change
 @Composable
 fun BadExample(viewModel: ViewModel) {
     val uiState by viewModel.uiState.collectAsState()
 
     Column {
         Text(uiState.title)
-        ExpensiveComponent() // ❌ Unnecessary recomposition
+        ExpensiveComponent() // ❌ May recompose along with Column because of uiState changes
         Text(uiState.subtitle)
     }
 }
 
-// ✅ GOOD: Narrow scope
+// ✅ GOOD: Narrower scope — read state closer to where it is used
 @Composable
 fun GoodExample(viewModel: ViewModel) {
     Column {
-        TitleText(viewModel) // ✅ Independent recomposition
-        ExpensiveComponent() // ✅ Never recomposes
+        TitleText(viewModel) // ✅ Independent recomposition for title-related state
+        ExpensiveComponent() // ✅ Not tied to uiState → won't recompose due to its changes
         SubtitleText(viewModel)
     }
 }
@@ -495,13 +510,13 @@ fun GoodExample(viewModel: ViewModel) {
 
 ### Best Practices
 
-1. **State hoisting** — lift to lowest common ancestor
-2. **Stable parameters** — use `@Immutable` and `@Stable`
-3. **Narrow scope** — read state close to usage
-4. **Keys in lists** — use `key` in `items()`
-5. **Derived state** — use `derivedStateOf` for computations
-6. **Remember expensive operations** — cache with `remember`
-7. **Method references** — `viewModel::action` over `{ viewModel.action() }`
+1. **State hoisting** — lift state to the lowest common ancestor that needs to control it.
+2. **Stable parameters** — prefer types compatible with Compose stability (`@Immutable`, `@Stable`, immutable collections`) when appropriate.
+3. **Narrow scope** — read state as close as possible to where it is used.
+4. **Keys in lists** — use `key` in `items()` to provide stable identities.
+5. **Derived state** — use `derivedStateOf` for derived/computed values.
+6. **Remember expensive operations** — use `remember` to avoid recomputing heavy work on every recomposition.
+7. **Stable callbacks when propagating deeply** — consider method references or `remember` for callbacks passed down the tree.
 
 ---
 

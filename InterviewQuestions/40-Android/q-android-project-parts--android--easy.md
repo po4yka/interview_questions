@@ -14,14 +14,13 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - c-gradle
-- c-modularization
 - q-android-manifest-file--android--easy
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags:
 - android/build-variants
 - android/gradle
@@ -41,25 +40,29 @@ sources: []
 
 **Структура Android проекта** организована в виде каталогов и файлов с четкими обязанностями: исходный код, ресурсы, конфигурация сборки.
 
+Ниже приведен упрощенный пример структуры одного app-модуля (без учёта всех вариантов source sets и дополнительных модулей):
+
 **Основные компоненты:**
 
 ```text
 app/
 ├── src/main/
-│   ├── java/                    # Исходный код (Kotlin/Java)
+│   ├── java/                    # Исходный код (Kotlin/Java; также возможна папка kotlin/)
 │   ├── res/                     # Компилируемые ресурсы
-│   │   ├── layout/             # XML макеты UI
-│   │   ├── values/             # strings, colors, dimens
-│   │   └── drawable/           # Изображения и векторы
+│   │   ├── layout/              # XML макеты UI
+│   │   ├── values/              # strings, colors, dimens
+│   │   └── drawable/            # Изображения и векторы
 │   ├── assets/                  # Сырые файлы (JSON, шрифты)
 │   └── AndroidManifest.xml      # Конфигурация приложения
-└── build.gradle.kts              # Конфигурация сборки
+└── build.gradle.kts             # Конфигурация сборки модуля
 ```
 
-**Организация кода:**
+(На уровне корня проекта также есть общий settings.gradle(.kts) и build.gradle(.kts), а в реальных проектах часто используется несколько модулей.)
+
+**Организация кода и ресурсов:**
 
 ```kotlin
-// ✅ Type-safe доступ к ресурсам через R class
+// Resource access via R class with compile-time checks for identifiers and resource types
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,11 +75,11 @@ class MainActivity : AppCompatActivity() {
 ```
 
 ```kotlin
-// ❌ Строковый доступ к assets (не type-safe)
+// String-based assets access (no type-safe wrapper, but this is the standard way)
 val json = assets.open("config.json").bufferedReader().use { it.readText() }
 ```
 
-**AndroidManifest.xml** - декларация компонентов:
+**AndroidManifest.xml** - декларация компонентов и метаданных:
 
 ```xml
 <manifest package="com.example.app">
@@ -93,7 +96,7 @@ val json = assets.open("config.json").bufferedReader().use { it.readText() }
 </manifest>
 ```
 
-**Build конфигурация:**
+**Build конфигурация (модуль):**
 
 ```kotlin
 android {
@@ -111,34 +114,38 @@ android {
 
 | Компонент | Назначение | Доступ |
 |-----------|-----------|--------|
-| **res/** | Компилируемые ресурсы | `R.layout.activity_main` (type-safe) |
-| **assets/** | Сырые файлы | `assets.open("file.json")` (строковый путь) |
-| **src/** | Исходный код | Компилируется в DEX bytecode |
-| **AndroidManifest.xml** | Метаданные, permissions | Читается при установке |
+| **res/** | Компилируемые ресурсы | Через `R.*` (компилятор проверяет наличие и тип ресурса) |
+| **assets/** | Сырые файлы | `assets.open("file.json")` (строковый путь, без type-safe) |
+| **src/** | Исходный код | Компилируется в байткод JVM и затем в DEX |
+| **AndroidManifest.xml** | Метаданные, permissions, компоненты | Используется системой при установке и запуске |
 
 ## Answer (EN)
 
-**Android Project Structure** organizes directories and files with clear responsibilities: source code, resources, build configuration.
+**Android Project Structure** organizes directories and files with clear responsibilities: source code, resources, and build configuration.
+
+Below is a simplified example of a single app module structure (not covering all source sets or additional modules):
 
 **Core Components:**
 
 ```text
 app/
 ├── src/main/
-│   ├── java/                    # Source code (Kotlin/Java)
+│   ├── java/                    # Source code (Kotlin/Java; kotlin/ directory may also be used)
 │   ├── res/                     # Compiled resources
-│   │   ├── layout/             # XML UI layouts
-│   │   ├── values/             # strings, colors, dimens
-│   │   └── drawable/           # Images and vectors
+│   │   ├── layout/              # XML UI layouts
+│   │   ├── values/              # strings, colors, dimens
+│   │   └── drawable/            # Images and vectors
 │   ├── assets/                  # Raw files (JSON, fonts)
 │   └── AndroidManifest.xml      # App configuration
-└── build.gradle.kts              # Build configuration
+└── build.gradle.kts             # Module-level build configuration
 ```
 
-**Code Organization:**
+(At the project root there are also settings.gradle(.kts) and a top-level build.gradle(.kts), and real projects often contain multiple modules.)
+
+**Code and resource organization:**
 
 ```kotlin
-// ✅ Type-safe resource access via R class
+// Resource access via R class with compile-time checks for identifiers and resource types
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -151,11 +158,11 @@ class MainActivity : AppCompatActivity() {
 ```
 
 ```kotlin
-// ❌ String-based assets access (not type-safe)
+// String-based assets access (no type-safe wrapper, but this is the standard way)
 val json = assets.open("config.json").bufferedReader().use { it.readText() }
 ```
 
-**AndroidManifest.xml** - component declarations:
+**AndroidManifest.xml** - component and metadata declarations:
 
 ```xml
 <manifest package="com.example.app">
@@ -172,7 +179,7 @@ val json = assets.open("config.json").bufferedReader().use { it.readText() }
 </manifest>
 ```
 
-**Build Configuration:**
+**Build configuration (module-level):**
 
 ```kotlin
 android {
@@ -190,10 +197,18 @@ android {
 
 | Component | Purpose | Access |
 |-----------|---------|--------|
-| **res/** | Compiled resources | `R.layout.activity_main` (type-safe) |
-| **assets/** | Raw files | `assets.open("file.json")` (string path) |
-| **src/** | Source code | Compiled to DEX bytecode |
-| **AndroidManifest.xml** | Metadata, permissions | Read during installation |
+| **res/** | Compiled resources | via `R.*` (compiler validates presence and type) |
+| **assets/** | Raw files | `assets.open("file.json")` (string path, not type-safe) |
+| **src/** | Source code | Compiled to JVM bytecode and then to DEX |
+| **AndroidManifest.xml** | Metadata, permissions, components | Used by the system during install and runtime |
+
+## Дополнительные вопросы (RU)
+
+- Какова разница между каталогами res/ и assets/ с точки зрения доступа к файлам?
+- Как происходит генерация класса R и на каком этапе сборки она выполняется?
+- Что такое source sets (main, debug, release) и как они объединяются?
+- Как version catalogs помогают управлять зависимостями в мульти-модульных проектах?
+- Что произойдет, если исключить AndroidManifest.xml из library-модуля?
 
 ## Follow-ups
 
@@ -203,28 +218,34 @@ android {
 - How do version catalogs improve multi-module dependency management?
 - What happens when you exclude AndroidManifest.xml from a library module?
 
+## Ссылки (RU)
+
+- https://developer.android.com/studio/projects
+- https://developer.android.com/guide/topics/resources/providing-resources
+- https://developer.android.com/build
+
 ## References
 
 - https://developer.android.com/studio/projects
 - https://developer.android.com/guide/topics/resources/providing-resources
-- [Gradle Build](https://developer.android.com/build)
+- https://developer.android.com/build
 
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-gradle]]
+- [[q-android-manifest-file--android--easy]]
+
+### Связанные вопросы
+- [[q-android-modularization--android--medium]]
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-gradle]]
-- [[c-modularization]]
-
-
-### Prerequisites
 - [[q-android-manifest-file--android--easy]]
 
 ### Related
-- [[q-gradle-build-system--android--medium]]
-
-
-### Advanced
 - [[q-android-modularization--android--medium]]
-- [[q-android-build-optimization--android--medium]]

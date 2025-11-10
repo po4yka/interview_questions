@@ -16,20 +16,21 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
 - c-performance
 - c-performance-optimization
 - q-android-app-bundles--android--easy
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 sources: []
 tags:
 - android/ab-testing
 - android/analytics
 - android/play-console
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
@@ -44,16 +45,16 @@ tags:
 
 ## Ответ (RU)
 
-**App Store Optimization (ASO)** — процесс улучшения видимости приложения в магазине и конверсии установок через оптимизацию метаданных, визуальных ресурсов и постоянное тестирование.
+**App Store Optimization (ASO)** — процесс улучшения видимости приложения в магазине (в контексте Android обычно Google Play) и конверсии установок через оптимизацию метаданных, визуальных ресурсов и постоянное тестирование.
 
 ### Ключевые Компоненты
 
-**1. Метаданные**
+**1. Метаданные (Google Play)**
 
-Заголовок (50 символов) содержит главное ключевое слово + бренд. Краткое описание (80 символов) фокусируется на основной выгоде. Полное описание структурировано: ключевые функции → преимущества → призыв к действию.
+Название приложения (до 30 символов) содержит главное ключевое слово + бренд, без keyword stuffing. Краткое описание (до 80 символов) фокусируется на основной выгоде и ключевых триггерах. Полное описание (до 4000 символов) структурировано: ключевые функции → преимущества → призыв к действию, с естественным использованием релевантных ключевых слов.
 
 ```xml
-<!-- ✅ Структурированные метаданные -->
+<!-- ✅ Структурированные метаданные (пример) -->
 <resources>
     <string name="play_store_title">TaskFlow - Task Manager</string>
     <string name="play_store_short_desc">Organize tasks, boost productivity</string>
@@ -66,25 +67,25 @@ tags:
 </resources>
 ```
 
-**2. Визуальные ресурсы**
+**2. Визуальные ресурсы (Google Play)**
 
-Первый скриншот показывает главную ценность, следующие 2-3 — ключевые функции. Feature Graphic (1024x500) используется в промо и поиске.
+Первый скриншот показывает главную ценность, следующие 2–3 — ключевые функции. Feature Graphic (1024x500) используется в промо и некоторых поверхностях Play. Требования к количеству и формату скриншотов зависят от категории и форм-фактора, но обычно рекомендуется 2–8 качественных скриншотов на каждое устройство.
 
 ```kotlin
-// ✅ Требования к ресурсам
+// ✅ Требования к ресурсам (упрощённый пример для Google Play)
 object StoreAssets {
     const val FEATURE_GRAPHIC_SIZE = "1024x500"
     const val SCREENSHOT_MIN = 2
     const val SCREENSHOT_MAX = 8
     const val PROMO_VIDEO_MAX_SEC = 30
 
-    // ❌ Избегайте: generic screenshots, текст мелким шрифтом, устаревшие скриншоты
+    // ❌ Избегайте: generic-снимков, мелкого текста, устаревших скриншотов
 }
 ```
 
 **3. Локализация**
 
-Адаптация под локальный рынок: релевантные ключевые слова, культурные особенности, локальные кейсы использования.
+Адаптация под локальный рынок: релевантные ключевые слова, культурные особенности, локальные кейсы использования, локализованные скриншоты/видео при необходимости.
 
 ```kotlin
 // ✅ Локализация метаданных
@@ -93,19 +94,19 @@ data class LocalizedListing(
     val title: String,          // Локализованный заголовок
     val shortDesc: String,      // Краткое описание
     val fullDesc: String,       // Полное описание
-    val keywords: List<String>  // Локальные ключевые слова
+    val keywords: List<String>  // Локальные ключевые слова (в описании, не отдельным полем в Play)
 )
 ```
 
-**4. A/B Тестирование**
+**4. A/B Тестирование (Store Listing Experiments)**
 
-Play Console Experiments позволяет тестировать заголовок, иконку, скриншоты. Минимум 7-14 дней на тест, измерение конверсии установок.
+Play Console Store Listing Experiments позволяют тестировать заголовок, иконку, скриншоты и другие элементы. Тест запускается до достижения статистической значимости; практический ориентир — не менее 7–14 дней и достаточный объём трафика. Ключевая метрика — конверсия просмотров листинга в установки.
 
 ```kotlin
 // ✅ Структура эксперимента
 data class StoreExperiment(
     val variant: String,        // "control" или "variant_1"
-    val element: String,        // "icon" | "screenshots" | "title"
+    val element: String,        // "icon" | "screenshots" | "title" | ...
     val conversionRate: Double, // installs / store listing views
     val sampleSize: Int
 )
@@ -132,22 +133,22 @@ data class ASOMetrics(
 )
 ```
 
-**Типичные результаты:** органический трафик +30-50%, конверсия +20-30%, удержание +10-15% при комплексной оптимизации.
+**Типичные эффекты (примерные ориентиры при качественной оптимизации, не гарантии):** возможен рост органического трафика, конверсии и удержания, но конкретные проценты зависят от ниши, конкуренции и качества продукта.
 
 ---
 
 ## Answer (EN)
 
-**App Store Optimization (ASO)** is the process of improving app discoverability and install conversion through metadata optimization, visual assets, and continuous testing.
+**App Store Optimization (ASO)** is the process of improving app discoverability and install conversion in the store (for Android, typically Google Play) through metadata optimization, visual assets, and continuous testing.
 
 ### Key Components
 
-**1. Metadata**
+**1. Metadata (Google Play)**
 
-Title (50 chars) includes primary keyword + brand. Short description (80 chars) focuses on core benefit. Full description structured: key features → benefits → call to action.
+App name (up to 30 characters) should include the primary keyword + brand, without keyword stuffing. `Short` description (up to 80 characters) focuses on the core benefit and key triggers. Full description (up to 4000 characters) is structured: key features → benefits → call to action, with natural use of relevant keywords.
 
 ```xml
-<!-- ✅ Structured metadata -->
+<!-- ✅ Structured metadata (example) -->
 <resources>
     <string name="play_store_title">TaskFlow - Task Manager</string>
     <string name="play_store_short_desc">Organize tasks, boost productivity</string>
@@ -160,25 +161,25 @@ Title (50 chars) includes primary keyword + brand. Short description (80 chars) 
 </resources>
 ```
 
-**2. Visual Assets**
+**2. Visual Assets (Google Play)**
 
-First screenshot shows core value, next 2-3 showcase key features. Feature Graphic (1024x500) used in promotions and search.
+The first screenshot should show the core value; the next 2–3 highlight key features. A Feature Graphic (1024x500) is used on some Play surfaces and promotions. Screenshot count and formats depend on category and form factor, but 2–8 high-quality screenshots per device type is a common recommendation.
 
 ```kotlin
-// ✅ Asset requirements
+// ✅ Asset requirements (simplified example for Google Play)
 object StoreAssets {
     const val FEATURE_GRAPHIC_SIZE = "1024x500"
     const val SCREENSHOT_MIN = 2
     const val SCREENSHOT_MAX = 8
     const val PROMO_VIDEO_MAX_SEC = 30
 
-    // ❌ Avoid: generic screenshots, small text, outdated screenshots
+    // ❌ Avoid: generic screenshots, tiny text, outdated screenshots
 }
 ```
 
 **3. Localization**
 
-Market adaptation: relevant keywords, cultural nuances, local use cases.
+Adapt to each target market: relevant keywords, cultural nuances, local use cases, and localized screenshots/video when appropriate.
 
 ```kotlin
 // ✅ Metadata localization
@@ -187,19 +188,19 @@ data class LocalizedListing(
     val title: String,          // Localized title
     val shortDesc: String,      // Short description
     val fullDesc: String,       // Full description
-    val keywords: List<String>  // Local keywords
+    val keywords: List<String>  // Local keywords (reflected in text; Play has no separate keyword field)
 )
 ```
 
-**4. A/B Testing**
+**4. A/B Testing (Store Listing Experiments)**
 
-Play Console Experiments test title, icon, screenshots. Minimum 7-14 days per test, measure install conversion.
+Play Console Store Listing Experiments allow you to test title, icon, screenshots, and other assets. Experiments should run until statistical significance is reached; a practical guideline is at least 7–14 days with sufficient traffic. The primary metric is conversion from store listing views to installs.
 
 ```kotlin
 // ✅ Experiment structure
 data class StoreExperiment(
     val variant: String,        // "control" or "variant_1"
-    val element: String,        // "icon" | "screenshots" | "title"
+    val element: String,        // "icon" | "screenshots" | "title" | ...
     val conversionRate: Double, // installs / store listing views
     val sampleSize: Int
 )
@@ -226,7 +227,17 @@ data class ASOMetrics(
 )
 ```
 
-**Typical Results:** organic traffic +30-50%, conversion +20-30%, retention +10-15% with comprehensive optimization.
+**Typical impact (non-guaranteed):** comprehensive optimization can improve organic traffic, conversion rate, and retention, but actual percentages depend heavily on the category, competition, and product quality.
+
+---
+
+## Дополнительные вопросы (RU)
+
+- Как балансировать оптимизацию ключевых слов и естественный язык в описаниях в магазине?
+- Какой минимальный размер выборки нужен для статистически значимых результатов A/B-тестов в Play Console Experiments?
+- Как рейтинг и скорость появления отзывов влияют на алгоритм ранжирования поиска в Play Store?
+- Чем отличаются стратегии ASO для Play Store и App Store (iOS)?
+- Как измерять и оптимизировать факторы ранжирования, зависящие от категории?
 
 ---
 
@@ -240,13 +251,50 @@ data class ASOMetrics(
 
 ---
 
+## Ссылки (RU)
+
+- [[q-android-app-bundles--android--easy]] - Оптимизация `Bundle` для уменьшения размера загрузки
+- API In-app review для оптимизации рейтинга
+- [[q-alternative-distribution--android--medium]] - Альтернативные каналы распространения
+- "Play Console Help - Store Listing" (актуальная документация Google)
+- "Play Console - Store Listing Experiments" (официальная справка по экспериментам)
+
+---
+
 ## References
 
-- [[q-android-app-bundles--android--easy]] - App Bundle optimization for smaller downloads
- - In-app review API for rating optimization
+- [[q-android-app-bundles--android--easy]] - App `Bundle` optimization for smaller downloads
+- In-app review API for rating optimization
 - [[q-alternative-distribution--android--medium]] - Alternative distribution channels
 - [Play Console Help - Store Listing](https://support.google.com/googleplay/android-developer/answer/9844778)
 - [Play Console - Store Listing Experiments](https://support.google.com/googleplay/android-developer/answer/6227309)
+
+---
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-performance]]
+- [[c-performance-optimization]]
+
+### Предпосылки (Проще)
+
+- [[q-android-app-bundles--android--easy]] - Понимание формата App `Bundle` и его преимуществ
+- Панель Play Console и метрики
+
+### Связанные (Тот же уровень)
+
+- Реализация API In-App Review
+- [[q-alternative-distribution--android--medium]] - Распространение вне Play Store
+- Интеграция аналитики для отслеживания конверсий
+
+### Продвинутые (Сложнее)
+
+- Стратегия многорынковой локализации и культурная адаптация
+- Продвинутая оптимизация воронки конверсий с использованием предиктивной аналитики
+- Кроссплатформенная ASO-стратегия (Play Store vs App Store)
+- Оптимизация growth loops и вирусного коэффициента в consumer-приложениях
 
 ---
 
@@ -257,15 +305,14 @@ data class ASOMetrics(
 - [[c-performance]]
 - [[c-performance-optimization]]
 
-
 ### Prerequisites (Easier)
-- [[q-android-app-bundles--android--easy]] - Understanding App Bundle format and benefits
- - Play Console dashboard and metrics
+- [[q-android-app-bundles--android--easy]] - Understanding App `Bundle` format and benefits
+- Play Console dashboard and metrics
 
 ### Related (Same Level)
- - In-App Review API implementation
+- In-App Review API implementation
 - [[q-alternative-distribution--android--medium]] - Distribution beyond Play Store
- - Analytics integration for conversion tracking
+- Analytics integration for conversion tracking
 
 ### Advanced (Harder)
 - Multi-market localization strategy and cultural adaptation

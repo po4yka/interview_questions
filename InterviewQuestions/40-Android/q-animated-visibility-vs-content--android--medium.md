@@ -12,12 +12,14 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
   - c-jetpack-compose
+  - c-compose-recomposition
+  - q-android-jetpack-overview--android--easy
 created: 2025-10-13
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/ui-animation, android/ui-compose, animation, compose, difficulty/medium]
 sources: []
 ---
@@ -42,23 +44,22 @@ Compose предоставляет три специализированных A
 ```kotlin
 AnimatedVisibility(
     visible = expanded,
-    enter = expandVertically() + fadeIn(),  // ✅ Комбинация переходов
+    enter = expandVertically() + fadeIn(),
     exit = shrinkVertically() + fadeOut()
 ) {
-    DetailContent()  // Не существует в композиции, когда invisible
+    DetailContent()
 }
 ```
 
 **Применение**: раскрывающиеся секции, модальные окна, условный UI.
 
 ### AnimatedContent
-Переключает между состояниями с полным контролем направления анимации. Оба состояния сосуществуют во время перехода.
+Переключает между состояниями с полным контролем направления анимации. Во время перехода исходное и целевое содержимое могут одновременно участвовать в измерении/отрисовке, чтобы сформировать анимацию.
 
 ```kotlin
 AnimatedContent(
     targetState = currentState,
     transitionSpec = {
-        // ✅ Направленная анимация
         slideInHorizontally { it } togetherWith slideOutHorizontally { -it }
     }
 ) { state ->
@@ -72,7 +73,7 @@ AnimatedContent(
 **Применение**: state-машины (loading/success/error), пагинация, wizard-формы.
 
 ### Crossfade
-Упрощенная версия AnimatedContent только для fade-переходов. Минималистичный API без контроля анимации.
+Упрощенная версия AnimatedContent только для fade-переходов. Минималистичный API: тип анимации зафиксирован как crossfade, но длительность/интерполяцию можно настраивать через `animationSpec`.
 
 ```kotlin
 Crossfade(targetState = screen) { currentScreen ->
@@ -85,16 +86,11 @@ Crossfade(targetState = screen) { currentScreen ->
 
 **Применение**: прототипирование, простые переключения экранов.
 
-### Ключевые Различия
+### Ключевые различия
 
-| Критерий | AnimatedVisibility | AnimatedContent | Crossfade |
-|---------|-------------------|-----------------|-----------|
-| Управление композицией | Добавляет/удаляет | Переключает | Переключает |
-| Память | Освобождает invisible | Оба в памяти | Оба в памяти |
-| Анимации | Enter/exit комбинации | Полный контроль | Только fade |
-| API сложность | Средняя | Высокая | Низкая |
-
-**Выбор API**: AnimatedVisibility для условного UI, AnimatedContent для state-переходов с контролем направления, Crossfade для быстрого прототипирования.
+- AnimatedVisibility: управляет добавлением/удалением из композиции, освобождает ресурсы после завершения hide-анимации.
+- AnimatedContent: анимированное переключение состояний с гибкими переходами, старое и новое содержимое участвуют в композиции во время анимации.
+- Crossfade: простой fade-переход между состояниями без настройки типа анимации.
 
 ---
 
@@ -108,23 +104,22 @@ Controls composable presence in the composition tree. Adds/removes nodes with cu
 ```kotlin
 AnimatedVisibility(
     visible = expanded,
-    enter = expandVertically() + fadeIn(),  // ✅ Combined transitions
+    enter = expandVertically() + fadeIn(),
     exit = shrinkVertically() + fadeOut()
 ) {
-    DetailContent()  // Does not exist in composition when invisible
+    DetailContent()
 }
 ```
 
 **Use case**: expandable sections, modals, conditional UI.
 
 ### AnimatedContent
-Switches between states with full directional control. Both states coexist during transition.
+Switches between states with detailed control over the transition (including direction). During the transition, both the previous and target content can be measured/placed/drawn simultaneously to produce the animation.
 
 ```kotlin
 AnimatedContent(
     targetState = currentState,
     transitionSpec = {
-        // ✅ Directional animation
         slideInHorizontally { it } togetherWith slideOutHorizontally { -it }
     }
 ) { state ->
@@ -138,7 +133,7 @@ AnimatedContent(
 **Use case**: state machines (loading/success/error), pagination, wizard forms.
 
 ### Crossfade
-Simplified AnimatedContent for fade-only transitions. Minimalist API without animation control.
+A simplified AnimatedContent variant for fade-only transitions. Minimal API: the transition type is fixed to crossfade, but you can still adjust duration/easing via `animationSpec`.
 
 ```kotlin
 Crossfade(targetState = screen) { currentScreen ->
@@ -151,26 +146,41 @@ Crossfade(targetState = screen) { currentScreen ->
 
 **Use case**: prototyping, simple screen switching.
 
-### Key Differences
+### Key differences
 
-| Criterion | AnimatedVisibility | AnimatedContent | Crossfade |
-|---------|-------------------|-----------------|-----------|
-| Composition Control | Adds/removes | Switches | Switches |
-| Memory | Frees invisible | Both in memory | Both in memory |
-| Animations | Enter/exit combinations | Full control | Fade only |
-| API Complexity | Medium | High | Low |
+- AnimatedVisibility: controls appearance/disappearance and removes content from composition after the hide animation.
+- AnimatedContent: animates transitions between states with flexible specs; old and new content coexist during the transition.
+- Crossfade: fixed fade transition for simple switches.
 
-**API Selection**: AnimatedVisibility for conditional UI, AnimatedContent for state transitions with directional control, Crossfade for rapid prototyping.
+---
+
+## Дополнительные вопросы (RU)
+
+- Как `AnimatedVisibility` обрабатывает прерывания, когда видимость меняется во время анимации?
+- Каковы последствия для производительности, когда старое и новое содержимое одновременно участвуют в композиции в `AnimatedContent` / `Crossfade`?
+- Как создавать кастомные enter/exit переходы сверх встроенных?
+- В каких случаях лучше использовать модификатор `animateEnterExit` вместо обертки `AnimatedVisibility`?
+- Что происходит с состоянием и побочными эффектами composable-элементов, удаляемых через `AnimatedVisibility`?
 
 ---
 
 ## Follow-ups
 
-- How does AnimatedVisibility handle interruptions when visibility changes mid-animation?
-- What are the performance implications of keeping both states in memory with AnimatedContent?
+- How does `AnimatedVisibility` handle interruptions when visibility changes mid-animation?
+- What are the performance implications of both contents participating in composition during `AnimatedContent` / `Crossfade` transitions?
 - How do you create custom enter/exit transitions beyond the built-in ones?
-- When should you use `animateEnterExit` modifier instead of wrapping with AnimatedVisibility?
-- What happens to state and side effects in composables removed by AnimatedVisibility?
+- When should you use the `animateEnterExit` modifier instead of wrapping with `AnimatedVisibility`?
+- What happens to state and side effects in composables removed by `AnimatedVisibility`?
+
+---
+
+## Ссылки (RU)
+
+- [[c-jetpack-compose]]
+- https://developer.android.com/jetpack/compose/animation/composables-modifiers
+- https://developer.android.com/develop/ui/compose/animation/introduction
+
+---
 
 ## References
 
@@ -178,18 +188,28 @@ Crossfade(targetState = screen) { currentScreen ->
 - https://developer.android.com/jetpack/compose/animation/composables-modifiers
 - https://developer.android.com/develop/ui/compose/animation/introduction
 
+---
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-android-jetpack-overview--android--easy]]
+
+### Связанные (средний уровень)
+- [[c-compose-recomposition]]
+
+### Продвинутое (сложнее)
+- [[q-android-app-lag-analysis--android--medium]]
+
+---
+
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-jetpack-compose-basics--android--medium]] - Understanding Compose fundamentals
-- [[q-how-jetpack-compose-works--android--medium]] - Compose architecture
+- [[q-android-jetpack-overview--android--easy]]
 
 ### Related (Same Level)
-- Recomposition mechanics
-- [[q-compose-remember-derived-state--android--medium]] - State management
-- [[q-compose-modifier-system--android--medium]] - Modifier API
+- [[c-compose-recomposition]]
 
 ### Advanced (Harder)
- - Performance optimization
-- [[q-compose-custom-layout--android--hard]] - Custom layout and measurement
-- [[q-compose-stability-skippability--android--hard]] - Stability system
+- [[q-android-app-lag-analysis--android--medium]]

@@ -3,143 +3,150 @@ id: android-412
 title: JIT vs AOT Compilation / JIT vs AOT компиляция
 aliases: [Ahead-Of-Time, Android Runtime, ART, JIT vs AOT Compilation, JIT vs AOT компиляция, Just-In-Time]
 topic: android
-subtopics: [gradle, performance-startup, profiling]
+subtopics: [performance-startup, profiling]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-gradle, c-performance-optimization, q-android-build-optimization--android--medium, q-app-startup-optimization--android--medium, q-kapt-vs-ksp--android--medium]
+related: [q-android-build-optimization--android--medium, q-app-startup-optimization--android--medium, q-kapt-vs-ksp--android--medium]
 created: 2025-10-15
-updated: 2025-10-30
-tags: [android/gradle, android/performance-startup, android/profiling, aot, art, baseline-profiles, compilation, difficulty/medium, jit]
+updated: 2025-11-10
+tags: [android/performance-startup, android/profiling, aot, art, baseline-profiles, compilation, difficulty/medium, jit]
 sources: []
 ---
 
 # Вопрос (RU)
 
-В чём разница между JIT и AOT компиляцией в Android? Как Android использует обе стратегии?
+> В чём разница между JIT и AOT компиляцией в Android? Как Android использует обе стратегии?
 
 # Question (EN)
 
-What are the differences between JIT and AOT compilation in Android? How does Android use both strategies?
+> What are the differences between JIT and AOT compilation in Android? How does Android use both strategies?
 
 ---
 
 ## Ответ (RU)
 
-Android использует гибридный подход, сочетающий **JIT** (Just-In-Time) и **AOT** (Ahead-Of-Time) компиляцию для баланса между производительностью и скоростью установки.
+Android использует гибридный подход, сочетающий **JIT** (Just-In-Time) и **AOT** (Ahead-Of-Time) компиляцию (через ART) для баланса между производительностью, скоростью установки и размером.
+
+Важно: ниже приведённые числа по времени и размеру — иллюстративные, не универсальные для всех устройств и версий Android.
 
 ### JIT (Just-In-Time)
 
 **Принцип работы:**
-- Байткод интерпретируется при выполнении
-- Горячий код компилируется в runtime
-- Результат хранится в памяти (теряется при перезапуске)
+- DEX-байткод может исполняться интерпретатором ART.
+- Часто вызываемые ("горячие") участки кода профилируются и компилируются в машинный код во время выполнения.
+- Компилированный код используется для ускорения дальнейших вызовов; профили и результаты JIT-компиляции могут сохраняться и использоваться для последующей AOT-компиляции, поэтому эффект не всегда полностью "теряется" при перезапуске приложения.
 
 ```kotlin
 class JITExample {
     fun processData(numbers: List<Int>): Int {
-        // Первые вызовы: ~1000ns (интерпретация)
-        // После 10-100 вызовов: JIT компиляция
-        // Последующие вызовы: ~100ns (нативный код)
+        // Пример (условные числа для иллюстрации):
+        // Первые вызовы: медленнее (интерпретация / неоптимизированный код)
+        // После серии вызовов: JIT-компиляция горячего пути
+        // Последующие вызовы: быстрее (скомпилированный код)
         return numbers.sum()
     }
 }
 ```
 
 **Преимущества:**
-- ✅ Быстрая установка (5 сек)
-- ✅ Малый размер (~20 MB)
-- ✅ Адаптивная оптимизация под реальное использование
+- ✅ Быстрая установка (без полной AOT-компиляции всего кода).
+- ✅ Меньший начальный размер.
+- ✅ Адаптивная оптимизация под реальные сценарии использования.
 
 **Недостатки:**
-- ❌ Прогрев при первых запусках (~1500 ms)
-- ❌ Runtime overhead (профилирование, компиляция)
-- ❌ Теряется при рестарте приложения
+- ❌ Нужен "прогрев" при первых запусках (JIT ещё не успел оптимизировать горячие пути).
+- ❌ Runtime overhead (профилирование, компиляция во время работы приложения).
+- ❌ Без использования профилей и последующей AOT часть преимуществ теряется между сессиями.
 
 ### AOT (Ahead-Of-Time)
 
 **Принцип работы:**
-- Компиляция DEX → машинный код при установке (dex2oat)
-- OAT файл хранится на диске
-- Приложение запускается сразу с нативным кодом
+- Компиляция DEX → машинный код выполняется заранее (например, при установке или в отложенных задачах `dex2oat`), на основе политики системы.
+- Полученные артефакты (OAT/ART/VDex) хранятся на диске и используются при запуске.
+- Приложение может выполнять уже скомпилированный код без JIT для этих частей.
 
 ```kotlin
 class AOTExample {
     fun processData(numbers: List<Int>): Int {
-        // Все вызовы: ~100ns с первого запуска
-        // Скомпилировано при установке
+        // При наличии AOT-компиляции этот метод может работать быстро с первого запуска.
         return numbers.sum()
     }
 }
 ```
 
 **Преимущества:**
-- ✅ Мгновенная производительность с первого запуска
-- ✅ Предсказуемое время выполнения
-- ✅ Ниже расход батареи (нет runtime компиляции)
+- ✅ Высокая производительность с первых запусков для заранее скомпилированных участков.
+- ✅ Более предсказуемое время выполнения таких участков.
+- ✅ Меньше runtime-накладных расходов на компиляцию (и потенциально ниже расход батареи для этих путей).
 
 **Недостатки:**
-- ❌ Медленная установка (45 сек, 9x медленнее)
-- ❌ Большой размер (~60 MB, 2x больше)
-- ❌ Компилирует весь код, даже неиспользуемый
+- ❌ Увеличение времени установки или фоновой оптимизации при агрессивной AOT-компиляции.
+- ❌ Увеличение занимаемого места за счёт нативных артефактов.
+- ❌ Риск компиляции кода, который фактически редко или никогда не используется (если не применять профили).
 
 ### Гибридный Подход (Android 7+)
 
-**Profile-Guided Optimization:**
+Современный ART использует гибрид: интерпретация + JIT + профили + выборочная AOT-компиляция на основе профилей (Profile-Guided Optimization).
+
+**Profile-Guided Optimization (в упрощённом виде):**
 
 ```
-Установка → Быстро (только DEX)
+Установка → Быстро (DEX + минимальная начальная компиляция)
     ↓
-Первый запуск → JIT + профилирование горячих путей
+Первый запуск → Интерпретация + JIT + профилирование горячих путей
     ↓
-Фон (устройство на зарядке) → AOT компиляция только горячего кода
+Фон (устройство на зарядке / простаивает) → dex2oat компилирует по профилю только горячий код
     ↓
-Последующие запуски → Быстро (оптимизированный нативный код)
+Последующие запуски → Быстрее (часть кода уже в оптимизированном нативном виде)
 ```
 
 ```kotlin
-// Профиль сохраняется в:
+// Пример пути профиля (может отличаться между версиями):
 // /data/misc/profiles/cur/0/com.example.app/primary.prof
 
 class ProfileGuidedExample {
-    // Горячий метод → AOT компиляция в фоне
+    // Часто вызываемый метод → с высокой вероятностью попадёт в профиль и будет AOT-компилироваться в фоне.
     fun frequentOperation() { /* ... */ }
 
-    // Холодный метод → остаётся интерпретированным
+    // Редко используемый метод → может остаться интерпретируемым или JIT-компилироваться по мере надобности.
     fun rareDebugOperation() { /* ... */ }
 }
 ```
 
-**Режимы компиляции (adb):**
+**Режимы компиляции (adb) для отладки и тестирования:**
 
 ```bash
-# Profile-guided (по умолчанию)
+# Профильно-ориентированная компиляция (использует комбинацию JIT + AOT по профилю)
 adb shell cmd package compile -m speed-profile com.example.app
 
-# Полная AOT компиляция
+# Более агрессивная AOT-компиляция (speed)
 adb shell cmd package compile -m speed com.example.app
 
-# Сброс компиляции
+# Сбросить состояние компиляции
 adb shell cmd package compile --reset com.example.app
 ```
 
-### Baseline Profiles (Android 9+)
+### Baseline Profiles (Android 7+ / RU комментарий)
 
-Предгенерированные профили, поставляемые с APK для оптимизации критических путей при установке.
+Baseline Profiles поддерживаются ART, начиная с Android 7.0+ (API 24+), и используются экосистемой (в т.ч. Play Store и Jetpack библиотеками) для того, чтобы заранее передать профили оптимизации.
+
+**Идея:** предгенерированные профили, поставляемые с APK/AAB, позволяют системе компилировать критические пути уже при установке или ранних фоновых оптимизациях, уменьшая время "прогрева".
 
 ```kotlin
-// app/src/main/baseline-prof.txt
+// Как правило, файл профиля в модуле указывается относительно корня модуля, например:
+// src/main/baseline-prof.txt
 class BaselineProfileExample {
-    // Метод из baseline-prof.txt → компилируется при установке
+    // Метод, попавший в baseline-prof.txt → может быть AOT-соптимизирован ранее.
     fun criticalStartupMethod() {
-        // Быстро с первого запуска
+        // Более быстрый запуск с первых сессий.
     }
 }
 
-// Проверка статуса:
+// Проверка статуса; пример использования ProfileVerifier:
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
     val status = ProfileVerifier.getCompilationStatusAsync().get()
     Log.d("Compilation", """
@@ -149,149 +156,162 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 }
 ```
 
-**Улучшение производительности:**
-- Cold start: ~33% быстрее
-- Warm start: ~38% быстрее
+**Типичные эффекты (по данным документации и измерений, зависят от приложения):**
+- Cold start: может стать заметно быстрее (например, до ~30%+).
+- Warm start: аналогично может ускоряться.
 
 ### Сравнение Подходов
 
+(Числа условные, для понимания trade-off'ов.)
+
 | Аспект | JIT | AOT | Hybrid (Profile-Guided) |
 |--------|-----|-----|------------------------|
-| Установка | 5s | 45s | 5s |
-| Первый запуск | 1500ms | 700ms | 850ms |
-| Оптим. запуск | 800ms | 700ms | 750ms |
-| Размер | 20MB | 60MB | 35MB |
-| Батарея | Выше | Ниже | Низкий |
-| Обновления | Быстро | Медленно | Быстро |
+| Установка | Быстрая | Медленнее при полном AOT | Быстрая / адаптивная |
+| Первый запуск | Медленнее (прогрев) | Быстрее для AOT-кода | Ближе к AOT для горячих путей |
+| Оптим. запуск | После прогрева | Стабильный | Стабильный для профилированных путей |
+| Размер | Меньше артефактов | Больше из-за нативного кода | Компромисс |
+| Батарея | Выше из-за JIT | Ниже для AOT-кода | Компромисс, ниже при хороших профилях |
+| Обновления | Быстрые | Может требовать дополнительной компиляции | Быстрые + дооптимизация в фоне |
 
 ### Стратегия Выбора
+
+Ниже — концептуальный пример рассуждения о том, какой подход был бы выгоден для разных типов приложений (это не реальные Android API):
 
 ```kotlin
 fun chooseStrategy(appType: AppType): Strategy {
     return when (appType) {
-        Gaming -> Strategy.FullAOT // Стабильные фреймтаймы
-        SocialMedia -> Strategy.ProfileGuided // Частые обновления
-        Utility -> Strategy.BaselineProfile // Быстрый первый запуск
-        Enterprise -> Strategy.FullAOT // Стабильность > скорость обновлений
+        Gaming -> Strategy.FullAOT          // Максимально стабильные фреймтаймы (концептуально)
+        SocialMedia -> Strategy.ProfileGuided // Частые обновления, важен баланс
+        Utility -> Strategy.BaselineProfile // Быстрый первый запуск и лёгкость
+        Enterprise -> Strategy.FullAOT      // Ставка на предсказуемость
     }
 }
 ```
+
+Реально на Android выбор стратегии определяется политикой ART, настройками сборки, baseline-профилями и поведением магазина, а не ручным переключением таких enum'ов из приложения.
 
 ---
 
 ## Answer (EN)
 
-Android uses a hybrid approach combining **JIT** (Just-In-Time) and **AOT** (Ahead-Of-Time) compilation for optimal balance between performance and install speed.
+Android uses a hybrid approach with **JIT** (Just-In-Time) and **AOT** (Ahead-Of-Time) compilation (via ART) to balance performance, install time, and storage.
+
+Note: Numbers mentioned below for time/size are illustrative, not universal across devices or Android versions.
 
 ### JIT (Just-In-Time)
 
 **How it works:**
-- Bytecode interpreted at runtime
-- Hot code compiled on-the-fly
-- Results cached in memory (lost on restart)
+- ART can initially execute DEX bytecode via an interpreter.
+- Frequently executed ("hot") code paths are profiled and JIT-compiled into native code at runtime.
+- The compiled code is reused for subsequent calls; profiles and JIT results can be persisted and later used to drive AOT compilation, so benefits are not always fully lost on app restart.
 
 ```kotlin
 class JITExample {
     fun processData(numbers: List<Int>): Int {
-        // First calls: ~1000ns (interpreted)
-        // After 10-100 calls: JIT compilation triggered
-        // Subsequent calls: ~100ns (native code)
+        // Example (illustrative only):
+        // Initial calls: slower (interpreted / unoptimized)
+        // After repeated calls: JIT kicks in for hot path
+        // Subsequent calls: faster (compiled code)
         return numbers.sum()
     }
 }
 ```
 
 **Advantages:**
-- ✅ Fast installation (5 sec)
-- ✅ Small footprint (~20 MB)
-- ✅ Adaptive optimization based on actual usage
+- ✅ Fast installation (no full-AOT of all code at install).
+- ✅ Smaller initial storage footprint.
+- ✅ Adaptive optimizations based on real-world usage.
 
 **Disadvantages:**
-- ❌ Warm-up time on first runs (~1500 ms)
-- ❌ Runtime overhead (profiling, compilation)
-- ❌ Lost on app restart
+- ❌ Warm-up time while JIT collects profiles and compiles hot code.
+- ❌ Runtime overhead for profiling and compilation.
+- ❌ Without profile-based AOT, some benefits diminish between process restarts.
 
 ### AOT (Ahead-Of-Time)
 
 **How it works:**
-- DEX → native code compilation at install time (dex2oat)
-- OAT file stored on disk
-- App launches with pre-compiled native code
+- DEX → native compilation is performed ahead of time (e.g., during install or deferred background optimizations via `dex2oat`), according to system policy.
+- Resulting artifacts (OAT/ART/VDex) are stored on disk and used on launch.
+- The app can execute pre-compiled native code for those parts without JIT overhead.
 
 ```kotlin
 class AOTExample {
     fun processData(numbers: List<Int>): Int {
-        // All calls: ~100ns from first launch
-        // Compiled during installation
+        // When AOT-compiled, this method can be fast from the first run.
         return numbers.sum()
     }
 }
 ```
 
 **Advantages:**
-- ✅ Instant performance from first launch
-- ✅ Predictable execution times
-- ✅ Lower battery usage (no runtime compilation)
+- ✅ High performance from the first runs for precompiled regions.
+- ✅ More predictable execution time for those regions.
+- ✅ Reduced runtime compilation overhead (and potentially better battery usage for those paths).
 
 **Disadvantages:**
-- ❌ Slow installation (45 sec, 9x slower)
-- ❌ Large footprint (~60 MB, 2x larger)
-- ❌ Compiles all code, even unused
+- ❌ Longer install or background optimization time under aggressive full AOT.
+- ❌ Larger storage footprint due to native artifacts.
+- ❌ May compile rarely used code if not guided by profiles.
 
 ### Hybrid Approach (Android 7+)
 
-**Profile-Guided Optimization:**
+Modern ART uses a hybrid: interpretation + JIT + profiles + selective AOT based on profiles (Profile-Guided Optimization).
+
+**Profile-Guided Optimization (simplified):**
 
 ```
-Installation → Fast (DEX only)
+Install → Fast (DEX + minimal initial compilation)
     ↓
-First Run → JIT + profiling hot paths
+First Run → Interpretation + JIT + profiling of hot paths
     ↓
-Background (device charging) → AOT compile hot code only
+Background (device charging / idle) → dex2oat compiles hot code based on profiles
     ↓
-Subsequent Runs → Fast (optimized native code)
+Subsequent Runs → Faster (hot paths already optimized)
 ```
 
 ```kotlin
-// Profile stored at:
+// Example profile path (may vary by version):
 // /data/misc/profiles/cur/0/com.example.app/primary.prof
 
 class ProfileGuidedExample {
-    // Hot method → AOT compiled in background
+    // Hot method → likely ends up in profile and gets AOT-compiled in background.
     fun frequentOperation() { /* ... */ }
 
-    // Cold method → remains interpreted
+    // Cold method → may remain interpreted or JIT-compiled on demand.
     fun rareDebugOperation() { /* ... */ }
 }
 ```
 
-**Compilation modes (adb):**
+**Compilation modes (adb) for debugging and testing:**
 
 ```bash
-# Profile-guided (default)
+# Profile-guided style (combination of JIT + profile-based AOT)
 adb shell cmd package compile -m speed-profile com.example.app
 
-# Full AOT compilation
+# More aggressive AOT (speed)
 adb shell cmd package compile -m speed com.example.app
 
-# Reset compilation
+# Reset compilation state
 adb shell cmd package compile --reset com.example.app
 ```
 
-### Baseline Profiles (Android 9+)
+### Baseline Profiles (Android 7+ / EN note)
 
-Pre-generated profiles shipped with APK to optimize critical paths at install time.
+Baseline Profiles are supported by ART starting from Android 7.0+ (API 24+) and used by the ecosystem (including Play Store and Jetpack libraries) to supply optimization profiles ahead of time.
+
+**Idea:** pre-generated profiles shipped with the APK/AAB allow the system to compile critical paths during install or early background optimizations, reducing warm-up time.
 
 ```kotlin
-// app/src/main/baseline-prof.txt
+// Typically defined relative to the module root, e.g.:
+// src/main/baseline-prof.txt
 class BaselineProfileExample {
-    // Method listed in baseline-prof.txt → compiled at install
+    // Method listed in baseline-prof.txt → can be AOT-optimized earlier.
     fun criticalStartupMethod() {
-        // Fast from first launch
+        // Faster from early sessions.
     }
 }
 
-// Check compilation status:
+// Check compilation status; ProfileVerifier usage example:
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
     val status = ProfileVerifier.getCompilationStatusAsync().get()
     Log.d("Compilation", """
@@ -301,33 +321,39 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
 }
 ```
 
-**Performance improvements:**
-- Cold start: ~33% faster
-- Warm start: ~38% faster
+**Typical effects (per docs and measurements; app-dependent):**
+- Cold start: can be significantly faster (e.g. around ~30%+).
+- Warm start: similar potential improvements.
 
 ### Comparison
 
+(Values are conceptual, illustrating trade-offs.)
+
 | Aspect | JIT | AOT | Hybrid (Profile-Guided) |
 |--------|-----|-----|------------------------|
-| Install Time | 5s | 45s | 5s |
-| First Run | 1500ms | 700ms | 850ms |
-| Optimized Run | 800ms | 700ms | 750ms |
-| Storage | 20MB | 60MB | 35MB |
-| Battery | Higher | Lower | Low |
-| Updates | Fast | Slow | Fast |
+| Install Time | Fast | Slower with full AOT | Fast / adaptive |
+| First Run | Slower (warm-up) | Faster for AOT code | Closer to AOT on hot paths |
+| Optimized Run | After warm-up | Stable | Stable for profiled paths |
+| Storage | Smaller artifacts | Larger due to native code | In-between |
+| Battery | Higher due to JIT work | Lower for AOT code | Balanced; improved with good profiles |
+| Updates | Fast | May trigger extra compilation | Fast + background re-optimization |
 
 ### Strategy Selection
+
+Below is a conceptual example for reasoning about trade-offs for different app types (this is NOT an actual Android API):
 
 ```kotlin
 fun chooseStrategy(appType: AppType): Strategy {
     return when (appType) {
-        Gaming -> Strategy.FullAOT // Consistent frame times
-        SocialMedia -> Strategy.ProfileGuided // Frequent updates
-        Utility -> Strategy.BaselineProfile // Fast first impression
-        Enterprise -> Strategy.FullAOT // Stability > update speed
+        Gaming -> Strategy.FullAOT          // Conceptually favor stable frame times
+        SocialMedia -> Strategy.ProfileGuided // Frequent updates, need balance
+        Utility -> Strategy.BaselineProfile // Strong first impression, lightweight
+        Enterprise -> Strategy.FullAOT      // Predictability emphasized
     }
 }
 ```
+
+In reality, Android chooses strategies via ART policies, build configuration, baseline profiles, and store behavior; apps do not directly flip such enums at runtime.
 
 ---
 
@@ -337,12 +363,10 @@ fun chooseStrategy(appType: AppType): Strategy {
 2. What triggers background AOT compilation (dex2oat) in profile-guided mode?
 3. How can you force full AOT compilation for performance testing?
 4. What are the trade-offs between `speed` and `speed-profile` compilation modes?
-5. How does R8/ProGuard optimization interact with JIT/AOT compilation?
+5. How does code shrinking/obfuscation (R8/ProGuard) interact with JIT/AOT compilation on ART?
 
 ## References
 
-- [[c-performance-optimization]]
-- [[c-gradle]]
 - [Android Runtime (ART) and Dalvik](https://source.android.com/docs/core/runtime)
 - [Baseline Profiles Guide](https://developer.android.com/topic/performance/baselineprofiles)
 - [ProfileInstaller Library](https://developer.android.com/jetpack/androidx/releases/profileinstaller)

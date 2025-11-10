@@ -1,7 +1,6 @@
 ---
 id: android-118
-title: Is LayoutInflater A Singleton And Why / Является ли LayoutInflater синглтоном
-  и почему
+title: Is LayoutInflater A Singleton And Why / Является ли LayoutInflater синглтоном и почему
 aliases:
 - Is LayoutInflater A Singleton And Why
 - Является ли LayoutInflater синглтоном и почему
@@ -19,11 +18,10 @@ status: draft
 moc: moc-android
 related:
 - c-mvvm
-- c-viewmodel
 - q-home-screen-widgets--android--medium
 - q-what-design-systems-in-android-have-you-worked-with--android--medium
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 tags:
 - android
 - android/architecture-mvvm
@@ -32,6 +30,7 @@ tags:
 - difficulty/medium
 - system-services
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -46,38 +45,38 @@ sources: []
 
 ## Ответ (RU)
 
-Нет, **LayoutInflater не является глобальным синглтоном**. Каждый Context кэширует свой экземпляр LayoutInflater, полученный через `getSystemService()`. Это паттерн «синглтон в пределах области видимости» (scope-bound singleton).
+Нет, **LayoutInflater не является глобальным синглтоном**. Вместо этого используемые в фреймворке реализации `Context` (например, `Activity`, `ContextThemeWrapper`) обычно кэшируют свой экземпляр `LayoutInflater`, полученный через `getSystemService()`. То есть это «синглтон в пределах конкретного `Context`/темы», а не один глобальный объект на все приложение.
 
 ### Ключевые Моменты
 
 **Не глобальный синглтон**
-- Разные Context (Activity, Application) имеют разные экземпляры LayoutInflater
-- Каждый LayoutInflater привязан к своему Context и его теме
+- Разные `Context` (разные `Activity`, `Application`, разные обёртки `ContextThemeWrapper`) имеют разные экземпляры `LayoutInflater`.
+- Каждый `LayoutInflater` привязан к своему `Context` и его теме; менять контекст «на лету» нельзя.
 
-**Кэшируется в Context**
-- `LayoutInflater.from(context)` и `getSystemService(LAYOUT_INFLATER_SERVICE)` возвращают один экземпляр для данного Context
-- Внутренне Context хранит `mLayoutInflater` и переиспользует его
+**Кэшируется на уровне реализации `Context`**
+- `LayoutInflater.from(context)` и `getSystemService(LAYOUT_INFLATER_SERVICE)` возвращают один и тот же экземпляр для данной реализации `Context`, которая его кэширует.
+- На практике, например `ContextThemeWrapper`/`Activity` хранят `LayoutInflater` и переиспользуют его; это деталь реализации, но важно понимать, что повторные вызовы не создают новый объект каждый раз.
 
-**Stateless для inflate операций**
-- LayoutInflater не сохраняет состояние между вызовами `inflate()`
-- Безопасно переиспользовать для множественных инфляций
+**Безопасен для повторного использования**
+- `LayoutInflater` не хранит изменяемое состояние, зависящее от конкретных вызовов `inflate()` (нет накопления состояния между инфляциями), хотя содержит конфигурацию: `Context`, тему, фабрику и пр.
+- Поэтому один и тот же экземпляр можно безопасно использовать для множественных инфляций в рамках того же `Context`/темы.
 
-### Пример: Один Экземпляр На Context
+### Пример: Один Экземпляр На `Context`
 
 ```kotlin
 val inflater1 = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 val inflater2 = LayoutInflater.from(this)
-println(inflater1 === inflater2) // ✅ true - тот же экземпляр
+println(inflater1 === inflater2) // true - тот же экземпляр для данного Activity
 
 val activityInflater = LayoutInflater.from(this)
 val appInflater = LayoutInflater.from(applicationContext)
-println(activityInflater === appInflater) // ❌ false - разные Context
+println(activityInflater === appInflater) // false - разные Context -> разные экземпляры
 ```
 
-### Лучшие Практики
+### Замечания по Практике
 
 ```kotlin
-// ✅ ХОРОШО: передать в конструктор
+// Хорошо: передать inflater в конструктор (явная зависимость, удобно для тестирования)
 class MyAdapter(
     private val inflater: LayoutInflater
 ) : RecyclerView.Adapter<ViewHolder>() {
@@ -87,10 +86,10 @@ class MyAdapter(
     }
 }
 
-// ❌ ПЛОХО: вызывать from() каждый раз (хотя вернется кэшированный)
-class BadAdapter : RecyclerView.Adapter<ViewHolder>() {
+// Тоже допустимо: получать inflater при необходимости — вызов дешёвый и кэшированный
+class OkAdapter : RecyclerView.Adapter<ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context) // ненужный повторный вызов
+        val inflater = LayoutInflater.from(parent.context) // вернётся кэшированный экземпляр
         return ViewHolder(inflater.inflate(R.layout.item, parent, false))
     }
 }
@@ -98,38 +97,38 @@ class BadAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 ## Answer (EN)
 
-No, **LayoutInflater is not a global singleton**. Each Context caches its own LayoutInflater instance obtained via `getSystemService()`. This is a scope-bound singleton pattern.
+No, **LayoutInflater is not a global singleton**. Instead, framework `Context` implementations (such as `Activity`, `ContextThemeWrapper`) typically cache their own `LayoutInflater` instance obtained via `getSystemService()`. This behaves like a "singleton within a given `Context`/theme" rather than a single global object for the whole app.
 
 ### Key Points
 
 **Not a global singleton**
-- Different Contexts (Activity, Application) have different LayoutInflater instances
-- Each LayoutInflater is bound to its Context and theme
+- Different `Context`s (different `Activity` instances, `Application`, different `ContextThemeWrapper`s) have different `LayoutInflater` instances.
+- Each `LayoutInflater` is bound to its `Context` and theme; you cannot switch its context on the fly.
 
-**Cached in Context**
-- `LayoutInflater.from(context)` and `getSystemService(LAYOUT_INFLATER_SERVICE)` return the same instance for a given Context
-- Internally, Context stores `mLayoutInflater` and reuses it
+**Cached at `Context` implementation level**
+- `LayoutInflater.from(context)` and `getSystemService(LAYOUT_INFLATER_SERVICE)` return the same instance for a given `Context` implementation that caches it.
+- In practice, e.g. `ContextThemeWrapper`/`Activity` store and reuse their `LayoutInflater`; this is an implementation detail, but it means repeated calls are cheap and do not create new instances each time.
 
-**Stateless for inflate operations**
-- LayoutInflater doesn't preserve state between `inflate()` calls
-- Safe to reuse for multiple inflations
+**Safe to reuse**
+- `LayoutInflater` does not keep mutable, per-`inflate()` call state between inflations (though it holds configuration such as `Context`, theme, factory, etc.).
+- Therefore, reusing the same `LayoutInflater` for multiple inflations within the same `Context`/theme is safe.
 
-### Example: One Instance per Context
+### Example: One Instance per `Context`
 
 ```kotlin
 val inflater1 = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 val inflater2 = LayoutInflater.from(this)
-println(inflater1 === inflater2) // ✅ true - same instance
+println(inflater1 === inflater2) // true - same instance for this Activity
 
 val activityInflater = LayoutInflater.from(this)
 val appInflater = LayoutInflater.from(applicationContext)
-println(activityInflater === appInflater) // ❌ false - different Contexts
+println(activityInflater === appInflater) // false - different Contexts -> different instances
 ```
 
-### Best Practices
+### Practical Notes
 
 ```kotlin
-// ✅ GOOD: pass in constructor
+// GOOD: inject inflater via constructor (explicit dependency, convenient for testing)
 class MyAdapter(
     private val inflater: LayoutInflater
 ) : RecyclerView.Adapter<ViewHolder>() {
@@ -139,10 +138,10 @@ class MyAdapter(
     }
 }
 
-// ❌ BAD: call from() every time (though returns cached instance)
-class BadAdapter : RecyclerView.Adapter<ViewHolder>() {
+// ALSO FINE: obtain inflater when needed — call is cheap and returns cached instance
+class OkAdapter : RecyclerView.Adapter<ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val inflater = LayoutInflater.from(parent.context) // unnecessary repeated call
+        val inflater = LayoutInflater.from(parent.context) // cached instance for this Context
         return ViewHolder(inflater.inflate(R.layout.item, parent, false))
     }
 }
@@ -150,24 +149,33 @@ class BadAdapter : RecyclerView.Adapter<ViewHolder>() {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Каковы последствия для производительности при многократном создании экземпляров `LayoutInflater`?
+- Как `LayoutInflater` обрабатывает кастомные вью и атрибуты?
+- Когда стоит использовать контекст `Activity` против контекста `Application` для `LayoutInflater`?
+- Как `View Binding` соотносится с прямой инфляцией layout-файлов?
+
 ## Follow-ups
 
 - What are the performance implications of creating LayoutInflater instances repeatedly?
 - How does LayoutInflater handle custom views and attributes?
-- When should you use Activity context vs Application context for LayoutInflater?
-- How does View Binding compare to direct inflation?
+- When should you use `Activity` context vs `Application` context for LayoutInflater?
+- How does `View` Binding compare to direct inflation?
+
+## Ссылки (RU)
+
+- Android Developer Documentation: System Services and `Context`
 
 ## References
 
-- Android Developer Documentation: System Services and Context
+- Android Developer Documentation: System Services and `Context`
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-mvvm]]
-- [[c-viewmodel]]
-
 
 ### Prerequisites
 - [[q-viewmodel-pattern--android--easy]]

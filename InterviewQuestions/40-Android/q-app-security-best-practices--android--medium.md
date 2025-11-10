@@ -13,13 +13,13 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
   - c-android-keystore
   - c-encryption
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 sources: []
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, owasp, security]
 ---
@@ -57,6 +57,7 @@ val client = OkHttpClient.Builder()
 **Network Security Config** запрещает HTTP:
 
 ```xml
+<!-- Фрагмент network-security-config.xml -->
 <network-security-config>
     <domain-config cleartextTrafficPermitted="false">  <!-- ✅ Только HTTPS -->
         <domain includeSubdomains="true">api.example.com</domain>
@@ -67,9 +68,11 @@ val client = OkHttpClient.Builder()
 </network-security-config>
 ```
 
+(Этот конфиг должен быть подключен в `AndroidManifest.xml` через атрибут `android:networkSecurityConfig` для применения.)
+
 ### 2. Защита Данных
 
-**EncryptedSharedPreferences** с hardware-backed ключами:
+**EncryptedSharedPreferences** с использованием Android Keystore (при наличии — аппаратно защищённого):
 
 ```kotlin
 val masterKey = MasterKey.Builder(context)
@@ -84,7 +87,9 @@ val prefs = EncryptedSharedPreferences.create(
 prefs.edit().putString("token", authToken).apply()
 ```
 
-Ключи хранятся в Android Keystore и не могут быть извлечены.
+Ключи генерируются и хранятся через Android Keystore и недоступны напрямую приложению; на устройствах с аппаратной поддержкой это существенно усложняет их извлечение.
+
+Не хардкодить секреты (API-ключи, приватные токены) в коде/ресурсах; для чувствительных значений использовать серверную выдачу, Keystore и минимизацию чувствительных данных на клиенте.
 
 ### 3. Обфускация Кода
 
@@ -104,6 +109,8 @@ android {
 }
 ```
 
+Обфускация не заменяет криптографию и не должна рассматриваться как основная защита секрета.
+
 ### 4. Защита От SQL-инъекций
 
 ```kotlin
@@ -117,14 +124,13 @@ suspend fun findUser(email: String): User?
 
 ### 5. Критические Правила
 
-- **Permissions**: Минимальный набор, проверка во время выполнения
-- **Logging**: Никогда не логировать токены, пароли, PII
-- **Biometric Auth**: BiometricPrompt для критичных операций
-- **Root Detection**: Ограничить функциональность на скомпрометированных устройствах
-- **Dependencies**: Регулярное обновление, сканирование уязвимостей
+- **Permissions**: Запрашивать минимально необходимый набор, проверять во время выполнения, обосновывать пользователю.
+- **Logging**: Никогда не логировать токены, пароли, PII и другие секреты, особенно в релизных сборках.
+- **Biometric Auth**: Использовать BiometricPrompt / Biometric APIs для критичных операций, не хранить PIN/пароли в явном виде.
+- **Root Detection**: Использовать как эвристический сигнал (может быть обойдён); при необходимости ограничивать особо чувствительные функции.
+- **Dependencies**: Регулярно обновлять библиотеки и SDK, использовать сканирование уязвимостей.
 
 ---
-
 
 ## Answer (EN)
 
@@ -132,7 +138,7 @@ suspend fun findUser(email: String): User?
 
 ### 1. Network Security
 
-**Certificate Pinning** prevents MITM attacks:
+**Certificate Pinning** helps prevent MITM attacks:
 
 ```kotlin
 val pinner = CertificatePinner.Builder()
@@ -144,9 +150,10 @@ val client = OkHttpClient.Builder()
     .build()
 ```
 
-**Network Security Config** disables HTTP:
+**Network Security Config** disables HTTP for pinned domains:
 
 ```xml
+<!-- Fragment of network-security-config.xml -->
 <network-security-config>
     <domain-config cleartextTrafficPermitted="false">  <!-- ✅ HTTPS only -->
         <domain includeSubdomains="true">api.example.com</domain>
@@ -157,9 +164,11 @@ val client = OkHttpClient.Builder()
 </network-security-config>
 ```
 
+(This config must be referenced from `AndroidManifest.xml` via the `android:networkSecurityConfig` attribute to take effect.)
+
 ### 2. Data Protection
 
-**EncryptedSharedPreferences** with hardware-backed keys:
+**EncryptedSharedPreferences** using Android Keystore (hardware-backed when available):
 
 ```kotlin
 val masterKey = MasterKey.Builder(context)
@@ -174,11 +183,13 @@ val prefs = EncryptedSharedPreferences.create(
 prefs.edit().putString("token", authToken).apply()
 ```
 
-Keys are stored in Android Keystore and cannot be extracted.
+Keys are generated and stored via Android Keystore and are not directly accessible to the app; on devices with hardware-backed support this significantly raises the bar for extraction.
+
+Avoid hardcoding secrets (API keys, private tokens) in code/resources; use server-side issuance, Keystore, and minimize sensitive data on the client.
 
 ### 3. Code Obfuscation
 
-**R8** makes reverse engineering difficult:
+**R8** makes reverse engineering harder:
 
 ```gradle
 android {
@@ -194,6 +205,8 @@ android {
 }
 ```
 
+Obfuscation does not replace proper cryptography and should not be treated as the primary protection for secrets.
+
 ### 4. SQL Injection Prevention
 
 ```kotlin
@@ -207,11 +220,19 @@ suspend fun findUser(email: String): User?
 
 ### 5. Critical Rules
 
-- **Permissions**: Minimal set, runtime validation
-- **Logging**: Never log tokens, passwords, PII
-- **Biometric Auth**: BiometricPrompt for sensitive operations
-- **Root Detection**: Limit functionality on compromised devices
-- **Dependencies**: Regular updates, vulnerability scanning
+- **Permissions**: Request minimal required set, validate at runtime, provide clear justification to users.
+- **Logging**: Never log tokens, passwords, PII, or other secrets, especially in release builds.
+- **Biometric Auth**: Use BiometricPrompt / Biometric APIs for sensitive operations; do not store PIN/passwords in plaintext.
+- **Root Detection**: Use as a heuristic signal only (bypassable); restrict especially sensitive capabilities if needed.
+- **Dependencies**: Update libraries and SDKs regularly; use vulnerability scanning.
+
+## Дополнительные вопросы (RU)
+
+- Как безопасно обновлять (ротировать) пины сертификатов, не ломая старые версии приложения?
+- В чем разница между обфускацией R8 и защитой нативного кода?
+- Когда стоит отклонять использование приложения на рутованных устройствах, а когда ограничиться предупреждением?
+- Как реализовать безопасную ротацию ключей для EncryptedSharedPreferences?
+- Каковы компромиссы между SafetyNet и Play Integrity API?
 
 ## Follow-ups
 
@@ -221,6 +242,13 @@ suspend fun findUser(email: String): User?
 - How to implement secure key rotation for EncryptedSharedPreferences?
 - What are the trade-offs between SafetyNet and Play Integrity API?
 
+## Ссылки (RU)
+
+- [[c-encryption]] — Основы шифрования
+- [[c-android-keystore]] — Система Android Keystore
+- "OWASP Mobile Security" — https://owasp.org/www-project-mobile-top-10/
+- "Android Security Best Practices" — https://developer.android.com/topic/security/best-practices
+
 ## References
 
 - [[c-encryption]] — Encryption fundamentals
@@ -228,12 +256,24 @@ suspend fun findUser(email: String): User?
 - [OWASP Mobile Security](https://owasp.org/www-project-mobile-top-10/)
 - [Android Security Best Practices](https://developer.android.com/topic/security/best-practices)
 
+## Связанные вопросы (RU)
+
+### Предпосылки
+
+- Основы runtime-разрешений
+- Конфигурация безопасности манифеста
+
+### Связанные
+
+- Шаблоны обработки разрешений
+- Конфигурация сетевой безопасности
+
 ## Related Questions
 
 ### Prerequisites
- — Runtime permission basics
- — Manifest security configuration
+- Runtime permission basics
+- Manifest security configuration
 
 ### Related
- — Permission handling patterns
- — Network security configuration
+- Permission handling patterns
+- Network security configuration

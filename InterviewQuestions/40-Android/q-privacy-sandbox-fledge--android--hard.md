@@ -47,31 +47,33 @@ tags:
 
 ## Ответ (RU)
 
-FLEDGE (Protected Audience API) — система remarketing без cross-site отслеживания. Рекламные аукционы выполняются локально на устройстве, данные пользователя остаются приватными.
+FLEDGE (Protected Audience API) — механизм ремаркетинга без cross-site отслеживания и без third-party cookies. Рекламные аукционы выполняются локально на устройстве, данные пользователя остаются приватными.
 
-**Ключевая идея:** Рекламодатели добавляют пользователей в Custom Audiences, затем конкурируют в real-time аукционах на устройстве. Bidding/decision логика выполняется в изолированном JavaScript окружении.
+**Ключевая идея:** Рекламодатели через ad tech-платформы добавляют пользователя в custom audience (аудитории, связанные с конкретным buyer), затем конкурируют в on-device аукционах. Bidding/decision логика выполняется в изолированном JavaScript-окружении, без доступа к идентификаторам кросс-сайтового трекинга.
 
 ### Архитектура
 
 **Основные компоненты:**
-- **Custom Audiences** - Сегменты аудитории, определённые рекламодателем
+- **Custom Audiences** - Сегменты аудитории, определённые buyer'ом (ad tech/рекламодатель), хранящиеся на устройстве
 - **On-Device Auction** - Выбор рекламы происходит локально
-- **JavaScript Bidding** - Логика ставок выполняется изолированно
-- **k-anonymity** - Минимальный размер аудитории для privacy
+- **JavaScript Bidding** - Логика ставок выполняется изолированно в песочнице
+- **k-anonymity** - Минимальный размер аудитории для гарантий приватности
 
-**Процесс:**
-1. Рекламодатель добавляет пользователя в Custom Audience (`joinCustomAudience`)
-2. Издатель запрашивает рекламу (`selectAds`)
-3. On-device аукцион оценивает ставки от всех audiences
-4. Побеждает реклама с наивысшим score
-5. Impression отчёт отправляется (`reportImpression`)
+**Процесс (упрощённо):**
+1. Рекламодатель/платформа добавляет пользователя в Custom Audience (`joinCustomAudience`).
+2. Издатель запрашивает рекламу (`selectAds`).
+3. On-device аукцион запускает bidding и scoring скрипты для релевантных audiences.
+4. Побеждает креатив с наивысшим score.
+5. Отчёт об impression отправляется через соответствующий reporting API (анонимизированно).
 
 ### Реализация Custom Audiences
+
+Ниже — схематичный пример использования Protected Audience API; сигнатуры и типы могут отличаться от конкретной версии AdServices SDK.
 
 **Добавление пользователя в аудиторию:**
 
 ```kotlin
-// ✅ Корректно - полная конфигурация Custom Audience
+// ✅ Корректно как пример — полная конфигурация Custom Audience (срок жизни, сигналы, bidding-логика)
 suspend fun joinCustomAudience(productId: String, category: String) {
     val customAudience = CustomAudience.Builder()
         .setName("product_viewers_$category")
@@ -89,26 +91,27 @@ suspend fun joinCustomAudience(productId: String, category: String) {
         .setExpirationTime(Instant.now().plus(30, ChronoUnit.DAYS))
         .build()
 
+    // Реальный API использует асинхронные вызовы с Executor/Callback или suspend-обёртки
     customAudienceManager.joinCustomAudience(customAudience, executor, callback)
 }
 
-// ❌ Неправильно - нет expiration, некорректные signals
+// ⚠ Антипаттерн — пример некорректной конфигурации
 suspend fun joinBadAudience() {
     CustomAudience.Builder()
         .setName("audience")
-        .setBuyer(AdTechIdentifier.fromString("buyer"))
-        // Нет expirationTime - аудитория никогда не удалится
-        // Нет userBiddingSignals - нечего использовать для bidding
+        .setBuyer(AdTechIdentifier.fromString("https://buyer.example"))
+        // Нет expirationTime — нарушает ожидаемые политики/лучшие практики управления сроком жизни
+        // Нет userBiddingSignals/ads — аудитория не несёт полезной информации для bidding
         .build()
 }
 ```
 
 ### On-Device Auction
 
-**Запуск аукциона:**
+**Запуск аукциона (схематично):**
 
 ```kotlin
-// ✅ Корректно - полная конфигурация аукциона
+// ✅ Корректно как пример — конфигурация аукциона с seller, buyers и сигналами
 suspend fun selectAd(seller: String, buyers: List<String>): AdSelectionOutcome {
     val config = AdSelectionConfig.Builder()
         .setSeller(AdTechIdentifier.fromString(seller))
@@ -120,21 +123,22 @@ suspend fun selectAd(seller: String, buyers: List<String>): AdSelectionOutcome {
         .setSellerSignals(AdData.Builder()
             .setData("""{"floorPrice":0.5}""")
             .build())
-        .setPerBuyerSignals(buyers.associateWith { buyer ->
+        .setPerBuyerSignals(buyers.associateWith {
             AdData.Builder().setData("""{"timeout":50}""").build()
         }.mapKeys { AdTechIdentifier.fromString(it.key) })
         .build()
 
+    // В реальном коде используется асинхронный вызов adSelectionManager.selectAds(...)
     return adSelectionManager.selectAds(config, executor, callback)
 }
 ```
 
 ### JavaScript Bidding Logic
 
-**Генерация ставки (выполняется на устройстве):**
+**Генерация ставки (выполняется на устройстве в изолированной среде):**
 
 ```javascript
-// ✅ Корректно - быстрая bidding логика
+// ✅ Упрощённый пример быстрой bidding-логики
 function generateBid(customAudience, auctionSignals, perBuyerSignals) {
     const baseValue = customAudience.userBiddingSignals.interestLevel || 1.0;
     const recency = calculateRecency(customAudience.activationTime);
@@ -149,29 +153,29 @@ function generateBid(customAudience, auctionSignals, perBuyerSignals) {
 
 function calculateRecency(activationTime) {
     const days = (Date.now() - activationTime) / 86400000;
-    return Math.max(0.5, 1.0 - days / 30 * 0.5); // Decay over 30 days
+    return Math.max(0.5, 1.0 - (days / 30) * 0.5); // Плавное затухание в течение 30 дней
 }
 
-// ❌ Неправильно - слишком сложно, таймаут
+// ❌ Антипаттерн — может привести к таймауту/нарушению ограничений среды
 function generateBadBid(customAudience) {
-    // Медленные вычисления - вызовет таймаут (>50ms)
+    // Тяжёлые вычисления — риск превышения жёстких ограничений по времени выполнения
     for (let i = 0; i < 1000000; i++) { /* expensive loop */ }
-    // Внешние запросы - запрещены в isolated environment
+    // Внешние запросы из bidding JS запрещены в изолированной среде
     fetch('https://external.com/data');
 }
 ```
 
-**Decision Logic (seller scoring):**
+**Decision Logic (seller scoring, изолированная логика продавца):**
 
 ```javascript
-// ✅ Корректно - быстрая scoring логика
+// ✅ Упрощённый пример быстрой scoring-логики
 function scoreAd(adMetadata, bid, auctionConfig) {
     if (bid <= 0) return 0;
 
     const floorPrice = auctionConfig.sellerSignals.floorPrice || 0;
     if (bid < floorPrice) return 0;
 
-    // Quality adjustment
+    // Пример учёта качества
     const qualityMultiplier = adMetadata.ctr * 10 + adMetadata.viewability;
     return bid * qualityMultiplier;
 }
@@ -179,10 +183,12 @@ function scoreAd(adMetadata, bid, auctionConfig) {
 
 ### E-commerce Remarketing
 
+Ниже показан паттерн: как события e-commerce могут мапиться в custom audiences. Код иллюстративный: используются упрощённые типы и вспомогательные методы.
+
 **Отслеживание событий и управление аудиториями:**
 
 ```kotlin
-// ✅ Корректно - полный remarketing pipeline
+// ✅ Иллюстративный пример ремаркетинг-пайплайна поверх Protected Audience API
 class EcommerceRemarketingManager(
     private val audienceManager: CustomAudienceManager
 ) {
@@ -210,10 +216,10 @@ class EcommerceRemarketingManager(
     }
 
     suspend fun trackPurchase(orderId: String) {
-        // Remove from cart abandoners after purchase
-        leaveCustomAudience("cart_abandoners", buyer)
+        // После покупки пользователь должен быть удалён из "cart_abandoners"
+        leaveCustomAudience("cart_abandoners", buyer = /* соответствующий AdTechIdentifier */)
 
-        // Add to purchasers for cross-sell
+        // И добавлен в аудиторию покупателей для cross-sell
         joinCustomAudience(
             audienceName = "recent_purchasers",
             userSignals = mapOf("orderValue" to calculateValue(orderId)),
@@ -227,68 +233,74 @@ class EcommerceRemarketingManager(
             metadata = mapOf("discount" to 0.1) // 10% remarketing discount
         )
     }
+
+    // Реализации joinCustomAudience/leaveCustomAudience/calculateValue/... подразумеваются поверх реального AdServices API
 }
 ```
 
 ### Технические Вызовы
 
 **1. Производительность**
-- JavaScript execution < 50ms (иначе таймаут)
-- Ограниченные ресурсы на устройстве
-- Множественные buyers конкурируют одновременно
+- Жёсткие ограничения на время исполнения JS в песочнице (нужно укладываться в десятки миллисекунд; точные лимиты зависят от реализации).
+- Ограниченные ресурсы на устройстве.
+- Параллельные аукционы и несколько buyers.
 
-**Решение:** Минимизировать JavaScript сложность, использовать простые вычисления, избегать циклов.
+**Решение:** Держать bidding/decision JS максимально простым и детерминированным, избегать тяжёлых циклов и сложных структур.
 
-**2. Privacy ограничения**
-- k-anonymity требования (минимум пользователей в audience)
-- Нет cross-site identifiers
-- Данные остаются на устройстве
+**2. Privacy-ограничения**
+- k-anonymity требования (минимальный размер аудитории перед использованием).
+- Запрет на cross-site идентификаторы и прямой user-level трекинг.
+- Данные интересов и membership аудиторий хранятся на устройстве.
 
-**Решение:** Использовать достаточно большие audiences, не комбинировать с user IDs.
+**Решение:** Формировать достаточно крупные аудитории, не комбинировать с 1:1 user IDs или fingerprinting-сигналами.
 
-**3. JavaScript изоляция**
-- Нет доступа к DOM
-- Нет network requests
-- Нет storage API
+**3. Изоляция JavaScript**
+- Нет доступа к DOM.
+- Нет прямых network-запросов из bidding/scoring JS.
+- Нет доступа к persistent storage API.
 
-**Решение:** Все данные передавать через signals, использовать trusted servers для real-time данных.
+**Решение:**
+- Все необходимые данные передавать через signals (adSelectionSignals, sellerSignals, perBuyerSignals, userBiddingSignals).
+- Для обновления сигналов и trusted данных использовать разрешённые механизмы (daily update, Trusted Bidding Data endpoints) вне on-device JS выполнения.
 
-**4. API доступность**
-- Только Android 13+ (API 33)
-- Требует user consent
-- Может быть недоступен в регионах
+**4. Доступность API**
+- Protected Audience API доступен на устройствах, участвующих в программе Privacy Sandbox on Android (изначально Android 13+ с AdServices; возможна поставка через extension/Play services в зависимости от релиза и региона).
+- Требуется согласие пользователя и соблюдение policy.
+- Может быть недоступен в отдельных регионах или на конкретных девайсах.
 
-**Решение:** Проверять `Build.VERSION.SDK_INT`, fallback на contextual ads.
+**Решение:** Проверять доступность AdServices/Privacy Sandbox API на устройстве и статус consent; при недоступности — fallback на contextual ads и другие privacy-preserving механизмы.
 
 ---
 
 ## Answer (EN)
 
-FLEDGE (Protected Audience API) enables remarketing without cross-site tracking. Ad auctions run locally on-device, keeping user data private while allowing personalized advertising.
+FLEDGE (Protected Audience API) enables remarketing without cross-site tracking and without third-party cookies. Ad auctions run locally on the device, keeping user membership and interest data on-device while still allowing relevant ads.
 
-**Core Concept:** Advertisers add users to Custom Audiences, then compete in real-time on-device auctions. Bidding/decision logic executes in isolated JavaScript environments.
+**Core Concept:** Advertisers (via ad tech platforms) add users into custom audiences (audiences bound to specific buyers). When a publisher runs an ad request, eligible buyers compete in an on-device auction. Bidding and decision logic execute in an isolated JavaScript environment without access to cross-site identifiers.
 
 ### Architecture
 
 **Components:**
-- **Custom Audiences** - Advertiser-defined audience segments
-- **On-Device Auction** - Ad selection happens locally
-- **JavaScript Bidding** - Isolated bidding logic execution
-- **k-anonymity** - Minimum audience size for privacy
+- **Custom Audiences** - Buyer-defined on-device audience segments
+- **On-Device Auction** - Ad selection happens locally on the device
+- **JavaScript Bidding** - Bidding logic executes in an isolated sandboxed JS environment
+- **k-anonymity** - Minimum audience size constraints to protect privacy
 
-**Flow:**
-1. Advertiser adds user to Custom Audience (`joinCustomAudience`)
-2. Publisher requests ad (`selectAds`)
-3. On-device auction evaluates bids from all audiences
-4. Highest scoring ad wins
-5. Impression report sent (`reportImpression`)
+**Flow (simplified):**
+1. Advertiser/ad tech adds the user to a Custom Audience via `joinCustomAudience`.
+2. Publisher initiates an ad request via `selectAds`.
+3. The on-device auction runs buyer bidding scripts and seller scoring scripts for relevant audiences.
+4. The highest scoring ad/creative wins.
+5. Impression reporting is performed through the corresponding reporting APIs in a privacy-preserving way.
 
 ### Custom Audience Implementation
+
+Below is a schematic example of using the Protected Audience API; exact signatures and types may vary by AdServices SDK version.
 
 **Adding user to audience:**
 
 ```kotlin
-// ✅ Correct - full Custom Audience configuration
+// ✅ Correct as an example — full Custom Audience configuration (lifetime, signals, bidding logic)
 suspend fun joinCustomAudience(productId: String, category: String) {
     val customAudience = CustomAudience.Builder()
         .setName("product_viewers_$category")
@@ -306,26 +318,27 @@ suspend fun joinCustomAudience(productId: String, category: String) {
         .setExpirationTime(Instant.now().plus(30, ChronoUnit.DAYS))
         .build()
 
+    // Real APIs use async calls with Executor/Callback or suspend wrappers
     customAudienceManager.joinCustomAudience(customAudience, executor, callback)
 }
 
-// ❌ Wrong - no expiration, incorrect signals
+// ⚠ Anti-pattern — example of a problematic configuration
 suspend fun joinBadAudience() {
     CustomAudience.Builder()
         .setName("audience")
-        .setBuyer(AdTechIdentifier.fromString("buyer"))
-        // No expirationTime - audience never expires
-        // No userBiddingSignals - nothing to use for bidding
+        .setBuyer(AdTechIdentifier.fromString("https://buyer.example"))
+        // Missing expirationTime — violates lifecycle best practices/policies
+        // Missing userBiddingSignals/ads — audience carries no useful bidding context
         .build()
 }
 ```
 
 ### On-Device Auction
 
-**Running auction:**
+**Running auction (schematic):**
 
 ```kotlin
-// ✅ Correct - full auction configuration
+// ✅ Correct as an example — auction config with seller, buyers, and signals
 suspend fun selectAd(seller: String, buyers: List<String>): AdSelectionOutcome {
     val config = AdSelectionConfig.Builder()
         .setSeller(AdTechIdentifier.fromString(seller))
@@ -337,21 +350,22 @@ suspend fun selectAd(seller: String, buyers: List<String>): AdSelectionOutcome {
         .setSellerSignals(AdData.Builder()
             .setData("""{"floorPrice":0.5}""")
             .build())
-        .setPerBuyerSignals(buyers.associateWith { buyer ->
+        .setPerBuyerSignals(buyers.associateWith {
             AdData.Builder().setData("""{"timeout":50}""").build()
         }.mapKeys { AdTechIdentifier.fromString(it.key) })
         .build()
 
+    // In actual implementations this is an async call
     return adSelectionManager.selectAds(config, executor, callback)
 }
 ```
 
 ### JavaScript Bidding Logic
 
-**Generating bid (runs on-device):**
+**Generating bid (runs on-device in an isolated environment):**
 
 ```javascript
-// ✅ Correct - fast bidding logic
+// ✅ Simplified example of fast bidding logic
 function generateBid(customAudience, auctionSignals, perBuyerSignals) {
     const baseValue = customAudience.userBiddingSignals.interestLevel || 1.0;
     const recency = calculateRecency(customAudience.activationTime);
@@ -366,29 +380,29 @@ function generateBid(customAudience, auctionSignals, perBuyerSignals) {
 
 function calculateRecency(activationTime) {
     const days = (Date.now() - activationTime) / 86400000;
-    return Math.max(0.5, 1.0 - days / 30 * 0.5); // Decay over 30 days
+    return Math.max(0.5, 1.0 - (days / 30) * 0.5); // Decay over ~30 days
 }
 
-// ❌ Wrong - too complex, will timeout
+// ❌ Anti-pattern — likely to hit execution limits / violate environment constraints
 function generateBadBid(customAudience) {
-    // Slow computation - will timeout (>50ms)
+    // Heavy computation — may exceed strict execution time limits
     for (let i = 0; i < 1000000; i++) { /* expensive loop */ }
-    // External requests - forbidden in isolated environment
+    // Network calls from bidding JS are forbidden in the sandbox
     fetch('https://external.com/data');
 }
 ```
 
-**Decision logic (seller scoring):**
+**Decision logic (seller scoring, isolated):**
 
 ```javascript
-// ✅ Correct - fast scoring logic
+// ✅ Simplified example of fast scoring logic
 function scoreAd(adMetadata, bid, auctionConfig) {
     if (bid <= 0) return 0;
 
     const floorPrice = auctionConfig.sellerSignals.floorPrice || 0;
     if (bid < floorPrice) return 0;
 
-    // Quality adjustment
+    // Example quality adjustment
     const qualityMultiplier = adMetadata.ctr * 10 + adMetadata.viewability;
     return bid * qualityMultiplier;
 }
@@ -396,10 +410,12 @@ function scoreAd(adMetadata, bid, auctionConfig) {
 
 ### E-commerce Remarketing
 
+Pattern-level example: mapping typical e-commerce events into Protected Audience custom audiences. This is illustrative and omits full API wiring.
+
 **Event tracking and audience management:**
 
 ```kotlin
-// ✅ Correct - complete remarketing pipeline
+// ✅ Illustrative example of a remarketing pipeline built on top of Protected Audience API
 class EcommerceRemarketingManager(
     private val audienceManager: CustomAudienceManager
 ) {
@@ -428,9 +444,9 @@ class EcommerceRemarketingManager(
 
     suspend fun trackPurchase(orderId: String) {
         // Remove from cart abandoners after purchase
-        leaveCustomAudience("cart_abandoners", buyer)
+        leaveCustomAudience("cart_abandoners", buyer = /* appropriate AdTechIdentifier */)
 
-        // Add to purchasers for cross-sell
+        // Add to purchasers audience for cross-sell
         joinCustomAudience(
             audienceName = "recent_purchasers",
             userSignals = mapOf("orderValue" to calculateValue(orderId)),
@@ -441,41 +457,46 @@ class EcommerceRemarketingManager(
     private fun createProductAd(productId: String, price: Double): AdData {
         return AdData(
             renderUri = "https://advertiser.example/ads/product-$productId",
-            metadata = mapOf("discount" to 0.1) // 10% remarketing discount
+            metadata = mapOf("discount" to 0.1)
         )
     }
+
+    // Actual implementations of joinCustomAudience / leaveCustomAudience / calculateValue / etc.
+    // should be built against the concrete AdServices/Privacy Sandbox APIs.
 }
 ```
 
 ### Technical Challenges
 
 **1. Performance**
-- JavaScript execution < 50ms (else timeout)
-- Limited on-device resources
-- Multiple buyers competing simultaneously
+- Strict execution limits for JS sandbox; bidding and scoring must complete within a small time budget (tens of ms; exact numbers are implementation-specific).
+- Limited device resources.
+- Multiple concurrent auctions and buyers.
 
-**Solution:** Minimize JavaScript complexity, use simple calculations, avoid loops.
+**Solution:** Keep JS logic deterministic and lightweight; avoid heavy loops and complex computations.
 
 **2. Privacy constraints**
-- k-anonymity requirements (minimum users in audience)
-- No cross-site identifiers
-- Data stays on-device
+- k-anonymity / minimum audience size before an audience can be used.
+- No cross-site identifiers or direct user-level tracking.
+- Audience membership and interest data stored and evaluated on-device.
 
-**Solution:** Use sufficiently large audiences, don't combine with user IDs.
+**Solution:** Use sufficiently large segments; avoid combining with user IDs or fingerprinting techniques.
 
 **3. JavaScript isolation**
-- No DOM access
-- No network requests
-- No storage API
+- No DOM access.
+- No direct network access from bidding/scoring JS.
+- No persistent storage APIs.
 
-**Solution:** Pass all data through signals, use trusted servers for real-time data.
+**Solution:**
+- Provide required data via signals (adSelectionSignals, sellerSignals, perBuyerSignals, userBiddingSignals).
+- Use allowed mechanisms such as daily updates and Trusted Bidding Data endpoints to refresh signals outside the sandboxed JS execution.
 
 **4. API availability**
-- Only Android 13+ (API 33)
-- Requires user consent
-- May be unavailable in regions
+- Protected Audience API is available on devices participating in the Privacy Sandbox on Android program (initially Android 13+ with AdServices; may be delivered via extensions/Play services depending on rollout and region).
+- Requires user consent and compliance with Google policies.
+- May be unavailable in certain regions or on specific devices.
 
-**Solution:** Check `Build.VERSION.SDK_INT`, fallback to contextual ads.
+**Solution:** Check for AdServices/Privacy Sandbox availability and user consent at runtime; when unavailable, fall back to contextual ads and other privacy-preserving approaches.
 
 ---
 

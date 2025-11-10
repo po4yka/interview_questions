@@ -2,35 +2,27 @@
 id: android-022
 title: "HTTP vs Long-Polling vs WebSocket vs SSE / HTTP против Long-Polling против WebSocket против SSE"
 aliases: [HTTP Protocols Comparison, WebSocket vs HTTP, WebSocket против HTTP, Протоколы HTTP]
-
-# Classification
 topic: android
 subtopics: [networking-http, performance-memory, websockets]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
-sources: [https://github.com/amitshekhariitbhu/android-interview-questions]
-
-# Workflow & relations
+sources: ["https://github.com/amitshekhariitbhu/android-interview-questions"]
 status: draft
 moc: moc-android
 related: [q-retrofit-library--android--medium, q-server-sent-events-sse--android--medium, q-websocket-implementation--android--medium]
-
-# Timestamps
 created: 2025-10-06
 updated: 2025-10-28
-
 tags: [android/networking-http, android/performance-memory, android/websockets, difficulty/medium]
+
 ---
 
 # Вопрос (RU)
-> В чем разница между HTTP, Long-Polling, WebSocket и Server-Sent Events (SSE)? Когда следует использовать каждый из них?
+> В чем разница между HTTP, `Long`-Polling, WebSocket и Server-Sent Events (SSE)? Когда следует использовать каждый из них?
 
 # Question (EN)
-> What are the differences between HTTP, Long-Polling, WebSocket, and Server-Sent Events (SSE)? When should each be used?
+> What are the differences between HTTP, `Long`-Polling, WebSocket, and Server-Sent Events (SSE)? When should each be used?
 
 ---
 
@@ -40,26 +32,27 @@ tags: [android/networking-http, android/performance-memory, android/websockets, 
 
 | Протокол | Направление | Соединение | Задержка | Real-time | Use Case |
 |----------|-------------|------------|----------|-----------|----------|
-| HTTP | Запрос→Ответ | Новое | Высокая | Нет | REST API, CRUD |
-| Long-Polling | Запрос→Ответ | Удержание | Средняя | Почти | Уведомления (fallback) |
+| HTTP | Запрос→Ответ | Новое/мультиплексируемое | Выше при частых опросах | Нет | REST API, CRUD |
+| `Long`-Polling | Запрос→Ответ | Удержание | Средняя | Почти | Уведомления (fallback) |
 | WebSocket | Двунаправленный | Постоянное | Низкая | Да | Чаты, игры |
 | SSE | Сервер→Клиент | Постоянное | Низкая | Да | Новости, тикеры |
 
 ### 1. HTTP (Запрос-Ответ)
 
-**Модель**: Клиент инициирует запрос → Сервер отвечает → Соединение закрывается
+**Модель**: Клиент инициирует запрос → Сервер отвечает → жизненный цикл запроса завершен.
 
 **Характеристики:**
-- Без сохранения состояния (stateless)
+- Без сохранения состояния (stateless) на уровне протокола
 - HTTP заголовки с каждым запросом
-- Высокая задержка для частых обновлений
+- При частых коротких запросах задержка и накладные расходы становятся заметными
 - Поддержка кэширования
+- Поддержка keep-alive (HTTP/1.1) и мультиплексирования (HTTP/2), но взаимодействие остается моделью запрос-ответ
 
 **Когда использовать:**
 - ✅ REST API и CRUD операции
 - ✅ Загрузка файлов, изображений
-- ✅ Нечастые обновления данных
-- ❌ Не подходит для real-time обновлений
+- ✅ Нечастые или пакетные обновления данных
+- ❌ Неэффективен для частых двунаправленных real-time обновлений
 
 ```kotlin
 // Простой HTTP запрос с Retrofit
@@ -73,57 +66,74 @@ class UserRepository(private val api: ApiService) {
 }
 ```
 
-### 2. Long-Polling
+### 2. `Long`-Polling
 
-**Модель**: Клиент → Запрос открыт до появления данных → Ответ → Новый запрос
+**Модель**: Клиент → Длинный запрос удерживается до появления данных или timeout → Ответ → Новый запрос.
 
 **Характеристики:**
 - Сервер держит соединение открытым до данных или timeout
-- После ответа сразу новый запрос
-- Работает через большинство firewalls
-- Накладные расходы HTTP заголовков
+- После ответа клиент сразу инициирует новый запрос
+- Работает через большинство firewalls/proxy
+- Накладные расходы HTTP заголовков и установления (особенно без HTTP/2)
 
 **Когда использовать:**
 - ✅ WebSocket заблокирован firewall/proxy
 - ✅ Fallback для real-time функций
 - ✅ Нечастые обновления с сервера
-- ❌ Высокая нагрузка на сервер при масштабировании
+- ❌ Высокая нагрузка на сервер и подключения при масштабировании
 
 ```kotlin
-class LongPollingClient(private val client: OkHttpClient) {
+class LongPollingClient(
+    private val client: OkHttpClient,
+    private val scope: CoroutineScope,
+    private val endpoint: String
+) {
+    @Volatile
     private var isActive = false
 
-    fun startPolling(scope: CoroutineScope) {
+    fun start() {
         isActive = true
-        scope.launch {
+        scope.launch(Dispatchers.IO) {
             while (isActive) {
                 try {
                     val request = Request.Builder()
-                        .url("https://api.example.com/poll")
+                        .url(endpoint)
                         .build()
 
-                    val response = client.newCall(request).execute()
-                    processData(response.body?.string())
+                    client.newCall(request).execute().use { response ->
+                        if (response.isSuccessful) {
+                            processData(response.body?.string())
+                        } else {
+                            handleError(response.code)
+                        }
+                    }
                 } catch (e: Exception) {
+                    handleException(e)
                     delay(5000) // Задержка при ошибке
                 }
             }
         }
     }
 
-    fun stop() { isActive = false }
+    fun stop() {
+        isActive = false
+    }
+
+    private fun processData(payload: String?) { /* ... */ }
+    private fun handleError(code: Int) { /* ... */ }
+    private fun handleException(e: Exception) { /* ... */ }
 }
 ```
 
 ### 3. WebSocket
 
-**Модель**: Handshake → Постоянное двунаправленное соединение → Обмен сообщениями
+**Модель**: HTTP handshake → Постоянное двунаправленное соединение → Обмен сообщениями.
 
 **Характеристики:**
 - Полнодуплексная связь через одно TCP соединение
-- Минимальные накладные расходы после handshake
-- Мгновенная доставка сообщений (<50ms)
-- Поддержка бинарных данных
+- Минимальные накладные расходы после handshake (кадры WebSocket вместо HTTP-заголовков)
+- Подходящ для низкой задержки; фактическая задержка зависит от сети
+- Поддержка текстовых и бинарных сообщений
 
 **Когда использовать:**
 - ✅ Реал-тайм чаты, мессенджеры
@@ -133,9 +143,12 @@ class LongPollingClient(private val client: OkHttpClient) {
 - ❌ Может блокироваться некоторыми proxy/firewall
 
 ```kotlin
-class WebSocketManager(private val client: OkHttpClient) {
+class WebSocketManager(
+    private val client: OkHttpClient,
+    private val scope: CoroutineScope
+) {
     private var socket: WebSocket? = null
-    private val messages = MutableSharedFlow<String>()
+    val messages = MutableSharedFlow<String>(extraBufferCapacity = 64)
 
     fun connect(url: String) {
         val request = Request.Builder().url(url).build()
@@ -150,25 +163,35 @@ class WebSocketManager(private val client: OkHttpClient) {
             }
 
             override fun onFailure(ws: WebSocket, t: Throwable, response: Response?) {
-                scheduleReconnect() // Экспоненциальная задержка
+                scheduleReconnect()
             }
         })
     }
 
-    fun send(message: String) = socket?.send(message)
-    fun disconnect() = socket?.close(1000, null)
+    fun send(message: String) {
+        socket?.send(message)
+    }
+
+    fun disconnect() {
+        socket?.close(1000, null)
+        socket = null
+    }
+
+    private fun scheduleReconnect() {
+        // Экспоненциальная задержка и проверка сетевого состояния
+    }
 }
 ```
 
 ### 4. Server-Sent Events (SSE)
 
-**Модель**: Клиент подписывается → Сервер отправляет события → Автопереподключение
+**Модель**: Клиент подписывается (HTTP-запрос с Accept: text/event-stream) → Сервер отправляет события в одном длинном ответе → Клиент автоматически переподключается при обрыве.
 
 **Характеристики:**
 - Однонаправленный (только сервер → клиент)
-- Автоматическое переподключение
-- Event ID для отслеживания последнего события
-- Только текстовые данные
+- Поддержка автоматического переподключения через EventSource-подобный механизм (или его реализацию)
+- Event ID для отслеживания последнего события и возобновления
+- Формат событий текстовый; двоичные данные при необходимости инкапсулируются (base64 и т.п.)
 
 **Когда использовать:**
 - ✅ Новостные ленты, уведомления
@@ -184,47 +207,60 @@ class SSEClient(private val client: OkHttpClient) {
             .header("Accept", "text/event-stream")
             .build()
 
-        launch(Dispatchers.IO) {
-            val response = client.newCall(request).execute()
-            response.body?.source()?.use { source ->
-                while (!source.exhausted()) {
-                    val line = source.readUtf8Line() ?: continue
-                    if (line.startsWith("data: ")) {
-                        trySend(line.substring(6))
+        val call = client.newCall(request)
+
+        val job = launch(Dispatchers.IO) {
+            try {
+                call.execute().use { response ->
+                    if (!response.isSuccessful) {
+                        close(IOException("SSE HTTP ${'$'}{response.code}"))
+                        return@use
+                    }
+                    val source = response.body?.source() ?: return@use
+                    while (!isClosedForSend && !source.exhausted()) {
+                        val line = source.readUtf8Line() ?: continue
+                        if (line.startsWith("data: ")) {
+                            trySend(line.substring(6)).isSuccess
+                        }
                     }
                 }
+            } catch (e: Exception) {
+                close(e)
             }
         }
 
-        awaitClose { /* cleanup */ }
+        awaitClose {
+            call.cancel()
+            job.cancel()
+        }
     }
 }
 ```
 
 ### Матрица Решений
 
-**HTTP**: Простые CRUD, RESTful API, кэшируемые данные
-**Long-Polling**: Fallback для WebSocket, legacy системы
-**WebSocket**: Двунаправленный real-time, низкая задержка критична
-**SSE**: Только сервер→клиент, текстовые уведомления, простота
+**HTTP**: Простые CRUD, RESTful API, кэшируемые и нечасто изменяющиеся данные
+**`Long`-Polling**: Fallback для WebSocket, legacy-системы
+**WebSocket**: Двунаправленный real-time, когда критична низкая задержка и частые события
+**SSE**: Только сервер→клиент, текстовые уведомления и потоки событий, когда важна простота
 
 ### Лучшие Практики
 
 **WebSocket:**
 1. Экспоненциальная задержка при переподключении
 2. Heartbeat/ping-pong для обнаружения мертвых соединений
-3. Обработка изменений состояния сети
-4. Protocol Buffers для бинарных данных
+3. Обработка изменений состояния сети и фонов/foreground состояний приложения
+4. Использование компактных форматов (например, Protocol Buffers) для уменьшения размера сообщений
 
 **SSE:**
-1. Отслеживание event ID для resumption
-2. Timeout для зависших соединений
-3. HTTP/2 для лучшей производительности
+1. Отслеживание event ID для возобновления потока
+2. Timeout и обработка обрыва соединения
+3. Использование HTTP/2 (если доступен) для лучшей эффективности соединений
 
-**Long-Polling:**
-1. Timeout на стороне сервера
-2. Jitter для предотвращения thundering herd
-3. Graceful обработка ошибок
+**`Long`-Polling:**
+1. Корректные timeout-ы на стороне сервера
+2. Jitter для предотвращения эффекта thundering herd
+3. Корректная обработка ошибок и отмены запросов
 
 ## Answer (EN)
 
@@ -232,26 +268,27 @@ class SSEClient(private val client: OkHttpClient) {
 
 | Protocol | Direction | Connection | Latency | Real-time | Use Case |
 |----------|-----------|------------|---------|-----------|----------|
-| HTTP | Request→Response | New | High | No | REST API, CRUD |
-| Long-Polling | Request→Response | Held | Medium | Near | Notifications (fallback) |
+| HTTP | Request→Response | New/multiplexed | Higher for frequent polling | No | REST API, CRUD |
+| `Long`-Polling | Request→Response | Held | Medium | Near | Notifications (fallback) |
 | WebSocket | Bidirectional | Persistent | Low | Yes | Chat, games |
 | SSE | Server→Client | Persistent | Low | Yes | News, tickers |
 
 ### 1. HTTP (Request-Response)
 
-**Model**: Client initiates request → Server responds → Connection closes
+**Model**: Client initiates request → Server responds → request lifecycle completes.
 
 **Characteristics:**
-- Stateless - each request independent
-- HTTP headers with every request
-- High latency for frequent updates
+- Stateless at protocol level (each request self-contained)
+- HTTP headers sent with every request
+- For frequent short polling, latency and overhead become significant
 - Cacheable responses
+- Keep-alive (HTTP/1.1) and multiplexing (HTTP/2) reduce connection overhead, but the pattern stays request-response
 
 **When to use:**
 - ✅ REST APIs and CRUD operations
 - ✅ File/image downloads
-- ✅ Infrequent data updates
-- ❌ Not suitable for real-time updates
+- ✅ Infrequent or batch data updates
+- ❌ Inefficient for frequent bidirectional real-time updates
 
 ```kotlin
 // Simple HTTP request with Retrofit
@@ -265,57 +302,74 @@ class UserRepository(private val api: ApiService) {
 }
 ```
 
-### 2. Long-Polling
+### 2. `Long`-Polling
 
-**Model**: Client → Request held until data available → Response → New request
+**Model**: Client → `Long` request held until data or timeout → Response → New request.
 
 **Characteristics:**
-- Server keeps connection open until data or timeout
-- Immediately starts new request after response
-- Works through most firewalls
-- HTTP header overhead on each connection
+- Server keeps connection open until data is available or timeout
+- Client issues a new request immediately after each response
+- Works through most firewalls/proxies
+- HTTP header and connection overhead on each cycle (unless mitigated by HTTP/2)
 
 **When to use:**
 - ✅ WebSocket blocked by firewall/proxy
 - ✅ Fallback for real-time features
 - ✅ Infrequent server updates
-- ❌ High server load at scale
+- ❌ High server and connection load at scale
 
 ```kotlin
-class LongPollingClient(private val client: OkHttpClient) {
+class LongPollingClient(
+    private val client: OkHttpClient,
+    private val scope: CoroutineScope,
+    private val endpoint: String
+) {
+    @Volatile
     private var isActive = false
 
-    fun startPolling(scope: CoroutineScope) {
+    fun start() {
         isActive = true
-        scope.launch {
+        scope.launch(Dispatchers.IO) {
             while (isActive) {
                 try {
                     val request = Request.Builder()
-                        .url("https://api.example.com/poll")
+                        .url(endpoint)
                         .build()
 
-                    val response = client.newCall(request).execute()
-                    processData(response.body?.string())
+                    client.newCall(request).execute().use { response ->
+                        if (response.isSuccessful) {
+                            processData(response.body?.string())
+                        } else {
+                            handleError(response.code)
+                        }
+                    }
                 } catch (e: Exception) {
-                    delay(5000) // Error delay
+                    handleException(e)
+                    delay(5000) // Error backoff
                 }
             }
         }
     }
 
-    fun stop() { isActive = false }
+    fun stop() {
+        isActive = false
+    }
+
+    private fun processData(payload: String?) { /* ... */ }
+    private fun handleError(code: Int) { /* ... */ }
+    private fun handleException(e: Exception) { /* ... */ }
 }
 ```
 
 ### 3. WebSocket
 
-**Model**: Handshake → Persistent bidirectional connection → Message exchange
+**Model**: HTTP handshake → Persistent bidirectional connection → Message exchange.
 
 **Characteristics:**
-- Full-duplex communication over single TCP connection
-- Minimal overhead after handshake
-- Instant message delivery (<50ms)
-- Binary data support
+- Full-duplex communication over a single TCP connection
+- Minimal framing overhead after handshake (no full HTTP headers per message)
+- Suitable for low-latency messaging; actual latency depends on network conditions
+- Supports both text and binary messages
 
 **When to use:**
 - ✅ Real-time chat, messaging
@@ -325,9 +379,12 @@ class LongPollingClient(private val client: OkHttpClient) {
 - ❌ May be blocked by some proxies/firewalls
 
 ```kotlin
-class WebSocketManager(private val client: OkHttpClient) {
+class WebSocketManager(
+    private val client: OkHttpClient,
+    private val scope: CoroutineScope
+) {
     private var socket: WebSocket? = null
-    private val messages = MutableSharedFlow<String>()
+    val messages = MutableSharedFlow<String>(extraBufferCapacity = 64)
 
     fun connect(url: String) {
         val request = Request.Builder().url(url).build()
@@ -342,31 +399,41 @@ class WebSocketManager(private val client: OkHttpClient) {
             }
 
             override fun onFailure(ws: WebSocket, t: Throwable, response: Response?) {
-                scheduleReconnect() // Exponential backoff
+                scheduleReconnect()
             }
         })
     }
 
-    fun send(message: String) = socket?.send(message)
-    fun disconnect() = socket?.close(1000, null)
+    fun send(message: String) {
+        socket?.send(message)
+    }
+
+    fun disconnect() {
+        socket?.close(1000, null)
+        socket = null
+    }
+
+    private fun scheduleReconnect() {
+        // Exponential backoff and network state checks
+    }
 }
 ```
 
 ### 4. Server-Sent Events (SSE)
 
-**Model**: Client subscribes → Server pushes events → Auto-reconnection
+**Model**: Client subscribes (HTTP request with Accept: text/event-stream) → Server sends events over a single long-lived response → Client reconnects on disconnect.
 
 **Characteristics:**
 - Unidirectional (server → client only)
-- Automatic reconnection
-- Event IDs for tracking last received event
-- Text data only
+- Supports automatic reconnection semantics (EventSource-style)
+- Event IDs to track last event and resume on reconnect
+- Events are textual; binary payloads must be encoded if needed
 
 **When to use:**
 - ✅ News feeds, notifications
 - ✅ Stock tickers, currency rates
 - ✅ Server monitoring, logs
-- ❌ If bidirectional needed (use WebSocket)
+- ❌ If bidirectional communication is required (use WebSocket)
 
 ```kotlin
 class SSEClient(private val client: OkHttpClient) {
@@ -376,47 +443,60 @@ class SSEClient(private val client: OkHttpClient) {
             .header("Accept", "text/event-stream")
             .build()
 
-        launch(Dispatchers.IO) {
-            val response = client.newCall(request).execute()
-            response.body?.source()?.use { source ->
-                while (!source.exhausted()) {
-                    val line = source.readUtf8Line() ?: continue
-                    if (line.startsWith("data: ")) {
-                        trySend(line.substring(6))
+        val call = client.newCall(request)
+
+        val job = launch(Dispatchers.IO) {
+            try {
+                call.execute().use { response ->
+                    if (!response.isSuccessful) {
+                        close(IOException("SSE HTTP ${'$'}{response.code}"))
+                        return@use
+                    }
+                    val source = response.body?.source() ?: return@use
+                    while (!isClosedForSend && !source.exhausted()) {
+                        val line = source.readUtf8Line() ?: continue
+                        if (line.startsWith("data: ")) {
+                            trySend(line.substring(6)).isSuccess
+                        }
                     }
                 }
+            } catch (e: Exception) {
+                close(e)
             }
         }
 
-        awaitClose { /* cleanup */ }
+        awaitClose {
+            call.cancel()
+            job.cancel()
+        }
     }
 }
 ```
 
 ### Decision Matrix
 
-**HTTP**: Simple CRUD, RESTful APIs, cacheable data
-**Long-Polling**: Fallback for WebSocket, legacy systems
-**WebSocket**: Bidirectional real-time, low latency critical
-**SSE**: Server→client only, text notifications, simplicity
+**HTTP**: Simple CRUD, RESTful APIs, cacheable and infrequently changing data
+**`Long`-Polling**: Fallback for WebSocket, legacy systems
+**WebSocket**: Bidirectional real-time where low latency and frequent events are critical
+**SSE**: Server→client only, text/event streams where simplicity is desired
 
 ### Best Practices
 
 **WebSocket:**
 1. Exponential backoff for reconnection
 2. Heartbeat/ping-pong to detect dead connections
-3. Handle network state changes
-4. Protocol Buffers for binary data
+3. Handle network state changes and app background/foreground
+4. Use compact formats (e.g., Protocol Buffers) to reduce payload size
 
 **SSE:**
 1. Track event IDs for resumption
-2. Timeout for hung connections
-3. HTTP/2 for better performance
+2. Timeout and proper handling of dropped connections
+3. Use HTTP/2 (when available) for better connection efficiency
 
-**Long-Polling:**
-1. Server-side timeout
-2. Jitter to prevent thundering herd
-3. Graceful error handling
+**`Long`-Polling:**
+1. Proper server-side timeouts
+2. Jitter/backoff to prevent thundering herd
+3. Proper error handling and request cancellation
 
 ---
 

@@ -10,26 +10,27 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-activity-navigation-how-it-works--android--medium, q-compose-navigation-advanced--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
+related: [c-activity-lifecycle, q-activity-navigation-how-it-works--android--medium, q-compose-navigation-advanced--android--medium, q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-10-15
 tags: [android, android/activity, android/intents-deeplinks, android/ui-navigation, difficulty/medium]
+
 ---
 
 # Вопрос (RU)
 
-Как обработать ситуацию, когда Activity может открыться несколько раз из-за deeplink?
+> Как обработать ситуацию, когда `Activity` может открыться несколько раз из-за deeplink?
 
 # Question (EN)
 
-How to handle the situation where Activity can open multiple times due to deeplink?
+> How to handle the situation where `Activity` can open multiple times due to deeplink?
 
 ---
 
 ## Ответ (RU)
 
-При использовании deeplink Activity может запускаться многократно, создавая дубликаты в back stack. Существует несколько подходов для предотвращения этой проблемы.
+При использовании deeplink `Activity` может запускаться многократно, создавая дубликаты в back stack. Существует несколько подходов для предотвращения этой проблемы.
 
 ### Проблема
 
@@ -81,17 +82,17 @@ class ProductActivity : AppCompatActivity() {
 ```
 
 **Поведение singleTop**:
-- Activity на вершине стека → вызов `onNewIntent()` (без дубликата)
-- Activity ниже в стеке → создание нового экземпляра
-- Activity отсутствует → создание нового экземпляра
+- `Activity` на вершине стека → вызов `onNewIntent()` (без дубликата)
+- `Activity` ниже в стеке → создание нового экземпляра
+- `Activity` отсутствует → создание нового экземпляра
 
-### Решение 2: Intent Flags
+### Решение 2: `Intent` Flags
 
 Программное управление через флаги:
 
 ```kotlin
 val productIntent = Intent(this, ProductActivity::class.java).apply {
-    // ✅ Лучшая комбинация для deeplink
+    // ✅ Часто используемая комбинация для deeplink-сценариев
     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
     putExtra("product_id", productId)
 }
@@ -110,9 +111,9 @@ flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
 ```
 
-### Решение 3: Trampoline Activity Pattern
+### Решение 3: Trampoline `Activity` Pattern
 
-Промежуточная Activity для управления навигацией:
+Промежуточная `Activity` для управления навигацией:
 
 ```xml
 <!-- Trampoline получает все deeplink -->
@@ -148,7 +149,7 @@ class DeeplinkActivity : Activity() {
         val targetIntent = when {
             data.path?.startsWith("/product") == true -> {
                 Intent(this, ProductActivity::class.java).apply {
-                    // ✅ Гарантирует отсутствие дубликатов
+                    // ✅ В типичном случае предотвращает создание дубликатов ProductActivity
                     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
                             Intent.FLAG_ACTIVITY_SINGLE_TOP
                     putExtra("product_id", data.lastPathSegment)
@@ -185,12 +186,15 @@ class DeeplinkActivity : Activity() {
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main) // ✅ Должен содержать NavHostFragment с nav_host_fragment
+
         val navController = findNavController(R.id.nav_host_fragment)
         navController.handleDeepLink(intent)
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent)
         findNavController(R.id.nav_host_fragment).handleDeepLink(intent)
     }
 }
@@ -198,7 +202,7 @@ class MainActivity : AppCompatActivity() {
 
 **Преимущества Navigation Component**:
 - Автоматическое управление back stack
-- Single Activity pattern
+- Single `Activity` pattern
 - Type-safe аргументы
 
 ### Сравнение Решений
@@ -206,22 +210,22 @@ class MainActivity : AppCompatActivity() {
 | Решение | Плюсы | Минусы | Когда использовать |
 |---------|-------|--------|-------------------|
 | singleTop | Простота, предотвращает дубликаты на вершине | Разрешает дубликаты ниже в стеке | Большинство deeplink сценариев |
-| Intent flags | Гибкость, программный контроль | Требует явного применения | Динамическая логика |
-| Trampoline | Полный контроль маршрутизации | Дополнительная Activity | Сложная маршрутизация |
+| `Intent` flags | Гибкость, программный контроль | Требует явного применения | Динамическая логика |
+| Trampoline | Полный контроль маршрутизации | Дополнительная `Activity` | Сложная маршрутизация |
 | Navigation Component | Современный, type-safe | Кривая обучения | Новые проекты |
 
 ### Best Practices
 
-1. Используйте **singleTop** для большинства deeplink целей
-2. Всегда реализуйте **onNewIntent()** для обработки обновлений
-3. Вызывайте **setIntent()** в onNewIntent для обновления текущего intent
+1. Используйте **singleTop** для большинства deeplink целей (если это соответствует UX и навигации)
+2. Всегда реализуйте **onNewIntent()** для deeplink-целей для обработки обновлений
+3. Вызывайте **setIntent()** в `onNewIntent()` для обновления текущего intent
 4. Используйте **Navigation Component** для новых проектов
-5. Применяйте **Trampoline pattern** для сложной маршрутизации
-6. Тщательно **тестируйте** с различными состояниями навигации
+5. Применяйте **Trampoline pattern** для сложной маршрутизации и централизованной обработки deeplink
+6. Тщательно **тестируйте** с различными состояниями навигации и сценариями запуска приложения
 
 ## Answer (EN)
 
-When using deeplinks, an Activity can be launched multiple times creating duplicate instances in the back stack. Several approaches prevent this problem.
+When using deeplinks, an `Activity` can be launched multiple times creating duplicate instances in the back stack. Several approaches prevent this problem.
 
 ### Problem
 
@@ -273,17 +277,17 @@ class ProductActivity : AppCompatActivity() {
 ```
 
 **singleTop behavior**:
-- Activity at top of stack → calls `onNewIntent()` (no duplicate)
-- Activity below in stack → creates new instance
-- Activity not in stack → creates new instance
+- `Activity` at top of stack → calls `onNewIntent()` (no duplicate)
+- `Activity` below in stack → creates new instance
+- `Activity` not in stack → creates new instance
 
-### Solution 2: Intent Flags
+### Solution 2: `Intent` Flags
 
 Programmatic control with flags:
 
 ```kotlin
 val productIntent = Intent(this, ProductActivity::class.java).apply {
-    // ✅ Best combination for deeplinks
+    // ✅ Commonly used combination for deeplink scenarios
     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
     putExtra("product_id", productId)
 }
@@ -302,7 +306,7 @@ flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 flags = Intent.FLAG_ACTIVITY_REORDER_TO_FRONT
 ```
 
-### Solution 3: Trampoline Activity Pattern
+### Solution 3: Trampoline `Activity` Pattern
 
 Intermediate activity to control navigation:
 
@@ -340,7 +344,7 @@ class DeeplinkActivity : Activity() {
         val targetIntent = when {
             data.path?.startsWith("/product") == true -> {
                 Intent(this, ProductActivity::class.java).apply {
-                    // ✅ Guarantees no duplicates
+                    // ✅ In typical cases prevents creating duplicate ProductActivity instances
                     flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or
                             Intent.FLAG_ACTIVITY_SINGLE_TOP
                     putExtra("product_id", data.lastPathSegment)
@@ -377,12 +381,15 @@ Modern approach with Jetpack Navigation:
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main) // ✅ Must contain NavHostFragment with nav_host_fragment id
+
         val navController = findNavController(R.id.nav_host_fragment)
         navController.handleDeepLink(intent)
     }
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        setIntent(intent)
         findNavController(R.id.nav_host_fragment).handleDeepLink(intent)
     }
 }
@@ -390,7 +397,7 @@ class MainActivity : AppCompatActivity() {
 
 **Navigation Component benefits**:
 - Automatic back stack management
-- Single Activity pattern
+- Single `Activity` pattern
 - Type-safe arguments
 
 ### Solution Comparison
@@ -398,18 +405,18 @@ class MainActivity : AppCompatActivity() {
 | Solution | Pros | Cons | When to use |
 |----------|------|------|-------------|
 | singleTop | Simple, prevents top duplicates | Allows duplicates below in stack | Most deeplink scenarios |
-| Intent flags | Flexible, programmatic | Requires explicit application | Dynamic logic |
+| `Intent` flags | Flexible, programmatic control | Requires explicit application | Dynamic logic |
 | Trampoline | Full routing control | Extra activity | Complex routing |
 | Navigation Component | Modern, type-safe | Learning curve | New projects |
 
 ### Best Practices
 
-1. Use **singleTop** for most deeplink targets
-2. Always implement **onNewIntent()** to handle updates
-3. Call **setIntent()** in onNewIntent to update current intent
+1. Use **singleTop** for most deeplink targets (when aligned with UX and navigation design)
+2. Always implement **onNewIntent()** for deeplink targets to handle updates
+3. Call **setIntent()** in `onNewIntent()` to update the current intent
 4. Use **Navigation Component** for new projects
-5. Apply **Trampoline pattern** for complex routing
-6. Thoroughly **test** with different navigation states
+5. Apply the **Trampoline pattern** for complex routing and centralized deeplink handling
+6. Thoroughly **test** with different navigation states and app launch scenarios
 
 ---
 
@@ -423,20 +430,19 @@ class MainActivity : AppCompatActivity() {
 
 ## References
 
-- [[c-activity-lifecycle]] - Understanding Activity lifecycle
-- [[c-intent-flags]] - Intent flags reference
-- Android Documentation: [Tasks and Back Stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
+- [[c-activity-lifecycle]] - Understanding `Activity` lifecycle
+- Android Documentation: [Tasks and Back `Stack`](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
 - Android Documentation: [Deep Links](https://developer.android.com/training/app-links/deep-linking)
 - Jetpack Navigation: [Navigation Deeplinks](https://developer.android.com/guide/navigation/navigation-deep-link)
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-activity-navigation-how-it-works--android--medium]] - Understanding Activity navigation fundamentals
+- [[q-activity-navigation-how-it-works--android--medium]] - Understanding `Activity` navigation fundamentals
 
 ### Related (Same Level)
 - [[q-compose-navigation-advanced--android--medium]] - Navigation in Compose
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity lifecycle and memory
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - `Activity` lifecycle and memory
 
 ### Advanced (Harder)
-- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Fragment vs Activity architecture decisions
+- [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - `Fragment` vs `Activity` architecture decisions

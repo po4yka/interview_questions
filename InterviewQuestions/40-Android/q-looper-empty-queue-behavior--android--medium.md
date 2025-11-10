@@ -20,9 +20,6 @@ status: draft
 moc: moc-android
 related:
 - c-coroutines
-- q-handler-looper-messagequeue-relationship--android--medium
-- q-handlerthread-vs-thread--android--medium
-- q-message-scheduling-looper--android--medium
 sources: []
 created: 2025-10-13
 updated: 2025-10-31
@@ -33,6 +30,7 @@ tags:
 - difficulty/medium
 - looper
 - message-queue
+
 ---
 
 # Вопрос (RU)
@@ -50,9 +48,9 @@ tags:
 Когда `Looper.loop()` обрабатывает **пустую очередь**, поток:
 
 1. **Блокируется** в `MessageQueue.next()` (не завершает работу)
-2. **Переходит в состояние ожидания** через native epoll_wait
-3. **Не потребляет CPU** (0% при отсутствии сообщений)
-4. **Пробуждается** при добавлении нового сообщения или вызове `quit()`
+2. **Переходит в состояние ожидания** через native poll (epoll/подобный механизм)
+3. **Не выполняет активное ожидание и практически не потребляет CPU** во время простоя
+4. **Пробуждается** при добавлении нового сообщения (`nativeWake()`) или вызове `quit()/quitSafely()`
 
 Это **штатное поведение** — поток остается живым для обработки будущих сообщений.
 
@@ -66,7 +64,7 @@ public static void loop() {
     for (;;) {
         Message msg = queue.next(); // ✅ БЛОКИРУЕТСЯ здесь при пустой очереди
 
-        if (msg == null) return; // Только при quit()
+        if (msg == null) return; // Возврат только при quit()/quitSafely()
 
         msg.target.dispatchMessage(msg);
     }
@@ -74,25 +72,27 @@ public static void loop() {
 ```
 
 ```java
-// MessageQueue.next() блокирует поток
+// Упрощенная схема MessageQueue.next()
 Message next() {
     for (;;) {
-        nativePollOnce(ptr, timeout); // ✅ Блокируется в native epoll_wait
+        nativePollOnce(ptr, timeout); // ✅ Блокировка в native (epoll/pipe/и т.п.)
 
         synchronized (this) {
             Message msg = mMessages;
             if (msg != null) return msg;
 
-            timeout = -1; // Ждать бесконечно
+            // При отсутствии сообщений выбирается соответствующий таймаут;
+            // -1 означает ожидание до пробуждения через nativeWake().
+            timeout = -1;
         }
     }
 }
 ```
 
 **Native механизм:**
-- Использует **epoll_wait** (Linux) вместо busy-waiting
-- Поток в состоянии **RUNNABLE** (блокировка в native коде, не Java wait())
-- Мгновенное пробуждение через **nativeWake()** при добавлении сообщения
+- Использует эффективный блокирующий вызов (напр. **epoll_wait** на Linux) вместо busy-waiting
+- Поток отображается как **RUNNABLE**, но фактически заблокирован в native-коде (а не в `Object.wait()` Java)
+- Пробуждается через **nativeWake()** при добавлении сообщения или изменении состояния очереди (практически немедленно с точки зрения приложения, с учетом планировщика)
 
 ### Пример: Поток С Пустой Очередью
 
@@ -107,7 +107,7 @@ class LooperThread : Thread("Worker") {
         latch.countDown()
 
         println("Entering loop with EMPTY queue...")
-        Looper.loop() // ✅ Блокируется здесь
+        Looper.loop() // ✅ Блокируется здесь при отсутствии сообщений
         println("Loop exited")
     }
 
@@ -118,7 +118,7 @@ class LooperThread : Thread("Worker") {
 val thread = LooperThread().apply { start() }
 thread.waitReady()
 
-println("Thread state: ${thread.state}") // RUNNABLE (в native блокировке)
+println("Thread state: ${thread.state}") // Обычно RUNNABLE (заблокирован в native-вызове)
 
 // Пробуждение потока
 thread.handler.post { println("Message processed") }
@@ -130,14 +130,14 @@ thread.handler.looper.quitSafely()
 ### Остановка Looper
 
 ```kotlin
-// ❌ quit() - немедленный выход, отбросить все сообщения
+// quit() - немедленный запрос выхода из цикла, дальнейшие сообщения из очереди не будут обрабатываться
 looper.quit()
 
-// ✅ quitSafely() - обработать pending, затем выйти
+// quitSafely() - дать обработать сообщения с time <= now, затем корректно выйти
 looper.quitSafely()
 ```
 
-**Только `quit()` или `quitSafely()` завершают `Looper.loop()`** — пустая очередь НЕ завершает поток.
+**Только `quit()` или `quitSafely()` (или их внутренние вызовы) завершают `Looper.loop()` — пустая очередь сама по себе НЕ завершает цикл и не убивает поток.**
 
 ---
 
@@ -145,12 +145,12 @@ looper.quitSafely()
 
 When `Looper.loop()` processes an **empty queue**, the thread:
 
-1. **Blocks** in `MessageQueue.next()` (does NOT terminate)
-2. **Enters waiting state** via native epoll_wait
-3. **Consumes no CPU** (0% when idle)
-4. **Wakes up** when a new message arrives or `quit()` is called
+1. **Blocks** inside `MessageQueue.next()` (it does NOT terminate)
+2. **Enters a waiting state** via a native poll (epoll/similar mechanism)
+3. **Does not busy-wait and effectively does not consume CPU** while idle
+4. **Wakes up** when a new message is enqueued (`nativeWake()`) or when `quit()/quitSafely()` is requested
 
-This is **normal behavior** — the thread stays alive to process future messages asynchronously.
+This is **expected behavior** — the thread stays alive to process future messages asynchronously.
 
 ### Blocking Mechanism
 
@@ -160,9 +160,9 @@ public static void loop() {
     final MessageQueue queue = myLooper().mQueue;
 
     for (;;) {
-        Message msg = queue.next(); // ✅ BLOCKS here if queue is empty
+        Message msg = queue.next(); // ✅ BLOCKS here if the queue has nothing ready
 
-        if (msg == null) return; // Only when quit() is called
+        if (msg == null) return; // Returns only when quit()/quitSafely() has been called
 
         msg.target.dispatchMessage(msg);
     }
@@ -170,27 +170,29 @@ public static void loop() {
 ```
 
 ```java
-// MessageQueue.next() blocks the thread
+// Simplified sketch of MessageQueue.next()
 Message next() {
     for (;;) {
-        nativePollOnce(ptr, timeout); // ✅ Blocks in native epoll_wait
+        nativePollOnce(ptr, timeout); // ✅ Blocks in native (epoll/pipe/etc.)
 
         synchronized (this) {
             Message msg = mMessages;
             if (msg != null) return msg;
 
-            timeout = -1; // Wait indefinitely
+            // When no messages are ready, an appropriate timeout is chosen;
+            // -1 means wait indefinitely until woken via nativeWake().
+            timeout = -1;
         }
     }
 }
 ```
 
 **Native mechanism:**
-- Uses **epoll_wait** (Linux) instead of busy-waiting
-- Thread state: **RUNNABLE** (blocked in native code, not Java wait())
-- Instant wake-up via **nativeWake()** when message is added
+- Uses an efficient blocking primitive (e.g., **epoll_wait** on Linux) instead of busy-waiting
+- Thread state is shown as **RUNNABLE**, but it is actually blocked in native code (not in Java `Object.wait()`)
+- Woken up via **nativeWake()** when a message is posted or queue state changes (effectively immediately from the app's perspective, subject to scheduler)
 
-### Example: Thread with Empty Queue
+### Example: Thread with Empty `Queue`
 
 ```kotlin
 class LooperThread : Thread("Worker") {
@@ -203,7 +205,7 @@ class LooperThread : Thread("Worker") {
         latch.countDown()
 
         println("Entering loop with EMPTY queue...")
-        Looper.loop() // ✅ Blocks here
+        Looper.loop() // ✅ Blocks here when there are no messages
         println("Loop exited")
     }
 
@@ -214,7 +216,7 @@ class LooperThread : Thread("Worker") {
 val thread = LooperThread().apply { start() }
 thread.waitReady()
 
-println("Thread state: ${thread.state}") // RUNNABLE (in native blocking)
+println("Thread state: ${thread.state}") // Typically RUNNABLE (blocked in native call)
 
 // Wake up thread
 thread.handler.post { println("Message processed") }
@@ -226,14 +228,14 @@ thread.handler.looper.quitSafely()
 ### Stopping Looper
 
 ```kotlin
-// ❌ quit() - immediate exit, discard all messages
+// quit() - request immediate exit from the loop; further pending messages won't be processed
 looper.quit()
 
-// ✅ quitSafely() - process pending messages, then exit
+// quitSafely() - process messages with when <= now, then exit cleanly
 looper.quitSafely()
 ```
 
-**Only `quit()` or `quitSafely()` exits `Looper.loop()`** — an empty queue does NOT terminate the thread.
+**Only `quit()` or `quitSafely()` (or their internal uses) cause `Looper.loop()` to exit — an empty queue alone does NOT terminate the loop or the thread.**
 
 ---
 
@@ -264,9 +266,6 @@ looper.quitSafely()
 - [[q-why-multithreading-tools--android--easy]] - Threading fundamentals
 
 ### Related (Same Level)
-- [[q-handler-looper-messagequeue-relationship--android--medium]] - Handler Looper MessageQueue
-- [[q-handlerthread-vs-thread--android--medium]] - HandlerThread comparison
-- [[q-message-scheduling-looper--android--medium]] - Message scheduling
 - [[q-handler-looper-comprehensive--android--medium]] - Handler and Looper deep dive
 - [[q-multithreading-tools-android--android--medium]] - Threading tools comparison
 

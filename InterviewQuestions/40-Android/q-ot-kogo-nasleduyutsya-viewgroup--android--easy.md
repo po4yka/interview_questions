@@ -23,27 +23,28 @@ related:
 - q-how-to-display-two-identical-fragments-on-the-screen-at-the-same-time--android--easy
 - q-what-does-itemdecoration-do--android--medium
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 sources: []
 tags:
 - android
 - android/ui-views
 - difficulty/easy
+
 ---
 
 # Вопрос (RU)
 
-> От кого наследуется класс ViewGroup в Android?
+> От кого наследуется класс `ViewGroup` в Android?
 
 # Question (EN)
 
-> What class does ViewGroup inherit from in Android?
+> What class does `ViewGroup` inherit from in Android?
 
 ---
 
 ## Ответ (RU)
 
-**ViewGroup наследуется от класса View** - базового класса для всех UI элементов в Android.
+**`ViewGroup` наследуется от класса `View`** — базового класса для всех UI элементов в Android.
 
 ### Иерархия Наследования
 
@@ -57,50 +58,50 @@ ViewGroup (контейнер для других View)
 Конкретные Layout классы (LinearLayout, RelativeLayout, и т.д.)
 ```
 
-### Ключевые Методы View
+### Ключевые Методы `View`
 
-✅ **Правильно** - View предоставляет базовую функциональность:
+**Правильно** — ниже упрощённый псевдокод, иллюстрирующий базовую функциональность `View` (не точные сигнатуры исходного API):
 
 ```kotlin
-abstract class View {
-    // Базовые свойства
+open class View {
+    // Базовые свойства (в реальности доступны через геттеры/сеттеры)
     var visibility: Int
     var isEnabled: Boolean
     var isClickable: Boolean
 
     // Измерение и позиционирование
-    protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
-    protected open fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int)
+    protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {}
+    protected open fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {}
 
     // Рисование
-    protected open fun onDraw(canvas: Canvas)
+    protected open fun onDraw(canvas: Canvas) {}
 
     // События
-    open fun onTouchEvent(event: MotionEvent): Boolean
+    open fun onTouchEvent(event: MotionEvent): Boolean = false
 }
 ```
 
-### Дополнительная Функциональность ViewGroup
+### Дополнительная Функциональность `ViewGroup`
 
-ViewGroup расширяет View и добавляет управление дочерними элементами:
+`ViewGroup` расширяет `View` и добавляет управление дочерними элементами (также показано в виде упрощённого псевдокода):
 
 ```kotlin
-abstract class ViewGroup : View {
+abstract class ViewGroup(context: Context, attrs: AttributeSet? = null) : View(/* ... */) {
     // Управление дочерними элементами
-    fun addView(child: View)
-    fun removeView(child: View)
-    fun getChildAt(index: Int): View
-    fun getChildCount(): Int
+    fun addView(child: View) {}
+    fun removeView(child: View) {}
+    fun getChildAt(index: Int): View = TODO()
+    fun getChildCount(): Int = TODO()
 
     // Измерение дочерних элементов
-    fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int)
+    fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int) {}
 
-    // Распределение событий касания
-    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean
+    // Перехват и распределение событий касания
+    open fun onInterceptTouchEvent(ev: MotionEvent): Boolean = false
 }
 ```
 
-### Пример Пользовательского ViewGroup
+### Пример Пользовательского `ViewGroup`
 
 ```kotlin
 class CustomLayout @JvmOverloads constructor(
@@ -137,11 +138,11 @@ class CustomLayout @JvmOverloads constructor(
 
 ### Почему Это Важно
 
-1. **Полиморфизм** - ViewGroup можно использовать везде, где ожидается View
-2. **Единый API** - все UI элементы имеют общие методы
-3. **Гибкость** - можно переопределять методы View в ViewGroup
+1. Полиморфизм — `ViewGroup` можно использовать везде, где ожидается `View`.
+2. Единый API — все UI элементы имеют общие методы.
+3. Гибкость — можно переопределять методы `View` в `ViewGroup`.
 
-✅ **Правильно** - ViewGroup как View:
+**Правильно** — `ViewGroup` как `View`:
 
 ```kotlin
 fun setViewProperties(view: View) {
@@ -150,14 +151,14 @@ fun setViewProperties(view: View) {
 }
 
 val linearLayout = LinearLayout(context)
-setViewProperties(linearLayout) // Работает, так как LinearLayout extends ViewGroup extends View
+setViewProperties(linearLayout) // Работает, так как LinearLayout : ViewGroup : View
 ```
 
 ---
 
 ## Answer (EN)
 
-**ViewGroup inherits from the View class** - the base class for all UI elements in Android.
+**`ViewGroup` inherits from the `View` class** — the base class for all UI elements in Android.
 
 ### Inheritance Hierarchy
 
@@ -171,50 +172,50 @@ ViewGroup (container for other Views)
 Specific Layout Classes (LinearLayout, RelativeLayout, etc.)
 ```
 
-### Key View Methods
+### Key `View` Methods
 
-✅ **Correct** - View provides base functionality:
+**Correct** — below is simplified pseudo-code illustrating `View`'s base functionality (not the exact framework signatures):
 
 ```kotlin
-abstract class View {
-    // Basic properties
+open class View {
+    // Basic properties (actually exposed via getters/setters)
     var visibility: Int
     var isEnabled: Boolean
     var isClickable: Boolean
 
     // Measurement and positioning
-    protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int)
-    protected open fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int)
+    protected open fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {}
+    protected open fun onLayout(changed: Boolean, left: Int, top: Int, right: Int, bottom: Int) {}
 
     // Drawing
-    protected open fun onDraw(canvas: Canvas)
+    protected open fun onDraw(canvas: Canvas) {}
 
     // Events
-    open fun onTouchEvent(event: MotionEvent): Boolean
+    open fun onTouchEvent(event: MotionEvent): Boolean = false
 }
 ```
 
-### ViewGroup Additional Functionality
+### `ViewGroup` Additional Functionality
 
-ViewGroup extends View and adds child management:
+`ViewGroup` extends `View` and adds child management (also shown as simplified pseudo-code):
 
 ```kotlin
-abstract class ViewGroup : View {
+abstract class ViewGroup(context: Context, attrs: AttributeSet? = null) : View(/* ... */) {
     // Child management
-    fun addView(child: View)
-    fun removeView(child: View)
-    fun getChildAt(index: Int): View
-    fun getChildCount(): Int
+    fun addView(child: View) {}
+    fun removeView(child: View) {}
+    fun getChildAt(index: Int): View = TODO()
+    fun getChildCount(): Int = TODO()
 
     // Child measurement
-    fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int)
+    fun measureChildren(widthMeasureSpec: Int, heightMeasureSpec: Int) {}
 
-    // Touch event distribution
-    override fun onInterceptTouchEvent(ev: MotionEvent): Boolean
+    // Touch event interception and distribution
+    open fun onInterceptTouchEvent(ev: MotionEvent): Boolean = false
 }
 ```
 
-### Custom ViewGroup Example
+### Custom `ViewGroup` Example
 
 ```kotlin
 class CustomLayout @JvmOverloads constructor(
@@ -251,11 +252,11 @@ class CustomLayout @JvmOverloads constructor(
 
 ### Why This Matters
 
-1. **Polymorphism** - ViewGroup can be used anywhere View is expected
-2. **Unified API** - all UI elements share common methods
-3. **Flexibility** - can override View methods in ViewGroup
+1. Polymorphism — `ViewGroup` can be used anywhere `View` is expected.
+2. Unified API — all UI elements share common methods.
+3. Flexibility — `ViewGroup` can override and extend `View` behavior.
 
-✅ **Correct** - ViewGroup as View:
+**Correct** — `ViewGroup` as `View`:
 
 ```kotlin
 fun setViewProperties(view: View) {
@@ -264,30 +265,42 @@ fun setViewProperties(view: View) {
 }
 
 val linearLayout = LinearLayout(context)
-setViewProperties(linearLayout) // Works because LinearLayout extends ViewGroup extends View
+setViewProperties(linearLayout) // Works because LinearLayout : ViewGroup : View
 ```
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия между `View` и `ViewGroup`?
+- Почему метод `onLayout()` объявлен абстрактным в `ViewGroup` и что должны реализовать наследники?
+- Чем отличается обработка касаний в `View` и `ViewGroup`?
+- Какие распространенные наследники `ViewGroup` используются в Android?
+
 ## Follow-ups
 
-- What are the key differences between View and ViewGroup?
-- Why must ViewGroup override onLayout() as abstract?
-- How does touch event handling differ between View and ViewGroup?
-- What common ViewGroup subclasses are used in Android?
+- What are the key differences between `View` and `ViewGroup`?
+- Why is onLayout() declared abstract in `ViewGroup`, and what must subclasses implement there?
+- How does touch event handling differ between `View` and `ViewGroup`?
+- What common `ViewGroup` subclasses are used in Android?
+
+## Ссылки (RU)
+
+- Документация Android: `View` (https://developer.android.com/reference/android/view/View)
+- Документация Android: `ViewGroup` (https://developer.android.com/reference/android/view/ViewGroup)
+- Android Developers: Пользовательские представления (Custom Views): https://developer.android.com/develop/ui/views/layout/custom-views/custom-components
 
 ## References
 
-- Android Documentation: [View](https://developer.android.com/reference/android/view/View)
-- Android Documentation: [ViewGroup](https://developer.android.com/reference/android/view/ViewGroup)
-- Android Developers: [Custom Views](https://developer.android.com/develop/ui/views/layout/custom-views/custom-components)
+- Android Documentation: `View` (https://developer.android.com/reference/android/view/View)
+- Android Documentation: `ViewGroup` (https://developer.android.com/reference/android/view/ViewGroup)
+- Android Developers: Custom Views (https://developer.android.com/develop/ui/views/layout/custom-views/custom-components)
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-android-components]]
-
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]]

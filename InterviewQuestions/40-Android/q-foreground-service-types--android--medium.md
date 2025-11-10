@@ -1,78 +1,83 @@
 ---
 id: android-057
-title: Foreground Service Types / Типы Foreground Service
-aliases: [Foreground Service Types, Типы Foreground Service]
+title: Foreground Service Types / Foreground Service
+aliases: [Foreground Service Types, Foreground Service]
 topic: android
 subtopics:
-  - background-execution
-  - service
+- background-execution
+- service
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - q-android-service-types--android--easy
-  - q-workmanager-vs-alternatives--android--medium
+- c-background-tasks
+- q-android-service-types--android--easy
+- q-workmanager-vs-alternatives--android--medium
 created: 2025-10-12
-updated: 2025-01-27
+updated: 2025-11-10
 tags: [android/background-execution, android/service, difficulty/medium, foreground-service, notifications]
 sources:
-  - https://developer.android.com/guide/components/foreground-services
+- "https://developer.android.com/guide/components/foreground-services"
+
 ---
 
 # Вопрос (RU)
-> Что такое типы Foreground Service в Android? Как правильно реализовать foreground services?
+> Какие существуют типы Foreground `Service` в Android и как правильно реализовывать foreground-сервисы?
 
 # Question (EN)
-> What are Foreground Service types in Android? How do you implement foreground services correctly?
+> What are Foreground `Service` types in Android? How do you implement foreground services correctly?
 
 ---
 
 ## Ответ (RU)
 
-### Теоретические Основы
+### Теоретические основы
 
-**Foreground Services** — сервисы выполняющиеся с постоянным уведомлением, позволяя длительным операциям продолжаться в фоне. Они гарантируют что система не убьет процесс во время важных задач.
+**Foreground Services** — это сервисы, которые выполняются с постоянным уведомлением, позволяющим долгим и важным операциям продолжаться в фоне. Они снижают вероятность того, что система выгрузит процесс во время критически важной работы, но не дают абсолютной гарантии.
 
-**Почему нужны foreground services:**
-- **Длительные операции** — загрузка/синхронизация больших данных, медиа-воспроизведение
-- **Критическая функциональность** — навигация, здоровье/фитнес трекинг, VoIP звонки
-- **Системная защита** — предотвращает убийство процесса при нехватке памяти
+**Зачем нужны foreground services:**
+- Длительные операции: загрузка/выгрузка больших объёмов данных, медиапроигрывание
+- Критически важный функционал: навигация, трекинг здоровья/фитнеса, VoIP-звонки
+- Требование видимости для пользователя и повышенный приоритет по сравнению с обычным фоновым исполнением
 
-**Сравнение с background services:**
-- **Background Services** — могут быть убиты системой в любое время
-- **Foreground Services** — защищены уведомлением, но требуют обоснования использования
-- **WorkManager** — предпочтительна для отложенных задач без UI
+**Сравнение с фоновыми механизмами:**
+- Background Services — сильно ограничены начиная с Android 8.0; произвольные долгие фоновые сервисы в фоне в большинстве случаев недопустимы
+- Foreground Services — работают с видимым уведомлением и повышенным приоритетом, но требуют убедительного обоснования и корректного указания типа/разрешений
+- WorkManager — предпочтителен для отложенной, гарантированной или зависящей от условий фоновой работы без постоянной визуальной индикации
 
 **Эволюция ограничений:**
-- **Android 8.0** — введен limit в 1 час для background execution
-- **Android 10** — обязательное объявление типов сервисов
-- **Android 12** — short services для быстрых операций
-- **Android 14** — строгие ограничения на запуск из фона
+- Android 8.0 — введены ограничения фонового выполнения; произвольные долгие background services в фоне запрещены
+- Android 10 — необходимость явно указывать `android:foregroundServiceType` в манифесте для ряда сценариев
+- Android 12 — дополнительные ограничения FGS и FGS Task Manager
+- Android 13 — добавлен `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE` для коротких операций
+- Android 14 — усилены правила запуска FGS из фона и проверка корректности типов
 
 **Ключевые требования:**
-- Постоянное уведомление обязательно (`Notification.ONGOING`)
-- Тип сервиса в манифесте (Android 10+)
-- Вызов `startForeground()` в течение 5 секунд после старта
-- Специфические разрешения для каждого типа
+- Постоянное, видимое пользователю уведомление (`setOngoing(true)` / `FLAG_ONGOING_EVENT`) пока сервис в foreground-состоянии
+- Объявление типа(ов) сервиса через `android:foregroundServiceType` в манифесте (Android 10+)
+- Вызов `startForeground()` в течение 5 секунд после `startForegroundService()` во избежание ANR
+- Использование соответствующих `FOREGROUND_SERVICE_*`-разрешений для конкретных типов (медиа, локация и др.)
 
-**Основные типы:**
+**Основные типы (примеры):**
 ```kotlin
-// ✅ Common types
+// Распространённые типы
 FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK  // Media playback
 FOREGROUND_SERVICE_TYPE_LOCATION        // Location tracking
 FOREGROUND_SERVICE_TYPE_DATA_SYNC       // Data sync
 FOREGROUND_SERVICE_TYPE_CAMERA          // Camera usage
 FOREGROUND_SERVICE_TYPE_MICROPHONE      // Audio recording
 
-// ⚠️ Special types
-FOREGROUND_SERVICE_TYPE_SHORT_SERVICE   // Quick ops < 3 min (Android 12+)
-FOREGROUND_SERVICE_TYPE_SPECIAL_USE     // Requires Play Console justification (Android 14+)
+// Специальные типы
+FOREGROUND_SERVICE_TYPE_SHORT_SERVICE   // Краткие операции (~<3 мин, Android 13+)
+FOREGROUND_SERVICE_TYPE_SPECIAL_USE     // Ограниченный, требует декларации/обоснования в Play Console (Android 14+)
 ```
+
+Замечание: типы, используемые во время выполнения, должны быть объявлены в `android:foregroundServiceType` сервиса; некоторые требуют отдельных `FOREGROUND_SERVICE_*`-разрешений.
 
 **Объявление в манифесте:**
 ```xml
@@ -90,15 +95,18 @@ FOREGROUND_SERVICE_TYPE_SPECIAL_USE     // Requires Play Console justification (
 </manifest>
 ```
 
-**Реализация медиа-сервиса:**
+**Реализация media-сервиса:**
 ```kotlin
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val notification = createNotification()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(NOTIFICATION_ID, notification,
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+            startForeground(
+                NOTIFICATION_ID,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+            )
         } else {
             startForeground(NOTIFICATION_ID, notification)
         }
@@ -111,91 +119,122 @@ class MusicService : Service() {
         .setContentTitle("Now Playing")
         .setPriority(NotificationCompat.PRIORITY_LOW)
         .setOngoing(true)
-        .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
-            .setShowActionsInCompactView(0, 1))
+        .setStyle(
+            androidx.media.app.NotificationCompat.MediaStyle()
+                .setShowActionsInCompactView(0, 1)
+        )
         .build()
 
     override fun onBind(intent: Intent?): IBinder? = null
 }
 ```
 
-**Android 14+ ограничения:**
+**Ограничения Android 14+ (в общем виде):**
 ```kotlin
-// ❌ CANNOT start foreground service from background in most cases
+// В большинстве случаев НЕЛЬЗЯ запускать foreground service из фона.
+// Разрешены только документированные исключения, например:
+// - MEDIA_PLAYBACK при активной media session
+// - PHONE_CALL во время активного звонка
+// - CONNECTED_DEVICE при взаимодействии с активным BT/USB-устройством
+// - Из high-priority FCM или точного будильника при запуске допустимого типа FGS
+// - Из пользовательского действия по нажатию на уведомление
+// Подробный и актуальный список исключений см. в официальной документации.
 
-// ✅ Exemptions (can start from background):
-// - MEDIA_PLAYBACK with active media session
-// - PHONE_CALL during active call
-// - CONNECTED_DEVICE when Bluetooth/USB connected
-// - Started via high-priority FCM
-// - Started from notification action
-// - Started from exact alarm (AlarmManager)
-
-// ⚠️ Recommendation: use WorkManager instead of foreground services where possible
+// Рекомендация: использовать WorkManager и планировщики,
+// когда постоянный foreground не обязателен.
 ```
 
-**Short Service для быстрых операций:**
+**`Short` `Service` для быстрых операций (Android 13+):**
 ```kotlin
 class QuickUploadService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            startForeground(NOTIFICATION_ID, createNotification(),
+        val notification = createNotification()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            startForeground(
+                NOTIFICATION_ID,
+                notification,
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_SHORT_SERVICE or
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
+            startForeground(NOTIFICATION_ID, notification)
         }
 
-        uploadFile()
+        uploadFileAsync()
         return START_NOT_STICKY
     }
 
-    override fun onTimeout(startId: Int) {
-        cleanup()
-        stopSelf(startId)
+    private fun createNotification(): Notification { /* ... */ }
+
+    private fun uploadFileAsync() {
+        // Обеспечить завершение работы в пределах системного лимита SHORT_SERVICE.
     }
 }
 ```
+
+Замечание: API `Service` не предоставляет `onTimeout()` для SHORT_SERVICE; таймауты применяются системой. Если нужен пользовательский таймаут, реализуйте его самостоятельно (корутины/handlers) и вызывайте `stopSelf()`.
+
+### Лучшие практики (RU)
+
+- Минимизируйте время работы foreground-сервиса; используйте `SHORT_SERVICE`, когда это уместно, и завершайте работу как можно быстрее
+- Обосновывайте использование; `SPECIAL_USE` требует серьёзного обоснования и декларации в Play Console
+- Учитывайте системные таймауты и ограничения запуска из фона; не полагайтесь на недокументированное поведение
+- Комбинируйте типы при необходимости через побитовое OR (например, камера + микрофон)
+- Тестируйте на реальных устройствах разных API-уровней; эмуляторы могут не отражать все ограничения FGS
+
+### Частые ошибки (RU)
+
+- Несвоевременный вызов `startForeground()`: отсутствие вызова в течение 5 секунд после `startForegroundService()` приводит к ANR
+- Отсутствие постоянного уведомления: сервис теряет foreground-статус и может быть остановлен системой
+- Неверные или отсутствующие разрешения: для каждого типа могут требоваться свои `FOREGROUND_SERVICE_*` и runtime-разрешения
+- Нарушения правил запуска из фона: на Android 14+ большинство фоновых запусков FGS блокируется, если не попадает под разрешённые исключения
+- «Утечки» `Service`: отсутствие `stopSelf()`/`stopService()` приводит к лишнему потреблению ресурсов
 
 ## Answer (EN)
 
 ### Theoretical Foundations
 
-**Foreground Services** — services running with a persistent notification, allowing long-running operations to continue in the background. They guarantee that the system won't kill the process during important tasks.
+**Foreground Services** are services running with a persistent notification, allowing long-running operations to continue in the background. They make it much less likely that the system will kill your process during important tasks, but they do not give an absolute guarantee (the process may still be killed under extreme conditions or policy).
 
 **Why foreground services are needed:**
-- **Long-running operations** — uploading/syncing large data, media playback
-- **Critical functionality** — navigation, health/fitness tracking, VoIP calls
-- **System protection** — prevents process killing during memory pressure
+- `Long`-running operations: uploading/syncing large data, media playback
+- Critical functionality: navigation, health/fitness tracking, VoIP calls
+- Better protection from background limits: keeps important work visible to the user and prioritized by the system
 
 **Comparison with background services:**
-- **Background Services** — can be killed by system at any time
-- **Foreground Services** — protected by notification but require usage justification
-- **WorkManager** — preferred for deferred tasks without UI
+- Background Services: heavily restricted since Android 8.0; background services can be stopped shortly after the app goes to background and should generally be replaced by foreground services or scheduled work (JobScheduler/WorkManager)
+- Foreground Services: run with a visible notification and higher priority, but require strong justification and correct type/permission usage
+- WorkManager: preferred for deferrable, guaranteed, or constraint-based background work without continuous user-visible operation
 
 **Evolution of restrictions:**
-- **Android 8.0** — introduced 1-hour limit for background execution
-- **Android 10** — mandatory service type declarations
-- **Android 12** — short services for quick operations
-- **Android 14** — strict background launch restrictions
+- Android 8.0: background execution limits; apps generally cannot run arbitrary background services for long when in background
+- Android 10: introduced mandatory `foregroundServiceType` declaration in manifest for many use cases
+- Android 12: added further FGS restrictions and the Foreground `Service` Task Manager UI
+- Android 13: added `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE` for time-bounded quick operations
+- Android 14: tightened background-start rules and enforcement of valid FGS types
 
 **Key requirements:**
-- Persistent notification mandatory (`Notification.ONGOING`)
-- Service type in manifest (Android 10+)
-- Call `startForeground()` within 5 seconds after start
-- Type-specific permissions required
+- Persistent, user-visible notification (`setOngoing(true)` / `FLAG_ONGOING_EVENT`) while running as foreground service
+- `Service` type(s) declared via `android:foregroundServiceType` in manifest (Android 10+)
+- Call `startForeground()` within 5 seconds after `startForegroundService()` to avoid ANR
+- Type-specific `FOREGROUND_SERVICE_*` permissions where applicable (e.g., media playback, location, etc.)
 
-**Main types:**
+**Main types (examples):**
 ```kotlin
-// ✅ Common types
+// Common types
 FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK  // Media playback
 FOREGROUND_SERVICE_TYPE_LOCATION        // Location tracking
 FOREGROUND_SERVICE_TYPE_DATA_SYNC       // Data sync
 FOREGROUND_SERVICE_TYPE_CAMERA          // Camera usage
 FOREGROUND_SERVICE_TYPE_MICROPHONE      // Audio recording
 
-// ⚠️ Special types
-FOREGROUND_SERVICE_TYPE_SHORT_SERVICE   // Quick ops < 3 min (Android 12+)
-FOREGROUND_SERVICE_TYPE_SPECIAL_USE     // Requires Play Console justification (Android 14+)
+// Special types
+FOREGROUND_SERVICE_TYPE_SHORT_SERVICE   // Short, time-bounded operations (~<3 min, Android 13+)
+FOREGROUND_SERVICE_TYPE_SPECIAL_USE     // Restricted; requires Play Console declaration/justification (Android 14+)
 ```
+
+Note: Types used at runtime must be declared in the service's `android:foregroundServiceType` manifest attribute, and some types require specific `FOREGROUND_SERVICE_*` permissions.
 
 **Manifest declaration:**
 ```xml
@@ -220,8 +259,11 @@ class MusicService : Service() {
         val notification = createNotification()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(NOTIFICATION_ID, notification,
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+            startForeground(
+                NOTIFICATION_ID,
+                notification,
+                ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+            )
         } else {
             startForeground(NOTIFICATION_ID, notification)
         }
@@ -234,107 +276,128 @@ class MusicService : Service() {
         .setContentTitle("Now Playing")
         .setPriority(NotificationCompat.PRIORITY_LOW)
         .setOngoing(true)
-        .setStyle(androidx.media.app.NotificationCompat.MediaStyle()
-            .setShowActionsInCompactView(0, 1))
+        .setStyle(
+            androidx.media.app.NotificationCompat.MediaStyle()
+                .setShowActionsInCompactView(0, 1)
+        )
         .build()
 
     override fun onBind(intent: Intent?): IBinder? = null
 }
 ```
 
-**Android 14+ restrictions:**
+**Android 14+ restrictions (high-level):**
 ```kotlin
-// ❌ CANNOT start foreground service from background in most cases
+// In most cases you CANNOT start a foreground service from the background.
+// Only specific, documented exemptions apply, for example:
+// - MEDIA_PLAYBACK with an active media session
+// - PHONE_CALL during an active call
+// - CONNECTED_DEVICE when interacting with an active BT/USB device
+// - From high-priority FCM or exact alarm, when starting an allowed FGS type promptly
+// - From user-initiated notification actions
+// See official docs for the precise and evolving list of exemptions.
 
-// ✅ Exemptions (can start from background):
-// - MEDIA_PLAYBACK with active media session
-// - PHONE_CALL during active call
-// - CONNECTED_DEVICE when Bluetooth/USB connected
-// - Started via high-priority FCM
-// - Started from notification action
-// - Started from exact alarm (AlarmManager)
-
-// ⚠️ Recommendation: use [[c-workmanager]] instead of foreground services where possible
+// Recommendation: prefer WorkManager and other schedulers when continuous
+// user-visible execution is not strictly required.
 ```
 
-**Short Service for quick operations:**
+**`Short` `Service` for quick operations (Android 13+):**
 ```kotlin
 class QuickUploadService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            startForeground(NOTIFICATION_ID, createNotification(),
+        val notification = createNotification()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            startForeground(
+                NOTIFICATION_ID,
+                notification,
                 ServiceInfo.FOREGROUND_SERVICE_TYPE_SHORT_SERVICE or
-                ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC)
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
+            )
+        } else {
+            startForeground(NOTIFICATION_ID, notification)
         }
 
-        uploadFile()
+        uploadFileAsync()
         return START_NOT_STICKY
     }
 
-    override fun onTimeout(startId: Int) {
-        cleanup()
-        stopSelf(startId)
+    private fun createNotification(): Notification { /* ... */ }
+
+    private fun uploadFileAsync() {
+        // Ensure completion within the system-enforced SHORT_SERVICE time limit.
     }
 }
 ```
 
+Note: Android's `Service` API does not provide an `onTimeout()` callback; SHORT_SERVICE timeouts are enforced by the system. If you need custom timeouts, implement them yourself (e.g., with coroutines/handlers) and call `stopSelf()`.
+
 ### Best Practices
 
-- **Minimize foreground execution time** — use short services for quick tasks
-- **Justify usage** — SPECIAL_USE type requires detailed explanation in Play Console
-- **Handle timeouts** — always implement `onTimeout()` for short services
-- **Combine types** — use bitwise OR for simultaneous operations (camera + microphone)
-- **Test on real devices** — emulators don't always correctly simulate restrictions
+- Minimize foreground execution time; use `SHORT_SERVICE` where appropriate and complete work promptly
+- Justify usage; `SPECIAL_USE` requires strong justification and Play Console declaration
+- Be aware of system-enforced timeouts and background-start restrictions; do not rely on undefined callbacks
+- Combine types with bitwise OR when performing multiple operations (e.g., camera + microphone)
+- Test on real devices across API levels; emulators may not fully reflect FGS restrictions
 
 ### Common Pitfalls
 
-- **Delayed startForeground()** — call after 5 seconds causes ANR
-- **Missing notification** — service without ongoing notification will be killed by system
-- **Wrong permissions** — each type requires its own permission
-- **Background launch** — Android 14+ blocks most cases of starting foreground service from background
-- **Service leaks** — forgotten `stopSelf()` leads to constant resource consumption
-
-### Лучшие Практики
-
-- **Минимизируйте время foreground execution** — используйте short services для быстрых задач
-- **Обосновывайте использование** — для SPECIAL_USE типа требуется детальное объяснение в Play Console
-- **Обработка таймаутов** — всегда реализуйте `onTimeout()` для short services
-- **Комбинируйте типы** — используйте bitwise OR для одновременных операций (камера + микрофон)
-- **Тестируйте на реальных устройствах** — эмуляторы не всегда корректно симулируют ограничения
-
-### Типичные Ошибки
-
-- **Задержка startForeground()** — вызов после 5 секунд вызывает ANR
-- **Отсутствие уведомления** — сервис без ongoing notification будет убит системой
-- **Неправильные разрешения** — каждый тип требует своего permission
-- **Запуск из фона** — Android 14+ блокирует большинство случаев запуска foreground service из background
-- **Утечка сервисов** — забытый `stopSelf()` приводит к постоянному потреблению ресурсов
+- Delayed `startForeground()`: not calling it within 5 seconds after `startForegroundService()` can cause ANR
+- Missing ongoing notification: the service will lose foreground state and may be stopped by the system
+- Wrong or missing permissions: each FGS type may require its own `FOREGROUND_SERVICE_*` and runtime permissions
+- Background launch violations: Android 14+ blocks most background-initiated FGS starts that are not in an allowed exemption
+- `Service` leaks: forgetting `stopSelf()`/`stopService()` leads to unnecessary resource consumption
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Что произойдёт, если не вызвать `startForeground()` в течение 5 секунд?
+- Как обрабатывать изменение типов сервиса во время выполнения?
+- Как тестировать жизненный цикл foreground-сервисов и ограничения Android 14?
+- Чем поведение таймаута SHORT_SERVICE отличается от ручной реализации таймаута?
 
 ## Follow-ups
 
 - What happens if you don't call `startForeground()` within 5 seconds?
 - How do you handle service type changes at runtime?
 - What are the testing strategies for foreground service lifecycle and Android 14 restrictions?
-- How does `onTimeout()` behavior differ from manual timeout handling?
+- How does SHORT_SERVICE timeout behavior differ from manual timeout handling?
+
+## Ссылки (RU)
+
+- https://developer.android.com/guide/components/foreground-services
+- https://developer.android.com/about/versions/14/changes/fgs-types-required
 
 ## References
 
-- [[c-workmanager]] - Alternative to foreground services
 - https://developer.android.com/guide/components/foreground-services
 - https://developer.android.com/about/versions/14/changes/fgs-types-required
+
+## Связанные вопросы (RU)
+
+### База (проще)
+- [[q-android-service-types--android--easy]] - Типы `Service` и их жизненный цикл
+- Базовое понимание уведомлений и notification channels в Android
+
+### Связанные (тот же уровень)
+- [[q-workmanager-vs-alternatives--android--medium]] - Сравнение подходов к фоновой работе
+- Разбор trade-off между `Service` и WorkManager
+
+### Продвинутые (сложнее)
+- Реализация привязанных сервисов (bound services) в сочетании с foreground-сервисами
+- Продвинутые паттерны WorkManager для сложной фоновой работы
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-service-types--android--easy]] - Service types and lifecycle
+- [[q-android-service-types--android--easy]] - `Service` types and lifecycle
 - Basic understanding of Android notifications and notification channels
 
 ### Related (Same Level)
 - [[q-workmanager-vs-alternatives--android--medium]] - Background work comparison
-- Service vs [[c-workmanager]] trade-offs and use cases
+- `Service` vs WorkManager trade-offs and use cases
 
 ### Advanced (Harder)
 - Implementing service binding with foreground services
-- Advanced [[c-workmanager]] patterns for complex background work
+- Advanced WorkManager patterns for complex background work

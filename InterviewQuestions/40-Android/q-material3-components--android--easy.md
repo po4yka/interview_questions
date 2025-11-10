@@ -20,7 +20,7 @@ related:
 - c-compose-state
 - c-jetpack-compose
 created: 2025-10-13
-updated: 2025-01-27
+updated: 2025-11-10
 tags:
 - android
 - android/ui-compose
@@ -29,13 +29,14 @@ tags:
 - difficulty/easy
 - material3
 sources: []
+
 ---
 
 # Вопрос (RU)
-> Каковы ключевые различия между Material 2 и Material 3? Перечислите основные компоненты Material 3. Как мигрировать с Material 2 на Material 3?
+> Каковы ключевые различия между Material 2 и Material 3? Перечислите основные компоненты Material 3 и их сценарии использования. Как мигрировать с Material 2 на Material 3?
 
 # Question (EN)
-> What are the key differences between Material 2 and Material 3? List the main Material 3 components and their use cases. How do you migrate from Material 2 to Material 3?
+> What are the key differences between Material 2 and Material 3? `List` the main Material 3 components and their use cases. How do you migrate from Material 2 to Material 3?
 
 ---
 
@@ -49,11 +50,11 @@ sources: []
 |---------|------------|------------|
 | **Цвета** | Фиксированная палитра | Динамическая система (25+ ролей) |
 | **Персонализация** | Статические темы | Темы из обоев пользователя |
-| **Elevation** | На основе теней | Тональные поверхности |
+| **Elevation** | На основе теней | Тональные поверхности + обновлённые elevation-токены |
 
 ### Основные Компоненты Material 3
 
-**1. Кнопки:**
+**1. Кнопки (основные варианты):**
 ```kotlin
 // ✅ Filled — основное действие
 Button(onClick = {}) { Text("Save") }
@@ -61,16 +62,26 @@ Button(onClick = {}) { Text("Save") }
 // ✅ FilledTonalButton — вторичное действие
 FilledTonalButton(onClick = {}) { Text("Cancel") }
 
+// ✅ OutlinedButton — второстепенные / менее заметные действия
+OutlinedButton(onClick = {}) { Text("Secondary") }
+
+// ✅ TextButton — контекстные/микро-действия без акцента
+TextButton(onClick = {}) { Text("More") }
+
+// ✅ ElevatedButton — акцент при необходимости отделить от фона
+ElevatedButton(onClick = {}) { Text("Action") }
+
 // ❌ Не используйте Filled для всех кнопок
 ```
 
 **2. Навигация:**
-- `NavigationBar` — нижняя навигация (было `BottomNavigation`)
-- `NavigationRail` — боковая навигация
+- `NavigationBar` — нижняя навигация (ранее `BottomNavigation`)
+- `NavigationBarItem` — элементы нижней навигации
+- `NavigationRail` — боковая навигация для больших экранов
 - `ModalNavigationDrawer` — выдвижное меню
 
 **3. App Bar:**
-- `TopAppBar` — обычный
+- `TopAppBar` — стандартный
 - `MediumTopAppBar` — средний с прокруткой
 - `LargeTopAppBar` — большой
 
@@ -80,7 +91,8 @@ FilledTonalButton(onClick = {}) { Text("Cancel") }
 Card(
     colors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceVariant // ✅
-    )
+    ),
+    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
 )
 
 // ❌ Не хардкодьте цвета
@@ -88,17 +100,18 @@ Card(colors = CardDefaults.cardColors(containerColor = Color(0xFFE8DEF8)))
 ```
 
 **5. Chips:**
-- `AssistChip` — действия
-- `FilterChip` — фильтры
-- `InputChip` — ввод пользователя
-- `SuggestionChip` — предложения
+- `AssistChip` — контекстные действия
+- `FilterChip` — фильтрация / выбор состояний
+- `InputChip` — представление пользовательского ввода/тегов
+- `SuggestionChip` — предложения действий или вариантов
 
 ### Миграция С Material 2 На Material 3
 
 **1. Обновить зависимости:**
 ```gradle
-implementation "androidx.compose.material3:material3" // без версии
+implementation("androidx.compose.material3:material3")
 ```
+(версия указывается через BOM или явно в зависимости от конфигурации проекта)
 
 **2. Обновить theme:**
 ```kotlin
@@ -122,7 +135,7 @@ import androidx.compose.material3.Button
 - `BottomNavigation` → `NavigationBar`
 - `BottomNavigationItem` → `NavigationBarItem`
 
-**5. Исправить breaking changes:**
+**5. Учесть breaking changes:**
 ```kotlin
 // Material 2
 Card(elevation = 4.dp)
@@ -140,7 +153,7 @@ fun AppTheme(content: @Composable () -> Unit) {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             dynamicLightColorScheme(LocalContext.current) // ✅ Из обоев
         }
-        else -> lightColorScheme() // ❌ Fallback
+        else -> lightColorScheme() // ✅ Корректный fallback для старых устройств
     }
     MaterialTheme(colorScheme = colorScheme, content = content)
 }
@@ -149,9 +162,9 @@ fun AppTheme(content: @Composable () -> Unit) {
 ### Best Practices
 
 1. **Используйте семантические цветовые роли** (`primary`, `surfaceVariant`) вместо хардкода
-2. **Включайте динамические цвета** на Android 12+
-3. **Соблюдайте иерархию кнопок:** Filled → Tonal → Outlined → Text
-4. **Следуйте elevation:** Level 0 (фон) → Level 5 (модальные окна)
+2. **Включайте динамические цвета** на Android 12+, с корректным fallback для более старых версий
+3. **Соблюдайте иерархию кнопок:** Filled → FilledTonal → Elevated → Outlined → Text
+4. **Учитывайте обновлённую модель elevation:** уровни для фона, контейнеров, навигации и модальных элементов, опираясь на токены M3
 
 ---
 
@@ -165,29 +178,39 @@ fun AppTheme(content: @Composable () -> Unit) {
 |---------|------------|------------|
 | **Colors** | Fixed palette | Dynamic system (25+ roles) |
 | **Personalization** | Static themes | Themes from user wallpaper |
-| **Elevation** | Shadow-based | Tonal surfaces |
+| **Elevation** | Shadow-based | Tonal surfaces + updated elevation tokens |
 
 ### Main Material 3 Components
 
-**1. Buttons:**
+**1. Buttons (core variants):**
 ```kotlin
 // ✅ Filled — primary action
 Button(onClick = {}) { Text("Save") }
 
-// ✅ FilledTonalButton — secondary action
+// ✅ FilledTonalButton — secondary / alternative primary
 FilledTonalButton(onClick = {}) { Text("Cancel") }
+
+// ✅ OutlinedButton — less prominent secondary actions
+OutlinedButton(onClick = {}) { Text("Secondary") }
+
+// ✅ TextButton — inline / contextual actions
+TextButton(onClick = {}) { Text("More") }
+
+// ✅ ElevatedButton — when emphasis is needed against the background
+ElevatedButton(onClick = {}) { Text("Action") }
 
 // ❌ Don't use Filled for all buttons
 ```
 
 **2. Navigation:**
-- `NavigationBar` — bottom navigation (was `BottomNavigation`)
-- `NavigationRail` — side navigation
+- `NavigationBar` — bottom navigation (previously `BottomNavigation`)
+- `NavigationBarItem` — bottom navigation items
+- `NavigationRail` — side navigation for larger screens
 - `ModalNavigationDrawer` — drawer menu
 
 **3. App Bar:**
 - `TopAppBar` — standard
-- `MediumTopAppBar` — medium with scroll
+- `MediumTopAppBar` — medium with scroll behavior
 - `LargeTopAppBar` — large
 
 **4. Cards:**
@@ -196,7 +219,8 @@ FilledTonalButton(onClick = {}) { Text("Cancel") }
 Card(
     colors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surfaceVariant // ✅
-    )
+    ),
+    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
 )
 
 // ❌ Don't hardcode colors
@@ -204,17 +228,18 @@ Card(colors = CardDefaults.cardColors(containerColor = Color(0xFFE8DEF8)))
 ```
 
 **5. Chips:**
-- `AssistChip` — actions
-- `FilterChip` — filters
-- `InputChip` — user input
-- `SuggestionChip` — suggestions
+- `AssistChip` — contextual actions
+- `FilterChip` — filtering / toggling options
+- `InputChip` — representing user input/tags
+- `SuggestionChip` — suggested actions or options
 
 ### Migration from Material 2 to Material 3
 
 **1. Update dependencies:**
 ```gradle
-implementation "androidx.compose.material3:material3" // no version
+implementation("androidx.compose.material3:material3")
 ```
+(version is provided via BOM or explicitly, depending on your project setup)
 
 **2. Update theme:**
 ```kotlin
@@ -256,7 +281,7 @@ fun AppTheme(content: @Composable () -> Unit) {
         Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
             dynamicLightColorScheme(LocalContext.current) // ✅ From wallpaper
         }
-        else -> lightColorScheme() // ❌ Fallback
+        else -> lightColorScheme() // ✅ Correct fallback when dynamic color is unavailable
     }
     MaterialTheme(colorScheme = colorScheme, content = content)
 }
@@ -265,11 +290,19 @@ fun AppTheme(content: @Composable () -> Unit) {
 ### Best Practices
 
 1. **Use semantic color roles** (`primary`, `surfaceVariant`) instead of hardcoding
-2. **Enable dynamic colors** on Android 12+
-3. **Follow button hierarchy:** Filled → Tonal → Outlined → Text
-4. **Follow elevation:** Level 0 (background) → Level 5 (modal)
+2. **Enable dynamic colors** on Android 12+ with a proper fallback on lower versions
+3. **Follow button hierarchy:** Filled → FilledTonal → Elevated → Outlined → Text
+4. **Align with the updated elevation model:** use appropriate levels/tokens for background, containers, navigation, and modal elements
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как технически работает извлечение динамических цветов из обоев?
+- В чём плюсы и минусы стратегий миграции с M2 на M3 (постепенная vs одномоментная)?
+- Как тестировать компоненты Material 3 на разных версиях Android?
+- Какие улучшения по доступности предлагает Material 3 по сравнению с Material 2?
+- Как поддерживать собственные цветовые схемы при использовании динамических цветов?
 
 ## Follow-ups
 
@@ -279,10 +312,34 @@ fun AppTheme(content: @Composable () -> Unit) {
 - What accessibility improvements does Material 3 provide over Material 2?
 - How do you handle custom color schemes while supporting dynamic colors?
 
+## Ссылки (RU)
+
+- Material Design 3 Guidelines: https://m3.material.io/
+- Документация по Compose Material 3: https://developer.android.com/jetpack/compose/designsystems/material3
+
 ## References
 
 - Material Design 3 Guidelines: https://m3.material.io/
 - Compose Material 3 docs: https://developer.android.com/jetpack/compose/designsystems/material3
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+
+### Предпосылки
+- Базовые знания Jetpack Compose
+- Основы темизации в Compose
+
+### Связанные
+- Управление состоянием в Compose
+- Оптимизация производительности в Compose
+
+### Продвинутые
+- Построение собственных дизайн-систем
+- Доступность в Compose
 
 ## Related Questions
 

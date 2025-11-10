@@ -4,25 +4,26 @@ title: Architecture Components Libraries / Библиотеки Architecture Com
 aliases: [Architecture Components Libraries, Библиотеки Architecture Components]
 topic: android
 subtopics:
-  - architecture-mvvm
-  - lifecycle
-  - room
+- architecture-mvvm
+- lifecycle
+- room
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - c-lifecycle
-  - c-room
-  - c-viewmodel
+- c-lifecycle
+- c-room
+- c-android-components
 sources: []
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/architecture-mvvm, android/lifecycle, android/room, difficulty/easy, jetpack]
+
 ---
 
 # Вопрос (RU)
@@ -35,18 +36,18 @@ tags: [android/architecture-mvvm, android/lifecycle, android/room, difficulty/ea
 
 ## Ответ (RU)
 
-**Android Architecture Components** — набор библиотек для построения robust, testable, maintainable приложений. Решают проблемы lifecycle management, конфигурационных изменений, утечек памяти.
+**Android Architecture Components** — набор библиотек для построения надежных, тестируемых и поддерживаемых приложений. Решают проблемы lifecycle management, конфигурационных изменений, утечек памяти.
 
 ### Ключевые Принципы
 
 - **Separation of concerns**: UI не содержит бизнес-логику
 - **Lifecycle-aware**: компоненты автоматически реагируют на lifecycle events
-- **Unidirectional data flow**: ViewModel → UI (предсказуемость состояния)
+- **Unidirectional data flow**: `ViewModel` → UI (предсказуемость состояния)
 - **Testability**: слои изолированы через чёткие контракты
 
-### 1) ViewModel — Переживает Configuration Changes
+### 1) `ViewModel` — Переживает Configuration Changes
 
-Хранит UI state; отделяет логику от UI; ViewModelScope для корутин; **не хранит Context**.
+Хранит UI state; отделяет логику от UI; ViewModelScope для корутин; **не хранит `Context`**.
 
 ```kotlin
 // ✅ Переживает поворот экрана
@@ -63,12 +64,12 @@ class UserViewModel : ViewModel() {
 class BadViewModel(val context: Context) : ViewModel()
 ```
 
-**Когда использовать**: любая UI-логика, которая должна пережить recreate Activity/Fragment.
+**Когда использовать**: любая UI-логика, которая должна пережить recreate `Activity`/`Fragment`.
 
-### 2) LiveData / StateFlow — Observable Состояние
+### 2) `LiveData` / `StateFlow` — `Observable` Состояние
 
-**LiveData**: lifecycle-aware out-of-the-box; автоматическая отписка; legacy в новых проектах.
-**StateFlow**: Kotlin-first; требует manual lifecycle scope; лучшая интеграция с Compose/Flow.
+**`LiveData`**: lifecycle-aware out-of-the-box; автоматическая отписка; legacy в новых проектах.
+**`StateFlow`**: Kotlin-first; требует manual lifecycle scope; лучшая интеграция с Compose/`Flow`.
 
 ```kotlin
 // ✅ LiveData: автоматически отписывается
@@ -80,11 +81,11 @@ lifecycleScope.launch {
 }
 ```
 
-**Когда использовать**: StateFlow для новых проектов (Kotlin-first); LiveData для legacy или простых case.
+**Когда использовать**: `StateFlow` для новых проектов (Kotlin-first); `LiveData` для legacy или простых case.
 
 ### 3) Room — Type-safe SQLite ORM
 
-Compile-time SQL validation; аннотации (@Entity, @Dao, @Database); поддержка Flow/LiveData; migration automation.
+Compile-time SQL validation; аннотации (@Entity, @Dao, @Database); поддержка `Flow`/`LiveData`; migration automation.
 
 ```kotlin
 @Entity(tableName = "users")
@@ -134,7 +135,7 @@ val request = OneTimeWorkRequestBuilder<SyncWorker>()
 
 ### 5) Navigation — Централизованная Навигация
 
-Single-activity pattern; type-safe arguments (Safe Args); ViewModel scoping к графу; deep linking.
+Single-activity pattern; type-safe arguments (Safe Args); `ViewModel` scoping к графу; deep linking.
 
 ```kotlin
 // ✅ Type-safe передача аргументов
@@ -169,18 +170,18 @@ UI Layer (Compose / Views)
 
 ## Answer (EN)
 
-**Android Architecture Components** — libraries for building robust, testable, maintainable apps. Solve lifecycle management, configuration changes, memory leaks.
+**Android Architecture Components** are libraries for building robust, testable, maintainable apps. They solve lifecycle management, configuration changes, memory leaks.
 
 ### Key Principles
 
 - **Separation of concerns**: UI doesn't contain business logic
 - **Lifecycle-aware**: components automatically react to lifecycle events
-- **Unidirectional data flow**: ViewModel → UI (state predictability)
+- **Unidirectional data flow**: `ViewModel` → UI (state predictability)
 - **Testability**: layers isolated via clear contracts
 
-### 1) ViewModel — Survives Configuration Changes
+### 1) `ViewModel` — Survives Configuration Changes
 
-Stores UI state; separates logic from UI; ViewModelScope for coroutines; **no Context**.
+Stores UI state; separates logic from UI; ViewModelScope for coroutines; **no `Context`**.
 
 ```kotlin
 // ✅ Survives screen rotation
@@ -197,12 +198,12 @@ class UserViewModel : ViewModel() {
 class BadViewModel(val context: Context) : ViewModel()
 ```
 
-**When to use**: any UI logic that should survive Activity/Fragment recreate.
+**When to use**: any UI logic that should survive `Activity`/`Fragment` recreate.
 
-### 2) LiveData / StateFlow — Observable State
+### 2) `LiveData` / `StateFlow` — `Observable` State
 
-**LiveData**: lifecycle-aware out-of-the-box; automatic unsubscribe; legacy in new projects.
-**StateFlow**: Kotlin-first; requires manual lifecycle scope; better Compose/Flow integration.
+**`LiveData`**: lifecycle-aware out-of-the-box; automatic unsubscribe; legacy in new projects.
+**`StateFlow`**: Kotlin-first; requires manual lifecycle scope; better Compose/`Flow` integration.
 
 ```kotlin
 // ✅ LiveData: auto-unsubscribes
@@ -214,11 +215,11 @@ lifecycleScope.launch {
 }
 ```
 
-**When to use**: StateFlow for new projects (Kotlin-first); LiveData for legacy or simple cases.
+**When to use**: `StateFlow` for new projects (Kotlin-first); `LiveData` for legacy or simple cases.
 
 ### 3) Room — Type-safe SQLite ORM
 
-Compile-time SQL validation; annotations (@Entity, @Dao, @Database); Flow/LiveData support; migration automation.
+Compile-time SQL validation; annotations (@Entity, @Dao, @Database); `Flow`/`LiveData` support; migration automation.
 
 ```kotlin
 @Entity(tableName = "users")
@@ -268,7 +269,7 @@ val request = OneTimeWorkRequestBuilder<SyncWorker>()
 
 ### 5) Navigation — Centralized Navigation
 
-Single-activity pattern; type-safe arguments (Safe Args); ViewModel scoping to graph; deep linking.
+Single-activity pattern; type-safe arguments (Safe Args); `ViewModel` scoping to graph; deep linking.
 
 ```kotlin
 // ✅ Type-safe argument passing
@@ -301,25 +302,54 @@ UI Layer (Compose / Views)
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Когда стоит использовать `StateFlow` вместо `LiveData` в современном Android?
+- Как `ViewModel` переживает конфигурационные изменения без сохранения в state bundle?
+- В чем разница между запросами Room с `Flow` и с `LiveData`?
+- Когда следует использовать WorkManager, а когда ForegroundService или корутины?
+- Как заскопить `ViewModel` к графу навигации по сравнению с `Activity`?
+
 ## Follow-ups
 
-- When should you use StateFlow vs LiveData in modern Android?
-- How does ViewModel survive configuration changes without saving state bundle?
-- What's the difference between Room's Flow vs LiveData queries?
+- When should you use `StateFlow` vs `LiveData` in modern Android?
+- How does `ViewModel` survive configuration changes without saving state bundle?
+- What's the difference between Room's `Flow` vs `LiveData` queries?
 - When should you use WorkManager vs ForegroundService vs Coroutines?
-- How do you scope a ViewModel to a Navigation graph vs Activity?
+- How do you scope a `ViewModel` to a Navigation graph vs `Activity`?
 
-## References
+## Ссылки (RU)
 
-- [[c-viewmodel]]
+- [[c-android-components]]
 - [[c-lifecycle]]
 - [[c-room]]
 - https://developer.android.com/jetpack
-- [Architecture](https://developer.android.com/topic/architecture)
-- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
-- [Room Database](https://developer.android.com/training/data-storage/room)
-- [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
+- https://developer.android.com/topic/architecture
+- https://developer.android.com/topic/libraries/architecture/viewmodel
+- https://developer.android.com/training/data-storage/room
+- https://developer.android.com/topic/libraries/architecture/workmanager
 
+## References
+
+- [[c-android-components]]
+- [[c-lifecycle]]
+- [[c-room]]
+- https://developer.android.com/jetpack
+- https://developer.android.com/topic/architecture
+- https://developer.android.com/topic/libraries/architecture/viewmodel
+- https://developer.android.com/training/data-storage/room
+- https://developer.android.com/topic/libraries/architecture/workmanager
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-android-jetpack-overview--android--easy]]
+
+### Связанные (тот же уровень)
+- [[q-android-architectural-patterns--android--medium]]
+
+### Продвинутое (сложнее)
+- [[q-android-runtime-internals--android--hard]]
 
 ## Related Questions
 

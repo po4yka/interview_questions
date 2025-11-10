@@ -26,7 +26,6 @@ related:
 - c-dependency-injection
 - q-compositionlocal-compose--android--hard
 - q-how-to-register-broadcastreceiver-to-receive-messages--android--medium
-- q-recomposition-choreographer--android--hard
 created: 2025-10-15
 updated: 2025-10-28
 sources: []
@@ -39,6 +38,7 @@ tags:
 - injection
 - koin
 - service-locator
+
 ---
 
 # Вопрос (RU)
@@ -53,37 +53,34 @@ tags:
 
 ## Ответ (RU)
 
-**Koin** — легковесный DI фреймворк для Kotlin, использующий **Service Locator паттерн** вместо code generation. Разрешает зависимости в runtime через простой DSL.
+**Koin** — легковесный DI-фреймворк для Kotlin, использующий контейнер зависимостей с DSL и runtime-резолвингом, без code generation. Часто описывается как реализация паттерна `Service` Locator поверх DI-контейнера. Разрешает зависимости в runtime через простой DSL.
 
 ### Koin Vs Dagger/Hilt
 
 | Aspect | Koin | Dagger/Hilt |
 |--------|------|-------------|
-| **Подход** | Service Locator | True DI |
+| **Подход** | DI-контейнер с `Service` Locator-стилем API, runtime-резолвинг | DI c compile-time графом и генерацией кода |
 | **Разрешение** | Runtime | Compile-time |
 | **Code Generation** | ❌ Нет | ✅ kapt/ksp |
-| **Build Speed** | ✅ Быстро | ❌ Медленно |
-| **Error Detection** | ❌ Runtime | ✅ Compile-time |
-| **Learning Curve** | ✅ Простая | ❌ Крутая |
-| **Performance** | ❌ Медленнее | ✅ Быстрее |
-| **Testing** | ✅ Простое | ❌ Сложное |
-| **Multiplatform** | ✅ KMM | ❌ Android only |
+| **Скорость сборки** | ✅ Быстрее (нет генерации кода) | ❌ Медленнее (генерация кода) |
+| **Обнаружение ошибок** | ❌ В основном runtime | ✅ В основном compile-time |
+| **Порог входа** | ✅ Более простой | ❌ Более высокий |
+| **Производительность** | ❌ Хуже в рантайме для большого графа | ✅ Лучше (меньше overhead) |
+| **Тестирование** | ✅ Гибкая конфигурация модулей | ⚠️ Требует больше boilerplate с компонентами/аннотациями |
+| **Multiplatform** | ✅ Есть поддержка KMM | ⚠️ Hilt ориентирован на Android; Dagger как таковой не только для Android |
 
 ### Основные Определения
 
-**Module** - контейнер зависимостей
-**Factory** - новый экземпляр каждый раз
-**Single** - singleton (один экземпляр)
-**ViewModel** - Android ViewModel интеграция
+**Module** - контейнер зависимостей  
+**Factory** - новый экземпляр при каждом запросе  
+**Single** - singleton (один экземпляр на контейнер)  
+**`ViewModel`** - интеграция с Android `ViewModel` и её lifecycle
 
 ### Полная Настройка Koin
 
 **Определения классов**:
 
 ```kotlin
-// ❌ БЫЛО: Дублирование кода, избыточность
-// ✅ СЕЙЧАС: Минимальные определения
-
 // Domain
 interface UserRepository {
     suspend fun getUser(id: String): Result<User>
@@ -129,20 +126,21 @@ class UserViewModel(
 ```kotlin
 // ✅ Network module
 val networkModule = module {
+    single<OkHttpClient> {
+        OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+                else HttpLoggingInterceptor.Level.NONE
+            })
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
+
     single<Retrofit> {
         Retrofit.Builder()
             .baseUrl("https://api.example.com")
             .addConverterFactory(GsonConverterFactory.create())
             .client(get())
-            .build()
-    }
-
-    single<OkHttpClient> {
-        OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = if (BuildConfig.DEBUG) Level.BODY else Level.NONE
-            })
-            .connectTimeout(30, TimeUnit.SECONDS)
             .build()
     }
 
@@ -173,7 +171,7 @@ val domainModule = module {
 val presentationModule = module {
     viewModel { UserViewModel(get()) }
 
-    // ✅ С параметрами
+    // ✅ С параметрами (требует соответствующего ViewModel)
     viewModel { (userId: String) ->
         UserDetailViewModel(userId, get())
     }
@@ -198,11 +196,11 @@ class MyApplication : Application() {
 
 ### Использование
 
-**Activity**:
+**`Activity`**:
 
 ```kotlin
 class UserActivity : AppCompatActivity() {
-    // ✅ Lazy injection
+    // ✅ Lazy injection ViewModel Koin-расширением
     private val viewModel: UserViewModel by viewModel()
     private val logger: Logger by inject()
 
@@ -213,7 +211,7 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-**Fragment**:
+**`Fragment`**:
 
 ```kotlin
 class UserFragment : Fragment() {
@@ -254,10 +252,10 @@ fun UserScreen(userId: String) {
 }
 ```
 
-### Factory Vs Single Vs ViewModel
+### Factory Vs Single Vs `ViewModel`
 
 ```kotlin
-// ❌ Factory - новый экземпляр каждый раз
+// Factory - новый экземпляр каждый раз
 module {
     factory { MyRepository(get()) }
 }
@@ -265,7 +263,7 @@ val repo1: MyRepository by inject()
 val repo2: MyRepository by inject()
 // repo1 !== repo2
 
-// ✅ Single - один экземпляр (singleton)
+// Single - один экземпляр (singleton в пределах Koin-контейнера)
 module {
     single { MyDatabase(get()) }
 }
@@ -273,11 +271,11 @@ val db1: MyDatabase by inject()
 val db2: MyDatabase by inject()
 // db1 === db2
 
-// ✅ ViewModel - Android ViewModel lifecycle
+// ViewModel - управляется Android ViewModelStoreOwner
 module {
     viewModel { MyViewModel(get()) }
 }
-val vm: MyViewModel by viewModel() // Survives config changes
+val vm: MyViewModel by viewModel() // Переживает конфигурационные изменения в рамках owner
 ```
 
 ### Named Dependencies
@@ -304,7 +302,8 @@ class UserRepositoryTest : KoinTest {
         modules(
             module {
                 single<UserApi> { mockk<UserApi>() }
-                single<UserRepository> { UserRepositoryImpl(get()) }
+                single<UserDatabase> { mockk<UserDatabase>() }
+                single<UserRepository> { UserRepositoryImpl(get(), get()) }
             }
         )
     }
@@ -322,68 +321,65 @@ class UserRepositoryTest : KoinTest {
 
 **✅ DO:**
 - Группировать модули по слоям (data, domain, presentation)
-- Использовать интерфейсы для single
-- `by inject()` для lazy initialization
-- `checkModules()` для валидации
-- Scope для lifecycle management
+- Использовать интерфейсы для single, где это уместно
+- Использовать `by inject()` для lazy initialization
+- Использовать `checkModules()` для валидации конфигурации
+- Использовать scopes для управления lifecycle, где требуется
 
 **❌ DON'T:**
-- Factory для дорогих объектов (используйте single)
-- Хранить Activity context в singleton (утечка памяти)
-- Инжектить простые значения (передайте в конструктор)
-- Забывать startKoin() перед использованием
+- Использовать factory для очень дорогих объектов (предпочтительнее single)
+- Хранить `Activity` context в singleton (утечки памяти)
+- Избыточно инжектить простые значения, которые проще передать явно
+- Забывать вызывать `startKoin()` до первого использования
 
 ### Когда Выбирать Koin
 
 **✅ Koin:**
 - Kotlin Multiplatform проекты
-- Быстрое время сборки критично
-- Команда новичок в DI
+- Важна скорость сборки и простота конфигурации
+- Команда новичок в DI или не хочет сложного codegen-пайплайна
 - Малый/средний проект
-- Предпочитаете runtime гибкость
+- Нужна гибкость runtime-конфигурации
 
 **✅ Dagger/Hilt:**
-- Compile-time безопасность критична
-- Максимальная runtime производительность
+- Критична compile-time безопасность графа
+- Требуется максимальная runtime-производительность
 - Большая кодовая база
 - Команда опытна с Dagger
-- Android-only проект
+- Проект ориентирован на Android и хорошо вписывается в Hilt
 
 ---
 
 ## Answer (EN)
 
-**Koin** is a lightweight DI framework for Kotlin using **Service Locator pattern** instead of code generation. Resolves dependencies at runtime via simple DSL.
+**Koin** is a lightweight DI framework for Kotlin that uses a dependency container with a Kotlin DSL and runtime resolution instead of code generation. It is often described as using a `Service` Locator-style registry on top of a DI container. Dependencies are resolved at runtime via a simple DSL.
 
 ### Koin Vs Dagger/Hilt
 
 | Aspect | Koin | Dagger/Hilt |
 |--------|------|-------------|
-| **Approach** | Service Locator | True DI |
+| **Approach** | DI container with `Service` Locator-style API, runtime resolution | DI with compile-time graph and code generation |
 | **Resolution** | Runtime | Compile-time |
 | **Code Generation** | ❌ None | ✅ kapt/ksp |
-| **Build Speed** | ✅ Fast | ❌ Slow |
-| **Error Detection** | ❌ Runtime | ✅ Compile-time |
-| **Learning Curve** | ✅ Gentle | ❌ Steep |
-| **Performance** | ❌ Slower | ✅ Faster |
-| **Testing** | ✅ Simple | ❌ Complex |
-| **Multiplatform** | ✅ KMM | ❌ Android only |
+| **Build Speed** | ✅ Faster (no codegen) | ❌ Slower (codegen) |
+| **Error Detection** | ❌ Mostly runtime | ✅ Mostly compile-time |
+| **Learning Curve** | ✅ Gentler | ❌ Steeper |
+| **Performance** | ❌ More overhead for large graphs | ✅ Less overhead, faster in practice |
+| **Testing** | ✅ Flexible module redefinition | ⚠️ Requires more boilerplate with components/annotations |
+| **Multiplatform** | ✅ KMM support available | ⚠️ Hilt is Android-focused; Dagger itself is not Android-only |
 
 ### Core Definitions
 
-**Module** - dependency container
-**Factory** - new instance every time
-**Single** - singleton instance
-**ViewModel** - Android ViewModel integration
+**Module** - dependency container  
+**Factory** - new instance on each request  
+**Single** - singleton instance per Koin container  
+**`ViewModel`** - Android `ViewModel` integration with lifecycle awareness
 
 ### Complete Koin Setup
 
 **Class definitions**:
 
 ```kotlin
-// ❌ WAS: Code duplication, verbosity
-// ✅ NOW: Minimal definitions
-
 // Domain
 interface UserRepository {
     suspend fun getUser(id: String): Result<User>
@@ -429,20 +425,21 @@ class UserViewModel(
 ```kotlin
 // ✅ Network module
 val networkModule = module {
+    single<OkHttpClient> {
+        OkHttpClient.Builder()
+            .addInterceptor(HttpLoggingInterceptor().apply {
+                level = if (BuildConfig.DEBUG) HttpLoggingInterceptor.Level.BODY
+                else HttpLoggingInterceptor.Level.NONE
+            })
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .build()
+    }
+
     single<Retrofit> {
         Retrofit.Builder()
             .baseUrl("https://api.example.com")
             .addConverterFactory(GsonConverterFactory.create())
             .client(get())
-            .build()
-    }
-
-    single<OkHttpClient> {
-        OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = if (BuildConfig.DEBUG) Level.BODY else Level.NONE
-            })
-            .connectTimeout(30, TimeUnit.SECONDS)
             .build()
     }
 
@@ -473,7 +470,7 @@ val domainModule = module {
 val presentationModule = module {
     viewModel { UserViewModel(get()) }
 
-    // ✅ With parameters
+    // ✅ With parameters (requires corresponding ViewModel implementation)
     viewModel { (userId: String) ->
         UserDetailViewModel(userId, get())
     }
@@ -498,11 +495,11 @@ class MyApplication : Application() {
 
 ### Usage
 
-**Activity**:
+**`Activity`**:
 
 ```kotlin
 class UserActivity : AppCompatActivity() {
-    // ✅ Lazy injection
+    // ✅ Lazy injection via Koin ViewModel extension
     private val viewModel: UserViewModel by viewModel()
     private val logger: Logger by inject()
 
@@ -513,7 +510,7 @@ class UserActivity : AppCompatActivity() {
 }
 ```
 
-**Fragment**:
+**`Fragment`**:
 
 ```kotlin
 class UserFragment : Fragment() {
@@ -554,10 +551,10 @@ fun UserScreen(userId: String) {
 }
 ```
 
-### Factory Vs Single Vs ViewModel
+### Factory Vs Single Vs `ViewModel`
 
 ```kotlin
-// ❌ Factory - new instance every time
+// Factory - new instance every time
 module {
     factory { MyRepository(get()) }
 }
@@ -565,7 +562,7 @@ val repo1: MyRepository by inject()
 val repo2: MyRepository by inject()
 // repo1 !== repo2
 
-// ✅ Single - one instance (singleton)
+// Single - one instance (singleton within Koin container)
 module {
     single { MyDatabase(get()) }
 }
@@ -573,11 +570,11 @@ val db1: MyDatabase by inject()
 val db2: MyDatabase by inject()
 // db1 === db2
 
-// ✅ ViewModel - Android ViewModel lifecycle
+// ViewModel - managed by Android ViewModelStoreOwner
 module {
     viewModel { MyViewModel(get()) }
 }
-val vm: MyViewModel by viewModel() // Survives config changes
+val vm: MyViewModel by viewModel() // Survives configuration changes for its owner
 ```
 
 ### Named Dependencies
@@ -604,7 +601,8 @@ class UserRepositoryTest : KoinTest {
         modules(
             module {
                 single<UserApi> { mockk<UserApi>() }
-                single<UserRepository> { UserRepositoryImpl(get()) }
+                single<UserDatabase> { mockk<UserDatabase>() }
+                single<UserRepository> { UserRepositoryImpl(get(), get()) }
             }
         )
     }
@@ -622,32 +620,32 @@ class UserRepositoryTest : KoinTest {
 
 **✅ DO:**
 - Group modules by layer (data, domain, presentation)
-- Use interfaces for single
-- `by inject()` for lazy initialization
-- `checkModules()` for validation
-- Scope for lifecycle management
+- Use interfaces for singles where appropriate
+- Use `by inject()` for lazy initialization
+- Use `checkModules()` to validate configuration
+- Use scopes for lifecycle management when needed
 
 **❌ DON'T:**
-- Factory for expensive objects (use single)
-- Store Activity context in singleton (memory leak)
-- Inject simple values (pass in constructor)
-- Forget startKoin() before usage
+- Use factory for very expensive objects (prefer single)
+- Store `Activity` context in singletons (memory leak risk)
+- Overuse DI for trivial values better passed explicitly
+- Forget to call `startKoin()` before first usage
 
 ### When to Choose Koin
 
 **✅ Koin:**
 - Kotlin Multiplatform projects
-- Fast build time critical
-- Team new to DI
-- Small/medium project
-- Prefer runtime flexibility
+- Fast build times and simple configuration are important
+- Team is new to DI or wants to avoid complex codegen pipelines
+- Small/medium projects
+- Need runtime configuration flexibility
 
 **✅ Dagger/Hilt:**
-- Compile-time safety critical
-- Maximum runtime performance
+- Compile-time safety of the graph is critical
+- Maximum runtime performance is required
 - Large codebase
-- Team experienced with Dagger
-- Android-only project
+- Team is experienced with Dagger
+- Android-focused project that fits well with Hilt
 
 ---
 

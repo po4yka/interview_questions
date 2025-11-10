@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-mvi-architecture--android--hard, q-state-hoisting-compose--android--medium, q-stateflow-flow-sharedflow-livedata--android--medium]
+related: [c-mvvm-pattern, q-mvi-architecture--android--hard, q-state-hoisting-compose--android--medium, q-stateflow-flow-sharedflow-livedata--android--medium]
 created: 2025-10-12
-updated: 2025-01-27
+updated: 2025-11-10
 tags: [android/architecture-mvi, android/ui-state, difficulty/medium, mvi, sealed-classes, state-management]
-sources: [https://kotlinlang.org/docs/sealed-classes.html]
+sources: ["https://kotlinlang.org/docs/sealed-classes.html"]
+
 ---
 
 # Вопрос (RU)
@@ -28,7 +29,7 @@ sources: [https://kotlinlang.org/docs/sealed-classes.html]
 ## Ответ (RU)
 
 **Концепция:**
-Sealed классы ([[c-sealed-classes]]) представляют ограниченную иерархию типов, где все подклассы известны на этапе компиляции. В Android они используются для моделирования UI состояний, результатов API и событий в паттерне [[c-mvvm-pattern]].
+Sealed классы (sealed classes) представляют ограниченную иерархию типов, где все подклассы известны на этапе компиляции. В Android они используются для моделирования UI состояний, результатов API и событий в архитектурных паттернах на основе однонаправленного потока данных (например, MVI / MVVM).
 
 **Преимущества:**
 - Исчерпывающие when выражения — компилятор проверяет все варианты
@@ -98,7 +99,7 @@ enum class BadEvent { LOAD, UPDATE, LOGOUT } // Нет данных!
 ## Answer (EN)
 
 **Concept:**
-Sealed classes ([[c-sealed-classes]]) represent restricted type hierarchies where all subclasses are known at compile time. In Android, they're used to model UI states, API results, and events in the [[c-mvvm-pattern]] pattern.
+Sealed classes represent restricted type hierarchies where all subclasses are known at compile time. In Android, they're used to model UI states, API results, and events in unidirectional data flow architectures (e.g., MVI / MVVM).
 
 **Advantages:**
 - Exhaustive when expressions — compiler checks all variants
@@ -167,6 +168,13 @@ enum class BadEvent { LOAD, UPDATE, LOGOUT } // No data!
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Когда следует использовать `sealed class` против `sealed interface`?
+- Как sealed классы взаимодействуют с `SavedStateHandle` при убийстве процесса?
+- Какова стоимость по производительности у sealed классов по сравнению с обычным наследованием?
+- Как обрабатывать обратную совместимость при добавлении новых состояний?
+
 ## Follow-ups
 
 - When should you use `sealed class` vs `sealed interface`?
@@ -174,22 +182,43 @@ enum class BadEvent { LOAD, UPDATE, LOGOUT } // No data!
 - What's the performance overhead of sealed classes vs regular inheritance?
 - How do you handle backward compatibility when adding new states?
 
+## Ссылки (RU)
+
+- Sealed классы иерархий состояний в Kotlin
+- [[c-mvvm-pattern]] - Паттерн архитектуры MVVM
+- "Sealed Classes" в официальной документации Kotlin
+
 ## References
 
-- [[c-sealed-classes]] - Sealed classes concept
-- [[c-mvvm-pattern]] - MVI architecture pattern
-- [[c-state-flow]] - StateFlow for state management
+- Sealed classes for state hierarchies in Kotlin
+- [[c-mvvm-pattern]] - MVVM architecture pattern
 - https://kotlinlang.org/docs/sealed-classes.html
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- Базовое понимание data классов Kotlin и when выражений
+- Знание `ViewModel` и `StateFlow`
+
+### Связанные (средний уровень)
+- [[q-mvi-architecture--android--hard]] - Реализация архитектуры MVI
+- Вопросы о сравнении `StateFlow` и `LiveData` для управления состоянием
+- Вопросы об обработке состояний загрузки и ошибок в Compose
+
+### Продвинутые (сложнее)
+- Сложные конечные автоматы с вложенными иерархиями sealed типов
+- Стратегии нормализации состояний для крупных приложений
+- Разграничение Event vs State в контексте MVI
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - Basic understanding of Kotlin data classes and when expressions
-- Knowledge of ViewModel and StateFlow
+- Knowledge of `ViewModel` and `StateFlow`
 
 ### Related (Same Level)
 - [[q-mvi-architecture--android--hard]] - MVI architecture implementation
-- Questions about StateFlow vs LiveData for state management
+- Questions about `StateFlow` vs `LiveData` for state management
 - Questions about handling loading and error states in Compose
 
 ### Advanced (Harder)

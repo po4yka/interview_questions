@@ -18,10 +18,10 @@ status: draft
 moc: moc-android
 related:
 - c-accessibility
-- c-views
+- q-accessibility-text-scaling--android--medium
 - q-accessibility-testing--android--medium
 created: 2025-10-11
-updated: 2025-10-29
+updated: 2025-11-10
 sources: []
 tags:
 - android/ui-accessibility
@@ -39,25 +39,25 @@ tags:
 
 ## Ответ (RU)
 
-Масштабирование текста позволяет пользователям настраивать размер текста на уровне системы. Приложения должны поддерживать масштабирование до 200% для соответствия требованиям доступности.
+Масштабирование текста позволяет пользователям настраивать размер текста на уровне системы. Рекомендации по доступности (например, WCAG и Android Accessibility) предполагают корректную работу интерфейса как минимум до 200% (и лучше выше, если это поддерживается устройством).
 
 **Основные правила:**
 
-**1. Используйте масштабируемые единицы (sp)**
+**1. Используйте масштабируемые единицы (`sp`)**
 
 ```kotlin
-// ✅ Правильно - масштабируется
+// ✅ Правильно - масштабируется с настройкой размера шрифта пользователя
 Text(fontSize = 16.sp)
 <TextView android:textSize="16sp" />
 
-// ❌ Неправильно - не масштабируется
+// ❌ Неправильно - не учитывает настройку размера шрифта
 Text(fontSize = 16.dp)
 <TextView android:textSize="16dp" />
 ```
 
 **2. Используйте Material Type Scale**
 
-Используйте предопределенные стили типографики вместо явных размеров: `MaterialTheme.typography.headlineLarge`, `bodyMedium`, или `?attr/textAppearanceHeadlineLarge` в XML.
+Используйте предопределенные стили типографики вместо явных размеров: `MaterialTheme.typography.headlineLarge`, `bodyMedium`, или `?attr/textAppearanceHeadlineLarge` в XML, чтобы автоматически наследовать масштабирование и единый стиль.
 
 **3. Избегайте фиксированных высот**
 
@@ -75,7 +75,7 @@ Column(modifier = Modifier.wrapContentHeight()) {
 
 **4. Адаптивные макеты для больших масштабов**
 
-При экстремальных масштабах адаптируйте макет, проверяя `LocalDensity.current.fontScale` и переключаясь между вертикальной и горизонтальной ориентацией контента.
+При больших значениях масштаба учитывайте `LocalDensity.current.fontScale` и адаптируйте макет: увеличивайте отступы, позволяйте перенос текста, упрощайте компоновку, при необходимости меняйте ориентацию или расположение элементов так, чтобы контент оставался читаемым без обрезки.
 
 **5. Тестирование масштабирования**
 
@@ -90,31 +90,31 @@ fun TextScalingPreview() {
 
 **Основные ошибки:**
 - Использование `dp` вместо `sp` для текста
-- Фиксированные высоты контейнеров
-- Игнорирование минимальных размеров области касания (48dp)
-- Отсутствие тестирования при экстремальных масштабах
+- Фиксированные высоты контейнеров, из-за которых текст обрезается при увеличении
+- Игнорирование минимальных размеров области касания (обычно не менее 48dp), особенно при увеличенном тексте
+- Отсутствие тестирования при экстремальных значениях масштабирования
 
 ## Answer (EN)
 
-Text scaling allows users to adjust text size system-wide. Apps must support scaling up to 200% to meet accessibility guidelines.
+Text scaling allows users to adjust text size system-wide. Accessibility guidance (e.g., WCAG and Android Accessibility) expects UIs to work correctly at least up to 200% (and preferably higher where supported by the device).
 
 **Key Principles:**
 
-**1. Use Scalable Units (sp)**
+**1. Use Scalable Units (`sp`)**
 
 ```kotlin
-// ✅ Correct - scales with user settings
+// ✅ Correct - respects user font size settings
 Text(fontSize = 16.sp)
 <TextView android:textSize="16sp" />
 
-// ❌ Wrong - won't scale
+// ❌ Wrong - ignores user font size settings
 Text(fontSize = 16.dp)
 <TextView android:textSize="16dp" />
 ```
 
 **2. Use Material Type Scale**
 
-Use predefined typography styles instead of explicit sizes: `MaterialTheme.typography.headlineLarge`, `bodyMedium`, or `?attr/textAppearanceHeadlineLarge` in XML.
+Use predefined typography styles instead of hardcoded sizes: `MaterialTheme.typography.headlineLarge`, `bodyMedium`, or `?attr/textAppearanceHeadlineLarge` in XML so they inherit scaling and stay consistent.
 
 **3. Avoid Fixed Heights**
 
@@ -132,7 +132,7 @@ Column(modifier = Modifier.wrapContentHeight()) {
 
 **4. Adaptive Layouts for Large Scales**
 
-At extreme scales, adapt layout by checking `LocalDensity.current.fontScale` and switching between vertical and horizontal content orientation.
+At large font scales, read `LocalDensity.current.fontScale` and adapt layout accordingly: allow wrapping, adjust spacing, simplify layout, and, if needed, change orientation or arrangement so content remains readable and not clipped.
 
 **5. Testing Text Scaling**
 
@@ -147,11 +147,19 @@ fun TextScalingPreview() {
 
 **Common Pitfalls:**
 - Using `dp` instead of `sp` for text
-- Fixed container heights
-- Ignoring minimum touch target sizes (48dp)
-- Not testing at extreme scales
+- Fixed container heights that cause clipping when text is scaled
+- Ignoring minimum touch target sizes (typically at least 48dp), especially when text becomes larger
+- Not testing at extreme scale factors
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем разница между масштабированием шрифта и масштабированием размера экрана (display size)?
+- Как обрабатывать масштабирование текста в пользовательских `View`?
+- Что происходит, когда масштабирование текста превышает 200%?
+- Как сохранять минимальные размеры областей касания при масштабировании текста?
+- Как тестировать масштабирование текста в автоматизированных тестах?
 
 ## Follow-ups
 
@@ -160,6 +168,12 @@ fun TextScalingPreview() {
 - What happens when text scaling exceeds 200%?
 - How do you maintain minimum touch targets when text scales?
 - How do you test text scaling in automated tests?
+
+## Ссылки (RU)
+
+- Android Accessibility: https://developer.android.com/guide/topics/ui/accessibility/text-and-content
+- Material Design Typography: https://m3.material.io/styles/typography/overview
+- WCAG Guidelines: https://www.w3.org/WAI/WCAG21/quickref/#resize-text
 
 ## References
 
@@ -172,12 +186,9 @@ fun TextScalingPreview() {
 ### Prerequisites / Concepts
 
 - [[c-accessibility]]
-- [[c-views]]
-
-
-### Prerequisites
 
 ### Related
+
 - [[q-accessibility-compose--android--medium]] - Accessibility in Compose
 - [[q-accessibility-testing--android--medium]] - Accessibility testing
 
