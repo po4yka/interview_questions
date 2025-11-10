@@ -42,16 +42,12 @@ from obsidian_vault.utils import (
 from obsidian_vault.utils.graph_analytics import VaultGraph, generate_link_health_report
 from obsidian_vault.validators import Severity, ValidatorRegistry
 
-# Load environment variables from .env file
-# Search for .env in current directory, automation directory, and repo root
-load_dotenv()  # Load from current directory
-load_dotenv(dotenv_path=Path(__file__).parent.parent.parent.parent / ".env")  # Repo root
-load_dotenv(dotenv_path=Path(__file__).parent.parent.parent / ".env")  # Automation directory
+load_dotenv()
+load_dotenv(dotenv_path=Path(__file__).parent.parent.parent.parent / ".env")
+load_dotenv(dotenv_path=Path(__file__).parent.parent.parent / ".env")
 
-# Initialize logging
 setup_logging()
 
-# Create Typer app and Rich console
 app = typer.Typer(
     name="vault-app",
     help="Obsidian Interview Questions vault automation toolkit",
@@ -61,7 +57,6 @@ app = typer.Typer(
 console = Console()
 
 
-# Enum for output formats
 class ExportFormat(str, Enum):
     """Graph export formats."""
 
@@ -69,11 +64,6 @@ class ExportFormat(str, Enum):
     graphml = "graphml"
     json = "json"
     csv = "csv"
-
-
-# ============================================================================
-# Validation Command
-# ============================================================================
 
 
 @app.command()
@@ -105,16 +95,12 @@ def validate(
             logger.error(f"Vault directory not found: {e}")
             raise typer.Exit(code=1)
 
-        # Determine targets
         if all:
             targets = collect_validatable_files(vault_dir)
         elif path:
-            # Security: Prevent path traversal attacks
             try:
-                # Try resolving relative to vault_dir first (most common case)
                 safe_path = safe_resolve_path(path, vault_dir)
             except ValueError:
-                # If that fails, try relative to repo_root
                 try:
                     safe_path = safe_resolve_path(path, repo_root)
                 except ValueError as e:
@@ -127,7 +113,6 @@ def validate(
                     )
                     raise typer.Exit(code=1)
 
-            # Check if resolved path exists and is valid
             if not safe_path.exists():
                 console.print(
                     f"[red]✗[/red] Path not found: {path}\n\n"
@@ -156,7 +141,6 @@ def validate(
         logger.info(f"Found {len(targets)} file(s) to validate")
         logger.debug(f"Targets: {[str(t) for t in targets[:5]]}{'...' if len(targets) > 5 else ''}")
 
-        # Load taxonomy and note index
         with Progress(
             SpinnerColumn(),
             TextColumn("[progress.description]{task.description}"),
@@ -169,7 +153,6 @@ def validate(
             logger.debug("Building note index")
             note_index = build_note_index(vault_dir)
 
-        # Validate files
         console.print(f"\n[bold]Validating {len(targets)} file(s)...[/bold]\n")
 
         if parallel and len(targets) > 1:
@@ -178,7 +161,6 @@ def validate(
         else:
             results = _validate_files(targets, repo_root, vault_dir, taxonomy, note_index)
 
-        # Check for critical issues
         has_critical = any(
             any(issue.severity == Severity.CRITICAL for issue in result.issues)
             for result in results
@@ -188,13 +170,11 @@ def validate(
         logger.info(f"Validation complete: {total_issues} issue(s) found")
         logger.debug(f"Critical issues: {has_critical}")
 
-        # Generate report if requested
         if report:
             ReportGenerator(results).write_markdown(Path(report))
             console.print(f"\n[green]✓[/green] Report written to {report}")
             logger.info(f"Validation report written to {report}")
 
-        # Display results
         if quiet:
             _print_summary(results)
         else:
@@ -212,13 +192,11 @@ def validate(
 def _validate_files(targets, repo_root, vault_dir, taxonomy, note_index) -> list[FileResult]:
     """Validate a list of files."""
     results = []
-
     with Progress(console=console) as progress:
         task = progress.add_task("[cyan]Validating...", total=len(targets))
 
         for file_path in targets:
             frontmatter, body = parse_note(file_path)
-
             validators = ValidatorRegistry.create_validators(
                 content=body,
                 frontmatter=frontmatter,
@@ -309,11 +287,6 @@ def _print_detailed_results(results):
             console.print(f"[green]✓[/green] {result.path} - No issues")
 
 
-# ============================================================================
-# Graph Analytics Commands
-# ============================================================================
-
-
 @app.command()
 def graph_stats(
     hubs: Optional[int] = typer.Option(None, "--hubs", "-h", help="Show top N hub notes"),
@@ -347,7 +320,6 @@ def graph_stats(
             logger.debug("Analyzing link quality")
             quality = vg.analyze_link_quality()
 
-        # Create main statistics table
         table = Table(title="Vault Network Statistics", show_header=True, header_style="bold cyan")
         table.add_column("Metric", style="cyan", no_wrap=True)
         table.add_column("Value", justify="right", style="magenta")
@@ -357,7 +329,7 @@ def graph_stats(
         table.add_row("Average Degree", f"{stats['average_degree']:.2f}")
         table.add_row("Network Density", f"{stats['density']:.4f}")
         table.add_row("Connected Components", str(stats["connected_components"]))
-        table.add_row("", "")  # Separator
+        table.add_row("", "")
         table.add_row("Reciprocal Links", str(quality["reciprocal_links"]))
         table.add_row("Unidirectional Links", str(quality["unidirectional_links"]))
         table.add_row("Orphaned Notes", f"{stats['orphaned_notes']} ({quality['orphaned_ratio']:.1%})")
@@ -365,7 +337,6 @@ def graph_stats(
 
         console.print(table)
 
-        # Show hubs if requested
         if hubs:
             hub_notes = vg.get_hub_notes(hubs)
             if hub_notes:
@@ -378,7 +349,6 @@ def graph_stats(
 
                 console.print("\n", hub_table)
 
-        # Show authorities if requested
         if authorities:
             authority_notes = vg.get_authority_notes(authorities)
             if authority_notes:
@@ -577,7 +547,6 @@ def graph_export(
 
         output_path = Path(output)
 
-        # Determine format
         if format:
             export_format = format.value
         else:
@@ -589,7 +558,6 @@ def graph_export(
             }
             export_format = format_map.get(output_path.suffix.lower(), "gexf")
 
-        # Validate export format
         try:
             export_format = validate_choice(
                 export_format,
@@ -640,7 +608,6 @@ def communities(
     """
     from obsidian_vault.utils import ensure_vault_exists, validate_choice
 
-    # Validate algorithm choice early
     try:
         algorithm = validate_choice(algorithm, {"louvain", "greedy", "label_propagation"})
     except ValueError as e:
@@ -669,13 +636,11 @@ def communities(
             logger.warning("No communities detected")
             return
 
-        # Limit to top N if specified
         if top_n:
             communities_data = communities_data[:top_n]
 
         logger.success(f"Detected {len(communities_data)} communities")
 
-        # Create summary table
         summary_table = Table(
             title=f"Vault Communities ({algorithm} algorithm)",
             show_header=True,
@@ -699,7 +664,6 @@ def communities(
 
         console.print(summary_table)
 
-        # Show detailed notes if requested
         if show_notes:
             console.print()
             for comm in communities_data:
@@ -725,7 +689,6 @@ def communities(
                     )
                 )
 
-        # Generate text output if requested
         if output:
             output_lines = [
                 f"# Vault Communities ({algorithm} algorithm)\n",
@@ -754,7 +717,6 @@ def communities(
             console.print(f"\n[green]✓[/green] Communities report written to {output}")
             logger.info(f"Communities report written to {output}")
 
-        # Show statistics
         total_notes = sum(c["size"] for c in communities_data)
         avg_size = total_notes / len(communities_data) if communities_data else 0
         avg_density = (
@@ -833,14 +795,12 @@ def suggest_links(
             logger.warning("No link suggestions generated")
             return
 
-        # Analyze statistics
         stats = vg.analyze_link_predictions(suggestions)
         logger.success(
             f"Generated {stats['total_suggestions']} suggestions "
             f"for {stats['total_notes_analyzed']} notes"
         )
 
-        # Display results
         if note and note in suggestions:
             # Show suggestions for specific note
             console.print(
@@ -858,13 +818,11 @@ def suggest_links(
             console.print(table)
 
         else:
-            # Show summary for all notes
             console.print(
                 f"\n[bold cyan]Link Suggestions Summary[/bold cyan] "
                 f"(showing top {min(10, len(suggestions))} notes with suggestions)\n"
             )
 
-            # Sort by number of suggestions
             sorted_notes = sorted(suggestions.items(), key=lambda x: len(x[1]), reverse=True)[
                 :10
             ]
@@ -877,7 +835,6 @@ def suggest_links(
                 for i, (suggested, sim) in enumerate(note_suggestions, 1):
                     console.print(f"  {i}. {suggested} (similarity: {sim:.3f})")
 
-        # Show statistics
         console.print(f"\n[bold]Statistics:[/bold]")
         console.print(f"  Notes analyzed: {stats['total_notes_analyzed']}")
         console.print(f"  Total suggestions: {stats['total_suggestions']}")
@@ -885,7 +842,6 @@ def suggest_links(
         console.print(f"  Avg similarity: {stats['avg_similarity']:.3f}")
         console.print(f"  Similarity range: {stats['min_similarity']:.3f} - {stats['max_similarity']:.3f}")
 
-        # Write to file if requested
         if output:
             output_lines = [
                 "# Link Suggestions (ML-Based)\n\n",
@@ -900,7 +856,6 @@ def suggest_links(
                 "---\n\n",
             ]
 
-            # Sort all notes alphabetically
             sorted_all = sorted(suggestions.items())
 
             for note_name, note_sugg in sorted_all:
@@ -922,11 +877,6 @@ def suggest_links(
         console.print(f"[red]✗ Error:[/red] {e}")
         logger.exception(f"Link suggestion failed: {e}")
         raise typer.Exit(code=1)
-
-
-# ============================================================================
-# LLM Review Command
-# ============================================================================
 
 
 @app.command()
@@ -987,7 +937,6 @@ def llm_review(
     logger.info("Starting LLM-based note review")
 
     try:
-        # Check for API key
         import os
 
         if not os.getenv("OPENROUTER_API_KEY"):
@@ -1004,10 +953,8 @@ def llm_review(
             console.print("[red]✗[/red] InterviewQuestions directory not found")
             raise typer.Exit(code=1)
 
-        # Import LLM review module
         from obsidian_vault.llm_review import create_review_graph, CompletionMode
 
-        # Validate and convert completion_mode
         try:
             mode = CompletionMode(completion_mode.lower())
         except ValueError:
@@ -1017,17 +964,12 @@ def llm_review(
             )
             raise typer.Exit(code=1)
 
-        # Collect notes matching pattern
         if pattern.startswith("InterviewQuestions/"):
-            # Use glob directly on vault_dir with the sub-pattern
             search_pattern = pattern.replace("InterviewQuestions/", "", 1)
             notes = list(vault_dir.glob(search_pattern))
-            # Filter to only .md files
             notes = [n for n in notes if n.suffix == ".md" and n.is_file()]
         else:
-            # Fallback to full pattern matching
             from obsidian_vault.utils.common import collect_validatable_files
-
             notes = list(collect_validatable_files(repo_root / pattern.split("/")[0]))
 
         if not notes:
@@ -1039,7 +981,6 @@ def llm_review(
         if dry_run:
             console.print("[yellow]⚠[/yellow] DRY RUN MODE - No files will be modified\n")
 
-        # Create review graph
         with console.status("[bold green]Initializing LLM review system...", spinner="dots"):
             review_graph = create_review_graph(
                 vault_root=vault_dir,
@@ -1048,12 +989,10 @@ def llm_review(
                 completion_mode=mode,
             )
 
-        # PHASE 2 FIX: Process notes in parallel with semaphore
         results = []
 
         async def process_all():
             """Process notes in parallel with concurrency limit."""
-            # PHASE 2 FIX: Semaphore to limit concurrent processing
             semaphore = asyncio.Semaphore(max_concurrent)
 
             async def process_one(note_path: Path) -> tuple[Path, any]:
@@ -1080,7 +1019,6 @@ def llm_review(
                             backup_path.write_text(state.original_text, encoding="utf-8")
                             console.print(f"  [dim]Backup: {backup_path.name}[/dim]")
 
-                        # Sanitize text before writing (safety net to prevent YAML parsing errors)
                         sanitized_text = sanitize_text_for_yaml(state.current_text)
                         if sanitized_text != state.current_text:
                             logger.warning(
@@ -1094,12 +1032,10 @@ def llm_review(
                     console.print()
                     return (note_path, state)
 
-            # PHASE 2 FIX: Process all notes concurrently
             console.print(f"[bold]Processing up to {max_concurrent} notes concurrently[/bold]\n")
             tasks = [process_one(note_path) for note_path in notes]
             results_list = await asyncio.gather(*tasks, return_exceptions=True)
 
-            # Collect results, handling exceptions
             for result in results_list:
                 if isinstance(result, Exception):
                     console.print(f"  [red]✗[/red] Error: {result}")
@@ -1108,7 +1044,6 @@ def llm_review(
 
         asyncio.run(process_all())
 
-        # Generate summary
         total = len(results)
         modified = sum(1 for _, state in results if state.changed)
         errors = sum(1 for _, state in results if state.error)
@@ -1124,7 +1059,6 @@ def llm_review(
 
         console.print(table)
 
-        # Generate detailed report if requested
         if report:
             report_lines = ["# LLM Review Report\n"]
             report_lines.append(f"**Total notes**: {total}\n")
@@ -1173,10 +1107,6 @@ def llm_review(
         logger.exception(f"LLM review failed: {e}")
         raise typer.Exit(code=1)
 
-
-# ============================================================================
-# Main entry point
-# ============================================================================
 
 if __name__ == "__main__":
     app()

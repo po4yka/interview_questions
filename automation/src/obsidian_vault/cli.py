@@ -39,10 +39,6 @@ from obsidian_vault.utils import (
 from obsidian_vault.utils.graph_analytics import VaultGraph, generate_link_health_report
 from obsidian_vault.validators import Severity, ValidatorRegistry
 
-# ============================================================================
-# Validation Command
-# ============================================================================
-
 
 def cmd_validate(args: argparse.Namespace) -> int:
     """Run comprehensive note validation."""
@@ -64,7 +60,6 @@ def cmd_validate(args: argparse.Namespace) -> int:
     taxonomy = TaxonomyLoader(repo_root).load()
     note_index = build_note_index(vault_dir)
 
-    # Choose parallel or sequential processing
     if args.parallel and len(targets) > 1:
         results = _validate_parallel(
             targets,
@@ -81,7 +76,6 @@ def cmd_validate(args: argparse.Namespace) -> int:
             result = _validate_single_file(file_path, repo_root, vault_dir, taxonomy, note_index)
             results.append(result)
 
-    # Check for critical issues
     exit_code = 0
     for result in results:
         if any(issue.severity == Severity.CRITICAL for issue in result.issues):
@@ -195,12 +189,9 @@ def _determine_validation_targets(
         print("Either provide a path or use --all", file=sys.stderr)
         return []
 
-    # Security: Prevent path traversal attacks
     try:
-        # Try resolving relative to vault_dir first (most common case)
         safe_path = safe_resolve_path(args.path, vault_dir)
     except ValueError:
-        # If that fails, try relative to repo_root
         try:
             safe_path = safe_resolve_path(args.path, repo_root)
         except ValueError as e:
@@ -214,7 +205,6 @@ def _determine_validation_targets(
             )
             return []
 
-    # Check if resolved path exists and is valid
     if not safe_path.exists():
         print(
             f"Path not found: {args.path}\n\n"
@@ -290,11 +280,9 @@ def cmd_normalize(args: argparse.Namespace) -> int:
         print(f"Concepts directory not found: {concept_dir}", file=sys.stderr)
         return 1
 
-    # Load taxonomy for topic validation and MOC mapping
     taxonomy = TaxonomyLoader(repo_root).load()
     allowed_topics = set(taxonomy.topics.keys()) if taxonomy and taxonomy.topics else set()
 
-    # Build MOC map from taxonomy
     moc_map = _build_moc_map(taxonomy) if taxonomy else {}
 
     files = sorted(concept_dir.glob("c-*.md"))
@@ -330,10 +318,8 @@ def _normalize_concept_file(
 
     frontmatter = parse_note(path)[0]
 
-    # Extract and normalize fields
     tags = [t for t in listify(frontmatter.get("tags")) if t]
 
-    # Topic inference and validation
     topic = frontmatter.get("topic")
     if topic not in allowed_topics:
         topic = None
@@ -346,7 +332,6 @@ def _normalize_concept_file(
     if topic is None:
         topic = "cs"
 
-    # Subtopics
     subtopics = [s for s in listify(frontmatter.get("subtopics")) if s]
     if not subtopics:
         for tag in tags:
@@ -357,7 +342,6 @@ def _normalize_concept_file(
         subtopics = ["fundamentals"]
     subtopics = list(dict.fromkeys(subtopics))[:3]
 
-    # Other fields with defaults
     question_kind = frontmatter.get("question_kind")
     if question_kind not in {"theory", "coding", "system-design", "android"}:
         question_kind = "theory"
@@ -384,16 +368,13 @@ def _normalize_concept_file(
 
     moc = moc_map.get(topic, "moc-cs")
 
-    # ID normalization
     note_id = _normalize_id(frontmatter)
 
-    # Dates
     created = _normalize_date(frontmatter.get("created"))
     updated_date = _normalize_date(frontmatter.get("updated")) or created
 
     aliases = listify(frontmatter.get("aliases"))
 
-    # Tags cleanup
     if "concept" not in tags:
         tags.insert(0, "concept")
     diff_tag = f"difficulty/{difficulty}"
@@ -401,7 +382,6 @@ def _normalize_concept_file(
         tags.append(diff_tag)
     tags = list(dict.fromkeys(tags))[:8]
 
-    # Build ordered frontmatter
     ordered = {
         "id": note_id,
         "title": frontmatter.get("title", ""),
@@ -434,7 +414,6 @@ def _normalize_concept_file(
 
 def _build_moc_map(taxonomy) -> dict[str, str]:
     """Build topic -> MOC mapping from taxonomy."""
-    # Fallback hardcoded map in case taxonomy doesn't provide it
     default_map = {
         "algorithms": "moc-algorithms",
         "data-structures": "moc-algorithms",
@@ -460,14 +439,12 @@ def _build_moc_map(taxonomy) -> dict[str, str]:
         "cs": "moc-cs",
     }
 
-    # Could enhance TaxonomyLoader to provide MOC mapping in the future
     return default_map
 
 
 def _normalize_id(frontmatter: dict) -> str:
     """Normalize note ID from frontmatter."""
     id_pattern = re.compile(r"^(\d{8}-\d{6})$")
-
     raw_id = frontmatter.get("id")
     if isinstance(raw_id, str):
         candidate = raw_id
@@ -478,7 +455,6 @@ def _normalize_id(frontmatter: dict) -> str:
         if id_pattern.match(candidate):
             return candidate
 
-    # Fallback to created date or current timestamp
     created_raw = frontmatter.get("created")
     if isinstance(created_raw, str) and re.match(r"\d{4}-\d{2}-\d{2}", created_raw):
         return created_raw.replace("-", "") + "-000000"
@@ -540,11 +516,6 @@ def cmd_check_translations(args: argparse.Namespace) -> int:
             print("All notes have both EN and RU translations.")
 
     return 0
-
-
-# ============================================================================
-# Graph Analytics Commands
-# ============================================================================
 
 
 def cmd_graph_stats(args: argparse.Namespace) -> int:
@@ -866,11 +837,6 @@ def cmd_communities(args: argparse.Namespace) -> int:
     except Exception as e:
         print(f"Error detecting communities: {e}", file=sys.stderr)
         return 1
-
-
-# ============================================================================
-# Main CLI
-# ============================================================================
 
 
 def main() -> int:
