@@ -27,14 +27,14 @@ from .agents import (
     run_technical_review,
 )
 from .analytics import ReviewAnalyticsRecorder
-from .atomic_related_fixer import AtomicRelatedFixer  # PHASE 3 FIX
-from .deterministic_fixer import DeterministicFixer  # QUICK WIN FIX
-from .fix_memory import FixMemory  # PHASE 1 FIX
-from .smart_code_parity import SmartCodeParityChecker  # PHASE 3 FIX
-from .smart_validators import SmartValidatorSelector  # PHASE 2 FIX
+from .atomic_related_fixer import AtomicRelatedFixer
+from .deterministic_fixer import DeterministicFixer
+from .fix_memory import FixMemory
+from .smart_code_parity import SmartCodeParityChecker
+from .smart_validators import SmartValidatorSelector
 from .state import NoteReviewState, NoteReviewStateDict, ReviewIssue
-from .strict_qa_criteria import StrictQAVerifier  # PHASE 3 FIX
-from .timestamp_policy import TimestampPolicy  # PHASE 2 FIX
+from .strict_qa_criteria import StrictQAVerifier
+from .timestamp_policy import TimestampPolicy
 
 if TYPE_CHECKING:
     from obsidian_vault.utils.taxonomy_loader import TaxonomyLoader as TaxonomyLoaderType
@@ -218,16 +218,12 @@ class ReviewGraph:
         self.max_iterations = max_iterations + bonus_iterations
         self.dry_run = dry_run
         self.completion_mode = completion_mode
-        # PHASE 1 FIX: Add Fix Memory to track already-fixed fields
-        self.fix_memory: dict[str, FixMemory] = {}  # Keyed by note_path
-        # PHASE 2 FIX: Add Timestamp Policy and Smart Validator Selector
+        self.fix_memory: dict[str, FixMemory] = {}
         self.timestamp_policy = TimestampPolicy(vault_root)
         self.smart_selector = SmartValidatorSelector()
-        # PHASE 3 FIX: Add Atomic Related Fixer, Smart Code Parity, and Strict QA
         self.atomic_related = AtomicRelatedFixer()
         self.code_parity = SmartCodeParityChecker()
         self.strict_qa = StrictQAVerifier()
-        # QUICK WIN FIX: Add Deterministic Fixer for simple rule-based fixes
         self.deterministic_fixer = DeterministicFixer()
         analytics_enabled = (
             profile_settings["enable_analytics"]
@@ -239,10 +235,8 @@ class ReviewGraph:
 
     def _build_graph(self) -> StateGraph:
         """Build the LangGraph workflow."""
-        # Create graph with state type
         workflow = StateGraph(NoteReviewStateDict)
 
-        # Add nodes
         workflow.add_node("initial_llm_review", self._initial_llm_review)
         workflow.add_node("run_validators", self._run_validators)
         workflow.add_node("check_bilingual_parity", self._check_bilingual_parity)
@@ -250,14 +244,10 @@ class ReviewGraph:
         workflow.add_node("qa_verification", self._qa_verification)
         workflow.add_node("summarize_qa_failures", self._summarize_qa_failures)
 
-        # Define edges
         workflow.add_edge(START, "initial_llm_review")
         workflow.add_edge("initial_llm_review", "run_validators")
-
-        # After validators, check bilingual parity
         workflow.add_edge("run_validators", "check_bilingual_parity")
 
-        # Conditional edge from bilingual parity check
         workflow.add_conditional_edges(
             "check_bilingual_parity",
             self._should_continue_fixing,
@@ -269,10 +259,8 @@ class ReviewGraph:
             },
         )
 
-        # After fixing, go back to validators
         workflow.add_edge("llm_fix_issues", "run_validators")
 
-        # Conditional edge from QA verification
         workflow.add_conditional_edges(
             "qa_verification",
             self._should_continue_after_qa,
@@ -283,7 +271,6 @@ class ReviewGraph:
             },
         )
 
-        # After summarizing failures, end the workflow
         workflow.add_edge("summarize_qa_failures", END)
 
         return workflow.compile()
@@ -351,11 +338,9 @@ class ReviewGraph:
             import traceback
             logger.error("Traceback:\n{}", ''.join(traceback.format_exception(type(e), e, e.__traceback__)))
 
-            history_updates.append(
-                state_obj.add_history_entry(
-                    "initial_llm_review", f"Error during technical review: {e}"
-                )
-            )
+            history_updates.append(state_obj.add_history_entry(
+                "initial_llm_review", f"Error during technical review: {e}"
+            ))
             return {
                 "error": f"Technical review failed: {e}",
                 "completed": True,
@@ -365,10 +350,7 @@ class ReviewGraph:
     async def _run_validators(self, state: NoteReviewStateDict) -> dict[str, Any]:
         """Node: Run metadata checks and structural validation scripts.
 
-        PHASE 1 FIX: This node now runs metadata, structural, AND parity checks
-        IN PARALLEL using asyncio.gather to reduce iteration count.
-
-        This node now performs BOTH metadata sanity checks AND structural validation
+        This node performs both metadata sanity checks and structural validation
         on every iteration, ensuring that YAML changes made by the fix agent are
         re-validated in subsequent iterations.
 
@@ -393,7 +375,6 @@ class ReviewGraph:
         try:
             import asyncio
 
-            # Determine which validator helpers should run this iteration.
             selected_validators: list[str] = []
             if state_obj.iteration == 0 or self.force_full_validator_pass:
                 selected_validators = ["metadata", "structural", "parity"]
@@ -461,7 +442,6 @@ class ReviewGraph:
                 metadata_result = None
                 parity_result = None
 
-            # Convert metadata findings to ReviewIssues (if validator ran)
             metadata_issues = []
             if metadata_result is not None:
                 for issue in metadata_result.issues_found:
@@ -499,7 +479,6 @@ class ReviewGraph:
             else:
                 logger.debug("Metadata validator skipped (no changes)")
 
-            # PHASE 2 FIX: Process parity results (if validator ran)
             parity_issues = []
             if parity_result is not None:
                 for issue in parity_result.parity_issues:
@@ -536,11 +515,9 @@ class ReviewGraph:
             else:
                 logger.debug("Parity validator skipped (no changes)")
 
-            # STEP 2: Run structural validators
             logger.debug("Running structural validators...")
             frontmatter, body = load_frontmatter_text(state_obj.current_text)
 
-            # Create validators
             validators = ValidatorRegistry.create_validators(
                 content=body,
                 frontmatter=frontmatter or {},
@@ -550,18 +527,15 @@ class ReviewGraph:
                 note_index=self.note_index,
             )
 
-            # Run all validators
             structural_issues = []
             for validator in validators:
                 summary = validator.validate()
                 structural_issues.extend(summary.issues)
 
-            # Convert to ReviewIssue
             structural_review_issues = [
                 ReviewIssue.from_validation_issue(issue) for issue in structural_issues
             ]
 
-            # STEP 3: Merge metadata, structural, AND parity issues (PHASE 1 FIX)
             all_review_issues = metadata_issues + structural_review_issues + parity_issues
 
             logger.info(
@@ -585,7 +559,6 @@ class ReviewGraph:
                 iteration=state_obj.iteration + 1,
             )
 
-            # Record analytics for this iteration
             try:
                 self.analytics.record_iteration(
                     state_obj.note_path,
@@ -594,7 +567,7 @@ class ReviewGraph:
                     structural_issues=len(structural_review_issues),
                     parity_issues=len(parity_issues),
                 )
-            except Exception as analytics_error:  # pragma: no cover - defensive
+            except Exception as analytics_error:
                 logger.warning(
                     "Failed to record analytics for %s iteration %d: %s",
                     state_obj.note_path,
@@ -602,7 +575,6 @@ class ReviewGraph:
                     analytics_error,
                 )
 
-            # STEP 4: Calculate convergence metrics
             previous_issue_count = len(state_obj.issues)
             current_issue_count = len(all_review_issues)
 
@@ -639,10 +611,8 @@ class ReviewGraph:
                     )
                 )
 
-            # STEP 5: Record issues for oscillation detection
             next_state.record_current_issues()
 
-            # STEP 6: Check for oscillation
             is_oscillating, oscillation_msg = next_state.detect_oscillation()
             if is_oscillating:
                 logger.warning(f"Oscillation detected: {oscillation_msg}")
@@ -689,15 +659,11 @@ class ReviewGraph:
     async def _check_bilingual_parity(self, state: NoteReviewStateDict) -> dict[str, Any]:
         """Node: Compute decision after validation.
 
-        PHASE 1 FIX: This node is now a pass-through since parity checking
-        has been moved to run in parallel with validators in _run_validators.
+        This node is now a pass-through since parity checking has been moved
+        to run in parallel with validators in _run_validators.
 
-        OSCILLATION FIX: Issue recording happens in run_validators only.
-        This node does NOT record issues to prevent duplicate entries.
-
-        This node now serves to:
-        1. Compute the decision for next step
-        2. Maintain the graph structure for backward compatibility
+        Issue recording happens in run_validators only. This node does NOT
+        record issues to prevent duplicate entries.
 
         Args:
             state: Current state
@@ -709,8 +675,6 @@ class ReviewGraph:
         state_obj.decision = None
         history_updates: list[dict[str, Any]] = []
 
-        # OSCILLATION FIX: Issue recording already happened in run_validators()
-        # This node only computes decision, no duplicate recording
         logger.debug(
             f"Using existing issue recording from validators (iteration {state_obj.iteration})"
         )
@@ -719,8 +683,6 @@ class ReviewGraph:
         )
 
         try:
-            # Parity check already ran in parallel with validators
-            # Just log the current state
             existing_issue_count = len(state_obj.issues) if state_obj.issues else 0
             logger.info(
                 f"Total issues after parallel validation: {existing_issue_count}"
@@ -732,14 +694,12 @@ class ReviewGraph:
                     )
                 )
 
-            # Compute and log decision
             decision, decision_message = self._compute_decision(state_obj)
             logger.debug(f"Decision after issue recording: {decision} - {decision_message}")
             history_updates.append(
                 state_obj.add_history_entry("decision", decision_message)
             )
 
-            # Summary log for debugging
             logger.info(
                 f"[Issue Recording Complete] "
                 f"Decision={decision}, "
@@ -1069,8 +1029,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
     def _get_fix_memory(self, note_path: str) -> FixMemory:
         """Get or create FixMemory for a note.
 
-        PHASE 1 FIX: Returns a FixMemory instance that tracks already-fixed fields
-        to prevent oscillation.
+        Returns a FixMemory instance that tracks already-fixed fields to prevent oscillation.
 
         Args:
             note_path: Path to the note
@@ -1086,8 +1045,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
     def _format_fix_history(self, fix_attempts: list, note_path: str, current_iteration: int) -> str:
         """Format fix attempt history for fixer agent context.
 
-        PHASE 1 FIX: Now includes Fix Memory context to prevent re-fixing.
-
         Args:
             fix_attempts: List of FixAttempt objects
             note_path: Path to current note
@@ -1098,7 +1055,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         """
         lines = []
 
-        # PHASE 1 FIX: Add Fix Memory context first
         memory = self._get_fix_memory(note_path)
         memory_context = memory.get_context_for_fixer(current_iteration)
         lines.append(memory_context)
@@ -1106,12 +1062,10 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         lines.append("=" * 70)
         lines.append("")
 
-        # Original fix history logic
         if not fix_attempts:
             lines.append("No previous fix attempts in this session.")
             return "\n".join(lines)
 
-        # Limit to last 5 attempts to avoid token bloat
         recent_attempts = fix_attempts[-5:]
 
         lines.append("PREVIOUS FIX ATTEMPTS (learn from these):")
@@ -1136,7 +1090,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             if attempt.issues_remaining:
                 lines.append(f"  Still had: {len(attempt.issues_remaining)} issue(s) after")
 
-            # Add learning point for failed attempts
             if attempt.result in ("failed", "reverted"):
                 lines.append("  ⚠ This approach didn't work - try a different strategy!")
 
@@ -1176,8 +1129,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             )
 
         try:
-            # QUICK WIN FIX: Try deterministic fixer first for simple issues
-            # This reduces LLM calls and improves reliability
             deterministic_result = self.deterministic_fixer.fix(
                 note_text=state_obj.current_text,
                 issues=state_obj.issues,
@@ -1198,17 +1149,14 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                     )
                 )
 
-                # Update current text with deterministic fixes
                 state_obj.current_text = deterministic_result.revised_text
 
-                # Remove fixed issues from the list
                 remaining_issues = [
                     issue for issue in state_obj.issues
                     if issue.message not in deterministic_result.issues_fixed
                 ]
 
                 if len(remaining_issues) == 0:
-                    # All issues fixed deterministically - no need for LLM
                     logger.success("All issues resolved by deterministic fixer - skipping LLM")
                     return {
                         "current_text": deterministic_result.revised_text,
@@ -1226,7 +1174,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                         "decision": None,
                     }
 
-                # Update issues to only remaining ones
                 state_obj.issues = remaining_issues
                 logger.info(
                     f"Deterministic fixer left {len(remaining_issues)} issue(s) for LLM"
@@ -1234,14 +1181,12 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             else:
                 logger.debug("No issues can be fixed deterministically - using LLM for all")
 
-            # Convert remaining issues to string descriptions
             issue_descriptions = [
                 f"[{issue.severity}] {issue.message}"
                 + (f" (field: {issue.field})" if issue.field else "")
                 for issue in state_obj.issues
             ]
 
-            # Get available file indexes to help fixer make valid link suggestions
             available_concepts = self._get_concept_files()
             available_qa_files = self._get_qa_files()
             valid_moc_files = self._get_moc_files()
@@ -1253,7 +1198,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 f"{len(valid_moc_files)} MOCs"
             )
 
-            # PHASE 1 FIX: Format fix history with Fix Memory context
             fix_history = self._format_fix_history(
                 state_obj.fix_attempts,
                 state_obj.note_path,
@@ -1261,11 +1205,9 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             )
             logger.debug(f"Providing fix history: {len(state_obj.fix_attempts)} previous attempt(s)")
 
-            # PHASE 1 FIX: Get Fix Memory for this note
             memory = self._get_fix_memory(state_obj.note_path)
             logger.debug(f"Fix Memory status: {memory.get_summary()}")
 
-            # PHASE 3 FIX: Generate additional rules for fixer prompt
             atomic_related_rules = self.atomic_related.format_rules_for_prompt()
             code_parity_rules = self.code_parity.format_rules_for_prompt()
             timestamp_rules = self.timestamp_policy.format_rule_for_prompt()
@@ -1278,23 +1220,20 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 available_qa_files=available_qa_files,
                 valid_moc_files=valid_moc_files,
                 fix_history=fix_history,
-                # PHASE 3 FIX: Add strict rules to fixer prompt
                 atomic_related_rules=atomic_related_rules,
                 code_parity_rules=code_parity_rules,
                 timestamp_rules=timestamp_rules,
-                # RECURSION FIX: Add taxonomy context for Android subtopic validation
                 taxonomy=self.taxonomy,
                 vault_root=self.vault_root,
             )
 
-            # Record this fix attempt (will be updated with remaining issues after validation)
             from .state import FixAttempt
             attempt = FixAttempt(
                 iteration=state_obj.iteration,
                 issues_targeted=[issue.message for issue in state_obj.issues],
                 fixes_applied=result.fixes_applied if result.changes_made else [],
                 result="success" if result.changes_made else "failed",
-                issues_remaining=[],  # Will be filled in next iteration by validators
+                issues_remaining=[],
             )
 
             updates: dict[str, Any] = {}
@@ -1310,9 +1249,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                     )
                 )
 
-                # PHASE 1 FIX: Extract what was fixed and update Fix Memory
                 try:
-                    # Parse YAML before and after to detect changes
                     yaml_before, _ = load_frontmatter_text(state_obj.current_text)
                     yaml_after, _ = load_frontmatter_text(result.revised_text)
 
@@ -1325,7 +1262,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                         )
                         logger.debug(f"Updated Fix Memory: {memory.get_summary()}")
 
-                        # QUICK WIN FIX: Check for regressions and BLOCK them
                         regressions = memory.detect_regressions(yaml_after, state_obj.iteration)
                         if regressions:
                             logger.error(
@@ -1344,19 +1280,16 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                                 )
                             )
 
-                            # BLOCK THE FIX - Don't apply changes that cause regressions
                             logger.warning(
                                 "BLOCKING fix due to regressions - reverting to previous state"
                             )
 
-                            # Don't update current_text (keep previous version)
-                            # Set error and escalate to human review
                             return {
                                 "error": f"Fix caused {len(regressions)} regression(s): {regressions[0]}",
                                 "requires_human_review": True,
                                 "history": history_updates,
                                 "decision": "summarize_failures",
-                                "changed": False,  # Don't apply regressive changes
+                                "changed": False,
                             }
                 except Exception as mem_err:
                     logger.warning(f"Failed to update Fix Memory: {mem_err}")
@@ -1369,10 +1302,8 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                         "No fixes applied - requires human review",
                     )
                 )
-                # Escalate to human review instead of silently marking as completed
                 updates["requires_human_review"] = True
 
-            # Add this fix attempt to the history
             updated_attempts = state_obj.fix_attempts + [attempt]
             updates["fix_attempts"] = updated_attempts
 
@@ -1420,7 +1351,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         )
 
         try:
-            # PHASE 3 FIX: Apply strict QA criteria first (pre-check before LLM)
             strict_result = self.strict_qa.verify(
                 current_issues=state_obj.issues,
                 history=state_obj.history,
@@ -1430,13 +1360,11 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
             logger.debug(f"Strict QA pre-check: {strict_result.summary}")
 
-            # If strict QA fails, don't even bother with LLM verification
             if not strict_result.should_pass:
                 logger.warning(
                     f"Strict QA pre-check FAILED: {len(strict_result.blocking_reasons)} blocking reason(s)"
                 )
 
-                # Convert blocking reasons to issues
                 qa_issues = []
                 for reason in strict_result.blocking_reasons:
                     qa_issues.append(
@@ -1456,7 +1384,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                     )
                 )
 
-                # Return failure without calling LLM QA
                 self.analytics.record_qa_attempt(
                     state_obj.note_path,
                     iteration=state_obj.iteration,
@@ -1468,11 +1395,10 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                     "qa_verification_summary": strict_result.summary,
                     "qa_failure_summary": f"Strict QA pre-check failed: {strict_result.summary}",
                     "issues": qa_issues,
-                    "decision": "continue",  # Continue fixing
+                    "decision": "continue",
                     "history": history_updates,
                 }
 
-            # If strict QA passes, proceed with LLM verification
             logger.info("Strict QA pre-check PASSED - proceeding to LLM verification")
             history_updates.append(
                 state_obj.add_history_entry(
@@ -1482,14 +1408,12 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 )
             )
 
-            # Generate QA criteria for LLM prompt
             qa_criteria = self.strict_qa.format_rules_for_qa_agent()
 
             result = await run_qa_verification(
                 note_text=state_obj.current_text,
                 note_path=state_obj.note_path,
                 iteration_count=state_obj.iteration,
-                # PHASE 3 FIX: Add strict criteria to QA prompt
                 qa_criteria=qa_criteria,
             )
 
@@ -1520,7 +1444,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             else:
                 logger.warning("QA verification found issues that need fixing")
 
-                # Convert QA findings to ReviewIssues that can be fixed
                 qa_issues = []
                 for error in result.factual_errors:
                     qa_issues.append(
@@ -1550,7 +1473,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                     )
                 )
 
-                # Add QA issues to state for fixing
                 updates["issues"] = qa_issues
                 updates["decision"] = "continue"
 
@@ -1668,18 +1590,17 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         """Compute the next step decision and corresponding history message.
 
         Decision logic:
-        1. If requires_human_review flag set -> summarize_failures (ESCALATION)
-        2. PHASE 1 FIX: If oscillation detected -> summarize_failures (CIRCUIT BREAKER)
+        1. If requires_human_review flag set -> summarize_failures
+        2. If oscillation detected -> summarize_failures
         3. If max iterations reached AND (issues remain OR QA failed) -> summarize_failures
         4. If max iterations reached AND no issues AND QA passed -> done
         5. If error occurred -> done
         6. If completed flag set -> done
         7. If no validator/parity issues AND QA not run yet -> qa_verify
         8. If no validator/parity issues AND QA passed -> done
-        9. If validator/parity issues remain -> continue (fix loop)
+        9. If validator/parity issues remain -> continue
         """
 
-        # Detailed debug logging for decision evaluation
         logger.debug(
             f"[Decision] Evaluating next step: "
             f"iteration={state.iteration}/{state.max_iterations}, "
@@ -1690,7 +1611,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             f"qa_passed={state.qa_verification_passed}"
         )
 
-        # NEW: Check for escalation flag first (failed fix attempts)
         if state.requires_human_review:
             message = (
                 f"Fix agent could not apply changes - escalating to human review "
@@ -1700,8 +1620,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             logger.warning(message)
             return "summarize_failures", message
 
-        # PHASE 1 FIX: Circuit breaker for oscillation detection
-        # Check if issues are oscillating (repeating across iterations)
         is_oscillating, oscillation_explanation = state.detect_oscillation()
         if is_oscillating:
             message = (
@@ -1709,11 +1627,9 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 f"{oscillation_explanation}"
             )
             logger.error(message)
-            # Mark for human review since automated fixes are stuck in a loop
             return "summarize_failures", message
 
         if state.iteration >= state.max_iterations:
-            # Check if there are unresolved issues or QA failed
             has_unresolved_issues = state.has_any_issues()
             qa_failed = state.qa_verification_passed is False
 
@@ -1739,27 +1655,22 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             logger.info("Completed flag set - stopping iteration")
             return "done", message
 
-        # NEW: Check if remaining issues should block completion based on severity
         should_block, block_reason = self._should_issues_block_completion(state.issues)
 
         if not should_block:
-            # If issues don't block AND QA hasn't been run yet, route to QA
             if state.qa_verification_passed is None:
                 message = f"Issues don't block completion ({block_reason}) - routing to QA verification"
                 logger.info(message)
                 return "qa_verify", message
-            # If QA passed, we're done
             elif state.qa_verification_passed:
                 message = f"Stopping: {block_reason} and QA verification passed"
                 logger.success("Workflow complete - QA verification passed")
                 return "done", message
-            # If QA failed, issues were added back to state, so continue fixing
             else:
                 message = f"Continuing: QA verification found issues to fix (previous: {block_reason})"
                 logger.info(message)
                 return "continue", message
         else:
-            # Issues block completion - continue fixing
             message = f"Continuing to iteration {state.iteration + 1} ({block_reason})"
             logger.info(message)
             return "continue", message
@@ -1813,8 +1724,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             )
             return state_obj.decision
 
-        # This should not normally happen as the QA verification node sets the decision
-        # But as a fallback, check the QA verification result
         if state_obj.qa_verification_passed:
             self.analytics.set_iteration_decision(
                 state_obj.note_path, state_obj.iteration, "done"
@@ -1896,7 +1805,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         try:
             original_text = note_path.read_text(encoding="utf-8")
             logger.debug(f"Read {len(original_text)} characters from note")
-        except Exception as e:  # pragma: no cover - defensive I/O guard
+        except Exception as e:
             logger.error("Failed to read note {}: {}", note_path, e)
             error_message = f"Failed to read note: {e}"
             error_state = self._create_error_state(
@@ -1918,7 +1827,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             logger.info("=" * 70)
             return error_state
 
-        # Initialize state
         initial_state = NoteReviewState(
             note_path=note_path_key,
             original_text=original_text,
@@ -1927,14 +1835,12 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         )
         logger.debug(f"Initialized state with max_iterations={self.max_iterations}")
 
-        # PHASE 1 FIX: Clear Fix Memory for this note to start fresh
         if note_path_key in self.fix_memory:
             self.fix_memory[note_path_key].clear()
             logger.debug("Cleared existing Fix Memory for this note")
 
         logger.info(f"Starting LangGraph workflow for {note_path.name}")
         try:
-            # Configure recursion limit (doubled from default 25 to 50)
             config = {"recursion_limit": 50}
             final_state_dict = await self.graph.ainvoke(
                 initial_state.to_dict(), config=config
@@ -1966,7 +1872,6 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             logger.info("=" * 70)
             return error_state
 
-        # Log final results with detailed metrics
         elapsed_time = time.time() - start_time
         logger.success(
             f"Completed review for {note_path.name} - "
@@ -2071,11 +1976,9 @@ def create_review_graph(
     if enable_analytics is not None:
         logger.debug(f"Analytics enabled override: {enable_analytics}")
 
-    # Discover repo root
     repo_root = vault_root.parent if vault_root.name == "InterviewQuestions" else vault_root
     logger.debug(f"Repo root: {repo_root}")
 
-    # Load taxonomy
     logger.info("Loading taxonomy from TAXONOMY.md")
     try:
         taxonomy = TaxonomyLoader(repo_root).load()
@@ -2084,7 +1987,6 @@ def create_review_graph(
         logger.error("Failed to load taxonomy: {}", e)
         raise
 
-    # Build note index
     logger.info("Building note index")
     try:
         note_index = build_note_index(vault_root)
