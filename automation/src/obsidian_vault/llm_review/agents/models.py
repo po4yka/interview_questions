@@ -121,6 +121,61 @@ class ConceptEnrichmentResult(BaseModel):
     )
 
 
+class IssueGroup(BaseModel):
+    """A group of related issues that should be fixed together."""
+
+    group_type: str = Field(
+        description="Type of issues in this group (e.g., 'backticks', 'timestamps', 'parity', 'yaml_format')"
+    )
+    issues: list[str] = Field(
+        description="List of issue messages in this group"
+    )
+    priority: int = Field(
+        description="Priority level (1=highest, 5=lowest) based on severity and dependencies"
+    )
+    recommended_fixer: str = Field(
+        description="Which fixer should handle this group: 'deterministic' or 'llm'"
+    )
+    dependencies: list[str] = Field(
+        default_factory=list,
+        description="Group types that should be fixed before this one (e.g., ['yaml_format'] must be fixed before ['links'])"
+    )
+    rationale: str = Field(
+        description="Explanation of why these issues are grouped and prioritized this way"
+    )
+
+
+class FixPlanResult(BaseModel):
+    """Result of coordinating and planning the fix strategy."""
+
+    issue_groups: list[IssueGroup] = Field(
+        description="Prioritized groups of related issues with fix strategy"
+    )
+    fix_order: list[str] = Field(
+        description="Recommended order to process groups (by group_type)"
+    )
+    estimated_iterations: int = Field(
+        description="Estimated number of iterations needed to resolve all issues"
+    )
+    high_risk_fixes: list[str] = Field(
+        default_factory=list,
+        description="Issues that are risky to fix automatically and might need human review"
+    )
+    explanation: str = Field(
+        description="Overall fix strategy explanation"
+    )
+
+    @model_validator(mode="before")
+    @classmethod
+    def _coerce_optional_lists(cls, values: Any) -> Any:
+        """Ensure optional list fields default to empty lists when None."""
+
+        if isinstance(values, dict):
+            if values.get("high_risk_fixes") is None:
+                values["high_risk_fixes"] = []
+        return values
+
+
 class QAFailureSummaryResult(BaseModel):
     """Result of summarizing repeated QA failures for human follow-up."""
 

@@ -347,6 +347,96 @@ class ReviewGraph:
                 "history": history_updates,
             }
 
+    def _detect_changed_sections(self, text_before: str, text_after: str) -> set[str]:
+        """Detect which sections changed between two versions of a note.
+
+        IMPROVEMENT 3: Section-level change tracking for incremental validation.
+
+        Args:
+            text_before: Note content before changes
+            text_after: Note content after changes
+
+        Returns:
+            Set of changed section identifiers (e.g., 'yaml', 'question_en', 'answer_ru')
+        """
+        changed = set()
+
+        # Parse YAML and body
+        def parse_sections(text: str) -> tuple[str, dict[str, str]]:
+            """Parse note into YAML and body sections."""
+            if not text.startswith("---"):
+                return "", {}
+
+            parts = text.split("---", 2)
+            if len(parts) < 3:
+                return "", {}
+
+            yaml_section = parts[1].strip()
+            body = parts[2].strip()
+
+            # Extract major sections from body
+            sections = {}
+            current_section = None
+            current_content = []
+
+            for line in body.split("\n"):
+                # Detect section headers
+                if line.strip().startswith("#"):
+                    # Save previous section
+                    if current_section:
+                        sections[current_section] = "\n".join(current_content)
+
+                    # Start new section
+                    header = line.strip().lower()
+                    if "question (en)" in header:
+                        current_section = "question_en"
+                    elif "вопрос (ru)" in header:
+                        current_section = "question_ru"
+                    elif "answer (en)" in header:
+                        current_section = "answer_en"
+                    elif "ответ (ru)" in header:
+                        current_section = "answer_ru"
+                    elif "follow-up" in header:
+                        current_section = "followups"
+                    elif "reference" in header:
+                        current_section = "references"
+                    elif "related" in header:
+                        current_section = "related_questions"
+                    else:
+                        current_section = "other"
+
+                    current_content = []
+                else:
+                    current_content.append(line)
+
+            # Save last section
+            if current_section:
+                sections[current_section] = "\n".join(current_content)
+
+            return yaml_section, sections
+
+        yaml_before, sections_before = parse_sections(text_before)
+        yaml_after, sections_after = parse_sections(text_after)
+
+        # Check YAML changes
+        if yaml_before != yaml_after:
+            changed.add("yaml")
+
+        # Check section changes
+        all_sections = set(sections_before.keys()) | set(sections_after.keys())
+        for section in all_sections:
+            content_before = sections_before.get(section, "")
+            content_after = sections_after.get(section, "")
+            if content_before != content_after:
+                changed.add(section)
+
+        if changed:
+            logger.debug(f"Detected changes in sections: {', '.join(sorted(changed))}")
+        else:
+            logger.debug("No section changes detected")
+
+        return changed
+
     async def _run_validators(self, state: NoteReviewStateDict) -> dict[str, Any]:
         """Node: Run metadata checks and structural validation scripts.
 
@@ -375,6 +465,27 @@ class ReviewGraph:
         try:
             import asyncio
 
+            # IMPROVEMENT 3: Detect changed sections for incremental validation
+            if state_obj.iteration > 0:
+                # Get text from previous iteration (before current fixes)
+                prev_text = state.get("original_text", state_obj.original_text)
+                if len(state_obj.history) > 0:
+                    # Try to find previous current_text from history
+                    for entry in reversed(state_obj.history):
+                        if "iteration" in entry and entry["iteration"] == state_obj.iteration - 1:
+                            # Found previous iteration, use that text
+                            break
+                    else:
+                        prev_text = state_obj.original_text
+                else:
+                    prev_text = state_obj.original_text
+
+                changed_sections = self._detect_changed_sections(prev_text, state_obj.current_text)
+                state_obj.changed_sections = changed_sections
+            else:
+                # First iteration - all sections considered changed
+                state_obj.changed_sections = {"yaml", "question_en", "question_ru", "answer_en", "answer_ru"}
+
             selected_validators: list[str] = []
             if state_obj.iteration == 0 or self.force_full_validator_pass:
                 selected_validators = ["metadata", "structural", "parity"]
@@ -384,24 +495,36 @@ class ReviewGraph:
                 )
             else:
                 if self.use_smart_selection:
-                    diff = self.smart_selector.detect_changes(
-                        state_obj.original_text,
-                        state_obj.current_text,
-                    )
-                    selected_validators = self.smart_selector.select_validators(
-                        diff,
-                        state_obj.iteration + 1,
-                    )
+                    # Enhanced smart selection with section tracking
+                    if "yaml" in state_obj.changed_sections:
+                        selected_validators.append("metadata")
+                        logger.debug("YAML changed → metadata validator needed")
 
-                    calls_saved, pct_saved = self.smart_selector.estimate_savings(
-                        selected_validators,
-                        total_validators=3,
-                    )
+                    # If any content section changed, run structural + parity
+                    content_sections = {"question_en", "question_ru", "answer_en", "answer_ru", "followups", "references"}
+                    if content_sections & state_obj.changed_sections:
+                        selected_validators.extend(["structural", "parity"])
+                        logger.debug("Content sections changed → structural + parity validators needed")
+
+                    # If nothing changed (shouldn't happen, but just in case)
+                    if not state_obj.changed_sections:
+                        # Run parity as sanity check
+                        selected_validators.append("parity")
+                        logger.debug("No changes detected → parity-only sanity check")
+
+                    # Deduplicate
+                    selected_validators = sorted(set(selected_validators))
+
+                    # Estimate savings
+                    total_validators = 3
+                    calls_saved = total_validators - len(selected_validators)
+                    pct_saved = (calls_saved / total_validators) * 100 if total_validators > 0 else 0
                     if calls_saved > 0:
                         logger.info(
-                            "Smart selection saved %d validator call(s) (%.0f%%)",
+                            "Incremental validation saved %d validator call(s) (%.0f%%) - changed sections: %s",
                             calls_saved,
                             pct_saved,
+                            ', '.join(sorted(state_obj.changed_sections)),
                         )
                 else:
                     selected_validators = ["metadata", "structural", "parity"]
@@ -640,6 +763,7 @@ class ReviewGraph:
                 "issue_history": next_state.issue_history,
                 "requires_human_review": next_state.requires_human_review,
                 "error": next_state.error,
+                "changed_sections": list(next_state.changed_sections),
             }
 
         except Exception as e:
@@ -1116,24 +1240,58 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             )
         )
 
-        # Auto-create and enrich missing concept files before attempting fixes
-        created_concepts = await self._create_missing_concept_files(state_obj.issues)
-        if created_concepts:
-            logger.info(f"Auto-created {len(created_concepts)} missing concept files")
+        try:
+            # IMPROVEMENT 1: Run coordinator agent to create optimal fix plan
+            from .agents.runners import run_fix_coordination
+            fix_plan = await run_fix_coordination(
+                issues=[issue.message for issue in state_obj.issues],
+                iteration=state_obj.iteration,
+                max_iterations=state_obj.max_iterations,
+                fix_history=[attempt.__dict__ if hasattr(attempt, '__dict__') else attempt for attempt in state_obj.fix_attempts],
+                note_path=state_obj.note_path,
+            )
+            logger.info(f"Coordinator created fix plan: {len(fix_plan.issue_groups)} groups, order={' → '.join(fix_plan.fix_order)}")
             history_updates.append(
                 state_obj.add_history_entry(
-                    "llm_fix_issues",
-                    f"Auto-created missing concept files: {', '.join(created_concepts)}",
-                    created_files=created_concepts,
+                    "fix_coordinator",
+                    f"Created fix plan with {len(fix_plan.issue_groups)} groups",
+                    fix_order=fix_plan.fix_order,
+                    estimated_iterations=fix_plan.estimated_iterations,
+                    high_risk_fixes=fix_plan.high_risk_fixes,
                 )
             )
 
-        try:
-            deterministic_result = self.deterministic_fixer.fix(
-                note_text=state_obj.current_text,
-                issues=state_obj.issues,
-                note_path=state_obj.note_path,
+            # IMPROVEMENT 2: Run deterministic fixer + concept creation in parallel
+            import asyncio
+            logger.debug("Running deterministic fixer and concept creation in parallel...")
+            deterministic_task = asyncio.create_task(
+                asyncio.to_thread(
+                    self.deterministic_fixer.fix,
+                    note_text=state_obj.current_text,
+                    issues=state_obj.issues,
+                    note_path=state_obj.note_path,
+                )
             )
+            concept_task = asyncio.create_task(
+                self._create_missing_concept_files(state_obj.issues)
+            )
+
+            # Wait for both to complete
+            deterministic_result, created_concepts = await asyncio.gather(
+                deterministic_task,
+                concept_task,
+            )
+            logger.debug("Parallel execution complete")
+
+            if created_concepts:
+                logger.info(f"Auto-created {len(created_concepts)} missing concept files")
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "concept_creation",
+                        f"Auto-created missing concept files: {', '.join(created_concepts)}",
+                        created_files=created_concepts,
+                    )
+                )
 
             if deterministic_result.changes_made:
                 logger.info(

@@ -88,3 +88,15 @@ QA_FAILURE_SUMMARY_SETTINGS = AgentModelSettings(
     # Set generous limit for comprehensive diagnostic output
     max_tokens=16384,  # 16K tokens
 )
+
+FIX_COORDINATOR_SETTINGS = AgentModelSettings(
+    # Low-moderate temperature for strategic planning with some flexibility
+    # Needs to understand issue patterns and create optimal execution plans
+    temperature=0.2,
+    # Moderate penalties for clear, systematic planning
+    presence_penalty=0.2,
+    frequency_penalty=0.2,
+    # Coordinator produces structured fix plan with groups, priorities, and dependencies
+    # Set moderate limit for detailed planning output
+    max_tokens=8192,  # 8K tokens
+)
