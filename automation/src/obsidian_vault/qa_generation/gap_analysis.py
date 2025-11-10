@@ -10,7 +10,7 @@ from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
 from textwrap import dedent
-from typing import Iterable, Sequence
+from typing import Any, Iterable, Sequence, TYPE_CHECKING
 
 from langchain_core.output_parsers import PydanticOutputParser
 from langchain_core.prompts import ChatPromptTemplate
@@ -35,7 +35,15 @@ from obsidian_vault.utils import (
     ensure_vault_exists,
     parse_note,
 )
-from obsidian_vault.utils.graph_analytics import VaultGraph
+try:  # pragma: no cover - optional dependency hook
+    from obsidian_vault.utils.graph_analytics import VaultGraph as _VaultGraph
+except Exception:  # pragma: no cover - gracefully handle missing obsidiantools
+    _VaultGraph = None
+
+if TYPE_CHECKING:  # pragma: no cover - typing only
+    from obsidian_vault.utils.graph_analytics import VaultGraph
+else:  # pragma: no cover - at runtime we treat the dependency as optional
+    VaultGraph = Any
 from obsidian_vault.utils.taxonomy_loader import TaxonomyLoader
 
 
@@ -278,14 +286,19 @@ class GapAnalysisAgent:
         logger.info("Running gap analysis agent", note_count=len(notes))
         taxonomy = TaxonomyLoader(vault_root).load()
         vault_graph: VaultGraph | None = None
-        try:
-            vault_graph = VaultGraph(vault_root)
-            logger.debug("Initialized obsidiantools VaultGraph for gap analysis")
-        except Exception as error:  # pragma: no cover - graceful fallback when obsidiantools fails
+        if _VaultGraph is None:
             logger.warning(
-                "Unable to initialize obsidiantools vault graph; atomic coverage signals disabled",
-                error=str(error),
+                "obsidiantools is unavailable; atomic coverage signals disabled for gap analysis",
             )
+        else:
+            try:
+                vault_graph = _VaultGraph(vault_root)
+                logger.debug("Initialized obsidiantools VaultGraph for gap analysis")
+            except Exception as error:  # pragma: no cover - graceful fallback when obsidiantools fails
+                logger.warning(
+                    "Unable to initialize obsidiantools vault graph; atomic coverage signals disabled",
+                    error=str(error),
+                )
         topic_memories = _build_topic_memories(
             notes,
             max_per_topic=self.config.max_notes_per_topic,
