@@ -7,14 +7,11 @@ aliases:
 topic: android
 subtopics:
 - performance-rendering
-- profiling
-question_kind: coding
+- monitoring-slo
+question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-- android/performance-rendering
-- android/profiling
-- difficulty/medium
 - en
 - ru
 source: Original
@@ -24,1232 +21,57 @@ moc: moc-android
 related:
 - c-perfetto
 - c-performance
-- app-startup-optimization
-- baseline-profiles-optimization
-- macrobenchmark-startup
 created: 2025-10-11
-updated: 2025-10-31
+updated: 2025-11-10
 tags:
 - android/performance-rendering
-- android/profiling
+- android/monitoring-slo
 - difficulty/medium
 - en
 - ru
----
 
-# Question (EN)
-> Implement frame metrics monitoring to detect and fix jank. Use FrameMetricsAggregator, OnFrameMetricsAvailableListener, and systrace to identify rendering issues.
+---
 
 # Вопрос (RU)
-> Реализуйте мониторинг метрик кадров для обнаружения и исправления рывков. Используйте FrameMetricsAggregator, OnFrameMetricsAvailableListener и systrace для выявления проблем рендеринга.
-
----
-
-## Answer (EN)
-
-### Overview
-
-**Jank** occurs when the app fails to render a frame within the 16.67ms budget (60 FPS), causing visible stuttering. Modern devices support 90Hz (11.1ms) or 120Hz (8.33ms), making smooth rendering even more critical.
-
-**Frame Budget:**
-- 60 FPS: 16.67ms per frame
-- 90 FPS: 11.11ms per frame
-- 120 FPS: 8.33ms per frame
-
-**Common Causes of Jank:**
-1. Overdraw (rendering pixels multiple times)
-2. Layout complexity (nested hierarchies)
-3. Expensive onDraw() operations
-4. Main thread blocking (I/O, computation)
-5. RecyclerView inefficient adapter
-6. Large bitmap loading
-7. GC pauses
-
-### FrameMetricsAggregator Implementation
-
-**app/build.gradle.kts:**
-```kotlin
-dependencies {
-    implementation("androidx.metrics:metrics-performance:1.0.0-beta01")
-}
-```
-
-#### 1. Basic Frame Metrics Monitoring
-
-```kotlin
-class PerformanceMonitoringActivity : AppCompatActivity() {
-
-    private var frameMetricsAggregator: FrameMetricsAggregator? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Start frame metrics collection
-        frameMetricsAggregator = FrameMetricsAggregator()
-        frameMetricsAggregator?.add(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        frameMetricsAggregator?.reset()
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        // Analyze frame metrics
-        frameMetricsAggregator?.let { aggregator ->
-            val metrics = aggregator.metrics
-
-            // Get frame durations for different stages
-            val totalMetrics = metrics?.get(FrameMetricsAggregator.TOTAL_INDEX)
-
-            if (totalMetrics != null) {
-                analyzeFrameMetrics(totalMetrics)
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        frameMetricsAggregator?.stop()
-        frameMetricsAggregator = null
-    }
-
-    private fun analyzeFrameMetrics(metrics: SparseIntArray) {
-        var slowFrames = 0
-        var frozenFrames = 0
-        var totalFrames = 0
-
-        // Iterate through frame durations
-        for (i in 0 until metrics.size()) {
-            val frameDurationMs = metrics.keyAt(i)
-            val frameCount = metrics.valueAt(i)
-
-            totalFrames += frameCount
-
-            // Slow frame: > 16ms (missed 60 FPS deadline)
-            if (frameDurationMs > 16) {
-                slowFrames += frameCount
-            }
-
-            // Frozen frame: > 700ms (completely unresponsive)
-            if (frameDurationMs > 700) {
-                frozenFrames += frameCount
-            }
-        }
-
-        val slowFramePercentage = (slowFrames.toFloat() / totalFrames) * 100
-        val frozenFramePercentage = (frozenFrames.toFloat() / totalFrames) * 100
-
-        Log.d("FrameMetrics", """
-            Total Frames: $totalFrames
-            Slow Frames: $slowFrames (${"%.2f".format(slowFramePercentage)}%)
-            Frozen Frames: $frozenFrames (${"%.2f".format(frozenFramePercentage)}%)
-        """.trimIndent())
-
-        // Report to analytics if jank is significant
-        if (slowFramePercentage > 5.0) {
-            reportJankToAnalytics(slowFramePercentage, frozenFramePercentage)
-        }
-    }
-
-    private fun reportJankToAnalytics(slowFramePercentage: Float, frozenFramePercentage: Float) {
-        Firebase.analytics.logEvent("jank_detected") {
-            param("screen", this@PerformanceMonitoringActivity.javaClass.simpleName)
-            param("slow_frame_percentage", slowFramePercentage.toDouble())
-            param("frozen_frame_percentage", frozenFramePercentage.toDouble())
-        }
-    }
-}
-```
-
-#### 2. Real-Time Frame Monitoring with OnFrameMetricsAvailableListener
-
-```kotlin
-class RealTimeFrameMonitor : AppCompatActivity() {
-
-    private val frameMetricsListener = Window.OnFrameMetricsAvailableListener {
-        _, frameMetrics, _ ->
-
-        // Copy metrics (must be done in callback)
-        val metrics = FrameMetrics(frameMetrics)
-
-        // Analyze individual frame
-        val totalDurationNs = metrics.getMetric(FrameMetrics.TOTAL_DURATION)
-        val totalDurationMs = totalDurationNs / 1_000_000.0
-
-        val inputDurationMs = metrics.getMetric(FrameMetrics.INPUT_HANDLING_DURATION) / 1_000_000.0
-        val animationDurationMs = metrics.getMetric(FrameMetrics.ANIMATION_DURATION) / 1_000_000.0
-        val layoutDurationMs = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
-        val drawDurationMs = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
-        val syncDurationMs = metrics.getMetric(FrameMetrics.SYNC_DURATION) / 1_000_000.0
-        val commandDurationMs = metrics.getMetric(FrameMetrics.COMMAND_ISSUE_DURATION) / 1_000_000.0
-
-        // Check for slow frames
-        if (totalDurationMs > 16.67) {
-            Log.w("FrameMetrics", """
-                Slow frame detected: ${"%.2f".format(totalDurationMs)}ms
-                Breakdown:
-                - Input: ${"%.2f".format(inputDurationMs)}ms
-                - Animation: ${"%.2f".format(animationDurationMs)}ms
-                - Layout: ${"%.2f".format(layoutDurationMs)}ms
-                - Draw: ${"%.2f".format(drawDurationMs)}ms
-                - Sync: ${"%.2f".format(syncDurationMs)}ms
-                - Command: ${"%.2f".format(commandDurationMs)}ms
-            """.trimIndent())
-
-            // Identify bottleneck
-            val bottleneck = when {
-                layoutDurationMs > 8 -> "Layout complexity"
-                drawDurationMs > 8 -> "Draw operations"
-                syncDurationMs > 8 -> "GPU synchronization"
-                else -> "Multiple factors"
-            }
-
-            reportFrameBottleneck(bottleneck, totalDurationMs)
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Register listener
-        window.addOnFrameMetricsAvailableListener(
-            frameMetricsListener,
-            Handler(Looper.getMainLooper())
-        )
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        window.removeOnFrameMetricsAvailableListener(frameMetricsListener)
-    }
-
-    private fun reportFrameBottleneck(bottleneck: String, duration: Double) {
-        Firebase.analytics.logEvent("frame_bottleneck") {
-            param("type", bottleneck)
-            param("duration_ms", duration)
-        }
-    }
-}
-```
-
-#### 3. JankStats Library (Modern Approach)
-
-```kotlin
-dependencies {
-    implementation("androidx.metrics:metrics-performance:1.0.0-beta01")
-}
-
-class ModernJankMonitor : AppCompatActivity() {
-
-    private lateinit var jankStats: JankStats
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Create JankStats instance
-        jankStats = JankStats.createAndTrack(
-            window,
-            jankStatsListener
-        )
-    }
-
-    private val jankStatsListener = JankStats.OnFrameListener { frameData ->
-        // Called for each frame
-        if (frameData.isJank) {
-            val frameDurationMs = frameData.frameDurationUiNanos / 1_000_000.0
-
-            Log.w("JankStats", """
-                Jank detected:
-                Duration: ${"%.2f".format(frameDurationMs)}ms
-                States: ${frameData.states.joinToString()}
-            """.trimIndent())
-
-            // Track jank by UI state
-            val currentState = frameData.states.lastOrNull() ?: "unknown"
-            trackJankByState(currentState, frameDurationMs)
-        }
-    }
-
-    // Track UI state for better jank attribution
-    private fun trackScrolling(isScrolling: Boolean) {
-        if (isScrolling) {
-            jankStats.jankHappened("scrolling")
-        }
-    }
-
-    private fun trackJankByState(state: String, duration: Double) {
-        Firebase.analytics.logEvent("jank_by_state") {
-            param("state", state)
-            param("duration_ms", duration)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        jankStats.isTrackingEnabled = false
-    }
-}
-```
-
-### Common Jank Causes and Fixes
-
-#### 1. Overdraw
-
-** Problem: Multiple layers rendering**
-
-```xml
-<!-- Multiple backgrounds causing overdraw -->
-<LinearLayout
-    android:background="@color/white">
-
-    <LinearLayout
-        android:background="@color/light_gray">
-
-        <TextView
-            android:background="@color/white"
-            android:text="Hello" />
-    </LinearLayout>
-</LinearLayout>
-```
-
-** Solution: Remove unnecessary backgrounds**
-
-```xml
-<!-- Single background layer -->
-<LinearLayout>
-    <LinearLayout
-        android:background="@color/light_gray">
-
-        <TextView
-            android:text="Hello" />
-    </LinearLayout>
-</LinearLayout>
-```
-
-**Detect Overdraw:**
-```
-Developer Options → Debug GPU Overdraw → Show overdraw areas
-- Blue: 1x overdraw (acceptable)
-- Green: 2x overdraw (investigate)
-- Pink: 3x overdraw (fix)
-- Red: 4x+ overdraw (critical)
-```
-
-#### 2. Layout Complexity
-
-** Problem: Deeply nested layouts**
-
-```xml
-<LinearLayout>
-    <RelativeLayout>
-        <LinearLayout>
-            <RelativeLayout>
-                <LinearLayout>
-                    <TextView />
-                </LinearLayout>
-            </RelativeLayout>
-        </LinearLayout>
-    </RelativeLayout>
-</LinearLayout>
-<!-- Hierarchy depth: 6 levels, slow measure/layout -->
-```
-
-** Solution: Flatten with ConstraintLayout**
-
-```xml
-<androidx.constraintlayout.widget.ConstraintLayout>
-    <TextView
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
-<!-- Hierarchy depth: 2 levels, fast measure/layout -->
-```
-
-#### 3. RecyclerView Jank
-
-** Problem: Expensive bind operations**
-
-```kotlin
-class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-
-        // SLOW: Load image synchronously
-        val bitmap = BitmapFactory.decodeFile(item.imagePath)
-        holder.imageView.setImageBitmap(bitmap)
-
-        // SLOW: Complex text formatting
-        val formattedText = complexTextFormatting(item.description)
-        holder.textView.text = formattedText
-    }
-
-    private fun complexTextFormatting(text: String): Spanned {
-        // Expensive operation on main thread
-        return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
-    }
-}
-```
-
-** Solution: Async operations and caching**
-
-```kotlin
-class OptimizedAdapter : RecyclerView.Adapter<ViewHolder>() {
-
-    private val formattedTextCache = LruCache<String, Spanned>(100)
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-
-        // Load image asynchronously with Coil
-        holder.imageView.load(item.imagePath) {
-            crossfade(true)
-            placeholder(R.drawable.placeholder)
-        }
-
-        // Use cached formatted text
-        val formattedText = formattedTextCache.get(item.id)
-            ?: complexTextFormatting(item.description).also {
-                formattedTextCache.put(item.id, it)
-            }
-        holder.textView.text = formattedText
-    }
-
-    // Pre-format text in background
-    fun prefetchItems(items: List<Item>) {
-        CoroutineScope(Dispatchers.Default).launch {
-            items.forEach { item ->
-                if (formattedTextCache.get(item.id) == null) {
-                    val formatted = complexTextFormatting(item.description)
-                    formattedTextCache.put(item.id, formatted)
-                }
-            }
-        }
-    }
-}
-```
-
-#### 4. View Inflation Jank
-
-** Problem: Inflating views on demand**
-
-```kotlin
-// Inflate complex view when needed
-button.setOnClickListener {
-    val detailView = layoutInflater.inflate(
-        R.layout.complex_detail_view,  // 50ms to inflate
-        container,
-        false
-    )
-    container.addView(detailView)
-}
-```
-
-** Solution: ViewStub for lazy inflation**
-
-```xml
-<!-- activity_main.xml -->
-<FrameLayout>
-    <ViewStub
-        android:id="@+id/detail_view_stub"
-        android:layout="@layout/complex_detail_view"
-        android:inflatedId="@+id/detail_view" />
-</FrameLayout>
-```
-
-```kotlin
-// Inflate only when needed, UI appears faster
-button.setOnClickListener {
-    val viewStub = findViewById<ViewStub>(R.id.detail_view_stub)
-    val detailView = viewStub?.inflate() ?: findViewById(R.id.detail_view)
-    // Configure detailView...
-}
-```
-
-### Systrace Analysis
-
-#### 1. Capture Systrace
-
-```bash
-# Record 10 seconds of app interaction
-python $ANDROID_HOME/platform-tools/systrace/systrace.py \
-    --time=10 \
-    -o trace.html \
-    -a com.example.myapp \
-    sched gfx view wm am app
-
-# Open in Chrome
-chrome trace.html
-```
-
-#### 2. Identify Jank in Trace
-
-**Look for:**
-1. **Frame deadline misses**: Red/yellow bars in frame timeline
-2. **Long measure/layout**: > 8ms indicates complexity
-3. **Expensive draw**: > 8ms indicates overdraw or custom drawing
-4. **GC pauses**: "GC" events during frame rendering
-5. **Main thread blocking**: Long operations on UI thread
-
-**Example Analysis:**
-```
-Frame 145: 28ms (JANK - missed deadline)
- Input: 0.2ms
- Animation: 0.5ms
- Measure/Layout: 14.3ms  (TOO SLOW)
-   RecyclerView.onMeasure: 12.8ms
-      Adapter.onBindViewHolder: 11.2ms (BOTTLENECK)
- Draw: 8.1ms  (SLOW)
- Sync: 4.9ms
-
-Action: Optimize onBindViewHolder - move work off main thread
-```
-
-### Production Monitoring
-
-#### 1. Firebase Performance Monitoring
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-
-    private val frameMetricsMonitor = FrameMetricsMonitor()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Start monitoring frames
-        frameMetricsMonitor.start(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        frameMetricsMonitor.stop()
-    }
-}
-
-class FrameMetricsMonitor {
-
-    private var frameMetricsAggregator: FrameMetricsAggregator? = null
-    private val performanceMonitoring = Firebase.performance
-
-    fun start(activity: Activity) {
-        frameMetricsAggregator = FrameMetricsAggregator().apply {
-            add(activity)
-        }
-    }
-
-    fun stop() {
-        frameMetricsAggregator?.let { aggregator ->
-            val metrics = aggregator.metrics?.get(FrameMetricsAggregator.TOTAL_INDEX)
-
-            if (metrics != null) {
-                val stats = calculateFrameStats(metrics)
-
-                // Log to Firebase Performance
-                val trace = performanceMonitoring.newTrace("screen_rendering")
-                trace.putMetric("slow_frames", stats.slowFrames.toLong())
-                trace.putMetric("frozen_frames", stats.frozenFrames.toLong())
-                trace.putMetric("total_frames", stats.totalFrames.toLong())
-                trace.putMetric("slow_frame_percentage", (stats.slowFramePercentage * 100).toLong())
-                trace.stop()
-            }
-
-            aggregator.stop()
-        }
-        frameMetricsAggregator = null
-    }
-
-    private fun calculateFrameStats(metrics: SparseIntArray): FrameStats {
-        var slowFrames = 0
-        var frozenFrames = 0
-        var totalFrames = 0
-
-        for (i in 0 until metrics.size()) {
-            val frameDurationMs = metrics.keyAt(i)
-            val frameCount = metrics.valueAt(i)
-
-            totalFrames += frameCount
-
-            if (frameDurationMs > 16) slowFrames += frameCount
-            if (frameDurationMs > 700) frozenFrames += frameCount
-        }
-
-        return FrameStats(
-            totalFrames = totalFrames,
-            slowFrames = slowFrames,
-            frozenFrames = frozenFrames,
-            slowFramePercentage = slowFrames.toFloat() / totalFrames
-        )
-    }
-
-    data class FrameStats(
-        val totalFrames: Int,
-        val slowFrames: Int,
-        val frozenFrames: Int,
-        val slowFramePercentage: Float
-    )
-}
-```
-
-### Best Practices
-
-1. **Target 60 FPS Minimum**: Modern devices support higher, but 60 FPS is baseline
-2. **Measure Real Devices**: Emulators don't reflect real rendering performance
-3. **Monitor in Production**: Use Firebase Performance to track user experience
-4. **Flatten View Hierarchies**: Use ConstraintLayout to reduce nesting
-5. **Eliminate Overdraw**: Remove unnecessary backgrounds and layers
-6. **Optimize RecyclerView**: Use DiffUtil, ViewHolder pattern, prefetch
-7. **Async Image Loading**: Use Coil/Glide, never load images synchronously
-8. **ViewStub for Rare Views**: Defer inflation of infrequently shown content
-9. **Profile Before Optimizing**: Use systrace to identify actual bottlenecks
-10. **Test on Low-End Devices**: Jank is magnified on slow hardware
-11. **Avoid Main Thread Work**: Move heavy computation to background
-12. **Use Jetpack Compose**: Modern UI toolkit with better performance
-
-### Common Pitfalls
-
-1. **Synchronous Image Loading**: Always use async image libraries
-2. **Complex onDraw()**: Custom drawing should be minimal and cached
-3. **Deeply Nested Layouts**: Flatten hierarchies with ConstraintLayout
-4. **Expensive Adapter Binding**: Keep onBindViewHolder() lightweight
-5. **Main Thread I/O**: File/network operations must be async
-6. **Not Caching Formatted Text**: HTML parsing, regex expensive
-7. **Ignoring Overdraw**: Multiple background layers slow rendering
-8. **Large Bitmaps**: Downsample images to view dimensions
-9. **Blocking Animations**: Use hardware-accelerated animations
-10. **Testing Only on Flagship Devices**: Jank appears on mid/low-end phones
-
+> Реализуйте мониторинг метрик кадров для обнаружения и исправления рывков. Используйте FrameMetricsAggregator, OnFrameMetricsAvailableListener и инструменты трассировки (Systrace/Perfetto) для выявления проблем рендеринга.
 
 # Question (EN)
-> Implement frame metrics monitoring to detect and fix jank. Use FrameMetricsAggregator, OnFrameMetricsAvailableListener, and systrace to identify rendering issues.
-
-# Вопрос (RU)
-> Реализуйте мониторинг метрик кадров для обнаружения и исправления рывков. Используйте FrameMetricsAggregator, OnFrameMetricsAvailableListener и systrace для выявления проблем рендеринга.
+> Implement frame metrics monitoring to detect and fix jank. Use FrameMetricsAggregator, OnFrameMetricsAvailableListener, and Perfetto/System Trace tools to identify rendering issues.
 
 ---
-
-
----
-
-
-## Answer (EN)
-
-### Overview
-
-**Jank** occurs when the app fails to render a frame within the 16.67ms budget (60 FPS), causing visible stuttering. Modern devices support 90Hz (11.1ms) or 120Hz (8.33ms), making smooth rendering even more critical.
-
-**Frame Budget:**
-- 60 FPS: 16.67ms per frame
-- 90 FPS: 11.11ms per frame
-- 120 FPS: 8.33ms per frame
-
-**Common Causes of Jank:**
-1. Overdraw (rendering pixels multiple times)
-2. Layout complexity (nested hierarchies)
-3. Expensive onDraw() operations
-4. Main thread blocking (I/O, computation)
-5. RecyclerView inefficient adapter
-6. Large bitmap loading
-7. GC pauses
-
-### FrameMetricsAggregator Implementation
-
-**app/build.gradle.kts:**
-```kotlin
-dependencies {
-    implementation("androidx.metrics:metrics-performance:1.0.0-beta01")
-}
-```
-
-#### 1. Basic Frame Metrics Monitoring
-
-```kotlin
-class PerformanceMonitoringActivity : AppCompatActivity() {
-
-    private var frameMetricsAggregator: FrameMetricsAggregator? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Start frame metrics collection
-        frameMetricsAggregator = FrameMetricsAggregator()
-        frameMetricsAggregator?.add(this)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        frameMetricsAggregator?.reset()
-    }
-
-    override fun onPause() {
-        super.onPause()
-
-        // Analyze frame metrics
-        frameMetricsAggregator?.let { aggregator ->
-            val metrics = aggregator.metrics
-
-            // Get frame durations for different stages
-            val totalMetrics = metrics?.get(FrameMetricsAggregator.TOTAL_INDEX)
-
-            if (totalMetrics != null) {
-                analyzeFrameMetrics(totalMetrics)
-            }
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        frameMetricsAggregator?.stop()
-        frameMetricsAggregator = null
-    }
-
-    private fun analyzeFrameMetrics(metrics: SparseIntArray) {
-        var slowFrames = 0
-        var frozenFrames = 0
-        var totalFrames = 0
-
-        // Iterate through frame durations
-        for (i in 0 until metrics.size()) {
-            val frameDurationMs = metrics.keyAt(i)
-            val frameCount = metrics.valueAt(i)
-
-            totalFrames += frameCount
-
-            // Slow frame: > 16ms (missed 60 FPS deadline)
-            if (frameDurationMs > 16) {
-                slowFrames += frameCount
-            }
-
-            // Frozen frame: > 700ms (completely unresponsive)
-            if (frameDurationMs > 700) {
-                frozenFrames += frameCount
-            }
-        }
-
-        val slowFramePercentage = (slowFrames.toFloat() / totalFrames) * 100
-        val frozenFramePercentage = (frozenFrames.toFloat() / totalFrames) * 100
-
-        Log.d("FrameMetrics", """
-            Total Frames: $totalFrames
-            Slow Frames: $slowFrames (${"%.2f".format(slowFramePercentage)}%)
-            Frozen Frames: $frozenFrames (${"%.2f".format(frozenFramePercentage)}%)
-        """.trimIndent())
-
-        // Report to analytics if jank is significant
-        if (slowFramePercentage > 5.0) {
-            reportJankToAnalytics(slowFramePercentage, frozenFramePercentage)
-        }
-    }
-
-    private fun reportJankToAnalytics(slowFramePercentage: Float, frozenFramePercentage: Float) {
-        Firebase.analytics.logEvent("jank_detected") {
-            param("screen", this@PerformanceMonitoringActivity.javaClass.simpleName)
-            param("slow_frame_percentage", slowFramePercentage.toDouble())
-            param("frozen_frame_percentage", frozenFramePercentage.toDouble())
-        }
-    }
-}
-```
-
-#### 2. Real-Time Frame Monitoring with OnFrameMetricsAvailableListener
-
-```kotlin
-class RealTimeFrameMonitor : AppCompatActivity() {
-
-    private val frameMetricsListener = Window.OnFrameMetricsAvailableListener {
-        _, frameMetrics, _ ->
-
-        // Copy metrics (must be done in callback)
-        val metrics = FrameMetrics(frameMetrics)
-
-        // Analyze individual frame
-        val totalDurationNs = metrics.getMetric(FrameMetrics.TOTAL_DURATION)
-        val totalDurationMs = totalDurationNs / 1_000_000.0
-
-        val inputDurationMs = metrics.getMetric(FrameMetrics.INPUT_HANDLING_DURATION) / 1_000_000.0
-        val animationDurationMs = metrics.getMetric(FrameMetrics.ANIMATION_DURATION) / 1_000_000.0
-        val layoutDurationMs = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
-        val drawDurationMs = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
-        val syncDurationMs = metrics.getMetric(FrameMetrics.SYNC_DURATION) / 1_000_000.0
-        val commandDurationMs = metrics.getMetric(FrameMetrics.COMMAND_ISSUE_DURATION) / 1_000_000.0
-
-        // Check for slow frames
-        if (totalDurationMs > 16.67) {
-            Log.w("FrameMetrics", """
-                Slow frame detected: ${"%.2f".format(totalDurationMs)}ms
-                Breakdown:
-                - Input: ${"%.2f".format(inputDurationMs)}ms
-                - Animation: ${"%.2f".format(animationDurationMs)}ms
-                - Layout: ${"%.2f".format(layoutDurationMs)}ms
-                - Draw: ${"%.2f".format(drawDurationMs)}ms
-                - Sync: ${"%.2f".format(syncDurationMs)}ms
-                - Command: ${"%.2f".format(commandDurationMs)}ms
-            """.trimIndent())
-
-            // Identify bottleneck
-            val bottleneck = when {
-                layoutDurationMs > 8 -> "Layout complexity"
-                drawDurationMs > 8 -> "Draw operations"
-                syncDurationMs > 8 -> "GPU synchronization"
-                else -> "Multiple factors"
-            }
-
-            reportFrameBottleneck(bottleneck, totalDurationMs)
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Register listener
-        window.addOnFrameMetricsAvailableListener(
-            frameMetricsListener,
-            Handler(Looper.getMainLooper())
-        )
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        window.removeOnFrameMetricsAvailableListener(frameMetricsListener)
-    }
-
-    private fun reportFrameBottleneck(bottleneck: String, duration: Double) {
-        Firebase.analytics.logEvent("frame_bottleneck") {
-            param("type", bottleneck)
-            param("duration_ms", duration)
-        }
-    }
-}
-```
-
-#### 3. JankStats Library (Modern Approach)
-
-```kotlin
-dependencies {
-    implementation("androidx.metrics:metrics-performance:1.0.0-beta01")
-}
-
-class ModernJankMonitor : AppCompatActivity() {
-
-    private lateinit var jankStats: JankStats
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Create JankStats instance
-        jankStats = JankStats.createAndTrack(
-            window,
-            jankStatsListener
-        )
-    }
-
-    private val jankStatsListener = JankStats.OnFrameListener { frameData ->
-        // Called for each frame
-        if (frameData.isJank) {
-            val frameDurationMs = frameData.frameDurationUiNanos / 1_000_000.0
-
-            Log.w("JankStats", """
-                Jank detected:
-                Duration: ${"%.2f".format(frameDurationMs)}ms
-                States: ${frameData.states.joinToString()}
-            """.trimIndent())
-
-            // Track jank by UI state
-            val currentState = frameData.states.lastOrNull() ?: "unknown"
-            trackJankByState(currentState, frameDurationMs)
-        }
-    }
-
-    // Track UI state for better jank attribution
-    private fun trackScrolling(isScrolling: Boolean) {
-        if (isScrolling) {
-            jankStats.jankHappened("scrolling")
-        }
-    }
-
-    private fun trackJankByState(state: String, duration: Double) {
-        Firebase.analytics.logEvent("jank_by_state") {
-            param("state", state)
-            param("duration_ms", duration)
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        jankStats.isTrackingEnabled = false
-    }
-}
-```
-
-### Common Jank Causes and Fixes
-
-#### 1. Overdraw
-
-** Problem: Multiple layers rendering**
-
-```xml
-<!-- Multiple backgrounds causing overdraw -->
-<LinearLayout
-    android:background="@color/white">
-
-    <LinearLayout
-        android:background="@color/light_gray">
-
-        <TextView
-            android:background="@color/white"
-            android:text="Hello" />
-    </LinearLayout>
-</LinearLayout>
-```
-
-** Solution: Remove unnecessary backgrounds**
-
-```xml
-<!-- Single background layer -->
-<LinearLayout>
-    <LinearLayout
-        android:background="@color/light_gray">
-
-        <TextView
-            android:text="Hello" />
-    </LinearLayout>
-</LinearLayout>
-```
-
-**Detect Overdraw:**
-```
-Developer Options → Debug GPU Overdraw → Show overdraw areas
-- Blue: 1x overdraw (acceptable)
-- Green: 2x overdraw (investigate)
-- Pink: 3x overdraw (fix)
-- Red: 4x+ overdraw (critical)
-```
-
-#### 2. Layout Complexity
-
-** Problem: Deeply nested layouts**
-
-```xml
-<LinearLayout>
-    <RelativeLayout>
-        <LinearLayout>
-            <RelativeLayout>
-                <LinearLayout>
-                    <TextView />
-                </LinearLayout>
-            </RelativeLayout>
-        </LinearLayout>
-    </RelativeLayout>
-</LinearLayout>
-<!-- Hierarchy depth: 6 levels, slow measure/layout -->
-```
-
-** Solution: Flatten with ConstraintLayout**
-
-```xml
-<androidx.constraintlayout.widget.ConstraintLayout>
-    <TextView
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-</androidx.constraintlayout.widget.ConstraintLayout>
-<!-- Hierarchy depth: 2 levels, fast measure/layout -->
-```
-
-#### 3. RecyclerView Jank
-
-** Problem: Expensive bind operations**
-
-```kotlin
-class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-
-        // SLOW: Load image synchronously
-        val bitmap = BitmapFactory.decodeFile(item.imagePath)
-        holder.imageView.setImageBitmap(bitmap)
-
-        // SLOW: Complex text formatting
-        val formattedText = complexTextFormatting(item.description)
-        holder.textView.text = formattedText
-    }
-
-    private fun complexTextFormatting(text: String): Spanned {
-        // Expensive operation on main thread
-        return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
-    }
-}
-```
-
-** Solution: Async operations and caching**
-
-```kotlin
-class OptimizedAdapter : RecyclerView.Adapter<ViewHolder>() {
-
-    private val formattedTextCache = LruCache<String, Spanned>(100)
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = items[position]
-
-        // Load image asynchronously with Coil
-        holder.imageView.load(item.imagePath) {
-            crossfade(true)
-            placeholder(R.drawable.placeholder)
-        }
-
-        // Use cached formatted text
-        val formattedText = formattedTextCache.get(item.id)
-            ?: complexTextFormatting(item.description).also {
-                formattedTextCache.put(item.id, it)
-            }
-        holder.textView.text = formattedText
-    }
-
-    // Pre-format text in background
-    fun prefetchItems(items: List<Item>) {
-        CoroutineScope(Dispatchers.Default).launch {
-            items.forEach { item ->
-                if (formattedTextCache.get(item.id) == null) {
-                    val formatted = complexTextFormatting(item.description)
-                    formattedTextCache.put(item.id, formatted)
-                }
-            }
-        }
-    }
-}
-```
-
-#### 4. View Inflation Jank
-
-** Problem: Inflating views on demand**
-
-```kotlin
-// Inflate complex view when needed
-button.setOnClickListener {
-    val detailView = layoutInflater.inflate(
-        R.layout.complex_detail_view,  // 50ms to inflate
-        container,
-        false
-    )
-    container.addView(detailView)
-}
-```
-
-** Solution: ViewStub for lazy inflation**
-
-```xml
-<!-- activity_main.xml -->
-<FrameLayout>
-    <ViewStub
-        android:id="@+id/detail_view_stub"
-        android:layout="@layout/complex_detail_view"
-        android:inflatedId="@+id/detail_view" />
-</FrameLayout>
-```
-
-```kotlin
-// Inflate only when needed, UI appears faster
-button.setOnClickListener {
-    val viewStub = findViewById<ViewStub>(R.id.detail_view_stub)
-    val detailView = viewStub?.inflate() ?: findViewById(R.id.detail_view)
-    // Configure detailView...
-}
-```
-
-### Systrace Analysis
-
-#### 1. Capture Systrace
-
-```bash
-# Record 10 seconds of app interaction
-python $ANDROID_HOME/platform-tools/systrace/systrace.py \
-    --time=10 \
-    -o trace.html \
-    -a com.example.myapp \
-    sched gfx view wm am app
-
-# Open in Chrome
-chrome trace.html
-```
-
-#### 2. Identify Jank in Trace
-
-**Look for:**
-1. **Frame deadline misses**: Red/yellow bars in frame timeline
-2. **Long measure/layout**: > 8ms indicates complexity
-3. **Expensive draw**: > 8ms indicates overdraw or custom drawing
-4. **GC pauses**: "GC" events during frame rendering
-5. **Main thread blocking**: Long operations on UI thread
-
-**Example Analysis:**
-```
-Frame 145: 28ms (JANK - missed deadline)
- Input: 0.2ms
- Animation: 0.5ms
- Measure/Layout: 14.3ms  (TOO SLOW)
-   RecyclerView.onMeasure: 12.8ms
-      Adapter.onBindViewHolder: 11.2ms (BOTTLENECK)
- Draw: 8.1ms  (SLOW)
- Sync: 4.9ms
-
-Action: Optimize onBindViewHolder - move work off main thread
-```
-
-### Production Monitoring
-
-#### 1. Firebase Performance Monitoring
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-
-    private val frameMetricsMonitor = FrameMetricsMonitor()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        // Start monitoring frames
-        frameMetricsMonitor.start(this)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        frameMetricsMonitor.stop()
-    }
-}
-
-class FrameMetricsMonitor {
-
-    private var frameMetricsAggregator: FrameMetricsAggregator? = null
-    private val performanceMonitoring = Firebase.performance
-
-    fun start(activity: Activity) {
-        frameMetricsAggregator = FrameMetricsAggregator().apply {
-            add(activity)
-        }
-    }
-
-    fun stop() {
-        frameMetricsAggregator?.let { aggregator ->
-            val metrics = aggregator.metrics?.get(FrameMetricsAggregator.TOTAL_INDEX)
-
-            if (metrics != null) {
-                val stats = calculateFrameStats(metrics)
-
-                // Log to Firebase Performance
-                val trace = performanceMonitoring.newTrace("screen_rendering")
-                trace.putMetric("slow_frames", stats.slowFrames.toLong())
-                trace.putMetric("frozen_frames", stats.frozenFrames.toLong())
-                trace.putMetric("total_frames", stats.totalFrames.toLong())
-                trace.putMetric("slow_frame_percentage", (stats.slowFramePercentage * 100).toLong())
-                trace.stop()
-            }
-
-            aggregator.stop()
-        }
-        frameMetricsAggregator = null
-    }
-
-    private fun calculateFrameStats(metrics: SparseIntArray): FrameStats {
-        var slowFrames = 0
-        var frozenFrames = 0
-        var totalFrames = 0
-
-        for (i in 0 until metrics.size()) {
-            val frameDurationMs = metrics.keyAt(i)
-            val frameCount = metrics.valueAt(i)
-
-            totalFrames += frameCount
-
-            if (frameDurationMs > 16) slowFrames += frameCount
-            if (frameDurationMs > 700) frozenFrames += frameCount
-        }
-
-        return FrameStats(
-            totalFrames = totalFrames,
-            slowFrames = slowFrames,
-            frozenFrames = frozenFrames,
-            slowFramePercentage = slowFrames.toFloat() / totalFrames
-        )
-    }
-
-    data class FrameStats(
-        val totalFrames: Int,
-        val slowFrames: Int,
-        val frozenFrames: Int,
-        val slowFramePercentage: Float
-    )
-}
-```
-
-### Best Practices
-
-1. **Target 60 FPS Minimum**: Modern devices support higher, but 60 FPS is baseline
-2. **Measure Real Devices**: Emulators don't reflect real rendering performance
-3. **Monitor in Production**: Use Firebase Performance to track user experience
-4. **Flatten View Hierarchies**: Use ConstraintLayout to reduce nesting
-5. **Eliminate Overdraw**: Remove unnecessary backgrounds and layers
-6. **Optimize RecyclerView**: Use DiffUtil, ViewHolder pattern, prefetch
-7. **Async Image Loading**: Use Coil/Glide, never load images synchronously
-8. **ViewStub for Rare Views**: Defer inflation of infrequently shown content
-9. **Profile Before Optimizing**: Use systrace to identify actual bottlenecks
-10. **Test on Low-End Devices**: Jank is magnified on slow hardware
-11. **Avoid Main Thread Work**: Move heavy computation to background
-12. **Use Jetpack Compose**: Modern UI toolkit with better performance
-
-### Common Pitfalls
-
-1. **Synchronous Image Loading**: Always use async image libraries
-2. **Complex onDraw()**: Custom drawing should be minimal and cached
-3. **Deeply Nested Layouts**: Flatten hierarchies with ConstraintLayout
-4. **Expensive Adapter Binding**: Keep onBindViewHolder() lightweight
-5. **Main Thread I/O**: File/network operations must be async
-6. **Not Caching Formatted Text**: HTML parsing, regex expensive
-7. **Ignoring Overdraw**: Multiple background layers slow rendering
-8. **Large Bitmaps**: Downsample images to view dimensions
-9. **Blocking Animations**: Use hardware-accelerated animations
-10. **Testing Only on Flagship Devices**: Jank appears on mid/low-end phones
 
 ## Ответ (RU)
 
 ### Обзор
 
-**Jank (рывки)** возникает, когда приложение не может отрендерить кадр в рамках бюджета 16.67мс (60 FPS), что вызывает видимые подтормаживания. Современные устройства поддерживают 90Hz (11.1мс) или 120Hz (8.33мс), что делает плавный рендеринг еще более критичным.
+Jank (рывки) возникает, когда приложение не успевает отрисовать кадр в пределах бюджета синхронизации экрана (например, ~16.67 мс при 60 Гц), что приводит к заметным подлагиваниям. На современных устройствах с 90 Гц (~11.11 мс) и 120 Гц (~8.33 мс) требования к производительности ещё выше.
 
-**Бюджет кадра:**
-- 60 FPS: 16.67мс на кадр
-- 90 FPS: 11.11мс на кадр
-- 120 FPS: 8.33мс на кадр
+Примеры бюджета кадра (на кадр):
+- 60 Гц: 16.67 мс
+- 90 Гц: 11.11 мс
+- 120 Гц: 8.33 мс
 
-**Распространенные причины рывков:**
-1. Overdraw (отрисовка пикселей несколько раз)
-2. Сложность макета (вложенные иерархии)
-3. Дорогие операции в onDraw()
+Частые причины рывков:
+1. Overdraw (многократная перерисовка одних и тех же пикселей)
+2. Сложные и глубокие иерархии `View` (measure/layout дорогие)
+3. Тяжёлые операции в `onDraw()`
 4. Блокировка главного потока (I/O, вычисления)
-5. Неэффективный адаптер RecyclerView
-6. Загрузка больших bitmap
-7. Паузы сборщика мусора (GC)
+5. Неэффективный `RecyclerView` (тяжёлый `onBindViewHolder()`)
+6. Загрузка/декодирование крупных `Bitmap` в UI-потоке
+7. Паузы GC и избыточные выделения памяти
 
 ### Реализация FrameMetricsAggregator
 
-**app/build.gradle.kts:**
+Примечание: `FrameMetricsAggregator` агрегирует длительности по миллисекундным "бакетам". Порог >16 мс актуален для 60 Гц; для дисплеев с 90/120 Гц порог должен быть ниже.
+
+app/build.gradle.kts:
 ```kotlin
 dependencies {
-    implementation("androidx.metrics:metrics-performance:1.0.0-beta01")
+    implementation("androidx.metrics:metrics-performance:1.0.0")
 }
 ```
 
-#### 1. Базовый Мониторинг Метрик Кадров
+#### 1. Базовый мониторинг метрик кадров
 
 ```kotlin
 class PerformanceMonitoringActivity : AppCompatActivity() {
@@ -1260,25 +82,24 @@ class PerformanceMonitoringActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Start frame metrics collection
+        // Запуск сбора метрик кадров
         frameMetricsAggregator = FrameMetricsAggregator()
         frameMetricsAggregator?.add(this)
     }
 
     override fun onResume() {
         super.onResume()
+        // Сброс статистики при возврате экрана
         frameMetricsAggregator?.reset()
     }
 
     override fun onPause() {
         super.onPause()
 
-        // Analyze frame metrics
+        // Анализ метрик для текущего экрана
         frameMetricsAggregator?.let { aggregator ->
-            val metrics = aggregator.metrics
-
-            // Get frame durations for different stages
-            val totalMetrics = metrics?.get(FrameMetricsAggregator.TOTAL_INDEX)
+            val metricsArrays = aggregator.metrics
+            val totalMetrics = metricsArrays?.get(FrameMetricsAggregator.TOTAL_INDEX)
 
             if (totalMetrics != null) {
                 analyzeFrameMetrics(totalMetrics)
@@ -1297,40 +118,47 @@ class PerformanceMonitoringActivity : AppCompatActivity() {
         var frozenFrames = 0
         var totalFrames = 0
 
-        // Iterate through frame durations
         for (i in 0 until metrics.size()) {
-            val frameDurationMs = metrics.keyAt(i)
+            val frameDurationMs = metrics.keyAt(i) // верхняя граница бакета в мс
             val frameCount = metrics.valueAt(i)
 
             totalFrames += frameCount
 
-            // Slow frame: > 16ms (missed 60 FPS deadline)
+            // Медленный кадр (для 60 Гц): > 16 мс
             if (frameDurationMs > 16) {
                 slowFrames += frameCount
             }
 
-            // Frozen frame: > 700ms (completely unresponsive)
+            // "Замороженный" кадр (Android vitals): > 700 мс
             if (frameDurationMs > 700) {
                 frozenFrames += frameCount
             }
         }
 
+        if (totalFrames == 0) return
+
         val slowFramePercentage = (slowFrames.toFloat() / totalFrames) * 100
         val frozenFramePercentage = (frozenFrames.toFloat() / totalFrames) * 100
 
-        Log.d("FrameMetrics", """
-            Total Frames: $totalFrames
-            Slow Frames: $slowFrames (${"%.2f".format(slowFramePercentage)}%)
-            Frozen Frames: $frozenFrames (${"%.2f".format(frozenFramePercentage)}%)
-        """.trimIndent())
+        Log.d(
+            "FrameMetrics",
+            """
+            Всего кадров: $totalFrames
+            Медленных кадров: $slowFrames (${"%.2f".format(slowFramePercentage)}%)
+            Замороженных кадров: $frozenFrames (${"%.2f".format(frozenFramePercentage)}%)
+            """.trimIndent()
+        )
 
-        // Report to analytics if jank is significant
-        if (slowFramePercentage > 5.0) {
+        // Пример: репортим, если доля медленных кадров заметна
+        if (slowFramePercentage > 5.0f) {
             reportJankToAnalytics(slowFramePercentage, frozenFramePercentage)
         }
     }
 
-    private fun reportJankToAnalytics(slowFramePercentage: Float, frozenFramePercentage: Float) {
+    private fun reportJankToAnalytics(
+        slowFramePercentage: Float,
+        frozenFramePercentage: Float
+    ) {
         Firebase.analytics.logEvent("jank_detected") {
             param("screen", this@PerformanceMonitoringActivity.javaClass.simpleName)
             param("slow_frame_percentage", slowFramePercentage.toDouble())
@@ -1340,42 +168,46 @@ class PerformanceMonitoringActivity : AppCompatActivity() {
 }
 ```
 
-#### 2. Мониторинг Кадров В Реальном Времени С OnFrameMetricsAvailableListener
+#### 2. Мониторинг кадров в реальном времени с `OnFrameMetricsAvailableListener`
 
 ```kotlin
 class RealTimeFrameMonitor : AppCompatActivity() {
 
-    private val frameMetricsListener = Window.OnFrameMetricsAvailableListener {
-        _, frameMetrics, _ ->
-
-        // Copy metrics (must be done in callback)
+    private val frameMetricsListener = Window.OnFrameMetricsAvailableListener { _, frameMetrics, _ ->
         val metrics = FrameMetrics(frameMetrics)
 
-        // Analyze individual frame
         val totalDurationNs = metrics.getMetric(FrameMetrics.TOTAL_DURATION)
         val totalDurationMs = totalDurationNs / 1_000_000.0
 
-        val inputDurationMs = metrics.getMetric(FrameMetrics.INPUT_HANDLING_DURATION) / 1_000_000.0
-        val animationDurationMs = metrics.getMetric(FrameMetrics.ANIMATION_DURATION) / 1_000_000.0
-        val layoutDurationMs = metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
-        val drawDurationMs = metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
-        val syncDurationMs = metrics.getMetric(FrameMetrics.SYNC_DURATION) / 1_000_000.0
-        val commandDurationMs = metrics.getMetric(FrameMetrics.COMMAND_ISSUE_DURATION) / 1_000_000.0
+        val inputDurationMs =
+            metrics.getMetric(FrameMetrics.INPUT_HANDLING_DURATION) / 1_000_000.0
+        val animationDurationMs =
+            metrics.getMetric(FrameMetrics.ANIMATION_DURATION) / 1_000_000.0
+        val layoutDurationMs =
+            metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
+        val drawDurationMs =
+            metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
+        val syncDurationMs =
+            metrics.getMetric(FrameMetrics.SYNC_DURATION) / 1_000_000.0
+        val commandDurationMs =
+            metrics.getMetric(FrameMetrics.COMMAND_ISSUE_DURATION) / 1_000_000.0
 
-        // Check for slow frames
+        // Порог для 60 Гц; для 90/120 Гц нужно уменьшить
         if (totalDurationMs > 16.67) {
-            Log.w("FrameMetrics", """
-                Slow frame detected: ${"%.2f".format(totalDurationMs)}ms
-                Breakdown:
-                - Input: ${"%.2f".format(inputDurationMs)}ms
-                - Animation: ${"%.2f".format(animationDurationMs)}ms
-                - Layout: ${"%.2f".format(layoutDurationMs)}ms
-                - Draw: ${"%.2f".format(drawDurationMs)}ms
-                - Sync: ${"%.2f".format(syncDurationMs)}ms
-                - Command: ${"%.2f".format(commandDurationMs)}ms
-            """.trimIndent())
+            Log.w(
+                "FrameMetrics",
+                """
+                Обнаружен медленный кадр: ${"%.2f".format(totalDurationMs)} мс
+                Разбивка:
+                - Input: ${"%.2f".format(inputDurationMs)} мс
+                - Animation: ${"%.2f".format(animationDurationMs)} мс
+                - Layout: ${"%.2f".format(layoutDurationMs)} мс
+                - Draw: ${"%.2f".format(drawDurationMs)} мс
+                - Sync: ${"%.2f".format(syncDurationMs)} мс
+                - Command: ${"%.2f".format(commandDurationMs)} мс
+                """.trimIndent()
+            )
 
-            // Identify bottleneck
             val bottleneck = when {
                 layoutDurationMs > 8 -> "Layout complexity"
                 drawDurationMs > 8 -> "Draw operations"
@@ -1391,7 +223,6 @@ class RealTimeFrameMonitor : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Register listener
         window.addOnFrameMetricsAvailableListener(
             frameMetricsListener,
             Handler(Looper.getMainLooper())
@@ -1403,20 +234,20 @@ class RealTimeFrameMonitor : AppCompatActivity() {
         window.removeOnFrameMetricsAvailableListener(frameMetricsListener)
     }
 
-    private fun reportFrameBottleneck(bottleneck: String, duration: Double) {
+    private fun reportFrameBottleneck(bottleneck: String, durationMs: Double) {
         Firebase.analytics.logEvent("frame_bottleneck") {
             param("type", bottleneck)
-            param("duration_ms", duration)
+            param("duration_ms", durationMs)
         }
     }
 }
 ```
 
-#### 3. Библиотека JankStats (Современный подход)
+#### 3. Библиотека JankStats (современный подход)
 
 ```kotlin
 dependencies {
-    implementation("androidx.metrics:metrics-performance:1.0.0-beta01")
+    implementation("androidx.metrics:metrics-performance:1.0.0")
 }
 
 class ModernJankMonitor : AppCompatActivity() {
@@ -1427,41 +258,38 @@ class ModernJankMonitor : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Create JankStats instance
-        jankStats = JankStats.createAndTrack(
-            window,
-            jankStatsListener
-        )
-    }
+        jankStats = JankStats.createAndTrack(window) { frameData ->
+            if (frameData.isJank) {
+                val frameDurationMs = frameData.frameDurationUiNanos / 1_000_000.0
 
-    private val jankStatsListener = JankStats.OnFrameListener { frameData ->
-        // Called for each frame
-        if (frameData.isJank) {
-            val frameDurationMs = frameData.frameDurationUiNanos / 1_000_000.0
+                Log.w(
+                    "JankStats",
+                    """
+                    Обнаружен jank:
+                    Длительность: ${"%.2f".format(frameDurationMs)} мс
+                    Состояния: ${frameData.states.joinToString()}
+                    """.trimIndent()
+                )
 
-            Log.w("JankStats", """
-                Jank detected:
-                Duration: ${"%.2f".format(frameDurationMs)}ms
-                States: ${frameData.states.joinToString()}
-            """.trimIndent())
-
-            // Track jank by UI state
-            val currentState = frameData.states.lastOrNull() ?: "unknown"
-            trackJankByState(currentState, frameDurationMs)
+                val currentState = frameData.states.lastOrNull() ?: "unknown"
+                trackJankByState(currentState, frameDurationMs)
+            }
         }
     }
 
-    // Track UI state for better jank attribution
-    private fun trackScrolling(isScrolling: Boolean) {
+    // Пример: помечаем состояние "scrolling" для лучшей атрибуции
+    private fun setScrollingState(isScrolling: Boolean) {
         if (isScrolling) {
-            jankStats.jankHappened("scrolling")
+            jankStats.beginState("scrolling")
+        } else {
+            jankStats.endState("scrolling")
         }
     }
 
-    private fun trackJankByState(state: String, duration: Double) {
+    private fun trackJankByState(state: String, durationMs: Double) {
         Firebase.analytics.logEvent("jank_by_state") {
             param("state", state)
-            param("duration_ms", duration)
+            param("duration_ms", durationMs)
         }
     }
 
@@ -1472,51 +300,233 @@ class ModernJankMonitor : AppCompatActivity() {
 }
 ```
 
-### Распространенные Причины И Исправления Рывков
+### Распространённые причины и исправления рывков
 
 #### 1. Overdraw
 
-**Проблема:** Отрисовка нескольких слоев
-**Решение:** Убрать ненужные фоны
-**Обнаружение:** Developer Options → Debug GPU Overdraw
+Проблема: Несколько фонов и перекрывающихся `View` приводят к лишней отрисовке пикселей.
 
-#### 2. Сложность Макета
+```xml
+<!-- Несколько background, вызывающих overdraw -->
+<LinearLayout
+    android:background="@color/white">
 
-**Проблема:** Глубоко вложенные макеты
-**Решение:** Упростить с помощью ConstraintLayout
+    <LinearLayout
+        android:background="@color/light_gray">
 
-#### 3. Рывки В RecyclerView
-
-**Проблема:** Дорогие операции в onBindViewHolder
-**Решение:** Асинхронные операции и кэширование
-
-#### 4. Рывки При Инфляции View
-
-**Проблема:** Инфляция сложных view по требованию
-**Решение:** ViewStub для ленивой инфляции
-
-### Анализ С Помощью Systrace
-
-#### 1. Захват Systrace
-
-```bash
-python $ANDROID_HOME/platform-tools/systrace/systrace.py ...
+        <TextView
+            android:background="@color/white"
+            android:text="Hello" />
+    </LinearLayout>
+</LinearLayout>
 ```
 
-#### 2. Определение Рывков В Трейсе
+Решение: Убирать лишние `background`, рисовать по возможности один слой.
 
-**Искать:**
-1.  **Пропуски дедлайнов кадров**: Красные/желтые полосы
-2.  **Долгие measure/layout**: > 8мс
-3.  **Дорогие draw**: > 8мс
-4.  **Паузы GC**: События "GC"
-5.  **Блокировка главного потока**: Долгие операции
+```xml
+<!-- Один слой background -->
+<LinearLayout>
 
-### Мониторинг В Продакшене
+    <LinearLayout
+        android:background="@color/light_gray">
 
-#### 1. Firebase Performance Monitoring
+        <TextView
+            android:text="Hello" />
+    </LinearLayout>
+</LinearLayout>
+```
+
+Обнаружение overdraw:
+- Developer Options → Debug GPU Overdraw → Show overdraw areas
+- Синий: 1x (норма), зелёный: 2x (проверить), розовый: 3x (оптимизировать), красный: 4x+ (критично)
+
+#### 2. Сложность макета
+
+Проблема: Глубоко вложенные макеты → тяжёлый `measure/layout`.
+
+```xml
+<LinearLayout>
+    <RelativeLayout>
+        <LinearLayout>
+            <RelativeLayout>
+                <LinearLayout>
+                    <TextView />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
+```
+
+Решение: Уплощать иерархию с помощью `ConstraintLayout`.
+
+```xml
+<androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+#### 3. Рывки в RecyclerView
+
+Проблема: Тяжёлый `onBindViewHolder` (синхронная декодировка изображений, сложное форматирование текста).
 
 ```kotlin
+class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = items[position]
+
+        // ПЛОХО: синхронная декодировка в главном потоке
+        val bitmap = BitmapFactory.decodeFile(item.imagePath)
+        holder.imageView.setImageBitmap(bitmap)
+
+        // ПЛОХО: сложное текстовое форматирование в UI-потоке
+        val formattedText = complexTextFormatting(item.description)
+        holder.textView.text = formattedText
+    }
+
+    private fun complexTextFormatting(text: String): Spanned {
+        return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
+    }
+}
+```
+
+Решение: Асинхронная загрузка и кэширование.
+
+```kotlin
+class OptimizedAdapter : RecyclerView.Adapter<ViewHolder>() {
+
+    private val formattedTextCache = LruCache<String, Spanned>(100)
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = items[position]
+
+        // Асинхронная загрузка изображений (например, Coil)
+        holder.imageView.load(item.imagePath) {
+            crossfade(true)
+            placeholder(R.drawable.placeholder)
+        }
+
+        val cached = formattedTextCache.get(item.id)
+        val formatted = cached ?: complexTextFormatting(item.description).also {
+            formattedTextCache.put(item.id, it)
+        }
+        holder.textView.text = formatted
+    }
+
+    private fun complexTextFormatting(text: String): Spanned {
+        return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
+    }
+
+    fun prefetchItems(items: List<Item>) {
+        CoroutineScope(Dispatchers.Default).launch {
+            items.forEach { item ->
+                if (formattedTextCache.get(item.id) == null) {
+                    val formatted = complexTextFormatting(item.description)
+                    formattedTextCache.put(item.id, formatted)
+                }
+            }
+        }
+    }
+}
+```
+
+#### 4. Рывки при инфляции `View`
+
+Проблема: Инфляция тяжёлого layout по клику блокирует UI-поток.
+
+```kotlin
+button.setOnClickListener {
+    val detailView = layoutInflater.inflate(
+        R.layout.complex_detail_view,
+        container,
+        false
+    )
+    container.addView(detailView)
+}
+```
+
+Решение: Использовать `ViewStub` для ленивой инфляции.
+
+```xml
+<FrameLayout>
+    <ViewStub
+        android:id="@+id/detail_view_stub"
+        android:layout="@layout/complex_detail_view"
+        android:inflatedId="@+id/detail_view" />
+</FrameLayout>
+```
+
+```kotlin
+button.setOnClickListener {
+    val viewStub = findViewById<ViewStub>(R.id.detail_view_stub)
+    val detailView = viewStub?.inflate() ?: findViewById(R.id.detail_view)
+    // Настройка detailView...
+}
+```
+
+### Анализ с помощью Systrace / Perfetto
+
+Рекомендуется использовать System Trace / Perfetto (в Android Studio) или `perfetto` CLI вместо устаревшего `systrace.py`. Если используется Systrace, общая логика работы аналогична.
+
+Пример захвата (устаревший Systrace):
+
+```bash
+python $ANDROID_HOME/platform-tools/systrace/systrace.py \
+    --time=10 \
+    -o trace.html \
+    -a com.example.myapp \
+    sched gfx view wm am app
+
+chrome trace.html
+```
+
+На что смотреть:
+1. Пропуски дедлайнов кадров (красные/жёлтые кадры)
+2. Долгий `measure/layout` (> ~8 мс) → сложная иерархия
+3. Дорогой `draw` (> ~8 мс) → тяжёлый кастомный рендеринг/overdraw
+4. Паузы GC во время рендера
+5. Долгие операции в главном потоке
+
+Пример:
+
+```
+Frame 145: 28 ms (JANK - missed deadline)
+ Input: 0.2 ms
+ Animation: 0.5 ms
+ Measure/Layout: 14.3 ms (slow)
+   RecyclerView.onMeasure: 12.8 ms
+      Adapter.onBindViewHolder: 11.2 ms (bottleneck)
+ Draw: 8.1 ms (slow)
+ Sync: 4.9 ms
+
+Action: Move expensive onBindViewHolder work off main thread.
+```
+
+### Мониторинг в продакшене
+
+Пример с Firebase Performance и `FrameMetricsAggregator`:
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+
+    private val frameMetricsMonitor = FrameMetricsMonitor()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        frameMetricsMonitor.start(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        frameMetricsMonitor.stop()
+    }
+}
+
 class FrameMetricsMonitor {
 
     private var frameMetricsAggregator: FrameMetricsAggregator? = null
@@ -1530,69 +540,713 @@ class FrameMetricsMonitor {
 
     fun stop() {
         frameMetricsAggregator?.let { aggregator ->
-            val metrics = aggregator.metrics?.get(FrameMetricsAggregator.TOTAL_INDEX)
+            val totalMetrics = aggregator.metrics?.get(FrameMetricsAggregator.TOTAL_INDEX)
 
-            if (metrics != null) {
-                val stats = calculateFrameStats(metrics)
+            if (totalMetrics != null) {
+                val stats = calculateFrameStats(totalMetrics)
 
-                // Log to Firebase Performance
-                val trace = performanceMonitoring.newTrace("screen_rendering")
-                trace.putMetric("slow_frames", stats.slowFrames.toLong())
-                trace.putMetric("frozen_frames", stats.frozenFrames.toLong())
-                trace.putMetric("total_frames", stats.totalFrames.toLong())
-                trace.putMetric("slow_frame_percentage", (stats.slowFramePercentage * 100).toLong())
-                trace.stop()
+                if (stats.totalFrames > 0) {
+                    val trace = performanceMonitoring.newTrace("screen_rendering")
+                    trace.putMetric("slow_frames", stats.slowFrames.toLong())
+                    trace.putMetric("frozen_frames", stats.frozenFrames.toLong())
+                    trace.putMetric("total_frames", stats.totalFrames.toLong())
+                    trace.putMetric(
+                        "slow_frame_percentage",
+                        stats.slowFramePercentage.toLong()
+                    )
+                    trace.stop()
+                }
             }
 
             aggregator.stop()
         }
         frameMetricsAggregator = null
     }
-    // ...
+
+    private fun calculateFrameStats(metrics: SparseIntArray): FrameStats {
+        var slowFrames = 0
+        var frozenFrames = 0
+        var totalFrames = 0
+
+        for (i in 0 until metrics.size()) {
+            val frameDurationMs = metrics.keyAt(i)
+            val frameCount = metrics.valueAt(i)
+
+            totalFrames += frameCount
+
+            if (frameDurationMs > 16) slowFrames += frameCount
+            if (frameDurationMs > 700) frozenFrames += frameCount
+        }
+
+        val slowFramePercentage = if (totalFrames > 0) {
+            (slowFrames.toFloat() / totalFrames) * 100
+        } else 0f
+
+        return FrameStats(
+            totalFrames = totalFrames,
+            slowFrames = slowFrames,
+            frozenFrames = frozenFrames,
+            slowFramePercentage = slowFramePercentage
+        )
+    }
+
+    data class FrameStats(
+        val totalFrames: Int,
+        val slowFrames: Int,
+        val frozenFrames: Int,
+        val slowFramePercentage: Float
+    )
 }
 ```
 
-### Лучшие Практики
+### Лучшие практики
 
-1.  **Цель - минимум 60 FPS**
-2.  **Измеряйте на реальных устройствах**
-3.  **Мониторьте в продакшене**
-4.  **Упрощайте иерархии View**
-5.  **Устраняйте Overdraw**
-6.  **Оптимизируйте RecyclerView**
-7.  **Асинхронная загрузка изображений**
-8.  **Используйте ViewStub для редких View**
-9.  **Профилируйте перед оптимизацией**
-10. **Тестируйте на слабых устройствах**
-11. **Избегайте работы в главном потоке**
-12. **Используйте Jetpack Compose**
+1. Стремиться как минимум к 60 FPS (и учитывать дисплеи с 90/120 Гц).
+2. Тестировать на реальных устройствах, включая средний и низкий сегмент.
+3. Мониторить производительность рендеринга в продакшене.
+4. Упрощать иерархию `View`, использовать `ConstraintLayout`/Compose.
+5. Минимизировать overdraw, избегать лишних фонов и перекрытий.
+6. Оптимизировать `RecyclerView`: лёгкий `onBindViewHolder`, `DiffUtil`, prefetch.
+7. Загружать изображения асинхронно (Coil/Glide/Picasso), не блокировать UI-поток.
+8. Использовать `ViewStub` или ленивую инфляцию для редко используемых частей UI.
+9. Сначала профилировать (System Trace/Perfetto, FrameMetrics, JankStats), затем оптимизировать.
+10. Выносить тяжёлые операции из главного потока.
+11. Избегать избыточных аллокаций во время анимаций и на горячих путях, чтобы снизить jank от GC.
+12. Предпочитать современные тулкиты (Jetpack Compose + корректное профилирование), но всегда измерять.
 
-### Распространенные Ошибки
+### Распространённые ошибки
 
-1.  **Синхронная загрузка изображений**
-2.  **Сложный onDraw()**
-3.  **Глубоко вложенные макеты**
-4.  **Дорогие привязки в адаптере**
-5.  **I/O в главном потоке**
-6.  **Игнорирование Overdraw**
-7.  **Большие Bitmaps**
-8.  **Тестирование только на флагманах**
+1. Синхронная загрузка изображений в UI-потоке.
+2. Тяжёлый и не оптимизированный `onDraw()` без кэширования.
+3. Глубоко вложенные макеты, приводящие к медленному `measure/layout`.
+4. Тяжёлый `onBindViewHolder()`.
+5. Файловый/сетевой I/O в главном потоке.
+6. Игнорирование индикаторов overdraw.
+7. Использование огромных `Bitmap` без downsampling.
+8. Блокировка анимаций неаппаратно-ускоренными свойствами.
+9. Тестирование только на флагманских устройствах.
 
 ---
 
-## References
-- [JankStats Library](https://developer.android.com/jetpack/androidx/releases/metrics)
-- [Frame Metrics](https://developer.android.com/reference/android/view/FrameMetrics)
-- [Slow Rendering](https://developer.android.com/topic/performance/vitals/render)
-- [Systrace](https://developer.android.com/topic/performance/tracing)
+## Answer (EN)
 
+### Overview
+
+Jank occurs when the app fails to render frames within the device's vsync budget (e.g. ~16.67ms at 60Hz), causing visible stuttering. Modern devices support 90Hz (~11.11ms) or 120Hz (~8.33ms), so smooth rendering is even more critical.
+
+Frame budget examples (per frame):
+- 60 Hz: 16.67 ms
+- 90 Hz: 11.11 ms
+- 120 Hz: 8.33 ms
+
+Common causes of jank:
+1. Overdraw (rendering pixels multiple times)
+2. Layout complexity (deep hierarchies, heavy measure/layout)
+3. Expensive `onDraw()` operations
+4. Main thread blocking (I/O, heavy computation)
+5. Inefficient `RecyclerView` binding and diffing
+6. Large `Bitmap` loading / decoding on UI thread
+7. GC pauses and memory churn
+
+### FrameMetricsAggregator Implementation
+
+Note: `FrameMetricsAggregator` buckets durations in milliseconds. Thresholds below assume a 60Hz budget; for higher refresh rates, adjust accordingly.
+
+app/build.gradle.kts:
+```kotlin
+dependencies {
+    implementation("androidx.metrics:metrics-performance:1.0.0")
+}
+```
+
+#### 1. Basic Frame Metrics Monitoring
+
+```kotlin
+class PerformanceMonitoringActivity : AppCompatActivity() {
+
+    private var frameMetricsAggregator: FrameMetricsAggregator? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        // Start frame metrics collection
+        frameMetricsAggregator = FrameMetricsAggregator()
+        frameMetricsAggregator?.add(this)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Reset stats when screen becomes visible
+        frameMetricsAggregator?.reset()
+    }
+
+    override fun onPause() {
+        super.onPause()
+
+        // Analyze frame metrics for this screen session
+        frameMetricsAggregator?.let { aggregator ->
+            val metricsArrays = aggregator.metrics
+            val totalMetrics = metricsArrays?.get(FrameMetricsAggregator.TOTAL_INDEX)
+
+            if (totalMetrics != null) {
+                analyzeFrameMetrics(totalMetrics)
+            }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        frameMetricsAggregator?.stop()
+        frameMetricsAggregator = null
+    }
+
+    private fun analyzeFrameMetrics(metrics: SparseIntArray) {
+        var slowFrames = 0
+        var frozenFrames = 0
+        var totalFrames = 0
+
+        for (i in 0 until metrics.size()) {
+            val frameDurationMs = metrics.keyAt(i) // bucket upper bound in ms
+            val frameCount = metrics.valueAt(i)
+
+            totalFrames += frameCount
+
+            // Slow frame (for 60Hz): > 16 ms
+            if (frameDurationMs > 16) {
+                slowFrames += frameCount
+            }
+
+            // Frozen frame (Android vitals definition): > 700 ms
+            if (frameDurationMs > 700) {
+                frozenFrames += frameCount
+            }
+        }
+
+        if (totalFrames == 0) return
+
+        val slowFramePercentage = (slowFrames.toFloat() / totalFrames) * 100
+        val frozenFramePercentage = (frozenFrames.toFloat() / totalFrames) * 100
+
+        Log.d(
+            "FrameMetrics",
+            """
+            Total Frames: $totalFrames
+            Slow Frames: $slowFrames (${"%.2f".format(slowFramePercentage)}%)
+            Frozen Frames: $frozenFrames (${"%.2f".format(frozenFramePercentage)}%)
+            """.trimIndent()
+        )
+
+        // Example: report when slow frames exceed threshold
+        if (slowFramePercentage > 5.0f) {
+            reportJankToAnalytics(slowFramePercentage, frozenFramePercentage)
+        }
+    }
+
+    private fun reportJankToAnalytics(
+        slowFramePercentage: Float,
+        frozenFramePercentage: Float
+    ) {
+        Firebase.analytics.logEvent("jank_detected") {
+            param("screen", this@PerformanceMonitoringActivity.javaClass.simpleName)
+            param("slow_frame_percentage", slowFramePercentage.toDouble())
+            param("frozen_frame_percentage", frozenFramePercentage.toDouble())
+        }
+    }
+}
+```
+
+#### 2. Real-Time Frame Monitoring with `OnFrameMetricsAvailableListener`
+
+```kotlin
+class RealTimeFrameMonitor : AppCompatActivity() {
+
+    private val frameMetricsListener = Window.OnFrameMetricsAvailableListener { _, frameMetrics, _ ->
+        // Copy metrics (must be done inside callback)
+        val metrics = FrameMetrics(frameMetrics)
+
+        // Analyze individual frame
+        val totalDurationNs = metrics.getMetric(FrameMetrics.TOTAL_DURATION)
+        val totalDurationMs = totalDurationNs / 1_000_000.0
+
+        val inputDurationMs =
+            metrics.getMetric(FrameMetrics.INPUT_HANDLING_DURATION) / 1_000_000.0
+        val animationDurationMs =
+            metrics.getMetric(FrameMetrics.ANIMATION_DURATION) / 1_000_000.0
+        val layoutDurationMs =
+            metrics.getMetric(FrameMetrics.LAYOUT_MEASURE_DURATION) / 1_000_000.0
+        val drawDurationMs =
+            metrics.getMetric(FrameMetrics.DRAW_DURATION) / 1_000_000.0
+        val syncDurationMs =
+            metrics.getMetric(FrameMetrics.SYNC_DURATION) / 1_000_000.0
+        val commandDurationMs =
+            metrics.getMetric(FrameMetrics.COMMAND_ISSUE_DURATION) / 1_000_000.0
+
+        // Example threshold for 60Hz; adjust if targeting higher refresh rates.
+        if (totalDurationMs > 16.67) {
+            Log.w(
+                "FrameMetrics",
+                """
+                Slow frame detected: ${"%.2f".format(totalDurationMs)} ms
+                Breakdown:
+                - Input: ${"%.2f".format(inputDurationMs)} ms
+                - Animation: ${"%.2f".format(animationDurationMs)} ms
+                - Layout: ${"%.2f".format(layoutDurationMs)} ms
+                - Draw: ${"%.2f".format(drawDurationMs)} ms
+                - Sync: ${"%.2f".format(syncDurationMs)} ms
+                - Command: ${"%.2f".format(commandDurationMs)} ms
+                """.trimIndent()
+            )
+
+            val bottleneck = when {
+                layoutDurationMs > 8 -> "Layout complexity"
+                drawDurationMs > 8 -> "Draw operations"
+                syncDurationMs > 8 -> "GPU synchronization"
+                else -> "Multiple factors"
+            }
+
+            reportFrameBottleneck(bottleneck, totalDurationMs)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        window.addOnFrameMetricsAvailableListener(
+            frameMetricsListener,
+            Handler(Looper.getMainLooper())
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        window.removeOnFrameMetricsAvailableListener(frameMetricsListener)
+    }
+
+    private fun reportFrameBottleneck(bottleneck: String, durationMs: Double) {
+        Firebase.analytics.logEvent("frame_bottleneck") {
+            param("type", bottleneck)
+            param("duration_ms", durationMs)
+        }
+    }
+}
+```
+
+#### 3. JankStats Library (Modern Approach)
+
+```kotlin
+dependencies {
+    implementation("androidx.metrics:metrics-performance:1.0.0")
+}
+
+class ModernJankMonitor : AppCompatActivity() {
+
+    private lateinit var jankStats: JankStats
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        jankStats = JankStats.createAndTrack(window) { frameData ->
+            if (frameData.isJank) {
+                val frameDurationMs = frameData.frameDurationUiNanos / 1_000_000.0
+
+                Log.w(
+                    "JankStats",
+                    """
+                    Jank detected:
+                    Duration: ${"%.2f".format(frameDurationMs)} ms
+                    States: ${frameData.states.joinToString()}
+                    """.trimIndent()
+                )
+
+                val currentState = frameData.states.lastOrNull() ?: "unknown"
+                trackJankByState(currentState, frameDurationMs)
+            }
+        }
+    }
+
+    // Example: mark scrolling state for better attribution
+    private fun setScrollingState(isScrolling: Boolean) {
+        if (isScrolling) {
+            jankStats.beginState("scrolling")
+        } else {
+            jankStats.endState("scrolling")
+        }
+    }
+
+    private fun trackJankByState(state: String, durationMs: Double) {
+        Firebase.analytics.logEvent("jank_by_state") {
+            param("state", state)
+            param("duration_ms", durationMs)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        jankStats.isTrackingEnabled = false
+    }
+}
+```
+
+### Common Jank Causes and Fixes
+
+#### 1. Overdraw
+
+Problem: Multiple backgrounds and overlapping `View`s cause redundant pixel rendering.
+
+```xml
+<!-- Multiple backgrounds causing overdraw -->
+<LinearLayout
+    android:background="@color/white">
+
+    <LinearLayout
+        android:background="@color/light_gray">
+
+        <TextView
+            android:background="@color/white"
+            android:text="Hello" />
+    </LinearLayout>
+</LinearLayout>
+```
+
+Fix: Remove unnecessary backgrounds; prefer a single background layer when possible.
+
+```xml
+<!-- Single background layer -->
+<LinearLayout>
+
+    <LinearLayout
+        android:background="@color/light_gray">
+
+        <TextView
+            android:text="Hello" />
+    </LinearLayout>
+</LinearLayout>
+```
+
+Detecting overdraw:
+- Developer Options → Debug GPU Overdraw → Show overdraw areas
+- Blue: 1x (OK), green: 2x (review), pink: 3x (optimize), red: 4x+ (critical)
+
+#### 2. Layout Complexity
+
+Problem: Deeply nested layouts lead to expensive `measure/layout`.
+
+```xml
+<LinearLayout>
+    <RelativeLayout>
+        <LinearLayout>
+            <RelativeLayout>
+                <LinearLayout>
+                    <TextView />
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
+```
+
+Fix: Flatten hierarchy using `ConstraintLayout`.
+
+```xml
+<androidx.constraintlayout.widget.ConstraintLayout>
+    <TextView
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+```
+
+#### 3. RecyclerView Jank
+
+Problem: Heavy `onBindViewHolder` (e.g. synchronous image decoding, complex text formatting).
+
+```kotlin
+class SlowAdapter : RecyclerView.Adapter<ViewHolder>() {
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = items[position]
+
+        // BAD: synchronous decode on main thread
+        val bitmap = BitmapFactory.decodeFile(item.imagePath)
+        holder.imageView.setImageBitmap(bitmap)
+
+        // BAD: complex text formatting on UI thread
+        val formattedText = complexTextFormatting(item.description)
+        holder.textView.text = formattedText
+    }
+
+    private fun complexTextFormatting(text: String): Spanned {
+        return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
+    }
+}
+```
+
+Fix: Use async loading and caching.
+
+```kotlin
+class OptimizedAdapter : RecyclerView.Adapter<ViewHolder>() {
+
+    private val formattedTextCache = LruCache<String, Spanned>(100)
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val item = items[position]
+
+        // Async image loading (e.g., Coil)
+        holder.imageView.load(item.imagePath) {
+            crossfade(true)
+            placeholder(R.drawable.placeholder)
+        }
+
+        val cached = formattedTextCache.get(item.id)
+        val formatted = cached ?: complexTextFormatting(item.description).also {
+            formattedTextCache.put(item.id, it)
+        }
+        holder.textView.text = formatted
+    }
+
+    private fun complexTextFormatting(text: String): Spanned {
+        return Html.fromHtml(text, Html.FROM_HTML_MODE_LEGACY)
+    }
+
+    fun prefetchItems(items: List<Item>) {
+        CoroutineScope(Dispatchers.Default).launch {
+            items.forEach { item ->
+                if (formattedTextCache.get(item.id) == null) {
+                    val formatted = complexTextFormatting(item.description)
+                    formattedTextCache.put(item.id, formatted)
+                }
+            }
+        }
+    }
+}
+```
+
+#### 4. `View` Inflation Jank
+
+Problem: Inflating a heavy layout on click blocks the UI thread.
+
+```kotlin
+button.setOnClickListener {
+    val detailView = layoutInflater.inflate(
+        R.layout.complex_detail_view,
+        container,
+        false
+    )
+    container.addView(detailView)
+}
+```
+
+Fix: Use `ViewStub` for lazy inflation.
+
+```xml
+<FrameLayout>
+    <ViewStub
+        android:id="@+id/detail_view_stub"
+        android:layout="@layout/complex_detail_view"
+        android:inflatedId="@+id/detail_view" />
+</FrameLayout>
+```
+
+```kotlin
+button.setOnClickListener {
+    val viewStub = findViewById<ViewStub>(R.id.detail_view_stub)
+    val detailView = viewStub?.inflate() ?: findViewById(R.id.detail_view)
+    // Configure detailView...
+}
+```
+
+### Analysis with Systrace / Perfetto
+
+Prefer using System Trace / Perfetto (via Android Studio or `perfetto` CLI) instead of deprecated `systrace.py`. For Systrace, the overall workflow is similar.
+
+Example capture (legacy Systrace):
+
+```bash
+python $ANDROID_HOME/platform-tools/systrace/systrace.py \
+    --time=10 \
+    -o trace.html \
+    -a com.example.myapp \
+    sched gfx view wm am app
+
+chrome trace.html
+```
+
+What to look for:
+1. Missed frame deadlines (red/yellow frames)
+2. `Long` `measure/layout` (> ~8 ms) → complex hierarchy
+3. Expensive `draw` (> ~8 ms) → heavy custom rendering/overdraw
+4. GC pauses during rendering
+5. `Long`-running work on main thread
+
+Example snippet:
+
+```
+Frame 145: 28 ms (JANK - missed deadline)
+ Input: 0.2 ms
+ Animation: 0.5 ms
+ Measure/Layout: 14.3 ms (slow)
+   RecyclerView.onMeasure: 12.8 ms
+      Adapter.onBindViewHolder: 11.2 ms (bottleneck)
+ Draw: 8.1 ms (slow)
+ Sync: 4.9 ms
+
+Action: Move expensive onBindViewHolder work off main thread.
+```
+
+### Production Monitoring
+
+Example using Firebase Performance with `FrameMetricsAggregator`:
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+
+    private val frameMetricsMonitor = FrameMetricsMonitor()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        frameMetricsMonitor.start(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        frameMetricsMonitor.stop()
+    }
+}
+
+class FrameMetricsMonitor {
+
+    private var frameMetricsAggregator: FrameMetricsAggregator? = null
+    private val performanceMonitoring = Firebase.performance
+
+    fun start(activity: Activity) {
+        frameMetricsAggregator = FrameMetricsAggregator().apply {
+            add(activity)
+        }
+    }
+
+    fun stop() {
+        frameMetricsAggregator?.let { aggregator ->
+            val totalMetrics = aggregator.metrics?.get(FrameMetricsAggregator.TOTAL_INDEX)
+
+            if (totalMetrics != null) {
+                val stats = calculateFrameStats(totalMetrics)
+
+                if (stats.totalFrames > 0) {
+                    val trace = performanceMonitoring.newTrace("screen_rendering")
+                    trace.putMetric("slow_frames", stats.slowFrames.toLong())
+                    trace.putMetric("frozen_frames", stats.frozenFrames.toLong())
+                    trace.putMetric("total_frames", stats.totalFrames.toLong())
+                    trace.putMetric(
+                        "slow_frame_percentage",
+                        stats.slowFramePercentage.toLong()
+                    )
+                    trace.stop()
+                }
+            }
+
+            aggregator.stop()
+        }
+        frameMetricsAggregator = null
+    }
+
+    private fun calculateFrameStats(metrics: SparseIntArray): FrameStats {
+        var slowFrames = 0
+        var frozenFrames = 0
+        var totalFrames = 0
+
+        for (i in 0 until metrics.size()) {
+            val frameDurationMs = metrics.keyAt(i)
+            val frameCount = metrics.valueAt(i)
+
+            totalFrames += frameCount
+
+            if (frameDurationMs > 16) slowFrames += frameCount
+            if (frameDurationMs > 700) frozenFrames += frameCount
+        }
+
+        val slowFramePercentage = if (totalFrames > 0) {
+            (slowFrames.toFloat() / totalFrames) * 100
+        } else 0f
+
+        return FrameStats(
+            totalFrames = totalFrames,
+            slowFrames = slowFrames,
+            frozenFrames = frozenFrames,
+            slowFramePercentage = slowFramePercentage
+        )
+    }
+
+    data class FrameStats(
+        val totalFrames: Int,
+        val slowFrames: Int,
+        val frozenFrames: Int,
+        val slowFramePercentage: Float
+    )
+}
+```
+
+### Best Practices
+
+1. Target at least 60 FPS; consider 90/120Hz devices.
+2. Profile on real devices, including mid/low-end hardware.
+3. Monitor rendering performance in production.
+4. Flatten view hierarchies; use `ConstraintLayout`/Compose.
+5. Reduce overdraw; avoid redundant backgrounds and overlapping views.
+6. Optimize `RecyclerView`: lightweight `onBindViewHolder`, `DiffUtil`, prefetching.
+7. Load images asynchronously (Coil/Glide/Picasso); avoid blocking the main thread.
+8. Use `ViewStub` or lazy loading for rarely shown UI.
+9. Always profile first (System Trace/Perfetto, FrameMetrics, JankStats) before optimizing.
+10. Move expensive work off the main thread.
+11. Avoid excessive allocations during animations/hot paths to reduce GC jank.
+12. Prefer modern toolkits (Jetpack Compose + profiling) but still measure.
+
+### Common Pitfalls
+
+1. Synchronous image loading on UI thread.
+2. Heavy custom drawing in `onDraw()` without caching.
+3. Deeply nested layouts causing slow `measure/layout`.
+4. Expensive logic in `onBindViewHolder()`.
+5. File/network I/O on main thread.
+6. Ignoring overdraw indicators.
+7. Using huge `Bitmap`s without downsampling.
+8. Blocking animations with non-accelerated properties.
+9. Testing only on flagship devices.
+
+---
+
+## Ссылки (RU)
+
+- https://developer.android.com/jetpack/androidx/releases/metrics
+- https://developer.android.com/reference/android/view/FrameMetrics
+- https://developer.android.com/topic/performance/vitals/render
+- https://developer.android.com/topic/performance/tracing
+
+## References
+
+- https://developer.android.com/jetpack/androidx/releases/metrics
+- https://developer.android.com/reference/android/view/FrameMetrics
+- https://developer.android.com/topic/performance/vitals/render
+- https://developer.android.com/topic/performance/tracing
+
+## Дополнительные вопросы (RU)
+
+1. Как интегрировать Perfetto/System Trace в CI-пайплайн для регулярного анализа jank?
+2. Как измерять и оптимизировать jank в Jetpack Compose-сценариях (scrolling, lists, animations)?
+3. Как использовать Firebase Performance или аналогичные инструменты для сбора метрик медленных/замороженных кадров в продакшене?
+4. Какие подходы применимы для снижения GC-jank в анимациях и интенсивном скролле?
+5. Как учитывать разные частоты обновления экрана (60/90/120 Гц) при конфигурировании порогов обнаружения jank?
 
 ## Follow-ups
 
-- [[app-startup-optimization]]
-- [[baseline-profiles-optimization]]
-- [[macrobenchmark-startup]]
-
+1. How can you integrate Perfetto/System Trace into a CI pipeline to regularly detect jank regressions?
+2. How do you measure and reduce jank in Jetpack Compose-heavy screens (scrolling, lists, animations)?
+3. How can Firebase Performance or similar tools be used to track slow/frozen frames in production?
+4. What techniques help reduce GC-induced jank during animations and intensive scrolling?
+5. How should detection thresholds be tuned for devices with different refresh rates (60/90/120Hz)?
 
 ## Related Questions
 
@@ -1601,13 +1255,11 @@ class FrameMetricsMonitor {
 - [[c-perfetto]]
 - [[c-performance]]
 
-
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - Recyclerview
+
 ### Related (Medium)
 - [[q-memory-leak-detection--android--medium]] - Performance
-- [[q-macrobenchmark-startup--android--medium]] - Performance
-- [[q-app-startup-optimization--android--medium]] - Performance
-- [[q-baseline-profiles-optimization--android--medium]] - Performance
+
 ### Advanced (Harder)
 - [[q-compose-performance-optimization--android--hard]] - Jetpack Compose

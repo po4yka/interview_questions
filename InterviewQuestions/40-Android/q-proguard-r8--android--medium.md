@@ -6,9 +6,9 @@ aliases:
 - ProGuard и R8
 topic: android
 subtopics:
-- gradle
 - obfuscation
 - performance-memory
+- gradle
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -16,7 +16,7 @@ language_tags:
 - en
 - ru
 sources:
-- https://github.com/Kirchhoff-Android-Interview-Questions
+- "https://github.com/Kirchhoff-Android-Interview-Questions"
 status: draft
 moc: moc-android
 related:
@@ -25,11 +25,11 @@ related:
 - q-build-optimization-gradle--android--medium
 - q-reduce-app-size--android--medium
 created: 2025-10-05
-updated: 2025-01-27
+updated: 2025-11-10
 tags:
-- android/gradle
 - android/obfuscation
 - android/performance-memory
+- android/gradle
 - difficulty/medium
 ---
 
@@ -43,12 +43,17 @@ tags:
 
 ## Ответ (RU)
 
-**R8** — современный компилятор Android, который заменил ProGuard. Выполняет четыре задачи во время сборки:
+**ProGuard** — более старый инструмент для минификации и обфускации Java/Android-кода. В Android он использовался для:
+- удаления неиспользуемого кода (code shrinking),
+- обфускации (переименования) классов и методов,
+- простой оптимизации байткода.
 
-1. **Сжатие кода (tree-shaking)** — удаляет неиспользуемые классы, методы, поля
-2. **Сжатие ресурсов** — удаляет неиспользуемые ресурсы из APK
+**R8** — современный компилятор/шринкер, встроенный в Android Gradle Plugin и являющийся shrinker'ом по умолчанию (заменяет ProGuard в стандартном Android-пайплайне, но использует совместимый синтаксис правил). Выполняет четыре ключевые задачи во время сборки:
+
+1. **Сжатие кода (code shrinking / tree-shaking)** — удаляет неиспользуемые классы, методы, поля
+2. (Совместно с AGP) **Сжатие ресурсов (resource shrinking)** — на основе результатов анализа R8 удаляет неиспользуемые ресурсы из APK / AAB
 3. **Обфускация** — переименовывает классы/методы короткими именами
-4. **Оптимизация** — улучшает производительность и уменьшает размер DEX
+4. **Оптимизация** — применяет оптимизации байткода/Dex и уменьшает размер DEX
 
 ### Конфигурация
 
@@ -56,51 +61,57 @@ tags:
 android {
     buildTypes {
         release {
-            minifyEnabled true           // ✅ включает сжатие и обфускацию
-            shrinkResources true         // ✅ удаляет неиспользуемые ресурсы
+            minifyEnabled true           // включает R8 (или другой shrinker) для сжатия и обфускации
+            shrinkResources true         // включает shrinker ресурсов (AGP, опирается на результаты R8)
             proguardFiles getDefaultProguardFile(
                 'proguard-android-optimize.txt'),
-                'proguard-rules.pro'
+                'proguard-rules.pro'     // файлы с правилами в формате ProGuard, которые также использует R8
         }
     }
 }
 ```
 
-### Сохранение Кода С -keep Правилами
+### Сохранение кода с помощью правил `-keep`
 
-R8 может ошибочно удалить код, используемый через:
-- **Reflection** — динамическое создание экземпляров
-- **JNI** — вызовы из нативного кода
+R8 (как и ProGuard) может удалить код, который используется неявно, например через:
+- reflection — динамическое создание экземпляров, доступ к методам/полям
+- JNI — вызовы из нативного кода
+- фреймворки сериализации (Gson, Moshi и т.п.)
 
 ```proguard
--keep public class com.example.MyClass  # ✅ сохраняет класс целиком
--keepclassmembers class * {             # ✅ сохраняет поля/методы
-    @com.example.Keep *;
+-keep public class com.example.MyClass  # сохраняет класс целиком
+-keepclassmembers class * {
+    @com.example.Keep *;               # пример сохранения элементов, помеченных аннотацией
 }
 ```
 
-Альтернатива: аннотация `@Keep` из AndroidX.
+Для стандартного кейса можно использовать аннотацию `@Keep` из AndroidX (`androidx.annotation.Keep`), которую R8 обрабатывает напрямую.
 
-### Преимущества И Недостатки
+### Преимущества и недостатки R8/обфускации
 
 **Преимущества:**
-- Уменьшение размера APK (на 20-40%)
+- Уменьшение размера APK/AAB (часто на 20-40% в зависимости от проекта)
 - Усложнение обратной разработки
 - Удаление мёртвого кода
 
 **Недостатки:**
-- Требуется настройка правил для reflection/serialization
-- Усложнение отладки крашей (обфусцированные стектрейсы)
-- Необходимо тестировать release-сборки
+- Требуется настройка правил для reflection/serialization/JNI
+- Усложнение отладки крашей (обфусцированные stacktrace'ы; нужно использовать mapping-файлы)
+- Необходимо полноценно тестировать release-сборки
 
 ## Answer (EN)
 
-**R8** is the modern Android compiler that replaced ProGuard. It performs four compile-time tasks:
+**ProGuard** is the older tool for Java/Android code shrinking and obfuscation. In Android it was used to:
+- remove unused code (code shrinking),
+- obfuscate (rename) classes and methods,
+- perform basic bytecode optimizations.
+
+**R8** is the modern compiler/shrinker integrated into the Android Gradle Plugin and used as the default shrinker (it replaces ProGuard in the standard Android build pipeline while using ProGuard-compatible rule syntax). It performs four key build-time tasks:
 
 1. **Code shrinking (tree-shaking)** — removes unused classes, methods, fields
-2. **Resource shrinking** — removes unused resources from APK
+2. (Together with AGP) **Resource shrinking** — based on R8’s analysis, unused resources are removed from the APK/AAB
 3. **Obfuscation** — renames classes/methods with short names
-4. **Optimization** — improves performance and reduces DEX size
+4. **Optimization** — applies bytecode/Dex optimizations and reduces DEX size
 
 ### Configuration
 
@@ -108,44 +119,52 @@ R8 может ошибочно удалить код, используемый �
 android {
     buildTypes {
         release {
-            minifyEnabled true           // ✅ enables shrinking and obfuscation
-            shrinkResources true         // ✅ removes unused resources
+            minifyEnabled true           // enables R8 (or another shrinker) for code shrinking and obfuscation
+            shrinkResources true         // enables resource shrinking (AGP, depends on R8 analysis)
             proguardFiles getDefaultProguardFile(
                 'proguard-android-optimize.txt'),
-                'proguard-rules.pro'
+                'proguard-rules.pro'     // rule files in ProGuard format, also consumed by R8
         }
     }
 }
 ```
 
-### Preserving Code with -keep Rules
+### Preserving code with `-keep` rules
 
-R8 may incorrectly remove code accessed via:
-- **Reflection** — dynamic instantiation
-- **JNI** — calls from native code
+R8 (like ProGuard) can remove code that is only accessed indirectly, for example via:
+- reflection — dynamic instantiation or reflective access to fields/methods
+- JNI — calls from native code
+- serialization libraries (Gson, Moshi, etc.)
 
 ```proguard
--keep public class com.example.MyClass  # ✅ preserves entire class
--keepclassmembers class * {             # ✅ preserves fields/methods
-    @com.example.Keep *;
+-keep public class com.example.MyClass  # preserves the entire class
+-keepclassmembers class * {
+    @com.example.Keep *;               # example of preserving members annotated with a custom annotation
 }
 ```
 
-Alternative: `@Keep` annotation from AndroidX.
+For typical Android projects you can use the `@Keep` annotation from AndroidX (`androidx.annotation.Keep`), which R8 honors directly.
 
-### Trade-offs
+### Trade-offs (R8/obfuscation)
 
 **Benefits:**
-- Reduces APK size (by 20-40%)
+- Reduces APK/AAB size (often by 20-40%, depending on the project)
 - Makes reverse engineering harder
 - Removes dead code
 
 **Drawbacks:**
-- Requires rules configuration for reflection/serialization
-- Makes crash debugging harder (obfuscated stacktraces)
-- Requires testing release builds
+- Requires rules configuration for reflection/serialization/JNI
+- Makes crash debugging harder (obfuscated stack traces; requires mapping files)
+- Requires thorough testing of release builds
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как декодировать обфусцированные stacktrace'ы с помощью mapping-файлов?
+- Когда стоит использовать аннотацию `@Keep` вместо правил `-keep` и наоборот?
+- Как R8 оптимизирует байткод помимо простого удаления мёртвого кода?
+- Каковы типичные подводные камни при настройке правил ProGuard для Gson/Retrofit?
 
 ## Follow-ups
 
@@ -154,9 +173,30 @@ Alternative: `@Keep` annotation from AndroidX.
 - How does R8 optimize bytecode beyond simple dead code removal?
 - What are common pitfalls when configuring ProGuard rules for Gson/Retrofit?
 
+## Ссылки (RU)
+
+- https://developer.android.com/studio/build/shrink-code
+
 ## References
 
 - https://developer.android.com/studio/build/shrink-code
+
+## Связанные вопросы (RU)
+
+### Предварительные знания / Концепции
+
+- [[c-gradle]]
+- [[c-memory-management]]
+
+### Предварительные (Проще)
+- Понимание конфигурации сборки Gradle
+
+### Связанные (Средний уровень)
+- [[q-reduce-app-size--android--medium]] — техники оптимизации размера APK
+- [[q-build-optimization-gradle--android--medium]] — оптимизация конфигурации сборки
+
+### Продвинутые (Сложнее)
+- Продвинутая оптимизация старта и производительности во время исполнения
 
 ## Related Questions
 
@@ -164,7 +204,6 @@ Alternative: `@Keep` annotation from AndroidX.
 
 - [[c-gradle]]
 - [[c-memory-management]]
-
 
 ### Prerequisites (Easier)
 - Understanding Gradle build configuration

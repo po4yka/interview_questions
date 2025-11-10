@@ -3,18 +3,19 @@ id: android-089
 title: "LeakCanary Heap Dump Analysis / Анализ дампа памяти в LeakCanary"
 aliases: ["LeakCanary Heap Dump Analysis", "Анализ дампа памяти в LeakCanary"]
 topic: android
-subtopics: [performance-memory, profiling]
+subtopics: [performance-memory]
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-updated: 2025-10-31
-tags: [android/performance-memory, android/profiling, difficulty/medium, heap-dump, leakcanary, memory-analysis, shark]
+updated: 2025-11-10
+tags: [android/performance-memory, difficulty/medium, heap-dump, leakcanary, memory-analysis, shark]
 moc: moc-android
-related: [q-activity-lifecycle--android--easy]
+related: [q-leakcanary-detection-mechanism--android--medium]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -29,16 +30,18 @@ sources: []
 
 ## Ответ (RU)
 
-Если объект не был освобожден после вызова сборщика мусора, LeakCanary создает **heap dump** (снимок кучи) и анализирует его библиотекой **Shark**.
+Если наблюдаемый (watched) LeakCanary объект не был освобожден после нескольких циклов GC и задержки, LeakCanary создает **heap dump** (снимок кучи) и анализирует его библиотекой **Shark**.
+
+Ниже — упрощенная концептуальная схема (код иллюстративный, не реальный продакшн-код LeakCanary).
 
 **Процесс обнаружения утечки:**
 
 **1. Создание heap dump**
 
 ```kotlin
-// LeakCanary проверяет WeakReference после GC
+// Концептуально: LeakCanary отслеживает watched-объекты через WeakReference
 if (weakReference.get() != null) {
-    // ✅ Объект должен был быть собран, но все еще жив
+    // ✅ Объект должен был быть собран (мы закончили его жизненный цикл), но он все еще достижим
     val heapDumpFile = File(heapDumpsDir, "leak-${UUID.randomUUID()}.hprof")
     Debug.dumpHprofData(heapDumpFile.absolutePath)
     analyzeHeap(heapDumpFile)
@@ -47,9 +50,10 @@ if (weakReference.get() != null) {
 
 **2. Анализ через Shark**
 
-Shark строит граф объектов и находит пути от GC roots до подозрительных объектов:
+Shark строит граф объектов и находит пути от GC roots до подозрительных объектов (watched-объектов, которые не освободились):
 
 ```kotlin
+// Концептуальный пример использования Shark API — реальные версии могут отличаться
 fun analyzeHeap(heapDumpFile: File) {
     val heapAnalyzer = HeapAnalyzer(OnAnalysisProgressListener.NO_OP)
 
@@ -65,7 +69,7 @@ fun analyzeHeap(heapDumpFile: File) {
     when (analysis) {
         is HeapAnalysisSuccess -> {
             analysis.applicationLeaks.forEach { leak ->
-                // ❌ Найдена цепочка удержания от GC root
+                // ❌ Найдена цепочка удержания (retention chain) от GC root до watched-объекта
                 println("Leak: ${leak.leakTraces.first()}")
             }
         }
@@ -76,7 +80,7 @@ fun analyzeHeap(heapDumpFile: File) {
 
 **3. Проверка retention chain**
 
-Shark находит цепочку ссылок от GC root к объекту, который должен был быть собран:
+Shark ищет цепочку сильных ссылок от GC root к объекту, который по логике приложения должен был стать недостижимым, но остается удержан:
 
 ```
 GC Root: Thread (main)
@@ -111,7 +115,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-**Listener без отписки:**
+**`Listener` без отписки:**
 ```kotlin
 // ❌ Anonymous listener держит Activity
 override fun onCreate(savedInstanceState: Bundle?) {
@@ -125,23 +129,27 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 **Итоговая логика:**
 
-1. Объект не собран после GC → heap dump
+1. Watched-объект не собран после нескольких GC и задержки → создается heap dump
 2. Shark строит граф объектов
-3. Поиск путей от GC roots к "мертвым" объектам
-4. Если путь найден → утечка с retention chain и размером
+3. Ищутся пути от GC roots к объектам, которые по ожиданию должны были стать недостижимыми
+4. Если такой путь найден (есть retention chain) → считается утечкой; показываются цепочка удержания и удержанный размер памяти
+
+---
 
 ## Answer (EN)
 
-If an object wasn't freed after garbage collection, LeakCanary creates a **heap dump** and analyzes it using the **Shark library**.
+If a watched object tracked by LeakCanary is still not freed after several GC cycles and a delay, LeakCanary creates a **heap dump** and analyzes it using the **Shark library**.
+
+Below is a simplified conceptual flow (code is illustrative, not the exact production LeakCanary implementation).
 
 **Leak detection process:**
 
 **1. Heap dump creation**
 
 ```kotlin
-// LeakCanary checks WeakReference after GC
+// Conceptually: LeakCanary tracks watched objects via WeakReference
 if (weakReference.get() != null) {
-    // ✅ Object should be collected but still alive
+    // ✅ Object should have been collected (its lifecycle is finished), but it is still reachable
     val heapDumpFile = File(heapDumpsDir, "leak-${UUID.randomUUID()}.hprof")
     Debug.dumpHprofData(heapDumpFile.absolutePath)
     analyzeHeap(heapDumpFile)
@@ -150,9 +158,10 @@ if (weakReference.get() != null) {
 
 **2. Analysis via Shark**
 
-Shark builds an object graph and finds paths from GC roots to suspicious objects:
+Shark builds an object graph and finds paths from GC roots to suspicious objects (watched objects that were expected to be collected but are still strongly reachable):
 
 ```kotlin
+// Conceptual example of using Shark API — actual APIs/versions may differ
 fun analyzeHeap(heapDumpFile: File) {
     val heapAnalyzer = HeapAnalyzer(OnAnalysisProgressListener.NO_OP)
 
@@ -168,7 +177,7 @@ fun analyzeHeap(heapDumpFile: File) {
     when (analysis) {
         is HeapAnalysisSuccess -> {
             analysis.applicationLeaks.forEach { leak ->
-                // ❌ Found retention chain from GC root
+                // ❌ Retention chain from GC root to watched object found
                 println("Leak: ${leak.leakTraces.first()}")
             }
         }
@@ -179,7 +188,7 @@ fun analyzeHeap(heapDumpFile: File) {
 
 **3. Retention chain verification**
 
-Shark finds reference chains from GC roots to objects that should have been collected:
+Shark looks for strong reference chains from GC roots to an object that, according to app logic, should no longer be reachable but is still retained:
 
 ```
 GC Root: Thread (main)
@@ -214,7 +223,7 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-**Listener without unsubscribe:**
+**`Listener` without unsubscribe:**
 ```kotlin
 // ❌ Anonymous listener holds Activity
 override fun onCreate(savedInstanceState: Bundle?) {
@@ -228,12 +237,20 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 **Detection logic summary:**
 
-1. Object not collected after GC → heap dump
-2. Shark builds object graph
-3. Find paths from GC roots to "dead" objects
-4. If path exists → leak with retention chain and size
+1. Watched object not collected after several GC cycles and delay → heap dump is created
+2. Shark builds the object graph
+3. Find paths from GC roots to objects that were expected to become unreachable
+4. If such a retention chain exists → treated as a leak; LeakCanary reports the chain and retained heap size
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как LeakCanary отличает намеренно долго живущие объекты от утечек памяти?
+- Каковы накладные расходы по производительности при использовании LeakCanary в debug-сборках?
+- Как настроить пользовательские правила детекции утечек для доменных объектов?
+- Какую роль играют reference matchers в фильтрации ложных срабатываний?
+- Как Shark оптимизирует анализ heap dump для крупных приложений?
 
 ## Follow-ups
 
@@ -243,18 +260,42 @@ override fun onCreate(savedInstanceState: Bundle?) {
 - What role do reference matchers play in filtering false positives?
 - How does Shark optimize heap dump analysis for large applications?
 
+---
+
+## Ссылки (RU)
+
+- [LeakCanary Documentation](https://square.github.io/leakcanary/)
+- [Shark Library](https://square.github.io/leakcanary/shark/)
+- [[c-garbage-collection]]
+
 ## References
 
 - [LeakCanary Documentation](https://square.github.io/leakcanary/)
 - [Shark Library](https://square.github.io/leakcanary/shark/)
-- [[c-memory-management]]
 - [[c-garbage-collection]]
+
+---
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-main-thread-android--android--medium]] - Понимание модели потоков в Android
+
+### Связанные (того же уровня)
+- [[q-leakcanary-detection-mechanism--android--medium]] - Как LeakCanary обнаруживает утечки
+- [[q-memory-leak-detection--android--medium]] - Общие подходы к обнаружению утечек памяти
+- [[q-memory-leak-vs-oom-android--android--medium]] - Утечки памяти vs OOM
+- [[q-optimize-memory-usage-android--android--medium]] - Оптимизация использования памяти
+
+### Продвинутые (сложнее)
+- [[q-android-runtime-internals--android--hard]] - ART и работа с памятью
+- [[q-fix-slow-app-startup-legacy--android--hard]] - Оптимизация производительности
+- [[q-sensitive-data-lifecycle--android--hard]] - Управление жизненным циклом чувствительных данных
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - [[q-main-thread-android--android--medium]] - Understanding Android threading model
-- [[q-activity-lifecycle--android--easy]] - Activity lifecycle and destruction
 
 ### Related (Same Level)
 - [[q-leakcanary-detection-mechanism--android--medium]] - How LeakCanary detects leaks

@@ -4,15 +4,15 @@ title: "What Design Systems In Android Have You Worked With / С какими д
 aliases: ["What Design Systems In Android Have You Worked With", "С какими дизайн-системами Android вы работали"]
 topic: android
 subtopics: [ui-theming, ui-widgets]
-question_kind: android
+question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-design-systems, c-material-3, c-material-design]
+related: [c-android-ui-composition, c-android-themes, q-android-jetpack-overview--android--easy]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 sources: []
 tags: [android/ui-theming, android/ui-widgets, design-system, difficulty/medium, material-design, ui]
 ---
@@ -29,7 +29,7 @@ tags: [android/ui-theming, android/ui-widgets, design-system, difficulty/medium,
 
 ## Ответ (RU)
 
-Дизайн-система — это набор переиспользуемых компонентов, правил и паттернов, обеспечивающих консистентность UI. В Android основная система — Material Design от Google.
+Дизайн-система — это набор переиспользуемых компонентов, правил и паттернов, обеспечивающих консистентность UI. В Android основная система — Material Design от Google (см. также [[c-android-themes]] и [[c-android-ui-composition]]).
 
 ### Material Design
 
@@ -44,8 +44,8 @@ tags: [android/ui-theming, android/ui-widgets, design-system, difficulty/medium,
 
 **Пример базовой темы**:
 
-```kotlin
-// ✅ Material 3 тема с динамическими цветами (Android 12+)
+```xml
+<!-- ✅ Material 3 тема; для динамических цветов на Android 12+ используйте dynamicColor или генерацию палитры -->
 <style name="AppTheme" parent="Theme.Material3.DayNight">
     <item name="colorPrimary">@color/md_theme_primary</item>
     <item name="colorOnPrimary">@color/md_theme_on_primary</item>
@@ -79,7 +79,7 @@ tags: [android/ui-theming, android/ui-widgets, design-system, difficulty/medium,
 Многие компании создают собственные системы на базе Material Design, используя **design tokens** для централизации стилей.
 
 ```kotlin
-// ✅ Design tokens для переиспользования
+// ✅ Design tokens для переиспользования (пример для Compose-темизации)
 object DesignTokens {
     object Colors {
         val Primary = Color(0xFF1976D2)
@@ -117,7 +117,7 @@ object DesignTokens {
 
 ## Answer (EN)
 
-A design system is a collection of reusable components, guidelines, and patterns that ensure UI consistency. In Android, the primary system is Material Design by Google.
+A design system is a collection of reusable components, guidelines, and patterns that ensure UI consistency. In Android, the primary system is Material Design by Google (see also [[c-android-themes]] and [[c-android-ui-composition]]).
 
 ### Material Design
 
@@ -132,8 +132,8 @@ A design system is a collection of reusable components, guidelines, and patterns
 
 **Example theme setup**:
 
-```kotlin
-// ✅ Material 3 theme with dynamic colors (Android 12+)
+```xml
+<!-- ✅ Material 3 theme; for dynamic colors on Android 12+ use dynamicColor support or generated palettes -->
 <style name="AppTheme" parent="Theme.Material3.DayNight">
     <item name="colorPrimary">@color/md_theme_primary</item>
     <item name="colorOnPrimary">@color/md_theme_on_primary</item>
@@ -167,7 +167,7 @@ A design system is a collection of reusable components, guidelines, and patterns
 Many companies build custom systems on top of Material Design, using **design tokens** for centralized styling.
 
 ```kotlin
-// ✅ Design tokens for reusability
+// ✅ Design tokens for reusability (example for Compose theming)
 object DesignTokens {
     object Colors {
         val Primary = Color(0xFF1976D2)
@@ -205,6 +205,14 @@ object DesignTokens {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как вы реализуете кастомную дизайн-систему в крупной Android-кодовой базе?
+- В чем ключевые отличия между Material 2 и Material 3?
+- Как вы обеспечиваете консистентность дизайн-системы между несколькими командами?
+- Какие инструменты (Figma, Sketch) вы используете для синхронизации design tokens с кодом?
+- Как вы учитываете платформо-специфичные требования дизайна в кросс-платформенных приложениях?
+
 ## Follow-ups
 
 - How do you implement a custom design system in a large Android codebase?
@@ -213,24 +221,44 @@ object DesignTokens {
 - What tools (Figma, Sketch) do you use to sync design tokens with code?
 - How do you handle platform-specific design requirements in cross-platform apps?
 
-## References
+## Ссылки (RU)
 
-- [[c-material-design]]
-- [[c-design-tokens]]
-- [[c-theming]]
 - [Material Design Guidelines](https://m3.material.io/)
 - [Material Components for Android](https://github.com/material-components/material-components-android)
+
+## References
+
+- [Material Design Guidelines](https://m3.material.io/)
+- [Material Components for Android](https://github.com/material-components/material-components-android)
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+
+- [[q-android-jetpack-overview--android--easy]]
+- [[q-android-app-components--android--easy]]
+
+### Похожие (такой же уровень)
+
+- [[q-accessibility-color-contrast--android--medium]]
+
+### Продвинутые (сложнее)
+
+- [[q-clean-architecture-android--android--hard]]
+- [[q-android-build-optimization--android--medium]]
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-material-design--android--easy]]
-- [[q-how-to-apply-theme-to-activity--android--easy]]
+
+- [[q-android-jetpack-overview--android--easy]]
+- [[q-android-app-components--android--easy]]
 
 ### Related (Same Level)
-- [[q-how-to-implement-dark-theme--android--medium]]
-- [[q-how-to-create-custom-view--android--medium]]
+
+- [[q-accessibility-color-contrast--android--medium]]
 
 ### Advanced (Harder)
+
 - [[q-clean-architecture-android--android--hard]]
-- [[q-how-to-optimize-rendering-performance--android--hard]]
+- [[q-android-build-optimization--android--medium]]

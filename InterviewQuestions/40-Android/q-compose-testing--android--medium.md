@@ -4,26 +4,25 @@ title: Compose Testing / Тестирование Compose
 aliases: [Compose Testing, Тестирование Compose]
 topic: android
 subtopics:
-  - testing-unit
-  - ui-compose
+- testing-ui
+- ui-compose
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - c-jetpack-compose
-  - c-unit-testing
-  - q-compose-performance-optimization--android--hard
-  - q-compose-semantics--android--medium
+- q-compose-performance-optimization--android--hard
+- q-compose-semantics--android--medium
 created: 2025-10-20
-updated: 2025-10-30
-tags: [android/testing-unit, android/ui-compose, compose, difficulty/medium, semantics, testing]
+updated: 2025-11-10
+tags: [android/testing-ui, android/ui-compose, compose, difficulty/medium, semantics, testing]
 sources:
-  - https://developer.android.com/jetpack/compose/testing
+- "https://developer.android.com/jetpack/compose/testing"
+
 ---
 
 # Вопрос (RU)
@@ -36,7 +35,7 @@ sources:
 
 ## Ответ (RU)
 
-**Compose Testing** использует семантическое дерево вместо View-иерархии. Тесты выполняются синхронно — фреймворк автоматически ожидает завершения recomposition.
+**Compose Testing** использует семантическое дерево вместо `View`-иерархии. Тестовый фреймворк синхронизирует выполнение с Compose runtime и основными корутинами (IdlingResource): он автоматически ждёт завершения recomposition и работы на `Dispatchers.Main`, но не произвольных фоновых потоков.
 
 ### Ключевые Концепции
 
@@ -52,13 +51,13 @@ class LoginScreenTest {
         composeTestRule.setContent { LoginScreen() }
 
         composeTestRule.onNodeWithTag("login_btn").performClick()
-        // ✅ Автоматическое ожидание recomposition
+        // Automatic waiting for recomposition and main dispatcher idleness
         composeTestRule.onNodeWithTag("progress").assertExists()
     }
 }
 ```
 
-**Семантическое дерево** — структура из узлов с метаданными (text, role, actions). Элементы без семантики (например, декоративные Image) невидимы для тестов.
+**Семантическое дерево** — структура из узлов с метаданными (text, role, actions). Элементы без семантики (например, декоративные Image) не попадают в доступное для поиска дерево, пока им явно не заданы семантики (или они не входят в состав элементов с объединённой семантикой).
 
 ### Стратегии Поиска Элементов
 
@@ -71,7 +70,7 @@ composeTestRule.onNodeWithTag("submit").performClick()
 **Текст** (хрупко — зависит от локализации):
 ```kotlin
 composeTestRule.onNodeWithText("Submit").performClick()
-// ❌ Сломается при переводе на русский
+// Breaks when translated
 ```
 
 **Семантика** (лучший выбор для accessibility):
@@ -87,7 +86,7 @@ composeTestRule.onNodeWithContentDescription("Закрыть").performClick()
 composeTestRule.onNodeWithTag("email")
     .performTextInput("test@example.com")
 
-// Scroll и проверка состояния
+// Scroll и проверка состояния узла
 composeTestRule.onNodeWithTag("list")
     .performScrollToNode(hasText("Item 50"))
     .assertIsSelected()
@@ -98,11 +97,11 @@ composeTestRule.onNodeWithTag("list")
 ```kotlin
 @Test
 fun stateChange_triggersRecomposition() {
-    var counter by mutableStateOf(0)
-
     composeTestRule.setContent {
+        var counter by remember { mutableStateOf(0) }
+
         Button(onClick = { counter++ }) {
-            Text("Кликов: $counter") // ✅ Автоматический recompose
+            Text("Кликов: $counter")
         }
     }
 
@@ -120,10 +119,11 @@ fun asyncData_appearsAfterLoad() {
 
     composeTestRule.onNodeWithTag("loading").assertExists()
 
-    // ✅ Ожидание появления элемента
+    // Wait for element to appear (without crashing if no nodes yet)
     composeTestRule.waitUntil(timeoutMillis = 3000) {
         composeTestRule.onAllNodesWithTag("data_item")
-            .fetchSemanticsNodes().isNotEmpty()
+            .fetchSemanticsNodes(atLeastOneExpected = false)
+            .isNotEmpty()
     }
 
     composeTestRule.onNodeWithTag("data_item").assertExists()
@@ -132,11 +132,11 @@ fun asyncData_appearsAfterLoad() {
 
 ## Answer (EN)
 
-**Compose Testing** uses a semantic tree instead of View hierarchy. Tests run synchronously — the framework automatically waits for recomposition to complete.
+**Compose Testing** uses a semantic tree instead of a `View` hierarchy. The test framework synchronizes with the Compose runtime and main coroutines (IdlingResource): it automatically waits for recomposition and work on `Dispatchers.Main`, but not for arbitrary background threads.
 
 ### Key Concepts
 
-**ComposeTestRule** — central point for interacting with Compose runtime:
+**ComposeTestRule** — central point for interacting with the Compose runtime:
 
 ```kotlin
 class LoginScreenTest {
@@ -148,13 +148,13 @@ class LoginScreenTest {
         composeTestRule.setContent { LoginScreen() }
 
         composeTestRule.onNodeWithTag("login_btn").performClick()
-        // ✅ Automatic recomposition wait
+        // Automatic waiting for recomposition and main dispatcher idleness
         composeTestRule.onNodeWithTag("progress").assertExists()
     }
 }
 ```
 
-**Semantic tree** — structure of nodes with metadata (text, role, actions). Elements without semantics (e.g., decorative Images) are invisible to tests.
+**Semantic tree** — a structure of nodes with metadata (text, role, actions). Elements without semantics (e.g., decorative Images) are not exposed in the searchable tree unless given semantics explicitly (or included via merged semantics of their parents).
 
 ### Element Finding Strategies
 
@@ -167,7 +167,7 @@ composeTestRule.onNodeWithTag("submit").performClick()
 **Text** (brittle — breaks with localization):
 ```kotlin
 composeTestRule.onNodeWithText("Submit").performClick()
-// ❌ Breaks when translated
+// Breaks when translated
 ```
 
 **Semantics** (best for accessibility):
@@ -194,11 +194,11 @@ composeTestRule.onNodeWithTag("list")
 ```kotlin
 @Test
 fun stateChange_triggersRecomposition() {
-    var counter by mutableStateOf(0)
-
     composeTestRule.setContent {
+        var counter by remember { mutableStateOf(0) }
+
         Button(onClick = { counter++ }) {
-            Text("Clicks: $counter") // ✅ Auto-recompose
+            Text("Clicks: $counter")
         }
     }
 
@@ -216,10 +216,11 @@ fun asyncData_appearsAfterLoad() {
 
     composeTestRule.onNodeWithTag("loading").assertExists()
 
-    // ✅ Wait for element to appear
+    // Wait for element to appear (without crashing if no nodes yet)
     composeTestRule.waitUntil(timeoutMillis = 3000) {
         composeTestRule.onAllNodesWithTag("data_item")
-            .fetchSemanticsNodes().isNotEmpty()
+            .fetchSemanticsNodes(atLeastOneExpected = false)
+            .isNotEmpty()
     }
 
     composeTestRule.onNodeWithTag("data_item").assertExists()
@@ -228,31 +229,56 @@ fun asyncData_appearsAfterLoad() {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как тестировать `LaunchedEffect` и другие побочные эффекты в Compose?
+- Когда использовать немёрдженное vs мёрдженное семантическое дерево?
+- Как обрабатывать анимации, зависящие от времени, в тестах с использованием `mainClock`?
+- Как тестировать Navigation Compose и deep links?
+- Каковы лучшие практики тестирования Compose с `ViewModel`?
+
 ## Follow-ups
 
-- How to test LaunchedEffect and other side effects in Compose?
+- How to test `LaunchedEffect` and other side effects in Compose?
 - When should you use unmerged vs merged semantic tree?
-- How to handle time-based animations in tests using mainClock?
+- How to handle time-based animations in tests using `mainClock`?
 - How to test Navigation Compose and deep links?
-- What are best practices for testing Compose with ViewModels?
+- What are best practices for testing Compose with `ViewModel`s?
+
+## Ссылки (RU)
+
+- "https://developer.android.com/jetpack/compose/testing"
+- "https://developer.android.com/jetpack/compose/testing/semantics"
 
 ## References
 
-- [[c-jetpack-compose]] - Compose fundamentals and architecture
-- [[c-unit-testing]] - General testing principles
 - https://developer.android.com/jetpack/compose/testing
 - https://developer.android.com/jetpack/compose/testing/semantics
+
+## Связанные вопросы (RU)
+
+### Предпосылки
+
+- [[q-compose-semantics--android--medium]]
+
+### Похожие
+
+- [[q-compose-remember-derived-state--android--medium]]
+
+### Продвинутые
+
+- [[q-compose-performance-optimization--android--hard]]
 
 ## Related Questions
 
 ### Prerequisites
-- [[c-jetpack-compose]] - Understanding Compose basics required
+
+- [[q-compose-semantics--android--medium]]
 
 ### Related
-- [[q-compose-semantics--android--medium]] - Detailed semantic tree explanation
-- [[q-testing-viewmodels-turbine--android--medium]] - Testing ViewModels with Turbine
-- [[q-compose-remember-derived-state--android--medium]] - State patterns in Compose
+
+- [[q-compose-remember-derived-state--android--medium]]
 
 ### Advanced
-- [[q-compose-performance-optimization--android--hard]] - Performance testing strategies
-- [[q-testing-coroutines-flow--android--hard]] - Testing async Compose code
+
+- [[q-compose-performance-optimization--android--hard]]

@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-updated: 2025-01-27
+updated: 2025-11-10
 tags: [android/performance-memory, android/profiling, debugging-tools, difficulty/easy, leakcanary, memory-leaks]
 moc: moc-android
-related: [c-memory-management]
+related: [c-memory-management, c-garbage-collection]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -29,138 +30,146 @@ sources: []
 
 ## Ответ (RU)
 
-**LeakCanary** от Square — стандартный инструмент для автоматического обнаружения утечек памяти в Android приложениях.
+**LeakCanary** от Square — де-факто стандартный и широко используемый инструмент для автоматического обнаружения утечек памяти в Android-приложениях во время разработки.
 
 **Основные возможности:**
 
-- Автоматически отслеживает утечки Activity, Fragment, ViewModel
-- Работает "из коробки" без конфигурации
-- Визуализирует цепочки удержания объектов
-- Не влияет на production (только debug-сборки)
+- Автоматически отслеживает утечки `Activity`, `Fragment`, `ViewModel` и других Android-компонентов
+- Работает "из коробки" с минимальной конфигурацией
+- Визуализирует цепочки удержания объектов (retention path)
+- Обычно подключается только в debug-сборках и не влияет на production при использовании `debugImplementation`
 
 **Подключение:**
 
 ```kotlin
 // build.gradle (app)
 dependencies {
-    debugImplementation("com.squareup.leakcanary:leakcanary-android")  // ✅ Only debug builds
+    debugImplementation("com.squareup.leakcanary:leakcanary-android")  // ✅ Только debug-сборки по умолчанию
 }
 ```
 
-**Принцип работы:**
+**Принцип работы (упрощённо):**
 
-LeakCanary регистрирует lifecycle callbacks и отслеживает объекты после их уничтожения. Если объект не собран GC через 5 секунд — выполняется heap dump и анализ.
+LeakCanary регистрирует lifecycle callbacks и отслеживает объекты после того, как их жизненный цикл завершён (например, `Activity` после `onDestroy`). Если объект остаётся в памяти дольше заданного времени ожидания и не собирается GC, LeakCanary инициирует heap dump и выполняет его анализ, чтобы построить цепочку удержания.
 
 ```kotlin
-// LeakCanary автоматически следит за Activity
-override fun onActivityDestroyed(activity: Activity) {
-    AppWatcher.objectWatcher.watch(
-        activity,
-        "Activity#onDestroy() called"
-    )
-}
+// Упрощённый пример того, как объект может быть передан в LeakCanary
+AppWatcher.objectWatcher.watch(
+    activity,
+    "Activity#onDestroy() called"
+)
 ```
+
+(В реальном проекте LeakCanary делает это автоматически; вручную вы обычно не переопределяете колбэки для базовых компонентов.)
 
 **Пример утечки:**
 
 ```kotlin
-companion object {
-    var activity: Activity? = null  // ❌ Static reference — leak!
-}
-
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        var activity: Activity? = null  // ❌ Статическая ссылка удерживает Activity
+    }
+
     init {
-        activity = this  // ❌ Activity won't be GC'd
+        activity = this  // ❌ Activity не будет собрана GC
     }
 }
 ```
 
-**Отслеживание кастомных объектов:**
+**Отслеживание кастомных объектов (пример):**
+
+`AppWatcher.objectWatcher.watch(...)` следует вызывать в тот момент, когда объект ДОЛЖЕН стать освобождаемым. Например, для собственных listener-объектов или менеджеров, которые вы вручную "отвязываете":
 
 ```kotlin
-class MyViewModel : ViewModel() {
-    init {
+class MyLeakProneManager {
+    fun clear() {
+        // ... отписки и очистка ссылок ...
         AppWatcher.objectWatcher.watch(
             watchedObject = this,
-            description = "ViewModel cleared"
+            description = "MyLeakProneManager should be cleared now"
         )
     }
 }
 ```
 
-**Альтернативы:**
+**Альтернативы / смежные инструменты:**
 
-- [[c-memory-profiler]] — ручной анализ через Android Studio
-- Perfetto — системная трассировка с полной картиной производительности
+- Профилировщик памяти Android Studio (Memory Profiler) — ручной анализ памяти
+- Perfetto — системная трассировка и анализ производительности, включая память
 - MAT (Eclipse Memory Analyzer) — детальный анализ heap dump
 
 ---
 
 ## Answer (EN)
 
-**LeakCanary** by Square is the standard tool for automatically detecting memory leaks in Android applications.
+**LeakCanary** by Square is the de facto standard and widely used library for automatically detecting memory leaks in Android apps during development.
 
 **Key features:**
 
-- Automatically tracks Activity, Fragment, ViewModel leaks
-- Zero configuration — works out of the box
-- Visualizes object retention chains
-- No production impact (debug builds only)
+- Automatically tracks leaks for `Activity`, `Fragment`, `ViewModel`, and other Android components
+- Works out of the box with minimal configuration
+- Visualizes object retention chains (retention paths)
+- Typically added only to debug builds via `debugImplementation`, so it does not affect production in that setup
 
 **Setup:**
 
 ```kotlin
 // build.gradle (app)
 dependencies {
-    debugImplementation("com.squareup.leakcanary:leakcanary-android")  // ✅ Only debug builds
+    debugImplementation("com.squareup.leakcanary:leakcanary-android")  // ✅ Debug-only by default
 }
 ```
 
-**How it works:**
+**How it works (simplified):**
 
-LeakCanary registers lifecycle callbacks and watches objects after destruction. If an object isn't collected by GC after 5 seconds — heap dump is performed and analyzed.
+LeakCanary registers lifecycle callbacks and watches objects after their lifecycle is finished (e.g., an `Activity` after `onDestroy`). If an object remains in memory longer than the configured wait time and is not collected by GC, LeakCanary triggers a heap dump and analyzes it to build the retention path.
 
 ```kotlin
-// LeakCanary automatically watches Activity
-override fun onActivityDestroyed(activity: Activity) {
-    AppWatcher.objectWatcher.watch(
-        activity,
-        "Activity#onDestroy() called"
-    )
-}
+// Simplified example of passing an object to LeakCanary
+AppWatcher.objectWatcher.watch(
+    activity,
+    "Activity#onDestroy() called"
+)
 ```
+
+(In real usage, LeakCanary handles this automatically; you usually don't override lifecycle callbacks for core components just for LeakCanary.)
 
 **Leak example:**
 
 ```kotlin
-companion object {
-    var activity: Activity? = null  // ❌ Static reference — leak!
-}
-
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        var activity: Activity? = null  // ❌ Static reference holds onto Activity
+    }
+
     init {
         activity = this  // ❌ Activity won't be GC'd
     }
 }
 ```
 
-**Watch custom objects:**
+**Watch custom objects (example):**
+
+You should call `AppWatcher.objectWatcher.watch(...)` at the moment when the object is expected to become unreachable. For example, for your own managers or listeners that you explicitly clear:
 
 ```kotlin
-class MyViewModel : ViewModel() {
-    init {
+class MyLeakProneManager {
+    fun clear() {
+        // ... unsubscribe and clear references ...
         AppWatcher.objectWatcher.watch(
             watchedObject = this,
-            description = "ViewModel cleared"
+            description = "MyLeakProneManager should be cleared now"
         )
     }
 }
 ```
 
-**Alternatives:**
+**Alternatives / related tools:**
 
-- [[c-memory-profiler]] — manual analysis via Android Studio
-- Perfetto — system tracing with full performance picture
+- Android Studio Memory Profiler — manual memory analysis
+- Perfetto — system tracing and performance analysis, including memory
 - MAT (Eclipse Memory Analyzer) — detailed heap dump analysis
 
 ---
@@ -168,7 +177,7 @@ class MyViewModel : ViewModel() {
 ## Follow-ups
 
 - How does LeakCanary distinguish between expected retained objects and actual leaks?
-- What strategies prevent common leak patterns (static Activity references, inner class listeners)?
+- What strategies prevent common leak patterns (static `Activity` references, inner class listeners)?
 - How do you interpret leak traces to identify the root cause in complex object graphs?
 
 ## References

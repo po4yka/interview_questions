@@ -3,27 +3,28 @@ id: android-104
 title: "Why List Scrolling Lags / Почему тормозит скроллинг списка"
 aliases: ["RecyclerView Performance", "Why List Scrolling Lags", "Почему тормозит скроллинг списка"]
 topic: android
-subtopics: [performance-rendering, profiling, ui-views]
+subtopics: [performance-rendering, ui-views, threads-sync]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-updated: 2025-10-30
-tags: [android/performance-rendering, android/profiling, android/ui-views, difficulty/medium, optimization, performance, recyclerview]
+updated: 2025-11-10
+tags: [android/performance-rendering, android/ui-views, android/threads-sync, difficulty/medium, optimization, performance, recyclerview]
 moc: moc-android
-related: [c-performance-optimization, c-recyclerview, q-performance-optimization-android--android--medium, q-recyclerview-diffutil-advanced--android--medium, q-recyclerview-explained--android--medium]
+related: [q-android-app-lag-analysis--android--medium, q-recyclerview-explained--android--medium, q-android-performance-measurement-tools--android--medium]
 sources: []
+
 ---
 
 # Вопрос (RU)
 
-Почему при скролле может тормозить список?
+> Почему при скролле может тормозить список?
 
 # Question (EN)
 
-Why might list scrolling lag?
+> Why might list scrolling lag?
 
 ---
 
@@ -205,7 +206,7 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 
 ## Answer (EN)
 
-List scrolling lags due to **RecyclerView performance issues**. Main causes:
+`List` scrolling lags due to **RecyclerView performance issues**. Main causes:
 
 ### 1. Incorrect ViewHolder Usage
 
@@ -379,6 +380,14 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как внутренне работает механизм переиспользования ViewHolder в RecyclerView?
+- В чем разница между RecycledViewPool и ViewCacheExtension?
+- Как профилировать производительность RecyclerView с помощью Android Profiler?
+- Когда стоит использовать AsyncListDiffer по сравнению с ListAdapter?
+- Как ConstraintLayout улучшает производительность по сравнению с другими Layout?
+
 ## Follow-ups
 
 - How does RecyclerView's ViewHolder recycling mechanism work internally?
@@ -387,20 +396,42 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 - When should you use AsyncListDiffer vs ListAdapter?
 - How does ConstraintLayout improve performance compared to other layouts?
 
+## Ссылки (RU)
+
+- https://developer.android.com/topic/performance
+
 ## References
 
-- [[c-recyclerview]] - RecyclerView architecture and components
-- [[c-performance-optimization]] - Android performance optimization techniques
-- [[c-repository-pattern]] - Repository pattern for data caching
-- [Android Performance Patterns](https://developer.android.com/topic/performance)
+- https://developer.android.com/topic/performance
+
+## Связанные вопросы (RU)
+
+### База (Easy)
+
+- [[q-what-is-known-about-recyclerview--android--easy]] - основы RecyclerView
+- [[q-recyclerview-sethasfixedsize--android--easy]] - оптимизация setHasFixedSize
+
+### Связанные (Medium)
+
+- [[q-recyclerview-explained--android--medium]] - подробное устройство RecyclerView
+- [[q-recyclerview-diffutil-advanced--android--medium]] - продвинутое использование DiffUtil
+- [[q-recyclerview-async-list-differ--android--medium]] - шаблоны использования AsyncListDiffer
+- [[q-performance-optimization-android--android--medium]] - общая оптимизация производительности
+- [[q-android-performance-measurement-tools--android--medium]] - инструменты профилирования производительности
+
+### Продвинутое (Hard)
+
+- [[q-compose-performance-optimization--android--hard]] - паттерны оптимизации производительности в Compose
 
 ## Related Questions
 
 ### Prerequisites (Easy)
+
 - [[q-what-is-known-about-recyclerview--android--easy]] - RecyclerView basics
 - [[q-recyclerview-sethasfixedsize--android--easy]] - setHasFixedSize optimization
 
 ### Related (Medium)
+
 - [[q-recyclerview-explained--android--medium]] - RecyclerView deep dive
 - [[q-recyclerview-diffutil-advanced--android--medium]] - DiffUtil advanced usage
 - [[q-recyclerview-async-list-differ--android--medium]] - AsyncListDiffer patterns
@@ -408,4 +439,5 @@ override fun getChangePayload(old: Item, new: Item): Any? {
 - [[q-android-performance-measurement-tools--android--medium]] - Performance profiling tools
 
 ### Advanced (Hard)
+
 - [[q-compose-performance-optimization--android--hard]] - Compose performance patterns

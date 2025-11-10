@@ -12,7 +12,7 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
   - c-accessibility
@@ -20,11 +20,11 @@ related:
   - q-accessibility-testing--android--medium
   - q-custom-view-accessibility--android--medium
 created: 2025-10-11
-updated: 2025-10-29
+updated: 2025-11-10
 tags: [accessibility, android/ui-accessibility, android/ui-navigation, difficulty/medium, talkback]
 sources:
-  - https://developer.android.com/guide/topics/ui/accessibility
-  - https://developer.android.com/jetpack/compose/accessibility
+  - "https://developer.android.com/guide/topics/ui/accessibility"
+  - "https://developer.android.com/jetpack/compose/accessibility"
 ---
 
 # Вопрос (RU)
@@ -71,11 +71,13 @@ Image(
 ```kotlin
 // ✅ Объединяет иконку и текст в одно объявление
 Row(
-    modifier = Modifier.semantics(mergeDescendants = true) {}
+    modifier = Modifier
+        .clickable { /* ... */ }
+        .semantics(mergeDescendants = true) {}
 ) {
     Icon(Icons.Default.Star, contentDescription = null)
     Text("Избранное")
-    // TalkBack: "Избранное, кнопка"
+    // TalkBack: "Избранное, кнопка" благодаря кликабельности контейнера
 }
 
 // ✅ Скрывает декоративные элементы
@@ -88,19 +90,20 @@ Divider(
 
 ### 3. Порядок Фокуса
 
-Контролируйте навигацию TalkBack для логической последовательности:
+Контролируйте навигацию TalkBack для логической последовательности. В Compose по возможности обеспечивайте правильную иерархию и линейный порядок элементов в коде; явное управление порядком используйте только при необходимости:
 
 ```kotlin
-// Compose - явный порядок обхода
+// Пример: группировка и управление семантикой, а не жёсткими индексами
 Column(
-    modifier = Modifier.semantics {
-        traversalIndex = 1f
-    }
-) { /* Первый элемент */ }
+    modifier = Modifier.semantics(mergeDescendants = false) {}
+) {
+    // Элементы в визуально и логически правильном порядке
+}
 
-// View-based
-view.accessibilityTraversalBefore = R.id.next_view
-view.accessibilityTraversalAfter = R.id.previous_view
+// View-based: задаёт соседей в порядке обхода
+// current будет озвучен после view_before и до view_after
+current.accessibilityTraversalBefore = R.id.view_before
+current.accessibilityTraversalAfter = R.id.view_after
 ```
 
 ### 4. Пользовательские Действия
@@ -150,7 +153,7 @@ Text(
 **Практические советы**:
 
 - Описывайте **назначение**, а не внешний вид ("Отправить", а не "Синяя кнопка")
-- Избегайте **избыточности** (TalkBack автоматически добавляет "кнопка")
+- Избегайте **избыточности** (TalkBack автоматически добавляет "кнопка" для Button/Clickable)
 - Тестируйте с **реальным TalkBack** на устройстве
 - Используйте **короткие и ясные** описания (3-5 слов)
 
@@ -188,13 +191,15 @@ Image(
 Group related elements so TalkBack reads them as one unit:
 
 ```kotlin
-// ✅ Merges icon and text into single announcement
+// ✅ Merges icon and text into a single announcement
 Row(
-    modifier = Modifier.semantics(mergeDescendants = true) {}
+    modifier = Modifier
+        .clickable { /* ... */ }
+        .semantics(mergeDescendants = true) {}
 ) {
     Icon(Icons.Default.Star, contentDescription = null)
     Text("Favorite")
-    // TalkBack: "Favorite, button"
+    // TalkBack: "Favorite, button" because the container is clickable
 }
 
 // ✅ Hides decorative elements
@@ -207,19 +212,20 @@ Divider(
 
 ### 3. Focus Order
 
-Control TalkBack navigation for logical flow:
+Control TalkBack navigation for logical flow. In Compose, prefer a natural layout order and hierarchy; use explicit overrides only when needed:
 
 ```kotlin
-// Compose - explicit traversal order
+// Example: rely on correct structure instead of arbitrary indices
 Column(
-    modifier = Modifier.semantics {
-        traversalIndex = 1f
-    }
-) { /* First element */ }
+    modifier = Modifier.semantics(mergeDescendants = false) {}
+) {
+    // Children placed in the intended traversal order
+}
 
-// View-based
-view.accessibilityTraversalBefore = R.id.next_view
-view.accessibilityTraversalAfter = R.id.previous_view
+// View-based: define neighbors for traversal order
+// 'current' will be read after view_before and before view_after
+current.accessibilityTraversalBefore = R.id.view_before
+current.accessibilityTraversalAfter = R.id.view_after
 ```
 
 ### 4. Custom Actions
@@ -269,11 +275,19 @@ Text(
 **Practical Tips**:
 
 - Describe **purpose**, not appearance ("Submit", not "Blue button")
-- Avoid **redundancy** (TalkBack automatically adds "button")
+- Avoid **redundancy** (TalkBack automatically adds "button" for Button/Clickable where appropriate)
 - Test with **real TalkBack** on device
 - Use **short and clear** descriptions (3-5 words)
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как автоматизировать тестирование поддержки TalkBack?
+- Что происходит с вложенными интерактивными элементами в Compose?
+- Как обрабатывать сложные UI, такие как карусели и вкладки?
+- Когда использовать `mergeDescendants` вместо раздельных объявлений?
+- Как оптимизировать работу TalkBack для динамически обновляемого контента?
 
 ## Follow-ups
 
@@ -283,6 +297,15 @@ Text(
 - When should you use `mergeDescendants` vs separate announcements?
 - How to optimize TalkBack for dynamic content updates?
 
+## Ссылки (RU)
+
+- [[c-accessibility]]
+- [[q-accessibility-compose--android--medium]]
+- [[q-accessibility-testing--android--medium]]
+- [[q-custom-view-accessibility--android--medium]]
+- https://developer.android.com/guide/topics/ui/accessibility/testing
+- https://support.google.com/accessibility/android/answer/6283677
+
 ## References
 
 - [[c-accessibility]]
@@ -291,6 +314,13 @@ Text(
 - [[q-custom-view-accessibility--android--medium]]
 - https://developer.android.com/guide/topics/ui/accessibility/testing
 - https://support.google.com/accessibility/android/answer/6283677
+
+## Связанные вопросы (RU)
+
+### Связанные (тот же уровень)
+- [[q-accessibility-compose--android--medium]]
+- [[q-accessibility-testing--android--medium]]
+- [[q-custom-view-accessibility--android--medium]]
 
 ## Related Questions
 

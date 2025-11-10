@@ -4,24 +4,25 @@ title: Compose Compiler Plugin / Плагин компилятора Compose
 aliases: [Compose Compiler, Compose Compiler Plugin, Компилятор Compose, Плагин компилятора Compose]
 topic: android
 subtopics:
-  - performance-memory
-  - ui-compose
+- performance-memory
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - c-compose-recomposition
-  - c-compose-state
-  - q-android-performance-measurement-tools--android--medium
+- c-compose-recomposition
+- c-compose-state
+- q-android-performance-measurement-tools--android--medium
 sources: []
 created: 2025-10-11
-updated: 2025-10-29
+updated: 2025-11-10
 tags: [android/performance-memory, android/ui-compose, compiler, compose, difficulty/hard, performance]
+
 ---
 
 # Вопрос (RU)
@@ -40,19 +41,21 @@ tags: [android/performance-memory, android/ui-compose, compiler, compose, diffic
 - Вставляет параметр `Composer` для управления slot table
 - Генерирует группы и ключи для отслеживания изменений UI
 - Анализирует стабильность параметров через data flow analysis
-- Помечает функции как restartable/skippable для оптимизации
+- Помечает функции как restartable/skippable для оптимизации (если сигнатура и стабильность аргументов позволяют)
 
 ### Механизм Стабильности
 
-**Стабильные типы** → функция пропускается при одинаковых параметрах:
-- Примитивы (Int, String, Boolean)
-- Типы с `@Immutable` / `@Stable`
-- Referentially equal объекты
+**Стабильные типы** → позволяют компилятору безопасно пропускать выполнение функции при отсутствии изменений входных данных:
+- Примитивы (`Int`, `String`, `Boolean`) и другие типы, известные компилятору как неизменяемые
+- Типы с `@Immutable` / `@Stable` (при корректной семантике неизменяемости/стабильности)
+- Объекты, для которых композиционный анализ может опираться на сравнение по ссылке (referential equality), если они считаются стабильными
 
-**Нестабильные типы** → всегда перекомпозируются:
-- Изменяемые коллекции (MutableList, MutableMap)
-- Классы без явных маркеров стабильности
-- Типы с var полями
+**Нестабильные типы** → не позволяют использовать автоматический skip на основе стабильности, функция помечается как не skippable:
+- Изменяемые коллекции (`MutableList`, `MutableMap`, и т.п.)
+- Классы без явных маркеров стабильности и/или с семантикой мутабельности
+- Типы с `var` полями, нарушающими гарантию стабильности
+
+Важно: "нестабильный" не означает, что функция всегда будет перекомпозироваться при любом изменении родителя. Это означает, что компилятор не может безопасно пропустить ее выполнение, поэтому при триггере перекомпозиции соответствующей области функция будет выполняться.
 
 ### Примеры Оптимизации
 
@@ -63,7 +66,7 @@ data class User(val id: String, val name: String)
 
 @Composable
 fun UserRow(user: User) {
-    Text(text = user.name) // Перекомпозиция только при изменении user
+    Text(text = user.name) // Перекомпозиция только при изменении user или при триггере области, если ключи/входы изменились
 }
 ```
 
@@ -73,14 +76,14 @@ data class User(val id: String, var name: String) // var делает тип н�
 
 @Composable
 fun UserRow(user: User) {
-    Text(text = user.name) // Перекомпозируется при каждом изменении родителя
+    Text(text = user.name) // Не может быть эффективно пропущена: при перекомпозиции родительского scope будет выполняться снова
 }
 ```
 
 ✅ **Неизменяемые интерфейсы**:
 ```kotlin
 @Composable
-fun ItemList(items: List<Item>) { // List вместо MutableList
+fun ItemList(items: List<Item>) { // List вместо MutableList, при условии неизменяемого контракта
     LazyColumn {
         items(items) { ItemRow(it) }
     }
@@ -89,13 +92,29 @@ fun ItemList(items: List<Item>) { // List вместо MutableList
 
 ### Диагностика Компилятора
 
-Включите отчеты для анализа решений компилятора:
+Включите отчеты для анализа решений компилятора. Конкретные флаги зависят от версии плагина Compose и Gradle. Один из распространенных вариантов конфигурации (Kotlin DSL):
 
 ```kotlin
-// gradle.properties
-compose.compiler.report=true
-compose.compiler.metrics=true
-compose.compiler.reportDestination=build/compose-reports
+// build.gradle.kts (пример, актуальный для новых версий Compose Compiler)
+composeCompiler {
+    reportsDestination.set(layout.buildDirectory.dir("compose-reports"))
+    metricsDestination.set(layout.buildDirectory.dir("compose-metrics"))
+}
+```
+
+Либо через аргументы компилятора Kotlin (для соответствующих версий):
+
+```kotlin
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${buildDir}/compose-reports",
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${buildDir}/compose-metrics"
+        )
+    }
+}
 ```
 
 Отчеты показывают:
@@ -105,33 +124,35 @@ compose.compiler.reportDestination=build/compose-reports
 
 ### Рекомендации По Оптимизации
 
-1. **Используйте @Immutable/@Stable** для доменных моделей
-2. **Передавайте ID вместо объектов** для снижения нагрузки
-3. **Выносите вычисления** в `remember` и `derivedStateOf`
-4. **Декомпозируйте UI** на мелкие composable функции
-5. **Используйте key()** для контроля области перекомпозиции
+1. **Используйте @Immutable/@Stable** для доменных моделей при корректной семантике
+2. **По возможности передавайте ID вместо тяжелых объектов** для снижения нагрузки и упрощения сравнения
+3. **Выносите вычисления** в `remember` и `derivedStateOf` для предотвращения лишних вычислений при перекомпозиции
+4. **Декомпозируйте UI** на мелкие composable функции для локализации областей перекомпозиции
+5. **Используйте `key()`** для контроля области и идентичности элементов при перекомпозиции
 
 ## Answer (EN)
 
 ### @Composable Function Transformation
 
 The compiler transforms `@Composable` functions into state machines:
-- Injects `Composer` parameter for slot table management
+- Injects a `Composer` parameter for slot table management
 - Generates groups and keys for UI change tracking
 - Analyzes parameter stability through data flow analysis
-- Marks functions as restartable/skippable for optimization
+- Marks functions as restartable/skippable for optimization (when the signature and parameter stability allow it)
 
 ### Stability Mechanism
 
-**Stable types** → function skips when parameters are equal:
-- Primitives (Int, String, Boolean)
-- Types annotated with `@Immutable` / `@Stable`
-- Referentially equal objects
+**Stable types** → enable the compiler to safely skip executing a function when inputs are unchanged:
+- Primitives (`Int`, `String`, `Boolean`) and other types known to the compiler as effectively immutable
+- Types annotated with `@Immutable` / `@Stable` (assuming semantics are correct)
+- Objects where the stability analysis can rely on referential equality when they are classified as stable
 
-**Unstable types** → always recompose:
-- Mutable collections (MutableList, MutableMap)
-- Classes without explicit stability markers
-- Types with var fields
+**Unstable types** → prevent the compiler from using automatic skipping based solely on stability; such functions are treated as not skippable:
+- Mutable collections (`MutableList`, `MutableMap`, etc.)
+- Classes without explicit stability markers and/or with mutable semantics
+- Types with `var` properties that break stability guarantees
+
+Important: "unstable" does not mean the function "always recomposes" on every parent change. It means the compiler cannot safely skip it based on stability, so when recomposition is triggered for that scope, the function will be re-invoked.
 
 ### Optimization Examples
 
@@ -142,24 +163,24 @@ data class User(val id: String, val name: String)
 
 @Composable
 fun UserRow(user: User) {
-    Text(text = user.name) // Recomposes only when user changes
+    Text(text = user.name) // Recomposes only when user (or relevant inputs/keys) change within its recomposition scope
 }
 ```
 
 ❌ **Unstable model**:
 ```kotlin
-data class User(val id: String, var name: String) // var makes type unstable
+data class User(val id: String, var name: String) // var makes the type unstable
 
 @Composable
 fun UserRow(user: User) {
-    Text(text = user.name) // Recomposes on every parent change
+    Text(text = user.name) // Cannot be efficiently skipped; it will run whenever its parent scope recomposes
 }
 ```
 
 ✅ **Immutable interfaces**:
 ```kotlin
 @Composable
-fun ItemList(items: List<Item>) { // List instead of MutableList
+fun ItemList(items: List<Item>) { // List instead of MutableList, assuming an immutable usage contract
     LazyColumn {
         items(items) { ItemRow(it) }
     }
@@ -168,13 +189,29 @@ fun ItemList(items: List<Item>) { // List instead of MutableList
 
 ### Compiler Diagnostics
 
-Enable reports to analyze compiler decisions:
+Enable reports to analyze compiler decisions. Exact configuration depends on the Compose Compiler and Android Gradle Plugin versions. A common modern setup (Kotlin DSL) is:
 
 ```kotlin
-// gradle.properties
-compose.compiler.report=true
-compose.compiler.metrics=true
-compose.compiler.reportDestination=build/compose-reports
+// build.gradle.kts (example for newer Compose Compiler)
+composeCompiler {
+    reportsDestination.set(layout.buildDirectory.dir("compose-reports"))
+    metricsDestination.set(layout.buildDirectory.dir("compose-metrics"))
+}
+```
+
+Or via Kotlin compiler plugin arguments (for applicable versions):
+
+```kotlin
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=${buildDir}/compose-reports",
+            "-P",
+            "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=${buildDir}/compose-metrics"
+        )
+    }
+}
 ```
 
 Reports show:
@@ -184,11 +221,11 @@ Reports show:
 
 ### Optimization Recommendations
 
-1. **Use @Immutable/@Stable** for domain models when semantics apply
-2. **Pass IDs instead of objects** to reduce payload
-3. **Move calculations** to `remember` and `derivedStateOf`
-4. **Decompose UI** into small composable functions
-5. **Use key()** to control recomposition scope
+1. **Use @Immutable/@Stable** for domain models when semantics are correct
+2. **Prefer passing IDs instead of heavy objects** to reduce payload and simplify comparisons
+3. **Move expensive calculations** into `remember` and `derivedStateOf` to avoid redundant work during recomposition
+4. **Decompose UI** into small composable functions to localize recomposition scopes
+5. **Use `key()`** to control identity and recomposition scope for items
 
 ---
 
@@ -196,8 +233,8 @@ Reports show:
 
 - How to interpret compiler stability reports and fix unstable types?
 - What are the trade-offs of @Stable vs @Immutable annotations?
-- How does derivedStateOf prevent unnecessary recompositions?
-- When should you use key() to control recomposition scope?
+- How does `derivedStateOf` prevent unnecessary recompositions?
+- When should you use `key()` to control recomposition scope?
 - How to measure recomposition counts in production using tracing?
 
 ## References

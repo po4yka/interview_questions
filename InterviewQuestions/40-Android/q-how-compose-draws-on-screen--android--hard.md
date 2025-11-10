@@ -24,7 +24,7 @@ related:
 - q-compose-stability-skippability--android--hard
 - q-recomposition-compose--android--medium
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 tags:
 - android
 - android/performance-rendering
@@ -47,24 +47,24 @@ sources: []
 
 ## Ответ (RU)
 
-Jetpack Compose использует **трёхфазный асинхронный рендеринг**, где каждая фаза может выполняться независимо для оптимизации производительности.
+Jetpack Compose использует **трёхфазный пайплайн рендеринга**, в котором логически разделены этапы Composition, Layout и Drawing. Эти фазы могут выполняться отдельно (например, только Layout/Drawing без изменения Composition), что позволяет оптимизировать производительность, но они остаются упорядоченными в рамках кадра и не являются полностью независимыми или произвольно асинхронными.
 
 ### Три Фазы Рендеринга
 
-1. **Composition (Композиция)** — построение дерева UI из composable функций
+1. **Composition (Композиция)** — построение дерева UI из composable-функций
 2. **Layout (Размещение)** — измерение и позиционирование элементов
-3. **Drawing (Рисование)** — рендеринг на Canvas через GPU
+3. **Drawing (Рисование)** — рисование на Canvas (через Skia), с аппаратным ускорением
 
 ### Фаза 1: Composition
 
 **Что происходит:**
-- Compose вызывает все `@Composable` функции
-- Строит дерево `LayoutNode`
-- Отслеживает зависимости от state через snapshot system
-- Использует **Slot Table** для хранения структуры UI, state, remember значений
+- Compose вызывает `@Composable` функции
+- Строится дерево `LayoutNode`
+- Отслеживаются зависимости от state через snapshot system
+- Используется **Slot Table** для хранения структуры UI и значений `remember`
 
 **Умная рекомпозиция:**
-- Пропускает функции, параметры которых не изменились (skippable composables)
+- Пропускает функции, параметры и наблюдаемый state которых не изменились (skippable composables)
 - Рекомпонует только части, зависящие от изменившегося state
 
 ```kotlin
@@ -74,7 +74,7 @@ fun SmartRecomposition() {
 
     Column {
         Text("Counter: $counter") // ✅ Рекомпонуется при изменении counter
-        StaticHeader() // ✅ Не рекомпонуется (нет зависимостей от state)
+        StaticHeader() // ✅ Не рекомпонуется из-за counter (если параметры стабильны)
     }
 }
 ```
@@ -86,20 +86,37 @@ fun SmartRecomposition() {
 1. **Measure Pass (снизу вверх):**
    - Родитель передаёт constraints детям
    - Дети измеряют себя и возвращают размер
-   - Каждый элемент измеряется **только один раз** → O(n) сложность
+   - Каждый measurable должен быть измерен не более одного раза для данного набора constraints в корректной реализации (на практике возможны дополнительные измерения при других constraints)
 
 2. **Placement Pass (сверху вниз):**
    - Родитель размещает детей в координатах
    - Устанавливаются финальные позиции
 
 ```kotlin
-Layout(content = content, modifier = modifier) { measurables, constraints ->
-    // ✅ Measure: каждый measurable измеряется один раз
-    val placeables = measurables.map { it.measure(constraints) }
+@Composable
+fun SimpleCustomLayout(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Layout(
+        content = content,
+        modifier = modifier
+    ) { measurables, constraints ->
+        // ✅ Measure: измеряем каждого ребёнка с переданными constraints
+        val placeables = measurables.map { it.measure(constraints) }
 
-    layout(width, height) {
-        // ✅ Placement: позиционирование без повторных измерений
-        placeables.forEach { it.placeRelative(x, y) }
+        // Для примера используем максимальную ширину и суммарную высоту
+        val width = constraints.maxWidth
+        val height = placeables.sumOf { it.height }
+
+        layout(width, height) {
+            var y = 0
+            // ✅ Placement: позиционирование без повторного измерения
+            placeables.forEach { placeable ->
+                placeable.placeRelative(x = 0, y = y)
+                y += placeable.height
+            }
+        }
     }
 }
 ```
@@ -107,15 +124,15 @@ Layout(content = content, modifier = modifier) { measurables, constraints ->
 ### Фаза 3: Drawing
 
 **Рисование на Skia Canvas:**
-- Использует `DrawScope` для операций рисования
-- GPU-ускорение через hardware layers
-- `graphicsLayer` создаёт отдельный hardware layer для трансформаций
+- Используется `DrawScope` для операций рисования
+- GPU-ускорение через аппаратные слои
+- `graphicsLayer` может создавать отдельный слой для трансформаций и эффектов
 
 ```kotlin
 Box(
     modifier = Modifier
         .graphicsLayer {
-            // ✅ GPU-ускоренные трансформации без recomposition
+            // ✅ GPU-ускоренные трансформации без изменения Composition
             rotationZ = 45f
             alpha = 0.8f
         }
@@ -125,9 +142,9 @@ Box(
 )
 ```
 
-### Независимость Фаз (Ключевая Оптимизация)
+### Взаимосвязь и Разделение Фаз (Ключевая Идея)
 
-Фазы выполняются независимо:
+Фазы могут запускаться выборочно в ответ на изменения:
 
 ```kotlin
 var offset by remember { mutableStateOf(0f) }
@@ -135,7 +152,6 @@ var offset by remember { mutableStateOf(0f) }
 Box(
     modifier = Modifier
         .offset { IntOffset(offset.roundToInt(), 0) }
-        // ✅ Только layout phase, без recomposition
         .pointerInput(Unit) {
             detectHorizontalDragGestures { _, dragAmount ->
                 offset += dragAmount
@@ -144,16 +160,19 @@ Box(
 )
 ```
 
-**Правила:**
-- Изменение структуры UI → Composition + Layout + Drawing
-- Изменение размеров/позиций → Layout + Drawing
-- Изменение визуальных свойств → только Drawing
+- Обновление `offset` — это изменение state, которое триггерит рекомпозицию того scope, где `offset` читается, а также обновление Layout/Drawing для затронутых элементов.
+- На практике возможно обновлять только Layout/Drawing без повторной Composition, если состояние читается в соответствующих фазах или изменения изолированы.
+
+**Эмпирические правила:**
+- Изменение структуры UI (какие composables существуют) → Composition + Layout + Drawing
+- Изменение размеров/позиций (layout-зависимые параметры) → Layout + Drawing (может сопровождаться рекомпозицией, если меняется state в Composition)
+- Изменение чисто визуальных свойств, читаемых в draw-фазе (например, через `drawWithContent`) → преимущественно Drawing; однако если свойство читается в Composition, изменение вызовет и рекомпозицию
 
 ### Оптимизация Производительности
 
 **1. Отложенное чтение state:**
 ```kotlin
-// ✅ Читаем state в draw phase вместо composition
+// ✅ Читаем state в draw phase вместо composition, чтобы избежать лишней рекомпозиции
 Box(
     modifier = Modifier.drawWithContent {
         translate(left = animatedOffset.value) {
@@ -167,8 +186,8 @@ Box(
 ```kotlin
 val filteredCount by remember {
     derivedStateOf {
-        items.filter { it.isValid }.size
-        // ✅ Пересчёт только при изменении items
+        items.count { it.isValid }
+        // ✅ Пересчёт только при изменении items или их isValid
     }
 }
 ```
@@ -178,34 +197,76 @@ val filteredCount by remember {
 LazyColumn {
     items(
         items = list,
-        key = { it.id } // ✅ Предотвращает recomposition всего списка
-    ) { item -> ItemView(item) }
+        key = { it.id } // ✅ Сохраняет идентичность элементов и уменьшает ненужные перевычеркивания/пересоздания
+    ) { item ->
+        ItemView(item)
+    }
 }
 ```
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как Compose обрабатывает анимации без избыточной рекомпозиции?
+- Что делает composable-функцию "skippable"?
+- Когда следует использовать `graphicsLayer` по сравнению с `drawWithContent`?
+- Как Slot Table помогает отслеживать композицию и состояние?
+- Каково влияние на производительность при использовании вложенных lazy-списков?
+
+## Ссылки (RU)
+
+- [[q-recomposition-compose--android--medium]] — детали умной рекомпозиции
+- [[q-compose-slot-table-recomposition--android--hard]] — Slot Table и отслеживание рекомпозиции
+- [[q-mutable-state-compose--android--medium]] — основы управления состоянием
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+- [[c-performance]]
+
+### Предпосылки
+
+- [[q-jetpack-compose-basics--android--medium]] — основы Compose
+- [[q-how-jetpack-compose-works--android--medium]] — как работает Compose
+
+### Связанные
+
+- [[q-compose-stability-skippability--android--hard]] — стабильность и skippability
+- [[q-compose-modifier-system--android--medium]] — система модификаторов
+- [[q-compose-custom-layout--android--hard]] — реализация кастомного layout
+
+### Продвинутое
+
+- [[q-compose-performance-optimization--android--hard]] — техники оптимизации производительности
+- [[q-compose-compiler-plugin--android--hard]] — трансформации компилятором
+
+---
+
 ## Answer (EN)
 
-Jetpack Compose uses a **three-phase asynchronous rendering** pipeline where each phase can execute independently for optimal performance.
+Jetpack Compose uses a **three-stage rendering pipeline** with distinct Composition, Layout, and Drawing phases. These phases can be run selectively (e.g., layout/draw updates without structural recomposition), enabling performance optimizations, but they remain ordered within a frame and are not fully independent or arbitrarily asynchronous.
 
 ### Three Rendering Phases
 
-1. **Composition** — builds UI tree from composable functions
+1. **Composition** — builds the UI tree from composable functions
 2. **Layout** — measures and positions elements
-3. **Drawing** — renders to Canvas via GPU
+3. **Drawing** — draws onto a Canvas (via Skia) with hardware acceleration
 
 ### Phase 1: Composition
 
 **What happens:**
-- Compose calls all `@Composable` functions
+- Compose invokes `@Composable` functions
 - Builds a tree of `LayoutNode` objects
-- Tracks state dependencies via snapshot system
-- Uses **Slot Table** to store UI structure, state values, remembered values
+- Tracks state dependencies via the snapshot system
+- Uses the **Slot Table** to store UI structure and `remember` values
 
 **Smart recomposition:**
-- Skips functions whose parameters haven't changed (skippable composables)
-- Recomposes only parts that depend on changed state
+- Skips functions whose parameters and observed state haven't changed (skippable composables)
+- Recomposes only the parts that depend on changed state
 
 ```kotlin
 @Composable
@@ -214,7 +275,7 @@ fun SmartRecomposition() {
 
     Column {
         Text("Counter: $counter") // ✅ Recomposes when counter changes
-        StaticHeader() // ✅ Never recomposes (no state dependencies)
+        StaticHeader() // ✅ Not recomposed due to counter changes (if its inputs are stable)
     }
 }
 ```
@@ -226,20 +287,37 @@ fun SmartRecomposition() {
 1. **Measure Pass (bottom-up):**
    - Parent passes constraints to children
    - Children measure themselves and report size
-   - Each element measured **only once** → O(n) complexity
+   - In a correct layout, each measurable is measured at most once per constraint set; additional measurements may occur with different constraints when needed
 
 2. **Placement Pass (top-down):**
    - Parent positions children at coordinates
-   - Final positions are established
+   - Final positions are assigned
 
 ```kotlin
-Layout(content = content, modifier = modifier) { measurables, constraints ->
-    // ✅ Measure: each measurable measured once
-    val placeables = measurables.map { it.measure(constraints) }
+@Composable
+fun SimpleCustomLayout(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    Layout(
+        content = content,
+        modifier = modifier
+    ) { measurables, constraints ->
+        // ✅ Measure: measure each child with provided constraints
+        val placeables = measurables.map { it.measure(constraints) }
 
-    layout(width, height) {
-        // ✅ Placement: positioning without remeasuring
-        placeables.forEach { it.placeRelative(x, y) }
+        // For example, use max width and sum of heights
+        val width = constraints.maxWidth
+        val height = placeables.sumOf { it.height }
+
+        layout(width, height) {
+            var y = 0
+            // ✅ Placement: position children without re-measuring
+            placeables.forEach { placeable ->
+                placeable.placeRelative(x = 0, y = y)
+                y += placeable.height
+            }
+        }
     }
 }
 ```
@@ -248,14 +326,14 @@ Layout(content = content, modifier = modifier) { measurables, constraints ->
 
 **Rendering to Skia Canvas:**
 - Uses `DrawScope` for drawing operations
-- GPU acceleration via hardware layers
-- `graphicsLayer` creates separate hardware layer for transformations
+- Hardware acceleration via GPU-backed layers
+- `graphicsLayer` can create separate layers for transformations and effects
 
 ```kotlin
 Box(
     modifier = Modifier
         .graphicsLayer {
-            // ✅ GPU-accelerated transformations without recomposition
+            // ✅ GPU-accelerated transforms without changing Composition
             rotationZ = 45f
             alpha = 0.8f
         }
@@ -265,9 +343,9 @@ Box(
 )
 ```
 
-### Phase Independence (Key Optimization)
+### Phase Interaction and Separation (Key Idea)
 
-Phases execute independently:
+Phases can be triggered selectively in response to changes:
 
 ```kotlin
 var offset by remember { mutableStateOf(0f) }
@@ -275,7 +353,6 @@ var offset by remember { mutableStateOf(0f) }
 Box(
     modifier = Modifier
         .offset { IntOffset(offset.roundToInt(), 0) }
-        // ✅ Only layout phase, no recomposition
         .pointerInput(Unit) {
             detectHorizontalDragGestures { _, dragAmount ->
                 offset += dragAmount
@@ -284,16 +361,19 @@ Box(
 )
 ```
 
-**Rules:**
-- Structure changes → Composition + Layout + Drawing
-- Size/position changes → Layout + Drawing
-- Visual property changes → Drawing only
+- Updating `offset` is a state change; it will trigger recomposition of the scope that reads it and corresponding layout/draw updates.
+- In practice you can structure code so that some changes affect only layout/draw (e.g., reading state inside layout/draw lambdas) without forcing a full structural recomposition.
+
+**Heuristic rules:**
+- Structural changes (which composables are present) → Composition + Layout + Drawing
+- Size/position changes (layout-affecting parameters) → Layout + Drawing (may involve recomposition if driven by state read in Composition)
+- Pure visual changes read in the draw phase (e.g., inside `drawWithContent`) → primarily Drawing; if the value is read in Composition, its change also triggers recomposition
 
 ### Performance Optimization
 
 **1. Deferred state reads:**
 ```kotlin
-// ✅ Read state in draw phase instead of composition
+// ✅ Read state in the draw phase instead of composition to avoid unnecessary recompositions
 Box(
     modifier = Modifier.drawWithContent {
         translate(left = animatedOffset.value) {
@@ -307,8 +387,8 @@ Box(
 ```kotlin
 val filteredCount by remember {
     derivedStateOf {
-        items.filter { it.isValid }.size
-        // ✅ Recalculates only when items change
+        items.count { it.isValid }
+        // ✅ Recomputes only when items or their isValid flags change
     }
 }
 ```
@@ -318,8 +398,10 @@ val filteredCount by remember {
 LazyColumn {
     items(
         items = list,
-        key = { it.id } // ✅ Prevents recomposition of entire list
-    ) { item -> ItemView(item) }
+        key = { it.id } // ✅ Preserves item identity and reduces unnecessary item disposal/moves
+    ) { item ->
+        ItemView(item)
+    }
 }
 ```
 
@@ -327,10 +409,10 @@ LazyColumn {
 
 ## Follow-ups
 
-- How does Compose handle animations without triggering recomposition?
+- How does Compose handle animations without triggering unnecessary recomposition?
 - What makes a composable function "skippable"?
 - When should you use `graphicsLayer` vs `drawWithContent`?
-- How does Slot Table track state dependencies?
+- How does the Slot Table help track composition and state?
 - What is the performance impact of nested lazy lists?
 
 ## References
@@ -347,16 +429,18 @@ LazyColumn {
 - [[c-jetpack-compose]]
 - [[c-performance]]
 
-
 ### Prerequisites
+
 - [[q-jetpack-compose-basics--android--medium]] - Compose fundamentals
 - [[q-how-jetpack-compose-works--android--medium]] - How Compose works
 
 ### Related
+
 - [[q-compose-stability-skippability--android--hard]] - Stability & skippability
 - [[q-compose-modifier-system--android--medium]] - Modifier system
 - [[q-compose-custom-layout--android--hard]] - Custom layout implementation
 
 ### Advanced
+
 - [[q-compose-performance-optimization--android--hard]] - Performance optimization techniques
 - [[q-compose-compiler-plugin--android--hard]] - Compiler transformations

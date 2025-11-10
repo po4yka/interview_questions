@@ -23,7 +23,7 @@ related:
 - c-lifecycle
 - q-room-code-generation-timing--android--medium
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags:
 - android/lifecycle
@@ -31,6 +31,7 @@ tags:
 - difficulty/medium
 - threading
 - ui-thread
+
 ---
 
 # Вопрос (RU)
@@ -45,7 +46,7 @@ tags:
 
 ## Ответ (RU)
 
-Главный поток (Main Thread), также известный как UI Thread, отвечает за обработку пользовательского интерфейса и событий в Android.
+Главный поток (Main Thread), также известный как UI Thread, создаётся фреймворком при запуске процесса приложения и отвечает за обработку пользовательского интерфейса и событий в Android. Большинство API Android UI не являются потокобезопасными, поэтому взаимодействие с ними должно выполняться именно из этого потока.
 
 ### Основные Характеристики
 
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity() {
 
 #### 2. Event Loop
 
-Main thread работает на основе очереди событий (Looper + MessageQueue):
+Main thread работает на основе очереди сообщений/событий (Looper + MessageQueue):
 
 ```kotlin
 // ✅ Отправка задачи в main thread
@@ -82,12 +83,12 @@ thread {
 
 #### 3. ANR При Блокировке
 
-Блокировка главного потока более 5 секунд вызывает ANR (Application Not Responding):
+Если главный поток надолго блокируется (например, на несколько секунд), система может сгенерировать ANR (`Application` Not Responding). Для пользовательского ввода типичный таймаут около 5 секунд, для некоторых других операций (например, `BroadcastReceiver`, сервисы) используются другие значения.
 
 ```kotlin
 // ❌ Блокирует UI
 button.setOnClickListener {
-    val data = URL("https://api.example.com").readText()  // NetworkOnMainThreadException!
+    val data = URL("https://api.example.com").readText()  // Может вызвать NetworkOnMainThreadException и фриз UI
     textView.text = data
 }
 
@@ -102,14 +103,16 @@ button.setOnClickListener {
 }
 ```
 
-### Запрещённые Операции
+### Нежелательные Операции
 
-**Нельзя выполнять в main thread**:
+В главном потоке нельзя выполнять длительные или блокирующие операции, такие как:
 
 - Сетевые запросы
-- Операции с базой данных
+- Тяжёлые операции с базой данных
 - Тяжёлые вычисления
 - Чтение/запись больших файлов
+
+Они должны выполняться на фоновых потоках / подходящих диспетчерах, чтобы не блокировать обработку событий и не приводить к ANR.
 
 ### Современные Подходы
 
@@ -119,7 +122,7 @@ lifecycleScope.launch {
     val data = withContext(Dispatchers.IO) {
         repository.fetchData()
     }
-    updateUI(data)
+    updateUI(data) // вызывается на главном потоке
 }
 
 // ✅ ViewModel с StateFlow
@@ -144,7 +147,7 @@ class MyViewModel : ViewModel() {
 
 ## Answer (EN)
 
-The Main Thread, also known as the UI Thread, is responsible for handling user interface operations and events in Android.
+The Main Thread, also known as the UI Thread, is created by the Android framework when the app process starts and is responsible for handling user interface operations and events. Most Android UI toolkit APIs are not thread-safe, so they must be accessed from this thread.
 
 ### Key Characteristics
 
@@ -166,7 +169,7 @@ class MainActivity : AppCompatActivity() {
 
 #### 2. Event Loop
 
-The main thread operates using an event queue (Looper + MessageQueue):
+The main thread operates using a message/event queue (Looper + MessageQueue):
 
 ```kotlin
 // ✅ Posting task to main thread
@@ -181,12 +184,12 @@ thread {
 
 #### 3. ANR on Blocking
 
-Blocking the main thread for more than 5 seconds triggers ANR (Application Not Responding):
+If the main thread is blocked for too long (for example, several seconds), the system may trigger an ANR (`Application` Not Responding). For input events the typical timeout is around 5 seconds; other components (e.g., `BroadcastReceiver`, services) have different timeouts.
 
 ```kotlin
 // ❌ Blocks UI
 button.setOnClickListener {
-    val data = URL("https://api.example.com").readText()  // NetworkOnMainThreadException!
+    val data = URL("https://api.example.com").readText()  // May cause NetworkOnMainThreadException and freeze the UI
     textView.text = data
 }
 
@@ -201,14 +204,16 @@ button.setOnClickListener {
 }
 ```
 
-### Prohibited Operations
+### Prohibited / Undesired Operations
 
-**Must NOT be performed on main thread**:
+Long-running or blocking work must NOT be performed on the main thread, including:
 
 - Network requests
-- Database operations
+- Heavy database operations
 - Heavy computations
 - Reading/writing large files
+
+Such work should run on background threads / appropriate dispatchers to keep the UI responsive and avoid ANRs.
 
 ### Modern Approaches
 
@@ -218,7 +223,7 @@ lifecycleScope.launch {
     val data = withContext(Dispatchers.IO) {
         repository.fetchData()
     }
-    updateUI(data)
+    updateUI(data) // runs on main thread
 }
 
 // ✅ ViewModel with StateFlow
@@ -244,7 +249,7 @@ class MyViewModel : ViewModel() {
 ## Follow-ups
 
 - How does Looper.prepare() work internally?
-- What's the difference between Handler.post() and View.post()?
+- What's the difference between Handler.post() and `View`.post()?
 - How to detect if current code is running on main thread?
 - What happens when MessageQueue is full?
 - How does StrictMode detect main thread violations?
@@ -261,15 +266,17 @@ class MyViewModel : ViewModel() {
 - [[c-coroutines]]
 - [[c-lifecycle]]
 
-
 ### Prerequisites
+
 - Understanding of threads and processes in Android
 - Coroutines fundamentals
 
 ### Related
+
 - [[q-room-code-generation-timing--android--medium]] - Database operations and threading
 - Handler and Looper patterns
 
 ### Advanced
+
 - ANR debugging techniques
 - StrictMode for thread policy violations

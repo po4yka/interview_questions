@@ -16,7 +16,7 @@ language_tags:
 - ru
 status: draft
 created: 2025-10-13
-updated: 2025-10-28
+updated: 2025-11-10
 sources: []
 tags:
 - android/lifecycle
@@ -26,10 +26,11 @@ tags:
 - performance
 moc: moc-android
 related:
-- c-memory-management
-- c-lifecycle
+- c-android
+- c-activity-lifecycle
 - q-coroutine-memory-leak-detection--kotlin--hard
 - q-coroutine-memory-leaks--kotlin--hard
+
 ---
 
 # Вопрос (RU)
@@ -44,11 +45,11 @@ related:
 
 ## Ответ (RU)
 
-**Утечка памяти** возникает, когда объект больше не используется приложением, но остаётся недоступным для сборщика мусора из-за сохранившихся ссылок на него.
+**Утечка памяти** в Android возникает, когда объект больше не нужен для корректной работы приложения, но остаётся достижимым (есть ссылки), из-за чего сборщик мусора не может его освободить.
 
 **Основные причины:**
 
-**1. Статические ссылки на Activity:**
+**1. Статические ссылки на `Activity`:**
 
 ```kotlin
 // ❌ Утечка памяти
@@ -59,7 +60,7 @@ class MyActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        instance = this  // Activity никогда не освободится
+        instance = this  // Пока есть ссылка, Activity не может быть собрана
     }
 }
 ```
@@ -75,12 +76,12 @@ class MyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         handler.postDelayed({
-            updateUI()  // Удерживает Activity
+            updateUI()  // Лямбда удерживает ссылку на Activity, пока задача не выполнена
         }, 60000)
     }
 }
 
-// ✅ Правильно
+// ✅ Правильно: очищаем отложенные задачи при уничтожении Activity
 class MyActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
@@ -104,7 +105,7 @@ class MyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         eventBus.register(this)
-        // Отсутствует unregister в onDestroy
+        // Нет unregister в onDestroy: внешняя сущность продолжает удерживать Activity
     }
 }
 
@@ -127,27 +128,67 @@ class MyActivity : AppCompatActivity() {
 - Рост потребления памяти
 - OutOfMemoryError
 - Замедление приложения
-- Расход батареи
+- Лишний расход батареи
 
 **Обнаружение:**
 
 ```kotlin
-// LeakCanary автоматически обнаруживает утечки
+// LeakCanary автоматически отслеживает удерживаемые (подозрительные) объекты
 debugImplementation("com.squareup.leakcanary:leakcanary-android")
 
 // Показывает:
-// - Утёкший объект
-// - Цепочку удержания
-// - Размер удержанной памяти
+// - Утёкший/удерживаемый объект
+// - Цепочку удержания (leak trace)
 ```
+
+---
+
+## Follow-ups (RU)
+
+- Как обнаруживать утечки памяти с помощью Android Profiler?
+- В чем разница между утечкой памяти и избыточным потреблением памяти (memory bloat)?
+- Как слабые ссылки (`WeakReference`) помогают предотвращать утечки памяти?
+- Какие распространенные утечки памяти возникают в `ViewModel` и `LiveData`?
+- Как корутины могут как предотвращать, так и вызывать утечки памяти?
+
+## Ссылки (RU)
+
+- Документация Android Memory Profiler
+- Официальное руководство LeakCanary
+- "Android Performance: Memory" на developer.android.com
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции (RU)
+
+- [[c-android]]
+- [[c-activity-lifecycle]]
+
+### Предпосылки (RU)
+
+- [[q-primitive-vs-reference-types--programming-languages--easy]] - Понимание ссылочных типов
+- [[q-reference-types-criteria--programming-languages--medium]] - Детали ссылочных типов
+
+### Похожие (RU)
+
+- [[q-coroutine-memory-leak-detection--kotlin--hard]] - Обнаружение утечек в корутинах
+- Жизненный цикл `Activity` и корректная очистка ресурсов
+- Паттерны эффективного использования памяти в RecyclerView
+
+### Продвинутые (RU)
+
+- [[q-coroutine-memory-leaks--kotlin--hard]] - Утечки памяти, связанные с `Coroutine`
+- [[q-find-object-without-references--programming-languages--medium]] - Продвинутое поведение GC
+
+---
 
 ## Answer (EN)
 
-A **memory leak** occurs when an object is no longer used by the application but remains inaccessible to the garbage collector due to existing references.
+A **memory leak** in Android occurs when an object is no longer needed for the correct functioning of the app but remains reachable (strongly referenced), so the garbage collector cannot reclaim it.
 
 **Common causes:**
 
-**1. Static references to Activity:**
+**1. Static references to `Activity`:**
 
 ```kotlin
 // ❌ Memory leak
@@ -158,7 +199,7 @@ class MyActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        instance = this  // Activity never released
+        instance = this  // As long as this reference exists, Activity can't be collected
     }
 }
 ```
@@ -174,12 +215,12 @@ class MyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         handler.postDelayed({
-            updateUI()  // Holds Activity reference
+            updateUI()  // Lambda captures Activity reference until executed
         }, 60000)
     }
 }
 
-// ✅ Correct
+// ✅ Correct: clear pending tasks when Activity is destroyed
 class MyActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
@@ -203,7 +244,7 @@ class MyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         eventBus.register(this)
-        // Missing unregister in onDestroy
+        // Missing unregister in onDestroy: external component keeps holding Activity
     }
 }
 
@@ -224,20 +265,19 @@ class MyActivity : AppCompatActivity() {
 **Effects:**
 
 - Memory usage grows over time
-- OutOfMemoryError crashes
+- OutOfMemoryError
 - App performance degradation
-- Battery drain
+- Unnecessary battery drain
 
 **Detection:**
 
 ```kotlin
-// LeakCanary automatically detects leaks
+// LeakCanary automatically tracks retained (suspicious) objects
 debugImplementation("com.squareup.leakcanary:leakcanary-android")
 
 // Shows:
-// - Leaked object
-// - Retention chain
-// - Retained memory size
+// - Leaked/retained object
+// - Retention path (leak trace)
 ```
 
 ---
@@ -247,7 +287,7 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 - How do you detect memory leaks using Android Profiler?
 - What is the difference between a memory leak and a memory bloat?
 - How can weak references help prevent memory leaks?
-- What are common memory leaks in ViewModel and LiveData?
+- What are common memory leaks in `ViewModel` and `LiveData`?
 - How do coroutines prevent or cause memory leaks?
 
 ## References
@@ -260,19 +300,21 @@ debugImplementation("com.squareup.leakcanary:leakcanary-android")
 
 ### Prerequisites / Concepts
 
-- [[c-memory-management]]
-- [[c-lifecycle]]
-
+- [[c-android]]
+- [[c-activity-lifecycle]]
 
 ### Prerequisites
+
 - [[q-primitive-vs-reference-types--programming-languages--easy]] - Understanding references
 - [[q-reference-types-criteria--programming-languages--medium]] - Reference types in depth
 
 ### Related
+
 - [[q-coroutine-memory-leak-detection--kotlin--hard]] - Detecting coroutine leaks
-- Activity lifecycle and proper cleanup
+- `Activity` lifecycle and proper cleanup
 - RecyclerView memory efficiency patterns
 
 ### Advanced
-- [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutine-specific memory leaks
+
+- [[q-coroutine-memory-leaks--kotlin--hard]] - `Coroutine`-specific memory leaks
 - [[q-find-object-without-references--programming-languages--medium]] - Advanced GC behavior

@@ -2,35 +2,27 @@
 id: android-045
 title: "Memory Leak Detection and Fixing / Обнаружение и исправление утечек памяти"
 aliases: [LeakCanary, Memory Leak Detection, Memory Profiler, Обнаружение утечек памяти]
-
-# Classification
 topic: android
 subtopics: [lifecycle, performance-memory, profiling]
 question_kind: android
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
-sources: [Memory management best practices]
-
-# Workflow & relations
+sources: ["Memory management best practices"]
 status: draft
 moc: moc-android
 related: [q-app-startup-optimization--android--medium, q-baseline-profiles-optimization--android--medium, q-jank-detection-frame-metrics--android--medium]
-
-# Timestamps
 created: 2025-10-11
-updated: 2025-10-28
-
+updated: 2025-11-10
 tags: [android/lifecycle, android/performance-memory, android/profiling, difficulty/medium]
+
 ---
 
 # Вопрос (RU)
-> Как обнаружить и исправить утечки памяти в Android? Используйте LeakCanary, Memory Profiler. Исправьте утечки Activity/Fragment/ViewModel.
+> Как обнаружить и исправить утечки памяти в Android? Используйте LeakCanary, Memory Profiler и дампы кучи (heap dumps). Исправьте утечки `Activity`/`Fragment`/`ViewModel`.
 
 # Question (EN)
-> How to identify and fix memory leaks in Android? Use LeakCanary, Memory Profiler, and heap dumps. Fix Activity/Fragment/ViewModel leaks.
+> How to identify and fix memory leaks in Android? Use LeakCanary, Memory Profiler, and heap dumps. Fix `Activity`/`Fragment`/`ViewModel` leaks.
 
 ---
 
@@ -47,9 +39,9 @@ tags: [android/lifecycle, android/performance-memory, android/profiling, difficu
 - Замедление приложения
 
 **Инструменты:**
-- **LeakCanary** — автоматическое обнаружение
-- **Memory Profiler** — мониторинг в реальном времени
-- **MAT** — анализ дампов кучи
+- **LeakCanary** — автоматическое обнаружение удерживаемых объектов и цепочек удержания `Activity`/`Fragment`/`View`
+- **Memory Profiler** — мониторинг в реальном времени и анализ распределения
+- **MAT** — анализ дампов кучи (heap dumps)
 
 ### LeakCanary — Интеграция
 
@@ -60,26 +52,28 @@ dependencies {
 }
 ```
 
-Не требует настройки — автоматически отслеживает Activity/Fragment/ViewModel.
+В типичной настройке дополнительная инициализация не требуется — LeakCanary автоматически интегрируется через `ContentProvider` и отслеживает удерживаемые `Activity`/`Fragment`/`View`.
 
-**Настройка:**
+**Кастомная конфигурация (опционально в `Application`):**
 ```kotlin
 class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        LeakCanary.config = LeakCanary.config.copy(
-            retainedVisibleThreshold = 5,
-            onHeapAnalyzedListener = OnHeapAnalyzedListener { analysis ->
-                if (analysis is HeapAnalysisSuccess) {
-                    analysis.applicationLeaks.forEach { leak ->
-                        Firebase.crashlytics.recordException(
-                            LeakException(leak.leakTrace.toString())
-                        )
+        if (LeakCanary.isInstalled) {
+            LeakCanary.config = LeakCanary.config.copy(
+                retainedVisibleThreshold = 5,
+                onHeapAnalyzedListener = OnHeapAnalyzedListener { analysis ->
+                    if (analysis is HeapAnalysisSuccess) {
+                        analysis.applicationLeaks.forEach { leak ->
+                            // Отправлять такие данные во внешние сервисы обычно не нужно;
+                            // пример только для демонстрации интеграции.
+                            Log.d("LeakCanary", leak.leakTrace.toString())
+                        }
                     }
                 }
-            }
-        )
+            )
+        }
     }
 }
 ```
@@ -87,10 +81,10 @@ class MyApp : Application() {
 **Отслеживание кастомных объектов:**
 ```kotlin
 class MyRepository {
-    init {
+    fun close() {
         AppWatcher.objectWatcher.watch(
             watchedObject = this,
-            description = "MyRepository instance"
+            description = "MyRepository instance should be GC'ed after close()"
         )
     }
 }
@@ -98,7 +92,7 @@ class MyRepository {
 
 ### Типичные Утечки
 
-#### 1. Activity — Статические Ссылки
+#### 1. `Activity` — Статические Ссылки
 
 **❌ Утечка:**
 ```kotlin
@@ -114,10 +108,11 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**✅ Исправление:**
+**✅ Исправление (для демонстрации):**
 ```kotlin
 class MainActivity : AppCompatActivity() {
     companion object {
+        // В реальном коде лучше вообще избегать глобального доступа к Activity.
         private var instanceRef: WeakReference<MainActivity>? = null
 
         fun getInstance(): MainActivity? = instanceRef?.get()
@@ -130,7 +125,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 2. Activity — Внутренние Классы
+Основной вывод: не храните `Activity`/`Fragment` в статических полях и синглтонах.
+
+#### 2. `Activity` — Отложенные Задачи / Внутренние Классы
 
 **❌ Утечка:**
 ```kotlin
@@ -145,6 +142,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         Handler(Looper.getMainLooper()).postDelayed(runnable, 60_000)
+        // Если Activity уничтожена раньше выполнения, Runnable продолжает удерживать ссылку.
     }
 }
 ```
@@ -160,8 +158,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         handler.removeCallbacksAndMessages(null)
+        super.onDestroy()
     }
 
     private class MyRunnable(activity: MainActivity) : Runnable {
@@ -169,7 +167,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun run() {
             activityRef.get()?.let { activity ->
-                if (!activity.isFinishing) {
+                if (!activity.isFinishing && !activity.isDestroyed) {
                     Toast.makeText(activity, "Hello", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -178,7 +176,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 3. Activity — Слушатели
+#### 3. `Activity` — Слушатели
 
 **❌ Утечка:**
 ```kotlin
@@ -190,11 +188,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val locationManager = getSystemService<LocationManager>()
-        locationManager?.requestLocationUpdates(
+        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER, 1000L, 10f, locationListener
         )
-        // Не отменяется в onDestroy
+        // Не отменяется в onDestroy -> Activity удерживается системой.
     }
 }
 ```
@@ -202,26 +200,29 @@ class MainActivity : AppCompatActivity() {
 **✅ Исправление:**
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private val locationManager by lazy { getSystemService<LocationManager>() }
+    private val locationManager by lazy {
+        getSystemService(LOCATION_SERVICE) as LocationManager
+    }
+
     private val locationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {}
     }
 
     override fun onResume() {
         super.onResume()
-        locationManager?.requestLocationUpdates(
+        locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER, 1000L, 10f, locationListener
         )
     }
 
     override fun onPause() {
+        locationManager.removeUpdates(locationListener)
         super.onPause()
-        locationManager?.removeUpdates(locationListener)
     }
 }
 ```
 
-#### 4. Fragment — Ссылки На View
+#### 4. `Fragment` — Ссылки На `View`
 
 **❌ Утечка:**
 ```kotlin
@@ -237,7 +238,7 @@ class MyFragment : Fragment() {
         textView = view.findViewById(R.id.text_view)
         return view
     }
-    // textView не очищается
+    // textView ссылается на View дольше, чем живет view lifecycle.
 }
 ```
 
@@ -257,18 +258,18 @@ class MyFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        _binding = null  // Освобождаем ссылки на View
         super.onDestroyView()
-        _binding = null  // Освобождаем ссылки
     }
 }
 ```
 
-#### 5. ViewModel — Context
+#### 5. `ViewModel` — `Context`
 
 **❌ Утечка:**
 ```kotlin
 class MyViewModel(private val context: Context) : ViewModel() {
-    // Если context — Activity, утечка при повороте
+    // Если context — Activity, утечка при повороте.
 }
 
 class MainActivity : AppCompatActivity() {
@@ -287,11 +288,13 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 }
 
 class MainActivity : AppCompatActivity() {
-    private val viewModel by viewModels<MyViewModel>()
+    private val viewModel by viewModels<MyViewModel>()  // AndroidViewModel поддерживается дефолтной фабрикой
 }
 ```
 
-#### 6. LiveData — observeForever
+Ключ: храните только `Application` `Context` в долгоживущих компонентах (`ViewModel`, синглтоны).
+
+#### 6. `LiveData` — observeForever
 
 **❌ Утечка:**
 ```kotlin
@@ -304,7 +307,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.userData.observeForever { user ->
             updateUI(user)
         }
-        // Observer не удаляется
+        // Observer не удаляется -> Activity удерживается LiveData.
     }
 }
 ```
@@ -318,7 +321,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         viewModel.userData.observe(this) { user ->
-            updateUI(user)  // Автоматически очищается
+            updateUI(user)  // Отпишется автоматически по lifecycle.
         }
     }
 }
@@ -334,7 +337,7 @@ class MyFragment : Fragment() {
 
         GlobalScope.launch {
             delay(60_000)
-            updateUI()  // Fragment может быть уничтожен
+            updateUI()  // Fragment может быть уничтожен, но корутина продолжит ссылаться.
         }
     }
 }
@@ -348,7 +351,7 @@ class MyFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             delay(60_000)
-            updateUI()  // Автоматически отменяется
+            updateUI()  // Отменяется при уничтожении view lifecycle.
         }
     }
 }
@@ -374,63 +377,64 @@ object ImageCache {
     private val cacheSize = maxMemory / 10
 
     private val cache = object : LruCache<String, Bitmap>(cacheSize) {
-        override fun sizeOf(key: String, bitmap: Bitmap) = bitmap.byteCount / 1024
-
-        override fun entryRemoved(
-            evicted: Boolean, key: String, old: Bitmap, new: Bitmap?
-        ) {
-            if (evicted) old.recycle()
-        }
+        override fun sizeOf(key: String, bitmap: Bitmap): Int = bitmap.byteCount / 1024
     }
 
-    fun putBitmap(key: String, bitmap: Bitmap) = cache.put(key, bitmap)
-    fun getBitmap(key: String) = cache.get(key)
+    fun putBitmap(key: String, bitmap: Bitmap) {
+        cache.put(key, bitmap)
+    }
+
+    fun getBitmap(key: String): Bitmap? = cache.get(key)
 }
 ```
+
+Использование `LruCache` ограничивает память и уменьшает риск утечек; вручную вызывать `recycle()` обычно не нужно и может быть опасно.
 
 ### Memory Profiler
 
 **Мониторинг:**
 1. Android Studio → Profiler → Memory
-2. Паттерн "пила" — норма (выделение → GC)
-3. Постоянный рост — утечка
-4. Нет падения после GC — утечка
+2. Пилообразный график (выделение → GC) — норма
+3. Постоянный рост без освобождения — возможная утечка
+4. Если после ручного GC объект не уходит — признак утечки
 
-**Анализ дампа:**
+**Анализ дампа кучи (heap dump):**
 ```text
 1. Profile → Memory → Dump Java Heap
-2. Arrange by package → найти ваш Activity
+2. Отфильтровать по своему пакету → найти Activity/Fragment
 3. Проверить Retained Size
-4. Если экземпляры после rotation → утечка
-5. References → увидеть цепочку утечки
+4. Если экземпляры остаются после rotation → подозрение на утечку
+5. Через References посмотреть цепочку удержания
 ```
 
-**Программный дамп:**
+**Программный дамп (отладка):**
 ```kotlin
 fun dumpHeap() {
-    val file = File(getExternalFilesDir(null), "heap_${System.currentTimeMillis()}.hprof")
+    val file = File(getExternalFilesDir(null), "heap_${'$'}{System.currentTimeMillis()}.hprof")
     Debug.dumpHprofData(file.absolutePath)
 }
 ```
 
+Использовать аккуратно: операция тяжелая и не для продакшена.
+
 ### Лучшие Практики
 
-1. **LeakCanary в debug** — отлавливайте до продакшна
-2. **Lifecycle-компоненты** — LiveData, ViewModel, lifecycleScope
-3. **WeakReference** для кэшей
-4. **Отменяйте слушатели** в onDestroy/onPause
-5. **Очищайте binding** в onDestroyView
-6. **Application context** для синглтонов
-7. **Избегайте статических Activity ссылок**
-8. **viewModelScope, не GlobalScope**
-9. **Библиотеки изображений** (Coil, Glide)
-10. **Регулярное профилирование**
+1. **LeakCanary в debug** — ловите утечки до продакшена
+2. **Lifecycle-компоненты** — `LiveData`, `ViewModel`, `lifecycleScope` / `viewLifecycleOwner.lifecycleScope`
+3. **Не храните сильные ссылки на контекст `Activity`/`Fragment`** в синглтонах и долгоживущих объектах
+4. **Отменяйте слушатели и callback-и** в `onDestroy`/`onPause`/`onStop` (в зависимости от кейса)
+5. **Очищайте ViewBinding** в `onDestroyView` у `Fragment`
+6. **Используйте `Application` context** для синглтонов и репозиториев
+7. **Избегайте статических ссылок на `Activity`/`Fragment`/`View`**
+8. **Используйте `viewModelScope` вместо `GlobalScope`**
+9. **Используйте проверенные библиотеки изображений** (Coil, Glide) вместо ручного управления Bitmap-ами
+10. **Регулярно профилируйте память** на реальных сценариях
 
 ## Answer (EN)
 
 ### Overview
 
-A **memory leak** occurs when objects retain references after no longer needed, preventing garbage collection.
+A **memory leak** occurs when objects keep references after they are no longer needed, preventing garbage collection.
 
 **Impact:**
 - OutOfMemoryError crashes
@@ -439,8 +443,8 @@ A **memory leak** occurs when objects retain references after no longer needed, 
 - App slowness
 
 **Tools:**
-- **LeakCanary** — automatic detection
-- **Memory Profiler** — real-time monitoring
+- **LeakCanary** — automatic detection of retained objects and leak traces for `Activity`/`Fragment`/`View`
+- **Memory Profiler** — real-time memory monitoring and allocation analysis
 - **MAT** — heap dump analysis
 
 ### LeakCanary Integration
@@ -452,26 +456,28 @@ dependencies {
 }
 ```
 
-No setup required — automatically monitors Activity/Fragment/ViewModel.
+In a typical setup, no explicit initialization is required — LeakCanary integrates via a `ContentProvider` and automatically tracks retained `Activity`/`Fragment`/`View` instances.
 
-**Configuration:**
+**Optional custom configuration (in `Application`):**
 ```kotlin
 class MyApp : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        LeakCanary.config = LeakCanary.config.copy(
-            retainedVisibleThreshold = 5,
-            onHeapAnalyzedListener = OnHeapAnalyzedListener { analysis ->
-                if (analysis is HeapAnalysisSuccess) {
-                    analysis.applicationLeaks.forEach { leak ->
-                        Firebase.crashlytics.recordException(
-                            LeakException(leak.leakTrace.toString())
-                        )
+        if (LeakCanary.isInstalled) {
+            LeakCanary.config = LeakCanary.config.copy(
+                retainedVisibleThreshold = 5,
+                onHeapAnalyzedListener = OnHeapAnalyzedListener { analysis ->
+                    if (analysis is HeapAnalysisSuccess) {
+                        analysis.applicationLeaks.forEach { leak ->
+                            // Sending traces to external services is usually unnecessary;
+                            // this is just to demonstrate integration.
+                            Log.d("LeakCanary", leak.leakTrace.toString())
+                        }
                     }
                 }
-            }
-        )
+            )
+        }
     }
 }
 ```
@@ -479,10 +485,10 @@ class MyApp : Application() {
 **Watch custom objects:**
 ```kotlin
 class MyRepository {
-    init {
+    fun close() {
         AppWatcher.objectWatcher.watch(
             watchedObject = this,
-            description = "MyRepository instance"
+            description = "MyRepository instance should be GC'ed after close()"
         )
     }
 }
@@ -490,7 +496,7 @@ class MyRepository {
 
 ### Common Leak Patterns
 
-#### 1. Activity — Static References
+#### 1. `Activity` — Static References
 
 **❌ Leak:**
 ```kotlin
@@ -501,15 +507,16 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        instance = this  // Activity never GC'd
+        instance = this  // Activity never collected
     }
 }
 ```
 
-**✅ Fix:**
+**✅ Fix (for demonstration):**
 ```kotlin
 class MainActivity : AppCompatActivity() {
     companion object {
+        // In real code, avoid global access to Activity altogether.
         private var instanceRef: WeakReference<MainActivity>? = null
 
         fun getInstance(): MainActivity? = instanceRef?.get()
@@ -522,7 +529,9 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 2. Activity — Inner Classes
+Key takeaway: do not store `Activity`/`Fragment` in static fields or singletons.
+
+#### 2. `Activity` — Delayed Tasks / Inner Classes
 
 **❌ Leak:**
 ```kotlin
@@ -537,6 +546,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         Handler(Looper.getMainLooper()).postDelayed(runnable, 60_000)
+        // If Activity is destroyed earlier, Runnable still holds a reference.
     }
 }
 ```
@@ -552,8 +562,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        super.onDestroy()
         handler.removeCallbacksAndMessages(null)
+        super.onDestroy()
     }
 
     private class MyRunnable(activity: MainActivity) : Runnable {
@@ -561,7 +571,7 @@ class MainActivity : AppCompatActivity() {
 
         override fun run() {
             activityRef.get()?.let { activity ->
-                if (!activity.isFinishing) {
+                if (!activity.isFinishing && !activity.isDestroyed) {
                     Toast.makeText(activity, "Hello", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -570,7 +580,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### 3. Activity — Listeners
+#### 3. `Activity` — Listeners
 
 **❌ Leak:**
 ```kotlin
@@ -582,11 +592,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val locationManager = getSystemService<LocationManager>()
-        locationManager?.requestLocationUpdates(
+        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER, 1000L, 10f, locationListener
         )
-        // Not removed in onDestroy
+        // Not removed in onDestroy -> system can keep a reference to the Activity.
     }
 }
 ```
@@ -594,26 +604,29 @@ class MainActivity : AppCompatActivity() {
 **✅ Fix:**
 ```kotlin
 class MainActivity : AppCompatActivity() {
-    private val locationManager by lazy { getSystemService<LocationManager>() }
+    private val locationManager by lazy {
+        getSystemService(LOCATION_SERVICE) as LocationManager
+    }
+
     private val locationListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {}
     }
 
     override fun onResume() {
         super.onResume()
-        locationManager?.requestLocationUpdates(
+        locationManager.requestLocationUpdates(
             LocationManager.GPS_PROVIDER, 1000L, 10f, locationListener
         )
     }
 
     override fun onPause() {
+        locationManager.removeUpdates(locationListener)
         super.onPause()
-        locationManager?.removeUpdates(locationListener)
     }
 }
 ```
 
-#### 4. Fragment — View References
+#### 4. `Fragment` — `View` References
 
 **❌ Leak:**
 ```kotlin
@@ -629,7 +642,7 @@ class MyFragment : Fragment() {
         textView = view.findViewById(R.id.text_view)
         return view
     }
-    // textView not cleared
+    // textView outlives the View lifecycle and keeps a reference.
 }
 ```
 
@@ -649,18 +662,18 @@ class MyFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        _binding = null  // Clear references to View hierarchy
         super.onDestroyView()
-        _binding = null  // Clear references
     }
 }
 ```
 
-#### 5. ViewModel — Context
+#### 5. `ViewModel` — `Context`
 
 **❌ Leak:**
 ```kotlin
 class MyViewModel(private val context: Context) : ViewModel() {
-    // If context is Activity, leaks on rotation
+    // If context is an Activity, it will leak across configuration changes.
 }
 
 class MainActivity : AppCompatActivity() {
@@ -679,11 +692,13 @@ class MyViewModel(application: Application) : AndroidViewModel(application) {
 }
 
 class MainActivity : AppCompatActivity() {
-    private val viewModel by viewModels<MyViewModel>()
+    private val viewModel by viewModels<MyViewModel>()  // Default factory supports AndroidViewModel
 }
 ```
 
-#### 6. LiveData — observeForever
+Key: keep only `Application` `Context` in long-lived components (`ViewModel`, singletons).
+
+#### 6. `LiveData` — observeForever
 
 **❌ Leak:**
 ```kotlin
@@ -696,7 +711,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.userData.observeForever { user ->
             updateUI(user)
         }
-        // Observer not removed
+        // Observer not removed -> LiveData holds a reference to Activity.
     }
 }
 ```
@@ -710,7 +725,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         viewModel.userData.observe(this) { user ->
-            updateUI(user)  // Auto cleanup
+            updateUI(user)  // Automatically cleared with the lifecycle.
         }
     }
 }
@@ -726,7 +741,7 @@ class MyFragment : Fragment() {
 
         GlobalScope.launch {
             delay(60_000)
-            updateUI()  // Fragment might be destroyed
+            updateUI()  // Fragment might be destroyed, but coroutine keeps a reference.
         }
     }
 }
@@ -740,7 +755,7 @@ class MyFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             delay(60_000)
-            updateUI()  // Auto cancelled
+            updateUI()  // Cancelled when the view lifecycle is destroyed.
         }
     }
 }
@@ -766,59 +781,68 @@ object ImageCache {
     private val cacheSize = maxMemory / 10
 
     private val cache = object : LruCache<String, Bitmap>(cacheSize) {
-        override fun sizeOf(key: String, bitmap: Bitmap) = bitmap.byteCount / 1024
-
-        override fun entryRemoved(
-            evicted: Boolean, key: String, old: Bitmap, new: Bitmap?
-        ) {
-            if (evicted) old.recycle()
-        }
+        override fun sizeOf(key: String, bitmap: Bitmap): Int = bitmap.byteCount / 1024
     }
 
-    fun putBitmap(key: String, bitmap: Bitmap) = cache.put(key, bitmap)
-    fun getBitmap(key: String) = cache.get(key)
+    fun putBitmap(key: String, bitmap: Bitmap) {
+        cache.put(key, bitmap)
+    }
+
+    fun getBitmap(key: String): Bitmap? = cache.get(key)
 }
 ```
+
+Using `LruCache` bounds memory usage and reduces leak risk; manual `recycle()` is normally unnecessary and can be unsafe.
 
 ### Memory Profiler
 
 **Monitoring:**
 1. Android Studio → Profiler → Memory
-2. Sawtooth pattern — normal (allocate → GC)
-3. Gradual increase — leak
-4. No decrease after GC — leak
+2. Sawtooth pattern (allocations → GC) is normal
+3. Continuous growth without drops suggests a leak
+4. If objects remain after a forced GC, it indicates potential leaks
 
 **Heap dump analysis:**
 ```text
 1. Profile → Memory → Dump Java Heap
-2. Arrange by package → find your Activity
-3. Check Retained Size
-4. If instances exist after rotation → leak
-5. References → view leak chain
+2. Filter/arrange by your package → find Activity/Fragment
+3. Inspect Retained Size
+4. If instances remain after rotation → suspect a leak
+5. Use References to inspect the retention path
 ```
 
-**Programmatic dump:**
+**Programmatic dump (debug only):**
 ```kotlin
 fun dumpHeap() {
-    val file = File(getExternalFilesDir(null), "heap_${System.currentTimeMillis()}.hprof")
+    val file = File(getExternalFilesDir(null), "heap_${'$'}{System.currentTimeMillis()}.hprof")
     Debug.dumpHprofData(file.absolutePath)
 }
 ```
 
+Use with care: this is expensive and not for normal production use.
+
 ### Best Practices
 
-1. **LeakCanary in debug** — catch before production
-2. **Lifecycle components** — LiveData, ViewModel, lifecycleScope
-3. **WeakReference** for caches
-4. **Unregister listeners** in onDestroy/onPause
-5. **Clear binding** in onDestroyView
-6. **Application context** for singletons
-7. **Avoid static Activity references**
-8. **Use viewModelScope, not GlobalScope**
-9. **Image libraries** (Coil, Glide)
-10. **Regular profiling**
+1. **Use LeakCanary in debug builds** — catch leaks before production
+2. **Use lifecycle-aware components** — `LiveData`, `ViewModel`, `lifecycleScope` / `viewLifecycleOwner.lifecycleScope`
+3. **Avoid strong references to `Activity`/`Fragment` `Context`** in singletons and long-lived objects
+4. **Unregister listeners and callbacks** in appropriate lifecycle methods (`onDestroy`/`onPause`/`onStop`)
+5. **Clear ViewBinding** in `Fragment.onDestroyView`
+6. **Use `Application` `Context`** for singletons and repositories
+7. **Avoid static references to `Activity`/`Fragment`/`View`**
+8. **Prefer `viewModelScope` over `GlobalScope`**
+9. **Use mature image libraries** (Coil, Glide) instead of manual `Bitmap` management
+10. **Profile memory regularly** with real-world scenarios
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как обнаруживать утечки в продакшн-сборках?
+- В чем разница между дампом кучи (heap dump) и отслеживанием выделений (allocation tracking)?
+- Как анализировать отчеты MAT для сложных цепочек утечек?
+- Может ли ViewBinding вызывать утечки, если его не очищать?
+- Как автоматизировать проверку на утечки в тестах?
 
 ## Follow-ups
 
@@ -828,14 +852,30 @@ fun dumpHeap() {
 - Can ViewBinding cause leaks if not cleared?
 - How to test for leaks in automated tests?
 
+## Ссылки (RU)
+
+- Документация LeakCanary: https://square.github.io/leakcanary/
+- Руководство по Memory Profiler: https://developer.android.com/studio/profile/memory-profiler
+- Обзор управления памятью в Android: https://developer.android.com/topic/performance/memory
+
 ## References
 
-- [[c-memory-leaks]]
-- [[c-memory-management]]
-- [[c-lifecycle]]
 - [LeakCanary Documentation](https://square.github.io/leakcanary/)
 - [Memory Profiler Guide](https://developer.android.com/studio/profile/memory-profiler)
 - [Android Memory Management](https://developer.android.com/topic/performance/memory)
+
+## Связанные вопросы (RU)
+
+### Базовые (проще)
+- [[q-recyclerview-sethasfixedsize--android--easy]]
+
+### Смежные (средний уровень)
+- [[q-jank-detection-frame-metrics--android--medium]]
+- [[q-app-startup-optimization--android--medium]]
+- [[q-baseline-profiles-optimization--android--medium]]
+
+### Продвинутые (сложнее)
+- [[q-compose-performance-optimization--android--hard]]
 
 ## Related Questions
 

@@ -21,12 +21,13 @@ related:
 - q-save-data-outside-fragment--android--medium
 - q-spannable-text-styling--android--medium
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags:
 - android/ui-animation
 - animations
 - difficulty/medium
 - recyclerview
+
 ---
 
 # Вопрос (RU)
@@ -37,657 +38,24 @@ tags:
 
 ---
 
-## Answer (EN)
-RecyclerView provides several ways to implement animations, from simple built-in animations to complex custom animations. Animations can be applied at different levels: item-level, adapter-level, and through custom ItemAnimators.
-
-### 1. Using DefaultItemAnimator
-
-The simplest approach is using the built-in **DefaultItemAnimator**:
-
-```kotlin
-val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-recyclerView.itemAnimator = DefaultItemAnimator()
-
-// Customize animation timing
-(recyclerView.itemAnimator as? DefaultItemAnimator)?.apply {
-    addDuration = 300
-    removeDuration = 300
-    moveDuration = 300
-    changeDuration = 300
-}
-```
-
-### 2. Custom ItemAnimator
-
-Create a custom ItemAnimator by extending **SimpleItemAnimator** or **DefaultItemAnimator**:
-
-```kotlin
-class CustomItemAnimator : DefaultItemAnimator() {
-
-    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.alpha = 0f
-        holder.itemView.animate()
-            .alpha(1f)
-            .setDuration(300)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    dispatchAddFinished(holder)
-                }
-            })
-            .start()
-        return true
-    }
-
-    override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.animate()
-            .alpha(0f)
-            .setDuration(300)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    holder.itemView.alpha = 1f
-                    dispatchRemoveFinished(holder)
-                }
-            })
-            .start()
-        return true
-    }
-}
-
-// Usage
-recyclerView.itemAnimator = CustomItemAnimator()
-```
-
-### 3. Animations in Adapter (onBindViewHolder)
-
-Animate items directly in the adapter when binding:
-
-```kotlin
-class MyAdapter(private val items: List<String>) :
-    RecyclerView.Adapter<MyAdapter.ViewHolder>() {
-
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(R.id.textView)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = items[position]
-
-        // Fade in animation
-        holder.itemView.alpha = 0f
-        holder.itemView.animate()
-            .alpha(1f)
-            .setDuration(300)
-            .setStartDelay(position * 50L)
-            .start()
-    }
-
-    // Other methods...
-}
-```
-
-### 4. Scale Animation
-
-```kotlin
-class ScaleItemAnimator : DefaultItemAnimator() {
-
-    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.apply {
-            scaleX = 0.5f
-            scaleY = 0.5f
-            alpha = 0f
-
-            animate()
-                .scaleX(1f)
-                .scaleY(1f)
-                .alpha(1f)
-                .setDuration(300)
-                .setInterpolator(OvershootInterpolator())
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        dispatchAddFinished(holder)
-                    }
-                })
-                .start()
-        }
-        return true
-    }
-}
-```
-
-### 5. Slide Animation
-
-```kotlin
-class SlideInLeftAnimator : DefaultItemAnimator() {
-
-    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.apply {
-            translationX = -width.toFloat()
-            alpha = 0f
-
-            animate()
-                .translationX(0f)
-                .alpha(1f)
-                .setDuration(300)
-                .setInterpolator(DecelerateInterpolator())
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        translationX = 0f
-                        dispatchAddFinished(holder)
-                    }
-                })
-                .start()
-        }
-        return true
-    }
-
-    override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.animate()
-            .translationX(holder.itemView.width.toFloat())
-            .alpha(0f)
-            .setDuration(300)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    holder.itemView.translationX = 0f
-                    holder.itemView.alpha = 1f
-                    dispatchRemoveFinished(holder)
-                }
-            })
-            .start()
-        return true
-    }
-}
-```
-
-### 6. Using Third-Party Libraries
-
-#### RecyclerView Animators Library
-
-```kotlin
-// Usage
-recyclerView.itemAnimator = SlideInUpAnimator()
-// or
-recyclerView.itemAnimator = FadeInAnimator()
-// or
-recyclerView.itemAnimator = ScaleInAnimator()
-```
-
-### 7. Item-Specific Animations in Adapter
-
-```kotlin
-class AnimatedAdapter(private val items: MutableList<String>) :
-    RecyclerView.Adapter<AnimatedAdapter.ViewHolder>() {
-
-    private var lastPosition = -1
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
-
-        // Animate only items appearing for the first time
-        if (position > lastPosition) {
-            animateItem(holder.itemView, position)
-            lastPosition = position
-        }
-    }
-
-    private fun animateItem(view: View, position: Int) {
-        view.apply {
-            translationY = 200f
-            alpha = 0f
-
-            animate()
-                .translationY(0f)
-                .alpha(1f)
-                .setDuration(300)
-                .setStartDelay((position * 50).toLong())
-                .setInterpolator(DecelerateInterpolator())
-                .start()
-        }
-    }
-
-    fun addItem(item: String, position: Int) {
-        items.add(position, item)
-        notifyItemInserted(position)
-    }
-
-    fun removeItem(position: Int) {
-        items.removeAt(position)
-        notifyItemRemoved(position)
-    }
-}
-```
-
-### 8. Shared Element Transitions
-
-For transitions between RecyclerView and detail views:
-
-```kotlin
-class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
-
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imageView: ImageView = view.findViewById(R.id.imageView)
-
-        fun bind(item: Item, clickListener: (View, Item) -> Unit) {
-            // Set transition name for shared element
-            ViewCompat.setTransitionName(imageView, "image_${item.id}")
-
-            itemView.setOnClickListener {
-                clickListener(imageView, item)
-            }
-        }
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position]) { view, item ->
-            // Navigate with shared element
-            val intent = Intent(view.context, DetailActivity::class.java)
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                view.context as Activity,
-                view,
-                ViewCompat.getTransitionName(view)!!
-            )
-            view.context.startActivity(intent, options.toBundle())
-        }
-    }
-}
-```
-
-### 9. Swipe Animation
-
-```kotlin
-val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-    0,
-    ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-) {
-    override fun onMove(
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder,
-        target: RecyclerView.ViewHolder
-    ): Boolean = false
-
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        val position = viewHolder.adapterPosition
-        adapter.removeItem(position)
-    }
-
-    override fun onChildDraw(
-        c: Canvas,
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder,
-        dX: Float,
-        dY: Float,
-        actionState: Int,
-        isCurrentlyActive: Boolean
-    ) {
-        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-            val alpha = 1.0f - abs(dX) / viewHolder.itemView.width
-            viewHolder.itemView.alpha = alpha
-        }
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-    }
-})
-
-itemTouchHelper.attachToRecyclerView(recyclerView)
-```
-
-### Best Practices
-
-1. **Avoid animating on scroll**: Can cause performance issues
-2. **Reset animation state**: Clear animations in onViewRecycled
-3. **Use hardware layers**: For complex animations
-4. **Keep animations short**: 200-300ms is optimal
-5. **Test performance**: Ensure 60fps on all devices
-6. **Consider accessibility**: Respect reduce motion settings
-
-```kotlin
-// Check reduce motion setting
-val isReduceMotionEnabled = Settings.Global.getFloat(
-    contentResolver,
-    Settings.Global.TRANSITION_ANIMATION_SCALE,
-    1f
-) == 0f
-
-if (!isReduceMotionEnabled) {
-    // Apply animations
-}
-```
-
-
-# Question (EN)
-> How Animations Work In RecyclerView
-
----
-
-
----
-
-
-## Answer (EN)
-RecyclerView provides several ways to implement animations, from simple built-in animations to complex custom animations. Animations can be applied at different levels: item-level, adapter-level, and through custom ItemAnimators.
-
-### 1. Using DefaultItemAnimator
-
-The simplest approach is using the built-in **DefaultItemAnimator**:
-
-```kotlin
-val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
-recyclerView.itemAnimator = DefaultItemAnimator()
-
-// Customize animation timing
-(recyclerView.itemAnimator as? DefaultItemAnimator)?.apply {
-    addDuration = 300
-    removeDuration = 300
-    moveDuration = 300
-    changeDuration = 300
-}
-```
-
-### 2. Custom ItemAnimator
-
-Create a custom ItemAnimator by extending **SimpleItemAnimator** or **DefaultItemAnimator**:
-
-```kotlin
-class CustomItemAnimator : DefaultItemAnimator() {
-
-    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.alpha = 0f
-        holder.itemView.animate()
-            .alpha(1f)
-            .setDuration(300)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    dispatchAddFinished(holder)
-                }
-            })
-            .start()
-        return true
-    }
-
-    override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.animate()
-            .alpha(0f)
-            .setDuration(300)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    holder.itemView.alpha = 1f
-                    dispatchRemoveFinished(holder)
-                }
-            })
-            .start()
-        return true
-    }
-}
-
-// Usage
-recyclerView.itemAnimator = CustomItemAnimator()
-```
-
-### 3. Animations in Adapter (onBindViewHolder)
-
-Animate items directly in the adapter when binding:
-
-```kotlin
-class MyAdapter(private val items: List<String>) :
-    RecyclerView.Adapter<MyAdapter.ViewHolder>() {
-
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val textView: TextView = view.findViewById(R.id.textView)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.textView.text = items[position]
-
-        // Fade in animation
-        holder.itemView.alpha = 0f
-        holder.itemView.animate()
-            .alpha(1f)
-            .setDuration(300)
-            .setStartDelay(position * 50L)
-            .start()
-    }
-
-    // Other methods...
-}
-```
-
-### 4. Scale Animation
-
-```kotlin
-class ScaleItemAnimator : DefaultItemAnimator() {
-
-    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.apply {
-            scaleX = 0.5f
-            scaleY = 0.5f
-            alpha = 0f
-
-            animate()
-                .scaleX(1f)
-                .scaleY(1f)
-                .alpha(1f)
-                .setDuration(300)
-                .setInterpolator(OvershootInterpolator())
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        dispatchAddFinished(holder)
-                    }
-                })
-                .start()
-        }
-        return true
-    }
-}
-```
-
-### 5. Slide Animation
-
-```kotlin
-class SlideInLeftAnimator : DefaultItemAnimator() {
-
-    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.apply {
-            translationX = -width.toFloat()
-            alpha = 0f
-
-            animate()
-                .translationX(0f)
-                .alpha(1f)
-                .setDuration(300)
-                .setInterpolator(DecelerateInterpolator())
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        translationX = 0f
-                        dispatchAddFinished(holder)
-                    }
-                })
-                .start()
-        }
-        return true
-    }
-
-    override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.animate()
-            .translationX(holder.itemView.width.toFloat())
-            .alpha(0f)
-            .setDuration(300)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    holder.itemView.translationX = 0f
-                    holder.itemView.alpha = 1f
-                    dispatchRemoveFinished(holder)
-                }
-            })
-            .start()
-        return true
-    }
-}
-```
-
-### 6. Using Third-Party Libraries
-
-#### RecyclerView Animators Library
-
-```kotlin
-// Usage
-recyclerView.itemAnimator = SlideInUpAnimator()
-// or
-recyclerView.itemAnimator = FadeInAnimator()
-// or
-recyclerView.itemAnimator = ScaleInAnimator()
-```
-
-### 7. Item-Specific Animations in Adapter
-
-```kotlin
-class AnimatedAdapter(private val items: MutableList<String>) :
-    RecyclerView.Adapter<AnimatedAdapter.ViewHolder>() {
-
-    private var lastPosition = -1
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
-
-        // Animate only items appearing for the first time
-        if (position > lastPosition) {
-            animateItem(holder.itemView, position)
-            lastPosition = position
-        }
-    }
-
-    private fun animateItem(view: View, position: Int) {
-        view.apply {
-            translationY = 200f
-            alpha = 0f
-
-            animate()
-                .translationY(0f)
-                .alpha(1f)
-                .setDuration(300)
-                .setStartDelay((position * 50).toLong())
-                .setInterpolator(DecelerateInterpolator())
-                .start()
-        }
-    }
-
-    fun addItem(item: String, position: Int) {
-        items.add(position, item)
-        notifyItemInserted(position)
-    }
-
-    fun removeItem(position: Int) {
-        items.removeAt(position)
-        notifyItemRemoved(position)
-    }
-}
-```
-
-### 8. Shared Element Transitions
-
-For transitions between RecyclerView and detail views:
-
-```kotlin
-class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
-
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val imageView: ImageView = view.findViewById(R.id.imageView)
-
-        fun bind(item: Item, clickListener: (View, Item) -> Unit) {
-            // Set transition name for shared element
-            ViewCompat.setTransitionName(imageView, "image_${item.id}")
-
-            itemView.setOnClickListener {
-                clickListener(imageView, item)
-            }
-        }
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position]) { view, item ->
-            // Navigate with shared element
-            val intent = Intent(view.context, DetailActivity::class.java)
-            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                view.context as Activity,
-                view,
-                ViewCompat.getTransitionName(view)!!
-            )
-            view.context.startActivity(intent, options.toBundle())
-        }
-    }
-}
-```
-
-### 9. Swipe Animation
-
-```kotlin
-val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-    0,
-    ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-) {
-    override fun onMove(
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder,
-        target: RecyclerView.ViewHolder
-    ): Boolean = false
-
-    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        val position = viewHolder.adapterPosition
-        adapter.removeItem(position)
-    }
-
-    override fun onChildDraw(
-        c: Canvas,
-        recyclerView: RecyclerView,
-        viewHolder: RecyclerView.ViewHolder,
-        dX: Float,
-        dY: Float,
-        actionState: Int,
-        isCurrentlyActive: Boolean
-    ) {
-        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-            val alpha = 1.0f - abs(dX) / viewHolder.itemView.width
-            viewHolder.itemView.alpha = alpha
-        }
-        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
-    }
-})
-
-itemTouchHelper.attachToRecyclerView(recyclerView)
-```
-
-### Best Practices
-
-1. **Avoid animating on scroll**: Can cause performance issues
-2. **Reset animation state**: Clear animations in onViewRecycled
-3. **Use hardware layers**: For complex animations
-4. **Keep animations short**: 200-300ms is optimal
-5. **Test performance**: Ensure 60fps on all devices
-6. **Consider accessibility**: Respect reduce motion settings
-
-```kotlin
-// Check reduce motion setting
-val isReduceMotionEnabled = Settings.Global.getFloat(
-    contentResolver,
-    Settings.Global.TRANSITION_ANIMATION_SCALE,
-    1f
-) == 0f
-
-if (!isReduceMotionEnabled) {
-    // Apply animations
-}
-```
-
 ## Ответ (RU)
 
-RecyclerView предоставляет несколько способов реализации анимаций, от простых встроенных анимаций до сложных пользовательских. Анимации могут применяться на разных уровнях: на уровне элементов, адаптера и через кастомные ItemAnimator.
+RecyclerView предоставляет несколько способов реализации анимаций: от простых встроенных до сложных кастомных. Анимации можно применять на разных уровнях: на уровне элементов, адаптера и через пользовательские `ItemAnimator`.
+
+Ключевые механизмы:
+- `ItemAnimator`: отвечает за анимации добавления/удаления/перемещения/изменения при уведомлениях адаптера.
+- Анимации во время биндинга (`onBindViewHolder`) и layout- или property-анимации: управляют тем, как появляются и меняются `View` при привязке данных.
+- `ItemTouchHelper` и shared element transitions: для анимаций взаимодействия (свайпы/drag) и переходов между экранами.
 
 ### 1. Использование DefaultItemAnimator
 
-Самый простой подход - использовать встроенный **DefaultItemAnimator**:
+Самый простой подход — использовать встроенный `DefaultItemAnimator` (часто включён по умолчанию):
 
 ```kotlin
 val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
 recyclerView.itemAnimator = DefaultItemAnimator()
 
-// Настройка времени анимации
+// Настройка длительности анимаций
 (recyclerView.itemAnimator as? DefaultItemAnimator)?.apply {
     addDuration = 300
     removeDuration = 300
@@ -696,49 +64,47 @@ recyclerView.itemAnimator = DefaultItemAnimator()
 }
 ```
 
-### 2. Пользовательский ItemAnimator
+### 2. Пользовательский ItemAnimator (концептуально)
 
-Создайте кастомный ItemAnimator, наследуя **SimpleItemAnimator** или **DefaultItemAnimator**:
+Можно создать кастомный `ItemAnimator`, унаследовавшись от `SimpleItemAnimator` или `DefaultItemAnimator`. Корректная реализация должна:
+- Переопределять `animateAdd`/`animateRemove`/`animateMove`/`animateChange` по необходимости.
+- Вызывать `dispatchAddStarting`/`dispatchAddFinished` и аналогичные методы в нужные моменты.
+- Управлять и отменять анимации в `endAnimation`/`endAnimations`.
+- Возвращать `true` только при реальном запуске анимации.
+
+Упрощённый пример анимации появления (для иллюстрации, без полной реализации всех методов):
 
 ```kotlin
-class CustomItemAnimator : DefaultItemAnimator() {
+class FadeInItemAnimator : DefaultItemAnimator() {
 
     override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.alpha = 0f
-        holder.itemView.animate()
+        val view = holder.itemView
+        view.clearAnimation()
+        view.alpha = 0f
+
+        view.animate()
             .alpha(1f)
-            .setDuration(300)
+            .setDuration(addDuration)
             .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    dispatchAddStarting(holder)
+                }
+
                 override fun onAnimationEnd(animation: Animator) {
+                    view.alpha = 1f
                     dispatchAddFinished(holder)
                 }
             })
             .start()
-        return true
-    }
 
-    override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.animate()
-            .alpha(0f)
-            .setDuration(300)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    holder.itemView.alpha = 1f
-                    dispatchRemoveFinished(holder)
-                }
-            })
-            .start()
         return true
     }
 }
-
-// Использование
-recyclerView.itemAnimator = CustomItemAnimator()
 ```
 
-### 3. Анимации В Адаптере (onBindViewHolder)
+### 3. Анимации в адаптере (onBindViewHolder)
 
-Анимируйте элементы непосредственно в адаптере при привязке:
+Можно анимировать элементы напрямую при биндинге, но важно учитывать переиспользование `View`, чтобы не оставлять некорректные состояния.
 
 ```kotlin
 class MyAdapter(private val items: List<String>) :
@@ -749,106 +115,157 @@ class MyAdapter(private val items: List<String>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.itemView.clearAnimation()
         holder.textView.text = items[position]
 
-        // Анимация появления
+        // Пример анимации появления
         holder.itemView.alpha = 0f
         holder.itemView.animate()
             .alpha(1f)
             .setDuration(300)
-            .setStartDelay(position * 50L)
             .start()
     }
 
-    // Другие методы...
+    override fun onViewRecycled(holder: ViewHolder) {
+        holder.itemView.clearAnimation()
+        holder.itemView.alpha = 1f
+        super.onViewRecycled(holder)
+    }
+
+    // Другие методы адаптера опущены для краткости
 }
 ```
 
-### 4. Анимация Масштабирования
+### 4. Анимация масштабирования через ItemAnimator
 
 ```kotlin
 class ScaleItemAnimator : DefaultItemAnimator() {
 
     override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.apply {
-            scaleX = 0.5f
-            scaleY = 0.5f
-            alpha = 0f
+        val view = holder.itemView
+        view.clearAnimation()
+        view.scaleX = 0.5f
+        view.scaleY = 0.5f
+        view.alpha = 0f
 
-            animate()
-                .scaleX(1f)
-                .scaleY(1f)
-                .alpha(1f)
-                .setDuration(300)
-                .setInterpolator(OvershootInterpolator())
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        dispatchAddFinished(holder)
-                    }
-                })
-                .start()
-        }
+        view.animate()
+            .scaleX(1f)
+            .scaleY(1f)
+            .alpha(1f)
+            .setDuration(addDuration)
+            .setInterpolator(OvershootInterpolator())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    dispatchAddStarting(holder)
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    view.scaleX = 1f
+                    view.scaleY = 1f
+                    view.alpha = 1f
+                    dispatchAddFinished(holder)
+                }
+            })
+            .start()
+
         return true
     }
 }
 ```
 
-### 5. Анимация Скольжения
+### 5. Анимация слайдом через ItemAnimator
 
 ```kotlin
 class SlideInLeftAnimator : DefaultItemAnimator() {
 
     override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.apply {
-            translationX = -width.toFloat()
-            alpha = 0f
+        val view = holder.itemView
+        view.clearAnimation()
+        view.translationX = -view.width.toFloat()
+        view.alpha = 0f
 
-            animate()
-                .translationX(0f)
-                .alpha(1f)
-                .setDuration(300)
-                .setInterpolator(DecelerateInterpolator())
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        translationX = 0f
-                        dispatchAddFinished(holder)
-                    }
-                })
-                .start()
-        }
+        view.animate()
+            .translationX(0f)
+            .alpha(1f)
+            .setDuration(addDuration)
+            .setInterpolator(DecelerateInterpolator())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    dispatchAddStarting(holder)
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    view.translationX = 0f
+                    view.alpha = 1f
+                    dispatchAddFinished(holder)
+                }
+            })
+            .start()
+
         return true
     }
 
     override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.animate()
-            .translationX(holder.itemView.width.toFloat())
+        val view = holder.itemView
+        view.clearAnimation()
+
+        view.animate()
+            .translationX(view.width.toFloat())
             .alpha(0f)
-            .setDuration(300)
+            .setDuration(removeDuration)
             .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    dispatchRemoveStarting(holder)
+                }
+
                 override fun onAnimationEnd(animation: Animator) {
-                    holder.itemView.translationX = 0f
-                    holder.itemView.alpha = 1f
+                    view.translationX = 0f
+                    view.alpha = 1f
                     dispatchRemoveFinished(holder)
                 }
             })
             .start()
+
         return true
     }
 }
 ```
 
-### 6. Специфичные Анимации Элементов В Адаптере
+(Полная реализация должна также корректно обрабатывать pending/running анимации.)
+
+### 6. Использование сторонних библиотек
+
+Можно использовать библиотеки (например, RecyclerView Animators) для готовых анимаций элементов:
+
+```kotlin
+// Пример использования (подключение зависимости не показано)
+recyclerView.itemAnimator = SlideInUpAnimator()
+// или
+recyclerView.itemAnimator = FadeInAnimator()
+// или
+recyclerView.itemAnimator = ScaleInAnimator()
+```
+
+### 7. Специфичные анимации элементов в адаптере
+
+Анимирование только впервые появляющихся элементов:
 
 ```kotlin
 class AnimatedAdapter(private val items: MutableList<String>) :
     RecyclerView.Adapter<AnimatedAdapter.ViewHolder>() {
 
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bind(text: String) {
+            (itemView as? TextView)?.text = text
+        }
+    }
+
     private var lastPosition = -1
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.itemView.clearAnimation()
         holder.bind(items[position])
 
-        // Анимировать только элементы, появляющиеся впервые
         if (position > lastPosition) {
             animateItem(holder.itemView, position)
             lastPosition = position
@@ -856,18 +273,23 @@ class AnimatedAdapter(private val items: MutableList<String>) :
     }
 
     private fun animateItem(view: View, position: Int) {
-        view.apply {
-            translationY = 200f
-            alpha = 0f
+        view.translationY = 200f
+        view.alpha = 0f
 
-            animate()
-                .translationY(0f)
-                .alpha(1f)
-                .setDuration(300)
-                .setStartDelay((position * 50).toLong())
-                .setInterpolator(DecelerateInterpolator())
-                .start()
-        }
+        view.animate()
+            .translationY(0f)
+            .alpha(1f)
+            .setDuration(300)
+            .setStartDelay((position * 50).toLong())
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        holder.itemView.clearAnimation()
+        holder.itemView.alpha = 1f
+        holder.itemView.translationY = 0f
+        super.onViewRecycled(holder)
     }
 
     fun addItem(item: String, position: Int) {
@@ -882,7 +304,53 @@ class AnimatedAdapter(private val items: MutableList<String>) :
 }
 ```
 
-### 7. Анимация Свайпа
+### 8. Shared Element Transitions
+
+Для перехода от элемента `RecyclerView` к экрану деталей можно использовать shared element transitions:
+
+```kotlin
+class Item(val id: Long)
+
+class MyAdapter(private val items: List<Item>) :
+    RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val imageView: ImageView = view.findViewById(R.id.imageView)
+
+        fun bind(item: Item, clickListener: (View, Item) -> Unit) {
+            ViewCompat.setTransitionName(imageView, "image_${item.id}")
+            itemView.setOnClickListener { clickListener(imageView, item) }
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position]) { sharedView, item ->
+            val context = sharedView.context
+            val intent = Intent(context, DetailActivity::class.java)
+
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                context as Activity,
+                sharedView,
+                ViewCompat.getTransitionName(sharedView) ?: ""
+            )
+
+            context.startActivity(intent, options.toBundle())
+        }
+    }
+
+    override fun getItemCount(): Int = items.size
+}
+```
+
+### 9. Анимация свайпа с ItemTouchHelper
+
+`ItemTouchHelper` даёт свайп и drag-жесты; можно анимировать `alpha`/`translation` во время свайпа:
 
 ```kotlin
 val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
@@ -896,8 +364,10 @@ val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
     ): Boolean = false
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        val position = viewHolder.adapterPosition
-        adapter.removeItem(position)
+        val position = viewHolder.bindingAdapterPosition
+        if (position != RecyclerView.NO_POSITION) {
+            adapter.removeItem(position)
+        }
     }
 
     override fun onChildDraw(
@@ -910,8 +380,8 @@ val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
         isCurrentlyActive: Boolean
     ) {
         if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
-            val alpha = 1.0f - abs(dX) / viewHolder.itemView.width
-            viewHolder.itemView.alpha = alpha
+            val alpha = 1.0f - (kotlin.math.abs(dX) / viewHolder.itemView.width.coerceAtLeast(1))
+            viewHolder.itemView.alpha = alpha.coerceIn(0f, 1f)
         }
         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
     }
@@ -920,31 +390,416 @@ val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
 itemTouchHelper.attachToRecyclerView(recyclerView)
 ```
 
-### Лучшие Практики
+### Лучшие практики
 
-1. **Избегайте анимации при прокрутке**: Может вызвать проблемы с производительностью
-2. **Сбрасывайте состояние анимации**: Очищайте анимации в onViewRecycled
-3. **Используйте аппаратные слои**: Для сложных анимаций
-4. **Держите анимации короткими**: 200-300мс оптимально
-5. **Тестируйте производительность**: Обеспечьте 60fps на всех устройствах
-6. **Учитывайте доступность**: Уважайте настройку уменьшения движения
+1. Избегайте тяжёлых анимаций для каждого элемента при прокрутке: это может вызвать лаги.
+2. Всегда сбрасывайте состояние: очищайте анимации и возвращайте свойства в `onViewRecycled`.
+3. По возможности используйте `ItemAnimator` и property-анимации для структурных изменений.
+4. Держите анимации короткими: обычно 150–300 мс.
+5. Профилируйте производительность и стремитесь к плавной (~60 fps) прокрутке.
+6. Уважайте настройки пользователя: если системные анимации отключены/уменьшены, минимизируйте необязательные анимации.
 
 ```kotlin
-// Проверка настройки уменьшения движения
-val isReduceMotionEnabled = Settings.Global.getFloat(
-    contentResolver,
-    Settings.Global.TRANSITION_ANIMATION_SCALE,
-    1f
-) == 0f
+fun Context.isGlobalAnimationsDisabled(): Boolean {
+    return try {
+        val scale = Settings.Global.getFloat(
+            contentResolver,
+            Settings.Global.ANIMATOR_DURATION_SCALE
+        )
+        scale == 0f
+    } catch (e: Settings.SettingNotFoundException) {
+        false
+    }
+}
 
-if (!isReduceMotionEnabled) {
-    // Применить анимации
+if (!context.isGlobalAnimationsDisabled()) {
+    // Применяем анимации
 }
 ```
 
-
 ---
 
+## Answer (EN)
+RecyclerView provides several ways to implement animations, from simple built-in animations to complex custom animations. Animations can be applied at different levels: item-level, adapter-level, and via custom `ItemAnimator`s.
+
+Key mechanisms:
+- `ItemAnimator`: handles add/remove/move/change animations when the adapter notifies item changes.
+- Layout animations / view property animations in `onBindViewHolder`: control how views appear as they are bound.
+- `ItemTouchHelper` and shared element transitions: for interaction and navigation related animations.
+
+### 1. Using DefaultItemAnimator
+
+The simplest approach is using the built-in `DefaultItemAnimator` (enabled by default for many RecyclerView setups):
+
+```kotlin
+val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
+recyclerView.itemAnimator = DefaultItemAnimator()
+
+// Customize animation timing
+(recyclerView.itemAnimator as? DefaultItemAnimator)?.apply {
+    addDuration = 300
+    removeDuration = 300
+    moveDuration = 300
+    changeDuration = 300
+}
+```
+
+### 2. Custom ItemAnimator (conceptually)
+
+You can create a custom `ItemAnimator` by extending `SimpleItemAnimator` or `DefaultItemAnimator`. A correct implementation must:
+- Override `animateAdd`/`animateRemove`/`animateMove`/`animateChange` as needed.
+- Call `dispatchAddStarting`/`dispatchAddFinished`, etc., at appropriate times.
+- Manage and cancel running animations in `endAnimation`/`endAnimations`.
+- Return `true` only when an animation was started.
+
+Conceptual example for a fade-in on add (simplified; production code should also implement other required methods and proper cleanup):
+
+```kotlin
+class FadeInItemAnimator : DefaultItemAnimator() {
+
+    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
+        val view = holder.itemView
+        view.clearAnimation()
+        view.alpha = 0f
+
+        view.animate()
+            .alpha(1f)
+            .setDuration(addDuration)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    dispatchAddStarting(holder)
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    view.alpha = 1f
+                    dispatchAddFinished(holder)
+                }
+            })
+            .start()
+
+        return true
+    }
+}
+```
+
+### 3. Animations in Adapter (onBindViewHolder)
+
+You can animate items directly when binding, but must handle recycling to avoid incorrect states.
+
+```kotlin
+class MyAdapter(private val items: List<String>) :
+    RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val textView: TextView = view.findViewById(R.id.textView)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.itemView.clearAnimation()
+        holder.textView.text = items[position]
+
+        // Simple fade-in for newly bound items (example)
+        holder.itemView.alpha = 0f
+        holder.itemView.animate()
+            .alpha(1f)
+            .setDuration(300)
+            .start()
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        holder.itemView.clearAnimation()
+        holder.itemView.alpha = 1f
+        super.onViewRecycled(holder)
+    }
+
+    // Other required adapter methods omitted for brevity
+}
+```
+
+### 4. Scale Animation via ItemAnimator
+
+Example of scaling items on add (simplified):
+
+```kotlin
+class ScaleItemAnimator : DefaultItemAnimator() {
+
+    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
+        val view = holder.itemView
+        view.clearAnimation()
+        view.scaleX = 0.5f
+        view.scaleY = 0.5f
+        view.alpha = 0f
+
+        view.animate()
+            .scaleX(1f)
+            .scaleY(1f)
+            .alpha(1f)
+            .setDuration(addDuration)
+            .setInterpolator(OvershootInterpolator())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    dispatchAddStarting(holder)
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    view.scaleX = 1f
+                    view.scaleY = 1f
+                    view.alpha = 1f
+                    dispatchAddFinished(holder)
+                }
+            })
+            .start()
+
+        return true
+    }
+}
+```
+
+### 5. Slide Animation via ItemAnimator
+
+```kotlin
+class SlideInLeftAnimator : DefaultItemAnimator() {
+
+    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
+        val view = holder.itemView
+        view.clearAnimation()
+        view.translationX = -view.width.toFloat()
+        view.alpha = 0f
+
+        view.animate()
+            .translationX(0f)
+            .alpha(1f)
+            .setDuration(addDuration)
+            .setInterpolator(DecelerateInterpolator())
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    dispatchAddStarting(holder)
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    view.translationX = 0f
+                    view.alpha = 1f
+                    dispatchAddFinished(holder)
+                }
+            })
+            .start()
+
+        return true
+    }
+
+    override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
+        val view = holder.itemView
+        view.clearAnimation()
+
+        view.animate()
+            .translationX(view.width.toFloat())
+            .alpha(0f)
+            .setDuration(removeDuration)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    dispatchRemoveStarting(holder)
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    view.translationX = 0f
+                    view.alpha = 1f
+                    dispatchRemoveFinished(holder)
+                }
+            })
+            .start()
+
+        return true
+    }
+}
+```
+
+(Other lifecycle methods are omitted for brevity; a production `ItemAnimator` must properly manage all pending/running animations.)
+
+### 6. Using Third-Party Libraries
+
+You can use libraries like RecyclerView Animators to get ready-made item animators:
+
+```kotlin
+// Example usage (library dependency not shown here)
+recyclerView.itemAnimator = SlideInUpAnimator()
+// or
+recyclerView.itemAnimator = FadeInAnimator()
+// or
+recyclerView.itemAnimator = ScaleInAnimator()
+```
+
+### 7. Item-Specific Animations in Adapter
+
+Animating only items that appear for the first time:
+
+```kotlin
+class AnimatedAdapter(private val items: MutableList<String>) :
+    RecyclerView.Adapter<AnimatedAdapter.ViewHolder>() {
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        fun bind(text: String) {
+            (itemView as? TextView)?.text = text
+        }
+    }
+
+    private var lastPosition = -1
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.itemView.clearAnimation()
+        holder.bind(items[position])
+
+        if (position > lastPosition) {
+            animateItem(holder.itemView, position)
+            lastPosition = position
+        }
+    }
+
+    private fun animateItem(view: View, position: Int) {
+        view.translationY = 200f
+        view.alpha = 0f
+
+        view.animate()
+            .translationY(0f)
+            .alpha(1f)
+            .setDuration(300)
+            .setStartDelay((position * 50).toLong())
+            .setInterpolator(DecelerateInterpolator())
+            .start()
+    }
+
+    override fun onViewRecycled(holder: ViewHolder) {
+        holder.itemView.clearAnimation()
+        holder.itemView.alpha = 1f
+        holder.itemView.translationY = 0f
+        super.onViewRecycled(holder)
+    }
+
+    fun addItem(item: String, position: Int) {
+        items.add(position, item)
+        notifyItemInserted(position)
+    }
+
+    fun removeItem(position: Int) {
+        items.removeAt(position)
+        notifyItemRemoved(position)
+    }
+}
+```
+
+### 8. Shared Element Transitions
+
+For transitions between a RecyclerView item and a detail screen, you can use shared element transitions:
+
+```kotlin
+class Item(val id: Long)
+
+class MyAdapter(private val items: List<Item>) :
+    RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val imageView: ImageView = view.findViewById(R.id.imageView)
+
+        fun bind(item: Item, clickListener: (View, Item) -> Unit) {
+            ViewCompat.setTransitionName(imageView, "image_${item.id}")
+            itemView.setOnClickListener { clickListener(imageView, item) }
+        }
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_layout, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(items[position]) { sharedView, item ->
+            val context = sharedView.context
+            val intent = Intent(context, DetailActivity::class.java)
+
+            val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                context as Activity,
+                sharedView,
+                ViewCompat.getTransitionName(sharedView) ?: ""
+            )
+
+            context.startActivity(intent, options.toBundle())
+        }
+    }
+
+    override fun getItemCount(): Int = items.size
+}
+```
+
+### 9. Swipe Animation with ItemTouchHelper
+
+`ItemTouchHelper` provides swipe and drag interactions; you can animate `alpha`/`translation` during swipe:
+
+```kotlin
+val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+    0,
+    ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+) {
+    override fun onMove(
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        target: RecyclerView.ViewHolder
+    ): Boolean = false
+
+    override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        val position = viewHolder.bindingAdapterPosition
+        if (position != RecyclerView.NO_POSITION) {
+            adapter.removeItem(position)
+        }
+    }
+
+    override fun onChildDraw(
+        c: Canvas,
+        recyclerView: RecyclerView,
+        viewHolder: RecyclerView.ViewHolder,
+        dX: Float,
+        dY: Float,
+        actionState: Int,
+        isCurrentlyActive: Boolean
+    ) {
+        if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+            val alpha = 1.0f - (kotlin.math.abs(dX) / viewHolder.itemView.width.coerceAtLeast(1))
+            viewHolder.itemView.alpha = alpha.coerceIn(0f, 1f)
+        }
+        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+    }
+})
+
+itemTouchHelper.attachToRecyclerView(recyclerView)
+```
+
+### Best Practices
+
+1. Avoid heavy per-item animations during scroll: can hurt performance and cause jank.
+2. Always reset animation state: clear animations and restore properties in `onViewRecycled`.
+3. Prefer property animations and let `RecyclerView`/`ItemAnimator` handle structural changes.
+4. Keep animations short: around 150–300 ms is usually a good balance.
+5. Profile performance (e.g., with Android Studio Profiler) and aim for smooth (~60 fps) scrolling.
+6. Respect user settings: if system animations are disabled or reduced, minimize or disable non-essential animations.
+
+```kotlin
+fun Context.isGlobalAnimationsDisabled(): Boolean {
+    return try {
+        val scale = Settings.Global.getFloat(
+            contentResolver,
+            Settings.Global.ANIMATOR_DURATION_SCALE
+        )
+        scale == 0f
+    } catch (e: Settings.SettingNotFoundException) {
+        false
+    }
+}
+
+if (!context.isGlobalAnimationsDisabled()) {
+    // Apply animations
+}
+```
+
+---
 
 ## Follow-ups
 
@@ -966,12 +821,12 @@ if (!isReduceMotionEnabled) {
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - `View`, Ui
 
 ### Related (Medium)
-- q-rxjava-pagination-recyclerview--android--medium - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
-- [[q-recyclerview-async-list-differ--android--medium]] - View, Ui
-- [[q-recyclerview-diffutil-advanced--android--medium]] - View, Ui
+- q-rxjava-pagination-recyclerview--android--medium - `View`, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - `View`, Ui
+- [[q-recyclerview-async-list-differ--android--medium]] - `View`, Ui
+- [[q-recyclerview-diffutil-advanced--android--medium]] - `View`, Ui

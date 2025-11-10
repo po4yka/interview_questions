@@ -4,23 +4,25 @@ title: Factory Pattern Android / Паттерн Factory в Android
 aliases: [Abstract Factory Pattern, Factory Method Pattern, Factory Pattern Android, Паттерн Factory в Android]
 topic: android
 subtopics:
-  - architecture-clean
-  - ui-views
+- architecture-clean
+- ui-views
 question_kind: android
 difficulty: medium
-original_language: en
+original_language: ru
 language_tags:
-  - en
-  - ru
+- en
+- ru
 sources:
-  - https://developer.android.com/guide/topics/ui/declaring-layout
-status: reviewed
+- "https://developer.android.com/guide/topics/ui/declaring-layout"
+status: draft
 moc: moc-android
 related:
-  - c-factory-pattern
+- c-design-patterns
+- q-usecase-pattern-android--android--medium
 created: 2025-10-20
-updated: 2025-11-03
+updated: 2025-10-20
 tags: [android/architecture-clean, android/ui-views, design-patterns, difficulty/medium, factory-pattern, layout-inflater]
+
 ---
 
 # Вопрос (RU)
@@ -33,13 +35,15 @@ tags: [android/architecture-clean, android/ui-views, design-patterns, difficulty
 
 ## Ответ (RU)
 
-Android фреймворк широко использует Factory паттерн. Основные примеры: **`LayoutInflater`** (создает Views из XML), **`Fragment.instantiate()`** (создает фрагменты), **`Intent.createChooser()`** (создает chooser dialogs), **`MediaPlayer.create()`** (создает pre-configured media players).
+Android фреймворк широко использует Factory паттерн. Основные примеры: **`LayoutInflater`** (создает Views из XML), **`Fragment.instantiate()` / `FragmentFactory`** (создают фрагменты), **`Intent.createChooser()`** (создает chooser dialogs), **`MediaPlayer.create()`** (создает pre-configured media players).
+
+См. также: [[c-android-basics]]
 
 ### Ключевые Примеры
 
 **1. `LayoutInflater` - Factory Method Pattern**
 
-`LayoutInflater` создает View объекты из XML деклараций без прямых вызовов конструкторов:
+`LayoutInflater` создает `View` объекты из XML деклараций без прямых вызовов конструкторов:
 
 ```kotlin
 // ✅ Factory method создает Views из XML
@@ -64,7 +68,39 @@ private fun createViewFromTag(name: String, ctx: Context, attrs: AttributeSet): 
 }
 ```
 
-**2. `MediaPlayer.create()` - Static Factory Method**
+**2. `Fragment.instantiate()` / `FragmentFactory` - Factory Method**
+
+Фреймворк создает экземпляры `Fragment` через фабричные методы, не требуя прямых вызовов конструкторов в клиентском коде:
+
+```kotlin
+// Пример использования FragmentFactory (современный подход)
+class CustomFragmentFactory : FragmentFactory() {
+    override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
+        return when (className) {
+            MyFragment::class.java.name -> MyFragment(dependency)
+            else -> super.instantiate(classLoader, className)
+        }
+    }
+}
+
+// Регистрация фабрики
+supportFragmentManager.fragmentFactory = CustomFragmentFactory()
+```
+
+В собственных фрагментах часто используют статический фабричный метод `newInstance(...)` с `arguments` вместо прямого вызова конструктора:
+
+```kotlin
+class DetailsFragment : Fragment() {
+
+    companion object {
+        fun newInstance(id: Long): DetailsFragment = DetailsFragment().apply {
+            arguments = bundleOf("id" to id)
+        }
+    }
+}
+```
+
+**3. `MediaPlayer.create()` - Static Factory Method**
 
 Создает pre-configured MediaPlayer:
 
@@ -75,13 +111,14 @@ mediaPlayer.start() // готов к использованию
 
 // ❌ Без factory требует ручной настройки
 val mediaPlayer = MediaPlayer()
+val mediaPlayer = MediaPlayer()
 mediaPlayer.setDataSource(context, uri)
 mediaPlayer.prepare() // дополнительный шаг
 ```
 
-**3. `Intent.createChooser()` - Static Factory Method**
+**4. `Intent.createChooser()` - Static Factory Method**
 
-Создает Intent для выбора приложения:
+Создает `Intent` для выбора приложения:
 
 ```kotlin
 val shareIntent = Intent(Intent.ACTION_SEND).apply {
@@ -94,7 +131,7 @@ startActivity(chooser)
 
 ### Custom Factory Implementation
 
-Пример для RecyclerView:
+Пример для RecyclerView (viewType — это константы адаптера, например `TYPE_TEXT = 1`, `TYPE_IMAGE = 2`):
 
 ```kotlin
 class ViewHolderFactory {
@@ -120,10 +157,10 @@ class ViewHolderFactory {
 - **Консистентность**: единообразный API для создания объектов
 
 ### Лучшие Практики
-- Оборачивайте сложное создание в статические фабрики (`create()`)
+- Оборачивайте сложное создание в статические фабрики (`create()` / `newInstance()`), особенно для компонентов фреймворка
 - Возвращайте интерфейсы/абстракции, а не конкретные реализации
 - Кэшируйте дорогие объекты внутри фабрик при необходимости
-- Для `Fragment` используйте аргументы через `newInstance()`
+- Для `Fragment` используйте фабричные методы (`newInstance()` или `FragmentFactory`) вместо публичных конструкторов с параметрами
 
 ### Типичные Ошибки
 - Протаскивание `Context` повсюду вместо явной зависимости
@@ -132,13 +169,15 @@ class ViewHolderFactory {
 
 ## Answer (EN)
 
-Android framework extensively uses Factory pattern. Main examples: **`LayoutInflater`** (creates Views from XML), **`Fragment.instantiate()`** (creates fragments), **`Intent.createChooser()`** (creates chooser dialogs), **`MediaPlayer.create()`** (creates pre-configured media players).
+Android framework extensively uses Factory pattern. Main examples: **`LayoutInflater`** (creates Views from XML), **`Fragment.instantiate()` / `FragmentFactory`** (create fragments), **`Intent.createChooser()`** (creates chooser dialogs), **`MediaPlayer.create()`** (creates pre-configured media players).
+
+See also: [[c-android-basics]]
 
 ### Key Examples
 
 **1. `LayoutInflater` - Factory Method Pattern**
 
-`LayoutInflater` creates View objects from XML declarations without direct constructor calls:
+`LayoutInflater` creates `View` objects from XML declarations without direct constructor calls:
 
 ```kotlin
 // ✅ Factory method creates Views from XML
@@ -163,9 +202,41 @@ private fun createViewFromTag(name: String, ctx: Context, attrs: AttributeSet): 
 }
 ```
 
-**2. `MediaPlayer.create()` - Static Factory Method**
+**2. `Fragment.instantiate()` / `FragmentFactory` - Factory Method**
 
-Creates pre-configured MediaPlayer:
+The framework creates `Fragment` instances via factory methods instead of clients directly invoking constructors in most cases:
+
+```kotlin
+// Example using FragmentFactory (modern approach)
+class CustomFragmentFactory : FragmentFactory() {
+    override fun instantiate(classLoader: ClassLoader, className: String): Fragment {
+        return when (className) {
+            MyFragment::class.java.name -> MyFragment(dependency)
+            else -> super.instantiate(classLoader, className)
+        }
+    }
+}
+
+// Register the factory
+supportFragmentManager.fragmentFactory = CustomFragmentFactory()
+```
+
+In your own fragments, a common pattern is to expose a static factory method `newInstance(...)` that configures `arguments` instead of using public constructors with parameters:
+
+```kotlin
+class DetailsFragment : Fragment() {
+
+    companion object {
+        fun newInstance(id: Long): DetailsFragment = DetailsFragment().apply {
+            arguments = bundleOf("id" to id)
+        }
+    }
+}
+```
+
+**3. `MediaPlayer.create()` - Static Factory Method**
+
+Creates a pre-configured MediaPlayer:
 
 ```kotlin
 // ✅ Factory method with automatic preparation
@@ -174,13 +245,14 @@ mediaPlayer.start() // ready to use
 
 // ❌ Without factory requires manual setup
 val mediaPlayer = MediaPlayer()
+val mediaPlayer = MediaPlayer()
 mediaPlayer.setDataSource(context, uri)
 mediaPlayer.prepare() // additional step
 ```
 
-**3. `Intent.createChooser()` - Static Factory Method**
+**4. `Intent.createChooser()` - Static Factory Method**
 
-Creates Intent for app selection:
+Creates an `Intent` for app selection:
 
 ```kotlin
 val shareIntent = Intent(Intent.ACTION_SEND).apply {
@@ -193,7 +265,7 @@ startActivity(chooser)
 
 ### Custom Factory Implementation
 
-Example for RecyclerView:
+Example for RecyclerView (viewType here refers to adapter-defined constants like `TYPE_TEXT = 1`, `TYPE_IMAGE = 2`):
 
 ```kotlin
 class ViewHolderFactory {
@@ -214,15 +286,15 @@ class ViewHolderFactory {
 ### Factory Pattern Benefits in Android
 
 - **Declarative**: XML describes UI, factory creates objects
-- **Extensible**: easy to add new View/Fragment types
+- **Extensible**: easy to add new `View`/`Fragment` types
 - **Encapsulation**: hides creation complexity (reflection, initialization)
 - **Consistency**: uniform API for object creation
 
 ### Best Practices
-- Hide complex construction behind static factories (`create()`)
+- Hide complex construction behind static factories (`create()` / `newInstance()`), especially for framework components
 - Return interfaces/abstractions, not concrete types
 - Cache expensive objects inside factories when appropriate
-- For `Fragment` use `newInstance()` with `arguments`
+- For `Fragment`, prefer factory methods (`newInstance()` or `FragmentFactory`) over public constructors with parameters
 
 ### Common Pitfalls
 - Passing `Context` everywhere instead of explicit dependency
@@ -240,7 +312,6 @@ class ViewHolderFactory {
 
 ## References
 
-- [[c-software-design-patterns]]
 - https://developer.android.com/guide/topics/ui/declaring-layout
 - https://developer.android.com/guide/fragments/fragmentmanager#factory
 

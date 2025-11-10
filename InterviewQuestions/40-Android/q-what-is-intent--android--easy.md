@@ -25,29 +25,30 @@ related:
 created: 2025-10-15
 updated: 2025-10-27
 sources:
-- https://developer.android.com/guide/components/intents-filters
+- "https://developer.android.com/guide/components/intents-filters"
 tags:
 - android/intents-deeplinks
 - difficulty/easy
 - explicit-intent
 - implicit-intent
+
 ---
 
 # Вопрос (RU)
 
-> Что такое Intent?
+> Что такое `Intent`?
 
 # Question (EN)
 
-> What is Intent?
+> What is `Intent`?
 
 ## Ответ (RU)
 
-**Intent** — это объект-сообщение, используемый для **связи между компонентами Android** (Activity, Service, BroadcastReceiver) и между приложениями.
+**`Intent`** — это объект-сообщение, используемый для **связи между компонентами Android** (`Activity`, `Service`, `BroadcastReceiver`) и между приложениями.
 
 **Типы:**
 
-**1. Explicit Intent** - Конкретный компонент
+**1. Explicit `Intent`** - Конкретный компонент
 
 ```kotlin
 // Запуск конкретной Activity
@@ -59,7 +60,7 @@ startActivity(intent)
 startService(Intent(this, MusicService::class.java))
 ```
 
-**2. Implicit Intent** - На основе действия
+**2. Implicit `Intent`** - На основе действия
 
 ```kotlin
 // Открыть браузер
@@ -82,28 +83,33 @@ val intent = Intent(this, DetailActivity::class.java)
 intent.putExtra("name", "John")
 startActivity(intent)
 
-// ✅ Получение
+// ✅ Получение (например, в Activity через getIntent()/intent)
 val name = intent.getStringExtra("name")
 ```
 
-**Итог:** Intent — связующее звено между компонентами Android.
+**Broadcast:** `Intent` также используется для отправки и приёма широковещательных сообщений через `BroadcastReceiver` (sendBroadcast и т.п.).
+
+**Итог:** `Intent` — связующее звено между компонентами Android.
 
 ## Answer (EN)
 
-**Intent** is a messaging object used to **communicate between Android components** (Activity, Service, BroadcastReceiver) and between apps.
+**`Intent`** is a messaging object used to **communicate between Android components** (`Activity`, `Service`, `BroadcastReceiver`) and between apps.
 
 **Types:**
 
-**1. Explicit Intent** — specific component
+**1. Explicit `Intent`** — specific component
 
 ```kotlin
 // ✅ Start specific Activity
 val intent = Intent(this, ProfileActivity::class.java)
 intent.putExtra("user_id", 123)
 startActivity(intent)
+
+// ✅ Start specific Service
+startService(Intent(this, MusicService::class.java))
 ```
 
-**2. Implicit Intent** — action-based
+**2. Implicit `Intent`** — action-based
 
 ```kotlin
 // ✅ Open browser
@@ -126,31 +132,58 @@ val intent = Intent(this, DetailActivity::class.java)
 intent.putExtra("name", "John")
 startActivity(intent)
 
-// ✅ Receive
+// ✅ Receive (e.g., in Activity via getIntent()/intent)
 val name = intent.getStringExtra("name")
 ```
 
-**Summary:** Intent is the glue connecting Android components.
+**Broadcast:** `Intent` is also used to send and receive broadcasts via `BroadcastReceiver` (e.g., sendBroadcast).
+
+**Summary:** `Intent` is the glue connecting Android components.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Какие проблемы безопасности могут возникнуть при использовании неявных `Intent`?
+- Когда следует использовать `PendingIntent` вместо прямого `Intent`?
+- Как работают фильтры интентов (`intent-filter`)?
 
 ## Follow-ups
 
 - What are security pitfalls with implicit intents?
-- When to use PendingIntent instead of direct Intent?
+- When to use PendingIntent instead of direct `Intent`?
 - How do intent filters work?
+
+## Ссылки (RU)
+
+- [[c-intent]]
+- "https://developer.android.com/guide/components/intents-filters"
+- "https://developer.android.com/training/sharing/send"
 
 ## References
 
+- [[c-intent]]
 - https://developer.android.com/guide/components/intents-filters
 - https://developer.android.com/training/sharing/send
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепты
+
+- [[c-intent]]
+
+### Связанные (Easy)
+- [[q-what-are-services-for--android--easy]]
+- [[q-android-components-besides-activity--android--easy]]
+
+### Продвинутые (Сложнее)
+- [[q-intent-filters-android--android--medium]]
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-intent]]
-
 
 ### Related (Easy)
 - [[q-what-are-services-for--android--easy]]

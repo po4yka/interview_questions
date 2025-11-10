@@ -14,29 +14,28 @@ original_language: ru
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
-- c-choreographer
-- c-interpolator
-- c-value-animator
+- c-android-surfaces
 - q-canvas-drawing-optimization--android--hard
 - q-custom-view-lifecycle--android--medium
 sources:
-- https://developer.android.com/guide/topics/graphics/prop-animation
+- "https://developer.android.com/guide/topics/graphics/prop-animation"
 created: 2025-10-21
-updated: 2025-10-30
+updated: 2025-11-10
 tags:
 - android/ui-animation
 - android/ui-views
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
-> Как реализовать анимацию в Custom View?
+> Как реализовать анимацию в Custom `View`?
 
 # Question (EN)
-> How to implement animation in Custom View?
+> How to implement animation in Custom `View`?
 
 ---
 
@@ -46,30 +45,37 @@ tags:
 
 | Подход | Назначение | Производительность | Управление |
 |--------|------------|-------------------|------------|
-| **ValueAnimator** | Анимация пользовательских свойств | Отличная (VSYNC, без аллокаций) | Полный контроль |
-| **Property Animation** | Анимация стандартных свойств View | Отличная (Hardware-accelerated) | Простое |
+| **ValueAnimator** | Анимация пользовательских свойств | Высокая (VSYNC-синхронизация, гибкий контроль) | Полный контроль |
+| **Property Animation** | Анимация стандартных свойств `View` | Отличная (hardware-ускорение трансформаций) | Простое |
 | **Canvas Animation** | Сложная математическая графика | Хорошая | Требует математики |
 
 ### ValueAnimator - Универсальный Подход
 
-**Принцип**: Интерполяция значений через Choreographer, синхронизация с VSYNC (60 FPS), работа только с примитивами.
+**Принцип**: Интерполяция значений через `Choreographer`, синхронизация с VSYNC, обновление состояний (часто примитивов) и вызов `invalidate()`/`postInvalidateOnAnimation()` для перерисовки.
 
 ```kotlin
-class AnimatedProgressBar : View {
+class AnimatedProgressBar @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
     private var progress = 0f
         set(value) {
             field = value.coerceIn(0f, 100f)
-            invalidate() // ✅ Перерисовка при изменении
+            // Для вызовов с главного потока invalidate() корректен, для off-main — postInvalidateOnAnimation()
+            invalidate()
         }
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = Color.BLUE
     }
+
     private var animator: ValueAnimator? = null
 
     fun setProgress(target: Float) {
-        animator?.cancel() // ✅ Отмена предыдущей
+        animator?.cancel()
         animator = ValueAnimator.ofFloat(progress, target).apply {
             duration = 500
             interpolator = DecelerateInterpolator()
@@ -79,23 +85,28 @@ class AnimatedProgressBar : View {
     }
 
     override fun onDraw(canvas: Canvas) {
-        val width = width * (progress / 100f)
-        canvas.drawRect(0f, 0f, width, height.toFloat(), paint)
+        val filledWidth = width * (progress / 100f)
+        canvas.drawRect(0f, 0f, filledWidth, height.toFloat(), paint)
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        animator?.cancel() // ✅ Предотвращение утечек
+        animator?.cancel()
     }
 }
 ```
 
 ### Property Animation - Для Стандартных Свойств
 
-**Принцип**: ViewPropertyAnimator для цепочек анимаций, аппаратное ускорение трансформаций (scale, rotation, translation).
+**Принцип**: `ViewPropertyAnimator` для цепочек анимаций, аппаратное ускорение трансформаций (`alpha`, `translation`, `scale`, `rotation`).
 
 ```kotlin
-class AnimatedButton : Button {
+class AnimatedButton @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = android.R.attr.buttonStyle
+) : Button(context, attrs, defStyleAttr) {
+
     fun animateScale() {
         animate()
             .scaleX(1.2f)
@@ -103,7 +114,11 @@ class AnimatedButton : Button {
             .setDuration(200)
             .setInterpolator(OvershootInterpolator())
             .withEndAction {
-                animate().scaleX(1f).scaleY(1f).setDuration(200).start()
+                animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(200)
+                    .start()
             }
             .start()
     }
@@ -112,28 +127,40 @@ class AnimatedButton : Button {
 
 ### Canvas Animation - Математическая Графика
 
-**Принцип**: Тригонометрия (sin, cos) для циклических анимаций, математические функции для вычисления значений.
+**Принцип**: Тригонометрия (`sin`, `cos`) и другие функции для вычисления параметров анимации с ручной перерисовкой.
 
 ```kotlin
-class AnimatedCircleView : View {
+import kotlin.math.min
+import kotlin.math.sin
+
+class AnimatedCircleView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var animationProgress = 0f
     private var animator: ValueAnimator? = null
 
     fun startAnimation() {
+        animator?.cancel()
         animator = ValueAnimator.ofFloat(0f, 1f).apply {
             duration = 2000
             repeatCount = ValueAnimator.INFINITE
+            repeatMode = ValueAnimator.RESTART
             addUpdateListener {
                 animationProgress = it.animatedValue as Float
-                invalidate()
+                // На главном потоке можно использовать invalidate(), для VSYNC-синхронизации предпочтителен postInvalidateOnAnimation()
+                postInvalidateOnAnimation()
             }
             start()
         }
     }
 
     override fun onDraw(canvas: Canvas) {
-        val radius = (min(width, height) / 4f) * (0.5f + 0.5f * animationProgress)
+        val baseRadius = min(width, height) / 4f
+        val radius = baseRadius * (0.5f + 0.5f * animationProgress)
         val alpha = (255 * (0.5f + 0.5f * sin(animationProgress * Math.PI))).toInt()
         paint.alpha = alpha
         canvas.drawCircle(width / 2f, height / 2f, radius, paint)
@@ -141,7 +168,7 @@ class AnimatedCircleView : View {
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        animator?.cancel() // ✅ Обязательная очистка
+        animator?.cancel()
     }
 }
 ```
@@ -149,7 +176,12 @@ class AnimatedCircleView : View {
 ### Управление Жизненным Циклом
 
 ```kotlin
-class LifecycleAwareAnimatedView : View {
+class LifecycleAwareAnimatedView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
     private val activeAnimators = mutableListOf<Animator>()
 
     fun startAnimation() {
@@ -157,7 +189,7 @@ class LifecycleAwareAnimatedView : View {
             duration = 1000
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    activeAnimators.remove(animation) // ✅ Автоочистка
+                    activeAnimators.remove(animation)
                 }
             })
         }
@@ -168,9 +200,9 @@ class LifecycleAwareAnimatedView : View {
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         super.onVisibilityChanged(changedView, visibility)
         if (visibility != VISIBLE) {
-            activeAnimators.forEach { it.pause() } // ✅ Экономия ресурсов
+            activeAnimators.forEach { if (it.isStarted) it.pause() }
         } else {
-            activeAnimators.forEach { it.resume() }
+            activeAnimators.forEach { if (it.isPaused) it.resume() }
         }
     }
 
@@ -184,15 +216,18 @@ class LifecycleAwareAnimatedView : View {
 
 ### Best Practices
 
-**✅ Обязательно:**
+**Обязательно:**
 - Отменяйте анимации в `onDetachedFromWindow()`
-- Кэшируйте Paint объекты - НЕ создавайте в `onDraw()`
-- Приостанавливайте при `visibility != VISIBLE`
+- Кэшируйте `Paint` и другие объекты — не создавайте их в `onDraw()`
+- Приостанавливайте анимации при `visibility != VISIBLE` или при уходе с экрана
+- Для частых кадров / запуска не с главного потока используйте `postInvalidateOnAnimation()` для VSYNC-синхронизированной перерисовки
 
-**❌ Ошибки:**
-- Забывают отменять анимации → утечки памяти
-- Создают объекты в `onDraw()` → GC паузы
-- Используют `invalidate()` вместо `postInvalidateOnAnimation()` → пропуски кадров
+**Ошибки:**
+- Забывают отменять анимации → утечки / лишняя работа в фоне
+- Создают объекты в `onDraw()` → лишние GC-паузы
+- Всегда вызывают только `invalidate()` для анимаций с фоновых потоков → возможны пропуски кадров и некорректная работа (нужен `postInvalidateOnAnimation()`)
+
+---
 
 ## Answer (EN)
 
@@ -200,30 +235,37 @@ class LifecycleAwareAnimatedView : View {
 
 | Approach | Use Case | Performance | Control |
 |----------|----------|-------------|---------|
-| **ValueAnimator** | Animate custom properties | Excellent (VSYNC, no allocations) | Full control |
-| **Property Animation** | Animate standard View properties | Excellent (Hardware-accelerated) | Simple |
+| **ValueAnimator** | Animate custom properties | High (VSYNC-synced, flexible) | Full control |
+| **Property Animation** | Animate standard `View` properties | Excellent (hardware-accelerated transforms) | Simple |
 | **Canvas Animation** | Complex mathematical graphics | Good | Requires math |
 
 ### ValueAnimator - Universal Approach
 
-**Principle**: Value interpolation via Choreographer, VSYNC synchronization (60 FPS), primitives only.
+**Principle**: Interpolate values via `Choreographer`, sync to VSYNC, update state (often primitive-backed fields) and call `invalidate()`/`postInvalidateOnAnimation()` to redraw.
 
 ```kotlin
-class AnimatedProgressBar : View {
+class AnimatedProgressBar @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
     private var progress = 0f
         set(value) {
             field = value.coerceIn(0f, 100f)
-            invalidate() // ✅ Redraw on change
+            // For main-thread updates invalidate() is correct; for off-main use postInvalidateOnAnimation()
+            invalidate()
         }
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
         color = Color.BLUE
     }
+
     private var animator: ValueAnimator? = null
 
     fun setProgress(target: Float) {
-        animator?.cancel() // ✅ Cancel previous
+        animator?.cancel()
         animator = ValueAnimator.ofFloat(progress, target).apply {
             duration = 500
             interpolator = DecelerateInterpolator()
@@ -233,23 +275,28 @@ class AnimatedProgressBar : View {
     }
 
     override fun onDraw(canvas: Canvas) {
-        val width = width * (progress / 100f)
-        canvas.drawRect(0f, 0f, width, height.toFloat(), paint)
+        val filledWidth = width * (progress / 100f)
+        canvas.drawRect(0f, 0f, filledWidth, height.toFloat(), paint)
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        animator?.cancel() // ✅ Prevent leaks
+        animator?.cancel()
     }
 }
 ```
 
 ### Property Animation - Standard Properties
 
-**Principle**: ViewPropertyAnimator for animation chains, hardware acceleration for transformations (scale, rotation, translation).
+**Principle**: Use `ViewPropertyAnimator` for chained animations, hardware-accelerated transforms (`alpha`, `translation`, `scale`, `rotation`).
 
 ```kotlin
-class AnimatedButton : Button {
+class AnimatedButton @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = android.R.attr.buttonStyle
+) : Button(context, attrs, defStyleAttr) {
+
     fun animateScale() {
         animate()
             .scaleX(1.2f)
@@ -257,7 +304,11 @@ class AnimatedButton : Button {
             .setDuration(200)
             .setInterpolator(OvershootInterpolator())
             .withEndAction {
-                animate().scaleX(1f).scaleY(1f).setDuration(200).start()
+                animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .setDuration(200)
+                    .start()
             }
             .start()
     }
@@ -266,28 +317,40 @@ class AnimatedButton : Button {
 
 ### Canvas Animation - Mathematical Graphics
 
-**Principle**: Trigonometry (sin, cos) for cyclical animations, mathematical functions for value computation.
+**Principle**: Use trigonometry (`sin`, `cos`) and other math functions to compute animation parameters and manually invalidate the `View`.
 
 ```kotlin
-class AnimatedCircleView : View {
+import kotlin.math.min
+import kotlin.math.sin
+
+class AnimatedCircleView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var animationProgress = 0f
     private var animator: ValueAnimator? = null
 
     fun startAnimation() {
+        animator?.cancel()
         animator = ValueAnimator.ofFloat(0f, 1f).apply {
             duration = 2000
             repeatCount = ValueAnimator.INFINITE
+            repeatMode = ValueAnimator.RESTART
             addUpdateListener {
                 animationProgress = it.animatedValue as Float
-                invalidate()
+                // On the main thread invalidate() is fine; for VSYNC-aligned continuous animations prefer postInvalidateOnAnimation()
+                postInvalidateOnAnimation()
             }
             start()
         }
     }
 
     override fun onDraw(canvas: Canvas) {
-        val radius = (min(width, height) / 4f) * (0.5f + 0.5f * animationProgress)
+        val baseRadius = min(width, height) / 4f
+        val radius = baseRadius * (0.5f + 0.5f * animationProgress)
         val alpha = (255 * (0.5f + 0.5f * sin(animationProgress * Math.PI))).toInt()
         paint.alpha = alpha
         canvas.drawCircle(width / 2f, height / 2f, radius, paint)
@@ -295,7 +358,7 @@ class AnimatedCircleView : View {
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        animator?.cancel() // ✅ Required cleanup
+        animator?.cancel()
     }
 }
 ```
@@ -303,7 +366,12 @@ class AnimatedCircleView : View {
 ### Lifecycle Management
 
 ```kotlin
-class LifecycleAwareAnimatedView : View {
+class LifecycleAwareAnimatedView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
     private val activeAnimators = mutableListOf<Animator>()
 
     fun startAnimation() {
@@ -311,7 +379,7 @@ class LifecycleAwareAnimatedView : View {
             duration = 1000
             addListener(object : AnimatorListenerAdapter() {
                 override fun onAnimationEnd(animation: Animator) {
-                    activeAnimators.remove(animation) // ✅ Auto-cleanup
+                    activeAnimators.remove(animation)
                 }
             })
         }
@@ -322,9 +390,9 @@ class LifecycleAwareAnimatedView : View {
     override fun onVisibilityChanged(changedView: View, visibility: Int) {
         super.onVisibilityChanged(changedView, visibility)
         if (visibility != VISIBLE) {
-            activeAnimators.forEach { it.pause() } // ✅ Save resources
+            activeAnimators.forEach { if (it.isStarted) it.pause() }
         } else {
-            activeAnimators.forEach { it.resume() }
+            activeAnimators.forEach { if (it.isPaused) it.resume() }
         }
     }
 
@@ -338,50 +406,68 @@ class LifecycleAwareAnimatedView : View {
 
 ### Best Practices
 
-**✅ Required:**
+**Required:**
 - Cancel animations in `onDetachedFromWindow()`
-- Cache Paint objects - DON'T create in `onDraw()`
-- Pause when `visibility != VISIBLE`
+- Cache `Paint` and other objects — don't create them in `onDraw()`
+- Pause animations when `visibility != VISIBLE` or when the `View` goes off-screen
+- For frequent frame updates / non-main-thread invalidation use `postInvalidateOnAnimation()` for VSYNC-synced redraw
 
-**❌ Mistakes:**
-- Forgetting to cancel animations → memory leaks
-- Creating objects in `onDraw()` → GC pauses
-- Using `invalidate()` instead of `postInvalidateOnAnimation()` → frame drops
+**Mistakes:**
+- Forgetting to cancel animations → leaks / unnecessary background work
+- Creating objects in `onDraw()` → extra GC pauses
+- Always using only `invalidate()` when invalidating from background threads → possible frame issues (use `postInvalidateOnAnimation()` instead)
 
 ---
 
-## Follow-ups
+## Дополнительные вопросы (RU)
 
-- Как создать сложные path-анимации с PathInterpolator?
-- В чем разница производительности между ValueAnimator и ObjectAnimator?
-- Как синхронизировать несколько анимаций (AnimatorSet)?
-- Когда использовать postInvalidateOnAnimation() вместо invalidate()?
+- Как создать сложные path-анимации с `PathInterpolator`?
+- В чем разница производительности между `ValueAnimator` и `ObjectAnimator`?
+- Как синхронизировать несколько анимаций (`AnimatorSet`)?
+- Когда использовать `postInvalidateOnAnimation()` вместо `invalidate()`?
 - Как сохранить состояние анимации при повороте экрана?
 
-## References
+## Follow-ups (EN)
+
+- How to create complex path animations with `PathInterpolator`?
+- What is the performance difference between `ValueAnimator` and `ObjectAnimator`?
+- How to synchronize multiple animations using `AnimatorSet`?
+- When to use `postInvalidateOnAnimation()` instead of `invalidate()`?
+- How to preserve animation state across configuration changes?
+
+---
+
+## Ссылки (RU)
 
 - [Property Animation](https://developer.android.com/guide/topics/graphics/prop-animation)
 - [Hardware Acceleration](https://developer.android.com/topic/performance/hardware-accel)
+
+## References (EN)
+
+- [Property Animation](https://developer.android.com/guide/topics/graphics/prop-animation)
+- [Hardware Acceleration](https://developer.android.com/topic/performance/hardware-accel)
+
+---
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
-- [[c-choreographer]]
-- [[c-interpolator]]
-- [[c-value-animator]]
-
+- [[c-android-surfaces]]
 
 ### Prerequisites (Easier)
-- [[q-custom-view-lifecycle--android--medium]] - Жизненный цикл View для правильной очистки анимаций
-- Custom View basics - onDraw() и основы рендеринга
+
+- [[q-custom-view-lifecycle--android--medium]] - View lifecycle for proper animation cleanup / Жизненный цикл `View` для правильной очистки анимаций
+- Custom `View` basics - onDraw() and rendering basics / Основы Custom `View` - `onDraw()` и базовый рендеринг
 
 ### Related (Same Level)
-- [[q-canvas-drawing-optimization--android--hard]] - Оптимизация Canvas для плавных анимаций
-- Property Animation System - ObjectAnimator vs ViewPropertyAnimator
-- Touch handling with animation - Gesture integration
+
+- [[q-canvas-drawing-optimization--android--hard]] - Canvas performance for smooth animations / Оптимизация Canvas для плавных анимаций
+- Property Animation System - ObjectAnimator vs ViewPropertyAnimator / Система Property Animation - `ObjectAnimator` vs `ViewPropertyAnimator`
+- Touch handling with animation - Gesture integration / Обработка касаний с анимациями - интеграция жестов
 
 ### Advanced (Harder)
-- Path animations with PathMeasure - Сложные траектории движения
-- Spring animations - Physics-based motion (SpringAnimation, FlingAnimation)
-- Coordinated animations - Transition API и Motion Layout
+
+- Path animations with `PathMeasure` - complex motion paths / Path-анимации с `PathMeasure` - сложные траектории
+- Spring animations - physics-based motion (`SpringAnimation`, `FlingAnimation`) / Spring-анимации - физически правдоподобное движение (`SpringAnimation`, `FlingAnimation`)
+- Coordinated animations - Transition API and Motion Layout / Координированные анимации - Transition API и Motion Layout

@@ -35,55 +35,75 @@ sources: []
 
 ## Ответ (RU)
 
-[[c-accessibility|Контрастность цвета]] — отношение яркости текста к фону. WCAG требует минимум **4.5:1** для обычного текста (AA) и **7:1** для AAA. Material Design гарантирует контраст через систему цветовых ролей.
+[[c-accessibility|Контрастность цвета]] — отношение яркости текста к фону. WCAG рекомендует минимум **4.5:1** для обычного текста (уровень AA) и **7:1** для уровня AAA. Для крупного текста действуют послабления. В Material Design система цветовых ролей помогает достичь нужного контраста при корректном использовании (особенно при генерации через официальные инструменты и Dynamic Color), но не гарантирует его для произвольных кастомных палитр.
 
-### Требования WCAG И Material Цветовые Роли
+### Требования WCAG и Material Цветовые Роли
 
-**WCAG AA**: обычный текст < 18pt — 4.5:1, крупный ≥ 18pt — 3:1
-**WCAG AAA**: обычный текст — 7:1, крупный — 4.5:1
-**Примеры**: черный/белый 21:1 ✅, #757575/белый 4.6:1 ✅, #959595/белый 2.8:1 ❌
+**WCAG AA** (упрощённо для интервью):
+- обычный текст — 4.5:1
+- крупный текст — 3:1 (в WCAG: ≥ 18pt normal или ≥ 14pt жирный, на экране обычно ≈ 24sp/18sp)
+
+**WCAG AAA**:
+- обычный текст — 7:1
+- крупный текст — 4.5:1
+
+**Примеры (иллюстративно):**
+- чёрный/белый ≈ 21:1 ✅
+- #757575/белый ≈ 4.6:1 ✅ (минимальный запас для обычного текста)
+- #959595/белый ≈ 2.8:1 ❌ (ниже AA для обычного текста)
 
 ```kotlin
 @Composable
 fun MaterialColorExample() {
-    // ✅ Material гарантирует контраст 4.5:1
+    // ✅ При использовании рекомендуемых ролей (Material 3 / Dynamic Color)
+    // пары on* над * обычно подобраны с учётом WCAG AA для текста
     Surface(color = MaterialTheme.colorScheme.primary) {
         Text(text = "Button", color = MaterialTheme.colorScheme.onPrimary)
     }
 }
-// Основные пары: primary/onPrimary, surface/onSurface, background/onBackground
+// Основные пары ролей: primary/onPrimary, surface/onSurface, background/onBackground, и т.д.
+// Фактический контраст зависит от конкретной палитры — при кастомных цветах проверяйте явно.
 ```
 
 ### Типичные Ошибки
 
 ```kotlin
-// ❌ 1. Недостаточная контрастность (1.6:1)
-Text("Secondary", color = Color(0xFFCCCCCC), modifier = Modifier.background(Color.White))
+// ❌ 1. Потенциально недостаточный контраст для текста на белом фоне
+// (серый цвет выбран "на глаз", без проверки WCAG)
+Text(
+    text = "Secondary",
+    color = Color(0xFF959595),
+    modifier = Modifier.background(Color.White)
+)
 
-// ❌ 2. Только цвет для передачи информации (недоступно для цветослепых)
+// ❌ 2. Только цвет для передачи информации (недоступно для пользователей с нарушениями цветового зрения)
 Row {
     Text("Success", color = Color.Green)
     Text("Error", color = Color.Red)
 }
 
-// ❌ 3. Игнорирование темной темы
-val textColor = Color(0xFF212121) // Темная тема нарушит контраст
+// ❌ 3. Игнорирование темной темы: жёстко заданный тёмный цвет текста
+val textColor = Color(0xFF212121) // В тёмной теме на тёмном фоне контраст может стать недостаточным
 
-// ✅ Правильный подход: контраст + иконки + адаптация к теме
+// ✅ Правильный подход: роли + иконки/текст + адаптация к теме
 Text(
-    "Secondary",
-    color = MaterialTheme.colorScheme.onSurfaceVariant, // Контраст 4.6:1
+    text = "Secondary",
+    color = MaterialTheme.colorScheme.onSurfaceVariant,
     modifier = Modifier.background(MaterialTheme.colorScheme.surface)
 )
 Row {
-    Icon(Icons.Default.CheckCircle, null, tint = MaterialTheme.colorScheme.tertiary)
+    Icon(
+        imageVector = Icons.Default.CheckCircle,
+        contentDescription = null,
+        tint = MaterialTheme.colorScheme.tertiary
+    )
     Text("Success", color = MaterialTheme.colorScheme.tertiary)
 }
 ```
 
-### Цветовая Слепота И Тестирование
+### Цветовая Слепота и Тестирование
 
-8% мужчин и 0.5% женщин имеют дефицит цветового зрения — не полагайтесь только на цвет:
+Около 8% мужчин и 0.5% женщин имеют дефицит цветового зрения — нельзя полагаться только на цвет.
 
 ```kotlin
 // ✅ Форма + иконка + цвет для доступности
@@ -91,12 +111,17 @@ Row {
 fun StatusIndicator(isOnline: Boolean) {
     Row {
         Box(
-            Modifier.size(16.dp).background(
-                color = if (isOnline) Color(0xFF2E7D32) else Color(0xFFC62828),
-                shape = if (isOnline) CircleShape else RoundedCornerShape(2.dp) // Разная форма
-            )
+            Modifier
+                .size(16.dp)
+                .background(
+                    color = if (isOnline) Color(0xFF2E7D32) else Color(0xFFC62828),
+                    shape = if (isOnline) CircleShape else RoundedCornerShape(2.dp) // Разная форма
+                )
         )
-        Icon(if (isOnline) Icons.Default.CheckCircle else Icons.Default.Cancel, null)
+        Icon(
+            imageVector = if (isOnline) Icons.Default.CheckCircle else Icons.Default.Cancel,
+            contentDescription = null
+        )
         Text(if (isOnline) "Online" else "Offline")
     }
 }
@@ -104,67 +129,92 @@ fun StatusIndicator(isOnline: Boolean) {
 @Test
 fun testColorContrast() {
     val ratio = ContrastChecker.contrastRatio(Color(0xFF757575), Color.White)
+    // Проверяем соответствие минимуму для обычного текста уровня AA (4.5:1)
     assertTrue("Контраст $ratio:1 < 4.5:1", ratio >= 4.5)
 }
 ```
 
-**Инструменты**: Accessibility Scanner (Android), Android Studio (цветовой пикер), WebAIM Contrast Checker
+**Инструменты**: Accessibility Scanner (Android), Android Studio Color Picker (подсказки по контрасту), WebAIM Contrast Checker
 
-**Best Practices**: Используйте Material цветовые роли, не полагайтесь только на цвет, тестируйте темную тему (`@Preview(uiMode = UI_MODE_NIGHT_YES)`), автоматизируйте проверки в CI
+**Best Practices**:
+- используйте Material цветовые роли и Dynamic Color, но проверяйте кастомные палитры;
+- не полагайтесь только на цвет для передачи состояния или ошибки;
+- тестируйте светлую и тёмную темы (`@Preview(uiMode = UI_MODE_NIGHT_YES)`);
+- автоматизируйте проверки контраста в CI.
 
 ---
 
 ## Answer (EN)
 
-[[c-accessibility|Color contrast]] is the luminance ratio between text and background. WCAG requires minimum **4.5:1** for normal text (AA) and **7:1** for AAA. Material Design guarantees contrast through its color role system.
+[[c-accessibility|Color contrast]] is the luminance ratio between text and background. WCAG recommends a minimum **4.5:1** for normal text (Level AA) and **7:1** for AAA. Large text has slightly relaxed requirements. Material Design’s color roles help you achieve sufficient contrast when used as intended (especially with official tools and Dynamic Color), but they do not guarantee contrast for arbitrary custom palettes.
 
 ### WCAG Requirements and Material Color Roles
 
-**WCAG AA**: normal text < 18pt — 4.5:1, large ≥ 18pt — 3:1
-**WCAG AAA**: normal text — 7:1, large — 4.5:1
-**Examples**: black/white 21:1 ✅, #757575/white 4.6:1 ✅, #959595/white 2.8:1 ❌
+**WCAG AA** (simplified for interview context):
+- normal text — 4.5:1
+- large text — 3:1 (WCAG: ≥ 18pt regular or ≥ 14pt bold; on screens this is roughly ≥ 24sp/18sp)
+
+**WCAG AAA**:
+- normal text — 7:1
+- large text — 4.5:1
+
+**Examples (illustrative):**
+- black/white ≈ 21:1 ✅
+- #757575/white ≈ 4.6:1 ✅ (meets AA for normal text)
+- #959595/white ≈ 2.8:1 ❌ (fails AA for normal text)
 
 ```kotlin
 @Composable
 fun MaterialColorExample() {
-    // ✅ Material guarantees 4.5:1 contrast
+    // ✅ When using recommended roles (Material 3 / Dynamic Color),
+    // on* over * pairs are designed with WCAG AA in mind for typical text
     Surface(color = MaterialTheme.colorScheme.primary) {
         Text(text = "Button", color = MaterialTheme.colorScheme.onPrimary)
     }
 }
-// Key pairs: primary/onPrimary, surface/onSurface, background/onBackground
+// Key role pairs: primary/onPrimary, surface/onSurface, background/onBackground, etc.
+// Actual contrast depends on the concrete palette — always validate custom colors.
 ```
 
 ### Common Violations
 
 ```kotlin
-// ❌ 1. Insufficient contrast (1.6:1)
-Text("Secondary", color = Color(0xFFCCCCCC), modifier = Modifier.background(Color.White))
+// ❌ 1. Potentially insufficient contrast on white background
+// (gray chosen "by eye" without validating against WCAG)
+Text(
+    text = "Secondary",
+    color = Color(0xFF959595),
+    modifier = Modifier.background(Color.White)
+)
 
-// ❌ 2. Color alone for information (inaccessible for color blind users)
+// ❌ 2. Using color alone to convey meaning (inaccessible for users with color vision deficiency)
 Row {
     Text("Success", color = Color.Green)
     Text("Error", color = Color.Red)
 }
 
-// ❌ 3. Ignoring dark theme
-val textColor = Color(0xFF212121) // Dark theme breaks contrast
+// ❌ 3. Ignoring dark theme: hardcoded dark text color
+val textColor = Color(0xFF212121) // On dark theme backgrounds this may no longer meet contrast requirements
 
-// ✅ Correct approach: contrast + icons + theme-adaptive
+// ✅ Correct approach: roles + icons/text + theme-aware colors
 Text(
-    "Secondary",
-    color = MaterialTheme.colorScheme.onSurfaceVariant, // Contrast 4.6:1
+    text = "Secondary",
+    color = MaterialTheme.colorScheme.onSurfaceVariant,
     modifier = Modifier.background(MaterialTheme.colorScheme.surface)
 )
 Row {
-    Icon(Icons.Default.CheckCircle, null, tint = MaterialTheme.colorScheme.tertiary)
+    Icon(
+        imageVector = Icons.Default.CheckCircle,
+        contentDescription = null,
+        tint = MaterialTheme.colorScheme.tertiary
+    )
     Text("Success", color = MaterialTheme.colorScheme.tertiary)
 }
 ```
 
 ### Color Blindness and Testing
 
-8% of men and 0.5% of women have color vision deficiency — don't rely on color alone:
+About 8% of men and 0.5% of women have color vision deficiency — do not rely on color alone.
 
 ```kotlin
 // ✅ Shape + icon + color for accessibility
@@ -172,12 +222,17 @@ Row {
 fun StatusIndicator(isOnline: Boolean) {
     Row {
         Box(
-            Modifier.size(16.dp).background(
-                color = if (isOnline) Color(0xFF2E7D32) else Color(0xFFC62828),
-                shape = if (isOnline) CircleShape else RoundedCornerShape(2.dp) // Different shapes
-            )
+            Modifier
+                .size(16.dp)
+                .background(
+                    color = if (isOnline) Color(0xFF2E7D32) else Color(0xFFC62828),
+                    shape = if (isOnline) CircleShape else RoundedCornerShape(2.dp) // Different shapes
+                )
         )
-        Icon(if (isOnline) Icons.Default.CheckCircle else Icons.Default.Cancel, null)
+        Icon(
+            imageVector = if (isOnline) Icons.Default.CheckCircle else Icons.Default.Cancel,
+            contentDescription = null
+        )
         Text(if (isOnline) "Online" else "Offline")
     }
 }
@@ -185,13 +240,18 @@ fun StatusIndicator(isOnline: Boolean) {
 @Test
 fun testColorContrast() {
     val ratio = ContrastChecker.contrastRatio(Color(0xFF757575), Color.White)
+    // Verify minimum AA requirement for normal text (4.5:1)
     assertTrue("Contrast $ratio:1 < 4.5:1", ratio >= 4.5)
 }
 ```
 
-**Tools**: Accessibility Scanner (Android), Android Studio (color picker), WebAIM Contrast Checker
+**Tools**: Accessibility Scanner (Android), Android Studio Color Picker (contrast hints), WebAIM Contrast Checker
 
-**Best Practices**: Use Material color roles, don't rely on color alone, test dark theme (`@Preview(uiMode = UI_MODE_NIGHT_YES)`), automate contrast checks in CI
+**Best Practices**:
+- use Material color roles and Dynamic Color, but explicitly validate custom palettes;
+- do not rely on color alone to represent state or errors;
+- test both light and dark themes (`@Preview(uiMode = UI_MODE_NIGHT_YES)`);
+- automate contrast checks in CI.
 
 ---
 

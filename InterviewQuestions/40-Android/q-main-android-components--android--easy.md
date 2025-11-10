@@ -18,14 +18,14 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-service
+- c-android-components
 - c-activity
 - c-content-provider
 - q-how-does-activity-lifecycle-work--android--medium
-- q-jit-vs-aot-compilation--android--medium
+- q-android-components-besides-activity--android--easy
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 tags:
 - android
 - android/activity
@@ -33,6 +33,7 @@ tags:
 - android/service
 - components
 - difficulty/easy
+
 ---
 
 # Вопрос (RU)
@@ -47,7 +48,7 @@ tags:
 
 **Четыре основных компонента Android:**
 
-**1. Activity** - экран пользовательского интерфейса
+**1. `Activity`** - экран пользовательского интерфейса
 - Представляет один экран с UI
 - Точка взаимодействия пользователя с приложением
 - Пример: экран входа, экран профиля
@@ -61,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**2. Service** - фоновые операции
+**2. `Service`** - фоновые операции
 - Выполняет длительные операции без пользовательского интерфейса
 - Работает в фоновом режиме
 - Пример: воспроизведение музыки, синхронизация данных
@@ -69,7 +70,8 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // ✅ START_STICKY перезапускает сервис после kill
+        // START_STICKY сообщает системе попытаться перезапустить сервис после kill,
+        // но момент и наличие исходного Intent не гарантируются
         return START_STICKY
     }
 
@@ -77,7 +79,7 @@ class MusicService : Service() {
 }
 ```
 
-**3. BroadcastReceiver** - обработчик системных событий
+**3. `BroadcastReceiver`** - обработчик системных событий
 - Слушает системные или пользовательские broadcast-сообщения
 - Реагирует на изменения состояния системы
 - Пример: изменение сети, низкий заряд батареи
@@ -91,7 +93,7 @@ class NetworkReceiver : BroadcastReceiver() {
 }
 ```
 
-**4. ContentProvider** - управление и обмен данными
+**4. `ContentProvider`** - управление и обмен данными
 - Централизованное хранилище данных приложения
 - Обеспечивает контролируемый доступ к данным из других приложений
 - Пример: Contacts, MediaStore
@@ -103,8 +105,8 @@ class MyContentProvider : ContentProvider() {
         selection: String?, selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? {
-        // ✅ Возвращает данные по URI
-        return database.query(...)
+        // Возвращает Cursor с данными на основе URI (реализация зависит от схемы данных)
+        return database.query(/* ... */)
     }
 
     // onCreate, insert, update, delete...
@@ -112,15 +114,16 @@ class MyContentProvider : ContentProvider() {
 ```
 
 **Ключевые особенности:**
-- Все компоненты объявляются в **AndroidManifest.xml**
+- Основные компоненты (`Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`) обычно объявляются в `AndroidManifest.xml`;
+  некоторые `BroadcastReceiver` могут регистрироваться динамически в коде без манифеста
 - Каждый компонент имеет свой lifecycle
-- Компоненты могут быть запущены системой независимо друг от друга
+- Компоненты запускаются/создаются системой в ответ на intents, URI-запросы или другие события и могут быть активированы независимо друг от друга
 
 ## Answer (EN)
 
 **Four main Android components:**
 
-**1. Activity** - user interface screen
+**1. `Activity`** - user interface screen
 - Represents a single screen with UI
 - Entry point for user interaction
 - Example: login screen, profile screen
@@ -134,7 +137,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-**2. Service** - background operations
+**2. `Service`** - background operations
 - Performs long-running operations without UI
 - Runs in background
 - Example: music playback, data synchronization
@@ -142,7 +145,8 @@ class MainActivity : AppCompatActivity() {
 ```kotlin
 class MusicService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // ✅ START_STICKY restarts service after kill
+        // START_STICKY tells the system to try to recreate the service after it is killed,
+        // but the timing and presence of the original Intent are not guaranteed
         return START_STICKY
     }
 
@@ -150,7 +154,7 @@ class MusicService : Service() {
 }
 ```
 
-**3. BroadcastReceiver** - system event handler
+**3. `BroadcastReceiver`** - system event handler
 - Listens to system-wide or app broadcasts
 - Responds to system state changes
 - Example: network changes, low battery
@@ -164,7 +168,7 @@ class NetworkReceiver : BroadcastReceiver() {
 }
 ```
 
-**4. ContentProvider** - data management and sharing
+**4. `ContentProvider`** - data management and sharing
 - Centralized data storage for application
 - Provides controlled access to data from other apps
 - Example: Contacts, MediaStore
@@ -176,8 +180,8 @@ class MyContentProvider : ContentProvider() {
         selection: String?, selectionArgs: Array<String>?,
         sortOrder: String?
     ): Cursor? {
-        // ✅ Returns data based on URI
-        return database.query(...)
+        // Returns a Cursor with data based on the URI (implementation depends on data schema)
+        return database.query(/* ... */)
     }
 
     // onCreate, insert, update, delete...
@@ -185,40 +189,73 @@ class MyContentProvider : ContentProvider() {
 ```
 
 **Key characteristics:**
-- All components must be declared in **AndroidManifest.xml**
+- Core components (`Activity`, `Service`, `BroadcastReceiver`, `ContentProvider`) are typically declared in `AndroidManifest.xml`;
+  some `BroadcastReceiver`s can be registered dynamically in code without manifest entries
 - Each component has its own lifecycle
-- Components can be started by the system independently
+- Components are created/launched by the system in response to intents, URI requests, or other events and can be activated independently of one another
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как организовать взаимодействие между различными компонентами Android?
+- В чем разница между foreground- и background-сервисами?
+- Когда лучше использовать `BroadcastReceiver`, а когда event bus?
+- Как `ContentProvider` обрабатывает конкурентный доступ к данным?
+- Что произойдет, если забыть объявить компонент в `AndroidManifest.xml`?
 
 ## Follow-ups
 
 - How do you communicate between different Android components?
 - What is the difference between foreground and background services?
-- When should you use a BroadcastReceiver vs an event bus?
-- How does ContentProvider handle concurrent data access?
-- What happens if you forget to declare a component in AndroidManifest.xml?
+- When should you use a `BroadcastReceiver` vs an event bus?
+- How does `ContentProvider` handle concurrent data access?
+- What happens if you forget to declare a component in `AndroidManifest.xml`?
+
+## Ссылки (RU)
+
+- [[moc-android]] - Обзор разработки под Android
+- [Android Developer Guide - Application Fundamentals](https://developer.android.com/guide/components/fundamentals)
 
 ## References
 
 - [[moc-android]] - Android development overview
 - [Android Developer Guide - Application Fundamentals](https://developer.android.com/guide/components/fundamentals)
 
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-android-components]]
+- [[c-activity]]
+- [[c-content-provider]]
+
+### Предпосылки
+- [[q-what-is-the-main-application-execution-thread--android--easy]] - Основы main-потока
+- [[q-what-unifies-android-components--android--easy]] - Общая основа компонент
+
+### Связанные
+- [[q-how-does-activity-lifecycle-work--android--medium]] - Детали lifecycle `Activity`
+- [[q-android-components-besides-activity--android--easy]] - Другие типы компонентов
+
+### Продвинутое
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Архитектура компонентов
+- [[q-hilt-components-scope--android--medium]] - Dependency injection и компоненты
+
 ## Related Questions
 
 ### Prerequisites / Concepts
 
-- [[c-service]]
+- [[c-android-components]]
 - [[c-activity]]
 - [[c-content-provider]]
-
 
 ### Prerequisites
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread fundamentals
 - [[q-what-unifies-android-components--android--easy]] - Component foundation
 
 ### Related
-- [[q-how-does-activity-lifecycle-work--android--medium]] - Activity lifecycle details
+- [[q-how-does-activity-lifecycle-work--android--medium]] - `Activity` lifecycle details
 - [[q-android-components-besides-activity--android--easy]] - Other component types
 
 ### Advanced

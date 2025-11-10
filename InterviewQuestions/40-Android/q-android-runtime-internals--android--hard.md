@@ -13,14 +13,15 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
+  - c--android--hard
   - q-android-app-lag-analysis--android--medium
   - q-android-performance-measurement-tools--android--medium
   - q-android-runtime-art--android--medium
 created: 2025-10-13
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/performance-memory, android/processes, android/profiling, difficulty/hard]
 sources: []
 ---
@@ -35,13 +36,15 @@ sources: []
 
 ## Ответ (RU)
 
-**Android Runtime (ART)** — управляемая среда выполнения, объединяющая три режима исполнения кода: интерпретатор для первого запуска, JIT-компилятор для горячих участков и AOT-компилятор для предварительной оптимизации при установке. Использует поколенческую сборку мусора для минимизации пауз.
+**Android Runtime (ART)** — управляемая среда выполнения, объединяющая несколько режимов исполнения кода: интерпретатор для первого запуска, JIT-компилятор для горячих участков и AOT-компилятор для предварительной оптимизации при установке (на основе профилей и/или политики). Использует современный многопространственный (image/zygote/alloc/large) сборщик мусора с инкрементальными и concurrent-алгоритмами, включающими поколенческие и региональные идеи для минимизации пауз.
 
-**Архитектура ART:**
+**Архитектура ART (упрощённо):**
 
 ```text
-APK/DEX → ClassLoader → Верификатор → Интерпретатор/JIT/AOT → GC → Нативный код
+APK/DEX → ClassLoader → Верификатор → Интерпретатор/JIT/AOT ↔ GC → Нативный код
 ```
+
+(GC работает параллельно с исполнением, а не только «после» компиляции.)
 
 **DEX-формат:** Регистровый байткод (компактнее стекового Java-байткода):
 
@@ -49,7 +52,7 @@ APK/DEX → ClassLoader → Верификатор → Интерпретато�
 // Исходный код
 fun add(a: Int, b: Int): Int = a + b
 
-// DEX байткод
+// Упрощённый пример DEX байткода
 method add(II)I
     .registers 3
     add-int v0, p1, p2    // ✅ Регистровая модель
@@ -58,83 +61,98 @@ method add(II)I
 
 **Режимы выполнения:**
 
-- **Интерпретатор** — прямое выполнение без задержек на компиляцию
-- **JIT** — фоновая компиляция горячих методов после ~10k вызовов
-- **AOT** — предкомпиляция при установке (профилируемые методы или все)
+- **Интерпретатор** — прямое выполнение байткода без начальной задержки на компиляцию.
+- **JIT** — фоновая компиляция «горячих» методов на основе профилирования (порог вызовов и эвристики зависят от версии ART, «~10k» — порядок величины, а не фиксированное значение).
+- **AOT** — предкомпиляция при установке/обновлении приложения (под множество методов в соответствии с профилем и выбранным фильтром компиляции).
 
-**Фильтры AOT-компиляции:**
+**Фильтры AOT-компиляции (упрощённо):**
 
 ```kotlin
 enum class CompilationFilter {
-    QUICKEN,          // ❌ Только оптимизация DEX
-    SPEED_PROFILE,    // ✅ Компиляция профилируемых методов (~20-30% кода)
-    SPEED,            // Полная компиляция (долгая установка)
-    EVERYTHING        // Максимум оптимизаций
+    QUICKEN,         // Оптимизация и "разметка" DEX для более быстрого интерпретатора
+    SPEED_PROFILE,   // ✅ Компиляция профилируемых "горячих" методов
+    SPEED,           // Более агрессивная компиляция ради скорости исполнения
+    EVERYTHING       // Максимум AOT-компиляции (потенциально более долгие установка/обновление)
 }
-// По умолчанию: SPEED_PROFILE
+// Типичное значение по умолчанию на современных устройствах: SPEED_PROFILE (конкретика зависит от OEM/версии)
 ```
 
-**Поколенческая сборка мусора:**
+(Набор фильтров и точное поведение могут отличаться между версиями Android; пример иллюстративный.)
+
+**Сборка мусора и поколения (conceptually):**
+
+ART использует несколько типов сборщиков (например, Concurrent Copying, CMS, space-based) и разделение кучи на пространства, что позволяет:
+- чаще и дешевле собирать недолговечные объекты;
+- реже трогать долго живущие объекты;
+- выполнять значительную часть работы concurrent, снижая стоп-паузы.
 
 ```kotlin
-// Молодое поколение: новые объекты, частая сборка (~1-2ms)
-// Старое поколение: выжившие объекты, редкая сборка (~5-10ms)
+// Молодое "пространство"/регион: новые объекты, частые быстрые сборки
+// Старшие/долгоживущие области: реже собираются, сокращая полные паузы
 
 class GCRegions {
-    val youngGen = Region("young")  // ✅ 95% объектов умирают здесь
-    val oldGen = Region("old")      // Долгоживущие данные
+    val youngLike = Region("young")  // Большая часть объектов умирает здесь
+    val oldLike = Region("old")      // Долгоживущие данные
 }
 ```
+
+(Точная реализация поколенческой/региональной схемы зависит от версии ART; важно понимать идею оптимизации под "большинство объектов живут недолго".)
 
 **Управление памятью (Heap Spaces):**
 
 ```kotlin
 class MemorySpaces {
-    val imageSpace: Space       // ✅ Разделяемые классы фреймворка
-    val zygoteSpace: Space      // Разделяемое между процессами
-    val allocationSpace: Space  // Основная куча приложения
-    val largeObjectSpace: Space // ❌ Объекты >12KB (без перемещения)
+    val imageSpace: Space       // ✅ Предзагруженные и разделяемые классы фреймворка
+    val zygoteSpace: Space      // Разделяемые между процессами объекты, созданные до форка zygote
+    val allocationSpace: Space  // Основная куча приложения для новых объектов
+    val largeObjectSpace: Space // Крупные объекты (порог порядка ~8-12KB+, обычно не перемещаются)
 }
 ```
 
-**Компиляторные оптимизации:**
+(Конкретный порог для LargeObjectSpace и поведение могут меняться между версиями Android.)
+
+**Компиляторные оптимизации (упрощённые примеры):**
 
 ```kotlin
 // Встраивание (inlining)
 inline fun measure(block: () -> Unit) {
     val start = System.nanoTime()
-    block()  // ✅ Код встроен на месте вызова
+    block()  // ✅ Может быть встроено на месте вызова при JIT/AOT-оптимизации
     log("Time: ${System.nanoTime() - start}")
 }
 
-// Устранение виртуализации
+// Устранение виртуализации (devirtualization)
 fun test(obj: Derived) {
-    obj.compute()  // ✅ Прямой вызов (JIT знает точный тип)
+    obj.compute()  // ✅ Может быть превращён в прямой вызов, если рантайм знает точный тип
 }
 
-// Escape-анализ: выделение в стеке
+// Escape-анализ и стековое размещение
 fun calculateDistance(x: Int, y: Int): Int {
-    val point = Point(x, y)  // ✅ Не попадает в кучу
+    val point = Point(x, y)
+    // ✅ Может быть разложен (scalar replacement) и не попадать в кучу,
+    // если анализ доказывает отсутствие ухода ссылки за пределы метода
     return point.distance()
 }
 ```
 
 **Ключевые концепции:**
-- DEX-формат: регистровый байткод, компактный
-- Многоуровневое выполнение: интерпретатор → JIT → AOT
-- Поколенческая GC: молодое/старое поколение, минимальные паузы
-- Профилирование: компиляция горячих методов
-- Оптимизации: inlining, devirtualization, escape analysis
+- DEX-формат: регистровый байткод, компактный и оптимизированный под ART.
+- Многоуровневое выполнение: интерпретатор → JIT → AOT с профилированием.
+- Продвинутый GC: многопространственная/конкурентная сборка с учётом "поколений" объектов для сокращения пауз.
+- Профилирование: компиляция горячих методов и сохранение профиля между запусками.
+- Оптимизации: inlining, devirtualization, escape analysis и др., применяются тогда, когда условия для них доказуемо выполняются.
 
 ## Answer (EN)
 
-**Android Runtime (ART)** is a managed execution environment combining three execution modes: interpreter for initial launch, JIT compiler for hot code paths, and AOT compiler for pre-compilation during installation. Uses generational garbage collection to minimize pause times.
+**Android Runtime (ART)** is a managed execution environment that combines multiple execution modes: an interpreter for initial runs, a JIT compiler for hot code paths, and an AOT compiler for pre-compilation at install/update time (driven by profiles and policy). It uses a modern multi-space (image/zygote/alloc/large) garbage collector with incremental and concurrent algorithms, incorporating generational/region-based ideas to minimize pause times.
 
-**ART Architecture:**
+**ART Architecture (simplified):**
 
 ```text
-APK/DEX → ClassLoader → Verifier → Interpreter/JIT/AOT → GC → Native Code
+APK/DEX → ClassLoader → Verifier → Interpreter/JIT/AOT ↔ GC → Native Code
 ```
+
+(GC runs alongside execution and is not limited to "after" compilation.)
 
 **DEX Format:** Register-based bytecode (more compact than stack-based Java bytecode):
 
@@ -142,7 +160,7 @@ APK/DEX → ClassLoader → Verifier → Interpreter/JIT/AOT → GC → Native C
 // Source code
 fun add(a: Int, b: Int): Int = a + b
 
-// DEX bytecode
+// Simplified DEX bytecode example
 method add(II)I
     .registers 3
     add-int v0, p1, p2    // ✅ Register-based model
@@ -151,92 +169,128 @@ method add(II)I
 
 **Execution Modes:**
 
-- **Interpreter** — direct execution without compilation delay
-- **JIT** — background compilation of hot methods after ~10k invocations
-- **AOT** — pre-compilation during install (profiled methods or all)
+- **Interpreter** — executes bytecode directly with no upfront compilation cost.
+- **JIT** — compiles hot methods in the background based on profiling data (hotness thresholds and heuristics are version-dependent; "~10k" should be treated as an order of magnitude, not a fixed rule).
+- **AOT** — compiles selected methods at install/update time according to profiles and the chosen compilation filter.
 
-**AOT Compilation Filters:**
+**AOT Compilation Filters (simplified view):**
 
 ```kotlin
 enum class CompilationFilter {
-    QUICKEN,          // ❌ DEX optimization only
-    SPEED_PROFILE,    // ✅ Compile profiled methods (~20-30% of code)
-    SPEED,            // Full compilation (slow install)
-    EVERYTHING        // Maximum optimizations
+    QUICKEN,         // Optimize/annotate DEX to speed up interpretation
+    SPEED_PROFILE,   // ✅ Compile profiled hot methods
+    SPEED,           // More aggressive compilation for execution speed
+    EVERYTHING       // Maximum AOT compilation (potentially slower install/update)
 }
-// Default: SPEED_PROFILE
+// Typical default on modern devices: SPEED_PROFILE (exact behavior may vary by Android version/OEM)
 ```
 
-**Generational Garbage Collection:**
+(The actual set/semantics can differ between Android releases; this is illustrative.)
+
+**Garbage Collection and Generational Behavior (conceptual):**
+
+ART uses multiple collectors (e.g., concurrent copying, CMS, space-based) and heap spaces to:
+- collect short-lived objects more frequently and cheaply;
+- avoid frequently scanning long-lived objects;
+- perform much of the work concurrently, reducing stop-the-world pauses.
 
 ```kotlin
-// Young generation: new objects, frequent collection (~1-2ms)
-// Old generation: survived objects, infrequent collection (~5-10ms)
+// Young-like regions: new objects, frequent fast collections
+// Old-like/long-lived regions: collected less frequently to reduce full pauses
 
 class GCRegions {
-    val youngGen = Region("young")  // ✅ 95% objects die here
-    val oldGen = Region("old")      // Long-lived data
+    val youngLike = Region("young")  // Most objects die here
+    val oldLike = Region("old")      // Long-lived data
 }
 ```
+
+(Exact generational/region implementation details depend on ART version; key idea: "most objects die young" is exploited.)
 
 **Memory Management (Heap Spaces):**
 
 ```kotlin
 class MemorySpaces {
-    val imageSpace: Space       // ✅ Shared framework classes
-    val zygoteSpace: Space      // Shared between processes
-    val allocationSpace: Space  // Main app heap
-    val largeObjectSpace: Space // ❌ Objects >12KB (no relocation)
+    val imageSpace: Space       // ✅ Preloaded, shared framework classes
+    val zygoteSpace: Space      // Objects shared across app processes, created before zygote fork
+    val allocationSpace: Space  // Main app heap for regular objects
+    val largeObjectSpace: Space // Large objects (threshold on the order of ~8-12KB+, typically non-moving)
 }
 ```
 
-**Compiler Optimizations:**
+(The threshold and exact behavior of LargeObjectSpace are implementation-dependent.)
+
+**Compiler Optimizations (simplified examples):**
 
 ```kotlin
 // Inlining
 inline fun measure(block: () -> Unit) {
     val start = System.nanoTime()
-    block()  // ✅ Code inlined at call site
+    block()  // ✅ May be inlined at call site by JIT/AOT when profitable
     log("Time: ${System.nanoTime() - start}")
 }
 
 // Devirtualization
 fun test(obj: Derived) {
-    obj.compute()  // ✅ Direct call (JIT knows exact type)
+    obj.compute()  // ✅ May become a direct call if runtime can prove the exact target type
 }
 
-// Escape analysis: stack allocation
+// Escape analysis and stack allocation
 fun calculateDistance(x: Int, y: Int): Int {
-    val point = Point(x, y)  // ✅ Doesn't escape to heap
+    val point = Point(x, y)
+    // ✅ May be scalar-replaced / stack-allocated if analysis proves it does not escape
     return point.distance()
 }
 ```
 
 **Key Concepts:**
-- DEX format: register-based bytecode, compact
-- Multi-tier execution: interpreter → JIT → AOT
-- Generational GC: young/old generation, minimal pauses
-- Profiling: hot method compilation
-- Optimizations: inlining, devirtualization, escape analysis
+- DEX format: register-based, compact, optimized for ART.
+- Multi-tier execution: interpreter → JIT → AOT with profile-guided decisions.
+- Advanced GC: multi-space/concurrent collectors exploiting generational behavior to reduce pauses.
+- Profiling: hot method detection and persisted profiles influence JIT/AOT.
+- Optimizations: inlining, devirtualization, escape analysis, etc., applied when their safety and benefits are proven.
 
 ---
 
-## Follow-ups
+## Дополнительные вопросы (RU)
+
+- Как ART решает, какие методы компилировать JIT на основе профилирования?
+- В чем компромиссы между фильтрами компиляции SPEED_PROFILE и SPEED?
+- Как поколенческий/региональный GC уменьшает время пауз по сравнению с простыми mark-and-sweep сборщиками?
+- Что приводит к продвижению объектов из "молодых" областей в "старые"?
+- Как escape-анализ определяет, что объект можно разместить на стеке или заменить скалярными значениями?
+
+## Follow-ups (EN)
 
 - How does ART decide which methods to compile with JIT based on profiling data?
 - What are the trade-offs between SPEED_PROFILE and SPEED compilation filters?
-- How does generational GC reduce pause times compared to mark-and-sweep collectors?
-- What triggers promotion of objects from young to old generation?
-- How does escape analysis determine if an object can be stack-allocated?
+- How does generational/region-based GC reduce pause times compared to simple mark-and-sweep collectors?
+- What triggers promotion of objects from young-like to old-like regions/spaces?
+- How does escape analysis determine if an object can be stack-allocated or scalar-replaced?
 
-## References
+## Ссылки (RU)
 
-- [[c-memory-management]]
 - https://source.android.com/docs/core/runtime
-- [Memory Management](https://developer.android.com/topic/performance/memory-overview)
+- https://developer.android.com/topic/performance/memory-overview
 
+## References (EN)
 
-## Related Questions
+- https://source.android.com/docs/core/runtime
+- https://developer.android.com/topic/performance/memory-overview
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-android-runtime-art--android--medium]] - Основы ART и режимы компиляции
+- [[q-android-performance-measurement-tools--android--medium]] - Инструменты профилирования
+
+### Связанные (тот же уровень)
+- [[q-android-app-lag-analysis--android--medium]] - Техники анализа производительности
+
+### Продвинутое (сложнее)
+- Кастомные classloader-ы и оптимизация динамической загрузки кода
+- Управление нативной памятью и оптимизация производительности JNI
+
+## Related Questions (EN)
 
 ### Prerequisites (Easier)
 - [[q-android-runtime-art--android--medium]] - ART basics and compilation modes

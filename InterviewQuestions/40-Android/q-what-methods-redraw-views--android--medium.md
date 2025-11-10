@@ -17,12 +17,10 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-view-lifecycle
-- c-view-rendering
 - q-view-methods-and-their-purpose--android--medium
 - q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags:
 - android/lifecycle
 - android/ui-views
@@ -31,699 +29,37 @@ tags:
 - invalidate
 - requestLayout
 - view-rendering
+
 ---
 
 # Вопрос (RU)
-> Методы перерисовки View
+> Методы перерисовки `View`
 
 # Question (EN)
-> View Redraw Methods
+> `View` Redraw Methods
 
 ---
-
-## Answer (EN)
-Android provides several methods to trigger View redrawing and layout recalculation. Understanding when and how to use each method is crucial for efficient UI updates.
-
-### 1. invalidate()
-
-Marks the View for redrawing by calling `onDraw()`. Use when visual appearance changes but size remains the same.
-
-```kotlin
-class CustomView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null
-) : View(context, attrs) {
-
-    private var color = Color.RED
-
-    fun changeColor(newColor: Int) {
-        color = newColor
-        // Trigger redraw - calls onDraw()
-        invalidate()
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        canvas.drawColor(color)
-    }
-}
-```
-
-#### When to Use invalidate():
-- Color changes
-- Text updates
-- Drawing state changes
-- Visibility changes in custom drawing
-- Animation frames
-
-```kotlin
-class AnimatedView : View {
-    private var progress = 0f
-
-    fun animateProgress(toProgress: Float) {
-        val animator = ValueAnimator.ofFloat(progress, toProgress)
-        animator.addUpdateListener { animation ->
-            progress = animation.animatedValue as Float
-            invalidate() // Redraw each frame
-        }
-        animator.start()
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        // Draw progress based on current value
-        canvas.drawArc(rect, 0f, 360f * progress, true, paint)
-    }
-}
-```
-
-### 2. requestLayout()
-
-Triggers recalculation of sizes and positioning by calling `onMeasure()` and `onLayout()`. Use when View dimensions change.
-
-```kotlin
-class ExpandableView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null
-) : ViewGroup(context, attrs) {
-
-    private var isExpanded = false
-
-    fun toggleExpansion() {
-        isExpanded = !isExpanded
-        // Trigger remeasure and relayout
-        requestLayout()
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val height = if (isExpanded) 400.dp else 100.dp
-        setMeasuredDimension(
-            MeasureSpec.getSize(widthMeasureSpec),
-            height
-        )
-    }
-
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        // Position children based on new size
-        for (i in 0 until childCount) {
-            getChildAt(i).layout(0, 0, width, height)
-        }
-    }
-}
-```
-
-#### When to Use requestLayout():
-- Size changes
-- Margin/padding changes
-- LayoutParams changes
-- Adding/removing children
-- Orientation changes
-
-```kotlin
-class DynamicSizeView : View {
-
-    fun changeSize(newWidth: Int, newHeight: Int) {
-        val params = layoutParams
-        params.width = newWidth
-        params.height = newHeight
-        layoutParams = params // Automatically calls requestLayout()
-    }
-
-    fun changeSizeManually(newWidth: Int, newHeight: Int) {
-        // Manual approach
-        layoutParams = layoutParams.apply {
-            width = newWidth
-            height = newHeight
-        }
-        requestLayout() // Ensure layout is recalculated
-        invalidate()    // And redrawn
-    }
-}
-```
-
-### 3. postInvalidate()
-
-Deferred redrawing from a non-UI thread. Thread-safe version of `invalidate()`.
-
-```kotlin
-class LoadingView : View {
-
-    private var loadingProgress = 0
-
-    fun startLoading() {
-        Thread {
-            while (loadingProgress < 100) {
-                Thread.sleep(100)
-                loadingProgress += 10
-
-                // CANNOT call invalidate() from background thread
-                // Must use postInvalidate()
-                postInvalidate()
-            }
-        }.start()
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        canvas.drawRect(0f, 0f, width * loadingProgress / 100f, height.toFloat(), paint)
-    }
-}
-```
-
-#### Comparison: invalidate() Vs postInvalidate()
-
-```kotlin
-class ComparisonExample : View {
-
-    // From UI thread - use invalidate()
-    fun updateFromUIThread() {
-        invalidate() // Safe, direct call
-    }
-
-    // From background thread - use postInvalidate()
-    fun updateFromBackgroundThread() {
-        Thread {
-            // Do background work
-            processData()
-
-            // Wrong - will crash!
-            // invalidate()
-
-            // Correct - posts to UI thread
-            postInvalidate()
-
-            // Alternative using post()
-            post { invalidate() }
-        }.start()
-    }
-
-    private fun processData() {
-        // Background processing
-    }
-}
-```
-
-### 4. Additional Redraw Methods
-
-#### forceLayout()
-Forces layout pass without immediate redraw:
-
-```kotlin
-fun forceLayoutExample() {
-    val view = findViewById<View>(R.id.myView)
-    view.forceLayout() // Mark for layout
-    view.requestLayout() // Trigger layout pass
-}
-```
-
-#### invalidateDrawable()
-Invalidates a specific Drawable:
-
-```kotlin
-class CustomView : View {
-    private val drawable = ContextCompat.getDrawable(context, R.drawable.icon)
-
-    init {
-        drawable?.callback = object : Drawable.Callback {
-            override fun invalidateDrawable(who: Drawable) {
-                invalidate() // Redraw when drawable changes
-            }
-
-            override fun scheduleDrawable(who: Drawable, what: Runnable, `when`: Long) {}
-            override fun unscheduleDrawable(who: Drawable, what: Runnable) {}
-        }
-    }
-}
-```
-
-### 5. Practical Examples
-
-#### Complex View Update
-
-```kotlin
-class ComplexView : View {
-    private var text = "Hello"
-    private var textSize = 14f
-
-    fun updateText(newText: String) {
-        text = newText
-        invalidate() // Only visual change, no size change
-    }
-
-    fun updateTextSize(newSize: Float) {
-        textSize = newSize
-        // Size might change, need both
-        requestLayout()
-        invalidate()
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        // Measure based on text size
-        val paint = Paint().apply { textSize = this@ComplexView.textSize }
-        val textWidth = paint.measureText(text)
-        setMeasuredDimension(textWidth.toInt(), textSize.toInt())
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        val paint = Paint().apply {
-            textSize = this@ComplexView.textSize
-            color = Color.BLACK
-        }
-        canvas.drawText(text, 0f, textSize, paint)
-    }
-}
-```
-
-#### Optimized Updates
-
-```kotlin
-class OptimizedView : View {
-
-    private var needsLayout = false
-    private var needsRedraw = false
-
-    fun batchUpdates(updates: () -> Unit) {
-        // Collect changes
-        updates()
-
-        // Apply once
-        if (needsLayout) {
-            requestLayout()
-        }
-        if (needsRedraw) {
-            invalidate()
-        }
-
-        needsLayout = false
-        needsRedraw = false
-    }
-
-    fun updateColor(color: Int) {
-        // Just visual change
-        needsRedraw = true
-    }
-
-    fun updateSize(size: Int) {
-        // Layout change
-        needsLayout = true
-        needsRedraw = true
-    }
-}
-
-// Usage
-optimizedView.batchUpdates {
-    updateColor(Color.RED)
-    updateSize(100)
-} // Single layout and invalidate call
-```
-
-### Best Practices
-
-1. **Use invalidate()** for visual-only changes
-2. **Use requestLayout()** when size/position changes
-3. **Use postInvalidate()** from background threads
-4. **Batch updates** when possible to avoid multiple redraws
-5. **Avoid calling in loops** - invalidate/requestLayout are expensive
-6. **Check if attached** before calling these methods
-
-```kotlin
-fun safeInvalidate() {
-    if (isAttachedToWindow) {
-        invalidate()
-    }
-}
-```
-
-### Summary Table
-
-| Method | Thread | Calls | Use Case |
-|--------|--------|-------|----------|
-| `invalidate()` | UI thread | `onDraw()` | Visual changes only |
-| `requestLayout()` | UI thread | `onMeasure()`, `onLayout()` | Size/position changes |
-| `postInvalidate()` | Any thread | `onDraw()` (on UI thread) | Visual changes from background |
-| `forceLayout()` | UI thread | Marks for layout | Force layout recalculation |
-
----
-
-# Что Известно Про Методы, Которые Перерисовывают View?
-
-
-# Question (EN)
-> View Redraw Methods
-
----
-
-
----
-
-
-## Answer (EN)
-Android provides several methods to trigger View redrawing and layout recalculation. Understanding when and how to use each method is crucial for efficient UI updates.
-
-### 1. invalidate()
-
-Marks the View for redrawing by calling `onDraw()`. Use when visual appearance changes but size remains the same.
-
-```kotlin
-class CustomView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null
-) : View(context, attrs) {
-
-    private var color = Color.RED
-
-    fun changeColor(newColor: Int) {
-        color = newColor
-        // Trigger redraw - calls onDraw()
-        invalidate()
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        canvas.drawColor(color)
-    }
-}
-```
-
-#### When to Use invalidate():
-- Color changes
-- Text updates
-- Drawing state changes
-- Visibility changes in custom drawing
-- Animation frames
-
-```kotlin
-class AnimatedView : View {
-    private var progress = 0f
-
-    fun animateProgress(toProgress: Float) {
-        val animator = ValueAnimator.ofFloat(progress, toProgress)
-        animator.addUpdateListener { animation ->
-            progress = animation.animatedValue as Float
-            invalidate() // Redraw each frame
-        }
-        animator.start()
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        // Draw progress based on current value
-        canvas.drawArc(rect, 0f, 360f * progress, true, paint)
-    }
-}
-```
-
-### 2. requestLayout()
-
-Triggers recalculation of sizes and positioning by calling `onMeasure()` and `onLayout()`. Use when View dimensions change.
-
-```kotlin
-class ExpandableView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null
-) : ViewGroup(context, attrs) {
-
-    private var isExpanded = false
-
-    fun toggleExpansion() {
-        isExpanded = !isExpanded
-        // Trigger remeasure and relayout
-        requestLayout()
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val height = if (isExpanded) 400.dp else 100.dp
-        setMeasuredDimension(
-            MeasureSpec.getSize(widthMeasureSpec),
-            height
-        )
-    }
-
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        // Position children based on new size
-        for (i in 0 until childCount) {
-            getChildAt(i).layout(0, 0, width, height)
-        }
-    }
-}
-```
-
-#### When to Use requestLayout():
-- Size changes
-- Margin/padding changes
-- LayoutParams changes
-- Adding/removing children
-- Orientation changes
-
-```kotlin
-class DynamicSizeView : View {
-
-    fun changeSize(newWidth: Int, newHeight: Int) {
-        val params = layoutParams
-        params.width = newWidth
-        params.height = newHeight
-        layoutParams = params // Automatically calls requestLayout()
-    }
-
-    fun changeSizeManually(newWidth: Int, newHeight: Int) {
-        // Manual approach
-        layoutParams = layoutParams.apply {
-            width = newWidth
-            height = newHeight
-        }
-        requestLayout() // Ensure layout is recalculated
-        invalidate()    // And redrawn
-    }
-}
-```
-
-### 3. postInvalidate()
-
-Deferred redrawing from a non-UI thread. Thread-safe version of `invalidate()`.
-
-```kotlin
-class LoadingView : View {
-
-    private var loadingProgress = 0
-
-    fun startLoading() {
-        Thread {
-            while (loadingProgress < 100) {
-                Thread.sleep(100)
-                loadingProgress += 10
-
-                // CANNOT call invalidate() from background thread
-                // Must use postInvalidate()
-                postInvalidate()
-            }
-        }.start()
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        canvas.drawRect(0f, 0f, width * loadingProgress / 100f, height.toFloat(), paint)
-    }
-}
-```
-
-#### Comparison: invalidate() Vs postInvalidate()
-
-```kotlin
-class ComparisonExample : View {
-
-    // From UI thread - use invalidate()
-    fun updateFromUIThread() {
-        invalidate() // Safe, direct call
-    }
-
-    // From background thread - use postInvalidate()
-    fun updateFromBackgroundThread() {
-        Thread {
-            // Do background work
-            processData()
-
-            // Wrong - will crash!
-            // invalidate()
-
-            // Correct - posts to UI thread
-            postInvalidate()
-
-            // Alternative using post()
-            post { invalidate() }
-        }.start()
-    }
-
-    private fun processData() {
-        // Background processing
-    }
-}
-```
-
-### 4. Additional Redraw Methods
-
-#### forceLayout()
-Forces layout pass without immediate redraw:
-
-```kotlin
-fun forceLayoutExample() {
-    val view = findViewById<View>(R.id.myView)
-    view.forceLayout() // Mark for layout
-    view.requestLayout() // Trigger layout pass
-}
-```
-
-#### invalidateDrawable()
-Invalidates a specific Drawable:
-
-```kotlin
-class CustomView : View {
-    private val drawable = ContextCompat.getDrawable(context, R.drawable.icon)
-
-    init {
-        drawable?.callback = object : Drawable.Callback {
-            override fun invalidateDrawable(who: Drawable) {
-                invalidate() // Redraw when drawable changes
-            }
-
-            override fun scheduleDrawable(who: Drawable, what: Runnable, `when`: Long) {}
-            override fun unscheduleDrawable(who: Drawable, what: Runnable) {}
-        }
-    }
-}
-```
-
-### 5. Practical Examples
-
-#### Complex View Update
-
-```kotlin
-class ComplexView : View {
-    private var text = "Hello"
-    private var textSize = 14f
-
-    fun updateText(newText: String) {
-        text = newText
-        invalidate() // Only visual change, no size change
-    }
-
-    fun updateTextSize(newSize: Float) {
-        textSize = newSize
-        // Size might change, need both
-        requestLayout()
-        invalidate()
-    }
-
-    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        // Measure based on text size
-        val paint = Paint().apply { textSize = this@ComplexView.textSize }
-        val textWidth = paint.measureText(text)
-        setMeasuredDimension(textWidth.toInt(), textSize.toInt())
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-        val paint = Paint().apply {
-            textSize = this@ComplexView.textSize
-            color = Color.BLACK
-        }
-        canvas.drawText(text, 0f, textSize, paint)
-    }
-}
-```
-
-#### Optimized Updates
-
-```kotlin
-class OptimizedView : View {
-
-    private var needsLayout = false
-    private var needsRedraw = false
-
-    fun batchUpdates(updates: () -> Unit) {
-        // Collect changes
-        updates()
-
-        // Apply once
-        if (needsLayout) {
-            requestLayout()
-        }
-        if (needsRedraw) {
-            invalidate()
-        }
-
-        needsLayout = false
-        needsRedraw = false
-    }
-
-    fun updateColor(color: Int) {
-        // Just visual change
-        needsRedraw = true
-    }
-
-    fun updateSize(size: Int) {
-        // Layout change
-        needsLayout = true
-        needsRedraw = true
-    }
-}
-
-// Usage
-optimizedView.batchUpdates {
-    updateColor(Color.RED)
-    updateSize(100)
-} // Single layout and invalidate call
-```
-
-### Best Practices
-
-1. **Use invalidate()** for visual-only changes
-2. **Use requestLayout()** when size/position changes
-3. **Use postInvalidate()** from background threads
-4. **Batch updates** when possible to avoid multiple redraws
-5. **Avoid calling in loops** - invalidate/requestLayout are expensive
-6. **Check if attached** before calling these methods
-
-```kotlin
-fun safeInvalidate() {
-    if (isAttachedToWindow) {
-        invalidate()
-    }
-}
-```
-
-### Summary Table
-
-| Method | Thread | Calls | Use Case |
-|--------|--------|-------|----------|
-| `invalidate()` | UI thread | `onDraw()` | Visual changes only |
-| `requestLayout()` | UI thread | `onMeasure()`, `onLayout()` | Size/position changes |
-| `postInvalidate()` | Any thread | `onDraw()` (on UI thread) | Visual changes from background |
-| `forceLayout()` | UI thread | Marks for layout | Force layout recalculation |
-
----
-
-# Что Известно Про Методы, Которые Перерисовывают View?
 
 ## Ответ (RU)
 
-Android предоставляет несколько методов для запуска перерисовки View и пересчёта layout. Понимание когда и как использовать каждый метод критично для эффективных обновлений UI.
+Android предоставляет несколько методов для запуска перерисовки `View` и пересчёта layout. Понимание того, когда и как использовать каждый метод, критично для эффективных обновлений UI.
 
 ### 1. invalidate()
 
-Помечает View для перерисовки вызовом `onDraw()`. Используйте когда визуальный вид меняется, но размер остаётся прежним.
+Помечает `View` как требующую перерисовки. Фреймворк вызовет `onDraw()` (и `dispatchDraw()` для `ViewGroup`) при следующем проходе рисования. Используйте, когда меняется визуальное представление, но размер и позиционирование остаются теми же.
 
 ```kotlin
 class CustomView @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null
-) : View(context, attrs) {
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
     private var color = Color.RED
 
     fun changeColor(newColor: Int) {
         color = newColor
-        // Запустить перерисовку - вызывает onDraw()
+        // Запланировать перерисовку в следующем кадре
         invalidate()
     }
 
@@ -734,29 +70,35 @@ class CustomView @JvmOverloads constructor(
 }
 ```
 
-#### Когда Использовать invalidate():
+#### Когда использовать invalidate():
 - Изменения цвета
-- Обновления текста
+- Обновления текста или содержимого Drawable
 - Изменения состояния рисования
-- Изменения видимости в custom рисовании
-- Кадры анимации
+- Изменения видимости в рамках тех же границ
+- Кадры анимации, не меняющие границы `View`
 
 ```kotlin
-class AnimatedView : View {
+class AnimatedView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
     private var progress = 0f
+    private val rect = RectF(0f, 0f, 100f, 100f)
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     fun animateProgress(toProgress: Float) {
         val animator = ValueAnimator.ofFloat(progress, toProgress)
         animator.addUpdateListener { animation ->
             progress = animation.animatedValue as Float
-            invalidate() // Перерисовать каждый кадр
+            invalidate() // Перерисовать каждый кадр (по UI-потоку)
         }
         animator.start()
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        // Рисовать прогресс на основе текущего значения
         canvas.drawArc(rect, 0f, 360f * progress, true, paint)
     }
 }
@@ -764,76 +106,96 @@ class AnimatedView : View {
 
 ### 2. requestLayout()
 
-Запускает пересчёт размеров и позиционирования вызовом `onMeasure()` и `onLayout()`. Используйте когда размеры View меняются.
+Запрашивает новый проход layout. Это приведёт к вызову `onMeasure()` и `onLayout()` (и у родителей по иерархии) при следующем layout-проходе. Используйте, когда размер или положение `View` могут измениться.
 
 ```kotlin
 class ExpandableView @JvmOverloads constructor(
     context: Context,
-    attrs: AttributeSet? = null
-) : ViewGroup(context, attrs) {
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ViewGroup(context, attrs, defStyleAttr) {
 
     private var isExpanded = false
 
+    private val Int.dp: Int
+        get() = (this * resources.displayMetrics.density).toInt()
+
     fun toggleExpansion() {
         isExpanded = !isExpanded
-        // Запустить remeasure и relayout
+        // Запросить переизмерение и новый layout
         requestLayout()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val width = MeasureSpec.getSize(widthMeasureSpec)
         val height = if (isExpanded) 400.dp else 100.dp
-        setMeasuredDimension(
-            MeasureSpec.getSize(widthMeasureSpec),
-            height
-        )
+
+        // При необходимости измерить детей
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            measureChild(child, widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST))
+        }
+
+        setMeasuredDimension(width, height)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        // Позиционировать детей на основе нового размера
+        // Разместить детей в новых границах
         for (i in 0 until childCount) {
-            getChildAt(i).layout(0, 0, width, height)
+            val child = getChildAt(i)
+            child.layout(0, 0, width, height)
         }
     }
 }
 ```
 
-#### Когда Использовать requestLayout():
+#### Когда использовать requestLayout():
 - Изменения размера
 - Изменения margin/padding
 - Изменения LayoutParams
-- Добавление/удаление детей
-- Изменения ориентации
+- Добавление/удаление дочерних `View`
+- Любые изменения, влияющие на измерение или позиционирование
 
 ```kotlin
-class DynamicSizeView : View {
+class DynamicSizeView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
     fun changeSize(newWidth: Int, newHeight: Int) {
-        val params = layoutParams
+        val params = layoutParams ?: return
         params.width = newWidth
         params.height = newHeight
-        layoutParams = params // Автоматически вызывает requestLayout()
+        layoutParams = params
+        // Явно запросить новый layout
+        requestLayout()
     }
 
     fun changeSizeManually(newWidth: Int, newHeight: Int) {
-        // Ручной подход
-        layoutParams = layoutParams.apply {
+        layoutParams = (layoutParams ?: return).apply {
             width = newWidth
             height = newHeight
         }
-        requestLayout() // Убедиться что layout пересчитан
-        invalidate()    // И перерисован
+        requestLayout() // Пересчитать layout
+        invalidate()    // Перерисовать
     }
 }
 ```
 
 ### 3. postInvalidate()
 
-Отложенная перерисовка из не-UI потока. Потокобезопасная версия `invalidate()`.
+Позволяет запланировать перерисовку из любого потока, публикуя запрос в UI-поток. Используйте, когда нужно обновить `View` из фонового потока.
 
 ```kotlin
-class LoadingView : View {
+class LoadingView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
     private var loadingProgress = 0
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     fun startLoading() {
         Thread {
@@ -841,8 +203,8 @@ class LoadingView : View {
                 Thread.sleep(100)
                 loadingProgress += 10
 
-                // НЕЛЬЗЯ вызывать invalidate() из фонового потока
-                // Нужно использовать postInvalidate()
+                // invalidate() должен вызываться из UI-потока;
+                // из фонового потока используем postInvalidate()
                 postInvalidate()
             }
         }.start()
@@ -850,34 +212,36 @@ class LoadingView : View {
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas.drawRect(0f, 0f, width * loadingProgress / 100f, height.toFloat(), paint)
+        val widthProgress = width * loadingProgress / 100f
+        canvas.drawRect(0f, 0f, widthProgress, height.toFloat(), paint)
     }
 }
 ```
 
-#### Сравнение: invalidate() Vs postInvalidate()
+#### Сравнение: invalidate() vs postInvalidate()
 
 ```kotlin
-class ComparisonExample : View {
+class ComparisonExample @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
-    // Из UI потока - используйте invalidate()
+    // Из UI-потока - используем invalidate()
     fun updateFromUIThread() {
-        invalidate() // Безопасно, прямой вызов
+        invalidate() // Безопасный прямой вызов
     }
 
-    // Из фонового потока - используйте postInvalidate()
+    // Из фонового потока - используем postInvalidate()
     fun updateFromBackgroundThread() {
         Thread {
-            // Выполнить фоновую работу
+            // Фоновая работа
             processData()
 
-            // Неправильно - вызовет crash!
-            // invalidate()
+            // Нельзя вызывать invalidate() напрямую из фонового потока
+            postInvalidate() // Правильно - публикует в UI-поток
 
-            // Правильно - отправляет в UI поток
-            postInvalidate()
-
-            // Альтернатива используя post()
+            // Альтернатива с post()
             post { invalidate() }
         }.start()
     }
@@ -888,91 +252,113 @@ class ComparisonExample : View {
 }
 ```
 
-### 4. Дополнительные Методы Перерисовки
+### 4. Дополнительные методы, связанные с перерисовкой
 
 #### forceLayout()
-Принудительный проход layout без немедленной перерисовки:
+Помечает `View` как требующую layout на следующем проходе. Сам по себе не запускает немедленный layout; обычно используется вместе с `requestLayout()` или при родительском layout-проходе.
 
 ```kotlin
-fun forceLayoutExample() {
-    val view = findViewById<View>(R.id.myView)
-    view.forceLayout() // Пометить для layout
-    view.requestLayout() // Запустить проход layout
+fun forceLayoutExample(view: View) {
+    view.forceLayout()   // Пометить View для переразметки
+    view.requestLayout() // Запросить у родителя запуск прохода layout
 }
 ```
 
 #### invalidateDrawable()
-Инвалидирует конкретный Drawable:
+Вызывается, когда дочерний Drawable требует перерисовки; часто используется в кастомных `View`.
 
 ```kotlin
-class CustomView : View {
+class DrawableView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr), Drawable.Callback {
+
     private val drawable = ContextCompat.getDrawable(context, R.drawable.icon)
 
     init {
-        drawable?.callback = object : Drawable.Callback {
-            override fun invalidateDrawable(who: Drawable) {
-                invalidate() // Перерисовать когда drawable меняется
-            }
+        drawable?.callback = this
+    }
 
-            override fun scheduleDrawable(who: Drawable, what: Runnable, `when`: Long) {}
-            override fun unscheduleDrawable(who: Drawable, what: Runnable) {}
-        }
+    override fun invalidateDrawable(who: Drawable) {
+        // Перерисовать, когда Drawable изменился
+        invalidate()
+    }
+
+    override fun scheduleDrawable(who: Drawable, what: Runnable, `when`: Long) {}
+
+    override fun unscheduleDrawable(who: Drawable, what: Runnable) {}
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        drawable?.setBounds(0, 0, width, height)
+        drawable?.draw(canvas)
     }
 }
 ```
 
-### 5. Практические Примеры
+### 5. Практические примеры
 
-#### Сложное Обновление View
+#### Сложное обновление `View`
 
 ```kotlin
-class ComplexView : View {
+class ComplexView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
     private var text = "Hello"
-    private var textSize = 14f
+    private var textSizePx = 14f * resources.displayMetrics.scaledDensity
 
     fun updateText(newText: String) {
         text = newText
-        invalidate() // Только визуальное изменение, размер не меняется
+        invalidate() // Только визуальное изменение; предполагаем, что границы не меняются
     }
 
-    fun updateTextSize(newSize: Float) {
-        textSize = newSize
-        // Размер может измениться, нужны оба
+    fun updateTextSize(newSizeSp: Float) {
+        textSizePx = newSizeSp * resources.displayMetrics.scaledDensity
+        // Размер может измениться -> нужен layout + draw
         requestLayout()
         invalidate()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        // Измерить на основе размера текста
-        val paint = Paint().apply { textSize = this@ComplexView.textSize }
+        val paint = Paint().apply { textSize = textSizePx }
         val textWidth = paint.measureText(text)
-        setMeasuredDimension(textWidth.toInt(), textSize.toInt())
+        val textHeight = -paint.ascent() + paint.descent()
+        setMeasuredDimension(textWidth.toInt(), textHeight.toInt())
     }
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         val paint = Paint().apply {
-            textSize = this@ComplexView.textSize
+            textSize = textSizePx
             color = Color.BLACK
         }
-        canvas.drawText(text, 0f, textSize, paint)
+        val baseline = -paint.ascent()
+        canvas.drawText(text, 0f, baseline, paint)
     }
 }
 ```
 
-#### Оптимизированные Обновления
+#### Оптимизированные обновления
 
 ```kotlin
-class OptimizedView : View {
+class OptimizedView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
 
     private var needsLayout = false
     private var needsRedraw = false
 
     fun batchUpdates(updates: () -> Unit) {
-        // Собрать изменения
+        // Собираем изменения
         updates()
 
-        // Применить один раз
+        // Применяем один раз
         if (needsLayout) {
             requestLayout()
         }
@@ -990,7 +376,7 @@ class OptimizedView : View {
     }
 
     fun updateSize(size: Int) {
-        // Изменение layout
+        // Изменение, влияющее на layout
         needsLayout = true
         needsRedraw = true
     }
@@ -1000,42 +386,415 @@ class OptimizedView : View {
 optimizedView.batchUpdates {
     updateColor(Color.RED)
     updateSize(100)
-} // Один вызов layout и invalidate
+} // Один проход layout + invalidate
 ```
 
-### Лучшие Практики
+### Лучшие практики
 
-1. **Используйте invalidate()** для только визуальных изменений
-2. **Используйте requestLayout()** когда размер/позиция меняются
-3. **Используйте postInvalidate()** из фоновых потоков
-4. **Группируйте обновления** когда возможно чтобы избежать множественных перерисовок
-5. **Избегайте вызовов в циклах** - invalidate/requestLayout дорогие операции
-6. **Проверяйте прикрепление** перед вызовом этих методов
+1. Используйте `invalidate()` для только визуальных изменений, не влияющих на layout.
+2. Используйте `requestLayout()` при изменении размеров, положения или параметров, влияющих на измерение/размещение.
+3. Используйте `postInvalidate()` (или `post { invalidate() }`) при обновлении из фоновых потоков.
+4. Группируйте связанные обновления, чтобы избежать лишних проходов.
+5. Избегайте частых вызовов в плотных циклах: `invalidate()` и `requestLayout()` дорогие операции.
+6. По необходимости проверяйте `isAttachedToWindow` при асинхронных вызовах, чтобы избежать бесполезных обновлений.
 
 ```kotlin
-fun safeInvalidate() {
+fun View.safeInvalidate() {
     if (isAttachedToWindow) {
         invalidate()
     }
 }
 ```
 
-### Таблица Резюме
+### Таблица резюме
 
-| Метод | Поток | Вызывает | Случай Использования |
-|--------|--------|-------|----------|
-| `invalidate()` | UI поток | `onDraw()` | Только визуальные изменения |
-| `requestLayout()` | UI поток | `onMeasure()`, `onLayout()` | Изменения размера/позиции |
-| `postInvalidate()` | Любой поток | `onDraw()` (на UI потоке) | Визуальные изменения из фона |
-| `forceLayout()` | UI поток | Помечает для layout | Принудительный пересчёт layout |
+| Метод            | Поток        | Вызывает                         | Случай использования                          |
+|------------------|-------------|----------------------------------|-----------------------------------------------|
+| `invalidate()`    | UI-поток    | `onDraw()`                       | Только визуальные изменения                   |
+| `requestLayout()` | UI-поток    | `onMeasure()`, `onLayout()`      | Изменения размера/позиции/layout              |
+| `postInvalidate()`| Любой поток | `onDraw()` в UI-потоке           | Визуальные изменения из фонового потока       |
+| `forceLayout()`   | UI-поток    | Помечает для layout (без немедл. прохода) | Принудительный пересчёт на следующем layout |
 
 ---
 
+## Answer (EN)
+
+Android provides several methods to trigger `View` redrawing and layout recalculation. Understanding when and how to use each method is crucial for efficient UI updates.
+
+### 1. invalidate()
+
+Marks the `View` as needing to be redrawn. The framework will call `onDraw()` (and `dispatchDraw()` for ViewGroups) during the next drawing pass. Use when the visual appearance changes but size and layout remain the same.
+
+```kotlin
+class CustomView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
+    private var color = Color.RED
+
+    fun changeColor(newColor: Int) {
+        color = newColor
+        // Trigger redraw on next frame
+        invalidate()
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        canvas.drawColor(color)
+    }
+}
+```
+
+#### When to Use invalidate():
+- Color changes
+- Text or drawable content updates
+- Drawing state changes
+- Visibility changes in custom drawing (within the same bounds)
+- Animation frames where bounds do not change
+
+```kotlin
+class AnimatedView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
+    private var progress = 0f
+    private val rect = RectF(0f, 0f, 100f, 100f)
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    fun animateProgress(toProgress: Float) {
+        val animator = ValueAnimator.ofFloat(progress, toProgress)
+        animator.addUpdateListener { animation ->
+            progress = animation.animatedValue as Float
+            invalidate() // Schedule redraw for each frame on UI thread
+        }
+        animator.start()
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        canvas.drawArc(rect, 0f, 360f * progress, true, paint)
+    }
+}
+```
+
+### 2. requestLayout()
+
+Requests a new layout pass. This will cause `onMeasure()` and `onLayout()` (and for parents up the hierarchy) to be called on the next layout pass. Use when the `View`'s size or position might change.
+
+```kotlin
+class ExpandableView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : ViewGroup(context, attrs, defStyleAttr) {
+
+    private var isExpanded = false
+
+    private val Int.dp: Int
+        get() = (this * resources.displayMetrics.density).toInt()
+
+    fun toggleExpansion() {
+        isExpanded = !isExpanded
+        // Trigger remeasure and relayout
+        requestLayout()
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val width = MeasureSpec.getSize(widthMeasureSpec)
+        val height = if (isExpanded) 400.dp else 100.dp
+
+        // Measure children if needed
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            measureChild(child, widthMeasureSpec, MeasureSpec.makeMeasureSpec(height, MeasureSpec.AT_MOST))
+        }
+
+        setMeasuredDimension(width, height)
+    }
+
+    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
+        // Position children within new bounds
+        for (i in 0 until childCount) {
+            val child = getChildAt(i)
+            child.layout(0, 0, width, height)
+        }
+    }
+}
+```
+
+#### When to Use requestLayout():
+- Size changes
+- Margin/padding changes
+- LayoutParams changes
+- Adding/removing children
+- Changes that affect how parent or child views should be measured/positioned
+
+```kotlin
+class DynamicSizeView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
+    fun changeSize(newWidth: Int, newHeight: Int) {
+        val params = layoutParams ?: return
+        params.width = newWidth
+        params.height = newHeight
+        layoutParams = params
+        // Explicitly ensure a layout pass
+        requestLayout()
+    }
+
+    fun changeSizeManually(newWidth: Int, newHeight: Int) {
+        layoutParams = (layoutParams ?: return).apply {
+            width = newWidth
+            height = newHeight
+        }
+        requestLayout() // Ensure layout is recalculated
+        invalidate()    // Ensure it is redrawn
+    }
+}
+```
+
+### 3. postInvalidate()
+
+Schedules a redraw from any thread by posting an invalidate request to the UI thread. Use this when you need to update the `View` from a background thread.
+
+```kotlin
+class LoadingView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
+    private var loadingProgress = 0
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
+    fun startLoading() {
+        Thread {
+            while (loadingProgress < 100) {
+                Thread.sleep(100)
+                loadingProgress += 10
+
+                // invalidate() must be called on UI thread;
+                // from a background thread, use postInvalidate()
+                postInvalidate()
+            }
+        }.start()
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        val widthProgress = width * loadingProgress / 100f
+        canvas.drawRect(0f, 0f, widthProgress, height.toFloat(), paint)
+    }
+}
+```
+
+#### Comparison: invalidate() vs postInvalidate()
+
+```kotlin
+class ComparisonExample @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
+    // From UI thread - use invalidate()
+    fun updateFromUIThread() {
+        invalidate() // Safe, direct call on UI thread
+    }
+
+    // From background thread - use postInvalidate()
+    fun updateFromBackgroundThread() {
+        Thread {
+            processData()
+
+            // Do not call invalidate() directly from a background thread
+            postInvalidate() // Correct - posts invalidation to UI thread
+
+            // Alternative using post()
+            post { invalidate() }
+        }.start()
+    }
+
+    private fun processData() {
+        // Background processing
+    }
+}
+```
+
+### 4. Additional Redraw-Related Methods
+
+#### forceLayout()
+Marks the `View` as needing layout during the next layout pass. It does not itself start a layout pass immediately; typically you combine it with `requestLayout()` (or rely on a parent-triggered pass).
+
+```kotlin
+fun forceLayoutExample(view: View) {
+    view.forceLayout()   // Mark this view as needing layout
+    view.requestLayout() // Ask the parent hierarchy to run a layout pass
+}
+```
+
+#### invalidateDrawable()
+Called when a child Drawable needs to be redrawn; often used in custom views.
+
+```kotlin
+class DrawableView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr), Drawable.Callback {
+
+    private val drawable = ContextCompat.getDrawable(context, R.drawable.icon)
+
+    init {
+        drawable?.callback = this
+    }
+
+    override fun invalidateDrawable(who: Drawable) {
+        // Redraw when drawable changes
+        invalidate()
+    }
+
+    override fun scheduleDrawable(who: Drawable, what: Runnable, `when`: Long) {}
+
+    override fun unscheduleDrawable(who: Drawable, what: Runnable) {}
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        drawable?.setBounds(0, 0, width, height)
+        drawable?.draw(canvas)
+    }
+}
+```
+
+### 5. Practical Examples
+
+#### Complex `View` Update
+
+```kotlin
+class ComplexView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
+    private var text = "Hello"
+    private var textSizePx = 14f * resources.displayMetrics.scaledDensity
+
+    fun updateText(newText: String) {
+        text = newText
+        invalidate() // Only visual change; assumes bounds unchanged
+    }
+
+    fun updateTextSize(newSizeSp: Float) {
+        textSizePx = newSizeSp * resources.displayMetrics.scaledDensity
+        // Size might change, need measure + draw
+        requestLayout()
+        invalidate()
+    }
+
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val paint = Paint().apply { textSize = textSizePx }
+        val textWidth = paint.measureText(text)
+        val textHeight = -paint.ascent() + paint.descent()
+        setMeasuredDimension(textWidth.toInt(), textHeight.toInt())
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+        val paint = Paint().apply {
+            textSize = textSizePx
+            color = Color.BLACK
+        }
+        val baseline = -paint.ascent()
+        canvas.drawText(text, 0f, baseline, paint)
+    }
+}
+```
+
+#### Optimized Updates
+
+```kotlin
+class OptimizedView @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0
+) : View(context, attrs, defStyleAttr) {
+
+    private var needsLayout = false
+    private var needsRedraw = false
+
+    fun batchUpdates(updates: () -> Unit) {
+        // Collect changes
+        updates()
+
+        // Apply once
+        if (needsLayout) {
+            requestLayout()
+        }
+        if (needsRedraw) {
+            invalidate()
+        }
+
+        needsLayout = false
+        needsRedraw = false
+    }
+
+    fun updateColor(color: Int) {
+        // Only visual change; mark for redraw
+        needsRedraw = true
+    }
+
+    fun updateSize(size: Int) {
+        // Layout-related change
+        needsLayout = true
+        needsRedraw = true
+    }
+}
+
+// Usage
+optimizedView.batchUpdates {
+    updateColor(Color.RED)
+    updateSize(100)
+} // Single layout + invalidate call
+```
+
+### Best Practices
+
+1. Use `invalidate()` for visual-only changes that don't affect layout.
+2. Use `requestLayout()` when size, layout, or LayoutParams-based properties may change.
+3. Use `postInvalidate()` (or `post { invalidate() }`) when updating from a background thread.
+4. Batch related updates where possible to avoid redundant passes.
+5. Avoid unnecessary calls in tight loops: `invalidate()`/`requestLayout()` can be expensive.
+6. Optionally check attachment (e.g., `isAttachedToWindow`) when invalidating from async callbacks to avoid no-op or confusing behavior.
+
+```kotlin
+fun View.safeInvalidate() {
+    if (isAttachedToWindow) {
+        invalidate()
+    }
+}
+```
+
+### Summary Table
+
+| Method            | Thread        | Calls                            | Use Case                          |
+|------------------|--------------|----------------------------------|-----------------------------------|
+| `invalidate()`    | UI thread    | `onDraw()`                       | Visual changes only               |
+| `requestLayout()` | UI thread    | `onMeasure()`, `onLayout()`      | Size/position/layout changes      |
+| `postInvalidate()`| Any thread   | `onDraw()` on UI thread          | Visual changes from background    |
+| `forceLayout()`   | UI thread    | Marks for layout (no pass by itself) | Force remeasure on next layout |
+
+---
 
 ## Follow-ups
 
-- [[c-view-lifecycle]]
-- [[c-view-rendering]]
 - [[q-view-methods-and-their-purpose--android--medium]]
 
 
@@ -1049,15 +808,14 @@ fun safeInvalidate() {
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View
-- [[q-viewmodel-pattern--android--easy]] - View
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`
+- [[q-viewmodel-pattern--android--easy]] - `View`
 
 ### Related (Medium)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View
-- [[q-testing-viewmodels-turbine--android--medium]] - View
-- q-rxjava-pagination-recyclerview--android--medium - View
-- [[q-what-is-viewmodel--android--medium]] - View
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View`
+- [[q-testing-viewmodels-turbine--android--medium]] - `View`
+- [[q-what-is-viewmodel--android--medium]] - `View`
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--android--hard]] - View
+- [[q-compose-custom-layout--android--hard]] - `View`

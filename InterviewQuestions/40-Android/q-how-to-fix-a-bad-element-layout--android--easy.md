@@ -12,28 +12,29 @@ status: draft
 moc: moc-android
 related: [q-performance-optimization-android--android--medium, q-recyclerview-sethasfixedsize--android--easy, q-what-is-known-about-methods-that-redraw-view--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 sources: []
 tags: [android/performance-rendering, android/ui-views, difficulty/easy, layouts, performance]
+
 ---
 
 # Вопрос (RU)
 
-Как можно исправить плохой layout элемента?
+> Как можно исправить плохой layout элемента?
 
 # Question (EN)
 
-How to fix a bad element layout?
+> How to fix a bad element layout?
 
 ---
 
 ## Ответ (RU)
 
-Плохие layouts вызывают проблемы с производительностью, задержки рендеринга и ухудшают UX. Основные стратегии оптимизации:
+Плохие layouts вызывают проблемы с производительностью, задержки рендеринга и ухудшают UX. Основные стратегии оптимизации (для классического `View`-based UI):
 
 ### 1. Уменьшить Вложенность
 
-**Проблема:** Глубокая иерархия View замедляет рендеринг.
+**Проблема:** Глубокая иерархия `View` замедляет рендеринг.
 
 ```xml
 <!-- ❌ Слишком много вложенных layouts -->
@@ -71,15 +72,19 @@ How to fix a bad element layout?
 
 ### 2. Использовать ViewStub Для Редких Элементов
 
-ViewStub — это view нулевого размера, который инфлейтит layout только по требованию.
+`ViewStub` — это `View` нулевого размера, который инфлейтит layout только по требованию.
 
 ```kotlin
-// Inflate ViewStub только когда нужно
+// Пример с viewBinding: инфлейтим binding и используем ViewStub только при необходимости
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     private var stubInflated = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         binding.showButton.setOnClickListener {
             if (!stubInflated) {
                 binding.viewStub.inflate()
@@ -92,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
 ### 3. Применять `<merge>` Для Сокращения Уровней
 
-Тег `<merge>` устраняет избыточные ViewGroups при использовании `<include>`.
+Тег `<merge>` устраняет избыточные `ViewGroup` при использовании `<include>`.
 
 ```xml
 <!-- item_content.xml с merge -->
@@ -109,7 +114,7 @@ class MainActivity : AppCompatActivity() {
 
 ### 4. Избегать Overdraw
 
-Проверка: Settings > Developer Options > Debug GPU Overdraw
+Проверка: Settings > Developer Options > Debug GPU overdraw (включите отображение overdraw поверх UI).
 
 ```xml
 <!-- ❌ Лишние backgrounds -->
@@ -127,31 +132,37 @@ class MainActivity : AppCompatActivity() {
 
 ```kotlin
 class OptimizedView(context: Context) : View(context) {
-    private val paint = Paint()
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     // ✅ Кэшируем вычисления в onSizeChanged
     private var centerX = 0f
+    private var centerY = 0f
+    private var radius = 0f
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
         centerX = w / 2f
+        centerY = h / 2f
+        radius = min(w, h) / 4f
     }
 
     override fun onDraw(canvas: Canvas) {
-        // ❌ НЕ создавать объекты здесь!
+        super.onDraw(canvas)
+        // ❌ Не создавать новые объекты здесь, чтобы избежать лишнего GC
         canvas.drawCircle(centerX, centerY, radius, paint)
     }
 }
 ```
 
-### Инструменты Диагностики
+### Инструменты диагностики
 
-- **Layout Inspector**: View > Tool Windows > Layout Inspector
-- **GPU Overdraw**: Developer Options > Debug GPU Overdraw
-- **Systrace**: Анализ UI performance
+- Layout Inspector: `View` > Tool Windows > Layout Inspector
+- GPU Overdraw: Developer Options > Debug GPU overdraw
+- Systrace / Perfetto: анализ производительности UI и рендеринга
 
 ## Answer (EN)
 
-Bad layouts cause performance issues, rendering delays, and poor UX. Key optimization strategies:
+Bad layouts cause performance issues, rendering delays, and poor UX. Key optimization strategies (for classic `View`-based UI):
 
 ### 1. Reduce Layout Nesting
 
@@ -193,15 +204,19 @@ Bad layouts cause performance issues, rendering delays, and poor UX. Key optimiz
 
 ### 2. Use ViewStub for Rarely Used Elements
 
-ViewStub is a zero-sized view that lazily inflates layouts only when needed.
+`ViewStub` is a zero-sized `View` that lazily inflates layouts only when needed.
 
 ```kotlin
-// Inflate ViewStub only when needed
+// Example with viewBinding: inflate binding and use ViewStub only when needed
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
     private var stubInflated = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         binding.showButton.setOnClickListener {
             if (!stubInflated) {
                 binding.viewStub.inflate()
@@ -214,7 +229,7 @@ class MainActivity : AppCompatActivity() {
 
 ### 3. Apply `<merge>` to Reduce Nesting Levels
 
-The `<merge>` tag eliminates redundant ViewGroups when using `<include>`.
+The `<merge>` tag eliminates redundant `ViewGroup`s when using `<include>`.
 
 ```xml
 <!-- item_content.xml with merge -->
@@ -231,7 +246,7 @@ The `<merge>` tag eliminates redundant ViewGroups when using `<include>`.
 
 ### 4. Avoid Overdraw
 
-Check: Settings > Developer Options > Debug GPU Overdraw
+Check: Settings > Developer Options > Debug GPU overdraw (enable overdraw visualization over your UI).
 
 ```xml
 <!-- ❌ Unnecessary backgrounds -->
@@ -249,54 +264,84 @@ Check: Settings > Developer Options > Debug GPU Overdraw
 
 ```kotlin
 class OptimizedView(context: Context) : View(context) {
-    private val paint = Paint()
+    private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     // ✅ Cache calculations in onSizeChanged
     private var centerX = 0f
+    private var centerY = 0f
+    private var radius = 0f
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
+        super.onSizeChanged(w, h, oldw, oldh)
         centerX = w / 2f
+        centerY = h / 2f
+        radius = min(w, h) / 4f
     }
 
     override fun onDraw(canvas: Canvas) {
-        // ❌ DON'T create objects here!
+        super.onDraw(canvas)
+        // ❌ DON'T allocate new objects here to avoid extra GC
         canvas.drawCircle(centerX, centerY, radius, paint)
     }
 }
 ```
 
-### Diagnostic Tools
+### Diagnostic tools
 
-- **Layout Inspector**: View > Tool Windows > Layout Inspector
-- **GPU Overdraw**: Developer Options > Debug GPU Overdraw
-- **Systrace**: UI performance analysis
+- Layout Inspector: `View` > Tool Windows > Layout Inspector
+- GPU Overdraw: Developer Options > Debug GPU overdraw
+- Systrace / Perfetto: UI performance and rendering analysis
 
 ---
 
-## Follow-ups
+## Дополнительные вопросы (RU)
 
-- How to profile layout inflation time in RecyclerView?
-- When should you use ConstraintLayout vs. LinearLayout?
+- Как профилировать время инфлейта layout в `RecyclerView`?
+- Когда стоит использовать `ConstraintLayout` вместо `LinearLayout`?
+- Что вызывает layout thrashing и как его обнаружить?
+- Как `ViewStub` сравнивается с использованием `View` с visibility `GONE`?
+- Каковы последствия для производительности при вложенных `ConstraintLayout`?
+
+## Follow-ups (EN)
+
+- How to profile layout inflation time in `RecyclerView`?
+- When should you use `ConstraintLayout` vs. `LinearLayout`?
 - What causes layout thrashing and how to detect it?
-- How does ViewStub compare to GONE visibility?
-- What are the performance implications of nested ConstraintLayouts?
+- How does `ViewStub` compare to using a `View` with visibility `GONE`?
+- What are the performance implications of nested `ConstraintLayout`s?
 
-## References
+## Ссылки (RU)
 
-- [[c-constraintlayout]] - Concept note about ConstraintLayout
-- [[c-view-hierarchy]] - Understanding Android View hierarchy
+- Android Developer Documentation: рекомендации по оптимизации layout
+
+## References (EN)
+
 - Android Developer Documentation: Layout optimization best practices
 
-## Related Questions
+## Связанные вопросы (RU)
+
+### Предпосылки (Проще)
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Базовая оптимизация RecyclerView
+- [[q-viewmodel-pattern--android--easy]] - Разделение ответственности в UI
+
+### Связанные (Такой же уровень)
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - Методы перерисовки `View`
+- [[q-performance-optimization-android--android--medium]] - Общие стратегии оптимизации производительности
+
+### Продвинутые (Сложнее)
+- [[q-testing-viewmodels-turbine--android--medium]] - Тестирование UI-компонентов
+- Профилирование производительности кастомных `View` с помощью Systrace / Perfetto
+
+## Related Questions (EN)
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization basics
 - [[q-viewmodel-pattern--android--easy]] - Separation of concerns in UI
 
 ### Related (Same Level)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View redraw methods
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` redraw methods
 - [[q-performance-optimization-android--android--medium]] - General performance strategies
 
 ### Advanced (Harder)
 - [[q-testing-viewmodels-turbine--android--medium]] - Testing UI components
-- Custom View performance profiling with Systrace
+- Custom `View` performance profiling with Systrace / Perfetto

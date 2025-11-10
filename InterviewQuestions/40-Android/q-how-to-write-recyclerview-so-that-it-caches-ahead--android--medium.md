@@ -1,7 +1,6 @@
 ---
 id: android-267
-title: How To Write RecyclerView So That It Caches Ahead / Как написать RecyclerView
-  чтобы он кешировал вперед
+title: How To Write RecyclerView So That It Caches Ahead / Как написать RecyclerView чтобы он кешировал вперед
 aliases:
 - RecyclerView caching
 - RecyclerView prefetching
@@ -21,14 +20,13 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-memory-management
-- c-performance
+- c-android-components
 - q-how-animations-work-in-recyclerview--android--medium
 - q-recyclerview-async-list-differ--android--medium
 - q-recyclerview-sethasfixedsize--android--easy
 sources: []
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags:
 - android
 - android/performance-memory
@@ -38,48 +36,56 @@ tags:
 - difficulty/medium
 - prefetching
 - recyclerview
+
 ---
 
 # Вопрос (RU)
 
-Как можно писать RecyclerView, чтобы он кэшировал наперёд?
+> Как можно писать RecyclerView, чтобы он кэшировал наперёд?
 
 ---
 
 # Question (EN)
 
-How to write RecyclerView so that it caches ahead?
+> How to write RecyclerView so that it caches ahead?
 
 ---
 
 ## Ответ (RU)
 
-RecyclerView предоставляет несколько механизмов для кэширования элементов наперёд, улучшая производительность скроллинга.
+RecyclerView предоставляет несколько механизмов для кэширования и предзагрузки элементов, улучшая производительность скроллинга. Важно различать:
+- кэширование view (повторное использование уже созданных и привязанных `View`),
+- предзагрузку layout/bind (layout prefetch из `LayoutManager`),
+- предзагрузку данных (pagination, предварительная загрузка контента).
 
-### 1. Кэширование View Через setItemViewCacheSize()
+### 1. Кэширование `View` через `setItemViewCacheSize()`
 
-Кэш хранит недавно скрытые View без повторного биндинга данных.
+Кэш хранит недавно скрытые `View` в привязанном состоянии (без повторного биндинга данных), чтобы ускорить повторное появление этих же позиций в пределах небольшого диапазона.
 
 ```kotlin
-// ✅ Хорошо: увеличиваем размер кэша
+// ✅ Пример: увеличиваем размер кэша, если View дорогие
 recyclerView.setItemViewCacheSize(20) // default = 2
 
-// Правило: кэшируем 2-3 экрана
+// Вариант: кэшируем несколько экранов, если это оправдано по памяти
 val itemsPerScreen = 10
 recyclerView.setItemViewCacheSize(itemsPerScreen * 2)
 ```
 
-### 2. Предзагрузка Через LinearLayoutManager
+Это не «загружает вперёд» новые элементы, а уменьшает количество пересозданий/ребиндинга для недавно использованных `View`. Слишком большой cache size увеличивает использование памяти и может навредить.
+
+### 2. Предзагрузка через `LinearLayoutManager`
 
 ```kotlin
 val layoutManager = LinearLayoutManager(context).apply {
-    isItemPrefetchEnabled = true        // default = true
-    initialPrefetchItemCount = 4        // prefetch при первой загрузке
+    isItemPrefetchEnabled = true        // default = true: включает layout prefetch
+    initialPrefetchItemCount = 4        // сколько элементов предзагружать при первой прокрутке
 }
 recyclerView.layoutManager = layoutManager
 ```
 
-### 3. Загрузка Данных Через OnScrollListener
+`LayoutManager` с включённым item prefetch может заранее создавать и байндить `View` для позиций рядом с видимой областью, снижая jank при скролле.
+
+### 3. Загрузка данных через `OnScrollListener` (или paging library)
 
 ```kotlin
 recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -89,7 +95,7 @@ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
         val totalCount = layoutManager.itemCount
         val firstVisible = layoutManager.findFirstVisibleItemPosition()
 
-        // Загружаем за 5 элементов до конца
+        // Загружаем новые данные заранее, за 5 элементов до конца
         if (!isLoading && (visibleCount + firstVisible + 5) >= totalCount) {
             loadMoreData()
         }
@@ -97,7 +103,9 @@ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 })
 ```
 
-### 4. Кастомный LayoutManager Для Продвинутой Предзагрузки
+Это предзагрузка данных (pagination), а не только кэширование `View`, и она должна учитывать состояние загрузки и возможный повторный вызов. В продакшене часто удобнее использовать paging library, чтобы получать автоматическое подгружание и кэширование страниц.
+
+### 4. Кастомный `LayoutManager` для продвинутой предзагрузки
 
 ```kotlin
 class PrefetchLayoutManager(
@@ -115,9 +123,9 @@ class PrefetchLayoutManager(
         val scrollingDown = dy > 0
         val lastVisible = findLastVisibleItemPosition()
 
-        if (scrollingDown) {
+        if (scrollingDown && lastVisible != RecyclerView.NO_POSITION) {
             val endPos = minOf(lastVisible + prefetchCount, state.itemCount)
-            for (i in lastVisible + 1 until endPos) {
+            for (i in (lastVisible + 1) until endPos) {
                 registry.addPosition(i, 0)
             }
         }
@@ -125,21 +133,28 @@ class PrefetchLayoutManager(
 }
 ```
 
-### 5. Предзагрузка Изображений (Glide/Coil)
+Здесь явно предзагружаются позиции вперёд по направлению скролла. Аналогично можно добавить логику для скролла вверх.
+
+### 5. Предзагрузка изображений (Glide/Coil)
 
 ```kotlin
-// ✅ Хорошо: предзагружаем следующие изображения
+// Упрощённый пример: предзагружаем следующие изображения
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.bind(items[position])
 
-    // Prefetch next 5 images
-    for (i in position + 1 until minOf(position + 6, items.size)) {
-        Glide.with(context).load(items[i].imageUrl).preload()
+    // Prefetch next 5 images (следим, чтобы не создавать лишних запросов)
+    val end = minOf(position + 6, items.size)
+    for (i in position + 1 until end) {
+        Glide.with(holder.itemView)
+            .load(items[i].imageUrl)
+            .preload()
     }
 }
 ```
 
-### 6. SharedPool Для Вложенных RecyclerView
+На практике стоит учитывать направление скролла, сетевые ограничения и уметь отменять больше не нужные запросы, чтобы не перегружать сеть и память.
+
+### 6. `SharedPool` для вложенных `RecyclerView`
 
 ```kotlin
 private val sharedPool = RecyclerView.RecycledViewPool().apply {
@@ -154,11 +169,13 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
-### Полная Оптимизация
+Общий пул уменьшает количество пересозданий `ViewHolder` во вложенных списках.
+
+### Полная оптимизация
 
 ```kotlin
-fun setupOptimizedRecyclerView(recyclerView: RecyclerView) {
-    // View caching
+fun setupOptimizedRecyclerView(recyclerView: RecyclerView, context: Context) {
+    // View caching (тюним в зависимости от сложности layout и памяти)
     recyclerView.setItemViewCacheSize(20)
 
     // Prefetching
@@ -177,45 +194,52 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView) {
 
 ### Best Practices
 
-✅ **setItemViewCacheSize(20-30)** для плавного скроллинга
-✅ **isItemPrefetchEnabled = true** для автоматической предзагрузки
-✅ **OnScrollListener** для загрузки данных заранее
-✅ **SharedPool** для вложенных списков
-✅ **Preload images** через Glide/Coil
+✅ Аккуратно увеличивайте `setItemViewCacheSize(...)` только если `View` дорогие и хватает памяти
+✅ Держите `isItemPrefetchEnabled = true` для автоматической предзагрузки layout/bind
+✅ Используйте `OnScrollListener` (или paging library) для заблаговременной загрузки данных
+✅ Используйте `SharedPool` для вложенных списков
+✅ Предзагружайте изображения (Glide/Coil), контролируя объём, направление, сетевые ограничения и возможность отмены
 
-❌ Не устанавливайте слишком большой cache size (>50) - расход памяти
-❌ Не забывайте про pagination - загружайте данные порциями
+❌ Не ставьте чрезмерный cache size (например, >50) без профилирования — риск утечек памяти и OOM
+❌ Не забывайте про pagination — загружайте данные порциями и избегайте лишней предзагрузки
 
 ---
 
 ## Answer (EN)
 
-RecyclerView provides several mechanisms for caching items ahead to improve scrolling performance.
+RecyclerView provides several mechanisms for caching and prefetching items to improve scrolling performance. It is important to distinguish between:
+- view caching (reusing already created and bound views),
+- layout/bind prefetch (LayoutManager item prefetch),
+- data preloading (pagination / fetching content ahead).
 
-### 1. View Caching via setItemViewCacheSize()
+### 1. `View` Caching via `setItemViewCacheSize()`
 
-The view cache stores recently off-screen views without rebinding data.
+The view cache keeps recently off-screen views in a bound state (no rebind) so they can quickly reappear when scrolled back within a small range.
 
 ```kotlin
-// ✅ Good: increase cache size
+// ✅ Example: increase cache size when item views are expensive
 recyclerView.setItemViewCacheSize(20) // default = 2
 
-// Rule: cache 2-3 screens worth
+// Option: cache multiple screens if it is justified for your layouts/memory
 val itemsPerScreen = 10
 recyclerView.setItemViewCacheSize(itemsPerScreen * 2)
 ```
 
-### 2. Prefetching with LinearLayoutManager
+This does not "prefetch" new items ahead; it reduces rebinding/recreation for recently used views. Oversized cache increases memory usage and can be harmful.
+
+### 2. Prefetching with `LinearLayoutManager`
 
 ```kotlin
 val layoutManager = LinearLayoutManager(context).apply {
-    isItemPrefetchEnabled = true        // default = true
-    initialPrefetchItemCount = 4        // prefetch on initial load
+    isItemPrefetchEnabled = true        // default = true: enables layout prefetch
+    initialPrefetchItemCount = 4        // how many items to prefetch on initial scroll
 }
 recyclerView.layoutManager = layoutManager
 ```
 
-### 3. Data Loading via OnScrollListener
+With item prefetch enabled, the `LayoutManager` can pre-create and bind views for positions adjacent to the viewport to reduce jank.
+
+### 3. Data Loading via `OnScrollListener` (or paging library)
 
 ```kotlin
 recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -225,7 +249,7 @@ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
         val totalCount = layoutManager.itemCount
         val firstVisible = layoutManager.findFirstVisibleItemPosition()
 
-        // Load 5 items before end
+        // Load more data 5 items before the end
         if (!isLoading && (visibleCount + firstVisible + 5) >= totalCount) {
             loadMoreData()
         }
@@ -233,7 +257,9 @@ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 })
 ```
 
-### 4. Custom LayoutManager for Advanced Prefetching
+This is data preloading (pagination), not just view caching. It should guard against duplicate calls and handle loading state correctly. In production, a paging library is often preferable, as it encapsulates prefetch thresholds, caching, and lifecycle-awareness.
+
+### 4. Custom `LayoutManager` for Advanced Prefetching
 
 ```kotlin
 class PrefetchLayoutManager(
@@ -251,9 +277,9 @@ class PrefetchLayoutManager(
         val scrollingDown = dy > 0
         val lastVisible = findLastVisibleItemPosition()
 
-        if (scrollingDown) {
+        if (scrollingDown && lastVisible != RecyclerView.NO_POSITION) {
             val endPos = minOf(lastVisible + prefetchCount, state.itemCount)
-            for (i in lastVisible + 1 until endPos) {
+            for (i in (lastVisible + 1) until endPos) {
                 registry.addPosition(i, 0)
             }
         }
@@ -261,21 +287,28 @@ class PrefetchLayoutManager(
 }
 ```
 
+This explicitly prefetches positions ahead in the scroll direction. Similar logic can be added for scrolling up.
+
 ### 5. Image Prefetching (Glide/Coil)
 
 ```kotlin
-// ✅ Good: prefetch next images
+// Simplified example: prefetch next images
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.bind(items[position])
 
-    // Prefetch next 5 images
-    for (i in position + 1 until minOf(position + 6, items.size)) {
-        Glide.with(context).load(items[i].imageUrl).preload()
+    // Prefetch next 5 images (be careful to not over-fetch on fast scroll)
+    val end = minOf(position + 6, items.size)
+    for (i in position + 1 until end) {
+        Glide.with(holder.itemView)
+            .load(items[i].imageUrl)
+            .preload()
     }
 }
 ```
 
-### 6. SharedPool for Nested RecyclerViews
+In real apps you should take scroll direction, network constraints, and cancellation into account to avoid unnecessary work.
+
+### 6. `SharedPool` for Nested RecyclerViews
 
 ```kotlin
 private val sharedPool = RecyclerView.RecycledViewPool().apply {
@@ -290,11 +323,13 @@ override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 }
 ```
 
+A shared pool reduces `ViewHolder` recreations across nested child `RecyclerView`s.
+
 ### Complete Optimization
 
 ```kotlin
-fun setupOptimizedRecyclerView(recyclerView: RecyclerView) {
-    // View caching
+fun setupOptimizedRecyclerView(recyclerView: RecyclerView, context: Context) {
+    // View caching (tuned based on layout cost and memory)
     recyclerView.setItemViewCacheSize(20)
 
     // Prefetching
@@ -313,14 +348,24 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView) {
 
 ### Best Practices
 
-✅ **setItemViewCacheSize(20-30)** for smooth scrolling
-✅ **isItemPrefetchEnabled = true** for automatic prefetching
-✅ **OnScrollListener** for proactive data loading
-✅ **SharedPool** for nested lists
-✅ **Preload images** via Glide/Coil
+✅ Carefully increase `setItemViewCacheSize(...)` only when item views are expensive and memory allows
+✅ Keep `isItemPrefetchEnabled = true` for automatic layout/bind prefetching
+✅ Use an `OnScrollListener` (or paging library) for proactive data loading
+✅ Use a `SharedPool` for nested lists
+✅ Preload images via Glide/Coil with proper limits, direction-awareness, and cancellation
 
-❌ Don't set cache size too large (>50) - memory overhead
-❌ Don't forget pagination - load data in chunks
+❌ Don't set an excessively large cache size (e.g. >50) without profiling — risk of high memory usage / OOM
+❌ Don't forget proper pagination — load data in chunks and avoid aggressive unnecessary prefetching
+
+---
+
+## Дополнительные вопросы (RU)
+
+- Как внутренне работает механизм ресайклинга `RecyclerView`?
+- В чём разница между `ViewCache` и `RecycledViewPool`?
+- Когда стоит использовать `DiffUtil` против `AsyncListDiffer`?
+- Как измерять hit ratio кэша в продакшене?
+- Как влияет на производительность использование вложенных `RecyclerView`?
 
 ---
 
@@ -334,6 +379,14 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView) {
 
 ---
 
+## Ссылки (RU)
+
+- [[q-recyclerview-sethasfixedsize--android--easy]]
+- [[q-recyclerview-async-list-differ--android--medium]]
+- [[q-how-animations-work-in-recyclerview--android--medium]]
+
+---
+
 ## References
 
 - [[q-recyclerview-sethasfixedsize--android--easy]]
@@ -342,25 +395,39 @@ fun setupOptimizedRecyclerView(recyclerView: RecyclerView) {
 
 ---
 
+## Связанные вопросы (RU)
+
+### База / концепты
+
+- [[c-android-components]]
+
+### Предпосылки (проще)
+
+- [[q-recyclerview-sethasfixedsize--android--easy]]
+
+### Похожие (тот же уровень)
+
+- [[q-how-animations-work-in-recyclerview--android--medium]]
+- [[q-recyclerview-async-list-differ--android--medium]]
+
+### Продвинутое
+
+- Профилирование производительности `RecyclerView`
+
+---
+
 ## Related Questions
 
 ### Prerequisites / Concepts
 
-- [[c-memory-management]]
-- [[c-performance]]
-
+- [[c-android-components]]
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Fixed size optimization
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - Layout basics
+- [[q-recyclerview-sethasfixedsize--android--easy]]
 
 ### Related (Same Level)
-- [[q-how-animations-work-in-recyclerview--android--medium]] - Animation optimization
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - Advanced decoration
-- [[q-recyclerview-async-list-differ--android--medium]] - Async updates
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose alternative
+- [[q-how-animations-work-in-recyclerview--android--medium]]
+- [[q-recyclerview-async-list-differ--android--medium]]
 
 ### Advanced (Harder)
-- Custom layout managers for complex scrolling patterns
 - Profiling RecyclerView performance with systrace
-- Memory optimization strategies for large lists

@@ -17,11 +17,10 @@ status: draft
 moc: moc-android
 related:
 - c-layouts
-- c-view-positioning
 - q-viewgroup-vs-view-differences--android--easy
 - q-what-methods-redraw-views--android--medium
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags:
 - android/ui-views
 - difficulty/easy
@@ -29,6 +28,7 @@ tags:
 - layouts
 - ui
 - view-positioning
+
 ---
 
 # Вопрос (RU)
@@ -40,14 +40,248 @@ tags:
 ---
 
 ## Ответ (RU)
+Для перекрывающихся элементов в традиционной `View`-системе используют `FrameLayout`. В Jetpack Compose аналогичную роль играет `Box`.
 
 ## Answer (EN)
+For overlapping elements in the traditional `View` system, you use `FrameLayout`. In Jetpack Compose, the equivalent is `Box`.
+
+## RU (расширенный)
+
+### FrameLayout (традиционная View-система)
+
+В традиционной `View`-системе Android для перекрывающихся элементов используется `FrameLayout`:
+
+```xml
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="200dp">
+
+    <!-- Фоновое изображение -->
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background"
+        android:scaleType="centerCrop" />
+
+    <!-- Текст поверх -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="Overlay Text"
+        android:textColor="@android:color/white" />
+
+    <!-- Бейдж в углу -->
+    <ImageView
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="8dp"
+        android:src="@drawable/badge" />
+</FrameLayout>
+```
+
+Ключевые моменты:
+- По умолчанию дочерние элементы располагаются в левом верхнем углу.
+- Элементы рисуются по порядку: последний дочерний элемент отображается поверх остальных.
+- Для позиционирования внутри `FrameLayout` используется `layout_gravity`.
+- Подходит для оверлеев и простого наслаивания элементов.
+
+### Box (Jetpack Compose)
+
+В Jetpack Compose `Box` выполняет ту же роль для перекрывающихся элементов (Compose-only API):
+
+```kotlin
+@Composable
+fun OverlayExample() {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+    ) {
+        // Фоновое изображение
+        Image(
+            painter = painterResource(R.drawable.background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop
+        )
+
+        // Текст по центру поверх
+        Text(
+            text = "Overlay Text",
+            color = Color.White,
+            modifier = Modifier.align(Alignment.Center)
+        )
+
+        // Бейдж в правом верхнем углу
+        Image(
+            painter = painterResource(R.drawable.badge),
+            contentDescription = "Badge",
+            modifier = Modifier
+                .size(24.dp)
+                .align(Alignment.TopEnd)
+                .padding(8.dp)
+        )
+    }
+}
+```
+
+### Типичные случаи использования
+
+#### 1. Изображение с полупрозрачным оверлеем
+```kotlin
+@Composable
+fun ImageWithOverlay() {
+    Box {
+        Image(
+            painter = painterResource(R.drawable.photo),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize()
+        )
+
+        // Темный оверлей
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.3f))
+        )
+
+        // Контент поверх
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(16.dp)
+        ) {
+            Text("Title", color = Color.White, fontSize = 24.sp)
+            Text("Subtitle", color = Color.White.copy(alpha = 0.7f))
+        }
+    }
+}
+```
+
+#### 2. Оверлей загрузки поверх контента
+```kotlin
+@Composable
+fun ContentWithLoading(isLoading: Boolean) {
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Основной контент
+        ContentView()
+
+        // Оверлей загрузки
+        if (isLoading) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f))
+                    .clickable(enabled = false) { }
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+    }
+}
+```
+
+#### 3. Бейдж на иконке
+```kotlin
+@Composable
+fun IconWithBadge(badgeCount: Int) {
+    Box {
+        Icon(
+            imageVector = Icons.Default.Notifications,
+            contentDescription = "Notifications",
+            modifier = Modifier.size(24.dp)
+        )
+
+        if (badgeCount > 0) {
+            Box(
+                modifier = Modifier
+                    .size(16.dp)
+                    .align(Alignment.TopEnd)
+                    .offset(x = 4.dp, y = (-4).dp)
+                    .background(Color.Red, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "$badgeCount",
+                    color = Color.White,
+                    fontSize = 10.sp
+                )
+            }
+        }
+    }
+}
+```
+
+#### 4. Плавающая кнопка действия над контентом
+```kotlin
+@Composable
+fun ScreenWithFAB() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        // Основной список
+        LazyColumn(modifier = Modifier.fillMaxSize()) {
+            items(50) { index ->
+                Text("Item $index")
+            }
+        }
+
+        // FAB поверх в правом нижнем углу
+        FloatingActionButton(
+            onClick = { /* action */ },
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        ) {
+            Icon(Icons.Default.Add, contentDescription = "Add")
+        }
+    }
+}
+```
+
+### Z-Index и порядок отрисовки
+
+В `Box` слои располагаются в порядке объявления:
+
+```kotlin
+@Composable
+fun LayeringExample() {
+    Box(modifier = Modifier.size(200.dp)) {
+        // Нижний слой (рисуется первым)
+        Box(
+            modifier = Modifier
+                .size(150.dp)
+                .background(Color.Red)
+        )
+
+        // Средний слой
+        Box(
+            modifier = Modifier
+                .size(100.dp)
+                .align(Alignment.Center)
+                .background(Color.Green)
+        )
+
+        // Верхний слой (рисуется последним)
+        Box(
+            modifier = Modifier
+                .size(50.dp)
+                .align(Alignment.Center)
+                .background(Color.Blue)
+        )
+    }
+}
+```
+
+---
 
 ## EN (expanded)
 
 ### FrameLayout (Traditional Views)
 
-In the traditional Android View system, **FrameLayout** is used for overlapping elements:
+In the traditional Android `View` system, `FrameLayout` is used for overlapping elements:
 
 ```xml
 <FrameLayout
@@ -79,15 +313,15 @@ In the traditional Android View system, **FrameLayout** is used for overlapping 
 </FrameLayout>
 ```
 
-**Key Features:**
-- Elements positioned in top-left corner by default
-- Children drawn in order (last child on top)
-- Use `layout_gravity` to position children
-- Simple and efficient for overlays
+Key points:
+- Children are positioned at the top-left corner by default.
+- Children are drawn in order: the last child is on top.
+- Use `layout_gravity` to position children inside the `FrameLayout`.
+- Simple and efficient for overlays and stacking views.
 
 ### Box (Jetpack Compose)
 
-In Jetpack Compose, **Box** serves the same purpose as FrameLayout:
+In Jetpack Compose, `Box` serves a similar purpose to `FrameLayout` for overlapping elements (Compose-only API):
 
 ```kotlin
 @Composable
@@ -241,7 +475,7 @@ fun ScreenWithFAB() {
 
 ### Z-Index and Ordering
 
-In Box, children are layered in order of declaration:
+In `Box`, children are layered in order of declaration:
 
 ```kotlin
 @Composable
@@ -275,25 +509,15 @@ fun LayeringExample() {
 
 ---
 
-## RU (original)
-
-Как называется лейаут в котором объекты могут наслаиваться друг на друга
-
-В Android для наложения элементов используется FrameLayout или Box в Jetpack Compose. FrameLayout — контейнер, где элементы располагаются в левом верхнем углу и могут накладываться друг на друга. Box в Jetpack Compose аналогичен FrameLayout и также позволяет наложение элементов.
-
-
 ## Follow-ups
 
 - [[c-layouts]]
-- [[c-view-positioning]]
 - [[q-viewgroup-vs-view-differences--android--easy]]
-
 
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
-
 
 ## Related Questions
 

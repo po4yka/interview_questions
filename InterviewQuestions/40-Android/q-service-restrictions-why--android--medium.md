@@ -16,1073 +16,754 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-service
-- q-canvas-drawing-optimization--custom-views--hard
+- c-android-components
 - q-what-is-data-binding--android--easy
-- q-workmanager-chaining--background--hard
+- q-android-service-types--android--easy
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags:
 - android/service
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
-> Ограничения Service
+> Ограничения `Service`
 
 # Question (EN)
-> Service Restrictions
-
----
-
-## Answer (EN)
-Service restrictions are related to **battery optimization** and **performance**:
-
-1. **Battery life** - Long-running background services drain battery
-2. **Memory usage** - Too many services cause memory pressure
-3. **Performance** - Background work slows down the device
-4. **Security** - Prevents malicious apps from running indefinitely
-
-**Solution:** Use **WorkManager** or **Foreground Services** instead of background services.
-
----
-
-## History of Service Restrictions
-
-### Android Evolution
-
-```
-Android 5.0 (Lollipop) - JobScheduler introduced
-Android 6.0 (Marshmallow) - Doze mode
-Android 7.0 (Nougat) - Doze on the go
-Android 8.0 (Oreo) - Background execution limits ← Major change
-Android 9.0 (Pie) - App Standby Buckets
-Android 10 (Q) - Background activity starts restricted
-Android 11 (R) - Further background restrictions
-Android 12 (S) - Exact alarms restricted
-Android 13 (T) - Notification permissions required
-```
-
----
-
-## Android 8.0+ Background Service Restrictions
-
-### What Changed in Android 8.0 (Oreo)
-
-**Before Android 8.0:**
-```kotlin
-// - WORKED: Start service in background
-class MyApp : Application() {
-    fun doBackgroundWork() {
-        val intent = Intent(this, MyService::class.java)
-        startService(intent) // Worked fine
-    }
-}
-```
-
-**Android 8.0+:**
-```kotlin
-// - THROWS: IllegalStateException
-class MyApp : Application() {
-    fun doBackgroundWork() {
-        val intent = Intent(this, MyService::class.java)
-        startService(intent) // Crashes when app is in background!
-    }
-}
-```
-
-**Error:**
-```
-java.lang.IllegalStateException: Not allowed to start service Intent:
-app is in background
-```
-
----
-
-## Why These Restrictions?
-
-### 1. Battery Drain
-
-**Problem:** Apps running services 24/7 consume battery.
-
-```kotlin
-// - BAD: Old approach (pre-Android 8.0)
-class LocationTrackingService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Runs forever, drains battery
-        trackLocationContinuously()
-        return START_STICKY
-    }
-}
-```
-
-**Impact:**
-- Continuous GPS usage
-- Network requests while sleeping
-- Wake locks preventing device sleep
-- Background CPU usage
-
----
-
-### 2. Memory Leaks
-
-**Problem:** Services can cause memory leaks if not properly managed.
-
-```kotlin
-// - BAD: Service holding Activity reference
-class BadService : Service() {
-    private var activity: MainActivity? = null // Memory leak!
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // If Activity is destroyed, service still holds reference
-        activity = intent?.getParcelableExtra("activity")
-        return START_STICKY
-    }
-}
-```
-
----
-
-### 3. Performance Degradation
-
-**Problem:** Too many background services slow down the device.
-
-```
-100 apps × 1 service each = 100 background processes
-Each consuming: 50MB RAM + CPU cycles
-Total: 5GB RAM, constant CPU usage
-→ Device becomes sluggish
-```
-
----
-
-### 4. Security and Privacy
-
-**Problem:** Malicious apps can abuse services.
-
-```kotlin
-// - MALICIOUS: Spyware service
-class SpywareService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Runs in background, user unaware
-        recordAudio()
-        trackLocation()
-        sendDataToServer()
-        return START_STICKY // Restarts if killed
-    }
-}
-```
-
----
-
-## Specific Restrictions by Android Version
-
-### Android 8.0 (Oreo) - Background Execution Limits
-
-**Restrictions:**
-1. **Cannot start background services** when app is in background
-2. **Implicit broadcasts** mostly disabled
-3. **Background location updates** limited
-
-**Workarounds:**
-```kotlin
-// - GOOD: Use Foreground Service
-class MyService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(NOTIFICATION_ID, createNotification())
-        doWork()
-        return START_STICKY
-    }
-}
-
-// Start foreground service (allowed)
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-    startForegroundService(intent)
-} else {
-    startService(intent)
-}
-```
-
----
-
-### Android 9.0 (Pie) - App Standby Buckets
-
-Apps are categorized into buckets based on usage:
-
-| Bucket | Restrictions |
-|--------|--------------|
-| **Active** | App currently in use | No restrictions |
-| **Working set** | Used frequently | Mild restrictions |
-| **Frequent** | Used regularly | Moderate restrictions |
-| **Rare** | Rarely used | Heavy restrictions |
-| **Never** | Never opened | Maximum restrictions |
-
-**Impact:** Background jobs delayed based on bucket.
-
----
-
-### Android 10 (Q) - Background Activity Starts
-
-**Restriction:** Apps cannot start activities from background.
-
-```kotlin
-// - DOESN'T WORK: Start activity from background
-class MyService : Service() {
-    fun showActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent) // Blocked on Android 10+
-    }
-}
-
-// - WORKAROUND: Use full-screen intent notification
-val fullScreenIntent = Intent(this, IncomingCallActivity::class.java)
-val fullScreenPendingIntent = PendingIntent.getActivity(
-    this, 0, fullScreenIntent,
-    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-)
-
-val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-    .setSmallIcon(R.drawable.ic_call)
-    .setContentTitle("Incoming Call")
-    .setFullScreenIntent(fullScreenPendingIntent, true) // Shows on lock screen
-    .build()
-```
-
----
-
-### Android 12 (S) - Exact Alarms
-
-**Restriction:** Exact alarms require special permission.
-
-```kotlin
-// - RESTRICTED: Exact alarms
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-    // Requires SCHEDULE_EXACT_ALARM permission
-    alarmManager.setExact(
-        AlarmManager.RTC_WAKEUP,
-        triggerTime,
-        pendingIntent
-    )
-}
-
-// - ALTERNATIVE: Use inexact alarms
-alarmManager.setWindow(
-    AlarmManager.RTC_WAKEUP,
-    triggerTime,
-    10 * 60 * 1000, // 10-minute window
-    pendingIntent
-)
-```
-
----
-
-## Doze Mode and App Standby
-
-### Doze Mode
-
-When device is stationary and screen off for a while:
-
-**Restrictions applied:**
-- Network access suspended
-- Wake locks ignored
-- Alarms deferred
-- Wi-Fi scans disabled
-- JobScheduler and SyncAdapter deferred
-
-**Maintenance windows:**
-```
-Screen off
-  ↓
-[30 min] → [Doze] → [Maintenance] (few minutes)
-           ↓
-[60 min] → [Doze] → [Maintenance]
-           ↓
-[120 min] → [Doze] → [Maintenance]
-```
-
-### App Standby
-
-App enters standby when:
-- User hasn't used app recently
-- App has no foreground services
-- No notifications shown
-
-**Restrictions:**
-- Network access limited
-- Jobs and syncs deferred
-
----
-
-## Exemptions from Restrictions
-
-### Activities Allowed During Doze
-
-1. **High-priority FCM messages**
-   ```kotlin
-   {
-     "message": {
-       "token": "device_token",
-       "android": {
-         "priority": "high" // Bypasses Doze
-       },
-       "data": {
-         "key": "value"
-       }
-     }
-   }
-   ```
-
-2. **setAndAllowWhileIdle() alarms**
-   ```kotlin
-   alarmManager.setAndAllowWhileIdle(
-       AlarmManager.RTC_WAKEUP,
-       triggerTime,
-       pendingIntent
-   ) // Works during Doze (limited frequency)
-   ```
-
-3. **Foreground services**
-   ```kotlin
-   startForegroundService(intent) // Always allowed
-   ```
-
----
-
-## Modern Alternatives to Background Services
-
-### 1. WorkManager (Recommended)
-
-```kotlin
-val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
-    .setConstraints(
-        Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
-            .build()
-    )
-    .build()
-
-WorkManager.getInstance(context).enqueue(uploadWork)
-```
-
-**Advantages:**
-- - Respects system constraints
-- - Survives app restarts
-- - Automatic retry
-- - Compatible with all Android versions
-
----
-
-### 2. Foreground Services
-
-For user-visible tasks:
-
-```kotlin
-class MusicPlayerService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = createNotification()
-        startForeground(NOTIFICATION_ID, notification)
-
-        playMusic()
-
-        return START_STICKY
-    }
-
-    private fun createNotification(): Notification {
-        return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Playing Music")
-            .setContentText(currentSong.title)
-            .setSmallIcon(R.drawable.ic_music)
-            .build()
-    }
-}
-```
-
-**Use cases:**
-- Music playback
-- Navigation
-- File downloads
-- Ongoing calls
-
----
-
-### 3. Firebase Cloud Messaging (FCM)
-
-For triggered background work:
-
-```kotlin
-class MyFirebaseMessagingService : FirebaseMessagingService() {
-    override fun onMessageReceived(message: RemoteMessage) {
-        // Triggered by server, bypasses restrictions
-        processBackgroundTask(message.data)
-    }
-}
-```
-
----
-
-## Best Practices
-
-### 1. Choose the Right Tool
-
-```kotlin
-// - DON'T: Background service for periodic sync
-class SyncService : Service() {
-    override fun onStartCommand(...): Int {
-        syncData() // Restricted on Android 8.0+
-        return START_STICKY
-    }
-}
-
-// - DO: WorkManager for periodic work
-val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
-    .setConstraints(Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build())
-    .build()
-
-WorkManager.getInstance(context).enqueue(syncWork)
-```
-
----
-
-### 2. Minimize Background Work
-
-```kotlin
-// - DON'T: Continuous background processing
-class BadWorker : Worker() {
-    override fun doWork(): Result {
-        while (true) { // Infinite loop!
-            processData()
-            Thread.sleep(1000)
-        }
-    }
-}
-
-// - DO: Discrete, time-limited tasks
-class GoodWorker : CoroutineWorker() {
-    override suspend fun doWork(): Result {
-        processData() // Completes and exits
-        return Result.success()
-    }
-}
-```
-
----
-
-### 3. Use Appropriate Service Type
-
-```kotlin
-// - Foreground service for user-visible work
-startForegroundService(Intent(this, MusicService::class.java))
-
-// - WorkManager for deferrable work
-WorkManager.getInstance(context).enqueue(uploadWork)
-
-// - JobScheduler for system-scheduled work (pre-WorkManager)
-val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-jobScheduler.schedule(jobInfo)
-```
-
----
-
-## Summary
-
-**Why service restrictions exist:**
-
-1. **Battery optimization** - Prevent unnecessary battery drain
-2. **Performance** - Reduce memory pressure and CPU usage
-3. **Security** - Prevent malicious background activity
-4. **User experience** - Keep devices responsive
-
-**Key restrictions:**
-- - Cannot start background services on Android 8.0+ (when app in background)
-- - Doze mode limits network access and wake locks
-- - App Standby defers background jobs
-- - Android 10+ blocks starting activities from background
-
-**Solutions:**
-- - Use **WorkManager** for deferrable background work
-- - Use **Foreground Services** for user-visible tasks
-- - Use **FCM** for server-triggered work
-- - Use **AlarmManager.setAndAllowWhileIdle()** for time-critical tasks
-
-**Migration guide:**
-```kotlin
-// OLD: Background service (pre-Android 8.0)
-startService(Intent(this, MyService::class.java))
-
-// NEW: WorkManager (Android 8.0+)
-WorkManager.getInstance(context).enqueue(myWorkRequest)
-
-// NEW: Foreground service (for user-visible work)
-startForegroundService(Intent(this, MyService::class.java))
-```
-
----
-
-
-# Question (EN)
-> Service Restrictions
-
----
-
-
----
-
-
-## Answer (EN)
-Service restrictions are related to **battery optimization** and **performance**:
-
-1. **Battery life** - Long-running background services drain battery
-2. **Memory usage** - Too many services cause memory pressure
-3. **Performance** - Background work slows down the device
-4. **Security** - Prevents malicious apps from running indefinitely
-
-**Solution:** Use **WorkManager** or **Foreground Services** instead of background services.
-
----
-
-## History of Service Restrictions
-
-### Android Evolution
-
-```
-Android 5.0 (Lollipop) - JobScheduler introduced
-Android 6.0 (Marshmallow) - Doze mode
-Android 7.0 (Nougat) - Doze on the go
-Android 8.0 (Oreo) - Background execution limits ← Major change
-Android 9.0 (Pie) - App Standby Buckets
-Android 10 (Q) - Background activity starts restricted
-Android 11 (R) - Further background restrictions
-Android 12 (S) - Exact alarms restricted
-Android 13 (T) - Notification permissions required
-```
-
----
-
-## Android 8.0+ Background Service Restrictions
-
-### What Changed in Android 8.0 (Oreo)
-
-**Before Android 8.0:**
-```kotlin
-// - WORKED: Start service in background
-class MyApp : Application() {
-    fun doBackgroundWork() {
-        val intent = Intent(this, MyService::class.java)
-        startService(intent) // Worked fine
-    }
-}
-```
-
-**Android 8.0+:**
-```kotlin
-// - THROWS: IllegalStateException
-class MyApp : Application() {
-    fun doBackgroundWork() {
-        val intent = Intent(this, MyService::class.java)
-        startService(intent) // Crashes when app is in background!
-    }
-}
-```
-
-**Error:**
-```
-java.lang.IllegalStateException: Not allowed to start service Intent:
-app is in background
-```
-
----
-
-## Why These Restrictions?
-
-### 1. Battery Drain
-
-**Problem:** Apps running services 24/7 consume battery.
-
-```kotlin
-// - BAD: Old approach (pre-Android 8.0)
-class LocationTrackingService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Runs forever, drains battery
-        trackLocationContinuously()
-        return START_STICKY
-    }
-}
-```
-
-**Impact:**
-- Continuous GPS usage
-- Network requests while sleeping
-- Wake locks preventing device sleep
-- Background CPU usage
-
----
-
-### 2. Memory Leaks
-
-**Problem:** Services can cause memory leaks if not properly managed.
-
-```kotlin
-// - BAD: Service holding Activity reference
-class BadService : Service() {
-    private var activity: MainActivity? = null // Memory leak!
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // If Activity is destroyed, service still holds reference
-        activity = intent?.getParcelableExtra("activity")
-        return START_STICKY
-    }
-}
-```
-
----
-
-### 3. Performance Degradation
-
-**Problem:** Too many background services slow down the device.
-
-```
-100 apps × 1 service each = 100 background processes
-Each consuming: 50MB RAM + CPU cycles
-Total: 5GB RAM, constant CPU usage
-→ Device becomes sluggish
-```
-
----
-
-### 4. Security and Privacy
-
-**Problem:** Malicious apps can abuse services.
-
-```kotlin
-// - MALICIOUS: Spyware service
-class SpywareService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        // Runs in background, user unaware
-        recordAudio()
-        trackLocation()
-        sendDataToServer()
-        return START_STICKY // Restarts if killed
-    }
-}
-```
-
----
-
-## Specific Restrictions by Android Version
-
-### Android 8.0 (Oreo) - Background Execution Limits
-
-**Restrictions:**
-1. **Cannot start background services** when app is in background
-2. **Implicit broadcasts** mostly disabled
-3. **Background location updates** limited
-
-**Workarounds:**
-```kotlin
-// - GOOD: Use Foreground Service
-class MyService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(NOTIFICATION_ID, createNotification())
-        doWork()
-        return START_STICKY
-    }
-}
-
-// Start foreground service (allowed)
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-    startForegroundService(intent)
-} else {
-    startService(intent)
-}
-```
-
----
-
-### Android 9.0 (Pie) - App Standby Buckets
-
-Apps are categorized into buckets based on usage:
-
-| Bucket | Restrictions |
-|--------|--------------|
-| **Active** | App currently in use | No restrictions |
-| **Working set** | Used frequently | Mild restrictions |
-| **Frequent** | Used regularly | Moderate restrictions |
-| **Rare** | Rarely used | Heavy restrictions |
-| **Never** | Never opened | Maximum restrictions |
-
-**Impact:** Background jobs delayed based on bucket.
-
----
-
-### Android 10 (Q) - Background Activity Starts
-
-**Restriction:** Apps cannot start activities from background.
-
-```kotlin
-// - DOESN'T WORK: Start activity from background
-class MyService : Service() {
-    fun showActivity() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        startActivity(intent) // Blocked on Android 10+
-    }
-}
-
-// - WORKAROUND: Use full-screen intent notification
-val fullScreenIntent = Intent(this, IncomingCallActivity::class.java)
-val fullScreenPendingIntent = PendingIntent.getActivity(
-    this, 0, fullScreenIntent,
-    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-)
-
-val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-    .setSmallIcon(R.drawable.ic_call)
-    .setContentTitle("Incoming Call")
-    .setFullScreenIntent(fullScreenPendingIntent, true) // Shows on lock screen
-    .build()
-```
-
----
-
-### Android 12 (S) - Exact Alarms
-
-**Restriction:** Exact alarms require special permission.
-
-```kotlin
-// - RESTRICTED: Exact alarms
-if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-    // Requires SCHEDULE_EXACT_ALARM permission
-    alarmManager.setExact(
-        AlarmManager.RTC_WAKEUP,
-        triggerTime,
-        pendingIntent
-    )
-}
-
-// - ALTERNATIVE: Use inexact alarms
-alarmManager.setWindow(
-    AlarmManager.RTC_WAKEUP,
-    triggerTime,
-    10 * 60 * 1000, // 10-minute window
-    pendingIntent
-)
-```
-
----
-
-## Doze Mode and App Standby
-
-### Doze Mode
-
-When device is stationary and screen off for a while:
-
-**Restrictions applied:**
-- Network access suspended
-- Wake locks ignored
-- Alarms deferred
-- Wi-Fi scans disabled
-- JobScheduler and SyncAdapter deferred
-
-**Maintenance windows:**
-```
-Screen off
-  ↓
-[30 min] → [Doze] → [Maintenance] (few minutes)
-           ↓
-[60 min] → [Doze] → [Maintenance]
-           ↓
-[120 min] → [Doze] → [Maintenance]
-```
-
-### App Standby
-
-App enters standby when:
-- User hasn't used app recently
-- App has no foreground services
-- No notifications shown
-
-**Restrictions:**
-- Network access limited
-- Jobs and syncs deferred
-
----
-
-## Exemptions from Restrictions
-
-### Activities Allowed During Doze
-
-1. **High-priority FCM messages**
-   ```kotlin
-   {
-     "message": {
-       "token": "device_token",
-       "android": {
-         "priority": "high" // Bypasses Doze
-       },
-       "data": {
-         "key": "value"
-       }
-     }
-   }
-   ```
-
-2. **setAndAllowWhileIdle() alarms**
-   ```kotlin
-   alarmManager.setAndAllowWhileIdle(
-       AlarmManager.RTC_WAKEUP,
-       triggerTime,
-       pendingIntent
-   ) // Works during Doze (limited frequency)
-   ```
-
-3. **Foreground services**
-   ```kotlin
-   startForegroundService(intent) // Always allowed
-   ```
-
----
-
-## Modern Alternatives to Background Services
-
-### 1. WorkManager (Recommended)
-
-```kotlin
-val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
-    .setConstraints(
-        Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiresBatteryNotLow(true)
-            .build()
-    )
-    .build()
-
-WorkManager.getInstance(context).enqueue(uploadWork)
-```
-
-**Advantages:**
-- - Respects system constraints
-- - Survives app restarts
-- - Automatic retry
-- - Compatible with all Android versions
-
----
-
-### 2. Foreground Services
-
-For user-visible tasks:
-
-```kotlin
-class MusicPlayerService : Service() {
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = createNotification()
-        startForeground(NOTIFICATION_ID, notification)
-
-        playMusic()
-
-        return START_STICKY
-    }
-
-    private fun createNotification(): Notification {
-        return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("Playing Music")
-            .setContentText(currentSong.title)
-            .setSmallIcon(R.drawable.ic_music)
-            .build()
-    }
-}
-```
-
-**Use cases:**
-- Music playback
-- Navigation
-- File downloads
-- Ongoing calls
-
----
-
-### 3. Firebase Cloud Messaging (FCM)
-
-For triggered background work:
-
-```kotlin
-class MyFirebaseMessagingService : FirebaseMessagingService() {
-    override fun onMessageReceived(message: RemoteMessage) {
-        // Triggered by server, bypasses restrictions
-        processBackgroundTask(message.data)
-    }
-}
-```
-
----
-
-## Best Practices
-
-### 1. Choose the Right Tool
-
-```kotlin
-// - DON'T: Background service for periodic sync
-class SyncService : Service() {
-    override fun onStartCommand(...): Int {
-        syncData() // Restricted on Android 8.0+
-        return START_STICKY
-    }
-}
-
-// - DO: WorkManager for periodic work
-val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
-    .setConstraints(Constraints.Builder()
-        .setRequiredNetworkType(NetworkType.CONNECTED)
-        .build())
-    .build()
-
-WorkManager.getInstance(context).enqueue(syncWork)
-```
-
----
-
-### 2. Minimize Background Work
-
-```kotlin
-// - DON'T: Continuous background processing
-class BadWorker : Worker() {
-    override fun doWork(): Result {
-        while (true) { // Infinite loop!
-            processData()
-            Thread.sleep(1000)
-        }
-    }
-}
-
-// - DO: Discrete, time-limited tasks
-class GoodWorker : CoroutineWorker() {
-    override suspend fun doWork(): Result {
-        processData() // Completes and exits
-        return Result.success()
-    }
-}
-```
-
----
-
-### 3. Use Appropriate Service Type
-
-```kotlin
-// - Foreground service for user-visible work
-startForegroundService(Intent(this, MusicService::class.java))
-
-// - WorkManager for deferrable work
-WorkManager.getInstance(context).enqueue(uploadWork)
-
-// - JobScheduler for system-scheduled work (pre-WorkManager)
-val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
-jobScheduler.schedule(jobInfo)
-```
-
----
-
-## Summary
-
-**Why service restrictions exist:**
-
-1. **Battery optimization** - Prevent unnecessary battery drain
-2. **Performance** - Reduce memory pressure and CPU usage
-3. **Security** - Prevent malicious background activity
-4. **User experience** - Keep devices responsive
-
-**Key restrictions:**
-- - Cannot start background services on Android 8.0+ (when app in background)
-- - Doze mode limits network access and wake locks
-- - App Standby defers background jobs
-- - Android 10+ blocks starting activities from background
-
-**Solutions:**
-- - Use **WorkManager** for deferrable background work
-- - Use **Foreground Services** for user-visible tasks
-- - Use **FCM** for server-triggered work
-- - Use **AlarmManager.setAndAllowWhileIdle()** for time-critical tasks
-
-**Migration guide:**
-```kotlin
-// OLD: Background service (pre-Android 8.0)
-startService(Intent(this, MyService::class.java))
-
-// NEW: WorkManager (Android 8.0+)
-WorkManager.getInstance(context).enqueue(myWorkRequest)
-
-// NEW: Foreground service (for user-visible work)
-startForegroundService(Intent(this, MyService::class.java))
-```
+> `Service` Restrictions
 
 ---
 
 ## Ответ (RU)
-Ограничения на запуск сервисов связаны с **оптимизацией энергопотребления** и **производительности**:
 
-1. **Батарея** - Долгоживущие фоновые сервисы разряжают батарею
-2. **Память** - Много сервисов вызывают нехватку памяти
-3. **Производительность** - Фоновая работа замедляет устройство
-4. **Безопасность** - Предотвращает работу вредоносных приложений
+Ограничения на работу `Service` в Android введены для **экономии батареи**, **контроля ресурсов**, **поддержания производительности** и **повышения безопасности/приватности**. Со временем платформа существенно ужесточила правила фоновой активности.
 
-**Начиная с Android 8.0:**
-- - Нельзя запускать background services из фона
-- - Используйте **WorkManager** для отложенной работы
-- - Используйте **Foreground Services** для видимых задач
+### История ограничений `Service`
 
-**Решения:**
-
-```kotlin
-// - СТАРЫЙ способ (не работает на Android 8.0+)
-startService(Intent(this, MyService::class.java))
-
-// - WorkManager (для отложенных задач)
-WorkManager.getInstance(context).enqueue(myWorkRequest)
-
-// - Foreground Service (для видимых пользователю задач)
-startForegroundService(Intent(this, MyService::class.java))
+```
+Android 5.0 (Lollipop)   - Введен JobScheduler
+Android 6.0 (Marshmallow) - Doze Mode
+Android 7.0 (Nougat)     - Doze on the go
+Android 8.0 (Oreo)       - Ограничения фонового выполнения и геолокации (главный перелом)
+Android 9.0 (Pie)        - App Standby Buckets
+Android 10 (Q)           - Ограничения на запуск Activity из фона
+Android 11 (R)           - Доп. лимиты, типы Foreground Service
+Android 12 (S)           - Ограничения на точные (exact) будильники
+Android 13 (T)           - Разрешение на уведомления
 ```
 
-**Причины ограничений:**
-- Оптимизация батареи (Doze mode)
-- Управление памятью (App Standby)
-- Безопасность и приватность
-- Улучшение UX
+### Почему появились ограничения?
 
+1. **Батарея**
+   
+   Проблема: долгоживущие фоновые сервисы держат CPU, GPS, сеть и wake lock'и, мешают устройству переходить в глубокий сон.
+
+   ```kotlin
+   // ПЛОХО: старый подход (до Android 8.0)
+   class LocationTrackingService : Service() {
+       override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+           trackLocationContinuously() // Долгая непрерывная работа, разряд батареи
+           return START_STICKY
+       }
+   }
+   ```
+
+2. **Память и утечки**
+
+   Сервисы живут дольше `Activity` и могут удерживать контекст/ссылки и вызывать утечки памяти.
+
+   ```kotlin
+   // ПЛОХО: Service удерживает ссылку на Activity
+   class BadService : Service() {
+       private var activity: MainActivity? = null
+   
+       override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+           activity = intent?.getParcelableExtra("activity") // Риск утечки
+           return START_STICKY
+       }
+   }
+   ```
+
+3. **Производительность**
+
+   Множество фоновых сервисов из разных приложений → суммарная нагрузка на CPU/память → устройство «тормозит».
+
+4. **Безопасность и приватность**
+
+   Нельзя допускать, чтобы приложения незаметно для пользователя бесконечно отправляли данные, слушали микрофон, отслеживали местоположение и т.д.
+
+   ```kotlin
+   // ВОЗМОЖНО ЗЛОНАМЕРЕННО: скрытый сервис-шпион
+   class SpywareService : Service() {
+       override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+           recordAudio()
+           trackLocation()
+           sendDataToServer()
+           return START_STICKY // Перезапускается после убийства процессa
+       }
+   }
+   ```
 
 ---
 
+### Ограничения Android 8.0+ на фоновые `Service`
 
-## Follow-ups
+#### Что изменилось в Android 8.0 (Oreo)
 
-- [[q-canvas-drawing-optimization--custom-views--hard]]
+До Oreo можно было запускать `startService()` даже из фона.
+
+```kotlin
+// ДОЛГОЕ ВРЕМЯ РАБОТАЛО (до 8.0)
+class MyApp : Application() {
+    fun doBackgroundWork() {
+        val intent = Intent(this, MyService::class.java)
+        startService(intent)
+    }
+}
+```
+
+Начиная с Android 8.0:
+
+```kotlin
+// В ФОНЕ ПРИВЕДЕТ К IllegalStateException
+class MyApp : Application() {
+    fun doBackgroundWork() {
+        val intent = Intent(this, MyService::class.java)
+        startService(intent) // Запрет, если приложение в фоне
+    }
+}
+```
+
+Ошибка:
+
+```
+java.lang.IllegalStateException: Not allowed to start service Intent: app is in background
+```
+
+Теперь нужно:
+- либо использовать `startForegroundService()` и быстро вызвать `startForeground()` внутри сервиса;
+- либо планировать работу через `WorkManager`/`JobScheduler`.
+
+Пример корректного Foreground `Service`:
+
+```kotlin
+class MyService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startForeground(NOTIFICATION_ID, createNotification())
+        doWork()
+        return START_STICKY
+    }
+}
+
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    startForegroundService(intent)
+} else {
+    startService(intent)
+}
+```
+
+---
+
+### Doze Mode и App Standby
+
+#### Doze Mode
+
+Когда устройство долго не используется (экран выкл., нет движения), включается Doze:
+- Откладываются сетевые запросы и обычные `AlarmManager`-события.
+- Ограничиваются wake lock'и.
+- Фоновая синхронизация и `JobScheduler`-задачи выполняются в коротких maintenance-окнах.
+
+С ростом времени простоя окна обслуживания становятся реже.
+
+#### App Standby
+
+Когда приложение давно не открывали, нет foreground-активности/сервисов и заметных уведомлений, оно попадает в состояние Standby:
+- Сильнее ограничиваются сетевые операции.
+- Задачи и синхронизация откладываются агрессивнее.
+
+---
+
+### App Standby Buckets (Android 9.0, Pie)
+
+Android 9 вводит «корзины» активности приложения:
+
+- Active — активно используется, минимальные ограничения.
+- Working set — используется часто, мягкие лимиты.
+- Frequent — периодически используется, больше ограничений.
+- Rare — редко используется, сильные задержки фоновой работы.
+- Never — никогда не запускалось, максимальные ограничения.
+
+Чем ниже корзина, тем позже и реже система дает выполнять фоновые задачи.
+
+---
+
+### Android 10 (Q) — Запуск `Activity` из фона
+
+Android 10 существенно ограничивает старт `Activity` из фона (в том числе из сервисов):
+
+```kotlin
+// НЕ НАДЕЙТЕСЬ: запуск Activity из фонового сервиса
+class MyService : Service() {
+    fun showActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent) // На Android 10+ чаще всего блокируется/игнорируется
+    }
+}
+```
+
+Рекомендуемый подход — уведомление с высоким приоритетом или full-screen intent для допустимых сценариев (например, входящий звонок):
+
+```kotlin
+val fullScreenIntent = Intent(this, IncomingCallActivity::class.java)
+val fullScreenPendingIntent = PendingIntent.getActivity(
+    this, 0, fullScreenIntent,
+    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+)
+
+val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+    .setSmallIcon(R.drawable.ic_call)
+    .setContentTitle("Incoming Call")
+    .setFullScreenIntent(fullScreenPendingIntent, true)
+    .build()
+```
+
+---
+
+### Android 12 (S) — Точные будильники
+
+На Android 12+ точные (exact) будильники дополнительно контролируются:
+
+- Для свободного использования `setExact()`/`setExactAndAllowWhileIdle()` нужно спец-разрешение `SCHEDULE_EXACT_ALARM` или привилегированный статус (системные/OEM-приложения).
+
+```kotlin
+// Точный будильник на Android 12+
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    alarmManager.setExact(
+        AlarmManager.RTC_WAKEUP,
+        triggerTime,
+        pendingIntent
+    )
+}
+
+// Предпочтительно использовать неточный/оконный будильник
+alarmManager.setWindow(
+    AlarmManager.RTC_WAKEUP,
+    triggerTime,
+    10 * 60 * 1000L,
+    pendingIntent
+)
+```
+
+---
+
+### Исключения и послабления
+
+Во время Doze/Standby часть механик все же разрешена:
+
+1. **Высокоприоритетные FCM-сообщения** — короткое выполнение с доступом к сети (с лимитами и защитой от злоупотреблений).
+
+   ```json
+   {
+     "message": {
+       "token": "device_token",
+       "android": {
+         "priority": "high"
+       },
+       "data": {
+         "key": "value"
+       }
+     }
+   }
+   ```
+
+2. **`setAndAllowWhileIdle()` / `setExactAndAllowWhileIdle()`** — могут срабатывать в Doze, но с ограничением частоты.
+
+   ```kotlin
+   alarmManager.setAndAllowWhileIdle(
+       AlarmManager.RTC_WAKEUP,
+       triggerTime,
+       pendingIntent
+   )
+   ```
+
+3. **Foreground `Service`** — при корректном запуске (`startForegroundService()` + быстрый `startForeground()`) получает повышенный приоритет.
+
+   ```kotlin
+   if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+       startForegroundService(intent)
+   } else {
+       startService(intent)
+   }
+   ```
+
+---
+
+### Современные альтернативы фоновых `Service`
+
+1. **WorkManager (рекомендуется)** — для отложенных, гарантированных задач.
+
+   ```kotlin
+   val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
+       .setConstraints(
+           Constraints.Builder()
+               .setRequiredNetworkType(NetworkType.CONNECTED)
+               .setRequiresBatteryNotLow(true)
+               .build()
+       )
+       .build()
+   
+   WorkManager.getInstance(context).enqueue(uploadWork)
+   ```
+
+   Плюсы: уважает системные ограничения, переживает перезапуски, поддерживает цепочки и ретраи.
+
+2. **Foreground `Service`** — для длительных, заметных пользователю задач (музыка, навигация, загрузки, звонки, запись экрана).
+
+   ```kotlin
+   class MusicPlayerService : Service() {
+       override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+           val notification = createNotification()
+           startForeground(NOTIFICATION_ID, notification)
+           playMusic()
+           return START_STICKY
+       }
+   }
+   ```
+
+3. **Firebase Cloud Messaging (FCM)** — для триггеров с сервера с делегированием тяжелой работы в WorkManager/FGS.
+
+   ```kotlin
+   class MyFirebaseMessagingService : FirebaseMessagingService() {
+       override fun onMessageReceived(message: RemoteMessage) {
+           processBackgroundTask(message.data)
+       }
+   }
+   ```
+
+---
+
+### Лучшие практики
+
+1. **Выбирать правильный инструмент**
+
+   ```kotlin
+   // НЕПРАВИЛЬНО: started Service для периодической синхронизации
+   class SyncService : Service() {
+       override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+           syncData()
+           return START_STICKY
+       }
+   }
+   
+   // ПРАВИЛЬНО: WorkManager для периодической работы
+   val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
+       .setConstraints(
+           Constraints.Builder()
+               .setRequiredNetworkType(NetworkType.CONNECTED)
+               .build()
+       )
+       .build()
+   
+   WorkManager.getInstance(context).enqueue(syncWork)
+   ```
+
+2. **Минимизировать фоновую работу**
+
+   ```kotlin
+   // НЕПРАВИЛЬНО: бесконечный цикл в фоне
+   class BadWorker : Worker() {
+       override fun doWork(): Result {
+           while (true) {
+               processData()
+               Thread.sleep(1000)
+           }
+       }
+   }
+   
+   // ПРАВИЛЬНО: конечная, ограниченная по времени задача
+   class GoodWorker : CoroutineWorker() {
+       override suspend fun doWork(): Result {
+           processData()
+           return Result.success()
+       }
+   }
+   ```
+
+3. **Использовать подходящий тип `Service`/планировщик**
+
+   ```kotlin
+   // Foreground Service для длительной пользовательской задачи
+   startForegroundService(Intent(this, MusicService::class.java))
+   
+   // WorkManager для гарантированной отложенной работы
+   WorkManager.getInstance(context).enqueue(uploadWork)
+   
+   // JobScheduler — прямое использование системного планировщика при необходимости
+   val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+   jobScheduler.schedule(jobInfo)
+   ```
+
+---
+
+### Итоги (RU)
+
+Почему введены ограничения:
+- Экономия батареи.
+- Стабильность производительности и памяти.
+- Безопасность и приватность.
+- Предсказуемый пользовательский опыт.
+
+Ключевые моменты:
+- Нельзя свободно запускать фоновые `Service` из фона на Android 8.0+.
+- Doze/App Standby/App Standby Buckets агрессивно откладывают фоновую работу.
+- Android 10+ ограничивает запуск `Activity` из фона.
+- Android 12+ ужесточает использование точных будильников; Android 13+ требует разрешение на уведомления.
+
+Используйте:
+- WorkManager/JobScheduler для отложенных задач.
+- Foreground `Service` для длительной, заметной пользователю работы.
+- FCM (+ WorkManager/FGS) для событий с сервера.
+- `setAndAllowWhileIdle()` / `setExactAndAllowWhileIdle()` только для действительно критичных будильников.
+
+---
+
+## Answer (EN)
+
+`Service` restrictions are primarily about **battery optimization**, **performance**, **resource management**, and **security/privacy**. Over time Android has tightened what apps can do in the background.
+
+Key reasons:
+
+1. Long-running background services drain battery.
+2. Many services increase memory pressure and CPU load.
+3. Too much hidden background work degrades device performance.
+4. Malicious or opaque services can abuse permissions and user data.
+
+### History of `Service` Restrictions
+
+```
+Android 5.0 (Lollipop)   - JobScheduler introduced
+Android 6.0 (Marshmallow) - Doze mode
+Android 7.0 (Nougat)     - Doze on the go
+Android 8.0 (Oreo)       - Background execution and location limits
+Android 9.0 (Pie)        - App Standby Buckets
+Android 10 (Q)           - Background activity starts restricted
+Android 11 (R)           - Further background limits, FGS types
+Android 12 (S)           - Exact alarms gated by special permission
+Android 13 (T)           - Notification permission required
+```
+
+### Android 8.0+ Background `Service` Restrictions
+
+Before Android 8.0 you could freely call `startService()` even from the background:
+
+```kotlin
+// WORKED pre-8.0
+class MyApp : Application() {
+    fun doBackgroundWork() {
+        val intent = Intent(this, MyService::class.java)
+        startService(intent)
+    }
+}
+```
+
+On Android 8.0+ starting a background service while your app is in background leads to:
+
+```kotlin
+// THROWS when app is backgrounded
+class MyApp : Application() {
+    fun doBackgroundWork() {
+        val intent = Intent(this, MyService::class.java)
+        startService(intent) // Illegal if app in background
+    }
+}
+```
+
+Error:
+
+```
+java.lang.IllegalStateException: Not allowed to start service Intent: app is in background
+```
+
+You must either:
+- use `startForegroundService()` and call `startForeground()` quickly, or
+- schedule work via WorkManager/JobScheduler.
+
+```kotlin
+class MyService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        startForeground(NOTIFICATION_ID, createNotification())
+        doWork()
+        return START_STICKY
+    }
+}
+
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+    startForegroundService(intent)
+} else {
+    startService(intent)
+}
+```
+
+### Why These Restrictions?
+
+1. Battery drain — prevent 24/7 background services (GPS, network, wake locks) from killing battery.
+2. Memory/CPU — limit always-running processes that pressure system resources.
+3. Performance — keep the device responsive.
+4. Security/privacy — reduce opportunities for spyware-like behavior.
+
+```kotlin
+// MALICIOUS example
+class SpywareService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        recordAudio()
+        trackLocation()
+        sendDataToServer()
+        return START_STICKY
+    }
+}
+```
+
+### Doze Mode and App Standby
+
+- Doze: when device is idle, batches network, defers alarms, restricts wake locks and jobs.
+- App Standby: unused apps get stricter limits on network and background work.
+
+### Android 9.0 (Pie) - App Standby Buckets
+
+Apps are categorized into buckets:
+- Active, Working set, Frequent, Rare, Never — each with increasing background restrictions.
+
+System delays and batches work more aggressively for less-used apps.
+
+### Android 10 (Q) - Background `Activity` Starts
+
+Apps generally cannot start activities from background (including from services):
+
+```kotlin
+class MyService : Service() {
+    fun showActivity() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent) // Blocked/ignored on Android 10+ in most cases
+    }
+}
+```
+
+Use notifications/high-priority or full-screen intents for legitimate cases (e.g., incoming call):
+
+```kotlin
+val fullScreenIntent = Intent(this, IncomingCallActivity::class.java)
+val fullScreenPendingIntent = PendingIntent.getActivity(
+    this, 0, fullScreenIntent,
+    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+)
+
+val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+    .setSmallIcon(R.drawable.ic_call)
+    .setContentTitle("Incoming Call")
+    .setFullScreenIntent(fullScreenPendingIntent, true)
+    .build()
+```
+
+### Android 12 (S) - Exact Alarms
+
+Exact alarms are gated:
+- `SCHEDULE_EXACT_ALARM` special permission or privileged/OEM app status is needed for unrestricted `setExact*`.
+
+```kotlin
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+    alarmManager.setExact(
+        AlarmManager.RTC_WAKEUP,
+        triggerTime,
+        pendingIntent
+    )
+}
+
+alarmManager.setWindow(
+    AlarmManager.RTC_WAKEUP,
+    triggerTime,
+    10 * 60 * 1000L,
+    pendingIntent
+)
+```
+
+### Exemptions
+
+Allowed (with limits) even under Doze/standby:
+
+1. High-priority FCM messages.
+2. `setAndAllowWhileIdle()` / `setExactAndAllowWhileIdle()` (rate-limited).
+3. Foreground services started via `startForegroundService()` that promptly call `startForeground()`.
+
+### Modern Alternatives to Background Services
+
+1. WorkManager — deferrable, guaranteed background work.
+
+```kotlin
+val uploadWork = OneTimeWorkRequestBuilder<UploadWorker>()
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiresBatteryNotLow(true)
+            .build()
+    )
+    .build()
+
+WorkManager.getInstance(context).enqueue(uploadWork)
+```
+
+2. Foreground services — ongoing, user-visible tasks (music, navigation, downloads, calls, screen recording).
+
+```kotlin
+class MusicPlayerService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        val notification = createNotification()
+        startForeground(NOTIFICATION_ID, notification)
+        playMusic()
+        return START_STICKY
+    }
+}
+```
+
+3. FCM — server-triggered tasks; offload heavy work to WorkManager/FGS.
+
+```kotlin
+class MyFirebaseMessagingService : FirebaseMessagingService() {
+    override fun onMessageReceived(message: RemoteMessage) {
+        processBackgroundTask(message.data)
+    }
+}
+```
+
+### Best Practices
+
+1. Choose the right tool:
+
+```kotlin
+// DON'T: started Service for periodic sync
+class SyncService : Service() {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        syncData()
+        return START_STICKY
+    }
+}
+
+// DO: WorkManager
+val syncWork = PeriodicWorkRequestBuilder<SyncWorker>(1, TimeUnit.HOURS)
+    .setConstraints(
+        Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .build()
+    )
+    .build()
+
+WorkManager.getInstance(context).enqueue(syncWork)
+```
+
+2. Minimize background work:
+
+```kotlin
+// DON'T: infinite loop
+class BadWorker : Worker() {
+    override fun doWork(): Result {
+        while (true) {
+            processData()
+            Thread.sleep(1000)
+        }
+    }
+}
+
+// DO: finite, time-bounded
+class GoodWorker : CoroutineWorker() {
+    override suspend fun doWork(): Result {
+        processData()
+        return Result.success()
+    }
+}
+```
+
+3. Use appropriate `Service`/scheduler:
+
+```kotlin
+startForegroundService(Intent(this, MusicService::class.java))
+WorkManager.getInstance(context).enqueue(uploadWork)
+val jobScheduler = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler
+jobScheduler.schedule(jobInfo)
+```
+
+---
+
+## Summary (EN)
+
+Why restrictions exist:
+- Battery optimization.
+- Performance and memory stability.
+- Security and privacy.
+- Better, predictable UX.
+
+Key points:
+- No free-form background services on Android 8.0+ from background.
+- Doze/App Standby/App Standby Buckets aggressively defer work.
+- Android 10+ restricts background activity starts.
+- Android 12+ gates exact alarms; Android 13+ gates notifications.
+
+Use:
+- WorkManager/JobScheduler for deferrable tasks.
+- Foreground services for user-visible ongoing work.
+- FCM (+ WorkManager/FGS) for server-driven events.
+- `setAndAllowWhileIdle()` / `setExactAndAllowWhileIdle()` only for truly critical alarms.
+
+---
+
+## Дополнительные вопросы (RU)
+
 - [[q-what-is-data-binding--android--easy]]
-- [[q-workmanager-chaining--background--hard]]
+- [[q-android-service-types--android--easy]]
+- [[q-service-component--android--medium]]
+- [[q-foreground-service-types--android--medium]]
+- [[q-when-can-the-system-restart-a-service--android--medium]]
 
+## Follow-ups (EN)
 
-## References
+- [[q-what-is-data-binding--android--easy]]
+- [[q-android-service-types--android--easy]]
+- [[q-service-component--android--medium]]
+- [[q-foreground-service-types--android--medium]]
+- [[q-when-can-the-system-restart-a-service--android--medium]]
+
+---
+
+## Ссылки (RU)
 
 - [Services](https://developer.android.com/develop/background-work/services)
 
+## References (EN)
 
-## Related Questions
+- [Services](https://developer.android.com/develop/background-work/services)
+
+---
+
+## Related Questions (RU/EN)
 
 ### Prerequisites / Concepts
 
-- [[c-service]]
-
+- [[c-android-components]]
+- [[q-android-service-types--android--easy]]
 
 ### Prerequisites (Easier)
-- [[q-android-service-types--android--easy]] - Service
+
+- [[q-what-is-data-binding--android--easy]]
 
 ### Related (Medium)
-- [[q-service-component--android--medium]] - Service
-- [[q-foreground-service-types--android--medium]] - Service
-- [[q-when-can-the-system-restart-a-service--android--medium]] - Service
-- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]] - Service
-- [[q-keep-service-running-background--android--medium]] - Service
+
+- [[q-service-component--android--medium]]
+- [[q-foreground-service-types--android--medium]]
+- [[q-when-can-the-system-restart-a-service--android--medium]]
+- [[q-if-activity-starts-after-a-service-can-you-connect-to-this-service--android--medium]]
+- [[q-keep-service-running-background--android--medium]]
 
 ### Advanced (Harder)
-- [[q-service-lifecycle-binding--android--hard]] - Service
+
+- [[q-service-lifecycle-binding--android--hard]]

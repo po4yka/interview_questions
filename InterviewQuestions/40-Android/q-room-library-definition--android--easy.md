@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-room-library, q-data-storage-options--android--easy]
+related: [c-database-design, q-android-jetpack-overview--android--easy]
 created: 2025-10-13
-updated: 2025-10-28
-tags: [android/room, database, difficulty/easy, orm, room, sqlite]
-sources: []
+updated: 2025-11-10
+tags: [android/room, difficulty/easy]
+sources: ["https://developer.android.com/training/data-storage/room", "https://developer.android.com/codelabs/android-room-with-a-view-kotlin"]
+
 ---
 
 # Вопрос (RU)
@@ -29,10 +30,12 @@ sources: []
 
 Room — это ORM-библиотека от Google, предоставляющая абстракцию над SQLite с типобезопасностью на этапе компиляции и проверкой SQL-запросов.
 
+См. также: [[c-database-design]].
+
 **Ключевые преимущества:**
 - Проверка SQL во время компиляции
-- Интеграция с Flow, LiveData, Coroutines
-- Автоматические миграции схемы
+- Интеграция с `Flow`, `LiveData`, Coroutines
+- Поддержка миграций схемы (включая autoMigrations для ограниченного набора изменений)
 - Минимум шаблонного кода
 
 **Три компонента архитектуры:**
@@ -70,7 +73,11 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): AppDatabase =
             INSTANCE ?: synchronized(this) {  // ✅ потокобезопасный singleton
-                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+                INSTANCE ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "app_database"
+                ).build().also { INSTANCE = it }
             }
     }
 }
@@ -80,10 +87,12 @@ abstract class AppDatabase : RoomDatabase() {
 
 Room is Google's ORM library providing an abstraction over SQLite with compile-time type safety and SQL query validation.
 
+See also: [[c-database-design]].
+
 **Key advantages:**
 - SQL verification at compile time
-- Integration with Flow, LiveData, Coroutines
-- Automatic schema migrations
+- Integration with `Flow`, `LiveData`, Coroutines
+- Schema migrations support (including autoMigrations for a limited set of changes)
 - Minimal boilerplate code
 
 **Three architecture components:**
@@ -121,7 +130,11 @@ abstract class AppDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): AppDatabase =
             INSTANCE ?: synchronized(this) {  // ✅ thread-safe singleton
-                INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+                INSTANCE ?: Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "app_database"
+                ).build().also { INSTANCE = it }
             }
     }
 }
@@ -129,34 +142,60 @@ abstract class AppDatabase : RoomDatabase() {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как Room обрабатывает миграции базы данных между версиями схемы?
+- Каковы правила работы с потоками (threading rules) для операций Room?
+- Как реализовать сложные запросы с отношениями (one-to-many, many-to-many)?
+- В чем разница между `@Insert`, `@Update` и `@Upsert`?
+- Как Room поддерживает RxJava и Kotlin `Flow` для реактивных запросов?
+
 ## Follow-ups
 
 - How does Room handle database migrations between schema versions?
 - What are the threading rules for Room operations?
 - How do you implement complex queries with relationships (one-to-many, many-to-many)?
 - What's the difference between `@Insert`, `@Update`, and `@Upsert`?
-- How does Room support RxJava and Kotlin Flow for reactive queries?
+- How does Room support RxJava and Kotlin `Flow` for reactive queries?
+
+## Ссылки (RU)
+
+- https://developer.android.com/training/data-storage/room - Официальная документация по Room
+- https://developer.android.com/codelabs/android-room-with-a-view-kotlin - Codelab по Room
 
 ## References
 
-- [[c-room-library]] - Room library concept
-- [[c-sqlite]] - SQLite database basics
-- [[c-orm]] - Object-Relational Mapping patterns
 - https://developer.android.com/training/data-storage/room - Official Room documentation
 - https://developer.android.com/codelabs/android-room-with-a-view-kotlin - Room codelab
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- Android варианты хранения данных (см. вопрос об общих вариантах хранения данных в Android)
+- Основы SQLite (см. вопрос об основах SQLite в Android)
+
+### Связанные (того же уровня)
+- Базовые операции Room
+- Определение сущностей (Entity) в Room
+- Паттерны реализации DAO в Room
+
+### Продвинутые (сложнее)
+- Миграции схемы базы данных в Room
+- Моделирование связей таблиц в Room
+- Тестирование баз данных Room
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-data-storage-options--android--easy]] - Android data storage options
-- [[q-sqlite-basics--android--easy]] - SQLite fundamentals
+- Android data storage options
+- SQLite fundamentals
 
 ### Related (Same Level)
-- [[q-room-basics--android--easy]] - Room basic operations
-- [[q-room-entities--android--easy]] - Defining Room entities
-- [[q-room-dao--android--medium]] - DAO implementation patterns
+- Room basic operations
+- Defining Room entities
+- DAO implementation patterns
 
 ### Advanced (Harder)
-- [[q-room-database-migrations--android--medium]] - Database schema migrations
-- [[q-room-relationships--android--medium]] - Modeling table relationships
-- [[q-room-testing--android--hard]] - Testing Room databases
+- Room database schema migrations
+- Modeling table relationships in Room
+- Testing Room databases

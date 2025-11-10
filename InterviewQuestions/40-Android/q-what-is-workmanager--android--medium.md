@@ -2,28 +2,18 @@
 id: android-226
 title: "What Is Workmanager / Что такое WorkManager"
 aliases: ["What Is WorkManager", "Что такое WorkManager"]
-
-# Classification
 topic: android
 subtopics: [background-execution, coroutines]
 question_kind: android
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 sources: []
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [c-background-tasks, c-coroutines, c-jetpack, c-workmanager]
-
-# Timestamps
+related: [c-background-tasks, c-coroutines, c-workmanager]
 created: 2025-10-15
-updated: 2025-10-29
-
-# Tags (EN only; no leading #)
+updated: 2025-11-10
 tags: [android/background-execution, android/coroutines, difficulty/medium, jetpack, scheduled-tasks, workmanager]
 ---
 
@@ -33,23 +23,23 @@ tags: [android/background-execution, android/coroutines, difficulty/medium, jetp
 # Question (EN)
 > What is WorkManager and when should it be used?
 
----
-
 ## Ответ (RU)
 
-**WorkManager** — это Jetpack библиотека для **откладываемых гарантированных фоновых задач**, которые должны выполняться даже при закрытии приложения или перезагрузке устройства.
+**WorkManager** — это Jetpack библиотека для **отложенных (deferrable) и надёжных фоновых задач**, которые должны быть **гарантированно поставлены в очередь и предприняты для выполнения** даже при закрытии приложения или перезагрузке устройства, с учётом системных ограничений (Doze, оптимизация батареи). Это не абсолютная гарантия выполнения (работа может не выполниться, если, например, приложение удалено или условия так и не выполнены), но максимально приближенная в рамках платформы.
 
 ### Ключевые Особенности
 
-**Гарантированное выполнение**: задачи сохраняются в SQLite БД и переживают перезагрузки, уничтожение процесса, режим Doze.
+**Надёжное выполнение**: задачи сохраняются в SQLite БД и автоматически пере-планируются после перезапуска процесса или устройства, когда выполняются заданные условия.
 
-**Умный выбор механизма**: автоматически использует JobScheduler (API 23+) или AlarmManager + BroadcastReceiver (API 14-22).
+**Умный выбор механизма**: под капотом выбирает подходящий планировщик в зависимости от версии Android и ограничений (например, JobScheduler на новых версиях), абстрагируя детали реализации.
 
 **Ограничения выполнения**: декларативно задаются условия — сеть, зарядка, уровень батареи, свободное место.
 
 **Цепочки работ**: последовательное и параллельное выполнение с передачей данных между задачами.
 
 **Интеграция с корутинами**: `CoroutineWorker` для suspend-функций без блокировки потоков.
+
+**Уважение системных ограничений**: WorkManager предназначен для отложенных задач и может значительно откладывать выполнение, объединяя работы в батчи, чтобы соответствовать Doze и политикам энергосбережения.
 
 ### Основные Компоненты
 
@@ -66,8 +56,11 @@ class UploadWorker(
             uploadFile(path)
             Result.success() // ✅ задача завершена
         } catch (e: Exception) {
-            if (runAttemptCount < 3) Result.retry() // ✅ повторить с экспоненциальной задержкой
-            else Result.failure() // ❌ окончательный провал
+            if (runAttemptCount < 3) {
+                Result.retry() // ✅ повторить с экспоненциальной задержкой (интервалы контролирует система и WorkManager)
+            } else {
+                Result.failure() // ❌ окончательный провал
+            }
         }
     }
 }
@@ -78,12 +71,12 @@ val uploadRequest = OneTimeWorkRequestBuilder<UploadWorker>()
     .setConstraints(
         Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ только при наличии сети
-            .setRequiresBatteryNotLow(true)                // ✅ батарея > 15%
+            .setRequiresBatteryNotLow(true)                // ✅ только когда батарея не в состоянии "низкий заряд" (порог задаётся системой)
             .build()
     )
     .setBackoffCriteria(
         BackoffPolicy.EXPONENTIAL,
-        15, TimeUnit.SECONDS // ✅ повторы: 15s → 30s → 60s...
+        15, TimeUnit.SECONDS // ✅ начальная задержка; реальные интервалы могут быть увеличены и минимумы навязаны системой/WorkManager
     )
     .build()
 
@@ -129,34 +122,66 @@ WorkManager.getInstance(context)
 ### Когда Использовать
 
 **Используйте WorkManager**:
-- Загрузка файлов, которая должна завершиться
+- Загрузка файлов, которые должны быть надёжно поставлены в очередь и завершены при выполнении условий
 - Синхронизация данных с сервером
 - Отправка аналитики/логов
 - Очистка кэша/старых данных
 - Обработка изображений
-- Периодические задачи (мин. 15 минут)
+- Периодические задачи (минимальный интервал ~15 минут, фактическое время запуска может быть отложено системой)
 
 **Не используйте WorkManager**:
-- Точное время выполнения (используйте AlarmManager)
-- Длительная работа на переднем плане (используйте Foreground Service)
-- Немедленные UI обновления (используйте корутины)
-- Задачи реального времени (используйте Service)
+- Жёстко точное время выполнения (используйте AlarmManager или специализированные механизмы планирования)
+- Задачи, требующие немедленного и непрерывного выполнения в реальном времени (используйте foreground service / bound service)
+- Немедленные UI-обновления (используйте корутины, `ViewModel`, др. механизмы на основном потоке)
+
+Если вам нужен как гарантированный план/ретраи, так и выполнение в переднем плане (например, видимая пользователю долгая загрузка), используйте WorkManager с `setForeground()` внутри `ListenableWorker`/`CoroutineWorker` вместо ручного управления службой.
+
+### Дополнительные вопросы (RU)
+
+- Как WorkManager обрабатывает ограничения Doze и оптимизации батареи?
+- В чем разница между `Worker`, `CoroutineWorker` и `RxWorker`?
+- Как реализовать отслеживание прогресса для длительных задач WorkManager?
+- Какие политики доступны для обработки дублирующейся работы с `enqueueUniqueWork`?
+- Как работает механизм экспоненциального бэкофф-ретрая WorkManager и как его настроить?
+
+### Ссылки (RU)
+
+- [[c-coroutines]] — Интеграция WorkManager с Kotlin coroutines через `CoroutineWorker`
+- [[c-background-tasks]] — Обзор вариантов фонового выполнения в Android
+- [Документация WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager) — Официальное руководство
+- [WorkManager Basics](https://medium.com/androiddevelopers/workmanager-basics-beba51e94048) — Вводная статья
+
+### Связанные вопросы (RU)
+
+#### База (проще)
+- [[q-android-service-types--android--easy]] — Понимание типов и назначения Android `Service`
+- [[q-android-async-primitives--android--easy]] — Базовые асинхронные примитивы в Android
+
+#### Связанные (средний уровень)
+- [[q-foreground-service-types--android--medium]] — Длительная видимая фоновая работа через foreground service
+- [[q-android-architectural-patterns--android--medium]] — Архитектурные подходы и место фоновых задач
+
+#### Продвинутые (сложнее)
+- [[q-android14-permissions--android--medium]] — Новые ограничения и влияние на фоновую работу
+- [[q-android-app-lag-analysis--android--medium]] — Анализ лагов и влияние фоновых задач на производительность
 
 ## Answer (EN)
 
-**WorkManager** is a Jetpack library for **deferrable, guaranteed background work** that must run even if the app exits or the device restarts.
+**WorkManager** is a Jetpack library for **deferrable and reliable background work** that should be **persistently enqueued and best-effort guaranteed to run** even if the app exits or the device restarts, while respecting system constraints (Doze, battery optimizations). It is not an absolute guarantee (e.g., work will not run if the app is uninstalled or constraints are never met), but it is the most robust option within platform limits.
 
 ### Key Features
 
-**Guaranteed execution**: tasks are persisted in SQLite database and survive reboots, process death, Doze mode.
+**Reliable execution**: tasks are persisted in an internal SQLite database and automatically rescheduled after process death or device reboot when constraints are met.
 
-**Smart mechanism selection**: automatically uses JobScheduler (API 23+) or AlarmManager + BroadcastReceiver (API 14-22).
+**Smart mechanism selection**: under the hood chooses an appropriate scheduler based on Android version and constraints (e.g., JobScheduler on newer APIs), hiding implementation details.
 
-**Execution constraints**: declaratively specify conditions — network, charging, battery level, storage space.
+**Execution constraints**: declaratively specify conditions — network, charging, battery state, storage space.
 
 **Work chaining**: sequential and parallel execution with data passing between tasks.
 
 **Coroutines integration**: `CoroutineWorker` for suspend functions without blocking threads.
+
+**Respects system limits**: designed for deferrable work and may significantly delay execution or batch work to comply with Doze and power-saving policies.
 
 ### Core Components
 
@@ -173,8 +198,11 @@ class UploadWorker(
             uploadFile(path)
             Result.success() // ✅ task completed
         } catch (e: Exception) {
-            if (runAttemptCount < 3) Result.retry() // ✅ retry with exponential backoff
-            else Result.failure() // ❌ final failure
+            if (runAttemptCount < 3) {
+                Result.retry() // ✅ retry with exponential backoff (actual intervals are managed by WorkManager and the system)
+            } else {
+                Result.failure() // ❌ final failure
+            }
         }
     }
 }
@@ -184,13 +212,13 @@ val uploadRequest = OneTimeWorkRequestBuilder<UploadWorker>()
     .setInputData(workDataOf("file_path" to "/path/to/file"))
     .setConstraints(
         Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ only when network available
-            .setRequiresBatteryNotLow(true)                // ✅ battery > 15%
+            .setRequiredNetworkType(NetworkType.CONNECTED) // ✅ only when network is available
+            .setRequiresBatteryNotLow(true)                // ✅ only when battery is not in "low" state (threshold defined by system)
             .build()
     )
     .setBackoffCriteria(
         BackoffPolicy.EXPONENTIAL,
-        15, TimeUnit.SECONDS // ✅ retries: 15s → 30s → 60s...
+        15, TimeUnit.SECONDS // ✅ initial delay; real retry times may be clamped/extended by WorkManager and the OS
     )
     .build()
 
@@ -236,20 +264,19 @@ WorkManager.getInstance(context)
 ### When to Use
 
 **Use WorkManager for**:
-- File uploads that must complete
+- File uploads that must be reliably enqueued and completed when constraints are met
 - Data synchronization with server
 - Sending analytics/logs
 - Cache cleanup/old data deletion
 - Image processing
-- Periodic tasks (min 15 minutes)
+- Periodic tasks (minimum interval ~15 minutes; actual runs may be batched/delayed by the system)
 
 **Don't use WorkManager for**:
-- Precise timing (use AlarmManager)
-- Long-running foreground work (use Foreground Service)
-- Immediate UI updates (use coroutines)
-- Real-time processing (use Service)
+- Strictly exact timing (use AlarmManager or other precise scheduling mechanisms)
+- Tasks requiring immediate, continuous, real-time/low-latency execution (use a foreground service / bound service)
+- Immediate UI updates (use coroutines, `ViewModel`, and main-thread mechanisms)
 
----
+If you need both robust scheduling/retries and foreground execution (e.g., user-visible long-running upload), use WorkManager with `setForeground()` inside your `ListenableWorker`/`CoroutineWorker` instead of manually managing a service.
 
 ## Follow-ups
 
@@ -261,7 +288,7 @@ WorkManager.getInstance(context)
 
 ## References
 
-- [[c-coroutines]] — WorkManager integrates with Kotlin coroutines via CoroutineWorker
+- [[c-coroutines]] — WorkManager integrates with Kotlin coroutines via `CoroutineWorker`
 - [[c-background-tasks]] — Overview of Android background execution options
 - [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager) — Official Android guide
 - [WorkManager Basics](https://medium.com/androiddevelopers/workmanager-basics-beba51e94048) — Introduction article
@@ -269,14 +296,13 @@ WorkManager.getInstance(context)
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-service--android--easy]] — Understanding Android Service lifecycle
-- [[q-coroutines-basics--kotlin--easy]] — Kotlin coroutines fundamentals
+- [[q-android-service-types--android--easy]] — Understanding Android `Service` lifecycle
+- [[q-android-async-primitives--android--easy]] — Basic async primitives on Android
 
 ### Related (Same Level)
-- [[q-coroutines-flow--kotlin--medium]] — Asynchronous data streams with Flow
-- [[q-foreground-service-types--android--medium]] — Long-running visible background work
-- [[q-jobscheduler--android--medium]] — Lower-level scheduled task API
+- [[q-foreground-service-types--android--medium]] — `Long`-running visible background work using foreground services
+- [[q-android-architectural-patterns--android--medium]] — Architectural approaches and where background work fits
 
 ### Advanced (Harder)
-- [[q-background-execution-limits--android--hard]] — Android background execution restrictions and workarounds
-- [[q-battery-optimization--android--hard]] — Battery optimization strategies and Doze mode
+- [[q-android14-permissions--android--medium]] — New restrictions and their impact on background work
+- [[q-android-app-lag-analysis--android--medium]] — Lag analysis and impact of background work on performance

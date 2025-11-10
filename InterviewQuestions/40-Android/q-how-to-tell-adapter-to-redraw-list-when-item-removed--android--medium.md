@@ -7,7 +7,6 @@ aliases:
 - Как сказать адаптеру перерисовать список
 topic: android
 subtopics:
-- ui-animation
 - ui-views
 question_kind: android
 difficulty: medium
@@ -22,11 +21,10 @@ related:
 - q-how-to-create-list-like-recyclerview-in-compose--android--medium
 - q-recyclerview-sethasfixedsize--android--easy
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 sources: []
 tags:
 - adapter
-- android/ui-animation
 - android/ui-views
 - difficulty/medium
 - diffutil
@@ -45,7 +43,7 @@ tags:
 
 ## Ответ (RU)
 
-Когда элемент удаляется из списка, необходимо: (1) удалить его из источника данных, (2) уведомить адаптер о конкретном изменении через специализированные notify методы.
+Когда элемент удаляется из списка, необходимо: (1) удалить его из источника данных, (2) уведомить адаптер о конкретном изменении через специализированные notify-методы.
 
 ### Основные Подходы
 
@@ -53,23 +51,24 @@ tags:
 class MyAdapter(private val items: MutableList<Item>) :
     RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
-    // ❌ Обновляет весь список, нет анимаций
+    // ❌ Обновляет весь список, нет диффа, нет выборочных анимаций
     fun removeItemBad(position: Int) {
         items.removeAt(position)
-        notifyDataSetChanged() // Неэффективно!
+        notifyDataSetChanged() // Неэффективно, используйте точечные уведомления
     }
 
-    // ✅ Обновляет только затронутый элемент
+    // ✅ Уведомляем об удалении конкретного элемента
     fun removeItem(position: Int) {
         items.removeAt(position)
         notifyItemRemoved(position)
     }
 
-    // ✅ Дополнительно обновляет позиции
+    // ✅ При необходимости обновляем элементы, индексы которых зависят от позиции
     fun removeItemWithRange(position: Int) {
         items.removeAt(position)
         notifyItemRemoved(position)
-        notifyItemRangeChanged(position, items.size)
+        // Вызывайте range-обновление только если view зависят от adapterPosition
+        notifyItemRangeChanged(position, itemCount - position)
     }
 }
 ```
@@ -95,7 +94,7 @@ class MyAdapter : ListAdapter<Item, MyAdapter.ViewHolder>(ItemDiffCallback()) {
 }
 ```
 
-### Notify Методы
+### Notify-методы
 
 ```kotlin
 // Удалить один элемент
@@ -124,7 +123,10 @@ val swipeHandler = object : ItemTouchHelper.SimpleCallback(
     override fun onMove(...): Boolean = false
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        adapter.removeItem(viewHolder.adapterPosition)
+        val position = viewHolder.bindingAdapterPosition
+        if (position != RecyclerView.NO_POSITION) {
+            adapter.removeItem(position)
+        }
     }
 }
 
@@ -148,9 +150,14 @@ class UndoAdapter(private val items: MutableList<Item>) :
     }
 
     fun undoDelete() {
-        deletedItem?.let {
-            items.add(deletedPosition, it)
-            notifyItemInserted(deletedPosition)
+        deletedItem?.let { item ->
+            if (deletedPosition in 0..items.size) {
+                items.add(deletedPosition, item)
+                notifyItemInserted(deletedPosition)
+            }
+            // Сброс состояния после undo
+            deletedItem = null
+            deletedPosition = -1
         }
     }
 }
@@ -164,15 +171,15 @@ Snackbar.make(view, "Удалено", Snackbar.LENGTH_LONG)
 
 ### Лучшие Практики
 
-1. **Используйте ListAdapter** с DiffUtil для автоматического вычисления изменений
-2. **Избегайте notifyDataSetChanged()** — нет анимаций, плохая производительность
-3. **Обновляйте данные ДО вызова notify** — иначе IndexOutOfBoundsException
-4. **Используйте notifyItemRangeChanged()** для обновления позиций после удаления
-5. **Добавьте undo** для критичных удалений
+1. Используйте `ListAdapter` с `DiffUtil` для автоматического вычисления изменений.
+2. Избегайте `notifyDataSetChanged()`, когда можно использовать более точечные уведомления — иначе нет анимаций и лишние перерисовки.
+3. Сначала обновляйте данные, затем вызывайте `notify*` — иначе возможны ошибки индексов (`IndexOutOfBoundsException`, рассинхронизация).
+4. Вызывайте `notifyItemRangeChanged()` только при необходимости, когда содержимое последующих элементов зависит от их `adapterPosition` (например, отображаете порядковый номер).
+5. Добавьте undo для критичных удалений (через `Snackbar` или другой UI-паттерн).
 
 | Метод | Анимация | Производительность | Случай |
 |-------|----------|---------------------|--------|
-| `notifyDataSetChanged()` | Нет | Плохая | Избегать |
+| `notifyDataSetChanged()` | Нет (только полное обновление) | Плохая | Избегать, если есть альтернатива |
 | `notifyItemRemoved()` | Да | Хорошая | Один элемент |
 | `DiffUtil` | Да | Отличная | Рекомендуется |
 
@@ -188,23 +195,24 @@ When an item is deleted, you must: (1) remove it from the data source, (2) notif
 class MyAdapter(private val items: MutableList<Item>) :
     RecyclerView.Adapter<MyAdapter.ViewHolder>() {
 
-    // ❌ Refreshes entire list, no animations
+    // ❌ Refreshes entire list, no fine-grained diff or animations
     fun removeItemBad(position: Int) {
         items.removeAt(position)
-        notifyDataSetChanged() // Inefficient!
+        notifyDataSetChanged() // Inefficient, prefer specific notifications
     }
 
-    // ✅ Updates only affected item
+    // ✅ Notify about removal of a single item
     fun removeItem(position: Int) {
         items.removeAt(position)
         notifyItemRemoved(position)
     }
 
-    // ✅ Also updates subsequent positions
+    // ✅ Use range update only if later items' content depends on their position
     fun removeItemWithRange(position: Int) {
         items.removeAt(position)
         notifyItemRemoved(position)
-        notifyItemRangeChanged(position, items.size)
+        // Call range-changed only when views depend on adapterPosition
+        notifyItemRangeChanged(position, itemCount - position)
     }
 }
 ```
@@ -259,7 +267,10 @@ val swipeHandler = object : ItemTouchHelper.SimpleCallback(
     override fun onMove(...): Boolean = false
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        adapter.removeItem(viewHolder.adapterPosition)
+        val position = viewHolder.bindingAdapterPosition
+        if (position != RecyclerView.NO_POSITION) {
+            adapter.removeItem(position)
+        }
     }
 }
 
@@ -283,9 +294,14 @@ class UndoAdapter(private val items: MutableList<Item>) :
     }
 
     fun undoDelete() {
-        deletedItem?.let {
-            items.add(deletedPosition, it)
-            notifyItemInserted(deletedPosition)
+        deletedItem?.let { item ->
+            if (deletedPosition in 0..items.size) {
+                items.add(deletedPosition, item)
+                notifyItemInserted(deletedPosition)
+            }
+            // Reset state after undo
+            deletedItem = null
+            deletedPosition = -1
         }
     }
 }
@@ -299,33 +315,67 @@ Snackbar.make(view, "Deleted", Snackbar.LENGTH_LONG)
 
 ### Best Practices
 
-1. **Use ListAdapter** with DiffUtil for automatic change calculation
-2. **Avoid notifyDataSetChanged()** — no animations, poor performance
-3. **Update data BEFORE calling notify** — otherwise IndexOutOfBoundsException
-4. **Use notifyItemRangeChanged()** to update positions after removal
-5. **Add undo** for critical deletions
+1. Use `ListAdapter` with `DiffUtil` for automatic diff calculation.
+2. Avoid `notifyDataSetChanged()` when you can use more specific calls — it skips animations and causes unnecessary redraws.
+3. Update data BEFORE calling `notify*` to avoid index issues (`IndexOutOfBoundsException`, desync).
+4. Call `notifyItemRangeChanged()` only when necessary, e.g., when subsequent items render content based on their `adapterPosition` (such as ordinal numbers).
+5. Provide undo for critical deletions (via `Snackbar` or similar UX pattern).
 
 | Method | Animation | Performance | Use Case |
 |--------|-----------|-------------|----------|
-| `notifyDataSetChanged()` | No | Poor | Avoid |
+| `notifyDataSetChanged()` | No (full refresh only) | Poor | Avoid when a more specific call is possible |
 | `notifyItemRemoved()` | Yes | Good | Single item |
 | `DiffUtil` | Yes | Excellent | Recommended |
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Что произойдет, если вызвать `notifyItemRemoved()` до удаления элемента из списка данных?
+- Как `DiffUtil` вычисляет различия между списками?
+- Когда стоит использовать `AsyncListDiffer` вместо `ListAdapter`?
+- Как эффективно обрабатывать множественные одновременные удаления?
+- Каковы преимущества использования `payload` с `notifyItemChanged()`?
+
 ## Follow-ups
 
-- What happens if you call notifyItemRemoved() before removing from the data list?
-- How does DiffUtil calculate differences between lists?
-- When should you use AsyncListDiffer instead of ListAdapter?
+- What happens if you call `notifyItemRemoved()` before removing from the data list?
+- How does `DiffUtil` calculate differences between lists?
+- When should you use `AsyncListDiffer` instead of `ListAdapter`?
 - How to handle multiple simultaneous deletions efficiently?
-- What are the benefits of using payload with notifyItemChanged()?
+- What are the benefits of using `payload` with `notifyItemChanged()`?
+
+## Ссылки (RU)
+
+- [Документация по RecyclerView](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView)
+- [Документация по DiffUtil](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
+- [Документация по ListAdapter](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter)
 
 ## References
 
 - [RecyclerView Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/RecyclerView)
 - [DiffUtil Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/DiffUtil)
 - [ListAdapter Documentation](https://developer.android.com/reference/androidx/recyclerview/widget/ListAdapter)
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-custom-views]]
+
+### Предпосылки (Проще)
+
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Основы оптимизации RecyclerView
+
+### Связанные (Средний уровень)
+
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Альтернатива на Compose
+
+### Продвинутые (Сложнее)
+
+- Вопросы об оптимизации производительности RecyclerView с большими наборами данных
+- Вопросы о реализации кастомного `ItemAnimator` для RecyclerView
+- Вопросы о `ConcatAdapter` для нескольких типов представлений
 
 ## Related Questions
 
@@ -336,12 +386,9 @@ Snackbar.make(view, "Deleted", Snackbar.LENGTH_LONG)
 
 ### Prerequisites (Easier)
 - [[q-recyclerview-sethasfixedsize--android--easy]] - RecyclerView optimization basics
-- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Android UI fundamentals
-- [[q-why-separate-ui-and-business-logic--android--easy]] - Architecture principles
 
 ### Related (Same Level)
 - [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Compose alternative
-- [[q-testing-compose-ui--android--medium]] - UI testing patterns
 
 ### Advanced (Harder)
 - Questions about RecyclerView performance optimization with large datasets

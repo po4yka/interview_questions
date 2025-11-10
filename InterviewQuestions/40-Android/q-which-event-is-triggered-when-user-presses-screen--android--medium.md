@@ -10,22 +10,20 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-16kb-dex-page-size--android--medium, q-how-to-create-chat-lists-from-a-ui-perspective--android--hard, q-primitive-maps-android--android--medium]
+related: [c-custom-views, q-16kb-dex-page-size--android--medium, q-how-to-create-chat-lists-from-a-ui-perspective--android--hard, q-primitive-maps-android--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-11-10
 tags: [android, android/ui-compose, android/ui-views, difficulty/medium, gesture-detection, motion-event, touch-events]
 ---
 
 # Вопрос (RU)
 
-Какое событие срабатывает когда пользователь нажимает на экран?
-
+> Какое событие срабатывает когда пользователь нажимает на экран?
 
 # Question (EN)
 
-Which event is triggered when user presses the screen?
-
+> Which event is triggered when user presses the screen?
 
 ---
 
@@ -44,7 +42,7 @@ Which event is triggered when user presses the screen?
 | **ACTION_POINTER_DOWN** | 5 | Дополнительный указатель касается экрана |
 | **ACTION_POINTER_UP** | 6 | Не основной указатель покидает экран |
 
-### Базовая Обработка Касаний В View
+### Базовая Обработка Касаний В `View`
 
 ```kotlin
 class CustomView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
@@ -265,14 +263,13 @@ class ParentView(context: Context) : ViewGroup(context) {
 
 ### Лучшие Практики
 
-1. **Возвращайте `true`** из `onTouchEvent()` для получения последующих событий (`MOVE`, `UP`)
-2. **Используйте `actionMasked`** вместо `action` для корректной обработки мультикасаний
-3. **Отслеживайте pointer ID** для стабильного трекинга пальцев при мультикасаниях
-4. **Используйте `GestureDetector`** для стандартных жестов (tap, double-tap, fling)
-5. **Учитывайте доступность** — обеспечьте альтернативы тач-управлению
+1. Возвращайте `true` из `onTouchEvent()` для получения последующих событий (`MOVE`, `UP`)
+2. Используйте `actionMasked` вместо `action` для корректной обработки мультикасаний
+3. Отслеживайте pointer ID для стабильного трекинга пальцев при мультикасаниях
+4. Используйте `GestureDetector` для стандартных жестов (tap, double-tap, fling)
+5. Учитывайте доступность — обеспечьте альтернативы тач-управлению
 
 ---
-
 
 ## Answer (EN)
 
@@ -289,7 +286,7 @@ When a user presses the screen in Android, the **ACTION_DOWN** event is triggere
 | **ACTION_POINTER_DOWN** | 5 | Additional pointer touches screen |
 | **ACTION_POINTER_UP** | 6 | Non-primary pointer leaves screen |
 
-### Basic Touch Handling in View
+### Basic Touch Handling in `View`
 
 ```kotlin
 class CustomView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
@@ -510,13 +507,21 @@ class ParentView(context: Context) : ViewGroup(context) {
 
 ### Best Practices
 
-1. **Return `true`** from `onTouchEvent()` to receive subsequent events (`MOVE`, `UP`)
-2. **Use `actionMasked`** instead of `action` for correct multi-touch handling
-3. **Track pointer IDs** for stable finger tracking during multi-touch
-4. **Use `GestureDetector`** for standard gestures (tap, double-tap, fling)
-5. **Consider accessibility** — provide alternatives to touch controls
+1. Return `true` from `onTouchEvent()` to receive subsequent events (`MOVE`, `UP`)
+2. Use `actionMasked` instead of `action` for correct multi-touch handling
+3. Track pointer IDs for stable finger tracking during multi-touch
+4. Use `GestureDetector` for standard gestures (tap, double-tap, fling)
+5. Consider accessibility — provide alternatives to touch controls
 
 ---
+
+## Дополнительные вопросы (RU)
+
+1. В чем разница между `event.action` и `event.actionMasked`?
+2. Как различить жест свайпа и жест прокрутки при обработке касаний?
+3. Что произойдет, если `onTouchEvent()` вернет `false` для `ACTION_DOWN`?
+4. Как работает распространение touch-событий во вложенных `ViewGroup`?
+5. Когда стоит использовать `GestureDetector` вместо прямой обработки `MotionEvent`?
 
 ## Follow-ups
 
@@ -526,21 +531,44 @@ class ParentView(context: Context) : ViewGroup(context) {
 4. How does touch event propagation work in nested ViewGroups?
 5. When should you use `GestureDetector` vs. raw `MotionEvent` handling?
 
+## Ссылки (RU)
+
+- Документация Android: MotionEvent
+- Документация Android: Input Events
+- Документация Compose: Pointer Input
+
 ## References
 
 - [Android Developers: MotionEvent](https://developer.android.com/reference/android/view/MotionEvent)
 - [Android Developers: Input Events](https://developer.android.com/develop/ui/views/touch-and-input/input-events)
 - [Compose: Pointer Input](https://developer.android.com/jetpack/compose/touch-input)
 
+## Связанные вопросы (RU)
+
+### Базовые (проще)
+- Понимание жизненного цикла `View` в Android
+- Базовые знания о паттернах обработки событий
+
+### Связанные (тот же уровень)
+- [[q-how-to-create-chat-lists-from-a-ui-perspective--android--hard]]
+- Пользовательская отрисовка во `View` и `invalidate()`
+- Распознавание жестов и тактильная/визуальная обратная связь
+
+### Продвинутые (сложнее)
+- Сложные мульти-тач жесты (pinch-to-zoom, rotation)
+- Делегирование touch-событий в кастомных `ViewGroup`
+- Оптимизация производительности при обработке частых touch-событий
+- Реализация кастомного drag-and-drop на основе touch-событий
+
 ## Related Questions
 
 ### Prerequisites (Easier)
-- Understanding of View lifecycle in Android
+- Understanding of `View` lifecycle in Android
 - Basic knowledge of event handling patterns
 
 ### Related (Same Level)
 - [[q-how-to-create-chat-lists-from-a-ui-perspective--android--hard]]
-- Custom View drawing and invalidation
+- Custom `View` drawing and invalidation
 - Gesture recognition and touch feedback
 
 ### Advanced (Harder)

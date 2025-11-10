@@ -4,27 +4,28 @@ title: Canvas Optimization / Оптимизация Canvas
 aliases: [Canvas Optimization, Оптимизация Canvas]
 topic: android
 subtopics:
-  - performance-rendering
-  - ui-graphics
-  - ui-views
+- performance-rendering
+- ui-graphics
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - c-custom-views
-  - q-android-app-lag-analysis--android--medium
-  - q-android-performance-measurement-tools--android--medium
-  - q-canvas-drawing-optimization--android--hard
-  - q-custom-view-lifecycle--android--medium
+- c-custom-views
+- q-android-app-lag-analysis--android--medium
+- q-android-performance-measurement-tools--android--medium
+- q-canvas-drawing-optimization--android--hard
+- q-custom-view-lifecycle--android--medium
 sources: []
 created: 2025-10-13
-updated: 2025-10-29
+updated: 2025-11-10
 tags: [android/performance-rendering, android/ui-graphics, android/ui-views, custom-views, difficulty/medium, performance]
+
 ---
 
 # Вопрос (RU)
@@ -37,19 +38,20 @@ tags: [android/performance-rendering, android/ui-graphics, android/ui-views, cus
 
 ## Ответ (RU)
 
-### Цель Производительности
-**60 FPS = 16.67 мс/кадр**. Бюджет onDraw(): **< 5 мс** (остальное — измерение, компоновка, системные операции). Нулевые аллокации в цикле отрисовки.
+### Цель производительности
+**60 FPS = 16.67 мс/кадр**. Хорошая цель для `onDraw()`: **~3-5 мс** (остальное — измерение, компоновка, системные операции). Минимизируйте аллокации в цикле отрисовки, особенно в часто вызываемых методах; избегайте лишних объектов на каждый кадр, чтобы не провоцировать GC во время анимаций.
 
-### 1. Паттерн Без Аллокаций
+### 1. Паттерн без аллокаций
 
-Создавайте Paint/Path/Rect/Matrix как поля класса. Переиспользуйте через `reset()`/`set()`.
+Создавайте `Paint`/`Path`/`Rect`/`Matrix` как поля класса. Переиспользуйте через `reset()`/`set()`.
 
 ```kotlin
-class OptimizedView : View {
+class OptimizedView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
   // ✅ Выделить память один раз
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val rect = RectF()
   private val path = Path()
+  private val radius = 40f
 
   override fun onDraw(canvas: Canvas) {
     // ✅ Переиспользование
@@ -59,47 +61,55 @@ class OptimizedView : View {
 
     canvas.drawPath(path, paint)
 
-    // ❌ Никогда не создавать объекты здесь
+    // ❌ Избегать новых объектов здесь без необходимости
     // val tempPaint = Paint() // Аллокация каждый кадр!
   }
 }
 ```
 
-**Результат**: нет GC пауз во время отрисовки.
+**Результат**: сниженный риск GC-пауз во время отрисовки.
 
-### 2. Аппаратное Ускорение (GPU)
+### 2. Аппаратное ускорение (GPU)
 
 ```kotlin
-// GPU кеширует команды отрисовки
+// Включить аппаратную отрисовку слоя для этого View
 setLayerType(LAYER_TYPE_HARDWARE, null)
 ```
 
 **Когда использовать**:
-- Статичный или редко меняющийся контент
-- Сложная графика (тени, градиенты, размытие)
-- Анимация с постоянными визуальными эффектами
+- Статичный или редко меняющийся сложный контент, который выгодно кешировать в отдельном слое
+- Сложная графика (тени, градиенты, размытие), поддерживаемая аппаратным ускорением
+- Анимации, где эффекты могут быть эффективно отрисованы GPU
 
-**Эффект**: ускорение в 5-10 раз для сложных путей.
+**Эффект**: может существенно ускорить сложные операции по сравнению с программным рендерингом, но выигрыш зависит от устройства и конкретной сцены.
 
-**Компромисс**: дополнительная память (копия текстуры в GPU); не подходит для часто меняющегося контента.
+**Компромиссы**:
+- Дополнительная память под текстуры на GPU
+- Частая инвалидация большого или сложного аппаратного слоя может съесть выигрыш
+- Некоторые эффекты поддерживаются только в программном рендеринге (может потребоваться `LAYER_TYPE_SOFTWARE` для конкретных кейсов)
 
-### 3. Bitmap Кеширование
+### 3. Bitmap-кеширование
 
-Рендерьте дорогой контент один раз, сохраните в Bitmap, переиспользуйте.
+Рендерьте дорогой контент один раз, сохраните в `Bitmap`, переиспользуйте.
 
 ```kotlin
 private var cache: Bitmap? = null
 private var cacheValid = false
 
 override fun onDraw(canvas: Canvas) {
-  if (!cacheValid) {
+  if (width == 0 || height == 0) return
+
+  if (!cacheValid || cache?.width != width || cache?.height != height) {
+    // Освобождаем предыдущий Bitmap, если размер изменился
+    cache?.recycle()
+
     cache = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-    Canvas(cache!!).apply {
-      drawComplexBackground(this)  // Дорогая операция
-    }
+    val offscreenCanvas = Canvas(cache!!)
+    drawComplexBackground(offscreenCanvas)  // Дорогая операция
     cacheValid = true
   }
-  canvas.drawBitmap(cache!!, 0f, 0f, null)
+
+  cache?.let { canvas.drawBitmap(it, 0f, 0f, null) }
 }
 
 fun invalidateCache() {
@@ -108,9 +118,11 @@ fun invalidateCache() {
 }
 ```
 
-**Применение**: фоновые узоры, сложные статичные слои, шейдеры.
+**Применение**: фоновые узоры, сложные статичные слои, комбинации нескольких дорогих операций.
 
-### 4. Клиппинг Видимой Области
+**Замечание**: учитывайте расход памяти под большие `Bitmap`-ы; следите за жизненным циклом и очисткой.
+
+### 4. Клиппинг видимой области
 
 Рисуйте только видимые элементы.
 
@@ -118,29 +130,31 @@ fun invalidateCache() {
 override fun onDraw(canvas: Canvas) {
   val visibleBounds = canvas.clipBounds
 
-  items
-    .filter { it.bounds.intersects(visibleBounds) }
-    .forEach { it.draw(canvas) }
+  for (item in items) {
+    if (Rect.intersects(item.bounds, visibleBounds)) {
+      item.draw(canvas)
+    }
+  }
 }
 ```
 
-**Эффект**: ускорение в 10-20 раз для прокручиваемого контента с сотнями элементов.
+**Эффект**: значительное снижение лишней работы при прокрутке или большом количестве элементов; реальный выигрыш зависит от сцены.
 
 ### 5. Оптимизация Paint
 
 ```kotlin
-// ✅ Хорошо: простые настройки
-paint.isAntiAlias = false  // Для прямых линий
+// ✅ Хорошо: простые настройки там, где качество приемлемо
+paint.isAntiAlias = false  // Для прямых линий / пиксель-идеальной графики
 paint.color = Color.parseColor("#FF5733")  // Непрозрачный
 paint.style = Paint.Style.FILL
 
-// ❌ Плохо: дорогие операции
-paint.isAntiAlias = true  // +30% времени рендеринга
-paint.alpha = 128  // Требует альфа-блендинга
-paint.setShadowLayer(10f, 0f, 0f, Color.BLACK)  // Тяжелая операция
+// ❌ Осторожно: потенциально дорогие операции
+paint.isAntiAlias = true              // Требует дополнительной обработки пикселей
+paint.alpha = 128                     // Включает альфа-блендинг
+paint.setShadowLayer(10f, 0f, 0f, Color.BLACK)  // Тяжелая операция, особенно на больших объектах
 ```
 
-**Совет**: используйте `Paint.ANTI_ALIAS_FLAG` только для кривых/окружностей.
+**Совет**: включайте `Paint.ANTI_ALIAS_FLAG` и сложные эффекты только там, где это визуально оправдано, и измеряйте влияние.
 
 ### Профилирование
 
@@ -152,23 +166,26 @@ override fun onDraw(canvas: Canvas) {
 }
 ```
 
-Анализируйте через **Android Studio Profiler** → CPU → System Trace.
+Анализируйте через Android Studio Profiler → CPU → System Trace, а также инспектируйте кадры в Layout Inspector и профилях рендеринга.
+
+---
 
 ## Answer (EN)
 
 ### Performance Target
-**60 FPS = 16.67 ms/frame**. Budget for onDraw(): **< 5 ms** (rest for measure, layout, system overhead). Zero allocations in draw loop.
+**60 FPS = 16.67 ms/frame**. A good target for `onDraw()`: **~3-5 ms** (the rest is for measure, layout, and system overhead). Minimize allocations in the draw path, especially per-frame; avoid unnecessary objects every frame to reduce the risk of GC during animations.
 
 ### 1. Zero-Allocation Pattern
 
-Create Paint/Path/Rect/Matrix as class fields. Reuse via `reset()`/`set()`.
+Create `Paint`/`Path`/`Rect`/`Matrix` as class fields. Reuse via `reset()`/`set()`.
 
 ```kotlin
-class OptimizedView : View {
+class OptimizedView(context: Context, attrs: AttributeSet? = null) : View(context, attrs) {
   // ✅ Allocate once
   private val paint = Paint(Paint.ANTI_ALIAS_FLAG)
   private val rect = RectF()
   private val path = Path()
+  private val radius = 40f
 
   override fun onDraw(canvas: Canvas) {
     // ✅ Reuse
@@ -178,47 +195,55 @@ class OptimizedView : View {
 
     canvas.drawPath(path, paint)
 
-    // ❌ Never create objects here
+    // ❌ Avoid new objects here unless truly necessary
     // val tempPaint = Paint() // Allocation per frame!
   }
 }
 ```
 
-**Result**: no GC pauses during rendering.
+**Result**: reduced risk of GC pauses during rendering.
 
 ### 2. Hardware Acceleration (GPU)
 
 ```kotlin
-// GPU caches drawing commands
+// Enable hardware-accelerated layer for this View
 setLayerType(LAYER_TYPE_HARDWARE, null)
 ```
 
 **When to use**:
-- Static or infrequently changing content
-- Complex graphics (shadows, gradients, blur)
-- Animation with consistent visual effects
+- Static or infrequently changing complex content that benefits from being cached into a separate layer
+- Complex graphics (shadows, gradients, blur) supported by hardware acceleration
+- Animations where the GPU can efficiently handle the drawing workload
 
-**Impact**: 5-10x speedup for complex paths.
+**Impact**: can significantly speed up complex drawing compared to pure software rendering, but the gain depends on the device and scene.
 
-**Trade-off**: extra memory (texture copy on GPU); not suitable for frequently changing content.
+**Trade-offs**:
+- Extra GPU memory for layer textures
+- Frequent invalidation of a large/complex hardware layer can reduce or negate benefits
+- Some effects are only supported in software rendering (may require `LAYER_TYPE_SOFTWARE` for specific cases)
 
 ### 3. Bitmap Caching
 
-Render expensive content once, save to Bitmap, reuse.
+Render expensive content once, save to `Bitmap`, reuse.
 
 ```kotlin
 private var cache: Bitmap? = null
 private var cacheValid = false
 
 override fun onDraw(canvas: Canvas) {
-  if (!cacheValid) {
+  if (width == 0 || height == 0) return
+
+  if (!cacheValid || cache?.width != width || cache?.height != height) {
+    // Release previous bitmap if size has changed
+    cache?.recycle()
+
     cache = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-    Canvas(cache!!).apply {
-      drawComplexBackground(this)  // Expensive operation
-    }
+    val offscreenCanvas = Canvas(cache!!)
+    drawComplexBackground(offscreenCanvas)  // Expensive operation
     cacheValid = true
   }
-  canvas.drawBitmap(cache!!, 0f, 0f, null)
+
+  cache?.let { canvas.drawBitmap(it, 0f, 0f, null) }
 }
 
 fun invalidateCache() {
@@ -227,7 +252,9 @@ fun invalidateCache() {
 }
 ```
 
-**Use cases**: background patterns, complex static layers, shaders.
+**Use cases**: background patterns, complex static layers, combinations of several expensive operations.
+
+**Note**: consider memory usage for large `Bitmap`s; manage lifecycle and cleanup carefully.
 
 ### 4. Clipping to Visible Region
 
@@ -237,29 +264,31 @@ Draw only visible items.
 override fun onDraw(canvas: Canvas) {
   val visibleBounds = canvas.clipBounds
 
-  items
-    .filter { it.bounds.intersects(visibleBounds) }
-    .forEach { it.draw(canvas) }
+  for (item in items) {
+    if (Rect.intersects(item.bounds, visibleBounds)) {
+      item.draw(canvas)
+    }
+  }
 }
 ```
 
-**Impact**: 10-20x speedup for scrollable content with hundreds of items.
+**Impact**: can greatly reduce overdraw and wasted work for scrollable or large content; actual speedup depends on the scenario.
 
 ### 5. Paint Optimization
 
 ```kotlin
-// ✅ Good: simple settings
-paint.isAntiAlias = false  // For straight lines
+// ✅ Good: simple settings where quality is acceptable
+paint.isAntiAlias = false  // For straight lines / pixel-perfect graphics
 paint.color = Color.parseColor("#FF5733")  // Opaque
 paint.style = Paint.Style.FILL
 
-// ❌ Bad: expensive operations
-paint.isAntiAlias = true  // +30% rendering time
-paint.alpha = 128  // Requires alpha blending
-paint.setShadowLayer(10f, 0f, 0f, Color.BLACK)  // Heavy operation
+// ❌ Caution: potentially expensive operations
+paint.isAntiAlias = true              // Requires extra pixel processing
+paint.alpha = 128                     // Triggers alpha blending
+paint.setShadowLayer(10f, 0f, 0f, Color.BLACK)  // Heavy, especially on large shapes
 ```
 
-**Tip**: use `Paint.ANTI_ALIAS_FLAG` only for curves/circles.
+**Tip**: enable `Paint.ANTI_ALIAS_FLAG` and heavy effects only where visually needed, and measure their impact.
 
 ### Profiling
 
@@ -271,37 +300,60 @@ override fun onDraw(canvas: Canvas) {
 }
 ```
 
-Analyze via **Android Studio Profiler** → CPU → System Trace.
+Analyze via Android Studio Profiler → CPU → System Trace, and inspect rendering using Layout Inspector / rendering profiles.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как овердроу влияет на производительность Canvas и как его обнаружить?
+- Когда следует использовать `LAYER_TYPE_SOFTWARE` vs `LAYER_TYPE_HARDWARE`?
+- Как реализовать эффективное переиспользование представлений для прокручиваемых списков на основе Canvas?
+- Каковы последствия по памяти при использовании Bitmap-кеширования для больших представлений?
+- Как оптимизировать операции с `Path` для сложной векторной графики?
 
 ## Follow-ups
 
 - How does overdraw affect Canvas performance and how to detect it?
-- When should you use LAYER_TYPE_SOFTWARE vs LAYER_TYPE_HARDWARE?
+- When should you use `LAYER_TYPE_SOFTWARE` vs `LAYER_TYPE_HARDWARE`?
 - How to implement efficient view recycling for scrollable canvas-based lists?
 - What are the memory implications of Bitmap caching for large views?
-- How to optimize Path operations for complex vector graphics?
+- How to optimize `Path` operations for complex vector graphics?
 
-## References
+## Ссылки (RU)
 
-- [[c-custom-views]] - Custom View fundamentals
+- [[c-custom-views]] — основы работы с кастомными `View`
 - [Rendering Performance](https://developer.android.com/topic/performance/rendering)
 - https://developer.android.com/topic/performance/vitals/render
 
+## References
+
+- [[c-custom-views]] - Custom `View` fundamentals
+- [Rendering Performance](https://developer.android.com/topic/performance/rendering)
+- https://developer.android.com/topic/performance/vitals/render
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-custom-view-lifecycle--android--medium]] - основы жизненного цикла кастомных `View`
+- [[q-android-performance-measurement-tools--android--medium]] - обзор инструментов профилирования
+
+### Похожие (средний уровень)
+- [[q-android-app-lag-analysis--android--medium]] - анализ просадок кадров
+- [[q-canvas-drawing-optimization--android--hard]] - продвинутые техники Canvas
+
+### Продвинутые (сложнее)
+- [[q-canvas-drawing-optimization--android--hard]] - продвинутая оптимизация отрисовки Canvas
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-custom-view-lifecycle--android--medium]] - Custom View lifecycle basics
+- [[q-custom-view-lifecycle--android--medium]] - Custom `View` lifecycle basics
 - [[q-android-performance-measurement-tools--android--medium]] - Profiling tools overview
 
 ### Related (Same Level)
 - [[q-android-app-lag-analysis--android--medium]] - Frame drop analysis
-- [[q-custom-view-state-saving--android--medium]] - State management in custom views
-- [[q-anr-application-not-responding--android--medium]] - ANR debugging strategies
+- [[q-canvas-drawing-optimization--android--hard]] - Advanced Canvas techniques
 
 ### Advanced (Harder)
 - [[q-canvas-drawing-optimization--android--hard]] - Advanced Canvas techniques
-- [[q-custom-viewgroup-layout--android--hard]] - ViewGroup layout optimization
-- [[q-tiktok-video-feed--android--hard]] - Complex scrolling performance

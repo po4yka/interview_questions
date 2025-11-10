@@ -4,26 +4,27 @@ title: Design Feature Flags & Experimentation SDK / Проектирование
 aliases: [Experimentation SDK, Feature Flags SDK]
 topic: android
 subtopics:
-  - architecture-clean
-  - networking-http
-  - service
+- architecture-clean
+- networking-http
+- service
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - c-clean-architecture
-  - c-dependency-injection
-  - c-workmanager
+- c-clean-architecture
+- c-dependency-injection
+- c-workmanager
 sources:
-  - https://developer.android.com/topic/architecture
+- "https://developer.android.com/topic/architecture"
 created: 2025-10-29
-updated: 2025-11-03
+updated: 2025-11-10
 tags: [android/architecture-clean, android/networking-http, android/service, difficulty/hard, experimentation, feature-flags, sdk-design]
+
 ---
 
 # Вопрос (RU)
@@ -102,7 +103,7 @@ SDK флагов функций обеспечивает динамическо�
 
 **A/B тестирование** — метод сравнения двух версий функциональности для определения лучшей. Основывается на статистическом анализе конверсии, retention, engagement метрик.
 
-**Sticky assignments** — гарантия consistent user experience. Пользователь всегда попадает в одну и ту же группу эксперимента независимо от устройства/сессии.
+**Sticky assignments** — гарантия consistent user experience. Пользователь всегда попадает в одну и ту же группу эксперимента независимо от устройства/сессии (детерминированное распределение по стабильному идентификатору).
 
 **Kill-switch** — механизм мгновенного отключения проблемных функций без обновления приложения. Критично для поддержания availability при production incidents.
 
@@ -113,6 +114,27 @@ SDK флагов функций обеспечивает динамическо�
 **Schema versioning** — механизм поддержки backward compatibility при изменении структуры флагов. Использует semantic versioning и migration strategies.
 
 **Exposure logging** — запись факта показа пользователю определенной версии функциональности. Необходим для статистического анализа экспериментов.
+
+### Requirements
+
+**Функциональные требования:**
+- Управление флагами функций и конфигурацией экспериментов на стороне сервера
+- Динамическая загрузка и обновление конфигов без релиза приложения
+- Sticky assignments и детерминированный bucketing
+- Поддержка A/B и много вариантных экспериментов
+- Targeting rules по атрибутам пользователя и устройства
+- Kill-switch для мгновенного отключения критичных функций
+- Локальный офлайн-кеш с TTL и безопасными дефолтами
+- Логирование экспозиций и результатов для аналитики
+
+**Нефункциональные требования:**
+- Bootstrap <150мс на холодном старте за счет локального кеша
+- Высокая надежность: предсказуемое поведение при сетевых сбоях
+- Безопасность: подпись конфигов, защищенное хранение
+- Конфиденциальность: отсутствие PII в телеметрии
+- Масштабируемость: поддержка большого числа флагов и запросов
+- Наблюдаемость: метрики, логи, трассировка для диагностики
+- Обратная совместимость через версионирование схемы
 
 ### Архитектура
 
@@ -133,7 +155,7 @@ interface FlagEvaluator {
 interface FlagStore {
     suspend fun getConfig(): Config?
     suspend fun saveConfig(config: Config)
-    fun isExpired(): Boolean
+    fun isExpired(config: Config): Boolean
 }
 ```
 
@@ -150,18 +172,37 @@ class FlagBootstrapper(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     suspend fun bootstrap(): Config {
-        // 1. Load last good config from disk (<150ms target)
-        val cached = store.getConfig()
-        cached?.let { if (!store.isExpired()) return it }
+        return withContext(dispatcher) {
+            // 1. Load last good config from disk (<150ms target)
+            val cached = store.getConfig()
+            if (cached != null && !store.isExpired(cached)) {
+                // Fire-and-forget async refresh in background
+                launch { refreshInBackground(cached) }
+                return@withContext cached
+            }
 
-        // 2. Async fetch update (lazy loading)
-        val fresh = network.fetchConfig(ETag = cached?.etag)
-        fresh?.let { store.saveConfig(it) }
+            // 2. Fetch update synchronously as fallback
+            val fresh = network.fetchConfig(etag = cached?.etag)
+            if (fresh != null) {
+                store.saveConfig(fresh)
+                return@withContext fresh
+            }
 
-        return fresh ?: cached ?: getFailsafeDefaults()
+            // 3. Failsafe defaults (must be local and fast)
+            return@withContext getFailsafeDefaults()
+        }
+    }
+
+    private suspend fun refreshInBackground(cached: Config?) {
+        val fresh = network.fetchConfig(etag = cached?.etag)
+        if (fresh != null) {
+            store.saveConfig(fresh)
+        }
     }
 }
 ```
+
+`FlagNetworkClient`, `Config` (включая поле `etag`) и `getFailsafeDefaults()` подразумеваются как часть SDK контракта и должны быть определены отдельно.
 
 ### Evaluation Engine
 
@@ -170,11 +211,12 @@ class FlagBootstrapper(
 ```kotlin
 class HashEvaluator : FlagEvaluator {
     override fun evaluate(rule: Rule, context: EvaluationContext): Variant {
-        val hash = MurmurHash3.hash128("${rule.flagId}:${context.userId}")
-        val bucket = (hash % 100).toInt()
+        val key = "${rule.flagId}:${context.userId ?: "anon"}"
+        val hash = murmurHash32(key)
+        val bucket = (hash.toLong() and 0xffffffffL) % 100 // 0..99
 
         return when {
-            rule.enabled == false -> Variant.DISABLED
+            !rule.enabled -> Variant.DISABLED
             bucket < rule.rolloutPercent -> rule.variantA
             else -> rule.variantB
         }
@@ -188,6 +230,8 @@ val variant = evaluator.evaluate(
 )
 ```
 
+`murmurHash32` — любая детерминированная реализация (клиент/сервер должны совпадать).
+
 ### Cache & Offline Support
 
 Robust offline handling с TTL и fallback стратегиями:
@@ -200,29 +244,43 @@ data class CachedConfig(
     val etag: String?,
     val fetchedAt: Long,
     val ttlMs: Long = 3600000 // 1 hour
-)
+) {
+    fun isExpired(now: Long = System.currentTimeMillis()): Boolean =
+        now - fetchedAt > ttlMs
+}
 
 class RoomFlagStore(private val dao: FlagDao) : FlagStore {
     override suspend fun getConfig(): Config? {
-        val cached = dao.getLatest()
-        return if (cached?.isExpired() == false) {
-            Json.decodeFromString(cached.configJson)
-        } else null
+        val cached = dao.getLatest() ?: return null
+        return if (!cached.isExpired()) {
+            Json.decodeFromString<Config>(cached.configJson)
+        } else {
+            null
+        }
     }
 
     override suspend fun saveConfig(config: Config) {
-        dao.insert(CachedConfig(
+        val cached = CachedConfig(
             configJson = Json.encodeToString(config),
             etag = config.etag,
             fetchedAt = System.currentTimeMillis()
-        ))
+        )
+        dao.insert(cached)
+    }
+
+    override fun isExpired(config: Config): Boolean {
+        // Для простоты: ответственность за TTL реализована в CachedConfig,
+        // сюда можно прокинуть метаданные при необходимости.
+        return false
     }
 }
 ```
 
+В реальной реализации TTL/expiration должна быть согласованной: либо через метаданные `CachedConfig`, либо через поля `Config`.
+
 ### Kill-Switch
 
-Мгновенное отключение критичных функций через dedicated remote flag:
+Мгновенное отключение критичных функций через dedicated remote flag. Push (например, FCM) используется только как ускоритель обновления, а не единственный источник истины:
 
 ```kotlin
 class KillSwitchManager(
@@ -230,27 +288,24 @@ class KillSwitchManager(
     private val fcm: FirebaseMessaging = FirebaseMessaging.getInstance()
 ) {
     init {
-        // FCM nudge for instant updates
+        // FCM nudge for instant updates (best effort)
         fcm.subscribeToTopic("kill_switch")
     }
 
     fun shouldDisableFeature(feature: String): Boolean {
-        // Check kill switch first
-        if (flags.isEnabled("kill_switch_$feature")) {
-            return true
-        }
-        return false
+        // Check kill switch first; если включен kill_switch_x, то фича отключается
+        return flags.isEnabled("kill_switch_$feature")
     }
 }
 ```
 
 ### Telemetry & Privacy
 
-PII-safe exposure logging с buffered flushing.
+PII-safe exposure logging с буферизацией и периодическим сбросом. Не логировать прямые идентификаторы пользователя; использовать стабильные псевдонимизированные идентификаторы или агрегированные события.
 
 ### Security & Encryption
 
-Защита конфигураций через `EncryptedSharedPreferences`:
+Защита конфигураций через `EncryptedSharedPreferences` (пример концептуальный; реализация интерфейса должна быть полной):
 
 ```kotlin
 class SecureFlagStore(private val context: Context) : FlagStore {
@@ -258,15 +313,28 @@ class SecureFlagStore(private val context: Context) : FlagStore {
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
         .build()
 
+    private val encryptedPrefs = EncryptedSharedPreferences.create(
+        context,
+        "flags_secure",
+        masterKey,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
+
+    override suspend fun getConfig(): Config? {
+        val json = encryptedPrefs.getString("config", null) ?: return null
+        return Json.decodeFromString<Config>(json)
+    }
+
     override suspend fun saveConfig(config: Config) {
-        val encryptedPrefs = EncryptedSharedPreferences.create(
-            context, "flags_secure", masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
         encryptedPrefs.edit()
             .putString("config", Json.encodeToString(config))
             .apply()
+    }
+
+    override fun isExpired(config: Config): Boolean {
+        // TTL/expiration может храниться внутри Config или в отдельных метаданных
+        return false
     }
 }
 ```
@@ -301,7 +369,7 @@ Feature flags SDK enables dynamic feature toggles and A/B testing without requir
 
 **A/B testing** — method for comparing two versions of functionality to determine the better one. Based on statistical analysis of conversion, retention, engagement metrics.
 
-**Sticky assignments** — guarantee of consistent user experience. User always lands in the same experiment group regardless of device/session.
+**Sticky assignments** — guarantee of consistent user experience via deterministic bucketing. A user always lands in the same experiment group across sessions/devices when using a stable identifier.
 
 **Kill-switch** — mechanism for instantly disabling problematic features without app updates. Critical for maintaining availability during production incidents.
 
@@ -312,6 +380,27 @@ Feature flags SDK enables dynamic feature toggles and A/B testing without requir
 **Schema versioning** — mechanism for maintaining backward compatibility when flag structure changes. Uses semantic versioning and migration strategies.
 
 **Exposure logging** — recording when a user is shown a specific version of functionality. Required for statistical analysis of experiments.
+
+### Requirements
+
+**Functional requirements:**
+- Server-side management of feature flags and experiment configs
+- Dynamic loading and updating of configs without app releases
+- Sticky assignments and deterministic bucketing
+- Support for A/B and multivariate experiments
+- Targeting rules based on user/device attributes
+- Kill-switch for instant shutdown of critical features
+- Local offline cache with TTL and safe defaults
+- Exposure and result logging for analytics
+
+**Non-functional requirements:**
+- Bootstrap <150ms on cold start via local cache
+- High reliability: predictable behavior under network failures
+- Security: signed configs, protected storage
+- Privacy: no PII in telemetry
+- Scalability: support many flags and high request volume
+- Observability: metrics, logs, tracing for diagnostics
+- Backward compatibility via schema versioning
 
 ### Architecture
 
@@ -332,7 +421,7 @@ interface FlagEvaluator {
 interface FlagStore {
     suspend fun getConfig(): Config?
     suspend fun saveConfig(config: Config)
-    fun isExpired(): Boolean
+    fun isExpired(config: Config): Boolean
 }
 ```
 
@@ -340,7 +429,7 @@ Modules: `flags-core`, `evaluator`, `store`, `network`, `telemetry`, `flags-ui`.
 
 ### Bootstrap (<150ms)
 
-Critical for UX — users shouldn't wait for flag loading.
+Critical for UX — users should not wait for flag loading.
 
 ```kotlin
 class FlagBootstrapper(
@@ -349,18 +438,37 @@ class FlagBootstrapper(
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
     suspend fun bootstrap(): Config {
-        // 1. Load last good config from disk (<150ms target)
-        val cached = store.getConfig()
-        cached?.let { if (!store.isExpired()) return it }
+        return withContext(dispatcher) {
+            // 1. Load last good config from disk (<150ms target)
+            val cached = store.getConfig()
+            if (cached != null && !store.isExpired(cached)) {
+                // Fire-and-forget async refresh in background
+                launch { refreshInBackground(cached) }
+                return@withContext cached
+            }
 
-        // 2. Async fetch update (lazy loading)
-        val fresh = network.fetchConfig(ETag = cached?.etag)
-        fresh?.let { store.saveConfig(it) }
+            // 2. Fetch update synchronously as fallback
+            val fresh = network.fetchConfig(etag = cached?.etag)
+            if (fresh != null) {
+                store.saveConfig(fresh)
+                return@withContext fresh
+            }
 
-        return fresh ?: cached ?: getFailsafeDefaults()
+            // 3. Failsafe defaults (local, fast)
+            return@withContext getFailsafeDefaults()
+        }
+    }
+
+    private suspend fun refreshInBackground(cached: Config?) {
+        val fresh = network.fetchConfig(etag = cached?.etag)
+        if (fresh != null) {
+            store.saveConfig(fresh)
+        }
     }
 }
 ```
+
+`FlagNetworkClient`, `Config` (including `etag`) and `getFailsafeDefaults()` are part of the SDK contract and must be defined elsewhere.
 
 ### Evaluation Engine
 
@@ -369,11 +477,12 @@ Deterministic bucketing for consistent user experience:
 ```kotlin
 class HashEvaluator : FlagEvaluator {
     override fun evaluate(rule: Rule, context: EvaluationContext): Variant {
-        val hash = MurmurHash3.hash128("${rule.flagId}:${context.userId}")
-        val bucket = (hash % 100).toInt()
+        val key = "${rule.flagId}:${context.userId ?: "anon"}"
+        val hash = murmurHash32(key)
+        val bucket = (hash.toLong() and 0xffffffffL) % 100 // 0..99
 
         return when {
-            rule.enabled == false -> Variant.DISABLED
+            !rule.enabled -> Variant.DISABLED
             bucket < rule.rolloutPercent -> rule.variantA
             else -> rule.variantB
         }
@@ -387,6 +496,8 @@ val variant = evaluator.evaluate(
 )
 ```
 
+`murmurHash32` is any deterministic implementation shared between client and server.
+
 ### Cache & Offline Support
 
 Robust offline handling with TTL and fallback strategies:
@@ -399,29 +510,43 @@ data class CachedConfig(
     val etag: String?,
     val fetchedAt: Long,
     val ttlMs: Long = 3600000 // 1 hour
-)
+) {
+    fun isExpired(now: Long = System.currentTimeMillis()): Boolean =
+        now - fetchedAt > ttlMs
+}
 
 class RoomFlagStore(private val dao: FlagDao) : FlagStore {
     override suspend fun getConfig(): Config? {
-        val cached = dao.getLatest()
-        return if (cached?.isExpired() == false) {
-            Json.decodeFromString(cached.configJson)
-        } else null
+        val cached = dao.getLatest() ?: return null
+        return if (!cached.isExpired()) {
+            Json.decodeFromString<Config>(cached.configJson)
+        } else {
+            null
+        }
     }
 
     override suspend fun saveConfig(config: Config) {
-        dao.insert(CachedConfig(
+        val cached = CachedConfig(
             configJson = Json.encodeToString(config),
             etag = config.etag,
             fetchedAt = System.currentTimeMillis()
-        ))
+        )
+        dao.insert(cached)
+    }
+
+    override fun isExpired(config: Config): Boolean {
+        // In this example, expiration is handled via CachedConfig metadata.
+        // This method can be implemented if Config carries its own TTL.
+        return false
     }
 }
 ```
 
+In a real implementation, TTL/expiration logic should be consistently defined either via cache metadata or fields on Config.
+
 ### Kill-Switch
 
-Instant disabling of critical features via dedicated remote flag:
+Instant disabling of critical features via dedicated remote flag. Push (e.g., FCM) is only a nudge, not the source of truth:
 
 ```kotlin
 class KillSwitchManager(
@@ -429,27 +554,24 @@ class KillSwitchManager(
     private val fcm: FirebaseMessaging = FirebaseMessaging.getInstance()
 ) {
     init {
-        // FCM nudge for instant updates
+        // FCM nudge for instant updates (best effort)
         fcm.subscribeToTopic("kill_switch")
     }
 
     fun shouldDisableFeature(feature: String): Boolean {
-        // Check kill switch first
-        if (flags.isEnabled("kill_switch_$feature")) {
-            return true
-        }
-        return false
+        // Check kill switch first; if kill_switch_x is enabled, disable the feature
+        return flags.isEnabled("kill_switch_$feature")
     }
 }
 ```
 
 ### Telemetry & Privacy
 
-PII-safe exposure logging with buffered flushing.
+PII-safe exposure logging with buffered flushing. Do not log raw user identifiers; use stable pseudonymous IDs or aggregated metrics.
 
 ### Security & Encryption
 
-Protecting configs via `EncryptedSharedPreferences`:
+Protecting configs via `EncryptedSharedPreferences` (example is conceptual; implementation must fully satisfy FlagStore contract):
 
 ```kotlin
 class SecureFlagStore(private val context: Context) : FlagStore {
@@ -457,15 +579,28 @@ class SecureFlagStore(private val context: Context) : FlagStore {
         .setKeyScheme(MasterKey.KeyScheme.AES256_GCM)
         .build()
 
+    private val encryptedPrefs = EncryptedSharedPreferences.create(
+        context,
+        "flags_secure",
+        masterKey,
+        EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
+        EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
+    )
+
+    override suspend fun getConfig(): Config? {
+        val json = encryptedPrefs.getString("config", null) ?: return null
+        return Json.decodeFromString<Config>(json)
+    }
+
     override suspend fun saveConfig(config: Config) {
-        val encryptedPrefs = EncryptedSharedPreferences.create(
-            context, "flags_secure", masterKey,
-            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-        )
         encryptedPrefs.edit()
             .putString("config", Json.encodeToString(config))
             .apply()
+    }
+
+    override fun isExpired(config: Config): Boolean {
+        // TTL/expiration can be implemented using Config or separate metadata.
+        return false
     }
 }
 ```
@@ -494,19 +629,15 @@ Key metrics for production reliability: bootstrap latency (<150ms), cache hit ra
 
 ## References
 
--   [[c-clean-architecture]]
--   [[c-dependency-injection]]
--   [[c-workmanager]]
--   [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
--   [[ANDROID-INTERVIEWER-GUIDE]]
-
+- [[c-clean-architecture]]
+- [[c-dependency-injection]]
+- [[c-workmanager]]
 
 ## Follow-ups
 
 - [[c-clean-architecture]]
 - [[c-dependency-injection]]
 - [[c-workmanager]]
-
 
 ## Related Questions
 

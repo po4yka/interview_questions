@@ -16,12 +16,10 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-event-handling
-- c-touch-input
 - q-view-methods-and-their-purpose--android--medium
 - q-what-layout-allows-overlapping-objects--android--easy
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags:
 - android/ui-views
 - difficulty/medium
@@ -29,753 +27,790 @@ tags:
 - interaction
 - touch-events
 - ui
+
 ---
 
 # Вопрос (RU)
 
-Какое событие вызывается при нажатии юзера по экрану
+> Какое событие вызывается при нажатии юзера по экрану?
 
-## Answer (EN)
 # Question (EN)
-> Touch Events
 
----
-
-When a user presses the screen in Android, the system calls a series of touch event methods. The main events are: **dispatchTouchEvent()**, **onInterceptTouchEvent()** (for ViewGroups), **onTouchEvent()**, and if configured, **onClick()**.
-
-### Touch Event Flow
-
-```kotlin
-// Event dispatch flow:
-// Activity.dispatchTouchEvent()
-//   → ViewGroup.dispatchTouchEvent()
-//     → ViewGroup.onInterceptTouchEvent()
-//       → View.dispatchTouchEvent()
-//         → View.onTouchEvent()
-//           → View.OnClickListener.onClick()
-```
-
-### Touch Event Actions
-
-```kotlin
-class TouchEventExample : View {
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                // User pressed down on screen
-                Log.d("Touch", "ACTION_DOWN at (${event.x}, ${event.y})")
-                return true
-            }
-
-            MotionEvent.ACTION_MOVE -> {
-                // User moved finger while pressing
-                Log.d("Touch", "ACTION_MOVE to (${event.x}, ${event.y})")
-                return true
-            }
-
-            MotionEvent.ACTION_UP -> {
-                // User lifted finger
-                Log.d("Touch", "ACTION_UP at (${event.x}, ${event.y})")
-                return true
-            }
-
-            MotionEvent.ACTION_CANCEL -> {
-                // Touch cancelled (e.g., parent intercepts)
-                Log.d("Touch", "ACTION_CANCEL")
-                return true
-            }
-        }
-        return super.onTouchEvent(event)
-    }
-}
-```
-
-### dispatchTouchEvent()
-
-First method called - distributes the event.
-
-```kotlin
-class CustomView : View {
-
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        Log.d("Touch", "dispatchTouchEvent: ${event.actionToString()}")
-
-        // Can intercept before normal handling
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            // Custom logic
-        }
-
-        return super.dispatchTouchEvent(event)
-    }
-}
-```
-
-### onTouchEvent()
-
-Main touch handling method.
-
-```kotlin
-class InteractiveView : View {
-
-    private var lastX = 0f
-    private var lastY = 0f
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                lastX = event.x
-                lastY = event.y
-                return true // Consume event
-            }
-
-            MotionEvent.ACTION_MOVE -> {
-                val dx = event.x - lastX
-                val dy = event.y - lastY
-
-                translationX += dx
-                translationY += dy
-
-                lastX = event.x
-                lastY = event.y
-                return true
-            }
-
-            MotionEvent.ACTION_UP -> {
-                performClick() // Important for accessibility
-                return true
-            }
-        }
-
-        return super.onTouchEvent(event)
-    }
-
-    override fun performClick(): Boolean {
-        return super.performClick()
-    }
-}
-```
-
-### onClick()
-
-Called when ACTION_UP occurs without significant movement.
-
-```kotlin
-class ClickableView : View {
-
-    init {
-        // Set click listener
-        setOnClickListener {
-            Log.d("Touch", "View clicked!")
-        }
-    }
-
-    // onClick is called only if:
-    // 1. ACTION_DOWN occurred
-    // 2. ACTION_UP occurred in same location
-    // 3. No ACTION_CANCEL
-    // 4. View is clickable
-}
-```
-
-### ViewGroup Touch Interception
-
-```kotlin
-class CustomViewGroup : ViewGroup {
-
-    override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                // Decide whether to intercept
-                return false // Let children handle
-            }
-
-            MotionEvent.ACTION_MOVE -> {
-                // Intercept if scrolling
-                if (shouldInterceptScroll(event)) {
-                    return true // Intercept future events
-                }
-            }
-        }
-
-        return super.onInterceptTouchEvent(event)
-    }
-
-    private fun shouldInterceptScroll(event: MotionEvent): Boolean {
-        // Custom logic to determine if should intercept
-        return false
-    }
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        // Handle intercepted events
-        return super.onTouchEvent(event)
-    }
-}
-```
-
-### Complete Touch Event Example
-
-```kotlin
-class CompleteTouchExample : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val customView = object : View(this) {
-
-            override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-                Log.d("Touch", "1. dispatchTouchEvent: ${event.actionToString()}")
-                return super.dispatchTouchEvent(event)
-            }
-
-            override fun onTouchEvent(event: MotionEvent): Boolean {
-                Log.d("Touch", "2. onTouchEvent: ${event.actionToString()}")
-
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        Log.d("Touch", "   → User pressed screen")
-                        return true
-                    }
-
-                    MotionEvent.ACTION_MOVE -> {
-                        Log.d("Touch", "   → User moving finger")
-                        return true
-                    }
-
-                    MotionEvent.ACTION_UP -> {
-                        Log.d("Touch", "   → User lifted finger")
-                        performClick()
-                        return true
-                    }
-                }
-
-                return super.onTouchEvent(event)
-            }
-
-            override fun performClick(): Boolean {
-                Log.d("Touch", "3. performClick (if no movement)")
-                return super.performClick()
-            }
-        }
-
-        customView.setOnClickListener {
-            Log.d("Touch", "4. onClick callback")
-        }
-
-        setContentView(customView)
-    }
-}
-
-fun MotionEvent.actionToString() = when (action) {
-    MotionEvent.ACTION_DOWN -> "DOWN"
-    MotionEvent.ACTION_UP -> "UP"
-    MotionEvent.ACTION_MOVE -> "MOVE"
-    MotionEvent.ACTION_CANCEL -> "CANCEL"
-    else -> "OTHER"
-}
-```
-
-### Event Sequence for Single Tap
-
-```
-1. ACTION_DOWN - dispatchTouchEvent()
-2. ACTION_DOWN - onTouchEvent()
-3. ACTION_UP - dispatchTouchEvent()
-4. ACTION_UP - onTouchEvent()
-5. performClick()
-6. onClick()
-```
-
-### Gesture Detection
-
-```kotlin
-class GestureView : View {
-
-    private val gestureDetector = GestureDetector(context,
-        object : GestureDetector.SimpleOnGestureListener() {
-
-            override fun onDown(e: MotionEvent): Boolean {
-                Log.d("Gesture", "onDown")
-                return true
-            }
-
-            override fun onSingleTapUp(e: MotionEvent): Boolean {
-                Log.d("Gesture", "Single tap")
-                return true
-            }
-
-            override fun onDoubleTap(e: MotionEvent): Boolean {
-                Log.d("Gesture", "Double tap")
-                return true
-            }
-
-            override fun onLongPress(e: MotionEvent) {
-                Log.d("Gesture", "Long press")
-            }
-
-            override fun onFling(
-                e1: MotionEvent,
-                e2: MotionEvent,
-                velocityX: Float,
-                velocityY: Float
-            ): Boolean {
-                Log.d("Gesture", "Fling: velocity ($velocityX, $velocityY)")
-                return true
-            }
-
-            override fun onScroll(
-                e1: MotionEvent,
-                e2: MotionEvent,
-                distanceX: Float,
-                distanceY: Float
-            ): Boolean {
-                Log.d("Gesture", "Scroll: distance ($distanceX, $distanceY)")
-                return true
-            }
-        })
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
-    }
-}
-```
-
-### Touch Event in Jetpack Compose
-
-```kotlin
-@Composable
-fun ComposeTouchEvents() {
-    var tapInfo by remember { mutableStateOf("Tap the box") }
-
-    Box(
-        modifier = Modifier
-            .size(200.dp)
-            .background(Color.Blue)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onPress = {
-                        tapInfo = "Pressed"
-                        tryAwaitRelease()
-                        tapInfo = "Released"
-                    },
-                    onTap = {
-                        tapInfo = "Tapped at (${it.x}, ${it.y})"
-                    },
-                    onDoubleTap = {
-                        tapInfo = "Double tapped"
-                    },
-                    onLongPress = {
-                        tapInfo = "Long pressed"
-                    }
-                )
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(tapInfo, color = Color.White)
-    }
-}
-```
-
-### Summary
-
-When user presses screen, Android calls:
-
-1. **ACTION_DOWN** - User touches screen
-2. **dispatchTouchEvent()** - Event distribution starts
-3. **onInterceptTouchEvent()** - Parent can intercept (ViewGroup only)
-4. **onTouchEvent()** - View handles event
-5. **ACTION_UP** - User lifts finger
-6. **onClick()** - Called if no movement occurred
-
-Key points:
-- Return `true` from onTouchEvent() to consume event
-- onClick() only fires on ACTION_UP without movement
-- dispatchTouchEvent() is first, onTouchEvent() handles actual touch
-- ViewGroups can intercept child events with onInterceptTouchEvent()
-
-
-
----
-
-
-## Answer (EN)
-# Question (EN)
-> Touch Events
-
----
-
-When a user presses the screen in Android, the system calls a series of touch event methods. The main events are: **dispatchTouchEvent()**, **onInterceptTouchEvent()** (for ViewGroups), **onTouchEvent()**, and if configured, **onClick()**.
-
-### Touch Event Flow
-
-```kotlin
-// Event dispatch flow:
-// Activity.dispatchTouchEvent()
-//   → ViewGroup.dispatchTouchEvent()
-//     → ViewGroup.onInterceptTouchEvent()
-//       → View.dispatchTouchEvent()
-//         → View.onTouchEvent()
-//           → View.OnClickListener.onClick()
-```
-
-### Touch Event Actions
-
-```kotlin
-class TouchEventExample : View {
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                // User pressed down on screen
-                Log.d("Touch", "ACTION_DOWN at (${event.x}, ${event.y})")
-                return true
-            }
-
-            MotionEvent.ACTION_MOVE -> {
-                // User moved finger while pressing
-                Log.d("Touch", "ACTION_MOVE to (${event.x}, ${event.y})")
-                return true
-            }
-
-            MotionEvent.ACTION_UP -> {
-                // User lifted finger
-                Log.d("Touch", "ACTION_UP at (${event.x}, ${event.y})")
-                return true
-            }
-
-            MotionEvent.ACTION_CANCEL -> {
-                // Touch cancelled (e.g., parent intercepts)
-                Log.d("Touch", "ACTION_CANCEL")
-                return true
-            }
-        }
-        return super.onTouchEvent(event)
-    }
-}
-```
-
-### dispatchTouchEvent()
-
-First method called - distributes the event.
-
-```kotlin
-class CustomView : View {
-
-    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-        Log.d("Touch", "dispatchTouchEvent: ${event.actionToString()}")
-
-        // Can intercept before normal handling
-        if (event.action == MotionEvent.ACTION_DOWN) {
-            // Custom logic
-        }
-
-        return super.dispatchTouchEvent(event)
-    }
-}
-```
-
-### onTouchEvent()
-
-Main touch handling method.
-
-```kotlin
-class InteractiveView : View {
-
-    private var lastX = 0f
-    private var lastY = 0f
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                lastX = event.x
-                lastY = event.y
-                return true // Consume event
-            }
-
-            MotionEvent.ACTION_MOVE -> {
-                val dx = event.x - lastX
-                val dy = event.y - lastY
-
-                translationX += dx
-                translationY += dy
-
-                lastX = event.x
-                lastY = event.y
-                return true
-            }
-
-            MotionEvent.ACTION_UP -> {
-                performClick() // Important for accessibility
-                return true
-            }
-        }
-
-        return super.onTouchEvent(event)
-    }
-
-    override fun performClick(): Boolean {
-        return super.performClick()
-    }
-}
-```
-
-### onClick()
-
-Called when ACTION_UP occurs without significant movement.
-
-```kotlin
-class ClickableView : View {
-
-    init {
-        // Set click listener
-        setOnClickListener {
-            Log.d("Touch", "View clicked!")
-        }
-    }
-
-    // onClick is called only if:
-    // 1. ACTION_DOWN occurred
-    // 2. ACTION_UP occurred in same location
-    // 3. No ACTION_CANCEL
-    // 4. View is clickable
-}
-```
-
-### ViewGroup Touch Interception
-
-```kotlin
-class CustomViewGroup : ViewGroup {
-
-    override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
-        when (event.action) {
-            MotionEvent.ACTION_DOWN -> {
-                // Decide whether to intercept
-                return false // Let children handle
-            }
-
-            MotionEvent.ACTION_MOVE -> {
-                // Intercept if scrolling
-                if (shouldInterceptScroll(event)) {
-                    return true // Intercept future events
-                }
-            }
-        }
-
-        return super.onInterceptTouchEvent(event)
-    }
-
-    private fun shouldInterceptScroll(event: MotionEvent): Boolean {
-        // Custom logic to determine if should intercept
-        return false
-    }
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        // Handle intercepted events
-        return super.onTouchEvent(event)
-    }
-}
-```
-
-### Complete Touch Event Example
-
-```kotlin
-class CompleteTouchExample : AppCompatActivity() {
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val customView = object : View(this) {
-
-            override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-                Log.d("Touch", "1. dispatchTouchEvent: ${event.actionToString()}")
-                return super.dispatchTouchEvent(event)
-            }
-
-            override fun onTouchEvent(event: MotionEvent): Boolean {
-                Log.d("Touch", "2. onTouchEvent: ${event.actionToString()}")
-
-                when (event.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        Log.d("Touch", "   → User pressed screen")
-                        return true
-                    }
-
-                    MotionEvent.ACTION_MOVE -> {
-                        Log.d("Touch", "   → User moving finger")
-                        return true
-                    }
-
-                    MotionEvent.ACTION_UP -> {
-                        Log.d("Touch", "   → User lifted finger")
-                        performClick()
-                        return true
-                    }
-                }
-
-                return super.onTouchEvent(event)
-            }
-
-            override fun performClick(): Boolean {
-                Log.d("Touch", "3. performClick (if no movement)")
-                return super.performClick()
-            }
-        }
-
-        customView.setOnClickListener {
-            Log.d("Touch", "4. onClick callback")
-        }
-
-        setContentView(customView)
-    }
-}
-
-fun MotionEvent.actionToString() = when (action) {
-    MotionEvent.ACTION_DOWN -> "DOWN"
-    MotionEvent.ACTION_UP -> "UP"
-    MotionEvent.ACTION_MOVE -> "MOVE"
-    MotionEvent.ACTION_CANCEL -> "CANCEL"
-    else -> "OTHER"
-}
-```
-
-### Event Sequence for Single Tap
-
-```
-1. ACTION_DOWN - dispatchTouchEvent()
-2. ACTION_DOWN - onTouchEvent()
-3. ACTION_UP - dispatchTouchEvent()
-4. ACTION_UP - onTouchEvent()
-5. performClick()
-6. onClick()
-```
-
-### Gesture Detection
-
-```kotlin
-class GestureView : View {
-
-    private val gestureDetector = GestureDetector(context,
-        object : GestureDetector.SimpleOnGestureListener() {
-
-            override fun onDown(e: MotionEvent): Boolean {
-                Log.d("Gesture", "onDown")
-                return true
-            }
-
-            override fun onSingleTapUp(e: MotionEvent): Boolean {
-                Log.d("Gesture", "Single tap")
-                return true
-            }
-
-            override fun onDoubleTap(e: MotionEvent): Boolean {
-                Log.d("Gesture", "Double tap")
-                return true
-            }
-
-            override fun onLongPress(e: MotionEvent) {
-                Log.d("Gesture", "Long press")
-            }
-
-            override fun onFling(
-                e1: MotionEvent,
-                e2: MotionEvent,
-                velocityX: Float,
-                velocityY: Float
-            ): Boolean {
-                Log.d("Gesture", "Fling: velocity ($velocityX, $velocityY)")
-                return true
-            }
-
-            override fun onScroll(
-                e1: MotionEvent,
-                e2: MotionEvent,
-                distanceX: Float,
-                distanceY: Float
-            ): Boolean {
-                Log.d("Gesture", "Scroll: distance ($distanceX, $distanceY)")
-                return true
-            }
-        })
-
-    override fun onTouchEvent(event: MotionEvent): Boolean {
-        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
-    }
-}
-```
-
-### Touch Event in Jetpack Compose
-
-```kotlin
-@Composable
-fun ComposeTouchEvents() {
-    var tapInfo by remember { mutableStateOf("Tap the box") }
-
-    Box(
-        modifier = Modifier
-            .size(200.dp)
-            .background(Color.Blue)
-            .pointerInput(Unit) {
-                detectTapGestures(
-                    onPress = {
-                        tapInfo = "Pressed"
-                        tryAwaitRelease()
-                        tapInfo = "Released"
-                    },
-                    onTap = {
-                        tapInfo = "Tapped at (${it.x}, ${it.y})"
-                    },
-                    onDoubleTap = {
-                        tapInfo = "Double tapped"
-                    },
-                    onLongPress = {
-                        tapInfo = "Long pressed"
-                    }
-                )
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(tapInfo, color = Color.White)
-    }
-}
-```
-
-### Summary
-
-When user presses screen, Android calls:
-
-1. **ACTION_DOWN** - User touches screen
-2. **dispatchTouchEvent()** - Event distribution starts
-3. **onInterceptTouchEvent()** - Parent can intercept (ViewGroup only)
-4. **onTouchEvent()** - View handles event
-5. **ACTION_UP** - User lifts finger
-6. **onClick()** - Called if no movement occurred
-
-Key points:
-- Return `true` from onTouchEvent() to consume event
-- onClick() only fires on ACTION_UP without movement
-- dispatchTouchEvent() is first, onTouchEvent() handles actual touch
-- ViewGroups can intercept child events with onInterceptTouchEvent()
+> What event is called when the user presses the screen?
 
 ## Ответ (RU)
 
-Система вызывает: dispatchTouchEvent() — распределяет событие. onTouchEvent() — обрабатывает вью, если не перехвачено. onClick() — вызывается, если был ACTION_UP без движения.
+При первом нажатии пальцем по экрану генерируется событие касания с действием **`MotionEvent.ACTION_DOWN`**, которое проходит через цепочку обработки:
 
+1. **`dispatchTouchEvent()`** — сначала вызывается у `Activity`, затем у `ViewGroup` и далее у конкретного `View`, распределяя `MotionEvent`.
+2. **`onInterceptTouchEvent()`** (только у `ViewGroup`) — родитель может решить перехватить дальнейшие события этого жеста.
+3. **`onTouchEvent()`** — основной метод обработки касаний во `View`.
+4. При корректной последовательности `ACTION_DOWN` → `ACTION_UP` без существенного движения, без `ACTION_CANCEL`, при кликабельном и включённом `View` — может быть вызвано **`performClick()`**, а затем **`onClick()` слушателя.
+
+Ключевые моменты:
+- Само «нажатие» (первое прикосновение) соответствует **`ACTION_DOWN`**.
+- Цепочка доставки реализуется через `dispatchTouchEvent()` и `onTouchEvent()`; `onClick()` — это производное высокоуровневое событие.
+
+### Поток событий касания
+
+```kotlin
+// Поток распространения события (упрощенно):
+// Activity.dispatchTouchEvent()
+//   → ViewGroup.dispatchTouchEvent()
+//     → ViewGroup.onInterceptTouchEvent()
+//       → View.dispatchTouchEvent()
+//         → View.onTouchEvent()
+//           → View.OnClickListener.onClick()
+```
+
+### Действия событий касания
+
+```kotlin
+class TouchEventExample(context: Context) : View(context) {
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                // Пользователь коснулся экрана
+                Log.d("Touch", "ACTION_DOWN at (${event.x}, ${event.y})")
+                return true
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                // Пользователь двигает палец при нажатии
+                Log.d("Touch", "ACTION_MOVE to (${event.x}, ${event.y})")
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                // Пользователь отпустил палец
+                Log.d("Touch", "ACTION_UP at (${event.x}, ${event.y})")
+                return true
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                // Событие отменено (например, перехвачено родителем)
+                Log.d("Touch", "ACTION_CANCEL")
+                return true
+            }
+        }
+        return super.onTouchEvent(event)
+    }
+}
+```
+
+### `dispatchTouchEvent()`
+
+Первый колбэк в цепочке `Activity`/`View`/`ViewGroup`, который распределяет событие дальше.
+
+```kotlin
+class CustomView(context: Context) : View(context) {
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        Log.d("Touch", "dispatchTouchEvent: ${event.actionToString()}")
+
+        // При необходимости можно добавить предварительную обработку
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            // Дополнительная логика
+        }
+
+        return super.dispatchTouchEvent(event)
+    }
+}
+```
+
+### `onTouchEvent()`
+
+Основной метод обработки касаний у `View`.
+
+```kotlin
+class InteractiveView(context: Context) : View(context) {
+
+    private var lastX = 0f
+    private var lastY = 0f
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                lastX = event.x
+                lastY = event.y
+                return true // Вернуть true, чтобы продолжать получать события этого жеста
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                val dx = event.x - lastX
+                val dy = event.y - lastY
+
+                translationX += dx
+                translationY += dy
+
+                lastX = event.x
+                lastY = event.y
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                // Для согласованности и доступности вызываем performClick()
+                performClick()
+                return true
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                return true
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+
+    override fun performClick(): Boolean {
+        // Обработка клика при необходимости, затем вызов super
+        return super.performClick()
+    }
+}
+```
+
+### `onClick()`
+
+Высокоуровневый колбэк клика, вызывается после валидного tap-жеста.
+
+```kotlin
+class ClickableView(context: Context) : View(context) {
+
+    init {
+        // Установка обработчика клика
+        setOnClickListener {
+            Log.d("Touch", "View clicked!")
+        }
+    }
+
+    // onClick вызывается только если (упрощенно):
+    // 1. ACTION_DOWN произошел на этом View
+    // 2. ACTION_UP произошел на том же View (в пределах touch slop)
+    // 3. Не было ACTION_CANCEL
+    // 4. View кликабелен и включен
+}
+```
+
+### Перехват касаний во `ViewGroup`
+
+```kotlin
+abstract class CustomViewGroup(context: Context) : ViewGroup(context) {
+
+    override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                // Обычно не перехватываем DOWN, чтобы он ушел детям
+                return false
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                // Можно перехватить, например, при детектировании скролла
+                if (shouldInterceptScroll(event)) {
+                    return true // Перехватываем дальнейшие события этого жеста
+                }
+            }
+        }
+
+        return super.onInterceptTouchEvent(event)
+    }
+
+    private fun shouldInterceptScroll(event: MotionEvent): Boolean {
+        // Логика определения, нужно ли перехватить
+        return false
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        // Обработка событий, перехваченных этим ViewGroup
+        return super.onTouchEvent(event)
+    }
+}
+```
+
+### Полный пример обработки касаний
+
+```kotlin
+class CompleteTouchExample : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val customView = object : View(this) {
+
+            override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+                Log.d("Touch", "1. dispatchTouchEvent: ${event.actionToString()}")
+                return super.dispatchTouchEvent(event)
+            }
+
+            override fun onTouchEvent(event: MotionEvent): Boolean {
+                Log.d("Touch", "2. onTouchEvent: ${event.actionToString()}")
+
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        Log.d("Touch", "   → Пользователь нажал на экран")
+                        return true
+                    }
+
+                    MotionEvent.ACTION_MOVE -> {
+                        Log.d("Touch", "   → Пользователь двигает палец")
+                        return true
+                    }
+
+                    MotionEvent.ACTION_UP -> {
+                        Log.d("Touch", "   → Пользователь отпустил палец")
+                        // Для валидного клика логично вызвать performClick()
+                        performClick()
+                        return true
+                    }
+
+                    MotionEvent.ACTION_CANCEL -> {
+                        Log.d("Touch", "   → Касание отменено")
+                        return true
+                    }
+                }
+
+                return super.onTouchEvent(event)
+            }
+
+            override fun performClick(): Boolean {
+                Log.d("Touch", "3. performClick() (вызывается для валидного клика)")
+                return super.performClick()
+            }
+        }
+
+        customView.setOnClickListener {
+            Log.d("Touch", "4. onClick callback")
+        }
+
+        setContentView(customView)
+    }
+}
+
+fun MotionEvent.actionToString(): String = when (action) {
+    MotionEvent.ACTION_DOWN -> "DOWN"
+    MotionEvent.ACTION_UP -> "UP"
+    MotionEvent.ACTION_MOVE -> "MOVE"
+    MotionEvent.ACTION_CANCEL -> "CANCEL"
+    else -> "OTHER"
+}
+```
+
+### Последовательность событий для одиночного тапа (упрощенно)
+
+```
+1. ACTION_DOWN → dispatchTouchEvent()
+2. ACTION_DOWN → onTouchEvent()
+3. ACTION_UP   → dispatchTouchEvent()
+4. ACTION_UP   → onTouchEvent()
+5. performClick() (если жест распознан как клик)
+6. onClick() callback
+```
+
+### Распознавание жестов
+
+```kotlin
+class GestureView(context: Context) : View(context) {
+
+    private val gestureDetector = GestureDetector(context,
+        object : GestureDetector.SimpleOnGestureListener() {
+
+            override fun onDown(e: MotionEvent): Boolean {
+                Log.d("Gesture", "onDown")
+                return true
+            }
+
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
+                Log.d("Gesture", "Single tap")
+                return true
+            }
+
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                Log.d("Gesture", "Double tap")
+                return true
+            }
+
+            override fun onLongPress(e: MotionEvent) {
+                Log.d("Gesture", "Long press")
+            }
+
+            override fun onFling(
+                e1: MotionEvent,
+                e2: MotionEvent,
+                velocityX: Float,
+                velocityY: Float
+            ): Boolean {
+                Log.d("Gesture", "Fling: velocity ($velocityX, $velocityY)")
+                return true
+            }
+
+            override fun onScroll(
+                e1: MotionEvent,
+                e2: MotionEvent,
+                distanceX: Float,
+                distanceY: Float
+            ): Boolean {
+                Log.d("Gesture", "Scroll: distance ($distanceX, $distanceY)")
+                return true
+            }
+        })
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+    }
+}
+```
+
+### События касания в Jetpack Compose
+
+```kotlin
+@Composable
+fun ComposeTouchEvents() {
+    var tapInfo by remember { mutableStateOf("Tap the box") }
+
+    Box(
+        modifier = Modifier
+            .size(200.dp)
+            .background(Color.Blue)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = {
+                        tapInfo = "Pressed"
+                        tryAwaitRelease()
+                        tapInfo = "Released"
+                    },
+                    onTap = {
+                        tapInfo = "Tapped at (${it.x}, ${it.y})"
+                    },
+                    onDoubleTap = {
+                        tapInfo = "Double tapped"
+                    },
+                    onLongPress = {
+                        tapInfo = "Long pressed"
+                    }
+                )
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        Text(tapInfo, color = Color.White)
+    }
+}
+```
+
+### Резюме
+
+Когда пользователь нажимает на экран:
+
+1. Генерируется **`ACTION_DOWN`** — начальное касание.
+2. **`dispatchTouchEvent()`** запускает распространение события (`Activity` → `ViewGroup` → `View`).
+3. **`onInterceptTouchEvent()`** (`ViewGroup`) может перехватить дальнейшие события жеста.
+4. **`onTouchEvent()`** в целевом `View` обрабатывает касание.
+5. Если жест завершается подходящим **`ACTION_UP`** (без отмены, в пределах допусков, `View` кликабелен и включен), вызывается **`performClick()`**, ведущий к **`onClick()`.
+
+Ключевые моменты:
+- Низкоуровневое событие для нажатия — `MotionEvent.ACTION_DOWN`.
+- Возвращайте `true` из `onTouchEvent()`, чтобы продолжать получать события того же жеста.
+- `onClick()` — высокоуровневая абстракция, вызывается только для валидного клика.
+- `ViewGroup` управляет доставкой событий детям через `onInterceptTouchEvent()`.
+
+## Answer (EN)
+
+When a user presses the screen in Android, the system generates a touch event with action **`MotionEvent.ACTION_DOWN`**, which travels through the touch dispatch chain. The main callbacks involved are: **`dispatchTouchEvent()`**, **`onInterceptTouchEvent()`** (for `ViewGroup`s), **`onTouchEvent()`**, and, for clickable views with a valid tap sequence, **`performClick()` / `onClick()`.
+
+Key idea: the physical press corresponds to **`ACTION_DOWN`**; higher-level callbacks (`onClick`) are derived from the full gesture (DOWN → UP without cancel/too much movement, etc.).
+
+### Touch Event `Flow`
+
+```kotlin
+// Event dispatch flow (simplified):
+// Activity.dispatchTouchEvent()
+//   → ViewGroup.dispatchTouchEvent()
+//     → ViewGroup.onInterceptTouchEvent()
+//       → View.dispatchTouchEvent()
+//         → View.onTouchEvent()
+//           → View.OnClickListener.onClick()
+```
+
+### Touch Event Actions
+
+```kotlin
+class TouchEventExample(context: Context) : View(context) {
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                // User pressed down on screen
+                Log.d("Touch", "ACTION_DOWN at (${event.x}, ${event.y})")
+                return true
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                // User moved finger while pressing
+                Log.d("Touch", "ACTION_MOVE to (${event.x}, ${event.y})")
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                // User lifted finger
+                Log.d("Touch", "ACTION_UP at (${event.x}, ${event.y})")
+                return true
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                // Touch cancelled (e.g., parent intercepts or gesture taken over)
+                Log.d("Touch", "ACTION_CANCEL")
+                return true
+            }
+        }
+        return super.onTouchEvent(event)
+    }
+}
+```
+
+### dispatchTouchEvent()
+
+First callback in the `View`/`Activity` chain; responsible for dispatching the event further.
+
+```kotlin
+class CustomView(context: Context) : View(context) {
+
+    override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+        Log.d("Touch", "dispatchTouchEvent: ${event.actionToString()}")
+
+        // Custom pre-processing if needed
+        if (event.action == MotionEvent.ACTION_DOWN) {
+            // Custom logic
+        }
+
+        return super.dispatchTouchEvent(event)
+    }
+}
+```
+
+### onTouchEvent()
+
+Main touch handling method of a `View`.
+
+```kotlin
+class InteractiveView(context: Context) : View(context) {
+
+    private var lastX = 0f
+    private var lastY = 0f
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                lastX = event.x
+                lastY = event.y
+                return true // Consume event to continue receiving this gesture
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                val dx = event.x - lastX
+                val dy = event.y - lastY
+
+                translationX += dx
+                translationY += dy
+
+                lastX = event.x
+                lastY = event.y
+                return true
+            }
+
+            MotionEvent.ACTION_UP -> {
+                // Delegate to click handling for accessibility and consistency
+                performClick()
+                return true
+            }
+
+            MotionEvent.ACTION_CANCEL -> {
+                return true
+            }
+        }
+
+        return super.onTouchEvent(event)
+    }
+
+    override fun performClick(): Boolean {
+        // Handle click if needed, then call super
+        return super.performClick()
+    }
+}
+```
+
+### onClick()
+
+High-level click callback triggered after a valid tap gesture.
+
+```kotlin
+class ClickableView(context: Context) : View(context) {
+
+    init {
+        // Set click listener
+        setOnClickListener {
+            Log.d("Touch", "View clicked!")
+        }
+    }
+
+    // onClick is called only if (simplified):
+    // 1. ACTION_DOWN occurred on the view
+    // 2. ACTION_UP occurred on the same view (within touch slop)
+    // 3. No ACTION_CANCEL was received
+    // 4. View is clickable and enabled
+}
+```
+
+### `ViewGroup` Touch Interception
+
+```kotlin
+abstract class CustomViewGroup(context: Context) : ViewGroup(context) {
+
+    override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
+        when (event.action) {
+            MotionEvent.ACTION_DOWN -> {
+                // Decide whether to intercept; usually false so children get the DOWN
+                return false
+            }
+
+            MotionEvent.ACTION_MOVE -> {
+                // Intercept if, for example, we detect scrolling
+                if (shouldInterceptScroll(event)) {
+                    return true // Intercept subsequent events in this gesture
+                }
+            }
+        }
+
+        return super.onInterceptTouchEvent(event)
+    }
+
+    private fun shouldInterceptScroll(event: MotionEvent): Boolean {
+        // Custom logic to determine if we should intercept
+        return false
+    }
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        // Handle events intercepted by this ViewGroup
+        return super.onTouchEvent(event)
+    }
+}
+```
+
+### Complete Touch Event Example
+
+```kotlin
+class CompleteTouchExample : AppCompatActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val customView = object : View(this) {
+
+            override fun dispatchTouchEvent(event: MotionEvent): Boolean {
+                Log.d("Touch", "1. dispatchTouchEvent: ${event.actionToString()}")
+                return super.dispatchTouchEvent(event)
+            }
+
+            override fun onTouchEvent(event: MotionEvent): Boolean {
+                Log.d("Touch", "2. onTouchEvent: ${event.actionToString()}")
+
+                when (event.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        Log.d("Touch", "   → User pressed screen")
+                        return true
+                    }
+
+                    MotionEvent.ACTION_MOVE -> {
+                        Log.d("Touch", "   → User moving finger")
+                        return true
+                    }
+
+                    MotionEvent.ACTION_UP -> {
+                        Log.d("Touch", "   → User lifted finger")
+                        // Conceptually, performClick() should be invoked for a valid tap
+                        performClick()
+                        return true
+                    }
+
+                    MotionEvent.ACTION_CANCEL -> {
+                        Log.d("Touch", "   → Touch cancelled")
+                        return true
+                    }
+                }
+
+                return super.onTouchEvent(event)
+            }
+
+            override fun performClick(): Boolean {
+                Log.d("Touch", "3. performClick() (called for valid click gesture)")
+                return super.performClick()
+            }
+        }
+
+        customView.setOnClickListener {
+            Log.d("Touch", "4. onClick callback")
+        }
+
+        setContentView(customView)
+    }
+}
+
+fun MotionEvent.actionToString(): String = when (action) {
+    MotionEvent.ACTION_DOWN -> "DOWN"
+    MotionEvent.ACTION_UP -> "UP"
+    MotionEvent.ACTION_MOVE -> "MOVE"
+    MotionEvent.ACTION_CANCEL -> "CANCEL"
+    else -> "OTHER"
+}
+```
+
+### Event Sequence for Single Tap (Simplified)
+
+```
+1. ACTION_DOWN → dispatchTouchEvent()
+2. ACTION_DOWN → onTouchEvent()
+3. ACTION_UP   → dispatchTouchEvent()
+4. ACTION_UP   → onTouchEvent()
+5. performClick() (if gesture qualifies as a click)
+6. onClick() callback
+```
+
+### Gesture Detection
+
+```kotlin
+class GestureView(context: Context) : View(context) {
+
+    private val gestureDetector = GestureDetector(context,
+        object : GestureDetector.SimpleOnGestureListener() {
+
+            override fun onDown(e: MotionEvent): Boolean {
+                Log.d("Gesture", "onDown")
+                return true
+            }
+
+            override fun onSingleTapUp(e: MotionEvent): Boolean {
+                Log.d("Gesture", "Single tap")
+                return true
+            }
+
+            override fun onDoubleTap(e: MotionEvent): Boolean {
+                Log.d("Gesture", "Double tap")
+                return true
+            }
+
+            override fun onLongPress(e: MotionEvent) {
+                Log.d("Gesture", "Long press")
+            }
+
+            override fun onFling(
+                e1: MotionEvent,
+                e2: MotionEvent,
+                velocityX: Float,
+                velocityY: Float
+            ): Boolean {
+                Log.d("Gesture", "Fling: velocity ($velocityX, $velocityY)")
+                return true
+            }
+
+            override fun onScroll(
+                e1: MotionEvent,
+                e2: MotionEvent,
+                distanceX: Float,
+                distanceY: Float
+            ): Boolean {
+                Log.d("Gesture", "Scroll: distance ($distanceX, $distanceY)")
+                return true
+            }
+        })
+
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+        return gestureDetector.onTouchEvent(event) || super.onTouchEvent(event)
+    }
+}
+```
+
+### Touch Event in Jetpack Compose
+
+```kotlin
+@Composable
+fun ComposeTouchEvents() {
+    var tapInfo by remember { mutableStateOf("Tap the box") }
+
+    Box(
+        modifier = Modifier
+            .size(200.dp)
+            .background(Color.Blue)
+            .pointerInput(Unit) {
+                detectTapGestures(
+                    onPress = {
+                        tapInfo = "Pressed"
+                        tryAwaitRelease()
+                        tapInfo = "Released"
+                    },
+                    onTap = {
+                        tapInfo = "Tapped at (${it.x}, ${it.y})"
+                    },
+                    onDoubleTap = {
+                        tapInfo = "Double tapped"
+                    },
+                    onLongPress = {
+                        tapInfo = "Long pressed"
+                    }
+                )
+            },
+        contentAlignment = Alignment.Center
+    ) {
+        Text(tapInfo, color = Color.White)
+    }
+}
+```
+
+### Summary
+
+When the user presses the screen:
+
+1. **`ACTION_DOWN`** is generated — represents the initial touch.
+2. **`dispatchTouchEvent()`** starts the event distribution (`Activity` → `ViewGroup` → `View`).
+3. **`onInterceptTouchEvent()`** (`ViewGroup`) may choose to intercept subsequent events for this gesture.
+4. **`onTouchEvent()`** in the target `View` handles the touch.
+5. If the gesture completes with a suitable **`ACTION_UP`** (no cancel, within touch slop, view clickable/enabled), **`performClick()`** is invoked, leading to **`onClick()`.
+
+Key points:
+- The low-level event for the press is `MotionEvent.ACTION_DOWN`.
+- Return `true` from `onTouchEvent()` to keep receiving events in the same gesture.
+- `onClick()` is a high-level abstraction invoked only for a valid click gesture, not for every `ACTION_DOWN`/`ACTION_UP` pair.
+- `ViewGroup` can control whether children receive events via `onInterceptTouchEvent()`.
+
+---
+
+## Дополнительные вопросы (RU)
+
+- [[q-view-methods-and-their-purpose--android--medium]]
+- [[q-what-layout-allows-overlapping-objects--android--easy]]
+- Как обрабатываются последовательные события `ACTION_DOWN`, `ACTION_MOVE`, `ACTION_UP` в сложной иерархии `ViewGroup`?
+- В каких случаях `ViewGroup` должен перехватывать события в `onInterceptTouchEvent()` вместо делегирования детям?
+- Как `GestureDetector` взаимодействует с низкоуровневыми событиями `MotionEvent`?
 
 ## Follow-ups
 
-- [[c-event-handling]]
-- [[c-touch-input]]
 - [[q-view-methods-and-their-purpose--android--medium]]
+- [[q-what-layout-allows-overlapping-objects--android--easy]]
+- How are `ACTION_DOWN`, `ACTION_MOVE`, and `ACTION_UP` sequences handled in a complex `ViewGroup` hierarchy?
+- When should a `ViewGroup` intercept events in `onInterceptTouchEvent()` instead of letting children handle them?
+- How does `GestureDetector` relate to low-level `MotionEvent` handling?
 
+## Ссылки (RU)
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
 
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
 
+## Связанные вопросы (RU)
+
+- [[q-what-layout-allows-overlapping-objects--android--easy]]
 
 ## Related Questions
 
-- [[q-cicd-pipeline-android--android--medium]]
-- [[q-kotlin-context-receivers--android--hard]]
-- [[q-what-is-activity-and-what-is-it-used-for--android--medium]]
+- [[q-what-layout-allows-overlapping-objects--android--easy]]

@@ -22,7 +22,7 @@ related:
 - q-compose-semantics--android--medium
 - q-single-activity-approach--android--medium
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags:
 - android/ui-compose
@@ -43,15 +43,15 @@ tags:
 
 ## Ответ (RU)
 
-**Динамический цвет** — ключевая особенность Material 3, позволяющая приложениям адаптировать цветовую схему на основе обоев пользователя, создавая персонализированный опыт.
+**Динамический цвет** — ключевая особенность Material 3, позволяющая приложениям адаптировать цветовую схему на основе системной палитры Material You (как правило, сгенерированной из обоев пользователя), создавая персонализированный опыт.
 
 ### Принцип Работы
 
 **Извлечение цвета (Android 12+)**
-- Система анализирует обои и извлекает доминирующие цвета
-- Генерирует гармоничную тональную палитру (TonalPalette)
-- Создаёт светлую и тёмную схемы
-- Предоставляет через `dynamicLightColorScheme()` / `dynamicDarkColorScheme()`
+- Система (а не приложение) анализирует обои и извлекает ключевые цвета
+- На их основе генерируется гармоничная тональная палитра (например, "тональные палитры" / Tonal Palettes)
+- Формируются согласованные светлая и тёмная цветовые схемы
+- Приложения получают их через `dynamicLightColorScheme()` / `dynamicDarkColorScheme()` из Material 3 библиотеки
 
 ### Базовая Реализация
 
@@ -84,7 +84,7 @@ fun AppTheme(
 
 ### Цветовые Роли
 
-Material 3 определяет 25+ семантических ролей:
+Material 3 определяет множество семантических ролей (primary, secondary, tertiary, surface, background, error и др.):
 
 ```kotlin
 val LightColorScheme = lightColorScheme(
@@ -120,10 +120,12 @@ Button(
     )
 ) { Text("Сохранить") }
 
-// ❌ Хардкод цветов
-Button(colors = ButtonDefaults.buttonColors(
-    containerColor = Color.Blue // Игнорирует тему
-)) { Text("Плохо") }
+// ❌ Жёстко заданный цвет
+Button(
+    colors = ButtonDefaults.buttonColors(
+        containerColor = Color.Blue // Игнорирует тему и динамический цвет
+    )
+) { Text("Плохо") }
 ```
 
 ### Пользовательские Темы
@@ -135,19 +137,19 @@ Button(colors = ButtonDefaults.buttonColors(
 3. Экспортируйте Kotlin код
 
 ```kotlin
-// Сгенерированная схема
+// Сгенерированная схема (пример)
 val CustomLightScheme = lightColorScheme(
     primary = Color(0xFF6750A4),
     onPrimary = Color(0xFFFFFFFF),
     primaryContainer = Color(0xFFEADDFF)
-    // ... остальные 22 роли
+    // ... определите остальные роли схемы
 )
 ```
 
 ### Управление Темой Пользователем
 
 ```kotlin
-// Хранение настроек
+// Хранение настроек (пример; dataStore и DYNAMIC_COLOR_KEY должны быть объявлены отдельно)
 class ThemePreferences(context: Context) {
     private val dataStore = context.dataStore
 
@@ -202,13 +204,13 @@ fun AppTheme(
 }
 ```
 
-**Ручное управление:**
+**Ручное управление (пример интеграции с AppTheme):**
 
 ```kotlin
 enum class ThemeMode { LIGHT, DARK, SYSTEM }
 
 @Composable
-fun App(themeMode: ThemeMode) {
+fun App(themeMode: ThemeMode, dynamicColor: Boolean) {
     val systemDark = isSystemInDarkTheme()
     val darkTheme = when (themeMode) {
         ThemeMode.LIGHT -> false
@@ -216,40 +218,42 @@ fun App(themeMode: ThemeMode) {
         ThemeMode.SYSTEM -> systemDark
     }
 
-    AppTheme(darkTheme = darkTheme) { MainScreen() }
+    AppTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
+        MainScreen()
+    }
 }
 ```
 
 ### Тональная Elevation
 
-Material 3 использует цветовую tint вместо теней:
+Material 3 для поверхностей использует тональное приподнятие: на приподнятых поверхностях применяется прозрачный оттенок (tint), основанный на цвете темы (например, `surfaceTint`/`primary`), вместо того чтобы полагаться только на резкие тени.
 
 ```kotlin
 Card(
     elevation = CardDefaults.cardElevation(
-        defaultElevation = 6.dp // ✅ Elevation применяет tint
+        defaultElevation = 6.dp // ✅ Elevation добавляет тональный overlay к surface
     ),
     colors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surface
     )
 ) {
-    // Чем выше elevation, тем больше surface tint overlay
+    // Чем выше elevation, тем заметнее тональный overlay поверхности (в дополнение к теням)
 }
 ```
 
-**Уровни elevation:**
+**Примеры уровней elevation (рекомендации):**
 
-| Уровень | dp | Использование |
-|---------|-----|---------------|
-| 0 | 0dp | Фон, базовая поверхность |
-| 1 | 1dp | Карты в покое |
-| 3 | 6dp | App bar, FAB |
-| 4 | 8dp | Navigation drawer |
-| 5 | 12dp | Modal bottom sheet |
+| Уровень | dp  | Использование (пример)           |
+|---------|-----|----------------------------------|
+| 0       | 0dp | Фон, базовая поверхность         |
+| 1       | 1dp | Карты в покое                    |
+| 3       | 6dp | App bar, FAB                     |
+| 4       | 8dp | Navigation drawer                |
+| 5       | 12dp| Modal bottom sheet               |
 
 ### Inverse Цвета
 
-Для высококонтрастных оверлеев (Snackbar):
+Для высококонтрастных оверлеев (например, Snackbar на тёмном фоне):
 
 ```kotlin
 Snackbar(
@@ -264,22 +268,22 @@ Snackbar(
 1. **Всегда предоставляйте fallback** для Android < 12
 2. **Используйте семантические роли** (`MaterialTheme.colorScheme.*`), не хардкод
 3. **Тестируйте** с динамическими и статическими темами
-4. **Предоставляйте пользовательский контроль** (toggle для динамических цветов)
-5. **Следуйте elevation guidelines** (не используйте произвольные значения)
+4. **Предоставляйте пользовательский контроль** (toggle для динамических цветов, если это уместно)
+5. **Следуйте рекомендациям по elevation** вместо произвольных значений
 
 ---
 
 ## Answer (EN)
 
-**Dynamic color** is Material 3's signature feature, allowing apps to adapt their color scheme from the user's wallpaper, creating a personalized, cohesive experience.
+**Dynamic color** is a key Material 3 feature that lets apps adapt their color scheme from the system Material You palette (typically derived from the user's wallpaper), creating a personalized, cohesive experience.
 
 ### How It Works
 
-**Wallpaper Analysis (Android 12+)**
-- System extracts dominant colors from wallpaper
-- Generates harmonious tonal palette (TonalPalette)
-- Creates light and dark color schemes
-- Exposes via `dynamicLightColorScheme()` / `dynamicDarkColorScheme()`
+**Wallpaper-based extraction (Android 12+)**
+- The system (not the app) analyzes the wallpaper and extracts key colors
+- It generates harmonious tonal palettes from those colors
+- It derives consistent light and dark color schemes
+- Apps consume them via `dynamicLightColorScheme()` / `dynamicDarkColorScheme()` provided by the Material 3 library
 
 ### Basic Implementation
 
@@ -312,7 +316,7 @@ fun AppTheme(
 
 ### Color Roles
 
-Material 3 defines 25+ semantic roles:
+Material 3 defines multiple semantic color roles (primary, secondary, tertiary, surface, background, error, etc.):
 
 ```kotlin
 val LightColorScheme = lightColorScheme(
@@ -349,33 +353,35 @@ Button(
 ) { Text("Save") }
 
 // ❌ Hardcoded colors
-Button(colors = ButtonDefaults.buttonColors(
-    containerColor = Color.Blue // Ignores theme
-)) { Text("Bad") }
+Button(
+    colors = ButtonDefaults.buttonColors(
+        containerColor = Color.Blue // Ignores theme and dynamic color
+    )
+) { Text("Bad") }
 ```
 
 ### Custom Themes
 
-**Creating custom scheme:**
+**Creating a custom scheme:**
 
 1. Use [Material Theme Builder](https://m3.material.io/theme-builder)
-2. Upload wallpaper or choose seed color
+2. Upload wallpaper or choose a seed color
 3. Export Kotlin code
 
 ```kotlin
-// Generated scheme
+// Generated scheme (example)
 val CustomLightScheme = lightColorScheme(
     primary = Color(0xFF6750A4),
     onPrimary = Color(0xFFFFFFFF),
     primaryContainer = Color(0xFFEADDFF)
-    // ... remaining 22 roles
+    // ... define the rest of the roles
 )
 ```
 
 ### User Control
 
 ```kotlin
-// Store preference
+// Store preference (example; dataStore and DYNAMIC_COLOR_KEY must be defined separately)
 class ThemePreferences(context: Context) {
     private val dataStore = context.dataStore
 
@@ -430,13 +436,13 @@ fun AppTheme(
 }
 ```
 
-**Manual control:**
+**Manual control (example integration with AppTheme):**
 
 ```kotlin
 enum class ThemeMode { LIGHT, DARK, SYSTEM }
 
 @Composable
-fun App(themeMode: ThemeMode) {
+fun App(themeMode: ThemeMode, dynamicColor: Boolean) {
     val systemDark = isSystemInDarkTheme()
     val darkTheme = when (themeMode) {
         ThemeMode.LIGHT -> false
@@ -444,40 +450,42 @@ fun App(themeMode: ThemeMode) {
         ThemeMode.SYSTEM -> systemDark
     }
 
-    AppTheme(darkTheme = darkTheme) { MainScreen() }
+    AppTheme(darkTheme = darkTheme, dynamicColor = dynamicColor) {
+        MainScreen()
+    }
 }
 ```
 
 ### Tonal Elevation
 
-Material 3 uses color tint instead of shadows:
+Material 3 uses tonal elevation for surfaces: elevated components receive a translucent tint (overlay) derived from the theme (e.g., `surfaceTint`/`primary`) on top of `surface`, rather than relying solely on sharp shadows.
 
 ```kotlin
 Card(
     elevation = CardDefaults.cardElevation(
-        defaultElevation = 6.dp // ✅ Elevation applies tint
+        defaultElevation = 6.dp // ✅ Elevation adds a tonal overlay to the surface
     ),
     colors = CardDefaults.cardColors(
         containerColor = MaterialTheme.colorScheme.surface
     )
 ) {
-    // Higher elevation = more surface tint overlay
+    // Higher elevation = more pronounced surface tint overlay (in addition to shadows)
 }
 ```
 
-**Elevation levels:**
+**Elevation levels (example guidance):**
 
-| Level | dp | Usage |
-|-------|-----|-------|
-| 0 | 0dp | Background, base surface |
-| 1 | 1dp | Cards at rest |
-| 3 | 6dp | App bar, FAB |
-| 4 | 8dp | Navigation drawer |
-| 5 | 12dp | Modal bottom sheet |
+| Level | dp  | Usage (example)          |
+|-------|-----|--------------------------|
+| 0     | 0dp | Background, base surface |
+| 1     | 1dp | Cards at rest            |
+| 3     | 6dp | App bar, FAB             |
+| 4     | 8dp | Navigation drawer        |
+| 5     | 12dp| Modal bottom sheet       |
 
 ### Inverse Colors
 
-For high-contrast overlays (Snackbar):
+For high-contrast overlays (e.g., Snackbar on dark surfaces):
 
 ```kotlin
 Snackbar(
@@ -490,12 +498,20 @@ Snackbar(
 ### Best Practices
 
 1. **Always provide fallback** for Android < 12
-2. **Use semantic roles** (`MaterialTheme.colorScheme.*`), not hardcoded colors
+2. **Use semantic roles** (`MaterialTheme.colorScheme.*`), avoid hardcoded colors
 3. **Test** with both dynamic and static themes
-4. **Provide user control** (toggle for dynamic colors)
-5. **Follow elevation guidelines** (avoid arbitrary values)
+4. **Provide user control** (toggle for dynamic colors, when appropriate)
+5. **Follow elevation guidelines** instead of arbitrary values
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как Material 3 генерирует дополнительные (secondary, tertiary) цвета из одного seed color?
+- Какие аспекты доступности важно учитывать при использовании динамических цветов, зависящих от обоев пользователя?
+- Как реализовать плавные переходы темы при изменении динамических цветов (например, при смене обоев)?
+- Каков эффект динамической темизации на производительность и что важно учесть на более старых устройствах?
+- Как обрабатывать случаи, когда палитра обоев даёт недостаточный контраст цветов?
 
 ## Follow-ups
 
@@ -505,10 +521,34 @@ Snackbar(
 - What's the performance impact of dynamic color extraction on older devices?
 - How do you handle edge cases where wallpaper has insufficient color contrast?
 
+## Ссылки (RU)
+
+- [Material Design 3 - Dynamic Color](https://m3.material.io/styles/color/dynamic-color/overview)
+- [Material Theme Builder](https://m3.material.io/theme-builder)
+
 ## References
 
 - [Material Design 3 - Dynamic Color](https://m3.material.io/styles/color/dynamic-color/overview)
 - [Material Theme Builder](https://m3.material.io/theme-builder)
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+
+### Предпосылки
+
+- [[q-single-activity-approach--android--medium]] — Архитектура приложения для настройки темизации
+
+### Похожие вопросы
+
+- [[q-compose-semantics--android--medium]] — Доступность при использовании динамических тем
+
+### Продвинутое
+
+- [[q-why-was-the-lifecycle-library-created--android--hard]] — Подходы к lifecycle-aware темизации
 
 ## Related Questions
 

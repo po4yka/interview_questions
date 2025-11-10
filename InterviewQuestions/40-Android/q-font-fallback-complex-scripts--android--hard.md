@@ -1,57 +1,99 @@
 ---
 id: android-643
 title: Font Fallback for Complex Scripts / Резерв шрифтов для сложных скриптов
-aliases: [Font Fallback for Complex Scripts, Резерв шрифтов для сложных скриптов]
+aliases:
+- Font Fallback for Complex Scripts
+- Резерв шрифтов для сложных скриптов
 topic: android
 subtopics:
-  - globalization
-  - typography
+- i18n-l10n
+- ui-theming
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - c-globalization
+- c-globalization
+- c-android-components
 created: 2025-11-02
-updated: 2025-11-02
-tags: [accessibility, android/globalization, difficulty/hard, typography]
+updated: 2025-11-10
+tags:
+- accessibility
+- android/i18n-l10n
+- android/ui-theming
+- difficulty/hard
 sources:
-  - https://developer.android.com/guide/topics/resources/font-resource
-  - https://developer.android.com/guide/topics/text/downloadable-fonts
-  - https://material.io/design/typography/international-typography.html
+- "https://developer.android.com/guide/topics/resources/font-resource"
+- "https://developer.android.com/guide/topics/text/downloadable-fonts"
+- "https://material.io/design/typography/international-typography.html"
+
 ---
 
 # Вопрос (RU)
 
-> Как обеспечить корректное отображение сложных скриптов (CJK, арабский, индийские письменности) в Android: настройте font fallback цепочки с Noto шрифтами, downloadable fonts для dynamic loading, специальные настройки rendering для ligatures и complex shaping. Тестируйте на real устройствах с accessibility scaling.
+> Как обеспечить корректное отображение сложных скриптов (CJK, арабский, индийские письменности) в Android: настройте font fallback цепочки с Noto шрифтами, downloadable fonts для dynamic loading, корректно учитывайте ligatures и complex shaping. Тестируйте на real устройствах с accessibility scaling.
 
 # Question (EN)
 
-> How to ensure proper rendering of complex scripts (CJK, Arabic, Indic) in Android: configure font fallback chains with Noto fonts, use downloadable fonts for dynamic loading, apply special rendering settings for ligatures and complex shaping. Test on real devices with accessibility scaling enabled.
+> How to ensure proper rendering of complex scripts (CJK, Arabic, Indic) in Android: configure font fallback chains with Noto fonts, use downloadable fonts for dynamic loading, correctly handle ligatures and complex shaping. Test on real devices with accessibility scaling enabled.
 
 ---
 
 ## Ответ (RU)
 
+### Краткий вариант
+
+Используйте системные шрифты и Noto как надёжную основу, на бренд-шрифт опирайтесь только там, где подтверждено покрытие glyph и корректное shaping. Для сложных скриптов держитесь системных семейств (`sans-serif`, `serif`) и/или `FontFamily` с Noto, добавляйте downloadable fonts через FontsContractCompat. Обязательно тестируйте CJK, арабский, индийские скрипты, RTL и масштабирование шрифта на реальных устройствах.
+
+### Подробный вариант
+
 ### Теоретические Основы
 
-**Сложные скрипты** — письменности требующие advanced text shaping: CJK (Chinese/Japanese/Korean), Arabic с contextual forms, Indic скрипты с combining marks, Thai/Lao с complex clusters.
+**Сложные скрипты** — письменности, требующие advanced text shaping: CJK (Chinese/Japanese/Korean), Arabic с contextual forms, Indic скрипты с combining marks, Thai/Lao с complex clusters.
 
 **Проблемы отображения:**
-- **Glyph coverage** — большинство шрифтов поддерживают только Latin glyphs
+- **Glyph coverage** — многие брендовые шрифты поддерживают только Latin glyphs
 - **Text shaping** — complex scripts требуют ligatures, contextual forms, reordering
 - **Baseline alignment** — разные скрипты имеют разные baseline requirements
 - **Line breaking** — script-specific правила переноса слов
 
 **Android font system:**
-- **System fonts** — Roboto (Latin), Noto (international) как fallbacks
-- **Downloadable fonts** — Google Fonts API для dynamic loading
-- **Font resources** — XML конфигурация fallback цепочек
+- **System fonts** — Roboto (Latin), Noto (international) как часть системного набора и fallback
+- **Downloadable fonts** — Google Fonts API / FontsContract для dynamic loading
+- **Font resources** — XML-конфигурация шрифтов и указание fallback семейств
 - **Font synthesis** — fake bold/italic для unsupported styles
+
+### Требования
+
+**Функциональные:**
+- Корректное отображение CJK, арабских и индийских письменностей, включая ligatures и contextual forms.
+- Поддержка смешанного контента (латиница + сложные скрипты + emoji).
+- Работа с user-generated content, где скрипты заранее не известны.
+
+**Нефункциональные:**
+- Минимальное влияние на размер APK/`Bundle`.
+- Корректная работа offline при недоступности downloadable fonts.
+- Поддержка accessibility: масштабирование текста, RTL, screen readers.
+- Стабильная производительность при загрузке и рендеринге шрифтов.
+
+### Архитектура
+
+- **Слой шрифтов и ресурсов:**
+  - Определение базовых семей (`sans-serif`, `serif`) и расширенных `font-family` с Noto для целевых скриптов.
+  - Использование ресурсных XML и `FontFamily` в Compose для единообразной конфигурации.
+- **Runtime-логика выбора шрифта:**
+  - Определение скрипта текста (через `UnicodeScript`) и выбор подходящего `Typeface`/`FontFamily`.
+  - Использование системных fallbacks, если кастомный шрифт не покрывает символ.
+- **Downloadable fonts сервис:**
+  - Обёртка над `FontsContractCompat` с кешированием в памяти/на диске.
+  - Асинхронная доставка шрифтов для специфичных скриптов по требованию.
+- **Тестирование и наблюдаемость:**
+  - Набор тестовых строк по скриптам.
+  - Screenshot-тесты и ручная проверка на реальных устройствах с разными локалями и масштабированием.
 
 ### 1. Анализ Требований И Аудит
 
@@ -60,68 +102,106 @@ sources:
 - Проверяйте app content: user-generated text, translations, proper names
 - Оценивайте scope: UI labels vs user content vs mixed text
 
-**Аудит бренд-шрифта:**
+**Аудит бренд-шрифта (упрощённая проверка покрытия):**
 ```kotlin
-fun hasGlyph(font: Typeface, text: String): Boolean {
+fun hasGlyph(font: Typeface, ch: Char): Boolean {
     val paint = Paint().apply { typeface = font }
-    return paint.measureText(text) > 0f
+    // Важно: isGlyphMissing / hasGlyph доступен только на новых API;
+    // measureText даёт лишь приблизительную эвристику и может считать tofu-глиф валидным.
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        paint.hasGlyph(ch.toString())
+    } else {
+        paint.measureText(ch.toString()) > 0f
+    }
 }
 
 val testCases = mapOf("CJK" to "中文", "Arabic" to "العربية", "Devanagari" to "हिन्दी")
+
 testCases.forEach { (script, text) ->
-    Log.d("FontAudit", "$script: ${hasGlyph(brandFont, text)}")
+    val ok = text.all { hasGlyph(brandFont, it) }
+    Log.d("FontAudit", "$script: $ok")
 }
 ```
 
 **Приоритизация:**
-- **UI chrome** (buttons, navigation) — critical, может требовать custom fonts
-- **Content text** (articles, messages) — flexible, fallback acceptable
-- **User-generated content** — unpredictable, robust fallback essential
+- **UI chrome** (buttons, navigation) — critical, может требовать custom fonts и строгий контроль покрытия
+- **Content text** (articles, messages) — flexible, системные fallback допустимы
+- **User-generated content** — unpredictable, необходимы надёжные системные fallbacks / downloadable fonts
 
 ### 2. Font Fallback Цепочки
 
-**XML fallback цепочка:**
+Ключевая идея: вы не «вкручиваете» fallback внутрь кастомного семейства, а корректно комбинируете бренд-шрифт с системными семействами и Noto.
+
+**Simple XML font-family:**
 ```xml
 <font-family xmlns:android="http://schemas.android.com/apk/res/android">
-    <font android:font="@font/brand_regular" />
-    <font android:fallbackFor="sans-serif" android:font="@font/noto_cjk" />
-    <font android:fallbackFor="sans-serif" android:font="@font/noto_arabic" />
+    <font
+        android:font="@font/brand_regular"
+        android:fontStyle="normal"
+        android:fontWeight="400" />
 </font-family>
 ```
 
-**Программное создание:**
-```kotlin
-val fontFamily = Typeface.Builder(assets, "fonts/brand.ttf")
-    .setFallback("Noto Sans CJK JP", "Noto Sans Arabic")
-    .build()
-textView.typeface = fontFamily
+Используйте это семейство для элементов UI, а для контента оставляйте системные sans-serif / serif, чтобы работали встроенные системные fallbacks (включая Noto на современных устройствах).
+
+**Declarative fallback for a generic family (API 26+):**
+```xml
+<font-family
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fallbackFor="sans-serif">
+
+    <font
+        android:font="@font/noto_sans_cjk_jp"
+        android:fontStyle="normal"
+        android:fontWeight="400" />
+
+    <font
+        android:font="@font/noto_sans_arabic"
+        android:fontStyle="normal"
+        android:fontWeight="400" />
+</font-family>
 ```
+
+Эта конфигурация расширяет fallback для системного `sans-serif` (доступность и поведение зависят от OEM), а не связывает напрямую бренд-шрифт и Noto.
+
+**Programmatic combo (API 28+):**
+```kotlin
+val brand = ResourcesCompat.getFont(context, R.font.brand_regular)
+val cjk = ResourcesCompat.getFont(context, R.font.noto_sans_cjk_jp)
+val arabic = ResourcesCompat.getFont(context, R.font.noto_sans_arabic)
+
+// Используем системный fallback для смешанного контента,
+// а для критичного UI — бренд, при необходимости подменяем typeface по скрипту.
+val typefaceForText = when {
+    text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.ARABIC } -> arabic
+    text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.HAN } -> cjk
+    else -> brand
+}
+
+textView.typeface = typefaceForText
+```
+
+Обратите внимание: единого официального API для задания произвольной цепочки fallback шрифтов через `Typeface.Builder.setFallback(...)` не существует; используется сочетание системных семейств, ресурсов и выбора typeface в коде.
 
 **Compose FontFamily:**
 ```kotlin
-val fontFamily = FontFamily(
+val ComplexFontFamily = FontFamily(
     Font(R.font.brand_regular),
-    Font("Noto Sans CJK JP"), // CJK fallback
-    Font("Noto Sans Arabic")  // Arabic fallback
+    Font(R.font.noto_sans_cjk_jp),
+    Font(R.font.noto_sans_arabic)
 )
 
-Text(text, fontFamily = fontFamily)
+Text(
+    text = text,
+    fontFamily = ComplexFontFamily
+)
 ```
 
-**Custom resolver:**
-```kotlin
-val resolver = FontFamily.Resolver { family, weight, style ->
-    when {
-        text.contains(Regex("\\p{IsHan}")) -> Font("Noto Sans CJK JP", weight, style)
-        text.contains(Regex("\\p{IsArabic}")) -> Font("Noto Sans Arabic", weight, style)
-        else -> Font("sans-serif", weight, style)
-    }
-}
-```
+Важно: `Font(...)` принимает ресурсы или Typeface, а не строковые имена семейств.
 
 ### 3. Downloadable Fonts
 
-**Font request:**
+**Font request (classic):**
 ```kotlin
 val request = FontRequest(
     "com.google.android.gms.fonts",
@@ -130,78 +210,80 @@ val request = FontRequest(
     R.array.com_google_android_gms_fonts_certs
 )
 
-FontsContractCompat.requestFont(context, request, callback, handler)
+FontsContractCompat.requestFont(context, request, callback, Handler(Looper.getMainLooper()))
 ```
 
-**Compose integration:**
+**Compose integration (упрощённый пример):**
 ```kotlin
 @Composable
 fun DownloadableFontText(text: String) {
-    var fontFamily by remember { mutableStateOf<FontFamily?>(null) }
-    var loading by remember { mutableStateOf(true) }
+    val context = LocalContext.current
+    var typeface by remember { mutableStateOf<Typeface?>(null) }
 
     LaunchedEffect(Unit) {
-        try {
-            val typeface = FontsContractCompat.requestFont(context, request).await()
-            fontFamily = FontFamily(TypefaceCompat.createFromTypeface(typeface))
-        } catch (e: Exception) {
-            fontFamily = FontFamily.Default
+        withContext(Dispatchers.IO) {
+            // Обёртка над FontsContractCompat.requestFont с callback -> suspend
+            typeface = downloadTypeface(context, "Noto Sans Arabic")
         }
-        loading = false
     }
 
-    if (loading) CircularProgressIndicator() else Text(text, fontFamily = fontFamily)
+    val family = typeface?.let { FontFamily(Font(it)) } ?: FontFamily.Default
+
+    Text(text = text, fontFamily = family)
 }
 ```
 
-**Font caching:**
+Реализация `downloadTypeface` опускается, но должна корректно оборачивать FontsContractCompat; прямого `await()` в SDK нет.
+
+**Font caching (идея):**
 ```kotlin
-class FontCache(private val context: Context) {
-    private val fontMap = mutableMapOf<String, Typeface>()
+class FontCache {
+    private val memory = mutableMapOf<String, Typeface>()
 
-    fun getFont(name: String): Typeface? = fontMap[name] ?: loadFromDisk(name)
-    fun saveFont(name: String, typeface: Typeface) { fontMap[name] = typeface }
+    fun get(name: String): Typeface? = memory[name]
 
-    private fun loadFromDisk(name: String): Typeface? =
-        File(context.cacheDir, "fonts/$name.ttf").takeIf { it.exists() }
-            ?.let { Typeface.createFromFile(it) }
+    fun put(name: String, typeface: Typeface) {
+        memory[name] = typeface
+    }
 }
 ```
+
+Подробнее: кешируйте в памяти и (при необходимости) на диске, корректно обрабатывая ошибки.
 
 ### 4. Rendering Настройки
 
 **TextView optimization:**
 ```kotlin
-class OptimizedTextView(context: Context) : AppCompatTextView(context) {
+class OptimizedTextView(context: Context, attrs: AttributeSet? = null) : AppCompatTextView(context, attrs) {
     init {
-        setBreakStrategy(Layout.BREAK_STRATEGY_HIGH_QUALITY)
-        setHyphenationFrequency(Layout.HYPHENATION_FREQUENCY_NORMAL)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            setFontFeatureSettings("'liga' 1, 'kern' 1, 'calt' 1")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            breakStrategy = Layout.BREAK_STRATEGY_HIGH_QUALITY
+            hyphenationFrequency = Layout.HYPHENATION_FREQUENCY_NORMAL
         }
+        // OpenType features вроде 'liga' и 'kern' обычно включены по умолчанию;
+        // включайте fontFeatureSettings только при необходимости специфических фич.
     }
 }
 ```
 
-**Compose rendering:**
+**Compose rendering (упрощённый выбор семейства по скрипту):**
 ```kotlin
 @Composable
 fun ComplexScriptText(text: String) {
     val fontFamily = when {
-        text.contains(Regex("\\p{IsHan}")) -> FontFamily(Font("Noto Sans CJK JP"))
-        text.contains(Regex("\\p{IsArabic}")) -> FontFamily(Font("Noto Sans Arabic"))
-        text.contains(Regex("\\p{IsDevanagari}")) -> FontFamily(Font("Noto Sans Devanagari"))
+        text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.HAN } ->
+            FontFamily(Font(R.font.noto_sans_cjk_jp))
+        text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.ARABIC } ->
+            FontFamily(Font(R.font.noto_sans_arabic))
+        text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.DEVANAGARI } ->
+            FontFamily(Font(R.font.noto_sans_devanagari))
         else -> FontFamily.Default
     }
 
     Text(
         text = text,
-        fontFamily = fontFamily,
-        fontFeatureSettings = when {
-            text.contains(Regex("\\p{IsArabic}")) -> "liga 1, calt 1, isol 1"
-            text.contains(Regex("\\p{IsDevanagari}")) -> "liga 1, nukt 1"
-            else -> "liga 1"
-        }
+        fontFamily = fontFamily
+        // Arabic shaping и большинство ligatures обрабатываются движком автоматически.
     )
 }
 ```
@@ -214,8 +296,8 @@ fun ArabicText(text: String) {
         Text(
             text = text,
             textAlign = TextAlign.Start,
-            fontFamily = FontFamily(Font("Noto Sans Arabic")),
-            fontFeatureSettings = "liga 1, calt 1, isol 1, init 1, medi 1, fina 1"
+            fontFamily = FontFamily(Font(R.font.noto_sans_arabic))
+            // Не полагайтесь на ручное управление 'isol/init/medi/fina' — это задача шейпера.
         )
     }
 }
@@ -223,24 +305,29 @@ fun ArabicText(text: String) {
 
 ### 5. Тестирование
 
-**Glyph coverage test:**
+**Glyph coverage test (с учётом ограничений):**
 ```kotlin
 @Test
 fun testComplexScriptCoverage() {
     val tests = mapOf(
-        "Arabic" to "العربيةﷺ",
-        "Devanagari" to "हिन्दीक्ष",
+        "Arabic" to "العربية",
+        "Devanagari" to "हिन्दी",
         "CJK" to "中文日韓"
     )
 
     tests.forEach { (script, text) ->
-        assertTrue("$script coverage", hasGlyphCoverage(brandFont, text))
+        val ok = text.all { hasGlyph(brandFont, it) }
+        assertTrue("$script coverage (approx)", ok)
     }
 }
 
-private fun hasGlyphCoverage(font: Typeface, text: String): Boolean {
+private fun hasGlyph(font: Typeface, ch: Char): Boolean {
     val paint = Paint().apply { typeface = font }
-    return text.all { paint.measureText(it.toString()) > 0 }
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        paint.hasGlyph(ch.toString())
+    } else {
+        paint.measureText(ch.toString()) > 0f
+    }
 }
 ```
 
@@ -248,56 +335,48 @@ private fun hasGlyphCoverage(font: Typeface, text: String): Boolean {
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class TypographyScreenshotTest {
-    @get:Rule val paparazzi = Paparazzi()
+    // Пример c Paparazzi / Shot / и т.п. — конкретная интеграция зависит от используемого инструмента.
 
     @Test
     fun complexScripts() {
         val texts = listOf("English + العربية", "English + हिन्दी", "Mixed: Hello 世界")
-        texts.forEach { text ->
-            paparazzi.snapshot { Text(text, modifier = Modifier.padding(16.dp)) }
-        }
+        // Захват и сравнение скриншотов для разных конфигураций шрифта и scale.
     }
 }
 ```
 
 ### 6. Performance Optimization
 
-**Bundle size analysis:**
+**`Bundle` size analysis (пример оценки):**
 ```kotlin
 fun analyzeFontImpact() {
-    val fonts = listOf(2.1f, 2.0f, 18.5f, 0.8f) // MB sizes
-    val total = fonts.sum() * 0.7f // Compressed
-    println("Font impact: ${total}MB")
+    val fontsMb = listOf(2.1f, 2.0f, 18.5f, 0.8f) // sizes in MB
+    val compressedTotal = fontsMb.sum() * 0.7f
+    println("Font impact (approx compressed): ${compressedTotal}MB")
 }
 ```
 
-**Selective inclusion:**
-```kotlin
-android {
-    bundle {
-        font {
-            include "Noto Sans", "latin", "arabic", "devanagari"
-        }
-    }
-}
-```
+**Selective inclusion (концепт):**
 
-**On-demand delivery:**
+Избегайте включения полноразмерных CJK-шрифтов, если это не критично; опирайтесь на встроенные системные Noto, downloadable fonts или split APK / on-demand modules вместо несуществующего `bundle { font { include ... } }` DSL.
+
+**On-demand delivery (концепт):**
 ```kotlin
 suspend fun loadScriptFont(script: String): Typeface {
-    val fontName = when(script) {
+    val fontName = when (script) {
         "arabic" -> "Noto Sans Arabic"
         "cjk" -> "Noto Sans CJK JP"
         else -> "Noto Sans"
     }
 
-    return fontCache[fontName] ?: downloadFont(fontName).also { fontCache[fontName] = it }
+    // Реализуйте downloadFont через FontsContractCompat или Play Feature Delivery.
+    return fontCache.get(fontName) ?: downloadFont(fontName).also { fontCache.put(fontName, it) }
 }
 ```
 
 ### 7. UX Considerations
 
-**Line height for scripts:**
+**Line height для разных скриптов (эвристика):**
 ```kotlin
 val lineHeight = when (script) {
     "devanagari" -> 1.4f
@@ -307,7 +386,7 @@ val lineHeight = when (script) {
 }
 ```
 
-**Mixed script alignment:**
+**Mixed script alignment (концептуальный пример):**
 ```kotlin
 val baselineOffset = when (script) {
     "devanagari" -> (-2).dp
@@ -317,51 +396,85 @@ val baselineOffset = when (script) {
 }
 ```
 
-**Emoji compatibility:**
+Подбирайте значения экспериментально — разные шрифты дают разные метрики.
+
+**Emoji compatibility (пример):**
 ```kotlin
-val emojiCompat = EmojiCompat.init(FontRequest(
-    "com.google.android.gms.fonts",
-    "com.google.android.gms",
-    "Noto Color Emoji Compat",
-    certs
-))
+val config = BundledEmojiCompatConfig(context)
+val emojiCompat = EmojiCompat.init(config)
 ```
+
+Для downloadable emoji используйте официальные EmojiCompat FontRequest-примеры вместо произвольного `"Noto Color Emoji Compat"` без контекста.
 
 ### Лучшие Практики
 
-- **Комплексный аудит** — тестируйте бренд-шрифты на всех целевых скриптах перед внедрением
-- **Прогрессивное улучшение** — начинайте с системных шрифтов, добавляйте кастомные по необходимости
-- **Мониторинг производительности** — отслеживайте время загрузки шрифтов и влияние на размер бандла
-- **Доступность прежде всего** — обеспечивайте работу complex scripts с крупными размерами шрифта и скринридерами
-- **Оффлайн устойчивость** — кешируйте скачанные шрифты и предоставляйте системные fallback'ы
+- **Комплексный аудит** — проверяйте бренд-шрифты на всех целевых скриптах (`hasGlyph`/аналоги + визуальная проверка)
+- **Прогрессивное улучшение** — начинайте с системных шрифтов и встроенных fallbacks, добавляйте кастомные и downloadable fonts по необходимости
+- **Мониторинг производительности** — измеряйте время загрузки шрифтов и влияние на размер бандла / модулей
+- **Доступность прежде всего** — проверяйте complex scripts при увеличенном шрифте, high contrast, RTL и с экранными дикторами
+- **Оффлайн устойчивость** — кешируйте скачанные шрифты и всегда предоставляйте системные fallback'ы
 
 ### Типичные Ошибки
 
-- **Предположение что Latin coverage = universal** — большинство шрифтов не имеют CJK/Arabic glyphs
-- **Игнорирование text shaping** — complex scripts требуют contextual forms и ligatures
+- **Предположение, что Latin coverage = universal** — большинство шрифтов не имеют CJK/Arabic/Indic glyphs
+- **Игнорирование text shaping** — complex scripts требуют автоматического применения contextual forms и ligatures
 - **Плохое выравнивание mixed scripts** — разные скрипты имеют разные baseline
-- **Отсутствие тестирования доступности** — крупные размеры шрифта ломают рендеринг complex scripts
-- **Невнимание к размеру бандла** — CJK шрифты могут добавить 20+ MB к APK
+- **Отсутствие тестирования доступности** — крупные размеры шрифта и RTL могут ломать верстку без корректных fallbacks
+- **Невнимание к размеру бандла** — CJK шрифты могут добавить 20+ MB к APK, используйте downloadable/модули
 
 ---
 
 ## Answer (EN)
+
+### Short Version
+
+Use system fonts and Noto as the reliable base; only apply the brand font where glyph coverage and shaping are verified. For complex scripts keep text on system families (`sans-serif`, `serif`) and/or `FontFamily` with Noto, add downloadable fonts via FontsContractCompat. Always test CJK, Arabic, Indic, RTL, and font scaling on real devices.
+
+### Detailed Version
 
 ### Theoretical Foundations
 
 **Complex scripts** — writing systems requiring advanced text shaping: CJK (Chinese/Japanese/Korean), Arabic with contextual forms, Indic scripts with combining marks, Thai/Lao with complex clusters.
 
 **Rendering challenges:**
-- **Glyph coverage** — most fonts support only Latin glyphs
+- **Glyph coverage** — many brand fonts support only Latin glyphs
 - **Text shaping** — complex scripts require ligatures, contextual forms, reordering
 - **Baseline alignment** — different scripts have different baseline requirements
 - **Line breaking** — script-specific word wrapping rules
 
 **Android font system:**
-- **System fonts** — Roboto (Latin), Noto (international) as fallbacks
-- **Downloadable fonts** — Google Fonts API for dynamic loading
-- **Font resources** — XML configuration of fallback chains
+- **System fonts** — Roboto (Latin), Noto (international) as part of the system set and fallbacks
+- **Downloadable fonts** — Google Fonts API / FontsContract for dynamic loading
+- **Font resources** — XML configuration of font families and fallback for generic families
 - **Font synthesis** — fake bold/italic for unsupported styles
+
+### Requirements
+
+**Functional:**
+- Proper rendering of CJK, Arabic, and Indic scripts including ligatures and contextual forms.
+- Support for mixed content (Latin + complex scripts + emoji).
+- Robust handling of user-generated content where scripts are unknown upfront.
+
+**Non-functional:**
+- Minimal APK/`Bundle` size impact.
+- Correct offline behavior when downloadable fonts are unavailable.
+- Accessibility support: font scaling, RTL, screen readers.
+- Stable performance for font loading and rendering.
+
+### Architecture
+
+- **Font/resources layer:**
+  - Define base families (`sans-serif`, `serif`) and extended `font-family` configs with Noto for target scripts.
+  - Use XML font resources and Compose `FontFamily` for consistent configuration.
+- **Runtime font selection:**
+  - Detect script via `UnicodeScript` and choose the appropriate `Typeface`/`FontFamily`.
+  - Fall back to system fonts when the brand font lacks coverage.
+- **Downloadable fonts service:**
+  - Wrapper over `FontsContractCompat` with in-memory/disk caching.
+  - Async, on-demand delivery for specific scripts.
+- **Testing/observability:**
+  - Curated test strings per script.
+  - Screenshot tests and manual checks on real devices across locales and font scales.
 
 ### 1. Requirements Analysis and Audit
 
@@ -370,68 +483,104 @@ val emojiCompat = EmojiCompat.init(FontRequest(
 - Check app content: user-generated text, translations, proper names
 - Evaluate scope: UI labels vs user content vs mixed text
 
-**Brand font audit:**
+**Brand font audit (approximate coverage check):**
 ```kotlin
-fun hasGlyph(font: Typeface, text: String): Boolean {
+fun hasGlyph(font: Typeface, ch: Char): Boolean {
     val paint = Paint().apply { typeface = font }
-    return paint.measureText(text) > 0f
+    // Note: hasGlyph is reliable on newer API; measureText is only a heuristic and
+    // may count tofu as a valid glyph.
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        paint.hasGlyph(ch.toString())
+    } else {
+        paint.measureText(ch.toString()) > 0f
+    }
 }
 
 val testCases = mapOf("CJK" to "中文", "Arabic" to "العربية", "Devanagari" to "हिन्दी")
+
 testCases.forEach { (script, text) ->
-    Log.d("FontAudit", "$script: ${hasGlyph(brandFont, text)}")
+    val ok = text.all { hasGlyph(brandFont, it) }
+    Log.d("FontAudit", "$script: $ok")
 }
 ```
 
 **Prioritization:**
-- **UI chrome** (buttons, navigation) — critical, may require custom fonts
-- **Content text** (articles, messages) — flexible, fallback acceptable
-- **User-generated content** — unpredictable, robust fallback essential
+- **UI chrome** (buttons, navigation) — critical, may require custom fonts with verified coverage
+- **Content text** (articles, messages) — flexible, system fallbacks acceptable
+- **User-generated content** — unpredictable, robust fallbacks/downloadable fonts essential
 
 ### 2. Font Fallback Chains
 
-**XML fallback:**
+Key idea: you usually do not hard-wire all fallbacks into a single custom family; instead, you combine a brand font with system families and Noto in a controlled way.
+
+**Simple XML font-family:**
 ```xml
 <font-family xmlns:android="http://schemas.android.com/apk/res/android">
-    <font android:font="@font/brand_regular" />
-    <font android:fallbackFor="sans-serif" android:font="@font/noto_cjk" />
-    <font android:fallbackFor="sans-serif" android:font="@font/noto_arabic" />
+    <font
+        android:font="@font/brand_regular"
+        android:fontStyle="normal"
+        android:fontWeight="400" />
 </font-family>
 ```
 
-**Programmatic creation:**
-```kotlin
-val fontFamily = Typeface.Builder(assets, "fonts/brand.ttf")
-    .setFallback("Noto Sans CJK JP", "Noto Sans Arabic")
-    .build()
-textView.typeface = fontFamily
+Use this for branded UI; keep content on `sans-serif`/system families so built-in fallbacks (including Noto on many devices) handle complex scripts.
+
+**Declarative fallback for a generic family (API 26+):**
+```xml
+<font-family
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fallbackFor="sans-serif">
+
+    <font
+        android:font="@font/noto_sans_cjk_jp"
+        android:fontStyle="normal"
+        android:fontWeight="400" />
+
+    <font
+        android:font="@font/noto_sans_arabic"
+        android:fontStyle="normal"
+        android:fontWeight="400" />
+</font-family>
 ```
+
+This extends the fallback options for the generic `sans-serif` family (OEM behavior may vary) rather than chaining directly after the brand font.
+
+**Programmatic combo (API 28+):**
+```kotlin
+val brand = ResourcesCompat.getFont(context, R.font.brand_regular)
+val cjk = ResourcesCompat.getFont(context, R.font.noto_sans_cjk_jp)
+val arabic = ResourcesCompat.getFont(context, R.font.noto_sans_arabic)
+
+val typefaceForText = when {
+    text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.ARABIC } -> arabic
+    text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.HAN } -> cjk
+    else -> brand
+}
+
+textView.typeface = typefaceForText
+```
+
+Note: there is no official `Typeface.Builder.setFallback("Noto Sans CJK JP", "Noto Sans Arabic")` API; combining fallbacks is done via resources, system families, and runtime selection.
 
 **Compose FontFamily:**
 ```kotlin
-val fontFamily = FontFamily(
+val ComplexFontFamily = FontFamily(
     Font(R.font.brand_regular),
-    Font("Noto Sans CJK JP"), // CJK fallback
-    Font("Noto Sans Arabic")  // Arabic fallback
+    Font(R.font.noto_sans_cjk_jp),
+    Font(R.font.noto_sans_arabic)
 )
 
-Text(text, fontFamily = fontFamily)
+Text(
+    text = text,
+    fontFamily = ComplexFontFamily
+)
 ```
 
-**Custom resolver:**
-```kotlin
-val resolver = FontFamily.Resolver { family, weight, style ->
-    when {
-        text.contains(Regex("\\p{IsHan}")) -> Font("Noto Sans CJK JP", weight, style)
-        text.contains(Regex("\\p{IsArabic}")) -> Font("Noto Sans Arabic", weight, style)
-        else -> Font("sans-serif", weight, style)
-    }
-}
-```
+Important: `Font(...)` uses resource IDs or Typeface, not raw family name strings.
 
 ### 3. Downloadable Fonts
 
-**Font request:**
+**Font request (classic):**
 ```kotlin
 val request = FontRequest(
     "com.google.android.gms.fonts",
@@ -440,41 +589,40 @@ val request = FontRequest(
     R.array.com_google_android_gms_fonts_certs
 )
 
-FontsContractCompat.requestFont(context, request, callback, handler)
+FontsContractCompat.requestFont(context, request, callback, Handler(Looper.getMainLooper()))
 ```
 
-**Compose integration:**
+**Compose integration (simplified):**
 ```kotlin
 @Composable
 fun DownloadableFontText(text: String) {
-    var fontFamily by remember { mutableStateOf<FontFamily?>(null) }
-    var loading by remember { mutableStateOf(true) }
+    val context = LocalContext.current
+    var typeface by remember { mutableStateOf<Typeface?>(null) }
 
     LaunchedEffect(Unit) {
-        try {
-            val typeface = FontsContractCompat.requestFont(context, request).await()
-            fontFamily = FontFamily(TypefaceCompat.createFromTypeface(typeface))
-        } catch (e: Exception) {
-            fontFamily = FontFamily.Default
+        withContext(Dispatchers.IO) {
+            typeface = downloadTypeface(context, "Noto Sans Arabic")
         }
-        loading = false
     }
 
-    if (loading) CircularProgressIndicator() else Text(text, fontFamily = fontFamily)
+    val family = typeface?.let { FontFamily(Font(it)) } ?: FontFamily.Default
+
+    Text(text = text, fontFamily = family)
 }
 ```
 
-**Font caching:**
+`downloadTypeface` should wrap FontsContractCompat + callbacks into a suspend function; there is no built-in `requestFont(...).await()`.
+
+**Font caching (idea):**
 ```kotlin
-class FontCache(private val context: Context) {
-    private val fontMap = mutableMapOf<String, Typeface>()
+class FontCache {
+    private val memory = mutableMapOf<String, Typeface>()
 
-    fun getFont(name: String): Typeface? = fontMap[name] ?: loadFromDisk(name)
-    fun saveFont(name: String, typeface: Typeface) { fontMap[name] = typeface }
+    fun get(name: String): Typeface? = memory[name]
 
-    private fun loadFromDisk(name: String): Typeface? =
-        File(context.cacheDir, "fonts/$name.ttf").takeIf { it.exists() }
-            ?.let { Typeface.createFromFile(it) }
+    fun put(name: String, typeface: Typeface) {
+        memory[name] = typeface
+    }
 }
 ```
 
@@ -482,36 +630,35 @@ class FontCache(private val context: Context) {
 
 **TextView optimization:**
 ```kotlin
-class OptimizedTextView(context: Context) : AppCompatTextView(context) {
+class OptimizedTextView(context: Context, attrs: AttributeSet? = null) : AppCompatTextView(context, attrs) {
     init {
-        setBreakStrategy(Layout.BREAK_STRATEGY_HIGH_QUALITY)
-        setHyphenationFrequency(Layout.HYPHENATION_FREQUENCY_NORMAL)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            setFontFeatureSettings("'liga' 1, 'kern' 1, 'calt' 1")
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            breakStrategy = Layout.BREAK_STRATEGY_HIGH_QUALITY
+            hyphenationFrequency = Layout.HYPHENATION_FREQUENCY_NORMAL
         }
+        // OpenType features like 'liga' and 'kern' are usually enabled by default;
+        // only set fontFeatureSettings when you need specific optional features.
     }
 }
 ```
 
-**Compose rendering:**
+**Compose rendering (simplified family selection by script):**
 ```kotlin
 @Composable
 fun ComplexScriptText(text: String) {
     val fontFamily = when {
-        text.contains(Regex("\\p{IsHan}")) -> FontFamily(Font("Noto Sans CJK JP"))
-        text.contains(Regex("\\p{IsArabic}")) -> FontFamily(Font("Noto Sans Arabic"))
-        text.contains(Regex("\\p{IsDevanagari}")) -> FontFamily(Font("Noto Sans Devanagari"))
+        text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.HAN } ->
+            FontFamily(Font(R.font.noto_sans_cjk_jp))
+        text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.ARABIC } ->
+            FontFamily(Font(R.font.noto_sans_arabic))
+        text.any { Character.UnicodeScript.of(it.code) == Character.UnicodeScript.DEVANAGARI } ->
+            FontFamily(Font(R.font.noto_sans_devanagari))
         else -> FontFamily.Default
     }
 
     Text(
         text = text,
-        fontFamily = fontFamily,
-        fontFeatureSettings = when {
-            text.contains(Regex("\\p{IsArabic}")) -> "liga 1, calt 1, isol 1"
-            text.contains(Regex("\\p{IsDevanagari}")) -> "liga 1, nukt 1"
-            else -> "liga 1"
-        }
+        fontFamily = fontFamily
     )
 }
 ```
@@ -524,8 +671,8 @@ fun ArabicText(text: String) {
         Text(
             text = text,
             textAlign = TextAlign.Start,
-            fontFamily = FontFamily(Font("Noto Sans Arabic")),
-            fontFeatureSettings = "liga 1, calt 1, isol 1, init 1, medi 1, fina 1"
+            fontFamily = FontFamily(Font(R.font.noto_sans_arabic))
+            // Let the engine handle joining/shaping; don't try to toggle 'isol/init/medi/fina' manually.
         )
     }
 }
@@ -533,24 +680,29 @@ fun ArabicText(text: String) {
 
 ### 5. Testing
 
-**Glyph coverage test:**
+**Glyph coverage test (with caveats):**
 ```kotlin
 @Test
 fun testComplexScriptCoverage() {
     val tests = mapOf(
-        "Arabic" to "العربيةﷺ",
-        "Devanagari" to "हिन्दीक्ष",
+        "Arabic" to "العربية",
+        "Devanagari" to "हिन्दी",
         "CJK" to "中文日韓"
     )
 
     tests.forEach { (script, text) ->
-        assertTrue("$script coverage", hasGlyphCoverage(brandFont, text))
+        val ok = text.all { hasGlyph(brandFont, it) }
+        assertTrue("$script coverage (approx)", ok)
     }
 }
 
-private fun hasGlyphCoverage(font: Typeface, text: String): Boolean {
+private fun hasGlyph(font: Typeface, ch: Char): Boolean {
     val paint = Paint().apply { typeface = font }
-    return text.all { paint.measureText(it.toString()) > 0 }
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        paint.hasGlyph(ch.toString())
+    } else {
+        paint.measureText(ch.toString()) > 0f
+    }
 }
 ```
 
@@ -558,80 +710,79 @@ private fun hasGlyphCoverage(font: Typeface, text: String): Boolean {
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class TypographyScreenshotTest {
-    @get:Rule val paparazzi = Paparazzi()
-
     @Test
     fun complexScripts() {
         val texts = listOf("English + العربية", "English + हिन्दी", "Mixed: Hello 世界")
-        texts.forEach { text ->
-            paparazzi.snapshot { Text(text, modifier = Modifier.padding(16.dp)) }
-        }
+        // Capture and compare screenshots at different font scales and locales.
     }
 }
 ```
 
 ### 6. Performance Optimization
 
-**Bundle size analysis:**
+**`Bundle` size analysis (example):**
 ```kotlin
 fun analyzeFontImpact() {
-    val fonts = listOf(2.1f, 2.0f, 18.5f, 0.8f) // MB sizes
-    val total = fonts.sum() * 0.7f // Compressed
-    println("Font impact: ${total}MB")
+    val fontsMb = listOf(2.1f, 2.0f, 18.5f, 0.8f)
+    val compressedTotal = fontsMb.sum() * 0.7f
+    println("Font impact (approx compressed): ${compressedTotal}MB")
 }
 ```
 
-**Selective inclusion:**
-```kotlin
-android {
-    bundle {
-        font {
-            include "Noto Sans", "latin", "arabic", "devanagari"
-        }
-    }
-}
-```
+**Selective inclusion (concept):**
 
-**On-demand delivery:**
+Avoid bundling full CJK fonts unless absolutely necessary; rely on system Noto fonts, downloadable fonts, and/or Play Feature Delivery instead of a fictional `bundle { font { include ... } }` DSL.
+
+**On-demand delivery (concept):**
 ```kotlin
 suspend fun loadScriptFont(script: String): Typeface {
-    val fontName = when(script) {
+    val fontName = when (script) {
         "arabic" -> "Noto Sans Arabic"
         "cjk" -> "Noto Sans CJK JP"
         else -> "Noto Sans"
     }
 
-    return fontCache[fontName] ?: downloadFont(fontName).also { fontCache[fontName] = it }
+    return fontCache.get(fontName) ?: downloadFont(fontName).also { fontCache.put(fontName, it) }
 }
 ```
 
 ### Best Practices
 
-- **Comprehensive audit** — test brand fonts against all target scripts before implementation
-- **Progressive enhancement** — start with system fonts, add custom fonts as needed
-- **Performance monitoring** — track font loading times and bundle size impact
-- **Accessibility first** — ensure complex scripts work with large font sizes and screen readers
-- **Offline resilience** — cache downloaded fonts and provide system font fallbacks
+- **Comprehensive audit** — validate brand fonts for all target scripts (hasGlyph/hasGlyph-like APIs plus visual review)
+- **Progressive enhancement** — start with system fonts and built-in fallbacks; add custom and downloadable fonts as needed
+- **Performance monitoring** — measure font loading times and bundle/module size impact
+- **Accessibility first** — test complex scripts with large font scales, high contrast, RTL, and screen readers
+- **Offline resilience** — cache downloaded fonts and always provide system font fallbacks
 
 ### Common Pitfalls
 
-- **Assuming Latin coverage equals universal** — most fonts lack CJK/Arabic glyphs
-- **Ignoring text shaping** — complex scripts require contextual forms and ligatures
-- **Poor mixed script alignment** — different scripts have different baselines
-- **No accessibility testing** — large font sizes break complex script rendering
-- **Bundle size neglect** — CJK fonts can add 20+ MB to APK size
+- **Assuming Latin coverage is universal** — most fonts lack CJK/Arabic/Indic glyphs
+- **Ignoring text shaping** — complex scripts rely on automatic contextual forms and ligatures
+- **Poor mixed-script alignment** — different scripts have different baselines
+- **No accessibility testing** — large font sizes and RTL can break layout without proper fallbacks
+- **Ignoring bundle size** — CJK fonts can add 20+ MB; prefer downloadable fonts or modularization
 
 ---
 
-## Follow-ups
+## Follow-ups (RU)
 - Как комбинировать латинский бренд-шрифт и Noto для контента без визуальных конфликтов?
 - Как управлять загрузкой шрифтов при старте приложения (splash screen)?
 - Какие инструменты использовать для автоматической проверки покрытия glyph?
 
-## References
+## Follow-ups (EN)
+- How can you combine a Latin brand font and Noto fonts for content without visual conflicts?
+- How should you manage font loading during app startup (splash screen)?
+- Which tools can be used to automatically verify glyph coverage?
+
+## References (RU)
+- [[c-globalization]]
+- https://developer.android.com/guide/topics/text/downloadable-fonts
+
+## References (EN)
 - [[c-globalization]]
 - https://developer.android.com/guide/topics/text/downloadable-fonts
 
 ## Related Questions
 
 - [[c-globalization]]
+- [[c-android-components]]

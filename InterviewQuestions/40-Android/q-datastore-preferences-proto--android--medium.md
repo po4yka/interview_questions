@@ -31,7 +31,7 @@ sources:
 
 ## Ответ (RU)
 
-`DataStore` — современное решение для хранения данных в Android, замена `SharedPreferences`. Предоставляет два варианта: **`Preferences DataStore`** (ключ-значение) и **`Proto DataStore`** (типизированные объекты с Protocol Buffers). Использует `Coroutines` и `Flow` для асинхронности и реактивности. Основные преимущества: асинхронный API, транзакционность, типобезопасность (`Proto DataStore`), поддержка миграций.
+`DataStore` — современное рекомендуемое решение для локального хранения настроек и небольших порций данных в Android, пришедшее на смену большинству сценариев использования `SharedPreferences`. Предоставляет два варианта: **`Preferences DataStore`** (ключ-значение) и **`Proto DataStore`** (типизированные объекты с Protocol Buffers). Использует `Coroutines` и `Flow` для асинхронности и реактивности. Основные преимущества: асинхронный API, транзакционность, типобезопасность (`Proto DataStore`), поддержка миграций.
 
 ### Основные Концепции
 
@@ -48,7 +48,7 @@ sources:
 - Подходит для сложных структур данных — вложенные объекты, списки, перечисления
 
 **Ключевые отличия от `SharedPreferences`:**
-- Асинхронный API (`Coroutines`) — не блокирует UI поток, предотвращает `ANR`
+- Асинхронный API (`Coroutines`) — не блокирует UI поток, снижает риск `ANR`
 - Транзакционность — атомарные операции через `edit` или `updateData`, данные либо записываются полностью, либо откатываются
 - Безопасность типов — для `Proto DataStore` (compile-time проверка)
 - Поддержка миграций — встроенная миграция из `SharedPreferences` и между версиями `Proto`
@@ -89,10 +89,10 @@ message UserSettings {
 **Сериализатор:**
 ```kotlin
 object UserSettingsSerializer : Serializer<UserSettings> {
-    override val defaultValue = UserSettings.getDefaultInstance()
+    override val defaultValue: UserSettings = UserSettings.getDefaultInstance()
 
-    override suspend fun readFrom(input: InputStream) =
-        UserSettings.parseFrom(input)
+    override suspend fun readFrom(input: InputStream): UserSettings =
+        UserSettings.parseFrom(input) // На практике стоит обрабатывать IO/Corruption ошибки
 
     override suspend fun writeTo(t: UserSettings, output: OutputStream) =
         t.writeTo(output)
@@ -142,11 +142,11 @@ val Context.dataStore by preferencesDataStore(
 | Миграция с SharedPreferences | Preferences | Встроенная поддержка миграций |
 | Большой объем данных | Не использовать | Для больших данных → Room или файлы |
 
-**Важно:** `DataStore` не подходит для больших объемов данных (используйте `Room` или файлы) или частых синхронных чтений (асинхронный API по умолчанию). Максимальный размер данных — несколько сотен KB. Для больших данных или сложных запросов используйте `Room`.
+**Важно:** `DataStore` не подходит для больших объемов данных (используйте `Room` или файлы) или частых синхронных чтений (асинхронный API по умолчанию). Вместо жесткого лимита по размеру ориентируйтесь на практику: хранить относительно небольшой объем (обычно настройки и связанные с ними данные), а для больших объемов или сложных запросов использовать `Room` или другие механизмы хранения.
 
 ## Answer (EN)
 
-`DataStore` is a modern data storage solution for Android, replacing `SharedPreferences`. It provides two variants: **`Preferences DataStore`** (key-value) and **`Proto DataStore`** (typed objects with Protocol Buffers). Uses `Coroutines` and `Flow` for asynchronicity and reactivity. Key advantages: asynchronous API, transactional operations, type safety (`Proto DataStore`), migration support.
+`DataStore` is a modern recommended solution for local storage of settings and small amounts of data on Android, replacing most `SharedPreferences` use cases. It provides two variants: **`Preferences DataStore`** (key-value) and **`Proto DataStore`** (typed objects with Protocol Buffers). It uses `Coroutines` and `Flow` for asynchronicity and reactivity. Key advantages: asynchronous API, transactional operations, type safety (`Proto DataStore`), migration support.
 
 ### Core Concepts
 
@@ -163,7 +163,7 @@ val Context.dataStore by preferencesDataStore(
 - Suitable for complex data structures — nested objects, lists, enums
 
 **Key Differences from `SharedPreferences`:**
-- Asynchronous API (`Coroutines`) — doesn't block UI thread, prevents `ANR`
+- Asynchronous API (`Coroutines`) — doesn't block UI thread, reduces `ANR` risk
 - Transactional — atomic operations via `edit` or `updateData`, data either fully written or rolled back
 - Type safety — for `Proto DataStore` (compile-time checking)
 - Migration support — built-in migration from `SharedPreferences` and between `Proto` versions
@@ -204,10 +204,10 @@ message UserSettings {
 **Serializer:**
 ```kotlin
 object UserSettingsSerializer : Serializer<UserSettings> {
-    override val defaultValue = UserSettings.getDefaultInstance()
+    override val defaultValue: UserSettings = UserSettings.getDefaultInstance()
 
-    override suspend fun readFrom(input: InputStream) =
-        UserSettings.parseFrom(input)
+    override suspend fun readFrom(input: InputStream): UserSettings =
+        UserSettings.parseFrom(input) // In real code, handle IO/Corruption exceptions as needed
 
     override suspend fun writeTo(t: UserSettings, output: OutputStream) =
         t.writeTo(output)
@@ -257,7 +257,7 @@ val Context.dataStore by preferencesDataStore(
 | Migration from SharedPreferences | Preferences | Built-in migration support |
 | Large data volumes | Don't use | For large data → Room or files |
 
-**Important:** `DataStore` is not suitable for large data volumes (use `Room` or files) or frequent synchronous reads (asynchronous API by default). Maximum data size is several hundred KB. For large data or complex queries use `Room`.
+**Important:** `DataStore` is not suitable for large data volumes (use `Room` or files) or frequent synchronous reads (asynchronous API by default). Rather than a strict documented size limit, follow best practices: keep it for relatively small data sets (typically preferences and related small data), and use `Room` or other storage for large data or complex queries.
 
 
 ## Follow-ups

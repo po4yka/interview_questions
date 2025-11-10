@@ -10,11 +10,12 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-fragment-vs-activity-lifecycle--android--medium, q-retrofit-library--android--medium]
+related: [c-activity, q-fragment-vs-activity-lifecycle--android--medium, q-retrofit-library--android--medium]
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 tags: [android, android/activity, android/ui-views, difficulty/easy, ui]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -27,18 +28,20 @@ sources: []
 
 ## Ответ (RU)
 
-Чтобы начать отображать UI в Android, необходимо: (1) создать [[c-activity|Activity]], (2) определить layout (разметку), (3) связать их через `setContentView()`.
+Чтобы начать отображать UI в Android, нужно:
+- создать точку входа, обычно [[c-activity|`Activity`]] (или экран на её основе),
+- задать для неё содержимое: `View`-иерархию через `setContentView()` (`View`-based UI) или дерево composable-функций через `setContent {}` (Jetpack Compose).
 
 ### Основные Способы
 
-**1. XML Layout (традиционный)**
+**1. XML Layout (традиционный, `View`-based UI)**
 
 ```kotlin
-// ✅ Стандартный подход для View-based UI
+// Стандартный подход для View-based UI
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)  // ✅ Связывание layout с Activity
+        setContentView(R.layout.activity_main)  // Связывание layout с Activity
     }
 }
 ```
@@ -60,21 +63,21 @@ class MainActivity : AppCompatActivity() {
 **2. Jetpack Compose (современный)**
 
 ```kotlin
-// ✅ Декларативный UI без XML
+// Декларативный UI без XML
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {  // ✅ Compose UI вместо setContentView
+        setContent {  // Compose UI вместо setContentView для Activity
             Text("Hello World")
         }
     }
 }
 ```
 
-**3. Custom View (программная отрисовка)**
+**3. Custom `View` (программная отрисовка)**
 
 ```kotlin
-// ✅ Низкоуровневая отрисовка через Canvas
+// Низкоуровневая отрисовка через Canvas
 class CustomView(context: Context) : View(context) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -82,22 +85,32 @@ class CustomView(context: Context) : View(context) {
         canvas.drawCircle(100f, 100f, 50f, paint)
     }
 }
+
+// Подключение CustomView, один из вариантов:
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(CustomView(this))  // Устанавливаем CustomView как корневой View
+    }
+}
 ```
 
 ## Answer (EN)
 
-To display UI in Android, you need to: (1) create an [[c-activity|Activity]], (2) define a layout, (3) connect them via `setContentView()`.
+To display UI in Android, you need to:
+- create an entry point, usually an [[c-activity|`Activity`]] (or a screen based on it),
+- set its content: a `View` hierarchy via `setContentView()` (`View`-based UI) or a tree of composable functions via `setContent {}` (Jetpack Compose).
 
 ### Main Approaches
 
-**1. XML Layout (traditional)**
+**1. XML Layout (traditional, `View`-based UI)**
 
 ```kotlin
-// ✅ Standard approach for View-based UI
+// Standard approach for View-based UI
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)  // ✅ Bind layout to Activity
+        setContentView(R.layout.activity_main)  // Bind layout to Activity
     }
 }
 ```
@@ -119,21 +132,21 @@ class MainActivity : AppCompatActivity() {
 **2. Jetpack Compose (modern)**
 
 ```kotlin
-// ✅ Declarative UI without XML
+// Declarative UI without XML
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {  // ✅ Compose UI instead of setContentView
+        setContent {  // Compose UI instead of setContentView for the Activity
             Text("Hello World")
         }
     }
 }
 ```
 
-**3. Custom View (programmatic drawing)**
+**3. Custom `View` (programmatic drawing)**
 
 ```kotlin
-// ✅ Low-level drawing with Canvas
+// Low-level drawing with Canvas
 class CustomView(context: Context) : View(context) {
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
@@ -141,36 +154,72 @@ class CustomView(context: Context) : View(context) {
         canvas.drawCircle(100f, 100f, 50f, paint)
     }
 }
+
+// Attaching the CustomView, one option:
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(CustomView(this))  // Set CustomView as the root View
+    }
+}
 ```
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Что произойдет, если вызвать `setContentView()` несколько раз?
+- Как Android обрабатывает пересоздание `Activity` при изменении конфигурации (например, поворот экрана)?
+- В чем разница между `AppCompatActivity` и `ComponentActivity`?
+- Как ViewBinding/DataBinding интегрируются с `setContentView()`?
+
 ## Follow-ups
 
 - What happens if `setContentView()` is called multiple times?
-- How does Android handle Activity recreation during configuration changes (rotation)?
+- How does Android handle `Activity` recreation during configuration changes (rotation)?
 - What is the difference between `AppCompatActivity` and `ComponentActivity`?
 - How does ViewBinding/DataBinding integrate with `setContentView()`?
 
+## Ссылки (RU)
+
+- [[c-activity]] - Жизненный цикл и основы `Activity`
+- https://developer.android.com/guide/components/activities/intro-activities
+
 ## References
 
-- [[c-activity]] - Activity lifecycle and fundamentals
-- [[c-android-ui-composition]] - UI composition patterns
+- [[c-activity]] - `Activity` lifecycle and fundamentals
 - https://developer.android.com/guide/components/activities/intro-activities
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+
+- [[c-activity]] - Базовые понятия об `Activity`
+
+### Похожие (тот же уровень)
+
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - Жизненный цикл `Fragment` vs `Activity`
+- [[q-retrofit-library--android--medium]] - Настройка сетевого слоя
+
+### Продвинутые (сложнее)
+
+- Восстановление состояния `Activity` после убийства процесса
+- Реализация пользовательского `ViewGroup`
+- Интеграция Compose с XML-представлениями
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
-- [[c-activity]] - Understanding Activity basics
+- [[c-activity]] - Understanding `Activity` basics
 
 ### Related (Same Level)
 
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment vs Activity lifecycle
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Fragment` vs `Activity` lifecycle
 - [[q-retrofit-library--android--medium]] - Network layer setup
 
 ### Advanced (Harder)
 
-- Activity state restoration during process death
-- Custom ViewGroup implementation
+- `Activity` state restoration during process death
+- Custom `ViewGroup` implementation
 - Compose interop with XML Views

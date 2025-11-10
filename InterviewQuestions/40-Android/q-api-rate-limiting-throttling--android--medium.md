@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-networking, c-okhttp-interceptors]
+related: [c-android-basics, q-android-testing-strategies--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/networking-http, android/performance-startup, difficulty/medium, networking, okhttp, performance, retrofit]
+
 ---
 
 # Вопрос (RU)
@@ -29,6 +30,8 @@ tags: [android/networking-http, android/performance-startup, difficulty/medium, 
 
 **Rate limiting** и **throttling** — техники контроля частоты запросов для защиты серверов от перегрузки и обеспечения стабильности приложения.
 
+См. также: [[c-android-basics]].
+
 ### 1. Token Bucket Interceptor
 
 Позволяет всплески трафика при сохранении средней скорости.
@@ -36,20 +39,30 @@ tags: [android/networking-http, android/performance-startup, difficulty/medium, 
 ```kotlin
 class TokenBucketInterceptor(
     private val capacity: Int = 10,
-    private val refillRate: Long = 1000 // ms per token
+    private val refillRateMsPerToken: Long = 1000 // мс за токен
 ) : Interceptor {
     private var tokens = capacity
-    private var lastRefill = System.currentTimeMillis()
+    private var lastRefillTime = System.currentTimeMillis()
 
     override fun intercept(chain: Interceptor.Chain): Response {
         synchronized(this) {
             val now = System.currentTimeMillis()
-            val elapsed = now - lastRefill
-            tokens = minOf(capacity, tokens + (elapsed / refillRate).toInt())
-            lastRefill = now
+            val elapsed = now - lastRefillTime
 
-            // ✅ Пополнение токенов основано на времени
-            if (tokens < 1) throw TooManyRequestsException()
+            // ✅ Пополняем токены пропорционально прошедшему времени
+            if (elapsed > 0) {
+                val newTokens = (elapsed / refillRateMsPerToken).toInt()
+                if (newTokens > 0) {
+                    tokens = minOf(capacity, tokens + newTokens)
+                    lastRefillTime += newTokens * refillRateMsPerToken
+                }
+            }
+
+            if (tokens < 1) {
+                // В реальном приложении обычно возвращают контролируемую ошибку/результат,
+                // а не "падает" исключением как 429.
+                throw TooManyRequestsException()
+            }
             tokens--
         }
         return chain.proceed(chain.request())
@@ -59,28 +72,37 @@ class TokenBucketInterceptor(
 
 ### 2. Exponential Backoff
 
-Обрабатывает 429 и 5xx ошибки с увеличивающимися задержками.
+Обрабатывает 429 и 5xx ошибки с увеличивающимися задержками. Пример ниже синхронный и блокирующий (подходит только для фоновых потоков OkHttp).
 
 ```kotlin
 class RetryInterceptor(
     private val maxRetries: Int = 3,
-    private val initialDelay: Long = 1000
+    private val initialDelayMs: Long = 1000
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         var attempt = 0
+
         while (attempt <= maxRetries) {
             val response = chain.proceed(chain.request())
 
             when (response.code) {
                 in 200..299 -> return response
                 429, in 500..599 -> {
-                    response.close()
-                    if (attempt == maxRetries) throw MaxRetriesExceededException()
+                    if (attempt == maxRetries) {
+                        response.close()
+                        throw MaxRetriesExceededException()
+                    }
 
-                    // ✅ Учитываем Retry-After header
-                    val delay = response.header("Retry-After")?.toLongOrNull()?.times(1000)
-                        ?: (initialDelay shl attempt)
-                    Thread.sleep(delay)
+                    // ✅ Учитываем Retry-After header (секунды), иначе экспоненциальный backoff
+                    val retryAfterSeconds = response.header("Retry-After")?.toLongOrNull()
+                    response.close()
+
+                    val delayMs = retryAfterSeconds?.times(1000)
+                        ?: (initialDelayMs * (1L shl attempt)) // 1, 2, 4, ... * initialDelayMs
+
+                    // ⚠️ Thread.sleep блокирует поток OkHttp.
+                    // Использовать только в соответствующем пуле потоков; для корутин лучше delay().
+                    Thread.sleep(delayMs)
                     attempt++
                 }
                 else -> return response
@@ -91,7 +113,7 @@ class RetryInterceptor(
 }
 ```
 
-### 3. Flow Debounce
+### 3. `Flow` Debounce
 
 Ограничивает частые запросы от пользовательского ввода.
 
@@ -112,7 +134,7 @@ class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
 
 ### 4. WorkManager Rate Limiting
 
-Ограничивает фоновые задачи по сети и батарее.
+Ограничивает частоту фоновой синхронизации через периодичность задач, ограничения и backoff (это не классический per-request rate limiting, а управление частотой фоновых операций).
 
 ```kotlin
 val constraints = Constraints.Builder()
@@ -134,15 +156,17 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 ```
 
 **Рекомендации:**
-- Token bucket для API с burst traffic
-- Учитывать `Retry-After` header
-- Debounce 300-500ms для поиска
-- Кешировать с ETag для условных запросов
-- Мониторить 429 responses в analytics
+- Использовать token bucket для API, допускающих burst-трафик.
+- Учитывать `Retry-After` header и применять экспоненциальный backoff.
+- Применять debounce 300–500 мс для поиска.
+- Использовать кеширование с ETag для условных запросов как дополнение к лимитированию.
+- Мониторить ответы 429 в аналитике и корректировать стратегии.
 
 ## Answer (EN)
 
 **Rate limiting** and **throttling** control request frequency to protect servers from overload and ensure app stability.
+
+See also: [[c-android-basics]].
 
 ### 1. Token Bucket Interceptor
 
@@ -151,20 +175,30 @@ Allows burst traffic while maintaining average rate.
 ```kotlin
 class TokenBucketInterceptor(
     private val capacity: Int = 10,
-    private val refillRate: Long = 1000 // ms per token
+    private val refillRateMsPerToken: Long = 1000 // ms per token
 ) : Interceptor {
     private var tokens = capacity
-    private var lastRefill = System.currentTimeMillis()
+    private var lastRefillTime = System.currentTimeMillis()
 
     override fun intercept(chain: Interceptor.Chain): Response {
         synchronized(this) {
             val now = System.currentTimeMillis()
-            val elapsed = now - lastRefill
-            tokens = minOf(capacity, tokens + (elapsed / refillRate).toInt())
-            lastRefill = now
+            val elapsed = now - lastRefillTime
 
-            // ✅ Token refill based on elapsed time
-            if (tokens < 1) throw TooManyRequestsException()
+            // ✅ Refill tokens proportionally to elapsed time
+            if (elapsed > 0) {
+                val newTokens = (elapsed / refillRateMsPerToken).toInt()
+                if (newTokens > 0) {
+                    tokens = minOf(capacity, tokens + newTokens)
+                    lastRefillTime += newTokens * refillRateMsPerToken
+                }
+            }
+
+            if (tokens < 1) {
+                // In a real app you often map this to a controlled error/result
+                // instead of throwing as if it were a raw 429.
+                throw TooManyRequestsException()
+            }
             tokens--
         }
         return chain.proceed(chain.request())
@@ -174,28 +208,37 @@ class TokenBucketInterceptor(
 
 ### 2. Exponential Backoff
 
-Handles 429 and 5xx errors with increasing delays.
+Handles 429 and 5xx errors with increasing delays. The example below is synchronous and blocking (intended for OkHttp background threads).
 
 ```kotlin
 class RetryInterceptor(
     private val maxRetries: Int = 3,
-    private val initialDelay: Long = 1000
+    private val initialDelayMs: Long = 1000
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         var attempt = 0
+
         while (attempt <= maxRetries) {
             val response = chain.proceed(chain.request())
 
             when (response.code) {
                 in 200..299 -> return response
                 429, in 500..599 -> {
-                    response.close()
-                    if (attempt == maxRetries) throw MaxRetriesExceededException()
+                    if (attempt == maxRetries) {
+                        response.close()
+                        throw MaxRetriesExceededException()
+                    }
 
-                    // ✅ Respect Retry-After header
-                    val delay = response.header("Retry-After")?.toLongOrNull()?.times(1000)
-                        ?: (initialDelay shl attempt)
-                    Thread.sleep(delay)
+                    // ✅ Respect Retry-After header (seconds) or fall back to exponential backoff
+                    val retryAfterSeconds = response.header("Retry-After")?.toLongOrNull()
+                    response.close()
+
+                    val delayMs = retryAfterSeconds?.times(1000)
+                        ?: (initialDelayMs * (1L shl attempt)) // 1, 2, 4, ... * initialDelayMs
+
+                    // ⚠️ Thread.sleep blocks the OkHttp thread.
+                    // Use only where blocking is acceptable; for coroutines prefer delay().
+                    Thread.sleep(delayMs)
                     attempt++
                 }
                 else -> return response
@@ -206,7 +249,7 @@ class RetryInterceptor(
 }
 ```
 
-### 3. Flow Debounce
+### 3. `Flow` Debounce
 
 Limits frequent requests from user input.
 
@@ -227,7 +270,7 @@ class SearchViewModel(private val repo: SearchRepository) : ViewModel() {
 
 ### 4. WorkManager Rate Limiting
 
-Limits background tasks based on network and battery.
+Controls frequency of background sync via periodic work, constraints, and backoff. This is not classic per-request rate limiting but scheduling policies that effectively throttle background operations.
 
 ```kotlin
 val constraints = Constraints.Builder()
@@ -249,41 +292,66 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 ```
 
 **Best practices:**
-- Use token bucket for burst-friendly APIs
-- Always respect `Retry-After` header
-- Apply 300-500ms debounce for search
-- Cache with ETag for conditional requests
-- Monitor 429 responses in analytics
+- Use token bucket for burst-friendly APIs.
+- Always respect `Retry-After` header and apply exponential backoff.
+- Apply 300–500 ms debounce for search.
+- Use ETag-based conditional requests as a complement to rate limiting.
+- Monitor 429 responses in analytics and adjust strategies.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как тестировать rate limiting интерцепторы с MockWebServer?
+- В чем разница между алгоритмами token bucket и leaky bucket?
+- Как реализовать per-endpoint rate limiting с разными лимитами?
+- Когда использовать `delay()` корутин вместо `Thread.sleep()` в интерцепторах?
+- Как реализовать адаптивный rate limiting на основе заголовков ответа сервера?
 
 ## Follow-ups
 
 - How to test rate limiting interceptors with MockWebServer?
 - What's the difference between token bucket and leaky bucket algorithms?
 - How to implement per-endpoint rate limiting with different limits?
-- When to use coroutine delay() vs Thread.sleep() in interceptors?
+- When to use coroutine `delay()` vs `Thread.sleep()` in interceptors?
 - How to implement adaptive rate limiting based on server response headers?
+
+## Ссылки (RU)
+
+- [OkHttp Interceptors](https://square.github.io/okhttp/interceptors/)
+- [Kotlin `Flow` Operators](https://kotlinlang.org/docs/flow.html)
+- [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
 
 ## References
 
-- [[c-okhttp-interceptors]]
-- [[c-networking]]
 - [OkHttp Interceptors](https://square.github.io/okhttp/interceptors/)
-- [Kotlin Flow Operators](https://kotlinlang.org/docs/flow.html)
+- [Kotlin `Flow` Operators](https://kotlinlang.org/docs/flow.html)
 - [WorkManager Documentation](https://developer.android.com/topic/libraries/architecture/workmanager)
+
+## Связанные вопросы (RU)
+
+### Базовые (проще)
+
+- [[q-android-app-components--android--easy]]
+
+### На том же уровне сложности
+
+- [[q-android-testing-strategies--android--medium]]
+
+### Продвинутые (сложнее)
+
+- [[q-android-runtime-art--android--medium]]
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
-
+- [[q-android-app-components--android--easy]]
 
 ### Related (Same Level)
-- [[q-retrofit-error-handling--android--medium]]
+
 - [[q-android-testing-strategies--android--medium]]
-- [[q-workmanager-constraints--android--medium]]
 
 ### Advanced (Harder)
-- [[q-reactive-backpressure--kotlin--hard]]
-- [[q-distributed-rate-limiting--system-design--hard]]
+
+- [[q-android-runtime-art--android--medium]]

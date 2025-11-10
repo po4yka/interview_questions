@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-testing--android--medium, q-testing-coroutines-flow--android--hard, q-testing-viewmodels-turbine--android--medium]
+related: [moc-android, q-compose-testing--android--medium, q-testing-coroutines-flow--android--hard, q-testing-viewmodels-turbine--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags: [android/coroutines, android/kmp, android/testing-unit, difficulty/medium, kotlin, multiplatform, testing]
+
 ---
 
 # Вопрос (RU)
@@ -27,7 +28,9 @@ tags: [android/coroutines, android/kmp, android/testing-unit, difficulty/medium,
 
 ## Ответ (RU)
 
-Тестирование в KMM использует общий код в `commonTest` для всех платформ, с возможностью платформо-специфичных тестов через `expect/actual`. Для утверждений используется `kotlin.test`, для моков - MockK (мультиплатформенный).
+Тестирование в KMM строится вокруг максимального использования общего кода и общих тестов в `commonTest`, с выделением платформо-специфичных тестов в отдельных source sets. Общие тесты пишутся на базе `kotlin.test`. Для моков можно использовать мультиплатформенные библиотеки (например, MockK для поддерживаемых таргетов или KMP-friendly альтернативы).
+
+См. также: [[moc-android]]
 
 ### Структура Тестов
 
@@ -42,7 +45,7 @@ kotlin {
                 implementation(kotlin("test"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
                 implementation("app.cash.turbine:turbine")
-                implementation("io.mockk:mockk")
+                implementation("io.mockk:mockk") // для JVM; для других таргетов используйте совместимую версию или альтернативу
             }
         }
 
@@ -52,24 +55,29 @@ kotlin {
                 implementation("androidx.test:core")
             }
         }
+
+        // iosTest обычно настраивается Gradle-плагином KMP и использует commonTest + iOS-специфичные реализации
     }
 }
 ```
 
 **Структура директорий:**
+
 ```
 shared/src/
   commonTest/kotlin/         # Общие тесты (все платформы)
-  androidUnitTest/kotlin/    # Android-специфичные
-  iosTest/kotlin/            # iOS-специфичные
+  androidUnitTest/kotlin/    # Android-специфичные unit-тесты
+  iosTest/kotlin/            # iOS-специфичные тесты
 ```
 
-### Unit-тестирование В commonTest
+### Unit-тестирование в commonTest
 
-**Тест репозитория:**
+Общий код (репозитории, use-case, бизнес-логика) тестируется в `commonTest`, чтобы один и тот же тест запускался на разных таргетах.
+
+**Пример теста репозитория:**
 
 ```kotlin
-// ✅ Общий тест - работает на всех платформах
+// Общий тест - должен работать на всех поддерживаемых платформах
 class TaskRepositoryTest {
     private lateinit var repository: TaskRepository
     private lateinit var mockApi: TaskApi
@@ -77,13 +85,17 @@ class TaskRepositoryTest {
     @BeforeTest
     fun setup() {
         mockApi = mockk()
-        repository = TaskRepositoryImpl(mockApi)
+        repository = TaskRepositoryImpl(
+            api = mockApi,
+            cache = InMemoryTaskCache() // общий in-memory кеш для тестов
+        )
     }
 
     @Test
     fun `getTasks возвращает кэш при ошибке сети`() = runTest {
         // Given
         val cached = listOf(Task(id = "1", title = "Cached"))
+        repository.updateCache(cached)
         coEvery { mockApi.fetchTasks() } throws NetworkException()
 
         // When
@@ -96,48 +108,61 @@ class TaskRepositoryTest {
 }
 ```
 
-**Тестирование Flow с Turbine:**
+**Тестирование `Flow` с Turbine:**
 
 ```kotlin
-@Test
-fun `observeTasks эмитит обновления`() = runTest {
-    val tasksFlow = MutableStateFlow(emptyList<Task>())
-    every { mockDatabase.observeTasks() } returns tasksFlow
+class ObserveTasksTest {
+    private lateinit var repository: TaskRepository
 
-    repository.observeTasks().test {
-        assertEquals(emptyList(), awaitItem())
+    @BeforeTest
+    fun setup() {
+        repository = TaskRepositoryImpl(
+            api = FakeApi(),
+            cache = InMemoryTaskCache()
+        )
+    }
 
-        tasksFlow.value = listOf(Task(id = "1", title = "New"))
-        assertEquals(1, awaitItem().size)
+    @Test
+    fun `observeTasks эмитит обновления`() = runTest {
+        repository.observeTasks().test {
+            assertEquals(emptyList<Task>(), awaitItem())
 
-        cancel()
+            repository.addTask(Task(id = "1", title = "New"))
+
+            val updated = awaitItem()
+            assertEquals(1, updated.size)
+
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 }
 ```
 
 ### Мокирование Платформо-специфичного Кода
 
-**Expect/Actual для тестовых дублеров:**
+Для платформо-специфичных зависимостей в общем коде вместо прямых вызовов используйте `expect/actual` и внедрение зависимостей.
+
+**Expect/Actual для тестовых драйверов БД:**
 
 ```kotlin
-// ✅ commonTest - объявление
-expect class TestDatabaseDriver {
+// commonTest - объявление
+expect class TestDatabaseDriver() {
     fun createInMemoryDriver(): SqlDriver
 }
 
-// ✅ androidUnitTest - реализация
+// androidUnitTest - реализация (пример с SQLDelight)
 actual class TestDatabaseDriver {
     actual fun createInMemoryDriver(): SqlDriver {
-        return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).apply {
-            TaskDatabase.Schema.create(this)
+        return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).also { driver ->
+            TaskDatabase.Schema.create(driver)
         }
     }
 }
 
-// ✅ iosTest - реализация
+// iosTest - реализация (пример с SQLDelight)
 actual class TestDatabaseDriver {
     actual fun createInMemoryDriver(): SqlDriver {
-        return NativeSqliteDriver(TaskDatabase.Schema, name = null)
+        return NativeSqliteDriver(TaskDatabase.Schema, name = "test.db")
     }
 }
 ```
@@ -147,19 +172,22 @@ actual class TestDatabaseDriver {
 ```kotlin
 class TaskDatabaseTest {
     private lateinit var driver: SqlDriver
+    private lateinit var database: TaskDatabase
 
     @BeforeTest
     fun setup() {
         driver = TestDatabaseDriver().createInMemoryDriver()
+        database = TaskDatabase(driver)
     }
 
     @Test
     fun `insertTask сохраняет задачу`() {
         val task = Task(id = "1", title = "Test")
-        database.taskQueries.insertTask(task)
+        database.taskQueries.insertTask(task.id, task.title)
 
-        val retrieved = database.taskQueries.selectById("1")
-        assertEquals(task, retrieved)
+        val retrieved = database.taskQueries.selectById("1").executeAsOne()
+        assertEquals(task.id, retrieved.id)
+        assertEquals(task.title, retrieved.title)
     }
 }
 ```
@@ -167,9 +195,9 @@ class TaskDatabaseTest {
 **Фейки для платформенных API:**
 
 ```kotlin
-// ✅ commonTest - фейк
-class FakeLogger : PlatformLogger() {
-    val logs = mutableListOf<String>()
+// Общий fake для expect/actual PlatformLogger
+class FakeLogger : PlatformLogger {
+    private val logs = mutableListOf<String>()
 
     override fun log(message: String) {
         logs.add(message)
@@ -183,7 +211,7 @@ class FakeLogger : PlatformLogger() {
 
 ### Тестирование Корутин
 
-**TestDispatchers:**
+Общий подход — передавать абстракцию диспетчеров (например, `CoroutineDispatchers`) и подменять их тестовыми в `commonTest`.
 
 ```kotlin
 object TestDispatchers : CoroutineDispatchers {
@@ -194,7 +222,7 @@ object TestDispatchers : CoroutineDispatchers {
 @Test
 fun `loadTasks обновляет состояние`() = runTest {
     val viewModel = TaskViewModel(
-        repository = mockRepository,
+        repository = FakeTaskRepository(),
         dispatchers = TestDispatchers
     )
 
@@ -207,11 +235,13 @@ fun `loadTasks обновляет состояние`() = runTest {
 
 ### Платформо-специфичные Тесты
 
-**Android (с Robolectric):**
+**Android (инструментальные / JVM):**
+
+Платформенный код (например, работа с `Context`, SharedPreferences, файлами) тестируется в `androidUnitTest` или `androidInstrumentedTest`.
 
 ```kotlin
-// ❌ Не используйте реальный контекст в commonTest
-// ✅ Используйте в androidUnitTest
+// Не используйте реальный Context в commonTest
+// Используйте его в androidUnitTest / androidTest
 @RunWith(AndroidJUnit4::class)
 class AndroidPreferencesTest {
     private lateinit var context: Context
@@ -231,13 +261,17 @@ class AndroidPreferencesTest {
 }
 ```
 
+Для JVM-юнит тестов Android-кода можно использовать Robolectric с `@RunWith(RobolectricTestRunner::class)`.
+
 **iOS:**
+
+iOS-специфичные реализации (например, Keychain, NSUserDefaults) тестируются в `iosTest` с использованием Kotlin/Native тест-раннера или Xcode-проекта, в который интегрирован общий модуль.
 
 ```kotlin
 class IOSKeychainTest {
     @Test
     fun testIOSSpecificFeature() {
-        // iOS-специфичная логика
+        // Вызов iOS-специфичной реализации expect/actual и проверка поведения
     }
 }
 ```
@@ -245,25 +279,27 @@ class IOSKeychainTest {
 ### Best Practices
 
 **Организация:**
-- Максимизируйте код в `commonTest` (80%+)
-- Используйте платформо-специфичные тесты только для платформенного кода
-- Группируйте тесты по функциональности
+- Максимизируйте долю логики и тестов в `commonTest`.
+- Используйте платформо-специфичные тесты только для платформенного кода.
+- Группируйте тесты по функциональности/модулю.
 
 **Покрытие:**
-- 80%+ для общего кода
-- Тестируйте позитивные и негативные сценарии
-- Используйте фейки для сложных зависимостей
+- Стремитесь к высокому покрытию (особенно общего кода).
+- Тестируйте позитивные и негативные сценарии.
+- Для сложных зависимостей используйте фейки и тестовые реализаций через DI и `expect/actual`.
 
 **Производительность:**
-- Тесты <100мс
-- In-memory базы данных
-- Избегайте реальных сетевых вызовов
+- Избегайте реальных сетевых вызовов и тяжелых ресурсов.
+- Используйте in-memory базы данных.
+- Следите, чтобы тесты были быстрыми и детерминированными.
 
 ---
 
 ## Answer (EN)
 
-KMM testing uses shared code in `commonTest` for all platforms, with platform-specific tests via `expect/actual`. Use `kotlin.test` for assertions, MockK for mocks (multiplatform).
+KMM testing centers on maximizing shared code and shared tests in `commonTest`, with platform-specific tests in dedicated source sets. Use `kotlin.test` for assertions and multiplatform-friendly mocking libraries (e.g., MockK for supported targets or alternatives).
+
+See also: [[moc-android]]
 
 ### Test Structure
 
@@ -278,7 +314,7 @@ kotlin {
                 implementation(kotlin("test"))
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test")
                 implementation("app.cash.turbine:turbine")
-                implementation("io.mockk:mockk")
+                implementation("io.mockk:mockk") // JVM; use compatible variants/alternatives for other targets
             }
         }
 
@@ -288,27 +324,47 @@ kotlin {
                 implementation("androidx.test:core")
             }
         }
+
+        // iosTest is configured via KMP plugin; it reuses commonTest and can add iOS-specific implementations
     }
 }
 ```
 
+Directory layout:
+
+```
+shared/src/
+  commonTest/kotlin/         # Shared tests (all platforms)
+  androidUnitTest/kotlin/    # Android-specific unit tests
+  iosTest/kotlin/            # iOS-specific tests
+```
+
 ### Unit Testing in commonTest
 
-**Repository test:**
+Put repository, use-case, and business-logic tests in `commonTest` so they run on each target.
+
+**Repository test example:**
 
 ```kotlin
-// ✅ Shared test - runs on all platforms
+// Shared test - should run on all supported targets
 class TaskRepositoryTest {
+    private lateinit var repository: TaskRepository
     private lateinit var mockApi: TaskApi
 
     @BeforeTest
     fun setup() {
         mockApi = mockk()
+        repository = TaskRepositoryImpl(
+            api = mockApi,
+            cache = InMemoryTaskCache()
+        )
     }
 
     @Test
     fun `getTasks returns cache on network error`() = runTest {
         // Given
+        val cached = listOf(Task(id = "1", title = "Cached"))
+        repository.updateCache(cached)
         coEvery { mockApi.fetchTasks() } throws NetworkException()
 
         // When
@@ -316,49 +372,91 @@ class TaskRepositoryTest {
 
         // Then
         assertTrue(result.isSuccess)
+        assertEquals(cached, result.getOrNull())
     }
 }
 ```
 
-**Flow testing with Turbine:**
+**`Flow` testing with Turbine:**
 
 ```kotlin
-@Test
-fun `observeTasks emits updates`() = runTest {
-    repository.observeTasks().test {
-        assertEquals(emptyList(), awaitItem())
+class ObserveTasksTest {
+    private lateinit var repository: TaskRepository
 
-        // Trigger update
-        repository.addTask(Task(id = "1", title = "New"))
+    @BeforeTest
+    fun setup() {
+        repository = TaskRepositoryImpl(
+            api = FakeApi(),
+            cache = InMemoryTaskCache()
+        )
+    }
 
-        assertEquals(1, awaitItem().size)
-        cancel()
+    @Test
+    fun `observeTasks emits updates`() = runTest {
+        repository.observeTasks().test {
+            assertEquals(emptyList<Task>(), awaitItem())
+
+            repository.addTask(Task(id = "1", title = "New"))
+
+            val updated = awaitItem()
+            assertEquals(1, updated.size)
+
+            cancelAndIgnoreRemainingEvents()
+        }
     }
 }
 ```
 
 ### Mocking Platform-Specific Code
 
-**Expect/Actual for test doubles:**
+For platform-specific dependencies used from common code, use `expect/actual` and dependency injection instead of calling platform APIs directly.
+
+**Expect/Actual for test database driver:**
 
 ```kotlin
-// ✅ commonTest - declaration
-expect class TestDatabaseDriver {
+// commonTest - declaration
+expect class TestDatabaseDriver() {
     fun createInMemoryDriver(): SqlDriver
 }
 
-// ✅ androidUnitTest - implementation
+// androidUnitTest - implementation (SQLDelight example)
 actual class TestDatabaseDriver {
     actual fun createInMemoryDriver(): SqlDriver {
-        return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY)
+        return JdbcSqliteDriver(JdbcSqliteDriver.IN_MEMORY).also { driver ->
+            TaskDatabase.Schema.create(driver)
+        }
     }
 }
 
-// Usage in common tests
+// iosTest - implementation (SQLDelight example)
+actual class TestDatabaseDriver {
+    actual fun createInMemoryDriver(): SqlDriver {
+        return NativeSqliteDriver(TaskDatabase.Schema, name = "test.db")
+    }
+}
+```
+
+**Usage in shared tests:**
+
+```kotlin
 class TaskDatabaseTest {
+    private lateinit var driver: SqlDriver
+    private lateinit var database: TaskDatabase
+
     @BeforeTest
     fun setup() {
         driver = TestDatabaseDriver().createInMemoryDriver()
+        database = TaskDatabase(driver)
+    }
+
+    @Test
+    fun `insertTask stores task`() {
+        val task = Task(id = "1", title = "Test")
+        database.taskQueries.insertTask(task.id, task.title)
+
+        val retrieved = database.taskQueries.selectById("1").executeAsOne()
+        assertEquals(task.id, retrieved.id)
+        assertEquals(task.title, retrieved.title)
     }
 }
 ```
@@ -366,17 +464,23 @@ class TaskDatabaseTest {
 **Fakes for platform APIs:**
 
 ```kotlin
-// ✅ commonTest - fake
-class FakeLogger : PlatformLogger() {
-    val logs = mutableListOf<String>()
+// Shared fake for an expect/actual PlatformLogger
+class FakeLogger : PlatformLogger {
+    private val logs = mutableListOf<String>()
 
     override fun log(message: String) {
         logs.add(message)
     }
+
+    fun assertLogged(substring: String) {
+        assertTrue(logs.any { it.contains(substring) })
+    }
 }
 ```
 
-### Coroutine Testing
+### `Coroutine` Testing
+
+Inject a dispatcher provider (e.g., `CoroutineDispatchers`) and use test dispatchers in `commonTest`.
 
 ```kotlin
 object TestDispatchers : CoroutineDispatchers {
@@ -386,7 +490,11 @@ object TestDispatchers : CoroutineDispatchers {
 
 @Test
 fun `loadTasks updates state`() = runTest {
-    val viewModel = TaskViewModel(TestDispatchers)
+    val viewModel = TaskViewModel(
+        repository = FakeTaskRepository(),
+        dispatchers = TestDispatchers
+    )
+
     viewModel.loadTasks()
     advanceUntilIdle()
 
@@ -396,20 +504,43 @@ fun `loadTasks updates state`() = runTest {
 
 ### Platform-Specific Tests
 
-**Android (with Robolectric):**
+**Android:**
+
+Use `androidUnitTest` or `androidTest` for Android-specific code (`Context`, SharedPreferences, etc.).
 
 ```kotlin
-// ❌ Don't use real Context in commonTest
-// ✅ Use in androidUnitTest
+// Don't use real Context in commonTest
+// Use it in androidUnitTest / androidTest
 @RunWith(AndroidJUnit4::class)
 class AndroidPreferencesTest {
+    private lateinit var context: Context
+
+    @Before
+    fun setup() {
+        context = ApplicationProvider.getApplicationContext()
+    }
+
     @Test
     fun `saveToken persists token`() {
-        val context = ApplicationProvider.getApplicationContext<Context>()
         val prefs = AndroidPreferences(context)
-
         prefs.saveToken("token")
+
         assertEquals("token", prefs.getToken())
+    }
+}
+```
+
+For JVM-only tests of Android code, Robolectric can be used with `@RunWith(RobolectricTestRunner::class)`.
+
+**iOS:**
+
+Test iOS-specific implementations (Keychain, NSUserDefaults, etc.) in `iosTest` using the Kotlin/Native test runner or via Xcode integration.
+
+```kotlin
+class IOSKeychainTest {
+    @Test
+    fun testIOSSpecificFeature() {
+        // Call iOS-specific expect/actual implementation and assert behavior
     }
 }
 ```
@@ -417,42 +548,40 @@ class AndroidPreferencesTest {
 ### Best Practices
 
 **Organization:**
-- Maximize code in `commonTest` (80%+)
-- Use platform tests only for platform code
-- Group tests by functionality
+- Maximize shared logic and tests in `commonTest`.
+- Use platform-specific test source sets only for platform-dependent code.
+- Group tests by feature/module.
 
 **Coverage:**
-- 80%+ for shared code
-- Test happy paths and edge cases
-- Use fakes for complex dependencies
+- Aim for high coverage of shared code.
+- Test both success and failure paths.
+- Prefer fakes and test implementations via DI and `expect/actual` for complex dependencies.
 
 **Performance:**
-- Tests <100ms
-- In-memory databases
-- Avoid real network calls
+- Avoid real network calls and heavy I/O in tests.
+- Use in-memory databases where possible.
+- Keep tests fast, deterministic, and reliable.
 
 ---
 
 ## Follow-ups
 
 - How to test expect/actual implementations separately?
-- What are best practices for testing network layer in KMM?
+- What are best practices for testing the network layer in KMM?
 - How to implement screenshot testing across platforms?
 - When to use fakes vs mocks in KMM tests?
 - How to optimize test execution time in large KMM projects?
 
 ## References
 
-- [[c-kmm]] - Kotlin Multiplatform Mobile concept
-- [[c-testing-strategies]] - Testing strategies overview
 - [Kotlin Multiplatform Testing](https://kotlinlang.org/docs/multiplatform-run-tests.html)
 - [MockK Documentation](https://mockk.io/)
-- [Turbine - Flow Testing Library](https://github.com/cashapp/turbine)
+- [Turbine - `Flow` Testing Library](https://github.com/cashapp/turbine)
 
 ## Related Questions
 
 ### Related (Medium)
-- [[q-testing-viewmodels-turbine--android--medium]] - ViewModel testing with Turbine
+- [[q-testing-viewmodels-turbine--android--medium]] - `ViewModel` testing with Turbine
 - [[q-compose-testing--android--medium]] - Compose UI testing
 - [[q-robolectric-vs-instrumented--android--medium]] - Robolectric vs instrumented tests
 

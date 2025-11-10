@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-13
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/architecture-modularization, android/build-variants, android/gradle, architecture, difficulty/medium, modularization, modules]
 moc: moc-android
 related: [c-gradle, c-modularization]
-sources: [https://developer.android.com/topic/modularization/patterns]
+sources: ["https://developer.android.com/topic/modularization/patterns"]
+
 ---
 
 # Вопрос (RU)
@@ -29,7 +30,7 @@ sources: [https://developer.android.com/topic/modularization/patterns]
 
 ## Ответ (RU)
 
-В модуляризации Android существует 5 основных типов модулей:
+В модуляризации Android на практике часто используют следующие архитектурные типы модулей (это именно архитектурные/организационные категории поверх стандартных Gradle-модулей `app`/`library`/`test`, а не формальные "виды" модулей Android SDK):
 
 ### 1. Data Модули (Модули данных)
 
@@ -37,7 +38,7 @@ Data модуль содержит репозиторий, источники д
 
 - **Инкапсуляция данных и бизнес-логики домена** — каждый data модуль отвечает за обработку данных определённого домена
 - **Репозиторий как публичный API** — публичный API модуля должен быть репозиторием, отвечающим за предоставление данных остальной части приложения
-- **Скрытие деталей реализации** — источники данных доступны только репозиториям из того же модуля (использовать `private` или `internal`)
+- **Скрытие деталей реализации** — источники данных и внутренние модели доступны только внутри модуля; для этого используют `internal` для публичных по файлу элементов и более узкие уровни видимости для членов классов
 
 ```kotlin
 // ✅ Структура data модуля
@@ -58,7 +59,7 @@ Feature модуль — изолированная часть функцион�
 Feature модули:
 - Связаны с экранами/навигационными точками
 - Содержат UI и `ViewModel` для логики и состояния
-- **Зависят от data модулей**
+- **Зависят от data и core/common модулей**, но не наоборот
 
 ```kotlin
 // ✅ Структура feature модуля
@@ -72,10 +73,10 @@ Feature модули:
 
 ### 3. App Модули (Модули приложения)
 
-App модули — точка входа в приложение:
+App модули — точки входа в приложение (обычно Android `Application`/`Activity`, packagingOptions, манифест и т.п.):
 - Зависят от feature модулей
 - Предоставляют корневую навигацию
-- Компилируются в разные бинарные файлы благодаря build variants
+- Используют build variants (и product flavors), чтобы собирать разные APK/AAB из одного или нескольких app модулей
 
 ```kotlin
 // ✅ Структура app модуля
@@ -88,11 +89,11 @@ App модули — точка входа в приложение:
     AppModule.kt
 ```
 
-Для разных типов устройств создавать отдельные app модули:
+Для разных типов устройств можно создавать отдельные app модули (каждый со своим манифестом и конфигурацией):
 
 ```
-:app              // mobile
-:app-wear         // wearOS
+:app              // Mobile
+:app-wear         // WearOS
 :app-tv           // Android TV
 :app-auto         // Android Auto
 ```
@@ -130,7 +131,7 @@ Common/core модули содержат код, часто используе�
     AuthInterceptor.kt
 ```
 
-**Utility модуль** — вспомогательные функции:
+**Utility модуль** — вспомогательные функции и общие утилиты:
 
 ```kotlin
 :core:common
@@ -142,9 +143,9 @@ Common/core модули содержат код, часто используе�
 
 ### 5. Test Модули (Тестовые модули)
 
-Test модули используются только для тестирования. Содержат тестовый код, ресурсы и зависимости.
+Test модули используются для тестирования и переиспользования тестового кода. В Android большая часть тестов живёт в `test/` и `androidTest/` source set'ах каждого модуля, но также часто создают отдельные модуль(и), например `:core:testing`, для общих фейков и утилит.
 
-**Варианты использования:**
+**Варианты использования отдельных test-модулей:**
 - **Общий тестовый код** — переиспользование тестовых утилит, ассертов, тестовых данных между модулями
 - **Чистые конфигурации сборки** — отдельный `build.gradle` для тестовых зависимостей
 - **Интеграционные тесты** — тестирование взаимодействия между частями приложения
@@ -163,28 +164,34 @@ Test модули используются только для тестиров�
 
 ### Пример Зависимостей Модулей
 
-```
+```text
 :app
-   → :feature:login, :feature:home
-      → :feature:login
-         → :core:data:auth, :core:ui
-            → :core:data:auth
-               → :core:network, :core:database
+  → :feature:login, :feature:home
+  → :core:ui
+  → :core:analytics
+
+:feature:login
+  → :core:data:auth
+  → :core:ui
+
+:core:data:auth
+  → :core:network
+  → :core:database
 ```
 
 ### Резюме
 
 | Тип модуля | Назначение | Зависимости |
 |------------|-----------|------------|
-| **Data** | Репозитории, источники данных, модели | Core модули |
-| **Feature** | UI, ViewModel, логика функции | Data, Core модули |
-| **App** | Точка входа, навигация, DI | Feature модули |
+| **Data** | Репозитории, источники данных, модели | Core/Common модули |
+| **Feature** | UI, `ViewModel`, логика функции | Data, Core/Common модули |
+| **App** | Точка входа, навигация, DI | Feature, Core/Common модули |
 | **Common/Core** | Общий код (UI, network, analytics) | Минимальные |
-| **Test** | Фейки, тестовые утилиты | Тестируемые модули |
+| **Test** | Фейки, тестовые утилиты, общие тестовые зависимости | Тестируемые модули |
 
 ## Answer (EN)
 
-In Android modularization, there are 5 main module types:
+In Android modularization, teams commonly use the following architectural module types (these are architectural/conventional patterns built on top of standard Gradle `app`/`library`/`test` modules, not official Android SDK "kinds"):
 
 ### 1. Data Modules
 
@@ -192,7 +199,7 @@ Data modules contain repositories, data sources, and model classes. Three primar
 
 - **Encapsulate domain data and business logic** — each data module handles data for a specific domain
 - **Expose repository as public API** — the public API should be a repository responsible for exposing data to the rest of the app
-- **Hide implementation details** — data sources accessible only by repositories from the same module (use `private` or `internal`)
+- **Hide implementation details** — data sources and internal models should only be visible inside the module; use `internal` for top-level declarations and narrower visibilities for class members
 
 ```kotlin
 // ✅ Data module structure
@@ -213,7 +220,7 @@ Feature modules are isolated parts of app functionality corresponding to a scree
 Feature modules:
 - Associated with screens/navigation destinations
 - Contain UI and `ViewModel` for logic and state
-- **Depend on data modules**
+- **Depend on data and core/common modules**, but not vice versa
 
 ```kotlin
 // ✅ Feature module structure
@@ -227,10 +234,10 @@ Feature modules:
 
 ### 3. App Modules
 
-App modules are entry points to the application:
+App modules are the entry points to the application (typically host the `Application`/`Activity`, manifest, packaging configuration, etc.):
 - Depend on feature modules
 - Provide root navigation
-- Compile to different binaries via build variants
+- Use build variants (and product flavors) to produce different APKs/AABs from one or more app modules
 
 ```kotlin
 // ✅ App module structure
@@ -243,18 +250,18 @@ App modules are entry points to the application:
     AppModule.kt
 ```
 
-For multiple device types, define separate app modules:
+For multiple device types, you can define separate app modules (each with its own manifest and configuration):
 
 ```
-:app              // mobile
-:app-wear         // wearOS
+:app              // Mobile
+:app-wear         // WearOS
 :app-tv           // Android TV
 :app-auto         // Android Auto
 ```
 
 ### 4. Common Modules (Core Modules)
 
-Common/core modules contain code frequently used by other modules. They reduce redundancy and don't represent specific architecture layers:
+Common/core modules contain code frequently used by other modules. They reduce redundancy and do not represent a specific architecture layer:
 
 **UI module** — custom UI elements and branding:
 
@@ -285,7 +292,7 @@ Common/core modules contain code frequently used by other modules. They reduce r
     AuthInterceptor.kt
 ```
 
-**Utility module** — helper functions:
+**Utility module** — helper functions and shared utilities:
 
 ```kotlin
 :core:common
@@ -297,9 +304,9 @@ Common/core modules contain code frequently used by other modules. They reduce r
 
 ### 5. Test Modules
 
-Test modules are used for testing purposes only. They contain test code, resources, and dependencies.
+Test modules are used to support testing and reuse of test code. In Android, most tests live in `test/` and `androidTest/` source sets inside each module, but it's also common to create dedicated modules such as `:core:testing` for shared fakes and utilities.
 
-**Use cases:**
+**Use cases for separate test modules:**
 - **Shared test code** — reuse test utilities, assertions, test data across modules
 - **Cleaner build configurations** — separate `build.gradle` for test dependencies
 - **Integration tests** — test interactions between different app parts
@@ -318,24 +325,30 @@ Test modules are used for testing purposes only. They contain test code, resourc
 
 ### Module Dependency Example
 
-```
+```text
 :app
-   → :feature:login, :feature:home
-      → :feature:login
-         → :core:data:auth, :core:ui
-            → :core:data:auth
-               → :core:network, :core:database
+  → :feature:login, :feature:home
+  → :core:ui
+  → :core:analytics
+
+:feature:login
+  → :core:data:auth
+  → :core:ui
+
+:core:data:auth
+  → :core:network
+  → :core:database
 ```
 
 ### Summary
 
 | Module Type | Purpose | Dependencies |
 |------------|---------|--------------|
-| **Data** | Repositories, data sources, models | Core modules |
-| **Feature** | UI, ViewModel, feature logic | Data, Core modules |
-| **App** | Entry point, navigation, DI | Feature modules |
+| **Data** | Repositories, data sources, models | Core/Common modules |
+| **Feature** | UI, `ViewModel`, feature logic | Data, Core/Common modules |
+| **App** | Entry point, navigation, DI | Feature, Core/Common modules |
 | **Common/Core** | Shared code (UI, network, analytics) | Minimal |
-| **Test** | Fakes, test utilities | Modules under test |
+| **Test** | Fakes, test utilities, shared test dependencies | Modules under test |
 
 ---
 

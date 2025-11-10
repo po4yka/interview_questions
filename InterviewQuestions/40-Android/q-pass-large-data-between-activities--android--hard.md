@@ -21,11 +21,11 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-android-ipc
-- q-android-ipc-mechanisms--android--hard
-- q-android-security-best-practices--android--hard
+- c-android
+- c-binder
+- q-android-security-best-practices--android--medium
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 sources:
 - Android Content Provider Documentation
 - Android Developers
@@ -37,11 +37,12 @@ tags:
 - difficulty/hard
 - file-provider
 - ipc
+
 ---
 
 # Вопрос (RU)
 
-> Как правильно передать большой объем данных (например, изображение) между Activity?
+> Как правильно передать большой объем данных (например, изображение) между `Activity`?
 
 # Question (EN)
 
@@ -51,32 +52,41 @@ tags:
 
 ## Ответ (RU)
 
-### Проблема: Ограничение Размера Intent
+### Краткий вариант
 
-**❌ Неправильно** - передавать большие данные напрямую:
+Крупные данные нельзя передавать напрямую через `Intent` из-за лимита Binder (около 1 МБ на транзакцию). Вместо этого:
+- сохраняем данные во внешний носитель (файл/БД/кэш),
+- передаем только ссылку (`URI`/ID/путь),
+- предоставляем доступ через `FileProvider`/`ContentProvider` или другой безопасный механизм.
+
+### Подробный вариант
+
+### Проблема: Ограничение размера `Intent`
+
+**❌ Неправильно** - передавать большие данные напрямую (особенно `Bitmap`/`ByteArray`):
 
 ```kotlin
-// TransactionTooLargeException!
+// Возможен TransactionTooLargeException!
 val bitmap = BitmapFactory.decodeResource(resources, R.drawable.large)
-intent.putExtra("image", bitmap)  // Ошибка при размере > 1MB
+intent.putExtra("image", bitmap)  // Риск ошибки при большом размере, зависит от общего Binder буфера
 ```
 
-**Причина:** Intent использует Binder IPC с лимитом **~1MB** на всю транзакцию.
+**Причина:** `Intent` использует Binder IPC с лимитом порядка **1MB** на буфер транзакции для процесса. Передача крупных объектов может переполнить буфер и вызвать `TransactionTooLargeException`.
 
-**✅ Правильно** - передавать только ссылку:
+**✅ Правильно** - для больших данных передавать только ссылку:
 1. Сохранить данные (файл/БД/кэш)
-2. Передать ссылку (URI/ID/путь)
-3. Использовать безопасный доступ (FileProvider/ContentProvider)
+2. Передать ссылку (`URI`/ID/путь)
+3. Использовать безопасный доступ (`FileProvider`/`ContentProvider`)
 
 ---
 
 ### Решение 1: FileProvider + URI (Рекомендуется)
 
-**Когда использовать:** Изображения, видео, документы между Activity/приложениями.
+**Когда использовать:** Изображения, видео, документы между `Activity`/приложениями.
 
-**Шаг 1:** Настройка FileProvider в `AndroidManifest.xml`:
+**Шаг 1:** Настройка `FileProvider` в `AndroidManifest.xml`:
 
-```kotlin
+```xml
 <provider
     android:name="androidx.core.content.FileProvider"
     android:authorities="${applicationId}.fileprovider"
@@ -126,7 +136,8 @@ class MainActivity : AppCompatActivity() {
 class ViewImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val uri = Uri.parse(intent.getStringExtra("imageUri"))
+        val uriString = intent.getStringExtra("imageUri")
+        val uri = uriString?.let { Uri.parse(it) } ?: return
 
         // Загрузить через ContentResolver
         contentResolver.openInputStream(uri)?.use { stream ->
@@ -138,19 +149,25 @@ class ViewImageActivity : AppCompatActivity() {
 ```
 
 **✅ Преимущества:**
-- Безопасность (временные разрешения)
+- Безопасность (временные разрешения на чтение)
 - Работает между приложениями
 - Стандартный Android-подход
 
 **❌ Недостатки:**
-- Требует настройки FileProvider
+- Требует настройки `FileProvider`
 - Overhead на файловые операции
 
 ---
 
-### Решение 2: Shared ViewModel
+### Решение 2: Общий `ViewModel` (ограниченно применимо)
 
-**Когда использовать:** Временная передача между Activities в одной задаче.
+**Когда использовать:** Временная передача в рамках одного процесса и контролируемой навигации (чаще для нескольких экранов внутри одной `Activity`/Navigation Graph). Для разных `Activity` классический `by viewModels()` в каждой `Activity` создаст разные `ViewModel` и не будет делиться состоянием.
+
+Для обмена между несколькими экранами предпочтительнее использовать:
+- один host `Activity` с shared `ViewModel` между `Fragment`-ами, или
+- явный общий holder (DI/Singleton) для прототипов.
+
+Пример (упрощенный, не для меж-`Activity`):
 
 ```kotlin
 class SharedImageViewModel : ViewModel() {
@@ -158,29 +175,24 @@ class SharedImageViewModel : ViewModel() {
     val bitmap: LiveData<Bitmap?> = _bitmap
 
     fun setImage(bitmap: Bitmap) { _bitmap.value = bitmap }
-
-    override fun onCleared() {
-        _bitmap.value?.recycle()
-    }
 }
 
-// Отправитель
-class SenderActivity : AppCompatActivity() {
-    private val viewModel: SharedImageViewModel by viewModels()
+// Отправитель (на одном хосте с получателем)
+class SenderFragment : Fragment() {
+    private val viewModel: SharedImageViewModel by activityViewModels()
 
     fun share() {
         viewModel.setImage(loadBitmap())
-        startActivity(Intent(this, ReceiverActivity::class.java))
+        findNavController().navigate(R.id.receiverFragment)
     }
 }
 
 // Получатель
-class ReceiverActivity : AppCompatActivity() {
-    private val viewModel: SharedImageViewModel by viewModels()
+class ReceiverFragment : Fragment() {
+    private val viewModel: SharedImageViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.bitmap.observe(this) { bitmap ->
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.bitmap.observe(viewLifecycleOwner) { bitmap ->
             imageView.setImageBitmap(bitmap)
         }
     }
@@ -188,17 +200,17 @@ class ReceiverActivity : AppCompatActivity() {
 ```
 
 **✅ Преимущества:**
-- Просто
+- Просто для навигации внутри одного host `Activity`
 - Lifecycle-aware
 
 **❌ Недостатки:**
 - Только в рамках одного процесса
-- Очищается при уничтожении Activity
-- Риск утечки памяти
+- Не подходит для надежной передачи между разными `Activity` и при убийстве процесса
+- Риск удержания крупных объектов в памяти (важно явно очищать или использовать слабые ссылки)
 
 ---
 
-### Решение 3: Database + ID
+### Решение 3: База данных + ID
 
 **Когда использовать:** Персистентные данные, множественный доступ.
 
@@ -216,7 +228,7 @@ lifecycleScope.launch {
     val entity = ImageEntity(filePath = file.path, timestamp = now())
     val id = database.imageDao().insert(entity)
 
-    startActivity(Intent(this, ViewActivity::class.java).apply {
+    startActivity(Intent(this@SenderActivity, ViewActivity::class.java).apply {
         putExtra("imageId", id)
     })
 }
@@ -224,9 +236,10 @@ lifecycleScope.launch {
 // Получатель
 lifecycleScope.launch {
     val id = intent.getLongExtra("imageId", -1)
+    if (id == -1L) return@launch
     val entity = database.imageDao().getById(id)
-    val bitmap = BitmapFactory.decodeFile(entity?.filePath)
-    imageView.setImageBitmap(bitmap)
+    val bitmap = entity?.filePath?.let { BitmapFactory.decodeFile(it) }
+    bitmap?.let { imageView.setImageBitmap(it) }
 }
 ```
 
@@ -242,14 +255,13 @@ lifecycleScope.launch {
 
 ### Решение 4: Singleton Data Holder
 
-**Когда использовать:** Быстрое прототипирование, мелкие приложения.
+**Когда использовать:** Быстрое прототипирование, мелкие приложения, временное хранение между `Activity` в одном процессе.
 
 ```kotlin
 object ImageHolder {
     var currentBitmap: Bitmap? = null
 
     fun clear() {
-        currentBitmap?.recycle()
         currentBitmap = null
     }
 }
@@ -266,15 +278,16 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 override fun onDestroy() {
     super.onDestroy()
+    // При необходимости очищать, если Bitmap больше не нужен
     ImageHolder.clear()
 }
 ```
 
-**❌ Внимание:** Высокий риск утечки памяти. Только для временного использования.
+**❌ Внимание:** Высокий риск утечки памяти и зависимости от одного процесса. Только для временного/внутреннего использования.
 
 ---
 
-### Решение 5: Custom ContentProvider
+### Решение 5: Пользовательский `ContentProvider`
 
 **Когда использовать:** Обмен данными между приложениями, сложная логика доступа.
 
@@ -291,7 +304,7 @@ class ImageContentProvider : ContentProvider() {
         return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
     }
 
-    // Остальные методы...
+    // Остальные методы должны быть реализованы при необходимости (query/insert/update/delete)
 }
 
 // Манифест
@@ -317,72 +330,52 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 ---
 
-### Сравнение Подходов
-
-| Метод | Персистентность | Сложность | Межпроцессный | Рекомендация |
-|-------|----------------|-----------|---------------|--------------|
-| **FileProvider + URI** | ✅ | Средняя | ✅ | **Лучший выбор** |
-| **ViewModel** | ❌ | Низкая | ❌ | Временные данные |
-| **Database + ID** | ✅ | Высокая | ❌ | Структурированные данные |
-| **Singleton** | ❌ | Низкая | ❌ | Прототипирование |
-| **ContentProvider** | ✅ | Очень высокая | ✅ | Межприложенческий обмен |
-
----
-
-### Best Practices
-
-**✅ DO:**
-- Всегда передавать ссылку, а не данные
-- Использовать FileProvider для файлов
-- Выдавать минимальные разрешения (`FLAG_GRANT_READ_URI_PERMISSION`)
-- Очищать временные данные в `onDestroy()`
-- Обрабатывать ошибки доступа
-
-**❌ DON'T:**
-- Не передавать Bitmap/ByteArray в Intent
-- Не использовать Singleton для production
-- Не забывать отзывать разрешения URI
-- Не хранить большие объекты в памяти дольше необходимого
-
----
-
-### Архитектурные Особенности
+### Архитектурные особенности
 
 **Binder Transaction Buffer:**
-- Общий буфер для всех IPC-транзакций процесса (~1MB)
-- Включает все одновременные Intent/AIDL/Binder-вызовы
-- Превышение вызывает `TransactionTooLargeException`
+- Общий буфер для всех IPC-транзакций процесса (порядка ~1MB, зависит от устройства/версии)
+- Включает все одновременные `Intent`/AIDL/Binder-вызовы
+- Превышение лимита вызывает `TransactionTooLargeException`
 
-**FileProvider Security:**
-- Генерирует временные `content://` URI
-- Автоматически управляет разрешениями
+**Безопасность `FileProvider`:**
+- Генерирует `content://` URI, скрывающие реальные пути к файлам
+- Управляет временными разрешениями через `FLAG_GRANT_*_URI_PERMISSION`
 - Предотвращает `FileUriExposedException` на Android 7.0+
 
-**ViewModel Lifecycle:**
-- Переживает configuration changes
-- НЕ переживает process death
-- Очищается только при финальном уничтожении Activity/Fragment
+**Жизненный цикл `ViewModel`:**
+- Переживает configuration changes в рамках владельца (`Activity`/`Fragment`)
+- Не переживает `process death`
+- Очищается при финальном уничтожении владельца; не гарантирует долговременное хранение больших данных
 
 ---
 
 ## Answer (EN)
 
-### Problem: Intent Size Limit
+### Short Version
 
-**❌ Wrong** - passing large data directly:
+You must not put large payloads (e.g., `Bitmap`/`ByteArray`) directly into `Intent` extras because of the Binder transaction buffer limit (~1 MB). Instead:
+- persist data (file/DB/cache),
+- pass only a reference (`URI`/ID/path),
+- expose it securely via `FileProvider`/`ContentProvider` or similar.
+
+### Detailed Version
+
+### Problem: `Intent` Size Limit
+
+**❌ Wrong** - passing large data directly (especially `Bitmap`/`ByteArray`):
 
 ```kotlin
-// TransactionTooLargeException!
+// May cause TransactionTooLargeException!
 val bitmap = BitmapFactory.decodeResource(resources, R.drawable.large)
-intent.putExtra("image", bitmap)  // Fails if size > 1MB
+intent.putExtra("image", bitmap)  // Risky for large size; depends on total Binder buffer usage
 ```
 
-**Reason:** Intent uses Binder IPC with **~1MB** limit for entire transaction buffer.
+**Reason:** `Intent` extras are sent over Binder IPC with an approximate **1MB** transaction buffer limit per process. Large objects can overflow this buffer and trigger `TransactionTooLargeException`.
 
-**✅ Correct** - pass reference only:
+**✅ Correct** - for large data, pass a reference only:
 1. Save data (file/database/cache)
-2. Pass reference (URI/ID/path)
-3. Use secure access (FileProvider/ContentProvider)
+2. Pass reference (`URI`/ID/path)
+3. Use secure access (`FileProvider`/`ContentProvider`)
 
 ---
 
@@ -390,9 +383,9 @@ intent.putExtra("image", bitmap)  // Fails if size > 1MB
 
 **When to use:** Images, videos, documents between Activities/apps.
 
-**Step 1:** Configure FileProvider in `AndroidManifest.xml`:
+**Step 1:** Configure `FileProvider` in `AndroidManifest.xml`:
 
-```kotlin
+```xml
 <provider
     android:name="androidx.core.content.FileProvider"
     android:authorities="${applicationId}.fileprovider"
@@ -442,7 +435,8 @@ class MainActivity : AppCompatActivity() {
 class ViewImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val uri = Uri.parse(intent.getStringExtra("imageUri"))
+        val uriString = intent.getStringExtra("imageUri")
+        val uri = uriString?.let { Uri.parse(it) } ?: return
 
         // Load via ContentResolver
         contentResolver.openInputStream(uri)?.use { stream ->
@@ -454,19 +448,21 @@ class ViewImageActivity : AppCompatActivity() {
 ```
 
 **✅ Pros:**
-- Secure (temporary permissions)
+- Secure (temporary read permissions)
 - Works across apps
 - Standard Android approach
 
 **❌ Cons:**
-- Requires FileProvider setup
+- Requires `FileProvider` setup
 - File I/O overhead
 
 ---
 
-### Solution 2: Shared ViewModel
+### Solution 2: Shared `ViewModel` (narrow use)
 
-**When to use:** Temporary sharing between Activities in same task.
+**When to use:** Temporary sharing within a single process and controlled navigation, typically between multiple Fragments in the same host `Activity`. For different Activities, `by viewModels()` in each `Activity` will create separate `ViewModel` instances, so it does not share state as-is.
+
+Example (simplified, intra-`Activity`):
 
 ```kotlin
 class SharedImageViewModel : ViewModel() {
@@ -474,29 +470,24 @@ class SharedImageViewModel : ViewModel() {
     val bitmap: LiveData<Bitmap?> = _bitmap
 
     fun setImage(bitmap: Bitmap) { _bitmap.value = bitmap }
-
-    override fun onCleared() {
-        _bitmap.value?.recycle()
-    }
 }
 
-// Sender
-class SenderActivity : AppCompatActivity() {
-    private val viewModel: SharedImageViewModel by viewModels()
+// Sender (within the same host Activity)
+class SenderFragment : Fragment() {
+    private val viewModel: SharedImageViewModel by activityViewModels()
 
     fun share() {
         viewModel.setImage(loadBitmap())
-        startActivity(Intent(this, ReceiverActivity::class.java))
+        findNavController().navigate(R.id.receiverFragment)
     }
 }
 
 // Receiver
-class ReceiverActivity : AppCompatActivity() {
-    private val viewModel: SharedImageViewModel by viewModels()
+class ReceiverFragment : Fragment() {
+    private val viewModel: SharedImageViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModel.bitmap.observe(this) { bitmap ->
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        viewModel.bitmap.observe(viewLifecycleOwner) { bitmap ->
             imageView.setImageBitmap(bitmap)
         }
     }
@@ -504,13 +495,13 @@ class ReceiverActivity : AppCompatActivity() {
 ```
 
 **✅ Pros:**
-- Simple
+- Simple for multiple screens within one host `Activity`
 - Lifecycle-aware
 
 **❌ Cons:**
-- Single process only
-- Cleared on Activity destruction
-- Memory leak risk
+- Single-process only
+- Not reliable for cross-`Activity` or after process death
+- Holding large Bitmaps increases memory pressure; should be cleaned up explicitly when no longer needed
 
 ---
 
@@ -532,7 +523,7 @@ lifecycleScope.launch {
     val entity = ImageEntity(filePath = file.path, timestamp = now())
     val id = database.imageDao().insert(entity)
 
-    startActivity(Intent(this, ViewActivity::class.java).apply {
+    startActivity(Intent(this@SenderActivity, ViewActivity::class.java).apply {
         putExtra("imageId", id)
     })
 }
@@ -540,9 +531,10 @@ lifecycleScope.launch {
 // Receiver
 lifecycleScope.launch {
     val id = intent.getLongExtra("imageId", -1)
+    if (id == -1L) return@launch
     val entity = database.imageDao().getById(id)
-    val bitmap = BitmapFactory.decodeFile(entity?.filePath)
-    imageView.setImageBitmap(bitmap)
+    val bitmap = entity?.filePath?.let { BitmapFactory.decodeFile(it) }
+    bitmap?.let { imageView.setImageBitmap(it) }
 }
 ```
 
@@ -558,14 +550,13 @@ lifecycleScope.launch {
 
 ### Solution 4: Singleton Data Holder
 
-**When to use:** Quick prototyping, small apps.
+**When to use:** Quick prototyping, small apps, temporary in-process sharing.
 
 ```kotlin
 object ImageHolder {
     var currentBitmap: Bitmap? = null
 
     fun clear() {
-        currentBitmap?.recycle()
         currentBitmap = null
     }
 }
@@ -582,17 +573,18 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 override fun onDestroy() {
     super.onDestroy()
+    // Clear if not needed anymore
     ImageHolder.clear()
 }
 ```
 
-**❌ Warning:** High memory leak risk. Temporary use only.
+**❌ Warning:** High risk of memory leaks and tight coupling to a single process. Use only for temporary or internal flows.
 
 ---
 
-### Solution 5: Custom ContentProvider
+### Solution 5: Custom `ContentProvider`
 
-**When to use:** Cross-app data sharing, complex access logic.
+**When to use:** Cross-app data sharing, complex access control.
 
 ```kotlin
 class ImageContentProvider : ContentProvider() {
@@ -607,7 +599,7 @@ class ImageContentProvider : ContentProvider() {
         return ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
     }
 
-    // Other methods...
+    // Other methods (query/insert/update/delete) should be implemented as needed
 }
 
 // Manifest
@@ -633,70 +625,41 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 ---
 
-### Comparison Table
-
-| Method | Persistence | Complexity | Cross-Process | Recommendation |
-|--------|------------|------------|---------------|----------------|
-| **FileProvider + URI** | ✅ | Medium | ✅ | **Best choice** |
-| **ViewModel** | ❌ | Low | ❌ | Temporary data |
-| **Database + ID** | ✅ | High | ❌ | Structured data |
-| **Singleton** | ❌ | Low | ❌ | Prototyping |
-| **ContentProvider** | ✅ | Very high | ✅ | Cross-app sharing |
-
----
-
-### Best Practices
-
-**✅ DO:**
-- Always pass reference, not data
-- Use FileProvider for files
-- Grant minimal permissions (`FLAG_GRANT_READ_URI_PERMISSION`)
-- Clean up temporary data in `onDestroy()`
-- Handle access errors gracefully
-
-**❌ DON'T:**
-- Pass Bitmap/ByteArray in Intent
-- Use Singleton for production
-- Forget to revoke URI permissions
-- Keep large objects in memory longer than needed
-
----
-
 ### Architectural Considerations
 
 **Binder Transaction Buffer:**
-- Shared buffer for all process IPC transactions (~1MB)
-- Includes all concurrent Intent/AIDL/Binder calls
-- Exceeding limit throws `TransactionTooLargeException`
+- Shared buffer for all IPC transactions in a process (~1MB, device/OS-dependent)
+- Includes all concurrent `Intent`/AIDL/Binder calls
+- Exceeding the limit throws `TransactionTooLargeException`
 
 **FileProvider Security:**
-- Generates temporary `content://` URIs
-- Auto-manages permissions
+- Generates `content://` URIs that hide real file paths
+- Manages temporary permissions via `FLAG_GRANT_*_URI_PERMISSION`
 - Prevents `FileUriExposedException` on Android 7.0+
 
-**ViewModel Lifecycle:**
-- Survives configuration changes
-- Does NOT survive process death
-- Cleared only on final Activity/Fragment destruction
+**`ViewModel` Lifecycle:**
+- Survives configuration changes within its owner (`Activity`/`Fragment`)
+- Does not survive process death
+- Cleared when the owning scope is finished; not a long-term storage for large data
 
 ---
 
 ## Follow-ups
 
-1. What happens if receiver Activity crashes before consuming the URI? How to handle cleanup?
-2. How to pass large data between apps with different signing certificates using ContentProvider?
-3. What are memory implications of holding Bitmap in ViewModel across multiple Activities?
-4. How to implement streaming large files (>100MB) via ContentProvider without loading into memory?
-5. How does Scoped Storage (Android 10+) affect FileProvider implementation? What changes are needed for MediaStore?
+1. Что произойдет, если `Activity`-получатель упадет до чтения `URI`, и как организовать уборку временных файлов?
+2. Как передавать большие данные между приложениями с разными сертификатами подписи с помощью `ContentProvider` и временных разрешений?
+3. Каковы последствия для памяти при хранении `Bitmap` в `ViewModel` или Singleton и как избежать утечек?
+4. Как реализовать потоковую передачу крупных файлов (более 100 МБ) через `ContentProvider`, не загружая их полностью в память?
+5. Как Scoped Storage (Android 10+) влияет на использование `FileProvider` и какие изменения нужны при работе с `MediaStore`?
 
 ---
 
 ## References
 
-- Android Developers: [FileProvider](https://developer.android.com/reference/androidx/core/content/FileProvider)
-- Android Developers: [Content Provider Basics](https://developer.android.com/guide/topics/providers/content-provider-basics)
-- Android Developers: [Share Files](https://developer.android.com/training/secure-file-sharing)
-- Android IPC: [Binder Transaction Buffer](https://developer.android.com/topic/performance/memory-overview)
+- Android Developers: FileProvider
+- Android Developers: Content Provider Basics
+- Android Developers: Share Files
+- Android Developers: Binder and IPC (Binder transaction buffer behavior)
 
 ---
 
@@ -704,14 +667,15 @@ intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
 
 ### Prerequisites / Concepts
 
-- [[c-android-ipc]]
-
+- [[c-android]]
+- [[c-binder]]
 
 ### Prerequisites (Medium)
+
 - [[q-how-to-pass-data-from-one-activity-to-another--android--medium]] - Basic data passing
-- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - Activity lifecycle
+- [[q-what-happens-when-a-new-activity-is-called-is-memory-from-the-old-one-freed--android--medium]] - `Activity` lifecycle
 
 ### Related (Hard)
+
 - [[q-why-are-fragments-needed-if-there-is-activity--android--hard]] - Component architecture
-- [[q-android-ipc-mechanisms--android--hard]] - Inter-process communication
 - [[q-android-security-best-practices--android--medium]] - Secure file sharing

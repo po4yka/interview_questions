@@ -1,7 +1,7 @@
 ---
 id: android-300
-title: How To Pass Data From One Fragment To Another / Как передать данные из одного Fragment в другой
-aliases: [Fragment Communication, Pass Data Between Fragments, Передача данных между фрагментами]
+title: How To Pass Data From One Fragment To Another / Как передавать данные из одного фрагмента в другой
+aliases: [Fragment Communication, Pass Data Between Fragments]
 topic: android
 subtopics: [architecture-mvvm, fragment, lifecycle]
 question_kind: android
@@ -11,13 +11,15 @@ language_tags: [en, ru]
 status: draft
 moc: moc-android
 related:
-  - q-fragment-basics--android--easy
-  - q-fragment-vs-activity-lifecycle--android--medium
-  - q-save-data-outside-fragment--android--medium
+- c-fragments
+- q-fragment-basics--android--easy
+- q-fragment-vs-activity-lifecycle--android--medium
+- q-save-data-outside-fragment--android--medium
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/architecture-mvvm, android/fragment, android/lifecycle, difficulty/medium]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -28,11 +30,11 @@ sources: []
 
 ## Ответ (RU)
 
-Передача данных между фрагментами может быть реализована несколькими способами. Важно помнить, что фрагменты не должны напрямую обмениваться данными друг с другом — они должны общаться через родительскую Activity или использовать общий [[c-viewmodel]].
+Передача данных между фрагментами может быть реализована несколькими способами. Важно помнить, что фрагменты не должны напрямую обмениваться данными друг с другом — они должны общаться через родительскую `Activity`, общий [[c-viewmodel]] или использовать API навигации (arguments, FragmentResult).
 
 ### Основные Подходы
 
-**1. Shared ViewModel (Рекомендуется)**
+**1. Shared `ViewModel` (Рекомендуется)**
 
 Современный подход через [[c-viewmodel]], доступный обоим фрагментам через `activityViewModels()`:
 
@@ -70,9 +72,9 @@ class FragmentB : Fragment() {
 }
 ```
 
-**2. Bundle и Arguments**
+**2. `Bundle` и Arguments (включая Safe Args / Navigation)**
 
-Передача данных при создании фрагмента:
+Передача данных при создании фрагмента (базовый способ, также используется внутри Navigation Component через arguments/Safe Args):
 
 ```kotlin
 // ✅ Создание фрагмента с данными
@@ -93,10 +95,27 @@ class FragmentB : Fragment() {
 }
 ```
 
-**3. Activity как посредник (Устаревший)**
+**3. FragmentResult API (Рекомендуется для одноразовой передачи результата)**
+
+Подходит для передачи результата от одного фрагмента другому без shared `ViewModel` и без жёсткой связанности:
 
 ```kotlin
-// ❌ Устаревший подход — создаёт связанность
+// Fragment A — отправляет результат
+setFragmentResult("requestKey", bundleOf("KEY_DATA" to "Data from Fragment A"))
+
+// Fragment B — подписывается на результат
+setFragmentResultListener("requestKey") { _, bundle ->
+    val data = bundle.getString("KEY_DATA")
+    // ✅ Обрабатываем результат
+}
+```
+
+**4. `Activity` как посредник (Не рекомендуется)**
+
+Этот подход работает, но создаёт жёсткую связанность между `Activity` и конкретными фрагментами. Его лучше избегать, если есть возможность использовать Shared `ViewModel`, FragmentResult API или arguments.
+
+```kotlin
+// ⚠️ Не рекомендуется — создаёт связанность
 interface OnDataPassListener {
     fun onDataPass(data: String)
 }
@@ -104,7 +123,7 @@ interface OnDataPassListener {
 class MainActivity : AppCompatActivity(), OnDataPassListener {
     override fun onDataPass(data: String) {
         val fragmentB = supportFragmentManager.findFragmentByTag("B") as? FragmentB
-        fragmentB?.receiveData(data)  // ❌ Прямая связь Activity → Fragment
+        fragmentB?.receiveData(data)  // ⚠️ Прямая связь Activity → Fragment
     }
 }
 ```
@@ -113,17 +132,49 @@ class MainActivity : AppCompatActivity(), OnDataPassListener {
 
 | Подход | Когда использовать |
 |--------|-------------------|
-| **Shared ViewModel** | Динамический обмен данными между фрагментами |
-| **Bundle Arguments** | Передача данных при создании фрагмента |
-| **Activity посредник** | Устаревший подход, избегать |
+| **Shared `ViewModel`** | Динамический обмен данными между фрагментами, совместно используемое состояние |
+| **`Bundle` Arguments** | Передача данных при создании фрагмента или при навигации (в т.ч. через Navigation Component / Safe Args) |
+| **FragmentResult API** | Одноразовые результаты между фрагментами без shared `ViewModel` |
+| **`Activity` посредник** | Работает, но не рекомендуется из-за сильной связанности |
+
+## Дополнительные вопросы (RU)
+
+- Как отличается жизненный цикл общего `ViewModel` от жизненного цикла фрагмента?
+- Что произойдет, если передавать большой объём данных через `Bundle` arguments?
+- Как обрабатывать коммуникацию фрагмент-фрагмент в Navigation Component?
+- Когда лучше использовать FragmentResult API вместо shared `ViewModel`?
+- Как тестировать коммуникацию фрагментов с использованием shared `ViewModel`?
+
+## Ссылки (RU)
+
+- [[c-viewmodel]]
+- [[c-fragments]]
+- [[c-activity-lifecycle]]
+- [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
+
+## Связанные вопросы (RU)
+
+### База (Проще)
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - `Fragment`
+- [[q-fragment-basics--android--easy]] - `Fragment`
+
+### Похожие (Средней сложности)
+- [[q-save-data-outside-fragment--android--medium]] - `Fragment`
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment`
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - `Fragment`
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Fragment`
+- [[q-how-to-pass-parameters-to-a-fragment--android--easy]] - `Fragment`
+
+### Продвинутое (Сложнее)
+- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - `Fragment`
 
 ## Answer (EN)
 
-Passing data between fragments can be implemented in several ways. It's important to remember that fragments should not directly exchange data with each other — they should communicate through their parent Activity or use a shared [[c-viewmodel]].
+Passing data between fragments can be implemented in several ways. It's important to remember that fragments should not directly exchange data with each other — they should communicate via their parent `Activity`, a shared [[c-viewmodel]], or navigation APIs (arguments, FragmentResult).
 
 ### Main Approaches
 
-**1. Shared ViewModel (Recommended)**
+**1. Shared `ViewModel` (Recommended)**
 
 Modern approach using [[c-viewmodel]] accessible to both fragments via `activityViewModels()`:
 
@@ -161,9 +212,9 @@ class FragmentB : Fragment() {
 }
 ```
 
-**2. Bundle and Arguments**
+**2. `Bundle` and Arguments (including Safe Args / Navigation)**
 
-Passing data when creating a fragment:
+Passing data when creating a fragment (basic approach, also used internally by Navigation Component via arguments/Safe Args):
 
 ```kotlin
 // ✅ Create fragment with data
@@ -184,10 +235,27 @@ class FragmentB : Fragment() {
 }
 ```
 
-**3. Activity as Intermediary (Deprecated)**
+**3. FragmentResult API (Recommended for one-time results)**
+
+Good for passing a result from one fragment to another without a shared `ViewModel` and without tight coupling:
 
 ```kotlin
-// ❌ Deprecated approach - creates tight coupling
+// Fragment A - send result
+setFragmentResult("requestKey", bundleOf("KEY_DATA" to "Data from Fragment A"))
+
+// Fragment B - listen for result
+setFragmentResultListener("requestKey") { _, bundle ->
+    val data = bundle.getString("KEY_DATA")
+    // ✅ Handle result
+}
+```
+
+**4. `Activity` as Intermediary (Not recommended)**
+
+This approach works but introduces tight coupling between the `Activity` and specific fragments. Prefer Shared `ViewModel`, FragmentResult API, or arguments when possible.
+
+```kotlin
+// ⚠️ Not recommended - creates tight coupling
 interface OnDataPassListener {
     fun onDataPass(data: String)
 }
@@ -195,7 +263,7 @@ interface OnDataPassListener {
 class MainActivity : AppCompatActivity(), OnDataPassListener {
     override fun onDataPass(data: String) {
         val fragmentB = supportFragmentManager.findFragmentByTag("B") as? FragmentB
-        fragmentB?.receiveData(data)  // ❌ Direct coupling Activity → Fragment
+        fragmentB?.receiveData(data)  // ⚠️ Direct coupling Activity → Fragment
     }
 }
 ```
@@ -204,38 +272,38 @@ class MainActivity : AppCompatActivity(), OnDataPassListener {
 
 | Approach | When to use |
 |----------|-------------|
-| **Shared ViewModel** | Dynamic data exchange between fragments |
-| **Bundle Arguments** | Passing data when creating fragment |
-| **Activity intermediary** | Deprecated, avoid |
+| **Shared `ViewModel`** | Dynamic data exchange between fragments, shared state |
+| **`Bundle` Arguments** | Passing data on fragment creation or navigation (incl. Navigation Component / Safe Args) |
+| **FragmentResult API** | One-time results between fragments without shared `ViewModel` |
+| **`Activity` intermediary** | Works but not recommended due to tight coupling |
 
 ## Follow-ups
 
-- How does shared ViewModel lifecycle differ from fragment lifecycle?
-- What happens if you pass large data via Bundle arguments?
+- How does shared `ViewModel` lifecycle differ from fragment lifecycle?
+- What happens if you pass large data via `Bundle` arguments?
 - How to handle fragment-to-fragment communication in Navigation Component?
-- When should you use FragmentResult API instead of shared ViewModel?
-- How to test fragment communication with shared ViewModel?
+- When should you use FragmentResult API instead of shared `ViewModel`?
+- How to test fragment communication with shared `ViewModel`?
 
 ## References
 
 - [[c-viewmodel]]
 - [[c-fragments]]
 - [[c-activity-lifecycle]]
-- [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
-
+- [`ViewModel`](https://developer.android.com/topic/libraries/architecture/viewmodel)
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-how-to-choose-layout-for-fragment--android--easy]] - Fragment
-- [[q-fragment-basics--android--easy]] - Fragment
+- [[q-how-to-choose-layout-for-fragment--android--easy]] - `Fragment`
+- [[q-fragment-basics--android--easy]] - `Fragment`
 
 ### Related (Medium)
-- [[q-save-data-outside-fragment--android--medium]] - Fragment
-- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Fragment
-- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - Fragment
-- [[q-fragment-vs-activity-lifecycle--android--medium]] - Fragment
-- [[q-how-to-pass-parameters-to-a-fragment--android--easy]] - Fragment
+- [[q-save-data-outside-fragment--android--medium]] - `Fragment`
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - `Fragment`
+- [[q-can-state-loss-be-related-to-a-fragment--android--medium]] - `Fragment`
+- [[q-fragment-vs-activity-lifecycle--android--medium]] - `Fragment`
+- [[q-how-to-pass-parameters-to-a-fragment--android--easy]] - `Fragment`
 
 ### Advanced (Harder)
-- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - Fragment
+- [[q-why-fragment-needs-separate-callback-for-ui-creation--android--hard]] - `Fragment`

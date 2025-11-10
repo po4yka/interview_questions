@@ -4,27 +4,25 @@ title: Android Storage Types / Типы хранилища Android
 aliases: [Android Storage Types, Типы хранилища Android]
 topic: android
 subtopics:
-  - datastore
-  - files-media
-  - room
+- datastore
+- files-media
+- room
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - c-datastore
-  - c-room-database
-  - c-scoped-storage
-  - q-android-manifest-file--android--easy
-  - q-android-security-best-practices--android--medium
+- q-android-manifest-file--android--easy
+- q-android-security-best-practices--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/datastore, android/files-media, android/room, difficulty/medium, persistence, storage]
+
 ---
 
 # Вопрос (RU)
@@ -37,9 +35,9 @@ tags: [android/datastore, android/files-media, android/room, difficulty/medium, 
 
 Android предоставляет четыре основных механизма хранения, каждый оптимизирован под конкретные сценарии.
 
-**1. DataStore — настройки приложения**
+**1. DataStore — настройки приложения и небольшие данные**
 
-Асинхронная замена SharedPreferences на основе Kotlin Flow.
+Асинхронная, более безопасная замена `SharedPreferences` на основе Kotlin `Flow` и корутин. Подходит для небольших наборов key-value или структурированных данных.
 
 ```kotlin
 // ✅ Типобезопасное чтение/запись
@@ -51,11 +49,11 @@ dataStore.edit { prefs ->
 val theme = dataStore.data.map { it[stringPreferencesKey("theme")] }
 ```
 
-**Использование**: пользовательские настройки, feature flags, токены (до 10-20 ключей, <1 MB).
+**Использование**: пользовательские настройки, feature flags, легковесные токены и конфигурация. Предпочтительно для относительно малого объема данных; не для больших файлов или больших структур.
 
-**2. Internal Storage — приватные файлы**
+**2. Internal Storage — приватные файлы приложения**
 
-Доступны только вашему приложению, удаляются при деинсталляции.
+Доступны только вашему приложению (через его UID), удаляются при деинсталляции.
 
 ```kotlin
 // ✅ Безопасная запись
@@ -63,15 +61,17 @@ context.openFileOutput("cache.json", MODE_PRIVATE).use {
     it.write(data.toByteArray())
 }
 
-// ❌ Избегайте прямого File API
-val wrong = File("/data/data/com.app/files/cache.json") // небезопасно
+// ❌ Избегайте прямого File API с жестко заданными путями
+val wrong = File("/data/data/com.app/files/cache.json") // небезопасно и ломко
 ```
 
-**Использование**: временный кэш, логи, приватные конфигурации.
+**Использование**: временный и постоянный кэш, приватные конфигурации, внутренние БД/файлы, которые не должны быть доступны другим приложениям и будут очищены при удалении приложения.
 
-**3. External Storage — общие файлы**
+**3. External Storage — общие файлы и app-specific каталоги**
 
-Scoped Storage (Android 10+): app-specific directories без разрешений, MediaStore для общих медиа.
+Scoped Storage (Android 10+):
+- app-specific директории на внешнем/общем хранилище через `getExternalFilesDir()` — не требуют разрешений, изолированы от других приложений, но физически находятся в общем хранилище и могут быть доступны пользователю (например, через подключение к ПК);
+- `MediaStore` для общих медиафайлов.
 
 ```kotlin
 // ✅ App-specific (разрешения не нужны)
@@ -87,11 +87,13 @@ val uri = contentResolver.insert(
 )
 ```
 
-**Использование**: фото/видео, документы, экспортируемые файлы.
+**Использование**:
+- app-specific external: кэш/медиа, которые может увидеть пользователь и которые удаляются при деинсталляции приложения;
+- MediaStore: фото/видео/аудио и другие файлы, которые должны быть доступны за пределами приложения.
 
 **4. Room Database — структурированные данные**
 
-Type-safe ORM над SQLite с compile-time проверкой SQL.
+Type-safe слой над SQLite с compile-time проверкой SQL.
 
 ```kotlin
 @Entity
@@ -104,31 +106,31 @@ interface UserDao {
 }
 ```
 
-**Использование**: сложные запросы, связанные данные, offline-first.
+**Использование**: сложные запросы, связанные данные, offline-first, кеш доменной модели, когда требуется индексация и целостность.
 
 **Сравнительная таблица:**
 
-| Хранилище | Размер | Приватность | Сценарий |
-|-----------|--------|-------------|----------|
-| DataStore | <1 MB | Приватное | Настройки |
-| Internal | До квоты | Приватное | Кэш, логи |
-| External (app-specific) | До емкости | Приватное | Приватные медиа |
-| External (MediaStore) | До емкости | Публичное | Общие медиа |
-| Room | До емкости | Приватное | БД |
+| Хранилище | Размер (ориентир) | Приватность | Сценарий |
+|-----------|-------------------|-------------|----------|
+| DataStore | Малый объем       | Приватное   | Настройки, конфиг |
+| Internal  | До квоты          | Приватное   | Кэш, конфиг, приватные файлы |
+| External (app-specific) | До емкости устройства | Изолировано от других приложений; доступно пользователю | Медиа/файлы приложения |
+| External (MediaStore)   | До емкости устройства | Доступно другим приложениям/пользователю | Общие медиа и документы |
+| Room     | До емкости устройства | Приватное | Локальная БД |
 
 **Рекомендации:**
-- Мигрируйте с SharedPreferences на DataStore
-- Для чувствительных данных: EncryptedSharedPreferences или EncryptedFile
-- Room > raw SQLite (типобезопасность)
-- Scoped Storage обязателен для targetSdk 30+
+- Мигрируйте с `SharedPreferences` на `DataStore` для настроек и конфигурации;
+- Для чувствительных данных: используйте `EncryptedSharedPreferences` или `EncryptedFile` (и/или шифрование над Room);
+- Предпочитайте Room сырому SQLite для безопасности типов и поддержки миграций;
+- Scoped Storage обязателен для `targetSdk 30+`.
 
 ## Answer (EN)
 
 Android provides four core storage mechanisms, each optimized for specific use cases.
 
-**1. DataStore — app settings**
+**1. DataStore — app settings and small data**
 
-Async SharedPreferences replacement based on Kotlin Flow.
+Asynchronous, safer replacement for `SharedPreferences` based on Kotlin `Flow` and coroutines. Suitable for small key-value or structured datasets.
 
 ```kotlin
 // ✅ Type-safe read/write
@@ -140,11 +142,11 @@ dataStore.edit { prefs ->
 val theme = dataStore.data.map { it[stringPreferencesKey("theme")] }
 ```
 
-**Use for**: user preferences, feature flags, tokens (up to 10-20 keys, <1 MB).
+**Use for**: user preferences, feature flags, lightweight tokens and configuration. Prefer it for relatively small amounts of data; not for large files or big datasets.
 
-**2. Internal Storage — private files**
+**2. Internal Storage — private app files**
 
-Accessible only by your app, deleted on uninstall.
+Accessible only by your app (per-UID sandbox), deleted on uninstall.
 
 ```kotlin
 // ✅ Safe write
@@ -152,15 +154,17 @@ context.openFileOutput("cache.json", MODE_PRIVATE).use {
     it.write(data.toByteArray())
 }
 
-// ❌ Avoid direct File API
-val wrong = File("/data/data/com.app/files/cache.json") // unsafe
+// ❌ Avoid direct File API with hardcoded internal paths
+val wrong = File("/data/data/com.app/files/cache.json") // unsafe and brittle
 ```
 
-**Use for**: temp cache, logs, private configs.
+**Use for**: temporary and persistent cache, private configs, internal DBs/files that must not be accessible to other apps and will be removed on app uninstall.
 
-**3. External Storage — shared files**
+**3. External Storage — shared files and app-specific directories**
 
-Scoped Storage (Android 10+): app-specific directories without permissions, MediaStore for shared media.
+Scoped Storage (Android 10+):
+- App-specific directories on external/shared storage via `getExternalFilesDir()` — no runtime permissions, isolated from other apps, but physically on shared storage and typically user-visible (e.g., via PC);
+- `MediaStore` for shared media files.
 
 ```kotlin
 // ✅ App-specific (no permissions needed)
@@ -176,11 +180,13 @@ val uri = contentResolver.insert(
 )
 ```
 
-**Use for**: photos/videos, documents, exportable files.
+**Use for**:
+- App-specific external: app media/cache that should be visible to the user and removed on uninstall;
+- MediaStore: photos/videos/audio and other files that should be accessible outside your app.
 
 **4. Room Database — structured data**
 
-Type-safe ORM over SQLite with compile-time SQL verification.
+Type-safe abstraction over SQLite with compile-time SQL verification.
 
 ```kotlin
 @Entity
@@ -193,23 +199,31 @@ interface UserDao {
 }
 ```
 
-**Use for**: complex queries, related data, offline-first.
+**Use for**: complex queries, relational/linked data, offline-first caching, when you need indexing and data integrity.
 
 **Comparison Table:**
 
-| Storage | Size | Privacy | Scenario |
-|---------|------|---------|----------|
-| DataStore | <1 MB | Private | Settings |
-| Internal | Up to quota | Private | Cache, logs |
-| External (app-specific) | Device limit | Private | Private media |
-| External (MediaStore) | Device limit | Public | Shared media |
-| Room | Device limit | Private | Database |
+| Storage | Size (typical) | Privacy | Scenario |
+|---------|----------------|---------|----------|
+| DataStore | Small         | Private | Settings, config |
+| Internal  | Up to quota   | Private | Cache, config, private files |
+| External (app-specific) | Device limit | Isolated from other apps; user-visible | App media/files |
+| External (MediaStore)   | Device limit | Visible to other apps/user | Shared media and documents |
+| Room     | Device limit | Private | Local database |
 
 **Recommendations:**
-- Migrate from SharedPreferences to DataStore
-- For sensitive data: EncryptedSharedPreferences or EncryptedFile
-- Prefer Room over raw SQLite (type safety)
-- Scoped Storage mandatory for targetSdk 30+
+- Migrate from `SharedPreferences` to `DataStore` for settings and configuration;
+- For sensitive data: use `EncryptedSharedPreferences` or `EncryptedFile` (and/or encryption on top of Room);
+- Prefer Room over raw SQLite for type safety and migration support;
+- Scoped Storage is mandatory for `targetSdk 30+`.
+
+## Дополнительные вопросы (RU)
+
+- В чем различия между Proto DataStore и Preferences DataStore и когда выбирать каждый из них?
+- Что происходит с данными во внутреннем хранилище при обновлении приложения и при удалении?
+- Как реализовать шифрованное хранилище для чувствительных данных (например, токенов авторизации)?
+- Каковы производственные компромиссы между Room и "чистым" SQLite?
+- Как обрабатывать изменения разрешений на хранилище при миграции с до-Scoped Storage на Android 10+?
 
 ## Follow-ups
 
@@ -219,13 +233,17 @@ interface UserDao {
 - What are the performance trade-offs between Room and raw SQLite?
 - How do you handle storage permission changes when migrating from pre-Scoped Storage to Android 10+?
 
-## References
+## Ссылки (RU)
 
-- [[c-room-database]]
 - [Data Storage](https://developer.android.com/training/data-storage)
 - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
 - [Room Database](https://developer.android.com/training/data-storage/room)
 
+## References
+
+- [Data Storage](https://developer.android.com/training/data-storage)
+- [DataStore](https://developer.android.com/topic/libraries/architecture/datastore)
+- [Room Database](https://developer.android.com/training/data-storage/room)
 
 ## Related Questions
 
@@ -237,5 +255,5 @@ interface UserDao {
 - [[q-android-architectural-patterns--android--medium]] - Repository pattern for data layer
 
 ### Advanced
-- Implementing custom ContentProvider for inter-app data sharing
+- Implementing custom `ContentProvider` for inter-app data sharing
 - Optimizing Room performance with indices and query optimization

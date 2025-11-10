@@ -6,7 +6,6 @@ aliases:
 - Macrobenchmark для запуска приложения
 topic: android
 subtopics:
-- profiling
 - testing-benchmark
 question_kind: android
 difficulty: medium
@@ -20,10 +19,10 @@ moc: moc-android
 related:
 - c-perfetto
 - q-android-performance-measurement-tools--android--medium
-- q-baseline-profiles-android--android--medium
+- q-baseline-profiles-optimization--android--medium
 - q-performance-optimization-android--android--medium
 created: 2025-10-11
-updated: 2025-01-27
+updated: 2025-11-10
 tags:
 - android/profiling
 - android/testing-benchmark
@@ -32,6 +31,7 @@ tags:
 - perfetto
 - performance
 - startup
+
 ---
 
 # Вопрос (RU)
@@ -46,19 +46,19 @@ tags:
 
 ### Обзор
 
-**Macrobenchmark** - библиотека Jetpack для измерения производительности приложения на реальных устройствах. Измеряет сквозную производительность с точки зрения пользователя.
+**Macrobenchmark** — библиотека Jetpack для измерения производительности приложения на реальных устройствах. Она измеряет сквозную производительность с точки зрения пользователя.
 
-**Типы запуска:**
-- **Холодный**: процесс не существует, система создает его с нуля (самый медленный, 400-800мс)
-- **Теплый**: процесс существует, Activity пересоздается (200-400мс)
-- **Горячий**: Activity выводится на передний план (50-150мс)
+**Типы запуска (ориентиры, не жесткие границы):**
+- **Холодный**: процесс не существует, система создает его с нуля (обычно самый медленный; целевые значения могут быть в районе сотен миллисекунд в зависимости от устройства)
+- **Теплый**: процесс существует, `Activity` пересоздается (быстрее холодного, но все еще может содержать тяжелую инициализацию UI)
+- **Горячий**: `Activity` уже в памяти и выводится на передний план (самый быстрый сценарий)
 
 **Ключевые возможности:**
-- Измерения на реальном устройстве с Perfetto трассировкой
+- Измерения на реальном устройстве с Perfetto-трассировкой
 - Тестирование режимов компиляции (None, Partial, Full)
 - Интеграция [[q-baseline-profiles-android--android--medium|Baseline Profiles]]
 
-### Настройка Модуля
+### Настройка модуля
 
 **settings.gradle.kts:**
 ```kotlin
@@ -69,7 +69,7 @@ include(":macrobenchmark")  // ✅ Отдельный модуль для бен
 **macrobenchmark/build.gradle.kts:**
 ```kotlin
 plugins {
-    id("com.android.test")  // ✅ Тип модуля для тестирования
+    id("com.android.test")  // ✅ Тип модуля для тестирования (instrumentation tests)
     id("org.jetbrains.kotlin.android")
 }
 
@@ -80,8 +80,13 @@ android {
     targetProjectPath = ":app"  // ✅ Ссылка на тестируемое приложение
     experimentalProperties["android.experimental.self-instrumenting"] = true
 
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
     buildTypes {
-        create("benchmark") {  // ✅ Отдельный build type для бенчмарков
+        create("benchmark") {  // ✅ Отдельный build type для бенчмарков в test-модуле
+            // Этот build type относится к test-модулю и может быть debuggable
             isDebuggable = true
             signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks += listOf("release")
@@ -90,8 +95,8 @@ android {
 }
 
 dependencies {
-    implementation("androidx.benchmark:benchmark-macro-junit4")
-    implementation("androidx.test.uiautomator:uiautomator")
+    implementation("androidx.benchmark:benchmark-macro-junit4:1.2.4")
+    implementation("androidx.test.uiautomator:uiautomator:2.3.0")
 }
 ```
 
@@ -102,14 +107,18 @@ android {
         create("benchmark") {
             initWith(getByName("release"))
             signingConfig = signingConfigs.getByName("debug")
-            isDebuggable = false  // ✅ Близко к релизу, но с debug подписью
-            profileable = true  // ✅ Разрешает профилирование
+            isDebuggable = false  // ✅ Целевое приложение максимально близко к релизу
+            profileable = true    // ✅ Разрешает профилирование релизоподобной сборки
         }
+    }
+
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 }
 ```
 
-### Реализация Бенчмарков
+### Реализация бенчмарков
 
 **StartupBenchmark.kt:**
 ```kotlin
@@ -135,7 +144,7 @@ class StartupBenchmark {
         startupMode = StartupMode.COLD
     )
 
-    // ✅ Теплый запуск - переключение между приложениями
+    // ✅ Теплый запуск — переключение между приложениями
     @Test
     fun warmStartup() = benchmarkStartup(
         compilationMode = CompilationMode.Partial(),
@@ -150,9 +159,12 @@ class StartupBenchmark {
             packageName = "com.example.myapp",
             metrics = listOf(StartupTimingMetric()),
             compilationMode = compilationMode,
-            iterations = 10,  // ✅ Минимум 5-10 итераций для точности
+            iterations = 10,  // ✅ Минимум 5–10 итераций для более стабильных результатов
             startupMode = startupMode,
-            setupBlock = { pressHome() }
+            setupBlock = {
+                // Методы pressHome() и device предоставляются MacrobenchmarkRule / UiAutomator
+                pressHome()
+            }
         ) {
             startActivityAndWait()
             device.wait(Until.hasObject(By.res("main_content")), 5_000)
@@ -161,16 +173,16 @@ class StartupBenchmark {
 }
 ```
 
-### Инструментация Кода
+### Инструментация кода
 
 **MainActivity.kt:**
 ```kotlin
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        Trace.beginSection("ActivityStart")  // ✅ Маркер начала
+        Trace.beginSection("ActivityStart")  // ✅ Маркер начала критического пути
         super.onCreate(savedInstanceState)
 
-        // ✅ Измеряем критичные операции
+        // ✅ Измеряем потенциально тяжелые операции
         Trace.beginSection("NetworkInit")
         networkManager.initialize()
         Trace.endSection()
@@ -189,20 +201,20 @@ class MainActivity : ComponentActivity() {
 class BadApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        // ❌ Синхронная инициализация на главном потоке
-        initDatabase()  // 95мс блокировки
-        loadPreferences()  // 45мс блокировки
-        initAnalytics()  // 70мс блокировки
+        // ❌ Синхронная тяжелая инициализация на главном потоке при старте
+        initDatabase()      // Длительная блокировка старта
+        loadPreferences()   // Дополнительная задержка
+        initAnalytics()     // Сетевые/IO операции в onCreate()
     }
 }
 ```
 
-### Анализ Perfetto Трассировок
+### Анализ Perfetto-трассировок
 
-**Расположение файлов:**
+**Расположение файлов (может отличаться в разных версиях инструментов):**
 ```text
 macrobenchmark/build/outputs/connected_android_test_additional_output/
-  <device>/StartupBenchmark_coldStartup/
+  <device>/StartupBenchmark_coldStartupNone/
     iteration001-perfetto-trace.perfetto-trace
 ```
 
@@ -210,37 +222,37 @@ macrobenchmark/build/outputs/connected_android_test_additional_output/
 - Android Studio: File → Open → выбрать .perfetto-trace
 - Web UI: https://ui.perfetto.dev/
 
-**Типичные узкие места:**
+**Типичные узкие места (руководящие ориентиры):**
 
-1. **Application.onCreate() > 100мс:**
-   - Переместить инициализацию в background
-   - Использовать App Startup library для ленивой загрузки
+1. **`Application`.onCreate() заметно > ~100 мс:**
+   - Перенести не критичные для первого кадра инициализации в background
+   - Использовать App Startup / ленивую инициализацию компонентов
 
 2. **Блокировка главного потока:**
-   - Database init должна быть < 50мс или async
-   - SharedPreferences < 10мс
-   - Network calls только async
+   - Инициализацию БД по возможности делать асинхронно или подготовить заранее; избегать длительных (> десятков мс) операций
+   - Чтение SharedPreferences делать минимальным и быстрым, дорогое — переносить
+   - Все сетевые вызовы — только асинхронно
 
-3. **Медленная инфляция view > 100мс:**
-   - Перейти на Jetpack Compose
-   - Использовать ViewStub для отложенной загрузки
+3. **Медленная инфляция view / построение UI:**
+   - Оптимизировать layout'ы или использовать ленивую загрузку части UI (включая ViewStub, отложенный контент в Compose)
 
-4. **GC паузы > 50мс:**
-   - Уменьшить аллокации во время запуска
-   - Использовать object pools
+4. **GC-паузы:**
+   - Уменьшать аллокации во время запуска
+   - Продвинутые техники (например, object pool'ы) использовать осторожно и только по результатам профилирования
 
 **SQL-запросы в Perfetto:**
 ```sql
--- Найти самые долгие операции
-SELECT name, dur / 1e6 as ms
+-- Найти самые долгие операции по имени
+SELECT name, dur / 1e6 AS ms
 FROM slice
 WHERE name LIKE '%Init%'
-ORDER BY dur DESC LIMIT 10;
+ORDER BY ms DESC
+LIMIT 10;
 ```
 
-### Оптимизация На Основе Результатов
+### Оптимизация на основе результатов
 
-**До оптимизации:**
+**До оптимизации (пример):**
 ```text
 Холодный запуск (None): 850мс
 Холодный запуск (Partial): 580мс
@@ -257,35 +269,46 @@ ORDER BY dur DESC LIMIT 10;
 1. **Ленивая инициализация с App Startup:**
 ```kotlin
 class DatabaseInitializer : Initializer<DatabaseManager> {
-    override fun create(context: Context) =
+    override fun create(context: Context): DatabaseManager =
         DatabaseManager(context).apply {
-            initializeInBackground()  // ✅ Async инициализация
+            initializeInBackground()  // ✅ Асинхронная/отложенная инициализация
         }
+
+    override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
 }
 ```
 
 2. **Отложенная загрузка UI:**
 ```kotlin
-setContent {
-    val data by produceState<UserData?>(null) {
-        value = withContext(Dispatchers.IO) { loadUserData() }
+@Composable
+fun MainContent() {
+    val data by produceState<UserData?>(initialValue = null) {
+        // Блок produceState является suspend-контекстом
+        value = loadUserData() // Сделайте loadUserData() suspend и переключайте dispatcher внутри
     }
-    if (data != null) MainScreen(data!!) else LoadingScreen()
+
+    if (data != null) {
+        MainScreen(data!!)
+    } else {
+        LoadingScreen()
+    }
 }
 ```
 
-**После оптимизации:**
+**После оптимизации (примерные результаты):**
 ```text
-Холодный запуск (None): 520мс (-39%)
-Холодный запуск (Partial): 380мс (-34%)
-Теплый запуск: 180мс (-44%)
+Холодный запуск (None): 520мс
+Холодный запуск (Partial): 380мс
+Теплый запуск: 180мс
 ```
 
 ### Интеграция CI/CD
 
-**GitHub Actions:**
+> Предпочтительно запускать macrobenchmark'и на физических устройствах. Пример ниже показывает базовую интеграцию; для надежных метрик используйте реальные девайсы (device farm / локальный стенд).
+
+**GitHub Actions (пример):**
 ```yaml
-- name: Run Benchmarks
+- name: Run Benchmarks (emulator example - less stable)
   uses: reactivecircus/android-emulator-runner@v2
   with:
     api-level: 29
@@ -298,14 +321,14 @@ setContent {
     path: macrobenchmark/build/outputs/
 ```
 
-### Лучшие Практики
+### Лучшие практики
 
-1. **Запускать на реальных устройствах** - эмуляторы дают неточные результаты
-2. **10+ итераций** - минимум для статистической значимости
-3. **Тестировать все типы запуска** - холодный/теплый/горячий
-4. **Измерять с Baseline Profiles** - соответствует реальному сценарию Play Store
-5. **Профилировать перед оптимизацией** - не оптимизировать вслепую
-6. **Интегрировать в CI** - отслеживать регрессии автоматически
+1. Запускать на реальных устройствах — эмуляторы дают менее надежные результаты
+2. Использовать 10+ итераций для стабильной статистики
+3. Тестировать все типы запуска — холодный/тёплый/горячий (при необходимости добавлять отдельные тесты для HOT)
+4. Измерять с Baseline Profiles — соответствует реальному сценарию Play Store
+5. Профилировать перед оптимизацией — не оптимизировать вслепую
+6. Интегрировать в CI (по возможности с реальными девайсами) для отслеживания регрессий
 
 ---
 
@@ -313,12 +336,12 @@ setContent {
 
 ### Overview
 
-**Macrobenchmark** is a Jetpack library for measuring app performance on real devices. Measures end-to-end performance from user's perspective.
+**Macrobenchmark** is a Jetpack library for measuring app performance on real devices. It measures end-to-end performance from the user's perspective.
 
-**Startup Types:**
-- **Cold**: Process doesn't exist, system creates from scratch (slowest, 400-800ms)
-- **Warm**: Process exists, Activity recreated (200-400ms)
-- **Hot**: Activity brought to foreground (50-150ms)
+**Startup Types (guidelines, not strict guarantees):**
+- **Cold**: Process doesn't exist, system creates it from scratch (typically the slowest; actual times vary by device and app complexity)
+- **Warm**: Process exists, `Activity` is recreated (faster than cold but may still involve heavy UI setup)
+- **Hot**: `Activity` is already in memory and brought to the foreground (fastest scenario)
 
 **Key Capabilities:**
 - Real device measurements with Perfetto tracing
@@ -336,7 +359,7 @@ include(":macrobenchmark")  // ✅ Separate module for benchmarks
 **macrobenchmark/build.gradle.kts:**
 ```kotlin
 plugins {
-    id("com.android.test")  // ✅ Test module type
+    id("com.android.test")  // ✅ Test module type (instrumentation tests)
     id("org.jetbrains.kotlin.android")
 }
 
@@ -347,8 +370,13 @@ android {
     targetProjectPath = ":app"  // ✅ Reference to app under test
     experimentalProperties["android.experimental.self-instrumenting"] = true
 
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
     buildTypes {
-        create("benchmark") {  // ✅ Dedicated build type for benchmarks
+        create("benchmark") {  // ✅ Dedicated build type for the test module
+            // This build type is for the test APK; it can be debuggable
             isDebuggable = true
             signingConfig = signingConfigs.getByName("debug")
             matchingFallbacks += listOf("release")
@@ -357,8 +385,8 @@ android {
 }
 
 dependencies {
-    implementation("androidx.benchmark:benchmark-macro-junit4")
-    implementation("androidx.test.uiautomator:uiautomator")
+    implementation("androidx.benchmark:benchmark-macro-junit4:1.2.4")
+    implementation("androidx.test.uiautomator:uiautomator:2.3.0")
 }
 ```
 
@@ -369,9 +397,13 @@ android {
         create("benchmark") {
             initWith(getByName("release"))
             signingConfig = signingConfigs.getByName("debug")
-            isDebuggable = false  // ✅ Close to release but with debug signing
-            profileable = true  // ✅ Allows profiling
+            isDebuggable = false  // ✅ Target app is release-like
+            profileable = true    // ✅ Allows profiling of the release-like build
         }
+    }
+
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 }
 ```
@@ -393,7 +425,7 @@ class StartupBenchmark {
         startupMode = StartupMode.COLD
     )
 
-    // ✅ Cold startup with Baseline Profile (real Play Store scenario)
+    // ✅ Cold startup with Baseline Profile (real Play Store-like scenario)
     @Test
     fun coldStartupPartial() = benchmarkStartup(
         compilationMode = CompilationMode.Partial(
@@ -417,9 +449,12 @@ class StartupBenchmark {
             packageName = "com.example.myapp",
             metrics = listOf(StartupTimingMetric()),
             compilationMode = compilationMode,
-            iterations = 10,  // ✅ Minimum 5-10 iterations for accuracy
+            iterations = 10,  // ✅ At least 5–10 iterations for stability
             startupMode = startupMode,
-            setupBlock = { pressHome() }
+            setupBlock = {
+                // pressHome() and device are provided via MacrobenchmarkRule / UiAutomator
+                pressHome()
+            }
         ) {
             startActivityAndWait()
             device.wait(Until.hasObject(By.res("main_content")), 5_000)
@@ -434,10 +469,10 @@ class StartupBenchmark {
 ```kotlin
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        Trace.beginSection("ActivityStart")  // ✅ Mark start
+        Trace.beginSection("ActivityStart")  // ✅ Mark start of the critical path
         super.onCreate(savedInstanceState)
 
-        // ✅ Measure critical operations
+        // ✅ Measure potentially heavy operations
         Trace.beginSection("NetworkInit")
         networkManager.initialize()
         Trace.endSection()
@@ -456,20 +491,20 @@ class MainActivity : ComponentActivity() {
 class BadApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        // ❌ Synchronous initialization on main thread
-        initDatabase()  // 95ms blocking
-        loadPreferences()  // 45ms blocking
-        initAnalytics()  // 70ms blocking
+        // ❌ Heavy synchronous initialization on the main thread at startup
+        initDatabase()
+        loadPreferences()
+        initAnalytics()
     }
 }
 ```
 
 ### Perfetto Trace Analysis
 
-**File Location:**
+**File Location (may vary with tooling versions):**
 ```text
 macrobenchmark/build/outputs/connected_android_test_additional_output/
-  <device>/StartupBenchmark_coldStartup/
+  <device>/StartupBenchmark_coldStartupNone/
     iteration001-perfetto-trace.perfetto-trace
 ```
 
@@ -477,37 +512,38 @@ macrobenchmark/build/outputs/connected_android_test_additional_output/
 - Android Studio: File → Open → select .perfetto-trace
 - Web UI: https://ui.perfetto.dev/
 
-**Common Bottlenecks:**
+**Common Bottlenecks (guidelines):**
 
-1. **Application.onCreate() > 100ms:**
-   - Move initialization to background
-   - Use App Startup library for lazy loading
+1. **`Application`.onCreate() significantly > ~100ms:**
+   - Move non-critical initialization off the main thread
+   - Use App Startup / lazy initialization for non-essential components
 
 2. **Main thread blocking:**
-   - Database init should be < 50ms or async
-   - SharedPreferences < 10ms
+   - Avoid long (> tens of ms) DB setup; make heavy work async or precomputed
+   - Keep SharedPreferences reads minimal and fast; move heavy processing elsewhere
    - Network calls must be async
 
-3. **Slow view inflation > 100ms:**
-   - Migrate to Jetpack Compose
-   - Use ViewStub for deferred loading
+3. **Slow view inflation / UI construction:**
+   - Optimize layouts or defer non-critical UI
+   - Use mechanisms like ViewStub or deferred Compose content for lazy loading
 
-4. **GC pauses > 50ms:**
+4. **GC pauses:**
    - Reduce allocations during startup
-   - Use object pools
+   - Consider advanced techniques (like object pools) only when justified by profiling
 
 **SQL queries in Perfetto:**
 ```sql
--- Find longest operations
-SELECT name, dur / 1e6 as ms
+-- Find longest operations by name
+SELECT name, dur / 1e6 AS ms
 FROM slice
 WHERE name LIKE '%Init%'
-ORDER BY dur DESC LIMIT 10;
+ORDER BY ms DESC
+LIMIT 10;
 ```
 
 ### Optimization Based on Results
 
-**Before Optimization:**
+**Before Optimization (example):**
 ```text
 Cold startup (None): 850ms
 Cold startup (Partial): 580ms
@@ -524,35 +560,46 @@ Bottlenecks:
 1. **Lazy initialization with App Startup:**
 ```kotlin
 class DatabaseInitializer : Initializer<DatabaseManager> {
-    override fun create(context: Context) =
+    override fun create(context: Context): DatabaseManager =
         DatabaseManager(context).apply {
-            initializeInBackground()  // ✅ Async initialization
+            initializeInBackground()  // ✅ Async / deferred initialization
         }
+
+    override fun dependencies(): List<Class<out Initializer<*>>> = emptyList()
 }
 ```
 
 2. **Deferred UI loading:**
 ```kotlin
-setContent {
-    val data by produceState<UserData?>(null) {
-        value = withContext(Dispatchers.IO) { loadUserData() }
+@Composable
+fun MainContent() {
+    val data by produceState<UserData?>(initialValue = null) {
+        // This block is a suspend context
+        value = loadUserData() // Make loadUserData() suspend and switch dispatcher inside it
     }
-    if (data != null) MainScreen(data!!) else LoadingScreen()
+
+    if (data != null) {
+        MainScreen(data!!)
+    } else {
+        LoadingScreen()
+    }
 }
 ```
 
-**After Optimization:**
+**After Optimization (example):**
 ```text
-Cold startup (None): 520ms (-39%)
-Cold startup (Partial): 380ms (-34%)
-Warm startup: 180ms (-44%)
+Cold startup (None): 520ms
+Cold startup (Partial): 380ms
+Warm startup: 180ms
 ```
 
 ### CI/CD Integration
 
-**GitHub Actions:**
+> Prefer running macrobenchmarks on physical devices. The example below uses an emulator and is mainly illustrative; for reliable performance signals, integrate with real-device labs or dedicated hardware.
+
+**GitHub Actions (example):**
 ```yaml
-- name: Run Benchmarks
+- name: Run Benchmarks (emulator example - less stable)
   uses: reactivecircus/android-emulator-runner@v2
   with:
     api-level: 29
@@ -567,12 +614,12 @@ Warm startup: 180ms (-44%)
 
 ### Best Practices
 
-1. **Run on real devices** - emulators give inaccurate results
-2. **10+ iterations** - minimum for statistical significance
-3. **Test all startup types** - cold/warm/hot
-4. **Measure with Baseline Profiles** - matches real Play Store scenario
-5. **Profile before optimizing** - don't optimize blindly
-6. **Integrate into CI** - track regressions automatically
+1. Run on real devices where possible — emulators produce less stable results
+2. Use 10+ iterations for statistically meaningful numbers
+3. Cover all relevant startup types — cold/warm/hot (add dedicated HOT tests if needed)
+4. Measure with Baseline Profiles — aligns with real Play Store behavior
+5. Always profile before optimizing — avoid blind micro-optimizations
+6. Integrate into CI (ideally with real devices) to catch regressions early
 
 ---
 

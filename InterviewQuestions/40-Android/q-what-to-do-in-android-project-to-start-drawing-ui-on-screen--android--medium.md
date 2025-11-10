@@ -10,869 +10,778 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-activity-lifecycle, c-layouts, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy]
+related: [c-activity-lifecycle, q-what-is-activity-and-what-is-it-used-for--android--medium, q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [activity, android/activity, android/ui-views, difficulty/medium, layout, setup, ui]
+updated: 2025-11-10
+tags: [android/activity, android/ui-views, difficulty/medium]
+
 ---
-
-# What Needs to Be Done in Android Project to Start Drawing UI on Screen?
-
-# Question (EN)
-> What needs to be done in an Android project to start drawing UI on the screen?
 
 # Вопрос (RU)
 > Что нужно сделать в Android-проекте, чтобы начать рисовать UI на экране?
 
----
-
-## Answer (EN)
-
-To start drawing UI on screen in an Android project, you need to follow several fundamental steps:
-
-### 1. Create an Android Project
-
-Use Android Studio to create a new project:
-- File → New → New Project
-- Select "Empty Activity" or "Empty Compose Activity" template
-- Configure project name, package, and minimum SDK
-
-### 2. Method A: Traditional XML-Based UI
-
-#### Step 1: Create XML Layout
-
-Create or edit `res/layout/activity_main.xml`:
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:textSize="24sp" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Click Me" />
-
-</LinearLayout>
-```
-
-#### Step 2: Connect Layout to Activity
-
-In `MainActivity.kt`:
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Connect XML layout to activity
-        setContentView(R.layout.activity_main)
-
-        // Access views and set listeners
-        val textView = findViewById<TextView>(R.id.textView)
-        val button = findViewById<Button>(R.id.button)
-
-        button.setOnClickListener {
-            textView.text = "Button clicked!"
-        }
-    }
-}
-```
-
-#### Step 3: Run the Application
-
-- Connect device or start emulator
-- Click "Run" (green triangle) in Android Studio
-- UI will be displayed on screen
-
-### 2. Method B: View Binding (Recommended for XML)
-
-#### Step 1: Enable View Binding
-
-In `build.gradle.kts` (Module: app):
-
-```kotlin
-android {
-    buildFeatures {
-        viewBinding = true
-    }
-}
-```
-
-#### Step 2: Use View Binding in Activity
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Inflate layout using view binding
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        // Access views directly
-        binding.textView.text = "Hello World!"
-        binding.button.setOnClickListener {
-            binding.textView.text = "Button clicked!"
-        }
-    }
-}
-```
-
-### 3. Method C: Jetpack Compose (Modern Approach)
-
-#### Step 1: Enable Compose
-
-In `build.gradle.kts` (Module: app):
-
-```kotlin
-android {
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
-    }
-}
-
-dependencies {
-    implementation(platform("androidx.compose:compose-bom:2024.01.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.activity:activity-compose:1.8.2")
-}
-```
-
-#### Step 2: Create Composable UI
-
-In `MainActivity.kt`:
-
-```kotlin
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Set composable content
-        setContent {
-            MaterialTheme {
-                MyApp()
-            }
-        }
-    }
-}
-
-@Composable
-fun MyApp() {
-    var text by remember { mutableStateOf("Hello World!") }
-
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.headlineMedium
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(onClick = {
-                text = "Button clicked!"
-            }) {
-                Text("Click Me")
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewMyApp() {
-    MaterialTheme {
-        MyApp()
-    }
-}
-```
-
-### 4. Custom Drawing (Canvas)
-
-For custom graphics, create a custom view:
-
-```kotlin
-class CustomView(context: Context, attrs: AttributeSet? = null) :
-    View(context, attrs) {
-
-    private val paint = Paint().apply {
-        color = Color.BLUE
-        style = Paint.Style.FILL
-        isAntiAlias = true
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-
-        // Draw background
-        canvas.drawColor(Color.WHITE)
-
-        // Draw circle
-        canvas.drawCircle(
-            width / 2f,
-            height / 2f,
-            200f,
-            paint
-        )
-
-        // Draw text
-        paint.apply {
-            color = Color.BLACK
-            textSize = 48f
-            textAlign = Paint.Align.CENTER
-        }
-        canvas.drawText(
-            "Custom Drawing",
-            width / 2f,
-            height / 2f + 300f,
-            paint
-        )
-    }
-}
-```
-
-Use in XML:
-
-```xml
-<com.example.app.CustomView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
-```
-
-Or programmatically:
-
-```kotlin
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
-    val customView = CustomView(this)
-    setContentView(customView)
-}
-```
-
-### 5. Complete Example: All Methods Combined
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Choose ONE method:
-
-        // METHOD 1: XML Layout
-        // setContentView(R.layout.activity_main)
-
-        // METHOD 2: View Binding
-        // val binding = ActivityMainBinding.inflate(layoutInflater)
-        // setContentView(binding.root)
-
-        // METHOD 3: Compose
-        // setContent {
-        //     MyApp()
-        // }
-
-        // METHOD 4: Programmatic Views
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(16.dp, 16.dp, 16.dp, 16.dp)
-        }
-
-        val textView = TextView(this).apply {
-            text = "Hello World!"
-            textSize = 24f
-        }
-
-        val button = Button(this).apply {
-            text = "Click Me"
-            setOnClickListener {
-                textView.text = "Button clicked!"
-            }
-        }
-
-        layout.addView(textView)
-        layout.addView(button)
-
-        setContentView(layout)
-    }
-
-    private val Int.dp: Int
-        get() = (this * resources.displayMetrics.density).toInt()
-}
-```
-
-### 6. AndroidManifest.xml Configuration
-
-Ensure your activity is declared:
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/Theme.MyApp">
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-    </application>
-
-</manifest>
-```
-
-### 7. Minimal Steps Summary
-
-**For XML-based UI:**
-1. Create XML layout file (`activity_main.xml`)
-2. Call `setContentView(R.layout.activity_main)` in `onCreate()`
-3. Run app
-
-**For Compose UI:**
-1. Add Compose dependencies
-2. Call `setContent { YourComposable() }` in `onCreate()`
-3. Run app
-
-**For Custom Drawing:**
-1. Create class extending `View`
-2. Override `onDraw(canvas: Canvas)`
-3. Set as content view or add to layout
-
-### 8. Essential Activity Lifecycle
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Set content view here - required step
-        setContentView(R.layout.activity_main)
-        // UI is now ready to be displayed
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // Activity becoming visible
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Activity in foreground, interactive
-    }
-}
-```
-
-### Key Points
-
-1. **Activity** is the entry point for UI
-2. **setContentView()** must be called in `onCreate()`
-3. **Layout** can be defined in XML, Compose, or programmatically
-4. **Run the app** on emulator or device to see UI
-5. **Choose one approach**: XML + View Binding OR Compose (recommended for new projects)
-
-### Common Mistakes
-
-```kotlin
-// BAD: Accessing views before setContentView
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    val textView = findViewById<TextView>(R.id.textView) // null!
-    setContentView(R.layout.activity_main)
-}
-
-// GOOD: Set content view first
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-    val textView = findViewById<TextView>(R.id.textView) // works
-}
-```
-
----
-
-
 # Question (EN)
 > What needs to be done in an Android project to start drawing UI on the screen?
-
-# Вопрос (RU)
-> Что нужно сделать в Android-проекте, чтобы начать рисовать UI на экране?
-
----
-
-
----
-
-
-## Answer (EN)
-
-To start drawing UI on screen in an Android project, you need to follow several fundamental steps:
-
-### 1. Create an Android Project
-
-Use Android Studio to create a new project:
-- File → New → New Project
-- Select "Empty Activity" or "Empty Compose Activity" template
-- Configure project name, package, and minimum SDK
-
-### 2. Method A: Traditional XML-Based UI
-
-#### Step 1: Create XML Layout
-
-Create or edit `res/layout/activity_main.xml`:
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:textSize="24sp" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Click Me" />
-
-</LinearLayout>
-```
-
-#### Step 2: Connect Layout to Activity
-
-In `MainActivity.kt`:
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Connect XML layout to activity
-        setContentView(R.layout.activity_main)
-
-        // Access views and set listeners
-        val textView = findViewById<TextView>(R.id.textView)
-        val button = findViewById<Button>(R.id.button)
-
-        button.setOnClickListener {
-            textView.text = "Button clicked!"
-        }
-    }
-}
-```
-
-#### Step 3: Run the Application
-
-- Connect device or start emulator
-- Click "Run" (green triangle) in Android Studio
-- UI will be displayed on screen
-
-### 2. Method B: View Binding (Recommended for XML)
-
-#### Step 1: Enable View Binding
-
-In `build.gradle.kts` (Module: app):
-
-```kotlin
-android {
-    buildFeatures {
-        viewBinding = true
-    }
-}
-```
-
-#### Step 2: Use View Binding in Activity
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Inflate layout using view binding
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-
-        // Access views directly
-        binding.textView.text = "Hello World!"
-        binding.button.setOnClickListener {
-            binding.textView.text = "Button clicked!"
-        }
-    }
-}
-```
-
-### 3. Method C: Jetpack Compose (Modern Approach)
-
-#### Step 1: Enable Compose
-
-In `build.gradle.kts` (Module: app):
-
-```kotlin
-android {
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.3"
-    }
-}
-
-dependencies {
-    implementation(platform("androidx.compose:compose-bom:2024.01.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("androidx.activity:activity-compose:1.8.2")
-}
-```
-
-#### Step 2: Create Composable UI
-
-In `MainActivity.kt`:
-
-```kotlin
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Set composable content
-        setContent {
-            MaterialTheme {
-                MyApp()
-            }
-        }
-    }
-}
-
-@Composable
-fun MyApp() {
-    var text by remember { mutableStateOf("Hello World!") }
-
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Text(
-                text = text,
-                style = MaterialTheme.typography.headlineMedium
-            )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(onClick = {
-                text = "Button clicked!"
-            }) {
-                Text("Click Me")
-            }
-        }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun PreviewMyApp() {
-    MaterialTheme {
-        MyApp()
-    }
-}
-```
-
-### 4. Custom Drawing (Canvas)
-
-For custom graphics, create a custom view:
-
-```kotlin
-class CustomView(context: Context, attrs: AttributeSet? = null) :
-    View(context, attrs) {
-
-    private val paint = Paint().apply {
-        color = Color.BLUE
-        style = Paint.Style.FILL
-        isAntiAlias = true
-    }
-
-    override fun onDraw(canvas: Canvas) {
-        super.onDraw(canvas)
-
-        // Draw background
-        canvas.drawColor(Color.WHITE)
-
-        // Draw circle
-        canvas.drawCircle(
-            width / 2f,
-            height / 2f,
-            200f,
-            paint
-        )
-
-        // Draw text
-        paint.apply {
-            color = Color.BLACK
-            textSize = 48f
-            textAlign = Paint.Align.CENTER
-        }
-        canvas.drawText(
-            "Custom Drawing",
-            width / 2f,
-            height / 2f + 300f,
-            paint
-        )
-    }
-}
-```
-
-Use in XML:
-
-```xml
-<com.example.app.CustomView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" />
-```
-
-Or programmatically:
-
-```kotlin
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-
-    val customView = CustomView(this)
-    setContentView(customView)
-}
-```
-
-### 5. Complete Example: All Methods Combined
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Choose ONE method:
-
-        // METHOD 1: XML Layout
-        // setContentView(R.layout.activity_main)
-
-        // METHOD 2: View Binding
-        // val binding = ActivityMainBinding.inflate(layoutInflater)
-        // setContentView(binding.root)
-
-        // METHOD 3: Compose
-        // setContent {
-        //     MyApp()
-        // }
-
-        // METHOD 4: Programmatic Views
-        val layout = LinearLayout(this).apply {
-            orientation = LinearLayout.VERTICAL
-            setPadding(16.dp, 16.dp, 16.dp, 16.dp)
-        }
-
-        val textView = TextView(this).apply {
-            text = "Hello World!"
-            textSize = 24f
-        }
-
-        val button = Button(this).apply {
-            text = "Click Me"
-            setOnClickListener {
-                textView.text = "Button clicked!"
-            }
-        }
-
-        layout.addView(textView)
-        layout.addView(button)
-
-        setContentView(layout)
-    }
-
-    private val Int.dp: Int
-        get() = (this * resources.displayMetrics.density).toInt()
-}
-```
-
-### 6. AndroidManifest.xml Configuration
-
-Ensure your activity is declared:
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/Theme.MyApp">
-
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-    </application>
-
-</manifest>
-```
-
-### 7. Minimal Steps Summary
-
-**For XML-based UI:**
-1. Create XML layout file (`activity_main.xml`)
-2. Call `setContentView(R.layout.activity_main)` in `onCreate()`
-3. Run app
-
-**For Compose UI:**
-1. Add Compose dependencies
-2. Call `setContent { YourComposable() }` in `onCreate()`
-3. Run app
-
-**For Custom Drawing:**
-1. Create class extending `View`
-2. Override `onDraw(canvas: Canvas)`
-3. Set as content view or add to layout
-
-### 8. Essential Activity Lifecycle
-
-```kotlin
-class MainActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // Set content view here - required step
-        setContentView(R.layout.activity_main)
-        // UI is now ready to be displayed
-    }
-
-    override fun onStart() {
-        super.onStart()
-        // Activity becoming visible
-    }
-
-    override fun onResume() {
-        super.onResume()
-        // Activity in foreground, interactive
-    }
-}
-```
-
-### Key Points
-
-1. **Activity** is the entry point for UI
-2. **setContentView()** must be called in `onCreate()`
-3. **Layout** can be defined in XML, Compose, or programmatically
-4. **Run the app** on emulator or device to see UI
-5. **Choose one approach**: XML + View Binding OR Compose (recommended for new projects)
-
-### Common Mistakes
-
-```kotlin
-// BAD: Accessing views before setContentView
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    val textView = findViewById<TextView>(R.id.textView) // null!
-    setContentView(R.layout.activity_main)
-}
-
-// GOOD: Set content view first
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    setContentView(R.layout.activity_main)
-    val textView = findViewById<TextView>(R.id.textView) // works
-}
-```
 
 ---
 
 ## Ответ (RU)
 
-Что нужно сделать в Android-проекте чтобы начать рисовать UI на экране?
+Чтобы начать рисовать UI на экране в Android-проекте, нужно выполнить несколько базовых шагов.
 
-Чтобы начать рисовать пользовательский интерфейс (UI) на экране в Android-проекте, необходимо выполнить несколько шагов. Сначала создайте Android-проект в Android Studio с шаблоном «Empty Activity». Затем настройте макет, используя XML-файл для определения структуры интерфейса. Подключите макет к активности с помощью метода setContentView() в Activity классе. Если требуется кастомное рисование, создайте собственный класс, унаследованный от View и переопределите метод onDraw(). Наконец, запустите приложение на эмуляторе или реальном устройстве.
+### 1. Создать Android-проект
+
+Создайте новый проект в Android Studio:
+- File → New → New Project
+- Выберите шаблон "Empty `Activity`" или "Empty Compose `Activity`"
+- Укажите имя проекта, пакет и минимальный SDK
+
+### 2. Метод A: Классический UI на XML
+
+#### Шаг 1: Создать XML-разметку
+
+Создайте или отредактируйте `res/layout/activity_main.xml`:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Click Me" />
+
+</LinearLayout>
+```
+
+#### Шаг 2: Подключить разметку к `Activity`
+
+В `MainActivity.kt`:
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Подключаем XML-разметку к Activity
+        setContentView(R.layout.activity_main)
+
+        // Находим View и вешаем обработчики
+        val textView = findViewById<TextView>(R.id.textView)
+        val button = findViewById<Button>(R.id.button)
+
+        button.setOnClickListener {
+            textView.text = "Button clicked!"
+        }
+    }
+}
+```
+
+#### Шаг 3: Запустить приложение
+
+- Подключить устройство или запустить эмулятор
+- Нажать "Run" (зелёный треугольник) в Android Studio
+- UI отобразится на экране
+
+### 3. Метод B: `View` Binding (удобный доступ к `View`)
+
+#### Шаг 1: Включить `View` Binding
+
+В `build.gradle.kts` (Module: app):
+
+```kotlin
+android {
+    buildFeatures {
+        viewBinding = true
+    }
+}
+```
+
+#### Шаг 2: Использовать `View` Binding в `Activity`
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Инициализируем binding и устанавливаем корневой layout
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Доступ к View напрямую через binding
+        binding.textView.text = "Hello World!"
+        binding.button.setOnClickListener {
+            binding.textView.text = "Button clicked!"
+        }
+    }
+}
+```
+
+### 4. Метод C: Jetpack Compose (современный подход)
+
+#### Шаг 1: Включить Compose
+
+В `build.gradle.kts` (Module: app):
+
+```kotlin
+android {
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
+    }
+}
+
+dependencies {
+    implementation(platform("androidx.compose:compose-bom:2024.01.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.activity:activity-compose:1.8.2")
+}
+```
+
+#### Шаг 2: Создать UI на Compose
+
+В `MainActivity.kt`:
+
+```kotlin
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Вместо setContentView устанавливаем Compose-контент
+        setContent {
+            MaterialTheme {
+                MyApp()
+            }
+        }
+    }
+}
+
+@Composable
+fun MyApp() {
+    var text by remember { mutableStateOf("Hello World!") }
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.headlineMedium
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(onClick = {
+                text = "Button clicked!"
+            }) {
+                Text("Click Me")
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewMyApp() {
+    MaterialTheme {
+        MyApp()
+    }
+}
+```
+
+### 5. Кастомное рисование (Canvas)
+
+Для собственного рисования создайте кастомный `View`:
+
+```kotlin
+class CustomView(context: Context, attrs: AttributeSet? = null) :
+    View(context, attrs) {
+
+    private val paint = Paint().apply {
+        color = Color.BLUE
+        style = Paint.Style.FILL
+        isAntiAlias = true
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        // Фон
+        canvas.drawColor(Color.WHITE)
+
+        // Круг
+        canvas.drawCircle(
+            width / 2f,
+            height / 2f,
+            200f,
+            paint
+        )
+
+        // Текст
+        paint.apply {
+            color = Color.BLACK
+            textSize = 48f
+            textAlign = Paint.Align.CENTER
+        }
+        canvas.drawText(
+            "Custom Drawing",
+            width / 2f,
+            height / 2f + 300f,
+            paint
+        )
+    }
+}
+```
+
+Использование в XML:
+
+```xml
+<com.example.app.CustomView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+```
+
+Либо программно:
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    val customView = CustomView(this)
+    setContentView(customView)
+}
+```
+
+### 6. Пример: Программные `View` (без XML)
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Выбираем ОДИН подход для экрана.
+        // Ниже пример полностью программного создания UI.
+
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(16.dp, 16.dp, 16.dp, 16.dp)
+        }
+
+        val textView = TextView(this).apply {
+            text = "Hello World!"
+            textSize = 24f
+        }
+
+        val button = Button(this).apply {
+            text = "Click Me"
+            setOnClickListener {
+                textView.text = "Button clicked!"
+            }
+        }
+
+        layout.addView(textView)
+        layout.addView(button)
+
+        setContentView(layout)
+    }
+
+    private val Int.dp: Int
+        get() = (this * resources.displayMetrics.density).toInt()
+}
+```
+
+### 7. Настройка AndroidManifest.xml
+
+Убедитесь, что `Activity` объявлена и имеет корректный MAIN action, если это экран запуска:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.MyApp">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
+```
+
+### 8. Краткое резюме шагов
+
+- Для XML UI:
+  1. Создать XML-разметку.
+  2. В `onCreate()` вызвать `setContentView(R.layout.activity_main)`.
+  3. Запустить приложение.
+
+- Для Compose UI:
+  1. Включить Compose и добавить зависимости.
+  2. В `ComponentActivity` вызвать `setContent { YourComposable() }` (без `setContentView`).
+  3. Запустить приложение.
+
+- Для кастомного рисования:
+  1. Создать класс, наследующий `View`.
+  2. Переопределить `onDraw(Canvas)`.
+  3. Использовать этот `View` через `setContentView()` или в XML.
+
+### 9. Жизненный цикл `Activity` (основы)
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Для XML / программных View устанавливаем контент здесь
+        setContentView(R.layout.activity_main)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // Activity становится видимой
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Activity на переднем плане, доступна для взаимодействия
+    }
+}
+```
+
+Ключевые моменты:
+1. `Activity` (или хост-`Activity` для Compose) предоставляет окно, в котором рисуется UI.
+2. Нужно задать содержимое окна: через `setContentView(...)` для `View`/XML, через `setContent { ... }` для Compose или добавить кастомные `View`.
+3. Разметка может быть описана в XML, на Compose или создана программно.
+4. Корректная запись в манифесте и запуск на устройстве/эмуляторе обязательны, чтобы UI появился.
+5. Для одного экрана обычно выбирают один основной подход (XML + `View` Binding, программные `View` или Compose).
 
 ---
 
+## Answer (EN)
+
+To start drawing UI on screen in an Android project, you need to follow several fundamental steps:
+
+### 1. Create an Android Project
+
+Use Android Studio to create a new project:
+- File → New → New Project
+- Select "Empty `Activity`" or "Empty Compose `Activity`" template
+- Configure project name, package, and minimum SDK
+
+### 2. Method A: Traditional XML-Based UI
+
+#### Step 1: Create XML Layout
+
+Create or edit `res/layout/activity_main.xml`:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hello World!"
+        android:textSize="24sp" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Click Me" />
+
+</LinearLayout>
+```
+
+#### Step 2: Connect Layout to `Activity`
+
+In `MainActivity.kt`:
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Connect XML layout to activity
+        setContentView(R.layout.activity_main)
+
+        // Access views and set listeners
+        val textView = findViewById<TextView>(R.id.textView)
+        val button = findViewById<Button>(R.id.button)
+
+        button.setOnClickListener {
+            textView.text = "Button clicked!"
+        }
+    }
+}
+```
+
+#### Step 3: Run the `Application`
+
+- Connect device or start emulator
+- Click "Run" (green triangle) in Android Studio
+- UI will be displayed on screen
+
+### 3. Method B: `View` Binding (XML Convenience)
+
+#### Step 1: Enable `View` Binding
+
+In `build.gradle.kts` (Module: app):
+
+```kotlin
+android {
+    buildFeatures {
+        viewBinding = true
+    }
+}
+```
+
+#### Step 2: Use `View` Binding in `Activity`
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Inflate layout using view binding
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Access views directly
+        binding.textView.text = "Hello World!"
+        binding.button.setOnClickListener {
+            binding.textView.text = "Button clicked!"
+        }
+    }
+}
+```
+
+### 4. Method C: Jetpack Compose (Modern Approach)
+
+#### Step 1: Enable Compose
+
+In `build.gradle.kts` (Module: app):
+
+```kotlin
+android {
+    buildFeatures {
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.3"
+    }
+}
+
+dependencies {
+    implementation(platform("androidx.compose:compose-bom:2024.01.00"))
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.material3:material3")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.activity:activity-compose:1.8.2")
+}
+```
+
+#### Step 2: Create Composable UI
+
+In `MainActivity.kt`:
+
+```kotlin
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Set composable content instead of setContentView
+        setContent {
+            MaterialTheme {
+                MyApp()
+            }
+        }
+    }
+}
+
+@Composable
+fun MyApp() {
+    var text by remember { mutableStateOf("Hello World!") }
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = text,
+                style = MaterialTheme.typography.headlineMedium
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Button(onClick = {
+                text = "Button clicked!"
+            }) {
+                Text("Click Me")
+            }
+        }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun PreviewMyApp() {
+    MaterialTheme {
+        MyApp()
+    }
+}
+```
+
+### 5. Custom Drawing (Canvas)
+
+For custom graphics, create a custom view:
+
+```kotlin
+class CustomView(context: Context, attrs: AttributeSet? = null) :
+    View(context, attrs) {
+
+    private val paint = Paint().apply {
+        color = Color.BLUE
+        style = Paint.Style.FILL
+        isAntiAlias = true
+    }
+
+    override fun onDraw(canvas: Canvas) {
+        super.onDraw(canvas)
+
+        // Draw background
+        canvas.drawColor(Color.WHITE)
+
+        // Draw circle
+        canvas.drawCircle(
+            width / 2f,
+            height / 2f,
+            200f,
+            paint
+        )
+
+        // Draw text
+        paint.apply {
+            color = Color.BLACK
+            textSize = 48f
+            textAlign = Paint.Align.CENTER
+        }
+        canvas.drawText(
+            "Custom Drawing",
+            width / 2f,
+            height / 2f + 300f,
+            paint
+        )
+    }
+}
+```
+
+Use in XML:
+
+```xml
+<com.example.app.CustomView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />
+```
+
+Or programmatically:
+
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    val customView = CustomView(this)
+    setContentView(customView)
+}
+```
+
+### 6. Example: Programmatic Views (Without XML)
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Choose ONE approach per activity instance.
+        // Example below: programmatic views.
+
+        val layout = LinearLayout(this).apply {
+            orientation = LinearLayout.VERTICAL
+            setPadding(16.dp, 16.dp, 16.dp, 16.dp)
+        }
+
+        val textView = TextView(this).apply {
+            text = "Hello World!"
+            textSize = 24f
+        }
+
+        val button = Button(this).apply {
+            text = "Click Me"
+            setOnClickListener {
+                textView.text = "Button clicked!"
+            }
+        }
+
+        layout.addView(textView)
+        layout.addView(button)
+
+        setContentView(layout)
+    }
+
+    private val Int.dp: Int
+        get() = (this * resources.displayMetrics.density).toInt()
+}
+```
+
+### 7. AndroidManifest.xml Configuration
+
+Ensure your activity is declared and has the correct MAIN action to be launchable:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/Theme.MyApp">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+    </application>
+
+</manifest>
+```
+
+### 8. Minimal Steps Summary
+
+- For XML-based UI:
+  1. Create XML layout file (`activity_main.xml`).
+  2. In your activity's `onCreate()`, call `setContentView(R.layout.activity_main)`.
+  3. Run the app on a device/emulator.
+
+- For Compose UI:
+  1. Enable Compose and add dependencies.
+  2. In a `ComponentActivity`, call `setContent { YourComposable() }` instead of `setContentView()`.
+  3. Run the app.
+
+- For Custom Drawing:
+  1. Create a class extending `View`.
+  2. Override `onDraw(canvas: Canvas)`.
+  3. Use this view via `setContentView()` or in an XML layout.
+
+### 9. Essential `Activity` Lifecycle
+
+```kotlin
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // For XML / programmatic Views: set the content view here
+        setContentView(R.layout.activity_main)
+        // UI is now ready to be displayed
+    }
+
+    override fun onStart() {
+        super.onStart()
+        // Activity becoming visible
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Activity in foreground, interactive
+    }
+}
+```
+
+Key points:
+1. An `Activity` (or other appropriate entry point, e.g. Compose host activity) provides the window where UI is drawn.
+2. You must set the UI content: via `setContentView(...)` for Views/XML or by calling `setContent { ... }` for Compose, or by attaching custom views.
+3. Layout can be defined in XML, in Compose, or created programmatically.
+4. A proper manifest declaration and launching configuration are required to show the UI on device/emulator.
+5. Use one primary approach per screen (XML + `View` Binding, programmatic Views, or Compose).
+
+---
+
+## Дополнительные вопросы (RU)
+
+- [[c-activity-lifecycle]]
+- [[q-what-is-activity-and-what-is-it-used-for--android--medium]]
+- [[q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy]]
 
 ## Follow-ups
 
 - [[c-activity-lifecycle]]
-- [[c-layouts]]
 - [[q-what-is-activity-and-what-is-it-used-for--android--medium]]
+- [[q-what-needs-to-be-done-in-android-project-to-start-drawing-ui-on-screen--android--easy]]
 
+## Ссылки (RU)
+
+- [Views](https://developer.android.com/develop/ui/views)
+- [Android Documentation](https://developer.android.com/docs)
 
 ## References
 
 - [Views](https://developer.android.com/develop/ui/views)
 - [Android Documentation](https://developer.android.com/docs)
-
-
-## Related Questions
-
-### Prerequisites (Easier)
-- [[q-why-separate-ui-and-business-logic--android--easy]] - Ui
-- [[q-how-to-start-drawing-ui-in-android--android--easy]] - Ui
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Ui
-
-### Related (Medium)
-- [[q-dagger-build-time-optimization--android--medium]] - Ui
-- q-rxjava-pagination-recyclerview--android--medium - Ui
-- [[q-build-optimization-gradle--android--medium]] - Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - Ui
-- [[q-testing-compose-ui--android--medium]] - Ui

@@ -12,9 +12,10 @@ status: draft
 moc: moc-android
 related: [c-dependency-injection, c-hilt]
 created: 2025-10-11
-updated: 2025-01-27
+updated: 2025-11-10
 tags: [android/di-hilt, android/lifecycle, dependency-injection, difficulty/medium, hilt]
-sources: [https://dagger.dev/hilt/entry-points.html]
+sources: ["https://dagger.dev/hilt/entry-points.html"]
+
 ---
 
 # Вопрос (RU)
@@ -28,14 +29,14 @@ sources: [https://dagger.dev/hilt/entry-points.html]
 ## Ответ (RU)
 
 **Определение:**
-[[c-hilt|Entry Points]] — это интерфейсы, аннотированные `@EntryPoint`, которые предоставляют доступ к зависимостям Hilt в местах, где автоматическая инъекция невозможна. Они служат мостом между графом зависимостей и кодом, который не управляется Hilt.
+[[c-hilt|Entry Points]] — это интерфейсы, аннотированные `@EntryPoint`, которые предоставляют доступ к зависимостям Hilt в местах, где автоматическая инъекция через `@AndroidEntryPoint` или конструктор невозможна. Они служат мостом между графом зависимостей и кодом, который не управляется Hilt.
 
-**Когда использовать:**
-- Content Providers (создаются до Application.onCreate())
-- WorkManager Workers (инстанцируются WorkManager)
-- Firebase Services (FCM, Analytics)
-- Broadcast Receivers без @AndroidEntryPoint
-- Сторонние библиотеки (не контролируете конструкторы)
+**Когда использовать (типичные сценарии):**
+- `ContentProvider` (создаются системой до `Application.onCreate()`, нельзя напрямую использовать `@AndroidEntryPoint`)
+- WorkManager Workers (в специфичных случаях, когда вы не можете использовать `@HiltWorker` и штатный `HiltWorkerFactory`)
+- Firebase Services (например, `FirebaseMessagingService`), где нельзя использовать `@AndroidEntryPoint`
+- `BroadcastReceiver`, когда вы не можете или не хотите аннотировать его `@AndroidEntryPoint`
+- Сторонние библиотеки и фреймворки (когда вы не контролируете конструкторы или точки создания объектов)
 
 **Базовый пример:**
 ```kotlin
@@ -65,9 +66,9 @@ class MyContentProvider : ContentProvider() {
 }
 ```
 
-**WorkManager интеграция:**
+**WorkManager интеграция (рекомендуемый подход):**
 ```kotlin
-// ✅ Современный подход с @HiltWorker
+// ✅ Современный подход: используем @HiltWorker и HiltWorkerFactory
 @HiltWorker
 class DataSyncWorker @AssistedInject constructor(
     @Assisted context: Context,
@@ -83,24 +84,42 @@ class DataSyncWorker @AssistedInject constructor(
         }
     }
 }
+```
 
-// ❌ Устаревший подход через Entry Point
+**WorkManager и Entry Points (escape hatch):**
+```kotlin
+// ❗ Используйте Entry Point только если по архитектурным причинам
+// вы не можете использовать @HiltWorker / HiltWorkerFactory.
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 interface WorkerEntryPoint {
     fun apiService(): ApiService
 }
 
-class CustomWorkerFactory : WorkerFactory() {
-    override fun createWorker(/*...*/): ListenableWorker? {
-        // ❌ Ручное получение зависимостей
-        val entryPoint = EntryPointAccessors.fromApplication(/*...*/)
-        return DataSyncWorker(entryPoint.apiService())
+class CustomWorkerFactory(
+    private val appContext: Context
+) : WorkerFactory() {
+
+    override fun createWorker(
+        appContext: Context,
+        workerClassName: String,
+        workerParameters: WorkerParameters
+    ): ListenableWorker? {
+        return if (workerClassName == DataSyncWorker::class.qualifiedName) {
+            val entryPoint = EntryPointAccessors.fromApplication(
+                this.appContext,
+                WorkerEntryPoint::class.java
+            )
+            // ✅ Ручное создание worker с зависимостью из Entry Point
+            DataSyncWorker(appContext, workerParameters, entryPoint.apiService())
+        } else {
+            null
+        }
     }
 }
 ```
 
-**Firebase Messaging Service:**
+**Firebase Messaging `Service`:**
 ```kotlin
 class MyFirebaseService : FirebaseMessagingService() {
 
@@ -125,14 +144,15 @@ interface MessagingEntryPoint {
 
 **Component scopes:**
 ```kotlin
-// Singleton scope - живет весь жизненный цикл приложения
+// Singleton scope — живет весь жизненный цикл приложения
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 interface AppEntryPoint {
     fun database(): AppDatabase
 }
 
-// Activity scope - создается и уничтожается с Activity
+// Activity scope — создается и уничтожается с Activity
+// В реальном коде зависимости должны быть привязаны к ActivityComponent.
 @EntryPoint
 @InstallIn(ActivityComponent::class)
 interface ActivityEntryPoint {
@@ -141,22 +161,22 @@ interface ActivityEntryPoint {
 ```
 
 **Best practices:**
-- Используйте Entry Points только когда стандартная инъекция невозможна
-- Для WorkManager предпочитайте @HiltWorker вместо Entry Points
-- Кэшируйте полученные зависимости в lazy-свойствах
-- Выбирайте правильный scope компонента (Singleton, Activity, Fragment)
+- Используйте Entry Points только как "escape hatch" там, где стандартная инъекция через `@AndroidEntryPoint`, `@HiltViewModel`, `@HiltWorker` и т.п. невозможна.
+- Для WorkManager по возможности предпочитайте `@HiltWorker` и встроенный `HiltWorkerFactory` вместо Entry Points.
+- Всегда выбирайте компонент в `@InstallIn`, соответствующий тому, где объявлена нужная зависимость (Singleton, `Activity`, `Fragment` и т.д.).
+- Кэшируйте полученные зависимости (например, через `lazy`), чтобы избежать лишних вызовов EntryPointAccessors.
 
 ## Answer (EN)
 
 **Definition:**
-[[c-hilt|Entry Points]] are interfaces annotated with `@EntryPoint` that provide access to Hilt dependencies in places where automatic injection isn't possible. They bridge the dependency graph with code not managed by Hilt.
+[[c-hilt|Entry Points]] are interfaces annotated with `@EntryPoint` that provide access to Hilt dependencies in places where automatic injection via `@AndroidEntryPoint` or constructor injection is not possible. They act as a bridge between the dependency graph and code not managed by Hilt.
 
-**When to use:**
-- Content Providers (created before Application.onCreate())
-- WorkManager Workers (instantiated by WorkManager)
-- Firebase Services (FCM, Analytics)
-- Broadcast Receivers without @AndroidEntryPoint
-- Third-party libraries (you don't control constructors)
+**When to use (typical scenarios):**
+- ContentProviders (created by the system before `Application.onCreate()`, cannot directly use `@AndroidEntryPoint`)
+- WorkManager Workers (in specific cases where you cannot use `@HiltWorker` and the standard `HiltWorkerFactory`)
+- Firebase Services (e.g., `FirebaseMessagingService`) where `@AndroidEntryPoint` cannot be applied
+- BroadcastReceivers when you cannot or do not want to annotate them with `@AndroidEntryPoint`
+- Third-party libraries/frameworks (when you don't control constructors or creation points)
 
 **Basic example:**
 ```kotlin
@@ -186,9 +206,9 @@ class MyContentProvider : ContentProvider() {
 }
 ```
 
-**WorkManager integration:**
+**WorkManager integration (recommended):**
 ```kotlin
-// ✅ Modern approach with @HiltWorker
+// ✅ Modern approach: use @HiltWorker and HiltWorkerFactory
 @HiltWorker
 class DataSyncWorker @AssistedInject constructor(
     @Assisted context: Context,
@@ -204,24 +224,42 @@ class DataSyncWorker @AssistedInject constructor(
         }
     }
 }
+```
 
-// ❌ Legacy approach via Entry Point
+**WorkManager and Entry Points (escape hatch):**
+```kotlin
+// ❗ Use Entry Points only if, for architectural reasons,
+// you cannot use @HiltWorker / HiltWorkerFactory.
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 interface WorkerEntryPoint {
     fun apiService(): ApiService
 }
 
-class CustomWorkerFactory : WorkerFactory() {
-    override fun createWorker(/*...*/): ListenableWorker? {
-        // ❌ Manual dependency retrieval
-        val entryPoint = EntryPointAccessors.fromApplication(/*...*/)
-        return DataSyncWorker(entryPoint.apiService())
+class CustomWorkerFactory(
+    private val appContext: Context
+) : WorkerFactory() {
+
+    override fun createWorker(
+        appContext: Context,
+        workerClassName: String,
+        workerParameters: WorkerParameters
+    ): ListenableWorker? {
+        return if (workerClassName == DataSyncWorker::class.qualifiedName) {
+            val entryPoint = EntryPointAccessors.fromApplication(
+                this.appContext,
+                WorkerEntryPoint::class.java
+            )
+            // ✅ Manually create worker with dependency from Entry Point
+            DataSyncWorker(appContext, workerParameters, entryPoint.apiService())
+        } else {
+            null
+        }
     }
 }
 ```
 
-**Firebase Messaging Service:**
+**Firebase Messaging `Service`:**
 ```kotlin
 class MyFirebaseService : FirebaseMessagingService() {
 
@@ -246,7 +284,7 @@ interface MessagingEntryPoint {
 
 **Component scopes:**
 ```kotlin
-// Singleton scope - lives entire app lifecycle
+// Singleton scope - lives for the entire app lifecycle
 @EntryPoint
 @InstallIn(SingletonComponent::class)
 interface AppEntryPoint {
@@ -254,6 +292,7 @@ interface AppEntryPoint {
 }
 
 // Activity scope - created and destroyed with Activity
+// In real usage the dependencies must actually be bound in ActivityComponent.
 @EntryPoint
 @InstallIn(ActivityComponent::class)
 interface ActivityEntryPoint {
@@ -262,12 +301,19 @@ interface ActivityEntryPoint {
 ```
 
 **Best practices:**
-- Use Entry Points only when standard injection is impossible
-- For WorkManager prefer @HiltWorker over Entry Points
-- Cache retrieved dependencies in lazy properties
-- Choose correct component scope (Singleton, Activity, Fragment)
+- Treat Entry Points as an escape hatch: use them only where standard injection (`@AndroidEntryPoint`, `@HiltViewModel`, `@HiltWorker`, etc.) cannot be applied.
+- For WorkManager, prefer `@HiltWorker` and the built-in `HiltWorkerFactory` over Entry Points whenever possible.
+- Always choose the `@InstallIn` component that matches where the dependency is bound (Singleton, `Activity`, `Fragment`, etc.).
+- Cache retrieved dependencies (e.g., using `lazy`) to avoid repeated EntryPointAccessors calls.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как точки входа влияют на производительность запуска приложения по сравнению со стандартной инъекцией?
+- Какую стратегию тестирования использовать для классов, зависящих от Entry Points?
+- Как корректно обрабатывать ошибки инициализации Entry Point?
+- В каких случаях стоит создать собственный компонент вместо использования Entry Points?
 
 ## Follow-ups
 
@@ -276,10 +322,32 @@ interface ActivityEntryPoint {
 - How to handle Entry Point initialization failures gracefully?
 - When should you create a custom component instead of using Entry Points?
 
+## Ссылки (RU)
+
+- [[c-dependency-injection]] - Основы dependency injection
+- [[c-hilt]] - Фреймворк dependency injection Hilt
+
 ## References
 
 - [[c-dependency-injection]] - Dependency injection fundamentals
 - [[c-hilt]] - Hilt dependency injection framework
+
+## Связанные вопросы (RU)
+
+### База (проще)
+- Основы Hilt и иерархии компонентов
+- Жизненный цикл компонентов Android-приложения
+- Паттерны dependency injection в Android
+
+### На том же уровне
+- Инъекция `ViewModel` в Hilt и `SavedStateHandle`
+- Кастомные компоненты и скоупы в Hilt
+- Интеграция WorkManager с Hilt
+
+### Продвинутое (сложнее)
+- Assisted-инъекция в Hilt
+- Hilt multibinding и set/map binding
+- Кастомные жизненные циклы и скоупы компонентов
 
 ## Related Questions
 
@@ -289,7 +357,7 @@ interface ActivityEntryPoint {
 - Dependency injection patterns in Android
 
 ### Related (Same Level)
-- Hilt ViewModel injection and SavedStateHandle
+- Hilt `ViewModel` injection and SavedStateHandle
 - Custom Hilt components and scopes
 - WorkManager integration with Hilt
 

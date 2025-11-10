@@ -12,18 +12,19 @@ status: draft
 moc: moc-android
 related: [c-jetpack-compose, c-recyclerview, q-jetpack-compose-basics--android--medium, q-which-layout-for-large-list--android--easy]
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 sources: []
 tags: [android/ui-compose, android/ui-widgets, difficulty/easy, jetpack-compose, lazy-list]
+
 ---
 
 # Вопрос (RU)
 
-Как в Jetpack Compose создать список, аналогичный RecyclerView?
+> Как в Jetpack Compose создать список, аналогичный RecyclerView?
 
 # Question (EN)
 
-How to create a RecyclerView-like list in Jetpack Compose?
+> How to create a RecyclerView-like list in Jetpack Compose?
 
 ---
 
@@ -33,8 +34,9 @@ How to create a RecyclerView-like list in Jetpack Compose?
 
 ### Основные Характеристики
 
-LazyColumn создает элементы по требованию (lazy) — только видимые на экране:
-- Аналог RecyclerView с автоматическим переиспользованием
+LazyColumn создает элементы по требованию (lazy) — только видимые на экране и небольшой буфер вокруг:
+- Аналог подхода RecyclerView по эффективности при работе с большими списками (ленивая подгрузка элементов)
+- Элементы не переиспользуют `View`-объекты, вместо этого композиции создаются и утилизируются по мере появления/исчезновения с экрана
 - Не требует настройки Adapter и ViewHolder
 - Поддерживает разные типы элементов в одном списке
 
@@ -80,13 +82,13 @@ LazyColumn {
 | RecyclerView | LazyColumn |
 |--------------|------------|
 | Adapter + ViewHolder | Composable-функции напрямую |
-| notifyDataSetChanged() | Автоматическая реакция на State |
+| notifyDataSetChanged() и другие методы уведомления | Рекомпозиция при изменении отслеживаемого состояния (State, `Flow`, etc.) |
 | XML-разметка | Декларативный Compose-код |
 
 ### Когда Использовать
 
-- **LazyColumn/LazyRow**: динамические списки любого размера
-- **Column/Row**: статичный контент из 5-10 элементов (без lazy-загрузки)
+- **LazyColumn/LazyRow**: динамические или потенциально большие списки; элементы создаются лениво по мере прокрутки
+- **Column/Row**: когда количество элементов ограничено/известно заранее и нет требования ленивой подгрузки (все элементы измеряются и отображаются сразу)
 
 ## Answer (EN)
 
@@ -94,8 +96,9 @@ Use **LazyColumn** or **LazyRow** for vertical and horizontal lists respectively
 
 ### Core Characteristics
 
-LazyColumn creates items on demand (lazy) — only those visible on screen:
-- RecyclerView equivalent with automatic recycling
+LazyColumn creates items on demand (lazy) — only those visible on screen and a small buffer:
+- RecyclerView-like efficiency for large lists through lazy composition
+- Does not reuse `View` instances; composables are composed and disposed as they enter/leave the viewport
 - No need for Adapter or ViewHolder setup
 - Supports different item types in one list
 
@@ -141,15 +144,23 @@ LazyColumn {
 | RecyclerView | LazyColumn |
 |--------------|------------|
 | Adapter + ViewHolder | Composable functions directly |
-| notifyDataSetChanged() | Automatic State reaction |
+| notifyDataSetChanged() and other notify* calls | Recomposition triggered by changes in observable state (State, `Flow`, etc.) |
 | XML layout | Declarative Compose code |
 
 ### When to Use
 
-- **LazyColumn/LazyRow**: dynamic lists of any size
-- **Column/Row**: static content with 5-10 items (no lazy loading)
+- **LazyColumn/LazyRow**: dynamic or potentially large lists; items are created lazily as you scroll
+- **Column/Row**: when the number of items is limited/known and lazy behavior is not required (all children are measured and composed eagerly)
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как добавить разделители между элементами `LazyColumn`?
+- Что такое параметр `key` в `items()` и почему он важен?
+- Как реализовать закрепленные заголовки (sticky headers) в `LazyColumn`?
+- Как `LazyColumn` обрабатывает анимации элементов?
+- В чем разница между `items()` и `itemsIndexed()`?
 
 ## Follow-ups
 
@@ -159,11 +170,32 @@ LazyColumn {
 - How does LazyColumn handle item animations?
 - What is the difference between `items()` and `itemsIndexed()`?
 
+## Ссылки (RU)
+
+- [[c-jetpack-compose]] - основы Jetpack Compose
+- [[c-recyclerview]] - концепция RecyclerView для сравнения
+- [Документация по спискам в Compose](https://developer.android.com/jetpack/compose/lists)
+
 ## References
 
 - [[c-jetpack-compose]] - Jetpack Compose fundamentals
 - [[c-recyclerview]] - RecyclerView concept for comparison
 - [Compose Lists Documentation](https://developer.android.com/jetpack/compose/lists)
+
+## Связанные вопросы (RU)
+
+### База (проще)
+- [[q-what-is-known-about-recyclerview--android--easy]] - основы RecyclerView
+
+### Связанные (тот же уровень)
+- [[q-which-layout-for-large-list--android--easy]] - когда использовать разные варианты списков
+- [[q-android-jetpack-overview--android--easy]] - обзор компонентов Jetpack
+
+### Продвинутые (средний уровень)
+- [[q-jetpack-compose-basics--android--medium]] - базовое введение в Compose
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - продвинутые паттерны LazyColumn
+- [[q-mutable-state-compose--android--medium]] - управление состоянием в списках
+- [[q-recomposition-compose--android--medium]] - как работает рекомпозиция списков
 
 ## Related Questions
 

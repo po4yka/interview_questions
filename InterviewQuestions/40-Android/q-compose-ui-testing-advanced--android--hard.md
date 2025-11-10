@@ -4,26 +4,25 @@ title: Advanced Compose UI Testing / Продвинутое тестирован
 aliases: [Advanced Compose UI Testing, Продвинутое тестирование Compose UI]
 topic: android
 subtopics:
-  - testing-ui
-  - ui-compose
+- testing-ui
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
+- en
+- ru
 sources: []
-status: reviewed
+status: draft
 related:
-  - c-accessibility
-  - c-compose-semantics
-  - c-ui-testing
-  - q-compose-semantics--android--medium
-  - q-compose-testing--android--medium
+- c-accessibility
+- q-compose-semantics--android--medium
+- q-compose-testing--android--medium
 created: 2025-10-20
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [accessibility, android/testing-ui, android/ui-compose, compose-testing, difficulty/hard, semantics]
 moc: moc-android
+
 ---
 
 # Вопрос (RU)
@@ -154,6 +153,32 @@ fun testAccessibility() {
 }
 ```
 
+## Дополнительные вопросы (RU)
+
+- Как тестировать навигацию в Compose с вложенными destination?
+- Как мокать зависимости `ViewModel` в тестах Compose?
+- Как тестировать поведение прокрутки LazyColumn и видимость элементов?
+- Как обрабатывать нестабильность тестов, вызванную анимациями и задержками?
+- Как тестировать цепочки `Modifier` и измерения layout?
+
+## Ссылки (RU)
+
+- [[c-accessibility]] — Практики доступности
+- https://developer.android.com/jetpack/compose/testing
+- https://developer.android.com/jetpack/compose/semantics
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- [[q-compose-testing--android--medium]] — Базовая настройка тестов Compose и matchers
+- [[q-compose-semantics--android--medium]] — Понимание структуры semantic tree
+
+### На том же уровне
+- [[q-compose-performance-optimization--android--hard]] — Тестирование производительности и профилирование
+
+### Продвинутые (сложнее)
+- [[q-compose-compiler-plugin--android--hard]] — Внутреннее устройство компилятора и оптимизации
+
 ---
 
 ## Answer (EN)
@@ -274,19 +299,16 @@ fun testAccessibility() {
 }
 ```
 
----
-
 ## Follow-ups
 
 - How to test navigation in Compose with nested destinations?
-- How to mock ViewModel dependencies in Compose tests?
+- How to mock `ViewModel` dependencies in Compose tests?
 - How to test LazyColumn scroll behavior and item visibility?
 - How to handle test flakiness caused by animations and delays?
-- How to test custom Modifier chains and layout measurements?
+- How to test custom `Modifier` chains and layout measurements?
 
 ## References
 
-- [[c-unit-testing]] — UI testing principles
 - [[c-accessibility]] — Accessibility best practices
 - https://developer.android.com/jetpack/compose/testing
 - https://developer.android.com/jetpack/compose/semantics
@@ -302,4 +324,3 @@ fun testAccessibility() {
 
 ### Advanced (Harder)
 - [[q-compose-compiler-plugin--android--hard]] — Compiler internals and optimization
-- Screenshot testing with custom semantic properties for complex scenarios

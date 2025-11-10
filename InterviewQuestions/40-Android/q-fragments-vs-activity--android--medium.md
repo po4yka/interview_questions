@@ -7,8 +7,8 @@ aliases:
 topic: android
 subtopics:
 - fragment
-- lifecycle
 - ui-navigation
+- lifecycle
 question_kind: android
 difficulty: medium
 original_language: ru
@@ -23,36 +23,33 @@ related:
 - c-lifecycle
 - q-fragment-vs-activity-lifecycle--android--medium
 - q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium
-- q-why-use-fragments-when-we-have-activities--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 tags:
 - android/fragment
-- android/lifecycle
 - android/ui-navigation
+- android/lifecycle
 - difficulty/medium
-- fragments
-- ui-architecture
 ---
 
 # Вопрос (RU)
 
-Для чего нужны Фрагменты если есть Activity?
+> Для чего нужны фрагменты, если есть `Activity`?
 
 # Question (EN)
 
-Why use Fragments if we have Activities?
+> Why use Fragments if we have Activities?
 
 ## Ответ (RU)
 
-Фрагменты (Fragments) — модульные компоненты пользовательского интерфейса с собственным жизненным циклом, которые можно встраивать в Activity. Они позволяют создавать переиспользуемые, гибкие UI-компоненты для сложных и адаптивных интерфейсов.
+Фрагменты (Fragments) — модульные компоненты пользовательского интерфейса с собственным жизненным циклом, которые можно встраивать в `Activity`. Они позволяют создавать переиспользуемые, гибкие UI-компоненты для сложных и адаптивных интерфейсов.
 
-### Основные Преимущества
+### Основные преимущества
 
 **1. Модульность и переиспользование**
 
-Фрагменты инкапсулируют логику и UI, позволяя использовать их в разных Activity без дублирования кода.
+Фрагменты инкапсулируют логику и UI, позволяя использовать их в разных `Activity` без дублирования кода.
 
 ```kotlin
 // ✅ Один фрагмент — несколько контекстов
@@ -62,7 +59,7 @@ class UserFormFragment : Fragment() {
     }
 }
 
-// Использование в MainActivity и SettingsActivity
+// Использование в MainActivity и SettingsActivity (внутри Activity)
 supportFragmentManager.beginTransaction()
     .replace(R.id.container, UserFormFragment())
     .commit()
@@ -87,18 +84,18 @@ if (isTablet()) {
 }
 ```
 
-**3. Независимый жизненный цикл**
+**3. Жизненный цикл и управление состоянием**
 
-Жизненный цикл фрагмента связан с Activity, но управляется отдельно — фрагмент может пережить конфигурационные изменения (поворот экрана) или быть помещён в back stack.
+Жизненный цикл фрагмента привязан к `Activity`, но обрабатывается через отдельные callbacks. Фрагменты сами по себе не "переживают" уничтожение `Activity` при конфигурационных изменениях, но в них удобно использовать `ViewModel` и другие механизмы сохранения и восстановления состояния, а также добавлять их в back stack для управления навигацией.
 
 ```kotlin
 class DataFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance = true  // ❌ Deprecated, используйте ViewModel
+        // retainInstance = true  // ❌ Устарело, не использовать
     }
 
-    // ✅ Modern approach
+    // ✅ Рекомендуемый подход: хранить состояние во ViewModel
     private val viewModel: DataViewModel by viewModels()
 }
 ```
@@ -117,7 +114,7 @@ supportFragmentManager.beginTransaction()
 
 **5. Navigation Component**
 
-Современная архитектура Android (Jetpack Navigation) основана на фрагментах и обеспечивает type-safe навигацию.
+Jetpack Navigation упрощает навигацию между экранами и хорошо интегрируется с `Fragment`-based архитектурой (через NavHostFragment), но также поддерживает другие хосты (`Activity`, `View`, Jetpack Compose).
 
 ```kotlin
 // Safe Args — type-safe передача аргументов
@@ -144,7 +141,7 @@ class UserFormFragment : Fragment() {
     }
 }
 
-// Reused in MainActivity and SettingsActivity
+// Reused in MainActivity and SettingsActivity (called from an Activity)
 supportFragmentManager.beginTransaction()
     .replace(R.id.container, UserFormFragment())
     .commit()
@@ -169,25 +166,25 @@ if (isTablet()) {
 }
 ```
 
-**3. Independent Lifecycle**
+**3. Lifecycle and State Management**
 
-Fragment lifecycle is tied to the Activity but managed separately — fragments can survive configuration changes (rotation) or be placed on the back stack.
+A `Fragment`'s lifecycle is tied to its host `Activity` but handled through its own callbacks. Fragments themselves do not inherently survive `Activity` recreation on configuration changes; instead, they work well with `ViewModel` and state restoration mechanisms, and can be placed on the `Fragment` back stack to support navigation behavior.
 
 ```kotlin
 class DataFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        retainInstance = true  // ❌ Deprecated, use ViewModel instead
+        // retainInstance = true  // ❌ Deprecated, avoid using it
     }
 
-    // ✅ Modern approach
+    // ✅ Recommended: keep UI-related state in a ViewModel
     private val viewModel: DataViewModel by viewModels()
 }
 ```
 
 **4. Dynamic UI Composition**
 
-Fragments can be added, removed, replaced at runtime with back stack support.
+Fragments can be added, removed, and replaced at runtime with back stack support.
 
 ```kotlin
 // Dynamic navigation
@@ -199,7 +196,7 @@ supportFragmentManager.beginTransaction()
 
 **5. Navigation Component**
 
-Modern Android architecture (Jetpack Navigation) is fragment-based and provides type-safe navigation.
+Jetpack Navigation simplifies navigation between destinations and integrates well with fragment-based architectures via NavHostFragment, but it also supports other host types (such as Activities, Views, and Jetpack Compose destinations).
 
 ```kotlin
 // Safe Args — type-safe argument passing
@@ -208,23 +205,50 @@ findNavController().navigate(
 )
 ```
 
-
 ---
+
+## Дополнительные вопросы (RU)
+
+- В каких случаях стоит использовать несколько `Activity` вместо фрагментов?
+- Как Jetpack Compose влияет на выбор между `Fragment` и `Activity`?
+- Каковы последствия для производительности при использовании большого количества фрагментов в одной `Activity`?
+- Как организовать взаимодействие между фрагментами без сильного зацепления?
+- Каковы альтернативы `retainInstance` для сохранения состояния при изменении конфигурации?
 
 ## Follow-ups
 
 - When should you use multiple Activities instead of Fragments?
-- How does Jetpack Compose affect the Fragment vs Activity decision?
-- What are the performance implications of using many Fragments in a single Activity?
+- How does Jetpack Compose affect the `Fragment` vs `Activity` decision?
+- What are the performance implications of using many Fragments in a single `Activity`?
 - How do you handle communication between Fragments without tight coupling?
 - What are the alternatives to `retainInstance` for preserving state across configuration changes?
+
+## Ссылки (RU)
+
+- [Android Developers: Fragments](https://developer.android.com/guide/fragments)
+- [Android Developers: Navigation Component](https://developer.android.com/guide/navigation)
+- [Android Developers: `Fragment` Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
+- [Android Developers: `Activity` Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle)
 
 ## References
 
 - [Android Developers: Fragments](https://developer.android.com/guide/fragments)
 - [Android Developers: Navigation Component](https://developer.android.com/guide/navigation)
-- [Android Developers: Fragment Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
-- [Android Developers: Activity Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle)
+- [Android Developers: `Fragment` Lifecycle](https://developer.android.com/guide/fragments/lifecycle)
+- [Android Developers: `Activity` Lifecycle](https://developer.android.com/guide/components/activities/activity-lifecycle)
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-compose-navigation]]
+- [[c-fragments]]
+- [[c-lifecycle]]
+
+### Связанные
+
+- [[q-fragment-vs-activity-lifecycle--android--medium]] — сравнение жизненных циклов
+- [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] — взаимосвязь жизненных циклов
 
 ## Related Questions
 
@@ -234,16 +258,7 @@ findNavController().navigate(
 - [[c-fragments]]
 - [[c-lifecycle]]
 
-
-### Prerequisites
-- Understanding Activity lifecycle basics
-- Fragment lifecycle fundamentals
-
 ### Related
+
 - [[q-fragment-vs-activity-lifecycle--android--medium]] - Lifecycle comparison
 - [[q-is-fragment-lifecycle-connected-to-activity-or-independent--android--medium]] - Lifecycle relationship
-
-### Advanced
-- How to implement Single-Activity architecture with Jetpack Compose?
-- What are the trade-offs of Fragment back stack vs Navigation Component?
-- How to optimize Fragment transactions for performance?

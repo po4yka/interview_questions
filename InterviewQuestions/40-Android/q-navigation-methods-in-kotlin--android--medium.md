@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-fragments, c-navigation-component, q-activity-navigation-how-it-works--android--medium]
+related: [c-android-components, q-activity-navigation-how-it-works--android--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/ui-navigation, difficulty/medium, navigation]
+
 ---
 
 # Вопрос (RU)
@@ -31,14 +32,14 @@ tags: [android/architecture-mvvm, android/ui-navigation, difficulty/medium, navi
 
 **Основные подходы**:
 
-Android предлагает несколько способов навигации — от традиционных Intent до современного Navigation Component. Выбор зависит от архитектуры приложения и требований.
+Android предлагает несколько способов навигации — от традиционных `Intent` до современного Navigation Component. Выбор зависит от архитектуры (single-`Activity`/multi-`Activity`), UI-стека (Views/Compose) и требований к глубоким ссылкам и BackStack.
 
-**1. Jetpack Navigation Component (Рекомендуемый)**
+**1. Jetpack Navigation Component (Рекомендуемый для фрагментов и многомодульных приложений)**
 
-Современный подход с графом навигации и безопасной передачей аргументов:
+Современный подход с графом навигации, поддержкой deep link, анимаций и безопасной передачей аргументов (Safe Args для `View`-based UI, `Bundle`/`Parcelable` и др. для Compose destinations):
 
 ```kotlin
-// ✅ Навигация через NavController
+// ✅ Навигация во Fragment через NavController
 class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val navController = findNavController()
@@ -64,12 +65,12 @@ class DetailFragment : Fragment() {
 }
 ```
 
-**2. Intent (Навигация между Activity)**
+**2. `Intent` (Навигация между `Activity` и межприложенческая навигация)**
 
-Явные и неявные Intent для перехода между экранами:
+Явные и неявные `Intent` используются как для перехода между `Activity` внутри приложения, так и для вызова других приложений/системных действий.
 
 ```kotlin
-// ✅ Explicit Intent
+// ✅ Явный Intent (между Activity внутри приложения)
 val intent = Intent(this, DetailActivity::class.java)
 intent.putExtra("ITEM_ID", 123)
 startActivity(intent)
@@ -77,24 +78,27 @@ startActivity(intent)
 // Получение данных
 class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         val itemId = intent.getIntExtra("ITEM_ID", 0)
     }
 }
 
 // ❌ Неявный Intent без проверки
-val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://example.com"))
-startActivity(intent) // Может упасть, если нет браузера
+val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://example.com"))
+startActivity(viewIntent) // Может упасть, если нет подходящего обработчика
 
 // ✅ С проверкой
-if (intent.resolveActivity(packageManager) != null) {
-    startActivity(intent)
+if (viewIntent.resolveActivity(packageManager) != null) {
+    startActivity(viewIntent)
 }
 ```
 
 **3. FragmentTransaction (Ручное управление фрагментами)**
 
+Используется при навигации внутри одной `Activity` без Navigation Component. Вызов `supportFragmentManager` выполняется из `AppCompatActivity`, из фрагмента — через `requireActivity().supportFragmentManager`.
+
 ```kotlin
-// ✅ Корректная замена с BackStack
+// ✅ Корректная замена с добавлением в BackStack
 supportFragmentManager.beginTransaction()
     .replace(R.id.container, DetailFragment())
     .addToBackStack(null)
@@ -106,8 +110,10 @@ supportFragmentManager.beginTransaction()
     .commit() // Кнопка Back не вернет на предыдущий экран
 ```
 
-**Сложность**: Navigation Component автоматизирует управление BackStack и состоянием
-**Применение**: Navigation Component для новых проектов, Intent для межприложенческой навигации
+**Кратко про выбор**:
+- Navigation Component — предпочтителен для новых проектов, сложной навигации, deep links, single-`Activity` архитектуры, но может быть внедрён и постепенно.
+- `Intent` — базовый механизм для перехода между `Activity` (как внутри приложения, так и между приложениями).
+- Ручные `FragmentTransaction` — уместны для простых сценариев или легаси-кода, но требуют ручного управления BackStack.
 
 ---
 
@@ -115,14 +121,14 @@ supportFragmentManager.beginTransaction()
 
 **Key Approaches**:
 
-Android provides several navigation methods — from traditional Intents to modern Navigation Component. Choice depends on app architecture and requirements.
+Android provides several navigation methods — from traditional Intents to the modern Navigation Component. The choice depends on architecture (single-`Activity` vs multi-`Activity`), UI stack (Views/Compose), and deep-link/back stack requirements.
 
-**1. Jetpack Navigation Component (Recommended)**
+**1. Jetpack Navigation Component (Recommended for fragments and modular apps)**
 
-Modern approach with navigation graph and type-safe arguments:
+Modern approach with a navigation graph, deep link support, animations, and type-safe arguments (Safe Args for `View`-based UI, `Bundle`/`Parcelable` etc. for Compose destinations):
 
 ```kotlin
-// ✅ Navigate via NavController
+// ✅ Navigate inside a Fragment via NavController
 class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val navController = findNavController()
@@ -148,12 +154,12 @@ class DetailFragment : Fragment() {
 }
 ```
 
-**2. Intent (Activity Navigation)**
+**2. `Intent` (`Activity` navigation and inter-app communication)**
 
-Explicit and implicit Intents for screen transitions:
+Explicit and implicit Intents are used both for navigation between Activities within your app and for launching external apps/system actions.
 
 ```kotlin
-// ✅ Explicit Intent
+// ✅ Explicit Intent (between Activities in the same app)
 val intent = Intent(this, DetailActivity::class.java)
 intent.putExtra("ITEM_ID", 123)
 startActivity(intent)
@@ -161,21 +167,24 @@ startActivity(intent)
 // Receiving data
 class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         val itemId = intent.getIntExtra("ITEM_ID", 0)
     }
 }
 
 // ❌ Implicit Intent without checking
-val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://example.com"))
-startActivity(intent) // May crash if no browser
+val viewIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://example.com"))
+startActivity(viewIntent) // May crash if no matching handler
 
 // ✅ With check
-if (intent.resolveActivity(packageManager) != null) {
-    startActivity(intent)
+if (viewIntent.resolveActivity(packageManager) != null) {
+    startActivity(viewIntent)
 }
 ```
 
-**3. FragmentTransaction (Manual Fragment Management)**
+**3. FragmentTransaction (Manual fragment management)**
+
+Used for navigation inside a single `Activity` without Navigation Component. `supportFragmentManager` is called from an AppCompatActivity; from a `Fragment` you would use `requireActivity().supportFragmentManager`.
 
 ```kotlin
 // ✅ Correct replacement with BackStack
@@ -190,33 +199,63 @@ supportFragmentManager.beginTransaction()
     .commit() // Back button won't return to previous screen
 ```
 
-**Complexity**: Navigation Component automates BackStack and state management
-**Use Cases**: Navigation Component for new projects, Intent for inter-app navigation
+**Summary of choices**:
+- Navigation Component: preferred for new projects, complex navigation graphs, deep links, and single-`Activity` setups; can be adopted incrementally.
+- Intents: fundamental mechanism for `Activity`-to-`Activity` navigation (both intra-app and inter-app).
+- Manual FragmentTransactions: fine for simple or legacy flows but require manual back stack management.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать deep links с помощью Navigation Component?
+- В чем разница между `popBackStack()` и `popUpTo`?
+- Как безопасно передавать сложные объекты между фрагментами?
+- Когда лучше использовать архитектуру с одной `Activity` против нескольких `Activity`?
+- Как тестировать навигационные потоки?
 
 ## Follow-ups
 
 - How to handle deep links with Navigation Component?
 - What are the differences between `popBackStack()` and `popUpTo`?
 - How to pass complex objects between fragments safely?
-- When to use single Activity architecture vs multiple Activities?
+- When to use single `Activity` architecture vs multiple Activities?
 - How to test navigation flows?
+
+---
+
+## Ссылки (RU)
+
+- [[c-android-components]]
+- [[c-compose-navigation]]
 
 ## References
 
-- [[c-navigation-component]] - Jetpack Navigation Component overview
-- [[c-fragments]] - Fragment lifecycle and management
-- [[c-intents]] - Intent system in Android
-- Android Developers: Navigation Component Guide
+- [[c-android-components]]
+- [[c-compose-navigation]]
+
+---
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-how-does-activity-lifecycle-work--android--medium]] - Базовые сведения о жизненном цикле `Activity`
+
+### Связанные (того же уровня)
+- [[q-activity-navigation-how-it-works--android--medium]] - Детали навигации между `Activity`
+- [[q-compose-navigation-advanced--android--medium]] - Паттерны навигации в Compose
+- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Обработка deep link
+
+### Продвинутые (сложнее)
+- [[q-cache-implementation-strategies--android--medium]] - Управление состоянием при навигации
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-how-does-activity-lifecycle-work--android--medium]] - Activity lifecycle basics
+- [[q-how-does-activity-lifecycle-work--android--medium]] - `Activity` lifecycle basics
 
 ### Related (Same Level)
-- [[q-activity-navigation-how-it-works--android--medium]] - Activity navigation details
+- [[q-activity-navigation-how-it-works--android--medium]] - `Activity` navigation details
 - [[q-compose-navigation-advanced--android--medium]] - Compose navigation patterns
 - [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Deep link handling
 

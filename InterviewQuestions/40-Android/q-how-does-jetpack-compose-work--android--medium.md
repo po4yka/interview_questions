@@ -10,11 +10,12 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-mutable-state-compose--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
+related: [c-android, q-mutable-state-compose--android--medium, q-what-are-the-most-important-components-of-compose--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/ui-compose, compose, declarative-ui, difficulty/medium, recomposition]
+
 ---
 
 # Вопрос (RU)
@@ -68,9 +69,9 @@ fun Counter() {
 ```
 
 **Характеристики**:
-- Вызываются только из других composable-функций
-- Могут поддерживать состояние через `remember`
-- Запускают рекомпозицию при изменении состояния
+- Вызываются из других composable-функций или из специальных точек входа runtime (например, `setContent { ... }`).
+- Могут поддерживать состояние через `remember`.
+- При изменении наблюдаемого состояния (например, `mutableStateOf`) помечают соответствующие области для рекомпозиции.
 
 ### 3. Три Фазы Рендеринга
 
@@ -102,12 +103,14 @@ fun SmartRecomposition() {
     var counter by remember { mutableStateOf(0) }
 
     Column {
-        Text("Счетчик: $counter") // ✅ Перекомпонуется
-        StaticHeader() // ✅ Пропускается (нет зависимостей)
+        Text("Счетчик: $counter") // ✅ Перекомпонуется при изменении counter
+        StaticHeader() // ✅ Может быть пропущен при рекомпозиции, если стабилен и входы не изменились
         Button(onClick = { counter++ }) { Text("Увеличить") }
     }
 }
 ```
+
+Compose отслеживает зависимости и старается рекомпозировать только те области дерева, которые зависят от изменившегося состояния, а стабильные и неизменившиеся вызовы может пропускать.
 
 ### 5. Управление Побочными Эффектами
 
@@ -121,20 +124,20 @@ fun UserProfile(userId: String) {
     }
 
     DisposableEffect(Unit) {
-        onDispose { cleanup() } // Очистка
+        onDispose { cleanup() } // Очистка ресурсов при выходе из композиции
     }
 
     user?.let { UserCard(it) }
 }
 ```
 
-**Сложность**: Recomposition - O(n) где n - измененные composable, Layout - O(n), Drawing - O(n)
+**Оценка стоимости** (упрощенно, концептуально): Compose организует UI в дерево и при изменениях состояния выполняет рекомпозицию только для затронутых областей, затем при необходимости пересчитывает layout и перерисовывает. Это стремится к работе пропорционально размеру изменившихся участков дерева, а не всего UI.
 
 ---
 
 ## Answer (EN)
 
-**Approach**: Jetpack Compose uses a declarative approach where you describe "what" the UI should look like, not "how" to build it.
+**Approach**: Jetpack Compose uses a declarative approach where you describe "what" the UI should look like, not "how" to build it step-by-step.
 
 **Core Concepts**:
 
@@ -173,16 +176,16 @@ fun Counter() {
 ```
 
 **Characteristics**:
-- Called only from other composable functions
-- Can maintain state via `remember`
-- Trigger recomposition on state changes
+- Invoked from other composable functions or from Compose runtime entry points (e.g., `setContent { ... }`).
+- Can hold state via `remember`.
+- When observable state (e.g., `mutableStateOf`) changes, it invalidates the relevant scopes and schedules recomposition.
 
 ### 3. Three Rendering Phases
 
 **Composition** → **Layout** → **Drawing**
 
 ```kotlin
-// 1. Composition - builds UI tree
+// 1. Composition - builds the UI tree
 Column {
     Text("Header")
     Button(onClick = {}) { Text("Action") }
@@ -207,12 +210,14 @@ fun SmartRecomposition() {
     var counter by remember { mutableStateOf(0) }
 
     Column {
-        Text("Counter: $counter") // ✅ Recomposes
-        StaticHeader() // ✅ Skipped (no dependencies)
+        Text("Counter: $counter") // ✅ Recomposes when counter changes
+        StaticHeader() // ✅ Can be skipped during recomposition if stable and inputs are unchanged
         Button(onClick = { counter++ }) { Text("Increment") }
     }
 }
 ```
+
+Compose tracks dependencies and aims to recompose only those parts of the tree affected by state changes, while stable, unchanged calls can be skipped.
 
 ### 5. Side Effects Management
 
@@ -226,14 +231,14 @@ fun UserProfile(userId: String) {
     }
 
     DisposableEffect(Unit) {
-        onDispose { cleanup() } // Cleanup
+        onDispose { cleanup() } // Cleanup resources when leaving the composition
     }
 
     user?.let { UserCard(it) }
 }
 ```
 
-**Complexity**: Recomposition - O(n) where n is changed composables, Layout - O(n), Drawing - O(n)
+**Complexity (high-level, conceptual)**: Compose structures UI as a tree and, on state changes, recomposes only invalidated regions, then re-runs layout/draw where needed. The effective work is proportional to the size of affected parts rather than the entire UI, relying on stability and skipping to avoid unnecessary work.
 
 ---
 
@@ -243,13 +248,13 @@ fun UserProfile(userId: String) {
 - What is the difference between remember and rememberSaveable?
 - How do modifiers work and what is the order of execution?
 - What are stable classes and why do they matter?
-- How does Compose integrate with ViewModel?
+- How does Compose integrate with `ViewModel`?
 
 ## References
 
-- [[c-compose-ui]] - Compose UI fundamentals
-- [[c-declarative-programming]] - Declarative programming paradigm
-- [[c-recomposition]] - Recomposition mechanics
+- [[c-android-ui-composition]] - Compose UI fundamentals
+- [[c-declarative-programming-patterns]] - Declarative programming paradigm
+- [[c-compose-recomposition]] - Recomposition mechanics
 - https://developer.android.com/jetpack/compose/mental-model
 
 ## Related Questions

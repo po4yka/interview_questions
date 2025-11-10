@@ -41,14 +41,14 @@ sources:
 
 ## Ответ (RU)
 
-**FragmentManager** — менеджер для управления фрагментами Activity. Отвечает за:
+**FragmentManager** — менеджер для управления фрагментами в Activity и внутри фрагментов (через `childFragmentManager`). Отвечает за:
 - Жизненный цикл фрагментов
-- Back stack (стек возврата)
+- Операции со стеком возврата фрагментов
 - Поиск фрагментов
 
-**FragmentTransaction** — объект для выполнения операций с фрагментами (add, replace, remove) как атомарная единица работы. Получается через `fragmentManager.beginTransaction()`.
+**FragmentTransaction** — объект для группировки и выполнения операций с фрагментами (add, replace, remove и др.) единым набором изменений, применяемых при `commit*()`. Получается через `fragmentManager.beginTransaction()`.
 
-**Ключевое различие:** FragmentManager — это контроллер (что делать), FragmentTransaction — это команда (как делать).
+**Ключевое различие:** FragmentManager — это контроллер/точка доступа к управлению (что и где управлять), FragmentTransaction — это описанная команда изменений (какие именно операции применить).
 
 ```kotlin
 // FragmentManager: поиск и управление back stack
@@ -60,30 +60,30 @@ manager.popBackStack()
 manager.beginTransaction().apply {
     replace(R.id.container, MyFragment())
     addToBackStack(null)
-    commit() // ✅ Асинхронно, UI-safe
+    commit() // ✅ Асинхронно: выполнение запланировано в главном потоке
 }
 
 // ❌ Неправильно: создать транзакцию и не закоммитить
 val tx = manager.beginTransaction()
 tx.replace(R.id.container, MyFragment())
-// Фрагмент НЕ будет добавлен!
+// Фрагмент НЕ будет добавлен, пока не будет вызван commit*()!
 ```
 
 **Методы commit:**
-- `commit()` — асинхронный (планируется на главном потоке)
-- `commitNow()` — синхронный (выполняется немедленно, нельзя с `addToBackStack`)
-- `commitAllowingStateLoss()` — безопасный при возможной потере состояния
+- `commit()` — асинхронный (ставит транзакцию в очередь на главном потоке; нужно вызывать до сохранения состояния)
+- `commitNow()` — синхронный (выполняется немедленно, нельзя использовать с `addToBackStack`)
+- `commitAllowingStateLoss()` — допускает потерю состояния (используется, когда потенциальная потеря состояния приемлема и осознанна)
 
 ## Answer (EN)
 
-**FragmentManager** — the manager that controls Activity's fragments. Responsible for:
+**FragmentManager** — the manager that controls fragments in an Activity and inside other fragments (via `childFragmentManager`). Responsible for:
 - Fragment lifecycle management
-- Back stack operations
+- Fragment back stack operations
 - Fragment lookup
 
-**FragmentTransaction** — an object for performing fragment operations (add, replace, remove) as an atomic unit of work. Obtained via `fragmentManager.beginTransaction()`.
+**FragmentTransaction** — an object used to group and perform fragment operations (add, replace, remove, etc.) as a set of changes that are applied when `commit*()` is called. Obtained via `fragmentManager.beginTransaction()`.
 
-**Key difference:** FragmentManager is the controller (what to manage), FragmentTransaction is the command (how to change).
+**Key difference:** FragmentManager is the controller/access point (what and where to manage); FragmentTransaction is the described set of changes/command (which operations to apply).
 
 ```kotlin
 // FragmentManager: lookup and back stack management
@@ -95,19 +95,19 @@ manager.popBackStack()
 manager.beginTransaction().apply {
     replace(R.id.container, MyFragment())
     addToBackStack(null)
-    commit() // ✅ Asynchronous, UI-safe
+    commit() // ✅ Asynchronous: enqueues execution on the main thread
 }
 
 // ❌ Wrong: create transaction and don't commit
 val tx = manager.beginTransaction()
 tx.replace(R.id.container, MyFragment())
-// Fragment will NOT be added!
+// Fragment will NOT be added until commit*() is called!
 ```
 
 **Commit methods:**
-- `commit()` — asynchronous (scheduled on main thread)
-- `commitNow()` — synchronous (executes immediately, can't use with `addToBackStack`)
-- `commitAllowingStateLoss()` — safe when state loss is acceptable
+- `commit()` — asynchronous (schedules the transaction to run on the main thread; must be called before state is saved)
+- `commitNow()` — synchronous (executes immediately; cannot be used with `addToBackStack`)
+- `commitAllowingStateLoss()` — allows state loss (should be used only when potential state loss is acceptable and understood)
 
 ---
 

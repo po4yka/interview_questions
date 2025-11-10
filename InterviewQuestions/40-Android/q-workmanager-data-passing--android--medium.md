@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-coroutines, c-serialization, c-workmanager, q-workmanager-execution-guarantee--android--medium]
+related: [c-coroutines, c-workmanager, q-workmanager-execution-guarantee--android--medium]
 created: 2025-10-15
-updated: 2025-10-27
-sources: [https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration]
+updated: 2025-11-10
+sources: ["https://developer.android.com/topic/libraries/architecture/workmanager/advanced/custom-configuration"]
 tags: [android/background-execution, android/coroutines, background-processing, data-passing, difficulty/medium, workmanager]
+
 ---
 
 # Вопрос (RU)
@@ -27,7 +28,7 @@ tags: [android/background-execution, android/coroutines, background-processing, 
 
 ## Ответ (RU)
 
-WorkManager использует класс **Data** для передачи данных между Activity и Worker. Связано с [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
+WorkManager использует класс **Data** для передачи небольших наборов данных (конфигурации, параметры) между вызывающим кодом (например, `Activity`/Repository) и Worker. Связано с [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
 
 ### Передача Данных В Worker (Input)
 
@@ -55,11 +56,13 @@ class MyWorker(context: Context, params: WorkerParameters)
 
     override suspend fun doWork(): Result {
         // ✅ Читаем входные данные
-        val userId = inputData.getString("user_id") ?: return Result.failure()
+        val userId = inputData.getString("user_id") ?: return Result.failure(
+            workDataOf("error" to "Missing user_id")
+        )
         val count = inputData.getInt("count", 0) // ✅ С дефолтным значением
         val isPremium = inputData.getBoolean("is_premium", false)
 
-        val result = processData(userId, count)
+        val result = processData(userId, count, isPremium)
 
         // ✅ Возвращаем результат
         return Result.success(workDataOf("result" to result))
@@ -80,7 +83,7 @@ WorkManager.getInstance(context)
                 textView.text = "Result: $result"
             }
             WorkInfo.State.FAILED -> {
-                // ❌ Ошибка
+                // ❌ Ошибка (Worker должен положить описание в outputData)
                 val error = workInfo.outputData.getString("error")
                 textView.text = "Error: $error"
             }
@@ -96,48 +99,56 @@ WorkManager.getInstance(context)
 
 ```kotlin
 val data = workDataOf(
-    "string" to "value",      // ✅ String
-    "int" to 42,              // ✅ Int
-    "long" to 123L,           // ✅ Long
-    "float" to 3.14f,         // ✅ Float
-    "double" to 2.718,        // ✅ Double
-    "boolean" to true,        // ✅ Boolean
-    "string_array" to arrayOf("a", "b") // ✅ Массивы примитивов
+    "string" to "value",                // ✅ String
+    "int" to 42,                        // ✅ Int
+    "long" to 123L,                     // ✅ Long
+    "double" to 2.718,                  // ✅ Double (используется и для Float)
+    "boolean" to true,                  // ✅ Boolean
+    "string_array" to arrayOf("a", "b"), // ✅ Array<String>
+    "int_array" to intArrayOf(1, 2),    // ✅ IntArray
+    "long_array" to longArrayOf(1L, 2L),// ✅ LongArray
+    "double_array" to doubleArrayOf(1.0, 2.0), // ✅ DoubleArray
+    "boolean_array" to booleanArrayOf(true, false) // ✅ BooleanArray
 )
 
-// ❌ НЕ поддерживается: custom объекты напрямую
-// ✅ Используйте JSON для сложных объектов
+// ❌ НЕ поддерживается: произвольные custom-объекты напрямую
+// ✅ Используйте сериализацию (например, JSON) для сложных объектов
 ```
 
 ### Передача Сложных Объектов Через JSON
 
 ```kotlin
 @Serializable
-data class User(val id: String, val name: String, val age: Int)
+data class User(val id: String, val name: String)
 
 // ✅ Сериализуем в JSON
-val user = User("1", "Alice", 25)
-val userJson = Json.encodeToString(user)
+val user = User("1", "Alice")
+val json = Json // kotlinx.serialization.json.Json
+val userJson = json.encodeToString(user)
 
 val workRequest = OneTimeWorkRequestBuilder<UserWorker>()
     .setInputData(workDataOf("user_json" to userJson))
     .build()
 
-// ✅ В Worker десериализуем
-override suspend fun doWork(): Result {
-    val userJson = inputData.getString("user_json") ?: return Result.failure()
-    val user = Json.decodeFromString<User>(userJson)
+class UserWorker(context: Context, params: WorkerParameters)
+    : CoroutineWorker(context, params) {
 
-    val resultUser = processUser(user)
-    val resultJson = Json.encodeToString(resultUser)
+    override suspend fun doWork(): Result {
+        val json = Json
+        val userJson = inputData.getString("user_json") ?: return Result.failure(
+            workDataOf("error" to "Missing user_json")
+        )
+        val user = json.decodeFromString<User>(userJson)
 
-    return Result.success(workDataOf("result_json" to resultJson))
+        // ... обрабатываем user по необходимости
+        return Result.success()
+    }
 }
 ```
 
 ### Ограничения По Размеру Данных
 
-**Максимум ~10KB** (10,240 байт) — иначе `IllegalStateException`
+**Максимум ~10KB** (10,240 байт) на все Data — при превышении будет `IllegalStateException`.
 
 ```kotlin
 // ❌ ПЛОХО: превышает лимит
@@ -160,20 +171,53 @@ val workRequest = OneTimeWorkRequestBuilder<MyWorker>()
     .setInputData(workDataOf("data_id" to dataId))
     .build()
 
-// ✅ В Worker загружаем по ID
-override suspend fun doWork(): Result {
-    val dataId = inputData.getLong("data_id", 0)
-    val largeData = database.getData(dataId) // ✅ Полные данные
-    processData(largeData)
-    return Result.success()
+class MyWorker(context: Context, params: WorkerParameters)
+    : CoroutineWorker(context, params) {
+
+    override suspend fun doWork(): Result {
+        val dataId = inputData.getLong("data_id", 0L)
+        // ✅ Обработка только при валидном ID
+        if (dataId == 0L) return Result.failure(
+            workDataOf("error" to "Invalid data_id")
+        )
+
+        val largeData = database.getData(dataId) // ✅ Полные данные
+        processData(largeData)
+        return Result.success()
+    }
 }
 ```
+
+### Дополнительные вопросы (RU)
+
+- Как WorkManager гарантирует доставку данных при гибели процесса?
+- Что происходит с выходными данными, если приложение завершится до их получения наблюдателем?
+- Можно ли связывать несколько Worker и передавать данные между ними?
+
+### Ссылки (RU)
+
+- https://developer.android.com/topic/libraries/architecture/workmanager — официальное руководство по WorkManager
+- https://developer.android.com/reference/androidx/work/Data — документация по классу Data
+
+### Связанные вопросы (RU)
+
+#### Предварительные материалы
+- [[c-workmanager]] — концепция WorkManager
+- [[c-coroutines]] — корутины Kotlin
+- [[c-background-tasks]] — фоновые задачи
+
+#### На том же уровне
+- [[q-workmanager-execution-guarantee--android--medium]] — гарантии выполнения
+- [[q-workmanager-vs-alternatives--android--medium]] — WorkManager vs альтернативы
+
+#### Продвинутое
+- [[q-workmanager-advanced--android--medium]] — продвинутые паттерны WorkManager
 
 ---
 
 ## Answer (EN)
 
-WorkManager uses **Data** class for passing data between Activity and Worker. Related to [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
+WorkManager uses the **Data** class to pass small sets of primitive/configuration data between the caller (e.g., `Activity`/Repository) and a Worker. Related to [[c-workmanager]], [[c-coroutines]], [[c-background-tasks]].
 
 ### Passing Data TO Worker
 
@@ -181,7 +225,8 @@ WorkManager uses **Data** class for passing data between Activity and Worker. Re
 // ✅ Create input data
 val inputData = workDataOf(
     "user_id" to "user123",
-    "count" to 42
+    "count" to 42,
+    "is_premium" to true
 )
 
 // ✅ Create WorkRequest
@@ -200,11 +245,16 @@ class MyWorker(context: Context, params: WorkerParameters)
 
     override suspend fun doWork(): Result {
         // ✅ Read input
-        val userId = inputData.getString("user_id") ?: return Result.failure()
+        val userId = inputData.getString("user_id") ?: return Result.failure(
+            workDataOf("error" to "Missing user_id")
+        )
         val count = inputData.getInt("count", 0) // ✅ With default
+        val isPremium = inputData.getBoolean("is_premium", false)
+
+        val result = processData(userId, count, isPremium)
 
         // ✅ Return output
-        return Result.success(workDataOf("result" to "Done"))
+        return Result.success(workDataOf("result" to result))
     }
 }
 ```
@@ -219,12 +269,17 @@ WorkManager.getInstance(context)
             WorkInfo.State.SUCCEEDED -> {
                 // ✅ Extract output
                 val result = workInfo.outputData.getString("result")
+                // use result, e.g. update UI: textView.text = "Result: $result"
             }
             WorkInfo.State.FAILED -> {
-                // ❌ Error
+                // ❌ Error (Worker should put description into outputData)
                 val error = workInfo.outputData.getString("error")
+                // handle error, e.g. textView.text = "Error: $error"
             }
-            else -> { /* RUNNING, ENQUEUED, etc. */ }
+            WorkInfo.State.RUNNING -> {
+                // optional: show progress state, e.g. textView.text = "Processing..."
+            }
+            else -> { /* ENQUEUED, BLOCKED, CANCELLED */ }
         }
     }
 ```
@@ -233,17 +288,20 @@ WorkManager.getInstance(context)
 
 ```kotlin
 val data = workDataOf(
-    "string" to "value",    // ✅ String
-    "int" to 42,            // ✅ Int
-    "long" to 123L,         // ✅ Long
-    "float" to 3.14f,       // ✅ Float
-    "double" to 2.718,      // ✅ Double
-    "boolean" to true,      // ✅ Boolean
-    "array" to arrayOf("a", "b") // ✅ Primitive arrays
+    "string" to "value",                // ✅ String
+    "int" to 42,                        // ✅ Int
+    "long" to 123L,                     // ✅ Long
+    "double" to 2.718,                  // ✅ Double (also used to represent Floats)
+    "boolean" to true,                  // ✅ Boolean
+    "string_array" to arrayOf("a", "b"), // ✅ Array<String>
+    "int_array" to intArrayOf(1, 2),    // ✅ IntArray
+    "long_array" to longArrayOf(1L, 2L),// ✅ LongArray
+    "double_array" to doubleArrayOf(1.0, 2.0), // ✅ DoubleArray
+    "boolean_array" to booleanArrayOf(true, false) // ✅ BooleanArray
 )
 
-// ❌ NOT supported: custom objects directly
-// ✅ Use JSON for complex objects
+// ❌ NOT supported: arbitrary custom objects directly
+// ✅ Use serialization (e.g., JSON) for complex objects
 ```
 
 ### Passing Complex Objects via JSON
@@ -253,21 +311,33 @@ val data = workDataOf(
 data class User(val id: String, val name: String)
 
 // ✅ Serialize to JSON
-val userJson = Json.encodeToString(user)
+val user = User("1", "Alice")
+val json = Json // kotlinx.serialization.json.Json
+val userJson = json.encodeToString(user)
+
 val workRequest = OneTimeWorkRequestBuilder<UserWorker>()
     .setInputData(workDataOf("user_json" to userJson))
     .build()
 
-// ✅ Deserialize in Worker
-override suspend fun doWork(): Result {
-    val user = Json.decodeFromString<User>(inputData.getString("user_json")!!)
-    return Result.success()
+class UserWorker(context: Context, params: WorkerParameters)
+    : CoroutineWorker(context, params) {
+
+    override suspend fun doWork(): Result {
+        val json = Json
+        val userJson = inputData.getString("user_json") ?: return Result.failure(
+            workDataOf("error" to "Missing user_json")
+        )
+        val user = json.decodeFromString<User>(userJson)
+
+        // ... process user as needed
+        return Result.success()
+    }
 }
 ```
 
 ### Data Size Limitations
 
-**Maximum ~10KB** (10,240 bytes) — otherwise `IllegalStateException`
+**Maximum ~10KB** (10,240 bytes) for the entire Data payload — exceeding this will throw `IllegalStateException`.
 
 ```kotlin
 // ❌ BAD: exceeds limit
@@ -290,11 +360,19 @@ val workRequest = OneTimeWorkRequestBuilder<MyWorker>()
     .setInputData(workDataOf("data_id" to dataId))
     .build()
 
-// ✅ Load by ID in Worker
-override suspend fun doWork(): Result {
-    val dataId = inputData.getLong("data_id", 0)
-    val largeData = database.getData(dataId) // ✅ Full data
-    return Result.success()
+class MyWorker(context: Context, params: WorkerParameters)
+    : CoroutineWorker(context, params) {
+
+    override suspend fun doWork(): Result {
+        val dataId = inputData.getLong("data_id", 0L)
+        if (dataId == 0L) return Result.failure(
+            workDataOf("error" to "Invalid data_id")
+        )
+
+        val largeData = database.getData(dataId) // ✅ Full data
+        // ... process largeData
+        return Result.success()
+    }
 }
 ```
 

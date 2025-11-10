@@ -1,8 +1,10 @@
 ---
 id: android-028
-title: Gradle Kotlin DSL vs Groovy
+title: Gradle Kotlin DSL vs Groovy / Gradle Kotlin DSL против Groovy
 aliases:
 - Gradle Kotlin DSL vs Groovy
+- Gradle Kotlin DSL vs Groovy differences
+- Gradle Kotlin DSL против Groovy
 topic: android
 subtopics:
 - gradle
@@ -10,11 +12,6 @@ question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- android/build-tools
-- android/gradle
-- android/groovy
-- android/kotlin-dsl
-- difficulty/medium
 - en
 - ru
 source: https://github.com/amitshekhariitbhu/android-interview-questions
@@ -23,11 +20,10 @@ status: draft
 moc: moc-android
 related:
 - c-gradle
-- q-compose-custom-animations--jetpack-compose--medium
 - q-how-does-jetpackcompose-work--android--medium
 - q-what-is-workmanager--android--medium
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-11-10
 tags:
 - android/gradle
 - difficulty/medium
@@ -35,383 +31,340 @@ tags:
 - ru
 ---
 
-# Question (EN)
-> What are the differences between Gradle Kotlin DSL and Groovy? When to use each?
 # Вопрос (RU)
 > Какие различия между Gradle Kotlin DSL и Groovy? Когда использовать каждый?
 
----
-
-## Answer (EN)
-
-**Gradle Kotlin DSL** (.gradle.kts) provides type-safe build scripts with IDE support. **Groovy** (.gradle) is more concise but lacks type safety.
-
-### Syntax Comparison
-
-**Groovy:**
-
-```groovy
-// build.gradle
-plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-}
-
-android {
-    namespace 'com.example.app'
-    compileSdk 34
-
-    defaultConfig {
-        applicationId "com.example.app"
-        minSdk 24
-        targetSdk 34
-    }
-}
-
-dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
-}
-```
-
-**Kotlin DSL:**
-
-```kotlin
-// build.gradle.kts
-plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-}
-
-android {
-    namespace = "com.example.app"
-    compileSdk = 34
-
-    defaultConfig {
-        applicationId = "com.example.app"
-        minSdk = 24
-        targetSdk = 34
-    }
-}
-
-dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-}
-```
-
-### Key Differences
-
-| Feature | Kotlin DSL | Groovy |
-|---------|-----------|--------|
-| **File extension** | .gradle.kts | .gradle |
-| **Type safety** |  Compile-time |  Runtime only |
-| **IDE support** |  Autocomplete, refactoring |  Limited |
-| **Performance** | Slower first build | Faster first build |
-| **Syntax** | More verbose | More concise |
-| **String quotes** | Required ("") | Optional |
-| **Assignment** | = required | = optional |
-
-### Advantages of Kotlin DSL
-
-**1. Type safety:**
-
-```kotlin
-// GOOD - Compile error if wrong type
-android {
-    compileSdk = "34"  // Compile error: Type mismatch
-}
-
-// Groovy - No error until runtime
-android {
-    compileSdk "34"  //  Works but wrong type
-}
-```
-
-**2. IDE autocomplete:**
-
-```kotlin
-android {
-    default  // IDE suggests: defaultConfig, defaultPublishConfig
-}
-```
-
-**3. Refactoring support:**
-
-```kotlin
-// Rename variable - all usages updated
-val myMinSdk = 24
-android.defaultConfig.minSdk = myMinSdk
-```
-
-### Version Catalogs (Recommended for both)
-
-```toml
-# gradle/libs.versions.toml
-[versions]
-kotlin = "1.9.20"
-compose = "1.5.4"
-
-[libraries]
-androidx-core = { module = "androidx.core:core-ktx", version = "1.12.0" }
-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
-
-[plugins]
-android-application = { id = "com.android.application", version = "8.1.4" }
-```
-
-**Kotlin DSL:**
-
-```kotlin
-dependencies {
-    implementation(libs.androidx.core)
-    implementation(libs.compose.ui)
-}
-```
-
-**Groovy:**
-
-```groovy
-dependencies {
-    implementation libs.androidx.core
-    implementation libs.compose.ui
-}
-```
-
-### When to Use Each
-
-**Use Kotlin DSL when:**
-- New projects
-- Large team (type safety helps)
-- Complex build logic
-- Want refactoring support
-
-**Use Groovy when:**
-- Legacy projects (migration cost)
-- Simple build scripts
-- Build performance critical
-- Team unfamiliar with Kotlin
-
-**English Summary**: Kotlin DSL (.gradle.kts): type-safe, IDE support, autocomplete, refactoring. Groovy (.gradle): more concise, faster first build, no type safety. Kotlin DSL uses `=` for assignment, requires quotes. Both support version catalogs. Use Kotlin DSL for new projects, Groovy for legacy.
-
-
 # Question (EN)
 > What are the differences between Gradle Kotlin DSL and Groovy? When to use each?
-# Вопрос (RU)
-> Какие различия между Gradle Kotlin DSL и Groovy? Когда использовать каждый?
 
 ---
-
-
----
-
-
-## Answer (EN)
-
-**Gradle Kotlin DSL** (.gradle.kts) provides type-safe build scripts with IDE support. **Groovy** (.gradle) is more concise but lacks type safety.
-
-### Syntax Comparison
-
-**Groovy:**
-
-```groovy
-// build.gradle
-plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-}
-
-android {
-    namespace 'com.example.app'
-    compileSdk 34
-
-    defaultConfig {
-        applicationId "com.example.app"
-        minSdk 24
-        targetSdk 34
-    }
-}
-
-dependencies {
-    implementation 'androidx.core:core-ktx:1.12.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
-}
-```
-
-**Kotlin DSL:**
-
-```kotlin
-// build.gradle.kts
-plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
-}
-
-android {
-    namespace = "com.example.app"
-    compileSdk = 34
-
-    defaultConfig {
-        applicationId = "com.example.app"
-        minSdk = 24
-        targetSdk = 34
-    }
-}
-
-dependencies {
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-}
-```
-
-### Key Differences
-
-| Feature | Kotlin DSL | Groovy |
-|---------|-----------|--------|
-| **File extension** | .gradle.kts | .gradle |
-| **Type safety** |  Compile-time |  Runtime only |
-| **IDE support** |  Autocomplete, refactoring |  Limited |
-| **Performance** | Slower first build | Faster first build |
-| **Syntax** | More verbose | More concise |
-| **String quotes** | Required ("") | Optional |
-| **Assignment** | = required | = optional |
-
-### Advantages of Kotlin DSL
-
-**1. Type safety:**
-
-```kotlin
-// GOOD - Compile error if wrong type
-android {
-    compileSdk = "34"  // Compile error: Type mismatch
-}
-
-// Groovy - No error until runtime
-android {
-    compileSdk "34"  //  Works but wrong type
-}
-```
-
-**2. IDE autocomplete:**
-
-```kotlin
-android {
-    default  // IDE suggests: defaultConfig, defaultPublishConfig
-}
-```
-
-**3. Refactoring support:**
-
-```kotlin
-// Rename variable - all usages updated
-val myMinSdk = 24
-android.defaultConfig.minSdk = myMinSdk
-```
-
-### Version Catalogs (Recommended for both)
-
-```toml
-# gradle/libs.versions.toml
-[versions]
-kotlin = "1.9.20"
-compose = "1.5.4"
-
-[libraries]
-androidx-core = { module = "androidx.core:core-ktx", version = "1.12.0" }
-compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
-
-[plugins]
-android-application = { id = "com.android.application", version = "8.1.4" }
-```
-
-**Kotlin DSL:**
-
-```kotlin
-dependencies {
-    implementation(libs.androidx.core)
-    implementation(libs.compose.ui)
-}
-```
-
-**Groovy:**
-
-```groovy
-dependencies {
-    implementation libs.androidx.core
-    implementation libs.compose.ui
-}
-```
-
-### When to Use Each
-
-**Use Kotlin DSL when:**
-- New projects
-- Large team (type safety helps)
-- Complex build logic
-- Want refactoring support
-
-**Use Groovy when:**
-- Legacy projects (migration cost)
-- Simple build scripts
-- Build performance critical
-- Team unfamiliar with Kotlin
-
-**English Summary**: Kotlin DSL (.gradle.kts): type-safe, IDE support, autocomplete, refactoring. Groovy (.gradle): more concise, faster first build, no type safety. Kotlin DSL uses `=` for assignment, requires quotes. Both support version catalogs. Use Kotlin DSL for new projects, Groovy for legacy.
 
 ## Ответ (RU)
 
-**Gradle Kotlin DSL** (.gradle.kts) предоставляет типобезопасные build скрипты с поддержкой IDE. **Groovy** (.gradle) более лаконичен но не имеет типобезопасности.
+Gradle Kotlin DSL (.gradle.kts) даёт типобезопасные (на этапе компиляции) build-скрипты и более точную поддержку IDE для Gradle и Android Gradle Plugin (AGP) API. Скрипты на Groovy (.gradle) динамически типизированы: более гибкие и часто более лаконичные, но ошибки в использовании DSL чаще выявляются только во время конфигурации/выполнения.
 
-### Ключевые Различия
+### Сравнение синтаксиса
 
-| Функция | Kotlin DSL | Groovy |
-|---------|-----------|--------|
-| **Расширение файла** | .gradle.kts | .gradle |
-| **Типобезопасность** |  Во время компиляции |  Только во время выполнения |
-| **Поддержка IDE** |  Автодополнение, рефакторинг |  Ограниченная |
-| **Синтаксис** | Более многословный | Более лаконичный |
-| **Присваивание** | = обязательно | = опционально |
+Groovy:
 
-### Преимущества Kotlin DSL
+```groovy
+// build.gradle
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
 
-**1. Типобезопасность:**
-
-```kotlin
-// ХОРОШО - Ошибка компиляции если неправильный тип
 android {
-    compileSdk = "34"  // Ошибка компиляции: Type mismatch
+    namespace 'com.example.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.app"
+        minSdk 24
+        targetSdk 34
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
 }
 ```
 
-**2. Автодополнение IDE**
-**3. Поддержка рефакторинга**
+Kotlin DSL:
 
-### Когда Использовать Каждый
+```kotlin
+// build.gradle.kts
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
 
-**Используйте Kotlin DSL когда:**
-- Новые проекты
-- Большая команда (типобезопасность помогает)
-- Сложная build логика
+android {
+    namespace = "com.example.app"
+    compileSdk = 34
 
-**Используйте Groovy когда:**
-- Legacy проекты (стоимость миграции)
-- Простые build скрипты
-- Команда не знакома с Kotlin
+    defaultConfig {
+        applicationId = "com.example.app"
+        minSdk = 24
+        targetSdk = 34
+    }
+}
 
-**Краткое содержание**: Kotlin DSL (.gradle.kts): типобезопасный, поддержка IDE, автодополнение, рефакторинг. Groovy (.gradle): более лаконичен, быстрее первая сборка, нет типобезопасности. Kotlin DSL использует `=` для присваивания, требует кавычки. Используйте Kotlin DSL для новых проектов, Groovy для legacy.
+dependencies {
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+}
+```
+
+### Ключевые различия
+
+| Характеристика | Kotlin DSL | Groovy |
+|----------------|-----------|--------|
+| Расширение файла | .gradle.kts | .gradle |
+| Типизация / типобезопасность | Статическая типизация; типобезопасный доступ к Gradle API проверяется при компиляции скрипта | Динамическая типизация; многие ошибки (опечатки, неверные свойства) видны только при конфигурации/запуске |
+| Поддержка IDE | Более точное автодополнение, навигация и рефакторинг благодаря статическим типам | Хорошая, но менее точная для Gradle DSL из-за динамической типизации |
+| Производительность | Первая конфигурация может быть немного медленнее; инкрементальные сборки обычно сопоставимы | Исторически более быстрая конфигурация; разница снизилась в современных версиях Gradle |
+| Стиль синтаксиса | Kotlin-синтаксис: требуется `=` для присваивания, стандартные строковые литералы Kotlin | Groovy-DSL часто более лаконичен: вызовы методов (`compileSdk 34`), замыкания, одинарные кавычки |
+
+Замечания:
+- В обоих DSL нужны корректные строки; в Groovy обычно используют одинарные кавычки для простых строк и двойные для интерполяции.
+- В Kotlin DSL, как правило, явно используется `=` для установки свойств; в Groovy многие элементы DSL представлены как методы/свойства, поэтому `=` часто можно опустить.
+
+### Преимущества Kotlin DSL
+
+1. Типобезопасность и более раннее выявление ошибок
+
+```kotlin
+// Kotlin DSL - ошибка компиляции при неверном типе или неизвестном свойстве
+android {
+    compileSdk = "34"  // Ошибка: ожидается Int
+}
+```
+
+```groovy
+// Groovy DSL - динамическая типизация
+android {
+    compileSdk "34"  // Интерпретируется как вызов; приведёт к ошибке на этапе конфигурации/валидации, а не компиляции
+}
+```
+
+2. Лучшее автодополнение в IDE
+- Более точные подсказки и переход к определениям для Gradle и плагинов Android.
+
+3. Безопасный рефакторинг
+- Переименование свойств/функций в build-логике проще и надёжнее за счёт статических типов.
+
+### Version Catalogs (для обоих DSL)
+
+```toml
+# gradle/libs.versions.toml
+[versions]
+kotlin = "1.9.20"
+compose = "1.5.4"
+
+[libraries]
+androidx-core = { module = "androidx.core:core-ktx", version = "1.12.0" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+
+[plugins]
+android-application = { id = "com.android.application", version = "8.1.4" }
+```
+
+Kotlin DSL:
+
+```kotlin
+dependencies {
+    implementation(libs.androidx.core)
+    implementation(libs.compose.ui)
+}
+```
+
+Groovy:
+
+```groovy
+dependencies {
+    implementation libs.androidx.core
+    implementation libs.compose.ui
+}
+```
+
+Оба варианта полностью поддерживают version catalogs; отличается только синтаксис обращения.
+
+### Когда использовать каждый
+
+Используйте Kotlin DSL, когда:
+- Начинаете новый Android-проект.
+- Работаете в большой команде, где важны читаемость и поддерживаемость build-логики.
+- Нужна лучшая поддержка IDE и более безопасный рефакторинг сложных скриптов.
+
+Используйте Groovy, когда:
+- Поддерживаете существующие/legacy-проекты с Groovy-скриптами (стоимость миграции высока).
+- Скрипты относительно простые и редко меняются.
+- Команда лучше знакома с Groovy или динамическими DSL.
+
+Краткое содержание: Kotlin DSL (.gradle.kts) — статически типизированный, с улучшенной поддержкой IDE, рефакторинга и более ранним обнаружением ошибок при работе с Gradle и AGP API. Groovy (.gradle) — динамически типизированный и зачастую более лаконичный, но многие ошибки проявляются только при конфигурации/запуске. Оба поддерживают version catalogs. Для новых и сложных проектов обычно предпочтителен Kotlin DSL; Groovy остаётся разумным выбором для существующих и простых конфигураций.
+
+## Answer (EN)
+
+Gradle Kotlin DSL (.gradle.kts) provides type-safe (at compile time) build scripts with better IDE support for both Gradle and Android Gradle Plugin (AGP) APIs. Groovy-based Gradle scripts (.gradle) are dynamically typed: more flexible and often more concise, but many DSL usage errors are discovered only during configuration or execution.
+
+### Syntax Comparison
+
+Groovy:
+
+```groovy
+// build.gradle
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.example.app'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.example.app"
+        minSdk 24
+        targetSdk 34
+    }
+}
+
+dependencies {
+    implementation 'androidx.core:core-ktx:1.12.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.2'
+}
+```
+
+Kotlin DSL:
+
+```kotlin
+// build.gradle.kts
+plugins {
+    id("com.android.application")
+    id("org.jetbrains.kotlin.android")
+}
+
+android {
+    namespace = "com.example.app"
+    compileSdk = 34
+
+    defaultConfig {
+        applicationId = "com.example.app"
+        minSdk = 24
+        targetSdk = 34
+    }
+}
+
+dependencies {
+    implementation("androidx.core:core-ktx:1.12.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
+}
+```
+
+### Key Differences
+
+| Feature | Kotlin DSL | Groovy |
+|---------|------------|--------|
+| File extension | .gradle.kts | .gradle |
+| Typing / type safety | Statically typed; type-safe accessors for Gradle APIs checked at compile time | Dynamically typed; many errors (e.g., typos in DSL) surface at configuration/runtime |
+| IDE support | Strong: autocomplete for Gradle and AGP APIs, navigation, safer refactoring | Good, but less precise for Gradle DSL because of dynamic typing |
+| Performance | Initial configuration can be slightly slower; incremental builds often comparable | Historically faster to configure; difference is smaller in modern Gradle |
+| Syntax style | Uses Kotlin syntax: requires `=` for assignments, standard Kotlin string syntax, explicit lambdas | Groovy DSL syntax is often more concise: method-call style (`compileSdk 34`), closures, single quotes common |
+
+Notes:
+- Both DSLs require correct quoting; Groovy commonly uses single quotes for simple strings and supports string interpolation with double quotes.
+- In Kotlin DSL you typically use `=` for setting properties; in Groovy, many Gradle DSL elements are exposed as methods or properties so `=` can be omitted.
+
+### Advantages of Kotlin DSL
+
+1. Type safety and earlier error detection
+
+```kotlin
+// Kotlin DSL - compile-time error if wrong type or unknown property
+android {
+    compileSdk = "34"  // Error: type mismatch (expects Int)
+}
+```
+
+```groovy
+// Groovy DSL - dynamic typing
+android {
+    compileSdk "34"  // Treated as a method call; will fail at configuration/validation, not at compile time
+}
+```
+
+2. Better IDE assistance
+
+- More accurate autocomplete and navigation for Gradle and Android Gradle Plugin APIs.
+
+3. Safer refactoring
+
+- Renaming properties/functions used in build logic is better supported because of static typing.
+
+### Version Catalogs (Recommended for both)
+
+```toml
+# gradle/libs.versions.toml
+[versions]
+kotlin = "1.9.20"
+compose = "1.5.4"
+
+[libraries]
+androidx-core = { module = "androidx.core:core-ktx", version = "1.12.0" }
+compose-ui = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+
+[plugins]
+android-application = { id = "com.android.application", version = "8.1.4" }
+```
+
+Kotlin DSL:
+
+```kotlin
+dependencies {
+    implementation(libs.androidx.core)
+    implementation(libs.compose.ui)
+}
+```
+
+Groovy:
+
+```groovy
+dependencies {
+    implementation libs.androidx.core
+    implementation libs.compose.ui
+}
+```
+
+Both DSLs fully support version catalogs; usage syntax differs according to the language.
+
+### When to Use Each
+
+Use Kotlin DSL when:
+- Starting new Android projects.
+- Working in a large team where type safety and clearer contracts help maintainability.
+- You want better IDE support and safer refactoring for complex build logic.
+
+Use Groovy when:
+- Maintaining existing/legacy projects with Groovy-based build scripts (to avoid migration overhead).
+- Build scripts are relatively simple and stable.
+- Your team is more familiar with Groovy or dynamic scripting.
+
+English Summary: Kotlin DSL (.gradle.kts) gives statically typed, IDE-friendly, type-safe access to Gradle and AGP APIs with clearer refactoring support and earlier error detection. Groovy (.gradle) is dynamically typed and often more concise but surfaces many errors only at configuration/runtime. Both support version catalogs. Prefer Kotlin DSL for new and complex projects; Groovy remains reasonable for existing/simple builds where migration is not justified.
 
 ---
+
+## Ссылки (RU)
+- [Gradle Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
 
 ## References
 - [Gradle Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html)
 
+## Дополнительные вопросы (RU)
+
+- [[q-how-does-jetpackcompose-work--android--medium]]
+- [[q-what-is-workmanager--android--medium]]
+- Какие преимущества и недостатки миграции с Groovy на Kotlin DSL в существующем Android-проекте?
+- Как организация Gradle-логики (конвеншен-плагины, `buildSrc`, version catalogs) влияет на поддерживаемость проекта?
+- Как выбрать между `buildSrc` и standalone-плагином для общей Gradle-логики?
 
 ## Follow-ups
 
-- [[q-compose-custom-animations--android--medium]]
 - [[q-how-does-jetpackcompose-work--android--medium]]
 - [[q-what-is-workmanager--android--medium]]
+- What are the pros and cons of migrating from Groovy to Kotlin DSL in an existing Android project?
+- How does structuring Gradle logic (convention plugins, `buildSrc`, version catalogs) affect project maintainability?
+- How do you decide between `buildSrc` and a standalone Gradle plugin for shared build logic?
 
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепты
+
+- [[c-gradle]]
+
+### Связанные (Medium)
+- [[q-annotation-processing--android--medium]]
 
 ## Related Questions
 
@@ -419,11 +372,5 @@ android {
 
 - [[c-gradle]]
 
-
 ### Related (Medium)
-- [[q-build-optimization-gradle--android--medium]] - Gradle
-- [[q-proguard-r8--android--medium]] - Build Tools
-- [[q-annotation-processing--android--medium]] - Annotation Processing
-
-### Advanced (Harder)
-- [[q-multi-module-best-practices--android--hard]] - Architecture
+- [[q-annotation-processing--android--medium]]

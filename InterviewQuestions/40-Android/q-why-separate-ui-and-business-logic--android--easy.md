@@ -23,13 +23,14 @@ related:
 - q-compose-testing--android--medium
 - q-mvvm-vs-mvp-differences--android--medium
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags:
 - android/architecture-clean
 - android/architecture-mvvm
 - difficulty/easy
 - separation-of-concerns
+
 ---
 
 # Вопрос (RU)
@@ -87,11 +88,11 @@ fun `active users are sorted by name`() {
 
 **3. Переиспользуемость**
 
-Бизнес-логика может использоваться в Activity, Fragment, Compose, даже на других платформах через Kotlin Multiplatform (KMM).
+Бизнес-логика может использоваться в `Activity`, `Fragment`, Compose, даже на других платформах через Kotlin Multiplatform (KMM).
 
 **4. Архитектурные паттерны**
 
-Следует принципу Separation of Concerns в паттернах MVVM, MVI, Clean Architecture.
+Следует принципу `Separation of Concerns` в паттернах MVVM, MVI, Clean Architecture.
 
 **Пример с MVVM:**
 
@@ -172,11 +173,11 @@ fun `active users are sorted by name`() {
 
 **3. Reusability**
 
-Business logic can be reused in Activity, Fragment, Compose, even cross-platform via Kotlin Multiplatform (KMM).
+Business logic can be reused in `Activity`, `Fragment`, Compose, even cross-platform via Kotlin Multiplatform (KMM).
 
 **4. Architectural Patterns**
 
-Follows Separation of Concerns principle in MVVM, MVI, Clean Architecture patterns.
+Follows `Separation of Concerns` principle in MVVM, MVI, Clean Architecture patterns.
 
 **Example with MVVM:**
 
@@ -212,8 +213,39 @@ class GetUsersUseCase(private val repository: UserRepository) {
 }
 ```
 
-
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать сложную бизнес-логику, затрагивающую несколько `ViewModel`?
+- В чем компромиссы между MVVM, MVI и Clean Architecture?
+- Как тестировать UI-логику, зависящую от Android-фреймворка?
+
+## Ссылки (RU)
+
+- https://developer.android.com/jetpack/guide - Руководство по архитектуре Android
+- https://developer.android.com/topic/libraries/architecture/viewmodel - Руководство по `ViewModel`
+
+## Связанные вопросы (RU)
+
+### Предварительные знания / Концепции
+
+- [[c-clean-architecture]]
+- [[c-mvvm]]
+- [[c-viewmodel]]
+
+### Предварительные знания
+
+- Базовое понимание компонентов Android (`Activity`, `Fragment`)
+
+### Связанные вопросы
+
+- [[q-mvvm-vs-mvp-differences--android--medium]] - Сравнение MVVM и MVP
+- [[q-compose-testing--android--medium]] - Тестирование UI в Compose
+
+### Продвинутые темы
+
+- Реализация Clean Architecture в Android-проектах
 
 ## Follow-ups
 
@@ -224,7 +256,7 @@ class GetUsersUseCase(private val repository: UserRepository) {
 ## References
 
 - https://developer.android.com/jetpack/guide - Android architecture guide
-- https://developer.android.com/topic/libraries/architecture/viewmodel - ViewModel guide
+- https://developer.android.com/topic/libraries/architecture/viewmodel - `ViewModel` guide
 
 ## Related Questions
 
@@ -234,10 +266,9 @@ class GetUsersUseCase(private val repository: UserRepository) {
 - [[c-mvvm]]
 - [[c-viewmodel]]
 
-
 ### Prerequisites
 
-- Basic understanding of Android components (Activity, Fragment)
+- Basic understanding of Android components (`Activity`, `Fragment`)
 
 ### Related
 

@@ -5,7 +5,6 @@ aliases: [Annotation Processing in Android, Обработка аннотаци�
 topic: android
 subtopics:
   - build-variants
-  - gradle
 question_kind: android
 difficulty: medium
 original_language: en
@@ -35,7 +34,7 @@ tags: [android/build-variants, android/gradle, annotation-processing, code-gener
 
 ## Ответ (RU)
 
-**Обработка аннотаций** — это механизм генерации кода на этапе компиляции, где процессоры анализируют аннотации в исходном коде и автоматически создают вспомогательные классы. Используется библиотеками Room, Hilt, Moshi для генерации boilerplate-кода.
+**Обработка аннотаций** — это механизм генерации кода на этапе компиляции, при котором специальные процессоры анализируют аннотации в исходном коде и автоматически создают вспомогательные классы/файлы. Активно используется библиотеками Room, Hilt, Moshi для генерации boilerplate-кода.
 
 ### Принцип Работы
 
@@ -44,7 +43,7 @@ tags: [android/build-variants, android/gradle, annotation-processing, code-gener
     ↓
 Компилятор запускает процессоры
     ↓
-Процессоры генерируют новые классы
+Процессоры генерируют новые классы/файлы
     ↓
 Компиляция всего кода вместе
 ```
@@ -52,15 +51,15 @@ tags: [android/build-variants, android/gradle, annotation-processing, code-gener
 ### Kapt Vs KSP
 
 **kapt (Kotlin Annotation Processing Tool)**
-- Мост между Java-процессорами и Kotlin-кодом
-- Генерирует Java-заглушки для совместимости (медленно)
-- Устаревший подход, постепенно заменяется KSP
+- Мост между Java-аннотационными процессорами и Kotlin-кодом
+- Генерирует Java-заглушки для совместимости (это замедляет сборку)
+- Поддерживается, но развитие ограничено; для новых проектов рекомендуется KSP
 
 **KSP (Kotlin Symbol Processing)**
-- Нативная поддержка Kotlin, работает напрямую с AST
-- В 2× быстрее kapt благодаря отсутствию заглушек
-- Полная инкрементальная компиляция
-- Рекомендуется для всех новых проектов
+- Нативная поддержка Kotlin, работает с моделью символов Kotlin (без генерации Java-заглушек)
+- Обычно до ~2× быстрее kapt за счёт отсутствия заглушек и лучшей интеграции с компилятором (фактический выигрыш зависит от проекта)
+- Поддерживает полноценную инкрементальную компиляцию (при корректной реализации процессоров)
+- Рекомендуется для всех новых проектов и при миграции с kapt, когда библиотеки поддерживают KSP
 
 ### Настройка В build.gradle.kts
 
@@ -72,7 +71,7 @@ plugins {
 
 dependencies {
     implementation("androidx.room:room-runtime")
-    kapt("androidx.room:room-compiler") // ❌ Медленная генерация
+    kapt("androidx.room:room-compiler") // ❌ Медленнее из-за генерации заглушек
 }
 ```
 
@@ -84,7 +83,7 @@ plugins {
 
 dependencies {
     implementation("androidx.room:room-runtime")
-    ksp("androidx.room:room-compiler") // ✅ Быстрая генерация
+    ksp("androidx.room:room-compiler") // ✅ Быстрее и лучше интегрируется с Kotlin-компилятором
 }
 ```
 
@@ -103,9 +102,10 @@ interface UserDao {
     suspend fun getUser(userId: Long): User?
 }
 
-// ✅ KSP генерирует автоматически:
+// ✅ Обработчик аннотаций (через kapt или KSP, в зависимости от конфигурации)
+// генерирует, например:
 // - UserDao_Impl (реализация DAO)
-// - User_Table (схема таблицы)
+// - вспомогательные классы/метаданные для схемы
 ```
 
 ### Пример: Hilt Генерирует DI Компоненты
@@ -122,31 +122,32 @@ class UserViewModel @Inject constructor(
     private val repo: UserRepository
 ) : ViewModel()
 
-// ✅ Hilt генерирует весь граф зависимостей автоматически
+// ✅ Hilt через аннотационную обработку генерирует граф зависимостей и компоненты автоматически
 ```
 
 ### Сравнение Производительности
 
 | Аспект | kapt | KSP |
 |--------|------|-----|
-| Скорость | Базовая | 2× быстрее |
-| Язык API | Java | Kotlin |
-| Заглушки | Генерирует | Не требуются |
-| Инкрементальная компиляция | Ограниченная | Полная |
-| Будущее | Устаревает | Активное развитие |
+| Скорость | Базовая, медленнее из-за заглушек | Обычно быстрее (до ~2×, зависит от проекта) |
+| Язык API | Java (JSR 269) | Kotlin-first API (модель символов) |
+| Заглушки | Генерирует Java-заглушки | Не требуются |
+| Инкрементальная компиляция | Ограниченная | Полная поддержка (при корректных процессорах) |
+| Будущее | Поддерживается, но без активного развития | Активное развитие, рекомендованный путь |
 
-Реальные цифры (проект: Room + Hilt + 50 модулей):
+Примерные цифры (условный проект: Room + Hilt + 50 модулей):
 ```text
 kapt:  ~45 секунд
-KSP:   ~23 секунды (↓48%)
+KSP:   ~23 секунды (↓≈48%)
 ```
+Фактические значения зависят от конкретного проекта и конфигурации.
 
 ### Оптимизация Сборки
 
 **Миграция на KSP:**
-- Заменить `kotlin-kapt` на `com.google.devtools.ksp` в plugins
-- Заменить `kapt()` на `ksp()` в dependencies
-- Проверить совместимость библиотек (большинство поддерживают KSP)
+- Заменить `kotlin-kapt` на `com.google.devtools.ksp` в `plugins`
+- Заменить `kapt()` на `ksp()` в `dependencies`, если библиотека предоставляет KSP-артефакт
+- Проверить совместимость библиотек (многие популярные библиотеки уже поддерживают KSP)
 
 **Отладка сгенерированного кода:**
 ```kotlin
@@ -154,13 +155,13 @@ ksp {
     arg("verbose", "true") // Подробное логирование
 }
 
-// Путь к сгенерированному коду:
+// Путь к сгенерированному коду (пример для debug-билда):
 // build/generated/ksp/debug/kotlin/
 ```
 
 ## Answer (EN)
 
-**Annotation processing** is a compile-time code generation mechanism where processors analyze annotations in source code and automatically generate helper classes. Used by libraries like Room, Hilt, and Moshi to generate boilerplate code.
+**Annotation processing** is a compile-time code generation mechanism where processors analyze annotations in source code and automatically generate helper classes/files. Widely used by libraries like Room, Hilt, and Moshi to generate boilerplate code.
 
 ### How It Works
 
@@ -169,7 +170,7 @@ Source code with annotations
     ↓
 Compiler runs processors
     ↓
-Processors generate new classes
+Processors generate new classes/files
     ↓
 All code compiled together
 ```
@@ -177,15 +178,15 @@ All code compiled together
 ### Kapt Vs KSP
 
 **kapt (Kotlin Annotation Processing Tool)**
-- Bridge between Java processors and Kotlin code
-- Generates Java stubs for compatibility (slow)
-- Legacy approach, gradually being replaced by KSP
+- Bridge between Java annotation processors and Kotlin code
+- Generates Java stubs for compatibility (which slows down the build)
+- Still supported but with limited evolution; KSP is recommended for new code when available
 
 **KSP (Kotlin Symbol Processing)**
-- Native Kotlin support, works directly with AST
-- 2× faster than kapt due to no stub generation
-- Full incremental compilation support
-- Recommended for all new projects
+- Kotlin-first processing API that works with Kotlin symbol model (no Java stub generation)
+- Typically up to around 2× faster than kapt due to no stubs and better compiler integration (actual gains depend on the project)
+- Supports full incremental compilation (assuming processors are implemented correctly)
+- Recommended for all new projects and for migration from kapt where libraries provide KSP support
 
 ### Setup in build.gradle.kts
 
@@ -197,7 +198,7 @@ plugins {
 
 dependencies {
     implementation("androidx.room:room-runtime")
-    kapt("androidx.room:room-compiler") // ❌ Slow generation
+    kapt("androidx.room:room-compiler") // ❌ Slower due to stub generation
 }
 ```
 
@@ -209,7 +210,7 @@ plugins {
 
 dependencies {
     implementation("androidx.room:room-runtime")
-    ksp("androidx.room:room-compiler") // ✅ Fast generation
+    ksp("androidx.room:room-compiler") // ✅ Faster and better integrated with Kotlin compiler
 }
 ```
 
@@ -228,9 +229,10 @@ interface UserDao {
     suspend fun getUser(userId: Long): User?
 }
 
-// ✅ KSP automatically generates:
+// ✅ The annotation processor (via kapt or KSP, depending on configuration)
+// generates, for example:
 // - UserDao_Impl (DAO implementation)
-// - User_Table (table schema)
+// - supporting classes/metadata for the schema
 ```
 
 ### Example: Hilt Generates DI Components
@@ -247,31 +249,32 @@ class UserViewModel @Inject constructor(
     private val repo: UserRepository
 ) : ViewModel()
 
-// ✅ Hilt generates entire dependency graph automatically
+// ✅ Hilt uses annotation processing to generate the dependency graph and components automatically
 ```
 
 ### Performance Comparison
 
 | Aspect | kapt | KSP |
 |--------|------|-----|
-| Speed | Baseline | 2× faster |
-| API Language | Java | Kotlin |
-| Stubs | Generates | Not required |
-| Incremental compilation | Limited | Full |
-| Future | Deprecated | Active development |
+| Speed | Baseline, slower due to stubs | Typically faster (up to ~2×, project-dependent) |
+| API Language | Java (JSR 269) | Kotlin-first symbol API |
+| Stubs | Generates Java stubs | Not required |
+| Incremental compilation | Limited | Full support (with properly implemented processors) |
+| Future | Supported, but not actively evolved | Actively developed, recommended path |
 
-Real-world numbers (project: Room + Hilt + 50 modules):
+Example numbers (hypothetical project: Room + Hilt + 50 modules):
 ```text
 kapt:  ~45 seconds
-KSP:   ~23 seconds (↓48%)
+KSP:   ~23 seconds (↓≈48%)
 ```
+Actual gains vary by project and configuration.
 
 ### Build Optimization
 
 **Migrating to KSP:**
-- Replace `kotlin-kapt` with `com.google.devtools.ksp` in plugins
-- Replace `kapt()` with `ksp()` in dependencies
-- Check library compatibility (most support KSP)
+- Replace `kotlin-kapt` with `com.google.devtools.ksp` in `plugins`
+- Replace `kapt()` with `ksp()` in `dependencies` where the library exposes KSP artifacts
+- Check library compatibility (many popular libraries already support KSP)
 
 **Debugging generated code:**
 ```kotlin
@@ -279,7 +282,7 @@ ksp {
     arg("verbose", "true") // Verbose logging
 }
 
-// Path to generated code:
+// Path to generated code (example for debug build):
 // build/generated/ksp/debug/kotlin/
 ```
 

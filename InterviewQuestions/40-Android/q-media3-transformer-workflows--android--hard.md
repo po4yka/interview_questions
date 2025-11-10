@@ -2,36 +2,35 @@
 id: android-634
 title: Media3 Transformer Workflows / Пайплайны Media3 Transformer
 aliases:
-  - Media3 Transformer Workflows
-  - Пайплайны Media3 Transformer
+- Media3 Transformer Workflows
+- Пайплайны Media3 Transformer
 topic: android
 subtopics:
-  - media
-  - media3
-  - editing
-question_kind: android
+- media
+- files-media
+question_kind: theory
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-media3-transformer
-  - q-media3-migration-strategy--android--hard
+- q-media3-migration-strategy--android--hard
+- c-android
 created: 2025-11-02
-updated: 2025-11-02
+updated: 2025-11-10
 tags:
-  - android/media3
-  - android/editing
-  - video
-  - difficulty/hard
+- android/media
+- android/files-media
+- difficulty/hard
 sources:
-  - url: https://developer.android.com/guide/topics/media/media3/transformer
-    note: Media3 Transformer guide
-  - url: https://medium.com/androiddevelopers/media3-transformer-deep-dive
-    note: Transformer deep dive
+- url: "https://developer.android.com/guide/topics/media/media3/transformer"
+  note: Media3 Transformer guide
+- url: "https://medium.com/androiddevelopers/media3-transformer-deep-dive"
+  note: Transformer deep dive
+
 ---
 
 # Вопрос (RU)
@@ -44,94 +43,235 @@ sources:
 
 ## Ответ (RU)
 
+### Краткий вариант
+
+- Использовать `Composition` + `EditedMediaItem` для сборки таймлайна.
+- Настроить `TransformationRequest` (кодек, битрейт, разрешение, fallback) и запустить через `Transformer`.
+- Выполнять экспорт в фоне (`ForegroundService`/`WorkManager`), отслеживать прогресс и ошибки через `Transformer.Listener`.
+- Проверять доступные кодеки (`MediaCodecList`) и реализовать fallback-стратегии.
+- Логировать метрики и тестировать на разных устройствах.
+
+### Подробный вариант
+
 ### 1. Структура Composition
 
 ```kotlin
-val composition = Composition.Builder(
-    EditedMediaItem.Builder(MediaItem.fromUri(uri1))
-        .setRemoveAudio(true)
-        .setEffects(
-            Effects(
-                listOf(ColorFilterEffect(ColorMatrix().apply { setSaturation(0.8f) })),
-                listOf(VolumeEffect(0.8f))
-            )
+val editedItem1 = EditedMediaItem.Builder(MediaItem.fromUri(uri1))
+    .setEffects(
+        Effects(
+            listOf(ColorFilterEffect(ColorMatrix().apply { setSaturation(0.8f) })),
+            listOf(VolumeEffect(0.8f))
         )
-        .build()
-).addEditedMediaItem(
-    EditedMediaItem.Builder(MediaItem.fromUri(uri2))
-        .setClippingConfiguration(
-            EditedMediaItem.ClippingConfiguration.Builder()
-                .setStartTimeMs(1_000)
-                .setEndTimeMs(10_000)
-                .build()
-        )
-        .build()
-).build()
+    )
+    .setRemoveAudio(true)
+    .build()
+
+val editedItem2 = EditedMediaItem.Builder(MediaItem.fromUri(uri2))
+    .setClippingConfiguration(
+        EditedMediaItem.ClippingConfiguration.Builder()
+            .setStartTimeMs(1_000)
+            .setEndTimeMs(10_000)
+            .build()
+    )
+    .build()
+
+val composition = Composition.Builder(editedItem1)
+    .addEditedMediaItem(editedItem2)
+    .build()
 ```
 
-- `Composition` объединяет несколько `EditedMediaItem`.
-- Эффекты: LUT/ColorMatrix, overlays (`OverlayEffect`), text animations.
+- `Composition` объединяет несколько `EditedMediaItem` для последовательного воспроизведения/экспорта.
+- Эффекты: LUT/ColorMatrix, overlays (`OverlayEffect`), текст, анимации и другие video/audio эффекты через `Effects`.
 
-### 2. Настройка Transformer
+### 2. Требования
+
+- Функциональные:
+  - Комбинация нескольких клипов в один итоговый ролик.
+  - Применение цветокоррекции, оверлеев, текста, аудио/видео-эффектов.
+  - Настройка кодеков, битрейта, разрешения, со звуком/без.
+  - Фоновый экспорт с прогрессом и возможностью отмены.
+  - Обработка ошибок и fallback-конфигураций.
+- Нефункциональные:
+  - Стабильность на разных устройствах и версиях Android.
+  - Приемлемое время экспорта и энергопотребление.
+  - Предсказуемое поведение при ограничениях кодеков/железа.
+
+### 3. Архитектура
+
+- Слой конфигурации:
+  - Модуль, формирующий `Composition` и `EditedMediaItem` на основе пользовательского сценария.
+  - Модуль, формирующий `TransformationRequest` (кодек, битрейт, разрешение, `setEnableFallback(true)`).
+- Слой выполнения:
+  - Обертка над `Transformer`, запущенная из `ForegroundService` или `WorkManager`.
+  - Подписка на `Transformer.Listener` для прогресса (`onProgress`), завершения (`onCompleted`) и ошибок (`onError`).
+- Слой совместимости и аналитики:
+  - Проверка кодеков через `MediaCodecList`/`MediaCodecInfo`.
+  - Fallback-логика (смена кодека, понижение разрешения/битрейта).
+  - Логирование метрик исполнения.
+
+### 4. Настройка Transformer
 
 ```kotlin
-val request = ExportRequest.Builder(context)
-    .setComposition(composition)
-    .setOutputUri(outputUri)
-    .setVideoMimeType(MimeTypes.VIDEO_H264)
-    .setResolution(Resolution.HD_1080)
-    .setEstimatedBitrate(8_000_000)
+val transformationRequest = TransformationRequest.Builder()
+    .setVideoMimeType(MimeTypes.VIDEO_H265) // целевой кодек; при отсутствии возможен фоллбэк
+    .setAudioMimeType(MimeTypes.AUDIO_AAC)
+    .setVideoEncodingBitrate(8_000_000)
+    .setResolution(1920, 1080)
+    .setEnableFallback(true) // разрешить понижение параметров/смену кодека при неподдержке
     .build()
 
 val transformer = Transformer.Builder(context)
-    .setTransformationRequest(
-        TransformationRequest.Builder()
-            .setVideoMimeType(MimeTypes.VIDEO_H265)
-            .setAudioMimeType(MimeTypes.AUDIO_AAC)
-            .setResolution(1920, 1080)
-            .setEnableFallback(true)
-            .build()
-    )
+    .setTransformationRequest(transformationRequest)
     .addListener(listener)
     .build()
+
+transformer.start(composition, outputPath)
 ```
 
-- Используйте `enableFallback` для перехода на поддерживаемые кодеки.
-- Настраивайте target bitrate/resolution, hardware acceleration.
+- Используйте `setEnableFallback(true)` для автоматического перехода на поддерживаемые конфигурации (кодек, профиль, разрешение, битрейт).
+- Настраивайте целевые `mimeType`, `bitrate`, `resolution`; по умолчанию Transformer пытается сохранить исходные параметры.
+- Учитывайте, что конкретные доступные конфигурации зависят от `MediaCodec` на устройстве.
 
-### 3. Фоновая обработка
+### 5. Фоновая обработка
 
-- Запускайте Transformer в `ForegroundService` или `WorkManager` (Expedited).
-- Прогресс через `Transformer.Listener.onProgress(ProgressHolder)` → отправляйте notifications.
-- Сохраняйте state (cancel/resume). При сбое cleanup temp files.
+- Запускайте Transformer вне main thread, обычно в `ForegroundService` или через `WorkManager` (при необходимости expedited work), чтобы долгий экспорт не был убит системой.
+- Прогресс: используйте `Transformer.Listener.onProgress(progressHolder)` и/или `onCompleted`/`onError` для обновления уведомлений.
+- Обрабатывайте cancel (например, через `transformer.cancel()`) и при завершении/сбое очищайте временные файлы.
 
-### 4. Управление кодеками
+### 6. Управление кодеками
 
-- Проверьте `MediaCodecInfo` (profile/level). Если H.265 недоступен → fallback H.264.
-- Для HDR → поддержка `ColorTransfer`, `ColorSpace`.
-- Аудио: AAC/Opus, bit depth controlling.
+- При необходимости явно проверяйте доступность кодеков через `MediaCodecList`/`MediaCodecInfo` (поддерживаемые MIME, profile/level), чтобы выбирать между H.265 и H.264.
+- Для HDR учитывайте поддержку `ColorTransfer`, `ColorSpace`, `ColorRange`; при отсутствии поддерживающих кодеков/поверхностей используйте SDR fallback.
+- Аудио: задавайте MIME (например, AAC, Opus при поддержке), каналы, sample rate и bitrate через соответствующие настройки; произвольное управление битностью сэмплов через high-level API недоступно.
 
-### 5. Ошибки
+### 7. Ошибки
 
-- `TransformationException` → анализируйте `errorCode` (decoder failure, unsupported format).
-- Добавьте retry logic с пониженной конфигурацией (720p).
-- Логируйте metrics (duration, success rate) для аналитики.
+- Обрабатывайте `TransformationException` в `Transformer.Listener.onError`, анализируйте `errorCode` (например, decoder/encoder failure, unsupported format, file I/O ошибки).
+- Добавьте retry-логику с более консервативной конфигурацией (например, понижение разрешения до 720p или переключение на H.264).
+- Логируйте метрики (длительность обработки, процент успеха, распределение по устройствам) для диагностики и последующей оптимизации.
 
-### 6. Тестирование и перформанс
+### 8. Тестирование и перформанс
 
-- Тестируйте на разных чипсетах (hardware codecs сильно отличаются).
-- Измеряйте экспортное время, memory footprint.
-- Используйте `Media3` test utilities (`FakeClock`, instrumentation).
+- Тестируйте на разных чипсетах и версиях Android: поддержка hardware-кодеков и стабильность заметно различаются.
+- Измеряйте время экспорта, использование памяти и влияние на температуру/троттлинг.
+- Автоматизируйте сценарии экспорта (разные форматы, длина, разрешения, эффекты), используя доступные Media3 тестовые утилиты и instrumentation-тесты, чтобы отлавливать регрессии.
 
 ---
 
 ## Answer (EN)
 
-- Assemble a `Composition` of `EditedMediaItem` entries with clipping and effects, and configure `Transformer` with desired codecs/resolution and fallback settings.
-- Run exports off the main thread via ForegroundService/WorkManager, surfacing progress notifications and handling cancellations.
-- Probe codec availability to choose H.265/H.264 and vary bitrate; manage audio settings accordingly.
-- Catch `TransformationException` errors, retry with safe presets, and log metrics.
-- Validate across devices to ensure hardware codecs work and exports meet latency/quality targets.
+### Short Version
+
+- Use `Composition` + `EditedMediaItem` to build the editing timeline.
+- Configure `TransformationRequest` (codec, bitrate, resolution, fallback) and run via `Transformer`.
+- Execute in background (`ForegroundService`/`WorkManager`), track progress and errors via `Transformer.Listener`.
+- Probe codecs (`MediaCodecList`) and implement fallback strategies.
+- Log metrics and test across devices.
+
+### Detailed Version
+
+### 1. Composition structure
+
+```kotlin
+val editedItem1 = EditedMediaItem.Builder(MediaItem.fromUri(uri1))
+    .setEffects(
+        Effects(
+            listOf(ColorFilterEffect(ColorMatrix().apply { setSaturation(0.8f) })),
+            listOf(VolumeEffect(0.8f))
+        )
+    )
+    .setRemoveAudio(true)
+    .build()
+
+val editedItem2 = EditedMediaItem.Builder(MediaItem.fromUri(uri2))
+    .setClippingConfiguration(
+        EditedMediaItem.ClippingConfiguration.Builder()
+            .setStartTimeMs(1_000)
+            .setEndTimeMs(10_000)
+            .build()
+    )
+    .build()
+
+val composition = Composition.Builder(editedItem1)
+    .addEditedMediaItem(editedItem2)
+    .build()
+```
+
+- Use `Composition` to join multiple `EditedMediaItem` instances into a sequential timeline for playback/export.
+- Effects: LUT/ColorMatrix, overlays (`OverlayEffect`), text, animations, and other video/audio effects via `Effects`.
+
+### 2. Requirements
+
+- Functional:
+  - Combine multiple clips into a single final video.
+  - Apply color correction, overlays, text, and audio/video effects.
+  - Control codec, bitrate, resolution, mute/unmute audio.
+  - Run export in background with progress and cancellation.
+  - Handle errors and apply fallback configurations.
+- Non-functional:
+  - Robust behavior across devices and Android versions.
+  - Reasonable export time and power usage.
+  - Predictable behavior under codec/hardware constraints.
+
+### 3. Architecture
+
+- Configuration layer:
+  - Module building `Composition` and `EditedMediaItem` from user scenarios.
+  - Module building `TransformationRequest` (codec, bitrate, resolution, `setEnableFallback(true)`).
+- Execution layer:
+  - Wrapper around `Transformer` invoked from a `ForegroundService` or `WorkManager` worker.
+  - `Transformer.Listener` for progress (`onProgress`), completion (`onCompleted`), and errors (`onError`).
+- Compatibility and analytics layer:
+  - Codec probing via `MediaCodecList`/`MediaCodecInfo`.
+  - Fallback logic (codec switch, downscaling/bitrate reduction).
+  - Execution metrics logging.
+
+### 4. Transformer configuration
+
+```kotlin
+val transformationRequest = TransformationRequest.Builder()
+    .setVideoMimeType(MimeTypes.VIDEO_H265) // target codec; fallback may be needed
+    .setAudioMimeType(MimeTypes.AUDIO_AAC)
+    .setVideoEncodingBitrate(8_000_000)
+    .setResolution(1920, 1080)
+    .setEnableFallback(true) // allow downgrade/codec switch if unsupported
+    .build()
+
+val transformer = Transformer.Builder(context)
+    .setTransformationRequest(transformationRequest)
+    .addListener(listener)
+    .build()
+
+transformer.start(composition, outputPath)
+```
+
+- Use `setEnableFallback(true)` so Transformer can automatically switch to supported codec/profile/resolution/bitrate.
+- Explicitly tune target `mimeType`, bitrate, and resolution; by default Transformer tries to preserve source properties.
+- Remember that valid configurations depend on available `MediaCodec` implementations on the device.
+
+### 5. Background execution
+
+- Run Transformer off the main thread, typically in a `ForegroundService` or via `WorkManager` (with expedited work when appropriate) so long-running exports are not killed.
+- Use `Transformer.Listener.onProgress(progressHolder)` and `onCompleted`/`onError` to update notifications and UI.
+- Support cancellation (e.g., `transformer.cancel()`), and clean up temporary/partial files on completion or failure.
+
+### 6. Codec management
+
+- When needed, probe codecs using `MediaCodecList`/`MediaCodecInfo` (supported MIME, profile/level) to choose between H.265 and H.264.
+- For HDR, consider `ColorTransfer`, `ColorSpace`, `ColorRange`; if unsupported by codecs/surfaces, fall back to SDR.
+- For audio, select supported MIME types (e.g., AAC, Opus where available), channels, sample rate, and bitrate; arbitrary sample bit depth control is not exposed via the high-level API.
+
+### 7. Error handling
+
+- Catch `TransformationException` in `Transformer.Listener.onError` and inspect `errorCode` (decoder/encoder failures, unsupported format, file I/O issues).
+- Implement retry with safer presets (e.g., downscale to 720p or switch to H.264) when errors indicate capability problems.
+- Log metrics such as processing duration, success/failure rate, and device distribution to diagnose issues and guide optimization.
+
+### 8. Testing and performance
+
+- Test across diverse chipsets and Android versions: hardware codec support and stability differ significantly.
+- Measure export time, memory usage, and temperature/throttling impact under realistic workloads.
+- Automate export scenarios (varied formats, durations, resolutions, and effects) using Media3 test utilities and instrumentation tests to catch regressions.
 
 ---
 
@@ -141,11 +281,10 @@ val transformer = Transformer.Builder(context)
 - Какие метрики качества (SSIM/PSNR) стоит собирать в QA?
 
 ## References
-- [[c-media3-transformer]]
 - [[q-media3-migration-strategy--android--hard]]
+- [[c-android]]
 - https://developer.android.com/guide/topics/media/media3/transformer
 
 ## Related Questions
 
-- [[c-media3-transformer]]
 - [[q-media3-migration-strategy--android--hard]]

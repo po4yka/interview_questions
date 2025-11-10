@@ -7,19 +7,15 @@ aliases:
 topic: android
 subtopics:
 - app-bundle
-- gradle
 - performance-memory
+- build-variants
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- android/app-bundles
-- android/optimization
-- android/resources
-- difficulty/medium
 - en
 - ru
-source: https://github.com/Kirchhoff-Android-Interview-Questions
+source: "https://github.com/Kirchhoff-Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository
 status: draft
 moc: moc-android
@@ -29,385 +25,56 @@ related:
 - c-memory-management
 - q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium
 - q-memory-leak-vs-oom-android--android--medium
-- q-what-do-you-know-about-modifiers--programming-languages--medium
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-11-10
 tags:
 - android/app-bundle
-- android/gradle
 - android/performance-memory
+- android/build-variants
 - difficulty/medium
 - en
 - ru
+
 ---
 
-# Question (EN)
-> What ways do you know to reduce the size of an application?
 # Вопрос (RU)
 > Какие способы уменьшения размера приложения вы знаете?
 
----
-
-## Answer (EN)
-
-Small app size is directly related to download success, particularly in emerging markets with poor network device connections or low network speeds. This can result in lower app usage rates, which in turn lowers the scope and reach of your audience.
-
-The main ways to reduce the size of app are:
-- Upload your app with Android App Bundles
-- Reduce resource count and size
-- Reduce native and Java code
-- Re-evaluate feature and translation
-
-### Upload Your App with Android App Bundles
-
-Upload your app as an Android App Bundle to immediately save app size when you publish to Google Play. Android App Bundle is an upload format that includes all your app's compiled code and resources but defers APK generation and signing to Google Play.
-
-Google Play's app serving model then uses your app bundle to generate and serve optimized APKs for each user's device configuration so that they download only the code and resources they need to run your app. You don't have to build, sign, and manage multiple APKs to support different devices, and users get smaller, more optimized downloads.
-
-### Reduce Resource Count and Size
-
-The size of your APK has an impact on how fast your app loads, how much memory it uses, and how much power it consumes. You can make your APK smaller by reducing the number and size of the resources it contains. In particular, you can remove resources that your app no longer uses, and you can use scalable `Drawable` objects in place of image files.
-
-#### Remove Unused Resources
-
-The `lint` tool—a static code analyzer included in Android Studio—detects resources in your `res/` folder that your code doesn't reference. When the `lint` tool discovers a potentially unused resource in your project, it prints a message like the following example:
-
-```
-res/layout/preferences.xml: Warning: The resource R.layout.preferences appears
-    to be unused [UnusedResources]
-```
-
-Libraries that you add to your code might include unused resources. Gradle can automatically remove resources on your behalf if you enable `shrinkResources` in your app's `build.gradle.kts` file:
-
-```kotlin
-android {
-    // Other settings.
-
-    buildTypes {
-        getByName("release") {
-            minifyEnabled = true
-            shrinkResources = true
-            proguardFiles(getDefaultProguardFile('proguard-android.txt'), "proguard-rules.pro")
-        }
-    }
-}
-```
-
-To use `shrinkResources`, enable code shrinking. During the build process, R8 first removes unused code. Then, the Android Gradle plugin removes the unused resources.
-
-#### Support only Specific Densities
-
-Android supports different screen densities, such as the following:
-- `ldpi`
-- `mdpi`
-- `tvdpi`
-- `hdpi`
-- `xhdpi`
-- `xxhdpi`
-- `xxxhdpi`
-
-Although Android supports the preceding densities, you don't need to export your rasterized assets to each density.
-
-If you know that only a small percentage of your users have devices with specific densities, consider whether you need to bundle those densities into your app. If you don't include resources for a specific screen density, Android automatically scales existing resources originally designed for other screen densities.
-
-If your app needs only scaled images, you can save even more space by having a single variant of an image in `drawable-nodpi/`. We recommend you include at least an `xxhdpi` image variant in your app.
-
-#### Use Drawable Objects
-
-Some images don't require a static image resource. The framework can dynamically draw the image at runtime instead. `Drawable` objects—or `<shape>` in XML — can take up a tiny amount of space in your APK. In addition, XML `Drawable` objects produce monochromatic images compliant with Material Design guidelines.
-
-#### Reuse Resources
-
-You can include a separate resource for variations of an image, such as tinted, shaded, or rotated versions of the same image. However, we recommend that you reuse the same set of resources and customizing them as needed at runtime.
-
-Android provides several utilities to change the color of an asset, either using the `android:tint` and `tintMode` attributes.
-
-You can also omit resources that are only a rotated equivalent of another resource. The following code snippet provides an example of turning a "thumb up" into a "thumb down" by pivoting at the middle of the image and rotating it 180 degrees:
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<rotate xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/ic_thumb_up"
-    android:pivotX="50%"
-    android:pivotY="50%"
-    android:fromDegrees="180" />
-```
-
-#### Compress PNG and JPEG Files
-
-You can reduce PNG file sizes without losing image quality using tools like [pngcrush](https://pmt.sourceforge.io/pngcrush/), [pngquant](https://pngquant.org/), or [zopflipng](https://github.com/google/zopfli). All of these tools can reduce PNG file size while preserving the perceptive image quality.
-
-The `pngcrush` tool is particularly effective. This tool iterates over PNG filters and zlib (Deflate) parameters, using each combination of filters and parameters to compress the image. It then chooses the configuration that yields the smallest compressed output.
-
-To compress JPEG files, you can use tools like [packJPG](https://github.com/packjpg/packJPG) and [guetzli](https://github.com/google/guetzli).
-
-#### Use WebP File Format
-
-Instead of using PNG or JPEG files, you can also use the [WebP](https://developers.google.com/speed/webp) file format for your images. The WebP format provides lossy compression and transparency, like JPG and PNG, and it can provide better compression than either JPEG or PNG.
-
-You can convert existing BMP, JPG, PNG or static GIF images to WebP format using Android Studio. For more information, see [Create WebP images](https://developer.android.com/studio/write/convert-webp).
-
-#### Use Downloadable Fonts
-
-Since most programs on the Play Store share the same fonts, the App package already includes many of them. Duplication occurs when a user runs multiple apps with the same fonts on the same device. In response to the issue, Google added Downloadable fonts to its Support collection. APIs can now simply request typefaces instead of bundling files.
-
-### Reduce Native and Java Code
-
-You can use the following methods to reduce the size of the Java and native codebase in your app:
-
-- **Remove unnecessary generated code**: Make sure to understand the footprint of any code which is automatically generated. For example, many protocol buffer tools generate an excessive number of methods and classes, which can double or triple the size of your app
-- **Avoid enumerations**: A single enum can add about 1.0 to 1.4 KB to your app's `classes.dex` file. These additions can quickly accumulate for complex systems or shared libraries. If possible, consider using the `@IntDef` annotation and code shrinking to strip enumerations out and convert them to integers. This type conversion preserves all of the type safety benefits of enums
-- **Reduce the size of native binaries**: If your app uses native code and the Android NDK, you can also reduce the size of the release version of your app by optimizing your code. Two useful techniques are removing debug symbols and not extracting native libraries
-- **Remove debug symbols**: Using debug symbols makes sense if your app is in development and still requires debugging. Use the `arm-eabi-strip` tool provided in the Android NDK to remove unnecessary debug symbols from native libraries. Afterwards, you can compile your release build
-- **Avoid extracting native libraries**: When building the release version of your app, package uncompressed `.so` files in the APK by setting `useLegacyPackaging` to `false` in your app's `build.gradle.kts` file. Disabling this flag prevents `PackageManager` from copying `.so` files from the APK to the filesystem during installation. This method makes updates of your app smaller
-
-### Re-evaluate Feature and Translation
-
-#### Re-evaluate Infrequently Used Features
-
-Specifically optimize for Android (Go edition) by disabling features that have low daily active user (DAU) metrics. Examples of this include removing complex animations, large GIF files, or any other aesthetic additions not necessary for app success.
-
-#### Utilize Dynamic Delivery
-
-Play Feature Delivery uses advanced capabilities of app bundles, allowing certain features of your app to be delivered conditionally or downloaded on demand. You can use feature modules for custom delivery. A unique benefit of feature modules is the ability to customize how and when different features of your app are downloaded onto devices running Android 5.0 (API level 21) or higher.
-
-#### Reduce Translatable String Size
-
-You can use the Android Gradle `resConfigs` property to remove alternative resource files that your app doesn't need. If you're using a library that includes language resources (such as AppCompat or Google Play Services), then your app includes all translated language strings for library messages, regardless of app translation. If you'd like to keep only the languages that your app officially supports, you can specify those languages using the `resConfig` property. Any resources for languages not specified are removed.
-
-To limit your language resources to just English and French, you can edit `defaultConfig` as shown below:
-
-```kotlin
-android {
-    defaultConfig {
-        ...
-        resConfigs "en", "fr"
-    }
-}
-```
-
-#### Use Selective Translation
-
-If a given string isn't visible in the app's UI, then you don't have to translate it. Strings for the purpose of debugging, exception messages, or URLs should be string literals in code, not resources.
-
-For example, don't bother translating URLs:
-
-```xml
-<string name="car_frx_device_incompatible_sol_message">
-  This device doesn\'t support Android Auto.\n
-  &lt;a href="https://support.google.com/androidauto/answer/6395843"&gt;Learn more&lt;/a>
-</string>
-```
-
-You may recognize `&lt;` and `&gt`, as these are escape characters for `<` and `>`. They're needed here because if you were to put an `<a>` tag inside of a `<string>` tag, then the Android resource compiler drops them since it doesn't recognize the tag. However, this means that you're translating the HTML tags and the URL to 78 languages. Instead, you can remove the HTML:
-
-```xml
-<string name="car_frx_device_incompatible_sol_message">
-         This device doesn\'t support Android Auto.
-</string>
-```
-
-
 # Question (EN)
 > What ways do you know to reduce the size of an application?
-# Вопрос (RU)
-> Какие способы уменьшения размера приложения вы знаете?
 
 ---
-
-
----
-
-
-## Answer (EN)
-
-Small app size is directly related to download success, particularly in emerging markets with poor network device connections or low network speeds. This can result in lower app usage rates, which in turn lowers the scope and reach of your audience.
-
-The main ways to reduce the size of app are:
-- Upload your app with Android App Bundles
-- Reduce resource count and size
-- Reduce native and Java code
-- Re-evaluate feature and translation
-
-### Upload Your App with Android App Bundles
-
-Upload your app as an Android App Bundle to immediately save app size when you publish to Google Play. Android App Bundle is an upload format that includes all your app's compiled code and resources but defers APK generation and signing to Google Play.
-
-Google Play's app serving model then uses your app bundle to generate and serve optimized APKs for each user's device configuration so that they download only the code and resources they need to run your app. You don't have to build, sign, and manage multiple APKs to support different devices, and users get smaller, more optimized downloads.
-
-### Reduce Resource Count and Size
-
-The size of your APK has an impact on how fast your app loads, how much memory it uses, and how much power it consumes. You can make your APK smaller by reducing the number and size of the resources it contains. In particular, you can remove resources that your app no longer uses, and you can use scalable `Drawable` objects in place of image files.
-
-#### Remove Unused Resources
-
-The `lint` tool—a static code analyzer included in Android Studio—detects resources in your `res/` folder that your code doesn't reference. When the `lint` tool discovers a potentially unused resource in your project, it prints a message like the following example:
-
-```
-res/layout/preferences.xml: Warning: The resource R.layout.preferences appears
-    to be unused [UnusedResources]
-```
-
-Libraries that you add to your code might include unused resources. Gradle can automatically remove resources on your behalf if you enable `shrinkResources` in your app's `build.gradle.kts` file:
-
-```kotlin
-android {
-    // Other settings.
-
-    buildTypes {
-        getByName("release") {
-            minifyEnabled = true
-            shrinkResources = true
-            proguardFiles(getDefaultProguardFile('proguard-android.txt'), "proguard-rules.pro")
-        }
-    }
-}
-```
-
-To use `shrinkResources`, enable code shrinking. During the build process, R8 first removes unused code. Then, the Android Gradle plugin removes the unused resources.
-
-#### Support only Specific Densities
-
-Android supports different screen densities, such as the following:
-- `ldpi`
-- `mdpi`
-- `tvdpi`
-- `hdpi`
-- `xhdpi`
-- `xxhdpi`
-- `xxxhdpi`
-
-Although Android supports the preceding densities, you don't need to export your rasterized assets to each density.
-
-If you know that only a small percentage of your users have devices with specific densities, consider whether you need to bundle those densities into your app. If you don't include resources for a specific screen density, Android automatically scales existing resources originally designed for other screen densities.
-
-If your app needs only scaled images, you can save even more space by having a single variant of an image in `drawable-nodpi/`. We recommend you include at least an `xxhdpi` image variant in your app.
-
-#### Use Drawable Objects
-
-Some images don't require a static image resource. The framework can dynamically draw the image at runtime instead. `Drawable` objects—or `<shape>` in XML — can take up a tiny amount of space in your APK. In addition, XML `Drawable` objects produce monochromatic images compliant with Material Design guidelines.
-
-#### Reuse Resources
-
-You can include a separate resource for variations of an image, such as tinted, shaded, or rotated versions of the same image. However, we recommend that you reuse the same set of resources and customizing them as needed at runtime.
-
-Android provides several utilities to change the color of an asset, either using the `android:tint` and `tintMode` attributes.
-
-You can also omit resources that are only a rotated equivalent of another resource. The following code snippet provides an example of turning a "thumb up" into a "thumb down" by pivoting at the middle of the image and rotating it 180 degrees:
-
-```xml
-<?xml version="1.0" encoding="utf-8"?>
-<rotate xmlns:android="http://schemas.android.com/apk/res/android"
-    android:drawable="@drawable/ic_thumb_up"
-    android:pivotX="50%"
-    android:pivotY="50%"
-    android:fromDegrees="180" />
-```
-
-#### Compress PNG and JPEG Files
-
-You can reduce PNG file sizes without losing image quality using tools like [pngcrush](https://pmt.sourceforge.io/pngcrush/), [pngquant](https://pngquant.org/), or [zopflipng](https://github.com/google/zopfli). All of these tools can reduce PNG file size while preserving the perceptive image quality.
-
-The `pngcrush` tool is particularly effective. This tool iterates over PNG filters and zlib (Deflate) parameters, using each combination of filters and parameters to compress the image. It then chooses the configuration that yields the smallest compressed output.
-
-To compress JPEG files, you can use tools like [packJPG](https://github.com/packjpg/packJPG) and [guetzli](https://github.com/google/guetzli).
-
-#### Use WebP File Format
-
-Instead of using PNG or JPEG files, you can also use the [WebP](https://developers.google.com/speed/webp) file format for your images. The WebP format provides lossy compression and transparency, like JPG and PNG, and it can provide better compression than either JPEG or PNG.
-
-You can convert existing BMP, JPG, PNG or static GIF images to WebP format using Android Studio. For more information, see [Create WebP images](https://developer.android.com/studio/write/convert-webp).
-
-#### Use Downloadable Fonts
-
-Since most programs on the Play Store share the same fonts, the App package already includes many of them. Duplication occurs when a user runs multiple apps with the same fonts on the same device. In response to the issue, Google added Downloadable fonts to its Support collection. APIs can now simply request typefaces instead of bundling files.
-
-### Reduce Native and Java Code
-
-You can use the following methods to reduce the size of the Java and native codebase in your app:
-
-- **Remove unnecessary generated code**: Make sure to understand the footprint of any code which is automatically generated. For example, many protocol buffer tools generate an excessive number of methods and classes, which can double or triple the size of your app
-- **Avoid enumerations**: A single enum can add about 1.0 to 1.4 KB to your app's `classes.dex` file. These additions can quickly accumulate for complex systems or shared libraries. If possible, consider using the `@IntDef` annotation and code shrinking to strip enumerations out and convert them to integers. This type conversion preserves all of the type safety benefits of enums
-- **Reduce the size of native binaries**: If your app uses native code and the Android NDK, you can also reduce the size of the release version of your app by optimizing your code. Two useful techniques are removing debug symbols and not extracting native libraries
-- **Remove debug symbols**: Using debug symbols makes sense if your app is in development and still requires debugging. Use the `arm-eabi-strip` tool provided in the Android NDK to remove unnecessary debug symbols from native libraries. Afterwards, you can compile your release build
-- **Avoid extracting native libraries**: When building the release version of your app, package uncompressed `.so` files in the APK by setting `useLegacyPackaging` to `false` in your app's `build.gradle.kts` file. Disabling this flag prevents `PackageManager` from copying `.so` files from the APK to the filesystem during installation. This method makes updates of your app smaller
-
-### Re-evaluate Feature and Translation
-
-#### Re-evaluate Infrequently Used Features
-
-Specifically optimize for Android (Go edition) by disabling features that have low daily active user (DAU) metrics. Examples of this include removing complex animations, large GIF files, or any other aesthetic additions not necessary for app success.
-
-#### Utilize Dynamic Delivery
-
-Play Feature Delivery uses advanced capabilities of app bundles, allowing certain features of your app to be delivered conditionally or downloaded on demand. You can use feature modules for custom delivery. A unique benefit of feature modules is the ability to customize how and when different features of your app are downloaded onto devices running Android 5.0 (API level 21) or higher.
-
-#### Reduce Translatable String Size
-
-You can use the Android Gradle `resConfigs` property to remove alternative resource files that your app doesn't need. If you're using a library that includes language resources (such as AppCompat or Google Play Services), then your app includes all translated language strings for library messages, regardless of app translation. If you'd like to keep only the languages that your app officially supports, you can specify those languages using the `resConfig` property. Any resources for languages not specified are removed.
-
-To limit your language resources to just English and French, you can edit `defaultConfig` as shown below:
-
-```kotlin
-android {
-    defaultConfig {
-        ...
-        resConfigs "en", "fr"
-    }
-}
-```
-
-#### Use Selective Translation
-
-If a given string isn't visible in the app's UI, then you don't have to translate it. Strings for the purpose of debugging, exception messages, or URLs should be string literals in code, not resources.
-
-For example, don't bother translating URLs:
-
-```xml
-<string name="car_frx_device_incompatible_sol_message">
-  This device doesn\'t support Android Auto.\n
-  &lt;a href="https://support.google.com/androidauto/answer/6395843"&gt;Learn more&lt;/a>
-</string>
-```
-
-You may recognize `&lt;` and `&gt`, as these are escape characters for `<` and `>`. They're needed here because if you were to put an `<a>` tag inside of a `<string>` tag, then the Android resource compiler drops them since it doesn't recognize the tag. However, this means that you're translating the HTML tags and the URL to 78 languages. Instead, you can remove the HTML:
-
-```xml
-<string name="car_frx_device_incompatible_sol_message">
-         This device doesn\'t support Android Auto.
-</string>
-```
 
 ## Ответ (RU)
 
-Небольшой размер приложения напрямую связан с успехом загрузки, особенно на развивающихся рынках с плохими сетевыми подключениями устройств или низкими скоростями сети. Это может привести к снижению показателей использования приложения, что в свою очередь снижает охват и досягаемость вашей аудитории.
+Небольшой размер приложения напрямую связан с успешностью установки, особенно на развивающихся рынках с плохими сетевыми подключениями или низкой скоростью сети. Большие загрузки могут приводить к снижению количества установок и использования, что уменьшает охват вашей аудитории.
 
 Основные способы уменьшения размера приложения:
-- Загрузка приложения с помощью Android App Bundles
+- Загрузка приложения в формате Android App `Bundle`
 - Уменьшение количества и размера ресурсов
-- Уменьшение нативного кода и Java кода
-- Переоценка функций и переводов
+- Уменьшение объёма нативного и Java/Kotlin-кода
+- Переоценка функциональности и переводов
 
-### Загрузка Приложения С Помощью Android App Bundles
+### Загрузка приложения в формате Android App `Bundle`
 
-Загрузите свое приложение как Android App Bundle, чтобы немедленно сэкономить размер приложения при публикации в Google Play. Android App Bundle - это формат загрузки, который включает весь скомпилированный код и ресурсы вашего приложения, но откладывает генерацию и подписание APK на Google Play.
+Загрузите приложение как Android App `Bundle` (AAB), чтобы снизить размер загрузки и установки при публикации в Google Play. Android App `Bundle` — это формат загрузки, который включает весь скомпилированный код и ресурсы приложения, но передаёт генерацию и подписание APK на сторону Google Play.
 
-Модель обслуживания приложений Google Play затем использует ваш app bundle для генерации и обслуживания оптимизированных APK для конфигурации устройства каждого пользователя, чтобы они загружали только код и ресурсы, необходимые для запуска вашего приложения. Вам не нужно создавать, подписывать и управлять несколькими APK для поддержки различных устройств, а пользователи получают меньшие, более оптимизированные загрузки.
+Модель доставки Google Play использует ваш app bundle для генерации и распространения оптимизированных APK под конфигурацию конкретного устройства, чтобы пользователь загружал только необходимый для работы код и ресурсы. Вам не нужно создавать, подписывать и обслуживать несколько APK для разных устройств, а пользователи получают меньшие и более оптимизированные загрузки.
 
-### Уменьшение Количества И Размера Ресурсов
+### Уменьшение количества и размера ресурсов
 
-Размер вашего APK влияет на то, насколько быстро загружается ваше приложение, сколько памяти оно использует и сколько энергии потребляет. Вы можете уменьшить размер APK, уменьшив количество и размер содержащихся в нем ресурсов. В частности, вы можете удалить ресурсы, которые ваше приложение больше не использует, и вы можете использовать масштабируемые объекты `Drawable` вместо файлов изображений.
+Размер пакета приложения влияет на скорость запуска, потребление памяти и энергии. Вы можете уменьшить размер, сократив количество и объём ресурсов. В частности, удалите ресурсы, которые больше не используются, и при возможности используйте масштабируемые объекты `Drawable` вместо растровых изображений.
 
-#### Удаление Неиспользуемых Ресурсов
+#### Удаление неиспользуемых ресурсов
 
-Инструмент `lint` - статический анализатор кода, включенный в Android Studio - обнаруживает ресурсы в вашей папке `res/`, на которые не ссылается ваш код. Когда инструмент `lint` обнаруживает потенциально неиспользуемый ресурс в вашем проекте, он выводит сообщение, подобное следующему примеру:
+Инструмент `lint` — статический анализатор кода, включённый в Android Studio — обнаруживает ресурсы в папке `res/`, на которые не ссылается ваш код. Когда `lint` находит потенциально неиспользуемый ресурс, он выдаёт сообщение, подобное следующему:
 
 ```
 res/layout/preferences.xml: Warning: The resource R.layout.preferences appears
     to be unused [UnusedResources]
 ```
 
-Библиотеки, которые вы добавляете в свой код, могут включать неиспользуемые ресурсы. Gradle может автоматически удалять ресурсы от вашего имени, если вы включите `shrinkResources` в файле `build.gradle.kts` вашего приложения:
+Библиотеки, которые вы добавляете в проект, могут содержать неиспользуемые ресурсы. Gradle может автоматически удалить их, если включить `shrinkResources` в файле `build.gradle.kts` вашего приложения:
 
 ```kotlin
 android {
@@ -415,19 +82,22 @@ android {
 
     buildTypes {
         getByName("release") {
-            minifyEnabled = true
-            shrinkResources = true
-            proguardFiles(getDefaultProguardFile('proguard-android.txt'), "proguard-rules.pro")
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 }
 ```
 
-Чтобы использовать `shrinkResources`, включите сжатие кода. Во время процесса сборки R8 сначала удаляет неиспользуемый код. Затем плагин Android Gradle удаляет неиспользуемые ресурсы.
+Для использования `shrinkResources` необходимо включить уменьшение кода. Во время сборки R8 сначала удаляет неиспользуемый код, затем плагин Android Gradle удаляет неиспользуемые ресурсы.
 
-#### Поддержка Только Определенных Плотностей
+#### Поддержка только нужных плотностей экрана
 
-Android поддерживает различные плотности экрана, такие как следующие:
+Android поддерживает различные плотности экрана:
 - `ldpi`
 - `mdpi`
 - `tvdpi`
@@ -436,23 +106,23 @@ Android поддерживает различные плотности экра�
 - `xxhdpi`
 - `xxxhdpi`
 
-Хотя Android поддерживает вышеперечисленные плотности, вам не нужно экспортировать свои растровые ассеты для каждой плотности.
+Хотя перечисленные плотности поддерживаются, вам не обязательно иметь растровые ассеты для каждой из них.
 
-Если вы знаете, что только небольой процент ваших пользователей имеет устройства с определенными плотностями, подумайте, нужно ли вам включать эти плотности в ваше приложение. Если вы не включаете ресурсы для определенной плотности экрана, Android автоматически масштабирует существующие ресурсы, первоначально разработанные для других плотностей экрана.
+Если вы знаете, что лишь небольшой процент пользователей использует устройства с определёнными плотностями, подумайте, нужно ли включать соответствующие ресурсы. Если ресурсы для конкретной плотности отсутствуют, Android автоматически масштабирует существующие ресурсы, изначально подготовленные для других плотностей.
 
-Если вашему приложению нужны только масштабированные изображения, вы можете сэкономить еще больше места, имея один вариант изображения в `drawable-nodpi/`. Мы рекомендуем включить хотя бы вариант изображения `xxhdpi` в ваше приложение.
+Если вашему приложению достаточно масштабируемых изображений, вы можете ещё больше сэкономить место, имея один вариант изображения в `drawable-nodpi/`. Обычно рекомендуется включать как минимум вариант `xxhdpi`.
 
-#### Использование Drawable Объектов
+#### Использование объектов Drawable
 
-Некоторые изображения не требуют статического ресурса изображения. Фреймворк может динамически нарисовать изображение во время выполнения. Объекты `Drawable` - или `<shape>` в XML - могут занимать крошечное количество места в вашем APK. Кроме того, XML-объекты `Drawable` создают монохромные изображения, соответствующие рекомендациям Material Design.
+Некоторые элементы интерфейса не требуют статического растрового изображения. Фреймворк может нарисовать их динамически во время выполнения. Объекты `Drawable` (в том числе `<shape>` в XML) занимают очень мало места в APK. XML-ресурсы особенно подходят для простых монохромных фигур и хорошо сочетаются с рекомендациями Material Design.
 
-#### Повторное Использование Ресурсов
+#### Повторное использование ресурсов
 
-Вы можете включить отдельный ресурс для вариаций изображения, таких как тонированные, затененные или повернутые версии одного и того же изображения. Однако мы рекомендуем повторно использовать один и тот же набор ресурсов и настраивать их по мере необходимости во время выполнения.
+Вместо создания отдельных ресурсов для каждой вариации изображения (тонированной, затемнённой, повернутой и т.п.) лучше переиспользовать базовый ресурс и настраивать его во время выполнения.
 
-Android предоставляет несколько утилит для изменения цвета ассета, используя атрибуты `android:tint` и `tintMode`.
+Android предоставляет несколько способов изменить цвет ассета, например, с помощью атрибутов `android:tint` и `tintMode`.
 
-Вы также можете опустить ресурсы, которые являются только повернутым эквивалентом другого ресурса. Следующий фрагмент кода представляет пример превращения "большого пальца вверх" в "большой палец вниз" путем поворота в середине изображения и поворота его на 180 градусов:
+Можно также не добавлять ресурсы, которые являются лишь повернутым вариантом другого. В следующем примере показано превращение иконки «палец вверх» в «палец вниз» путём поворота изображения на 180 градусов относительно центра:
 
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
@@ -463,77 +133,245 @@ Android предоставляет несколько утилит для изм
     android:fromDegrees="180" />
 ```
 
-#### Сжатие PNG И JPEG Файлов
+#### Сжатие файлов PNG и JPEG
 
-Вы можете уменьшить размер файлов PNG без потери качества изображения, используя такие инструменты, как [pngcrush](https://pmt.sourceforge.io/pngcrush/), [pngquant](https://pngquant.org/) или [zopflipng](https://github.com/google/zopfli). Все эти инструменты могут уменьшить размер файла PNG, сохраняя при этом воспринимаемое качество изображения.
+Размер PNG можно уменьшить без потери визуального качества с помощью инструментов [pngcrush](https://pmt.sourceforge.io/pngcrush/), [pngquant](https://pngquant.org/), [zopflipng](https://github.com/google/zopfli) и других. Эти инструменты снижают размер файла при сохранении воспринимаемого качества изображения.
 
-Инструмент `pngcrush` особенно эффективен. Этот инструмент перебирает фильтры PNG и параметры zlib (Deflate), используя каждую комбинацию фильтров и параметров для сжатия изображения. Затем он выбирает конфигурацию, которая дает наименьший сжатый вывод.
+Инструмент `pngcrush` перебирает различные фильтры PNG и параметры zlib (Deflate), используя разные комбинации для сжатия изображения, и выбирает вариант с наименьшим размером.
 
-Для сжатия файлов JPEG вы можете использовать такие инструменты, как [packJPG](https://github.com/packjpg/packJPG) и [guetzli](https://github.com/google/guetzli).
+Для сжатия JPEG можно использовать, например, [packJPG](https://github.com/packjpg/packJPG) и [guetzli](https://github.com/google/guetzli).
 
-#### Использование Формата Файла WebP
+#### Использование формата WebP
 
-Вместо использования файлов PNG или JPEG вы также можете использовать формат файла [WebP](https://developers.google.com/speed/webp) для ваших изображений. Формат WebP обеспечивает сжатие с потерями и прозрачность, как JPG и PNG, и он может обеспечить лучшее сжатие, чем JPEG или PNG.
+Вместо PNG или JPEG вы можете использовать формат [WebP](https://developers.google.com/speed/webp). WebP поддерживает сжатие с потерями, прозрачность и зачастую обеспечивает лучшее сжатие по сравнению с JPEG и PNG.
 
-Вы можете конвертировать существующие изображения BMP, JPG, PNG или статические GIF в формат WebP с помощью Android Studio. Для получения дополнительной информации см. [Создание изображений WebP](https://developer.android.com/studio/write/convert-webp).
+Существующие BMP, JPG, PNG и статические GIF можно конвертировать в WebP с помощью Android Studio. Подробнее см. [Create WebP images](https://developer.android.com/studio/write/convert-webp).
 
-#### Использование Загружаемых Шрифтов
+#### Использование загружаемых шрифтов
 
-Поскольку большинство программ в Play Store используют одни и те же шрифты, пакет приложения уже включает многие из них. Дублирование происходит, когда пользователь запускает несколько приложений с одинаковыми шрифтами на одном устройстве. В ответ на эту проблему Google добавил загружаемые шрифты в свою коллекцию поддержки. API теперь могут просто запрашивать шрифты вместо объединения файлов.
+Поскольку многие приложения в Play Store используют одинаковые шрифты, их встраивание в каждый APK приводит к дублированию данных на устройстве. Загружаемые шрифты позволяют приложениям запрашивать шрифт из общего провайдера вместо встраивания файлов, что уменьшает размер APK/AAB и избегает дублей на устройстве.
 
-### Уменьшение Нативного Кода И Java Кода
+### Уменьшение объёма нативного и Java/Kotlin-кода
 
-Вы можете использовать следующие методы для уменьшения размера кодовой базы Java и нативного кода в вашем приложении:
+Для уменьшения размера Java/Kotlin- и нативного кода используйте следующие подходы:
 
-- **Удаление ненужного сгенерированного кода**: Убедитесь, что вы понимаете объем любого автоматически генерируемого кода. Например, многие инструменты protocol buffer генерируют чрезмерное количество методов и классов, что может удвоить или утроить размер вашего приложения
-- **Избегайте перечислений**: Одно перечисление может добавить около 1.0-1.4 КБ к файлу `classes.dex` вашего приложения. Эти дополнения могут быстро накапливаться для сложных систем или общих библиотек. Если возможно, рассмотрите возможность использования аннотации `@IntDef` и сжатия кода для удаления перечислений и преобразования их в целые числа. Этот тип преобразования сохраняет все преимущества типобезопасности перечислений
-- **Уменьшение размера нативных бинарных файлов**: Если ваше приложение использует нативный код и Android NDK, вы также можете уменьшить размер релизной версии вашего приложения, оптимизируя свой код. Две полезные техники - это удаление отладочных символов и не извлечение нативных библиотек
-- **Удаление отладочных символов**: Использование отладочных символов имеет смысл, если ваше приложение находится в разработке и все еще требует отладки. Используйте инструмент `arm-eabi-strip`, предоставляемый в Android NDK, для удаления ненужных отладочных символов из нативных библиотек. После этого вы можете скомпилировать свою релизную сборку
-- **Избегайте извлечения нативных библиотек**: При создании релизной версии вашего приложения упакуйте несжатые файлы `.so` в APK, установив `useLegacyPackaging` в `false` в файле `build.gradle.kts` вашего приложения. Отключение этого флага предотвращает копирование `PackageManager` файлов `.so` из APK в файловую систему во время установки. Этот метод делает обновления вашего приложения меньше
+- **Удаляйте ненужный сгенерированный код**: Контролируйте объём автоматически генерируемого кода. Некоторые инструменты (например, генераторы по protocol buffers) могут создавать чрезмерное количество классов и методов, существенно увеличивая размер приложения.
+- **Избегайте перечислений при необходимости**: Одно перечисление может добавить около 1,0–1,4 КБ к `classes.dex`. В больших системах это быстро накапливается. По возможности используйте аннотации `@IntDef`/`@StringDef` и shrinker, чтобы заменить enum на примитивы, сохранив большую часть преимуществ типобезопасности.
+- **Уменьшайте размер нативных бинарников**: При использовании NDK оптимизируйте нативный код, убирайте неиспользуемые части и лишние ABI, чтобы не поставлять ненужные библиотеки.
+- **Удаление отладочных символов**: Оставляйте отладочные символы только в debug-сборках или в отдельном symbol-файле для Crashlytics/Play Console. В релизные библиотеки загружайте версии без лишних символов.
+- **Избегайте извлечения нативных библиотек**: В релизной конфигурации отключите устаревшую схему распаковки `.so` (например, `useLegacyPackaging = false` в настройках packaging). Это предотвращает копирование `.so` из APK на файловую систему при установке и помогает уменьшить занимаемое место и размер обновлений.
 
-### Переоценка Функций И Переводов
+### Переоценка функциональности и переводов
 
-#### Переоценка Редко Используемых Функций
+#### Переоценка редко используемых функций
 
-Специально оптимизируйте для Android (Go edition), отключая функции, которые имеют низкие показатели ежедневных активных пользователей (DAU). Примеры этого включают удаление сложных анимаций, больших GIF-файлов или любых других эстетических дополнений, не необходимых для успеха приложения.
+Оптимизируйте приложение для устройств с ограниченными ресурсами (включая Android (Go edition)), отключая или удаляя функции с низким DAU. Например, тяжёлые анимации, большие GIF, неиспользуемые экраны, большие объёмы логирования и прочие неключевые элементы.
 
-#### Использование Динамической Доставки
+#### Использование динамической доставки
 
-Play Feature Delivery использует расширенные возможности app bundles, позволяя условно доставлять определенные функции вашего приложения или загружать их по требованию. Вы можете использовать модули функций для пользовательской доставки. Уникальное преимущество модулей функций - это возможность настраивать, как и когда различные функции вашего приложения загружаются на устройства под управлением Android 5.0 (API level 21) или выше.
+Play Feature Delivery (динамические feature-модули) использует возможности app bundle для условной или отложенной доставки отдельных функций. Крупные или редко используемые возможности могут загружаться только по требованию, что уменьшает первоначальный размер установки при сохранении функциональности.
 
-#### Уменьшение Размера Переводимых Строк
+#### Уменьшение объёма переводимых строк
 
-Вы можете использовать свойство Android Gradle `resConfigs` для удаления альтернативных файлов ресурсов, которые не нужны вашему приложению. Если вы используете библиотеку, которая включает языковые ресурсы (такие как AppCompat или Google Play Services), то ваше приложение включает все переведенные языковые строки для сообщений библиотеки, независимо от перевода приложения. Если вы хотите сохранить только языки, которые официально поддерживает ваше приложение, вы можете указать эти языки, используя свойство `resConfig`. Любые ресурсы для неуказанных языков удаляются.
+Используйте свойство `resConfigs` Android Gradle для удаления ненужных языковых ресурсов. Если подключённая библиотека (например, AppCompat или Google Play Services) содержит набор переводов, по умолчанию все эти строки попадают в приложение.
 
-Чтобы ограничить ваши языковые ресурсы только английским и французским, вы можете отредактировать `defaultConfig`, как показано ниже:
+Чтобы оставить только языки, официально поддерживаемые приложением, перечислите их в `resConfigs`. Ресурсы для остальных языков будут исключены.
+
+Например, чтобы оставить только английский и французский (Kotlin DSL):
 
 ```kotlin
 android {
     defaultConfig {
-        ...
-        resConfigs "en", "fr"
+        // ...
+        resConfigs("en", "fr")
     }
 }
 ```
 
-#### Использование Выборочного Перевода
+#### Выборочный перевод
 
-Если данная строка не видна в UI приложения, то вам не нужно ее переводить. Строки для целей отладки, сообщения об исключениях или URL должны быть строковыми литералами в коде, а не ресурсами.
+Строки, которые никогда не отображаются пользователю (отладка, сообщения исключений, URL), можно не локализовать и хранить как литералы в коде.
 
 Например, не стоит переводить URL:
 
 ```xml
 <string name="car_frx_device_incompatible_sol_message">
   This device doesn\'t support Android Auto.\n
-  &lt;a href="https://support.google.com/androidauto/answer/6395843"&gt;Learn more&lt;/a>
+  &lt;a href="https://support.google.com/androidauto/answer/6395843"&gt;Learn more&lt;/a&gt;
 </string>
 ```
 
-Вы можете распознать `&lt;` и `&gt`, поскольку это escape-символы для `<` и `>`. Они нужны здесь, потому что если бы вы поместили тег `<a>` внутри тега `<string>`, то компилятор ресурсов Android отбросит их, поскольку не распознает тег. Однако это означает, что вы переводите HTML-теги и URL на 78 языков. Вместо этого вы можете удалить HTML:
+`&lt;` и `&gt;` — это escape-символы для `<` и `>`. Они нужны, потому что прямой тег `<a>` внутри `<string>` может быть отброшен компилятором ресурсов. В таком варианте вы фактически локализуете HTML и URL на десятки языков. Вместо этого можно убрать HTML и не делать строку переводимой:
 
 ```xml
 <string name="car_frx_device_incompatible_sol_message">
-         This device doesn\'t support Android Auto.
+    This device doesn\'t support Android Auto.
+</string>
+```
+
+---
+
+## Answer (EN)
+
+Small app size is directly related to download success, particularly in emerging markets with poor network connections or low network speeds. Larger downloads can result in lower install and usage rates, which in turn reduces the reach of your audience.
+
+The main ways to reduce the size of an app are:
+- Upload your app with Android App Bundles
+- Reduce resource count and size
+- Reduce native and Java/Kotlin code
+- Re-evaluate features and translations
+
+### Upload Your App with Android App Bundles
+
+Upload your app as an Android App `Bundle` (AAB) to immediately save download and install size when you publish to Google Play. An Android App `Bundle` is an upload format that includes all your app's compiled code and resources but defers APK generation and signing to Google Play.
+
+Google Play's app serving model then uses your app bundle to generate and serve optimized APKs for each user's device configuration so that they download only the code and resources they need to run your app. You don't have to build, sign, and manage multiple APKs to support different devices, and users get smaller, more optimized downloads.
+
+### Reduce Resource Count and Size
+
+The size of your app package has an impact on how fast your app loads, how much memory it uses, and how much power it consumes. You can make your app smaller by reducing the number and size of the resources it contains. In particular, you can remove resources that your app no longer uses and use scalable `Drawable` objects in place of bitmap image files when appropriate.
+
+#### Remove Unused Resources
+
+The `lint` tool—a static code analyzer included in Android Studio—detects resources in your `res/` folder that your code doesn't reference. When the `lint` tool discovers a potentially unused resource in your project, it prints a message like the following example:
+
+```
+res/layout/preferences.xml: Warning: The resource R.layout.preferences appears
+    to be unused [UnusedResources]
+```
+
+Libraries that you add to your code might include unused resources. Gradle can automatically remove resources on your behalf if you enable `shrinkResources` in your app's `build.gradle.kts` file:
+
+```kotlin
+android {
+    // Other settings.
+
+    buildTypes {
+        getByName("release") {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android.txt"),
+                "proguard-rules.pro"
+            )
+        }
+    }
+}
+```
+
+To use `shrinkResources`, you must enable code shrinking. During the build process, R8 first removes unused code. Then, the Android Gradle plugin removes the unused resources.
+
+#### Support Only Specific Densities
+
+Android supports different screen densities, such as the following:
+- `ldpi`
+- `mdpi`
+- `tvdpi`
+- `hdpi`
+- `xhdpi`
+- `xxhdpi`
+- `xxxhdpi`
+
+Although Android supports the preceding densities, you don't need to export your rasterized assets to each density.
+
+If you know that only a small percentage of your users have devices with specific densities, consider whether you need to bundle those densities into your app. If you don't include resources for a specific screen density, Android automatically scales existing resources originally designed for other screen densities.
+
+If your app only needs scaled images, you can save even more space by having a single variant of an image in `drawable-nodpi/`. It's usually recommended to include at least an `xxhdpi` image variant.
+
+#### Use Drawable Objects
+
+Some images don't require a static bitmap resource. The framework can dynamically draw the image at runtime instead. `Drawable` objects—or `<shape>` in XML—can take up a tiny amount of space in your APK. In addition, XML `Drawable` objects are well suited for monochromatic and simple shapes, and work well with Material Design guidelines.
+
+#### Reuse Resources
+
+You can include a separate resource for variations of an image, such as tinted, shaded, or rotated versions of the same image. However, it's often better to reuse the same base resources and customize them as needed at runtime.
+
+Android provides several utilities to change the color of an asset, such as the `android:tint` and `tintMode` attributes.
+
+You can also omit resources that are only a rotated equivalent of another resource. The following code snippet provides an example of turning a "thumb up" into a "thumb down" by pivoting at the middle of the image and rotating it 180 degrees:
+
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@drawable/ic_thumb_up"
+    android:pivotX="50%"
+    android:pivotY="50%"
+    android:fromDegrees="180" />
+```
+
+#### Compress PNG and JPEG Files
+
+You can reduce PNG file sizes without losing image quality using tools like [pngcrush](https://pmt.sourceforge.io/pngcrush/), [pngquant](https://pngquant.org/), or [zopflipng](https://github.com/google/zopfli). All of these tools can reduce PNG file size while preserving perceived image quality.
+
+The `pngcrush` tool is particularly effective. This tool iterates over PNG filters and zlib (Deflate) parameters, using each combination of filters and parameters to compress the image. It then chooses the configuration that yields the smallest compressed output.
+
+To compress JPEG files, you can use tools like [packJPG](https://github.com/packjpg/packJPG) and [guetzli](https://github.com/google/guetzli).
+
+#### Use WebP File Format
+
+Instead of using PNG or JPEG files, you can also use the [WebP](https://developers.google.com/speed/webp) file format for your images. The WebP format provides lossy compression and transparency and can often provide better compression than either JPEG or PNG.
+
+You can convert existing BMP, JPG, PNG, or static GIF images to WebP format using Android Studio. For more information, see [Create WebP images](https://developer.android.com/studio/write/convert-webp).
+
+#### Use Downloadable Fonts
+
+Because many apps on the Play Store use the same fonts, bundling font files in every app causes duplication on the device. Downloadable Fonts allow apps to request fonts from a shared provider instead of bundling them, which reduces the APK/AAB size and avoids duplicate copies on the device.
+
+### Reduce Native and Java/Kotlin Code
+
+You can use the following methods to reduce the size of the Java/Kotlin and native codebase in your app:
+
+- **Remove unnecessary generated code**: Understand the footprint of any code that is automatically generated. For example, some protocol buffer tools can generate an excessive number of methods and classes, which can significantly increase your app size.
+- **Avoid enumerations where appropriate**: A single enum can add about 1.0 to 1.4 KB to your app's `classes.dex` file. These additions can accumulate for complex systems or shared libraries. If possible, consider using the `@IntDef`/`@StringDef` annotations and code shrinking to strip enums and represent them as primitives. This preserves most of the type-safety benefits while reducing size.
+- **Reduce the size of native binaries**: If your app uses native code and the Android NDK, you can reduce the size of the release version of your app by optimizing your code—for example, removing debug symbols and avoiding unnecessary ABIs.
+- **Remove debug symbols**: Debug symbols make sense in development builds. For release builds, strip unnecessary debug symbols from native libraries (for example, using `llvm-strip` or appropriate strip tools). Keep a separate symbol file for crash reporting.
+- **Avoid extracting native libraries**: When building the release version of your app, package uncompressed `.so` files in the APK / app bundle by setting `useLegacyPackaging = false` for the relevant packaging options in your Gradle config. Disabling legacy packaging prevents `PackageManager` from copying `.so` files from the APK to the filesystem during installation, which can make on-device storage usage and updates smaller.
+
+### Re-evaluate Features and Translations
+
+#### Re-evaluate Infrequently Used Features
+
+Optimize specifically for constrained devices (including Android (Go edition)) by disabling or removing features that have low daily active user (DAU) metrics. Examples include complex animations, large GIF files, heavy debug or logging frameworks, or other non-essential visual and diagnostic assets.
+
+#### Utilize Dynamic Delivery
+
+Play Feature Delivery uses app bundle capabilities to deliver certain features conditionally or on demand. You can use feature modules for custom delivery, which allows you to download large or rarely used features only when needed. This reduces the initial install size while still making those capabilities available.
+
+#### Reduce Translatable `String` Size
+
+You can use the Android Gradle `resConfigs` property to remove alternative resource files that your app doesn't need. If you're using a library that includes language resources (such as AppCompat or Google Play Services), then your app includes all translated language strings for library messages by default, regardless of your app's own supported languages.
+
+If you'd like to keep only the languages that your app officially supports, you can specify those languages using the `resConfigs` property. Any resources for languages not specified are removed.
+
+To limit your language resources to just English and French in Kotlin DSL, you can edit `defaultConfig` as shown below:
+
+```kotlin
+android {
+    defaultConfig {
+        // ...
+        resConfigs("en", "fr")
+    }
+}
+```
+
+#### Use Selective Translation
+
+If a given string is never visible in the app's UI, then you don't have to translate it. Strings for debugging, exception messages, or URLs can be string literals in code rather than translatable resources.
+
+For example, don't translate URLs:
+
+```xml
+<string name="car_frx_device_incompatible_sol_message">
+  This device doesn\'t support Android Auto.\n
+  &lt;a href="https://support.google.com/androidauto/answer/6395843"&gt;Learn more&lt;/a&gt;
+</string>
+```
+
+You may recognize `&lt;` and `&gt;` as escape characters for `<` and `>`. They're needed here because if you were to put an `<a>` tag inside of a `<string>` tag, then the Android resource compiler drops it if it doesn't recognize the tag. However, this also means you're translating the HTML tags and the URL into many languages. Instead, you can remove the HTML so it doesn't need translation:
+
+```xml
+<string name="car_frx_device_incompatible_sol_message">
+    This device doesn\'t support Android Auto.
 </string>
 ```
 
@@ -551,7 +389,9 @@ android {
 
 - [[q-how-to-catch-the-earliest-entry-point-into-the-application--android--medium]]
 - [[q-memory-leak-vs-oom-android--android--medium]]
-- [[q-what-do-you-know-about-modifiers--programming-languages--medium]]
+- Which parts of the app (code, resources, or libraries) typically contribute most to size in your projects, and how would you measure them?
+- How would you integrate R8 configuration and `shrinkResources` into a CI pipeline to ensure size regressions are detected early?
+- When would you choose dynamic feature modules over a monolithic app in terms of size, and what trade-offs does this introduce?
 
 
 ## Related Questions

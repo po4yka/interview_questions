@@ -45,109 +45,111 @@ tags:
 
 **Looper** связывается с потоком через два ключевых метода:
 
-1. **`Looper.prepare()`** — создает Looper для текущего потока
-2. **`Looper.loop()`** — запускает бесконечный цикл обработки сообщений
+1. **`Looper.prepare()`** — создает и привязывает Looper к текущему потоку через `ThreadLocal`
+2. **`Looper.loop()`** — запускает бесконечный цикл обработки сообщений для этого Looper
 
 ### Механизм Связывания
 
-**Looper.prepare()** сохраняет Looper в `ThreadLocal<Looper>`:
+**`Looper.prepare()`** сохраняет Looper в `ThreadLocal<Looper>` текущего потока. **`Handler`** при создании привязывается к конкретному `Looper` (и его `MessageQueue`), обычно полученному через `Looper.myLooper()` или явно переданному.
 
 ```kotlin
-// ✅ Правильное создание потока с Looper
+// ✅ Правильное создание потока с Looper (API 28+ используйте явный Looper)
 class LooperThread : Thread() {
     override fun run() {
-        Looper.prepare()  // Создать Looper для этого потока
+        Looper.prepare()  // Создать и привязать Looper к этому потоку
 
-        val handler = Handler(Looper.myLooper()!!) { msg ->
+        val looper = Looper.myLooper()!!
+        val handler = Handler(looper) { msg ->
             println("Обработка: ${msg.what}")
             true
         }
 
-        Looper.loop()  // Запустить цикл (блокирует поток)
+        Looper.loop()  // Запустить цикл (блокирует поток до quit/quitSafely)
     }
 }
 ```
 
 **Ключевые особенности:**
-- Один Looper на поток (повторный вызов `prepare()` выбросит исключение)
-- Главный поток имеет Looper автоматически
-- `Looper.loop()` блокирует поток для обработки сообщений
-- Handler получает доступ к Looper через `ThreadLocal`
+- Один Looper на поток (повторный вызов `prepare()` выбросит `RuntimeException`)
+- Главный поток имеет Looper, подготовленный системой автоматически
+- `Looper.loop()` блокирует поток и извлекает сообщения/задачи из очереди до вызова `quit()`/`quitSafely()`
+- `Handler` связан с конкретным `Looper` при создании; `ThreadLocal` используется самим `Looper` для связи с потоком
 
 ### Жизненный Цикл
 
 ```kotlin
-// ✅ HandlerThread — готовая реализация
+// ✅ HandlerThread — готовая реализация потока с Looper
 val handlerThread = HandlerThread("Worker")
 handlerThread.start()
 
 val handler = Handler(handlerThread.looper) { msg ->
-    // Обрабатывается на фоновом потоке
+    // Обработка на фоновом потоке
     true
 }
 
 handler.sendEmptyMessage(1)
 
 // Остановка
-handlerThread.quitSafely()  // Обработает pending сообщения
+handlerThread.quitSafely()  // Завершает цикл после обработки уже находящихся в очереди сообщений (без принятия новых)
 ```
 
 ### Распространенные Ошибки
 
 ```kotlin
-// ❌ Повторный вызов prepare()
+// ❌ Повторный вызов prepare() в одном и том же потоке
 Looper.prepare()
 Looper.prepare()  // RuntimeException!
 
-// ❌ Handler до prepare()
-val handler = Handler(Looper.myLooper()!!)  // NPE!
+// ❌ Handler до prepare() (если Looper ещё не создан)
+val handler = Handler(Looper.myLooper()!!)  // NPE или RuntimeException при отсутствии Looper!
 Looper.prepare()
 
 // ❌ Забыли вызвать loop()
 Looper.prepare()
 val handler = Handler(Looper.myLooper()!!)
-// Сообщения не обрабатываются!
+// Сообщения не обрабатываются, т.к. не запущен цикл Looper!
 ```
 
-**Лучшая практика:** используйте `HandlerThread` вместо ручной настройки Looper.
+**Лучшая практика:** по возможности используйте `HandlerThread` вместо ручной настройки Looper.
 
 ## Answer (EN)
 
-**Looper** connects to a thread using two key methods:
+**Looper** connects to a thread via two key methods:
 
-1. **`Looper.prepare()`** — creates a Looper for the current thread
-2. **`Looper.loop()`** — starts the infinite message processing loop
+1. **`Looper.prepare()`** — creates and binds a Looper to the current thread using `ThreadLocal`
+2. **`Looper.loop()`** — starts the infinite message processing loop for that Looper
 
 ### Binding Mechanism
 
-**Looper.prepare()** stores the Looper in `ThreadLocal<Looper>`:
+**`Looper.prepare()`** stores the Looper in the current thread's `ThreadLocal<Looper>`. A **`Handler`** is bound to a specific `Looper` (and its `MessageQueue`) at construction time, typically obtained via `Looper.myLooper()` or passed explicitly.
 
 ```kotlin
-// ✅ Correct Looper thread creation
+// ✅ Correct Looper thread creation (on modern Android prefer explicit Looper)
 class LooperThread : Thread() {
     override fun run() {
-        Looper.prepare()  // Create Looper for this thread
+        Looper.prepare()  // Create and bind Looper to this thread
 
-        val handler = Handler(Looper.myLooper()!!) { msg ->
+        val looper = Looper.myLooper()!!
+        val handler = Handler(looper) { msg ->
             println("Processing: ${msg.what}")
             true
         }
 
-        Looper.loop()  // Start loop (blocks thread)
+        Looper.loop()  // Start loop (blocks thread until quit/quitSafely)
     }
 }
 ```
 
 **Key characteristics:**
-- One Looper per thread (calling `prepare()` twice throws exception)
-- Main thread has Looper prepared automatically
-- `Looper.loop()` blocks the thread to process messages
-- Handler accesses Looper via `ThreadLocal`
+- One Looper per thread (calling `prepare()` twice on the same thread throws `RuntimeException`)
+- The main thread gets its Looper prepared by the system automatically
+- `Looper.loop()` blocks the thread and pulls messages/tasks from the queue until `quit()`/`quitSafely()` is called
+- A `Handler` is bound to a specific `Looper` at construction; `ThreadLocal` is used internally by `Looper` to associate itself with the thread
 
 ### Lifecycle
 
 ```kotlin
-// ✅ HandlerThread — ready-made implementation
+// ✅ HandlerThread — ready-made implementation of a thread with a Looper
 val handlerThread = HandlerThread("Worker")
 handlerThread.start()
 
@@ -159,27 +161,27 @@ val handler = Handler(handlerThread.looper) { msg ->
 handler.sendEmptyMessage(1)
 
 // Stopping
-handlerThread.quitSafely()  // Process pending messages
+handlerThread.quitSafely()  // Ends loop after processing messages already in the queue (no new messages accepted)
 ```
 
 ### Common Mistakes
 
 ```kotlin
-// ❌ Calling prepare() twice
+// ❌ Calling prepare() twice on the same thread
 Looper.prepare()
 Looper.prepare()  // RuntimeException!
 
-// ❌ Handler before prepare()
-val handler = Handler(Looper.myLooper()!!)  // NPE!
+// ❌ Handler before prepare() (if Looper not created yet)
+val handler = Handler(Looper.myLooper()!!)  // NPE or RuntimeException when no Looper!
 Looper.prepare()
 
 // ❌ Forgot to call loop()
 Looper.prepare()
 val handler = Handler(Looper.myLooper()!!)
-// Messages won't be processed!
+// Messages won't be processed because Looper loop is not started!
 ```
 
-**Best practice:** Use `HandlerThread` instead of manual Looper setup.
+**Best practice:** Prefer `HandlerThread` over manual Looper setup when possible.
 
 ---
 

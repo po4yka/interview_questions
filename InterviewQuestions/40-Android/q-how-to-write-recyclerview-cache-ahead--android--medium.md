@@ -41,37 +41,42 @@ tags:
 
 # Вопрос (RU)
 
-> Как настроить RecyclerView для кеширования элементов вперед?
+> Как настроить RecyclerView для кеширования и предзагрузки элементов (cache/prefetch ahead)?
 
 # Question (EN)
 
-> How to configure RecyclerView to cache items ahead?
+> How to configure RecyclerView to cache and prefetch items ahead?
 
 ---
 
 ## Ответ (RU)
 
-RecyclerView предоставляет несколько механизмов для кеширования элементов вперед:
+RecyclerView предоставляет несколько механизмов для предзагрузки и кеширования элементов вперед (уменьшения работы при появлении следующих элементов на экране):
 
-**1. setItemViewCacheSize() - Кеш представлений**
+**1. setItemViewCacheSize() - кеш view (view cache)**
 
 ```kotlin
 recyclerView.setItemViewCacheSize(20) // Default: 2
 ```
 
-Сохраняет недавно прокрученные view без ребиндинга данных.
+Сохраняет недавно ушедшие с экрана ViewHolder'ы в отсоединенном, но уже связанном (bound) состоянии, чтобы при повторном появлении их не приходилось пересоздавать или заново искать view. Это не выполняет асинхронную предзагрузку данных, а лишь уменьшает объем работы при повторном показе.
+
+Важно: слишком большое значение увеличивает потребление памяти и может ухудшить производительность — подбирайте его на основе профилирования.
 
 **2. Prefetching через LinearLayoutManager**
 
 ```kotlin
 val layoutManager = LinearLayoutManager(context).apply {
     isItemPrefetchEnabled = true // ✅ Default: true
-    initialPrefetchItemCount = 6  // Prefetch первые N элементов
+    initialPrefetchItemCount = 6  // Для вложенных RecyclerView: предзагрузка первых N элементов
 }
 recyclerView.layoutManager = layoutManager
 ```
 
-**3. OnScrollListener для предзагрузки данных**
+`isItemPrefetchEnabled` включает layout prefetch (по умолчанию включен).
+`initialPrefetchItemCount` используется в основном, когда этот LayoutManager вложен внутри другого скроллируемого контейнера (например, горизонтальный список внутри вертикального), чтобы заранее подготовить несколько child-элементов. Для обычного "топ-левел" RecyclerView этот параметр не управляет сетевой/дата-предзагрузкой и не заменяет собственную логику пагинации.
+
+**3. OnScrollListener для предзагрузки данных (data prefetch)**
 
 ```kotlin
 recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -82,19 +87,22 @@ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 
         val threshold = 5
         if (!isLoading && (visibleItemCount + firstVisibleItem + threshold) >= totalItemCount) {
-            loadMoreData() // Загрузка следующей страницы
+            loadMoreData() // Загрузка следующей страницы / fetch next page
         }
     }
 })
 ```
 
-**4. Кастомный LayoutManager**
+Этот подход управляет именно предзагрузкой данных (пагинацией, сетевыми запросами), а не только переиспользованием view. Порог (threshold) подбирается эмпирически.
+
+**4. Кастомный LayoutManager для точного контроля prefetch**
 
 ```kotlin
 class CustomPrefetchLayoutManager(context: Context) : LinearLayoutManager(context) {
 
     override fun collectAdjacentPrefetchPositions(
-        dx: Int, dy: Int,
+        dx: Int,
+        dy: Int,
         state: RecyclerView.State,
         layoutPrefetchRegistry: LayoutPrefetchRegistry
     ) {
@@ -102,17 +110,22 @@ class CustomPrefetchLayoutManager(context: Context) : LinearLayoutManager(contex
 
         val scrollingDown = dy > 0
         val lastVisible = findLastVisibleItemPosition()
+        val itemCount = state.itemCount
 
-        if (scrollingDown) {
+        if (scrollingDown && lastVisible != RecyclerView.NO_POSITION) {
             val startPos = lastVisible + 1
-            val endPos = minOf(startPos + 10, state.itemCount)
-            for (i in startPos until endPos) {
-                layoutPrefetchRegistry.addPosition(i, 0) // ✅ Регистрация позиций для prefetch
+            val endPosExclusive = minOf(startPos + 10, itemCount)
+            for (i in startPos until endPosExclusive) {
+                if (i in 0 until itemCount) {
+                    layoutPrefetchRegistry.addPosition(i, 0) // ✅ Регистрация позиций для prefetch
+                }
             }
         }
     }
 }
 ```
+
+Переопределяя `collectAdjacentPrefetchPositions`, можно явно указать, какие позиции нужно подготовить заранее. Важно не выходить за пределы `itemCount`.
 
 **5. RecycledViewPool для вложенных RecyclerView**
 
@@ -124,41 +137,48 @@ val sharedPool = RecyclerView.RecycledViewPool().apply {
 // Использование в адаптере
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.nestedRecyclerView.apply {
-        setRecycledViewPool(sharedPool) // ✅ Переиспользование view pool
+        setRecycledViewPool(sharedPool) // ✅ Переиспользование view pool между вложенными списками
         setItemViewCacheSize(10)
     }
 }
 ```
 
-**Рекомендации**:
-- setItemViewCacheSize(20-30) для гладкой прокрутки
-- initialPrefetchItemCount = 4-6 для вложенных RecyclerView
-- OnScrollListener для пагинации с threshold = 5-10
-- RecycledViewPool для вложенных списков
+Общий `RecycledViewPool` полезен для множества вложенных RecyclerView с одинаковыми viewType'ами (например, карусели в списке). Это уменьшает количество инфляций и создает эффект "cache ahead" на уровне переиспользуемых view. Для разных макетов или сильно различающихся списков общий пул может не дать эффекта или навредить.
+
+**Рекомендации** (ориентиры, требующие профилирования):
+- увеличивать `setItemViewCacheSize()` только при наличии фризов из-за частого пересоздания view и с учетом памяти устройства;
+- для вложенных RecyclerView `initialPrefetchItemCount` часто выбирают в диапазоне 4–6, чтобы элементы были готовы при скролле;
+- использовать `OnScrollListener` (или Paging 3) для предзагрузки данных с порогом (например, 5–10 элементов) до конца списка;
+- применять `RecycledViewPool` для вложенных списков с одинаковыми типами элементов.
 
 ## Answer (EN)
 
-RecyclerView provides several mechanisms for caching items ahead:
+RecyclerView provides several mechanisms to prefetch and cache items ahead (reducing work before items appear on screen):
 
-**1. setItemViewCacheSize() - View Cache**
+**1. setItemViewCacheSize() - view cache**
 
 ```kotlin
 recyclerView.setItemViewCacheSize(20) // Default: 2
 ```
 
-Stores recently scrolled-off views without rebinding data.
+Keeps recently scrolled-off ViewHolders in a detached but bound state so they can be reused without full rebind/inflation when they come back. This does not perform asynchronous data prefetching; it optimizes view reuse.
+
+Important: setting this too high increases memory usage and can hurt performance—tune it based on profiling.
 
 **2. Prefetching with LinearLayoutManager**
 
 ```kotlin
 val layoutManager = LinearLayoutManager(context).apply {
-    isItemPrefetchEnabled = true // ✅ Default: true
-    initialPrefetchItemCount = 6  // Prefetch first N items
+    isItemPrefetchEnabled = true // ✅ Default: true (layout prefetch)
+    initialPrefetchItemCount = 6  // For nested RecyclerViews: prefetch first N child items
 }
 recyclerView.layoutManager = layoutManager
 ```
 
-**3. OnScrollListener for Data Prefetching**
+`isItemPrefetchEnabled` controls layout prefetching (enabled by default).
+`initialPrefetchItemCount` is mainly effective when this LayoutManager is inside another scrolling container (e.g., horizontal RV inside vertical RV), so child views are prepared in advance. For a top-level list it does not replace proper data prefetching/paging.
+
+**3. OnScrollListener for data prefetching**
 
 ```kotlin
 recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -175,13 +195,16 @@ recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
 })
 ```
 
-**4. Custom LayoutManager**
+This pattern handles data prefetching/pagination (network or DB), not just view reuse. Choose the threshold empirically.
+
+**4. Custom LayoutManager for fine-grained prefetch**
 
 ```kotlin
 class CustomPrefetchLayoutManager(context: Context) : LinearLayoutManager(context) {
 
     override fun collectAdjacentPrefetchPositions(
-        dx: Int, dy: Int,
+        dx: Int,
+        dy: Int,
         state: RecyclerView.State,
         layoutPrefetchRegistry: LayoutPrefetchRegistry
     ) {
@@ -189,19 +212,24 @@ class CustomPrefetchLayoutManager(context: Context) : LinearLayoutManager(contex
 
         val scrollingDown = dy > 0
         val lastVisible = findLastVisibleItemPosition()
+        val itemCount = state.itemCount
 
-        if (scrollingDown) {
+        if (scrollingDown && lastVisible != RecyclerView.NO_POSITION) {
             val startPos = lastVisible + 1
-            val endPos = minOf(startPos + 10, state.itemCount)
-            for (i in startPos until endPos) {
-                layoutPrefetchRegistry.addPosition(i, 0) // ✅ Register positions for prefetch
+            val endPosExclusive = minOf(startPos + 10, itemCount)
+            for (i in startPos until endPosExclusive) {
+                if (i in 0 until itemCount) {
+                    layoutPrefetchRegistry.addPosition(i, 0) // ✅ Register positions for prefetch
+                }
             }
         }
     }
 }
 ```
 
-**5. RecycledViewPool for Nested RecyclerViews**
+By overriding `collectAdjacentPrefetchPositions`, you can explicitly specify which positions should be prepared ahead of time. Ensure you never go beyond `itemCount`.
+
+**5. RecycledViewPool for nested RecyclerViews**
 
 ```kotlin
 val sharedPool = RecyclerView.RecycledViewPool().apply {
@@ -211,17 +239,19 @@ val sharedPool = RecyclerView.RecycledViewPool().apply {
 // Usage in adapter
 override fun onBindViewHolder(holder: ViewHolder, position: Int) {
     holder.nestedRecyclerView.apply {
-        setRecycledViewPool(sharedPool) // ✅ Reuse view pool
+        setRecycledViewPool(sharedPool) // ✅ Share pool between nested lists
         setItemViewCacheSize(10)
     }
 }
 ```
 
-**Best Practices**:
-- setItemViewCacheSize(20-30) for smooth scrolling
-- initialPrefetchItemCount = 4-6 for nested RecyclerViews
-- OnScrollListener for pagination with threshold = 5-10
-- RecycledViewPool for nested lists
+A shared `RecycledViewPool` is beneficial when you have many nested RecyclerViews with the same view types (e.g., carousels in a feed). It reduces view inflation and contributes to "cache ahead" behavior at the view level. For heterogeneous layouts, a shared pool may not help.
+
+**Best Practices** (guidelines; always validate with profiling):
+- Increase `setItemViewCacheSize()` only when you see jank from frequent view recreation and have memory headroom.
+- For nested RecyclerViews, `initialPrefetchItemCount` is often set around 4–6 to have items ready before they appear.
+- Use an `OnScrollListener` (or Paging 3) for data prefetching with a threshold (e.g., 5–10 items) before the end.
+- Use a shared `RecycledViewPool` for nested lists with matching view types.
 
 ---
 

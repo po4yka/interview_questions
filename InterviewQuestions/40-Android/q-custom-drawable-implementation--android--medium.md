@@ -4,23 +4,25 @@ title: Custom Drawable Implementation / Реализация Custom Drawable
 aliases: [Custom Drawable Implementation, Реализация Custom Drawable]
 topic: android
 subtopics:
-  - ui-graphics
-  - ui-views
+- ui-graphics
+- ui-views
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - q-canvas-drawing-optimization--android--hard
-  - q-custom-viewgroup-layout--android--hard
+- c-custom-views
+- q-canvas-drawing-optimization--android--hard
+- q-custom-viewgroup-layout--android--hard
 created: 2025-10-21
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/ui-graphics, android/ui-views, difficulty/medium]
 sources: []
+
 ---
 
 # Вопрос (RU)
@@ -34,11 +36,11 @@ sources: []
 ## Ответ (RU)
 
 ### Что Такое Custom Drawable
-Легковесный переиспользуемый графический примитив для отображения в нескольких View. Эффективнее кастомной View для простой неинтерактивной графики — не требует сложного жизненного цикла, управляется системой.
+Легковесный переиспользуемый графический примитив для отображения в нескольких `View`. Эффективнее кастомной `View` для простой неинтерактивной графики — не требует сложного жизненного цикла, управляется системой.
 
-**Когда использовать Drawable**: неинтерактивная графика (иконки, фоны), переиспользование в разных View, простые формы и анимации.
+**Когда использовать Drawable**: неинтерактивная графика (иконки, фоны), переиспользование в разных `View`, простые формы и анимации.
 
-**Когда использовать Custom View**: обработка касаний, сложный жизненный цикл, требования доступности, координация анимаций.
+**Когда использовать Custom `View`**: обработка касаний, сложный жизненный цикл, требования доступности, координация анимаций.
 
 ### Ключевые Методы
 
@@ -48,7 +50,7 @@ sources: []
 
 **getOpacity()** — возвращает прозрачность (PixelFormat.OPAQUE/TRANSLUCENT/TRANSPARENT).
 
-**setAlpha(alpha: Int)** — устанавливает альфа-канал.
+**setAlpha(alpha: `Int`)** — устанавливает альфа-канал.
 
 **setColorFilter(colorFilter: ColorFilter?)** — применяет цветовой фильтр для тонирования.
 
@@ -97,9 +99,9 @@ class CircleDrawable : Drawable() {
 ```
 
 **Критичные моменты**:
-- Paint создается один раз, не в draw() — иначе аллокации на каждом фрейме
-- invalidateSelf() запрашивает перерисовку при изменении состояния
-- intrinsic размеры определяют дефолтные размеры для wrap_content
+- `Paint` создается один раз, не в `draw()` — иначе аллокации на каждом фрейме
+- `invalidateSelf()` запрашивает перерисовку при изменении состояния
+- intrinsic размеры определяют дефолтные размеры для `wrap_content`
 
 ### Управление Состоянием
 
@@ -116,20 +118,22 @@ class StatefulDrawable : Drawable() {
 
     override fun setState(stateSet: IntArray): Boolean {
         val wasPressed = isPressed
+        // Используем стандартный state spec для нажатого состояния
         isPressed = stateSet.contains(android.R.attr.state_pressed)
 
-        if (wasPressed != isPressed) {
+        return if (wasPressed != isPressed) {
             invalidateSelf()
-            return true // Состояние изменилось
+            true // Состояние изменилось, просим перерисовку
+        } else {
+            false
         }
-        return false
     }
 
     override fun isStateful(): Boolean = true
 }
 ```
 
-**setState()** вызывается системой при изменении состояния View (pressed, focused, selected). Возвращайте true только если состояние реально изменилось — это триггерит перерисовку.
+**`setState()`** вызывается системой при изменении состояния `View` (pressed, focused, selected). Возвращайте `true` только если состояние реально изменилось — это триггерит перерисовку.
 
 ### Анимация
 
@@ -137,6 +141,7 @@ class StatefulDrawable : Drawable() {
 class PulsingDrawable : Drawable() {
     private val paint = Paint()
     private var scale = 1f
+    private var animator: ValueAnimator? = null
 
     override fun draw(canvas: Canvas) {
         val radius = min(bounds.width(), bounds.height()) / 2f * scale
@@ -148,52 +153,61 @@ class PulsingDrawable : Drawable() {
     }
 
     fun startAnimation() {
-        ValueAnimator.ofFloat(1f, 1.5f, 1f).apply {
+        if (animator?.isRunning == true) return
+
+        animator = ValueAnimator.ofFloat(1f, 1.5f, 1f).apply {
             duration = 1000
             repeatCount = ValueAnimator.INFINITE
-            addUpdateListener { animator ->
-                scale = animator.animatedValue as Float
+            addUpdateListener { valueAnimator ->
+                scale = valueAnimator.animatedValue as Float
                 invalidateSelf() // ✅ Перерисовка на каждом фрейме
             }
             start()
         }
+    }
+
+    fun stopAnimation() {
+        animator?.cancel()
+        animator = null
     }
 }
 ```
 
 ### Лучшие Практики
 
-1. **Кэшируйте Paint** — не создавайте в draw(), это аллокации на каждом фрейме
-2. **Вызывайте invalidateSelf()** при изменении внешнего вида
-3. **Реализуйте intrinsic размеры** для корректной работы с wrap_content
-4. **Избегайте вычислений в draw()** — предварительно вычисляйте в setBounds()
-5. **Правильно обрабатывайте bounds** — система может их изменить
+1. Кэшируйте `Paint` — не создавайте в `draw()`, это аллокации на каждом фрейме.
+2. Вызывайте `invalidateSelf()` при изменении внешнего вида.
+3. Реализуйте intrinsic размеры для корректной работы с `wrap_content`.
+4. Избегайте тяжелых вычислений в `draw()` — по возможности предварительно вычисляйте в `setBounds()`.
+5. Правильно обрабатывайте `bounds` — система может их изменить.
+6. Для анимаций управляйте жизненным циклом (останавливайте аниматоры, когда `Drawable` больше не используется).
 
 ### Подводные Камни
 
-- **Аллокации в draw()** — критично для производительности, вызывается каждый фрейм
-- **Забыт invalidateSelf()** — изменения не отрисуются
-- **Игнорирование bounds** — неверный размер/позиция
-- **Неверный getOpacity()** — влияет на оптимизацию рендеринга
+- Аллокации в `draw()` — критично для производительности, вызывается каждый фрейм.
+- Забытый `invalidateSelf()` — изменения не отрисуются.
+- Игнорирование `bounds` — неверный размер/позиция.
+- Неверный `getOpacity()` — влияет на оптимизацию рендеринга.
+- Бесконтрольные анимации внутри `Drawable` — могут привести к утечкам и лишним перерисовкам.
 
 ## Answer (EN)
 
 ### What is Custom Drawable
-Lightweight reusable graphic primitive for display in multiple Views. More efficient than Custom View for simple non-interactive graphics — no complex lifecycle needed, managed by system.
+Lightweight reusable graphic primitive for display in multiple `View`s. More efficient than Custom `View` for simple non-interactive graphics — no complex lifecycle needed, managed by the system.
 
-**When to use Drawable**: non-interactive graphics (icons, backgrounds), reuse across Views, simple shapes and animations.
+**When to use Drawable**: non-interactive graphics (icons, backgrounds), reuse across `View`s, simple shapes and animations.
 
-**When to use Custom View**: touch handling, complex lifecycle, accessibility requirements, animation coordination.
+**When to use Custom `View`**: touch handling, complex lifecycle, accessibility requirements, animation coordination.
 
 ### Key Methods
 
-**draw(canvas: Canvas)** — main drawing method called by system.
+**draw(canvas: Canvas)** — main drawing method called by the system.
 
 **setBounds()** — sets drawing area (coordinates and size).
 
-**getOpacity()** — returns transparency (PixelFormat.OPAQUE/TRANSLUCENT/TRANSPARENT).
+**getOpacity()** — returns transparency (`PixelFormat.OPAQUE/TRANSLUCENT/TRANSPARENT`).
 
-**setAlpha(alpha: Int)** — sets alpha channel.
+**setAlpha(alpha: `Int`)** — sets alpha channel.
 
 **setColorFilter(colorFilter: ColorFilter?)** — applies color filter for tinting.
 
@@ -242,9 +256,9 @@ class CircleDrawable : Drawable() {
 ```
 
 **Critical points**:
-- Paint created once, not in draw() — otherwise allocations every frame
-- invalidateSelf() requests redraw on state change
-- intrinsic sizes define default dimensions for wrap_content
+- `Paint` created once, not in `draw()` — otherwise allocations every frame.
+- `invalidateSelf()` requests redraw on state change.
+- Intrinsic sizes define default dimensions for `wrap_content`.
 
 ### State Management
 
@@ -261,20 +275,22 @@ class StatefulDrawable : Drawable() {
 
     override fun setState(stateSet: IntArray): Boolean {
         val wasPressed = isPressed
+        // Use standard pressed state spec
         isPressed = stateSet.contains(android.R.attr.state_pressed)
 
-        if (wasPressed != isPressed) {
+        return if (wasPressed != isPressed) {
             invalidateSelf()
-            return true // State changed
+            true // State changed, request redraw
+        } else {
+            false
         }
-        return false
     }
 
     override fun isStateful(): Boolean = true
 }
 ```
 
-**setState()** called by system when View state changes (pressed, focused, selected). Return true only if state actually changed — this triggers redraw.
+**`setState()`** is called by the system when `View` state changes (pressed, focused, selected). Return `true` only if state actually changed — this triggers redraw.
 
 ### Animation
 
@@ -282,6 +298,7 @@ class StatefulDrawable : Drawable() {
 class PulsingDrawable : Drawable() {
     private val paint = Paint()
     private var scale = 1f
+    private var animator: ValueAnimator? = null
 
     override fun draw(canvas: Canvas) {
         val radius = min(bounds.width(), bounds.height()) / 2f * scale
@@ -293,53 +310,83 @@ class PulsingDrawable : Drawable() {
     }
 
     fun startAnimation() {
-        ValueAnimator.ofFloat(1f, 1.5f, 1f).apply {
+        if (animator?.isRunning == true) return
+
+        animator = ValueAnimator.ofFloat(1f, 1.5f, 1f).apply {
             duration = 1000
             repeatCount = ValueAnimator.INFINITE
-            addUpdateListener { animator ->
-                scale = animator.animatedValue as Float
+            addUpdateListener { valueAnimator ->
+                scale = valueAnimator.animatedValue as Float
                 invalidateSelf() // ✅ Redraw every frame
             }
             start()
         }
+    }
+
+    fun stopAnimation() {
+        animator?.cancel()
+        animator = null
     }
 }
 ```
 
 ### Best Practices
 
-1. **Cache Paint** — don't create in draw(), causes allocations every frame
-2. **Call invalidateSelf()** when appearance changes
-3. **Implement intrinsic sizes** for correct wrap_content behavior
-4. **Avoid calculations in draw()** — precompute in setBounds()
-5. **Handle bounds correctly** — system may change them
+1. Cache `Paint` — don't create in `draw()`, causes allocations every frame.
+2. Call `invalidateSelf()` when appearance changes.
+3. Implement intrinsic sizes for correct `wrap_content` behavior.
+4. Avoid heavy calculations in `draw()` — precompute in `setBounds()` when possible.
+5. Handle `bounds` correctly — system may change them.
+6. For animations, manage lifecycle (stop animators when `Drawable` is no longer used).
 
 ### Pitfalls
 
-- **Allocations in draw()** — critical for performance, called every frame
-- **Forgot invalidateSelf()** — changes won't render
-- **Ignoring bounds** — wrong size/position
-- **Wrong getOpacity()** — affects rendering optimization
+- Allocations in `draw()` — critical for performance, called every frame.
+- Forgot `invalidateSelf()` — changes won't render.
+- Ignoring `bounds` — wrong size/position.
+- Wrong `getOpacity()` — affects rendering optimization.
+- Uncontrolled animations inside `Drawable` — may cause leaks and unnecessary redraws.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как реализовать составные `Drawable` с использованием `LayerDrawable` или `DrawableContainer`?
+- Когда стоит использовать `VectorDrawable` вместо кастомного `Drawable` для масштабируемой графики?
+- Как корректно обрабатывать размеры, независимые от плотности (dp), в кастомных `Drawable`?
+- Каковы компромиссы по производительности между сложной логикой в `draw()` и кешированием в `Bitmap`?
+- Как реализовать анимированные переходы состояния (аналог `StateListAnimator`)?
+
+## Ссылки (RU)
+
+- [[c-custom-views]] — паттерны реализации кастомных `View`.
+- [[c-lifecycle]] — жизненный цикл Android-компонентов.
+- [Drawable API Reference](https://developer.android.com/reference/android/graphics/drawable/Drawable)
+- [Custom Drawables Guide](https://developer.android.com/develop/ui/views/graphics/drawables)
 
 ## Follow-ups
 
 - How to implement compound drawables using LayerDrawable or DrawableContainer?
 - When should you use VectorDrawable vs custom Drawable for scalable graphics?
 - How to properly handle density-independent sizing in custom Drawables?
-- What are performance trade-offs of complex draw() operations vs bitmap caching?
+- What are performance trade-offs of complex `draw()` operations vs bitmap caching?
 - How to implement animated state transitions (StateListAnimator equivalent)?
 
 ## References
 
-- [[c-custom-views]] - Custom View implementation patterns
+- [[c-custom-views]] - Custom `View` implementation patterns
 - [[c-lifecycle]] - Android component lifecycle
 - [Drawable API Reference](https://developer.android.com/reference/android/graphics/drawable/Drawable)
 - [Custom Drawables Guide](https://developer.android.com/develop/ui/views/graphics/drawables)
 
 ## Related Questions
 
+### Расширенные вопросы (RU)
+
+- [[q-canvas-drawing-optimization--android--hard]] — техники оптимизации `Canvas`-отрисовки.
+- [[q-custom-viewgroup-layout--android--hard]] — реализация кастомного `ViewGroup`.
+
 ### Advanced
+
 - [[q-canvas-drawing-optimization--android--hard]] - Advanced Canvas optimization techniques
-- [[q-custom-viewgroup-layout--android--hard]] - Custom ViewGroup implementation
+- [[q-custom-viewgroup-layout--android--hard]] - Custom `ViewGroup` implementation

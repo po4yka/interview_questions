@@ -48,11 +48,13 @@ tags:
 
 ML Kit предоставляет предобученные модели для визуального распознавания без необходимости ML-экспертизы.
 
+(Примечание: численные значения для количества меток и задержек являются ориентировочными и могут меняться в зависимости от версии ML Kit и устройства.)
+
 ### Маркировка Изображений
 
 **On-Device vs Cloud:**
-- **On-Device**: ~400 меток, офлайн, 100-300мс задержка, приватность
-- **Cloud**: 10,000+ меток, требует интернет, 500-1500мс, лучшая точность
+- **On-Device**: порядка сотен стандартных меток, офлайн-работа, низкая задержка (десятки-сотни мс), лучше для приватности
+- **Cloud**: значительно больше меток и выше точность, требует интернет, больше задержка (сотни-тысячи мс); некоторые облачные API могли быть изменены или устареть, необходимо проверять актуальную документацию
 
 ✅ **Лучшая практика - On-Device маркировка:**
 ```kotlin
@@ -63,6 +65,7 @@ class ImageLabelingManager(private val context: Context) {
             .build()
     )
 
+    // Требуются Kotlin Coroutines extensions для Task (kotlinx-coroutines-play-services)
     suspend fun labelImage(image: InputImage): Result<List<ImageLabel>> {
         return try {
             val labels = labeler.process(image).await()
@@ -112,6 +115,7 @@ class ObjectDetectionManager {
             .build()
     )
 
+    // Требуются Kotlin Coroutines extensions для Task (kotlinx-coroutines-play-services)
     suspend fun detectObjects(image: InputImage): List<DetectedObject> {
         return detector.process(image).await()
     }
@@ -126,8 +130,9 @@ data class ObjectInfo(
 )
 ```
 
-✅ **Отслеживание движения:**
+✅ **Отслеживание движения (упрощённый пример, вспомогательные типы опущены):**
 ```kotlin
+// TrackedHistory должен содержать историю позиций и время последнего появления объекта.
 class ObjectTracker {
     private val tracked = mutableMapOf<Int, TrackedHistory>()
 
@@ -156,11 +161,11 @@ class ObjectTracker {
 
 ### Сканирование Штрих-кодов
 
-**Поддерживаемые форматы:**
-- 1D: EAN-13, EAN-8, UPC, Code-128, Code-39
+**Поддерживаемые форматы (основные):**
+- 1D: EAN-13, EAN-8, UPC, Code-128, Code-39 и др.
 - 2D: QR Code, Aztec, PDF417, Data Matrix
 
-✅ **Сканер с обработкой типов:**
+✅ **Сканер с обработкой типов (обработчики действий условные):**
 ```kotlin
 class BarcodeScanningManager {
     private val scanner = BarcodeScanning.getClient(
@@ -173,6 +178,7 @@ class BarcodeScanningManager {
             .build()
     )
 
+    // Требуются Kotlin Coroutines extensions для Task (kotlinx-coroutines-play-services)
     suspend fun scanBarcodes(image: InputImage): List<Barcode> {
         return scanner.process(image).await()
     }
@@ -203,6 +209,7 @@ class MLKitCameraAnalyzer(
     private var detector: ImageLabeler? = null
     private val cameraExecutor = Executors.newSingleThreadExecutor()
 
+    // Требуются Kotlin Coroutines extensions для ProcessCameraProvider (androidx.concurrent:concurrent-futures-ktx)
     suspend fun startCamera() {
         detector = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS)
 
@@ -236,8 +243,15 @@ class MLKitCameraAnalyzer(
         )
 
         detector?.process(image)
-            ?.addOnSuccessListener { labels -> onLabelsDetected(labels) }
+            ?.addOnSuccessListener { labels ->
+                // Обработчик результатов должен быть реализован вызывающей стороной
+                onLabelsDetected(labels)
+            }
             ?.addOnCompleteListener { imageProxy.close() }
+    }
+
+    private fun onLabelsDetected(labels: List<ImageLabel>) {
+        // Placeholder: обновление состояния или UI
     }
 
     fun shutdown() {
@@ -304,30 +318,30 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 ### Лучшие Практики
 
 **Выбор модели:**
-- ✅ On-device для реального времени, офлайн, приватности
-- ✅ Cloud для высокой точности, большего покрытия меток
+- ✅ On-device для реального времени, офлайн и приватности
+- ✅ Cloud для более высокой точности и большего покрытия меток (при наличии и актуальности соответствующих API)
 - ✅ Гибридный подход с fallback на on-device
 
 **Оптимизация производительности:**
 - ✅ `STRATEGY_KEEP_ONLY_LATEST` для backpressure
-- ✅ Пониженное разрешение (640x480) для реального времени
-- ✅ Пропуск кадров (обрабатывайте каждый 3-й кадр)
-- ✅ Всегда закрывайте `imageProxy.close()`
+- ✅ Пониженное разрешение (например, около 640x480) для реального времени
+- ✅ Пропуск кадров (например, обрабатывать каждый 3-й кадр)
+- ✅ Всегда вызывать `imageProxy.close()`
 
 **Управление ресурсами:**
-- ✅ Вызывайте `detector.close()` при уничтожении
-- ✅ Используйте `ExecutorService` для фоновой обработки
-- ✅ Останавливайте камеру при неактивности
+- ✅ Вызывать `detector.close()` при уничтожении
+- ✅ Использовать `ExecutorService` для фоновой обработки
+- ✅ Останавливать камеру при неактивности
 
 **Безопасность:**
-- ✅ Валидируйте данные штрих-кодов перед использованием
-- ✅ Запрашивайте подтверждение для чувствительных действий
-- ✅ Санитизируйте URLs перед открытием
+- ✅ Валидировать данные штрих-кодов перед использованием
+- ✅ Запрашивать подтверждение для чувствительных действий
+- ✅ Санитизировать URL перед открытием и относиться к данным из штрих-кодов как к недоверенным
 
 ❌ **Распространённые ошибки:**
 - ❌ Не закрывать детекторы → утечки памяти
 - ❌ Обрабатывать каждый кадр → низкая производительность
-- ❌ Неправильный режим детектора (STREAM vs SINGLE_IMAGE)
+- ❌ Неправильно выбирать режим детектора (STREAM vs SINGLE_IMAGE)
 - ❌ Не обрабатывать разрешения камеры → краши
 - ❌ Не освобождать ImageProxy → зависание камеры
 
@@ -337,11 +351,13 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 
 ML Kit provides pre-trained models for visual recognition tasks without requiring ML expertise.
 
+(Note: label counts and latency ranges below are approximate and may change with ML Kit version and device.)
+
 ### Image Labeling
 
 **On-Device vs Cloud:**
-- **On-Device**: ~400 labels, offline, 100-300ms latency, privacy
-- **Cloud**: 10,000+ labels, requires internet, 500-1500ms, better accuracy
+- **On-Device**: on the order of hundreds of standard labels, works offline, low latency (tens-hundreds of ms), better for privacy
+- **Cloud**: significantly more labels and higher accuracy, requires internet, higher latency (hundreds-thousands of ms); some cloud APIs may have changed or been deprecated, always check current documentation
 
 ✅ **Best Practice - On-Device labeling:**
 ```kotlin
@@ -352,6 +368,7 @@ class ImageLabelingManager(private val context: Context) {
             .build()
     )
 
+    // Requires Kotlin Coroutines Task extensions (kotlinx-coroutines-play-services)
     suspend fun labelImage(image: InputImage): Result<List<ImageLabel>> {
         return try {
             val labels = labeler.process(image).await()
@@ -401,6 +418,7 @@ class ObjectDetectionManager {
             .build()
     )
 
+    // Requires Kotlin Coroutines Task extensions (kotlinx-coroutines-play-services)
     suspend fun detectObjects(image: InputImage): List<DetectedObject> {
         return detector.process(image).await()
     }
@@ -415,8 +433,9 @@ data class ObjectInfo(
 )
 ```
 
-✅ **Motion tracking:**
+✅ **Motion tracking (simplified, helper types omitted):**
 ```kotlin
+// TrackedHistory should keep position history and last-seen timestamp for an object.
 class ObjectTracker {
     private val tracked = mutableMapOf<Int, TrackedHistory>()
 
@@ -445,11 +464,11 @@ class ObjectTracker {
 
 ### Barcode Scanning
 
-**Supported formats:**
-- 1D: EAN-13, EAN-8, UPC, Code-128, Code-39
+**Supported formats (common):**
+- 1D: EAN-13, EAN-8, UPC, Code-128, Code-39, etc.
 - 2D: QR Code, Aztec, PDF417, Data Matrix
 
-✅ **Scanner with type handling:**
+✅ **Scanner with type handling (action handlers are placeholders):**
 ```kotlin
 class BarcodeScanningManager {
     private val scanner = BarcodeScanning.getClient(
@@ -462,6 +481,7 @@ class BarcodeScanningManager {
             .build()
     )
 
+    // Requires Kotlin Coroutines Task extensions (kotlinx-coroutines-play-services)
     suspend fun scanBarcodes(image: InputImage): List<Barcode> {
         return scanner.process(image).await()
     }
@@ -492,6 +512,7 @@ class MLKitCameraAnalyzer(
     private var detector: ImageLabeler? = null
     private val cameraExecutor = Executors.newSingleThreadExecutor()
 
+    // Requires Kotlin Coroutines ProcessCameraProvider extension (androidx.concurrent:concurrent-futures-ktx)
     suspend fun startCamera() {
         detector = ImageLabeling.getClient(ImageLabelerOptions.DEFAULT_OPTIONS)
 
@@ -525,8 +546,15 @@ class MLKitCameraAnalyzer(
         )
 
         detector?.process(image)
-            ?.addOnSuccessListener { labels -> onLabelsDetected(labels) }
+            ?.addOnSuccessListener { labels ->
+                // Result handler should be implemented by the caller
+                onLabelsDetected(labels)
+            }
             ?.addOnCompleteListener { imageProxy.close() }
+    }
+
+    private fun onLabelsDetected(labels: List<ImageLabel>) {
+        // Placeholder: update state or UI
     }
 
     fun shutdown() {
@@ -593,15 +621,15 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 ### Best Practices
 
 **Model selection:**
-- ✅ On-device for real-time, offline, privacy
-- ✅ Cloud for higher accuracy, broader label coverage
+- ✅ On-device for real-time, offline usage, and privacy
+- ✅ Cloud for higher accuracy and broader label coverage (subject to current API availability)
 - ✅ Hybrid approach with on-device fallback
 
 **Performance optimization:**
 - ✅ `STRATEGY_KEEP_ONLY_LATEST` for backpressure
-- ✅ Lower resolution (640x480) for real-time
-- ✅ Skip frames (process every 3rd frame)
-- ✅ Always close with `imageProxy.close()`
+- ✅ Lower resolution (e.g., around 640x480) for real-time
+- ✅ Skip frames (e.g., process every 3rd frame)
+- ✅ Always call `imageProxy.close()`
 
 **Resource management:**
 - ✅ Call `detector.close()` on destroy
@@ -611,7 +639,7 @@ fun DetectionOverlay(labels: List<ImageLabel>) {
 **Security:**
 - ✅ Validate barcode data before use
 - ✅ Request confirmation for sensitive actions
-- ✅ Sanitize URLs before opening
+- ✅ Sanitize URLs before opening; treat all barcode-derived data as untrusted
 
 ❌ **Common pitfalls:**
 - ❌ Not closing detectors → memory leaks

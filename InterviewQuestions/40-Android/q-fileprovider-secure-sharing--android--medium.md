@@ -35,14 +35,14 @@ tags: [android/files-media, android/permissions, content-provider, difficulty/me
 
 ## Ответ (RU)
 
-[[c-content-provider|FileProvider]] — специализированный ContentProvider для безопасного межпроцессного обмена файлами через `content://` URI вместо небезопасных `file://` URI. Предоставляет временные гранулярные разрешения без изменения системных прав доступа.
+[[c-content-provider|FileProvider]] — специализированный ContentProvider для безопасного межпроцессного обмена файлами через `content://` URI вместо прямых `file://` URI. Предоставляет временные и адресные разрешения на доступ к конкретным файлам без изменения их системных прав доступа.
 
 ### Проблема file:// URI
 
 С Android 7.0 (API 24) передача `file://` URI через Intent вызывает `FileUriExposedException`. Причины:
-- `file://` требует глобальных разрешений на чтение (MODE_WORLD_READABLE — deprecated)
-- Получатель имеет доступ ко всей файловой системе отправителя
-- Невозможность отзыва разрешений после передачи
+- `file://` опирается на файловые разрешения процесса и часто требовал глобальных прав на чтение (например, MODE_WORLD_READABLE — deprecated), что приводило к избыточному доступу
+- При прямой передаче пути через `file://` сложно обеспечить принцип минимально необходимых прав и неочевидно, какие файлы могут быть доступны при ошибочной настройке прав
+- Невозможность централизованно управлять и отзываться разрешения на конкретные ресурсы после передачи
 
 ### Архитектура FileProvider
 
@@ -51,8 +51,8 @@ tags: [android/files-media, android/permissions, content-provider, difficulty/me
 <provider
     android:name="androidx.core.content.FileProvider"
     android:authorities="${applicationId}.fileprovider"  // ✅ Уникальный authority
-    android:exported="false"                             // ✅ Запрет прямого доступа
-    android:grantUriPermissions="true">                  // ✅ Временные разрешения
+    android:exported="false"                             // ✅ Запрет прямого таргетирования провайдера
+    android:grantUriPermissions="true">                  // ✅ Разрешить временные grant'ы по URI
     <meta-data
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/file_paths" />
@@ -77,11 +77,11 @@ val contentUri = FileProvider.getUriForFile(
 )
 // content://com.example.fileprovider/images/photo.jpg
 
-// Передача с временными разрешениями
+// Передача с временными разрешениями (чтение)
 val intent = Intent(Intent.ACTION_SEND).apply {
     type = "image/*"
     putExtra(Intent.EXTRA_STREAM, contentUri)
-    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)  // ✅ Временное право на чтение
+    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)  // ✅ Временное право на чтение для целевого получателя
 }
 context.startActivity(Intent.createChooser(intent, null))
 ```
@@ -99,30 +99,30 @@ context.startActivity(Intent.createChooser(intent, null))
 ### Безопасность
 
 **Временные разрешения:**
-- Действуют только пока активен компонент-получатель (Activity/Service)
-- Автоматически отзываются при уничтожении получателя
-- Не требуют runtime permissions
+- Grant выдаётся для конкретного `content://` URI и указанного получателя
+- Обычно действует, пока задача/активность получателя актуальна; может быть отозван системой (например, при перезагрузке устройства)
+- Не требует от получателя собственных runtime permissions к файловой системе, если выдан соответствующий grant
 
 **Контроль доступа:**
-- Путь в `file_paths.xml` ограничивает доступные файлы
-- Authority изолирует FileProvider разных приложений
-- `exported="false"` блокирует прямой доступ через ContentResolver
+- Пути в `file_paths.xml` ограничивают набор файлов, доступных через FileProvider
+- Разные authority изолируют FileProvider разных приложений
+- `exported="false"` запрещает прямое таргетирование провайдера из других приложений; доступ возможен только к тем URI, на которые явно выданы разрешения через Intent-флаги
 
 **Потенциальные уязвимости:**
-- ❌ `external-path` с `path="."` открывает всё внешнее хранилище
-- ❌ Не валидированные пользовательские пути (path traversal)
-- ✅ Используйте минимально необходимые директории
+- ❌ `external-path` с `path="."` открывает слишком широкий доступ к внешнему хранилищу
+- ❌ Необработанные пользовательские пути (path traversal) при формировании File-объектов до передачи в FileProvider
+- ✅ Используйте минимально необходимые директории и точечные пути
 
 ## Answer (EN)
 
-[[c-content-provider|FileProvider]] is a specialized ContentProvider for secure inter-process file sharing using `content://` URIs instead of insecure `file://` URIs. It provides temporary granular permissions without modifying system file permissions.
+[[c-content-provider|FileProvider]] is a specialized ContentProvider for secure inter-process file sharing using `content://` URIs instead of direct `file://` URIs. It provides temporary, URI-scoped permissions to specific files without changing their underlying filesystem permissions.
 
 ### The file:// URI Problem
 
 Starting with Android 7.0 (API 24), passing `file://` URIs through Intents throws `FileUriExposedException`. Reasons:
-- `file://` requires global read permissions (MODE_WORLD_READABLE — deprecated)
-- Receiver gains access to sender's entire file system
-- No ability to revoke permissions after sharing
+- `file://` relies on the sender's filesystem permissions and historically used global/world-readable flags (e.g., MODE_WORLD_READABLE — deprecated), which can overexpose data
+- Directly exposing raw filesystem paths via `file://` makes it hard to enforce least-privilege and to reason about what may be accessible if permissions are misconfigured
+- There is no built-in, fine-grained mechanism to centrally manage and revoke access to specific resources once a `file://` path is shared
 
 ### FileProvider Architecture
 
@@ -131,8 +131,8 @@ Starting with Android 7.0 (API 24), passing `file://` URIs through Intents throw
 <provider
     android:name="androidx.core.content.FileProvider"
     android:authorities="${applicationId}.fileprovider"  // ✅ Unique authority
-    android:exported="false"                             // ✅ Prevent direct access
-    android:grantUriPermissions="true">                  // ✅ Enable temp permissions
+    android:exported="false"                             // ✅ Prevent direct targeting of the provider
+    android:grantUriPermissions="true">                  // ✅ Allow temporary URI grants
     <meta-data
         android:name="android.support.FILE_PROVIDER_PATHS"
         android:resource="@xml/file_paths" />
@@ -157,11 +157,11 @@ val contentUri = FileProvider.getUriForFile(
 )
 // content://com.example.fileprovider/images/photo.jpg
 
-// Share with temporary permissions
+// Share with temporary read permissions
 val intent = Intent(Intent.ACTION_SEND).apply {
     type = "image/*"
     putExtra(Intent.EXTRA_STREAM, contentUri)
-    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)  // ✅ Temporary read access
+    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)  // ✅ Temporary read access for the resolved target(s)
 }
 context.startActivity(Intent.createChooser(intent, null))
 ```
@@ -179,19 +179,19 @@ context.startActivity(Intent.createChooser(intent, null))
 ### Security
 
 **Temporary Permissions:**
-- Active only while recipient component (Activity/Service) is alive
-- Automatically revoked when recipient is destroyed
-- No runtime permissions required
+- Grants are issued for specific `content://` URIs and the resolved recipient components
+- Typically remain valid while the recipient's task/component is in use and may be cleared by the system (e.g., on device reboot)
+- Do not require the receiving app to hold its own filesystem runtime permissions for that file, as long as the appropriate grant flag (read/write) is provided
 
 **Access Control:**
-- Paths in `file_paths.xml` restrict accessible files
-- Authority isolates FileProviders across apps
-- `exported="false"` blocks direct ContentResolver access
+- Paths in `file_paths.xml` constrain which files are exposed via FileProvider
+- Distinct authorities isolate FileProviders between apps
+- `exported="false"` prevents other apps from directly targeting the provider; access is only possible to URIs for which grants have been explicitly provided via Intent flags
 
 **Potential Vulnerabilities:**
-- ❌ `external-path` with `path="."` exposes entire external storage
-- ❌ Unvalidated user-controlled paths (path traversal)
-- ✅ Use minimally necessary directories
+- ❌ `external-path` with `path="."` exposes an overly broad portion of external storage
+- ❌ Unvalidated, user-controlled paths (path traversal) when constructing File instances before passing them to FileProvider
+- ✅ Always expose only the minimal required directories and specific paths
 
 ## Follow-ups
 - How does FLAG_GRANT_PERSISTABLE_URI_PERMISSION differ from temporary grants?

@@ -4,23 +4,25 @@ title: Android Async Primitives / Примитивы асинхронности 
 aliases: [Android Async Primitives, Примитивы асинхронности Android]
 topic: android
 subtopics:
-  - coroutines
-  - threads-sync
+- coroutines
+- threads-sync
 question_kind: android
 difficulty: easy
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - q-coroutine-builders-basics--kotlin--easy
-  - q-viewmodel-pattern--android--easy
+- c-coroutines
+- q-coroutine-builders-basics--kotlin--easy
+- q-viewmodel-pattern--android--easy
 sources: []
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-11-10
 tags: [android/coroutines, android/threads-sync, difficulty/easy]
+
 ---
 
 # Вопрос (RU)
@@ -35,18 +37,18 @@ tags: [android/coroutines, android/threads-sync, difficulty/easy]
 
 ## Ответ (RU)
 
-Android предоставляет несколько примитивов для асинхронной работы:
+Android предоставляет несколько уровней примитивов для асинхронной работы:
 
-**Современные (рекомендуемые):**
+**Современные (рекомендуемые, более высокоуровневые):**
 - **[[c-coroutines|Корутины]]** — легковесная конкурентность с lifecycle-aware отменой
-- **Flow** — реактивные потоки данных (cold streams + hot StateFlow/SharedFlow)
-- **[[c-workmanager|WorkManager]]** — гарантированное выполнение задач, переживающих смерть процесса
+- **`Flow`** — реактивные потоки данных (cold streams + hot `StateFlow`/`SharedFlow`) поверх корутин
+- **WorkManager** — надёжное планирование фоновых задач, переживающих смерть процесса (best effort при соблюдении ограничений)
 
-**Legacy (устаревшие):**
-- **Handler/Looper** — низкоуровневая передача сообщений между потоками
+**Базовые/Legacy (низкоуровневые или устаревшие):**
+- **Thread / HandlerThread / Handler/Looper** — низкоуровневая работа с потоками и передача сообщений между ними (включая основной поток)
 - **ExecutorService** — Java thread pool без интеграции с Android lifecycle
-- **RxJava** — функциональное реактивное программирование (требует дисциплины управления подписками)
-- **AsyncTask** — DEPRECATED, утечки памяти при rotation
+- **RxJava** — функциональное реактивное программирование (требует дисциплины управления подписками и ручной привязки к lifecycle)
+- **AsyncTask** — DEPRECATED из-за проблем с lifecycle, управлением потоками, предсказуемостью очередности и частыми утечками памяти при неправильном использовании
 
 ### 1. Kotlin Coroutines (основной выбор)
 
@@ -56,7 +58,7 @@ class DataViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
             val data = withContext(Dispatchers.IO) {
-                repository.fetchData() // сеть/БД всегда на IO
+                repository.fetchData() // сеть/БД рекомендуется выполнять на IO (если вызов блокирующий)
             }
             _uiState.value = UiState.Success(data) // обновление UI на Main
         }
@@ -71,17 +73,17 @@ class DataViewModel : ViewModel() {
         }
     }
 
-    // ❌ WRONG: blocking Main thread
+    // ❌ WRONG: потенциальная блокировка Main thread
     fun loadDataWrong() {
-        viewModelScope.launch { // launch без withContext
-            val data = repository.fetchData() // блокирует Main!
+        viewModelScope.launch { // запуск на Dispatchers.Main по умолчанию
+            val data = repository.fetchData() // если метод блокирующий, он будет блокировать Main!
             _uiState.value = UiState.Success(data)
         }
     }
 }
 ```
 
-### 2. Flow (реактивные потоки)
+### 2. `Flow` (реактивные потоки)
 
 ```kotlin
 // ✅ StateFlow: hot stream с последним значением + conflation
@@ -90,7 +92,7 @@ val users: StateFlow<List<User>> = _users.asStateFlow()
 
 // ✅ Обработка потока с lifecycle-aware collection
 lifecycleScope.launch {
-    repeatOnLifecycle(Lifecycle.State.STARTED) { // останавливается при STOPPED
+    repeatOnLifecycle(Lifecycle.State.STARTED) { // коллекция при STARTED+, автоматическая отмена при STOPPED
         repository.getUsers()
             .flowOn(Dispatchers.IO) // upstream на IO
             .collect { users ->
@@ -99,26 +101,26 @@ lifecycleScope.launch {
     }
 }
 
-// ❌ WRONG: collect без repeatOnLifecycle
+// ❌ WRONG: collect без repeatOnLifecycle (нет привязки к жизненному циклу, риск утечек/лишней работы)
 lifecycleScope.launch {
-    repository.getUsers().collect { /* утечка при background */ }
+    repository.getUsers().collect { /* может продолжать работу, когда UI неактивен */ }
 }
 ```
 
-### 3. WorkManager (гарантированная Фоновая работа)
+### 3. WorkManager (фоновые задачи с устойчивым планированием)
 
 ```kotlin
 class DataSyncWorker(context: Context, params: WorkerParameters)
     : CoroutineWorker(context, params) {
 
-    // ✅ Переживает смерть процесса, перезагрузку устройства
+    // ✅ Может быть повторно запущен системой после смерти процесса/перезагрузки при выполнении условий
     override suspend fun doWork(): Result = try {
         withContext(Dispatchers.IO) {
             syncData() // тяжёлая работа на IO
         }
-        Result.success() // задача завершена, больше не будет перезапущена
+        Result.success() // задача успешно завершена
     } catch (e: Exception) {
-        if (runAttemptCount < 3) Result.retry() // exponential backoff
+        if (runAttemptCount < 3) Result.retry() // можно настроить backoff policy
         else Result.failure() // после 3 попыток отказываемся
     }
 }
@@ -127,7 +129,7 @@ class DataSyncWorker(context: Context, params: WorkerParameters)
 val syncWork = PeriodicWorkRequestBuilder<DataSyncWorker>(1, TimeUnit.HOURS)
     .setConstraints(
         Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED) // только при сети
+            .setRequiredNetworkType(NetworkType.CONNECTED) // только при наличии сети
             .setRequiresBatteryNotLow(true)
             .build()
     )
@@ -135,32 +137,33 @@ val syncWork = PeriodicWorkRequestBuilder<DataSyncWorker>(1, TimeUnit.HOURS)
 
 WorkManager.getInstance(context).enqueueUniquePeriodicWork(
     "DataSync",
-    ExistingPeriodicWorkPolicy.KEEP, // не дублируем задачи
+    ExistingPeriodicWorkPolicy.KEEP, // не дублируем периодические задачи
     syncWork
 )
 ```
 
 **Выбор примитива:**
-- **Корутины** — UI-связанные операции с коротким временем выполнения (API calls, DB queries)
-- **Flow** — непрерывные потоки данных (sensors, DB observations, WebSocket)
-- **WorkManager** — критичные задачи, которые должны выполниться даже после закрытия app (upload, sync)
+- **Корутины** — UI-связанные операции с коротким или контролируемым временем выполнения (API calls, DB queries, параллельные запросы)
+- **`Flow`** — непрерывные/подписочные потоки данных (sensors, DB observations, WebSocket)
+- **WorkManager** — критичные задачи, которые должны быть надежно запланированы и выполниться даже после закрытия app/смерти процесса (upload, sync) при соблюдении системных ограничений
+- **Handler/Executor/Thread** — низкоуровневый контроль потоков и очередей, когда нужна тонкая настройка
 
 ---
 
 ## Answer (EN)
 
-Android provides several async primitives:
+Android provides several levels of async primitives:
 
-**Modern (recommended):**
+**Modern (recommended, higher-level):**
 - **[[c-coroutines|Coroutines]]** — lightweight concurrency with lifecycle-aware cancellation
-- **Flow** — reactive data streams (cold streams + hot StateFlow/SharedFlow)
-- **[[c-workmanager|WorkManager]]** — guaranteed task execution surviving process death
+- **`Flow`** — reactive data streams (cold streams + hot `StateFlow`/`SharedFlow`) built on top of coroutines
+- **WorkManager** — robust scheduling for background tasks that can survive process death (best-effort under given constraints)
 
-**Legacy (outdated):**
-- **Handler/Looper** — low-level message passing between threads
-- **ExecutorService** — Java thread pool without Android lifecycle integration
-- **RxJava** — functional reactive programming (requires disciplined subscription management)
-- **AsyncTask** — DEPRECATED, memory leaks on rotation
+**Low-level/Legacy (basic or outdated):**
+- **Thread / HandlerThread / Handler/Looper** — low-level threading and message passing (including the main thread)
+- **ExecutorService** — Java thread pool without built-in Android lifecycle integration
+- **RxJava** — functional reactive programming (requires disciplined subscription management and manual lifecycle handling)
+- **AsyncTask** — DEPRECATED due to lifecycle issues, threading behavior, ordering guarantees, and common memory leaks when misused
 
 ### 1. Kotlin Coroutines (primary choice)
 
@@ -170,7 +173,7 @@ class DataViewModel : ViewModel() {
     fun loadData() {
         viewModelScope.launch {
             val data = withContext(Dispatchers.IO) {
-                repository.fetchData() // network/DB always on IO
+                repository.fetchData() // network/DB should be on IO if the call is blocking
             }
             _uiState.value = UiState.Success(data) // UI update on Main
         }
@@ -185,17 +188,17 @@ class DataViewModel : ViewModel() {
         }
     }
 
-    // ❌ WRONG: blocking Main thread
+    // ❌ WRONG: potential Main thread blocking
     fun loadDataWrong() {
-        viewModelScope.launch { // launch without withContext
-            val data = repository.fetchData() // blocks Main!
+        viewModelScope.launch { // runs on Dispatchers.Main by default
+            val data = repository.fetchData() // if blocking, this will block Main!
             _uiState.value = UiState.Success(data)
         }
     }
 }
 ```
 
-### 2. Flow (reactive streams)
+### 2. `Flow` (reactive streams)
 
 ```kotlin
 // ✅ StateFlow: hot stream with latest value + conflation
@@ -204,7 +207,7 @@ val users: StateFlow<List<User>> = _users.asStateFlow()
 
 // ✅ Stream processing with lifecycle-aware collection
 lifecycleScope.launch {
-    repeatOnLifecycle(Lifecycle.State.STARTED) { // stops on STOPPED
+    repeatOnLifecycle(Lifecycle.State.STARTED) { // collect when STARTED+, automatically cancelled on STOPPED
         repository.getUsers()
             .flowOn(Dispatchers.IO) // upstream on IO
             .collect { users ->
@@ -213,26 +216,26 @@ lifecycleScope.launch {
     }
 }
 
-// ❌ WRONG: collect without repeatOnLifecycle
+// ❌ WRONG: collect without repeatOnLifecycle (no lifecycle awareness, risk of leaks/unnecessary work)
 lifecycleScope.launch {
-    repository.getUsers().collect { /* leaks on background */ }
+    repository.getUsers().collect { /* may keep collecting when UI is not visible */ }
 }
 ```
 
-### 3. WorkManager (guaranteed Background work)
+### 3. WorkManager (background work with resilient scheduling)
 
 ```kotlin
 class DataSyncWorker(context: Context, params: WorkerParameters)
     : CoroutineWorker(context, params) {
 
-    // ✅ Survives process death, device reboot
+    // ✅ Can be rescheduled by the system after process death/reboot when constraints are met
     override suspend fun doWork(): Result = try {
         withContext(Dispatchers.IO) {
             syncData() // heavy work on IO
         }
-        Result.success() // task complete, won't restart
+        Result.success() // task completed successfully
     } catch (e: Exception) {
-        if (runAttemptCount < 3) Result.retry() // exponential backoff
+        if (runAttemptCount < 3) Result.retry() // backoff policy can be configured
         else Result.failure() // give up after 3 attempts
     }
 }
@@ -241,7 +244,7 @@ class DataSyncWorker(context: Context, params: WorkerParameters)
 val syncWork = PeriodicWorkRequestBuilder<DataSyncWorker>(1, TimeUnit.HOURS)
     .setConstraints(
         Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED) // only with network
+            .setRequiredNetworkType(NetworkType.CONNECTED) // only when network is available
             .setRequiresBatteryNotLow(true)
             .build()
     )
@@ -249,45 +252,77 @@ val syncWork = PeriodicWorkRequestBuilder<DataSyncWorker>(1, TimeUnit.HOURS)
 
 WorkManager.getInstance(context).enqueueUniquePeriodicWork(
     "DataSync",
-    ExistingPeriodicWorkPolicy.KEEP, // don't duplicate tasks
+    ExistingPeriodicWorkPolicy.KEEP, // don't duplicate periodic tasks
     syncWork
 )
 ```
 
 **Choosing the right primitive:**
-- **Coroutines** — UI-bound operations with short execution time (API calls, DB queries)
-- **Flow** — continuous data streams (sensors, DB observations, WebSocket)
-- **WorkManager** — critical tasks that must complete even after app closes (upload, sync)
+- **Coroutines** — UI-bound operations with short or controlled execution time (API calls, DB queries, parallel calls)
+- **`Flow`** — continuous/subscribed data streams (sensors, DB observations, WebSocket)
+- **WorkManager** — critical tasks that must be reliably scheduled and run even after app closure/process death (upload, sync) under system constraints
+- **Handler/Executor/Thread** — low-level control of threads and queues when fine-grained behavior is needed
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как `viewModelScope` обеспечивает автоматическую отмену при очистке `ViewModel`?
+- В чем разница между `StateFlow` и `SharedFlow` с точки зрения буферизации и `replay`?
+- В каких случаях вы предпочтете `ExecutorService` вместо корутин, несмотря на рекомендации?
+- Как WorkManager сохраняет и переназначает задачи при смерти процесса и перезагрузке устройства?
+- Каковы последствия для памяти при использовании `Handler` с долгоживущими ссылками на `Activity`?
+- Почему `AsyncTask` устарел и какие конкретные проблемы у него были с lifecycle и потоками?
+- Как диспетчеры корутин отображаются на модель потоков Android (Main, IO, Default)?
+
 ## Follow-ups
 
-- How does `viewModelScope` ensure automatic cancellation when ViewModel is cleared?
+- How does `viewModelScope` ensure automatic cancellation when `ViewModel` is cleared?
 - What's the difference between `StateFlow` and `SharedFlow` in terms of buffering and replay?
 - When would you prefer `ExecutorService` over coroutines despite the recommendation?
-- How does WorkManager guarantee task execution across process death?
-- What are the memory implications of using Handler with long-lived Activity references?
-- Why is `AsyncTask` deprecated and what specific issues did it have with lifecycle management?
+- How does WorkManager persist and reschedule work across process death and device reboot?
+- What are the memory implications of using Handler with long-lived `Activity` references?
+- Why is `AsyncTask` deprecated and what specific issues did it have with lifecycle management and threading?
 - How do coroutine dispatchers map to Android's threading model (Main, IO, Default)?
+
+## Ссылки (RU)
+
+- [[c-coroutines]] — основы корутин
+- Руководство по корутинам Kotlin на Android: https://developer.android.com/kotlin/coroutines
+- Документация по `Flow`: https://kotlinlang.org/docs/flow.html
+- Руководство по WorkManager: https://developer.android.com/topic/libraries/architecture/workmanager
+- Обзор фоновых задач: https://developer.android.com/develop/background-work/background-tasks
 
 ## References
 
 - [[c-coroutines]] — Coroutines fundamentals
-- [[c-workmanager]] — WorkManager architecture
 - [Kotlin Coroutines on Android](https://developer.android.com/kotlin/coroutines)
-- [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)
+- [Kotlin `Flow` Documentation](https://kotlinlang.org/docs/flow.html)
 - [WorkManager Guide](https://developer.android.com/topic/libraries/architecture/workmanager)
 - [Background Tasks Overview](https://developer.android.com/develop/background-work/background-tasks)
+
+## Связанные вопросы (RU)
+
+### Предусловия
+- [[q-coroutine-builders-basics--kotlin--easy]] — основы корутин
+- [[q-viewmodel-pattern--android--easy]] — паттерн `ViewModel`
+
+### Связанные
+- [[q-flow-operators--kotlin--medium]] — операторы `Flow`
+- [[q-what-is-workmanager--android--medium]] — основы WorkManager
+
+### Продвинутые
+- [[q-advanced-coroutine-patterns--kotlin--hard]] — продвинутые паттерны корутин
+- [[q-workmanager-execution-guarantee--android--medium]] — гарантии выполнения WorkManager
 
 ## Related Questions
 
 ### Prerequisites
 - [[q-coroutine-builders-basics--kotlin--easy]] — Coroutines fundamentals
-- [[q-viewmodel-pattern--android--easy]] — ViewModel pattern
+- [[q-viewmodel-pattern--android--easy]] — `ViewModel` pattern
 
 ### Related
-- [[q-flow-operators--kotlin--medium]] — Flow operators
+- [[q-flow-operators--kotlin--medium]] — `Flow` operators
 - [[q-what-is-workmanager--android--medium]] — WorkManager basics
 
 ### Advanced

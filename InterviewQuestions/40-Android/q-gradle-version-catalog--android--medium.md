@@ -3,40 +3,42 @@ id: android-179
 title: "Gradle Version Catalog / Каталог версий Gradle"
 aliases: [Gradle Version Catalog, libs.versions.toml, Version Catalog, Каталог версий Gradle]
 topic: android
-subtopics: [build-variants, dependency-management, gradle]
+subtopics: [gradle]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-gradle-build-system--android--medium, q-gradle-kotlin-dsl-vs-groovy--android--medium, q-kapt-ksp-migration--android--medium]
+related: [c-gradle, q-gradle-build-system--android--medium, q-gradle-kotlin-dsl-vs-groovy--android--medium, q-kapt-ksp-migration--android--medium]
 created: 2025-10-15
-updated: 2025-10-27
-tags: [android/build-variants, android/dependency-management, android/gradle, dependency-management, difficulty/medium, gradle, toml]
-sources: [Android Developer Docs, Kirchhoff repo]
+updated: 2025-11-10
+tags: [android/gradle, difficulty/medium, gradle, toml]
+sources: ["https://developer.android.com/build/migrate-to-catalogs", "https://docs.gradle.org/current/userguide/platforms.html"]
 ---
 
 # Вопрос (RU)
 
-Что вы знаете о Gradle Version Catalog?
+> Что вы знаете о Gradle Version Catalog?
 
 # Question (EN)
 
-What do you know about Gradle Version Catalog?
+> What do you know about Gradle Version Catalog?
 
 ---
 
 ## Ответ (RU)
 
-**Gradle Version Catalog** - это механизм для централизованного управления зависимостями и плагинами в Gradle-проектах через файл `libs.versions.toml`. Вместо дублирования версий в каждом модуле, создается единый каталог с типобезопасными аксессорами и поддержкой автодополнения в IDE. См. также [[c-dependency-injection]] для паттернов управления зависимостями.
+**Gradle Version Catalog** — это механизм для централизованного управления зависимостями и плагинами в Gradle-проектах через файл `libs.versions.toml` (или несколько каталогов). Вместо дублирования версий в каждом модуле создается единый каталог, на основе которого Gradle генерирует удобные, структурированные аксессоры ("типизированные"/type-safe-style) с поддержкой автодополнения в IDE.
+
+См. также: [[c-gradle]]
 
 ### Ключевые Преимущества
 
-1. **Типобезопасность**: Gradle генерирует аксессоры для автодополнения (`libs.retrofit.core`)
-2. **Централизация**: Единый источник истины для всех версий
-3. **Бандлы**: Группировка часто используемых вместе зависимостей
-4. **Консистентность**: Одна версия применяется во всех модулях
+1. **Структурированные аксессоры**: Gradle генерирует аксессоры для автодополнения (`libs.retrofit.core`).
+2. **Централизация**: Единый источник истины для версий и координат зависимостей.
+3. **Бандлы**: Группировка часто используемых вместе зависимостей.
+4. **Консистентность**: Одна версия применяется во всех модулях.
 
 ### Структура libs.versions.toml
 
@@ -57,7 +59,7 @@ retrofit = ["retrofit-core", "retrofit-gson"]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 ```
 
-### Использование В build.gradle.kts
+### Использование в build.gradle.kts
 
 ```kotlin
 plugins {
@@ -65,26 +67,27 @@ plugins {
 }
 
 dependencies {
-    // ✅ Отдельные зависимости с типобезопасностью
+    // ✅ Отдельные зависимости через сгенерированные аксессоры
     implementation(libs.retrofit.core)
 
-    // ✅ Бандл - все зависимости группы сразу
+    // ✅ Бандл — все зависимости группы сразу
     implementation(libs.bundles.retrofit)
 }
 ```
 
-### Правила Именования Алиасов
+### Правила именования алиасов
 
-**Разделители** (dash рекомендуется):
-- Дефис `-`: `retrofit-core` → `libs.retrofit.core`
-- Точка `.`: `androidx.core.ktx` → `libs.androidx.core.ktx`
-- Подчеркивание `_`: `room_runtime` → `libs.room.runtime`
+Gradle на основе ключей в TOML генерирует Kotlin/Java аксессоры. Важно понимать, как символы преобразуются:
 
-**Валидные алиасы**: `guava`, `compose-ui`, `androidx.lifecycle.runtime`
+- Дефис `-` в алиасе библиотеки (`retrofit-core`) приводит к вложенному аксессору: `libs.retrofit.core`.
+- Точка `.` используется как уже вложенная структура: `androidx.core.ktx` → `libs.androidx.core.ktx`.
+- Подчёркивание `_` в ключах (`room_runtime`) также транслируется в допустимые имена аксессоров и часто превращается в точку/разделитель: `room_runtime` → `libs.room.runtime`.
 
-**Невалидные**: `this.#invalid` (спецсимволы запрещены)
+**Валидные алиасы**: `guava`, `compose-ui`, `androidx.lifecycle.runtime`.
 
-### Пример Для Android-проекта
+**Невалидные**: `this.#invalid` (спецсимволы запрещены).
+
+### Пример для Android-проекта
 
 ```toml
 [versions]
@@ -99,7 +102,7 @@ compose-material3 = { module = "androidx.compose.material3:material3", version.r
 # Room Database
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }  # ✅ KSP dependency
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }  # ✅ Для kapt/ksp в зависимости от используемого варианта
 
 [bundles]
 compose = ["compose-ui", "compose-material3"]
@@ -114,30 +117,32 @@ ksp = { id = "com.google.devtools.ksp", version = "1.9.20-1.0.14" }
 ```kotlin
 dependencies {
     implementation(libs.bundles.compose)     // ✅ Весь Compose UI сразу
-    implementation(libs.bundles.room)        // ✅ Room runtime и extensions
-    ksp(libs.room.compiler)                  // ✅ Аннотация-процессор через KSP
+    implementation(libs.bundles.room)        // ✅ Room runtime и KTX-расширения
+    ksp(libs.room.compiler)                  // ✅ Используем room-compiler с KSP-плагином (при конфигурации KSP)
 }
 ```
 
-### Стратегия Миграции
+### Стратегия миграции
 
-1. Создайте `gradle/libs.versions.toml`
-2. Извлеките версии из build-файлов в `[versions]`
-3. Объявите библиотеки в `[libraries]` с `version.ref`
-4. Группируйте связанные зависимости в `[bundles]`
-5. Замените `implementation("group:artifact:version")` на `implementation(libs.artifact)`
-6. Протестируйте сборку
+1. Создайте `gradle/libs.versions.toml`.
+2. Вынесите версии из `build.gradle` файлов в секцию `[versions]`.
+3. Объявите библиотеки в `[libraries]` с `version.ref`.
+4. Сгруппируйте связанные зависимости в `[bundles]`.
+5. Замените `implementation("group:artifact:version")` на `implementation(libs.<alias>)`.
+6. Убедитесь, что проект собирается (и при необходимости включена поддержка каталогов версий в `settings.gradle` для старых версий Gradle).
 
 ## Answer (EN)
 
-**Gradle Version Catalog** is a centralized dependency and plugin management mechanism through `libs.versions.toml` file. Instead of hardcoding versions in each module, you create a single catalog with type-safe accessors and IDE autocompletion support.
+**Gradle Version Catalog** is a mechanism for centralized dependency and plugin management via the `libs.versions.toml` file (or multiple catalogs). Instead of hardcoding versions in each module, you define a shared catalog from which Gradle generates convenient, structured accessors (type-safe-style accessors) with IDE autocompletion support.
+
+See also: [[c-gradle]]
 
 ### Key Benefits
 
-1. **Type Safety**: Gradle generates accessors for autocompletion (`libs.retrofit.core`)
-2. **Centralization**: Single source of truth for all versions
-3. **Bundles**: Group commonly used dependencies together
-4. **Consistency**: One version applied across all modules
+1. **Structured accessors**: Gradle generates accessors for autocompletion (`libs.retrofit.core`).
+2. **Centralization**: Single source of truth for versions and dependency coordinates.
+3. **Bundles**: Group commonly used dependencies together.
+4. **Consistency**: One version applied across all modules.
 
 ### Structure of libs.versions.toml
 
@@ -166,7 +171,7 @@ plugins {
 }
 
 dependencies {
-    // ✅ Individual dependencies with type safety
+    // ✅ Individual dependencies via generated accessors
     implementation(libs.retrofit.core)
 
     // ✅ Bundle - all group dependencies at once
@@ -176,14 +181,15 @@ dependencies {
 
 ### Alias Naming Rules
 
-**Separators** (dash recommended):
-- Dash `-`: `retrofit-core` → `libs.retrofit.core`
-- Dot `.`: `androidx.core.ktx` → `libs.androidx.core.ktx`
-- Underscore `_`: `room_runtime` → `libs.room.runtime`
+Gradle generates Kotlin/Java accessors based on TOML keys. Key transformation rules:
 
-**Valid aliases**: `guava`, `compose-ui`, `androidx.lifecycle.runtime`
+- Dash `-` in library aliases (`retrofit-core`) becomes a nested accessor: `libs.retrofit.core`.
+- Dot `.` represents nested structure directly: `androidx.core.ktx` → `libs.androidx.core.ktx`.
+- Underscore `_` in keys (`room_runtime`) is converted into a valid accessor name and typically treated as a separator: `room_runtime` → `libs.room.runtime`.
 
-**Invalid**: `this.#invalid` (special characters forbidden)
+**Valid aliases**: `guava`, `compose-ui`, `androidx.lifecycle.runtime`.
+
+**Invalid**: `this.#invalid` (special characters are forbidden).
 
 ### Android Project Example
 
@@ -200,7 +206,7 @@ compose-material3 = { module = "androidx.compose.material3:material3", version.r
 # Room Database
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }  # ✅ KSP dependency
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }  # ✅ Used with kapt or KSP depending on your setup
 
 [bundles]
 compose = ["compose-ui", "compose-material3"]
@@ -215,19 +221,19 @@ ksp = { id = "com.google.devtools.ksp", version = "1.9.20-1.0.14" }
 ```kotlin
 dependencies {
     implementation(libs.bundles.compose)     // ✅ All Compose UI at once
-    implementation(libs.bundles.room)        // ✅ Room runtime and extensions
-    ksp(libs.room.compiler)                  // ✅ Annotation processor via KSP
+    implementation(libs.bundles.room)        // ✅ Room runtime and KTX extensions
+    ksp(libs.room.compiler)                  // ✅ Use room-compiler with the KSP plugin (when configured for KSP)
 }
 ```
 
 ### Migration Strategy
 
-1. Create `gradle/libs.versions.toml` file
-2. Extract versions from build files to `[versions]` section
-3. Declare libraries in `[libraries]` with `version.ref`
-4. Group related dependencies in `[bundles]`
-5. Replace `implementation("group:artifact:version")` with `implementation(libs.artifact)`
-6. Test the build
+1. Create `gradle/libs.versions.toml`.
+2. Extract versions from existing `build.gradle` files into the `[versions]` section.
+3. Declare libraries in `[libraries]` using `version.ref` where appropriate.
+4. Group related dependencies in `[bundles]`.
+5. Replace `implementation("group:artifact:version")` with `implementation(libs.<alias>)`.
+6. Verify the build (and for older Gradle versions, ensure version catalogs are enabled/configured in `settings.gradle`).
 
 ---
 

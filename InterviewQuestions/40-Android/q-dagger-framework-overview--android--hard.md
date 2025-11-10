@@ -4,28 +4,29 @@ title: Dagger Framework Overview / Обзор фреймворка Dagger
 aliases: [Dagger Framework Overview, Обзор фреймворка Dagger]
 topic: android
 subtopics:
-  - architecture-clean
-  - architecture-mvvm
-  - di-hilt
+- architecture-clean
+- architecture-mvvm
+- di-hilt
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - c-dagger
-  - c-dependency-injection
-  - c-hilt
-  - q-dagger-build-time-optimization--android--medium
-  - q-dagger-custom-scopes--android--hard
+- c-dagger
+- c-dependency-injection
+- c-hilt
+- q-dagger-build-time-optimization--android--medium
+- q-dagger-custom-scopes--android--hard
 created: 2025-10-20
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/architecture-clean, android/architecture-mvvm, android/di-hilt, dagger, dependency-injection, difficulty/hard, hilt]
 sources:
-  - https://dagger.dev/
+- "https://dagger.dev/"
+
 ---
 
 # Вопрос (RU)
@@ -85,15 +86,20 @@ interface AppComponent {
 @Singleton  // Один экземпляр на весь граф
 class ApiClient @Inject constructor()
 
-@ActivityScoped  // Один экземпляр на Activity
-class ViewModel @Inject constructor()
+// Пример пользовательского scope для Activity (в чистом Dagger):
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ActivityScope
+
+@ActivityScope  // Один экземпляр на Activity в рамках соответствующего компонента
+class SomeActivityScopedDependency @Inject constructor()
 
 // ❌ Без scope — создается новый экземпляр при каждом запросе
 ```
 
 ### [[c-hilt]] — Упрощенный Dagger Для Android
 
-Hilt автоматизирует boilerplate-код и предоставляет стандартные компоненты:
+Hilt автоматизирует boilerplate-код и предоставляет стандартные компоненты и scope-аннотации для Android.
 
 ```kotlin
 // ✅ Hilt автоматически создает компоненты и внедряет зависимости
@@ -112,27 +118,54 @@ class UserViewModel @Inject constructor(
 ```
 
 **Стандартные Scopes в Hilt:**
-- `@Singleton` — на уровне Application
-- `@ActivityScoped` / `@ActivityRetainedScoped` — Activity/ViewModel
-- `@ViewModelScoped` — ViewModel
-- `@FragmentScoped` — Fragment
+- `@Singleton` — `SingletonComponent` / уровень `Application`
+- `@ActivityScoped` — `ActivityComponent` (один экземпляр на `Activity`)
+- `@ActivityRetainedScoped` — `ActivityRetainedComponent` (связано с жизненным циклом `Activity`, переживает конфигурационные изменения; подходит для зависимостей `ViewModel`)
+- `@ViewModelScoped` — `ViewModelComponent` (один экземпляр на `ViewModel`)
+- `@FragmentScoped` — `FragmentComponent` (один экземпляр на `Fragment`)
 
 ### Преимущества Compile-Time DI
 
 **Производительность:**
 - Нет runtime reflection overhead
 - Граф зависимостей строится на этапе компиляции
-- Zero runtime initialization cost
+- Минимальные runtime-издержки при разрешении зависимостей за счет сгенерированных фабрик
 
 **Безопасность:**
 - Compile-time проверка циклических зависимостей
 - Гарантия существования всех зависимостей
-- Thread-safe singleton creation
+- Потокобезопасное создание синглтонов (через сгенерированный код и корректно настроенные компоненты)
 
 **Тестируемость:**
 - Простая замена модулей для тестов
 - Изолированное тестирование компонентов
 - Mock-friendly архитектура
+
+### Дополнительные вопросы (RU)
+
+- Как Dagger обнаруживает и репортит циклические зависимости на этапе компиляции, и какой алгоритм обхода графа он использует?
+- Каковы trade-offs между constructor injection и field injection с точки зрения неизменяемости, тестируемости и управления жизненным циклом?
+- Как работают пользовательские scope в Dagger, и когда стоит создавать свои вместо использования стандартных?
+- Что произойдет, если внедрить незаскопленную зависимость в scoped-компонент, и как это повлияет на создание экземпляров?
+- Как иерархия компонентов Hilt соотносится с жизненным циклом Android-компонентов и как это влияет на утечки памяти?
+
+### Ссылки (RU)
+
+- [[c-dagger]] — концепции фреймворка Dagger
+- [[c-dependency-injection]] — паттерн Dependency Injection
+- [[c-hilt]] — Hilt для Android
+- "https://dagger.dev/" — официальная документация Dagger
+
+### Связанные вопросы (RU)
+
+#### База (проще)
+- [[q-dagger-field-injection--android--medium]] — различия между field и constructor injection
+
+#### Того же уровня (средний/текущий)
+- [[q-dagger-build-time-optimization--android--medium]] — оптимизация времени сборки с Dagger
+
+#### Продвинутые (сложнее)
+- [[q-dagger-custom-scopes--android--hard]] — создание и управление пользовательскими scope
 
 ## Answer (EN)
 
@@ -185,15 +218,20 @@ interface AppComponent {
 @Singleton  // One instance across entire graph
 class ApiClient @Inject constructor()
 
-@ActivityScoped  // One instance per Activity
-class ViewModel @Inject constructor()
+// Example of a custom Activity scope in plain Dagger:
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class ActivityScope
+
+@ActivityScope  // One instance per Activity within the corresponding component
+class SomeActivityScopedDependency @Inject constructor()
 
 // ❌ No scope — new instance created on each request
 ```
 
 ### [[c-hilt]] — Simplified Dagger for Android
 
-Hilt automates boilerplate and provides standard components:
+Hilt automates boilerplate and provides standard components and scope annotations tailored for Android.
 
 ```kotlin
 // ✅ Hilt automatically creates components and injects dependencies
@@ -212,22 +250,23 @@ class UserViewModel @Inject constructor(
 ```
 
 **Standard Hilt Scopes:**
-- `@Singleton` — Application level
-- `@ActivityScoped` / `@ActivityRetainedScoped` — Activity/ViewModel
-- `@ViewModelScoped` — ViewModel
-- `@FragmentScoped` — Fragment
+- `@Singleton` — `SingletonComponent` / `Application` level
+- `@ActivityScoped` — `ActivityComponent` (one instance per `Activity`)
+- `@ActivityRetainedScoped` — `ActivityRetainedComponent` (tied to `Activity` lifecycle across configuration changes; suitable for `ViewModel`-related dependencies)
+- `@ViewModelScoped` — `ViewModelComponent` (one instance per `ViewModel`)
+- `@FragmentScoped` — `FragmentComponent` (one instance per `Fragment`)
 
 ### Compile-Time DI Advantages
 
 **Performance:**
 - No runtime reflection overhead
 - Dependency graph built at compile time
-- Zero runtime initialization cost
+- Minimal runtime overhead for dependency resolution thanks to generated factories
 
 **Safety:**
 - Compile-time cyclic dependency detection
 - Guaranteed existence of all dependencies
-- Thread-safe singleton creation
+- Thread-safe singleton creation via generated code and properly configured components
 
 **Testability:**
 - Simple module replacement for tests
@@ -247,7 +286,7 @@ class UserViewModel @Inject constructor(
 - [[c-dagger]] — Dagger framework concepts
 - [[c-dependency-injection]] — Dependency Injection pattern
 - [[c-hilt]] — Hilt wrapper for Android
-- https://dagger.dev/ — Official Dagger documentation
+- "https://dagger.dev/" — Official Dagger documentation
 
 ## Related Questions
 

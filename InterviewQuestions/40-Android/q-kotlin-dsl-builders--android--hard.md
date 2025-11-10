@@ -17,8 +17,9 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-dsl-builders
-- q-kotlin-lambda-receivers--kotlin--medium
+- c-kotlin
+- c-gradle
+- q-kotlin-lambda-expressions--kotlin--medium
 created: 2025-10-12
 updated: 2025-10-31
 tags:
@@ -30,7 +31,8 @@ tags:
 - dsl
 - lambdas
 sources:
-- https://kotlinlang.org/docs/type-safe-builders.html
+- "https://kotlinlang.org/docs/type-safe-builders.html"
+
 ---
 
 # Вопрос (RU)
@@ -44,13 +46,13 @@ sources:
 ## Ответ (RU)
 
 **Теория DSL строителей:**
-DSL (Domain-Specific Language) строители позволяют создавать выразительные, типобезопасные API, которые напоминают естественный язык. Основаны на лямбдах с получателем, функциях-расширениях и перегрузке операторов.
+DSL (Domain-Specific Language) строители позволяют создавать выразительные, типобезопасные API, которые напоминают декларативный язык конфигурации (как в Gradle Kotlin DSL, Jetpack Compose или HTML DSL). Они основаны на лямбдах с получателем, функциях-расширениях и (опционально) перегрузке операторов.
 
 **Основные концепции:**
-- Лямбда с получателем (`T.() -> Unit`) - основа DSL
-- `@DslMarker` - предотвращает доступ к внешнему scope
-- Функции-расширения для добавления методов строителя
-- Перегрузка операторов для естественного синтаксиса
+- Лямбда с получателем (`T.() -> Unit`) — основа DSL: внутри блока `this` — экземпляр `T`.
+- `@DslMarker` — ограничивает видимость нескольких имплицитных получателей разных DSL-областей, предотвращая случайное обращение к «чужому» `this`.
+- Функции-расширения — позволяют добавлять функции "строителя" к контекстному типу.
+- Перегрузка операторов — может улучшать читаемость (например, `unaryPlus` для текста в HTML DSL).
 
 **Лямбда с получателем:**
 ```kotlin
@@ -68,14 +70,22 @@ fun buildHtml2(builder: HTML.() -> Unit): HTML {
     return html
 }
 
-// Использование - чище, параметр не нужен
+class HTML {
+    private val content = StringBuilder()
+
+    fun append(text: String) {
+        content.append(text)
+    }
+}
+
+// Использование — чище, параметр не нужен
 val html2 = buildHtml2 {
-    append("<html>")  // 'this' - это HTML
+    append("<html>")  // 'this' — это HTML
     append("<body>")
 }
 ```
 
-**Базовый DSL строитель:**
+**Базовый DSL строитель (упрощённый HTML DSL):**
 ```kotlin
 @DslMarker
 annotation class HtmlTagMarker
@@ -100,17 +110,24 @@ abstract class Tag(val name: String) {
     }
 }
 
+class TextTag(private val text: String) : Tag("text")
+
 class HTML : Tag("html") {
     fun head(init: Head.() -> Unit) = initTag(Head(), init)
     fun body(init: Body.() -> Unit) = initTag(Body(), init)
 }
+
+class Head : Tag("head")
 
 class Body : Tag("body") {
     fun h1(init: H1.() -> Unit) = initTag(H1(), init)
     fun p(init: P.() -> Unit) = initTag(P(), init)
 }
 
-// DSL функция
+class H1 : Tag("h1")
+class P : Tag("p")
+
+// DSL-функция верхнего уровня
 fun html(init: HTML.() -> Unit): HTML {
     val html = HTML()
     html.init()
@@ -146,20 +163,22 @@ class SafeRowBuilder {
     }
 }
 
-// Теперь безопаснее - нельзя получить доступ к внешнему scope
+// Благодаря @TableDsl, когда внутри row { ... } одновременно есть получатель SafeRowBuilder
+// и внешний SafeTableBuilder, Kotlin запрещает неявные обращения к "чужому" this,
+// уменьшая риск ошибок при вложенных DSL-вызовах.
 fun buildTable() {
     SafeTableBuilder().apply {
         row {
             cell("A")
-            // row { // Ошибка компиляции - нельзя получить доступ к внешнему scope
-            //     cell("B")
-            // }
+            // Вложенный вызов row() без явной ссылки на внешний билдер будет запрещён,
+            // если он создаёт конфликт имплицитных получателей.
+            // row { cell("B") } // пример потенциально проблемного кода
         }
     }
 }
 ```
 
-**Android View DSL:**
+**Android `View` DSL (упрощённый пример):**
 ```kotlin
 @DslMarker
 annotation class ViewDsl
@@ -170,8 +189,32 @@ abstract class ViewBuilder {
 }
 
 @ViewDsl
+class TextViewBuilder : ViewBuilder() {
+    var text: CharSequence = ""
+    var textSize: Float = 14f
+
+    override fun build(context: Context): TextView =
+        TextView(context).apply {
+            this.text = this@TextViewBuilder.text
+            this.textSize = this@TextViewBuilder.textSize
+        }
+}
+
+@ViewDsl
+class ButtonBuilder : ViewBuilder() {
+    var text: CharSequence = ""
+    var onClickListener: ((View) -> Unit)? = null
+
+    override fun build(context: Context): Button =
+        Button(context).apply {
+            this.text = this@ButtonBuilder.text
+            setOnClickListener { v -> onClickListener?.invoke(v) }
+        }
+}
+
+@ViewDsl
 class LinearLayoutBuilder : ViewBuilder() {
-    var orientation = LinearLayout.VERTICAL
+    var orientation: Int = LinearLayout.VERTICAL
     private val children = mutableListOf<ViewBuilder>()
 
     fun textView(init: TextViewBuilder.() -> Unit) {
@@ -182,21 +225,20 @@ class LinearLayoutBuilder : ViewBuilder() {
         children.add(ButtonBuilder().apply(init))
     }
 
-    override fun build(context: Context): LinearLayout {
-        return LinearLayout(context).apply {
+    override fun build(context: Context): LinearLayout =
+        LinearLayout(context).apply {
             this.orientation = this@LinearLayoutBuilder.orientation
-            children.forEach { addView(it.build(context)) }
+            children.forEach { child -> addView(child.build(context)) }
         }
-    }
 }
 
-// DSL функция
+// DSL-функция
 fun Context.verticalLayout(init: LinearLayoutBuilder.() -> Unit): LinearLayout {
     return LinearLayoutBuilder().apply(init).build(this)
 }
 
 // Использование
-val layout = verticalLayout {
+val layout = context.verticalLayout {
     orientation = LinearLayout.VERTICAL
     textView {
         text = "Привет"
@@ -204,28 +246,30 @@ val layout = verticalLayout {
     }
     button {
         text = "Нажми меня"
-        onClick = { /* ... */ }
+        onClickListener = { /* ... */ }
     }
 }
 ```
 
+(Этот пример иллюстрирует подход; в реальных Android-проектах чаще используют Jetpack Compose, который является DSL, основанным на аннотации `@Composable` и функциях с приемником.)
+
 ## Answer (EN)
 
 **DSL Builders Theory:**
-DSL (Domain-Specific Language) builders allow creating expressive, type-safe APIs that resemble natural language. Based on lambda with receiver, extension functions, and operator overloading.
+DSL (Domain-Specific Language) builders help create expressive, type-safe APIs that look like a declarative configuration language (similar to Gradle Kotlin DSL, Jetpack Compose, or HTML DSL). They are built on lambdas with receiver, extension functions, and optionally operator overloading.
 
 **Main concepts:**
-- Lambda with receiver (`T.() -> Unit`) - foundation of DSL
-- `@DslMarker` - prevents accessing outer scope
-- Extension functions for adding builder methods
-- Operator overloading for natural syntax
+- Lambda with receiver (`T.() -> Unit`) — the core: inside the block, `this` is an instance of `T`.
+- `@DslMarker` — restricts visibility when multiple implicit receivers from different DSL scopes are in play, preventing accidental calls on the wrong `this`.
+- Extension functions — provide builder-style functions on the context type.
+- Operator overloading — can improve readability (for example, `unaryPlus` for text in HTML DSL).
 
 **Lambda with receiver:**
 ```kotlin
 // Regular lambda: (HTML) -> Unit
 fun buildHtml1(builder: (HTML) -> Unit): HTML {
     val html = HTML()
-    builder(html)  // Pass HTML as parameter
+    builder(html)  // Pass HTML as argument
     return html
 }
 
@@ -236,14 +280,22 @@ fun buildHtml2(builder: HTML.() -> Unit): HTML {
     return html
 }
 
-// Usage - cleaner, no parameter needed
+class HTML {
+    private val content = StringBuilder()
+
+    fun append(text: String) {
+        content.append(text)
+    }
+}
+
+// Usage — cleaner, no parameter needed
 val html2 = buildHtml2 {
     append("<html>")  // 'this' is HTML
     append("<body>")
 }
 ```
 
-**Basic DSL builder:**
+**Basic DSL builder (simplified HTML DSL):**
 ```kotlin
 @DslMarker
 annotation class HtmlTagMarker
@@ -268,17 +320,24 @@ abstract class Tag(val name: String) {
     }
 }
 
+class TextTag(private val text: String) : Tag("text")
+
 class HTML : Tag("html") {
     fun head(init: Head.() -> Unit) = initTag(Head(), init)
     fun body(init: Body.() -> Unit) = initTag(Body(), init)
 }
+
+class Head : Tag("head")
 
 class Body : Tag("body") {
     fun h1(init: H1.() -> Unit) = initTag(H1(), init)
     fun p(init: P.() -> Unit) = initTag(P(), init)
 }
 
-// DSL function
+class H1 : Tag("h1")
+class P : Tag("p")
+
+// Top-level DSL function
 fun html(init: HTML.() -> Unit): HTML {
     val html = HTML()
     html.init()
@@ -314,20 +373,21 @@ class SafeRowBuilder {
     }
 }
 
-// Now safer - cannot access outer scope
+// With @TableDsl, when inside row { ... } there are both SafeRowBuilder and outer SafeTableBuilder
+// as potential receivers, Kotlin restricts implicit member resolution to avoid calling the wrong receiver.
 fun buildTable() {
     SafeTableBuilder().apply {
         row {
             cell("A")
-            // row { // Compile error - cannot access outer scope
-            //     cell("B")
-            // }
+            // Nested row() without qualifying the outer receiver would be disallowed
+            // if it causes conflicting implicit receivers.
+            // row { cell("B") } // example of potentially problematic code
         }
     }
 }
 ```
 
-**Android View DSL:**
+**Android `View` DSL (simplified example):**
 ```kotlin
 @DslMarker
 annotation class ViewDsl
@@ -338,8 +398,32 @@ abstract class ViewBuilder {
 }
 
 @ViewDsl
+class TextViewBuilder : ViewBuilder() {
+    var text: CharSequence = ""
+    var textSize: Float = 14f
+
+    override fun build(context: Context): TextView =
+        TextView(context).apply {
+            this.text = this@TextViewBuilder.text
+            this.textSize = this@TextViewBuilder.textSize
+        }
+}
+
+@ViewDsl
+class ButtonBuilder : ViewBuilder() {
+    var text: CharSequence = ""
+    var onClickListener: ((View) -> Unit)? = null
+
+    override fun build(context: Context): Button =
+        Button(context).apply {
+            this.text = this@ButtonBuilder.text
+            setOnClickListener { v -> onClickListener?.invoke(v) }
+        }
+}
+
+@ViewDsl
 class LinearLayoutBuilder : ViewBuilder() {
-    var orientation = LinearLayout.VERTICAL
+    var orientation: Int = LinearLayout.VERTICAL
     private val children = mutableListOf<ViewBuilder>()
 
     fun textView(init: TextViewBuilder.() -> Unit) {
@@ -350,12 +434,11 @@ class LinearLayoutBuilder : ViewBuilder() {
         children.add(ButtonBuilder().apply(init))
     }
 
-    override fun build(context: Context): LinearLayout {
-        return LinearLayout(context).apply {
+    override fun build(context: Context): LinearLayout =
+        LinearLayout(context).apply {
             this.orientation = this@LinearLayoutBuilder.orientation
-            children.forEach { addView(it.build(context)) }
+            children.forEach { child -> addView(child.build(context)) }
         }
-    }
 }
 
 // DSL function
@@ -364,7 +447,7 @@ fun Context.verticalLayout(init: LinearLayoutBuilder.() -> Unit): LinearLayout {
 }
 
 // Usage
-val layout = verticalLayout {
+val layout = context.verticalLayout {
     orientation = LinearLayout.VERTICAL
     textView {
         text = "Hello"
@@ -372,10 +455,12 @@ val layout = verticalLayout {
     }
     button {
         text = "Click me"
-        onClick = { /* ... */ }
+        onClickListener = { /* ... */ }
     }
 }
 ```
+
+(This example is illustrative; in modern Android, Jetpack Compose itself is a Kotlin-based UI DSL built with composable functions.)
 
 ---
 
@@ -396,11 +481,11 @@ val layout = verticalLayout {
 
 ### Prerequisites / Concepts
 
-- [[c-dsl-builders]]
-
+- [[c-kotlin]]
+- [[c-gradle]]
 
 ### Related (Same Level)
 - [[q-kotlin-lambda-expressions--kotlin--medium]] - Lambda receivers
 
 ### Advanced (Harder)
-- [[q-kotlin-context-receivers--android--hard]] - Context receivers
+- [[q-kotlin-context-receivers--android--hard]] - `Context` receivers

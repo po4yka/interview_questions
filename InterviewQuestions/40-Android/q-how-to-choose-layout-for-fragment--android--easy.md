@@ -21,25 +21,26 @@ related:
 - q-fragment-basics--android--easy
 - q-why-user-data-may-disappear-on-screen-rotation--android--hard
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags:
 - android/fragment
 - android/ui-views
 - difficulty/easy
+
 ---
 
 # Вопрос (RU)
 
-Каким образом ты выбираешь layout для Fragment?
+> Каким образом ты выбираешь layout для `Fragment`?
 
 # Question (EN)
 
-How do you choose a layout for a Fragment?
+> How do you choose a layout for a `Fragment`?
 
 ## Ответ (RU)
 
-В Android фрагментах выбор layout выполняется в методе **onCreateView()** с использованием **LayoutInflater**. Это основной способ преобразования XML-разметки в View объекты.
+В Android фрагментах выбор и подключение layout обычно выполняется в методе **onCreateView()** с использованием **LayoutInflater**. Это основной способ преобразования XML-разметки в `View`-объекты для конкретного фрагмента.
 
 ### Основные Подходы
 
@@ -52,16 +53,17 @@ override fun onCreateView(
     savedInstanceState: Bundle?
 ): View {
     // ✅ attachToRoot = false для фрагментов
+    // FragmentManager сам добавит корневой View во "fragment container"
     return inflater.inflate(R.layout.fragment_example, container, false)
 }
 ```
 
 **Ключевые параметры:**
 - `inflater` — предоставляется системой
-- `container` — родительская ViewGroup
-- `attachToRoot` — **обязательно false** (FragmentManager сам управляет добавлением)
+- `container` — предполагаемый родительский `ViewGroup` (например, FrameLayout в активности)
+- `attachToRoot` — для фрагментов должен быть `false`, т.к. добавлением во view hierarchy занимается FragmentManager; установка `true` приведёт к попытке двойного добавления и `IllegalStateException` во время выполнения.
 
-**2. View Binding** (рекомендуется)
+**2. `View` Binding** (рекомендуется)
 
 ```kotlin
 private var _binding: FragmentExampleBinding? = null
@@ -102,17 +104,17 @@ override fun onCreateView(
 
 ### Условный Выбор Layout
 
-Используйте **resource qualifiers** (layout-land, layout-sw600dp) вместо runtime проверок:
+Основной выбор layout (телефон/планшет, портрет/ландшафт) делайте через **resource qualifiers** (`layout-land`, `layout-sw600dp` и т.д.), а не через проверки во время выполнения, чтобы система сама подбирала нужный ресурс по одному и тому же `layoutId`.
 
 ```kotlin
-// ❌ Плохо — проверка во время выполнения
+// ❌ Плохо — логика выбора layout во время выполнения
 val layoutId = if (resources.getBoolean(R.bool.is_tablet)) {
     R.layout.fragment_tablet
 } else {
     R.layout.fragment_phone
 }
 
-// ✅ Хорошо — resource qualifiers
+// ✅ Хорошо — один идентификатор, разные файлы по resource qualifiers
 // layout/fragment_example.xml
 // layout-sw600dp/fragment_example.xml
 return inflater.inflate(R.layout.fragment_example, container, false)
@@ -121,13 +123,34 @@ return inflater.inflate(R.layout.fragment_example, container, false)
 ### Типичные Ошибки
 
 ```kotlin
-// ❌ attachToRoot = true вызовет IllegalStateException
+// ❌ attachToRoot = true приводит к двойному добавлению View и IllegalStateException
 return inflater.inflate(R.layout.fragment, container, true)
 
-// ❌ Утечка памяти через binding
-private val binding: FragmentExampleBinding? = null
+// ❌ Утечка памяти через binding — хранение ссылки, не обнуляемой по уничтожению View
+lateinit var binding: FragmentExampleBinding
 
-// ✅ Правильная очистка
+override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View {
+    binding = FragmentExampleBinding.inflate(inflater, container, false)
+    return binding.root
+}
+
+// ✅ Правильная очистка с отдельным nullable-хранилищем
+private var _binding: FragmentExampleBinding? = null
+private val safeBinding get() = _binding!!
+
+override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View {
+    _binding = FragmentExampleBinding.inflate(inflater, container, false)
+    return safeBinding.root
+}
+
 override fun onDestroyView() {
     super.onDestroyView()
     _binding = null
@@ -136,7 +159,7 @@ override fun onDestroyView() {
 
 ## Answer (EN)
 
-In Android fragments, layout selection is performed in the **onCreateView()** method using **LayoutInflater**. This is the primary way to inflate XML layouts into View objects.
+In Android fragments, choosing and attaching a layout is typically done in the **onCreateView()** method using **LayoutInflater**. This is the primary way to inflate XML into `View` objects for that fragment.
 
 ### Main Approaches
 
@@ -149,16 +172,17 @@ override fun onCreateView(
     savedInstanceState: Bundle?
 ): View {
     // ✅ attachToRoot = false for fragments
+    // FragmentManager will attach the root view to the container
     return inflater.inflate(R.layout.fragment_example, container, false)
 }
 ```
 
 **Key parameters:**
 - `inflater` — provided by the system
-- `container` — parent ViewGroup
-- `attachToRoot` — **must be false** (FragmentManager handles attachment)
+- `container` — the expected parent `ViewGroup` (e.g., the FrameLayout in the `Activity`)
+- `attachToRoot` — for fragments should be `false` because FragmentManager handles adding the view to the hierarchy; passing `true` causes double attachment and an `IllegalStateException` at runtime.
 
-**2. View Binding** (recommended)
+**2. `View` Binding** (recommended)
 
 ```kotlin
 private var _binding: FragmentExampleBinding? = null
@@ -199,17 +223,17 @@ override fun onCreateView(
 
 ### Conditional Layout Selection
 
-Use **resource qualifiers** (layout-land, layout-sw600dp) instead of runtime checks:
+Prefer **resource qualifiers** (`layout-land`, `layout-sw600dp`, etc.) over runtime checks so the system selects the appropriate layout variant for a single `layoutId`.
 
 ```kotlin
-// ❌ Bad — runtime check
+// ❌ Bad — choosing layout at runtime with manual logic
 val layoutId = if (resources.getBoolean(R.bool.is_tablet)) {
     R.layout.fragment_tablet
 } else {
     R.layout.fragment_phone
 }
 
-// ✅ Good — resource qualifiers
+// ✅ Good — single ID, multiple files via resource qualifiers
 // layout/fragment_example.xml
 // layout-sw600dp/fragment_example.xml
 return inflater.inflate(R.layout.fragment_example, container, false)
@@ -218,13 +242,34 @@ return inflater.inflate(R.layout.fragment_example, container, false)
 ### Common Mistakes
 
 ```kotlin
-// ❌ attachToRoot = true will throw IllegalStateException
+// ❌ attachToRoot = true leads to double-adding the view and IllegalStateException
 return inflater.inflate(R.layout.fragment, container, true)
 
-// ❌ Memory leak via binding
-private val binding: FragmentExampleBinding? = null
+// ❌ Memory leak via binding — keeping a long-lived reference that is never cleared
+lateinit var binding: FragmentExampleBinding
 
-// ✅ Proper cleanup
+override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View {
+    binding = FragmentExampleBinding.inflate(inflater, container, false)
+    return binding.root
+}
+
+// ✅ Proper cleanup with nullable backing field
+private var _binding: FragmentExampleBinding? = null
+private val safeBinding get() = _binding!!
+
+override fun onCreateView(
+    inflater: LayoutInflater,
+    container: ViewGroup?,
+    savedInstanceState: Bundle?
+): View {
+    _binding = FragmentExampleBinding.inflate(inflater, container, false)
+    return safeBinding.root
+}
+
 override fun onDestroyView() {
     super.onDestroyView()
     _binding = null
@@ -236,14 +281,14 @@ override fun onDestroyView() {
 ## Follow-ups
 
 - Why must `attachToRoot` be false for fragments?
-- What happens if you don't clean up View Binding references in `onDestroyView()`?
+- What happens if you don't clean up `View` Binding references in `onDestroyView()`?
 - When should you prefer Jetpack Compose over traditional XML layouts?
 - How do resource qualifiers work for different screen sizes and orientations?
 
 ## References
 
-- Official Android documentation: Fragment lifecycle
-- Official Android documentation: View Binding
+- Official Android documentation: `Fragment` lifecycle
+- Official Android documentation: `View` Binding
 - Official Android documentation: LayoutInflater API reference
 
 ## Related Questions
@@ -252,13 +297,15 @@ override fun onDestroyView() {
 
 - [[c-fragments]]
 
-
 ### Prerequisites
-- [[q-fragment-basics--android--easy|Fragment Basics]]
+
+- [[q-fragment-basics--android--easy|`Fragment` Basics]]
 
 ### Related
+
 - [[q-why-user-data-may-disappear-on-screen-rotation--android--hard|Why User Data May Disappear on Screen Rotation]]
 
 ### Advanced
+
 - Advanced fragment transaction management
-- Fragment result API and communication patterns
+- `Fragment` result API and communication patterns

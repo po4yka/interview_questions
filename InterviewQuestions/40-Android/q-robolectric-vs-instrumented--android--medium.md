@@ -2,28 +2,18 @@
 id: android-323
 title: "Robolectric Vs Instrumented / Robolectric против Instrumented"
 aliases: ["Robolectric Vs Instrumented", "Robolectric против Instrumented"]
-
-# Classification
 topic: android
 subtopics: [testing-instrumented, testing-unit]
 question_kind: theory
 difficulty: medium
-
-# Language & provenance
 original_language: en
-language_tags: [en, ru]
-sources: []
-
-# Workflow & relations
+language_tags: [ru, en]
+sources: ["https://robolectric.org/", "https://developer.android.com/training/testing/instrumented-tests", "https://developer.android.com/training/testing/fundamentals"]
 status: draft
 moc: moc-android
-related: [q-junit-basics--android--easy, q-test-flakiness-strategies--android--hard, q-unit-testing-basics--android--easy]
-
-# Timestamps
+related: [c-android, q-testing-viewmodels-turbine--android--medium, q-testing-compose-ui--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
-
-# Tags (EN only; no leading #)
+updated: 2025-11-10
 tags: [android/testing-instrumented, android/testing-unit, comparison, difficulty/medium, robolectric, strategy]
 ---
 
@@ -44,26 +34,26 @@ tags: [android/testing-instrumented, android/testing-unit, comparison, difficult
 ### Основные Различия
 
 **Robolectric** (JVM-тесты):
-- Симулирует Android Framework на JVM
-- Быстрые (1-10 сек)
+- Симулирует части Android Framework на JVM
+- Быстрые (обычно ощутимо быстрее инструментальных)
 - Не требуют устройство или эмулятор
 - Легко интегрируются в CI/CD
-- Могут иметь тонкие различия с реальным устройством
+- Могут иметь тонкие отличия от поведения на реальном устройстве
 
 **Инструментальные тесты** (реальные устройства):
-- Выполняются на настоящем Android
-- Медленные (10-60+ сек)
-- Тестируют реальное поведение устройства
+- Выполняются на настоящем Android (эмулятор или реальное устройство)
+- Медленнее из-за запуска приложения, среды и взаимодействия с устройством
+- Тестируют реальное поведение устройства и фреймворка
 - Требуют эмулятор/устройство
-- Могут быть нестабильными (flaky)
+- Могут быть нестабильными (flaky) из-за окружения, производительности и асинхронности
 
 ### Когда Использовать Robolectric
 
 **Подходит для:**
-- Тестирование ViewModel с Android-зависимостями
-- Проверка жизненного цикла Activity/Fragment
-- Тестирование Resources, Context, SharedPreferences
-- Создание Intent и навигация
+- Тестирование `ViewModel` или другой логики с Android-зависимостями (`Context`, Resources и т.п.)
+- Проверка жизненного цикла `Activity`/`Fragment` на JVM
+- Тестирование Resources, `Context`, SharedPreferences
+- Создание `Intent` и навигации на уровне компонентов
 - Быстрая обратная связь в CI
 
 ```kotlin
@@ -76,7 +66,7 @@ class UserViewModelTest {
 
         viewModel.loadUser(1)
 
-        // ✅ Быстрая проверка состояния
+        // Быстрая проверка состояния
         assertTrue(viewModel.uiState.value is UiState.Success)
     }
 }
@@ -87,15 +77,15 @@ class UserViewModelTest {
 **Подходит для:**
 - Сложные UI-взаимодействия (swipe, drag, animations)
 - Работа с hardware (камера, GPS, сенсоры)
-- Тестирование производительности
-- Интеграция с SDK третьих сторон (Firebase, Google Maps)
+- Тестирование производительности и поведения под нагрузкой
+- Интеграция с SDK третьих сторон (Firebase, Google Maps и т.п.)
 - Pixel-perfect скриншотные тесты
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class ComplexUiTest {
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = createAndroidComposeRule<YourActivity>()
 
     @Test
     fun swipeToDelete_removesItem() {
@@ -103,7 +93,7 @@ class ComplexUiTest {
             .onNodeWithText("Item 1")
             .performTouchInput { swipeLeft() }
 
-        // ✅ Реальное поведение жестов
+        // Реальное поведение жестов
         composeTestRule
             .onNodeWithText("Item 1")
             .assertDoesNotExist()
@@ -115,19 +105,19 @@ class ComplexUiTest {
 
 | Аспект | Robolectric | Инструментальные |
 |--------|-------------|------------------|
-| Скорость | Быстро (1-10с) | Медленно (10-60с+) |
+| Скорость | Быстрее, JVM | Медленнее, запуск на устройстве |
 | Устройство | Не требуется | Требуется |
-| CI/CD | Легко | Нужен эмулятор |
-| Надежность | Стабильные | Могут быть flaky |
-| Реальность | Симуляция | Настоящий Android |
-| Hardware | Mock | Реальные сенсоры |
+| CI/CD | Проще запускать | Нужен эмулятор/устройство |
+| Надежность | Более стабильные (предсказуемая JVM-среда) | Могут быть flaky |
+| Реальность | Симуляция фреймворка | Настоящий Android стек |
+| Hardware | Обычно через mock/fake | Реальные сенсоры и сервисы |
 
 ### Пирамида Тестирования
 
-Рекомендуемое распределение:
-- **70%** - Unit-тесты (чистый JVM)
-- **20%** - Интеграционные (Robolectric)
-- **10%** - E2E (Инструментальные)
+Рекомендуемый ориентир (может варьироваться по проекту):
+- 70% - Unit-тесты (чистый JVM)
+- ~20% - Интеграционные (в т.ч. с Robolectric или аналогами)
+- ~10% - E2E (инструментальные / UI)
 
 ```kotlin
 // 70% - Unit-тесты
@@ -138,51 +128,51 @@ class CalculatorTest {
     }
 }
 
-// 20% - Robolectric
+// ~20% - Интеграционные с Robolectric
 @RunWith(RobolectricTestRunner::class)
 class ViewModelIntegrationTest {
     @Test
     fun loadData_updatesState() = runTest {
-        // ✅ Проверка интеграции с Android
+        // Проверка интеграции с Android-зависимостями на JVM
     }
 }
 
-// 10% - Инструментальные E2E
+// ~10% - Инструментальные E2E
 @RunWith(AndroidJUnit4::class)
 class LoginFlowTest {
     @Test
     fun login_navigatesToHome() {
-        // ✅ Полный путь пользователя
+        // Полный путь пользователя
     }
 }
 ```
 
 ### Лучшие Практики
 
-1. **Начинайте с unit-тестов** для бизнес-логики
-2. **Используйте Robolectric** для интеграционных тестов с Android
-3. **Оставьте инструментальные** для критических сценариев
-4. **Комбинируйте подходы** для оптимального покрытия
+1. Начинайте с unit-тестов для бизнес-логики.
+2. Используйте Robolectric (при необходимости) для интеграционных тестов с Android API без запуска на устройстве.
+3. Оставьте инструментальные тесты для критических, UI-интенсивных и средозависимых сценариев.
+4. Комбинируйте подходы для оптимального покрытия и времени прогона.
 
 **Гибридный подход:**
 
 ```kotlin
-// Robolectric: бизнес-логика + простой UI
+// Robolectric: бизнес-логика + простой UI/жизненный цикл
 @RunWith(RobolectricTestRunner::class)
 class UserProfileFragmentTest {
     @Test
     fun loadProfile_displaysInfo() {
         val fragment = launchFragment<UserProfileFragment>()
-        // ✅ Быстрая проверка
+        // Быстрая проверка
     }
 }
 
-// Инструментальные: критические сценарии
+// Инструментальные: критические end-to-end сценарии
 @RunWith(AndroidJUnit4::class)
 class UserProfileE2ETest {
     @Test
     fun editProfile_syncsToBackend() {
-        // ✅ Полная интеграция
+        // Полная интеграция
     }
 }
 ```
@@ -191,32 +181,32 @@ class UserProfileE2ETest {
 
 ## Answer (EN)
 
-**Robolectric** runs Android tests on the JVM without a device/emulator, while **Instrumented tests** run on actual Android devices. Each has distinct advantages and tradeoffs.
+**Robolectric** runs Android tests on the JVM without a device/emulator, while **Instrumented tests** run on actual Android devices (emulator or physical). Each has distinct advantages and tradeoffs.
 
 ### Key Differences
 
 **Robolectric** (JVM tests):
-- Simulates Android Framework on JVM
-- Fast (1-10 seconds)
+- Simulates parts of the Android Framework on the JVM
+- Fast (typically much faster than instrumented tests)
 - No device/emulator needed
 - Easy CI/CD integration
-- May have subtle differences from real device
+- May have subtle differences from real device behavior
 
 **Instrumented tests** (real devices):
-- Run on actual Android
-- Slow (10-60+ seconds)
-- Test real device behavior
+- Run on real Android (emulator or device)
+- Slower due to full app/runtime startup and device interaction
+- Test real framework and device behavior
 - Require emulator/device
-- Can be flaky
+- Can be flaky due to environment, performance, and async behavior
 
 ### When to Use Robolectric
 
 **Good for:**
-- Testing ViewModels with Android dependencies
-- Verifying Activity/Fragment lifecycle
-- Testing Resources, Context, SharedPreferences
-- Intent creation and navigation
-- Fast CI feedback
+- Testing ViewModels or other logic that depends on Android APIs (`Context`, Resources, etc.)
+- Verifying `Activity`/`Fragment` lifecycle behavior on the JVM
+- Testing Resources, `Context`, SharedPreferences
+- `Intent` creation and component-level navigation
+- Fast feedback in CI
 
 ```kotlin
 @RunWith(RobolectricTestRunner::class)
@@ -228,7 +218,7 @@ class UserViewModelTest {
 
         viewModel.loadUser(1)
 
-        // ✅ Fast state verification
+        // Fast state verification
         assertTrue(viewModel.uiState.value is UiState.Success)
     }
 }
@@ -239,15 +229,15 @@ class UserViewModelTest {
 **Good for:**
 - Complex UI interactions (swipe, drag, animations)
 - Hardware integration (camera, GPS, sensors)
-- Performance testing
-- Third-party SDK integration (Firebase, Google Maps)
-- Pixel-perfect screenshot testing
+- Performance and load-related behavior
+- Third-party SDK integration (Firebase, Google Maps, etc.)
+- Pixel-perfect screenshot tests
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class ComplexUiTest {
     @get:Rule
-    val composeTestRule = createComposeRule()
+    val composeTestRule = createAndroidComposeRule<YourActivity>()
 
     @Test
     fun swipeToDelete_removesItem() {
@@ -255,7 +245,7 @@ class ComplexUiTest {
             .onNodeWithText("Item 1")
             .performTouchInput { swipeLeft() }
 
-        // ✅ Real gesture behavior
+        // Real gesture behavior
         composeTestRule
             .onNodeWithText("Item 1")
             .assertDoesNotExist()
@@ -267,19 +257,19 @@ class ComplexUiTest {
 
 | Aspect | Robolectric | Instrumented |
 |--------|-------------|--------------|
-| Speed | Fast (1-10s) | Slow (10-60s+) |
+| Speed | Faster, JVM | Slower, runs on device |
 | Device | Not required | Required |
-| CI/CD | Easy | Needs emulator |
-| Reliability | Stable | Can be flaky |
-| Reality | Simulated | Real Android |
-| Hardware | Mocked | Real sensors |
+| CI/CD | Easier to run | Needs emulator/device |
+| Reliability | More stable (predictable JVM) | Can be flaky |
+| Reality | Simulated framework | Real Android stack |
+| Hardware | Typically mocked/faked | Real sensors/services |
 
 ### Testing Pyramid
 
-Recommended distribution:
-- **70%** - Unit tests (pure JVM)
-- **20%** - Integration (Robolectric)
-- **10%** - E2E (Instrumented)
+Recommended guideline (varies by team/system):
+- 70% - Unit tests (pure JVM)
+- ~20% - Integration tests (including Robolectric or similar)
+- ~10% - E2E/UI (instrumented)
 
 ```kotlin
 // 70% - Unit tests
@@ -290,56 +280,64 @@ class CalculatorTest {
     }
 }
 
-// 20% - Robolectric
+// ~20% - Integration with Robolectric
 @RunWith(RobolectricTestRunner::class)
 class ViewModelIntegrationTest {
     @Test
     fun loadData_updatesState() = runTest {
-        // ✅ Integration with Android
+        // Integration with Android-dependent components on JVM
     }
 }
 
-// 10% - Instrumented E2E
+// ~10% - Instrumented E2E
 @RunWith(AndroidJUnit4::class)
 class LoginFlowTest {
     @Test
     fun login_navigatesToHome() {
-        // ✅ Full user journey
+        // Full user journey
     }
 }
 ```
 
 ### Best Practices
 
-1. **Start with unit tests** for business logic
-2. **Use Robolectric** for integration tests with Android
-3. **Reserve instrumented** for critical scenarios
-4. **Combine approaches** for optimal coverage
+1. Start with unit tests for business logic.
+2. Use Robolectric (when beneficial) for integration tests that need Android APIs without device costs.
+3. Reserve instrumented tests for critical, UI-heavy, and environment-sensitive scenarios.
+4. Combine approaches to balance coverage and execution time.
 
 **Hybrid approach:**
 
 ```kotlin
-// Robolectric: business logic + simple UI
+// Robolectric: business logic + simple UI / lifecycle
 @RunWith(RobolectricTestRunner::class)
 class UserProfileFragmentTest {
     @Test
     fun loadProfile_displaysInfo() {
         val fragment = launchFragment<UserProfileFragment>()
-        // ✅ Fast verification
+        // Fast verification
     }
 }
 
-// Instrumented: critical scenarios
+// Instrumented: critical end-to-end scenarios
 @RunWith(AndroidJUnit4::class)
 class UserProfileE2ETest {
     @Test
     fun editProfile_syncsToBackend() {
-        // ✅ Full integration
+        // Full integration
     }
 }
 ```
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как настроить CI/CD, чтобы эффективно запускать оба типа тестов?
+- Какие стратегии помогают уменьшить нестабильность (flakiness) инструментальных тестов?
+- Как мокать внешние зависимости в тестах Robolectric?
+- Когда в Android-тестировании использовать Fakes против Mocks?
+- Как подходить к тестированию Compose в Robolectric и инструментальных тестах?
 
 ## Follow-ups
 
@@ -349,26 +347,42 @@ class UserProfileE2ETest {
 - When should you use Fakes vs Mocks in Android testing?
 - How do you handle Compose testing in Robolectric vs instrumented tests?
 
+## Ссылки (RU)
+
+- [[c-android]]
+- https://robolectric.org/ - Документация Robolectric
+- https://developer.android.com/training/testing/instrumented-tests - Руководство по инструментальным тестам
+- https://developer.android.com/training/testing/fundamentals - Основы тестирования Android
+
 ## References
 
-- [[c-testing-pyramid]]
-- [[c-test-doubles]]
+- [[c-android]]
 - https://robolectric.org/ - Robolectric documentation
 - https://developer.android.com/training/testing/instrumented-tests - Instrumented testing guide
 - https://developer.android.com/training/testing/fundamentals - Android testing fundamentals
 
+## Связанные вопросы (RU)
+
+### База (проще)
+- [[q-testing-viewmodels-turbine--android--medium]] - Тестирование `ViewModel`
+- [[q-testing-compose-ui--android--medium]] - Тестирование Compose UI
+
+### Смежные (Medium)
+- [[q-fakes-vs-mocks-testing--android--medium]] - Test doubles
+- [[q-screenshot-snapshot-testing--android--medium]] - Скриншотное тестирование
+
+### Продвинутые (сложнее)
+- [[q-testing-coroutines-flow--android--hard]] - Тестирование асинхронного кода
+
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-unit-testing-basics--android--easy]] - Understanding unit tests
-- [[q-fragment-basics--android--easy]] - JUnit framework basics
-
-### Related (Medium)
 - [[q-testing-viewmodels-turbine--android--medium]] - Testing ViewModels
 - [[q-testing-compose-ui--android--medium]] - Compose UI testing
+
+### Related (Medium)
 - [[q-fakes-vs-mocks-testing--android--medium]] - Test doubles
 - [[q-screenshot-snapshot-testing--android--medium]] - Screenshot testing
 
 ### Advanced (Harder)
 - [[q-testing-coroutines-flow--android--hard]] - Testing async code
-- [[q-test-flakiness-strategies--android--hard]] - Reducing flakiness

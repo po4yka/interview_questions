@@ -23,7 +23,7 @@ related:
 - q-performance-optimization-android--android--medium
 - q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags:
 - android/ab-testing
@@ -33,6 +33,7 @@ tags:
 - machine-learning
 - ml-kit
 - tensorflow-lite
+
 ---
 
 # Вопрос (RU)
@@ -45,58 +46,66 @@ tags:
 
 ## Ответ (RU)
 
-ML Kit поддерживает пользовательские модели через интеграцию TensorFlow Lite, позволяя использовать специализированные модели для конкретных случаев. Это обеспечивает гибкость за пределами предобученных моделей ML Kit.
+ML Kit поддерживает пользовательские модели через TensorFlow Lite (TFLite). Можно:
+- либо использовать API кастомных моделей ML Kit (если доступно в текущей версии SDK),
+- либо напрямую интегрировать TFLite-интерпретатор, реализуя загрузку, обновления и A/B тестирование на уровне приложения.
+
+Это даёт гибкость сверх предобученных моделей ML Kit. Важно учитывать актуальность API: старый Firebase ML (FirebaseModelSource и пр.) устарел; используем современные ML Kit / TFLite подходы.
+
+### Краткий вариант
+
+- Используйте TFLite модель (кастомную или AutoML) либо как локальную (в APK/AAB), либо как удалённую (через CDN/Firebase/ML Kit).
+- Всегда имейте локальный fallback.
+- Для обновлений и A/B тестов управляйте выбором модели через Remote Config/feature flags и отслеживайте метрики.
+
+### Подробный вариант
 
 ### Типы Моделей
 
-**1. Локальные модели (Bundled):**
-- Упакованы в APK, доступны офлайн
+**1. Локальные модели (Bundled / On-device):**
+- Упакованы в APK/AAB, доступны офлайн
 - Увеличивают размер приложения
 - Требуют обновления приложения для обновления модели
 
-**2. Удалённые модели (Dynamic):**
-- Размещены в Firebase ML
-- Загружаются по требованию, можно обновлять без релиза
-- Требуют интернет для первой загрузки
+**2. Удалённые модели (Dynamic / Remote):**
+- Хостятся в удалённом источнике (например, Firebase Remote Config, собственный CDN/endpoint или ML Kit Custom Remote Models, если используется соответствующий SDK)
+- Загружаются по требованию, можно обновлять без релиза приложения
+- Требуют интернет для первой загрузки и обновлений
 
 **3. AutoML модели:**
-- Обучены через Google Cloud AutoML
-- Автоматическая оптимизация архитектуры
-- Упрощённый процесс обучения
+- Обучены через Google Cloud AutoML / Vertex AI и экспортированы как TFLite
+- Автоматическая/полуавтоматическая оптимизация архитектуры под задачу
+- Упрощённый процесс обучения, развёртывание аналогично кастомным TFLite моделям (локально или удалённо)
 
-### Интеграция TensorFlow Lite
+### Интеграция TensorFlow Lite (пример)
+
+Ниже — упрощённый пример, показывающий общую идею сочетания локальной и удалённой модели. Вспомогательные компоненты (remoteModelManager, ModelLoader и т.п.) предполагаются реализованными отдельно.
 
 ```kotlin
 class CustomModelManager(private val context: Context) {
-    // ✅ Локальная модель как fallback
-    private val localModel = LocalModel.Builder()
-        .setAssetFilePath("models/classifier.tflite")
-        .build()
+    // ✅ Локальная модель как fallback (asset)
+    private val localModelPath = "models/classifier.tflite"
 
-    // ✅ Удалённая модель с условиями загрузки
-    private val remoteModel = CustomRemoteModel.Builder(
-        FirebaseModelSource.Builder("custom_classifier")
-            .enableModelUpdates(true)
-            .setInitialDownloadConditions(
-                DownloadConditions.Builder()
-                    .requireWifi()  // ✅ Только по WiFi
-                    .build()
-            )
-            .build()
-    ).build()
+    private var interpreter: Interpreter? = null
 
     suspend fun initialize(): Result<Unit> = withContext(Dispatchers.IO) {
         try {
-            val modelFile = if (remoteModelManager.isModelDownloaded(remoteModel).await()) {
-                remoteModelManager.getLatestModelFile(remoteModel).await()
+            // pseudo: проверяем наличие обновлённой удалённой модели
+            val remoteFile: File? = RemoteModelProvider.getLatestModelFileIfAvailable()
+
+            val modelBuffer: MappedByteBuffer = if (remoteFile != null) {
+                FileUtil.loadMappedFile(remoteFile)
             } else {
-                FileUtil.loadMappedFile(context, localModel.assetFilePath)
+                // локальный asset fallback
+                FileUtil.loadMappedFile(context, localModelPath)
             }
 
-            interpreter = Interpreter(modelFile, Interpreter.Options().apply {
+            interpreter = Interpreter(modelBuffer, Interpreter.Options().apply {
                 setNumThreads(4)
-                setUseNNAPI(true)  // ✅ Аппаратное ускорение
+                // Использование NNAPI имеет смысл только при поддержке устройством и модели
+                setUseNNAPI(true)
             })
+
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
@@ -104,6 +113,28 @@ class CustomModelManager(private val context: Context) {
     }
 }
 ```
+
+Примечания:
+- RemoteModelProvider и FileUtil.loadMappedFile(File) здесь условные/примерные — в реальном коде нужно использовать конкретный способ загрузки (ML Kit Custom Model API или собственную реализацию).
+- Важно валидировать совместимость версии модели и входных данных.
+
+### Требования
+
+- Функциональные:
+  - Поддержка локальной и удалённой загрузки моделей.
+  - Возможность безопасного обновления модели без крашей и деградации UX.
+  - Механизм A/B тестирования и постепенного rollout.
+- Нефункциональные:
+  - Низкая задержка и ограниченное использование памяти.
+  - Работоспособность офлайн за счёт локальной модели.
+  - Надёжный откат на стабильную модель.
+
+### Архитектура
+
+- Компонент управления моделями (ModelManager), инкапсулирующий загрузку локальной/удалённой модели и валидацию.
+- Слой конфигурации/feature flags (например, Remote Config) для выбора активной модели и A/B стратегий.
+- Отдельный слой логирования и метрик (Firebase Analytics/Crashlytics и др.) для мониторинга качества и производительности.
+- Инференс из UI/Domain слоя идёт только через абстракцию, не напрямую к TFLite.
 
 ### A/B Тестирование Моделей
 
@@ -121,18 +152,25 @@ class ModelABTestingManager(private val context: Context) {
         }
     }
 
-    // ✅ Консистентное назначение на основе user ID
+    // ✅ Консистентное назначение на основе user ID (пример)
     private fun selectModelByUserId(): ModelSelection {
         val userId = getUserId()
         val modelAWeight = remoteConfig.getLong("model_a_weight").toInt()
-        val totalWeight = modelAWeight + remoteConfig.getLong("model_b_weight").toInt()
+        val modelBWeight = remoteConfig.getLong("model_b_weight").toInt()
+        val totalWeight = (modelAWeight + modelBWeight).coerceAtLeast(1)
 
-        return if (Math.abs(userId.hashCode() % totalWeight) < modelAWeight) {
+        val bucket = kotlin.math.abs(userId.hashCode() % totalWeight)
+        return if (bucket < modelAWeight) {
             ModelSelection(remoteConfig.getString("model_a_name"), "variant_a")
         } else {
             ModelSelection(remoteConfig.getString("model_b_name"), "variant_b")
         }
     }
+
+    // Эти функции/тип должны быть реализованы в вашем коде:
+    private fun selectModelRandomly(): ModelSelection { /* ... */ TODO() }
+    private fun getUserId(): String { /* ... */ TODO() }
+    data class ModelSelection(val modelName: String, val variant: String)
 
     // ✅ Трекинг метрик производительности
     fun trackModelPerformance(
@@ -147,14 +185,15 @@ class ModelABTestingManager(private val context: Context) {
             accuracy?.let { putDouble("accuracy", it.toDouble()) }
             putBoolean("success", success)
         }
-        FirebaseAnalytics.getInstance(context).logEvent("ml_model_inference", bundle)
+        FirebaseAnalytics.getInstance(context)
+            .logEvent("ml_model_inference", bundle)
     }
 }
 ```
 
 ### Оптимизация Моделей
 
-**Post-training quantization (Python):**
+**Post-training quantization (Python, упрощённый пример):**
 ```python
 import tensorflow as tf
 
@@ -162,7 +201,7 @@ def quantize_model(model_path, output_path):
     converter = tf.lite.TFLiteConverter.from_saved_model(model_path)
     converter.optimizations = [tf.lite.Optimize.DEFAULT]
 
-    # ✅ INT8 квантизация для уменьшения размера на 75%
+    # ✅ Полная integer-квантизация (пример с uint8 I/O)
     converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
     converter.inference_input_type = tf.uint8
     converter.inference_output_type = tf.uint8
@@ -171,111 +210,125 @@ def quantize_model(model_path, output_path):
     with open(output_path, 'wb') as f:
         f.write(quantized_model)
 ```
+Комментарий: уменьшение размера "до ~75%" — ориентировочная оценка и зависит от модели.
 
-**GPU делегирование:**
+**GPU делегирование (пример):**
 ```kotlin
-fun createOptimizedInterpreter(modelPath: String): Interpreter {
+fun createOptimizedInterpreter(context: Context, modelPath: String): Interpreter {
+    val modelBuffer = FileUtil.loadMappedFile(context, modelPath)
     val options = Interpreter.Options().apply {
-        addDelegate(GpuDelegate())  // ✅ Ускорение до 10x
+        // GPU делегат может существенно ускорить inference на поддерживаемых устройствах и моделях
+        addDelegate(GpuDelegate())
         setNumThreads(4)
         setAllowFp16PrecisionForFp32(true)
     }
-    return Interpreter(FileUtil.loadMappedFile(context, modelPath), options)
+    return Interpreter(modelBuffer, options)
 }
 ```
+Примечания:
+- Фактический выигрыш ("до 10x") не гарантирован и сильно зависит от устройства и модели.
+- Необходимо корректно освобождать делегаты и интерпретатор.
 
 ### Стратегии Развёртывания
 
-**1. Постепенный rollout:**
+**1. Постепенный rollout (примерная схема):**
 - 10% пользователей → мониторинг метрик
-- 50% пользователей → валидация стабильности
+- 50% пользователей → проверка стабильности и качества
 - 100% пользователей → полный запуск
 
-**2. Условия загрузки:**
+**2. Условия загрузки (для удалённых моделей):**
 ```kotlin
 val conditions = DownloadConditions.Builder()
-    .requireWifi()      // ✅ Только WiFi
-    .requireCharging()  // ✅ Во время зарядки для больших моделей
+    .requireWifi()      // ✅ Только Wi‑Fi
+    .requireCharging()  // ✅ Для больших моделей — во время зарядки
     .build()
 ```
 
 **3. Fallback стратегия:**
-- Всегда включать локальную модель в APK
-- Использовать удалённую при доступности
-- Graceful degradation при ошибках
+- Всегда включать локальную модель в APK/AAB как безопасный вариант
+- Использовать удалённую при доступности и успешной валидации
+- Обеспечить graceful degradation при ошибках загрузки/инициализации
 
 ### Метрики Производительности
 
-Отслеживать:
-- **Inference time** (latency): <100ms для real-time
-- **Model size**: <10MB для локальных моделей
-- **Accuracy**: baseline метрика качества
-- **Memory usage**: peak memory во время inference
-- **Success rate**: процент успешных inference
+Рекомендуется отслеживать (ориентиры, а не жёсткие правила):
+- Inference time (latency)
+- Model size
+- Accuracy / quality metrics
+- Memory usage
+- Success rate
 
 ### Лучшие Практики
 
-1. **Всегда имейте локальную fallback модель**
-2. **Используйте условия загрузки (WiFi, зарядка)**
-3. **Отслеживайте метрики производительности моделей**
-4. **Применяйте квантизацию для уменьшения размера**
-5. **Тестируйте на целевом диапазоне устройств**
-6. **Реализуйте постепенный rollout для новых моделей**
+1. Всегда имейте локальную fallback модель.
+2. Используйте условия загрузки (Wi‑Fi, зарядка, не в роуминге) для удалённых моделей.
+3. Отслеживайте метрики производительности и качества моделей.
+4. Применяйте квантизацию и другие оптимизации для снижения размера и задержки.
+5. Тестируйте на целевом диапазоне устройств (GPU/NNAPI/CPU, разные SoC и память).
+6. Реализуйте постепенный rollout и A/B тестирование для новых моделей с возможностью быстрого отката.
 
 ## Answer (EN)
 
-ML Kit supports custom models through TensorFlow Lite integration, allowing specialized models trained for specific use cases beyond pre-trained ML Kit models.
+ML Kit supports custom models through TensorFlow Lite (TFLite). You can:
+- use the ML Kit Custom Model API (where available in the current SDK), or
+- integrate TFLite directly and implement loading, updates, and A/B logic in your app.
+
+This provides flexibility beyond built-in ML Kit models. Be aware that the old Firebase ML APIs have been deprecated; use modern ML Kit / TFLite-based approaches.
+
+### Short Version
+
+- Use a TFLite model (custom or AutoML) either bundled in the app or downloaded remotely.
+- Always keep a local fallback.
+- Control active model and A/B experiments via Remote Config/feature flags and track metrics.
+
+### Detailed Version
 
 ### Model Types
 
-**1. Bundled Models (Local):**
-- Packaged in APK, work offline
+**1. Bundled / On-device Models (Local):**
+- Packaged in the APK/AAB, work fully offline
 - Increase app size
-- Require app update for model updates
+- Require app update to ship a new model version
 
-**2. Dynamic Models (Remote):**
-- Hosted on Firebase ML
-- Downloaded on demand, updatable without releases
-- Require internet for initial download
+**2. Dynamic / Remote Models:**
+- Hosted remotely (e.g., via Firebase / Remote Config + storage, your own CDN/endpoint, or ML Kit Custom Remote Models if using that SDK)
+- Downloaded on demand; can be updated without releasing a new app build
+- Require network for initial download and updates
 
 **3. AutoML Models:**
-- Trained via Google Cloud AutoML
-- Automatic architecture optimization
-- Simplified training process
+- Trained using Google Cloud AutoML / Vertex AI and exported as TFLite
+- (Semi-)automatic architecture/search/optimization
+- Deployed the same way as other TFLite custom models (bundled or remote)
 
-### TensorFlow Lite Integration
+### TensorFlow Lite Integration (example)
+
+Below is a simplified example that shows the idea of combining a bundled fallback model with a remotely updated one. Helper components (RemoteModelProvider, etc.) are assumed to be implemented separately.
 
 ```kotlin
 class CustomModelManager(private val context: Context) {
-    // ✅ Local model as fallback
-    private val localModel = LocalModel.Builder()
-        .setAssetFilePath("models/classifier.tflite")
-        .build()
+    // ✅ Local model as fallback (asset)
+    private val localModelPath = "models/classifier.tflite"
 
-    // ✅ Remote model with download conditions
-    private val remoteModel = CustomRemoteModel.Builder(
-        FirebaseModelSource.Builder("custom_classifier")
-            .enableModelUpdates(true)
-            .setInitialDownloadConditions(
-                DownloadConditions.Builder()
-                    .requireWifi()  // ✅ WiFi only
-                    .build()
-            )
-            .build()
-    ).build()
+    private var interpreter: Interpreter? = null
 
     suspend fun initialize(): Result<Unit> = withContext(Dispatchers.IO) {
         try {
-            val modelFile = if (remoteModelManager.isModelDownloaded(remoteModel).await()) {
-                remoteModelManager.getLatestModelFile(remoteModel).await()
+            // pseudo: check if an updated remote model is available
+            val remoteFile: File? = RemoteModelProvider.getLatestModelFileIfAvailable()
+
+            val modelBuffer: MappedByteBuffer = if (remoteFile != null) {
+                FileUtil.loadMappedFile(remoteFile)
             } else {
-                FileUtil.loadMappedFile(context, localModel.assetFilePath)
+                // fallback to bundled asset
+                FileUtil.loadMappedFile(context, localModelPath)
             }
 
-            interpreter = Interpreter(modelFile, Interpreter.Options().apply {
+            interpreter = Interpreter(modelBuffer, Interpreter.Options().apply {
                 setNumThreads(4)
-                setUseNNAPI(true)  // ✅ Hardware acceleration
+                // Use NNAPI only when supported by device and model
+                setUseNNAPI(true)
             })
+
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
@@ -283,6 +336,28 @@ class CustomModelManager(private val context: Context) {
     }
 }
 ```
+
+Notes:
+- RemoteModelProvider and FileUtil.loadMappedFile(File) are placeholders; in production use ML Kit Custom Model APIs or your own robust download/cache.
+- Validate input/output compatibility and handle model versioning.
+
+### Requirements
+
+- Functional:
+  - Support both bundled and remote models.
+  - Allow safe model updates without crashes or UX regression.
+  - Provide A/B testing and gradual rollout mechanism.
+- Non-functional:
+  - Low latency and controlled memory usage.
+  - Offline capability via bundled model.
+  - Reliable rollback to a stable model.
+
+### Architecture
+
+- Model Manager component abstracting model loading (local/remote), versioning, and validation.
+- Config/feature-flag layer (e.g., Remote Config) controlling active model and experiments.
+- Metrics/logging layer (Firebase Analytics/Crashlytics etc.) monitoring quality/perf.
+- UI/Domain call inference only through abstraction, not directly via TFLite.
 
 ### Model A/B Testing
 
@@ -300,18 +375,25 @@ class ModelABTestingManager(private val context: Context) {
         }
     }
 
-    // ✅ Consistent assignment based on user ID
+    // ✅ Consistent assignment based on user ID (example)
     private fun selectModelByUserId(): ModelSelection {
         val userId = getUserId()
         val modelAWeight = remoteConfig.getLong("model_a_weight").toInt()
-        val totalWeight = modelAWeight + remoteConfig.getLong("model_b_weight").toInt()
+        val modelBWeight = remoteConfig.getLong("model_b_weight").toInt()
+        val totalWeight = (modelAWeight + modelBWeight).coerceAtLeast(1)
 
-        return if (Math.abs(userId.hashCode() % totalWeight) < modelAWeight) {
+        val bucket = kotlin.math.abs(userId.hashCode() % totalWeight)
+        return if (bucket < modelAWeight) {
             ModelSelection(remoteConfig.getString("model_a_name"), "variant_a")
         } else {
             ModelSelection(remoteConfig.getString("model_b_name"), "variant_b")
         }
     }
+
+    // These are placeholders and must be implemented in real code:
+    private fun selectModelRandomly(): ModelSelection { /* ... */ TODO() }
+    private fun getUserId(): String { /* ... */ TODO() }
+    data class ModelSelection(val modelName: String, val variant: String)
 
     // ✅ Track performance metrics
     fun trackModelPerformance(
@@ -326,14 +408,15 @@ class ModelABTestingManager(private val context: Context) {
             accuracy?.let { putDouble("accuracy", it.toDouble()) }
             putBoolean("success", success)
         }
-        FirebaseAnalytics.getInstance(context).logEvent("ml_model_inference", bundle)
+        FirebaseAnalytics.getInstance(context)
+            .logEvent("ml_model_inference", bundle)
     }
 }
 ```
 
 ### Model Optimization
 
-**Post-training quantization (Python):**
+**Post-training quantization (Python, simplified):**
 ```python
 import tensorflow as tf
 
@@ -341,7 +424,7 @@ def quantize_model(model_path, output_path):
     converter = tf.lite.TFLiteConverter.from_saved_model(model_path)
     converter.optimizations = [tf.lite.Optimize.DEFAULT]
 
-    # ✅ INT8 quantization reduces size by 75%
+    # ✅ Example of full integer quantization with uint8 I/O
     converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8]
     converter.inference_input_type = tf.uint8
     converter.inference_output_type = tf.uint8
@@ -350,56 +433,62 @@ def quantize_model(model_path, output_path):
     with open(output_path, 'wb') as f:
         f.write(quantized_model)
 ```
+Note: "up to ~75% size reduction" is typical but not guaranteed; it depends on the model.
 
-**GPU delegation:**
+**GPU delegation (example):**
 ```kotlin
-fun createOptimizedInterpreter(modelPath: String): Interpreter {
+fun createOptimizedInterpreter(context: Context, modelPath: String): Interpreter {
+    val modelBuffer = FileUtil.loadMappedFile(context, modelPath)
     val options = Interpreter.Options().apply {
-        addDelegate(GpuDelegate())  // ✅ Up to 10x speedup
+        // GPU delegate can provide significant speedups on supported devices/models
+        addDelegate(GpuDelegate())
         setNumThreads(4)
         setAllowFp16PrecisionForFp32(true)
     }
-    return Interpreter(FileUtil.loadMappedFile(context, modelPath), options)
+    return Interpreter(modelBuffer, options)
 }
 ```
+Notes:
+- Actual speedups vary widely; not guaranteed to be 10x.
+- Properly manage delegate and interpreter lifecycle and fall back if GPU is unavailable.
 
 ### Deployment Strategies
 
-**1. Gradual rollout:**
-- 10% users → monitor metrics
-- 50% users → validate stability
-- 100% users → full launch
+**1. Gradual rollout (illustrative):**
+- 10% of users → monitor key metrics
+- 50% of users → validate stability and quality
+- 100% of users → full rollout
 
-**2. Download conditions:**
+**2. Download conditions (for remote models):**
 ```kotlin
 val conditions = DownloadConditions.Builder()
-    .requireWifi()      // ✅ WiFi only
+    .requireWifi()      // ✅ Wi‑Fi only
     .requireCharging()  // ✅ While charging for large models
     .build()
 ```
 
 **3. Fallback strategy:**
-- Always bundle local model in APK
-- Use remote when available
-- Graceful degradation on errors
+- Always bundle a local model in APK/AAB as a safe default
+- Prefer remote model when available and validated
+- Implement graceful degradation on download/init failures
 
 ### Performance Metrics
 
-Track:
-- **Inference time** (latency): <100ms for real-time
-- **Model size**: <10MB for bundled models
-- **Accuracy**: baseline quality metric
-- **Memory usage**: peak memory during inference
-- **Success rate**: percentage of successful inferences
+Recommended to track (heuristics, not hard rules):
+- Inference time (latency)
+- Model size
+- Accuracy / quality metrics
+- Memory usage
+- Success rate
 
 ### Best Practices
 
-1. **Always have a local fallback model**
-2. **Use download conditions (WiFi, charging)**
-3. **Track model performance metrics**
-4. **Apply quantization to reduce size**
-5. **Test on target device range**
-6. **Implement gradual rollout for new models**
+1. Always have a local fallback model.
+2. Use download conditions (Wi‑Fi, charging, no roaming) for remote models.
+3. Track performance and quality metrics for each model version.
+4. Apply quantization and other optimizations to reduce size and latency.
+5. Test across your target device range (GPU/NNAPI/CPU, different SoCs and memory).
+6. Implement gradual rollout and A/B testing with the ability to quickly roll back.
 
 ## Follow-ups
 
@@ -421,7 +510,6 @@ Track:
 
 - [[c-memory-management]]
 - [[c-mobile-observability]]
-
 
 ### Prerequisites
 - [[q-when-is-it-better-to-use-png-and-webp-and-when-svg--android--easy]]

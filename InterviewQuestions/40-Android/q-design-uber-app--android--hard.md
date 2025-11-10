@@ -4,23 +4,25 @@ title: Design Uber App / Проектирование приложения Uber
 aliases: [Design Uber App, Проектирование приложения Uber]
 topic: android
 subtopics:
-  - location
-  - networking-http
-  - service
+- location
+- networking-http
+- service
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - q-data-sync-unstable-network--android--hard
-  - q-design-instagram-stories--android--hard
+- q-data-sync-unstable-network--android--hard
+- q-design-instagram-stories--android--hard
+- c-android-components
 created: 2025-10-20
-updated: 2025-11-02
+updated: 2025-11-10
 tags: [android/location, android/networking-http, android/service, architecture, difficulty/hard, location, maps, networking, performance, realtime, system-design, websocket]
+
 ---
 
 # Вопрос (RU)
@@ -72,7 +74,7 @@ Design an Android app for requesting rides in a tier‑1 city. The system should
 Design a complete Uber Android app with the following requirements:
 
 **Performance:**
-- Map interaction: <200ms from input to render
+- `Map` interaction: <200ms from input to render
 - Cold start: <2.5s (p95) on Pixel‑class devices
 - Battery: <3%/hr foreground tracking and <1%/hr background waiting
 
@@ -98,6 +100,8 @@ Design a complete Uber Android app with the following requirements:
 ## Ответ (RU)
 
 `Uber` — комплексная система для заказа поездок, включающая: отслеживание местоположения в реальном времени, подбор ближайших водителей через геопространственный поиск, расчёт стоимости с динамическим ценообразованием (surge pricing), маршрутизацию через картографические API, обработку платежей, масштабирование на миллионы пользователей, и офлайн-устойчивость для работы при прерывистой сети.
+
+См. также: [[c-android-components]].
 
 ### Требования
 
@@ -133,7 +137,7 @@ Design a complete Uber Android app with the following requirements:
 
 Модульная архитектура с разделением по feature-модулям:
 -   **Локация**: `FusedLocationProvider` для получения координат, адаптивная частота семплирования, обработка прерывистой сети
--   **WebSocket**: realtime канал для обновлений статуса поездки, ETA водителя, push-уведомлений
+-   **Realtime канал**: WebSocket для обновлений статуса поездки, ETA водителя и других внутрипроцессных realtime‑событий; push-уведомления (через FCM) для доставки событий, когда приложение в фоне
 -   **Карты**: интеграция с картографическими SDK (`Google Maps`, `Mapbox`) для отображения маркеров, маршрутов, кластеризации
 -   **Офлайн очередь**: локальное хранилище (`Room`) для неотправленных запросов, синхронизация через `WorkManager`
 
@@ -142,7 +146,7 @@ Design a complete Uber Android app with the following requirements:
 Архитектура микросервисов с четким разделением ответственности:
 -   **API Gateway**: единая точка входа для всех клиентских запросов, роутинг к соответствующим микросервисам, rate limiting, аутентификация
 -   **Микросервисы**: `Location Service` (трекинг координат), `Matching Service` (подбор водителей), `Ride Service` (FSM поездки), `Payment Service` (обработка платежей), `Notification Service` (push-уведомления), `Pricing Service` (расчет стоимости, surge)
--   **Хранилище данных**: `PostgreSQL` для персистентных данных, `Redis` для кеширования и геопространственного поиска, очереди (`Kafka`/`RabbitMQ`) для асинхронной обработки событий
+-   **Хранилище данных**: `PostgreSQL` для персистентных данных, `Redis` для кеширования и геопространственного поиска (через GEO* команды, например `GEOSEARCH`), очереди (`Kafka`/`RabbitMQ`) для асинхронной обработки событий
 
 ### Клиент Android: Ключевые Потоки
 
@@ -159,7 +163,7 @@ Design a complete Uber Android app with the following requirements:
 
 -   **Idle режим**: 0.2-0.5 Гц (раз в 2-5 секунд) с `Significant Motion` detection — снижение частоты когда пользователь неподвижен
 -   **В пути**: 1 Гц (раз в секунду) с батчингом 5-10 секунд — сбор координат в буфер для batch отправки
--   **Foreground Service**: обязательный при активной поездке (Android 14+ требует явный `Foreground Service Type`)
+-   **Foreground `Service`**: обязательный при активной поездке (Android 14+ требует явный `Foreground Service Type`)
 
 ```kotlin
 // ✅ Location updates with adaptive priority
@@ -181,28 +185,27 @@ fusedLocationClient.requestLocationUpdates(req, callback, Looper.getMainLooper()
 
 Эффективная синхронизация координат с сервером с минимизацией сетевых запросов и поддержкой офлайн режима.
 
-**Дебаунс и батчинг:**
+**Дебаунс и батчинг (пример с `Flow`-подобным API):**
 
 -   **Дебаунс**: задержка отправки на 3 секунды после последнего обновления — предотвращает spam запросов при частых изменениях координат
--   **Батчинг**: накопление координат в буфере (5-10 точек) и отправка batch запросом — снижение количества HTTP-запросов и overhead
+-   **Батчинг**: накопление координат в буфере и отправка пакетами раз в 5-10 секунд — снижение количества HTTP-запросов и overhead
 -   **Coalescing**: объединение обновлений для отправки раз в 5-10 секунд вместо каждого обновления
 
 ```kotlin
-// ✅ Debounce + background sync with batching
+// ✅ Debounce + background sync with batching (псевдокод поверх Flow)
 locationFlow
   .filterNotNull()
-  .debounce(3000L)  // Дебаунс 3 секунды
-  .batch(TimeWindow(5000L))  // Батчинг каждые 5 секунд
-  .onEach { locations ->
-    // Отправка batch координат
-    repo.updateLocationBatch(locations)
+  .debounce(3000L)              // Дебаунс 3 секунды
+  // Далее: собираем обновления за окно и шлём батчем
+  .onEach { bufferedLocations ->
+    repo.updateLocationBatch(bufferedLocations)
   }
   .launchIn(viewModelScope)
 ```
 
 **Фоновая синхронизация:**
 
--   **`WorkManager`**: автоматическая синхронизация в фоне с constraints (сеть, зарядка) — продолжает работу даже при закрытом приложении
+-   **`WorkManager`**: планирование отложенной/повторяющейся синхронизации в фоне с constraints (сеть, зарядка); выполняется по лучшим усилиям в границах ограничений Android 14+
 -   **Восстановление при онлайне**: автоматический retry при восстановлении сети с exponential backoff
 -   **Очередь**: локальное хранилище (`Room`) для неотправленных координат с персистентной очередью синхронизации
 
@@ -217,7 +220,7 @@ locationFlow
 -   **Фильтры**: фильтрация по типу авто (Economy, Premium, XL), статусу водителя (онлайн/занят)
 
 ```kotlin
-// ✅ REST seed + WebSocket stream with filtering
+// ✅ REST seed + WebSocket stream with filtering (псевдокод)
 repo.getNearbyDrivers(
   location = currentLocation,
   vehicleType = selectedVehicleType
@@ -243,7 +246,7 @@ repo.getNearbyDrivers(
 1.   **Оценка тарифа**: предварительный расчет стоимости через `Pricing Service` с учетом surge multiplier — пользователь видит цену до подтверждения
 2.   **Создание ride**: создание записи поездки в `Ride Service` с уникальным `requestId` для идемпотентности
 3.   **Матчинг**: подбор ближайшего водителя через `Matching Service` с scoring алгоритмом
-4.   **Подтверждение**: получение подтверждения от водителя через `WebSocket` или push-уведомление
+4.   **Подтверждение**: получение подтверждения от водителя через WebSocket или push-уведомление
 5.   **Трекинг**: начало отслеживания поездки в реальном времени
 
 ```kotlin
@@ -276,12 +279,12 @@ rideRepo.create(
 
 **Объединение данных:**
 
--   **Состояние поездки**: получение через `WebSocket` для обновлений статуса (принято водителем, прибыл, началась поездка, завершена)
--   **Местоположение водителя**: realtime обновления координат водителя через `WebSocket` для отображения на карте
+-   **Состояние поездки**: получение через WebSocket для обновлений статуса (принято водителем, прибыл, началась поездка, завершена)
+-   **Местоположение водителя**: realtime обновления координат водителя через WebSocket для отображения на карте
 -   **Маршрут и ETA**: расчет через картографические API (`Google Maps Directions`, `Mapbox`) для отображения маршрута и времени прибытия
 
 ```kotlin
-// ✅ Combine ride state + driver location with route
+// ✅ Combine ride state + driver location with route (псевдокод)
 rideRepo.observeRide(rideId)
   .combine(
     locationRepo.observeDriver(driverId),
@@ -305,8 +308,8 @@ rideRepo.observeRide(rideId)
 
 **Границы сервисов:**
 
--   **`Location Service`**: принимает координаты от клиентов, валидирует физику движения (проверка скорости <150 km/h для обнаружения спуфинга), обновляет геоиндекс в `Redis Geo` для быстрого поиска, публикует события в `Kafka` для downstream сервисов. Хранит только горячие данные (последние 30 минут) для оптимизации памяти.
--   **`Matching Service`**: выполняет геопоиск доступных водителей в радиусе через `Redis Geo` (`GEORADIUS`), применяет scoring алгоритм (рейтинг·0.4 + 1/distance·0.3 + 1/ETA·0.3), резервирует водителя с optimistic lock для предотвращения двойного матчинга, отправляет push-уведомление водителю. Обрабатывает accept/reject с timeout (30 секунд) для автоматической отмены при отсутствии ответа.
+-   **`Location Service`**: принимает координаты от клиентов, валидирует физику движения (проверка скорости <150 km/h для обнаружения спуфинга), обновляет геоиндекс в Redis Geo (через команды `GEOADD`/`GEOSEARCH`) для быстрого поиска, публикует события в Kafka для downstream сервисов. Хранит только горячие данные (последние 30 минут) для оптимизации памяти.
+-   **`Matching Service`**: выполняет геопоиск доступных водителей в радиусе через Redis Geo (`GEOSEARCH`), применяет scoring алгоритм (рейтинг·0.4 + 1/distance·0.3 + 1/ETA·0.3), резервирует водителя с optimistic lock для предотвращения двойного матчинга, отправляет push-уведомление водителю. Обрабатывает accept/reject с timeout (30 секунд) для автоматической отмены при отсутствии ответа.
 -   **`Ride Service`**: управляет FSM (Finite State Machine) поездки с переходами `REQUESTED`→`ACCEPTED`→`ARRIVED`→`IN_PROGRESS`→`COMPLETED`/`CANCELLED`, хранит аудит всех переходов состояний для аналитики и отладки, обеспечивает идемпотентность через `requestId` от клиента, координирует с `Payment Service` через события для синхронизации оплаты.
 -   **`Pricing Service`**: вычисляет базовый тариф по расстоянию и времени поездки, применяет surge multiplier на основе спроса/предложения в зоне, генерирует котировку с TTL (2-5 минут) для предотвращения устаревших цен, привязывает `quoteId` к ride для валидации при создании поездки.
 -   **`Payment Service`**: выполняет pre-authorization при запросе поездки (блокировка средств), charge (списание) при завершении поездки, refund (возврат) при отмене поездки. Соответствует требованиям `PCI DSS` для безопасной обработки платежных данных.
@@ -320,7 +323,7 @@ rideRepo.observeRide(rideId)
 **Хранение данных:**
 
 -   **PostgreSQL**: rides, payments с ACID, партиционирование по created_at, индексы на rider_id/driver_id/status, репликация master-slave.
--   **Redis Geo**: активные водители (TTL 5 мин), GEOADD/GEORADIUS для мгновенного поиска.
+-   **Redis Geo**: активные водители (TTL 5 мин), GEOADD/GEOSEARCH для мгновенного поиска.
 -   **Redis Cache**: котировки (TTL 5 мин), session tokens, rate limit counters.
 -   **S3 + Parquet**: архив завершённых поездок, траектории для ML/аналитики.
 
@@ -407,6 +410,8 @@ Realtime: FCM‑nudges + WebSocket; heartbeat, backoff, обновление т�
 
 `Uber` is a comprehensive ride-hailing system involving: real-time location tracking, nearby driver matching via geospatial search, fare calculation with dynamic pricing (surge pricing), routing via mapping APIs, payment processing, scaling to millions of users, and offline resilience for operation under intermittent connectivity.
 
+See also: [[c-android-components]].
+
 ### Requirements
 
 **Functional:**
@@ -441,7 +446,7 @@ Realtime: FCM‑nudges + WebSocket; heartbeat, backoff, обновление т�
 
 Modular architecture with separation by feature modules:
 -   **Location**: `FusedLocationProvider` for coordinate retrieval, adaptive sampling frequency, intermittent connectivity handling
--   **WebSocket**: realtime channel for trip status updates, driver ETA, push notifications
+-   **Realtime channel**: WebSocket for in-app realtime updates (trip status, driver ETA, etc.); push notifications (via FCM) for events when the app is in background
 -   **Maps**: integration with mapping SDKs (`Google Maps`, `Mapbox`) for markers, routes, clustering
 -   **Offline queue**: local storage (`Room`) for unsent requests, synchronization via `WorkManager`
 
@@ -450,7 +455,7 @@ Modular architecture with separation by feature modules:
 Microservices architecture with clear separation of responsibility:
 -   **API Gateway**: single entry point for all client requests, routing to corresponding microservices, rate limiting, authentication
 -   **Microservices**: `Location Service` (coordinate tracking), `Matching Service` (driver matching), `Ride Service` (trip FSM), `Payment Service` (payment processing), `Notification Service` (push notifications), `Pricing Service` (fare calculation, surge)
--   **Data storage**: `PostgreSQL` for persistent data, `Redis` for caching and geospatial search, queues (`Kafka`/`RabbitMQ`) for asynchronous event processing
+-   **Data storage**: `PostgreSQL` for persistent data, `Redis` for caching and geospatial search (via GEO* commands such as `GEOSEARCH`), queues (`Kafka`/`RabbitMQ`) for asynchronous event processing
 
 ### Android Client: Key Flows
 
@@ -467,7 +472,7 @@ Location tracking strategy with adaptive frequency for balance between accuracy 
 
 -   **Idle mode**: 0.2-0.5 Hz (every 2-5 seconds) with `Significant Motion` detection — reduce frequency when user stationary
 -   **En route**: 1 Hz (per second) with 5-10 second batching — collect coordinates in buffer for batch sending
--   **Foreground Service**: required during active trip (Android 14+ requires explicit `Foreground Service Type`)
+-   **Foreground `Service`**: required during active trip (Android 14+ requires explicit `Foreground Service Type`)
 
 ```kotlin
 // ✅ Location updates with adaptive priority
@@ -487,7 +492,25 @@ fusedLocationClient.requestLocationUpdates(req, callback, Looper.getMainLooper()
 
 **2. Sync**
 
-Debounce and batching for efficient network usage, background processing via `WorkManager`, automatic resume on reconnect.
+Efficient coordinate synchronization with debounce and batching (`Flow`-style pseudocode) to minimize network requests and support offline mode.
+
+```kotlin
+// ✅ Debounce + background sync with batching (pseudocode over Flow)
+locationFlow
+  .filterNotNull()
+  .debounce(3000L)              // Debounce 3 seconds
+  // Then: collect updates for a time window and send as batch
+  .onEach { bufferedLocations ->
+    repo.updateLocationBatch(bufferedLocations)
+  }
+  .launchIn(viewModelScope)
+```
+
+Background sync:
+
+-   **`WorkManager`**: schedules deferred/periodic sync with constraints (network, charging); runs on a best-effort basis within Android 14+ background limits
+-   **Reconnect recovery**: automatic retry with exponential backoff when network is restored
+-   **`Queue`**: local (`Room`) persistent queue of unsent coordinates
 
 **3. Nearby Drivers**
 
@@ -500,7 +523,7 @@ Hybrid approach for displaying nearby drivers: initial load via REST and realtim
 -   **Filters**: filter by vehicle type (Economy, Premium, XL), driver status (online/busy)
 
 ```kotlin
-// ✅ REST seed + WebSocket stream with filtering
+// ✅ REST seed + WebSocket stream with filtering (pseudocode)
 repo.getNearbyDrivers(
   location = currentLocation,
   vehicleType = selectedVehicleType
@@ -526,7 +549,7 @@ Multi-step process for creating ride request with optimistic UI and reliable err
 1.   **Fare estimate**: preliminary cost calculation via `Pricing Service` with surge multiplier — user sees price before confirmation
 2.   **Create ride**: create ride record in `Ride Service` with unique `requestId` for idempotency
 3.   **Matching**: find nearest driver via `Matching Service` with scoring algorithm
-4.   **Confirmation**: receive driver confirmation via `WebSocket` or push notification
+4.   **Confirmation**: receive driver confirmation via WebSocket or push notification
 5.   **Tracking**: start real-time trip tracking
 
 ```kotlin
@@ -545,7 +568,7 @@ rideRepo.create(
 
 **Error handling:**
 
--   **Optimistic UI**: immediate "Searching for driver" display before server response — improves UX
+-   **Optimistic UI**: immediate "Searching for driver" state before server response — improves UX
 -   **Retry logic**: automatic retry on network errors with exponential backoff
 -   **Offline mode**: save request to local queue (`Room`) for sending on network recovery
 
@@ -559,12 +582,12 @@ State transitions: `IDLE` → `REQUESTING` → `MATCHING` → `DRIVER_EN_ROUTE` 
 
 **Data combination:**
 
--   **Trip state**: received via `WebSocket` for status updates (driver accepted, arrived, trip started, completed)
--   **Driver location**: realtime driver coordinate updates via `WebSocket` for map display
+-   **Trip state**: received via WebSocket for status updates (driver accepted, arrived, trip started, completed)
+-   **Driver location**: realtime driver coordinate updates via WebSocket for map display
 -   **Route and ETA**: calculated via mapping APIs (`Google Maps Directions`, `Mapbox`) for route and arrival time display
 
 ```kotlin
-// ✅ Combine ride state + driver location with route
+// ✅ Combine ride state + driver location with route (pseudocode)
 rideRepo.observeRide(rideId)
   .combine(
     locationRepo.observeDriver(driverId),
@@ -586,13 +609,13 @@ rideRepo.observeRide(rideId)
 
 ### Server: Architecture Analysis
 
-**Service boundaries:**
+**`Service` boundaries:**
 
--   **`Location Service`**: accepts coordinates from clients, validates movement physics (speed check <150 km/h for spoofing detection), updates geo-index in `Redis Geo` for fast search, publishes events to `Kafka` for downstream services. Stores only hot data (last 30 minutes) for memory optimization.
--   **`Matching Service`**: performs geo-search for available drivers in radius via `Redis Geo` (`GEORADIUS`), applies scoring algorithm (rating·0.4 + 1/distance·0.3 + 1/ETA·0.3), reserves driver with optimistic lock to prevent double matching, sends push notification to driver. Handles accept/reject with timeout (30 seconds) for automatic cancellation on no response.
+-   **`Location Service`**: accepts coordinates from clients, validates movement physics (speed check <150 km/h for spoofing detection), updates geo-index in Redis Geo (via `GEOADD`/`GEOSEARCH`) for fast search, publishes events to Kafka for downstream services. Stores only hot data (last 30 minutes) for memory optimization.
+-   **`Matching Service`**: performs geo-search for available drivers in radius via Redis Geo (`GEOSEARCH`), applies scoring algorithm (rating·0.4 + 1/distance·0.3 + 1/ETA·0.3), reserves driver with optimistic lock to prevent double matching, sends push notification to driver. Handles accept/reject with timeout (30 seconds) for automatic cancellation on no response.
 -   **`Ride Service`**: manages FSM (Finite State Machine) with transitions `REQUESTED`→`ACCEPTED`→`ARRIVED`→`IN_PROGRESS`→`COMPLETED`/`CANCELLED`, stores audit trail of all state transitions for analytics and debugging, ensures idempotency via `requestId` from client, coordinates with `Payment Service` via events for payment synchronization.
 -   **`Pricing Service`**: calculates base fare by trip distance and time, applies surge multiplier based on demand/supply in zone, generates quote with TTL (2-5 minutes) to prevent stale pricing, binds `quoteId` to ride for validation on ride creation.
--   **`Payment Service`**: performs pre-authorization on ride request (funds hold), charge on trip completion, refund on cancellation. Complies with `PCI DSS` requirements for secure payment data processing.
+-   **`Payment Service`**: performs pre-authorization on ride request (funds hold), charge on trip completion, refund on cancellation. Complies with `PCI DSS` for secure payment data processing.
 
 **Domain models:**
 
@@ -603,7 +626,7 @@ rideRepo.observeRide(rideId)
 **Data storage:**
 
 -   **PostgreSQL**: rides, payments with ACID, partitioning by created_at, indexes on rider_id/driver_id/status, master-slave replication.
--   **Redis Geo**: active drivers (TTL 5 min), GEOADD/GEORADIUS for instant search.
+-   **Redis Geo**: active drivers (TTL 5 min), GEOADD/GEOSEARCH for instant search.
 -   **Redis Cache**: quotes (TTL 5 min), session tokens, rate limit counters.
 -   **S3 + Parquet**: archive completed rides, trajectories for ML/analytics.
 
@@ -664,7 +687,7 @@ Cache incomplete actions, sync queue, auto-resend on network restore.
 
 Architecture overview: feature-ride-request, feature-trip, maps-ui, location-core, realtime, payments, flags, analytics. UDF/MVI; TripRepository orchestrates Room + network; feature flags for protocols and sampling.
 
-Map performance: frame budget <16ms; offload interpolation/clustering; keep main-thread work minimal.
+`Map` performance: frame budget <16ms; offload interpolation/clustering; keep main-thread work minimal.
 
 Location strategy: FusedLocationProvider; fallback to GNSS+sensor fusion. Sampling idle 0.2–0.5 Hz with significant‑motion; en‑route 1 Hz with 5–10s batching; Kalman smoothing; spoofing checks. Foreground service during active trip.
 
@@ -701,10 +724,6 @@ Sequencing: MVP → Hardening → Scale; WS latency vs background limits tradeof
 -   [Redis Geo Commands](https://redis.io/commands/geoadd/)
 -   [WorkManager](https://developer.android.com/topic/libraries/architecture/workmanager)
 -   [Battery Performance](https://developer.android.com/topic/performance/power)
--   [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
--   [[ANDROID-INTERVIEWER-GUIDE]]
--   [[c-service]]
--   [[c-workmanager]]
 
 ## Related Questions
 

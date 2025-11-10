@@ -1,7 +1,6 @@
 ---
 id: android-243
-title: How To Implement View Behavior When It Is Added To The Tree / Как реализовать
-  поведение View при добавлении в дерево
+title: How To Implement View Behavior When It Is Added To The Tree / Как реализовать поведение View при добавлении в дерево
 aliases:
 - How To Implement View Behavior When It Is Added To The Tree
 - Как реализовать поведение View при добавлении в дерево
@@ -32,34 +31,35 @@ tags:
 - difficulty/easy
 - ui
 - view-lifecycle
+
 ---
 
 # Вопрос (RU)
 
-Как можно реализовать поведение View при её добавлении в дерево?
+> Как можно реализовать поведение `View` при её добавлении в дерево?
 
 # Question (EN)
 
-How to implement view behavior when it is added to the tree?
+> How to implement view behavior when it is added to the tree?
 
 ---
 
 ## Ответ (RU)
 
-Для реализации поведения View при её добавлении в дерево View используется метод **`onAttachedToWindow()`**, который вызывается, когда View добавляется в окно. Этот метод позволяет выполнять действия, когда View становится видимой для пользователя.
+Для реализации поведения `View` при её добавлении в иерархию/окно используется метод **`onAttachedToWindow()`**, который вызывается, когда `View` прикрепляется к окну (`Window`). Это означает, что `View` стала частью отображаемой иерархии, но не гарантирует, что она полностью видима пользователю. Этот метод подходит для запуска логики, зависящей от наличия `View` в окне (подписки, анимации, инициализация ресурсов), и в паре с ним всегда следует корректно обрабатывать **`onDetachedFromWindow()`**.
 
-### Основные Методы Жизненного Цикла View
+### Основные Методы Жизненного Цикла `View` (упрощённо)
 
-При добавлении View в иерархию:
-1. **Constructor** - создание View
-2. **onFinishInflate()** - после inflate из XML
-3. **onAttachedToWindow()** - прикрепление к окну
-4. **onMeasure()** - измерение размера
-5. **onLayout()** - позиционирование
-6. **onDraw()** - отрисовка
+При создании и добавлении `View` в иерархию обычно задействуются следующие методы:
+1. **Constructor** - создание `View`
+2. **onFinishInflate()** - после inflate из XML (если применимо)
+3. **onAttachedToWindow()** - прикрепление к окну (может вызываться несколько раз за жизнь `View`)
+4. **onMeasure()** - измерение размера (может вызываться многократно)
+5. **onLayout()** - позиционирование (может вызываться многократно)
+6. **onDraw()** - отрисовка (может вызываться многократно)
 
-При удалении View:
-1. **onDetachedFromWindow()** - открепление от окна
+При удалении `View` из окна:
+1. **onDetachedFromWindow()** - открепление от окна (также может вызываться несколько раз, если `View` переиспользуется)
 
 ### Базовая Реализация
 
@@ -78,10 +78,10 @@ class CustomView @JvmOverloads constructor(
     }
 
     override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow() // ✅ Всегда вызывайте super
         // View откреплена от окна
         stopAnimation()
         unregisterListeners() // ✅ Очистка ресурсов
+        super.onDetachedFromWindow() // ✅ Всегда вызывайте super (после своей очистки)
     }
 }
 ```
@@ -100,12 +100,13 @@ class VideoPlayerView @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        initializePlayer() // ✅ Инициализация при отображении
+        initializePlayer() // ✅ Инициализация при прикреплении к окну
     }
 
     override fun onDetachedFromWindow() {
+        // ✅ Освобождение ресурсов до вызова super
+        releasePlayer()
         super.onDetachedFromWindow()
-        releasePlayer() // ✅ Освобождение ресурсов
     }
 
     private fun releasePlayer() {
@@ -126,17 +127,21 @@ class SensorView @JvmOverloads constructor(
     private val sensorManager: SensorManager =
         context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
+    private val accelerometer: Sensor? =
+        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        // ✅ Регистрация слушателя при отображении
+        // ✅ Регистрация слушателя при прикреплении к окну
         accelerometer?.let {
             sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
         }
     }
 
     override fun onDetachedFromWindow() {
+        // ✅ Отписка при откреплении
+        sensorManager.unregisterListener(this)
         super.onDetachedFromWindow()
-        sensorManager.unregisterListener(this) // ✅ Экономия батареи
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -147,7 +152,7 @@ class SensorView @JvmOverloads constructor(
 }
 ```
 
-#### 3. Lifecycle-aware View
+#### 3. Lifecycle-aware `View`
 
 ```kotlin
 class LifecycleAwareView @JvmOverloads constructor(
@@ -159,15 +164,16 @@ class LifecycleAwareView @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        // ✅ Использование ViewTreeLifecycleOwner
+        // ✅ Использование ViewTreeLifecycleOwner для привязки к lifecycle
         lifecycleOwner = findViewTreeLifecycleOwner()
         lifecycleOwner?.lifecycle?.addObserver(this)
     }
 
     override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        lifecycleOwner?.lifecycle?.removeObserver(this) // ✅ Удаление observer
+        // ✅ Удаление observer до вызова super
+        lifecycleOwner?.lifecycle?.removeObserver(this)
         lifecycleOwner = null
+        super.onDetachedFromWindow()
     }
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
@@ -196,27 +202,28 @@ myView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener 
 
 ### Best Practices
 
-1. **Всегда вызывайте super** - `super.onAttachedToWindow()` и `super.onDetachedFromWindow()`
-2. **Очищайте ресурсы** - отписывайтесь от слушателей, останавливайте анимации в `onDetachedFromWindow()`
-3. **Проверяйте статус** - используйте `isAttachedToWindow` для проверки текущего состояния
-4. **Избегайте утечек памяти** - всегда очищайте ресурсы в `onDetachedFromWindow()`
+1. **Всегда вызывайте super** - `super.onAttachedToWindow()` и `super.onDetachedFromWindow()`; освобождение ресурсов обычно выполняйте до `super.onDetachedFromWindow()`.
+2. **Очищайте ресурсы** - отписывайтесь от слушателей, останавливайте анимации и фоновые задачи в `onDetachedFromWindow()`.
+3. **Проверяйте статус** - используйте `isAttachedToWindow` для проверки текущего состояния перед доступом к связанной инфраструктуре.
+4. **Избегайте утечек памяти** - всегда очищайте ссылки на контекст, слушатели и тяжёлые ресурсы в `onDetachedFromWindow()`.
+5. **Помните о повторных вызовах** - `onAttachedToWindow()` / `onDetachedFromWindow()` могут вызываться несколько раз, если `View` перемещается между родителями или переиспользуется.
 
 ## Answer (EN)
 
-To implement View behavior when it is added to the view tree in Android, use the **`onAttachedToWindow()`** method, which is called when a View is added to a window. This method allows you to perform actions when the View becomes visible to the user.
+To implement view behavior when it is added to the view tree in Android, use the **`onAttachedToWindow()`** method, which is called when a `View` is attached to a window (`Window`). This means the `View` becomes part of the displayed hierarchy, but it does not guarantee that it is fully visible on screen. This callback is suitable for logic that depends on the `View` being attached (subscriptions, animations, resource initialization), and should be paired with proper cleanup in **`onDetachedFromWindow()`**.
 
-### View Lifecycle Methods
+### `View` Lifecycle Methods (simplified)
 
-When a View is added to the hierarchy:
-1. **Constructor** - View creation
-2. **onFinishInflate()** - Called after inflate from XML
-3. **onAttachedToWindow()** - Attached to window
-4. **onMeasure()** - Size measurement
-5. **onLayout()** - Positioning
-6. **onDraw()** - Drawing
+When a `View` is created and added to the hierarchy, these callbacks are typically involved:
+1. **Constructor** - `View` creation
+2. **onFinishInflate()** - Called after inflation from XML (if applicable)
+3. **onAttachedToWindow()** - Attached to window (may be called multiple times during the `View`'s lifetime)
+4. **onMeasure()** - Size measurement (may be called many times)
+5. **onLayout()** - Positioning (may be called many times)
+6. **onDraw()** - Drawing (may be called many times)
 
-When a View is removed:
-1. **onDetachedFromWindow()** - Detached from window
+When a `View` is removed from the window:
+1. **onDetachedFromWindow()** - Detached from window (may also be called multiple times if the `View` is reused/moved)
 
 ### Basic Implementation
 
@@ -229,16 +236,16 @@ class CustomView @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow() // ✅ Always call super
-        // View is attached to window
+        // View is attached to the window
         startAnimation()
         registerListeners()
     }
 
     override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow() // ✅ Always call super
-        // View is detached from window
+        // View is detached from the window
         stopAnimation()
         unregisterListeners() // ✅ Clean up resources
+        super.onDetachedFromWindow() // ✅ Always call super (after cleanup)
     }
 }
 ```
@@ -257,12 +264,13 @@ class VideoPlayerView @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        initializePlayer() // ✅ Initialize when visible
+        initializePlayer() // ✅ Initialize when attached to window
     }
 
     override fun onDetachedFromWindow() {
+        // ✅ Free resources before calling super
+        releasePlayer()
         super.onDetachedFromWindow()
-        releasePlayer() // ✅ Free resources
     }
 
     private fun releasePlayer() {
@@ -272,7 +280,7 @@ class VideoPlayerView @JvmOverloads constructor(
 }
 ```
 
-#### 2. Sensor-Based View
+#### 2. Sensor-Based `View`
 
 ```kotlin
 class SensorView @JvmOverloads constructor(
@@ -283,17 +291,21 @@ class SensorView @JvmOverloads constructor(
     private val sensorManager: SensorManager =
         context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
+    private val accelerometer: Sensor? =
+        sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        // ✅ Register listener when visible
+        // ✅ Register listener when attached to window
         accelerometer?.let {
             sensorManager.registerListener(this, it, SensorManager.SENSOR_DELAY_NORMAL)
         }
     }
 
     override fun onDetachedFromWindow() {
+        // ✅ Unregister listener when detached
+        sensorManager.unregisterListener(this)
         super.onDetachedFromWindow()
-        sensorManager.unregisterListener(this) // ✅ Save battery
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
@@ -304,7 +316,7 @@ class SensorView @JvmOverloads constructor(
 }
 ```
 
-#### 3. Lifecycle-Aware View
+#### 3. Lifecycle-Aware `View`
 
 ```kotlin
 class LifecycleAwareView @JvmOverloads constructor(
@@ -316,15 +328,16 @@ class LifecycleAwareView @JvmOverloads constructor(
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-        // ✅ Use ViewTreeLifecycleOwner
+        // ✅ Use ViewTreeLifecycleOwner to bind to Lifecycle
         lifecycleOwner = findViewTreeLifecycleOwner()
         lifecycleOwner?.lifecycle?.addObserver(this)
     }
 
     override fun onDetachedFromWindow() {
-        super.onDetachedFromWindow()
-        lifecycleOwner?.lifecycle?.removeObserver(this) // ✅ Remove observer
+        // ✅ Remove observer before calling super
+        lifecycleOwner?.lifecycle?.removeObserver(this)
         lifecycleOwner = null
+        super.onDetachedFromWindow()
     }
 
     override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
@@ -353,10 +366,11 @@ myView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener 
 
 ### Best Practices
 
-1. **Always call super** - `super.onAttachedToWindow()` and `super.onDetachedFromWindow()`
-2. **Clean up resources** - Unregister listeners, stop animations in `onDetachedFromWindow()`
-3. **Check attachment state** - Use `isAttachedToWindow` to check current state
-4. **Avoid memory leaks** - Always clean up in `onDetachedFromWindow()`
+1. **Always call super** - `super.onAttachedToWindow()` and `super.onDetachedFromWindow()`; typically perform your cleanup before `super.onDetachedFromWindow()`.
+2. **Clean up resources** - Unregister listeners, stop animations, and cancel background work in `onDetachedFromWindow()`.
+3. **Check attachment state** - Use `isAttachedToWindow` before accessing window-dependent APIs.
+4. **Avoid memory leaks** - Clear references to `Context`, listeners, and heavy resources on detach.
+5. **Remember multiple invocations** - `onAttachedToWindow()` / `onDetachedFromWindow()` may be called multiple times if the `View` is moved or reused.
 
 ---
 
@@ -364,13 +378,13 @@ myView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener 
 
 - What is the difference between `onAttachedToWindow()` and `onFinishInflate()`?
 - When should you use `addOnAttachStateChangeListener` vs overriding `onAttachedToWindow()`?
-- How does `onAttachedToWindow()` interact with Fragment lifecycle?
-- What happens if you don't call `super.onAttachedToWindow()`?
-- Can you use coroutines in `onAttachedToWindow()` safely?
+- How does `onAttachedToWindow()` interact with `Fragment` lifecycle?
+- What happens if you don't call `super.onAttachedToWindow()` / `super.onDetachedFromWindow()`?
+- Can you use coroutines in `onAttachedToWindow()` safely, and how should you cancel them in `onDetachedFromWindow()`?
 
 ## References
 
-- Official Android documentation on View lifecycle
+- Official Android documentation on `View` lifecycle
 - Android Developer Guides - Custom Views
 
 ## Related Questions
@@ -381,13 +395,13 @@ myView.addOnAttachStateChangeListener(object : View.OnAttachStateChangeListener 
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - Basic View concepts
+- [[q-recyclerview-sethasfixedsize--android--easy]] - Basic `View` concepts
 
 ### Related (Same Level)
-- [[q-viewmodel-pattern--android--easy]] - View patterns
-- View invalidation and drawing cycle
+- [[q-viewmodel-pattern--android--easy]] - `View` patterns
+- `View` invalidation and drawing cycle
 
 ### Advanced (Harder)
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View rendering
-- [[q-testing-viewmodels-turbine--android--medium]] - Testing View-related components
-- Custom View optimization and performance
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` rendering
+- [[q-testing-viewmodels-turbine--android--medium]] - Testing `View`-related components
+- Custom `View` optimization and performance

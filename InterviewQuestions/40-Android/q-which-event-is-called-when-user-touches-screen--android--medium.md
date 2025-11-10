@@ -1,7 +1,6 @@
 ---
 id: android-155
-title: Which Event Is Called When User Touches Screen / Какое событие вызывается когда
-  пользователь касается экрана
+title: Which Event Is Called When User Touches Screen / Какое событие вызывается когда пользователь касается экрана
 aliases:
 - Touch Events
 - События касания
@@ -23,7 +22,7 @@ related:
 - q-how-to-create-chat-lists-from-a-ui-perspective--android--hard
 - q-how-to-create-dynamic-screens-at-runtime--android--hard
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags:
 - android/ui-compose
@@ -31,6 +30,7 @@ tags:
 - difficulty/medium
 - touch-events
 - ui
+
 ---
 
 # Вопрос (RU)
@@ -45,25 +45,26 @@ tags:
 
 ## Ответ (RU)
 
-Когда пользователь касается экрана в Android, система вызывает цепочку методов обработки касаний. Основные события: **dispatchTouchEvent()** (распределение), **onInterceptTouchEvent()** (перехват для ViewGroup), **onTouchEvent()** (обработка), и **onClick()** (если настроен).
+В Android не существует одного «магического» события для касания. Когда пользователь касается экрана, система формирует объект `MotionEvent` (например, `ACTION_DOWN`) и запускает цепочку методов обработки касаний. Ключевые точки в цепочке: **dispatchTouchEvent()** (распределение), **onInterceptTouchEvent()** (перехват для `ViewGroup`), **onTouchEvent()** (обработка), и, при выполнении условий клика, **performClick() / onClick()**.
 
 ### Поток Событий
 
 ```kotlin
 // Activity.dispatchTouchEvent()
 //   → ViewGroup.dispatchTouchEvent()
-//     → ViewGroup.onInterceptTouchEvent() // ✅ Может перехватить для прокрутки
+//     → ViewGroup.onInterceptTouchEvent() // ✅ Может перехватить, например, для прокрутки
 //       → View.onTouchEvent()
-//         → View.OnClickListener.onClick()
+//         → View.performClick()
+//           → View.OnClickListener.onClick() // если клик распознан
 ```
 
 ### Основные Методы
 
-**dispatchTouchEvent()** — первый метод, распределяет событие:
+**dispatchTouchEvent()** — первый метод в цепочке на каждом уровне (`Activity`, `ViewGroup`, `View`), распределяет событие дальше:
 
 ```kotlin
 override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-    // ✅ Можно перехватить перед обычной обработкой
+    // ✅ Можно обработать или перехватить до стандартной логики
     if (event.action == MotionEvent.ACTION_DOWN) {
         // Кастомная логика
     }
@@ -71,14 +72,14 @@ override fun dispatchTouchEvent(event: MotionEvent): Boolean {
 }
 ```
 
-**onTouchEvent()** — основной метод обработки:
+**onTouchEvent()** — основной метод низкоуровневой обработки для конкретной `View`:
 
 ```kotlin
 override fun onTouchEvent(event: MotionEvent): Boolean {
     when (event.action) {
         MotionEvent.ACTION_DOWN -> {
             lastX = event.x; lastY = event.y
-            return true // ✅ Потребляем событие
+            return true // ✅ Потребляем последовательность событий
         }
         MotionEvent.ACTION_MOVE -> {
             translationX += event.x - lastX
@@ -86,7 +87,8 @@ override fun onTouchEvent(event: MotionEvent): Boolean {
             return true
         }
         MotionEvent.ACTION_UP -> {
-            performClick() // ✅ Важно для accessibility
+            // Вызываем performClick(), если жест действительно считается кликом
+            performClick()
             return true
         }
     }
@@ -94,13 +96,15 @@ override fun onTouchEvent(event: MotionEvent): Boolean {
 }
 ```
 
-**onInterceptTouchEvent()** — перехват для ViewGroup:
+**onInterceptTouchEvent()** — перехват для `ViewGroup`:
 
 ```kotlin
 override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
     return when (event.action) {
-        MotionEvent.ACTION_MOVE -> shouldInterceptScroll(event) // ✅ Перехват при прокрутке
-        else -> false // ❌ Не перехватываем DOWN - даем детям шанс
+        MotionEvent.ACTION_MOVE -> shouldInterceptScroll(event) // ✅ Частый случай: перехват при прокрутке
+        // Обычно DOWN не перехватывают, чтобы дать детям шанс получить события,
+        // но при необходимости его тоже можно перехватить.
+        else -> false
     }
 }
 ```
@@ -137,45 +141,46 @@ Box(modifier = Modifier.pointerInput(Unit) {
 })
 ```
 
-### Последовательность Для Одиночного Клика
+### Последовательность Для Одиночного Клика (упрощенно)
 
 ```text
-1. ACTION_DOWN → dispatchTouchEvent()
-2. ACTION_DOWN → onTouchEvent()
-3. ACTION_UP → dispatchTouchEvent()
-4. ACTION_UP → onTouchEvent()
-5. performClick()
-6. onClick()
+1. ACTION_DOWN → проходит через dispatchTouchEvent() (Activity → ViewGroup → View)
+2. ACTION_DOWN → целевая View.onTouchEvent()
+3. ACTION_UP → снова через dispatchTouchEvent() (Activity → ViewGroup → View)
+4. ACTION_UP → целевая View.onTouchEvent()
+5. View.performClick() вызывается, если жест распознан как клик
+6. View.OnClickListener.onClick() вызывается из performClick()
 ```
 
 ### Ключевые Моменты
 
-- Возвращайте `true` из onTouchEvent() для потребления события
-- onClick() срабатывает только на ACTION_UP без движения
-- ViewGroup может перехватить события детей через onInterceptTouchEvent()
-- Всегда вызывайте performClick() при ACTION_UP для accessibility
+- Возвращайте `true` из `onTouchEvent()` (обычно на `ACTION_DOWN`), если `View` хочет обрабатывать дальнейшие события этого жеста.
+- `onClick()` вызывается только если последовательность касаний распознана как клик (обычно `DOWN` → `UP` без значимого движения/отмены).
+- `ViewGroup` может перехватывать события детей через `onInterceptTouchEvent()`; решение о перехвате зависит от жеста.
+- Вызывайте `performClick()` при `ACTION_UP`, когда действие действительно соответствует клику — это важно для accessibility и единообразного поведения.
 
 ## Answer (EN)
 
-When a user touches the screen in Android, the system calls a chain of touch event methods. The main events are: **dispatchTouchEvent()** (distribution), **onInterceptTouchEvent()** (interception for ViewGroups), **onTouchEvent()** (handling), and **onClick()** (if configured).
+In Android there is no single "magic" event for a touch. When the user touches the screen, the system creates a `MotionEvent` (e.g., `ACTION_DOWN`) and starts a touch event dispatch chain. The key points in this chain are: **dispatchTouchEvent()** (distribution), **onInterceptTouchEvent()** (interception for ViewGroups), **onTouchEvent()** (handling), and, when click conditions are met, **performClick() / onClick()**.
 
-### Event Flow
+### Event `Flow`
 
 ```kotlin
 // Activity.dispatchTouchEvent()
 //   → ViewGroup.dispatchTouchEvent()
-//     → ViewGroup.onInterceptTouchEvent() // ✅ Can intercept for scrolling
+//     → ViewGroup.onInterceptTouchEvent() // ✅ Can intercept, e.g., for scrolling
 //       → View.onTouchEvent()
-//         → View.OnClickListener.onClick()
+//         → View.performClick()
+//           → View.OnClickListener.onClick() // if click is recognized
 ```
 
 ### Core Methods
 
-**dispatchTouchEvent()** — first method called, distributes the event:
+**dispatchTouchEvent()** — the first method in the chain at each level (`Activity`, `ViewGroup`, `View`); distributes the event further:
 
 ```kotlin
 override fun dispatchTouchEvent(event: MotionEvent): Boolean {
-    // ✅ Can intercept before normal handling
+    // ✅ Can handle or short-circuit before default behavior
     if (event.action == MotionEvent.ACTION_DOWN) {
         // Custom logic
     }
@@ -183,14 +188,14 @@ override fun dispatchTouchEvent(event: MotionEvent): Boolean {
 }
 ```
 
-**onTouchEvent()** — main touch handling method:
+**onTouchEvent()** — the main low-level handling method for a specific `View`:
 
 ```kotlin
 override fun onTouchEvent(event: MotionEvent): Boolean {
     when (event.action) {
         MotionEvent.ACTION_DOWN -> {
             lastX = event.x; lastY = event.y
-            return true // ✅ Consume event
+            return true // ✅ Consume the gesture sequence
         }
         MotionEvent.ACTION_MOVE -> {
             translationX += event.x - lastX
@@ -198,7 +203,8 @@ override fun onTouchEvent(event: MotionEvent): Boolean {
             return true
         }
         MotionEvent.ACTION_UP -> {
-            performClick() // ✅ Important for accessibility
+            // Call performClick() when this sequence should be treated as a click
+            performClick()
             return true
         }
     }
@@ -211,15 +217,17 @@ override fun onTouchEvent(event: MotionEvent): Boolean {
 ```kotlin
 override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
     return when (event.action) {
-        MotionEvent.ACTION_MOVE -> shouldInterceptScroll(event) // ✅ Intercept on scroll
-        else -> false // ❌ Don't intercept DOWN - give children a chance
+        MotionEvent.ACTION_MOVE -> shouldInterceptScroll(event) // ✅ Common: intercept when scrolling
+        // Typically you don't intercept DOWN so children can receive events,
+        // but you technically can if your layout needs it.
+        else -> false
     }
 }
 ```
 
 ### GestureDetector
 
-For handling gestures (tap, double-tap, fling, scroll):
+For handling higher-level gestures (tap, double-tap, fling, scroll):
 
 ```kotlin
 private val gestureDetector = GestureDetector(context,
@@ -249,31 +257,31 @@ Box(modifier = Modifier.pointerInput(Unit) {
 })
 ```
 
-### Event Sequence for Single Click
+### Event Sequence for Single Click (simplified)
 
 ```text
-1. ACTION_DOWN → dispatchTouchEvent()
-2. ACTION_DOWN → onTouchEvent()
-3. ACTION_UP → dispatchTouchEvent()
-4. ACTION_UP → onTouchEvent()
-5. performClick()
-6. onClick()
+1. ACTION_DOWN → goes through dispatchTouchEvent() (Activity → ViewGroup → View)
+2. ACTION_DOWN → target View.onTouchEvent()
+3. ACTION_UP → again through dispatchTouchEvent() (Activity → ViewGroup → View)
+4. ACTION_UP → target View.onTouchEvent()
+5. View.performClick() is called when the gesture is recognized as a click
+6. View.OnClickListener.onClick() is invoked from performClick()
 ```
 
 ### Key Points
 
-- Return `true` from onTouchEvent() to consume the event
-- onClick() only fires on ACTION_UP without movement
-- ViewGroup can intercept child events via onInterceptTouchEvent()
-- Always call performClick() on ACTION_UP for accessibility
+- Return `true` from `onTouchEvent()` (typically on `ACTION_DOWN`) if the `View` intends to handle the rest of the gesture.
+- `onClick()` is fired only when the touch sequence is recognized as a click (usually `DOWN` → `UP` without significant movement/cancel).
+- A `ViewGroup` may intercept child events via `onInterceptTouchEvent()`; interception behavior depends on the intended gesture handling.
+- Call `performClick()` on `ACTION_UP` when the interaction should be treated as a click; this is important for accessibility and consistent behavior.
 
 ## Follow-ups
 
-- How does touch event propagation differ between View and ViewGroup?
+- How does touch event propagation differ between `View` and `ViewGroup`?
 - What happens when multiple views can handle the same touch event?
 - How do you implement custom gesture detection for complex interactions?
 - What is the difference between consuming an event and letting it propagate?
-- How does Compose's pointer input system differ from View's touch events?
+- How does Compose's pointer input system differ from `View`'s touch events?
 
 ## References
 
@@ -286,9 +294,8 @@ Box(modifier = Modifier.pointerInput(Unit) {
 - [[c-compose-state]]
 - [[c-jetpack-compose]]
 
-
 ### Prerequisites
-- Understanding View lifecycle and custom views
+- Understanding `View` lifecycle and custom views
 
 ### Related
 - [[q-how-to-create-dynamic-screens-at-runtime--android--hard]]

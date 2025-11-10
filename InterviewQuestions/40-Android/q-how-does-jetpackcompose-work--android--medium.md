@@ -25,7 +25,7 @@ related:
 - q-how-does-activity-lifecycle-work--android--medium
 - q-how-does-the-main-thread-work--android--medium
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags:
 - android
@@ -33,40 +33,41 @@ tags:
 - android/ui-compose
 - android/ui-state
 - difficulty/medium
+
 ---
 
 # Вопрос (RU)
 
-Как работает Jetpack Compose?
+> Как работает Jetpack Compose?
 
 # Question (EN)
 
-How does Jetpack Compose work?
+> How does Jetpack Compose work?
 
 ## Ответ (RU)
 
-**Jetpack Compose** - декларативный UI-фреймворк от Google для Android. Вместо XML и императивного управления View, использует Kotlin-функции для описания UI.
+**Jetpack Compose** — декларативный UI-фреймворк от Google для Android. Вместо XML и императивного управления `View` используется подход, где UI описывается Kotlin-функциями.
 
 ### Основные Принципы
 
-**Declarative UI**: описываете что должно быть, а не как построить
-**Reactive**: UI автоматически обновляется при изменении данных
-**Component-based**: UI из переиспользуемых функций
-**Kotlin-first**: полная интеграция с корутинами и Flow
+**Declarative UI**: описываете, что должно быть, а не как по шагам построить UI
+**Reactive**: UI автоматически обновляется при изменении наблюдаемого состояния
+**Component-based**: UI собирается из переиспользуемых composable-функций
+**Kotlin-first**: тесная интеграция с Kotlin (включая корутины и `Flow` через специализированные API)
 
 ### Как Работает Composition
 
-Compose создаёт дерево composable-функций - **Composition**. Внутри используется **slot table**, отслеживающая активные composable, их позицию, состояние и параметры.
+Compose создаёт дерево вызовов composable-функций — **Composition**. Внутри используется структура данных **slot table**, которая отслеживает группы (composable-блоки), их позиции, состояния (включая `remember`) и ключи, необходимые для корректной перекомпозиции.
 
 ```kotlin
 @Composable
 fun Counter() {
-    var count by remember { mutableStateOf(0) } // ✅ State hoisting with remember
+    var count by remember { mutableStateOf(0) } // ✅ Локальное состояние, привязанное к Composition
 
     Column {
-        Text("Count: $count") // ✅ Recomposes when count changes
+        Text("Count: $count") // ✅ Перекомпонуется при изменении count
         Button(onClick = { count++ }) {
-            Text("Increment") // ✅ Never recomposes (static)
+            Text("Increment") // ✅ Содержимое может участвовать в рекомпозиции, но Compose может оптимизировать повторное выполнение
         }
     }
 }
@@ -74,19 +75,19 @@ fun Counter() {
 
 ### Recomposition - Сердце Compose
 
-При изменении данных Compose перекомпонует только затронутые части:
+При изменении данных Compose интеллектуально повторно выполняет только затронутые части UI:
 
-1. Изменение state (`count++`)
-2. Compose помечает зависимые composable невалидными
-3. Выполняются только невалидные composable
-4. UI обновляется новыми значениями
+1. Меняется состояние (`count++`).
+2. Compose помечает связанные с этим состоянием группы (composable) как невалидные.
+3. При следующем проходе выполняются только невалидные участки Composition; стабильные/неизменившиеся участки могут быть пропущены.
+4. UI обновляется на основе новых значений.
 
 ### State Hoisting (Поднятие Состояния)
 
-Перемещайте состояние вверх для переиспользуемости:
+Поднимайте состояние выше по иерархии для переиспользуемости и тестируемости:
 
 ```kotlin
-// ✅ Stateless composable (reusable, testable)
+// ✅ Stateless composable (переиспользуемый, легко тестировать)
 @Composable
 fun Counter(count: Int, onIncrement: () -> Unit) {
     Column {
@@ -95,7 +96,7 @@ fun Counter(count: Int, onIncrement: () -> Unit) {
     }
 }
 
-// ✅ Stateful parent manages state
+// ✅ Stateful-родитель управляет состоянием
 @Composable
 fun CounterScreen() {
     var count by remember { mutableStateOf(0) }
@@ -109,13 +110,14 @@ fun CounterScreen() {
 
 ```kotlin
 @Composable
-fun EffectsExample(userId: String) {
-    // ✅ LaunchedEffect: suspend functions, restarts on key change
+fun EffectsExample(userId: String, locationManager: LocationManager) {
+    // ✅ LaunchedEffect: для запуска suspend-функций, перезапускается при изменении ключа
     LaunchedEffect(userId) {
-        val user = loadUser(userId)
+        val user = loadUser(userId) // loadUser — условная suspend-функция загрузки данных
+        // используйте user для обновления состояния
     }
 
-    // ✅ DisposableEffect: cleanup resources
+    // ✅ DisposableEffect: для инициализации и освобождения ресурсов
     DisposableEffect(Unit) {
         val listener = LocationListener()
         locationManager.addListener(listener)
@@ -126,13 +128,13 @@ fun EffectsExample(userId: String) {
 
 ### Modifiers - Стилизация И Поведение
 
-Модификаторы настраивают внешний вид. **Порядок важен**:
+Модификаторы настраивают внешний вид и поведение. **Порядок важен**:
 
 ```kotlin
-// ✅ Padding before background - background includes padding
+// ✅ padding перед background — фон включает внутренние отступы
 Box(Modifier.padding(16.dp).background(Color.Blue))
 
-// ❌ Background before padding - padding outside background
+// ❌ background перед padding — отступы оказываются за пределами фона
 Box(Modifier.background(Color.Blue).padding(16.dp))
 ```
 
@@ -141,7 +143,7 @@ Box(Modifier.background(Color.Blue).padding(16.dp))
 ```kotlin
 @Composable
 fun OptimizedList(items: List<Item>) {
-    // ✅ LazyColumn for large lists (like RecyclerView)
+    // ✅ LazyColumn для больших списков (аналогично RecyclerView по идее ленивой загрузки)
     LazyColumn {
         items(items) { item -> ItemRow(item) }
     }
@@ -149,59 +151,61 @@ fun OptimizedList(items: List<Item>) {
 
 @Composable
 fun ItemRow(item: Item) {
-    // ✅ derivedStateOf: recompute only when dependencies change
+    // ✅ derivedStateOf: вычисляет значение только при изменении зависимостей
     val isExpensive by remember(item) {
         derivedStateOf { expensiveCalculation(item) }
     }
-    // ✅ remember: cache expensive objects by key
+    // ✅ remember: кэширует дорогостоящие объекты по ключу
     val obj = remember(item.id) { createExpensiveObject(item) }
+
+    // используйте isExpensive и obj в UI
 }
 ```
 
 ### Как Работает Внутри
 
 **Три фазы**:
-1. **Composition**: построение UI дерева из @Composable функций
-2. **Layout**: измерение и позиционирование элементов
-3. **Drawing**: отрисовка пикселей
+1. **Composition**: построение дерева UI из @Composable-функций и запись структуры в slot table.
+2. **Layout**: измерение и позиционирование элементов.
+3. **Drawing**: отрисовка элементов на экран.
 
-**Slot Table**: gap buffer для эффективного отслеживания позиций composable, объектов состояния, значений remember, ключей для перекомпозиции.
+**Slot Table**: компактная индексированная структура, которую Compose использует для эффективного отслеживания групп composable, их состояний, значений `remember` и ключей. Это позволяет находить и обновлять только нужные части дерева при перекомпозиции без полного пересоздания UI.
 
 ### Резюме
 
 Compose работает через:
-- Объявление UI с @Composable функциями
-- Построение composition tree
-- Автоматическое наблюдение за состоянием
+- Описание UI с помощью @Composable-функций
+- Построение дерева Composition
+- Автоматическое отслеживание и использование состояния
 - Умную перекомпозицию только затронутых частей
-- Эффективный layout и отрисовку
+- Эффективные фазы layout и отрисовки
 
-**Магия** в умной перекомпозиции - выполняются только функции, зависящие от изменённого состояния.
+"Магия" — в механизме перекомпозиции: повторно выполняются только те функции и группы, которые зависят от изменённого состояния, при возможности переиспользуя остальные.
 
 ## Answer (EN)
 
-**Jetpack Compose** is Google's declarative UI toolkit for Android. Instead of XML and imperative View manipulation, it uses Kotlin functions to describe UI.
+**Jetpack Compose** is Google's declarative UI toolkit for Android. Instead of XML and imperative `View` manipulation, it uses Kotlin functions to describe UI.
 
 ### Core Principles
 
-**Declarative UI**: describe what the UI should look like, not how to build it
-**Reactive**: UI automatically updates when data changes
-**Component-based**: build UIs from reusable functions
-**Kotlin-first**: full integration with coroutines and Flow
+**Declarative UI**: describe what the UI should be, not step-by-step how to mutate it
+**Reactive**: UI automatically updates when observable state changes
+**Component-based**: build UIs from reusable composable functions
+**Kotlin-first**: designed for Kotlin, with coroutine/`Flow`-aware APIs and seamless Kotlin integration
 
 ### How Composition Works
 
-Compose builds a tree of composable functions called **Composition**. Internally, it uses a **slot table** that tracks active composables, their positions, state, and parameters.
+Compose builds a tree of composable function calls called the **Composition**. Internally, it uses a **slot table** data structure that tracks groups (composable regions), their positions, state (including `remember`), and keys required for correct recomposition.
 
 ```kotlin
 @Composable
 fun Counter() {
-    var count by remember { mutableStateOf(0) } // ✅ State hoisting with remember
+    var count by remember { mutableStateOf(0) } // ✅ Local state tied to this Composition
 
     Column {
-        Text("Count: $count") // ✅ Recomposes when count changes
+        Text("Count: $count") // ✅ Re-executes / updates when count changes
         Button(onClick = { count++ }) {
-            Text("Increment") // ✅ Never recomposes (static)
+            Text("Increment") // ✅ Participates in recomposition; Compose may skip if inputs are stable
         }
     }
 }
@@ -209,19 +213,19 @@ fun Counter() {
 
 ### Recomposition - The Heart of Compose
 
-When data changes, Compose intelligently recomposes only affected parts:
+When data changes, Compose intelligently re-executes only affected parts of the UI:
 
-1. State changes (`count++`)
-2. Compose marks dependent composables as invalid
-3. Only invalid composables re-execute
-4. UI updates with new values
+1. State changes (`count++`).
+2. Compose marks the corresponding groups (composables that read that state) as invalid.
+3. On the next pass, only invalid regions of the Composition are re-executed; stable/unchanged regions may be skipped.
+4. The rendered UI is updated with the new values.
 
 ### State Hoisting
 
-Move state up to make components reusable and testable:
+Move state up the tree to make components reusable and testable:
 
 ```kotlin
-// ✅ Stateless composable (reusable, testable)
+// ✅ Stateless composable (reusable, easy to test)
 @Composable
 fun Counter(count: Int, onIncrement: () -> Unit) {
     Column {
@@ -230,7 +234,7 @@ fun Counter(count: Int, onIncrement: () -> Unit) {
     }
 }
 
-// ✅ Stateful parent manages state
+// ✅ Stateful parent owns and manages state
 @Composable
 fun CounterScreen() {
     var count by remember { mutableStateOf(0) }
@@ -244,13 +248,14 @@ For side effects:
 
 ```kotlin
 @Composable
-fun EffectsExample(userId: String) {
-    // ✅ LaunchedEffect: suspend functions, restarts on key change
+fun EffectsExample(userId: String, locationManager: LocationManager) {
+    // ✅ LaunchedEffect: run suspend functions; restarts when key changes
     LaunchedEffect(userId) {
-        val user = loadUser(userId)
+        val user = loadUser(userId) // loadUser is a placeholder suspend function
+        // use user to update some state
     }
 
-    // ✅ DisposableEffect: cleanup resources
+    // ✅ DisposableEffect: acquire and clean up resources
     DisposableEffect(Unit) {
         val listener = LocationListener()
         locationManager.addListener(listener)
@@ -264,10 +269,10 @@ fun EffectsExample(userId: String) {
 Modifiers customize appearance and behavior. **Order matters**:
 
 ```kotlin
-// ✅ Padding before background - background includes padding
+// ✅ Padding before background - background covers padded area
 Box(Modifier.padding(16.dp).background(Color.Blue))
 
-// ❌ Background before padding - padding outside background
+// ❌ Background before padding - padding is applied outside the background
 Box(Modifier.background(Color.Blue).padding(16.dp))
 ```
 
@@ -276,7 +281,7 @@ Box(Modifier.background(Color.Blue).padding(16.dp))
 ```kotlin
 @Composable
 fun OptimizedList(items: List<Item>) {
-    // ✅ LazyColumn for large lists (like RecyclerView)
+    // ✅ Use LazyColumn for large lists (lazy item composition similar in concept to RecyclerView)
     LazyColumn {
         items(items) { item -> ItemRow(item) }
     }
@@ -290,28 +295,38 @@ fun ItemRow(item: Item) {
     }
     // ✅ remember: cache expensive objects by key
     val obj = remember(item.id) { createExpensiveObject(item) }
+
+    // use isExpensive and obj in the UI
 }
 ```
 
 ### How It Works Under the Hood
 
 **Three phases**:
-1. **Composition**: build UI tree from @Composable functions
-2. **Layout**: measure and position elements
-3. **Drawing**: render pixels to screen
+1. **Composition**: execute @Composable functions to build the UI tree and record it into the slot table.
+2. **Layout**: measure and position elements.
+3. **Drawing**: draw elements to the screen.
 
-**Slot Table**: gap buffer for efficiently tracking composable positions, state objects, remember values, group keys for recomposition.
+**Slot Table**: a compact indexed data structure that Compose uses to efficiently track composable groups, their state objects, `remember` values, and keys. This enables updating only the necessary parts of the tree during recomposition without rebuilding the entire UI.
 
 ### Summary
 
 Compose works by:
 - Declaring UI with @Composable functions
-- Building composition tree
-- Automatically observing state
-- Smart recomposition of only affected parts
-- Efficient layout and drawing
+- Building a composition tree
+- Automatically tracking and observing state usage
+- Performing smart recomposition of only affected parts
+- Running efficient layout and drawing phases
 
-**The magic** is in smart recomposition - Compose only re-executes functions that depend on changed state.
+The "magic" is in its recomposition model: only functions and groups that depend on changed state are re-executed, while others can be efficiently reused or skipped.
+
+## Дополнительные вопросы (RU)
+
+- Как Compose обрабатывает изменения конфигурации по сравнению с традиционной `View`-системой?
+- Каковы последствия глубокой вложенности composable-функций для производительности?
+- Как работает `remember` при смерти процесса и восстановлении состояния?
+- Когда следует использовать `derivedStateOf` вместо обычного состояния?
+- Как интероп между Compose и `View` влияет на производительность гибридных приложений?
 
 ## Follow-ups
 
@@ -321,11 +336,42 @@ Compose works by:
 - When should you use derivedStateOf vs regular state?
 - How does Compose interop affect performance in hybrid apps?
 
+## Ссылки (RU)
+
+- Официальная документация по Jetpack Compose
+- Руководство "Thinking in Compose"
+- Рекомендации по управлению состоянием в Compose
+
 ## References
 
 - Official Jetpack Compose documentation
 - Thinking in Compose guide
 - State management in Compose best practices
+
+## Связанные вопросы и материалы (RU)
+
+### Предварительные знания / Концепции
+
+- [[c-compose-state]]
+- [[c-jetpack-compose]]
+- [[c-mvvm]]
+
+### Предварительные требования
+
+- Базовые знания Kotlin (лямбды, делегаты)
+- Понимание основ `View`-системы Android
+
+### Связанные вопросы
+
+- [[q-cache-implementation-strategies--android--medium]]
+- [[q-how-does-the-main-thread-work--android--medium]]
+- [[q-how-does-activity-lifecycle-work--android--medium]]
+
+### Продвинутое
+
+- Продвинутая оптимизация производительности в Compose
+- Реализация кастомных layout-ов в Compose
+- Внутреннее устройство Compose Compiler и генерация кода
 
 ## Related Questions
 
@@ -335,18 +381,19 @@ Compose works by:
 - [[c-jetpack-compose]]
 - [[c-mvvm]]
 
-
 ### Prerequisites
+
 - Basic Kotlin knowledge with lambdas and delegates
-- Understanding of Android View system basics
+- Understanding of Android `View` system basics
 
 ### Related
+
 - [[q-cache-implementation-strategies--android--medium]]
 - [[q-how-does-the-main-thread-work--android--medium]]
 - [[q-how-does-activity-lifecycle-work--android--medium]]
 
 ### Advanced
+
 - Advanced Compose performance optimization techniques
 - Custom layout implementation in Compose
 - Compose compiler internals and code generation
-

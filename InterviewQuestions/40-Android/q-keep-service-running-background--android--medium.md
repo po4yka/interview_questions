@@ -22,7 +22,6 @@ moc: moc-android
 related:
 - c-coroutines
 - c-background-tasks
-- c-service
 - q-android-service-types--android--easy
 - q-foreground-service-types--android--medium
 - q-service-component--android--medium
@@ -37,15 +36,16 @@ tags:
 - foreground-service
 - jobscheduler
 - workmanager
+
 ---
 
 # Вопрос (RU)
 
-Что делать если нужно чтобы сервис продолжал работу в фоне?
+> Что делать если нужно чтобы сервис продолжал работу в фоне?
 
 # Question (EN)
 
-What to do if you need a service to continue running in the background?
+> What to do if you need a service to continue running in the background?
 
 ---
 
@@ -53,7 +53,7 @@ What to do if you need a service to continue running in the background?
 
 Для продолжения работы сервиса в фоне выберите правильный подход:
 
-### 1. Foreground Service (Высокий приоритет)
+### 1. Foreground `Service` (Высокий приоритет)
 
 **Когда использовать:**
 - Задача инициирована пользователем и срочна
@@ -63,20 +63,22 @@ What to do if you need a service to continue running in the background?
 
 **Ключевые характеристики:**
 - Требует постоянного уведомления (обязательно с Android 8.0+)
-- Высокий приоритет - система не убивает сервис
-- Должен вызвать `startForeground()` в течение 5 секунд
+- Высокий приоритет — сервис значительно менее вероятно будет убит системой, но это не абсолютная гарантия
+- Должен вызвать `startForeground()` в течение 5 секунд после запуска через `startForegroundService()`
 - Требует разрешения `FOREGROUND_SERVICE` в манифесте
 
 ```kotlin
 class DownloadService : Service() {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
     override fun onCreate() {
         super.onCreate()
-        // ✅ Must call startForeground within 5 seconds
+        // ✅ Must call startForeground within 5 seconds after startForegroundService()
         startForeground(NOTIFICATION_ID, createNotification())
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        CoroutineScope(Dispatchers.IO).launch {
+        scope.launch {
             try {
                 downloadLargeFile()
             } finally {
@@ -88,6 +90,11 @@ class DownloadService : Service() {
         return START_STICKY
     }
 
+    override fun onDestroy() {
+        scope.cancel()
+        super.onDestroy()
+    }
+
     override fun onBind(intent: Intent?): IBinder? = null
 }
 ```
@@ -96,9 +103,9 @@ class DownloadService : Service() {
 ```kotlin
 val intent = Intent(this, DownloadService::class.java)
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-    startForegroundService(intent) // ✅ API 26+
+    startForegroundService(intent) // ✅ API 26+: запуск foreground service
 } else {
-    startService(intent) // ❌ Deprecated for foreground on API 26+
+    startService(intent)
 }
 ```
 
@@ -107,7 +114,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 **Когда использовать:**
 - Задача может быть отложена
 - Задача должна пережить перезапуск приложения
-- Нужно гарантированное выполнение
+- Нужно максимально надежное выполнение (best-effort с учётом ограничений системы)
 - Важна оптимизация батареи
 
 **Примеры:** загрузка логов, периодическая синхронизация, резервное копирование при WiFi
@@ -117,11 +124,12 @@ class UploadWorker(context: Context, params: WorkerParameters) : CoroutineWorker
     override suspend fun doWork(): Result {
         return try {
             val fileUrl = inputData.getString("file_url") ?: return Result.failure()
-            setForeground(createForegroundInfo()) // ✅ For long-running work
+            // ✅ For long-running work that must run in a foreground context
+            setForeground(createForegroundInfo())
             uploadFile(fileUrl)
             Result.success()
         } catch (e: Exception) {
-            // ✅ Retry with exponential backoff
+            // ✅ Retry with exponential backoff (ограниченное число попыток)
             if (runAttemptCount < 3) Result.retry() else Result.failure()
         }
     }
@@ -163,7 +171,7 @@ class SyncJobService : JobService() {
                 performSync()
                 jobFinished(params, false) // ✅ false = don't reschedule
             } catch (e: Exception) {
-                jobFinished(params, true) // ✅ true = reschedule on failure
+                jobFinished(params, true) // ✅ true = reschedule on failure (subject to system policies)
             }
         }
         return true // Work is ongoing
@@ -171,20 +179,20 @@ class SyncJobService : JobService() {
 
     override fun onStopJob(params: JobParameters?): Boolean {
         job?.cancel()
-        return true // Reschedule
+        return true // Request reschedule; реальное поведение зависит от системы
     }
 }
 ```
 
 ### Сравнение Подходов
 
-| Критерий | Foreground Service | WorkManager | JobScheduler |
+| Критерий | Foreground `Service` | WorkManager | JobScheduler |
 |----------|-------------------|-------------|--------------|
-| **Уведомление пользователя** | Требуется | Опционально | Не требуется |
-| **Приоритет** | Высокий | Средний | Низкий |
+| **Уведомление пользователя** | Требуется | Опционально / требуется при foreground-работе | Не требуется |
+| **Приоритет** | Высокий (но не абсолютный) | Средний | Низкий |
 | **Время выполнения** | Немедленное | Отложенное | Отложенное |
-| **Constraints** | Нет | Сеть, батарея, хранилище | Сеть, зарядка, idle |
-| **Переживает перезагрузку** | Нет | Да | Да (если persisted) |
+| **Constraints** | Нет встроенных (решаются вручную) | Сеть, батарея, хранилище | Сеть, зарядка, idle |
+| **Переживает перезагрузку** | Нет (если явно не обработан BOOT_COMPLETED) | Да | Да (если persisted) |
 | **Случай использования** | Музыка, навигация | Фоновая синхронизация | Периодическая очистка |
 
 ### Лучшие Практики
@@ -194,7 +202,7 @@ class SyncJobService : JobService() {
 // ❌ BAD: Foreground service для периодической синхронизации
 class PeriodicSyncService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(1, notification) // Пользователь не должен это видеть!
+        startForeground(1, notification) // Пользователь не должен это видеть без веской причины
         syncData()
         return START_STICKY
     }
@@ -206,19 +214,21 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 ```
 
 **2. Учитывайте различия версий Android:**
-- Android 12+ имеет ограничения на запуск foreground service из фона
-- Android 8+ требует `startForegroundService()` вместо `startService()`
-- Android 14+ требует `foregroundServiceType` в манифесте
+- Android 12+ имеет дополнительные ограничения на запуск foreground service из фона
+- Android 8+ требует `startForegroundService()` для запуска foreground service
+- Android 14+ требует `foregroundServiceType` в манифесте для соответствующих сценариев
 
 **3. Всегда останавливайте сервисы:**
 ```kotlin
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-    CoroutineScope(Dispatchers.IO).launch {
+    val scope = CoroutineScope(Dispatchers.IO)
+    scope.launch {
         try {
             performTask()
         } finally {
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf() // ✅ Always stop when done
+            scope.cancel()
         }
     }
     return START_NOT_STICKY
@@ -241,7 +251,7 @@ override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
 
 To keep a service running in the background, choose the right approach:
 
-### 1. Foreground Service (High Priority)
+### 1. Foreground `Service` (High Priority)
 
 **When to use:**
 - Task is user-initiated and time-sensitive
@@ -250,21 +260,23 @@ To keep a service running in the background, choose the right approach:
 - You can show a persistent notification
 
 **Key characteristics:**
-- Requires persistent notification (mandatory on Android 8.0+)
-- High priority - system won't kill the service
-- Must call `startForeground()` within 5 seconds
+- Requires a persistent notification (mandatory on Android 8.0+)
+- High priority — much less likely to be killed by the system, but not guaranteed to run forever
+- Must call `startForeground()` within 5 seconds after starting via `startForegroundService()`
 - Requires `FOREGROUND_SERVICE` permission in manifest
 
 ```kotlin
 class DownloadService : Service() {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
     override fun onCreate() {
         super.onCreate()
-        // ✅ Must call startForeground within 5 seconds
+        // ✅ Must call startForeground within 5 seconds after startForegroundService()
         startForeground(NOTIFICATION_ID, createNotification())
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        CoroutineScope(Dispatchers.IO).launch {
+        scope.launch {
             try {
                 downloadLargeFile()
             } finally {
@@ -276,6 +288,11 @@ class DownloadService : Service() {
         return START_STICKY
     }
 
+    override fun onDestroy() {
+        scope.cancel()
+        super.onDestroy()
+    }
+
     override fun onBind(intent: Intent?): IBinder? = null
 }
 ```
@@ -284,9 +301,9 @@ class DownloadService : Service() {
 ```kotlin
 val intent = Intent(this, DownloadService::class.java)
 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-    startForegroundService(intent) // ✅ API 26+
+    startForegroundService(intent) // ✅ API 26+: proper way to start a foreground service
 } else {
-    startService(intent) // ❌ Deprecated for foreground on API 26+
+    startService(intent)
 }
 ```
 
@@ -295,7 +312,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 **When to use:**
 - Task is deferrable
 - Task should survive app restarts
-- You need guaranteed execution
+- You need highly reliable, best-effort execution under system constraints
 - Battery optimization is important
 
 **Examples:** log uploads, periodic sync, WiFi-based photo backup
@@ -305,11 +322,12 @@ class UploadWorker(context: Context, params: WorkerParameters) : CoroutineWorker
     override suspend fun doWork(): Result {
         return try {
             val fileUrl = inputData.getString("file_url") ?: return Result.failure()
-            setForeground(createForegroundInfo()) // ✅ For long-running work
+            // ✅ For long-running work that must run in a foreground context
+            setForeground(createForegroundInfo())
             uploadFile(fileUrl)
             Result.success()
         } catch (e: Exception) {
-            // ✅ Retry with exponential backoff
+            // ✅ Retry with exponential backoff (limited attempts)
             if (runAttemptCount < 3) Result.retry() else Result.failure()
         }
     }
@@ -351,7 +369,7 @@ class SyncJobService : JobService() {
                 performSync()
                 jobFinished(params, false) // ✅ false = don't reschedule
             } catch (e: Exception) {
-                jobFinished(params, true) // ✅ true = reschedule on failure
+                jobFinished(params, true) // ✅ true = ask to reschedule (subject to system policies)
             }
         }
         return true // Work is ongoing
@@ -359,20 +377,20 @@ class SyncJobService : JobService() {
 
     override fun onStopJob(params: JobParameters?): Boolean {
         job?.cancel()
-        return true // Reschedule
+        return true // Request reschedule; actual behavior depends on the system
     }
 }
 ```
 
 ### Comparison
 
-| Criteria | Foreground Service | WorkManager | JobScheduler |
+| Criteria | Foreground `Service` | WorkManager | JobScheduler |
 |----------|-------------------|-------------|--------------|
-| **User notification** | Required | Optional | Not required |
-| **Priority** | High | Medium | Low |
+| **User notification** | Required | Optional / required for foreground work | Not required |
+| **Priority** | High (but not absolute) | Medium | Low |
 | **Execution timing** | Immediate | Deferred | Deferred |
-| **Constraints** | None | Network, battery, storage | Network, charging, idle |
-| **Survives reboot** | No | Yes | Yes (if persisted) |
+| **Constraints** | None built-in (handled manually) | Network, battery, storage | Network, charging, idle |
+| **Survives reboot** | No (unless BOOT_COMPLETED is handled) | Yes | Yes (if persisted) |
 | **Use case** | Music, navigation | Background sync | Periodic cleanup |
 
 ### Best Practices
@@ -382,7 +400,7 @@ class SyncJobService : JobService() {
 // ❌ BAD: Foreground service for periodic sync
 class PeriodicSyncService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        startForeground(1, notification) // User doesn't need to see this!
+        startForeground(1, notification) // User shouldn't see this without a strong reason
         syncData()
         return START_STICKY
     }
@@ -394,19 +412,21 @@ WorkManager.getInstance(context).enqueue(syncRequest)
 ```
 
 **2. Handle Android version differences:**
-- Android 12+ has restrictions on foreground service starts from background
-- Android 8+ requires `startForegroundService()` instead of `startService()`
-- Android 14+ requires `foregroundServiceType` in manifest
+- Android 12+ has additional restrictions on starting foreground services from the background
+- Android 8+ requires `startForegroundService()` to start a foreground service
+- Android 14+ requires `foregroundServiceType` in manifest for relevant use cases
 
 **3. Always stop services:**
 ```kotlin
 override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-    CoroutineScope(Dispatchers.IO).launch {
+    val scope = CoroutineScope(Dispatchers.IO)
+    scope.launch {
         try {
             performTask()
         } finally {
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf() // ✅ Always stop when done
+            scope.cancel()
         }
     }
     return START_NOT_STICKY
@@ -446,16 +466,15 @@ Is task user-initiated and time-sensitive?
 
 - [[c-coroutines]]
 - [[c-background-tasks]]
-- [[c-service]]
 
 
 ### Prerequisites (Easier)
 - [[q-android-service-types--android--easy]] - Types of Android services
 
 ### Related (Same Level)
-- [[q-service-component--android--medium]] - Service component lifecycle
+- [[q-service-component--android--medium]] - `Service` component lifecycle
 - [[q-foreground-service-types--android--medium]] - Foreground service types
-- [[q-when-can-the-system-restart-a-service--android--medium]] - Service restart behavior
+- [[q-when-can-the-system-restart-a-service--android--medium]] - `Service` restart behavior
 - [[q-background-vs-foreground-service--android--medium]] - Comparing service types
 
 ### Advanced (Harder)

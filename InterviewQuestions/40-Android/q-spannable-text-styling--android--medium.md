@@ -14,7 +14,7 @@ original_language: en
 language_tags:
 - en
 - ru
-status: draft
+status: ready
 created: 2025-10-13
 updated: 2025-10-28
 sources: []
@@ -34,23 +34,23 @@ related:
 
 # Вопрос (RU)
 
-Что такое Spannable и как его использовать для стилизации текста?
+> Что такое Spannable и как его использовать для стилизации текста?
 
 # Question (EN)
 
-What is Spannable and how do you use it for text styling?
+> What is Spannable and how do you use it for text styling?
 
 ## Ответ (RU)
 
-**Spannable** — интерфейс для текста, к которому можно прикреплять объекты разметки во время выполнения. Используется для динамической стилизации части текста или целых абзацев.
+**Spannable** — интерфейс для текста, к которому можно прикреплять объекты разметки (spans) во время выполнения. Используется для динамической стилизации части текста или целых абзацев.
 
 ### Основные Классы
 
 | Класс | Текст | Разметка | Использование |
 |-------|-------|----------|---------------|
-| **SpannedString** | Неизменяемый | Неизменяемая | Чтение |
-| **SpannableString** | Неизменяемый | Изменяемая | <10 spans |
-| **SpannableStringBuilder** | Изменяемый | Изменяемая | >10 spans |
+| **SpannedString** | Неизменяемый | Неизменяемая | Только чтение, заранее подготовленный текст со spans |
+| **SpannableString** | Неизменяемый | Изменяемая | Небольшое количество spans, когда текст не меняется |
+| **SpannableStringBuilder** | Изменяемый | Изменяемая | Частые изменения текста/диапазонов, сложная разметка |
 
 ### Базовый Пример
 
@@ -66,14 +66,14 @@ textView.text = text
 
 ### Флаги Span
 
-- `SPAN_EXCLUSIVE_EXCLUSIVE` — не включать вставленный текст
-- `SPAN_INCLUSIVE_EXCLUSIVE` — включать текст в начале
-- `SPAN_EXCLUSIVE_INCLUSIVE` — включать текст в конце
-- `SPAN_INCLUSIVE_INCLUSIVE` — включать текст с обеих сторон
+- `SPAN_EXCLUSIVE_EXCLUSIVE` — не включать текст, вставленный на границах
+- `SPAN_INCLUSIVE_EXCLUSIVE` — включать текст, вставленный в начале диапазона
+- `SPAN_EXCLUSIVE_INCLUSIVE` — включать текст, вставленный в конце диапазона
+- `SPAN_INCLUSIVE_INCLUSIVE` — включать текст, вставленный на обеих границах
 
 ### Категории Spans
 
-**1. Appearance spans** (изменяют внешний вид без перерасчёта layout):
+**1. Appearance spans** (изменяют внешний вид без изменения метрик шрифта, обычно без полного перерасчёта layout):
 
 ```kotlin
 ForegroundColorSpan(Color.RED)        // Цвет текста
@@ -83,21 +83,21 @@ UnderlineSpan()                       // Подчёркивание
 StrikethroughSpan()                   // Зачёркивание
 ```
 
-**2. Metric spans** (требуют перерасчёта layout):
+**2. Metric spans** (влияют на метрики/размеры, требуют перерасчёта layout):
 
 ```kotlin
 RelativeSizeSpan(1.5f)                // Относительный размер
-AbsoluteSizeSpan(24, true)            // ✅ true = sp
+AbsoluteSizeSpan(24, true)            // ✅ true = размер в sp
 ScaleXSpan(2.0f)                      // Масштабирование по X
-TypefaceSpan("monospace")             // Моноширинный шрифт
+TypefaceSpan("monospace")             // Моноширинный шрифт (для новых API предпочтителен TypefaceSpan(typeface))
 ```
 
-**3. Paragraph spans** (применяются к целым абзацам):
+**3. Paragraph spans** (применяются к целым абзацам, диапазону до символа перевода строки):
 
 ```kotlin
 QuoteSpan(Color.BLUE)                 // Вертикальная линия цитаты
-BulletSpan(20, Color.RED)             // Маркер списка
-AlignmentSpan.Standard(ALIGN_CENTER)  // Выравнивание
+BulletSpan(20, Color.RED)            // Маркер списка
+AlignmentSpan.Standard(ALIGN_CENTER)  // Выравнивание абзаца
 ```
 
 ### Кликабельные Spans
@@ -116,7 +116,7 @@ val clickable = object : ClickableSpan() {
 }
 
 spannable.setSpan(clickable, 0, 5, SPAN_EXCLUSIVE_EXCLUSIVE)
-textView.movementMethod = LinkMovementMethod.getInstance()  // ✅ Обязательно
+textView.movementMethod = LinkMovementMethod.getInstance()  // ✅ Обязательно для обработки кликов
 ```
 
 ### Extension-функции
@@ -141,23 +141,23 @@ val styled = SpannableStringBuilder()
 
 ### Производительность
 
-1. **SpannableString** для статического текста — быстрее чем Builder
-2. **SpannableStringBuilder** для динамического текста — эффективнее для множественных изменений
-3. **Кэшировать** стилизованный текст в RecyclerView
-4. **Избегать** избыточных spans — каждый добавляет overhead
-5. **Переиспользовать** spans когда возможно
+1. **SpannableString** — хороший выбор для статического текста: текст неизменяем, можно добавить spans один раз.
+2. **SpannableStringBuilder** — предпочтителен для динамического текста и множественных изменений.
+3. **Кэшировать** стилизованный текст в RecyclerView.
+4. **Избегать** избыточных spans — каждый добавляет overhead при layout/отрисовке.
+5. **Осторожно переиспользовать** spans: безопасно для простых, stateless spans (например, цвет/стиль), но не для spans с внутренним состоянием, зависящим от диапазона или view.
 
 ## Answer (EN)
 
-**Spannable** is an interface for text to which markup objects can be attached at runtime. Used for dynamic styling of text portions or entire paragraphs.
+**Spannable** is an interface for text to which markup objects (spans) can be attached at runtime. It is used for dynamic styling of text portions or entire paragraphs.
 
 ### Core Classes
 
 | Class | Text | Markup | Use Case |
 |-------|------|--------|----------|
-| **SpannedString** | Immutable | Immutable | Reading |
-| **SpannableString** | Immutable | Mutable | <10 spans |
-| **SpannableStringBuilder** | Mutable | Mutable | >10 spans |
+| **SpannedString** | Immutable | Immutable | Read-only, prebuilt text with spans |
+| **SpannableString** | Immutable | Mutable | Small number of spans when text itself does not change |
+| **SpannableStringBuilder** | Mutable | Mutable | Frequent edits / complex styling with many spans |
 
 ### Basic Example
 
@@ -173,14 +173,14 @@ textView.text = text
 
 ### Span Flags
 
-- `SPAN_EXCLUSIVE_EXCLUSIVE` — don't include inserted text
-- `SPAN_INCLUSIVE_EXCLUSIVE` — include text inserted at start
-- `SPAN_EXCLUSIVE_INCLUSIVE` — include text inserted at end
-- `SPAN_INCLUSIVE_INCLUSIVE` — include text at both start and end
+- `SPAN_EXCLUSIVE_EXCLUSIVE` — do not include text inserted at the span boundaries
+- `SPAN_INCLUSIVE_EXCLUSIVE` — include text inserted at the start boundary
+- `SPAN_EXCLUSIVE_INCLUSIVE` — include text inserted at the end boundary
+- `SPAN_INCLUSIVE_INCLUSIVE` — include text inserted at both boundaries
 
 ### Span Categories
 
-**1. Appearance spans** (change appearance without layout recalculation):
+**1. Appearance spans** (change visual appearance without changing font metrics; usually do not require a full layout remeasure):
 
 ```kotlin
 ForegroundColorSpan(Color.RED)        // Text color
@@ -190,21 +190,21 @@ UnderlineSpan()                       // Underline
 StrikethroughSpan()                   // Strikethrough
 ```
 
-**2. Metric spans** (require layout recalculation):
+**2. Metric spans** (affect font metrics/size; require layout recalculation):
 
 ```kotlin
 RelativeSizeSpan(1.5f)                // Relative size
-AbsoluteSizeSpan(24, true)            // ✅ true = sp
+AbsoluteSizeSpan(24, true)            // ✅ true = size in sp
 ScaleXSpan(2.0f)                      // X-axis scaling
-TypefaceSpan("monospace")             // Monospace font
+TypefaceSpan("monospace")             // Monospace font (for newer APIs, prefer TypefaceSpan(typeface))
 ```
 
-**3. Paragraph spans** (apply to entire paragraphs):
+**3. Paragraph spans** (apply to entire paragraphs, i.e., up to newline):
 
 ```kotlin
 QuoteSpan(Color.BLUE)                 // Quote vertical line
-BulletSpan(20, Color.RED)             // Bullet point
-AlignmentSpan.Standard(ALIGN_CENTER)  // Alignment
+BulletSpan(20, Color.RED)            // Bullet point
+AlignmentSpan.Standard(ALIGN_CENTER)  // Paragraph alignment
 ```
 
 ### Clickable Spans
@@ -223,7 +223,7 @@ val clickable = object : ClickableSpan() {
 }
 
 spannable.setSpan(clickable, 0, 5, SPAN_EXCLUSIVE_EXCLUSIVE)
-textView.movementMethod = LinkMovementMethod.getInstance()  // ✅ Required
+textView.movementMethod = LinkMovementMethod.getInstance()  // ✅ Required for click handling
 ```
 
 ### Extension Functions
@@ -248,11 +248,19 @@ val styled = SpannableStringBuilder()
 
 ### Performance Considerations
 
-1. **SpannableString** for static text — faster than Builder
-2. **SpannableStringBuilder** for dynamic text — efficient for multiple modifications
-3. **Cache** styled text in RecyclerView
-4. **Avoid** excessive spans — each adds overhead
-5. **Reuse** spans when possible
+1. **SpannableString** is a good fit for static text: text is immutable; you set spans once.
+2. **SpannableStringBuilder** is better for dynamic text and multiple modifications.
+3. **Cache** styled text in RecyclerView.
+4. **Avoid** excessive spans — each adds overhead during layout/draw.
+5. **Reuse spans carefully**: safe for simple stateless spans (e.g., color/style), but avoid reusing spans that hold internal state or depend on a specific range/view.
+
+## Дополнительные вопросы (RU)
+
+- В чем отличие пользовательских (custom) spans от стандартных spans из фреймворка?
+- Как использование большого количества spans влияет на производительность в RecyclerView?
+- Когда следует использовать `SpannableStringBuilder` вместо `SpannableString`?
+- Как абзацные spans обрабатывают текст, который не заканчивается символом новой строки?
+- Каковы плюсы и минусы использования `Spannable` по сравнению с `Html.fromHtml()`?
 
 ## Follow-ups
 
@@ -262,18 +270,45 @@ val styled = SpannableStringBuilder()
 - How do paragraph spans handle text that doesn't end with newline?
 - What are the trade-offs between Spannable vs HTML.fromHtml()?
 
+## Ссылки (RU)
+
+- [Документация Android Spannable](https://developer.android.com/reference/android/text/Spannable)
+- [Spantastic Text Styling with Spans](https://medium.com/androiddevelopers/spantastic-text-styling-with-spans-17b0c16b4568)
+- [Руководство по Text Spans](https://developer.android.com/guide/topics/text/spans)
+
 ## References
 
 - [Android Spannable Documentation](https://developer.android.com/reference/android/text/Spannable)
 - [Spantastic Text Styling with Spans](https://medium.com/androiddevelopers/spantastic-text-styling-with-spans-17b0c16b4568)
 - [Text Spans Guide](https://developer.android.com/guide/topics/text/spans)
 
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-android-components]]
+
+### Предпосылки (проще)
+
+- [[q-view-fundamentals--android--easy]]
+- [[q-how-to-break-text-by-screen-width--android--easy]]
+
+### Связанные (такой же уровень)
+
+- [[q-custom-view-attributes--android--medium]]
+- [[q-accessibility-text-scaling--android--medium]]
+- [[q-view-methods-and-their-purpose--android--medium]]
+
+### Продвинутые (сложнее)
+
+- [[q-custom-viewgroup-layout--android--hard]]
+- [[q-which-class-to-use-for-rendering-view-in-background-thread--android--hard]]
+
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-android-components]]
-
 
 ### Prerequisites (Easier)
 - [[q-view-fundamentals--android--easy]]

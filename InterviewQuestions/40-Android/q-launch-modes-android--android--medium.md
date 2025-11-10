@@ -12,10 +12,6 @@ question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- android/activity
-- android/navigation
-- android/task-management
-- difficulty/medium
 - en
 - ru
 source: https://github.com/Kirchhoff-Android-Interview-Questions
@@ -30,230 +26,224 @@ related:
 - q-viewmodel-vs-onsavedinstancestate--android--medium
 - q-which-event-is-triggered-when-user-presses-screen--android--medium
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-11-10
 tags:
 - android/activity
 - android/ui-navigation
 - difficulty/medium
 - en
 - ru
+
 ---
 
-# Question (EN)
-> What launch modes do you know?
 # Вопрос (RU)
 > Какие режимы запуска (launch modes) вы знаете?
 
----
-
-## Answer (EN)
-
-When declaring an activity in your manifest file, you can specify how the activity should associate with a task. There are two ways to define the launch modes. First way is using **Android Manifest file**, and second way is using **Intent Flags**.
-
-There are five different launch modes you can assign to the `launchMode` attribute:
-
-- `standard`
-- `singleTop`
-- `singleTask`
-- `singleInstance`
-- `singleInstancePerTask`
-
-### Standard (the Default mode)
-
-Default. The system creates a new instance of the activity in the task from which it was started and routes the intent to it. The activity can be instantiated multiple times, each instance can belong to different tasks, and one task can have multiple instances.
-
-**Example:**
-Suppose you have *A*, *B*, *C* and *D* activities and your activity *B* has `<activity android:launchMode="standard" />`. Now you again launching activity *B*:
-
-State of Activity Stack before launch *B*:
-*A* -> *B* -> *C* -> *D*
-
-State of Activity Stack after launch *B*:
-*A* -> *B* -> *C* -> *D* -> *B*
-
-### singleTop
-
-If an instance of the activity already exists at the top of the current task, the system routes the intent to that instance through a call to its `onNewIntent()` method, rather than creating a new instance of the activity. The activity can be instantiated multiple times, each instance can belong to different tasks, and one task can have multiple instances (but only if the activity at the top of the back stack is not an existing instance of the activity).
-
-**Scenario 1:** The `Activity` exists and it's sitting on the top of the back stack (Assume that's current activity as well). For example, the **Activity C** exists, and it's on the top of the back stack. The user wants to go to the same activity again. The Android system will not create new instance of the **Activity C**, instead it will use the existing **Activity C** that's sitting on the top of the **back stack**. Hence, the **back stack** remains intact.
-
-**Scenario 2:** The `Activity` exists, and but it's not on the top of the **back stack**. For example, **Activity C** exists, and it's not on the top of the stack. The user wants to go to the **Activity C** from **Activity B**. Android system will create a new instance of the **Activity C**, even though **Activity C** already exists in the back stack, but it's not on the top of the back stack. Hence, the back stack is modified by adding new instance of the **Activity C**.
-
-**Note:** When a new instance of an activity is created, the user can press or gesture Back to return to the previous activity. But when an existing instance of an activity handles a new intent, the user cannot press or gesture Back to return to the state of the activity before the new intent arrived in `onNewIntent()`.
-
-### singleTask
-
-The system creates the activity at the root of a new task or locates the activity on an existing task with the same affinity. If an instance of the activity already exists and is at the root of the task, the system routes the intent to existing instance through a call to its `onNewIntent()` method, rather than creating a new instance. Meanwhile all of the other activities on top of it are destroyed.
-
-**Scenario 1:** The activity does not exist, and hence the new activity with its own **task** and **back stack** will be initiated. The Activity will be the root of the **new task**. For example, we want to open **Activity C** from **Activity B**, but it does not exist in the **back stack** or separate **task**. So **new task/back stack** will be created with root activity as **Activity C**.
-
-From this new **back stack** the **Activity C** can launch other activities. For example, from **Activity C** if the user wants to see **Activity D** which has a default launch mode, it can launch itself.
-
-If the user presses the back button, **Activity D** will be popped off from the **back stack** of **new task**, hence **Activity C** will be visible. So regardless of task, back button will always take the user to previous activity.
-
-**Scenario 2:** The user wants to launch an activity which has a `singleTask` mode, and already exists with its **task** and **back stack**. For example, referring to the previous scenario where the **Activity C** exists with newly created **task** and **back stack**. Let's say the user wants to go to the **Activity C** from **Activity A**, the android system will not create a new instance of the **Activity C** along with the **task/back stack**. Instead, it just routes it to the **Activity C**, and what ever activities that was sitting on the top of the root activity will be popped off.
-
-**Scenario 3:** The `Activity` exists, and it's not on a separate **task/back stack**, but its on the current **back stack**. Let's say we have 4 Activities in our stack respectively **Activity A**, **Activity B**, **Activity C**, and **Activity D**. Let's say that the user wants to go to **Activity A** from **Activity D**, since the **Activity A** has mode of `singleTask`, and it is exists in the root of the **back stack**. So no need to create new **task/back stack**, what would happen in this case is that the system will pop off every activity that's sitting top of **Activity A** until it becomes top of the **back stack**. Hence, the **Activity A** is being reused instead of creating new one.
-
-**Note:** Although the activity starts in a new task, the Back button and gesture still return the user to the previous activity.
-
-### singleInstance
-
-Same as `singleTask`, except that the system doesn't launch any other activities into the task holding the instance. The activity is always the single and only member of its task; any activities started by this one open in a separate task. So only that instance of the activity exists in the **task/back stack**.
-
-For example, like the previous example we have launched the **Activity C** from the **Activity B** but in this case the **Activity C** has a mode of `singleInstance`. After creating new a **task** and **back stack** which has **Activity C**, lets say we want to launch the **Activity D** which has a default mode, the **Activity D** will be launched pushed into the old task or separate task not the newly created task by the **Activity C**.
-
-### singleInstancePerTask
-
-The activity can only be running as the root activity of the task, the first activity that created the task, and therefore there will only be one instance of this activity in a task. In contrast to the `singleTask` launch mode, this activity can be started in multiple instances in different tasks if the `FLAG_ACTIVITY_MULTIPLE_TASK` or `FLAG_ACTIVITY_NEW_DOCUMENT` flag is set.
-
-**Note:** `singleTask` and `singleInstancePerTask` will remove all activities which are above the starting activity from the **task**. For example, suppose a task consists of root activity *A* with activities *B*, *C* (the task is *A* -> *B* -> *C*; *C* is on top). An intent arrives for an activity of type *A*. If A's launch mode is `singleTask` or `singleInstancePerTask`, the existing instance of *A* receives the intent through `onNewIntent()`. *B* and *C* are finished, and the task is now *A*.
-
-
 # Question (EN)
 > What launch modes do you know?
-# Вопрос (RU)
-> Какие режимы запуска (launch modes) вы знаете?
 
 ---
-
-
----
-
-
-## Answer (EN)
-
-When declaring an activity in your manifest file, you can specify how the activity should associate with a task. There are two ways to define the launch modes. First way is using **Android Manifest file**, and second way is using **Intent Flags**.
-
-There are five different launch modes you can assign to the `launchMode` attribute:
-
-- `standard`
-- `singleTop`
-- `singleTask`
-- `singleInstance`
-- `singleInstancePerTask`
-
-### Standard (the Default mode)
-
-Default. The system creates a new instance of the activity in the task from which it was started and routes the intent to it. The activity can be instantiated multiple times, each instance can belong to different tasks, and one task can have multiple instances.
-
-**Example:**
-Suppose you have *A*, *B*, *C* and *D* activities and your activity *B* has `<activity android:launchMode="standard" />`. Now you again launching activity *B*:
-
-State of Activity Stack before launch *B*:
-*A* -> *B* -> *C* -> *D*
-
-State of Activity Stack after launch *B*:
-*A* -> *B* -> *C* -> *D* -> *B*
-
-### singleTop
-
-If an instance of the activity already exists at the top of the current task, the system routes the intent to that instance through a call to its `onNewIntent()` method, rather than creating a new instance of the activity. The activity can be instantiated multiple times, each instance can belong to different tasks, and one task can have multiple instances (but only if the activity at the top of the back stack is not an existing instance of the activity).
-
-**Scenario 1:** The `Activity` exists and it's sitting on the top of the back stack (Assume that's current activity as well). For example, the **Activity C** exists, and it's on the top of the back stack. The user wants to go to the same activity again. The Android system will not create new instance of the **Activity C**, instead it will use the existing **Activity C** that's sitting on the top of the **back stack**. Hence, the **back stack** remains intact.
-
-**Scenario 2:** The `Activity` exists, and but it's not on the top of the **back stack**. For example, **Activity C** exists, and it's not on the top of the stack. The user wants to go to the **Activity C** from **Activity B**. Android system will create a new instance of the **Activity C**, even though **Activity C** already exists in the back stack, but it's not on the top of the back stack. Hence, the back stack is modified by adding new instance of the **Activity C**.
-
-**Note:** When a new instance of an activity is created, the user can press or gesture Back to return to the previous activity. But when an existing instance of an activity handles a new intent, the user cannot press or gesture Back to return to the state of the activity before the new intent arrived in `onNewIntent()`.
-
-### singleTask
-
-The system creates the activity at the root of a new task or locates the activity on an existing task with the same affinity. If an instance of the activity already exists and is at the root of the task, the system routes the intent to existing instance through a call to its `onNewIntent()` method, rather than creating a new instance. Meanwhile all of the other activities on top of it are destroyed.
-
-**Scenario 1:** The activity does not exist, and hence the new activity with its own **task** and **back stack** will be initiated. The Activity will be the root of the **new task**. For example, we want to open **Activity C** from **Activity B**, but it does not exist in the **back stack** or separate **task**. So **new task/back stack** will be created with root activity as **Activity C**.
-
-From this new **back stack** the **Activity C** can launch other activities. For example, from **Activity C** if the user wants to see **Activity D** which has a default launch mode, it can launch itself.
-
-If the user presses the back button, **Activity D** will be popped off from the **back stack** of **new task**, hence **Activity C** will be visible. So regardless of task, back button will always take the user to previous activity.
-
-**Scenario 2:** The user wants to launch an activity which has a `singleTask` mode, and already exists with its **task** and **back stack**. For example, referring to the previous scenario where the **Activity C** exists with newly created **task** and **back stack**. Let's say the user wants to go to the **Activity C** from **Activity A**, the android system will not create a new instance of the **Activity C** along with the **task/back stack**. Instead, it just routes it to the **Activity C**, and what ever activities that was sitting on the top of the root activity will be popped off.
-
-**Scenario 3:** The `Activity` exists, and it's not on a separate **task/back stack**, but its on the current **back stack**. Let's say we have 4 Activities in our stack respectively **Activity A**, **Activity B**, **Activity C**, and **Activity D**. Let's say that the user wants to go to **Activity A** from **Activity D**, since the **Activity A** has mode of `singleTask`, and it is exists in the root of the **back stack**. So no need to create new **task/back stack**, what would happen in this case is that the system will pop off every activity that's sitting top of **Activity A** until it becomes top of the **back stack**. Hence, the **Activity A** is being reused instead of creating new one.
-
-**Note:** Although the activity starts in a new task, the Back button and gesture still return the user to the previous activity.
-
-### singleInstance
-
-Same as `singleTask`, except that the system doesn't launch any other activities into the task holding the instance. The activity is always the single and only member of its task; any activities started by this one open in a separate task. So only that instance of the activity exists in the **task/back stack**.
-
-For example, like the previous example we have launched the **Activity C** from the **Activity B** but in this case the **Activity C** has a mode of `singleInstance`. After creating new a **task** and **back stack** which has **Activity C**, lets say we want to launch the **Activity D** which has a default mode, the **Activity D** will be launched pushed into the old task or separate task not the newly created task by the **Activity C**.
-
-### singleInstancePerTask
-
-The activity can only be running as the root activity of the task, the first activity that created the task, and therefore there will only be one instance of this activity in a task. In contrast to the `singleTask` launch mode, this activity can be started in multiple instances in different tasks if the `FLAG_ACTIVITY_MULTIPLE_TASK` or `FLAG_ACTIVITY_NEW_DOCUMENT` flag is set.
-
-**Note:** `singleTask` and `singleInstancePerTask` will remove all activities which are above the starting activity from the **task**. For example, suppose a task consists of root activity *A* with activities *B*, *C* (the task is *A* -> *B* -> *C*; *C* is on top). An intent arrives for an activity of type *A*. If A's launch mode is `singleTask` or `singleInstancePerTask`, the existing instance of *A* receives the intent through `onNewIntent()`. *B* and *C* are finished, and the task is now *A*.
 
 ## Ответ (RU)
 
-При объявлении активити в файле манифеста вы можете указать, как активити должна ассоциироваться с задачей (task). Существует два способа определения режимов запуска. Первый способ - использование **файла Android Manifest**, второй способ - использование **флагов Intent**.
+При объявлении `Activity` в файле манифеста вы можете указать, как `Activity` должна ассоциироваться с задачей (task). Есть два основных способа влиять на поведение запуска:
+- через атрибут `android:launchMode` в AndroidManifest
+- через флаги `Intent`
 
-Существует пять различных режимов запуска, которые вы можете назначить атрибуту `launchMode`:
+Существует четыре стандартных режима запуска, которые можно явно указать в атрибуте `launchMode`:
 
 - `standard`
 - `singleTop`
 - `singleTask`
 - `singleInstance`
-- `singleInstancePerTask`
 
-### Standard (режим По умолчанию)
+Начиная с Android 5.0, документ-ориентированный режим (`FLAG_ACTIVITY_NEW_DOCUMENT` и `FLAG_ACTIVITY_MULTIPLE_TASK`) вводит поведение `singleInstancePerTask` для отдельных `Activity`, но это не отдельное значение атрибута `android:launchMode`.
 
-Режим по умолчанию. Система создает новый экземпляр активити в задаче, из которой она была запущена, и направляет туда интент. Активити может быть создана несколько раз, каждый экземпляр может принадлежать разным задачам, и одна задача может иметь несколько экземпляров.
+### standard (режим по умолчанию)
 
-**Пример:**
-Предположим, у вас есть активити *A*, *B*, *C* и *D*, и ваша активити *B* имеет `<activity android:launchMode="standard" />`. Теперь вы снова запускаете активити *B*:
+Режим по умолчанию. Система создает новый экземпляр `Activity` в задаче, из которой она была запущена, и направляет в него `Intent`. `Activity` может быть создана несколько раз; каждый экземпляр может принадлежать разным задачам, и одна задача может содержать несколько экземпляров.
 
-Состояние стека активити до запуска *B*:
-*A* -> *B* -> *C* -> *D*
+Пример:
+- Активити: A, B, C, D
+- B объявлена как `<activity android:launchMode="standard" />`
 
-Состояние стека активити после запуска *B*:
-*A* -> *B* -> *C* -> *D* -> *B*
+Состояние стека до повторного запуска B:
+A -> B -> C -> D
+
+Состояние стека после повторного запуска B:
+A -> B -> C -> D -> B
 
 ### singleTop
 
-Если экземпляр активити уже существует в верхней части текущей задачи, система направляет интент в этот экземпляр через вызов метода `onNewIntent()`, вместо создания нового экземпляра активити. Активити может быть создана несколько раз, каждый экземпляр может принадлежать разным задачам, и одна задача может иметь несколько экземпляров (но только если активити в верхней части стека возврата не является существующим экземпляром активити).
+Если экземпляр `Activity` уже существует в верхней части стека текущей задачи, система направляет `Intent` в этот экземпляр через вызов `onNewIntent()`, вместо создания нового экземпляра. В целом может существовать несколько экземпляров такой `Activity`: в разных задачах или в одной задаче (если при запуске ни один существующий экземпляр не находится на вершине стека).
 
-**Сценарий 1:** `Activity` существует и находится в верхней части стека возврата (предположим, что это также текущая активити). Например, **Activity C** существует и находится в верхней части стека возврата. Пользователь хочет снова перейти к той же активити. Система Android не создаст новый экземпляр **Activity C**, вместо этого она будет использовать существующую **Activity C**, которая находится в верхней части **стека возврата**. Таким образом, **стек возврата** остается неизменным.
+Сценарий 1:
+- `Activity` C находится на вершине стека.
+- Вы снова запускаете C.
+- Новый экземпляр не создается; существующая C получает `onNewIntent()`.
+- Стек остается без изменений.
 
-**Сценарий 2:** `Activity` существует, но не находится в верхней части **стека возврата**. Например, **Activity C** существует и не находится в верхней части стека. Пользователь хочет перейти к **Activity C** из **Activity B**. Система Android создаст новый экземпляр **Activity C**, даже если **Activity C** уже существует в стеке возврата, но не находится в его верхней части. Таким образом, стек возврата изменяется путем добавления нового экземпляра **Activity C**.
+Сценарий 2:
+- Стек: A -> C -> B (B сверху).
+- Из B запускаем C.
+- Так как C не на вершине, создается новый экземпляр C.
+- Новый стек: A -> C -> B -> C.
 
-**Примечание:** Когда создается новый экземпляр активити, пользователь может нажать кнопку "Назад" или использовать жест для возврата к предыдущей активити. Но когда существующий экземпляр активити обрабатывает новый интент, пользователь не может нажать кнопку "Назад" или использовать жест для возврата к состоянию активити до прибытия нового интента в `onNewIntent()`.
+Примечание: Если создается новый экземпляр `Activity`, пользователь может с помощью "Назад" вернуться к предыдущей `Activity`. Если же существующий экземпляр обрабатывает новый `Intent` через `onNewIntent()`, его предыдущее состояние перезаписывается, и по "Назад" вернуться к состоянию до прихода нового `Intent` нельзя.
 
 ### singleTask
 
-Система создает активити в корне новой задачи или находит активити в существующей задаче с тем же сродством (affinity). Если экземпляр активити уже существует и находится в корне задачи, система направляет интент в существующий экземпляр через вызов метода `onNewIntent()`, вместо создания нового экземпляра. При этом все другие активити над ним уничтожаются.
+Система создает `Activity` в корне новой задачи или переиспользует существующую задачу, корневой `Activity` которой является экземпляр этой `Activity` (с совпадающим affinity). Если такой экземпляр уже существует в корне своей задачи, система направляет `Intent` в него через `onNewIntent()` вместо создания нового, а все `Activity` над ним в этой задаче уничтожаются.
 
-**Сценарий 1:** Активити не существует, и поэтому будет инициирована новая активити со своей собственной **задачей** и **стеком возврата**. Активити будет корнем **новой задачи**. Например, мы хотим открыть **Activity C** из **Activity B**, но она не существует в **стеке возврата** или отдельной **задаче**. Таким образом, будет создана **новая задача/стек возврата** с корневой активити **Activity C**.
+Сценарий 1 (экземпляра еще нет):
+- Из B запускаем C (singleTask).
+- Экземпляра C еще нет.
+- Создается новая задача, C становится корневой `Activity`.
+- Из C можно запускать другие `Activity` (например, D с режимом по умолчанию), которые будут добавляться поверх C в этой задаче.
+- В пределах этой задачи "Назад" удаляет D и возвращает к C; выход из задачи вернет пользователя к предыдущей задаче (в соответствии с поведением лаунчера/списка недавних).
 
-Из этого нового **стека возврата** **Activity C** может запускать другие активити. Например, из **Activity C**, если пользователь хочет увидеть **Activity D**, которая имеет режим запуска по умолчанию, она может запустить себя.
+Сценарий 2 (экземпляр существует в своей задаче):
+- C (singleTask) уже существует как корень собственной задачи, над ним есть другие `Activity`.
+- Из A запускаем C.
+- Система переиспользует существующую задачу: все `Activity` над C завершаются; C получает `onNewIntent()` и выводится на передний план.
 
-Если пользователь нажмет кнопку "Назад", **Activity D** будет извлечена из **стека возврата** **новой задачи**, и **Activity C** станет видимой. Таким образом, независимо от задачи, кнопка "Назад" всегда будет возвращать пользователя к предыдущей активити.
+Сценарий 3 (экземпляр существует в текущей задаче как корень):
+- Стек: A (singleTask) -> B -> C -> D.
+- Из D запускаем A.
+- Поскольку A имеет режим `singleTask` и уже находится в корне этой задачи, все `Activity` над A (B, C, D) будут уничтожены; A получит `onNewIntent()` и станет верхней.
 
-**Сценарий 2:** Пользователь хочет запустить активити, которая имеет режим `singleTask` и уже существует со своей **задачей** и **стеком возврата**. Например, ссылаясь на предыдущий сценарий, где **Activity C** существует с вновь созданной **задачей** и **стеком возврата**. Допустим, пользователь хочет перейти к **Activity C** из **Activity A**, система Android не создаст новый экземпляр **Activity C** вместе с **задачей/стеком возврата**. Вместо этого она просто направит его к **Activity C**, и все активити, которые находились над корневой активити, будут удалены.
-
-**Сценарий 3:** `Activity` существует и находится не в отдельной **задаче/стеке возврата**, а в текущем **стеке возврата**. Допустим, у нас есть 4 активити в нашем стеке соответственно **Activity A**, **Activity B**, **Activity C** и **Activity D**. Допустим, что пользователь хочет перейти к **Activity A** из **Activity D**, поскольку **Activity A** имеет режим `singleTask` и существует в корне **стека возврата**. Нет необходимости создавать новую **задачу/стек возврата**, что произойдет в этом случае - система удалит все активити, находящиеся над **Activity A**, пока она не станет верхней в **стеке возврата**. Таким образом, **Activity A** переиспользуется вместо создания новой.
-
-**Примечание:** Хотя активити запускается в новой задаче, кнопка "Назад" и жест по-прежнему возвращают пользователя к предыдущей активити.
+Примечание: Кнопка/жест "Назад" работает внутри стека текущей задачи. Когда `singleTask`-`Activity` переиспользуется и очищает стек над собой, "Назад" перемещает пользователя по оставшимся `Activity` этой задачи или выводит из задачи.
 
 ### singleInstance
 
-Аналогично `singleTask`, за исключением того, что система не запускает никакие другие активити в задачу, содержащую экземпляр. Активити всегда является единственным членом своей задачи; любые активити, запущенные ею, открываются в отдельной задаче. Таким образом, только этот экземпляр активити существует в **задаче/стеке возврата**.
+Похожа на `singleTask`, но `Activity` всегда является единственным элементом своей задачи. Система не добавляет другие `Activity` в задачу, содержащую `singleInstance`.
 
-Например, как в предыдущем примере, мы запустили **Activity C** из **Activity B**, но в этом случае **Activity C** имеет режим `singleInstance`. После создания новой **задачи** и **стека возврата**, которые содержат **Activity C**, допустим, мы хотим запустить **Activity D**, которая имеет режим по умолчанию, **Activity D** будет запущена и добавлена в старую задачу или отдельную задачу, а не во вновь созданную задачу **Activity C**.
+- Существует только один экземпляр такой `Activity` на устройстве.
+- Этот экземпляр всегда единственный в своем task.
+- Любые `Activity`, запускаемые из нее, открываются в других задачах.
+
+Пример:
+- B запускает C (singleInstance).
+- Создается новая задача только с C.
+- Если C запускает D (режим по умолчанию), D будет помещена в другую подходящую задачу, а не в задачу C.
 
 ### singleInstancePerTask
 
-Активити может работать только как корневая активити задачи, первая активити, создавшая задачу, и поэтому в задаче будет только один экземпляр этой активити. В отличие от режима запуска `singleTask`, эта активити может быть запущена в нескольких экземплярах в разных задачах, если установлен флаг `FLAG_ACTIVITY_MULTIPLE_TASK` или `FLAG_ACTIVITY_NEW_DOCUMENT`.
+`singleInstancePerTask` не является допустимым значением `android:launchMode` в манифесте. Это термин для описания поведения документ-ориентированных `Activity` (например, с флагами `FLAG_ACTIVITY_NEW_DOCUMENT` и `FLAG_ACTIVITY_MULTIPLE_TASK`). В этом режиме:
 
-**Примечание:** `singleTask` и `singleInstancePerTask` удалят все активити, которые находятся над запускаемой активити из **задачи**. Например, предположим, что задача состоит из корневой активити *A* с активити *B*, *C* (задача: *A* -> *B* -> *C*; *C* находится сверху). Приходит интент для активити типа *A*. Если режим запуска A - `singleTask` или `singleInstancePerTask`, существующий экземпляр *A* получает интент через `onNewIntent()`. *B* и *C* завершаются, и задача теперь представляет собой *A*.
+- Экземпляр `Activity` может быть только корневой `Activity` своей задачи.
+- Может существовать несколько таких задач (каждая со своим корневым экземпляром этой `Activity`), но в каждой задаче не более одного экземпляра этой `Activity`.
+- При повторном использовании существующего экземпляра (по аналогии с `singleTask` для этой задачи) `Activity`, расположенные выше него в стеке, удаляются.
+
+Примечание: Для поведения `singleTask` и `singleInstancePerTask` (в контексте document mode), при переиспользовании существующего экземпляра все `Activity`, находящиеся над ним в задаче, уничтожаются. Например:
+- Задача: A (root) -> B -> C (top)
+- Приходит `Intent` для A (с `singleTask`-подобным поведением).
+- Существующий A получает `onNewIntent()`, B и C завершаются, задача становится A.
+
+---
+
+## Answer (EN)
+
+When declaring an activity in your manifest file, you can specify how the activity should associate with a task. There are two ways to influence launch behavior:
+- via the `android:launchMode` attribute in the Android Manifest
+- via `Intent` flags
+
+There are four standard launch modes you can assign directly to the `launchMode` attribute:
+
+- `standard`
+- `singleTop`
+- `singleTask`
+- `singleInstance`
+
+Starting with Android 5.0, document-mode flags (such as `FLAG_ACTIVITY_NEW_DOCUMENT` and `FLAG_ACTIVITY_MULTIPLE_TASK`) introduce `singleInstancePerTask` behavior for certain activities, but this is not a separate value of `android:launchMode`.
+
+### standard (the default mode)
+
+Default. The system creates a new instance of the activity in the task from which it was started and routes the intent to it. The activity can be instantiated multiple times; each instance can belong to different tasks, and one task can contain multiple instances.
+
+Example:
+- Activities: A, B, C, D
+- B declared as `<activity android:launchMode="standard" />`
+
+State of activity stack before launching B again:
+A -> B -> C -> D
+
+State of activity stack after launching B again:
+A -> B -> C -> D -> B
+
+### singleTop
+
+If an instance of the activity already exists at the top of the current task's back stack, the system routes the intent to that instance through a call to its `onNewIntent()` method, rather than creating a new instance. The activity can still have multiple instances overall: multiple tasks may host it, and a single task may contain multiple instances as long as none of them (except possibly the top one) is at the top of the stack at launch time.
+
+Scenario 1:
+- `Activity` C is at the top of the back stack.
+- You navigate to C again with an intent targeting C.
+- No new instance is created; existing C receives `onNewIntent()`.
+- Back stack remains unchanged.
+
+Scenario 2:
+- Back stack contains A -> C -> B (B is on top).
+- You start C from B.
+- Because C is not at the top, a new instance of C is created.
+- New back stack: A -> C -> B -> C.
+
+Note: When a new instance of an activity is created, the user can press or gesture Back to return to the previous activity. When an existing instance handles a new intent via `onNewIntent()`, the previous state of that instance is overwritten; Back will not return to its prior state.
+
+### singleTask
+
+The system creates the activity as the root of a new task or reuses an existing task whose root activity is an instance of that activity (matching task affinity). If such an instance already exists at the root of its task, the system routes the intent to that existing instance via `onNewIntent()` instead of creating a new one, and all activities above it in that task are destroyed.
+
+Scenario 1 (no existing instance):
+- You start `Activity` C (singleTask) from B.
+- No C exists yet.
+- A new task is created; C becomes the root of this new task.
+- From C you can start other activities (e.g., D with default mode), which will be placed on top of C in that task.
+- Within that task, Back pops D and returns to C; leaving the task then returns to the previous task (if any), subject to launcher/recents behavior.
+
+Scenario 2 (existing instance in its own task):
+- C (singleTask) already exists as root of its own task with some activities above it.
+- You start C from A.
+- Android reuses the existing task: all activities above C in that task are finished; C receives `onNewIntent()` and comes to foreground.
+
+Scenario 3 (existing instance in current task as root):
+- Back stack: A (singleTask) -> B -> C -> D.
+- From D you start A.
+- Because A is singleTask and already at the root of this task, all activities above A (B, C, D) are finished; A receives `onNewIntent()` and becomes top.
+
+Note: The "Back" button/gesture operates within the current task's back stack. When a singleTask activity brings its existing task to foreground and clears activities above it, Back navigates among the remaining activities in that task or eventually leaves the task.
+
+### singleInstance
+
+Similar to `singleTask`, except that the activity is the only activity in its task. The system does not launch any other activities into the task holding this instance. Any activities started by a `singleInstance` activity always open in other tasks.
+
+- Only one instance of this activity exists on the device.
+- That instance is always the sole member of its task.
+
+Example:
+- B starts C (singleInstance).
+- System creates a new task with only C.
+- If C starts D (default mode), D is launched into another appropriate task, not into C's task.
+
+### singleInstancePerTask
+
+`singleInstancePerTask` is not a value of `android:launchMode` in the manifest. It describes behavior used with document-mode activities (e.g., using `FLAG_ACTIVITY_NEW_DOCUMENT` and `FLAG_ACTIVITY_MULTIPLE_TASK`). In this mode:
+
+- An activity instance can only be the root of its task.
+- There can be multiple such tasks (each with its own root instance of that activity), but each task has at most one instance of that activity.
+- When reusing an existing instance (similar to `singleTask` semantics for that task), activities above it in that task are removed.
+
+Note: For both `singleTask`-like behavior and `singleInstancePerTask` in document mode, when an existing instance is reused, all activities that are above that instance in its task are finished. For example:
+- Task: A (root) -> B -> C (top)
+- An intent arrives for A (singleTask-like behavior).
+- Existing A receives `onNewIntent()`, B and C are finished, and the task becomes A.
 
 ---
 
 ## References
 - [Tasks and the back stack](https://developer.android.com/guide/components/activities/tasks-and-back-stack)
-- [Understand the types of Launch Modes in an Android Activity](https://mohamedyousufmo.medium.com/understand-android-activity-launch-mode-c21fcecf04b8)
-- [Android Activity Launch Mode](https://medium.com/android-news/android-activity-launch-mode-e0df1aa72242)
-- [Understand Android Activity's launchMode: standard, singleTop, singleTask and singleInstance](https://inthecheesefactory.com/blog/understand-android-activity-launchmode/en)
+- [Understand the types of Launch Modes in an Android `Activity`](https://mohamedyousufmo.medium.com/understand-android-activity-launch-mode-c21fcecf04b8)
+- [Android `Activity` Launch Mode](https://medium.com/android-news/android-activity-launch-mode-e0df1aa72242)
+- [Understand Android `Activity`'s launchMode: standard, singleTop, singleTask and singleInstance](https://inthecheesefactory.com/blog/understand-android-activity-launchmode/en)
 
 
 ## Follow-ups

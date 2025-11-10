@@ -47,14 +47,14 @@ tags:
 
 ## Ответ (RU)
 
-**DiffUtil** — утилитарный класс, вычисляющий разницу между двумя списками и генерирующий операции обновления. Используется с RecyclerView для эффективного обновления только изменённых элементов.
+**DiffUtil** — утилитарный класс, вычисляющий разницу между двумя списками и генерирующий операции обновления. Используется с RecyclerView для более эффективного обновления только изменённых элементов вместо полного перерендера.
 
 ### Преимущества
 
-1. **Производительность** — обновляются только изменённые элементы
-2. **Анимации** — автоматические анимации добавления/удаления/перемещения
-3. **Алгоритм Myers** — O(N + D²) вместо O(N²)
-4. **Сохранение состояния** — позиция скролла и фокус не сбрасываются
+1. **Производительность** — рассчитываются и применяются только необходимые операции (insert/remove/move/change), уменьшается количество перерисовок
+2. **Анимации** — автоматические анимации добавления/удаления/перемещения на основе рассчитанных diff-операций
+3. **Алгоритм Myers** — асимптотика O(N + D²) (N — суммарный размер списков, D — число различий) с линейной сложностью по памяти, на практике лучше, чем наивное O(N²)
+4. **Сохранение состояния** — корректный diff помогает сохранить позицию скролла, фокус и состояние ViewHolder'ов (в отличие от полного обновления)
 
 ### 1. Базовая Реализация
 
@@ -91,7 +91,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
 ### 2. ListAdapter (рекомендуемый подход)
 
-✅ **BEST PRACTICE**: Используйте ListAdapter для автоматического DiffUtil
+✅ **BEST PRACTICE**: Используйте ListAdapter, который внутри использует AsyncListDiffer + DiffUtil.
 
 ```kotlin
 class UserListAdapter : ListAdapter<User, UserListAdapter.ViewHolder>(
@@ -116,12 +116,12 @@ class UserListAdapter : ListAdapter<User, UserListAdapter.ViewHolder>(
 }
 
 // Использование
-adapter.submitList(newUsers) // DiffUtil применяется автоматически
+adapter.submitList(newUsers) // DiffUtil применяется автоматически на основе ItemCallback
 ```
 
 ### 3. Partial Updates С Payloads
 
-Обновление только изменённых полей:
+Обновление только изменённых полей с помощью payloads уменьшает объём работы onBindViewHolder.
 
 ```kotlin
 class UserDiffCallback : DiffUtil.ItemCallback<User>() {
@@ -139,6 +139,7 @@ class UserDiffCallback : DiffUtil.ItemCallback<User>() {
 class UserAdapter : ListAdapter<User, ViewHolder>(UserDiffCallback()) {
     override fun onBindViewHolder(holder: ViewHolder, pos: Int, payloads: List<Any>) {
         if (payloads.isEmpty()) {
+            // Фоллбек на обычный полный биндинг
             super.onBindViewHolder(holder, pos, payloads)
         } else {
             val user = getItem(pos)
@@ -157,7 +158,7 @@ class UserAdapter : ListAdapter<User, ViewHolder>(UserDiffCallback()) {
 
 ### 4. AsyncListDiffer Для Больших Списков
 
-✅ **BEST PRACTICE**: Для списков >100 элементов
+✅ **BEST PRACTICE**: Используйте AsyncListDiffer, когда нужен асинхронный расчёт diff (например, тяжёлые/частые обновления списка или кастомная логика адаптера).
 
 ```kotlin
 class LargeListAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -173,6 +174,7 @@ class LargeListAdapter : RecyclerView.Adapter<ViewHolder>() {
     fun submitList(list: List<Item>) = differ.submitList(list)
 
     override fun getItemCount() = differ.currentList.size
+
     override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
         holder.bind(differ.currentList[pos])
     }
@@ -186,39 +188,39 @@ class LargeListAdapter : RecyclerView.Adapter<ViewHolder>() {
 fun updateItems(newItems: List<Item>) {
     items.clear()
     items.addAll(newItems)
-    notifyDataSetChanged() // Пересоздаёт все ViewHolder'ы
+    notifyDataSetChanged() // Обновляет все видимые элементы без диффа
 }
-// Проблемы: нет анимаций, плохая производительность, скролл сбрасывается
+// Проблемы: нет дифф-анимаций, избыточные биндинги и перерисовки; возможно изменение/сдвиг позиции скролла
 ```
 
-✅ **ХОРОШО**: DiffUtil
+✅ **ХОРОШО**: DiffUtil / ListAdapter
 ```kotlin
 fun updateItems(newItems: List<Item>) {
-    submitList(newItems) // Обновляет только изменённые элементы
+    submitList(newItems) // Вычисляет diff и применяет только необходимые операции
 }
-// Преимущества: анимации, производительность, позиция скролла сохраняется
+// Преимущества: предсказуемые анимации, меньшая нагрузка на UI-поток, лучшее сохранение положения списка
 ```
 
 ### Рекомендации
 
-1. ✅ Используйте **ListAdapter** для простых случаев
-2. ✅ Используйте **AsyncListDiffer** для больших списков
-3. ✅ Реализуйте **payloads** для частичных обновлений
-4. ✅ Используйте **data class** для автоматической проверки equals()
-5. ❌ Избегайте notifyDataSetChanged() при использовании DiffUtil
+1. ✅ Используйте **ListAdapter** для большинства стандартных случаев
+2. ✅ Используйте **AsyncListDiffer** при сложной логике адаптера или частых/тяжёлых обновлениях
+3. ✅ Реализуйте **payloads** для частичных обновлений при необходимости
+4. ✅ Используйте **data class** или корректно переопределяйте equals()/hashCode() для корректной проверки содержимого
+5. ❌ Не вызывайте `notifyDataSetChanged()` там, где уже используется DiffUtil или можно применить дифф-обновления
 
 ---
 
 ## Answer (EN)
 
-**DiffUtil** is a utility class that calculates the difference between two lists and generates update operations. Used with RecyclerView to efficiently update only changed items.
+**DiffUtil** is a utility class that calculates the difference between two lists and generates update operations. It is used with RecyclerView to more efficiently update only what actually changed instead of redrawing everything.
 
 ### Benefits
 
-1. **Performance** — updates only changed items
-2. **Animations** — automatic add/remove/move animations
-3. **Myers Algorithm** — O(N + D²) instead of O(N²)
-4. **State Preservation** — scroll position and focus maintained
+1. **Performance** — computes and applies only the necessary insert/remove/move/change operations, reducing unnecessary redraws
+2. **Animations** — enables automatic add/remove/move/change animations based on the computed diff
+3. **Myers Algorithm** — time complexity O(N + D²) (N = total size of both lists, D = number of differences) with linear memory usage; in practice more efficient than a naive O(N²) comparison
+4. **State Preservation** — a proper diff helps preserve scroll position, focus, and ViewHolder state better than full refreshes
 
 ### 1. Basic Implementation
 
@@ -255,7 +257,7 @@ class UserAdapter : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
 ### 2. ListAdapter (Recommended)
 
-✅ **BEST PRACTICE**: Use ListAdapter for automatic DiffUtil
+✅ **BEST PRACTICE**: Use ListAdapter, which internally relies on AsyncListDiffer + DiffUtil.
 
 ```kotlin
 class UserListAdapter : ListAdapter<User, UserListAdapter.ViewHolder>(
@@ -280,12 +282,12 @@ class UserListAdapter : ListAdapter<User, UserListAdapter.ViewHolder>(
 }
 
 // Usage
-adapter.submitList(newUsers) // DiffUtil applied automatically
+adapter.submitList(newUsers) // DiffUtil is applied automatically using the ItemCallback
 ```
 
 ### 3. Partial Updates with Payloads
 
-Update only changed fields:
+Use payloads to update only changed fields and avoid full rebind work when possible.
 
 ```kotlin
 class UserDiffCallback : DiffUtil.ItemCallback<User>() {
@@ -303,6 +305,7 @@ class UserDiffCallback : DiffUtil.ItemCallback<User>() {
 class UserAdapter : ListAdapter<User, ViewHolder>(UserDiffCallback()) {
     override fun onBindViewHolder(holder: ViewHolder, pos: Int, payloads: List<Any>) {
         if (payloads.isEmpty()) {
+            // Fallback to regular full bind
             super.onBindViewHolder(holder, pos, payloads)
         } else {
             val user = getItem(pos)
@@ -319,9 +322,9 @@ class UserAdapter : ListAdapter<User, ViewHolder>(UserDiffCallback()) {
 }
 ```
 
-### 4. AsyncListDiffer for Large Lists
+### 4. AsyncListDiffer for Large/Heavy Lists
 
-✅ **BEST PRACTICE**: For lists >100 items
+✅ **BEST PRACTICE**: Use AsyncListDiffer when you want diff calculation off the main thread (e.g., large lists, frequent or heavy updates, or custom adapter implementations).
 
 ```kotlin
 class LargeListAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -337,6 +340,7 @@ class LargeListAdapter : RecyclerView.Adapter<ViewHolder>() {
     fun submitList(list: List<Item>) = differ.submitList(list)
 
     override fun getItemCount() = differ.currentList.size
+
     override fun onBindViewHolder(holder: ViewHolder, pos: Int) {
         holder.bind(differ.currentList[pos])
     }
@@ -350,49 +354,49 @@ class LargeListAdapter : RecyclerView.Adapter<ViewHolder>() {
 fun updateItems(newItems: List<Item>) {
     items.clear()
     items.addAll(newItems)
-    notifyDataSetChanged() // Recreates all ViewHolders
+    notifyDataSetChanged() // Updates all visible items without using a diff
 }
-// Issues: no animations, poor performance, scroll resets
+// Issues: no diff-based animations, redundant binds and redraws; scroll position and visual continuity may be negatively impacted
 ```
 
-✅ **GOOD**: DiffUtil
+✅ **GOOD**: DiffUtil / ListAdapter
 ```kotlin
 fun updateItems(newItems: List<Item>) {
-    submitList(newItems) // Updates only changed items
+    submitList(newItems) // Computes a diff and applies only the required operations
 }
-// Benefits: animations, performance, scroll position maintained
+// Benefits: smoother animations, reduced UI thread work, better preservation of list position/state
 ```
 
 ### Recommendations
 
-1. ✅ Use **ListAdapter** for simple cases
-2. ✅ Use **AsyncListDiffer** for large lists
-3. ✅ Implement **payloads** for partial updates
-4. ✅ Use **data class** for automatic equals() check
-5. ❌ Avoid notifyDataSetChanged() when using DiffUtil
+1. ✅ Use **ListAdapter** for most standard RecyclerView list cases
+2. ✅ Use **AsyncListDiffer** when you have custom adapter behavior or frequent/heavy list updates
+3. ✅ Implement **payloads** for partial updates when fine-grained changes matter
+4. ✅ Use **data class** or correctly override equals()/hashCode() to make content comparison reliable
+5. ❌ Avoid `notifyDataSetChanged()` when DiffUtil-based updates are applicable
 
 ---
 
 ## Follow-ups
 
 1. **What's the time complexity of DiffUtil's Myers algorithm?**
-   - O(N + D²) where N is sum of list sizes, D is number of differences
+   - O(N + D²), where N is the sum of list sizes and D is the number of differences; memory is O(N + D).
 
 2. **When should you use AsyncListDiffer vs ListAdapter?**
-   - AsyncListDiffer: custom adapter logic needed
-   - ListAdapter: simpler cases, built-in lifecycle handling
+   - AsyncListDiffer: when you need custom adapter implementations or want explicit control while still doing diffing off the main thread.
+   - ListAdapter: when you want a simpler API and built-in AsyncListDiffer handling for common list use cases.
 
 3. **How does getChangePayload() improve performance?**
-   - Allows partial ViewHolder updates instead of full rebinding
-   - Only changed fields are updated, reducing layout passes
+   - Allows partial ViewHolder updates instead of full rebinding.
+   - Only changed fields are updated, reducing binding work and layout passes.
 
-4. **What happens if areItemsTheSame() returns wrong result?**
-   - Items will be treated as removed/added instead of changed
-   - Animations will be incorrect (fade instead of move/change)
+4. **What happens if areItemsTheSame() / areContentsTheSame() returns incorrect results?**
+   - DiffUtil will compute wrong operations: items may be treated as removed/added instead of moved/changed (or vice versa).
+   - This leads to incorrect animations and potential visual glitches or stale data in ViewHolders.
 
 5. **Can DiffUtil handle large lists (10,000+ items)?**
-   - Yes, but use AsyncListDiffer or run calculateDiff() on background thread
-   - Consider pagination or incremental loading for very large datasets
+   - Yes, but diffing can be expensive; prefer AsyncListDiffer (or ListAdapter, which uses it) to run diff calculation off the main thread.
+   - For very large datasets, consider pagination/incremental loading.
 
 ---
 

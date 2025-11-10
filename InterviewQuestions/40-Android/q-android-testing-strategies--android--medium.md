@@ -15,26 +15,22 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
-- c-testing
-- c-unit-testing
 - q-android-architectural-patterns--android--medium
 - q-android-performance-measurement-tools--android--medium
 - q-android-security-best-practices--android--medium
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 sources: []
 tags:
 - android/testing-instrumented
 - android/testing-ui
 - android/testing-unit
 - difficulty/medium
-- espresso
-- junit
-- mockk
 - testing
+
 ---
 
 # Вопрос (RU)
@@ -49,26 +45,39 @@ tags:
 
 ## Ответ (RU)
 
-**Пирамида тестирования Android** распределяет тесты по уровням:
-- **Unit тесты (70%)** — быстрые JVM-тесты бизнес-логики без Android Framework
-- **Integration тесты (20%)** — проверка взаимодействия с Android компонентами (Room, WorkManager)
-- **UI тесты (10%)** — end-to-end сценарии на эмуляторах/устройствах
+**Пирамида тестирования Android** распределяет тесты по уровням (проценты примерные, а не жёсткое правило):
+- **Unit тесты (~70%)** — быстрые JVM-тесты бизнес-логики без Android Framework
+- **Integration тесты (~20%)** — проверка взаимодействия между слоями и с Android компонентами (Room, WorkManager и т.п.)
+- **UI тесты (~10%)** — end-to-end сценарии на эмуляторах/устройствах
 
 ### 1. Unit-тесты
 
-Тестируют изолированную логику на JVM (без эмулятора):
+Тестируют изолированную логику на JVM (без эмулятора и без Android Framework):
 
 ```kotlin
+@OptIn(ExperimentalCoroutinesApi::class)
 class UserViewModelTest {
+    private val testDispatcher = StandardTestDispatcher()
+
     private lateinit var viewModel: UserViewModel
     private val repository: UserRepository = mockk()
 
+    @Before
+    fun setup() {
+        Dispatchers.setMain(testDispatcher)
+        viewModel = UserViewModel(repository)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
     @Test
-    fun `loadUsers updates state on success`() = runTest {
-        // ✅ Быстрый тест без Android зависимостей
+    fun `loadUsers updates state on success`() = runTest(testDispatcher) {
+        // Fast test without Android dependencies
         coEvery { repository.getUsers() } returns listOf(User("Alice"))
 
-        viewModel = UserViewModel(repository)
         viewModel.loadUsers()
 
         assertEquals(LoadState.Success, viewModel.state.value)
@@ -76,8 +85,8 @@ class UserViewModelTest {
     }
 
     @Test
-    fun `loadUsers sets error state on failure`() = runTest {
-        // ✅ Проверка граничных случаев
+    fun `loadUsers sets error state on failure`() = runTest(testDispatcher) {
+        // Test edge cases
         coEvery { repository.getUsers() } throws NetworkException()
 
         viewModel.loadUsers()
@@ -87,23 +96,31 @@ class UserViewModelTest {
 }
 ```
 
-**Инструменты**: JUnit, MockK, Turbine (для Flow), Kotest
+**Инструменты**: JUnit, MockK, Turbine (для `Flow`), Kotest
 
 ### 2. Integration-тесты
 
-Проверяют взаимодействие с Android компонентами:
+Проверяют взаимодействие между слоями и с Android компонентами. Пример для Room (инструментальный тест):
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class UserDaoTest {
+
     private lateinit var database: AppDatabase
 
     @Before
     fun setup() {
-        // ✅ In-memory БД для изоляции
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        // In-memory БД для изоляции
         database = Room.inMemoryDatabaseBuilder(
-            context, AppDatabase::class.java
+            context,
+            AppDatabase::class.java
         ).build()
+    }
+
+    @After
+    fun tearDown() {
+        database.close()
     }
 
     @Test
@@ -118,7 +135,7 @@ class UserDaoTest {
 }
 ```
 
-**Инструменты**: AndroidX Test, Robolectric (для быстрого локального запуска)
+**Инструменты**: AndroidX Test, Robolectric (для быстрого локального запуска без устройства), реальная или in-memory Room БД в интеграционных тестах
 
 ### 3. UI-тесты
 
@@ -127,7 +144,7 @@ class UserDaoTest {
 ```kotlin
 @Test
 fun loginFlow_successfulAuth_navigatesToHome() {
-    // ✅ Compose UI Testing
+    // Compose UI Testing
     composeTestRule.setContent {
         LoginScreen(navController)
     }
@@ -144,60 +161,75 @@ fun loginFlow_successfulAuth_navigatesToHome() {
         .onNodeWithText("Login")
         .performClick()
 
-    // ✅ Проверка навигации
+    // Verify navigation / outcome
     composeTestRule
         .onNodeWithText("Home Screen")
         .assertIsDisplayed()
 }
 ```
 
-**Espresso пример** (для View-based UI):
+**Espresso пример** (для `View`-based UI, упрощённый):
 ```kotlin
 @Test
-fun clickButton_displaysToast() {
-    // ❌ Избегать излишнего UI тестирования мелких деталей
+fun clickButton_displaysMessage() {
+    // Avoid over-testing UI minutiae
     onView(withId(R.id.button)).perform(click())
     onView(withText("Success")).check(matches(isDisplayed()))
 }
 ```
 
+(Для реальных Toast лучше использовать специализированные matchers или проверять побочные эффекты, а не полагаться на простое `isDisplayed()`.)
+
 **Инструменты**: Compose UI Test, Espresso, UI Automator (для межприложенческого взаимодействия)
 
-### Ключевые Практики
+### Ключевые практики
 
-1. **Изоляция через DI** — Hilt/Koin позволяют подменять зависимости в тестах
-2. **Идемпотентность** — тесты не зависят от порядка выполнения
-3. **Детерминизм** — избегать flaky тестов (таймауты, race conditions)
-4. **Test Doubles стратегии**:
+1. **Изоляция через DI** — Hilt/Koin позволяют подменять зависимости в тестах (для Hilt инструментальные тесты с `HiltAndroidRule`, для JVM-тестов — обычные конструкторы/модули).
+2. **Идемпотентность** — тесты не зависят от порядка выполнения и предыдущего состояния.
+3. **Детерминизм** — избегать flaky тестов (жесткие таймауты, race conditions, зависимость от сети/часов).
+4. **Стратегии Test Doubles**:
    - Mocks для внешних API
    - Fakes для репозиториев (in-memory реализации)
-   - Real для критичных компонентов (navigation, database)
-5. **CI оптимизация** — unit/integration на каждый коммит, UI тесты перед релизом
+   - Real-компоненты для тех частей, которые и проверяются в интеграционных тестах (например, Room БД); для навигации чаще использовать тестовые/подмененные реализации.
+5. **CI-оптимизация** — unit/integration на каждый коммит, UI тесты реже (например, на pull request или перед релизом); ограничения по времени рассматривать как целевые бюджеты, а не жесткие нормы.
 
 ---
 
 ## Answer (EN)
 
-**Android Testing Pyramid** distributes tests by execution speed and isolation:
-- **Unit tests (70%)** — fast JVM tests of business logic without Android Framework
-- **Integration tests (20%)** — verify interaction with Android components (Room, WorkManager)
-- **UI tests (10%)** — end-to-end scenarios on emulators/devices
+**Android Testing Pyramid** distributes tests by execution speed and isolation (percentages are indicative, not strict rules):
+- **Unit tests (~70%)** — fast JVM tests of business logic without Android Framework
+- **Integration tests (~20%)** — verify interactions between layers and with Android components (Room, WorkManager, etc.)
+- **UI tests (~10%)** — end-to-end scenarios on emulators/devices
 
 ### 1. Unit Tests
 
-Test isolated logic on JVM (no emulator required):
+Test isolated logic on JVM (no emulator and no Android Framework):
 
 ```kotlin
+@OptIn(ExperimentalCoroutinesApi::class)
 class UserViewModelTest {
+    private val testDispatcher = StandardTestDispatcher()
+
     private lateinit var viewModel: UserViewModel
     private val repository: UserRepository = mockk()
 
+    @Before
+    fun setup() {
+        Dispatchers.setMain(testDispatcher)
+        viewModel = UserViewModel(repository)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
     @Test
-    fun `loadUsers updates state on success`() = runTest {
-        // ✅ Fast test without Android dependencies
+    fun `loadUsers updates state on success`() = runTest(testDispatcher) {
+        // Fast test without Android dependencies
         coEvery { repository.getUsers() } returns listOf(User("Alice"))
 
-        viewModel = UserViewModel(repository)
         viewModel.loadUsers()
 
         assertEquals(LoadState.Success, viewModel.state.value)
@@ -205,8 +237,8 @@ class UserViewModelTest {
     }
 
     @Test
-    fun `loadUsers sets error state on failure`() = runTest {
-        // ✅ Test edge cases
+    fun `loadUsers sets error state on failure`() = runTest(testDispatcher) {
+        // Test edge cases
         coEvery { repository.getUsers() } throws NetworkException()
 
         viewModel.loadUsers()
@@ -216,23 +248,31 @@ class UserViewModelTest {
 }
 ```
 
-**Tools**: JUnit, MockK, Turbine (for Flow), Kotest
+**Tools**: JUnit, MockK, Turbine (for `Flow`), Kotest
 
 ### 2. Integration Tests
 
-Verify interaction with Android components:
+Verify interaction between layers and with Android components. Example for Room (instrumented test):
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class UserDaoTest {
+
     private lateinit var database: AppDatabase
 
     @Before
     fun setup() {
-        // ✅ In-memory database for isolation
+        val context = ApplicationProvider.getApplicationContext<Context>()
+        // In-memory database for isolation
         database = Room.inMemoryDatabaseBuilder(
-            context, AppDatabase::class.java
+            context,
+            AppDatabase::class.java
         ).build()
+    }
+
+    @After
+    fun tearDown() {
+        database.close()
     }
 
     @Test
@@ -247,7 +287,7 @@ class UserDaoTest {
 }
 ```
 
-**Tools**: AndroidX Test, Robolectric (for fast local execution)
+**Tools**: AndroidX Test, Robolectric (for fast local execution without a device), real or in-memory Room DB in integration tests
 
 ### 3. UI Tests
 
@@ -256,7 +296,7 @@ Verify complete user flows:
 ```kotlin
 @Test
 fun loginFlow_successfulAuth_navigatesToHome() {
-    // ✅ Compose UI Testing
+    // Compose UI Testing
     composeTestRule.setContent {
         LoginScreen(navController)
     }
@@ -273,85 +313,106 @@ fun loginFlow_successfulAuth_navigatesToHome() {
         .onNodeWithText("Login")
         .performClick()
 
-    // ✅ Verify navigation
+    // Verify navigation / outcome
     composeTestRule
         .onNodeWithText("Home Screen")
         .assertIsDisplayed()
 }
 ```
 
-**Espresso example** (for View-based UI):
+**Espresso example** (for `View`-based UI, simplified):
 ```kotlin
 @Test
-fun clickButton_displaysToast() {
-    // ❌ Avoid over-testing UI minutiae
+fun clickButton_displaysMessage() {
+    // Avoid over-testing UI minutiae
     onView(withId(R.id.button)).perform(click())
     onView(withText("Success")).check(matches(isDisplayed()))
 }
 ```
 
+(For real Toasts, prefer dedicated matchers or asserting side effects instead of relying on a naive `isDisplayed()` check.)
+
 **Tools**: Compose UI Test, Espresso, UI Automator (for cross-app interactions)
 
 ### Key Practices
 
-1. **Isolation via DI** — Hilt/Koin enable dependency substitution in tests
-2. **Idempotence** — tests don't depend on execution order
-3. **Determinism** — avoid flaky tests (timeouts, race conditions)
+1. **Isolation via DI** — Hilt/Koin enable dependency substitution in tests (use `HiltAndroidRule` for instrumented tests; in JVM tests prefer constructor injection/manual wiring).
+2. **Idempotence** — tests must not depend on execution order or previous state.
+3. **Determinism** — avoid flaky tests (hard-coded timeouts, race conditions, dependency on real network/clock).
 4. **Test Doubles strategies**:
    - Mocks for external APIs
    - Fakes for repositories (in-memory implementations)
-   - Real for critical components (navigation, database)
-5. **CI optimization** — unit/integration on every commit, UI tests before release
+   - Real components for what you explicitly validate in integration tests (e.g., Room DB); for navigation prefer test/dedicated implementations.
+5. **CI optimization** — run unit/integration tests on every commit, UI tests less frequently (e.g., per PR or pre-release); treat time limits as target budgets, not rigid correctness rules.
+
+---
+
+## Дополнительные вопросы (RU)
+
+1. Как тестировать Compose UI с вынесенным состоянием (state hoisting) и учетом рекомпозиции, какие ключевые edge-case-сценарии нужно покрыть?
+2. В чем компромисс между использованием Robolectric и инструментальных тестов с точки зрения скорости, реалистичности окружения и поддержки?
+3. Как бороться с flaky UI-тестами в CI, какие техники синхронизации и ретраев использовать?
+4. В каких случаях использовать screenshot-тесты, а в каких — поведенческие UI-тесты для проверки сценариев пользователя?
+5. Как тестировать корутины и эмиссии `Flow`, чтобы избежать зависимостей от реального времени и гонок?
 
 ---
 
 ## Follow-ups
 
-1. **How do you test Compose UI with state hoisting and recomposition?**
-   - Use `composeTestRule.mainClock` to control recomposition timing
-   - Test state changes via `advanceTimeBy()` for animations
+1. How do you test Compose UI with state hoisting and recomposition, and which edge cases should be covered?
+2. What's the trade-off between Robolectric and instrumented tests regarding speed, environment fidelity, and maintenance?
+3. How do you handle flaky UI tests in CI, including synchronization strategies and retries?
+4. When should you use screenshot testing vs behavioral UI tests for validating user flows?
+5. How do you test coroutines and `Flow` emissions while avoiding reliance on real time and race conditions?
 
-2. **What's the trade-off between Robolectric and instrumented tests?**
-   - Robolectric: fast (JVM), limited fidelity, no real sensors/hardware
-   - Instrumented: slower, accurate, tests actual device behavior
+---
 
-3. **How do you handle flaky UI tests in CI?**
-   - Use `IdlingResource` for async operations
-   - Disable animations (`adb shell settings put global animator_duration_scale 0`)
-   - Implement retry logic with test orchestrator
+## Ссылки (RU)
 
-4. **When to use screenshot testing vs behavioral UI tests?**
-   - Screenshots: visual regression (layout, colors, fonts)
-   - Behavioral: user interactions, navigation, state changes
+**Официальная документация**:
+- https://developer.android.com/training/testing
+- https://developer.android.com/jetpack/compose/testing
+- https://developer.android.com/studio/test
 
-5. **How do you test coroutines and Flow emissions?**
-   - `runTest` with `TestDispatcher` for coroutines
-   - `Turbine` library for Flow assertions (`test { awaitItem() }`)
+**Связанные темы**:
+- [[q-android-architectural-patterns--android--medium]]
+- [[q-android-performance-measurement-tools--android--medium]]
 
-6. **How do you test dependency injection in tests?**
-   - Hilt: use `@UninstallModules` + `@TestInstallIn` for test modules
-   - Koin: `loadKoinModules()` to override production dependencies
-
-7. **What metrics define a good test suite?**
-   - Code coverage (70-80% target), not 100%
-   - Execution time (unit: <5s, integration: <30s, UI: <2min)
-   - Flakiness rate (<5% failures)
+---
 
 ## References
 
-**Concept Notes**:
-- Testing Pyramid (concept note pending)
-- Dependency Injection in Tests (concept note pending)
-- Test Doubles Patterns (concept note pending)
-
 **Official Documentation**:
-- [Android Testing Guide](https://developer.android.com/training/testing)
-- [Compose Testing](https://developer.android.com/jetpack/compose/testing)
-- [Test Your App](https://developer.android.com/studio/test)
+- https://developer.android.com/training/testing
+- https://developer.android.com/jetpack/compose/testing
+- https://developer.android.com/studio/test
 
 **Related Topics**:
 - [[q-android-architectural-patterns--android--medium]]
 - [[q-android-performance-measurement-tools--android--medium]]
+
+---
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-testing]]
+- [[c-unit-testing]]
+
+### Предпосылки (проще)
+- [[q-android-project-parts--android--easy]] — Структура приложения
+- [[q-android-app-components--android--easy]] — Базовые компоненты Android
+
+### Связанные (тот же уровень)
+- [[q-android-architectural-patterns--android--medium]] — MVVM/MVI и тестируемость
+- [[q-android-performance-measurement-tools--android--medium]] — Профилирование и бенчмаркинг
+- [[q-android-security-best-practices--android--medium]] — Подходы к безопасности и их тестирование
+
+### Продвинутые (сложнее)
+- [[q-android-runtime-internals--android--hard]] — Глубокое понимание для интеграционных тестов
+
+---
 
 ## Related Questions
 
@@ -359,7 +420,6 @@ fun clickButton_displaysToast() {
 
 - [[c-testing]]
 - [[c-unit-testing]]
-
 
 ### Prerequisites (Easier)
 - [[q-android-project-parts--android--easy]] — Understanding app structure
@@ -372,5 +432,3 @@ fun clickButton_displaysToast() {
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]] — Deep understanding for integration tests
-- Advanced: Testing custom instrumentation and APK analyzer integration
-- Advanced: Writing Gradle test plugins for modular test execution

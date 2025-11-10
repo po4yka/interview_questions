@@ -4,21 +4,22 @@ title: App Startup Library / Библиотека App Startup
 aliases: [App Startup Library, Библиотека App Startup]
 topic: android
 subtopics:
-  - app-startup
-  - performance-startup
+- app-startup
+- performance-startup
 question_kind: android
 difficulty: medium
 original_language: ru
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
-related: [c-content-provider, c-performance-optimization, c-lifecycle]
-created: 2025-10-15
-updated: 2025-10-30
+related: [q-android-app-components--android--easy]
+created: 2024-10-15
+updated: 2024-11-10
 sources: []
 tags: [android/app-startup, android/performance-startup, difficulty/medium, jetpack]
+
 ---
 
 # Вопрос (RU)
@@ -31,28 +32,30 @@ tags: [android/app-startup, android/performance-startup, difficulty/medium, jetp
 
 ## Ответ (RU)
 
-**App Startup** — библиотека Jetpack для централизации инициализации компонентов, объединяющая множественные ContentProvider'ы в один `InitializationProvider`, что сокращает холодный старт на 30-50% (~170мс при 5 SDK).
+**App Startup** — библиотека Jetpack для централизации инициализации компонентов. Она предоставляет единый `InitializationProvider`, который по meta-data в манифесте запускает `Initializer`-ы и уменьшает накладные расходы на инициализацию по сравнению с множественными `ContentProvider` при корректном использовании (эффект зависит от устройства и выполняемой работы).
 
-### Проблема: Множественные ContentProvider
+### Проблема: Множественные `ContentProvider`
 
-Каждая библиотека традиционно создаёт свой ContentProvider для auto-init:
+Исторически каждая библиотека могла создавать свой `ContentProvider` для auto-init, что добавляет работу в фазу запуска процесса:
 
 ```kotlin
 // ❌ Проблема: каждая библиотека добавляет ContentProvider
 class WorkManagerProvider : ContentProvider() {
     override fun onCreate(): Boolean {
         WorkManager.initialize(context!!, Configuration.Builder().build())
-        return true  // +50-100мс к старту
+        return true  // потенциальные десятки миллисекунд к старту в зависимости от выполняемой работы
     }
 }
 ```
 
-**Накопительный эффект**: 5 SDK × 50-100мс = 250-500мс задержки при каждом запуске.
+**Накопительный эффект**: несколько тяжёлых `ContentProvider` подряд могут заметно увеличить время холодного старта.
 
 ### Решение: Единый Initializer
 
+С App Startup инициализация библиотек оформляется через `Initializer`, а запуском управляет единый `InitializationProvider`.
+
 ```kotlin
-// ✅ Один провайдер для всех компонентов
+// ✅ Инициализатор для WorkManager
 class WorkManagerInitializer : Initializer<WorkManager> {
     override fun create(context: Context): WorkManager {
         val config = Configuration.Builder().build()
@@ -64,16 +67,20 @@ class WorkManagerInitializer : Initializer<WorkManager> {
 }
 ```
 
-**Регистрация в AndroidManifest.xml**:
+**Регистрация в AndroidManifest.xml** (в приложении или библиотеке):
 ```xml
 <provider
     android:name="androidx.startup.InitializationProvider"
-    android:authorities="${applicationId}.androidx-startup">
+    android:authorities="${applicationId}.androidx-startup"
+    android:exported="false"
+    tools:node="merge">
     <meta-data
         android:name="com.example.WorkManagerInitializer"
         android:value="androidx.startup" />
 </provider>
 ```
+
+`InitializationProvider` при старте процесса читает meta-data и вызывает указанные `Initializer`-ы, заменяя собой множество специальных провайдеров и давая более явный контроль над порядком и стратегией инициализации.
 
 ### Управление Зависимостями
 
@@ -82,23 +89,33 @@ class WorkManagerInitializer : Initializer<WorkManager> {
 class AnalyticsInitializer : Initializer<Analytics> {
     override fun create(context: Context) =
         Analytics.Builder(context)
-            .setLogger(AppInitializer.getInstance(context)
-                .initializeComponent(LoggerInitializer::class.java))
+            .setLogger(
+                AppInitializer.getInstance(context)
+                    .initializeComponent(LoggerInitializer::class.java)
+            )
             .build()
 
     override fun dependencies() = listOf(LoggerInitializer::class.java)
 }
 ```
 
-**Автоматическая топологическая сортировка** предотвращает циклические зависимости.
+App Startup строит порядок выполнения инициализаторов с помощью топологической сортировки на основе `dependencies()`. При наличии циклической зависимости будет выброшено исключение во время инициализации (цикл не «предотвращается» автоматически, а детектируется как ошибка).
 
 ### Ленивая Инициализация
 
-```kotlin
-// ❌ AndroidManifest: отключить auto-init
-<meta-data
-    android:name="com.example.AnalyticsInitializer"
-    tools:node="remove" />
+В приложении можно отключить auto-init конкретного инициализатора, прописанного в библиотеке, и запускать его вручную.
+
+```xml
+<!-- ❌ В манифесте приложения: отключаем auto-init библиотеки -->
+<application
+    xmlns:tools="http://schemas.android.com/tools"
+    ...>
+
+    <meta-data
+        android:name="com.example.AnalyticsInitializer"
+        tools:node="remove" />
+
+</application>
 ```
 
 ```kotlin
@@ -109,32 +126,34 @@ if (userLoggedIn) {
 }
 ```
 
-**Результат**: 5 ContentProviders (~450мс) → 1 InitializationProvider (~280мс).
+**Результат**: вместо множества тяжёлых провайдеров и неявного порядка инициализации вы получаете единый механизм, явный граф зависимостей и возможность откладывать тяжёлую инициализацию, что в типичных сценариях улучшает время запуска.
 
 ## Answer (EN)
 
-**App Startup** is a Jetpack library for centralizing component initialization, consolidating multiple ContentProviders into a single `InitializationProvider`, reducing cold start time by 30-50% (~170ms with 5 SDKs).
+**App Startup** is a Jetpack library for centralizing component initialization. It provides a single `InitializationProvider` that reads manifest meta-data and runs `Initializer` implementations, reducing initialization overhead compared to multiple custom `ContentProvider`s when used correctly (the actual impact depends on device and work performed).
 
 ### Problem: Multiple ContentProviders
 
-Each library traditionally creates its own ContentProvider for auto-init:
+Historically, each library could declare its own `ContentProvider` for auto-init, adding work to process startup:
 
 ```kotlin
 // ❌ Problem: each library adds a ContentProvider
 class WorkManagerProvider : ContentProvider() {
     override fun onCreate(): Boolean {
         WorkManager.initialize(context!!, Configuration.Builder().build())
-        return true  // +50-100ms startup overhead
+        return true  // can add tens of ms to startup depending on the work done
     }
 }
 ```
 
-**Cumulative effect**: 5 SDKs × 50-100ms = 250-500ms delay per launch.
+**Cumulative effect**: several heavy `ContentProvider`s in sequence can noticeably increase cold start time.
 
 ### Solution: Unified Initializer
 
+With App Startup, library initialization is expressed via `Initializer`s, and a single `InitializationProvider` orchestrates them.
+
 ```kotlin
-// ✅ Single provider for all components
+// ✅ Initializer for WorkManager
 class WorkManagerInitializer : Initializer<WorkManager> {
     override fun create(context: Context): WorkManager {
         val config = Configuration.Builder().build()
@@ -146,16 +165,20 @@ class WorkManagerInitializer : Initializer<WorkManager> {
 }
 ```
 
-**AndroidManifest.xml registration**:
+**AndroidManifest.xml registration** (in the app or library):
 ```xml
 <provider
     android:name="androidx.startup.InitializationProvider"
-    android:authorities="${applicationId}.androidx-startup">
+    android:authorities="${applicationId}.androidx-startup"
+    android:exported="false"
+    tools:node="merge">
     <meta-data
         android:name="com.example.WorkManagerInitializer"
         android:value="androidx.startup" />
 </provider>
 ```
+
+`InitializationProvider` reads the meta-data at process start and invokes the specified `Initializer`s, replacing many custom providers and giving explicit control over order and strategy.
 
 ### Dependency Management
 
@@ -164,23 +187,33 @@ class WorkManagerInitializer : Initializer<WorkManager> {
 class AnalyticsInitializer : Initializer<Analytics> {
     override fun create(context: Context) =
         Analytics.Builder(context)
-            .setLogger(AppInitializer.getInstance(context)
-                .initializeComponent(LoggerInitializer::class.java))
+            .setLogger(
+                AppInitializer.getInstance(context)
+                    .initializeComponent(LoggerInitializer::class.java)
+            )
             .build()
 
     override fun dependencies() = listOf(LoggerInitializer::class.java)
 }
 ```
 
-**Automatic topological sorting** prevents circular dependencies.
+App Startup computes the execution order using topological sorting based on `dependencies()`. If there is a cyclic dependency, it throws an exception during initialization (cycles are detected and reported as errors, not silently "prevented").
 
 ### Lazy Initialization
 
-```kotlin
-// ❌ AndroidManifest: disable auto-init
-<meta-data
-    android:name="com.example.AnalyticsInitializer"
-    tools:node="remove" />
+In the app manifest you can disable auto-init for a library-provided initializer and trigger it manually.
+
+```xml
+<!-- ❌ In the app manifest: disable library auto-init -->
+<application
+    xmlns:tools="http://schemas.android.com/tools"
+    ...>
+
+    <meta-data
+        android:name="com.example.AnalyticsInitializer"
+        tools:node="remove" />
+
+</application>
 ```
 
 ```kotlin
@@ -191,28 +224,55 @@ if (userLoggedIn) {
 }
 ```
 
-**Impact**: 5 ContentProviders (~450ms) → 1 InitializationProvider (~280ms).
+**Impact**: instead of multiple heavy providers and implicit ordering, you get a single mechanism, an explicit dependency graph, and the ability to defer heavy initialization, which typically improves startup performance.
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как App Startup обнаруживает и обрабатывает циклические зависимости?
+- В каких случаях лучше использовать `Application.onCreate()` вместо App Startup?
+- Как App Startup ведет себя в многопроцессных приложениях?
+- Каковы компромиссы между жадной и ленивой стратегиями инициализации?
+- Как можно проверить порядок инициализации в интеграционных тестах?
+
 ## Follow-ups
 
-- How does App Startup detect and prevent circular dependencies?
+- How does App Startup detect and handle circular dependencies?
 - When should you use `Application.onCreate()` instead of App Startup?
 - How does App Startup behave in multi-process applications?
 - What are the trade-offs between eager and lazy initialization strategies?
 - How can you verify initialization order in integration tests?
 
+## Ссылки (RU)
+
+- [[c-content-provider]] — жизненный цикл и производительность `ContentProvider`
+- Официальная документация App Startup: https://developer.android.com/topic/libraries/app-startup
+
 ## References
 
-- [[c-content-provider]] — ContentProvider lifecycle and performance
+- [[c-content-provider]] — `ContentProvider` lifecycle and performance
 - [App Startup Library](https://developer.android.com/topic/libraries/app-startup)
 
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-android-app-components--android--easy]] — основы `ContentProvider`
+- [[q-android-project-parts--android--easy]] — структура AndroidManifest
+
+### Похожие (того же уровня)
+- [[q-app-start-types-android--android--medium]] — холодный, тёплый и горячий старт
+- [[q-android-performance-measurement-tools--android--medium]] — профилирование времени запуска
+- [[q-android-build-optimization--android--medium]] — оптимизации сборки
+
+### Продвинутые (сложнее)
+- [[q-android-runtime-internals--android--hard]] — внутренности инициализации приложений
+- Продвинутая оптимизация старта
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-android-app-components--android--easy]] — ContentProvider fundamentals
+- [[q-android-app-components--android--easy]] — `ContentProvider` fundamentals
 - [[q-android-project-parts--android--easy]] — AndroidManifest structure
 
 ### Related (Same Level)
@@ -222,4 +282,4 @@ if (userLoggedIn) {
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]] — App initialization internals
- — Advanced startup optimization
+- Advanced startup optimization

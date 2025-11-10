@@ -13,16 +13,15 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
   - c-encryption
-  - c-https-tls
 created: 2025-10-06
-updated: 2025-10-29
+updated: 2025-11-10
 tags: [android/network-security-config, android/networking-http, android/permissions, difficulty/easy, security]
 sources:
-  - https://developer.android.com/training/articles/security-config
+  - "https://developer.android.com/training/articles/security-config"
 ---
 
 # Вопрос (RU)
@@ -35,26 +34,26 @@ sources:
 
 ## Ответ (RU)
 
-**Cleartext traffic** — это незашифрованная HTTP-связь без TLS/SSL. Любой узел на пути передачи может перехватить и изменить данные.
+**Cleartext traffic** — это незашифрованная HTTP-связь без TLS/SSL (HTTP, WebSocket без wss и т.п.). Любой узел на пути передачи может перехватить и изменить данные.
 
-**Политика Android**:
-- **API 28+ (Android 9+)**: cleartext заблокирован по умолчанию
-- **API 23-27**: разрешён по умолчанию
-- **API <23**: всегда разрешён (устаревшие версии)
+**Политика Android (упрощённо):**
+- **API 28+ (Android 9+)**: по умолчанию используется политика «secure by default»: cleartext-запросы к доменам без явного разрешения могут быть заблокированы (особенно если домен помечен как незащищённый в платформенных списках или доступен по HTTPS). Рекомендуется считать, что незашифрованный трафик должен быть явно разрешён.
+- **API 23-27**: cleartext разрешён по умолчанию, но может быть ограничен через Network Security Config или `usesCleartextTraffic`.
+- **API <23**: cleartext всегда разрешён (устаревшие версии, нет Network Security Config).
 
-### Контроль Через Network Security Config
+### Контроль через Network Security Config
 
 **Для локальной разработки** (минимальные разрешения):
 ```xml
 <!-- res/xml/network_security_config.xml -->
 <network-security-config>
-  <!-- ✅ Разрешить только localhost/эмулятор -->
+  <!-- ✅ Разрешить cleartext только для локальных адресов -->
   <domain-config cleartextTrafficPermitted="true">
-    <domain includeSubdomains="true">localhost</domain>
-    <domain includeSubdomains="true">10.0.2.2</domain>
+    <domain>localhost</domain>
+    <domain>10.0.2.2</domain>
   </domain-config>
 
-  <!-- Блокировать для всех остальных -->
+  <!-- Блокировать cleartext для всех остальных доменов по умолчанию -->
   <base-config cleartextTrafficPermitted="false" />
 </network-security-config>
 ```
@@ -66,15 +65,17 @@ sources:
 </application>
 ```
 
+(Примечание: `domain-config` переопределяет `base-config` для перечисленных доменов.)
+
 **Антипаттерн** (небезопасно для production):
 ```xml
-<!-- ❌ Разрешает cleartext для ВСЕХ доменов -->
+<!-- ❌ Разрешает cleartext для ВСЕХ доменов приложения -->
 <application android:usesCleartextTraffic="true" />
 ```
 
 ### Типичная Ошибка
 
-При попытке HTTP-запроса на API 28+:
+При попытке HTTP-запроса на API 28+ без разрешённого cleartext:
 ```
 java.net.UnknownServiceException:
 CLEARTEXT communication not permitted by network security policy
@@ -82,19 +83,19 @@ CLEARTEXT communication not permitted by network security policy
 
 ### Production Стратегия
 
-1. **HTTPS везде** — используйте TLS для всех соединений
-2. **Certificate pinning** — для критичных API (банковские, платёжные)
-3. **Build variant config** — cleartext только в debug-сборках
-4. **ProGuard/R8** — удаляйте debug-конфигурации из release
+1. **HTTPS везде** — используйте TLS для всех соединений.
+2. **Certificate pinning** — для критичных API (банковские, платёжные и т.п.).
+3. **Build variants** — разрешайте cleartext только в debug-сборках (отдельные Network Security Config и манифесты для debug/release).
+4. **Сборочный пайплайн** — убедитесь, что debug-конфигурации (включая XML и `usesCleartextTraffic="true"`) не попадают в release; это решается через productFlavors/Build Types, а не ProGuard/R8 напрямую.
 
 ## Answer (EN)
 
-**Cleartext traffic** is unencrypted HTTP communication without TLS/SSL. Any node on the network path can intercept and modify the data.
+**Cleartext traffic** is unencrypted HTTP communication without TLS/SSL (e.g., HTTP, non-TLS WebSocket). Any node on the network path can intercept and modify the data.
 
-**Android Policy**:
-- **API 28+ (Android 9+)**: cleartext blocked by default
-- **API 23-27**: allowed by default
-- **API <23**: always allowed (legacy versions)
+**Android policy (simplified):**
+- **API 28+ (Android 9+)**: follows a "secure by default" approach: cleartext requests to domains without explicit allowance may be blocked (especially for domains considered insecure by platform lists or when HTTPS is available). Treat cleartext as something that must be explicitly allowed.
+- **API 23-27**: cleartext is allowed by default but can be restricted using Network Security Config or `usesCleartextTraffic`.
+- **API <23**: cleartext always allowed (legacy versions; Network Security Config not supported).
 
 ### Control via Network Security Config
 
@@ -102,13 +103,13 @@ CLEARTEXT communication not permitted by network security policy
 ```xml
 <!-- res/xml/network_security_config.xml -->
 <network-security-config>
-  <!-- ✅ Allow only localhost/emulator -->
+  <!-- ✅ Allow cleartext only for local addresses -->
   <domain-config cleartextTrafficPermitted="true">
-    <domain includeSubdomains="true">localhost</domain>
-    <domain includeSubdomains="true">10.0.2.2</domain>
+    <domain>localhost</domain>
+    <domain>10.0.2.2</domain>
   </domain-config>
 
-  <!-- Block for all others -->
+  <!-- Block cleartext for all other domains by default -->
   <base-config cleartextTrafficPermitted="false" />
 </network-security-config>
 ```
@@ -120,15 +121,17 @@ CLEARTEXT communication not permitted by network security policy
 </application>
 ```
 
+(Note: `domain-config` overrides `base-config` for the specified domains.)
+
 **Anti-pattern** (unsafe for production):
 ```xml
-<!-- ❌ Allows cleartext for ALL domains -->
+<!-- ❌ Allows cleartext for ALL domains of the app -->
 <application android:usesCleartextTraffic="true" />
 ```
 
 ### Common Error
 
-When attempting HTTP request on API 28+:
+When attempting an HTTP request on API 28+ without permitted cleartext:
 ```
 java.net.UnknownServiceException:
 CLEARTEXT communication not permitted by network security policy
@@ -136,10 +139,10 @@ CLEARTEXT communication not permitted by network security policy
 
 ### Production Strategy
 
-1. **HTTPS everywhere** — use TLS for all connections
-2. **Certificate pinning** — for sensitive APIs (banking, payments)
-3. **Build variant config** — cleartext only in debug builds
-4. **ProGuard/R8** — strip debug configs from release
+1. **HTTPS everywhere** — use TLS for all connections.
+2. **Certificate pinning** — for sensitive APIs (banking, payments, etc.).
+3. **Build variants** — allow cleartext only in debug builds (separate Network Security Config and manifest per debug/release).
+4. **Build pipeline** — ensure debug configs (including XML and `usesCleartextTraffic="true") are excluded from release; handle this via productFlavors/Build Types rather than relying on ProGuard/R8 alone.
 
 ---
 
@@ -154,8 +157,8 @@ CLEARTEXT communication not permitted by network security policy
 ## References
 
 - [[c-encryption]] — Encryption fundamentals
-- [Android Network Security Configuration](https://developer.android.com/training/articles/security-config)
-- [Protecting Against Unintended Data Leakage](https://developer.android.com/privacy-and-security/security-tips#UnintendedDataLeakage)
+- https://developer.android.com/training/articles/security-config
+- https://developer.android.com/privacy-and-security/security-tips#UnintendedDataLeakage
 - [[q-certificate-pinning--security--medium]] — Advanced network security
 
 ## Related Questions

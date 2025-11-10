@@ -1,7 +1,6 @@
 ---
 id: android-419
-title: How To Animate Adding/Removing Items In RecyclerView / Как анимировать добавление
-  и удаление элементов в RecyclerView
+title: How To Animate Adding/Removing Items In RecyclerView / Как анимировать добавление и удаление элементов в RecyclerView
 aliases:
 - How To Animate Adding Removing Items In RecyclerView
 - Как анимировать добавление и удаление элементов в RecyclerView
@@ -19,15 +18,15 @@ moc: moc-android
 related:
 - c-custom-views
 - q-bundle-data-types--android--medium
-- q-compositionlocal-advanced--jetpack-compose--medium
 - q-stack-heap-memory-multiple-threads--android--medium
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags:
 - android/ui-animation
 - animations
 - difficulty/medium
 - recyclerview
+
 ---
 
 # Вопрос (RU)
@@ -40,11 +39,31 @@ tags:
 
 ## Ответ (RU)
 
+Для анимации добавления и удаления элементов в RecyclerView обычно используют:
+- ItemAnimator (по умолчанию `DefaultItemAnimator`), и
+- точечные уведомления адаптера (`notifyItemInserted`/`notifyItemRemoved` и т.п.) или `DiffUtil`/`ListAdapter`, которые генерируют эти события автоматически.
+
+Кратко:
+- `DefaultItemAnimator` уже анимирует вставки/удаления/перемещения, если вы используете точечные `notifyItem*` вместо `notifyDataSetChanged()`.
+- `DiffUtil` и `ListAdapter` вычисляют различия между списками и сами вызывают нужные `notifyItem*`, обеспечивая корректные анимации.
+- Для более сложных эффектов можно настроить `DefaultItemAnimator` (длительности) или реализовать свой `ItemAnimator`/`SimpleItemAnimator`, аккуратно вызывая `dispatch*`-методы и обрабатывая состояния анимаций.
+
 ## Answer (EN)
+
+To animate adding and removing items in a RecyclerView you typically rely on:
+- an `ItemAnimator` (by default `DefaultItemAnimator`), and
+- fine-grained adapter updates (`notifyItemInserted`/`notifyItemRemoved`, etc.) or `DiffUtil`/`ListAdapter` to produce those updates.
+
+In short:
+- `DefaultItemAnimator` already animates insert/remove/move if you use specific `notifyItem*` calls instead of `notifyDataSetChanged()`.
+- `DiffUtil` and `ListAdapter` compute list differences and dispatch proper `notifyItem*` calls for you, resulting in smooth, correct animations.
+- For advanced visuals, tune `DefaultItemAnimator` (durations) or implement a custom `ItemAnimator`/`SimpleItemAnimator`, making sure to correctly call `dispatch*` methods and manage animation lifecycle.
 
 ## EN (expanded)
 
-To animate item additions and removals in RecyclerView, you use **ItemAnimator** (default is **DefaultItemAnimator**) combined with proper adapter notifications or **DiffUtil**.
+To animate item additions and removals in RecyclerView, you use:
+- ItemAnimator (DefaultItemAnimator by default), and
+- correct adapter notifications (notifyItemInserted/Removed/etc.) or DiffUtil/ListAdapter.
 
 ### 1. DefaultItemAnimator (Built-in)
 
@@ -64,13 +83,15 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
     fun addItem(item: String) {
         items.add(item)
         notifyItemInserted(items.size - 1)
-        // Animation triggers automatically
+        // Animation triggers automatically for the inserted item
     }
 
     fun removeItem(position: Int) {
-        items.removeAt(position)
-        notifyItemRemoved(position)
-        // Animation triggers automatically
+        if (position in items.indices) {
+            items.removeAt(position)
+            notifyItemRemoved(position)
+            // Animation triggers automatically for the removed item
+        }
     }
 
     fun removeItem(item: String) {
@@ -78,20 +99,25 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
         if (position != -1) {
             items.removeAt(position)
             notifyItemRemoved(position)
-            notifyItemRangeChanged(position, items.size)
+            // Avoid unnecessary notifyItemRangeChanged here; DefaultItemAnimator
+            // animates based on fine-grained notifications.
         }
     }
 
     fun moveItem(fromPosition: Int, toPosition: Int) {
-        val item = items.removeAt(fromPosition)
-        items.add(toPosition, item)
-        notifyItemMoved(fromPosition, toPosition)
-        // Move animation triggers
+        if (fromPosition in items.indices && toPosition in items.indices) {
+            val item = items.removeAt(fromPosition)
+            items.add(toPosition, item)
+            notifyItemMoved(fromPosition, toPosition)
+            // Move animation triggers automatically
+        }
     }
 
     // ... rest of adapter
 }
 ```
+
+Key rule: use the specific notifyItem* methods instead of notifyDataSetChanged() to enable animations.
 
 ### 3. DiffUtil for Automatic Animations
 
@@ -107,7 +133,7 @@ class SmartAdapter : RecyclerView.Adapter<SmartAdapter.ViewHolder>() {
 
         items = newItems
         diffResult.dispatchUpdatesTo(this)
-        // DiffUtil triggers appropriate animations
+        // DiffUtil triggers insert/remove/move/change animations
     }
 
     class ItemDiffCallback(
@@ -140,20 +166,23 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator
         val newList = currentList.toMutableList()
         newList.add(item)
         submitList(newList)
-        // Animations handled automatically
+        // Animations handled automatically (uses DiffUtil under the hood)
     }
 
     fun removeItem(position: Int) {
-        val newList = currentList.toMutableList()
-        newList.removeAt(position)
-        submitList(newList)
-        // Animations handled automatically
+        if (position in currentList.indices) {
+            val newList = currentList.toMutableList()
+            newList.removeAt(position)
+            submitList(newList)
+            // Animations handled automatically
+        }
     }
 
     fun removeItem(item: Item) {
         val newList = currentList.toMutableList()
-        newList.remove(item)
-        submitList(newList)
+        if (newList.remove(item)) {
+            submitList(newList)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -190,72 +219,75 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator
 }
 ```
 
-### 5. Custom ItemAnimator
+### 5. Custom ItemAnimator (Simple Example)
 
-Create custom animations:
+If you only need to tweak durations and rely on DefaultItemAnimator behavior, prefer configuration over overriding animate*.
+If you override animateAdd/animateRemove in DefaultItemAnimator, you must not both run your own ViewPropertyAnimator and delegate to super, otherwise you risk duplicate/incorrect animations.
+
+Minimal, safe customization using DefaultItemAnimator configuration:
 
 ```kotlin
-class CustomItemAnimator : DefaultItemAnimator() {
-
-    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.alpha = 0f
-        holder.itemView.animate()
-            .alpha(1f)
-            .setDuration(300)
-            .start()
-        return super.animateAdd(holder)
-    }
-
-    override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.animate()
-            .alpha(0f)
-            .scaleX(0f)
-            .scaleY(0f)
-            .setDuration(300)
-            .start()
-        return super.animateRemove(holder)
-    }
+val animator = DefaultItemAnimator().apply {
+    addDuration = 300
+    removeDuration = 300
 }
-
-// Usage
-recyclerView.itemAnimator = CustomItemAnimator()
+recyclerView.itemAnimator = animator
 ```
 
-### 6. Advanced Custom Animator
+For fully custom effects, extend SimpleItemAnimator and manage dispatch* calls properly (see below).
+
+### 6. Advanced Custom Animator (Skeleton)
+
+Example of a custom animator based on SimpleItemAnimator. This is a conceptual skeleton – a production implementation must track pending/running animations and call the dispatch* methods correctly.
 
 ```kotlin
 class SlideInItemAnimator : SimpleItemAnimator() {
 
     override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.apply {
-            translationX = width.toFloat()
-            alpha = 0f
+        val view = holder.itemView
+        view.translationX = view.width.toFloat()
+        view.alpha = 0f
 
-            animate()
-                .translationX(0f)
-                .alpha(1f)
-                .setDuration(300)
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        dispatchAddFinished(holder)
-                    }
-                })
-                .start()
-        }
+        view.animate()
+            .translationX(0f)
+            .alpha(1f)
+            .setDuration(addDuration)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    dispatchAddStarting(holder)
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    view.translationX = 0f
+                    view.alpha = 1f
+                    dispatchAddFinished(holder)
+                }
+            })
+            .start()
+
         return true
     }
 
     override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.animate()
-            .translationX(-holder.itemView.width.toFloat())
+        val view = holder.itemView
+
+        view.animate()
+            .translationX(-view.width.toFloat())
             .alpha(0f)
-            .setDuration(300)
+            .setDuration(removeDuration)
             .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    dispatchRemoveStarting(holder)
+                }
+
                 override fun onAnimationEnd(animation: Animator) {
+                    view.translationX = 0f
+                    view.alpha = 1f
                     dispatchRemoveFinished(holder)
                 }
             })
             .start()
+
         return true
     }
 
@@ -264,22 +296,8 @@ class SlideInItemAnimator : SimpleItemAnimator() {
         fromX: Int, fromY: Int,
         toX: Int, toY: Int
     ): Boolean {
-        holder.itemView.apply {
-            translationX = (fromX - toX).toFloat()
-            translationY = (fromY - toY).toFloat()
-
-            animate()
-                .translationX(0f)
-                .translationY(0f)
-                .setDuration(300)
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        dispatchMoveFinished(holder)
-                    }
-                })
-                .start()
-        }
-        return true
+        // Implement if needed; otherwise return false
+        return false
     }
 
     override fun animateChange(
@@ -288,34 +306,13 @@ class SlideInItemAnimator : SimpleItemAnimator() {
         fromLeft: Int, fromTop: Int,
         toLeft: Int, toTop: Int
     ): Boolean {
-        if (newHolder != null) {
-            newHolder.itemView.alpha = 0f
-            newHolder.itemView.animate()
-                .alpha(1f)
-                .setDuration(300)
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        dispatchChangeFinished(newHolder, false)
-                    }
-                })
-                .start()
-        }
-
-        oldHolder.itemView.animate()
-            .alpha(0f)
-            .setDuration(300)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    dispatchChangeFinished(oldHolder, true)
-                }
-            })
-            .start()
-
-        return true
+        // Implement if needed; otherwise return false
+        return false
     }
 
     override fun runPendingAnimations() {
-        // Handle any pending animations
+        // For a simple implementation that starts animations immediately,
+        // nothing special is required here.
     }
 
     override fun endAnimation(item: RecyclerView.ViewHolder) {
@@ -323,11 +320,12 @@ class SlideInItemAnimator : SimpleItemAnimator() {
     }
 
     override fun endAnimations() {
-        // Cancel all animations
+        // Cancel all running animations if you track them
     }
 
     override fun isRunning(): Boolean {
-        return false // Check if any animations are running
+        // Return true if any animations are running
+        return false
     }
 }
 
@@ -335,27 +333,27 @@ class SlideInItemAnimator : SimpleItemAnimator() {
 recyclerView.itemAnimator = SlideInItemAnimator()
 ```
 
-### 7. Complete Example with Swipe to Delete
+Note: For real projects, use an implementation that correctly tracks pending/running animations.
+
+### 7. Complete Example with Swipe to Delete (with ListAdapter)
 
 ```kotlin
 class AnimatedListActivity : AppCompatActivity() {
 
     private lateinit var adapter: ModernAdapter
-    private val items = mutableListOf<Item>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_list)
 
-        // Setup RecyclerView
         adapter = ModernAdapter()
+
         recyclerView.apply {
             adapter = this@AnimatedListActivity.adapter
             layoutManager = LinearLayoutManager(this@AnimatedListActivity)
-            itemAnimator = DefaultItemAnimator() // Or custom animator
+            itemAnimator = DefaultItemAnimator() // Or a custom animator
         }
 
-        // Setup swipe to delete with animation
         val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             0,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -367,65 +365,80 @@ class AnimatedListActivity : AppCompatActivity() {
             ) = false
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val position = viewHolder.adapterPosition
-                val item = adapter.currentList[position]
+                val position = viewHolder.bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val currentList = adapter.currentList
+                    if (position < currentList.size) {
+                        val item = currentList[position]
 
-                // Remove with animation
-                adapter.removeItem(position)
+                        // Remove with animation via submitList
+                        adapter.removeItem(position)
 
-                // Show undo
-                Snackbar.make(recyclerView, "Item deleted", Snackbar.LENGTH_LONG)
-                    .setAction("Undo") {
-                        // Restore with animation
-                        val restoreList = adapter.currentList.toMutableList()
-                        restoreList.add(position, item)
-                        adapter.submitList(restoreList)
+                        Snackbar.make(recyclerView, "Item deleted", Snackbar.LENGTH_LONG)
+                            .setAction("Undo") {
+                                val restoreList = adapter.currentList.toMutableList()
+                                val safePosition = restoreList.coerceIndex(position)
+                                restoreList.add(safePosition, item)
+                                adapter.submitList(restoreList)
+                            }
+                            .show()
                     }
-                    .show()
+                }
             }
         })
 
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
-        // Add button
         fabAdd.setOnClickListener {
-            val newItem = Item("${items.size}", "New Item", "Description")
+            val newItem = Item(
+                id = System.currentTimeMillis().toString(),
+                title = "New Item",
+                description = "Description"
+            )
             adapter.addItem(newItem)
-
-            // Scroll to new item
             recyclerView.smoothScrollToPosition(adapter.itemCount - 1)
         }
 
-        // Load initial data
         loadItems()
     }
 
     private fun loadItems() {
-        adapter.submitList(items)
+        // Initial data
+        val initialItems = listOf<Item>(
+            // ...
+        )
+        adapter.submitList(initialItems)
     }
 }
+
+// Helper extension used above
+private fun <T> MutableList<T>.coerceIndex(index: Int): Int =
+    when {
+        isEmpty() -> 0
+        index < 0 -> 0
+        index > size -> size
+        else -> index
+    }
 ```
 
-### 8. Animation Duration Configuration
+This demonstrates how ListAdapter + DefaultItemAnimator provide smooth add/remove animations. It also uses bindingAdapterPosition and validates indices to avoid subtle bugs.
+
+### 8. Disabling/Configuring Specific Animations
 
 ```kotlin
-// Configure default animator
-val animator = DefaultItemAnimator()
-animator.addDuration = 300
-animator.removeDuration = 300
-animator.moveDuration = 300
-animator.changeDuration = 300
-
+// Configure DefaultItemAnimator durations
+val animator = DefaultItemAnimator().apply {
+    addDuration = 300
+    removeDuration = 300
+    moveDuration = 300
+    changeDuration = 300
+}
 recyclerView.itemAnimator = animator
-```
 
-### 9. Disabling Specific Animations
-
-```kotlin
-// Disable change animations (useful for flickering issues)
+// Disable change animations (useful to prevent flicker when using DiffUtil)
 (recyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
-// Or create custom animator without change animations
+// Or provide a variant with disabled change animations
 class NoChangeItemAnimator : DefaultItemAnimator() {
     init {
         supportsChangeAnimations = false
@@ -433,108 +446,36 @@ class NoChangeItemAnimator : DefaultItemAnimator() {
 }
 ```
 
-### 10. Best Practices
+### 9. Best Practices (EN)
 
-```kotlin
-class BestPracticeAdapter : ListAdapter<Item, BestPracticeAdapter.ViewHolder>(ItemComparator) {
-
-    // Use ListAdapter - handles DiffUtil automatically
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // Create view holder
-        return ViewHolder(/* ... */)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
-
-    // Stable IDs improve animation performance
-    init {
-        setHasStableIds(true)
-    }
-
-    override fun getItemId(position: Int): Long {
-        return getItem(position).id.hashCode().toLong()
-    }
-
-    // Item comparator for DiffUtil
-    object ItemComparator : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem == newItem
-        }
-
-        // Optional: Provide payload for partial updates
-        override fun getChangePayload(oldItem: Item, newItem: Item): Any? {
-            return if (oldItem.title != newItem.title) {
-                "title_changed"
-            } else {
-                null
-            }
-        }
-    }
-
-    // Handle partial updates
-    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
-        if (payloads.isEmpty()) {
-            super.onBindViewHolder(holder, position, payloads)
-        } else {
-            // Update only changed parts
-            val item = getItem(position)
-            if (payloads.contains("title_changed")) {
-                holder.updateTitle(item.title)
-            }
-        }
-    }
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: Item) {
-            // Bind all data
-        }
-
-        fun updateTitle(title: String) {
-            // Update only title
-        }
-    }
-}
-```
-
-### Summary
-
-**Essential Components:**
-1. **ItemAnimator** (DefaultItemAnimator is default)
-2. **Proper notifications** (notifyItemInserted, notifyItemRemoved, etc.)
-3. **DiffUtil** or **ListAdapter** for automatic detection
-4. **Stable IDs** for better performance
-
-**Quick Setup:**
-```kotlin
-// Minimal setup with animations
-recyclerView.adapter = ListAdapter(/* ... */)
-recyclerView.itemAnimator = DefaultItemAnimator() // Optional, it's default
-
-// Animations work automatically with ListAdapter.submitList()
-```
+- Prefer fine-grained notifyItem* calls or DiffUtil/ListAdapter.
+- Avoid notifyDataSetChanged() when you want animations.
+- With ListAdapter, do NOT rely on setHasStableIds/getItemId; identity is defined by ItemCallback.
+- If implementing a custom ItemAnimator:
+  - Use SimpleItemAnimator when you need full control.
+  - Call dispatchAdd/Remove/Move/ChangeStarting/Finished appropriately.
+  - Implement isRunning/endAnimation/endAnimations correctly.
+- Disable change animations if you see blinking with partial updates.
+- Test animations on low-end devices to ensure performance.
 
 ---
 
 ## RU (расширенный ответ)
 
-Для анимации добавления и удаления элементов в RecyclerView используется **ItemAnimator** (по умолчанию **DefaultItemAnimator**) в сочетании с правильными уведомлениями адаптера или **DiffUtil**.
+Для анимации добавления и удаления элементов в RecyclerView используются:
+- ItemAnimator (по умолчанию DefaultItemAnimator), и
+- корректные уведомления адаптера (notifyItemInserted/Removed и т.п.) или DiffUtil/ListAdapter.
 
 ### 1. DefaultItemAnimator (Встроенный)
 
-RecyclerView включает анимацию по умолчанию:
+RecyclerView включает аниматор по умолчанию:
 
 ```kotlin
 recyclerView.itemAnimator = DefaultItemAnimator()
-// Это фактически значение по умолчанию, поэтому явно устанавливать не обязательно
+// Это значение используется по умолчанию, можно не устанавливать явно
 ```
 
-### 2. Базовые Уведомления Элементов
+### 2. Базовые уведомления элементов
 
 ```kotlin
 class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
@@ -543,13 +484,15 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
     fun addItem(item: String) {
         items.add(item)
         notifyItemInserted(items.size - 1)
-        // Анимация срабатывает автоматически
+        // Анимация вставки срабатывает автоматически
     }
 
     fun removeItem(position: Int) {
-        items.removeAt(position)
-        notifyItemRemoved(position)
-        // Анимация срабатывает автоматически
+        if (position in items.indices) {
+            items.removeAt(position)
+            notifyItemRemoved(position)
+            // Анимация удаления срабатывает автоматически
+        }
     }
 
     fun removeItem(item: String) {
@@ -557,24 +500,29 @@ class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
         if (position != -1) {
             items.removeAt(position)
             notifyItemRemoved(position)
-            notifyItemRangeChanged(position, items.size)
+            // Избегаем лишнего notifyItemRangeChanged: анимации строятся
+            // на точечных уведомлениях
         }
     }
 
     fun moveItem(fromPosition: Int, toPosition: Int) {
-        val item = items.removeAt(fromPosition)
-        items.add(toPosition, item)
-        notifyItemMoved(fromPosition, toPosition)
-        // Срабатывает анимация перемещения
+        if (fromPosition in items.indices && toPosition in items.indices) {
+            val item = items.removeAt(fromPosition)
+            items.add(toPosition, item)
+            notifyItemMoved(fromPosition, toPosition)
+            // Анимация перемещения срабатывает автоматически
+        }
     }
 
     // ... остальной код адаптера
 }
 ```
 
-### 3. DiffUtil Для Автоматических Анимаций
+Ключевое правило: используйте конкретные методы notifyItem* вместо notifyDataSetChanged(), если нужны анимации.
 
-DiffUtil вычисляет различия и запускает соответствующие анимации:
+### 3. DiffUtil для автоматических анимаций
+
+DiffUtil вычисляет различия и генерирует соответствующие анимации:
 
 ```kotlin
 class SmartAdapter : RecyclerView.Adapter<SmartAdapter.ViewHolder>() {
@@ -586,7 +534,7 @@ class SmartAdapter : RecyclerView.Adapter<SmartAdapter.ViewHolder>() {
 
         items = newItems
         diffResult.dispatchUpdatesTo(this)
-        // DiffUtil запускает соответствующие анимации
+        // DiffUtil вызывает вставки/удаления/перемещения/изменения с анимацией
     }
 
     class ItemDiffCallback(
@@ -610,7 +558,7 @@ class SmartAdapter : RecyclerView.Adapter<SmartAdapter.ViewHolder>() {
 
 ### 4. ListAdapter (Рекомендуется)
 
-ListAdapter автоматически обрабатывает DiffUtil и анимации:
+ListAdapter автоматически использует DiffUtil и анимирует изменения списка:
 
 ```kotlin
 class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator) {
@@ -623,10 +571,19 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator
     }
 
     fun removeItem(position: Int) {
+        if (position in currentList.indices) {
+            val newList = currentList.toMutableList()
+            newList.removeAt(position)
+            submitList(newList)
+            // Анимации обрабатываются автоматически
+        }
+    }
+
+    fun removeItem(item: Item) {
         val newList = currentList.toMutableList()
-        newList.removeAt(position)
-        submitList(newList)
-        // Анимации обрабатываются автоматически
+        if (newList.remove(item)) {
+            submitList(newList)
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -663,72 +620,72 @@ class ModernAdapter : ListAdapter<Item, ModernAdapter.ViewHolder>(ItemComparator
 }
 ```
 
-### 5. Кастомный ItemAnimator
+### 5. Кастомный ItemAnimator (простая настройка)
 
-Создание пользовательских анимаций:
+Если нужно только изменить скорость/длительность анимаций, обычно достаточно настроить DefaultItemAnimator, не переопределяя animate*.
 
 ```kotlin
-class CustomItemAnimator : DefaultItemAnimator() {
-
-    override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.alpha = 0f
-        holder.itemView.animate()
-            .alpha(1f)
-            .setDuration(300)
-            .start()
-        return super.animateAdd(holder)
-    }
-
-    override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.animate()
-            .alpha(0f)
-            .scaleX(0f)
-            .scaleY(0f)
-            .setDuration(300)
-            .start()
-        return super.animateRemove(holder)
-    }
+val animator = DefaultItemAnimator().apply {
+    addDuration = 300
+    removeDuration = 300
 }
-
-// Использование
-recyclerView.itemAnimator = CustomItemAnimator()
+recyclerView.itemAnimator = animator
 ```
 
-### 6. Продвинутый Кастомный Аниматор
+Если вы переопределяете animateAdd/animateRemove у DefaultItemAnimator, нельзя одновременно запускать свои ViewPropertyAnimator и вызывать super.animate* — это может привести к двойным или некорректным анимациям. Для полноценного контроля лучше наследоваться от SimpleItemAnimator.
+
+### 6. Продвинутый кастомный аниматор (скелет)
+
+Пример на базе SimpleItemAnimator. Это демонстрационный скелет — реальная реализация должна отслеживать pending/running анимации и корректно вызывать dispatch*.
 
 ```kotlin
 class SlideInItemAnimator : SimpleItemAnimator() {
 
     override fun animateAdd(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.apply {
-            translationX = width.toFloat()
-            alpha = 0f
+        val view = holder.itemView
+        view.translationX = view.width.toFloat()
+        view.alpha = 0f
 
-            animate()
-                .translationX(0f)
-                .alpha(1f)
-                .setDuration(300)
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        dispatchAddFinished(holder)
-                    }
-                })
-                .start()
-        }
+        view.animate()
+            .translationX(0f)
+            .alpha(1f)
+            .setDuration(addDuration)
+            .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    dispatchAddStarting(holder)
+                }
+
+                override fun onAnimationEnd(animation: Animator) {
+                    view.translationX = 0f
+                    view.alpha = 1f
+                    dispatchAddFinished(holder)
+                }
+            })
+            .start()
+
         return true
     }
 
     override fun animateRemove(holder: RecyclerView.ViewHolder): Boolean {
-        holder.itemView.animate()
-            .translationX(-holder.itemView.width.toFloat())
+        val view = holder.itemView
+
+        view.animate()
+            .translationX(-view.width.toFloat())
             .alpha(0f)
-            .setDuration(300)
+            .setDuration(removeDuration)
             .setListener(object : AnimatorListenerAdapter() {
+                override fun onAnimationStart(animation: Animator) {
+                    dispatchRemoveStarting(holder)
+                }
+
                 override fun onAnimationEnd(animation: Animator) {
+                    view.translationX = 0f
+                    view.alpha = 1f
                     dispatchRemoveFinished(holder)
                 }
             })
             .start()
+
         return true
     }
 
@@ -737,22 +694,8 @@ class SlideInItemAnimator : SimpleItemAnimator() {
         fromX: Int, fromY: Int,
         toX: Int, toY: Int
     ): Boolean {
-        holder.itemView.apply {
-            translationX = (fromX - toX).toFloat()
-            translationY = (fromY - toY).toFloat()
-
-            animate()
-                .translationX(0f)
-                .translationY(0f)
-                .setDuration(300)
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        dispatchMoveFinished(holder)
-                    }
-                })
-                .start()
-        }
-        return true
+        // Реализуйте при необходимости; иначе верните false
+        return false
     }
 
     override fun animateChange(
@@ -761,34 +704,12 @@ class SlideInItemAnimator : SimpleItemAnimator() {
         fromLeft: Int, fromTop: Int,
         toLeft: Int, toTop: Int
     ): Boolean {
-        if (newHolder != null) {
-            newHolder.itemView.alpha = 0f
-            newHolder.itemView.animate()
-                .alpha(1f)
-                .setDuration(300)
-                .setListener(object : AnimatorListenerAdapter() {
-                    override fun onAnimationEnd(animation: Animator) {
-                        dispatchChangeFinished(newHolder, false)
-                    }
-                })
-                .start()
-        }
-
-        oldHolder.itemView.animate()
-            .alpha(0f)
-            .setDuration(300)
-            .setListener(object : AnimatorListenerAdapter() {
-                override fun onAnimationEnd(animation: Animator) {
-                    dispatchChangeFinished(oldHolder, true)
-                }
-            })
-            .start()
-
-        return true
+        // Реализуйте при необходимости; иначе верните false
+        return false
     }
 
     override fun runPendingAnimations() {
-        // Обработка отложенных анимаций
+        // Для простого варианта, когда анимации стартуют сразу, можно оставить пустым
     }
 
     override fun endAnimation(item: RecyclerView.ViewHolder) {
@@ -796,11 +717,12 @@ class SlideInItemAnimator : SimpleItemAnimator() {
     }
 
     override fun endAnimations() {
-        // Отмена всех анимаций
+        // Отмените все анимации, если вы их отслеживаете
     }
 
     override fun isRunning(): Boolean {
-        return false // Проверка запущенных анимаций
+        // Верните true, если какие-либо анимации выполняются
+        return false
     }
 }
 
@@ -808,26 +730,111 @@ class SlideInItemAnimator : SimpleItemAnimator() {
 recyclerView.itemAnimator = SlideInItemAnimator()
 ```
 
-### 7. Настройка Длительности Анимации
+Важно: в реальном проекте используйте полностью реализованный ItemAnimator с корректным управлением состоянием.
+
+### 7. Пример со swipe-to-delete (ListAdapter)
 
 ```kotlin
-// Конфигурация стандартного аниматора
-val animator = DefaultItemAnimator()
-animator.addDuration = 300
-animator.removeDuration = 300
-animator.moveDuration = 300
-animator.changeDuration = 300
+class AnimatedListActivity : AppCompatActivity() {
 
-recyclerView.itemAnimator = animator
+    private lateinit var adapter: ModernAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_list)
+
+        adapter = ModernAdapter()
+
+        recyclerView.apply {
+            adapter = this@AnimatedListActivity.adapter
+            layoutManager = LinearLayoutManager(this@AnimatedListActivity)
+            itemAnimator = DefaultItemAnimator() // Или кастомный аниматор
+        }
+
+        val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
+            0,
+            ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+        ) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ) = false
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.bindingAdapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    val currentList = adapter.currentList
+                    if (position < currentList.size) {
+                        val item = currentList[position]
+
+                        // Удаляем через submitList c анимацией
+                        adapter.removeItem(position)
+
+                        Snackbar.make(recyclerView, "Item deleted", Snackbar.LENGTH_LONG)
+                            .setAction("Undo") {
+                                val restoreList = adapter.currentList.toMutableList()
+                                val safePosition = restoreList.coerceIndex(position)
+                                restoreList.add(safePosition, item)
+                                adapter.submitList(restoreList)
+                            }
+                            .show()
+                    }
+                }
+            }
+        })
+
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+        fabAdd.setOnClickListener {
+            val newItem = Item(
+                id = System.currentTimeMillis().toString(),
+                title = "New Item",
+                description = "Description"
+            )
+            adapter.addItem(newItem)
+            recyclerView.smoothScrollToPosition(adapter.itemCount - 1)
+        }
+
+        loadItems()
+    }
+
+    private fun loadItems() {
+        val initialItems = listOf<Item>(
+            // ...
+        )
+        adapter.submitList(initialItems)
+    }
+}
+
+// Вспомогательное расширение
+private fun <T> MutableList<T>.coerceIndex(index: Int): Int =
+    when {
+        isEmpty() -> 0
+        index < 0 -> 0
+        index > size -> size
+        else -> index
+    }
 ```
 
-### 8. Отключение Определённых Анимаций
+Этот пример показывает, как ListAdapter + DefaultItemAnimator обеспечивают плавные анимации при добавлении/удалении, и демонстрирует использование bindingAdapterPosition и проверок индексов для избежания тонких багов.
+
+### 8. Настройка и отключение отдельных анимаций
 
 ```kotlin
-// Отключение анимаций изменения (полезно при проблемах с мерцанием)
+// Настройка стандартного аниматора
+val animator = DefaultItemAnimator().apply {
+    addDuration = 300
+    removeDuration = 300
+    moveDuration = 300
+    changeDuration = 300
+}
+recyclerView.itemAnimator = animator
+
+// Отключение анимаций изменений (полезно при мерцании с DiffUtil)
 (recyclerView.itemAnimator as? SimpleItemAnimator)?.supportsChangeAnimations = false
 
-// Или создать кастомный аниматор без анимаций изменения
+// Вариант с отключёнными change-анимациями
 class NoChangeItemAnimator : DefaultItemAnimator() {
     init {
         supportsChangeAnimations = false
@@ -835,99 +842,23 @@ class NoChangeItemAnimator : DefaultItemAnimator() {
 }
 ```
 
-### 9. Лучшие Практики
+### 9. Лучшие практики (RU)
 
-```kotlin
-class BestPracticeAdapter : ListAdapter<Item, BestPracticeAdapter.ViewHolder>(ItemComparator) {
-
-    // Используйте ListAdapter - обрабатывает DiffUtil автоматически
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        // Создание view holder
-        return ViewHolder(/* ... */)
-    }
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
-    }
-
-    // Стабильные ID улучшают производительность анимаций
-    init {
-        setHasStableIds(true)
-    }
-
-    override fun getItemId(position: Int): Long {
-        return getItem(position).id.hashCode().toLong()
-    }
-
-    // Компаратор элементов для DiffUtil
-    object ItemComparator : DiffUtil.ItemCallback<Item>() {
-        override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem.id == newItem.id
-        }
-
-        override fun areContentsTheSame(oldItem: Item, newItem: Item): Boolean {
-            return oldItem == newItem
-        }
-
-        // Опционально: Предоставить payload для частичных обновлений
-        override fun getChangePayload(oldItem: Item, newItem: Item): Any? {
-            return if (oldItem.title != newItem.title) {
-                "title_changed"
-            } else {
-                null
-            }
-        }
-    }
-
-    // Обработка частичных обновлений
-    override fun onBindViewHolder(holder: ViewHolder, position: Int, payloads: MutableList<Any>) {
-        if (payloads.isEmpty()) {
-            super.onBindViewHolder(holder, position, payloads)
-        } else {
-            // Обновление только изменённых частей
-            val item = getItem(position)
-            if (payloads.contains("title_changed")) {
-                holder.updateTitle(item.title)
-            }
-        }
-    }
-
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(item: Item) {
-            // Привязка всех данных
-        }
-
-        fun updateTitle(title: String) {
-            // Обновление только заголовка
-        }
-    }
-}
-```
+1. Используйте точечные методы notifyItem* или DiffUtil/ListAdapter вместо notifyDataSetChanged(), если нужны анимации.
+2. С ListAdapter не полагайтесь на setHasStableIds/getItemId для идентификации — используйте ItemCallback.
+3. При написании кастомного ItemAnimator:
+   - Предпочитайте SimpleItemAnimator для полного контроля.
+   - Корректно вызывайте dispatchAdd/Remove/Move/ChangeStarting/Finished.
+   - Реализуйте isRunning/endAnimation/endAnimations так, чтобы отражать реальные анимации.
+4. Отключайте change-анимации при мерцаниях/частичных обновлениях.
+5. Тестируйте анимации на медленных устройствах, следите за производительностью.
 
 ### Резюме
 
-**Основные компоненты:**
-1. **ItemAnimator** (DefaultItemAnimator по умолчанию)
-2. **Правильные уведомления** (notifyItemInserted, notifyItemRemoved и т.д.)
-3. **DiffUtil** или **ListAdapter** для автоматического обнаружения
-4. **Стабильные ID** для лучшей производительности
-
-**Быстрая настройка:**
-```kotlin
-// Минимальная настройка с анимациями
-recyclerView.adapter = ListAdapter(/* ... */)
-recyclerView.itemAnimator = DefaultItemAnimator() // Опционально, это значение по умолчанию
-
-// Анимации работают автоматически с ListAdapter.submitList()
-```
-
-**Best Practices:**
-
-1. Используйте `notifyItemInserted()` вместо `notifyDataSetChanged()`
-2. ListAdapter + DiffUtil для автоматических анимаций
-3. Не забывайте про `dispatchAddFinished()` в custom animators
-4. Тестируйте анимации на медленных устройствах
-5. Используйте стабильные ID для улучшения производительности
+Кратко:
+- ItemAnimator (DefaultItemAnimator по умолчанию) + точечные notifyItem* уже дают базовые анимации.
+- DiffUtil или ListAdapter обеспечивают автоматическое вычисление изменений и анимацию добавлений/удалений/перемещений.
+- При необходимости — настраивайте durations или пишите кастомный ItemAnimator, корректно управляя dispatch* и состоянием.
 
 ## Follow-ups
 
@@ -949,12 +880,12 @@ recyclerView.itemAnimator = DefaultItemAnimator() // Опционально, э�
 
 
 ### Prerequisites (Easier)
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View, Ui
-- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - View, Ui
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View`, Ui
+- [[q-how-to-change-the-number-of-columns-in-recyclerview-depending-on-orientation--android--easy]] - `View`, Ui
 
 ### Related (Medium)
-- q-rxjava-pagination-recyclerview--android--medium - View, Ui
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - View, Ui
-- [[q-recyclerview-itemdecoration-advanced--android--medium]] - View, Ui
-- [[q-how-animations-work-in-recyclerview--android--medium]] - View, Ui
-- [[q-recyclerview-async-list-differ--android--medium]] - View, Ui
+- q-rxjava-pagination-recyclerview--android--medium - `View`, Ui
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - `View`, Ui
+- [[q-recyclerview-itemdecoration-advanced--android--medium]] - `View`, Ui
+- [[q-how-animations-work-in-recyclerview--android--medium]] - `View`, Ui
+- [[q-recyclerview-async-list-differ--android--medium]] - `View`, Ui

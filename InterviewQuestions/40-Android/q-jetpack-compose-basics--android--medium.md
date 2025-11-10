@@ -8,17 +8,11 @@ topic: android
 subtopics:
 - ui-compose
 - ui-state
-- ui-views
+- ui-theming
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags:
-- android/declarative-ui
-- android/jetpack-compose
-- android/recomposition
-- android/state
-- android/ui
-- difficulty/medium
 - en
 - ru
 source: internal
@@ -27,2023 +21,72 @@ status: draft
 moc: moc-android
 related:
 - c-compose-state
-- c-jetpack-compose
-- c-viewmodel
-- q-compose-remember-derived-state--jetpack-compose--medium
-- q-compose-side-effects-advanced--jetpack-compose--hard
-- q-compose-stability-skippability--jetpack-compose--hard
 - q-how-does-jetpack-compose-work--android--medium
+- q-compose-modifier-system--android--medium
+- q-compose-remember-derived-state--android--medium
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-10
 tags:
 - android/ui-compose
 - android/ui-state
-- android/ui-views
+- android/ui-theming
 - difficulty/medium
 - en
 - ru
----
 
-# Question (EN)
-> What is Jetpack Compose? Explain core concepts: composable functions, state management, recomposition, modifiers, layouts, and lifecycle. Provide comprehensive examples for building UIs.
+---
 
 # Вопрос (RU)
 > Что такое Jetpack Compose? Объясните основные концепции: composable функции, управление состоянием, recomposition, модификаторы, макеты и жизненный цикл. Приведите подробные примеры построения UI.
 
----
-
-## Answer (EN)
-
-Jetpack Compose is Android's modern declarative UI toolkit that simplifies and accelerates UI development. Unlike the imperative View system, Compose describes what the UI should look like based on the current state, and the framework handles all updates automatically.
-
-### Why Jetpack Compose?
-
-**Traditional View System (Imperative)**:
-```kotlin
-// XML layout
-<TextView
-    android:id="@+id/textView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
-
-// Activity/Fragment
-val textView = findViewById<TextView>(R.id.textView)
-textView.text = "Hello"
-textView.setTextColor(Color.BLUE)
-// Must manually update when state changes
-```
-
-**Jetpack Compose (Declarative)**:
-```kotlin
-@Composable
-fun Greeting(name: String) {
-    Text(
-        text = "Hello $name",
-        color = Color.Blue
-    )
-    // Automatically updates when name changes
-}
-```
-
-### Core Principles
-
-1. **Declarative**: Describe UI state, not how to achieve it
-2. **Composable**: Build UI from small, reusable functions
-3. **Reactive**: UI automatically updates when state changes
-4. **Data-driven**: UI is a function of state: `UI = f(state)`
-
-### Composable Functions
-
-Composable functions are annotated with `@Composable` and can call other composables:
-
-```kotlin
-@Composable
-fun MessageCard(message: Message) {
-    Row(modifier = Modifier.padding(8.dp)) {
-        Image(
-            painter = painterResource(R.drawable.profile),
-            contentDescription = "Profile picture",
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-        )
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        Column {
-            Text(
-                text = message.author,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = message.body,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
-
-data class Message(val author: String, val body: String)
-```
-
-**Key characteristics**:
-- Must be annotated with `@Composable`
-- Can call other `@Composable` functions
-- Cannot return values (return type is Unit or no return)
-- Can only be called from other composables or composable lambdas
-- Should be side-effect free (use `SideEffect` or `LaunchedEffect` for side effects)
-
-### State and Recomposition
-
-**State** is any value that can change over time. When state changes, Compose **recomposes** (re-executes) composable functions that read that state.
-
-#### Basic State Management
-
-```kotlin
-@Composable
-fun Counter() {
-    // remember preserves state across recompositions
-    var count by remember { mutableStateOf(0) }
-
-    Column(
-        modifier = Modifier.padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Count: $count")
-        Button(onClick = { count++ }) {
-            Text("Increment")
-        }
-    }
-}
-
-// Without remember - WRONG!
-@Composable
-fun BrokenCounter() {
-    var count by mutableStateOf(0)  //  Resets to 0 on every recomposition!
-
-    Button(onClick = { count++ }) {
-        Text("Count: $count")  // Always shows 0
-    }
-}
-```
-
-#### State Hoisting
-
-Lifting state up to make composables stateless and reusable:
-
-```kotlin
-// Stateful version (not reusable)
-@Composable
-fun StatefulCounter() {
-    var count by remember { mutableStateOf(0) }
-
-    Button(onClick = { count++ }) {
-        Text("Count: $count")
-    }
-}
-
-// Stateless version (reusable)
-@Composable
-fun StatelessCounter(
-    count: Int,
-    onIncrement: () -> Unit
-) {
-    Button(onClick = onIncrement) {
-        Text("Count: $count")
-    }
-}
-
-// Parent manages state
-@Composable
-fun CounterScreen() {
-    var count by remember { mutableStateOf(0) }
-
-    Column {
-        Text("Current count: $count")
-        StatelessCounter(
-            count = count,
-            onIncrement = { count++ }
-        )
-        Button(onClick = { count = 0 }) {
-            Text("Reset")
-        }
-    }
-}
-```
-
-#### State Types
-
-```kotlin
-// 1. mutableStateOf - single value
-var name by remember { mutableStateOf("") }
-
-// 2. mutableStateListOf - observable list
-val items = remember { mutableStateListOf<String>() }
-items.add("New item")  // Triggers recomposition
-
-// 3. mutableStateMapOf - observable map
-val userScores = remember { mutableStateMapOf<String, Int>() }
-userScores["Alice"] = 100  // Triggers recomposition
-
-// 4. derivedStateOf - computed value
-val filteredItems by remember(items, query) {
-    derivedStateOf {
-        items.filter { it.contains(query, ignoreCase = true) }
-    }
-}
-```
-
-### Recomposition
-
-Recomposition is the process of re-executing composables when state changes:
-
-```kotlin
-@Composable
-fun RecompositionExample() {
-    var count by remember { mutableStateOf(0) }
-
-    Column {
-        // This Text recomposes when count changes
-        Text("Count: $count")
-        println("Text recomposed!")  // Prints on every count change
-
-        // This Text never recomposes (no state read)
-        Text("Static text")
-        println("Static text composed!")  // Prints only once
-
-        Button(onClick = { count++ }) {
-            Text("Increment")
-        }
-    }
-}
-```
-
-**Recomposition characteristics**:
-- **Intelligent**: Only recomposes functions that read changed state
-- **Can happen in any order**: Don't assume sequential execution
-- **Can be skipped**: If inputs haven't changed
-- **Should be idempotent**: Same inputs = same output
-- **Should be fast**: Avoid heavy computation
-
-#### Recomposition Scope
-
-```kotlin
-@Composable
-fun ScopeExample() {
-    var outerState by remember { mutableStateOf(0) }
-
-    Column {
-        Text("Outer: $outerState")  // Reads outerState
-
-        InnerComposable()  // Doesn't read outerState - won't recompose
-    }
-}
-
-@Composable
-fun InnerComposable() {
-    var innerState by remember { mutableStateOf(0) }
-
-    Text("Inner: $innerState")
-    Button(onClick = { innerState++ }) {
-        Text("Increment Inner")
-    }
-    // Only this composable recomposes when innerState changes
-}
-```
-
-### Modifiers
-
-Modifiers allow you to decorate or augment composables. They can:
-- Change size, layout, behavior, appearance
-- Add interactions (clicks, gestures)
-- Add accessibility information
-
-```kotlin
-@Composable
-fun ModifierExamples() {
-    // Order matters!
-    Box(
-        modifier = Modifier
-            .size(100.dp)           // 1. Set size first
-            .background(Color.Blue)  // 2. Then background
-            .padding(16.dp)         // 3. Then padding
-            .border(2.dp, Color.Red) // 4. Border inside padding
-    )
-
-    // Different order = different result
-    Box(
-        modifier = Modifier
-            .padding(16.dp)         // 1. Padding first
-            .size(100.dp)           // 2. Size inside padding
-            .background(Color.Blue)  // 3. Background fills size
-    )
-}
-```
-
-#### Common Modifiers
-
-```kotlin
-@Composable
-fun ModifierGuide() {
-    Column {
-        // Size modifiers
-        Box(Modifier.size(100.dp))
-        Box(Modifier.width(100.dp).height(50.dp))
-        Box(Modifier.fillMaxWidth())
-        Box(Modifier.fillMaxHeight())
-        Box(Modifier.fillMaxSize())
-
-        // Padding and spacing
-        Box(Modifier.padding(16.dp))
-        Box(Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
-        Box(Modifier.padding(start = 16.dp))
-
-        // Background and borders
-        Box(Modifier.background(Color.Blue))
-        Box(Modifier.background(Color.Red, shape = RoundedCornerShape(8.dp)))
-        Box(Modifier.border(2.dp, Color.Black))
-
-        // Clickable
-        Box(Modifier.clickable { /* onClick */ })
-
-        // Alignment and arrangement
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Centered")
-        }
-
-        // Scrolling
-        Column(Modifier.verticalScroll(rememberScrollState())) {
-            // Content
-        }
-    }
-}
-```
-
-#### Custom Modifiers
-
-```kotlin
-// Extension function pattern
-fun Modifier.debugBorder(color: Color = Color.Red) = this.then(
-    Modifier.border(2.dp, color)
-)
-
-// Usage
-Text(
-    "Debug text",
-    modifier = Modifier.debugBorder()
-)
-
-// With composed state
-fun Modifier.shimmer(enabled: Boolean): Modifier = composed {
-    if (enabled) {
-        val transition = rememberInfiniteTransition()
-        val alpha by transition.animateFloat(
-            initialValue = 0.3f,
-            targetValue = 0.9f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(1000),
-                repeatMode = RepeatMode.Reverse
-            )
-        )
-        this.alpha(alpha)
-    } else {
-        this
-    }
-}
-```
-
-### Layouts
-
-Compose provides three basic layout composables:
-
-#### Column - Vertical Layout
-
-```kotlin
-@Composable
-fun ColumnExample() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("First item")
-        Text("Second item")
-        Text("Third item")
-    }
-}
-
-// Arrangement options
-Column(verticalArrangement = Arrangement.Top)         // Default
-Column(verticalArrangement = Arrangement.Center)
-Column(verticalArrangement = Arrangement.Bottom)
-Column(verticalArrangement = Arrangement.SpaceBetween)
-Column(verticalArrangement = Arrangement.SpaceAround)
-Column(verticalArrangement = Arrangement.SpaceEvenly)
-Column(verticalArrangement = Arrangement.spacedBy(8.dp))
-
-// Alignment options
-Column(horizontalAlignment = Alignment.Start)        // Default
-Column(horizontalAlignment = Alignment.CenterHorizontally)
-Column(horizontalAlignment = Alignment.End)
-```
-
-#### Row - Horizontal Layout
-
-```kotlin
-@Composable
-fun RowExample() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(Icons.Default.Star, contentDescription = null)
-        Text("Rating")
-        Text("4.5")
-    }
-}
-
-// Similar arrangement and alignment options as Column
-```
-
-#### Box - Stack Layout
-
-```kotlin
-@Composable
-fun BoxExample() {
-    Box(
-        modifier = Modifier.size(200.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        // Items stack on top of each other
-        Image(
-            painter = painterResource(R.drawable.background),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize()
-        )
-        Text(
-            "Overlay Text",
-            color = Color.White,
-            fontSize = 24.sp
-        )
-    }
-}
-```
-
-#### LazyColumn and LazyRow - Efficient Lists
-
-```kotlin
-@Composable
-fun LazyListExample(items: List<String>) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(items) { item ->
-            Text(item)
-        }
-
-        // Or with index
-        itemsIndexed(items) { index, item ->
-            Text("$index: $item")
-        }
-
-        // Single item
-        item {
-            Text("Header")
-        }
-    }
-}
-
-// LazyColumn with different item types
-@Composable
-fun MixedLazyList() {
-    LazyColumn {
-        // Header
-        item {
-            Text(
-                "Header",
-                style = MaterialTheme.typography.headlineMedium
-            )
-        }
-
-        // List of items
-        items(20) { index ->
-            ListItem(index)
-        }
-
-        // Footer
-        item {
-            Button(onClick = { /* Load more */ }) {
-                Text("Load More")
-            }
-        }
-    }
-}
-
-// With key for proper recomposition
-@Composable
-fun LazyListWithKeys(messages: List<Message>) {
-    LazyColumn {
-        items(
-            items = messages,
-            key = { message -> message.id }  // Important for animations
-        ) { message ->
-            MessageCard(message)
-        }
-    }
-}
-```
-
-#### ConstraintLayout
-
-```kotlin
-@Composable
-fun ConstraintLayoutExample() {
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (button, text, image) = createRefs()
-
-        Button(
-            onClick = { },
-            modifier = Modifier.constrainAs(button) {
-                top.linkTo(parent.top, margin = 16.dp)
-                start.linkTo(parent.start, margin = 16.dp)
-            }
-        ) {
-            Text("Button")
-        }
-
-        Text(
-            "Constrained Text",
-            modifier = Modifier.constrainAs(text) {
-                top.linkTo(button.bottom, margin = 16.dp)
-                centerHorizontallyTo(parent)
-            }
-        )
-
-        Image(
-            painter = painterResource(R.drawable.ic_launcher),
-            contentDescription = null,
-            modifier = Modifier.constrainAs(image) {
-                bottom.linkTo(parent.bottom, margin = 16.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-            }
-        )
-    }
-}
-```
-
-### Complete UI Examples
-
-#### Example 1: Login Screen
-
-```kotlin
-@Composable
-fun LoginScreen(
-    onLoginClick: (String, String) -> Unit
-) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Welcome Back",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
-
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
-            leadingIcon = {
-                Icon(Icons.Default.Email, contentDescription = null)
-            },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next
-            )
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            leadingIcon = {
-                Icon(Icons.Default.Lock, contentDescription = null)
-            },
-            trailingIcon = {
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(
-                        if (passwordVisible) Icons.Default.Visibility
-                        else Icons.Default.VisibilityOff,
-                        contentDescription = "Toggle password visibility"
-                    )
-                }
-            },
-            visualTransformation = if (passwordVisible)
-                VisualTransformation.None
-            else
-                PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
-            )
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = { onLoginClick(email, password) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = email.isNotBlank() && password.isNotBlank()
-        ) {
-            Text("Login")
-        }
-
-        TextButton(
-            onClick = { /* Navigate to forgot password */ },
-            modifier = Modifier.padding(top = 8.dp)
-        ) {
-            Text("Forgot Password?")
-        }
-    }
-}
-```
-
-#### Example 2: Profile Card with State
-
-```kotlin
-data class User(
-    val name: String,
-    val bio: String,
-    val followerCount: Int,
-    val isFollowing: Boolean
-)
-
-@Composable
-fun ProfileCard(
-    user: User,
-    onFollowClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Profile picture
-                Box(
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary)
-                ) {
-                    Text(
-                        text = user.name.first().toString(),
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = Color.White,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = user.name,
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                    Text(
-                        text = "${user.followerCount} followers",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                Button(
-                    onClick = onFollowClick,
-                    colors = if (user.isFollowing) {
-                        ButtonDefaults.outlinedButtonColors()
-                    } else {
-                        ButtonDefaults.buttonColors()
-                    }
-                ) {
-                    Text(if (user.isFollowing) "Following" else "Follow")
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = user.bio,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
-
-// Usage with state
-@Composable
-fun ProfileScreen() {
-    var user by remember {
-        mutableStateOf(
-            User(
-                name = "John Doe",
-                bio = "Android Developer | Kotlin Enthusiast",
-                followerCount = 1234,
-                isFollowing = false
-            )
-        )
-    }
-
-    ProfileCard(
-        user = user,
-        onFollowClick = {
-            user = user.copy(
-                isFollowing = !user.isFollowing,
-                followerCount = if (user.isFollowing)
-                    user.followerCount - 1
-                else
-                    user.followerCount + 1
-            )
-        }
-    )
-}
-```
-
-#### Example 3: Todo List with CRUD Operations
-
-```kotlin
-data class TodoItem(
-    val id: Int,
-    val title: String,
-    val completed: Boolean = false
-)
-
-@Composable
-fun TodoListScreen() {
-    var todos by remember {
-        mutableStateOf(
-            listOf(
-                TodoItem(1, "Learn Compose"),
-                TodoItem(2, "Build an app"),
-                TodoItem(3, "Deploy to Play Store")
-            )
-        )
-    }
-    var newTodoText by remember { mutableStateOf("") }
-    var nextId by remember { mutableStateOf(4) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // Header
-        Text(
-            text = "My Tasks",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        // Add new todo
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            OutlinedTextField(
-                value = newTodoText,
-                onValueChange = { newTodoText = it },
-                placeholder = { Text("New task...") },
-                modifier = Modifier.weight(1f),
-                singleLine = true
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            IconButton(
-                onClick = {
-                    if (newTodoText.isNotBlank()) {
-                        todos = todos + TodoItem(nextId++, newTodoText)
-                        newTodoText = ""
-                    }
-                }
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add task")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Todo list
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(
-                items = todos,
-                key = { it.id }
-            ) { todo ->
-                TodoItemRow(
-                    todo = todo,
-                    onToggle = {
-                        todos = todos.map {
-                            if (it.id == todo.id) it.copy(completed = !it.completed)
-                            else it
-                        }
-                    },
-                    onDelete = {
-                        todos = todos.filter { it.id != todo.id }
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun TodoItemRow(
-    todo: TodoItem,
-    onToggle: () -> Unit,
-    onDelete: () -> Unit
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = todo.completed,
-                onCheckedChange = { onToggle() }
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text(
-                text = todo.title,
-                modifier = Modifier.weight(1f),
-                style = if (todo.completed) {
-                    MaterialTheme.typography.bodyLarge.copy(
-                        textDecoration = TextDecoration.LineThrough,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                } else {
-                    MaterialTheme.typography.bodyLarge
-                }
-            )
-
-            IconButton(onClick = onDelete) {
-                Icon(
-                    Icons.Default.Delete,
-                    contentDescription = "Delete task",
-                    tint = MaterialTheme.colorScheme.error
-                )
-            }
-        }
-    }
-}
-```
-
-### Lifecycle of Composables
-
-Composables have three lifecycle stages:
-
-1. **Enter the Composition**: Composable is first executed
-2. **Recomposition**: Re-executed when state changes
-3. **Leave the Composition**: Removed from UI
-
-```kotlin
-@Composable
-fun LifecycleExample() {
-    DisposableEffect(Unit) {
-        println("Entered composition")
-
-        onDispose {
-            println("Left composition")
-        }
-    }
-
-    var count by remember { mutableStateOf(0) }
-
-    println("Recomposing with count: $count")  // Runs on every recomposition
-
-    Button(onClick = { count++ }) {
-        Text("Count: $count")
-    }
-}
-```
-
-### Side Effects in Compose
-
-Composables should be side-effect free, but sometimes you need side effects:
-
-```kotlin
-// LaunchedEffect - launch coroutine tied to composition
-@Composable
-fun LoadDataExample(userId: String) {
-    var userData by remember { mutableStateOf<User?>(null) }
-
-    LaunchedEffect(userId) {  // Restarts when userId changes
-        userData = loadUserData(userId)
-    }
-
-    userData?.let { user ->
-        UserProfile(user)
-    } ?: CircularProgressIndicator()
-}
-
-// DisposableEffect - cleanup when leaving composition
-@Composable
-fun TimerExample() {
-    DisposableEffect(Unit) {
-        val timer = Timer()
-        timer.schedule(/* task */)
-
-        onDispose {
-            timer.cancel()  // Cleanup
-        }
-    }
-}
-
-// SideEffect - execute on every successful recomposition
-@Composable
-fun AnalyticsExample(screen: String) {
-    SideEffect {
-        analytics.logScreenView(screen)
-    }
-}
-```
-
-### Theme and Styling
-
-```kotlin
-@Composable
-fun MyApp() {
-    MaterialTheme(
-        colorScheme = if (isSystemInDarkTheme()) {
-            darkColorScheme()
-        } else {
-            lightColorScheme()
-        },
-        typography = Typography,
-        content = content
-    ) {
-        // App content
-    }
-}
-
-// Using theme values
-@Composable
-fun ThemedText() {
-    Text(
-        "Themed text",
-        color = MaterialTheme.colorScheme.primary,
-        style = MaterialTheme.typography.bodyLarge
-    )
-}
-```
-
-### Best Practices
-
-1. **Keep composables small and focused**
-2. **Hoist state when needed**
-3. **Use keys in lazy lists**
-4. **Avoid side effects in composables**
-5. **Don't read state in remember initialization**
-6. **Use derivedStateOf for expensive computations**
-7. **Prefer stateless composables for reusability**
-
----
-
-
 # Question (EN)
 > What is Jetpack Compose? Explain core concepts: composable functions, state management, recomposition, modifiers, layouts, and lifecycle. Provide comprehensive examples for building UIs.
-
-# Вопрос (RU)
-> Что такое Jetpack Compose? Объясните основные концепции: composable функции, управление состоянием, recomposition, модификаторы, макеты и жизненный цикл. Приведите подробные примеры построения UI.
-
----
-
-
----
-
-
-## Answer (EN)
-
-Jetpack Compose is Android's modern declarative UI toolkit that simplifies and accelerates UI development. Unlike the imperative View system, Compose describes what the UI should look like based on the current state, and the framework handles all updates automatically.
-
-### Why Jetpack Compose?
-
-**Traditional View System (Imperative)**:
-```kotlin
-// XML layout
-<TextView
-    android:id="@+id/textView"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content" />
-
-// Activity/Fragment
-val textView = findViewById<TextView>(R.id.textView)
-textView.text = "Hello"
-textView.setTextColor(Color.BLUE)
-// Must manually update when state changes
-```
-
-**Jetpack Compose (Declarative)**:
-```kotlin
-@Composable
-fun Greeting(name: String) {
-    Text(
-        text = "Hello $name",
-        color = Color.Blue
-    )
-    // Automatically updates when name changes
-}
-```
-
-### Core Principles
-
-1. **Declarative**: Describe UI state, not how to achieve it
-2. **Composable**: Build UI from small, reusable functions
-3. **Reactive**: UI automatically updates when state changes
-4. **Data-driven**: UI is a function of state: `UI = f(state)`
-
-### Composable Functions
-
-Composable functions are annotated with `@Composable` and can call other composables:
-
-```kotlin
-@Composable
-fun MessageCard(message: Message) {
-    Row(modifier = Modifier.padding(8.dp)) {
-        Image(
-            painter = painterResource(R.drawable.profile),
-            contentDescription = "Profile picture",
-            modifier = Modifier
-                .size(40.dp)
-                .clip(CircleShape)
-        )
-
-        Spacer(modifier = Modifier.width(8.dp))
-
-        Column {
-            Text(
-                text = message.author,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = message.body,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
-
-data class Message(val author: String, val body: String)
-```
-
-**Key characteristics**:
-- Must be annotated with `@Composable`
-- Can call other `@Composable` functions
-- Cannot return values (return type is Unit or no return)
-- Can only be called from other composables or composable lambdas
-- Should be side-effect free (use `SideEffect` or `LaunchedEffect` for side effects)
-
-### State and Recomposition
-
-**State** is any value that can change over time. When state changes, Compose **recomposes** (re-executes) composable functions that read that state.
-
-#### Basic State Management
-
-```kotlin
-@Composable
-fun Counter() {
-    // remember preserves state across recompositions
-    var count by remember { mutableStateOf(0) }
-
-    Column(
-        modifier = Modifier.padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Count: $count")
-        Button(onClick = { count++ }) {
-            Text("Increment")
-        }
-    }
-}
-
-// Without remember - WRONG!
-@Composable
-fun BrokenCounter() {
-    var count by mutableStateOf(0)  //  Resets to 0 on every recomposition!
-
-    Button(onClick = { count++ }) {
-        Text("Count: $count")  // Always shows 0
-    }
-}
-```
-
-#### State Hoisting
-
-Lifting state up to make composables stateless and reusable:
-
-```kotlin
-// Stateful version (not reusable)
-@Composable
-fun StatefulCounter() {
-    var count by remember { mutableStateOf(0) }
-
-    Button(onClick = { count++ }) {
-        Text("Count: $count")
-    }
-}
-
-// Stateless version (reusable)
-@Composable
-fun StatelessCounter(
-    count: Int,
-    onIncrement: () -> Unit
-) {
-    Button(onClick = onIncrement) {
-        Text("Count: $count")
-    }
-}
-
-// Parent manages state
-@Composable
-fun CounterScreen() {
-    var count by remember { mutableStateOf(0) }
-
-    Column {
-        Text("Current count: $count")
-        StatelessCounter(
-            count = count,
-            onIncrement = { count++ }
-        )
-        Button(onClick = { count = 0 }) {
-            Text("Reset")
-        }
-    }
-}
-```
-
-#### State Types
-
-```kotlin
-// 1. mutableStateOf - single value
-var name by remember { mutableStateOf("") }
-
-// 2. mutableStateListOf - observable list
-val items = remember { mutableStateListOf<String>() }
-items.add("New item")  // Triggers recomposition
-
-// 3. mutableStateMapOf - observable map
-val userScores = remember { mutableStateMapOf<String, Int>() }
-userScores["Alice"] = 100  // Triggers recomposition
-
-// 4. derivedStateOf - computed value
-val filteredItems by remember(items, query) {
-    derivedStateOf {
-        items.filter { it.contains(query, ignoreCase = true) }
-    }
-}
-```
-
-### Recomposition
-
-Recomposition is the process of re-executing composables when state changes:
-
-```kotlin
-@Composable
-fun RecompositionExample() {
-    var count by remember { mutableStateOf(0) }
-
-    Column {
-        // This Text recomposes when count changes
-        Text("Count: $count")
-        println("Text recomposed!")  // Prints on every count change
-
-        // This Text never recomposes (no state read)
-        Text("Static text")
-        println("Static text composed!")  // Prints only once
-
-        Button(onClick = { count++ }) {
-            Text("Increment")
-        }
-    }
-}
-```
-
-**Recomposition characteristics**:
-- **Intelligent**: Only recomposes functions that read changed state
-- **Can happen in any order**: Don't assume sequential execution
-- **Can be skipped**: If inputs haven't changed
-- **Should be idempotent**: Same inputs = same output
-- **Should be fast**: Avoid heavy computation
-
-#### Recomposition Scope
-
-```kotlin
-@Composable
-fun ScopeExample() {
-    var outerState by remember { mutableStateOf(0) }
-
-    Column {
-        Text("Outer: $outerState")  // Reads outerState
-
-        InnerComposable()  // Doesn't read outerState - won't recompose
-    }
-}
-
-@Composable
-fun InnerComposable() {
-    var innerState by remember { mutableStateOf(0) }
-
-    Text("Inner: $innerState")
-    Button(onClick = { innerState++ }) {
-        Text("Increment Inner")
-    }
-    // Only this composable recomposes when innerState changes
-}
-```
-
-### Modifiers
-
-Modifiers allow you to decorate or augment composables. They can:
-- Change size, layout, behavior, appearance
-- Add interactions (clicks, gestures)
-- Add accessibility information
-
-```kotlin
-@Composable
-fun ModifierExamples() {
-    // Order matters!
-    Box(
-        modifier = Modifier
-            .size(100.dp)           // 1. Set size first
-            .background(Color.Blue)  // 2. Then background
-            .padding(16.dp)         // 3. Then padding
-            .border(2.dp, Color.Red) // 4. Border inside padding
-    )
-
-    // Different order = different result
-    Box(
-        modifier = Modifier
-            .padding(16.dp)         // 1. Padding first
-            .size(100.dp)           // 2. Size inside padding
-            .background(Color.Blue)  // 3. Background fills size
-    )
-}
-```
-
-#### Common Modifiers
-
-```kotlin
-@Composable
-fun ModifierGuide() {
-    Column {
-        // Size modifiers
-        Box(Modifier.size(100.dp))
-        Box(Modifier.width(100.dp).height(50.dp))
-        Box(Modifier.fillMaxWidth())
-        Box(Modifier.fillMaxHeight())
-        Box(Modifier.fillMaxSize())
-
-        // Padding and spacing
-        Box(Modifier.padding(16.dp))
-        Box(Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
-        Box(Modifier.padding(start = 16.dp))
-
-        // Background and borders
-        Box(Modifier.background(Color.Blue))
-        Box(Modifier.background(Color.Red, shape = RoundedCornerShape(8.dp)))
-        Box(Modifier.border(2.dp, Color.Black))
-
-        // Clickable
-        Box(Modifier.clickable { /* onClick */ })
-
-        // Alignment and arrangement
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text("Centered")
-        }
-
-        // Scrolling
-        Column(Modifier.verticalScroll(rememberScrollState())) {
-            // Content
-        }
-    }
-}
-```
-
-#### Custom Modifiers
-
-```kotlin
-// Extension function pattern
-fun Modifier.debugBorder(color: Color = Color.Red) = this.then(
-    Modifier.border(2.dp, color)
-)
-
-// Usage
-Text(
-    "Debug text",
-    modifier = Modifier.debugBorder()
-)
-
-// With composed state
-fun Modifier.shimmer(enabled: Boolean): Modifier = composed {
-    if (enabled) {
-        val transition = rememberInfiniteTransition()
-        val alpha by transition.animateFloat(
-            initialValue = 0.3f,
-            targetValue = 0.9f,
-            animationSpec = infiniteRepeatable(
-                animation = tween(1000),
-                repeatMode = RepeatMode.Reverse
-            )
-        )
-        this.alpha(alpha)
-    } else {
-        this
-    }
-}
-```
-
-### Layouts
-
-Compose provides three basic layout composables:
-
-#### Column - Vertical Layout
-
-```kotlin
-@Composable
-fun ColumnExample() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("First item")
-        Text("Second item")
-        Text("Third item")
-    }
-}
-
-// Arrangement options
-Column(verticalArrangement = Arrangement.Top)         // Default
-Column(verticalArrangement = Arrangement.Center)
-Column(verticalArrangement = Arrangement.Bottom)
-Column(verticalArrangement = Arrangement.SpaceBetween)
-Column(verticalArrangement = Arrangement.SpaceAround)
-Column(verticalArrangement = Arrangement.SpaceEvenly)
-Column(verticalArrangement = Arrangement.spacedBy(8.dp))
-
-// Alignment options
-Column(horizontalAlignment = Alignment.Start)        // Default
-Column(horizontalAlignment = Alignment.CenterHorizontally)
-Column(horizontalAlignment = Alignment.End)
-```
-
-#### Row - Horizontal Layout
-
-```kotlin
-@Composable
-fun RowExample() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(Icons.Default.Star, contentDescription = null)
-        Text("Rating")
-        Text("4.5")
-    }
-}
-
-// Similar arrangement and alignment options as Column
-```
-
-#### Box - Stack Layout
-
-```kotlin
-@Composable
-fun BoxExample() {
-    Box(
-        modifier = Modifier.size(200.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        // Items stack on top of each other
-        Image(
-            painter = painterResource(R.drawable.background),
-            contentDescription = null,
-            modifier = Modifier.fillMaxSize()
-        )
-        Text(
-            "Overlay Text",
-            color = Color.White,
-            fontSize = 24.sp
-        )
-    }
-}
-```
-
-#### LazyColumn and LazyRow - Efficient Lists
-
-```kotlin
-@Composable
-fun LazyListExample(items: List<String>) {
-    LazyColumn(
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        items(items) { item ->
-            Text(item)
-        }
-
-        // Or with index
-        itemsIndexed(items) { index, item ->
-            Text("$index: $item")
-        }
-
-        // Single item
-        item {
-            Text("Header")
-        }
-    }
-}
-
-// LazyColumn with different item types
-@Composable
-fun MixedLazyList() {
-    LazyColumn {
-        // Header
-        item {
-            Text(
-                "Header",
-                style = MaterialTheme.typography.headlineMedium
-            )
-        }
-
-        // List of items
-        items(20) { index ->
-            ListItem(index)
-        }
-
-        // Footer
-        item {
-            Button(onClick = { /* Load more */ }) {
-                Text("Load More")
-            }
-        }
-    }
-}
-
-// With key for proper recomposition
-@Composable
-fun LazyListWithKeys(messages: List<Message>) {
-    LazyColumn {
-        items(
-            items = messages,
-            key = { message -> message.id }  // Important for animations
-        ) { message ->
-            MessageCard(message)
-        }
-    }
-}
-```
-
-#### ConstraintLayout
-
-```kotlin
-@Composable
-fun ConstraintLayoutExample() {
-    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (button, text, image) = createRefs()
-
-        Button(
-            onClick = { },
-            modifier = Modifier.constrainAs(button) {
-                top.linkTo(parent.top, margin = 16.dp)
-                start.linkTo(parent.start, margin = 16.dp)
-            }
-        ) {
-            Text("Button")
-        }
-
-        Text(
-            "Constrained Text",
-            modifier = Modifier.constrainAs(text) {
-                top.linkTo(button.bottom, margin = 16.dp)
-                centerHorizontallyTo(parent)
-            }
-        )
-
-        Image(
-            painter = painterResource(R.drawable.ic_launcher),
-            contentDescription = null,
-            modifier = Modifier.constrainAs(image) {
-                bottom.linkTo(parent.bottom, margin = 16.dp)
-                end.linkTo(parent.end, margin = 16.dp)
-            }
-        )
-    }
-}
-```
-
-### Complete UI Examples
-
-#### Example 1: Login Screen
-
-```kotlin
-@Composable
-fun LoginScreen(
-    onLoginClick: (String, String) -> Unit
-) {
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var passwordVisible by remember { mutableStateOf(false) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(
-            text = "Welcome Back",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 32.dp)
-        )
-
-        OutlinedTextField(
-            value = email,
-            onValueChange = { email = it },
-            label = { Text("Email") },
-            leadingIcon = {
-                Icon(Icons.Default.Email, contentDescription = null)
-            },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email,
-                imeAction = ImeAction.Next
-            )
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Password") },
-            leadingIcon = {
-                Icon(Icons.Default.Lock, contentDescription = null)
-            },
-            trailingIcon = {
-                IconButton(onClick = { passwordVisible = !passwordVisible }) {
-                    Icon(
-                        if (passwordVisible) Icons.Default.Visibility
-                        else Icons.Default.VisibilityOff,
-                        contentDescription = "Toggle password visibility"
-                    )
-                }
-            },
-            visualTransformation = if (passwordVisible)
-                VisualTransformation.None
-            else
-                PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Password,
-                imeAction = ImeAction.Done
-            )
-        )
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Button(
-            onClick = { onLoginClick(email, password) },
-            modifier = Modifier.fillMaxWidth(),
-            enabled = email.isNotBlank() && password.isNotBlank()
-        ) {
-            Text("Login")
-        }
-
-        TextButton(
-            onClick = { /* Navigate to forgot password */ },
-            modifier = Modifier.padding(top = 8.dp)
-        ) {
-            Text("Forgot Password?")
-        }
-    }
-}
-```
-
-#### Example 2: Profile Card with State
-
-```kotlin
-data class User(
-    val name: String,
-    val bio: String,
-    val followerCount: Int,
-    val isFollowing: Boolean
-)
-
-@Composable
-fun ProfileCard(
-    user: User,
-    onFollowClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                // Profile picture
-                Box(
-                    modifier = Modifier
-                        .size(64.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.primary)
-                ) {
-                    Text(
-                        text = user.name.first().toString(),
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = Color.White,
-                        modifier = Modifier.align(Alignment.Center)
-                    )
-                }
-
-                Spacer(modifier = Modifier.width(16.dp))
-
-                Column(modifier = Modifier.weight(1f)) {
-                    Text(
-                        text = user.name,
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                    Text(
-                        text = "${user.followerCount} followers",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-
-                Button(
-                    onClick = onFollowClick,
-                    colors = if (user.isFollowing) {
-                        ButtonDefaults.outlinedButtonColors()
-                    } else {
-                        ButtonDefaults.buttonColors()
-                    }
-                ) {
-                    Text(if (user.isFollowing) "Following" else "Follow")
-                }
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = user.bio,
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
-
-// Usage with state
-@Composable
-fun ProfileScreen() {
-    var user by remember {
-        mutableStateOf(
-            User(
-                name = "John Doe",
-                bio = "Android Developer | Kotlin Enthusiast",
-                followerCount = 1234,
-                isFollowing = false
-            )
-        )
-    }
-
-    ProfileCard(
-        user = user,
-        onFollowClick = {
-            user = user.copy(
-                isFollowing = !user.isFollowing,
-                followerCount = if (user.isFollowing)
-                    user.followerCount - 1
-                else
-                    user.followerCount + 1
-            )
-        }
-    )
-}
-```
-
-#### Example 3: Todo List with CRUD Operations
-
-```kotlin
-data class TodoItem(
-    val id: Int,
-    val title: String,
-    val completed: Boolean = false
-)
-
-@Composable
-fun TodoListScreen() {
-    var todos by remember {
-        mutableStateOf(
-            listOf(
-                TodoItem(1, "Learn Compose"),
-                TodoItem(2, "Build an app"),
-                TodoItem(3, "Deploy to Play Store")
-            )
-        )
-    }
-    var newTodoText by remember { mutableStateOf("") }
-    var nextId by remember { mutableStateOf(4) }
-
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        // Header
-        Text(
-            text = "My Tasks",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
-
-        // Add new todo
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            OutlinedTextField(
-                value = newTodoText,
-                onValueChange = { newTodoText = it },
-                placeholder = { Text("New task...") },
-                modifier = Modifier.weight(1f),
-                singleLine = true
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            IconButton(
-                onClick = {
-                    if (newTodoText.isNotBlank()) {
-                        todos = todos + TodoItem(nextId++, newTodoText)
-                        newTodoText = ""
-                    }
-                }
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add task")
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Todo list
-        LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(
-                items = todos,
-                key = { it.id }
-            ) { todo ->
-                TodoItemRow(
-                    todo = todo,
-                    onToggle = {
-                        todos = todos.map {
-                            if (it.id == todo.id) it.copy(completed = !it.completed)
-                            else it
-                        }
-                    },
-                    onDelete = {
-                        todos = todos.filter { it.id != todo.id }
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun TodoItemRow(
-    todo: TodoItem,
-    onToggle: () -> Unit,
-    onDelete: () -> Unit
-) {
-    Card(
-        modifier = Modifier.fillMaxWidth()
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = todo.completed,
-                onCheckedChange = { onToggle() }
-            )
-
-            Spacer(modifier = Modifier.width(8.dp))
-
-            Text(
-                text = todo.title,
-                modifier = Modifier.weight(1f),
-                style = if (todo.completed) {
-                    MaterialTheme.typography.bodyLarge.copy(
-                        textDecoration = TextDecoration.LineThrough,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                } else {
-                    MaterialTheme.typography.bodyLarge
-                }
-            )
-
-            IconButton(onClick = onDelete) {
-                Icon(
-                    Icons.Default.Delete,
-                    contentDescription = "Delete task",
-                    tint = MaterialTheme.colorScheme.error
-                )
-            }
-        }
-    }
-}
-```
-
-### Lifecycle of Composables
-
-Composables have three lifecycle stages:
-
-1. **Enter the Composition**: Composable is first executed
-2. **Recomposition**: Re-executed when state changes
-3. **Leave the Composition**: Removed from UI
-
-```kotlin
-@Composable
-fun LifecycleExample() {
-    DisposableEffect(Unit) {
-        println("Entered composition")
-
-        onDispose {
-            println("Left composition")
-        }
-    }
-
-    var count by remember { mutableStateOf(0) }
-
-    println("Recomposing with count: $count")  // Runs on every recomposition
-
-    Button(onClick = { count++ }) {
-        Text("Count: $count")
-    }
-}
-```
-
-### Side Effects in Compose
-
-Composables should be side-effect free, but sometimes you need side effects:
-
-```kotlin
-// LaunchedEffect - launch coroutine tied to composition
-@Composable
-fun LoadDataExample(userId: String) {
-    var userData by remember { mutableStateOf<User?>(null) }
-
-    LaunchedEffect(userId) {  // Restarts when userId changes
-        userData = loadUserData(userId)
-    }
-
-    userData?.let { user ->
-        UserProfile(user)
-    } ?: CircularProgressIndicator()
-}
-
-// DisposableEffect - cleanup when leaving composition
-@Composable
-fun TimerExample() {
-    DisposableEffect(Unit) {
-        val timer = Timer()
-        timer.schedule(/* task */)
-
-        onDispose {
-            timer.cancel()  // Cleanup
-        }
-    }
-}
-
-// SideEffect - execute on every successful recomposition
-@Composable
-fun AnalyticsExample(screen: String) {
-    SideEffect {
-        analytics.logScreenView(screen)
-    }
-}
-```
-
-### Theme and Styling
-
-```kotlin
-@Composable
-fun MyApp() {
-    MaterialTheme(
-        colorScheme = if (isSystemInDarkTheme()) {
-            darkColorScheme()
-        } else {
-            lightColorScheme()
-        },
-        typography = Typography,
-        content = content
-    ) {
-        // App content
-    }
-}
-
-// Using theme values
-@Composable
-fun ThemedText() {
-    Text(
-        "Themed text",
-        color = MaterialTheme.colorScheme.primary,
-        style = MaterialTheme.typography.bodyLarge
-    )
-}
-```
-
-### Best Practices
-
-1. **Keep composables small and focused**
-2. **Hoist state when needed**
-3. **Use keys in lazy lists**
-4. **Avoid side effects in composables**
-5. **Don't read state in remember initialization**
-6. **Use derivedStateOf for expensive computations**
-7. **Prefer stateless composables for reusability**
 
 ---
 
 ## Ответ (RU)
 
-Jetpack Compose - это современный декларативный UI-инструментарий Android, упрощающий и ускоряющий разработку пользовательского интерфейса.
+Jetpack Compose — это современный декларативный UI-фреймворк для Android, который упрощает и ускоряет разработку интерфейса. В отличие от императивной `View`-системы, в Compose вы описываете, как должен выглядеть UI при данном состоянии, а фреймворк сам эффективно обновляет экран при изменении состояния.
 
 ### Почему Jetpack Compose?
 
-**Традиционная система View (Императивная)**:
+**Традиционная `View`-система (императивный подход)**:
 ```kotlin
-// XML макет + код для обновления
+// XML + код
+<TextView
+    android:id="@+id/textView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
 val textView = findViewById<TextView>(R.id.textView)
 textView.text = "Привет"
-// Необходимо вручную обновлять при изменении состояния
+textView.setTextColor(Color.BLUE)
+// При изменении данных нужно вручную менять View
 ```
 
-**Jetpack Compose (Декларативная)**:
+**Jetpack Compose (декларативный подход)**:
 ```kotlin
 @Composable
 fun Greeting(name: String) {
-    Text("Привет $name")
-    // Автоматически обновляется при изменении name
+    Text(
+        text = "Привет $name",
+        color = Color.Blue
+    )
+    // Если name приходит из состояния и меняется,
+    // этот composable будет перерассчитан автоматически.
 }
 ```
 
-### Основные Принципы
+### Основные принципы
 
-1. **Декларативность**: Описываете состояние UI, а не как его достичь
-2. **Компонуемость**: Строите UI из маленьких переиспользуемых функций
-3. **Реактивность**: UI автоматически обновляется при изменении состояния
-4. **Управление данными**: UI = f(состояние)
+1. **Декларативность**: UI описывается как функция состояния, а не последовательность мутаций.
+2. **Компонуемость**: UI строится из мелких переиспользуемых composable-функций.
+3. **Реактивность**: При изменении наблюдаемого состояния нужные участки UI перерассчитываются.
+4. **UI = f(state)**: Один источник правды для состояния, предсказуемость.
 
-### Composable Функции
+### Composable-функции
 
-Composable функции аннотируются `@Composable` и могут вызывать другие composable:
+Composable-функции помечаются аннотацией `@Composable` и могут вызывать другие composable:
 
 ```kotlin
 @Composable
@@ -2072,23 +115,125 @@ fun MessageCard(message: Message) {
         }
     }
 }
+
+data class Message(val id: Long, val author: String, val body: String)
 ```
 
-### Состояние И Recomposition
+Характеристики:
+- `@Composable` над функцией.
+- Можно вызывать только из других composable или composable-лямбд.
+- Обычно возвращают `Unit` и описывают UI, а не создают `View`.
+- Должны быть по возможности без побочных эффектов; побочные эффекты выносятся в `LaunchedEffect`, `SideEffect`, `DisposableEffect` и т.п.
 
-**Состояние** - это любое значение, которое может измениться. При изменении состояния Compose выполняет **recomposition** (переисполнение) composable функций, читающих это состояние.
+### Состояние и Recomposition
+
+Состояние — любое значение, которое может изменяться со временем. Если composable читает observable-состояние (например, `MutableState`), то при его изменении соответствующая область композиции будет перерассчитана.
+
+#### Базовое управление состоянием
 
 ```kotlin
 @Composable
 fun Counter() {
-    // remember сохраняет состояние между recomposition
     var count by remember { mutableStateOf(0) }
 
     Column(
         modifier = Modifier.padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Счет: $count")
+        Text(text = "Счёт: $count")
+        Button(onClick = { count++ }) {
+            Text("Увеличить")
+        }
+    }
+}
+
+// Пример с ошибкой
+@Composable
+fun BrokenCounter() {
+    var count by mutableStateOf(0) // пересоздаётся при каждой recomposition
+
+    Button(onClick = { count++ }) {
+        Text("Счёт: $count")
+    }
+}
+```
+
+#### Подъём состояния (State Hoisting)
+
+```kotlin
+@Composable
+fun StatefulCounter() {
+    var count by remember { mutableStateOf(0) }
+    Button(onClick = { count++ }) {
+        Text("Счёт: $count")
+    }
+}
+
+@Composable
+fun StatelessCounter(
+    count: Int,
+    onIncrement: () -> Unit
+) {
+    Button(onClick = onIncrement) {
+        Text("Счёт: $count")
+    }
+}
+
+@Composable
+fun CounterScreen() {
+    var count by remember { mutableStateOf(0) }
+
+    Column {
+        Text("Текущий счёт: $count")
+        StatelessCounter(
+            count = count,
+            onIncrement = { count++ }
+        )
+        Button(onClick = { count = 0 }) {
+            Text("Сброс")
+        }
+    }
+}
+```
+
+#### Типы состояния (Compose runtime)
+
+```kotlin
+// 1. mutableStateOf — одно наблюдаемое значение
+var name by remember { mutableStateOf("") }
+
+// 2. SnapshotStateList — наблюдаемый список
+val items = remember { mutableStateListOf<String>() }
+items.add("Новый элемент")
+
+// 3. SnapshotStateMap — наблюдаемая map
+val userScores = remember { mutableStateMapOf<String, Int>() }
+userScores["Alice"] = 100
+
+// 4. derivedStateOf — производное значение
+val filteredItems by remember(items, query) {
+    derivedStateOf {
+        items.filter { it.contains(query, ignoreCase = true) }
+    }
+}
+```
+
+### Recomposition
+
+Recomposition — повторное выполнение composable-функций, которые зависят от изменившегося состояния.
+
+```kotlin
+@Composable
+fun RecompositionExample() {
+    var count by remember { mutableStateOf(0) }
+
+    Column {
+        Text("Счёт: $count")
+        println("Recomposition: Text с счётом")
+
+        Text("Статичный текст")
+        println("Статичный Text создаётся один раз")
+
         Button(onClick = { count++ }) {
             Text("Увеличить")
         }
@@ -2096,27 +241,139 @@ fun Counter() {
 }
 ```
 
+Свойства `recomposition` и стабильности:
+- Пересчитываются только затронутые области дерева (scopes), а не весь экран.
+- Порядок выполнения не гарантируется.
+- Может быть пропущена (`skipped`), если входные данные стабильны (`stability` / `skippability`).
+- Composable должны быть идемпотентны и быстрыми.
+
+#### Область Recomposition (Scope)
+
+```kotlin
+@Composable
+fun ScopeExample() {
+    var outerState by remember { mutableStateOf(0) }
+
+    Column {
+        Text("Outer: $outerState")
+
+        InnerComposable() // не читает outerState напрямую
+    }
+}
+
+@Composable
+fun InnerComposable() {
+    var innerState by remember { mutableStateOf(0) }
+
+    Text("Inner: $innerState")
+    Button(onClick = { innerState++ }) {
+        Text("Increment Inner")
+    }
+    // При изменении innerState пересчитывается только эта область
+}
+```
+
 ### Модификаторы
 
-Модификаторы позволяют оформлять или дополнять composable:
+Модификаторы позволяют:
+- задавать размер и позиционирование,
+- менять фон, границы, форму,
+- обрабатывать клики и жесты,
+- добавлять семантику и доступность.
+
+Порядок применения модификаторов важен.
 
 ```kotlin
 @Composable
 fun ModifierExamples() {
-    // Порядок имеет значение!
+    // Порядок важен
     Box(
         modifier = Modifier
-            .size(100.dp)           // 1. Установить размер
-            .background(Color.Blue)  // 2. Затем фон
-            .padding(16.dp)         // 3. Затем отступ
-            .border(2.dp, Color.Red) // 4. Граница внутри отступа
+            .size(100.dp)
+            .background(Color.Blue)
+            .padding(16.dp)
+            .border(2.dp, Color.Red)
     )
+
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .size(100.dp)
+            .background(Color.Blue)
+    )
+}
+```
+
+#### Подборка распространённых модификаторов
+
+```kotlin
+@Composable
+fun ModifierGuide() {
+    Column {
+        // Размер
+        Box(Modifier.size(100.dp))
+        Box(Modifier.width(100.dp).height(50.dp))
+        Box(Modifier.fillMaxWidth())
+        Box(Modifier.fillMaxSize())
+
+        // Отступы и оформление
+        Box(Modifier.padding(16.dp))
+        Box(Modifier.background(Color.Blue))
+        Box(Modifier.border(2.dp, Color.Black))
+
+        // Взаимодействие
+        Box(Modifier.clickable { /* onClick */ })
+
+        // Выравнивание
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("По центру")
+        }
+
+        // Прокрутка
+        Column(Modifier.verticalScroll(rememberScrollState())) {
+            // Прокручиваемый контент
+        }
+    }
+}
+```
+
+#### Пользовательские модификаторы
+
+```kotlin
+fun Modifier.debugBorder(color: Color = Color.Red): Modifier =
+    this.then(Modifier.border(2.dp, color))
+
+@Composable
+fun DebugExample() {
+    Text(
+        "Debug text",
+        modifier = Modifier.debugBorder()
+    )
+}
+
+fun Modifier.shimmer(enabled: Boolean): Modifier = composed {
+    if (!enabled) return@composed this
+
+    val transition = rememberInfiniteTransition(label = "shimmer")
+    val alpha by transition.animateFloat(
+        initialValue = 0.3f,
+        targetValue = 0.9f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "alpha"
+    )
+    this.alpha(alpha)
 }
 ```
 
 ### Макеты
 
-#### Column - Вертикальный Макет
+#### Column — вертикальный список
 
 ```kotlin
 @Composable
@@ -2135,7 +392,7 @@ fun ColumnExample() {
 }
 ```
 
-#### Row - Горизонтальный Макет
+#### Row — горизонтальное размещение
 
 ```kotlin
 @Composable
@@ -2152,7 +409,7 @@ fun RowExample() {
 }
 ```
 
-#### Box - Стековый Макет
+#### Box — наложение
 
 ```kotlin
 @Composable
@@ -2161,7 +418,6 @@ fun BoxExample() {
         modifier = Modifier.size(200.dp),
         contentAlignment = Alignment.Center
     ) {
-        // Элементы накладываются друг на друга
         Image(
             painter = painterResource(R.drawable.background),
             contentDescription = null,
@@ -2176,7 +432,7 @@ fun BoxExample() {
 }
 ```
 
-#### LazyColumn - Эффективные Списки
+#### LazyColumn / LazyRow — списки
 
 ```kotlin
 @Composable
@@ -2186,16 +442,77 @@ fun LazyListExample(items: List<String>) {
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
+        // Элементы списка
         items(items) { item ->
             Text(item)
+        }
+
+        // С индексом
+        itemsIndexed(items) { index, item ->
+            Text("$index: $item")
+        }
+
+        // Статический элемент
+        item {
+            Text("Заголовок")
+        }
+    }
+}
+
+@Composable
+fun LazyListWithKeys(messages: List<Message>) {
+    LazyColumn {
+        items(
+            items = messages,
+            key = { message -> message.id }
+        ) { message ->
+            MessageCard(message)
         }
     }
 }
 ```
 
-### Полные Примеры UI
+#### ConstraintLayout (опционально)
 
-#### Пример 1: Экран Входа
+```kotlin
+@Composable
+fun ConstraintLayoutExample() {
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val (button, text, image) = createRefs()
+
+        Button(
+            onClick = { },
+            modifier = Modifier.constrainAs(button) {
+                top.linkTo(parent.top, margin = 16.dp)
+                start.linkTo(parent.start, margin = 16.dp)
+            }
+        ) {
+            Text("Кнопка")
+        }
+
+        Text(
+            "Текст с ограничениями",
+            modifier = Modifier.constrainAs(text) {
+                top.linkTo(button.bottom, margin = 16.dp)
+                centerHorizontallyTo(parent)
+            }
+        )
+
+        Image(
+            painter = painterResource(R.drawable.ic_launcher),
+            contentDescription = null,
+            modifier = Modifier.constrainAs(image) {
+                bottom.linkTo(parent.bottom, margin = 16.dp)
+                end.linkTo(parent.end, margin = 16.dp)
+            }
+        )
+    }
+}
+```
+
+### Полные примеры UI
+
+#### Пример 1: Экран входа (LoginScreen)
 
 ```kotlin
 @Composable
@@ -2223,7 +540,15 @@ fun LoginScreen(
             value = email,
             onValueChange = { email = it },
             label = { Text("Email") },
-            modifier = Modifier.fillMaxWidth()
+            leadingIcon = {
+                Icon(Icons.Default.Email, contentDescription = null)
+            },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            )
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -2232,11 +557,27 @@ fun LoginScreen(
             value = password,
             onValueChange = { password = it },
             label = { Text("Пароль") },
+            leadingIcon = {
+                Icon(Icons.Default.Lock, contentDescription = null)
+            },
+            trailingIcon = {
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(
+                        imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                        contentDescription = "Переключить видимость пароля"
+                    )
+                }
+            },
             visualTransformation = if (passwordVisible)
                 VisualTransformation.None
             else
                 PasswordVisualTransformation(),
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            )
         )
 
         Spacer(modifier = Modifier.height(24.dp))
@@ -2248,11 +589,118 @@ fun LoginScreen(
         ) {
             Text("Войти")
         }
+
+        TextButton(
+            onClick = { /* Восстановление пароля */ },
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
+            Text("Забыли пароль?")
+        }
     }
 }
 ```
 
-#### Пример 2: Список Задач
+#### Пример 2: Профиль с состоянием (ProfileCard / ProfileScreen)
+
+```kotlin
+data class User(
+    val name: String,
+    val bio: String,
+    val followerCount: Int,
+    val isFollowing: Boolean
+)
+
+@Composable
+fun ProfileCard(
+    user: User,
+    onFollowClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary)
+                ) {
+                    Text(
+                        text = user.name.first().toString(),
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = Color.White,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = user.name,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = "${user.followerCount} подписчиков",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                OutlinedButton(
+                    onClick = onFollowClick
+                ) {
+                    Text(if (user.isFollowing) "Вы подписаны" else "Подписаться")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = user.bio,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
+
+@Composable
+fun ProfileScreen() {
+    var user by remember {
+        mutableStateOf(
+            User(
+                name = "John Doe",
+                bio = "Android Developer | Kotlin Enthusiast",
+                followerCount = 1234,
+                isFollowing = false
+            )
+        )
+    }
+
+    ProfileCard(
+        user = user,
+        onFollowClick = {
+            user = user.copy(
+                isFollowing = !user.isFollowing,
+                followerCount = if (user.isFollowing)
+                    user.followerCount - 1
+                else
+                    user.followerCount + 1
+            )
+        }
+    )
+}
+```
+
+#### Пример 3: Список задач с CRUD (TodoListScreen / TodoItemRow)
 
 ```kotlin
 data class TodoItem(
@@ -2272,14 +720,52 @@ fun TodoListScreen() {
             )
         )
     }
+    var newTodoText by remember { mutableStateOf("") }
+    var nextId by remember { mutableStateOf(4) }
 
-    Column(modifier = Modifier.padding(16.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
         Text(
             text = "Мои задачи",
-            style = MaterialTheme.typography.headlineMedium
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 16.dp)
         )
 
-        LazyColumn {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedTextField(
+                value = newTodoText,
+                onValueChange = { newTodoText = it },
+                placeholder = { Text("Новая задача...") },
+                modifier = Modifier.weight(1f),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            IconButton(
+                onClick = {
+                    if (newTodoText.isNotBlank()) {
+                        todos = todos + TodoItem(nextId, newTodoText)
+                        nextId++
+                        newTodoText = ""
+                    }
+                }
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Добавить задачу")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
             items(
                 items = todos,
                 key = { it.id }
@@ -2291,7 +777,56 @@ fun TodoListScreen() {
                             if (it.id == todo.id) it.copy(completed = !it.completed)
                             else it
                         }
+                    },
+                    onDelete = {
+                        todos = todos.filter { it.id != todo.id }
                     }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TodoItemRow(
+    todo: TodoItem,
+    onToggle: () -> Unit,
+    onDelete: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = todo.completed,
+                onCheckedChange = { onToggle() }
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text(
+                text = todo.title,
+                modifier = Modifier.weight(1f),
+                style = if (todo.completed) {
+                    MaterialTheme.typography.bodyLarge.copy(
+                        textDecoration = TextDecoration.LineThrough,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                } else {
+                    MaterialTheme.typography.bodyLarge
+                }
+            )
+
+            IconButton(onClick = onDelete) {
+                Icon(
+                    Icons.Default.Delete,
+                    contentDescription = "Удалить задачу",
+                    tint = MaterialTheme.colorScheme.error
                 )
             }
         }
@@ -2299,40 +834,1021 @@ fun TodoListScreen() {
 }
 ```
 
-### Жизненный Цикл Composable
+### Жизненный цикл Composable
 
-Composable имеют три стадии жизненного цикла:
-
-1. **Вход в Composition**: Composable выполняется впервые
-2. **Recomposition**: Переисполняется при изменении состояния
-3. **Выход из Composition**: Удаляется из UI
-
-### Побочные Эффекты
+Composable проходит через стадии:
+1. Вход в composition — первый запуск и добавление в дерево.
+2. Recomposition — повторный запуск при изменении читаемого состояния.
+3. Выход из composition — удаление из дерева, очистка эффектов и состояния.
 
 ```kotlin
-// LaunchedEffect - запуск корутины привязанной к композиции
+@Composable
+fun LifecycleExample() {
+    DisposableEffect(Unit) {
+        println("Вошли в composition")
+
+        onDispose {
+            println("Вышли из composition")
+        }
+    }
+
+    var count by remember { mutableStateOf(0) }
+
+    println("Recomposing with count: $count")
+
+    Button(onClick = { count++ }) {
+        Text("Count: $count")
+    }
+}
+```
+
+### Побочные эффекты в Compose
+
+Composable-функции должны быть максимально чистыми; для побочных эффектов используются специальные API.
+
+```kotlin
+// LaunchedEffect — запуск coroutine, привязанной к composition
 @Composable
 fun LoadDataExample(userId: String) {
     var userData by remember { mutableStateOf<User?>(null) }
 
-    LaunchedEffect(userId) {  // Перезапускается при изменении userId
+    LaunchedEffect(userId) {
         userData = loadUserData(userId)
     }
 
-    userData?.let { UserProfile(it) } ?: CircularProgressIndicator()
+    userData?.let { user ->
+        UserProfile(user)
+    } ?: CircularProgressIndicator()
+}
+
+// DisposableEffect — настройка/очистка ресурсов
+@Composable
+fun TimerExample() {
+    DisposableEffect(Unit) {
+        val timer = Timer()
+        // timer.schedule(...)
+
+        onDispose {
+            timer.cancel()
+        }
+    }
+}
+
+// SideEffect — выполняется после каждой успешной recomposition
+@Composable
+fun AnalyticsExample(screen: String) {
+    SideEffect {
+        analytics.logScreenView(screen)
+    }
 }
 ```
 
-### Лучшие Практики
+### Тема и стилизация
 
-1. **Держите composable маленькими и сфокусированными**
-2. **Поднимайте состояние когда нужно**
-3. **Используйте ключи в lazy списках**
-4. **Избегайте побочных эффектов в composable**
-5. **Предпочитайте stateless composable для переиспользования**
+```kotlin
+@Composable
+fun MyApp(content: @Composable () -> Unit) {
+    val darkTheme = isSystemInDarkTheme()
+
+    MaterialTheme(
+        colorScheme = if (darkTheme) darkColorScheme() else lightColorScheme(),
+        typography = Typography
+    ) {
+        content()
+    }
+}
+
+@Composable
+fun ThemedText() {
+    Text(
+        "Текст в теме",
+        color = MaterialTheme.colorScheme.primary,
+        style = MaterialTheme.typography.bodyLarge
+    )
+}
+```
+
+### Лучшие практики
+
+1. Делайте composable-функции маленькими и переиспользуемыми.
+2. Поднимайте состояние наверх, когда логика должна контролироваться извне.
+3. Используйте стабильные ключи в `LazyColumn`/`LazyRow`.
+4. Не запускайте побочные эффекты напрямую в composable — используйте `LaunchedEffect`, `SideEffect`, `DisposableEffect` и другие эффекты.
+5. Не выполняйте тяжёлые операции и долгие задачи непосредственно в composition; используйте `remember`, корутины или эффекты.
+6. Для производных значений используйте `derivedStateOf`.
+7. Отдавайте предпочтение stateless-компонентам, принимающим состояние и события через параметры (стейт хранится снаружи).
 
 ---
 
+## Answer (EN)
+
+Jetpack Compose is Android's modern declarative UI toolkit that simplifies and accelerates UI development. Unlike the imperative `View` system, Compose describes what the UI should look like based on the current state, and the framework efficiently updates the UI when that state changes.
+
+### Why Jetpack Compose?
+
+**Traditional `View` System (Imperative)**:
+```kotlin
+// XML layout
+<TextView
+    android:id="@+id/textView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+
+// Activity/Fragment
+val textView = findViewById<TextView>(R.id.textView)
+textView.text = "Hello"
+textView.setTextColor(Color.BLUE)
+// Must manually update when state changes
+```
+
+**Jetpack Compose (Declarative)**:
+```kotlin
+@Composable
+fun Greeting(name: String) {
+    Text(
+        text = "Hello $name",
+        color = Color.Blue
+    )
+    // If name changes and this composable reads it from state,
+    // it will be recomposed automatically.
+}
+```
+
+### Core Principles
+
+1. **Declarative**: Describe UI based on state instead of imperatively mutating views.
+2. **Composable**: Build UI from small, reusable composable functions.
+3. **Reactive**: UI automatically updates when observable state changes.
+4. **Data-driven**: UI is a function of state: `UI = f(state)`.
+
+### Composable Functions
+
+Composable functions are annotated with `@Composable` and can call other composables:
+
+```kotlin
+@Composable
+fun MessageCard(message: Message) {
+    Row(modifier = Modifier.padding(8.dp)) {
+        Image(
+            painter = painterResource(R.drawable.profile),
+            contentDescription = "Profile picture",
+            modifier = Modifier
+                .size(40.dp)
+                .clip(CircleShape)
+        )
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        Column {
+            Text(
+                text = message.author,
+                style = MaterialTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(
+                text = message.body,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
+
+data class Message(val id: Long, val author: String, val body: String)
+```
+
+Key characteristics:
+- Must be annotated with `@Composable`.
+- Can call other `@Composable` functions.
+- Typically return `Unit`; they emit UI instead of returning a `View`.
+- Should be called only from other composables or composable lambdas.
+- Should be side-effect free; use side-effect APIs (`LaunchedEffect`, `SideEffect`, `DisposableEffect`, etc.) for side effects.
+
+### State and Recomposition
+
+State is any value that can change over time. When observable state read by a composable changes, Compose schedules recomposition of the relevant composable scopes.
+
+#### Basic State Management
+
+```kotlin
+@Composable
+fun Counter() {
+    // remember preserves state across recompositions while in composition
+    var count by remember { mutableStateOf(0) }
+
+    Column(
+        modifier = Modifier.padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = "Count: $count")
+        Button(onClick = { count++ }) {
+            Text("Increment")
+        }
+    }
+}
+
+// Without remember - WRONG in a recomposing context
+@Composable
+fun BrokenCounter() {
+    // Local state is recreated on every recomposition
+    var count by mutableStateOf(0)
+
+    Button(onClick = { count++ }) {
+        Text("Count: $count")  // Always shows 0 in practice
+    }
+}
+```
+
+#### State Hoisting
+
+Lifting state up to make composables stateless and reusable:
+
+```kotlin
+// Stateful version
+@Composable
+fun StatefulCounter() {
+    var count by remember { mutableStateOf(0) }
+
+    Button(onClick = { count++ }) {
+        Text("Count: $count")
+    }
+}
+
+// Stateless (UI-only) version
+@Composable
+fun StatelessCounter(
+    count: Int,
+    onIncrement: () -> Unit
+) {
+    Button(onClick = onIncrement) {
+        Text("Count: $count")
+    }
+}
+
+// Parent manages state
+@Composable
+fun CounterScreen() {
+    var count by remember { mutableStateOf(0) }
+
+    Column {
+        Text("Current count: $count")
+        StatelessCounter(
+            count = count,
+            onIncrement = { count++ }
+        )
+        Button(onClick = { count = 0 }) {
+            Text("Reset")
+        }
+    }
+}
+```
+
+#### State Types (Compose runtime)
+
+```kotlin
+// 1. mutableStateOf - single observable value
+var name by remember { mutableStateOf("") }
+
+// 2. SnapshotStateList - observable list
+val items = remember { mutableStateListOf<String>() }
+items.add("New item")  // Triggers recomposition where items are read
+
+// 3. SnapshotStateMap - observable map
+val userScores = remember { mutableStateMapOf<String, Int>() }
+userScores["Alice"] = 100
+
+// 4. derivedStateOf - computed value based on other state
+val filteredItems by remember(items, query) {
+    derivedStateOf {
+        items.filter { it.contains(query, ignoreCase = true) }
+    }
+}
+```
+
+### Recomposition
+
+Recomposition is the process where Compose re-executes composable functions when the state they read changes.
+
+```kotlin
+@Composable
+fun RecompositionExample() {
+    var count by remember { mutableStateOf(0) }
+
+    Column {
+        // This Text reads count, so it is updated when count changes
+        Text("Count: $count")
+        println("Count Text recomposed")
+
+        // This Text does not read changing state; it is composed once
+        Text("Static text")
+        println("Static text composed once")
+
+        Button(onClick = { count++ }) {
+            Text("Increment")
+        }
+    }
+}
+```
+
+Recomposition characteristics:
+- Only affected composable scopes that read the changed state are recomposed (not the entire UI tree).
+- Can run in any order; do not rely on execution order.
+- Can be skipped when inputs have not changed (stability/skippability).
+- Should be idempotent: same inputs → same emitted UI.
+- Should be fast; avoid heavy work directly in composables.
+
+#### Recomposition Scope
+
+```kotlin
+@Composable
+fun ScopeExample() {
+    var outerState by remember { mutableStateOf(0) }
+
+    Column {
+        Text("Outer: $outerState")  // Reads outerState
+
+        InnerComposable() // Does not read outerState directly
+    }
+}
+
+@Composable
+fun InnerComposable() {
+    var innerState by remember { mutableStateOf(0) }
+
+    Text("Inner: $innerState")
+    Button(onClick = { innerState++ }) {
+        Text("Increment Inner")
+    }
+    // Only this composable scope recomposes when innerState changes
+}
+```
+
+### Modifiers
+
+Modifiers decorate or augment composables:
+- Layout (size, padding, alignment)
+- Drawing (background, border, clip)
+- Interaction (click, gestures)
+- Semantics / accessibility
+
+```kotlin
+@Composable
+fun ModifierExamples() {
+    // Order matters
+    Box(
+        modifier = Modifier
+            .size(100.dp)
+            .background(Color.Blue)
+            .padding(16.dp)
+            .border(2.dp, Color.Red)
+    )
+
+    Box(
+        modifier = Modifier
+            .padding(16.dp)
+            .size(100.dp)
+            .background(Color.Blue)
+    )
+}
+```
+
+Common modifiers example:
+
+```kotlin
+@Composable
+fun ModifierGuide() {
+    Column {
+        Box(Modifier.size(100.dp))
+        Box(Modifier.width(100.dp).height(50.dp))
+        Box(Modifier.fillMaxWidth())
+        Box(Modifier.fillMaxSize())
+
+        Box(Modifier.padding(16.dp))
+        Box(Modifier.background(Color.Blue))
+        Box(Modifier.border(2.dp, Color.Black))
+
+        Box(Modifier.clickable { /* onClick */ })
+
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text("Centered")
+        }
+
+        Column(Modifier.verticalScroll(rememberScrollState())) {
+            // Scrollable content
+        }
+    }
+}
+```
+
+Custom modifier examples:
+
+```kotlin
+fun Modifier.debugBorder(color: Color = Color.Red): Modifier =
+    this.then(Modifier.border(2.dp, color))
+
+@Composable
+fun DebugExample() {
+    Text(
+        "Debug text",
+        modifier = Modifier.debugBorder()
+    )
+}
+
+fun Modifier.shimmer(enabled: Boolean): Modifier = composed {
+    if (!enabled) return@composed this
+
+    val transition = rememberInfiniteTransition(label = "shimmer")
+    val alpha by transition.animateFloat(
+        initialValue = 0.3f,
+        targetValue = 0.9f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "alpha"
+    )
+    this.alpha(alpha)
+}
+```
+
+### Layouts
+
+Key layout primitives:
+
+#### Column - Vertical
+
+```kotlin
+@Composable
+fun ColumnExample() {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text("First item")
+        Text("Second item")
+        Text("Third item")
+    }
+}
+```
+
+#### Row - Horizontal
+
+```kotlin
+@Composable
+fun RowExample() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(Icons.Default.Star, contentDescription = null)
+        Text("Rating")
+        Text("4.5")
+    }
+}
+```
+
+#### Box - `Stack`
+
+```kotlin
+@Composable
+fun BoxExample() {
+    Box(
+        modifier = Modifier.size(200.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Image(
+            painter = painterResource(R.drawable.background),
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize()
+        )
+        Text(
+            "Overlay Text",
+            color = Color.White,
+            fontSize = 24.sp
+        )
+    }
+}
+```
+
+#### LazyColumn / LazyRow - Lists
+
+```kotlin
+@Composable
+fun LazyListExample(items: List<String>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(items) { item ->
+            Text(item)
+        }
+
+        // With index
+        itemsIndexed(items) { index, item ->
+            Text("$index: $item")
+        }
+
+        // Single static item
+        item {
+            Text("Header")
+        }
+    }
+}
+
+@Composable
+fun LazyListWithKeys(messages: List<Message>) {
+    LazyColumn {
+        items(
+            items = messages,
+            key = { message -> message.id }
+        ) { message ->
+            MessageCard(message)
+        }
+    }
+}
+```
+
+#### ConstraintLayout (optional)
+
+```kotlin
+@Composable
+fun ConstraintLayoutExample() {
+    ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+        val (button, text, image) = createRefs()
+
+        Button(
+            onClick = { },
+            modifier = Modifier.constrainAs(button) {
+                top.linkTo(parent.top, margin = 16.dp)
+                start.linkTo(parent.start, margin = 16.dp)
+            }
+        ) {
+            Text("Button")
+        }
+
+        Text(
+            "Constrained Text",
+            modifier = Modifier.constrainAs(text) {
+                top.linkTo(button.bottom, margin = 16.dp)
+                centerHorizontallyTo(parent)
+            }
+        )
+
+        Image(
+            painter = painterResource(R.drawable.ic_launcher),
+            contentDescription = null,
+            modifier = Modifier.constrainAs(image) {
+                bottom.linkTo(parent.bottom, margin = 16.dp)
+                end.linkTo(parent.end, margin = 16.dp)
+            }
+        )
+    }
+}
+```
+
+### Complete UI Examples
+
+#### Example 1: Login Screen
+
+```kotlin
+@Composable
+fun LoginScreen(
+    onLoginClick: (String, String) -> Unit
+) {
+    var email by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    var passwordVisible by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Welcome Back",
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+
+        OutlinedTextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
+            leadingIcon = {
+                Icon(Icons.Default.Email, contentDescription = null)
+            },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Email,
+                imeAction = ImeAction.Next
+            )
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedTextField(
+            value = password,
+            onValueChange = { password = it },
+            label = { Text("Password") },
+            leadingIcon = {
+                Icon(Icons.Default.Lock, contentDescription = null)
+            },
+            trailingIcon = {
+                IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                    Icon(
+                        imageVector = if (passwordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                        contentDescription = "Toggle password visibility"
+                    )
+                }
+            },
+            visualTransformation = if (passwordVisible)
+                VisualTransformation.None
+            else
+                PasswordVisualTransformation(),
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Done
+            )
+        )
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Button(
+            onClick = { onLoginClick(email, password) },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = email.isNotBlank() && password.isNotBlank()
+        ) {
+            Text("Login")
+        }
+
+        TextButton(
+            onClick = { /* Navigate to forgot password */ },
+            modifier = Modifier.padding(top = 8.dp)
+        ) {
+            Text("Forgot Password?")
+        }
+    }
+}
+```
+
+#### Example 2: Profile Card with State
+
+```kotlin
+data class User(
+    val name: String,
+    val bio: String,
+    val followerCount: Int,
+    val isFollowing: Boolean
+)
+
+@Composable
+fun ProfileCard(
+    user: User,
+    onFollowClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier.fillMaxWidth(),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp)
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Box(
+                    modifier = Modifier
+                        .size(64.dp)
+                        .clip(CircleShape)
+                        .background(MaterialTheme.colorScheme.primary)
+                ) {
+                    Text(
+                        text = user.name.first().toString(),
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = Color.White,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Column(modifier = Modifier.weight(1f)) {
+                    Text(
+                        text = user.name,
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    Text(
+                        text = "${user.followerCount} followers",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+
+                OutlinedButton(
+                    onClick = onFollowClick
+                ) {
+                    Text(if (user.isFollowing) "Following" else "Follow")
+                }
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = user.bio,
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+    }
+}
+
+@Composable
+fun ProfileScreen() {
+    var user by remember {
+        mutableStateOf(
+            User(
+                name = "John Doe",
+                bio = "Android Developer | Kotlin Enthusiast",
+                followerCount = 1234,
+                isFollowing = false
+            )
+        )
+    }
+
+    ProfileCard(
+        user = user,
+        onFollowClick = {
+            user = user.copy(
+                isFollowing = !user.isFollowing,
+                followerCount = if (user.isFollowing)
+                    user.followerCount - 1
+                else
+                    user.followerCount + 1
+            )
+        }
+    )
+}
+```
+
+#### Example 3: Todo `List` with CRUD Operations
+
+```kotlin
+data class TodoItem(
+    val id: Int,
+    val title: String,
+    val completed: Boolean = false
+)
+
+@Composable
+fun TodoListScreen() {
+    var todos by remember {
+        mutableStateOf(
+            listOf(
+                TodoItem(1, "Learn Compose"),
+                TodoItem(2, "Build an app"),
+                TodoItem(3, "Deploy to Play Store")
+            )
+        )
+    }
+    var newTodoText by remember { mutableStateOf("") }
+    var nextId by remember { mutableStateOf(4) }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Text(
+            text = "My Tasks",
+            style = MaterialTheme.typography.headlineMedium,
+            modifier = Modifier.padding(bottom = 16.dp)
+        )
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            OutlinedTextField(
+                value = newTodoText,
+                onValueChange = { newTodoText = it },
+                placeholder = { Text("New task...") },
+                modifier = Modifier.weight(1f),
+                singleLine = true
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            IconButton(
+                onClick = {
+                    if (newTodoText.isNotBlank()) {
+                        todos = todos + TodoItem(nextId, newTodoText)
+                        nextId++
+                        newTodoText = ""
+                    }
+                }
+            ) {
+                Icon(Icons.Default.Add, contentDescription = "Add task")
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        LazyColumn(
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(
+                items = todos,
+                key = { it.id }
+            ) { todo ->
+                TodoItemRow(
+                    todo = todo,
+                    onToggle = {
+                        todos = todos.map {
+                            if (it.id == todo.id) it.copy(completed = !it.completed)
+                            else it
+                        }
+                    },
+                    onDelete = {
+                        todos = todos.filter { it.id != todo.id }
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TodoItemRow(
+    todo: TodoItem,
+    onToggle: () -> Unit,
+    onDelete: () -> Unit
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Checkbox(
+                checked = todo.completed,
+                onCheckedChange = { onToggle() }
+            )
+
+            Spacer(modifier = Modifier.width(8.dp))
+
+            Text(
+                text = todo.title,
+                modifier = Modifier.weight(1f),
+                style = if (todo.completed) {
+                    MaterialTheme.typography.bodyLarge.copy(
+                        textDecoration = TextDecoration.LineThrough,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                } else {
+                    MaterialTheme.typography.bodyLarge
+                }
+            )
+
+            IconButton(onClick = onDelete) {
+                Icon(
+                    Icons.Default.Delete,
+                    contentDescription = "Delete task",
+                    tint = MaterialTheme.colorScheme.error
+                )
+            }
+        }
+    }
+}
+```
+
+### Lifecycle of Composables
+
+Composable functions participate in the composition lifecycle:
+
+1. **Enter the Composition**: The composable is first executed and its UI is inserted.
+2. **Recomposition**: The composable is re-executed when the state it reads changes.
+3. **Leave the Composition**: The composable is removed; associated effects and remembered state are disposed.
+
+```kotlin
+@Composable
+fun LifecycleExample() {
+    DisposableEffect(Unit) {
+        println("Entered composition")
+
+        onDispose {
+            println("Left composition")
+        }
+    }
+
+    var count by remember { mutableStateOf(0) }
+
+    println("Recomposing with count: $count")
+
+    Button(onClick = { count++ }) {
+        Text("Count: $count")
+    }
+}
+```
+
+### Side Effects in Compose
+
+Composable functions should be referentially transparent; use dedicated APIs for side effects:
+
+```kotlin
+// LaunchedEffect - launch a coroutine tied to the composition
+@Composable
+fun LoadDataExample(userId: String) {
+    var userData by remember { mutableStateOf<User?>(null) }
+
+    LaunchedEffect(userId) {
+        userData = loadUserData(userId)
+    }
+
+    userData?.let { user ->
+        UserProfile(user)
+    } ?: CircularProgressIndicator()
+}
+
+// DisposableEffect - perform setup/cleanup
+@Composable
+fun TimerExample() {
+    DisposableEffect(Unit) {
+        val timer = Timer()
+        // timer.schedule(...)
+
+        onDispose {
+            timer.cancel()
+        }
+    }
+}
+
+// SideEffect - run after every successful recomposition
+@Composable
+fun AnalyticsExample(screen: String) {
+    SideEffect {
+        analytics.logScreenView(screen)
+    }
+}
+```
+
+### Theme and Styling
+
+```kotlin
+@Composable
+fun MyApp(content: @Composable () -> Unit) {
+    val darkTheme = isSystemInDarkTheme()
+
+    MaterialTheme(
+        colorScheme = if (darkTheme) darkColorScheme() else lightColorScheme(),
+        typography = Typography
+    ) {
+        content()
+    }
+}
+
+@Composable
+fun ThemedText() {
+    Text(
+        "Themed text",
+        color = MaterialTheme.colorScheme.primary,
+        style = MaterialTheme.typography.bodyLarge
+    )
+}
+```
+
+### Best Practices
+
+1. Keep composables small and focused.
+2. Hoist state up when you need reuse or shared control.
+3. Use stable keys in lazy lists.
+4. Avoid performing side effects directly in composables; use side-effect APIs.
+5. Avoid doing heavy work or starting long-running operations in composition; use `remember`, coroutines, or effects appropriately.
+6. Use `derivedStateOf` for derived/expensive computations based on other state.
+7. Prefer stateless, UI-only composables for reusability; pass in state and events from the caller.
+
+---
+
+## Дополнительные вопросы (RU)
+
+- [[q-compose-remember-derived-state--android--medium]]
+- [[q-compose-side-effects-advanced--android--hard]]
+- [[q-compose-stability-skippability--android--hard]]
 
 ## Follow-ups
 
@@ -2340,60 +1856,65 @@ fun LoadDataExample(userId: String) {
 - [[q-compose-side-effects-advanced--android--hard]]
 - [[q-compose-stability-skippability--android--hard]]
 
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-compose-state]]
+
+### Связанные (Medium)
+- [[q-jetpack-compose-lazy-column--android--easy]]
+- [[q-recomposition-compose--android--medium]]
+- [[q-compose-modifier-system--android--medium]]
+- [[q-remember-remembersaveable--android--medium]]
+
+### Основы Compose (Medium)
+- [[q-how-does-jetpack-compose-work--android--medium]]
+- [[q-what-are-the-most-important-components-of-compose--android--medium]]
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]]
+- [[q-mutable-state-compose--android--medium]]
+- [[q-remember-vs-remembersaveable-compose--android--medium]]
+- [[q-state-hoisting-compose--android--medium]]
+
+### Продвинутое (Harder)
+- [[q-compose-stability-skippability--android--hard]]
+- [[q-compose-slot-table-recomposition--android--hard]]
+- [[q-compose-performance-optimization--android--hard]]
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-compose-state]]
-- [[c-jetpack-compose]]
-- [[c-viewmodel]]
-
-
-### Prerequisites (Easier)
-- [[q-jetpack-compose-lazy-column--android--easy]] - LazyColumn for lists
 
 ### Related (Medium)
-- [[q-recomposition-compose--android--medium]] - Jetpack Compose
-- [[q-compose-modifier-system--android--medium]] - Jetpack Compose
-- [[q-remember-remembersaveable--android--medium]] - Jetpack Compose
-- [[q-compose-semantics--android--medium]] - Jetpack Compose
+- [[q-jetpack-compose-lazy-column--android--easy]]
+- [[q-recomposition-compose--android--medium]]
+- [[q-compose-modifier-system--android--medium]]
+- [[q-remember-remembersaveable--android--medium]]
 
 ### Compose Fundamentals (Medium)
-- [[q-how-does-jetpack-compose-work--android--medium]] - How Compose works
-- [[q-what-are-the-most-important-components-of-compose--android--medium]] - Essential Compose components
-- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]] - RecyclerView in Compose
-- [[q-mutable-state-compose--android--medium]] - MutableState basics
-- [[q-remember-vs-remembersaveable-compose--android--medium]] - remember vs rememberSaveable
-- [[q-compose-remember-derived-state--android--medium]] - Derived state patterns
-- [[q-state-hoisting-compose--android--medium]] - State hoisting principles
-- [[q-compose-modifier-order-performance--android--medium]] - Modifier order & performance
-
-### UI & Components (Medium)
-- [[q-compose-side-effects-launchedeffect-disposableeffect--android--hard]] - LaunchedEffect & DisposableEffect
-- [[q-compose-gesture-detection--android--medium]] - Gesture detection
-- [[q-compose-custom-animations--android--medium]] - Custom animations
-- [[q-animated-visibility-vs-content--android--medium]] - AnimatedVisibility vs Content
-- [[q-compose-navigation-advanced--android--medium]] - Navigation patterns
-- [[q-compositionlocal-advanced--android--medium]] - CompositionLocal patterns
-- [[q-compose-testing--android--medium]] - Compose testing basics
-- [[q-testing-compose-ui--android--medium]] - UI testing strategies
-- [[q-migration-to-compose--android--medium]] - Migration to Compose
-- [[q-accessibility-compose--android--medium]] - Accessibility in Compose
+- [[q-how-does-jetpack-compose-work--android--medium]]
+- [[q-what-are-the-most-important-components-of-compose--android--medium]]
+- [[q-how-to-create-list-like-recyclerview-in-compose--android--medium]]
+- [[q-mutable-state-compose--android--medium]]
+- [[q-remember-vs-remembersaveable-compose--android--medium]]
+- [[q-state-hoisting-compose--android--medium]]
 
 ### Advanced (Harder)
-- [[q-compose-stability-skippability--android--hard]] - Stability & skippability
-- [[q-stable-classes-compose--android--hard]] - @Stable annotation
-- [[q-stable-annotation-compose--android--hard]] - Stability annotations
-- [[q-compose-slot-table-recomposition--android--hard]] - Slot table internals
-- [[q-compose-performance-optimization--android--hard]] - Performance optimization
-- [[q-compose-custom-layout--android--hard]] - Custom layouts
-- [[q-compose-side-effects-advanced--android--hard]] - Advanced side effects
-- [[q-compositionlocal-compose--android--hard]] - CompositionLocal deep dive
-- [[q-compose-compiler-plugin--android--hard]] - Compiler plugin internals
-- q-kak-risuet-compose-na-ekrane--android--hard - Compose drawing internals
+- [[q-compose-stability-skippability--android--hard]]
+- [[q-compose-slot-table-recomposition--android--hard]]
+- [[q-compose-performance-optimization--android--hard]]
+
+## Ссылки (RU)
+
+- [Jetpack Compose Documentation](https://developer.android.com/jetpack/compose)
+- [Compose Basics](https://developer.android.com/jetpack/compose/tutorial)
+- [State and Jetpack Compose](https://developer.android.com/jetpack/compose/state)
+- [Compose Layout Basics](https://developer.android.com/jetpack/compose/layouts/basics)
 
 ## References
+
 - [Jetpack Compose Documentation](https://developer.android.com/jetpack/compose)
 - [Compose Basics](https://developer.android.com/jetpack/compose/tutorial)
 - [State and Jetpack Compose](https://developer.android.com/jetpack/compose/state)

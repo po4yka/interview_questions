@@ -10,36 +10,37 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-coroutines, c-flow, c-mockk, c-testing]
+related: [c-coroutines, c-flow, c-testing]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 sources: []
 tags: [android/coroutines, android/flow, android/testing-unit, difficulty/medium, mockk, testing, turbine, unit-testing]
+
 ---
 
 # Вопрос (RU)
 
-> Как писать юнит-тесты для Kotlin Coroutines и Flow? Какие есть best practices и распространённые ошибки?
+> Как писать юнит-тесты для Kotlin Coroutines и `Flow`? Какие есть best practices и распространённые ошибки?
 
 # Question (EN)
 
-> How do you write unit tests for Kotlin Coroutines and Flow? What are the best practices and common pitfalls?
+> How do you write unit tests for Kotlin Coroutines and `Flow`? What are the best practices and common pitfalls?
 
 ---
 
 ## Ответ (RU)
 
-Тестирование корутин и Flow требует специального подхода: тестовые диспетчеры, управление виртуальным временем, правильная обработка асинхронности.
+Тестирование корутин и `Flow` требует специального подхода: тестовые диспетчеры, управление виртуальным временем, правильная обработка асинхронности.
 
 ### Ключевые Инструменты
 
 **1. TestDispatchers**
 - `StandardTestDispatcher` — требует явного `advanceTimeBy()`/`runCurrent()`
-- `UnconfinedTestDispatcher` — выполняет корутины немедленно
+- `UnconfinedTestDispatcher` — выполняет корутины немедленно (менее детерминированен, обычно не используется как дефолтный для сложных тестов)
 - `runTest { }` — корутинный scope с виртуальным временем
 
 **2. Turbine**
-- Удобный API для тестирования Flow
+- Удобный API для тестирования `Flow`
 - `awaitItem()`, `awaitComplete()`, `awaitError()`
 - Автоматическая отмена коллекции
 
@@ -76,7 +77,7 @@ fun `loadUser updates state`() = runTest {
 }
 ```
 
-**Тестирование Flow с Turbine**
+**Тестирование `Flow` с Turbine**
 
 ```kotlin
 // Repository
@@ -106,7 +107,7 @@ fun `observeArticles emits periodically`() = runTest {
 }
 ```
 
-**Тестирование StateFlow с debounce**
+**Тестирование `StateFlow` с debounce**
 
 ```kotlin
 // ViewModel
@@ -142,7 +143,7 @@ fun `debounce prevents excessive calls`() = runTest {
 ```kotlin
 // Test rule для замены Dispatchers.Main
 class MainDispatcherRule(
-    private val dispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    private val dispatcher: TestDispatcher = StandardTestDispatcher()
 ) : TestWatcher() {
     override fun starting(description: Description) {
         Dispatchers.setMain(dispatcher)
@@ -159,13 +160,13 @@ class MainDispatcherRule(
 - Используйте `runTest { }` вместо `runBlocking`
 - Инжектируйте `CoroutineDispatcher` для тестируемости
 - Управляйте виртуальным временем через `testScheduler`
-- Используйте Turbine для Flow тестов
+- Используйте Turbine для `Flow` тестов
 - Проверяйте error cases и cancellation
 
 **❌ Избегайте:**
 - `Thread.sleep()` — ломает виртуальное время
 - Забывать `advanceTimeBy()` для delay
-- Не закрывать infinite Flow (используйте `take()` или Turbine)
+- Не закрывать infinite `Flow` (используйте `take()` или Turbine)
 - Не тестировать cancellation
 - Использовать реальные Dispatchers
 
@@ -212,17 +213,17 @@ fun test() = runTest {
 
 ## Answer (EN)
 
-Testing coroutines and Flow requires specialized tools: test dispatchers, virtual time control, and proper async handling.
+Testing coroutines and `Flow` requires specialized tools: test dispatchers, virtual time control, and proper async handling.
 
 ### Key Tools
 
 **1. TestDispatchers**
 - `StandardTestDispatcher` — requires explicit `advanceTimeBy()`/`runCurrent()`
-- `UnconfinedTestDispatcher` — executes coroutines immediately
+- `UnconfinedTestDispatcher` — executes coroutines immediately (less deterministic, usually not the default choice for complex tests)
 - `runTest { }` — coroutine scope with virtual time
 
 **2. Turbine**
-- Convenient API for Flow testing
+- Convenient API for `Flow` testing
 - `awaitItem()`, `awaitComplete()`, `awaitError()`
 - Automatic collection cancellation
 
@@ -259,7 +260,7 @@ fun `loadUser updates state`() = runTest {
 }
 ```
 
-**Testing Flow with Turbine**
+**Testing `Flow` with Turbine**
 
 ```kotlin
 // Repository
@@ -289,7 +290,7 @@ fun `observeArticles emits periodically`() = runTest {
 }
 ```
 
-**Testing StateFlow with debounce**
+**Testing `StateFlow` with debounce**
 
 ```kotlin
 // ViewModel
@@ -325,7 +326,7 @@ fun `debounce prevents excessive calls`() = runTest {
 ```kotlin
 // Test rule to replace Dispatchers.Main
 class MainDispatcherRule(
-    private val dispatcher: TestDispatcher = UnconfinedTestDispatcher()
+    private val dispatcher: TestDispatcher = StandardTestDispatcher()
 ) : TestWatcher() {
     override fun starting(description: Description) {
         Dispatchers.setMain(dispatcher)
@@ -342,7 +343,7 @@ class MainDispatcherRule(
 - Use `runTest { }` instead of `runBlocking`
 - Inject `CoroutineDispatcher` for testability
 - Control virtual time via `testScheduler`
-- Use Turbine for Flow tests
+- Use Turbine for `Flow` tests
 - Test error cases and cancellation
 
 **❌ Avoid:**
@@ -393,39 +394,64 @@ fun test() = runTest {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+1. Как протестировать поведение `SharedFlow` с `replay` буфером и различными подписчиками?
+2. В чём практическая разница между `StandardTestDispatcher` и `UnconfinedTestDispatcher` при написании тестов?
+3. Как корректно тестировать отмену корутин и использование `ensureActive()`?
+4. Как тестировать сложные `Flow`-цепочки с операторами `combine()`, `zip()` и `merge()`?
+5. Как протестировать поведение с таймаутами при использовании `withTimeout()` и `withTimeoutOrNull()`?
+
 ## Follow-ups
 
-1. How do you test `SharedFlow` with replay buffer behavior?
-2. What's the difference between `StandardTestDispatcher` and `UnconfinedTestDispatcher` in practice?
-3. How to test coroutine cancellation and `ensureActive()` calls?
-4. How do you test `Flow` operators like `combine()`, `zip()`, and `merge()`?
-5. How to test timeout behavior with `withTimeout()`?
+1. How do you test `SharedFlow` with replay buffer behavior and multiple subscribers?
+2. What are the practical differences between `StandardTestDispatcher` and `UnconfinedTestDispatcher` in coroutine tests?
+3. How do you properly test coroutine cancellation and `ensureActive()` checks?
+4. How do you test complex `Flow` chains using operators like `combine()`, `zip()`, and `merge()`?
+5. How do you test timeout behavior when using `withTimeout()` or `withTimeoutOrNull()`?
 
 ---
+
+## Ссылки (RU)
+
+- [[c-coroutines]] — основы корутин в Kotlin
+- [[c-flow]] — основы и операторы `Flow`
+- [[c-testing]] — общие подходы к тестированию
+- [Kotlin Coroutines Test Guide](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
+- [Turbine Documentation](https://github.com/cashapp/turbine)
+- [Testing Coroutines on Android](https://developer.android.com/kotlin/coroutines/test)
 
 ## References
 
 - [[c-coroutines]] — Kotlin coroutines fundamentals
-- [[c-flow]] — Flow basics and operators
-- [[c-testing-strategies]] — General testing approaches
+- [[c-flow]] — `Flow` basics and operators
+- [[c-testing]] — General testing approaches
 - [Kotlin Coroutines Test Guide](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
 - [Turbine Documentation](https://github.com/cashapp/turbine)
 - [Testing Coroutines on Android](https://developer.android.com/kotlin/coroutines/test)
 
 ---
 
+## Связанные вопросы (RU)
+
+### Базовые (проще)
+- [[q-what-is-coroutine--kotlin--easy]] — основы `Coroutine`
+
+### Связанные (средний уровень)
+- [[q-testing-compose-ui--android--medium]] — тестирование Compose UI
+- [[q-coroutine-dispatchers--kotlin--medium]] — типы диспетчеров и их использование
+
+### Продвинутые (сложнее)
+- [[q-structured-concurrency--kotlin--hard]] — сложные иерархии корутин
+
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-what-is-coroutine--kotlin--easy]] — Coroutine basics
-- [[q-what-is-flow--kotlin--easy]] — Flow fundamentals
-- [[q-unit-testing-basics--android--easy]] — Unit testing intro
+- [[q-what-is-coroutine--kotlin--easy]] — `Coroutine` basics
 
 ### Related (Same Level)
-- [[q-testing-viewmodels--android--medium]] — ViewModel testing patterns
 - [[q-testing-compose-ui--android--medium]] — Compose UI testing
 - [[q-coroutine-dispatchers--kotlin--medium]] — Dispatcher types and usage
 
 ### Advanced (Harder)
-- [[q-testing-race-conditions--android--hard]] — Concurrency edge cases
 - [[q-structured-concurrency--kotlin--hard]] — Complex coroutine hierarchies

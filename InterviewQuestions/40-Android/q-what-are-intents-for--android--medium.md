@@ -2,34 +2,25 @@
 id: android-250
 title: "What Are Intents For / Для чего нужны Intent"
 aliases: ["What Are Intents For", "Для чего нужны Intent"]
-
-# Classification
 topic: android
 subtopics: [activity, intents-deeplinks, service]
 question_kind: android
 difficulty: medium
-
-# Language & provenance
 original_language: en
 language_tags: [en, ru]
 sources: []
-
-# Workflow & relations
 status: draft
 moc: moc-android
-related: [q-android-components-besides-activity--android--easy, q-annotation-processing--android--medium, q-what-is-layout-types-and-when-to-use--android--easy]
-
-# Timestamps
+related: [c-intent, q-android-components-besides-activity--android--easy, q-annotation-processing--android--medium, q-what-is-layout-types-and-when-to-use--android--easy]
 created: 2025-10-15
-updated: 2025-10-28
-
-# Tags (EN only; no leading #)
+updated: 2025-11-10
 tags: [android, android/activity, android/intents-deeplinks, android/service, difficulty/medium]
+
 ---
 
 # Вопрос (RU)
 
-> Для чего нужны Intent в Android?
+> Для чего нужны `Intent` в Android?
 
 # Question (EN)
 
@@ -39,11 +30,11 @@ tags: [android, android/activity, android/intents-deeplinks, android/service, di
 
 ## Ответ (RU)
 
-Intent — это объект сообщения в Android для коммуникации между компонентами. Основные назначения: запуск Activity, Service, отправка Broadcast и передача данных между модулями.
+`Intent` — это объект сообщения в Android для коммуникации между компонентами. Основные назначения: запуск `Activity`, запуск и привязка `Service`, отправка Broadcast и передача данных между компонентами и приложениями.
 
 ### Основные Сценарии Использования
 
-**1. Запуск Activity**
+**1. Запуск `Activity`**
 
 ```kotlin
 // Явный Intent — запуск конкретной Activity
@@ -68,14 +59,17 @@ val launcher = registerForActivityResult(
 launcher.launch(Intent(this, PickerActivity::class.java))
 ```
 
-**2. Запуск Service**
+**2. Запуск `Service`**
 
 ```kotlin
-// Запуск фонового сервиса
+// Запуск сервиса для фоновой работы
 val serviceIntent = Intent(this, DownloadService::class.java).apply {
     putExtra("file_url", "https://example.com/file.zip")
 }
-startService(serviceIntent) // ✅ Для одноразовых операций
+
+// ✅ Для кратковременных операций из фонового контекста учитывайте ограничения Android 8.0+
+// и при необходимости используйте startForegroundService() + foreground notification
+startService(serviceIntent)
 
 // Привязка к Service
 val connection = object : ServiceConnection {
@@ -95,16 +89,18 @@ bindService(Intent(this, MyService::class.java), connection, Context.BIND_AUTO_C
 val broadcastIntent = Intent("com.example.CUSTOM_ACTION").apply {
     putExtra("data", "Hello World")
 }
-sendBroadcast(broadcastIntent) // ✅ Подходит для внутренних событий
+sendBroadcast(broadcastIntent) // ✅ Подходит для внутренних событий (нечувствительных данных)
 
-// ❌ Избегайте для конфиденциальных данных без явных разрешений
+// ✅ Для защиты используйте разрешения или ограничивайте получателей
 sendBroadcast(
     Intent("com.example.PROTECTED_ACTION"),
     "com.example.permission.CUSTOM"
 )
+
+// ❌ Не используйте незащищённые широковещательные Intent для конфиденциальных данных
 ```
 
-**4. Неявные Intent (Implicit)**
+**4. Неявные `Intent` (Implicit)**
 
 Система находит подходящий компонент по action и data:
 
@@ -130,11 +126,11 @@ fun safeStartActivity(intent: Intent) {
 }
 ```
 
-### Компоненты Intent
+### Компоненты `Intent`
 
 ```kotlin
 val intent = Intent().apply {
-    action = Intent.ACTION_VIEW            // 1. Действие
+    action = Intent.ACTION_VIEW              // 1. Действие
     data = Uri.parse("https://example.com") // 2. Данные
     addCategory(Intent.CATEGORY_BROWSABLE)  // 3. Категория
     type = "text/plain"                     // 4. MIME-тип
@@ -143,7 +139,7 @@ val intent = Intent().apply {
 }
 ```
 
-### Intent Flags (важные)
+### `Intent` Flags (важные)
 
 ```kotlin
 // ✅ Очистить стек выше целевой Activity
@@ -158,13 +154,15 @@ intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 
 ### PendingIntent
 
-Intent, который может быть выполнен другим приложением (для уведомлений, алармов):
+`Intent`, который может быть выполнен другим приложением или системой (для уведомлений, алармов и т.п.). На Android 12 (API 31)+ требуется явно указать, может ли PendingIntent изменяться.
 
 ```kotlin
 val notificationIntent = Intent(this, MainActivity::class.java)
 val pendingIntent = PendingIntent.getActivity(
-    this, 0, notificationIntent,
-    PendingIntent.FLAG_IMMUTABLE // ✅ Обязателен с API 31+
+    this,
+    0,
+    notificationIntent,
+    PendingIntent.FLAG_IMMUTABLE // ✅ Рекомендуется, если Intent не должен изменяться
 )
 
 val notification = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -174,15 +172,15 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 
 ### Когда Использовать Что
 
-| Тип Intent | Применение | Пример |
+| Тип `Intent` | Применение | Пример |
 |-----------|-----------|--------|
 | **Explicit** | Запуск компонента вашего приложения | `Intent(this, DetailActivity::class.java)` |
 | **Implicit** | Запуск системного компонента или другого приложения | `Intent.ACTION_VIEW` |
-| **PendingIntent** | Отложенное выполнение через другое приложение | Уведомления, алармы |
+| **PendingIntent** | Отложенное выполнение через другое приложение или систему | Уведомления, алармы |
 
 ## Answer (EN)
 
-Intent is a messaging object in Android for component communication. Core purposes: starting Activities, Services, broadcasting messages, and passing data between modules.
+`Intent` is a messaging object in Android for component communication. Core purposes: starting Activities, starting and binding to Services, sending broadcasts, and passing data between components and apps.
 
 ### Main Use Cases
 
@@ -214,11 +212,14 @@ launcher.launch(Intent(this, PickerActivity::class.java))
 **2. Starting Services**
 
 ```kotlin
-// Start background service
+// Start a service for background work
 val serviceIntent = Intent(this, DownloadService::class.java).apply {
     putExtra("file_url", "https://example.com/file.zip")
 }
-startService(serviceIntent) // ✅ For one-time operations
+
+// ✅ For short-lived work be aware of Android 8.0+ background execution limits;
+// use startForegroundService() + foreground notification when required.
+startService(serviceIntent)
 
 // Bind to Service
 val connection = object : ServiceConnection {
@@ -238,13 +239,15 @@ bindService(Intent(this, MyService::class.java), connection, Context.BIND_AUTO_C
 val broadcastIntent = Intent("com.example.CUSTOM_ACTION").apply {
     putExtra("data", "Hello World")
 }
-sendBroadcast(broadcastIntent) // ✅ Good for internal events
+sendBroadcast(broadcastIntent) // ✅ Good for internal, non-sensitive events
 
-// ❌ Avoid for sensitive data without explicit permissions
+// ✅ For protection, use permissions or otherwise restrict receivers
 sendBroadcast(
     Intent("com.example.PROTECTED_ACTION"),
     "com.example.permission.CUSTOM"
 )
+
+// ❌ Do not use unsecured implicit broadcasts for sensitive data
 ```
 
 **4. Implicit Intents**
@@ -273,11 +276,11 @@ fun safeStartActivity(intent: Intent) {
 }
 ```
 
-### Intent Components
+### `Intent` Components
 
 ```kotlin
 val intent = Intent().apply {
-    action = Intent.ACTION_VIEW            // 1. Action
+    action = Intent.ACTION_VIEW              // 1. Action
     data = Uri.parse("https://example.com") // 2. Data
     addCategory(Intent.CATEGORY_BROWSABLE)  // 3. Category
     type = "text/plain"                     // 4. MIME type
@@ -286,7 +289,7 @@ val intent = Intent().apply {
 }
 ```
 
-### Intent Flags (important)
+### `Intent` Flags (important)
 
 ```kotlin
 // ✅ Clear all activities above target
@@ -301,13 +304,15 @@ intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
 
 ### PendingIntent
 
-Intent that can be executed by another app (for notifications, alarms):
+`Intent` that can be executed by another app or by the system (for notifications, alarms, etc.). On Android 12 (API 31)+ you must explicitly declare whether the PendingIntent is mutable or immutable.
 
 ```kotlin
 val notificationIntent = Intent(this, MainActivity::class.java)
 val pendingIntent = PendingIntent.getActivity(
-    this, 0, notificationIntent,
-    PendingIntent.FLAG_IMMUTABLE // ✅ Required on API 31+
+    this,
+    0,
+    notificationIntent,
+    PendingIntent.FLAG_IMMUTABLE // ✅ Recommended when the Intent should not be modified
 )
 
 val notification = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -317,17 +322,17 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 
 ### When to Use What
 
-| Intent Type | Use Case | Example |
+| `Intent` Type | Use Case | Example |
 |-----------|----------|---------|
 | **Explicit** | Launch component in your app | `Intent(this, DetailActivity::class.java)` |
 | **Implicit** | Launch system component or other app | `Intent.ACTION_VIEW` |
-| **PendingIntent** | Deferred execution by another app | Notifications, alarms |
+| **PendingIntent** | Deferred execution by another app or the system | Notifications, alarms |
 
 ---
 
 ## Follow-ups
 
-- How do Intent Filters work in AndroidManifest.xml?
+- How do `Intent` Filters work in AndroidManifest.xml?
 - What's the difference between startActivity() and startActivityForResult() (deprecated)?
 - When should you use LocalBroadcastManager vs system broadcasts?
 - What are the security implications of implicit Intents?
@@ -336,8 +341,8 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 ## References
 
 - [[c-android-components]] - Overview of Android components
-- [[c-activity-lifecycle]] - Activity lifecycle and Intent handling
-- [Android Developer Guide: Intents and Intent Filters](https://developer.android.com/guide/components/intents-filters)
+- [[c-activity-lifecycle]] - `Activity` lifecycle and `Intent` handling
+- [Android Developer Guide: Intents and `Intent` Filters](https://developer.android.com/guide/components/intents-filters)
 - [Common Intents Reference](https://developer.android.com/guide/components/intents-common)
 
 ## Related Questions
@@ -347,7 +352,7 @@ val notification = NotificationCompat.Builder(this, CHANNEL_ID)
 - [[q-what-is-the-main-application-execution-thread--android--easy]] - Main thread and component communication
 
 ### Related (Medium)
-- [[q-intent-filters-android--android--medium]] - How apps declare Intent handling
+- [[q-intent-filters-android--android--medium]] - How apps declare `Intent` handling
 - [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Component architecture
 
 ### Advanced (Harder)

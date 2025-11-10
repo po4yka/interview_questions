@@ -10,20 +10,21 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-navigation-advanced--jetpack-compose--medium, q-flow-testing-turbine--android--medium, q-what-is-data-binding--android--easy]
+related: [q-flow-testing-turbine--android--medium, q-what-is-data-binding--android--easy]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/coroutines, android/networking-http, difficulty/medium, networking, retrofit]
+
 ---
 
 # Вопрос (RU)
 
-Как делать сетевые запросы с помощью Retrofit?
+> Как делать сетевые запросы с помощью Retrofit?
 
 # Question (EN)
 
-How to make network requests with Retrofit?
+> How to make network requests with Retrofit?
 
 ---
 
@@ -116,6 +117,7 @@ object RetrofitClient {
 class UserRepository {
     private val api = RetrofitClient.apiService
 
+    // suspend-функции Retrofit выбрасывают HttpException для кодов 4xx/5xx
     suspend fun getUsers(): Result<List<User>> = try {
         Result.Success(api.getUsers())
     } catch (e: HttpException) {
@@ -131,7 +133,7 @@ sealed class Result<out T> {
 }
 ```
 
-**6. Вызвать из ViewModel**
+**6. Вызвать из `ViewModel`**
 
 ```kotlin
 class UserViewModel(
@@ -183,16 +185,16 @@ val response = api.uploadFile(filePart)
 **Query параметры**
 
 ```kotlin
-// ✅ Правильно: опциональные параметры с default значениями
+// ✅ Пример: опциональные параметры с default значениями для удобного вызова
 @GET("posts")
 suspend fun getPosts(
     @Query("userId") userId: Int? = null,
     @Query("_limit") limit: Int = 10
 ): List<Post>
 
-// ❌ Неправильно: без default, клиент должен всегда передавать
+// ✅ Также валидно: без значений по умолчанию, если API требует явной передачи
 @GET("posts")
-suspend fun getPosts(
+suspend fun getPostsRequired(
     @Query("userId") userId: Int,
     @Query("_limit") limit: Int
 ): List<Post>
@@ -200,11 +202,11 @@ suspend fun getPosts(
 
 ### Лучшие Практики
 
-1. **Используйте suspend функции** с корутинами вместо Call<T>
-2. **Оборачивайте в Result/Either** для обработки ошибок
-3. **Выносите в Repository** — не вызывайте API напрямую из ViewModel
-4. **Логируйте только в DEBUG** — HttpLoggingInterceptor с проверкой BuildConfig
-5. **Добавляйте timeouts** в OkHttp (connectTimeout, readTimeout)
+1. Используйте suspend-функции с корутинами вместо `Call<T>`, если вы уже на coroutines stack
+2. Оборачивайте результаты в Result/Either для централизованной обработки ошибок
+3. Выносите сетевую логику в Repository — не вызывайте API напрямую из `ViewModel`
+4. Логируйте только в DEBUG — HttpLoggingInterceptor с проверкой BuildConfig
+5. Добавляйте timeouts в OkHttp (connectTimeout, readTimeout)
 
 ## Answer (EN)
 
@@ -295,6 +297,7 @@ object RetrofitClient {
 class UserRepository {
     private val api = RetrofitClient.apiService
 
+    // Retrofit suspend functions throw HttpException for non-2xx HTTP responses
     suspend fun getUsers(): Result<List<User>> = try {
         Result.Success(api.getUsers())
     } catch (e: HttpException) {
@@ -310,7 +313,7 @@ sealed class Result<out T> {
 }
 ```
 
-**6. Call from ViewModel**
+**6. Call from `ViewModel`**
 
 ```kotlin
 class UserViewModel(
@@ -362,16 +365,16 @@ val response = api.uploadFile(filePart)
 **Query parameters**
 
 ```kotlin
-// ✅ Correct: optional parameters with defaults
+// ✅ Example: optional parameters with defaults for convenient calls
 @GET("posts")
 suspend fun getPosts(
     @Query("userId") userId: Int? = null,
     @Query("_limit") limit: Int = 10
 ): List<Post>
 
-// ❌ Wrong: no defaults, client must always provide
+// ✅ Also valid: no defaults when your API requires explicit values
 @GET("posts")
-suspend fun getPosts(
+suspend fun getPostsRequired(
     @Query("userId") userId: Int,
     @Query("_limit") limit: Int
 ): List<Post>
@@ -379,27 +382,47 @@ suspend fun getPosts(
 
 ### Best Practices
 
-1. **Use suspend functions** with coroutines instead of Call<T>
-2. **Wrap in Result/Either** for error handling
-3. **Extract to Repository** — don't call API directly from ViewModel
-4. **Log only in DEBUG** — HttpLoggingInterceptor with BuildConfig check
-5. **Add timeouts** in OkHttp (connectTimeout, readTimeout)
+1. Use suspend functions with coroutines instead of `Call<T>` when you are on a coroutines-based stack
+2. Wrap results in Result/Either for centralized error handling
+3. Extract networking into a Repository — don't call the API directly from the `ViewModel`
+4. Log only in DEBUG — HttpLoggingInterceptor with a BuildConfig check
+5. Add timeouts in OkHttp (connectTimeout, readTimeout)
+
+---
+
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать токены аутентификации с помощью интерсепторов Retrofit?
+- В чем разница между suspend-функциями и `Call<T>` в Retrofit?
+- Как реализовать логику повторных попыток для неудачных сетевых запросов?
+- Когда стоит использовать `@QueryMap` вместо отдельных `@Query` параметров?
+- Как тестировать вызовы Retrofit с помощью MockWebServer?
+
+## Ссылки (RU)
+
+- Официальная документация Retrofit: https://square.github.io/retrofit/
+- Документация по OkHttp Interceptors: https://square.github.io/okhttp/interceptors/
+
+## Связанные вопросы (RU)
+
+### База (проще)
+- [[q-what-is-data-binding--android--easy]] - Базовые концепции data binding в Android
+
+### Связанные (средние)
+- [[q-flow-testing-turbine--android--medium]] - Тестирование с использованием `Flow`
 
 ---
 
 ## Follow-ups
 
 - How to handle authentication tokens with Retrofit interceptors?
-- What's the difference between suspend functions and Call<T> in Retrofit?
+- What's the difference between suspend functions and `Call<T>` in Retrofit?
 - How to implement retry logic for failed network requests?
-- When should you use @QueryMap vs individual @Query parameters?
+- When should you use `@QueryMap` vs individual `@Query` parameters?
 - How to test Retrofit API calls with MockWebServer?
 
 ## References
 
-- [[c-retrofit]] - Retrofit concept note
-- [[c-okhttp]] - OkHttp concept note
-- [[c-coroutines]] - Coroutines concept note
 - [Retrofit Documentation](https://square.github.io/retrofit/)
 - [OkHttp Interceptors](https://square.github.io/okhttp/interceptors/)
 
@@ -407,15 +430,7 @@ suspend fun getPosts(
 
 ### Prerequisites (Easier)
 - [[q-what-is-data-binding--android--easy]] - Android data binding basics
-- [[q-graphql-vs-rest--networking--easy]] - REST API concepts
 
 ### Related (Medium)
-- [[q-flow-testing-turbine--android--medium]] - Testing with Flow
-- [[q-http-protocols-comparison--android--medium]] - HTTP protocols
-- [[q-retrofit-path-parameter--android--medium]] - Retrofit path parameters
-- [[q-retrofit-library--android--medium]] - Retrofit library overview
-- [[q-kmm-ktor-networking--android--medium]] - KMM with Ktor
+- [[q-flow-testing-turbine--android--medium]] - Testing with `Flow`
 
-### Advanced (Harder)
-- [[q-data-sync-unstable-network--android--hard]] - Network resilience
-- [[q-retrofit-modify-all-requests--android--hard]] - Advanced Retrofit interceptors

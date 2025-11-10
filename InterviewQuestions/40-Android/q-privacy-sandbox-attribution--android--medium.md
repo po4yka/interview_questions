@@ -10,26 +10,26 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-privacy-sandbox, q-privacy-sandbox-topics-api--android--medium]
+related: [c-android, q-privacy-sandbox-topics-api--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags: [advertising, android/privacy-sdks, attribution-reporting, difficulty/medium, privacy, privacy-sandbox]
 ---
 
 # Вопрос (RU)
 
-Как работает Attribution Reporting API в Privacy Sandbox? Как измерять конверсии рекламы без отслеживания пользователей? В чём разница между event-level и aggregate отчётами?
+> Как работает Attribution Reporting API в Privacy Sandbox? Как измерять конверсии рекламы без отслеживания пользователей? В чём разница между event-level и aggregate отчётами?
 
 # Question (EN)
 
-How does the Attribution Reporting API work in Privacy Sandbox? How do you measure ad conversions without tracking users? What are the differences between event-level and aggregate reports?
+> How does the Attribution Reporting API work in Privacy Sandbox? How do you measure ad conversions without tracking users? What are the differences between event-level and aggregate reports?
 
 ---
 
 ## Ответ (RU)
 
-Attribution Reporting API обеспечивает измерение конверсий без cross-app отслеживания через два комплементарных механизма:
+Attribution Reporting API обеспечивает измерение конверсий без cross-app отслеживания через два комплементарных механизма. См. также [[c-android]].
 
 **Event-Level Reports:**
 - Детальная информация об источнике (campaign ID, creative)
@@ -40,13 +40,13 @@ Attribution Reporting API обеспечивает измерение конве
 **Aggregate Reports:**
 - Сводная статистика по множеству конверсий
 - Детальные значения (revenue, quantity)
-- Differential privacy (добавление шума к агрегированным данным)
+- Шум и защита приватности на стороне aggregation service
 - Использование: измерение revenue, детальная аналитика
 
 **Основные концепции:**
 - Source events (показы/клики) регистрируются с attribution destination
 - Trigger events (конверсии) сопоставляются с source в пределах attribution window
-- Отчёты отправляются на reporting endpoint с задержкой
+- Отчёты отправляются на reporting endpoint с задержкой и с учётом privacy-защит
 - Rate limits предотвращают злоупотребления
 
 ### Регистрация Source И Trigger
@@ -57,7 +57,7 @@ class AttributionManager(context: Context) {
     private val measurementManager =
         context.getSystemService(MeasurementManager::class.java)
 
-    // ✅ Регистрация показа/клика рекламы
+    // ✅ Регистрация показа/клика рекламы (web-to-app / web attribution пример)
     suspend fun registerAdSource(
         sourceUrl: Uri,
         destination: Uri,
@@ -84,34 +84,34 @@ class AttributionManager(context: Context) {
         )
     }
 
-    // ✅ Регистрация конверсии
+    // ✅ Регистрация конверсии (web trigger пример)
     suspend fun registerTrigger(triggerUrl: Uri) =
         suspendCancellableCoroutine { cont ->
-        val params = WebTriggerParams.Builder(triggerUrl)
-            .setDebugKeyAllowed(false)
-            .build()
+            val params = WebTriggerParams.Builder(triggerUrl)
+                .setDebugKeyAllowed(false)
+                .build()
 
-        val request = WebTriggerRegistrationRequest.Builder(
-            listOf(params),
-            Uri.parse("https://advertiser.example")
-        ).build()
+            val request = WebTriggerRegistrationRequest.Builder(
+                listOf(params),
+                Uri.parse("https://advertiser.example")
+            ).build()
 
-        measurementManager?.registerWebTrigger(
-            request,
-            Executors.newSingleThreadExecutor(),
-            OutcomeReceiver.create(
-                { cont.resume(Unit) },
-                { error -> cont.resumeWithException(error) }
+            measurementManager?.registerWebTrigger(
+                request,
+                Executors.newSingleThreadExecutor(),
+                OutcomeReceiver.create(
+                    { cont.resume(Unit) },
+                    { error -> cont.resumeWithException(error) }
+                )
             )
-        )
-    }
+        }
 }
 ```
 
 ### Event-Level Attribution
 
 ```kotlin
-// Source registration JSON (server endpoint)
+// Упрощённый пример Source registration JSON (server endpoint)
 {
   "source_event_id": "campaign_123",
   "destination": "https://advertiser.example",
@@ -120,7 +120,7 @@ class AttributionManager(context: Context) {
   "event_report_window": "2592000"
 }
 
-// Trigger registration JSON
+// Упрощённый пример Trigger registration JSON
 {
   "event_trigger_data": [
     {
@@ -148,7 +148,7 @@ val triggerData = when (conversionType) {
 ### Aggregate Attribution
 
 ```kotlin
-// Source с aggregation keys (128-bit идентификаторы)
+// Упрощённый пример Source с aggregation keys
 {
   "source_event_id": "campaign_123",
   "destination": "https://advertiser.example",
@@ -159,7 +159,7 @@ val triggerData = when (conversionType) {
   }
 }
 
-// Trigger с aggregate values
+// Упрощённый пример Trigger с aggregate values
 {
   "aggregatable_trigger_data": [
     {
@@ -175,7 +175,7 @@ val triggerData = when (conversionType) {
 }
 
 class AggregateTracking {
-    // ✅ Детальные значения для aggregate
+    // ✅ Детальные значения для aggregate (упрощённый паттерн)
     suspend fun trackPurchase(
         orderId: String,
         totalValue: Double,
@@ -189,7 +189,7 @@ class AggregateTracking {
     }
 
     // ❌ НЕПРАВИЛЬНО: Хранение user ID вместе с attribution
-    // Нарушает privacy
+    // Нарушает privacy и цели API
     data class Attribution(
         val userId: String,  // ЗАПРЕЩЕНО
         val conversionValue: Int
@@ -201,19 +201,18 @@ class AggregateTracking {
 
 **Event-Level:**
 - Ограничение 3 бита для trigger data
-- Randomized reporting delay (2-30 дней)
-- Rate limits на количество источников
+- Randomized reporting delay (периодическая отправка с задержкой, минимизирует отслеживание по времени)
+- Rate limits на количество источников и триггеров
 
 **Aggregate:**
-- Differential privacy noise добавляется к суммам
-- Privacy budget (65536) распределяется между отчётами
-- Encrypted payloads обрабатываются aggregation service
+- Шум и анонимизация на уровне агрегированных сумм
+- Использование aggregation service и зашифрованных payloads для обработки
 
 ```kotlin
-// Deduplication для предотвращения двойного подсчёта
+// Deduplication на стороне приложения для предотвращения двойного подсчёта
 class ConversionTracker(private val prefs: SharedPreferences) {
 
-    // ✅ Проверка дубликатов перед регистрацией
+    // ✅ Проверка дубликатов перед регистрацией (app-level guard, не часть протокола)
     suspend fun trackIfNew(orderId: String, trigger: Uri) {
         val key = "conversion_$orderId"
         if (!prefs.contains(key)) {
@@ -229,28 +228,27 @@ class ConversionTracker(private val prefs: SharedPreferences) {
 **1. Выбор типа отчёта:**
 - Event-level для оптимизации кампаний (какие ads работают)
 - Aggregate для revenue measurement (сколько заработали)
-- Комбинировать оба для полной картины
+- Комбинировать оба для более полной картины в рамках ограничений API
 
 **2. Attribution windows:**
-- Clicks: 7 дней (shorter journey)
-- Impressions: 30 дней (longer journey)
-- Настроить под customer journey вашего продукта
+- Для кликов обычно используются более короткие окна, чем для показов
+- Конкретные окна и тайминги определяются спецификацией API и конфигурацией источников
 
 **3. Deduplication:**
-- Использовать уникальные deduplication keys
-- Хранить локально для проверки
+- Использовать deduplication keys, поддерживаемые API
+- При необходимости дополнять app-level проверками
 - Критично для purchase events
 
-**4. Privacy budget management:**
-- Планировать aggregation queries заранее
-- Мониторить потребление budget
-- Приоритизировать важные метрики
+**4. Privacy budget / queries:**
+- Планировать aggregation queries заранее и минимизировать количество различных срезов
+- Мониторить эффекты шума и ограничений на точность
+- Приоритизировать важные метрики, учитывая ограничения приватности
 
 ---
 
 ## Answer (EN)
 
-Attribution Reporting API enables conversion measurement without cross-app tracking through two complementary mechanisms:
+Attribution Reporting API enables conversion measurement without cross-app tracking through two complementary mechanisms. See also [[c-android]].
 
 **Event-Level Reports:**
 - Detailed source information (campaign ID, creative)
@@ -261,13 +259,13 @@ Attribution Reporting API enables conversion measurement without cross-app track
 **Aggregate Reports:**
 - Summary statistics across multiple conversions
 - Detailed values (revenue, quantity)
-- Differential privacy (noise added to aggregated data)
+- Privacy protection and noise applied by the aggregation service
 - Use case: revenue measurement, detailed analytics
 
 **Core concepts:**
-- Source events (impressions/clicks) registered with attribution destination
-- Trigger events (conversions) matched to sources within attribution window
-- Reports sent to reporting endpoint with delay
+- Source events (impressions/clicks) registered with an attribution destination
+- Trigger events (conversions) matched to sources within an attribution window
+- Reports sent to reporting endpoint with delay and built-in privacy protections
 - Rate limits prevent abuse
 
 ### Source and Trigger Registration
@@ -278,7 +276,7 @@ class AttributionManager(context: Context) {
     private val measurementManager =
         context.getSystemService(MeasurementManager::class.java)
 
-    // ✅ Register ad impression/click
+    // ✅ Register ad impression/click (web-to-app / web attribution example)
     suspend fun registerAdSource(
         sourceUrl: Uri,
         destination: Uri,
@@ -305,34 +303,34 @@ class AttributionManager(context: Context) {
         )
     }
 
-    // ✅ Register conversion
+    // ✅ Register conversion (web trigger example)
     suspend fun registerTrigger(triggerUrl: Uri) =
         suspendCancellableCoroutine { cont ->
-        val params = WebTriggerParams.Builder(triggerUrl)
-            .setDebugKeyAllowed(false)
-            .build()
+            val params = WebTriggerParams.Builder(triggerUrl)
+                .setDebugKeyAllowed(false)
+                .build()
 
-        val request = WebTriggerRegistrationRequest.Builder(
-            listOf(params),
-            Uri.parse("https://advertiser.example")
-        ).build()
+            val request = WebTriggerRegistrationRequest.Builder(
+                listOf(params),
+                Uri.parse("https://advertiser.example")
+            ).build()
 
-        measurementManager?.registerWebTrigger(
-            request,
-            Executors.newSingleThreadExecutor(),
-            OutcomeReceiver.create(
-                { cont.resume(Unit) },
-                { error -> cont.resumeWithException(error) }
+            measurementManager?.registerWebTrigger(
+                request,
+                Executors.newSingleThreadExecutor(),
+                OutcomeReceiver.create(
+                    { cont.resume(Unit) },
+                    { error -> cont.resumeWithException(error) }
+                )
             )
-        )
-    }
+        }
 }
 ```
 
 ### Event-Level Attribution
 
 ```kotlin
-// Source registration JSON (server endpoint)
+// Simplified example of Source registration JSON (server endpoint)
 {
   "source_event_id": "campaign_123",
   "destination": "https://advertiser.example",
@@ -341,7 +339,7 @@ class AttributionManager(context: Context) {
   "event_report_window": "2592000"
 }
 
-// Trigger registration JSON
+// Simplified example of Trigger registration JSON
 {
   "event_trigger_data": [
     {
@@ -369,7 +367,7 @@ val triggerData = when (conversionType) {
 ### Aggregate Attribution
 
 ```kotlin
-// Source with aggregation keys (128-bit identifiers)
+// Simplified example: Source with aggregation keys
 {
   "source_event_id": "campaign_123",
   "destination": "https://advertiser.example",
@@ -380,7 +378,7 @@ val triggerData = when (conversionType) {
   }
 }
 
-// Trigger with aggregate values
+// Simplified example: Trigger with aggregate values
 {
   "aggregatable_trigger_data": [
     {
@@ -396,7 +394,7 @@ val triggerData = when (conversionType) {
 }
 
 class AggregateTracking {
-    // ✅ Detailed values for aggregate
+    // ✅ Detailed values for aggregate (simplified pattern)
     suspend fun trackPurchase(
         orderId: String,
         totalValue: Double,
@@ -410,7 +408,7 @@ class AggregateTracking {
     }
 
     // ❌ WRONG: Storing user ID with attribution
-    // Violates privacy
+    // Violates privacy goals of the API
     data class Attribution(
         val userId: String,  // FORBIDDEN
         val conversionValue: Int
@@ -422,19 +420,18 @@ class AggregateTracking {
 
 **Event-Level:**
 - 3-bit limit for trigger data
-- Randomized reporting delay (2-30 days)
-- Rate limits on number of sources
+- Randomized reporting delay (batched and delayed to reduce timing-based tracking)
+- Rate limits on number of sources and triggers
 
 **Aggregate:**
-- Differential privacy noise added to sums
-- Privacy budget (65536) distributed across reports
-- Encrypted payloads processed by aggregation service
+- Noise and anonymization applied to aggregated sums
+- Encrypted payloads processed by an aggregation service
 
 ```kotlin
-// Deduplication to prevent double-counting
+// Deduplication on app side to prevent double-counting
 class ConversionTracker(private val prefs: SharedPreferences) {
 
-    // ✅ Check for duplicates before registration
+    // ✅ Check for duplicates before registration (app-level guard, not protocol-required)
     suspend fun trackIfNew(orderId: String, trigger: Uri) {
         val key = "conversion_$orderId"
         if (!prefs.contains(key)) {
@@ -450,24 +447,51 @@ class ConversionTracker(private val prefs: SharedPreferences) {
 **1. Report type selection:**
 - Event-level for campaign optimization (which ads work)
 - Aggregate for revenue measurement (how much earned)
-- Combine both for complete picture
+- Combine both for a more complete picture within API constraints
 
 **2. Attribution windows:**
-- Clicks: 7 days (shorter journey)
-- Impressions: 30 days (longer journey)
-- Tune to your product's customer journey
+- Click-based sources typically use shorter windows than impression-based sources
+- Exact windows and timings are defined by the API specification and source configuration
 
 **3. Deduplication:**
-- Use unique deduplication keys
-- Store locally for checking
+- Use deduplication keys supported by the API
+- Optionally complement with app-level checks
 - Critical for purchase events
 
-**4. Privacy budget management:**
-- Plan aggregation queries in advance
-- Monitor budget consumption
-- Prioritize important metrics
+**4. Aggregation and privacy constraints:**
+- Plan aggregation queries in advance and minimize the number of distinct breakdowns
+- Monitor the impact of noise and constraints on accuracy
+- Prioritize key metrics given privacy limitations
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как работает атрибуция, если пользователь меняет устройство?
+- Что происходит, если attribution window истекает до конверсии?
+- Как обрабатывать несколько источников атрибуции (клик + показ)?
+- Как работает механизм расчёта privacy budget?
+- Как шум дифференциальной приватности влияет на маленькие кампании?
+- Можно ли комбинировать Attribution Reporting с Topics API?
+
+## Ссылки (RU)
+
+- [Privacy Sandbox Attribution Reporting](https://developer.android.com/design-for-safety/privacy-sandbox/attribution)
+
+## Связанные вопросы (RU)
+
+### Предварительные материалы
+
+- [[q-privacy-sandbox-topics-api--android--medium]] - Основы Topics API
+
+### Похожие вопросы
+
+- [[q-privacy-sandbox-fledge--android--hard]] - FLEDGE API для ремаркетинга
+- [[q-privacy-sandbox-sdk-runtime--android--hard]] - Изоляция SDK Runtime
+
+### Продвинутое
+
+- Управление privacy budget в масштабных системах (отдельная заметка отсутствует)
 
 ## Follow-ups
 
@@ -480,20 +504,19 @@ class ConversionTracker(private val prefs: SharedPreferences) {
 
 ## References
 
-- [[c-privacy-sandbox]]
-- [[c-differential-privacy]]
 - [Privacy Sandbox Attribution Reporting](https://developer.android.com/design-for-safety/privacy-sandbox/attribution)
 
 ## Related Questions
 
 ### Prerequisites
-- [[q-privacy-sandbox-topics--android--medium]] - Topics API basics
-- [[q-what-is-differential-privacy--cs--medium]] - Differential privacy concepts
+
+- [[q-privacy-sandbox-topics-api--android--medium]] - Topics API basics
 
 ### Related
+
 - [[q-privacy-sandbox-fledge--android--hard]] - FLEDGE API for remarketing
 - [[q-privacy-sandbox-sdk-runtime--android--hard]] - SDK Runtime isolation
 
 ### Advanced
-- [[q-implementing-aggregation-service--backend--hard]] - Backend aggregation service
-- [[q-privacy-budget-management--android--hard]] - Managing privacy budget at scale
+
+- Managing privacy budget at scale (note missing)

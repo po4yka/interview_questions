@@ -35,7 +35,7 @@ tags: [android/architecture-mvvm, android/ui-compose, difficulty/medium]
 ## Ответ (RU)
 
 ### Назначение CompositionLocal
-Передаёт контекстные данные (тема, локаль, DI-объекты) по дереву композиции без явных параметров. Применяйте для сквозных зависимостей, которые относятся к окружению и редко меняются.
+Передаёт контекстные данные (тема, локаль, DI-объекты) по дереву композиции без явных параметров. Применяйте для сквозных зависимостей, которые относятся к окружению и не должны обновляться слишком часто на больших поддеревьях.
 
 **Когда использовать:**
 - Тема, плотность, локаль
@@ -44,18 +44,18 @@ tags: [android/architecture-mvvm, android/ui-compose, difficulty/medium]
 
 **Когда НЕ использовать:**
 - Вместо явных параметров для бизнес-логики
-- Для часто меняющихся локальных данных
+- Для локальных данных с высокой частотой изменений, если можно ограничить область явными параметрами или состоянием
 - Как скрытый глобальный стейт
 
 ### staticCompositionLocalOf Vs compositionLocalOf
 
 **`compositionLocalOf` (динамический):**
-- Отслеживает чтение `.current` — перекомпозируются только читатели
-- Для часто меняющихся значений (scroll position, dynamic flags)
-- Небольшие затраты на каждое чтение
+- Отслеживает чтение `.current` — перекомпозируются только реальные читатели
+- Подходит для значений, которые могут меняться относительно часто (scroll position, динамические флаги), при условии разумного выбора области провайдера
+- Небольшие накладные расходы на каждое чтение
 
 ```kotlin
-// ✅ Динамический Local для частых обновлений
+// ✅ Динамический Local для частых обновлений в ограниченной области
 val LocalScrollInfo = compositionLocalOf { 0 }
 
 @Composable
@@ -68,9 +68,9 @@ fun Screen(scrollY: Int) {
 ```
 
 **`staticCompositionLocalOf` (статический):**
-- Без отслеживания — обновление инвалидирует всё поддерево
+- Не отслеживает чтения — обновление инвалидирует всё поддерево провайдера
 - Для редко меняющихся, широко читаемых значений (тема, локаль)
-- Дешевле чтение, дороже обновления
+- Чтение дешевле, обновления дороже
 
 ```kotlin
 // ✅ Статический Local для редких обновлений
@@ -87,23 +87,23 @@ fun App(env: AppEnv, content: @Composable () -> Unit) {
 }
 ```
 
-### Производительность И Границы Инвалидации
+### Производительность и границы инвалидации
 
 **Динамический Local:**
 - Инвалидирует только реальных читателей `.current`
-- Идеален для значений, меняющихся чаще 1 раза в минуту
+- Хорош для значений, которые могут обновляться часто, при условии, что область действия провайдера не чрезмерно широка
 
 **Статический Local:**
 - Инвалидирует всё поддерево `CompositionLocalProvider`
-- Используйте для значений, меняющихся реже 1 раза в минуту
-- Размещайте провайдеры близко к потребителям
+- Используйте для значений, которые меняются редко относительно размера поддерева
+- Размещайте провайдеры ближе к потребителям, чтобы ограничить область массовых рекомпозиций
 
 ```kotlin
 // ❌ Провайдер слишком высоко для частых обновлений
 @Composable
-fun App() {
+fun App(scrollY: Int) {
     CompositionLocalProvider(LocalScrollInfo provides scrollY) {
-        // Всё дерево перекомпозируется
+        // При изменении scrollY перекомпозируется всё дерево
         Navigation()
         Settings()
         Profile()
@@ -115,13 +115,13 @@ fun App() {
 fun FeedScreen(scrollY: Int) {
     Header()
     CompositionLocalProvider(LocalScrollInfo provides scrollY) {
-        FeedList()  // только FeedList перекомпозируется
+        FeedList()  // только FeedList зависит от LocalScrollInfo и перекомпозируется
     }
     BottomNav()
 }
 ```
 
-### Безопасные Дефолты
+### Безопасные дефолты
 
 ```kotlin
 // ❌ Валидный дефолт скрывает отсутствие провайдера
@@ -133,7 +133,7 @@ val LocalLogger = staticCompositionLocalOf<Logger> {
 }
 ```
 
-### Неизменяемость И Стабильность
+### Неизменяемость и стабильность
 
 ```kotlin
 // ❌ Мутация невидима для Compose
@@ -142,29 +142,29 @@ val theme = LocalTheme.current
 theme.primaryColor = Color.Red  // не вызовет рекомпозицию
 
 // ✅ Обновление через копирование
-val theme = LocalTheme.current.copy(primaryColor = Color.Red)
-CompositionLocalProvider(LocalTheme provides theme) { ... }
+val updatedTheme = LocalTheme.current.copy(primaryColor = Color.Red)
+CompositionLocalProvider(LocalTheme provides updatedTheme) { /* ... */ }
 ```
 
-### Типичные Ошибки
+### Типичные ошибки
 
 ```kotlin
-// ❌ Чтение Local вне композиции
+// ⚠️ Потенциально устаревшее значение
 @Composable
 fun Screen() {
     val theme = LocalTheme.current
     LaunchedEffect(Unit) {
         delay(1000)
-        // theme может быть устаревшим
+        // theme может быть устаревшим, если LocalTheme изменился за это время
         logger.log(theme.primaryColor)
     }
 }
 
-// ✅ Читайте Local внутри композиции
+// ✅ Чтение Local в актуальном контексте внутри побочного эффекта
 @Composable
 fun Screen() {
-    LaunchedEffect(Unit) {
-        val theme = LocalTheme.current  // актуальное значение
+    LaunchedEffect(LocalTheme.current) {
+        val theme = LocalTheme.current  // значение соответствует текущему CompositionLocal
         logger.log(theme.primaryColor)
     }
 }
@@ -173,7 +173,7 @@ fun Screen() {
 ## Answer (EN)
 
 ### Purpose of CompositionLocal
-Passes contextual data (theme, locale, DI objects) through composition tree without explicit parameters. Use for cross-cutting dependencies that are environmental and change rarely.
+Passes contextual data (theme, locale, DI objects) through the composition tree without explicit parameters. Use for cross-cutting dependencies that are environmental and should not be driving frequent updates over large subtrees.
 
 **When to use:**
 - Theme, density, locale
@@ -182,18 +182,18 @@ Passes contextual data (theme, locale, DI objects) through composition tree with
 
 **When NOT to use:**
 - Instead of explicit parameters for business logic
-- For frequently changing local data
+- For highly localized data with very frequent changes when it could be scoped better via parameters or state
 - As hidden global state
 
 ### staticCompositionLocalOf Vs compositionLocalOf
 
 **`compositionLocalOf` (dynamic):**
-- Tracks `.current` reads — only readers recompose
-- For frequently changing values (scroll position, dynamic flags)
+- Tracks `.current` reads — only actual readers recompose
+- Suitable for values that may change relatively often (scroll position, dynamic flags), given a reasonable provider scope
 - Small per-read overhead
 
 ```kotlin
-// ✅ Dynamic Local for frequent updates
+// ✅ Dynamic Local for frequent updates within a limited scope
 val LocalScrollInfo = compositionLocalOf { 0 }
 
 @Composable
@@ -206,9 +206,9 @@ fun Screen(scrollY: Int) {
 ```
 
 **`staticCompositionLocalOf` (static):**
-- No read tracking — update invalidates entire subtree
+- No read tracking — updates invalidate the entire provider subtree
 - For rarely changing, widely read values (theme, locale)
-- Cheaper reads, expensive updates
+- Cheaper reads, more expensive updates
 
 ```kotlin
 // ✅ Static Local for rare updates
@@ -229,19 +229,19 @@ fun App(env: AppEnv, content: @Composable () -> Unit) {
 
 **Dynamic Local:**
 - Invalidates only actual `.current` readers
-- Ideal for values changing more than once per minute
+- Good for values that can update frequently, as long as the provider scope is not unnecessarily wide
 
 **Static Local:**
-- Invalidates entire `CompositionLocalProvider` subtree
-- Use for values changing less than once per minute
-- Place providers close to consumers
+- Invalidates the entire `CompositionLocalProvider` subtree
+- Use for values that change infrequently relative to the size of the affected subtree
+- Place providers close to consumers to limit large recomposition areas
 
 ```kotlin
 // ❌ Provider too high for frequent updates
 @Composable
-fun App() {
+fun App(scrollY: Int) {
     CompositionLocalProvider(LocalScrollInfo provides scrollY) {
-        // Entire tree recomposes
+        // When scrollY changes, the entire tree recomposes
         Navigation()
         Settings()
         Profile()
@@ -253,7 +253,7 @@ fun App() {
 fun FeedScreen(scrollY: Int) {
     Header()
     CompositionLocalProvider(LocalScrollInfo provides scrollY) {
-        FeedList()  // only FeedList recomposes
+        FeedList()  // only FeedList depends on LocalScrollInfo and recomposes
     }
     BottomNav()
 }
@@ -265,7 +265,7 @@ fun FeedScreen(scrollY: Int) {
 // ❌ Valid default hides missing provider
 val LocalLogger = staticCompositionLocalOf { NoOpLogger }
 
-// ✅ Crash immediately shows problem
+// ✅ Crash immediately shows missing provider
 val LocalLogger = staticCompositionLocalOf<Logger> {
     error("Logger not provided")
 }
@@ -280,29 +280,29 @@ val theme = LocalTheme.current
 theme.primaryColor = Color.Red  // won't trigger recomposition
 
 // ✅ Update via copying
-val theme = LocalTheme.current.copy(primaryColor = Color.Red)
-CompositionLocalProvider(LocalTheme provides theme) { ... }
+val updatedTheme = LocalTheme.current.copy(primaryColor = Color.Red)
+CompositionLocalProvider(LocalTheme provides updatedTheme) { /* ... */ }
 ```
 
 ### Common Pitfalls
 
 ```kotlin
-// ❌ Reading Local outside composition
+// ⚠️ Potentially stale value
 @Composable
 fun Screen() {
     val theme = LocalTheme.current
     LaunchedEffect(Unit) {
         delay(1000)
-        // theme may be stale
+        // theme may be stale if LocalTheme changed during this time
         logger.log(theme.primaryColor)
     }
 }
 
-// ✅ Read Local inside composition
+// ✅ Read Local in an up-to-date context inside the effect
 @Composable
 fun Screen() {
-    LaunchedEffect(Unit) {
-        val theme = LocalTheme.current  // current value
+    LaunchedEffect(LocalTheme.current) {
+        val theme = LocalTheme.current  // value consistent with current CompositionLocal
         logger.log(theme.primaryColor)
     }
 }

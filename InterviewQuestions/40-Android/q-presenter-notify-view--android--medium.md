@@ -3,7 +3,7 @@ id: android-313
 title: "Presenter Notify View / Presenter уведомляет View"
 aliases: ["MVP communication", "Presenter Notify View", "Presenter уведомляет View", "Взаимодействие MVP"]
 topic: android
-subtopics: [architecture-mvvm, lifecycle]
+subtopics: [architecture-mvvm]
 question_kind: android
 difficulty: medium
 original_language: ru
@@ -13,27 +13,28 @@ moc: moc-android
 related: [q-kapt-vs-ksp--android--medium, q-what-are-fragments-for-if-there-is-activity--android--medium, q-what-is-viewmodel--android--medium]
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 tags: [android/architecture-mvvm, android/lifecycle, architecture-mvvm, callback, difficulty/medium, lifecycle, mvp, platform/android, presenter, view]
+
 ---
 
 # Вопрос (RU)
 
-После получения результата внутри Presenter как сообщить об этом View?
+> После получения результата внутри Presenter как сообщить об этом `View`?
 
 # Question (EN)
 
-After getting a result inside Presenter, how to notify the View?
+> After getting a result inside Presenter, how to notify the `View`?
 
 ---
 
 ## Ответ (RU)
 
-В MVP-архитектуре Presenter отвечает за бизнес-логику, а View — за отображение. Presenter не должен знать об Android-специфике View (Activity/Fragment), поэтому используется абстракция через интерфейс.
+В MVP-архитектуре Presenter отвечает за бизнес-логику, а `View` — за отображение. Presenter не должен знать об Android-специфике `View` (`Activity`/`Fragment`), поэтому используется абстракция через интерфейс и контролируемое управление ссылкой на `View`.
 
 ### 1. Интерфейсный Контракт (Interface Contract) ✅
 
-**Наиболее распространенный подход**. Presenter вызывает методы интерфейса, который реализует View:
+**Наиболее распространенный подход**. Presenter вызывает методы интерфейса, который реализует `View`, и управляет её привязкой/отвязкой:
 
 ```kotlin
 // Contract
@@ -46,24 +47,34 @@ interface UserContract {
     }
 
     interface Presenter {
+        fun attachView(view: View)
+        fun detachView()
         fun loadUser(userId: String)
-        fun onDestroy()
     }
 }
 
 // Presenter
 class UserPresenter(
-    private val view: UserContract.View,
     private val repository: UserRepository
 ) : UserContract.Presenter {
 
+    private var view: UserContract.View? = null
+
+    override fun attachView(view: UserContract.View) {
+        this.view = view
+    }
+
+    override fun detachView() {
+        this.view = null
+    }
+
     override fun loadUser(userId: String) {
-        view.showLoading()
+        view?.showLoading()
         repository.getUser(userId) { result ->
-            view.hideLoading()
+            view?.hideLoading()
             when (result) {
-                is Success -> view.showUser(result.data)
-                is Error -> view.showError(result.message)
+                is Success -> view?.showUser(result.data)
+                is Error -> view?.showError(result.message)
             }
         }
     }
@@ -71,30 +82,44 @@ class UserPresenter(
 
 // View (Activity/Fragment)
 class UserActivity : AppCompatActivity(), UserContract.View {
-    private lateinit var presenter: UserPresenter
+    private lateinit var presenter: UserContract.Presenter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        presenter = UserPresenter(UserRepository())
+        presenter.attachView(this)
+    }
+
+    override fun onDestroy() {
+        presenter.detachView()
+        super.onDestroy()
+    }
 
     override fun showUser(user: User) {
         // Update UI
         binding.userName.text = user.name
     }
+
+    // Реализуем остальные методы View
 }
 ```
 
 **Преимущества**:
 - Четкий контракт между слоями
-- Легко тестировать (можно мокировать View)
+- Легко тестировать (можно мокировать `View`)
 - Type-safe вызовы
 
 **Недостатки**:
 - Много boilerplate кода для интерфейсов
-- При уничтожении View может быть NPE (нужна проверка)
+- Нужно явно отвязывать `View`, чтобы избежать утечек памяти
 
-### 2. Callback-функции ✅
+### 2. `Callback`-функции ✅
 
-Передача лямбда-функций для специфичных операций:
+Передача лямбда-функций для специфичных операций. Подход уместен для локальных, ограниченных по времени задач.
 
 ```kotlin
 class DataPresenter(
+    private val repository: DataRepository,
     private val onDataLoaded: (Data) -> Unit,
     private val onError: (String) -> Unit
 ) {
@@ -108,8 +133,9 @@ class DataPresenter(
     }
 }
 
-// Usage
+// Usage (например, в Activity/Fragment)
 val presenter = DataPresenter(
+    repository = DataRepository(),
     onDataLoaded = { data -> updateUI(data) },
     onError = { msg -> showError(msg) }
 )
@@ -120,93 +146,102 @@ val presenter = DataPresenter(
 - Гибкость для одноразовых операций
 
 **Недостатки**:
-- Может привести к memory leak если не управлять жизненным циклом
-- Сложнее тестировать множественные callback
+- Возможны утечки памяти, если Presenter или repository хранят callback дольше, чем живет `View`
+- Требуется явно отменять операции/обнулять ссылки при уничтожении `View`
+- Сложнее управлять множественными callback как единым состоянием
 
-### 3. LiveData/StateFlow (Гибридный подход)
+### 3. `LiveData`/`StateFlow` (Гибридный подход)
 
-Если используется переход к MVVM, Presenter может эмитить состояния:
+Если команда постепенно переходит к MVVM, можно использовать `LiveData`/`StateFlow` для уведомления `View` о состояниях. Важно понимать, что это уже не классический MVP, а `ViewModel`-подобный слой.
 
 ```kotlin
-class UserPresenter {
+class UserPresenterLikeViewModel {
     private val _userState = MutableLiveData<UserState>()
     val userState: LiveData<UserState> = _userState
 
     fun loadUser(userId: String) {
         _userState.value = UserState.Loading
         repository.getUser(userId) { result ->
-            _userState.value = when (result) {
-                is Success -> UserState.Success(result.data)
-                is Error -> UserState.Error(result.message)
-            }
+            _userState.postValue(
+                when (result) {
+                    is Success -> UserState.Success(result.data)
+                    is Error -> UserState.Error(result.message)
+                }
+            )
         }
     }
 }
 
-// View observes
-presenter.userState.observe(this) { state ->
+// View observes (Activity/Fragment)
+userPresenterLikeViewModel.userState.observe(this) { state ->
     when (state) {
-        is Loading -> showLoading()
-        is Success -> showUser(state.user)
-        is Error -> showError(state.message)
+        is UserState.Loading -> showLoading()
+        is UserState.Success -> showUser(state.user)
+        is UserState.Error -> showError(state.message)
     }
 }
 ```
 
 **Преимущества**:
-- Lifecycle-aware (автоматически отписывается)
-- Нет проблем с утечками памяти
-- Проще работать с потоками
+- Наблюдение привязано к жизненному циклу `View` (через LifecycleOwner)
+- Удобно выражать состояния экрана
 
 **Недостатки**:
-- Это уже не чистый MVP, а гибрид с MVVM
-- Добавляет зависимость от Android Lifecycle
+- Это уже не чистый MVP, а гибрид/переход к MVVM
+- Требует аккуратного управления временем жизни holder-а `LiveData`/`StateFlow`
 
 ### Важные Моменты (Best Practices)
 
-**Проверка жизненного цикла** — Presenter должен проверять, что View еще "жива":
+**Проверка жизненного цикла** — Presenter должен учитывать, что `View` может быть уничтожена, и не держать на неё долгоживущих сильных ссылок:
 
 ```kotlin
-class BasePresenter<V : BaseView>(private var view: V?) {
+interface BaseView
 
-    protected fun executeViewAction(action: (V) -> Unit) {
-        view?.let { action(it) }
+open class BasePresenter<V : BaseView> {
+    protected var view: V? = null
+        private set
+
+    fun attachView(view: V) {
+        this.view = view
     }
 
-    fun onDestroy() {
-        view = null // ✅ Avoid memory leaks
+    fun detachView() {
+        this.view = null
+    }
+
+    protected fun withView(action: (V) -> Unit) {
+        view?.let(action)
     }
 }
 ```
 
-**Weak reference** ❌ — не используйте `WeakReference<View>` в Presenter:
-- Усложняет код
-- Может привести к неожиданной потере ссылки
-- Лучше явно управлять через `onDestroy()`
+**WeakReference** — использование `WeakReference<`View`>` внутри Presenter, как правило, не требуется при правильно реализованных `attachView()/detachView()` и может усложнять код или приводить к неожиданным обнулениям. Если и использовать, то осознанно и с пониманием последствий.
 
-**Thread safety** — всегда переключайтесь на Main thread для UI операций:
+**Thread safety** — всегда выполняйте UI-операции на главном потоке:
 
 ```kotlin
-// ✅ Correct
+// ✅ Пример (псевдокод): обновление View через Handler главного потока
 fun notifyView(data: Data) {
     mainThreadHandler.post {
-        view.showData(data)
+        view?.showData(data)
     }
 }
 
-// ❌ Wrong - может крашнуться если вызвано из background thread
-fun notifyView(data: Data) {
-    view.showData(data)
+// ❌ Неправильно - может привести к крашу, если вызвано из background thread
+fun notifyViewWrong(data: Data) {
+    view?.showData(data)
 }
 ```
+
+Где `mainThreadHandler` создан на `Looper.getMainLooper()`, либо вместо этого можно использовать `runOnUiThread`, `lifecycleScope`, `Dispatchers.Main` и т.п.
 
 ## Answer (EN)
 
-In MVP architecture, the Presenter handles business logic while the View handles display. The Presenter should not know Android-specific details about the View (Activity/Fragment), so abstraction through interfaces is used.
+In MVP architecture, the Presenter handles business logic while the `View` handles rendering. The Presenter should not depend on Android-specific `View` implementations (`Activity`/`Fragment`) directly; instead, use an interface and explicit `View` attachment/detachment.
 
 ### 1. Interface Contract ✅
 
-**Most common approach**. The Presenter calls interface methods that the View implements:
+**Most common approach.** The Presenter calls methods on an interface implemented by the `View` and manages its attachment/detachment:
 
 ```kotlin
 // Contract
@@ -219,24 +254,34 @@ interface UserContract {
     }
 
     interface Presenter {
+        fun attachView(view: View)
+        fun detachView()
         fun loadUser(userId: String)
-        fun onDestroy()
     }
 }
 
 // Presenter
 class UserPresenter(
-    private val view: UserContract.View,
     private val repository: UserRepository
 ) : UserContract.Presenter {
 
+    private var view: UserContract.View? = null
+
+    override fun attachView(view: UserContract.View) {
+        this.view = view
+    }
+
+    override fun detachView() {
+        this.view = null
+    }
+
     override fun loadUser(userId: String) {
-        view.showLoading()
+        view?.showLoading()
         repository.getUser(userId) { result ->
-            view.hideLoading()
+            view?.hideLoading()
             when (result) {
-                is Success -> view.showUser(result.data)
-                is Error -> view.showError(result.message)
+                is Success -> view?.showUser(result.data)
+                is Error -> view?.showError(result.message)
             }
         }
     }
@@ -244,30 +289,44 @@ class UserPresenter(
 
 // View (Activity/Fragment)
 class UserActivity : AppCompatActivity(), UserContract.View {
-    private lateinit var presenter: UserPresenter
+    private lateinit var presenter: UserContract.Presenter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        presenter = UserPresenter(UserRepository())
+        presenter.attachView(this)
+    }
+
+    override fun onDestroy() {
+        presenter.detachView()
+        super.onDestroy()
+    }
 
     override fun showUser(user: User) {
         // Update UI
         binding.userName.text = user.name
     }
+
+    // Implement other View methods
 }
 ```
 
 **Advantages**:
 - Clear contract between layers
-- Easy to test (can mock View)
+- Easy to unit test (mock the `View`)
 - Type-safe calls
 
 **Disadvantages**:
-- Lots of boilerplate for interfaces
-- Potential NPE when View is destroyed (needs checks)
+- Boilerplate for contracts
+- Must detach `View` explicitly to avoid memory leaks
 
-### 2. Callback Functions ✅
+### 2. `Callback` Functions ✅
 
-Passing lambda functions for specific operations:
+Pass lambda callbacks for specific operations. Suitable for small, localized tasks.
 
 ```kotlin
 class DataPresenter(
+    private val repository: DataRepository,
     private val onDataLoaded: (Data) -> Unit,
     private val onError: (String) -> Unit
 ) {
@@ -281,8 +340,9 @@ class DataPresenter(
     }
 }
 
-// Usage
+// Usage (e.g., in Activity/Fragment)
 val presenter = DataPresenter(
+    repository = DataRepository(),
     onDataLoaded = { data -> updateUI(data) },
     onError = { msg -> showError(msg) }
 )
@@ -290,115 +350,151 @@ val presenter = DataPresenter(
 
 **Advantages**:
 - Minimal boilerplate
-- Flexibility for one-off operations
+- Flexible for one-off flows
 
 **Disadvantages**:
-- Can lead to memory leaks if lifecycle not managed
-- Harder to test multiple callbacks
+- Potential memory leaks if Presenter/repository store callbacks longer than the `View`'s lifecycle
+- Need to cancel operations / clear callbacks when `View` is destroyed
+- Harder to treat multiple callbacks as a single UI state
 
-### 3. LiveData/StateFlow (Hybrid Approach)
+### 3. `LiveData`/`StateFlow` (Hybrid Approach)
 
-If transitioning to MVVM, the Presenter can emit states:
+If transitioning towards MVVM, you can use `LiveData` or `StateFlow` to expose UI state. This effectively becomes a `ViewModel`-like layer rather than classic MVP.
 
 ```kotlin
-class UserPresenter {
+class UserPresenterLikeViewModel {
     private val _userState = MutableLiveData<UserState>()
     val userState: LiveData<UserState> = _userState
 
     fun loadUser(userId: String) {
         _userState.value = UserState.Loading
         repository.getUser(userId) { result ->
-            _userState.value = when (result) {
-                is Success -> UserState.Success(result.data)
-                is Error -> UserState.Error(result.message)
-            }
+            _userState.postValue(
+                when (result) {
+                    is Success -> UserState.Success(result.data)
+                    is Error -> UserState.Error(result.message)
+                }
+            )
         }
     }
 }
 
 // View observes
-presenter.userState.observe(this) { state ->
+userPresenterLikeViewModel.userState.observe(this) { state ->
     when (state) {
-        is Loading -> showLoading()
-        is Success -> showUser(state.user)
-        is Error -> showError(state.message)
+        is UserState.Loading -> showLoading()
+        is UserState.Success -> showUser(state.user)
+        is UserState.Error -> showError(state.message)
     }
 }
 ```
 
 **Advantages**:
-- Lifecycle-aware (auto-unsubscribes)
-- No memory leak issues
-- Easier thread handling
+- Observer tied to LifecycleOwner (lifecycle-aware observation)
+- Natural way to represent screen states
 
 **Disadvantages**:
-- Not pure MVP, but MVP-MVVM hybrid
-- Adds dependency on Android Lifecycle
+- Not pure MVP; hybrid / closer to MVVM
+- Must ensure the holder of `LiveData`/`StateFlow` has appropriate lifecycle (e.g., actual `ViewModel`)
 
 ### Important Considerations (Best Practices)
 
-**Lifecycle checking** — Presenter should verify View is still "alive":
+**Lifecycle awareness** — Presenter should handle the fact that the `View` can be destroyed and must not keep a long-lived strong reference to it:
 
 ```kotlin
-class BasePresenter<V : BaseView>(private var view: V?) {
+interface BaseView
 
-    protected fun executeViewAction(action: (V) -> Unit) {
-        view?.let { action(it) }
+open class BasePresenter<V : BaseView> {
+    protected var view: V? = null
+        private set
+
+    fun attachView(view: V) {
+        this.view = view
     }
 
-    fun onDestroy() {
-        view = null // ✅ Avoid memory leaks
+    fun detachView() {
+        this.view = null
+    }
+
+    protected fun withView(action: (V) -> Unit) {
+        view?.let(action)
     }
 }
 ```
 
-**Weak reference** ❌ — don't use `WeakReference<View>` in Presenter:
-- Complicates code
-- Can lead to unexpected reference loss
-- Better to explicitly manage via `onDestroy()`
+**WeakReference** — using `WeakReference<`View`>` inside Presenter is usually unnecessary when `attachView()/detachView()` are implemented correctly, and can overcomplicate logic or lead to unexpected nulls. If used, it should be a deliberate choice with clear reasoning.
 
-**Thread safety** — always switch to Main thread for UI operations:
+**Thread safety** — always update UI on the Main thread:
 
 ```kotlin
-// ✅ Correct
+// ✅ Example (pseudo-code): post work to main thread handler
 fun notifyView(data: Data) {
     mainThreadHandler.post {
-        view.showData(data)
+        view?.showData(data)
     }
 }
 
-// ❌ Wrong - can crash if called from background thread
-fun notifyView(data: Data) {
-    view.showData(data)
+// ❌ Wrong - may crash if called from a background thread
+fun notifyViewWrong(data: Data) {
+    view?.showData(data)
 }
 ```
 
+Where `mainThreadHandler` is created with `Looper.getMainLooper()`, or you can use `runOnUiThread`, `lifecycleScope`, `Dispatchers.Main`, etc.
+
 ---
+
+## Дополнительные вопросы (Follow-ups, RU)
+
+- Как обрабатывать изменения конфигурации (например, поворот экрана) в MVP, не теряя состояние Presenter?
+- В чем различия между паттернами MVP и MVVM в Android?
+- Как правильно тестировать Presenter с использованием мок-объектов `View` в unit-тестах?
+- Должен ли Presenter хранить ссылку на Android `Context`? Почему да или нет?
+- Как реализовать корректную обработку ошибок и retry-логики в Presenter?
 
 ## Follow-ups
 
 - How to handle configuration changes (rotation) in MVP without losing Presenter state?
 - What are the differences between MVP and MVVM patterns in Android?
-- How to properly test Presenter with mock View in unit tests?
-- Should Presenter hold reference to Android Context? Why or why not?
+- How to properly test Presenter with mock `View` in unit tests?
+- Should Presenter hold reference to Android `Context`? Why or why not?
 - How to implement proper error handling and retry logic in Presenter?
+
+## Ссылки (RU)
+
+- [Android Architecture Guide](https://developer.android.com/topic/architecture)
 
 ## References
 
-- [[c-mvvm-pattern]] - MVP architectural pattern
-- [[c-mvvm-pattern]] - MVVM for comparison
 - [Android Architecture Guide](https://developer.android.com/topic/architecture)
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+
+- [[q-viewmodel-pattern--android--easy]] — Понимание `ViewModel`
+- [[q-recyclerview-sethasfixedsize--android--easy]] — Оптимизация `View`
+
+### Связанные (тот же уровень)
+
+- [[q-what-is-viewmodel--android--medium]] — Подробности о `ViewModel`
+- [[q-testing-viewmodels-turbine--android--medium]] — Паттерны тестирования
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] — Методы перерисовки `View`
+
+### Продвинутые (сложнее)
+
+- [[q-compose-custom-layout--android--hard]] — Современная композиция `View`
 
 ## Related Questions
 
 ### Prerequisites (Easier)
-- [[q-viewmodel-pattern--android--easy]] - Understanding ViewModel
-- [[q-recyclerview-sethasfixedsize--android--easy]] - View optimization
+- [[q-viewmodel-pattern--android--easy]] - Understanding `ViewModel`
+- [[q-recyclerview-sethasfixedsize--android--easy]] - `View` optimization
 
 ### Related (Same Level)
-- [[q-what-is-viewmodel--android--medium]] - ViewModel in detail
+- [[q-what-is-viewmodel--android--medium]] - `ViewModel` in detail
 - [[q-testing-viewmodels-turbine--android--medium]] - Testing patterns
-- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - View redraw methods
+- [[q-what-is-known-about-methods-that-redraw-view--android--medium]] - `View` redraw methods
 
 ### Advanced (Harder)
-- [[q-compose-custom-layout--android--hard]] - Modern View composition
+- [[q-compose-custom-layout--android--hard]] - Modern `View` composition

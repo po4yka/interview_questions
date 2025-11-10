@@ -22,13 +22,12 @@ moc: moc-android
 related:
 - c-compose-navigation
 - c-activity
-- c-fragments
 - q-activity-navigation-how-it-works--android--medium
 - q-compose-navigation-advanced--android--medium
 - q-what-navigation-methods-do-you-know--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-11-10
 tags:
 - android/activity
 - android/fragment
@@ -36,15 +35,16 @@ tags:
 - difficulty/medium
 - navigation
 - ui
+
 ---
 
 # Вопрос (RU)
 
-Каким образом осуществляется навигация в Android?
+> Каким образом осуществляется навигация в Android?
 
 # Question (EN)
 
-How is navigation implemented in Android?
+> How is navigation implemented in Android?
 
 ---
 
@@ -82,7 +82,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 ### Навигация В Приложении
 
-#### 1. Activity Navigation
+#### 1. `Activity` Navigation
 
 ```kotlin
 // ✅ Базовый переход
@@ -96,7 +96,7 @@ val intent = Intent(this, MainActivity::class.java).apply {
 startActivity(intent)
 ```
 
-#### 2. Fragment Navigation
+#### 2. `Fragment` Navigation
 
 ```kotlin
 // ✅ FragmentManager
@@ -105,7 +105,7 @@ supportFragmentManager.beginTransaction()
     .addToBackStack(null)
     .commit()
 
-// ✅ Navigation Component (рекомендуется)
+// ✅ Navigation Component (рекомендуется, внутри Fragment/Activity с NavHost)
 findNavController().navigate(R.id.action_home_to_detail)
 ```
 
@@ -129,9 +129,10 @@ bottomNav.setOnItemSelectedListener { item ->
 
 #### 4. Predictive Back (Android 13+)
 
-Показ превью предыдущего экрана при жесте назад:
+Показ превью предыдущего экрана при жесте назад. Требует включения в манифесте (`android:enableOnBackInvokedCallback="true"` для соответствующей `Activity`) и корректной обработки callback.
 
 ```kotlin
+// Пример кастомной анимации прогресса жеста (поддержка совместимости через BackEventCompat)
 onBackPressedDispatcher.addCallback(
     this,
     object : OnBackPressedCallback(true) {
@@ -145,17 +146,23 @@ onBackPressedDispatcher.addCallback(
             // Отмена — возврат к исходному состоянию
             binding.root.animate().scaleX(1f).start()
         }
+
+        override fun handleOnBackPressed() {
+            // Базовое поведение "назад"
+            isEnabled = false
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 )
 ```
 
 ### Best Practices
 
-1. **Уважайте системную навигацию** — не блокируйте жесты назад
-2. **Следуйте соглашениям платформы** — используйте знакомые паттерны
-3. **Сохраняйте состояние** — восстанавливайте навигацию после пересоздания Activity
-4. **Поддержка deep linking** — позволяйте открывать экраны напрямую
-5. **Реализуйте predictive back** — улучшает UX на современных устройствах
+1. Уважайте системную навигацию — не блокируйте жесты назад без необходимости.
+2. Следуйте соглашениям платформы — используйте знакомые паттерны.
+3. Сохраняйте состояние — восстанавливайте навигацию после пересоздания `Activity`.
+4. Поддержка deep linking — позволяйте открывать экраны напрямую.
+5. Используйте predictive back на Android 13+ — при наличии поддержки улучшает UX на современных устройствах.
 
 ## Answer (EN)
 
@@ -167,7 +174,7 @@ Navigation in Android is implemented at two levels: **system-level** (between ap
 
 Modern devices use gesture navigation:
 - Swipe up from bottom — home screen
-- Swipe up with hold — recent apps
+- Swipe up and hold — recent apps
 - Swipe from edges — back navigation
 
 ```kotlin
@@ -189,9 +196,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 Three on-screen buttons: Back, Home, Recent Apps.
 
-### Application-Level Navigation
+### `Application`-Level Navigation
 
-#### 1. Activity Navigation
+#### 1. `Activity` Navigation
 
 ```kotlin
 // ✅ Basic transition
@@ -205,7 +212,7 @@ val intent = Intent(this, MainActivity::class.java).apply {
 startActivity(intent)
 ```
 
-#### 2. Fragment Navigation
+#### 2. `Fragment` Navigation
 
 ```kotlin
 // ✅ FragmentManager approach
@@ -214,7 +221,7 @@ supportFragmentManager.beginTransaction()
     .addToBackStack(null)
     .commit()
 
-// ✅ Navigation Component (recommended)
+// ✅ Navigation Component (recommended, inside Fragment/Activity hosting NavHost)
 findNavController().navigate(R.id.action_home_to_detail)
 ```
 
@@ -238,9 +245,10 @@ bottomNav.setOnItemSelectedListener { item ->
 
 #### 4. Predictive Back (Android 13+)
 
-Shows preview of previous screen during back gesture:
+Shows a preview of the previous screen during the back gesture. Requires enabling it in the manifest (`android:enableOnBackInvokedCallback="true"` for the `Activity`) and proper callback handling.
 
 ```kotlin
+// Example of custom back gesture progress animation (with BackEventCompat for compatibility)
 onBackPressedDispatcher.addCallback(
     this,
     object : OnBackPressedCallback(true) {
@@ -254,19 +262,62 @@ onBackPressedDispatcher.addCallback(
             // Cancel — restore original state
             binding.root.animate().scaleX(1f).start()
         }
+
+        override fun handleOnBackPressed() {
+            // Default "back" behavior
+            isEnabled = false
+            onBackPressedDispatcher.onBackPressed()
+        }
     }
 )
 ```
 
 ### Best Practices
 
-1. **Respect system navigation** — don't block back gestures
-2. **Follow platform conventions** — use familiar patterns
-3. **Preserve state** — restore navigation after Activity recreation
-4. **Support deep linking** — allow direct screen access
-5. **Implement predictive back** — improves UX on modern devices
+1. Respect system navigation — don't block back gestures without a strong reason.
+2. Follow platform conventions — use familiar patterns.
+3. Preserve state — restore navigation after `Activity` recreation.
+4. Support deep linking — allow direct screen access.
+5. Use predictive back on Android 13+ — when supported, it improves UX on modern devices.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как вы обрабатываете восстановление состояния навигации после убийства процесса?
+- В чем различия между флагами `launchMode` и как они влияют на back stack?
+- Как бы вы реализовали кастомный back stack для сложной мультимодульной навигации?
+- Как Navigation Component обрабатывает deep links и передачу аргументов?
+- Каковы trade-off'ы между архитектурой с одной `Activity` и несколькими `Activity`?
+
+## Ссылки (RU)
+
+- [Android Navigation Guide](https://developer.android.com/guide/navigation)
+- [Gesture Navigation](https://developer.android.com/develop/ui/views/layout/edge-to-edge)
+- [Predictive Back](https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture)
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-compose-navigation]]
+- [[c-activity]]
+
+### Предпосылки
+
+- [[q-what-navigation-methods-do-you-know--android--medium]] — Обзор подходов к навигации
+
+### Связанные
+
+- [[q-activity-navigation-how-it-works--android--medium]] — Детали навигации между `Activity`
+- [[q-compose-navigation-advanced--android--medium]] — Навигация в Jetpack Compose
+- [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] — Проблемы с deep linking
+
+### Продвинутое
+
+- Архитектура навигации в мультимодульных приложениях с динамическими фичами
+- Кастомные переходы навигации и анимации SharedElement
+- Type-safe навигация с проверкой маршрутов на этапе компиляции
 
 ## Follow-ups
 
@@ -274,7 +325,7 @@ onBackPressedDispatcher.addCallback(
 - What are the differences between `launchMode` flags and how do they affect back stack?
 - How would you implement a custom back stack for a complex multi-module navigation?
 - How does Navigation Component handle deep links and argument passing?
-- What are the trade-offs between single-Activity architecture and multi-Activity?
+- What are the trade-offs between single-`Activity` architecture and multi-`Activity`?
 
 ## References
 
@@ -288,14 +339,12 @@ onBackPressedDispatcher.addCallback(
 
 - [[c-compose-navigation]]
 - [[c-activity]]
-- [[c-fragments]]
-
 
 ### Prerequisites
 - [[q-what-navigation-methods-do-you-know--android--medium]] - Overview of navigation approaches
 
 ### Related
-- [[q-activity-navigation-how-it-works--android--medium]] - Activity navigation details
+- [[q-activity-navigation-how-it-works--android--medium]] - `Activity` navigation details
 - [[q-compose-navigation-advanced--android--medium]] - Jetpack Compose navigation
 - [[q-how-to-handle-the-situation-where-activity-can-open-multiple-times-due-to-deeplink--android--medium]] - Deep linking challenges
 

@@ -1,7 +1,6 @@
 ---
 id: android-124
-title: How Application Priority Is Determined By The System / Как система определяет
-  приоритет приложения
+title: How Application Priority Is Determined By The System / Как система определяет приоритет приложения
 aliases:
 - How Application Priority Is Determined
 - Как система определяет приоритет приложения
@@ -24,7 +23,7 @@ related:
 - q-anr-application-not-responding--android--medium
 - q-what-unites-the-main-components-of-an-android-application--android--medium
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags:
 - android
@@ -35,6 +34,7 @@ tags:
 - lifecycle
 - performance-memory
 - processes
+
 ---
 
 # Вопрос (RU)
@@ -49,40 +49,50 @@ tags:
 
 ## Ответ (RU)
 
-Android классифицирует процессы по **иерархии важности**, что влияет на решения **Low Memory Killer (LMK)** о завершении процессов и распределение ресурсов CPU.
+Android определяет приоритет процессов по **иерархии важности**, основанной на состоянии компонентов приложения и их видимости/значимости для пользователя. Эта иерархия влияет на решения системы (ActivityManager + lmkd/LMK) о завершении процессов при нехватке памяти и на распределение ресурсов.
 
-### Иерархия Приоритетов
+Важно: конкретные значения `oom_adj` и внутренние пороги являются деталями реализации и могут отличаться между версиями Android. Корректнее мыслить категориями важности (importance), а не полагаться на фиксированные числовые диапазоны.
+
+### Иерархия Приоритетов (концептуально)
 
 От высшего к низшему:
 
-1. **Foreground Process** - пользователь активно взаимодействует
-2. **Visible Process** - процесс частично виден пользователю
-3. **Service Process** - выполняет фоновую задачу
-4. **Cached Process** - остановлен, но кешируется для быстрого перезапуска
-5. **Empty Process** - без активных компонентов, убивается первым
+1. **Foreground process** — пользователь активно взаимодействует или выполняется критичный для пользователя код
+2. **Visible process** — что-то из UI видно пользователю
+3. **Perceptible / `Service` process** — важная фоновая работа, ощутимая пользователю (например, музыка, активный вызов)
+4. **Cached process** — содержит остановленные компоненты, хранится для быстрого перезапуска
+5. **Empty process** — без активных компонентов, служит в основном для кеша, высвобождается первым при нехватке памяти
 
-### Критерии Определения
+### Критерии Определения (упрощенно)
 
-**Foreground (oom_adj = 0):**
-- Activity в состоянии resumed (onResume)
-- Foreground Service с уведомлением
-- BroadcastReceiver выполняет onReceive()
+Ниже описаны типичные случаи. Точные флаги/значения зависят от версии Android и внутренних алгоритмов.
 
-**Visible (oom_adj = 100-200):**
-- Activity в состоянии paused, но видима (диалог поверх)
-- Service привязан к visible Activity
+**Foreground**:
+- `Activity` в состоянии resumed (в фокусе)
+- Foreground service через `startForeground()` с обязательным уведомлением
+- Выполнение `BroadcastReceiver.onReceive()` или `ContentProvider` в процессе, связанное с актуальным пользовательским действием
 
-**Service (oom_adj = 300-400):**
-- Service запущен через startService()
-- Выполняет длительную операцию
+**Visible**:
+- `Activity` в состоянии paused, но её UI всё ещё частично видим (например, диалог поверх)
+- Компоненты (например, bound service), связанные с видимой `Activity`
 
-**Cached (oom_adj = 900-999):**
-- Activity в состоянии stopped (onStop)
-- Нет активных компонентов
-- Убивается первым при нехватке памяти (LRU порядок)
+**Perceptible / `Service`**:
+- Сервис, который играет музыку, обрабатывает активный вызов, трекинг, и т.п., когда это явно разрешено политиками фонового выполнения
+- Bound service, к которому привязаны foreground/visible компоненты, может поднимать приоритет процесса, в котором он работает
+
+**Cached**:
+- `Activity` в состоянии stopped (не видно пользователю), но процесс всё ещё содержит её состояние или другие неактивные компоненты
+- Нет активных foreground/visible/perceptible компонентов
+- Такие процессы хранятся по LRU и завершаются при нехватке памяти
+
+**Empty**:
+- Процесс без активных компонентов и без полезного кешируемого состояния
+- Может быть завершён одним из первых при необходимости освобождения памяти; не обязательно "немедленно", но имеет наименьший приоритет
 
 ### Проверка Приоритета
 
+Для диагностики можно посмотреть важность текущего процесса через `ActivityManager.RunningAppProcessInfo.importance`.
+
 ```kotlin
 class PriorityChecker(private val context: Context) {
     fun logCurrentPriority() {
@@ -93,67 +103,118 @@ class PriorityChecker(private val context: Context) {
         val myProcess = processes.find { it.pid == myPid } ?: return
 
         val level = when (myProcess.importance) {
-            IMPORTANCE_FOREGROUND -> "FOREGROUND (0)" // ✅ Highest priority
-            IMPORTANCE_VISIBLE -> "VISIBLE (100-200)"
-            IMPORTANCE_SERVICE -> "SERVICE (300-400)"
-            IMPORTANCE_CACHED -> "CACHED (900-999)" // ❌ First to be killed
-            else -> "UNKNOWN"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND -> "FOREGROUND"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE -> "VISIBLE"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_SERVICE -> "SERVICE / PERCEPTIBLE"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_PERCEPTIBLE -> "PERCEPTIBLE"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_CACHED -> "CACHED"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_EMPTY -> "EMPTY"
+            else -> "OTHER (${myProcess.importance})"
         }
-        Log.d("Priority", "Current: $level")
+        Log.d("Priority", "Current importance: $level")
     }
 }
 ```
+
+Замечания:
+- Набор значений `importance` и их семантика могут отличаться между версиями Android.
+- `runningAppProcesses` и эти значения не гарантируются как точный источник для продакшен-логики; используйте их преимущественно для отладки и понимания.
 
 ### Факторы Влияния
 
-1. **Состояние компонентов** - resumed Activity повышает до Foreground
-2. **Тип Service** - foreground Service (startForeground) получает приоритет Foreground
-3. **Bound Services** - наследуют приоритет Activity, к которой привязаны
-4. **Зависимости процессов** - если процесс A зависит от B, B получает приоритет A
+1. **Состояние компонентов** — resumed `Activity` делает процесс foreground.
+2. **Тип сервиса** — foreground service (`startForeground()`) поднимает процесс до foreground-приоритета; обычные фоновые сервисы на современных версиях сильно ограничены и часто переводятся в более низкий приоритет или вовсе запрещаются.
+3. **Bound services** — сервис, к которому привязан foreground/visible компонент, получает более высокий приоритет.
+4. **Зависимости процессов** — если процесс A напрямую зависит от процесса B (например, binder-связь с критичным сервисом), система может повысить приоритет B ближе к A, чтобы избежать kill критичного зависимого.
 
-### Low Memory Killer
+### Low Memory Killer / lmkd
 
-LMK убивает процессы начиная с наибольшего oom_adj:
-1. Empty (1000) → немедленно
-2. Cached (900-999) → LRU порядок
-3. Service (300-400) → при нехватке памяти
-4. Visible/Foreground → в крайнем случае
+Под давлением памяти система (через `ActivityManager` и `lmkd`/LMK) завершает процессы, начиная с наименее важных:
+
+1. Empty / низкоприоритетные кешированные процессы
+2. Cached процессы в порядке LRU
+3. `Service` / perceptible процессы — только при серьёзной нехватке памяти
+4. Visible / Foreground процессы — только в крайнем случае, если ресурсы полностью исчерпаны
+
+Критерий — не только категория, но и объём потребляемой памяти, недавняя активность и политика конкретной версии Android.
+
+### Дополнительные вопросы (RU)
+
+- Как `oom_adj`/importance-оценка динамически меняется при переходах состояний `Activity`?
+- В чем компромиссы между использованием foreground-сервисов и WorkManager для фоновых задач?
+- Как привязанные (`bound`) сервисы могут влиять на приоритет процессов между разными приложениями?
+
+### Ссылки (RU)
+
+- https://developer.android.com/guide/components/activities/process-lifecycle - Жизненный цикл процессов
+- https://developer.android.com/guide/components/services - Сервисы и приоритет процессов
+
+### Связанные вопросы (RU)
+
+#### Предпосылки / Концепции
+
+- [[c-memory-management]]
+- [[c-lifecycle]]
+
+#### Предпосылки (проще)
+
+- [[q-anr-application-not-responding--android--medium]] - Основы ANR
+- [[q-what-unites-the-main-components-of-an-android-application--android--medium]] - Компоненты Android
+
+#### Связанные (сложные)
+
+- q-android-memory-management--android--hard - Стратегии управления памятью
+- q-background-execution-limits--android--hard - Ограничения фонового выполнения
+
+#### Продвинутые (сложные)
+
+- q-process-death-handling--android--hard - Обработка смерти процесса
 
 ## Answer (EN)
 
-Android classifies processes by **importance hierarchy**, affecting **Low Memory Killer (LMK)** decisions and CPU/resource allocation.
+Android determines process priority via an **importance hierarchy** based on component state and user visibility/impact. This hierarchy guides the system (ActivityManager together with lmkd/LMK and related mechanisms) when reclaiming memory and allocating CPU/resources.
 
-### Priority Hierarchy
+Important: concrete `oom_adj` values and internal thresholds are implementation details and vary across Android versions. It is safer to reason in terms of importance categories, not fixed numeric ranges.
+
+### Priority Hierarchy (conceptual)
 
 From highest to lowest:
 
-1. **Foreground Process** - user actively interacting
-2. **Visible Process** - partially visible to user
-3. **Service Process** - performing background task
-4. **Cached Process** - stopped but cached for quick restart
-5. **Empty Process** - no active components, killed first
+1. **Foreground process** - user actively interacting or running user-critical work
+2. **Visible process** - some part of its UI visible to the user
+3. **Perceptible / `Service` process** - important background work perceptible to the user (e.g., music playback, ongoing call)
+4. **Cached process** - holds stopped components, kept for fast restart
+5. **Empty process** - no active components, mostly used as cache, reclaimed first under pressure
 
-### Determination Criteria
+### Determination Criteria (simplified)
 
-**Foreground (oom_adj = 0):**
-- Activity in resumed state (onResume)
-- Foreground Service with notification
-- BroadcastReceiver executing onReceive()
+Below are typical conditions; exact flags/values depend on Android version and internal logic.
 
-**Visible (oom_adj = 100-200):**
-- Activity in paused state but visible (dialog on top)
-- Service bound to visible Activity
+**Foreground:**
+- `Activity` in resumed state (in focus)
+- Foreground service via `startForeground()` with a required notification
+- `BroadcastReceiver.onReceive()` or `ContentProvider` work associated with current user-visible operations
 
-**Service (oom_adj = 300-400):**
-- Service started via startService()
-- Performing long-running operation
+**Visible:**
+- `Activity` paused but still visible (e.g., dialog on top)
+- Components (e.g., bound service) associated with a visible `Activity`
 
-**Cached (oom_adj = 900-999):**
-- Activity in stopped state (onStop)
-- No active components
-- Killed first during low memory (LRU order)
+**Perceptible / `Service`:**
+- Services doing user-perceptible work (music, active call, allowed tracking, etc.) when permitted by background execution policies
+- Bound services referenced by foreground/visible components can elevate the hosting process priority
+
+**Cached:**
+- `Activity` in stopped state (not visible) but process still holds its state or other inactive components
+- No active foreground/visible/perceptible components
+- Processes kept in LRU and killed under memory pressure
+
+**Empty:**
+- Process without active components or useful cached state
+- Among the first candidates to be killed when memory is needed; not literally "immediately", but lowest priority
 
 ### Checking Priority
+
+For debugging you can inspect your process importance via `ActivityManager.RunningAppProcessInfo.importance`:
 
 ```kotlin
 class PriorityChecker(private val context: Context) {
@@ -165,37 +226,46 @@ class PriorityChecker(private val context: Context) {
         val myProcess = processes.find { it.pid == myPid } ?: return
 
         val level = when (myProcess.importance) {
-            IMPORTANCE_FOREGROUND -> "FOREGROUND (0)" // ✅ Highest priority
-            IMPORTANCE_VISIBLE -> "VISIBLE (100-200)"
-            IMPORTANCE_SERVICE -> "SERVICE (300-400)"
-            IMPORTANCE_CACHED -> "CACHED (900-999)" // ❌ First to be killed
-            else -> "UNKNOWN"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND -> "FOREGROUND"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE -> "VISIBLE"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_SERVICE -> "SERVICE / PERCEPTIBLE"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_PERCEPTIBLE -> "PERCEPTIBLE"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_CACHED -> "CACHED"
+            ActivityManager.RunningAppProcessInfo.IMPORTANCE_EMPTY -> "EMPTY"
+            else -> "OTHER (${myProcess.importance})"
         }
-        Log.d("Priority", "Current: $level")
+        Log.d("Priority", "Current importance: $level")
     }
 }
 ```
 
+Notes:
+- The set and meaning of `importance` values can evolve across API levels.
+- `runningAppProcesses` and these flags are best used for diagnostics and understanding, not as a strict production contract.
+
 ### Influencing Factors
 
-1. **Component state** - resumed Activity elevates to Foreground
-2. **Service type** - foreground Service (startForeground) gets Foreground priority
-3. **Bound Services** - inherit priority of bound Activity
-4. **Process dependencies** - if process A depends on B, B inherits A's priority
+1. **Component state** - a resumed `Activity` promotes the process to foreground.
+2. **`Service` type** - a foreground service (`startForeground()`) raises the process to foreground-level priority; regular background services are heavily restricted on modern Android and may run at lower priority or be disallowed.
+3. **Bound services** - a service bound to a foreground/visible component gets higher priority.
+4. **Process dependencies** - if process A depends on process B via critical binder bindings, the system may raise B's priority closer to A's.
 
-### Low Memory Killer
+### Low Memory Killer / lmkd
 
-LMK kills processes starting with highest oom_adj:
-1. Empty (1000) → immediately
-2. Cached (900-999) → LRU order
-3. Service (300-400) → when memory low
-4. Visible/Foreground → last resort
+Under memory pressure, the system (via `ActivityManager` and `lmkd`/LMK) kills processes starting from the least important:
+
+1. Empty / low-priority cached processes
+2. Cached processes in LRU order
+3. `Service` / perceptible processes — only under significant pressure
+4. Visible / Foreground processes — only as a last resort when resources are exhausted
+
+Decisions consider not only the category, but also actual memory usage, recency, and policies of the specific Android version.
 
 ---
 
 ## Follow-ups
 
-- How does the oom_adj score dynamically change during Activity lifecycle transitions?
+- How does the oom_adj/importance score dynamically change during `Activity` lifecycle transitions?
 - What are the trade-offs between using foreground Services versus WorkManager for background tasks?
 - How can bound Services affect the priority of processes across different applications?
 

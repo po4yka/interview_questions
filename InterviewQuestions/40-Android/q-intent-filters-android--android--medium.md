@@ -23,7 +23,7 @@ related:
 - q-what-are-intents-for--android--medium
 - q-what-is-intent--android--easy
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 tags:
 - android/activity
 - android/intents-deeplinks
@@ -31,19 +31,20 @@ tags:
 - difficulty/medium
 - intent-filter
 sources: []
+
 ---
 
 # Вопрос (RU)
 
-> Что такое Intent Filters в Android и как они работают?
+> Что такое `Intent` Filters в Android и как они работают?
 
 # Question (EN)
 
-> What are Intent Filters in Android and how do they work?
+> What are `Intent` Filters in Android and how do they work?
 
 ## Ответ (RU)
 
-**Intent Filter** — это выражение в манифесте приложения, определяющее типы интентов, которые компонент готов принимать. Фильтры позволяют объявлять возможности компонентов и обеспечивают разрешение неявных намерений.
+**`Intent` Filter** — это выражение в манифесте приложения, определяющее типы интентов, которые компонент готов принимать. Фильтры позволяют объявлять возможности компонентов и обеспечивают разрешение неявных намерений.
 
 ### Основные Компоненты
 
@@ -51,11 +52,11 @@ sources: []
 
 **`<action>`** (обязательный) — действие, которое компонент может выполнить:
 ```xml
-<!-- ✅ Стандартные действия -->
+<!-- Standard actions -->
 <action android:name="android.intent.action.MAIN" />
 <action android:name="android.intent.action.SEND" />
 
-<!-- ✅ Кастомные действия с пакетным префиксом -->
+<!-- Custom actions with package prefix -->
 <action android:name="com.example.project.CUSTOM_ACTION" />
 ```
 
@@ -68,10 +69,10 @@ sources: []
 
 **`<data>`** (опционально) — спецификация данных (MIME-тип или URI):
 ```xml
-<!-- MIME-тип -->
+<!-- MIME type -->
 <data android:mimeType="text/plain" />
 
-<!-- URI схема -->
+<!-- URI scheme -->
 <data android:scheme="https"
       android:host="example.com"
       android:pathPrefix="/products" />
@@ -106,7 +107,7 @@ sources: []
 ```xml
 <intent-filter>
     <action android:name="android.intent.action.SEND" />
-    <!-- ✅ DEFAULT обязателен для неявных интентов -->
+    <!-- DEFAULT обязателен для неявных интентов -->
     <category android:name="android.intent.category.DEFAULT" />
     <data android:mimeType="text/plain" />
 </intent-filter>
@@ -114,14 +115,14 @@ sources: []
 
 ### Ключевые Правила
 
-1. **CATEGORY_DEFAULT обязателен** для активностей, принимающих неявные интенты
-2. **android:exported** должен быть указан явно (обязательно с API 31+)
-3. **android:autoVerify="true"** для App Links (HTTPS URL)
+1. `CATEGORY_DEFAULT` обязателен для активностей, принимающих неявные интенты
+2. `android:exported` должен быть указан явно (обязательно с API 31+)
+3. `android:autoVerify="true"` используется для App Links (HTTPS URL)
 4. Один компонент может иметь несколько фильтров, каждый описывает отдельную возможность
 
 ## Answer (EN)
 
-**Intent Filter** is an expression in the app's manifest that specifies the types of intents a component can receive. Filters allow components to declare their capabilities and enable implicit intent resolution.
+**`Intent` Filter** is an expression in the app's manifest that specifies the types of intents a component can receive. Filters allow components to declare their capabilities and enable implicit intent resolution.
 
 ### Core Components
 
@@ -129,11 +130,11 @@ A filter consists of three elements:
 
 **`<action>`** (required) — action the component can perform:
 ```xml
-<!-- ✅ Standard actions -->
+<!-- Standard actions -->
 <action android:name="android.intent.action.MAIN" />
 <action android:name="android.intent.action.SEND" />
 
-<!-- ✅ Custom actions with package prefix -->
+<!-- Custom actions with package prefix -->
 <action android:name="com.example.project.CUSTOM_ACTION" />
 ```
 
@@ -184,7 +185,7 @@ A filter consists of three elements:
 ```xml
 <intent-filter>
     <action android:name="android.intent.action.SEND" />
-    <!-- ✅ DEFAULT required for implicit intents -->
+    <!-- DEFAULT required for implicit intents -->
     <category android:name="android.intent.category.DEFAULT" />
     <data android:mimeType="text/plain" />
 </intent-filter>
@@ -192,10 +193,17 @@ A filter consists of three elements:
 
 ### Key Rules
 
-1. **CATEGORY_DEFAULT required** for activities receiving implicit intents
-2. **android:exported** must be explicit (mandatory from API 31+)
-3. **android:autoVerify="true"** for App Links (HTTPS URLs)
+1. `CATEGORY_DEFAULT` required for activities receiving implicit intents
+2. `android:exported` must be explicit (mandatory from API 31+)
+3. `android:autoVerify="true"` for App Links (HTTPS URLs)
 4. One component can have multiple filters, each describing a separate capability
+
+## Дополнительные вопросы (RU)
+
+- Как Android разрешает конфликты, когда несколько приложений объявляют фильтры намерений для одного и того же действия?
+- В чем разница между неявными и явными интентами с точки зрения безопасности?
+- Как программно тестировать deep links и App Links?
+- Каковы последствия для производительности при наличии большого количества intent filters?
 
 ## Follow-ups
 
@@ -204,10 +212,37 @@ A filter consists of three elements:
 - How do you test deep links and App Links programmatically?
 - What are the performance implications of having many intent filters?
 
+## Ссылки (RU)
+
+- Официальная документация Android: `Intent` Filters
+- Официальная документация Android: проверка и настройка App Links
+
 ## References
 
-- Android Developer Documentation: Intent Filters
+- Android Developer Documentation: `Intent` Filters
 - Android Developer Documentation: App Links verification
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепты
+
+- [[c-intent]]
+- [[c-activity]]
+
+### Предпосылки (проще)
+
+- [[q-what-is-intent--android--easy]] — Базовые концепции `Intent`
+- Основы `Activity` и ее жизненного цикла
+
+### Связанные (того же уровня)
+
+- [[q-what-are-intents-for--android--medium]] — Сценарии использования `Intent`
+- Сравнение неявных и явных интентов
+
+### Продвинутые (сложнее)
+
+- Реализация и верификация App Links
+- Вопросы безопасности при работе с интентами
 
 ## Related Questions
 
@@ -216,15 +251,17 @@ A filter consists of three elements:
 - [[c-intent]]
 - [[c-activity]]
 
-
 ### Prerequisites (Easier)
+
 - [[q-what-is-intent--android--easy]] — Basic intent concepts
-- Activity fundamentals and lifecycle
+- `Activity` fundamentals and lifecycle
 
 ### Related (Same Level)
-- [[q-what-are-intents-for--android--medium]] — Intent use cases
+
+- [[q-what-are-intents-for--android--medium]] — `Intent` use cases
 - Implicit vs explicit intents comparison
 
 ### Advanced (Harder)
+
 - App Links verification and implementation
 - Security considerations for intents

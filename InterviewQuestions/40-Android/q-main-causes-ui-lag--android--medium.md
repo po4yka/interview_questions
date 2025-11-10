@@ -10,11 +10,12 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-compose-performance-optimization--android--hard, q-mvvm-pattern--android--medium, q-reduce-apk-size-techniques--android--medium]
+related: [c-android, q-compose-performance-optimization--android--hard, q-mvvm-pattern--android--medium, q-reduce-apk-size-techniques--android--medium]
 sources: []
 created: 2025-10-15
 updated: 2025-10-28
 tags: [android/performance-memory, android/performance-rendering, android/threads-sync, difficulty/medium, performance, threading, ui]
+
 ---
 
 # Вопрос (RU)
@@ -55,7 +56,7 @@ suspend fun loadData() {
 }
 ```
 
-**Современные подходы:** [[c-coroutines|Kotlin Coroutines]] (рекомендовано), WorkManager, Flow.
+**Современные подходы:** [[c-coroutines|Kotlin Coroutines]] (рекомендовано), WorkManager, `Flow`.
 
 ### 2. Неоптимизированные Макеты (layouts)
 
@@ -85,7 +86,7 @@ suspend fun loadData() {
 </ConstraintLayout>
 ```
 
-**Best practices:** ConstraintLayout для сложных UI, ViewStub для условно отображаемых view, merge тег для устранения лишних ViewGroup.
+**Best practices:** ConstraintLayout для сложных UI, ViewStub для условно отображаемых view, merge тег для устранения лишних `ViewGroup`.
 
 ### 3. Неоптимизированная Работа С Изображениями
 
@@ -170,7 +171,7 @@ AnimatedVisibility(visible = isVisible) {
 
 **7. Overdraw:** Отрисовка пикселей несколько раз. Решение: удалить лишние background, использовать "Debug GPU overdraw" в Developer Options.
 
-**8. Медленные Custom Views:** Неэффективный onDraw(). Решение: избегать аллокаций в onDraw(), кешировать Paint объекты.
+**8. Медленные Custom Views:** Неэффективный `onDraw()`. Решение: избегать аллокаций в `onDraw()`, кешировать объекты `Paint`.
 
 ---
 
@@ -180,7 +181,7 @@ The main causes of **UI lag** (janky user interface) in Android applications:
 
 ### 1. Heavy Operations on Main Thread
 
-**Problem:** Long-running operations block UI rendering.
+**Problem:** `Long`-running operations block UI rendering.
 
 **Examples:** network requests, database queries, file I/O, image processing.
 
@@ -202,7 +203,7 @@ suspend fun loadData() {
 }
 ```
 
-**Modern approaches:** Kotlin Coroutines (recommended), WorkManager, Flow.
+**Modern approaches:** Kotlin Coroutines (recommended), WorkManager, `Flow`.
 
 ### 2. Unoptimized Layouts
 
@@ -266,7 +267,7 @@ imageView.load(imageUrl) {
 
 **Problem:** Too many UI updates cause excessive rendering.
 
-**Examples:** updating every item in RecyclerView, excessive notifyDataSetChanged().
+**Examples:** updating every item in RecyclerView, excessive `notifyDataSetChanged()`.
 
 **Solution:** Minimize and batch UI updates:
 
@@ -317,9 +318,17 @@ AnimatedVisibility(visible = isVisible) {
 
 **7. Overdraw:** Drawing pixels multiple times wastes GPU. Solution: remove unnecessary backgrounds, use "Debug GPU overdraw" in Developer Options.
 
-**8. Slow Custom Views:** Inefficient onDraw(). Solution: avoid allocations in onDraw(), cache Paint objects.
+**8. Slow Custom Views:** Inefficient `onDraw()`. Solution: avoid allocations in `onDraw()`, cache `Paint` objects.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как измерять производительность UI? (Systrace/Perfetto, Profile GPU Rendering, Layout Inspector, StrictMode)
+- Что такое бюджет кадра 16 мс для 60fps?
+- Как `DiffUtil` вычисляет различия?
+- В чем различия между Glide, Coil и Picasso?
+- Как обнаружить overdraw в приложении?
 
 ## Follow-ups
 
@@ -329,12 +338,33 @@ AnimatedVisibility(visible = isVisible) {
 - What are the differences between Glide, Coil, and Picasso?
 - How to detect overdraw in your app?
 
+## Ссылки (RU)
+
+- Android Performance Patterns
+- Документация по Systrace / Perfetto
+- Руководство по ConstraintLayout
+- Kotlin Coroutines Best Practices
+
 ## References
 
 - [Android Performance Patterns](https://www.youtube.com/playlist?list=PLWz5rJ2EKKc9CBxr3BVjPTPoDPLdPIFCE)
 - [Systrace Documentation](https://developer.android.com/topic/performance/tracing)
 - [ConstraintLayout Guide](https://developer.android.com/develop/ui/views/layout/constraint-layout)
 - [Kotlin Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+
+## Связанные вопросы (RU)
+
+### Базовые (проще)
+- [[q-graphql-vs-rest--networking--easy]] - Основы сетевого взаимодействия
+
+### Связанные (того же уровня)
+- [[q-reduce-apk-size-techniques--android--medium]] - Оптимизация производительности
+- [[q-mvvm-pattern--android--medium]] - Архитектурные паттерны
+- [[q-build-optimization-gradle--android--medium]] - Производительность сборки
+- [[q-compose-modifier-order-performance--android--medium]] - Производительность Compose
+
+### Продвинутые (сложнее)
+- [[q-compose-performance-optimization--android--hard]] - Продвинутая оптимизация производительности
 
 ## Related Questions
 

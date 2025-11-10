@@ -45,7 +45,7 @@ sources:
 
 **Основные компоненты:**
 - `Repository Pattern` для абстракции источников данных — единый интерфейс для local/remote
-- `WorkManager` для надежного фонового выполнения — автоматические retry и constraints
+- `WorkManager` для надежного фонового выполнения — constraints и управляемый retry при ошибках
 - `Coroutines` для асинхронных операций — неблокирующее выполнение
 - Механизмы retry с экспоненциальной задержкой — уменьшение нагрузки на сервер
 - Стратегии разрешения конфликтов — `Last Write Wins`, `Merge`, `Local Wins`, `Remote Wins`
@@ -62,11 +62,12 @@ class DataRepository @Inject constructor(
     suspend fun saveUser(user: User): Result<User> {
         // ✅ Сохраняем локально первым для мгновенного отклика UI
         val saved = localDb.saveUser(user)
+        // user.id может быть использован для таргетированной синхронизации; опущено для краткости
         syncManager.scheduleSync(user.id)
         return Result.success(saved)
     }
 
-    // ❌ НЕ ждем сеть перед возвратом данных
+    // ❌ Не ждем сеть перед возвратом данных, читаем из локального источника
     suspend fun getUser(id: String): User = localDb.getUser(id)
 }
 ```
@@ -75,17 +76,19 @@ class DataRepository @Inject constructor(
 ```kotlin
 class RetryManager {
     suspend fun <T> executeWithRetry(operation: suspend () -> T): Result<T> {
+        var lastError: Throwable? = null
         repeat(3) { attempt ->
             try {
                 return Result.success(operation())
             } catch (e: Exception) {
+                lastError = e
                 // ✅ Экспоненциальная задержка с jitter предотвращает thundering herd
                 if (attempt < 2) {
                     delay(1000L * (1L shl attempt) + (0..1000).random())
                 }
             }
         }
-        return Result.failure(Exception("Max retries exceeded"))
+        return Result.failure(lastError ?: Exception("Max retries exceeded"))
     }
 }
 ```
@@ -98,10 +101,14 @@ class ConflictResolver {
             // ✅ Last Write Wins — простейшая стратегия (по timestamp)
             Strategy.LAST_WRITE_WINS ->
                 if (remote.lastModified > local.lastModified) remote else local
-            // ✅ Merge — объединение изменений по полям (интеллектуальное слияние)
+            // ✅ Merge — объединение изменений по полям (упрощенный пример)
             Strategy.MERGE ->
-                User(local.id, remote.name, local.email,
-                     maxOf(local.lastModified, remote.lastModified))
+                User(
+                    id = local.id,
+                    name = remote.name,
+                    email = local.email,
+                    lastModified = maxOf(local.lastModified, remote.lastModified)
+                )
             Strategy.LOCAL_WINS -> local  // Локальные изменения имеют приоритет
             Strategy.REMOTE_WINS -> remote  // Удаленные изменения имеют приоритет
         }
@@ -111,15 +118,18 @@ class ConflictResolver {
 
 **4. Фоновая синхронизация с WorkManager:**
 ```kotlin
-class SyncWorker(context: Context, params: WorkerParameters)
-    : CoroutineWorker(context, params) {
+class SyncWorker(
+    appContext: Context,
+    params: WorkerParameters
+) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result {
         return try {
+            // В реальном приложении SyncManager обычно внедряется через DI
             SyncManager(applicationContext).performSync()
             Result.success()
         } catch (e: Exception) {
-            // ✅ Автоматический retry при ошибке (до 3 попыток)
+            // ✅ Управляемый retry при ошибке: пробуем до 3 попыток
             if (runAttemptCount < 3) Result.retry() else Result.failure()
         }
     }
@@ -131,9 +141,15 @@ class SyncManager @Inject constructor(private val context: Context) {
             .setRequiredNetworkType(NetworkType.CONNECTED)  // ✅ Ждем доступность сети
             .build()
         val request = OneTimeWorkRequestBuilder<SyncWorker>()
+            // userId можно прокинуть через inputData при необходимости
             .setConstraints(constraints)
             .build()
         WorkManager.getInstance(context).enqueue(request)
+    }
+
+    suspend fun performSync() {
+        // Упрощенный пример: здесь должна быть логика чтения локальных изменений,
+        // отправки их на сервер и обновления локальной БД ответами сервера.
     }
 }
 ```
@@ -145,9 +161,11 @@ class NetworkMonitor @Inject constructor(private val context: Context) {
 
     fun observeNetworkState(): Flow<Boolean> = callbackFlow {
         val callback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) = trySend(true)
-            override fun onLost(network: Network) = trySend(false)
+            override fun onAvailable(network: Network) { trySend(true).isSuccess }
+            override fun onLost(network: Network) { trySend(false).isSuccess }
         }
+        // Для упрощения примера ошибки регистрации не обрабатываются;
+        // в продакшене учтите API-уровень и nullability ConnectivityManager.
         connectivityManager?.registerDefaultNetworkCallback(callback)
         awaitClose { connectivityManager?.unregisterNetworkCallback(callback) }
     }
@@ -156,19 +174,19 @@ class NetworkMonitor @Inject constructor(private val context: Context) {
 
 ## Answer (EN)
 
-Handling data synchronization on unstable networks requires `offline-first` architecture, retry mechanisms with exponential backoff, and conflict resolution strategies. Main goal: ensure UI responsiveness and sync reliability regardless of network state.
+Handling data synchronization on unstable networks requires an `offline-first` architecture, retry mechanisms with exponential backoff, and conflict resolution strategies. The main goal is to keep the UI responsive and sync reliable regardless of network state.
 
 ### Key Principles
 
 **Offline-First Architecture:**
-- Local database (`Room`/SQLite) as single source of truth — always available
+- Local database (`Room`/SQLite) as a single source of truth — always available
 - All operations performed locally first — instant UI response
-- Synchronization happens asynchronously in background — doesn't block user
+- Synchronization happens asynchronously in the background — does not block the user
 - User always sees current local data — even without network
 
 **Core Components:**
 - `Repository Pattern` for data source abstraction — unified interface for local/remote
-- `WorkManager` for reliable background execution — automatic retry and constraints
+- `WorkManager` for reliable background execution — constraints and controlled retry on failures
 - `Coroutines` for asynchronous operations — non-blocking execution
 - Retry mechanisms with exponential backoff — reduce server load
 - Conflict resolution strategies — `Last Write Wins`, `Merge`, `Local Wins`, `Remote Wins`
@@ -183,13 +201,14 @@ class DataRepository @Inject constructor(
     private val syncManager: SyncManager
 ) {
     suspend fun saveUser(user: User): Result<User> {
-        // ✅ Сохраняем локально первым для мгновенного отклика UI
+        // ✅ Save locally first for instant UI feedback
         val saved = localDb.saveUser(user)
+        // user.id can be used for targeted sync; omitted here for brevity
         syncManager.scheduleSync(user.id)
         return Result.success(saved)
     }
 
-    // ❌ НЕ ждем сеть перед возвратом данных
+    // ❌ Do not wait for network before returning; read from local source
     suspend fun getUser(id: String): User = localDb.getUser(id)
 }
 ```
@@ -198,17 +217,19 @@ class DataRepository @Inject constructor(
 ```kotlin
 class RetryManager {
     suspend fun <T> executeWithRetry(operation: suspend () -> T): Result<T> {
+        var lastError: Throwable? = null
         repeat(3) { attempt ->
             try {
                 return Result.success(operation())
             } catch (e: Exception) {
-                // ✅ Exponential backoff with jitter prevents thundering herd
+                lastError = e
+                // ✅ Exponential backoff with jitter helps avoid thundering herd
                 if (attempt < 2) {
                     delay(1000L * (1L shl attempt) + (0..1000).random())
                 }
             }
         }
-        return Result.failure(Exception("Max retries exceeded"))
+        return Result.failure(lastError ?: Exception("Max retries exceeded"))
     }
 }
 ```
@@ -221,10 +242,14 @@ class ConflictResolver {
             // ✅ Last Write Wins — simplest strategy (by timestamp)
             Strategy.LAST_WRITE_WINS ->
                 if (remote.lastModified > local.lastModified) remote else local
-            // ✅ Merge — combine changes by fields (intelligent merging)
+            // ✅ Merge — combine changes by fields (simplified example)
             Strategy.MERGE ->
-                User(local.id, remote.name, local.email,
-                     maxOf(local.lastModified, remote.lastModified))
+                User(
+                    id = local.id,
+                    name = remote.name,
+                    email = local.email,
+                    lastModified = maxOf(local.lastModified, remote.lastModified)
+                )
             Strategy.LOCAL_WINS -> local  // Local changes have priority
             Strategy.REMOTE_WINS -> remote  // Remote changes have priority
         }
@@ -234,15 +259,18 @@ class ConflictResolver {
 
 **4. Background sync with WorkManager:**
 ```kotlin
-class SyncWorker(context: Context, params: WorkerParameters)
-    : CoroutineWorker(context, params) {
+class SyncWorker(
+    appContext: Context,
+    params: WorkerParameters
+) : CoroutineWorker(appContext, params) {
 
     override suspend fun doWork(): Result {
         return try {
+            // In a real app SyncManager is typically provided via DI
             SyncManager(applicationContext).performSync()
             Result.success()
         } catch (e: Exception) {
-            // ✅ Automatic retry on failure
+            // ✅ Controlled retry on failure: retry up to 3 attempts
             if (runAttemptCount < 3) Result.retry() else Result.failure()
         }
     }
@@ -254,9 +282,15 @@ class SyncManager @Inject constructor(private val context: Context) {
             .setRequiredNetworkType(NetworkType.CONNECTED)  // ✅ Wait for network
             .build()
         val request = OneTimeWorkRequestBuilder<SyncWorker>()
+            // userId can be passed via inputData if needed
             .setConstraints(constraints)
             .build()
         WorkManager.getInstance(context).enqueue(request)
+    }
+
+    suspend fun performSync() {
+        // Simplified example: implement reading local changes,
+        // pushing them to server, and updating local DB from responses.
     }
 }
 ```
@@ -268,9 +302,11 @@ class NetworkMonitor @Inject constructor(private val context: Context) {
 
     fun observeNetworkState(): Flow<Boolean> = callbackFlow {
         val callback = object : ConnectivityManager.NetworkCallback() {
-            override fun onAvailable(network: Network) = trySend(true)
-            override fun onLost(network: Network) = trySend(false)
+            override fun onAvailable(network: Network) { trySend(true).isSuccess }
+            override fun onLost(network: Network) { trySend(false).isSuccess }
         }
+        // For brevity, registration errors are not handled here;
+        // in production, handle API levels and nullability of ConnectivityManager.
         connectivityManager?.registerDefaultNetworkCallback(callback)
         awaitClose { connectivityManager?.unregisterNetworkCallback(callback) }
     }

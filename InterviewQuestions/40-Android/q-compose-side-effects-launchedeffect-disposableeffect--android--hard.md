@@ -4,25 +4,25 @@ title: "Compose Side Effects: LaunchedEffect vs DisposableEffect / Побочн�
 aliases: [Compose LaunchedEffect vs DisposableEffect, Compose Side Effects, DisposableEffect, LaunchedEffect, Побочные эффекты Compose]
 topic: android
 subtopics:
-  - lifecycle
-  - ui-compose
+- ui-compose
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags:
-  - en
-  - ru
-status: reviewed
+- en
+- ru
+status: draft
 moc: moc-android
 related:
-  - q-compose-performance-optimization--android--hard
-  - q-compose-remember-derived-state--android--medium
+- q-compose-performance-optimization--android--hard
+- q-compose-remember-derived-state--android--medium
 created: 2025-10-13
-updated: 2025-10-30
-tags: [android/lifecycle, android/ui-compose, compose, difficulty/hard, side-effects]
+updated: 2025-11-10
+tags: [android/ui-compose, compose, difficulty/hard, side-effects]
 sources:
-  - https://developer.android.com/jetpack/compose/lifecycle
-  - https://developer.android.com/jetpack/compose/side-effects
+- "https://developer.android.com/jetpack/compose/lifecycle"
+- "https://developer.android.com/jetpack/compose/side-effects"
+
 ---
 
 # Вопрос (RU)
@@ -38,29 +38,30 @@ sources:
 ### Основные Различия
 
 **LaunchedEffect**
-- Запускает корутину в composition scope
-- Автоматически отменяется при изменении ключей или recomposition выходе
-- Для suspend-функций, Flow, асинхронных операций
+- Запускает корутину в scope композиции (Composition)
+- Автоматически отменяется, когда эффект выходит из композиции: при изменении ключей или когда соответствующий Composable удаляется
+- Подходит для suspend-функций, `Flow`, асинхронных операций, завязанных на жизненный цикл конкретного вхождения Composable
 
 **DisposableEffect**
+- Выполняет побочный эффект при входе в композицию синхронно
 - Регистрирует внешние ресурсы (listeners, observers, callbacks)
-- Требует явного cleanup через `onDispose`
-- Для lifecycle-aware и non-suspend ресурсов
+- Требует явного cleanup через `onDispose`, который гарантированно вызывается при выходе эффекта из композиции (изменение ключей или удаление Composable)
+- Подходит для lifecycle-aware и non-suspend ресурсов, которые должны быть очищены при удалении Composable
 
 ### Примеры Использования
 
 **LaunchedEffect с автоперезапуском:**
 ```kotlin
-LaunchedEffect(userId) { // ✅ Перезапуск при изменении userId
+LaunchedEffect(userId) { // ✅ Перезапуск при изменении userId, пока этот Composable в композиции
   repository.loadUser(userId)
     .onSuccess { state.value = it }
     .onFailure { showError(it) }
 }
 ```
 
-**LaunchedEffect + Flow:**
+**LaunchedEffect + `Flow`:**
 ```kotlin
-LaunchedEffect(Unit) { // ✅ Единожды за lifecycle
+LaunchedEffect(Unit) { // ✅ Один запуск для данного вхождения Composable, пока оно остается в композиции
   viewModel.events.collect { event ->
     when (event) {
       is NavigateEvent -> navigator.navigate(event.route)
@@ -78,7 +79,7 @@ DisposableEffect(lifecycleOwner) {
     }
   }
   lifecycleOwner.lifecycle.addObserver(observer)
-  onDispose { // ✅ Обязательная очистка
+  onDispose { // ✅ Обязательная очистка при выходе из композиции или смене lifecycleOwner
     lifecycleOwner.lifecycle.removeObserver(observer)
   }
 }
@@ -92,7 +93,7 @@ DisposableEffect(sensorType) {
     override fun onAccuracyChanged(s: Sensor, a: Int) {}
   }
   sensorManager.registerListener(listener, sensor, SENSOR_DELAY_NORMAL)
-  onDispose { sensorManager.unregisterListener(listener) } // ✅ Cleanup
+  onDispose { sensorManager.unregisterListener(listener) } // ✅ Гарантированный cleanup при выходе Composable
 }
 ```
 
@@ -100,16 +101,16 @@ DisposableEffect(sensorType) {
 
 | API | Когда использовать |
 |-----|-------------------|
-| **LaunchedEffect** | Suspend-операции, Flow, API calls, таймеры |
-| **DisposableEffect** | Listeners, observers, native ресурсы, lifecycle callbacks |
-| **rememberCoroutineScope** | Event-driven корутины (клики, swipe) |
-| **SideEffect** | Синхронизация state после recomposition (без suspend) |
+| **LaunchedEffect** | Suspend-операции, `Flow`, API calls, таймеры, связанные с жизненным циклом конкретного Composable |
+| **DisposableEffect** | Listeners, observers, нативные ресурсы, lifecycle callbacks, требующие детерминированного снятия регистрации при выходе Composable |
+| **rememberCoroutineScope** | Event-driven корутины (клики, swipe), запускаемые из обработчиков, а не из композиции |
+| **SideEffect** | Синхронизация внешнего не-suspend состояния после успешной recomposition, без корутин |
 
 ### Распространенные Ошибки
 
-❌ **Неверные ключи:**
+❌ **Неверные (нестабильные) ключи:**
 ```kotlin
-LaunchedEffect(callback) { // ❌ Перезапуск при каждой recomposition
+LaunchedEffect(callback) { // ❌ Перезапуск при каждой recomposition, если callback не стабилен
   callback()
 }
 ```
@@ -117,7 +118,7 @@ LaunchedEffect(callback) { // ❌ Перезапуск при каждой recom
 ✅ **Стабильные ключи:**
 ```kotlin
 val stableCallback = rememberUpdatedState(callback)
-LaunchedEffect(Unit) { // ✅ Единожды
+LaunchedEffect(Unit) { // ✅ Один запуск для данного вхождения Composable
   stableCallback.value()
 }
 ```
@@ -125,39 +126,68 @@ LaunchedEffect(Unit) { // ✅ Единожды
 ❌ **Отсутствие cleanup:**
 ```kotlin
 DisposableEffect(Unit) {
-  player.start() // ❌ Утечка ресурса
+  player.start() // ❌ Возможная утечка ресурса: player не будет остановлен
   // Нет onDispose!
 }
 ```
+
+---
+
+## Дополнительные вопросы (RU)
+
+- Как `rememberUpdatedState` предотвращает ненужные перезапуски эффектов?
+- Когда эффекты должны жить во `ViewModel`, а когда в Composable?
+- Как тестировать побочные эффекты на корректный cleanup и предотвращение утечек?
+- В чем разница между `SideEffect` и `LaunchedEffect`?
+- Как ключи эффектов взаимодействуют с рекомпозицией и умной рекомпозицией?
+
+## Ссылки (RU)
+
+- [[c-coroutines]]
+- "https://developer.android.com/jetpack/compose/side-effects"
+- "https://developer.android.com/jetpack/compose/lifecycle"
+- "https://developer.android.com/jetpack/compose/mental-model"
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-android-jetpack-overview--android--easy]]
+- [[q-compose-remember-derived-state--android--medium]]
+
+### Связанные (тот же уровень)
+- [[q-compose-performance-optimization--android--hard]]
+
+---
 
 ## Answer (EN)
 
 ### Core Differences
 
 **LaunchedEffect**
-- Launches coroutine in composition scope
-- Auto-cancels on key change or recomposition exit
-- For suspend functions, Flow, async operations
+- Launches a coroutine in the composition scope
+- Automatically cancels when the effect leaves the composition: on key change or when the corresponding Composable is removed
+- Use for suspend functions, Flows, async operations tied to the lifecycle of a specific Composable instance
 
 **DisposableEffect**
+- Runs its effect block synchronously when entering the composition
 - Registers external resources (listeners, observers, callbacks)
-- Requires explicit cleanup via `onDispose`
-- For lifecycle-aware and non-suspend resources
+- Requires explicit cleanup via `onDispose`, which is guaranteed to be called when the effect leaves the composition (key change or Composable removal)
+- Use for lifecycle-aware and non-suspend resources that must be cleaned up when the Composable is disposed
 
 ### Usage Examples
 
 **LaunchedEffect with auto-restart:**
 ```kotlin
-LaunchedEffect(userId) { // ✅ Restarts when userId changes
+LaunchedEffect(userId) { // ✅ Restarts when userId changes, while this Composable stays in composition
   repository.loadUser(userId)
     .onSuccess { state.value = it }
     .onFailure { showError(it) }
 }
 ```
 
-**LaunchedEffect + Flow:**
+**LaunchedEffect + `Flow`:**
 ```kotlin
-LaunchedEffect(Unit) { // ✅ Once per lifecycle
+LaunchedEffect(Unit) { // ✅ Runs once for this Composable instance while it remains in the composition
   viewModel.events.collect { event ->
     when (event) {
       is NavigateEvent -> navigator.navigate(event.route)
@@ -175,7 +205,7 @@ DisposableEffect(lifecycleOwner) {
     }
   }
   lifecycleOwner.lifecycle.addObserver(observer)
-  onDispose { // ✅ Mandatory cleanup
+  onDispose { // ✅ Mandatory cleanup when leaving composition or when lifecycleOwner changes
     lifecycleOwner.lifecycle.removeObserver(observer)
   }
 }
@@ -189,7 +219,7 @@ DisposableEffect(sensorType) {
     override fun onAccuracyChanged(s: Sensor, a: Int) {}
   }
   sensorManager.registerListener(listener, sensor, SENSOR_DELAY_NORMAL)
-  onDispose { sensorManager.unregisterListener(listener) } // ✅ Cleanup
+  onDispose { sensorManager.unregisterListener(listener) } // ✅ Guaranteed cleanup when Composable is disposed
 }
 ```
 
@@ -197,16 +227,16 @@ DisposableEffect(sensorType) {
 
 | API | When to use |
 |-----|-------------|
-| **LaunchedEffect** | Suspend operations, Flow, API calls, timers |
-| **DisposableEffect** | Listeners, observers, native resources, lifecycle callbacks |
-| **rememberCoroutineScope** | Event-driven coroutines (clicks, swipes) |
-| **SideEffect** | Sync state after recomposition (no suspend) |
+| **LaunchedEffect** | Suspend operations, Flows, API calls, timers tied to the lifecycle of a specific Composable instance |
+| **DisposableEffect** | Listeners, observers, native resources, lifecycle callbacks that require deterministic deregistration on Composable disposal |
+| **rememberCoroutineScope** | Event-driven coroutines (clicks, swipes) started from callbacks rather than from composition itself |
+| **SideEffect** | Sync external non-suspend state after a successful recomposition, without launching coroutines |
 
 ### Common Pitfalls
 
 ❌ **Unstable keys:**
 ```kotlin
-LaunchedEffect(callback) { // ❌ Restarts every recomposition
+LaunchedEffect(callback) { // ❌ Restarts on every recomposition if callback is unstable
   callback()
 }
 ```
@@ -214,7 +244,7 @@ LaunchedEffect(callback) { // ❌ Restarts every recomposition
 ✅ **Stable keys:**
 ```kotlin
 val stableCallback = rememberUpdatedState(callback)
-LaunchedEffect(Unit) { // ✅ Once
+LaunchedEffect(Unit) { // ✅ Once for this Composable instance
   stableCallback.value()
 }
 ```
@@ -222,7 +252,7 @@ LaunchedEffect(Unit) { // ✅ Once
 ❌ **Missing cleanup:**
 ```kotlin
 DisposableEffect(Unit) {
-  player.start() // ❌ Resource leak
+  player.start() // ❌ Potential resource leak: player won't be stopped
   // No onDispose!
 }
 ```
@@ -232,7 +262,7 @@ DisposableEffect(Unit) {
 ## Follow-ups
 
 - How does `rememberUpdatedState` prevent unnecessary effect restarts?
-- When should effects live in ViewModel versus Composable?
+- When should effects live in `ViewModel` versus Composable?
 - How to test side effects for proper cleanup and leak prevention?
 - What is the difference between `SideEffect` and `LaunchedEffect`?
 - How do effect keys interact with recomposition and smart recomposition?
@@ -240,10 +270,9 @@ DisposableEffect(Unit) {
 ## References
 
 - [[c-coroutines]]
-- [[c-structured-concurrency]]
-- https://developer.android.com/jetpack/compose/side-effects
-- https://developer.android.com/jetpack/compose/lifecycle
-- https://developer.android.com/jetpack/compose/mental-model
+- "https://developer.android.com/jetpack/compose/side-effects"
+- "https://developer.android.com/jetpack/compose/lifecycle"
+- "https://developer.android.com/jetpack/compose/mental-model"
 
 ## Related Questions
 

@@ -6,7 +6,6 @@ aliases:
 - Layout кастомных ViewGroup
 topic: android
 subtopics:
-- ui-graphics
 - ui-views
 question_kind: android
 difficulty: hard
@@ -14,32 +13,31 @@ original_language: en
 language_tags:
 - en
 - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
-- c-views
-- c-layouts
+- c-custom-views
 - q-custom-drawable-implementation--android--medium
 - q-custom-view-attributes--android--medium
 - q-custom-view-lifecycle--android--medium
 created: 2025-10-20
-updated: 2025-11-02
+updated: 2025-11-10
 tags:
-- android/ui-graphics
 - android/ui-views
 - custom-views
 - difficulty/hard
 - layout
 sources: []
+
 ---
 
 # Вопрос (RU)
 
-> Как создать кастомный ViewGroup? Объясните процесс измерения и компоновки. Реализуйте FlowLayout, который располагает дочерние элементы в ряды с переносом.
+> Как создать кастомный `ViewGroup`? Объясните процесс измерения и компоновки. Реализуйте FlowLayout, который располагает дочерние элементы в ряды с переносом.
 
 # Question (EN)
 
-> How do you create a custom ViewGroup? Explain the measurement and layout process. Implement a FlowLayout that arranges children in rows, wrapping to the next row when needed.
+> How do you create a custom `ViewGroup`? Explain the measurement and layout process. Implement a FlowLayout that arranges children in rows, wrapping to the next row when needed.
 
 ## Ответ (RU)
 
@@ -48,61 +46,112 @@ sources: []
 ### Двухпроходный Алгоритм
 
 **Проход 1: `onMeasure`** — определение размеров:
-- Измеряет каждый дочерний элемент через `measureChild()` или `measureChildWithMargins()`
-- Рассчитывает собственный размер на основе размеров детей и `MeasureSpec` от родителя
-- **ОБЯЗАН** вызвать `setMeasuredDimension(width, height)` — без этого View не отрисуется
+- Измеряет каждый дочерний элемент через `measureChild()` или `measureChildWithMargins()` с учетом `MeasureSpec`, полученного от родителя.
+- Рассчитывает собственный размер на основе размеров детей, внутренних отступов (`padding`) и ограничений `MeasureSpec`.
+- **ОБЯЗАН** вызвать `setMeasuredDimension(width, height)` — без этого `View` не будет корректно измерен и отрисован.
 
 **Проход 2: `onLayout`** — позиционирование:
-- Позиционирует каждый дочерний элемент через `child.layout(left, top, right, bottom)`
-- Координаты относительно родителя; учитывает `padding` родителя и `margins` детей
+- Позиционирует каждый дочерний элемент через `child.layout(left, top, right, bottom)`.
+- Координаты задаются относительно родителя; учитываются `padding` родителя и `margins` детей.
 
 ### MeasureSpec
 
 `MeasureSpec` — 32-битное число, объединяющее режим (2 старших бита) и размер (30 младших бит). Режим определяет, как интерпретировать размер:
 
-- **`EXACTLY`** — точный размер требуется (`match_parent` или конкретное значение в `dp`)
-- **`AT_MOST`** — максимальный размер, можно меньше (`wrap_content`)
-- **`UNSPECIFIED`** — без ограничений (используется в `ScrollView`, `ListView` для измерения контента)
+- **`EXACTLY`** — родитель требует точный размер (`match_parent` или конкретное значение в `dp`).
+- **`AT_MOST`** — максимальный доступный размер, можно занять меньше (обычное поведение для `wrap_content`).
+- **`UNSPECIFIED`** — родитель не накладывает ограничений (часто используется во вложенных прокручиваемых контейнерах для измерения контента).
 
 ### Реализация FlowLayout
+
+Ниже пример упрощенной реализации `FlowLayout`, который уважает `MeasureSpec` и корректно раскладывает детей по строкам с переносом.
 
 ```kotlin
 class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(context, attrs) {
     var horizontalSpacing = 0
     var verticalSpacing = 0
 
-    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
-        val availableWidth = MeasureSpec.getSize(widthSpec) - paddingLeft - paddingRight
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+
+        val usableWidth = max(0, widthSize - paddingLeft - paddingRight)
+
         var rowWidth = 0
         var rowHeight = 0
+        var maxWidth = 0
         var totalHeight = paddingTop + paddingBottom
 
         for (i in 0 until childCount) {
             val child = getChildAt(i)
             if (child.visibility == GONE) continue
 
-            measureChildWithMargins(child, widthSpec, 0, heightSpec, 0)
             val lp = child.layoutParams as MarginLayoutParams
+
+            // Учитываем маргины при измерении
+            val childWidthMeasureSpec = getChildMeasureSpec(
+                widthMeasureSpec,
+                paddingLeft + paddingRight + lp.leftMargin + lp.rightMargin,
+                lp.width
+            )
+            val childHeightMeasureSpec = getChildMeasureSpec(
+                heightMeasureSpec,
+                paddingTop + paddingBottom + lp.topMargin + lp.bottomMargin,
+                lp.height
+            )
+
+            child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
+
             val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
             val childHeight = child.measuredHeight + lp.topMargin + lp.bottomMargin
 
-            if (rowWidth + childWidth > availableWidth && rowWidth > 0) {
+            if (rowWidth > 0 && rowWidth + childWidth + horizontalSpacing > usableWidth && widthMode != MeasureSpec.UNSPECIFIED) {
+                // перенос строки
+                maxWidth = max(maxWidth, rowWidth)
                 totalHeight += rowHeight + verticalSpacing
                 rowWidth = childWidth
                 rowHeight = childHeight
             } else {
-                rowWidth += childWidth + horizontalSpacing
+                if (rowWidth > 0) {
+                    rowWidth += horizontalSpacing
+                }
+                rowWidth += childWidth
                 rowHeight = max(rowHeight, childHeight)
             }
         }
-        setMeasuredDimension(
-            resolveSize(MeasureSpec.getSize(widthSpec), widthSpec),
-            resolveSize(totalHeight + rowHeight, heightSpec)
-        )
+
+        if (rowWidth > 0) {
+            maxWidth = max(maxWidth, rowWidth)
+            totalHeight += rowHeight
+        }
+
+        var measuredWidth = when (widthMode) {
+            MeasureSpec.EXACTLY -> widthSize
+            MeasureSpec.AT_MOST -> paddingLeft + paddingRight + min(maxWidth, usableWidth)
+            MeasureSpec.UNSPECIFIED -> paddingLeft + paddingRight + maxWidth
+            else -> paddingLeft + paddingRight + maxWidth
+        }
+
+        var measuredHeight = when (heightMode) {
+            MeasureSpec.EXACTLY -> heightSize
+            MeasureSpec.AT_MOST -> min(totalHeight, heightSize)
+            MeasureSpec.UNSPECIFIED -> totalHeight
+            else -> totalHeight
+        }
+
+        // Защита от отрицательных значений
+        measuredWidth = max(measuredWidth, paddingLeft + paddingRight)
+        measuredHeight = max(measuredHeight, paddingTop + paddingBottom)
+
+        setMeasuredDimension(measuredWidth, measuredHeight)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        val availableWidth = r - l - paddingLeft - paddingRight
+        val width = r - l
+        val usableWidth = max(0, width - paddingLeft - paddingRight)
+
         var x = paddingLeft
         var y = paddingTop
         var rowHeight = 0
@@ -112,65 +161,77 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
             if (child.visibility == GONE) continue
 
             val lp = child.layoutParams as MarginLayoutParams
-            val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
 
-            if (x + childWidth > paddingLeft + availableWidth && x > paddingLeft) {
+            val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
+            val childHeight = child.measuredHeight + lp.topMargin + lp.bottomMargin
+
+            if (x > paddingLeft && x + childWidth > paddingLeft + usableWidth) {
+                // перенос строки
                 x = paddingLeft
                 y += rowHeight + verticalSpacing
                 rowHeight = 0
             }
 
-            child.layout(
-                x + lp.leftMargin, y + lp.topMargin,
-                x + lp.leftMargin + child.measuredWidth,
-                y + lp.topMargin + child.measuredHeight
-            )
+            val left = x + lp.leftMargin
+            val top = y + lp.topMargin
+            val right = left + child.measuredWidth
+            val bottom = top + child.measuredHeight
+
+            child.layout(left, top, right, bottom)
+
             x += childWidth + horizontalSpacing
-            rowHeight = max(rowHeight, child.measuredHeight + lp.topMargin + lp.bottomMargin)
+            rowHeight = max(rowHeight, childHeight)
         }
     }
 
-    override fun generateLayoutParams(attrs: AttributeSet?) = MarginLayoutParams(context, attrs)
-    override fun generateDefaultLayoutParams() = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-    override fun generateLayoutParams(p: LayoutParams?) = MarginLayoutParams(p)
-    override fun checkLayoutParams(p: LayoutParams?) = p is MarginLayoutParams
+    override fun generateLayoutParams(attrs: AttributeSet?): LayoutParams = MarginLayoutParams(context, attrs)
+
+    override fun generateDefaultLayoutParams(): LayoutParams =
+        MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+
+    override fun generateLayoutParams(p: LayoutParams?): LayoutParams =
+        if (p is MarginLayoutParams) MarginLayoutParams(p) else MarginLayoutParams(p)
+
+    override fun checkLayoutParams(p: LayoutParams?): Boolean = p is MarginLayoutParams
 }
 ```
 
 ### Критические Правила
 
 **ОБЯЗАТЕЛЬНО:**
-- Измерять всех детей через `measureChild()` или `measureChildWithMargins()` перед расчетом собственного размера
-- Вызывать `setMeasuredDimension()` в конце `onMeasure()` — без этого View не отрисуется
-- Пропускать `GONE` элементы (`child.visibility == View.GONE`) — они не занимают место
-- Учитывать `padding` родителя и `margins` детей при расчете размеров и позиций
-- Использовать `resolveSize()` для учета `MeasureSpec` от родителя
+- Измерять всех детей через `measureChild()`, `measureChildWithMargins()` или `measure()` с корректными `getChildMeasureSpec()` до расчета собственного размера.
+- Вызывать `setMeasuredDimension()` в конце `onMeasure()`.
+- Пропускать `GONE` элементы (`child.visibility == View.GONE`) — они не занимают место.
+- Учитывать `padding` родителя и `margins` детей при расчете размеров и позиций.
+- Уважать `MeasureSpec` от родителя (можно использовать `resolveSize()` / `resolveSizeAndState()` как удобные хелперы).
 
 **ЗАПРЕЩЕНО:**
-- ❌ Вызывать `requestLayout()` внутри `onLayout()` → бесконечный цикл
-- ❌ Использовать `measuredWidth`/`measuredHeight` до вызова `measure()` на дочернем элементе
-- ❌ Игнорировать `MeasureSpec` от родителя — нарушение контракта измерения
-- ❌ Позиционировать детей вне границ родителя (без учета `padding`)
+- Вызывать `requestLayout()` внутри `onLayout()` → риск бесконечных перезапусков layout-процесса.
+- Использовать `measuredWidth`/`measuredHeight` до вызова `measure()` на дочернем элементе.
+- Игнорировать `MeasureSpec` от родителя — нарушение контракта измерения.
+- Позиционировать детей вне границ родителя (без учета `padding`) — может привести к обрезанию/ошибкам.
 
 ### Оптимизации
 
-**1. Кэширование bounds** между `onMeasure`/`onLayout` для избежания повторных вычислений:
+**1. Кэширование позиций** между `onMeasure`/`onLayout` для избежания повторных вычислений (особенно при сложной геометрии). Важно: в `onMeasure()` можно вычислить предполагаемые `bounds`, но итоговая раскладка должна оставаться согласованной с измеренными размерами. В реальной реализации необходимо гарантировать совпадение количества записанных `bounds` с количеством видимых детей.
 
 ```kotlin
 private val childBounds = mutableListOf<Rect>()
 
-override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     childBounds.clear()
-    // Сохраняем вычисленные позиции во время измерения
-    for (i in 0 until childCount) {
-        childBounds.add(calculateChildBounds(i))
-    }
-    setMeasuredDimension(w, h)
+    // ... логика измерения, заполнение childBounds согласованными координатами ...
+    setMeasuredDimension(calculatedWidth, calculatedHeight)
 }
 
 override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-    childBounds.forEachIndexed { i, bounds ->
-        getChildAt(i).layout(bounds.left, bounds.top, bounds.right, bounds.bottom)
+    var index = 0
+    for (i in 0 until childCount) {
+        val child = getChildAt(i)
+        if (child.visibility == GONE) continue
+        val bounds = childBounds[index]
+        child.layout(bounds.left, bounds.top, bounds.right, bounds.bottom)
+        index++
     }
 }
 ```
@@ -189,61 +250,110 @@ Creating a custom `ViewGroup` requires understanding the two-pass algorithm: **m
 ### Two-Pass Algorithm
 
 **Pass 1: `onMeasure`** — size determination:
-- Measures each child via `measureChild()` or `measureChildWithMargins()`
-- Calculates its own size based on children's sizes and parent's `MeasureSpec`
-- **MUST** call `setMeasuredDimension(width, height)` — without this, View won't render
+- Measure each child via `measureChild()`, `measureChildWithMargins()`, or `measure()` with appropriate `getChildMeasureSpec()` based on the parent's `MeasureSpec`.
+- Compute the `ViewGroup`'s own size from children sizes, padding, and the constraints from the parent's `MeasureSpec`.
+- **MUST** call `setMeasuredDimension(width, height)` — otherwise the view will not be properly measured/rendered.
 
 **Pass 2: `onLayout`** — positioning:
-- Positions each child via `child.layout(left, top, right, bottom)`
-- Coordinates relative to parent; accounts for parent's `padding` and children's `margins`
+- Position each child via `child.layout(left, top, right, bottom)`.
+- Coordinates are relative to the parent; respect parent's `padding` and children's `margins`.
 
 ### MeasureSpec
 
-`MeasureSpec` is a 32-bit value combining mode (upper 2 bits) and size (lower 30 bits). The mode determines how to interpret the size:
+`MeasureSpec` is a 32-bit value that combines mode (upper 2 bits) and size (lower 30 bits). The mode defines how to interpret the size:
 
-- **`EXACTLY`** — exact size required (`match_parent` or specific `dp` value)
-- **`AT_MOST`** — maximum size, can be smaller (`wrap_content`)
-- **`UNSPECIFIED`** — no constraints (used in `ScrollView`, `ListView` for content measurement)
+- **`EXACTLY`** — parent specifies an exact size (`match_parent` or an explicit `dp` value).
+- **`AT_MOST`** — maximum size available; the view should not exceed it (typical for `wrap_content`).
+- **`UNSPECIFIED`** — no constraints from parent (often used inside scrollable containers to measure content).
 
 ### FlowLayout Implementation
+
+Below is a simplified `FlowLayout` implementation that respects `MeasureSpec` and lays out children in rows with wrapping.
 
 ```kotlin
 class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(context, attrs) {
     var horizontalSpacing = 0
     var verticalSpacing = 0
 
-    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
-        val availableWidth = MeasureSpec.getSize(widthSpec) - paddingLeft - paddingRight
+    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
+        val widthMode = MeasureSpec.getMode(widthMeasureSpec)
+        val widthSize = MeasureSpec.getSize(widthMeasureSpec)
+        val heightMode = MeasureSpec.getMode(heightMeasureSpec)
+        val heightSize = MeasureSpec.getSize(heightMeasureSpec)
+
+        val usableWidth = max(0, widthSize - paddingLeft - paddingRight)
+
         var rowWidth = 0
         var rowHeight = 0
+        var maxWidth = 0
         var totalHeight = paddingTop + paddingBottom
 
         for (i in 0 until childCount) {
             val child = getChildAt(i)
             if (child.visibility == GONE) continue
 
-            measureChildWithMargins(child, widthSpec, 0, heightSpec, 0)
             val lp = child.layoutParams as MarginLayoutParams
+
+            val childWidthMeasureSpec = getChildMeasureSpec(
+                widthMeasureSpec,
+                paddingLeft + paddingRight + lp.leftMargin + lp.rightMargin,
+                lp.width
+            )
+            val childHeightMeasureSpec = getChildMeasureSpec(
+                heightMeasureSpec,
+                paddingTop + paddingBottom + lp.topMargin + lp.bottomMargin,
+                lp.height
+            )
+
+            child.measure(childWidthMeasureSpec, childHeightMeasureSpec)
+
             val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
             val childHeight = child.measuredHeight + lp.topMargin + lp.bottomMargin
 
-            if (rowWidth + childWidth > availableWidth && rowWidth > 0) {
+            if (rowWidth > 0 && rowWidth + childWidth + horizontalSpacing > usableWidth && widthMode != MeasureSpec.UNSPECIFIED) {
+                // wrap to next line
+                maxWidth = max(maxWidth, rowWidth)
                 totalHeight += rowHeight + verticalSpacing
                 rowWidth = childWidth
                 rowHeight = childHeight
             } else {
-                rowWidth += childWidth + horizontalSpacing
+                if (rowWidth > 0) {
+                    rowWidth += horizontalSpacing
+                }
+                rowWidth += childWidth
                 rowHeight = max(rowHeight, childHeight)
             }
         }
-        setMeasuredDimension(
-            resolveSize(MeasureSpec.getSize(widthSpec), widthSpec),
-            resolveSize(totalHeight + rowHeight, heightSpec)
-        )
+
+        if (rowWidth > 0) {
+            maxWidth = max(maxWidth, rowWidth)
+            totalHeight += rowHeight
+        }
+
+        var measuredWidth = when (widthMode) {
+            MeasureSpec.EXACTLY -> widthSize
+            MeasureSpec.AT_MOST -> paddingLeft + paddingRight + min(maxWidth, usableWidth)
+            MeasureSpec.UNSPECIFIED -> paddingLeft + paddingRight + maxWidth
+            else -> paddingLeft + paddingRight + maxWidth
+        }
+
+        var measuredHeight = when (heightMode) {
+            MeasureSpec.EXACTLY -> heightSize
+            MeasureSpec.AT_MOST -> min(totalHeight, heightSize)
+            MeasureSpec.UNSPECIFIED -> totalHeight
+            else -> totalHeight
+        }
+
+        measuredWidth = max(measuredWidth, paddingLeft + paddingRight)
+        measuredHeight = max(measuredHeight, paddingTop + paddingBottom)
+
+        setMeasuredDimension(measuredWidth, measuredHeight)
     }
 
     override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-        val availableWidth = r - l - paddingLeft - paddingRight
+        val width = r - l
+        val usableWidth = max(0, width - paddingLeft - paddingRight)
+
         var x = paddingLeft
         var y = paddingTop
         var rowHeight = 0
@@ -253,75 +363,95 @@ class FlowLayout(context: Context, attrs: AttributeSet? = null) : ViewGroup(cont
             if (child.visibility == GONE) continue
 
             val lp = child.layoutParams as MarginLayoutParams
-            val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
 
-            if (x + childWidth > paddingLeft + availableWidth && x > paddingLeft) {
+            val childWidth = child.measuredWidth + lp.leftMargin + lp.rightMargin
+            val childHeight = child.measuredHeight + lp.topMargin + lp.bottomMargin
+
+            if (x > paddingLeft && x + childWidth > paddingLeft + usableWidth) {
+                // wrap to next line
                 x = paddingLeft
                 y += rowHeight + verticalSpacing
                 rowHeight = 0
             }
 
-            child.layout(
-                x + lp.leftMargin, y + lp.topMargin,
-                x + lp.leftMargin + child.measuredWidth,
-                y + lp.topMargin + child.measuredHeight
-            )
+            val left = x + lp.leftMargin
+            val top = y + lp.topMargin
+            val right = left + child.measuredWidth
+            val bottom = top + child.measuredHeight
+
+            child.layout(left, top, right, bottom)
+
             x += childWidth + horizontalSpacing
-            rowHeight = max(rowHeight, child.measuredHeight + lp.topMargin + lp.bottomMargin)
+            rowHeight = max(rowHeight, childHeight)
         }
     }
 
-    override fun generateLayoutParams(attrs: AttributeSet?) = MarginLayoutParams(context, attrs)
-    override fun generateDefaultLayoutParams() = MarginLayoutParams(WRAP_CONTENT, WRAP_CONTENT)
-    override fun generateLayoutParams(p: LayoutParams?) = MarginLayoutParams(p)
-    override fun checkLayoutParams(p: LayoutParams?) = p is MarginLayoutParams
+    override fun generateLayoutParams(attrs: AttributeSet?): LayoutParams = MarginLayoutParams(context, attrs)
+
+    override fun generateDefaultLayoutParams(): LayoutParams =
+        MarginLayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
+
+    override fun generateLayoutParams(p: LayoutParams?): LayoutParams =
+        if (p is MarginLayoutParams) MarginLayoutParams(p) else MarginLayoutParams(p)
+
+    override fun checkLayoutParams(p: LayoutParams?): Boolean = p is MarginLayoutParams
 }
 ```
 
 ### Critical Rules
 
 **MUST:**
-- Measure all children via `measureChild()` or `measureChildWithMargins()` before calculating own size
-- Call `setMeasuredDimension()` at end of `onMeasure()` — without this, View won't render
-- Skip `GONE` children (`child.visibility == View.GONE`) — they don't take space
-- Account for parent's `padding` and children's `margins` when calculating sizes and positions
-- Use `resolveSize()` to respect parent's `MeasureSpec`
+- Measure all children via `measureChild()`, `measureChildWithMargins()`, or `measure()` with proper `getChildMeasureSpec()` before computing own size.
+- Call `setMeasuredDimension()` at the end of `onMeasure()`.
+- Skip `GONE` children (`child.visibility == View.GONE`) — they do not take space.
+- Account for parent's `padding` and children's `margins` when calculating sizes and positions.
+- Respect parent's `MeasureSpec`; `resolveSize()` / `resolveSizeAndState()` are recommended helpers.
 
 **FORBIDDEN:**
-- ❌ Call `requestLayout()` inside `onLayout()` → infinite loop
-- ❌ Use `measuredWidth`/`measuredHeight` before calling `measure()` on child
-- ❌ Ignore `MeasureSpec` from parent — measurement contract violation
-- ❌ Position children outside parent bounds (without accounting for `padding`)
+- Call `requestLayout()` inside `onLayout()` → risk of repeated layout passes / infinite loops.
+- Use `measuredWidth`/`measuredHeight` before calling `measure()` on the child.
+- Ignore `MeasureSpec` from parent — violates the measurement contract.
+- Layout children outside parent bounds (ignoring `padding`).
 
 ### Optimizations
 
-**1. Cache bounds** between `onMeasure`/`onLayout` to avoid recalculation:
+**1. Cache bounds** between `onMeasure` and `onLayout` to avoid recalculating complex geometry. Ensure the cached bounds are consistent with measured sizes and updated when children change. Also ensure the number of cached bounds matches the number of visible children.
 
 ```kotlin
 private val childBounds = mutableListOf<Rect>()
 
-override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
     childBounds.clear()
-    // Save calculated positions during measurement
-    for (i in 0 until childCount) {
-        childBounds.add(calculateChildBounds(i))
-    }
-    setMeasuredDimension(w, h)
+    // ... measurement logic that fills childBounds ...
+    setMeasuredDimension(calculatedWidth, calculatedHeight)
 }
 
 override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
-    childBounds.forEachIndexed { i, bounds ->
-        getChildAt(i).layout(bounds.left, bounds.top, bounds.right, bounds.bottom)
+    var index = 0
+    for (i in 0 until childCount) {
+        val child = getChildAt(i)
+        if (child.visibility == GONE) continue
+        val bounds = childBounds[index]
+        child.layout(bounds.left, bounds.top, bounds.right, bounds.bottom)
+        index++
     }
 }
 ```
 
-**2. RTL Support** — account for right-to-left writing direction for Arabic/Hebrew:
+**2. RTL Support** — account for right-to-left layout direction:
 
 ```kotlin
 val isRtl = ViewCompat.getLayoutDirection(this) == ViewCompat.LAYOUT_DIRECTION_RTL
 val startX = if (isRtl) width - paddingRight else paddingLeft
 ```
+
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать динамическое добавление/удаление дочерних элементов без полного переизмерения?
+- В чем разница между `measureChild()` и `measureChildWithMargins()` и когда использовать каждый?
+- Как реализовать выравнивание по базовой линии между строками во `FlowLayout`?
+- Как оптимизировать производительность для 100+ детей? Рассмотрите стратегии переиспользования представлений.
+- Чем `requestLayout()` отличается от `invalidate()`? Когда каждый из них инициирует измерение vs. отрисовку?
 
 ## Follow-ups
 
@@ -331,30 +461,58 @@ val startX = if (isRtl) width - paddingRight else paddingLeft
 - How would you optimize performance for 100+ children? Consider view recycling strategies.
 - How does `requestLayout()` differ from `invalidate()`? When does each trigger measurement vs. drawing?
 
+## Ссылки (RU)
+
+- Документация `ViewGroup`: https://developer.android.com/reference/android/view/ViewGroup
+- Руководство по кастомным `View`: https://developer.android.com/guide/topics/ui/custom-components
+- Процесс измерения `View`: https://developer.android.com/guide/topics/ui/how-android-draws
+
 ## References
 
-- [ViewGroup Documentation](https://developer.android.com/reference/android/view/ViewGroup)
-- [Custom Views Guide](https://developer.android.com/guide/topics/ui/custom-components)
-- [View Measurement Process](https://developer.android.com/guide/topics/ui/how-android-draws)
+- `ViewGroup` Documentation: https://developer.android.com/reference/android/view/ViewGroup
+- Custom Views Guide: https://developer.android.com/guide/topics/ui/custom-components
+- `View` Measurement Process: https://developer.android.com/guide/topics/ui/how-android-draws
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-custom-views]]
+
+### Предпосылки (Проще)
+
+- [[q-custom-view-lifecycle--android--medium]] — Жизненный цикл и порядок отрисовки `View`
+- [[q-custom-view-attributes--android--medium]] — Кастомные XML-атрибуты
+
+### Связанные (Такой же уровень)
+
+- [[q-custom-drawable-implementation--android--medium]] — Кастомный рисунок во `View`
+- Техники оптимизации layout-прохода
+
+### Продвинутые (Сложнее)
+
+- Более сложный `FlowLayout` с выравниванием по базовой линии
+- Внутреннее устройство `AsyncLayoutInflater`
+- Внутренняя работа `RecyclerView` LayoutManager
 
 ## Related Questions
 
 ### Prerequisites / Concepts
 
-- [[c-views]]
-- [[c-layouts]]
-
+- [[c-custom-views]]
 
 ### Prerequisites (Easier)
-- [[q-custom-view-lifecycle--android--medium]] — View lifecycle and drawing order
+
+- [[q-custom-view-lifecycle--android--medium]] — `View` lifecycle and drawing order
 - [[q-custom-view-attributes--android--medium]] — Custom XML attributes
 
 ### Related (Same Level)
+
 - [[q-custom-drawable-implementation--android--medium]] — Custom drawing in Views
-- Layout constraint solving systems
 - Layout pass optimization techniques
 
 ### Advanced (Harder)
+
 - Complex `FlowLayout` with baseline alignment
 - `AsyncLayoutInflater` implementation — background layout inflation
 - `RecyclerView` layout manager internals

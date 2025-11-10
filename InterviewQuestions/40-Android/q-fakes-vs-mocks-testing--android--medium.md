@@ -38,9 +38,9 @@ tags: [android/testing-instrumented, android/testing-unit, difficulty/medium, fa
 ### Основные Типы
 
 **1. `Stub` — предопределённые ответы**
-- Возвращает жёстко заданные значения
-- Для тестов без проверки взаимодействий
-- State verification
+- Возвращает жёстко заданные или заранее сконфигурированные значения
+- Используется для тестов с проверкой результата через состояние (state-based verification)
+- Сам по себе не проверяет взаимодействия (но код теста может косвенно учитывать, был ли вызван stub)
 
 ```kotlin
 // ✅ Stub для простых тестов
@@ -55,13 +55,13 @@ fun `load user updates UI`() = runTest {
     val viewModel = UserViewModel(UserRepositoryStub())
     viewModel.loadUser(1)
 
-    assertEquals("Stub User", viewModel.userName.value) // State verification
+    assertEquals("Stub User", viewModel.userName.value) // State-based verification
 }
 ```
 
 **2. `Mock` — проверка взаимодействий**
-- Записывает вызовы методов
-- Для behavior verification
+- Записывает/эмулирует вызовы методов
+- Для behavior verification (проверка того, КАК взаимодействуют объекты)
 - Проверяет параметры и количество вызовов
 
 ```kotlin
@@ -71,14 +71,16 @@ fun `load user calls repository`() = runTest {
     val repository = mockk<UserRepository>()
     coEvery { repository.getUser(1) } returns User(1, "John")
     val viewModel = UserViewModel(repository)
+
     viewModel.loadUser(1)
+
     coVerify(exactly = 1) { repository.getUser(1) }
 }
 ```
 
 **3. `Fake` — рабочая реализация**
-- Упрощённая, но полнофункциональная реализация
-- Для интеграционных тестов
+- Упрощённая, но функциональная реализация интерфейса
+- Полезен для интеграционных и более реалистичных unit-тестов
 - Сохраняет состояние между вызовами
 
 ```kotlin
@@ -104,25 +106,26 @@ fun `save and load user workflow`() = runTest {
     viewModel.saveUser(User(1, "John"))
     viewModel.loadUser(1)
 
-    assertEquals("John", viewModel.userName.value) // End-to-end scenario
+    assertEquals("John", viewModel.userName.value) // Близко к end-to-end сценарию
 }
 ```
 
-**4. `Spy` — частичная замена**
-- Реальный объект + отслеживание вызовов
-- Для логирования и отладки
+**4. `Spy` — частичная замена + проверка взаимодействий**
+- Основан на реальном объекте (частичная или полная реальная логика)
+- Позволяет отслеживать вызовы и параметры (behavior verification), сохраняя поведение реальной реализации
+- Может использоваться и для логирования/отладки, но основная задача — проверка взаимодействий с реальным объектом
 
 ```kotlin
-// ✅ Spy для частичной замены
+// ✅ Spy для частичной замены и проверки взаимодействий
 class UserRepositorySpy(private val real: UserRepository) : UserRepository {
-    var callCount = 0
+    var getUserCallCount = 0
 
     override suspend fun getUser(id: Int): User {
-        callCount++
-        return real.getUser(id) // Делегирование + логирование
+        getUserCallCount++
+        return real.getUser(id) // Делегирование + отслеживание
     }
 
-    override suspend fun saveUser(user: User) = real.saveUser(user)
+    override suspend fun saveUser(user: User): Boolean = real.saveUser(user)
 }
 ```
 
@@ -130,44 +133,44 @@ class UserRepositorySpy(private val real: UserRepository) : UserRepository {
 
 | Type | Use Case | Verification |
 |------|----------|-------------|
-| **`Stub`** | Простые unit-тесты | State |
-| **`Mock`** | Проверка взаимодействий | Behavior |
-| **`Fake`** | Интеграционные тесты | State |
-| **`Spy`** | Отладка, частичная замена | Behavior |
+| **`Stub`** | Простые unit-тесты с предсказуемыми ответами | State |
+| **`Mock`** | Проверка взаимодействий и контрактов | Behavior |
+| **`Fake`** | Более реалистичные unit-/интеграционные тесты | State |
+| **`Spy`** | Частичная замена и проверка вызовов реальной логики | Behavior |
 
 **Stub:**
 - ✅ Быстрые unit-тесты
 - ✅ Предсказуемые ответы
-- ❌ Не проверяет взаимодействия
+- ❌ Не выполняет явной проверки взаимодействий
 
 **Mock:**
 - ✅ Проверка вызовов методов
 - ✅ Контроль параметров
-- ❌ Хрупкие тесты при overuse
+- ❌ Хрупкие тесты при чрезмерном использовании
 
 **Fake:**
 - ✅ Реалистичное поведение
-- ✅ Интеграционные тесты
-- ❌ Требует больше кода
+- ✅ Подходит для интеграционных и более широких сценариев
+- ❌ Требует больше кода и поддержки
 
 **Spy:**
-- ✅ Реальная логика + логирование
+- ✅ Реальная логика + отслеживание
 - ✅ Частичная замена
-- ❌ Может маскировать баги
+- ❌ Может маскировать баги и усложнять тесты при неосторожном использовании
 
 ### Лучшие Практики
 
-- Предпочитайте `Fake` вместо `Mock` для интеграционных тестов
+- Предпочитайте `Fake` вместо «глубоких» `Mock` для интеграционных и более широких сценариев
 - Используйте `Stub` для простых unit-тестов с предопределёнными ответами
-- Один assertion на тест для фокусировки
-- Test Pyramid: 70% unit (stubs/mocks), 20% integration (fakes), 10% E2E (real)
+- Ориентируйтесь на один сценарий/поведение на тест; несколько assert допустимы, если проверяют один логический кейс
+- Рассматривайте Test Pyramid как ориентир: большинство тестов — быстрые unit (часто с stubs/fakes/mocks), меньше — интеграционных (часто с fakes/инфраструктурой), ещё меньше — E2E
 
 ### Типичные Ошибки
 
-- Over-mocking: избыточное использование `Mock` ведет к хрупким тестам
+- Over-mocking: избыточное использование `Mock` ведёт к хрупким тестам
 - Отсутствие очистки состояния между тестами в `Fake`
-- Проверка внутренней реализации вместо поведения
-- Использование `Spy` может маскировать баги в реальной логике
+- Проверка внутренней реализации вместо наблюдаемого поведения
+- Неразборчивое использование `Spy`, из-за чего тесты становятся сложными и скрывают реальные проблемы
 
 ---
 
@@ -178,9 +181,9 @@ class UserRepositorySpy(private val real: UserRepository) : UserRepository {
 ### Key Types
 
 **1. `Stub` — predefined responses**
-- Returns hard-coded values
-- For tests without interaction verification
-- State verification
+- Returns hard-coded or preconfigured values
+- Used for tests with state-based verification of outcomes
+- Does not itself assert on interactions (though the test code may indirectly rely on it being called)
 
 ```kotlin
 // ✅ Stub for simple tests
@@ -195,14 +198,14 @@ fun `load user updates UI`() = runTest {
     val viewModel = UserViewModel(UserRepositoryStub())
     viewModel.loadUser(1)
 
-    assertEquals("Stub User", viewModel.userName.value) // State verification
+    assertEquals("Stub User", viewModel.userName.value) // State-based verification
 }
 ```
 
 **2. `Mock` — interaction verification**
-- Records method calls
-- For behavior verification
-- Checks parameters and call counts
+- Records/emulates method calls
+- For behavior verification (how collaborators are used)
+- Verifies parameters and call counts
 
 ```kotlin
 // ✅ Mock for behavior verification
@@ -211,14 +214,16 @@ fun `load user calls repository`() = runTest {
     val repository = mockk<UserRepository>()
     coEvery { repository.getUser(1) } returns User(1, "John")
     val viewModel = UserViewModel(repository)
+
     viewModel.loadUser(1)
+
     coVerify(exactly = 1) { repository.getUser(1) }
 }
 ```
 
 **3. `Fake` — working implementation**
-- Simplified but fully functional implementation
-- For integration tests
+- Simplified but functional implementation of the interface
+- Useful for integration tests and more realistic unit tests
 - Maintains state between calls
 
 ```kotlin
@@ -244,25 +249,26 @@ fun `save and load user workflow`() = runTest {
     viewModel.saveUser(User(1, "John"))
     viewModel.loadUser(1)
 
-    assertEquals("John", viewModel.userName.value) // End-to-end scenario
+    assertEquals("John", viewModel.userName.value) // Close to an end-to-end scenario
 }
 ```
 
-**4. `Spy` — partial replacement**
-- Real object + call tracking
-- For logging and debugging
+**4. `Spy` — partial replacement + interaction verification**
+- Wraps a real object (partial or full real implementation)
+- Tracks calls and parameters (behavior verification) while delegating to real logic
+- Can be used for logging/debugging, but primary purpose is verifying interactions with a real implementation
 
 ```kotlin
-// ✅ Spy for partial replacement
+// ✅ Spy for partial replacement and interaction verification
 class UserRepositorySpy(private val real: UserRepository) : UserRepository {
-    var callCount = 0
+    var getUserCallCount = 0
 
     override suspend fun getUser(id: Int): User {
-        callCount++
-        return real.getUser(id) // Delegation + logging
+        getUserCallCount++
+        return real.getUser(id) // Delegation + tracking
     }
 
-    override suspend fun saveUser(user: User) = real.saveUser(user)
+    override suspend fun saveUser(user: User): Boolean = real.saveUser(user)
 }
 ```
 
@@ -270,15 +276,15 @@ class UserRepositorySpy(private val real: UserRepository) : UserRepository {
 
 | Type | Use Case | Verification |
 |------|----------|-------------|
-| **`Stub`** | Simple unit tests | State |
-| **`Mock`** | Interaction verification | Behavior |
-| **`Fake`** | Integration tests | State |
-| **`Spy`** | Debugging, partial replacement | Behavior |
+| **`Stub`** | Simple unit tests with predictable responses | State |
+| **`Mock`** | Verifying interactions and contracts | Behavior |
+| **`Fake`** | More realistic unit/integration tests | State |
+| **`Spy`** | Partial replacement + verifying calls to real logic | Behavior |
 
 **Stub:**
 - ✅ Fast unit tests
 - ✅ Predictable responses
-- ❌ No interaction verification
+- ❌ No explicit interaction verification
 
 **Mock:**
 - ✅ Method call verification
@@ -287,27 +293,27 @@ class UserRepositorySpy(private val real: UserRepository) : UserRepository {
 
 **Fake:**
 - ✅ Realistic behavior
-- ✅ Integration tests
-- ❌ Requires more code
+- ✅ Good for integration and broader scenarios
+- ❌ Requires more code and maintenance
 
 **Spy:**
-- ✅ Real logic + logging
+- ✅ Real logic + tracking
 - ✅ Partial replacement
-- ❌ Can mask bugs
+- ❌ Can mask bugs / add complexity if misused
 
 ### Best Practices
 
-- Prefer `Fake` over `Mock` for integration tests
+- Prefer `Fake` over deeply nested `Mock` setups for integration-like scenarios
 - Use `Stub` for simple unit tests with predefined responses
-- One assertion per test for focus
-- Test Pyramid: 70% unit (stubs/mocks), 20% integration (fakes), 10% E2E (real)
+- Aim for one behavior/scenario per test; multiple assertions are fine when they validate a single logical outcome
+- Treat the Test Pyramid as guidance: majority fast unit tests (often with stubs/fakes/mocks), fewer integration tests (often with fakes/real infra), and even fewer full end-to-end tests
 
 ### Common Pitfalls
 
 - Over-mocking: excessive `Mock` usage leads to brittle tests
-- Missing state cleanup between tests in `Fake`
-- Verifying implementation details instead of behavior
-- Using `Spy` can mask bugs in real logic
+- Missing state cleanup between tests when using `Fake`
+- Verifying internal implementation instead of observable behavior
+- Using `Spy` without clear purpose, making tests complex and hiding real issues
 
 ---
 

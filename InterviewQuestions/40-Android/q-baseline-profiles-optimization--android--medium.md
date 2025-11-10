@@ -41,11 +41,11 @@ tags:
 
 ## Ответ (RU)
 
-**Baseline Profiles** — механизм AOT-компиляции критических путей кода при установке приложения. ART предварительно компилирует указанные методы и классы, минуя JIT-интерпретацию, что ускоряет холодный старт на 30-40% и снижает джанк при первом рендеринге.
+**Baseline Profiles** — механизм, позволяющий заранее (AOT) скомпилировать критические пути кода при установке приложения на устройстве, используя сведения о том, какие методы реально важны для старта и ключевых сценариев. ART предварительно компилирует указанные методы и классы, уменьшая долю интерпретации/JIT на первых запусках. Это обычно даёт заметное ускорение холодного старта (часто десятки процентов) и снижает джанк при первом рендеринге и ранних взаимодействиях.
 
 **Принцип работы**:
-- **Без профиля**: Запуск → Интерпретация байткода → Постепенная JIT-компиляция
-- **С профилем**: Установка → AOT-компиляция критических путей → Мгновенный нативный код
+- **Без профиля**: Запуск → Интерпретация байткода → Постепенная JIT-компиляция по мере использования
+- **С профилем**: Установка → AOT-компиляция критических путей из baseline-профиля → Быстрое исполнение без ожидания JIT
 
 ### Структура Реализации
 
@@ -74,12 +74,12 @@ android {
 fun generateProfile() = baselineRule.collect(
     packageName = "com.example.app"
 ) {
-    // ✅ Критический сценарий: запуск + первый рендер
+    // ✅ Критический сценарий: запуск + первый рендер + навигация к основному экрану
     pressHome()
     startActivityAndWait()
     device.findObject(By.res("home_screen")).click()
 
-    // ❌ Не включайте редкие сценарии
+    // ❌ Не включайте редкие или тяжёлые для установки сценарии
 }
 ```
 
@@ -97,7 +97,7 @@ baselineProfile {
 
 **4. Проверка в production**:
 ```kotlin
-val status = ProfileVerifier.getCompilationStatusAsync().get()
+val status = ProfileVerifier.getCompilationStatusAsync().get() // ⚠️ вызывайте не с main thread
 when (status.profileInstallResultCode) {
     RESULT_CODE_COMPILED_WITH_PROFILE -> logSuccess()
     RESULT_CODE_NO_PROFILE -> logFallbackToJit()
@@ -106,18 +106,18 @@ when (status.profileInstallResultCode) {
 
 ### Критерии Качества
 
-- **Размер профиля** < 200KB (больше замедляет установку)
-- **Покрытие**: Запуск → Первый рендер → Основной user flow
-- **Регенерация**: После рефакторинга или изменения горячих путей
-- **CI/CD**: Автоматическая проверка размера и актуальности профиля
+- **Размер профиля**: по возможности держать компактным (ориентир < ~200KB), чтобы не замедлять установку и не перегружать компиляцию.
+- **Покрытие**: запуск → первый рендер → основной user flow (часто используемые экраны/действия).
+- **Регенерация**: после рефакторинга, изменения навигации или горячих путей.
+- **CI/CD**: автоматическая генерация и проверка актуальности и размера профиля.
 
 ## Answer (EN)
 
-**Baseline Profiles** enable AOT-compilation of critical code paths at install time. ART pre-compiles specified methods and classes, bypassing JIT interpretation, achieving 30-40% faster cold startup and reduced jank during first render.
+**Baseline Profiles** enable ahead-of-time (AOT) compilation of critical code paths at app install time based on a predefined profile of important methods and classes. ART pre-compiles those targets to reduce interpretation/JIT work on first runs. This typically results in significantly faster cold startup (often tens of percent improvement) and less jank during first render and early user interactions.
 
 **How it works**:
-- **Without Profile**: Launch → Bytecode interpretation → Gradual JIT compilation
-- **With Profile**: Install → AOT-compile critical paths → Instant native code
+- **Without Profile**: Launch → Bytecode interpretation → Gradual JIT compilation as code is executed
+- **With Profile**: Install → AOT-compile critical paths from the baseline profile → Faster execution without waiting for JIT
 
 ### Implementation Structure
 
@@ -146,12 +146,12 @@ android {
 fun generateProfile() = baselineRule.collect(
     packageName = "com.example.app"
 ) {
-    // ✅ Critical scenario: startup + first render
+    // ✅ Critical scenario: startup + first render + navigate to main screen
     pressHome()
     startActivityAndWait()
     device.findObject(By.res("home_screen")).click()
 
-    // ❌ Don't include rare user journeys
+    // ❌ Don't include rare or installation-costly flows
 }
 ```
 
@@ -169,7 +169,7 @@ baselineProfile {
 
 **4. Production verification**:
 ```kotlin
-val status = ProfileVerifier.getCompilationStatusAsync().get()
+val status = ProfileVerifier.getCompilationStatusAsync().get() // ⚠️ do not call on main thread
 when (status.profileInstallResultCode) {
     RESULT_CODE_COMPILED_WITH_PROFILE -> logSuccess()
     RESULT_CODE_NO_PROFILE -> logFallbackToJit()
@@ -178,10 +178,10 @@ when (status.profileInstallResultCode) {
 
 ### Quality Criteria
 
-- **Profile size** < 200KB (larger slows installation)
-- **Coverage**: Startup → First render → Primary user flow
-- **Regeneration**: After refactoring or hot path changes
-- **CI/CD**: Automated size and freshness validation
+- **Profile size**: keep it as small as reasonably possible (a practical target is < ~200KB) to avoid slowing installation and compilation.
+- **Coverage**: Startup → First render → Primary, frequently used user flows.
+- **Regeneration**: After refactoring, navigation changes, or hot path modifications.
+- **CI/CD**: Automated generation and validation of profile size and freshness.
 
 ## Follow-ups
 

@@ -1,7 +1,6 @@
 ---
 id: android-196
-title: Which Class To Use For Detecting Gestures / Какой класс использовать для обнаружения
-  жестов
+title: Which Class To Use For Detecting Gestures / Какой класс использовать для обнаружения жестов
 aliases:
 - Which Class To Use For Detecting Gestures
 - Какой класс использовать для обнаружения жестов
@@ -25,13 +24,14 @@ related:
 - q-how-to-write-recyclerview-cache-ahead--android--medium
 - q-what-are-services-for--android--easy
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-11-10
 tags:
 - android/ui-state
 - android/ui-views
 - difficulty/medium
 - gestures
 - touch-events
+
 ---
 
 # Вопрос (RU)
@@ -186,7 +186,7 @@ fun GestureExample() {
 - `onDown()` должен возвращать `true`, иначе остальные события не поступят
 - Используйте `SimpleOnGestureListener` вместо полного интерфейса
 - Для масштабирования используйте отдельный `ScaleGestureDetector`
-- Можно комбинировать несколько детекторов в одном View
+- Можно комбинировать несколько детекторов в одном `View`
 
 ---
 
@@ -332,9 +332,17 @@ fun GestureExample() {
 - `onDown()` must return `true` or other events won't be received
 - Use `SimpleOnGestureListener` instead of the full interface
 - For pinch zoom, use separate `ScaleGestureDetector`
-- Multiple detectors can be combined in one View
+- Multiple detectors can be combined in one `View`
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать конфликтующие жесты (например, прокрутка vs свайп)?
+- В чем разница между `onSingleTapUp()` и `onSingleTapConfirmed()`?
+- Как реализовать пользовательские мультитач-жесты?
+- В каких случаях стоит использовать `MotionEvent` напрямую вместо `GestureDetector`?
+- Как детекторы жестов работают вместе с `RecyclerView` или `ViewPager`?
 
 ## Follow-ups
 
@@ -344,11 +352,39 @@ fun GestureExample() {
 - When should you use `MotionEvent` directly instead of `GestureDetector`?
 - How do gesture detectors work with `RecyclerView` or `ViewPager`?
 
+## Ссылки (RU)
+
+- [Android Developers: Input Events](https://developer.android.com/develop/ui/views/touch-and-input/gestures)
+- [GestureDetector API Reference](https://developer.android.com/reference/android/view/GestureDetector)
+- [Compose Gestures](https://developer.android.com/jetpack/compose/touch-input)
+
 ## References
 
 - [Android Developers: Input Events](https://developer.android.com/develop/ui/views/touch-and-input/gestures)
 - [GestureDetector API Reference](https://developer.android.com/reference/android/view/GestureDetector)
 - [Compose Gestures](https://developer.android.com/jetpack/compose/touch-input)
+
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-compose-state]]
+- [[c-viewmodel]]
+
+### Предпосылки (проще)
+
+- [[q-what-are-services-for--android--easy]] - Базовое понимание компонентов Android
+
+### Связанные (такой же уровень)
+
+- [[q-how-to-write-recyclerview-cache-ahead--android--medium]] - Обработка касаний в RecyclerView
+- [[q-dagger-field-injection--android--medium]] - Паттерны внедрения зависимостей
+
+### Продвинутые (сложнее)
+
+- Реализация пользовательских мультитач-жестов
+- Разрешение конфликтов жестов в сложных UI
+- Оптимизация производительности для интерфейсов с большим количеством жестов
 
 ## Related Questions
 
@@ -356,7 +392,6 @@ fun GestureExample() {
 
 - [[c-compose-state]]
 - [[c-viewmodel]]
-
 
 ### Prerequisites (Easier)
 - [[q-what-are-services-for--android--easy]] - Basic Android components understanding

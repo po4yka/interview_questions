@@ -22,10 +22,9 @@ sources: []
 status: draft
 moc: moc-android
 related:
-- c-main-thread
-- c-threading
-created: 2025-10-15
-updated: 2025-10-29
+- c-android-components
+created: 2024-10-15
+updated: 2025-11-10
 tags:
 - android/lifecycle
 - android/performance-rendering
@@ -45,17 +44,17 @@ tags:
 
 ## Ответ (RU)
 
-**Main Thread** (или **UI Thread**) — единственный поток в Android-приложении, в котором выполняются все операции с пользовательским интерфейсом и обратные вызовы жизненного цикла компонентов.
+**Main Thread** (или **UI Thread**) — основной поток в Android-приложении, в котором выполняются все операции с пользовательским интерфейсом и большинство обратных вызовов жизненного цикла компонентов. Он создаётся вместе с процессом приложения и живёт, пока живёт процесс.
 
 ### Ключевые Характеристики
 
-1. **Единственный поток UI** — создаётся при старте приложения и живёт весь жизненный цикл
-2. **Все UI-операции** — только Main Thread может обращаться к View (иначе `CalledFromWrongThreadException`)
-3. **Event Loop** — содержит Looper + MessageQueue для обработки событий (touch, lifecycle callbacks, broadcasts)
+1. **Единственный UI-поток на процесс** — создаётся при старте процесса приложения и существует весь его жизненный цикл (дополнительные UI-потоки создавать нельзя).
+2. **Все UI-операции** — только Main Thread может безопасно обращаться к `View` и другим UI-компонентам (в противном случае возможен `CalledFromWrongThreadException`).
+3. **Event Loop** — поток использует `Looper` + `MessageQueue` для обработки сообщений и событий (touch, lifecycle callbacks, некоторые Binder callbacks, broadcasts). Все задачи выполняются по очереди в этом цикле сообщений.
 
 ### Правило 16ms (60 FPS)
 
-Главный поток должен обработать каждый кадр за **16ms** (60 FPS) или **11ms** (90 FPS):
+Главный поток должен обработать логику кадра за **≈16ms** (60 FPS) или **≈11ms** (90 FPS):
 
 ```kotlin
 // ❌ Плохо - блокирует UI
@@ -69,9 +68,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     lifecycleScope.launch {
         val data = withContext(Dispatchers.IO) {
-            fetchDataFromNetwork() // Фон
+            fetchDataFromNetwork() // Фоновая операция
         }
-        textView.text = data // Главный поток
+        textView.text = data // Обновление UI в главном потоке
     }
 }
 ```
@@ -79,20 +78,21 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ### Переключение На Главный Поток
 
 ```kotlin
-// Вариант 1: runOnUiThread
+// Вариант 1: runOnUiThread (из Activity)
 Thread {
     val data = fetchData()
     runOnUiThread { textView.text = data }
 }.start()
 
-// Вариант 2: Handler
+// Вариант 2: Handler с Looper главного потока
 Handler(Looper.getMainLooper()).post {
     textView.text = data
 }
 
-// Вариант 3: Coroutines (рекомендуется)
+// Вариант 3: Coroutines (рекомендуется для современного кода)
+// В lifecycleScope (Activity/Fragment) по умолчанию используется Dispatchers.Main
 lifecycleScope.launch {
-    textView.text = data // Автоматически Main Thread
+    textView.text = data // Выполняется в Main Thread
 }
 ```
 
@@ -104,24 +104,25 @@ fun isMainThread(): Boolean =
 ```
 
 **Ответственность Main Thread:**
-- Отрисовка UI (View.draw, layout, measure)
-- Обработка событий (touch, key events)
-- Lifecycle callbacks (onCreate, onStart, onResume)
-- BroadcastReceiver.onReceive()
+- Отрисовка UI (measure, layout, draw)
+- Обработка пользовательских событий (touch, key events)
+- Lifecycle callbacks (onCreate, onStart, onResume и др.)
+- Вызовы `BroadcastReceiver.onReceive()` (если не указано иное)
+- Обработка сообщений/колбэков, отправленных в основной `Looper`
 
 ## Answer (EN)
 
-The **Main Thread** (also called the **UI Thread**) is the single thread in an Android application where all UI operations and component lifecycle callbacks are executed.
+The **Main Thread** (also called the **UI Thread**) is the primary thread in an Android application where all UI operations and most component lifecycle callbacks are executed. It is created with the app process and exists as long as that process is alive.
 
 ### Key Characteristics
 
-1. **Single UI Thread** — created at app startup and lives for the entire lifecycle
-2. **All UI Operations** — only the Main Thread can access Views (otherwise `CalledFromWrongThreadException`)
-3. **Event Loop** — contains Looper + MessageQueue for processing events (touch, lifecycle callbacks, broadcasts)
+1. **Single UI thread per process** — created when the app process starts and exists for the lifetime of that process (you cannot create additional UI-capable threads).
+2. **All UI operations** — only the Main Thread may safely access `View` and other UI toolkit components (otherwise you may get a `CalledFromWrongThreadException`).
+3. **Event Loop** — the thread uses a `Looper` + `MessageQueue` to process messages and events (touch, lifecycle callbacks, some Binder callbacks, broadcasts). All tasks run sequentially on this message loop.
 
 ### The 16ms Rule (60 FPS)
 
-The main thread must complete each frame in **16ms** (60 FPS) or **11ms** (90 FPS):
+The main thread should complete the work for each frame in about **16ms** (60 FPS) or **11ms** (90 FPS):
 
 ```kotlin
 // ❌ Bad - blocks UI
@@ -135,9 +136,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     lifecycleScope.launch {
         val data = withContext(Dispatchers.IO) {
-            fetchDataFromNetwork() // Background
+            fetchDataFromNetwork() // Background work
         }
-        textView.text = data // Main thread
+        textView.text = data // UI update on the main thread
     }
 }
 ```
@@ -145,20 +146,21 @@ override fun onCreate(savedInstanceState: Bundle?) {
 ### Switching to Main Thread
 
 ```kotlin
-// Option 1: runOnUiThread
+// Option 1: runOnUiThread (from an Activity)
 Thread {
     val data = fetchData()
     runOnUiThread { textView.text = data }
 }.start()
 
-// Option 2: Handler
+// Option 2: Handler with the main Looper
 Handler(Looper.getMainLooper()).post {
     textView.text = data
 }
 
-// Option 3: Coroutines (recommended)
+// Option 3: Coroutines (recommended for modern code)
+// In lifecycleScope (Activity/Fragment), Dispatchers.Main is used by default
 lifecycleScope.launch {
-    textView.text = data // Automatically Main Thread
+    textView.text = data // Runs on the Main Thread
 }
 ```
 
@@ -170,20 +172,35 @@ fun isMainThread(): Boolean =
 ```
 
 **Main Thread Responsibilities:**
-- UI rendering (View.draw, layout, measure)
+- UI rendering (measure, layout, draw)
 - Event handling (touch, key events)
-- Lifecycle callbacks (onCreate, onStart, onResume)
-- BroadcastReceiver.onReceive()
+- Lifecycle callbacks (onCreate, onStart, onResume, etc.)
+- `BroadcastReceiver.onReceive()` calls (unless specified otherwise)
+- Handling messages/callbacks posted to the main `Looper`
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Что произойдет, если заблокировать Main Thread более чем на 5 секунд (например, ANR)?
+- Как `Looper.loop()` поддерживает отзывчивость Main Thread, оставаясь блокирующим вызовом?
+- Можно ли создать дополнительные UI-потоки в Android?
+- В чем разница между `Handler.post()` и `Handler.postDelayed()`?
+- Как корутины Kotlin обеспечивают выполнение обновлений UI в Main Thread?
+
 ## Follow-ups
 
-- What happens if you block the Main Thread for more than 5 seconds?
-- How does Looper.loop() process messages without blocking?
+- What happens if you block the Main Thread for more than 5 seconds (e.g., ANR)?
+- How does `Looper.loop()` keep the Main Thread responsive while being a blocking call?
 - Can you create additional UI threads in Android?
-- What is the difference between Handler.post() and Handler.postDelayed()?
+- What is the difference between `Handler.post()` and `Handler.postDelayed()`?
 - How do Kotlin coroutines ensure UI updates run on the Main Thread?
+
+## Ссылки (RU)
+
+- [Android Processes and Threads](https://developer.android.com/guide/components/processes-and-threads)
+- [Looper and Handler](https://developer.android.com/reference/android/os/Looper)
+- [Kotlin Coroutines on Android](https://developer.android.com/kotlin/coroutines)
 
 ## References
 
@@ -191,20 +208,33 @@ fun isMainThread(): Boolean =
 - [Looper and Handler](https://developer.android.com/reference/android/os/Looper)
 - [Kotlin Coroutines on Android](https://developer.android.com/kotlin/coroutines)
 
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-android-components]]
+
+### Предпосылки (проще)
+- [[q-main-android-components--android--easy]] — Базовые компоненты Android
+
+### Связанные (тот же уровень)
+- [[q-what-unifies-android-components--android--easy]] — Основы компонентов
+
+### Продвинутые (сложнее)
+- [[q-anr-application-not-responding--android--medium]] — Отладка ANR
+- [[q-what-navigation-methods-do-you-know--android--medium]] — Архитектура навигации
+
 ## Related Questions
 
 ### Prerequisites / Concepts
 
-- [[c-main-thread]]
-- [[c-threading]]
-
+- [[c-android-components]]
 
 ### Prerequisites (Easier)
 - [[q-main-android-components--android--easy]] — Basic Android components
 
 ### Related (Same Level)
 - [[q-what-unifies-android-components--android--easy]] — Component fundamentals
-- [[q-what-is-pendingintent--programming-languages--medium]] — Asynchronous operations
 
 ### Advanced (Harder)
 - [[q-anr-application-not-responding--android--medium]] — ANR debugging

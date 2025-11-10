@@ -3,18 +3,19 @@ id: android-084
 title: "Memory Leak vs OOM / Утечка памяти vs OOM"
 aliases: ["Memory Leak vs OOM", "Утечка памяти vs OOM"]
 topic: android
-subtopics: [performance-memory, profiling]
+subtopics: [performance-memory, performance-battery]
 question_kind: android
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [q-coroutine-memory-leak-detection--kotlin--hard, q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium, q-what-is-the-main-application-execution-thread--android--easy]
+related: [c-garbage-collection, q-coroutine-memory-leak-detection--kotlin--hard, q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium, q-what-is-the-main-application-execution-thread--android--easy]
 sources: []
 created: 2025-10-13
-updated: 2025-10-31
-tags: [android, android/performance-memory, android/profiling, difficulty/medium, leakcanary, memory-leak, oom]
+updated: 2025-11-10
+tags: [android, android/performance-memory, android/performance-battery, difficulty/medium, leakcanary, memory-leak, oom]
+
 ---
 
 # Вопрос (RU)
@@ -27,16 +28,19 @@ tags: [android, android/performance-memory, android/profiling, difficulty/medium
 
 ## Ответ (RU)
 
-**Утечки памяти** и **OutOfMemoryError** — разные проблемы. Утечки постепенно расходуют память, что может привести к OOM-краху.
+**Утечки памяти** и **OutOfMemoryError** — связанные, но разные проблемы.
+- Утечка памяти — логическая ошибка, когда объекты больше не нужны, но остаются достижимыми, и GC не может их освободить.
+- OutOfMemoryError (OOM) — симптом: попытка выделить память, когда свободной памяти (в Java heap или native heap) уже недостаточно. OOM может быть вызван как утечками, так и корректным, но слишком большим потреблением памяти (например, загрузкой огромного bitmap).
 
 ### 1. Утечка Памяти
 
-**Определение**: Объекты больше не нужны, но остаются referenced — GC не может их собрать.
+**Определение**: Объекты больше не нужны, но остаются достижимыми через цепочку ссылок (например, из статических полей, синглтонов, длинноживущих коллекций), поэтому сборщик мусора не может их собрать.
 
-**Типичные причины и решения:**
+**Типичные причины и решения (упрощённые примеры):**
 
 ```kotlin
-// ❌ Static-ссылка на Activity
+// ❌ Статическое поле хранит ссылку, связанной с Activity
+// (на практике часто: listener держит Activity или View, а companion/singleton живёт дольше Activity)
 class LeakyActivity : AppCompatActivity() {
     companion object {
         var listener: OnDataListener? = null
@@ -46,30 +50,50 @@ class LeakyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         listener = object : OnDataListener {
             override fun onData(data: String) {
-                updateUI(data)  // Удерживает Activity
+                updateUI(data)  // updateUI() использует Activity/View; listener живёт дольше Activity
             }
         }
     }
 }
 
-// ✅ WeakReference
-class FixedActivity : AppCompatActivity() {
-    companion object {
-        var listenerRef: WeakReference<OnDataListener>? = null
-    }
+// ✅ Не держать Activity через долгоживущие статические ссылки
+// Ключевая идея: если нужен callback из синглтона/companion, хранить WeakReference на владельца
+class FixedActivity : AppCompatActivity(), OnDataListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val listener = object : OnDataListener {
-            override fun onData(data: String) { updateUI(data) }
-        }
+        ListenerHolder.registerListener(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ListenerHolder.unregisterListener(this)
+    }
+
+    override fun onData(data: String) {
+        updateUI(data)
+    }
+}
+
+object ListenerHolder {
+    private var listenerRef: WeakReference<OnDataListener>? = null
+
+    fun registerListener(listener: OnDataListener) {
         listenerRef = WeakReference(listener)
+    }
+
+    fun unregisterListener(listener: OnDataListener) {
+        if (listenerRef?.get() == listener) listenerRef = null
+    }
+
+    fun notifyData(data: String) {
+        listenerRef?.get()?.onData(data)
     }
 }
 ```
 
 ```kotlin
-// ❌ Handler-утечка
+// ❌ Handler-утечка: внутренний класс не static и/или отложенные сообщения переживают Activity
 class HandlerLeakActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
@@ -79,16 +103,21 @@ class HandlerLeakActivity : AppCompatActivity() {
     }
 }
 
-// ✅ Static Handler + WeakReference + очистка
+// ✅ Static-внутренний Handler + WeakReference + очистка сообщений
 class FixedHandlerActivity : AppCompatActivity() {
     private val handler = MyHandler(this)
 
-    class MyHandler(activity: FixedHandlerActivity) : Handler(Looper.getMainLooper()) {
+    private class MyHandler(activity: FixedHandlerActivity) : Handler(Looper.getMainLooper()) {
         private val activityRef = WeakReference(activity)
 
         override fun handleMessage(msg: Message) {
             activityRef.get()?.updateUI()
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        handler.sendEmptyMessageDelayed(0, 60_000)
     }
 
     override fun onDestroy() {
@@ -99,7 +128,7 @@ class FixedHandlerActivity : AppCompatActivity() {
 ```
 
 ```kotlin
-// ✅ Lifecycle-aware coroutines (лучший подход)
+// ✅ Lifecycle-aware coroutines (рекомендуемый подход)
 class CoroutineActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,7 +138,7 @@ class CoroutineActivity : AppCompatActivity() {
                 updateUI()
                 delay(1000)
             }
-            // Автоматическая отмена при destroy
+            // coroutine будет автоматически отменена, когда lifecycleOwner уничтожен
         }
     }
 }
@@ -117,29 +146,29 @@ class CoroutineActivity : AppCompatActivity() {
 
 ### 2. OutOfMemoryError (OOM)
 
-**Определение**: Попытка выделить больше памяти, чем доступно.
+**Определение**: Исключение, возникающее при попытке выделить память, когда лимит heap (или доступная память процесса) исчерпан.
 
 **Типичные причины и решения:**
 
 ```kotlin
-// ❌ Загрузка больших изображений
+// ❌ Наивная загрузка большого изображения в полный размер
 val bitmap = BitmapFactory.decodeFile("/sdcard/large_image.jpg")
 
-// ✅ Glide с автоматическим управлением памятью
+// ✅ Использовать Glide/Coil/Picasso для downsampling и кэширования
 Glide.with(this)
     .load("/sdcard/large_image.jpg")
-    .override(imageView.width, imageView.height)
+    .override(imageView.width, imageView.height) // под размер View
     .into(imageView)
 ```
 
 ```kotlin
-// ❌ Избыточная аллокация
+// ❌ Избыточная аллокация большого списка целиком в памяти
 val results = mutableListOf<Result>()
 repeat(1_000_000) {
     results.add(Result(it, it.toString()))
 }
 
-// ✅ Lazy-генерация через Sequence
+// ✅ Ленивое перечисление / потоковая обработка без удержания всего набора в памяти
 fun processLargeDataset(): Sequence<Result> = sequence {
     repeat(1_000_000) {
         yield(Result(it, it.toString()))
@@ -149,17 +178,17 @@ fun processLargeDataset(): Sequence<Result> = sequence {
 
 ### 3. Инструменты Обнаружения
 
-**LeakCanary** (автоматическое обнаружение утечек):
+**LeakCanary** (автоматическое обнаружение утечек в debug-сборках):
 
 ```kotlin
-// build.gradle.kts
+// build.gradle.kts (модуль приложения)
 dependencies {
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.x")
 }
-// Zero configuration — работает из коробки
+// Дополнительная конфигурация обычно не требуется, работает "из коробки" в debug.
 ```
 
-**Android Profiler** (мониторинг памяти):
+**Android Profiler** (мониторинг памяти, heap dump, анализ allocs) + вспомогательные логи:
 
 ```kotlin
 class MemoryMonitor {
@@ -176,33 +205,36 @@ class MemoryMonitor {
 ### Предотвращение
 
 **Утечки памяти:**
-- WeakReference для долгоживущих объектов
-- Очистка listeners/observers в onDestroy
-- Lifecycle-aware компоненты (ViewModel, lifecycleScope)
-- Application context вместо Activity context
-- Отмена coroutines/jobs
+- Не хранить `Activity`/`Fragment`/`View` в статических полях и синглтонах.
+- Освобождать listeners/observers/колбэки в onDestroy/onCleared и т.п.
+- Использовать lifecycle-aware компоненты (`ViewModel`, lifecycleScope, `LiveData`/`Flow` с owner'ом).
+- Использовать `Application` context только там, где действительно нужен контекст приложения (и избегать утечек `Activity` context).
+- Корректно отменять coroutines/jobs и другие асинхронные операции.
 
 **OutOfMemoryError:**
-- Glide/Coil для изображений
-- LruCache для bitmap
-- Обработка данных частями (chunking)
-- Lazy evaluation (Sequence)
-- Pagination для больших наборов данных
+- Использовать библиотеки для работы с изображениями (Glide/Coil) с downsampling и кэшированием.
+- Применять LruCache для bitmap и других тяжёлых объектов.
+- Обрабатывать большие данные частями (chunking/streaming), избегать удержания всего набора в памяти.
+- Использовать ленивую оценку (Sequence/flows) там, где возможно.
+- Использовать pagination/постраничную загрузку для больших списков.
 
 ---
 
 ## Answer (EN)
 
-**Memory leaks** and **OutOfMemoryError** are distinct issues. Memory leaks gradually consume memory, potentially leading to OOM crashes.
+**Memory leaks** and **OutOfMemoryError** are related but distinct issues.
+- A memory leak is a logical/programming bug where objects that are no longer needed remain reachable, so the GC cannot reclaim them.
+- OutOfMemoryError (OOM) is a runtime symptom: an allocation fails because the app has exhausted its allowed memory (Java heap and/or native). OOM can be caused by leaks or by legitimately large allocations (e.g., huge bitmaps or data sets).
 
 ### 1. Memory Leak
 
-**Definition**: Objects are no longer needed but remain referenced, preventing garbage collection.
+**Definition**: Objects are no longer needed but remain reachable through a chain of references (e.g., from static fields, singletons, long-lived collections), preventing garbage collection.
 
-**Common causes and solutions:**
+**Common causes and solutions (simplified examples):**
 
 ```kotlin
-// ❌ Static reference to Activity
+// ❌ Static holder keeps a reference chain tied to an Activity
+// In practice: a listener or callback stored in a singleton/companion indirectly holds Activity/View
 class LeakyActivity : AppCompatActivity() {
     companion object {
         var listener: OnDataListener? = null
@@ -212,30 +244,50 @@ class LeakyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         listener = object : OnDataListener {
             override fun onData(data: String) {
-                updateUI(data)  // Holds Activity reference
+                updateUI(data)  // updateUI() uses Activity/View; listener may outlive the Activity
             }
         }
     }
 }
 
-// ✅ WeakReference
-class FixedActivity : AppCompatActivity() {
-    companion object {
-        var listenerRef: WeakReference<OnDataListener>? = null
-    }
+// ✅ Do not keep Activities in long-lived static references
+// Key idea: if a singleton/companion needs a callback, keep a WeakReference to the owner
+class FixedActivity : AppCompatActivity(), OnDataListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val listener = object : OnDataListener {
-            override fun onData(data: String) { updateUI(data) }
-        }
+        ListenerHolder.registerListener(this)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        ListenerHolder.unregisterListener(this)
+    }
+
+    override fun onData(data: String) {
+        updateUI(data)
+    }
+}
+
+object ListenerHolder {
+    private var listenerRef: WeakReference<OnDataListener>? = null
+
+    fun registerListener(listener: OnDataListener) {
         listenerRef = WeakReference(listener)
+    }
+
+    fun unregisterListener(listener: OnDataListener) {
+        if (listenerRef?.get() == listener) listenerRef = null
+    }
+
+    fun notifyData(data: String) {
+        listenerRef?.get()?.onData(data)
     }
 }
 ```
 
 ```kotlin
-// ❌ Handler leak
+// ❌ Handler leak: non-static inner class and/or delayed messages outlive the Activity
 class HandlerLeakActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())
 
@@ -245,16 +297,21 @@ class HandlerLeakActivity : AppCompatActivity() {
     }
 }
 
-// ✅ Static Handler + WeakReference + cleanup
+// ✅ Static inner Handler + WeakReference + removing pending messages
 class FixedHandlerActivity : AppCompatActivity() {
     private val handler = MyHandler(this)
 
-    class MyHandler(activity: FixedHandlerActivity) : Handler(Looper.getMainLooper()) {
+    private class MyHandler(activity: FixedHandlerActivity) : Handler(Looper.getMainLooper()) {
         private val activityRef = WeakReference(activity)
 
         override fun handleMessage(msg: Message) {
             activityRef.get()?.updateUI()
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        handler.sendEmptyMessageDelayed(0, 60_000)
     }
 
     override fun onDestroy() {
@@ -265,7 +322,7 @@ class FixedHandlerActivity : AppCompatActivity() {
 ```
 
 ```kotlin
-// ✅ Lifecycle-aware coroutines (best approach)
+// ✅ Lifecycle-aware coroutines (recommended approach)
 class CoroutineActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -275,7 +332,7 @@ class CoroutineActivity : AppCompatActivity() {
                 updateUI()
                 delay(1000)
             }
-            // Automatically cancelled on destroy
+            // Automatically cancelled when the LifecycleOwner is destroyed
         }
     }
 }
@@ -283,29 +340,29 @@ class CoroutineActivity : AppCompatActivity() {
 
 ### 2. OutOfMemoryError (OOM)
 
-**Definition**: App attempts to allocate more memory than available.
+**Definition**: Thrown when an allocation request cannot be satisfied because the process has exhausted its memory limits.
 
 **Common causes and solutions:**
 
 ```kotlin
-// ❌ Loading large bitmaps
+// ❌ Naively loading a huge bitmap at full resolution
 val bitmap = BitmapFactory.decodeFile("/sdcard/large_image.jpg")
 
-// ✅ Glide with automatic memory management
+// ✅ Use Glide/Coil/Picasso to downsample and manage caching
 Glide.with(this)
     .load("/sdcard/large_image.jpg")
-    .override(imageView.width, imageView.height)
+    .override(imageView.width, imageView.height) // match the View size
     .into(imageView)
 ```
 
 ```kotlin
-// ❌ Excessive allocation
+// ❌ Holding a massive collection entirely in memory
 val results = mutableListOf<Result>()
 repeat(1_000_000) {
     results.add(Result(it, it.toString()))
 }
 
-// ✅ Lazy generation with Sequence
+// ✅ Lazy / streaming processing to avoid keeping everything in memory
 fun processLargeDataset(): Sequence<Result> = sequence {
     repeat(1_000_000) {
         yield(Result(it, it.toString()))
@@ -315,17 +372,17 @@ fun processLargeDataset(): Sequence<Result> = sequence {
 
 ### 3. Detection Tools
 
-**LeakCanary** (automatic leak detection):
+**LeakCanary** (automatic leak detection in debug builds):
 
 ```kotlin
-// build.gradle.kts
+// build.gradle.kts (app module)
 dependencies {
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.x")
 }
-// Zero configuration — works out of the box
+// No extra setup required for typical usage; works out of the box in debug.
 ```
 
-**Android Profiler** (memory monitoring):
+**Android Profiler** (memory monitoring, heap dumps, allocation tracking) + helper logs:
 
 ```kotlin
 class MemoryMonitor {
@@ -342,18 +399,18 @@ class MemoryMonitor {
 ### Prevention
 
 **Memory Leaks:**
-- WeakReference for long-lived objects
-- Clean up listeners/observers in onDestroy
-- Lifecycle-aware components (ViewModel, lifecycleScope)
-- Application context instead of Activity context
-- Cancel coroutines/jobs properly
+- Do not keep `Activity`/`Fragment`/`View` references in static fields or long-lived singletons.
+- Properly unregister listeners/observers/callbacks in onDestroy/onCleared/etc.
+- Use lifecycle-aware components (`ViewModel`, lifecycleScope, `LiveData`/`Flow` tied to a LifecycleOwner).
+- Use `Application` context only when an application-wide context is appropriate; avoid leaking `Activity` context.
+- Correctly cancel coroutines/jobs and other async work.
 
 **OutOfMemoryError:**
-- Glide/Coil for images
-- LruCache for bitmaps
-- Process data in chunks
-- Lazy evaluation (Sequence)
-- Pagination for large datasets
+- Use image libraries (Glide/Coil) with downsampling and caching.
+- Use LruCache for bitmaps and other heavy objects.
+- Process large data sets in chunks/streams instead of loading everything at once.
+- Prefer lazy evaluation (Sequence/flows) where suitable.
+- Use pagination / incremental loading for large lists.
 
 ---
 
@@ -369,7 +426,6 @@ class MemoryMonitor {
 
 - Android Memory Management: https://developer.android.com/topic/performance/memory
 - LeakCanary Documentation: https://square.github.io/leakcanary/
-- [[c-android-lifecycle]]
 - [[c-coroutines]]
 - [[c-viewmodel]]
 
@@ -382,7 +438,7 @@ class MemoryMonitor {
 ### Related
 - [[q-how-to-tell-adapter-to-redraw-list-if-an-item-was-deleted--android--medium]] - UI lifecycle and memory
 - [[q-play-feature-delivery-dynamic-modules--android--medium]] - Memory-efficient modularization
-- [[q-coroutine-memory-leaks--kotlin--hard]] - Coroutine-specific memory issues
+- [[q-coroutine-memory-leaks--kotlin--hard]] - `Coroutine`-specific memory issues
 
 ### Advanced
 - [[q-coroutine-memory-leak-detection--kotlin--hard]] - Advanced leak detection strategies

@@ -2,50 +2,36 @@
 id: android-354
 title: Room Type Converters / TypeConverters в Room
 aliases: [Room Type Converters, Room конвертеры типов, TypeConverters в Room]
-
-# Classification
 topic: android
-subtopics: [room, serialization]
+subtopics: [room]
 question_kind: android
 difficulty: medium
-
-# Language
 original_language: en
 language_tags: [en, ru]
-
-# Workflow
 status: draft
-
-# Links
 moc: moc-android
-related: [c-room, q-room-library-definition--android--easy, q-room-vs-sqlite--android--medium]
+related: [q-room-library-definition--android--easy, q-room-vs-sqlite--android--medium]
 sources: []
-
-# Timestamps
 created: 2025-10-15
-updated: 2025-10-28
-
-# Tags
-tags: [android/room, android/serialization, database, difficulty/medium, room, typeconverter]
+updated: 2025-11-10
+tags: [android/room, difficulty/medium]
 ---
 
 # Вопрос (RU)
 
-Что вы знаете о TypeConverters в Room?
+> Что вы знаете о TypeConverters в Room?
 
 # Question (EN)
 
-What do you know about Converters in Room?
-
----
+> What do you know about TypeConverters in Room?
 
 ## Ответ (RU)
 
-**Room TypeConverters** — это механизм преобразования пользовательских типов данных в примитивные типы, которые Room умеет сохранять в SQLite. Они позволяют работать с Date, Enum, List и сложными объектами как с обычными полями Entity.
+**Room TypeConverters** — это механизм преобразования пользовательских типов данных в примитивные типы, которые Room умеет сохранять в SQLite. Они позволяют работать с Date, Enum, `List` и сложными объектами как с обычными полями Entity.
 
 ### Основной Принцип
 
-Room знает только примитивы (Int, Long, String, Boolean, etc). Для кастомных типов нужны конвертеры.
+Room знает только примитивы (`Int`, `Long`, `String`, `Boolean`, etc). Для кастомных типов нужны конвертеры.
 
 **Простой пример:**
 
@@ -109,7 +95,7 @@ class Converters {
 }
 ```
 
-**List через JSON:**
+**`List` через JSON:**
 
 ```kotlin
 class Converters {
@@ -150,10 +136,10 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "db")
 
 ### Ограничения И Best Practices
 
-1. **Избегайте тяжёлых операций** — конвертеры вызываются на каждой операции чтения/записи
-2. **Не для связей** — Room запрещает хранить ссылки на другие Entity (используйте Foreign Keys + @Relation)
-3. **Обрабатывайте null** — используйте nullable типы (`Long?`, `Date?`)
-4. **Тестируйте двусторонность** — `toX(fromX(value)) == value`
+1. Избегайте тяжёлых операций — конвертеры вызываются на каждой операции чтения/записи
+2. Не для связей — Room запрещает хранить ссылки на другие Entity (используйте Foreign Keys + @Relation)
+3. Обрабатывайте null — используйте nullable типы (`Long?`, `Date?`)
+4. Тестируйте двусторонность — `toX(fromX(value)) == value`
 
 **Почему Room не поддерживает Object References:**
 
@@ -184,15 +170,13 @@ data class PostWithAuthor(
 - Контроль потребления памяти
 - Явное определение связей
 
----
-
 ## Answer (EN)
 
-**Room TypeConverters** are a mechanism for converting custom data types to primitive types that Room can persist in SQLite. They enable working with Date, Enum, List, and complex objects as regular Entity fields.
+**Room TypeConverters** are a mechanism for converting custom data types to primitive types that Room can persist in SQLite. They enable working with Date, Enum, `List`, and complex objects as regular Entity fields.
 
 ### Core Principle
 
-Room only understands primitives (Int, Long, String, Boolean, etc). Custom types require converters.
+Room only understands primitives (`Int`, `Long`, `String`, `Boolean`, etc). Custom types require converters.
 
 **Basic Example:**
 
@@ -256,7 +240,7 @@ class Converters {
 }
 ```
 
-**List via JSON:**
+**`List` via JSON:**
 
 ```kotlin
 class Converters {
@@ -297,10 +281,10 @@ val db = Room.databaseBuilder(context, AppDatabase::class.java, "db")
 
 ### Constraints and Best Practices
 
-1. **Avoid heavy operations** — converters run on every read/write
-2. **Not for relationships** — Room forbids storing Entity references (use Foreign Keys + @Relation)
-3. **Handle nullability** — use nullable types (`Long?`, `Date?`)
-4. **Test bidirectionality** — `toX(fromX(value)) == value`
+1. Avoid heavy operations — converters run on every read/write
+2. Not for relationships — Room forbids storing Entity references (use Foreign Keys + @Relation)
+3. Handle nullability — use nullable types (`Long?`, `Date?`)
+4. Test bidirectionality — `toX(fromX(value)) == value`
 
 **Why Room Disallows Object References:**
 
@@ -331,20 +315,41 @@ Reasons:
 - Control memory consumption
 - Explicit relationship definition
 
----
+## Дополнительные вопросы (RU)
+
+1. Как реализовать конвертер для сложных вложенных объектов (например, `List<Address>`)?
+2. Что произойдет, если `TypeConverter` выбросит исключение во время чтения значения?
+3. Можно ли использовать Kotlin Serialization вместо Gson в конвертерах?
+4. Как выполнять миграции базы данных при изменении реализации `TypeConverter`?
+5. Как оценить и минимизировать влияние JSON-сериализации в конвертерах на производительность?
 
 ## Follow-ups
 
 1. How do you convert complex nested objects (e.g., `List<Address>`)?
-2. What happens if TypeConverter throws an exception during read?
-3. Can you use Kotlin serialization instead of Gson for converters?
-4. How to migrate database when changing TypeConverter implementation?
-5. What's the performance impact of JSON serialization in converters?
+2. What happens if a `TypeConverter` throws an exception during read?
+3. Can you use Kotlin Serialization instead of Gson for converters?
+4. How to migrate the database when changing a `TypeConverter` implementation?
+5. What is the performance impact of JSON serialization in converters and how can it be minimized?
+
+## Ссылки (RU)
+
+- [Room Referencing Complex Data](https://developer.android.com/training/data-storage/room/referencing-data) — официальная документация
 
 ## References
 
-- [[c-room]] - Room persistence library
 - [Room Referencing Complex Data](https://developer.android.com/training/data-storage/room/referencing-data) - Official docs
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- [[q-room-library-definition--android--easy]] — Что такое Room?
+
+### Связанные (средний уровень)
+- [[q-room-vs-sqlite--android--medium]] — Room против «сырого» SQLite
+- [[q-room-code-generation-timing--android--medium]] — В какое время выполняется генерация кода Room?
+
+### Продвинутые (сложнее)
+- [[q-room-database-migrations--android--medium]] — Миграции схемы базы данных
 
 ## Related Questions
 
@@ -353,7 +358,7 @@ Reasons:
 
 ### Related (Medium)
 - [[q-room-vs-sqlite--android--medium]] - Room vs raw SQLite
-- [[q-room-code-generation-timing--android--medium]] - Room annotation processing
+- [[q-room-code-generation-timing--android--medium]] - Room annotation processing timing
 
 ### Advanced (Harder)
 - [[q-room-database-migrations--android--medium]] - Database schema migrations

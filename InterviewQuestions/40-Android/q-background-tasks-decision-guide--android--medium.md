@@ -50,7 +50,7 @@ flowchart TD
     Deferrable -->|ДА| WorkManager[WorkManager]
     Deferrable -->|НЕТ| SpecializedAPI[Есть специализированный API?]
     SpecializedAPI -->|ДА| Specialized[MediaSession / Location API]
-    SpecializedAPI -->|НЕТ| ShortTask[Короткая задача &lt;3 мин?]
+    SpecializedAPI -->|НЕТ| ShortTask[Короткая задача <3 мин?]
     ShortTask -->|ДА| ShortService[ShortService]
     ShortTask -->|НЕТ| ForegroundService[Regular Foreground Service]
 ```
@@ -79,7 +79,7 @@ viewModelScope.launch {
     }
     _uiState.value = result
 }
-// ❌ GlobalScope живет вечно — утечка памяти
+// ⚠️ GlobalScope живет дольше, чем lifecycle-компоненты, что может привести к утечкам и крашам — избегайте для UI-заданий
 
 // ✅ WorkManager: отложенная задача с ограничениями
 val syncWork = OneTimeWorkRequestBuilder<SyncWorker>()
@@ -93,8 +93,8 @@ val syncWork = OneTimeWorkRequestBuilder<SyncWorker>()
     .build()
 WorkManager.getInstance(context).enqueue(syncWork)
 
-// ✅ ShortService: критичная задача <3 мин
-class FileTransferService : Service() {
+// ✅ ShortService: критичная задача <3 мин (на поддерживаемых API)
+class FileTransferService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         ServiceCompat.startForeground(
             this, NOTIFICATION_ID,
@@ -108,14 +108,14 @@ class FileTransferService : Service() {
         return START_NOT_STICKY
     }
 }
-// ❌ Обычный Service будет убит системой без foreground статуса
+// ⚠️ Обычный Service без foreground-статуса для долгих задач имеет повышенный риск быть убитым системой (особенно в фоне) и не должен использоваться для продолжительных операций
 ```
 
 **Ключевые моменты**:
 - **Coroutines**: используйте структурированные scope (`viewModelScope`, `lifecycleScope`) для автоотмены
 - **WorkManager**: гарантирует выполнение даже после перезагрузки устройства, соблюдает Doze Mode
-- **ShortService**: требует тип `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE` и завершение до 3 минут
-- **Избегайте**: обычных Service без foreground режима для задач длительнее 1 секунды
+- **ShortService**: требует тип `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE`, доступный на современных версиях Android, и завершение в пределах лимита (~3 минут)
+- **Избегайте**: обычных Service без foreground режима для продолжительных задач; они нестабильны и подвержены убийству системой
 
 ---
 
@@ -132,7 +132,7 @@ flowchart TD
     Deferrable -->|YES| WorkManager[WorkManager]
     Deferrable -->|NO| SpecializedAPI[Specialized API available?]
     SpecializedAPI -->|YES| Specialized[MediaSession / Location API]
-    SpecializedAPI -->|NO| ShortTask[Short task &lt;3 min?]
+    SpecializedAPI -->|NO| ShortTask[Short task <3 min?]
     ShortTask -->|YES| ShortService[ShortService]
     ShortTask -->|NO| ForegroundService[Regular Foreground Service]
 ```
@@ -161,7 +161,7 @@ viewModelScope.launch {
     }
     _uiState.value = result
 }
-// ❌ GlobalScope lives forever — memory leak
+// ⚠️ GlobalScope outlives lifecycle components and can cause leaks/crashes — avoid it for UI-related work
 
 // ✅ WorkManager: deferred task with constraints
 val syncWork = OneTimeWorkRequestBuilder<SyncWorker>()
@@ -175,8 +175,8 @@ val syncWork = OneTimeWorkRequestBuilder<SyncWorker>()
     .build()
 WorkManager.getInstance(context).enqueue(syncWork)
 
-// ✅ ShortService: critical task <3 min
-class FileTransferService : Service() {
+// ✅ ShortService: critical task <3 min (on supported API levels)
+class FileTransferService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         ServiceCompat.startForeground(
             this, NOTIFICATION_ID,
@@ -190,14 +190,14 @@ class FileTransferService : Service() {
         return START_NOT_STICKY
     }
 }
-// ❌ Regular Service will be killed by system without foreground status
+// ⚠️ A regular Service without foreground status for long-running work is at high risk of being killed by the system (especially in background) and must not be used for long operations
 ```
 
 **Key points**:
 - **Coroutines**: use structured scopes (`viewModelScope`, `lifecycleScope`) for auto-cancellation
 - **WorkManager**: guarantees execution even after device reboot, respects Doze Mode
-- **ShortService**: requires `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE` type and completion within 3 minutes
-- **Avoid**: regular Services without foreground mode for tasks longer than 1 second
+- **ShortService**: requires `FOREGROUND_SERVICE_TYPE_SHORT_SERVICE`, available on modern Android versions, and must finish within the enforced time limit (~3 minutes)
+- **Avoid**: using regular Services without foreground mode for long-running tasks; they are unstable and likely to be killed by the system
 
 ---
 
@@ -234,3 +234,4 @@ class FileTransferService : Service() {
 ### Advanced (Harder)
 - [[q-service-lifecycle-binding--android--hard]]
 - [[q-workmanager-chaining--android--hard]]
+```

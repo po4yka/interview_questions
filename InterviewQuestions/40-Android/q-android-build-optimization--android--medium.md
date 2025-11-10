@@ -13,14 +13,14 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
   - c-gradle
   - c-modularization
 sources: []
 created: 2025-10-15
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/build-variants, android/dependency-management, android/gradle, difficulty/medium, gradle, performance]
 ---
 
@@ -36,35 +36,35 @@ tags: [android/build-variants, android/dependency-management, android/gradle, di
 
 ## Ответ (RU)
 
-**Стратегия**: Gradle-конфигурация + модуляризация + управление зависимостями + профилирование.
+**Стратегия**: настройка Gradle + модуляризация + управление зависимостями + профилирование.
 
-### 1. Критичные Настройки gradle.properties
+### 1. Критичные настройки gradle.properties
 
 ```properties
-# ✅ Параллельная сборка
+# ✅ Параллельная сборка (подбирайте значение под вашу машину)
 org.gradle.parallel=true
 org.gradle.workers.max=8
 
-# ✅ Build cache (кеш артефактов)
+# ✅ Build cache (кеш артефактов) и configuration cache (если плагины совместимы)
 org.gradle.caching=true
 org.gradle.configuration-cache=true
 
 # ✅ File system watching
 org.gradle.vfs.watch=true
 
-# ✅ JVM heap
+# ✅ JVM heap (значение подбирается под доступную память)
 org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=512m
 
-# ✅ Non-transitive R classes
+# ✅ Не транзитивные R-классы (уменьшает пересборку)
 android.nonTransitiveRClass=true
 
-# ✅ Incremental compilation
+# ✅ Инкрементальная компиляция (в новых версиях включена по умолчанию)
 kotlin.incremental=true
 ```
 
-**Эффект**: +30-70% на инкрементальных сборках, +15-30% на clean builds.
+**Эффект**: Потенциально до +30-70% на инкрементальных сборках и +15-30% на clean-сборках, в зависимости от проекта и окружения.
 
-### 2. Зависимости: Implementation Vs Api
+### 2. Зависимости: implementation vs api
 
 ```kotlin
 dependencies {
@@ -72,28 +72,30 @@ dependencies {
     implementation(libs.androidx.core)
     implementation(libs.retrofit)
 
-    // ❌ api выставляет наружу → пересборка потребителей
+    // ❌ api выставляет зависимости наружу → изменения приводят к пересборке потребителей
     // api(libs.retrofit)
 
-    // ✅ KSP вместо Kapt (2x быстрее)
+    // ✅ KSP вместо Kapt (часто до ~2x быстрее для аннотаций)
     ksp(libs.hilt.compiler)
 }
 ```
 
-**Правило**: `api` только если зависимость в публичном API модуля.
+**Правило**: `api` использовать только если зависимость является частью публичного API модуля.
 
-### 3. Отключение Неиспользуемых Функций
+### 3. Отключение неиспользуемых функций
 
 ```kotlin
 android {
     buildFeatures {
-        buildConfig = false  // ✅ Только при использовании
+        // Отключайте только если не используете соответствующие артефакты,
+        // иначе сборка или код сломаются.
+        buildConfig = false
         aidl = false
-        renderScript = false
+        renderScript = false  // RenderScript устарел; включайте только при наличии легаси-кода
     }
 
     lint {
-        checkReleaseBuilds = false  // ✅ Lint в CI
+        checkReleaseBuilds = false  // ✅ Запускаем полный Lint в CI, не на локальных release-сборках
     }
 }
 ```
@@ -107,10 +109,10 @@ include(":feature:home", ":feature:profile")
 include(":core:network", ":core:database")
 
 // ✅ Параллельная компиляция независимых модулей
-// ✅ Изоляция изменений
+// ✅ Изоляция изменений → меньше затронутых модулей при правках
 ```
 
-**Бонус**: Gradle Remote Build Cache для команды.
+**Бонус**: Gradle Remote Build Cache для команды (при корректной конфигурации инфраструктуры).
 
 ### 5. Профилирование
 
@@ -122,9 +124,9 @@ include(":core:network", ":core:database")
 ./gradlew assembleDebug --profile
 
 # Ищем:
-# - Slowest tasks (>5% build time)
-# - Cache misses (низкий hit rate)
-# - Sequential execution
+# - самые медленные задачи (>5% времени сборки)
+# - cache misses (низкий hit rate)
+# - последовательное выполнение, которое можно распараллелить
 ```
 
 ---
@@ -133,62 +135,64 @@ include(":core:network", ":core:database")
 
 **Strategy**: Gradle configuration + modularization + dependency management + profiling.
 
-### 1. Critical gradle.properties Settings
+### 1. Critical gradle.properties settings
 
 ```properties
-# ✅ Parallel build
+# ✅ Parallel build (tune for your machine)
 org.gradle.parallel=true
 org.gradle.workers.max=8
 
-# ✅ Build cache
+# ✅ Build cache and configuration cache (only if plugins/tasks are compatible)
 org.gradle.caching=true
 org.gradle.configuration-cache=true
 
 # ✅ File system watching
 org.gradle.vfs.watch=true
 
-# ✅ JVM heap
+# ✅ JVM heap (adjust based on available memory)
 org.gradle.jvmargs=-Xmx4096m -XX:MaxMetaspaceSize=512m
 
-# ✅ Non-transitive R classes
+# ✅ Non-transitive R classes (reduces unnecessary recompilation)
 android.nonTransitiveRClass=true
 
-# ✅ Incremental compilation
+# ✅ Incremental compilation (enabled by default in modern Kotlin/AGP)
 kotlin.incremental=true
 ```
 
-**Impact**: +30-70% on incremental builds, +15-30% on clean builds.
+**Impact**: Potentially up to +30-70% on incremental builds and +15-30% on clean builds, depending on project and environment.
 
-### 2. Dependencies: Implementation Vs Api
+### 2. Dependencies: implementation vs api
 
 ```kotlin
 dependencies {
-    // ✅ implementation hides transitive dependencies
+    // ✅ implementation hides transitive dependencies from consumers
     implementation(libs.androidx.core)
     implementation(libs.retrofit)
 
-    // ❌ api exposes dependencies → rebuilds consumers
+    // ❌ api exposes dependencies → changes trigger rebuilds of consumers
     // api(libs.retrofit)
 
-    // ✅ KSP instead of Kapt (2x faster)
+    // ✅ KSP instead of Kapt (often up to ~2x faster for annotation processing)
     ksp(libs.hilt.compiler)
 }
 ```
 
-**Rule**: Use `api` only if dependency is in module's public API.
+**Rule**: Use `api` only if the dependency is part of the module's public API.
 
-### 3. Disable Unused Features
+### 3. Disable unused features
 
 ```kotlin
 android {
     buildFeatures {
-        buildConfig = false  // ✅ Generate only if used
+        // Disable only if you are not using the generated artifacts;
+        // otherwise builds or references will break.
+        buildConfig = false
         aidl = false
-        renderScript = false
+        renderScript = false  // RenderScript is deprecated; enable only for existing legacy usage
     }
 
     lint {
-        checkReleaseBuilds = false  // ✅ Lint in CI
+        checkReleaseBuilds = false  // ✅ Run full Lint in CI instead of local release builds
     }
 }
 ```
@@ -202,10 +206,10 @@ include(":feature:home", ":feature:profile")
 include(":core:network", ":core:database")
 
 // ✅ Parallel compilation of independent modules
-// ✅ Change isolation
+// ✅ Change isolation → fewer modules affected per change
 ```
 
-**Bonus**: Gradle Remote Build Cache for team collaboration.
+**Bonus**: Gradle Remote Build Cache for team collaboration (with proper infrastructure configuration).
 
 ### 5. Profiling
 
@@ -217,22 +221,32 @@ include(":core:network", ":core:database")
 ./gradlew assembleDebug --profile
 
 # Look for:
-# - Slowest tasks (>5% build time)
-# - Cache misses (low hit rate)
-# - Sequential execution
+# - slowest tasks (>5% of total build time)
+# - cache misses (low hit rate)
+# - sequential execution that can be parallelized
 ```
 
 ---
 
-## Follow-ups
+## Дополнительные вопросы (RU)
+
+- Чем Configuration Cache отличается от Build Cache?
+- Каковы компромиссы использования `api` vs `implementation` в многомодульных проектах?
+- Как диагностировать и улучшать cache hit rate в CI?
+- Когда стоит выделять функциональность в отдельный модуль, а когда оставлять монолит?
+- Как безопасно и эффективно настроить Gradle Remote Build Cache для команды?
+
+## Follow-ups (EN)
 
 - How does Configuration Cache differ from Build Cache?
-- What are the trade-offs of using api vs implementation in multi-module projects?
+- What are the trade-offs of using `api` vs `implementation` in multi-module projects?
 - How to diagnose and improve cache hit rates in CI?
 - When should you split a feature module vs keeping it monolithic?
 - How to set up Gradle Remote Build Cache securely for team use?
 
-## References
+---
+
+## Ссылки (RU)
 
 - [[c-gradle]]
 - [[c-dependency-injection]]
@@ -240,7 +254,30 @@ include(":core:network", ":core:database")
 - https://docs.gradle.org/current/userguide/performance.html
 - https://developer.android.com/studio/build/optimize-your-build
 
-## Related Questions
+## References (EN)
+
+- [[c-gradle]]
+- [[c-dependency-injection]]
+- [[c-modularization]]
+- https://docs.gradle.org/current/userguide/performance.html
+- https://developer.android.com/studio/build/optimize-your-build
+
+---
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-gradle-basics--android--easy]]
+
+### Связанные (того же уровня)
+
+
+
+### Продвинутые (сложнее)
+
+
+
+## Related Questions (EN)
 
 ### Prerequisites (Easier)
 - [[q-gradle-basics--android--easy]]

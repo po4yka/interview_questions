@@ -12,17 +12,16 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
   - c-accessibility
-  - c-jetpack-compose
   - q-accessibility-testing--android--medium
 created: 2025-10-11
-updated: 2025-10-29
+updated: 2025-11-10
 sources:
-  - https://developer.android.com/guide/topics/ui/accessibility
-  - https://developer.android.com/jetpack/compose/accessibility
+  - "https://developer.android.com/guide/topics/ui/accessibility"
+  - "https://developer.android.com/jetpack/compose/accessibility"
 tags: [accessibility, android/ui-accessibility, android/ui-compose, compose, difficulty/medium, semantics, talkback]
 ---
 
@@ -38,7 +37,7 @@ tags: [accessibility, android/ui-accessibility, android/ui-compose, compose, dif
 
 ## Ответ (RU)
 
-**Доступность в Compose** обеспечивает использование приложения людьми с ограниченными возможностями через TalkBack, семантические свойства и минимальные размеры сенсорных целей (48dp).
+**Доступность в Compose** обеспечивает использование приложения людьми с ограниченными возможностями через поддержку сервисов вроде TalkBack, корректные семантические свойства, фокусируемость элементов и соблюдение минимальных размеров сенсорных целей (48dp).
 
 ### Ключевые Техники
 
@@ -58,25 +57,33 @@ Image(
 )
 ```
 
-**2. Semantic Properties** — семантика для кастомных элементов:
+**2. Semantic Properties** — семантика для кастомных элементов (если стандартных модификаторов toggleable/selectable недостаточно):
 
 ```kotlin
+val checked = remember { mutableStateOf(false) }
+
 Box(
     modifier = Modifier
         .semantics {
             role = Role.Switch  // ✅ Тип элемента
-            toggleableState = ToggleableState(checked)
-            contentDescription = "Notifications $state"
+            stateDescription = if (checked.value) "On" else "Off"
         }
+        .toggleable(
+            value = checked.value,
+            onValueChange = { checked.value = it },
+            role = Role.Switch
+        )
 )
 ```
 
-**3. Merge Descendants** — группировка семантики:
+**3. Merge Descendants** — группировка семантики сложных компонентов в один анонс:
 
 ```kotlin
 Card(
     modifier = Modifier.semantics(mergeDescendants = true) {
-        contentDescription = "${product.name}, $${product.price}, ${product.stock}"
+        // Потомки будут объединены в один анонс TalkBack,
+        // не нужно дублировать contentDescription здесь, если
+        // текст потомков уже информативен.
     }
 ) {
     Column {
@@ -90,26 +97,29 @@ Card(
 **4. Touch Target Size** — минимум 48dp:
 
 ```kotlin
-// ✅ Правильно
+// ✅ Правильно: достаточно большой таргет
 IconButton(
     onClick = { },
-    modifier = Modifier.size(48.dp)  // ✅ 48dp
+    modifier = Modifier.size(48.dp)  // Минимум 48dp, часто обеспечивается автоматически
 ) {
     Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
 }
 
-// ❌ Неправильно
+// ❌ Неправильно: слишком маленький таргет
 Icon(
-    modifier = Modifier.size(24.dp).clickable { }  // ❌ 24dp!
+    modifier = Modifier
+        .size(24.dp)
+        .clickable { }  // ❌ 24dp!
 )
 ```
 
-**5. Custom Actions** — дополнительные действия:
+**5. Custom Actions** — дополнительные действия, доступные через TalkBack:
 
 ```kotlin
 Card(
     modifier = Modifier.semantics {
-        customActions = listOf(
+        // Добавляем дополнительные доступные действия
+        this.customActions = listOf(
             CustomAccessibilityAction("Delete") { onDelete(); true },
             CustomAccessibilityAction("Archive") { onArchive(); true }
         )
@@ -119,17 +129,17 @@ Card(
 
 ### Ключевые Принципы
 
-- **ContentDescription**: обязательно для информативных элементов, `null` для декоративных
-- **Touch targets**: минимум 48dp для всех интерактивных элементов
-- **MergeDescendants**: группировка сложных компонентов в единое семантическое описание
-- **Semantic properties**: `role`, `toggleableState`, `liveRegion` для кастомных элементов
-- **Тестирование**: всегда проверять с включенным TalkBack
+- **contentDescription**: обязательно для информативных элементов, `null` для декоративных.
+- **Touch targets**: минимум 48dp для всех интерактивных элементов (учитывать, что многие Material-компоненты обеспечивают это по умолчанию).
+- **mergeDescendants**: использовать для объединения сложных компонентов в единое семантическое представление, если покомпонентный анонс мешает восприятию.
+- **Semantic properties**: при кастомном поведении использовать `role`, `stateDescription`, `liveRegion` и др.; по возможности предпочитать готовые модификаторы (`clickable`, `toggleable`, `selectable`), которые уже интегрированы с accessibility.
+- **Тестирование**: всегда проверять с включённым TalkBack / Switch Access и системными инструментами.
 
 ---
 
 ## Answer (EN)
 
-**Accessibility in Compose** ensures app usability for people with disabilities through TalkBack support, semantic properties, and minimum touch target sizes (48dp).
+**Accessibility in Compose** ensures app usability for people with disabilities through support of services like TalkBack, correct semantic properties, focusability, and respecting minimum touch target sizes (48dp).
 
 ### Key Techniques
 
@@ -149,25 +159,32 @@ Image(
 )
 ```
 
-**2. Semantic Properties** — semantics for custom elements:
+**2. Semantic Properties** — semantics for custom elements (when built-in toggleable/selectable modifiers are not enough):
 
 ```kotlin
+val checked = remember { mutableStateOf(false) }
+
 Box(
     modifier = Modifier
         .semantics {
             role = Role.Switch  // ✅ Element type
-            toggleableState = ToggleableState(checked)
-            contentDescription = "Notifications $state"
+            stateDescription = if (checked.value) "On" else "Off"
         }
+        .toggleable(
+            value = checked.value,
+            onValueChange = { checked.value = it },
+            role = Role.Switch
+        )
 )
 ```
 
-**3. Merge Descendants** — group semantic information:
+**3. Merge Descendants** — group semantic information of complex components into a single announcement:
 
 ```kotlin
 Card(
     modifier = Modifier.semantics(mergeDescendants = true) {
-        contentDescription = "${product.name}, $${product.price}, ${product.stock}"
+        // Children semantics will be merged into a single TalkBack announcement.
+        // No need to duplicate contentDescription here if child text is already meaningful.
     }
 ) {
     Column {
@@ -181,26 +198,29 @@ Card(
 **4. Touch Target Size** — minimum 48dp:
 
 ```kotlin
-// ✅ Correct
+// ✅ Correct: sufficiently large target
 IconButton(
     onClick = { },
-    modifier = Modifier.size(48.dp)  // ✅ 48dp
+    modifier = Modifier.size(48.dp)  // At least 48dp, often ensured by Material defaults
 ) {
     Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
 }
 
-// ❌ Wrong
+// ❌ Wrong: too small target
 Icon(
-    modifier = Modifier.size(24.dp).clickable { }  // ❌ 24dp!
+    modifier = Modifier
+        .size(24.dp)
+        .clickable { }  // ❌ 24dp!
 )
 ```
 
-**5. Custom Actions** — additional actions:
+**5. Custom Actions** — additional actions exposed to accessibility services:
 
 ```kotlin
 Card(
     modifier = Modifier.semantics {
-        customActions = listOf(
+        // Add extra accessible actions
+        this.customActions = listOf(
             CustomAccessibilityAction("Delete") { onDelete(); true },
             CustomAccessibilityAction("Archive") { onArchive(); true }
         )
@@ -210,26 +230,39 @@ Card(
 
 ### Key Principles
 
-- **ContentDescription**: required for meaningful elements, `null` for decorative
-- **Touch targets**: minimum 48dp for all interactive elements
-- **MergeDescendants**: group complex components into single semantic description
-- **Semantic properties**: `role`, `toggleableState`, `liveRegion` for custom elements
-- **Testing**: always verify with TalkBack enabled
+- **contentDescription**: required for meaningful elements, `null` for decorative ones.
+- **Touch targets**: minimum 48dp for all interactive elements (noting many Material components enforce this by default).
+- **mergeDescendants**: use to group complex components into a single semantic node when separate announcements harm usability.
+- **Semantic properties**: for custom behavior, use `role`, `stateDescription`, `liveRegion`, etc.; prefer built-in modifiers (`clickable`, `toggleable`, `selectable`) that are accessibility-aware.
+- **Testing**: always verify with TalkBack / Switch Access and platform accessibility tools enabled.
 
 ---
 
-## Follow-ups
+## Дополнительные вопросы (RU)
 
-- Что происходит, если не указать contentDescription для изображений?
+- Что происходит, если не указать `contentDescription` для изображений?
 - В чём разница между `mergeDescendants` и `clearAndSetSemantics`?
 - Как использовать `LiveRegionMode.Polite` vs `LiveRegionMode.Assertive`?
 - Как тестировать accessibility с помощью Accessibility Scanner?
 - Какие semantic properties кроме `role` и `contentDescription` существуют?
 
-## References
+## Follow-ups (EN)
+
+- What happens if you do not specify `contentDescription` for images?
+- What is the difference between `mergeDescendants` and `clearAndSetSemantics`?
+- How to use `LiveRegionMode.Polite` vs `LiveRegionMode.Assertive`?
+- How to test accessibility using Accessibility Scanner?
+- Which semantic properties exist besides `role` and `contentDescription`?
+
+## Ссылки (RU)
 
 - [[c-accessibility]] — Основы accessibility
-- [[c-jetpack-compose]] — Jetpack Compose fundamentals
+- https://developer.android.com/jetpack/compose/accessibility
+- https://developer.android.com/guide/topics/ui/accessibility/testing
+
+## References (EN)
+
+- [[c-accessibility]] — Accessibility basics
 - https://developer.android.com/jetpack/compose/accessibility
 - https://developer.android.com/guide/topics/ui/accessibility/testing
 
@@ -237,11 +270,9 @@ Card(
 
 ### Prerequisites (Easier)
 - [[c-accessibility]] — Accessibility concepts
-- [[c-jetpack-compose]] — Jetpack Compose basics
 
 ### Related (Same Level)
 - [[q-accessibility-talkback--android--medium]] — TalkBack testing
 - [[q-accessibility-testing--android--medium]] — Accessibility testing
-- [[q-custom-view-accessibility--android--medium]] — Custom view accessibility
 
 ### Advanced (Harder)

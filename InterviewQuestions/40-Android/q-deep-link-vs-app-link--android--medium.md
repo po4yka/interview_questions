@@ -40,20 +40,20 @@ sources:
 
 ## Ответ (RU)
 
-**Deep Link** использует **пользовательскую URI-схему** (`myapp://`) для навигации внутри приложения. Прост в настройке, но любое приложение может заявить ту же схему, что создает риски безопасности.
+**Deep Link** обычно использует **пользовательскую URI-схему** (`myapp://`) для навигации внутри приложения. Прост в настройке, но любое приложение может заявить ту же схему, что создает риски перехвата (hijacking) и отсутствие гарантии, что откроется именно ваше приложение.
 
-**App Link** использует **HTTPS URL** с **верификацией домена** через `assetlinks.json`. Обеспечивает безопасность и прямой запуск приложения без диалога выбора. Это современный стандарт Google для глубоких ссылок с проверкой владения доменом.
+**App Link** использует **HTTPS URL** с **верификацией домена** через `assetlinks.json`. Обеспечивает подтвержденное владение доменом и возможность прямого запуска приложения при успешной верификации. Это современный стандарт Google для глубоких ссылок с проверкой владения доменом.
 
 ### Ключевые Различия
 
 | Критерий | Deep Link | App Link |
 |----------|-----------|----------|
 | **Схема** | Пользовательская (`myapp://`) | HTTPS (`https://`) |
-| **Верификация** | Отсутствует — любой может перехватить | Верификация домена через `assetlinks.json` — доказательство владения |
-| **UX** | Диалог выбора приложения — пользователь выбирает вручную | Прямой запуск приложения — без диалога |
-| **Android API** | Все версии (API 1+) | API 23+ (Android 6.0 Marshmallow) |
-| **Безопасность** | Низкая (схема не защищена, возможно перехватывание) | Высокая (верифицированное владение доменом, исключает перехватывание) |
-| **Настройка** | Простая (только `AndroidManifest.xml`) | Сложная (`AndroidManifest.xml` + `assetlinks.json` на сервере) |
+| **Верификация** | Нет встроенной проверки владения — любую схему может заявить любое приложение | Верификация домена через `assetlinks.json` — доказательство владения |
+| **UX** | Зависит от совпадений: если несколько приложений обрабатывают схему — диалог выбора; если одно или выбрано по умолчанию — открывается сразу | При успешной верификации домена и отсутствии конфликтов — прямой запуск приложения; при ошибке верификации или нескольких претендентах возможен диалог |
+| **Android API** | Все версии (API 1+) | API 23+ (Android 6.0 Marshmallow) для официальных Android App Links |
+| **Безопасность** | Ниже: нет подтверждения владения, возможен перехват схемы другим приложением | Выше: проверка владения доменом значительно снижает риск перехвата; поведение зависит от успешной верификации и настроек пользователя |
+| **Настройка** | Простая (только `AndroidManifest.xml`) | Более сложная (`AndroidManifest.xml` + `assetlinks.json` на сервере) |
 
 ### Deep Link: Реализация
 
@@ -65,7 +65,7 @@ sources:
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <!-- ❌ Пользовательская схема — любой может перехватить -->
+        <!-- ❌ Пользовательская схема — любой может заявить такую же -->
         <data android:scheme="myapp" android:host="detail" />
     </intent-filter>
 </activity>
@@ -86,19 +86,19 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-**Пример использования:** `myapp://detail?id=123` — открывается диалог выбора приложения, если несколько приложений заявляют эту схему.
+**Пример использования:** `myapp://detail?id=123` — если несколько приложений заявили эту схему и host/path, система покажет диалог выбора; если только одно приложение или пользователь уже выбрал по умолчанию — откроется оно напрямую.
 
 ### App Link: Реализация
 
 **Intent Filter с autoVerify:**
 ```xml
 <activity android:name=".DetailActivity">
-    <!-- ✅ autoVerify=true для автоматической верификации -->
+    <!-- ✅ autoVerify=true для автоматической верификации App Links -->
     <intent-filter android:autoVerify="true">
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <!-- ✅ HTTPS схема — только верифицированный домен -->
+        <!-- ✅ HTTPS схема с конкретным доменом -->
         <data android:scheme="https"
               android:host="example.com"
               android:pathPrefix="/detail" />
@@ -120,7 +120,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }]
 ```
 
-**Пример использования:** `https://example.com/detail?id=123` — приложение открывается напрямую без диалога, если домен верифицирован.
+**Пример использования:** `https://example.com/detail?id=123` — при успешной верификации домена и отсутствии других приоритетных обработчиков ссылка откроется в приложении без диалога; иначе система может предложить выбор (браузер / приложения).
 
 ### Проверка Верификации
 
@@ -131,11 +131,11 @@ val userState = manager.getDomainVerificationUserState(packageName)
 
 userState?.hostToStateMap?.forEach { (domain, state) ->
     when (state) {
-        // ✅ Домен верифицирован
+        // ✅ Домен верифицирован для App Links
         DomainVerificationUserState.DOMAIN_STATE_VERIFIED -> {
             Log.d("AppLink", "$domain verified")
         }
-        // ❌ Верификация не прошла
+        // ❌ Верификация не прошла или неактивна
         else -> Log.w("AppLink", "$domain not verified: $state")
     }
 }
@@ -144,33 +144,33 @@ userState?.hostToStateMap?.forEach { (domain, state) ->
 ### Выбор Подхода
 
 **Deep Link → для:**
-- Внутренней навигации (между частями приложения) — когда безопасность не критична
+- Внутренней навигации (между частями приложения), когда критичная безопасность не требуется
 - Быстрого прототипирования — минимальная настройка
-- Случаев без требований к безопасности — тестирование, внутренние инструменты
-- Legacy приложений — поддержка старых версий Android
+- Случаев без строгих требований к безопасности — тестирование, внутренние инструменты
+- Legacy-приложений — поддержка старых версий Android
 
 **App Link → для:**
-- Публичного веб-контента с мобильной версией — единая ссылка для веб и мобильного приложения
-- Интеграции с маркетинговыми кампаниями — надежная доставка пользователей
-- Случаев с высокими требованиями к безопасности — предотвращение перехватывания ссылок
-- Universal Links совместимости (iOS) — единый формат для обеих платформ
+- Публичного веб-контента с мобильной версией — единая ссылка для веба и приложения
+- Маркетинговых кампаний — надежная маршрутизация пользователей в ваше приложение
+- Сценариев с повышенными требованиями к безопасности — защита от перехвата домена другими приложениями при корректной верификации
+- Согласованности с Universal Links (iOS) — единый формат ссылок на обеих платформах
 
 ## Answer (EN)
 
-**Deep Link** uses a **custom URI scheme** (`myapp://`) for in-app navigation. Simple to configure, but any app can claim the same scheme, creating security risks.
+**Deep Link** typically uses a **custom URI scheme** (`myapp://`) for in-app navigation. It is simple to configure, but any app can claim the same scheme, which introduces hijacking risks and no guarantee that your app will handle the link.
 
-**App Link** uses **HTTPS URLs** with **domain verification** via `assetlinks.json`. Provides security and direct app launch without chooser dialog. This is Google's modern standard for deep linking with domain ownership verification.
+**App Link** uses **HTTPS URLs** with **domain verification** via `assetlinks.json`. It provides proven domain ownership and allows direct app opening when verification succeeds. This is Google's modern standard for deep linking with domain ownership verification.
 
 ### Key Differences
 
 | Criterion | Deep Link | App Link |
 |-----------|-----------|----------|
 | **Scheme** | Custom (`myapp://`) | HTTPS (`https://`) |
-| **Verification** | None — anyone can intercept | Domain verification via `assetlinks.json` — proof of ownership |
-| **UX** | App chooser dialog — user selects manually | Direct app launch — no dialog |
-| **Android API** | All versions (API 1+) | API 23+ (Android 6.0 Marshmallow) |
-| **Security** | Low (unprotected scheme, possible hijacking) | High (verified domain ownership, prevents hijacking) |
-| **Setup** | Simple (`AndroidManifest.xml` only) | Complex (`AndroidManifest.xml` + `assetlinks.json` on server) |
+| **Verification** | No built-in ownership check — any app can claim the scheme | Domain verification via `assetlinks.json` — proof of ownership |
+| **UX** | Depends on matches: if multiple apps handle the scheme, user sees a chooser; if only one or a default is set, it opens directly | With successful domain verification and no conflicts, links can open the app directly; on verification failure or multiple contenders, a chooser or browser may appear |
+| **Android API** | All versions (API 1+) | API 23+ (Android 6.0) for official Android App Links |
+| **Security** | Lower: no ownership proof, scheme can be hijacked | Higher: verified domain ownership greatly reduces hijacking risk; behavior depends on verification status and user preferences |
+| **Setup** | Simple (`AndroidManifest.xml` only) | More complex (`AndroidManifest.xml` + `assetlinks.json` on server) |
 
 ### Deep Link: Implementation
 
@@ -182,7 +182,7 @@ userState?.hostToStateMap?.forEach { (domain, state) ->
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <!-- ❌ Custom scheme — anyone can intercept -->
+        <!-- ❌ Custom scheme — any app can declare the same -->
         <data android:scheme="myapp" android:host="detail" />
     </intent-filter>
 </activity>
@@ -203,19 +203,19 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-**Usage example:** `myapp://detail?id=123` — opens app chooser dialog if multiple apps claim this scheme.
+**Usage example:** `myapp://detail?id=123` — if multiple apps claim this scheme and matching host/path, the system shows a chooser; if only one or the user set a default, it opens that app directly.
 
 ### App Link: Implementation
 
 **Intent Filter with autoVerify:**
 ```xml
 <activity android:name=".DetailActivity">
-    <!-- ✅ autoVerify=true for automatic verification -->
+    <!-- ✅ autoVerify=true for automatic verification of App Links -->
     <intent-filter android:autoVerify="true">
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
-        <!-- ✅ HTTPS scheme — verified domain only -->
+        <!-- ✅ HTTPS scheme with specific domain -->
         <data android:scheme="https"
               android:host="example.com"
               android:pathPrefix="/detail" />
@@ -237,7 +237,7 @@ Location: `https://example.com/.well-known/assetlinks.json`
 }]
 ```
 
-**Usage example:** `https://example.com/detail?id=123` — app opens directly without dialog if domain is verified.
+**Usage example:** `https://example.com/detail?id=123` — if domain verification succeeds and there are no higher-priority handlers, the app opens directly; otherwise the system may fall back to a chooser or open in a browser.
 
 ### Verification Check
 
@@ -248,11 +248,11 @@ val userState = manager.getDomainVerificationUserState(packageName)
 
 userState?.hostToStateMap?.forEach { (domain, state) ->
     when (state) {
-        // ✅ Domain verified
+        // ✅ Domain verified for App Links
         DomainVerificationUserState.DOMAIN_STATE_VERIFIED -> {
             Log.d("AppLink", "$domain verified")
         }
-        // ❌ Verification failed
+        // ❌ Not verified / inactive
         else -> Log.w("AppLink", "$domain not verified: $state")
     }
 }
@@ -261,16 +261,16 @@ userState?.hostToStateMap?.forEach { (domain, state) ->
 ### Choosing the Approach
 
 **Deep Link → for:**
-- Internal navigation (between app sections) — when security isn't critical
-- Rapid prototyping — minimal setup
-- Cases without security requirements — testing, internal tools
-- Legacy apps — support for older Android versions
+- Internal navigation (between screens within the app) when strong security is not required
+- Rapid prototyping — minimal configuration
+- Non-critical flows — testing, internal tools
+- Legacy apps — broad Android version support
 
 **App Link → for:**
-- Public web content with mobile app version — single link for web and mobile app
-- Marketing campaign integration — reliable user delivery
-- Cases with high security requirements — prevents link hijacking
-- Universal Links compatibility (iOS) — unified format for both platforms
+- Public web content that also has an in-app representation — single URL for web and app
+- Marketing campaigns — reliable routing into your app
+- Security-sensitive scenarios — protect against domain hijacking by other apps when verification is correctly configured
+- Alignment with iOS Universal Links — unified link strategy across platforms
 
 ## Follow-ups
 

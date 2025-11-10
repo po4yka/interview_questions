@@ -7,7 +7,7 @@ aliases:
 topic: android
 subtopics:
   - di-koin
-  - testing
+  - testing-unit
   - architecture-clean
 question_kind: android
 difficulty: medium
@@ -22,18 +22,17 @@ related:
   - q-koin-fundamentals--android--medium
   - q-koin-scope-management--android--medium
 created: 2025-11-02
-updated: 2025-11-02
+updated: 2025-11-10
 tags:
   - android/di-koin
-  - android/testing
+  - android/testing-unit
+  - android/architecture-clean
   - dependency-injection
   - koin
   - difficulty/medium
 sources:
-  - url: https://insert-koin.io/docs/reference/koin-test/testing
-    note: Official Koin testing guide
-  - url: https://insert-koin.io/docs/reference/koin-android/check-modules
-    note: checkModules usage and tips
+  - "https://insert-koin.io/docs/reference/koin-test/testing"
+  - "https://insert-koin.io/docs/reference/koin-android/check-modules"
 ---
 
 # Вопрос (RU)
@@ -42,11 +41,9 @@ sources:
 # Question (EN)
 > How do you test Koin modules? Demonstrate strategies for unit tests, instrumented tests, and validating the dependency graph.
 
----
-
 ## Ответ (RU)
 
-Тестирование Koin строится вокруг трёх задач: **валидация графа зависимостей**, **подмена зависимостей** и **контроль жизненного цикла**. Koin предоставляет утилиты `checkModules`, `KoinTestRule`, `declare` и `loadKoinModules`, которые позволяют тестам оставаться изолированными и быстрыми.
+Тестирование Koin строится вокруг трёх задач: **валидация графа зависимостей**, **подмена зависимостей** и **контроль жизненного цикла**. Koin предоставляет утилиты `checkModules`, `KoinTestRule`, `loadKoinModules` / `unloadKoinModules` и возможность переопределения модулей, которые позволяют тестам оставаться изолированными и быстрыми.
 
 ### 1. Валидация графа модулей (checkModules)
 
@@ -58,7 +55,7 @@ class AppModulesTest {
         koinApplication {
             modules(listOf(networkModule, dataModule, domainModule, presentationModule))
         }.checkModules {
-            // ✅ Явно объявляем entry-point, иначе модуль не проверит injections в Activity/Fragment
+            // ✅ Явно объявляем entry-point, иначе не будут проверены зависимости, требующие Android-контекста
             withInstance<Context>(mockk(relaxed = true))
             withInstance<SharedPreferences>(mockk())
         }
@@ -81,6 +78,7 @@ class UserRepositoryTest : KoinTest {
             module {
                 single<UserApi> { mockk(relaxed = true) }
                 single<UserDatabase> { mockk(relaxed = true) }
+                // Тестируем реальную реализацию, провайдим зависимости через Koin
                 single<UserRepository> { UserRepositoryImpl(get(), get()) }
             }
         )
@@ -90,7 +88,8 @@ class UserRepositoryTest : KoinTest {
 
     @Test
     fun `возвращает кеш при сетевой ошибке`() = runTest {
-        coEvery { repository.getUser("42") } returns Result.success(User("42"))
+        // Здесь в реальных тестах лучше мокать UserApi/UserDatabase, а не сам репозиторий
+        coEvery { getKoin().get<UserApi>().getUser("42") } returns User("42")
 
         val result = repository.getUser("42")
 
@@ -101,35 +100,33 @@ class UserRepositoryTest : KoinTest {
 
 - `KoinTestRule` гарантирует старт/останов Koin перед и после теста.
 - `inject()` даёт ленивый доступ к зависимостям.
-- Для корутин используйте `runTest` и mockk `coEvery`.
+- Для корутин используйте `runTest` и мокайте зависимости (например, через MockK `coEvery`) вместо мокания тестируемого класса.
 
-### 3. Подмена зависимостей во время теста (`declare`, `loadKoinModules`)
+### 3. Подмена зависимостей во время теста (override-модули)
 
 ```kotlin
 class DashboardViewModelTest : KoinTest {
 
     private val fakeMetrics = FakeMetricsService()
-    private val overrideModule = module {
+    private val overrideModule = module(override = true) {
         single<MetricsService> { fakeMetrics }
+        single<UserRepository> { FakeUserRepository() }
     }
 
     @Before
     fun setup() {
+        // Подключаем тестовый модуль, перекрывающий production-определения
         loadKoinModules(overrideModule)
     }
 
     @After
     fun tearDown() {
+        // Удаляем тестовые определения; контейнер должен контролироваться общим правилом/настройкой
         unloadKoinModules(overrideModule)
-        stopKoin() // ✅ очищаем контейнер, иначе возможны утечки между тестами
     }
 
     @Test
     fun `отправляет событие при загрузке`() = runTest {
-        declare {
-            single<UserRepository> { FakeUserRepository() }
-        }
-
         val viewModel: DashboardViewModel by inject()
 
         viewModel.load()
@@ -140,8 +137,8 @@ class DashboardViewModelTest : KoinTest {
 ```
 
 - `loadKoinModules` загружает дополнительные тестовые определения.
-- `declare` позволяет переопределить single/factory «на лету».
-- Не забывайте `stopKoin()` или `closeKoin()` в `@After`, если вы модифицируете глобальный контейнер.
+- Используйте `module(override = true)` или соответствующий механизм переопределения для замены production-зависимостей.
+- Не дублируйте управление жизненным циклом: если используете `KoinTestRule` или общий `startKoin` в тестовом раннере, не вызывайте `stopKoin()` точечно в каждом таком тесте без необходимости.
 
 ### 4. Инструментальные тесты с KoinTestRule
 
@@ -167,21 +164,20 @@ class SettingsFragmentTest : KoinTest {
 
 - Для инструментальных тестов обязательно передать `androidContext`.
 - Отдельный `testingModule` содержит фейковые/фиктивные зависимости.
-- После тестов правило автоматически останавливает Koin.
+- `KoinTestRule` автоматически управляет запуском и остановкой Koin.
 
 ### 5. Практики для стабильных тестов
 
-- **Изоляция**: каждый тест должен стартовать Koin с минимальным набором модулей.
-- **Быстрый teardown**: всегда очищайте контейнеры (`stopKoin`, `unloadKoinModules`).
-- **Параметры**: используйте `parametersOf` для runtime данных.
+- **Изоляция**: каждый тест (или suite) должен стартовать Koin с минимальным набором модулей.
+- **Явный lifecycle**: используйте либо `KoinTestRule`, либо явный `startKoin/stopKoin` для всего набора тестов; избегайте конфликтов.
+- **Переопределения**: для подмены зависимостей применяйте override-модули (`module(override = true)`, `loadKoinModules`/`unloadKoinModules`).
+- **Параметры**: используйте `parametersOf` для runtime-данных.
 - **Валидация**: автоматизируйте `checkModules` в CI.
-- **Delegates**: избегайте глобальных `by inject()` в тестируемых классах; предпочтительнее конструктор DI.
-
----
+- **Delegates**: избегайте глобальных `by inject()` в production-коде; предпочтительнее конструктор DI.
 
 ## Answer (EN)
 
-Testing Koin spans three goals: **validating the graph**, **overriding dependencies**, and **controlling lifecycle**. Koin ships helpers such as `checkModules`, `KoinTestRule`, `declare`, and `loadKoinModules` to keep tests isolated and deterministic.
+Testing Koin spans three goals: **validating the graph**, **overriding dependencies**, and **controlling lifecycle**. Koin ships helpers such as `checkModules`, `KoinTestRule`, `loadKoinModules` / `unloadKoinModules`, and module overrides to keep tests isolated and deterministic.
 
 ### 1. Validate modules with checkModules
 
@@ -193,6 +189,7 @@ class AppModulesTest {
         koinApplication {
             modules(listOf(networkModule, dataModule, domainModule, presentationModule))
         }.checkModules {
+            // ✅ Explicitly provide entry-points like Context when needed
             withInstance<Context>(mockk(relaxed = true))
             withInstance<SharedPreferences>(mockk())
         }
@@ -201,8 +198,8 @@ class AppModulesTest {
 ```
 
 - `koinApplication` builds an isolated container for the test.
-- `checkModules` spins the graph and ensures every dependency resolves.
-- `withInstance` injects runtime artifacts (like `Context`) the framework cannot instantiate.
+- `checkModules` resolves the graph and ensures every dependency can be created.
+- `withInstance` supplies runtime artifacts (like `Context`) that Koin cannot instantiate itself.
 
 ### 2. Unit tests with KoinTestRule
 
@@ -215,6 +212,7 @@ class UserRepositoryTest : KoinTest {
             module {
                 single<UserApi> { mockk(relaxed = true) }
                 single<UserDatabase> { mockk(relaxed = true) }
+                // Test the real implementation wired via Koin
                 single<UserRepository> { UserRepositoryImpl(get(), get()) }
             }
         )
@@ -224,7 +222,8 @@ class UserRepositoryTest : KoinTest {
 
     @Test
     fun `returns cached data on network failure`() = runTest {
-        coEvery { repository.getUser("42") } returns Result.success(User("42"))
+        // In real tests, mock UserApi/UserDatabase instead of the repository itself
+        coEvery { getKoin().get<UserApi>().getUser("42") } returns User("42")
 
         val result = repository.getUser("42")
 
@@ -234,36 +233,34 @@ class UserRepositoryTest : KoinTest {
 ```
 
 - `KoinTestRule` handles starting/stopping Koin around each test.
-- `inject()` gives lazy access to the dependency graph.
-- Combine with `runTest` and `coEvery` for coroutine-friendly assertions.
+- `inject()` gives lazy access to dependencies.
+- Use `runTest` and mock lower-level dependencies (e.g., via MockK `coEvery`) instead of mocking the class under test.
 
-### 3. Override definitions (`declare`, `loadKoinModules`)
+### 3. Override definitions with test modules
 
 ```kotlin
 class DashboardViewModelTest : KoinTest {
 
     private val fakeMetrics = FakeMetricsService()
-    private val overrideModule = module {
+    private val overrideModule = module(override = true) {
         single<MetricsService> { fakeMetrics }
+        single<UserRepository> { FakeUserRepository() }
     }
 
     @Before
     fun setup() {
+        // Load a test module that overrides production bindings
         loadKoinModules(overrideModule)
     }
 
     @After
     fun tearDown() {
+        // Remove test bindings; lifecycle should be controlled at suite level
         unloadKoinModules(overrideModule)
-        stopKoin()
     }
 
     @Test
     fun `emits analytics event on load`() = runTest {
-        declare {
-            single<UserRepository> { FakeUserRepository() }
-        }
-
         val viewModel: DashboardViewModel by inject()
 
         viewModel.load()
@@ -273,9 +270,9 @@ class DashboardViewModelTest : KoinTest {
 }
 ```
 
-- `loadKoinModules` loads additional test modules.
-- `declare` lets you override bindings on the fly.
-- Clean up with `stopKoin`/`unloadKoinModules` to avoid leakage between tests.
+- `loadKoinModules` loads additional test definitions.
+- Use `module(override = true)` (or the appropriate override mechanism for your Koin version) to replace production dependencies.
+- Avoid conflicting lifecycle control: if `KoinTestRule` or a global `startKoin` manages the container, don't call `stopKoin()` for individual tests unless you own that instance.
 
 ### 4. Instrumented tests with KoinTestRule
 
@@ -301,17 +298,16 @@ class SettingsFragmentTest : KoinTest {
 
 - Instrumented tests must supply `androidContext`.
 - Keep a dedicated `testingModule` with fakes/stubs.
-- The rule tears Koin down automatically.
+- `KoinTestRule` tears Koin down automatically.
 
 ### 5. Practices for stable tests
 
-- **Isolation**: start Koin with the smallest set of modules per test.
-- **Teardown**: always clear the container (`stopKoin`, `unloadKoinModules`).
+- **Isolation**: start Koin with the smallest set of modules per test or test suite.
+- **Explicit lifecycle**: choose either `KoinTestRule` or manual `startKoin/stopKoin` for the whole test run; avoid mixing patterns that fight each other.
+- **Overrides**: use override modules (`module(override = true)`, `loadKoinModules`/`unloadKoinModules`) to swap dependencies.
 - **Parameters**: leverage `parametersOf` for runtime inputs.
-- **Validation**: run `checkModules` in CI to catch missing bindings.
+- **Validation**: run `checkModules` in CI to catch missing bindings early.
 - **Delegates**: avoid global `by inject()` in production code; prefer constructor injection.
-
----
 
 ## Follow-ups
 - How does `checkModules` behave with dynamic feature modules?

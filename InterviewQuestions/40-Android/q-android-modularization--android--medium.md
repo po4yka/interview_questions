@@ -35,7 +35,7 @@ sources: []
 
 ## Ответ (RU)
 
-**Модуляризация Android** — разделение кодовой базы на слабо связанные, независимо разрабатываемые модули Gradle. Каждый модуль инкапсулирует определённую функциональность и собирается отдельно.
+**Модуляризация Android** — разделение кодовой базы на слабо связанные, независимо разрабатываемые модули Gradle. Каждый модуль инкапсулирует определённую функциональность и может собираться независимо от других.
 
 **Типы модулей:**
 - **App Module** — точка входа, координирует feature-модули
@@ -46,14 +46,14 @@ sources: []
 **Преимущества:**
 
 **1. Масштабируемость и изоляция**
-- Изменения в модуле не влияют на другие части
+- Изменения в модуле минимально влияют на другие части
 - Контроль видимости через `internal` скрывает детали реализации
 - Чёткие границы между слоями
 
 **2. Производительность сборки**
 - Gradle кеширует неизменённые модули
 - Параллельная компиляция
-- Инкрементальная сборка затрагивает только изменённый модуль
+- Инкрементальная сборка затрагивает в основном изменённый модуль
 
 **3. Переиспользование и тестирование**
 - Модули можно применять в других проектах
@@ -63,12 +63,12 @@ sources: []
 **Структура проекта:**
 ```text
 app/
-├── app/                  # Main module
-├── feature:news/         # News feature
-├── feature:profile/      # Profile feature
-├── core:data/           # Data layer
-├── core:network/        # Networking
-└── core:ui/             # Shared UI components
+├── app/                     # Основной application-модуль
+├── feature-news/            # News feature (модуль ":feature:news")
+├── feature-profile/         # Profile feature (модуль ":feature:profile")
+├── core-data/               # Data layer (модуль ":core:data")
+├── core-network/            # Networking (модуль ":core:network")
+└── core-ui/                 # Shared UI components (модуль ":core:ui")
 ```
 
 **Управление зависимостями:**
@@ -79,11 +79,11 @@ dependencies {
     implementation(project(":core:data"))
 }
 
-// feature:news/build.gradle
+// feature-news/build.gradle
 dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
-    // ✅ No direct dependency between features
+    // ✅ Нет прямой зависимости между feature-модулями
 }
 ```
 
@@ -91,36 +91,38 @@ dependencies {
 ```kotlin
 // core:data module
 internal class DatabaseHelper {
-    // ✅ Accessible only within this module
+    // ✅ Доступен только внутри этого модуля
 }
 
 class UserRepository {
-    // ✅ Public API for other modules
-    fun getUser(id: String): User
+    // ✅ Публичный API для других модулей
+    fun getUser(id: String): User {
+        // implementation
+    }
 }
 
 // feature:news module
 class NewsViewModel {
-    private val repo = UserRepository() // ✅ Can use
-    // ❌ DatabaseHelper not accessible
+    private val repo = UserRepository() // ✅ Можно использовать публичный API
+    // ❌ DatabaseHelper недоступен
 }
 ```
 
 **Типичные ошибки:**
 - **Циклические зависимости** — feature A → feature B → feature A
-- **Over-modularization** — слишком мелкие модули усложняют навигацию
-- **Неправильная иерархия** — feature модули зависят друг от друга напрямую
+- **Over-modularization** — слишком мелкие модули усложняют навигацию и сборку
+- **Неправильная иерархия** — feature-модули напрямую зависят друг от друга вместо зависимостей через core-модули
 
 **Best practices:**
 - Начинайте с app + core:data + core:ui
 - Один модуль = одна фича или слой архитектуры
-- Feature модули общаются через core:data, а не напрямую
+- Feature-модули общаются через core:data / core:ui / общие интерфейсы, а не напрямую
 - Используйте convention plugins для единообразия конфигурации
-- Применяйте Play Feature Delivery для больших приложений
+- Рассматривайте Play Feature Delivery и dynamic feature modules для крупных приложений с on-demand функциональностью
 
 ## Answer (EN)
 
-**Android Modularization** is organizing a codebase into loosely coupled, independently developable Gradle modules. Each module encapsulates specific functionality and builds separately.
+**Android Modularization** is organizing a codebase into loosely coupled, independently developable Gradle modules. Each module encapsulates specific functionality and can be built independently from others.
 
 **Module Types:**
 - **App Module** — entry point, coordinates feature modules
@@ -131,14 +133,14 @@ class NewsViewModel {
 **Benefits:**
 
 **1. Scalability and Isolation**
-- Changes in one module don't affect others
+- Changes in one module minimally affect others
 - Visibility control via `internal` hides implementation details
 - Clear boundaries between layers
 
 **2. Build Performance**
 - Gradle caches unchanged modules
 - Parallel compilation
-- Incremental builds affect only changed modules
+- Incremental builds mostly affect the changed module
 
 **3. Reusability and Testing**
 - Modules can be shared across projects
@@ -148,12 +150,12 @@ class NewsViewModel {
 **Project Structure:**
 ```text
 app/
-├── app/                  # Main module
-├── feature:news/         # News feature
-├── feature:profile/      # Profile feature
-├── core:data/           # Data layer
-├── core:network/        # Networking
-└── core:ui/             # Shared UI components
+├── app/                     # Main application module
+├── feature-news/            # News feature (module ":feature:news")
+├── feature-profile/         # Profile feature (module ":feature:profile")
+├── core-data/               # Data layer (module ":core:data")
+├── core-network/            # Networking (module ":core:network")
+└── core-ui/                 # Shared UI components (module ":core:ui")
 ```
 
 **Dependency Management:**
@@ -164,11 +166,11 @@ dependencies {
     implementation(project(":core:data"))
 }
 
-// feature:news/build.gradle
+// feature-news/build.gradle
 dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
-    // ✅ No direct dependency between features
+    // ✅ No direct dependency between feature modules
 }
 ```
 
@@ -181,27 +183,29 @@ internal class DatabaseHelper {
 
 class UserRepository {
     // ✅ Public API for other modules
-    fun getUser(id: String): User
+    fun getUser(id: String): User {
+        // implementation
+    }
 }
 
 // feature:news module
 class NewsViewModel {
-    private val repo = UserRepository() // ✅ Can use
+    private val repo = UserRepository() // ✅ Can use public API
     // ❌ DatabaseHelper not accessible
 }
 ```
 
 **Common Pitfalls:**
 - **Circular Dependencies** — feature A → feature B → feature A
-- **Over-modularization** — too many small modules complicate navigation
-- **Wrong Hierarchy** — feature modules depend on each other directly
+- **Over-modularization** — too many small modules complicate navigation and build
+- **Wrong Hierarchy** — feature modules depend directly on each other instead of through core modules
 
 **Best Practices:**
 - Start with app + core:data + core:ui
 - One module = one feature or architecture layer
-- Feature modules communicate through core:data, not directly
+- Feature modules communicate via core:data / core:ui / shared interfaces, not directly
 - Use convention plugins for consistent configuration
-- Apply Play Feature Delivery for large apps
+- Consider Play Feature Delivery and dynamic feature modules for large apps with on-demand functionality
 
 ## Follow-ups
 

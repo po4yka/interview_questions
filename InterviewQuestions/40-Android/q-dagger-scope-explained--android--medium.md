@@ -12,17 +12,18 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
+  - c-dagger
   - q-dagger-custom-scopes--android--hard
   - q-dagger-framework-overview--android--hard
   - q-dagger-main-elements--android--medium
 created: 2025-10-20
-updated: 2025-11-02
+updated: 2025-11-10
 tags: [android/di-hilt, android/lifecycle, dagger, difficulty/medium, hilt, lifecycle, scope]
 sources:
-  - https://dagger.dev/api/latest/dagger/Scope.html
+  - "https://dagger.dev/api/latest/dagger/Scope.html"
 ---
 
 # Вопрос (RU)
@@ -44,22 +45,25 @@ Scope привязывает зависимость к жизненному ци
 
 **Проверка на этапе компиляции**: Dagger проверяет, что scoped-зависимости используются только в компонентах с соответствующим scope. Нарушение правил иерархии вызывает ошибку компиляции.
 
-### Иерархия Hilt Scopes
+### Иерархия Hilt Scopes (упрощенно)
 
 ```kotlin
-@Singleton              // Application lifetime
-  └─ @ActivityRetainedScoped  // Survives Activity recreation
-      └─ @ActivityScoped      // Activity lifecycle
-          ├─ @FragmentScoped  // Fragment lifecycle
-          └─ @ViewScoped      // View lifecycle
-  └─ @ViewModelScoped         // ViewModel lifecycle
-  └─ @ServiceScoped           // Service lifecycle
+@Singleton                    // Application (SingletonComponent) lifetime
+  └─ @ActivityRetainedScoped  // ActivityRetainedComponent: переживает recreation Activity
+      ├─ @ActivityScoped      // ActivityComponent: жизненный цикл Activity
+      │   ├─ @FragmentScoped  // Fragment lifecycle
+      │   └─ @ViewScoped      // View lifecycle
+      └─ @ViewModelScoped     // ViewModelComponent: жизненный цикл ViewModel
+
+  └─ @ServiceScoped           // ServiceComponent: жизненный цикл Service
 ```
+
+(Диаграмма отражает основные отношения долгоживущих и краткоживущих скоупов, а не все технические детали реализации.)
 
 ### Типичные Кейсы
 
 ```kotlin
-// ✅ Singleton для глобальных сервисов
+// ✅ Singleton для глобальных сервисов (@Singleton в Hilt привязан к SingletonComponent)
 @Singleton
 class NetworkClient @Inject constructor()
 
@@ -70,7 +74,7 @@ class UserSessionManager @Inject constructor()
 // ✅ ViewModelScoped для зависимостей ViewModel
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val repository: ProfileRepository  // Unscoped — создается каждый раз
+    private val repository: ProfileRepository  // @ViewModelScoped — один экземпляр на ViewModel
 ) : ViewModel()
 
 @ViewModelScoped
@@ -81,10 +85,10 @@ class ProfileRepository @Inject constructor(
 
 ### Правила Использования
 
-**Scope Hierarchy Rule**: дочерний компонент может использовать зависимости из родительского scope, но не наоборот. Это предотвращает утечки памяти (короткоживущие зависимости не могут удерживать долгоживущие):
+**Scope Hierarchy Rule**: дочерний компонент может использовать зависимости из родительского scope, но не наоборот. Это предотвращает ситуации, когда долгоживущий объект удерживает ссылку на краткоживущую зависимость и мешает её сборке мусора.
 
 ```kotlin
-// ✅ Правильно: Activity использует Singleton
+// ✅ Правильно: Activity-скоуп использует Singleton
 @ActivityScoped
 class UserFlow @Inject constructor(
     private val database: Database  // @Singleton — OK
@@ -105,33 +109,36 @@ class GlobalService @Inject constructor(
 
 ## Answer (EN)
 
-**Scope** in Dagger is a mechanism for managing dependency lifetimes. A scope guarantees that only one instance of an object is created within a single component. This allows reusing expensive-to-create objects and controlling their lifecycle.
+**Scope** in Dagger is a mechanism for managing dependency lifetimes. A scope guarantees that only one instance of a given type is created within a single component. This allows reusing expensive-to-create objects and controlling their lifecycle.
 
 ### How it Works
 
-Scope binds a dependency to the lifecycle of a Dagger component:
+Scope binds a dependency to the lifecycle of a Dagger/Hilt component:
 - Component created → scoped dependency instantiated
-- Component alive → same instance reused (cached in component)
-- Component destroyed → dependency released (can be GC'd)
+- Component alive → same instance reused (cached in the component)
+- Component destroyed → dependency released (eligible for GC)
 
-**Compile-time validation**: Dagger verifies that scoped dependencies are only used in components with matching scopes. Hierarchy violations cause compilation errors.
+**Compile-time validation**: Dagger verifies that scoped dependencies are only used in components with compatible scopes. Hierarchy violations cause compilation errors.
 
-### Hilt Scope Hierarchy
+### Hilt Scope Hierarchy (simplified)
 
 ```kotlin
-@Singleton              // Application lifetime
-  └─ @ActivityRetainedScoped  // Survives Activity recreation
-      └─ @ActivityScoped      // Activity lifecycle
-          ├─ @FragmentScoped  // Fragment lifecycle
-          └─ @ViewScoped      // View lifecycle
-  └─ @ViewModelScoped         // ViewModel lifecycle
-  └─ @ServiceScoped           // Service lifecycle
+@Singleton                    // Application (SingletonComponent) lifetime
+  └─ @ActivityRetainedScoped  // ActivityRetainedComponent: survives Activity recreation
+      ├─ @ActivityScoped      // ActivityComponent: Activity lifecycle
+      │   ├─ @FragmentScoped  // Fragment lifecycle
+      │   └─ @ViewScoped      // View lifecycle
+      └─ @ViewModelScoped     // ViewModelComponent: ViewModel lifecycle
+
+  └─ @ServiceScoped           // ServiceComponent: Service lifecycle
 ```
+
+(The diagram shows the main long-lived vs short-lived relationships, not every implementation detail.)
 
 ### Typical Use Cases
 
 ```kotlin
-// ✅ Singleton for global services
+// ✅ Singleton for global services (@Singleton in Hilt is bound to SingletonComponent)
 @Singleton
 class NetworkClient @Inject constructor()
 
@@ -142,7 +149,7 @@ class UserSessionManager @Inject constructor()
 // ✅ ViewModelScoped for ViewModel dependencies
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    private val repository: ProfileRepository  // Unscoped — created each time
+    private val repository: ProfileRepository  // @ViewModelScoped — one instance per ViewModel
 ) : ViewModel()
 
 @ViewModelScoped
@@ -153,10 +160,10 @@ class ProfileRepository @Inject constructor(
 
 ### Usage Rules
 
-**Scope Hierarchy Rule**: child components can use dependencies from parent scopes, but not vice versa. This prevents memory leaks (short-lived dependencies cannot hold long-lived ones):
+**Scope Hierarchy Rule**: child components can use dependencies from parent scopes, but not vice versa. This prevents long-lived objects from depending on shorter-lived scoped objects and accidentally keeping them in memory.
 
 ```kotlin
-// ✅ Correct: Activity uses Singleton
+// ✅ Correct: Activity scope uses Singleton
 @ActivityScoped
 class UserFlow @Inject constructor(
     private val database: Database  // @Singleton — OK
@@ -173,7 +180,15 @@ class GlobalService @Inject constructor(
 - Heavy objects (DB, Network) → `@Singleton` — expensive to create, needed globally
 - UI data surviving rotation → `@ActivityRetainedScoped` or `@ViewModelScoped` — preserve state across recreation
 - UI adapters, presenters → `@ActivityScoped` or `@FragmentScoped` — tied to UI lifecycle
-- Lightweight utilities → unscoped (created each time) — no benefit caching cheap objects
+- Lightweight utilities → unscoped (created each time) — no benefit in caching
+
+## Дополнительные вопросы (RU)
+
+- Как создавать кастомные scope в Dagger?
+- Что произойдет, если внедрить зависимость с `@ActivityScoped` в компонент с `@Singleton`?
+- Как `@ActivityRetainedScoped` технически переживает смену конфигурации?
+- Каковы последствия для производительности при чрезмерном использовании зависимостей с `@Singleton`?
+- Как тестировать scoped-зависимости?
 
 ## Follow-ups
 
@@ -183,11 +198,33 @@ class GlobalService @Inject constructor(
 - What are the performance implications of using too many `@Singleton` dependencies?
 - How do you test scoped dependencies?
 
+## Ссылки (RU)
+
+- [[c-dependency-injection]] — основы DI и принципы
+- [Документация по Scope в Dagger](https://dagger.dev/api/latest/dagger/Scope.html)
+- [Иерархия компонентов Hilt](https://developer.android.com/training/dependency-injection/hilt-android#component-hierarchy)
+
 ## References
 
 - [[c-dependency-injection]] — DI fundamentals and principles
 - [Dagger Scope Documentation](https://dagger.dev/api/latest/dagger/Scope.html)
 - [Hilt Component Hierarchy](https://developer.android.com/training/dependency-injection/hilt-android#component-hierarchy)
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-dagger-inject-annotation--android--easy]] — понимание аннотации `@Inject`
+- Базовое понимание концепций dependency injection
+
+### Связанные (того же уровня)
+- [[q-dagger-main-elements--android--medium]] — основные концепции Dagger
+- Понимание жизненного цикла компонентов
+- Отличия Hilt от классического Dagger
+
+### Продвинутые (сложнее)
+- [[q-dagger-custom-scopes--android--hard]] — создание кастомных scope
+- [[q-dagger-framework-overview--android--hard]] — детальный обзор внутреннего устройства Dagger
+- Subcomponents и отношения scope
 
 ## Related Questions
 

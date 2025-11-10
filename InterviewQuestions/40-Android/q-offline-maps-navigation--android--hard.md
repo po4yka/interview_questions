@@ -18,18 +18,18 @@ language_tags:
 status: draft
 moc: moc-android
 related:
-- c-lifecycle
-- c-workmanager
+- c-background-tasks
 - q-design-uber-app--android--hard
 sources: []
 created: 2025-10-29
-updated: 2025-10-29
+updated: 2025-11-10
 tags:
 - difficulty/hard
 - android/files-media
 - android/location
 - android/service
 - topic/android
+
 ---
 
 # Вопрос (RU)
@@ -54,6 +54,25 @@ Build offline‑first maps & navigation. Requirements: no network for 24h, GPS d
 
 Офлайн карты и навигация требуют векторных тайлов, локального графа маршрутизации, обработки GPS и голосовых подсказок.
 
+### Краткая версия
+
+Используем векторные тайлы с офлайн‑кешем, локальный граф дорог для маршрутизации, энергоэффективное получение локации и голосовые подсказки. Проектируем систему так, чтобы она работала 24 часа без сети, поддерживала быстрый reroute и контролируемое потребление батареи.
+
+### Подробная версия
+
+### Требования
+
+- Функциональные:
+  - Полноценное отображение карт в офлайне для выбранных регионов.
+  - Пошаговая навигация с reroute <1.5 с без сети.
+  - Загрузка/обновление регионов через менеджер загрузок.
+  - Голосовые подсказки и понятный UI навигации.
+- Нефункциональные:
+  - Работа без сети минимум 24 часа.
+  - Потребление батареи <2%/ч при навигации.
+  - Устойчивость к потере GNSS, городским каньонам и туннелям.
+  - Наблюдаемость: метрики производительности, стабильности и точности.
+
 ### Архитектура
 
 Модули: maps-core, tiles-store, nav-engine, voice, download-manager, location-core, analytics, flags.
@@ -68,7 +87,7 @@ Fused provider где возможно; fallback на raw GNSS + sensor fusion. 
 
 ### Маршрутизация
 
-Локальный граф для основных дорог; серверная помощь при онлайне для трафика; reroute цель <1.5с через incremental Dijkstra/A\* на локальном графе. Голосовые подсказки планируются заранее по расстоянию; TTS через TextToSpeech или pre‑baked prompts.
+Локальный граф для основных дорог; серверная помощь при онлайне для трафика; reroute цель <1.5с через incremental Dijkstra/A* на локальном графе. Голосовые подсказки планируются заранее по расстоянию; TTS через TextToSpeech или pre‑baked prompts.
 
 ### Батарея
 
@@ -98,6 +117,25 @@ MVP (базовые тайлы + локальная маршрутизация) 
 
 Offline maps and navigation require vector tiles, local routing graph, GPS handling, and voice guidance.
 
+### Short Version
+
+Use vector tiles with an offline cache, an on-device road graph for routing, energy-efficient location, and voice guidance. Design for 24h offline operation, fast reroute, and controlled battery usage.
+
+### Detailed Version
+
+### Requirements
+
+- Functional:
+  - Full offline map display for selected regions.
+  - Turn-by-turn navigation with reroute <1.5s without network.
+  - Region download/update via download manager.
+  - Voice guidance and clear navigation UI.
+- Non-functional:
+  - At least 24h operation without network.
+  - Battery usage <2%/hr while navigating.
+  - Robustness to GNSS loss, urban canyons, and tunnels.
+  - Observability: performance, stability, and accuracy metrics.
+
 ### Architecture
 
 maps-core, tiles-store, nav-engine, voice, download-manager, location-core, analytics, flags.
@@ -112,11 +150,11 @@ Fused provider where possible; fallback to raw GNSS + sensor fusion. Sampling 1 
 
 ### Routing
 
-On‑device graph for primary roads; server‑assisted when online for traffic; reroute target <1.5s using incremental Dijkstra/A\* on local graph. Voice prompts scheduled ahead by distance; TTS via TextToSpeech or pre‑baked prompts.
+On-device graph for primary roads; server-assisted when online for traffic; reroute target <1.5s using incremental Dijkstra/A* on local graph. Voice prompts scheduled ahead by distance; TTS via TextToSpeech or pre-baked prompts.
 
 ### Battery
 
-Duty‑cycle GPS; significant‑motion to drop to low sampling; coalesce writes; foreground service with persistent notification.
+Duty-cycle GPS; significant-motion to drop to low sampling; coalesce writes; foreground service with persistent notification.
 
 ### Downloads
 
@@ -128,11 +166,11 @@ GPS accuracy hist, reroute latency, crash/ANR, battery/100km, tile cache hit%.
 
 ### Testing
 
-Simulated traces, tunnel/no‑GNSS, region switch, process‑death mid‑route.
+Simulated traces, tunnel/no-GNSS, region switch, process-death mid-route.
 
 ### Sequencing
 
-MVP (basic tiles + on‑device routing) → voice → reroute → server traffic assist → smart downloads.
+MVP (basic tiles + on-device routing) → voice → reroute → server traffic assist → smart downloads.
 
 ### Tradeoffs
 
@@ -140,33 +178,56 @@ Larger local graphs reduce reroute time but cost storage; tune by region popular
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать GPS drift в туннелях и городских каньонах?
+- Какую стратегию сжатия использовать, чтобы минимизировать размер тайлов без потери качества?
+- Как оптимизировать расход батареи при непрерывной навигации?
+- Как обрабатывать обновление карт во время активной навигационной сессии?
+
 ## Follow-ups
 
--   How to handle GPS drift in tunnels and urban canyons?
--   What compression strategy minimizes tile storage while preserving quality?
--   How to optimize battery for continuous navigation?
--   How to handle map updates with active navigation sessions?
+- How to handle GPS drift in tunnels and urban canyons?
+- What compression strategy minimizes tile storage while preserving quality?
+- How to optimize battery for continuous navigation?
+- How to handle map updates with active navigation sessions?
+
+## Ссылки (RU)
+
+- [[c-background-tasks]]
+- https://developer.android.com/training/location
 
 ## References
 
--   [[c-lifecycle]]
--   [[c-workmanager]]
-- [Location](https://developer.android.com/training/location)
--   [[ANDROID-SYSTEM-DESIGN-CHECKLIST]]
--   [[ANDROID-INTERVIEWER-GUIDE]]
+- [[c-background-tasks]]
+- https://developer.android.com/training/location
 
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+
+- [[q-design-uber-app--android--hard]]
+
+### Связанные (тот же уровень)
+
+- [[q-design-uber-app--android--hard]]
+- [[q-data-sync-unstable-network--android--hard]]
+
+### Продвинутые (сложнее)
+
+- Спроектируйте глобальную систему доставки тайлов на масштабе Google Maps
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 
--   [[q-design-uber-app--android--hard]]
+- [[q-design-uber-app--android--hard]]
 
 ### Related (Same Level)
 
--   [[q-design-uber-app--android--hard]]
--   [[q-data-sync-unstable-network--android--hard]]
+- [[q-design-uber-app--android--hard]]
+- [[q-data-sync-unstable-network--android--hard]]
 
 ### Advanced (Harder)
 
--   Design a global tile distribution system at Google Maps scale
+- Design a global tile distribution system at Google Maps scale

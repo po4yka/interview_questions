@@ -21,7 +21,7 @@ related:
 - q-database-encryption-android--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 tags:
 - android
 - android/permissions
@@ -43,53 +43,53 @@ tags:
 
 ## Ответ (RU)
 
-**Runtime разрешения** были введены в Android 6.0 (API 23) для предоставления пользователям контроля над конфиденциальными данными. Правильная обработка требует продуманного UX-потока с использованием современного API ActivityResultContracts.
+**Runtime-разрешения** были введены в Android 6.0 (API 23) для предоставления пользователям контроля над конфиденциальными данными. Правильная обработка требует продуманного UX-потока с использованием современного API ActivityResultContracts.
 
 ### Состояния Разрешений
 
 1. **Не запрошено**: разрешение никогда не запрашивалось
 2. **Предоставлено**: пользователь одобрил
 3. **Отклонено**: пользователь отказал (можно запросить снова)
-4. **Навсегда отклонено**: пользователь отметил "Больше не спрашивать"
+4. **Навсегда отклонено**: пользователь отметил "Больше не спрашивать" (или система больше не показывает диалог)
 
-### Реализация С ActivityResultContracts
+### Реализация с ActivityResultContracts
 
 ```kotlin
 class PermissionManager(private val activity: AppCompatActivity) {
 
     // ✅ Современный подход с ActivityResultContracts
-    private var permissionLauncher: ActivityResultLauncher<String>? = null
-
-    init {
-        permissionLauncher = activity.registerForActivityResult(
+    private val permissionLauncher: ActivityResultLauncher<String> =
+        activity.registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
+            // Обработайте результат: включите фичу или покажите сообщение/диалог
             handlePermissionResult(isGranted)
         }
-    }
 
     fun requestPermission(permission: String, rationale: String?) {
         when (getPermissionState(permission)) {
-            PermissionState.Granted -> proceedWithFeature()
+            PermissionState.Granted -> {
+                proceedWithFeature()
+            }
 
             PermissionState.Denied -> {
                 // ✅ Показать обоснование перед повторным запросом
                 if (rationale != null) {
                     showRationaleDialog(rationale) {
-                        permissionLauncher?.launch(permission)
+                        permissionLauncher.launch(permission)
                     }
                 } else {
-                    permissionLauncher?.launch(permission)
+                    permissionLauncher.launch(permission)
                 }
             }
 
             PermissionState.PermanentlyDenied -> {
-                // ✅ Направить в настройки
-                showSettingsDialog(permission)
+                // ✅ Направить в настройки (без повторного системного диалога)
+                showSettingsDialog()
             }
 
             PermissionState.NotRequested -> {
-                permissionLauncher?.launch(permission)
+                permissionLauncher.launch(permission)
             }
         }
     }
@@ -100,14 +100,20 @@ class PermissionManager(private val activity: AppCompatActivity) {
                 PackageManager.PERMISSION_GRANTED -> PermissionState.Granted
 
             activity.shouldShowRequestPermissionRationale(permission) ->
+                // Был отказ без "Больше не спрашивать", можно показать rationale
                 PermissionState.Denied
 
-            wasPermissionRequested(permission) ->
+            // Для определения "навсегда отклонено" требуется помнить, что мы уже запрашивали
+            wasPermissionRequested(permission) &&
+                !activity.shouldShowRequestPermissionRationale(permission) ->
                 PermissionState.PermanentlyDenied
 
             else -> PermissionState.NotRequested
         }
     }
+
+    // Реализации handlePermissionResult / proceedWithFeature / showRationaleDialog /
+    // showSettingsDialog / wasPermissionRequested опущены для краткости.
 }
 ```
 
@@ -130,20 +136,25 @@ val locationLauncher = registerForActivityResult(
 }
 
 // ❌ НЕПРАВИЛЬНО: запрос всех разрешений при запуске приложения
-override fun onCreate() {
-    requestAllPermissions()
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    requestAllPermissions() // анти-паттерн
 }
 
 // ✅ ПРАВИЛЬНО: запрос в момент использования функции
 fun startLocationTracking() {
-    locationLauncher.launch(arrayOf(
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    ))
+    locationLauncher.launch(
+        arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+    )
 }
 ```
 
 ### Jetpack Compose Интеграция
+
+(пример использует библиотеку accompanist-permissions, `rememberPermissionState` и `ExperimentalPermissionsApi` не входят в core Compose)
 
 ```kotlin
 @OptIn(ExperimentalPermissionsApi::class)
@@ -166,7 +177,7 @@ fun CameraPermissionScreen() {
         }
 
         else -> {
-            // ✅ Первый запрос
+            // ✅ Первый запрос или постоянный отказ
             Button(onClick = { cameraState.launchPermissionRequest() }) {
                 Text("Разрешить доступ к камере")
             }
@@ -177,17 +188,18 @@ fun CameraPermissionScreen() {
 
 ### Best Practices
 
-1. **Запрашивайте в момент использования** — не при запуске приложения
-2. **Объясняйте перед запросом** — покажите, зачем нужно разрешение
-3. **Обрабатывайте постоянный отказ** — направляйте в Settings
-4. **Запрашивайте минимум** — только необходимые разрешения
-5. **Тестируйте все состояния** — granted, denied, permanently denied
+1. **Запрашивайте в момент использования** — не при запуске приложения.
+2. **Объясняйте перед запросом** — покажите, зачем нужно разрешение.
+3. **Обрабатывайте постоянный отказ** — направляйте в Settings, не зацикливайте запросы.
+4. **Запрашивайте минимум** — только необходимые разрешения и только связанные группы.
+5. **Тестируйте все состояния** — granted, denied, permanently denied (включая конфигурации "Don't ask again").
 
 ### Типичные Ошибки
 
 **❌ Запрос при старте приложения:**
 ```kotlin
-override fun onCreate() {
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
     requestPermissions(arrayOf(CAMERA, LOCATION, CONTACTS))
 }
 ```
@@ -201,7 +213,7 @@ fun openCamera() {
 
 **❌ Игнорирование постоянного отказа:**
 ```kotlin
-// Продолжаем спрашивать, хотя пользователь отказал навсегда
+// Продолжаем вызывать системный диалог, хотя пользователь отключил "спрашивать" (Don't ask again)
 ```
 
 **✅ Направление в настройки:**
@@ -219,10 +231,10 @@ if (isPermanentlyDenied) {
 
 ### Permission States
 
-1. **Not Requested**: permission never asked
-2. **Granted**: user approved
-3. **Denied**: user rejected (can ask again)
-4. **Permanently Denied**: user checked "Don't ask again"
+1. **Not Requested**: permission never asked.
+2. **Granted**: user approved.
+3. **Denied**: user rejected (can ask again).
+4. **Permanently Denied**: user checked "Don't ask again" (or the system no longer shows the dialog).
 
 ### Implementation with ActivityResultContracts
 
@@ -230,38 +242,38 @@ if (isPermanentlyDenied) {
 class PermissionManager(private val activity: AppCompatActivity) {
 
     // ✅ Modern approach with ActivityResultContracts
-    private var permissionLauncher: ActivityResultLauncher<String>? = null
-
-    init {
-        permissionLauncher = activity.registerForActivityResult(
+    private val permissionLauncher: ActivityResultLauncher<String> =
+        activity.registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
+            // Handle result: enable feature or show message/dialog
             handlePermissionResult(isGranted)
         }
-    }
 
     fun requestPermission(permission: String, rationale: String?) {
         when (getPermissionState(permission)) {
-            PermissionState.Granted -> proceedWithFeature()
+            PermissionState.Granted -> {
+                proceedWithFeature()
+            }
 
             PermissionState.Denied -> {
                 // ✅ Show rationale before re-requesting
                 if (rationale != null) {
                     showRationaleDialog(rationale) {
-                        permissionLauncher?.launch(permission)
+                        permissionLauncher.launch(permission)
                     }
                 } else {
-                    permissionLauncher?.launch(permission)
+                    permissionLauncher.launch(permission)
                 }
             }
 
             PermissionState.PermanentlyDenied -> {
-                // ✅ Direct to settings
-                showSettingsDialog(permission)
+                // ✅ Direct to settings (no further system dialog)
+                showSettingsDialog()
             }
 
             PermissionState.NotRequested -> {
-                permissionLauncher?.launch(permission)
+                permissionLauncher.launch(permission)
             }
         }
     }
@@ -272,14 +284,20 @@ class PermissionManager(private val activity: AppCompatActivity) {
                 PackageManager.PERMISSION_GRANTED -> PermissionState.Granted
 
             activity.shouldShowRequestPermissionRationale(permission) ->
+                // Previously denied without "Don't ask again".
                 PermissionState.Denied
 
-            wasPermissionRequested(permission) ->
+            // To detect "permanently denied" you must remember that it was requested before.
+            wasPermissionRequested(permission) &&
+                !activity.shouldShowRequestPermissionRationale(permission) ->
                 PermissionState.PermanentlyDenied
 
             else -> PermissionState.NotRequested
         }
     }
+
+    // Implementations of handlePermissionResult / proceedWithFeature /
+    // showRationaleDialog / showSettingsDialog / wasPermissionRequested are omitted for brevity.
 }
 ```
 
@@ -302,20 +320,25 @@ val locationLauncher = registerForActivityResult(
 }
 
 // ❌ WRONG: request all permissions on app launch
-override fun onCreate() {
-    requestAllPermissions()
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    requestAllPermissions() // anti-pattern
 }
 
 // ✅ CORRECT: request at point of use
 fun startLocationTracking() {
-    locationLauncher.launch(arrayOf(
-        Manifest.permission.ACCESS_FINE_LOCATION,
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    ))
+    locationLauncher.launch(
+        arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+    )
 }
 ```
 
 ### Jetpack Compose Integration
+
+(This example uses the accompanist-permissions library; `rememberPermissionState` and `ExperimentalPermissionsApi` are not part of core Compose.)
 
 ```kotlin
 @OptIn(ExperimentalPermissionsApi::class)
@@ -338,7 +361,7 @@ fun CameraPermissionScreen() {
         }
 
         else -> {
-            // ✅ First request
+            // ✅ First request or permanently denied
             Button(onClick = { cameraState.launchPermissionRequest() }) {
                 Text("Allow Camera Access")
             }
@@ -349,17 +372,18 @@ fun CameraPermissionScreen() {
 
 ### Best Practices
 
-1. **Request at point of use** — not on app launch
-2. **Explain before requesting** — show why permission is needed
-3. **Handle permanent denial** — direct users to Settings
-4. **Request minimum** — only necessary permissions
-5. **Test all states** — granted, denied, permanently denied
+1. **Request at point of use** — not on app launch.
+2. **Explain before requesting** — make it clear why the permission is needed.
+3. **Handle permanent denial** — direct users to Settings instead of looping requests.
+4. **Request minimum** — only necessary and logically related permissions.
+5. **Test all states** — granted, denied, permanently denied (including "Don't ask again").
 
 ### Common Mistakes
 
 **❌ Requesting on app start:**
 ```kotlin
-override fun onCreate() {
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
     requestPermissions(arrayOf(CAMERA, LOCATION, CONTACTS))
 }
 ```
@@ -373,7 +397,7 @@ fun openCamera() {
 
 **❌ Ignoring permanent denial:**
 ```kotlin
-// Keep asking even though user permanently denied
+// Keep trying to show system dialog even when user selected "Don't ask again"
 ```
 
 **✅ Directing to settings:**
@@ -385,6 +409,14 @@ if (isPermanentlyDenied) {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как по-разному обрабатывать фоновые разрешения на локацию по сравнению с foreground?
+- Как строить стратегию запроса разрешения на уведомления в Android 13+?
+- Как изящно деградировать функциональность при отказе в разрешениях?
+- Какие метрики и события аналитики отслеживать для конверсии по разрешениям?
+- Как тестировать permission-флоу в инструментальных тестах?
+
 ## Follow-ups
 
 - How to handle background location permissions separately from foreground?
@@ -393,18 +425,47 @@ if (isPermanentlyDenied) {
 - What analytics should be tracked for permission conversion rates?
 - How to test permission flows in instrumented tests?
 
+## Ссылки (RU)
+
+- https://developer.android.com/training/permissions/requesting
+- https://developer.android.com/guide/topics/permissions/overview
+- https://developer.android.com/reference/androidx/activity/result/contract/ActivityResultContracts
+
 ## References
 
 - https://developer.android.com/training/permissions/requesting
 - https://developer.android.com/guide/topics/permissions/overview
 - https://developer.android.com/reference/androidx/activity/result/contract/ActivityResultContracts
 
+## Связанные вопросы (RU)
+
+### Предпосылки / Концепции
+
+- [[c-permissions]]
+
+### Предпосылки (проще)
+
+- Понимание модели разрешений Android и объявлений в манифесте
+- Базовые знания системы runtime-разрешений Android
+
+### Связанные (тот же уровень)
+
+- [[q-database-encryption-android--android--medium]] - Практики безопасности
+- [[q-android-security-practices-checklist--android--medium]] - Чек-лист по безопасности
+- Паттерны использования ActivityResult API
+- Лучшие практики согласия пользователя и приватности
+
+### Продвинутое (сложнее)
+
+- [[q-clean-architecture-android--android--hard]] - Архитектурные паттерны
+- Реализация оберток над разрешениями в мультимодульной архитектуре
+- Продвинутые паттерны безопасности при доступе к чувствительным данным
+
 ## Related Questions
 
 ### Prerequisites / Concepts
 
 - [[c-permissions]]
-
 
 ### Prerequisites (Easier)
 

@@ -45,14 +45,14 @@ tags:
 ## Ответ (RU)
 
 ### Цели CI/CD Для Мультимодульных Проектов
-- **Скорость**: PR-проверки < 10 минут независимо от размера проекта
+- **Скорость**: PR-проверки < 10 минут независимо от размера проекта (как ориентир, а не жёсткая гарантия)
 - **Эффективность**: сборка и тестирование только изменённых модулей и их зависимостей
 - **Детерминированность**: стабильные результаты, воспроизводимые сборки
-- **Масштабируемость**: время сборки растёт линейно (не квадратично) с ростом числа модулей
+- **Масштабируемость**: время сборки растёт примерно линейно (а не квадратично) с ростом числа модулей при правильной конфигурации
 
 ### Ключевые Стратегии
 
-#### 1. Affected Module Detection (определение Затронутых модулей)
+#### 1. Affected Module Detection (определение затронутых модулей)
 Вычисление минимального набора модулей для проверки на основе изменённых файлов:
 
 ```bash
@@ -64,7 +64,7 @@ tags:
 # ✅ Если изменён :core:ui → собрать :core:ui, :feature:home, :feature:profile, :app
 CHANGED=$(git diff --name-only origin/main...HEAD)
 AFFECTED=$(scripts/affected-modules.sh "$CHANGED")
-# :core:ui :feature:home :feature:profile :app
+# Пример вывода: :core:ui :feature:home :feature:profile :app
 ```
 
 **Алгоритм**:
@@ -73,10 +73,10 @@ AFFECTED=$(scripts/affected-modules.sh "$CHANGED")
 3. Дедупликация и расчёт минимального множества
 
 #### 2. Gradle Task Filtering (фильтрация задач)
-Запуск только необходимых Gradle-задач:
+Запуск только необходимых Gradle-задач для затронутых модулей:
 
 ```bash
-# ✅ Запуск только для затронутых модулей
+# ✅ Запуск только для затронутых модулей (пример с явным перечислением)
 ./gradlew \
   :core:ui:assemble :core:ui:testDebugUnitTest \
   :feature:home:assemble :feature:home:testDebugUnitTest \
@@ -86,18 +86,21 @@ AFFECTED=$(scripts/affected-modules.sh "$CHANGED")
 ```
 
 ```bash
-# ❌ Избегать полной сборки
+# ❌ Избегать полной сборки без необходимости
 ./gradlew assembleDebug testDebugUnitTest  # медленно
 ```
 
 #### 3. Кэширование (трёхуровневое)
 - **Configuration Cache**: кэш графа задач Gradle (`.gradle/configuration-cache/`)
-- **Build Cache**: remote/local кэш артефактов задач (`buildCache { remote { ... } }`)
-- **Dependency Cache**: кэш зависимостей CI (Maven/Gradle, actions/cache)
+- **Build Cache**: локальный (по умолчанию) и/или удалённый кэш артефактов задач (`buildCache { local { ... } remote { ... } }`)
+- **Dependency Cache**: кэш Maven/Gradle-репозиториев на уровне CI (например, `actions/cache` или аналог)
 
 ```kotlin
 // build.gradle.kts (root)
 buildCache {
+    local {
+        isEnabled = true
+    }
     remote<HttpBuildCache> {
         url = uri("https://cache.example.com")
         isPush = System.getenv("CI_BUILD_CACHE_PUSH") == "true"
@@ -109,12 +112,12 @@ buildCache {
 }
 ```
 
-#### 4. Параллелизм И Шардирование
+#### 4. Параллелизм и шардирование
 - **Matrix builds**: группировка модулей в независимые задачи CI (`:feature:*` → один job, `:core:*` → другой)
-- **Test sharding**: распределение тестов по нескольким runner'ам (Gradle Enterprise Test Distribution)
+- **Test sharding**: распределение тестов по нескольким runner'ам (например, Gradle Enterprise Test Distribution)
 - **Parallel execution**: `org.gradle.parallel=true`, `--max-workers=<N>`
 
-### Gradle-специфичные Техники
+### Gradle-специфичные техники
 
 #### Convention Plugins (плагины конвенций)
 Унификация конфигурации модулей через `build-logic/`:
@@ -141,14 +144,14 @@ dependencies {
 **Преимущества**: изменение конвенции → автоматическое применение ко всем модулям
 
 #### Composite/Included Builds
-Изоляция `build-logic/` для быстрого кэширования:
+Изоляция `build-logic/` для быстрого кэширования и независимой сборки:
 
 ```kotlin
 // settings.gradle.kts
 includeBuild("build-logic")
 ```
 
-### Стабильность И Борьба С Flaky-тестами
+### Стабильность и борьба с flaky-тестами
 - **Quarantine**: изоляция нестабильных тестов по модулям (аннотации `@Ignore`, отдельные test suites)
 - **Retry mechanism**: повтор только упавших тестов (Gradle Test Retry Plugin)
 - **Hermetic tests**: без сети, фиксированные Java toolchains, детерминированные seed'ы
@@ -162,28 +165,32 @@ tasks.withType<Test> {
 }
 ```
 
-### Пример Минимального CI-скрипта (GitHub Actions)
+### Пример минимального CI-скрипта (GitHub Actions)
 
 ```yaml
 # ✅ Affected modules + caching
 - name: Detect affected modules
   run: |
     CHANGED=$(git diff --name-only origin/main...HEAD)
-    echo "AFFECTED=$(./scripts/affected-modules.sh "$CHANGED")" >> $GITHUB_ENV
+    AFFECTED=$(./scripts/affected-modules.sh "$CHANGED")
+    echo "AFFECTED=$AFFECTED" >> $GITHUB_ENV
 
 - name: Build and test
   run: |
-    ./gradlew ${{ env.AFFECTED }}:assemble ${{ env.AFFECTED }}:test \
-      --configuration-cache --build-cache --parallel
+    TASKS=""
+    for module in $AFFECTED; do
+      TASKS+="$module:assemble $module:test "
+    done
+    ./gradlew $TASKS --configuration-cache --build-cache --parallel
 ```
 
 ## Answer (EN)
 
 ### CI/CD Goals for Multi-Module Projects
-- **Speed**: PR checks < 10 minutes regardless of project size
+- **Speed**: PR checks < 10 minutes regardless of project size (as a target, not a strict guarantee)
 - **Efficiency**: build and test only changed modules and their dependencies
 - **Determinism**: stable results, reproducible builds
-- **Scalability**: build time grows linearly (not quadratically) with module count
+- **Scalability**: build time grows approximately linearly (not quadratically) with module count when configured properly
 
 ### Key Strategies
 
@@ -199,7 +206,7 @@ Computing minimal set of modules to verify based on changed files:
 # ✅ If :core:ui changed → build :core:ui, :feature:home, :feature:profile, :app
 CHANGED=$(git diff --name-only origin/main...HEAD)
 AFFECTED=$(scripts/affected-modules.sh "$CHANGED")
-# :core:ui :feature:home :feature:profile :app
+# Example output: :core:ui :feature:home :feature:profile :app
 ```
 
 **Algorithm**:
@@ -208,10 +215,10 @@ AFFECTED=$(scripts/affected-modules.sh "$CHANGED")
 3. Deduplicate and compute minimal set
 
 #### 2. Gradle Task Filtering
-Run only necessary Gradle tasks:
+Run only necessary Gradle tasks for affected modules:
 
 ```bash
-# ✅ Run only for affected modules
+# ✅ Run only for affected modules (explicit example)
 ./gradlew \
   :core:ui:assemble :core:ui:testDebugUnitTest \
   :feature:home:assemble :feature:home:testDebugUnitTest \
@@ -221,18 +228,21 @@ Run only necessary Gradle tasks:
 ```
 
 ```bash
-# ❌ Avoid full builds
+# ❌ Avoid full builds when not needed
 ./gradlew assembleDebug testDebugUnitTest  # slow
 ```
 
 #### 3. Three-Level Caching
-- **Configuration Cache**: Gradle task graph cache (`.gradle/configuration-cache/`)
-- **Build Cache**: remote/local task artifact cache (`buildCache { remote { ... } }`)
-- **Dependency Cache**: CI dependency cache (Maven/Gradle, actions/cache)
+- **Configuration Cache**: Gradle configuration phase cache (`.gradle/configuration-cache/`)
+- **Build Cache**: local (by default) and/or remote cache of task outputs (`buildCache { local { ... } remote { ... } }`)
+- **Dependency Cache**: CI-level cache of Maven/Gradle dependencies (e.g. `actions/cache` or similar)
 
 ```kotlin
 // build.gradle.kts (root)
 buildCache {
+    local {
+        isEnabled = true
+    }
     remote<HttpBuildCache> {
         url = uri("https://cache.example.com")
         isPush = System.getenv("CI_BUILD_CACHE_PUSH") == "true"
@@ -246,7 +256,7 @@ buildCache {
 
 #### 4. Parallelism and Sharding
 - **Matrix builds**: group modules into independent CI jobs (`:feature:*` → one job, `:core:*` → another)
-- **Test sharding**: distribute tests across multiple runners (Gradle Enterprise Test Distribution)
+- **Test sharding**: distribute tests across multiple runners (e.g. Gradle Enterprise Test Distribution)
 - **Parallel execution**: `org.gradle.parallel=true`, `--max-workers=<N>`
 
 ### Gradle-Specific Techniques
@@ -276,7 +286,7 @@ dependencies {
 **Benefits**: change convention → automatically applies to all modules
 
 #### Composite/Included Builds
-Isolate `build-logic/` for fast caching:
+Isolate `build-logic` as an included build for faster caching and independent compilation:
 
 ```kotlin
 // settings.gradle.kts
@@ -304,12 +314,16 @@ tasks.withType<Test> {
 - name: Detect affected modules
   run: |
     CHANGED=$(git diff --name-only origin/main...HEAD)
-    echo "AFFECTED=$(./scripts/affected-modules.sh "$CHANGED")" >> $GITHUB_ENV
+    AFFECTED=$(./scripts/affected-modules.sh "$CHANGED")
+    echo "AFFECTED=$AFFECTED" >> $GITHUB_ENV
 
 - name: Build and test
   run: |
-    ./gradlew ${{ env.AFFECTED }}:assemble ${{ env.AFFECTED }}:test \
-      --configuration-cache --build-cache --parallel
+    TASKS=""
+    for module in $AFFECTED; do
+      TASKS+="$module:assemble $module:test "
+    done
+    ./gradlew $TASKS --configuration-cache --build-cache --parallel
 ```
 
 ---

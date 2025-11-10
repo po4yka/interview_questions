@@ -26,7 +26,7 @@ related:
 - q-how-does-jetpackcompose-work--android--medium
 sources: []
 created: 2025-10-15
-updated: 2025-10-29
+updated: 2025-11-10
 tags:
 - android
 - android/ui-compose
@@ -48,7 +48,7 @@ tags:
 
 ## Ответ (RU)
 
-Повторный вызов происходит из механизма **recomposition**. Compose автоматически вызывает функцию снова, если состояние, связанное с этой функцией, изменилось.
+Повторный вызов происходит из механизма **recomposition**. Compose автоматически вызывает функцию снова, когда отслеживаемое ею состояние изменилось.
 
 ### Как Работает Recomposition
 
@@ -59,7 +59,7 @@ fun Counter() {
     var count by remember { mutableStateOf(0) }
 
     Column {
-        Text("Count: $count") // Перерисовывается при изменении count
+        Text("Count: $count") // Перечитывается при изменении count
 
         Button(onClick = { count++ }) {
             Text("Increment")
@@ -69,9 +69,9 @@ fun Counter() {
 ```
 
 **Процесс**:
-1. Compose отслеживает чтение `count`
-2. При изменении помечает `Counter()` как недействительный
-3. Перевызывает `Counter()` для обновления UI
+1. Compose отслеживает чтения `count` в composable-функции.
+2. При изменении состояния помечает соответствующую область композиции как недействительную.
+3. Запускает recomposition и повторно вызывает нужные composable-функции для обновления UI.
 
 ### Источники Recomposition
 
@@ -88,7 +88,7 @@ fun RecompositionSources(viewModel: MyViewModel) {
     val data by viewModel.liveData.observeAsState()
 
     Column {
-        Text(text)           // ✅ Перерисуется при изменении text
+        Text(text)            // ✅ Перерисуется при изменении text
         Text(uiState.message) // ✅ Перерисуется при изменении uiState
         Text(data ?: "")      // ✅ Перерисуется при изменении data
     }
@@ -99,35 +99,39 @@ fun RecompositionSources(viewModel: MyViewModel) {
 - Изменения `mutableStateOf`
 - Обновления `Flow/StateFlow` через `collectAsState()`
 - Обновления `LiveData` через `observeAsState()`
-- Recomposition родительского composable
+- Recomposition родительского composable (ребенок будет пересоздан в рамках его области)
 
-### Оптимизация С derivedStateOf
+### Оптимизация С `derivedStateOf`
 
 ```kotlin
 @Composable
 fun OptimizedRecomposition() {
     var count by remember { mutableStateOf(0) }
 
-    // ❌ Без derivedStateOf - лишние recomposition
+    // Прямой расчет: выполняется на каждый вызов composable
     val isEvenBad = count % 2 == 0
 
-    // ✅ С derivedStateOf - перерисовка только при изменении результата
+    // ✅ С derivedStateOf: значение пересчитывается при изменении count,
+    // и recomposition зависимых мест будет запущена только если результат действительно изменился
     val isEven by remember {
         derivedStateOf { count % 2 == 0 }
     }
 
     Column {
-        Text("Count: $count")    // Recomposition на каждое изменение
-        Text("Even: $isEven")    // Recomposition только при 0→1→2→3...
+        Text("Count: $count")    // Recomposition при каждом изменении count
+        Text("Even (bad): $isEvenBad")
+        Text("Even (good): $isEven")
     }
 }
 ```
+
+Важно: `derivedStateOf` не отменяет recomposition, вызванную изменением `count`. Оно помогает избежать лишних уведомлений и перерасчетов для производных значений, когда сам результат не меняется (по структурному равенству), и тем самым может сократить количество затронутых composable-элементов.
 
 ---
 
 ## Answer (EN)
 
-The repeated call comes from the **recomposition** mechanism. Compose automatically calls the function again if the state associated with this function has changed.
+The repeated call comes from the **recomposition** mechanism. Compose automatically calls the function again when the state it reads and depends on has changed.
 
 ### How Recomposition Works
 
@@ -138,7 +142,7 @@ fun Counter() {
     var count by remember { mutableStateOf(0) }
 
     Column {
-        Text("Count: $count") // Redrawn when count changes
+        Text("Count: $count") // Re-read when count changes
 
         Button(onClick = { count++ }) {
             Text("Increment")
@@ -148,16 +152,16 @@ fun Counter() {
 ```
 
 **Process**:
-1. Compose tracks reads of `count`
-2. When changed, marks `Counter()` as invalid
-3. Re-executes `Counter()` to update UI
+1. Compose tracks reads of `count` inside the composable.
+2. When the state changes, it marks the corresponding composition scope as invalid.
+3. It runs recomposition and re-executes the affected composables to update the UI.
 
 ### Recomposition Sources
 
 ```kotlin
 @Composable
 fun RecompositionSources(viewModel: MyViewModel) {
-    // 1. State - local state
+    // 1. Local state
     var text by remember { mutableStateOf("") }
 
     // 2. Flow/StateFlow from ViewModel
@@ -167,7 +171,7 @@ fun RecompositionSources(viewModel: MyViewModel) {
     val data by viewModel.liveData.observeAsState()
 
     Column {
-        Text(text)           // ✅ Recomposes when text changes
+        Text(text)            // ✅ Recomposes when text changes
         Text(uiState.message) // ✅ Recomposes when uiState changes
         Text(data ?: "")      // ✅ Recomposes when data changes
     }
@@ -178,31 +182,43 @@ fun RecompositionSources(viewModel: MyViewModel) {
 - Changes to `mutableStateOf`
 - Updates to `Flow/StateFlow` via `collectAsState()`
 - Updates to `LiveData` via `observeAsState()`
-- Parent composable recomposition
+- Parent composable recomposition (children in its scope will be recomposed as needed)
 
-### Optimizing with derivedStateOf
+### Optimizing with `derivedStateOf`
 
 ```kotlin
 @Composable
 fun OptimizedRecomposition() {
     var count by remember { mutableStateOf(0) }
 
-    // ❌ Without derivedStateOf - unnecessary recomposition
+    // Direct computation: executed on every composable invocation
     val isEvenBad = count % 2 == 0
 
-    // ✅ With derivedStateOf - recomposition only when result changes
+    // ✅ With derivedStateOf: the value is recomputed when count changes,
+    // and dependents are only notified if the result actually changes
     val isEven by remember {
         derivedStateOf { count % 2 == 0 }
     }
 
     Column {
-        Text("Count: $count")    // Recomposition on every change
-        Text("Even: $isEven")    // Recomposition only at 0→1→2→3...
+        Text("Count: $count")      // Recomposition on each count change
+        Text("Even (bad): $isEvenBad")
+        Text("Even (good): $isEven")
     }
 }
 ```
 
+Important: `derivedStateOf` does not prevent recomposition triggered by changes of `count` itself. It helps avoid extra invalidations and recompositions for dependents when the derived value remains equal (by structural equality), which can reduce the number of affected composables.
+
 ---
+
+## Дополнительные вопросы (RU)
+
+1. Как Compose определяет, какие конкретные composable-функции нужно перерассчитать (механизм "умных" областей recomposition)?
+2. В чем разница между `remember` и `rememberSaveable` с точки зрения recomposition?
+3. Как избежать лишних recomposition при передаче лямбда-выражений как параметров?
+4. Какую роль играет структурное равенство при пропуске recomposition?
+5. Как внутренне работают наблюдатели snapshot-состояния для отслеживания изменений?
 
 ## Follow-ups
 
@@ -211,6 +227,12 @@ fun OptimizedRecomposition() {
 3. How can you prevent unnecessary recompositions when passing lambdas as parameters?
 4. What role does structural equality play in skipping recomposition?
 5. How do snapshot state observers work internally to detect state changes?
+
+## Источники (RU)
+
+- https://developer.android.com/develop/ui/compose/lifecycle - Жизненный цикл Compose
+- https://developer.android.com/develop/ui/compose/performance - Рекомендации по производительности
+- https://developer.android.com/develop/ui/compose/state - Состояние и recomposition
 
 ## References
 
@@ -225,7 +247,6 @@ fun OptimizedRecomposition() {
 - [[c-compose-state]]
 - [[c-jetpack-compose]]
 - [[c-viewmodel]]
-
 
 ### Prerequisites (Easier)
 - [[q-what-are-the-most-important-components-of-compose--android--medium]] - Compose basics

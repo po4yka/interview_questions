@@ -10,39 +10,41 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-viewmodel, q-what-is-viewmodel--android--medium]
+related: [c-mvvm-pattern, c-viewmodel, q-what-is-viewmodel--android--medium]
 created: 2025-10-15
-updated: 2025-01-27
+updated: 2025-11-10
 sources: []
 tags: [android/architecture-mvvm, android/coroutines, android/lifecycle, architecture-patterns, difficulty/medium, mvvm, viewmodel]
+
 ---
 
 # Вопрос (RU)
 
-> Что такое архитектурный паттерн MVVM (Model-View-ViewModel)? Объясните его компоненты и преимущества.
+> Что такое архитектурный паттерн MVVM (Model-`View`-`ViewModel`)? Объясните его компоненты и преимущества.
 
 # Question (EN)
 
-> What is the MVVM (Model-View-ViewModel) architectural pattern? Explain its components and advantages.
+> What is the MVVM (Model-`View`-`ViewModel`) architectural pattern? Explain its components and advantages.
 
 ---
 
 ## Ответ (RU)
 
-**MVVM (Model-View-ViewModel)** — архитектурный паттерн для разделения UI и бизнес-логики через реактивное связывание данных.
+**MVVM (Model-`View`-`ViewModel`)** — архитектурный паттерн для разделения UI и бизнес-логики через наблюдаемые источники данных и односторонний поток данных (unidirectional data flow).
 
 ### Компоненты
 
-**Model** — источник данных (Repository, Use Cases, domain logic). Независим от UI.
+**Model** — источник и логика данных (Repository, Use Cases, domain logic). Независим от UI.
 
-**View** — UI слой (Activity, Fragment, Composable). Наблюдает за ViewModel через LiveData/StateFlow. Не содержит бизнес-логики.
+**`View`** — UI слой (`Activity`, `Fragment`, Composable). Наблюдает за состоянием из `ViewModel` (например, через `LiveData`/`StateFlow`/Compose state). Не содержит бизнес-логики.
 
-**ViewModel** — управляет UI-состоянием, переживает configuration changes, предоставляет данные через observable streams. Не хранит ссылки на View (предотвращает утечки памяти).
+**`ViewModel`** — управляет UI-состоянием, переживает configuration changes в рамках своего владельца (ViewModelStoreOwner), предоставляет данные через observable streams. Не хранит ссылки на `View` или короткоживущие контексты (что предотвращает утечки памяти).
 
 ### Реализация
 
 ```kotlin
 // ✅ Правильно: единый источник истины
+
 data class UserUiState(
     val user: User? = null,
     val isLoading: Boolean = false,
@@ -56,11 +58,17 @@ class UserViewModel(
     val uiState: StateFlow<UserUiState> = _uiState.asStateFlow() // ✅ Immutable для View
 
     fun loadUser(id: Int) {
-        viewModelScope.launch { // ✅ Автоматическая отмена при onCleared()
-            _uiState.update { it.copy(isLoading = true) }
+        viewModelScope.launch { // ✅ Коррутины отменяются при onCleared()
+            _uiState.update { it.copy(isLoading = true, error = null) }
             repository.getUser(id)
-                .onSuccess { user -> _uiState.update { it.copy(user = user, isLoading = false) } }
-                .onFailure { error -> _uiState.update { it.copy(error = error.message, isLoading = false) } }
+                .onSuccess { user ->
+                    _uiState.update { it.copy(user = user, isLoading = false) }
+                }
+                .onFailure { error ->
+                    _uiState.update {
+                        it.copy(error = error.message, isLoading = false)
+                    }
+                }
         }
     }
 }
@@ -82,48 +90,51 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 
 | Плюсы | Минусы |
 |-------|--------|
-| Lifecycle-aware (выживает при rotation) | Избыточен для простых экранов |
-| Тестируемость без UI | Требует знания реактивного программирования |
-| Нет утечек памяти (ViewModel не держит View) | Сложность дизайна для больших экранов |
-| Separation of concerns | Debugging data binding может быть труден |
+| `ViewModel` переиспользуется через ViewModelStore и сохраняется при configuration changes владельца | Избыточен для простых экранов |
+| Тестируемость бизнес-логики и состояния без UI | Требует знаний реактивных/асинхронных подходов |
+| Меньше утечек памяти (`ViewModel` не держит `View`/`Activity`/`Fragment`) | Может усложнять дизайн для очень больших экранов и сложных состояний |
+| Чёткое разделение ответственностей (Separation of concerns) | Отладка связей/обновлений состояния может быть нетривиальной |
 
 ### Сравнение С Другими Паттернами
 
-**vs MVP**: MVVM использует data binding (автоматическое обновление UI), MVP — ручные вызовы через интерфейсы. ViewModel переживает configuration changes, Presenter — нет.
+**vs MVP**: В MVVM `ViewModel` экспонирует наблюдаемое состояние (`LiveData`/`Flow`/Compose state), `View` подписывается и обновляет UI на основе изменений. В MVP Presenter обычно напрямую вызывает методы `View` через интерфейс. `ViewModel` хранится во ViewModelStore и может переживать configuration changes, Presenter (без дополнительной обвязки) — нет.
 
-**vs MVI**: MVVM допускает multiple state streams, MVI — единый immutable state. MVI явно моделирует user intents, MVVM — методы в ViewModel.
+**vs MVI**: MVVM обычно допускает несколько observable-потоков состояния и более гибкий API методов во `ViewModel`. MVI подчёркивает единый immutable state и явные user intents → reducer → новое состояние. В MVVM user intents чаще отображаются на методы `ViewModel` с обновлением одного или нескольких потоков состояния.
 
 ### Best Practices
 
 ```kotlin
-// ✅ DO: Нет Android-зависимостей в ViewModel
+// ✅ DO: Не тянуть во ViewModel ссылки на View/Activity/Fragment или другие короткоживущие объекты
 class UserViewModel(private val repo: UserRepository) : ViewModel()
 
-// ❌ DON'T: Зависимость от Context/View
-class BadViewModel(private val context: Context) : ViewModel()
+// ❌ DON'T: Прямые зависимости от View или short-lived Context
+class BadViewModel(private val context: Context) : ViewModel() // риск утечки, если это Activity/Fragment context
 class BadViewModel(private val view: UserView) : ViewModel()
 ```
 
-См. также [[c-viewmodel]].
+Допустимы безопасные зависимости, предоставляемые фреймворком, такие как SavedStateHandle или `Application` (через AndroidViewModel), когда они обоснованы архитектурой.
+
+См. также [[c-viewmodel]] и [[c-mvvm-pattern]].
 
 ---
 
 ## Answer (EN)
 
-**MVVM (Model-View-ViewModel)** is an architectural pattern that separates UI from business logic through reactive data binding.
+**MVVM (Model-`View`-`ViewModel`)** is an architectural pattern that separates UI from business logic using observable data and a unidirectional data flow between layers.
 
 ### Components
 
-**Model** — data source (Repository, Use Cases, domain logic). Independent of UI.
+**Model** — data and domain logic (Repository, Use Cases, business rules). Independent of the UI.
 
-**View** — UI layer (Activity, Fragment, Composable). Observes ViewModel via LiveData/StateFlow. No business logic.
+**`View`** — UI layer (`Activity`, `Fragment`, Composable). Observes state exposed by the `ViewModel` (e.g., via `LiveData`/`StateFlow`/Compose state). Contains no business logic.
 
-**ViewModel** — manages UI state, survives configuration changes, exposes data via observable streams. Doesn't hold View references (prevents memory leaks).
+**`ViewModel`** — manages UI state, is retained across configuration changes within its owner (ViewModelStoreOwner), and exposes data via observable streams. It does not hold references to the `View` or other short-lived UI components, which helps prevent memory leaks.
 
 ### Implementation
 
 ```kotlin
 // ✅ Correct: single source of truth
+
 data class UserUiState(
     val user: User? = null,
     val isLoading: Boolean = false,
@@ -137,11 +148,17 @@ class UserViewModel(
     val uiState: StateFlow<UserUiState> = _uiState.asStateFlow() // ✅ Immutable for View
 
     fun loadUser(id: Int) {
-        viewModelScope.launch { // ✅ Automatic cancellation on onCleared()
-            _uiState.update { it.copy(isLoading = true) }
+        viewModelScope.launch { // ✅ Coroutines cancelled on onCleared()
+            _uiState.update { it.copy(isLoading = true, error = null) }
             repository.getUser(id)
-                .onSuccess { user -> _uiState.update { it.copy(user = user, isLoading = false) } }
-                .onFailure { error -> _uiState.update { it.copy(error = error.message, isLoading = false) } }
+                .onSuccess { user ->
+                    _uiState.update { it.copy(user = user, isLoading = false) }
+                }
+                .onFailure { error ->
+                    _uiState.update {
+                        it.copy(error = error.message, isLoading = false)
+                    }
+                }
         }
     }
 }
@@ -163,29 +180,65 @@ fun UserScreen(viewModel: UserViewModel = hiltViewModel()) {
 
 | Pros | Cons |
 |------|------|
-| Lifecycle-aware (survives rotation) | Overkill for simple screens |
-| Testability without UI | Requires reactive programming knowledge |
-| No memory leaks (ViewModel doesn't hold View) | Complex design for large screens |
-| Separation of concerns | Data binding debugging can be difficult |
+| `ViewModel` is retained via ViewModelStore across configuration changes of its owner | Overkill for simple screens |
+| Business logic and state can be tested without UI | Requires understanding of reactive/asynchronous patterns |
+| Fewer memory leaks (`ViewModel` does not keep references to `View`/`Activity`/`Fragment`) | Can complicate design for very large or complex screens |
+| Clear separation of concerns | Debugging state updates/bindings can be non-trivial |
 
 ### Comparison with other Patterns
 
-**vs MVP**: MVVM uses data binding (automatic UI updates), MVP uses manual calls via interfaces. ViewModel survives configuration changes, Presenter doesn't.
+**vs MVP**: In MVVM, the `ViewModel` exposes observable state (`LiveData`/`Flow`/Compose state), and the `View` reacts to changes. In MVP, the Presenter typically calls `View` methods directly via interfaces. `ViewModel` is scoped to a ViewModelStoreOwner and can survive configuration changes; a basic Presenter does not unless extra mechanisms are used.
 
-**vs MVI**: MVVM allows multiple state streams, MVI has single immutable state. MVI explicitly models user intents, MVVM has methods in ViewModel.
+**vs MVI**: MVVM often uses multiple observable streams and method-based APIs in the `ViewModel`. MVI emphasizes a single immutable state and explicit user intents → reducer → new state. In MVVM, user intents more commonly map to `ViewModel` functions that update one or more state streams.
 
 ### Best Practices
 
 ```kotlin
-// ✅ DO: No Android dependencies in ViewModel
+// ✅ DO: Avoid holding references to View/Activity/Fragment or other short-lived Android components
 class UserViewModel(private val repo: UserRepository) : ViewModel()
 
-// ❌ DON'T: Dependency on Context/View
-class BadViewModel(private val context: Context) : ViewModel()
+// ❌ DON'T: Depend directly on View or short-lived Context
+class BadViewModel(private val context: Context) : ViewModel() // risk of leaks if this is an Activity/Fragment context
 class BadViewModel(private val view: UserView) : ViewModel()
 ```
 
-See also [[c-viewmodel]].
+Framework-provided safe dependencies like SavedStateHandle or `Application` (via AndroidViewModel) are acceptable when justified by the architecture.
+
+See also [[c-viewmodel]] and [[c-mvvm-pattern]].
+
+---
+
+## Дополнительные вопросы (RU)
+
+- Как обрабатывать одноразовые события (навигация, toasts) в MVVM, не нарушая unidirectional data flow?
+- В чём отличия и trade-offs между использованием `MutableStateFlow.update {}` и прямым присваиванием в `value`?
+- Когда вы выберете MVVM вместо MVI в крупном Android-приложении?
+- Как тестировать `ViewModel`, использующий `viewModelScope` и коррутины?
+
+## Ссылки (RU)
+
+- [[c-viewmodel]] — жизненный цикл и управление состоянием `ViewModel`
+- [[c-mvvm-pattern]] — общий обзор паттерна MVVM
+- Официальная документация: https://developer.android.com/topic/architecture
+- Руководство по архитектуре приложений Android: https://developer.android.com/topic/libraries/architecture
+
+## Связанные вопросы (RU)
+
+### Базовые/предпосылки
+
+- [[q-what-is-viewmodel--android--medium]] — что такое `ViewModel` и его жизненный цикл
+
+### Связанные
+
+- [[q-mvvm-vs-mvp-differences--android--medium]] — сравнение MVVM и MVP
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] — `ViewModel` против onSavedInstanceState для сохранения состояния
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] — назначение и внутренняя работа `ViewModel`
+
+### Продвинутые
+
+- [[q-mvi-architecture--android--hard]] — архитектурный паттерн MVI
+- [[q-clean-architecture-android--android--hard]] — Clean Architecture вместе с MVVM
+- [[q-offline-first-architecture--android--hard]] — offline-first архитектурные подходы
 
 ---
 
@@ -198,7 +251,8 @@ See also [[c-viewmodel]].
 
 ## References
 
-- [[c-viewmodel]] — ViewModel lifecycle and state management
+- [[c-viewmodel]] — `ViewModel` lifecycle and state management
+- [[c-mvvm-pattern]] — MVVM pattern overview
 - Official docs: https://developer.android.com/topic/architecture
 - Android Guide to app architecture: https://developer.android.com/topic/libraries/architecture
 
@@ -206,13 +260,13 @@ See also [[c-viewmodel]].
 
 ### Prerequisites
 
-- [[q-what-is-viewmodel--android--medium]] — What is ViewModel and its lifecycle
+- [[q-what-is-viewmodel--android--medium]] — What is `ViewModel` and its lifecycle
 
 ### Related
 
 - [[q-mvvm-vs-mvp-differences--android--medium]] — MVVM vs MVP comparison
-- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] — ViewModel vs onSavedInstanceState for state preservation
-- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] — ViewModel purpose and internals
+- [[q-viewmodel-vs-onsavedinstancestate--android--medium]] — `ViewModel` vs onSavedInstanceState for state preservation
+- [[q-why-is-viewmodel-needed-and-what-happens-in-it--android--medium]] — `ViewModel` purpose and internals
 
 ### Advanced
 

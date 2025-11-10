@@ -2,36 +2,38 @@
 id: android-637
 title: Sensitive Data Lifecycle / Жизненный цикл чувствительных данных
 aliases:
-  - Sensitive Data Lifecycle
-  - Жизненный цикл чувствительных данных
+- Sensitive Data Lifecycle
+- Жизненный цикл чувствительных данных
 topic: android
 subtopics:
-  - security
-  - privacy
+- keystore-crypto
+- privacy-sdks
 question_kind: android
 difficulty: hard
 original_language: ru
 language_tags:
-  - ru
-  - en
+- ru
+- en
 status: draft
 moc: moc-android
 related:
-  - c-security-hardening
+- c-android-keystore
+- q-android-security-best-practices--android--medium
 created: 2025-11-02
-updated: 2025-11-02
+updated: 2025-11-10
 tags:
-  - android/security
-  - android/privacy
-  - data-lifecycle
-  - difficulty/hard
+- android/keystore-crypto
+- android/privacy-sdks
+- data-lifecycle
+- difficulty/hard
 sources:
-  - url: https://developer.android.com/topic/security/data
-    note: Protecting user data guide
-  - url: https://developer.android.com/topic/security/best-practices
-    note: Android security best practices
-  - url: https://owasp.org/www-project-mobile-security-testing-guide/
-    note: OWASP MSTG data storage/testing guidance
+- url: "https://developer.android.com/topic/security/data"
+  note: Protecting user data guide
+- url: "https://developer.android.com/topic/security/best-practices"
+  note: Android security best practices
+- url: "https://owasp.org/www-project-mobile-security-testing-guide/"
+  note: OWASP MSTG data storage/testing guidance
+
 ---
 
 # Вопрос (RU)
@@ -44,71 +46,146 @@ sources:
 
 ## Ответ (RU)
 
+### Краткий вариант
+- Классифицируйте данные, минимизируйте сбор и храните только необходимое.
+- Используйте шифрование at rest и in transit, ключи — в аппаратно-защищённом Keystore.
+- Ограничьте кеширование чувствительных данных.
+- Введите явные политики ретенции, безопасное удаление (crypto-shredding).
+- Обеспечьте аудит, мониторинг и проверку через тесты и статический анализ.
+
+### Подробный вариант
+
 ### 1. Классификация и минимизация
 
-- Разбейте данные на уровни (PII, финансовые, biometrics, telemetry).
-- Принцип минимизации: не собирайте данные без явной цели.
-- Обновляйте классификацию при изменении схем (Room migrations, DTO).
+- Разбейте данные на уровни (PII, финансовые, биометрические данные, телеметрия).
+- Принцип минимизации: не собирайте данные без явной, задокументированной цели.
+- Обновляйте классификацию при изменении схем (Room migrations, DTO) и при добавлении новых типов данных.
 
 ### 2. Хранение (at rest)
 
-- Используйте `EncryptedSharedPreferences`, `EncryptedFile`, `SQLCipher` или Jetpack Security.
-- Для кешей — `File.createTempFile` в `context.cacheDir`, стирайте после использования.
-- Изолируйте ключи через `Hardware-backed Keystore` (AES/GCM, key validity).
+- Используйте `EncryptedSharedPreferences`, `EncryptedFile` (Jetpack Security), `SQLCipher` для критичных БД.
+- Для временных данных/кешей — используйте файлы в `context.cacheDir` (при необходимости через `File.createTempFile`) и гарантируйте удаление после использования.
+- Изолируйте ключи через аппаратно-защищённый Keystore (`Hardware-backed Keystore`), задавайте корректные атрибуты ключей (алгоритм, режим, допустимое назначение, срок действия, требования к аутентификации пользователя).
 
 ### 3. Передача (in transit)
 
-- TLS 1.2+ с pinning, избегайте передач без шифрования.
-- Учитывайте offline-сценарии: шифруйте payload перед сохранением в очередь отправки.
-- Добавьте подпись (HMAC) для целостности.
+- Используйте TLS 1.2+; сертификат pinning применяйте обоснованно (для высокорисковых сценариев, с продуманным механизмом ротации), избегайте незашифрованной передачи чувствительных данных.
+- Учитывайте offline-сценарии: шифруйте payload перед сохранением в локальную очередь отправки.
+- Добавьте криптографическую подпись/механизм целостности (например, HMAC) для защиты от модификации.
 
 ### 4. Контролируемое кеширование
 
-- Network layer: отключайте HTTP caching для содержимого с PII (`Cache-Control: no-store`).
-- Glide/Picasso: используйте `DiskCacheStrategy.NONE` для аватаров чувствительных пользователей.
-- Room: разделяйте таблицы с PII и нефинансовыми данными (column-level encryption).
+- На сетевом уровне для содержимого с PII используйте заголовки `Cache-Control: no-store`/`no-cache` по необходимости, чтобы предотвратить кеширование на клиенте/прокси.
+- Для загрузчиков изображений (Glide/Picasso и др.) отключайте диск-кеш для изображений, содержащих чувствительные данные (например, персональные документы, медицинские снимки), через `DiskCacheStrategy.NONE`/аналогичные настройки.
+- В хранилище (Room и др.) разделяйте таблицы с PII и прочими данными, используйте шифрование на уровне таблиц/колонок, когда необходимо, чтобы минимизировать объём чувствительных данных в кеше/индексах.
 
 ### 5. Удаление и ретенция
 
-- Имплементируйте retention policy (в днях). Используйте `WorkManager` для периодической чистки.
-- Безопасное удаление: перезаписывать файл (или удалять key, если данные зашифрованы → crypto-shredding).
-- Учитывайте backup: исключите файлы из Auto Backup (`android:allowBackup="false"` или `fullBackupContent`).
+- Имплементируйте явную retention policy (например, в днях) для каждого типа данных. Используйте `WorkManager` или аналог для периодической очистки.
+- Безопасное удаление: для зашифрованных данных предпочитайте crypto-shredding (удаление ключа, делая данные необратимо нечитаемыми); попытки перезаписи файлов могут не гарантировать полное удаление на уровне ФС/носителя.
+- Учитывайте бэкапы: исключите чувствительные файлы из Auto Backup (`android:allowBackup="false"` или настройка `fullBackupContent`) и из собственных механизмов резервного копирования.
 
 ### 6. Аудит и мониторинг
 
-- Ведите audit log: кто запросил/изменил данные (анонимизируйте ID).
-- Настройте риск-алерты (много запросов подряд, необычные IP).
-- Храните доказательства (evidence) для compliance review.
+- Ведите audit log действий с данными: какие операции выполнены, каким техническим идентификатором (используйте псевдонимизацию/анонимизацию, не логируйте сами чувствительные значения).
+- Настройте риск-алерты (аномальное количество запросов, нетипичные IP/устройства/гео при наличии серверной поддержки).
+- Храните необходимые доказательства (evidence) для compliance review, не нарушая принцип минимизации и не дублируя PII в логах.
 
 ### 7. Инструменты и тестирование
 
-- Security unit tests: проверяют, что данные не попадают в intents/logcat.
-- Static анализ: checkstyle/Detekt rules -> запрет `Log.d` с PII.
-- Penetration testing/OWASP MSTG: проверка кешей, backup, debug builds.
+- Unit/-интеграционные тесты безопасности: проверяют, что чувствительные данные не попадают в intents, `logcat`, уведомления и незашифрованные файлы.
+- Статический анализ: настройте правила (например, Checkstyle/Detekt/Lint) для запрета `Log.*` с PII и для контроля использования безопасных API.
+- Security-проверки и пентесты по OWASP MSTG: проверяйте кеши, бэкапы, debug-сборки, обработку root/Jailbreak, экспортируемые компоненты и др.
+
+### Требования
+
+- Функциональные:
+  - Поддержка классификации и ретенции для каждого типа чувствительных данных.
+  - Шифрование данных at rest и in transit.
+  - Управляемое кеширование и безопасное удаление.
+  - Аудит ключевых операций над чувствительными данными.
+- Нефункциональные:
+  - Соответствие требованиям OWASP MSTG и актуальным рекомендациям Android.
+  - Минимальное влияние на UX и производительность.
+  - Масштабируемость и поддерживаемость политик безопасности.
+
+### Архитектура
+
+- На клиенте:
+  - Слой абстракции для доступа к чувствительным данным (secure repository), инкапсулирующий шифрование, кеш и ретенцию.
+  - Использование Android Keystore для ключей и Jetpack Security для безопасного хранения.
+  - Интеграция с `WorkManager` для фоновой очистки.
+- На бэкенде:
+  - Централизованное применение политик хранения, логирования и аномалий.
+  - Защищённые API (TLS, авторизация, rate limiting) и согласованная модель классификации.
 
 ---
 
 ## Answer (EN)
 
-- Classify sensitive data, minimize collection, and document use cases; keep the taxonomy up to date with schema changes.
-- Protect data at rest with encrypted storage (Jetpack Security, SQLCipher) and store keys in hardware-backed keystore.
-- Secure data in transit with TLS and optional payload encryption/HMAC for offline queues.
-- Control caching layers (HTTP, image loaders, Room) to prevent unintended persistence of PII.
-- Enforce retention policies, automate secure deletion (or crypto-shredding), and exclude sensitive files from backups.
-- Maintain audit logs, monitor for anomalies, and provide evidence for compliance reviews.
-- Add automated tests and static analysis to prevent leaks in logs, intents, or backups.
+### Short Version
+- Classify data, minimize collection, and store only what is necessary.
+- Use encryption at rest and in transit; keep keys in hardware-backed Keystore.
+- Restrict sensitive data caching.
+- Enforce explicit retention policies and secure deletion (crypto-shredding).
+- Provide auditability, monitoring, and security testing/analysis.
+
+### Detailed Version
+
+- Classify sensitive data (PII, financial, biometric, telemetry), minimize collection, and document purposes; keep classifications updated when schemas or data types change.
+- Protect data at rest with encrypted storage (`EncryptedSharedPreferences`, `EncryptedFile` via Jetpack Security, SQLCipher for critical DBs) and store keys in a hardware-backed Keystore with appropriate key properties.
+- Secure data in transit with TLS 1.2+; use certificate pinning selectively for high-risk use cases with a well-thought rotation mechanism; avoid sending sensitive data unencrypted. For offline queues, encrypt payloads and add integrity protection (e.g., HMAC).
+- Control caching layers: use appropriate HTTP cache headers (e.g., `Cache-Control: no-store`/`no-cache` for PII responses), disable disk caching in image loaders (Glide/Picasso/etc.) for images containing sensitive data, and structure local storage (e.g., Room) so that PII is separated and encrypted at table/column level when needed.
+- Enforce explicit retention policies per data type, automate cleanup with scheduled work (e.g., WorkManager), use crypto-shredding (key deletion) as the primary secure deletion mechanism (overwriting files alone does not guarantee secure deletion at the FS/storage level), and exclude sensitive files from OS or custom backups.
+- Maintain audit logs of security-relevant actions using pseudonymous identifiers (no raw sensitive values), monitor for anomalies (abnormal access patterns, unusual IPs/devices/geo), and preserve necessary evidence for compliance without violating minimization principles.
+- Add automated tests and static analysis rules to detect leaks in logs, intents, notifications, backups, and ensure coverage for caches, backups, debug builds, root/jailbreak handling, and exported components as per OWASP MSTG.
+
+### Requirements
+
+- Functional:
+  - Support classification and retention policies per sensitive data type.
+  - Provide encryption for data at rest and in transit.
+  - Implement controlled caching and secure deletion.
+  - Enable auditing of key operations on sensitive data.
+- Non-functional:
+  - Comply with OWASP MSTG and current Android security guidance.
+  - Minimize impact on UX and performance.
+  - Ensure scalable and maintainable security policies.
+
+### Architecture
+
+- Client side:
+  - A secure data access layer (secure repository) encapsulating encryption, caching, and retention.
+  - Android Keystore for key management and Jetpack Security for secure storage.
+  - Integration with WorkManager for background cleanup.
+- Backend side:
+  - Centralized policies for storage, logging, and anomaly detection.
+  - Secure APIs (TLS, authorization, rate limiting) and aligned data classification model.
 
 ---
 
-## Follow-ups
-- Как реализовать пользовательское \"забыть меня\" (GDPR) с полным удалением и отчетом?
+## Дополнительные вопросы (RU)
+- Как реализовать пользовательское "забыть меня" (GDPR) с полным удалением и отчетом?
 - Как обеспечить безопасную передачу данных между приложением и Wear/IoT устройствами?
 - Какие подходы для secret management в рантайме (remote config, key rotation)?
 
-## References
-- [[c-security-hardening]]
-- https://developer.android.com/topic/security/data
+## Follow-ups (EN)
+- How would you implement a user "forget me" (GDPR) flow with full deletion and reporting?
+- How would you securely transfer data between the app and Wear/IoT devices?
+- What runtime secret-management approaches would you use (remote config, key rotation)?
 
-## Related Questions
+## Ссылки (RU)
+- [[c-android-keystore]]
+- "https://developer.android.com/topic/security/data"
 
-- [[c-security-hardening]]
+## References (EN)
+- [[c-android-keystore]]
+- "https://developer.android.com/topic/security/data"
+
+## Связанные вопросы (RU)
+
+- [[q-android-security-best-practices--android--medium]]
+
+## Related Questions (EN)
+
+- [[q-android-security-best-practices--android--medium]]

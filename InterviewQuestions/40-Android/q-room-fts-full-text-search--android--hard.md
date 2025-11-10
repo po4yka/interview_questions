@@ -3,51 +3,56 @@ id: android-427
 title: "Room Full-Text Search (FTS) / Полнотекстовый поиск FTS в Room"
 aliases: ["Room Full-Text Search", "Полнотекстовый поиск FTS в Room"]
 topic: android
-subtopics: [performance-rendering, room]
+subtopics: [room]
 question_kind: android
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-room-database, q-room-basics-dao-entity--android--easy, q-room-relationships-embedded--android--medium]
+related: [c-android-basics, c-database-performance, q-android-storage-types--android--medium]
 created: 2025-10-15
-updated: 2025-10-28
+updated: 2025-10-15
 sources: []
-tags: [android/performance-rendering, android/room, database, difficulty/hard, fts, performance, search]
+tags: [android/room, difficulty/hard]
+
 ---
 
 # Вопрос (RU)
 
-Реализуйте полнотекстовый поиск в Room с использованием FTS4/FTS5. Оптимизируйте производительность поиска для больших наборов данных. Когда использовать FTS вместо LIKE? Как синхронизировать FTS таблицы с основными таблицами?
+> Реализуйте полнотекстовый поиск в Room с использованием FTS4/FTS5. Оптимизируйте производительность поиска для больших наборов данных. Когда использовать FTS вместо LIKE? Как синхронизировать FTS таблицы с основными таблицами?
 
 # Question (EN)
 
-Implement full-text search in Room using FTS4/FTS5. Optimize search performance for large datasets. When to use FTS instead of LIKE? How to synchronize FTS tables with main tables?
+> Implement full-text search in Room using FTS4/FTS5. Optimize search performance for large datasets. When to use FTS instead of LIKE? How to synchronize FTS tables with main tables?
 
 ---
 
 ## Ответ (RU)
 
-**Полнотекстовый поиск (FTS)** в Room обеспечивает эффективный текстовый поиск через расширения FTS SQLite. FTS в 10-100 раз быстрее LIKE запросов на больших данных и поддерживает ранжирование, префиксный поиск и булевы операторы.
+**Полнотекстовый поиск (FTS)** в Room обеспечивает эффективный текстовый поиск через расширения FTS SQLite. На больших наборах данных FTS обычно значительно быстрее, чем LIKE-запросы по неиндексированному тексту, и поддерживает ранжирование (FTS5), префиксный поиск и булевы операторы.
 
 ### Когда Использовать FTS
 
-| Сценарий | LIKE | FTS5 |
-|----------|------|------|
-| < 1000 записей | ✅ Достаточно | ⚠️ Избыточно |
-| > 10000 записей | ❌ Медленно | ✅ Быстро |
-| Простой поиск | ✅ Проще | ⚠️ Сложнее |
-| Ранжирование | ❌ Нет | ✅ BM25 |
-| Префиксы | ❌ Только `%` | ✅ Оптимизированно |
+| Сценарий | LIKE | FTS4/FTS5 |
+|----------|------|-----------|
+| Малые таблицы (порядка сотен записей) | ✅ Часто достаточно | ⚠️ Может быть избыточно |
+| Крупные таблицы (десятки/сотни тысяч записей) | ❌ Часто медленно без спец. индексов | ✅ Обычно быстрее и масштабируемее |
+| Простой поиск по одному полю | ✅ Проще | ⚠️ Сложнее в настройке |
+| Ранжирование по релевантности | ❌ Нет | ✅ Через `bm25()` (FTS5) |
+| Продвинутый / префиксный поиск | ❌ Ограничен шаблонами `%` | ✅ Специализированные операторы и индексация |
 
-**Ключевые преимущества FTS5**:
-- Производительность: 10-100x быстрее LIKE
-- BM25 ранжирование по релевантности
-- Функции highlight() и snippet()
-- Булевы операторы (AND, OR, NOT)
+(Цифры про «10-100x» рассматривайте как типичную оценку для полнотекстовых задач, а не жёсткую гарантию: всё зависит от данных и запросов.)
 
-### Базовая Реализация FTS5
+**Ключевые возможности FTS (особенно FTS5)**:
+- Повышенная производительность полнотекстового поиска по сравнению с последовательным LIKE-поиском
+- Ранжирование по релевантности через `bm25()` (FTS5)
+- Функции `highlight()` и `snippet()`
+- Булевы операторы (AND, OR, NOT) и префиксный поиск в MATCH-выражениях
+
+### Базовая Реализация (пример с FTS5)
+
+Пример ниже показывает FTS-таблицу с внешним содержимым (external content) для FTS5.
 
 ```kotlin
 // ✅ Основная сущность
@@ -59,18 +64,27 @@ data class Article(
     val content: String
 )
 
-// ✅ FTS сущность с внешним содержимым (избегает дублирования)
-@Fts4(contentEntity = Article::class) // Room использует @Fts4 для FTS5
+// ✅ FTS5 сущность с внешним содержимым (избегает дублирования)
+// Требуется версия Room с поддержкой @Fts5
+@Fts5(contentEntity = Article::class)
 @Entity(tableName = "articles_fts")
 data class ArticleFts(
-    @PrimaryKey @ColumnInfo(name = "rowid")
-    val rowid: Long,
+    // Для FTS-таблиц Room использует виртуальный rowid; явный @PrimaryKey обычно не объявляется
     val title: String,    // Индексируется
     val content: String   // Индексируется
 )
 ```
 
-### Синхронизация Через Триггеры
+Если используется FTS4, аннотация будет `@Fts4`, а часть функций (например, `bm25()`) недоступна.
+
+### Синхронизация С Основной Таблицей
+
+Для external content FTS-таблиц есть два основных подхода:
+
+1. Настроить виртуальную таблицу как `content='articles'`, `content_rowid='id'` (Room делает это при `contentEntity`), и обеспечивать согласованность вставками/обновлениями в основную таблицу.
+2. Использовать триггеры для явного обновления FTS-таблицы при изменениях основной таблицы.
+
+Ниже пример с триггерами (упрощённый; подходит для базового сценария, не учитывает все варианты contentless-таблиц):
 
 ```kotlin
 @Database(entities = [Article::class, ArticleFts::class], version = 1)
@@ -81,46 +95,53 @@ abstract class AppDatabase : RoomDatabase() {
 
         // ✅ Автоматическая синхронизация при INSERT
         db.execSQL("""
-            CREATE TRIGGER articles_fts_insert AFTER INSERT ON articles
+            CREATE TRIGGER IF NOT EXISTS articles_fts_insert
+            AFTER INSERT ON articles
             BEGIN
-                INSERT INTO articles_fts (rowid, title, content)
+                INSERT INTO articles_fts(rowid, title, content)
                 VALUES (new.id, new.title, new.content);
-            END
+            END;
         """)
 
         // ✅ Автоматическая синхронизация при UPDATE
         db.execSQL("""
-            CREATE TRIGGER articles_fts_update AFTER UPDATE ON articles
+            CREATE TRIGGER IF NOT EXISTS articles_fts_update
+            AFTER UPDATE ON articles
             BEGIN
-                UPDATE articles_fts SET title = new.title, content = new.content
+                UPDATE articles_fts
+                SET title = new.title,
+                    content = new.content
                 WHERE rowid = new.id;
-            END
+            END;
         """)
 
         // ✅ Автоматическая синхронизация при DELETE
         db.execSQL("""
-            CREATE TRIGGER articles_fts_delete AFTER DELETE ON articles
+            CREATE TRIGGER IF NOT EXISTS articles_fts_delete
+            AFTER DELETE ON articles
             BEGIN
                 DELETE FROM articles_fts WHERE rowid = old.id;
-            END
+            END;
         """)
     }
 }
 ```
 
-### Поиск С Ранжированием BM25
+Важно: точная схема триггеров и использование вспомогательных команд FTS (`INSERT`, `DELETE`, `UPDATE`) зависит от того, используется ли external content/contentless режим. Для production-решения нужно строго следовать документации SQLite FTS и Room.
+
+### Поиск С Ранжированием BM25 (FTS5)
 
 ```kotlin
 data class ArticleSearchResult(
     @Embedded val article: Article,
-    val rank: Double  // ✅ BM25 score (меньше = релевантнее)
+    val rank: Double  // ✅ bm25 score (меньше = релевантнее)
 )
 
 @Dao
 interface ArticleDao {
-    // ✅ Базовый поиск с ранжированием
+    // ✅ Базовый поиск с ранжированием (FTS5)
     @Query("""
-        SELECT articles.*, bm25(articles_fts) as rank
+        SELECT articles.*, bm25(articles_fts) AS rank
         FROM articles
         INNER JOIN articles_fts ON articles.id = articles_fts.rowid
         WHERE articles_fts MATCH :query
@@ -130,16 +151,19 @@ interface ArticleDao {
 
     // ✅ Взвешенное ранжирование (title важнее content)
     @Query("""
-        SELECT articles.*, bm25(articles_fts, 10.0, 1.0) as rank
-        FROM articles INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+        SELECT articles.*, bm25(articles_fts, 10.0, 1.0) AS rank
+        FROM articles
+        INNER JOIN articles_fts ON articles.id = articles_fts.rowid
         WHERE articles_fts MATCH :query
-        ORDER BY rank LIMIT :limit
+        ORDER BY rank
+        LIMIT :limit
     """)
     suspend fun searchWeighted(query: String, limit: Int): List<ArticleSearchResult>
 
-    // ✅ Префиксный поиск для автодополнения
+    // ✅ Префиксный поиск для автодополнения (FTS MATCH синтаксис)
     @Query("""
-        SELECT articles.* FROM articles
+        SELECT articles.*
+        FROM articles
         INNER JOIN articles_fts ON articles.id = articles_fts.rowid
         WHERE articles_fts MATCH :query || '*'
         LIMIT 10
@@ -148,26 +172,30 @@ interface ArticleDao {
 }
 ```
 
+(Функции `bm25()` и расширенные MATCH-выражения требуют FTS5 и сборки SQLite/Room с соответствующей поддержкой.)
+
 ### Подсветка Результатов
 
 ```kotlin
 data class ArticleWithHighlight(
     @Embedded val article: Article,
     val highlightedTitle: String,    // ✅ Подсвеченный заголовок
-    val snippet: String,              // ✅ Фрагмент с контекстом
+    val snippet: String,             // ✅ Фрагмент с контекстом
     val rank: Double
 )
 
 @Dao
-interface ArticleDao {
+interface ArticleDaoHighlight {
     @Query("""
         SELECT articles.*,
-               highlight(articles_fts, 0, '<b>', '</b>') as highlightedTitle,
-               snippet(articles_fts, 1, '<mark>', '</mark>', '...', 30) as snippet,
-               bm25(articles_fts) as rank
-        FROM articles INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+               highlight(articles_fts, 0, '<b>', '</b>') AS highlightedTitle,
+               snippet(articles_fts, 1, '<mark>', '</mark>', '...', 30) AS snippet,
+               bm25(articles_fts) AS rank
+        FROM articles
+        INNER JOIN articles_fts ON articles.id = articles_fts.rowid
         WHERE articles_fts MATCH :query
-        ORDER BY rank LIMIT :limit
+        ORDER BY rank
+        LIMIT :limit
     """)
     suspend fun searchWithHighlight(query: String, limit: Int): List<ArticleWithHighlight>
 }
@@ -178,21 +206,23 @@ interface ArticleDao {
 ```kotlin
 class ArticleRepository(private val dao: ArticleDao) {
 
-    // ✅ Debouncing для оптимизации UX
+    // ✅ Debouncing для оптимизации UX (примерный вариант)
     fun search(queryFlow: Flow<String>): Flow<List<ArticleSearchResult>> {
         return queryFlow
-            .debounce(300)  // Ждать 300мс после ввода
+            .debounce(300)
+            .map { it.trim() }
             .filter { it.length >= 2 }
             .distinctUntilChanged()
             .flatMapLatest { query ->
-                dao.search(sanitize(query))
+                dao.search(simpleSanitize(query))
             }
     }
 
-    // ✅ Санитизация для предотвращения ошибок FTS
-    private fun sanitize(query: String): String {
-        return query.trim()
-            .replace("\"", "")   // Удалить кавычки
+    // Простейшая санитизация для демонстрации.
+    // В реальном коде нужно аккуратно обрабатывать спецсимволы и операторы FTS.
+    private fun simpleSanitize(query: String): String {
+        return query
+            .replace("\"", "")
             .split("\\s+".toRegex())
             .filter { it.isNotEmpty() }
             .joinToString(" AND ")
@@ -203,68 +233,79 @@ class ArticleRepository(private val dao: ArticleDao) {
 ### Токенизаторы
 
 ```kotlin
-// ✅ Unicode61 (по умолчанию) - поддержка большинства языков
-@Fts4(tokenizer = FtsOptions.TOKENIZER_UNICODE61)
-@Entity(tableName = "articles_fts")
-data class ArticleFtsUnicode(...)
+// ✅ Unicode61 (по умолчанию в FTS5) — поддержка большинства языков
+@Fts5(tokenizer = FtsOptions.TOKENIZER_UNICODE61)
+@Entity(tableName = "articles_fts_unicode")
+data class ArticleFtsUnicode(
+    val title: String,
+    val content: String
+)
 
-// ✅ Porter - английский stemming ("running" → "run")
-@Fts4(tokenizer = FtsOptions.TOKENIZER_PORTER)
+// ✅ Porter — английский stemming ("running" → "run")
+@Fts5(tokenizer = FtsOptions.TOKENIZER_PORTER)
 @Entity(tableName = "articles_fts_porter")
-data class ArticleFtsPorter(...)
+data class ArticleFtsPorter(
+    val title: String,
+    val content: String
+)
 
-// ❌ Simple - только ASCII, не для интернациональных текстов
-@Fts4(tokenizer = FtsOptions.TOKENIZER_SIMPLE)
+// ⚠️ Simple — простой байтовый токенизатор, не Unicode-aware,
+// обычно не подходит для интернациональных текстов
+@Fts5(tokenizer = FtsOptions.TOKENIZER_SIMPLE)
 @Entity(tableName = "articles_fts_simple")
-data class ArticleFtsSimple(...)
+data class ArticleFtsSimple(
+    val title: String,
+    val content: String
+)
 ```
+
+Конкретный набор токенизаторов и параметры зависит от версии Room/SQLite и сборки.
 
 ### Best Practices
 
-1. ✅ **FTS5 для новых проектов** - лучшая производительность и функции
-2. ✅ **External content** - используйте `contentEntity` для избежания дублирования
-3. ✅ **Триггеры** - автоматическая синхронизация FTS таблиц
-4. ✅ **Индексируйте только searchable поля** - не индексируйте метаданные
-5. ✅ **Debouncing** - не поиск на каждом нажатии клавиши
-6. ✅ **BM25 ranking** - сортировка по релевантности
-7. ✅ **Sanitize input** - предотвращение ошибок FTS
-8. ⚠️ **Paging** - используйте для больших результатов
-9. ⚠️ **@Transaction** - FTS sync должен быть атомарным
-10. ❌ **Не дублируйте данные** - всегда используйте contentEntity
+1. ✅ **Используйте FTS5 для новых проектов**, если версия Room/SQLite его поддерживает: больше возможностей и лучшее ранжирование.
+2. ✅ **Рассмотрите external content (`contentEntity`)**, чтобы избегать ненужного дублирования, но допускается и contentless-схема, если она лучше подходит под задачи.
+3. ✅ **Настройте автоматическую синхронизацию** FTS-таблиц через триггеры или корректно сконфигурированный external content.
+4. ✅ **Индексируйте только действительно searchable-поля**, чтобы уменьшить размер индекса и ускорить поиск.
+5. ✅ **Используйте debouncing и/или throttling** в UI, чтобы не спамить базу запросами на каждый символ.
+6. ✅ **Используйте ранжирование (`bm25`)** там, где важна релевантность (FTS5).
+7. ✅ **Корректно обрабатывайте пользовательский ввод** (экранирование спецсимволов, резервированных слов, операторов) вместо слепого подставления в MATCH.
+8. ⚠️ **Используйте Paging** для больших результатов, чтобы не загружать всю выборку в память.
+9. ⚠️ **Соблюдайте атомарность операций** (например, через `@Transaction` или триггеры), чтобы данные и FTS-индекс не расходились.
+10. ⚠️ **Осознанно выбирайте между external content и дублированием данных** — выбор зависит от требований к размеру, скорости и простоте.
 
 ### Частые Ошибки
 
 ```kotlin
-// ❌ WRONG - Ручная синхронизация (подвержена ошибкам)
+// ❌ Ручная синхронизация без триггеров (подвержена расхождениям)
 @Transaction
 suspend fun insert(article: Article) {
     val id = insertArticle(article)
-    insertFts(ArticleFts(id, article.title, article.content))
+    // Легко забыть обновить FTS при обновлении/удалении
+    insertFts(ArticleFts(title = article.title, content = article.content))
 }
 
-// ✅ CORRECT - Автоматическая синхронизация через триггеры
-// Просто insert в основную таблицу, триггер обновит FTS
+// ✅ Предпочтительно: автоматическая синхронизация через триггеры
+// или строго инкапсулированные DAO-операции
 
-// ❌ WRONG - Не санитизация query
-dao.search(userInput)  // Может вызвать ошибку FTS
+// ❌ Отсутствие обработки пользовательского ввода в MATCH
+// dao.search(userInput)
 
-// ✅ CORRECT - Санитизация входных данных
-dao.search(sanitize(userInput))
+// ✅ Минимум: нормализовать/экранировать ввод перед MATCH
+// dao.search(simpleSanitize(userInput))
 
-// ❌ WRONG - Индексация всех полей
-@Fts4(contentEntity = Article::class)
-data class ArticleFts(
-    val id: Long,
+// ❌ Индексация всех полей
+@Fts5(contentEntity = Article::class)
+data class ArticleFtsTooWide(
     val title: String,
     val content: String,
-    val metadata: String,  // Не нужно индексировать
-    val timestamps: Long   // Не нужно индексировать
+    val metadata: String,  // Лишняя нагрузка на индекс
+    val timestamp: Long    // Обычно не нужен в полнотекстовом индексе
 )
 
-// ✅ CORRECT - Индексация только searchable полей
-@Fts4(contentEntity = Article::class)
-data class ArticleFts(
-    val rowid: Long,
+// ✅ Индексация только полнотекстовых полей
+@Fts5(contentEntity = Article::class)
+data class ArticleFtsNarrow(
     val title: String,
     val content: String
 )
@@ -274,25 +315,29 @@ data class ArticleFts(
 
 ## Answer (EN)
 
-**Full-Text Search (FTS)** in Room provides efficient text search through SQLite's FTS extensions. FTS is 10-100x faster than LIKE queries on large datasets and supports ranking, prefix search, and boolean operators.
+**Full-Text Search (FTS)** in Room provides efficient text search via SQLite FTS extensions. On large datasets, FTS is typically much faster than naive LIKE scans over unindexed text and supports (with FTS5) relevance ranking, prefix search, and boolean operators.
 
 ### When to Use FTS
 
-| Scenario | LIKE | FTS5 |
-|----------|------|------|
-| < 1000 records | ✅ Sufficient | ⚠️ Overkill |
-| > 10000 records | ❌ Slow | ✅ Fast |
-| Simple search | ✅ Simpler | ⚠️ More complex |
-| Ranking | ❌ No | ✅ BM25 |
-| Prefix search | ❌ Only `%` | ✅ Optimized |
+| Scenario | LIKE | FTS4/FTS5 |
+|----------|------|-----------|
+| Small tables (hundreds of rows) | ✅ Often sufficient | ⚠️ May be overkill |
+| Large tables (tens/hundreds of thousands of rows) | ❌ Often slow without proper indexes | ✅ Usually faster and more scalable |
+| Simple search on one column | ✅ Simpler | ⚠️ More setup |
+| Relevance ranking | ❌ Not built-in | ✅ `bm25()` (FTS5) |
+| Advanced/prefix search | ❌ Limited to `%` patterns | ✅ Dedicated MATCH syntax/indexing |
 
-**Key FTS5 Benefits**:
-- Performance: 10-100x faster than LIKE
-- BM25 relevance ranking
-- highlight() and snippet() functions
-- Boolean operators (AND, OR, NOT)
+(Values like "10-100x faster" should be treated as typical for full-text workloads, not a strict guarantee. Actual gains depend on schema, data, and queries.)
 
-### Basic FTS5 Implementation
+**Key FTS (esp. FTS5) features**:
+- Better performance for full-text queries vs. sequential LIKE scans
+- Relevance ranking via `bm25()` (FTS5)
+- `highlight()` and `snippet()` helper functions
+- Boolean operators and prefix queries in MATCH expressions
+
+### Basic Implementation (FTS5 Example)
+
+The following shows an FTS5 table with external content (no duplicated storage).
 
 ```kotlin
 // ✅ Main entity
@@ -304,18 +349,27 @@ data class Article(
     val content: String
 )
 
-// ✅ FTS entity with external content (avoids duplication)
-@Fts4(contentEntity = Article::class) // Room uses @Fts4 for FTS5
+// ✅ FTS5 entity with external content (avoids duplication)
+// Requires a Room version that supports @Fts5
+@Fts5(contentEntity = Article::class)
 @Entity(tableName = "articles_fts")
 data class ArticleFts(
-    @PrimaryKey @ColumnInfo(name = "rowid")
-    val rowid: Long,
+    // For FTS entities Room relies on the virtual table rowid; you typically do not declare @PrimaryKey
     val title: String,    // Indexed
     val content: String   // Indexed
 )
 ```
 
-### Synchronization via Triggers
+If you use FTS4 instead, replace `@Fts5` with `@Fts4` and note that features like `bm25()` are not available.
+
+### Synchronization with Main Table
+
+For external content FTS tables you have two main options:
+
+1. Configure the virtual table with `content='articles'` and `content_rowid='id'` (Room does this based on `contentEntity`), and rely on consistent writes to the main table.
+2. Use triggers to explicitly keep the FTS table in sync with the main table.
+
+Below is a simplified trigger-based example (suitable for a basic external content pattern; details depend on your exact FTS mode):
 
 ```kotlin
 @Database(entities = [Article::class, ArticleFts::class], version = 1)
@@ -326,46 +380,53 @@ abstract class AppDatabase : RoomDatabase() {
 
         // ✅ Auto-sync on INSERT
         db.execSQL("""
-            CREATE TRIGGER articles_fts_insert AFTER INSERT ON articles
+            CREATE TRIGGER IF NOT EXISTS articles_fts_insert
+            AFTER INSERT ON articles
             BEGIN
-                INSERT INTO articles_fts (rowid, title, content)
+                INSERT INTO articles_fts(rowid, title, content)
                 VALUES (new.id, new.title, new.content);
-            END
+            END;
         """)
 
         // ✅ Auto-sync on UPDATE
         db.execSQL("""
-            CREATE TRIGGER articles_fts_update AFTER UPDATE ON articles
+            CREATE TRIGGER IF NOT EXISTS articles_fts_update
+            AFTER UPDATE ON articles
             BEGIN
-                UPDATE articles_fts SET title = new.title, content = new.content
+                UPDATE articles_fts
+                SET title = new.title,
+                    content = new.content
                 WHERE rowid = new.id;
-            END
+            END;
         """)
 
         // ✅ Auto-sync on DELETE
         db.execSQL("""
-            CREATE TRIGGER articles_fts_delete AFTER DELETE ON articles
+            CREATE TRIGGER IF NOT EXISTS articles_fts_delete
+            AFTER DELETE ON articles
             BEGIN
                 DELETE FROM articles_fts WHERE rowid = old.id;
-            END
+            END;
         """)
     }
 }
 ```
 
-### Search with BM25 Ranking
+Note: For production, align your triggers and FTS table definition (external content vs contentless) strictly with the SQLite FTS documentation; auxiliary `INSERT/UPDATE/DELETE` commands for FTS may be required depending on configuration.
+
+### Search with BM25 Ranking (FTS5)
 
 ```kotlin
 data class ArticleSearchResult(
     @Embedded val article: Article,
-    val rank: Double  // ✅ BM25 score (lower = more relevant)
+    val rank: Double  // ✅ bm25 score (lower = more relevant)
 )
 
 @Dao
 interface ArticleDao {
-    // ✅ Basic search with ranking
+    // ✅ Basic search with ranking (FTS5)
     @Query("""
-        SELECT articles.*, bm25(articles_fts) as rank
+        SELECT articles.*, bm25(articles_fts) AS rank
         FROM articles
         INNER JOIN articles_fts ON articles.id = articles_fts.rowid
         WHERE articles_fts MATCH :query
@@ -375,16 +436,19 @@ interface ArticleDao {
 
     // ✅ Weighted ranking (title more important than content)
     @Query("""
-        SELECT articles.*, bm25(articles_fts, 10.0, 1.0) as rank
-        FROM articles INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+        SELECT articles.*, bm25(articles_fts, 10.0, 1.0) AS rank
+        FROM articles
+        INNER JOIN articles_fts ON articles.id = articles_fts.rowid
         WHERE articles_fts MATCH :query
-        ORDER BY rank LIMIT :limit
+        ORDER BY rank
+        LIMIT :limit
     """)
     suspend fun searchWeighted(query: String, limit: Int): List<ArticleSearchResult>
 
-    // ✅ Prefix search for autocomplete
+    // ✅ Prefix search for autocomplete (FTS MATCH syntax)
     @Query("""
-        SELECT articles.* FROM articles
+        SELECT articles.*
+        FROM articles
         INNER JOIN articles_fts ON articles.id = articles_fts.rowid
         WHERE articles_fts MATCH :query || '*'
         LIMIT 10
@@ -393,26 +457,30 @@ interface ArticleDao {
 }
 ```
 
+(Again, `bm25()` and advanced MATCH syntax assume FTS5 support.)
+
 ### Highlighting Results
 
 ```kotlin
 data class ArticleWithHighlight(
     @Embedded val article: Article,
     val highlightedTitle: String,    // ✅ Highlighted title
-    val snippet: String,              // ✅ Snippet with context
+    val snippet: String,             // ✅ Context snippet
     val rank: Double
 )
 
 @Dao
-interface ArticleDao {
+interface ArticleDaoHighlight {
     @Query("""
         SELECT articles.*,
-               highlight(articles_fts, 0, '<b>', '</b>') as highlightedTitle,
-               snippet(articles_fts, 1, '<mark>', '</mark>', '...', 30) as snippet,
-               bm25(articles_fts) as rank
-        FROM articles INNER JOIN articles_fts ON articles.id = articles_fts.rowid
+               highlight(articles_fts, 0, '<b>', '</b>') AS highlightedTitle,
+               snippet(articles_fts, 1, '<mark>', '</mark>', '...', 30) AS snippet,
+               bm25(articles_fts) AS rank
+        FROM articles
+        INNER JOIN articles_fts ON articles.id = articles_fts.rowid
         WHERE articles_fts MATCH :query
-        ORDER BY rank LIMIT :limit
+        ORDER BY rank
+        LIMIT :limit
     """)
     suspend fun searchWithHighlight(query: String, limit: Int): List<ArticleWithHighlight>
 }
@@ -423,21 +491,23 @@ interface ArticleDao {
 ```kotlin
 class ArticleRepository(private val dao: ArticleDao) {
 
-    // ✅ Debouncing for better UX
+    // ✅ Debouncing for better UX (illustrative)
     fun search(queryFlow: Flow<String>): Flow<List<ArticleSearchResult>> {
         return queryFlow
-            .debounce(300)  // Wait 300ms after typing
+            .debounce(300)
+            .map { it.trim() }
             .filter { it.length >= 2 }
             .distinctUntilChanged()
             .flatMapLatest { query ->
-                dao.search(sanitize(query))
+                dao.search(simpleSanitize(query))
             }
     }
 
-    // ✅ Sanitize to prevent FTS errors
-    private fun sanitize(query: String): String {
-        return query.trim()
-            .replace("\"", "")   // Remove quotes
+    // Simple demo sanitization.
+    // Real-world code should robustly escape/handle FTS operators.
+    private fun simpleSanitize(query: String): String {
+        return query
+            .replace("\"", "")
             .split("\\s+".toRegex())
             .filter { it.isNotEmpty() }
             .joinToString(" AND ")
@@ -448,68 +518,77 @@ class ArticleRepository(private val dao: ArticleDao) {
 ### Tokenizers
 
 ```kotlin
-// ✅ Unicode61 (default) - supports most languages
-@Fts4(tokenizer = FtsOptions.TOKENIZER_UNICODE61)
-@Entity(tableName = "articles_fts")
-data class ArticleFtsUnicode(...)
+// ✅ Unicode61 (default for FTS5) — supports most languages reasonably well
+@Fts5(tokenizer = FtsOptions.TOKENIZER_UNICODE61)
+@Entity(tableName = "articles_fts_unicode")
+data class ArticleFtsUnicode(
+    val title: String,
+    val content: String
+)
 
-// ✅ Porter - English stemming ("running" → "run")
-@Fts4(tokenizer = FtsOptions.TOKENIZER_PORTER)
+// ✅ Porter — English stemming ("running" → "run")
+@Fts5(tokenizer = FtsOptions.TOKENIZER_PORTER)
 @Entity(tableName = "articles_fts_porter")
-data class ArticleFtsPorter(...)
+data class ArticleFtsPorter(
+    val title: String,
+    val content: String
+)
 
-// ❌ Simple - ASCII only, not for international text
-@Fts4(tokenizer = FtsOptions.TOKENIZER_SIMPLE)
+// ⚠️ Simple — byte-based, not Unicode-aware; usually unsuitable for multilingual text
+@Fts5(tokenizer = FtsOptions.TOKENIZER_SIMPLE)
 @Entity(tableName = "articles_fts_simple")
-data class ArticleFtsSimple(...)
+data class ArticleFtsSimple(
+    val title: String,
+    val content: String
+)
 ```
+
+Actual tokenizer availability/parameters depend on your SQLite/Room build.
 
 ### Best Practices
 
-1. ✅ **FTS5 for new projects** - better performance and features
-2. ✅ **External content** - use `contentEntity` to avoid duplication
-3. ✅ **Triggers** - automatic FTS table synchronization
-4. ✅ **Index only searchable fields** - don't index metadata
-5. ✅ **Debouncing** - don't search on every keystroke
-6. ✅ **BM25 ranking** - sort by relevance
-7. ✅ **Sanitize input** - prevent FTS errors
-8. ⚠️ **Paging** - use for large result sets
-9. ⚠️ **@Transaction** - FTS sync must be atomic
-10. ❌ **Don't duplicate data** - always use contentEntity
+1. ✅ Prefer **FTS5 for new projects** (if supported by your Room/SQLite) for better ranking and features.
+2. ✅ Consider **external content (`contentEntity`)** to avoid unnecessary duplication, but contentless setups are valid where they simplify maintenance or offer better control.
+3. ✅ Ensure **automatic synchronization** between base and FTS tables (via triggers or tightly controlled DAO operations).
+4. ✅ **Index only real searchable text fields** to reduce index size and improve performance.
+5. ✅ Use **debouncing/throttling** in the UI to limit query frequency.
+6. ✅ Use **bm25 ranking** (FTS5) when relevance matters.
+7. ✅ **Handle user input safely** for MATCH (escape/normalize special characters and operators).
+8. ⚠️ Use **Paging** for large result sets.
+9. ⚠️ Ensure **atomicity** of writes affecting both main and FTS tables.
+10. ⚠️ **Choose between external content and duplication consciously**; "never duplicate" is incorrect as a blanket rule.
 
 ### Common Mistakes
 
 ```kotlin
-// ❌ WRONG - Manual synchronization (error-prone)
+// ❌ Manual sync without a clear invariant — leads to divergence
 @Transaction
 suspend fun insert(article: Article) {
     val id = insertArticle(article)
-    insertFts(ArticleFts(id, article.title, article.content))
+    // Easy to forget updates/deletes or handle failures incorrectly
+    insertFts(ArticleFts(title = article.title, content = article.content))
 }
 
-// ✅ CORRECT - Automatic sync via triggers
-// Just insert to main table, trigger updates FTS
+// ✅ Prefer triggers or a single well-defined insertion path that updates both.
 
-// ❌ WRONG - No query sanitization
-dao.search(userInput)  // Can cause FTS error
+// ❌ Passing raw user input to MATCH
+// dao.search(userInput)
 
-// ✅ CORRECT - Sanitize user input
-dao.search(sanitize(userInput))
+// ✅ Normalize/escape input before MATCH
+// dao.search(simpleSanitize(userInput))
 
-// ❌ WRONG - Index all fields
-@Fts4(contentEntity = Article::class)
-data class ArticleFts(
-    val id: Long,
+// ❌ Indexing every field in FTS
+@Fts5(contentEntity = Article::class)
+data class ArticleFtsTooWide(
     val title: String,
     val content: String,
-    val metadata: String,  // Don't index
-    val timestamps: Long   // Don't index
+    val metadata: String,
+    val timestamp: Long
 )
 
-// ✅ CORRECT - Index only searchable fields
-@Fts4(contentEntity = Article::class)
-data class ArticleFts(
-    val rowid: Long,
+// ✅ Keep FTS schema minimal
+@Fts5(contentEntity = Article::class)
+data class ArticleFtsNarrow(
     val title: String,
     val content: String
 )
@@ -519,35 +598,20 @@ data class ArticleFts(
 
 ## Follow-ups
 
-1. How does FTS5 handle multi-language content (e.g., English + Russian in same document)?
-2. What are the storage overhead implications of FTS tables for large datasets?
-3. How to implement fuzzy search or typo tolerance with FTS?
-4. Can FTS5 be used with Room's multi-process access?
-5. How to optimize FTS rebuild performance for large existing databases?
+1. How does FTS5 handle multi-language content (e.g., English and Russian text in the same document), and how would you choose tokenizers for that?
+2. What are the storage overhead and migration implications of introducing FTS tables into an existing Room schema?
+3. How can you implement fuzzy search or typo tolerance on top of FTS (e.g., with auxiliary tables or client-side ranking)?
+4. How would you design FTS synchronization and recovery logic after a partial data loss or corruption of the FTS index?
+5. How can you benchmark and profile FTS vs LIKE for your specific workload on Android devices?
 
 ## References
 
-**Concept Notes**:
-- [[c-room-database]] - Room database fundamentals
-- [[c-sqlite-indexes]] - SQLite indexing strategies
-- [[c-bm25-ranking]] - BM25 relevance ranking algorithm
-
-**Official Documentation**:
+- [[c-android-basics]]
+- [[c-database-performance]]
 - [Room FTS Documentation](https://developer.android.com/training/data-storage/room/defining-data#fts)
 - [SQLite FTS5 Extension](https://www.sqlite.org/fts5.html)
 - [Room Performance Best Practices](https://developer.android.com/topic/performance/sqlite-performance-best-practices)
 
 ## Related Questions
 
-### Prerequisites (Easier)
-- [[q-room-basics-dao-entity--android--easy]] - Room fundamentals
-- [[q-room-relations-embedded--android--medium]] - Room relationships
-
-### Related (Same Level)
-- [[q-room-transactions-dao--android--medium]] - Transaction handling
-- [[q-room-paging3-integration--android--medium]] - Pagination integration
-- [[q-sqlite-query-optimization--android--hard]] - Query optimization
-
-### Advanced (Harder)
-- [[q-room-custom-type-converters--android--hard]] - Advanced type converters
-- [[q-multi-module-room-database--android--hard]] - Multi-module Room architecture
+- [[q-android-storage-types--android--medium]]

@@ -10,11 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-android
-related: [c-background-tasks, c-constraints, c-workmanager]
+related: [c-background-tasks]
 created: 2025-10-12
-updated: 2025-10-29
+updated: 2025-11-10
 tags: [android/background-execution, background-processing, difficulty/medium, jetpack, workmanager]
-sources: [https://developer.android.com/topic/libraries/architecture/workmanager]
+sources: ["https://developer.android.com/topic/libraries/architecture/workmanager"]
 ---
 
 # Вопрос (RU)
@@ -27,7 +27,7 @@ sources: [https://developer.android.com/topic/libraries/architecture/workmanager
 
 ## Ответ (RU)
 
-WorkManager обеспечивает гарантированное выполнение откладываемой фоновой работы с поддержкой ограничений, цепочек и восстановления после перезагрузок.
+WorkManager обеспечивает надежное (best-effort) выполнение отложенной фоновой работы с поддержкой ограничений, цепочек и восстановления после перезагрузок в рамках системных лимитов платформы.
 
 **Constraints (Ограничения):**
 Выполнение работы только при соблюдении условий для экономии батареи и трафика.
@@ -55,7 +55,7 @@ val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
 WorkManager.getInstance(context)
     .enqueueUniquePeriodicWork(
         "daily_sync",
-        ExistingPeriodicWorkPolicy.KEEP,  // ✅ Don't restart if running
+        ExistingPeriodicWorkPolicy.KEEP,  // ✅ Don't restart if existing periodic work with this name exists
         syncRequest
     )
 ```
@@ -79,7 +79,7 @@ WorkManager.getInstance(context)
 ```
 
 **ExistingWorkPolicy:**
-Управление дублированием уникальных задач.
+Управление поведением при повторной постановке уникальной работы.
 
 ```kotlin
 // REPLACE — отменить существующую, запустить новую
@@ -90,10 +90,12 @@ WorkManager.getInstance(context)
 WorkManager.getInstance(context)
     .enqueueUniqueWork("cleanup", ExistingWorkPolicy.KEEP, request)
 
-// APPEND — добавить в очередь после существующей
+// APPEND_OR_REPLACE — добавить в цепочку после существующей; если существующая завершилась с ошибкой, заменить её новой
 WorkManager.getInstance(context)
-    .enqueueUniqueWork("queue", ExistingWorkPolicy.APPEND, request)
+    .enqueueUniqueWork("queue", ExistingWorkPolicy.APPEND_OR_REPLACE, request)
 ```
+
+(Примечание: `APPEND` устарел и заменен на `APPEND_OR_REPLACE`.)
 
 **Persistence:**
 WorkManager сохраняет задачи в SQLite, восстанавливает после перезагрузки/обновления приложения.
@@ -108,9 +110,9 @@ class MigrationWorker @AssistedInject constructor(
     override suspend fun doWork(): Result = try {
         val fromVersion = inputData.getInt("from_version", 0)
         database.migrate(fromVersion, BuildConfig.VERSION_CODE)
-        Result.success()  // ✅ Success with retry support
+        Result.success()  // ✅ Успешное завершение, без повторных запусков
     } catch (e: Exception) {
-        Result.retry()    // ✅ Retry with backoff policy
+        Result.retry()    // ✅ Запросить повторный запуск с backoff policy
     }
 }
 ```
@@ -121,6 +123,7 @@ class MigrationWorker @AssistedInject constructor(
 ```kotlin
 // In Worker
 setProgress(workDataOf("progress" to 50, "file" to "photo.jpg"))
+// Для CoroutineWorker предпочтительно использовать setProgressAsync, но setProgress доступен через базовый Worker.
 
 // In ViewModel
 val progress = workManager.getWorkInfoByIdLiveData(workId)
@@ -129,7 +132,7 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 
 ## Answer (EN)
 
-WorkManager provides guaranteed execution of deferrable background work with constraints, chaining, and recovery after reboots.
+WorkManager provides reliable (best-effort) execution of deferrable background work with constraints, chaining, and recovery after reboots within platform limits.
 
 **Constraints:**
 Execute work only when conditions are met to save battery and data.
@@ -146,7 +149,7 @@ val uploadRequest = OneTimeWorkRequestBuilder<PhotoUploadWorker>()
 ```
 
 **Periodic Work:**
-Minimum 15-minute interval with flexible execution window.
+Minimum 15-minute interval with a flexible execution window.
 
 ```kotlin
 val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
@@ -157,7 +160,7 @@ val syncRequest = PeriodicWorkRequestBuilder<DataSyncWorker>(
 WorkManager.getInstance(context)
     .enqueueUniquePeriodicWork(
         "daily_sync",
-        ExistingPeriodicWorkPolicy.KEEP,  // ✅ Don't restart if running
+        ExistingPeriodicWorkPolicy.KEEP,  // ✅ Don't start a new one if existing periodic work with this name exists
         syncRequest
     )
 ```
@@ -192,13 +195,15 @@ WorkManager.getInstance(context)
 WorkManager.getInstance(context)
     .enqueueUniqueWork("cleanup", ExistingWorkPolicy.KEEP, request)
 
-// APPEND — enqueue after existing
+// APPEND_OR_REPLACE — append after existing; if existing finished with failure, replace with the new work
 WorkManager.getInstance(context)
-    .enqueueUniqueWork("queue", ExistingWorkPolicy.APPEND, request)
+    .enqueueUniqueWork("queue", ExistingWorkPolicy.APPEND_OR_REPLACE, request)
 ```
 
+(Note: `APPEND` is deprecated and replaced by `APPEND_OR_REPLACE`.)
+
 **Persistence:**
-WorkManager persists tasks in SQLite, restores after reboot/app update.
+WorkManager persists work in SQLite and restores it after reboot/app update.
 
 ```kotlin
 @HiltWorker
@@ -210,19 +215,20 @@ class MigrationWorker @AssistedInject constructor(
     override suspend fun doWork(): Result = try {
         val fromVersion = inputData.getInt("from_version", 0)
         database.migrate(fromVersion, BuildConfig.VERSION_CODE)
-        Result.success()  // ✅ Success with retry support
+        Result.success()  // ✅ Successful completion, no further retries
     } catch (e: Exception) {
-        Result.retry()    // ✅ Retry with backoff policy
+        Result.retry()    // ✅ Request retry with configured backoff policy
     }
 }
 ```
 
 **Progress Tracking:**
-Update progress for UI updates.
+Update progress for UI.
 
 ```kotlin
 // In Worker
 setProgress(workDataOf("progress" to 50, "file" to "photo.jpg"))
+// For CoroutineWorker, prefer setProgressAsync; setProgress is available via the base Worker API.
 
 // In ViewModel
 val progress = workManager.getWorkInfoByIdLiveData(workId)
@@ -231,33 +237,54 @@ val progress = workManager.getWorkInfoByIdLiveData(workId)
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как ограничения ведут себя на разных версиях Android (особенно с учетом Doze и ограничений Android 12+)?
+- Каковы накладные расходы и компромиссы между цепочками работ и отдельными Worker-ами?
+- Как обрабатывать отмену Worker во время отслеживания прогресса?
+- Что произойдет при использовании `ExistingWorkPolicy.APPEND` с завершившимися с ошибкой задачами?
+- Как тестировать периодическую работу с `flexTimeInterval` в модульных тестах?
+
 ## Follow-ups
 
 - How do constraints behave across different Android versions (especially Android 12+ Doze restrictions)?
 - What are the performance trade-offs of work chaining vs. separate Workers?
 - How to handle Worker cancellation during progress tracking?
-- What happens when ExistingWorkPolicy.APPEND is used with failed workers?
-- How to test periodic work with flexTimeInterval in unit tests?
+- What happens when `ExistingWorkPolicy.APPEND` is used with failed workers?
+- How to test periodic work with `flexTimeInterval` in unit tests?
+
+## Ссылки (RU)
+
+- [[c-workmanager]]
+- "https://developer.android.com/topic/libraries/architecture/workmanager/advanced"
+- "https://developer.android.com/topic/libraries/architecture/workmanager/how-to/chain-work"
 
 ## References
 
 - [[c-workmanager]] - WorkManager concepts
-- [[c-android-background-execution]] - Background execution strategies
-- https://developer.android.com/topic/libraries/architecture/workmanager/advanced
-- https://developer.android.com/topic/libraries/architecture/workmanager/how-to/chain-work
+- "https://developer.android.com/topic/libraries/architecture/workmanager/advanced"
+- "https://developer.android.com/topic/libraries/architecture/workmanager/how-to/chain-work"
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- [[q-android-app-components--android--easy]] - Обзор компонентов приложения
+
+### Связанные (такой же уровень)
+- [[q-workmanager-vs-alternatives--android--medium]] - WorkManager и альтернативы
+- [[q-workmanager-return-result--android--medium]] - Возврат результатов из Worker-ов
+
+### Продвинутые (сложнее)
+- [[q-android-runtime-internals--android--hard]] - Внутреннее устройство Android Runtime
 
 ## Related Questions
 
 ### Prerequisites (Easier)
 - [[q-android-app-components--android--easy]] - App components overview
-- [[q-android-lifecycle--android--easy]] - Lifecycle management basics
-- [[q-workmanager-basics--android--easy]] - WorkManager fundamentals
 
 ### Related (Same Level)
 - [[q-workmanager-vs-alternatives--android--medium]] - WorkManager vs alternatives
 - [[q-workmanager-return-result--android--medium]] - Returning results from Workers
-- [[q-android-background-limits--android--medium]] - Background execution limits
 
 ### Advanced (Harder)
 - [[q-android-runtime-internals--android--hard]] - Android runtime internals
-- [[q-android-power-battery-optimization--android--hard]] - Power and battery optimization

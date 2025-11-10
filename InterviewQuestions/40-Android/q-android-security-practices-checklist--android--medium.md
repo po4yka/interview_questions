@@ -13,13 +13,13 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
   - c-android-keystore
   - c-encryption
 created: 2025-10-05
-updated: 2025-10-30
+updated: 2025-11-10
 tags: [android/keystore-crypto, android/network-security-config, android/permissions, difficulty/medium, security]
 sources: []
 ---
@@ -63,17 +63,20 @@ val plainPrefs = getSharedPreferences("prefs", MODE_PRIVATE)
 
 ### 2. Сетевая Безопасность
 
-**Network Security Config** блокирует cleartext HTTP:
+**Network Security Config** запрещает cleartext HTTP и может использоваться для пиннинга сертификатов:
 
 ```xml
 <!-- res/xml/network_security_config.xml -->
 <network-security-config>
-    <!-- ✅ Только HTTPS -->
+    <!-- ✅ Запрет cleartext по умолчанию -->
+    <base-config cleartextTrafficPermitted="false" />
+
+    <!-- HTTPS и явное разрешение для домена API -->
     <domain-config cleartextTrafficPermitted="false">
         <domain includeSubdomains="true">api.example.com</domain>
     </domain-config>
 
-    <!-- Certificate pinning -->
+    <!-- Certificate pinning для критичного домена -->
     <domain-config>
         <domain>secure.example.com</domain>
         <pin-set>
@@ -91,22 +94,27 @@ val plainPrefs = getSharedPreferences("prefs", MODE_PRIVATE)
 
 ### 3. Защита Компонентов
 
-**Отключение экспорта** для внутренних компонентов:
+**Ограничение экспорта** для внутренних компонентов (Activities, Services, Providers, Receivers):
 
 ```xml
-<!-- ✅ Безопасно -->
+<!-- ✅ Внутренний провайдер, не доступен другим приложениям -->
+<provider
+    android:name="com.example.internal.DataProvider"
+    android:authorities="com.example.internal.provider"
+    android:exported="false" />
+
+<!-- ✅ FileProvider для шаринга файлов: доступен, но с granular-разрешениями -->
 <provider
     android:name="androidx.core.content.FileProvider"
-    android:exported="false"
+    android:authorities="com.example.fileprovider"
+    android:exported="true"
     android:grantUriPermissions="true" />
-
-<!-- ❌ Доступен другим приложениям -->
-<provider
-    android:name="com.example.DataProvider"
-    android:exported="true" />
 ```
 
-**Правило**: `exported="false"` по умолчанию, явно разрешать только публичные API.
+**Правила**:
+- Явно указывать `android:exported` для компонентов, особенно с intent-filters (Android 12+).
+- Использовать `exported="false"` по умолчанию для внутренних компонент; включать `exported="true"` только для заведомо публичных API.
+- Для FileProvider полагаться на `grantUriPermissions`/`FLAG_GRANT_*` и корректный `authorities`, а не на глобальный доступ.
 
 ### 4. Обфускация Кода
 
@@ -130,7 +138,7 @@ android {
 
 ### 5. Биометрическая Аутентификация
 
-**BiometricPrompt** для критичных операций:
+**BiometricPrompt** для критичных операций (платежи, изменение настроек безопасности):
 
 ```kotlin
 val biometricPrompt = BiometricPrompt(
@@ -146,16 +154,20 @@ val biometricPrompt = BiometricPrompt(
 
 val promptInfo = BiometricPrompt.PromptInfo.Builder()
     .setTitle("Подтверждение платежа")
-    .setNegativeButtonText("Отмена")
+    .setSubtitle("Используйте биометрию или экран блокировки устройства")
+    .setAllowedAuthenticators(
+        BiometricManager.Authenticators.BIOMETRIC_STRONG or
+            BiometricManager.Authenticators.DEVICE_CREDENTIAL
+    )
     .build()
 ```
 
 **Чек-лист проверки**:
 - EncryptedSharedPreferences для токенов
-- Network Security Config с HTTPS
-- Компоненты exported="false" по умолчанию
+- Network Security Config с глобальным запретом cleartext и HTTPS
+- Компоненты с явным `android:exported`, внутренние — `false`
 - R8 minification включен в release
-- BiometricPrompt для финансовых операций
+- BiometricPrompt с сильной аутентификацией для финансовых/критичных операций
 
 ## Answer (EN)
 
@@ -188,17 +200,20 @@ val plainPrefs = getSharedPreferences("prefs", MODE_PRIVATE)
 
 ### 2. Network Security
 
-**Network Security Config** blocks cleartext HTTP:
+**Network Security Config** should disable cleartext HTTP and can be used for certificate pinning:
 
 ```xml
 <!-- res/xml/network_security_config.xml -->
 <network-security-config>
-    <!-- ✅ HTTPS only -->
+    <!-- ✅ Disable cleartext by default -->
+    <base-config cleartextTrafficPermitted="false" />
+
+    <!-- HTTPS and explicit allow for API domain -->
     <domain-config cleartextTrafficPermitted="false">
         <domain includeSubdomains="true">api.example.com</domain>
     </domain-config>
 
-    <!-- Certificate pinning -->
+    <!-- Certificate pinning for critical domain -->
     <domain-config>
         <domain>secure.example.com</domain>
         <pin-set>
@@ -216,22 +231,27 @@ val plainPrefs = getSharedPreferences("prefs", MODE_PRIVATE)
 
 ### 3. Component Protection
 
-**Disable export** for internal components:
+**Restrict export** for internal components (Activities, Services, Providers, Receivers):
 
 ```xml
-<!-- ✅ Secure -->
+<!-- ✅ Internal provider, not accessible to other apps -->
+<provider
+    android:name="com.example.internal.DataProvider"
+    android:authorities="com.example.internal.provider"
+    android:exported="false" />
+
+<!-- ✅ FileProvider for file sharing: exported with scoped grants -->
 <provider
     android:name="androidx.core.content.FileProvider"
-    android:exported="false"
+    android:authorities="com.example.fileprovider"
+    android:exported="true"
     android:grantUriPermissions="true" />
-
-<!-- ❌ Accessible to other apps -->
-<provider
-    android:name="com.example.DataProvider"
-    android:exported="true" />
 ```
 
-**Rule**: `exported="false"` by default, explicitly allow only public APIs.
+**Rules**:
+- Explicitly set `android:exported` for components, especially those with intent-filters (Android 12+).
+- Use `exported="false"` by default for internal components; set `exported="true"` only for intentional public APIs.
+- For FileProvider, rely on `grantUriPermissions`/`FLAG_GRANT_*` flags and proper `authorities` instead of broad access.
 
 ### 4. Code Obfuscation
 
@@ -255,7 +275,7 @@ android {
 
 ### 5. Biometric Authentication
 
-**BiometricPrompt** for critical operations:
+**BiometricPrompt** for critical operations (payments, security settings changes):
 
 ```kotlin
 val biometricPrompt = BiometricPrompt(
@@ -271,16 +291,20 @@ val biometricPrompt = BiometricPrompt(
 
 val promptInfo = BiometricPrompt.PromptInfo.Builder()
     .setTitle("Confirm Payment")
-    .setNegativeButtonText("Cancel")
+    .setSubtitle("Use biometrics or device screen lock")
+    .setAllowedAuthenticators(
+        BiometricManager.Authenticators.BIOMETRIC_STRONG or
+            BiometricManager.Authenticators.DEVICE_CREDENTIAL
+    )
     .build()
 ```
 
 **Verification checklist**:
 - EncryptedSharedPreferences for tokens
-- Network Security Config with HTTPS
-- Components exported="false" by default
+- Network Security Config with global cleartext disabled and HTTPS
+- Components with explicit `android:exported`, internal ones set to `false`
 - R8 minification enabled in release
-- BiometricPrompt for financial operations
+- BiometricPrompt with strong authenticators for financial/critical operations
 
 ---
 

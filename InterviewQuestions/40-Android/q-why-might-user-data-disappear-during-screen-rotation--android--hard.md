@@ -1,7 +1,6 @@
 ---
 id: android-096
-title: Почему данные пользователя могут исчезать при повороте экрана? / Why might
-  user data disappear during screen rotation?
+title: Почему данные пользователя могут исчезать при повороте экрана? / Why might user data disappear during screen rotation?
 aliases:
 - Configuration change data loss
 - Screen rotation data loss
@@ -27,7 +26,7 @@ related:
 - q-compose-gesture-detection--android--medium
 - q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard
 created: 2025-10-13
-updated: 2025-10-30
+updated: 2025-11-10
 tags:
 - android/architecture-mvvm
 - android/lifecycle
@@ -38,8 +37,9 @@ tags:
 - state-management
 - viewmodel
 sources:
-- https://developer.android.com/guide/topics/resources/runtime-changes
-- https://developer.android.com/topic/libraries/architecture/saving-states
+- "https://developer.android.com/guide/topics/resources/runtime-changes"
+- "https://developer.android.com/topic/libraries/architecture/saving-states"
+
 ---
 
 # Вопрос (RU)
@@ -54,17 +54,27 @@ sources:
 
 ## Ответ (RU)
 
-Android по умолчанию уничтожает и пересоздает Activity при изменении конфигурации (поворот экрана). Непонятые переменные сбрасываются, и данные теряются.
+### Краткая версия
 
-### Почему Android Пересоздаёт Activity
+Данные исчезают, потому что при изменении конфигурации Android уничтожает и пересоздаёт `Activity`. Все поля и локальные переменные сбрасываются. Чтобы сохранить данные, нужно использовать:
+- `onSaveInstanceState` для небольшого UI-состояния
+- `ViewModel` для состояния, переживающего config changes
+- `SavedStateHandle` для критичных данных и восстановления после process death
+- Автоматическое сохранение состояния `View` по `android:id`
 
-Система пересоздаёт Activity для:
+### Подробная версия
+
+Android по умолчанию уничтожает и пересоздает `Activity` при изменении конфигурации (поворот экрана). Поля активити и локальные переменные сбрасываются, и несохранённые данные теряются.
+
+### Почему Android пересоздаёт `Activity`
+
+Система пересоздаёт `Activity` для:
 1. Применения новых ресурсов (layout-land, values-sw600dp)
 2. Загрузки ресурсов для новой ориентации
 3. Пересчёта размеров layout
 4. Применения изменений плотности/языка/темы
 
-### Жизненный Цикл При Повороте
+### Жизненный цикл при повороте
 
 ```
 Поворот устройства
@@ -82,7 +92,7 @@ onCreate(savedInstanceState)  ← ВОССТАНОВИТЬ СОСТОЯНИЕ
 onStart() → onRestoreInstanceState() → onResume()
 ```
 
-### ❌ Проблема: Потеря Данных
+### ❌ Проблема: Потеря данных
 
 ```kotlin
 // Данные будут потеряны при повороте
@@ -102,7 +112,7 @@ class FormActivity : AppCompatActivity() {
 }
 ```
 
-### ✅ Решение 1: onSaveInstanceState (для UI-состояния)
+### ✅ Решение 1: `onSaveInstanceState` (для UI-состояния)
 
 ```kotlin
 class FormActivity : AppCompatActivity() {
@@ -132,10 +142,10 @@ class FormActivity : AppCompatActivity() {
 ```
 
 **Ограничения**:
-- Bundle имеет лимит ~500KB (TransactionTooLargeException)
-- Только сериализуемые типы (Parcelable, Serializable, примитивы)
+- `Bundle` имеет лимит порядка сотен килобайт (слишком большие данные могут привести к `TransactionTooLargeException`)
+- Только сериализуемые типы (`Parcelable`, `Serializable`, примитивы)
 
-### ✅ Решение 2: ViewModel (для Сложных данных)
+### ✅ Решение 2: `ViewModel` (для сложных данных)
 
 ```kotlin
 class FormViewModel : ViewModel() {
@@ -143,7 +153,7 @@ class FormViewModel : ViewModel() {
     val productList = MutableLiveData<List<Product>>()
 
     init {
-        loadProducts()  // Загрузится только один раз
+        loadProducts()  // Загрузится только один раз для данного владельца
     }
 
     private fun loadProducts() {
@@ -158,6 +168,7 @@ class FormActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_form)
 
         // ViewModel переживает поворот
         viewModel.userInput.observe(this) { input ->
@@ -174,18 +185,20 @@ class FormActivity : AppCompatActivity() {
 
 **Преимущества**:
 - Переживает configuration changes
-- Не имеет размерных ограничений Bundle
-- Идеально для тяжёлых операций (сетевые запросы, БД)
+- Не имеет размерных ограничений `Bundle`
+- Подходит для тяжёлых операций (сетевые запросы, БД)
 
-**Ограничение**: НЕ переживает process death
+**Ограничение**: не переживает process death (данные нужно уметь восстановить из надёжного источника).
 
-### ✅ Решение 3: SavedStateHandle (best practice)
+### ✅ Решение 3: `SavedStateHandle` (best practice)
 
 ```kotlin
 class FormViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    // Переживает и config changes, и process death
+    // Может пережить и config changes, и process death,
+    // если ViewModel создан через SavedStateViewModelFactory / Hilt и данные
+    // корректно сохраняются через SavedStateRegistry
     var userInput: String
         get() = savedStateHandle["input"] ?: ""
         set(value) { savedStateHandle["input"] = value }
@@ -196,13 +209,15 @@ class FormViewModel(
 }
 
 class FormActivity : AppCompatActivity() {
+    // Требуется фабрика, поддерживающая SavedStateHandle
     private val viewModel: FormViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_form)
 
         findViewById<EditText>(R.id.editText).apply {
-            setText(viewModel.userInput)  // Автоматически восстановлено
+            setText(viewModel.userInput)  // Восстановлено из SavedStateHandle (если доступно)
             addTextChangedListener {
                 viewModel.userInput = it.toString()
             }
@@ -211,7 +226,7 @@ class FormActivity : AppCompatActivity() {
 }
 ```
 
-### ❌ Решение 4: android:configChanges (не рекомендуется)
+### ❌ Решение 4: `android:configChanges` (не рекомендуется)
 
 ```xml
 <!-- AndroidManifest.xml -->
@@ -234,12 +249,12 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Почему плохо**:
-- Нужно вручную обрабатывать все изменения конфигурации
-- Не загружаются ресурсы для новой ориентации автоматически
+- Нужно вручную обрабатывать соответствующие изменения конфигурации
+- Ресурсы для новой конфигурации не будут применены автоматически так же прозрачно, как при пересоздании `Activity`
 - Усложняет код
-- Считается bad practice
+- Считается плохой практикой, за редкими, обоснованными исключениями
 
-### Автоматическое Сохранение View
+### Автоматическое сохранение состояния `View`
 
 ```xml
 <!-- View с android:id автоматически сохраняют базовое состояние -->
@@ -257,10 +272,10 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Требует**:
-- View должна иметь `android:id`
-- View должна быть присоединена к window во время `onSaveInstanceState()`
+- `View` должна иметь `android:id`
+- `View` должна быть присоединена к window во время `onSaveInstanceState()`
 
-### Что Требует Ручного Сохранения
+### Что требует ручного сохранения
 
 ```kotlin
 // ❌ НЕ сохраняется автоматически
@@ -280,7 +295,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 }
 ```
 
-### Распространённые Ошибки
+### Распространённые ошибки
 
 ```kotlin
 // ❌ Ошибка 1: игнорирование savedInstanceState
@@ -299,7 +314,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     outState.putParcelableArrayList("list", ArrayList(millionItems))
-    // TransactionTooLargeException!
+    // Риск TransactionTooLargeException!
 }
 
 // ✅ Правильный подход
@@ -314,24 +329,24 @@ override fun onCreate(savedInstanceState: Bundle?) {
 }
 ```
 
-### Матрица Решений
+### Матрица решений
 
 | Тип данных | Решение | Причина |
 |------------|---------|---------|
-| EditText (с ID) | Автоматически | View сохраняет сам |
-| Кастомная переменная | onSaveInstanceState | Маленькие данные |
-| Большой объект | ViewModel | Только config changes |
-| Критические данные | SavedStateHandle | Config changes + process death |
-| Сетевые данные | ViewModel + Repository | Не перезагружать |
-| Ввод формы | SavedStateHandle | Должен пережить process death |
+| EditText (с ID) | Автоматически | `View` сохраняет сам |
+| Кастомная переменная | `onSaveInstanceState` | Маленькие данные |
+| Большой объект | `ViewModel` | Только config changes |
+| Критические данные | `SavedStateHandle` | Config changes + process death (при корректной интеграции) |
+| Сетевые данные | `ViewModel` + Repository | Не перезагружать |
+| Ввод формы | `SavedStateHandle` | Должен пережить process death |
 
-### Полный Пример (best practice)
+### Полный пример (best practice)
 
 ```kotlin
 class RegistrationViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    // Критические данные - переживают process death
+    // Критические данные - могут пережить process death при корректном использовании
     var email: String
         get() = savedStateHandle["email"] ?: ""
         set(value) { savedStateHandle["email"] = value }
@@ -351,6 +366,7 @@ class RegistrationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_registration)
 
         findViewById<EditText>(R.id.email).apply {
             setText(viewModel.email)
@@ -369,22 +385,32 @@ class RegistrationActivity : AppCompatActivity() {
 ### Резюме
 
 Данные исчезают потому что:
-1. Activity уничтожается и пересоздаётся
+1. `Activity` уничтожается и пересоздаётся
 2. Переменные сбрасываются в начальные значения
-3. Данные не сохранены в onSaveInstanceState
-4. ViewModel не используется для сложных данных
+3. Данные не сохранены в `onSaveInstanceState`
+4. `ViewModel` / `SavedStateHandle` не используются для хранения состояния
 
-**Решения**:
-- **onSaveInstanceState** - маленькое UI-состояние (< 500KB)
-- **ViewModel** - сложные данные, config changes
-- **SavedStateHandle** - критические данные (best practice)
-- **View ID** - автоматическое сохранение базового состояния View
+Решения:
+- `onSaveInstanceState` — маленькое UI-состояние (учитывая лимит Binder)
+- `ViewModel` — сложные данные, переживает только config changes
+- `SavedStateHandle` — критические данные (best practice, при правильной интеграции)
+- `View` ID — автоматическое сохранение базового состояния `View`
 
 ## Answer (EN)
 
-Android destroys and recreates Activities by default during configuration changes (screen rotation). Unsaved variables reset, causing data loss.
+### Short Version
 
-### Why Android Recreates Activity
+Data disappears because Android destroys and recreates the `Activity` on configuration change. All fields and locals are reset. To preserve data, use:
+- `onSaveInstanceState` for small UI state
+- `ViewModel` for state surviving config changes
+- `SavedStateHandle` for critical state and process-death restoration
+- Automatic `View` state saving via `android:id`
+
+### Detailed Version
+
+Android destroys and recreates Activities by default during configuration changes (screen rotation). `Activity` fields and local variables are reset, and any unsaved data is lost.
+
+### Why Android Recreates `Activity`
 
 System recreates to:
 1. Apply new resource configurations (layout-land, values-sw600dp)
@@ -430,7 +456,7 @@ class FormActivity : AppCompatActivity() {
 }
 ```
 
-### ✅ Solution 1: onSaveInstanceState (for UI state)
+### ✅ Solution 1: `onSaveInstanceState` (for UI state)
 
 ```kotlin
 class FormActivity : AppCompatActivity() {
@@ -460,10 +486,10 @@ class FormActivity : AppCompatActivity() {
 ```
 
 **Limitations**:
-- Bundle has ~500KB limit (TransactionTooLargeException)
-- Only serializable types (Parcelable, Serializable, primitives)
+- `Bundle` is constrained by Binder transaction limits (too much data can cause `TransactionTooLargeException`)
+- Only serializable types (`Parcelable`, `Serializable`, primitives)
 
-### ✅ Solution 2: ViewModel (for Complex data)
+### ✅ Solution 2: `ViewModel` (for complex data)
 
 ```kotlin
 class FormViewModel : ViewModel() {
@@ -471,7 +497,7 @@ class FormViewModel : ViewModel() {
     val productList = MutableLiveData<List<Product>>()
 
     init {
-        loadProducts()  // Loads only once
+        loadProducts()  // Loads only once for the given owner
     }
 
     private fun loadProducts() {
@@ -486,6 +512,7 @@ class FormActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_form)
 
         // ViewModel survives rotation
         viewModel.userInput.observe(this) { input ->
@@ -502,18 +529,20 @@ class FormActivity : AppCompatActivity() {
 
 **Benefits**:
 - Survives configuration changes
-- No Bundle size limits
-- Perfect for heavy operations (network, database)
+- No `Bundle` size limits
+- Good for heavy operations (network, database)
 
-**Limitation**: Does NOT survive process death
+**Limitation**: does not survive process death (state must be restorable from a reliable source).
 
-### ✅ Solution 3: SavedStateHandle (best practice)
+### ✅ Solution 3: `SavedStateHandle` (best practice)
 
 ```kotlin
 class FormViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    // Survives both config changes AND process death
+    // Can survive both config changes AND process death
+    // when ViewModel is created via SavedStateViewModelFactory / Hilt
+    // and values are properly saved through SavedStateRegistry
     var userInput: String
         get() = savedStateHandle["input"] ?: ""
         set(value) { savedStateHandle["input"] = value }
@@ -524,13 +553,15 @@ class FormViewModel(
 }
 
 class FormActivity : AppCompatActivity() {
+    // Requires a factory that provides SavedStateHandle
     private val viewModel: FormViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_form)
 
         findViewById<EditText>(R.id.editText).apply {
-            setText(viewModel.userInput)  // Auto-restored
+            setText(viewModel.userInput)  // Restored from SavedStateHandle (if available)
             addTextChangedListener {
                 viewModel.userInput = it.toString()
             }
@@ -539,7 +570,7 @@ class FormActivity : AppCompatActivity() {
 }
 ```
 
-### ❌ Solution 4: android:configChanges (not recommended)
+### ❌ Solution 4: `android:configChanges` (not recommended)
 
 ```xml
 <!-- AndroidManifest.xml -->
@@ -562,12 +593,12 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Why bad**:
-- Must manually handle all configuration changes
-- Orientation-specific resources won't load automatically
+- You must manually handle all relevant configuration changes
+- New configuration resources are not applied as seamlessly as with `Activity` recreation
 - Complicates code
-- Considered bad practice
+- Considered bad practice except for narrow, justified cases
 
-### Automatic View State Saving
+### Automatic `View` State Saving
 
 ```xml
 <!-- Views with android:id automatically save basic state -->
@@ -585,8 +616,8 @@ class MainActivity : AppCompatActivity() {
 ```
 
 **Requirements**:
-- View must have `android:id`
-- View must be attached to window during `onSaveInstanceState()`
+- `View` must have `android:id`
+- `View` must be attached to window during `onSaveInstanceState()`
 
 ### What Needs Manual Saving
 
@@ -627,7 +658,7 @@ override fun onSaveInstanceState(outState: Bundle) {
 override fun onSaveInstanceState(outState: Bundle) {
     super.onSaveInstanceState(outState)
     outState.putParcelableArrayList("list", ArrayList(millionItems))
-    // TransactionTooLargeException!
+    // Risk of TransactionTooLargeException!
 }
 
 // ✅ Correct approach
@@ -646,12 +677,12 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
 | Data Type | Solution | Reason |
 |-----------|----------|--------|
-| EditText (with ID) | Automatic | View saves itself |
-| Custom variable | onSaveInstanceState | Small data |
-| Large object | ViewModel | Config changes only |
-| Critical data | SavedStateHandle | Config changes + process death |
-| Network data | ViewModel + Repository | Don't reload |
-| Form input | SavedStateHandle | Must survive process death |
+| EditText (with ID) | Automatic | `View` saves itself |
+| Custom variable | `onSaveInstanceState` | Small data |
+| Large object | `ViewModel` | Config changes only |
+| Critical data | `SavedStateHandle` | Config changes + process death (with correct integration) |
+| Network data | `ViewModel` + Repository | Avoid reloads |
+| Form input | `SavedStateHandle` | Should survive process death |
 
 ### Complete Example (best practice)
 
@@ -659,7 +690,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 class RegistrationViewModel(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    // Critical data - survives process death
+    // Critical data - can survive process death when wired via SavedStateHandle
     var email: String
         get() = savedStateHandle["email"] ?: ""
         set(value) { savedStateHandle["email"] = value }
@@ -679,6 +710,7 @@ class RegistrationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_registration)
 
         findViewById<EditText>(R.id.email).apply {
             setText(viewModel.email)
@@ -697,32 +729,32 @@ class RegistrationActivity : AppCompatActivity() {
 ### Summary
 
 Data disappears because:
-1. Activity destroyed and recreated
+1. `Activity` is destroyed and recreated
 2. Variables reset to initial values
-3. Data not saved in onSaveInstanceState
-4. ViewModel not used for complex data
+3. Data is not saved in `onSaveInstanceState`
+4. `ViewModel` / `SavedStateHandle` is not used for state management
 
-**Solutions**:
-- **onSaveInstanceState** - small UI state (< 500KB)
-- **ViewModel** - complex data, config changes
-- **SavedStateHandle** - critical data (best practice)
-- **View ID** - automatic basic View state saving
+Solutions:
+- `onSaveInstanceState` — small UI state (respect Binder limits)
+- `ViewModel` — complex data, survives config changes only
+- `SavedStateHandle` — critical data (best practice with proper integration)
+- `View` ID — automatic basic `View` state saving
 
 ---
 
 ## Follow-ups
 
-1. What's the maximum size for data in onSaveInstanceState Bundle and what happens if exceeded?
-2. How does SavedStateHandle internally combine ViewModel persistence with Bundle serialization?
-3. What happens to ViewModel when process is killed (low memory) vs configuration change?
-4. How to handle state restoration for custom Views that don't extend standard Android Views?
-5. What advanced patterns exist for managing complex multi-fragment state during configuration changes?
+1. What's the maximum safe size for data stored in the `onSaveInstanceState` `Bundle`, and how do Binder transaction limits affect this?
+2. How does `SavedStateHandle` interact with `SavedStateRegistry` and `Bundle` under the hood?
+3. What happens to a `ViewModel` during low-memory process death vs. a configuration change, and how should you design for both?
+4. How would you persist complex form state across multiple `Fragment`s during rotation and process death?
+5. In which rare scenarios is using `android:configChanges` justified, and what trade-offs does it introduce?
 
 ## References
 
 - Official Android Documentation: [Handle configuration changes](https://developer.android.com/guide/topics/resources/runtime-changes)
 - Official Android Documentation: [Saving UI States](https://developer.android.com/topic/libraries/architecture/saving-states)
-- Official Android Documentation: [ViewModel Overview](https://developer.android.com/topic/libraries/architecture/viewmodel)
+- Official Android Documentation: [`ViewModel` Overview](https://developer.android.com/topic/libraries/architecture/viewmodel)
 
 ## Related Questions
 
@@ -732,10 +764,11 @@ Data disappears because:
 - [[c-lifecycle]]
 - [[c-mvvm]]
 
-
 ### Prerequisites (Medium)
+
 - [[q-how-to-display-svg-string-as-a-vector-file--android--medium]]
 - [[q-compose-gesture-detection--android--medium]]
 
 ### Related (Hard)
+
 - [[q-why-fragment-callbacks-differ-from-activity-callbacks--android--hard]]

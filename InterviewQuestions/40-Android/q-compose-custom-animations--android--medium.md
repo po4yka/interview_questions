@@ -12,15 +12,16 @@ original_language: en
 language_tags:
   - en
   - ru
-status: reviewed
+status: draft
 moc: moc-android
 related:
+  - c-jetpack-compose
   - q-animated-visibility-vs-content--android--medium
   - q-how-to-create-animations-in-android--android--medium
   - q-jetpack-compose-basics--android--medium
   - q-vector-graphics-animations--android--medium
 created: 2025-10-13
-updated: 2025-10-29
+updated: 2025-11-10
 tags: [android/ui-animation, android/ui-compose, difficulty/medium]
 sources: []
 ---
@@ -58,7 +59,7 @@ sources: []
 ```kotlin
 @Composable
 fun PulsingButton(expanded: Boolean) {
-  // ✅ Автоматически отменяется при изменении expanded
+  // Автоматически отменяется при изменении expanded
   val scale by animateFloatAsState(
     targetValue = if (expanded) 1.2f else 1f,
     animationSpec = spring(stiffness = Spring.StiffnessLow)
@@ -77,7 +78,7 @@ fun GestureAnimation(targetOffset: Float) {
   val offset = remember { Animatable(0f) }
 
   LaunchedEffect(targetOffset) {
-    // ✅ Контроль последовательности и прерываний
+    // Контроль последовательности и прерываний
     offset.animateTo(
       targetValue = targetOffset,
       animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
@@ -94,7 +95,7 @@ fun GestureAnimation(targetOffset: Float) {
 fun AnimatedCard(isExpanded: Boolean) {
   val transition = updateTransition(isExpanded, label = "card_expand")
 
-  // ✅ Все анимации синхронизированы
+  // Все анимации синхронизированы
   val alpha by transition.animateFloat(label = "alpha") {
     if (it) 1f else 0.6f
   }
@@ -130,11 +131,45 @@ fun AnimatedCard(isExpanded: Boolean) {
 
 ### Оптимизация Производительности
 
-- Используйте `graphicsLayer` вместо `offset`/`size` для hardware-accelerated анимаций
-- Ограничивайте recomposition через `derivedStateOf` для вычисляемых значений
-- Избегайте lambda allocations в animationSpec
-- `Modifier.animateContentSize()` для layout-based анимаций
-- Профилируйте через Layout Inspector (animation preview) и Macrobenchmark
+- Используйте `graphicsLayer` для недорогих transform-анимаций (scale/alpha/translation/rotation); для изменений layout по оси/размеру по-прежнему используйте соответствующие layout-модификаторы.
+- Ограничивайте recomposition через `derivedStateOf` для вычисляемых значений.
+- Избегайте лишних lambda allocations в `animationSpec`.
+- Используйте `Modifier.animateContentSize()` для плавной анимации изменений размера контента (учитывая, что это вызывает layout-проходы).
+- Профилируйте через Layout Inspector (animation preview) и Macrobenchmark.
+
+---
+
+## Ответ: Дополнительные вопросы (RU)
+
+- Как последовательно запускать несколько анимаций с разными задержками и длительностями?
+- В каких случаях `Transition` даёт лучшие характеристики, чем несколько независимых вызовов `animate*AsState`?
+- Как реализовать жестовые анимации с учётом скорости (velocity) с помощью `Animatable`?
+- Каковы особенности потребления памяти при использовании `rememberInfiniteTransition` для непрерывных анимаций?
+- Как тестировать анимации в composable-функциях с помощью Compose Testing API?
+
+## Ответ: Ссылки (RU)
+
+- [[c-jetpack-compose]] — концепции и архитектура Jetpack Compose
+- [[q-jetpack-compose-basics--android--medium]] — основы Compose
+- [[q-animated-visibility-vs-content--android--medium]] — AnimatedVisibility vs AnimatedContent
+- "https://developer.android.com/develop/ui/compose/animation/introduction"
+- "https://developer.android.com/develop/ui/compose/animation/quick-guide"
+
+## Ответ: Связанные вопросы (RU)
+
+### Предварительные (проще)
+- [[q-jetpack-compose-basics--android--medium]] — понимание основ Compose и state
+- [[q-how-to-create-animations-in-android--android--medium]] — базовые концепции анимаций в Android
+
+### Связанные (средний уровень)
+- [[q-animated-visibility-vs-content--android--medium]] — выбор между AnimatedVisibility и AnimatedContent
+- [[q-vector-graphics-animations--android--medium]] — анимация векторной графики в Compose
+- [[q-remember-remembersaveable--android--medium]] — паттерны сохранения состояния в Compose
+
+### Продвинутые (сложнее)
+- [[q-compose-compiler-plugin--android--hard]] — оптимизации компилятора Compose
+
+---
 
 ## Answer (EN)
 
@@ -161,7 +196,7 @@ fun AnimatedCard(isExpanded: Boolean) {
 ```kotlin
 @Composable
 fun PulsingButton(expanded: Boolean) {
-  // ✅ Automatically cancels when expanded changes
+  // Automatically cancels when expanded changes
   val scale by animateFloatAsState(
     targetValue = if (expanded) 1.2f else 1f,
     animationSpec = spring(stiffness = Spring.StiffnessLow)
@@ -180,7 +215,7 @@ fun GestureAnimation(targetOffset: Float) {
   val offset = remember { Animatable(0f) }
 
   LaunchedEffect(targetOffset) {
-    // ✅ Sequence control and interruption handling
+    // Sequence control and interruption handling
     offset.animateTo(
       targetValue = targetOffset,
       animationSpec = spring(dampingRatio = Spring.DampingRatioMediumBouncy)
@@ -197,7 +232,7 @@ fun GestureAnimation(targetOffset: Float) {
 fun AnimatedCard(isExpanded: Boolean) {
   val transition = updateTransition(isExpanded, label = "card_expand")
 
-  // ✅ All animations synchronized
+  // All animations synchronized
   val alpha by transition.animateFloat(label = "alpha") {
     if (it) 1f else 0.6f
   }
@@ -233,11 +268,11 @@ fun AnimatedCard(isExpanded: Boolean) {
 
 ### Performance Optimization
 
-- Use `graphicsLayer` instead of `offset`/`size` for hardware-accelerated animations
-- Limit recomposition via `derivedStateOf` for computed values
-- Avoid lambda allocations in animationSpec
-- `Modifier.animateContentSize()` for layout-based animations
-- Profile with Layout Inspector (animation preview) and Macrobenchmark
+- Use `graphicsLayer` for cheap transform animations (scale/alpha/translation/rotation); for actual layout/position changes still use the appropriate layout modifiers.
+- Limit recomposition via `derivedStateOf` for computed values.
+- Avoid unnecessary lambda allocations in `animationSpec`.
+- Use `Modifier.animateContentSize()` for smooth size changes of content (being aware it triggers layout passes).
+- Profile with Layout Inspector (animation preview) and Macrobenchmark.
 
 ---
 
@@ -254,8 +289,8 @@ fun AnimatedCard(isExpanded: Boolean) {
 - [[c-jetpack-compose]] - Jetpack Compose concepts and architecture
 - [[q-jetpack-compose-basics--android--medium]] - Compose fundamentals
 - [[q-animated-visibility-vs-content--android--medium]] - AnimatedVisibility vs AnimatedContent
-- https://developer.android.com/develop/ui/compose/animation/introduction
-- https://developer.android.com/develop/ui/compose/animation/quick-guide
+- "https://developer.android.com/develop/ui/compose/animation/introduction"
+- "https://developer.android.com/develop/ui/compose/animation/quick-guide"
 
 ## Related Questions
 
