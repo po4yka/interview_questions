@@ -23,24 +23,26 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: graph-export
+  cancel-in-progress: false
+
 jobs:
   export:
     name: Export Vault Graph
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up uv with Python 3.12
+        uses: astral-sh/setup-uv@v3
         with:
           python-version: '3.12'
-
-      - name: Install uv
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          cache: true
+          cache-dependency-path: automation/uv.lock
 
       - name: Install automation package
         run: |
@@ -53,7 +55,7 @@ jobs:
           mkdir -p ../graph-exports
 
           TIMESTAMP=$(date -u '+%Y%m%d-%H%M%S')
-          FORMAT="${{ inputs.format || 'all' }}"
+          FORMAT="${{ github.event_name == 'workflow_dispatch' && github.event.inputs.format || 'all' }}"
 
           echo "Exporting vault graph (format: $FORMAT)..."
 
@@ -128,7 +130,7 @@ jobs:
           echo "# Graph Export Complete" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "**Timestamp**: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "**Format**: ${{ inputs.format || 'all' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Format**: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.format || 'all' }}" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "Exported files:" >> $GITHUB_STEP_SUMMARY
           ls -lh graph-exports/ >> $GITHUB_STEP_SUMMARY

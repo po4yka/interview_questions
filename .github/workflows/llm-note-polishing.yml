@@ -31,15 +31,14 @@ on:
     # Run weekly on Sunday at 2 AM UTC (dry-run only)
     - cron: '0 2 * * 0'
 
-permissions:
-  contents: write
-  pull-requests: write
-  issues: write
-
 jobs:
-  llm-review:
-    name: LLM-based Note Review
+  scheduled-dry-run:
+    if: github.event_name == 'schedule'
+    name: Scheduled LLM Review (dry run)
     runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
 
     steps:
       - name: Checkout repository
@@ -47,15 +46,92 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up uv with Python 3.12
+        uses: astral-sh/setup-uv@v3
         with:
           python-version: '3.12'
+          cache: true
+          cache-dependency-path: automation/uv.lock
 
-      - name: Install uv
+      - name: Install automation package
         run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          cd automation
+          uv sync
+
+      - name: Configure run parameters
+        run: |
+          echo "DRY_RUN=true" >> $GITHUB_ENV
+          echo "CREATE_PR=false" >> $GITHUB_ENV
+          echo "PATTERN=InterviewQuestions/**/*.md" >> $GITHUB_ENV
+          echo "MAX_ITERATIONS=5" >> $GITHUB_ENV
+
+      - name: Ensure OpenRouter API key is available
+        env:
+          HAS_OPENROUTER: ${{ secrets.OPENROUTER_API_KEY != '' }}
+        run: |
+          if [ "$HAS_OPENROUTER" != "true" ]; then
+            echo "OPENROUTER_API_KEY secret is required for the LLM review workflow." >&2
+            exit 1
+          fi
+
+      - name: Run LLM review
+        env:
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          cd automation
+          uv run vault-app llm-review \
+            --pattern "$PATTERN" \
+            --dry-run \
+            --max-iterations "$MAX_ITERATIONS" \
+            --report ../llm-review-report.md \
+            --backup
+
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: llm-review-report
+          path: llm-review-report.md
+          retention-days: 30
+
+      - name: Add workflow summary
+        if: always()
+        run: |
+          echo "## LLM Review Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Mode**: scheduled dry run" >> $GITHUB_STEP_SUMMARY
+          echo "- Pattern: $PATTERN" >> $GITHUB_STEP_SUMMARY
+          echo "- Max iterations: $MAX_ITERATIONS" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f "llm-review-report.md" ]; then
+            echo "### Report" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            cat llm-review-report.md >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No report generated" >> $GITHUB_STEP_SUMMARY
+          fi
+
+  llm-review:
+    if: github.event_name != 'schedule'
+    name: LLM-based Note Review
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up uv with Python 3.12
+        uses: astral-sh/setup-uv@v3
+        with:
+          python-version: '3.12'
+          cache: true
+          cache-dependency-path: automation/uv.lock
 
       - name: Install automation package
         run: |
@@ -64,18 +140,18 @@ jobs:
 
       - name: Set up environment variables
         run: |
-          # Set defaults for scheduled runs
-          if [ "${{ github.event_name }}" == "schedule" ]; then
-            echo "DRY_RUN=true" >> $GITHUB_ENV
-            echo "CREATE_PR=false" >> $GITHUB_ENV
-            echo "PATTERN=InterviewQuestions/**/*.md" >> $GITHUB_ENV
-            echo "MAX_ITERATIONS=5" >> $GITHUB_ENV
-          else
-            # Use workflow_dispatch inputs
-            echo "DRY_RUN=${{ github.event.inputs.dry_run || 'true' }}" >> $GITHUB_ENV
-            echo "CREATE_PR=${{ github.event.inputs.create_pr || 'true' }}" >> $GITHUB_ENV
-            echo "PATTERN=${{ github.event.inputs.pattern || 'InterviewQuestions/**/*.md' }}" >> $GITHUB_ENV
-            echo "MAX_ITERATIONS=${{ github.event.inputs.max_iterations || '5' }}" >> $GITHUB_ENV
+          echo "DRY_RUN=${{ github.event.inputs.dry_run || 'true' }}" >> $GITHUB_ENV
+          echo "CREATE_PR=${{ github.event.inputs.create_pr || 'true' }}" >> $GITHUB_ENV
+          echo "PATTERN=${{ github.event.inputs.pattern || 'InterviewQuestions/**/*.md' }}" >> $GITHUB_ENV
+          echo "MAX_ITERATIONS=${{ github.event.inputs.max_iterations || '5' }}" >> $GITHUB_ENV
+
+      - name: Ensure OpenRouter API key is available
+        env:
+          HAS_OPENROUTER: ${{ secrets.OPENROUTER_API_KEY != '' }}
+        run: |
+          if [ "$HAS_OPENROUTER" != "true" ]; then
+            echo "OPENROUTER_API_KEY secret is required for the LLM review workflow." >&2
+            exit 1
           fi
 
       - name: Run LLM review
@@ -84,14 +160,12 @@ jobs:
         run: |
           cd automation
 
-          # Determine dry-run flag
           if [ "$DRY_RUN" == "true" ]; then
             DRY_RUN_FLAG="--dry-run"
           else
             DRY_RUN_FLAG="--no-dry-run"
           fi
 
-          # Run LLM review
           uv run vault-app llm-review \
             --pattern "$PATTERN" \
             $DRY_RUN_FLAG \
@@ -109,75 +183,68 @@ jobs:
       - name: Create PR with changes
         if: env.DRY_RUN == 'false' && env.CREATE_PR == 'true'
         run: |
-          # Check if there are changes
           if [ -z "$(git status --porcelain)" ]; then
             echo "No changes to commit"
             exit 0
           fi
 
-          # Configure git
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-          # Create branch
           BRANCH_NAME="llm-review/$(date +%Y%m%d-%H%M%S)"
           git checkout -b "$BRANCH_NAME"
 
-          # Add changes
           git add InterviewQuestions/**/*.md
           git add InterviewQuestions/**/*.md.backup 2>/dev/null || true
 
-          # Commit
           git commit -m "feat: LLM-based note review and fixes
 
-          This commit contains automated improvements to notes using LLM review:
-          - Technical accuracy improvements
-          - Formatting and structure fixes
-          - Compliance with vault rules
+This commit contains automated improvements to notes using LLM review:
+- Technical accuracy improvements
+- Formatting and structure fixes
+- Compliance with vault rules
 
-          Pattern: $PATTERN
-          Max iterations: $MAX_ITERATIONS
+Pattern: $PATTERN
+Max iterations: $MAX_ITERATIONS
 
-          Generated by: ${{ github.workflow }}
-          Run: ${{ github.run_id }}"
+Generated by: ${{ github.workflow }}
+Run: ${{ github.run_id }}"
 
-          # Push
           git push -u origin "$BRANCH_NAME"
 
-          # Create PR
           gh pr create \
             --title "LLM Review: Automated note improvements" \
-            --body "$(cat <<'EOF'
-          ## Summary
+            --body "$(cat <<'PR_BODY'
+## Summary
 
-          This PR contains automated improvements to notes using the LLM review system.
+This PR contains automated improvements to notes using the LLM review system.
 
-          **Review settings**:
-          - Pattern: $PATTERN
-          - Max iterations: $MAX_ITERATIONS
-          - Workflow run: [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+**Review settings**:
+- Pattern: $PATTERN
+- Max iterations: $MAX_ITERATIONS
+- Workflow run: [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
 
-          ## Changes
+## Changes
 
-          The LLM review system performed:
-          1. Technical/factual review of note content
-          2. Iterative fixing of formatting and structure issues
-          3. Validation against vault rules
+The LLM review system performed:
+1. Technical/factual review of note content
+2. Iterative fixing of formatting and structure issues
+3. Validation against vault rules
 
-          ## Report
+## Report
 
-          See the detailed report in the workflow artifacts.
+See the detailed report in the workflow artifacts.
 
-          ## Testing
+## Testing
 
-          Please review the changes carefully, especially:
-          - Technical accuracy of any modified explanations
-          - Code examples remain correct
-          - YAML frontmatter is properly formatted
-          - Bilingual structure is preserved
+Please review the changes carefully, especially:
+- Technical accuracy of any modified explanations
+- Code examples remain correct
+- YAML frontmatter is properly formatted
+- Bilingual structure is preserved
 
-          EOF
-          )" \
+PR_BODY
+)" \
             --base main \
             --head "$BRANCH_NAME"
         env:
@@ -188,13 +255,12 @@ jobs:
         run: |
           echo "## LLM Review Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Settings**:" >> $GITHUB_STEP_SUMMARY
+          echo "**Mode**: workflow_dispatch" >> $GITHUB_STEP_SUMMARY
           echo "- Dry run: $DRY_RUN" >> $GITHUB_STEP_SUMMARY
           echo "- Pattern: $PATTERN" >> $GITHUB_STEP_SUMMARY
           echo "- Max iterations: $MAX_ITERATIONS" >> $GITHUB_STEP_SUMMARY
           echo "- Create PR: $CREATE_PR" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-
           if [ -f "llm-review-report.md" ]; then
             echo "### Report" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
@@ -211,7 +277,6 @@ jobs:
           script: |
             const runUrl = `${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}`;
 
-            // Find if there's an open issue about LLM review failures
             const issues = await github.rest.issues.listForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
@@ -220,7 +285,6 @@ jobs:
             });
 
             if (issues.data.length === 0) {
-              // Create new issue
               await github.rest.issues.create({
                 owner: context.repo.owner,
                 repo: context.repo.repo,

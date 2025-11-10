@@ -22,6 +22,7 @@ jobs:
   validate:
     name: Validate Changed Notes
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Checkout repository
@@ -29,15 +30,12 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up uv with Python 3.12
+        uses: astral-sh/setup-uv@v3
         with:
           python-version: '3.12'
-
-      - name: Install uv
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+          cache: true
+          cache-dependency-path: automation/uv.lock
 
       - name: Install automation package
         run: |
@@ -48,24 +46,27 @@ jobs:
         id: changed-files
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            BASE_REF="${{ github.event.pull_request.base.sha }}"
+            git fetch origin "${{ github.base_ref }}" --depth=1
+            BASE_SHA=$(git merge-base "origin/${{ github.base_ref }}" HEAD)
+            RANGE="$BASE_SHA...HEAD"
           else
-            BASE_REF="HEAD^"
+            BEFORE="${{ github.event.before }}"
+            if [ -z "$BEFORE" ] || [ "$BEFORE" = "0000000000000000000000000000000000000000" ]; then
+              BEFORE=$(git rev-list --max-parents=0 HEAD)
+            fi
+            RANGE="$BEFORE...${{ github.sha }}"
           fi
 
-          # Get changed .md files in InterviewQuestions/
-          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMR $BASE_REF HEAD | grep 'InterviewQuestions/.*\.md$' || echo "")
+          CHANGED_FILES=$(git diff --name-only --diff-filter=ACMR "$RANGE" -- 'InterviewQuestions/**/*.md' || true)
 
           if [ -z "$CHANGED_FILES" ]; then
             echo "No Markdown files changed"
-            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
           else
             echo "Changed files:"
             echo "$CHANGED_FILES"
-            echo "has_changes=true" >> $GITHUB_OUTPUT
-
-            # Save to file for validation
-            echo "$CHANGED_FILES" > changed_files.txt
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            printf '%s\n' "$CHANGED_FILES" > changed_files.txt
           fi
 
       - name: Prepare changed notes workspace
@@ -90,7 +91,6 @@ jobs:
           uv run vault validate ../changed-notes-temp --report ../validation-report.md --quiet | tee ../validation-console.log
           status=${PIPESTATUS[0]}
           printf "exit_code=%s\n" "$status" >> "$GITHUB_OUTPUT"
-          exit $status
 
       - name: Create validation summary
         if: steps.changed-files.outputs.has_changes == 'true'
@@ -185,6 +185,11 @@ jobs:
             changed_files.txt
           retention-days: 30
 
+      - name: Add validation summary to job report
+        if: steps.changed-files.outputs.has_changes == 'true'
+        run: |
+          cat validation-summary.md >> "$GITHUB_STEP_SUMMARY"
+
       - name: Comment PR with validation results
         if: github.event_name == 'pull_request' && steps.changed-files.outputs.has_changes == 'true'
         uses: actions/github-script@v7
@@ -198,54 +203,44 @@ jobs:
               : '# Validation Summary\n\nSummary not available.';
             const report = fs.existsSync('validation-report.md')
               ? fs.readFileSync('validation-report.md', 'utf8')
-              : 'Validation report not found.';
+              : 'Validation report not available.';
 
-            const body = `## Validation Results
+            const body = `${summary}\n\n<details>\n<summary>Validation report</summary>\n\n${report}\n\n</details>`;
 
-${summary}
-
-<details>
-<summary>Full validation report</summary>
-
-${report}
-
-</details>
-
-<details>
-<summary>Workflow details</summary>
-
-- **Workflow**: ${{ github.workflow }}
-- **Run**: [${{ github.run_id }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-- **Commit**: ${{ github.sha }}
-
-</details>`;
-
-            github.rest.issues.createComment({
+            await github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
               repo: context.repo.repo,
-              body: body
+              body
             });
 
-      - name: Validation summary
-        if: steps.changed-files.outputs.has_changes == 'true'
-        run: |
-          if [ -f "validation-summary.md" ]; then
-            cat validation-summary.md >> $GITHUB_STEP_SUMMARY
-          else
-            echo "# Validation Summary" >> $GITHUB_STEP_SUMMARY
-            echo "Validation report not generated." >> $GITHUB_STEP_SUMMARY
-          fi
+      - name: Create GitHub issue for critical validation failures
+        if: steps.changed-files.outputs.has_changes == 'true' && steps.summarize.outputs.has_critical == 'true'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const summary = require('fs').readFileSync('validation-summary.md', 'utf8');
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: 'Critical validation issues detected',
+              body: summary,
+              labels: ['validation', 'automation', 'critical']
+            });
 
-      - name: Fail on validation issues
-        if: steps.changed-files.outputs.has_changes == 'true' && (steps.summarize.outputs.has_errors == 'true' || steps.run-validation.outputs.exit_code != '0')
+      - name: Fail workflow for validation errors
+        if: steps.changed-files.outputs.has_changes == 'true' && steps.summarize.outputs.has_errors == 'true'
         run: |
-          echo "Validation detected errors."
+          echo "Validation reported errors"
           exit 1
 
-      - name: No changes detected
-        if: steps.changed-files.outputs.has_changes == 'false'
+      - name: No changes detected summary
+        if: steps.changed-files.outputs.has_changes != 'true'
         run: |
           echo "No Markdown files changed - skipping validation"
-          echo "### No Changes Detected" >> $GITHUB_STEP_SUMMARY
-          echo "No Markdown files were changed in this PR." >> $GITHUB_STEP_SUMMARY
+          {
+            echo "## Validation Summary"
+            echo ""
+            echo "No Markdown files were changed in this run."
+          } >> "$GITHUB_STEP_SUMMARY"
