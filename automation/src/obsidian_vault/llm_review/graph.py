@@ -333,6 +333,32 @@ class ReviewGraph:
 
             updates: dict[str, Any] = {}
             if result.changes_made:
+                is_valid, validation_error = self._validate_fix(
+                    state_obj.current_text,
+                    result.revised_text,
+                    state_obj.note_path,
+                )
+
+                if not is_valid:
+                    logger.error(
+                        "Technical review validation FAILED: {}",
+                        validation_error,
+                    )
+                    history_updates.append(
+                        state_obj.add_history_entry(
+                            "initial_llm_review",
+                            f"Technical review rejected: {validation_error}",
+                            validation_error=validation_error,
+                        )
+                    )
+                    return {
+                        "error": f"Technical review produced invalid output: {validation_error}",
+                        "requires_human_review": True,
+                        "completed": True,
+                        "decision": "done",
+                        "history": history_updates,
+                    }
+
                 updates["current_text"] = result.revised_text
                 updates["changed"] = True
                 logger.info(f"Technical review made changes: {result.explanation}")
