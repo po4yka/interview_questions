@@ -123,7 +123,9 @@ class StrictQAVerifier:
         timestamp_issues = [
             issue
             for issue in current_issues
-            if "timestamp" in issue.message.lower() or "created" in issue.field or "updated" in issue.field
+            if (issue.message and "timestamp" in issue.message.lower())
+            or (issue.field and "created" in issue.field)
+            or (issue.field and "updated" in issue.field)
         ]
         if timestamp_issues:
             for issue in timestamp_issues:
@@ -140,7 +142,9 @@ class StrictQAVerifier:
         required_field_issues = [
             issue
             for issue in current_issues
-            if "missing" in issue.message.lower() and issue.field == "frontmatter"
+            if issue.message
+            and "missing" in issue.message.lower()
+            and issue.field == "frontmatter"
         ]
         if required_field_issues:
             for issue in required_field_issues:
