@@ -8,7 +8,7 @@ Modules:
 - utils: Utility helpers for YAML loading, taxonomy management, and reporting
 - cli: Unified command-line interface with subcommands
 - technical_validation: LangChain-powered technical accuracy auditing
-- anki_generation: Automated workflow for creating new notes from external articles
+- qa_generation: Automated workflow for creating new Q&A notes from external articles
 
 Use the 'vault' CLI tool with subcommands:
 - vault validate: Comprehensive note validation
@@ -18,4 +18,4 @@ Use the 'vault' CLI tool with subcommands:
 
 __version__ = "0.3.1"
 
-__all__ = ["validators", "utils", "cli", "technical_validation", "anki_generation"]
+__all__ = ["validators", "utils", "cli", "technical_validation", "qa_generation"]
