@@ -1,11 +1,11 @@
 ---
 id: kotlin-074
-title: "Flow Operators: map, filter, transform"
+title: "Операторы Flow: map, filter, transform / Flow Operators: map, filter, transform"
 aliases: []
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, filter, flow]
+subtopics: [coroutines, flow]
 question_kind: theory
 difficulty: medium
 
@@ -13,30 +13,30 @@ difficulty: medium
 original_language: en
 language_tags: [en, ru]
 source: internal
-source_note: Comprehensive Kotlin Coroutines Guide - Question 140018
+source_note: "Comprehensive Kotlin Coroutines Guide - Question 140018"
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-coroutinescope-vs-coroutinecontext--kotlin--medium, q-flow-operators--kotlin--medium, q-testing-flow-operators--kotlin--hard]
+related: [c-flow, c-coroutines, q-flow-operators--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 
 tags: [coroutines, difficulty/medium, kotlin]
 ---
 # Вопрос (RU)
-> Как использовать операторы Flow map, filter, transform? Объясните цепочки операторов и практические паттерны.
+> Как использовать операторы `Flow` `map`, `filter`, `transform`? Объясните цепочки операторов и практические паттерны.
 
 ---
 
 # Question (EN)
-> How to use Flow operators map, filter, transform? Explain operator chaining and practical patterns.
+> How to use `Flow` operators `map`, `filter`, `transform`? Explain operator chaining and practical patterns.
 
 ## Ответ (RU)
 
-Операторы Flow `map`, `filter` и `transform` являются фундаментальными инструментами для обработки потоков данных в Kotlin coroutines. Они позволяют трансформировать, фильтровать и манипулировать значениями, испускаемыми Flow, декларативным способом.
+Операторы `Flow` `map`, `filter` и `transform` являются фундаментальными инструментами для обработки холодных потоков данных в Kotlin Coroutines. Они позволяют трансформировать, фильтровать и манипулировать значениями, испускаемыми `Flow`, декларативным способом.
 
 ### Базовые Операторы
 
@@ -61,7 +61,7 @@ flow {
  .collect { println(it) }  // Выводит: 2, 4
 ```
 
-**transform** - Универсальный оператор, который может испускать несколько значений:
+**transform** - Универсальный оператор, который может испускать несколько значений на один вход и выполнять произвольную логику:
 ```kotlin
 flow {
     emit("A")
@@ -141,25 +141,28 @@ dataFlow
 
 ### Соображения Производительности
 
-- Операторы **выполняются последовательно** для каждого испускаемого значения
-- **Промежуточные коллекции не создаются** (в отличие от операторов sequence)
-- Операторы сохраняют семантику **backpressure** и **отмены**
-- Цепочки операторов не создают накладных расходов на производительность
+- По умолчанию операторы выполняются **последовательно** для каждого значения в том же контексте корутины, пока вы явно не измените это (например, с помощью `buffer`/`conflate`/`flowOn`).
+- **Промежуточные коллекции не создаются**, операторы `Flow` ленивые и обрабатывают элементы по мере запроса `collect`-ом.
+- Операторы сохраняют семантику **поддержки отмены** и кооперативной обработки.
+- Каждая операция в цепочке добавляет небольшие накладные расходы, но обычно это приемлемо; избегайте чрезмерно длинных цепочек без необходимости.
 
 ### Типичные Ошибки
 
-1. **Suspend-операции в map**: Используйте `mapNotNull` или `transform`:
+1. **Ненужный запуск корутин внутри `map`**: `map` — suspending-оператор, внутри него можно вызывать suspend-функции напрямую. Проблемой является создание дополнительных корутин (`async`/`launch`) без необходимости.
 ```kotlin
-// Избегайте
+// Избегайте: избыточный async внутри map
 flow.map { async { heavyOperation(it) }.await() }
 
-// Предпочтительно
-flow.transform {
-    emit(heavyOperation(it))
+// Предпочтительно: просто вызвать suspend-функцию
+flow.map { heavyOperation(it) }
+
+// Или использовать transform, если нужно несколько emit или сложная логика
+flow.transform { value ->
+    emit(heavyOperation(value))
 }
 ```
 
-2. **Побочные эффекты**: Держите операторы чистыми:
+2. **Побочные эффекты в операторе преобразования**: Старайтесь, чтобы `map`/`filter`/`transform` оставались как можно более чистыми.
 ```kotlin
 // Избегайте
 flow.map {
@@ -167,7 +170,7 @@ flow.map {
     it
 }
 
-// Предпочтительно
+// Предпочтительно: выносить побочные эффекты в onEach или collect
 flow.onEach { updateDatabase(it) }
     .map { it }
 ```
@@ -176,7 +179,7 @@ flow.onEach { updateDatabase(it) }
 
 ## Answer (EN)
 
-Flow operators `map`, `filter`, and `transform` are fundamental tools for processing data streams in Kotlin coroutines. They allow you to transform, filter, and manipulate Flow emissions in a declarative way.
+`Flow` operators `map`, `filter`, and `transform` are fundamental tools for processing cold data streams in Kotlin Coroutines. They allow you to transform, filter, and manipulate `Flow` emissions in a declarative way.
 
 ### Basic Operators
 
@@ -201,7 +204,7 @@ flow {
  .collect { println(it) }  // Prints: 2, 4
 ```
 
-**transform** - General-purpose operator that can emit multiple values:
+**transform** - General-purpose operator that can emit multiple values per input and run arbitrary logic:
 ```kotlin
 flow {
     emit("A")
@@ -281,25 +284,28 @@ dataFlow
 
 ### Performance Considerations
 
-- Operators are **executed sequentially** for each emission
-- **No intermediate collections** are created (unlike sequence operators)
-- Operators preserve **backpressure** and **cancellation** semantics
-- Chaining multiple operators doesn't create performance overhead
+- Operators by default are **executed sequentially** for each emission in the same coroutine context, unless you explicitly change it (e.g., with `buffer`/`conflate`/`flowOn`).
+- **No intermediate collections** are created; `Flow` operators are lazy and process values on demand as `collect` requests them.
+- Operators preserve cooperative **cancellation** semantics.
+- Each operator adds a small overhead; in most real-world pipelines this is negligible, but avoid excessively deep chains without purpose.
 
 ### Common Pitfalls
 
-1. **Suspending operations in map**: Use `mapNotNull` or `transform` instead:
+1. **Unnecessary coroutine launches inside `map`**: `map` is a suspending operator, you can call suspend functions directly. The issue is spawning extra coroutines (`async`/`launch`) when not needed.
 ```kotlin
-// Avoid
+// Avoid: redundant async inside map
 flow.map { async { heavyOperation(it) }.await() }
 
-// Prefer
-flow.transform {
-    emit(heavyOperation(it))
+// Prefer: call the suspend function directly
+flow.map { heavyOperation(it) }
+
+// Or use transform when you need multiple emits or more complex logic
+flow.transform { value ->
+    emit(heavyOperation(value))
 }
 ```
 
-2. **Side effects**: Keep operators pure:
+2. **Side effects inside transformation operators**: Keep `map`/`filter`/`transform` as pure as possible.
 ```kotlin
 // Avoid
 flow.map {
@@ -307,38 +313,73 @@ flow.map {
     it
 }
 
-// Prefer
+// Prefer: move side effects to onEach or collect
 flow.onEach { updateDatabase(it) }
     .map { it }
 ```
 
 ---
 
+## Дополнительные вопросы (RU)
+
+1. Как отличить использование `map`, `mapLatest`, `flatMapLatest` и `transform` для асинхронных операций в `Flow`?
+2. В каких случаях стоит использовать `buffer`, `conflate` или `flowOn` вместе с операторами `map`/`filter`/`transform` для оптимизации производительности?
+3. Как организовать обработку ошибок в цепочках операторов `Flow` (например, с помощью `catch`, `retry`) без нарушения чистоты операторов?
+4. Чем отличаются операторы для холодных потоков `Flow` от операторов на `Channel` или горячих источниках (например, `StateFlow`/`SharedFlow`)?
+5. Как обеспечить тестируемость сложных цепочек операторов `Flow` и какие подходы использовать в юнит-тестах?
+
+---
+
 ## Follow-ups
 
-1. **Follow-up question 1**
-2. **Follow-up question 2**
+1. How do `map`, `mapLatest`, `flatMapLatest`, and `transform` differ when used for asynchronous operations in `Flow`?
+2. When should you use `buffer`, `conflate`, or `flowOn` together with `map`/`filter`/`transform` to optimize performance?
+3. How can you structure error handling in `Flow` operator chains (e.g., with `catch`, `retry`) while keeping operators pure?
+4. How do operators on cold `Flow` differ from operators on `Channel` or hot streams (such as `StateFlow`/`SharedFlow`)?
+5. How can you ensure testability of complex `Flow` operator chains and what patterns to use in unit tests?
+
+---
+
+## Ссылки (RU)
+
+- Официальная документация по Kotlin Coroutines: https://kotlinlang.org/docs/coroutines-overview.html
+- [[c-flow]]
+- [[c-coroutines]]
 
 ---
 
 ## References
 
-- [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
+- Kotlin Coroutines Documentation: https://kotlinlang.org/docs/coroutines-overview.html
+- [[c-flow]]
+- [[c-coroutines]]
+
+---
+
+## Связанные вопросы (RU)
+
+### Средний уровень
+- [[q-flow-operators--kotlin--medium]] — Базовые операторы `Flow`
+- [[q-retry-operators-flow--kotlin--medium]] — Повтор и обработка ошибок в `Flow`
+- [[q-flow-time-operators--kotlin--medium]] — Временные операторы в `Flow`
+
+### Продвинутый уровень
+- [[q-testing-flow-operators--kotlin--hard]] — Тестирование операторов `Flow`
+
+### Хаб
+- [[q-kotlin-flow-basics--kotlin--medium]] — Введение в `Flow`
 
 ---
 
 ## Related Questions
 
 ### Related (Medium)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
-- [[q-flow-operators--kotlin--medium]] - Flow
-- [[q-retry-operators-flow--kotlin--medium]] - Flow
-- [[q-flow-time-operators--kotlin--medium]] - Flow
+- [[q-flow-operators--kotlin--medium]] - Basic `Flow` operators
+- [[q-retry-operators-flow--kotlin--medium]] - Retry and error handling with `Flow`
+- [[q-flow-time-operators--kotlin--medium]] - Time-based operators in `Flow`
 
 ### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
-- [[q-flow-operators-deep-dive--kotlin--hard]] - Flow
+- [[q-testing-flow-operators--kotlin--hard]] - Testing `Flow` operators
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
-
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive `Flow` introduction

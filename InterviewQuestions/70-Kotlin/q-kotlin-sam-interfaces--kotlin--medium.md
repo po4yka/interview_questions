@@ -1,11 +1,11 @@
 ---
 id: kotlin-025
 title: "Kotlin SAM Interfaces / SAM интерфейсы в Kotlin"
-aliases: ["Kotlin SAM Interfaces, SAM интерфейсы в Kotlin"]
+aliases: ["Kotlin SAM Interfaces", "SAM интерфейсы в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [functional-programming, interfaces, lambdas]
+subtopics: [interfaces, functions, lambdas]
 question_kind: theory
 difficulty: medium
 
@@ -18,11 +18,11 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-data-sealed-usage--programming-languages--medium, q-nothing-instances--programming-languages--easy, q-semaphore-rate-limiting--kotlin--medium]
+related: [c-kotlin, q-semaphore-rate-limiting--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-11-09
 
 tags: [difficulty/medium, functional-programming, interfaces, kotlin, lambdas, sam]
 ---
@@ -33,11 +33,12 @@ tags: [difficulty/medium, functional-programming, interfaces, kotlin, lambdas, s
 
 # Question (EN)
 > What do you know about functional (SAM) interfaces in Kotlin?
+
 ## Ответ (RU)
 
 Интерфейс только с одним абстрактным методом называется **функциональным интерфейсом**, или **Single Abstract Method (SAM) интерфейсом**. Функциональный интерфейс может иметь несколько неабстрактных членов, но только один абстрактный член.
 
-Чтобы объявить функциональный интерфейс в Kotlin, используйте модификатор `fun`.
+В Kotlin собственные функциональные интерфейсы объявляются с помощью модификатора `fun`.
 
 ```kotlin
 fun interface KRunnable {
@@ -47,9 +48,9 @@ fun interface KRunnable {
 
 ### SAM Конверсии
 
-Для функциональных интерфейсов вы можете использовать SAM конверсии, которые помогают сделать ваш код более кратким и читаемым, используя лямбда-выражения.
+Для функциональных интерфейсов вы можете использовать SAM-конверсии, которые помогают сделать ваш код более кратким и читаемым, используя лямбда-выражения.
 
-Вместо создания класса, который вручную реализует функциональный интерфейс, вы можете использовать лямбда-выражение. С помощью SAM конверсии Kotlin может конвертировать любое лямбда-выражение, сигнатура которого соответствует сигнатуре единственного метода интерфейса, в код, который динамически создает экземпляр реализации интерфейса.
+Вместо создания класса, который вручную реализует функциональный интерфейс, вы можете использовать лямбда-выражение. С помощью SAM-конверсии Kotlin может конвертировать лямбда-выражение, сигнатура которого соответствует сигнатуре единственного абстрактного метода интерфейса, в экземпляр реализации этого интерфейса.
 
 Например, рассмотрим следующий функциональный интерфейс Kotlin:
 
@@ -59,10 +60,10 @@ fun interface IntPredicate {
 }
 ```
 
-Если вы не используете SAM конверсию, вам нужно будет написать такой код:
+Без SAM-конверсии вам нужно было бы написать такой код:
 
 ```kotlin
-// Создание экземпляра класса
+// Создание экземпляра анонимного класса
 val isEven = object : IntPredicate {
    override fun accept(i: Int): Boolean {
        return i % 2 == 0
@@ -70,14 +71,14 @@ val isEven = object : IntPredicate {
 }
 ```
 
-Используя SAM конверсию Kotlin, вы можете написать следующий эквивалентный код:
+Используя SAM-конверсию Kotlin, вы можете написать следующий эквивалентный код:
 
 ```kotlin
-// Создание экземпляра используя лямбду
+// Создание экземпляра, используя лямбду
 val isEven = IntPredicate { it % 2 == 0 }
 ```
 
-Короткое лямбда-выражение заменяет весь ненужный код:
+Короткое лямбда-выражение заменяет весь лишний код:
 
 ```kotlin
 fun interface IntPredicate {
@@ -91,26 +92,36 @@ fun main() {
 }
 ```
 
-### Аннотация @FunctionalInterface
+Обратите внимание:
+- SAM-конверсии в Kotlin поддерживаются для `fun interface` и для Java-функциональных интерфейсов (интерфейсы с одним абстрактным методом),
+- но не для произвольных Kotlin-интерфейсов, у которых просто случайно один абстрактный метод (без `fun interface`).
 
-Аннотация `@FunctionalInterface`:
-- Эта аннотация не обязательна, но помогает указать, что интерфейс предназначен быть функциональным интерфейсом;
-- Она обеспечивает проверку во время компиляции, чтобы убедиться, что интерфейс соответствует ограничению единственного абстрактного метода.
+### Аннотация `@FunctionalInterface`
 
-```kotlin
+Аннотация `@FunctionalInterface` является Java-аннотацией:
+- Она не обязательна, но в Java помогает указать, что интерфейс предназначен быть функциональным интерфейсом;
+- Она обеспечивает проверку во время компиляции в Java, чтобы убедиться, что интерфейс соответствует ограничению единственного абстрактного метода;
+- В контексте Kotlin она обычно используется на Java-коде или Java-интерфейсах, с которыми вы интероперируете; для Kotlin-функциональных интерфейсов следует использовать ключевое слово `fun`, а не полагаться на `@FunctionalInterface`.
+
+```java
 @FunctionalInterface
-interface MyFunctionalInterface {
-    fun performAction(name: String)
+public interface MyFunctionalInterface {
+    void performAction(String name);
 }
 ```
 
-### Функциональные Интерфейсы С Методами По Умолчанию
+Такой интерфейс можно использовать из Kotlin как функциональный (SAM) интерфейс:
+
+```kotlin
+val action = MyFunctionalInterface { name -> println("Hello, $name") }
+```
+
+### Функциональные интерфейсы с методами по умолчанию
 
 Функциональные интерфейсы могут иметь методы по умолчанию, которые предоставляют дополнительную функциональность без нарушения правила единственного абстрактного метода:
 
 ```kotlin
-@FunctionalInterface
-interface Worker {
+fun interface Worker {
     fun work(task: String)
 
     // Метод по умолчанию
@@ -131,21 +142,42 @@ fun main() {
 
 ### Резюме
 
-Функциональные интерфейсы в Kotlin — это интерфейсы с одним абстрактным методом, предназначенные для облегчения функционального программирования и улучшения совместимости с Java. Ключевые особенности включают:
-- Single Abstract Method (SAM): Гарантирует, что интерфейс имеет только один абстрактный метод;
-- Аннотация `@FunctionalInterface`: Опциональная аннотация для обеспечения соответствия SAM;
-- SAM конверсия: Позволяет использовать лямбды там, где ожидаются функциональные интерфейсы;
-- Совместимость с Java: Обеспечивает бесшовное использование функциональных интерфейсов Java в Kotlin;
-- Методы по умолчанию: Предоставляет дополнительную функциональность без нарушения ограничения единственного абстрактного метода;
-- Функции высшего порядка: Поддерживает передачу функциональных интерфейсов в качестве параметров для гибкого и переиспользуемого кода.
+Функциональные интерфейсы в Kotlin — это интерфейсы с одним абстрактным методом, объявляемые через `fun interface`, предназначенные для облегчения функционального программирования и улучшения совместимости с Java. Ключевые моменты:
+- Single Abstract Method (SAM): Интерфейс имеет только один абстрактный метод; остальные члены могут быть конкретными/по умолчанию;
+- `fun interface`: Канонический способ объявления функционального интерфейса в Kotlin;
+- SAM-конверсия: Позволяет использовать лямбды там, где ожидаются `fun interface` или Java-функциональные интерфейсы;
+- Совместимость с Java: Позволяет бесшовно использовать Java-функциональные интерфейсы (включая помеченные `@FunctionalInterface`) в Kotlin;
+- Методы по умолчанию: Разрешены и не нарушают ограничение единственного абстрактного метода;
+- Функции высшего порядка и лямбды: Часто функциональные интерфейсы конкурируют с типами функций; выбор зависит от требований к читаемости, бинарной совместимости и Java-интеропу.
+
+## Дополнительные вопросы (RU)
+
+- Каковы ключевые отличия функциональных интерфейсов в Kotlin от Java?
+- Когда вы бы выбрали `fun interface` вместо типа функции на практике?
+- Какие распространенные ошибки и подводные камни при использовании SAM-интерфейсов в Kotlin?
+
+## Ссылки (RU)
+
+- [Functional (SAM) interfaces](https://kotlinlang.org/docs/fun-interfaces.html)
+- [Everything you want to know about Functional interfaces in Kotlin](https://www.droidcon.com/2024/05/31/everything-you-want-to-know-about-functional-interfaces-in-kotlin/)
+- [SAM Conversions in Kotlin](https://www.baeldung.com/kotlin/sam-conversions)
+- [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+### Связанные (Medium)
+- [[q-functional-interfaces-vs-type-aliases--kotlin--medium]] — Функциональные интерфейсы vs typealias
+- [[q-kotlin-fold-reduce--kotlin--medium]] — Операции fold/reduce в коллекциях
+- [[q-kotlin-higher-order-functions--kotlin--medium]] — Функции высшего порядка в Kotlin
+- [[q-kotlin-lambda-expressions--kotlin--medium]] — Лямбда-выражения в Kotlin
 
 ---
 
 ## Answer (EN)
 
-An interface with only one abstract method is called a **functional interface**, or a **Single Abstract Method (SAM) interface**. The functional interface can have several non-abstract members but only one abstract member.
+An interface with only one abstract method is called a **functional interface**, or a **Single Abstract Method (SAM) interface**. A functional interface can have several non-abstract members but only one abstract member.
 
-To declare a functional interface in Kotlin, use the `fun` modifier.
+In Kotlin, dedicated functional interfaces are declared using the `fun` modifier.
 
 ```kotlin
 fun interface KRunnable {
@@ -157,7 +189,7 @@ fun interface KRunnable {
 
 For functional interfaces, you can use SAM conversions that help make your code more concise and readable by using lambda expressions.
 
-Instead of creating a class that implements a functional interface manually, you can use a lambda expression. With a SAM conversion, Kotlin can convert any lambda expression whose signature matches the signature of the interface's single method into the code, which dynamically instantiates the interface implementation.
+Instead of manually creating a class that implements a functional interface, you can use a lambda expression. With SAM conversion, Kotlin can convert a lambda expression whose signature matches the single abstract method of the interface into an instance of that interface.
 
 For example, consider the following Kotlin functional interface:
 
@@ -167,10 +199,10 @@ fun interface IntPredicate {
 }
 ```
 
-If you don't use a SAM conversion, you will need to write code like this:
+Without SAM conversion, you would need to write code like this:
 
 ```kotlin
-// Creating an instance of a class
+// Creating an instance of an anonymous class
 val isEven = object : IntPredicate {
    override fun accept(i: Int): Boolean {
        return i % 2 == 0
@@ -181,11 +213,11 @@ val isEven = object : IntPredicate {
 By leveraging Kotlin's SAM conversion, you can write the following equivalent code instead:
 
 ```kotlin
-// Creating an instance using lambda
+// Creating an instance using a lambda
 val isEven = IntPredicate { it % 2 == 0 }
 ```
 
-A short lambda expression replaces all the unnecessary code:
+A short lambda expression replaces all the verbose boilerplate:
 
 ```kotlin
 fun interface IntPredicate {
@@ -199,17 +231,28 @@ fun main() {
 }
 ```
 
-### @FunctionalInterface Annotation
+Note:
+- SAM conversions in Kotlin are supported for `fun interface` and for Java functional interfaces (single abstract method interfaces),
+- but not for arbitrary Kotlin interfaces that merely happen to have a single abstract method without being declared as `fun interface`.
 
-`@FunctionalInterface` Annotation:
-- This annotation is not mandatory but helps indicate that an interface is intended to be a functional interface;
-- It provides compile-time checking to ensure the interface adheres to the single abstract method constraint.
+### `@FunctionalInterface` Annotation
+
+The `@FunctionalInterface` annotation is a Java annotation:
+- It is not mandatory, but in Java it helps indicate that an interface is intended to be a functional interface;
+- It provides compile-time checking to ensure the interface adheres to the single abstract method constraint;
+- In Kotlin, you typically see it on Java interfaces you interoperate with; for Kotlin functional interfaces you should rely on the `fun` modifier rather than `@FunctionalInterface`.
+
+```java
+@FunctionalInterface
+public interface MyFunctionalInterface {
+    void performAction(String name);
+}
+```
+
+Such an interface can be used from Kotlin as a functional (SAM) interface:
 
 ```kotlin
-@FunctionalInterface
-interface MyFunctionalInterface {
-    fun performAction(name: String)
-}
+val action = MyFunctionalInterface { name -> println("Hello, $name") }
 ```
 
 ### Functional Interfaces with Default Methods
@@ -217,8 +260,7 @@ interface MyFunctionalInterface {
 Functional interfaces can have default methods, which provide additional functionality without breaking the single abstract method rule:
 
 ```kotlin
-@FunctionalInterface
-interface Worker {
+fun interface Worker {
     fun work(task: String)
 
     // Default method
@@ -239,13 +281,13 @@ fun main() {
 
 ### Summary
 
-Functional interfaces in Kotlin are interfaces with a single abstract method, designed to facilitate functional programming and enhance Java interoperability. Key features include:
-- Single Abstract Method (SAM): Ensures the interface has only one abstract method;
-- `@FunctionalInterface` Annotation: Optional annotation to enforce SAM compliance;
-- SAM Conversion: Allows lambdas to be used where functional interfaces are expected;
-- Interoperability with Java: Enables seamless use of Java functional interfaces in Kotlin;
-- Default Methods: Provides additional functionality without breaking the single abstract method constraint;
-- Higher-Order Functions: Supports passing functional interfaces as parameters for flexible and reusable code.
+Functional interfaces in Kotlin are interfaces with a single abstract method, declared via `fun interface`, designed to facilitate functional programming and enhance Java interoperability. Key points include:
+- Single Abstract Method (SAM): The interface has only one abstract method; other members may be concrete/default;
+- `fun interface`: The canonical way to declare a functional interface in Kotlin;
+- SAM Conversion: Allows lambdas to be used where `fun interface` or Java functional interfaces are expected;
+- Interoperability with Java: Enables seamless use of Java functional interfaces (including those annotated with `@FunctionalInterface`) from Kotlin;
+- Default Methods: Allowed and do not break the single abstract method constraint;
+- Higher-Order Functions and Lambdas: Functional interfaces often compete with plain function types; choose based on readability, binary stability, and Java interop needs.
 
 ## Follow-ups
 

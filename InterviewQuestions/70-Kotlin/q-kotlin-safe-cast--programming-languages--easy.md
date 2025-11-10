@@ -2,7 +2,7 @@
 id: lang-075
 title: "Kotlin Safe Cast / Безопасное приведение типов в Kotlin"
 aliases: [Kotlin Safe Cast, Безопасное приведение типов в Kotlin]
-topic: programming-languages
+topic: kotlin
 subtopics: [null-safety, type-system]
 question_kind: theory
 difficulty: easy
@@ -10,24 +10,22 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-class-initialization-order--kotlin--medium, q-variance-type-projections--kotlin--hard]
+related: [c-kotlin, q-class-initialization-order--kotlin--medium, q-variance-type-projections--kotlin--hard]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [as?, casting, difficulty/easy, programming-languages, safe-cast, type-conversion, type-safety]
+tags: [as, casting, difficulty/easy, kotlin, safe-cast, type-conversion, type-safety]
 ---
-# Как В Kotlin Привести Переменную Типа Any К Типу String Безопасно, Чтобы Избежать Исключения?
-
 # Вопрос (RU)
-> Как в Kotlin привести переменную типа Any к типу String безопасно, чтобы избежать исключения?
+> Как в Kotlin привести переменную типа `Any` к типу `String` безопасно, чтобы избежать исключения?
 
 ---
 
 # Question (EN)
-> How to safely cast Any to String in Kotlin to avoid exceptions?
+> How to safely cast `Any` to `String` in Kotlin to avoid exceptions?
 
 ## Ответ (RU)
 
-Используйте **оператор безопасного приведения `as?`**, который возвращает null вместо выброса исключения, если приведение типа невозможно.
+Используйте оператор безопасного приведения `as?`, который возвращает `null` вместо выброса исключения, если приведение типа невозможно.
 
 **Синтаксис:**
 ```kotlin
@@ -62,7 +60,7 @@ val result = any as? String ?: "default"
 
 ## Answer (EN)
 
-Use the **safe cast operator `as?`**, which returns null instead of throwing an exception if the cast is not possible.
+Use the safe cast operator `as?`, which returns `null` instead of throwing an exception if the cast is not possible.
 
 **Syntax:**
 ```kotlin
@@ -97,6 +95,22 @@ val result = any as? String ?: "default"
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого подхода от Java?
+- Когда бы вы использовали это на практике?
+- Каковы распространенные подводные камни, которых следует избегать?
+
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+- [[q-variance-type-projections--kotlin--hard]]
+- [[q-class-initialization-order--kotlin--medium]]
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
@@ -106,9 +120,9 @@ val result = any as? String ?: "default"
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
 
 ## Related Questions
 
--
 - [[q-variance-type-projections--kotlin--hard]]
 - [[q-class-initialization-order--kotlin--medium]]

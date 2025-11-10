@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-immutable-collections--programming-languages--easy, q-kotlin-sam-interfaces--kotlin--medium]
+related: [c-kotlin, c-sealed-classes, q-kotlin-immutable-collections--programming-languages--easy, q-kotlin-sam-interfaces--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 ---
-# Describe Data Classes and Sealed Classes
-
 # Вопрос (RU)
 > Опишите data классы и sealed классы в Kotlin. Каковы их ключевые особенности и применения?
 
@@ -29,12 +27,12 @@ tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 
 ### Data Классы
 
-**Data классы** в Kotlin предназначены для хранения данных и автоматически генерируют методы: `equals()`, `hashCode()`, `toString()` и `copy()`. Они идеально подходят для создания POJO/POCO объектов (Plain Old Java/C# Objects).
+**Data классы** в Kotlin предназначены для хранения данных и автоматически генерируют методы: `equals()`, `hashCode()`, `toString()` и `copy()`, а также компонентные функции для деструктуризации. Они идеально подходят для создания POJO/POCO объектов (Plain Old Java/C# Objects). Важно помнить, что data классы сами по себе не гарантируют неизменяемость — она достигается за счёт использования `val` свойств и отсутствия изменяемых полей.
 
 **Ключевые особенности data классов:**
 - Автоматическая генерация utility методов
 - Встроенная поддержка деструктуризации (destructuring declarations)
-- Поддержка immutability с `val` свойствами
+- Возможность легко реализовать immutability, если использовать только `val` и не держать изменяемые ссылки
 - Простое копирование объектов с изменениями через `copy()`
 - Идеальны для DTOs, моделей и value objects
 
@@ -106,14 +104,14 @@ data class Address(
 
 ### Sealed Классы
 
-**Sealed классы** используются для представления ограниченного набора типов, похожих на перечисления, но с возможностью иметь классы с разными свойствами и методами. Это обеспечивает безопасное использование при работе с типами во время компиляции, улучшая обработку ошибок и логику ветвления.
+**Sealed классы** используются для представления ограниченного набора подтипов, похожих на перечисления, но с возможностью иметь классы с разными свойствами и методами. Это обеспечивает безопасное использование при работе с типами во время компиляции, улучшая обработку ошибок и логику ветвления.
 
 **Ключевые особенности sealed классов:**
 - Ограниченные иерархии классов
 - Compile-time exhaustiveness checking в `when` выражениях
-- Типобезопасное представление конечного состояния
+- Типобезопасное представление конечного множества состояний
 - Идеальны для управления состоянием и Result типов
-- Все подклассы должны быть в том же файле/модуле
+- Подклассы должны находиться в контролируемой области: либо в том же файле (для классического sealed), либо в том же пакете и модуле (для package-wide sealed из новых версий Kotlin)
 
 **Пример:**
 ```kotlin
@@ -217,7 +215,7 @@ fun processPayment(method: PaymentMethod, amount: Double) {
 ```kotlin
 // Универсальный result тип используя sealed класс и data классы
 sealed class Result<out T> {
-    data class Success<T>(val value: T) : Result<T>()
+    data class Success<out T>(val value: T) : Result<T>()
     data class Failure(val error: Error) : Result<Nothing>()
     object Loading : Result<Nothing>()
 }
@@ -359,31 +357,31 @@ fun handleValidation(result: ValidationResult) {
 
 ### Краткий Ответ
 
-**Data классы**: Предназначены для хранения данных. Автоматически генерируют `equals()`, `hashCode()`, `toString()`, `copy()` и компонентные функции. Идеальны для POJO/POCO объектов, DTOs, моделей данных и value objects. Поддерживают деструктуризацию и простое копирование с изменениями.
+**Data классы**: Предназначены для хранения данных. Автоматически генерируют `equals()`, `hashCode()`, `toString()`, `copy()` и компонентные функции. Идеальны для POJO/POCO объектов, DTOs, моделей данных и value objects. Поддерживают деструктуризацию и простое копирование с изменениями. Не делают объекты неизменяемыми автоматически — это достигается выбором типов свойств и API.
 
-**Sealed классы**: Представляют ограниченный набор типов. Ограничивают наследование одним файлом/модулем. Обеспечивают compile-time exhaustiveness checking в `when` выражениях. Идеальны для управления состоянием, Result типов, навигационных событий и представления конечных множеств состояний. Комбинируются с data классами для создания мощных type-safe API.
+**Sealed классы**: Представляют ограниченный набор типов. Ограничивают наследование контролируемой областью (тот же файл или тот же пакет и модуль, в зависимости от варианта). Обеспечивают compile-time exhaustiveness checking в `when` выражениях. Идеальны для управления состоянием, Result типов, навигационных событий и представления конечных множеств состояний. Хорошо комбинируются с data классами для создания надёжных type-safe API.
 
 ## Answer (EN)
 
 **Data Classes:**
-Data classes in Kotlin are designed for storing data and automatically generate methods such as `equals()`, `hashCode()`, `toString()`, and `copy()`. They are ideal for creating POJO/POCO objects (Plain Old Java/C# Objects).
+Data classes in Kotlin are designed for storing data and automatically generate methods such as `equals()`, `hashCode()`, `toString()`, `copy()`, and component functions for destructuring. They are ideal for creating POJO/POCO objects (Plain Old Java/C# Objects). Note that data classes do not inherently guarantee immutability; immutability is achieved by using `val` properties and avoiding mutable state.
 
 **Key features of data classes:**
 - Automatic generation of utility methods
 - Built-in support for destructuring declarations
-- Immutability support with `val` properties
+- Easy to make immutable by using `val` properties and not exposing mutable fields
 - Easy object copying with modifications via `copy()`
 - Perfect for DTOs, models, and value objects
 
 **Sealed Classes:**
-Sealed classes are used to represent a restricted set of types, similar to enumerations, but with the ability to have classes with different properties and methods. This helps ensure safe usage when working with types at compile time, improving error handling and branching logic.
+Sealed classes are used to represent a restricted set of types, similar to enums, but with the ability to have subclasses with different properties and methods. This helps ensure safe usage when working with types at compile time, improving error handling and branching logic.
 
 **Key features of sealed classes:**
 - Restricted class hierarchies
 - Compile-time exhaustiveness checking in `when` expressions
-- Type-safe representation of finite state
+- Type-safe representation of a finite set of states
 - Perfect for state management and result types
-- All subclasses must be in same file/module
+- Subclasses must be declared within a controlled scope: either in the same file (classic sealed) or in the same package and module (for package-wide sealed in newer Kotlin versions)
 
 ### Code Examples
 
@@ -621,7 +619,7 @@ fun main() {
 ```kotlin
 // Generic result type using sealed class and data classes
 sealed class Result<out T> {
-    data class Success<T>(val value: T) : Result<T>()
+    data class Success<out T>(val value: T) : Result<T>()
     data class Failure(val error: Error) : Result<Nothing>()
     object Loading : Result<Nothing>()
 }
@@ -801,18 +799,36 @@ fun main() {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия data и sealed классов от аналогичных конструкций в Java?
+- Когда вы бы использовали эти конструкции на практике?
+- Какие распространенные ошибки и подводные камни следует избегать при использовании data и sealed классов?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+- [[c-sealed-classes]]
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+- [[c-sealed-classes]]
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-immutable-collections--programming-languages--easy]]
+- [[q-kotlin-sam-interfaces--kotlin--medium]]
 
 ## Related Questions
 
 - [[q-kotlin-immutable-collections--programming-languages--easy]]
--
 - [[q-kotlin-sam-interfaces--kotlin--medium]]

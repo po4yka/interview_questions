@@ -10,13 +10,11 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin-features]
+related: [c-kotlin-features, c-kotlin]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags: [code-generation, data-classes, difficulty/easy, kotlin]
 ---
-# Для Чего Нужен Data Class?
-
 # Вопрос (RU)
 > Что такое data class в Kotlin и для чего он нужен?
 
@@ -58,26 +56,48 @@ println("$name is $age years old")
 - Сокращает количество шаблонного кода
 - Упрощает создание моделей данных
 - Повышает читабельность кода
-- Обеспечивает корректную работу с коллекциями (благодаря equals/hashCode)
+- Обеспечивает корректную работу с коллекциями (благодаря `equals()`/`hashCode()`)
 
 ## Answer (EN)
 
-Data classes in Kotlin are designed for holding data. They automatically generate boilerplate methods that would otherwise need to be manually written:
-- `equals()` - compares objects by content
-- `hashCode()` - generates hash for collections
-- `toString()` - string representation
-- `componentN()` - enables destructuring
-- `copy()` - creates copy with modified fields
+Data classes in Kotlin are designed for holding data. Their main purpose is to simplify creating classes primarily used to store data without extra boilerplate code.
+
+To declare a data class, add the `data` keyword before the class declaration:
 
 ```kotlin
 data class User(val name: String, val age: Int)
-
-val user1 = User("Alice", 30)
-val user2 = user1.copy(age = 31)  // Copy with different age
-val (name, age) = user1  // Destructuring
 ```
 
-Data classes reduce boilerplate code, simplify model creation, improve readability, and ensure correct collection behavior.
+### Features and Benefits
+
+**Automatically generated functions:**
+- `equals()` - compares objects by content
+- `hashCode()` - generates hash for use in collections
+- `toString()` - string representation of the object
+- `componentN()` - enables destructuring declarations
+- `copy()` - creates a copy with modified fields
+
+```kotlin
+val user1 = User("Alice", 30)
+val user2 = user1.copy(age = 31)  // Create a copy with different age
+
+// Destructuring
+val (name, age) = user1
+println("$name is $age years old")
+```
+
+### Usage
+
+- Reduces boilerplate code
+- Simplifies creation of data models
+- Improves code readability
+- Ensures correct behavior in collections (thanks to `equals()`/`hashCode()`)
+
+## Дополнительные вопросы
+
+- В чем ключевые отличия от Java-классов с ручной реализацией методов?
+- Когда вы бы использовали `data class` на практике?
+- Какие распространенные ошибки и подводные камни следует избегать?
 
 ## Follow-ups
 
@@ -85,9 +105,20 @@ Data classes reduce boilerplate code, simplify model creation, improve readabili
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки
+
+- [[c-kotlin]]
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## References
 
+- [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-structured-concurrency-kotlin--kotlin--medium]]
+- [[q-kotlin-lateinit--programming-languages--medium]]
 
 ## Related Questions
 

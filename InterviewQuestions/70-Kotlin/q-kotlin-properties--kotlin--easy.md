@@ -1,16 +1,14 @@
 ---
 id: kotlin-064
 title: "Kotlin Properties / Свойства в Kotlin"
-aliases: ["Kotlin Properties, Свойства в Kotlin"]
+aliases: ["Kotlin Properties", "Свойства в Kotlin"]
 
 # Classification
 topic: kotlin
 subtopics:
-  - backing-field
   - getters
-  - lateinit
-  - properties
   - setters
+  - lateinit
 question_kind: theory
 difficulty: easy
 
@@ -23,11 +21,11 @@ source_note: Comprehensive guide on Kotlin properties
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-constructors--kotlin--easy, q-kotlin-lateinit--kotlin--medium, q-kotlin-val-vs-var--kotlin--easy, q-property-delegates--kotlin--medium]
+related: [c-kotlin, c-kotlin-features, q-kotlin-constructors--kotlin--easy, q-kotlin-lateinit--kotlin--medium, q-kotlin-val-vs-var--kotlin--easy, q-property-delegates--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 
 tags: [backing-field, delegated-properties, difficulty/easy, getters, kotlin, lateinit, lazy, properties, setters]
 ---
@@ -41,7 +39,7 @@ tags: [backing-field, delegated-properties, difficulty/easy, getters, kotlin, la
 
 ## Ответ (RU)
 
-Свойства в Kotlin — это первоклассные языковые конструкции, заменяющие паттерн Java с полем + getter/setter. Они обеспечивают компактный синтаксис, сохраняя инкапсуляцию и позволяя настраивать поведение.
+Свойства в Kotlin — это первоклассные языковые конструкции, заменяющие паттерн Java с полем + getter/setter. Они обеспечивают компактный синтаксис, сохраняя инкапсуляцию и позволяя настраивать поведение. См. также: [[c-kotlin]].
 
 ### Ключевые Концепции
 
@@ -77,6 +75,29 @@ val list = mutableListOf(1, 2, 3)
 list.add(4)                        // OK: можно изменить содержимое
 ```
 
+### Синтаксис Объявления Свойств
+
+```kotlin
+class User {
+    // Полный синтаксис
+    var name: String = ""
+        get() = field
+        set(value) {
+            field = value
+        }
+
+    // Компактный синтаксис (эквивалентно выше)
+    var email: String = ""
+
+    // Свойство только для чтения с геттером
+    val fullName: String
+        get() = "$firstName $lastName"
+
+    var firstName: String = ""
+    var lastName: String = ""
+}
+```
+
 ### Пользовательские Getters
 
 ```kotlin
@@ -105,7 +126,7 @@ class User {
     var name: String = ""
         set(value) {
             println("Установка имени: $value")
-            field = value.trim().capitalize()
+            field = value.trim().replaceFirstChar { it.titlecase() }
         }
 
     var age: Int = 0
@@ -146,9 +167,36 @@ class Circle(val radius: Double) {
 }
 ```
 
+#### Когда создаётся backing field / когда его нет
+
+Backing field создаётся, если:
+- У свойства есть стандартный getter/setter, ИЛИ
+- В пользовательском аксессоре используется `field`.
+
+Backing field НЕ создаётся, если:
+- Есть только пользовательский getter, который не использует `field`.
+- Свойство объявлено с `by` (делегированное свойство).
+
+```kotlin
+class Example {
+    var stored: Int = 0           // Есть backing field
+
+    val computed: Int             // Нет backing field
+        get() = stored * 2
+
+    var withField: Int = 0        // Есть backing field
+        set(value) {
+            field = value * 2     // Использует 'field'
+        }
+
+    val noField: Int              // Нет backing field
+        get() = 42                // Не использует 'field'
+}
+```
+
 ### Backing Properties
 
-Когда нужен больший контроль, используйте приватное backing свойство:
+Когда нужен больший контроль, используйте приватное backing-свойство:
 
 ```kotlin
 class StringRepository {
@@ -200,13 +248,13 @@ class MyActivity : AppCompatActivity() {
 }
 ```
 
-**Требования lateinit**:
+**Требования `lateinit`**:
 - Должно быть `var` (не `val`)
 - Должно быть non-null типом
-- Не может быть примитивным типом (Int, Boolean и т.д.)
+- Не может быть примитивным типом (`Int`, `Boolean` и т.д.)
 - Не может иметь пользовательский getter/setter
 
-**Проверка инициализации lateinit**:
+**Проверка инициализации `lateinit`**:
 
 ```kotlin
 class Example {
@@ -242,8 +290,8 @@ println(resource.data)  // Выводит: Вычисление данных... 
 println(resource.data)  // Выводит: Вычисленный результат (не пересчитывается)
 ```
 
-**Характеристики lazy**:
-- Thread-safe по умолчанию
+**Характеристики `lazy`**:
+- Потокобезопасно по умолчанию
 - Инициализируется только один раз
 - Должно быть `val` (не `var`)
 - Блок инициализации выполняется при первом обращении
@@ -308,12 +356,165 @@ user.email                     // OK: можно читать
 user.updateEmail("new@test")  // OK
 ```
 
+### Типы Свойств
+
+#### Хранимое свойство
+
+```kotlin
+class User {
+    var name: String = "Unknown"  // Есть backing field
+}
+```
+
+#### Вычисляемое свойство
+
+```kotlin
+class Rectangle(val width: Int, val height: Int) {
+    val area: Int                 // Нет backing field
+        get() = width * height
+}
+```
+
+#### Свойство с backing-свойством
+
+```kotlin
+class Repository {
+    private val _items = mutableListOf<String>()
+    val items: List<String>
+        get() = _items
+}
+```
+
+### Реальные Примеры
+
+#### Паттерн свойств во ViewModel
+
+```kotlin
+class UserViewModel : ViewModel() {
+    private val _users = MutableStateFlow<List<User>>(emptyList())
+    val users: StateFlow<List<User>> = _users.asStateFlow()
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    fun loadUsers() {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                _users.value = repository.getUsers()
+            } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+}
+```
+
+#### Конфигурация с валидацией
+
+```kotlin
+class ServerConfig {
+    var host: String = "localhost"
+        set(value) {
+            require(value.isNotBlank()) { "Host не может быть пустым" }
+            field = value
+        }
+
+    var port: Int = 8080
+        set(value) {
+            require(value in 1..65535) { "Некорректный порт: $value" }
+            field = value
+        }
+
+    val url: String
+        get() = "http://$host:$port"
+}
+
+val config = ServerConfig()
+config.host = "api.example.com"
+config.port = 443
+println(config.url)  // http://api.example.com:443
+```
+
+#### Кешированное свойство
+
+```kotlin
+class ExpensiveCalculation(val input: Int) {
+    val result: Int by lazy {
+        println("Вычисление результата для $input...")
+        Thread.sleep(1000)  // Эмуляция дорогой операции
+        input * input
+    }
+}
+
+val calc = ExpensiveCalculation(10)
+println("Создан калькулятор")
+println(calc.result)  // Печатает: Вычисление... затем 100
+println(calc.result)  // Печатает: 100 (из кеша)
+```
+
+#### Свойство с побочными эффектами
+
+```kotlin
+class Logger {
+    var level: LogLevel = LogLevel.INFO
+        set(value) {
+            println("Изменение уровня логирования с $field на $value")
+            field = value
+            notifyListeners(value)
+        }
+
+    private fun notifyListeners(level: LogLevel) {
+        // Уведомление наблюдателей об изменении уровня логирования
+    }
+}
+```
+
+### Общие Паттерны
+
+#### Singleton с lazy
+
+```kotlin
+object Database {
+    val connection: Connection by lazy {
+        DriverManager.getConnection("jdbc:sqlite:app.db")
+    }
+}
+```
+
+#### Цепочка делегирования свойств
+
+```kotlin
+class Preferences {
+    var theme: String by PreferenceDelegate("theme", "light")
+    var fontSize: Int by PreferenceDelegate("fontSize", 14)
+}
+
+class PreferenceDelegate<T>(
+    private val key: String,
+    private val defaultValue: T
+) {
+    operator fun getValue(thisRef: Any?, property: KProperty<*>): T {
+        // Чтение из SharedPreferences
+        return defaultValue
+    }
+
+    operator fun setValue(thisRef: Any?, property: KProperty<*>, value: T) {
+        // Запись в SharedPreferences
+    }
+}
+```
+
 ### Лучшие Практики
 
 #### ДЕЛАТЬ:
+
 ```kotlin
 // Использовать val для неизменяемых свойств
-class Person(val name: String, val birthYear: Int)
+class Person(val name: String, val birthYear: Int) {
+    val age: Int
+        get() = Calendar.getInstance().get(Calendar.YEAR) - birthYear
+}
 
 // Использовать backing properties для изменяемых коллекций
 class DataStore {
@@ -327,6 +528,13 @@ class Repository {
     lateinit var api: ApiService
 }
 
+// Использовать lazy для дорогой инициализации
+class DatabaseManager {
+    private val connection: Connection by lazy {
+        DriverManager.getConnection(DATABASE_URL)
+    }
+}
+
 // Валидировать в setters
 class User {
     var age: Int = 0
@@ -338,10 +546,19 @@ class User {
 ```
 
 #### НЕ ДЕЛАТЬ:
+
 ```kotlin
 // Не использовать var когда подходит val
 class Point(var x: Int, var y: Int)  // Плохо если координаты не меняются
 class Point(val x: Int, val y: Int)  // Лучше
+
+// Не обращаться к field в getter без причины
+var name: String = ""
+    get() = field  // Лишнее - поведение по умолчанию
+
+// Не использовать lateinit для nullable типов
+lateinit var text: String?  // Ошибка: lateinit не может быть nullable
+var text: String? = null    // Лучше использовать nullable
 
 // Не вычислять дорогостоящие операции в getters повторно
 val data: List<String>
@@ -357,7 +574,7 @@ val items = mutableListOf<String>()  // Плохо: внешний код мож
 
 ## Answer (EN)
 
-Properties in Kotlin are first-class language features that replace Java's field + getter/setter pattern. They provide a concise syntax while maintaining encapsulation and allowing custom behavior.
+Properties in Kotlin are first-class language features that replace Java's field + getter/setter pattern. They provide a concise syntax while maintaining encapsulation and allowing custom behavior. See also: [[c-kotlin]].
 
 ### Key Concepts
 
@@ -448,7 +665,7 @@ class User {
     var name: String = ""
         set(value) {
             println("Setting name to: $value")
-            field = value.trim().capitalize()
+            field = value.trim().replaceFirstChar { it.titlecase() }
         }
 
     var age: Int = 0
@@ -571,7 +788,7 @@ class MyActivity : AppCompatActivity() {
 **lateinit requirements**:
 - Must be `var` (not `val`)
 - Must be non-null type
-- Cannot be primitive type (Int, Boolean, etc.)
+- Cannot be primitive type (`Int`, `Boolean`, etc.)
 - Cannot have custom getter/setter
 
 **Checking if lateinit is initialized**:
@@ -910,17 +1127,37 @@ class PreferenceDelegate<T>(
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия свойств Kotlin от полей и аксессоров в Java?
+- Когда стоит использовать `lateinit`, а когда `lazy`?
+- Какие типичные ошибки при работе со свойствами в Kotlin?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
+- [Delegated Properties](https://kotlinlang.org/docs/delegated-properties.html)
+- [Kotlin Backing Fields](https://kotlinlang.org/docs/properties.html#backing-fields)
+
 ## References
 
 - [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
 - [Delegated Properties](https://kotlinlang.org/docs/delegated-properties.html)
 - [Kotlin Backing Fields](https://kotlinlang.org/docs/properties.html#backing-fields)
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-val-vs-var--kotlin--easy]]
+- [[q-kotlin-constructors--kotlin--easy]]
+- [[q-property-delegates--kotlin--medium]]
+- [[q-kotlin-lateinit--kotlin--medium]]
+- [[q-lazy-vs-lateinit--kotlin--medium]]
 
 ## Related Questions
 
@@ -929,6 +1166,10 @@ class PreferenceDelegate<T>(
 - [[q-property-delegates--kotlin--medium]]
 - [[q-kotlin-lateinit--kotlin--medium]]
 - [[q-lazy-vs-lateinit--kotlin--medium]]
+
+## MOC Ссылки (RU)
+
+- [[moc-kotlin]]
 
 ## MOC Links
 

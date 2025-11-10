@@ -38,7 +38,7 @@ subtopics:
 > How do you ensure proper resource cleanup when a coroutine is cancelled?
 ## Ответ (RU)
 
-**Очистка ресурсов в корутинах** требует тщательной обработки, потому что отмена является кооперативной и асинхронной. Паттерн `try-finally` и контекст `NonCancellable` - ключевые инструменты для обеспечения правильного освобождения ресурсов.
+**Очистка ресурсов в корутинах** требует тщательной обработки, потому что отмена является кооперативной и асинхронной. Паттерн `try-finally` и контекст `NonCancellable` — ключевые инструменты для обеспечения правильного освобождения ресурсов.
 
 ### Проблема: Ресурсы и Отмена
 
@@ -56,6 +56,7 @@ val job = lifecycleScope.launch {
     file.close() // Никогда не достигается при отмене!
 }
 
+// Предполагается вызов внутри suspend-функции или корутины
 delay(500)
 job.cancel() // Файл остается открытым → утечка ресурсов!
 ```
@@ -68,7 +69,9 @@ job.cancel() // Файл остается открытым → утечка ре
 
 ### Решение 1: Паттерн try-finally (Обязательно)
 
-**Базовый Паттерн**: Используйте `try-finally` для гарантированной очистки.
+**Базовый паттерн**: Используйте `try-finally` для гарантированной очистки.
+
+Важно: сам блок `finally` выполняется всегда, но если внутри него есть приостанавливающиеся вызовы, они могут быть отменены. Для критически важной приостанавливающейся очистки используйте `NonCancellable` (см. ниже).
 
 ```kotlin
 // - ХОРОШО: Гарантированная очистка
@@ -81,28 +84,29 @@ val job = lifecycleScope.launch {
             delay(100) // Отмена может произойти здесь
         }
     } finally {
-        // ВСЕГДА выполняется, даже при отмене
+        // ВСЕГДА выполняется в этой корутине, даже при отмене
         file.close()
         println("Файл закрыт")
     }
 }
 
+// Предполагается вызов внутри suspend-функции или корутины
 delay(500)
 job.cancel() // Файл корректно закрыт!
 job.join()   // Ждем завершения очистки
 ```
 
-**Как Это Работает**:
-1. Корутина начинает запись в файл
-2. Вызывается `cancel()`
-3. В следующей точке приостановки (`delay(100)`) обнаруживается отмена
-4. Выбрасывается `CancellationException`
-5. Выполняется блок `finally` → файл закрыт
-6. Корутина завершается
+**Как это работает**:
+1. Корутина начинает запись в файл.
+2. Вызывается `cancel()`.
+3. В следующей точке приостановки (`delay(100)`) обнаруживается отмена.
+4. Выбрасывается `CancellationException`.
+5. Выполняется блок `finally` → файл закрыт.
+6. Корутина завершается.
 
-### Решение 2: Расширение use() (Автоматическая Очистка)
+### Решение 2: Расширение use() (Автоматическая очистка)
 
-**use() из Kotlin**: Автоматически закрывает `Closeable` ресурсы.
+**`use()` из Kotlin**: Автоматически закрывает ресурсы `Closeable`.
 
 ```kotlin
 // - ЛУЧШЕ ВСЕГО: Автоматическое управление ресурсами
@@ -115,6 +119,7 @@ val job = lifecycleScope.launch {
     } // Автоматически закрывается здесь, даже при отмене
 }
 
+// Предполагается вызов внутри suspend-функции или корутины
 delay(500)
 job.cancel()
 job.join()
@@ -124,9 +129,9 @@ job.join()
 - Лаконичный, идиоматичный Kotlin
 - Обрабатывает исключения автоматически
 - Работает с любым `Closeable` ресурсом
-- Эквивалентно try-finally, но чище
+- Эквивалентно `try-finally`, но чище
 
-### Решение 3: Контекст NonCancellable (Очистка Должна Завершиться)
+### Решение 3: Контекст NonCancellable (Очистка должна завершиться)
 
 **Проблема**: Код очистки, который приостанавливается, может быть отменен.
 
@@ -138,8 +143,8 @@ val job = lifecycleScope.launch {
     try {
         performDatabaseOperations()
     } finally {
-        // Если очистка занимает время и отменяется...
-        delay(1000) // Очистка прервана! Соединение не закрыто
+        // Если очистка занимает время и приостанавливается...
+        delay(1000) // Очистка может быть прервана, соединение не закрыто
         connection.close()
     }
 }
@@ -147,7 +152,7 @@ val job = lifecycleScope.launch {
 job.cancel()
 ```
 
-**Решение**: Используйте контекст `NonCancellable` для очистки.
+**Решение**: Используйте контекст `NonCancellable` для приостанавливающейся очистки.
 
 ```kotlin
 // - ХОРОШО: Очистка не может быть отменена
@@ -158,7 +163,7 @@ val job = lifecycleScope.launch {
         performDatabaseOperations()
     } finally {
         withContext(NonCancellable) {
-            // Этот блок НЕ МОЖЕТ быть отменен
+            // Этот блок не может быть отменен
             delay(1000) // Выполняется до конца
             connection.close()
             println("Очистка завершена")
@@ -167,10 +172,10 @@ val job = lifecycleScope.launch {
 }
 
 job.cancel()
-job.join() // Ждет завершения блока NonCancellable
+job.join() // Ждем завершения блока NonCancellable
 ```
 
-**Когда Использовать NonCancellable**:
+**Когда использовать NonCancellable**:
 - Очистка требует приостанавливающих функций
 - Необходимо отправить логи краша
 - Необходимо сохранить критическое состояние
@@ -178,28 +183,31 @@ job.join() // Ждет завершения блока NonCancellable
 
 ### Резюме
 
-**Очистка Ресурсов в Корутинах**:
-- - **try-finally**: Гарантированная очистка при отмене
-- - **use()**: Автоматическая очистка для `Closeable` ресурсов
-- - **NonCancellable**: Очистка, которую нельзя прервать
-- - **job.join()**: Ждать завершения очистки после отмены
-- - **Вложенная очистка**: Корректно обрабатывать несколько ресурсов
-- - **Перебрасывать CancellationException**: Не проглатывать его
+**Очистка ресурсов в корутинах**:
+- **try-finally**: гарантированная очистка при отмене
+- **use()**: автоматическая очистка для `Closeable` ресурсов
+- **NonCancellable**: очистка, которую нельзя прервать, если она приостанавливается
+- **job.join()**: ждать завершения очистки после отмены
+- **Вложенная очистка**: корректно обрабатывать несколько ресурсов
+- **Перебрасывать CancellationException**: не проглатывать его
 
-**Ключевой Паттерн**:
+**Ключевой паттерн**:
 ```kotlin
-coroutine.launch {
+// Внутри подходящего CoroutineScope
+launch {
     resource.use { res ->
         // Работа с ресурсом
     }
-} // Всегда очищено
+} // Ресурс всегда очищен
 
-// Или с try-finally:
-try {
-    work()
-} finally {
-    withContext(NonCancellable) {
-        cleanup() // Не может быть отменено
+// Или с try-finally и NonCancellable:
+launch {
+    try {
+        work()
+    } finally {
+        withContext(NonCancellable) {
+            cleanup() // Не может быть отменено
+        }
     }
 }
 ```
@@ -226,6 +234,7 @@ val job = lifecycleScope.launch {
     file.close() // Never reached if cancelled!
 }
 
+// Intended to be called from a suspend function or coroutine
 delay(500)
 job.cancel() // File remains open → resource leak!
 ```
@@ -238,7 +247,9 @@ job.cancel() // File remains open → resource leak!
 
 ### Solution 1: try-finally Pattern (Essential)
 
-**Basic Pattern**: Use `try-finally` to guarantee cleanup.
+**Basic pattern**: Use `try-finally` to guarantee cleanup.
+
+Note: The `finally` block itself always runs for that coroutine, but any suspending calls inside it are still cancellation-aware. For critical suspending cleanup, wrap it in `NonCancellable`.
 
 ```kotlin
 // - GOOD: Guaranteed cleanup
@@ -251,28 +262,29 @@ val job = lifecycleScope.launch {
             delay(100) // Cancellation can happen here
         }
     } finally {
-        // ALWAYS runs, even if cancelled
+        // ALWAYS runs in this coroutine, even if cancelled
         file.close()
         println("File closed")
     }
 }
 
+// Intended to be called from a suspend function or coroutine
 delay(500)
 job.cancel() // File is properly closed!
 job.join()   // Wait for cleanup to complete
 ```
 
 **How It Works**:
-1. Coroutine starts writing to file
-2. `cancel()` is called
-3. At next suspension point (`delay(100)`), cancellation is detected
-4. `CancellationException` is thrown
-5. `finally` block executes → file closed
-6. Coroutine terminates
+1. Coroutine starts writing to file.
+2. `cancel()` is called.
+3. At next suspension point (`delay(100)`), cancellation is detected.
+4. `CancellationException` is thrown.
+5. `finally` block executes → file closed.
+6. Coroutine terminates.
 
 ### Solution 2: use() Extension (Automatic Cleanup)
 
-**Kotlin's use()**: Automatically closes `Closeable` resources.
+**Kotlin's `use()`**: Automatically closes `Closeable` resources.
 
 ```kotlin
 // - BEST: Automatic resource management
@@ -285,6 +297,7 @@ val job = lifecycleScope.launch {
     } // Automatically closed here, even if cancelled
 }
 
+// Intended to be called from a suspend function or coroutine
 delay(500)
 job.cancel()
 job.join()
@@ -294,7 +307,7 @@ job.join()
 - Concise, idiomatic Kotlin
 - Handles exceptions automatically
 - Works with any `Closeable` resource
-- Equivalent to try-finally but cleaner
+- Equivalent to `try-finally` but cleaner
 
 ### Solution 3: NonCancellable Context (Cleanup Must Complete)
 
@@ -308,8 +321,8 @@ val job = lifecycleScope.launch {
     try {
         performDatabaseOperations()
     } finally {
-        // If cleanup takes time and is cancelled...
-        delay(1000) // Cleanup interrupted! Connection not closed
+        // If cleanup takes time and suspends...
+        delay(1000) // Cleanup may be cancelled, connection not closed
         connection.close()
     }
 }
@@ -317,7 +330,7 @@ val job = lifecycleScope.launch {
 job.cancel()
 ```
 
-**Solution**: Use `NonCancellable` context for cleanup.
+**Solution**: Use `NonCancellable` context for suspending cleanup.
 
 ```kotlin
 // - GOOD: Cleanup cannot be cancelled
@@ -348,7 +361,7 @@ job.join() // Waits for NonCancellable block to finish
 
 ### Solution 4: Multiple Resources
 
-**Pattern**: Nested try-finally or multiple use blocks.
+**Pattern**: Nested `try-finally` or multiple `use` blocks.
 
 ```kotlin
 // - GOOD: Multiple resources with use()
@@ -387,6 +400,7 @@ class DatabaseConnection : Closeable {
     private val connection = openRawConnection()
 
     suspend fun executeQuery(sql: String): List<Row> {
+        // Assume this is a suspending or non-blocking call in real code
         return connection.query(sql)
     }
 
@@ -436,7 +450,7 @@ class DataSyncViewModel : ViewModel() {
 
 ### Solution 6: Cancellation-Aware Cleanup
 
-**Check Cancellation in Cleanup**:
+**Pattern**: Ensure all acquired resources are cleaned up, even on cancellation.
 
 ```kotlin
 val job = lifecycleScope.launch {
@@ -548,6 +562,8 @@ val job = lifecycleScope.launch {
 }
 ```
 
+In general, do not swallow `CancellationException` without rethrowing, or you may break structured cancellation semantics.
+
 ### Best Practices
 
 ```kotlin
@@ -561,7 +577,7 @@ try {
     cleanup()
 }
 
-// - DO: Use NonCancellable for critical cleanup
+// - DO: Use NonCancellable for critical suspending cleanup
 finally {
     withContext(NonCancellable) {
         criticalCleanup()
@@ -585,13 +601,15 @@ work(file) // If cancelled, file not closed!
 
 // - DON'T: Swallow CancellationException in cleanup
 catch (e: CancellationException) {
-    // Don't ignore it!
+    // Don't ignore it — rethrow to propagate cancellation when appropriate
+    throw e
 }
 
-// - DON'T: Perform long operations in finally without NonCancellable
+// - DON'T: Perform long suspending operations in finally without NonCancellable
 finally {
-    delay(5000) // Can be cancelled!
-    cleanup()   // Might not run!
+    // This can be cancelled; use NonCancellable if it must complete
+    delay(5000)
+    cleanup()
 }
 ```
 
@@ -624,27 +642,30 @@ class FileProcessorTest {
 ### Summary
 
 **Resource Cleanup in Coroutines**:
-- - **try-finally**: Guaranteed cleanup on cancellation
-- - **use()**: Automatic cleanup for `Closeable` resources
-- - **NonCancellable**: Cleanup that cannot be interrupted
-- - **job.join()**: Wait for cleanup to complete after cancel
-- - **Nested cleanup**: Handle multiple resources correctly
-- - **Re-throw CancellationException**: Don't swallow it
+- **try-finally**: Guaranteed cleanup on cancellation
+- **use()**: Automatic cleanup for `Closeable` resources
+- **NonCancellable**: Cleanup that cannot be interrupted when it suspends
+- **job.join()**: Wait for cleanup to complete after cancel
+- **Nested cleanup**: Handle multiple resources correctly
+- **Re-throw CancellationException**: Don't swallow it
 
 **Key Pattern**:
 ```kotlin
-coroutine.launch {
+// Inside an appropriate CoroutineScope
+launch {
     resource.use { res ->
         // Work with resource
     }
 } // Always cleaned up
 
-// Or with try-finally:
-try {
-    work()
-} finally {
-    withContext(NonCancellable) {
-        cleanup() // Cannot be cancelled
+// Or with try-finally and NonCancellable:
+launch {
+    try {
+        work()
+    } finally {
+        withContext(NonCancellable) {
+            cleanup() // Cannot be cancelled
+        }
     }
 }
 ```

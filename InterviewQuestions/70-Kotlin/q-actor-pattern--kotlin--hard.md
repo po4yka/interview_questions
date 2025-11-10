@@ -1,14 +1,12 @@
 ---
 id: kotlin-066
 title: "Actor Pattern with Coroutines / Паттерн Actor с корутинами"
-aliases: ["Actor Pattern with Coroutines, Паттерн Actor с корутинами"]
+aliases: ["Actor Pattern with Coroutines", "Паттерн Actor с корутинами"]
 
 # Classification
 topic: kotlin
 subtopics:
-  - actor
   - channels
-  - concurrency
   - coroutines
   - state-management
 question_kind: theory
@@ -23,11 +21,11 @@ source_note: Comprehensive guide on Actor pattern with Kotlin Coroutines
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-advanced-coroutine-patterns--kotlin--hard, q-channel-buffering-strategies--kotlin--hard, q-fan-in-fan-out--kotlin--hard]
+related: [c-kotlin, q-advanced-coroutine-patterns--kotlin--hard, q-channel-buffering-strategies--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 
 tags: [actor, channels, concurrency, coroutines, difficulty/hard, kotlin, message-passing, state-encapsulation]
 ---
@@ -41,16 +39,40 @@ tags: [actor, channels, concurrency, coroutines, difficulty/hard, kotlin, messag
 
 ## Ответ (RU)
 
-Паттерн **Actor** - это модель параллелизма, где акторы являются изолированными единицами, которые обрабатывают сообщения последовательно, устраняя необходимость в блокировках и синхронизации. В Kotlin акторы реализуются с использованием корутин и каналов.
+Паттерн **Actor** - это модель параллелизма, где акторы являются изолированными единицами, которые обрабатывают сообщения последовательно, устраняя необходимость в явных блокировках и ручной синхронизации общего состояния. В Kotlin акторы обычно реализуются с использованием корутин и каналов ([[c-coroutines]]).
 
 ### Ключевые Концепции
 
-1. **Actor**: Независимая сущность с приватным состоянием
-2. **Передача сообщений**: Коммуникация через каналы
-3. **Последовательная обработка**: Сообщения обрабатываются по одному
-4. **Инкапсуляция состояния**: Нет общего изменяемого состояния
-5. **Потокобезопасность**: Нет гонки условий по дизайну
-6. **Почтовый ящик**: Очередь сообщений (реализована как Channel)
+1. **Actor**: Независимая сущность с приватным состоянием.
+2. **Передача сообщений**: Коммуникация через каналы.
+3. **Последовательная обработка**: Сообщения обрабатываются по одному в цикле.
+4. **Инкапсуляция состояния**: Нет общего изменяемого состояния вне актора.
+5. **Потокобезопасность**: Отсутствие гонок за счёт доступа к состоянию только из одного потока выполнения актора.
+6. **Почтовый ящик**: Очередь сообщений (обычно `Channel`).
+
+### Архитектура Модели Акторов
+
+```
+
+            Актор
+
+       Приватное состояние
+    (доступно только коду актора)
+
+
+
+     Цикл обработки сообщений
+     (обработка по одному)
+
+
+
+        Почтовый ящик (Channel)
+
+
+
+          Сообщения от
+          внешних отправителей
+```
 
 ### Базовая Реализация Актора
 
@@ -85,30 +107,105 @@ suspend fun main() = coroutineScope {
     counter.send(IncCounter)
     counter.send(IncCounter)
     counter.send(IncCounter)
+    counter.send(DecCounter)
 
     // Получение текущего значения
     val response = CompletableDeferred<Int>()
     counter.send(GetCounter(response))
-    println("Счётчик: ${response.await()}")  // Счётчик: 3
+    println("Счётчик: ${response.await()}")  // Счётчик: 2
 
     counter.close()
 }
 ```
 
-### Реальный Пример: Банковский Счёт Актор
+### Функция-строитель Actor
 
 ```kotlin
+fun <T> CoroutineScope.actor(
+    context: CoroutineContext = EmptyCoroutineContext,
+    capacity: Int = 0,  // По умолчанию rendezvous-канал
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    onCompletion: CompletionHandler? = null,
+    block: suspend ActorScope<T>.() -> Unit
+): SendChannel<T>
+
+// ActorScope предоставляет:
+// - channel: ReceiveChannel<T> для получения сообщений
+// - интерфейс SendChannel<T> для отправки сообщений
+```
+
+### Актор-счётчик с улучшенным API
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
+// Типы сообщений
+sealed class CounterMsg
+object IncCounter : CounterMsg()
+object DecCounter : CounterMsg()
+class GetCounter(val response: CompletableDeferred<Int>) : CounterMsg()
+class SetCounter(val value: Int) : CounterMsg()
+object Reset : CounterMsg()
+
+class CounterActor(scope: CoroutineScope) {
+    private val actor = scope.actor<CounterMsg> {
+        var counter = 0
+
+        for (msg in channel) {
+            when (msg) {
+                is IncCounter -> counter++
+                is DecCounter -> counter--
+                is GetCounter -> msg.response.complete(counter)
+                is SetCounter -> counter = msg.value
+                is Reset -> counter = 0
+            }
+        }
+    }
+
+    suspend fun increment() = actor.send(IncCounter)
+    suspend fun decrement() = actor.send(DecCounter)
+
+    suspend fun get(): Int {
+        val response = CompletableDeferred<Int>()
+        actor.send(GetCounter(response))
+        return response.await()
+    }
+
+    suspend fun set(value: Int) = actor.send(SetCounter(value))
+    suspend fun reset() = actor.send(Reset)
+
+    fun close() = actor.close()
+}
+```
+
+### Реальный пример: Актор банковского счёта
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
 sealed class AccountMsg
 class Deposit(val amount: Double, val response: CompletableDeferred<Result<Unit>>) : AccountMsg()
 class Withdraw(val amount: Double, val response: CompletableDeferred<Result<Unit>>) : AccountMsg()
 class GetBalance(val response: CompletableDeferred<Double>) : AccountMsg()
+class Transfer(
+    val toAccount: SendChannel<AccountMsg>,
+    val amount: Double,
+    val response: CompletableDeferred<Result<Unit>>
+) : AccountMsg()
+
+sealed class Result<out T> {
+    data class Success<T>(val value: T) : Result<T>()
+    data class Error(val message: String) : Result<Nothing>()
+}
 
 class BankAccount(
     scope: CoroutineScope,
     private val accountId: String,
     initialBalance: Double = 0.0
 ) {
-    private val actor = scope.actor<AccountMsg> {
+    internal val actor = scope.actor<AccountMsg> {
         var balance = initialBalance
 
         for (msg in channel) {
@@ -142,6 +239,37 @@ class BankAccount(
                 is GetBalance -> {
                     msg.response.complete(balance)
                 }
+
+                is Transfer -> {
+                    when {
+                        msg.amount <= 0 -> {
+                            msg.response.complete(Result.Error("Неверная сумма"))
+                        }
+                        balance < msg.amount -> {
+                            msg.response.complete(Result.Error("Недостаточно средств"))
+                        }
+                        else -> {
+                            // Списываем с этого счёта
+                            balance -= msg.amount
+                            println("[$accountId] Перевод ${msg.amount}, Баланс: $balance")
+
+                            // Пытаемся зачислить на другой счёт
+                            val depositResponse = CompletableDeferred<Result<Unit>>()
+                            msg.toAccount.send(Deposit(msg.amount, depositResponse))
+
+                            when (val result = depositResponse.await()) {
+                                is Result.Success -> {
+                                    msg.response.complete(Result.Success(Unit))
+                                }
+                                is Result.Error -> {
+                                    // Откат при ошибке
+                                    balance += msg.amount
+                                    msg.response.complete(Result.Error("Перевод не выполнен: ${result.message}"))
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -164,14 +292,273 @@ class BankAccount(
         return response.await()
     }
 
+    suspend fun transfer(toAccount: BankAccount, amount: Double): Result<Unit> {
+        val response = CompletableDeferred<Result<Unit>>()
+        actor.send(Transfer(toAccount.actor, amount, response))
+        return response.await()
+    }
+
     fun close() = actor.close()
 }
 ```
 
-### Actor Vs Mutex
+### Актор кэша (Cache Actor)
 
 ```kotlin
-// Используя Mutex (традиционный подход)
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
+sealed class CacheMsg<K, V>
+class Put<K, V>(val key: K, val value: V) : CacheMsg<K, V>()
+class Get<K, V>(val key: K, val response: CompletableDeferred<V?>) : CacheMsg<K, V>()
+class Remove<K, V>(val key: K) : CacheMsg<K, V>()
+class Clear<K, V> : CacheMsg<K, V>()
+class Size<K, V>(val response: CompletableDeferred<Int>) : CacheMsg<K, V>()
+
+class CacheActor<K, V>(
+    scope: CoroutineScope,
+    private val maxSize: Int = 100
+) {
+    private val actor = scope.actor<CacheMsg<K, V>> {
+        val cache = LinkedHashMap<K, V>(maxSize, 0.75f, true)
+
+        for (msg in channel) {
+            when (msg) {
+                is Put -> {
+                    if (cache.size >= maxSize && !cache.containsKey(msg.key)) {
+                        val oldestKey = cache.keys.first()
+                        cache.remove(oldestKey)
+                    }
+                    cache[msg.key] = msg.value
+                }
+                is Get -> {
+                    msg.response.complete(cache[msg.key])
+                }
+                is Remove -> {
+                    cache.remove(msg.key)
+                }
+                is Clear -> {
+                    cache.clear()
+                }
+                is Size -> {
+                    msg.response.complete(cache.size)
+                }
+            }
+        }
+    }
+
+    suspend fun put(key: K, value: V) = actor.send(Put(key, value))
+
+    suspend fun get(key: K): V? {
+        val response = CompletableDeferred<V?>()
+        actor.send(Get(key, response))
+        return response.await()
+    }
+
+    suspend fun remove(key: K) = actor.send(Remove(key))
+    suspend fun clear() = actor.send(Clear())
+
+    suspend fun size(): Int {
+        val response = CompletableDeferred<Int>()
+        actor.send(Size(response))
+        return response.await()
+    }
+
+    fun close() = actor.close()
+}
+```
+
+### Актор ограничения частоты (Rate Limiter Actor)
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
+sealed class RateLimiterMsg
+class TryAcquire(val response: CompletableDeferred<Boolean>) : RateLimiterMsg()
+class GetAvailable(val response: CompletableDeferred<Int>) : RateLimiterMsg()
+
+class RateLimiterActor(
+    scope: CoroutineScope,
+    private val maxRequests: Int,
+    private val windowMillis: Long
+) {
+    private val actor = scope.actor<RateLimiterMsg> {
+        val requests = mutableListOf<Long>()
+
+        for (msg in channel) {
+            val now = System.currentTimeMillis()
+            requests.removeIf { it < now - windowMillis }
+
+            when (msg) {
+                is TryAcquire -> {
+                    if (requests.size < maxRequests) {
+                        requests.add(now)
+                        msg.response.complete(true)
+                    } else {
+                        msg.response.complete(false)
+                    }
+                }
+                is GetAvailable -> {
+                    msg.response.complete(maxRequests - requests.size)
+                }
+            }
+        }
+    }
+
+    suspend fun tryAcquire(): Boolean {
+        val response = CompletableDeferred<Boolean>()
+        actor.send(TryAcquire(response))
+        return response.await()
+    }
+
+    suspend fun getAvailable(): Int {
+        val response = CompletableDeferred<Int>()
+        actor.send(GetAvailable(response))
+        return response.await()
+    }
+
+    fun close() = actor.close()
+}
+```
+
+### Актор очереди задач (Task Queue Actor)
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
+sealed class TaskQueueMsg
+class EnqueueTask(val task: suspend () -> Unit) : TaskQueueMsg()
+class GetQueueSize(val response: CompletableDeferred<Int>) : TaskQueueMsg()
+object PauseQueue : TaskQueueMsg()
+object ResumeQueue : TaskQueueMsg()
+
+class TaskQueueActor(
+    scope: CoroutineScope,
+    private val concurrency: Int = 1
+) {
+    private val actor = scope.actor<TaskQueueMsg>(capacity = Channel.UNLIMITED) {
+        val queue = mutableListOf<suspend () -> Unit>()
+        var isPaused = false
+        val activeJobs = mutableListOf<Job>()
+
+        suspend fun processQueue() {
+            while (!isPaused && queue.isNotEmpty() && activeJobs.size < concurrency) {
+                val task = queue.removeAt(0)
+                val job = launch {
+                    try {
+                        task()
+                    } finally {
+                        activeJobs.remove(this)
+                        processQueue()
+                    }
+                }
+                activeJobs.add(job)
+            }
+        }
+
+        for (msg in channel) {
+            when (msg) {
+                is EnqueueTask -> {
+                    queue.add(msg.task)
+                    processQueue()
+                }
+                is GetQueueSize -> {
+                    msg.response.complete(queue.size)
+                }
+                is PauseQueue -> {
+                    isPaused = true
+                }
+                is ResumeQueue -> {
+                    isPaused = false
+                    processQueue()
+                }
+            }
+        }
+    }
+
+    suspend fun enqueue(task: suspend () -> Unit) = actor.send(EnqueueTask(task))
+
+    suspend fun getQueueSize(): Int {
+        val response = CompletableDeferred<Int>()
+        actor.send(GetQueueSize(response))
+        return response.await()
+    }
+
+    suspend fun pause() = actor.send(PauseQueue)
+    suspend fun resume() = actor.send(ResumeQueue)
+
+    fun close() = actor.close()
+}
+```
+
+### Обработка ошибок в акторах
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
+sealed class SafeAccountMsg
+class SafeDeposit(
+    val amount: Double,
+    val response: CompletableDeferred<Result<Unit>>
+) : SafeAccountMsg()
+
+sealed class Result<out T> {
+    data class Success<T>(val value: T) : Result<T>()
+    data class Error(val message: String) : Result<Nothing>()
+}
+
+class SafeBankAccount(scope: CoroutineScope) {
+    private val actor = scope.actor<SafeAccountMsg> {
+        var balance = 0.0
+
+        try {
+            for (msg in channel) {
+                try {
+                    when (msg) {
+                        is SafeDeposit -> {
+                            if (msg.amount < 0) {
+                                throw IllegalArgumentException("Negative amount")
+                            }
+                            balance += msg.amount
+                            msg.response.complete(Result.Success(Unit))
+                        }
+                    }
+                } catch (e: Exception) {
+                    when (msg) {
+                        is SafeDeposit -> msg.response.complete(
+                            Result.Error(e.message ?: "Unknown error")
+                        )
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            println("Actor failed: ${e.message}")
+        }
+    }
+
+    suspend fun deposit(amount: Double): Result<Unit> {
+        val response = CompletableDeferred<Result<Unit>>()
+        actor.send(SafeDeposit(amount, response))
+        return response.await()
+    }
+
+    fun close() = actor.close()
+}
+```
+
+### Сравнение Actor и Mutex
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlin.system.measureTimeMillis
+
+// Подход с Mutex
 class MutexCounter {
     private var counter = 0
     private val mutex = Mutex()
@@ -181,20 +568,52 @@ class MutexCounter {
             counter++
         }
     }
+
+    suspend fun get(): Int = mutex.withLock { counter }
 }
 
-// Используя Actor (передача сообщений)
+// Подход с Actor
+sealed class CounterMsg
+object IncCounter : CounterMsg()
+class GetCounter(val response: CompletableDeferred<Int>) : CounterMsg()
+
 class ActorCounter(scope: CoroutineScope) {
     private val actor = scope.actor<CounterMsg> {
         var counter = 0
         for (msg in channel) {
             when (msg) {
                 is IncCounter -> counter++
+                is GetCounter -> msg.response.complete(counter)
             }
         }
     }
 
     suspend fun increment() = actor.send(IncCounter)
+
+    suspend fun get(): Int {
+        val response = CompletableDeferred<Int>()
+        actor.send(GetCounter(response))
+        return response.await()
+    }
+}
+
+// Пример грубого сравнения производительности
+suspend fun main() = coroutineScope {
+    val mutexCounter = MutexCounter()
+    val mutexTime = measureTimeMillis {
+        repeat(10_000) {
+            launch { mutexCounter.increment() }
+        }
+    }
+    println("Mutex: $mutexTime ms")
+
+    val actorCounter = ActorCounter(this)
+    val actorTime = measureTimeMillis {
+        repeat(10_000) {
+            launch { actorCounter.increment() }
+        }
+    }
+    println("Actor: $actorTime ms")
 }
 ```
 
@@ -203,9 +622,12 @@ class ActorCounter(scope: CoroutineScope) {
 #### ДЕЛАТЬ:
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
 // Держать состояние актора приватным
 class GoodActor(scope: CoroutineScope) {
-    private var state = 0  // Приватное, инкапсулированное
+    private var state = 0
     private val actor = scope.actor<Msg> { /* ... */ }
 }
 
@@ -214,6 +636,19 @@ sealed class Msg
 object Increment : Msg()
 class GetValue(val response: CompletableDeferred<Int>) : Msg()
 
+// Обрабатывать ошибки
+private val actor = scope.actor<Msg> {
+    try {
+        for (msg in channel) {
+            when (msg) {
+                // ...
+            }
+        }
+    } catch (e: Exception) {
+        // логирование и обработка
+    }
+}
+
 // Предоставлять чистый API
 suspend fun increment() = actor.send(Increment)
 ```
@@ -221,48 +656,63 @@ suspend fun increment() = actor.send(Increment)
 #### НЕ ДЕЛАТЬ:
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
 // Не выставлять изменяемое состояние наружу
 class BadActor(scope: CoroutineScope) {
-    var state = 0  // Плохо: публичное изменяемое состояние!
+    var state = 0  // Плохо
 }
 
-// Не использовать акторы для простых задач
-// Используйте Mutex для простой синхронизации
+// Не использовать акторы для слишком простых задач
+val mutex = Mutex()
+var counter = 0
+suspend fun simpleIncrement() = mutex.withLock { counter++ }
 
 // Не забывать закрывать акторы
 val actor = actor<Msg> { /* ... */ }
-actor.close()  // Всегда закрывайте!
+actor.close()
+
+// Не блокировать поток внутри актора
+private val blockingActor = scope.actor<Msg> {
+    for (msg in channel) {
+        // Thread.sleep(1000) // Плохо
+        delay(1000)          // Хорошо
+    }
+}
 ```
 
 ### Когда Использовать Акторы
 
-**Используйте акторы когда:**
-- Нужно управлять изменяемым состоянием с конкурентным доступом
-- Обновления состояния сложные и требуют нескольких шагов
-- Нужно сохранять порядок операций
-- Хотите избежать явных блокировок
-- Строите событийно-ориентированные системы
+Используйте акторы когда:
+- Нужно управлять изменяемым состоянием с конкурентным доступом.
+- Обновления состояния сложные и требуют нескольких шагов.
+- Нужно сохранять порядок операций.
+- Хотите избежать явных блокировок.
+- Строите событийно-ориентированные системы.
 
-**Не используйте акторы когда:**
-- Простые атомарные операции (используйте AtomicInteger)
-- Операции в основном на чтение (используйте StateFlow)
-- Нужны немедленные ответы (акторы имеют накладные расходы)
-- Состояние неизменяемо (используйте обычные функции)
+Не используйте акторы когда:
+- Простые атомарные операции (используйте `AtomicInteger`).
+- Операции в основном на чтение (используйте `StateFlow`).
+- Нужны немедленные ответы (акторы имеют накладные расходы).
+- Состояние неизменяемо.
 
 ---
 
 ## Answer (EN)
 
-The **Actor pattern** is a concurrency model where actors are isolated units that process messages sequentially, eliminating the need for locks and synchronization. In Kotlin, actors are implemented using coroutines and channels.
+The **Actor pattern** is a concurrency model where actors are isolated units that process messages sequentially, avoiding explicit locks and manual synchronization of shared mutable state. In Kotlin, actors are typically implemented using coroutines and channels.
 
 ### Key Concepts
 
-1. **Actor**: Independent entity with private state
-2. **Message passing**: Communication through channels
-3. **Sequential processing**: Messages processed one at a time
-4. **State encapsulation**: No shared mutable state
-5. **Thread-safe**: No race conditions by design
-6. **Mailbox**: Queue of messages (implemented as Channel)
+1. **Actor**: Independent entity with private state.
+2. **Message passing**: Communication via channels.
+3. **Sequential processing**: Messages processed one at a time in a loop.
+4. **State encapsulation**: No shared mutable state outside the actor.
+5. **Thread-safe**: No race conditions because only the actor logic accesses its state.
+6. **Mailbox**: Queue of messages (commonly a `Channel`).
 
 ### Actor Model Architecture
 
@@ -272,7 +722,6 @@ The **Actor pattern** is a concurrency model where actors are isolated units tha
 
        Private State
     (only actor can access)
-
 
 
 
@@ -352,6 +801,17 @@ fun <T> CoroutineScope.actor(
 ### Counter Actor with Better API
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
+// Message types
+sealed class CounterMsg
+object IncCounter : CounterMsg()
+object DecCounter : CounterMsg()
+class GetCounter(val response: CompletableDeferred<Int>) : CounterMsg()
+class SetCounter(val value: Int) : CounterMsg()
+object Reset : CounterMsg()
+
 class CounterActor(scope: CoroutineScope) {
     private val actor = scope.actor<CounterMsg> {
         var counter = 0
@@ -382,14 +842,6 @@ class CounterActor(scope: CoroutineScope) {
     fun close() = actor.close()
 }
 
-// Message types
-sealed class CounterMsg
-object IncCounter : CounterMsg()
-object DecCounter : CounterMsg()
-class GetCounter(val response: CompletableDeferred<Int>) : CounterMsg()
-class SetCounter(val value: Int) : CounterMsg()
-object Reset : CounterMsg()
-
 // Usage
 suspend fun main() = coroutineScope {
     val counter = CounterActor(this)
@@ -408,6 +860,9 @@ suspend fun main() = coroutineScope {
 ### Real-World Example: Bank Account Actor
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
 sealed class AccountMsg
 class Deposit(val amount: Double, val response: CompletableDeferred<Result<Unit>>) : AccountMsg()
 class Withdraw(val amount: Double, val response: CompletableDeferred<Result<Unit>>) : AccountMsg()
@@ -428,7 +883,7 @@ class BankAccount(
     private val accountId: String,
     initialBalance: Double = 0.0
 ) {
-    private val actor = scope.actor<AccountMsg> {
+    internal val actor = scope.actor<AccountMsg> {
         var balance = initialBalance
 
         for (msg in channel) {
@@ -472,11 +927,9 @@ class BankAccount(
                             msg.response.complete(Result.Error("Insufficient funds"))
                         }
                         else -> {
-                            // Withdraw from this account
                             balance -= msg.amount
                             println("[$accountId] Transfer out ${msg.amount}, Balance: $balance")
 
-                            // Deposit to other account
                             val depositResponse = CompletableDeferred<Result<Unit>>()
                             msg.toAccount.send(Deposit(msg.amount, depositResponse))
 
@@ -485,7 +938,6 @@ class BankAccount(
                                     msg.response.complete(Result.Success(Unit))
                                 }
                                 is Result.Error -> {
-                                    // Rollback
                                     balance += msg.amount
                                     msg.response.complete(Result.Error("Transfer failed: ${result.message}"))
                                 }
@@ -523,35 +975,14 @@ class BankAccount(
 
     fun close() = actor.close()
 }
-
-// Usage
-suspend fun main() = coroutineScope {
-    val account1 = BankAccount(this, "ACC001", 1000.0)
-    val account2 = BankAccount(this, "ACC002", 500.0)
-
-    // Concurrent deposits (thread-safe)
-    launch { account1.deposit(100.0) }
-    launch { account1.deposit(200.0) }
-    launch { account2.deposit(50.0) }
-
-    delay(100)
-
-    // Transfer money
-    val result = account1.transfer(account2, 300.0)
-    println("Transfer result: $result")
-
-    // Check balances
-    println("Account 1 balance: ${account1.getBalance()}")  // 1000
-    println("Account 2 balance: ${account2.getBalance()}")  // 850
-
-    account1.close()
-    account2.close()
-}
 ```
 
 ### Cache Actor
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
 sealed class CacheMsg<K, V>
 class Put<K, V>(val key: K, val value: V) : CacheMsg<K, V>()
 class Get<K, V>(val key: K, val response: CompletableDeferred<V?>) : CacheMsg<K, V>()
@@ -570,7 +1001,6 @@ class CacheActor<K, V>(
             when (msg) {
                 is Put -> {
                     if (cache.size >= maxSize && !cache.containsKey(msg.key)) {
-                        // Remove oldest entry (LRU)
                         val oldestKey = cache.keys.first()
                         cache.remove(oldestKey)
                     }
@@ -615,27 +1045,14 @@ class CacheActor<K, V>(
 
     fun close() = actor.close()
 }
-
-// Usage
-suspend fun main() = coroutineScope {
-    val cache = CacheActor<String, String>(this, maxSize = 3)
-
-    cache.put("key1", "value1")
-    cache.put("key2", "value2")
-    cache.put("key3", "value3")
-    cache.put("key4", "value4")  // Will evict key1 (LRU)
-
-    println(cache.get("key1"))  // null (evicted)
-    println(cache.get("key2"))  // value2
-    println(cache.size())       // 3
-
-    cache.close()
-}
 ```
 
 ### Rate Limiter Actor
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
 sealed class RateLimiterMsg
 class TryAcquire(val response: CompletableDeferred<Boolean>) : RateLimiterMsg()
 class GetAvailable(val response: CompletableDeferred<Int>) : RateLimiterMsg()
@@ -650,8 +1067,6 @@ class RateLimiterActor(
 
         for (msg in channel) {
             val now = System.currentTimeMillis()
-
-            // Remove old requests outside the window
             requests.removeIf { it < now - windowMillis }
 
             when (msg) {
@@ -685,35 +1100,14 @@ class RateLimiterActor(
 
     fun close() = actor.close()
 }
-
-// Usage
-suspend fun main() = coroutineScope {
-    // Allow 5 requests per second
-    val rateLimiter = RateLimiterActor(this, maxRequests = 5, windowMillis = 1000)
-
-    // Simulate concurrent requests
-    val results = (1..10).map {
-        async {
-            val allowed = rateLimiter.tryAcquire()
-            if (allowed) {
-                println("Request $it: ALLOWED")
-            } else {
-                println("Request $it: DENIED")
-            }
-            allowed
-        }
-    }.awaitAll()
-
-    val allowed = results.count { it }
-    println("Total allowed: $allowed / ${results.size}")
-
-    rateLimiter.close()
-}
 ```
 
 ### Task Queue Actor
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
 sealed class TaskQueueMsg
 class EnqueueTask(val task: suspend () -> Unit) : TaskQueueMsg()
 class GetQueueSize(val response: CompletableDeferred<Int>) : TaskQueueMsg()
@@ -728,6 +1122,21 @@ class TaskQueueActor(
         val queue = mutableListOf<suspend () -> Unit>()
         var isPaused = false
         val activeJobs = mutableListOf<Job>()
+
+        suspend fun processQueue() {
+            while (!isPaused && queue.isNotEmpty() && activeJobs.size < concurrency) {
+                val task = queue.removeAt(0)
+                val job = launch {
+                    try {
+                        task()
+                    } finally {
+                        activeJobs.remove(this)
+                        processQueue()
+                    }
+                }
+                activeJobs.add(job)
+            }
+        }
 
         for (msg in channel) {
             when (msg) {
@@ -750,21 +1159,6 @@ class TaskQueueActor(
                 }
             }
         }
-
-        suspend fun processQueue() {
-            while (!isPaused && queue.isNotEmpty() && activeJobs.size < concurrency) {
-                val task = queue.removeAt(0)
-                val job = launch {
-                    try {
-                        task()
-                    } finally {
-                        activeJobs.remove(coroutineContext[Job])
-                        actor.send(EnqueueTask {})  // Trigger next task
-                    }
-                }
-                activeJobs.add(job)
-            }
-        }
     }
 
     suspend fun enqueue(task: suspend () -> Unit) = actor.send(EnqueueTask(task))
@@ -780,36 +1174,24 @@ class TaskQueueActor(
 
     fun close() = actor.close()
 }
-
-// Usage
-suspend fun main() = coroutineScope {
-    val taskQueue = TaskQueueActor(this, concurrency = 2)
-
-    // Enqueue tasks
-    repeat(10) { i ->
-        taskQueue.enqueue {
-            println("Executing task $i")
-            delay(500)
-            println("Task $i completed")
-        }
-    }
-
-    delay(1000)
-    println("Queue size: ${taskQueue.getQueueSize()}")
-
-    delay(5000)
-    taskQueue.close()
-}
 ```
 
 ### Error Handling in Actors
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
 sealed class SafeAccountMsg
 class SafeDeposit(
     val amount: Double,
     val response: CompletableDeferred<Result<Unit>>
 ) : SafeAccountMsg()
+
+sealed class Result<out T> {
+    data class Success<T>(val value: T) : Result<T>()
+    data class Error(val message: String) : Result<Nothing>()
+}
 
 class SafeBankAccount(scope: CoroutineScope) {
     private val actor = scope.actor<SafeAccountMsg> {
@@ -828,7 +1210,6 @@ class SafeBankAccount(scope: CoroutineScope) {
                         }
                     }
                 } catch (e: Exception) {
-                    // Handle message-specific errors
                     when (msg) {
                         is SafeDeposit -> msg.response.complete(
                             Result.Error(e.message ?: "Unknown error")
@@ -837,7 +1218,6 @@ class SafeBankAccount(scope: CoroutineScope) {
                 }
             }
         } catch (e: Exception) {
-            // Handle actor-level errors
             println("Actor failed: ${e.message}")
         }
     }
@@ -855,6 +1235,12 @@ class SafeBankAccount(scope: CoroutineScope) {
 ### Actor Vs Mutex Comparison
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+import kotlin.system.measureTimeMillis
+
 // Using Mutex (traditional approach)
 class MutexCounter {
     private var counter = 0
@@ -874,6 +1260,10 @@ class MutexCounter {
 }
 
 // Using Actor (message passing)
+sealed class CounterMsg
+object IncCounter : CounterMsg()
+class GetCounter(val response: CompletableDeferred<Int>) : CounterMsg()
+
 class ActorCounter(scope: CoroutineScope) {
     private val actor = scope.actor<CounterMsg> {
         var counter = 0
@@ -921,6 +1311,9 @@ suspend fun main() = coroutineScope {
 #### DO:
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
 // Keep actor state private
 class GoodActor(scope: CoroutineScope) {
     private var state = 0  // Private, encapsulated
@@ -957,14 +1350,19 @@ suspend fun getValue(): Int {
 #### DON'T:
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
 // Don't expose mutable state
 class BadActor(scope: CoroutineScope) {
     var state = 0  // Bad: public mutable state!
 }
 
 // Don't use actors for simple tasks
-// Use Mutex for simple synchronization
 val mutex = Mutex()
+var counter = 0
 suspend fun simpleIncrement() = mutex.withLock { counter++ }
 
 // Don't forget to close actors
@@ -973,35 +1371,50 @@ val actor = actor<Msg> { /* ... */ }
 actor.close()  // Always close!
 
 // Don't block inside actor
-private val actor = scope.actor<Msg> {
+private val blockingActor = scope.actor<Msg> {
     for (msg in channel) {
-        Thread.sleep(1000)  // Bad: blocking call!
+        // Thread.sleep would block; prefer suspending calls like delay
+        // Thread.sleep(1000) // BAD
+        delay(1000)          // GOOD (non-blocking)
     }
 }
 ```
 
 ### When to Use Actors
 
-**Use actors when:**
-- Need to manage mutable state with concurrent access
-- State updates are complex and require multiple steps
-- Need to maintain ordering of operations
-- Want to avoid explicit locking
-- Building event-driven systems
+Use actors when:
+- Need to manage mutable state with concurrent access.
+- State updates are complex and require multiple steps.
+- Need to maintain ordering of operations.
+- Want to avoid explicit locking.
+- Building event-driven systems.
 
-**Don't use actors when:**
-- Simple atomic operations (use AtomicInteger)
-- Read-heavy operations (use StateFlow)
-- Need immediate responses (actors have overhead)
-- State is immutable (use regular functions)
+Don't use actors when:
+- Simple atomic operations (use `AtomicInteger`).
+- Read-heavy operations (use `StateFlow`).
+- Need immediate responses (actors have overhead).
+- State is immutable (use regular functions).
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого подхода от классической многопоточности в Java?
+- Когда на практике вы бы выбрали акторы вместо других примитивов синхронизации?
+- Каковы типичные ошибки при использовании акторов и как их избежать?
 
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## Ссылки (RU)
+
+- [Kotlin Coroutines Actors](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html#actors)
+- [Actor Model](https://en.wikipedia.org/wiki/Actor_model)
+- [Kotlinx Coroutines Channels](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/)
+- [Actor Pattern Guide](https://elizarov.medium.com/shared-mutable-state-and-concurrency-in-kotlin-f0f6b8c5c5d8)
 
 ## References
 
@@ -1010,12 +1423,23 @@ private val actor = scope.actor<Msg> {
 - [Kotlinx Coroutines Channels](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/)
 - [Actor Pattern Guide](https://elizarov.medium.com/shared-mutable-state-and-concurrency-in-kotlin-f0f6b8c5c5d8)
 
+## Связанные вопросы (RU)
+
+- [[q-advanced-coroutine-patterns--kotlin--hard]]
+- [[q-fan-in-fan-out--kotlin--hard]]
+- [[q-channel-buffering-strategies--kotlin--hard]]
+- [[q-structured-concurrency--kotlin--hard]]
+
 ## Related Questions
 
 - [[q-advanced-coroutine-patterns--kotlin--hard]]
 - [[q-fan-in-fan-out--kotlin--hard]]
 - [[q-channel-buffering-strategies--kotlin--hard]]
 - [[q-structured-concurrency--kotlin--hard]]
+
+## MOC Ссылки (RU)
+
+- [[moc-kotlin]]
 
 ## MOC Links
 

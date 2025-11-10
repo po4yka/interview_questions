@@ -3,37 +3,38 @@ id: kotlin-237
 title: "Class Delegation with 'by' Keyword / Делегирование класса с ключевым словом 'by'"
 aliases: ["Class Delegation", "Делегирование класса"]
 topic: kotlin
-subtopics: [classes, delegation, kotlin-features]
+subtopics: [delegation, kotlin-features]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-kotlin-lateinit--kotlin--medium]
-created: "2025-10-12"
-updated: 2025-01-25
+related: [c-kotlin, q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-kotlin-lateinit--kotlin--medium]
+created: 2025-10-12
+updated: 2025-11-09
 tags: [by-keyword, classes, delegation, difficulty/medium, kotlin, kotlin-features]
-sources: [https://kotlinlang.org/docs/delegation.html]
+sources: ["https://kotlinlang.org/docs/delegation.html"]
 ---
 
 # Вопрос (RU)
-> Что такое делегирование класса с ключевым словом 'by' в Kotlin?
+> Что такое делегирование класса с ключевым словом `by` в Kotlin?
 
 # Question (EN)
-> What is class delegation with the 'by' keyword in Kotlin?
+> What is class delegation with the `by` keyword in Kotlin?
 
 ---
 
 ## Ответ (RU)
 
 **Теория делегирования:**
-Ключевое слово `by` в Kotlin используется для реализации паттерна делегирования. Вместо наследования класс может реализовать интерфейс путём делегирования всех его публичных членов указанному объекту. Это позволяет использовать композицию вместо наследования и избежать проблем множественного наследования.
+Ключевое слово `by` в Kotlin используется для реализации паттерна делегирования. Вместо наследования класс может реализовать интерфейс путём делегирования реализации всех его членов указанному объекту-делегату. Это позволяет использовать композицию вместо наследования и избежать проблем множественного наследования. Делегирование через `by` для классов в Kotlin возможно только для интерфейсов, а не для конкретных (неинтерфейсных) базовых классов.
 
 **Основные концепции:**
-- **Делегирование интерфейса**: Реализация интерфейса через делегирование всех его методов другому объекту
-- **Использование 'by'**: Автоматическая генерация делегированных методов
+- **Делегирование интерфейса**: Реализация интерфейса через делегирование всех его методов (и свойств интерфейса) другому объекту
+- **Использование `by`**: Автоматическая генерация делегированных методов компилятором
 - **Сокращение boilerplate**: Код для делегирования генерируется компилятором автоматически
+- См. также: [[c-kotlin]]
 
 **Базовое делегирование:**
 ```kotlin
@@ -47,7 +48,7 @@ class ConsolePrinter : Printer {
     }
 }
 
-// ✅ Использование делегирования
+// Использование делегирования
 class Logger(private val printer: Printer) : Printer by printer {
     fun log(message: String) {
         printer.print("[LOG] $message")
@@ -73,7 +74,7 @@ class BImpl : B {
     override fun b() = println("B")
 }
 
-// ✅ Делегирование нескольких интерфейсов
+// Делегирование нескольких интерфейсов
 class Composite(a: A, b: B) : A by a, B by b
 
 fun main() {
@@ -93,7 +94,7 @@ class DbRepository : Repository {
     override fun findById(id: String): String = "DB result"
 }
 
-// ✅ Частичное переопределение
+// Частичное переопределение
 class CachedRepository(private val dbRepo: Repository) : Repository by dbRepo {
     private val cache = mutableMapOf<String, String>()
 
@@ -119,7 +120,7 @@ class GreetingImpl : Greetable {
     override fun greet() = "Hello!"
 }
 
-// ✅ Комбинация наследования и делегирования
+// Комбинация наследования и делегирования интерфейса
 class Derived(name: String, greeter: Greetable) :
     Base(name), Greetable by greeter {
 
@@ -132,7 +133,7 @@ fun main() {
 }
 ```
 
-**Классическое использование - отказ от интерфейса:**
+**Использование для ограничения API (read-only обёртка):**
 ```kotlin
 interface ReadOnlyCollection {
     fun size(): Int
@@ -145,24 +146,44 @@ class MutableCollection(private val items: MutableList<String>) : ReadOnlyCollec
     fun add(item: String) = items.add(item)
 }
 
-// ✅ Делегирование упрощает код
+// Делегирование упрощает код и ограничивает внешний контракт
 class ReadOnlyWrapper(private val collection: MutableCollection) :
     ReadOnlyCollection by collection {
-    // Только методы ReadOnlyCollection доступны
+    // Снаружи доступны только методы ReadOnlyCollection
 }
 ```
+
+## Дополнительные вопросы (RU)
+
+- Когда использовать делегирование вместо наследования?
+- Как делегирование помогает реализовать композицию вместо наследования?
+- Каковы накладные расходы и влияние делегирования на производительность?
+
+## Ссылки (RU)
+
+- https://kotlinlang.org/docs/delegation.html
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-inheritance-open-final--kotlin--medium]] - Основы наследования
+
+### Связанные (средний уровень)
+- [[q-data-class-detailed--kotlin--medium]] - Data классы
+- [[q-class-initialization-order--kotlin--medium]] - Порядок инициализации классов
 
 ---
 
 ## Answer (EN)
 
 **Delegation Theory:**
-The `by` keyword in Kotlin implements the delegation pattern. Instead of inheritance, a class can implement an interface by delegating all its public members to a specified object. This enables composition over inheritance and avoids multiple inheritance problems.
+The `by` keyword in Kotlin implements the delegation pattern. Instead of inheritance, a class can implement an interface by delegating the implementation of all its members to a specified delegate object. This enables composition over inheritance and avoids multiple inheritance problems. Class delegation with `by` in Kotlin applies to interfaces only (you cannot delegate to a concrete superclass type using `by`).
 
 **Core Concepts:**
-- **Interface Delegation**: Implementing interface by delegating all its methods to another object
-- **Using 'by'**: Automatic generation of delegated methods
-- **Boilerplate Reduction**: Delegation code is generated automatically by compiler
+- **Interface Delegation**: Implementing an interface by delegating all its methods (and properties declared in the interface) to another object
+- **Using `by`**: Automatic generation of delegated methods by the compiler
+- **Boilerplate Reduction**: Delegation code is generated automatically by the compiler
+- See also: [[c-kotlin]]
 
 **Basic Delegation:**
 ```kotlin
@@ -176,7 +197,7 @@ class ConsolePrinter : Printer {
     }
 }
 
-// ✅ Using delegation
+// Using delegation
 class Logger(private val printer: Printer) : Printer by printer {
     fun log(message: String) {
         printer.print("[LOG] $message")
@@ -202,7 +223,7 @@ class BImpl : B {
     override fun b() = println("B")
 }
 
-// ✅ Delegating multiple interfaces
+// Delegating multiple interfaces
 class Composite(a: A, b: B) : A by a, B by b
 
 fun main() {
@@ -222,7 +243,7 @@ class DbRepository : Repository {
     override fun findById(id: String): String = "DB result"
 }
 
-// ✅ Partial override
+// Partial override
 class CachedRepository(private val dbRepo: Repository) : Repository by dbRepo {
     private val cache = mutableMapOf<String, String>()
 
@@ -248,7 +269,7 @@ class GreetingImpl : Greetable {
     override fun greet() = "Hello!"
 }
 
-// ✅ Combining inheritance and delegation
+// Combining inheritance and interface delegation
 class Derived(name: String, greeter: Greetable) :
     Base(name), Greetable by greeter {
 
@@ -261,7 +282,7 @@ fun main() {
 }
 ```
 
-**Classic Use Case - Interface Segregation:**
+**Use Case - Restricting Public API via Read-Only Wrapper:**
 ```kotlin
 interface ReadOnlyCollection {
     fun size(): Int
@@ -274,10 +295,10 @@ class MutableCollection(private val items: MutableList<String>) : ReadOnlyCollec
     fun add(item: String) = items.add(item)
 }
 
-// ✅ Delegation simplifies code
+// Delegation simplifies code and restricts the exposed contract
 class ReadOnlyWrapper(private val collection: MutableCollection) :
     ReadOnlyCollection by collection {
-    // Only ReadOnlyCollection methods accessible
+    // From the outside, only ReadOnlyCollection methods are accessible
 }
 ```
 

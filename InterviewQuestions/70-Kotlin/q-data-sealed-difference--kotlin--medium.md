@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-parent-child-relationship--kotlin--medium, q-testing-viewmodel-coroutines--kotlin--medium, q-value-classes-inline-classes--kotlin--medium]
+related: [c-kotlin, c-sealed-classes, q-value-classes-inline-classes--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 ---
-# What is the Difference between Data Classes and Sealed Classes?
-
 # Вопрос (RU)
 > В чём разница между data class и sealed class в Kotlin?
 
@@ -27,99 +25,249 @@ tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 
 ## Ответ (RU)
 
-**data class** — класс для хранения данных с автогенерацией `equals()`, `hashCode()`, `copy()`, `toString()`.
+**data class** — класс для хранения данных с автогенерацией `equals()`, `hashCode()`, `copy()`, `toString()` и `componentN`.
 
-**sealed class** — ограниченная иерархия классов, используется с `when` выражениями для exhaustive проверок.
+**sealed class** — ограниченная иерархия типов, используемая с выражениями `when` для исчерпывающих проверок.
 
 **Ключевые отличия:**
 
-| Аспект | data class | sealed class |
-|--------|-----------|--------------|
-| **Назначение** | Хранение данных | Представление типов/состояний |
-| **Автогенерация** | equals, hashCode, toString, copy, componentN | Ничего |
-| **Наследование** | Не может быть abstract/open/sealed | Абстрактный по умолчанию |
-| **Подклассы** | Нет подклассов | Фиксированный набор подклассов |
-| **Use case** | DTO, модели, значения | Состояния, результаты, when |
+- `data class`:
+  - Автогенерирует `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN`.
+  - Не может быть `abstract`, `open`, `sealed` или `inner`.
+  - Подходит для хранения данных, DTO, моделей, value-объектов.
+- `sealed class`:
+  - Описывает закрытую иерархию типов с фиксированным набором подклассов.
+  - Не генерирует вспомогательные методы автоматически.
+  - Используется для описания состояний, результатов операций, конечных наборов вариантов (finite type sets).
 
 ### Примеры
 
-**data class - для данных:**
+**data class — для данных:**
 ```kotlin
+// Data class — хранит данные, автогенерирует полезные методы
 data class User(val id: Int, val name: String, val email: String)
 
 val user1 = User(1, "Alice", "alice@example.com")
 val user2 = user1.copy(email = "new@example.com")
-println(user1 == user2)  // false (auto-generated equals)
-println(user1)           // auto-generated toString
+println(user1 == user2)  // false (автогенерированный equals)
+println(user1)           // автогенерированный toString
 ```
 
-**sealed class - для иерархий:**
+**sealed class — для иерархий:**
 ```kotlin
+// Sealed class — ограниченная иерархия для результатов
 sealed class Result {
     data class Success(val value: Int) : Result()
     data class Error(val message: String) : Result()
     object Loading : Result()
 }
 
-fun handle(result: Result) = when (result) {
+fun handleResult(result: Result): String = when (result) {
     is Result.Success -> "Value: ${result.value}"
     is Result.Error -> "Error: ${result.message}"
     Result.Loading -> "Loading..."
-    // Не нужен else - компилятор знает все типы!
+    // else не нужен — компилятор знает все варианты
+}
+```
+
+**Сравнение на примере:**
+
+```kotlin
+// DATA CLASS
+data class Product(val id: Int, val name: String, val price: Double)
+
+// Назначение: хранение данных
+// Автоматически: equals, hashCode, toString, copy, componentN
+// Нельзя объявить как: abstract, open, sealed, inner
+// Use case: DTO, модели, value-объекты
+
+fun demonstrateDataClass() {
+    val p1 = Product(1, "Laptop", 999.99)
+    val p2 = p1.copy(price = 899.99)
+
+    println(p1)          // toString
+    println(p1 == p2)    // equals
+    println(p1.hashCode())
+
+    val (id, name, price) = p1  // componentN (деструктуризация)
+}
+
+// SEALED CLASS
+sealed class State {
+    object Loading : State()
+    data class Success(val data: String) : State()
+    data class Error(val code: Int) : State()
+}
+
+// Назначение: ограниченная иерархия состояний
+// Автогенерации нет (но подклассы могут быть data class)
+// Нельзя создавать напрямую, используем только подклассы.
+// Use case: состояния, результаты, конечные наборы типов (finite type sets)
+
+fun demonstrateSealedClass(state: State) {
+    when (state) {  // исчерпывающий when
+        State.Loading -> println("Loading...")
+        is State.Success -> println("Data: ${state.data}")
+        is State.Error -> println("Error: ${state.code}")
+    }
 }
 ```
 
 **Когда что использовать:**
 
-**data class:**
-- API ответы и запросы
-- Модели базы данных
-- Конфигурация
-- Value objects
-
-**sealed class:**
-- UI состояния (Loading, Success, Error)
-- Навигация между экранами
-- Результаты операций
-- Конечные наборы типов
-
-**Комбинация:**
 ```kotlin
-sealed class PaymentMethod {
-    data class CreditCard(val number: String) : PaymentMethod()
-    data class PayPal(val email: String) : PaymentMethod()
-    object Cash : PaymentMethod()
+// DATA CLASS — когда нужно хранить данные
+
+data class ApiResponse(
+    val success: Boolean,
+    val data: String?,
+    val error: String?
+)
+
+data class UserEntity(
+    val id: Long,
+    val username: String,
+    val email: String
+)
+
+data class AppConfig(
+    val apiUrl: String,
+    val timeout: Int,
+    val debugMode: Boolean
+)
+
+// SEALED CLASS — когда нужно описать варианты/состояния
+
+sealed class UiState {
+    object Loading : UiState()
+    data class Content(val items: List<String>) : UiState()
+    data class Error(val message: String) : UiState()
 }
 
-fun process(method: PaymentMethod) = when (method) {
-    is PaymentMethod.CreditCard -> "Card: ${method.number}"  // data class benefits
-    is PaymentMethod.PayPal -> "PayPal: ${method.email}"
-    PaymentMethod.Cash -> "Cash"
+sealed class Screen {
+    object Home : Screen()
+    data class Details(val id: Int) : Screen()
+    object Settings : Screen()
+}
+
+sealed class NetworkResult<out T> {
+    data class Success<T>(val data: T) : NetworkResult<T>()
+    data class Failure(val error: Throwable) : NetworkResult<Nothing>()
 }
 ```
 
-**Ключевое отличие:**
+**Комбинация data и sealed:**
+
+```kotlin
+// Sealed class с data class-подклассами
+sealed class PaymentMethod {
+    data class CreditCard(
+        val number: String,
+        val cvv: String,
+        val expiry: String
+    ) : PaymentMethod()
+
+    data class PayPal(
+        val email: String
+    ) : PaymentMethod()
+
+    object Cash : PaymentMethod()
+}
+
+fun processPayment(method: PaymentMethod, amount: Double) {
+    when (method) {
+        is PaymentMethod.CreditCard -> {
+            val (number, cvv, expiry) = method
+            println("Charging $amount to card ending in ${number.takeLast(4)}")
+        }
+        is PaymentMethod.PayPal -> {
+            println("Charging $amount to PayPal account ${method.email}")
+        }
+        PaymentMethod.Cash -> {
+            println("Processing cash payment of $amount")
+        }
+    }
+}
+```
+
+**Реальный пример (data + sealed + дженерики):**
+
+```kotlin
+// Data классы для моделей
+data class User(val id: Int, val name: String)
+data class Post(val id: Int, val title: String, val content: String)
+
+// Sealed class для состояний загрузки с дженериками
+sealed class LoadingState<out T> {
+    object Idle : LoadingState<Nothing>()
+    object Loading : LoadingState<Nothing>()
+    data class Success<T>(val data: T) : LoadingState<T>()
+    data class Error(val exception: Throwable) : LoadingState<Nothing>()
+}
+
+fun fetchUser(id: Int): LoadingState<User> = try {
+    val user = User(id, "Alice")
+    LoadingState.Success(user)
+} catch (e: Exception) {
+    LoadingState.Error(e)
+}
+
+fun displayUserState(state: LoadingState<User>) {
+    when (state) {
+        LoadingState.Idle -> println("Not loaded")
+        LoadingState.Loading -> println("Loading user...")
+        is LoadingState.Success -> println("User: ${state.data.name} (ID: ${state.data.id})")
+        is LoadingState.Error -> println("Error: ${state.exception.message}")
+    }
+}
+```
+
+**Итоговые отличия (кратко):**
+
+```kotlin
+/*
+DATA CLASS:
+- Для хранения данных.
+- Генерирует: equals, hashCode, toString, copy, componentN.
+- Нельзя объявить как abstract, open, sealed, inner.
+- Используем для DTO, моделей, API-ответов, сущностей.
+
+SEALED CLASS:
+- Для описания иерархий и закрытых наборов вариантов.
+- Ничего не генерирует автоматически (подклассы могут быть data class).
+- Нельзя создавать напрямую, используем только подклассы.
+- Используем для состояний, результатов, finite type sets, when-выражений.
+
+КЛЮЧЕВОЕ:
 - data class = "Какие данные здесь хранятся?"
-- sealed class = "Какие возможны варианты/типы?"
+- sealed class = "Какие возможны варианты/состояния?"
+*/
+```
 
 ## Answer (EN)
 
-**data class** — A class for storing data with auto-generation of `equals()`, `hashCode()`, `copy()`.
+**data class** — A class for storing data with auto-generation of `equals()`, `hashCode()`, `copy()`, `toString()`, and `componentN`.
 
-**sealed class** — A restricted class hierarchy, used with `when` expressions.
+**sealed class** — A restricted class hierarchy, used with `when` expressions for exhaustive checks.
 
 **Key differences:**
-- `data class` automatically creates `equals()`, `hashCode()`, `copy()`, `toString()`
-- `sealed class` is used when there is a fixed number of subclasses
-- `data class` is for data containers
-- `sealed class` is for type hierarchies and state representation
+
+- `data class`:
+  - Automatically creates `equals()`, `hashCode()`, `toString()`, `copy()`, `componentN`.
+  - Cannot be `abstract`, `open`, `sealed`, or `inner`.
+  - Used for data containers: DTOs, models, value objects.
+- `sealed class`:
+  - Describes a closed hierarchy with a fixed set of subclasses (finite type sets).
+  - Does not auto-generate helper methods (subclasses can be `data class`).
+  - Cannot be instantiated directly; you work only with its subclasses.
+  - Used for representing states, operation results, and closed sets of variants.
 
 ### Code Examples
 
 **data class - for data:**
 
 ```kotlin
-// Data class - stores data
+// Data class - stores data and auto-generates useful methods
 data class User(
     val id: Int,
     val name: String,
@@ -149,7 +297,7 @@ fun main() {
 **sealed class - for hierarchies:**
 
 ```kotlin
-// Sealed class - represents a type hierarchy
+// Sealed class - represents a restricted result hierarchy
 sealed class Result {
     data class Success(val value: Int) : Result()
     data class Error(val message: String) : Result()
@@ -179,7 +327,7 @@ fun main() {
 }
 ```
 
-**Comparison table:**
+**Comparison (in code comments):**
 
 ```kotlin
 // DATA CLASS
@@ -194,9 +342,9 @@ fun demonstrateDataClass() {
     val p1 = Product(1, "Laptop", 999.99)
     val p2 = p1.copy(price = 899.99)
 
-    println(p1)  // toString
-    println(p1 == p2)  // equals
-    println(p1.hashCode())  // hashCode
+    println(p1)              // toString
+    println(p1 == p2)        // equals
+    println(p1.hashCode())   // hashCode
 
     val (id, name, price) = p1  // componentN
 }
@@ -208,10 +356,10 @@ sealed class State {
     data class Error(val code: Int) : State()
 }
 
-// Purpose: Restricted type hierarchy
-// Auto-generated: Nothing
-// Can be: abstract (implicitly)
-// Use case: State management, result types, finite sets of types
+// Purpose: Restricted type hierarchy (finite type set)
+// Auto-generated: nothing (subclasses may be data classes)
+// Cannot be instantiated directly; use its subclasses only.
+// Use case: state management, result types, finite sets of types
 
 fun demonstrateSealedClass(state: State) {
     when (state) {  // Exhaustive
@@ -294,25 +442,15 @@ fun processPayment(method: PaymentMethod, amount: Double) {
         is PaymentMethod.CreditCard -> {
             // Data class provides all benefits
             val (number, cvv, expiry) = method
-            println("Charging $$amount to card ending in ${number.takeLast(4)}")
+            println("Charging $amount to card ending in ${number.takeLast(4)}")
         }
         is PaymentMethod.PayPal -> {
-            println("Charging $$amount to PayPal account ${method.email}")
+            println("Charging $amount to PayPal account ${method.email}")
         }
         PaymentMethod.Cash -> {
-            println("Processing cash payment of $$amount")
+            println("Processing cash payment of $amount")
         }
     }
-}
-
-fun main() {
-    val payment1 = PaymentMethod.CreditCard("1234567890123456", "123", "12/25")
-    val payment2 = PaymentMethod.PayPal("user@example.com")
-    val payment3 = PaymentMethod.Cash
-
-    processPayment(payment1, 99.99)
-    processPayment(payment2, 49.99)
-    processPayment(payment3, 29.99)
 }
 ```
 
@@ -322,7 +460,6 @@ fun main() {
 // Data classes for models
 data class User(val id: Int, val name: String)
 data class Post(val id: Int, val title: String, val content: String)
-data class Comment(val id: Int, val text: String, val userId: Int)
 
 // Sealed class for loading states
 sealed class LoadingState<out T> {
@@ -355,11 +492,6 @@ fun displayUserState(state: LoadingState<User>) {
         }
     }
 }
-
-fun main() {
-    val state = fetchUser(1)
-    displayUserState(state)
-}
 ```
 
 **Summary of differences:**
@@ -367,30 +499,47 @@ fun main() {
 ```kotlin
 /*
 DATA CLASS:
-- Purpose: Data containers
-- Auto-generates: equals, hashCode, toString, copy, componentN
-- Cannot be: abstract, open, sealed, inner
-- Use for: DTOs, models, API responses, entities
+- Purpose: Data containers.
+- Auto-generates: equals, hashCode, toString, copy, componentN.
+- Cannot be: abstract, open, sealed, inner.
+- Use for: DTOs, models, API responses, entities.
 
 SEALED CLASS:
-- Purpose: Type hierarchies
-- Auto-generates: Nothing (but subclasses can be data classes)
-- Cannot be: instantiated directly
-- Use for: States, results, finite type sets, when expressions
+- Purpose: Type hierarchies and closed sets of variants (finite type sets).
+- Auto-generates: nothing (subclasses can be data classes).
+- Cannot be instantiated directly; use only its subclasses.
+- Use for: states, results, finite type sets, when expressions.
 
 KEY DIFFERENCE:
-- Data class = "What data does this contain?"
-- Sealed class = "What are all possible types?"
+- data class = "What data does this contain?"
+- sealed class = "What are all possible variants/states?"
 */
 ```
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чём ключевые отличия этого подхода от Java?
+- Когда вы бы использовали data и sealed классы на практике?
+- Какие распространённые ошибки при использовании data и sealed классов?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [[c-sealed-classes]]
+
+## Связанные вопросы (RU)
+
+- [[q-value-classes-inline-classes--kotlin--medium]]
+- [[q-coroutine-parent-child-relationship--kotlin--medium]]
+- [[q-testing-viewmodel-coroutines--kotlin--medium]]
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- When would you use data and sealed classes in practice?
+- What are common mistakes when using data and sealed classes?
 
 ## References
 

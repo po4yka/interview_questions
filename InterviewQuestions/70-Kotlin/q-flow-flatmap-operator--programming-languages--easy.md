@@ -2,7 +2,7 @@
 id: lang-081
 title: "Flow Flatmap Operator / Оператор flatMap для Flow"
 aliases: [Flow Flatmap Operator, Оператор flatMap для Flow]
-topic: programming-languages
+topic: kotlin
 subtopics: [coroutines, flow, operators]
 question_kind: theory
 difficulty: easy
@@ -12,28 +12,44 @@ status: draft
 moc: moc-kotlin
 related: [c-coroutines, c-flow, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags: [coroutines, difficulty/easy, flow, kotlin, operators, programming-languages, reactive]
 ---
-# Чем Воспользоваться Если Нужно Преобразовать Один Поток Данных В Другой Поток Данных
-
 # Вопрос (RU)
-> Чем воспользоваться если нужно преобразовать один поток данных в другой поток данных?
+> Чем в Kotlin `Flow` воспользоваться, если нужно преобразовать один поток данных в другой поток данных?
 
 ---
 
 # Question (EN)
-> What to use if you need to transform one data stream into another data stream?
+> In Kotlin `Flow`, what should you use if you need to transform one data stream into another data stream?
 
 ## Ответ (RU)
 
-Используйте оператор flatMap. Преобразует элементы из одного потока в другой поток Пример из потока URL в поток содержимого страниц
+Используйте оператор `flatMap` (и его варианты). Он преобразует каждый элемент исходного `Flow` в новый `Flow` и "сплющивает" их в один результирующий поток.
+
+Пример: из потока URL-адресов в поток содержимого страниц.
+
+```kotlin
+flow {
+    emit("https://example.com")
+    emit("https://google.com")
+}.flatMapConcat { url ->
+    fetchPageContent(url) // Возвращает Flow<String>
+}.collect { content ->
+    println(content)
+}
+```
+
+**Варианты:**
+- `flatMapConcat` — последовательная обработка внутренних Flow в порядке прихода значений.
+- `flatMapMerge` — конкурентная обработка нескольких внутренних Flow с межлевелингом значений.
+- `flatMapLatest` — при поступлении нового значения отменяет предыдущий внутренний Flow и переключается на новый.
 
 ## Answer (EN)
 
-Use the **flatMap** operator. It transforms elements from one stream into another stream.
+Use the `flatMap` operator (and its variants). It transforms each element of the original `Flow` into a new `Flow` and flattens them into a single resulting stream.
 
-**Example**: from a stream of URLs to a stream of page content
+Example: from a stream of URLs to a stream of page content.
 
 ```kotlin
 flow {
@@ -47,11 +63,17 @@ flow {
 ```
 
 **Variants:**
-- `flatMapConcat` - sequential processing
-- `flatMapMerge` - concurrent processing
-- `flatMapLatest` - cancel previous when new arrives
+- `flatMapConcat` - sequentially collects inner Flows in order.
+- `flatMapMerge` - collects from multiple inner Flows concurrently, interleaving values.
+- `flatMapLatest` - cancels the previous inner Flow when a new value arrives and switches to the latest.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого подхода от Java-подходов к работе с потоками данных?
+- Когда на практике стоит использовать `flatMap` для `Flow`?
+- Каких распространенных ошибок при использовании `flatMap` следует избегать?
 
 ## Follow-ups
 
@@ -59,9 +81,21 @@ flow {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- "Kotlin Documentation" — "https://kotlinlang.org/docs/home.html"
+
 ## References
 
+- [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-what-is-flow--programming-languages--medium]]
+- [[q-singleton-pattern--design-patterns--easy]]
+- [[q-priorityqueue-vs-deque--programming-languages--easy]]
 
 ## Related Questions
 

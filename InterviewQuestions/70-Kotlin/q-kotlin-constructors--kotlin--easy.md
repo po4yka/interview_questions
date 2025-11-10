@@ -1,7 +1,7 @@
 ---
 id: kotlin-088
 title: "Kotlin Constructors / Конструкторы в Kotlin"
-aliases: ["Kotlin Constructors, Конструкторы в Kotlin"]
+aliases: ["Kotlin Constructors", "Конструкторы в Kotlin"]
 
 # Classification
 topic: kotlin
@@ -18,32 +18,30 @@ source_note: Comprehensive guide on Kotlin constructors
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-init-block--kotlin--easy, q-kotlin-properties--kotlin--easy, q-kotlin-val-vs-var--kotlin--easy]
+related: [c-kotlin, q-kotlin-init-block--kotlin--easy, q-kotlin-properties--kotlin--easy, q-kotlin-val-vs-var--kotlin--easy]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 
 tags: [constructors, difficulty/easy, init, initialization, kotlin, primary-constructor, secondary-constructor]
 ---
 # Вопрос (RU)
 > Что такое конструкторы в Kotlin? Объясните первичные конструкторы, вторичные конструкторы и блоки init.
 
----
-
 # Question (EN)
 > What are constructors in Kotlin? Explain primary constructors, secondary constructors, and init blocks.
 
 ## Ответ (RU)
 
-Kotlin имеет **первичные конструкторы** и **вторичные конструкторы** для инициализации экземпляров классов. В отличие от Java, Kotlin разделяет параметры конструктора и логику инициализации, обеспечивая более чистый и гибкий подход к созданию объектов.
+Kotlin имеет **первичные конструкторы** и **вторичные конструкторы** для инициализации экземпляров классов. В отличие от Java, Kotlin разделяет параметры конструктора и логику инициализации, обеспечивая более чистый и гибкий подход к созданию объектов. Подробности см. также в [[c-kotlin]].
 
 ### Ключевые Концепции
 
-1. **Первичный конструктор**: Объявляется в заголовке класса, не может содержать код
+1. **Первичный конструктор**: Объявляется в заголовке класса, не может содержать исполняемый код (логика инициализации выносится в `init`-блоки или инициализаторы свойств)
 2. **Вторичный конструктор**: Определяется в теле класса с ключевым словом `constructor`
-3. **Блоки Init**: Выполняют код инициализации, работают как часть первичного конструктора
-4. **Параметры конструктора vs Свойства**: Параметры могут стать свойствами используя `val`/`var`
+3. **Блоки init**: Выполняют код инициализации, выполняются вместе с инициализаторами свойств как часть первичного конструктора в порядке объявления
+4. **Параметры конструктора vs Свойства**: Параметры могут стать свойствами, если объявлены с `val`/`var`
 5. **Значения по умолчанию**: Параметры конструктора могут иметь значения по умолчанию
 6. **Именованные аргументы**: Делают вызовы конструктора более читаемыми
 
@@ -68,6 +66,12 @@ class Person private constructor(val name: String, val age: Int)
 val person = Person("Alice", 25)
 println("${person.name} is ${person.age} years old")
 ```
+
+Ключевые моменты:
+- Объявляется в заголовке класса после имени
+- Не содержит исполняемый код (используйте `init`-блоки)
+- Параметры могут быть объявлены как свойства через `val`/`var`
+- Может иметь модификаторы видимости (`private`, `protected`, `internal`)
 
 ### Параметры Конструктора Как Свойства
 
@@ -96,11 +100,15 @@ class User(
 ) {
     val emailDomain = email.substringAfter("@")
 }
+
+val user = User(1, "alice", "alice@example.com")
+println(user.username)      // OK
+// println(user.email)      // Ошибка: email не является свойством
 ```
 
-### Блоки Init
+### Блоки init
 
-Блоки init выполняют код инициализации как часть первичного конструктора:
+Блоки `init` выполняют код инициализации как часть первичного конструктора. Они вызываются вместе с инициализаторами свойств в порядке их объявления в классе.
 
 ```kotlin
 class Person(val name: String, val age: Int) {
@@ -129,6 +137,10 @@ class User(val username: String) {
     private fun generateId(): String =
         "${username.hashCode()}-${System.currentTimeMillis()}"
 }
+
+// Порядок выполнения:
+// 1. Параметры первичного конструктора
+// 2. Инициализаторы свойств и блоки init (в порядке объявления)
 ```
 
 ### Значения По Умолчанию
@@ -139,17 +151,48 @@ class User(
     val email: String = "",
     val age: Int = 0,
     val isActive: Boolean = true
-)
+) {
+    override fun toString() =
+        "User(username=$username, email=$email, age=$age, active=$isActive)"
+}
 
 // Использование со значениями по умолчанию
 val user1 = User("alice")
 val user2 = User("bob", "bob@example.com")
 val user3 = User("charlie", age = 30)
+val user4 = User("david", email = "david@test.com", age = 25, isActive = false)
+```
+
+### Именованные Аргументы
+
+Именованные аргументы делают вызовы конструктора более читаемыми и позволяют передавать параметры в любом порядке (после позиционных без пропусков).
+
+```kotlin
+class Rectangle(
+    val width: Int,
+    val height: Int,
+    val color: String = "black",
+    val filled: Boolean = false
+)
+
+// Позиционные аргументы
+val rect1 = Rectangle(100, 50, "red", true)
+
+// Именованные аргументы (в любом порядке)
+val rect2 = Rectangle(
+    height = 50,
+    width = 100,
+    filled = true,
+    color = "blue"
+)
+
+// Смешанный подход
+val rect3 = Rectangle(100, 50, filled = true)
 ```
 
 ### Вторичные Конструкторы
 
-Вторичные конструкторы предоставляют альтернативные способы создания экземпляров:
+Вторичные конструкторы предоставляют альтернативные способы создания экземпляров и всегда должны делегировать вызов первичному конструктору (непосредственно или через другой вторичный).
 
 ```kotlin
 class Person(val name: String, val age: Int) {
@@ -193,56 +236,282 @@ class User(val id: Int, val username: String) {
 }
 
 // Порядок выполнения для User(1, "alice", "a@test.com", "123"):
-// 1. Первичный конструктор
-// 2. Блоки Init
-// 3. Вторичный конструктор 1
-// 4. Вторичный конструктор 2
+// 1. Первичный конструктор (параметры)
+// 2. Инициализаторы свойств и блоки init (в порядке объявления)
+// 3. Тело вторичного конструктора 1
+// 4. Тело вторичного конструктора 2
 ```
 
-### Лучшие Практики
+### Класс Без Первичного Конструктора
 
-#### ДЕЛАТЬ:
+Класс может быть объявлен без первичного конструктора и иметь только вторичные.
+
 ```kotlin
-// Использовать первичный конструктор с объявлениями свойств
+class Database {
+    private var connection: Connection? = null
+
+    // Вторичный конструктор 1
+    constructor(url: String) {
+        connection = DriverManager.getConnection(url)
+    }
+
+    // Вторичный конструктор 2
+    constructor(url: String, user: String, password: String) {
+        connection = DriverManager.getConnection(url, user, password)
+    }
+}
+
+val db1 = Database("jdbc:sqlite:test.db")
+val db2 = Database("jdbc:mysql://localhost/test", "root", "password")
+```
+
+### Реальный Пример: Конфигурационный Класс
+
+```kotlin
+class DatabaseConfig(
+    val host: String,
+    val port: Int = 5432,
+    val database: String,
+    val username: String = "postgres",
+    val password: String = "",
+    val sslEnabled: Boolean = true,
+    val maxConnections: Int = 10
+) {
+    val connectionUrl: String
+
+    init {
+        require(host.isNotBlank()) { "Host не может быть пустым" }
+        require(port in 1..65535) { "Port должен быть в диапазоне 1..65535" }
+        require(database.isNotBlank()) { "Имя базы данных не может быть пустым" }
+        require(maxConnections > 0) { "Max connections должно быть положительным" }
+
+        connectionUrl = buildConnectionUrl()
+    }
+
+    // Вторичный конструктор для локальной разработки
+    constructor(database: String) : this(
+        host = "localhost",
+        database = database,
+        username = "postgres",
+        password = "postgres"
+    )
+
+    private fun buildConnectionUrl(): String {
+        val protocol = if (sslEnabled) "postgresql+ssl" else "postgresql"
+        return "$protocol://$host:$port/$database"
+    }
+
+    override fun toString() = """
+        DatabaseConfig(
+            host=$host,
+            port=$port,
+            database=$database,
+            connectionUrl=$connectionUrl,
+            maxConnections=$maxConnections
+        )
+    """.trimIndent()
+}
+
+// Использование
+val prodConfig = DatabaseConfig(
+    host = "prod-db.example.com",
+    database = "app_db",
+    username = "app_user",
+    password = "secret",
+    maxConnections = 50
+)
+
+val devConfig = DatabaseConfig("dev_db")
+```
+
+### Data-классы и Конструкторы
+
+```kotlin
+data class User(
+    val id: Int,
+    val username: String,
+    val email: String,
+    val createdAt: Long = System.currentTimeMillis()
+) {
+    init {
+        require(username.length >= 3) { "Слишком короткий username" }
+        require(email.contains("@")) { "Неверный email" }
+    }
+
+    // Вторичный конструктор
+    constructor(username: String, email: String) : this(
+        id = username.hashCode(),
+        username = username,
+        email = email
+    )
+}
+
+val user1 = User(1, "alice", "alice@example.com")
+val user2 = User("bob", "bob@example.com")
+```
+
+### Видимость Конструкторов
+
+```kotlin
+// Private первичный конструктор
+class Singleton private constructor(val name: String) {
+    companion object {
+        private var instance: Singleton? = null
+
+        fun getInstance(name: String): Singleton {
+            return instance ?: synchronized(this) {
+                instance ?: Singleton(name).also { instance = it }
+            }
+        }
+    }
+}
+
+val singleton = Singleton.getInstance("MyApp")
+
+// Internal конструктор
+internal class InternalService internal constructor(val config: Config)
+
+// Protected конструктор (в абстрактном классе)
+abstract class BaseRepository protected constructor(val database: Database)
+```
+
+### Лучшие практики
+
+#### ДЕЛАЙТЕ:
+
+```kotlin
+// Используйте первичный конструктор с объявлением свойств
 class Person(val name: String, val age: Int)
 
-// Использовать значения по умолчанию для опциональных параметров
+// Используйте значения по умолчанию для необязательных параметров
 class Config(val timeout: Int = 5000, val retries: Int = 3)
 
-// Использовать блоки init для валидации
+// Используйте init-блоки для валидации
 class Email(val address: String) {
     init {
         require(address.contains("@")) { "Неверный email" }
     }
 }
+
+// Используйте именованные аргументы для ясности
+val rect = Rectangle(width = 100, height = 50, color = "red")
+
+// Используйте вторичные конструкторы для альтернативных сценариев создания
+class User(val id: Int, val name: String) {
+    constructor(name: String) : this(name.hashCode(), name)
+}
 ```
 
-#### НЕ ДЕЛАТЬ:
+#### НЕ ДЕЛАЙТЕ:
+
 ```kotlin
-// Не повторять объявления свойств
-class Person(name: String, age: Int) {
-    val name: String = name  // Лишнее
-    val age: Int = age       // Лишнее
+// Не дублируйте свойства без необходимости
+class Person(name: String, age: Int) {  // Параметры
+    val name: String = name              // Лишнее в большинстве случаев
+    val age: Int = age                   // Лишнее в большинстве случаев
+}
+// Лучше: class Person(val name: String, val age: Int)
+
+// Не используйте вторичные конструкторы там, где достаточно значений по умолчанию
+class User(val name: String, val age: Int) {
+    constructor(name: String) : this(name, 0)  // Плохая практика
+}
+// Лучше: class User(val name: String, val age: Int = 0)
+
+// Не помещайте тяжелую логику в init-блоки
+class Service(val config: Config) {
+    init {
+        // Избегайте тяжелых вычислений или I/O здесь
+        connectToDatabase()  // Плохо: лучше вызвать явно
+    }
 }
 
-// Не использовать вторичные конструкторы когда работают значения по умолчанию
-class User(val name: String, val age: Int) {
-    constructor(name: String) : this(name, 0)  // Плохо
+// Не пропускайте валидацию в конструкторах
+class Age(val value: Int)  // Плохо: нет валидации
+// Лучше:
+class Age(val value: Int) {
+    init {
+        require(value >= 0) { "Возраст не может быть отрицательным" }
+    }
 }
-// Вместо: class User(val name: String, val age: Int = 0)
+```
+
+### Общие Паттерны
+
+#### Фабричный метод с приватным конструктором
+
+```kotlin
+class User private constructor(
+    val id: Int,
+    val username: String,
+    val email: String
+) {
+    companion object {
+        fun create(username: String, email: String): User {
+            val id = generateId()
+            return User(id, username, email)
+        }
+
+        fun fromDatabase(id: Int, username: String, email: String): User {
+            return User(id, username, email)
+        }
+
+        private fun generateId(): Int =
+            (System.currentTimeMillis() % Int.MAX_VALUE).toInt()
+    }
+}
+
+val user = User.create("alice", "alice@example.com")
+```
+
+#### Паттерн Builder
+
+```kotlin
+class HttpRequest private constructor(
+    val url: String,
+    val method: String,
+    val headers: Map<String, String>,
+    val body: String?
+) {
+    class Builder {
+        private var url: String = ""
+        private var method: String = "GET"
+        private val headers = mutableMapOf<String, String>()
+        private var body: String? = null
+
+        fun url(url: String) = apply { this.url = url }
+        fun method(method: String) = apply { this.method = method }
+        fun header(key: String, value: String) = apply {
+            headers[key] = value
+        }
+        fun body(body: String) = apply { this.body = body }
+
+        fun build(): HttpRequest {
+            require(url.isNotBlank()) { "URL обязателен" }
+            return HttpRequest(url, method, headers, body)
+        }
+    }
+}
+
+val request = HttpRequest.Builder()
+    .url("https://api.example.com/users")
+    .method("POST")
+    .header("Content-Type", "application/json")
+    .body("""{"name":"Alice"}""")
+    .build()
 ```
 
 ---
 
 ## Answer (EN)
 
-Kotlin has **primary constructors** and **secondary constructors** for initializing class instances. Unlike Java, Kotlin separates constructor parameters from initialization logic, providing a cleaner and more flexible approach to object creation.
+Kotlin has **primary constructors** and **secondary constructors** for initializing class instances. Unlike Java, Kotlin separates constructor parameters from initialization logic, providing a cleaner and more flexible approach to object creation. See also [[c-kotlin]] for more details.
 
 ### Key Concepts
 
-1. **Primary Constructor**: Declared in the class header, cannot contain code
+1. **Primary Constructor**: Declared in the class header, cannot contain executable code itself (use `init` blocks or property initializers)
 2. **Secondary Constructor**: Defined in the class body with the `constructor` keyword
-3. **Init Blocks**: Execute initialization code, run as part of the primary constructor
+3. **Init Blocks**: Execute initialization code, run together with property initializers as part of the primary constructor in declaration order
 4. **Constructor Parameters vs Properties**: Parameters can become properties using `val`/`var`
 5. **Default Values**: Constructor parameters can have default values
 6. **Named Arguments**: Make constructor calls more readable
@@ -310,7 +579,7 @@ println(user.username)      // OK
 
 ### Init Blocks
 
-Init blocks execute initialization code as part of the primary constructor:
+Init blocks execute initialization code as part of the primary constructor. They are invoked along with property initializers in the order they appear in the class.
 
 ```kotlin
 class Person(val name: String, val age: Int) {
@@ -366,8 +635,8 @@ val user2 = User("bob", "bob@example.com")
 val user3 = User("charlie", age = 30)
 val user4 = User("david", email = "david@test.com", age = 25, isActive = false)
 
-println(user1)  // User(username=alice, email=, age=0, active=true)
-println(user2)  // User(username=bob, email=bob@example.com, age=0, active=true)
+println(user1)
+println(user2)
 ```
 
 ### Named Arguments
@@ -443,10 +712,10 @@ class User(val id: Int, val username: String) {
 }
 
 // Execution order for User(1, "alice", "a@test.com", "123"):
-// 1. Primary constructor
-// 2. Init blocks
-// 3. Secondary constructor 1
-// 4. Secondary constructor 2
+// 1. Primary constructor (parameters)
+// 2. Init blocks and property initializers (in declaration order)
+// 3. Body of secondary constructor 1
+// 4. Body of secondary constructor 2
 ```
 
 ### Class Without Primary Constructor
@@ -608,10 +877,10 @@ class User(val id: Int, val name: String) {
 
 #### DON'T:
 ```kotlin
-// Don't repeat property declarations
+// Don't repeat property declarations without need
 class Person(name: String, age: Int) {  // Parameters
-    val name: String = name              // Unnecessary
-    val age: Int = age                   // Unnecessary
+    val name: String = name              // Unnecessary in most cases
+    val age: Int = age                   // Unnecessary in most cases
 }
 // Instead: class Person(val name: String, val age: Int)
 
@@ -706,25 +975,52 @@ val request = HttpRequest.Builder()
 
 ---
 
-## Follow-ups
+## Дополнительные вопросы (RU)
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- В чем ключевые отличия системы конструкторов Kotlin от Java?
+- Когда использовать вторичные конструкторы вместо значений по умолчанию и именованных аргументов?
+- Какие распространенные ошибки при использовании `init` и вторичных конструкторов?
 
-## References
+## Additional Questions (EN)
+
+- What are the key differences between Kotlin's constructor system and Java's?
+- When should you use secondary constructors instead of default values and named arguments?
+- What are common pitfalls when using `init` blocks and secondary constructors?
+
+## Ссылки (RU)
 
 - [Kotlin Classes and Inheritance](https://kotlinlang.org/docs/classes.html)
 - [Kotlin Constructors](https://kotlinlang.org/docs/classes.html#constructors)
 - [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
 
-## Related Questions
+## References (EN)
+
+- [Kotlin Classes and Inheritance](https://kotlinlang.org/docs/classes.html)
+- [Kotlin Constructors](https://kotlinlang.org/docs/classes.html#constructors)
+- [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
+
+## Связанные вопросы (RU)
 
 - [[q-kotlin-init-block--kotlin--easy]]
 - [[q-kotlin-properties--kotlin--easy]]
 - [[q-kotlin-val-vs-var--kotlin--easy]]
--
 
-## MOC Links
+## Related Questions (EN)
+
+- [[q-kotlin-init-block--kotlin--easy]]
+- [[q-kotlin-properties--kotlin--easy]]
+- [[q-kotlin-val-vs-var--kotlin--easy]]
+
+## MOC Ссылки (RU)
 
 - [[moc-kotlin]]
+
+## MOC Links (EN)
+
+- [[moc-kotlin]]
+
+## Follow-ups
+
+- Compare how constructor overloading in Java maps to Kotlin's primary + secondary constructors and default parameters.
+- Explain how `init` blocks interact with property initialization order in more complex class hierarchies.
+- Discuss when to prefer factory functions or builder patterns over exposing multiple constructors.

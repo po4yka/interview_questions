@@ -2,7 +2,7 @@
 id: lang-042
 title: "Kotlin Serialization / Сериализация в Kotlin"
 aliases: [Kotlin Serialization, Сериализация в Kotlin]
-topic: programming-languages
+topic: kotlin
 subtopics: [serialization, type-system]
 question_kind: theory
 difficulty: easy
@@ -10,24 +10,17 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-functional-interfaces-vs-type-aliases--kotlin--medium, q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-singleton-creation--programming-languages--easy]
+related: [c-kotlin, q-functional-interfaces-vs-type-aliases--kotlin--medium, q-kotlin-non-inheritable-class--programming-languages--easy]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [data-persistence, difficulty/easy, json, programming-languages, serialization]
+updated: 2025-11-09
+tags: [data-persistence, difficulty/easy, json, kotlin, serialization]
 ---
-# Что Такое Сериализация?
-
 # Вопрос (RU)
 > Что такое сериализация?
 
----
-
-# Question (EN)
-> What is serialization?
-
 ## Ответ (RU)
 
-**Сериализация** — это процесс преобразования объекта в поток байтов для сохранения его состояния или передачи его через сеть.
+**Сериализация** — это процесс преобразования объекта в формат, который можно сохранить или передать (обычно в поток байтов или текстовый формат), с возможностью последующего восстановления объекта (десериализация).
 
 Это нужно, чтобы можно было хранить объекты в файлы, базы данных или передавать их между разными компонентами приложения или даже разными приложениями.
 
@@ -39,9 +32,9 @@ tags: [data-persistence, difficulty/easy, json, programming-languages, serializa
 - **Глубокое копирование** объектов
 - **Пауза/Возобновление** состояния приложения
 
-**Распространённые форматы:**
+**Распространённые форматы и подходы:**
 
-**1. JSON** (самый распространённый для API):
+**1. JSON** (самый распространённый для API, поддерживается `kotlinx.serialization`):
 ```kotlin
 @Serializable
 data class User(val id: Int, val name: String, val email: String)
@@ -56,7 +49,7 @@ val json = Json.encodeToString(user)
 val userFromJson = Json.decodeFromString<User>(json)
 ```
 
-**2. Binary** (Java Serializable):
+**2. Binary** (Java `Serializable` — устаревший, используется для совместимости):
 ```kotlin
 import java.io.*
 
@@ -76,7 +69,7 @@ val loadedPerson = objectIn.readObject() as Person
 objectIn.close()
 ```
 
-**3. Kotlin Serialization** (рекомендуется):
+**3. Kotlin Serialization (`kotlinx.serialization`)** — рекомендуемая библиотека для Kotlin, поддерживает различные форматы (JSON, CBOR, ProtoBuf и др.):
 ```kotlin
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
@@ -98,7 +91,7 @@ val jsonString = Json.encodeToString(product)
 val decodedProduct = Json.decodeFromString<Product>(jsonString)
 ```
 
-**4. Parcelable** (Android):
+**4. `Parcelable`** (Android, для передачи данных между компонентами в рамках одного процесса/приложения):
 ```kotlin
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -110,7 +103,7 @@ data class Message(
     val timestamp: Long
 ) : Parcelable
 
-// Передача между Activities/Fragments
+// Передача между Activities/Fragments в Android
 intent.putExtra("message", message)
 ```
 
@@ -163,7 +156,7 @@ object UserCache {
 
     fun loadUser(): User? {
         return if (cacheFile.exists()) {
-            Json.decodeFromString(cacheFile.readText())
+            Json.decodeFromString<User>(cacheFile.readText())
         } else null
     }
 }
@@ -171,13 +164,13 @@ object UserCache {
 
 **Сравнение методов сериализации:**
 
-| Метод | Формат | Скорость | Размер | Применение |
-|-------|--------|----------|--------|------------|
-| **JSON** | Текст | Средняя | Большой | API, конфиг файлы |
-| **Kotlin Serialization** | Различные | Быстро | Оптимизированный | Современные Kotlin приложения |
-| **Java Serializable** | Бинарный | Медленно | Большой | Устаревшие Java приложения |
-| **Parcelable** | Бинарный | Быстро | Маленький | Android IPC |
-| **Protocol Buffers** | Бинарный | Очень быстро | Очень маленький | Высокая производительность |
+| Метод | Что это | Формат | Скорость | Размер | Применение |
+|-------|---------|--------|----------|--------|------------|
+| **JSON** | Формат | Текст | Средняя | Большой | API, конфиг файлы |
+| **`kotlinx.serialization`** | Библиотека | Поддерживает разные (JSON, CBOR, ProtoBuf, …) | Быстро | Оптимизированно | Современные Kotlin приложения |
+| **Java `Serializable`** | Механизм JVM | Бинарный | Медленно | Большой | Устаревшие Java приложения, совместимость |
+| **`Parcelable`** | Android-механизм | Бинарный | Быстро | Маленький | Android IPC внутри приложения |
+| **Protocol Buffers** | Формат/IDL | Бинарный | Очень быстро | Очень маленький | Высокая производительность, сетевые протоколы |
 
 **Настройка Kotlin Serialization:**
 
@@ -194,29 +187,49 @@ dependencies {
 
 **Резюме:**
 
-- **Сериализация**: Объект → Поток байтов
-- **Десериализация**: Поток байтов → Объект
+- **Сериализация**: Объект → Формат для передачи/хранения (часто поток байтов или текст)
+- **Десериализация**: Такой формат → Объект
 - **Назначение**: Сохранение, передача, кеширование объектов
-- **Распространённые форматы**: JSON, Binary, Parcelable
-- **Kotlin**: Используйте аннотацию `@Serializable`
+- **Распространённые форматы/механизмы**: JSON, бинарные форматы, `Parcelable`, Protocol Buffers
+- **В Kotlin**: чаще используйте `kotlinx.serialization` с аннотацией `@Serializable`
+
+## Дополнительные вопросы (RU)
+
+- Каковы ключевые отличия этого подхода от Java?
+- Когда вы бы использовали это на практике?
+- Какие распространённые подводные камни следует избегать?
+
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-non-inheritable-class--programming-languages--easy]]
+- [[q-kotlin-singleton-creation--programming-languages--easy]]
+- [[q-functional-interfaces-vs-type-aliases--kotlin--medium]]
+
+# Question (EN)
+> What is serialization?
 
 ## Answer (EN)
 
-**Serialization** is the process of converting an object into a byte stream to save its state or transmit it over a network.
+**Serialization** is the process of converting an object into a representation that can be stored or transmitted (typically a byte stream or a text format) and later reconstructed back into an object (deserialization).
 
 This is needed so you can store objects in files, databases, or transfer them between different application components or even different applications.
 
 **Why Serialization:**
 
--  **Save state** to files or database
--  **Network transfer** between client and server
--  **Cache** objects for faster access
--  **Deep copy** of objects
-- ⏸ **Pause/Resume** application state
+- **Save state** to files or database
+- **Network transfer** between client and server
+- **Cache** objects for faster access
+- **Deep copy** of objects
+- **Pause/Resume** application state
 
-**Common Formats:**
+**Common formats and approaches:**
 
-**1. JSON** (most common for APIs):
+**1. JSON** (most common for APIs, supported by `kotlinx.serialization`):
 ```kotlin
 @Serializable
 data class User(val id: Int, val name: String, val email: String)
@@ -231,7 +244,7 @@ val json = Json.encodeToString(user)
 val userFromJson = Json.decodeFromString<User>(json)
 ```
 
-**2. Binary** (Java Serializable):
+**2. Binary** (Java `Serializable` — legacy, mostly for compatibility):
 ```kotlin
 import java.io.*
 
@@ -251,7 +264,7 @@ val loadedPerson = objectIn.readObject() as Person
 objectIn.close()
 ```
 
-**3. Kotlin Serialization** (recommended):
+**3. Kotlin Serialization (`kotlinx.serialization`)** — the recommended Kotlin library, supports multiple formats (JSON, CBOR, ProtoBuf, etc.):
 ```kotlin
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
@@ -273,7 +286,7 @@ val jsonString = Json.encodeToString(product)
 val decodedProduct = Json.decodeFromString<Product>(jsonString)
 ```
 
-**4. Parcelable** (Android):
+**4. `Parcelable`** (Android, for passing data between components within the same app/process):
 ```kotlin
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -285,7 +298,7 @@ data class Message(
     val timestamp: Long
 ) : Parcelable
 
-// Pass between Activities/Fragments
+// Pass between Activities/Fragments in Android
 intent.putExtra("message", message)
 ```
 
@@ -338,7 +351,7 @@ object UserCache {
 
     fun loadUser(): User? {
         return if (cacheFile.exists()) {
-            Json.decodeFromString(cacheFile.readText())
+            Json.decodeFromString<User>(cacheFile.readText())
         } else null
     }
 }
@@ -346,13 +359,13 @@ object UserCache {
 
 **Comparison of Serialization Methods:**
 
-| Method | Format | Speed | Size | Use Case |
-|--------|--------|-------|------|----------|
-| **JSON** | Text | Medium | Large | APIs, config files |
-| **Kotlin Serialization** | Various | Fast | Optimized | Modern Kotlin apps |
-| **Java Serializable** | Binary | Slow | Large | Legacy Java apps |
-| **Parcelable** | Binary | Fast | Small | Android IPC |
-| **Protocol Buffers** | Binary | Very Fast | Very Small | High performance |
+| Method | What it is | Format | Speed | Size | Use Case |
+|--------|------------|--------|-------|------|----------|
+| **JSON** | Data format | Text | Medium | Large | APIs, config files |
+| **`kotlinx.serialization`** | Library | Supports various (JSON, CBOR, ProtoBuf, …) | Fast | Optimized | Modern Kotlin apps |
+| **Java `Serializable`** | JVM mechanism | Binary | Slow | Large | Legacy Java apps, compatibility |
+| **`Parcelable`** | Android mechanism | Binary | Fast | Small | Android IPC within an app |
+| **Protocol Buffers** | Format/IDL | Binary | Very Fast | Very Small | High-performance RPC, network protocols |
 
 **Setup Kotlin Serialization:**
 
@@ -369,11 +382,11 @@ dependencies {
 
 **Summary:**
 
-- **Serialization**: Object → Byte stream
-- **Deserialization**: Byte stream → Object
+- **Serialization**: Object → Representation suitable for transfer/storage (often a byte stream or text)
+- **Deserialization**: That representation → Object
 - **Purpose**: Save, transmit, cache objects
-- **Common formats**: JSON, Binary, Parcelable
-- **Kotlin**: Use `@Serializable` annotation
+- **Common formats/mechanisms**: JSON, binary formats, `Parcelable`, Protocol Buffers
+- **In Kotlin**: prefer `kotlinx.serialization` with the `@Serializable` annotation
 
 ---
 
@@ -386,6 +399,7 @@ dependencies {
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
 
 ## Related Questions
 

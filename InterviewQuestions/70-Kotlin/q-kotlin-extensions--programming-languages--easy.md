@@ -2,7 +2,7 @@
 id: lang-041
 title: "Kotlin Extensions / Расширения Kotlin"
 aliases: [Kotlin Extensions, Расширения Kotlin]
-topic: programming-languages
+topic: kotlin
 subtopics: [extensions, type-system]
 question_kind: theory
 difficulty: easy
@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-flow-basics--kotlin--easy, q-kotlin-extensions-overview--programming-languages--medium]
-created: 2025-10-15
-updated: 2025-10-31
+related: [c-kotlin, q-flow-basics--kotlin--easy, q-kotlin-extensions-overview--programming-languages--medium]
+created: 2024-10-15
+updated: 2025-11-09
 tags: [difficulty/easy, extension-functions, extensions, programming-languages]
 ---
-# Что Такое Extensions?
-
 # Вопрос (RU)
 > Что такое Extensions?
 
@@ -27,7 +25,7 @@ tags: [difficulty/easy, extension-functions, extensions, programming-languages]
 
 ## Ответ (RU)
 
-Термин **'Extensions'** используется для обозначения функциональности, которая позволяет добавлять новые возможности к существующим классам без изменения их исходного кода.
+Термин **"Extensions"** используется для обозначения функциональности в Kotlin, которая позволяет добавлять новые возможности к существующим классам без изменения их исходного кода. См. также [[c-kotlin]].
 
 ### Ключевые Концепции
 
@@ -77,7 +75,7 @@ println(numbers.average())  // 3.0
 
 ## Answer (EN)
 
-The term **'Extensions'** refers to functionality that allows adding new capabilities to existing classes without modifying their source code.
+The term **"Extensions"** refers to functionality in Kotlin that allows adding new capabilities to existing classes without modifying their source code. See also [[c-kotlin]].
 
 ### Key Concepts
 
@@ -127,18 +125,32 @@ println(numbers.average())  // 3.0
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия extensions от подхода в Java?
+- Когда на практике стоит использовать extensions?
+- Какие распространенные ошибки и подводные камни при использовании extensions?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
+## Связанные вопросы (RU)
+
+- [[q-kotlin-extensions-overview--programming-languages--medium]]
+- [[q-flow-basics--kotlin--easy]]
+
 ## Related Questions
 
 - [[q-kotlin-extensions-overview--programming-languages--medium]]
--
 - [[q-flow-basics--kotlin--easy]]

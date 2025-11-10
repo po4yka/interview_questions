@@ -10,15 +10,63 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-fan-in-fan-out--kotlin--hard, q-kotlin-visibility-modifiers--kotlin--easy]
+related: [c-kotlin, q-fan-in-fan-out--kotlin--hard, q-kotlin-visibility-modifiers--kotlin--easy]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags: [classes, data-classes, design, difficulty/medium, kotlin, sealed-classes]
 ---
 
-# Why Are Data Class and Sealed Classes Needed?
+# Вопрос (RU)
 
-**English**: Why are Data Class and Sealed Classes needed in Kotlin?
+> Зачем в Kotlin нужны `data` классы и `sealed` классы?
+
+# Question (EN)
+
+> Why are `data` classes and `sealed` classes needed in Kotlin?
+
+## Ответ (RU)
+
+Data классы и sealed классы служат разным целям в системе типов Kotlin (см. [[c-kotlin]]).
+
+### Data Классы
+Автоматически генерируют полезные методы:
+```kotlin
+data class User(val name: String, val age: Int)
+// Авто-генерирует: equals(), hashCode(), toString(), copy(), componentN()
+
+val user = User("Alice", 25)
+val older = user.copy(age = 26)
+```
+
+**Зачем использовать data классы:**
+- Нужно равенство по значению
+- Нужна функциональность copy
+- Работа с неизменяемыми данными
+- Нужна деструктуризация
+
+### Sealed Классы
+Ограничивают наследование известными подтипами:
+```kotlin
+sealed class Result {
+    data class Success(val data: String) : Result()
+    data class Error(val message: String) : Result()
+    object Loading : Result()
+}
+
+// Исчерпывающий when
+fun handle(result: Result) = when (result) {
+    is Result.Success -> show(result.data)
+    is Result.Error -> showError(result.message)
+    Result.Loading -> showLoading()
+    // else не нужен - компилятор знает все случаи
+}
+```
+
+**Зачем использовать sealed классы:**
+- Представить ограниченные иерархии типов
+- Исчерпывающие when выражения
+- Лучше чем enum, когда состояния имеют данные
+- ADTs (Алгебраические типы данных)
 
 ## Answer (EN)
 
@@ -64,54 +112,11 @@ fun handle(result: Result) = when (result) {
 - Better than enum when states have data
 - ADTs (Algebraic Data Types)
 
----
----
+## Дополнительные вопросы (RU)
 
-## Ответ (RU)
-
-Data классы и sealed классы служат разным целям в системе типов Kotlin.
-
-### Data Классы
-Автоматически генерируют полезные методы:
-```kotlin
-data class User(val name: String, val age: Int)
-// Авто-генерирует: equals(), hashCode(), toString(), copy(), componentN()
-
-val user = User("Alice", 25)
-val older = user.copy(age = 26)
-```
-
-**Зачем использовать data классы:**
-- Нужно равенство по значению
-- Нужна функциональность copy
-- Работа с неизменяемыми данными
-- Нужна деструктуризация
-
-### Sealed Классы
-Ограничивают наследование известными подтипами:
-```kotlin
-sealed class Result {
-    data class Success(val data: String) : Result()
-    data class Error(val message: String) : Result()
-    object Loading : Result()
-}
-
-// Исчерпывающий when
-fun handle(result: Result) = when (result) {
-    is Result.Success -> show(result.data)
-    is Result.Error -> showError(result.message)
-    Result.Loading -> showLoading()
-    // else не нужен - компилятор знает все случаи
-}
-```
-
-**Зачем использовать sealed классы:**
-- Представить ограниченные иерархии типов
-- Исчерпывающие when выражения
-- Лучше чем enum когда состояния имеют данные
-- ADTs (Алгебраические типы данных)
-
----
+- Каковы ключевые отличия от Java?
+- Когда вы бы использовали это на практике?
+- Какие распространенные ошибки стоит избегать?
 
 ## Follow-ups
 
@@ -119,12 +124,20 @@ fun handle(result: Result) = when (result) {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-visibility-modifiers--kotlin--easy]]
+- [[q-fan-in-fan-out--kotlin--hard]]
 
 ## Related Questions
 
 - [[q-kotlin-visibility-modifiers--kotlin--easy]]
 - [[q-fan-in-fan-out--kotlin--hard]]
-

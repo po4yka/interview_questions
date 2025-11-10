@@ -1,11 +1,11 @@
 ---
 id: kotlin-134
 title: "Kotlin Multiplatform expect/actual / Механизм expect/actual в Kotlin"
-aliases: ["Kotlin Multiplatform expect, actual / Механизм expect/actual в Kotlin"]
+aliases: ["Kotlin Multiplatform expect/actual", "Механизм expect/actual в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [common-code, expect-actual, kmp]
+subtopics: [expect-actual, kmp, c-kotlin-multiplatform]
 question_kind: theory
 difficulty: medium
 
@@ -18,33 +18,48 @@ source_note: Comprehensive guide on Kotlin Multiplatform expect/actual mechanism
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-collections--kotlin--medium, q-kotlin-constructors--kotlin--easy, q-kotlin-native--kotlin--hard]
+related: [c-kotlin, q-kotlin-collections--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-10
 
 tags: [cross-platform, difficulty/medium, expect-actual, kmp, kotlin, multiplatform, platform-specific]
 ---
 # Вопрос (RU)
 > Что такое механизм expect/actual в Kotlin Multiplatform? Объясните как объявлять платформо-специфичные реализации и приведите практические примеры.
 
----
-
 # Question (EN)
 > What is the expect/actual mechanism in Kotlin Multiplatform? Explain how to declare platform-specific implementations and provide practical examples.
 
 ## Ответ (RU)
 
-Механизм **expect/actual** в Kotlin Multiplatform (KMP) позволяет писать общий код, который может иметь разные реализации на разных платформах (Android, iOS, JVM, JS, Native). Он обеспечивает типобезопасный способ доступа к платформо-специфичным API при сохранении возможности разделения кода.
+Механизм **expect/actual** в Kotlin Multiplatform (KMP) позволяет писать общий код, который может иметь разные реализации на разных платформах (Android, iOS, JVM, JS, Native). Он обеспечивает типобезопасный способ доступа к платформо-специфичным API при сохранении возможности разделения кода. Подробнее см. [[c-kotlin]].
 
 ### Ключевые Концепции
 
-1. **expect**: Объявление в общем коде, что что-то будет предоставлено платформо-специфичным кодом
-2. **actual**: Платформо-специфичная реализация ожидаемого объявления
-3. **Платформенные модули**: commonMain, androidMain, iosMain, jvmMain, jsMain
-4. **Типобезопасность**: Компилятор гарантирует, что actual реализации соответствуют expect объявлениям
-5. **Гибкость**: Может использоваться для функций, классов, свойств и объектов
+1. **expect**: Объявление в общем коде, что что-то будет предоставлено платформо-специфичным кодом.
+2. **actual**: Платформо-специфичная реализация ожидаемого объявления.
+3. **Платформенные модули**: commonMain, androidMain, iosMain, jvmMain, jsMain (и более детальные source sets для конкретных целей).
+4. **Типобезопасность**: Компилятор гарантирует, что actual-реализации соответствуют expect-объявлениям (имя, сигнатура, модификаторы и nullability).
+5. **Гибкость**: Может использоваться для функций, классов, свойств и объектов.
+
+### Как Работает expect/actual
+
+```
+
+         commonMain
+
+    expect fun getPlatform()
+    expect class Storage
+
+
+
+
+ androidMain     iosMain
+ actual impl    actual impl
+
+```
 
 ### expect/actual Функции
 
@@ -58,7 +73,7 @@ expect fun currentTimeMillis(): Long
 
 expect fun generateUUID(): String
 
-// Общий код, использующий expect функции
+// Общий код, использующий expect-функции
 class Logger {
     fun log(message: String) {
         val timestamp = currentTimeMillis()
@@ -74,19 +89,20 @@ class Logger {
 // androidMain/Platform.kt
 actual fun getPlatformName(): String = "Android ${android.os.Build.VERSION.SDK_INT}"
 
-actual fun currentTimeMillis(): Long = System.currentTimeMillis()
+actual fun currentTimeMillis(): Long = java.lang.System.currentTimeMillis()
 
 actual fun generateUUID(): String = java.util.UUID.randomUUID().toString()
 
 // iosMain/Platform.kt
 import platform.UIKit.UIDevice
 import platform.Foundation.NSUUID
+import platform.Foundation.NSDate
 
 actual fun getPlatformName(): String =
     "iOS ${UIDevice.currentDevice.systemVersion}"
 
 actual fun currentTimeMillis(): Long =
-    platform.Foundation.NSDate().timeIntervalSince1970.toLong() * 1000
+    (NSDate().timeIntervalSince1970 * 1000).toLong()
 
 actual fun generateUUID(): String =
     NSUUID().UUIDString()
@@ -122,14 +138,14 @@ class UserPreferences(private val storage: KeyValueStorage) {
 }
 ```
 
-Android реализация:
+Android-реализация:
 
 ```kotlin
 // androidMain/Storage.kt
 import android.content.Context
 import android.content.SharedPreferences
 
-actual class KeyValueStorage(context: Context) {
+actual class KeyValueStorage(private val context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
@@ -151,7 +167,7 @@ actual class KeyValueStorage(context: Context) {
 }
 ```
 
-iOS реализация:
+iOS-реализация (упрощённый пример):
 
 ```kotlin
 // iosMain/Storage.kt
@@ -162,7 +178,6 @@ actual class KeyValueStorage {
 
     actual fun saveString(key: String, value: String) {
         userDefaults.setObject(value, forKey = key)
-        userDefaults.synchronize()
     }
 
     actual fun getString(key: String): String? {
@@ -171,7 +186,6 @@ actual class KeyValueStorage {
 
     actual fun remove(key: String) {
         userDefaults.removeObjectForKey(key)
-        userDefaults.synchronize()
     }
 
     actual fun clear() {
@@ -179,10 +193,24 @@ actual class KeyValueStorage {
         dictionary.keys.forEach { key ->
             userDefaults.removeObjectForKey(key as String)
         }
-        userDefaults.synchronize()
     }
 }
 ```
+
+(В реальном коде реализации могут учитывать миграции, типизированный доступ и избегать устаревших API.)
+
+### expect/actual с Параметрами Типов (Концептуально)
+
+Важно, чтобы `expect`/`actual`-объявления совпадали полностью, включая дженерики и ограничения типов. Для JSON в KMP обычно используют kotlinx.serialization и механизмы `serializer()` вместо `Class<T>`.
+
+```kotlin
+// commonMain/Serializer.kt (концептуально)
+expect class JsonSerializer {
+    fun <T> serialize(obj: T): String
+}
+```
+
+Каждая `actual`-реализация обязана иметь совместимые сигнатуры и использовать доступные на платформе механизмы.
 
 ### expect/actual Свойства
 
@@ -216,7 +244,74 @@ actual val platformVersion: String = UIDevice.currentDevice.systemVersion
 actual val deviceModel: String = UIDevice.currentDevice.model
 ```
 
-### Реальный Пример: HTTP Клиент
+### expect/actual Объекты (Одиночки)
+
+```kotlin
+// commonMain/Logger.kt
+expect object PlatformLogger {
+    fun debug(message: String)
+    fun info(message: String)
+    fun warning(message: String)
+    fun error(message: String)
+}
+
+// Общее использование
+class AppLogger {
+    fun logAppStart() {
+        PlatformLogger.info("Application started")
+    }
+
+    fun logError(exception: Exception) {
+        PlatformLogger.error("Error: ${exception.message}")
+    }
+}
+
+// androidMain/Logger.kt
+import android.util.Log
+
+actual object PlatformLogger {
+    private const val TAG = "KMPApp"
+
+    actual fun debug(message: String) {
+        Log.d(TAG, message)
+    }
+
+    actual fun info(message: String) {
+        Log.i(TAG, message)
+    }
+
+    actual fun warning(message: String) {
+        Log.w(TAG, message)
+    }
+
+    actual fun error(message: String) {
+        Log.e(TAG, message)
+    }
+}
+
+// iosMain/Logger.kt
+import platform.Foundation.NSLog
+
+actual object PlatformLogger {
+    actual fun debug(message: String) {
+        NSLog("[DEBUG] $message")
+    }
+
+    actual fun info(message: String) {
+        NSLog("[INFO] $message")
+    }
+
+    actual fun warning(message: String) {
+        NSLog("[WARNING] $message")
+    }
+
+    actual fun error(message: String) {
+        NSLog("[ERROR] $message")
+    }
+}
+```
+
+### Реальный Пример: HTTP Клиент (Концептуально)
 
 ```kotlin
 // commonMain/HttpClient.kt
@@ -226,7 +321,7 @@ expect class HttpClient {
     fun close()
 }
 
-// Общий репозиторий, использующий HTTP клиент
+// Общий репозиторий, использующий HTTP-клиент
 class ApiRepository(private val client: HttpClient) {
     suspend fun fetchUsers(): List<User> {
         val response = client.get("https://api.example.com/users")
@@ -245,12 +340,55 @@ class ApiRepository(private val client: HttpClient) {
 }
 ```
 
+Платформенные `actual`-реализации должны:
+- Не блокировать внутри `suspend`-функций.
+- Корректно бриджить колбэки в `suspend` или использовать мультиплатформенные HTTP-библиотеки.
+
+### expect/actual с Интерфейсами
+
+```kotlin
+// commonMain/Database.kt
+interface DatabaseDriver {
+    fun insert(table: String, values: Map<String, Any>)
+    fun query(table: String, where: String): List<Map<String, Any>>
+    fun delete(table: String, where: String)
+}
+
+expect fun createDatabaseDriver(databaseName: String): DatabaseDriver
+
+// Общее использование
+class UserDatabase {
+    private val driver = createDatabaseDriver("users.db")
+
+    fun saveUser(user: User) {
+        driver.insert("users", mapOf(
+            "id" to user.id,
+            "name" to user.name,
+            "email" to user.email
+        ))
+    }
+
+    fun getUser(id: Int): User? {
+        val results = driver.query("users", "id = $id")
+        return results.firstOrNull()?.let {
+            User(
+                id = it["id"] as Int,
+                name = it["name"] as String,
+                email = it["email"] as String
+            )
+        }
+    }
+}
+```
+
+Платформенные `actual`-реализации должны предоставлять конкретный `DatabaseDriver` в соответствии со своими API для хранения данных (например, SQLite на Android), обычно через инъекцию зависимостей из платформенного кода.
+
 ### Распространённые Ошибки
 
 ```kotlin
 // ПЛОХО: Использование платформо-специфичных типов в expect
 expect class MyClass {
-    fun doSomething(context: android.content.Context)  // Ошибка: Android тип в общем коде!
+    fun doSomething(context: android.content.Context)  // Ошибка: Android-тип в общем коде!
 }
 
 // ХОРОШО: Использовать общие типы или абстракцию
@@ -261,13 +399,37 @@ expect class MyClass {
 // ПЛОХО: Разные сигнатуры между expect и actual
 expect fun format(value: Double): String
 
-actual fun format(value: Double, precision: Int = 2): String  // Ошибка: разные сигнатуры!
+actual fun format(value: Double, precision: Int): String  // Ошибка: другая сигнатура!
 
-// ХОРОШО: Сигнатуры должны точно совпадать
+// ХОРОШО: Сигнатуры должны точно совпадать (включая параметры по умолчанию)
 expect fun format(value: Double, precision: Int = 2): String
 
 actual fun format(value: Double, precision: Int): String =
     String.format("%.${precision}f", value)
+
+// ПЛОХО: Отсутствует actual-реализация
+expect fun platformSpecific(): String
+
+// iosMain: нет actual-реализации
+// Это приведет к ошибке компиляции!
+
+// ХОРОШО: Всегда предоставляйте actual для всех целевых платформ
+// androidMain
+actual fun platformSpecific(): String = "Android"
+
+// iosMain
+actual fun platformSpecific(): String = "iOS"
+```
+
+Также помните: `expect`-объявления не могут иметь тела; общая логика и реализации по умолчанию должны быть вынесены в обычные функции или inline-хелперы, а не в `expect`.
+
+Недопустимы и несогласованные nullability:
+
+```kotlin
+// ПЛОХО: nullability не совпадает
+expect fun getValue(): String
+
+actual fun getValue(): String? = null  // Ошибка: несоответствие nullability!
 ```
 
 ### Лучшие Практики
@@ -278,7 +440,7 @@ actual fun format(value: Double, precision: Int): String =
 // Использовать expect/actual для платформо-специфичной функциональности
 expect fun openUrl(url: String)
 
-// Держать expect объявления минимальными и сфокусированными
+// Держать expect-объявления минимальными и сфокусированными
 expect class ImageLoader {
     fun load(url: String): ByteArray
 }
@@ -286,9 +448,10 @@ expect class ImageLoader {
 // Использовать описательные имена, указывающие на специфичность платформы
 expect fun getPlatformHttpClient(): HttpClient
 
-// Предоставлять реализации по умолчанию когда возможно
-expect fun getDeviceId(): String {
-    return "unknown"  // Реализация по умолчанию
+// Использовать общие абстракции (sealed-классы и т.п.) для разделяемой логики
+sealed class PlatformResult {
+    data class Success(val data: String) : PlatformResult()
+    data class Error(val message: String) : PlatformResult()
 }
 ```
 
@@ -301,12 +464,12 @@ expect class BadClass {
 }
 
 // Не делайте всё expect/actual
-// Используйте общий код когда возможно
+// Используйте общий код, когда возможно
 class CommonHelper {  // Не нужен expect/actual
     fun formatNumber(num: Int): String = num.toString()
 }
 
-// Не создавайте излишне сложные expect/actual иерархии
+// Не создавайте чрезмерно сложные expect/actual-иерархии
 expect abstract class ComplexBase {
     abstract class Inner {
         abstract class DeeperInner  // Слишком сложно!
@@ -314,43 +477,84 @@ expect abstract class ComplexBase {
 }
 ```
 
+### Тестирование expect/actual-Кода (Концептуально)
+
+```kotlin
+// commonTest/PlatformTest.kt
+import kotlin.test.Test
+import kotlin.test.assertTrue
+import kotlin.test.assertNotNull
+
+class PlatformTest {
+    @Test
+    fun testPlatformName() {
+        val name = getPlatformName()
+        assertNotNull(name)
+        assertTrue(name.isNotBlank())
+    }
+}
+```
+
+Для каждой платформы можно добавить специфичные тесты, проверяющие корректность `actual`-реализаций.
+
 ### Структура Проекта
 
 ```
 myproject/
  commonMain/
     kotlin/
-        Platform.kt        (expect объявления)
+        Platform.kt        (expect-объявления)
         Storage.kt         (expect class)
         Logger.kt          (expect object)
  androidMain/
     kotlin/
-        Platform.kt        (actual реализации)
+        Platform.kt        (actual-реализации)
         Storage.kt         (actual class)
         Logger.kt          (actual object)
  iosMain/
     kotlin/
-        Platform.kt        (actual реализации)
+        Platform.kt        (actual-реализации)
         Storage.kt         (actual class)
         Logger.kt          (actual object)
  commonTest/
      kotlin/
-         PlatformTest.kt    (общие тесты)
+         PlatformTest.kt   (общие тесты)
 ```
 
----
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого механизма от подхода в Java (без expect/actual)?
+- В каких практических сценариях вы бы использовали expect/actual в реальных проектах?
+- Какие типичные ошибки и подводные камни при использовании expect/actual следует избегать?
+
+## Ссылки (RU)
+
+- https://kotlinlang.org/docs/multiplatform-connect-to-apis.html
+- https://kotlinlang.org/docs/multiplatform-expect-actual.html
+- https://kotlinlang.org/docs/multiplatform-mobile-getting-started.html
+- https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-expect-actual.html
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-native--kotlin--hard]]
+- [[q-kotlin-constructors--kotlin--easy]]
+- [[q-kotlin-collections--kotlin--medium]]
+
+## MOC-ссылки (RU)
+
+- [[moc-kotlin]]
 
 ## Answer (EN)
 
-The **expect/actual** mechanism in Kotlin Multiplatform (KMP) allows you to write common code that can have different implementations on different platforms (Android, iOS, JVM, JS, Native). It provides a type-safe way to access platform-specific APIs while maintaining code sharing.
+The **expect/actual** mechanism in Kotlin Multiplatform (KMP) allows you to write common code that can have different implementations on different platforms (Android, iOS, JVM, JS, Native). It provides a type-safe way to access platform-specific APIs while maintaining code sharing. See also [[c-kotlin]].
 
 ### Key Concepts
 
-1. **expect**: Declaration in common code that something will be provided by platform-specific code
-2. **actual**: Platform-specific implementation of the expected declaration
-3. **Platform modules**: commonMain, androidMain, iosMain, jvmMain, jsMain
-4. **Type safety**: Compiler ensures actual implementations match expect declarations
-5. **Flexibility**: Can be used for functions, classes, properties, and objects
+1. **expect**: Declaration in common code that something will be provided by platform-specific code.
+2. **actual**: Platform-specific implementation of the expected declaration.
+3. **Platform modules**: commonMain, androidMain, iosMain, jvmMain, jsMain (plus more granular targets/source sets).
+4. **Type safety**: The compiler ensures actual implementations match expect declarations (name, signature, modifiers, nullability).
+5. **Flexibility**: Can be used for functions, classes, properties, and objects.
 
 ### How expect/actual Works
 
@@ -360,8 +564,6 @@ The **expect/actual** mechanism in Kotlin Multiplatform (KMP) allows you to writ
 
     expect fun getPlatform()
     expect class Storage
-
-
 
 
 
@@ -399,19 +601,20 @@ Platform implementations:
 // androidMain/Platform.kt
 actual fun getPlatformName(): String = "Android ${android.os.Build.VERSION.SDK_INT}"
 
-actual fun currentTimeMillis(): Long = System.currentTimeMillis()
+actual fun currentTimeMillis(): Long = java.lang.System.currentTimeMillis()
 
 actual fun generateUUID(): String = java.util.UUID.randomUUID().toString()
 
 // iosMain/Platform.kt
 import platform.UIKit.UIDevice
 import platform.Foundation.NSUUID
+import platform.Foundation.NSDate
 
 actual fun getPlatformName(): String =
     "iOS ${UIDevice.currentDevice.systemVersion}"
 
 actual fun currentTimeMillis(): Long =
-    platform.Foundation.NSDate().timeIntervalSince1970.toLong() * 1000
+    (NSDate().timeIntervalSince1970 * 1000).toLong()
 
 actual fun generateUUID(): String =
     NSUUID().UUIDString()
@@ -454,7 +657,7 @@ Android implementation:
 import android.content.Context
 import android.content.SharedPreferences
 
-actual class KeyValueStorage(context: Context) {
+actual class KeyValueStorage(private val context: Context) {
     private val prefs: SharedPreferences =
         context.getSharedPreferences("app_prefs", Context.MODE_PRIVATE)
 
@@ -476,7 +679,7 @@ actual class KeyValueStorage(context: Context) {
 }
 ```
 
-iOS implementation:
+iOS implementation (simplified example):
 
 ```kotlin
 // iosMain/Storage.kt
@@ -487,7 +690,6 @@ actual class KeyValueStorage {
 
     actual fun saveString(key: String, value: String) {
         userDefaults.setObject(value, forKey = key)
-        userDefaults.synchronize()
     }
 
     actual fun getString(key: String): String? {
@@ -496,7 +698,6 @@ actual class KeyValueStorage {
 
     actual fun remove(key: String) {
         userDefaults.removeObjectForKey(key)
-        userDefaults.synchronize()
     }
 
     actual fun clear() {
@@ -504,50 +705,24 @@ actual class KeyValueStorage {
         dictionary.keys.forEach { key ->
             userDefaults.removeObjectForKey(key as String)
         }
-        userDefaults.synchronize()
     }
 }
 ```
 
-### expect/actual With Type Parameters
+(Real-world implementations may manage migration, typed accessors, and avoid deprecated APIs.)
+
+### expect/actual With Type Parameters (Conceptual)
+
+Be careful that expect/actual declarations match exactly, including generic constraints and parameters. For JSON in KMP, kotlinx.serialization with `serializer()` is typically used instead of `Class<T>`.
 
 ```kotlin
-// commonMain/Serializer.kt
+// commonMain/Serializer.kt (conceptual)
 expect class JsonSerializer {
     fun <T> serialize(obj: T): String
-    fun <T> deserialize(json: String, type: Class<T>): T
-}
-
-// androidMain/Serializer.kt
-import com.google.gson.Gson
-
-actual class JsonSerializer {
-    private val gson = Gson()
-
-    actual fun <T> serialize(obj: T): String {
-        return gson.toJson(obj)
-    }
-
-    actual fun <T> deserialize(json: String, type: Class<T>): T {
-        return gson.fromJson(json, type)
-    }
-}
-
-// iosMain/Serializer.kt
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.encodeToString
-
-actual class JsonSerializer {
-    actual fun <T> serialize(obj: T): String {
-        return Json.encodeToString(obj)
-    }
-
-    actual fun <T> deserialize(json: String, type: Class<T>): T {
-        return Json.decodeFromString(json)
-    }
 }
 ```
+
+Each actual implementation must use compatible signatures and mechanisms available on that platform.
 
 ### expect/actual Properties
 
@@ -648,7 +823,7 @@ actual object PlatformLogger {
 }
 ```
 
-### Real-World Example: HTTP Client
+### Real-World Example: HTTP Client (Conceptual)
 
 ```kotlin
 // commonMain/HttpClient.kt
@@ -675,125 +850,11 @@ class ApiRepository(private val client: HttpClient) {
         client.close()
     }
 }
-
-// androidMain/HttpClient.kt
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody.Companion.toRequestBody
-import okhttp3.MediaType.Companion.toMediaType
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-
-actual class HttpClient {
-    private val okHttpClient = OkHttpClient()
-
-    actual suspend fun get(url: String): String = suspendCancellableCoroutine { continuation ->
-        val request = Request.Builder()
-            .url(url)
-            .build()
-
-        okHttpClient.newCall(request).execute().use { response ->
-            if (response.isSuccessful) {
-                continuation.resume(response.body?.string() ?: "")
-            } else {
-                continuation.resumeWithException(
-                    Exception("HTTP ${response.code}")
-                )
-            }
-        }
-    }
-
-    actual suspend fun post(url: String, body: String): String =
-        suspendCancellableCoroutine { continuation ->
-            val mediaType = "application/json".toMediaType()
-            val requestBody = body.toRequestBody(mediaType)
-            val request = Request.Builder()
-                .url(url)
-                .post(requestBody)
-                .build()
-
-            okHttpClient.newCall(request).execute().use { response ->
-                if (response.isSuccessful) {
-                    continuation.resume(response.body?.string() ?: "")
-                } else {
-                    continuation.resumeWithException(
-                        Exception("HTTP ${response.code}")
-                    )
-                }
-            }
-        }
-
-    actual fun close() {
-        okHttpClient.dispatcher.executorService.shutdown()
-    }
-}
-
-// iosMain/HttpClient.kt
-import platform.Foundation.*
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
-
-actual class HttpClient {
-    private val session = NSURLSession.sharedSession
-
-    actual suspend fun get(url: String): String = suspendCancellableCoroutine { continuation ->
-        val nsUrl = NSURL(string = url)
-        val request = NSMutableURLRequest(uRL = nsUrl)
-        request.HTTPMethod = "GET"
-
-        val task = session.dataTaskWithRequest(request) { data, response, error ->
-            when {
-                error != null -> continuation.resumeWithException(
-                    Exception(error.localizedDescription)
-                )
-                data != null -> {
-                    val string = NSString.create(data = data, encoding = NSUTF8StringEncoding)
-                    continuation.resume(string?.toString() ?: "")
-                }
-                else -> continuation.resumeWithException(Exception("Unknown error"))
-            }
-        }
-        task.resume()
-
-        continuation.invokeOnCancellation {
-            task.cancel()
-        }
-    }
-
-    actual suspend fun post(url: String, body: String): String =
-        suspendCancellableCoroutine { continuation ->
-            val nsUrl = NSURL(string = url)
-            val request = NSMutableURLRequest(uRL = nsUrl)
-            request.HTTPMethod = "POST"
-            request.setValue("application/json", forHTTPHeaderField = "Content-Type")
-            request.HTTPBody = body.encodeToByteArray().toNSData()
-
-            val task = session.dataTaskWithRequest(request) { data, response, error ->
-                when {
-                    error != null -> continuation.resumeWithException(
-                        Exception(error.localizedDescription)
-                    )
-                    data != null -> {
-                        val string = NSString.create(data = data, encoding = NSUTF8StringEncoding)
-                        continuation.resume(string?.toString() ?: "")
-                    }
-                    else -> continuation.resumeWithException(Exception("Unknown error"))
-                }
-            }
-            task.resume()
-
-            continuation.invokeOnCancellation {
-                task.cancel()
-            }
-        }
-
-    actual fun close() {
-        // iOS URLSession cleanup if needed
-    }
-}
 ```
+
+Platform-specific actual implementations should:
+- Avoid blocking inside suspending functions.
+- Use proper callback-to-suspend bridging or a multiplatform HTTP library.
 
 ### expect/actual With Interfaces
 
@@ -830,83 +891,9 @@ class UserDatabase {
         }
     }
 }
-
-// androidMain/Database.kt
-import android.content.ContentValues
-import android.database.sqlite.SQLiteDatabase
-
-class AndroidDatabaseDriver(private val db: SQLiteDatabase) : DatabaseDriver {
-    override fun insert(table: String, values: Map<String, Any>) {
-        val contentValues = ContentValues().apply {
-            values.forEach { (key, value) ->
-                when (value) {
-                    is String -> put(key, value)
-                    is Int -> put(key, value)
-                    is Long -> put(key, value)
-                    is Boolean -> put(key, value)
-                }
-            }
-        }
-        db.insert(table, null, contentValues)
-    }
-
-    override fun query(table: String, where: String): List<Map<String, Any>> {
-        val results = mutableListOf<Map<String, Any>>()
-        val cursor = db.query(table, null, where, null, null, null, null)
-
-        cursor.use {
-            while (it.moveToNext()) {
-                val row = mutableMapOf<String, Any>()
-                for (i in 0 until it.columnCount) {
-                    val columnName = it.getColumnName(i)
-                    val value = it.getString(i)
-                    row[columnName] = value
-                }
-                results.add(row)
-            }
-        }
-        return results
-    }
-
-    override fun delete(table: String, where: String) {
-        db.delete(table, where, null)
-    }
-}
-
-actual fun createDatabaseDriver(databaseName: String): DatabaseDriver {
-    // Implementation would get SQLiteDatabase instance
-    return AndroidDatabaseDriver(/* SQLiteDatabase instance */)
-}
-
-// iosMain/Database.kt
-import platform.Foundation.*
-
-class IosDatabaseDriver(private val databasePath: String) : DatabaseDriver {
-    override fun insert(table: String, values: Map<String, Any>) {
-        // iOS SQLite implementation
-    }
-
-    override fun query(table: String, where: String): List<Map<String, Any>> {
-        // iOS SQLite implementation
-        return emptyList()
-    }
-
-    override fun delete(table: String, where: String) {
-        // iOS SQLite implementation
-    }
-}
-
-actual fun createDatabaseDriver(databaseName: String): DatabaseDriver {
-    val paths = NSSearchPathForDirectoriesInDomains(
-        NSDocumentDirectory,
-        NSUserDomainMask,
-        true
-    )
-    val documentsDirectory = paths.first() as String
-    val databasePath = "$documentsDirectory/$databaseName"
-    return IosDatabaseDriver(databasePath)
-}
 ```
+
+Platform actual implementations must provide a concrete DatabaseDriver consistent with their storage APIs. The exact acquisition of, for example, SQLiteDatabase on Android is environment-specific and typically injected from Android code.
 
 ### Common Pitfalls
 
@@ -924,9 +911,9 @@ expect class MyClass {
 // BAD: Different signatures between expect and actual
 expect fun format(value: Double): String
 
-actual fun format(value: Double, precision: Int = 2): String  // Error: different signature!
+actual fun format(value: Double, precision: Int): String  // Error: different signature!
 
-// GOOD: Match signatures exactly
+// GOOD: Match signatures exactly (including default params)
 expect fun format(value: Double, precision: Int = 2): String
 
 actual fun format(value: Double, precision: Int): String =
@@ -938,13 +925,20 @@ expect fun platformSpecific(): String
 // iosMain: Missing actual implementation
 // This will cause compilation error!
 
-// GOOD: Always provide actual for all platforms
+// GOOD: Always provide actual for all relevant targets
 // androidMain
 actual fun platformSpecific(): String = "Android"
 
 // iosMain
 actual fun platformSpecific(): String = "iOS"
+
+// BAD: Mismatched nullability between expect and actual
+expect fun getValue(): String
+
+actual fun getValue(): String? = null  // Error: nullability mismatch!
 ```
+
+Also remember: expect declarations cannot have bodies; default implementations, if needed, must be expressed via common functions or inline helpers, not in expect itself.
 
 ### Best Practices
 
@@ -962,12 +956,7 @@ expect class ImageLoader {
 // Use descriptive names that indicate platform specificity
 expect fun getPlatformHttpClient(): HttpClient
 
-// Provide default implementations when possible
-expect fun getDeviceId(): String {
-    return "unknown"  // Default implementation
-}
-
-// Use sealed classes for platform-specific results
+// Use sealed classes or other common abstractions for shared logic
 sealed class PlatformResult {
     data class Success(val data: String) : PlatformResult()
     data class Error(val message: String) : PlatformResult()
@@ -994,14 +983,9 @@ expect abstract class ComplexBase {
         abstract class DeeperInner  // Too complex!
     }
 }
-
-// Don't forget null safety in actual implementations
-expect fun getValue(): String
-
-actual fun getValue(): String? = null  // Error: nullability mismatch!
 ```
 
-### Testing expect/actual Code
+### Testing expect/actual Code (Conceptual)
 
 ```kotlin
 // commonTest/PlatformTest.kt
@@ -1016,27 +1000,10 @@ class PlatformTest {
         assertNotNull(name)
         assertTrue(name.isNotBlank())
     }
-
-    @Test
-    fun testStorage() {
-        val storage = createStorage()
-        storage.saveString("test", "value")
-        assertEquals("value", storage.getString("test"))
-        storage.clear()
-        assertNull(storage.getString("test"))
-    }
-}
-
-// Each platform can have specific tests too
-// androidTest/AndroidPlatformTest.kt
-class AndroidPlatformTest {
-    @Test
-    fun testAndroidSpecificFeature() {
-        val name = getPlatformName()
-        assertTrue(name.startsWith("Android"))
-    }
 }
 ```
+
+Each platform can have specific tests too, ensuring actual implementations behave as expected.
 
 ### Project Structure
 
@@ -1059,10 +1026,8 @@ myproject/
         Logger.kt          (actual object)
  commonTest/
      kotlin/
-         PlatformTest.kt    (common tests)
+         PlatformTest.kt   (common tests)
 ```
-
----
 
 ## Follow-ups
 
@@ -1072,17 +1037,16 @@ myproject/
 
 ## References
 
-- [Kotlin Multiplatform expect/actual](https://kotlinlang.org/docs/multiplatform-connect-to-apis.html)
-- [KMP Platform-specific declarations](https://kotlinlang.org/docs/multiplatform-expect-actual.html)
-- [Kotlin Multiplatform Mobile](https://kotlinlang.org/docs/multiplatform-mobile-getting-started.html)
-- [expect/actual Tutorial](https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-expect-actual.html)
+- https://kotlinlang.org/docs/multiplatform-connect-to-apis.html
+- https://kotlinlang.org/docs/multiplatform-expect-actual.html
+- https://kotlinlang.org/docs/multiplatform-mobile-getting-started.html
+- https://www.jetbrains.com/help/kotlin-multiplatform-dev/multiplatform-expect-actual.html
 
 ## Related Questions
 
 - [[q-kotlin-native--kotlin--hard]]
 - [[q-kotlin-constructors--kotlin--easy]]
 - [[q-kotlin-collections--kotlin--medium]]
-- [[q-flow-basics--kotlin--easy]]
 
 ## MOC Links
 

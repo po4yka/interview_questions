@@ -1,7 +1,7 @@
 ---
 id: kotlin-245
 title: "Data classes in Kotlin: features, limitations, and best practices / Data classes в Kotlin"
-aliases: [Data Classes Kotlin, Data classes в Kotlin]
+aliases: [Data Classes Kotlin, Data classes Kotlin]
 topic: kotlin
 difficulty: medium
 original_language: en
@@ -9,15 +9,31 @@ language_tags: [en, ru]
 question_kind: theory
 status: draft
 created: "2025-10-12"
-updated: "2025-10-31"
+updated: "2025-11-09"
 tags: ["classes", "data-class", "difficulty/medium", "kotlin-features", "kotlin"]
 description: "Comprehensive guide to Kotlin data classes covering generated methods, copy(), componentN(), destructuring, limitations, and when to use them"
 moc: moc-kotlin
-related: [c-kotlin-features, c-equality]
+related: [c-kotlin-features, c-equality, q-sealed-class-sealed-interface--kotlin--medium]
 subtopics: [data-classes]
 ---
 
-# Data Classes in Kotlin: Features, Limitations, and Best Practices
+# Вопрос
+
+Что такое data классы в Kotlin, какие методы для них автоматически генерируются, как работают `copy()` и `componentN()`/деструктуризация, какие есть ограничения и лучшие практики использования?
+
+# Question
+
+What are data classes in Kotlin, what methods are automatically generated for them, how do `copy()` and `componentN()`/destructuring work, what are their limitations, and what are the best practices for using them?
+
+## Ответ
+
+Ниже приведено подробное пояснение с примерами (английские примеры кода идентичны для обеих языковых секций).
+
+## Answer
+
+Below is a detailed explanation with examples (code samples are shared between both language sections).
+
+---
 
 ## English
 
@@ -27,7 +43,7 @@ Data classes are one of Kotlin's most powerful features for representing data. T
 
 ### Solution
 
-A **data class** in Kotlin is a class whose primary purpose is to hold data. The compiler automatically generates `equals()`, `hashCode()`, `toString()`, `copy()`, and `componentN()` functions.
+A `data class` in [[c-kotlin]] is a class whose primary purpose is to hold data. The compiler automatically generates `equals()`, `hashCode()`, `toString()`, `copy()`, and `componentN()` functions.
 
 #### Basic Data Class
 
@@ -101,7 +117,7 @@ data class Product(
     val inStock: Boolean = true
 )
 
-fun copyin Examples() {
+fun copyingExamples() {
     val product = Product("1", "Laptop", 999.99, true)
 
     // Copy with single property change
@@ -208,6 +224,10 @@ data class ValidData4(val id: Int) {
 class Outer {
     // inner data class InvalidData4(val value: String) // Error
 }
+
+// Cannot be enum or annotation classes
+// enum data class InvalidEnum(val id: Int) // Error
+// annotation data class InvalidAnnotation // Error
 ```
 
 #### Properties in Primary Constructor Vs Body
@@ -241,6 +261,7 @@ fun demonstratePropertyDifference() {
 
 ```kotlin
 // Limitation 1: Cannot inherit from data classes
+// (i.e., a data class cannot extend another data class)
 data class BaseData(val id: String)
 // data class DerivedData(val id: String, val name: String) : BaseData(id) // Error
 
@@ -260,10 +281,10 @@ data class Person(val name: String) {
 // Workaround: Put all important properties in constructor
 data class PersonFixed(val name: String, val age: Int)
 
-// Limitation 3: No control over generated methods
+// Limitation 3: Generated methods are based only on primary constructor properties
 data class Account(val id: String, val balance: Double)
 
-// Workaround: Override if needed
+// Workaround: Override generated methods if you need custom behavior
 data class AccountCustom(val id: String, val balance: Double) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -391,7 +412,7 @@ Data классы - одна из самых мощных функций Kotlin 
 
 ### Решение
 
-**Data класс** в Kotlin - это класс, основная цель которого - хранить данные. Компилятор автоматически генерирует функции `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()`.
+`Data` класс в [[c-kotlin]] - это класс, основная цель которого - хранить данные. Компилятор автоматически генерирует функции `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()`.
 
 #### Базовый Data Класс
 
@@ -572,6 +593,10 @@ data class ValidData4(val id: Int) {
 class Outer {
     // inner data class InvalidData4(val value: String) // Ошибка
 }
+
+// Не могут быть enum или annotation классами
+// enum data class InvalidEnum(val id: Int) // Ошибка
+// annotation data class InvalidAnnotation // Ошибка
 ```
 
 #### Свойства В Primary Constructor Vs Теле Класса
@@ -605,6 +630,7 @@ fun demonstratePropertyDifference() {
 
 ```kotlin
 // Ограничение 1: Нельзя наследоваться от data классов
+// (то есть data класс не может расширять другой data класс)
 data class BaseData(val id: String)
 // data class DerivedData(val id: String, val name: String) : BaseData(id) // Ошибка
 
@@ -624,10 +650,10 @@ data class Person(val name: String) {
 // Обходной путь: Поместите все важные свойства в конструктор
 data class PersonFixed(val name: String, val age: Int)
 
-// Ограничение 3: Нет контроля над генерируемыми методами
+// Ограничение 3: Генерируемые методы учитывают только свойства primary constructor
 data class Account(val id: String, val balance: Double)
 
-// Обходной путь: Переопределите при необходимости
+// Обходной путь: Переопределяйте генерируемые методы при необходимости
 data class AccountCustom(val id: String, val balance: Double) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -747,40 +773,66 @@ object Loading : Result<Nothing>()
 
 ### Краткое Резюме
 
-**Data классы** автоматически генерируют:
+`Data` классы автоматически генерируют:
 - `equals()` - структурное сравнение
 - `hashCode()` - согласованный с equals
 - `toString()` - строковое представление
 - `copy()` - создание копий с изменениями
 - `componentN()` - деструктуризация
 
-**Требования:**
+Требования:
 - Минимум один параметр в primary constructor
 - Все параметры должны быть `val` или `var`
-- Не могут быть abstract, open, sealed, или inner
+- Не могут быть abstract, open, sealed, inner, enum или annotation классами
 
-**Используйте для:**
-- DTOs и API responses
-- Value objects
+Используйте для:
+- DTO и API ответов
+- Value объектов
 - Конфигурационных объектов
 - Состояний UI
 - Сущностей базы данных
 
-**Избегайте:**
+Избегайте:
 - Помещения бизнес-логики в data классы
-- Изменяемых свойств (используйте val)
+- Избыточно изменяемых свойств (предпочитайте `val`)
 - Наследования между data классами
+
+### Summary
+
+`Data` classes automatically generate:
+- `equals()` - structural equality based on primary constructor properties
+- `hashCode()` - consistent with `equals()`
+- `toString()` - readable string representation
+- `copy()` - creating modified copies
+- `componentN()` - destructuring support
+
+Requirements:
+- At least one parameter in the primary constructor
+- All primary constructor parameters must be `val` or `var`
+- Cannot be `abstract`, `open`, `sealed`, `inner`, `enum`, or `annotation` classes
+
+Use data classes for:
+- DTOs and API responses
+- Value objects
+- Configuration objects
+- UI state representations
+- Database entities
+
+Avoid:
+- Putting business logic into data classes
+- Excessive mutability (prefer `val`)
+- Inheritance hierarchies between data classes
 
 ---
 
 ## Follow-ups
 
 1. Why can't data classes be open or abstract?
-2. How does copy() handle deep copying of nested objects?
+2. How does `copy()` handle deep copying of nested objects?
 3. What's the performance impact of using data classes vs regular classes?
 4. Can data classes implement interfaces?
 5. How do data classes work with serialization libraries?
-6. What happens if you override equals() but not hashCode()?
+6. What happens if you override `equals()` but not `hashCode()` in a data class?
 7. Can data classes have generic type parameters?
 8. How do data classes compare to Java records?
 

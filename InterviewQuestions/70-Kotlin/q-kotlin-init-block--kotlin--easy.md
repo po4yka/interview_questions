@@ -1,28 +1,28 @@
 ---
 id: kotlin-001
 title: "Init Block in Kotlin / Блок init в Kotlin"
-aliases: ["Init Block in Kotlin, Блок init в Kotlin"]
+aliases: ["Init Block in Kotlin", "Блок init в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [class-initialization, constructors, init-block]
+subtopics: [constructors, initialization, init-block]
 question_kind: theory
 difficulty: easy
 
 # Language & provenance
 original_language: en
 language_tags: [en, ru]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
+source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-constructors--kotlin--easy, q-repeatonlifecycle-android--kotlin--medium, q-statein-sharein-flow--kotlin--medium]
+related: [c-kotlin, q-flowon-operator-context-switching--kotlin--hard, q-kotlin-constructors--kotlin--easy, q-repeatonlifecycle-android--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-18
+updated: 2025-11-09
 
 tags: [constructors, difficulty/easy, init-block, initialization, kotlin]
 ---
@@ -33,16 +33,17 @@ tags: [constructors, difficulty/easy, init-block, initialization, kotlin]
 
 # Question (EN)
 > What is an init block in Kotlin?
+
 ## Ответ (RU)
 
-Класс в Kotlin может иметь **первичный конструктор** и один или несколько **вторичных конструкторов**. Первичный конструктор не может содержать никакого кода. Код инициализации можно поместить в **блоки инициализации**, которые обозначаются ключевым словом `init`.
+Класс в Kotlin (см. [[c-kotlin]]) может иметь **первичный конструктор** и один или несколько **вторичных конструкторов**. Первичный конструктор не может содержать никакого исполняемого кода в своей декларации. Код инициализации можно поместить в **блоки инициализации**, которые обозначаются ключевым словом `init`.
 
 ### Ключевые Моменты
 
-1. **Код в блоках инициализации фактически становится частью первичного конструктора** - Блок init выполняется как часть инициализации объекта
-2. **Делегирование к первичному конструктору происходит как первый оператор** - Даже во вторичных конструкторах блоки init выполняются первыми
-3. **Блоки инициализации выполняются в том порядке, в котором они появляются** - Вы можете иметь несколько блоков init
-4. **Блоки init выполняются, даже если нет первичного конструктора** - Делегирование происходит неявно
+1. **Код в блоках инициализации фактически становится частью первичного конструктора** — блоки `init` выполняются как часть инициализации объекта сразу после инициализации параметров и свойств первичного конструктора.
+2. **Во вторичных конструкторах сначала выполняется делегирование, затем код init** — каждый вторичный конструктор обязан делегировать к первичному (или другому вторичному); после делегирования выполняются инициализаторы свойств и блоки `init`, а потом уже тело вторичного конструктора.
+3. **Блоки инициализации и инициализаторы свойств выполняются в порядке появления** — можно объявлять несколько блоков `init`; они выполняются в одном общем порядке с инициализаторами свойств, в соответствии с их текстовым расположением в теле класса.
+4. **Блоки init можно использовать даже без явного первичного конструктора** — если первичный конструктор не указан явно, используется неявный конструктор по умолчанию, и блоки `init` все равно выполняются при создании экземпляра.
 
 ### Базовый Пример
 
@@ -177,20 +178,20 @@ class Configuration(val env: String) {
 }
 ```
 
-**Краткое содержание**: Блоки init — это специальные блоки кода с ключевым словом `init`, которые выполняются во время инициализации объекта. Они выполняются в порядке появления в теле класса, становятся частью первичного конструктора и выполняются перед телами вторичных конструкторов. Они полезны для валидации, сложной логики инициализации и вычисляемых свойств.
+**Краткое содержание**: Блоки init — это специальные блоки кода с ключевым словом `init`, которые выполняются во время инициализации объекта. Они выполняются в порядке появления в теле класса совместно с инициализаторами свойств, логически являются частью первичного конструктора и выполняются до выполнения тел вторичных конструкторов.
 
 ---
 
 ## Answer (EN)
 
-A class in Kotlin can have a **primary constructor** and one or more **secondary constructors**. The primary constructor cannot contain any code. Initialization code can be placed in **initializer blocks**, which are prefixed with the `init` keyword.
+A class in Kotlin (see [[c-kotlin]]) can have a **primary constructor** and one or more **secondary constructors**. The primary constructor cannot contain executable code in its declaration. Initialization code can be placed in **initializer blocks**, which are prefixed with the `init` keyword.
 
 ### Key Points
 
-1. **Code in initializer blocks effectively becomes part of the primary constructor** - The init block runs as part of object initialization
-2. **Delegation to the primary constructor happens as the first statement** - Even in secondary constructors, init blocks run first
-3. **Initializer blocks are executed in the same order as they appear** - You can have multiple init blocks
-4. **Init blocks execute even if there's no primary constructor** - The delegation happens implicitly
+1. **Code in initializer blocks effectively becomes part of the primary constructor** — init blocks run as part of object initialization, immediately after initializing primary constructor parameters and properties.
+2. **In secondary constructors, delegation runs first, then init and property initialization, then the body** — every secondary constructor must delegate to the primary (or another secondary); after that delegation, property initializers and init blocks execute, followed by the secondary constructor body.
+3. **Initializer blocks and property initializers are executed in the order they appear** — you can define multiple init blocks; they execute in a single sequence interleaved with property initializers, according to their textual order in the class body.
+4. **Init blocks can be used even without an explicit primary constructor** — if a primary constructor is not explicitly declared, a default one is implied, and init blocks still execute on each instance creation.
 
 ### Basic Example
 
@@ -325,7 +326,7 @@ class Configuration(val env: String) {
 }
 ```
 
-**English Summary**: Init blocks are special code blocks prefixed with the `init` keyword that execute during object initialization. They run in the order they appear in the class body, become part of the primary constructor, and execute before secondary constructor bodies. They're useful for validation, complex initialization logic, and computed properties.
+**English Summary**: Init blocks are special code blocks prefixed with the `init` keyword that execute during object initialization. They run in the order they appear in the class body together with property initializers, conceptually form part of the primary constructor's initialization logic, and execute before any secondary constructor body. They're useful for validation, complex initialization logic, and computed properties.
 
 ## Follow-ups
 

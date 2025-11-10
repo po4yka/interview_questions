@@ -2,7 +2,7 @@
 id: lang-048
 title: "Kotlin Reference Equality Operator / Оператор ссылочного равенства в Kotlin"
 aliases: [Kotlin Reference Equality Operator, Оператор ссылочного равенства в Kotlin]
-topic: programming-languages
+topic: kotlin
 subtopics: [operators, type-system]
 question_kind: theory
 difficulty: easy
@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-data-class-detailed--kotlin--medium, q-destructuring-declarations--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium]
+related: [c-kotlin, c-equality, q-data-class-detailed--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/easy, equality, operators, programming-languages, reference-equality, structural-equality]
 ---
-# Какой Оператор Используется Для Проверки Равенства Ссылок В Kotlin?
-
 # Вопрос (RU)
 > Какой оператор используется для проверки равенства ссылок в Kotlin?
 
@@ -29,6 +27,8 @@ tags: [difficulty/easy, equality, operators, programming-languages, reference-eq
 
 В Kotlin для проверки **ссылочного равенства** используется оператор **`===`** (также называемого референтным равенством). Он проверяет, указывают ли две переменные на один и тот же объект в памяти.
 
+См. также: [[c-kotlin]], [[c-equality]]
+
 **Сравнение: `==` vs `===`**
 
 ```kotlin
@@ -36,11 +36,13 @@ val a = "Hello"
 val b = "Hello"
 val c = a
 
-// Структурное равенство (==) - проверяет содержимое
+// Структурное равенство (==) - проверяет содержимое (null-safe вызов equals)
 a == b   // true (одинаковое содержимое)
 
 // Референтное равенство (===) - проверяет, один ли это объект
-a === b  // true (string pool - один объект)
+// Важно: результат a === b не гарантирован спецификацией Kotlin и зависит от платформы/реализации
+a === b  // может быть true или false
+
 a === c  // true (c ссылается на a)
 
 val d = String(charArrayOf('H', 'e', 'l', 'l', 'o'))
@@ -65,19 +67,21 @@ user1 === user3  // true (одна и та же ссылка)
 
 | Оператор | Назначение | Null-safe |
 |----------|---------|-----------|
-| `==` | Структурное равенство (вызывает `equals()`) | Да |
+| `==` | Структурное равенство (компилируется в null-safe вызов `equals()`) | Да |
 | `===` | Референтное равенство (один объект) | Да |
 | `!=` | Структурное неравенство | Да |
 | `!==` | Референтное неравенство | Да |
 
 **Kotlin vs Java:**
-- Kotlin `==` ≈ Java `.equals()`
+- Kotlin `==` ≈ Java `.equals()` (c null-safe оберткой: `a?.equals(b) ?: (b == null)`)
 - Kotlin `===` ≈ Java `==`
-- `==` в Kotlin является null-safe, `==` в Java проверяет ссылки
+- `==` в Kotlin является null-safe, `==` в Java для ссылочных типов проверяет ссылки и не является null-safe в том же смысле (возможен `NullPointerException` при вызове `.equals` напрямую).
 
 ## Answer (EN)
 
 In Kotlin, the **`===` operator** is used to check **reference equality** (also called referential equality). It checks whether two variables point to the same object in memory.
+
+See also: [[c-kotlin]], [[c-equality]]
 
 **Comparison: `==` vs `===`**
 
@@ -86,11 +90,13 @@ val a = "Hello"
 val b = "Hello"
 val c = a
 
-// Structural equality (==) - checks content
+// Structural equality (==) - checks content (null-safe equals)
 a == b   // true (same content)
 
 // Referential equality (===) - checks if same object
-a === b  // true (string pool - same object)
+// Important: the result of a === b is not guaranteed by Kotlin spec and depends on platform/implementation
+a === b  // may be true or false
+
 a === c  // true (c references a)
 
 val d = String(charArrayOf('H', 'e', 'l', 'l', 'o'))
@@ -115,17 +121,33 @@ user1 === user3  // true (same reference)
 
 | Operator | Purpose | Null-safe |
 |----------|---------|-----------|
-| `==` | Structural equality (calls `equals()`) | Yes |
+| `==` | Structural equality (compiled to a null-safe `equals()` call) | Yes |
 | `===` | Referential equality (same object) | Yes |
 | `!=` | Structural inequality | Yes |
 | `!==` | Referential inequality | Yes |
 
 **Kotlin vs Java:**
-- Kotlin `==` ≈ Java `.equals()`
+- Kotlin `==` ≈ Java `.equals()` (with null-safe wrapper: `a?.equals(b) ?: (b == null)`)
 - Kotlin `===` ≈ Java `==`
-- Kotlin's `==` is null-safe, Java's `==` checks references
+- Kotlin's `==` is null-safe; Java's `==` for reference types checks references and using `.equals` directly can throw `NullPointerException` when the receiver is null.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия `===` от проверки в Java оператором `==`?
+- В каких случаях на практике следует использовать `===`?
+- Какие распространенные ошибки и подводные камни связаны с использованием `===`?
+
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-data-class-detailed--kotlin--medium]]
+- [[q-destructuring-declarations--kotlin--medium]]
+- [[q-mutex-synchronized-coroutines--kotlin--medium]]
 
 ## Follow-ups
 

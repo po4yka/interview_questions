@@ -2,7 +2,7 @@
 id: lang-059
 title: "Kotlin Generic Function Syntax / Синтаксис обобщенных функций Kotlin"
 aliases: [Kotlin Generic Function Syntax, Синтаксис обобщенных функций Kotlin]
-topic: programming-languages
+topic: kotlin
 subtopics: [generics, type-system]
 question_kind: theory
 difficulty: easy
@@ -10,20 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-sealed-classes-features--programming-languages--medium, q-retrofit-coroutines-best-practices--kotlin--medium]
+related: [c-kotlin, q-kotlin-sealed-classes-features--programming-languages--medium, q-retrofit-coroutines-best-practices--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [difficulty/easy, functions, generics, programming-languages, syntax, type-parameters]
+updated: 2025-11-09
+tags: [difficulty/easy, functions, generics, kotlin, syntax, type-parameters]
 ---
-# Какой Синтаксис Используется Для Объявления Обобщенной Функции В Kotlin?
-
 # Вопрос (RU)
 > Какой синтаксис используется для объявления обобщенной функции в Kotlin?
-
----
-
-# Question (EN)
-> What syntax is used to declare a generic function in Kotlin?
 
 ## Ответ (RU)
 
@@ -60,7 +53,12 @@ val name = identity("Hello")     // T выводится как String
 
 **Размещение параметра типа:**
 - Перед именем функции: `fun <T> name()`
-- Перед extension receiver: `fun <T> T.extension()`
+- Перед приемником расширения: `fun <T> T.extension()`
+
+---
+
+# Question (EN)
+> What syntax is used to declare a generic function in Kotlin?
 
 ## Answer (EN)
 
@@ -101,6 +99,24 @@ val name = identity("Hello")     // T inferred as String
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого синтаксиса от Java?
+- Когда вы бы использовали обобщенные функции на практике?
+- Каковы распространенные ошибки и подводные камни при использовании обобщений?
+
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-sealed-classes-features--programming-languages--medium]]
+- [[q-retrofit-coroutines-best-practices--kotlin--medium]]
+
+---
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
@@ -110,9 +126,9 @@ val name = identity("Hello")     // T inferred as String
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
 
 ## Related Questions
 
--
 - [[q-kotlin-sealed-classes-features--programming-languages--medium]]
 - [[q-retrofit-coroutines-best-practices--kotlin--medium]]

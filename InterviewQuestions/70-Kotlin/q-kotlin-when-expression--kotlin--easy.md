@@ -10,20 +10,18 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-cancellation-mechanisms--kotlin--medium, q-reified-type-parameters--kotlin--medium]
+related: [c-kotlin, q-coroutine-cancellation-mechanisms--kotlin--medium, q-reified-type-parameters--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [control-flow, difficulty/easy, kotlin, pattern-matching, syntax, when]
 ---
-# Как Использовать when В Kotlin Вместо Switch?
-
 # Вопрос (RU)
-> Как использовать when в Kotlin вместо switch?
+> Как использовать `when` в Kotlin вместо `switch`?
 
 ---
 
 # Question (EN)
-> How to use when in Kotlin instead of switch?
+> How to use `when` in Kotlin instead of `switch`?
 
 ## Ответ (RU)
 
@@ -102,6 +100,8 @@ val result = when (val x = getValue()) {
 - Может проверять любое условие, не только константы
 - Поддерживает диапазоны и проверки типов
 - Исчерпывающая проверка с sealed классами
+
+См. также: [[c-kotlin]]
 
 ## Answer (EN)
 
@@ -183,18 +183,32 @@ val result = when (val x = getValue()) {
 
 ---
 
+## Последующие вопросы (RU)
+
+- В чем ключевые отличия `when` от `switch` в Java?
+- В каких практических случаях вы бы использовали `when`?
+- Какие типичные ошибки при использовании `when` стоит избегать?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
+## Связанные вопросы (RU)
+
+- [[q-reified-type-parameters--kotlin--medium]]
+- [[q-coroutine-cancellation-mechanisms--kotlin--medium]]
+
 ## Related Questions
 
--
 - [[q-reified-type-parameters--kotlin--medium]]
 - [[q-coroutine-cancellation-mechanisms--kotlin--medium]]

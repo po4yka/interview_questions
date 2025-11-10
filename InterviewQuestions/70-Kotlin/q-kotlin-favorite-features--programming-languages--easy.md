@@ -2,7 +2,7 @@
 id: lang-079
 title: "Kotlin Favorite Features / Любимые возможности Kotlin"
 aliases: [Kotlin Favorite Features, Любимые возможности Kotlin]
-topic: programming-languages
+topic: kotlin
 subtopics: [coroutines, extensions, null-safety]
 question_kind: theory
 difficulty: easy
@@ -10,10 +10,10 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-class-initialization-order--kotlin--medium, q-fan-in-fan-out-channels--kotlin--hard, q-flow-operators-map-filter--kotlin--medium]
+related: [c-kotlin, c-kotlin-features, q-class-initialization-order--kotlin--medium, q-fan-in-fan-out-channels--kotlin--hard, q-flow-operators-map-filter--kotlin--medium]
 created: 2025-10-15
 updated: 2025-10-31
-tags: [coroutines, difficulty/easy, extensions, features, null-safety, overview, programming-languages]
+tags: [coroutines, difficulty/easy, extensions, features, null-safety, overview, kotlin]
 ---
 # Расскажи Про Три Любимых Фичи В Kotlin
 
@@ -59,6 +59,8 @@ suspend fun fetchData() {
 - **Null Safety**: Предотвращает большинство runtime ошибок
 - **Корутины**: Значительно упрощает асинхронное программирование
 
+См. также: [[c-kotlin]], [[c-kotlin-features]], [[c-coroutines]]
+
 ## Answer (EN)
 
 Three favorite Kotlin features:
@@ -93,7 +95,15 @@ suspend fun fetchData() {
 - **Null Safety**: Prevents most runtime crashes
 - **Coroutines**: Simplifies async programming dramatically
 
+See also: [[c-kotlin]], [[c-kotlin-features]], [[c-coroutines]]
+
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этих возможностей от Java?
+- Когда бы ты использовал каждую из этих возможностей на практике?
+- Каковы распространенные подводные камни и ошибки, которых стоит избегать?
 
 ## Follow-ups
 
@@ -101,9 +111,19 @@ suspend fun fetchData() {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-flow-operators-map-filter--kotlin--medium]]
+- [[q-class-initialization-order--kotlin--medium]]
+- [[q-fan-in-fan-out-channels--kotlin--hard]]
 
 ## Related Questions
 

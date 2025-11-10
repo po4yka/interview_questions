@@ -1,7 +1,7 @@
 ---
 id: kotlin-154
 title: "Inline Function Limitations / Ограничения inline функций"
-aliases: [Function, Inline, Limitations]
+aliases: [Kotlin inline function limitations, Inline function restrictions Kotlin, Ограничения inline функций Kotlin]
 topic: kotlin
 subtopics: [coroutines, delegation, flow]
 question_kind: theory
@@ -10,22 +10,373 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-context-elements--kotlin--hard, q-testing-stateflow-sharedflow--kotlin--medium]
+related: [c-kotlin, c-kotlin-features, q-coroutine-context-elements--kotlin--hard, q-testing-stateflow-sharedflow--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/medium]
 ---
 
-# Когда Нельзя Использовать Inline Функции?
+# Вопрос (RU)
+> Когда нельзя или нежелательно использовать inline-функции в Kotlin, и какие ограничения при этом действуют?
 
-**English**: When can't you use inline functions?
+# Question (EN)
+> When can't or shouldn't you use inline functions in Kotlin, and what limitations apply?
+
+## Ответ (RU)
+
+Хотя `inline` функции могут улучшать производительность (особенно для небольших higher-order функций), есть случаи, когда их использование невозможно, ограничено или нежелательно.
+
+### 1. Нельзя сохранять лямбду в переменную (без `noinline`)
+
+Для параметров `inline`-функции, которые инлайнатся (без модификатора `noinline`), компилятор ожидает использование только в формах, совместимых с инлайнингом. Нельзя сохранять такую лямбду для отложенного выполнения.
+
+```kotlin
+// - ОШИБКА КОМПИЛЯЦИИ
+inline fun processData(callback: () -> Unit) {
+    val storedCallback = callback  // ERROR: Illegal usage of inline-parameter
+    // Нельзя сохранить callback для последующего использования
+}
+
+// - ОШИБКА КОМПИЛЯЦИИ (та же причина)
+inline fun deferExecution(action: () -> Unit) {
+    val deferredAction = action    // ERROR
+    Handler(Looper.getMainLooper()).post(deferredAction)
+}
+
+//  ПРАВИЛЬНО — используйте noinline, если нужно сохранить/передать лямбду
+inline fun processData(noinline callback: () -> Unit) {
+    val storedCallback = callback  // OK
+    Handler(Looper.getMainLooper()).post(storedCallback)
+}
+
+//  ПРАВИЛЬНО — выполнять inline-лямбду сразу
+inline fun processDataNow(callback: () -> Unit) {
+    callback()  // OK — прямой вызов
+}
+```
+
+### 2. Нельзя передавать лямбду в обычную (non-inline) функцию (без `noinline`)
+
+Нельзя передать инлайновый параметр (лямбду без `noinline`) туда, где от него ожидается значение-функция, которое может быть сохранено или использовано позже, например — в обычную функцию.
+
+```kotlin
+// - ОШИБКА КОМПИЛЯЦИИ
+inline fun withLogging(action: () -> Unit) {
+    log("Starting")
+    executeInBackground(action)  // ERROR: Illegal usage of inline-parameter
+    log("Finished")
+}
+
+fun executeInBackground(task: () -> Unit) {
+    Thread { task() }.start()
+}
+
+//  ПРАВИЛЬНО — noinline разрешает передавать параметр как значение
+inline fun withLogging(noinline action: () -> Unit) {
+    log("Starting")
+    executeInBackground(action)  // OK
+    log("Finished")
+}
+
+//  АЛЬТЕРНАТИВА — не использовать inline
+fun withLogging(action: () -> Unit) {
+    log("Starting")
+    executeInBackground(action)
+    log("Finished")
+}
+```
+
+### 3. Рекурсивные функции не могут быть inline
+
+`inline`-функции не могут быть напрямую рекурсивными: компилятор выдаст ошибку, так как наивный инлайнинг привёл бы к бесконечному разворачиванию.
+
+```kotlin
+// - ОШИБКА КОМПИЛЯЦИИ
+inline fun factorial(n: Int): Int {  // ERROR: Inline function cannot be recursive
+    return if (n <= 1) 1 else n * factorial(n - 1)
+}
+
+//  ПРАВИЛЬНО — убрать inline
+fun factorial(n: Int): Int {
+    return if (n <= 1) 1 else n * factorial(n - 1)
+}
+
+//  АЛЬТЕРНАТИВА — tailrec вместо inline (другая оптимизация)
+tailrec fun factorial(n: Int, acc: Int = 1): Int {
+    return if (n <= 1) acc else factorial(n - 1, n * acc)
+}
+```
+
+### 4. Очень большие inline-функции — рост размера кода
+
+Тело `inline`-функции копируется в каждую точку вызова. Инлайнинг большой функции приводит к раздуванию байткода и может ухудшать работу кеша инструкций.
+
+```kotlin
+// - ПЛОХАЯ ПРАКТИКА — большая inline-функция
+inline fun processUserData(user: User, callback: (Result) -> Unit) {
+    // 100+ строк кода
+    val validatedUser = validateUser(user)
+    val enrichedUser = enrichUserData(validatedUser)
+    val processedUser = applyBusinessLogic(enrichedUser)
+    val savedUser = saveToDatabase(processedUser)
+    val notificationSent = sendNotification(savedUser)
+    val analyticsLogged = logAnalytics(savedUser)
+    // ... ещё много логики
+
+    callback(Result.Success(savedUser))
+}
+
+// Каждый вызов дублирует тело в байткоде.
+processUserData(user1) { }
+processUserData(user2) { }
+processUserData(user3) { }
+
+//  РЕКОМЕНДАЦИЯ — большие функции обычно не должны быть inline
+fun processUserData(user: User, callback: (Result) -> Unit) {
+    // Код в одном месте; все вызовы ссылаются на эту функцию.
+}
+```
+
+Рекомендация: использовать `inline` для маленьких функций и утилит высшего порядка; избегать для больших тел.
+
+### 5. Часто вызываемые функции: баланс выгод и размера
+
+Для очень маленьких функций инлайнинг, даже при частых вызовах, может быть полезен (меньше накладных расходов вызова, лучше оптимизации). Для нетривиальных тел при множестве вызовов инлайнинг может излишне раздувать код.
+
+```kotlin
+// Пример, где inline разумен (крошечный wrapper)
+inline fun logInline(message: String) {
+    println("[${System.currentTimeMillis()}] $message")
+}
+
+// Если тело становится больше/сложнее и вызывается часто,
+// лучше обычная функция, чтобы избежать дублирования кода.
+fun log(message: String) {
+    println("[${System.currentTimeMillis()}] $message")
+}
+```
+
+Ключевая мысль: «часто вызывается» само по себе не аргумент против или за `inline`; нужно учитывать размер тела, избегание аллокаций и накладные расходы вызова.
+
+### 6. `reified` без реальной необходимости
+
+`reified` тип-параметры требуют `inline`. Но их использование добавляет ограничения (например, вызовы только из Kotlin, инлайнинг в код клиента). Не стоит добавлять `reified`/`inline`, если не нужен доступ к типу в runtime.
+
+```kotlin
+// - СОМНИТЕЛЬНО — создание инстанса через reflection
+inline fun <reified T> createInstance(): T {
+    return T::class.java.getDeclaredConstructor().newInstance()
+}
+
+// Используем reified, когда реально нужен T в runtime
+inline fun <reified T> Gson.fromJson(json: String): T {
+    return fromJson(json, T::class.java)
+}
+
+// Пример с Android Activity
+inline fun <reified T : Activity> Context.startActivity() {
+    val intent = Intent(this, T::class.java)
+    startActivity(intent)
+}
+
+// Использование
+context.startActivity<MainActivity>()
+```
+
+### 7. Публичный API библиотеки
+
+`inline`-функции встраиваются в байткод клиента. Изменение реализации/сигнатуры такой функции влияет на бинарную совместимость иначе, чем для обычных функций, и может ломать клиентов, собранных против старой версии.
+
+```kotlin
+// - РИСКОВАНО — inline в публичном API библиотеки
+// версия 1.0
+public inline fun processRequest(url: String, callback: (Response) -> Unit) {
+    // Реализация v1.0
+    val response = httpClient.get(url)
+    callback(response)
+}
+
+// версия 1.1
+public inline fun processRequest(url: String, callback: (Response) -> Unit) {
+    // Новая реализация v1.1
+    val response = newHttpClient.get(url)
+    callback(response)
+}
+
+// Приложения, собранные с 1.0, продолжают содержать старое inlined-тело,
+// пока не будут пересобраны против новой версии.
+
+//  БОЛЕЕ БЕЗОПАСНО — обычная функция в публичном API
+public fun processRequest(url: String, callback: (Response) -> Unit) {
+    val response = httpClient.get(url)
+    callback(response)
+}
+
+// Обновление библиотеки меняет поведение без необходимости пересборки клиента.
+```
+
+### 8. Public inline функции и менее видимые зависимости
+
+Так как тело `public inline` функции раскрывается в коде вызвавшей стороны, оно не может использовать сущности с меньшей видимостью (`private`, `internal` из другого модуля). Иначе возникнет ошибка компиляции.
+
+```kotlin
+class UserManager {
+    private val cache = mutableMapOf<Int, User>()
+
+    public inline fun getUser(id: Int): User? {
+        // ERROR: Public-API inline function cannot access private property 'cache'
+        return cache[id]
+    }
+}
+
+//  ВАРИАНТ 1 — убрать inline, оставить private
+class UserManager1 {
+    private val cache = mutableMapOf<Int, User>()
+
+    fun getUser(id: Int): User? {
+        return cache[id]
+    }
+}
+
+//  ВАРИАНТ 2 — оставить inline, выровнять видимость
+class UserManager2 {
+    internal val cache = mutableMapOf<Int, User>()
+
+    internal inline fun getUser(id: Int): User? {
+        return cache[id]  // OK: обе сущности internal в одном модуле
+    }
+}
+```
+
+### 9. Нелокальные возвраты: поведенческая ловушка
+
+`inline`-функции позволяют нелокальные `return` из лямбда-параметров (если они не помечены `crossinline`). Это легально, но может запутывать логику.
+
+```kotlin
+inline fun processItems(items: List<String>) {
+    items.forEach { item ->
+        if (item.isEmpty()) {
+            return  // Нелокальный return из processItems, а не из forEach
+        }
+        println(item)
+    }
+}
+
+fun caller() {
+    processItems(listOf("a", "", "c"))
+    println("After processItems")  // НЕ выполнится, если встретится пустая строка
+}
+
+//  АЛЬТЕРНАТИВА — только локальный возврат
+fun processItemsSafe(items: List<String>) {
+    items.forEach { item ->
+        if (item.isEmpty()) {
+            return@forEach  // Локальный return только из forEach
+        }
+        println(item)
+    }
+}
+```
+
+Чтобы запретить нелокальные возвраты для конкретного параметра, используйте `crossinline`.
+
+### 10. Когда производительность не критична
+
+Инлайнинг уменьшает накладные расходы вызова и может убрать аллокации лямбд, но увеличивает размер кода и раскрывает реализацию. Избегайте `inline`, если выигрыша почти нет.
+
+```kotlin
+// - НЕОБЯЗАТЕЛЬНО — inline почти ничего не даёт
+inline fun formatUserNameInline(firstName: String, lastName: String): String {
+    return "$firstName $lastName"
+}
+
+// Предпочтительнее обычная функция
+fun formatUserName(firstName: String, lastName: String): String {
+    return "$firstName $lastName"
+}
+
+// Inline особенно полезен, когда:
+// 1. Функция маленькая.
+// 2. Это higher-order функция, и можно избежать аллокаций лямбд.
+// 3. Нужны reified тип-параметры.
+```
+
+### Когда использовать inline
+
+```kotlin
+// Маленькие утилиты высшего порядка
+inline fun <T> measureTime(block: () -> T): Pair<T, Long> {
+    val start = System.currentTimeMillis()
+    val result = block()
+    val time = System.currentTimeMillis() - start
+    return result to time
+}
+
+// Inline с reified типом
+inline fun <reified T> Intent.getParcelableExtraCompat(key: String): T? {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        getParcelableExtra(key, T::class.java)
+    } else {
+        @Suppress("DEPRECATION")
+        getParcelableExtra(key) as? T
+    }
+}
+
+// Небольшая утилита с лямбдой
+inline fun <R> synchronized(lock: Any, block: () -> R): R {
+    return kotlin.synchronized(lock) {
+        block()
+    }
+}
+
+// DSL builder
+inline fun buildUser(init: UserBuilder.() -> Unit): User {
+    val builder = UserBuilder()
+    builder.init()
+    return builder.build()
+}
+```
+
+### Ключевые правила
+
+| Ситуация | Можно inline? | Причина |
+|----------|---------------|---------|
+| Маленькая функция с лямбдой | Да | Снижение накладных расходов вызова и аллокаций |
+| Большая функция (много строк) | Обычно нет | Риск раздувания кода |
+| Рекурсивная функция | Нет | Прямой inline-рекурс не разрешён |
+| Функция с `reified` типом | Да (inline обязателен) | Нужен доступ к типу `T` во время выполнения |
+| Публичный API библиотеки | Осторожно | Вопросы бинарной совместимости и обновлений |
+| Хранение/передача лямбды как значения | Использовать `noinline` | Нужна обычная семантика значения |
+| Часто вызываемая функция | Зависит | Баланс между размером и скоростью |
+
+### Использование `noinline` и `crossinline`
+
+```kotlin
+// noinline — отключает инлайнинг для параметра, чтобы его можно было хранить/передавать
+// crossinline — запрещает нелокальные return из этой лямбды
+inline fun transaction(
+    noinline onError: (Exception) -> Unit,
+    crossinline onSuccess: () -> Unit
+) {
+    try {
+        db.beginTransaction()
+        onSuccess()
+        db.setTransactionSuccessful()
+    } catch (e: Exception) {
+        errorHandler.handle(onError)  // onError можно сохранить/передать
+    } finally {
+        db.endTransaction()
+    }
+}
+```
 
 ## Answer (EN)
-Although `inline` functions improve performance through code inlining, there are cases when their use is impossible, undesirable, or even harmful.
+
+Although `inline` functions can improve performance (especially for small higher-order functions), there are cases when their use is impossible, restricted, or undesirable.
 
 ### 1. Cannot Store Lambda in Variable
 
-Inline function embeds lambda code at call site, so you cannot store lambda for deferred execution.
+For parameters of an `inline` function that are inlined (i.e., not marked `noinline`), the compiler expects them to be used only in ways compatible with inlining. You cannot store such a lambda for deferred execution.
 
 ```kotlin
 // - COMPILATION ERROR
@@ -34,13 +385,13 @@ inline fun processData(callback: () -> Unit) {
     // Cannot store callback for later use
 }
 
-// - ERROR
+// - COMPILATION ERROR (same reason)
 inline fun deferExecution(action: () -> Unit) {
-    val deferredAction = action
-    Handler(Looper.getMainLooper()).post(deferredAction)  // ERROR
+    val deferredAction = action    // ERROR
+    Handler(Looper.getMainLooper()).post(deferredAction)
 }
 
-//  CORRECT - use noinline
+//  CORRECT - use noinline when you need to store/pass lambda
 inline fun processData(noinline callback: () -> Unit) {
     val storedCallback = callback  // OK
     Handler(Looper.getMainLooper()).post(storedCallback)
@@ -52,13 +403,15 @@ inline fun processDataNow(callback: () -> Unit) {
 }
 ```
 
-### 2. Cannot Pass Lambda to Regular (non-inline) Function
+### 2. Cannot Pass Lambda to Regular (non-inline) Function (Without noinline)
+
+You cannot pass an inlined function parameter (higher-order parameter without `noinline`) where it would need to be stored or treated as a regular value, such as passing it to another function that expects a function value.
 
 ```kotlin
-// - ОШИБКА КОМПИЛЯЦИИ
+// - COMPILATION ERROR
 inline fun withLogging(action: () -> Unit) {
     log("Starting")
-    executeInBackground(action)  // ERROR: Illegal usage
+    executeInBackground(action)  // ERROR: Illegal usage of inline-parameter
     log("Finished")
 }
 
@@ -66,14 +419,14 @@ fun executeInBackground(task: () -> Unit) {
     Thread { task() }.start()
 }
 
-//  ПРАВИЛЬНО - использовать noinline
+//  CORRECT - use noinline to allow passing
 inline fun withLogging(noinline action: () -> Unit) {
     log("Starting")
     executeInBackground(action)  // OK
     log("Finished")
 }
 
-//  АЛЬТЕРНАТИВА - не использовать inline
+//  ALTERNATIVE - do not use inline
 fun withLogging(action: () -> Unit) {
     log("Starting")
     executeInBackground(action)
@@ -83,28 +436,28 @@ fun withLogging(action: () -> Unit) {
 
 ### 3. Recursive Functions Cannot Be Inline
 
-Inlining a recursive function would lead to infinite code growth.
+Inline functions cannot be directly recursive: the compiler will report an error because naive inlining would lead to infinite expansion.
 
 ```kotlin
-// - ОШИБКА КОМПИЛЯЦИИ
+// - COMPILATION ERROR
 inline fun factorial(n: Int): Int {  // ERROR: Inline function cannot be recursive
     return if (n <= 1) 1 else n * factorial(n - 1)
 }
 
-//  ПРАВИЛЬНО - убрать inline
+//  CORRECT - remove inline
 fun factorial(n: Int): Int {
     return if (n <= 1) 1 else n * factorial(n - 1)
 }
 
-//  ALTERNATIVE - tailrec instead of inline
+//  ALTERNATIVE - tailrec instead of inline (different optimization)
 tailrec fun factorial(n: Int, acc: Int = 1): Int {
     return if (n <= 1) acc else factorial(n - 1, n * acc)
 }
 ```
 
-### 4. Large Functions - Code Size Increase
+### 4. Very Large Inline Functions - Code Size Increase
 
-Inline functions copy their code to every call site, which can significantly increase APK size.
+Inline functions copy their body to every call site. Inlining a large body can cause code bloat and negatively affect binary size and instruction cache.
 
 ```kotlin
 // - BAD PRACTICE - large inline function
@@ -116,141 +469,142 @@ inline fun processUserData(user: User, callback: (Result) -> Unit) {
     val savedUser = saveToDatabase(processedUser)
     val notificationSent = sendNotification(savedUser)
     val analyticsLogged = logAnalytics(savedUser)
-    // ... еще 90 строк
+    // ... another 90 lines
 
     callback(Result.Success(savedUser))
 }
 
-// Each call adds ~100 lines of code!
-processUserData(user1) { }  // +100 lines in bytecode
-processUserData(user2) { }  // +100 lines in bytecode
-processUserData(user3) { }  // +100 lines in bytecode
+// Each call duplicates the inlined body in bytecode.
+processUserData(user1) { }
+processUserData(user2) { }
+processUserData(user3) { }
 
-//  CORRECT - large functions should NOT be inline
+//  RECOMMENDED - large functions should usually NOT be inline
 fun processUserData(user: User, callback: (Result) -> Unit) {
-    // Code executes in only one place
-    // All calls reference one function
+    // Code exists in one place; all calls reference this function.
 }
 ```
 
-**Recommendation**: Use inline only for small functions (1-3 lines).
+Recommendation: Prefer inline for small functions and higher-order utilities; be careful with inlining large bodies.
 
-### 5. Functions with High Call Frequency
+### 5. Frequently Called Functions: Consider Trade-offs
+
+For very small functions, inlining even when called frequently can be beneficial (fewer call overheads, better optimizations). For non-trivial bodies, inlining at many call sites can cause code size bloat.
 
 ```kotlin
-// - ПЛОХАЯ ПРАКТИКА - inline функция вызывается очень часто
-inline fun log(message: String) {
+// Example where inline is reasonable (tiny wrapper)
+inline fun logInline(message: String) {
     println("[${System.currentTimeMillis()}] $message")
 }
 
-// Если вызывается 10,000 раз, код будет продублирован 10,000 раз
-repeat(10_000) {
-    log("Iteration $it")  // Раздутие кода!
-}
-
-//  ПРАВИЛЬНО - обычная функция
+// If the body becomes larger/complex and is called many times,
+// prefer a regular function to avoid code bloat.
 fun log(message: String) {
     println("[${System.currentTimeMillis()}] $message")
 }
 ```
 
+Key point: "frequently called" alone is not a reason to avoid inline; you must balance body size, allocation avoidance, and call overhead.
+
 ### 6. Functions with Reified Types without Necessity
 
+`reified` type parameters require `inline`. But using `reified`/`inline` adds constraints (e.g., only callable from Kotlin, inlining into client code). Avoid them when you don't actually need type information at runtime.
+
 ```kotlin
-// - ИЗБЫТОЧНО - reified без реальной необходимости
+// - QUESTIONABLE - uses reflection and deprecated/unsafe API
 inline fun <reified T> createInstance(): T {
-    // Просто создаем объект, reified не нужен
-    return T::class.java.newInstance()
+    return T::class.java.getDeclaredConstructor().newInstance()
 }
 
-//  ПРАВИЛЬНО - использовать reified только когда нужен тип в runtime
+// Use reified only when you need T at runtime, e.g. to pass T::class.java
 inline fun <reified T> Gson.fromJson(json: String): T {
-    // Reified нужен чтобы передать T::class.java в Gson
     return fromJson(json, T::class.java)
 }
 
-// Правильное использование reified
+// Correct usage with Android Activity
 inline fun <reified T : Activity> Context.startActivity() {
     val intent = Intent(this, T::class.java)
     startActivity(intent)
 }
 
-// Использование
-context.startActivity<MainActivity>()  // Без явного .java
+// Usage
+context.startActivity<MainActivity>()  // No explicit .java class literal
 ```
 
 ### 7. Public Library API
 
-Inline functions are embedded into client code, complicating library updates.
+Inline functions are inlined into client bytecode. Changing their implementation/signature affects binary compatibility differently from regular functions and may break clients compiled against old versions.
 
 ```kotlin
-// - ПЛОХАЯ ПРАКТИКА - inline в public API библиотеки
+// - RISKY - inline in public API of a library
 // library version 1.0
-inline fun processRequest(url: String, callback: (Response) -> Unit) {
-    // Реализация версии 1.0
+public inline fun processRequest(url: String, callback: (Response) -> Unit) {
+    // Implementation v1.0
     val response = httpClient.get(url)
     callback(response)
 }
 
-// Если изменить реализацию в version 1.1:
-inline fun processRequest(url: String, callback: (Response) -> Unit) {
-    // Новая реализация версии 1.1
-    val response = newHttpClient.get(url)  // Новый клиент!
+// version 1.1
+public inline fun processRequest(url: String, callback: (Response) -> Unit) {
+    // New implementation v1.1
+    val response = newHttpClient.get(url)
     callback(response)
 }
 
-// Проблема: приложения, скомпилированные с 1.0, используют СТАРЫЙ код
-// даже если обновили библиотеку до 1.1!
+// Apps compiled with 1.0 keep the old inlined body
+// until they are recompiled against the new version.
 
-//  ПРАВИЛЬНО - обычная функция в public API
-fun processRequest(url: String, callback: (Response) -> Unit) {
+//  SAFER - regular function in public API
+public fun processRequest(url: String, callback: (Response) -> Unit) {
     val response = httpClient.get(url)
     callback(response)
 }
 
-// Теперь обновление библиотеки сразу применит новую реализацию
+// Updating the library updates behavior without requiring recompilation.
 ```
 
-### 8. Functions with internal/private Dependencies
+### 8. Public Inline Functions with Non-public Dependencies
+
+Public inline functions have their bodies exposed to callers at the call site. They must not depend on declarations that are less visible than the function itself (private or internal in another module), otherwise compilation will fail.
 
 ```kotlin
-// - ОШИБКА - inline функция обращается к private полю
 class UserManager {
     private val cache = mutableMapOf<Int, User>()
 
-    inline fun getUser(id: Int): User? {
-        // ERROR: Public-API inline function cannot access non-public-API 'cache'
+    public inline fun getUser(id: Int): User? {
+        // ERROR: Public-API inline function cannot access private property 'cache'
         return cache[id]
     }
 }
 
-//  ПРАВИЛЬНО - убрать inline или сделать cache internal
-class UserManager {
-    internal val cache = mutableMapOf<Int, User>()
-
-    inline fun getUser(id: Int): User? {
-        return cache[id]  // OK
-    }
-}
-
-//  АЛЬТЕРНАТИВА - не использовать inline
-class UserManager {
+//  CORRECT OPTION 1 - remove inline and keep cache private
+class UserManager1 {
     private val cache = mutableMapOf<Int, User>()
 
     fun getUser(id: Int): User? {
         return cache[id]
     }
 }
+
+//  CORRECT OPTION 2 - keep inline but align visibility
+class UserManager2 {
+    internal val cache = mutableMapOf<Int, User>()
+
+    internal inline fun getUser(id: Int): User? {
+        return cache[id]  // OK: both are internal (same module)
+    }
+}
 ```
 
-### 9. Functions with Non-local Returns in Complex Constructs
+### 9. Non-local Returns: Behavioral Pitfall
+
+Inline functions allow non-local returns from lambda parameters (unless marked `crossinline`). This is legal but can be confusing. This is not a prohibition on using inline, but a semantics caveat.
 
 ```kotlin
-// - СЛОЖНО ДЛЯ ПОНИМАНИЯ
 inline fun processItems(items: List<String>) {
     items.forEach { item ->
         if (item.isEmpty()) {
-            return  // Non-local return из processItems, НЕ из forEach!
+            return  // Non-local return from processItems, NOT from forEach
         }
         println(item)
     }
@@ -258,14 +612,14 @@ inline fun processItems(items: List<String>) {
 
 fun caller() {
     processItems(listOf("a", "", "c"))
-    println("After processItems")  // НЕ ВЫПОЛНИТСЯ если есть пустая строка!
+    println("After processItems")  // Will NOT execute if there is an empty string
 }
 
-//  ПРАВИЛЬНО - использовать явные return или не inline
-fun processItems(items: List<String>) {
+//  ALTERNATIVE - avoid non-local return for clarity
+fun processItemsSafe(items: List<String>) {
     items.forEach { item ->
         if (item.isEmpty()) {
-            return@forEach  // Локальный return из forEach
+            return@forEach  // Local return from forEach only
         }
         println(item)
     }
@@ -274,30 +628,29 @@ fun processItems(items: List<String>) {
 
 ### 10. When Performance is not Critical
 
+Using `inline` has trade-offs: it can reduce call overhead and allocations for lambdas, but increases code size and exposes implementation. Avoid `inline` when performance benefits are negligible.
+
 ```kotlin
-// - ИЗБЫТОЧНО - inline без выигрыша в производительности
-inline fun formatUserName(firstName: String, lastName: String): String {
+// - UNNECESSARY - inline gives no real benefit here
+inline fun formatUserNameInline(firstName: String, lastName: String): String {
     return "$firstName $lastName"
 }
 
-// Вызывается 1 раз при загрузке профиля
-val name = formatUserName(user.first, user.last)
-
-//  ПРАВИЛЬНО - обычная функция
+// Prefer regular function
 fun formatUserName(firstName: String, lastName: String): String {
     return "$firstName $lastName"
 }
 
-// Inline стоит использовать только когда:
-// 1. Функция вызывается часто (в циклах)
-// 2. Принимает лямбды (избегает создания объектов)
-// 3. Очень маленькая (1-3 строки)
+// Inline is most useful when:
+// 1. The function is small.
+// 2. It is higher-order and can avoid lambda allocations.
+// 3. You need reified type parameters.
 ```
 
 ### When You SHOULD Use Inline
 
 ```kotlin
-//  ПРАВИЛЬНО - inline для higher-order функций
+// Inline for small higher-order utilities
 inline fun <T> measureTime(block: () -> T): Pair<T, Long> {
     val start = System.currentTimeMillis()
     val result = block()
@@ -305,7 +658,7 @@ inline fun <T> measureTime(block: () -> T): Pair<T, Long> {
     return result to time
 }
 
-//  ПРАВИЛЬНО - inline с reified
+// Inline with reified type
 inline fun <reified T> Intent.getParcelableExtraCompat(key: String): T? {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         getParcelableExtra(key, T::class.java)
@@ -315,14 +668,14 @@ inline fun <reified T> Intent.getParcelableExtraCompat(key: String): T? {
     }
 }
 
-//  ПРАВИЛЬНО - маленькие утилиты с лямбдами
+// Small utility with lambda
 inline fun <R> synchronized(lock: Any, block: () -> R): R {
-    kotlin.synchronized(lock) {
-        return block()
+    return kotlin.synchronized(lock) {
+        block()
     }
 }
 
-//  ПРАВИЛЬНО - DSL builders
+// DSL builders
 inline fun buildUser(init: UserBuilder.() -> Unit): User {
     val builder = UserBuilder()
     builder.init()
@@ -333,65 +686,41 @@ inline fun buildUser(init: UserBuilder.() -> Unit): User {
 ### Key Rules
 
 | Situation | Can inline? | Reason |
-|----------|---------------|---------|
-| Small function with lambda | - Yes | Optimization |
-| Large function (50+ lines) | - No | Code bloat |
-| Recursive function | - No | Infinite inlining |
-| Function with reified type | - Yes | Inline required |
-| Public library API | WARNING: Careful | Update issues |
-| Storing lambda | - No | Use noinline |
-| Frequently called function | WARNING: Depends | Size/speed balance |
+|----------|-------------|--------|
+| Small function with lambda | Yes | Avoid call + lambda overhead |
+| Large function (many lines) | Usually no | Risk of code bloat |
+| Recursive function | No | Inline recursive not allowed |
+| Function with reified type | Yes (inline required) | Needs T at runtime |
+| Public library API | Careful | Binary compatibility & update issues |
+| Storing/passing lambda as value | Use noinline | Normal value semantics needed |
+| Frequently called function | Depends | Trade off size vs speed |
 
 ### Using Noinline and Crossinline
 
 ```kotlin
-// noinline - disable inline for specific parameter
+// noinline - disables inlining for specific parameter so it can be stored/passed
+// crossinline - disallows non-local returns from that lambda
 inline fun transaction(
-    noinline onError: (Exception) -> Unit,  // Can be stored
-    crossinline onSuccess: () -> Unit       // Cannot non-local return
+    noinline onError: (Exception) -> Unit,
+    crossinline onSuccess: () -> Unit
 ) {
     try {
         db.beginTransaction()
         onSuccess()
         db.setTransactionSuccessful()
     } catch (e: Exception) {
-        errorHandler.handle(onError)  // onError можно передать
+        errorHandler.handle(onError)  // onError can be stored/passed
     } finally {
         db.endTransaction()
     }
 }
 ```
 
-**English**: Cannot use inline when: 1) **Storing lambda** in variable (use `noinline`), 2) **Passing lambda** to non-inline function (`noinline`), 3) **Recursive functions** (infinite inlining), 4) **Large functions** (code bloat), 5) **Frequently called** simple functions (bloat), 6) **Public library API** (update issues), 7) **Accessing private members** from public inline. Use inline only for: small functions with lambdas, `reified` type parameters, DSL builders. Use `noinline` to exclude specific parameters from inlining.
+## Дополнительные вопросы (RU)
 
-## Ответ (RU)
-
-Нельзя использовать inline когда:
-
-### Основные Ограничения
-
-1. **Нельзя сохранить лямбду в переменную** - inline функция встраивает код лямбды в место вызова, поэтому нельзя сохранить для отложенного выполнения (используйте `noinline`)
-
-2. **Нельзя передать лямбду в не-inline функцию** - inline лямбду нельзя передать в обычную функцию (используйте `noinline`)
-
-3. **Рекурсивные функции нельзя inline** - приведет к бесконечному росту кода
-
-4. **Большие функции** - inline копирует код в каждое место вызова, раздувая размер APK
-
-5. **Часто вызываемые функции** - если вызывается 10,000 раз, код будет продублирован 10,000 раз
-
-6. **Public library API** - inline функции встраиваются в код клиента, усложняя обновление библиотеки
-
-7. **Доступ к private членам** - public inline функция не может обращаться к private полям
-
-### Когда ИСПОЛЬЗОВАТЬ Inline
-
-- Маленькие функции с лямбдами (1-3 строки)
-- Функции с `reified` параметрами типов (inline обязателен)
-- DSL builders
-- Higher-order функции где важна производительность
-
-Используйте `noinline` чтобы исключить конкретные параметры из inlining, и `crossinline` когда нельзя делать non-local return.
+- В чем ключевые отличия inline-функций в Kotlin по сравнению с Java-подходом?
+- В каких практических ситуациях вы бы использовали inline-функции?
+- Какие распространенные ошибки и подводные камни при использовании inline стоит учитывать?
 
 ## Follow-ups
 
@@ -399,12 +728,22 @@ inline fun transaction(
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+- [[q-testing-stateflow-sharedflow--kotlin--medium]]
+- [[q-coroutine-context-elements--kotlin--hard]]
 
 ## Related Questions
 
 - [[q-testing-stateflow-sharedflow--kotlin--medium]]
 - [[q-coroutine-context-elements--kotlin--hard]]
--

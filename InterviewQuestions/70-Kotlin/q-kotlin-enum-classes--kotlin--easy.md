@@ -1,11 +1,11 @@
 ---
 id: kotlin-010
 title: "Kotlin Enum Classes / Перечисления (Enum) в Kotlin"
-aliases: ["Kotlin Enum Classes, Перечисления (Enum) в Kotlin"]
+aliases: ["Kotlin Enum Classes", "Перечисления (Enum) в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [classes, enums, types]
+subtopics: [enums, types]
 question_kind: theory
 difficulty: easy
 
@@ -18,21 +18,20 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-default-inheritance-type--programming-languages--easy, q-kotlin-lateinit--kotlin--medium, q-request-coalescing-deduplication--kotlin--hard]
+related: [c-kotlin, c-kotlin-features, q-kotlin-lateinit--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-11-09
 
 tags: [classes, difficulty/easy, enum, kotlin, types]
 ---
 # Вопрос (RU)
 > Что такое Enum в Kotlin?
 
----
-
 # Question (EN)
 > What is an Enum in Kotlin?
+
 ## Ответ (RU)
 
 `Enum` в Kotlin — это специальный тип, который представляет группу связанных констант. Он позволяет определить фиксированный набор значений для переменной. Константы enum обычно используются для представления закрытого набора опций или выборов.
@@ -53,7 +52,7 @@ enum class Color {
 enum class Color(val rgb: Int) {
     RED(0xFF0000),
     GREEN(0x00FF00),
-    BLUE(0x0000FF)
+    BLUE(0x0000FF);
 
     fun description(): String {
         return when (this) {
@@ -77,6 +76,26 @@ println(redColor.description()) // Вывод: Red color
 
 Перечисления в Kotlin могут быть полезны в различных сценариях, таких как представление дней недели, опций меню, кодов состояния и многого другого. Они обеспечивают типобезопасный и лаконичный способ определения фиксированного набора значений.
 
+См. также: [[c-kotlin]], [[c-kotlin-features]]
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия между этим и Java?
+- Когда вы бы использовали это на практике?
+- Какие распространенные подводные камни нужно избегать?
+
+## Ссылки (RU)
+
+- [Kotlin Enum Classes](https://kotlinlang.org/docs/enum-classes.html)
+- [Enums in Kotlin](https://www.baeldung.com/kotlin/enum)
+
+## Связанные вопросы (RU)
+
+### Продвинутое (сложнее)
+- [[q-value-classes-inline-classes--kotlin--medium]] - Классы
+- [[q-inner-nested-classes--kotlin--medium]] - Классы
+- [[q-enum-class-advanced--kotlin--medium]] - Классы
+
 ---
 
 ## Answer (EN)
@@ -99,7 +118,7 @@ Enums in Kotlin can also have properties and methods, similar to classes. Each e
 enum class Color(val rgb: Int) {
     RED(0xFF0000),
     GREEN(0x00FF00),
-    BLUE(0x0000FF)
+    BLUE(0x0000FF);
 
     fun description(): String {
         return when (this) {
@@ -122,6 +141,8 @@ println(redColor.description()) // Output: Red color
 ```
 
 Enums in Kotlin can be useful in various scenarios, such as representing days of the week, menu options, status codes, and more. They provide a type-safe and concise way to define a fixed set of values.
+
+See also: [[c-kotlin]], [[c-kotlin-features]]
 
 ## Follow-ups
 

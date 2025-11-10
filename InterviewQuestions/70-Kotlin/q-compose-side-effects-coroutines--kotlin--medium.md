@@ -3,52 +3,40 @@ id: kotlin-170
 title: "Coroutines and side effects in Jetpack Compose / Корутины и side effects в Jetpack Compose"
 aliases: [Coroutines Side Effects Compose, Корутины side effects Jetpack Compose]
 topic: kotlin
-subtopics: [compose-integration, coroutines]
+subtopics: [coroutines, c-jetpack-compose]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [android, coroutines, difficulty/medium, jetpack-compose, kotlin, launchedeffect, lifecycle, rememberCoroutineScope, side-effects, state-management]
 moc: moc-kotlin
-related: [q-stateflow-sharedflow--kotlin--medium]
+related: [c-kotlin, c-coroutines, q-testing-stateflow-sharedflow--kotlin--medium]
 ---
-# Coroutines and Side Effects in Jetpack Compose
-
-## English
-
-### Question
-What are side effects in Jetpack Compose and how do coroutines integrate with them? Explain LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, and other side effect handlers. When should you use each? Provide production examples of data loading, animations, event handling, and Flow collection with proper lifecycle management and testing strategies.
-
 # Вопрос (RU)
-> What are side effects in Jetpack Compose and how do coroutines integrate with them? Explain LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, and other side effect handlers. When should you use each? Provide production examples of data loading, animations, event handling, and Flow collection with proper lifecycle management and testing strategies.
-
----
+> Что такое side effects в Jetpack Compose и как с ними интегрируются корутины? Объясните `LaunchedEffect`, `rememberCoroutineScope`, `DisposableEffect`, `produceState` и другие обработчики побочных эффектов. Когда какой использовать? Приведите production-примеры загрузки данных, анимаций, обработки событий и коллекции `Flow` с корректным управлением жизненным циклом и стратегиями тестирования.
 
 # Question (EN)
-> What are side effects in Jetpack Compose and how do coroutines integrate with them? Explain LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, and other side effect handlers. When should you use each? Provide production examples of data loading, animations, event handling, and Flow collection with proper lifecycle management and testing strategies.
+> What are side effects in Jetpack Compose and how do coroutines integrate with them? Explain `LaunchedEffect`, `rememberCoroutineScope`, `DisposableEffect`, `produceState`, and other side effect handlers. When should you use each? Provide production examples of data loading, animations, event handling, and `Flow` collection with proper lifecycle management and testing strategies.
 
 ## Ответ (RU)
 
-*(Краткое содержание основных пунктов из английской версии)*
-Что такое side effects в Jetpack Compose и как корутины интегрируются с ними? Объясните LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState и другие обработчики side effects. Когда следует использовать каждый из них? Приведите production примеры загрузки данных, анимаций, обработки событий и сбора Flow с правильным управлением жизненным циклом и стратегиями тестирования.
+Side effects в Compose — это операции, которые выходят за рамки composable-функции и влияют на состояние приложения вне самой композиции. Корутины являются ключевым механизмом управления асинхронными side effects в Compose.
 
-**Side effects** в Compose — это операции, которые выходят за рамки composable функции и влияют на состояние приложения вне самой композиции.
-
-#### 1. Что Такое Side Effects?
+#### 1. Что такое Side Effects?
 
 **Определение:**
-- Side effects — это операции **вне** композиции
-- Примеры: API вызовы, запись в БД, навигация, аналитика
-- Должны быть правильно привязаны к жизненному циклу композиции
-- Должны быть **предсказуемыми** и **управляемыми**
+- Side effects — это операции, происходящие **вне** чистой композиции.
+- Примеры: сетевые вызовы, запросы к БД, навигация, аналитика, взаимодействие с платформенными API.
+- Они должны быть корректно привязаны к жизненному циклу композиции.
+- Должны быть **предсказуемыми** и **управляемыми**.
 
 **Почему side effects важны:**
 
 ```kotlin
-//  ПЛОХО: Side effect выполняется при каждой рекомпозиции
+// ПЛОХО: Side effect выполняется при каждой рекомпозиции
 @Composable
 fun BadExample() {
     // Это выполняется каждый раз при рекомпозиции!
@@ -57,7 +45,7 @@ fun BadExample() {
     Text("Привет")
 }
 
-//  ХОРОШО: Side effect выполняется один раз
+// ХОРОШО: Side effect выполняется один раз
 @Composable
 fun GoodExample() {
     LaunchedEffect(Unit) {
@@ -69,41 +57,576 @@ fun GoodExample() {
 }
 ```
 
-*(Продолжение следует той же структуре с подробными примерами всех side effects на русском языке, включая LaunchedEffect, rememberCoroutineScope, DisposableEffect, produceState, SideEffect, derivedStateOf, snapshotFlow, production примеры, тестирование и best practices)*
+#### 2. `LaunchedEffect` — корутины, привязанные к композиции
 
-### Связанные Вопросы
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - StateFlow и SharedFlow
+**Назначение:** Запускает корутину, привязанную к жизненному циклу composable.
 
-### Дополнительные Вопросы
-1. Когда выбрать LaunchedEffect вместо produceState для загрузки данных?
-2. Как collectAsStateWithLifecycle отличается от collectAsState с точки зрения производительности и управления жизненным циклом?
-3. Что происходит с LaunchedEffect когда меняется его ключ? Объясните жизненный цикл.
-4. Как реализовать таймер обратного отсчета, который приостанавливается когда приложение уходит в фон?
-5. Объясните, как обрабатывать одноразовые события (например, показ toast) в Compose без потери при изменении конфигурации.
-6. В чем разница между SideEffect и LaunchedEffect с точки зрения времени выполнения?
-7. Как тестировать composable, который использует DisposableEffect с реальным listener?
+**Ключевые свойства:**
+- Запускается при входе composable в композицию.
+- Отменяется при выходе composable из композиции.
+- Перезапускается при изменении ключей.
 
-### Ссылки
+**Базовый пример:**
+
+```kotlin
+@Composable
+fun UserProfileScreen(userId: String) {
+    var user by remember { mutableStateOf<User?>(null) }
+    var isLoading by remember { mutableStateOf(true) }
+
+    LaunchedEffect(userId) { // Ключ: userId
+        isLoading = true
+        try {
+            user = userRepository.getUser(userId)
+        } finally {
+            isLoading = false
+        }
+    }
+
+    when {
+        isLoading -> LoadingIndicator()
+        user != null -> UserProfile(user!!)
+        else -> ErrorMessage()
+    }
+}
+```
+
+**Работа с ключами:**
+
+```kotlin
+@Composable
+fun SearchScreen() {
+    var query by remember { mutableStateOf("") }
+    var results by remember { mutableStateOf<List<String>>(emptyList()) }
+
+    LaunchedEffect(query) {
+        // Отменяет предыдущий поиск и перезапускается при изменении query
+        delay(300) // debounce
+        results = searchRepository.search(query)
+    }
+
+    Column {
+        TextField(
+            value = query,
+            onValueChange = { query = it }
+        )
+        LazyColumn {
+            items(results) { result ->
+                Text(result)
+            }
+        }
+    }
+}
+```
+
+```kotlin
+@Composable
+fun DataSync(userId: String, syncType: SyncType) {
+    LaunchedEffect(userId, syncType) {
+        // Перезапускается, когда меняется userId или syncType
+        syncData(userId, syncType)
+    }
+}
+```
+
+```kotlin
+@Composable
+fun AnalyticsScreen() {
+    LaunchedEffect(Unit) {
+        // Выполняется один раз при входе экрана в композицию
+        analytics.logScreenView("HomeScreen")
+    }
+}
+```
+
+#### 3. `rememberCoroutineScope` — ручной запуск корутин
+
+**Назначение:** Предоставляет `CoroutineScope`, привязанный к композиции, для запуска корутин из обработчиков событий.
+
+**Когда использовать:**
+- Запуск корутин из callback-ов (`onClick`, `onSwipe` и т.п.).
+- Когда запуск зависит от действий пользователя, а не от ключей.
+
+```kotlin
+@Composable
+fun RefreshableList() {
+    val scope = rememberCoroutineScope()
+    var items by remember { mutableStateOf<List<Item>>(emptyList()) }
+    var isRefreshing by remember { mutableStateOf(false) }
+
+    Column {
+        Button(
+            onClick = {
+                scope.launch {
+                    isRefreshing = true
+                    try {
+                        items = repository.fetchItems()
+                    } finally {
+                        isRefreshing = false
+                    }
+                }
+            }
+        ) {
+            Text("Обновить")
+        }
+
+        if (isRefreshing) {
+            CircularProgressIndicator()
+        }
+
+        LazyColumn {
+            items(items) { item ->
+                ItemRow(item)
+            }
+        }
+    }
+}
+```
+
+Кратко:
+- `LaunchedEffect` — автоматический запуск на вход/изменение ключей.
+- `rememberCoroutineScope` — ручной запуск из событий UI.
+
+#### 4. `DisposableEffect` — очистка ресурсов
+
+**Назначение:** Регистрировать слушателей/ресурсы и корректно освобождать их при выходе из композиции.
+
+```kotlin
+@Composable
+fun LocationScreen() {
+    var location by remember { mutableStateOf<Location?>(null) }
+
+    DisposableEffect(Unit) {
+        val listener = LocationListener { newLocation ->
+            location = newLocation
+        }
+
+        locationManager.addListener(listener)
+
+        onDispose {
+            locationManager.removeListener(listener)
+        }
+    }
+
+    location?.let { loc ->
+        Text("Lat: ${loc.latitude}, Lon: ${loc.longitude}")
+    }
+}
+```
+
+#### 5. `produceState` — из `suspend` / `Flow` в `State`
+
+**Назначение:** Обернуть `suspend`-функции или `Flow` в Compose `State`.
+
+```kotlin
+@Composable
+fun TimerScreen() {
+    val seconds by produceState(initialValue = 0) {
+        while (true) {
+            delay(1000)
+            value++
+        }
+    }
+
+    Text("Прошло: $seconds секунд")
+}
+```
+
+```kotlin
+@Composable
+fun UserProfile(userId: String) {
+    val userState by produceState<User?>(initialValue = null, userId) {
+        value = userRepository.getUser(userId)
+    }
+
+    userState?.let { user ->
+        Column {
+            Text("Name: ${user.name}")
+            Text("Email: ${user.email}")
+        }
+    } ?: CircularProgressIndicator()
+}
+```
+
+```kotlin
+@Composable
+fun MessagesScreen() {
+    val messages by produceState(
+        initialValue = emptyList<Message>(),
+        producer = {
+            messageRepository.observeMessages().collect { newMessages ->
+                value = newMessages
+            }
+        }
+    )
+
+    LazyColumn {
+        items(messages) { message ->
+            MessageItem(message)
+        }
+    }
+}
+```
+
+#### 6. `SideEffect` — несуспендящиеся эффекты
+
+**Назначение:** Выполнить несуспендящийся побочный эффект после успешной рекомпозиции.
+
+```kotlin
+@Composable
+fun AnalyticsExample(screenName: String) {
+    SideEffect {
+        analytics.setCurrentScreen(screenName)
+    }
+}
+```
+
+```kotlin
+@Composable
+fun VideoPlayer(isPlaying: Boolean, player: MediaPlayer) {
+    SideEffect {
+        if (isPlaying) {
+            player.start()
+        } else {
+            player.pause()
+        }
+    }
+}
+```
+
+Используйте для синхронизации с внешними объектами, когда не нужны `suspend`-операции.
+
+#### 7. `derivedStateOf` — вычисляемое состояние
+
+**Назначение:** Эффективно вычислять значения на основе других состояний, избегая лишних пересчетов.
+
+```kotlin
+@Composable
+fun EfficientExample(items: List<Item>) {
+    val expensiveItems by remember(items) {
+        derivedStateOf {
+            items.filter { it.price > 100 }
+        }
+    }
+
+    LazyColumn {
+        items(expensiveItems) { item ->
+            ItemRow(item)
+        }
+    }
+}
+```
+
+#### 8. `snapshotFlow` — State → `Flow`
+
+**Назначение:** Преобразовать Compose-состояние в `Flow` для обработки в корутине.
+
+```kotlin
+@Composable
+fun SearchWithDebounce() {
+    var query by remember { mutableStateOf("") }
+    var results by remember { mutableStateOf<List<String>>(emptyList()) }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow { query }
+            .debounce(300)
+            .filter { it.length >= 3 }
+            .collectLatest { searchQuery ->
+                results = searchRepository.search(searchQuery)
+            }
+    }
+
+    Column {
+        TextField(
+            value = query,
+            onValueChange = { query = it }
+        )
+        LazyColumn {
+            items(results) { result ->
+                Text(result)
+            }
+        }
+    }
+}
+```
+
+#### 9. Production-пример: загрузка данных и `Flow`
+
+```kotlin
+@Composable
+fun ArticleScreen(
+    articleId: String,
+    viewModel: ArticleViewModel = hiltViewModel()
+) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(articleId) {
+        viewModel.loadArticle(articleId)
+    }
+
+    when (val state = uiState) {
+        is ArticleUiState.Loading -> LoadingScreen()
+        is ArticleUiState.Success -> ArticleContent(state.article)
+        is ArticleUiState.Error -> ErrorScreen(state.message) {
+            viewModel.loadArticle(articleId)
+        }
+    }
+}
+```
+
+#### 10. Коллекция `Flow` с учетом жизненного цикла
+
+```kotlin
+@Composable
+fun MessagesScreen(viewModel: MessagesViewModel = hiltViewModel()) {
+    val messages by viewModel.messages.collectAsStateWithLifecycle()
+
+    LazyColumn {
+        items(messages) { message ->
+            MessageItem(message)
+        }
+    }
+}
+```
+
+```kotlin
+@Composable
+fun SimpleFlowCollection(viewModel: MyViewModel) {
+    val data by viewModel.dataFlow.collectAsState(initial = null)
+
+    data?.let { value ->
+        Text("Data: $value")
+    }
+}
+```
+
+```kotlin
+@Composable
+fun ManualFlowCollection(viewModel: MyViewModel) {
+    var data by remember { mutableStateOf<Data?>(null) }
+
+    LaunchedEffect(Unit) {
+        viewModel.dataFlow.collect { newData ->
+            data = newData
+        }
+    }
+
+    data?.let { value ->
+        Text("Data: $value")
+    }
+}
+```
+
+#### 11. Side effects для анимаций
+
+```kotlin
+@Composable
+fun ProgressScreen() {
+    var progress by remember { mutableStateOf(0f) }
+
+    LaunchedEffect(Unit) {
+        for (i in 0..100) {
+            progress = i / 100f
+            delay(50)
+        }
+    }
+
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        CircularProgressIndicator(progress = progress)
+        Text("${(progress * 100).toInt()}%")
+    }
+}
+```
+
+```kotlin
+@Composable
+fun PulsingCircle() {
+    val infiniteTransition = rememberInfiniteTransition()
+    val scale by infiniteTransition.animateFloat(
+        initialValue = 1f,
+        targetValue = 1.5f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1000),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    Box(
+        modifier = Modifier
+            .size(100.dp)
+            .scale(scale)
+            .background(Color.Blue, CircleShape)
+    )
+}
+```
+
+#### 12. Side effects для обработки событий
+
+```kotlin
+@Composable
+fun EventHandlingScreen(viewModel: EventViewModel = hiltViewModel()) {
+    val context = LocalContext.current
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(uiState.event) {
+        uiState.event?.let { event ->
+            when (event) {
+                is UiEvent.ShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+                is UiEvent.Navigate -> {
+                    // Навигация на другой экран
+                }
+            }
+            viewModel.eventConsumed()
+        }
+    }
+
+    Button(onClick = { viewModel.performAction() }) {
+        Text("Выполнить действие")
+    }
+}
+```
+
+#### 13. Частые ошибки и best practices
+
+```kotlin
+@Composable
+fun BadExample1() {
+    fetchData() // Вызывается при КАЖДОЙ рекомпозиции!
+}
+
+@Composable
+fun GoodExample1() {
+    LaunchedEffect(Unit) {
+        fetchData()
+    }
+}
+
+@Composable
+fun BadExample2() {
+    val data = runBlocking {
+        repository.getData()
+    }
+    Text(data)
+}
+
+@Composable
+fun GoodExample2() {
+    val data by produceState<String?>(initialValue = null) {
+        value = repository.getData()
+    }
+    data?.let { Text(it) }
+}
+
+@Composable
+fun BadExample3(userId: String) {
+    LaunchedEffect(Unit) {
+        loadUser(userId) // Не перезапустится при смене userId
+    }
+}
+
+@Composable
+fun GoodExample3(userId: String) {
+    LaunchedEffect(userId) {
+        loadUser(userId)
+    }
+}
+
+@Composable
+fun BadExample4() {
+    val listener = LocationListener { }
+    locationManager.addListener(listener)
+}
+
+@Composable
+fun GoodExample4() {
+    DisposableEffect(Unit) {
+        val listener = LocationListener { }
+        locationManager.addListener(listener)
+        onDispose {
+            locationManager.removeListener(listener)
+        }
+    }
+}
+```
+
+#### 14. Тестирование side effects
+
+```kotlin
+@Test
+fun testLaunchedEffect() = runTest {
+    var launched = false
+
+    composeTestRule.setContent {
+        LaunchedEffect(Unit) {
+            launched = true
+        }
+    }
+
+    composeTestRule.waitForIdle()
+    assertTrue(launched)
+}
+```
+
+```kotlin
+class FakeArticleRepository : ArticleRepository {
+    override suspend fun getArticle(id: String): Article {
+        delay(100)
+        return Article(id, "Test Title", "Test Content")
+    }
+}
+
+@Test
+fun testArticleLoading() = runTest {
+    val repository = FakeArticleRepository()
+    val viewModel = ArticleViewModel(repository)
+
+    composeTestRule.setContent {
+        ArticleScreen(articleId = "1", viewModel = viewModel)
+    }
+
+    composeTestRule.onNodeWithText("Loading").assertExists()
+
+    composeTestRule.waitForIdle()
+
+    composeTestRule.onNodeWithText("Test Title").assertExists()
+}
+```
+
+### Связанные Вопросы (RU)
+- [[q-testing-stateflow-sharedflow--kotlin--medium]] — `StateFlow` и `SharedFlow`
+
+### Дополнительные Вопросы (RU)
+1. Когда выбрать `LaunchedEffect` вместо `produceState` для загрузки данных?
+2. Как `collectAsStateWithLifecycle` отличается от `collectAsState` с точки зрения управления жизненным циклом?
+3. Что происходит с `LaunchedEffect`, когда меняется его ключ? Объясните жизненный цикл.
+4. Как реализовать таймер обратного отсчета, который приостанавливается, когда приложение уходит в фон?
+5. Как обрабатывать одноразовые события (например, показ toast) в Compose без потери при изменении конфигурации?
+6. В чем разница между `SideEffect` и `LaunchedEffect` с точки зрения времени выполнения?
+7. Как тестировать composable, который использует `DisposableEffect` с реальным listener?
+
+### Ссылки (RU)
 - [Документация Compose Side Effects](https://developer.android.com/jetpack/compose/side-effects)
 - [LaunchedEffect](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#LaunchedEffect(kotlin.Any,kotlin.coroutines.SuspendFunction1))
-- [Lifecycle-aware сбор Flow](https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware)
+- [Lifecycle-aware сбор `Flow`](https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware)
 - [Тестирование Compose](https://developer.android.com/jetpack/compose/testing)
 
 ## Answer (EN)
 
-
-
-**Side effects** in Compose are operations that escape the scope of a composable function and affect the state of the app outside of the composition itself. Coroutines are central to managing async side effects in Compose.
+Side effects in Compose are operations that escape the scope of a composable function and affect the state of the app outside of the composition itself. Coroutines are central to managing async side effects in Compose.
 
 #### 1. What Are Side Effects?
 
 **Definition:**
-- Side effects are operations that happen **outside** the composition
-- Examples: API calls, database writes, navigation, analytics
-- Must be properly scoped to composition lifecycle
-- Should be **predictable** and **manageable**
-
-**Why side effects matter:**
+- Side effects are operations that happen **outside** the composition.
+- Examples: API calls, database writes, navigation, analytics.
+- Must be properly scoped to composition lifecycle.
+- Should be **predictable** and **manageable**.
 
 ```kotlin
 //  BAD: Side effect executed on every recomposition
@@ -127,16 +650,14 @@ fun GoodExample() {
 }
 ```
 
-#### 2. LaunchedEffect - Launch Coroutines Tied to Composition
+#### 2. `LaunchedEffect` - Launch Coroutines Tied to Composition
 
 **Purpose:** Launch a coroutine that's tied to the lifecycle of the composable.
 
 **Key characteristics:**
-- Launches when composable **enters** composition
-- Cancels when composable **leaves** composition
-- Relaunches when **keys change**
-
-**Basic usage:**
+- Launches when composable **enters** composition.
+- Cancels when composable **leaves** composition.
+- Relaunches when **keys change**.
 
 ```kotlin
 @Composable
@@ -144,8 +665,7 @@ fun UserProfileScreen(userId: String) {
     var user by remember { mutableStateOf<User?>(null) }
     var isLoading by remember { mutableStateOf(true) }
 
-    // Launch coroutine tied to composition
-    LaunchedEffect(userId) { // Key: userId
+    LaunchedEffect(userId) {
         isLoading = true
         try {
             user = userRepository.getUser(userId)
@@ -162,8 +682,6 @@ fun UserProfileScreen(userId: String) {
 }
 ```
 
-**How keys work:**
-
 ```kotlin
 @Composable
 fun SearchScreen() {
@@ -171,8 +689,7 @@ fun SearchScreen() {
     var results by remember { mutableStateOf<List<String>>(emptyList()) }
 
     LaunchedEffect(query) {
-        // Cancel previous search and restart when query changes
-        delay(300) // Debounce
+        delay(300)
         results = searchRepository.search(query)
     }
 
@@ -190,40 +707,31 @@ fun SearchScreen() {
 }
 ```
 
-**Multiple keys:**
-
 ```kotlin
 @Composable
 fun DataSync(userId: String, syncType: SyncType) {
     LaunchedEffect(userId, syncType) {
-        // Relaunches when either userId OR syncType changes
         syncData(userId, syncType)
     }
 }
 ```
 
-**Key is Unit (runs once):**
-
 ```kotlin
 @Composable
 fun AnalyticsScreen() {
     LaunchedEffect(Unit) {
-        // Runs only once when screen enters composition
         analytics.logScreenView("HomeScreen")
     }
 }
 ```
 
-#### 3. rememberCoroutineScope - Manual Coroutine Launching
+#### 3. `rememberCoroutineScope` - Manual Coroutine Launching
 
-**Purpose:** Get a CoroutineScope that's bound to the composition, but launch coroutines **manually** (e.g., from event handlers).
+**Purpose:** Get a `CoroutineScope` that's bound to the composition, but launch coroutines manually (e.g., from event handlers).
 
 **When to use:**
-- Launch coroutines from **callbacks** (onClick, onSwipe, etc.)
-- Manual control over coroutine timing
-- Not tied to specific keys
-
-**Basic usage:**
+- Launch coroutines from callbacks (`onClick`, `onSwipe`, etc.).
+- Manual control over coroutine timing.
 
 ```kotlin
 @Composable
@@ -235,7 +743,6 @@ fun RefreshableList() {
     Column {
         Button(
             onClick = {
-                // Launch coroutine manually from callback
                 scope.launch {
                     isRefreshing = true
                     try {
@@ -262,25 +769,7 @@ fun RefreshableList() {
 }
 ```
 
-**LaunchedEffect vs rememberCoroutineScope:**
-
-| Aspect | LaunchedEffect | rememberCoroutineScope |
-|--------|----------------|------------------------|
-| Launch timing | Automatically on composition/key change | Manually from callback |
-| Use case | Load data when screen appears | Handle button clicks |
-| Keys | Relaunches when keys change | No key mechanism |
-| Example | `LaunchedEffect(userId) { loadUser() }` | `scope.launch { refresh() }` |
-
-#### 4. DisposableEffect - Cleanup Resources
-
-**Purpose:** Register observers/listeners and clean them up when composition leaves.
-
-**When to use:**
-- Register/unregister listeners
-- Subscribe/unsubscribe
-- Acquire/release resources
-
-**Basic usage:**
+#### 4. `DisposableEffect` - Cleanup Resources
 
 ```kotlin
 @Composable
@@ -292,10 +781,8 @@ fun LocationScreen() {
             location = newLocation
         }
 
-        // Register listener
         locationManager.addListener(listener)
 
-        // Cleanup when leaving composition
         onDispose {
             locationManager.removeListener(listener)
         }
@@ -307,48 +794,15 @@ fun LocationScreen() {
 }
 ```
 
-**Lifecycle observation:**
-
-```kotlin
-@Composable
-fun LifecycleAwareScreen(lifecycleOwner: LifecycleOwner) {
-    DisposableEffect(lifecycleOwner) {
-        val observer = LifecycleEventObserver { _, event ->
-            when (event) {
-                Lifecycle.Event.ON_RESUME -> println("Screen resumed")
-                Lifecycle.Event.ON_PAUSE -> println("Screen paused")
-                else -> {}
-            }
-        }
-
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        onDispose {
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
-    }
-}
-```
-
-#### 5. produceState - Convert Suspend Functions to State
-
-**Purpose:** Convert a suspend function or Flow into Compose State.
-
-**When to use:**
-- Wrap existing suspend functions
-- Integrate with non-Compose code
-- Create stateful data sources
-
-**Basic usage:**
+#### 5. `produceState` - Convert Suspend Functions / `Flow` to State
 
 ```kotlin
 @Composable
 fun TimerScreen() {
-    // Convert suspend function to State<Int>
     val seconds by produceState(initialValue = 0) {
         while (true) {
             delay(1000)
-            value++ // Update state
+            value++
         }
     }
 
@@ -356,13 +810,10 @@ fun TimerScreen() {
 }
 ```
 
-**Loading data with produceState:**
-
 ```kotlin
 @Composable
 fun UserProfile(userId: String) {
     val userState by produceState<User?>(initialValue = null, userId) {
-        // Automatically reloads when userId changes
         value = userRepository.getUser(userId)
     }
 
@@ -374,8 +825,6 @@ fun UserProfile(userId: String) {
     } ?: CircularProgressIndicator()
 }
 ```
-
-**Flow to State:**
 
 ```kotlin
 @Composable
@@ -397,34 +846,21 @@ fun MessagesScreen() {
 }
 ```
 
-#### 6. SideEffect - Non-Suspending Side Effects
-
-**Purpose:** Publish state to non-Compose code **after successful recomposition**.
-
-**When to use:**
-- Update non-Compose objects with Compose state
-- Analytics logging
-- Synchronize with external state
-
-**Basic usage:**
+#### 6. `SideEffect` - Non-Suspending Side Effects
 
 ```kotlin
 @Composable
 fun AnalyticsExample(screenName: String) {
     SideEffect {
-        // Runs after every successful recomposition
         analytics.setCurrentScreen(screenName)
     }
 }
 ```
 
-**Update external state:**
-
 ```kotlin
 @Composable
 fun VideoPlayer(isPlaying: Boolean, player: MediaPlayer) {
     SideEffect {
-        // Synchronize MediaPlayer state with Compose state
         if (isPlaying) {
             player.start()
         } else {
@@ -434,46 +870,11 @@ fun VideoPlayer(isPlaying: Boolean, player: MediaPlayer) {
 }
 ```
 
-**SideEffect vs LaunchedEffect:**
-
-| Aspect | SideEffect | LaunchedEffect |
-|--------|------------|----------------|
-| Suspending | No | Yes |
-| Timing | After recomposition | On composition/key change |
-| Use case | Non-suspending updates | Suspending operations |
-| Example | `analytics.log()` | `repository.fetch()` |
-
-#### 7. derivedStateOf - Computed State
-
-**Purpose:** Create state that's derived from other state, minimizing recompositions.
-
-**When to use:**
-- Expensive calculations based on state
-- Filtering/transforming lists
-- Computed properties
-
-**Without derivedStateOf (inefficient):**
-
-```kotlin
-@Composable
-fun IneffcientExample(items: List<Item>) {
-    // Recomputes on EVERY recomposition!
-    val expensiveItems = items.filter { it.price > 100 }
-
-    LazyColumn {
-        items(expensiveItems) { item ->
-            ItemRow(item)
-        }
-    }
-}
-```
-
-**With derivedStateOf (efficient):**
+#### 7. `derivedStateOf` - Computed State
 
 ```kotlin
 @Composable
 fun EfficientExample(items: List<Item>) {
-    // Only recomputes when items actually change
     val expensiveItems by remember(items) {
         derivedStateOf {
             items.filter { it.price > 100 }
@@ -488,16 +889,7 @@ fun EfficientExample(items: List<Item>) {
 }
 ```
 
-#### 8. snapshotFlow - Convert State to Flow
-
-**Purpose:** Convert Compose State into a Flow for observation.
-
-**When to use:**
-- Observe state changes in coroutines
-- Integrate Compose state with Flow-based code
-- Debounce state changes
-
-**Basic usage:**
+#### 8. `snapshotFlow` - Convert State to `Flow`
 
 ```kotlin
 @Composable
@@ -506,7 +898,6 @@ fun SearchWithDebounce() {
     var results by remember { mutableStateOf<List<String>>(emptyList()) }
 
     LaunchedEffect(Unit) {
-        // Convert state to flow and apply operators
         snapshotFlow { query }
             .debounce(300)
             .filter { it.length >= 3 }
@@ -529,33 +920,7 @@ fun SearchWithDebounce() {
 }
 ```
 
-**Observe multiple state values:**
-
-```kotlin
-@Composable
-fun CombinedStateObservation() {
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-    var fullName by remember { mutableStateOf("") }
-
-    LaunchedEffect(Unit) {
-        snapshotFlow { "$firstName $lastName" }
-            .collect { combined ->
-                fullName = combined.trim()
-            }
-    }
-
-    Column {
-        TextField(value = firstName, onValueChange = { firstName = it })
-        TextField(value = lastName, onValueChange = { lastName = it })
-        Text("Full name: $fullName")
-    }
-}
-```
-
 #### 9. Production Example: Data Loading
-
-**Complete data loading pattern:**
 
 ```kotlin
 @Composable
@@ -565,7 +930,6 @@ fun ArticleScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // Load data when screen appears or articleId changes
     LaunchedEffect(articleId) {
         viewModel.loadArticle(articleId)
     }
@@ -578,54 +942,13 @@ fun ArticleScreen(
         }
     }
 }
-
-sealed class ArticleUiState {
-    object Loading : ArticleUiState()
-    data class Success(val article: Article) : ArticleUiState()
-    data class Error(val message: String) : ArticleUiState()
-}
-
-class ArticleViewModel @Inject constructor(
-    private val repository: ArticleRepository
-) : ViewModel() {
-
-    private val _uiState = MutableStateFlow<ArticleUiState>(ArticleUiState.Loading)
-    val uiState: StateFlow<ArticleUiState> = _uiState.asStateFlow()
-
-    fun loadArticle(articleId: String) {
-        viewModelScope.launch {
-            _uiState.value = ArticleUiState.Loading
-            try {
-                val article = repository.getArticle(articleId)
-                _uiState.value = ArticleUiState.Success(article)
-            } catch (e: Exception) {
-                _uiState.value = ArticleUiState.Error(e.message ?: "Unknown error")
-            }
-        }
-    }
-}
-
-@Composable
-fun ArticleContent(article: Article) {
-    Column(modifier = Modifier.padding(16.dp)) {
-        Text(
-            text = article.title,
-            style = MaterialTheme.typography.h4
-        )
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(text = article.content)
-    }
-}
 ```
 
-#### 10. Flow Collection with Lifecycle Awareness
-
-**collectAsStateWithLifecycle - Recommended approach:**
+#### 10. `Flow` Collection with Lifecycle Awareness
 
 ```kotlin
 @Composable
 fun MessagesScreen(viewModel: MessagesViewModel = hiltViewModel()) {
-    // Automatically starts/stops collection based on lifecycle
     val messages by viewModel.messages.collectAsStateWithLifecycle()
 
     LazyColumn {
@@ -634,26 +957,11 @@ fun MessagesScreen(viewModel: MessagesViewModel = hiltViewModel()) {
         }
     }
 }
-
-class MessagesViewModel @Inject constructor(
-    private val repository: MessagesRepository
-) : ViewModel() {
-
-    val messages: StateFlow<List<Message>> = repository.observeMessages()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-}
 ```
-
-**collectAsState (simpler, but no lifecycle awareness):**
 
 ```kotlin
 @Composable
 fun SimpleFlowCollection(viewModel: MyViewModel) {
-    // Collects as long as composable is in composition
     val data by viewModel.dataFlow.collectAsState(initial = null)
 
     data?.let { value ->
@@ -661,8 +969,6 @@ fun SimpleFlowCollection(viewModel: MyViewModel) {
     }
 }
 ```
-
-**Manual collection with LaunchedEffect:**
 
 ```kotlin
 @Composable
@@ -683,15 +989,12 @@ fun ManualFlowCollection(viewModel: MyViewModel) {
 
 #### 11. Animation Side Effects
 
-**Animated progress with LaunchedEffect:**
-
 ```kotlin
 @Composable
 fun ProgressScreen() {
     var progress by remember { mutableStateOf(0f) }
 
     LaunchedEffect(Unit) {
-        // Animate progress from 0 to 1
         for (i in 0..100) {
             progress = i / 100f
             delay(50)
@@ -701,15 +1004,13 @@ fun ProgressScreen() {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalAlignment = Alignment.CenterVertically
+        verticalArrangement = Arrangement.Center
     ) {
         CircularProgressIndicator(progress = progress)
         Text("${(progress * 100).toInt()}%")
     }
 }
 ```
-
-**Infinite animation:**
 
 ```kotlin
 @Composable
@@ -735,15 +1036,12 @@ fun PulsingCircle() {
 
 #### 12. Event Handling Side Effects
 
-**One-time events with LaunchedEffect:**
-
 ```kotlin
 @Composable
 fun EventHandlingScreen(viewModel: EventViewModel = hiltViewModel()) {
     val context = LocalContext.current
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // Handle one-time events
     LaunchedEffect(uiState.event) {
         uiState.event?.let { event ->
             when (event) {
@@ -758,51 +1056,20 @@ fun EventHandlingScreen(viewModel: EventViewModel = hiltViewModel()) {
         }
     }
 
-    // UI content
     Button(onClick = { viewModel.performAction() }) {
         Text("Perform Action")
-    }
-}
-
-sealed class UiEvent {
-    data class ShowToast(val message: String) : UiEvent()
-    data class Navigate(val route: String) : UiEvent()
-}
-
-data class UiState(
-    val isLoading: Boolean = false,
-    val event: UiEvent? = null
-)
-
-class EventViewModel : ViewModel() {
-    private val _uiState = MutableStateFlow(UiState())
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    fun performAction() {
-        viewModelScope.launch {
-            // Perform action
-            _uiState.value = UiState(event = UiEvent.ShowToast("Action completed"))
-        }
-    }
-
-    fun eventConsumed() {
-        _uiState.value = _uiState.value.copy(event = null)
     }
 }
 ```
 
 #### 13. Common Mistakes and Best Practices
 
-**Mistakes to avoid:**
-
 ```kotlin
-//  BAD: Side effect on every recomposition
 @Composable
 fun BadExample1() {
     fetchData() // Called on EVERY recomposition!
 }
 
-//  GOOD: Wrap in LaunchedEffect
 @Composable
 fun GoodExample1() {
     LaunchedEffect(Unit) {
@@ -810,34 +1077,29 @@ fun GoodExample1() {
     }
 }
 
-//  BAD: Blocking operation in composable
 @Composable
 fun BadExample2() {
     val data = runBlocking {
-        repository.getData() // Blocks composition!
+        repository.getData()
     }
     Text(data)
 }
 
-//  GOOD: Use produceState or LaunchedEffect
 @Composable
 fun GoodExample2() {
-    val data by produceState<String?>(null) {
+    val data by produceState<String?>(initialValue = null) {
         value = repository.getData()
     }
     data?.let { Text(it) }
 }
 
-//  BAD: Forgetting key in LaunchedEffect
 @Composable
 fun BadExample3(userId: String) {
     LaunchedEffect(Unit) {
-        // Won't reload when userId changes!
-        loadUser(userId)
+        loadUser(userId) // Won't reload when userId changes
     }
 }
 
-//  GOOD: Include dependencies in keys
 @Composable
 fun GoodExample3(userId: String) {
     LaunchedEffect(userId) {
@@ -845,15 +1107,12 @@ fun GoodExample3(userId: String) {
     }
 }
 
-//  BAD: Not cleaning up resources
 @Composable
 fun BadExample4() {
     val listener = LocationListener { }
     locationManager.addListener(listener)
-    // Never removed!
 }
 
-//  GOOD: Use DisposableEffect for cleanup
 @Composable
 fun GoodExample4() {
     DisposableEffect(Unit) {
@@ -866,20 +1125,7 @@ fun GoodExample4() {
 }
 ```
 
-**Best practices summary:**
-
-| Do | Don't |
-|----|-------|
-| Use LaunchedEffect for async operations | Call suspend functions directly in composable |
-| Use rememberCoroutineScope for event handlers | Use GlobalScope |
-| Use DisposableEffect for cleanup | Forget to unregister listeners |
-| Use produceState for suspend → State | Use runBlocking in composables |
-| Include dependencies in LaunchedEffect keys | Use Unit when data can change |
-| Use collectAsStateWithLifecycle for Flows | Collect flows without lifecycle awareness |
-
 #### 14. Testing Side Effects
-
-**Testing LaunchedEffect:**
 
 ```kotlin
 @Test
@@ -897,12 +1143,10 @@ fun testLaunchedEffect() = runTest {
 }
 ```
 
-**Testing with fake repository:**
-
 ```kotlin
 class FakeArticleRepository : ArticleRepository {
     override suspend fun getArticle(id: String): Article {
-        delay(100) // Simulate network delay
+        delay(100)
         return Article(id, "Test Title", "Test Content")
     }
 }
@@ -916,16 +1160,30 @@ fun testArticleLoading() = runTest {
         ArticleScreen(articleId = "1", viewModel = viewModel)
     }
 
-    // Initially shows loading
     composeTestRule.onNodeWithText("Loading").assertExists()
 
-    // Wait for data to load
     composeTestRule.waitForIdle()
 
-    // Shows article content
     composeTestRule.onNodeWithText("Test Title").assertExists()
 }
 ```
 
-### Related Questions
-- [[q-testing-stateflow-sharedflow--kotlin--medium]] - StateFlow and SharedFlow
+## Related Questions
+- [[q-testing-stateflow-sharedflow--kotlin--medium]]
+
+## Follow-ups
+- When would you choose `LaunchedEffect` over `produceState` for data loading?
+- How does `collectAsStateWithLifecycle` differ from `collectAsState` regarding lifecycle awareness?
+- What happens to `LaunchedEffect` when its key changes? Explain its lifecycle.
+- How to implement a countdown timer that pauses when the app goes to background?
+- How to handle one-off events (e.g., toast) in Compose without losing them on configuration change?
+- What is the difference between `SideEffect` and `LaunchedEffect` in terms of execution timing?
+- How to test a composable that uses `DisposableEffect` with a real listener?
+
+## References
+- [Compose Side Effects documentation](https://developer.android.com/jetpack/compose/side-effects)
+- [LaunchedEffect](https://developer.android.com/reference/kotlin/androidx/compose/runtime/package-summary#LaunchedEffect(kotlin.Any,kotlin.coroutines.SuspendFunction1))
+- [Lifecycle-aware `Flow` collection](https://developer.android.com/topic/libraries/architecture/coroutines#lifecycle-aware)
+- [Compose Testing](https://developer.android.com/jetpack/compose/testing)
+- [[c-kotlin]]
+- [[c-coroutines]]

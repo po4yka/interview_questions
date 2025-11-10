@@ -1,15 +1,13 @@
 ---
 id: kotlin-128
 title: "Structured Concurrency / Структурированная параллельность"
-aliases: ["Structured Concurrency, Структурированная параллельность"]
+aliases: ["Structured Concurrency", "Структурированная параллельность"]
 
 # Classification
 topic: kotlin
 subtopics:
-  - cancellation
   - coroutines
-  - exception-handling
-  - scope
+  - cancellation
   - structured-concurrency
 question_kind: theory
 difficulty: hard
@@ -23,11 +21,11 @@ source_note: Comprehensive guide on Structured Concurrency
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-actor-pattern--kotlin--hard, q-advanced-coroutine-patterns--kotlin--hard, q-coroutine-dispatchers--kotlin--medium]
+related: [c-kotlin, c-coroutines, q-actor-pattern--kotlin--hard, q-advanced-coroutine-patterns--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-10
 
 tags: [cancellation, coroutines, difficulty/hard, exception-handling, kotlin, scope, structured-concurrency]
 ---
@@ -41,79 +39,558 @@ tags: [cancellation, coroutines, difficulty/hard, exception-handling, kotlin, sc
 
 ## Ответ (RU)
 
-**Структурированная параллельность** гарантирует, что корутины следуют чёткой иерархии родитель-потомок, обеспечивая автоматическое распространение отмены, обработку исключений и очистку ресурсов.
+**Структурированная параллельность** гарантирует, что корутины следуют чёткой иерархии родитель-потомок, обеспечивая автоматическое распространение отмены, предсказуемое распространение исключений и корректную очистку ресурсов. См. также [[c-kotlin]] и [[c-coroutines]].
 
 ### Основные Принципы
 
-1. **Иерархия**: Корутины формируют отношения родитель-потомок
-2. **Время жизни**: Время жизни потомка привязано к родителю
-3. **Отмена**: Распространяется от родителя к потомкам
-4. **Исключения**: Исключения потомка распространяются к родителю
-5. **Завершение**: Родитель ждёт всех потомков
+1. **Иерархия**: Корутины формируют отношения родитель-потомок.
+2. **Время жизни**: Время жизни потомка привязано к родителю.
+3. **Отмена**: Распространяется от родителя к потомкам.
+4. **Исключения**: По умолчанию исключения потомка (в обычных скоупах) распространяются к родителю и отменяют сиблингов.
+5. **Завершение**: Родитель ждёт всех потомков.
+
+### Иерархия корутин
+
+```kotlin
+import kotlinx.coroutines.*
+
+suspend fun example() = coroutineScope {  // Родительский scope
+    launch {                                // Потомок 1
+        launch {                            // Внук
+            delay(1000)
+            println("Grandchild")
+        }
+        delay(500)
+        println("Child 1")
+    }
+    
+    launch {                                // Потомок 2
+        delay(300)
+        println("Child 2")
+    }
+    
+    println("Parent waiting...")
+    // Родитель ждёт завершения всех потомков и внуков
+}
+
+// Примерный вывод:
+// Parent waiting...
+// Child 2 (после 300 мс)
+// Child 1 (после 500 мс)
+// Grandchild (после 1000 мс)
+// example() вернётся только после завершения всех корутин
+```
 
 ### coroutineScope
 
-Создаёт новый скоуп, который ждёт всех потомков:
+Создаёт новый scope с новым дочерним Job, который ждёт всех своих потомков:
 
 ```kotlin
 suspend fun processData() = coroutineScope {
     val deferred1 = async { loadData1() }
     val deferred2 = async { loadData2() }
     
-    deferred1.await() + deferred2.await()
-    // coroutineScope ждёт завершения обоих
+    val result1 = deferred1.await()
+    val result2 = deferred2.await()
+    
+    result1 + result2
+    // coroutineScope завершится только после завершения обоих async
 }
+
+suspend fun loadData1(): Int {
+    delay(1000)
+    return 42
+}
+
+suspend fun loadData2(): Int {
+    delay(500)
+    return 58
+}
+```
+
+**Обработка исключений:**
+
+```kotlin
+suspend fun withExceptions() {
+    try {
+        coroutineScope {
+            launch {
+                delay(100)
+                throw Exception("Child failed")
+            }
+            
+            launch {
+                delay(500)
+                println("This will be cancelled before it prints")
+            }
+        }
+    } catch (e: Exception) {
+        println("Caught: ${e.message}")
+        // Caught: Child failed
+    }
+}
+
+// При сбое ЛЮБОГО потомка в coroutineScope:
+// 1. Все сиблинги отменяются.
+// 2. Первое исключение пробрасывается родителю.
+// 3. Родительский scope завершается с ошибкой.
 ```
 
 ### supervisorScope
 
-Создаёт скоуп где сбои не отменяют соседей:
+Создаёт scope с SupervisorJob, где сбой одной дочерней корутины не отменяет её "соседей". Однако, если исключение не обработано внутри дочерней корутины, `supervisorScope` завершится с этим исключением и пробросит его наверх.
 
 ```kotlin
 suspend fun withSupervisor() = supervisorScope {
-    launch {
-        throw Exception("Сбой задачи 1")
+    val job1 = launch {
+        delay(100)
+        throw Exception("Job 1 failed")
     }
     
-    launch {
-        println("Задача 2 выполняется") // Всё равно выполнится!
+    val job2 = launch {
+        delay(500)
+        println("Job 2 completed")  // Может выполниться, даже если Job 1 упал
     }
+    
+    // Если исключение Job 1 не перехвачено, supervisorScope пробросит его после завершения тела,
+    // при этом Job 2 остаётся независимым.
+}
+
+// Сбой Job 1 не отменяет Job 2 автоматически.
+// Неперехваченное исключение всё равно выходит из supervisorScope к родителю.
+```
+
+**Кейс: независимые задачи**
+
+```kotlin
+class DataSyncer {
+    suspend fun syncAll() = supervisorScope {
+        // Каждая синхронизация независима
+        launch {
+            try {
+                syncUsers()
+            } catch (e: Exception) {
+                logError("Users sync failed", e)
+            }
+        }
+        
+        launch {
+            try {
+                syncPosts()
+            } catch (e: Exception) {
+                logError("Posts sync failed", e)
+            }
+        }
+        
+        launch {
+            try {
+                syncComments()
+            } catch (e: Exception) {
+                logError("Comments sync failed", e)
+            }
+        }
+        
+        // Исключения из дочерних корутин локально обработаны;
+        // supervisorScope завершается нормально.
+    }
+    
+    private suspend fun syncUsers() { delay(1000) }
+    private suspend fun syncPosts() { delay(1000) }
+    private suspend fun syncComments() { delay(1000) }
+    private fun logError(msg: String, e: Exception) = println("$msg: $e")
 }
 ```
 
 ### withContext
 
-Переключает контекст без создания нового скоупа:
+Переключает контекст выполнения (например, диспетчер) для вызывающей корутины. Он:
+- создаёт новый комбинированный контекст для блока;
+- использует родительский Job, если не указан другой;
+- приостанавливает вызывающую корутину до завершения блока (и его потомков).
 
 ```kotlin
 suspend fun loadUser(id: Int): User = withContext(Dispatchers.IO) {
-    // Переключается на IO диспетчер
+    // Переключается на IO-диспетчер, вызывающая корутина приостанавливается
     database.getUser(id)
 }
+
+// vs coroutineScope
+suspend fun loadUserScope(id: Int): User = coroutineScope {
+    // Создаёт новый дочерний Job, но остаётся на текущем диспетчере по умолчанию
+    database.getUser(id)
+}
+```
+
+### Распространение отмены
+
+**Родитель -> потомок:**
+
+```kotlin
+suspend fun parentCancellation() = coroutineScope {
+    val job = launch {
+        repeat(5) { i ->
+            delay(500)
+            println("Child: $i")
+        }
+    }
+    
+    delay(1500)
+    cancel() // Отмена родительского scope
+    
+    // Потомок будет автоматически отменён
+}
+
+// Вывод:
+// Child: 0
+// Child: 1
+// Child: 2
+// (затем отмена)
+```
+
+**Потомок -> родитель (через исключение):**
+
+```kotlin
+suspend fun childException() {
+    try {
+        coroutineScope {
+            launch {
+                delay(100)
+                throw Exception("Child failed")
+            }
+            
+            launch {
+                repeat(10) {
+                    delay(200)
+                    println("Sibling: $it")
+                }
+            }
+        }
+    } catch (e: Exception) {
+        println("Parent caught: ${e.message}")
+    }
+}
+
+// Потомок кидает исключение -> scope завершается с ошибкой ->
+// родитель ловит исключение, второй потомок отменяется и не успевает напечатать.
+```
+
+### Стратегии обработки исключений
+
+**Стратегия 1: try-catch в дочерней корутине**
+
+```kotlin
+coroutineScope {
+    launch {
+        try {
+            riskyOperation()
+        } catch (e: Exception) {
+            // Локальная обработка
+            println("Handled in child: $e")
+        }
+    }
+}
+```
+
+**Стратегия 2: supervisorScope / SupervisorJob**
+
+```kotlin
+supervisorScope {
+    launch {
+        riskyOperation() // Может упасть, не отменяя сиблингов
+    }
+    
+    launch {
+        anotherOperation() // Продолжит работу, даже если сосед упал
+    }
+}
+```
+
+**Стратегия 3: CoroutineExceptionHandler**
+
+```kotlin
+val handler = CoroutineExceptionHandler { _, exception ->
+    println("Caught: ${exception.message}")
+}
+
+val scope = CoroutineScope(SupervisorJob() + handler)
+
+scope.launch {
+    throw Exception("Error")
+    // Будет перехвачено handler для корня; не "роняет" весь процесс
+}
+```
+
+### Реальный пример: параллельная загрузка данных
+
+```kotlin
+class UserProfileLoader(
+    private val userApi: UserApi,
+    private val postsApi: PostsApi,
+    private val friendsApi: FriendsApi
+) {
+    suspend fun loadProfile(userId: Int): UserProfile = coroutineScope {
+        // Все запросы в параллели
+        val userDeferred = async { userApi.getUser(userId) }
+        val postsDeferred = async { postsApi.getPosts(userId) }
+        val friendsDeferred = async { friendsApi.getFriends(userId) }
+        
+        val user = userDeferred.await()
+        val posts = postsDeferred.await()
+        val friends = friendsDeferred.await()
+        
+        // Если ЛЮБОЙ запрос падает (и не обработан), остальные отменяются,
+        // а исключение пробрасывается вызывающему коду.
+        UserProfile(user, posts, friends)
+    }
+    
+    suspend fun loadProfileResilient(userId: Int): UserProfile = supervisorScope {
+        val userDeferred = async {
+            try {
+                userApi.getUser(userId)
+            } catch (e: Exception) {
+                null
+            }
+        }
+        
+        val postsDeferred = async {
+            try {
+                postsApi.getPosts(userId)
+            } catch (e: Exception) {
+                emptyList()
+            }
+        }
+        
+        val friendsDeferred = async {
+            try {
+                friendsApi.getFriends(userId)
+            } catch (e: Exception) {
+                emptyList()
+            }
+        }
+        
+        UserProfile(
+            user = userDeferred.await(),
+            posts = postsDeferred.await(),
+            friends = friendsDeferred.await()
+        )
+        // Устойчивый вариант: каждая ошибка обрабатывается независимо,
+        // supervisorScope завершается нормально.
+    }
+}
+
+data class UserProfile(val user: User?, val posts: List<Post>, val friends: List<User>)
+```
+
+### Иерархия Job
+
+```kotlin
+fun demonstrateJobHierarchy() = runBlocking {
+    val parentJob = launch {
+        println("Parent started")
+        
+        val child1 = launch {
+            println("Child 1 started")
+            delay(1000)
+            println("Child 1 completed")
+        }
+        
+        val child2 = launch {
+            println("Child 2 started")
+            delay(500)
+            println("Child 2 completed")
+        }
+        
+        println("Parent waiting for children")
+        child1.join()
+        child2.join()
+        println("Parent completed")
+    }
+    
+    parentJob.join()
+    println("All completed")
+}
+
+// Иерархия Job:
+// parentJob
+//    child1
+//    child2
 ```
 
 ### Таблица Сравнения
 
 | Функция | coroutineScope | supervisorScope | withContext |
-|---------|---------------|-----------------|-------------|
-| Создаёт новый Job | Да | Да (SupervisorJob) | Нет |
-| Распространение исключений | К родителю | Останавливается | К родителю |
-| Ждёт потомков | Да | Да | Нет потомков |
+|--------|----------------|-----------------|-------------|
+| Создаёт новый Job | Да (дочерний Job) | Да (SupervisorJob) | Нет (наследует Job, можно переопределить) |
+| Поведение исключений дочерних | Исключение отменяет сиблингов, пробрасывается родителю | Не отменяет сиблингов, но неперехваченное пробрасывается из scope наружу | Исключения из блока пробрасываются вызывающему коду |
+| Ждёт потомков | Да | Да | Ждёт завершения тела и любых потомков внутри блока |
 | Меняет диспетчер | Нет | Нет | Да (опционально) |
+
+### Продвинутые паттерны
+
+**Паттерн 1: timeout с очисткой**
+
+```kotlin
+suspend fun withTimeoutExample() = coroutineScope {
+    val job = launch {
+        try {
+            longRunningOperation()
+        } finally {
+            cleanup() // Гарантированно выполнится при отмене или завершении
+        }
+    }
+    
+    withTimeout(5000) {
+        job.join()
+    }
+}
+```
+
+**Паттерн 2: Корректная отмена (graceful cancellation)**
+
+```kotlin
+suspend fun gracefulOperation() = coroutineScope {
+    val job = launch {
+        try {
+            while (isActive) { // Проверяем отмену
+                processItem()
+                delay(100)
+            }
+        } finally {
+            withContext(NonCancellable) {
+                // Очистка, которая должна завершиться
+                saveState()
+            }
+        }
+    }
+    
+    // Триггер отмены может быть добавлен здесь при необходимости
+}
+```
+
+**Паттерн 3: Очистка ресурсов**
+
+```kotlin
+suspend fun withResource() = coroutineScope {
+    val resource = acquireResource()
+    
+    try {
+        launch {
+            useResource(resource)
+        }
+    } finally {
+        resource.release()
+        // Гарантированно вызывается даже при отмене scope
+    }
+}
+```
+
+### Рекомендации (Best Practices)
+
+#### DO (делайте):
+
+```kotlin
+// Используйте coroutineScope для связанных задач
+suspend fun loadData() = coroutineScope {
+    val a = async { loadA() }
+    val b = async { loadB() }
+    combine(a.await(), b.await())
+}
+
+// Используйте supervisorScope для независимых задач
+suspend fun syncAll() = supervisorScope {
+    launch { syncUsers() }
+    launch { syncPosts() }
+}
+
+// Обрабатывайте отмену
+launch {
+    try {
+        work()
+    } finally {
+        cleanup()
+    }
+}
+
+// Проверяйте isActive в циклах
+while (isActive) {
+    processNext()
+}
+```
+
+#### DON'T (не делайте):
+
+```kotlin
+// Не глотайте CancellationException
+try {
+    work()
+} catch (e: Exception) {
+    if (e is CancellationException) throw e
+}
+
+// Не используйте GlobalScope для структурированной работы
+GlobalScope.launch {
+    // Нет структурированной параллельности: время жизни не привязано к компоненту
+}
+
+// Не блокируйте потоки
+launch {
+    Thread.sleep(1000) // Плохо, используйте delay(1000)
+}
+
+// Не забывайте про обработку исключений в корневых scope
+coroutineScope {
+    launch {
+        riskyOperation() // Сбой отменит сиблингов и пробросится наверх
+    }
+}
+```
+
+### Тестирование структурированной параллельности
+
+```kotlin
+@Test
+fun testCancellation() = runTest {
+    val job = launch {
+        repeat(10) {
+            delay(100)
+        }
+    }
+    
+    delay(250)
+    job.cancel()
+    
+    assertFalse(job.isActive)
+}
+
+@Test
+fun testExceptionPropagation() = runTest {
+    var caught = false
+    try {
+        coroutineScope {
+            launch {
+                throw Exception("Failed")
+            }
+        }
+    } catch (e: Exception) {
+        caught = true
+    }
+    assertTrue(caught)
+}
+```
 
 ---
 
 ## Answer (EN)
 
-**Structured concurrency** ensures that coroutines follow a clear parent-child hierarchy, providing automatic cancellation propagation, exception handling, and resource cleanup.
+**Structured concurrency** ensures that coroutines follow a clear parent-child hierarchy, providing automatic cancellation propagation, predictable exception propagation, and proper resource cleanup. See also [[c-kotlin]] and [[c-coroutines]].
 
 ### Core Principles
 
-1. **Hierarchy**: Coroutines form parent-child relationships
-2. **Lifetime**: Child lifetime bound to parent
-3. **Cancellation**: Propagates from parent to children
-4. **Exceptions**: Child exceptions propagate to parent
-5. **Completion**: Parent waits for all children
+1. **Hierarchy**: Coroutines form parent-child relationships.
+2. **Lifetime**: Child lifetime is bound to its parent.
+3. **Cancellation**: Propagates from parent to children.
+4. **Exceptions**: By default, child exceptions (in regular scopes) cancel siblings and propagate to the parent.
+5. **Completion**: Parent waits for all children.
 
 ### Coroutine Hierarchy
 
@@ -149,7 +626,7 @@ suspend fun example() = coroutineScope {  // Parent scope
 
 ### coroutineScope
 
-Creates a new scope that waits for all children:
+Creates a new scope with a new child Job that waits for all its children:
 
 ```kotlin
 suspend fun processData() = coroutineScope {
@@ -160,7 +637,7 @@ suspend fun processData() = coroutineScope {
     val result2 = deferred2.await()
     
     result1 + result2
-    // coroutineScope waits for both to complete
+    // coroutineScope completes only after both async coroutines finish (successfully or exceptionally)
 }
 
 suspend fun loadData1(): Int {
@@ -187,7 +664,7 @@ suspend fun withExceptions() {
             
             launch {
                 delay(500)
-                println("This won't execute")
+                println("This will be cancelled before it prints")
             }
         }
     } catch (e: Exception) {
@@ -196,15 +673,15 @@ suspend fun withExceptions() {
     }
 }
 
-// When ANY child fails:
+// When ANY child fails in coroutineScope:
 // 1. All siblings are cancelled
-// 2. Exception propagates to parent
-// 3. Parent scope cancels and throws exception
+// 2. The first failure propagates to the parent
+// 3. The parent scope completes exceptionally and throws
 ```
 
 ### supervisorScope
 
-Creates a scope where failures don't cancel siblings:
+Creates a scope with a SupervisorJob where one child’s failure does not cancel its siblings. However, if a child’s exception is not handled within that child, `supervisorScope` itself will complete exceptionally and rethrow the exception to its parent.
 
 ```kotlin
 suspend fun withSupervisor() = supervisorScope {
@@ -215,14 +692,15 @@ suspend fun withSupervisor() = supervisorScope {
     
     val job2 = launch {
         delay(500)
-        println("Job 2 completed")  // Still executes!
+        println("Job 2 completed")  // Can still execute even if Job 1 fails
     }
     
-    // Parent doesn't fail, continues execution
+    // If Job 1's exception is not caught, supervisorScope will rethrow it
+    // after its body completes (while preserving Job 2's independence).
 }
 
-// Job 1 fails, but Job 2 continues
-// supervisorScope doesn't throw exception
+// Job 1 failure does not automatically cancel Job 2.
+// Unhandled exception still escapes from supervisorScope to its caller.
 ```
 
 **Use case: Independent tasks**
@@ -255,8 +733,8 @@ class DataSyncer {
             }
         }
         
-        // All syncs run independently
-        // One failure doesn't affect others
+        // Failures are isolated by local try/catch; supervisorScope itself
+        // completes normally if exceptions are handled.
     }
     
     private suspend fun syncUsers() { delay(1000) }
@@ -268,18 +746,21 @@ class DataSyncer {
 
 ### withContext
 
-Switches context without creating new scope:
+Switches the coroutine context (e.g., dispatcher) of the current coroutine. It:
+- creates a new combined context for the block;
+- uses the parent Job unless another Job is provided;
+- suspends until the block (and its children) completes.
 
 ```kotlin
 suspend fun loadUser(id: Int): User = withContext(Dispatchers.IO) {
     // Switches to IO dispatcher
-    // Returns immediately after block completes
+    // Caller is suspended until this block completes
     database.getUser(id)
 }
 
 // vs coroutineScope
 suspend fun loadUserScope(id: Int): User = coroutineScope {
-    // Creates new scope but stays on same dispatcher
+    // Creates new child Job but stays on current dispatcher by default
     database.getUser(id)
 }
 ```
@@ -287,25 +768,25 @@ suspend fun loadUserScope(id: Int): User = coroutineScope {
 **Key differences:**
 
 ```kotlin
-// withContext: Changes dispatcher, inherits Job
+// withContext: Changes dispatcher or context, inherits Job (unless overridden)
 suspend fun example1() = withContext(Dispatchers.IO) {
     // Runs on IO dispatcher
-    // Uses parent's Job
-    // Returns immediately
+    // Uses parent's Job by default
+    // Suspends caller until completion
 }
 
-// coroutineScope: Same dispatcher, new Job
+// coroutineScope: Same dispatcher (unless changed inside), new child Job
 suspend fun example2() = coroutineScope {
     // Runs on current dispatcher
-    // Creates new Job
-    // Waits for all children
+    // Creates new child Job
+    // Waits for all child coroutines in this scope
 }
 
 // supervisorScope: Same dispatcher, SupervisorJob
 suspend fun example3() = supervisorScope {
     // Runs on current dispatcher
-    // Creates SupervisorJob
-    // Failures don't cancel siblings
+    // Uses SupervisorJob semantics
+    // Child failures don't cancel siblings, but unhandled ones still escape
 }
 ```
 
@@ -381,12 +862,12 @@ coroutineScope {
 }
 ```
 
-**Strategy 2: SupervisorJob**
+**Strategy 2: supervisorScope / SupervisorJob**
 
 ```kotlin
 supervisorScope {
     launch {
-        riskyOperation() // Can fail without affecting siblings
+        riskyOperation() // Can fail without cancelling siblings
     }
     
     launch {
@@ -406,7 +887,7 @@ val scope = CoroutineScope(SupervisorJob() + handler)
 
 scope.launch {
     throw Exception("Error")
-    // Caught by handler, doesn't crash
+    // Caught by handler for this root coroutine; doesn't crash the process
 }
 ```
 
@@ -429,9 +910,9 @@ class UserProfileLoader(
         val posts = postsDeferred.await()
         val friends = friendsDeferred.await()
         
+        // If ANY request fails (and not handled), all others are cancelled
+        // and the exception is propagated to the caller.
         UserProfile(user, posts, friends)
-        // If ANY request fails, all are cancelled
-        // Exception propagates to caller
     }
     
     suspend fun loadProfileResilient(userId: Int): UserProfile = supervisorScope {
@@ -439,7 +920,7 @@ class UserProfileLoader(
             try {
                 userApi.getUser(userId)
             } catch (e: Exception) {
-                null // Continue even if fails
+                null // Continue even if user request fails
             }
         }
         
@@ -464,7 +945,7 @@ class UserProfileLoader(
             posts = postsDeferred.await(),
             friends = friendsDeferred.await()
         )
-        // Resilient: Each failure handled independently
+        // Resilient: Each failure handled independently; supervisorScope completes normally.
     }
 }
 
@@ -509,24 +990,24 @@ fun demonstrateJobHierarchy() = runBlocking {
 ### Comparison Table
 
 | Feature | coroutineScope | supervisorScope | withContext |
-|---------|---------------|-----------------|-------------|
-| Creates new Job | Yes | Yes (SupervisorJob) | No |
-| Exception propagation | To parent | Stops at scope | To parent |
-| Waits for children | Yes | Yes | No children |
+|--------|----------------|-----------------|-------------|
+| Creates new Job | Yes (child Job) | Yes (SupervisorJob) | No (inherits Job unless overridden) |
+| Exception semantics | Child failure cancels siblings and is rethrown to parent | Child failure does not cancel siblings; unhandled failure is rethrown from scope | Exceptions from block are rethrown to caller |
+| Waits for children | Yes | Yes | Yes, waits for block and its children |
 | Changes dispatcher | No | No | Yes (optional) |
-| Use case | Related tasks | Independent tasks | Switch context |
+| Typical use case | Related tasks, all must succeed or fail together | Independent tasks, failure isolation | Change dispatcher/context for a suspending block |
 
 ### Advanced Patterns
 
 **Pattern 1: Timeout with cleanup**
 
 ```kotlin
-suspend fun withTimeout() = coroutineScope {
+suspend fun withTimeoutExample() = coroutineScope {
     val job = launch {
         try {
             longRunningOperation()
         } finally {
-            cleanup() // Always runs
+            cleanup() // Always runs when job is cancelled or completes
         }
     }
     
@@ -553,6 +1034,8 @@ suspend fun gracefulOperation() = coroutineScope {
             }
         }
     }
+    
+    // Example cancellation trigger could be placed here if needed
 }
 ```
 
@@ -568,7 +1051,7 @@ suspend fun withResource() = coroutineScope {
         }
     } finally {
         resource.release()
-        // Guaranteed to run even if cancelled
+        // Guaranteed to run even if scope is cancelled
     }
 }
 ```
@@ -609,28 +1092,29 @@ while (isActive) {
 #### DON'T:
 
 ```kotlin
-// Don't suppress cancellation
+// Don't blindly swallow CancellationException
 try {
     work()
 } catch (e: Exception) {
-    // Swallows CancellationException!
+    // If you catch Exception, rethrow CancellationException to avoid breaking cancellation
+    if (e is CancellationException) throw e
 }
 
-// Don't use GlobalScope
+// Don't use GlobalScope for structured work
 GlobalScope.launch {
-    // No structured concurrency!
+    // No structured concurrency: lifetime is not bound to any component
 }
 
 // Don't block coroutine threads
 launch {
     Thread.sleep(1000) // Bad!
-    // Use delay(1000)
+    // Use delay(1000) instead
 }
 
-// Don't forget exception handling
+// Don't forget exception handling in root scopes
 coroutineScope {
     launch {
-        riskyOperation() // Can cancel all siblings!
+        riskyOperation() // Failure will cancel siblings and propagate
     }
 }
 ```
@@ -654,13 +1138,18 @@ fun testCancellation() = runTest {
 
 @Test
 fun testExceptionPropagation() = runTest {
-    assertThrows<Exception> {
+    // For suspending tests, use runTest + try/catch instead of assertThrows
+    var caught = false
+    try {
         coroutineScope {
             launch {
                 throw Exception("Failed")
             }
         }
+    } catch (e: Exception) {
+        caught = true
     }
+    assertTrue(caught)
 }
 ```
 

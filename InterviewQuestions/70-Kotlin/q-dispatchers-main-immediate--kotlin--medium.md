@@ -10,291 +10,183 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [android, coroutines, difficulty/medium, dispatchers, immediate, kotlin, main, optimization, performance, ui-thread]
 moc: moc-kotlin
-related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-visibility-modifiers--kotlin--easy]
+related: [c-kotlin, c-coroutines, q-flowon-operator-context-switching--kotlin--hard]
 ---
-# Dispatchers.Main.immediate Vs Dispatchers.Main
-
-## English
-
-### Question
-What is Dispatchers.Main.immediate and how does it differ from Dispatchers.Main? When does Main.immediate avoid dispatch and what are the performance implications? Provide production examples of UI updates, view state changes, performance measurements, and testing strategies.
-
 # Вопрос (RU)
-> What is Dispatchers.Main.immediate and how does it differ from Dispatchers.Main? When does Main.immediate avoid dispatch and what are the performance implications? Provide production examples of UI updates, view state changes, performance measurements, and testing strategies.
-
----
+> Что такое `Dispatchers.Main.immediate`, чем он отличается от `Dispatchers.Main`? В каких случаях `Main.immediate` избегает дополнительной диспетчеризации и как это влияет на производительность? Приведите примеры из практики: обновление UI, изменение состояния представления, измерение производительности и стратегии тестирования.
 
 # Question (EN)
-> What is Dispatchers.Main.immediate and how does it differ from Dispatchers.Main? When does Main.immediate avoid dispatch and what are the performance implications? Provide production examples of UI updates, view state changes, performance measurements, and testing strategies.
+> What is `Dispatchers.Main.immediate` and how does it differ from `Dispatchers.Main`? When does `Main.immediate` avoid dispatch and what are the performance implications? Provide production examples of UI updates, view state changes, performance measurements, and testing strategies.
 
 ## Ответ (RU)
 
-*(Краткое содержание основных пунктов из английской версии)*
-Что такое Dispatchers.Main.immediate и чем он отличается от Dispatchers.Main? Когда Main.immediate избегает dispatch и каковы последствия для производительности? Приведите production примеры обновлений UI, изменений состояния view, измерений производительности и стратегий тестирования.
+`Dispatchers.Main.immediate` — специализированный вариант `Dispatchers.Main`, который может выполнять код немедленно на главном потоке, если корутина уже там выполняется, избегая лишней отправки задачи в очередь главного потока.
 
-**Dispatchers.Main.immediate** — это оптимизация Dispatchers.Main, которая избегает ненужного dispatch когда уже находится на главном потоке. Это может значительно улучшить производительность за счет устранения overhead dispatch.
+Высокоуровневое поведение:
+- `Dispatchers.Main`:
+  - Диспетчер для главного/UI-потока.
+  - Обычно постит выполнение в очередь главного looper'а.
+- `Dispatchers.Main.immediate`:
+  - Если выполнение уже в корректном контексте `Main` (тот же главный поток/loop), выполняет блок синхронно, без повторной диспетчеризации.
+  - Если мы не на `Main`, ведет себя как `Dispatchers.Main`, т.е. диспатчит на главный поток.
 
-*(Продолжение следует той же структуре с подробными примерами разницы Main и Main.immediate, случаев использования, production примеров, performance measurements, testing и best practices на русском языке)*
+Это про:
+- Избежание лишних "прыжков" через очередь, когда вы уже на `Main`.
+- Более предсказуемый порядок выполнения в некоторых сценариях.
+- Микро-оптимизацию горячих путей с частыми мелкими UI/State-обновлениями (но не про магическое ускорение на порядки).
 
-### Связанные Вопросы
--  - Основы диспетчеров
--  - Контекст корутины
--  - Интеграция с Android lifecycle
-- [[q-flow-basics--kotlin--easy]] - Основы Flow
+### 1. Разница между Main и Main.immediate
 
-### Дополнительные Вопросы
-1. Какой реальный механизм позволяет Main.immediate проверить, находится ли он уже на главном потоке?
-2. Какое улучшение производительности можно ожидать от использования Main.immediate в типичном Android приложении?
-3. Когда использование Main.immediate может навредить производительности вместо того, чтобы помочь?
-4. Объясните связь между Dispatchers.Main.immediate и диспетчеризацией event loop.
-5. Как тестовые диспетчеры (StandardTestDispatcher, UnconfinedTestDispatcher) ведут себя с Main.immediate?
-6. Есть ли Main.immediate эквивалент для других dispatchers (IO, Default)? Почему да или нет?
-7. Как профилировать и измерить влияние переключения с Main на Main.immediate в production приложении?
+Точнее:
 
-### Ссылки
-- [Coroutine Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
-- [Документация Dispatchers.Main](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/-main.html)
-- [Android Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
-- [Оптимизация производительности](https://developer.android.com/topic/performance)
+- `Dispatchers.Main`:
+  - Планирует выполнение на главном потоке (Android: `Handler`/`Looper`).
+  - Вызов `withContext(Dispatchers.Main)` из кода, уже идущего на `Main`, может привести к дополнительному посту в очередь.
 
-## Answer (EN)
+- `Dispatchers.Main.immediate`:
+  - Проверяет, выполняется ли корутина уже в контексте `Dispatchers.Main`.
+  - Если да — продолжает выполнение сразу в текущем стеке вызовов (без постановки в очередь).
+  - Если нет — диспатчит так же, как `Dispatchers.Main`.
 
+Упрощенно:
 
-
-**Dispatchers.Main.immediate** is an optimization of Dispatchers.Main that avoids unnecessary dispatch when already on the main thread. This can significantly improve performance by eliminating dispatch overhead.
-
-#### 1. The Difference Between Main and Main.immediate
-
-**Dispatchers.Main:**
-- **Always** dispatches to the main thread queue
-- Even if already on main thread
-- Adds dispatch overhead (event loop delay)
-
-**Dispatchers.Main.immediate:**
-- Checks if already on main thread
-- If yes: executes **immediately** (no dispatch)
-- If no: dispatches to main thread (same as Main)
-
-**Visual comparison:**
-
-```
-Already on Main Thread:
-
+```kotlin
+// Уже на Main:
 withContext(Dispatchers.Main) {
-    // Code here
+    // Может быть поставлено в очередь и выполнено позже
 }
-→ Posted to event queue → Executed later
-  (unnecessary dispatch!)
 
 withContext(Dispatchers.Main.immediate) {
-    // Code here
+    // Выполняется сразу в текущем стеке
 }
-→ Executed immediately
-  (no dispatch!)
 
-Not on Main Thread:
-
-Both Main and Main.immediate behave the same:
-→ Posted to main thread event queue → Executed on main thread
+// Не на Main:
+withContext(Dispatchers.Main) { /* ... */ }
+withContext(Dispatchers.Main.immediate) { /* то же самое */ }
 ```
 
-#### 2. Basic Example
-
-**Demonstrating the difference:**
+### 2. Базовый пример
 
 ```kotlin
 import kotlinx.coroutines.*
 import android.os.Looper
+import kotlin.system.measureTimeMillis
 
 suspend fun demonstrateDifference() {
-    println("1. Current thread: ${Thread.currentThread().name}")
-    println("   Is main thread: ${Looper.myLooper() == Looper.getMainLooper()}")
+    println("1. Current thread: ${'$'}{Thread.currentThread().name}")
+    println("   Is main thread: ${'$'}{Looper.myLooper() == Looper.getMainLooper()}")
 
-    // Using Dispatchers.Main
     withContext(Dispatchers.Main) {
-        println("2. In Dispatchers.Main")
-        println("   Current thread: ${Thread.currentThread().name}")
-        // Even though we're on main, this was dispatched
+        println("2. In Dispatchers.Main (executed on main)")
     }
 
-    // Using Dispatchers.Main.immediate
     withContext(Dispatchers.Main.immediate) {
-        println("3. In Dispatchers.Main.immediate")
-        println("   Current thread: ${Thread.currentThread().name}")
-        // If already on main, no dispatch happened
+        println("3. In Dispatchers.Main.immediate (on main, may reuse current frame)")
     }
 }
-
-// Called from main thread:
-// Output:
-// 1. Current thread: main
-//    Is main thread: true
-// 2. In Dispatchers.Main      ← Dispatched (delayed)
-//    Current thread: main
-// 3. In Dispatchers.Main.immediate  ← Immediate (no delay)
-//    Current thread: main
 ```
 
-**Timing demonstration:**
+Идея микробенчмарка:
 
 ```kotlin
 suspend fun timingDifference() = withContext(Dispatchers.Main) {
-    println("Starting on main thread")
-
-    // Measure time for Main
     val timeMain = measureTimeMillis {
-        repeat(100) {
+        repeat(1_000) {
             withContext(Dispatchers.Main) {
-                // Simple operation
+                // trivial work
             }
         }
     }
-    println("Dispatchers.Main: ${timeMain}ms")
 
-    // Measure time for Main.immediate
     val timeImmediate = measureTimeMillis {
-        repeat(100) {
+        repeat(1_000) {
             withContext(Dispatchers.Main.immediate) {
-                // Simple operation
+                // trivial work
             }
         }
     }
-    println("Dispatchers.Main.immediate: ${timeImmediate}ms")
 
-    println("Difference: ${timeMain - timeImmediate}ms")
-}
-
-// Typical output:
-// Dispatchers.Main: 150ms
-// Dispatchers.Main.immediate: 5ms
-// Difference: 145ms  ← Significant savings!
-```
-
-#### 3. When Main.immediate Avoids Dispatch
-
-**Decision tree:**
-
-```kotlin
-fun dispatchBehavior() {
-    /*
-    withContext(Dispatchers.Main.immediate) {
-        // Are we already on main thread?
-        if (currentThread == mainThread) {
-            // YES → Execute immediately (no dispatch)
-            executeCode()
-        } else {
-            // NO → Dispatch to main thread
-            postToMainThreadQueue {
-                executeCode()
-            }
-        }
-    }
-    */
+    println("Main: ${'$'}timeMain ms, Main.immediate: ${'$'}timeImmediate ms")
 }
 ```
 
-**Scenarios:**
+Ключ: `Main.immediate` может быть заметно быстрее в плотных циклах, когда вы уже на `Main`, но это микро-выигрыш.
+
+### 3. Когда Main.immediate избегает диспетчеризации
 
 ```kotlin
-// Scenario 1: Already on main thread → No dispatch
+withContext(Dispatchers.Main.immediate) {
+    // Если уже на Main -> выполняется inline
+    // Иначе -> обычный пост на главный поток
+}
+```
+
+Сценарии:
+
+```kotlin
+// 1: Уже на Main -> без лишнего dispatch
 lifecycleScope.launch(Dispatchers.Main) {
-    // We're on main thread
     withContext(Dispatchers.Main.immediate) {
-        updateUI() //  Immediate execution
+        updateUI()
     }
 }
 
-// Scenario 2: On background thread → Dispatch happens
+// 2: Фон -> нужен dispatch
 lifecycleScope.launch(Dispatchers.IO) {
-    // We're on background thread
     val data = fetchData()
-
     withContext(Dispatchers.Main.immediate) {
-        updateUI(data) //  Must dispatch (same as Main)
+        updateUI(data)
     }
 }
 
-// Scenario 3: Nested withContext
+// 3: Main -> IO -> обратно
 lifecycleScope.launch(Dispatchers.Main) {
-    withContext(Dispatchers.IO) {
-        val data = compute()
-
-        withContext(Dispatchers.Main.immediate) {
-            // Was on IO, must dispatch to Main
-            updateUI(data) //  Must dispatch
-        }
+    val data = withContext(Dispatchers.IO) { compute() }
+    withContext(Dispatchers.Main.immediate) {
+        updateUI(data)
     }
 }
 ```
 
-#### 4. Production Example: Repository Pattern
-
-**Optimal repository implementation:**
+### 4. Продакшн пример: паттерн Repository / `ViewModel`
 
 ```kotlin
 class UserRepository(
     private val apiService: ApiService,
-    private val userDao: UserDao
+    private val userDao: UserDao,
 ) {
-    //  BAD: Always uses Main (unnecessary dispatches)
-    suspend fun getUserBad(userId: String): User = withContext(Dispatchers.Main) {
-        // Fetch from network
-        val user = withContext(Dispatchers.IO) {
-            apiService.getUser(userId)
-        }
-
-        // Update UI - but we dispatched even though we're on Main!
-        withContext(Dispatchers.Main) {
-            showLoadingIndicator(false)
-        }
-
-        user
-    }
-
-    //  GOOD: Uses Main.immediate to avoid unnecessary dispatch
-    suspend fun getUserGood(userId: String): User {
-        // Fetch from network
-        val user = withContext(Dispatchers.IO) {
-            apiService.getUser(userId)
-        }
-
-        // Update UI - uses immediate to avoid dispatch if on Main
-        withContext(Dispatchers.Main.immediate) {
-            showLoadingIndicator(false)
-        }
-
-        return user
-    }
-
-    //  BETTER: Caller handles dispatcher
-    suspend fun getUserBetter(userId: String): User {
-        return withContext(Dispatchers.IO) {
-            apiService.getUser(userId)
-        }
+    suspend fun getUser(userId: String): User = withContext(Dispatchers.IO) {
+        val remote = apiService.getUser(userId)
+        userDao.saveUser(remote)
+        remote
     }
 }
 
-// Usage from ViewModel (already on Main)
 class UserViewModel(private val repository: UserRepository) : ViewModel() {
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    private val _user = MutableStateFlow<User?>(null)
+    val user: StateFlow<User?> = _user
+
     fun loadUser(userId: String) {
-        viewModelScope.launch { // Dispatchers.Main by default
+        // viewModelScope по умолчанию на Main
+        viewModelScope.launch {
             _isLoading.value = true
-
             try {
-                val user = repository.getUserBetter(userId)
-
-                // We're already on Main, no dispatch needed
+                val user = repository.getUser(userId)
                 withContext(Dispatchers.Main.immediate) {
                     _user.value = user
                     _isLoading.value = false
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main.immediate) {
-                    _error.value = e.message
                     _isLoading.value = false
+                    // обновить состояние ошибки
                 }
             }
         }
@@ -302,9 +194,7 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 }
 ```
 
-#### 5. Production Example: UI Updates
-
-**Efficient UI updates:**
+### 5. Продакшн пример: обновление UI
 
 ```kotlin
 class ProductListViewModel(
@@ -312,286 +202,120 @@ class ProductListViewModel(
 ) : ViewModel() {
 
     private val _products = MutableStateFlow<List<Product>>(emptyList())
-    val products: StateFlow<List<Product>> = _products.asStateFlow()
+    val products: StateFlow<List<Product>> = _products
 
     fun loadProducts() {
         viewModelScope.launch {
-            // Load from background
             val products = withContext(Dispatchers.IO) {
                 repository.getProducts()
             }
 
-            // Update UI state - use immediate since we're back on Main
             withContext(Dispatchers.Main.immediate) {
                 _products.value = products
-                // Multiple state updates - no dispatch overhead!
                 updateFilterState()
                 updateSortState()
-                notifyLoadComplete()
             }
         }
     }
 
-    private fun updateFilterState() {
-        // Already on Main.immediate context
-    }
-
-    private fun updateSortState() {
-        // Already on Main.immediate context
-    }
-
-    private fun notifyLoadComplete() {
-        // Already on Main.immediate context
-    }
+    private fun updateFilterState() { /* ... */ }
+    private fun updateSortState() { /* ... */ }
 }
-```
 
-**View layer updates:**
-
-```kotlin
 @Composable
 fun ProductScreen(viewModel: ProductListViewModel) {
     val products by viewModel.products.collectAsState()
 
     LaunchedEffect(Unit) {
-        // LaunchedEffect runs on Dispatchers.Main by default
         viewModel.loadProducts()
-
-        // Updating UI after some operation
-        withContext(Dispatchers.Main.immediate) {
-            // If already on Main (which we are), no dispatch
-            // Very fast UI updates
-            updateScrollPosition()
-            highlightFirstItem()
-        }
     }
 
     ProductList(products = products)
 }
 ```
 
-#### 6. Flow with flowOn and Main.immediate
-
-**Optimizing Flow collection:**
+### 6. `Flow` с `flowOn` и Main.immediate
 
 ```kotlin
 class DataRepository {
     fun observeData(): Flow<Data> = flow {
-        // Heavy computation
         val data = computeData()
         emit(data)
-    }
-        .flowOn(Dispatchers.Default)
-        // Flow runs on Default dispatcher
+    }.flowOn(Dispatchers.Default)
 }
 
-//  BAD: Unnecessary dispatch
-fun collectDataBad(repository: DataRepository) {
+// Избыточно, но корректно
+fun collectDataRedundant(repository: DataRepository) {
     lifecycleScope.launch(Dispatchers.Main) {
-        repository.observeData()
-            .collect { data ->
-                // Already on Main, but withContext(Main) dispatches
-                withContext(Dispatchers.Main) {
-                    updateUI(data)
-                }
-            }
-    }
-}
-
-//  GOOD: Use immediate to avoid dispatch
-fun collectDataGood(repository: DataRepository) {
-    lifecycleScope.launch(Dispatchers.Main) {
-        repository.observeData()
-            .collect { data ->
-                // Use immediate - no dispatch if on Main
-                withContext(Dispatchers.Main.immediate) {
-                    updateUI(data)
-                }
-            }
-    }
-}
-
-//  BETTER: No withContext needed, already on Main
-fun collectDataBetter(repository: DataRepository) {
-    lifecycleScope.launch(Dispatchers.Main) {
-        repository.observeData()
-            .collect { data ->
-                // Already on Main from lifecycleScope
+        repository.observeData().collect { data ->
+            withContext(Dispatchers.Main.immediate) {
                 updateUI(data)
             }
+        }
+    }
+}
+
+// Предпочтительно: полагаться на контекст коллектора
+fun collectDataBetter(repository: DataRepository) {
+    lifecycleScope.launch(Dispatchers.Main) {
+        repository.observeData().collect { data ->
+            updateUI(data)
+        }
     }
 }
 ```
 
-#### 7. Performance Measurements
+Идея: код один и тот же, `Main.immediate` полезен, когда путь вызова может быть из разных контекстов, и вы хотите избежать лишнего dispatch при уже активном `Main`.
 
-**Measuring dispatch overhead:**
-
-```kotlin
-class DispatcherPerformanceTest {
-
-    fun measureDispatchOverhead() {
-        // Test environment: Android device, UI thread
-
-        // Scenario 1: Many small UI updates with Main
-        val timeWithMain = runBlocking(Dispatchers.Main) {
-            measureTimeMillis {
-                repeat(1000) {
-                    withContext(Dispatchers.Main) {
-                        // Simulate small UI update
-                        val x = 1 + 1
-                    }
-                }
-            }
-        }
-
-        // Scenario 2: Many small UI updates with Main.immediate
-        val timeWithImmediate = runBlocking(Dispatchers.Main) {
-            measureTimeMillis {
-                repeat(1000) {
-                    withContext(Dispatchers.Main.immediate) {
-                        // Simulate small UI update
-                        val x = 1 + 1
-                    }
-                }
-            }
-        }
-
-        println("""
-            Performance Comparison:
-            Dispatchers.Main: ${timeWithMain}ms
-            Dispatchers.Main.immediate: ${timeWithImmediate}ms
-            Savings: ${timeWithMain - timeWithImmediate}ms
-            Improvement: ${(timeWithMain - timeWithImmediate) * 100 / timeWithMain}%
-        """.trimIndent())
-
-        // Typical results on Android:
-        // Dispatchers.Main: 250ms
-        // Dispatchers.Main.immediate: 15ms
-        // Savings: 235ms
-        // Improvement: 94%
-    }
-}
-```
-
-**Real-world performance test:**
+### 7. Измерения производительности
 
 ```kotlin
-class RealWorldPerformanceTest {
+suspend fun compareMainVsImmediate() = withContext(Dispatchers.Main) {
+    val iterations = 10_000
 
-    suspend fun testListScrollPerformance() {
-        val items = List(100) { "Item $it" }
-
-        // Simulate list scrolling with position updates
-        val timeWithMain = measureTimeMillis {
-            items.forEach { item ->
-                withContext(Dispatchers.Main) {
-                    updateListItemPosition(item)
-                }
+    val tMain = measureTimeMillis {
+        repeat(iterations) {
+            withContext(Dispatchers.Main) {
+                // tiny work
             }
         }
-
-        val timeWithImmediate = measureTimeMillis {
-            items.forEach { item ->
-                withContext(Dispatchers.Main.immediate) {
-                    updateListItemPosition(item)
-                }
-            }
-        }
-
-        println("""
-            List Scroll Performance:
-            With Main: ${timeWithMain}ms (${1000f / timeWithMain} fps)
-            With Immediate: ${timeWithImmediate}ms (${1000f / timeWithImmediate} fps)
-        """.trimIndent())
-
-        // Typical results:
-        // With Main: 500ms (2 fps) ← Janky!
-        // With Immediate: 50ms (20 fps) ← Smooth!
     }
 
-    private fun updateListItemPosition(item: String) {
-        // Simulate position update
-        Thread.sleep(1)
-    }
-}
-```
-
-#### 8. Common Use Cases
-
-**When to use Main.immediate:**
-
-| Use Case | Recommended | Reason |
-|----------|-------------|--------|
-| Update UI from ViewModel | Main.immediate | Caller (viewModelScope) is on Main |
-| Update UI after background work | Main.immediate | Might already be on Main |
-| Flow collection in UI | Main.immediate | Collection scope often on Main |
-| Event handlers | Main.immediate | Called from UI thread |
-| State updates | Main.immediate | Frequently called from Main |
-| Animation callbacks | Main.immediate | Called on UI thread |
-
-**Code examples:**
-
-```kotlin
-// Use case 1: ViewModel state updates
-class MyViewModel : ViewModel() {
-    fun updateState(newValue: String) {
-        viewModelScope.launch {
-            // viewModelScope uses Dispatchers.Main
+    val tImmediate = measureTimeMillis {
+        repeat(iterations) {
             withContext(Dispatchers.Main.immediate) {
-                _state.value = newValue // No dispatch overhead
+                // tiny work
             }
         }
     }
-}
 
-// Use case 2: After background work
-suspend fun processAndUpdate() {
-    val data = withContext(Dispatchers.IO) {
-        fetchData()
-    }
-
-    withContext(Dispatchers.Main.immediate) {
-        updateUI(data) // Optimized return to Main
-    }
-}
-
-// Use case 3: Flow collection
-fun observeUserFlow() {
-    lifecycleScope.launch {
-        userFlow.collect { user ->
-            withContext(Dispatchers.Main.immediate) {
-                binding.userName.text = user.name
-            }
-        }
-    }
-}
-
-// Use case 4: Event handlers
-fun onButtonClick() {
-    lifecycleScope.launch {
-        withContext(Dispatchers.Main.immediate) {
-            showLoading()
-        }
-
-        val result = withContext(Dispatchers.IO) {
-            performAction()
-        }
-
-        withContext(Dispatchers.Main.immediate) {
-            hideLoading()
-            showResult(result)
-        }
-    }
+    println("Main: ${'$'}tMain ms, Main.immediate: ${'$'}tImmediate ms")
 }
 ```
 
-#### 9. Testing Main Vs Main.immediate
+Рекомендации:
+- Не блокировать главный поток (никакого `Thread.sleep`).
+- Оценивать в реалистичных сценариях и профилировщиках (Android Studio, трассировка и т.п.).
 
-**Unit test setup:**
+### 8. Типичные случаи использования
+
+Когда `Dispatchers.Main.immediate` уместен:
+- Обновление UI/состояния в `ViewModel` или презентационном слое, уже работающем на `Main`.
+- После возврата с фонового потока, когда вы уверены, что снова на `Main`, и хотите избежать лишнего поста.
+- Когда важно, чтобы логика выполнилась до следующего тика event loop.
+
+Когда нормально/предпочтительно использовать `Dispatchers.Main`:
+- Для стартовых `launch` из UI-событий/жизненного цикла.
+- Когда вы специально хотите отложить выполнение до следующей итерации цикла сообщений.
+
+### 9. Тестирование Main vs Main.immediate
 
 ```kotlin
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.*
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -611,164 +335,400 @@ class MainImmediateTest {
     }
 
     @Test
-    fun `Main immediate executes without delay when on main`() = runTest {
+    fun `Main_immediate_runs_inline_when_on_main_in_test`() = runTest {
         var executionOrder = ""
 
         launch(Dispatchers.Main) {
             executionOrder += "1"
-
             withContext(Dispatchers.Main.immediate) {
                 executionOrder += "2"
             }
-
             executionOrder += "3"
         }
 
-        // Main.immediate executes immediately
+        advanceUntilIdle()
         assertEquals("123", executionOrder)
     }
+}
+```
 
-    @Test
-    fun `Main dispatches even when on main`() = runTest {
-        var executionOrder = ""
+Комментарии:
+- С `StandardTestDispatcher` оба (`Main` и `Main.immediate`) управляются планировщиком теста; разница видна в порядке внутри одного логического тика.
 
-        launch(Dispatchers.Main) {
-            executionOrder += "1"
+### 10. Рекомендуемые практики
 
+- Использовать `Dispatchers.Main` для:
+  - Запуска корутин из UI/жизненного цикла.
+  - Случаев, когда нужен "шаг" через event loop.
+- Использовать `Dispatchers.Main.immediate` для:
+  - Внутренних `withContext` в уже запущенных на Main корутинах, когда вы обновляете UI/состояние.
+  - Микро-оптимизации горячих путей и строгого порядка выполнения.
+- Избегать:
+  - Блокирующих/тяжелых операций на `Main` или `Main.immediate`.
+  - Избыточных `withContext(Dispatchers.Main/Dispatchers.Main.immediate)`, если вы и так стабильно на Main и не полагаетесь на его семантику.
+
+## Answer (EN)
+
+Dispatchers.Main.immediate is a specialized variant of Dispatchers.Main that can execute coroutines immediately on the main thread when they are already running there, avoiding an extra dispatch through the main event queue.
+
+High-level behavior:
+- Dispatchers.Main:
+  - Dispatcher for the main/UI thread.
+  - Typically posts work to the main thread/event loop.
+- Dispatchers.Main.immediate:
+  - If execution is already on the appropriate Main dispatcher (same main thread / event loop), it runs the block immediately (synchronously) without re-dispatch.
+  - If not on main, it behaves like Dispatchers.Main and dispatches to the main thread.
+
+This is primarily about:
+- Avoiding redundant dispatch hops when you're already on Main.
+- Preserving more predictable ordering in some scenarios.
+- Micro-optimizing hot-path UI/state updates; it is not a magic large speedup.
+
+#### 1. The Difference Between Main and Main.immediate
+
+- Dispatchers.Main:
+  - Schedules execution on the main thread (Android: Handler/Looper).
+  - From code already running on Main, `withContext(Dispatchers.Main)` may cause an extra enqueue.
+
+- Dispatchers.Main.immediate:
+  - Checks if the coroutine is already running in Dispatchers.Main context.
+  - If yes, continues inline in the current call stack.
+  - If no, dispatches like Dispatchers.Main.
+
+```kotlin
+// Already on Main:
+withContext(Dispatchers.Main) {
+    // May be enqueued
+}
+
+withContext(Dispatchers.Main.immediate) {
+    // Runs inline
+}
+
+// Not on Main:
+withContext(Dispatchers.Main) { /* ... */ }
+withContext(Dispatchers.Main.immediate) { /* same */ }
+```
+
+#### 2. Basic Example
+
+```kotlin
+import kotlinx.coroutines.*
+import android.os.Looper
+import kotlin.system.measureTimeMillis
+
+suspend fun demonstrateDifference() {
+    println("1. Current thread: ${'$'}{Thread.currentThread().name}")
+    println("   Is main thread: ${'$'}{Looper.myLooper() == Looper.getMainLooper()}")
+
+    withContext(Dispatchers.Main) {
+        println("2. In Dispatchers.Main (executed on main)")
+    }
+
+    withContext(Dispatchers.Main.immediate) {
+        println("3. In Dispatchers.Main.immediate (on main, may reuse current frame)")
+    }
+}
+```
+
+```kotlin
+suspend fun timingDifference() = withContext(Dispatchers.Main) {
+    val timeMain = measureTimeMillis {
+        repeat(1_000) {
             withContext(Dispatchers.Main) {
-                executionOrder += "2"
+                // trivial work
             }
-
-            executionOrder += "3"
         }
-
-        // Need to advance time to execute dispatched work
-        advanceUntilIdle()
-
-        // Main dispatches, so "2" comes after "3"
-        // (Order depends on scheduler)
     }
 
-    @Test
-    fun `ViewModel with immediate updates state efficiently`() = runTest {
-        val viewModel = MyViewModel(repository)
-
-        viewModel.updateState("test")
-
-        // With immediate, state is updated synchronously
-        assertEquals("test", viewModel.state.value)
+    val timeImmediate = measureTimeMillis {
+        repeat(1_000) {
+            withContext(Dispatchers.Main.immediate) {
+                // trivial work
+            }
+        }
     }
+
+    println("Main: ${'$'}timeMain ms, Main.immediate: ${'$'}timeImmediate ms")
 }
 ```
 
-#### 10. Best Practices and Guidelines
-
-**When to use each:**
+#### 3. When Main.immediate Avoids Dispatch
 
 ```kotlin
-//  PREFER Main.immediate for:
-
-// 1. Returning to Main after background work
-withContext(Dispatchers.IO) {
-    fetchData()
-}
 withContext(Dispatchers.Main.immediate) {
-    updateUI() // Might already be on Main
+    // Inline if already on Main; otherwise dispatch
 }
+```
 
-// 2. In ViewModel coroutines
-viewModelScope.launch {
-    withContext(Dispatchers.Main.immediate) {
-        _state.value = newValue
-    }
-}
+Examples:
 
-// 3. Multiple UI updates in sequence
-withContext(Dispatchers.Main.immediate) {
-    updateView1()
-    updateView2()
-    updateView3()
-}
-
-// 4. Flow collection
-lifecycleScope.launch {
-    flow.collect { value ->
-        withContext(Dispatchers.Main.immediate) {
-            updateUI(value)
-        }
-    }
-}
-
-//  Use regular Main for:
-
-// 1. When you specifically want to defer execution
-launch(Dispatchers.Main) {
-    // Defer to next frame
-}
-
-// 2. Initial coroutine launch
+```kotlin
 lifecycleScope.launch(Dispatchers.Main) {
-    // Entry point
-}
-
-// 3. When batching UI updates
-// (though usually better to use Main.immediate)
-```
-
-**Comparison table:**
-
-| Aspect | Main | Main.immediate |
-|--------|------|----------------|
-| Already on main | Dispatches | Immediate |
-| Not on main | Dispatches | Dispatches |
-| Performance | Lower (dispatch overhead) | Higher (avoids dispatch) |
-| Use case | Defer execution | Optimize when might be on Main |
-| Default choice | Launching coroutines | Switching contexts |
-| Best for | Entry points | Mid-coroutine updates |
-
-**Common mistakes:**
-
-```kotlin
-//  Mistake 1: Using Main when immediate would be better
-viewModelScope.launch {
-    withContext(Dispatchers.Main) { // viewModelScope is already Main!
-        updateState()
-    }
-}
-
-//  Fix: Use immediate
-viewModelScope.launch {
-    withContext(Dispatchers.Main.immediate) {
-        updateState()
-    }
-}
-
-//  Mistake 2: Unnecessary withContext
-lifecycleScope.launch {
-    // Already on Main from lifecycleScope
     withContext(Dispatchers.Main.immediate) {
         updateUI()
     }
 }
 
-//  Fix: Remove withContext
-lifecycleScope.launch {
-    updateUI() // Already on Main
+lifecycleScope.launch(Dispatchers.IO) {
+    val data = fetchData()
+    withContext(Dispatchers.Main.immediate) {
+        updateUI(data)
+    }
 }
 
-//  Mistake 3: Using immediate for initial launch
-lifecycleScope.launch(Dispatchers.Main.immediate) {
-    // Don't use immediate for launch, use Main
-}
-
-//  Fix: Use Main for launch
 lifecycleScope.launch(Dispatchers.Main) {
-    // Use Main for launching
+    val data = withContext(Dispatchers.IO) { compute() }
+    withContext(Dispatchers.Main.immediate) {
+        updateUI(data)
+    }
 }
 ```
 
-### Related Questions
--  - Dispatcher fundamentals
--  - Coroutine context
--  - Android lifecycle integration
-- [[q-flow-basics--kotlin--easy]] - Flow fundamentals
+#### 4. Production Example: ViewModel/Repository Pattern
+
+```kotlin
+class UserRepository(
+    private val apiService: ApiService,
+    private val userDao: UserDao,
+) {
+    suspend fun getUser(userId: String): User = withContext(Dispatchers.IO) {
+        val remote = apiService.getUser(userId)
+        userDao.saveUser(remote)
+        remote
+    }
+}
+
+class UserViewModel(private val repository: UserRepository) : ViewModel() {
+
+    private val _isLoading = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+    private val _user = MutableStateFlow<User?>(null)
+    val user: StateFlow<User?> = _user
+
+    fun loadUser(userId: String) {
+        viewModelScope.launch {
+            _isLoading.value = true
+            try {
+                val user = repository.getUser(userId)
+                withContext(Dispatchers.Main.immediate) {
+                    _user.value = user
+                    _isLoading.value = false
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main.immediate) {
+                    _isLoading.value = false
+                    // update error state
+                }
+            }
+        }
+    }
+}
+```
+
+#### 5. Production Example: UI Updates
+
+```kotlin
+class ProductListViewModel(
+    private val repository: ProductRepository
+) : ViewModel() {
+
+    private val _products = MutableStateFlow<List<Product>>(emptyList())
+    val products: StateFlow<List<Product>> = _products
+
+    fun loadProducts() {
+        viewModelScope.launch {
+            val products = withContext(Dispatchers.IO) {
+                repository.getProducts()
+            }
+
+            withContext(Dispatchers.Main.immediate) {
+                _products.value = products
+                updateFilterState()
+                updateSortState()
+            }
+        }
+    }
+
+    private fun updateFilterState() { /* ... */ }
+    private fun updateSortState() { /* ... */ }
+}
+
+@Composable
+fun ProductScreen(viewModel: ProductListViewModel) {
+    val products by viewModel.products.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.loadProducts()
+    }
+
+    ProductList(products = products)
+}
+```
+
+#### 6. Flow with flowOn and Main.immediate
+
+```kotlin
+class DataRepository {
+    fun observeData(): Flow<Data> = flow {
+        val data = computeData()
+        emit(data)
+    }.flowOn(Dispatchers.Default)
+}
+
+fun collectDataRedundant(repository: DataRepository) {
+    lifecycleScope.launch(Dispatchers.Main) {
+        repository.observeData().collect { data ->
+            withContext(Dispatchers.Main.immediate) {
+                updateUI(data)
+            }
+        }
+    }
+}
+
+fun collectDataBetter(repository: DataRepository) {
+    lifecycleScope.launch(Dispatchers.Main) {
+        repository.observeData().collect { data ->
+            updateUI(data)
+        }
+    }
+}
+```
+
+#### 7. Performance Measurements
+
+```kotlin
+suspend fun compareMainVsImmediate() = withContext(Dispatchers.Main) {
+    val iterations = 10_000
+
+    val tMain = measureTimeMillis {
+        repeat(iterations) {
+            withContext(Dispatchers.Main) {
+                // tiny work
+            }
+        }
+    }
+
+    val tImmediate = measureTimeMillis {
+        repeat(iterations) {
+            withContext(Dispatchers.Main.immediate) {
+                // tiny work
+            }
+        }
+    }
+
+    println("Main: ${'$'}tMain ms, Main.immediate: ${'$'}tImmediate ms")
+}
+```
+
+Guidelines:
+- Use realistic scenarios and proper profiling.
+- Do not block the main thread when measuring.
+
+#### 8. Common Use Cases
+
+Use Dispatchers.Main.immediate for:
+- UI/state updates in a coroutine already running on Main.
+- Inline updates after background work when resuming on Main.
+- Situations where you care about running before the next main loop tick.
+
+Use Dispatchers.Main for:
+- Initial launches from UI/lifecycle.
+- When you want to defer to the next event-loop iteration.
+
+#### 9. Testing Main vs Main.immediate
+
+```kotlin
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.*
+import org.junit.After
+import org.junit.Before
+import org.junit.Test
+import kotlin.test.assertEquals
+
+class MainImmediateTest {
+
+    private val testDispatcher = StandardTestDispatcher()
+
+    @Before
+    fun setup() {
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
+    @Test
+    fun `Main_immediate_runs_inline_when_on_main_in_test`() = runTest {
+        var executionOrder = ""
+
+        launch(Dispatchers.Main) {
+            executionOrder += "1"
+            withContext(Dispatchers.Main.immediate) {
+                executionOrder += "2"
+            }
+            executionOrder += "3"
+        }
+
+        advanceUntilIdle()
+        assertEquals("123", executionOrder)
+    }
+}
+```
+
+Notes:
+- With StandardTestDispatcher, both are driven by the test scheduler; the visible difference is ordering within a logical tick.
+
+#### 10. Best Practices and Guidelines
+
+- Prefer Dispatchers.Main for:
+  - Launching coroutines from UI/lifecycle.
+  - When you intentionally want the event-loop hop.
+- Prefer Dispatchers.Main.immediate for:
+  - Internal context switches inside Main coroutines for UI/state updates.
+  - Avoiding redundant dispatch hops on hot paths.
+- Avoid:
+  - Blocking/heavy work on Main or Main.immediate.
+  - Unnecessary `withContext(Main/Main.immediate)` when already on Main.
+
+## Дополнительные вопросы (RU)
+1. Как `Main.immediate` определяет, что выполнение уже находится в соответствующем контексте главного потока?
+2. Какое реальное улучшение можно ожидать от `Main.immediate` в горячих точках с частыми небольшими UI-обновлениями?
+3. В каких случаях использование `Main.immediate` может сделать порядок выполнения менее очевидным по сравнению с явным шагом через event loop?
+4. Как `Dispatchers.Main.immediate` соотносится с порядком обработки сообщений в главном потоке Android?
+5. Как тестовые диспетчеры (`StandardTestDispatcher`, `UnconfinedTestDispatcher`) интерпретируют `Main.immediate` и как это влияет на порядок выполнения в тестах?
+6. Почему для IO/Default нет аналога `Main.immediate` и какие риски были бы при немедленном выполнении на пулах потоков?
+7. Как корректно профилировать влияние перехода с `Main` на `Main.immediate` (трейсы, микробенчмарки, анализ количества постов в main looper)?
+
+## Follow-ups
+1. How does `Main.immediate` determine that execution is already on the correct main thread context?
+2. What realistic performance gain can you expect from `Main.immediate` in hot paths with frequent small UI updates?
+3. When can using `Main.immediate` make execution order less obvious compared to always dispatching through the event loop?
+4. How does `Dispatchers.Main.immediate` relate to main thread message ordering on Android?
+5. How do test dispatchers (`StandardTestDispatcher`, `UnconfinedTestDispatcher`) treat `Main.immediate`, and what does that mean for asserting execution order?
+6. Why is there no `immediate` variant for IO/Default, and what problems could it cause on thread pools?
+7. How would you profile and compare `Dispatchers.Main` vs `Dispatchers.Main.immediate` in a real app scenario?
+
+## Ссылки (RU)
+- [Coroutine Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Документация Dispatchers.Main](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/-main.html)
+- [Android Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+- [Оптимизация производительности](https://developer.android.com/topic/performance)
+- [[c-kotlin]]
+- [[c-coroutines]]
+
+## References
+- [Coroutine Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Dispatchers.Main Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-dispatchers/-main.html)
+- [Android Coroutines Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+- [Android Performance Optimization](https://developer.android.com/topic/performance)
+- [[c-kotlin]]
+- [[c-coroutines]]
+
+## Related Questions
+- [[q-flowon-operator-context-switching--kotlin--hard]]

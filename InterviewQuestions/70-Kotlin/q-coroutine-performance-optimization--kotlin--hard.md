@@ -1,11 +1,11 @@
 ---
 id: kotlin-083
 title: "Coroutine Performance Optimization / Оптимизация производительности корутин"
-aliases: ["Coroutine Performance Optimization, Оптимизация производительности корутин"]
+aliases: ["Coroutine Performance Optimization", "Оптимизация производительности корутин"]
 
 # Classification
 topic: kotlin
-subtopics: [advanced, coroutines, patterns]
+subtopics: [coroutines, patterns, advanced]
 question_kind: theory
 difficulty: hard
 
@@ -18,13 +18,13 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140021
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-delegates-compilation--kotlin--hard, q-lifecyclescope-viewmodelscope--kotlin--medium, q-stateflow-purpose--programming-languages--medium]
+related: [c-kotlin, c-coroutines, q-delegates-compilation--kotlin--hard, q-lifecyclescope-viewmodelscope--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 
-tags: [coroutines, difficulty/hard, difficulty/medium, kotlin]
+tags: [coroutines, difficulty/hard, kotlin]
 ---
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140021
@@ -36,7 +36,7 @@ tags: [coroutines, difficulty/hard, difficulty/medium, kotlin]
 
 ## Ответ (RU)
 
-Оптимизация производительности корутин включает понимание выбора диспетчеров, минимизацию переключения контекста, эффективное использование ресурсов и избежание распространенных проблем производительности.
+Оптимизация производительности корутин включает понимание выбора диспетчеров, минимизацию переключения контекста, эффективное использование ресурсов и избежание распространенных проблем производительности. См. также [[c-kotlin]] и [[c-coroutines]].
 
 ### Ключевые Принципы Производительности
 
@@ -60,14 +60,14 @@ withContext(Dispatchers.Main) {
 
 **2. Минимизация переключения контекста**
 ```kotlin
-// Плохо: Множественные переключения контекста
+// Плохо: множественные последовательные переключения контекста с одинаковым dispatcher
 suspend fun inefficient() {
     withContext(Dispatchers.IO) { operation1() }
     withContext(Dispatchers.IO) { operation2() }
     withContext(Dispatchers.IO) { operation3() }
 }
 
-// Хорошо: Единственное переключение контекста
+// Лучше: одно переключение контекста для последовательных операций
 suspend fun efficient() {
     withContext(Dispatchers.IO) {
         operation1()
@@ -77,7 +77,7 @@ suspend fun efficient() {
 }
 ```
 
-**3. Использование параллельного выполнения**
+**3. Использование параллельного выполнения (для независимых операций)**
 ```kotlin
 suspend fun loadDataParallel() = coroutineScope {
     val user = async { fetchUser() }
@@ -88,16 +88,18 @@ suspend fun loadDataParallel() = coroutineScope {
 }
 ```
 
-**4. Избегайте создания слишком многих корутин**
+**4. Избегайте бессмысленного создания огромного числа корутин**
 ```kotlin
-// Плохо: Создает 1 миллион корутин
+// Потенциально неэффективно: создаёт 1 миллион корутин.
+// Коррутины лёгкие, но если внутри тяжёлая или блокирующая работа,
+// это приведёт к избыточным накладным расходам и потреблению памяти.
 launch {
     (1..1_000_000).forEach {
         launch { process(it) }
     }
 }
 
-// Хорошо: Используйте разбиение на части
+// Лучше: батчируйте задачи или ограничивайте параллелизм
 launch {
     (1..1_000_000).chunked(1000).forEach { chunk ->
         launch {
@@ -107,25 +109,29 @@ launch {
 }
 ```
 
-**5. Конфигурация размеров пулов Dispatcher**
+**5. Конфигурация параллелизма Dispatcher**
 ```kotlin
-// Кастомный dispatcher с ограниченным параллелизмом
+// Кастомный dispatcher с ограниченным параллелизмом на базе Dispatchers.IO
 val customDispatcher = Dispatchers.IO.limitedParallelism(4)
 
 launch(customDispatcher) {
-    // Только 4 одновременные операции
+    // Не более 4 одновременных корутин на этом dispatcher для данного ограничителя
 }
 ```
 
-**6. Используйте Flow для потоковых данных**
+**6. Используйте `Flow` для потоковых данных (и правильные dispatcher)**
 ```kotlin
-// Лучше чем собирать в список
 flow {
     repeat(1_000_000) {
         emit(it)
     }
-}.map { process(it) }
- .collect { save(it) }
+}
+    .map { value ->
+        // При тяжёлой работе явно выбирайте dispatcher, например:
+        // withContext(Dispatchers.Default) { process(value) }
+        process(value)
+    }
+    .collect { save(it) }
 ```
 
 ### Мониторинг Производительности
@@ -135,7 +141,7 @@ suspend fun measurePerformance() {
     val duration = measureTimeMillis {
         coroutineScope {
             repeat(10_000) {
-                launch { /* work */ }
+                launch { /* неблокирующая работа */ }
             }
         }
     }
@@ -145,18 +151,18 @@ suspend fun measurePerformance() {
 
 ### Лучшие Практики
 
-1. **Переиспользуйте CoroutineScope** вместо создания новых
-2. **Используйте структурированную конкурентность** чтобы избежать утечек
-3. **Профилируйте перед оптимизацией** - измеряйте реальные узкие места
+1. **Переиспользуйте `CoroutineScope`** вместо создания новых при каждой операции
+2. **Используйте структурированную конкурентность**, избегайте `GlobalScope` для долгоживущих задач
+3. **Профилируйте перед оптимизацией** — измеряйте реальные узкие места
 4. **Используйте подходящие размеры буферов** в каналах и потоках
-5. **Рассмотрите использование sequences** для CPU-bound трансформаций
-6. **Избегайте блокирующих операций** в корутинах
+5. **Рассматривайте `Sequence`** для CPU-bound трансформаций в одном потоке
+6. **Избегайте блокирующих операций** в корутинах; оборачивайте их в соответствующий dispatcher или заменяйте неблокирующими API
 
 ---
 
 ## Answer (EN)
 
-Coroutine performance optimization involves understanding dispatcher selection, minimizing context switching, efficient resource usage, and avoiding common performance pitfalls.
+Coroutine performance optimization involves understanding dispatcher selection, minimizing context switching, efficient resource usage, and avoiding common performance pitfalls. See also [[c-kotlin]] and [[c-coroutines]].
 
 ### Key Performance Principles
 
@@ -178,16 +184,16 @@ withContext(Dispatchers.Main) {
 }
 ```
 
-**2. Minimize Context Switching**
+**2. Minimize context switching**
 ```kotlin
-// Bad: Multiple context switches
+// Bad: multiple sequential context switches to the same dispatcher
 suspend fun inefficient() {
     withContext(Dispatchers.IO) { operation1() }
     withContext(Dispatchers.IO) { operation2() }
     withContext(Dispatchers.IO) { operation3() }
 }
 
-// Good: Single context switch
+// Better: a single context switch for sequential work
 suspend fun efficient() {
     withContext(Dispatchers.IO) {
         operation1()
@@ -197,7 +203,7 @@ suspend fun efficient() {
 }
 ```
 
-**3. Use Parallel Execution**
+**3. Use parallel execution (for independent operations)**
 ```kotlin
 suspend fun loadDataParallel() = coroutineScope {
     val user = async { fetchUser() }
@@ -208,16 +214,18 @@ suspend fun loadDataParallel() = coroutineScope {
 }
 ```
 
-**4. Avoid Creating Too Many Coroutines**
+**4. Avoid pointless creation of huge numbers of coroutines**
 ```kotlin
-// Bad: Creates 1 million coroutines
+// Potentially inefficient: creates 1 million coroutines.
+// Coroutines are lightweight, but if each does heavy or blocking work,
+// you get significant scheduling and memory overhead.
 launch {
     (1..1_000_000).forEach {
         launch { process(it) }
     }
 }
 
-// Good: Use chunking
+// Better: batch work or limit parallelism
 launch {
     (1..1_000_000).chunked(1000).forEach { chunk ->
         launch {
@@ -227,25 +235,29 @@ launch {
 }
 ```
 
-**5. Configure Dispatcher Pool Sizes**
+**5. Configure dispatcher parallelism**
 ```kotlin
-// Custom dispatcher with limited parallelism
+// Custom dispatcher with limited parallelism based on Dispatchers.IO
 val customDispatcher = Dispatchers.IO.limitedParallelism(4)
 
 launch(customDispatcher) {
-    // Only 4 concurrent operations
+    // At most 4 concurrent coroutines on this limited view
 }
 ```
 
-**6. Use Flow for Streaming Data**
+**6. Use `Flow` for streaming data (with appropriate dispatchers)**
 ```kotlin
-// Better than collecting to list
 flow {
     repeat(1_000_000) {
         emit(it)
     }
-}.map { process(it) }
- .collect { save(it) }
+}
+    .map { value ->
+        // For heavy CPU work, explicitly choose dispatcher, e.g.:
+        // withContext(Dispatchers.Default) { process(value) }
+        process(value)
+    }
+    .collect { save(it) }
 ```
 
 ### Performance Monitoring
@@ -255,7 +267,7 @@ suspend fun measurePerformance() {
     val duration = measureTimeMillis {
         coroutineScope {
             repeat(10_000) {
-                launch { /* work */ }
+                launch { /* non-blocking work */ }
             }
         }
     }
@@ -265,25 +277,61 @@ suspend fun measurePerformance() {
 
 ### Best Practices
 
-1. **Reuse CoroutineScope** instead of creating new ones
-2. **Use structured concurrency** to avoid leaks
-3. **Profile before optimizing** - measure actual bottlenecks
+1. **Reuse `CoroutineScope`** instead of creating new scopes for every operation
+2. **Use structured concurrency** and avoid `GlobalScope` for long-running tasks
+3. **Profile before optimizing** – measure real bottlenecks
 4. **Use appropriate buffer sizes** in channels and flows
-5. **Consider using sequences** for CPU-bound transformations
-6. **Avoid blocking operations** in coroutines
+5. **Consider using `Sequence`** for single-threaded CPU-bound transformations
+6. **Avoid blocking operations** inside coroutines; wrap them with the proper dispatcher or replace with non-blocking APIs
+
+---
+
+## Дополнительные вопросы (RU)
+
+1. Как вы будете профилировать корутины в крупном приложении и какие инструменты использовать для поиска узких мест?
+2. В каких случаях стоит ограничивать параллелизм через `limitedParallelism`, и как выбрать оптимальное значение?
+3. Как подойти к оптимизации `Flow`-цепочек с большим количеством операторов и большим объёмом данных?
+4. Какие риски возникают при использовании `GlobalScope` с точки зрения производительности и утечек ресурсов?
+5. Как вы определите, что стоит перейти от корутин к более низкоуровневым примитивам (например, потокам или нативным API) для критичных путей?
 
 ---
 
 ## Follow-ups
 
-1. **Follow-up question 1**
-2. **Follow-up question 2**
+1. How would you profile coroutines in a large application and which tools would you use to identify bottlenecks?
+2. When should you limit parallelism via `limitedParallelism`, and how do you choose an appropriate value?
+3. How would you optimize `Flow` pipelines with many operators and high data volume?
+4. What are the performance and resource-leak risks of using `GlobalScope`?
+5. How do you decide when to replace coroutines with lower-level primitives (threads/native APIs) on critical hot paths?
+
+---
+
+## Ссылки (RU)
+
+- [Документация Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
 
 ---
 
 ## References
 
 - [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
+
+---
+
+## Связанные вопросы (RU)
+
+### Сложные (Hard)
+- [[q-coroutine-profiling--kotlin--hard]] - Корутины
+- [[q-coroutine-memory-leaks--kotlin--hard]] - Корутины
+- [[q-flow-performance--kotlin--hard]] - Корутины
+- [[q-dispatcher-performance--kotlin--hard]] - Корутины
+
+### Предпосылки (Легче)
+- [[q-flow-combining-zip-combine--kotlin--medium]] - Корутины
+- [[q-what-is-coroutine--kotlin--easy]] - Корутины
+
+### Хаб
+- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Введение в корутины
 
 ---
 
@@ -301,4 +349,3 @@ suspend fun measurePerformance() {
 
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
-

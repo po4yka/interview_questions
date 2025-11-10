@@ -1,892 +1,32 @@
 ---
 id: kotlin-148
 title: "Flow completion with onCompletion operator / Завершение Flow с onCompletion оператором"
-aliases: [Completion, Flow, Oncompletion]
+aliases: [Completion, `Flow`, onCompletion]
 topic: kotlin
-subtopics: []
+subtopics: [c-flow, c-coroutines, c-kotlin]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-access-modifiers--programming-languages--medium, q-kotlin-extension-functions--kotlin--medium, q-kotlin-type-system--kotlin--medium]
+related: [c-kotlin, c-flow, q-kotlin-extension-functions--kotlin--medium, q-kotlin-type-system--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/medium]
 ---
 
-# Flow Completion with onCompletion Operator
+# Вопрос (RU)
+Что такое оператор `onCompletion` в `Kotlin Flow` и чем он отличается от блоков `finally`? Как обрабатывать завершение для успешных случаев, исключений и отмены? Приведите production-примеры очистки, логирования, обновления UI-состояния и аналитики с корректными стратегиями тестирования.
 
-## English
+## Ответ (RU)
 
-### Question
-What is the onCompletion operator in Kotlin Flow and how does it differ from finally blocks? How do you handle completion for success, exceptions, and cancellation cases? Provide production examples of cleanup, logging, UI state updates, and analytics with proper testing strategies.
+Оператор `onCompletion` регистрирует действие, которое вызывается при завершении сборки `Flow` — при успешном завершении, с исключением или из-за отмены. Он похож по идее на блок `finally`, но:
+- выполняется как часть цепочки операторов `Flow`;
+- получает причину завершения через параметр `cause`;
+- вызывается один раз на каждый запуск коллекции.
 
-### Answer
-
-The **onCompletion** operator is called when a Flow completes, either successfully, exceptionally, or due to cancellation. It's the Flow equivalent of a `finally` block but with more control and better integration with Flow operators.
-
-#### 1. Basic onCompletion Usage
-
-**Simple completion notification:**
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-suspend fun basicOnCompletionExample() {
-    flow {
-        emit(1)
-        emit(2)
-        emit(3)
-    }
-        .onCompletion {
-            println("Flow completed")
-        }
-        .collect { value ->
-            println("Received: $value")
-        }
-}
-
-// Output:
-// Received: 1
-// Received: 2
-// Received: 3
-// Flow completed
-```
-
-**onCompletion with cause parameter:**
-
-```kotlin
-suspend fun completionWithCauseExample() {
-    flow {
-        emit(1)
-        emit(2)
-        throw RuntimeException("Error occurred")
-    }
-        .onCompletion { cause ->
-            when (cause) {
-                null -> println("Completed successfully")
-                is CancellationException -> println("Flow was cancelled")
-                else -> println("Completed with exception: ${cause.message}")
-            }
-        }
-        .catch { e ->
-            println("Caught exception: ${e.message}")
-        }
-        .collect { value ->
-            println("Received: $value")
-        }
-}
-
-// Output:
-// Received: 1
-// Received: 2
-// Completed with exception: Error occurred
-// Caught exception: Error occurred
-```
-
-#### 2. Completion Scenarios
-
-**Three completion cases:**
-
-1. **Success (cause = null)**: Flow completed normally
-2. **Exception (cause = Throwable)**: Flow threw an exception
-3. **Cancellation (cause = CancellationException)**: Flow was cancelled
-
-**Complete example showing all cases:**
-
-```kotlin
-enum class CompletionType {
-    SUCCESS, ERROR, CANCELLATION
-}
-
-suspend fun demonstrateCompletionCases(type: CompletionType) {
-    val job = CoroutineScope(Dispatchers.Default).launch {
-        flow {
-            emit(1)
-            emit(2)
-
-            when (type) {
-                CompletionType.SUCCESS -> {
-                    emit(3)
-                    // Completes successfully
-                }
-                CompletionType.ERROR -> {
-                    throw IllegalStateException("Simulated error")
-                }
-                CompletionType.CANCELLATION -> {
-                    emit(3)
-                    delay(Long.MAX_VALUE) // Will be cancelled
-                }
-            }
-        }
-            .onCompletion { cause ->
-                when (cause) {
-                    null -> println(" Completed successfully")
-                    is CancellationException -> println(" Cancelled: ${cause.message}")
-                    else -> println(" Failed: ${cause.message}")
-                }
-            }
-            .catch { e ->
-                println("Exception caught: ${e.message}")
-            }
-            .collect { value ->
-                println("Value: $value")
-            }
-    }
-
-    if (type == CompletionType.CANCELLATION) {
-        delay(100)
-        job.cancel("User cancelled")
-    }
-
-    job.join()
-}
-
-// Usage:
-// demonstrateCompletionCases(CompletionType.SUCCESS)
-// demonstrateCompletionCases(CompletionType.ERROR)
-// demonstrateCompletionCases(CompletionType.CANCELLATION)
-```
-
-#### 3. onCompletion Vs Finally
-
-**Comparison:**
-
-```kotlin
-// Using finally
-suspend fun withFinally() {
-    try {
-        flow {
-            emit(1)
-            emit(2)
-        }.collect { value ->
-            println("Value: $value")
-        }
-    } finally {
-        println("Finally block")
-    }
-}
-
-// Using onCompletion
-suspend fun withOnCompletion() {
-    flow {
-        emit(1)
-        emit(2)
-    }
-        .onCompletion {
-            println("onCompletion")
-        }
-        .collect { value ->
-            println("Value: $value")
-        }
-}
-```
-
-**Key differences:**
-
-| Aspect | finally | onCompletion |
-|--------|---------|--------------|
-| Scope | Around entire collect block | Part of Flow chain |
-| Composability | Not composable | Composable operator |
-| Exception info | Not available | Available via cause parameter |
-| Placement | Outside Flow | Inside Flow chain |
-| Can emit | No | No |
-| Use case | Cleanup around collection | Cleanup as part of Flow |
-
-**onCompletion placement matters:**
-
-```kotlin
-suspend fun placementMatters() {
-    flow {
-        emit(1)
-        throw RuntimeException("Error in flow")
-    }
-        .onCompletion { cause ->
-            // This sees the exception from upstream
-            println("1. onCompletion before catch: cause = $cause")
-        }
-        .catch { e ->
-            println("2. Caught: ${e.message}")
-            emit(-1) // Recover
-        }
-        .onCompletion { cause ->
-            // This sees null (successful completion after recovery)
-            println("3. onCompletion after catch: cause = $cause")
-        }
-        .collect { value ->
-            println("Collected: $value")
-        }
-}
-
-// Output:
-// Collected: 1
-// 1. onCompletion before catch: cause = java.lang.RuntimeException: Error in flow
-// 2. Caught: Error in flow
-// Collected: -1
-// 3. onCompletion after catch: cause = null
-```
-
-#### 4. Flow Lifecycle with onStart and onCompletion
-
-**Complete Flow lifecycle:**
-
-```kotlin
-suspend fun flowLifecycle() {
-    flow {
-        println("Flow builder: Starting")
-        emit(1)
-        println("Flow builder: Emitted 1")
-        delay(100)
-        emit(2)
-        println("Flow builder: Emitted 2")
-    }
-        .onStart {
-            println("→ onStart: Flow is about to start")
-        }
-        .onEach { value ->
-            println("  onEach: Processing $value")
-        }
-        .onCompletion { cause ->
-            println("← onCompletion: Flow finished (cause: $cause)")
-        }
-        .collect { value ->
-            println("  Collect: Received $value")
-        }
-}
-
-// Output:
-// → onStart: Flow is about to start
-// Flow builder: Starting
-// Flow builder: Emitted 1
-//   onEach: Processing 1
-//   Collect: Received 1
-// Flow builder: Emitted 2
-//   onEach: Processing 2
-//   Collect: Received 2
-// ← onCompletion: Flow finished (cause: null)
-```
-
-**Lifecycle diagram:**
-
-```
-
-   onStart    → Initialization
-
-
-
-
-  emissions   → onEach → collect
-   (loop)
-
-
-
-
-onCompletion  → Cleanup
-
-```
-
-#### 5. Production Example: Resource Cleanup
-
-**Database connection cleanup:**
-
-```kotlin
-class DatabaseFlow(private val database: Database) {
-
-    fun queryUsers(): Flow<User> = flow {
-        val connection = database.openConnection()
-        println("Database connection opened")
-
-        try {
-            val users = connection.query("SELECT * FROM users")
-            users.forEach { user ->
-                emit(user)
-            }
-        } finally {
-            // This cleanup is in flow builder
-            println("Flow builder cleanup")
-        }
-    }
-        .onCompletion { cause ->
-            // Additional cleanup after flow completes
-            when (cause) {
-                null -> {
-                    println("Query completed successfully")
-                    database.commitTransaction()
-                }
-                is CancellationException -> {
-                    println("Query cancelled")
-                    database.rollbackTransaction()
-                }
-                else -> {
-                    println("Query failed: ${cause.message}")
-                    database.rollbackTransaction()
-                }
-            }
-        }
-}
-
-// Usage
-suspend fun queryUsersExample() {
-    val databaseFlow = DatabaseFlow(database)
-
-    databaseFlow.queryUsers()
-        .catch { e ->
-            println("Error: ${e.message}")
-        }
-        .collect { user ->
-            println("User: ${user.name}")
-        }
-}
-```
-
-**Network connection cleanup:**
-
-```kotlin
-class NetworkStream(private val webSocket: WebSocket) {
-
-    fun observeMessages(): Flow<Message> = callbackFlow {
-        val listener = object : WebSocketListener {
-            override fun onMessage(message: Message) {
-                trySend(message)
-            }
-
-            override fun onError(error: Throwable) {
-                close(error)
-            }
-        }
-
-        webSocket.addListener(listener)
-        println("WebSocket listener added")
-
-        awaitClose {
-            webSocket.removeListener(listener)
-            println("WebSocket listener removed (from awaitClose)")
-        }
-    }
-        .onStart {
-            println("Starting message observation")
-        }
-        .onCompletion { cause ->
-            when (cause) {
-                null -> println("Message stream completed normally")
-                is CancellationException -> println("Message stream cancelled")
-                else -> println("Message stream failed: ${cause.message}")
-            }
-
-            // Additional cleanup
-            if (cause != null) {
-                webSocket.reconnect()
-            }
-        }
-}
-```
-
-#### 6. Production Example: Logging and Analytics
-
-**Logging flow execution:**
-
-```kotlin
-class LoggingRepository(
-    private val apiService: ApiService,
-    private val logger: Logger
-) {
-    fun fetchData(userId: String): Flow<Data> = flow {
-        val startTime = System.currentTimeMillis()
-        logger.info("Fetching data for user: $userId")
-
-        val data = apiService.getData(userId)
-        emit(data)
-
-        val duration = System.currentTimeMillis() - startTime
-        logger.info("Data fetched in ${duration}ms")
-    }
-        .onStart {
-            logger.debug("Flow started")
-        }
-        .onEach { data ->
-            logger.debug("Emitted data: ${data.id}")
-        }
-        .onCompletion { cause ->
-            when (cause) {
-                null -> {
-                    logger.info("Flow completed successfully")
-                    analytics.logEvent("data_fetch_success", mapOf("userId" to userId))
-                }
-                is CancellationException -> {
-                    logger.warn("Flow cancelled")
-                    analytics.logEvent("data_fetch_cancelled", mapOf("userId" to userId))
-                }
-                else -> {
-                    logger.error("Flow failed: ${cause.message}", cause)
-                    analytics.logEvent(
-                        "data_fetch_error",
-                        mapOf(
-                            "userId" to userId,
-                            "error" to cause.message
-                        )
-                    )
-                }
-            }
-        }
-}
-```
-
-**Performance monitoring:**
-
-```kotlin
-fun <T> Flow<T>.withPerformanceMonitoring(
-    operationName: String,
-    logger: Logger
-): Flow<T> {
-    var startTime = 0L
-    var itemCount = 0
-
-    return this
-        .onStart {
-            startTime = System.currentTimeMillis()
-            logger.info("[$operationName] Started")
-        }
-        .onEach {
-            itemCount++
-        }
-        .onCompletion { cause ->
-            val duration = System.currentTimeMillis() - startTime
-
-            val status = when (cause) {
-                null -> "SUCCESS"
-                is CancellationException -> "CANCELLED"
-                else -> "FAILED"
-            }
-
-            logger.info(
-                "[$operationName] $status - " +
-                "Duration: ${duration}ms, Items: $itemCount"
-            )
-
-            // Report metrics
-            if (cause == null) {
-                metricsService.recordTiming(operationName, duration)
-                metricsService.recordCount("$operationName.items", itemCount)
-            }
-        }
-}
-
-// Usage
-suspend fun monitoredDataFetch() {
-    repository.fetchUsers()
-        .withPerformanceMonitoring("fetch_users", logger)
-        .collect { user ->
-            println("User: ${user.name}")
-        }
-}
-```
-
-#### 7. Production Example: UI State Updates
-
-**Loading state management:**
-
-```kotlin
-sealed class UiState<out T> {
-    object Idle : UiState<Nothing>()
-    object Loading : UiState<Nothing>()
-    data class Success<T>(val data: T) : UiState<T>()
-    data class Error(val message: String) : UiState<Nothing>()
-}
-
-class UserViewModel(private val repository: UserRepository) : ViewModel() {
-
-    private val _uiState = MutableStateFlow<UiState<User>>(UiState.Idle)
-    val uiState: StateFlow<UiState<User>> = _uiState.asStateFlow()
-
-    fun loadUser(userId: String) {
-        viewModelScope.launch {
-            repository.getUser(userId)
-                .onStart {
-                    _uiState.value = UiState.Loading
-                }
-                .onCompletion { cause ->
-                    // Reset to idle on completion (success or error handled elsewhere)
-                    if (cause != null && cause !is CancellationException) {
-                        _uiState.value = UiState.Error(
-                            cause.message ?: "Unknown error"
-                        )
-                    }
-                }
-                .catch { e ->
-                    // Error already set in onCompletion
-                }
-                .collect { user ->
-                    _uiState.value = UiState.Success(user)
-                }
-        }
-    }
-}
-```
-
-**Progress tracking:**
-
-```kotlin
-class DownloadViewModel(private val downloader: Downloader) : ViewModel() {
-
-    private val _downloadState = MutableStateFlow<DownloadState>(DownloadState.Idle)
-    val downloadState: StateFlow<DownloadState> = _downloadState.asStateFlow()
-
-    fun downloadFile(url: String) {
-        viewModelScope.launch {
-            downloader.download(url)
-                .onStart {
-                    _downloadState.value = DownloadState.InProgress(0)
-                }
-                .onEach { progress ->
-                    _downloadState.value = DownloadState.InProgress(progress)
-                }
-                .onCompletion { cause ->
-                    _downloadState.value = when (cause) {
-                        null -> DownloadState.Completed
-                        is CancellationException -> DownloadState.Cancelled
-                        else -> DownloadState.Failed(cause.message ?: "Download failed")
-                    }
-                }
-                .catch { }
-                .collect()
-        }
-    }
-
-    fun cancelDownload() {
-        viewModelScope.coroutineContext.job.children.forEach { it.cancel() }
-    }
-}
-
-sealed class DownloadState {
-    object Idle : DownloadState()
-    data class InProgress(val progress: Int) : DownloadState()
-    object Completed : DownloadState()
-    object Cancelled : DownloadState()
-    data class Failed(val error: String) : DownloadState()
-}
-```
-
-#### 8. Combining onCompletion with Error Handling
-
-**Complete error handling pattern:**
-
-```kotlin
-suspend fun completeErrorHandlingExample() {
-    flow {
-        emit(1)
-        emit(2)
-        throw IOException("Network error")
-    }
-        .retry(2) { e ->
-            e is IOException
-        }
-        .onCompletion { cause ->
-            // Runs after all retries
-            when (cause) {
-                null -> println("Success after retries")
-                is IOException -> println("Failed even after retries")
-                else -> println("Other error: ${cause.message}")
-            }
-        }
-        .catch { e ->
-            println("Final catch: ${e.message}")
-            emit(-1) // Emit fallback value
-        }
-        .collect { value ->
-            println("Received: $value")
-        }
-}
-```
-
-**Declarative error handling:**
-
-```kotlin
-fun <T> Flow<T>.withErrorHandling(
-    onSuccess: () -> Unit = {},
-    onError: (Throwable) -> Unit = {},
-    onCancelled: () -> Unit = {}
-): Flow<T> = this
-    .onCompletion { cause ->
-        when (cause) {
-            null -> onSuccess()
-            is CancellationException -> onCancelled()
-            else -> onError(cause)
-        }
-    }
-
-// Usage
-suspend fun declarativeErrorHandling() {
-    repository.fetchData()
-        .withErrorHandling(
-            onSuccess = {
-                println("Data fetch successful")
-                showSuccessMessage()
-            },
-            onError = { e ->
-                println("Data fetch failed: ${e.message}")
-                showErrorMessage(e)
-            },
-            onCancelled = {
-                println("Data fetch cancelled")
-            }
-        )
-        .collect { data ->
-            processData(data)
-        }
-}
-```
-
-#### 9. onCompletion Cannot Emit Values
-
-**Important limitation:**
-
-```kotlin
-//  This does NOT work - onCompletion cannot emit
-suspend fun cannotEmitInOnCompletion() {
-    flow {
-        emit(1)
-        emit(2)
-    }
-        .onCompletion {
-            // This will throw UnsupportedOperationException
-            // emit(3) //  Cannot emit
-        }
-        .collect { value ->
-            println("Value: $value")
-        }
-}
-
-//  Use catch to emit recovery values
-suspend fun emitInCatch() {
-    flow {
-        emit(1)
-        emit(2)
-        throw RuntimeException("Error")
-    }
-        .catch { e ->
-            println("Error: ${e.message}")
-            emit(-1) //  Can emit in catch
-        }
-        .onCompletion { cause ->
-            println("Completed with cause: $cause")
-        }
-        .collect { value ->
-            println("Value: $value")
-        }
-}
-```
-
-#### 10. Testing onCompletion
-
-**Unit testing completion scenarios:**
-
-```kotlin
-import kotlinx.coroutines.test.*
-import org.junit.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertTrue
-
-class OnCompletionTest {
-
-    @Test
-    fun `onCompletion called on success`() = runTest {
-        var completionCalled = false
-        var completionCause: Throwable? = null
-
-        flow {
-            emit(1)
-            emit(2)
-        }
-            .onCompletion { cause ->
-                completionCalled = true
-                completionCause = cause
-            }
-            .collect()
-
-        assertTrue(completionCalled)
-        assertEquals(null, completionCause) // Success
-    }
-
-    @Test
-    fun `onCompletion called on exception`() = runTest {
-        var completionCause: Throwable? = null
-
-        flow {
-            emit(1)
-            throw RuntimeException("Test error")
-        }
-            .onCompletion { cause ->
-                completionCause = cause
-            }
-            .catch { }
-            .collect()
-
-        assertTrue(completionCause is RuntimeException)
-        assertEquals("Test error", completionCause?.message)
-    }
-
-    @Test
-    fun `onCompletion called on cancellation`() = runTest {
-        var completionCause: Throwable? = null
-
-        val job = launch {
-            flow {
-                emit(1)
-                delay(1000)
-                emit(2)
-            }
-                .onCompletion { cause ->
-                    completionCause = cause
-                }
-                .collect()
-        }
-
-        advanceTimeBy(500)
-        job.cancel()
-        job.join()
-
-        assertTrue(completionCause is CancellationException)
-    }
-
-    @Test
-    fun `onCompletion order with catch`() = runTest {
-        val events = mutableListOf<String>()
-
-        flow {
-            emit(1)
-            throw RuntimeException("Error")
-        }
-            .onCompletion { cause ->
-                events.add("onCompletion1: ${cause != null}")
-            }
-            .catch { e ->
-                events.add("catch: ${e.message}")
-            }
-            .onCompletion { cause ->
-                events.add("onCompletion2: ${cause != null}")
-            }
-            .collect { value ->
-                events.add("collect: $value")
-            }
-
-        assertEquals(
-            listOf(
-                "collect: 1",
-                "onCompletion1: true",
-                "catch: Error",
-                "onCompletion2: false"
-            ),
-            events
-        )
-    }
-}
-```
-
-#### 11. Common Patterns and Best Practices
-
-**Pattern: Resource management:**
-
-```kotlin
-fun <T> Flow<T>.withResource(
-    acquire: () -> Resource,
-    release: (Resource) -> Unit
-): Flow<T> = flow {
-    val resource = acquire()
-    try {
-        collect { value ->
-            emit(value)
-        }
-    } finally {
-        // Always cleanup in finally of flow builder
-        release(resource)
-    }
-}.onCompletion { cause ->
-    // Additional completion handling
-    when (cause) {
-        null -> println("Resource released after successful completion")
-        else -> println("Resource released after failure: ${cause.message}")
-    }
-}
-```
-
-**Pattern: State machine:**
-
-```kotlin
-class StateMachine {
-    private val _state = MutableStateFlow<State>(State.Idle)
-    val state: StateFlow<State> = _state.asStateFlow()
-
-    fun processData(): Flow<Data> = flow {
-        _state.value = State.Processing
-        // Emit data
-    }
-        .onCompletion { cause ->
-            _state.value = when (cause) {
-                null -> State.Success
-                is CancellationException -> State.Cancelled
-                else -> State.Error(cause.message ?: "Unknown")
-            }
-        }
-}
-```
-
-**Best practices:**
-
-| Do | Don't |
-|----|-------|
-| Use onCompletion for cleanup | Try to emit in onCompletion |
-| Check cause parameter | Assume successful completion |
-| Place onCompletion carefully in chain | Forget it only runs once |
-| Combine with catch for error handling | Use as replacement for catch |
-| Use for analytics/logging | Use for data transformation |
-
-### Related Questions
-
-### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
-
-### Related (Medium)
-- [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
-- [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
-- [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
-- [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
-
-### Advanced (Harder)
-- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
-- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
-
-## Follow-ups
-1. What's the difference between onCompletion before and after a catch operator in a Flow chain?
-2. Why can't onCompletion emit values? How is this different from catch?
-3. How would you implement a Flow operator that guarantees cleanup even if the collector throws an exception?
-4. Explain the order of execution: flow builder finally vs onCompletion. Which runs first?
-5. How do you distinguish between normal cancellation and cancellation due to timeout in onCompletion?
-6. When would you choose onCompletion over DisposableEffect in Jetpack Compose?
-7. How would you implement retry logic that logs each attempt's completion status?
-
-### References
-- [Flow Completion](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/on-completion.html)
-- [Flow Exception Handling](https://kotlinlang.org/docs/flow.html#flow-exceptions)
-- [Flow Operators](https://kotlinlang.org/docs/flow.html#intermediate-flow-operators)
-- [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)
-
----
-
-## Русский
-
-### Вопрос
-Что такое оператор onCompletion в Kotlin Flow и чем он отличается от блоков finally? Как обрабатывать завершение для успешных случаев, исключений и отмены? Приведите production примеры очистки, логирования, обновления UI состояния и аналитики с правильными стратегиями тестирования.
-
-### Ответ
-
-Оператор **onCompletion** вызывается когда Flow завершается, либо успешно, либо с исключением, либо из-за отмены. Это Flow эквивалент блока `finally`, но с большим контролем и лучшей интеграцией с операторами Flow.
-
-#### 1. Базовое Использование onCompletion
+#### 1. Базовое использование onCompletion
 
 **Простое уведомление о завершении:**
 
@@ -946,13 +86,13 @@ suspend fun completionWithCauseExample() {
 // Поймано исключение: Произошла ошибка
 ```
 
-#### 2. Сценарии Завершения
+#### 2. Сценарии завершения
 
 **Три случая завершения:**
 
-1. **Успех (cause = null)**: Flow завершился нормально
-2. **Исключение (cause = Throwable)**: Flow выбросил исключение
-3. **Отмена (cause = CancellationException)**: Flow был отменен
+1. **Успех (cause = null)**: `Flow` завершился нормально
+2. **Исключение (cause = Throwable)**: `Flow` выбросил исключение, не обработанное до этого `onCompletion`
+3. **Отмена (cause = CancellationException)**: `Flow` был отменен
 
 **Полный пример, показывающий все случаи:**
 
@@ -983,9 +123,9 @@ suspend fun demonstrateCompletionCases(type: CompletionType) {
         }
             .onCompletion { cause ->
                 when (cause) {
-                    null -> println("✓ Завершено успешно")
-                    is CancellationException -> println("⚠ Отменено: ${cause.message}")
-                    else -> println("✗ Ошибка: ${cause.message}")
+                    null -> println("Завершено успешно")
+                    is CancellationException -> println("Отменено: ${cause.message}")
+                    else -> println("Ошибка: ${cause.message}")
                 }
             }
             .catch { e ->
@@ -1005,7 +145,7 @@ suspend fun demonstrateCompletionCases(type: CompletionType) {
 }
 ```
 
-#### 3. onCompletion Vs Finally
+#### 3. onCompletion vs finally
 
 **Сравнение:**
 
@@ -1044,11 +184,11 @@ suspend fun withOnCompletion() {
 | Аспект | finally | onCompletion |
 |--------|---------|--------------|
 | Область | Вокруг всего блока collect | Часть цепочки Flow |
-| Композируемость | Не композируемый | Композируемый оператор |
-| Информация об исключении | Недоступна | Доступна через параметр cause |
+| Композируемость | Не оператор Flow | Композируемый оператор |
+| Информация об исключении | Не передается | Доступна через параметр cause |
 | Размещение | Вне Flow | Внутри цепочки Flow |
 | Может emit | Нет | Нет |
-| Случай использования | Очистка вокруг collection | Очистка как часть Flow |
+| Сценарий | Очистка вокруг области коллекции | Очистка/побочные эффекты как часть Flow |
 
 **Размещение onCompletion имеет значение:**
 
@@ -1059,7 +199,7 @@ suspend fun placementMatters() {
         throw RuntimeException("Ошибка в flow")
     }
         .onCompletion { cause ->
-            // Это видит исключение из upstream
+            // Видит исключение из upstream, т.к. стоит до catch
             println("1. onCompletion до catch: cause = $cause")
         }
         .catch { e ->
@@ -1067,7 +207,7 @@ suspend fun placementMatters() {
             emit(-1) // Восстановление
         }
         .onCompletion { cause ->
-            // Это видит null (успешное завершение после восстановления)
+            // Видит null (успешное завершение после восстановления)
             println("3. onCompletion после catch: cause = $cause")
         }
         .collect { value ->
@@ -1083,7 +223,7 @@ suspend fun placementMatters() {
 // 3. onCompletion после catch: cause = null
 ```
 
-#### 4. Жизненный Цикл Flow С onStart И onCompletion
+#### 4. Жизненный цикл Flow с onStart и onCompletion
 
 **Полный жизненный цикл Flow:**
 
@@ -1123,9 +263,9 @@ suspend fun flowLifecycle() {
 // ← onCompletion: Flow завершен (cause: null)
 ```
 
-#### 5. Production Пример: Очистка Ресурсов
+#### 5. Production-пример: очистка ресурсов
 
-**Очистка подключения к базе данных:**
+Внешние зависимости (например, `Database`) считаются внедренными.
 
 ```kotlin
 class DatabaseFlow(private val database: Database) {
@@ -1140,12 +280,12 @@ class DatabaseFlow(private val database: Database) {
                 emit(user)
             }
         } finally {
-            // Эта очистка в flow builder
             println("Очистка flow builder")
+            connection.close()
         }
     }
         .onCompletion { cause ->
-            // Дополнительная очистка после завершения flow
+            // Дополнительная обработка после завершения flow
             when (cause) {
                 null -> {
                     println("Запрос завершен успешно")
@@ -1164,7 +304,7 @@ class DatabaseFlow(private val database: Database) {
 }
 
 // Использование
-suspend fun queryUsersExample() {
+suspend fun queryUsersExample(database: Database) {
     val databaseFlow = DatabaseFlow(database)
 
     databaseFlow.queryUsers()
@@ -1180,12 +320,15 @@ suspend fun queryUsersExample() {
 **Очистка сетевого подключения:**
 
 ```kotlin
-class NetworkStream(private val webSocket: WebSocket) {
+class NetworkStream(
+    private val webSocket: WebSocket,
+    private val reconnectOnError: (Throwable) -> Unit
+) {
 
     fun observeMessages(): Flow<Message> = callbackFlow {
         val listener = object : WebSocketListener {
             override fun onMessage(message: Message) {
-                trySend(message)
+                trySend(message).isSuccess
             }
 
             override fun onError(error: Throwable) {
@@ -1208,25 +351,22 @@ class NetworkStream(private val webSocket: WebSocket) {
             when (cause) {
                 null -> println("Поток сообщений завершен нормально")
                 is CancellationException -> println("Поток сообщений отменен")
-                else -> println("Поток сообщений не удался: ${cause.message}")
-            }
-
-            // Дополнительная очистка
-            if (cause != null) {
-                webSocket.reconnect()
+                else -> {
+                    println("Поток сообщений не удался: ${cause.message}")
+                    reconnectOnError(cause)
+                }
             }
         }
 }
 ```
 
-#### 6. Production Пример: Логирование И Аналитика
-
-**Логирование выполнения flow:**
+#### 6. Production-пример: логирование и аналитика
 
 ```kotlin
 class LoggingRepository(
     private val apiService: ApiService,
-    private val logger: Logger
+    private val logger: Logger,
+    private val analytics: Analytics
 ) {
     fun fetchData(userId: String): Flow<Data> = flow {
         val startTime = System.currentTimeMillis()
@@ -1260,7 +400,7 @@ class LoggingRepository(
                         "data_fetch_error",
                         mapOf(
                             "userId" to userId,
-                            "error" to cause.message
+                            "error" to (cause.message ?: "unknown")
                         )
                     )
                 }
@@ -1274,7 +414,8 @@ class LoggingRepository(
 ```kotlin
 fun <T> Flow<T>.withPerformanceMonitoring(
     operationName: String,
-    logger: Logger
+    logger: Logger,
+    metricsService: MetricsService
 ): Flow<T> {
     var startTime = 0L
     var itemCount = 0
@@ -1298,28 +439,29 @@ fun <T> Flow<T>.withPerformanceMonitoring(
 
             logger.info(
                 "[$operationName] $status - " +
-                "Длительность: ${duration}мс, Элементов: $itemCount"
+                    "Длительность: ${duration}мс, Элементов: $itemCount"
             )
 
-            // Отправка метрик
-            if (cause == null) {
-                metricsService.recordTiming(operationName, duration)
-                metricsService.recordCount("$operationName.items", itemCount)
-            }
+            metricsService.recordTiming(operationName, duration)
+            metricsService.recordCount("$operationName.items", itemCount)
         }
 }
 
 // Использование
-suspend fun monitoredDataFetch() {
+suspend fun monitoredDataFetch(
+    repository: UserRepository,
+    logger: Logger,
+    metricsService: MetricsService
+) {
     repository.fetchUsers()
-        .withPerformanceMonitoring("fetch_users", logger)
+        .withPerformanceMonitoring("fetch_users", logger, metricsService)
         .collect { user ->
             println("Пользователь: ${user.name}")
         }
 }
 ```
 
-#### 7. Production Пример: Обновления Состояния UI
+#### 7. Production-пример: обновления состояния UI
 
 **Управление состоянием загрузки:**
 
@@ -1342,16 +484,13 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
                 .onStart {
                     _uiState.value = UiState.Loading
                 }
-                .onCompletion { cause ->
-                    // Сброс в idle при завершении (успех или ошибка обрабатываются отдельно)
-                    if (cause != null && cause !is CancellationException) {
-                        _uiState.value = UiState.Error(
-                            cause.message ?: "Неизвестная ошибка"
-                        )
-                    }
-                }
                 .catch { e ->
-                    // Ошибка уже установлена в onCompletion
+                    _uiState.value = UiState.Error(e.message ?: "Неизвестная ошибка")
+                }
+                .onCompletion { cause ->
+                    if (cause is CancellationException) {
+                        _uiState.value = UiState.Idle
+                    }
                 }
                 .collect { user ->
                     _uiState.value = UiState.Success(user)
@@ -1385,13 +524,11 @@ class DownloadViewModel(private val downloader: Downloader) : ViewModel() {
                         else -> DownloadState.Failed(cause.message ?: "Загрузка не удалась")
                     }
                 }
-                .catch { }
+                .catch { e ->
+                    _downloadState.value = DownloadState.Failed(e.message ?: "Загрузка не удалась")
+                }
                 .collect()
         }
-    }
-
-    fun cancelDownload() {
-        viewModelScope.coroutineContext.job.children.forEach { it.cancel() }
     }
 }
 
@@ -1404,9 +541,7 @@ sealed class DownloadState {
 }
 ```
 
-#### 8. Комбинирование onCompletion С Обработкой Ошибок
-
-**Полный паттерн обработки ошибок:**
+#### 8. Комбинирование onCompletion с обработкой ошибок
 
 ```kotlin
 suspend fun completeErrorHandlingExample() {
@@ -1419,7 +554,7 @@ suspend fun completeErrorHandlingExample() {
             e is IOException
         }
         .onCompletion { cause ->
-            // Выполняется после всех повторов
+            // Вызывается после всех попыток
             when (cause) {
                 null -> println("Успех после повторов")
                 is IOException -> println("Не удалось даже после повторов")
@@ -1428,7 +563,7 @@ suspend fun completeErrorHandlingExample() {
         }
         .catch { e ->
             println("Финальный catch: ${e.message}")
-            emit(-1) // Выпуск fallback значения
+            emit(-1)
         }
         .collect { value ->
             println("Получено: $value")
@@ -1453,7 +588,7 @@ fun <T> Flow<T>.withErrorHandling(
     }
 
 // Использование
-suspend fun declarativeErrorHandling() {
+suspend fun declarativeErrorHandling(repository: Repository) {
     repository.fetchData()
         .withErrorHandling(
             onSuccess = {
@@ -1474,27 +609,24 @@ suspend fun declarativeErrorHandling() {
 }
 ```
 
-#### 9. onCompletion Не Может Выпускать Значения
-
-**Важное ограничение:**
+#### 9. onCompletion не может выпускать значения
 
 ```kotlin
-// ✗ Это НЕ работает - onCompletion не может emit
+// Это НЕ работает - onCompletion не может emit
 suspend fun cannotEmitInOnCompletion() {
     flow {
         emit(1)
         emit(2)
     }
         .onCompletion {
-            // Это выбросит UnsupportedOperationException
-            // emit(3) // ✗ Нельзя emit
+            // emit(3) // UnsupportedOperationException: нельзя emit из onCompletion
         }
         .collect { value ->
             println("Значение: $value")
         }
 }
 
-// ✓ Используйте catch для выпуска восстановительных значений
+// Используйте catch для выпуска восстановительных значений
 suspend fun emitInCatch() {
     flow {
         emit(1)
@@ -1503,7 +635,7 @@ suspend fun emitInCatch() {
     }
         .catch { e ->
             println("Ошибка: ${e.message}")
-            emit(-1) // ✓ Можно emit в catch
+            emit(-1) // Можно emit в catch
         }
         .onCompletion { cause ->
             println("Завершено с cause: $cause")
@@ -1516,10 +648,12 @@ suspend fun emitInCatch() {
 
 #### 10. Тестирование onCompletion
 
-**Unit-тестирование сценариев завершения:**
-
 ```kotlin
-import kotlinx.coroutines.test.*
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -1599,6 +733,7 @@ class OnCompletionTest {
             }
             .catch { e ->
                 events.add("catch: ${e.message}")
+                emit(-1)
             }
             .onCompletion { cause ->
                 events.add("onCompletion2: ${cause != null}")
@@ -1609,10 +744,10 @@ class OnCompletionTest {
 
         assertEquals(
             listOf(
-                "collect: 1",
-                "onCompletion1: true",
+                "onCompletion1: true",   // upstream видит ошибку
                 "catch: Ошибка",
-                "onCompletion2: false"
+                "collect: -1",
+                "onCompletion2: false"   // downstream после восстановления
             ),
             events
         )
@@ -1620,9 +755,9 @@ class OnCompletionTest {
 }
 ```
 
-#### 11. Общие Паттерны И Лучшие Практики
+#### 11. Общие паттерны и лучшие практики
 
-**Паттерн: Управление ресурсами:**
+**Паттерн: управление ресурсами:**
 
 ```kotlin
 fun <T> Flow<T>.withResource(
@@ -1631,33 +766,28 @@ fun <T> Flow<T>.withResource(
 ): Flow<T> = flow {
     val resource = acquire()
     try {
-        collect { value ->
+        this@withResource.collect { value ->
             emit(value)
         }
     } finally {
-        // Всегда очистка в finally flow builder
         release(resource)
-    }
-}.onCompletion { cause ->
-    // Дополнительная обработка завершения
-    when (cause) {
-        null -> println("Ресурс освобожден после успешного завершения")
-        else -> println("Ресурс освобожден после ошибки: ${cause.message}")
     }
 }
 ```
 
-**Паттерн: Конечный автомат:**
+При необходимости дополнительные действия при завершении можно навесить через `onCompletion` поверх этого оператора.
+
+**Паттерн: конечный автомат:**
 
 ```kotlin
 class StateMachine {
     private val _state = MutableStateFlow<State>(State.Idle)
     val state: StateFlow<State> = _state.asStateFlow()
 
-    fun processData(): Flow<Data> = flow {
-        _state.value = State.Processing
-        // Выпуск данных
-    }
+    fun processData(upstream: Flow<Data>): Flow<Data> = upstream
+        .onStart {
+            _state.value = State.Processing
+        }
         .onCompletion { cause ->
             _state.value = when (cause) {
                 null -> State.Success
@@ -1672,29 +802,841 @@ class StateMachine {
 
 | Делать | Не делать |
 |----|-------|
-| Использовать onCompletion для очистки | Пытаться emit в onCompletion |
-| Проверять параметр cause | Предполагать успешное завершение |
-| Размещать onCompletion тщательно в цепочке | Забывать, что он выполняется только один раз |
+| Использовать onCompletion для очистки и побочных эффектов | Пытаться emit в onCompletion |
+| Проверять параметр cause | Предполагать всегда успешное завершение |
+| Внимательно выбирать место onCompletion в цепочке | Забывать, что он вызывается один раз на коллекцию |
 | Комбинировать с catch для обработки ошибок | Использовать как замену catch |
-| Использовать для аналитики/логирования | Использовать для трансформации данных |
+| Использовать для аналитики/логирования/метрик | Использовать для трансформации данных |
 
-### Связанные Вопросы
+### Связанные вопросы (RU)
 - [[q-flow-operators--kotlin--medium]] - Операторы Flow
 - [[q-flow-exception-handling--kotlin--medium]] - Обработка исключений в Flow
 - [[q-flow-basics--kotlin--easy]] - Основы Flow
 - [[q-structured-concurrency--kotlin--hard]] - Структурированная конкурентность
 
-### Дополнительные Вопросы
+### Дополнительные вопросы (RU)
 1. В чем разница между onCompletion до и после оператора catch в цепочке Flow?
 2. Почему onCompletion не может emit значения? Чем это отличается от catch?
-3. Как реализовать Flow оператор, который гарантирует cleanup даже если collector бросает исключение?
-4. Объясните порядок выполнения: finally блок в flow builder vs onCompletion. Что выполняется первым?
+3. Как реализовать Flow-оператор, который гарантирует очистку даже если collector бросает исключение?
+4. Объясните порядок выполнения: finally в flow builder vs onCompletion. Что выполняется первым?
 5. Как различить обычную отмену и отмену из-за timeout в onCompletion?
 6. Когда выбрать onCompletion вместо DisposableEffect в Jetpack Compose?
-7. Как реализовать retry логику, которая логирует статус завершения каждой попытки?
+7. Как реализовать retry-логику, которая логирует статус завершения каждой попытки?
 
-### Ссылки
+### Ссылки (RU)
 - [Flow Completion](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/on-completion.html)
 - [Обработка исключений Flow](https://kotlinlang.org/docs/flow.html#flow-exceptions)
 - [Операторы Flow](https://kotlinlang.org/docs/flow.html#intermediate-flow-operators)
 - [Документация Kotlin Flow](https://kotlinlang.org/docs/flow.html)
+
+# Question (EN)
+What is the `onCompletion` operator in `Kotlin Flow` and how does it differ from `finally` blocks? How do you handle completion for success, exceptions, and cancellation cases? Provide production examples of cleanup, logging, UI state updates, and analytics with proper testing strategies.
+
+## Answer (EN)
+
+The `onCompletion` operator registers an action that is invoked when a `Flow` collection completes — whether successfully, with an exception, or due to cancellation. It is similar in spirit to a `finally` block but:
+- executes as part of the `Flow` operator chain,
+- can observe the completion cause via the `cause` parameter,
+- runs once per collection.
+
+#### 1. Basic onCompletion Usage
+
+**Simple completion notification:**
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+suspend fun basicOnCompletionExample() {
+    flow {
+        emit(1)
+        emit(2)
+        emit(3)
+    }
+        .onCompletion {
+            println("Flow completed")
+        }
+        .collect { value ->
+            println("Received: $value")
+        }
+}
+
+// Output:
+// Received: 1
+// Received: 2
+// Received: 3
+// Flow completed
+```
+
+**onCompletion with cause parameter:**
+
+```kotlin
+suspend fun completionWithCauseExample() {
+    flow {
+        emit(1)
+        emit(2)
+        throw RuntimeException("Error occurred")
+    }
+        .onCompletion { cause ->
+            when (cause) {
+                null -> println("Completed successfully")
+                is CancellationException -> println("Flow was cancelled")
+                else -> println("Completed with exception: ${cause.message}")
+            }
+        }
+        .catch { e ->
+            println("Caught exception: ${e.message}")
+        }
+        .collect { value ->
+            println("Received: $value")
+        }
+}
+
+// Output:
+// Received: 1
+// Received: 2
+// Completed with exception: Error occurred
+// Caught exception: Error occurred
+```
+
+#### 2. Completion Scenarios
+
+**Three completion cases:**
+
+1. **Success (cause = null)**: `Flow` completed normally
+2. **Exception (cause = Throwable)**: `Flow` threw an exception that was not handled upstream of this `onCompletion`
+3. **Cancellation (cause = CancellationException)**: `Flow` was cancelled
+
+**Complete example showing all cases:**
+
+```kotlin
+enum class CompletionType {
+    SUCCESS, ERROR, CANCELLATION
+}
+
+suspend fun demonstrateCompletionCases(type: CompletionType) {
+    val job = CoroutineScope(Dispatchers.Default).launch {
+        flow {
+            emit(1)
+            emit(2)
+
+            when (type) {
+                CompletionType.SUCCESS -> {
+                    emit(3)
+                    // Completes successfully
+                }
+                CompletionType.ERROR -> {
+                    throw IllegalStateException("Simulated error")
+                }
+                CompletionType.CANCELLATION -> {
+                    emit(3)
+                    delay(Long.MAX_VALUE) // Will be cancelled
+                }
+            }
+        }
+            .onCompletion { cause ->
+                when (cause) {
+                    null -> println("Completed successfully")
+                    is CancellationException -> println("Cancelled: ${cause.message}")
+                    else -> println("Failed: ${cause.message}")
+                }
+            }
+            .catch { e ->
+                println("Exception caught: ${e.message}")
+            }
+            .collect { value ->
+                println("Value: $value")
+            }
+    }
+
+    if (type == CompletionType.CANCELLATION) {
+        delay(100)
+        job.cancel("User cancelled")
+    }
+
+    job.join()
+}
+
+// Usage:
+// demonstrateCompletionCases(CompletionType.SUCCESS)
+// demonstrateCompletionCases(CompletionType.ERROR)
+// demonstrateCompletionCases(CompletionType.CANCELLATION)
+```
+
+#### 3. onCompletion Vs finally
+
+```kotlin
+// Using finally
+suspend fun withFinally() {
+    try {
+        flow {
+            emit(1)
+            emit(2)
+        }.collect { value ->
+            println("Value: $value")
+        }
+    } finally {
+        println("Finally block")
+    }
+}
+
+// Using onCompletion
+suspend fun withOnCompletion() {
+    flow {
+        emit(1)
+        emit(2)
+    }
+        .onCompletion {
+            println("onCompletion")
+        }
+        .collect { value ->
+            println("Value: $value")
+        }
+}
+```
+
+**Key differences:**
+
+| Aspect | finally | onCompletion |
+|--------|---------|--------------|
+| Scope | Around entire collect block | Part of Flow chain |
+| Composability | Not composable as Flow operator | Composable operator |
+| Exception info | Not passed in | Available via cause parameter |
+| Placement | Outside Flow | Inside Flow chain |
+| Can emit | No | No |
+| Use case | Cleanup around collection scope | Cleanup/side effects as part of Flow |
+
+**onCompletion placement matters:**
+
+```kotlin
+suspend fun placementMatters() {
+    flow {
+        emit(1)
+        throw RuntimeException("Error in flow")
+    }
+        .onCompletion { cause ->
+            // Sees the exception from upstream, because it is before catch
+            println("1. onCompletion before catch: cause = $cause")
+        }
+        .catch { e ->
+            println("2. Caught: ${e.message}")
+            emit(-1) // Recover
+        }
+        .onCompletion { cause ->
+            // Sees null (successful completion after recovery)
+            println("3. onCompletion after catch: cause = $cause")
+        }
+        .collect { value ->
+            println("Collected: $value")
+        }
+}
+
+// Output:
+// Collected: 1
+// 1. onCompletion before catch: cause = java.lang.RuntimeException: Error in flow
+// 2. Caught: Error in flow
+// Collected: -1
+// 3. onCompletion after catch: cause = null
+```
+
+#### 4. Flow Lifecycle with onStart and onCompletion
+
+**Complete Flow lifecycle:**
+
+```kotlin
+suspend fun flowLifecycle() {
+    flow {
+        println("Flow builder: Starting")
+        emit(1)
+        println("Flow builder: Emitted 1")
+        delay(100)
+        emit(2)
+        println("Flow builder: Emitted 2")
+    }
+        .onStart {
+            println("→ onStart: Flow is about to start")
+        }
+        .onEach { value ->
+            println("  onEach: Processing $value")
+        }
+        .onCompletion { cause ->
+            println("← onCompletion: Flow finished (cause: $cause)")
+        }
+        .collect { value ->
+            println("  Collect: Received $value")
+        }
+}
+
+// Output:
+// → onStart: Flow is about to start
+// Flow builder: Starting
+// Flow builder: Emitted 1
+//   onEach: Processing 1
+//   Collect: Received 1
+// Flow builder: Emitted 2
+//   onEach: Processing 2
+//   Collect: Received 2
+// ← onCompletion: Flow finished (cause: null)
+```
+
+#### 5. Production Example: Resource Cleanup
+
+Note: External collaborators (e.g., `Database`) are assumed to be injected/available in scope.
+
+```kotlin
+class DatabaseFlow(private val database: Database) {
+
+    fun queryUsers(): Flow<User> = flow {
+        val connection = database.openConnection()
+        println("Database connection opened")
+
+        try {
+            val users = connection.query("SELECT * FROM users")
+            users.forEach { user ->
+                emit(user)
+            }
+        } finally {
+            println("Flow builder cleanup")
+            connection.close()
+        }
+    }
+        .onCompletion { cause ->
+            // Additional completion handling after flow completes
+            when (cause) {
+                null -> {
+                    println("Query completed successfully")
+                    database.commitTransaction()
+                }
+                is CancellationException -> {
+                    println("Query cancelled")
+                    database.rollbackTransaction()
+                }
+                else -> {
+                    println("Query failed: ${cause.message}")
+                    database.rollbackTransaction()
+                }
+            }
+        }
+}
+
+// Usage
+suspend fun queryUsersExample(database: Database) {
+    val databaseFlow = DatabaseFlow(database)
+
+    databaseFlow.queryUsers()
+        .catch { e ->
+            println("Error: ${e.message}")
+        }
+        .collect { user ->
+            println("User: ${user.name}")
+        }
+}
+```
+
+**Network connection cleanup:**
+
+```kotlin
+class NetworkStream(
+    private val webSocket: WebSocket,
+    private val reconnectOnError: (Throwable) -> Unit
+) {
+
+    fun observeMessages(): Flow<Message> = callbackFlow {
+        val listener = object : WebSocketListener {
+            override fun onMessage(message: Message) {
+                trySend(message).isSuccess
+            }
+
+            override fun onError(error: Throwable) {
+                close(error)
+            }
+        }
+
+        webSocket.addListener(listener)
+        println("WebSocket listener added")
+
+        awaitClose {
+            webSocket.removeListener(listener)
+            println("WebSocket listener removed (from awaitClose)")
+        }
+    }
+        .onStart {
+            println("Starting message observation")
+        }
+        .onCompletion { cause ->
+            when (cause) {
+                null -> println("Message stream completed normally")
+                is CancellationException -> println("Message stream cancelled")
+                else -> {
+                    println("Message stream failed: ${cause.message}")
+                    reconnectOnError(cause)
+                }
+            }
+        }
+}
+```
+
+#### 6. Production Example: Logging and Analytics
+
+```kotlin
+class LoggingRepository(
+    private val apiService: ApiService,
+    private val logger: Logger,
+    private val analytics: Analytics
+) {
+    fun fetchData(userId: String): Flow<Data> = flow {
+        val startTime = System.currentTimeMillis()
+        logger.info("Fetching data for user: $userId")
+
+        val data = apiService.getData(userId)
+        emit(data)
+
+        val duration = System.currentTimeMillis() - startTime
+        logger.info("Data fetched in ${duration}ms")
+    }
+        .onStart {
+            logger.debug("Flow started")
+        }
+        .onEach { data ->
+            logger.debug("Emitted data: ${data.id}")
+        }
+        .onCompletion { cause ->
+            when (cause) {
+                null -> {
+                    logger.info("Flow completed successfully")
+                    analytics.logEvent("data_fetch_success", mapOf("userId" to userId))
+                }
+                is CancellationException -> {
+                    logger.warn("Flow cancelled")
+                    analytics.logEvent("data_fetch_cancelled", mapOf("userId" to userId))
+                }
+                else -> {
+                    logger.error("Flow failed: ${cause.message}", cause)
+                    analytics.logEvent(
+                        "data_fetch_error",
+                        mapOf(
+                            "userId" to userId,
+                            "error" to (cause.message ?: "unknown")
+                        )
+                    )
+                }
+            }
+        }
+}
+```
+
+**Performance monitoring:**
+
+```kotlin
+fun <T> Flow<T>.withPerformanceMonitoring(
+    operationName: String,
+    logger: Logger,
+    metricsService: MetricsService
+): Flow<T> {
+    var startTime = 0L
+    var itemCount = 0
+
+    return this
+        .onStart {
+            startTime = System.currentTimeMillis()
+            logger.info("[$operationName] Started")
+        }
+        .onEach {
+            itemCount++
+        }
+        .onCompletion { cause ->
+            val duration = System.currentTimeMillis() - startTime
+
+            val status = when (cause) {
+                null -> "SUCCESS"
+                is CancellationException -> "CANCELLED"
+                else -> "FAILED"
+            }
+
+            logger.info(
+                "[$operationName] $status - " +
+                    "Duration: ${duration}ms, Items: $itemCount"
+            )
+
+            // Report metrics for all outcomes if desired
+            metricsService.recordTiming(operationName, duration)
+            metricsService.recordCount("$operationName.items", itemCount)
+        }
+}
+
+// Usage
+suspend fun monitoredDataFetch(
+    repository: UserRepository,
+    logger: Logger,
+    metricsService: MetricsService
+) {
+    repository.fetchUsers()
+        .withPerformanceMonitoring("fetch_users", logger, metricsService)
+        .collect { user ->
+            println("User: ${user.name}")
+        }
+}
+```
+
+#### 7. Production Example: UI State Updates
+
+```kotlin
+sealed class UiState<out T> {
+    object Idle : UiState<Nothing>()
+    object Loading : UiState<Nothing>()
+    data class Success<T>(val data: T) : UiState<T>()
+    data class Error(val message: String) : UiState<Nothing>()
+}
+
+class UserViewModel(private val repository: UserRepository) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<UiState<User>>(UiState.Idle)
+    val uiState: StateFlow<UiState<User>> = _uiState.asStateFlow()
+
+    fun loadUser(userId: String) {
+        viewModelScope.launch {
+            repository.getUser(userId)
+                .onStart {
+                    _uiState.value = UiState.Loading
+                }
+                .catch { e ->
+                    _uiState.value = UiState.Error(e.message ?: "Unknown error")
+                }
+                .onCompletion { cause ->
+                    if (cause is CancellationException) {
+                        _uiState.value = UiState.Idle
+                    }
+                }
+                .collect { user ->
+                    _uiState.value = UiState.Success(user)
+                }
+        }
+    }
+}
+```
+
+```kotlin
+class DownloadViewModel(private val downloader: Downloader) : ViewModel() {
+
+    private val _downloadState = MutableStateFlow<DownloadState>(DownloadState.Idle)
+    val downloadState: StateFlow<DownloadState> = _downloadState.asStateFlow()
+
+    fun downloadFile(url: String) {
+        viewModelScope.launch {
+            downloader.download(url)
+                .onStart {
+                    _downloadState.value = DownloadState.InProgress(0)
+                }
+                .onEach { progress ->
+                    _downloadState.value = DownloadState.InProgress(progress)
+                }
+                .onCompletion { cause ->
+                    _downloadState.value = when (cause) {
+                        null -> DownloadState.Completed
+                        is CancellationException -> DownloadState.Cancelled
+                        else -> DownloadState.Failed(cause.message ?: "Download failed")
+                    }
+                }
+                .catch { e ->
+                    _downloadState.value = DownloadState.Failed(e.message ?: "Download failed")
+                }
+                .collect()
+        }
+    }
+}
+
+sealed class DownloadState {
+    object Idle : DownloadState()
+    data class InProgress(val progress: Int) : DownloadState()
+    object Completed : DownloadState()
+    object Cancelled : DownloadState()
+    data class Failed(val error: String) : DownloadState()
+}
+```
+
+#### 8. Combining onCompletion with Error Handling
+
+```kotlin
+suspend fun completeErrorHandlingExample() {
+    flow {
+        emit(1)
+        emit(2)
+        throw IOException("Network error")
+    }
+        .retry(2) { e ->
+            e is IOException
+        }
+        .onCompletion { cause ->
+            // Runs after all retries
+            when (cause) {
+                null -> println("Success after retries")
+                is IOException -> println("Failed even after retries")
+                else -> println("Other error: ${cause.message}")
+            }
+        }
+        .catch { e ->
+            println("Final catch: ${e.message}")
+            emit(-1) // Emit fallback value
+        }
+        .collect { value ->
+            println("Received: $value")
+        }
+}
+```
+
+```kotlin
+fun <T> Flow<T>.withErrorHandling(
+    onSuccess: () -> Unit = {},
+    onError: (Throwable) -> Unit = {},
+    onCancelled: () -> Unit = {}
+): Flow<T> = this
+    .onCompletion { cause ->
+        when (cause) {
+            null -> onSuccess()
+            is CancellationException -> onCancelled()
+            else -> onError(cause)
+        }
+    }
+
+// Usage
+suspend fun declarativeErrorHandling(repository: Repository) {
+    repository.fetchData()
+        .withErrorHandling(
+            onSuccess = {
+                println("Data fetch successful")
+                showSuccessMessage()
+            },
+            onError = { e ->
+                println("Data fetch failed: ${e.message}")
+                showErrorMessage(e)
+            },
+            onCancelled = {
+                println("Data fetch cancelled")
+            }
+        )
+        .collect { data ->
+            processData(data)
+        }
+}
+```
+
+#### 9. onCompletion Cannot Emit Values
+
+```kotlin
+// This does NOT work - onCompletion cannot emit
+suspend fun cannotEmitInOnCompletion() {
+    flow {
+        emit(1)
+        emit(2)
+    }
+        .onCompletion {
+            // emit(3) // UnsupportedOperationException: emission from onCompletion is not allowed
+        }
+        .collect { value ->
+            println("Value: $value")
+        }
+}
+
+// Use catch to emit recovery values
+suspend fun emitInCatch() {
+    flow {
+        emit(1)
+        emit(2)
+        throw RuntimeException("Error")
+    }
+        .catch { e ->
+            println("Error: ${e.message}")
+            emit(-1) // Can emit in catch
+        }
+        .onCompletion { cause ->
+            println("Completed with cause: $cause")
+        }
+        .collect { value ->
+            println("Value: $value")
+        }
+}
+```
+
+#### 10. Testing onCompletion
+
+```kotlin
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.runTest
+import org.junit.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+
+class OnCompletionTest {
+
+    @Test
+    fun `onCompletion called on success`() = runTest {
+        var completionCalled = false
+        var completionCause: Throwable? = null
+
+        flow {
+            emit(1)
+            emit(2)
+        }
+            .onCompletion { cause ->
+                completionCalled = true
+                completionCause = cause
+            }
+            .collect()
+
+        assertTrue(completionCalled)
+        assertEquals(null, completionCause) // Success
+    }
+
+    @Test
+    fun `onCompletion called on exception`() = runTest {
+        var completionCause: Throwable? = null
+
+        flow {
+            emit(1)
+            throw RuntimeException("Test error")
+        }
+            .onCompletion { cause ->
+                completionCause = cause
+            }
+            .catch { }
+            .collect()
+
+        assertTrue(completionCause is RuntimeException)
+        assertEquals("Test error", completionCause?.message)
+    }
+
+    @Test
+    fun `onCompletion called on cancellation`() = runTest {
+        var completionCause: Throwable? = null
+
+        val job = launch {
+            flow {
+                emit(1)
+                delay(1000)
+                emit(2)
+            }
+                .onCompletion { cause ->
+                    completionCause = cause
+                }
+                .collect()
+        }
+
+        advanceTimeBy(500)
+        job.cancel()
+        job.join()
+
+        assertTrue(completionCause is CancellationException)
+    }
+
+    @Test
+    fun `onCompletion order with catch`() = runTest {
+        val events = mutableListOf<String>()
+
+        flow {
+            emit(1)
+            throw RuntimeException("Error")
+        }
+            .onCompletion { cause ->
+                events.add("onCompletion1: ${cause != null}")
+            }
+            .catch { e ->
+                events.add("catch: ${e.message}")
+                emit(-1)
+            }
+            .onCompletion { cause ->
+                events.add("onCompletion2: ${cause != null}")
+            }
+            .collect { value ->
+                events.add("collect: $value")
+            }
+
+        assertEquals(
+            listOf(
+                "onCompletion1: true",   // upstream failure observed
+                "catch: Error",
+                "collect: -1",
+                "onCompletion2: false"   // downstream completion after recovery
+            ),
+            events
+        )
+    }
+}
+```
+
+#### 11. Common Patterns and Best Practices
+
+```kotlin
+fun <T> Flow<T>.withResource(
+    acquire: () -> Resource,
+    release: (Resource) -> Unit
+): Flow<T> = flow {
+    val resource = acquire()
+    try {
+        // Use the original flow as a source
+        this@withResource.collect { value ->
+            emit(value)
+        }
+    } finally {
+        release(resource)
+    }
+}
+```
+
+```kotlin
+class StateMachine {
+    private val _state = MutableStateFlow<State>(State.Idle)
+    val state: StateFlow<State> = _state.asStateFlow()
+
+    fun processData(upstream: Flow<Data>): Flow<Data> = upstream
+        .onStart {
+            _state.value = State.Processing
+        }
+        .onCompletion { cause ->
+            _state.value = when (cause) {
+                null -> State.Success
+                is CancellationException -> State.Cancelled
+                else -> State.Error(cause.message ?: "Unknown")
+            }
+        }
+}
+```
+
+**Best practices:**
+
+| Do | Don't |
+|----|-------|
+| Use onCompletion for cleanup and side effects | Try to emit in onCompletion |
+| Check cause parameter | Assume successful completion |
+| Place onCompletion carefully in chain | Forget it only runs once per collection |
+| Combine with catch for error handling | Use as replacement for catch |
+| Use for analytics/logging/metrics | Use for data transformation |
+
+### Related Questions (EN)
+
+- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
+- [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
+- [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
+- [[q-flow-vs-livedata-comparison--kotlin--medium]] - `Flow` vs `LiveData`
+- [[q-channels-vs-flow--kotlin--medium]] - Channels vs `Flow`
+- [[q-sharedflow-stateflow--kotlin--medium]] - `SharedFlow` vs `StateFlow`
+- [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
+- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
+- [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
+
+## Follow-ups (EN)
+1. What's the difference between onCompletion before and after a catch operator in a Flow chain?
+2. Why can't onCompletion emit values? How is this different from catch?
+3. How would you implement a Flow operator that guarantees cleanup even if the collector throws an exception?
+4. Explain the order of execution: flow builder finally vs onCompletion. Which runs first?
+5. How do you distinguish between normal cancellation and cancellation due to timeout in onCompletion?
+6. When would you choose onCompletion over DisposableEffect in Jetpack Compose?
+7. How would you implement retry logic that logs each attempt's completion status?
+
+### References (EN)
+- [Flow Completion](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/on-completion.html)
+- [Flow Exception Handling](https://kotlinlang.org/docs/flow.html#flow-exceptions)
+- [Flow Operators](https://kotlinlang.org/docs/flow.html#intermediate-flow-operators)
+- [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)

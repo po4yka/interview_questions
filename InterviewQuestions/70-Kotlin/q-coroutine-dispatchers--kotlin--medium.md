@@ -1,15 +1,13 @@
 ---
 id: kotlin-096
 title: "Coroutine Dispatchers / Диспетчеры корутин"
-aliases: ["Coroutine Dispatchers, Диспетчеры корутин"]
+aliases: ["Coroutine Dispatchers", "Диспетчеры корутин"]
 
 # Classification
 topic: kotlin
 subtopics:
-  - concurrency
   - coroutines
   - dispatchers
-  - main
   - threading
 question_kind: theory
 difficulty: medium
@@ -21,13 +19,13 @@ source: internal
 source_note: Comprehensive guide to Kotlin Coroutine Dispatchers
 
 # Workflow & relations
-status: reviewed
+status: draft
 moc: moc-kotlin
-related: [q-coroutine-context-explained--kotlin--medium, q-dispatchers-io-vs-default--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
+related: [c-kotlin, c-coroutines, q-coroutine-context-explained--kotlin--medium, q-dispatchers-io-vs-default--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-11-05
+updated: 2025-11-09
 
 tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, main, threading, unconfined]
 ---
@@ -48,9 +46,9 @@ tags: [coroutines, default, difficulty/medium, dispatchers, io, kotlin, main, th
 | Диспетчер | Пул потоков | Случай использования | Примеры |
 |------------|-------------|----------|----------|
 | **Dispatchers.Main** | UI поток | Обновления UI, взаимодействие с пользователем | Обновить TextView, показать Dialog |
-| **Dispatchers.IO** | Общий пул (64+ потоков) | I/O операции, блокирующие вызовы | Сеть, БД, файловый I/O |
+| **Dispatchers.IO** | Общий пул (лимит потоков по умолчанию ≈ 64 или 2×CPU, совместно с Default) | I/O операции, блокирующие вызовы | Сеть, БД, файловый I/O |
 | **Dispatchers.Default** | CPU-bound пул (ядра CPU) | CPU-интенсивная работа | Парсинг, сортировка, вычисления |
-| **Dispatchers.Unconfined** | Нет конкретного потока | Тестирование, особые случаи | Unit тесты, продвинутые сценарии |
+| **Dispatchers.Unconfined** | Нет конкретного потока | Специальные/низкоуровневые случаи, отладка | Демонстрации, специфические сценарии |
 
 ### Dispatchers.Main
 
@@ -66,7 +64,7 @@ class MainActivity : AppCompatActivity() {
             textView.text = "Загрузка..."
 
             val data = withContext(Dispatchers.IO) {
-                // Переключение на IO поток
+                // Переключение на IO-диспетчер
                 fetchData()
             }
 
@@ -81,7 +79,7 @@ class MainActivity : AppCompatActivity() {
 - Однопоточный (UI поток)
 - Требуется для обновлений UI
 - По умолчанию для `lifecycleScope` и `viewModelScope`
-- Неблокирующий: использует event loop
+- Критично не блокировать: длительные операции должны выноситься в другие диспетчеры
 
 **Использовать для**:
 - Обновления элементов UI
@@ -91,7 +89,7 @@ class MainActivity : AppCompatActivity() {
 
 ### Dispatchers.IO
 
-Оптимизирован для I/O операций с большим пулом потоков:
+Оптимизирован для I/O операций с общим пулом потоков:
 
 ```kotlin
 class UserRepository(private val api: ApiService, private val db: UserDao) {
@@ -113,16 +111,16 @@ class UserRepository(private val api: ApiService, private val db: UserDao) {
 ```
 
 **Характеристики**:
-- Большой пул потоков (по умолчанию 64 потока, настраиваемый)
-- Разработан для блокирующего I/O
-- Потоки могут быть заблокированы без влияния на производительность
-- Эффективно разделяет потоки
+- Большой общий пул потоков с верхним лимитом (по умолчанию около 64 или 2×число ядер, может настраиваться)
+- Реализован как расширение пула `Dispatchers.Default`
+- Предназначен для блокирующего I/O (сетевые запросы, дисковые операции)
+- Позволяет блокировать потоки без непосредственного вытеснения CPU-задач с Default, но чрезмерное блокирование всё равно вредит производительности
 
 **Использовать для**:
 - Сетевых запросов (Retrofit, Ktor)
 - Операций с БД (Room, SQLite)
 - Файлового I/O (чтение/запись файлов)
-- Блокирующих I/O операций
+- Других блокирующих I/O операций
 
 ### Dispatchers.Default
 
@@ -164,7 +162,7 @@ class DataProcessor {
 
 ### Dispatchers.Unconfined
 
-Начинает в контексте вызывающей стороны, возобновляется в произвольном потоке:
+Начинает выполнение в контексте вызывающей стороны, может возобновиться в другом потоке:
 
 ```kotlin
 fun main() = runBlocking {
@@ -189,16 +187,15 @@ fun main() = runBlocking {
 ```
 
 **Характеристики**:
-- Нет привязки к потоку
+- Нет привязки к конкретному потоку
 - Возобновляется в том потоке, в котором возобновилась suspend-функция
-- Непредсказуемое поведение потока
-- Очень низкие накладные расходы
+- Непредсказуемое поведение потока относительно пользовательского кода
+- Очень низкие накладные расходы переключения
 
-**Использовать для**:
-- Тестирования
-- Производительно-критичного кода (продвинутый)
-- Когда поток не имеет значения
-- Обычно **не рекомендуется** для production
+**Использовать для** (с большой осторожностью):
+- Специальных низкоуровневых сценариев, когда вы хорошо понимаете модель выполнения
+- Демонстраций и отладки поведения корутин
+- Обычно **не рекомендуется** для production-кода и не является универсальным выбором для «производительно-критичного» кода
 
 ### Переключение Диспетчеров С withContext
 
@@ -244,7 +241,7 @@ class MovieRepository(
             parseMovieDto(movieDto)
         }
 
-        // 3. Скачать и обработать постер (обратно на IO)
+        // 3. Скачать постер (всё ещё на IO-диспетчере внешнего withContext)
         val posterUrl = movie.posterUrl
         val posterBytes = api.downloadPoster(posterUrl)
 
@@ -253,7 +250,7 @@ class MovieRepository(
             imageProcessor.optimize(posterBytes)
         }
 
-        // 5. Сохранить в базу данных (обратно на IO)
+        // 5. Сохранить в базу данных (всё ещё на IO-диспетчере)
         database.movieDao().insert(movie.copy(poster = processedPoster))
 
         movie
@@ -273,7 +270,7 @@ class MovieViewModel : ViewModel() {
                 // Repository обрабатывает переключение диспетчеров внутренне
                 val movie = repository.getMovieDetails(id)
 
-                // Обновить UI на Main диспетчере (автоматически)
+                // Обновить UI на Main диспетчере
                 _movie.value = UiState.Success(movie)
             } catch (e: Exception) {
                 _movie.value = UiState.Error(e.message ?: "Unknown error")
@@ -319,10 +316,10 @@ val fixedThreadPool = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 // fixedThreadPool.close()
 ```
 
-**⚠️ Примечание об устаревших API:**
+**Примечание об устаревших API:**
 Функции `newSingleThreadContext()` и `newFixedThreadPoolContext()` были **помечены как устаревшие в Kotlin Coroutines 1.6.0** (2021). Современный код должен использовать `Executors.asCoroutineDispatcher()`, как показано выше.
 
-**Управление Жизненным Циклом Пользовательского Диспетчера:**
+**Управление жизненным циклом пользовательского диспетчера:**
 ```kotlin
 class DataProcessor {
     // Создать пользовательский диспетчер
@@ -466,9 +463,9 @@ Coroutine dispatchers determine which thread or thread pool executes a coroutine
 | Dispatcher | Thread Pool | Use Case | Examples |
 |------------|-------------|----------|----------|
 | **Dispatchers.Main** | UI thread | UI updates, user interaction | Update TextView, show Dialog |
-| **Dispatchers.IO** | Shared pool (64+ threads) | I/O operations, blocking calls | Network, Database, File I/O |
+| **Dispatchers.IO** | Shared pool (default upper bound ≈ 64 or 2×CPU, shared with Default) | I/O operations, blocking calls | Network, Database, File I/O |
 | **Dispatchers.Default** | CPU-bound pool (CPU cores) | CPU-intensive work | Parsing, sorting, calculations |
-| **Dispatchers.Unconfined** | No specific thread | Testing, special cases | Unit tests, advanced scenarios |
+| **Dispatchers.Unconfined** | No specific thread | Special/low-level cases, debugging | Demos, specific scenarios |
 
 ### Dispatchers.Main
 
@@ -484,7 +481,7 @@ class MainActivity : AppCompatActivity() {
             textView.text = "Loading..."
 
             val data = withContext(Dispatchers.IO) {
-                // Switch to IO thread
+                // Switch to IO dispatcher
                 fetchData()
             }
 
@@ -499,7 +496,7 @@ class MainActivity : AppCompatActivity() {
 - Single-threaded (UI thread)
 - Required for UI updates
 - Default for `lifecycleScope` and `viewModelScope`
-- Non-blocking: uses event loop
+- Must not be blocked: long-running work should be offloaded to other dispatchers
 
 **Use for**:
 - Updating UI elements
@@ -509,7 +506,7 @@ class MainActivity : AppCompatActivity() {
 
 ### Dispatchers.IO
 
-Optimized for I/O operations with a large thread pool:
+Optimized for I/O operations with a shared thread pool:
 
 ```kotlin
 class UserRepository(private val api: ApiService, private val db: UserDao) {
@@ -531,16 +528,16 @@ class UserRepository(private val api: ApiService, private val db: UserDao) {
 ```
 
 **Characteristics**:
-- Large thread pool (default 64 threads, configurable)
-- Designed for blocking I/O
-- Threads can be blocked without affecting performance
-- Shares threads efficiently
+- Large shared thread pool with an upper limit (by default roughly 64 or 2×number of cores, configurable)
+- Implemented as an extension of the `Dispatchers.Default` pool
+- Designed for blocking I/O (network, disk, database)
+- Allows blocking without immediately starving CPU-bound tasks on Default, but excessive blocking still degrades performance
 
 **Use for**:
 - Network requests (Retrofit, Ktor)
 - Database operations (Room, SQLite)
 - File I/O (reading/writing files)
-- Blocking I/O operations
+- Other blocking I/O operations
 
 ### Dispatchers.Default
 
@@ -582,7 +579,7 @@ class DataProcessor {
 
 ### Dispatchers.Unconfined
 
-Starts in caller's context, resumes in arbitrary thread:
+Starts in the caller's context, may resume in a different thread:
 
 ```kotlin
 fun main() = runBlocking {
@@ -607,16 +604,15 @@ fun main() = runBlocking {
 ```
 
 **Characteristics**:
-- No thread affinity
-- Resumes in whatever thread the suspending function resumed in
-- Unpredictable thread behavior
-- Very low overhead
+- No fixed thread affinity
+- Resumes in whichever thread the suspending function resumes on
+- Unpredictable thread behavior from the perspective of application code
+- Very low dispatch overhead
 
-**Use for**:
-- Testing
-- Performance-critical code (advanced)
-- When thread doesn't matter
-- Generally **not recommended** for production
+**Use for** (with great caution):
+- Special low-level scenarios where you fully understand the execution model
+- Demonstrations and debugging coroutine behavior
+- Generally **not recommended** for production code and not a generic choice for performance-critical code
 
 ### Switching Dispatchers with withContext
 
@@ -662,7 +658,7 @@ class MovieRepository(
             parseMovieDto(movieDto)
         }
 
-        // 3. Download and process poster image (back on IO)
+        // 3. Download poster (still on outer IO dispatcher)
         val posterUrl = movie.posterUrl
         val posterBytes = api.downloadPoster(posterUrl)
 
@@ -671,7 +667,7 @@ class MovieRepository(
             imageProcessor.optimize(posterBytes)
         }
 
-        // 5. Save to database (back on IO)
+        // 5. Save to database (still on IO dispatcher)
         database.movieDao().insert(movie.copy(poster = processedPoster))
 
         movie
@@ -691,7 +687,7 @@ class MovieViewModel : ViewModel() {
                 // Repository handles dispatcher switching internally
                 val movie = repository.getMovieDetails(id)
 
-                // Update UI on Main dispatcher (automatically)
+                // Update UI on Main dispatcher
                 _movie.value = UiState.Success(movie)
             } catch (e: Exception) {
                 _movie.value = UiState.Error(e.message ?: "Unknown error")
@@ -737,7 +733,7 @@ val fixedThreadPool = Executors.newFixedThreadPool(4).asCoroutineDispatcher()
 // fixedThreadPool.close()
 ```
 
-**⚠️ Deprecation Note:**
+**Deprecation Note:**
 The `newSingleThreadContext()` and `newFixedThreadPoolContext()` functions were **deprecated in Kotlin Coroutines 1.6.0** (2021). Modern code should use `Executors.asCoroutineDispatcher()` as shown above.
 
 **Custom Dispatcher Lifecycle Management:**
@@ -885,3 +881,5 @@ launch(Dispatchers.Unconfined) {
 ## MOC Links
 
 - [[moc-kotlin]]
+- [[c-kotlin]]
+- [[c-coroutines]]

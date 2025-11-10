@@ -1,7 +1,7 @@
 ---
 id: kotlin-125
-title: "flowOn operator and context switching in flows / flowOn оператор и переключение контекста"
-aliases: [Context, Flowon, Operator, Switching]
+title: "Оператор flowOn и переключение контекста во Flow / flowOn operator and context switching in flows"
+aliases: [Context, FlowOn, Operator, Switching]
 topic: kotlin
 subtopics: [coroutines, flow, performance]
 question_kind: theory
@@ -12,732 +12,21 @@ status: draft
 moc: moc-kotlin
 related: [c-coroutines, c-flow, q-coroutine-context-elements--kotlin--hard, q-flow-operators-map-filter--kotlin--medium]
 created: 2025-10-12
-updated: 2025-11-06
-tags: ["buffer", "context-switching", "dispatchers", "flow-operators", "flowon", "performance", difficulty/hard]
+updated: 2025-11-09
+tags: ["buffer", "context-switching", "dispatchers", "flow-operators", "flowon", "performance", "difficulty/hard"]
 ---
 
-# flowOn Operator and Context Switching in Flows / flowOn Оператор И Переключение Контекста
+# Вопрос (RU)
+> Что делает оператор `flowOn` в `Flow` в Kotlin? Чем он отличается от `withContext`? Объясните сохранение контекста, поведение буферизации, использование нескольких `flowOn` в цепочке и влияние на производительность с реальными примерами.
 
-## English Version
+# Question (EN)
+> What does the `flowOn` operator do in Kotlin `Flow`s? How does it differ from `withContext`? Explain context preservation, buffering behavior, multiple `flowOn` operators in a chain, and performance implications with real-world examples.
 
-### Question
-What does the `flowOn` operator do in Kotlin flows? How does it differ from `withContext`? Explain context preservation, buffering behavior, multiple flowOn operators in a chain, and performance implications with real-world examples.
+## Ответ (RU)
 
-### Answer
+### Что делает `flowOn`
 
-#### What flowOn Does
-
-`flowOn` changes the **upstream** execution context of a flow. It affects where the flow's emissions are produced, not where they are collected.
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-fun demonstrateFlowOn() = runBlocking {
-    flow {
-        println("Emitting on: ${Thread.currentThread().name}")
-        emit(1)
-        emit(2)
-        emit(3)
-    }
-        .flowOn(Dispatchers.IO) // Change upstream context
-        .collect { value ->
-            println("Collecting $value on: ${Thread.currentThread().name}")
-        }
-}
-
-// Output:
-// Emitting on: DefaultDispatcher-worker-1 (IO pool)
-// Collecting 1 on: main
-// Collecting 2 on: main
-// Collecting 3 on: main
-```
-
-**Key principle**: `flowOn` affects **everything above it** in the chain, not below.
-
-#### Why withContext Doesn't Work in Flows
-
-You **cannot** use `withContext` inside a flow builder:
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-// This DOESN'T WORK as expected
-fun brokenFlow() = flow {
-    withContext(Dispatchers.IO) {
-        emit(1) // IllegalStateException: Flow invariant is violated
-    }
-}
-```
-
-**Why**: Flow's `emit` function is context-preserving. It must be called from the same coroutine context where the flow was collected. Using `withContext` changes the context, violating this invariant.
-
-**Correct way:**
-
-```kotlin
-fun correctFlow() = flow {
-    // Build flow on current context
-    emit(1)
-    emit(2)
-}.flowOn(Dispatchers.IO) // Change context of entire upstream
-```
-
-#### Context Preservation in Flows
-
-Flows are designed to be **context-preserving**:
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-suspend fun demonstrateContextPreservation() {
-    val flow = flow {
-        println("Flow builder on: ${Thread.currentThread().name}")
-        emit(1)
-    }
-
-    // Collect on Main
-    withContext(Dispatchers.Main) {
-        flow.collect {
-            println("Collected on: ${Thread.currentThread().name}")
-        }
-    }
-    // Output: Both on Main (context preserved)
-
-    // Collect on IO
-    withContext(Dispatchers.IO) {
-        flow.collect {
-            println("Collected on: ${Thread.currentThread().name}")
-        }
-    }
-    // Output: Both on IO (context preserved)
-}
-```
-
-**Without flowOn**, the flow executes in the collector's context.
-
-#### flowOn Changes Upstream Context
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-fun demonstrateUpstreamChange() = runBlocking {
-    flow {
-        println("1. Emit in: ${Thread.currentThread().name}")
-        emit("A")
-    }
-        .map { value ->
-            println("2. Map in: ${Thread.currentThread().name}")
-            value.lowercase()
-        }
-        .flowOn(Dispatchers.IO) // Affects blocks 1 and 2
-        .map { value ->
-            println("3. Map in: ${Thread.currentThread().name}")
-            value.uppercase()
-        }
-        .collect { value ->
-            println("4. Collect '$value' in: ${Thread.currentThread().name}")
-        }
-}
-
-// Output:
-// 1. Emit in: DefaultDispatcher-worker-1 (IO)
-// 2. Map in: DefaultDispatcher-worker-1 (IO)
-// 3. Map in: main
-// 4. Collect 'A' in: main
-```
-
-**Visualization:**
-
-```
-[emit] -> [map lowercase] -> flowOn(IO) -> [map uppercase] -> [collect]
-   ↑           ↑                               ↑                 ↑
-   IO          IO                            Main              Main
-```
-
-#### How flowOn Introduces Buffering
-
-`flowOn` creates a **channel-based buffer** between contexts:
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-fun demonstrateBuffering() = runBlocking {
-    flow {
-        repeat(5) { i ->
-            println("[${System.currentTimeMillis()}] Emitting $i")
-            emit(i)
-            delay(100) // Fast producer
-        }
-    }
-        .flowOn(Dispatchers.IO) // Creates buffer here
-        .collect { value ->
-            println("[${System.currentTimeMillis()}] Collecting $value")
-            delay(500) // Slow consumer
-        }
-}
-
-// Output shows producer doesn't wait for consumer
-// Buffer holds values until consumer ready
-```
-
-**Default buffer size**: 64 (from `Channel.BUFFERED`)
-
-**Custom buffer:**
-
-```kotlin
-fun customBufferFlow() = flow {
-    emit(1)
-}
-    .buffer(10) // Explicit buffer size
-    .flowOn(Dispatchers.IO)
-```
-
-#### Channel Buffer Created by flowOn
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-// flowOn internally creates something like:
-fun manualFlowOnEquivalent() = flow {
-    emit(1)
-    emit(2)
-}
-    .buffer(Channel.BUFFERED) // flowOn adds this
-    .let { bufferedFlow ->
-        flow {
-            // Collect upstream on different dispatcher
-            withContext(Dispatchers.IO) {
-                bufferedFlow.collect { emit(it) }
-            }
-        }
-    }
-```
-
-**Buffer characteristics:**
-- **Capacity**: Default 64 (Channel.BUFFERED)
-- **Overflow**: SUSPEND (backpressure)
-- **Purpose**: Decouple producer/consumer speeds
-
-#### Multiple flowOn Operators in Chain
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-fun demonstrateMultipleFlowOn() = runBlocking {
-    flow {
-        println("Emit on: ${Thread.currentThread().name}")
-        emit(1)
-    }
-        .map {
-            println("Map1 on: ${Thread.currentThread().name}")
-            it * 2
-        }
-        .flowOn(Dispatchers.IO) // Changes context for emit + map1
-        .map {
-            println("Map2 on: ${Thread.currentThread().name}")
-            it + 10
-        }
-        .flowOn(Dispatchers.Default) // Changes context for map2
-        .collect {
-            println("Collect $it on: ${Thread.currentThread().name}")
-        }
-}
-
-// Output:
-// Emit on: DefaultDispatcher-worker-1 (IO)
-// Map1 on: DefaultDispatcher-worker-1 (IO)
-// Map2 on: DefaultDispatcher-worker-2 (Default)
-// Collect 12 on: main
-```
-
-**Visualization:**
-
-```
-[emit] -> [map1] -> flowOn(IO) -> [map2] -> flowOn(Default) -> [collect]
-   ↑        ↑                        ↑                            ↑
-   IO       IO                     Default                      Main
-```
-
-**Each flowOn**:
-- Affects all operators **above** it
-- Creates a separate buffer
-- Enables parallel pipeline processing
-
-#### Performance Implications
-
-**Benchmark: With vs Without flowOn**
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import kotlin.system.measureTimeMillis
-
-suspend fun cpuIntensiveOperation(value: Int): Int {
-    // Simulate heavy CPU work
-    var result = value
-    repeat(1_000_000) {
-        result = (result * 31 + it) % 1000
-    }
-    return result
-}
-
-fun benchmarkFlowOn() = runBlocking {
-    // Without flowOn (sequential on main)
-    val withoutFlowOn = measureTimeMillis {
-        flow {
-            repeat(10) { emit(it) }
-        }
-            .map { cpuIntensiveOperation(it) }
-            .collect { }
-    }
-
-    // With flowOn (parallel processing)
-    val withFlowOn = measureTimeMillis {
-        flow {
-            repeat(10) { emit(it) }
-        }
-            .map { cpuIntensiveOperation(it) }
-            .flowOn(Dispatchers.Default)
-            .collect { }
-    }
-
-    println("Without flowOn: ${withoutFlowOn}ms")
-    println("With flowOn: ${withFlowOn}ms")
-    println("Speedup: ${withoutFlowOn.toDouble() / withFlowOn}x")
-}
-
-// Typical results:
-// Without flowOn: 2000ms
-// With flowOn: 2000ms (similar, but doesn't block collector's thread)
-// Benefit: Collector's thread is free while CPU work happens
-```
-
-**Memory overhead:**
-
-```kotlin
-// Each flowOn creates a Channel buffer
-val flow = flow { emit(1) }
-    .flowOn(Dispatchers.IO)      // Buffer 1 (64 slots)
-    .flowOn(Dispatchers.Default) // Buffer 2 (64 slots)
-    .flowOn(Dispatchers.Main)    // Buffer 3 (64 slots)
-
-// Memory: 3 * 64 * sizeof(element)
-// Trade-off: Memory for concurrency
-```
-
-#### flowOn Placement in Operator Chain
-
-**Where you place flowOn matters!**
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-// Example 1: flowOn at end (affects all upstream)
-fun flowOnAtEnd() = flow {
-    println("Emit on: ${Thread.currentThread().name}")
-    emit(1)
-}
-    .map {
-        println("Map on: ${Thread.currentThread().name}")
-        it * 2
-    }
-    .filter {
-        println("Filter on: ${Thread.currentThread().name}")
-        it > 0
-    }
-    .flowOn(Dispatchers.IO) // All above run on IO
-
-// Example 2: flowOn in middle (affects only above)
-fun flowOnInMiddle() = flow {
-    println("Emit on: ${Thread.currentThread().name}")
-    emit(1)
-}
-    .flowOn(Dispatchers.IO) // Only emit on IO
-    .map {
-        println("Map on: ${Thread.currentThread().name}")
-        it * 2
-    }
-    .filter {
-        println("Filter on: ${Thread.currentThread().name}")
-        it > 0
-    } // map and filter on collector's context
-```
-
-**Best practices:**
-
-1. **Place flowOn right after expensive operations:**
-```kotlin
-flow { /* fetch data */ }
-    .flowOn(Dispatchers.IO) // I/O on IO pool
-    .map { /* parse */ }
-    .flowOn(Dispatchers.Default) // Parsing on CPU pool
-    .collect { /* update UI */ } // UI on Main
-```
-
-2. **Don't overuse flowOn:**
-```kotlin
-// Bad: Too many flowOn
-flow { emit(1) }
-    .flowOn(Dispatchers.IO)
-    .map { it * 2 }
-    .flowOn(Dispatchers.IO) // Unnecessary context switch
-    .collect { }
-
-// Good: One flowOn for related operations
-flow { emit(1) }
-    .map { it * 2 }
-    .flowOn(Dispatchers.IO) // Both on IO
-    .collect { }
-```
-
-#### Upstream Vs Downstream Context
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-fun demonstrateUpstreamDownstream() = runBlocking {
-    println("Starting on: ${Thread.currentThread().name}")
-
-    flow {
-        println("UPSTREAM: Emit on ${Thread.currentThread().name}")
-        emit(1)
-    }
-        .onEach {
-            println("UPSTREAM: onEach on ${Thread.currentThread().name}")
-        }
-        .flowOn(Dispatchers.IO) // <-- Dividing line
-        .onEach {
-            println("DOWNSTREAM: onEach on ${Thread.currentThread().name}")
-        }
-        .collect {
-            println("DOWNSTREAM: Collect on ${Thread.currentThread().name}")
-        }
-}
-
-// Output:
-// Starting on: main
-// UPSTREAM: Emit on DefaultDispatcher-worker-1 (IO)
-// UPSTREAM: onEach on DefaultDispatcher-worker-1 (IO)
-// DOWNSTREAM: onEach on main
-// DOWNSTREAM: Collect on main
-```
-
-**Rule**: Everything **above** flowOn = upstream (affected), everything **below** = downstream (not affected).
-
-#### Real Example: Loading Data from Network and Database
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-data class User(val id: Int, val name: String)
-
-class UserRepository {
-    // Simulate network call
-    private suspend fun fetchUsersFromNetwork(): List<User> {
-        delay(1000)
-        return listOf(User(1, "Alice"), User(2, "Bob"))
-    }
-
-    // Simulate database save
-    private suspend fun saveToDatabase(user: User) {
-        delay(100)
-        println("Saved ${user.name} to DB")
-    }
-
-    // Flow with proper dispatcher usage
-    fun syncUsers(): Flow<User> = flow {
-        println("Fetching from network on: ${Thread.currentThread().name}")
-        val users = fetchUsersFromNetwork()
-        users.forEach { emit(it) }
-    }
-        .flowOn(Dispatchers.IO) // Network I/O on IO dispatcher
-        .onEach { user ->
-            println("Parsing $user on: ${Thread.currentThread().name}")
-            // Heavy parsing could go here
-        }
-        .flowOn(Dispatchers.Default) // CPU work on Default
-        .onEach { user ->
-            println("Saving ${user.name} on: ${Thread.currentThread().name}")
-            saveToDatabase(user)
-        }
-        .flowOn(Dispatchers.IO) // Database I/O on IO
-}
-
-suspend fun demonstrateRealWorld() {
-    val repo = UserRepository()
-    repo.syncUsers().collect { user ->
-        println("UI update for ${user.name} on: ${Thread.currentThread().name}")
-    }
-}
-```
-
-**Context flow:**
-```
-[Network fetch] -> flowOn(IO) -> [Parsing] -> flowOn(Default) -> [DB save] -> flowOn(IO) -> [UI update]
-      ↑ IO                          ↑ Default                        ↑ IO              ↑ Main
-```
-
-#### flowOn with Custom Buffer Capacity
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-fun customBufferWithFlowOn() = flow {
-    repeat(100) { emit(it) }
-}
-    .buffer(10) // Small buffer
-    .flowOn(Dispatchers.IO)
-
-// vs
-
-fun defaultBufferWithFlowOn() = flow {
-    repeat(100) { emit(it) }
-}
-    .flowOn(Dispatchers.IO) // Buffer 64 by default
-```
-
-**When to customize buffer:**
-
-- **Smaller buffer**: Memory-constrained, want backpressure
-- **Larger buffer**: Producer much faster than consumer
-- **Unbounded**: Special cases (use carefully!)
-
-```kotlin
-fun unboundedBuffer() = flow {
-    repeat(1000) { emit(it) }
-}
-    .buffer(Channel.UNLIMITED)
-    .flowOn(Dispatchers.IO)
-// Warning: Can cause OOM if producer >> consumer
-```
-
-#### Common Mistakes
-
-**1. flowOn on terminal operator**
-
-```kotlin
-// Wrong: flowOn after collect does nothing
-flow { emit(1) }
-    .collect { }
-    .flowOn(Dispatchers.IO) // No effect! Collect is terminal
-
-// Wrong: flowOn after toList
-flow { emit(1) }
-    .toList()
-    .let { /* process */ }
-// .flowOn here would do nothing
-
-// Correct: flowOn before terminal operator
-flow { emit(1) }
-    .flowOn(Dispatchers.IO)
-    .collect { }
-```
-
-**2. Unnecessary context switches**
-
-```kotlin
-// Bad: Context switch for trivial operation
-flow { emit(1) }
-    .map { it + 1 } // Trivial operation
-    .flowOn(Dispatchers.Default) // Unnecessary overhead
-
-// Good: Only switch for expensive operations
-flow {
-    // Expensive I/O
-    readFromDatabase()
-}
-    .flowOn(Dispatchers.IO)
-    .map { it + 1 } // Trivial, on collector's context
-```
-
-**3. Using withContext in flow builder**
-
-```kotlin
-// Wrong: Breaks flow invariant
-flow {
-    withContext(Dispatchers.IO) {
-        emit(1) // IllegalStateException
-    }
-}
-
-// Correct: Use flowOn
-flow {
-    emit(1)
-}.flowOn(Dispatchers.IO)
-```
-
-#### Debugging Context Switches
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-
-fun debuggableFlow() = flow {
-    println("[${Thread.currentThread().name}] Emitting")
-    emit(1)
-}
-    .onEach { println("[${Thread.currentThread().name}] After emit") }
-    .flowOn(Dispatchers.IO)
-    .onEach { println("[${Thread.currentThread().name}] After flowOn") }
-    .map {
-        println("[${Thread.currentThread().name}] Mapping")
-        it * 2
-    }
-    .flowOn(Dispatchers.Default)
-    .onEach { println("[${Thread.currentThread().name}] After second flowOn") }
-
-suspend fun debugFlow() {
-    withContext(Dispatchers.Main) {
-        debuggableFlow().collect { value ->
-            println("[${Thread.currentThread().name}] Collected: $value")
-        }
-    }
-}
-```
-
-**Output shows context at each stage:**
-```
-[DefaultDispatcher-worker-1] Emitting
-[DefaultDispatcher-worker-1] After emit
-[DefaultDispatcher-worker-2] After flowOn
-[DefaultDispatcher-worker-2] Mapping
-[main] After second flowOn
-[main] Collected: 2
-```
-
-#### Best Practices
-
-**1. Match dispatcher to workload**
-
-```kotlin
-// I/O operations -> Dispatchers.IO
-flow {
-    fetchFromNetwork()
-    readFromFile()
-}
-    .flowOn(Dispatchers.IO)
-
-// CPU-intensive -> Dispatchers.Default
-flow {
-    parseJson()
-    processImage()
-}
-    .flowOn(Dispatchers.Default)
-
-// UI updates -> Dispatchers.Main (or collector's context)
-flow { /* ... */ }
-    .collect {
-        updateUI(it) // On Main
-    }
-```
-
-**2. Minimize flowOn calls**
-
-```kotlin
-// Bad: Multiple flowOn for same dispatcher
-flow { operationA() }
-    .flowOn(Dispatchers.IO)
-    .map { operationB(it) }
-    .flowOn(Dispatchers.IO) // Unnecessary
-
-// Good: Group operations
-flow {
-    val a = operationA()
-    operationB(a)
-}
-    .flowOn(Dispatchers.IO)
-```
-
-**3. Place flowOn strategically**
-
-```kotlin
-// Good: flowOn right after expensive operations
-flow { expensiveNetworkCall() }
-    .flowOn(Dispatchers.IO) // Immediately after I/O
-    .map { cheapTransform(it) } // On collector's thread
-```
-
-#### Testing Flows with flowOn
-
-```kotlin
-import kotlinx.coroutines.test.*
-import kotlinx.coroutines.flow.*
-import org.junit.Test
-import kotlin.test.assertEquals
-
-class FlowOnTests {
-    @Test
-    fun testFlowOnChangesContext() = runTest {
-        val dispatcher = StandardTestDispatcher(testScheduler)
-
-        val results = flow {
-            emit(Thread.currentThread().name)
-        }
-            .flowOn(dispatcher)
-            .toList()
-
-        // Verify emission happened on test dispatcher
-        assert(results[0].contains("Test"))
-    }
-
-    @Test
-    fun testFlowOnBuffering() = runTest {
-        var emitCount = 0
-        var collectCount = 0
-
-        flow {
-            repeat(10) {
-                emit(it)
-                emitCount++
-            }
-        }
-            .flowOn(StandardTestDispatcher(testScheduler))
-            .collect {
-                collectCount++
-            }
-
-        assertEquals(10, emitCount)
-        assertEquals(10, collectCount)
-    }
-}
-```
-
-### Summary
-
-**flowOn** changes the **upstream** execution context in flows:
-
-- **Affects**: Everything above flowOn in the chain
-- **Creates**: Channel-based buffer (default 64)
-- **Use for**: I/O operations, CPU-intensive work
-- **Cannot use**: `withContext` in flow builder (use flowOn instead)
-- **Multiple flowOn**: Each affects operations above it, creates separate buffer
-- **Placement**: Right after expensive operations
-- **Avoid**: On terminal operators, for trivial operations
-
-**Key insight**: flowOn enables pipeline parallelism - different flow stages can run on different threads concurrently.
-
----
-
-## Russian Version / Русская Версия
-
-### Вопрос
-Что делает оператор `flowOn` в Kotlin потоках? Чем он отличается от `withContext`? Объясните сохранение контекста, поведение буферизации, множественные операторы flowOn в цепочке и влияние на производительность с реальными примерами.
-
-### Ответ
-
-#### Что Делает flowOn
-
-`flowOn` изменяет **upstream** контекст выполнения потока. Он влияет на то, где производятся эмиссии потока, а не где они собираются.
+`flowOn` изменяет контекст выполнения upstream-операторов потока. Он влияет на то, где выполняются эмиссии и обработка выше него в цепочке, а не на контекст коллектора ниже него.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -748,26 +37,31 @@ fun demonstrateFlowOn() = runBlocking {
         println("Эмитим на: ${Thread.currentThread().name}")
         emit(1)
         emit(2)
+        emit(3)
     }
-        .flowOn(Dispatchers.IO) // Изменить upstream контекст
+        .flowOn(Dispatchers.IO) // Изменяем upstream-контекст
         .collect { value ->
             println("Собираем $value на: ${Thread.currentThread().name}")
         }
 }
 
-// Вывод:
+// Возможный вывод:
 // Эмитим на: DefaultDispatcher-worker-1 (IO пул)
 // Собираем 1 на: main
 // Собираем 2 на: main
+// Собираем 3 на: main
 ```
 
-**Ключевой принцип**: `flowOn` влияет на **всё выше** его в цепочке, не ниже.
+Ключевой принцип: `flowOn` влияет на всё, что выше него в цепочке (upstream), и не меняет то, что ниже (downstream).
 
-#### Почему withContext Не Работает В Потоках
+### Почему `withContext` ограничен в `flow`
 
-Вы **не можете** использовать `withContext` внутри flow builder:
+Нельзя произвольно менять контекст вокруг `emit` внутри `flow {}`. Пример ниже некорректен:
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
 // Это НЕ РАБОТАЕТ как ожидается
 fun brokenFlow() = flow {
     withContext(Dispatchers.IO) {
@@ -776,52 +70,52 @@ fun brokenFlow() = flow {
 }
 ```
 
-**Почему**: Функция `emit` потока сохраняет контекст. Она должна вызываться из того же контекста корутины, где поток был собран. Использование `withContext` изменяет контекст, нарушая этот инвариант.
+Почему: холодные потоки по умолчанию контекстосохраняющие. Код внутри `flow {}` должен выполняться в контексте коллектора (если не изменён `flowOn`). Вызов `emit` из другого контекста нарушает инвариант сохранения контекста.
 
-**Правильный способ:**
+Правильный способ:
 
 ```kotlin
 fun correctFlow() = flow {
     emit(1)
     emit(2)
-}.flowOn(Dispatchers.IO) // Изменить контекст всего upstream
+}.flowOn(Dispatchers.IO) // Меняем контекст всего upstream
 ```
 
-#### Сохранение Контекста В Потоках
+### Сохранение контекста в потоках
 
-Потоки спроектированы так, чтобы быть **контекстосохраняющими**:
+По умолчанию потоки сохраняют контекст:
 
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
 suspend fun demonstrateContextPreservation() {
-    val flow = flow {
+    val f = flow {
         println("Flow builder на: ${Thread.currentThread().name}")
         emit(1)
     }
 
     // Собираем на Main
     withContext(Dispatchers.Main) {
-        flow.collect {
+        f.collect {
             println("Собрано на: ${Thread.currentThread().name}")
         }
     }
-    // Вывод: Оба на Main (контекст сохранён)
+    // Оба лога на Main
 
     // Собираем на IO
     withContext(Dispatchers.IO) {
-        flow.collect {
+        f.collect {
             println("Собрано на: ${Thread.currentThread().name}")
         }
     }
-    // Вывод: Оба на IO (контекст сохранён)
+    // Оба лога на IO
 }
 ```
 
-**Без flowOn**, поток выполняется в контексте коллектора.
+Без `flowOn` весь поток выполняется в контексте коллектора.
 
-#### flowOn Изменяет Upstream Контекст
+### `flowOn` изменяет upstream-контекст
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -836,7 +130,7 @@ fun demonstrateUpstreamChange() = runBlocking {
             println("2. Map в: ${Thread.currentThread().name}")
             value.lowercase()
         }
-        .flowOn(Dispatchers.IO) // Влияет на блоки 1 и 2
+        .flowOn(Dispatchers.IO) // Влияет на 1 и 2
         .map { value ->
             println("3. Map в: ${Thread.currentThread().name}")
             value.uppercase()
@@ -846,14 +140,14 @@ fun demonstrateUpstreamChange() = runBlocking {
         }
 }
 
-// Вывод:
+// Возможный вывод:
 // 1. Emit в: DefaultDispatcher-worker-1 (IO)
 // 2. Map в: DefaultDispatcher-worker-1 (IO)
 // 3. Map в: main
 // 4. Collect 'A' в: main
 ```
 
-**Визуализация:**
+Визуализация:
 
 ```
 [emit] -> [map lowercase] -> flowOn(IO) -> [map uppercase] -> [collect]
@@ -861,9 +155,9 @@ fun demonstrateUpstreamChange() = runBlocking {
    IO          IO                            Main              Main
 ```
 
-#### Как flowOn Вносит Буферизацию
+### Как `flowOn` добавляет буферизацию
 
-`flowOn` создаёт **буфер на основе канала** между контекстами:
+`flowOn` создаёт границу на основе канала между контекстами (концептуально как буферированный канал):
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -872,49 +166,47 @@ import kotlinx.coroutines.flow.*
 fun demonstrateBuffering() = runBlocking {
     flow {
         repeat(5) { i ->
-            println("Эмитим $i")
+            println("[${System.currentTimeMillis()}] Эмитим $i")
             emit(i)
             delay(100) // Быстрый производитель
         }
     }
-        .flowOn(Dispatchers.IO) // Создаёт буфер здесь
+        .flowOn(Dispatchers.IO) // Граница и буфер здесь
         .collect { value ->
-            println("Собираем $value")
+            println("[${System.currentTimeMillis()}] Собираем $value")
             delay(500) // Медленный потребитель
         }
 }
 
-// Вывод показывает что производитель не ждёт потребителя
-// Буфер хранит значения пока потребитель не готов
+// Вывод показывает, что producer может опережать consumer до ёмкости буфера
 ```
 
-**Размер буфера по умолчанию**: 64 (из `Channel.BUFFERED`)
+Размер буфера по умолчанию: 64 (`Channel.BUFFERED`).
 
-**Пользовательский буфер:**
+Пользовательский буфер:
 
 ```kotlin
 fun customBufferFlow() = flow {
     emit(1)
 }
-    .buffer(10) // Явный размер буфера
+    .buffer(10) // Явный буфер до переключения контекста
     .flowOn(Dispatchers.IO)
 ```
 
-#### Буфер Канала, Создаваемый flowOn
+### Буфер канала, создаваемый `flowOn` (концептуально)
 
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 
-// flowOn внутри создаёт что-то вроде:
+// Концептуальное приближение поведения flowOn
 fun manualFlowOnEquivalent() = flow {
     emit(1)
     emit(2)
 }
-    .buffer(Channel.BUFFERED) // flowOn добавляет это
+    .buffer(Channel.BUFFERED)
     .let { bufferedFlow ->
         flow {
-            // Собираем upstream на другом диспетчере
             withContext(Dispatchers.IO) {
                 bufferedFlow.collect { emit(it) }
             }
@@ -922,12 +214,16 @@ fun manualFlowOnEquivalent() = flow {
     }
 ```
 
-**Характеристики буфера:**
-- **Ёмкость**: По умолчанию 64 (Channel.BUFFERED)
-- **Переполнение**: SUSPEND (противодавление)
-- **Назначение**: Разделить скорости производителя/потребителя
+Замечания:
+- Это не точная реализация, а иллюстрация:
+  - есть буфер между контекстами,
+  - upstream может работать на другом диспетчере,
+  - downstream читает из буфера.
+- Характеристики по умолчанию:
+  - Ёмкость: 64 (`Channel.BUFFERED`)
+  - Переполнение: `SUSPEND` (backpressure)
 
-#### Несколько Операторов flowOn В Цепочке
+### Несколько операторов `flowOn` в цепочке
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -942,19 +238,25 @@ fun demonstrateMultipleFlowOn() = runBlocking {
             println("Map1 на: ${Thread.currentThread().name}")
             it * 2
         }
-        .flowOn(Dispatchers.IO) // Изменяет контекст для emit + map1
+        .flowOn(Dispatchers.IO) // Влияет на emit + Map1
         .map {
             println("Map2 на: ${Thread.currentThread().name}")
             it + 10
         }
-        .flowOn(Dispatchers.Default) // Изменяет контекст для map2
+        .flowOn(Dispatchers.Default) // Влияет на Map2 как на свой upstream
         .collect {
             println("Collect $it на: ${Thread.currentThread().name}")
         }
 }
+
+// Возможный вывод:
+// Emit на: DefaultDispatcher-worker-1 (IO)
+// Map1 на: DefaultDispatcher-worker-1 (IO)
+// Map2 на: DefaultDispatcher-worker-2 (Default)
+// Collect 12 на: main
 ```
 
-**Визуализация:**
+Визуализация:
 
 ```
 [emit] -> [map1] -> flowOn(IO) -> [map2] -> flowOn(Default) -> [collect]
@@ -962,14 +264,14 @@ fun demonstrateMultipleFlowOn() = runBlocking {
    IO       IO                     Default                      Main
 ```
 
-**Каждый flowOn**:
-- Влияет на все операторы **выше** него
-- Создаёт отдельный буфер
-- Обеспечивает параллельную обработку конвейера
+Каждый `flowOn`:
+- влияет на все операторы выше него,
+- создаёт собственную границу/буфер,
+- позволяет различным частям конвейера выполняться на разных диспетчерах.
 
-#### Влияние На Производительность
+### Влияние на производительность
 
-**Бенчмарк: С и Без flowOn**
+`flowOn` в первую очередь переносит тяжёлую работу с контекста коллектора и создаёт асинхронные границы; ускорение не гарантируется само по себе.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -977,7 +279,6 @@ import kotlinx.coroutines.flow.*
 import kotlin.system.measureTimeMillis
 
 suspend fun cpuIntensiveOperation(value: Int): Int {
-    // Симулируем тяжёлую CPU работу
     var result = value
     repeat(1_000_000) {
         result = (result * 31 + it) % 1000
@@ -986,7 +287,6 @@ suspend fun cpuIntensiveOperation(value: Int): Int {
 }
 
 fun benchmarkFlowOn() = runBlocking {
-    // Без flowOn (последовательно на main)
     val withoutFlowOn = measureTimeMillis {
         flow {
             repeat(10) { emit(it) }
@@ -995,7 +295,6 @@ fun benchmarkFlowOn() = runBlocking {
             .collect { }
     }
 
-    // С flowOn (параллельная обработка)
     val withFlowOn = measureTimeMillis {
         flow {
             repeat(10) { emit(it) }
@@ -1007,31 +306,28 @@ fun benchmarkFlowOn() = runBlocking {
 
     println("Без flowOn: ${withoutFlowOn}мс")
     println("С flowOn: ${withFlowOn}мс")
-    println("Ускорение: ${withoutFlowOn.toDouble() / withFlowOn}x")
 }
-
-// Типичные результаты:
-// Без flowOn: 2000мс
-// С flowOn: 2000мс (похоже, но не блокирует поток коллектора)
-// Преимущество: Поток коллектора свободен пока идёт CPU работа
 ```
 
-**Накладные расходы памяти:**
+Замечания:
+- Для одного коллектора время может быть близким.
+- Польза в том, что тяжёлая работа выполняется не в UI-контексте, а в фоне.
+- Каждый `flowOn` добавляет буфер и переключения контекста; используйте только там, где это отражает реальные границы конвейера.
+
+Накладные расходы памяти:
 
 ```kotlin
-// Каждый flowOn создаёт буфер Channel
 val flow = flow { emit(1) }
-    .flowOn(Dispatchers.IO)      // Буфер 1 (64 слота)
-    .flowOn(Dispatchers.Default) // Буфер 2 (64 слота)
-    .flowOn(Dispatchers.Main)    // Буфер 3 (64 слота)
-
-// Память: 3 * 64 * sizeof(element)
-// Компромисс: Память за параллелизм
+    .flowOn(Dispatchers.IO)      // Буфер 1
+    .flowOn(Dispatchers.Default) // Буфер 2
+    .flowOn(Dispatchers.Main)    // Буфер 3
 ```
 
-#### Размещение flowOn В Цепочке Операторов
+Каждая граница добавляет состояние буфера; это обмен памяти и планирования на развязку этапов.
 
-**Место размещения flowOn имеет значение!**
+### Размещение `flowOn` в цепочке операторов
+
+Место размещения `flowOn` принципиально важно.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1050,9 +346,9 @@ fun flowOnAtEnd() = flow {
         println("Filter на: ${Thread.currentThread().name}")
         it > 0
     }
-    .flowOn(Dispatchers.IO) // Всё выше работает на IO
+    .flowOn(Dispatchers.IO) // Всё выше выполняется на IO
 
-// Пример 2: flowOn в середине (влияет только на то, что выше)
+// Пример 2: flowOn в середине
 fun flowOnInMiddle() = flow {
     println("Emit на: ${Thread.currentThread().name}")
     emit(1)
@@ -1068,34 +364,36 @@ fun flowOnInMiddle() = flow {
     } // map и filter на контексте коллектора
 ```
 
-**Лучшие практики:**
+Лучшие практики:
 
-1. **Размещайте flowOn сразу после дорогих операций:**
+1. Размещайте `flowOn` так, чтобы тяжёлая upstream-работа шла на подходящем диспетчере:
+
 ```kotlin
-flow { /* fetch data */ }
-    .flowOn(Dispatchers.IO) // I/O на IO пуле
-    .map { /* parse */ }
-    .flowOn(Dispatchers.Default) // Парсинг на CPU пуле
-    .collect { /* update UI */ } // UI на Main
+flow { /* сетевой или дисковый I/O */ }
+    .flowOn(Dispatchers.IO)
+    .map { /* тяжёлый парсинг */ }
+    .flowOn(Dispatchers.Default)
+    .collect { /* обновление UI */ }
 ```
 
-2. **Не злоупотребляйте flowOn:**
+2. Избегайте лишних `flowOn`:
+
 ```kotlin
-// Плохо: Слишком много flowOn
+// Слишком много переключений
 flow { emit(1) }
     .flowOn(Dispatchers.IO)
     .map { it * 2 }
-    .flowOn(Dispatchers.IO) // Ненужное переключение контекста
+    .flowOn(Dispatchers.IO) // лишний
     .collect { }
 
-// Хорошо: Один flowOn для связанных операций
+// Лучше
 flow { emit(1) }
     .map { it * 2 }
-    .flowOn(Dispatchers.IO) // Оба на IO
+    .flowOn(Dispatchers.IO)
     .collect { }
 ```
 
-#### Upstream Против Downstream Контекста
+### Upstream против Downstream контекста
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1111,7 +409,7 @@ fun demonstrateUpstreamDownstream() = runBlocking {
         .onEach {
             println("UPSTREAM: onEach на ${Thread.currentThread().name}")
         }
-        .flowOn(Dispatchers.IO) // <-- Разделяющая линия
+        .flowOn(Dispatchers.IO) // граница
         .onEach {
             println("DOWNSTREAM: onEach на ${Thread.currentThread().name}")
         }
@@ -1120,7 +418,7 @@ fun demonstrateUpstreamDownstream() = runBlocking {
         }
 }
 
-// Вывод:
+// Возможный вывод:
 // Начинаем на: main
 // UPSTREAM: Emit на DefaultDispatcher-worker-1 (IO)
 // UPSTREAM: onEach на DefaultDispatcher-worker-1 (IO)
@@ -1128,9 +426,9 @@ fun demonstrateUpstreamDownstream() = runBlocking {
 // DOWNSTREAM: Collect на main
 ```
 
-**Правило**: Всё **выше** flowOn = upstream (затронуто), всё **ниже** = downstream (не затронуто).
+Правило: всё выше `flowOn` — upstream (меняется), всё ниже — downstream (не меняется).
 
-#### Реальный Пример: Загрузка Данных Из Сети И Базы Данных
+### Реальный пример: сеть и база данных (скорректированный)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1144,36 +442,48 @@ class UserRepository {
         return listOf(User(1, "Алиса"), User(2, "Боб"))
     }
 
+    private suspend fun parseUser(user: User): User {
+        delay(10) // условный CPU-bound парсинг
+        return user
+    }
+
     private suspend fun saveToDatabase(user: User) {
         delay(100)
         println("Сохранён ${user.name} в БД")
     }
 
     fun syncUsers(): Flow<User> = flow {
-        println("Загрузка из сети на: ${Thread.currentThread().name}")
         val users = fetchUsersFromNetwork()
         users.forEach { emit(it) }
     }
-        .flowOn(Dispatchers.IO) // Сетевой I/O на IO диспетчере
-        .onEach { user ->
-            println("Парсинг $user на: ${Thread.currentThread().name}")
+        .flowOn(Dispatchers.IO) // сеть на IO
+        .map { user ->
+            parseUser(user)
         }
-        .flowOn(Dispatchers.Default) // CPU работа на Default
+        .flowOn(Dispatchers.Default) // парсинг на Default
         .onEach { user ->
-            println("Сохранение ${user.name} на: ${Thread.currentThread().name}")
             saveToDatabase(user)
         }
-        .flowOn(Dispatchers.IO) // БД I/O на IO
+        .flowOn(Dispatchers.IO) // сохранение в БД на IO
+}
+
+suspend fun demonstrateRealWorldRu() {
+    val repo = UserRepository()
+    repo.syncUsers().collect { user ->
+        println("Обновление UI для ${user.name} на: ${Thread.currentThread().name}")
+    }
 }
 ```
 
-**Поток контекста:**
+Контекстный поток (концептуально):
+
 ```
-[Загрузка из сети] -> flowOn(IO) -> [Парсинг] -> flowOn(Default) -> [Сохранение в БД] -> flowOn(IO) -> [Обновление UI]
-      ↑ IO                             ↑ Default                           ↑ IO                    ↑ Main
+[Сеть] --IO--> [Парсинг] --Default--> [БД] --IO--> [UI]
 ```
 
-#### flowOn С Пользовательской Ёмкостью Буфера
+Каждый `flowOn` сдвигает соответствующий upstream-фрагмент на указанный диспетчер.
+
+### `flowOn` с пользовательской ёмкостью буфера
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1182,22 +492,19 @@ import kotlinx.coroutines.flow.*
 fun customBufferWithFlowOn() = flow {
     repeat(100) { emit(it) }
 }
-    .buffer(10) // Маленький буфер
+    .buffer(10) // маленький буфер
     .flowOn(Dispatchers.IO)
-
-// против
 
 fun defaultBufferWithFlowOn() = flow {
     repeat(100) { emit(it) }
 }
-    .flowOn(Dispatchers.IO) // Буфер 64 по умолчанию
+    .flowOn(Dispatchers.IO) // буфер ~64 по умолчанию
 ```
 
-**Когда настраивать буфер:**
-
-- **Меньший буфер**: Ограниченная память, нужно противодавление
-- **Больший буфер**: Производитель намного быстрее потребителя
-- **Неограниченный**: Особые случаи (используйте осторожно!)
+Когда настраивать буфер:
+- меньший: экономия памяти, более раннее противодавление;
+- больший: producer сильно быстрее consumer;
+- `UNLIMITED`: редкие случаи; возможен рост памяти до OOM.
 
 ```kotlin
 fun unboundedBuffer() = flow {
@@ -1205,104 +512,52 @@ fun unboundedBuffer() = flow {
 }
     .buffer(Channel.UNLIMITED)
     .flowOn(Dispatchers.IO)
-// Предупреждение: Может вызвать OOM если производитель >> потребителя
+// Предупреждение: риск неограниченного роста памяти
 ```
 
-#### Типичные Ошибки
+### Типичные ошибки
 
-**1. flowOn на терминальном операторе**
+1. `flowOn` после терминального оператора:
 
 ```kotlin
-// Неправильно: flowOn после collect ничего не делает
 flow { emit(1) }
     .collect { }
-    .flowOn(Dispatchers.IO) // Нет эффекта! Collect терминальный
+    .flowOn(Dispatchers.IO) // без эффекта
 
-// Правильно: flowOn перед терминальным оператором
 flow { emit(1) }
     .flowOn(Dispatchers.IO)
     .collect { }
 ```
 
-**2. Ненужные переключения контекста**
+2. Лишние переключения контекста:
 
 ```kotlin
-// Плохо: Переключение контекста для тривиальной операции
 flow { emit(1) }
-    .map { it + 1 } // Тривиальная операция
-    .flowOn(Dispatchers.Default) // Ненужные накладные расходы
+    .map { it + 1 }
+    .flowOn(Dispatchers.Default) // накладные расходы ради мелочи
 
-// Хорошо: Только переключение для дорогих операций
 flow {
-    readFromDatabase() // Дорогой I/O
+    readFromDatabase()
 }
     .flowOn(Dispatchers.IO)
-    .map { it + 1 } // Тривиально, на контексте коллектора
+    .map { it + 1 }
 ```
 
-**3. Использование withContext в flow builder**
+3. `withContext` вокруг `emit` в `flow {}`:
 
 ```kotlin
-// Неправильно: Нарушает инвариант потока
 flow {
     withContext(Dispatchers.IO) {
         emit(1) // IllegalStateException
     }
 }
 
-// Правильно: Используйте flowOn
 flow {
     emit(1)
 }.flowOn(Dispatchers.IO)
 ```
 
-#### Лучшие Практики
-
-**1. Сопоставляйте диспетчер с нагрузкой**
-
-```kotlin
-// I/O операции -> Dispatchers.IO
-flow {
-    fetchFromNetwork()
-    readFromFile()
-}
-    .flowOn(Dispatchers.IO)
-
-// CPU-интенсивное -> Dispatchers.Default
-flow {
-    parseJson()
-    processImage()
-}
-    .flowOn(Dispatchers.Default)
-```
-
-**2. Минимизируйте вызовы flowOn**
-
-```kotlin
-// Плохо: Несколько flowOn для одного диспетчера
-flow { operationA() }
-    .flowOn(Dispatchers.IO)
-    .map { operationB(it) }
-    .flowOn(Dispatchers.IO) // Ненужно
-
-// Хорошо: Группируйте операции
-flow {
-    val a = operationA()
-    operationB(a)
-}
-    .flowOn(Dispatchers.IO)
-```
-
-**3. Размещайте flowOn стратегически**
-
-```kotlin
-// Хорошо: flowOn сразу после дорогих операций
-flow { expensiveNetworkCall() }
-    .flowOn(Dispatchers.IO) // Сразу после I/O
-    .map { cheapTransform(it) } // На потоке коллектора
-```
-
-#### Отладка Переключений Контекста
+### Отладка переключений контекста
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1314,7 +569,7 @@ fun debuggableFlow() = flow {
 }
     .onEach { println("[${Thread.currentThread().name}] После emit") }
     .flowOn(Dispatchers.IO)
-    .onEach { println("[${Thread.currentThread().name}] После flowOn") }
+    .onEach { println("[${Thread.currentThread().name}] После первого flowOn") }
     .map {
         println("[${Thread.currentThread().name}] Mapping")
         it * 2
@@ -1322,7 +577,7 @@ fun debuggableFlow() = flow {
     .flowOn(Dispatchers.Default)
     .onEach { println("[${Thread.currentThread().name}] После второго flowOn") }
 
-suspend fun debugFlow() {
+suspend fun debugFlowRu() {
     withContext(Dispatchers.Main) {
         debuggableFlow().collect { value ->
             println("[${Thread.currentThread().name}] Собрано: $value")
@@ -1331,17 +586,9 @@ suspend fun debugFlow() {
 }
 ```
 
-**Вывод показывает контекст на каждом этапе:**
-```
-[DefaultDispatcher-worker-1] Эмиссия
-[DefaultDispatcher-worker-1] После emit
-[DefaultDispatcher-worker-2] После flowOn
-[DefaultDispatcher-worker-2] Mapping
-[main] После второго flowOn
-[main] Собрано: 2
-```
+По именам потоков видно, какие стадии выполняются на каких диспетчерах и как влияют `flowOn`-границы.
 
-#### Тестирование Потоков С flowOn
+### Тестирование потоков с `flowOn`
 
 ```kotlin
 import kotlinx.coroutines.test.*
@@ -1360,7 +607,7 @@ class FlowOnTests {
             .flowOn(dispatcher)
             .toList()
 
-        // Проверяем что эмиссия произошла на тестовом диспетчере
+        // Проверяем, что была задействована инфраструктура тестового диспетчера
         assert(results[0].contains("Test"))
     }
 
@@ -1388,34 +635,662 @@ class FlowOnTests {
 
 ### Резюме
 
-**flowOn** изменяет **upstream** контекст выполнения в потоках:
+`flowOn` изменяет upstream-контекст выполнения в потоках:
 
-- **Влияет**: На всё выше flowOn в цепочке
-- **Создаёт**: Буфер на основе канала (по умолчанию 64)
-- **Используйте для**: I/O операций, CPU-интенсивной работы
-- **Нельзя использовать**: `withContext` в flow builder (используйте flowOn вместо него)
-- **Множественный flowOn**: Каждый влияет на операции выше него, создаёт отдельный буфер
-- **Размещение**: Сразу после дорогих операций
-- **Избегайте**: На терминальных операторах, для тривиальных операций
+- влияет на всё выше себя в цепочке,
+- добавляет буферизированную границу (по умолчанию ~64),
+- используйте для переноса I/O и CPU-интенсивной upstream-работы на подходящие диспетчеры,
+- не используйте `withContext` вокруг `emit` внутри `flow {}`; вместо этого применяйте `flowOn`,
+- несколько `flowOn`: каждый влияет на свой upstream и добавляет границу,
+- размещайте `flowOn` осознанно; избегайте после терминальных операторов и для тривиальных операций.
 
-**Ключевое понимание**: flowOn обеспечивает параллелизм конвейера - разные стадии потока могут выполняться на разных потоках одновременно.
+Ключевая идея: `flowOn` даёт управляемые границы асинхронности и переключения диспетчеров между этапами холодного потока.
+
+## Answer (EN)
+
+### What `flowOn` Does
+
+`flowOn` changes the execution context of the `Flow`'s upstream operators. It affects where emissions are produced and processed above it in the chain, not where they are collected below it.
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+fun demonstrateFlowOn() = runBlocking {
+    flow {
+        println("Emitting on: ${Thread.currentThread().name}")
+        emit(1)
+        emit(2)
+        emit(3)
+    }
+        .flowOn(Dispatchers.IO) // Change upstream context
+        .collect { value ->
+            println("Collecting $value on: ${Thread.currentThread().name}")
+        }
+}
+
+// Possible output:
+// Emitting on: DefaultDispatcher-worker-1 (IO pool)
+// Collecting 1 on: main
+// Collecting 2 on: main
+// Collecting 3 on: main
+```
+
+Key principle: `flowOn` affects everything above it in the chain (upstream), not below (downstream).
+
+### Why `withContext` Is Restricted in `Flow`
+
+You cannot arbitrarily change context around `emit` inside a cold flow builder. The following is invalid:
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+// This DOESN'T WORK as expected
+fun brokenFlow() = flow {
+    withContext(Dispatchers.IO) {
+        emit(1) // IllegalStateException: Flow invariant is violated
+    }
+}
+```
+
+Why: cold flows are context-preserving by default. Code inside `flow {}` is expected to run in the collector's context (unless changed by `flowOn`). Calling `emit` from a different context violates the context preservation invariant.
+
+Correct way:
+
+```kotlin
+fun correctFlow() = flow {
+    emit(1)
+    emit(2)
+}.flowOn(Dispatchers.IO) // Change context of entire upstream
+```
+
+### Context Preservation in `Flow`
+
+By default, flows are context-preserving:
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+suspend fun demonstrateContextPreservation() {
+    val f = flow {
+        println("Flow builder on: ${Thread.currentThread().name}")
+        emit(1)
+    }
+
+    // Collect on Main
+    withContext(Dispatchers.Main) {
+        f.collect {
+            println("Collected on: ${Thread.currentThread().name}")
+        }
+    }
+    // Both logs on Main
+
+    // Collect on IO
+    withContext(Dispatchers.IO) {
+        f.collect {
+            println("Collected on: ${Thread.currentThread().name}")
+        }
+    }
+    // Both logs on IO
+}
+```
+
+Without `flowOn`, the flow executes entirely in the collector's context.
+
+### `flowOn` Changes Upstream Context
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+fun demonstrateUpstreamChange() = runBlocking {
+    flow {
+        println("1. Emit in: ${Thread.currentThread().name}")
+        emit("A")
+    }
+        .map { value ->
+            println("2. Map in: ${Thread.currentThread().name}")
+            value.lowercase()
+        }
+        .flowOn(Dispatchers.IO) // Affects 1 and 2
+        .map { value ->
+            println("3. Map in: ${Thread.currentThread().name}")
+            value.uppercase()
+        }
+        .collect { value ->
+            println("4. Collect '$value' in: ${Thread.currentThread().name}")
+        }
+}
+
+// Possible output:
+// 1. Emit in: DefaultDispatcher-worker-1 (IO)
+// 2. Map in: DefaultDispatcher-worker-1 (IO)
+// 3. Map in: main
+// 4. Collect 'A' in: main
+```
+
+Visualization:
+
+```
+[emit] -> [map lowercase] -> flowOn(IO) -> [map uppercase] -> [collect]
+   ↑           ↑                               ↑                 ↑
+   IO          IO                            Main              Main
+```
+
+### How `flowOn` Introduces Buffering
+
+`flowOn` creates a channel-based boundary between contexts (conceptually similar to a buffered channel):
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+fun demonstrateBuffering() = runBlocking {
+    flow {
+        repeat(5) { i ->
+            println("[${System.currentTimeMillis()}] Emitting $i")
+            emit(i)
+            delay(100) // Fast producer
+        }
+    }
+        .flowOn(Dispatchers.IO) // Boundary and buffer here
+        .collect { value ->
+            println("[${System.currentTimeMillis()}] Collecting $value")
+            delay(500) // Slow consumer
+        }
+}
+
+// Output shows producer can run ahead up to buffer capacity
+```
+
+Default buffer size: 64 (`Channel.BUFFERED`).
+
+Custom buffer:
+
+```kotlin
+fun customBufferFlow() = flow {
+    emit(1)
+}
+    .buffer(10) // Explicit buffer before context switch
+    .flowOn(Dispatchers.IO)
+```
+
+### Channel Buffer Created by `flowOn` (Conceptual)
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+// Conceptual approximation of what flowOn does internally
+fun manualFlowOnEquivalent() = flow {
+    emit(1)
+    emit(2)
+}
+    .buffer(Channel.BUFFERED)
+    .let { bufferedFlow ->
+        flow {
+            withContext(Dispatchers.IO) {
+                bufferedFlow.collect { emit(it) }
+            }
+        }
+    }
+```
+
+Notes:
+- Not the exact implementation, but illustrates:
+  - a buffer between contexts,
+  - upstream on one dispatcher,
+  - downstream collecting from that buffer.
+- Default behavior:
+  - Capacity: 64 (`Channel.BUFFERED`)
+  - Overflow: `SUSPEND` (backpressure)
+
+### Multiple `flowOn` Operators in a Chain
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+fun demonstrateMultipleFlowOn() = runBlocking {
+    flow {
+        println("Emit on: ${Thread.currentThread().name}")
+        emit(1)
+    }
+        .map {
+            println("Map1 on: ${Thread.currentThread().name}")
+            it * 2
+        }
+        .flowOn(Dispatchers.IO) // Affects emit + Map1
+        .map {
+            println("Map2 on: ${Thread.currentThread().name}")
+            it + 10
+        }
+        .flowOn(Dispatchers.Default) // Affects Map2 as its upstream
+        .collect {
+            println("Collect $it on: ${Thread.currentThread().name}")
+        }
+}
+
+// Possible output:
+// Emit on: DefaultDispatcher-worker-1 (IO)
+// Map1 on: DefaultDispatcher-worker-1 (IO)
+// Map2 on: DefaultDispatcher-worker-2 (Default)
+// Collect 12 on: main
+```
+
+Visualization:
+
+```
+[emit] -> [map1] -> flowOn(IO) -> [map2] -> flowOn(Default) -> [collect]
+   ↑        ↑                        ↑                            ↑
+   IO       IO                     Default                      Main
+```
+
+Each `flowOn`:
+- affects all operators above it,
+- introduces its own buffer/boundary,
+- lets different pipeline segments run on different dispatchers.
+
+### Performance Implications
+
+`flowOn` is mainly about moving work off the collector's context and creating asynchronous boundaries; it does not guarantee speedups by itself.
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlin.system.measureTimeMillis
+
+suspend fun cpuIntensiveOperation(value: Int): Int {
+    var result = value
+    repeat(1_000_000) {
+        result = (result * 31 + it) % 1000
+    }
+    return result
+}
+
+fun benchmarkFlowOn() = runBlocking {
+    val withoutFlowOn = measureTimeMillis {
+        flow {
+            repeat(10) { emit(it) }
+        }
+            .map { cpuIntensiveOperation(it) }
+            .collect { }
+    }
+
+    val withFlowOn = measureTimeMillis {
+        flow {
+            repeat(10) { emit(it) }
+        }
+            .map { cpuIntensiveOperation(it) }
+            .flowOn(Dispatchers.Default)
+            .collect { }
+    }
+
+    println("Without flowOn: ${withoutFlowOn}ms")
+    println("With flowOn: ${withFlowOn}ms")
+}
+```
+
+Notes:
+- For a single collector, total time may be similar.
+- Benefit: heavy upstream work runs on a background dispatcher instead of blocking the collector (e.g., Main), improving responsiveness.
+- Each `flowOn` adds buffers and context switches; use only when they reflect real concurrency boundaries.
+
+Memory overhead:
+
+```kotlin
+val flow = flow { emit(1) }
+    .flowOn(Dispatchers.IO)      // Buffer 1
+    .flowOn(Dispatchers.Default) // Buffer 2
+    .flowOn(Dispatchers.Main)    // Buffer 3
+```
+
+Each boundary adds buffer state; this trades memory and scheduling overhead for decoupling.
+
+### `flowOn` Placement in Operator Chain
+
+Placement of `flowOn` is critical.
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+// Example 1: flowOn at end (affects all upstream)
+fun flowOnAtEnd() = flow {
+    println("Emit on: ${Thread.currentThread().name}")
+    emit(1)
+}
+    .map {
+        println("Map on: ${Thread.currentThread().name}")
+        it * 2
+    }
+    .filter {
+        println("Filter on: ${Thread.currentThread().name}")
+        it > 0
+    }
+    .flowOn(Dispatchers.IO) // All upstream on IO
+
+// Example 2: flowOn in middle
+fun flowOnInMiddle() = flow {
+    println("Emit on: ${Thread.currentThread().name}")
+    emit(1)
+}
+    .flowOn(Dispatchers.IO) // Only emit on IO
+    .map {
+        println("Map on: ${Thread.currentThread().name}")
+        it * 2
+    }
+    .filter {
+        println("Filter on: ${Thread.currentThread().name}")
+        it > 0
+    } // map and filter on collector's context
+```
+
+Best practices:
+
+1. Place `flowOn` so heavy upstream work runs on suitable dispatchers:
+
+```kotlin
+flow { /* network or disk I/O */ }
+    .flowOn(Dispatchers.IO)
+    .map { /* CPU-heavy parsing */ }
+    .flowOn(Dispatchers.Default)
+    .collect { /* UI update */ }
+```
+
+2. Avoid redundant `flowOn`:
+
+```kotlin
+// Too many switches
+flow { emit(1) }
+    .flowOn(Dispatchers.IO)
+    .map { it * 2 }
+    .flowOn(Dispatchers.IO) // redundant
+    .collect { }
+
+// Better
+flow { emit(1) }
+    .map { it * 2 }
+    .flowOn(Dispatchers.IO)
+    .collect { }
+```
+
+### Upstream vs Downstream Context
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+fun demonstrateUpstreamDownstream() = runBlocking {
+    println("Starting on: ${Thread.currentThread().name}")
+
+    flow {
+        println("UPSTREAM: Emit on ${Thread.currentThread().name}")
+        emit(1)
+    }
+        .onEach {
+            println("UPSTREAM: onEach on ${Thread.currentThread().name}")
+        }
+        .flowOn(Dispatchers.IO) // boundary
+        .onEach {
+            println("DOWNSTREAM: onEach on ${Thread.currentThread().name}")
+        }
+        .collect {
+            println("DOWNSTREAM: Collect on ${Thread.currentThread().name}")
+        }
+}
+
+// Possible output:
+// Starting on: main
+// UPSTREAM: Emit on DefaultDispatcher-worker-1 (IO)
+// UPSTREAM: onEach on DefaultDispatcher-worker-1 (IO)
+// DOWNSTREAM: onEach on main
+// DOWNSTREAM: Collect on main
+```
+
+Rule: everything above `flowOn` = upstream (affected); below = downstream (unchanged).
+
+### Real Example: Network and Database (Corrected)
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+data class User(val id: Int, val name: String)
+
+class UserRepository {
+    private suspend fun fetchUsersFromNetwork(): List<User> {
+        delay(1000)
+        return listOf(User(1, "Alice"), User(2, "Bob"))
+    }
+
+    private suspend fun parseUser(user: User): User {
+        // simulate CPU-bound parsing
+        delay(10)
+        return user
+    }
+
+    private suspend fun saveToDatabase(user: User) {
+        delay(100)
+        println("Saved ${user.name} to DB")
+    }
+
+    fun syncUsers(): Flow<User> = flow {
+        val users = fetchUsersFromNetwork()
+        users.forEach { emit(it) }
+    }
+        .flowOn(Dispatchers.IO) // network on IO
+        .map { user ->
+            parseUser(user)
+        }
+        .flowOn(Dispatchers.Default) // parsing on Default
+        .onEach { user ->
+            saveToDatabase(user)
+        }
+        .flowOn(Dispatchers.IO) // DB I/O on IO
+}
+
+suspend fun demonstrateRealWorld() {
+    val repo = UserRepository()
+    repo.syncUsers().collect { user ->
+        println("UI update for ${user.name} on: ${Thread.currentThread().name}")
+    }
+}
+```
+
+Context flow (conceptual):
+
+```
+[Network fetch] --IO--> [Parsing] --Default--> [DB save] --IO--> [UI update]
+```
+
+Each `flowOn` shifts its upstream segment to the specified dispatcher.
+
+### `flowOn` with Custom Buffer Capacity
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+fun customBufferWithFlowOn() = flow {
+    repeat(100) { emit(it) }
+}
+    .buffer(10) // Small buffer
+    .flowOn(Dispatchers.IO)
+
+fun defaultBufferWithFlowOn() = flow {
+    repeat(100) { emit(it) }
+}
+    .flowOn(Dispatchers.IO) // Default buffer size (~64)
+```
+
+When to customize buffer:
+- Smaller: conserve memory, stronger backpressure.
+- Larger: producer much faster than consumer.
+- `UNLIMITED`: rare; may cause OOM.
+
+```kotlin
+fun unboundedBuffer() = flow {
+    repeat(1000) { emit(it) }
+}
+    .buffer(Channel.UNLIMITED)
+    .flowOn(Dispatchers.IO)
+// Warning: risk of unbounded memory growth
+```
+
+### Common Mistakes
+
+1. `flowOn` after terminal operator:
+
+```kotlin
+flow { emit(1) }
+    .collect { }
+    .flowOn(Dispatchers.IO) // no effect
+
+flow { emit(1) }
+    .flowOn(Dispatchers.IO)
+    .collect { }
+```
+
+2. Excessive context switching:
+
+```kotlin
+flow { emit(1) }
+    .map { it + 1 }
+    .flowOn(Dispatchers.Default) // overhead for trivial work
+
+flow {
+    readFromDatabase()
+}
+    .flowOn(Dispatchers.IO)
+    .map { it + 1 }
+```
+
+3. `withContext` around `emit` inside `flow {}`:
+
+```kotlin
+flow {
+    withContext(Dispatchers.IO) {
+        emit(1) // IllegalStateException
+    }
+}
+
+flow {
+    emit(1)
+}.flowOn(Dispatchers.IO)
+```
+
+### Debugging Context Switches
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+fun debuggableFlow() = flow {
+    println("[${Thread.currentThread().name}] Emitting")
+    emit(1)
+}
+    .onEach { println("[${Thread.currentThread().name}] After emit") }
+    .flowOn(Dispatchers.IO)
+    .onEach { println("[${Thread.currentThread().name}] After first flowOn") }
+    .map {
+        println("[${Thread.currentThread().name}] Mapping")
+        it * 2
+    }
+    .flowOn(Dispatchers.Default)
+    .onEach { println("[${Thread.currentThread().name}] After second flowOn") }
+
+suspend fun debugFlow() {
+    withContext(Dispatchers.Main) {
+        debuggableFlow().collect { value ->
+            println("[${Thread.currentThread().name}] Collected: $value")
+        }
+    }
+}
+```
+
+By checking thread names, you can see which stages run on which dispatcher and how `flowOn` boundaries affect them.
+
+### Testing Flows with `flowOn`
+
+```kotlin
+import kotlinx.coroutines.test.*
+import kotlinx.coroutines.flow.*
+import org.junit.Test
+import kotlin.test.assertEquals
+
+class FlowOnTests {
+    @Test
+    fun testFlowOnChangesContext() = runTest {
+        val dispatcher = StandardTestDispatcher(testScheduler)
+
+        val results = flow {
+            emit(Thread.currentThread().name)
+        }
+            .flowOn(dispatcher)
+            .toList()
+
+        // Implementation-specific, but should use the test dispatcher
+        assert(results[0].contains("Test"))
+    }
+
+    @Test
+    fun testFlowOnBuffering() = runTest {
+        var emitCount = 0
+        var collectCount = 0
+
+        flow {
+            repeat(10) {
+                emit(it)
+                emitCount++
+            }
+        }
+            .flowOn(StandardTestDispatcher(testScheduler))
+            .collect {
+                collectCount++
+            }
+
+        assertEquals(10, emitCount)
+        assertEquals(10, collectCount)
+    }
+}
+```
+
+### Summary
+
+`flowOn` changes the upstream execution context in flows:
+
+- affects everything above it in the chain,
+- introduces a buffered boundary (default ~64),
+- use it to move I/O and CPU-heavy upstream work to appropriate dispatchers,
+- do not use `withContext` around `emit` inside `flow {}`; use `flowOn` instead,
+- multiple `flowOn` calls: each affects its upstream and adds a boundary,
+- place `flowOn` thoughtfully; avoid after terminal operators and for trivial work.
+
+Key idea: `flowOn` provides controlled async boundaries and dispatcher shifts between stages of a cold flow pipeline.
 
 ---
 
+## Дополнительные вопросы
+
+1. Как внутренний буфер `flowOn` обрабатывает backpressure, когда downstream-коллектор медленнее upstream-эмиссий?
+2. Как `flowOn` влияет на распространение исключений? Меняется ли путь, по которому исключения идут вверх по цепочке?
+3. Как бы вы реализовали пользовательский оператор, похожий на `flowOn`, но с иными стратегиями буферизации?
+4. Объясните компромиссы производительности между использованием нескольких `flowOn` и одного `flowOn` в конце цепочки.
+5. Как `flowOn` взаимодействует с `StateFlow` и `SharedFlow`? Можно ли применять `flowOn` к горячим потокам?
+6. Каковы последствия использования `flowOn` совместно с операторами `retry()` или `catch()`?
+7. Как бы вы спроектировали систему мониторинга для отслеживания переключений контекста в сложном конвейере `Flow`?
+
 ## Follow-ups
 
-1. How does flowOn's internal buffer handle backpressure when the downstream collector is slower than upstream emissions?
-
-2. What happens to exception propagation when flowOn is used? Does it affect how exceptions travel up the flow chain?
-
-3. How would you implement a custom operator similar to flowOn but with different buffering strategies?
-
-4. Explain the performance trade-offs between using multiple flowOn operators vs a single flowOn at the end of the chain.
-
-5. How does flowOn interact with StateFlow and SharedFlow? Can you use flowOn with hot flows?
-
-6. What are the implications of using flowOn with operators like `retry()` or `catch()`?
-
+1. How does `flowOn`'s internal buffer handle backpressure when the downstream collector is slower than upstream emissions?
+2. What happens to exception propagation when `flowOn` is used? Does it affect how exceptions travel up the flow chain?
+3. How would you implement a custom operator similar to `flowOn` but with different buffering strategies?
+4. Explain the performance trade-offs between using multiple `flowOn` operators vs a single `flowOn` at the end of the chain.
+5. How does `flowOn` interact with `StateFlow` and `SharedFlow`? Can you use `flowOn` with hot flows?
+6. What are the implications of using `flowOn` with operators like `retry()` or `catch()`?
 7. How would you design a monitoring system to track context switches in a complex flow pipeline?
 
 ## References
@@ -1423,8 +1298,9 @@ class FlowOnTests {
 - [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)
 - [flowOn API Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/flow-on.html)
 - [Flow Context Preservation](https://kotlinlang.org/docs/flow.html#flow-context)
-- [Roman Elizarov - Flow Dispatchers](https://medium.com/@elizarov/reactive-streams-and-kotlin-flows-bfd12772cda4)
+- [Roman Elizarov - Reactive Streams and Kotlin Flows](https://medium.com/@elizarov/reactive-streams-and-kotlin-flows-bfd12772cda4)
 - [Coroutines Guide - Flow](https://kotlinlang.org/docs/flow.html)
+- [[c-flow]]
 
 ## Related Questions
 
@@ -1449,5 +1325,5 @@ class FlowOnTests {
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
 
 ## Tags
-#kotlin #coroutines #flowon #context-switching #dispatchers #flow #performance #buffer
 
+#kotlin #coroutines #flowon #context-switching #dispatchers #flow #performance #buffer

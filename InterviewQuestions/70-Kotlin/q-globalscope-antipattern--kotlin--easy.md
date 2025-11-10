@@ -1,34 +1,35 @@
 ---
 id: kotlin-193
 title: "GlobalScope Anti-Pattern / Анти-Паттерн GlobalScope"
-aliases: [Antipattern, Globalscope]
+aliases: [GlobalScope Anti-Pattern, GlobalScope Antipattern]
 topic: kotlin
-subtopics: []
+subtopics: [coroutines, structured-concurrency]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-object-companion-object--kotlin--medium, q-test-dispatcher-types--kotlin--medium]
-created: 2025-10-15
-updated: 2025-10-31
+related: [c-coroutines, q-object-companion-object--kotlin--medium, q-test-dispatcher-types--kotlin--medium]
+created: 2024-10-15
+updated: 2025-11-09
 tags: [difficulty/easy]
 ---
 # Вопрос (RU)
-> Почему следует избегать использования GlobalScope в Android приложениях?
+> Почему следует избегать использования `GlobalScope` в Android приложениях?
 
 ---
 
 # Question (EN)
-> Why should you avoid using GlobalScope in Android applications?
+> Why should you avoid using `GlobalScope` in Android applications?
+
 ## Ответ (RU)
 
-**GlobalScope является анти-паттерном в Android**, потому что создает корутины, не привязанные к жизненному циклу, что приводит к утечкам памяти, потере ресурсов и возможным крэшам.
+**`GlobalScope` является анти-паттерном в Android**, потому что создает корутины, не привязанные к жизненному циклу, что легко приводит к ситуациям, где долго живущие задачи держат ссылки на UI/`Activity`/`Fragment`, вызывая утечки памяти, потерю ресурсов и возможные крэши.
 
 ### Что Такое GlobalScope?
 
-**Определение**: `GlobalScope` - это корутинная область верхнего уровня, которая существует в течение всего времени жизни приложения.
+**Определение**: `GlobalScope` — это корутинная область верхнего уровня, существующая до завершения процесса приложения. Корутины в ней не привязаны к конкретному владельцу жизненного цикла.
 
 ```kotlin
 // Корутина в GlobalScope
@@ -39,17 +40,17 @@ GlobalScope.launch {
 ```
 
 **Ключевые Характеристики**:
-- Существует все время жизни приложения
-- Не привязана к жизненному циклу компонентов
-- Не отменяется автоматически
-- Использует контекст уровня приложения
+- Существует все время жизни процесса приложения
+- Не привязана к жизненному циклу Android-компонентов
+- Не отменяется автоматически при уничтожении `Activity`/`Fragment`/`ViewModel`
+- Использует глобальный контекст (по умолчанию Dispatchers.Default)
 
 ### Почему GlobalScope Проблематичен
 
-**Проблема 1: Утечки Памяти**
+**Проблема 1: Утечки Памяти и Доступ к Уничтоженному UI**
 
 ```kotlin
-// ПЛОХО: Риск утечки памяти
+// ПЛОХО: Риск утечки памяти и крэша
 class UserProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +59,7 @@ class UserProfileActivity : AppCompatActivity() {
             // Загружает данные пользователя
             val user = repository.loadUser()
 
-            // Activity может быть уничтожен здесь!
+            // Activity может быть уничтожена здесь!
             // Но корутина все еще работает
             updateUI(user) // КРЭШ! View уничтожен
         }
@@ -72,11 +73,13 @@ class UserProfileActivity : AppCompatActivity() {
 ```
 
 **Что Происходит**:
-1. Activity запускается, запускает корутину в GlobalScope
-2. Пользователь поворачивает устройство или нажимает назад
-3. Activity уничтожается
-4. Корутина продолжает работать (не привязана к жизненному циклу Activity)
-5. Корутина пытается обновить уничтоженные view → **Крэш или утечка памяти**
+1. `Activity` запускается и создает корутину в `GlobalScope`
+2. Пользователь поворачивает устройство или уходит назад
+3. `Activity` уничтожается
+4. Корутина продолжает работать (не привязана к жизненному циклу `Activity`)
+5. Корутина пытается обновить уничтоженные view → **крэш** или удержание ссылок на `Activity`/Views → **утечка памяти**
+
+Ключевой момент: сам `GlobalScope` не "создает утечки" автоматически, но корутины в нем живут дольше компонентов и легко захватывают их ссылки.
 
 **Проблема 2: Потраченные Ресурсы**
 
@@ -101,9 +104,9 @@ class SearchActivity : AppCompatActivity() {
 ```
 
 **Проблема**:
-- Пользователь уходит из SearchActivity
+- Пользователь уходит из `SearchActivity`
 - Сетевой запрос все равно завершается
-- Результаты обрабатываются, хотя никому не нужны
+- Результаты обрабатываются, хотя UI уже не актуален
 - Потраченный трафик, батарея, CPU
 
 **Проблема 3: Необработанные Исключения**
@@ -115,8 +118,8 @@ GlobalScope.launch {
     riskyOperation()
 }
 
-// CoroutineExceptionHandler не установлен!
-// Исключение идет к обработчику по умолчанию → крэш приложения
+// Если не установлен CoroutineExceptionHandler,
+// необработанное исключение пойдет к обработчику по умолчанию → крэш приложения
 ```
 
 **Проблема 4: Сложности с Тестированием**
@@ -138,17 +141,17 @@ fun testLoadUser() {
     viewModel.loadUser()
 
     // Как нам дождаться завершения корутины в GlobalScope?
-    // Нельзя внедрить TestDispatcher
-    // Нельзя контролировать timing корутин
+    // Нельзя корректно внедрить TestDispatcher
+    // Сложно контролировать время выполнения корутин
 }
 ```
 
-### Правильный Способ: Корутины С Жизненным Циклом
+### Правильный Способ: Корутины с Жизненным Циклом
 
-**Решение 1: Использовать lifecycleScope (Activity/Fragment)**
+**Решение 1: Использовать lifecycleScope (`Activity`/`Fragment`)**
 
 ```kotlin
-// ХОРОШО: Привязано к жизненному циклу Activity
+// ХОРОШО: Привязано к жизненному циклу `Activity`
 class UserProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -156,23 +159,23 @@ class UserProfileActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val user = repository.loadUser()
 
-            // Автоматически отменяется при уничтожении Activity
-            updateUI(user) // Безопасно!
+            // Автоматически отменяется при уничтожении `Activity`
+            updateUI(user) // Безопаснее
         }
     }
 }
 ```
 
 **Преимущества**:
-- Корутина отменяется при уничтожении Activity
-- Нет утечек памяти
-- Нет потери ресурсов
+- Корутина отменяется при уничтожении `Activity`
+- Меньше риска утечек памяти
+- Нет ненужных трат ресурсов после уничтожения экрана
 - Безопасные обновления UI
 
-**Решение 2: Использовать viewModelScope (ViewModel)**
+**Решение 2: Использовать viewModelScope (`ViewModel`)**
 
 ```kotlin
-// ХОРОШО: Привязано к жизненному циклу ViewModel
+// ХОРОШО: Привязано к жизненному циклу `ViewModel`
 class UserViewModel : ViewModel() {
     private val _userData = MutableStateFlow<User?>(null)
     val userData: StateFlow<User?> = _userData
@@ -184,17 +187,17 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    // Автоматически отменяется при вызове ViewModel.onCleared()
+    // Корутины отменяются при вызове `ViewModel.onCleared()`
 }
 ```
 
 **Преимущества**:
-- Переживает изменения конфигурации (поворот)
-- Отменяется при очистке ViewModel
-- Тестируется с TestDispatcher
-- Нет утечек памяти
+- Переживает изменения конфигурации (поворот экрана)
+- Отменяется при очистке `ViewModel`
+- Удобно тестировать с TestDispatcher/TestScope
+- Снижает риск утечек памяти
 
-**Решение 3: Использовать repeatOnLifecycle для сбора Flow**
+**Решение 3: Использовать repeatOnLifecycle для сбора `Flow`**
 
 ```kotlin
 // ЛУЧШЕ ВСЕГО: Сбор Flow с учетом жизненного цикла
@@ -216,7 +219,7 @@ class UserProfileActivity : AppCompatActivity() {
 
 **Преимущества**:
 - Уважает состояния жизненного цикла
-- Нет обновлений когда приложение в фоне
+- Нет обновлений, когда приложение в фоне
 - Оптимальное использование ресурсов
 
 ### Когда GlobalScope Может Быть Приемлем
@@ -227,9 +230,11 @@ class UserProfileActivity : AppCompatActivity() {
 // WARNING: ВОЗМОЖНО ПРИЕМЛЕМО: Singleton уровня приложения
 class AnalyticsManager {
     fun logEvent(event: String) {
-        // Это ДОЛЖНО работать даже если Activity уничтожен
+        // Это ДОЛЖНО работать даже если `Activity` уничтожен
         GlobalScope.launch(Dispatchers.IO) {
             analyticsApi.sendEvent(event)
+            // Обратите внимание: без явного обработчика ошибок
+            // возможна потеря ошибок или крэш через глобальный handler
         }
     }
 }
@@ -245,6 +250,8 @@ class MyApplication : Application() {
     )
 
     override fun onTerminate() {
+        // ВАЖНО: onTerminate() не гарантированно вызывается на реальных устройствах,
+        // поэтому не полагайтесь на него как на главный механизм очистки.
         applicationScope.cancel()
         super.onTerminate()
     }
@@ -261,36 +268,88 @@ class AnalyticsManager(private val scope: CoroutineScope) {
 
 **Почему Лучше**:
 - Явное владение областью
-- Можно внедрить TestScope в тестах
+- Можно внедрить TestScope/TestDispatcher в тестах
 - Можно добавить CoroutineExceptionHandler
 - Четкое управление жизненным циклом
 
+### Сравнительная Таблица
+
+| Аспект | GlobalScope | lifecycleScope/viewModelScope |
+|--------|-------------|-------------------------------|
+| **Время жизни** | Весь процесс приложения | Жизненный цикл компонента |
+| **Отмена** | Только вручную | Автоматическая |
+| **Утечки памяти** | Высокий риск (если захватывать компоненты) | Безопаснее |
+| **Потеря ресурсов** | Возможна | Снижена |
+| **Тестирование** | Сложно | Проще (можно внедрять dispatcher/scope) |
+| **Обработка исключений** | Глобальный обработчик по умолчанию | Обработчик области |
+| **Практика Android** | Анти-паттерн | Рекомендуется |
+
+### Распространенные Ошибки и Как Их Исправить
+
+**Ошибка 1: Фоновая работа после ухода пользователя**
+
+```kotlin
+// ПЛОХО
+GlobalScope.launch {
+    delay(10000) // Задержка 10 секунд
+    showNotification()
+}
+
+// ХОРОШО — использовать WorkManager для отложенной работы
+val workRequest = OneTimeWorkRequestBuilder<NotificationWorker>()
+    .setInitialDelay(10, TimeUnit.SECONDS)
+    .build()
+
+WorkManager.getInstance(context).enqueue(workRequest)
+```
+
+**Ошибка 2: Fire-and-forget сетевые вызовы**
+
+```kotlin
+// ПЛОХО
+fun sendAnalytics() {
+    GlobalScope.launch {
+        api.sendEvent(event)
+    }
+}
+
+// ХОРОШО — привязать к подходящей области
+class MyViewModel : ViewModel() {
+    fun sendAnalytics() {
+        viewModelScope.launch {
+            api.sendEvent(event)
+        }
+    }
+}
+```
+
 ### Резюме
 
-**Почему Избегать GlobalScope**:
-- Вызывает утечки памяти (держит ссылки на Activity/Fragment)
-- Тратит ресурсы (продолжает после уничтожения компонента)
-- Сложно тестировать (нельзя внедрить TestDispatcher)
-- Неконтролируемый жизненный цикл (работает пока приложение живо)
-- Проблемы с обработкой исключений (глобальный обработчик крэшей)
+**Почему Избегать `GlobalScope`**:
+- Корутины могут пережить компоненты и удерживать ссылки на `Activity`/`Fragment` → утечки памяти
+- Тратит ресурсы (продолжает работу после уничтожения компонента)
+- Сложно тестировать (нельзя удобно внедрить TestDispatcher / управлять временем)
+- Неконтролируемый жизненный цикл (работает, пока живет процесс приложения)
+- Проблемы с обработкой исключений (попадает в глобальный обработчик, возможен крэш)
 
 **Используйте Вместо**:
-- `lifecycleScope` для Activity/Fragment
-- `viewModelScope` для ViewModel
+- `lifecycleScope` для `Activity`/`Fragment`
+- `viewModelScope` для `ViewModel`
 - Пользовательские области с четким владением жизненным циклом
 - `WorkManager` для фоновых задач, переживающих UI
+- См. также: [[c-coroutines]]
 
-**Ключевой Принцип**: **Всегда привязывайте корутины к области, учитывающей жизненный цикл**. Если вы думаете, что вам нужен GlobalScope, вам, вероятно, нужна лучшая архитектура или WorkManager.
+**Ключевой Принцип**: **Всегда привязывайте корутины к области, учитывающей жизненный цикл**. Если кажется, что нужен `GlobalScope`, вероятно нужна лучшая архитектура или `WorkManager`.
 
 ---
 
 ## Answer (EN)
 
-**GlobalScope is an anti-pattern in Android** because it creates coroutines that are not tied to any lifecycle, leading to memory leaks, wasted resources, and potential crashes.
+**GlobalScope is considered an anti-pattern in Android** because it creates coroutines that are not tied to any lifecycle, which makes it easy for long-lived tasks to capture references to `Activity`, `Fragment`, or views, leading to memory leaks, wasted resources, and potential crashes.
 
 ### What is GlobalScope?
 
-**Definition**: `GlobalScope` is a top-level coroutine scope that lives for the entire lifetime of the application.
+**Definition**: `GlobalScope` is a top-level coroutine scope that exists until the app process is killed. Coroutines launched in it are not bound to a specific lifecycle owner.
 
 ```kotlin
 // GlobalScope coroutine
@@ -301,17 +360,17 @@ GlobalScope.launch {
 ```
 
 **Key Characteristics**:
-- Lives for entire application lifetime
-- Not tied to any component lifecycle
-- Doesn't cancel automatically
-- Uses application-level context
+- Lives for the entire app process lifetime
+- Not tied to Android component lifecycles
+- Not automatically canceled when `Activity`/`Fragment`/`ViewModel` is destroyed
+- Uses a global context (Dispatchers.Default by default)
 
 ### Why GlobalScope is Problematic
 
-**Problem 1: Memory Leaks**
+**Problem 1: Memory Leaks and Accessing Destroyed UI**
 
 ```kotlin
-// BAD: Memory leak risk
+// BAD: Memory leak and crash risk
 class UserProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -334,11 +393,13 @@ class UserProfileActivity : AppCompatActivity() {
 ```
 
 **What Happens**:
-1. Activity starts, launches GlobalScope coroutine
+1. `Activity` starts and launches a coroutine in `GlobalScope`
 2. User rotates device or presses back
-3. Activity is destroyed
-4. Coroutine keeps running (not tied to Activity lifecycle)
-5. Coroutine tries to update destroyed views → **Crash or memory leak**
+3. `Activity` is destroyed
+4. Coroutine keeps running (not tied to `Activity` lifecycle)
+5. Coroutine tries to update destroyed views → **crash** or holding references to `Activity`/Views → **memory leak**
+
+Key point: `GlobalScope` itself does not magically leak, but coroutines in it outlive components and can easily capture them.
 
 **Problem 2: Wasted Resources**
 
@@ -363,9 +424,9 @@ class SearchActivity : AppCompatActivity() {
 ```
 
 **Issue**:
-- User navigates away from SearchActivity
+- User navigates away from `SearchActivity`
 - Network call completes anyway
-- Results are processed even though nobody needs them
+- Results are processed even though UI no longer cares
 - Wasted bandwidth, battery, CPU
 
 **Problem 3: Unhandled Exceptions**
@@ -377,8 +438,8 @@ GlobalScope.launch {
     riskyOperation()
 }
 
-// No CoroutineExceptionHandler installed!
-// Exception propagates to default handler → app crash
+// Without a CoroutineExceptionHandler,
+// the exception is routed to the default handler → app crash
 ```
 
 **Problem 4: Testing Difficulties**
@@ -399,9 +460,9 @@ class UserViewModel {
 fun testLoadUser() {
     viewModel.loadUser()
 
-    // How do we wait for GlobalScope coroutine to finish?
-    // Can't inject TestDispatcher
-    // Can't control coroutine timing
+    // How do we wait for the GlobalScope coroutine to finish?
+    // Can't cleanly inject a TestDispatcher
+    // Hard to control coroutine timing
 }
 ```
 
@@ -410,7 +471,7 @@ fun testLoadUser() {
 **Solution 1: Use lifecycleScope (Activities/Fragments)**
 
 ```kotlin
-// GOOD: Tied to Activity lifecycle
+// GOOD: Tied to `Activity` lifecycle
 class UserProfileActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -418,23 +479,23 @@ class UserProfileActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val user = repository.loadUser()
 
-            // Automatically canceled if Activity is destroyed
-            updateUI(user) // Safe!
+            // Automatically canceled if `Activity` is destroyed
+            updateUI(user) // Safer
         }
     }
 }
 ```
 
 **Benefits**:
-- Coroutine canceled when Activity destroyed
-- No memory leaks
-- No wasted resources
+- Coroutine is canceled when `Activity` is destroyed
+- Reduced risk of memory leaks
+- Avoids wasting work after screen is gone
 - Safe UI updates
 
 **Solution 2: Use viewModelScope (ViewModels)**
 
 ```kotlin
-// GOOD: Tied to ViewModel lifecycle
+// GOOD: Tied to `ViewModel` lifecycle
 class UserViewModel : ViewModel() {
     private val _userData = MutableStateFlow<User?>(null)
     val userData: StateFlow<User?> = _userData
@@ -446,17 +507,17 @@ class UserViewModel : ViewModel() {
         }
     }
 
-    // Automatically canceled when ViewModel.onCleared() is called
+    // Coroutines are canceled when `ViewModel.onCleared()` is called
 }
 ```
 
 **Benefits**:
-- Survives configuration changes (rotation)
-- Canceled when ViewModel cleared
-- Testable with TestDispatcher
-- No memory leaks
+- Survives configuration changes (e.g., rotation)
+- Canceled when `ViewModel` is cleared
+- Testable with TestDispatcher/TestScope
+- Reduced risk of leaks
 
-**Solution 3: Use repeatOnLifecycle for Flow collection**
+**Solution 3: Use repeatOnLifecycle for `Flow` collection**
 
 ```kotlin
 // BEST: Lifecycle-aware Flow collection
@@ -478,8 +539,8 @@ class UserProfileActivity : AppCompatActivity() {
 
 **Benefits**:
 - Respects lifecycle states
-- No updates when app is in background
-- Optimal resource usage
+- No updates while app is in background
+- Efficient resource usage
 
 ### When GlobalScope Might Be Acceptable
 
@@ -489,9 +550,11 @@ class UserProfileActivity : AppCompatActivity() {
 // WARNING: MAYBE ACCEPTABLE: Application-level singleton
 class AnalyticsManager {
     fun logEvent(event: String) {
-        // This SHOULD run even if Activity is destroyed
+        // This SHOULD run even if `Activity` is destroyed
         GlobalScope.launch(Dispatchers.IO) {
             analyticsApi.sendEvent(event)
+            // Note: without explicit error handling,
+            // failures may be lost or crash via default handler
         }
     }
 }
@@ -507,6 +570,8 @@ class MyApplication : Application() {
     )
 
     override fun onTerminate() {
+        // IMPORTANT: onTerminate() is not reliably called on real devices;
+        // don't rely on it as the primary cleanup mechanism.
         applicationScope.cancel()
         super.onTerminate()
     }
@@ -523,8 +588,8 @@ class AnalyticsManager(private val scope: CoroutineScope) {
 
 **Why Better**:
 - Explicit scope ownership
-- Can inject TestScope in tests
-- Can add CoroutineExceptionHandler
+- Can inject TestScope/TestDispatcher in tests
+- Can attach a CoroutineExceptionHandler
 - Clear lifecycle management
 
 ### Comparison Table
@@ -533,9 +598,9 @@ class AnalyticsManager(private val scope: CoroutineScope) {
 |--------|-------------|-------------------------------|
 | **Lifetime** | Entire app process | Component lifecycle |
 | **Cancellation** | Manual only | Automatic |
-| **Memory Leaks** | High risk | Safe |
-| **Resource Waste** | Possible | Prevented |
-| **Testing** | Difficult | Easy (inject dispatcher) |
+| **Memory Leaks** | High risk (if capturing components) | Safer |
+| **Resource Waste** | Possible | Reduced |
+| **Testing** | Difficult | Easier (inject dispatcher/scope) |
 | **Exception Handling** | Global default | Scope-specific handler |
 | **Android Best Practice** | Anti-pattern | Recommended |
 
@@ -580,28 +645,41 @@ class MyViewModel : ViewModel() {
 
 ### Summary
 
-**Why Avoid GlobalScope**:
-- Causes memory leaks (holds Activity/Fragment references)
-- Wastes resources (continues after component destroyed)
-- Hard to test (can't inject TestDispatcher)
-- Uncontrolled lifecycle (runs until app dies)
-- Exception handling issues (global crash handler)
+**Why Avoid `GlobalScope`**:
+- Coroutines can outlive components and capture `Activity`/`Fragment` references → memory leaks
+- Wastes resources (continues after component is destroyed)
+- Hard to test (can't easily inject TestDispatcher or control timing)
+- Uncontrolled lifecycle (runs until app process dies)
+- Exception handling issues (falls back to global handler → possible crash)
 
 **Use Instead**:
 - `lifecycleScope` for Activities/Fragments
 - `viewModelScope` for ViewModels
 - Custom scopes with clear lifecycle ownership
 - `WorkManager` for background tasks that outlive UI
+- See also: [[c-coroutines]]
 
-**Key Principle**: **Always tie coroutines to a lifecycle-aware scope**. If you think you need GlobalScope, you probably need a better architecture or WorkManager instead.
+**Key Principle**: **Always tie coroutines to a lifecycle-aware scope**. If you think you need `GlobalScope`, you probably need a better architecture or WorkManager instead.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого подхода от Java-потоков?
+- В каких редких случаях использование `GlobalScope` все же можно обосновать?
+- Каковы типичные ошибки при работе с корутинами и жизненным циклом в Android?
 
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
+
+## Ссылки (RU)
+
+- [Документация GlobalScope - Kotlin](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-global-scope/)
+- [Coroutines on Android - Android Developers](https://developer.android.com/kotlin/coroutines)
+- [Lifecycle-aware coroutines - AndroidX](https://developer.android.com/topic/libraries/architecture/coroutines)
 
 ## References
 
@@ -611,10 +689,12 @@ class MyViewModel : ViewModel() {
 
 ---
 
-**Source**: Kotlin Coroutines Interview Questions for Android Developers PDF
+## Связанные вопросы (RU)
+
+- [[q-object-companion-object--kotlin--medium]]
+- [[q-test-dispatcher-types--kotlin--medium]]
 
 ## Related Questions
 
 - [[q-object-companion-object--kotlin--medium]]
 - [[q-test-dispatcher-types--kotlin--medium]]
--

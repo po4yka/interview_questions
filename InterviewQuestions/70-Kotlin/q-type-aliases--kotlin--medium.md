@@ -1,11 +1,11 @@
 ---
 id: kotlin-021
 title: "Type Aliases in Kotlin / Псевдонимы типов в Kotlin"
-aliases: ["Type Aliases in Kotlin, Псевдонимы типов в Kotlin"]
+aliases: ["Type Aliases in Kotlin", "Псевдонимы типов в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [dsl, readability, type-aliases]
+subtopics: [type-aliases, dsl, readability]
 question_kind: theory
 difficulty: medium
 
@@ -18,13 +18,13 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-inline-classes-value-classes--kotlin--medium, q-kotlin-generics--kotlin--hard, q-kotlin-type-system--kotlin--medium]
+related: [c-kotlin, q-inline-classes-value-classes--kotlin--medium, q-kotlin-generics--kotlin--hard]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-18
+updated: 2025-11-09
 
-tags: [difficulty/medium, dsl, kotlin, readability, type-aliases, types]
+tags: [difficulty/medium, kotlin, type-aliases, types]
 ---
 # Вопрос (RU)
 > Что такое псевдонимы типов (type aliases) в Kotlin и когда их использовать?
@@ -33,20 +33,21 @@ tags: [difficulty/medium, dsl, kotlin, readability, type-aliases, types]
 
 # Question (EN)
 > What are type aliases in Kotlin and when should you use them?
+
 ## Ответ (RU)
 
 Псевдонимы типов (type aliases) предоставляют альтернативные имена для существующих типов. Если имя типа слишком длинное, можно ввести другое, более короткое имя и использовать его.
 
-### Базовый Синтаксис
+### Базовый синтаксис
 
 ```kotlin
 typealias NodeSet = Set<Network.Node>
 typealias FileTable<K> = MutableMap<K, MutableList<File>>
 ```
 
-### Частые Случаи Использования
+### Частые случаи использования
 
-#### 1. Сокращение Длинных Обобщенных Типов
+#### 1. Сокращение длинных обобщенных типов
 
 ```kotlin
 // До
@@ -57,15 +58,35 @@ typealias UserCache = MutableMap<String, MutableList<User>>
 val userCache: UserCache = mutableMapOf()
 ```
 
-#### 2. Псевдонимы Функциональных Типов
+#### 2. Псевдонимы функциональных типов
 
 ```kotlin
 typealias MyHandler = (Int, String, Any) -> Unit
 typealias Predicate<T> = (T) -> Boolean
 typealias ClickListener = (View) -> Unit
+
+// Пример использования
+fun setOnClickListener(listener: ClickListener) {
+    // ...
+}
 ```
 
-#### 3. Семантические Имена Типов
+#### 3. Псевдонимы для внутренних и вложенных классов
+
+```kotlin
+class A {
+    inner class Inner
+}
+
+class B {
+    inner class Inner
+}
+
+typealias AInner = A.Inner
+typealias BInner = B.Inner
+```
+
+#### 4. Семантические имена типов
 
 ```kotlin
 typealias UserId = String
@@ -73,11 +94,15 @@ typealias ProductId = Int
 typealias Email = String
 
 fun fetchUserProfile(userId: UserId): UserProfile {
-    // Понятнее чем просто String
+    // Понятнее, чем просто String
+}
+
+fun validateEmail(email: Email): Boolean {
+    // Явнее, чем просто String
 }
 ```
 
-### Важно: Псевдонимы Не Создают Новые Типы
+### Важно: псевдонимы не создают новые типы
 
 Псевдонимы типов **не являются новыми типами** - они эквивалентны соответствующим базовым типам. Компилятор всегда разворачивает их в исходный тип.
 
@@ -97,18 +122,101 @@ fun main() {
 }
 ```
 
-### Почему Использовать Псевдонимы Типов?
+### Зачем использовать псевдонимы типов?
 
-1. **Улучшенная читаемость** - Делает код понятнее с осмысленными именами
-2. **Абстракция и инкапсуляция** - Может абстрагировать детали реализации
-3. **Переиспользуемость кода** - Последовательный способ представления концепций
-4. **Создание DSL** - Помогает создавать предметно-ориентированные языки
+1. Улучшенная читаемость — делает код понятнее за счет осмысленных имен.
+2. Абстракция и инкапсуляция — может скрывать детали реализации.
+3. Переиспользуемость — единый способ представлять концепции.
+4. Создание DSL — помогает создавать предметно-ориентированные языки.
 
-### Ограничения Псевдонимов Типов
+### Примеры
 
-1. **Не создают новые типы** - Это просто альтернативные имена
-2. **Нет усиленной типобезопасности** - Любая строка может быть присвоена `typealias Email = String`
-3. **Одинаковое восприятие компилятором** - Компилятор интерпретирует их как исходные типы
+#### Пример 1: улучшение сигнатур функций
+
+```kotlin
+// Без псевдонима типа
+fun distance(p1: Pair<Double, Double>, p2: Pair<Double, Double>): Double {
+    val dx = p1.first - p2.first
+    val dy = p1.second - p2.second
+    return Math.sqrt(dx * dx + dy * dy)
+}
+
+// С псевдонимом типа — более наглядно
+typealias Point = Pair<Double, Double>
+
+fun distance(p1: Point, p2: Point): Double {
+    val dx = p1.first - p2.first
+    val dy = p1.second - p2.second
+    return Math.sqrt(dx * dx + dy * dy)
+}
+
+// Использование понятнее
+val p1: Point = 3.0 to 4.0
+val p2: Point = 6.0 to 8.0
+val dist = distance(p1, p2)
+```
+
+#### Пример 2: DSL-подобный синтаксис
+
+```kotlin
+typealias Tag = StringBuilder.() -> Unit
+
+fun html(block: Tag): String {
+    val sb = StringBuilder()
+    sb.append("<html>")
+    sb.block()
+    sb.append("</html>")
+    return sb.toString()
+}
+
+fun Tag.head(block: Tag) {
+    append("<head>")
+    block()
+    append("</head>")
+}
+
+fun Tag.body(block: Tag) {
+    append("<body>")
+    block()
+    append("</body>")
+}
+
+fun Tag.p(content: String) {
+    append("<p>$content</p>")
+}
+
+// Использование
+val page = html {
+    head {
+        p("Type Aliases in Kotlin")
+    }
+    body {
+        p("Learn about type aliases.")
+    }
+}
+```
+
+#### Пример 3: семантические имена типов
+
+```kotlin
+typealias UserId = String
+typealias ProductId = Int
+typealias Email = String
+
+fun fetchUserProfile(userId: UserId): UserProfile {
+    // Понятнее, чем просто String
+}
+
+fun validateEmail(email: Email): Boolean {
+    // Явнее, чем просто String
+}
+```
+
+### Ограничения псевдонимов типов
+
+1. Не создают новые типы — это только альтернативные имена.
+2. Нет усиленной типобезопасности — любая строка может быть присвоена `typealias Email = String`.
+3. Одинаковое восприятие компилятором — компилятор интерпретирует их как исходные типы.
 
 ```kotlin
 // Пример ограничения
@@ -118,7 +226,7 @@ typealias PhoneNumber = String
 val email: Email = "user@example.com"
 val phone: PhoneNumber = email  // - Компилируется! Нет типобезопасности
 
-// Для реальной типобезопасности используйте value классы:
+// Для реальной типобезопасности используйте value-классы:
 @JvmInline
 value class Email(val value: String)
 @JvmInline
@@ -128,7 +236,31 @@ val email2 = Email("user@example.com")
 val phone2: PhoneNumber = email2  // - Ошибка компиляции! Реальная типобезопасность
 ```
 
-**Краткое содержание**: Псевдонимы типов предоставляют альтернативные имена для существующих типов, улучшая читаемость кода без создания новых типов. Полезны для сокращения длинных обобщенных типов, именования функциональных типов и создания DSL. Однако не обеспечивают типобезопасность - для этого используйте value классы.
+### Рекомендации по использованию (Best Practices)
+
+1. Используйте для читаемости — когда имена типов слишком длинные или неочевидные.
+2. Используйте для моделирования домена — `UserId`, `ProductId` и т.п.
+3. Используйте для функциональных типов — делает сигнатуры колбэков яснее.
+4. Не злоупотребляйте — только если это реально улучшает понимание кода.
+5. Рассматривайте value-классы — если нужна настоящая типобезопасность.
+
+**Краткое резюме**: Псевдонимы типов предоставляют альтернативные имена для существующих типов, улучшая читаемость кода без создания новых типов. Полезны для сокращения длинных обобщенных типов, именования функциональных типов и создания DSL. Однако не обеспечивают типобезопасность — для этого используйте value-классы.
+
+## Дополнительные вопросы (Follow-ups, RU)
+
+- В чем ключевые отличия по сравнению с Java?
+- Когда вы бы использовали это на практике?
+- Какие распространенные ошибки и подводные камни стоит избегать?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [Type Aliases - Kotlin Documentation](https://kotlinlang.org/docs/type-aliases.html)
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-generics--kotlin--hard]]
+- [[q-inline-classes-value-classes--kotlin--medium]]
 
 ---
 
@@ -184,6 +316,22 @@ typealias AInner = A.Inner
 typealias BInner = B.Inner
 ```
 
+#### 4. Semantic Type Names
+
+```kotlin
+typealias UserId = String
+typealias ProductId = Int
+typealias Email = String
+
+fun fetchUserProfile(userId: UserId): UserProfile {
+    // More clear than just using String
+}
+
+fun validateEmail(email: Email): Boolean {
+    // Intent is clearer than using String
+}
+```
+
 ### Important: Type Aliases Don't Create New Types
 
 Type aliases are **not new types** - they are equivalent to the corresponding underlying types. The compiler always expands them to the original type.
@@ -206,10 +354,10 @@ fun main() {
 
 ### Why Use Type Aliases?
 
-1. **Improved Readability** - Makes code more understandable by giving meaningful names to complex types
-2. **Abstraction and Encapsulation** - Can abstract implementation details
-3. **Code Reusability** - Provides consistent way to represent concepts
-4. **DSL Creation** - Helps create domain-specific languages
+1. Improved Readability - Makes code more understandable by giving meaningful names to complex types
+2. Abstraction and Encapsulation - Can abstract implementation details
+3. Code Reusability - Provides consistent way to represent concepts
+4. DSL Creation - Helps create domain-specific languages
 
 ### Examples
 
@@ -296,9 +444,9 @@ fun validateEmail(email: Email): Boolean {
 
 ### Limitations of Type Aliases
 
-1. **Don't Create New Types** - They're just alternative names for existing types
-2. **No Enhanced Type Safety** - Any string can be assigned to `typealias Email = String`
-3. **Same Compiler Perception** - Compiler treats them as their original types
+1. Don't Create New Types - They're just alternative names for existing types
+2. No Enhanced Type Safety - Any string can be assigned to `typealias Email = String`
+3. Same Compiler Perception - Compiler treats them as their original types
 
 ```kotlin
 // Example of limitation
@@ -320,11 +468,11 @@ val phone2: PhoneNumber = email2  // - Compilation error! Real type safety
 
 ### Best Practices
 
-1. **Use for readability** - When type names are too long or cryptic
-2. **Use for domain modeling** - `UserId`, `ProductId`, etc.
-3. **Use for function types** - Makes callback signatures clearer
-4. **Don't overuse** - Only when it genuinely improves code clarity
-5. **Consider value classes** - If you need actual type safety, use value classes instead
+1. Use for readability - When type names are too long or cryptic
+2. Use for domain modeling - `UserId`, `ProductId`, etc.
+3. Use for function types - Makes callback signatures clearer
+4. Don't overuse - Only when it genuinely improves code clarity
+5. Consider value classes - If you need actual type safety, use value classes instead
 
 **English Summary**: Type aliases provide alternative names for existing types, improving code readability without creating new types. They're useful for shortening long generic types, naming function types, and creating DSLs. However, they don't provide type safety - for that, use value classes. The compiler always expands type aliases to their underlying types.
 
@@ -336,8 +484,7 @@ val phone2: PhoneNumber = email2  // - Compilation error! Real type safety
 
 ## References
 - [Type Aliases - Kotlin Documentation](https://kotlinlang.org/docs/type-aliases.html)
-- [All About Type Aliases](https://typealias.com/guides/all-about-type-aliases/)
 
 ## Related Questions
 - [[q-kotlin-generics--kotlin--hard]]
-- [[q-kotlin-sam-interfaces--kotlin--medium]]
+- [[q-inline-classes-value-classes--kotlin--medium]]

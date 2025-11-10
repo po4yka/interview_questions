@@ -3,18 +3,18 @@ id: kotlin-231
 title: "Advanced Enum Class Features in Kotlin / Продвинутые возможности enum классов"
 aliases: ["Advanced Enum Features", "Продвинутые возможности enum"]
 topic: kotlin
-subtopics: [classes, enums, kotlin-features]
+subtopics: [enums, kotlin-features]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-data-class-detailed--kotlin--medium, q-kotlin-enum-classes--kotlin--easy, q-sealed-class-sealed-interface--kotlin--medium]
-created: "2025-10-12"
-updated: 2025-01-25
+related: [c-kotlin, q-data-class-detailed--kotlin--medium, q-kotlin-enum-classes--kotlin--easy, q-sealed-class-sealed-interface--kotlin--medium]
+created: "2024-10-12"
+updated: "2025-11-09"
 tags: [advanced-enums, classes, difficulty/medium, enums, kotlin, kotlin-features]
-sources: [https://kotlinlang.org/docs/enum-classes.html]
+sources: ["https://kotlinlang.org/docs/enum-classes.html"]
 ---
 
 # Вопрос (RU)
@@ -28,7 +28,9 @@ sources: [https://kotlinlang.org/docs/enum-classes.html]
 ## Ответ (RU)
 
 **Теория продвинутых enum:**
-Kotlin enum классы поддерживают множество продвинутых возможностей: параметры, методы, интерфейсы, абстрактные методы, companion object, property delegation. Enum может реализовывать интерфейсы, иметь абстрактные методы для разной реализации в каждом enum значении, предоставлять общие методы и свойства.
+Kotlin enum классы поддерживают расширенные возможности: параметры, методы, реализацию интерфейсов, абстрактные методы, companion object. Enum может реализовывать интерфейсы, иметь абстрактные методы для разной реализации в каждом значении, предоставлять общие методы и свойства, а также переопределения для конкретных значений.
+
+Дополнительно у каждого enum значения есть стандартные свойства и функции: `name`, `ordinal`, статические методы `values()` и `valueOf()`, а также `entries` (c 1.9+) для безопасного получения списка значений.
 
 **Параметры enum значений:**
 ```kotlin
@@ -51,7 +53,7 @@ enum class Planet(val mass: Double, val radius: Double) {
 }
 ```
 
-**Реализация интерфейсов:**
+**Реализация интерфейсов и переопределения в значениях:**
 ```kotlin
 interface Clickable {
     fun click(): String
@@ -133,7 +135,9 @@ val exists = Color.hasColor("purple") // false
 ## Answer (EN)
 
 **Advanced Enum Theory:**
-Kotlin enum classes support many advanced features: parameters, methods, interfaces, abstract methods, companion object, property delegation. Enum can implement interfaces, have abstract methods for different implementations in each enum value, provide common methods and properties.
+Kotlin enum classes support extended features: constructor parameters, methods, interface implementation, abstract methods, and companion objects. An enum can implement interfaces, define abstract methods with different implementations per enum constant, provide common methods and properties, and allow per-constant overrides.
+
+Additionally, each enum constant has built-in properties and functions: `name`, `ordinal`, static-like `values()` and `valueOf()`, and `entries` (since 1.9+) for safely obtaining the list of constants.
 
 **Enum Value Parameters:**
 ```kotlin
@@ -156,7 +160,7 @@ enum class Planet(val mass: Double, val radius: Double) {
 }
 ```
 
-**Interface Implementation:**
+**Interface Implementation and Per-Constant Overrides:**
 ```kotlin
 interface Clickable {
     fun click(): String
@@ -241,7 +245,7 @@ val exists = Color.hasColor("purple") // false
 
 ## References
 
-- [[c-oop-fundamentals]]
+- [[c-kotlin]]
 - https://kotlinlang.org/docs/enum-classes.html
 
 ## Related Questions

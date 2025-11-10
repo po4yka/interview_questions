@@ -1,7 +1,7 @@
 ---
 id: kotlin-179
 title: "Sam Conversions / SAM конверсии"
-aliases: [Functional Interfaces, SAM Conversion, SAM конверсии, Single Abstract Method]
+aliases: [Functional Interfaces, SAM Conversion, Single Abstract Method]
 topic: kotlin
 subtopics: [java-interop, lambdas]
 question_kind: theory
@@ -10,22 +10,27 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-flow-exception-handling--kotlin--medium, q-kotlin-inline-functions--kotlin--medium, q-object-companion-object--kotlin--medium]
+related: [c-kotlin, q-flow-exception-handling--kotlin--medium, q-kotlin-inline-functions--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/medium, functional-interface, java-interop, kotlin, lambda, sam]
 ---
 
-# SAM (Single Abstract Method) Конверсии
+# Вопрос (RU)
 
-**English**: SAM (Single Abstract Method) conversions in Kotlin
+> Что такое SAM (Single Abstract Method) конверсии в Kotlin, как они работают для Java и Kotlin интерфейсов, какие ограничения у SAM-конверсий, как использовать SAM-конструкторы и чем SAM-интерфейсы отличаются от типов функций?
 
-## Answer (EN)
-**SAM conversions** allow using **lambda functions** instead of class/interface objects with **one abstract method**. This makes code more concise and readable when working with Java API or functional interfaces. Instead of creating an anonymous class, you can pass a lambda.
+# Question (EN)
 
-### What is a SAM Interface
+> What are SAM (Single Abstract Method) conversions in Kotlin, how do they work for Java and Kotlin interfaces, what are their limitations, how are SAM constructors used, and how do SAM interfaces differ from function types?
 
-**SAM** (Single Abstract Method) interface is an interface with **one** abstract method.
+## Ответ (RU)
+
+**SAM (Single Abstract Method)** конверсии позволяют использовать **лямбда-функции** вместо объектов анонимных классов для интерфейсов с **одним абстрактным методом**. Это делает код короче и читабельнее, особенно при работе с Java API и функциональными интерфейсами.
+
+### Что такое SAM-интерфейс
+
+**SAM-интерфейс** — это интерфейс с одним абстрактным методом.
 
 ```kotlin
 // Java
@@ -36,6 +41,388 @@ interface OnClickListener {
 // Kotlin
 fun interface OnClickListener {
     fun onClick(view: View)  // Один абстрактный метод
+}
+```
+
+### SAM-конверсия на практике
+
+#### До SAM (старый подход)
+
+```kotlin
+// Анонимный класс — многословно
+button.setOnClickListener(object : View.OnClickListener {
+    override fun onClick(v: View) {
+        println("Button clicked!")
+    }
+})
+```
+
+#### С SAM-конверсией
+
+```kotlin
+// Лямбда — короче и читабельнее
+button.setOnClickListener { v ->
+    println("Button clicked!")
+}
+
+// Или ещё короче (если параметр не используется)
+button.setOnClickListener {
+    println("Button clicked!")
+}
+```
+
+### SAM для Java-интерфейсов
+
+Kotlin автоматически применяет SAM-конверсии к **Java** интерфейсам с одним абстрактным методом, таким как `Runnable`, `Callable`, `Comparator` и слушатели Android.
+
+```java
+// Java-интерфейсы
+public interface Runnable {
+    void run();
+}
+
+public interface Callable<V> {
+    V call() throws Exception;
+}
+
+public interface Comparator<T> {
+    int compare(T o1, T o2);
+}
+```
+
+```kotlin
+// Runnable
+Thread {
+    println("Running in thread")
+}.start()
+
+// Вместо:
+Thread(object : Runnable {
+    override fun run() {
+        println("Running in thread")
+    }
+}).start()
+
+// Callable
+val executor = Executors.newSingleThreadExecutor()
+val future = executor.submit<String> {
+    "Result from callable"
+}
+
+// Comparator
+val numbers = listOf(3, 1, 4, 1, 5, 9)
+val sorted = numbers.sortedWith { a, b -> a.compareTo(b) }
+
+// Явно через SAM-конструктор Comparator
+val sorted2 = numbers.sortedWith(Comparator { a, b -> a - b })
+```
+
+### SAM для Kotlin-интерфейсов (`fun interface`)
+
+Для SAM-конверсии Kotlin-интерфейсов используется модификатор `fun interface` (начиная с Kotlin 1.4).
+
+```kotlin
+// SAM-интерфейс в Kotlin
+fun interface StringTransformer {
+    fun transform(input: String): String
+}
+
+// Функция, принимающая SAM-интерфейс
+fun processString(input: String, transformer: StringTransformer): String {
+    return transformer.transform(input)
+}
+
+// SAM-конверсия: использование лямбды
+val result = processString("hello") { it.uppercase() }
+println(result)  // HELLO
+
+// Ссылки на функции тоже работают
+val result2 = processString("world", String::uppercase)
+println(result2)  // WORLD
+
+// Без fun interface пришлось бы писать анонимный объект
+val result3 = processString("test", object : StringTransformer {
+    override fun transform(input: String) = input.uppercase()
+})
+```
+
+Обычный `interface` с одним методом в Kotlin не становится SAM-совместимым для Kotlin-лямбд без `fun interface`.
+
+### Практические примеры
+
+#### Пример 1: Android OnClickListener
+
+```kotlin
+// Java-интерфейс из Android SDK
+// public interface OnClickListener {
+//     void onClick(View v);
+// }
+
+class MainActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val button = findViewById<Button>(R.id.myButton)
+
+        // Без SAM — многословно
+        button.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View) {
+                Toast.makeText(this@MainActivity, "Clicked!", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        // С SAM — короче
+        button.setOnClickListener { v ->
+            Toast.makeText(this, "Clicked!", Toast.LENGTH_SHORT).show()
+        }
+
+        // Параметр не используется
+        button.setOnClickListener {
+            Toast.makeText(this, "Clicked!", Toast.LENGTH_SHORT).show()
+        }
+    }
+}
+```
+
+#### Пример 2: RecyclerView Adapter (лямбда как коллбек)
+
+```kotlin
+class UserAdapter(
+    private val users: List<User>,
+    private val onItemClick: (User) -> Unit  // Тип функции (не SAM), но используется с лямбдой
+) : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val user = users[position]
+        holder.bind(user)
+        holder.itemView.setOnClickListener {
+            onItemClick(user)
+        }
+    }
+
+    // ...
+}
+
+// Использование
+val adapter = UserAdapter(users) { user ->
+    navigateToDetails(user.id)
+}
+```
+
+#### Пример 3: Кастомный SAM-интерфейс Validator
+
+```kotlin
+// Валидатор данных
+fun interface Validator<T> {
+    fun validate(value: T): Boolean
+}
+
+data class User(val name: String, val email: String, val age: Int)
+
+class UserRepository {
+    fun findUsers(validator: Validator<User>): List<User> {
+        val allUsers = getAllUsers()
+        return allUsers.filter { validator.validate(it) }
+    }
+}
+
+// Использование
+val repo = UserRepository()
+
+// SAM-конверсия: лямбда вместо объекта
+val adults = repo.findUsers { user -> user.age >= 18 }
+
+val withValidEmail = repo.findUsers { user ->
+    user.email.contains("@") && user.email.contains(".")
+}
+
+// Переиспользуем валидаторы
+val emailValidator = Validator<User> { it.email.contains("@") }
+val validUsers = repo.findUsers(emailValidator)
+```
+
+#### Пример 4: Обработчики событий (EventBus)
+
+```kotlin
+fun interface EventHandler<T> {
+    fun handle(event: T)
+}
+
+class EventBus {
+    private val handlers = mutableMapOf<String, MutableList<EventHandler<Any>>>()
+
+    fun <T : Any> subscribe(eventType: String, handler: EventHandler<T>) {
+        @Suppress("UNCHECKED_CAST")
+        handlers.getOrPut(eventType) { mutableListOf() }
+            .add(handler as EventHandler<Any>)  // небезопасное приведение, полагаемся на корректное использование
+    }
+
+    fun <T : Any> publish(eventType: String, event: T) {
+        handlers[eventType]?.forEach { handler ->
+            @Suppress("UNCHECKED_CAST")
+            (handler as EventHandler<T>).handle(event)
+        }
+    }
+}
+
+// Использование (предполагается, что типы согласованы)
+data class UserLoggedIn(val userId: Int, val timestamp: Long)
+data class MessageReceived(val from: String, val text: String)
+
+val eventBus = EventBus()
+
+eventBus.subscribe("user.login") { event: UserLoggedIn ->
+    println("User ${event.userId} logged in at ${event.timestamp}")
+}
+
+eventBus.subscribe("message.received") { event: MessageReceived ->
+    println("Message from ${event.from}: ${event.text}")
+}
+
+// Публикация
+eventBus.publish("user.login", UserLoggedIn(123, System.currentTimeMillis()))
+eventBus.publish("message.received", MessageReceived("Alice", "Hello!"))
+```
+
+### SAM-конструктор
+
+SAM-инстанс можно создать явно через синтаксис конструктора SAM-интерфейса. Это полезно при неоднозначности перегрузок.
+
+```kotlin
+fun interface StringMapper {
+    fun map(input: String): String
+}
+
+// Неявная SAM-конверсия
+val mapper1: StringMapper = { it.uppercase() }
+
+// Явный SAM-конструктор
+val mapper2 = StringMapper { it.uppercase() }
+
+// Пример разрешения перегрузок
+fun process(mapper: StringMapper) { }
+fun process(transformer: (String) -> String) { }
+
+// Явно выбираем перегрузку с SAM-интерфейсом
+process(StringMapper { it.uppercase() })
+```
+
+### Ограничения SAM-конверсий
+
+**1. Только для интерфейсов с одним абстрактным методом**
+
+```kotlin
+// Не SAM — два абстрактных метода
+interface MultiMethod {
+    fun method1()
+    fun method2()
+}
+
+// SAM-конверсия не сработает
+val obj = MultiMethod { /* ... */ }  // ОШИБКА
+
+// SAM — один абстрактный метод
+fun interface SingleMethod {
+    fun method()
+}
+
+val obj2 = SingleMethod { /* ... */ }  // OK
+```
+
+**2. Методы по умолчанию не считаются абстрактными**
+
+```kotlin
+// SAM — только один АБСТРАКТНЫЙ метод
+fun interface Processor {
+    fun process(input: String): String
+
+    // Метод по умолчанию не влияет на SAM-свойство
+    fun log(message: String) {
+        println(message)
+    }
+}
+
+val processor = Processor { it.uppercase() }  // OK
+```
+
+**3. Kotlin-интерфейсы требуют `fun interface` для SAM-конверсии**
+
+```kotlin
+// Обычный Kotlin-интерфейс — не рассматривается как SAM для Kotlin-лямбд
+interface Transformer {
+    fun transform(input: String): String
+}
+
+val t1 = Transformer { it.uppercase() }  // ОШИБКА
+
+// fun interface — SAM-конверсия работает
+fun interface TransformerFun {
+    fun transform(input: String): String
+}
+
+val t2 = TransformerFun { it.uppercase() }  // OK
+```
+
+**4. Java-интерфейсы поддерживаются автоматически**
+
+```kotlin
+// Java-интерфейс (например, Runnable)
+// interface Runnable { void run(); }
+
+// SAM-конверсия работает без `fun interface`
+val runnable = Runnable { println("Running") }  // OK
+```
+
+### Сравнение с высшими функциями (function types)
+
+```kotlin
+// Подход 1: SAM-интерфейс
+fun interface ClickHandler {
+    fun onClick()
+}
+
+fun setHandler(handler: ClickHandler) {
+    handler.onClick()
+}
+
+setHandler { println("Clicked") }
+
+// Подход 2: Тип функции (higher-order function)
+fun setHandlerFn(handler: () -> Unit) {
+    handler()
+}
+
+setHandlerFn { println("Clicked") }
+```
+
+Когда выбирать SAM-интерфейс:
+- Для interop с Java (`Runnable`, `OnClickListener`, `Executor` и т.п.).
+- Когда нужен именованный функциональный тип с чёткой семантикой.
+- Когда предполагаются несколько реализаций и/или вы хотите документировать контракт как интерфейс.
+
+Когда выбирать тип функции `(T) -> R`:
+- Для чистого Kotlin-кода без требований Java interop.
+- Когда важна простота сигнатур и минимум обёрток.
+
+SAM-конструкторы (`Runnable { ... }`, `Comparator { ... }`, `StringMapper { ... }`) помогают явно указать использование функционального интерфейса и разрешить неоднозначность перегрузок.
+
+## Answer (EN)
+
+**SAM (Single Abstract Method) conversions** allow using **lambda functions** instead of anonymous class/interface objects for interfaces with **one abstract method**. This makes code more concise and readable, especially when working with Java APIs or functional interfaces.
+
+### What is a SAM Interface
+
+A **SAM interface** is an interface with exactly one abstract method.
+
+```kotlin
+// Java
+interface OnClickListener {
+    void onClick(View view);  // One abstract method
+}
+
+// Kotlin
+fun interface OnClickListener {
+    fun onClick(view: View)  // One abstract method
 }
 ```
 
@@ -68,10 +455,10 @@ button.setOnClickListener {
 
 ### Java SAM Interfaces
 
-Kotlin automatically applies SAM conversions to **Java** interfaces:
+Kotlin automatically applies SAM conversions to **Java** interfaces that have a single abstract method:
 
 ```java
-// Java интерфейс
+// Java interfaces
 public interface Runnable {
     void run();
 }
@@ -110,13 +497,13 @@ val future = executor.submit<String> {
 val numbers = listOf(3, 1, 4, 1, 5, 9)
 val sorted = numbers.sortedWith { a, b -> a.compareTo(b) }
 
-// Or even shorter
-val sorted = numbers.sortedWith(Comparator { a, b -> a - b })
+// Or explicitly via a Comparator SAM constructor
+val sorted2 = numbers.sortedWith(Comparator { a, b -> a - b })
 ```
 
 ### Kotlin SAM Interfaces (fun interface)
 
-Since Kotlin 1.4, SAM support for Kotlin interfaces via `fun interface`:
+Since Kotlin 1.4, SAM conversion is also supported for Kotlin interfaces marked with `fun interface`.
 
 ```kotlin
 // SAM interface declaration in Kotlin
@@ -129,15 +516,15 @@ fun processString(input: String, transformer: StringTransformer): String {
     return transformer.transform(input)
 }
 
-// Usage with lambda
+// Usage with lambda (SAM conversion applies)
 val result = processString("hello") { it.uppercase() }
 println(result)  // HELLO
 
-// Or with reference
+// Or with function reference
 val result2 = processString("world", String::uppercase)
 println(result2)  // WORLD
 
-// Without fun interface would have to write:
+// Without fun interface you would have to write:
 val result3 = processString("test", object : StringTransformer {
     override fun transform(input: String) = input.uppercase()
 })
@@ -159,19 +546,19 @@ class MainActivity : AppCompatActivity() {
 
         val button = findViewById<Button>(R.id.myButton)
 
-        // - Без SAM - многословно
+        // Without SAM - verbose
         button.setOnClickListener(object : View.OnClickListener {
             override fun onClick(v: View) {
                 Toast.makeText(this@MainActivity, "Clicked!", Toast.LENGTH_SHORT).show()
             }
         })
 
-        // - С SAM - кратко
+        // With SAM - concise
         button.setOnClickListener { v ->
             Toast.makeText(this, "Clicked!", Toast.LENGTH_SHORT).show()
         }
 
-        // - Еще короче (параметр не используется)
+        // Even shorter (parameter not used)
         button.setOnClickListener {
             Toast.makeText(this, "Clicked!", Toast.LENGTH_SHORT).show()
         }
@@ -179,35 +566,35 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-#### Пример 2: RecyclerView Adapter
+#### Example 2: RecyclerView Adapter
 
 ```kotlin
 class UserAdapter(
     private val users: List<User>,
-    private val onItemClick: (User) -> Unit  // Kotlin lambda - проще SAM
+    private val onItemClick: (User) -> Unit  // Kotlin function type, not SAM, but used with a lambda
 ) : RecyclerView.Adapter<UserAdapter.ViewHolder>() {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val user = users[position]
         holder.bind(user)
         holder.itemView.setOnClickListener {
-            onItemClick(user)  // SAM-конверсия
+            onItemClick(user)  // uses the provided lambda
         }
     }
 
     // ...
 }
 
-// Использование
+// Usage
 val adapter = UserAdapter(users) { user ->
     navigateToDetails(user.id)
 }
 ```
 
-#### Пример 3: Кастомный SAM Интерфейс
+#### Example 3: Custom SAM Interface (Validator)
 
 ```kotlin
-// Валидатор данных
+// Data validator
 fun interface Validator<T> {
     fun validate(value: T): Boolean
 }
@@ -221,22 +608,22 @@ class UserRepository {
     }
 }
 
-// Использование
+// Usage
 val repo = UserRepository()
 
-// SAM-конверсия: лямбда вместо объекта
+// SAM conversion: lambda instead of an object
 val adults = repo.findUsers { user -> user.age >= 18 }
 
 val withValidEmail = repo.findUsers { user ->
     user.email.contains("@") && user.email.contains(".")
 }
 
-// Можно переиспользовать валидаторы
+// You can reuse validators
 val emailValidator = Validator<User> { it.email.contains("@") }
 val validUsers = repo.findUsers(emailValidator)
 ```
 
-#### Пример 4: Обработчики Событий
+#### Example 4: Event Handlers (EventBus)
 
 ```kotlin
 fun interface EventHandler<T> {
@@ -247,22 +634,27 @@ class EventBus {
     private val handlers = mutableMapOf<String, MutableList<EventHandler<Any>>>()
 
     fun <T : Any> subscribe(eventType: String, handler: EventHandler<T>) {
+        @Suppress("UNCHECKED_CAST")
         handlers.getOrPut(eventType) { mutableListOf() }
-            .add(handler as EventHandler<Any>)
+            .add(handler as EventHandler<Any>)  // unsafe cast, relies on consistent usage
     }
 
     fun <T : Any> publish(eventType: String, event: T) {
-        handlers[eventType]?.forEach { it.handle(event) }
+        handlers[eventType]?.forEach { handler ->
+            // unchecked cast at call site; simplified for example purposes
+            @Suppress("UNCHECKED_CAST")
+            (handler as EventHandler<T>).handle(event)
+        }
     }
 }
 
-// Использование
+// Usage (assumes consistent event types; otherwise may cause ClassCastException)
 data class UserLoggedIn(val userId: Int, val timestamp: Long)
 data class MessageReceived(val from: String, val text: String)
 
 val eventBus = EventBus()
 
-// SAM-конверсии для подписки
+// SAM conversions for subscription
 eventBus.subscribe("user.login") { event: UserLoggedIn ->
     println("User ${event.userId} logged in at ${event.timestamp}")
 }
@@ -271,14 +663,14 @@ eventBus.subscribe("message.received") { event: MessageReceived ->
     println("Message from ${event.from}: ${event.text}")
 }
 
-// Публикация
+// Publishing
 eventBus.publish("user.login", UserLoggedIn(123, System.currentTimeMillis()))
 eventBus.publish("message.received", MessageReceived("Alice", "Hello!"))
 ```
 
 ### SAM Constructor
 
-Can explicitly create SAM via constructor:
+You can explicitly create a SAM instance via its constructor syntax:
 
 ```kotlin
 fun interface StringMapper {
@@ -291,44 +683,44 @@ val mapper1: StringMapper = { it.uppercase() }
 // Explicit SAM constructor
 val mapper2 = StringMapper { it.uppercase() }
 
-// Useful when type ambiguity
+// Useful when there is type ambiguity
 fun process(mapper: StringMapper) { }
 fun process(transformer: (String) -> String) { }
 
-// Нужно уточнить, какую перегрузку вызываем
-process(StringMapper { it.uppercase() })  // SAM
+// Disambiguate which overload to call
+process(StringMapper { it.uppercase() })  // uses SAM overload
 ```
 
-### Ограничения SAM-конверсий
+### SAM Conversion Limitations
 
-**1. Только для интерфейсов с одним абстрактным методом**
+1. Only for interfaces with one abstract method.
 
 ```kotlin
-// - НЕ SAM - два метода
+// Not SAM - two abstract methods
 interface MultiMethod {
     fun method1()
     fun method2()
 }
 
-// - Не работает SAM-конверсия
-val obj = MultiMethod { ... }  // ERROR
+// SAM conversion does NOT work
+val obj = MultiMethod { /* ... */ }  // ERROR
 
-// - SAM - один метод
+// SAM - one abstract method
 fun interface SingleMethod {
     fun method()
 }
 
-val obj = SingleMethod { ... }  // OK
+val obj2 = SingleMethod { /* ... */ }  // OK
 ```
 
-**2. Дефолтные методы не считаются абстрактными**
+2. Default methods do not count as abstract.
 
 ```kotlin
-// - SAM - только один АБСТРАКТНЫЙ метод
+// SAM - only one ABSTRACT method
 fun interface Processor {
     fun process(input: String): String
 
-    // Дефолтный метод не считается
+    // Default method does not count as abstract
     fun log(message: String) {
         println(message)
     }
@@ -337,38 +729,38 @@ fun interface Processor {
 val processor = Processor { it.uppercase() }  // OK
 ```
 
-**3. Kotlin интерфейсы требуют `fun interface`**
+3. Kotlin interfaces require `fun interface` for SAM conversion.
 
 ```kotlin
-// - Обычный Kotlin интерфейс - НЕТ SAM
+// Regular Kotlin interface - NOT treated as SAM for Kotlin SAM conversion
 interface Transformer {
     fun transform(input: String): String
 }
 
-val t = Transformer { it.uppercase() }  // ERROR
+val t1 = Transformer { it.uppercase() }  // ERROR
 
-// - fun interface - SAM работает
-fun interface Transformer {
+// fun interface - SAM conversion works
+fun interface TransformerFun {
     fun transform(input: String): String
 }
 
-val t = Transformer { it.uppercase() }  // OK
+val t2 = TransformerFun { it.uppercase() }  // OK
 ```
 
-**4. Java интерфейсы работают автоматически**
+4. Java interfaces are supported automatically.
 
 ```kotlin
-// Java интерфейс (из библиотеки)
+// Java interface (from library)
 // interface Runnable { void run(); }
 
-// - SAM работает без fun
+// SAM conversion works without fun interface
 val runnable = Runnable { println("Running") }  // OK
 ```
 
-### Сравнение С Высшими Функциями
+### Comparison with Higher-Order Functions
 
 ```kotlin
-// Подход 1: SAM интерфейс
+// Approach 1: SAM interface
 fun interface ClickHandler {
     fun onClick()
 }
@@ -379,104 +771,30 @@ fun setHandler(handler: ClickHandler) {
 
 setHandler { println("Clicked") }
 
-// Подход 2: Высшая функция (function type)
-fun setHandler(handler: () -> Unit) {
+// Approach 2: Higher-order function (function type)
+fun setHandlerFn(handler: () -> Unit) {
     handler()
 }
 
-setHandler { println("Clicked") }
+setHandlerFn { println("Clicked") }
 ```
 
-**Когда использовать SAM:**
-- Совместимость с Java
-- Нужна типобезопасность на уровне интерфейса
-- Планируется несколько реализаций
+When to use SAM:
+- Interoperating with Java and existing functional interfaces (`Runnable`, `OnClickListener`, `Executor`, etc.).
+- When you want a named functional type with clear semantics.
+- When you plan to have multiple implementations of the interface.
 
-**Когда использовать function type:**
-- Чистый Kotlin код
-- Нужна простота
-- Не требуется Java interop
+When to use function types `(T) -> R`:
+- In pure Kotlin code without specific Java interop requirements.
+- When you prefer simpler signatures and minimal wrappers.
 
-### Best Practices
+SAM constructors like `Runnable { ... }`, `Comparator { ... }`, `StringMapper { ... }` help disambiguate overloads and explicitly select the functional interface overload.
 
-**1. Используйте `fun interface` для Kotlin SAM**
+## Дополнительные вопросы (RU)
 
-```kotlin
-// - ПРАВИЛЬНО
-fun interface Mapper<T, R> {
-    fun map(input: T): R
-}
-
-val stringToInt = Mapper<String, Int> { it.length }
-```
-
-**2. SAM для Java interop**
-
-```kotlin
-// - ПРАВИЛЬНО - работа с Java API
-executor.submit {
-    doWork()
-}
-
-button.setOnClickListener {
-    handleClick()
-}
-```
-
-**3. Function types для чистого Kotlin**
-
-```kotlin
-// - ПРАВИЛЬНО - чистый Kotlin
-fun processItems(items: List<String>, transform: (String) -> String) {
-    items.forEach { println(transform(it)) }
-}
-
-processItems(list) { it.uppercase() }
-```
-
-**English**: **SAM (Single Abstract Method)** conversions allow using **lambda functions** instead of anonymous class objects for interfaces with **one abstract method**. Works automatically with **Java** interfaces (Runnable, Comparator, OnClickListener). For **Kotlin** interfaces, requires `fun interface` modifier. Example: `button.setOnClickListener { }` instead of `object : OnClickListener { override fun onClick(...) }`. Use SAM for Java interop and type safety. Use function types `(T) -> R` for pure Kotlin code. SAM constructor explicitly creates instance: `Runnable { code }`. Only works with single abstract method - default methods don't count.
-
-## Ответ (RU)
-
-**SAM (Single Abstract Method)** конверсии позволяют использовать **лямбда-функции** вместо объектов анонимных классов для интерфейсов с **одним абстрактным методом**.
-
-### Как Работает
-
-Вместо создания анонимного класса можно передать лямбду:
-
-```kotlin
-// Без SAM - многословно
-button.setOnClickListener(object : View.OnClickListener {
-    override fun onClick(v: View) { }
-})
-
-// С SAM - кратко
-button.setOnClickListener { v -> }
-```
-
-### Для Java Интерфейсов
-
-Работает автоматически для Java интерфейсов (Runnable, Comparator, OnClickListener)
-
-### Для Kotlin Интерфейсов
-
-Требует модификатор `fun interface`:
-
-```kotlin
-fun interface StringTransformer {
-    fun transform(input: String): String
-}
-
-// Использование
-val result = processString("hello") { it.uppercase() }
-```
-
-### Когда Использовать
-
-- **SAM**: для Java interop и типобезопасности
-- **Function types** `(T) -> R`: для чистого Kotlin кода
-
-SAM конструктор явно создает экземпляр: `Runnable { code }`. Работает только с одним абстрактным методом - default методы не считаются.
+- В чем ключевые отличия SAM-конверсий Kotlin от Java-подхода?
+- Когда вы бы использовали SAM-конверсии на практике?
+- Какие типичные ошибки и подводные камни при использовании SAM-конверсий?
 
 ## Follow-ups
 
@@ -484,9 +802,20 @@ SAM конструктор явно создает экземпляр: `Runnable
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- "Kotlin Documentation" — https://kotlinlang.org/docs/home.html
+
 ## References
 
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- https://kotlinlang.org/docs/home.html
+
+## Связанные вопросы (RU)
+
+- [[q-flow-exception-handling--kotlin--medium]]
+- [[q-kotlin-inline-functions--kotlin--medium]]
+- [[q-object-companion-object--kotlin--medium]]
 
 ## Related Questions
 

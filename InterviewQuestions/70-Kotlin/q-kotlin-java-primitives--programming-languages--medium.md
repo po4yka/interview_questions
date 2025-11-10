@@ -2,67 +2,63 @@
 id: lang-094
 title: "Kotlin Java Primitives / Примитивы Kotlin и Java"
 aliases: [Kotlin Java Primitives, Примитивы Kotlin и Java]
-topic: programming-languages
-subtopics: [null-safety, type-system]
+topic: kotlin
+subtopics: [type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-flowon-operator-context-switching--kotlin--hard, q-kotlin-init-block-features--programming-languages--easy, q-kotlin-reflection--programming-languages--medium]
+related: [c-kotlin, q-flowon-operator-context-switching--kotlin--hard, q-kotlin-reflection--programming-languages--medium]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [difficulty/medium, java, primitives, programming-languages, types, wrappers]
+updated: 2025-11-10
+tags: [difficulty/medium, java, primitives, types, wrappers]
 ---
-# Какие Примитивы Есть В Kotlin, А Какие В Java?
-
 # Вопрос (RU)
 > Какие примитивы есть в Kotlin, а какие в Java?
-
----
 
 # Question (EN)
 > What primitives exist in Kotlin and Java?
 
 ## Ответ (RU)
 
-Kotlin и Java используют разные подходы к примитивным типам данных. Java имеет явные примитивы, а Kotlin предоставляет унифицированную систему типов.
+Kotlin и Java используют разные подходы к примитивным типам данных. Java имеет явные примитивы и отдельные классы-обертки, а Kotlin предоставляет унифицированную (с точки зрения синтаксиса) систему типов поверх JVM, где компилятор по возможности использует примитивы.
 
 ### Java Примитивы
 
 Java содержит **8 примитивных типов** и соответствующие классы-обертки:
 
-| Тип | Размер | Диапазон | Класс-обертка |
-|------|------|-------|---------------|
+| Тип | Размер (логический) | Диапазон | Класс-обертка |
+|------|---------------------|----------|---------------|
 | `byte` | 8 бит | -128 до 127 | `Byte` |
 | `short` | 16 бит | -32,768 до 32,767 | `Short` |
 | `int` | 32 бит | -2³¹ до 2³¹-1 | `Integer` |
 | `long` | 64 бит | -2⁶³ до 2⁶³-1 | `Long` |
 | `float` | 32 бит | IEEE 754 | `Float` |
 | `double` | 64 бит | IEEE 754 | `Double` |
-| `char` | 16 бит | Unicode символ | `Character` |
-| `boolean` | 1 бит | `true` / `false` | `Boolean` |
+| `char` | 16 бит | UTF-16 кодовое значение | `Character` |
+| `boolean` | не определен в битах спецификацией | `true` / `false` | `Boolean` |
 
 **Код на Java:**
 ```java
-// Примитивы - хранятся на стеке, нет методов
+// Примитивы - значимые типы без методов
 int x = 10;
 double y = 3.14;
 boolean flag = true;
 
-// Классы-обертки - хранятся на куче, есть методы
-Integer boxed = 10;  // Autoboxing (автоупаковка)
+// Классы-обертки - ссылочные типы, имеют методы
+Integer boxed = 10;   // Autoboxing (автоупаковка)
 int unboxed = boxed;  // Unboxing (распаковка)
 
 // Примитивы не могут быть null
-int value = null;  // Ошибка компиляции!
+// int value = null;  // Ошибка компиляции
 Integer nullable = null;  // OK - класс-обертка
 
 // Проблема autoboxing
 Integer a = 1000;
 Integer b = 1000;
-System.out.println(a == b);      // false! (сравнение ссылок)
+System.out.println(a == b);      // false (сравнение ссылок)
 System.out.println(a.equals(b)); // true (сравнение значений)
 
 // Кэширование Integer (-128 до 127)
@@ -73,10 +69,12 @@ System.out.println(c == d);  // true (кэшированные объекты)
 
 ### Kotlin "примитивы"
 
-Kotlin **не имеет примитивных типов** с точки зрения разработчика. Вместо этого используются **классы**, которые компилятор оптимизирует в JVM примитивы когда возможно:
+Kotlin **не объявляет отдельный синтаксис для примитивных типов**: разработчик работает с типами `Int`, `Double`, `Boolean` и т.п. как с классами. Однако компилятор Kotlin на JVM:
+- использует **JVM-примитивы** для non-nullable значений, когда это возможно;
+- использует **классы-обертки** (`java.lang.Integer` и др.) для nullable типов, обобщений, `Array<T>` и других случаев.
 
-| Тип Kotlin | JVM примитив | JVM обертка |
-|-------------|---------------|-------------|
+| Тип Kotlin | JVM примитив (когда возможно) | JVM обертка (когда нужно) |
+|-------------|-------------------------------|---------------------------|
 | `Byte` | `byte` | `java.lang.Byte` |
 | `Short` | `short` | `java.lang.Short` |
 | `Int` | `int` | `java.lang.Integer` |
@@ -88,66 +86,57 @@ Kotlin **не имеет примитивных типов** с точки зр�
 
 **Код на Kotlin:**
 ```kotlin
-// Выглядят как объекты, но компилируются в примитивы когда возможно
-val x: Int = 10          // Компилируется в: int x = 10
-val y: Double = 3.14     // Компилируется в: double y = 3.14
-val flag: Boolean = true // Компилируется в: boolean flag = true
+// Выглядят как объекты, но компилируются в примитивы, когда возможно
+val x: Int = 10          // Компилируется в байткод с использованием int
+val y: Double = 3.14     // Используется double
+val flag: Boolean = true // Используется boolean
 
-// Можно вызывать методы (это объекты в Kotlin)
-val hex = 255.toString(16)  // "ff"
-val abs = (-10).absoluteValue  // 10
-val pi = 3.14159.roundToInt()  // 3
+// Можно вызывать функции и свойства (часть стандартной библиотеки)
+val hex = 255.toString(16)       // "ff"
+val abs = (-10).absoluteValue    // 10
 
-// Nullable типы компилируются в классы-обертки
-val nullable: Int? = null    // Компилируется в: Integer nullable = null
-val notNull: Int = 10        // Компилируется в: int notNull = 10
+// Nullable типы обычно компилируются в классы-обертки
+val nullable: Int? = null        // Используется java.lang.Integer
+val notNull: Int = 10            // Используется примитив int, когда возможно
 
-// Нет проблем с autoboxing
+// Сравнение
 val a: Int = 1000
 val b: Int = 1000
-println(a == b)   // true (всегда сравнение значений!)
-println(a === b)  // зависит от оптимизации (сравнение ссылок)
+println(a == b)   // true (сравнение значений)
+println(a === b)  // сравнение ссылок, результат зависит от представления (примитив/обертка)
 ```
 
 ### Ключевые Различия
 
 #### 1. Унифицированная Система Типов
 
+С точки зрения языка Kotlin все эти числовые и логические типы ведут себя как обычные классы и могут использоваться в обобщениях, иметь функции-расширения и т.д. При этом на уровне JVM компилятор старается использовать примитивы для эффективности.
+
 **Kotlin:**
 ```kotlin
-// В Kotlin все типы - объекты
 fun <T> identity(value: T): T = value
 
-val x = identity(42)        // Работает! Int это объект
-val s = identity("hello")   // Тоже работает!
-val list = identity(listOf(1, 2, 3))  // И это работает
-
-// Обобщенные функции работают с любыми типами
-fun <T> printValue(value: T) {
-    println(value)
-}
-
-printValue(10)      // Int
-printValue(3.14)    // Double
-printValue("text")  // String
+val x = identity(42)          // Работает, T выводится как Int (будет boxed в контексте обобщения)
+val s = identity("hello")   // Работает
+val list = identity(listOf(1, 2, 3))
 ```
 
 **Java:**
 ```java
-// В Java примитивы не объекты
-public <T> T identity(T value) {
+public static <T> T identity(T value) {
     return value;
 }
 
-// identity(42);  // Ошибка! int не T
-Integer result = identity(42);  // Нужен autoboxing
+// Работает: int 42 автоупакуется в Integer
+Integer i = identity(42);       // autoboxing до Integer
+String s = identity("hello");
 
-// Нужны отдельные методы для примитивов
-public int identityInt(int value) { return value; }
-public double identityDouble(double value) { return value; }
-
-// Или использовать обертки везде (потеря производительности)
+// Для избежания boxing для примитивов приходится писать перегрузки:
+public static int identityInt(int value) { return value; }
+public static double identityDouble(double value) { return value; }
 ```
+
+Ключевое отличие: в Kotlin один и тот же синтаксис типов (`Int`, `Double`) используется независимо от того, будут ли значения представлены как примитивы или обертки на JVM, тогда как в Java существуют отдельные типы для примитивов и оберток.
 
 #### 2. Nullable Типы
 
@@ -155,16 +144,15 @@ public double identityDouble(double value) { return value; }
 ```kotlin
 // Явное различие nullable vs non-nullable
 val notNull: Int = 10           // Не может быть null
-// notNull = null  // Ошибка компиляции!
+// notNull = null  // Ошибка компиляции
 
 val nullable: Int? = null       // Может быть null
 val result = nullable?.plus(5)  // Safe call
 
-// Компилируется по-разному:
-val primitive: Int = 42         // → int (примитив JVM)
+// Типичное представление:
+val primitive: Int = 42         // → примитив int в байткоде, где возможно
 val boxed: Int? = 42            // → Integer (обертка JVM)
 
-// Умная обработка null
 fun processNumber(n: Int?) {
     if (n != null) {
         println(n * 2)  // Smart cast к Int (non-null)
@@ -174,39 +162,37 @@ fun processNumber(n: Int?) {
 
 **Java:**
 ```java
-// Примитивы не могут быть null, обертки могут
+// Примитивы не могут быть null
 int primitive = 10;
-// primitive = null;  // Ошибка!
+// primitive = null;  // Ошибка компиляции
 
+// Обертки могут быть null
 Integer wrapper = null;  // OK
-// int result = wrapper + 5;  // NullPointerException!
+// int result = wrapper + 5;  // Возможен NullPointerException при распаковке
 
-// Нужны ручные проверки
 if (wrapper != null) {
     int result = wrapper + 5;
 }
-
-// Нет различия на уровне типов для null-safety
+// Нет встроенной null-safety в системе типов
 ```
 
 #### 3. Методы На "примитивах"
 
 **Kotlin:**
 ```kotlin
-// Методы доступны напрямую
 val number = 42
-println(number.toString())      // "42"
-println(number.toDouble())      // 42.0
-println(number.coerceIn(0, 100))  // 42
+println(number.toString())         // "42"
+println(number.toDouble())         // 42.0
+println(number.coerceIn(0, 100))   // 42
 
-val binary = 10.toString(2)     // "1010"
-val max = 5.coerceAtLeast(10)   // 10
+val binary = 10.toString(2)        // "1010"
+val max = 5.coerceAtLeast(10)      // 10
 
 // Методы расширения
 fun Int.isEven() = this % 2 == 0
 println(42.isEven())  // true
 
-// Операторы как методы
+// Операторы как функции
 val sum = 10.plus(5)       // 15 (то же что 10 + 5)
 val product = 3.times(4)   // 12 (то же что 3 * 4)
 ```
@@ -215,7 +201,7 @@ val product = 3.times(4)   // 12 (то же что 3 * 4)
 ```java
 // Примитивы не имеют методов
 int number = 42;
-// number.toString();  // Ошибка!
+// number.toString();  // Ошибка: нужен Integer.toString(number)
 
 // Нужны обертки или статические методы
 String str = Integer.toString(number);
@@ -223,7 +209,7 @@ double d = Integer.valueOf(number).doubleValue();
 
 // Обертки имеют методы
 Integer boxed = 42;
-String text = boxed.toString();  // OK
+String text = boxed.toString();
 
 // Статические методы утилит
 int max = Math.max(5, 10);
@@ -232,13 +218,13 @@ int abs = Math.abs(-5);
 
 #### 4. Когда Kotlin Использует Примитивы Vs Обертки
 
-**Компилируется в JVM примитивы:**
+**Компилируется преимущественно в JVM-примитивы:**
 ```kotlin
-// Non-nullable типы в локальных переменных
-val x: Int = 10           // int x = 10
+// Non-nullable локальные переменные и поля
+val x: Int = 10
 
 // Non-nullable параметры и возвращаемые типы
-fun add(a: Int, b: Int): Int = a + b  // int add(int a, int b)
+fun add(a: Int, b: Int): Int = a + b
 
 // Примитивные массивы
 val intArray: IntArray = intArrayOf(1, 2, 3)        // int[]
@@ -246,38 +232,35 @@ val doubleArray: DoubleArray = doubleArrayOf(1.0)   // double[]
 val boolArray: BooleanArray = booleanArrayOf(true)  // boolean[]
 ```
 
-**Компилируется в обертки:**
+**Компилируется в обертки (boxing):**
 ```kotlin
 // Nullable типы
-val nullable: Int? = 10              // Integer nullable = 10
+val nullable: Int? = 10              // Integer
 
 // Параметры обобщенных типов
-val list: List<Int> = listOf(1, 2)   // List<Integer>
-val map: Map<String, Int> = mapOf()  // Map<String, Integer>
+val list: List<Int> = listOf(1, 2)   // List<Integer> в байткоде (type erasure)
+val map: Map<String, Int> = mapOf()  // Map<String, Integer]
 
-// Platform types из Java
-// fun javaMethod(): Int! → может быть int или Integer
+// Platform types из Java (Int!) могут быть как int, так и Integer
 
 // Массивы объектов
 val boxedArray: Array<Int> = arrayOf(1, 2, 3)  // Integer[]
 ```
 
-**Примеры компиляции:**
+**Пример компиляции (упрощенно):**
 ```kotlin
-// Kotlin код
 fun calculate(a: Int, b: Int?): Int? {
     val local: Int = 10
     val nullable: Int? = null
     return if (b != null) a + b else null
 }
 
-// Скомпилируется примерно в:
-// Java байткод
-public Integer calculate(int a, Integer b) {
-    int local = 10;           // примитив
-    Integer nullable = null;  // обертка
-    return (b != null) ? a + b : null;
-}
+// Псевдокод байткода/Java-представления:
+// public static Integer calculate(int a, Integer b) {
+//     int local = 10;           // примитив
+//     Integer nullable = null;  // обертка
+//     return (b != null) ? a + b : null;
+// }
 ```
 
 ### Массивы - Особый Случай
@@ -301,81 +284,77 @@ val boxedArray = Array<Int>(5) { 0 }  // Integer[]
 val stringArray = arrayOf("a", "b")   // String[]
 
 // Преобразование
-val primitiveToBoxed = intArray.toTypedArray()  // Integer[]
-val boxedToPrimitive = boxedArray.toIntArray()  // int[]
+val primitiveToBoxed = intArray.toTypedArray()  // IntArray → Array<Int> → Integer[]
+val boxedToPrimitive = boxedArray.toIntArray()  // Array<Int> → IntArray → int[]
 ```
 
 **Java:**
 ```java
 // Примитивные массивы
-int[] intArray = new int[5];           // примитивы
-double[] doubleArray = new double[5];  // примитивы
+int[] intArray = new int[5];
+double[] doubleArray = new double[5];
 
 intArray[0] = 42;
 
 // Массивы объектов
-Integer[] boxedArray = new Integer[5];  // обертки
+Integer[] boxedArray = new Integer[5];
 String[] stringArray = {"a", "b"};
 
-// Нельзя преобразовать напрямую
-// Integer[] boxed = (Integer[]) intArray;  // Ошибка!
+// Прямое приведение между int[] и Integer[] невозможно
+// Integer[] boxed = (Integer[]) intArray;  // Ошибка
 
-// Нужна ручная конвертация
+// Нужна поэлементная конвертация, например через цикл или стримы
 Integer[] boxed = Arrays.stream(intArray)
-                         .boxed()
-                         .toArray(Integer[]::new);
+                        .boxed()
+                        .toArray(Integer[]::new);
 ```
 
 ### Производительность
 
 **Kotlin оптимизации:**
 ```kotlin
-// Компилятор оптимизирует
 class Counter {
-    var count: Int = 0  // Примитив int в JVM
+    var count: Int = 0  // Обычно компилируется как поле с примитивным int
 
     fun increment() {
         count++  // Эффективная операция на примитиве
     }
 }
 
-// Коллекции используют обертки
-val list = listOf(1, 2, 3)  // List<Integer> - накладные расходы
+// Коллекции стандартной библиотеки используют обертки для чисел
+val list = listOf(1, 2, 3)  // List<Int> → List<Integer> на JVM
 
-// Используйте примитивные массивы для производительности
-val bigArray = IntArray(1_000_000) { it }  // Эффективно
-// val bigList = List(1_000_000) { it }  // Менее эффективно
+// Для больших объемов данных используйте примитивные массивы
+val bigArray = IntArray(1_000_000) { it }
 ```
 
-**Сравнение производительности:**
+**Сравнение производительности (идея):**
 ```kotlin
 // Быстро - примитивный массив
 val primitiveArray = IntArray(1_000_000)
 for (i in primitiveArray.indices) {
-    primitiveArray[i] = i * 2  // Примитивные операции
+    primitiveArray[i] = i * 2
 }
 
 // Медленнее - Array<Int> (обертки)
 val boxedArray = Array(1_000_000) { 0 }
 for (i in boxedArray.indices) {
-    boxedArray[i] = i * 2  // Autoboxing/unboxing
+    boxedArray[i] = i * 2  // boxing/unboxing
 }
 
-// Еще медленнее - List<Int> (неизменяемая коллекция)
-val list = List(1_000_000) { 0 }
-// Нельзя изменить элементы напрямую
+// Еще медленнее - List<Int> (немутируемая коллекция, обертки)
+val list = List(1_000_000) { it }
 ```
 
 ### Unsigned Типы (Kotlin 1.3+)
 
-Kotlin добавляет беззнаковые типы (недоступны в Java):
+Kotlin добавляет беззнаковые типы (в Java их нет как отдельных примитивов):
 
 ```kotlin
-// Unsigned типы
 val uByte: UByte = 200u           // 0 до 255
-val uShort: UShort = 50000u       // 0 до 65,535
+val uShort: UShort = 50000u       // 0 до 65_535
 val uInt: UInt = 4_000_000_000u   // 0 до 2³²-1
-val uLong: ULong = 10000000000u   // 0 до 2⁶⁴-1
+val uLong: ULong = 10_000_000_000uL  // 0 до 2⁶⁴-1
 
 // Unsigned массивы
 val uIntArray = UIntArray(5)
@@ -383,130 +362,144 @@ val uBytes = ubyteArrayOf(200u, 255u)
 
 // Операции
 val sum = 100u + 50u              // UInt
-val overflow = UByte.MAX_VALUE + 1u  // Переполнение до 0
+val overflow = UByte.MAX_VALUE + 1u  // Переполнение по модулю диапазона
 
 println(UByte.MAX_VALUE)  // 255
-println(UInt.MAX_VALUE)   // 4294967295
+println(UInt.MAX_VALUE)   // 4294967295u
 ```
 
 ### Взаимодействие С Java
 
 **Из Kotlin вызов Java:**
 ```kotlin
-// Java метод: public int calculate(int a, Integer b)
-val result = javaObject.calculate(10, 20)  // Автоматическая конвертация
+// Java: public int calculate(int a, Integer b)
+val result = javaObject.calculate(10, 20)  // Авто-преобразование Int → int/Integer
 
-// Java метод возвращает Integer (nullable!)
-val nullable: Int? = javaObject.getNullableInt()  // Правильно
-// val notNull: Int = javaObject.getNullableInt()  // Опасно!
+// Java метод возвращает Integer (nullable)
+val nullable: Int? = javaObject.getNullableInt()  // Безопасно
+// val notNull: Int = javaObject.getNullableInt()  // Опасно: возможен NPE в рантайме
 ```
 
 **Из Java вызов Kotlin:**
 ```java
 // Kotlin: fun process(value: Int): Int
-int result = kotlinObject.process(42);  // OK
+int r1 = kotlinObject.process(42);  // OK, используется int
 
 // Kotlin: fun process(value: Int?): Int?
-Integer result = kotlinObject.process(null);  // OK
+Integer r2 = kotlinObject.process(null);  // OK, как Integer
 
 // Kotlin: val numbers: IntArray
-int[] array = kotlinObject.getNumbers();  // Примитивный массив
+int[] array = kotlinObject.getNumbers();  // int[]
 
 // Kotlin: val boxed: Array<Int>
-Integer[] boxedArray = kotlinObject.getBoxed();  // Массив объектов
+Integer[] boxedArray = kotlinObject.getBoxed();  // Integer[]
 ```
 
 ### Сравнительная Таблица
 
 | Аспект | Java | Kotlin |
 |--------|------|--------|
-| **Примитивы** | Да (8 типов) | Нет (унифицированная система) |
-| **Обертки** | Отдельные классы | Используются автоматически |
-| **Методы на примитивах** | Нет | Да |
-| **Nullable** | Только обертки | Явный синтаксис `?` |
-| **Autoboxing** | Автоматический (с подводными камнями) | Автоматический (без проблем) |
-| **Производительность** | Примитивы vs обертки | Оптимизируется компилятором |
-| **Обобщения** | Только обертки | Работают прозрачно |
-| **Unsigned типы** | Нет | Да (UByte, UInt, ULong, UShort) |
+| **Примитивы** | Да (8 типов) | Нет отдельного синтаксиса, используются классы (`Int` и т.п.) |
+| **Обертки** | Отдельные классы | Используются автоматически при необходимости |
+| **Методы на примитивах** | Нет (через обертки/утилиты) | Да (функции/расширения для числовых типов) |
+| **Nullable** | Только обертки | Явный синтаксис `?` + проверка компилятором |
+| **Autoboxing** | Есть, с подводными камнями (`==`, кэширование) | Boxing есть, но скрыт за единой моделью типов; `==` всегда по значению |
+| **Производительность** | Большая разница prim vs wrapper | Компилятор старается использовать примитивы; обертки для nullable/обобщений |
+| **Обобщения** | Только ссылочные типы (boxing для примитивов) | Унифицированный синтаксис, но под капотом также boxing для обобщений |
+| **Unsigned типы** | Нет | Да (`UByte`, `UShort`, `UInt`, `ULong` и массивы) |
 
 ### Резюме
 
 **Java:**
-- 8 явных примитивных типов
-- Отдельные классы-обертки для каждого
-- Нет методов на примитивах
-- Autoboxing может быть проблемным
-- Нужно помнить о различии примитив vs обертка
+- 8 явных примитивных типов.
+- Отдельные классы-обертки для каждого примитива.
+- Примитивы не имеют методов; используются утилиты и обертки.
+- Autoboxing может приводить к неожиданному поведению (`==`, кэширование, NPE).
+- Нужно явно различать примитивы и обертки.
 
 **Kotlin:**
-- Унифицированная система типов (все объекты)
-- Автоматическая оптимизация в примитивы JVM
-- Методы доступны на всех типах
-- Явное различие nullable vs non-nullable
-- Безопасная работа с null
-- Дополнительные unsigned типы
+- Единый синтаксис типов (`Int`, `Double` и др.), без отдельных ключевых слов для примитивов.
+- Компилятор автоматически выбирает примитивы JVM или обертки в зависимости от контекста.
+- Методы и функции-расширения доступны для числовых типов.
+- Явное различие nullable vs non-nullable и встроенная null-safety.
+- Дополнительные unsigned типы.
 
 **Лучшие практики Kotlin:**
 
 ```kotlin
-// ✅ Используйте non-nullable типы когда возможно
-val count: Int = 0  // Компилируется в примитив
+// ✅ Используйте non-nullable типы, когда возможно
+val count: Int = 0  // Обычно компилируется в примитив
 
-// ✅ Используйте nullable только при необходимости
-val optional: Int? = null  // Обертка
+// ✅ Nullable только при необходимости
+val optional: Int? = null
 
-// ✅ Примитивные массивы для производительности
+// ✅ Примитивные массивы для больших данных
 val bigData = IntArray(1_000_000)
 
-// ✅ Обычные коллекции для удобства
+// ✅ Коллекции (List/Set/Map) для удобства, понимая, что там обертки
 val smallList = listOf(1, 2, 3)
 
 // ❌ Избегайте ненужных nullable
 val unnecessary: Int? = 42  // Лучше Int
 
-// ❌ Не используйте Array<Int> для больших данных
-val inefficient = Array(1_000_000) { 0 }  // Используйте IntArray
+// ❌ Не используйте Array<Int> для очень больших числовых данных
+val inefficient = Array(1_000_000) { 0 }  // Лучше IntArray
 ```
 
 ## Answer (EN)
 
+Kotlin and Java use different approaches to primitive types. Java has explicit primitive types and separate wrapper classes, while Kotlin exposes a unified (syntax-level) type system on top of the JVM where the compiler uses primitives when possible and wrappers when needed.
+
 ### Java Primitives
 
-Java has **8 primitive types**:
+Java has **8 primitive types** and corresponding wrapper classes:
 
-| Type | Size | Range | Wrapper Class |
-|------|------|-------|---------------|
-| `byte` | 8 bit | -128 to 127 | `Byte` |
-| `short` | 16 bit | -32,768 to 32,767 | `Short` |
-| `int` | 32 bit | -2³¹ to 2³¹-1 | `Integer` |
-| `long` | 64 bit | -2⁶³ to 2⁶³-1 | `Long` |
-| `float` | 32 bit | IEEE 754 | `Float` |
-| `double` | 64 bit | IEEE 754 | `Double` |
-| `char` | 16 bit | Unicode character | `Character` |
-| `boolean` | 1 bit | `true` / `false` | `Boolean` |
+| Type | Logical Size | Range | Wrapper Class |
+|------|--------------|-------|---------------|
+| `byte` | 8 bits | -128 to 127 | `Byte` |
+| `short` | 16 bits | -32,768 to 32,767 | `Short` |
+| `int` | 32 bits | -2³¹ to 2³¹-1 | `Integer` |
+| `long` | 64 bits | -2⁶³ to 2⁶³-1 | `Long` |
+| `float` | 32 bits | IEEE 754 | `Float` |
+| `double` | 64 bits | IEEE 754 | `Double` |
+| `char` | 16 bits | UTF-16 code unit | `Character` |
+| `boolean` | size not defined in bits by the spec | `true` / `false` | `Boolean` |
 
 **Java code:**
 ```java
-// Primitives - stored on stack, no methods
+// Primitives: value types, no instance methods
 int x = 10;
 double y = 3.14;
 boolean flag = true;
 
-// Wrapper classes - stored on heap, have methods
-Integer boxed = 10;  // Autoboxing
+// Wrapper classes: reference types, have methods
+Integer boxed = 10;   // Autoboxing
 int unboxed = boxed;  // Unboxing
 
-// Cannot be null
-int value = null;  // Compilation error
+// Primitives cannot be null
+// int value = null;  // Compile-time error
 Integer nullable = null;  // OK - wrapper class
+
+// Autoboxing pitfall
+Integer a = 1000;
+Integer b = 1000;
+System.out.println(a == b);      // false (reference equality)
+System.out.println(a.equals(b)); // true (value equality)
+
+// Integer cache (-128 to 127)
+Integer c = 100;
+Integer d = 100;
+System.out.println(c == d);  // true (cached objects)
 ```
 
 ### Kotlin "Primitives"
 
-Kotlin **has no primitive types** from user perspective. Instead, it uses **wrapper classes** that compile to JVM primitives when possible:
+Kotlin does not have a separate primitive syntax: you use types like `Int`, `Double`, `Boolean` as regular types. On the JVM, the Kotlin compiler:
+- uses JVM primitives for non-nullable values where possible;
+- uses wrapper classes (`java.lang.Integer`, etc.) for nullable types, generics, `Array<T>`, and similar cases.
 
-| Kotlin Type | JVM Primitive | JVM Wrapper |
-|-------------|---------------|-------------|
+| Kotlin Type | JVM Primitive (when possible) | JVM Wrapper (when needed) |
+|-------------|-------------------------------|---------------------------|
 | `Byte` | `byte` | `java.lang.Byte` |
 | `Short` | `short` | `java.lang.Short` |
 | `Int` | `int` | `java.lang.Integer` |
@@ -518,117 +511,301 @@ Kotlin **has no primitive types** from user perspective. Instead, it uses **wrap
 
 **Kotlin code:**
 ```kotlin
-// All look like objects, but compile to primitives when possible
-val x: Int = 10          // Compiles to: int x = 10
-val y: Double = 3.14     // Compiles to: double y = 3.14
-val flag: Boolean = true // Compiles to: boolean flag = true
+// Look like objects, compiled to primitives when possible
+val x: Int = 10          // Uses primitive int in bytecode
+val y: Double = 3.14     // Uses double
+val flag: Boolean = true // Uses boolean
 
-// Can call methods (they're objects in Kotlin)
-val hex = 255.toString(16)  // "ff"
-val abs = (-10).absoluteValue  // 10
+// Standard library functions and extensions
+val hex = 255.toString(16)       // "ff"
+val abs = (-10).absoluteValue    // 10
 
-// Nullable types compile to wrapper classes
-val nullable: Int? = null    // Compiles to: Integer nullable = null
-val notNull: Int = 10        // Compiles to: int notNull = 10
+// Nullable types typically use wrappers
+val nullable: Int? = null        // Uses java.lang.Integer
+val notNull: Int = 10            // Uses primitive int when possible
+
+// Comparison
+val a: Int = 1000
+val b: Int = 1000
+println(a == b)   // true (value equality)
+println(a === b)  // reference equality; depends on representation
 ```
 
 ### Key Differences
 
-**1. Unified Type System:**
+#### 1. Unified Type System
+
+From Kotlin's point of view, numeric and boolean types behave like regular classes and can be used in generics, have extension functions, etc., while the compiler picks primitives or wrappers underneath.
+
 ```kotlin
-// Kotlin: Everything is an object
 fun <T> identity(value: T): T = value
 
-val x = identity(42)  // Works! Int is an object
-val s = identity("hello")  // Also works!
-
-// Java: Primitives are not objects
-// Need separate methods or autoboxing
+val x = identity(42)          // T inferred as Int (boxed in generic context)
+val s = identity("hello")
+val list = identity(listOf(1, 2, 3))
 ```
 
-**2. Nullability:**
-```kotlin
-// Kotlin: Explicit nullable vs non-nullable
-val notNull: Int = 10      // Cannot be null
-val nullable: Int? = null  // Can be null
-
-// Java: Primitives cannot be null, wrappers can
-int primitive = 10;        // Cannot be null
-Integer wrapper = null;    // Can be null
-```
-
-**3. No Autoboxing Issues:**
-```kotlin
-// Kotlin: No surprises
-val a: Int = 1000
-val b: Int = 1000
-println(a == b)        // true (value equality)
-println(a === b)       // depends on compilation (referential)
-
-// Java: Autoboxing can cause surprises
-Integer a = 1000;
-Integer b = 1000;
-System.out.println(a == b);  // false! (reference equality)
-System.out.println(a.equals(b));  // true (value equality)
-```
-
-**4. Smart Compilation:**
-```kotlin
-fun add(a: Int, b: Int): Int = a + b
-// Compiles to efficient primitive arithmetic
-
-fun addNullable(a: Int?, b: Int?): Int? {
-    if (a == null || b == null) return null
-    return a + b
+```java
+public static <T> T identity(T value) {
+    return value;
 }
-// Uses wrapper classes internally
+
+Integer i = identity(42);   // 42 autoboxed to Integer
+String s = identity("hello");
+
+// Overloads required to avoid boxing for primitives
+public static int identityInt(int value) { return value; }
+public static double identityDouble(double value) { return value; }
 ```
 
-### When Kotlin Uses Primitives Vs Wrappers
+Kotlin uses one syntax (`Int`, `Double`, etc.) regardless of whether values are implemented as primitives or wrappers; Java has distinct primitive and wrapper types.
 
-**Compiles to JVM primitives:**
-- Non-nullable types in local variables
-- Non-nullable types in parameters/return types
-- Non-nullable array elements: `IntArray`, `DoubleArray`
-
-**Compiles to wrapper classes:**
-- Nullable types: `Int?`, `Boolean?`
-- Generic type parameters: `List<Int>`
-- Platform types from Java
-- When stored in `Array<Int>`
+#### 2. Nullability
 
 ```kotlin
-val primitive: Int = 10           // int (primitive)
-val nullable: Int? = 10           // Integer (wrapper)
-val list: List<Int> = listOf(1)   // List<Integer> (wrapper)
-val array: IntArray = intArrayOf(1)  // int[] (primitive array)
-val boxedArray: Array<Int> = arrayOf(1)  // Integer[] (wrapper array)
+val notNull: Int = 10        // Cannot be null
+val nullable: Int? = null    // Can be null
+val result = nullable?.plus(5)
+
+val primitive: Int = 42      // usually primitive int
+val boxed: Int? = 42         // `Integer` under the hood
 ```
 
-### Summary
+```java
+int primitive = 10;          // Cannot be null
+Integer wrapper = null;      // Can be null; NPE risk on unboxing
+```
+
+Kotlin encodes nullability in the type system and enforces it at compile time; Java relies on conventions and runtime checks.
+
+#### 3. Methods on "Primitives"
+
+```kotlin
+val number = 42
+println(number.toString())
+println(number.toDouble())
+println(number.coerceIn(0, 100))
+
+fun Int.isEven() = this % 2 == 0
+println(42.isEven())
+```
+
+```java
+int number = 42;
+String str = Integer.toString(number);
+Integer boxed = 42;
+String text = boxed.toString();
+```
+
+Kotlin exposes methods and extensions on these types directly; Java requires wrappers or utility methods for similar behavior.
+
+#### 4. When Kotlin Uses Primitives vs Wrappers
+
+Kotlin compiles to JVM primitives when:
+- Types are non-nullable (`Int`, `Double`, etc.).
+- They are used in primitive arrays (`IntArray`, `DoubleArray`, etc.).
+
+It uses wrapper types when:
+- Types are nullable (`Int?`, etc.).
+- Used as generic type arguments: `List<Int>`, `Map<String, Int>`.
+- In `Array<Int>` and other object arrays.
+- For platform types from Java when needed.
+
+```kotlin
+val primitive: Int = 10                // int
+val nullableInt: Int? = 10             // Integer
+val list: List<Int> = listOf(1, 2, 3)  // List<Integer>
+val intArray: IntArray = intArrayOf(1, 2, 3)   // int[]
+val boxedArray: Array<Int> = arrayOf(1, 2, 3)  // Integer[]
+```
+
+### Arrays - Special Case
+
+Kotlin distinguishes between primitive arrays and object arrays, mapping closely to Java:
+
+```kotlin
+// Primitive arrays (efficient)
+val intArray = IntArray(5)         // int[]
+val doubleArray = DoubleArray(5)   // double[]
+val byteArray = ByteArray(5)       // byte[]
+
+intArray[0] = 42
+println(intArray.size)  // 5
+
+// With initialization
+val numbers = intArrayOf(1, 2, 3, 4, 5)
+val doubles = doubleArrayOf(1.0, 2.0, 3.0)
+
+// Object arrays
+val boxedArray = Array<Int>(5) { 0 }  // Integer[]
+val stringArray = arrayOf("a", "b")   // String[]
+
+// Conversions (require element-wise transformation under the hood)
+val primitiveToBoxed = intArray.toTypedArray()  // IntArray -> Array<Int> -> Integer[]
+val boxedToPrimitive = boxedArray.toIntArray()  // Array<Int> -> IntArray -> int[]
+```
+
+```java
+// Primitive arrays
+int[] intArray = new int[5];
+double[] doubleArray = new double[5];
+
+intArray[0] = 42;
+
+// Object arrays
+Integer[] boxedArray = new Integer[5];
+String[] stringArray = {"a", "b"};
+
+// No direct cast between int[] and Integer[]
+// Integer[] boxed = (Integer[]) intArray;  // Compile-time error
+
+// Must convert element-wise (loop or streams)
+Integer[] boxed = Arrays.stream(intArray)
+                        .boxed()
+                        .toArray(Integer[]::new);
+```
+
+Key points:
+- Primitive arrays (`IntArray`, etc. / `int[]`, etc.) are more memory- and CPU-efficient.
+- Conversions between primitive arrays and boxed/object arrays always require iteration.
+
+### Performance
+
+Kotlin aims to match Java's performance characteristics for primitives while providing a cleaner type model.
+
+```kotlin
+class Counter {
+    var count: Int = 0      // Typically compiled as a primitive int field
+
+    fun increment() {
+        count++             // Efficient primitive operation
+    }
+}
+
+// Standard library collections store numbers as boxed types on the JVM
+val list = listOf(1, 2, 3)  // List<Int> -> List<Integer>
+
+// Use primitive arrays for large numeric data
+val bigArray = IntArray(1_000_000) { it }
+```
+
+Illustrative comparison:
+
+```kotlin
+// Fast: primitive array (no boxing)
+val primitiveArray = IntArray(1_000_000)
+for (i in primitiveArray.indices) {
+    primitiveArray[i] = i * 2
+}
+
+// Slower: Array<Int> (boxing/unboxing on each element)
+val boxedArray = Array(1_000_000) { 0 }
+for (i in boxedArray.indices) {
+    boxedArray[i] = i * 2
+}
+
+// Heavier: List<Int> (immutable structure + boxed elements)
+val list = List(1_000_000) { it }
+```
+
+So, for large numeric datasets, prefer primitive arrays over `Array<Int>` or `List<Int>` when performance matters.
+
+### Unsigned Types (Kotlin 1.3+)
+
+Kotlin adds unsigned numeric types (Java has no dedicated unsigned primitives):
+
+```kotlin
+val uByte: UByte = 200u
+val uShort: UShort = 50000u
+val uInt: UInt = 4_000_000_000u
+val uLong: ULong = 10_000_000_000uL
+
+val uIntArray = UIntArray(5)
+val uBytes = ubyteArrayOf(200u, 255u)
+
+val sum = 100u + 50u
+val overflow = UByte.MAX_VALUE + 1u
+```
+
+These are implemented with compiler support and mapped onto existing JVM types but behave as unsigned in Kotlin code.
+
+### Interoperability with Java
+
+When Kotlin calls Java:
+
+```kotlin
+// Java: public int calculate(int a, Integer b)
+val result = javaObject.calculate(10, 20)
+
+// Java: Integer getNullableInt()
+val nullable: Int? = javaObject.getNullableInt()  // Safe
+// val notNull: Int = javaObject.getNullableInt() // Unsafe: possible NPE
+```
+
+When Java calls Kotlin:
+
+```java
+// Kotlin: fun process(value: Int): Int
+int r1 = kotlinObject.process(42);   // uses primitive int
+
+// Kotlin: fun process(value: Int?): Int?
+Integer r2 = kotlinObject.process(null); // uses Integer
+
+// Kotlin: val numbers: IntArray
+int[] array = kotlinObject.getNumbers();
+
+// Kotlin: val boxed: Array<Int>
+Integer[] boxedArray = kotlinObject.getBoxed();
+```
+
+Understanding when values are primitives vs wrappers at the boundaries is important to avoid accidental boxing or NPEs.
+
+### Comparative Table
 
 | Aspect | Java | Kotlin |
 |--------|------|--------|
-| **Primitives** | Yes (8 types) | No (unified type system) |
-| **Wrappers** | Separate classes | Used automatically |
-| **Methods on primitives** | No | Yes |
-| **Nullability** | Wrappers only | Explicit `?` suffix |
-| **Compilation** | Primitives vs objects | Optimized to primitives when possible |
+| Primitives | 8 explicit primitive types | No separate primitive syntax; uses `Int`, etc. |
+| Wrappers | Separate wrapper classes | Used automatically when needed |
+| Methods on primitives | None (use wrappers/utils) | Available via member/extension functions |
+| Nullability | Only via wrappers | Built-in nullability with `?` and checks |
+| Autoboxing | Explicit pitfalls (`==`, caching, NPE) | Boxing exists but mostly hidden; `==` is value equality |
+| Generics | Work with reference types only | Same syntax; primitives boxed in generic contexts |
+| Unsigned types | Not built-in | Built-in (`UByte`, `UShort`, `UInt`, `ULong`) |
 
----
+### Kotlin Best Practices (Summary)
+
+```kotlin
+// Prefer non-nullable types when possible
+val count: Int = 0  // Typically compiled to a primitive
+
+// Use nullable only when it reflects real absence of a value
+val maybeValue: Int? = null
+
+// Use primitive arrays for large numeric data
+val bigData = IntArray(1_000_000)
+
+// Use collections (List/Set/Map) for expressiveness, knowing they store boxed numbers
+val smallList = listOf(1, 2, 3)
+
+// Avoid unnecessary nullable wrappers
+val bad: Int? = 42     // Prefer non-nullable Int
+
+// Avoid Array<Int> for huge numeric datasets
+val inefficient = Array(1_000_000) { 0 }  // Prefer IntArray
+```
 
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- What are common boxing/autoboxing pitfalls in mixed Kotlin/Java code?
+- When would you choose primitive arrays vs collections in Kotlin?
+- How does null-safety in Kotlin reduce NPE risks compared to Java's primitive/wrapper model?
 
 ## References
 
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+- https://kotlinlang.org/docs/home.html
 
 ## Related Questions
 
 - [[q-flowon-operator-context-switching--kotlin--hard]]
-- [[q-kotlin-init-block-features--programming-languages--easy]]
 - [[q-kotlin-reflection--programming-languages--medium]]

@@ -3,78 +3,86 @@ id: kotlin-105
 title: "Job state machine and state transitions / Job машина состояний и переходы"
 aliases: [Job, Machine, State, Transitions]
 topic: kotlin
-subtopics: []
+subtopics: [c-coroutines, c-structured-concurrency]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-fan-in-fan-out--kotlin--hard, q-inline-function-limitations--kotlin--medium, q-list-set-map-differences--programming-languages--easy]
+related: [c-kotlin, c-coroutines, q-fan-in-fan-out--kotlin--hard, q-inline-function-limitations--kotlin--medium]
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 tags: [difficulty/medium]
 ---
 
-# Job State Machine and State Transitions / Job Машина Состояний И Переходы
+# Вопрос (RU)
 
-## English
+> Объясните машину состояний `Job` в Kotlin корутинах: какие есть состояния (`New`, `Active`, `Completing`, `Completed`, `Cancelling`, `Cancelled`), допустимые переходы между ними, как ведут себя свойства `isActive`, `isCompleted`, `isCancelled` в каждом состоянии, как работают правила распространения состояний между родителем и потомками, и как `join()` и `cancel()` взаимодействуют с различными состояниями. Проиллюстрируйте ответ подробными примерами, включая реальные сценарии (логирование состояний и `ViewModel`-подобное использование).
 
-### Overview
+# Question (EN)
 
-The Kotlin coroutines `Job` is a state machine with 6 distinct states. Understanding these states, their transitions, and the behavior of `isActive`, `isCompleted`, and `isCancelled` properties is critical for mastering coroutine lifecycle management, debugging, and preventing common bugs.
+> Explain the `Job` state machine in Kotlin coroutines: what states exist (`New`, `Active`, `Completing`, `Completed`, `Cancelling`, `Cancelled`), which transitions are valid between them, how `isActive`, `isCompleted`, and `isCancelled` behave in each state, how parent-child state propagation works, and how `join()` and `cancel()` interact with different states. Illustrate the answer with detailed examples, including real-world scenarios (state logging and `ViewModel`-like usage).
 
-This question explores the complete state machine, valid transitions, property behavior in each state, parent-child propagation rules, and how `join()` and `cancel()` interact with different states.
+## Ответ (RU)
 
-### The 6 Job States
+### Обзор
 
-A `Job` can be in one of the following states:
+`Job` в Kotlin корутинах (см. [[c-coroutines]]) ведёт себя как конечный автомат с чётко определёнными этапами жизненного цикла. Понимание этих этапов, переходов между ними и поведения свойств `isActive`, `isCompleted` и `isCancelled` критически важно для управления жизненным циклом корутин, отладки и предотвращения распространённых ошибок.
 
-1. **New** (only for `CoroutineStart.LAZY`)
-2. **Active** (normal execution)
-3. **Completing** (body finished, waiting for children)
-4. **Completed** (fully finished)
-5. **Cancelling** (cancellation in progress, running finally blocks)
-6. **Cancelled** (terminal cancelled state)
+Здесь рассматривается практическая модель жизненного цикла `Job` (6 наблюдаемых состояний), допустимые переходы, поведение свойств в каждом состоянии, правила распространения состояний между родителем и потомками, а также то, как `join()` и `cancel()` взаимодействуют с различными состояниями.
 
-### State Properties Behavior
+### 6 состояний `Job`
 
-| State | isActive | isCompleted | isCancelled |
-|-------|----------|-------------|-------------|
-| **New** | false | false | false |
-| **Active** | true | false | false |
-| **Completing** | true | false | false |
-| **Completed** | false | true | false |
-| **Cancelling** | false | false | true |
-| **Cancelled** | false | true | true |
+Концептуально `Job` можно мыслить в одном из следующих состояний (по его публичным свойствам и поведению):
 
-### State Transition Diagram (Text-Based)
+1. `New` (только для `CoroutineStart.LAZY`)
+2. `Active` (нормальное выполнение)
+3. `Completing` (тело завершено, ожидание потомков)
+4. `Completed` (полностью успешно завершён)
+5. `Cancelling` (отмена в процессе, выполнение обработчиков/finally, ожидание потомков)
+6. `Cancelled` (терминальное отменённое состояние)
+
+Важно: конкретные внутренние состояния — деталь реализации `kotlinx.coroutines`, но эта модель отражает наблюдаемое поведение API `Job`.
+
+### Поведение свойств состояния
+
+| Состояние | isActive | isCompleted | isCancelled |
+|-----------|----------|-------------|-------------|
+| `New` | false | false | false |
+| `Active` | true | false | false |
+| `Completing` | true | false | false |
+| `Completed` | false | true | false |
+| `Cancelling` | false | false | true |
+| `Cancelled` | false | true | true |
+
+### Диаграмма переходов состояний (текстовая)
 
 ```
 
-                           New      (LAZY only)
-                        (initial)
+                           New      (только LAZY)
+                       (начальное)
 
                               start()
 
 
             Active
-                      (executing)
+                     (выполнение)
 
 
-                             body done
+                             тело завершено
 
 
                       Completing
-                     (wait kids)
+                     (ожид. детей)
 
 
-                             all children
-                             complete
+                             все дети
+                             завершены
 
 
                        Completed
-                       (success)
+                        (успех)
 
 
            cancel()
@@ -84,29 +92,32 @@ A `Job` can be in one of the following states:
 
                 Cancelling
                (finally,
-                wait kids)   children done
+                ожид. детей) дети завершены
 
 
-                       finally done
+                       finally выполнен
 
 
                  Cancelled
-                (terminal)
+               (терминальное)
 
 ```
 
-### State 1: New (CoroutineStart.LAZY only)
+### Состояние 1: New (`CoroutineStart.LAZY`)
 
-The **New** state exists only for coroutines started with `CoroutineStart.LAZY`. The coroutine is created but not started yet.
+Состояние `New` существует только для корутин, созданных с `CoroutineStart.LAZY`: корутина создана, но ещё не запущена.
 
-**Properties:**
+Свойства:
 - `isActive = false`
 - `isCompleted = false`
 - `isCancelled = false`
 
-**Transitions:**
-- To **Active**: calling `start()` or `join()`
-- To **Cancelling**: calling `cancel()` before starting
+Переходы:
+- В `Active`: вызов `start()` или `join()` (для LAZY `join()` запускает `Job` и ждёт её завершения)
+- В `Cancelled`: вызов `cancel()` до запуска; `Job` немедленно завершается как отменённая:
+  - `isActive = false`, `isCompleted = true`, `isCancelled = true`
+
+Код (идентичен английской версии):
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -144,40 +155,19 @@ fun demonstrateNewState() = runBlocking {
 }
 ```
 
-**Output:**
-```
-=== New State Demo ===
-After creation:
-  isActive: false
-  isCompleted: false
-  isCancelled: false
+### Состояние 2: Active (нормальное выполнение)
 
-After 50ms (still not started):
-  isActive: false
-  isCompleted: false
+Состояние `Active` означает, что корутина выполняется или ещё не завершилась после запуска. Это нормальное рабочее состояние.
 
-After start():
-  isActive: true
-  isCompleted: false
-Coroutine body executing
-
-After completion:
-  isActive: false
-  isCompleted: true
-```
-
-### State 2: Active (Normal Execution)
-
-The **Active** state means the coroutine is currently executing. This is the normal working state.
-
-**Properties:**
+Свойства:
 - `isActive = true`
 - `isCompleted = false`
 - `isCancelled = false`
 
-**Transitions:**
-- To **Completing**: body finishes normally
-- To **Cancelling**: `cancel()` called
+Переходы:
+- В `Completing`: тело завершилось, но у `Job` есть активные потомки
+- В `Completed`: тело завершилось и потомков нет (или все уже завершены)
+- В `Cancelling`: вызвано `cancel()` или отмена/ошибка пришла от родителя/потомка
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -200,7 +190,7 @@ fun demonstrateActiveState() = runBlocking {
 
     delay(50)
     println("\nFrom parent scope:")
-    println("  isActive: ${job.isActive}")         // true
+    println("  isActive: ${job.isActive}")         // likely true
     println("  isCompleted: ${job.isCompleted}")   // false
 
     job.join()
@@ -210,16 +200,16 @@ fun demonstrateActiveState() = runBlocking {
 }
 ```
 
-### State 3: Completing (Waiting for Children)
+### Состояние 3: Completing (ожидание потомков)
 
-The **Completing** state occurs when the coroutine body has finished, but it still has active children. The parent waits for all children to complete before transitioning to **Completed**.
+Состояние `Completing` возникает, когда тело корутины завершилось, но у неё всё ещё есть активные потомки. Родитель ждёт всех потомков, прежде чем перейти в терминальное состояние.
 
-**Properties:**
-- `isActive = true` (still considered active!)
+Свойства:
+- `isActive = true` (с точки зрения API `Job` всё ещё активен)
 - `isCompleted = false`
 - `isCancelled = false`
 
-**Key Insight:** `isActive` remains `true` during the Completing state because the job is not yet fully done.
+Ключевой момент: `isActive` остаётся `true` в состоянии `Completing`, потому что работа `Job` ещё не полностью завершена и её итог зависит от потомков.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -244,13 +234,13 @@ fun demonstrateCompletingState() = runBlocking {
         }
 
         println("Parent body finished (but children still running)")
-        // Parent enters Completing state here
+        // Parent enters Completing-like state here
     }
 
     delay(250) // Parent body done, child 1 done, child 2 still running
 
-    println("\nParent in Completing state:")
-    println("  isActive: ${parentJob.isActive}")       // true (!)
+    println("\nParent likely waiting for children:")
+    println("  isActive: ${parentJob.isActive}")       // true
     println("  isCompleted: ${parentJob.isCompleted}") // false
     println("  isCancelled: ${parentJob.isCancelled}") // false
 
@@ -262,36 +252,16 @@ fun demonstrateCompletingState() = runBlocking {
 }
 ```
 
-**Output:**
-```
-=== Completing State Demo ===
-Parent body started
-  Child 1 started
-  Child 2 started
-Parent body finished (but children still running)
-  Child 1 finished
+### Состояние 4: Completed (успешное завершение)
 
-Parent in Completing state:
-  isActive: true
-  isCompleted: false
-  isCancelled: false
-  Child 2 finished
+`Completed` — терминальное состояние, указывающее на успешное завершение: тело `Job` завершилось, все потомки завершены, нет необработанной отмены или ошибки.
 
-After all children complete:
-  isActive: false
-  isCompleted: true
-```
-
-### State 4: Completed (Success)
-
-The **Completed** state is a terminal state indicating successful completion. The coroutine body finished, all children completed, and no cancellation occurred.
-
-**Properties:**
+Свойства:
 - `isActive = false`
 - `isCompleted = true`
 - `isCancelled = false`
 
-**Transitions:** None (terminal state)
+Переходы: нет (терминальное состояние).
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -321,21 +291,21 @@ fun demonstrateCompletedState() = runBlocking {
     println("\nCalling cancel()...")
     job.cancel()
     println("cancel() had no effect (already completed)")
-    println("  isCancelled: ${job.isCancelled}")   // false (still!)
+    println("  isCancelled: ${job.isCancelled}")   // false
 }
 ```
 
-### State 5: Cancelling (Running Finally Blocks)
+### Состояние 5: Cancelling (отмена в процессе)
 
-The **Cancelling** state occurs when cancellation is in progress. The coroutine is running `finally` blocks, and waiting for children to be cancelled.
+Состояние `Cancelling` возникает, когда отмена запрошена. `Job` помечен как отменённый, выполняются блоки `finally` и обработчики, а также отменяются/дожидаются потомки.
 
-**Properties:**
+Свойства:
 - `isActive = false`
 - `isCompleted = false`
 - `isCancelled = true`
 
-**Transitions:**
-- To **Cancelled**: finally blocks done, children cancelled
+Переходы:
+- В `Cancelled`: после завершения очистки (`finally`/обработчики) и всех потомков.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -343,7 +313,7 @@ import kotlinx.coroutines.*
 fun demonstrateCancellingState() = runBlocking {
     println("=== Cancelling State Demo ===")
 
-    val job = launch {
+    val job = launch(Dispatchers.Default) { // use Default to avoid blocking main
         try {
             println("Starting work...")
             repeat(5) { i ->
@@ -352,12 +322,11 @@ fun demonstrateCancellingState() = runBlocking {
             }
         } finally {
             println("Finally block started")
-            println("  isActive: ${coroutineContext[Job]?.isActive}")     // false
+            println("  isActive: ${coroutineContext[Job]?.isActive}")       // false during cancelling
             println("  isCancelled: ${coroutineContext[Job]?.isCancelled}") // true
 
-            // Cleanup work (non-suspending)
-            println("  Cleaning up resources...")
-            Thread.sleep(150) // Simulate cleanup
+            // Cleanup work; avoid Thread.sleep in real code to not block threads.
+            delay(150)
             println("  Cleanup done")
 
             println("Finally block finished")
@@ -369,11 +338,11 @@ fun demonstrateCancellingState() = runBlocking {
     println("\nCancelling job...")
     job.cancel()
 
-    // Job might briefly be in Cancelling state
-    println("Job in Cancelling state:")
-    println("  isActive: ${job.isActive}")         // false
-    println("  isCompleted: ${job.isCompleted}")   // false (!)
-    println("  isCancelled: ${job.isCancelled}")   // true
+    // Job is in Cancelling state until cleanup finishes
+    println("Job in Cancelling state (shortly after cancel):")
+    println("  isActive: ${job.isActive}")       // false
+    println("  isCompleted: ${job.isCompleted}") // false (until finally completes)
+    println("  isCancelled: ${job.isCancelled}") // true
 
     job.join() // Wait for cancellation to complete
 
@@ -384,44 +353,18 @@ fun demonstrateCancellingState() = runBlocking {
 }
 ```
 
-**Output:**
-```
-=== Cancelling State Demo ===
-Starting work...
-  Iteration 0
-  Iteration 1
-  Iteration 2
+### Состояние 6: Cancelled (терминальное отменённое состояние)
 
-Cancelling job...
-Job in Cancelling state:
-  isActive: false
-  isCompleted: false
-  isCancelled: true
-Finally block started
-  isActive: false
-  isCancelled: true
-  Cleaning up resources...
-  Cleanup done
-Finally block finished
+Состояние `Cancelled` — терминальное: отмена завершена, все необходимые обработчики выполнены, потомки завершены.
 
-After cancellation complete:
-  isActive: false
-  isCompleted: true
-  isCancelled: true
-```
-
-### State 6: Cancelled (Terminal Cancelled State)
-
-The **Cancelled** state is a terminal state indicating cancellation completed. All finally blocks ran, all children cancelled.
-
-**Properties:**
+Свойства:
 - `isActive = false`
-- `isCompleted = true` (!)
+- `isCompleted = true`
 - `isCancelled = true`
 
-**Key Insight:** `isCompleted` is `true` in the Cancelled state because the job has finished (even though it was cancelled).
+Ключевой момент: `isCompleted = true` и для успешно завершённых, и для отменённых `Job`; различать нужно по `isCancelled` и причине.
 
-**Transitions:** None (terminal state)
+Переходы: нет (терминальное состояние).
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -446,7 +389,7 @@ fun demonstrateCancelledState() = runBlocking {
 
     println("\nJob in Cancelled state:")
     println("  isActive: ${job.isActive}")         // false
-    println("  isCompleted: ${job.isCompleted}")   // true (!)
+    println("  isCompleted: ${job.isCompleted}")   // true
     println("  isCancelled: ${job.isCancelled}")   // true
 
     // Subsequent operations have no effect
@@ -459,22 +402,22 @@ fun demonstrateCancelledState() = runBlocking {
 }
 ```
 
-### Parent-Child State Propagation Rules
+### Правила распространения состояний Родитель–Потомок
 
-Coroutine state propagation follows structured concurrency principles:
+(аналогично английской версии)
 
-1. **Parent cancellation → Children cancellation**
-   - When a parent is cancelled, all children are cancelled recursively
-   - Children enter Cancelling state
+1. Отмена родителя → отмена потомков
+   - При отмене родителя все его потомки рекурсивно отменяются.
+   - Потомки проходят через `Cancelling` и затем `Cancelled`.
 
-2. **Child failure → Parent cancellation**
-   - When a child fails with exception, parent is cancelled (by default)
-   - Siblings are also cancelled
-   - Use `SupervisorJob` to prevent this
+2. Ошибка потомка → отмена родителя (для обычного `Job`)
+   - Невыловленное исключение в потомке по умолчанию отменяет родителя.
+   - Сиблинги также отменяются.
+   - Используйте `SupervisorJob` / `supervisorScope`, чтобы изолировать ошибки.
 
-3. **Parent waits for children**
-   - Parent enters Completing state after body finishes
-   - Transitions to Completed only when all children complete
+3. Родитель ждёт потомков
+   - После завершения тела родитель ждёт всех потомков, прежде чем попасть в терминальное состояние.
+   - Если все завершились успешно, родитель становится `Completed`; если кто-то отменён или упал — завершение (как правило) будет отменённым / с ошибкой.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -521,36 +464,18 @@ fun demonstrateParentChildPropagation() = runBlocking {
 }
 ```
 
-**Output:**
-```
-=== Parent-Child Propagation ===
-Parent started
-  Child 1 started
-  Child 2 started
-Parent body finished (waiting for children)
+### Поведение `join()` в разных состояниях
 
-Cancelling parent...
-  Child 1 finally (cancelled: true)
-  Child 2 finally (cancelled: true)
+`join()` приостанавливает вызывающую корутину, пока `Job` не достигнет терминального состояния (`Completed` или `Cancelled`).
 
-All jobs cancelled
-Parent:
-  isCompleted: true
-  isCancelled: true
-```
-
-### join() Behavior in Each State
-
-The `join()` function suspends until the job reaches a terminal state (Completed or Cancelled).
-
-| State | join() Behavior |
-|-------|-----------------|
-| **New** | Starts the job (if LAZY), then suspends until complete |
-| **Active** | Suspends until job completes or is cancelled |
-| **Completing** | Suspends until all children complete |
-| **Completed** | Returns immediately |
-| **Cancelling** | Suspends until cancellation completes |
-| **Cancelled** | Returns immediately |
+| Состояние | Поведение `join()` |
+|-----------|--------------------|
+| `New` | Для LAZY job: запускает и ждёт завершения |
+| `Active` | Ждёт завершения или отмены `Job` |
+| `Completing` | Ждёт завершения всех потомков и терминального состояния |
+| `Completed` | Возвращается немедленно |
+| `Cancelling` | Ждёт завершения `finally`/обработчиков и потомков |
+| `Cancelled` | Возвращается немедленно |
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -596,12 +521,12 @@ fun demonstrateJoinBehavior() = runBlocking {
     println("   Took ${time3}ms\n")
 
     // 4. join() during Cancelling waits for cleanup
-    val cancellingJob = launch {
+    val cancellingJob = launch(Dispatchers.Default) {
         try {
-            delay(10000)
+            delay(10_000)
         } finally {
             println("   Cleanup starting...")
-            Thread.sleep(150)
+            delay(150)
             println("   Cleanup done")
         }
     }
@@ -617,18 +542,18 @@ fun demonstrateJoinBehavior() = runBlocking {
 }
 ```
 
-### cancel() Behavior in Each State
+### Поведение `cancel()` в разных состояниях
 
-The `cancel()` function requests cancellation of the job.
+`cancel()` запрашивает отмену `Job`.
 
-| State | cancel() Behavior |
-|-------|-------------------|
-| **New** | Immediately transitions to Cancelled (no execution) |
-| **Active** | Transitions to Cancelling, runs finally blocks |
-| **Completing** | Transitions to Cancelling, cancels remaining children |
-| **Completed** | No effect (idempotent) |
-| **Cancelling** | No effect (already cancelling) |
-| **Cancelled** | No effect (idempotent) |
+| Состояние | Поведение `cancel()` |
+|-----------|----------------------|
+| `New` | Для LAZY: немедленно завершает `Job` как `Cancelled` (`isCompleted = true`, `isCancelled = true`), тело не выполняется |
+| `Active` | Переход в фазу `Cancelling`, запуск `finally`/обработчиков, отмена потомков |
+| `Completing` | Переход в `Cancelling`, отмена оставшихся потомков |
+| `Completed` | Без эффекта (идемпотентно) |
+| `Cancelling` | Дополнительного эффекта нет |
+| `Cancelled` | Без эффекта (идемпотентно) |
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -644,7 +569,8 @@ fun demonstrateCancelBehavior() = runBlocking {
     lazyJob.cancel()
     lazyJob.join()
     println("   Job cancelled without execution")
-    println("   isCancelled: ${lazyJob.isCancelled}\n")
+    println("   isCompleted: ${lazyJob.isCompleted}")  // true
+    println("   isCancelled: ${lazyJob.isCancelled}\n") // true
 
     // 2. cancel() on Active job
     println("2. cancel() on Active job:")
@@ -683,18 +609,18 @@ fun demonstrateCancelBehavior() = runBlocking {
     job.cancel()
     println("   First cancel()")
     job.cancel()
-    println("   Second cancel() - no effect")
+    println("   Second cancel() - no additional effect")
     job.cancel()
-    println("   Third cancel() - no effect")
+    println("   Third cancel() - no additional effect")
 
     job.join()
     println("   All cancels completed")
 }
 ```
 
-### invokeOnCompletion for State Notifications
+### `invokeOnCompletion` для уведомлений о состоянии
 
-Use `invokeOnCompletion` to be notified when a job reaches a terminal state.
+Используйте `invokeOnCompletion`, чтобы получать уведомление, когда `Job` достигает терминального состояния (`Completed` или `Cancelled`, либо завершился с ошибкой).
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -744,30 +670,15 @@ fun demonstrateInvokeOnCompletion() = runBlocking {
 }
 ```
 
-**Output:**
-```
-=== invokeOnCompletion Demo ===
-Job started
-Job is active: true
-Job finished
-Completed successfully
+### Невозможные (или недопустимые) переходы состояний
 
---- Cancellation Case ---
-Cleanup
-Completion handler: cause=kotlinx.coroutines.JobCancellationException: User requested cancellation
-  isCancelled: true
-  isCompleted: true
-```
+(повторяет ключевые ограничения из EN-версии)
 
-### Impossible State Transitions
-
-Certain transitions are impossible in the Job state machine:
-
-1. **Cannot go from Completed to Active** - terminal state
-2. **Cannot go from Cancelled to Active** - terminal state
-3. **Cannot go from Completing to New** - forward-only
-4. **Cannot skip Cancelling** - must run finally blocks
-5. **Cannot have Cancelled without Completing/Cancelling first**
+1. Нельзя перейти из `Completed` в `Active` — терминальное состояние.
+2. Нельзя перейти из `Cancelled` в `Active`.
+3. Нельзя из любого терминального состояния вернуться в `New`.
+4. При отмене всегда проходит фаза логики завершения: обработчики и `finally` должны выполниться до того, как `Job` наблюдается как терминальный.
+5. Успешно завершившийся `Job` становится `Completed` только после завершения тела и всех потомков.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -784,21 +695,20 @@ fun demonstrateImpossibleTransitions() = runBlocking {
     println("1. Completed job:")
     println("   isCompleted: ${completedJob.isCompleted}")
 
-    // No way to restart or reactivate
-    // completedJob.start() // Would have no effect
+    // completedJob.start() // Would have no effect and is not allowed
 
     delay(100)
     println("   Still completed: ${completedJob.isCompleted}")
     println("   Cannot transition back to Active\n")
 
-    // 2. Cannot skip finally blocks
+    // 2. Completion logic during cancellation
     var finallyExecuted = false
     val job = launch {
         try {
             delay(1000)
         } finally {
             finallyExecuted = true
-            println("2. Finally executed during cancellation")
+            println("2. Finally executed during cancellation (or attempted)")
         }
     }
 
@@ -807,15 +717,13 @@ fun demonstrateImpossibleTransitions() = runBlocking {
     job.join()
 
     println("   finallyExecuted: $finallyExecuted")
-    println("   Cancelling state is mandatory\n")
 
-    // 3. Cannot have partial completion
+    // 3. Parent waits for child
     val parentJob = launch {
         launch {
             delay(100)
         }
-        // Parent must wait for child
-        println("3. Parent body done, but not completed yet")
+        println("3. Parent body done, but not completed until child finishes")
     }
 
     delay(50)
@@ -826,7 +734,9 @@ fun demonstrateImpossibleTransitions() = runBlocking {
 }
 ```
 
-### Real-World Example: State Logging
+### Иллюстративный пример: логирование состояний
+
+Важно: по трём булевым (`isActive`, `isCompleted`, `isCancelled`) нельзя точно восстановить внутреннюю машину состояний, можно лишь приблизительно оценивать состояние для логирования.
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -836,10 +746,9 @@ class StatefulJobMonitor {
 
     fun getState(job: Job): String {
         return when {
-            !job.isActive && !job.isCompleted -> "New"
-            job.isActive && !job.isCancelled && !job.isCompleted ->
-                if (/* has children running */ false) "Completing" else "Active"
-            !job.isActive && !job.isCompleted && job.isCancelled -> "Cancelling"
+            !job.isActive && !job.isCompleted && !job.isCancelled -> "New" // LAZY
+            job.isActive && !job.isCancelled && !job.isCompleted -> "Active or Completing"
+            !job.isActive && !job.isCompleted && job.isCancelled -> "Cancelling" // transient; rarely observable
             job.isCompleted && !job.isCancelled -> "Completed"
             job.isCompleted && job.isCancelled -> "Cancelled"
             else -> "Unknown"
@@ -888,7 +797,7 @@ fun demonstrateStateLogging() = runBlocking {
 }
 ```
 
-### Real-World Example: Android ViewModel with State Tracking
+### Иллюстративный пример: Android-подобный `ViewModel` с отслеживанием состояния
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -919,7 +828,7 @@ class DataViewModel {
             } catch (e: CancellationException) {
                 // Job was cancelled
                 _dataState.value = DataState.Idle
-                throw e // Rethrow to maintain cancellation
+                throw e // Rethrow to propagate cancellation
             } catch (e: Exception) {
                 if (isActive) {
                     _dataState.value = DataState.Error(e.message ?: "Unknown error")
@@ -966,7 +875,1081 @@ sealed class DataState {
     data class Error(val message: String) : DataState()
 }
 
-// Usage in Activity/Fragment
+// Usage demo
+fun demonstrateViewModelStateTracking() = runBlocking {
+    println("=== ViewModel State Tracking ===")
+
+    val viewModel = DataViewModel()
+
+    // Collect state
+    val job = launch {
+        viewModel.dataState.collect { state ->
+            println("UI State: $state")
+        }
+    }
+
+    println("Starting load...")
+    viewModel.loadData()
+    println("Job state: ${viewModel.getJobState()}")
+
+    delay(500)
+    println("\nCancelling load...")
+    viewModel.cancelLoad()
+
+    delay(100)
+    println("Job state after cancel: ${viewModel.getJobState()}")
+
+    job.cancel()
+    viewModel.onCleared()
+}
+```
+
+### Лучшие практики проверки состояния
+
+(отражают пункты из EN-версии)
+
+1. Проверяйте `isActive` перед тяжёлой работой или коммитом результата:
+
+   ```kotlin
+   suspend fun doWork() {
+       if (!isActive) return
+
+       val result = heavyComputation()
+
+       if (!isActive) return
+
+       updateUI(result)
+   }
+   ```
+
+2. Используйте `ensureActive()` для кооперативной отмены:
+
+   ```kotlin
+   suspend fun processItems(items: List<Item>) {
+       for (item in items) {
+           ensureActive() // Бросит CancellationException при отмене
+           processItem(item)
+       }
+   }
+   ```
+
+3. Перед обновлением разделяемого состояния убеждайтесь, что `Job` ещё активен:
+
+   ```kotlin
+   val job = launch {
+       val data = loadData()
+       if (isActive) {
+           _state.value = data
+       }
+   }
+   ```
+
+4. Используйте `invokeOnCompletion` для очистки, зависящей от финального состояния:
+
+   ```kotlin
+   val job = launch {
+       // Work
+   }
+
+   job.invokeOnCompletion { cause ->
+       if (cause != null) {
+           // Cleanup on failure/cancellation
+       }
+   }
+   ```
+
+5. Не полагайтесь на условные проверки вида `if (!job.isCompleted) job.cancel()` — просто вызывайте `cancel()`, он идемпотентен.
+
+6. При необходимости дождаться завершения `finally` после `cancel()` вызывайте `join()`:
+
+   ```kotlin
+   job.cancel()
+   job.join() // Дождаться finally
+   // Теперь безопасно освобождать ресурсы
+   ```
+
+### Распространённые ошибки
+
+1. Считать, что `isCompleted == true` гарантирует успех:
+
+   ```kotlin
+   // Плохо
+   if (job.isCompleted) {
+       // Может быть и отмена
+   }
+
+   // Хорошо
+   if (job.isCompleted && !job.isCancelled) {
+       // Успешное завершение
+   }
+   ```
+
+2. Не ждать завершения отмены:
+
+   ```kotlin
+   // Плохо
+   job.cancel()
+   resource.release() // finally может ещё выполняться
+
+   // Хорошо
+   job.cancel()
+   job.join()
+   resource.release()
+   ```
+
+3. Интерпретировать `!isActive` как успешное завершение:
+
+   ```kotlin
+   // Плохо
+   if (!job.isActive) {
+       // Может быть New, Cancelling, Completed или Cancelled
+   }
+
+   // Хорошо
+   if (job.isCompleted && !job.isCancelled) {
+       // Успех
+   }
+   ```
+
+4. Пытаться перезапустить завершённый `Job`:
+
+   ```kotlin
+   // Плохо
+   job.start() // Не сработает для уже завершённого
+
+   // Лучше создать новый Job
+   ```
+
+### Соображения производительности
+
+1. Проверки состояния (`isActive`, `isCompleted`, `isCancelled`) — O(1), их можно вызывать часто.
+2. `invokeOnCompletion` добавляет небольшую накладную — не регистрируйте множество обработчиков без необходимости.
+3. Фаза `Completing` может добавлять задержку при большом числе дочерних корутин.
+4. Время в `Cancelling` зависит от работы в `finally`/обработчиках — держите их быстрыми и не блокирующими.
+
+### Тестирование состояний `Job` (иллюстративно)
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.*
+import kotlin.test.*
+
+class JobStateTest {
+    @Test
+    fun testLazyJobStates() = runTest {
+        val job = launch(start = CoroutineStart.LAZY) {
+            delay(100)
+        }
+
+        // New state
+        assertFalse(job.isActive)
+        assertFalse(job.isCompleted)
+        assertFalse(job.isCancelled)
+
+        job.start()
+
+        // Active state (or on the way to completion)
+        assertTrue(job.isActive)
+        assertFalse(job.isCompleted)
+
+        job.join()
+
+        // Completed state
+        assertFalse(job.isActive)
+        assertTrue(job.isCompleted)
+        assertFalse(job.isCancelled)
+    }
+
+    @Test
+    fun testCancelledStates() = runTest {
+        val job = launch {
+            delay(1000)
+        }
+
+        // Active
+        assertTrue(job.isActive)
+
+        job.cancel()
+
+        // After cancel, job is marked as cancelled
+        assertTrue(job.isCancelled)
+
+        job.join()
+
+        // Cancelled terminal state
+        assertFalse(job.isActive)
+        assertTrue(job.isCompleted)
+        assertTrue(job.isCancelled)
+    }
+
+    @Test
+    fun testParentWaitsForChild() = runTest {
+        var parentObservedActiveWhileWaiting = false
+
+        val parent = launch {
+            val child = launch {
+                delay(200)
+            }
+            yield() // allow scheduling
+            parentObservedActiveWhileWaiting = isActive && !isCompleted && !child.isCompleted
+        }
+
+        parent.join()
+        assertTrue(parentObservedActiveWhileWaiting)
+    }
+}
+```
+
+## Answer (EN)
+
+### Overview
+
+The Kotlin coroutines `Job` (see [[c-coroutines]]) behaves as a state machine with well-defined lifecycle stages. Understanding these stages, their transitions, and the behavior of `isActive`, `isCompleted`, and `isCancelled` properties is critical for mastering coroutine lifecycle management, debugging, and preventing common bugs.
+
+This answer explores the practical `Job` lifecycle model (6 commonly described observable states), valid transitions, property behavior in each state, parent-child propagation rules, and how `join()` and `cancel()` interact with different states.
+
+### The 6 Job States
+
+Conceptually, a `Job` can be thought of as being in one of the following states (based on its public properties and behavior):
+
+1. `New` (only for `CoroutineStart.LAZY`)
+2. `Active` (normal execution)
+3. `Completing` (body finished, waiting for children)
+4. `Completed` (fully finished successfully)
+5. `Cancelling` (cancellation in progress, running handlers/finally, waiting for children)
+6. `Cancelled` (terminal cancelled state)
+
+Note: The exact internal implementation details are kotlinx.coroutines-specific, but these states describe the observable behavior exposed via `Job` API.
+
+### State Properties Behavior
+
+| State | isActive | isCompleted | isCancelled |
+|-------|----------|-------------|-------------|
+| `New` | false | false | false |
+| `Active` | true | false | false |
+| `Completing` | true | false | false |
+| `Completed` | false | true | false |
+| `Cancelling` | false | false | true |
+| `Cancelled` | false | true | true |
+
+### State Transition Diagram (Text-Based)
+
+```
+
+                           New      (LAZY only)
+                        (initial)
+
+                              start()
+
+
+            Active
+                      (executing)
+
+
+                             body done
+
+
+                      Completing
+                     (wait kids)
+
+
+                             all children
+                             complete
+
+
+                       Completed
+                       (success)
+
+
+           cancel()
+
+
+
+
+                Cancelling
+               (finally,
+                wait kids)   children done
+
+
+                       finally done
+
+
+                 Cancelled
+                (terminal)
+
+```
+
+### State 1: New (`CoroutineStart.LAZY` only)
+
+The `New` state exists only for coroutines started with `CoroutineStart.LAZY`. The coroutine is created but not started yet.
+
+Properties:
+- `isActive = false`
+- `isCompleted = false`
+- `isCancelled = false`
+
+Transitions:
+- To `Active`: calling `start()` or calling `join()` (which starts a lazy job and then suspends until completion)
+- To `Cancelled`: calling `cancel()` before starting; it completes immediately as cancelled with:
+  - `isActive = false`, `isCompleted = true`, `isCancelled = true`
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateNewState() = runBlocking {
+    println("=== New State Demo ===")
+
+    val job = launch(start = CoroutineStart.LAZY) {
+        println("Coroutine body executing")
+        delay(100)
+    }
+
+    // In New state
+    println("After creation:")
+    println("  isActive: ${job.isActive}")         // false
+    println("  isCompleted: ${job.isCompleted}")   // false
+    println("  isCancelled: ${job.isCancelled}")   // false
+
+    delay(50) // Wait a bit
+
+    println("\nAfter 50ms (still not started):")
+    println("  isActive: ${job.isActive}")         // false
+    println("  isCompleted: ${job.isCompleted}")   // false
+
+    // Transition to Active
+    job.start()
+    println("\nAfter start():")
+    println("  isActive: ${job.isActive}")         // true
+    println("  isCompleted: ${job.isCompleted}")   // false
+
+    job.join()
+    println("\nAfter completion:")
+    println("  isActive: ${job.isActive}")         // false
+    println("  isCompleted: ${job.isCompleted}")   // true
+}
+```
+
+### State 2: Active (Normal Execution)
+
+The `Active` state means the coroutine is currently executing or otherwise not yet completed while started. This is the normal working state.
+
+Properties:
+- `isActive = true`
+- `isCompleted = false`
+- `isCancelled = false`
+
+Transitions:
+- To `Completing`: body finishes normally while children are still running
+- To `Completed`: body finishes and there are no children (or all are already done)
+- To `Cancelling`: `cancel()` called (or parent/child failure propagates cancellation)
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateActiveState() = runBlocking {
+    println("=== Active State Demo ===")
+
+    val job = launch {
+        println("Starting execution")
+        println("  isActive: ${coroutineContext[Job]?.isActive}")       // true
+        println("  isCompleted: ${coroutineContext[Job]?.isCompleted}") // false
+
+        repeat(3) { i ->
+            delay(100)
+            println("Iteration $i - still active: ${coroutineContext[Job]?.isActive}")
+        }
+
+        println("Body finished")
+    }
+
+    delay(50)
+    println("\nFrom parent scope:")
+    println("  isActive: ${job.isActive}")         // likely true
+    println("  isCompleted: ${job.isCompleted}")   // false
+
+    job.join()
+    println("\nAfter join:")
+    println("  isActive: ${job.isActive}")         // false
+    println("  isCompleted: ${job.isCompleted}")   // true
+}
+```
+
+### State 3: Completing (Waiting for Children)
+
+The `Completing` state occurs when the coroutine body has finished, but it still has active children. The parent waits for all children to complete before transitioning to a terminal state.
+
+Properties:
+- `isActive = true` (still considered active from the Job API perspective)
+- `isCompleted = false`
+- `isCancelled = false`
+
+Key Insight: `isActive` remains `true` during the `Completing` state because the job is not yet fully done and can still be affected by failures/cancellation of its children.
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateCompletingState() = runBlocking {
+    println("=== Completing State Demo ===")
+
+    val parentJob = launch {
+        println("Parent body started")
+
+        // Launch child coroutines
+        launch {
+            println("  Child 1 started")
+            delay(200)
+            println("  Child 1 finished")
+        }
+
+        launch {
+            println("  Child 2 started")
+            delay(400)
+            println("  Child 2 finished")
+        }
+
+        println("Parent body finished (but children still running)")
+        // Parent enters Completing-like state here
+    }
+
+    delay(250) // Parent body done, child 1 done, child 2 still running
+
+    println("\nParent likely waiting for children:")
+    println("  isActive: ${parentJob.isActive}")       // true
+    println("  isCompleted: ${parentJob.isCompleted}") // false
+    println("  isCancelled: ${parentJob.isCancelled}") // false
+
+    parentJob.join() // Wait for child 2 to finish
+
+    println("\nAfter all children complete:")
+    println("  isActive: ${parentJob.isActive}")       // false
+    println("  isCompleted: ${parentJob.isCompleted}") // true
+}
+```
+
+### State 4: Completed (Success)
+
+The `Completed` state is a terminal state indicating successful completion. The coroutine body finished, all children completed, and no unhandled cancellation or failure is pending.
+
+Properties:
+- `isActive = false`
+- `isCompleted = true`
+- `isCancelled = false`
+
+Transitions: None (terminal state)
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateCompletedState() = runBlocking {
+    println("=== Completed State Demo ===")
+
+    val job = launch {
+        println("Doing work...")
+        delay(100)
+        println("Work done!")
+    }
+
+    job.join()
+
+    println("\nJob in Completed state:")
+    println("  isActive: ${job.isActive}")         // false
+    println("  isCompleted: ${job.isCompleted}")   // true
+    println("  isCancelled: ${job.isCancelled}")   // false
+
+    // join() on completed job returns immediately
+    println("\nCalling join() again...")
+    job.join()
+    println("join() returned immediately")
+
+    // cancel() on completed job has no effect
+    println("\nCalling cancel()...")
+    job.cancel()
+    println("cancel() had no effect (already completed)")
+    println("  isCancelled: ${job.isCancelled}")   // false
+}
+```
+
+### State 5: Cancelling (Running Finally Blocks)
+
+The `Cancelling` state occurs when cancellation is in progress. The coroutine is marked as cancelled, runs `finally` blocks and completion handlers, and waits for its children to complete or cancel.
+
+Properties:
+- `isActive = false`
+- `isCompleted = false`
+- `isCancelled = true`
+
+Transitions:
+- To `Cancelled`: cleanup (finally/handlers) complete and all children have finished
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateCancellingState() = runBlocking {
+    println("=== Cancelling State Demo ===")
+
+    val job = launch(Dispatchers.Default) { // use Default to avoid blocking main
+        try {
+            println("Starting work...")
+            repeat(5) { i ->
+                println("  Iteration $i")
+                delay(100)
+            }
+        } finally {
+            println("Finally block started")
+            println("  isActive: ${coroutineContext[Job]?.isActive}")       // false during cancelling
+            println("  isCancelled: ${coroutineContext[Job]?.isCancelled}") // true
+
+            // Cleanup work; avoid Thread.sleep in real code to not block threads.
+            delay(150)
+            println("  Cleanup done")
+
+            println("Finally block finished")
+        }
+    }
+
+    delay(250) // Let it run for a bit
+
+    println("\nCancelling job...")
+    job.cancel()
+
+    // Job is in Cancelling state until cleanup finishes
+    println("Job in Cancelling state (shortly after cancel):")
+    println("  isActive: ${job.isActive}")       // false
+    println("  isCompleted: ${job.isCompleted}") // false (until finally completes)
+    println("  isCancelled: ${job.isCancelled}") // true
+
+    job.join() // Wait for cancellation to complete
+
+    println("\nAfter cancellation complete:")
+    println("  isActive: ${job.isActive}")         // false
+    println("  isCompleted: ${job.isCompleted}")   // true
+    println("  isCancelled: ${job.isCancelled}")   // true
+}
+```
+
+### State 6: Cancelled (Terminal Cancelled State)
+
+The `Cancelled` state is a terminal state indicating that cancellation completed. All relevant handlers and finally blocks have finished, and all children are done.
+
+Properties:
+- `isActive = false`
+- `isCompleted = true`
+- `isCancelled = true`
+
+Key Insight: `isCompleted` is `true` in the `Cancelled` state because the job has finished (even though it was cancelled).
+
+Transitions: None (terminal state)
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateCancelledState() = runBlocking {
+    println("=== Cancelled State Demo ===")
+
+    val job = launch {
+        try {
+            repeat(10) { i ->
+                println("Working... $i")
+                delay(100)
+            }
+        } finally {
+            println("Cleanup in finally")
+        }
+    }
+
+    delay(250)
+    job.cancel()
+    job.join()
+
+    println("\nJob in Cancelled state:")
+    println("  isActive: ${job.isActive}")         // false
+    println("  isCompleted: ${job.isCompleted}")   // true
+    println("  isCancelled: ${job.isCancelled}")   // true
+
+    // Subsequent operations have no effect
+    job.cancel() // No-op
+    job.join()   // Returns immediately
+
+    println("\nAfter additional cancel/join:")
+    println("  isCompleted: ${job.isCompleted}")   // still true
+    println("  isCancelled: ${job.isCancelled}")   // still true
+}
+```
+
+### Parent-Child State Propagation Rules
+
+Coroutine state propagation follows structured concurrency principles:
+
+1. Parent cancellation → Children cancellation
+   - When a parent is cancelled, all children are cancelled recursively.
+   - Children enter a cancelling phase and then terminal cancelled state.
+
+2. Child failure → Parent cancellation (for regular `Job`)
+   - When a child fails with an exception, its parent is cancelled by default.
+   - Sibling coroutines are also cancelled.
+   - Use `SupervisorJob`/`supervisorScope` to prevent a child failure from cancelling its parent and siblings.
+
+3. Parent waits for children
+   - After the parent body finishes, it waits for all its children before reaching a terminal state.
+   - If all complete successfully, parent becomes `Completed`; if any is cancelled/failed, parent completes accordingly (often `Cancelled`/failed).
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateParentChildPropagation() = runBlocking {
+    println("=== Parent-Child Propagation ===")
+
+    val parent = launch {
+        println("Parent started")
+
+        val child1 = launch {
+            try {
+                println("  Child 1 started")
+                delay(1000)
+                println("  Child 1 finished")
+            } finally {
+                println("  Child 1 finally (cancelled: ${coroutineContext[Job]?.isCancelled})")
+            }
+        }
+
+        val child2 = launch {
+            try {
+                println("  Child 2 started")
+                delay(1000)
+                println("  Child 2 finished")
+            } finally {
+                println("  Child 2 finally (cancelled: ${coroutineContext[Job]?.isCancelled})")
+            }
+        }
+
+        println("Parent body finished (waiting for children)")
+    }
+
+    delay(200)
+    println("\nCancelling parent...")
+    parent.cancel()
+
+    parent.join()
+
+    println("\nAll jobs cancelled")
+    println("Parent:")
+    println("  isCompleted: ${parent.isCompleted}") // true
+    println("  isCancelled: ${parent.isCancelled}") // true
+}
+```
+
+### `join()` Behavior in Each State
+
+The `join()` function suspends until the job reaches a terminal state (`Completed` or `Cancelled`).
+
+| State | join() Behavior |
+|-------|-----------------|
+| `New` | For a LAZY job, starts it, then suspends until completion |
+| `Active` | Suspends until job completes or is cancelled |
+| `Completing` | Suspends until all children complete and a terminal state is reached |
+| `Completed` | Returns immediately |
+| `Cancelling` | Suspends until cancellation handlers/finally and children complete |
+| `Cancelled` | Returns immediately |
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlin.system.measureTimeMillis
+
+fun demonstrateJoinBehavior() = runBlocking {
+    println("=== join() Behavior Demo ===")
+
+    // 1. join() on LAZY job starts it
+    val lazyJob = launch(start = CoroutineStart.LAZY) {
+        println("Lazy job executing")
+        delay(100)
+    }
+
+    println("1. join() on LAZY (New state) - starts and waits:")
+    val time1 = measureTimeMillis {
+        lazyJob.join()
+    }
+    println("   Took ${time1}ms\n")
+
+    // 2. join() on Active job waits
+    val activeJob = launch {
+        delay(200)
+    }
+
+    delay(50)
+    println("2. join() on Active job - waits for completion:")
+    val time2 = measureTimeMillis {
+        activeJob.join()
+    }
+    println("   Took ${time2}ms\n")
+
+    // 3. join() on Completed job returns immediately
+    val completedJob = launch {
+        delay(100)
+    }
+    completedJob.join()
+
+    println("3. join() on Completed job - immediate return:")
+    val time3 = measureTimeMillis {
+        completedJob.join()
+    }
+    println("   Took ${time3}ms\n")
+
+    // 4. join() during Cancelling waits for cleanup
+    val cancellingJob = launch(Dispatchers.Default) {
+        try {
+            delay(10_000)
+        } finally {
+            println("   Cleanup starting...")
+            delay(150)
+            println("   Cleanup done")
+        }
+    }
+
+    delay(50)
+    cancellingJob.cancel()
+
+    println("4. join() on Cancelling job - waits for finally:")
+    val time4 = measureTimeMillis {
+        cancellingJob.join()
+    }
+    println("   Took ${time4}ms")
+}
+```
+
+### `cancel()` Behavior in Each State
+
+The `cancel()` function requests cancellation of the job.
+
+| State | cancel() Behavior |
+|-------|-------------------|
+| `New` | For a LAZY job, completes it immediately as `Cancelled` (`isCompleted = true`, `isCancelled = true`), body never runs |
+| `Active` | Transitions into cancelling phase, runs handlers/finally, cancels children |
+| `Completing` | Transitions into cancelling phase, cancels remaining children |
+| `Completed` | No effect (idempotent) |
+| `Cancelling` | No additional effect (already cancelling) |
+| `Cancelled` | No effect (idempotent) |
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateCancelBehavior() = runBlocking {
+    println("=== cancel() Behavior Demo ===")
+
+    // 1. cancel() on LAZY job (New state)
+    println("1. cancel() on LAZY (New state):")
+    val lazyJob = launch(start = CoroutineStart.LAZY) {
+        println("   This should not print")
+    }
+    lazyJob.cancel()
+    lazyJob.join()
+    println("   Job cancelled without execution")
+    println("   isCompleted: ${lazyJob.isCompleted}")  // true
+    println("   isCancelled: ${lazyJob.isCancelled}\n") // true
+
+    // 2. cancel() on Active job
+    println("2. cancel() on Active job:")
+    val activeJob = launch {
+        try {
+            println("   Working...")
+            delay(1000)
+        } finally {
+            println("   Finally block executed")
+        }
+    }
+    delay(50)
+    activeJob.cancel()
+    activeJob.join()
+    println("   Job cancelled and cleaned up\n")
+
+    // 3. cancel() on Completed job
+    println("3. cancel() on Completed job:")
+    val completedJob = launch {
+        delay(50)
+    }
+    completedJob.join()
+
+    println("   Before cancel: isCancelled=${completedJob.isCancelled}")
+    completedJob.cancel()
+    println("   After cancel: isCancelled=${completedJob.isCancelled}")
+    println("   (No effect - already completed)\n")
+
+    // 4. cancel() multiple times
+    println("4. Multiple cancel() calls:")
+    val job = launch {
+        delay(1000)
+    }
+    delay(50)
+
+    job.cancel()
+    println("   First cancel()")
+    job.cancel()
+    println("   Second cancel() - no additional effect")
+    job.cancel()
+    println("   Third cancel() - no additional effect")
+
+    job.join()
+    println("   All cancels completed")
+}
+```
+
+### `invokeOnCompletion` for State Notifications
+
+Use `invokeOnCompletion` to be notified when a job reaches a terminal state (`Completed` or `Cancelled`, or failed with exception).
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateInvokeOnCompletion() = runBlocking {
+    println("=== invokeOnCompletion Demo ===")
+
+    val job = launch {
+        println("Job started")
+        delay(200)
+        println("Job finished")
+    }
+
+    // Register completion handler
+    job.invokeOnCompletion { cause ->
+        when (cause) {
+            null -> println("Completed successfully")
+            is CancellationException -> println("Cancelled: ${cause.message}")
+            else -> println("Failed: ${cause.message}")
+        }
+    }
+
+    delay(100)
+    println("Job is active: ${job.isActive}")
+
+    job.join()
+
+    println("\n--- Cancellation Case ---")
+
+    val cancelledJob = launch {
+        try {
+            delay(1000)
+        } finally {
+            println("Cleanup")
+        }
+    }
+
+    cancelledJob.invokeOnCompletion { cause ->
+        println("Completion handler: cause=$cause")
+        println("  isCancelled: ${cancelledJob.isCancelled}")
+        println("  isCompleted: ${cancelledJob.isCompleted}")
+    }
+
+    delay(50)
+    cancelledJob.cancel("User requested cancellation")
+    cancelledJob.join()
+}
+```
+
+### Impossible (or Invalid) State Transitions
+
+Certain transitions are not supported in the `Job` lifecycle:
+
+1. Cannot go from `Completed` to `Active` — terminal state.
+2. Cannot go from `Cancelled` to `Active` — terminal state.
+3. Cannot go from any terminal state back to `New`.
+4. Cancellation always goes through completion logic: completion handlers and `finally` blocks run before the job is observed as terminal.
+5. A successfully `Completed` job only becomes `Completed` after its body and all children have finished.
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateImpossibleTransitions() = runBlocking {
+    println("=== Impossible Transitions Demo ===")
+
+    // 1. Cannot restart completed job
+    val completedJob = launch {
+        delay(50)
+    }
+    completedJob.join()
+
+    println("1. Completed job:")
+    println("   isCompleted: ${completedJob.isCompleted}")
+
+    // completedJob.start() // Would have no effect and is not allowed
+
+    delay(100)
+    println("   Still completed: ${completedJob.isCompleted}")
+    println("   Cannot transition back to Active\n")
+
+    // 2. Completion logic during cancellation
+    var finallyExecuted = false
+    val job = launch {
+        try {
+            delay(1000)
+        } finally {
+            finallyExecuted = true
+            println("2. Finally executed during cancellation (or attempted)")
+        }
+    }
+
+    delay(50)
+    job.cancel()
+    job.join()
+
+    println("   finallyExecuted: $finallyExecuted")
+
+    // 3. Parent waits for child
+    val parentJob = launch {
+        launch {
+            delay(100)
+        }
+        println("3. Parent body done, but not completed until child finishes")
+    }
+
+    delay(50)
+    println("   Parent isCompleted: ${parentJob.isCompleted}") // false
+
+    delay(100)
+    println("   After child done, parent isCompleted: ${parentJob.isCompleted}") // true
+}
+```
+
+### Real-World Example: State Logging (Illustrative)
+
+Note: You cannot fully reconstruct the internal state machine from just `isActive`, `isCompleted`, and `isCancelled`. The following is an illustrative approximation for logging.
+
+```kotlin
+import kotlinx.coroutines.*
+
+class StatefulJobMonitor {
+    private var previousState: String = ""
+
+    fun getState(job: Job): String {
+        return when {
+            !job.isActive && !job.isCompleted && !job.isCancelled -> "New" // LAZY
+            job.isActive && !job.isCancelled && !job.isCompleted -> "Active or Completing"
+            !job.isActive && !job.isCompleted && job.isCancelled -> "Cancelling" // transient; rarely observable
+            job.isCompleted && !job.isCancelled -> "Completed"
+            job.isCompleted && job.isCancelled -> "Cancelled"
+            else -> "Unknown"
+        }
+    }
+
+    fun logStateChange(job: Job, label: String) {
+        val currentState = getState(job)
+        if (currentState != previousState) {
+            println("[$label] State: $previousState → $currentState")
+            println("  isActive=${job.isActive}, isCompleted=${job.isCompleted}, isCancelled=${job.isCancelled}")
+            previousState = currentState
+        }
+    }
+}
+
+fun demonstrateStateLogging() = runBlocking {
+    println("=== State Logging Demo ===")
+
+    val monitor = StatefulJobMonitor()
+
+    val job = launch(start = CoroutineStart.LAZY) {
+        monitor.logStateChange(coroutineContext[Job]!!, "Inside coroutine")
+
+        try {
+            repeat(3) { i ->
+                delay(100)
+                println("Iteration $i")
+            }
+        } finally {
+            monitor.logStateChange(coroutineContext[Job]!!, "In finally")
+        }
+    }
+
+    monitor.logStateChange(job, "After creation")
+
+    delay(50)
+    job.start()
+    monitor.logStateChange(job, "After start")
+
+    delay(150)
+    monitor.logStateChange(job, "During execution")
+
+    delay(200)
+    monitor.logStateChange(job, "After completion")
+}
+```
+
+### Real-World Example: Android-like `ViewModel` with State Tracking
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+class DataViewModel {
+    private val viewModelScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+    private val _dataState = MutableStateFlow<DataState>(DataState.Idle)
+    val dataState: StateFlow<DataState> = _dataState.asStateFlow()
+
+    private var loadJob: Job? = null
+
+    fun loadData() {
+        // Cancel previous load if still running
+        loadJob?.cancel()
+
+        loadJob = viewModelScope.launch {
+            _dataState.value = DataState.Loading
+
+            try {
+                val data = fetchDataFromNetwork()
+
+                // Check if still active before updating state
+                if (isActive) {
+                    _dataState.value = DataState.Success(data)
+                }
+            } catch (e: CancellationException) {
+                // Job was cancelled
+                _dataState.value = DataState.Idle
+                throw e // Rethrow to propagate cancellation
+            } catch (e: Exception) {
+                if (isActive) {
+                    _dataState.value = DataState.Error(e.message ?: "Unknown error")
+                }
+            }
+        }
+
+        // Monitor job state
+        loadJob?.invokeOnCompletion { cause ->
+            println("Load job completed")
+            println("  Cancelled: ${loadJob?.isCancelled}")
+            println("  Cause: $cause")
+        }
+    }
+
+    fun cancelLoad() {
+        loadJob?.cancel("User cancelled")
+    }
+
+    fun getJobState(): String {
+        val job = loadJob ?: return "No job"
+        return when {
+            job.isActive -> "Active"
+            job.isCompleted && !job.isCancelled -> "Completed"
+            job.isCompleted && job.isCancelled -> "Cancelled"
+            else -> "Unknown"
+        }
+    }
+
+    private suspend fun fetchDataFromNetwork(): String {
+        delay(2000)
+        return "Network data"
+    }
+
+    fun onCleared() {
+        viewModelScope.cancel()
+    }
+}
+
+sealed class DataState {
+    object Idle : DataState()
+    object Loading : DataState()
+    data class Success(val data: String) : DataState()
+    data class Error(val message: String) : DataState()
+}
+
+// Usage demo
 fun demonstrateViewModelStateTracking() = runBlocking {
     println("=== ViewModel State Tracking ===")
 
@@ -997,131 +1980,28 @@ fun demonstrateViewModelStateTracking() = runBlocking {
 
 ### Best Practices for State Checking
 
-1. **Check `isActive` before suspending**
-   ```kotlin
-   suspend fun doWork() {
-       if (!isActive) return
-
-       // Expensive operation
-       val result = heavyComputation()
-
-       if (!isActive) return // Check again
-
-       updateUI(result)
-   }
-   ```
-
-2. **Use `ensureActive()` for better cancellation**
-   ```kotlin
-   suspend fun processItems(items: List<Item>) {
-       for (item in items) {
-           ensureActive() // Throws if cancelled
-           processItem(item)
-       }
-   }
-   ```
-
-3. **Check completion before updating state**
-   ```kotlin
-   launch {
-       val data = loadData()
-       if (isActive) { // Only update if not cancelled
-           _state.value = data
-       }
-   }
-   ```
-
-4. **Use `invokeOnCompletion` for cleanup**
-   ```kotlin
-   val job = launch {
-       // Work
-   }
-
-   job.invokeOnCompletion { cause ->
-       if (cause != null) {
-           // Cleanup on failure/cancellation
-       }
-   }
-   ```
-
-5. **Don't rely on state in concurrent scenarios**
-   ```kotlin
-   // BAD: Race condition
-   if (!job.isCompleted) {
-       job.cancel()
-   }
-
-   // GOOD: cancel() is idempotent
-   job.cancel()
-   ```
-
-6. **Wait for cancellation with `join()`**
-   ```kotlin
-   job.cancel()
-   job.join() // Wait for finally blocks
-   // Now safe to release resources
-   ```
+1. Check `isActive` before doing expensive work or committing results.
+2. Use `ensureActive()` for cooperative cancellation.
+3. Check completion/cancellation before updating shared state.
+4. Use `invokeOnCompletion` for cleanup that depends on the final state.
+5. Do not rely on instantaneous state checks in concurrent scenarios; `cancel()` is idempotent.
+6. Wait for cancellation to finish with `join()` when resources depend on it.
 
 ### Common Pitfalls
 
-1. **Forgetting that `isCompleted=true` for cancelled jobs**
-   ```kotlin
-   // BAD
-   if (job.isCompleted) {
-       // Assumes success, but might be cancelled!
-   }
-
-   // GOOD
-   if (job.isCompleted && !job.isCancelled) {
-       // Truly successful
-   }
-   ```
-
-2. **Not waiting for cancellation to complete**
-   ```kotlin
-   // BAD
-   job.cancel()
-   resource.release() // Finally might still be running!
-
-   // GOOD
-   job.cancel()
-   job.join() // Wait for finally blocks
-   resource.release()
-   ```
-
-3. **Assuming `isActive=false` means completed**
-   ```kotlin
-   // BAD
-   if (!job.isActive) {
-       // Could be New, Completing, Cancelling, or terminal
-   }
-
-   // GOOD
-   if (job.isCompleted) {
-       // Terminal state
-   }
-   ```
-
-4. **Starting completed jobs**
-   ```kotlin
-   // BAD
-   job.start() // No effect if already started/completed
-
-   // GOOD
-   if (job.isActive || !job.isCompleted) {
-       job.start()
-   }
-   // Or better: just create a new job
-   ```
+1. Forgetting that `isCompleted == true` for cancelled jobs.
+2. Not waiting for cancellation to complete before releasing resources.
+3. Assuming `!isActive` means successful completion.
+4. Trying to start already completed jobs instead of creating new ones.
 
 ### Performance Considerations
 
-1. **State checks are O(1)** - cheap to call frequently
-2. **`invokeOnCompletion` has overhead** - use sparingly
-3. **Completing state adds latency** - parent waits for all children
-4. **Cancelling state duration depends on finally blocks** - keep them short
+1. State checks are O(1) — cheap to call frequently.
+2. `invokeOnCompletion` adds some overhead — avoid registering large numbers of handlers unnecessarily.
+3. The `Completing` phase adds latency when many children must finish.
+4. Cancelling duration depends on `finally`/handler logic — keep it fast and non-blocking.
 
-### Testing Job States
+### Testing Job States (Illustrative)
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -1142,7 +2022,7 @@ class JobStateTest {
 
         job.start()
 
-        // Active state
+        // Active state (or on the way to completion)
         assertTrue(job.isActive)
         assertFalse(job.isCompleted)
 
@@ -1165,395 +2045,51 @@ class JobStateTest {
 
         job.cancel()
 
-        // Cancelling (might be brief)
+        // After cancel, job is marked as cancelled
         assertTrue(job.isCancelled)
 
         job.join()
 
-        // Cancelled
+        // Cancelled terminal state
         assertFalse(job.isActive)
         assertTrue(job.isCompleted)
         assertTrue(job.isCancelled)
     }
 
     @Test
-    fun testCompletingState() = runTest {
-        var parentInCompletingState = false
+    fun testParentWaitsForChild() = runTest {
+        var parentObservedActiveWhileWaiting = false
 
         val parent = launch {
-            launch {
+            val child = launch {
                 delay(200)
             }
-            // Parent body finishes here, enters Completing
-            parentInCompletingState = parent.isActive && !parent.isCompleted
+            yield() // allow scheduling
+            parentObservedActiveWhileWaiting = isActive && !isCompleted && !child.isCompleted
         }
 
         parent.join()
-        assertTrue(parentInCompletingState)
+        assertTrue(parentObservedActiveWhileWaiting)
     }
 }
 ```
-
----
-
-## Русский
-
-### Обзор
-
-Kotlin корутины `Job` — это конечный автомат с 6 различными состояниями. Понимание этих состояний, их переходов и поведения свойств `isActive`, `isCompleted` и `isCancelled` критически важно для управления жизненным циклом корутин, отладки и предотвращения распространённых ошибок.
-
-Этот вопрос исследует полный конечный автомат, допустимые переходы, поведение свойств в каждом состоянии, правила распространения от родителя к потомкам, и как `join()` и `cancel()` взаимодействуют с различными состояниями.
-
-### 6 Состояний Job
-
-`Job` может находиться в одном из следующих состояний:
-
-1. **New** (только для `CoroutineStart.LAZY`)
-2. **Active** (нормальное выполнение)
-3. **Completing** (тело завершено, ожидание потомков)
-4. **Completed** (полностью завершено)
-5. **Cancelling** (отмена в процессе, выполнение блоков finally)
-6. **Cancelled** (терминальное отменённое состояние)
-
-### Поведение Свойств Состояния
-
-| Состояние | isActive | isCompleted | isCancelled |
-|-----------|----------|-------------|-------------|
-| **New** | false | false | false |
-| **Active** | true | false | false |
-| **Completing** | true | false | false |
-| **Completed** | false | true | false |
-| **Cancelling** | false | false | true |
-| **Cancelled** | false | true | true |
-
-### Диаграмма Переходов Состояний (текстовая)
-
-```
-
-                           New      (только LAZY)
-                       (начальное)
-
-                              start()
-
-
-            Active
-                     (выполнение)
-
-
-                             тело завершено
-
-
-                      Completing
-                     (ожид. детей)
-
-
-                             все дети
-                             завершены
-
-
-                       Completed
-                        (успех)
-
-
-           cancel()
-
-
-
-
-                Cancelling
-               (finally,
-                ожид. детей) дети завершены
-
-
-                       finally выполнен
-
-
-                 Cancelled
-               (терминальное)
-
-```
-
-### Состояние 1: New (только CoroutineStart.LAZY)
-
-Состояние **New** существует только для корутин, запущенных с `CoroutineStart.LAZY`. Корутина создана, но ещё не запущена.
-
-**Свойства:**
-- `isActive = false`
-- `isCompleted = false`
-- `isCancelled = false`
-
-**Переходы:**
-- В **Active**: вызов `start()` или `join()`
-- В **Cancelling**: вызов `cancel()` до запуска
-
-```kotlin
-import kotlinx.coroutines.*
-
-fun demonstrateNewState() = runBlocking {
-    println("=== Демонстрация состояния New ===")
-
-    val job = launch(start = CoroutineStart.LAZY) {
-        println("Выполнение тела корутины")
-        delay(100)
-    }
-
-    // В состоянии New
-    println("После создания:")
-    println("  isActive: ${job.isActive}")         // false
-    println("  isCompleted: ${job.isCompleted}")   // false
-    println("  isCancelled: ${job.isCancelled}")   // false
-
-    delay(50) // Ждём немного
-
-    println("\nЧерез 50мс (всё ещё не запущена):")
-    println("  isActive: ${job.isActive}")         // false
-    println("  isCompleted: ${job.isCompleted}")   // false
-
-    // Переход в Active
-    job.start()
-    println("\nПосле start():")
-    println("  isActive: ${job.isActive}")         // true
-    println("  isCompleted: ${job.isCompleted}")   // false
-
-    job.join()
-    println("\nПосле завершения:")
-    println("  isActive: ${job.isActive}")         // false
-    println("  isCompleted: ${job.isCompleted}")   // true
-}
-```
-
-### Состояние 2: Active (нормальное выполнение)
-
-Состояние **Active** означает, что корутина в данный момент выполняется. Это нормальное рабочее состояние.
-
-**Свойства:**
-- `isActive = true`
-- `isCompleted = false`
-- `isCancelled = false`
-
-**Переходы:**
-- В **Completing**: тело завершается нормально
-- В **Cancelling**: вызывается `cancel()`
-
-### Состояние 3: Completing (ожидание потомков)
-
-Состояние **Completing** возникает, когда тело корутины завершилось, но у неё всё ещё есть активные потомки. Родитель ждёт завершения всех потомков перед переходом в **Completed**.
-
-**Свойства:**
-- `isActive = true` (всё ещё считается активной!)
-- `isCompleted = false`
-- `isCancelled = false`
-
-**Ключевой момент:** `isActive` остаётся `true` во время состояния Completing, потому что работа ещё не полностью завершена.
-
-```kotlin
-import kotlinx.coroutines.*
-
-fun demonstrateCompletingState() = runBlocking {
-    println("=== Демонстрация состояния Completing ===")
-
-    val parentJob = launch {
-        println("Тело родителя запущено")
-
-        // Запускаем дочерние корутины
-        launch {
-            println("  Потомок 1 запущен")
-            delay(200)
-            println("  Потомок 1 завершён")
-        }
-
-        launch {
-            println("  Потомок 2 запущен")
-            delay(400)
-            println("  Потомок 2 завершён")
-        }
-
-        println("Тело родителя завершено (но потомки ещё работают)")
-        // Родитель переходит в состояние Completing здесь
-    }
-
-    delay(250) // Тело родителя выполнено, потомок 1 завершён, потомок 2 ещё работает
-
-    println("\nРодитель в состоянии Completing:")
-    println("  isActive: ${parentJob.isActive}")       // true (!)
-    println("  isCompleted: ${parentJob.isCompleted}") // false
-    println("  isCancelled: ${parentJob.isCancelled}") // false
-
-    parentJob.join() // Ждём завершения потомка 2
-
-    println("\nПосле завершения всех потомков:")
-    println("  isActive: ${parentJob.isActive}")       // false
-    println("  isCompleted: ${parentJob.isCompleted}") // true
-}
-```
-
-### Состояние 4: Completed (успешное завершение)
-
-Состояние **Completed** — терминальное состояние, указывающее на успешное завершение. Тело корутины завершилось, все потомки завершены, отмены не произошло.
-
-**Свойства:**
-- `isActive = false`
-- `isCompleted = true`
-- `isCancelled = false`
-
-**Переходы:** Нет (терминальное состояние)
-
-### Состояние 5: Cancelling (выполнение Блоков finally)
-
-Состояние **Cancelling** возникает, когда отмена в процессе. Корутина выполняет блоки `finally` и ждёт отмены потомков.
-
-**Свойства:**
-- `isActive = false`
-- `isCompleted = false`
-- `isCancelled = true`
-
-**Переходы:**
-- В **Cancelled**: блоки finally выполнены, потомки отменены
-
-```kotlin
-import kotlinx.coroutines.*
-
-fun demonstrateCancellingState() = runBlocking {
-    println("=== Демонстрация состояния Cancelling ===")
-
-    val job = launch {
-        try {
-            println("Начинаем работу...")
-            repeat(5) { i ->
-                println("  Итерация $i")
-                delay(100)
-            }
-        } finally {
-            println("Блок finally начался")
-            println("  isActive: ${coroutineContext[Job]?.isActive}")     // false
-            println("  isCancelled: ${coroutineContext[Job]?.isCancelled}") // true
-
-            // Работа по очистке (без приостановки)
-            println("  Очистка ресурсов...")
-            Thread.sleep(150) // Имитация очистки
-            println("  Очистка завершена")
-
-            println("Блок finally завершён")
-        }
-    }
-
-    delay(250) // Даём поработать немного
-
-    println("\nОтменяем job...")
-    job.cancel()
-
-    // Job может ненадолго оказаться в состоянии Cancelling
-    println("Job в состоянии Cancelling:")
-    println("  isActive: ${job.isActive}")         // false
-    println("  isCompleted: ${job.isCompleted}")   // false (!)
-    println("  isCancelled: ${job.isCancelled}")   // true
-
-    job.join() // Ждём завершения отмены
-
-    println("\nПосле завершения отмены:")
-    println("  isActive: ${job.isActive}")         // false
-    println("  isCompleted: ${job.isCompleted}")   // true
-    println("  isCancelled: ${job.isCancelled}")   // true
-}
-```
-
-### Состояние 6: Cancelled (терминальное Отменённое состояние)
-
-Состояние **Cancelled** — терминальное состояние, указывающее на завершённую отмену. Все блоки finally выполнены, все потомки отменены.
-
-**Свойства:**
-- `isActive = false`
-- `isCompleted = true` (!)
-- `isCancelled = true`
-
-**Ключевой момент:** `isCompleted` равен `true` в состоянии Cancelled, потому что работа завершена (даже если была отменена).
-
-**Переходы:** Нет (терминальное состояние)
-
-### Правила Распространения Состояний Родитель-потомок
-
-Распространение состояний корутин следует принципам структурной параллельности:
-
-1. **Отмена родителя → отмена потомков**
-   - Когда родитель отменяется, все потомки отменяются рекурсивно
-   - Потомки переходят в состояние Cancelling
-
-2. **Ошибка потомка → отмена родителя**
-   - Когда потомок завершается с исключением, родитель отменяется (по умолчанию)
-   - Братья и сёстры также отменяются
-   - Используйте `SupervisorJob` для предотвращения этого
-
-3. **Родитель ждёт потомков**
-   - Родитель переходит в состояние Completing после завершения тела
-   - Переходит в Completed только когда все потомки завершены
-
-### Поведение join() В Каждом Состоянии
-
-Функция `join()` приостанавливается до тех пор, пока job не достигнет терминального состояния (Completed или Cancelled).
-
-| Состояние | Поведение join() |
-|-----------|------------------|
-| **New** | Запускает job (если LAZY), затем приостанавливается до завершения |
-| **Active** | Приостанавливается до завершения или отмены job |
-| **Completing** | Приостанавливается до завершения всех потомков |
-| **Completed** | Возвращается немедленно |
-| **Cancelling** | Приостанавливается до завершения отмены |
-| **Cancelled** | Возвращается немедленно |
-
-### Поведение cancel() В Каждом Состоянии
-
-Функция `cancel()` запрашивает отмену job.
-
-| Состояние | Поведение cancel() |
-|-----------|---------------------|
-| **New** | Немедленно переходит в Cancelled (без выполнения) |
-| **Active** | Переходит в Cancelling, выполняет блоки finally |
-| **Completing** | Переходит в Cancelling, отменяет оставшихся потомков |
-| **Completed** | Без эффекта (идемпотентна) |
-| **Cancelling** | Без эффекта (уже отменяется) |
-| **Cancelled** | Без эффекта (идемпотентна) |
-
-### Лучшие Практики Проверки Состояния
-
-1. **Проверяйте `isActive` перед приостановкой**
-2. **Используйте `ensureActive()` для лучшей отмены**
-3. **Проверяйте завершение перед обновлением состояния**
-4. **Используйте `invokeOnCompletion` для очистки**
-5. **Не полагайтесь на состояние в конкурентных сценариях**
-6. **Ждите завершения отмены с `join()`**
-
-### Распространённые Ошибки
-
-1. **Забывание, что `isCompleted=true` для отменённых jobs**
-2. **Неожидание завершения отмены**
-3. **Предположение, что `isActive=false` означает завершение**
-4. **Запуск завершённых jobs**
-
-### Соображения Производительности
-
-1. **Проверки состояния имеют O(1)** - дёшево вызывать часто
-2. **`invokeOnCompletion` имеет накладные расходы** - используйте экономно
-3. **Состояние Completing добавляет задержку** - родитель ждёт всех потомков
-4. **Длительность состояния Cancelling зависит от блоков finally** - делайте их короткими
-
----
 
 ## Follow-ups
 
-1. What happens to child coroutines when parent transitions from Completing to Completed?
-2. How does SupervisorJob affect state transitions between parent and children?
-3. Can you cancel a job in the New state, and what happens to its properties?
-4. Why is `isActive` true in the Completing state but false in Cancelling?
-5. How does `cancelAndJoin()` differ from separate `cancel()` and `join()` calls?
-6. What happens if an exception is thrown in a finally block during Cancelling state?
-7. How do you test that a coroutine properly transitions through all expected states?
+1. Что происходит с дочерними корутинами, когда родитель переходит в терминальное состояние `Completed`?
+2. Как `SupervisorJob` влияет на распространение отмены и конечные состояния родителя и потомков?
+3. Можно ли отменить `Job` в состоянии `New`, и какие будут значения `isCompleted` и `isCancelled`?
+4. Почему в состоянии `Completing` `isActive == true`, а в состоянии `Cancelling` — `false`?
+5. Чем `cancelAndJoin()` отличается от последовательных вызовов `cancel()` и `join()`?
+6. Что происходит, если в блоке `finally` во время отмены выбрасывается исключение?
+7. Как протестировать, что корутина проходит через ожидаемые состояния и корректно обрабатывает отмену?
 
 ## References
 
-- [Kotlin Coroutines Guide - Job](https://kotlinlang.org/docs/coroutines-guide.html)
-- [Job Interface Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-job/)
-- [Coroutine Cancellation and Timeouts](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
-- [Understanding Kotlin Coroutines Job Lifecycle](https://medium.com/androiddevelopers/coroutines-first-things-first-e6187bf3bb21)
+- https://kotlinlang.org/docs/coroutines-guide.html
+- https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-job/
+- https://kotlinlang.org/docs/cancellation-and-timeouts.html
+- https://medium.com/androiddevelopers/coroutines-first-things-first-e6187bf3bb21
 
 ## Related Questions
 

@@ -10,17 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-cancellation-mechanisms--kotlin--medium, q-coroutinescope-vs-coroutinecontext--kotlin--medium, q-kotlin-coroutines-introduction--kotlin--medium]
+related: [c-kotlin, q-coroutine-cancellation-mechanisms--kotlin--medium, q-coroutinescope-vs-coroutinecontext--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [delegates, difficulty/easy, initialization, kotlin, lazy, performance]
 ---
-# What Function in Kotlin is Used for Lazy Property Initialization?
-
 # Вопрос (RU)
 > Какая функция в Kotlin используется для ленивой инициализации свойства?
-
----
 
 # Question (EN)
 > What function in Kotlin is used for lazy property initialization?
@@ -28,6 +24,8 @@ tags: [delegates, difficulty/easy, initialization, kotlin, lazy, performance]
 ## Ответ (RU)
 
 Функция `lazy` используется для ленивой инициализации свойств в Kotlin.
+
+См. также: [[c-kotlin]]
 
 **Ключевые характеристики:**
 - Свойство инициализируется только при первом обращении
@@ -45,35 +43,257 @@ val propertyName: Type by lazy {
 }
 ```
 
-**Пример:**
+### Примеры кода
+
+**Базовая ленивая инициализация:**
 ```kotlin
 class User {
+    val name = "Alice"
+
+    // Дорогостоящая операция — вычисляется только при необходимости
     val profile: String by lazy {
         println("Вычисление профиля...")
-        "Профиль пользователя"
+        "Профиль для $name"
     }
 }
 
-val user = User()
-println("Пользователь создан")
-// profile ещё не вычислен
+fun main() {
+    val user = User()
+    println("Пользователь создан")
 
-println(user.profile)  // Вычисление профиля... Профиль пользователя
-println(user.profile)  // Профиль пользователя (без вычисления)
+    // profile ещё не вычислен
+    println("Первый доступ к profile:")
+    println(user.profile)  // Вычисление профиля...
+                           // Профиль для Alice
+
+    println("Повторный доступ к profile:")
+    println(user.profile)  // Профиль для Alice (без повторного вычисления)
+}
 ```
 
-**Режимы потокобезопасности:**
-- `LazyThreadSafetyMode.SYNCHRONIZED` (по умолчанию) - потокобезопасный
-- `LazyThreadSafetyMode.PUBLICATION` - множественное вычисление, но одно значение
-- `LazyThreadSafetyMode.NONE` - не потокобезопасный, самый быстрый
+**Ленивая инициализация с тяжёлой операцией:**
+```kotlin
+class DatabaseConnection {
+    val connectionString = "jdbc:mysql://localhost:3306/mydb"
 
-**lazy vs lateinit:**
-- `lazy`: используется с `val`, инициализация при первом доступе, с инициализатором
-- `lateinit`: используется с `var`, должна быть инициализирована до использования, без инициализатора
+    val connection: String by lazy {
+        println("Устанавливаем соединение с базой данных...")
+        Thread.sleep(1000)  // Эмуляция дорогой операции
+        println("Соединение установлено!")
+        "Подключено к $connectionString"
+    }
+}
+
+fun main() {
+    println("Создаём объект базы данных...")
+    val db = DatabaseConnection()
+
+    println("Объект создан, но соединение ещё не установлено")
+    println("Выполняем другую работу...")
+
+    println("\nТеперь нужен коннект:")
+    println(db.connection)  // Соединение устанавливается здесь
+
+    println("\nПовторный доступ к connection:")
+    println(db.connection)  // Без задержки, используется кэшированное значение
+}
+```
+
+**Несколько ленивых свойств:**
+```kotlin
+class Application {
+    val config: Map<String, String> by lazy {
+        println("Загрузка конфигурации...")
+        mapOf(
+            "app_name" to "MyApp",
+            "version" to "1.0.0",
+            "api_url" to "https://api.example.com"
+        )
+    }
+
+    val logger: String by lazy {
+        println("Инициализация логгера...")
+        "Logger for ${config["app_name"]}"
+    }
+
+    val cache: MutableMap<String, Any> by lazy {
+        println("Создание кэша...")
+        mutableMapOf<String, Any>()
+    }
+}
+
+fun main() {
+    val app = Application()
+    println("Приложение создано\n")
+
+    println("Получаем logger:")
+    println(app.logger)
+    // Загрузка конфигурации...
+    // Инициализация логгера...
+    // Logger for MyApp
+
+    println("\nПолучаем cache:")
+    println(app.cache)
+    // Создание кэша...
+    // {}
+}
+```
+
+**Режимы потокобезопасности (`LazyThreadSafetyMode`):**
+```kotlin
+class ThreadSafetyDemo {
+    // По умолчанию: SYNCHRONIZED (потокобезопасно)
+    val synchronized: String by lazy {
+        println("SYNCHRONIZED инициализация")
+        "Потокобезопасное значение"
+    }
+
+    // PUBLICATION: несколько потоков могут вычислить значение, но используется одно
+    val publication: String by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        println("PUBLICATION режим инициализации")
+        "Значение в режиме PUBLICATION"
+    }
+
+    // NONE: не потокобезопасно, самый быстрый вариант (для однопоточных сценариев)
+    val none: String by lazy(LazyThreadSafetyMode.NONE) {
+        println("NONE режим инициализации")
+        "Непотокобезопасное значение"
+    }
+}
+
+fun main() {
+    val demo = ThreadSafetyDemo()
+
+    println(demo.synchronized)
+    println(demo.publication)
+    println(demo.none)
+}
+```
+
+**`lazy` vs `lateinit`:**
+```kotlin
+class ComparisonExample {
+    // lazy: val, инициализация при первом доступе, есть инициализатор
+    val lazyProperty: String by lazy {
+        "Лениво инициализировано"
+    }
+
+    // lateinit: var, должен быть инициализирован до использования, без начального значения
+    lateinit var lateinitProperty: String
+
+    fun initializeLateInit() {
+        lateinitProperty = "Поздно инициализировано"
+    }
+}
+
+fun main() {
+    val example = ComparisonExample()
+
+    // lazy: можно сразу читать, инициализация произойдёт на первом доступе
+    println(example.lazyProperty)  // Лениво инициализировано
+
+    // lateinit: нужно явно инициализировать до использования
+    example.initializeLateInit()
+    println(example.lateinitProperty)  // Поздно инициализировано
+
+    if (example::lateinitProperty.isInitialized) {
+        println("lateinit свойство инициализировано")
+    }
+}
+```
+
+**Практический пример: ленивая загрузка ресурсов:**
+```kotlin
+class ImageProcessor {
+    private val imagePath = "large_image.png"
+
+    // Тяжёлый объект, загружается только при необходимости
+    val imageData: ByteArray by lazy {
+        println("Загрузка изображения из $imagePath...")
+        Thread.sleep(500)  // Эмуляция чтения файла
+        ByteArray(1000)  // Эмуляция данных изображения
+    }
+
+    val thumbnail: ByteArray by lazy {
+        println("Создание превью из изображения...")
+        imageData.take(100).toByteArray()
+    }
+
+    fun getImageSize() = imageData.size
+
+    fun getThumbnailSize() = thumbnail.size
+}
+
+fun main() {
+    val processor = ImageProcessor()
+    println("ImageProcessor создан\n")
+
+    // Изображение ещё не загружено
+    println("Получаем превью:")
+    val thumbSize = processor.getThumbnailSize()
+    // Загрузка изображения...
+    // Создание превью...
+    println("Размер превью: $thumbSize\n")
+
+    // Изображение уже загружено
+    println("Получаем размер изображения:")
+    val imgSize = processor.getImageSize()
+    println("Размер изображения: $imgSize")
+}
+```
+
+**Ленивая инициализация со сложной логикой:**
+```kotlin
+class UserRepository {
+    private val users = listOf(
+        "Alice" to 30,
+        "Bob" to 25,
+        "Charlie" to 35
+    )
+
+    // Сложные вычисления выполняются один раз при первом доступе
+    val statistics: Map<String, Any> by lazy {
+        println("Вычисление статистики...")
+
+        val averageAge = users.map { it.second }.average()
+        val oldestUser = users.maxByOrNull { it.second }
+        val youngestUser = users.minByOrNull { it.second }
+
+        mapOf(
+            "total_users" to users.size,
+            "average_age" to averageAge,
+            "oldest" to oldestUser?.first,
+            "youngest" to youngestUser?.first
+        )
+    }
+
+    fun printStats() {
+        println("Статистика пользователей:")
+        statistics.forEach { (key, value) ->
+            println("  $key: $value")
+        }
+    }
+}
+
+fun main() {
+    val repo = UserRepository()
+
+    println("Репозиторий создан")
+    println("Вызов printStats():")
+    repo.printStats()
+    // Вычисление статистики...
+    // Статистика пользователей: ...
+
+    println("\nПовторный вызов printStats():")
+    repo.printStats()  // Без повторных вычислений
+}
+```
 
 ## Answer (EN)
 
 The `lazy` function is used for lazy property initialization in Kotlin.
+
+See also: [[c-kotlin]]
 
 **Key characteristics:**
 - Property is initialized only when first accessed
@@ -112,7 +332,7 @@ fun main() {
     // profile is not computed yet
     println("Accessing profile for the first time:")
     println(user.profile)  // Computing profile...
-                          // Profile for Alice
+                           // Profile for Alice
 
     println("Accessing profile again:")
     println(user.profile)  // Profile for Alice (no computation)
@@ -245,7 +465,7 @@ fun main() {
     println(example.lateinitProperty)  // Late initialized
 
     // Checking if lateinit is initialized
-    if (::lateinitProperty.isInitialized) {
+    if (example::lateinitProperty.isInitialized) {
         println("lateinit property is initialized")
     }
 }
@@ -349,15 +569,31 @@ fun main() {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия `lazy` от механизмов инициализации в Java?
+- В каких практических сценариях стоит использовать ленивую инициализацию?
+- Какие распространенные ошибки и подводные камни при использовании `lazy`?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]]
+- [[q-kotlin-coroutines-introduction--kotlin--medium]]
+- [[q-coroutine-cancellation-mechanisms--kotlin--medium]]
 
 ## Related Questions
 

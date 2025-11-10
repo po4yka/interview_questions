@@ -1,80 +1,270 @@
 ---
 id: lang-011
-title: "Java Object Comparison / Java Object Сравнение"
-aliases: [Java Object Comparison, Java Object Сравнение]
-topic: programming-languages
-subtopics: [equality, java, object-model]
+title: "Java Object Comparison"
+aliases: ["Java Object Comparison", "Java Object Сравнение"]
+topic: kotlin
+subtopics: [equality]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutinescope-vs-supervisorscope--programming-languages--medium, q-flow-map-operator--programming-languages--medium, q-observer-pattern--design-patterns--medium]
+related: [c-equality, c-java-features, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-13
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/easy, equality, equals, hashcode, java, object-comparison, programming-languages]
 ---
-# Как Сравниваются Объекты В Java?
-
 # Вопрос (RU)
 > Как сравниваются объекты в Java?
-
----
 
 # Question (EN)
 > How are objects compared in Java?
 
 ## Ответ (RU)
 
-По умолчанию через `==` — сравнение ссылок (адресов). Через `.equals()` — логическое сравнение содержимого. При переопределении `.equals()` рекомендуется также переопределить `.hashCode()`.
+В Java есть два основных способа сравнения объектов:
 
+1. `==` — сравнение ссылок (идентичности объектов)
+   - Оператор `==` для объектов проверяет, указывают ли две переменные на один и тот же объект в памяти.
+   - Для строк (`String`) это особенно важно: литералы могут находиться в пуле строк (string pool), поэтому два одинаковых литерала могут давать `true` при `==`, но два `new String("...")` — `false`.
+
+   ```java
+   String str1 = new String("Hello");
+   String str2 = new String("Hello");
+
+   System.out.println(str1 == str2);  // false - разные объекты
+
+   String str3 = "Hello";
+   String str4 = "Hello";
+
+   System.out.println(str3 == str4);  // true - один и тот же объект из пула строк
+   ```
+
+2. `.equals()` — логическое (содержательное) сравнение
+   - По умолчанию `Object.equals()` сравнивает по ссылке, как `==`.
+   - Многие классы (например, `String`, обёртки над примитивами, коллекции) переопределяют `.equals()` для сравнения содержимого.
+
+   ```java
+   String str1 = new String("Hello");
+   String str2 = new String("Hello");
+
+   System.out.println(str1.equals(str2));  // true - одинаковое содержимое
+   ```
+
+При переопределении `.equals()` необходимо также переопределить `.hashCode()` в соответствии с контрактом, чтобы корректно работать с коллекциями на основе хеш-таблиц (`HashMap`, `HashSet` и др.).
+
+### Контракт equals()
+
+Метод `.equals()` должен удовлетворять следующим свойствам:
+
+```java
+Person person = new Person("John", 30);
+
+// 1. Рефлексивность: x.equals(x) == true
+person.equals(person);  // true
+
+// 2. Симметричность: x.equals(y) == y.equals(x)
+Person p3 = new Person("John", 30);
+person.equals(p3) == p3.equals(person);
+
+// 3. Транзитивность: если x.equals(y) && y.equals(z), то x.equals(z)
+Person p4 = new Person("John", 30);
+if (person.equals(p3) && p3.equals(p4)) {
+    person.equals(p4);  // должно быть true
+}
+
+// 4. Согласованность: повторные вызовы дают один и тот же результат
+person.equals(p3);  // при неизменных объектах результат должен быть стабилен
+
+// 5. null: x.equals(null) == false
+person.equals(null);  // false
+```
+
+### Контракт hashCode()
+
+```java
+// Если equals() возвращает true, hashCode() обязан быть одинаковым
+if (person1.equals(person2)) {
+    assert person1.hashCode() == person2.hashCode();  // ДОЛЖНО быть true
+}
+
+// Одинаковый hashCode() не гарантирует equals() == true (возможны коллизии)
+if (person1.hashCode() == person2.hashCode()) {
+    // person1.equals(person2) может быть как true, так и false
+}
+```
+
+### Пример правильной реализации equals() и hashCode()
+
+```java
+import java.util.Objects;
+
+class Person {
+    private final String name;
+    private final int age;
+
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;  // та же ссылка
+        if (obj == null || getClass() != obj.getClass()) return false;
+
+        Person person = (Person) obj;
+        return age == person.age &&
+               Objects.equals(name, person.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, age);
+    }
+}
+
+Person p1 = new Person("John", 30);
+Person p2 = new Person("John", 30);
+
+System.out.println(p1 == p2);        // false - разные объекты
+System.out.println(p1.equals(p2));   // true - равны по содержимому
+```
+
+### Частые ошибки
+
+```java
+// Ошибка: использование == для сравнения содержимого строк
+String s1 = new String("test");
+String s2 = new String("test");
+if (s1 == s2) {  // false - разные объекты
+    // не выполнится
+}
+
+// Правильно: используем equals() для сравнения содержимого
+if (s1.equals(s2)) {  // true - одинаковое содержимое
+    // выполнится
+}
+
+// Ошибка: переопределён equals(), но не переопределён hashCode()
+class Bad {
+    @Override
+    public boolean equals(Object obj) {
+        // некоторая логика
+        return super.equals(obj);
+    }
+    // Отсутствует согласованный hashCode() - ломает работу в хеш-коллекциях
+}
+```
+
+### Таблица сравнения
+
+| Оператор    | Что сравнивает                            | Когда использовать                    | Пример               |
+|-------------|-------------------------------------------|----------------------------------------|----------------------|
+| `==`        | Ссылки (идентичность объекта)            | Проверка, один ли это объект           | `obj1 == obj2`      |
+| `.equals()` | Реализацию в классе (обычно данные)      | Логическое равенство                   | `obj1.equals(obj2)` |
+
+### Краткое резюме
+
+- `==` сравнивает ссылки (идентичность объекта).
+- `.equals()` определяет логическое равенство; по умолчанию как `==`, но многие классы переопределяют его для сравнения содержимого.
+- При переопределении `.equals()` всегда переопределяйте `.hashCode()` согласованно.
+- Соблюдайте контракты `equals()`/`hashCode()` для корректной работы с коллекциями (`HashMap`, `HashSet`).
 
 ---
 
 ## Answer (EN)
 
-Java provides **two ways** to compare objects:
+Java provides two main ways to compare objects:
 
-**1. Reference Comparison (`==`)** - Compares memory addresses
+1. Reference Comparison (`==`) - Compares object identity
+   - The `==` operator compares references: it checks whether two variables refer to the same object.
+   - For `String`, this is important: literals may be stored in the string pool, so two identical literals may yield `true` with `==`, while two `new String("...")` instances yield `false`.
 
-By default, `==` compares **references** (memory addresses).
+   ```java
+   String str1 = new String("Hello");
+   String str2 = new String("Hello");
+
+   System.out.println(str1 == str2);  // false - different objects
+
+   String str3 = "Hello";
+   String str4 = "Hello";
+
+   System.out.println(str3 == str4);  // true - same interned String instance (string pool)
+   ```
+
+2. `.equals()` - Logical (content) equality
+   - By default, `Object.equals()` behaves like `==` (compares references).
+   - Many classes (e.g., `String`, wrappers, collections) override `.equals()` to compare contents.
+
+   ```java
+   String str1 = new String("Hello");
+   String str2 = new String("Hello");
+
+   System.out.println(str1.equals(str2));  // true - same content
+   ```
+
+When you override `.equals()`, you must also override `.hashCode()` to preserve their contract, especially for hash-based collections (`HashMap`, `HashSet`, etc.).
+
+### equals() Contract
+
+The `.equals()` method must satisfy these properties:
 
 ```java
-String str1 = new String("Hello");
-String str2 = new String("Hello");
+Person person = new Person("John", 30);
 
-System.out.println(str1 == str2);  // false - different objects in memory
+// 1. Reflexive: x.equals(x) == true
+person.equals(person);  // true
 
-String str3 = "Hello";
-String str4 = "Hello";
+// 2. Symmetric: x.equals(y) == y.equals(x)
+Person p3 = new Person("John", 30);
+person.equals(p3) == p3.equals(person);
 
-System.out.println(str3 == str4);  // true - same object in string pool
+// 3. Transitive: if x.equals(y) && y.equals(z), then x.equals(z)
+Person p4 = new Person("John", 30);
+if (person.equals(p3) && p3.equals(p4)) {
+    person.equals(p4);  // must be true
+}
+
+// 4. Consistent: multiple calls return same result
+person.equals(p3);  // result must remain stable if objects do not change
+
+// 5. null: x.equals(null) == false
+person.equals(null);  // false
 ```
 
-**2. Logical Comparison (`.equals()`)** - Compares content
-
-The `.equals()` method compares **logical content**.
+### hashCode() Contract
 
 ```java
-String str1 = new String("Hello");
-String str2 = new String("Hello");
+// If equals() returns true, hashCode() must be equal
+if (p1.equals(p2)) {
+    assert p1.hashCode() == p2.hashCode();  // MUST be true
+}
 
-System.out.println(str1.equals(str2));  // true - same content
+// Equal hashCode() does not guarantee equals() == true (collisions possible)
+if (p1.hashCode() == p2.hashCode()) {
+    // p1.equals(p2) may be either true or false
+}
 ```
 
-**Overriding equals() and hashCode():**
-
-When overriding `.equals()`, you should **also override `.hashCode()`**.
+### Example of correct equals() and hashCode() implementation
 
 ```java
+import java.util.Objects;
+
 class Person {
-    private String name;
-    private int age;
+    private final String name;
+    private final int age;
+
+    Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;  // Same reference
+        if (this == obj) return true;  // same reference
         if (obj == null || getClass() != obj.getClass()) return false;
 
         Person person = (Person) obj;
@@ -95,93 +285,79 @@ System.out.println(p1 == p2);        // false - different objects
 System.out.println(p1.equals(p2));   // true - same content
 ```
 
-**equals() Contract:**
-
-Must satisfy these properties:
+### Common Mistakes
 
 ```java
-// 1. Reflexive: x.equals(x) == true
-person.equals(person);  // true
-
-// 2. Symmetric: x.equals(y) == y.equals(x)
-p1.equals(p2) == p2.equals(p1);
-
-// 3. Transitive: if x.equals(y) && y.equals(z), then x.equals(z)
-if (p1.equals(p2) && p2.equals(p3)) {
-    p1.equals(p3);  // must be true
-}
-
-// 4. Consistent: multiple calls return same result
-p1.equals(p2);  // always same result
-
-// 5. null: x.equals(null) == false
-person.equals(null);  // false
-```
-
-**hashCode() Contract:**
-
-```java
-// If equals() is true, hashCode() must be equal
-if (p1.equals(p2)) {
-    p1.hashCode() == p2.hashCode();  // MUST be true
-}
-
-// If hashCode() is equal, equals() MAY be true or false
-if (p1.hashCode() == p2.hashCode()) {
-    p1.equals(p2);  // could be true or false (hash collision)
-}
-```
-
-**Common Mistakes:**
-
-```java
-// - Wrong: Using == for String comparison
+// Wrong: Using == for String content comparison
 String s1 = new String("test");
 String s2 = new String("test");
 if (s1 == s2) {  // false - different objects
     // Won't execute
 }
 
-// - Correct: Using equals() for String comparison
+// Correct: Using equals() for String content comparison
 if (s1.equals(s2)) {  // true - same content
     // Will execute
 }
 
-// - Wrong: Overriding equals() without hashCode()
+// Wrong: Overriding equals() without hashCode()
 class Bad {
     @Override
     public boolean equals(Object obj) {
-        // ...
+        // custom logic
+        return super.equals(obj);
     }
-    // Missing hashCode() override!
+    // Missing consistent hashCode() override - breaks behavior in hash-based collections
 }
 ```
 
-**Comparison Table:**
+### Comparison Table
 
-| Operator | Compares | Use Case | Example |
-|----------|----------|----------|---------|
-| `==` | References (addresses) | Identity check | `obj1 == obj2` |
-| `.equals()` | Logical content | Equality check | `obj1.equals(obj2)` |
+| Operator    | Compares                                | Use Case                  | Example               |
+|-------------|------------------------------------------|---------------------------|-----------------------|
+| `==`        | References (object identity)            | Identity check            | `obj1 == obj2`       |
+| `.equals()` | As implemented by the class (usually data) | Logical equality check | `obj1.equals(obj2)` |
 
-**Summary:**
+### Summary
 
-- **`==`** compares **references** (memory addresses)
-- **`.equals()`** compares **logical content**
-- When overriding `.equals()`, **always override `.hashCode()`**
-- Follow the equals/hashCode **contract** for correct behavior
+- `==` compares references (object identity).
+- `.equals()` defines logical equality; by default it's identity, but many classes override it to compare content.
+- When overriding `.equals()`, always override `.hashCode()` consistently.
+- Follow the `equals()`/`hashCode()` contracts for correct behavior with collections like `HashMap` and `HashSet`.
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем различия между `==`/`.equals()` в Java и `==`/`===` в Kotlin?
+- Когда на практике стоит использовать проверку идентичности, а когда логического равенства?
+- Какие распространенные ошибки возникают при переопределении `equals()` и `hashCode()`?
+
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- What are the key differences between Java `==`/`equals()` and Kotlin `==`/`===`?
+- When would you use identity vs logical equality in practice?
+- What are common pitfalls to avoid when overriding equals() and hashCode()?
+
+## Ссылки (RU)
+
+- [[c-equality]]
 
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-equality]]
+
+## Связанные вопросы (RU)
+
+### Простые (Easy)
+- [[q-java-equals-default-behavior--programming-languages--easy]] - Java
+- [[q-java-lambda-type--programming-languages--easy]] - Java
+
+### Продвинутые (Сложнее)
+- [[q-java-access-modifiers--programming-languages--medium]] - Java
+- [[q-kotlin-operator-overloading--kotlin--medium]] - Операторы
+- [[q-kotlin-extension-functions--kotlin--medium]] - Расширения
 
 ## Related Questions
 

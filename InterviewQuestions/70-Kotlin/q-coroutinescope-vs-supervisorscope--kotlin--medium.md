@@ -10,9 +10,9 @@ original_language: ru
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-channel-pipelines--kotlin--hard, q-inline-value-classes-performance--kotlin--medium, q-kotlin-inline-functions--kotlin--medium]
+related: [c-coroutines, q-channel-pipelines--kotlin--hard, q-inline-value-classes-performance--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags: [coroutines, difficulty/medium, error-handling, kotlin, scope, structured-concurrency]
 ---
 # coroutineScope Vs supervisorScope: Обработка Ошибок
@@ -27,11 +27,11 @@ tags: [coroutines, difficulty/medium, error-handling, kotlin, scope, structured-
 
 ## Ответ (RU)
 
-`coroutineScope` и `supervisorScope` — это функции-билдеры для создания вложенных корутинных scope. Главное различие — **обработка ошибок**: в `coroutineScope` падение одной дочерней корутины отменяет все остальные, в `supervisorScope` остальные продолжают работать.
+`coroutineScope` и `supervisorScope` — это функции-билдеры для создания вложенных корутинных scope. Главное различие — **обработка ошибок** и влияние падения одной дочерней корутины на другие: в `coroutineScope` падение одной дочерней корутины по умолчанию отменяет все остальные, в `supervisorScope` остальные продолжают работать, пока вы явно не отмените их или не завершите scope.
 
 ### coroutineScope — Fail-fast Стратегия
 
-Если **любая** дочерняя корутина бросает исключение, **все** остальные отменяются.
+Если **любая** дочерняя корутина бросает неперехваченное исключение, **все** остальные дочерние корутины в этом scope отменяются.
 
 ```kotlin
 suspend fun fetchUserData() = coroutineScope {
@@ -39,7 +39,7 @@ suspend fun fetchUserData() = coroutineScope {
     val settings = async { fetchSettings() }    // Корутина 2
     val friends = async { fetchFriends() }      // Корутина 3
 
-    // Если fetchSettings() упадет, profile и friends ОТМЕНЯТСЯ
+    // Если fetchSettings() упадет (и исключение не будет перехвачено внутри), profile и friends ОТМЕНЯТСЯ
     UserData(
         profile = profile.await(),
         settings = settings.await(),
@@ -57,14 +57,14 @@ try {
 ```
 
 **Поведение при ошибке:**
-1. `fetchSettings()` бросает исключение
+1. `fetchSettings()` бросает исключение (и оно не перехвачено внутри корутины)
 2. `coroutineScope` **отменяет** `profile` и `friends`
 3. Исключение **пробрасывается** наверх
 4. Вся функция `fetchUserData()` завершается с ошибкой
 
 ### supervisorScope — Fail-tolerant Стратегия
 
-Если одна дочерняя корутина падает, **остальные продолжают** работу.
+Если одна дочерняя корутина падает, **остальные продолжают** работу: отмена не распространяется "вниз" на сиблингов по умолчанию. Но исключения из дочерних корутин всё равно должны быть либо обработаны, либо ожидаемы (`await()`), иначе scope завершится с ошибкой, когда вы дождётесь их результата или при завершении.
 
 ```kotlin
 suspend fun fetchUserDataTolerant() = supervisorScope {
@@ -87,16 +87,16 @@ println("Success (partial): $data")  // Получим данные, даже е
 
 **Поведение при ошибке:**
 1. `fetchSettings()` бросает исключение
-2. `supervisorScope` **НЕ отменяет** `profile` и `friends`
-3. `settings.await()` **бросит** исключение (нужен try-catch)
-4. Функция **продолжает** работу с частичными данными
+2. `supervisorScope` **НЕ отменяет** `profile` и `friends` автоматически
+3. `settings.await()` **бросит** исключение, поэтому нужен `try-catch`, если вы хотите частичный успех
+4. Функция может **продолжать** работу и вернуть частичные данные, если ошибки обработаны локально
 
 ### Сравнительная Таблица
 
 | Аспект | coroutineScope | supervisorScope |
 |--------|----------------|-----------------|
-| **Ошибка в дочерней корутине** | Отменяет все остальные | Остальные продолжают |
-| **Пробрасывание исключений** | Автоматически | Нужен try-catch на await() |
+| **Ошибка в дочерней корутине** | Отменяет все остальные (fail-fast) | Остальные не отменяются автоматически |
+| **Пробрасывание исключений** | Необработанное исключение завершает scope с ошибкой | Необработанное исключение дочерней корутины также завершит scope с ошибкой, но не отменит сиблингов; для частичного успеха нужно локально обрабатывать ошибки |
 | **Use case** | Все или ничего (all-or-nothing) | Частичный успех допустим |
 | **Примеры** | Транзакции, критичные операции | Загрузка виджетов, метрики |
 
@@ -120,7 +120,7 @@ class ProfileViewModel @Inject constructor(
             _uiState.value = ProfileUiState.Loading
 
             try {
-                // coroutineScope: все критично, любая ошибка = fail
+                // coroutineScope: все критично, любая необработанная ошибка = fail
                 val data = coroutineScope {
                     val profile = async { repository.getProfile(userId) }
                     val posts = async { repository.getPosts(userId) }
@@ -171,7 +171,7 @@ class DashboardViewModel @Inject constructor(
 
     fun loadDashboard() {
         viewModelScope.launch {
-            // supervisorScope: каждый виджет независим
+            // supervisorScope: каждый виджет независим; ошибки обрабатываем локально
             supervisorScope {
                 // Виджет 1: Аналитика
                 launch {
@@ -203,7 +203,7 @@ class DashboardViewModel @Inject constructor(
                     }
                 }
             }
-            // Все виджеты завершились (успешно или с ошибкой)
+            // Все виджеты завершились (успешно или с ошибкой, но ошибки не обрушили весь экран)
         }
     }
 }
@@ -253,9 +253,9 @@ suspend fun complexOperation() = coroutineScope {
             val widget3 = async { fetchWidget3() }
 
             listOfNotNull(
-                widget1.await().getOrNull(),
-                widget2.await().getOrNull(),
-                widget3.await().getOrNull()
+                widget1.getOrNull(),
+                widget2.getOrNull(),
+                widget3.getOrNull()
             )
         }
     }
@@ -266,7 +266,7 @@ suspend fun complexOperation() = coroutineScope {
     )
 }
 
-fun <T> Deferred<T>.getOrNull(): T? = try {
+suspend fun <T> Deferred<T>.getOrNull(): T? = try {
     await()
 } catch (e: Exception) {
     null
@@ -278,30 +278,51 @@ fun <T> Deferred<T>.getOrNull(): T? = try {
 Похожие, но разные концепции:
 
 ```kotlin
-// - НЕПРАВИЛЬНО - SupervisorJob не работает с async
+// SupervisorJob задаёт стратегию отмены для дочерних корутин: сбой одного ребёнка
+// не отменяет автоматически других (как и supervisorScope).
+
 val scope = CoroutineScope(SupervisorJob())
 scope.launch {
     val a = async { throw Exception("Error") }
-    val b = async { delay(1000); "Success" }
+    val b = async {
+        delay(1000)
+        "Success"
+    }
 
-    // b ВСЕ РАВНО отменится! SupervisorJob работает только для launch, не async
-    println(b.await())
+    try {
+        a.await()
+    } catch (e: Exception) {
+        // Ошибка a обработана локально, scope не падает
+    }
+
+    // b не будет отменён из-за ошибки a и успешно завершится
+    println(b.await())  // "Success"
 }
 
-// - ПРАВИЛЬНО - supervisorScope
+// supervisorScope — suspend-билдер с теми же семантиками над дочерними корутинами,
+// но ограниченный временем жизни вызова suspend-функции.
 suspend fun correct() = supervisorScope {
     val a = async { throw Exception("Error") }
     val b = async { delay(1000); "Success" }
 
-    try { a.await() } catch (e: Exception) { }
+    try {
+        a.await()
+    } catch (e: Exception) {
+        // обрабатываем локально
+    }
+
     println(b.await())  // "Success" - b не отменится
 }
 ```
 
+Ключевые моменты:
+- И `SupervisorJob`, и `supervisorScope` распространяют сбой родителя на детей, но не сбой одного ребёнка на других.
+- Семантика одинакова для `launch` и `async`; важно корректно обрабатывать исключения (например, через `await()` внутри try-catch).
+
 ### withContext Vs coroutineScope/supervisorScope
 
 ```kotlin
-// withContext - для смены контекста (Dispatcher, например)
+// withContext - для смены контекста (Dispatcher, например) + возможная группировка как у coroutineScope
 suspend fun loadData() = withContext(Dispatchers.IO) {
     repository.fetchData()
 }
@@ -313,7 +334,7 @@ suspend fun loadAll() = coroutineScope {
     Pair(a.await(), b.await())
 }
 
-// supervisorScope - для независимых задач
+// supervisorScope - для независимых задач (ошибки обрабатываются локально)
 suspend fun loadIndependent() = supervisorScope {
     launch { task1() }
     launch { task2() }
@@ -332,11 +353,11 @@ suspend fun loadWithCoroutineScope() {
             async { task2() }
         }
     } catch (e: Exception) {
-        // Любая ошибка попадет сюда
+        // Любая необработанная ошибка дочерней корутины попадет сюда
     }
 }
 
-// supervisorScope: try-catch на каждый await
+// supervisorScope: локальная обработка для частичного успеха
 suspend fun loadWithSupervisorScope() = supervisorScope {
     val result1 = async { task1() }
     val result2 = async { task2() }
@@ -365,11 +386,13 @@ fun `coroutineScope cancels all on failure`() = runTest {
     var task2Executed = false
 
     assertThrows<Exception> {
-        coroutineScope {
-            async { throw Exception("Task 1 failed") }
-            async {
-                delay(1000)
-                task2Executed = true
+        runBlocking {
+            coroutineScope {
+                async { throw Exception("Task 1 failed") }
+                async {
+                    delay(1000)
+                    task2Executed = true
+                }
             }
         }
     }
@@ -378,15 +401,26 @@ fun `coroutineScope cancels all on failure`() = runTest {
 }
 
 @Test
-fun `supervisorScope continues on failure`() = runTest {
+fun `supervisorScope continues siblings on failure when errors handled`() = runTest {
     var task2Executed = false
 
     supervisorScope {
-        async { throw Exception("Task 1 failed") }
-        async {
+        val job1 = async {
+            throw Exception("Task 1 failed")
+        }
+        val job2 = async {
             delay(100)
             task2Executed = true
         }
+
+        // Обрабатываем ошибку первой корутины, чтобы она не завершила весь scope
+        try {
+            job1.await()
+        } catch (e: Exception) {
+            // ignore
+        }
+
+        job2.await()
     }
 
     assertTrue(task2Executed)  // Task 2 завершился
@@ -419,10 +453,10 @@ suspend fun loadHomeScreen() = supervisorScope {
 }
 ```
 
-**3. Не смешивайте стратегии**
+**3. Не смешивайте стратегии без необходимости**
 
 ```kotlin
-// - НЕПРАВИЛЬНО - непонятное поведение
+// - НЕЖЕЛАТЕЛЬНО - сложная вложенная комбинация без явной мотивации
 suspend fun mixed() = supervisorScope {
     val a = async {
         coroutineScope {
@@ -430,18 +464,335 @@ suspend fun mixed() = supervisorScope {
             async { task2() }
         }
     }
+    a.await()
 }
 ```
 
 ## Answer (EN)
 
-`coroutineScope` and `supervisorScope` are builder functions for creating nested coroutine scopes. The main difference is **error handling**: in `coroutineScope`, if one child coroutine fails, all others are cancelled (fail-fast). In `supervisorScope`, other children continue executing (fail-tolerant).
+`coroutineScope` and `supervisorScope` are suspend builder functions for creating nested coroutine scopes. The key difference is how they propagate failures between siblings.
 
-**Use cases:**
-- **coroutineScope**: All-or-nothing operations - transactions, critical data loading where all pieces are required
-- **supervisorScope**: Independent tasks - dashboard widgets, metrics collection where partial success is acceptable
+- In `coroutineScope`, if any child coroutine fails with an unhandled exception, the scope is cancelled, all siblings are cancelled, and the exception is rethrown (fail-fast, all-or-nothing).
+- In `supervisorScope`, a failure of one child does not automatically cancel its siblings. Siblings can continue; failed children complete exceptionally and must be observed/handled (for example, via `await()` in `try/catch`) if you want partial success.
 
-**Key difference**: In `coroutineScope`, one try-catch wraps the entire block. In `supervisorScope`, you need try-catch on each `await()` call. Note that `SupervisorJob` doesn't work properly with `async` - use `supervisorScope` instead.
+### Comparative Table
+
+| Aspect | `coroutineScope` | `supervisorScope` |
+|--------|------------------|-------------------|
+| Child failure | Cancels all other children (fail-fast) | Does not cancel siblings automatically |
+| Exception propagation | Unhandled child exception fails the whole scope | Unhandled child exception still can fail the scope when observed or on completion, but siblings are not retro-cancelled; handle locally for partial success |
+| Typical use case | All-or-nothing operations | Partial success, independent tasks |
+| Examples | Transactions, critical data loading | Dashboard widgets, metrics, best-effort tasks |
+
+### Practical Examples
+
+#### Example 1: Profile Screen Loading (`coroutineScope`)
+
+Requirement: if any critical part fails, show an error.
+
+```kotlin
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
+    private val repository: UserRepository
+) : ViewModel() {
+
+    private val _uiState = MutableStateFlow<ProfileUiState>(ProfileUiState.Loading)
+    val uiState: StateFlow<ProfileUiState> = _uiState.asStateFlow()
+
+    fun loadProfile(userId: Int) {
+        viewModelScope.launch {
+            _uiState.value = ProfileUiState.Loading
+
+            try {
+                val data = coroutineScope {
+                    val profile = async { repository.getProfile(userId) }
+                    val posts = async { repository.getPosts(userId) }
+                    val followers = async { repository.getFollowers(userId) }
+
+                    ProfileData(
+                        profile = profile.await(),
+                        posts = posts.await(),
+                        followers = followers.await()
+                    )
+                }
+
+                _uiState.value = ProfileUiState.Success(data)
+            } catch (e: Exception) {
+                _uiState.value = ProfileUiState.Error(e.message ?: "Unknown error")
+            }
+        }
+    }
+}
+
+sealed class ProfileUiState {
+    object Loading : ProfileUiState()
+    data class Success(val data: ProfileData) : ProfileUiState()
+    data class Error(val message: String) : ProfileUiState()
+}
+```
+
+#### Example 2: Dashboard Widgets (`supervisorScope`)
+
+Requirement: if one widget fails, show the others.
+
+```kotlin
+@HiltViewModel
+class DashboardViewModel @Inject constructor(
+    private val analyticsRepo: AnalyticsRepository,
+    private val weatherRepo: WeatherRepository,
+    private val newsRepo: NewsRepository
+) : ViewModel() {
+
+    data class DashboardData(
+        val analytics: Analytics? = null,
+        val weather: Weather? = null,
+        val news: List<Article>? = null
+    )
+
+    private val _dashboard = MutableStateFlow(DashboardData())
+    val dashboard: StateFlow<DashboardData> = _dashboard.asStateFlow()
+
+    fun loadDashboard() {
+        viewModelScope.launch {
+            supervisorScope {
+                launch {
+                    try {
+                        val analytics = analyticsRepo.getAnalytics()
+                        _dashboard.update { it.copy(analytics = analytics) }
+                    } catch (e: Exception) {
+                        Log.e("Dashboard", "Analytics failed: ${e.message}")
+                    }
+                }
+
+                launch {
+                    try {
+                        val weather = weatherRepo.getWeather()
+                        _dashboard.update { it.copy(weather = weather) }
+                    } catch (e: Exception) {
+                        Log.e("Dashboard", "Weather failed: ${e.message}")
+                    }
+                }
+
+                launch {
+                    try {
+                        val news = newsRepo.getLatestNews()
+                        _dashboard.update { it.copy(news = news) }
+                    } catch (e: Exception) {
+                        Log.e("Dashboard", "News failed: ${e.message}")
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+#### Example 3: Fallback Loading (`supervisorScope` + `async`)
+
+```kotlin
+suspend fun loadUserWithFallback(userId: Int): User = supervisorScope {
+    val primaryApi = async {
+        delay(1000)
+        primaryService.getUser(userId)
+    }
+
+    val fallbackApi = async {
+        delay(2000)
+        fallbackService.getUser(userId)
+    }
+
+    try {
+        primaryApi.await()
+    } catch (e: Exception) {
+        Log.w("API", "Primary failed, using fallback")
+        fallbackApi.await()
+    }
+}
+```
+
+### Nested Scopes
+
+```kotlin
+suspend fun complexOperation() = coroutineScope {
+    val criticalData = async {
+        fetchCriticalData()
+    }
+
+    val optionalWidgets = async {
+        supervisorScope {
+            val widget1 = async { fetchWidget1() }
+            val widget2 = async { fetchWidget2() }
+            val widget3 = async { fetchWidget3() }
+
+            listOfNotNull(
+                widget1.getOrNull(),
+                widget2.getOrNull(),
+                widget3.getOrNull()
+            )
+        }
+    }
+
+    AppData(
+        critical = criticalData.await(),
+        widgets = optionalWidgets.await()
+    )
+}
+
+suspend fun <T> Deferred<T>.getOrNull(): T? = try {
+    await()
+} catch (e: Exception) {
+    null
+}
+```
+
+### SupervisorJob Vs `supervisorScope`
+
+```kotlin
+val scope = CoroutineScope(SupervisorJob())
+scope.launch {
+    val a = async { throw Exception("Error") }
+    val b = async {
+        delay(1000)
+        "Success"
+    }
+
+    try {
+        a.await()
+    } catch (e: Exception) {
+        // child failure handled locally, scope survives
+    }
+
+    println(b.await())  // "Success"
+}
+
+suspend fun correct() = supervisorScope {
+    val a = async { throw Exception("Error") }
+    val b = async { delay(1000); "Success" }
+
+    try {
+        a.await()
+    } catch (e: Exception) {
+        // handle locally
+    }
+
+    println(b.await())  // "Success"
+}
+```
+
+Key points:
+- Both `SupervisorJob` and `supervisorScope` propagate parent failure to children, but do not propagate one child's failure to siblings.
+- Semantics are consistent for both `launch` and `async`; make sure to observe and handle exceptions properly (e.g., `await()` in `try/catch`).
+
+### `withContext` Vs `coroutineScope` / `supervisorScope`
+
+```kotlin
+// withContext: switch context (e.g., dispatcher) and run a block, structurally similar to coroutineScope
+suspend fun loadData() = withContext(Dispatchers.IO) {
+    repository.fetchData()
+}
+
+// coroutineScope: group children with fail-fast semantics
+suspend fun loadAll() = coroutineScope {
+    val a = async { loadA() }
+    val b = async { loadB() }
+    Pair(a.await(), b.await())
+}
+
+// supervisorScope: group independent tasks with local error handling
+suspend fun loadIndependent() = supervisorScope {
+    launch { task1() }
+    launch { task2() }
+    launch { task3() }
+}
+```
+
+### Error Handling
+
+```kotlin
+// coroutineScope: one try-catch for the whole group
+suspend fun loadWithCoroutineScope() {
+    try {
+        coroutineScope {
+            async { task1() }
+            async { task2() }
+        }
+    } catch (e: Exception) {
+        // any unhandled child exception ends up here
+    }
+}
+
+// supervisorScope: local handling for partial success
+suspend fun loadWithSupervisorScope() = supervisorScope {
+    val result1 = async { task1() }
+    val result2 = async { task2() }
+
+    val data1 = try {
+        result1.await()
+    } catch (e: Exception) {
+        null
+    }
+
+    val data2 = try {
+        result2.await()
+    } catch (e: Exception) {
+        null
+    }
+
+    Pair(data1, data2)
+}
+```
+
+### Testing
+
+```kotlin
+@Test
+fun `coroutineScope cancels all on failure`() = runTest {
+    var task2Executed = false
+
+    assertThrows<Exception> {
+        runBlocking {
+            coroutineScope {
+                async { throw Exception("Task 1 failed") }
+                async {
+                    delay(1000)
+                    task2Executed = true
+                }
+            }
+        }
+    }
+
+    assertFalse(task2Executed)
+}
+
+@Test
+fun `supervisorScope continues siblings on failure when errors handled`() = runTest {
+    var task2Executed = false
+
+    supervisorScope {
+        val job1 = async { throw Exception("Task 1 failed") }
+        val job2 = async {
+            delay(100)
+            task2Executed = true
+        }
+
+        try {
+            job1.await()
+        } catch (e: Exception) {
+            // ignore
+        }
+
+        job2.await()
+    }
+
+    assertTrue(task2Executed)
+}
+```
+
+### Best Practices
+
+1. Use `coroutineScope` for tightly coupled, all-or-nothing operations where every child result is required.
+2. Use `supervisorScope` (or a `CoroutineScope` with `SupervisorJob`) for independent tasks where partial success is acceptable and failures are handled locally.
+3. Avoid mixing supervision strategies unnecessarily; prefer clear, explicit boundaries (for example, outer `coroutineScope` for critical flow and inner `supervisorScope` for optional parts).
 
 ## Follow-ups
 
@@ -452,6 +803,7 @@ suspend fun mixed() = supervisorScope {
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-coroutines]]
 
 ## Related Questions
 

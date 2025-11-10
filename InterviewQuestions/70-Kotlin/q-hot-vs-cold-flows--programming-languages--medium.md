@@ -2,7 +2,7 @@
 id: lang-016
 title: "Hot Vs Cold Flows / Горячие и холодные потоки"
 aliases: [Hot Vs Cold Flows, Горячие и холодные потоки]
-topic: programming-languages
+topic: kotlin
 subtopics: [coroutines, flow, reactive-programming]
 question_kind: theory
 difficulty: medium
@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-coroutines, c-flow, q-flow-map-operator--programming-languages--medium]
+related: [c-kotlin, c-flow, q-flow-map-operator--programming-languages--medium]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [coroutines, difficulty/medium, flow, kotlin, programming-languages, reactive]
+updated: 2025-11-09
+tags: [coroutines, difficulty/medium, flow, kotlin, reactive]
 ---
-# Hot Vs Cold Flows
-
 # Вопрос (RU)
 > В чем разница между Hot и Cold Flows?
 
@@ -27,15 +25,310 @@ tags: [coroutines, difficulty/medium, flow, kotlin, programming-languages, react
 
 ## Ответ (RU)
 
-Холодные (cold) — начинают генерировать данные только после подписки Например Flow Observable Горячие (hot) — генерируют данные независимо от подписчиков Например SharedFlow LiveData Broadcast
+Холодные потоки (cold) начинают генерировать данные только после подписки (ленивые) — выполнение запускается для каждого нового коллектора.
+Примеры: `Flow` (`kotlinx.coroutines.flow.Flow`), `Observable` (Rx).
+
+Горячие потоки (hot) существуют независимо от подписчиков — источник данных активен в своем жизненном цикле и эмитит значения независимо от того, есть ли текущие коллекторы.
+Примеры: `SharedFlow`, `StateFlow`, `LiveData`, широковещательные источники (Broadcast).
+
+### Характеристики холодных потоков
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+// Cold Flow: Starts only when collected
+fun coldFlowExample(): Flow<Int> = flow {
+    println("Flow started")  // Печатается при вызове collect()
+    repeat(3) { i ->
+        delay(100)
+        emit(i)
+    }
+}
+
+fun main() = runBlocking {
+    val coldFlow = coldFlowExample()
+    println("Flow created")
+
+    delay(1000)
+    println("Starting collection")
+
+    coldFlow.collect { value ->
+        println("Received: $value")
+    }
+}
+
+// Output:
+// Flow created
+// (1 second delay)
+// Starting collection
+// Flow started  <- Запуск только в момент collect()
+// Received: 0
+// Received: 1
+// Received: 2
+```
+
+### Характеристики горячих потоков
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+// Hot Flow: Producer emits regardless of current subscribers
+fun hotFlowExample() = runBlocking {
+    val hotFlow = MutableSharedFlow<Int>() // replay = 0 по умолчанию
+
+    // Начинаем эмитить (подписчиков еще нет)
+    launch {
+        repeat(5) { i ->
+            println("Emitting $i")
+            hotFlow.emit(i)
+            delay(100)
+        }
+    }
+
+    delay(250)  // Ждем перед подпиской
+
+    // Поздний подписчик — пропускает значения до момента подписки
+    launch {
+        hotFlow.collect { value ->
+            println("Subscriber 1: $value")
+        }
+    }
+
+    delay(500)
+}
+
+// Пример результата при replay = 0:
+// Emitting 0  <- До появления подписчика
+// Emitting 1  <- До появления подписчика
+// Emitting 2
+// Subscriber 1: 2  <- Поздний подписчик получает первое значение после своей подписки
+// Emitting 3
+// Subscriber 1: 3
+// Emitting 4
+// Subscriber 1: 4
+```
+
+### Холодный поток — отдельное выполнение на коллектора
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+fun multipleColdCollectors() = runBlocking {
+    val coldFlow = flow {
+        println("Flow started for ${'$'}{Thread.currentThread().name}")
+        repeat(3) { emit(it) }
+    }
+
+    // Коллектор 1
+    launch {
+        coldFlow.collect { println("Collector 1: ${'$'}it") }
+    }
+
+    // Коллектор 2
+    launch {
+        coldFlow.collect { println("Collector 2: ${'$'}it") }
+    }
+}
+
+// Вывод (порядок зависит от планировщика):
+// Flow started for ...  <- Запуск для коллектора 1
+// Collector 1: 0
+// Flow started for ...  <- Отдельный запуск для коллектора 2
+// Collector 1: 1
+// Collector 2: 0
+// ...
+// Каждый коллектор получает независимое выполнение upstream-а
+```
+
+### Горячий поток — общее выполнение
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+fun multipleHotCollectors() = runBlocking {
+    val hotFlow = MutableSharedFlow<Int>() // replay = 0
+
+    // Один общий источник эмиссий
+    launch {
+        repeat(5) { i ->
+            hotFlow.emit(i)
+            delay(100)
+        }
+    }
+
+    // Коллектор 1 подписывается сразу
+    launch {
+        hotFlow.collect { println("Collector 1: ${'$'}it") }
+    }
+
+    delay(150)
+
+    // Коллектор 2 подписывается позже и видит только последующие значения
+    launch {
+        hotFlow.collect { println("Collector 2: ${'$'}it") }
+    }
+
+    delay(500)
+}
+
+// Пример результата при replay = 0:
+// Collector 1: 0
+// Collector 1: 1
+// Collector 2: 2  <- Поздний подписчик не видит 0 и 1
+// Collector 1: 2
+// Collector 1: 3
+// Collector 2: 3
+// Collector 1: 4
+// Collector 2: 4
+// Один продюсер, несколько коллекторов разделяют его эмиссии; поздние подписчики пропускают прошлые значения без replay
+```
+
+### Конвертация холодного потока в горячий
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+// shareIn: превращает холодный upstream в разделяемый горячий поток
+fun coldToHot() = runBlocking {
+    val coldFlow = flow {
+        println("Flow started")
+        repeat(5) { i ->
+            delay(100)
+            emit(i)
+        }
+    }
+
+    // Делаем общий горячий поток в данном scope
+    val hotFlow = coldFlow.shareIn(
+        scope = this,
+        started = SharingStarted.Eagerly,
+        replay = 0
+    )
+
+    delay(250)
+
+    // Подписчик получает значения от уже запущенного общего upstream-а
+    hotFlow.collect { println("Received: ${'$'}it") }
+}
+```
+
+### Использование горячего потока (общий источник)
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+fun hotFlowUsage() = runBlocking {
+    val sharedFlow = MutableSharedFlow<Int>()
+
+    // Каждый collect подписывается на один и тот же горячий источник
+    launch {
+        sharedFlow.collect { println("A: ${'$'}it") }
+    }
+
+    launch {
+        sharedFlow.collect { println("B: ${'$'}it") }
+    }
+
+    // Оба коллектора получают одни и те же значения
+    sharedFlow.emit(1)
+    sharedFlow.emit(2)
+}
+```
+
+### StateFlow — горячий поток с состоянием
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+fun stateFlowExample() = runBlocking {
+    val stateFlow = MutableStateFlow(0)
+
+    // `StateFlow` горячий — всегда имеет текущее значение в своем scope
+    println("Initial value: ${'$'}{stateFlow.value}")  // 0
+
+    // Продюсер, обновляющий состояние
+    launch {
+        repeat(5) { i ->
+            delay(100)
+            stateFlow.value = i + 1
+        }
+    }
+
+    delay(250)
+
+    // Поздний подписчик сразу получает актуальное значение и дальнейшие обновления
+    launch {
+        stateFlow.collect { println("Subscriber: ${'$'}it") }
+    }
+
+    delay(500)
+}
+
+// Пример результата:
+// Initial value: 0
+// Subscriber: 3  <- Поздний подписчик сразу получает текущее значение
+// Subscriber: 4
+// Subscriber: 5
+```
+
+### Практические примеры
+
+```kotlin
+// Cold Flow: API вызовы (каждый collect запускает свой запрос)
+class Repository(private val api: Api) {
+    fun getUsers(): Flow<List<User>> = flow {
+        val users = api.fetchUsers()  // Новый запрос на каждый collect()
+        emit(users)
+    }
+}
+
+// Hot Flow: обновления локации (один источник, несколько наблюдателей)
+class LocationService(private val locationProvider: LocationProvider) {
+    private val _location = MutableSharedFlow<Location>(replay = 0)
+    val location: SharedFlow<Location> = _location
+
+    init {
+        // Запуск обновлений независимо от наличия подписчиков
+        locationProvider.startUpdates { newLocation ->
+            _location.tryEmit(newLocation)
+        }
+    }
+}
+
+// StateFlow: состояние UI (всегда отдает последнее состояние)
+class ViewModel {
+    private val _uiState = MutableStateFlow(UiState.Loading)
+    val uiState: StateFlow<UiState> = _uiState
+
+    // Поздние подписчики сразу получают текущее состояние
+}
+```
+
+### Сводная таблица
+
+| Характеристика | Холодный поток | Горячий поток |
+|----------------|----------------|---------------|
+| Старт | Запускается при collect (ленивый) | Продюсер активен по своему жизненному циклу, не на collect |
+| Выполнение | Новое выполнение на каждого коллектора | Общее выполнение для всех коллектора |
+| Поздние подписчики | Получают значения с момента начала своего collect | Могут пропускать прошлые значения (если нет replay/буфера) |
+| Примеры | `Flow`, Rx `Observable` | `SharedFlow`, `StateFlow`, `LiveData` |
+| Use case | API вызовы, преобразования | События, состояние, сенсоры, broadcast-источники |
+| Ресурсы | Возможное дублирование работы на коллектора | Один продюсер переиспользуется коллекторами |
 
 ## Answer (EN)
 
-**Cold flows** start generating data only after subscription (lazy).
-Examples: Flow, Observable
+Cold flows start producing data only when they are collected (lazy) — a new execution is started for each collector.
+Examples: `Flow` (`kotlinx.coroutines.flow.Flow`), `Observable` (Rx).
 
-**Hot flows** generate data independently of subscribers (eager).
-Examples: SharedFlow, StateFlow, LiveData, Broadcast
+Hot flows have an active producer that exists independently of individual subscribers — emissions are driven by the producer's lifecycle, not by each collector.
+Examples: `SharedFlow`, `StateFlow`, `LiveData`, broadcast-like sources.
 
 ### Cold Flow Characteristics
 
@@ -77,9 +370,12 @@ fun main() = runBlocking {
 ### Hot Flow Characteristics
 
 ```kotlin
-// Hot Flow: Starts immediately, emits regardless of subscribers
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+// Hot Flow: Producer emits regardless of current subscribers
 fun hotFlowExample() = runBlocking {
-    val hotFlow = MutableSharedFlow<Int>()
+    val hotFlow = MutableSharedFlow<Int>() // replay = 0 by default
 
     // Start emitting (no subscribers yet)
     launch {
@@ -92,7 +388,7 @@ fun hotFlowExample() = runBlocking {
 
     delay(250)  // Wait before subscribing
 
-    // Subscribe late - will miss first values
+    // Subscribe late - will miss values emitted before subscription
     launch {
         hotFlow.collect { value ->
             println("Subscriber 1: $value")
@@ -102,11 +398,11 @@ fun hotFlowExample() = runBlocking {
     delay(500)
 }
 
-// Output:
+// Example outcome with replay = 0:
 // Emitting 0  <- Emitted before any subscriber
 // Emitting 1  <- Emitted before any subscriber
-// Emitting 2  <- Emitted before any subscriber
-// Subscriber 1: 2  <- Late subscriber, missed 0 and 1
+// Emitting 2
+// Subscriber 1: 2  <- Late subscriber starts from the first emission after subscription
 // Emitting 3
 // Subscriber 1: 3
 // Emitting 4
@@ -116,40 +412,46 @@ fun hotFlowExample() = runBlocking {
 ### Cold Flow - Each Collector Gets Own Execution
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
 fun multipleColdCollectors() = runBlocking {
     val coldFlow = flow {
-        println("Flow started for ${Thread.currentThread().name}")
+        println("Flow started for ${'$'}{Thread.currentThread().name}")
         repeat(3) { emit(it) }
     }
 
     // Collector 1
     launch {
-        coldFlow.collect { println("Collector 1: $it") }
+        coldFlow.collect { println("Collector 1: ${'$'}it") }
     }
 
     // Collector 2
     launch {
-        coldFlow.collect { println("Collector 2: $it") }
+        coldFlow.collect { println("Collector 2: ${'$'}it") }
     }
 }
 
-// Output:
+// Output (order may vary by scheduling):
 // Flow started for ...  <- Started for collector 1
 // Collector 1: 0
 // Flow started for ...  <- Started again for collector 2
 // Collector 1: 1
 // Collector 2: 0
 // ...
-// (Each collector gets independent execution)
+// (Each collector gets an independent execution of the upstream)
 ```
 
 ### Hot Flow - Shared Execution
 
 ```kotlin
-fun multipleHotCollectors() = runBlocking {
-    val hotFlow = MutableSharedFlow<Int>()
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
-    // Start emitting
+fun multipleHotCollectors() = runBlocking {
+    val hotFlow = MutableSharedFlow<Int>() // replay = 0
+
+    // Start emitting from a single shared source
     launch {
         repeat(5) { i ->
             hotFlow.emit(i)
@@ -157,35 +459,40 @@ fun multipleHotCollectors() = runBlocking {
         }
     }
 
-    // Collector 1
+    // Collector 1 subscribes immediately
     launch {
-        hotFlow.collect { println("Collector 1: $it") }
+        hotFlow.collect { println("Collector 1: ${'$'}it") }
     }
 
-    delay(50)
+    delay(150)
 
-    // Collector 2 joins later
+    // Collector 2 joins later; will only see emissions from this point on
     launch {
-        hotFlow.collect { println("Collector 2: $it") }
+        hotFlow.collect { println("Collector 2: ${'$'}it") }
     }
 
     delay(500)
 }
 
-// Output:
+// Example outcome with replay = 0 (timing-dependent):
 // Collector 1: 0
 // Collector 1: 1
-// Collector 2: 1  <- Collector 2 starts here, receives same value
+// Collector 2: 2  <- Joins later; does not receive 0 or 1
 // Collector 1: 2
-// Collector 2: 2
-// ...
-// (Both collectors receive same values from shared source)
+// Collector 1: 3
+// Collector 2: 3
+// Collector 1: 4
+// Collector 2: 4
+// (A single producer; multiple collectors share its emissions, late collectors miss past values without replay)
 ```
 
 ### Converting Cold to Hot
 
 ```kotlin
-// shareIn: Convert cold to hot
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+// shareIn: Convert a cold upstream into a shared hot flow
 fun coldToHot() = runBlocking {
     val coldFlow = flow {
         println("Flow started")
@@ -195,7 +502,7 @@ fun coldToHot() = runBlocking {
         }
     }
 
-    // Convert to hot flow
+    // Convert to hot shared flow in this scope
     val hotFlow = coldFlow.shareIn(
         scope = this,
         started = SharingStarted.Eagerly,
@@ -204,28 +511,30 @@ fun coldToHot() = runBlocking {
 
     delay(250)
 
-    // Subscribe to hot flow (flow already started)
-    hotFlow.collect { println("Received: $it") }
+    // Subscriber gets values from the already running shared upstream
+    hotFlow.collect { println("Received: ${'$'}it") }
 }
 ```
 
-### Converting Hot to Cold
+### Hot Flow Usage (Shared Source)
 
 ```kotlin
-// Every collector gets the hot flow, but it's still hot
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
 fun hotFlowUsage() = runBlocking {
     val sharedFlow = MutableSharedFlow<Int>()
 
-    // Each collect call subscribes to the same shared source
+    // Each collect call subscribes to the same hot shared source
     launch {
-        sharedFlow.collect { println("A: $it") }
+        sharedFlow.collect { println("A: ${'$'}it") }
     }
 
     launch {
-        sharedFlow.collect { println("B: $it") }
+        sharedFlow.collect { println("B: ${'$'}it") }
     }
 
-    // Both receive same values
+    // Both collectors receive the same emitted values from the shared source
     sharedFlow.emit(1)
     sharedFlow.emit(2)
 }
@@ -234,13 +543,16 @@ fun hotFlowUsage() = runBlocking {
 ### StateFlow - Hot Flow with State
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
 fun stateFlowExample() = runBlocking {
     val stateFlow = MutableStateFlow(0)
 
-    // StateFlow is hot - always has a value
-    println("Initial value: ${stateFlow.value}")  // 0
+    // `StateFlow` is hot - it always has a value and is active within its scope
+    println("Initial value: ${'$'}{stateFlow.value}")  // 0
 
-    // Start updating
+    // Start updating in a producer coroutine
     launch {
         repeat(5) { i ->
             delay(100)
@@ -250,18 +562,17 @@ fun stateFlowExample() = runBlocking {
 
     delay(250)
 
-    // Late subscriber gets current value immediately
+    // Late subscriber gets the current value immediately, then subsequent updates
     launch {
-        stateFlow.collect { println("Subscriber: $it") }
+        stateFlow.collect { println("Subscriber: ${'$'}it") }
     }
 
     delay(500)
 }
 
-// Output:
+// Example outcome:
 // Initial value: 0
-// Subscriber: 2  <- Late subscriber immediately gets current value
-// Subscriber: 3
+// Subscriber: 3  <- Late subscriber immediately gets current value at time of subscription
 // Subscriber: 4
 // Subscriber: 5
 ```
@@ -269,33 +580,33 @@ fun stateFlowExample() = runBlocking {
 ### Real-World Examples
 
 ```kotlin
-// Cold Flow: API calls (each collector makes own request)
-class Repository {
+// Cold Flow: API calls (each collector triggers its own request)
+class Repository(private val api: Api) {
     fun getUsers(): Flow<List<User>> = flow {
-        val users = api.fetchUsers()  // New request for each collector
+        val users = api.fetchUsers()  // New request for each collect()
         emit(users)
     }
 }
 
-// Hot Flow: Location updates (single source, multiple observers)
-class LocationService {
-    private val _location = MutableSharedFlow<Location>()
-    val location: SharedFlow<Location> = _location.asSharedFlow()
+// Hot Flow: Location updates (single source, multiple observers sharing updates)
+class LocationService(private val locationProvider: LocationProvider) {
+    private val _location = MutableSharedFlow<Location>(replay = 0)
+    val location: SharedFlow<Location> = _location
 
     init {
-        // Start receiving location updates immediately
+        // Start receiving and emitting updates independently of collectors
         locationProvider.startUpdates { newLocation ->
             _location.tryEmit(newLocation)
         }
     }
 }
 
-// StateFlow: UI state (always has current value)
+// StateFlow: UI state (always exposes the latest state to collectors)
 class ViewModel {
     private val _uiState = MutableStateFlow(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+    val uiState: StateFlow<UiState> = _uiState
 
-    // Late subscribers immediately get current state
+    // Late subscribers immediately receive the current state
 }
 ```
 
@@ -303,14 +614,20 @@ class ViewModel {
 
 | Feature | Cold Flow | Hot Flow |
 |---------|-----------|----------|
-| **Start behavior** | On collection | Immediately or on first subscriber |
-| **Execution** | Independent per collector | Shared among collectors |
-| **Late subscribers** | Get all values from start | Miss previous values (unless replay) |
-| **Examples** | Flow, Observable | SharedFlow, StateFlow, LiveData |
-| **Use case** | API calls, transformations | Events, state, sensors |
-| **Resource usage** | New execution per collector | Single execution shared |
+| **Start behavior** | Starts on collection (lazy) | Producer active based on its own scope/lifecycle, not per collector |
+| **Execution** | New execution per collector | Shared execution for all collectors |
+| **Late subscribers** | Receive all values from their own start of collection | May miss values emitted before subscription (unless replay/buffering is used) |
+| **Examples** | `Flow`, Rx `Observable` | `SharedFlow`, `StateFlow`, `LiveData` |
+| **Use case** | API calls, transformations | Events, state, sensors, broadcasts |
+| **Resource usage** | Potentially repeated work per collector | Single producer reused across collectors |
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия по сравнению с Java-подходами к реактивности?
+- Когда на практике стоит использовать `hot` vs `cold` потоки?
+- Каковы типичные ошибки при работе с hot/cold потоками?
 
 ## Follow-ups
 
@@ -318,9 +635,23 @@ class ViewModel {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [[c-flow]]
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## References
 
+- [[c-kotlin]]
+- [[c-flow]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-how-suspend-function-detects-suspension--programming-languages--hard]]
+- [[q-inheritance-vs-composition--oop--medium]]
+- [[q-iterator-concept--programming-languages--easy]]
 
 ## Related Questions
 

@@ -2,7 +2,7 @@
 id: lang-039
 title: "Kotlin Sam Conversions / SAM конверсии в Kotlin"
 aliases: [Kotlin Sam Conversions, SAM конверсии в Kotlin]
-topic: programming-languages
+topic: kotlin
 subtopics: [functional-programming, type-system]
 question_kind: theory
 difficulty: medium
@@ -10,9 +10,9 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-infix-functions--kotlin--medium, q-kotlin-extensions-overview--programming-languages--medium, q-kotlin-override-keyword--programming-languages--easy]
+related: [c-kotlin, q-infix-functions--kotlin--medium, q-kotlin-extensions-overview--programming-languages--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/medium, lambda, lambda-functions, programming-languages, sam]
 ---
 # Как Работают SAM (Single Abstract Method)?
@@ -27,14 +27,13 @@ tags: [difficulty/medium, lambda, lambda-functions, programming-languages, sam]
 
 ## Ответ (RU)
 
-
-SAM (Single Abstract Method) конверсии позволяют использовать Kotlin лямбды там где ожидаются Java функциональные интерфейсы.
+SAM (Single Abstract Method) конверсии позволяют использовать Kotlin-лямбды в тех местах, где ожидаются функциональные интерфейсы (Java функциональные интерфейсы или Kotlin `fun interface`). Компилятор при этом генерирует анонимную реализацию интерфейса.
 
 ### Java Функциональный Интерфейс
 ```java
 // Java
 public interface Clickable {
-    void onClick(View view);
+    void onClick(Object view);
 }
 
 public void setListener(Clickable listener) {
@@ -46,12 +45,12 @@ public void setListener(Clickable listener) {
 ```kotlin
 // Вместо:
 setListener(object : Clickable {
-    override fun onClick(view: View) {
+    override fun onClick(view: Any?) {
         // Обработать клик
     }
 })
 
-// SAM конверсия позволяет:
+// SAM-конверсия позволяет записать короче:
 setListener { view ->
     // Обработать клик
 }
@@ -59,20 +58,22 @@ setListener { view ->
 
 ### Требования Для SAM Конверсии
 
-1. **Java интерфейс** (не Kotlin интерфейс)
-2. **Ровно один абстрактный метод**
-3. **Параметры метода соответствуют параметрам лямбды**
+1. **Функциональный интерфейс** с ровно одним абстрактным методом:
+   - Java интерфейс с одним абстрактным методом (фактический SAM/functional interface)
+   - либо Kotlin `fun interface` (с одним абстрактным методом)
+2. **Параметры метода соответствуют параметрам лямбды** (типы должны быть совместимы)
+3. SAM-конверсия — это синтаксический сахар: создаётся анонимная реализация интерфейса, а не «чистая» функция.
 
 ### Примеры
 
-**1. Event Listeners**
+**1. Event Listeners (Java SAM)**
 ```kotlin
 button.setOnClickListener { view ->
     Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show()
 }
 ```
 
-**2. Runnable**
+**2. Runnable (Java SAM)**
 ```kotlin
 // Java: Runnable interface
 Thread {
@@ -80,22 +81,22 @@ Thread {
 }.start()
 ```
 
-**3. Comparator**
+**3. Comparator (Java SAM)**
 ```kotlin
 val sorted = list.sortedWith { a, b ->
-    a.length - b.length
+    a.length.compareTo(b.length)
 }
 ```
 
 ### Kotlin Fun Interfaces
 
-Kotlin 1.4+ поддерживает `fun interface`:
+Начиная с Kotlin 1.4 поддерживаются `fun interface`, для которых также работает SAM-конверсия:
 ```kotlin
 fun interface Transformer {
     fun transform(input: String): String
 }
 
-// SAM конверсия работает:
+// SAM-конверсия работает:
 fun process(transformer: Transformer) {
     // ...
 }
@@ -105,7 +106,7 @@ process { it.uppercase() }
 
 ### Когда SAM Не Работает
 ```kotlin
-// Kotlin интерфейс - Нет SAM конверсии
+// Обычный Kotlin-интерфейс (НЕ fun interface) - нет SAM-конверсии
 interface KotlinListener {
     fun onEvent()
 }
@@ -120,14 +121,13 @@ setListener(object : KotlinListener {
 
 ## Answer (EN)
 
-
-SAM (Single Abstract Method) conversions allow Kotlin lambdas to be used where Java functional interfaces are expected.
+SAM (Single Abstract Method) conversions allow Kotlin lambdas to be used where functional interfaces are expected (Java functional interfaces or Kotlin `fun interface`). The compiler generates an anonymous implementation of that interface behind the scenes.
 
 ### Java Functional Interface
 ```java
 // Java
 public interface Clickable {
-    void onClick(View view);
+    void onClick(Object view);
 }
 
 public void setListener(Clickable listener) {
@@ -139,12 +139,12 @@ public void setListener(Clickable listener) {
 ```kotlin
 // Instead of:
 setListener(object : Clickable {
-    override fun onClick(view: View) {
+    override fun onClick(view: Any?) {
         // Handle click
     }
 })
 
-// SAM conversion allows:
+// SAM conversion allows a shorter form:
 setListener { view ->
     // Handle click
 }
@@ -152,20 +152,22 @@ setListener { view ->
 
 ### Requirements for SAM Conversion
 
-1. **Java interface** (not Kotlin interface)
-2. **Exactly one abstract method**
-3. **Method parameters match lambda parameters**
+1. **Functional interface** with exactly one abstract method:
+   - Java interface with a single abstract method (a SAM / functional interface)
+   - or a Kotlin `fun interface` (with a single abstract method)
+2. **Method parameters must be compatible with lambda parameters**
+3. SAM conversion is compile-time sugar that creates an anonymous implementation of the interface (not a raw function type at runtime).
 
 ### Examples
 
-**1. Event Listeners**
+**1. Event Listeners (Java SAM)**
 ```kotlin
 button.setOnClickListener { view ->
     Toast.makeText(context, "Clicked", Toast.LENGTH_SHORT).show()
 }
 ```
 
-**2. Runnable**
+**2. Runnable (Java SAM)**
 ```kotlin
 // Java: Runnable interface
 Thread {
@@ -173,16 +175,16 @@ Thread {
 }.start()
 ```
 
-**3. Comparator**
+**3. Comparator (Java SAM)**
 ```kotlin
 val sorted = list.sortedWith { a, b ->
-    a.length - b.length
+    a.length.compareTo(b.length)
 }
 ```
 
 ### Kotlin Fun Interfaces
 
-Kotlin 1.4+ supports `fun interface`:
+Since Kotlin 1.4, `fun interface` is supported and SAM conversion applies to them:
 ```kotlin
 fun interface Transformer {
     fun transform(input: String): String
@@ -198,7 +200,7 @@ process { it.uppercase() }
 
 ### When SAM Doesn't Work
 ```kotlin
-// Kotlin interface - No SAM conversion
+// Plain Kotlin interface (NOT a fun interface) - no SAM conversion
 interface KotlinListener {
     fun onEvent()
 }
@@ -209,7 +211,6 @@ setListener(object : KotlinListener {
 })
 ```
 
----
 ---
 
 ## Follow-ups
@@ -227,4 +228,4 @@ setListener(object : KotlinListener {
 - [[q-kotlin-extensions-overview--programming-languages--medium]]
 - [[q-infix-functions--kotlin--medium]]
 - [[q-kotlin-override-keyword--programming-languages--easy]]
-
+- [[c-kotlin]]

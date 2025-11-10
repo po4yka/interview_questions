@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-equals-hashcode-purpose--kotlin--medium, q-launch-vs-async--kotlin--easy]
+related: [c-kotlin, q-equals-hashcode-purpose--kotlin--medium, q-launch-vs-async--kotlin--easy]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [contravariance, covariance, difficulty/hard, generics, kotlin, projections, type-system, variance]
 ---
-# Variance and Type Projections in Kotlin
-
 # Вопрос (RU)
 > Объясните variance на месте объявления против на месте использования в Kotlin. В чем разница между in, out и star проекциями?
 
@@ -27,75 +25,55 @@ tags: [contravariance, covariance, difficulty/hard, generics, kotlin, projection
 
 ## Ответ (RU)
 
-**Variance** описывает, как подтипизация между generic типами соотносится с подтипизацией их параметров типов.
+**Variance** описывает, как отношения подтипизации между generic-типами соотносятся с подтипизацией их параметров типов.
 
-### Ковариантность (out)
+Kotlin поддерживает **вариантность на месте объявления** (declaration-site variance) с помощью модификаторов `out` и `in` в объявлении класса/интерфейса, а также **вариантность на месте использования** (use-site variance) через проекции типов `out`, `in` и `*` в конкретных местах использования обобщённого типа.
 
-Производитель - может только возвращать значения. List<out T> - пример.
+См. также: [[c-kotlin]]
 
-### Контравариантность (in)
+### Ковариантность (`out`)
 
-Потребитель - может только принимать значения. Comparable<in T> - пример.
+- Объявление `out T` означает, что тип ковариантен по `T`: `Producer<String>` является подтипом `Producer<Any>`.
+- Ограничение: параметр типа `T` можно использовать только в позициях "выхода" (возвращаемое значение, значения, выдаваемые наружу), чтобы сохранить type-safety.
+- Тип с `out` можно рассматривать как "поставщика" значений `T`.
 
-### Инвариантность
-
-Нет замены. MutableList<T> инвариантен.
-
-### Use-Site Variance
-
-Применение variance в месте использования: `MutableList<out T>`, `MutableList<in T>`.
-
-### Star Projection
-
-Неизвестный тип: `List<*>` означает список неизвестного типа.
-
-Variance обеспечивает type-safety при работе с generic типами в Kotlin.
-
-## Answer (EN)
-
-**Variance** describes how subtyping between generic types relates to subtyping of their type parameters. Kotlin supports both **declaration-site** and **use-site** variance.
-
----
-
-### Covariance (out)
-
-Producer - can only produce (return) values:
+Пример (на месте объявления):
 
 ```kotlin
-// Declaration-site covariance
 interface Producer<out T> {
-    fun produce(): T          //  Can return T
-    // fun consume(item: T)   //  Cannot accept T as parameter
+    fun produce(): T          // можно возвращать T
+    // fun consume(item: T)  // нельзя принимать T в параметрах (ошибка компиляции)
 }
 
 class StringProducer : Producer<String> {
     override fun produce(): String = "Hello"
 }
 
-fun example() {
+fun exampleCovariance() {
     val stringProducer: Producer<String> = StringProducer()
-    val anyProducer: Producer<Any> = stringProducer //  Covariant
+    val anyProducer: Producer<Any> = stringProducer // ковариантность
 }
 ```
 
-**Real-world: List<out T>**
+Из стандартной библиотеки: `List<out T>` ковариантен. Например:
 
 ```kotlin
 val strings: List<String> = listOf("a", "b")
-val objects: List<Any> = strings //  List is covariant
+val anys: List<Any> = strings // OK: List ковариантен по T
 ```
 
----
+### Контравариантность (`in`)
 
-### Contravariance (in)
+- Объявление `in T` означает, что тип контравариантен по `T`: `Consumer<Any>` является подтипом `Consumer<String>`.
+- Ограничение: параметр типа `T` можно использовать только во "входных" позициях (параметры методов), а возвращать `T` нельзя.
+- Тип с `in` можно рассматривать как "потребителя" значений `T`.
 
-Consumer - can only consume (accept) values:
+Пример (на месте объявления):
 
 ```kotlin
-// Declaration-site contravariance
 interface Consumer<in T> {
-    fun consume(item: T)      //  Can accept T
-    // fun produce(): T       //  Cannot return T
+    fun consume(item: T)      // можно принимать T
+    // fun produce(): T       // нельзя возвращать T (ошибка компиляции)
 }
 
 class AnyConsumer : Consumer<Any> {
@@ -104,27 +82,27 @@ class AnyConsumer : Consumer<Any> {
     }
 }
 
-fun example() {
+fun exampleContravariance() {
     val anyConsumer: Consumer<Any> = AnyConsumer()
-    val stringConsumer: Consumer<String> = anyConsumer //  Contravariant
+    val stringConsumer: Consumer<String> = anyConsumer // контравариантность
 }
 ```
 
-**Real-world: Comparable<in T>**
+Из стандартной библиотеки: `Comparable<in T>` контравариантен:
 
 ```kotlin
-class Person(val name: String) : Comparable<Any> {
-    override fun compareTo(other: Any): Int = 0
+class Person(val name: String) : Comparable<Person> {
+    override fun compareTo(other: Person): Int = name.compareTo(other.name)
 }
 
-val person: Comparable<Person> = Person("John") //  Contravariant
+fun useComparable(persons: List<Person>, cmp: Comparable<in Person>) {
+    // Можно передать, например, Comparator/Comparable, который "умеет" сравнивать Person или его супертипы
+}
 ```
 
----
+### Инвариантность
 
-### Invariance (no variance)
-
-Cannot substitute:
+- Без модификаторов `in`/`out` тип инвариантен: `Box<String>` не является ни подтипом, ни супертипом `Box<Any>`.
 
 ```kotlin
 interface Box<T> {
@@ -132,22 +110,21 @@ interface Box<T> {
     fun set(item: T)
 }
 
-fun example() {
-    val stringBox: Box<String> = StringBox()
-    // val anyBox: Box<Any> = stringBox //  Invariant
+fun exampleInvariance() {
+    val stringBox: Box<String> = object : Box<String> {
+        private var value: String = ""
+        override fun get(): String = value
+        override fun set(item: String) { value = item }
+    }
+    // val anyBox: Box<Any> = stringBox // ошибка: инвариантность
 }
 ```
 
----
+### Вариантность на месте использования (Use-Site Variance / Type Projections)
 
-### Use-Site Variance (Projections)
-
-Apply variance at use-site:
+Use-site variance позволяет "спроецировать" тип, когда объявление инвариантно, но в конкретном контексте мы используем его только как производителя или только как потребителя.
 
 ```kotlin
-// Declaration is invariant
-class MutableList<T>
-
 fun copy(from: MutableList<out Any>, to: MutableList<in Any>) {
     for (item in from) {
         to.add(item)
@@ -155,11 +132,156 @@ fun copy(from: MutableList<out Any>, to: MutableList<in Any>) {
 }
 ```
 
+- `MutableList<out Any>` на месте использования означает: мы читаем элементы как `Any`, но не можем безопасно добавлять произвольные `Any`.
+- `MutableList<in Any>` означает: мы можем добавлять `Any`, но элементы, которые читаем, имеют тип `Any?`.
+
+### Star Projection (`*`)
+
+Star projection используется, когда конкретный параметр типа неизвестен, но нужно безопасно работать с типом.
+
+```kotlin
+fun printList(list: List<*>) {
+    for (item in list) {
+        println(item) // item имеет тип Any?
+    }
+}
+```
+
+`List<*>` означает: "список элементов некоторого неизвестного типа". Мы можем читать элементы только как `Any?`, но не можем добавлять произвольные значения (кроме `null` там, где это допустимо), сохраняя type-safety.
+
+Variance и проекции типов в Kotlin позволяют выразить, какие операции с generic-типами безопасны, и избежать проблем с небезопасной подстановкой типов.
+
+## Answer (EN)
+
+**Variance** describes how subtyping between generic types relates to subtyping of their type parameters.
+
+Kotlin supports:
+- **Declaration-site variance** via `out` and `in` in the generic type declaration.
+- **Use-site variance** via type projections (`out`, `in`, `*`) at specific usage sites.
+
+See also: [[c-kotlin]]
+
 ---
 
-### Star Projection (*)
+### Covariance (`out`)
 
-Unknown type:
+- `out T` on a type parameter makes the type covariant in `T`: `Producer<String>` is a subtype of `Producer<Any>`.
+- Restriction: `T` can only be used in "output" positions (returned/produced values) in the declaration to preserve type safety.
+- Intuition: "producer" of `T`.
+
+Declaration-site example:
+
+```kotlin
+interface Producer<out T> {
+    fun produce(): T          // Can return T
+    // fun consume(item: T)   // Error: cannot use T in in-position
+}
+
+class StringProducer : Producer<String> {
+    override fun produce(): String = "Hello"
+}
+
+fun exampleCovariance() {
+    val stringProducer: Producer<String> = StringProducer()
+    val anyProducer: Producer<Any> = stringProducer // Covariant
+}
+```
+
+Standard library: `List<out T>` is covariant:
+
+```kotlin
+val strings: List<String> = listOf("a", "b")
+val anys: List<Any> = strings // OK
+```
+
+---
+
+### Contravariance (`in`)
+
+- `in T` on a type parameter makes the type contravariant in `T`: `Consumer<Any>` is a subtype of `Consumer<String>`.
+- Restriction: `T` can only be used in "input" positions (method parameters); it cannot be returned.
+- Intuition: "consumer" of `T`.
+
+Declaration-site example:
+
+```kotlin
+interface Consumer<in T> {
+    fun consume(item: T)      // Can accept T
+    // fun produce(): T       // Error: cannot return T
+}
+
+class AnyConsumer : Consumer<Any> {
+    override fun consume(item: Any) {
+        println(item)
+    }
+}
+
+fun exampleContravariance() {
+    val anyConsumer: Consumer<Any> = AnyConsumer()
+    val stringConsumer: Consumer<String> = anyConsumer // Contravariant
+}
+```
+
+Standard library: `Comparable<in T>` is contravariant. Typical usage:
+
+```kotlin
+class Person(val name: String) : Comparable<Person> {
+    override fun compareTo(other: Person): Int = name.compareTo(other.name)
+}
+
+fun useComparable(persons: List<Person>, cmp: Comparable<in Person>) {
+    // cmp can handle Person or its supertypes
+}
+```
+
+---
+
+### Invariance (no variance)
+
+Without `in`/`out`, a generic type is invariant: you cannot substitute `Generic<A>` where `Generic<B>` is expected, even if `A` is a subtype of `B`.
+
+```kotlin
+interface Box<T> {
+    fun get(): T
+    fun set(item: T)
+}
+
+fun exampleInvariance() {
+    val stringBox: Box<String> = object : Box<String> {
+        private var value: String = ""
+        override fun get(): String = value
+        override fun set(item: String) { value = item }
+    }
+    // val anyBox: Box<Any> = stringBox // Error: invariant
+}
+```
+
+---
+
+### Use-Site Variance (Type Projections)
+
+Use-site variance lets you project variance when using an invariant type.
+
+Example similar to `java.util.Collections.copy`:
+
+```kotlin
+fun copy(from: MutableList<out Any>, to: MutableList<in Any>) {
+    for (item in from) {
+        to.add(item)
+    }
+}
+```
+
+- `MutableList<out Any>`: we treat `from` as a producer of `Any`. We cannot safely add arbitrary `Any` to it.
+- `MutableList<in Any>`: we treat `to` as a consumer of `Any`. Elements read from it are of type `Any?`.
+
+(Real-world analogues: `Array<out T>`, `MutableList<out T>`, etc., when used with projections in APIs.)
+
+---
+
+### Star Projection (`*`)
+
+Star projection represents an unknown type argument while preserving type safety.
 
 ```kotlin
 fun printList(list: List<*>) {
@@ -169,7 +291,11 @@ fun printList(list: List<*>) {
 }
 ```
 
+`List<*>` means "a list of elements of some unknown type". You can safely read elements as `Any?`, but you cannot (in general) add arbitrary elements to it.
+
 ---
+
+Variance and type projections in Kotlin help express which operations on generic types are safe and prevent unsafe substitutions.
 
 ## Follow-ups
 
@@ -183,6 +309,5 @@ fun printList(list: List<*>) {
 
 ## Related Questions
 
--
 - [[q-equals-hashcode-purpose--kotlin--medium]]
 - [[q-launch-vs-async--kotlin--easy]]

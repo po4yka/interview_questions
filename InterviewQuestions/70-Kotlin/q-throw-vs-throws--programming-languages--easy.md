@@ -2,20 +2,20 @@
 id: lang-035
 title: "Throw Vs Throws / Throw против Throws"
 aliases: [Throw Vs Throws, Throw против Throws]
-topic: programming-languages
-subtopics: [error-handling, exception-handling, java]
+topic: kotlin
+subtopics: [exceptions, java]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-sealed-vs-enum-classes--programming-languages--medium]
+related: [c-kotlin, q-sealed-vs-enum-classes--programming-languages--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/easy, exceptions, java, kotlin, programming-languages, throw, throws]
 ---
-# Разница Между Throw И Throws
+# Throw Vs Throws / Throw против Throws
 
 # Вопрос (RU)
 > Разница между throw и throws
@@ -27,7 +27,7 @@ tags: [difficulty/easy, exceptions, java, kotlin, programming-languages, throw, 
 
 ## Ответ (RU)
 
-Разница между `throw` и `throws` фундаментальна в обработке исключений:
+Разница между `throw` и `throws` фундаментальна в обработке исключений (в первую очередь в Java):
 
 ### Ключевое Слово `throw`
 
@@ -50,19 +50,19 @@ fun checkAge(age: Int) {
 ```
 
 **Характеристики**:
-- Используется внутри тела метода
-- Фактически создает и выбрасывает экземпляр исключения
-- Выполнение останавливается в этой точке
-- В Java используется с `new`, в Kotlin без `new`
+- Используется внутри тела метода / функции
+- Выбрасывает экземпляр исключения (созданный в этот момент или заранее)
+- Выполнение текущего потока на этом пути останавливается и управление передается обработчику исключений
+- В Java при создании используется `new`, в Kotlin без `new`
 
 ### Ключевое Слово `throws`
 
-**Используется в сигнатуре метода** для объявления что метод может выбросить исключения (только Java):
+**Используется в сигнатуре метода** для объявления, что метод может выбросить исключения (только Java, для checked-исключений):
 
 ```java
 // Java - должны объявлять checked exceptions
-public void readFile(String path) throws IOException, FileNotFoundException {
-    // Может выбросить эти исключения
+public void readFile(String path) throws IOException {
+    // Может выбросить IOException (включая его подклассы)
     FileReader reader = new FileReader(path);
 }
 
@@ -81,12 +81,12 @@ public void safeProcessFile() {
 }
 ```
 
-**Примечание**: Kotlin **не имеет ключевого слова `throws`**! Все исключения unchecked.
+**Примечание**: В Kotlin **нет ключевого слова `throws`**. На уровне языка все исключения ведут себя как unchecked: компилятор не требует объявления или обязательной обработки исключений.
 
 ```kotlin
 // Kotlin - объявление throws не требуется
 fun readFile(path: String) {
-    // Может выбросить IOException, но объявление не нужно
+    // Может выбросить IOException, но объявления не нужно
     val reader = FileReader(path)
 }
 
@@ -100,19 +100,19 @@ fun processFile() {
 
 | Аспект | `throw` | `throws` |
 |--------|---------|----------|
-| **Назначение** | Выбросить исключение | Объявить возможные исключения |
-| **Расположение** | Внутри тела метода | Сигнатура метода |
-| **Язык** | Java и Kotlin | Только Java (не в Kotlin) |
-| **Действие** | Фактически выбрасывает | Только объявляет |
-| **Синтаксис** | `throw new Exception()` | `throws Exception` |
-| **Обязательность** | Когда нужно выбросить | Для checked exceptions (Java) |
+| **Назначение** | Фактически выбросить исключение | Объявить возможные checked-исключения |
+| **Расположение** | Внутри тела метода/функции | Сигнатура метода |
+| **Язык** | Java и Kotlin | Только Java (нет в Kotlin) |
+| **Действие** | Выбрасывает исключение | Только объявляет (для компилятора) |
+| **Синтаксис** | `throw new Exception()` (Java), `throw Exception()` (Kotlin) | `throws Exception` |
+| **Обязательность** | Когда нужно выбросить | Для checked exceptions в Java (handle-or-declare) |
 
-### Пример С Обоими Ключевыми Словами (Java)
+### Пример С Оба Ключевыми Словами (Java)
 
 ```java
 // Java - использование обоих throw и throws
 public class FileProcessor {
-    // throws: объявляет исключение
+    // throws: объявляет checked-исключение
     public void processFile(String path) throws IOException {
         if (path == null) {
             // throw: фактически выбрасывает исключение
@@ -120,7 +120,7 @@ public class FileProcessor {
         }
 
         FileReader reader = new FileReader(path);  // Может выбросить IOException
-        // ... обработка файла
+        // ... обработка файла (упрощенный пример)
     }
 }
 ```
@@ -136,13 +136,13 @@ class FileProcessor {
             throw IllegalArgumentException("Путь не может быть пустым")
         }
 
-        val reader = FileReader(path)  // Может выбросить IOException (unchecked)
-        // ... обработка файла
+        val reader = FileReader(path)  // Может выбросить IOException (как unchecked с точки зрения Kotlin)
+        // ... обработка файла (упрощенный пример)
     }
 }
 ```
 
-### Аннотация @Throws В Kotlin
+### Аннотация `@Throws` В Kotlin
 
 Для совместимости с Java, Kotlin имеет аннотацию `@Throws`:
 
@@ -153,32 +153,32 @@ fun readFile(path: String) {
     val reader = FileReader(path)
 }
 
-// Java код вызывающий эту Kotlin функцию увидит:
+// Java-код, вызывающий эту Kotlin-функцию, увидит сигнатуру:
 // public void readFile(String path) throws IOException, FileNotFoundException
 ```
 
 **Когда использовать**:
-- Пишете Kotlin библиотеку используемую Java кодом
-- Хотите чтобы Java вызывающие обрабатывали конкретные исключения
-- В противном случае, не нужно в чистом Kotlin
+- Пишете Kotlin-библиотеку, используемую Java-кодом
+- Хотите, чтобы Java-вызывающие явно обрабатывали конкретные исключения
+- В чистом Kotlin обычно не требуется
 
 ### Распространенные Ошибки
 
-**1. Использование throws в Kotlin:**
+**1. Использование `throws` в Kotlin:**
 ```kotlin
-// Неправильно - throws не существует в Kotlin
+// Неправильно - ключевого слова throws нет в Kotlin
 fun readFile() throws IOException {  // Ошибка компиляции!
 }
 
-// Правильно - просто throw если нужно
+// Правильно - просто выбросить исключение при необходимости
 fun readFile() {
     throw IOException("Ошибка")
 }
 ```
 
-**2. Забыть ключевое слово throw:**
+**2. Забыть ключевое слово `throw`:**
 ```java
-// Неправильно - просто создание исключения, не выбрасывание
+// Неправильно - просто создаем исключение, не выбрасывая его
 if (age < 0) {
     new IllegalArgumentException("Недопустимо");  // Ничего не делает!
 }
@@ -192,24 +192,23 @@ if (age < 0) {
 ### Резюме
 
 **`throw`**:
-- Выполняет выбрасывание исключения
-- Используется в теле метода
-- Оба Java и Kotlin
+- Фактически выполняет выбрасывание исключения
+- Используется в теле метода/функции
+- Работает и в Java, и в Kotlin
 - Синтаксис: `throw ExceptionInstance`
 
 **`throws`**:
-- Объявляет возможные исключения
+- Объявляет возможные (как правило checked) исключения
 - Используется в сигнатуре метода
-- Только Java (Kotlin использует аннотацию `@Throws` для interop)
+- Только Java (в Kotlin вместо этого при необходимости используют аннотацию `@Throws` для interop с Java)
 - Синтаксис: `throws ExceptionType1, ExceptionType2`
 
-**Ключевое различие**: `throw` - это действие (выбрасывает исключение), `throws` - это декларация (объявляет что метод может выбросить).
+**Ключевое различие**: `throw` — действие (выбрасывает исключение), `throws` — декларация для компилятора и вызывающего кода (сообщает, что метод может выбросить исключение).
 
 ### Практические Примеры Использования
 
-**Пример 1: Валидация данных**
+**Пример 1: Валидация данных (Kotlin)**
 ```kotlin
-// Kotlin
 fun validateAge(age: Int) {
     if (age < 0) {
         throw IllegalArgumentException("Возраст не может быть отрицательным")
@@ -229,14 +228,14 @@ try {
 
 **Пример 2: Работа с файлами (Java)**
 ```java
-// Java - должны объявлять IOException
+// Java - объявляем IOException
 public String readFileContent(String path) throws IOException {
     if (path == null || path.isEmpty()) {
         throw new IllegalArgumentException("Путь не может быть пустым");
     }
 
     BufferedReader reader = new BufferedReader(new FileReader(path));
-    return reader.readLine();
+    return reader.readLine();  // Упрощенный пример, без закрытия ресурса
 }
 
 // Вызывающий код должен обработать исключение
@@ -250,9 +249,8 @@ public void processFile() {
 }
 ```
 
-**Пример 3: Кастомные исключения**
+**Пример 3: Кастомные исключения (Kotlin)**
 ```kotlin
-// Kotlin - создание собственного исключения
 class InsufficientBalanceException(
     val balance: Double,
     val amount: Double
@@ -277,15 +275,13 @@ try {
 }
 ```
 
-**Пример 4: Цепочка исключений**
+**Пример 4: Цепочка исключений (Kotlin)**
 ```kotlin
-// Kotlin - обертывание исключений
 class DataProcessingException(message: String, cause: Throwable)
     : Exception(message, cause)
 
 fun processData(data: String) {
     try {
-        // Некоторая обработка
         val result = data.toInt()
     } catch (e: NumberFormatException) {
         throw DataProcessingException(
@@ -304,7 +300,7 @@ try {
 }
 ```
 
-**Пример 5: Multiple exceptions (Java)**
+**Пример 5: Несколько исключений (Java)**
 ```java
 // Java - объявление нескольких исключений
 public void connectToDatabase(String url)
@@ -318,7 +314,7 @@ public void connectToDatabase(String url)
     DriverManager.getConnection(url);
 }
 
-// Обработка нескольких исключений
+// Обработка нескольких типов исключений
 public void initDatabase() {
     try {
         connectToDatabase("jdbc:mysql://localhost/db");
@@ -332,20 +328,20 @@ public void initDatabase() {
 
 ### Лучшие Практики
 
-1. **Используйте специфичные исключения** - не бросайте общий `Exception`
-2. **Добавляйте осмысленные сообщения** - помогите понять причину ошибки
-3. **В Kotlin избегайте @Throws** - используйте только для Java interop
-4. **Не игнорируйте исключения** - всегда обрабатывайте или логируйте
-5. **Создавайте кастомные исключения** - для доменных ошибок
-6. **Документируйте исключения** - укажите когда метод может выбросить исключение
+1. Используйте специфичные типы исключений — не бросайте общий `Exception` без необходимости.
+2. Добавляйте осмысленные сообщения — помогайте понять причину ошибки.
+3. В Kotlin используйте `@Throws` только для interop с Java, а не в чисто Kotlin-коде.
+4. Не игнорируйте исключения — обрабатывайте или логируйте их.
+5. Создавайте кастомные исключения для доменных ошибок при необходимости.
+6. Документируйте важные исключения в комментариях/документации, даже если Kotlin не требует `throws`.
 
 ## Answer (EN)
 
-The difference between `throw` and `throws` is fundamental in exception handling:
+The difference between `throw` and `throws` is fundamental in exception handling (primarily in Java):
 
 ### `throw` Keyword
 
-**Used to actually throw an exception** at a specific place in code:
+**Used to actually throw an exception** at a specific point in code:
 
 ```java
 // Java
@@ -364,19 +360,19 @@ fun checkAge(age: Int) {
 ```
 
 **Characteristics:**
-- Used **inside method body**
-- Actually creates and throws an exception instance
-- Execution stops at that point
-- Used with `new` in Java (without `new` in Kotlin)
+- Used inside a method/function body
+- Throws an exception instance (created at that moment or earlier)
+- Control flow for that path stops and is transferred to exception handling
+- Uses `new` when creating in Java; no `new` in Kotlin
 
 ### `throws` Keyword
 
-**Used in method signature** to declare that method may throw exceptions (Java only):
+**Used in a method signature** to declare that the method may throw exceptions (Java only, for checked exceptions):
 
 ```java
 // Java - must declare checked exceptions
-public void readFile(String path) throws IOException, FileNotFoundException {
-    // May throw these exceptions
+public void readFile(String path) throws IOException {
+    // May throw IOException (including its subclasses)
     FileReader reader = new FileReader(path);
 }
 
@@ -395,7 +391,7 @@ public void safeProcessFile() {
 }
 ```
 
-**Note:** Kotlin **does not have `throws` keyword**! All exceptions are unchecked.
+**Note:** Kotlin **does not have a `throws` keyword**. At the language level, all exceptions are treated as unchecked: the compiler does not require you to declare or catch them.
 
 ```kotlin
 // Kotlin - no throws declaration needed
@@ -406,7 +402,7 @@ fun readFile(path: String) {
 
 // No forced handling
 fun processFile() {
-    readFile("data.txt")  // OK, no try-catch required
+    readFile("data.txt");  // OK, no try-catch required
 }
 ```
 
@@ -414,27 +410,27 @@ fun processFile() {
 
 | Aspect | `throw` | `throws` |
 |--------|---------|----------|
-| **Purpose** | Throw exception | Declare possible exceptions |
-| **Location** | Inside method body | Method signature |
+| **Purpose** | Actually throw an exception | Declare possible checked exceptions |
+| **Location** | Inside method/function body | Method signature |
 | **Language** | Java & Kotlin | Java only (not in Kotlin) |
-| **Action** | Actually throws | Only declares |
-| **Syntax** | `throw new Exception()` | `throws Exception` |
-| **Mandatory** | When you want to throw | For checked exceptions (Java) |
+| **Action** | Performs the throw | Declaration for compiler/callers |
+| **Syntax** | `throw new Exception()` (Java), `throw Exception()` (Kotlin) | `throws Exception` |
+| **Mandatory** | When you want to throw | For checked exceptions in Java (handle-or-declare) |
 
 ### Java Example (Both Keywords)
 
 ```java
 // Java - using both throw and throws
 public class FileProcessor {
-    // throws: declares exception
+    // throws: declares a checked exception
     public void processFile(String path) throws IOException {
         if (path == null) {
-            // throw: actually throws exception
+            // throw: actually throws an exception
             throw new IllegalArgumentException("Path cannot be null");
         }
 
         FileReader reader = new FileReader(path);  // May throw IOException
-        // ... process file
+        // ... process file (simplified)
     }
 }
 ```
@@ -446,19 +442,19 @@ public class FileProcessor {
 class FileProcessor {
     fun processFile(path: String) {
         if (path.isEmpty()) {
-            // throw: actually throws exception
+            // throw: actually throws an exception
             throw IllegalArgumentException("Path cannot be empty")
         }
 
-        val reader = FileReader(path)  // May throw IOException (unchecked)
-        // ... process file
+        val reader = FileReader(path);  // May throw IOException (treated as unchecked in Kotlin)
+        // ... process file (simplified)
     }
 }
 ```
 
-### Kotlin @Throws Annotation
+### Kotlin `@Throws` Annotation
 
-For Java interoperability, Kotlin has `@Throws` annotation:
+For Java interoperability, Kotlin has the `@Throws` annotation:
 
 ```kotlin
 // Kotlin
@@ -472,32 +468,32 @@ fun readFile(path: String) {
 ```
 
 **When to use:**
-- Writing Kotlin library used by Java code
-- Want Java callers to handle specific exceptions
-- Otherwise, not needed in pure Kotlin
+- Writing a Kotlin library consumed by Java code
+- You want Java callers to be forced/encouraged to handle specific exceptions
+- Otherwise usually not needed in pure Kotlin code
 
 ### Common Errors
 
-**1. Using throws in Kotlin:**
+**1. Using `throws` in Kotlin:**
 ```kotlin
-// - Wrong - throws doesn't exist in Kotlin
+// Wrong - 'throws' keyword doesn't exist in Kotlin
 fun readFile() throws IOException {  // Compilation error!
 }
 
-// - Correct - just throw if needed
+// Correct - just throw when needed
 fun readFile() {
     throw IOException("Error")
 }
 ```
 
-**2. Forgetting throw keyword:**
+**2. Forgetting the `throw` keyword:**
 ```java
-// - Wrong - just creating exception, not throwing
+// Wrong - just creating an exception, not throwing it
 if (age < 0) {
     new IllegalArgumentException("Invalid");  // Does nothing!
 }
 
-// - Correct - actually throw it
+// Correct - actually throw it
 if (age < 0) {
     throw new IllegalArgumentException("Invalid");
 }
@@ -506,31 +502,45 @@ if (age < 0) {
 ### Summary
 
 **`throw`:**
-- Executes an exception throw
-- Used in method body
-- Both Java and Kotlin
+- Performs the actual throwing of an exception
+- Used inside method/function body
+- Available in both Java and Kotlin
 - Syntax: `throw ExceptionInstance`
 
 **`throws`:**
-- Declares possible exceptions
+- Declares possible (typically checked) exceptions
 - Used in method signature
-- Java only (Kotlin uses `@Throws` annotation for interop)
+- Java only (Kotlin uses `@Throws` for Java interop when needed)
 - Syntax: `throws ExceptionType1, ExceptionType2`
+
+**Key difference:** `throw` is an action (throws an exception), `throws` is a declaration for the compiler and callers (states that a method may throw exceptions).
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как это связано с проверяемыми (`checked`) и непроверяемыми (`unchecked`) исключениями в Java?
+- В каких случаях стоит использовать `throws` в Java вместо того, чтобы полагаться только на непроверяемые исключения?
+- Какие подводные камни возникают при смешанном использовании Kotlin и Java с разной моделью обработки исключений?
+
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- How does this relate to Java's checked vs unchecked exceptions?
+- When would you use `throws` in Java vs relying on unchecked exceptions?
+- What are common pitfalls when mixing Kotlin and Java exception handling?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
 
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
+## Связанные вопросы (RU)
+
+- [[q-sealed-vs-enum-classes--programming-languages--medium]]
+
 ## Related Questions
 
--
 - [[q-sealed-vs-enum-classes--programming-languages--medium]]
--

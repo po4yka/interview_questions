@@ -2,7 +2,7 @@
 id: lang-049
 title: "Equals Hashcode Rules / Правила equals и hashCode"
 aliases: [Equals Hashcode Rules, Правила equals и hashCode]
-topic: programming-languages
+topic: kotlin
 subtopics: [collections, equality, object-methods]
 question_kind: theory
 difficulty: medium
@@ -12,56 +12,61 @@ status: draft
 moc: moc-kotlin
 related: [c-equality, q-equals-hashcode-contracts--programming-languages--medium, q-equals-hashcode-purpose--programming-languages--hard]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [collections, contracts, difficulty/medium, equality, object-methods, programming-languages]
+updated: 2025-11-09
+tags: [collections, contracts, difficulty/medium, equality, object-methods, kotlin]
 ---
-# Какие Существуют Правила Для Методов Equals И Hashcode?
 
 # Вопрос (RU)
 > Какие существуют правила для методов equals и hashcode?
-
----
 
 # Question (EN)
 > What rules exist for equals and hashCode methods?
 
 ## Ответ (RU)
 
-Методы `equals()` и `hashCode()` имеют важное значение для корректной работы коллекций, таких как HashSet, HashMap и HashTable.
+Методы `equals()` и `hashCode()` определяют логику сравнения объектов и корректную работу хеш-коллекций, таких как `HashSet`, `HashMap` и `Hashtable` (см. также [[c-equality]]).
 
 **Контракт equals():**
-1. **Рефлексивность**: `x.equals(x)` должен возвращать true
-2. **Симметричность**: Если `x.equals(y)` возвращает true, то `y.equals(x)` должен возвращать true
-3. **Транзитивность**: Если `x.equals(y)` и `y.equals(z)` возвращают true, то `x.equals(z)` должен возвращать true
-4. **Согласованность**: Множественные вызовы возвращают одинаковый результат, если данные не изменились
-5. **Сравнение с null**: `x.equals(null)` должен возвращать false
+1. **Рефлексивность**: для любого не-null объекта `x`, `x.equals(x)` должно возвращать `true`.
+2. **Симметричность**: если `x.equals(y)` возвращает `true`, то `y.equals(x)` также должно возвращать `true`.
+3. **Транзитивность**: если `x.equals(y)` и `y.equals(z)` возвращают `true`, то `x.equals(z)` также должно возвращать `true`.
+4. **Согласованность**: повторные вызовы `x.equals(y)` должны давать один и тот же результат, пока значения, участвующие в сравнении, не изменились.
+5. **Сравнение с null**: для любого не-null объекта `x`, вызов `x.equals(null)` должен возвращать `false`.
 
 **Контракт hashCode():**
-1. **Внутренняя согласованность**: hashCode должен возвращать одно и то же значение, если объект не изменился
-2. **Согласованность с equals**: Если `x.equals(y)` возвращает true, то `x.hashCode() == y.hashCode()` должен быть true
-3. **Необязательное различие**: Разные объекты могут иметь одинаковый hashCode (коллизии допустимы), но лучшая производительность достигается при разных значениях
+1. **Согласованность во времени**: в течение одного выполнения программы вызов `x.hashCode()` должен возвращать одно и то же значение, пока значения полей, участвующих в `equals()`, не меняются.
+2. **Согласованность с equals**:
+   - если `x.equals(y)` возвращает `true`, то `x.hashCode() == y.hashCode()` должно быть `true`;
+   - если `x.hashCode() != y.hashCode()`, то `x.equals(y)` обязательно должно быть `false`.
+3. **Коллизии допустимы**: разные объекты могут иметь одинаковый `hashCode` (это не нарушает контракт), но для эффективности хеш-структур желательно минимизировать коллизии.
 
-**Золотое правило**: Когда вы переопределяете `equals()`, вы ДОЛЖНЫ переопределить `hashCode()`!
+**Практическое правило**: когда вы переопределяете `equals()`, вы практически всегда должны переопределить и `hashCode()` таким образом, чтобы оба опирались на один и тот же набор значимых полей.
 
 ## Answer (EN)
 
-Methods `equals()` and `hashCode()` are important for correct operation of collections such as HashSet, HashMap, and HashTable.
+Methods `equals()` and `hashCode()` define how objects are compared and are critical for correct behavior of hash-based collections such as `HashSet`, `HashMap`, and `Hashtable` (see also [[c-equality]]).
 
 **equals() contract:**
-1. **Reflexive**: `x.equals(x)` must return true
-2. **Symmetric**: If `x.equals(y)` is true, then `y.equals(x)` must be true
-3. **Transitive**: If `x.equals(y)` and `y.equals(z)` are true, then `x.equals(z)` must be true
-4. **Consistent**: Multiple calls return same result if no data changes
-5. **Null comparison**: `x.equals(null)` must return false
+1. **Reflexive**: for any non-null reference `x`, `x.equals(x)` must return `true`.
+2. **Symmetric**: if `x.equals(y)` is `true`, then `y.equals(x)` must also be `true`.
+3. **Transitive**: if `x.equals(y)` and `y.equals(z)` are `true`, then `x.equals(z)` must also be `true`.
+4. **Consistent**: repeated calls to `x.equals(y)` must consistently return the same result as long as the fields used in the comparison do not change.
+5. **Null comparison**: for any non-null reference `x`, `x.equals(null)` must return `false`.
 
 **hashCode() contract:**
-1. **Internal consistency**: hashCode must return same value if object hasn't changed
-2. **Consistency with equals**: If `x.equals(y)` is true, then `x.hashCode() == y.hashCode()` must be true
-3. **Optional distinction**: Different objects may have same hashCode (collisions allowed), but better performance if different
+1. **Stable during execution**: during a single execution of the program, `x.hashCode()` must consistently return the same value as long as the fields used in `equals()` do not change.
+2. **Consistency with equals**:
+   - if `x.equals(y)` is `true`, then `x.hashCode() == y.hashCode()` must be `true`;
+   - if `x.hashCode() != y.hashCode()`, then `x.equals(y)` must be `false`.
+3. **Collisions allowed**: different objects may have the same `hashCode` (this does not violate the contract), but good implementations minimize collisions for better performance.
 
-**Golden rule**: When you override `equals()`, you MUST override `hashCode()`!
+**Practical rule**: when you override `equals()`, you should almost always override `hashCode()` as well, and both must be based on the same set of significant fields.
 
----
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого контракта от Java?
+- Когда это используется на практике?
+- Какие распространенные ошибки следует избегать?
 
 ## Follow-ups
 
@@ -69,9 +74,19 @@ Methods `equals()` and `hashCode()` are important for correct operation of colle
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+-
+-
+-
 
 ## Related Questions
 

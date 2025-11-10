@@ -10,12 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-equals-hashcode-purpose--kotlin--medium, q-kotlin-object-companion-object--programming-languages--easy]
+related: [c-kotlin, q-equals-hashcode-purpose--kotlin--medium, q-kotlin-object-companion-object--programming-languages--easy]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [classes, companion-object, difficulty/hard, kotlin, object-keyword, singleton]
 ---
-# What is Object / Companion Object?
 
 # Вопрос (RU)
 > Что такое `object` / `companion object` в Kotlin? Объясните их характеристики, различия и продвинутые случаи использования.
@@ -27,7 +26,7 @@ tags: [classes, companion-object, difficulty/hard, kotlin, object-keyword, singl
 
 ## Ответ (RU)
 
-`object` и `companion object` используются для реализации различных паттернов и функциональностей в Kotlin:
+`object` и `companion object` используются для реализации различных паттернов и функциональностей в Kotlin (см. также [[c-kotlin]]):
 
 ### Object Declaration (объявление object)
 
@@ -95,11 +94,12 @@ Logger.onClick()
 **Характеристики:**
 - Объявляется внутри класса
 - Используется для членов, доступных без создания экземпляра класса
-- Аналог статических членов в Java
+- Аналог статических членов в Java (но реализован через обычный объект, а не ключевое слово `static`)
 - Может реализовывать интерфейсы
 - Может иметь extension-функции
 - Только один companion object на класс
 - Может иметь имя (опционально)
+- Ленивая инициализация при первом обращении к companion object или его членам
 
 **Пример со статико-подобными членами:**
 ```kotlin
@@ -170,9 +170,9 @@ class Person(val name: String, val age: Int) {
 
 // Использование
 val person = Person("Alice", 30)
-println(person.toJson())              // Метод экземпляра
+println(person.toJson())               // Метод экземпляра
 println(Person.toJson())               // Метод companion object
-val newPerson = Person.fromJson("{}")  // Фабричный метод
+val newPerson = Person.fromJson("{}"); // Фабричный метод
 ```
 
 **Анонимный object (object expression):**
@@ -222,22 +222,22 @@ println(person.name)  // Имя по умолчанию
 |----------------|--------|------------------|
 | **Расположение** | Отдельная сущность | Внутри класса |
 | **Доступ** | Через имя object | Через имя класса |
-| **Назначение** | Singleton паттерн | "Статические" члены |
-| **Количество** | Один на объявление | Один на класс (опционально) |
+| **Назначение** | Singleton паттерн, утилиты, объекты как значения | "Статические" члены, связанные с классом |
+| **Количество** | Один экземпляр на объявление | Не более одного на класс (опционально) |
 | **Конструктор** | Не может иметь | Не может иметь |
-| **Наследование** | Может наследоваться | Может реализовывать интерфейсы |
-| **Инициализация** | Ленивая | При загрузке класса |
-| **Extension** | Нет | Да (можно расширять) |
+| **Наследование** | Может наследоваться и реализовывать интерфейсы | Может реализовывать интерфейсы |
+| **Инициализация** | Ленивая при первом обращении | Ленивая при первом обращении к companion object или его членам |
+| **Extension** | Можно объявлять extension-функции/свойства для конкретного `object` по его имени | Можно объявлять extension-функции/свойства для `Companion` (или именованного companion object) |
 
 ### Когда Использовать
 
-**Используйте object когда:**
+**Используйте `object` когда:**
 - Нужен единственный экземпляр (Singleton)
 - Создаёте утилитный класс
 - Реализуете глобальный менеджер
 - Создаёте константы на уровне модуля
 
-**Используйте companion object когда:**
+**Используйте `companion object` когда:**
 - Нужны фабричные методы
 - Создаёте константы внутри класса
 - Нужны "статические" члены, связанные с классом
@@ -297,31 +297,22 @@ val page = HtmlBuilder.html {
 
 ### Краткий Ответ
 
-**object**: Создаёт потокобезопасный singleton с ленивой инициализацией. Используется для одиночных экземпляров, утилит, глобальных менеджеров. Может наследоваться и реализовывать интерфейсы.
+**`object`**: Создаёт потокобезопасный singleton с ленивой инициализацией. Используется для одиночных экземпляров, утилит, глобальных менеджеров. Может наследоваться и реализовывать интерфейсы.
 
-**companion object**: Объявляет статико-подобные члены внутри класса, доступные через имя класса. Используется для фабричных методов, констант, "статических" функций. Может реализовывать интерфейсы и иметь extension-функции. Один на класс, может быть именованным.
+**`companion object`**: Объявляет статико-подобные члены внутри класса, доступные через имя класса. Используется для фабричных методов, констант, "статических" функций. Может реализовывать интерфейсы и иметь extension-функции. Один на класс, может быть именованным. Ленивая инициализация при первом обращении.
 
 ## Answer (EN)
 
-`object` and `companion object` are used to implement various patterns and functionalities in Kotlin:
+`object` and `companion object` are used to implement various patterns and functionalities in Kotlin (see also [[c-kotlin]]):
 
-**object declaration:**
+### Object Declaration
+
+**Characteristics:**
 - Used to create a single instance of a class (Singleton pattern)
 - Thread-safe by default
 - Lazily initialized when first accessed
 - Cannot have constructors (automatically instantiated)
 - Can inherit from classes and implement interfaces
-
-**companion object:**
-- Declared inside a class
-- Used to declare members accessible without creating an instance of the class
-- Similar to static members in Java
-- Can implement interfaces
-- Can have extension functions
-- Only one companion object per class
-- Can be named (optional)
-
-### Code Examples
 
 **Object declaration (Singleton):**
 ```kotlin
@@ -378,6 +369,18 @@ fun main() {
     Logger.onClick()
 }
 ```
+
+### Companion Object
+
+**Characteristics:**
+- Declared inside a class
+- Used to declare members accessible without creating an instance of the class
+- Similar to static members in Java (but implemented as a regular object, not via `static` keyword)
+- Can implement interfaces
+- Can have extension functions
+- Only one companion object per class
+- Can be named (optional)
+- Lazily initialized when first accessed (the companion object or its members)
 
 **Companion object (static-like members):**
 ```kotlin
@@ -454,9 +457,9 @@ class Person(val name: String, val age: Int) {
 
 fun main() {
     val person = Person("Alice", 30)
-    println(person.toJson())              // Instance method
+    println(person.toJson())               // Instance method
     println(Person.toJson())               // Companion object method
-    val newPerson = Person.fromJson("{}")  // Factory method
+    val newPerson = Person.fromJson("{}") // Factory method
 }
 ```
 
@@ -504,6 +507,90 @@ fun main() {
 }
 ```
 
+### Key Differences
+
+| Aspect | `object` | `companion object` |
+|--------|---------|--------------------|
+| Location | Top-level or nested singleton declaration | Inside a class |
+| Access | Via the object name | Via the class name |
+| Purpose | Singleton pattern, utilities, objects as values | "Static-like" members associated with the class |
+| Count | One instance per declaration | At most one per class (optional) |
+| Constructor | Cannot have one | Cannot have one |
+| Inheritance | Can extend classes and implement interfaces | Can implement interfaces |
+| Initialization | Lazy on first access | Lazy on first access to the companion or its members |
+| Extensions | You can declare extension functions/properties for a specific `object` by its name | You can declare extensions for `Companion` (or the named companion object) |
+
+### When to Use
+
+Use `object` when:
+- You need a single instance (Singleton)
+- You are creating a utility holder
+- You implement a global manager
+- You define constants at module/top level
+
+Use `companion object` when:
+- You need factory methods
+- You keep constants inside the class
+- You need "static-like" members strongly associated with the class
+- You implement Factory-style APIs
+
+### Advanced Examples
+
+**Singleton with initialization:**
+```kotlin
+object AppConfig {
+    private val properties = mutableMapOf<String, String>()
+
+    init {
+        // Runs once on first access
+        println("Initializing AppConfig")
+        loadProperties()
+    }
+
+    private fun loadProperties() {
+        properties["api_url"] = "https://api.example.com"
+        properties["timeout"] = "30"
+    }
+
+    fun get(key: String): String? = properties[key]
+}
+
+// First access initializes the object
+val apiUrl = AppConfig.get("api_url")
+```
+
+**Companion object for DSL:**
+```kotlin
+class HtmlBuilder {
+    private val elements = mutableListOf<String>()
+
+    fun tag(name: String, content: String) {
+        elements.add("<$name>$content</$name>")
+    }
+
+    fun build(): String = elements.joinToString("\n")
+
+    companion object {
+        fun html(init: HtmlBuilder.() -> Unit): String {
+            val builder = HtmlBuilder()
+            builder.init()
+            return builder.build()
+        }
+    }
+}
+
+// Using the DSL
+val page = HtmlBuilder.html {
+    tag("h1", "Title")
+    tag("p", "Paragraph")
+}
+```
+
+### Short Answer
+
+- `object`: Thread-safe, lazily initialized singleton. Good for one-off instances, utilities, global managers; can inherit and implement interfaces; can be used for constants at module/top level.
+- `companion object`: Provides static-like members inside a class, accessed via the class name. Good for factory methods, constants, and static helpers tied to that class; can implement interfaces and have extensions; exactly one per class, optionally named; lazily initialized on first access.
+
 ---
 
 ## Follow-ups
@@ -520,4 +607,3 @@ fun main() {
 
 - [[q-kotlin-object-companion-object--programming-languages--easy]]
 - [[q-equals-hashcode-purpose--kotlin--medium]]
--

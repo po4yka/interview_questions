@@ -1,22 +1,20 @@
 ---
 id: kotlin-203
 title: "Interface Properties / Свойства интерфейсов"
-aliases: ["Interface Properties, Свойства интерфейсов"]
+aliases: ["Interface Properties", "Свойства интерфейсов"]
 topic: kotlin
-subtopics: [access-modifiers, null-safety, type-system]
+subtopics: [null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-inline-functions--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium, q-statein-sharein-flow--kotlin--medium]
+related: [c-kotlin, c-kotlin-features, q-inline-functions--kotlin--medium, q-kotlin-delegation-detailed--kotlin--medium, q-statein-sharein-flow--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/medium]
 ---
-# How to Operate with Properties in Interface?
-
 # Вопрос (RU)
 > Как работать со свойствами в интерфейсах в Kotlin?
 
@@ -27,29 +25,218 @@ tags: [difficulty/medium]
 
 ## Ответ (RU)
 
-В интерфейсе можно объявить `val` или `var` свойства без инициализации. Для свойств с `get` реализация может быть в интерфейсе через кастомный геттер. Для `var` с `set` реализация должна быть в классе, так как интерфейсы не имеют состояния и не могут использовать backing fields (`field`).
+В интерфейсе можно объявить свойства `val` или `var` без инициализации. Интерфейсы не имеют собственного состояния и не могут использовать backing fields (`field`), поэтому:
+- свойство без тела (без реализации аксессоров) является абстрактным, и его реализация (backing field, делегат или вычисление) должна быть предоставлена в реализующем классе;
+- свойство с реализованным геттером/сеттером в интерфейсе должно быть реализуемым без обращения к `field` (например, вычисляться на основе других свойств или методов);
+- инициализаторы свойств в интерфейсе недопустимы.
 
-**Ключевые правила:**
-- Свойства интерфейса не могут иметь backing fields
-- Могут иметь кастомные геттеры в интерфейсе
-- Свойства `var` могут объявлять сеттеры, но нуждаются в реализации в классе
-- Свойства могут быть абстрактными (без реализации) или иметь реализацию по умолчанию
-- Можно переопределять свойства в реализующих классах
+Ключевые правила:
+- Свойства интерфейса не могут иметь backing fields.
+- Можно объявлять кастомные геттеры (и сеттеры для `var`) прямо в интерфейсе, если реализация не требует `field`.
+- Свойства `var` могут объявлять сеттеры; если аксессоры абстрактны (без тела), реализацию нужно дать в классе.
+- Свойства могут быть абстрактными или иметь реализацию по умолчанию (вычисляемые свойства) в интерфейсе.
+- Свойства можно переопределять в реализующих классах.
+- Допустимо комбинировать несколько интерфейсов с пересекающимися или вычисляемыми свойствами.
+- Допустимо использовать делегирование (`by`) и ленивую инициализацию (`by lazy`) в реализующих классах для свойств, объявленных в интерфейсе.
+
+### Примеры кода (RU)
+
+Базовые свойства интерфейса:
+
+```kotlin
+interface User {
+    // Абстрактное свойство — реализация обязательна в классе
+    val name: String
+
+    val email: String
+
+    // Свойство с кастомным геттером — есть реализация по умолчанию
+    val displayName: String
+        get() = "User: $name"
+
+    // Вычисляемое свойство на основе других свойств
+    val isValid: Boolean
+        get() = name.isNotEmpty() && email.contains("@")
+}
+
+class BasicUser(
+    override val name: String,
+    override val email: String
+) : User
+```
+
+`val` vs `var` в интерфейсах:
+
+```kotlin
+interface Config {
+    // val с геттером по умолчанию
+    val apiUrl: String
+        get() = "https://api.example.com"
+
+    // var — абстрактное изменяемое свойство, реализация в классе
+    var timeout: Int
+
+    // var с кастомным геттером, но абстрактным сеттером
+    var debugMode: Boolean
+        get() = false
+}
+
+class AppConfig : Config {
+    override val apiUrl: String = "https://api.production.com"
+    override var timeout: Int = 30
+    override var debugMode: Boolean = false
+}
+```
+
+Кастомные геттеры и вычисляемые свойства:
+
+```kotlin
+interface Shape {
+    val width: Double
+    val height: Double
+
+    val area: Double
+        get() = width * height
+
+    val perimeter: Double
+        get() = 2 * (width + height)
+
+    val diagonal: Double
+        get() = Math.sqrt(width * width + height * height)
+}
+
+class Rectangle(
+    override val width: Double,
+    override val height: Double
+) : Shape
+```
+
+Свойства с сеттером и валидацией в классе:
+
+```kotlin
+interface Nameable {
+    var name: String
+
+    val upperCaseName: String
+        get() = name.uppercase()
+}
+
+class Person(override var name: String) : Nameable
+
+class Product : Nameable {
+    private var _name: String = ""
+
+    override var name: String
+        get() = _name
+        set(value) {
+            require(value.isNotBlank()) { "Name cannot be blank" }
+            _name = value.trim()
+        }
+}
+```
+
+Несколько интерфейсов и переопределение свойств:
+
+```kotlin
+interface Identifiable {
+    val id: String
+}
+
+interface Timestamped {
+    val createdAt: Long
+    val updatedAt: Long
+
+    val age: Long
+        get() = System.currentTimeMillis() - createdAt
+}
+
+interface NameHolder {
+    val name: String
+    val displayName: String
+        get() = name
+}
+
+data class Article(
+    override val id: String,
+    override val name: String,
+    override val createdAt: Long,
+    override val updatedAt: Long
+) : Identifiable, Timestamped, NameHolder {
+    override val displayName: String
+        get() = "Article: $name"
+}
+```
+
+Делегирование и `by lazy` в реализации:
+
+```kotlin
+interface DataProvider {
+    val data: List<String>
+    val size: Int
+        get() = data.size
+
+    val isEmpty: Boolean
+        get() = data.isEmpty()
+
+    val firstOrNull: String?
+        get() = data.firstOrNull()
+}
+
+class StringListProvider(override val data: List<String>) : DataProvider
+
+class LazyDataProvider : DataProvider {
+    override val data: List<String> by lazy {
+        println("Loading data...")
+        listOf("Item 1", "Item 2", "Item 3")
+    }
+}
+```
+
+`const` в companion object интерфейса и отсутствие backing fields:
+
+```kotlin
+interface Constants {
+    companion object {
+        const val MAX_SIZE = 100
+        const val DEFAULT_TIMEOUT = 30
+        const val API_VERSION = "v1"
+    }
+
+    val maxRetries: Int
+        get() = 3
+}
+
+interface Counter {
+    // Нельзя иметь инициализатор или использовать field в интерфейсе
+
+    var currentValue: Int
+        get() = getCurrentCount()
+        set(value) = setCurrentCount(value)
+
+    fun getCurrentCount(): Int
+    fun setCurrentCount(value: Int)
+}
+```
 
 ## Answer (EN)
 
-In an interface, you can declare `val` or `var` properties without initialization. For properties with `get`, the implementation can be in the interface through a custom getter. For `var` with `set`, the implementation must be in the class, as interfaces do not have state and cannot use backing fields (`field`).
+In an interface, you can declare `val` or `var` properties without initialization. For properties, you can provide an implementation of the getter directly in the interface via a custom accessor. Interfaces do not have their own state and cannot use backing fields (`field`), therefore:
+- a property without a body (no implemented accessors) is abstract, and its implementation (backing field or delegate/computation) must be provided in the implementing class;
+- a property with implemented getter/setter in the interface must be implementable without using `field` (for example, computed from other properties or functions);
+- property initializers in interfaces are not allowed.
 
-**Key rules:**
-- Interface properties cannot have backing fields
-- Can have custom getters in the interface
-- `var` properties can declare setters, but need implementation in class
-- Properties can be abstract (no implementation) or have default implementation
-- Can override properties in implementing classes
+Key rules:
+- Interface properties cannot have backing fields.
+- They can have custom getters (and setters for `var`) in the interface if the implementation does not require `field`.
+- `var` properties can declare setters; if their accessors are abstract (no body), the implementation must be provided in the class.
+- Properties can be abstract (no implementation) or have default implementations in the interface (e.g., computed properties).
+- Properties can be overridden in implementing classes.
+- You can combine multiple interfaces with overlapping or computed properties.
+- Implementing classes can use delegation (`by`) and `by lazy` for properties declared in interfaces.
 
 ### Code Examples
 
-**Basic interface properties:**
+Basic interface properties:
 
 ```kotlin
 interface User {
@@ -72,18 +259,9 @@ class BasicUser(
     override val name: String,
     override val email: String
 ) : User
-
-fun main() {
-    val user = BasicUser("Alice", "alice@example.com")
-
-    println("Name: ${user.name}")
-    println("Email: ${user.email}")
-    println("Display name: ${user.displayName}")  // User: Alice
-    println("Is valid: ${user.isValid}")  // true
-}
 ```
 
-**val vs var in interfaces:**
+val vs var in interfaces:
 
 ```kotlin
 interface Config {
@@ -91,41 +269,27 @@ interface Config {
     val apiUrl: String
         get() = "https://api.example.com"  // Default implementation
 
-    // var - can be overridden as read-write
+    // var - abstract read-write property: implementation required in class
     var timeout: Int
 
-    // var with custom getter
+    // var with custom getter only - still abstract setter
     var debugMode: Boolean
-        get() = false  // Default value
+        get() = false  // Default value (no field)
 }
 
 class AppConfig : Config {
     // Can override val with val
     override val apiUrl: String = "https://api.production.com"
 
-    // Must provide backing field for var
+    // Must provide backing field or equivalent for abstract var
     override var timeout: Int = 30
 
-    // Can override with backing field
+    // Provide full implementation including setter
     override var debugMode: Boolean = false
-}
-
-fun main() {
-    val config = AppConfig()
-
-    println("API URL: ${config.apiUrl}")
-    println("Timeout: ${config.timeout}")
-
-    // Can modify var properties
-    config.timeout = 60
-    config.debugMode = true
-
-    println("New timeout: ${config.timeout}")
-    println("Debug mode: ${config.debugMode}")
 }
 ```
 
-**Custom getters in interface:**
+Custom getters in interface:
 
 ```kotlin
 interface Shape {
@@ -147,19 +311,9 @@ class Rectangle(
     override val width: Double,
     override val height: Double
 ) : Shape
-
-fun main() {
-    val rect = Rectangle(10.0, 5.0)
-
-    println("Width: ${rect.width}")
-    println("Height: ${rect.height}")
-    println("Area: ${rect.area}")         // 50.0
-    println("Perimeter: ${rect.perimeter}") // 30.0
-    println("Diagonal: ${rect.diagonal}")   // 11.18...
-}
 ```
 
-**Properties with setter (must be implemented in class):**
+Properties with setter (must be implemented in class if abstract):
 
 ```kotlin
 interface Nameable {
@@ -185,26 +339,9 @@ class Product : Nameable {
             _name = value.trim()
         }
 }
-
-fun main() {
-    val person = Person("alice")
-    println("Person: ${person.name}")
-    println("Upper: ${person.upperCaseName}")
-
-    person.name = "bob"
-    println("Updated: ${person.name}")
-
-    val product = Product()
-    product.name = "  Laptop  "
-    println("Product: '${product.name}'")  // 'Laptop' (trimmed)
-    println("Upper: ${product.upperCaseName}")
-
-    // This would throw exception:
-    // product.name = "  "
-}
 ```
 
-**Multiple interface properties:**
+Multiple interface properties:
 
 ```kotlin
 interface Identifiable {
@@ -219,7 +356,7 @@ interface Timestamped {
         get() = System.currentTimeMillis() - createdAt
 }
 
-interface Nameable {
+interface NameHolder {
     val name: String
     val displayName: String
         get() = name
@@ -230,60 +367,13 @@ data class Article(
     override val name: String,
     override val createdAt: Long,
     override val updatedAt: Long
-) : Identifiable, Timestamped, Nameable {
+) : Identifiable, Timestamped, NameHolder {
     override val displayName: String
         get() = "Article: $name"
 }
-
-fun main() {
-    val article = Article(
-        id = "article-001",
-        name = "Kotlin Basics",
-        createdAt = System.currentTimeMillis() - 1000000,
-        updatedAt = System.currentTimeMillis()
-    )
-
-    println("ID: ${article.id}")
-    println("Name: ${article.name}")
-    println("Display: ${article.displayName}")
-    println("Age: ${article.age} ms")
-}
 ```
 
-**Overriding interface properties:**
-
-```kotlin
-interface Animal {
-    val species: String
-    val sound: String
-        get() = "Generic sound"
-}
-
-class Dog : Animal {
-    override val species: String = "Canis familiaris"
-
-    // Override with custom getter
-    override val sound: String
-        get() = "Woof!"
-}
-
-class Cat : Animal {
-    override val species: String = "Felis catus"
-
-    // Override with backing field
-    override val sound: String = "Meow!"
-}
-
-fun main() {
-    val dog = Dog()
-    val cat = Cat()
-
-    println("Dog species: ${dog.species}, sound: ${dog.sound}")
-    println("Cat species: ${cat.species}, sound: ${cat.sound}")
-}
-```
-
-**Properties with delegation:**
+Properties with delegation:
 
 ```kotlin
 interface DataProvider {
@@ -306,20 +396,9 @@ class LazyDataProvider : DataProvider {
         listOf("Item 1", "Item 2", "Item 3")
     }
 }
-
-fun main() {
-    val provider1 = StringListProvider(listOf("A", "B", "C"))
-    println("Provider 1 size: ${provider1.size}")
-    println("Provider 1 first: ${provider1.firstOrNull}")
-
-    val provider2 = LazyDataProvider()
-    println("Provider 2 created (data not loaded yet)")
-    println("Provider 2 size: ${provider2.size}")  // Data loaded here
-    println("Provider 2 first: ${provider2.firstOrNull}")
-}
 ```
 
-**const in companion object of interface:**
+const in companion object of interface and no backing fields in interface:
 
 ```kotlin
 interface Constants {
@@ -333,86 +412,14 @@ interface Constants {
         get() = 3
 }
 
-class Service : Constants {
-    fun performAction() {
-        println("Max size: ${Constants.MAX_SIZE}")
-        println("Max retries: $maxRetries")
-    }
-}
-
-fun main() {
-    println("API Version: ${Constants.API_VERSION}")
-
-    val service = Service()
-    service.performAction()
-}
-```
-
-**Complex example with validation:**
-
-```kotlin
-interface Validatable {
-    val isValid: Boolean
-        get() = validate().isEmpty()
-
-    fun validate(): List<String>
-}
-
-interface UserData : Validatable {
-    val username: String
-    val email: String
-    val age: Int
-
-    override fun validate(): List<String> {
-        val errors = mutableListOf<String>()
-
-        if (username.length < 3) {
-            errors.add("Username must be at least 3 characters")
-        }
-
-        if (!email.contains("@")) {
-            errors.add("Invalid email format")
-        }
-
-        if (age < 0 || age > 150) {
-            errors.add("Age must be between 0 and 150")
-        }
-
-        return errors
-    }
-}
-
-data class User(
-    override val username: String,
-    override val email: String,
-    override val age: Int
-) : UserData
-
-fun main() {
-    val validUser = User("alice", "alice@example.com", 30)
-    println("Valid user: ${validUser.isValid}")
-    println("Errors: ${validUser.validate()}")
-
-    val invalidUser = User("al", "invalid-email", -5)
-    println("\nInvalid user: ${invalidUser.isValid}")
-    println("Errors:")
-    invalidUser.validate().forEach { println("  - $it") }
-}
-```
-
-**No backing field in interface:**
-
-```kotlin
 interface Counter {
     // This would NOT compile in interface:
-    // var count: Int = 0  // Error: Property initializers are not allowed in interfaces
-
-    // This would NOT compile:
+    // var count: Int = 0
     // var count: Int
-    //     get() = field  // Error: 'field' is not available in interface
+    //     get() = field
     //     set(value) { field = value }
 
-    // This WORKS - no backing field needed:
+    // This WORKS - no backing field needed in the interface itself:
     var currentValue: Int
         get() = getCurrentCount()
         set(value) = setCurrentCount(value)
@@ -420,27 +427,15 @@ interface Counter {
     fun getCurrentCount(): Int
     fun setCurrentCount(value: Int)
 }
-
-class CounterImpl : Counter {
-    private var count = 0
-
-    override fun getCurrentCount() = count
-
-    override fun setCurrentCount(value: Int) {
-        count = value
-    }
-}
-
-fun main() {
-    val counter = CounterImpl()
-    println("Current: ${counter.currentValue}")
-
-    counter.currentValue = 10
-    println("Updated: ${counter.currentValue}")
-}
 ```
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем отличия работы со свойствами интерфейсов в Kotlin и Java?
+- Когда на практике полезно использовать вычисляемые свойства в интерфейсе?
+- Какие распространенные ошибки при использовании свойств интерфейсов в Kotlin?
 
 ## Follow-ups
 
@@ -448,8 +443,14 @@ fun main() {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## References
 
+- [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions

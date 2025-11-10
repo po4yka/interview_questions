@@ -2,7 +2,7 @@
 id: lang-074
 title: "Kotlin Final Modifier / Модификатор final в Kotlin"
 aliases: [Kotlin Final Modifier, Модификатор final в Kotlin]
-topic: programming-languages
+topic: kotlin
 subtopics: [inheritance, type-system]
 question_kind: theory
 difficulty: easy
@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-flowon-operator-context-switching--kotlin--hard, q-infix-functions--kotlin--medium]
+related: [c-kotlin, q-flowon-operator-context-switching--kotlin--hard, q-infix-functions--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [class-modifiers, classes, difficulty/easy, final, inheritance, open, programming-languages, syntax]
+updated: 2025-11-09
+tags: [class-modifiers, classes, difficulty/easy, final, inheritance, open, kotlin, syntax]
 ---
-# Какой Модификатор В Kotlin Делает Класс Нерасширяемым?
-
 # Вопрос (RU)
 > Какой модификатор в Kotlin делает класс нерасширяемым?
 
@@ -28,6 +26,8 @@ tags: [class-modifiers, classes, difficulty/easy, final, inheritance, open, prog
 ## Ответ (RU)
 
 В Kotlin модификатор `final` делает класс нерасширяемым. Однако **все классы в Kotlin являются `final` по умолчанию**. Чтобы сделать класс расширяемым, необходимо явно использовать ключевое слово `open`.
+
+См. также: [[c-kotlin]]
 
 **Пример:**
 ```kotlin
@@ -57,6 +57,8 @@ class Derived : OpenClass()
 ## Answer (EN)
 
 In Kotlin, the `final` modifier makes a class non-extendable. However, **all classes in Kotlin are `final` by default**. To make a class extendable, you must explicitly use the `open` keyword.
+
+See also: [[c-kotlin]]
 
 **Example:**
 ```kotlin
@@ -98,5 +100,4 @@ class Derived : OpenClass()
 ## Related Questions
 
 - [[q-infix-functions--kotlin--medium]]
--
 - [[q-flowon-operator-context-switching--kotlin--hard]]

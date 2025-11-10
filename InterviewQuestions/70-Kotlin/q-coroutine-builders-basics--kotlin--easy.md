@@ -1,11 +1,11 @@
 ---
 id: kotlin-102
 title: "Coroutine Builders: launch, async, runBlocking / Билдеры корутин: launch, async, runBlocking"
-aliases: ["Coroutine Builders: launch, async, runBlocking, Билдеры корутин: launch, async, runBlocking"]
+aliases: ["Coroutine Builders: launch, async, runBlocking", "Билдеры корутин: launch, async, runBlocking"]
 
 # Classification
 topic: kotlin
-subtopics: [advanced, coroutines, patterns]
+subtopics: [coroutines, patterns]
 question_kind: theory
 difficulty: easy
 
@@ -18,77 +18,89 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140029
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-data-class-detailed--kotlin--medium, q-data-sealed-usage--programming-languages--medium, q-kotlin-null-safety--programming-languages--medium]
+related: [c-kotlin-coroutines-basics, q-data-class-detailed--kotlin--medium, q-kotlin-null-safety--programming-languages--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 
-tags: [coroutines, difficulty/easy, difficulty/medium, kotlin]
+tags: [coroutines, difficulty/easy, kotlin]
 ---
 # Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140029
+> Базовая тема корутин Kotlin 140029 (билдеры `launch`, `async`, `runBlocking`)
 
 ---
 
 # Question (EN)
-> Kotlin Coroutines advanced topic 140029
+> Kotlin Coroutines basic topic 140029 (builders `launch`, `async`, `runBlocking`)
 
 ## Ответ (RU)
 
-
-Coroutine builders - это функции создающие и запускающие корутины. Основные builders: `launch`, `async` и `runBlocking`.
+`Coroutine` builders - это функции, создающие и запускающие корутины в заданном `CoroutineScope`. Основные builders: `launch`, `async` и `runBlocking`.
 
 ### Launch
-Запускает новую корутину и возвращает Job:
+Запускает новую корутину и возвращает `Job`. Предназначен для задач с побочными эффектами, когда результат не требуется напрямую.
 ```kotlin
-val job = GlobalScope.launch {
-    delay(1000)
-    println("World!")
+fun main() = runBlocking {
+    val job = launch {
+        delay(1000)
+        println("World!")
+    }
+    println("Hello,")
+    job.join() // Ждем завершения при необходимости
 }
-println("Hello,")
 // Hello,
-// (задержка 1 секунда)
+// (задержка ~1 секунда)
 // World!
 ```
 
 ### Async
-Запускает корутину возвращающую результат через Deferred:
+Запускает корутину, возвращающую результат через `Deferred<T>`. Используется для конкурентного вычисления значений.
 ```kotlin
-val deferred = GlobalScope.async {
-    delay(1000)
-    "Result"
+fun main() = runBlocking {
+    val deferred = async {
+        delay(1000)
+        "Result"
+    }
+    println(deferred.await())  // Ждем результат
 }
-println(deferred.await())  // Ждем результат
 ```
 
 ### runBlocking
-Блокирует текущий поток до завершения:
+Создает корутину и блокирует текущий поток до завершения переданного блока, возвращая результат этого блока. Обычно используется только на границах (например, в main или тестах).
 ```kotlin
-runBlocking {
-    delay(1000)
-    println("Done")
+fun main() {
+    val result = runBlocking {
+        delay(1000)
+        println("Done")
+        "Result"
+    }
+    // Блокируется на ~1 секунду, затем выводит Done и сохраняет "Result" в result
 }
-// Блокируется на 1 секунду, затем выводит Done
 ```
 
 ### Ключевые Отличия
-| Builder | Возвращает | Блокирует поток | Применение |
-|---------|------------|-----------------|------------|
-| launch | Job | Нет | Запустить и забыть |
-| async | Deferred<T> | Нет | Нужен результат |
-| runBlocking | T | Да | main(), тесты |
+| Builder | Возвращает          | Блокирует поток | Применение                                  |
+|---------|---------------------|-----------------|----------------------------------------------|
+| launch  | `Job`               | Нет             | "Запустить и забыть", побочные эффекты      |
+| async   | `Deferred<T>`       | Нет             | Нужен результат, конкурентные вычисления     |
+| runBlocking | Результат блока `T` | Да         | Граница с блокирующим кодом: main(), тесты |
 
 ### Практические Примеры
 ```kotlin
-// Запустить несколько операций
-launch { operation1() }
-launch { operation2() }
+// Внутри CoroutineScope или runBlocking
+fun main() = runBlocking {
+    // Запустить несколько операций параллельно
+    val job1 = launch { operation1() }
+    val job2 = launch { operation2() }
+    job1.join()
+    job2.join()
 
-// Получить результаты из async
-val result1 = async { fetchData1() }
-val result2 = async { fetchData2() }
-process(result1.await(), result2.await())
+    // Получить результаты из async параллельно
+    val result1 = async { fetchData1() }
+    val result2 = async { fetchData2() }
+    process(result1.await(), result2.await())
+}
 
 // Мост к корутинам в main
 fun main() = runBlocking {
@@ -96,64 +108,77 @@ fun main() = runBlocking {
 }
 ```
 
----
+См. также: [[c-kotlin-coroutines-basics]]
+
 ---
 
 ## Answer (EN)
 
-
-Coroutine builders are functions that create and start coroutines. The main builders are `launch`, `async`, and `runBlocking`.
+`Coroutine` builders are functions that create and start coroutines within a given `CoroutineScope`. The main builders are `launch`, `async`, and `runBlocking`.
 
 ### Launch
-Starts a new coroutine and returns a Job:
+Starts a new coroutine and returns a `Job`. Intended for tasks with side effects where you don't need a direct result.
 ```kotlin
-val job = GlobalScope.launch {
-    delay(1000)
-    println("World!")
+fun main() = runBlocking {
+    val job = launch {
+        delay(1000)
+        println("World!")
+    }
+    println("Hello,")
+    job.join() // Wait for completion if needed
 }
-println("Hello,")
 // Hello,
-// (1 second delay)
+// (about 1 second delay)
 // World!
 ```
 
 ### Async
-Starts a coroutine that returns a result via Deferred:
+Starts a coroutine that returns a result via `Deferred<T>`. Used for concurrent computations that produce values.
 ```kotlin
-val deferred = GlobalScope.async {
-    delay(1000)
-    "Result"
+fun main() = runBlocking {
+    val deferred = async {
+        delay(1000)
+        "Result"
+    }
+    println(deferred.await())  // Wait for result
 }
-println(deferred.await())  // Wait for result
 ```
 
 ### runBlocking
-Blocks the current thread until completion:
+Creates a coroutine and blocks the current thread until the given block completes, returning that block's result. Typically used only at boundaries (e.g., in main or tests).
 ```kotlin
-runBlocking {
-    delay(1000)
-    println("Done")
+fun main() {
+    val result = runBlocking {
+        delay(1000)
+        println("Done")
+        "Result"
+    }
+    // Blocks for about 1 second, then prints Done and stores "Result" in result
 }
-// Blocks for 1 second, then prints Done
 ```
 
 ### Key Differences
-| Builder | Returns | Blocks Thread | Use Case |
-|---------|---------|---------------|----------|
-| launch | Job | No | Fire and forget |
-| async | Deferred<T> | No | Needs result |
-| runBlocking | T | Yes | main(), tests |
+| Builder    | Returns            | Blocks Thread | Use Case                                      |
+|------------|--------------------|---------------|-----------------------------------------------|
+| launch     | `Job`              | No            | Fire and forget, side effects                 |
+| async      | `Deferred<T>`      | No            | Need a result, concurrent computations        |
+| runBlocking| Block result `T`   | Yes           | Boundary with blocking code: main(), tests    |
 
 ### Practical Examples
 ```kotlin
-// Launch multiple operations
-launch { operation1() }
-launch { operation2() }
+// Inside a CoroutineScope or runBlocking
+fun main() = runBlocking {
+    // Launch multiple operations in parallel
+    val job1 = launch { operation1() }
+    val job2 = launch { operation2() }
+    job1.join()
+    job2.join()
 
-// Get results from async
-val result1 = async { fetchData1() }
-val result2 = async { fetchData2() }
-process(result1.await(), result2.await())
+    // Get results from async concurrently
+    val result1 = async { fetchData1() }
+    val result2 = async { fetchData2() }
+    process(result1.await(), result2.await())
+}
 
 // Bridge to coroutines in main
 fun main() = runBlocking {
@@ -162,18 +187,67 @@ fun main() = runBlocking {
 ```
 
 ---
+
+## Дополнительные вопросы (RU)
+
+1. Объясните, когда вы выберете `launch` вместо `async` и почему (учитывая тип возвращаемого значения и характер задачи).
+2. Почему `runBlocking` не рекомендуется использовать в продакшн-коде Android или серверных приложений (обсудите блокировку потоков и влияние на масштабируемость)?
+3. Как связаны `CoroutineScope`, `CoroutineContext` и выбор билдера (`launch`/`async`) при проектировании структурированной конкуррентности?
+4. Что произойдет, если внутри `runBlocking` запустить несколько `launch`/`async`, и как это влияет на время выполнения?
+5. Как бы вы организовали параллельную загрузку данных с помощью нескольких `async` и последующей агрегацией результатов?
+
 ---
 
 ## Follow-ups
 
-1. **Follow-up question 1**
-2. **Follow-up question 2**
+1. When would you choose `launch` over `async`, and why (considering return type and nature of the task)?
+2. Why is `runBlocking` generally discouraged in production Android or server code (discuss thread blocking and scalability impact)?
+3. How do `CoroutineScope`, `CoroutineContext`, and the choice of builder (`launch`/`async`) relate when designing structured concurrency?
+4. What happens if you start multiple `launch`/`async` calls inside a single `runBlocking`, and how does this affect execution time?
+5. How would you organize parallel data loading using multiple `async` calls and then aggregate the results?
+
+---
+
+## Ссылки (RU)
+
+- [Документация по Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
+- [[c-kotlin-coroutines-basics]]
 
 ---
 
 ## References
 
 - [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
+- [[c-kotlin-coroutines-basics]]
+
+---
+
+## Связанные вопросы (RU)
+
+### Похожие (Easy)
+- [[q-coroutine-scope-basics--kotlin--easy]] - Основы CoroutineScope
+- [[q-what-is-coroutine--kotlin--easy]] - Что такое корутина
+- [[q-suspend-functions-basics--kotlin--easy]] - Основы suspend-функций
+- [[q-launch-vs-async--kotlin--easy]] - Разница между launch и async
+
+### Того же уровня (Easy)
+- [[q-what-is-coroutine--kotlin--easy]] - Базовые концепции корутин
+- [[q-coroutine-scope-basics--kotlin--easy]] - Основы CoroutineScope
+- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - `delay()` vs `Thread.sleep()`
+- [[q-coroutines-threads-android-differences--kotlin--easy]] - Coroutines vs Threads в Android
+
+### Следующие шаги (Medium)
+- [[q-suspend-functions-basics--kotlin--easy]] - Понимание suspend-функций
+- [[q-coroutine-dispatchers--kotlin--medium]] - Обзор диспетчеров корутин
+- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Сравнение Scope и `CoroutineContext`
+
+### Продвинутое (Harder)
+- [[q-flow-combining-zip-combine--kotlin--medium]] - Работа с `Flow` и комбинацией потоков
+- [[q-coroutine-profiling--kotlin--hard]] - Профилирование корутин
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Оптимизация производительности корутин
+
+### Хабы
+- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Обзор и введение в корутины Kotlin
 
 ---
 
@@ -188,13 +262,13 @@ fun main() = runBlocking {
 ### Same Level (Easy)
 - [[q-what-is-coroutine--kotlin--easy]] - Basic coroutine concepts
 - [[q-coroutine-scope-basics--kotlin--easy]] - CoroutineScope fundamentals
-- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - delay() vs Thread.sleep()
+- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - `delay()` vs `Thread.sleep()`
 - [[q-coroutines-threads-android-differences--kotlin--easy]] - Coroutines vs Threads on Android
 
 ### Next Steps (Medium)
 - [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
 - [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
-- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
+- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs `CoroutineContext`
 
 ### Advanced (Harder)
 - [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines
@@ -203,4 +277,3 @@ fun main() = runBlocking {
 
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
-

@@ -1,11 +1,11 @@
 ---
 id: kotlin-065
 title: "produce and actor Channel Builders / Билдеры каналов produce и actor"
-aliases: ["produce and actor Channel Builders, Билдеры каналов produce и actor"]
+aliases: ["produce and actor Channel Builders", "Билдеры каналов produce и actor"]
 
 # Classification
 topic: kotlin
-subtopics: [actor, channel-builders, channels]
+subtopics: [channels, coroutines, functions]
 question_kind: theory
 difficulty: medium
 
@@ -18,53 +18,60 @@ source_note: Comprehensive Kotlin Coroutines Channel Builders Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-actor-pattern--kotlin--hard, q-channel-closing-completion--kotlin--medium, q-channels-basics-types--kotlin--medium]
+related: [c-kotlin, c-coroutines, q-actor-pattern--kotlin--hard, q-channel-closing-completion--kotlin--medium, q-channels-basics-types--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 
 tags: [actor, builders, channels, coroutines, difficulty/medium, kotlin, produce]
 ---
 
-# Question (EN)
-> What are produce and actor channel builders? Explain their purpose, automatic resource management, and when to use each builder pattern.
-
 # Вопрос (RU)
-> Что такое билдеры каналов produce и actor? Объясните их назначение, автоматическое управление ресурсами и когда использовать каждый паттерн билдера.
+> Что такое билдеры каналов `produce` и `actor`? Объясните их назначение, автоматическое управление ресурсами, особенности привязки к `CoroutineScope` и когда использовать каждый паттерн билдера.
+
+# Question (EN)
+> What are `produce` and `actor` channel builders? Explain their purpose, automatic resource management, scope-binding semantics, and when to use each builder pattern.
 
 ---
 
-## Answer (EN)
+## Ответ (RU)
 
-The `produce` and `actor` builders are high-level channel construction functions that simplify common coroutine patterns and provide automatic resource management.
+Билдеры `produce` и `actor` — это высокоуровневые функции (`CoroutineScope.produce` и `CoroutineScope.actor`) из `kotlinx.coroutines.channels`, которые упрощают типичные паттерны взаимодействия корутин через каналы и обеспечивают автоматическое управление ресурсами при использовании в рамках структурированной конкуренции.
 
-### Produce: Producer Pattern Builder
+Ключевая идея: каждый билдер определён как extension-функция на `CoroutineScope` и запускает корутину, привязанную к этому скоупу. Когда скоуп отменяется, соответствующая корутина и связанный канал также отменяются/закрываются. Это помогает избегать утечек и естественно встраивает продьюсеров и акторов в дерево структурированной конкуренции.
+
+> См. также: [[c-kotlin]], [[c-coroutines]], [[c-structured-concurrency]] (если доступен в хранилище; в противном случае используйте документацию kotlinx.coroutines).
+
+### Produce: Паттерн производителя (Builder)
 
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
 
-// Basic produce usage
-fun basicProduce() = runBlocking {
-    val numbers = produce {
+// Базовый пример produce
+fun basicProduceRu() = runBlocking {
+    val numbers: ReceiveChannel<Int> = produce {
         for (i in 1..5) {
             send(i)
         }
-        // Channel automatically closed after block completes
+        // Канал автоматически закрывается после успешного завершения блока
     }
 
     for (num in numbers) {
-        println("Received: $num")
+        println("Получено: $num")
     }
-    // Output: Received: 1, 2, 3, 4, 5
+    // Вывод построчно:
+    // Получено: 1
+    // Получено: 2
+    // ... до 5
 }
 
-// Comparison: Manual channel vs produce
-class ProduceComparison {
+// Сравнение: ручной канал vs produce
+class ProduceComparisonRu {
 
-    //  Manual approach (more boilerplate)
-    suspend fun manualChannel(): ReceiveChannel<Int> {
+    // Ручной подход (больше бойлерплейта)
+    fun CoroutineScope.manualChannel(): ReceiveChannel<Int> {
         val channel = Channel<Int>()
 
         launch {
@@ -80,11 +87,743 @@ class ProduceComparison {
         return channel
     }
 
-    //  Using produce (cleaner, safer)
-    fun withProduce() = produce {
+    // Использование produce (чище и безопаснее в рамках скоупа)
+    fun CoroutineScope.withProduce(): ReceiveChannel<Int> = produce {
         for (i in 1..5) {
             send(i)
         }
+        // Канал закрывается, когда продьюсер-корутина завершается
+    }
+}
+```
+
+### Возможности и преимущества Produce
+
+```kotlin
+class ProduceFeaturesRu {
+
+    // 1. Автоматическое создание и закрытие канала в рамках скоупа
+    fun CoroutineScope.automaticManagement(): ReceiveChannel<Int> = produce {
+        try {
+            for (i in 1..10) {
+                send(i)
+            }
+            println("Все значения успешно отправлены")
+        } catch (e: Exception) {
+            println("Ошибка в продьюсере: ${e.message}")
+        }
+        // При нормальном завершении канал закрывается.
+        // При ошибке исключение будет доставлено потребителю.
+    }
+
+    // 2. Обработка отмены
+    fun cancellationHandling() = runBlocking {
+        val numbers = produce {
+            var x = 1
+            while (true) {
+                send(x++)
+                delay(100)
+            }
+        }
+
+        // Берём только первые 5
+        repeat(5) {
+            println(numbers.receive())
+        }
+
+        numbers.cancel() // Отменяет продьюсер и закрывает канал
+    }
+
+    // 3. Проброс исключений
+    fun exceptionPropagation() = runBlocking {
+        val numbers = produce {
+            for (i in 1..10) {
+                if (i == 5) throw IllegalStateException("Ошибка на $i")
+                send(i)
+            }
+        }
+
+        try {
+            for (num in numbers) {
+                println(num)
+            }
+        } catch (e: IllegalStateException) {
+            println("Потребитель увидел ошибку: ${e.message}")
+        }
+    }
+
+    // 4. Настройка capacity
+    fun CoroutineScope.withCapacity(): ReceiveChannel<Int> = produce(capacity = Channel.BUFFERED) {
+        repeat(100) {
+            send(it)
+            println("Отправлено $it")
+        }
+    }
+
+    // 5. Настройка контекста/диспетчера
+    fun CoroutineScope.withDispatcher(): ReceiveChannel<Int> = produce(context = Dispatchers.IO) {
+        // Продьюсер работает на IO-диспетчере
+        repeat(10) {
+            send(readFromDatabase(it))
+        }
+    }
+
+    private fun readFromDatabase(id: Int): Int = id
+}
+```
+
+### Типичные случаи использования Produce
+
+```kotlin
+class ProduceUseCasesRu {
+
+    // Use Case 1: Генератор диапазона
+    fun CoroutineScope.rangeGenerator(start: Int, end: Int): ReceiveChannel<Int> = produce {
+        for (i in start..end) {
+            send(i)
+        }
+    }
+
+    // Use Case 2: Чтение файла построчно
+    fun CoroutineScope.readFileLines(file: java.io.File): ReceiveChannel<String> = produce(context = Dispatchers.IO) {
+        file.bufferedReader().use { reader ->
+            for (line in reader.lineSequence()) {
+                send(line)
+            }
+        }
+        // Канал закрывается после окончания чтения файла
+    }
+
+    // Use Case 3: Постраничная загрузка из API
+    fun CoroutineScope.fetchAllPages(userId: String): ReceiveChannel<Page> = produce {
+        var pageNumber = 1
+        while (true) {
+            val page = apiClient.fetchPage(userId, pageNumber)
+            send(page)
+            if (!page.hasNext) break
+            pageNumber++
+        }
+    }
+
+    data class Page(val data: List<String>, val hasNext: Boolean)
+
+    object apiClient {
+        fun fetchPage(userId: String, page: Int) = Page(emptyList(), hasNext = false)
+    }
+}
+```
+
+Примечание: для callback-источников событий с управляемым освобождением ресурсов чаще лучше подходят `callbackFlow` + `awaitClose`, чем `produce`.
+
+### Actor: Паттерн актора (Builder)
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
+// Сообщения
+sealed class CounterMsgRu {
+    object Increment : CounterMsgRu()
+    object Decrement : CounterMsgRu()
+    data class GetValue(val response: CompletableDeferred<Int>) : CounterMsgRu()
+}
+
+// actor-билдер вызывается на CoroutineScope
+fun CoroutineScope.counterActorRu(): SendChannel<CounterMsgRu> = actor {
+    var counter = 0
+
+    for (msg in channel) {
+        when (msg) {
+            is CounterMsgRu.Increment -> counter++
+            is CounterMsgRu.Decrement -> counter--
+            is CounterMsgRu.GetValue -> msg.response.complete(counter)
+        }
+    }
+}
+
+// Использование
+fun actorExampleRu() = runBlocking {
+    val counter = counterActorRu() // скоуп runBlocking
+
+    counter.send(CounterMsgRu.Increment)
+    counter.send(CounterMsgRu.Increment)
+    counter.send(CounterMsgRu.Decrement)
+
+    val response = CompletableDeferred<Int>()
+    counter.send(CounterMsgRu.GetValue(response))
+    println("Значение счётчика: ${response.await()}") // 1
+
+    counter.close() // После закрытия актор завершится после обработки очереди
+}
+
+// Сравнение: ручной актор vs actor-билдер
+class ActorComparisonRu {
+
+    // Ручной подход
+    fun CoroutineScope.manualActor(): SendChannel<CounterMsgRu> {
+        val channel = Channel<CounterMsgRu>()
+        var counter = 0
+
+        launch {
+            for (msg in channel) {
+                when (msg) {
+                    is CounterMsgRu.Increment -> counter++
+                    is CounterMsgRu.Decrement -> counter--
+                    is CounterMsgRu.GetValue -> msg.response.complete(counter)
+                }
+            }
+        }
+
+        return channel
+    }
+
+    // Использование actor-билдера
+    fun CoroutineScope.withActor(): SendChannel<CounterMsgRu> = actor {
+        var counter = 0
+
+        for (msg in channel) {
+            when (msg) {
+                is CounterMsgRu.Increment -> counter++
+                is CounterMsgRu.Decrement -> counter--
+                is CounterMsgRu.GetValue -> msg.response.complete(counter)
+            }
+        }
+    }
+}
+```
+
+### Возможности и преимущества Actor
+
+```kotlin
+class ActorFeaturesRu {
+
+    // 1. Инкапсуляция состояния (пример BankAccount)
+    class BankAccount(initialBalance: Int) {
+        sealed class Msg {
+            data class Deposit(val amount: Int) : Msg()
+            data class Withdraw(val amount: Int, val response: CompletableDeferred<Boolean>) : Msg()
+            data class GetBalance(val response: CompletableDeferred<Int>) : Msg()
+        }
+
+        // Scope должен управляться жизненным циклом аккаунта
+        private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+        private val actor = scope.actor<Msg> {
+            var balance = initialBalance
+
+            for (msg in channel) {
+                when (msg) {
+                    is Msg.Deposit -> {
+                        balance += msg.amount
+                        println("Пополнение ${msg.amount}, баланс: $balance")
+                    }
+                    is Msg.Withdraw -> {
+                        val success = balance >= msg.amount
+                        if (success) {
+                            balance -= msg.amount
+                            println("Снятие ${msg.amount}, баланс: $balance")
+                        }
+                        msg.response.complete(success)
+                    }
+                    is Msg.GetBalance -> {
+                        msg.response.complete(balance)
+                    }
+                }
+            }
+        }
+
+        suspend fun deposit(amount: Int) {
+            actor.send(Msg.Deposit(amount))
+        }
+
+        suspend fun withdraw(amount: Int): Boolean {
+            val response = CompletableDeferred<Boolean>()
+            actor.send(Msg.Withdraw(amount, response))
+            return response.await()
+        }
+
+        suspend fun getBalance(): Int {
+            val response = CompletableDeferred<Int>()
+            actor.send(Msg.GetBalance(response))
+            return response.await()
+        }
+
+        fun close() {
+            actor.close()
+            scope.cancel()
+        }
+    }
+
+    // 2. Последовательная обработка сообщений (пример логгера)
+    fun sequentialProcessing() = runBlocking {
+        data class LogMsg(val level: String, val message: String)
+
+        val logger = actor<LogMsg> {
+            for (msg in channel) {
+                // Сообщения обрабатываются по одному, в порядке поступления
+                println("[${msg.level}] ${msg.message}")
+                delay(100) // эмуляция медленного I/O
+            }
+        }
+
+        // Отправка из нескольких корутин
+        repeat(10) { i ->
+            launch {
+                logger.send(LogMsg("INFO", "Сообщение $i"))
+            }
+        }
+
+        delay(1500)
+        logger.close()
+    }
+
+    // 3. Настройка буферизации
+    fun CoroutineScope.withBuffering(): SendChannel<String> = actor(capacity = 100) {
+        for (msg in channel) {
+            processMessage(msg)
+        }
+    }
+
+    private suspend fun processMessage(msg: String) {
+        delay(10)
+    }
+}
+```
+
+### Типичные случаи использования Actor
+
+```kotlin
+class ActorUseCasesRu {
+
+    // Use Case 1: Актор-кэш
+    class CacheActor<K, V> {
+        sealed class Msg<K, V> {
+            data class Put<K, V>(val key: K, val value: V) : Msg<K, V>()
+            data class Get<K, V>(val key: K, val response: CompletableDeferred<V?>) : Msg<K, V>()
+            data class Remove<K, V>(val key: K) : Msg<K, V>()
+        }
+
+        private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+        private val actor = scope.actor<Msg<K, V>> {
+            val cache = mutableMapOf<K, V>()
+
+            for (msg in channel) {
+                when (msg) {
+                    is Msg.Put<*, *> -> {
+                        @Suppress("UNCHECKED_CAST")
+                        cache[msg.key as K] = msg.value as V
+                    }
+                    is Msg.Get<*, *> -> {
+                        @Suppress("UNCHECKED_CAST")
+                        val typed = msg as Msg.Get<K, V>
+                        typed.response.complete(cache[typed.key])
+                    }
+                    is Msg.Remove<*, *> -> {
+                        @Suppress("UNCHECKED_CAST")
+                        cache.remove(msg.key as K)
+                    }
+                }
+            }
+        }
+
+        suspend fun put(key: K, value: V) {
+            actor.send(Msg.Put(key, value))
+        }
+
+        suspend fun get(key: K): V? {
+            val response = CompletableDeferred<V?>()
+            actor.send(Msg.Get(key, response))
+            return response.await()
+        }
+
+        suspend fun remove(key: K) {
+            actor.send(Msg.Remove(key))
+        }
+
+        fun close() {
+            actor.close()
+            scope.cancel()
+        }
+    }
+
+    // Use Case 2: Rate limiter (токен-бакет)
+    class RateLimiterActor(private val maxRequests: Int, private val periodMs: Long) {
+        sealed class Msg {
+            data class Request(val id: String, val response: CompletableDeferred<Boolean>) : Msg()
+        }
+
+        private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+        private val actor = scope.actor<Msg> {
+            val timestamps = mutableListOf<Long>()
+
+            for (msg in channel) {
+                when (msg) {
+                    is Msg.Request -> {
+                        val now = System.currentTimeMillis()
+
+                        // Удаляем устаревшие отметки
+                        timestamps.removeAll { now - it > periodMs }
+
+                        val allowed = timestamps.size < maxRequests
+                        if (allowed) {
+                            timestamps.add(now)
+                        }
+
+                        msg.response.complete(allowed)
+                    }
+                }
+            }
+        }
+
+        suspend fun tryAcquire(id: String): Boolean {
+            val response = CompletableDeferred<Boolean>()
+            actor.send(Msg.Request(id, response))
+            return response.await()
+        }
+
+        fun close() {
+            actor.close()
+            scope.cancel()
+        }
+    }
+
+    // Use Case 3: Очередь задач
+    class TaskQueueActor {
+        sealed class Msg {
+            data class AddTask(val task: suspend () -> Unit) : Msg()
+            object ProcessNext : Msg()
+        }
+
+        private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+        private val actor = scope.actor<Msg> {
+            val queue = mutableListOf<suspend () -> Unit>()
+
+            for (msg in channel) {
+                when (msg) {
+                    is Msg.AddTask -> queue.add(msg.task)
+                    is Msg.ProcessNext -> {
+                        if (queue.isNotEmpty()) {
+                            val task = queue.removeAt(0)
+                            task()
+                        }
+                    }
+                }
+            }
+        }
+
+        suspend fun addTask(task: suspend () -> Unit) {
+            actor.send(Msg.AddTask(task))
+        }
+
+        suspend fun processNext() {
+            actor.send(Msg.ProcessNext)
+        }
+
+        fun close() {
+            actor.close()
+            scope.cancel()
+        }
+    }
+}
+```
+
+### Сравнение Produce и Actor
+
+```kotlin
+/**
+ * PRODUCE vs ACTOR (обзор)
+ *
+ *  Aspect            produce                         actor
+ *
+ *  Purpose           Генерация значений              Обработка команд/сообщений
+ *  Direction         Исходящий поток (producer -> consumer)
+ *                    Входящий поток (клиенты -> actor)
+ *  Return Type       ReceiveChannel                  SendChannel
+ *  Primary Use       Producer-паттерн, пайплайны     Актор-модель, владение состоянием
+ *  State             Обычно без состояния или внешнее Обычно инкапсулированное, изменяемое
+ *  Consumer          Внешний код читает из канала    Внешний код шлёт в канал
+ *  Pattern           Один → много потребителей       Многие отправители → один обработчик
+ */
+
+class ProduceVsActorExamplesRu {
+
+    // PRODUCE: бесконечная последовательность Fibonacci
+    fun CoroutineScope.fibonacci(): ReceiveChannel<Int> = produce {
+        var a = 0
+        var b = 1
+        while (true) {
+            send(a)
+            val next = a + b
+            a = b
+            b = next
+        }
+    }
+
+    // ACTOR: обработка запросов
+    data class Request(val id: Int)
+
+    fun CoroutineScope.requestProcessor(): SendChannel<Request> = actor {
+        for (request in channel) {
+            processRequest(request)
+        }
+    }
+
+    private suspend fun processRequest(request: Request) {
+        // обработка запроса
+    }
+}
+```
+
+### Продвинутые паттерны
+
+```kotlin
+class AdvancedPatternsRu {
+
+    // Простая pipeline-конструкция с produce (все в одном scope)
+    fun pipeline() = runBlocking {
+        val numbers = produce {
+            for (i in 1..10) send(i)
+        }
+
+        val squares = produce {
+            for (num in numbers) send(num * num)
+        }
+
+        val formatted = produce {
+            for (sq in squares) send("Value: $sq")
+        }
+
+        for (result in formatted) {
+            println(result)
+        }
+        // При завершении runBlocking все дочерние продьюсеры будут отменены.
+    }
+
+    // Актор как state machine
+    class StateMachineActor {
+        sealed class State {
+            object Idle : State()
+            object Running : State()
+            object Paused : State()
+        }
+
+        sealed class Msg {
+            object Start : Msg()
+            object Pause : Msg()
+            object Resume : Msg()
+            object Stop : Msg()
+            data class GetState(val response: CompletableDeferred<State>) : Msg()
+        }
+
+        private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+        private val actor = scope.actor<Msg> {
+            var state: State = State.Idle
+
+            for (msg in channel) {
+                state = when (msg) {
+                    is Msg.Start -> State.Running
+                    is Msg.Pause -> if (state is State.Running) State.Paused else state
+                    is Msg.Resume -> if (state is State.Paused) State.Running else state
+                    is Msg.Stop -> State.Idle
+                    is Msg.GetState -> {
+                        msg.response.complete(state)
+                        state
+                    }
+                }
+                println("Переход состояния: $state")
+            }
+        }
+
+        suspend fun start() = actor.send(Msg.Start)
+        suspend fun pause() = actor.send(Msg.Pause)
+        suspend fun resume() = actor.send(Msg.Resume)
+        suspend fun stop() = actor.send(Msg.Stop)
+
+        suspend fun getState(): State {
+            val response = CompletableDeferred<State>()
+            actor.send(Msg.GetState(response))
+            return response.await()
+        }
+
+        fun close() {
+            actor.close()
+            scope.cancel()
+        }
+    }
+
+    // Координация нескольких акторов
+    class CoordinatedActors {
+        data class WorkItem(val id: Int, val data: String)
+
+        private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+        val dispatcher = scope.actor<WorkItem> {
+            val workers = List(3) { createWorker(it) }
+            var nextWorker = 0
+
+            for (item in channel) {
+                workers[nextWorker].send(item)
+                nextWorker = (nextWorker + 1) % workers.size
+            }
+
+            workers.forEach { it.close() }
+            scope.cancel()
+        }
+
+        private fun createWorker(id: Int) = scope.actor<WorkItem> {
+            for (item in channel) {
+                println("Worker $id обрабатывает ${item.id}")
+                delay(100)
+            }
+        }
+    }
+}
+```
+
+### Тестирование Produce и Actor
+
+```kotlin
+import kotlinx.coroutines.test.runTest
+import kotlin.test.*
+
+class BuilderTestsRu {
+
+    @Test
+    fun `produce генерирует значения`() = runTest {
+        val numbers = produce {
+            for (i in 1..5) send(i)
+        }
+
+        val values = mutableListOf<Int>()
+        for (num in numbers) {
+            values.add(num)
+        }
+
+        assertEquals(listOf(1, 2, 3, 4, 5), values)
+    }
+
+    @Test
+    fun `actor обрабатывает сообщения`() = runTest {
+        sealed class Msg {
+            object Increment : Msg()
+            data class GetValue(val response: CompletableDeferred<Int>) : Msg()
+        }
+
+        val counter = actor<Msg> {
+            var count = 0
+            for (msg in channel) {
+                when (msg) {
+                    is Msg.Increment -> count++
+                    is Msg.GetValue -> msg.response.complete(count)
+                }
+            }
+        }
+
+        counter.send(Msg.Increment)
+        counter.send(Msg.Increment)
+
+        val response = CompletableDeferred<Int>()
+        counter.send(Msg.GetValue(response))
+
+        assertEquals(2, response.await())
+        counter.close()
+    }
+
+    @Test
+    fun `produce корректно обрабатывает отмену`() = runTest {
+        val numbers = produce {
+            var i = 0
+            while (true) {
+                send(i++)
+                delay(100)
+            }
+        }
+
+        repeat(3) {
+            numbers.receive()
+        }
+
+        numbers.cancel()
+
+        assertTrue(numbers.isClosedForReceive)
+    }
+}
+```
+
+### Когда использовать (итог по-русски)
+
+- `produce`:
+  - когда нужен источник/поток данных (one-to-many, пайплайны, генераторы);
+  - когда важен простой и безопасный lifecycle управления каналом.
+- `actor`:
+  - когда нужно потокобезопасно инкапсулировать изменяемое состояние;
+  - когда много отправителей посылают команды/сообщения одному обработчику;
+  - когда удобна актор-модель или state machine поверх сообщений.
+
+Также важно вызывать эти билдеры на корректных скоупах (например, `coroutineScope`, `runBlocking`, `viewModelScope`, `lifecycleScope`) и не создавать "глобальные" скоупы без явного управления их жизненным циклом.
+
+---
+
+## Answer (EN)
+
+The `produce` and `actor` builders are high-level channel construction functions (defined as extension functions on `CoroutineScope`) that simplify common coroutine patterns and provide automatic resource management when used in a structured concurrency context.
+
+Note: These builders are part of `kotlinx.coroutines.channels`. They create coroutines bound to the scope on which they are called. When that scope is cancelled, the producer/actor and its channel are cancelled/closed accordingly.
+
+### Produce: Producer Pattern Builder
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
+// Basic produce usage
+fun basicProduce() = runBlocking {
+    val numbers: ReceiveChannel<Int> = produce {
+        for (i in 1..5) {
+            send(i)
+        }
+        // Channel automatically closed after this block completes successfully
+    }
+
+    for (num in numbers) {
+        println("Received: $num")
+    }
+    // Output (line by line):
+    // Received: 1
+    // Received: 2
+    // ... up to 5
+}
+
+// Comparison: Manual channel vs produce
+class ProduceComparison {
+
+    // Manual approach (more boilerplate)
+    fun CoroutineScope.manualChannel(): ReceiveChannel<Int> {
+        val channel = Channel<Int>()
+
+        launch {
+            try {
+                for (i in 1..5) {
+                    channel.send(i)
+                }
+            } finally {
+                channel.close()
+            }
+        }
+
+        return channel
+    }
+
+    // Using produce (cleaner, safer in this scoped form)
+    fun CoroutineScope.withProduce(): ReceiveChannel<Int> = produce {
+        for (i in 1..5) {
+            send(i)
+        }
+        // Channel closed when this producer coroutine completes
     }
 }
 ```
@@ -94,17 +833,18 @@ class ProduceComparison {
 ```kotlin
 class ProduceFeatures {
 
-    // 1. Automatic channel creation and closing
-    fun automaticManagement() = produce<Int> {
+    // 1. Automatic channel creation and closing within scope
+    fun CoroutineScope.automaticManagement(): ReceiveChannel<Int> = produce {
         try {
             for (i in 1..10) {
                 send(i)
             }
             println("All sent successfully")
         } catch (e: Exception) {
-            println("Error: ${e.message}")
+            println("Error in producer: ${e.message}")
         }
-        // Channel automatically closed
+        // On normal completion, channel is closed.
+        // On failure, the exception is propagated to the consumer side.
     }
 
     // 2. Cancellation handling
@@ -122,7 +862,7 @@ class ProduceFeatures {
             println(numbers.receive())
         }
 
-        numbers.cancel() // Cancels producer coroutine
+        numbers.cancel() // Cancels producer coroutine and closes the channel
     }
 
     // 3. Exception propagation
@@ -138,22 +878,22 @@ class ProduceFeatures {
             for (num in numbers) {
                 println(num)
             }
-        } catch (e: ClosedReceiveChannelException) {
-            println("Channel closed due to: ${e.cause}")
+        } catch (e: IllegalStateException) {
+            println("Consumer observed failure: ${e.message}")
         }
     }
 
     // 4. Capacity configuration
-    fun withCapacity() = produce<Int>(capacity = Channel.BUFFERED) {
+    fun CoroutineScope.withCapacity(): ReceiveChannel<Int> = produce(capacity = Channel.BUFFERED) {
         repeat(100) {
             send(it)
             println("Sent $it")
         }
     }
 
-    // 5. Dispatcher configuration
-    fun withDispatcher() = produce<Int>(Dispatchers.IO) {
-        // Runs on IO dispatcher
+    // 5. Dispatcher / context configuration
+    fun CoroutineScope.withDispatcher(): ReceiveChannel<Int> = produce(context = Dispatchers.IO) {
+        // Producer coroutine runs on IO dispatcher
         repeat(10) {
             send(readFromDatabase(it))
         }
@@ -169,23 +909,24 @@ class ProduceFeatures {
 class ProduceUseCases {
 
     // Use Case 1: Range generator
-    fun rangeGenerator(start: Int, end: Int) = produce {
+    fun CoroutineScope.rangeGenerator(start: Int, end: Int): ReceiveChannel<Int> = produce {
         for (i in start..end) {
             send(i)
         }
     }
 
     // Use Case 2: File reader
-    fun readFileLines(file: File) = produce<String>(Dispatchers.IO) {
+    fun CoroutineScope.readFileLines(file: java.io.File): ReceiveChannel<String> = produce(context = Dispatchers.IO) {
         file.bufferedReader().use { reader ->
             for (line in reader.lineSequence()) {
                 send(line)
             }
         }
+        // Channel closes when file reading is done
     }
 
     // Use Case 3: API pagination
-    fun fetchAllPages(userId: String) = produce<Page> {
+    fun CoroutineScope.fetchAllPages(userId: String): ReceiveChannel<Page> = produce {
         var pageNumber = 1
         while (true) {
             val page = apiClient.fetchPage(userId, pageNumber)
@@ -195,49 +936,31 @@ class ProduceUseCases {
         }
     }
 
-    // Use Case 4: Event stream
-    fun observeEvents() = produce<Event> {
-        val listener = object : EventListener {
-            override fun onEvent(event: Event) {
-                trySend(event)
-            }
-        }
-
-        eventBus.register(listener)
-
-        try {
-            awaitClose { eventBus.unregister(listener) }
-        } finally {
-            eventBus.unregister(listener)
-        }
-    }
-
     data class Page(val data: List<String>, val hasNext: Boolean)
-    data class Event(val type: String)
-    interface EventListener {
-        fun onEvent(event: Event)
-    }
+
     object apiClient {
-        fun fetchPage(userId: String, page: Int) = Page(emptyList(), false)
-    }
-    object eventBus {
-        fun register(listener: EventListener) {}
-        fun unregister(listener: EventListener) {}
+        fun fetchPage(userId: String, page: Int) = Page(emptyList(), hasNext = false)
     }
 }
 ```
 
+Note: For callback-based event sources with lifecycle-aware cleanup, prefer `callbackFlow` and `awaitClose` instead of `produce`.
+
 ### Actor: Actor Pattern Builder
 
 ```kotlin
-// Basic actor usage
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
+// Messages
 sealed class CounterMsg {
     object Increment : CounterMsg()
     object Decrement : CounterMsg()
     data class GetValue(val response: CompletableDeferred<Int>) : CounterMsg()
 }
 
-fun counterActor() = actor<CounterMsg> {
+// Actor builder must be called on a CoroutineScope
+fun CoroutineScope.counterActor(): SendChannel<CounterMsg> = actor {
     var counter = 0
 
     for (msg in channel) {
@@ -251,7 +974,7 @@ fun counterActor() = actor<CounterMsg> {
 
 // Usage
 fun actorExample() = runBlocking {
-    val counter = counterActor()
+    val counter = counterActor() // this refers to runBlocking's scope
 
     counter.send(CounterMsg.Increment)
     counter.send(CounterMsg.Increment)
@@ -261,14 +984,14 @@ fun actorExample() = runBlocking {
     counter.send(CounterMsg.GetValue(response))
     println("Counter value: ${response.await()}") // 1
 
-    counter.close()
+    counter.close() // After closing, actor finishes when all messages are processed
 }
 
 // Comparison: Manual actor vs builder
 class ActorComparison {
 
-    //  Manual approach
-    suspend fun manualActor(): SendChannel<CounterMsg> {
+    // Manual approach
+    fun CoroutineScope.manualActor(): SendChannel<CounterMsg> {
         val channel = Channel<CounterMsg>()
         var counter = 0
 
@@ -285,8 +1008,8 @@ class ActorComparison {
         return channel
     }
 
-    //  Using actor builder
-    fun withActor() = actor<CounterMsg> {
+    // Using actor builder
+    fun CoroutineScope.withActor(): SendChannel<CounterMsg> = actor {
         var counter = 0
 
         for (msg in channel) {
@@ -313,7 +1036,10 @@ class ActorFeatures {
             data class GetBalance(val response: CompletableDeferred<Int>) : Msg()
         }
 
-        private val actor = CoroutineScope(Dispatchers.Default).actor<Msg> {
+        // Scope should be owned/managed by the account's lifecycle
+        private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+        private val actor = scope.actor<Msg> {
             var balance = initialBalance
 
             for (msg in channel) {
@@ -355,6 +1081,7 @@ class ActorFeatures {
 
         fun close() {
             actor.close()
+            scope.cancel()
         }
     }
 
@@ -382,7 +1109,7 @@ class ActorFeatures {
     }
 
     // 3. Buffering configuration
-    fun withBuffering() = actor<String>(capacity = 100) {
+    fun CoroutineScope.withBuffering(): SendChannel<String> = actor(capacity = 100) {
         for (msg in channel) {
             processMessage(msg)
         }
@@ -407,14 +1134,26 @@ class ActorUseCases {
             data class Remove<K, V>(val key: K) : Msg<K, V>()
         }
 
-        private val actor = CoroutineScope(Dispatchers.Default).actor<Msg<K, V>> {
+        private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+        private val actor = scope.actor<Msg<K, V>> {
             val cache = mutableMapOf<K, V>()
 
             for (msg in channel) {
                 when (msg) {
-                    is Msg.Put -> cache[msg.key] = msg.value
-                    is Msg.Get -> msg.response.complete(cache[msg.key])
-                    is Msg.Remove -> cache.remove(msg.key)
+                    is Msg.Put<*, *> -> {
+                        @Suppress("UNCHECKED_CAST")
+                        cache[msg.key as K] = msg.value as V
+                    }
+                    is Msg.Get<*, *> -> {
+                        @Suppress("UNCHECKED_CAST")
+                        val typed = msg as Msg.Get<K, V>
+                        typed.response.complete(cache[typed.key])
+                    }
+                    is Msg.Remove<*, *> -> {
+                        @Suppress("UNCHECKED_CAST")
+                        cache.remove(msg.key as K)
+                    }
                 }
             }
         }
@@ -432,15 +1171,22 @@ class ActorUseCases {
         suspend fun remove(key: K) {
             actor.send(Msg.Remove(key))
         }
+
+        fun close() {
+            actor.close()
+            scope.cancel()
+        }
     }
 
-    // Use Case 2: Rate limiter
+    // Use Case 2: Rate limiter (simple token bucket style)
     class RateLimiterActor(private val maxRequests: Int, private val periodMs: Long) {
         sealed class Msg {
             data class Request(val id: String, val response: CompletableDeferred<Boolean>) : Msg()
         }
 
-        private val actor = CoroutineScope(Dispatchers.Default).actor<Msg> {
+        private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+        private val actor = scope.actor<Msg> {
             val timestamps = mutableListOf<Long>()
 
             for (msg in channel) {
@@ -467,6 +1213,11 @@ class ActorUseCases {
             actor.send(Msg.Request(id, response))
             return response.await()
         }
+
+        fun close() {
+            actor.close()
+            scope.cancel()
+        }
     }
 
     // Use Case 3: Task queue
@@ -476,7 +1227,9 @@ class ActorUseCases {
             object ProcessNext : Msg()
         }
 
-        private val actor = CoroutineScope(Dispatchers.Default).actor<Msg> {
+        private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+        private val actor = scope.actor<Msg> {
             val queue = mutableListOf<suspend () -> Unit>()
 
             for (msg in channel) {
@@ -499,6 +1252,11 @@ class ActorUseCases {
         suspend fun processNext() {
             actor.send(Msg.ProcessNext)
         }
+
+        fun close() {
+            actor.close()
+            scope.cancel()
+        }
     }
 }
 ```
@@ -509,23 +1267,21 @@ class ActorUseCases {
 /**
  * PRODUCE vs ACTOR
  *
+ *  Aspect            produce                        actor
  *
- *  Aspect            produce               actor
- *
- *  Purpose           Generate values       Process messages
- *  Direction         Outbound (send)       Inbound (receive)
- *  Return Type       ReceiveChannel        SendChannel
- *  Primary Use       Producer pattern      Actor pattern
- *  State             Usually stateless     Usually stateful
- *  Consumer          External              Internal
- *  Pattern           One-to-many           Many-to-one
- *
+ *  Purpose           Generate values                Process commands/messages
+ *  Direction         Outbound (producer -> consumer) Inbound (clients -> actor)
+ *  Return Type       ReceiveChannel                 SendChannel
+ *  Primary Use       Producer pattern, pipelines    Actor model, state ownership
+ *  State             Usually stateless or external  Usually encapsulated, mutable
+ *  Consumer          External reads from channel    External sends to channel
+ *  Pattern           One-to-many consumers          Many-to-one sender(s)
  */
 
 class ProduceVsActorExamples {
 
-    // PRODUCE: Generating sequence
-    fun fibonacci() = produce {
+    // PRODUCE: Generating infinite sequence
+    fun CoroutineScope.fibonacci(): ReceiveChannel<Int> = produce {
         var a = 0
         var b = 1
         while (true) {
@@ -537,14 +1293,17 @@ class ProduceVsActorExamples {
     }
 
     // ACTOR: Processing requests
-    fun requestProcessor() = actor<Request> {
+    data class Request(val id: Int)
+
+    fun CoroutineScope.requestProcessor(): SendChannel<Request> = actor {
         for (request in channel) {
             processRequest(request)
         }
     }
 
-    data class Request(val id: Int)
-    private suspend fun processRequest(request: Request) {}
+    private suspend fun processRequest(request: Request) {
+        // handle request
+    }
 }
 ```
 
@@ -553,7 +1312,7 @@ class ProduceVsActorExamples {
 ```kotlin
 class AdvancedPatterns {
 
-    // Pipeline with produce
+    // Simple pipeline with produce (all within a scope)
     fun pipeline() = runBlocking {
         val numbers = produce {
             for (i in 1..10) send(i)
@@ -570,6 +1329,8 @@ class AdvancedPatterns {
         for (result in formatted) {
             println(result)
         }
+
+        // When runBlocking completes, all child producers are cancelled if still running.
     }
 
     // Actor-based state machine
@@ -588,7 +1349,9 @@ class AdvancedPatterns {
             data class GetState(val response: CompletableDeferred<State>) : Msg()
         }
 
-        private val actor = CoroutineScope(Dispatchers.Default).actor<Msg> {
+        private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+        private val actor = scope.actor<Msg> {
             var state: State = State.Idle
 
             for (msg in channel) {
@@ -616,13 +1379,20 @@ class AdvancedPatterns {
             actor.send(Msg.GetState(response))
             return response.await()
         }
+
+        fun close() {
+            actor.close()
+            scope.cancel()
+        }
     }
 
     // Coordinated actors
     class CoordinatedActors {
         data class WorkItem(val id: Int, val data: String)
 
-        val dispatcher = actor<WorkItem> {
+        private val scope = CoroutineScope(Dispatchers.Default + SupervisorJob())
+
+        val dispatcher = scope.actor<WorkItem> {
             val workers = List(3) { createWorker(it) }
             var nextWorker = 0
 
@@ -632,9 +1402,10 @@ class AdvancedPatterns {
             }
 
             workers.forEach { it.close() }
+            scope.cancel()
         }
 
-        private fun CoroutineScope.createWorker(id: Int) = actor<WorkItem> {
+        private fun createWorker(id: Int) = scope.actor<WorkItem> {
             for (item in channel) {
                 println("Worker $id processing ${item.id}")
                 delay(100)
@@ -647,6 +1418,9 @@ class AdvancedPatterns {
 ### Testing Produce and Actor
 
 ```kotlin
+import kotlinx.coroutines.test.runTest
+import kotlin.test.*
+
 class BuilderTests {
 
     @Test
@@ -665,22 +1439,26 @@ class BuilderTests {
 
     @Test
     fun `test actor processes messages`() = runTest {
-        val counter = actor<CounterMsg> {
+        sealed class Msg {
+            object Increment : Msg()
+            data class GetValue(val response: CompletableDeferred<Int>) : Msg()
+        }
+
+        val counter = actor<Msg> {
             var count = 0
             for (msg in channel) {
                 when (msg) {
-                    is CounterMsg.Increment -> count++
-                    is CounterMsg.GetValue -> msg.response.complete(count)
-                    else -> {}
+                    is Msg.Increment -> count++
+                    is Msg.GetValue -> msg.response.complete(count)
                 }
             }
         }
 
-        counter.send(CounterMsg.Increment)
-        counter.send(CounterMsg.Increment)
+        counter.send(Msg.Increment)
+        counter.send(Msg.Increment)
 
         val response = CompletableDeferred<Int>()
-        counter.send(CounterMsg.GetValue(response))
+        counter.send(Msg.GetValue(response))
 
         assertEquals(2, response.await())
         counter.close()
@@ -709,99 +1487,72 @@ class BuilderTests {
 
 ---
 
-## Ответ (RU)
+## Дополнительные вопросы (RU)
 
-Билдеры `produce` и `actor` - это высокоуровневые функции создания каналов, упрощающие общие паттерны корутин.
+1. Как `produce` и `actor` обрабатывают исключения?
+   - Проброс исключений от продьюсера/актора к потребителям/вызывающим сторонам
+   - Стратегии восстановления
+   - Состояние канала после ошибки или отмены
 
-### Produce: Паттерн Производителя
+2. Можно ли компоновать несколько акторов вместе?
+   - Иерархии акторов
+   - Маршрутизация сообщений
+   - Паттерны координации
 
-```kotlin
-val numbers = produce {
-    for (i in 1..5) {
-        send(i)
-    }
-    // Канал автоматически закрывается
-}
+3. Как тестировать код с `produce` и `actor`?
+   - Использование `runTest` и тестовых скоупов
+   - Тестовые реализации акторов
+   - Проверка потока и порядка сообщений
 
-for (num in numbers) {
-    println(num)
-}
-```
+4. Каковы последствия для производительности?
+   - Памятные накладные расходы каналов и корутин
+   - Пропускная способность обработки сообщений
+   - Сравнение с ручными каналами / мьютексами
 
-**Преимущества produce**:
-- Автоматическое создание и закрытие канала
-- Обработка отмены
-- Пропаганда исключений
-- Настройка емкости и диспетчера
+5. Как реализовать тайм-аут для сообщений актора?
+   - `withTimeout` / `select`
+   - Предотвращение дедлоков
+   - Обработка ответов и fallback-сценарии
 
-### Actor: Паттерн Актора
+## Follow-ups (EN)
 
-```kotlin
-val counter = actor<CounterMsg> {
-    var count = 0
-    for (msg in channel) {
-        when (msg) {
-            is Increment -> count++
-            is GetValue -> msg.response.complete(count)
-        }
-    }
-}
+1. How do `produce` and `actor` handle exceptions?
+   - Exception propagation from producer/actor to consumers/callers
+   - Error recovery strategies
+   - Channel state after failure or cancellation
 
-counter.send(Increment)
-```
-
-**Преимущества actor**:
-- Инкапсуляция состояния
-- Последовательная обработка сообщений
-- Потокобезопасность
-- Паттерн "актор-модель"
-
-### Когда Использовать
-
-**produce**: Генерация последовательности значений, потоки данных
-**actor**: Обработка запросов, управление состоянием, координация
-
----
-
-## Follow-up Questions (Следующие вопросы)
-
-1. **How do produce and actor handle exceptions?**
-   - Exception propagation
-   - Error recovery
-   - Channel state after exception
-
-2. **Can you compose multiple actors together?**
+2. Can you compose multiple actors together?
    - Actor hierarchies
    - Message routing
    - Coordination patterns
 
-3. **How to test code using produce and actor?**
-   - Testing patterns
-   - Mocking actors
-   - Verifying message flow
+3. How to test code using `produce` and `actor`?
+   - Using `runTest` and test scopes
+   - Test implementations / mocks
+   - Verifying message flow and ordering
 
-4. **What are the performance implications?**
-   - Memory overhead
-   - Message processing speed
-   - Comparison with manual channels
+4. What are the performance implications?
+   - Memory overhead of channels and coroutines
+   - Message processing throughput
+   - Comparison with manual channels / mutexes
 
-5. **How to implement timeout in actor messages?**
-   - Timeout strategies
+5. How to implement timeout in actor messages?
+   - Timeout strategies with `withTimeout` / `select`
    - Deadlock prevention
-   - Response handling
+   - Response handling and fallbacks
 
 ---
 
-## References (Ссылки)
+## References (EN/RU)
 
 ### Official Documentation
-- [produce Builder](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/produce.html)
-- [actor Builder](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/actor.html)
-- [Channels Guide](https://kotlinlang.org/docs/channels.html)
+- https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/produce.html
+- https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/actor.html
+- https://kotlinlang.org/docs/channels.html
 
 ### Learning Resources
 - "Kotlin Coroutines" by Marcin Moskała - Channel Builders
-- [Actor Model in Kotlin](https://elizarov.medium.com/kotlin-coroutines-and-actor-model-5b88f908e352)
+- https://elizarov.medium.com/kotlin-coroutines-and-actor-model-5b88f908e352
 
 ### Related Topics
 - Actor Model
@@ -812,8 +1563,8 @@ counter.send(Increment)
 
 ## Related Questions (Связанные вопросы)
 
-- [[q-channels-basics-types--kotlin--medium]] - Channel fundamentals
-- [[q-channel-closing-completion--kotlin--medium]] - Channel lifecycle
-- [[q-actor-pattern--kotlin--hard]] - Advanced actor patterns
-- [[q-channel-pipelines--kotlin--hard]] - Channel pipelines
-- [[q-select-expression-channels--kotlin--hard]] - select with channels
+- [[q-channels-basics-types--kotlin--medium]]
+- [[q-channel-closing-completion--kotlin--medium]]
+- [[q-actor-pattern--kotlin--hard]]
+- [[q-channel-pipelines--kotlin--hard]]
+- [[q-select-expression-channels--kotlin--hard]]

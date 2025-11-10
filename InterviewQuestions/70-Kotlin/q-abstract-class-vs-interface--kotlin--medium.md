@@ -28,51 +28,52 @@ sources: ["https://kotlinlang.org/docs/interfaces.html"]
 ## Ответ (RU)
 
 **Теория Abstract Class vs Interface:**
-Абстрактный класс - частично определённый класс с возможностью хранить состояние (backing fields). Интерфейс - контракт без состояния, может иметь только custom getters без backing fields. В Kotlin интерфейсы поддерживают множественную реализацию, абстрактные классы - только одиночное наследование.
+Абстрактный класс — частично определённый класс, который может хранить состояние (backing fields) и содержать как абстрактные, так и не абстрактные члены. Интерфейс — контракт, который не может иметь собственных backing fields: его свойства либо абстрактные, либо реализованы только через геттеры/сеттеры без поля в самом интерфейсе. В Kotlin интерфейсы поддерживают множественную реализацию, абстрактные классы — только одиночное наследование.
 
 **Основные отличия:**
-- **Состояние**: Abstract class может иметь backing fields, interface - нет
-- **Наследование**: Abstract class - single inheritance, interface - multiple implementation
-- **Конструкторы**: Abstract class может иметь, interface - нет
-- **Использование**: Abstract class для тесно связанных классов, interface для контрактов
+- **Состояние**: Abstract class может иметь собственные backing fields, interface — нет (backing field появляется в классе-реализации)
+- **Наследование**: Abstract class — single inheritance, interface — multiple implementation
+- **Конструкторы**: Abstract class может иметь конструктор(ы), interface — нет
+- **Реализация**: И абстрактный класс, и интерфейс могут содержать реализации методов (default / concrete methods)
+- **Использование**: Abstract class для тесно связанных классов с общей базовой реализацией или состоянием, interface для объявления контрактов поведения, которые могут реализовываться несвязанными классами
 
 **Базовые примеры:**
 ```kotlin
-// ✅ Interface - контракт без состояния
+// ✅ Interface — контракт без собственных backing fields
 interface Clickable {
     fun click() // Абстрактный метод
     fun showOff() = println("I'm clickable!") // Реализация по умолчанию
 }
 
-// ✅ Abstract class - может хранить состояние
+// ✅ Abstract class — может хранить состояние
 abstract class Animated {
     protected var isRunning = false // ✅ Backing field
     abstract fun animate()
     fun start() { isRunning = true }
 }
 
-// ✅ Interface properties без backing fields
+// ✅ Interface свойства без backing fields в интерфейсе
 interface Named {
-    val name: String // Абстрактное свойство
+    val name: String // Абстрактное свойство (accessor абстрактен)
     val displayName: String
-        get() = "User: $name" // ✅ Custom getter без backing field
+        get() = "User: $name" // ✅ Custom getter без backing field в интерфейсе
 }
 ```
 
 **State в interface vs abstract class:**
 ```kotlin
-// ❌ Interface не может иметь backing fields
+// ✅ Interface не имеет собственного backing field для этого свойства
 interface Counter {
-    var count: Int // Должно быть переопределено
+    var count: Int // Accessors абстрактные, реализация и backing field должны быть в классе
 }
 
 class MyCounter : Counter {
-    override var count: Int = 0 // ✅ Backing field в классе
+    override var count: Int = 0 // ✅ Backing field в классе-реализации
 }
 
 // ✅ Abstract class может иметь состояние
 abstract class Repository {
-    private val cache = mutableMapOf<String, Any>() // ✅ Backing field
+    private val cache = mutableMapOf<String, Any>() // ✅ Backing field в абстрактном классе
 
     protected fun getCached(key: String) = cache[key]
     abstract fun fetch(id: String): Any
@@ -81,7 +82,7 @@ abstract class Repository {
 
 **Multiple inheritance:**
 ```kotlin
-// ✅ Interface - множественная реализация
+// ✅ Interface — множественная реализация
 interface Serializable
 interface Comparable<T>
 interface Cloneable
@@ -90,7 +91,7 @@ class Data : Serializable, Comparable<Data>, Cloneable {
     override fun compareTo(other: Data): Int = 0
 }
 
-// ❌ Abstract class - только один
+// ❌ Abstract class — только один базовый класс
 abstract class BaseViewModel
 abstract class BaseRepository
 // class MyClass : BaseViewModel(), BaseRepository() // Ошибка!
@@ -98,15 +99,17 @@ abstract class BaseRepository
 
 **Access modifiers:**
 ```kotlin
-// ✅ Abstract class - любые модификаторы
+// ✅ Abstract class — любые модификаторы, как у обычных классов
 abstract class Animal {
     protected var age: Int = 0 // ✅ Protected
     private val name: String = "Animal" // ✅ Private
 }
 
-// ✅ Interface - public по умолчанию, private доступен (Kotlin 1.4+)
+// ✅ Interface — члены public по умолчанию, private доступен (Kotlin 1.4+)
+// Видимость самого интерфейса по умолчанию public для top-level,
+// вложенные интерфейсы наследуют модификатор внешней сущности.
 interface Test {
-    fun publicMethod() // Public
+    fun publicMethod() // Public по умолчанию
     private fun privateMethod() {} // ✅ Kotlin 1.4+
 }
 ```
@@ -140,51 +143,52 @@ interface Test {
 ## Answer (EN)
 
 **Abstract Class vs Interface Theory:**
-Abstract class is partially defined class that can hold state (backing fields). Interface is contract without state, can only have custom getters without backing fields. In Kotlin, interfaces support multiple implementation, abstract classes support only single inheritance.
+Abstract class is a partially defined class that can hold state (backing fields) and contain both abstract and non-abstract members. Interface is a contract that cannot have its own backing fields: its properties are either abstract or implemented via accessors only, without a field in the interface itself. In Kotlin, interfaces support multiple implementation, while abstract classes support only single inheritance for classes.
 
 **Key Differences:**
-- **State**: Abstract class can have backing fields, interface cannot
-- **Inheritance**: Abstract class - single inheritance, interface - multiple implementation
-- **Constructors**: Abstract class can have, interface cannot
-- **Usage**: Abstract class for closely related classes, interface for contracts
+- **State**: Abstract class can have its own backing fields, interface cannot (the backing field is provided by the implementing class)
+- **Inheritance**: Abstract class — single inheritance, interface — multiple implementation
+- **Constructors**: Abstract class can have constructors, interface cannot
+- **Implementation**: Both abstract class and interface can contain concrete (default) method implementations
+- **Usage**: Use abstract class for closely related classes sharing base implementation/state; use interface to define behavior contracts implementable by unrelated classes
 
 **Basic Examples:**
 ```kotlin
-// ✅ Interface - contract without state
+// ✅ Interface — contract without its own backing fields
 interface Clickable {
     fun click() // Abstract method
     fun showOff() = println("I'm clickable!") // Default implementation
 }
 
-// ✅ Abstract class - can hold state
+// ✅ Abstract class — can hold state
 abstract class Animated {
     protected var isRunning = false // ✅ Backing field
     abstract fun animate()
     fun start() { isRunning = true }
 }
 
-// ✅ Interface properties without backing fields
+// ✅ Interface properties without backing fields in the interface itself
 interface Named {
-    val name: String // Abstract property
+    val name: String // Abstract property (accessor is abstract)
     val displayName: String
-        get() = "User: $name" // ✅ Custom getter without backing field
+        get() = "User: $name" // ✅ Custom getter without backing field in the interface
 }
 ```
 
 **State in Interface vs Abstract Class:**
 ```kotlin
-// ❌ Interface cannot have backing fields
+// ✅ Interface does not get a backing field for this property
 interface Counter {
-    var count: Int // Must be overridden
+    var count: Int // Accessors are abstract; implementation and backing field must be in the class
 }
 
 class MyCounter : Counter {
-    override var count: Int = 0 // ✅ Backing field in class
+    override var count: Int = 0 // ✅ Backing field in implementing class
 }
 
 // ✅ Abstract class can have state
 abstract class Repository {
-    private val cache = mutableMapOf<String, Any>() // ✅ Backing field
+    private val cache = mutableMapOf<String, Any>() // ✅ Backing field in abstract class
 
     protected fun getCached(key: String) = cache[key]
     abstract fun fetch(id: String): Any
@@ -193,7 +197,7 @@ abstract class Repository {
 
 **Multiple Inheritance:**
 ```kotlin
-// ✅ Interface - multiple implementation
+// ✅ Interface — multiple implementation
 interface Serializable
 interface Comparable<T>
 interface Cloneable
@@ -202,7 +206,7 @@ class Data : Serializable, Comparable<Data>, Cloneable {
     override fun compareTo(other: Data): Int = 0
 }
 
-// ❌ Abstract class - only one
+// ❌ Abstract class — only one superclass allowed
 abstract class BaseViewModel
 abstract class BaseRepository
 // class MyClass : BaseViewModel(), BaseRepository() // Error!
@@ -210,15 +214,16 @@ abstract class BaseRepository
 
 **Access Modifiers:**
 ```kotlin
-// ✅ Abstract class - any modifiers
+// ✅ Abstract class — same possibilities as regular classes
 abstract class Animal {
     protected var age: Int = 0 // ✅ Protected
     private val name: String = "Animal" // ✅ Private
 }
 
-// ✅ Interface - public by default, private available (Kotlin 1.4+)
+// ✅ Interface — members are public by default; private is available (Kotlin 1.4+)
+// Top-level interfaces are public by default; nested interfaces follow their containing declaration.
 interface Test {
-    fun publicMethod() // Public
+    fun publicMethod() // Public by default
     private fun privateMethod() {} // ✅ Kotlin 1.4+
 }
 ```

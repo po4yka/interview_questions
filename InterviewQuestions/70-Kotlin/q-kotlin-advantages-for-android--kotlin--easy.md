@@ -3,20 +3,18 @@ id: kotlin-225
 title: "Kotlin Advantages For Android / Преимущества Kotlin для Android"
 aliases: [Advantages, Android, For, Kotlin]
 topic: kotlin
-subtopics: [extensions, flow, null-safety]
+subtopics: [extensions, null-safety]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-delegates-compilation--kotlin--hard, q-kotlin-inline-functions--kotlin--medium]
+related: [c-kotlin, q-delegates-compilation--kotlin--hard, q-kotlin-inline-functions--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags: [difficulty/easy]
 ---
-# В Чем Преимущество Kotlin Для Разработки Под Android
-
 # Вопрос (RU)
 > В чём преимущества Kotlin для разработки под Android?
 
@@ -29,73 +27,24 @@ tags: [difficulty/easy]
 
 Kotlin представляет собой статически типизированный язык программирования, который полностью совместим с Java и оптимизирован для разработки под Android.
 
-### Основные Преимущества
+**Основные преимущества:**
 
-**1. Более краткий и выразительный синтаксис**
+1. **Более краткий и выразительный синтаксис** — меньше шаблонного кода, код более читаемый и поддерживаемый.
+2. **Null-безопасность** — система типов различает nullable и non-nullable типы и помогает предотвращать значительную часть `NullPointerException` на этапе компиляции.
+3. **Extension-функции** — позволяют добавлять новые функции к существующим классам без наследования.
+4. **Поддержка функционального программирования** — лямбды, функции высшего порядка, неизменяемые коллекции.
+5. **Полная совместимость с Java** — можно использовать Java-библиотеки и фреймворки, смешивать Kotlin и Java-код в одном проекте.
+6. **Инструментальная поддержка** — полная поддержка в Android Studio, включая рефакторинг, автодополнение и отладку.
+7. **Корутины** — упрощают асинхронное программирование, позволяя писать последовательный на вид асинхронный код вместо вложенных коллбеков.
+8. **Официальная поддержка Google** — с 2017 года Kotlin является официально поддерживаемым языком для разработки Android и одним из рекомендуемых языков по умолчанию.
 
-Меньше шаблонного кода (boilerplate), что делает код более читаемым и поддерживаемым.
-
+**Пример краткости:**
 ```kotlin
-// Kotlin
+// Kotlin - 1 строка
 data class User(val name: String, val age: Int)
 
-// Java эквивалент потребовал бы 20+ строк кода
+// Java-эквивалент - 20+ строк
 ```
-
-**2. Null безопасность**
-
-Система типов Kotlin различает nullable и non-nullable типы, предотвращая NullPointerException на этапе компиляции.
-
-```kotlin
-var name: String = "Alice"  // Не может быть null
-var nullableName: String? = null  // Может быть null
-```
-
-**3. Расширенные функции (Extension Functions)**
-
-Позволяют добавлять новые функции к существующим классам без наследования.
-
-```kotlin
-fun String.isPalindrome(): Boolean = this == this.reversed()
-"radar".isPalindrome()  // true
-```
-
-**4. Поддержка функционального программирования**
-
-Лямбды, функции высшего порядка, неизменяемые коллекции.
-
-```kotlin
-val numbers = listOf(1, 2, 3, 4, 5)
-val doubled = numbers.map { it * 2 }
-val evenNumbers = numbers.filter { it % 2 == 0 }
-```
-
-**5. Полная совместимость с Java**
-
-Можно использовать все Java библиотеки и фреймворки, смешивать Kotlin и Java код в одном проекте.
-
-**6. Инструментальная поддержка**
-
-Полная поддержка в Android Studio, включая рефакторинг, автодополнение и отладку.
-
-**7. Корутины для асинхронного программирования**
-
-Упрощают работу с асинхронным кодом без callback hell.
-
-```kotlin
-lifecycleScope.launch {
-    val data = withContext(Dispatchers.IO) {
-        // Фоновая операция
-        fetchDataFromNetwork()
-    }
-    // Обновление UI
-    updateUI(data)
-}
-```
-
-**8. Официальная поддержка Google**
-
-С 2017 года Kotlin является официально поддерживаемым языком для разработки Android.
 
 ## Answer (EN)
 
@@ -103,13 +52,13 @@ Kotlin is a statically-typed language fully compatible with Java and optimized f
 
 **Key advantages:**
 1. **Concise syntax** - less boilerplate code (data classes, property access)
-2. **Null safety** - nullable/non-nullable types prevent NullPointerException at compile time
+2. **Null safety** - nullable/non-nullable types significantly reduce `NullPointerException`s at compile time
 3. **Extension functions** - add methods to existing classes without inheritance
 4. **Functional programming** - lambdas, higher-order functions, immutable collections
 5. **Full Java interoperability** - use all Java libraries, mix Kotlin and Java code
 6. **Excellent tooling** - first-class Android Studio support
-7. **Coroutines** - simplify async programming without callback hell
-8. **Official Google support** - officially supported since 2017
+7. **Coroutines** - simplify async programming by allowing sequential-style asynchronous code instead of nested callbacks
+8. **Official Google support** - officially supported since 2017 and promoted as a primary language for Android apps
 
 **Example of conciseness:**
 ```kotlin
@@ -121,18 +70,34 @@ data class User(val name: String, val age: Int)
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чём ключевые отличия Kotlin от Java в контексте Android?
+- Когда на практике стоит выбирать Kotlin в Android-проектах?
+- Какие типичные ошибки и подводные камни при использовании Kotlin на Android?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-inline-functions--kotlin--medium]]
+- [[q-delegates-compilation--kotlin--hard]]
 
 ## Related Questions
 
--
 - [[q-kotlin-inline-functions--kotlin--medium]]
 - [[q-delegates-compilation--kotlin--hard]]

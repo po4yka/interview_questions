@@ -1,45 +1,41 @@
 ---
-id: lang-064
+id: kotlin-070
 title: "Interface Vs Abstract Class / Интерфейс против абстрактного класса"
 aliases: [Interface Vs Abstract Class, Интерфейс против абстрактного класса]
-topic: programming-languages
-subtopics: [abstract-classes, inheritance, interfaces]
+topic: kotlin
+subtopics: [interfaces, abstract-classes, inheritance]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-inheritance, c-oop-concepts, q-class-composition--oop--medium]
-created: 2025-10-15
-updated: 2025-10-31
+related: [c-kotlin, q-class-composition--oop--medium]
+created: 2024-10-15
+updated: 2025-11-09
 tags: [abstract-classes, difficulty/medium, inheritance, interfaces, kotlin, oop, programming-languages]
 ---
-# Что Такое Interface И Чем Он Отличается От Абстрактного Класса?
-
 # Вопрос (RU)
 > Что такое interface и чем он отличается от абстрактного класса?
-
----
 
 # Question (EN)
 > What is an interface and how does it differ from abstract class?
 
 ## Ответ (RU)
 
-**Interface** определяет набор абстрактных методов, которые должен реализовать класс. Интерфейсы могут содержать реализации методов по умолчанию (в Kotlin).
+**Interface** определяет набор абстрактных методов (а также свойств), которые должен реализовать класс. В Kotlin интерфейсы могут содержать реализации методов по умолчанию и свойства с реализацией (например, с геттерами/сеттерами или инициализаторами).
 
-**Абстрактный класс** не может быть инстанциирован сам по себе и может содержать как абстрактные методы, так и методы с реализацией.
+**Абстрактный класс** не может быть инстанциирован сам по себе и может содержать как абстрактные методы, так и методы с реализацией. Как правило, используется как базовый класс с общим состоянием и поведением.
 
 **Основные различия:**
 
 | Аспект | Interface | Абстрактный класс |
 |--------|-----------|-------------------|
 | **Множественное наследование** | Класс может реализовывать несколько интерфейсов | Класс может наследовать только один абстрактный класс |
-| **Реализация методов** | Может иметь реализации по умолчанию | Может содержать полные реализации методов |
-| **Поля/состояние** | Не может содержать состояние (только свойства с пользовательскими геттерами) | Может содержать поля и состояние |
+| **Реализация методов** | Может иметь реализации по умолчанию (default-методы) | Может содержать полные реализации методов |
+| **Поля/состояние** | Может объявлять свойства и иметь реализацию, но обычно не используется как основной носитель состояния конкретного объекта | Может содержать поля и состояние, выступает как полноценный базовый класс |
 | **Конструкторы** | Не может иметь конструкторы | Может иметь конструкторы |
-| **Когда использовать** | Определить контракт поведения | Разделить код между связанными классами |
+| **Когда использовать** | Определить контракт поведения / набор способностей | Разделить код и состояние между связанными классами в иерархии "is-a" |
 
 ### Примеры Использования
 
@@ -220,6 +216,7 @@ class CustomButton : UIComponent(), Drawable, Resizable {
 
 ### Ключевое Правило
 
+(эвристика)
 **Interface = "can do" (может делать)**
 **Abstract Class = "is a" (является)**
 
@@ -243,51 +240,249 @@ class Duck : Animal(), Flyable, Swimmable {
 
 ## Answer (EN)
 
-**Interface** defines a set of abstract methods that a class must implement. Interfaces can contain default method implementations (in Kotlin).
+An **interface** defines a set of abstract methods and/or properties that a class must implement. In Kotlin, interfaces can contain default method implementations and properties with implementations (e.g., via accessors or initializers).
 
-**Abstract class** cannot be instantiated itself and can contain both abstract methods and methods with implementation.
+An **abstract class** cannot be instantiated by itself and can contain both abstract methods and concrete methods with implementation. It is typically used as a base class to share state and behavior.
 
 **Main differences:**
 
 | Aspect | Interface | Abstract Class |
 |--------|-----------|----------------|
-| **Multiple inheritance** | Class can implement multiple interfaces | Class can inherit only one abstract class |
-| **Method implementation** | Can have default implementations | Can contain full method implementations |
-| **Fields/state** | Cannot contain state (only properties with custom getters) | Can contain fields and state |
+| **Multiple inheritance** | A class can implement multiple interfaces | A class can extend only one abstract (or any) class |
+| **Method implementation** | Can have default implementations (default methods) | Can contain full method implementations |
+| **Fields/state** | Can declare properties and hold state via their implementations, but is usually used to model capabilities/contract rather than primary object state | Can contain fields and state and is used as a full-fledged base class |
 | **Constructors** | Cannot have constructors | Can have constructors |
-| **When to use** | Define behavior contract | Share code among related classes |
+| **When to use** | Define behavior contract / capabilities | Share code and state among related classes in an "is-a" hierarchy |
 
-**Example:**
+### Usage Examples
+
+#### Interface - Behavior Contract
+
 ```kotlin
-interface Animal {
-    fun eat()
+// Interface defines "what it can do"
+interface Clickable {
+    fun click()
+
+    // Default implementation in Kotlin
+    fun showClickAnimation() {
+        println("Click animation")
+    }
 }
 
-abstract class Mammal {
-    abstract fun breathe()
-    fun sleep() = println("Sleeping")
+interface Focusable {
+    fun setFocus(focused: Boolean)
+    fun isFocused(): Boolean
 }
 
-class Dog : Mammal(), Animal {
-    override fun eat() = println("Dog eating")
-    override fun breathe() = println("Dog breathing")
+// Class can implement multiple interfaces
+class Button : Clickable, Focusable {
+    private var focused = false
+
+    override fun click() {
+        println("Button clicked")
+    }
+
+    override fun setFocus(focused: Boolean) {
+        this.focused = focused
+    }
+
+    override fun isFocused() = focused
 }
 ```
 
----
+#### Abstract Class - Shared Base Code
+
+```kotlin
+// Abstract class defines "what it is" and holds common code
+abstract class Vehicle {
+    // State fields
+    protected var speed = 0
+    protected var fuel = 100
+
+    // Constructor
+    constructor(initialSpeed: Int) {
+        this.speed = initialSpeed
+    }
+
+    // Abstract method
+    abstract fun start()
+
+    // Concrete implementation
+    fun accelerate() {
+        speed += 10
+        fuel -= 1
+        println("Speed: $speed, Fuel: $fuel")
+    }
+
+    // Another concrete implementation
+    fun stop() {
+        speed = 0
+        println("Vehicle stopped")
+    }
+}
+
+class Car : Vehicle(0) {
+    override fun start() {
+        println("Car engine started")
+        speed = 10
+    }
+}
+
+class Motorcycle : Vehicle(0) {
+    override fun start() {
+        println("Motorcycle started")
+        speed = 5
+    }
+}
+```
+
+### When To Use What
+
+Use an interface when:
+- You need to define a contract (what an object can do)
+- A class should have multiple capabilities
+- Unrelated classes must share a behavior
+- You need multiple inheritance of behavior
+
+```kotlin
+interface Serializable {
+    fun serialize(): String
+}
+
+interface Comparable<T> {
+    fun compareTo(other: T): Int
+}
+
+// Any class can be both Serializable and Comparable
+class User : Serializable, Comparable<User> {
+    override fun serialize() = "User data"
+    override fun compareTo(other: User) = 0
+}
+```
+
+Use an abstract class when:
+- You have common code to share between related classes
+- You need stateful fields
+- You need a constructor
+- Classes form an "is-a" hierarchy
+
+```kotlin
+abstract class Shape {
+    // Shared state
+    var color: String = "black"
+    var filled: Boolean = false
+
+    // Shared behavior
+    fun describe() {
+        println("Shape: color=$color, filled=$filled")
+    }
+
+    // Abstract method to override
+    abstract fun calculateArea(): Double
+}
+
+class Circle(val radius: Double) : Shape() {
+    override fun calculateArea() = Math.PI * radius * radius
+}
+
+class Rectangle(val width: Double, val height: Double) : Shape() {
+    override fun calculateArea() = width * height
+}
+```
+
+### Combining
+
+Interfaces and abstract classes can be combined:
+
+```kotlin
+interface Drawable {
+    fun draw()
+}
+
+interface Resizable {
+    fun resize(scale: Double)
+}
+
+abstract class UIComponent {
+    var x: Int = 0
+    var y: Int = 0
+
+    abstract fun render()
+
+    fun moveTo(newX: Int, newY: Int) {
+        x = newX
+        y = newY
+    }
+}
+
+// Inherits abstract class and implements interfaces
+class CustomButton : UIComponent(), Drawable, Resizable {
+    override fun render() {
+        println("Rendering button at ($x, $y)")
+    }
+
+    override fun draw() {
+        println("Drawing button")
+    }
+
+    override fun resize(scale: Double) {
+        println("Resizing button by $scale")
+    }
+}
+```
+
+### Key Heuristic
+
+(heuristic)
+**Interface = "can do"**
+**Abstract Class = "is a"**
+
+```kotlin
+// Interfaces describe capabilities
+interface Flyable { fun fly() }
+interface Swimmable { fun swim() }
+
+// Abstract class describes an entity
+abstract class Animal {
+    abstract fun makeSound()
+}
+
+// Duck "is an" Animal and "can" fly and swim
+class Duck : Animal(), Flyable, Swimmable {
+    override fun makeSound() = println("Quack")
+    override fun fly() = println("Duck flying")
+    override fun swim() = println("Duck swimming")
+}
+```
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия реализации интерфейсов и абстрактных классов в Java и Kotlin?
+- Приведите практический сценарий на Kotlin (например, проект с разными источниками данных), где вы выберете interface вместо abstract class, и объясните почему.
+- Приведите практический сценарий (например, иерархия UI-компонентов), где абстрактный класс лучше интерфейса, и какие ошибки возникают при неверном выборе.
 
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- What are the key differences in how interfaces and abstract classes are implemented in Java vs Kotlin?
+- Give a concrete practical scenario in Kotlin (for example, multiple data sources) where you would choose an interface over an abstract class, and explain why.
+- Give a concrete practical scenario (for example, a UI component hierarchy) where an abstract class is preferable to an interface, and what typical mistakes occur when choosing between them.
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- https://kotlinlang.org/docs/interfaces.html
+- https://kotlinlang.org/docs/inheritance.html
 
 ## References
 
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+- https://kotlinlang.org/docs/interfaces.html
+- https://kotlinlang.org/docs/inheritance.html
+
+## Связанные вопросы (RU)
+
+- [[q-abstract-class-vs-interface--kotlin--medium]]
 
 ## Related Questions
 
--
-- [[q-garbage-collector-basics--programming-languages--medium]]
-- [[q-error-handling-in-coroutines--programming-languages--medium]]
+- [[q-abstract-class-vs-interface--kotlin--medium]]

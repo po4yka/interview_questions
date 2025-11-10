@@ -3,22 +3,40 @@ id: kotlin-172
 title: "Circuit breaker pattern with coroutines / Circuit breaker паттерн с корутинами"
 aliases: [Circuit Breaker Pattern, Circuit breaker паттерн]
 topic: kotlin
-subtopics: [coroutines, patterns]
+subtopics: [coroutines]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [circuit-breaker, coroutines, difficulty/hard, error-handling, kotlin, microservices, patterns, production, resilience]
 moc: moc-kotlin
-related: [q-flatmap-variants-flow--kotlin--medium, q-flow-vs-livedata-comparison--kotlin--medium, q-request-coalescing-deduplication--kotlin--hard]
+related: [c-kotlin, c-coroutines, q-advanced-coroutine-patterns--kotlin--hard]
+---
+
+# Вопрос (RU)
+
+> Как реализовать и использовать паттерн circuit breaker с использованием Kotlin coroutines в продакшене: состояния (Closed/Open/Half-Open), конфигурация порогов, потокобезопасность, мониторинг и интеграция с retry/timeout для разных сервисов?
+
+# Question (EN)
+
+> How do you implement and use the circuit breaker pattern with Kotlin coroutines in production: states (Closed/Open/Half-Open), threshold configuration, thread safety, monitoring, and integration with retry/timeout for different services?
+
+## Ответ (RU)
+
+Ниже приведено детальное объяснение и практические примеры реализации circuit breaker с корутинами, включая состояния, конфигурацию, потокобезопасность, мониторинг, интеграцию с retry/timeout и примеры для разных сервисов.
+
+## Answer (EN)
+
+Below is a detailed explanation and practical implementation examples of a coroutine-based circuit breaker, covering states, configuration, thread safety, monitoring, integration with retry/timeout, and usage for different services.
+
 ---
 
 # Circuit Breaker Pattern with Coroutines
 
-**English** | [Русский](#russian-version)
+**English** | [Русский](#circuit-breaker-паттерн-с-корутинами)
 
 ---
 
@@ -54,12 +72,14 @@ related: [q-flatmap-variants-flow--kotlin--medium, q-flow-vs-livedata-comparison
 
 The Circuit Breaker pattern prevents an application from repeatedly trying to execute an operation that's likely to fail, allowing it to continue without waiting for the fault to be fixed or wasting CPU cycles.
 
-**Key Benefits:**
+Key benefits:
 - Prevents cascading failures in distributed systems
 - Provides fast failure detection and recovery
 - Reduces load on failing services
 - Improves system resilience and stability
 - Enables graceful degradation
+
+Also see: [[c-kotlin]], [[c-coroutines]].
 
 ---
 
@@ -69,8 +89,7 @@ The Circuit Breaker pattern prevents an application from repeatedly trying to ex
 
 The Circuit Breaker pattern is inspired by electrical circuit breakers that automatically stop the flow of electricity when a fault is detected.
 
-```
-
+```text
    Client       Circuit      Service
                          Breaker              (Backend)
 
@@ -82,15 +101,14 @@ The Circuit Breaker pattern is inspired by electrical circuit breakers that auto
 
                            State
                           Machine
-
 ```
 
 ### Why Use Circuit Breaker?
 
-**Problem without Circuit Breaker:**
+Problem without circuit breaker:
 
 ```kotlin
-//  Without circuit breaker - keeps hammering failing service
+// Without circuit breaker - keeps hammering failing service
 class PaymentService(private val api: PaymentApi) {
     suspend fun processPayment(payment: Payment): Result<PaymentResponse> {
         return try {
@@ -108,10 +126,10 @@ class PaymentService(private val api: PaymentApi) {
 // System becomes unresponsive
 ```
 
-**Solution with Circuit Breaker:**
+Solution with circuit breaker:
 
 ```kotlin
-//  With circuit breaker - fails fast when service is down
+// With circuit breaker - fails fast when service is down
 class PaymentService(
     private val api: PaymentApi,
     private val circuitBreaker: CircuitBreaker
@@ -132,10 +150,11 @@ class PaymentService(
 
 ## Three States Explained
 
+NOTE: The snippets below illustrate behavior concepts. The complete, consistent implementation is shown in [Full Implementation](#full-implementation).
+
 ### State: Closed (Normal Operation)
 
-```
-
+```text
          CLOSED State
   (Normal Operation)
 
@@ -144,46 +163,33 @@ class PaymentService(
   • Success resets failure counter
   • When failures exceed threshold:
     → Transition to OPEN
-
 ```
 
-**Code Example:**
+Illustrative code example:
 
 ```kotlin
 sealed class CircuitBreakerState {
-    object Closed : CircuitBreakerState() {
-        var failureCount: Int = 0
+    data class Closed(
+        var failureCount: Int = 0,
         var lastFailureTime: Long? = null
-
-        fun recordSuccess() {
-            failureCount = 0
-            lastFailureTime = null
-        }
-
-        fun recordFailure() {
-            failureCount++
-            lastFailureTime = System.currentTimeMillis()
-        }
-    }
+    ) : CircuitBreakerState()
 }
 ```
 
 ### State: Open (Failing)
 
-```
-
+```text
          OPEN State
   (Service is Down)
 
   • All requests fail immediately
   • No calls to backend service
-  • Failure counter is at maximum
+  • Failure counter reached threshold
   • After timeout period:
     → Transition to HALF_OPEN
-
 ```
 
-**Code Example:**
+Illustrative code example:
 
 ```kotlin
 sealed class CircuitBreakerState {
@@ -199,8 +205,7 @@ sealed class CircuitBreakerState {
 
 ### State: Half-Open (Testing)
 
-```
-
+```text
          HALF_OPEN State
   (Testing Recovery)
 
@@ -210,25 +215,16 @@ sealed class CircuitBreakerState {
     → Transition to CLOSED
   • On failure:
     → Transition back to OPEN
-
 ```
 
-**Code Example:**
+Illustrative code example:
 
 ```kotlin
 sealed class CircuitBreakerState {
-    object HalfOpen : CircuitBreakerState() {
-        var successCount: Int = 0
+    data class HalfOpen(
+        var successCount: Int = 0,
         var failureCount: Int = 0
-
-        fun recordSuccess() {
-            successCount++
-        }
-
-        fun recordFailure() {
-            failureCount++
-        }
-    }
+    ) : CircuitBreakerState()
 }
 ```
 
@@ -236,8 +232,7 @@ sealed class CircuitBreakerState {
 
 ## State Transition Diagram
 
-```
-
+```text
                        CLOSED
                       (Normal)
 
@@ -266,15 +261,14 @@ sealed class CircuitBreakerState {
 
                         OPEN
                       (Failing)
-
 ```
 
-**State Transitions:**
+State transitions:
 
-1. **CLOSED → OPEN**: When failure count exceeds threshold
-2. **OPEN → HALF_OPEN**: After timeout period elapses
-3. **HALF_OPEN → CLOSED**: When test requests succeed
-4. **HALF_OPEN → OPEN**: When test request fails
+1. CLOSED → OPEN: When failure count exceeds threshold
+2. OPEN → HALF_OPEN: After timeout period elapses
+3. HALF_OPEN → CLOSED: When test requests succeed
+4. HALF_OPEN → OPEN: When test request fails
 
 ---
 
@@ -391,7 +385,7 @@ class CircuitBreaker(
         return elapsed >= config.resetTimeout
     }
 
-    // Timeout for individual operations
+    // Timeout for individual operations (delegates to full execute implementation)
     suspend fun <T> executeWithTimeout(
         timeoutMs: Long = 5000,
         operation: suspend () -> T
@@ -399,6 +393,11 @@ class CircuitBreaker(
         return withTimeout(timeoutMs) {
             execute(operation)
         }
+    }
+
+    suspend fun <T> execute(operation: suspend () -> T): T {
+        // Refer to Full Implementation section for full logic
+        return operation()
     }
 }
 ```
@@ -445,7 +444,7 @@ interface RecoveryStrategy {
 
 ## Half-Open State Mechanism
 
-### Implementation
+### Implementation (excerpt)
 
 ```kotlin
 class CircuitBreaker(
@@ -458,47 +457,53 @@ class CircuitBreaker(
         val currentState = state.get()
 
         return when (currentState) {
-            is CircuitBreakerState.Closed -> executeInClosedState(operation)
-            is CircuitBreakerState.Open -> executeInOpenState(currentState, operation)
-            is CircuitBreakerState.HalfOpen -> executeInHalfOpenState(operation)
+            is CircuitBreakerState.Closed -> executeInClosedState(operation, currentState)
+            is CircuitBreakerState.Open -> executeInOpenState(operation, currentState)
+            is CircuitBreakerState.HalfOpen -> executeInHalfOpenState(operation, currentState)
         }
     }
 
     private suspend fun <T> executeInHalfOpenState(
-        operation: suspend () -> T
+        operation: suspend () -> T,
+        currentState: CircuitBreakerState.HalfOpen
     ): T {
         // Ensure only limited concurrent requests in half-open
         return halfOpenLock.withLock {
-            val currentState = state.get()
-            if (currentState !is CircuitBreakerState.HalfOpen) {
-                return execute(operation) // State changed, retry
+            // Re-check state after acquiring the lock
+            val latest = state.get()
+            if (latest !is CircuitBreakerState.HalfOpen) {
+                return execute(operation) // State changed, delegate
             }
 
             try {
                 val result = operation()
 
                 // Record success
-                currentState.successCount++
+                latest.successCount++
 
                 // Check if we should close circuit
-                if (currentState.successCount >= config.successThreshold) {
-                    state.set(CircuitBreakerState.Closed())
+                if (latest.successCount >= config.successThreshold) {
+                    val closed = CircuitBreakerState.Closed()
+                    state.set(closed)
                     Log.i("CircuitBreaker", "Circuit closed after successful recovery")
                 }
 
                 result
             } catch (e: Exception) {
                 // Record failure
-                currentState.failureCount++
+                latest.failureCount++
 
                 // Re-open circuit on any failure
-                state.set(CircuitBreakerState.Open())
+                val open = CircuitBreakerState.Open()
+                state.set(open)
                 Log.w("CircuitBreaker", "Circuit re-opened after failure in half-open state")
 
                 throw CircuitBreakerOpenException("Circuit breaker re-opened", e)
             }
         }
     }
+
+    // executeInClosedState and executeInOpenState are implemented as in Full Implementation
 }
 ```
 
@@ -621,6 +626,7 @@ class CircuitBreaker(
         operation: suspend () -> T,
         currentState: CircuitBreakerState.HalfOpen
     ): T = mutex.withLock {
+        // Only one test execution at a time
         try {
             val result = operation()
             recordHalfOpenSuccess(currentState)
@@ -636,8 +642,8 @@ class CircuitBreaker(
             // Double-check state (may have changed)
             val currentState = state.get()
             if (currentState is CircuitBreakerState.Open &&
-                currentState.shouldAttemptReset(config.resetTimeout)) {
-
+                currentState.shouldAttemptReset(config.resetTimeout)
+            ) {
                 val halfOpenState = CircuitBreakerState.HalfOpen()
                 state.set(halfOpenState)
                 stateFlow.value = halfOpenState
@@ -709,27 +715,30 @@ class CircuitBreaker(
 
         // Check if exception should be recorded
         return config.recordExceptions.isEmpty() ||
-               config.recordExceptions.any { it.isInstance(e) }
+            config.recordExceptions.any { it.isInstance(e) }
     }
 
     fun observeState(): StateFlow<CircuitBreakerState> = stateFlow.asStateFlow()
 
     fun getMetrics(): CircuitBreakerMetrics {
+        val total = totalCalls.get()
+        val success = successfulCalls.get()
         return CircuitBreakerMetrics(
             state = state.get(),
-            totalCalls = totalCalls.get(),
-            successfulCalls = successfulCalls.get(),
+            totalCalls = total,
+            successfulCalls = success,
             failedCalls = failedCalls.get(),
             rejectedCalls = rejectedCalls.get(),
-            successRate = if (totalCalls.get() > 0) {
-                (successfulCalls.get().toDouble() / totalCalls.get()) * 100
+            successRate = if (total > 0) {
+                (success.toDouble() / total) * 100
             } else 0.0
         )
     }
 
     fun reset() {
-        state.set(CircuitBreakerState.Closed())
-        stateFlow.value = CircuitBreakerState.Closed()
+        val closed = CircuitBreakerState.Closed()
+        state.set(closed)
+        stateFlow.value = closed
         totalCalls.set(0)
         successfulCalls.set(0)
         failedCalls.set(0)
@@ -776,7 +785,7 @@ class CircuitBreakerOpenException(
 
 ## Thread-Safe State Transitions
 
-### Using AtomicReference and Mutex
+### Using AtomicReference and Mutex (conceptual example)
 
 ```kotlin
 class ThreadSafeCircuitBreaker(
@@ -789,57 +798,70 @@ class ThreadSafeCircuitBreaker(
     private val transitionMutex = Mutex()
 
     suspend fun <T> execute(operation: suspend () -> T): T {
-        // Fast path: read state without lock
         val currentState = state.get()
-
         return when (currentState) {
-            is CircuitBreakerState.Closed -> {
-                executeWithStateTransition(operation) { result, error ->
-                    if (error != null) {
-                        handleClosedStateFailure(currentState)
-                    } else {
-                        handleClosedStateSuccess(currentState)
-                    }
-                }
-            }
-            is CircuitBreakerState.Open -> {
-                if (currentState.shouldAttemptReset(config.resetTimeout)) {
-                    transitionToHalfOpen(operation)
-                } else {
-                    throw CircuitBreakerOpenException("Circuit is OPEN")
-                }
-            }
-            is CircuitBreakerState.HalfOpen -> {
-                executeInHalfOpenWithMutex(operation, currentState)
-            }
+            is CircuitBreakerState.Closed -> executeInClosed(operation, currentState)
+            is CircuitBreakerState.Open -> executeInOpen(operation, currentState)
+            is CircuitBreakerState.HalfOpen -> executeInHalfOpen(operation, currentState)
         }
     }
 
-    private suspend fun <T> executeInHalfOpenWithMutex(
+    private suspend fun <T> executeInClosed(
         operation: suspend () -> T,
-        currentState: CircuitBreakerState.HalfOpen
-    ): T = transitionMutex.withLock {
-        // Only one coroutine can execute in half-open
-        try {
+        current: CircuitBreakerState.Closed
+    ): T {
+        return try {
             val result = operation()
-            currentState.successCount++
-
-            if (currentState.successCount >= config.successThreshold) {
-                state.compareAndSet(currentState, CircuitBreakerState.Closed())
-            }
-
+            // on success, reset counters
+            current.failureCount = 0
+            current.lastFailureTime = null
             result
         } catch (e: Exception) {
-            state.compareAndSet(currentState, CircuitBreakerState.Open())
+            current.failureCount++
+            current.lastFailureTime = System.currentTimeMillis()
+            if (current.failureCount >= config.failureThreshold) {
+                val open = CircuitBreakerState.Open()
+                if (state.compareAndSet(current, open)) {
+                    // transitioned to OPEN
+                }
+            }
+            throw e
+        }
+    }
+
+    private suspend fun <T> executeInOpen(
+        operation: suspend () -> T,
+        current: CircuitBreakerState.Open
+    ): T {
+        if (current.shouldAttemptReset(config.resetTimeout)) {
+            return transitionToHalfOpen(operation)
+        }
+        throw CircuitBreakerOpenException("Circuit is OPEN")
+    }
+
+    private suspend fun <T> executeInHalfOpen(
+        operation: suspend () -> T,
+        current: CircuitBreakerState.HalfOpen
+    ): T = transitionMutex.withLock {
+        try {
+            val result = operation()
+            current.successCount++
+            if (current.successCount >= config.successThreshold) {
+                state.compareAndSet(current, CircuitBreakerState.Closed())
+            }
+            result
+        } catch (e: Exception) {
+            state.compareAndSet(current, CircuitBreakerState.Open())
             throw e
         }
     }
 
     private suspend fun <T> transitionToHalfOpen(operation: suspend () -> T): T {
         transitionMutex.withLock {
-            // Double-check after acquiring lock
             val current = state.get()
-            if (current is CircuitBreakerState.Open) {
+            if (current is CircuitBreakerState.Open &&
+                current.shouldAttemptReset(config.resetTimeout)
+            ) {
                 state.compareAndSet(current, CircuitBreakerState.HalfOpen())
             }
         }
@@ -853,6 +875,7 @@ class ThreadSafeCircuitBreaker(
 ```kotlin
 // Atomic state update with retry
 private fun updateStateAtomically(
+    state: AtomicReference<CircuitBreakerState>,
     expectedState: CircuitBreakerState,
     newState: CircuitBreakerState
 ): Boolean {
@@ -860,14 +883,17 @@ private fun updateStateAtomically(
 }
 
 // Usage example
-private fun openCircuit(currentState: CircuitBreakerState.Closed) {
+private fun openCircuit(
+    state: AtomicReference<CircuitBreakerState>,
+    currentState: CircuitBreakerState.Closed
+) {
     val openState = CircuitBreakerState.Open()
 
     if (state.compareAndSet(currentState, openState)) {
         Log.i("CircuitBreaker", "Successfully transitioned to OPEN")
-        notifyStateChange(openState)
+        // notifyStateChange(openState)
     } else {
-        Log.w("CircuitBreaker", "State changed during transition, retry")
+        Log.w("CircuitBreaker", "State changed during transition, retry if needed")
     }
 }
 ```
@@ -887,6 +913,15 @@ interface PaymentApi {
     suspend fun getPaymentStatus(@Path("id") paymentId: String): PaymentStatus
 }
 
+data class PaymentRequest(/* fields */)
+data class PaymentResponse(/* fields */)
+data class PaymentStatus(/* fields */)
+
+sealed class Result<out T> {
+    data class Success<T>(val value: T) : Result<T>()
+    data class Error(val message: String, val cause: Throwable? = null) : Result<Nothing>()
+}
+
 class PaymentService(
     private val api: PaymentApi,
     private val circuitBreaker: CircuitBreaker
@@ -899,9 +934,9 @@ class PaymentService(
             Result.Success(response)
         } catch (e: CircuitBreakerOpenException) {
             // Circuit is open - fail fast
-            Result.Error("Payment service is temporarily unavailable. Please try again later.")
+            Result.Error("Payment service is temporarily unavailable. Please try again later.", e)
         } catch (e: Exception) {
-            Result.Error("Payment failed: ${e.message}")
+            Result.Error("Payment failed: ${e.message}", e)
         }
     }
 
@@ -915,12 +950,12 @@ class PaymentService(
             // Try cache or local storage
             getCachedPaymentStatus(paymentId)
         } catch (e: Exception) {
-            Result.Error(e.message ?: "Unknown error")
+            Result.Error(e.message ?: "Unknown error", e)
         }
     }
 
     private suspend fun getCachedPaymentStatus(paymentId: String): Result<PaymentStatus> {
-        // Fallback to cached data
+        // Fallback to cached data (simplified example)
         return Result.Error("Service unavailable and no cached data")
     }
 }
@@ -996,11 +1031,11 @@ class ResilientApiClient(
             }
             Result.Success(result)
         } catch (e: CircuitBreakerOpenException) {
-            Result.Error("Service unavailable (circuit open)")
+            Result.Error("Service unavailable (circuit open)", e)
         } catch (e: TimeoutCancellationException) {
-            Result.Error("Request timeout")
+            Result.Error("Request timeout", e)
         } catch (e: Exception) {
-            Result.Error(e.message ?: "Unknown error")
+            Result.Error(e.message ?: "Unknown error", e)
         }
     }
 
@@ -1042,12 +1077,12 @@ data class RetryConfig(
 )
 ```
 
-### Composite Resilience Pattern
+### Composite Resilience Pattern (conceptual)
 
 ```kotlin
 class CompositeResilienceStrategy(
     private val circuitBreaker: CircuitBreaker,
-    private val rateLimiter: RateLimiter,
+    private val rateLimiter: SimpleRateLimiter,
     private val bulkhead: Bulkhead
 ) {
     suspend fun <T> execute(operation: suspend () -> T): T {
@@ -1064,27 +1099,33 @@ class CompositeResilienceStrategy(
     }
 }
 
-// Rate limiter to prevent overwhelming service
-class RateLimiter(
+// Simplified rate limiter: max N calls per time window
+class SimpleRateLimiter(
     private val permitsPerSecond: Int
 ) {
-    private val semaphore = Semaphore(permitsPerSecond)
+    private val mutex = Mutex()
+    private var availablePermits = permitsPerSecond
     private var lastRefillTime = System.currentTimeMillis()
 
     suspend fun acquire() {
-        refillIfNeeded()
-        semaphore.acquire()
+        mutex.withLock {
+            refillIfNeeded()
+            while (availablePermits <= 0) {
+                val waitTime = 50L
+                delay(waitTime)
+                refillIfNeeded()
+            }
+            availablePermits--
+        }
     }
 
     private fun refillIfNeeded() {
         val now = System.currentTimeMillis()
-        val elapsed = now - lastRefillTime
-
-        if (elapsed >= 1000) {
-            val permitsToAdd = (elapsed / 1000).toInt() * permitsPerSecond
-            repeat(permitsToAdd.coerceAtMost(permitsPerSecond)) {
-                semaphore.tryAcquire()
-            }
+        val elapsedSeconds = (now - lastRefillTime) / 1000
+        if (elapsedSeconds > 0) {
+            val permitsToAdd = (elapsedSeconds * permitsPerSecond).toInt()
+            availablePermits = (availablePermits + permitsToAdd)
+                .coerceAtMost(permitsPerSecond)
             lastRefillTime = now
         }
     }
@@ -1209,67 +1250,117 @@ fun StateIndicator(state: CircuitBreakerState) {
 
 ---
 
-[Continuing due to length - this is part 1 of the circuit breaker file. Would you like me to continue with the remaining sections including Production Metrics, Testing, Real Example, Best Practices, etc.?]
+## Production Metrics
+
+Key metrics to track in production:
+- Number of calls, success/failure/rejected counts
+- Success rate
+- Time spent in each state (Closed/Open/Half-Open)
+- Frequency of state transitions
+- Per-service circuit breaker statistics
+
+Use these metrics to:
+- Tune `failureThreshold`, `failureTimeWindow`, `resetTimeout`, `successThreshold`
+- Detect unstable downstream dependencies early
+- Drive alerts when circuits stay OPEN too long
 
 ---
 
-## Follow-ups
+## Testing with Simulated Failures
 
-1. **What's the difference between circuit breaker and retry pattern?**
-   - Retry: Keeps trying failed operation multiple times
-   - Circuit breaker: Stops trying after threshold, prevents cascading failures
-   - Use both together for optimal resilience
+Recommended approaches:
+- Unit tests: inject a fake or stubbed dependency that consistently fails to trigger OPEN and HALF_OPEN transitions.
+- Use virtual time or controllable clocks to test timeout and reset behavior.
+- Integration tests: run against a test service that you can force to return errors/timeouts.
+- Chaos testing: periodically inject failures in non-production/staging to validate behavior.
 
-2. **How do you determine the right failure threshold?**
-   - Depends on service SLA and criticality
-   - Monitor baseline failure rate in production
-   - Start conservative (3-5 failures), tune based on metrics
+---
 
-3. **What happens to in-flight requests when circuit opens?**
-   - Requests already executing complete normally
-   - New requests fail immediately with CircuitBreakerOpenException
-   - Use bulkhead pattern to limit concurrent requests
+## Resilience4j Comparison
 
-4. **How do you handle circuit breaker in a microservices architecture?**
-   - Each service has its own circuit breaker instance
-   - Configure independently based on service characteristics
-   - Share state across instances using Redis or similar
+Resilience4j provides battle-tested implementations of circuit breaker, retry, bulkhead, and rate limiter.
+Key comparison points for a custom coroutine-based implementation:
+- Fine-tuned for your specific use cases and coroutine context.
+- You control state model, metrics, and integration with your logging/monitoring.
+- But you must carefully test: state transitions, race conditions, backpressure, and metrics.
 
-5. **What's the difference between half-open and closed state?**
-   - Closed: Normal operation, all requests go through
-   - Half-open: Limited test requests to check service recovery
-   - Half-open transitions to either closed (success) or open (failure)
+When possible, prefer a well-tested library (like Resilience4j with Kotlin interop) for production unless you have specific constraints.
 
-6. **How do you test circuit breaker behavior?**
-   - Mock failures to trigger state transitions
-   - Use virtual time to test timeout behavior
-   - Verify metrics and state changes
+---
 
-7. **Should you use circuit breaker for all API calls?**
-   - Not for idempotent, non-critical operations
-   - Not for operations with built-in retry
-   - Yes for critical services, payment processing, external APIs
+## Real Example: Payment Service
+
+A typical payment flow:
+- Wrap calls to external payment gateway with a circuit breaker.
+- Configure aggressive thresholds (low `failureThreshold`, sensible `resetTimeout`).
+- On OPEN:
+  - Fail fast API calls.
+  - Show clear message to user.
+  - Optionally place payment into a "pending" queue.
+- On HALF_OPEN:
+  - Allow a few test charges.
+  - If they succeed, close the circuit.
+  - If they fail, re-open and alert on-call team.
+
+This ensures:
+- The rest of your system remains responsive.
+- You do not overload a degraded payment provider.
+- You have clear observability into payment stability.
+
+---
+
+## Best Practices
+
+- Use separate circuit breakers per dependency (per endpoint or logical group), not a global one.
+- Combine with retry, timeout, bulkhead, and rate limiting.
+- Use metrics and logs to tune thresholds; avoid magic constants without data.
+- Implement fallbacks where possible (cache, degraded responses).
+- Ensure thread-safe, deterministic state transitions.
+
+---
+
+## When NOT to Use
+
+- For cheap, idempotent operations where occasional retries are harmless.
+- For purely in-process calls without network or IO boundaries.
+- When underlying libraries already include robust resilience and adding another circuit breaker complicates behavior.
+
+---
+
+## Common Pitfalls
+
+- Too low `failureThreshold` → frequent false openings.
+- Ignoring `CircuitBreakerOpenException` without proper fallback.
+- One global circuit breaker for very different operations.
+- No monitoring or alerting on circuit breaker metrics.
+
+---
+
+## Follow-up Questions
+
+1. What is the difference between circuit breaker and retry pattern?
+2. How would you choose `failureThreshold` and `resetTimeout` for different services?
+3. How do you keep the implementation thread-safe under high concurrency with coroutines?
+4. How would you expose circuit breaker metrics to your monitoring stack?
+5. How do you test state transitions deterministically (including time-based)?
 
 ---
 
 ## References
 
-- [Martin Fowler - Circuit Breaker](https://martinfowler.com/bliki/CircuitBreaker.html)
-- [Resilience4j Documentation](https://resilience4j.readme.io/)
-- [Microsoft - Circuit Breaker Pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker)
-- [Netflix Hystrix](https://github.com/Netflix/Hystrix)
+- Martin Fowler - Circuit Breaker: https://martinfowler.com/bliki/CircuitBreaker.html
+- Resilience4j Documentation: https://resilience4j.readme.io/
+- Microsoft - Circuit Breaker Pattern: https://learn.microsoft.com/azure/architecture/patterns/circuit-breaker
 
 ---
 
 ## Related Questions
 
-- [Retry logic with exponential backoff](q-retry-exponential-backoff--kotlin--medium.md)
-- [Rate limiting patterns](q-rate-limiting--kotlin--hard.md)
-- [Bulkhead pattern](q-bulkhead-pattern--kotlin--hard.md)
+- [[q-advanced-coroutine-patterns--kotlin--hard]]
+- [[q-request-coalescing-deduplication--kotlin--hard]]
+- [[q-actor-pattern--kotlin--hard]]
 
 ---
-
-<a name="russian-version"></a>
 
 # Circuit Breaker Паттерн С Корутинами
 
@@ -1299,39 +1390,44 @@ fun StateIndicator(state: CircuitBreakerState) {
 - [Лучшие практики](#лучшие-практики-ru)
 - [Когда НЕ использовать](#когда-не-использовать)
 - [Распространённые ошибки](#распространённые-ошибки-ru)
+- [Дополнительные вопросы](#дополнительные-вопросы-ru)
+- [Ссылки](#ссылки-ru)
+- [Связанные вопросы](#связанные-вопросы-ru)
 
 ---
 
 ## Обзор {#обзор-ru}
 
-Паттерн Circuit Breaker предотвращает повторные попытки выполнения операции, которая скорее всего завершится неудачей, позволяя приложению продолжать работу без ожидания исправления ошибки или траты циклов CPU.
+Паттерн circuit breaker предотвращает повторные попытки выполнения операции, которая с высокой вероятностью завершится неудачей, позволяя приложению продолжать работу без ожидания исправления ошибки и лишней траты ресурсов.
 
-**Ключевые преимущества:**
+Ключевые преимущества:
 - Предотвращает каскадные сбои в распределённых системах
 - Обеспечивает быстрое обнаружение сбоев и восстановление
 - Снижает нагрузку на неработающие сервисы
-- Улучшает устойчивость и стабильность системы
-- Позволяет graceful degradation (плавную деградацию)
+- Повышает устойчивость и стабильность системы
+- Поддерживает плавную деградацию
+
+См. также: [[c-kotlin]], [[c-coroutines]].
 
 ---
 
-## Определение И Мотивация Паттерна
+## Определение и мотивация паттерна
 
-### Что Такое Circuit Breaker?
+### Что такое circuit breaker?
 
-Паттерн Circuit Breaker вдохновлён электрическими автоматическими выключателями, которые автоматически останавливают поток электричества при обнаружении неисправности.
+Паттерн circuit breaker вдохновлён электрическими автоматическими выключателями, которые автоматически останавливают ток при обнаружении неисправности.
 
-### Зачем Использовать Circuit Breaker?
+### Зачем использовать circuit breaker?
 
-**Проблема без Circuit Breaker:**
+Проблема без circuit breaker:
 
 ```kotlin
-// Без circuit breaker - продолжает атаковать неработающий сервис
+// Без circuit breaker — продолжаем бомбить неработающий сервис
 class PaymentService(private val api: PaymentApi) {
     suspend fun processPayment(payment: Payment): Result<PaymentResponse> {
         return try {
-            // Сервис не работает, но мы продолжаем попытки
-            val response = api.processPayment(payment) // Ждёт 30 секунд до тайм-аута
+            // Сервис лежит, но мы продолжаем попытки
+            val response = api.processPayment(payment) // Ждём 30 секунд до тайм-аута
             Result.Success(response)
         } catch (e: Exception) {
             Result.Error(e)
@@ -1343,10 +1439,10 @@ class PaymentService(private val api: PaymentApi) {
 // Система становится неотзывчивой
 ```
 
-**Решение с Circuit Breaker:**
+Решение с circuit breaker:
 
 ```kotlin
-// С circuit breaker - быстрый отказ когда сервис не работает
+// С circuit breaker — быстрый отказ, когда сервис недоступен
 class PaymentService(
     private val api: PaymentApi,
     private val circuitBreaker: CircuitBreaker
@@ -1358,47 +1454,35 @@ class PaymentService(
     }
 }
 
-// После порогового количества ошибок circuit открывается
-// Последующие запросы немедленно завершаются с ошибкой (без ожидания)
+// После порога ошибок circuit открывается
+// Новые запросы немедленно отклоняются (без ожидания)
 // Система остаётся отзывчивой
 ```
 
 ---
 
-## Три Состояния
+## Три состояния
 
-### Состояние: Closed (Закрыто - Нормальная работа)
+(Фрагменты иллюстрируют поведение; полную реализацию см. в разделе «Полная реализация».)
 
-**Пример кода:**
+### Состояние: Closed (закрыто, нормальная работа)
 
 ```kotlin
 sealed class CircuitBreakerState {
-    object Closed : CircuitBreakerState() {
-        var failureCount: Int = 0
+    data class Closed(
+        var failureCount: Int = 0,
         var lastFailureTime: Long? = null
-
-        fun recordSuccess() {
-            failureCount = 0
-            lastFailureTime = null
-        }
-
-        fun recordFailure() {
-            failureCount++
-            lastFailureTime = System.currentTimeMillis()
-        }
-    }
+    ) : CircuitBreakerState()
 }
 ```
 
-**Характеристики:**
-- Все запросы проходят через
+Характеристики:
+- Все запросы проходят
 - Ошибки подсчитываются
-- Успех сбрасывает счётчик ошибок
+- Успешный вызов сбрасывает счётчик ошибок
 - При превышении порога → переход в OPEN
 
-### Состояние: Open (Открыто - Сервис Не работает)
-
-**Пример кода:**
+### Состояние: Open (открыто, сервис не работает)
 
 ```kotlin
 sealed class CircuitBreakerState {
@@ -1412,66 +1496,54 @@ sealed class CircuitBreakerState {
 }
 ```
 
-**Характеристики:**
+Характеристики:
 - Все запросы немедленно завершаются с ошибкой
-- Нет вызовов к backend сервису
-- Счётчик ошибок на максимуме
+- Нет вызовов к backend-сервису
+- Порог ошибок достигнут
 - После периода тайм-аута → переход в HALF_OPEN
 
-### Состояние: Half-Open (Полуоткрыто - тестирование)
-
-**Пример кода:**
+### Состояние: Half-Open (полуоткрыто, тестирование)
 
 ```kotlin
 sealed class CircuitBreakerState {
-    object HalfOpen : CircuitBreakerState() {
-        var successCount: Int = 0
+    data class HalfOpen(
+        var successCount: Int = 0,
         var failureCount: Int = 0
-
-        fun recordSuccess() {
-            successCount++
-        }
-
-        fun recordFailure() {
-            failureCount++
-        }
-    }
+    ) : CircuitBreakerState()
 }
 ```
 
-**Характеристики:**
-- Ограниченное количество запросов проходит через
-- Тестирование восстановления сервиса
-- При успехе → переход в CLOSED
-- При ошибке → переход обратно в OPEN
+Характеристики:
+- Ограниченное число запросов пропускается
+- Проверяется восстановление сервиса
+- При достаточном числе успешных вызовов → CLOSED
+- При ошибке → обратно в OPEN
 
 ---
 
-## Диаграмма Переходов Состояний {#диаграмма-переходов-состояний-ru}
+## Диаграмма переходов состояний {#диаграмма-переходов-состояний-ru}
 
-**Переходы состояний:**
-
-1. **CLOSED → OPEN**: Когда количество ошибок превышает порог
-2. **OPEN → HALF_OPEN**: После истечения периода тайм-аута
-3. **HALF_OPEN → CLOSED**: Когда тестовые запросы успешны
-4. **HALF_OPEN → OPEN**: Когда тестовый запрос завершается ошибкой
+1. CLOSED → OPEN: превышен порог ошибок.
+2. OPEN → HALF_OPEN: истёк период тайм-аута.
+3. HALF_OPEN → CLOSED: достаточно успешных тестовых запросов.
+4. HALF_OPEN → OPEN: тестовый запрос завершился ошибкой.
 
 ---
 
-## Конфигурация Порога Ошибок
+## Конфигурация порога ошибок
 
-### Базовая Конфигурация
+### Базовая конфигурация
 
 ```kotlin
 data class CircuitBreakerConfig(
     // Количество последовательных ошибок перед открытием circuit
     val failureThreshold: Int = 5,
 
-    // Временное окно для подсчёта ошибок (миллисекунды)
-    val failureTimeWindow: Long = 10_000, // 10 секунд
+    // Временное окно для подсчёта ошибок (мс)
+    val failureTimeWindow: Long = 10_000,
 
-    // Время ожидания перед попыткой сброса (миллисекунды)
-    val resetTimeout: Long = 60_000, // 60 секунд
+    // Время ожидания перед попыткой восстановления (мс)
+    val resetTimeout: Long = 60_000,
 
     // Количество успешных вызовов для закрытия из half-open
     val successThreshold: Int = 2,
@@ -1490,11 +1562,46 @@ data class CircuitBreakerConfig(
 )
 ```
 
-### Различные Конфигурации Для Разных Сервисов
+### Продвинутая конфигурация со sliding window
+
+```kotlin
+data class AdvancedCircuitBreakerConfig(
+    // Тип окна: по количеству вызовов или по времени
+    val slidingWindowType: SlidingWindowType = SlidingWindowType.COUNT_BASED,
+
+    // Размер окна
+    val slidingWindowSize: Int = 100,
+
+    // Минимальное число вызовов перед расчётом доли ошибок
+    val minimumNumberOfCalls: Int = 10,
+
+    // Порог доли ошибок (в процентах)
+    val failureRateThreshold: Float = 50f,
+
+    // Порог длительности медленного вызова (мс)
+    val slowCallDurationThreshold: Long = 1000,
+
+    // Порог доли медленных вызовов (в процентах)
+    val slowCallRateThreshold: Float = 100f,
+
+    // Количество разрешённых вызовов в HALF_OPEN
+    val permittedNumberOfCallsInHalfOpenState: Int = 3,
+
+    // Время ожидания в OPEN (мс)
+    val waitDurationInOpenState: Long = 60_000
+)
+
+enum class SlidingWindowType {
+    COUNT_BASED,
+    TIME_BASED
+}
+```
+
+### Разные конфигурации для разных сервисов
 
 ```kotlin
 object CircuitBreakerConfigs {
-    // Критический сервис - быстрый отказ
+    // Критичный сервис — быстрый отказ
     val payment = CircuitBreakerConfig(
         failureThreshold = 3,
         failureTimeWindow = 5_000,
@@ -1502,7 +1609,7 @@ object CircuitBreakerConfigs {
         successThreshold = 3
     )
 
-    // Некритический сервис - более толерантный
+    // Некритичный сервис — больше допусков
     val analytics = CircuitBreakerConfig(
         failureThreshold = 10,
         failureTimeWindow = 30_000,
@@ -1510,11 +1617,11 @@ object CircuitBreakerConfigs {
         successThreshold = 1
     )
 
-    // Внешний сторонний сервис - очень толерантный
+    // Внешний сервис — ещё более толерантный
     val thirdParty = CircuitBreakerConfig(
         failureThreshold = 5,
         failureTimeWindow = 60_000,
-        resetTimeout = 300_000, // 5 минут
+        resetTimeout = 300_000,
         successThreshold = 5
     )
 }
@@ -1522,9 +1629,9 @@ object CircuitBreakerConfigs {
 
 ---
 
-## Тайм-ауты И Период Восстановления
+## Тайм-ауты и период восстановления
 
-### Конфигурация Тайм-аута
+### Конфигурация тайм-аута
 
 ```kotlin
 class CircuitBreaker(
@@ -1536,7 +1643,7 @@ class CircuitBreaker(
         return elapsed >= config.resetTimeout
     }
 
-    // Тайм-аут для индивидуальных операций
+    // Тайм-аут для операций (делегирует в полную реализацию)
     suspend fun <T> executeWithTimeout(
         timeoutMs: Long = 5000,
         operation: suspend () -> T
@@ -1545,20 +1652,24 @@ class CircuitBreaker(
             execute(operation)
         }
     }
+
+    suspend fun <T> execute(operation: suspend () -> T): T {
+        return operation()
+    }
 }
 ```
 
-### Стратегии Периода Восстановления
+### Стратегии периода восстановления
 
 ```kotlin
-// Стратегия 1: Фиксированная задержка
+// Стратегия 1: фиксированная задержка
 class FixedDelayRecovery(
     private val delayMs: Long = 60_000
 ) : RecoveryStrategy {
     override fun getNextDelay(attempt: Int): Long = delayMs
 }
 
-// Стратегия 2: Экспоненциальная задержка
+// Стратегия 2: экспоненциальная задержка
 class ExponentialBackoffRecovery(
     private val initialDelay: Long = 1000,
     private val maxDelay: Long = 300_000,
@@ -1570,7 +1681,7 @@ class ExponentialBackoffRecovery(
     }
 }
 
-// Стратегия 3: Jitter (рандомизация для предотвращения thundering herd)
+// Стратегия 3: jitter (рандомизация)
 class JitterRecovery(
     private val baseDelay: Long = 60_000,
     private val maxJitter: Long = 5000
@@ -1588,9 +1699,9 @@ interface RecoveryStrategy {
 
 ---
 
-## Механизм Полуоткрытого Состояния
+## Механизм полуоткрытого состояния
 
-### Реализация
+### Реализация (фрагмент)
 
 ```kotlin
 class CircuitBreaker(
@@ -1599,38 +1710,42 @@ class CircuitBreaker(
     private val state = AtomicReference<CircuitBreakerState>(CircuitBreakerState.Closed())
     private val halfOpenLock = Mutex()
 
+    suspend fun <T> execute(operation: suspend () -> T): T {
+        val currentState = state.get()
+        return when (currentState) {
+            is CircuitBreakerState.Closed -> executeInClosedState(operation, currentState)
+            is CircuitBreakerState.Open -> executeInOpenState(operation, currentState)
+            is CircuitBreakerState.HalfOpen -> executeInHalfOpenState(operation, currentState)
+        }
+    }
+
     private suspend fun <T> executeInHalfOpenState(
-        operation: suspend () -> T
+        operation: suspend () -> T,
+        currentState: CircuitBreakerState.HalfOpen
     ): T {
-        // Обеспечиваем ограниченное количество concurrent запросов в half-open
         return halfOpenLock.withLock {
-            val currentState = state.get()
-            if (currentState !is CircuitBreakerState.HalfOpen) {
-                return execute(operation) // Состояние изменилось, повторяем
+            val latest = state.get()
+            if (latest !is CircuitBreakerState.HalfOpen) {
+                return execute(operation)
             }
 
             try {
                 val result = operation()
+                latest.successCount++
 
-                // Записываем успех
-                currentState.successCount++
-
-                // Проверяем, нужно ли закрыть circuit
-                if (currentState.successCount >= config.successThreshold) {
-                    state.set(CircuitBreakerState.Closed())
-                    Log.i("CircuitBreaker", "Circuit закрыт после успешного восстановления")
+                if (latest.successCount >= config.successThreshold) {
+                    val closed = CircuitBreakerState.Closed()
+                    state.set(closed)
+                    Log.i("CircuitBreaker", "Circuit closed after successful recovery")
                 }
 
                 result
             } catch (e: Exception) {
-                // Записываем ошибку
-                currentState.failureCount++
-
-                // Повторно открываем circuit при любой ошибке
-                state.set(CircuitBreakerState.Open())
-                Log.w("CircuitBreaker", "Circuit повторно открыт после ошибки в half-open состоянии")
-
-                throw CircuitBreakerOpenException("Circuit breaker повторно открыт", e)
+                latest.failureCount++
+                val open = CircuitBreakerState.Open()
+                state.set(open)
+                Log.w("CircuitBreaker", "Circuit re-opened after failure in half-open state")
+                throw CircuitBreakerOpenException("Circuit breaker re-opened", e)
             }
         }
     }
@@ -1639,9 +1754,9 @@ class CircuitBreaker(
 
 ---
 
-## Полная Реализация {#полная-реализация-ru}
+## Полная реализация {#полная-реализация-ru}
 
-### Полный Класс Circuit Breaker
+### Полный класс CircuitBreaker
 
 ```kotlin
 class CircuitBreaker(
@@ -1695,16 +1810,44 @@ class CircuitBreaker(
         operation: suspend () -> T,
         currentState: CircuitBreakerState.Open
     ): T {
-        // Проверяем, нужно ли попытаться сбросить
         if (currentState.shouldAttemptReset(config.resetTimeout)) {
             return transitionToHalfOpen(operation)
         }
 
-        // Circuit открыт, немедленно отклоняем
         rejectedCalls.incrementAndGet()
         throw CircuitBreakerOpenException(
-            "Circuit breaker в состоянии OPEN. Сервис недоступен."
+            "Circuit breaker is OPEN. Service is unavailable."
         )
+    }
+
+    private suspend fun <T> executeInHalfOpenState(
+        operation: suspend () -> T,
+        currentState: CircuitBreakerState.HalfOpen
+    ): T = mutex.withLock {
+        try {
+            val result = operation()
+            recordHalfOpenSuccess(currentState)
+            result
+        } catch (e: Exception) {
+            recordHalfOpenFailure()
+            throw e
+        }
+    }
+
+    private suspend fun <T> transitionToHalfOpen(operation: suspend () -> T): T {
+        mutex.withLock {
+            val currentState = state.get()
+            if (currentState is CircuitBreakerState.Open &&
+                currentState.shouldAttemptReset(config.resetTimeout)
+            ) {
+                val halfOpenState = CircuitBreakerState.HalfOpen()
+                state.set(halfOpenState)
+                stateFlow.value = halfOpenState
+                Log.i("CircuitBreaker", "Transitioned to HALF_OPEN")
+            }
+        }
+
+        return execute(operation)
     }
 
     private fun recordSuccess(currentState: CircuitBreakerState.Closed) {
@@ -1718,102 +1861,188 @@ class CircuitBreaker(
         currentState.failureCount++
         currentState.lastFailureTime = System.currentTimeMillis()
 
-        // Проверяем, нужно ли открыть circuit
         if (shouldOpenCircuit(currentState)) {
             val openState = CircuitBreakerState.Open()
             state.set(openState)
             stateFlow.value = openState
-            Log.w("CircuitBreaker", "Circuit ОТКРЫТ после ${currentState.failureCount} ошибок")
+            Log.w("CircuitBreaker", "Circuit OPENED after ${currentState.failureCount} failures")
         }
+    }
+
+    private fun recordHalfOpenSuccess(currentState: CircuitBreakerState.HalfOpen) {
+        successfulCalls.incrementAndGet()
+        currentState.successCount++
+
+        if (currentState.successCount >= config.successThreshold) {
+            val closedState = CircuitBreakerState.Closed()
+            state.set(closedState)
+            stateFlow.value = closedState
+            Log.i("CircuitBreaker", "Circuit CLOSED after successful recovery")
+        }
+    }
+
+    private fun recordHalfOpenFailure() {
+        failedCalls.incrementAndGet()
+
+        val openState = CircuitBreakerState.Open()
+        state.set(openState)
+        stateFlow.value = openState
+        Log.w("CircuitBreaker", "Circuit re-OPENED after failure in HALF_OPEN")
+    }
+
+    private fun shouldOpenCircuit(currentState: CircuitBreakerState.Closed): Boolean {
+        if (currentState.failureCount < config.failureThreshold) {
+            return false
+        }
+
+        val lastFailure = currentState.lastFailureTime ?: return false
+        val elapsed = System.currentTimeMillis() - lastFailure
+
+        return elapsed <= config.failureTimeWindow
+    }
+
+    private fun shouldRecordException(e: Exception): Boolean {
+        if (config.ignoreExceptions.any { it.isInstance(e) }) {
+            return false
+        }
+
+        return config.recordExceptions.isEmpty() ||
+            config.recordExceptions.any { it.isInstance(e) }
     }
 
     fun observeState(): StateFlow<CircuitBreakerState> = stateFlow.asStateFlow()
 
     fun getMetrics(): CircuitBreakerMetrics {
+        val total = totalCalls.get()
+        val success = successfulCalls.get()
         return CircuitBreakerMetrics(
             state = state.get(),
-            totalCalls = totalCalls.get(),
-            successfulCalls = successfulCalls.get(),
+            totalCalls = total,
+            successfulCalls = success,
             failedCalls = failedCalls.get(),
             rejectedCalls = rejectedCalls.get(),
-            successRate = if (totalCalls.get() > 0) {
-                (successfulCalls.get().toDouble() / totalCalls.get()) * 100
+            successRate = if (total > 0) {
+                (success.toDouble() / total) * 100
             } else 0.0
         )
     }
+
+    fun reset() {
+        val closed = CircuitBreakerState.Closed()
+        state.set(closed)
+        stateFlow.value = closed
+        totalCalls.set(0)
+        successfulCalls.set(0)
+        failedCalls.set(0)
+        rejectedCalls.set(0)
+    }
 }
+
+data class CircuitBreakerMetrics(
+    val state: CircuitBreakerState,
+    val totalCalls: Long,
+    val successfulCalls: Long,
+    val failedCalls: Long,
+    val rejectedCalls: Long,
+    val successRate: Double
+)
+
+class CircuitBreakerOpenException(
+    message: String,
+    cause: Throwable? = null
+) : Exception(message, cause)
 ```
 
 ---
 
-## Потокобезопасные Переходы Состояний
+## Потокобезопасные переходы состояний
 
-### Использование AtomicReference И Mutex
+### Использование AtomicReference и Mutex
 
 ```kotlin
 class ThreadSafeCircuitBreaker(
     private val config: CircuitBreakerConfig
 ) {
-    // AtomicReference для lock-free чтения
     private val state = AtomicReference<CircuitBreakerState>(CircuitBreakerState.Closed())
-
-    // Mutex для координированных переходов состояний
     private val transitionMutex = Mutex()
 
     suspend fun <T> execute(operation: suspend () -> T): T {
-        // Быстрый путь: чтение состояния без блокировки
         val currentState = state.get()
-
         return when (currentState) {
-            is CircuitBreakerState.Closed -> {
-                executeWithStateTransition(operation) { result, error ->
-                    if (error != null) {
-                        handleClosedStateFailure(currentState)
-                    } else {
-                        handleClosedStateSuccess(currentState)
-                    }
-                }
-            }
-            is CircuitBreakerState.Open -> {
-                if (currentState.shouldAttemptReset(config.resetTimeout)) {
-                    transitionToHalfOpen(operation)
-                } else {
-                    throw CircuitBreakerOpenException("Circuit в состоянии OPEN")
-                }
-            }
-            is CircuitBreakerState.HalfOpen -> {
-                executeInHalfOpenWithMutex(operation, currentState)
-            }
+            is CircuitBreakerState.Closed -> executeInClosed(operation, currentState)
+            is CircuitBreakerState.Open -> executeInOpen(operation, currentState)
+            is CircuitBreakerState.HalfOpen -> executeInHalfOpen(operation, currentState)
         }
     }
 
-    private suspend fun <T> executeInHalfOpenWithMutex(
+    private suspend fun <T> executeInClosed(
         operation: suspend () -> T,
-        currentState: CircuitBreakerState.HalfOpen
-    ): T = transitionMutex.withLock {
-        // Только одна корутина может выполняться в half-open
-        try {
+        current: CircuitBreakerState.Closed
+    ): T {
+        return try {
             val result = operation()
-            currentState.successCount++
-
-            if (currentState.successCount >= config.successThreshold) {
-                state.compareAndSet(currentState, CircuitBreakerState.Closed())
-            }
-
+            current.failureCount = 0
+            current.lastFailureTime = null
             result
         } catch (e: Exception) {
-            state.compareAndSet(currentState, CircuitBreakerState.Open())
+            current.failureCount++
+            current.lastFailureTime = System.currentTimeMillis()
+            if (current.failureCount >= config.failureThreshold) {
+                val open = CircuitBreakerState.Open()
+                if (state.compareAndSet(current, open)) {
+                    // переход в OPEN
+                }
+            }
             throw e
         }
+    }
+
+    private suspend fun <T> executeInOpen(
+        operation: suspend () -> T,
+        current: CircuitBreakerState.Open
+    ): T {
+        if (current.shouldAttemptReset(config.resetTimeout)) {
+            return transitionToHalfOpen(operation)
+        }
+        throw CircuitBreakerOpenException("Circuit is OPEN")
+    }
+
+    private suspend fun <T> executeInHalfOpen(
+        operation: suspend () -> T,
+        current: CircuitBreakerState.HalfOpen
+    ): T = transitionMutex.withLock {
+        try {
+            val result = operation()
+            current.successCount++
+            if (current.successCount >= config.successThreshold) {
+                state.compareAndSet(current, CircuitBreakerState.Closed())
+            }
+            result
+        } catch (e: Exception) {
+            state.compareAndSet(current, CircuitBreakerState.Open())
+            throw e
+        }
+    }
+
+    private suspend fun <T> transitionToHalfOpen(operation: suspend () -> T): T {
+        transitionMutex.withLock {
+            val current = state.get()
+            if (current is CircuitBreakerState.Open &&
+                current.shouldAttemptReset(config.resetTimeout)
+            ) {
+                state.compareAndSet(current, CircuitBreakerState.HalfOpen())
+            }
+        }
+        return execute(operation)
     }
 }
 ```
 
 ---
 
-## Полный API Клиент С Circuit Breaker
+## Полный API клиент с Circuit Breaker
 
-### Retrofit API С Circuit Breaker Обёрткой
+### Retrofit API с обёрткой circuit breaker
 
 ```kotlin
 interface PaymentApi {
@@ -1822,6 +2051,15 @@ interface PaymentApi {
 
     @GET("payments/{id}")
     suspend fun getPaymentStatus(@Path("id") paymentId: String): PaymentStatus
+}
+
+data class PaymentRequest(/* поля */)
+data class PaymentResponse(/* поля */)
+data class PaymentStatus(/* поля */)
+
+sealed class Result<out T> {
+    data class Success<T>(val value: T) : Result<T>()
+    data class Error(val message: String, val cause: Throwable? = null) : Result<Nothing>()
 }
 
 class PaymentService(
@@ -1835,10 +2073,9 @@ class PaymentService(
             }
             Result.Success(response)
         } catch (e: CircuitBreakerOpenException) {
-            // Circuit открыт - быстрый отказ
-            Result.Error("Сервис платежей временно недоступен. Попробуйте позже.")
+            Result.Error("Сервис платежей временно недоступен. Попробуйте позже.", e)
         } catch (e: Exception) {
-            Result.Error("Платёж не прошёл: ${e.message}")
+            Result.Error("Платёж не прошёл: ${e.message}", e)
         }
     }
 
@@ -1849,15 +2086,13 @@ class PaymentService(
             }
             Result.Success(status)
         } catch (e: CircuitBreakerOpenException) {
-            // Попытка использовать кеш или локальное хранилище
             getCachedPaymentStatus(paymentId)
         } catch (e: Exception) {
-            Result.Error(e.message ?: "Неизвестная ошибка")
+            Result.Error(e.message ?: "Неизвестная ошибка", e)
         }
     }
 
     private suspend fun getCachedPaymentStatus(paymentId: String): Result<PaymentStatus> {
-        // Fallback к кешированным данным
         return Result.Error("Сервис недоступен и нет кешированных данных")
     }
 }
@@ -1865,9 +2100,9 @@ class PaymentService(
 
 ---
 
-## Комбинирование С Retry И Timeout
+## Комбинирование с Retry и Timeout
 
-### Circuit Breaker + Retry + Timeout
+### Circuit Breaker + Retry + Timeout (RU)
 
 ```kotlin
 class ResilientApiClient(
@@ -1879,11 +2114,8 @@ class ResilientApiClient(
         operation: suspend () -> T
     ): Result<T> {
         return try {
-            // Оборачиваем в circuit breaker
             val result = circuitBreaker.execute {
-                // Оборачиваем в timeout
                 withTimeout(retryConfig.timeoutMs) {
-                    // Оборачиваем в retry логику
                     retryWithBackoff(retryConfig) {
                         operation()
                     }
@@ -1891,11 +2123,11 @@ class ResilientApiClient(
             }
             Result.Success(result)
         } catch (e: CircuitBreakerOpenException) {
-            Result.Error("Сервис недоступен (circuit открыт)")
+            Result.Error("Сервис недоступен (circuit открыт)", e)
         } catch (e: TimeoutCancellationException) {
-            Result.Error("Тайм-аут запроса")
+            Result.Error("Тайм-аут запроса", e)
         } catch (e: Exception) {
-            Result.Error(e.message ?: "Неизвестная ошибка")
+            Result.Error(e.message ?: "Неизвестная ошибка", e)
         }
     }
 
@@ -1916,7 +2148,7 @@ class ResilientApiClient(
                     throw e
                 }
 
-                Log.d("Retry", "Попытка ${attempt + 1} не удалась, повтор через ${currentDelay}ms")
+                Log.d("Retry", "Попытка ${attempt + 1} не удалась, повтор через ${currentDelay}мс")
                 delay(currentDelay)
                 currentDelay = (currentDelay * config.backoffMultiplier)
                     .toLong()
@@ -1924,10 +2156,12 @@ class ResilientApiClient(
             }
         }
 
-        throw lastException ?: Exception("Retry не удался")
+        throw lastException ?: Exception("Retry завершился неудачей")
     }
 }
+```
 
+```kotlin
 data class RetryConfig(
     val maxAttempts: Int = 3,
     val initialDelay: Long = 1000,
@@ -1939,9 +2173,9 @@ data class RetryConfig(
 
 ---
 
-## Мониторинг Состояния Circuit Breaker
+## Мониторинг состояния Circuit Breaker
 
-### Мониторинг Состояния В Реальном Времени
+### Онлайн-мониторинг состояния (RU)
 
 ```kotlin
 class CircuitBreakerMonitor(
@@ -1954,7 +2188,7 @@ class CircuitBreakerMonitor(
     fun monitorMetrics(): Flow<CircuitBreakerMetrics> = flow {
         while (currentCoroutineContext().isActive) {
             emit(circuitBreaker.getMetrics())
-            delay(1000) // Отправляем метрики каждую секунду
+            delay(1000)
         }
     }
 
@@ -1962,90 +2196,154 @@ class CircuitBreakerMonitor(
         circuitBreaker.observeState().collect { state ->
             when (state) {
                 is CircuitBreakerState.Closed -> {
-                    Log.i("Monitor", "Circuit ЗАКРЫТ - Сервис здоров")
+                    Log.i("Monitor", "Circuit CLOSED - сервис здоров")
                 }
                 is CircuitBreakerState.Open -> {
-                    Log.w("Monitor", "Circuit ОТКРЫТ - Сервис неисправен")
-                    // Триггерим alert
-                    sendAlert("Circuit breaker открылся для сервиса")
+                    Log.w("Monitor", "Circuit OPEN - проблемы с сервисом")
+                    sendAlert("Circuit breaker открыт для сервиса")
                 }
                 is CircuitBreakerState.HalfOpen -> {
-                    Log.i("Monitor", "Circuit ПОЛУОТКРЫТ - Тестирование восстановления сервиса")
+                    Log.i("Monitor", "Circuit HALF_OPEN - тестируем восстановление")
                 }
             }
         }
     }
 
     private suspend fun sendAlert(message: String) {
-        // Отправка в систему мониторинга (Datadog, New Relic, etc.)
+        // Интеграция с системой мониторинга
+    }
+}
+```
+
+### Дэшборд метрик (RU)
+
+```kotlin
+@Composable
+fun CircuitBreakerDashboard(monitor: CircuitBreakerMonitor) {
+    val state by monitor.monitorState().collectAsState(initial = CircuitBreakerState.Closed())
+    val metrics by monitor.monitorMetrics().collectAsState(
+        initial = CircuitBreakerMetrics(
+            state = CircuitBreakerState.Closed(),
+            totalCalls = 0,
+            successfulCalls = 0,
+            failedCalls = 0,
+            rejectedCalls = 0,
+            successRate = 0.0
+        )
+    )
+
+    Column(modifier = Modifier.padding(16.dp)) {
+        StateIndicator(state)
+        Spacer(modifier = Modifier.height(16.dp))
+        MetricsCard(metrics)
+        Spacer(modifier = Modifier.height(16.dp))
+        SuccessRateChart(metrics.successRate)
     }
 }
 ```
 
 ---
 
-## Лучшие Практики {#лучшие-практики-ru}
+## Production метрики {#production-метрики-ru}
 
-1. **Используйте разные конфигурации для разных типов сервисов**
-   - Критические сервисы: низкий порог ошибок, быстрый сброс
-   - Некритические сервисы: высокий порог ошибок, медленный сброс
+Рекомендуемые метрики:
+- Общее число вызовов, успешных, неуспешных, отклонённых
+- Доля успешных вызовов
+- Время в состояниях Closed/Open/Half-Open
+- Частота переходов состояний
+- Отдельные метрики по каждому circuit breaker/сервису
 
-2. **Комбинируйте с другими паттернами устойчивости**
-   - Retry для временных сбоев
-   - Timeout для предотвращения зависаний
-   - Bulkhead для изоляции ресурсов
-
-3. **Мониторьте метрики circuit breaker**
-   - Отслеживайте переходы состояний
-   - Логируйте успешность/неудачность вызовов
-   - Настройте алерты для состояния OPEN
-
-4. **Реализуйте fallback стратегии**
-   - Кеширование
-   - Значения по умолчанию
-   - Деградированная функциональность
-
-5. **Тестируйте сценарии сбоев**
-   - Unit тесты с моками
-   - Integration тесты с симулированными сбоями
-   - Chaos engineering в production
+Используйте метрики для настройки порогов (`failureThreshold`, `failureTimeWindow`, `resetTimeout`, `successThreshold`) и раннего обнаружения нестабильных зависимостей.
 
 ---
 
-## Когда НЕ Использовать
+## Тестирование с симуляцией сбоев {#тестирование-с-симуляцией-сбоев}
 
-1. **Идемпотентные операции без побочных эффектов**
-   - Простые запросы только на чтение
-   - Операции, которые можно повторять без последствий
-
-2. **Внутренние вызовы в процессе**
-   - Не нужно для локальных операций
-   - Используйте только для сетевых вызовов
-
-3. **Операции с встроенным retry**
-   - Некоторые библиотеки уже имеют механизмы retry
-   - Избегайте дублирования логики
+Подходы:
+- Unit-тесты с заглушками, которые всегда падают, чтобы проверить переход в OPEN и HALF_OPEN.
+- Управляемое время (virtual time) для тестирования тайм-аутов и периодов восстановления.
+- Интеграционные тесты против тестового сервиса с принудительными ошибками и тайм-аутами.
+- Chaos-тестирование в стейджинге для проверки поведения под сбоями.
 
 ---
 
-## Распространённые Ошибки {#распространённые-ошибки-ru}
+## Сравнение с Resilience4j {#сравнение-с-resilience4j}
 
-1. **Слишком низкий порог ошибок**
-   - Может привести к ложным срабатываниям
-   - Начинайте с консервативных значений и настраивайте
+Resilience4j предоставляет готовые реализации circuit breaker, retry, bulkhead и rate limiter.
+Сравнение с собственной реализацией на корутинах:
+- Своя реализация точнее учитывает контекст корутин и особенности проекта.
+- Полный контроль над моделью состояний, метриками, логированием.
+- Но требуется тщательное тестирование переходов состояний, гонок и метрик.
 
-2. **Забывание обработки CircuitBreakerOpenException**
-   - Всегда предоставляйте fallback
-   - Информируйте пользователя о проблеме
-
-3. **Не мониторинг состояния**
-   - Circuit может быть открыт долго без вашего ведома
-   - Настройте alerts и мониторинг
-
-4. **Использование одного circuit breaker для всех операций**
-   - Разделяйте по сервисам/операциям
-   - Избегайте каскадных сбоев
+В продакшене при отсутствии особых требований стоит рассматривать использование проверенной библиотеки.
 
 ---
 
-**End of document**
+## Реальный пример: Payment Service {#реальный-пример-payment-service}
+
+Типичный сценарий:
+- Оборачиваем вызовы внешнего платёжного провайдера в circuit breaker.
+- Настраиваем агрессивные пороги (низкий `failureThreshold`, разумный `resetTimeout`).
+- В состоянии OPEN:
+  - Быстро отклоняем запросы.
+  - Показываем пользователю понятное сообщение.
+  - При необходимости отправляем транзакции в очередь "pending".
+- В HALF_OPEN:
+  - Разрешаем ограниченное число тестовых платежей.
+  - При успехе — закрываем circuit.
+  - При ошибках — снова открываем и шлём алерты.
+
+Это защищает систему от перегрузки и даёт прозрачность состояния платёжного сервиса.
+
+---
+
+## Лучшие практики {#лучшие-практики-ru}
+
+- Отдельный circuit breaker на каждую внешнюю зависимость или группу похожих операций.
+- Комбинация с retry, timeout, bulkhead и rate limiting.
+- Настройка порогов на основе метрик.
+- Наличие fallback-стратегий (кеш, деградация функциональности).
+- Потокобезопасные и предсказуемые переходы состояний.
+
+---
+
+## Когда НЕ использовать {#когда-не-использовать}
+
+- Для дешёвых, идемпотентных операций, где повторы безопасны.
+- Для локальных вызовов в пределах одного процесса.
+- Когда сторонняя библиотека уже надёжно обрабатывает сбои и дополнительный circuit breaker усложняет поведение.
+
+---
+
+## Распространённые ошибки {#распространённые-ошибки-ru}
+
+- Слишком низкий порог ошибок → частые ложные срабатывания.
+- Игнорирование `CircuitBreakerOpenException` без fallback.
+- Один общий circuit breaker для разных по критичности операций.
+- Отсутствие мониторинга и алертов по состояниям circuit breaker.
+
+---
+
+## Дополнительные вопросы {#дополнительные-вопросы-ru}
+
+1. В чём разница между circuit breaker и retry паттерном?
+2. Как подобрать `failureThreshold` и `resetTimeout` для разных сервисов?
+3. Как обеспечить потокобезопасность реализации под высокой нагрузкой с корутинами?
+4. Как экспортировать метрики circuit breaker в систему мониторинга?
+5. Как детерминированно тестировать переходы состояний, включая зависящие от времени?
+
+---
+
+## Ссылки {#ссылки-ru}
+
+- Martin Fowler — Circuit Breaker: https://martinfowler.com/bliki/CircuitBreaker.html
+- Resilience4j Documentation: https://resilience4j.readme.io/
+- Microsoft — Circuit Breaker Pattern: https://learn.microsoft.com/azure/architecture/patterns/circuit-breaker
+
+---
+
+## Связанные вопросы {#связанные-вопросы-ru}
+
+- [[q-advanced-coroutine-patterns--kotlin--hard]]
+- [[q-request-coalescing-deduplication--kotlin--hard]]
+- [[q-actor-pattern--kotlin--hard]]

@@ -1,28 +1,28 @@
 ---
 id: kotlin-002
 title: "Equality Operators == vs === / Операторы равенства == vs ==="
-aliases: ["Equality Operators == vs ===, Операторы равенства == vs ==="]
+aliases: ["Equality Operators == vs ===", "Операторы равенства == vs ==="]
 
 # Classification
 topic: kotlin
-subtopics: [comparison, equality, operators]
+subtopics: [equality, operators]
 question_kind: theory
 difficulty: easy
 
 # Language & provenance
 original_language: en
 language_tags: [en, ru]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
+source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-favorite-features--programming-languages--easy, q-kotlin-object-companion-object--programming-languages--easy, q-test-dispatcher-types--kotlin--medium]
+related: [c-kotlin, c-equality, q-kotlin-favorite-features--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-11-09
 
 tags: [comparison, difficulty/easy, equality, kotlin, operators]
 ---
@@ -33,23 +33,32 @@ tags: [comparison, difficulty/easy, equality, kotlin, operators]
 
 # Question (EN)
 > What is the difference between == and === in Kotlin?
+
+---
+
 ## Ответ (RU)
 
 В Kotlin есть два типа равенства: **структурное** и **ссылочное**.
 
 ### == (Структурное равенство)
 
-Проверяет равны ли **значения** объектов. Эквивалентно методу `equals()` в Java.
+Проверяет, равны ли **значения** объектов. Для ссылочных типов при ненулевом левом операнде ведет себя как вызов `equals()` с проверкой на null: `a?.equals(b) ?: (b === null)`.
 
 ```kotlin
 val a = "hello"
 val b = "hello"
 println(a == b)  // true - одинаковое содержимое
+
+val list1 = listOf(1, 2, 3)
+val list2 = listOf(1, 2, 3)
+println(list1 == list2)  // true - одинаковое содержимое
 ```
+
+Для примитивных типов (например, `Int`) `==` сравнивает значения, как ожидается.
 
 ### === (Ссылочное равенство)
 
-Проверяет указывают ли две ссылки на **один и тот же объект**. Эквивалентно оператору `==` в Java.
+Проверяет, указывают ли две ссылки на **один и тот же объект**. Эквивалентно оператору `==` в Java для ссылочных типов.
 
 ```kotlin
 val list1 = mutableListOf(1, 2, 3)
@@ -58,7 +67,34 @@ println(list1 === list2)  // false - разные объекты
 println(list1 === list1)  // true - тот же объект
 ```
 
-**Краткое содержание**: `==` проверяет структурное равенство (равные значения/содержимое), вызывает `equals()`. `===` проверяет ссылочное равенство (тот же объект). Используйте `==` для сравнения значений, `===` для проверки указывают ли переменные на один объект.
+Важно: не полагайтесь на `===` для строк или чисел как на способ проверки "одинакового значения" — он проверяет именно идентичность объекта/ссылки, а не содержимое.
+
+### Итоговая таблица
+
+| Оператор | Назначение | Эквивалент в Java | Null-safe |
+|----------|------------|-------------------|-----------|
+| `==` | Структурное равенство (содержимое) | `equals()` с null-safe семантикой | Да (`a?.equals(b) ?: (b === null)`) |
+| `===` | Ссылочное равенство (ссылка) | `==` (для ссылок) | Нет |
+
+### Примеры
+
+```kotlin
+data class Person(val name: String, val age: Int)
+
+val person1 = Person("Alice", 25)
+val person2 = Person("Alice", 25)
+val person3 = person1
+
+// Структурное равенство
+println(person1 == person2)  // true - одинаковые данные
+println(person1 == person3)  // true - одинаковые данные
+
+// Ссылочное равенство
+println(person1 === person2)  // false - разные объекты
+println(person1 === person3)  // true - та же ссылка
+```
+
+**Итог (RU)**: `==` проверяет структурное равенство (равные значения/содержимое) с null-safe семантикой, фактически вызывая `equals()`. `===` проверяет ссылочное равенство (та же ссылка/объект). Используйте `==` для сравнения значений, `===` — для проверки, что две переменные указывают на один и тот же объект.
 
 ---
 
@@ -68,7 +104,7 @@ Kotlin has two types of equality: **structural** and **referential**.
 
 ### == (Structural Equality)
 
-Checks if objects have **equal values**. Equivalent to `equals()` method in Java.
+Checks if objects have **equal values**. For reference types with a non-null left operand it behaves like calling `equals()` with a null-safe check: `a?.equals(b) ?: (b === null)`.
 
 ```kotlin
 val a = "hello"
@@ -80,27 +116,27 @@ val list2 = listOf(1, 2, 3)
 println(list1 == list2)  // true - same content
 ```
 
+For primitive types (e.g., `Int`), `==` compares values as expected.
+
 ### === (Referential Equality)
 
-Checks if two references point to the **same object**. Equivalent to `==` operator in Java.
+Checks if two references point to the **same object**. Equivalent to the `==` operator in Java for reference types.
 
 ```kotlin
-val a = "hello"
-val b = "hello"
-println(a === b)  // true (string pool optimization)
-
 val list1 = mutableListOf(1, 2, 3)
 val list2 = mutableListOf(1, 2, 3)
 println(list1 === list2)  // false - different objects
 println(list1 === list1)  // true - same object
 ```
 
+Note: do not rely on `===` for strings or numbers as a way to check "same value" — it only checks object/reference identity, not content.
+
 ### Summary Table
 
 | Operator | Purpose | Java Equivalent | Null Safe |
 |----------|---------|-----------------|-----------|
-| `==` | Structural equality (content) | `equals()` | Yes (`a?.equals(b) ?: (b === null)`) |
-| `===` | Referential equality (reference) | `==` | No |
+| `==` | Structural equality (content) | `equals()` with null-safe semantics | Yes (`a?.equals(b) ?: (b === null)`) |
+| `===` | Referential equality (reference) | `==` (for references) | No |
 
 ### Examples
 
@@ -120,7 +156,7 @@ println(person1 === person2)  // false - different objects
 println(person1 === person3)  // true - same reference
 ```
 
-**English Summary**: `==` checks structural equality (equal values/content), calls `equals()`. `===` checks referential equality (same object reference). Use `==` for comparing values, `===` for checking if two variables point to the same object.
+**English Summary**: `==` checks structural equality (equal values/content) with null-safe semantics, effectively calling `equals()`. `===` checks referential equality (same object reference). Use `==` for comparing values, `===` for checking if two variables point to the same object.
 
 ## Follow-ups
 
@@ -130,10 +166,12 @@ println(person1 === person3)  // true - same reference
 
 ## References
 - [Equality - Kotlin Documentation](https://kotlinlang.org/docs/reference/equality.html)
+- [[c-kotlin]]
+- [[c-equality]]
 
 ## Related Questions
 
 ### Advanced (Harder)
-- [[q-instant-search-flow-operators--kotlin--medium]] - Flow
+- [[q-instant-search-flow-operators--kotlin--medium]] - `Flow`
 - [[q-flow-operators-map-filter--kotlin--medium]] - Coroutines
-- [[q-flow-operators--kotlin--medium]] - Flow
+- [[q-flow-operators--kotlin--medium]] - `Flow`

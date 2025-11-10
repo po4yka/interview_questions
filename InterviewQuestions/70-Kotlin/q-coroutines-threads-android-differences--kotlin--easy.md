@@ -38,21 +38,21 @@ subtopics:
 > What are the key differences between coroutines and threads in Android development?
 ## Ответ (RU)
 
-**Корутины и потоки** оба обеспечивают конкурентное программирование, но корутины **легковесные**, **проще в использовании** и **безопаснее** для Android разработки.
+**Корутины и потоки** оба обеспечивают конкурентное программирование, но корутины **легковесные**, **проще в использовании** и **лучше интегрированы** с Android стеком.
 
 ### Основные Различия
 
 | Аспект | Потоки | Корутины |
 |--------|---------|-----------|
-| **Вес** | Тяжеловесные (1-2 МБ на поток) | Легковесные (байты на корутину) |
-| **Стоимость Создания** | Дорогая (вызов ядра ОС) | Дешевая (выделение объекта) |
-| **Переключение Контекста** | Дорогое (уровень ядра) | Дешевое (уровень пользователя) |
-| **Количество** | Ограничено (~тысячи) | Практически неограничено (миллионы) |
-| **Отмена** | Сложная (прерывание, небезопасно) | Легкая (кооперативная, безопасная) |
-| **Безопасность Main Потока** | Требуется ручное переключение | Встроенная с диспетчерами |
-| **Память** | Фиксированный стек (1-2 МБ) | Динамическая, минимальные издержки |
-| **Обработка Исключений** | UncaughtExceptionHandler | Структурированная со scope |
-| **Жизненный Цикл** | Ручное управление | Автоматическое со scopes |
+| **Вес** | Тяжеловесные (обычно 0.5-2 МБ стека на поток) | Легковесные (на порядки меньше памяти на корутину) |
+| **Стоимость Создания** | Дорогая (вызов ядра ОС) | Дешевая (выделение объектов в user-space) |
+| **Переключение Контекста** | Дорогое (уровень ядра) | Дешевое (организуется в user-space поверх потоков) |
+| **Количество** | Практически ограничено (обычно сотни/тысячи) | Намного больше при тех же ресурсах (десятки/сотни тысяч) |
+| **Отмена** | Кооперативная через interrupt, требует ручной поддержки | Кооперативная, встроена в API (isActive, cancel, cancellation exceptions) |
+| **Безопасность Main Потока** | Требуется ручное переключение | Упрощена с диспетчерами (Dispatchers.Main и т.п.) |
+| **Память** | Фиксированный стек на поток | Динамическая, низкие накладные расходы на корутину |
+| **Обработка Исключений** | Через UncaughtExceptionHandler и try/catch в потоках | Структурированная с CoroutineScope и SupervisorJob |
+| **Жизненный Цикл** | Ручное управление | Жизненный цикл можно привязать к scope (viewModelScope, lifecycleScope) |
 
 ### Вес: Легковесные vs Тяжеловесные
 
@@ -60,14 +60,14 @@ subtopics:
 ```kotlin
 // - ДОРОГО: Создание множества потоков
 fun loadData() {
-    // Каждый поток стоит ~1-2 МБ памяти
+    // Каждый поток обычно резервирует значимый объем памяти под стек
     repeat(10000) { i ->
         Thread {
             val data = fetchData(i)
             runOnUiThread { updateUI(data) }
         }.start()
     }
-    // 10,000 потоков = ~10-20 ГБ памяти! → Крэш!
+    // Такое количество потоков с высокой вероятностью приведет к OOM или серьезному падению производительности.
 }
 ```
 
@@ -75,48 +75,49 @@ fun loadData() {
 ```kotlin
 // - ДЕШЕВО: Создание множества корутин
 fun loadData() {
-    lifecycleScope.launch {
-        // Каждая корутина стоит байты, а не мегабайты
+    lifecycleScope.launch { // в Activity/Fragment по умолчанию запускает на Dispatchers.Main
         repeat(10000) { i ->
-            launch {
-                val data = fetchData(i)
-                updateUI(data) // Уже в main потоке
+            launch { // наследует Dispatcher родителя (Main)
+                val data = withContext(Dispatchers.IO) {
+                    fetchData(i)
+                }
+                updateUI(data) // Выполняется на main-потоке
             }
         }
     }
-    // 10,000 корутин = ~несколько МБ памяти → Без проблем!
+    // Тысячи корутин при разумной работе не приводят к таким же накладным расходам, как тысячи потоков.
 }
 ```
 
 **Влияние на Память**:
-- Поток: ~1-2 МБ каждый → 1000 потоков = ~1-2 ГБ
-- Корутина: ~байты каждая → 1,000,000 корутин = ~несколько МБ
+- Поток: заметные фиксированные накладные расходы на каждый поток → большое количество потоков быстро исчерпывает память.
+- Корутина: гораздо меньшие накладные расходы → можно обрабатывать существенно больше конкурентных задач поверх ограниченного пула потоков.
 
 ### Android-специфические преимущества
 
 **1. Безопасность Main потока**:
 ```kotlin
-// Корутины делают легким сохранение main-safe
-lifecycleScope.launch {
+// Корутины упрощают возвращение на main-поток
+lifecycleScope.launch { // Main dispatcher
     val data = withContext(Dispatchers.IO) { loadData() }
-    updateUI(data) // Безопасно - обратно на main потоке
+    updateUI(data) // Безопасно - снова на main-потоке
 }
 ```
 
 **2. Интеграция с жизненным циклом**:
 ```kotlin
-// Автоматическая отмена с жизненным циклом
+// Автоматическая отмена при использовании lifecycle-aware scopes
 viewModelScope.launch { ... } // Отменяется в onCleared()
-lifecycleScope.launch { ... } // Отменяется когда жизненный цикл уничтожен
+lifecycleScope.launch { ... } // Отменяется когда соответствующий LifecycleOwner уничтожен
 ```
 
 **3. Структурированная конкурентность**:
 ```kotlin
-// Отношение родитель-потомок предотвращает утечки
+// Отношение родитель-потомок помогает избежать утечек и "висящих" задач
 lifecycleScope.launch {
     val job1 = launch { work1() }
     val job2 = launch { work2() }
-    // Оба отменяются если родитель отменен
+    // Оба будут отменены, если будет отменен родительский scope
 }
 ```
 
@@ -124,7 +125,7 @@ lifecycleScope.launch {
 
 **Версия с потоками**:
 ```kotlin
-// - СЛОЖНО: Сетевой вызов на потоках
+// - СЛОЖНЕЕ: Сетевой вызов на потоках
 class UserRepository {
     fun getUser(callback: (User?) -> Unit) {
         Thread {
@@ -154,7 +155,7 @@ repository.getUser { user ->
 
 **Версия с корутинами**:
 ```kotlin
-// - ПРОСТО: Сетевой вызов на корутинах
+// - ПРОЩЕ: Сетевой вызов на корутинах
 class UserRepository {
     suspend fun getUser(): User? {
         return withContext(Dispatchers.IO) {
@@ -180,384 +181,56 @@ lifecycleScope.launch {
 ### Когда использовать каждый
 
 **Используйте Потоки Когда**:
-- WARNING: Работа с Java библиотеками, которые требуют потоки
-- WARNING: Долгие блокирующие операции (редко - используйте WorkManager вместо этого)
-- WARNING: Низкоуровневое системное программирование
+- Нужно взаимодействовать с Java API, которые явно требуют управления потоками.
+- Для низкоуровневых задач, где необходим прямой контроль над потоками.
 
-**Используйте Корутины Когда** (Почти Всегда на Android):
-- - Сетевые вызовы
-- - Операции с базой данных
-- - Файловый I/O
-- - Обработка изображений
-- - Любая async работа в Android приложении
-- - Обновления UI с фоновой работой
-- - Сложные конкурентные операции
+**Используйте Корутины Когда** (типичный выбор на Android):
+- Сетевые вызовы
+- Операции с базой данных
+- Файловый I/O
+- Обработка изображений
+- Любая асинхронная работа в Android-приложении
+- Обновление UI после фоновой работы
+- Сложные конкурентные операции и координация задач
 
 ### Резюме
 
 **Потоки**:
-- - Тяжеловесные (1-2 МБ каждый)
-- - Дорогое переключение контекста
-- - Ограниченное количество (~тысячи)
-- - Сложно безопасно отменить
-- - Ручное управление жизненным циклом
-- - Многословное переключение потоков
-- - Высокое использование памяти
+- Тяжеловесные накладные расходы на память
+- Дорогое переключение контекста
+- Ограниченное количество на устройство
+- Отмена через interrupt требует дисциплины и ручной поддержки
+- Ручное управление жизненным циклом и переключением на main-поток
 
 **Корутины**:
-- - Легковесные (байты каждая)
-- - Дешевое переключение контекста
-- - Практически неограничены (миллионы)
-- - Легкая, безопасная отмена
-- - Автоматическое управление жизненным циклом
-- - Чистое переключение диспетчеров
-- - Низкое использование памяти
+- Легковесные
+- Более дешевое планирование и переключение на уровне библиотеки
+- Позволяют запускать существенно больше задач поверх фиксированного пула потоков
+- Встроенная кооперативная отмена
+- Удобная интеграция с lifecycleScope/viewModelScope и структурированной конкурентностью
+- Упрощенное переключение диспетчеров (например, IO ⇄ Main)
 
-### Переключение контекста: Стоимость
-
-**Потоки - Дорогое переключение**:
-```kotlin
-// Переключение контекста включает:
-// 1. Сохранение состояния потока (регистры, указатель стека)
-// 2. Переключение в режим ядра
-// 3. Планирование следующего потока
-// 4. Восстановление состояния потока
-// Время: ~1-10 микросекунд на переключение
-
-Thread {
-    // Работа в фоновом потоке
-    val data = loadData()
-
-    runOnUiThread {
-        // Дорогое переключение контекста на main поток
-        updateUI(data)
-    }
-}.start()
-```
-
-**Корутины - Дешевое переключение**:
-```kotlin
-// Переключение контекста это просто вызов функции
-// Нет вовлечения ядра
-// Время: ~наносекунды
-
-lifecycleScope.launch {
-    // Работа на background диспетчере
-    val data = withContext(Dispatchers.IO) {
-        loadData()
-    }
-
-    // Дешевое переключение на main диспетчер
-    updateUI(data) // runOnUiThread не нужен!
-}
-```
-
-### Безопасность Main потока
-
-**Потоки - Ручное переключение**:
-```kotlin
-// - МНОГОСЛОВНО: Ручное управление потоками
-class UserViewModel {
-    fun loadUser() {
-        Thread {
-            // Фоновый поток
-            val user = repository.getUser()
-
-            // Нужно вручную переключиться на main поток
-            Handler(Looper.getMainLooper()).post {
-                _userData.value = user
-            }
-
-            // Или
-            runOnUiThread {
-                _userData.value = user
-            }
-        }.start()
-    }
-}
-```
-
-**Корутины - Автоматическое переключение**:
-```kotlin
-// - ЧИСТО: Автоматическая обработка диспетчером
-class UserViewModel : ViewModel() {
-    fun loadUser() {
-        viewModelScope.launch {
-            // IO работа на background диспетчере
-            val user = withContext(Dispatchers.IO) {
-                repository.getUser()
-            }
-
-            // Автоматически переключается обратно на main диспетчер
-            _userData.value = user // Безопасно на main потоке!
-        }
-    }
-}
-```
-
-### Отмена
-
-**Потоки - Сложно отменить**:
-```kotlin
-// - ОПАСНО: Прерывание потока рискованно
-class DataLoader {
-    private var thread: Thread? = null
-
-    fun loadData() {
-        thread = Thread {
-            try {
-                while (!Thread.currentThread().isInterrupted) {
-                    // Работа
-                    val data = fetchData()
-
-                    // Проверить прерывание вручную
-                    if (Thread.interrupted()) break
-                }
-            } catch (e: InterruptedException) {
-                // Обработать прерывание
-            }
-        }
-        thread?.start()
-    }
-
-    fun cancel() {
-        thread?.interrupt() // Небезопасно - может повредить состояние!
-    }
-}
-```
-
-**Корутины - Легко отменить**:
-```kotlin
-// - БЕЗОПАСНО: Кооперативная отмена
-class DataLoader {
-    private var job: Job? = null
-
-    fun loadData() {
-        job = lifecycleScope.launch {
-            while (isActive) { // Встроенная проверка отмены
-                val data = fetchData()
-                updateUI(data)
-            }
-        }
-    }
-
-    fun cancel() {
-        job?.cancel() // Безопасная, предсказуемая отмена
-    }
-}
-```
-
-### Управление жизненным циклом
-
-**Потоки - Ручное управление**:
-```kotlin
-// - РИСК УТЕЧКИ: Нужно вручную отслеживать и отменять потоки
-class MyActivity : AppCompatActivity() {
-    private val activeThreads = mutableListOf<Thread>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val thread = Thread {
-            // Долгая работа
-            repeat(1000) {
-                Thread.sleep(1000)
-                // Если Activity уничтожена, это продолжает работать!
-            }
-        }
-        activeThreads.add(thread)
-        thread.start()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // Нужно вручную отменить все потоки
-        activeThreads.forEach { it.interrupt() }
-        activeThreads.clear()
-    }
-}
-```
-
-**Корутины - Автоматическое управление**:
-```kotlin
-// - БЕЗ УТЕЧЕК: Автоматическое управление жизненным циклом
-class MyActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        lifecycleScope.launch {
-            // Долгая работа
-            repeat(1000) {
-                delay(1000)
-                // Автоматически отменяется когда Activity уничтожена!
-            }
-        }
-    }
-
-    // onDestroy не нужен - автоматическая очистка!
-}
-```
-
-### Сравнение производительности
-
-**Бенчмарк: 10,000 конкурентных задач**
-
-```kotlin
-// Потоки - Крэш или серьезное замедление
-fun threadBenchmark() {
-    val startTime = System.currentTimeMillis()
-
-    repeat(10000) {
-        Thread {
-            Thread.sleep(1000)
-            println("Done")
-        }.start()
-    }
-    // Результат: OutOfMemoryError или экстремальное замедление
-}
-
-// Корутины - Без проблем
-suspend fun coroutineBenchmark() {
-    val startTime = System.currentTimeMillis()
-
-    coroutineScope {
-        repeat(10000) {
-            launch {
-                delay(1000)
-                println("Done")
-            }
-        }
-    }
-    // Результат: ~1 секунда, минимальное использование памяти
-}
-```
-
-**Результаты**:
-- Потоки: Крэш с OutOfMemoryError (слишком много потоков)
-- Корутины: Завершаются успешно за ~1 секунду
-
-### Преимущества специфичные для Android
-
-**1. Безопасность Main потока**:
-```kotlin
-// Корутины делают легким сохранение main-safe
-lifecycleScope.launch {
-    val data = withContext(Dispatchers.IO) { loadData() }
-    updateUI(data) // Безопасно - обратно на main потоке
-}
-```
-
-**2. Интеграция с жизненным циклом**:
-```kotlin
-// Автоматическая отмена с жизненным циклом
-viewModelScope.launch { ... } // Отменяется в onCleared()
-lifecycleScope.launch { ... } // Отменяется когда жизненный цикл уничтожен
-```
-
-**3. Структурированная конкурентность**:
-```kotlin
-// Отношение родитель-потомок предотвращает утечки
-lifecycleScope.launch {
-    val job1 = launch { work1() }
-    val job2 = launch { work2() }
-    // Оба отменяются если родитель отменен
-}
-```
-
-### Сравнение кода: Реальный пример
-
-**Версия с потоками**:
-```kotlin
-// - СЛОЖНО: Сетевой вызов на потоках
-class UserRepository {
-    fun getUser(callback: (User?) -> Unit) {
-        Thread {
-            try {
-                val response = api.getUser()
-                val user = parseUser(response)
-
-                Handler(Looper.getMainLooper()).post {
-                    callback(user)
-                }
-            } catch (e: Exception) {
-                Handler(Looper.getMainLooper()).post {
-                    callback(null)
-                }
-            }
-        }.start()
-    }
-}
-
-// Использование
-repository.getUser { user ->
-    if (user != null) {
-        updateUI(user)
-    }
-}
-```
-
-**Версия с корутинами**:
-```kotlin
-// - ПРОСТО: Сетевой вызов на корутинах
-class UserRepository {
-    suspend fun getUser(): User? {
-        return withContext(Dispatchers.IO) {
-            try {
-                val response = api.getUser()
-                parseUser(response)
-            } catch (e: Exception) {
-                null
-            }
-        }
-    }
-}
-
-// Использование
-lifecycleScope.launch {
-    val user = repository.getUser()
-    if (user != null) {
-        updateUI(user)
-    }
-}
-```
-
-### Когда использовать каждый
-
-**Используйте Потоки Когда**:
-- WARNING: Работа с Java библиотеками, которые требуют потоки
-- WARNING: Долгие блокирующие операции (редко - используйте WorkManager вместо этого)
-- WARNING: Низкоуровневое системное программирование
-
-**Используйте Корутины Когда** (Почти Всегда на Android):
-- - Сетевые вызовы
-- - Операции с базой данных
-- - Файловый I/O
-- - Обработка изображений
-- - Любая async работа в Android приложении
-- - Обновления UI с фоновой работой
-- - Сложные конкурентные операции
-
-**Ключевой Вывод**: На Android **всегда предпочитайте корутины потокам** для асинхронных операций. Корутины легче, безопаснее и бесшовно интегрируются с компонентами жизненного цикла Android.
+**Ключевой Вывод**: На Android для асинхронных операций обычно предпочтительнее использовать корутины поверх Dispatchers (особенно с lifecycleScope/viewModelScope), так как это легче, безопаснее и лучше интегрируется с компонентами платформы, чем ручное управление потоками.
 
 ---
 
 ## Answer (EN)
 
-**Coroutines and threads** both enable concurrent programming, but coroutines are **lightweight**, **easier to use**, and **safer** for Android development.
+**Coroutines and threads** both enable concurrent programming, but coroutines are **lightweight**, **easier to work with**, and **better integrated** with the Android stack.
 
 ### Core Differences
 
 | Aspect | Threads | Coroutines |
 |--------|---------|-----------|
-| **Weight** | Heavyweight (1-2 MB per thread) | Lightweight (bytes per coroutine) |
-| **Creation Cost** | Expensive (OS kernel call) | Cheap (object allocation) |
-| **Context Switching** | Expensive (kernel-level) | Cheap (user-level) |
-| **Number** | Limited (~thousands) | Virtually unlimited (millions) |
-| **Cancellation** | Hard (interrupt, unsafe) | Easy (cooperative, safe) |
-| **Main Thread Safety** | Manual switching required | Built-in with dispatchers |
-| **Memory** | Fixed stack (1-2 MB) | Dynamic, minimal overhead |
-| **Exception Handling** | UncaughtExceptionHandler | Structured with scope |
-| **Lifecycle** | Manual management | Automatic with scopes |
+| **Weight** | Heavyweight (typically ~0.5-2 MB stack per thread) | Lightweight (orders of magnitude less memory per coroutine) |
+| **Creation Cost** | Expensive (OS kernel involvement) | Cheap (user-space object allocation) |
+| **Context Switching** | Expensive (kernel-level scheduling) | Cheaper (managed in user-space on top of threads) |
+| **Number** | Practically limited (hundreds/thousands typical) | Can run far more tasks for same resources (tens/hundreds of thousands) |
+| **Cancellation** | Cooperative via interrupt, requires manual handling | Cooperative, built into API (isActive, cancel, cancellation exceptions) |
+| **Main Thread Safety** | Manual switching required | Simplified via dispatchers (Dispatchers.Main, etc.) |
+| **Memory** | Fixed stack per thread | Dynamic, low per-coroutine overhead |
+| **Exception Handling** | Via UncaughtExceptionHandler and try/catch in threads | Structured via CoroutineScope and SupervisorJob |
+| **Lifecycle** | Manual management | Can be lifecycle-aware when using scopes (viewModelScope, lifecycleScope) |
 
 ### Weight: Lightweight vs Heavyweight
 
@@ -565,14 +238,14 @@ lifecycleScope.launch {
 ```kotlin
 // - EXPENSIVE: Creating many threads
 fun loadData() {
-    // Each thread costs ~1-2 MB of memory
+    // Each thread reserves a significant stack
     repeat(10000) { i ->
         Thread {
             val data = fetchData(i)
             runOnUiThread { updateUI(data) }
         }.start()
     }
-    // 10,000 threads = ~10-20 GB memory! → Crash!
+    // Such a large number of threads is likely to cause OOM or severe slowdown.
 }
 ```
 
@@ -580,59 +253,49 @@ fun loadData() {
 ```kotlin
 // - CHEAP: Creating many coroutines
 fun loadData() {
-    lifecycleScope.launch {
-        // Each coroutine costs bytes, not megabytes
+    lifecycleScope.launch { // in Activity/Fragment defaults to Dispatchers.Main
         repeat(10000) { i ->
-            launch {
-                val data = fetchData(i)
-                updateUI(data) // Already on main thread
+            launch { // inherits parent's dispatcher (Main)
+                val data = withContext(Dispatchers.IO) {
+                    fetchData(i)
+                }
+                updateUI(data) // Runs on main thread
             }
         }
     }
-    // 10,000 coroutines = ~few MB memory → No problem!
+    // Thousands of coroutines are feasible without the same overhead as thousands of threads.
 }
 ```
 
 **Memory Impact**:
-- Thread: ~1-2 MB each → 1000 threads = ~1-2 GB
-- Coroutine: ~bytes each → 1,000,000 coroutines = ~few MB
+- Threads: significant fixed overhead per thread → many threads quickly exhaust memory.
+- Coroutines: much smaller overhead → can schedule many more concurrent tasks on a limited thread pool.
 
 ### Context Switching Cost
 
 **Threads - Expensive Switching**:
 ```kotlin
-// Context switch involves:
-// 1. Save thread state (registers, stack pointer)
-// 2. Kernel mode switch
-// 3. Schedule next thread
-// 4. Restore thread state
-// Time: ~1-10 microseconds per switch
-
+// Thread context switch involves kernel-level scheduling and saving/restoring thread state.
 Thread {
-    // Work on background thread
     val data = loadData()
 
     runOnUiThread {
-        // Expensive context switch to main thread
         updateUI(data)
     }
 }.start()
 ```
 
-**Coroutines - Cheap Switching**:
+**Coroutines - Cheaper Switching**:
 ```kotlin
-// Context switch is just a function call
-// No kernel involvement
-// Time: ~nanoseconds
+// Coroutine dispatching is implemented in user-space on top of a few threads.
+// Switching between coroutine continuations avoids creating new OS threads.
 
 lifecycleScope.launch {
-    // Work on background dispatcher
     val data = withContext(Dispatchers.IO) {
         loadData()
     }
 
-    // Cheap switch to main dispatcher
-    updateUI(data) // No runOnUiThread needed!
+    updateUI(data) // Back on main dispatcher, no explicit runOnUiThread needed
 }
 ```
 
@@ -644,16 +307,10 @@ lifecycleScope.launch {
 class UserViewModel {
     fun loadUser() {
         Thread {
-            // Background thread
             val user = repository.getUser()
 
             // Must manually switch to main thread
             Handler(Looper.getMainLooper()).post {
-                _userData.value = user
-            }
-
-            // Or
-            runOnUiThread {
                 _userData.value = user
             }
         }.start()
@@ -661,19 +318,17 @@ class UserViewModel {
 }
 ```
 
-**Coroutines - Automatic Switching**:
+**Coroutines - Simplified Switching**:
 ```kotlin
-// - CLEAN: Automatic dispatcher handling
+// - CLEAN: Dispatcher-based switching
 class UserViewModel : ViewModel() {
     fun loadUser() {
         viewModelScope.launch {
-            // IO work on background dispatcher
             val user = withContext(Dispatchers.IO) {
                 repository.getUser()
             }
 
-            // Automatically switches back to main dispatcher
-            _userData.value = user // Safe on main thread!
+            _userData.value = user // On main thread when using viewModelScope + Main dispatcher
         }
     }
 }
@@ -681,9 +336,8 @@ class UserViewModel : ViewModel() {
 
 ### Cancellation
 
-**Threads - Hard to Cancel**:
+**Threads - Manual Cooperative Cancellation**:
 ```kotlin
-// - DANGEROUS: Thread interruption is risky
 class DataLoader {
     private var thread: Thread? = null
 
@@ -691,10 +345,8 @@ class DataLoader {
         thread = Thread {
             try {
                 while (!Thread.currentThread().isInterrupted) {
-                    // Work
                     val data = fetchData()
-
-                    // Check interruption manually
+                    // Periodically check interruption to stop safely
                     if (Thread.interrupted()) break
                 }
             } catch (e: InterruptedException) {
@@ -705,14 +357,13 @@ class DataLoader {
     }
 
     fun cancel() {
-        thread?.interrupt() // Unsafe - can corrupt state!
+        thread?.interrupt() // Requires code inside thread to cooperate to remain safe
     }
 }
 ```
 
-**Coroutines - Easy to Cancel**:
+**Coroutines - Built-in Cooperative Cancellation**:
 ```kotlin
-// - SAFE: Cooperative cancellation
 class DataLoader {
     private var job: Job? = null
 
@@ -726,7 +377,7 @@ class DataLoader {
     }
 
     fun cancel() {
-        job?.cancel() // Safe, predictable cancellation
+        job?.cancel() // Structured, predictable cancellation
     }
 }
 ```
@@ -743,10 +394,9 @@ class MyActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val thread = Thread {
-            // Long-running work
             repeat(1000) {
                 Thread.sleep(1000)
-                // If Activity destroyed, this keeps running!
+                // If Activity is destroyed, this may keep running unless interrupted
             }
         }
         activeThreads.add(thread)
@@ -755,55 +405,46 @@ class MyActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        // Must manually cancel all threads
         activeThreads.forEach { it.interrupt() }
         activeThreads.clear()
     }
 }
 ```
 
-**Coroutines - Automatic Management**:
+**Coroutines - Lifecycle-Aware with Proper Scope**:
 ```kotlin
-// - NO LEAKS: Automatic lifecycle management
+// - REDUCED LEAK RISK: lifecycleScope ties coroutines to Activity/Fragment lifecycle
 class MyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-            // Long-running work
             repeat(1000) {
                 delay(1000)
-                // Automatically cancelled when Activity destroyed!
+                // This coroutine is cancelled automatically when Activity is destroyed
             }
         }
     }
-
-    // No onDestroy needed - automatic cleanup!
 }
 ```
 
 ### Performance Comparison
 
-**Benchmark: 10,000 Concurrent Tasks**
+**Benchmark: 10,000 Concurrent Tasks (Illustrative)**
 
 ```kotlin
-// Threads - Crash or severe slowdown
+// Threads - often leads to OOM or severe slowdown on typical devices
 fun threadBenchmark() {
-    val startTime = System.currentTimeMillis()
-
     repeat(10000) {
         Thread {
             Thread.sleep(1000)
             println("Done")
         }.start()
     }
-    // Result: OutOfMemoryError or extreme slowdown
 }
 
-// Coroutines - No problem
+// Coroutines - can handle many logical tasks on a limited thread pool
 suspend fun coroutineBenchmark() {
-    val startTime = System.currentTimeMillis()
-
     coroutineScope {
         repeat(10000) {
             launch {
@@ -812,39 +453,35 @@ suspend fun coroutineBenchmark() {
             }
         }
     }
-    // Result: ~1 second, minimal memory usage
 }
 ```
 
-**Results**:
-- Threads: Crash with OutOfMemoryError (too many threads)
-- Coroutines: Complete successfully in ~1 second
+**Typical Results**:
+- Threads: Very high overhead; may hit OutOfMemoryError or heavy contention on many devices.
+- Coroutines: Can complete with much lower memory footprint because they share a bounded pool of threads.
 
 ### Android-Specific Benefits
 
 **1. Main Thread Safety**:
 ```kotlin
-// Coroutines make it easy to stay main-safe
 lifecycleScope.launch {
     val data = withContext(Dispatchers.IO) { loadData() }
-    updateUI(data) // Safe - back on main thread
+    updateUI(data) // Back on main thread via Dispatchers.Main
 }
 ```
 
 **2. Lifecycle Integration**:
 ```kotlin
-// Automatic cancellation with lifecycle
 viewModelScope.launch { ... } // Cancelled in onCleared()
-lifecycleScope.launch { ... } // Cancelled when lifecycle destroyed
+lifecycleScope.launch { ... } // Cancelled when LifecycleOwner is destroyed
 ```
 
 **3. Structured Concurrency**:
 ```kotlin
-// Parent-child relationship prevents leaks
 lifecycleScope.launch {
     val job1 = launch { work1() }
     val job2 = launch { work2() }
-    // Both cancelled if parent cancelled
+    // Both cancelled when parent scope is cancelled
 }
 ```
 
@@ -852,7 +489,7 @@ lifecycleScope.launch {
 
 **Thread Version**:
 ```kotlin
-// - COMPLEX: Thread-based network call
+// - MORE COMPLEX: Thread-based network call
 class UserRepository {
     fun getUser(callback: (User?) -> Unit) {
         Thread {
@@ -882,7 +519,7 @@ repository.getUser { user ->
 
 **Coroutine Version**:
 ```kotlin
-// - SIMPLE: Coroutine-based network call
+// - SIMPLER: Coroutine-based network call
 class UserRepository {
     suspend fun getUser(): User? {
         return withContext(Dispatchers.IO) {
@@ -908,59 +545,54 @@ lifecycleScope.launch {
 ### When to Use Each
 
 **Use Threads When**:
-- WARNING: Working with Java libraries that require threads
-- WARNING: Long-running blocking operations (rare - use WorkManager instead)
-- WARNING: Low-level system programming
+- Interacting with Java APIs that explicitly require managing threads.
+- Low-level system or library code where you need full control over thread behavior.
 
-**Use Coroutines When** (Almost Always on Android):
-- - Network calls
-- - Database operations
-- - File I/O
-- - Image processing
-- - Any async work in Android app
-- - UI updates with background work
-- - Complex concurrent operations
+**Use Coroutines When** (the default on Android):
+- Network calls
+- Database operations
+- File I/O
+- Image processing
+- Any async work in an Android app
+- UI updates coordinated with background work
+- Complex concurrent flows
 
 ### Summary
 
 **Threads**:
-- - Heavyweight (1-2 MB each)
-- - Expensive context switching
-- - Limited number (~thousands)
-- - Hard to cancel safely
-- - Manual lifecycle management
-- - Verbose thread switching
-- - High memory usage
+- Heavyweight per-thread memory and scheduling cost
+- Expensive context switches at OS level
+- Practically limited in number
+- Cancellation via interrupt is cooperative but manual
+- Manual lifecycle and main-thread coordination
 
 **Coroutines**:
-- - Lightweight (bytes each)
-- - Cheap context switching
-- - Virtually unlimited (millions)
-- - Easy, safe cancellation
-- - Automatic lifecycle management
-- - Clean dispatcher switching
-- - Low memory usage
+- Lightweight abstractions over thread pools
+- Cheaper, user-space scheduling and context switching
+- Support a far larger number of concurrent tasks
+- Built-in cooperative cancellation and structured concurrency
+- Lifecycle-aware when using viewModelScope/lifecycleScope
+- Clear dispatcher-based main/background switching
 
-**Key Takeaway**: On Android, **always prefer coroutines over threads** for async operations. Coroutines are lighter, safer, and integrate seamlessly with Android lifecycle components.
+**Key Takeaway**: On Android, prefer coroutines (with proper scopes and dispatchers) over manually managed threads for most async operations. They are lighter, safer when used correctly, and integrate seamlessly with Android lifecycle components.
 
 ---
 
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- What are the key differences between this and Java's concurrency model?
+- When would you still choose raw threads instead of coroutines in Android?
+- What are common pitfalls when using coroutines on Android (e.g., missing scopes, blocking calls in coroutines)?
 
 ## References
 
 - [Coroutines vs Threads - Kotlin Docs](https://kotlinlang.org/docs/coroutines-basics.html)
 - [Threading on Android - Android Developers](https://developer.android.com/guide/background/threading)
-- [Coroutines Performance - Android Developers](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
+- [Coroutines Best Practices - Android Developers](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
 
 ---
 
 **Source**: Kotlin Coroutines Interview Questions for Android Developers PDF
-
 
 ---
 
@@ -979,4 +611,3 @@ lifecycleScope.launch {
 - [[q-suspend-functions-basics--kotlin--easy]] - Understanding suspend functions
 - [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
 - [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
-

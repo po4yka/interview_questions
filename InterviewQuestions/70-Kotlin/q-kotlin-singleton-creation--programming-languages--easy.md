@@ -2,32 +2,28 @@
 id: lang-028
 title: "Kotlin Singleton Creation / Создание синглтона в Kotlin"
 aliases: [Kotlin Singleton Creation, Создание синглтона в Kotlin]
-topic: programming-languages
-subtopics: [initialization, type-system]
+topic: kotlin
+subtopics: [c-kotlin, c-kotlin-features]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-job-lifecycle--kotlin--medium, q-statein-sharein-flow--kotlin--medium, q-suspend-functions-basics--kotlin--easy]
+related: [c-kotlin, q-coroutine-job-lifecycle--kotlin--medium, q-statein-sharein-flow--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [design-patterns, difficulty/easy, programming-languages, singleton]
+updated: 2025-11-09
+tags: [design-patterns, difficulty/easy, singleton]
 ---
-# How to Create a Singleton in Kotlin?
-
 # Вопрос (RU)
 > Как создать singleton в Kotlin?
-
----
 
 # Question (EN)
 > How to create a singleton in Kotlin?
 
 ## Ответ (RU)
 
-В Kotlin можно создать singleton, используя object-декларацию. Это самый простой и идиоматичный способ реализации паттерна Singleton в Kotlin.
+В Kotlin можно создать singleton, используя object-декларацию. Это самый простой и идиоматичный способ реализации паттерна Singleton в Kotlin. См. также [[c-kotlin]].
 
 **Синтаксис:**
 ```kotlin
@@ -36,13 +32,15 @@ object MySingleton {
 }
 ```
 
-**Ключевые особенности:**
-- Потокобезопасен по умолчанию (не требует синхронизации)
+**Ключевые особенности (для JVM):**
+- Потокобезопасная инициализация по умолчанию (object создаётся один раз, без явной синхронизации)
 - Ленивая инициализация при первом обращении
 - Существует только один экземпляр на всё приложение
 - Не может иметь конструкторы
 - Может иметь свойства, методы и блоки init
 - Может наследоваться от классов и реализовывать интерфейсы
+
+Важно: потокобезопасна именно инициализация объекта. Если singleton хранит изменяемое состояние, операции над ним сами по себе не становятся потокобезопасными — при работе из нескольких потоков потребуется синхронизация или атомарные типы.
 
 ### Примеры
 
@@ -74,12 +72,15 @@ object DatabaseManager {
 
     init {
         println("DatabaseManager initialized")
+        // Выполнение инициализации
         connections.add("Default Connection")
     }
 
     fun addConnection(name: String) {
         connections.add(name)
     }
+
+    fun getConnections(): List<String> = connections
 }
 ```
 
@@ -98,6 +99,31 @@ object ConsoleLogger : Logger {
 ConsoleLogger.log("Application started")
 ```
 
+**Singleton с полями и методами для сессии пользователя:**
+```kotlin
+object UserSession {
+    var userId: String? = null
+    var username: String? = null
+    var isLoggedIn: Boolean = false
+
+    fun login(id: String, name: String) {
+        userId = id
+        username = name
+        isLoggedIn = true
+        println("User $name logged in")
+    }
+
+    fun logout() {
+        println("User $username logged out")
+        userId = null
+        username = null
+        isLoggedIn = false
+    }
+
+    fun getCurrentUser(): String? = username
+}
+```
+
 **Альтернатива: через companion object (для ленивой инициализации с параметрами):**
 ```kotlin
 class DatabaseConnection private constructor(val url: String) {
@@ -106,15 +132,57 @@ class DatabaseConnection private constructor(val url: String) {
         private var instance: DatabaseConnection? = null
 
         fun getInstance(url: String): DatabaseConnection {
+            // Первый вызов определяет конфигурацию singleton; последующие url игнорируются
             return instance ?: synchronized(this) {
                 instance ?: DatabaseConnection(url).also { instance = it }
             }
         }
     }
+
+    fun connect() {
+        println("Connecting to $url")
+    }
+}
+
+fun main() {
+    val db1 = DatabaseConnection.getInstance("jdbc:mysql://localhost:3306")
+    val db2 = DatabaseConnection.getInstance("jdbc:mysql://localhost:3306")
+
+    println(db1 === db2)  // true
+    db1.connect()
 }
 ```
 
-Главное преимущество object-декларации — автоматическая потокобезопасность и простота использования.
+**Заметка о потокобезопасности операций:**
+```kotlin
+object Counter {
+    private val lock = Any()
+    private var count = 0
+
+    fun increment() {
+        synchronized(lock) {
+            count++
+        }
+    }
+
+    fun getCount(): Int = synchronized(lock) { count }
+}
+
+fun main() {
+    val threads = List(10) {
+        Thread {
+            repeat(1000) {
+                Counter.increment()
+            }
+        }
+    }
+
+    threads.forEach { it.start() }
+    threads.forEach { it.join() }
+
+    println("Final count: ${Counter.getCount()}")  // 10000
+}
+```
 
 ## Answer (EN)
 
@@ -127,13 +195,15 @@ object MySingleton {
 }
 ```
 
-**Key features:**
-- Thread-safe by default (no need for synchronization)
+**Key features (on the JVM):**
+- Thread-safe initialization by default (the object instance is created once without explicit synchronization)
 - Lazily initialized when first accessed
 - Only one instance exists throughout the application
 - Cannot have constructors
 - Can have properties, methods, and init blocks
 - Can inherit from classes and implement interfaces
+
+Important: what is guaranteed to be thread-safe is the object initialization itself. If the singleton holds mutable state, operations on that state are not automatically thread-safe; you still need synchronization or atomic primitives when accessing it from multiple threads.
 
 ### Code Examples
 
@@ -142,26 +212,20 @@ object MySingleton {
 object AppConfig {
     var apiUrl = "https://api.example.com"
     var timeout = 30
-    var debugMode = false
 
     fun printConfig() {
         println("API URL: $apiUrl")
-        println("Timeout: $timeout")
-        println("Debug Mode: $debugMode")
     }
 }
 
-fun main() {
-    // Direct access without instantiation
-    AppConfig.apiUrl = "https://api.production.com"
-    AppConfig.debugMode = true
-    AppConfig.printConfig()
+// Direct access without instantiation
+AppConfig.apiUrl = "https://api.production.com"
+AppConfig.printConfig()
 
-    // Always the same instance
-    val config1 = AppConfig
-    val config2 = AppConfig
-    println(config1 === config2)  // true
-}
+// Always the same instance
+val config1 = AppConfig
+val config2 = AppConfig
+println(config1 === config2)  // true
 ```
 
 **Singleton with initialization:**
@@ -181,38 +245,21 @@ object DatabaseManager {
 
     fun getConnections(): List<String> = connections
 }
-
-fun main() {
-    // First access triggers initialization
-    println("Before first access")
-    DatabaseManager.addConnection("Connection 1")  // DatabaseManager initialized
-    DatabaseManager.addConnection("Connection 2")
-
-    println(DatabaseManager.getConnections())
-}
 ```
 
 **Singleton implementing interface:**
 ```kotlin
 interface Logger {
     fun log(message: String)
-    fun error(message: String)
 }
 
 object ConsoleLogger : Logger {
     override fun log(message: String) {
         println("[LOG] $message")
     }
-
-    override fun error(message: String) {
-        println("[ERROR] $message")
-    }
 }
 
-fun main() {
-    ConsoleLogger.log("Application started")
-    ConsoleLogger.error("An error occurred")
-}
+ConsoleLogger.log("Application started")
 ```
 
 **Singleton with properties and methods:**
@@ -238,15 +285,6 @@ object UserSession {
 
     fun getCurrentUser(): String? = username
 }
-
-fun main() {
-    UserSession.login("123", "Alice")
-    println("Current user: ${UserSession.getCurrentUser()}")
-    println("Is logged in: ${UserSession.isLoggedIn}")
-
-    UserSession.logout()
-    println("Is logged in: ${UserSession.isLoggedIn}")
-}
 ```
 
 **Alternative: Singleton using companion object (for lazy initialization with parameters):**
@@ -257,6 +295,7 @@ class DatabaseConnection private constructor(val url: String) {
         private var instance: DatabaseConnection? = null
 
         fun getInstance(url: String): DatabaseConnection {
+            // The first call defines the singleton configuration; subsequent url values are ignored
             return instance ?: synchronized(this) {
                 instance ?: DatabaseConnection(url).also { instance = it }
             }
@@ -277,20 +316,22 @@ fun main() {
 }
 ```
 
-**Thread-safety demonstration:**
+**Note on thread safety of operations:**
 ```kotlin
 object Counter {
+    private val lock = Any()
     private var count = 0
 
     fun increment() {
-        count++
+        synchronized(lock) {
+            count++
+        }
     }
 
-    fun getCount() = count
+    fun getCount(): Int = synchronized(lock) { count }
 }
 
 fun main() {
-    // Safe to use from multiple threads
     val threads = List(10) {
         Thread {
             repeat(1000) {
@@ -308,15 +349,31 @@ fun main() {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого подхода от Java?
+- Когда вы бы использовали такой singleton на практике?
+- Каковы распространенные ошибки и подводные камни при использовании singleton?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-coroutine-job-lifecycle--kotlin--medium]]
+- [[q-suspend-functions-basics--kotlin--easy]]
+- [[q-statein-sharein-flow--kotlin--medium]]
 
 ## Related Questions
 

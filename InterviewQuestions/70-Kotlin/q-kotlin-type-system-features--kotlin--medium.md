@@ -1,70 +1,115 @@
 ---
 id: kotlin-141
 title: "Kotlin Type System Features / Возможности системы типов Kotlin"
-aliases: [Null Safety, Type Safety, Type System, Система типов Kotlin]
+aliases: [Null Safety, Type Safety, Type System]
 topic: kotlin
-subtopics: [data-classes, null-safety, type-system]
+subtopics: [null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-coroutines-introduction--kotlin--medium, q-testing-viewmodels-coroutines--kotlin--medium]
+related: [c-kotlin, c-kotlin-features, q-kotlin-coroutines-introduction--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [data-classes, difficulty/medium, kotlin, null-safety, sealed-classes, type-inference, type-system]
+updated: 2025-11-09
+tags: [difficulty/medium, kotlin, null-safety, type-inference, type-system]
 ---
-# Какие Знаешь Особенности Системы Типов В Kotlin?
 
 # Вопрос (RU)
-> Какие знаешь особенности системы типов в Kotlin?
-
----
+> Какие особенности системы типов в Kotlin ты знаешь?
 
 # Question (EN)
 > What Kotlin type system features do you know?
 
 ## Ответ (RU)
 
-Null Safety (Безопасность null), Коллекции разделение на изменяемые и неизменяемые коллекции, Data Classes автоматическое создание методов equals hashCode и toString, Smart Casts автоматическое приведение типа после проверки с помощью is, Sealed Classes упрощают обработку ограниченных иерархий классов, Выведение типов Kotlin автоматически определяет тип переменной
+Ниже перечислены ключевые особенности системы типов Kotlin (см. также [[c-kotlin]], [[c-kotlin-features]]):
+
+### 1. Null Safety (Безопасность null)
+По умолчанию переменные не могут содержать `null`, что помогает предотвращать `NullPointerException`. Чтобы значение могло быть `null`, тип нужно явно пометить `?`:
+```kotlin
+var nonNull: String = "Hello"      // Не может быть null
+var nullable: String? = null        // Явно допускает null
+```
+
+### 2. Коллекции: Read-only vs Mutable
+В Kotlin чётко разделены интерфейсы для только-чтения (read-only) и изменяемых коллекций. Read-only коллекции предоставляют неизменяемый интерфейс, но не всегда гарантируют структурную неизменяемость реализации.
+```kotlin
+val list: List<String> = listOf("a", "b")              // Интерфейс только для чтения
+val mutableList: MutableList<String> = mutableListOf("a", "b")
+```
+
+### 3. Data Classes (Классы данных)
+Для `data class` компилятор автоматически генерирует `equals()`, `hashCode()`, `toString()`, `componentN()` и `copy()` на основе первичного конструктора:
+```kotlin
+data class User(val name: String, val age: Int)
+```
+
+### 4. Smart Casts (Умные приведения типов)
+После проверки с помощью `is` (и при отсутствии побочных эффектов) компилятор автоматически приводит тип внутри соответствующей ветки:
+```kotlin
+fun demo(x: Any) {
+    if (x is String) {
+        println(x.length)  // x автоматически рассматривается как String
+    }
+}
+```
+
+### 5. Sealed Classes (Закрытые иерархии)
+`sealed class` иерархии ограничивают набор допустимых подтипов, что упрощает исчерпывающую обработку в `when` без ветки `else`:
+```kotlin
+sealed class Result {
+    data class Success(val data: String) : Result()
+    data class Error(val message: String) : Result()
+}
+```
+
+### 6. Type Inference (Выведение типов)
+Kotlin во многих случаях автоматически выводит тип переменных и выражений (локальное выведение типов), что уменьшает шаблонный код:
+```kotlin
+val x = 10        // Тип выведен как Int
+val name = "John" // Тип выведен как String
+```
+
+Эти возможности делают код на Kotlin более безопасным, выразительным и компактным.
 
 ## Answer (EN)
 
 Kotlin's type system has several powerful features:
 
 ### 1. Null Safety
-Variables cannot be null by default, preventing NullPointerException:
+By default, variables cannot hold `null`, helping to avoid `NullPointerException`. To allow `null`, you must explicitly mark the type as nullable with `?`:
 ```kotlin
-var nonNull: String = "Hello"     // Cannot be null
-var nullable: String? = null      // Explicitly nullable
+var nonNull: String = "Hello"      // Cannot be null
+var nullable: String? = null        // Explicitly nullable
 ```
 
-### 2. Collections (Mutable Vs Immutable)
-Clear separation between read-only and mutable collections:
+### 2. Collections: Read-only vs Mutable
+Kotlin clearly distinguishes between read-only collection interfaces and mutable ones. Read-only collections expose a non-mutating API but do not always guarantee structural immutability of the underlying collection.
 ```kotlin
-val list: List<String> = listOf("a", "b")           // Read-only
+val list: List<String> = listOf("a", "b")              // Read-only view
 val mutableList: MutableList<String> = mutableListOf("a", "b")
 ```
 
 ### 3. Data Classes
-Automatic generation of `equals()`, `hashCode()`, `toString()`:
+For a `data class`, the compiler automatically generates `equals()`, `hashCode()`, `toString()`, `componentN()`, and `copy()` based on the primary constructor properties:
 ```kotlin
 data class User(val name: String, val age: Int)
 ```
 
 ### 4. Smart Casts
-Automatic type casting after checking with `is`:
+After a successful `is` check (and when the value cannot change in between), the compiler automatically smart-casts the variable within that scope:
 ```kotlin
 fun demo(x: Any) {
     if (x is String) {
-        println(x.length)  // x automatically cast to String
+        println(x.length)  // x is smart-cast to String
     }
 }
 ```
 
 ### 5. Sealed Classes
-Simplified handling of limited class hierarchies:
+Sealed classes define restricted class hierarchies, making exhaustive `when` expressions easier and safer (no `else` needed when all subclasses are covered):
 ```kotlin
 sealed class Result {
     data class Success(val data: String) : Result()
@@ -73,21 +118,33 @@ sealed class Result {
 ```
 
 ### 6. Type Inference
-Kotlin automatically determines variable type:
+Kotlin can infer types from context (primarily locally), reducing boilerplate while keeping static type safety:
 ```kotlin
-val x = 10        // Type inferred as Int
-val name = "John" // Type inferred as String
+val x = 10        // Inferred as Int
+val name = "John" // Inferred as String
 ```
 
-These features make Kotlin code **safer, more concise, and more expressive**.
+These features make Kotlin code safer, more concise, and more expressive.
 
----
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия системы типов Kotlin от Java?
+- Когда на практике особенно важно использовать эти возможности системы типов Kotlin (null-safety, умные приведения, sealed классы, разделение коллекций)?
+- Каковы распространенные ошибки и подводные камни при использовании этих особенностей, и как их избежать?
+
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-coroutines-introduction--kotlin--medium]]
 
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- What are the key differences between Kotlin's type system and Java's?
+- When are these Kotlin type system features (null safety, smart casts, sealed classes, collection variance) particularly important in practice?
+- What are common mistakes and pitfalls when using these features, and how can they be avoided?
 
 ## References
 
@@ -95,6 +152,4 @@ These features make Kotlin code **safer, more concise, and more expressive**.
 
 ## Related Questions
 
--
-- [[q-testing-viewmodels-coroutines--kotlin--medium]]
 - [[q-kotlin-coroutines-introduction--kotlin--medium]]

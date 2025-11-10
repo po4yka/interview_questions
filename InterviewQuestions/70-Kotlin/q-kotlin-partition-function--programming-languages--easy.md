@@ -2,33 +2,27 @@
 id: lang-055
 title: "Kotlin Partition Function / Функция partition в Kotlin"
 aliases: [Kotlin Partition Function, Функция partition в Kotlin]
-topic: programming-languages
-subtopics: [collections, functional-programming]
+topic: kotlin
+subtopics: [c-collections, c-functional-programming]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-continuation-cps-internals--kotlin--hard, q-fan-in-fan-out-channels--kotlin--hard]
+related: [c-kotlin, q-continuation-cps-internals--kotlin--hard, q-fan-in-fan-out-channels--kotlin--hard]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [collections, difficulty/easy, functions, programming-languages]
+updated: 2025-11-09
+tags: [collections, difficulty/easy, functions, kotlin]
 ---
-# Что Делает Функция Коллекций partition()?
-
 # Вопрос (RU)
-> Что делает функция коллекций partition()?
-
----
-
-# Question (EN)
-> What does the collection function partition() do?
+> Что делает функция коллекций `partition()`?
 
 ## Ответ (RU)
 
+Функция `partition` разделяет коллекцию на два списка на основе предиката: один для элементов, соответствующих предикату, и один для несоответствующих.
 
-Функция `partition` разделяет коллекцию на два списка на основе предиката: один для элементов соответствующих предикату, один для несоответствующих.
+[[c-collections]]
 
 ### Синтаксис
 ```kotlin
@@ -81,12 +75,29 @@ fun <T> Iterable<T>.partition(
 - Создает два новых списка
 - Вычисляет предикат один раз на элемент
 
----
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого подхода от аналогов в Java?
+- Когда вы бы использовали `partition()` на практике?
+- Каковы распространенные подводные камни при использовании `partition()`?
+
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-fan-in-fan-out-channels--kotlin--hard]]
+- [[q-continuation-cps-internals--kotlin--hard]]
+
+# Question (EN)
+> What does the collection function `partition()` do?
 
 ## Answer (EN)
 
-
 The `partition` function splits a collection into two lists based on a predicate: one for elements matching the predicate, one for those that don't.
+
+[[c-collections]]
 
 ### Syntax
 ```kotlin
@@ -139,9 +150,6 @@ fun <T> Iterable<T>.partition(
 - Creates two new lists
 - Evaluates predicate once per element
 
----
----
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
@@ -154,7 +162,5 @@ fun <T> Iterable<T>.partition(
 
 ## Related Questions
 
--
 - [[q-fan-in-fan-out-channels--kotlin--hard]]
 - [[q-continuation-cps-internals--kotlin--hard]]
-

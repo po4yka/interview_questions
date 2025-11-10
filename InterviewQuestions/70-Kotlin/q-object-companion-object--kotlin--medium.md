@@ -10,9 +10,9 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutinecontext-composition--kotlin--hard, q-flow-backpressure--kotlin--hard, q-kotlin-java-type-differences--programming-languages--medium]
+related: [c-kotlin, q-coroutinecontext-composition--kotlin--hard, q-flow-backpressure--kotlin--hard]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [classes, companion-object, difficulty/medium, kotlin, object-keyword, singleton]
 ---
 # Что Такое Object / Companion Object?
@@ -27,11 +27,11 @@ tags: [classes, companion-object, difficulty/medium, kotlin, object-keyword, sin
 
 ## Ответ (RU)
 
-`object` и `companion object` используются для реализации различных паттернов и функциональностей, включая паттерн одиночка (singleton), объявление статических членов и функций, а также для реализации объектов без необходимости явного создания экземпляра класса.
+`object` и `companion object` используются для объявления объектов, доступных без явного создания экземпляра обычного класса: для реализации паттерна одиночка (singleton), объявления членов, аналогичных статическим, создания объектов-утилит, фабрик и объектных выражений.
 
 ### Object - Одиночка (Singleton)
 
-Используется для создания одиночного экземпляра класса, то есть реализации паттерна Singleton.
+`object`-объявление создаёт одиночный экземпляр (singleton) конкретного объекта.
 
 ```kotlin
 object DatabaseManager {
@@ -52,8 +52,9 @@ DatabaseManager.close()
 ```
 
 **Особенности object**:
-- Создаётся единственный экземпляр при первом обращении (lazy initialization)
-- Потокобезопасен по умолчанию
+- Для каждого `object`-объявления существует ровно один экземпляр этого объекта
+- Инициализируется при первом обращении (lazy initialization) инициализационным кодом
+- Инициализация потокобезопасна по умолчанию
 - Не может иметь конструктор с параметрами
 
 ```kotlin
@@ -66,9 +67,11 @@ object Config {
 }
 ```
 
+(Дополнительно: существуют object-выражения и локальные object-объявления, которые также используют ключевое слово `object`, но не являются синглтонами на уровне всего приложения.)
+
 ### Companion Object - Статические Члены
 
-Используется внутри класса и служит для объявления членов класса, доступных без создания экземпляра этого класса (аналогично статическим членам в Java).
+Используется внутри класса и служит для объявления членов, доступных без создания экземпляра этого класса (аналогично статическим членам в Java).
 
 ```kotlin
 class User private constructor(val id: Int, val name: String) {
@@ -93,10 +96,10 @@ println(User.MAX_NAME_LENGTH)  // 50
 
 | Aspect | object | companion object |
 |--------|--------|------------------|
-| **Расположение** | Отдельная сущность | Внутри класса |
-| **Доступ** | Через имя object | Через имя класса |
-| **Назначение** | Singleton | "Статические" члены |
-| **Количество** | Один на файл | Один на класс |
+| **Расположение** | Отдельное объявление (top-level, локальное, вложенное) | Внутри класса, объявлено как `companion object` |
+| **Доступ** | Через имя object | Через имя класса (или имя companion, если указано) |
+| **Назначение** | Singleton для данного объявления, утилиты, object-выражения | "Статические" члены и фабрики, связанные с классом |
+| **Количество** | Один экземпляр на каждое `object`-объявление | Не более одного `companion object` на класс (необязателен) |
 
 ### Примеры Использования
 
@@ -202,33 +205,180 @@ MyClass.bar()  // "bar" - расширение
 
 ## Answer (EN)
 
-`object` and `companion object` are Kotlin features for implementing various patterns without explicit instantiation:
+`object` and `companion object` are Kotlin features for declaring objects accessible without explicitly instantiating a regular class: used for singletons, static-like members, utilities, factories, and object expressions.
 
-**object**: Creates a singleton (single instance). Accessed by name. Thread-safe lazy initialization. Use for: singletons, utility classes, constants.
+### Object - Singleton
 
-**companion object**: Declares static-like members inside a class. Accessed via class name. Use for: factory methods, constants, static utility functions within a class context.
+`object` declarations create a single instance (a singleton) for that declaration.
 
-**Key differences:**
-- **object**: Standalone entity, accessed by its own name
-- **companion object**: Lives inside a class, accessed via class name
-- **object**: One per declaration
-- **companion object**: One per class (optional)
-
-**Example:**
 ```kotlin
-// object - singleton
 object DatabaseManager {
-    fun executeQuery(sql: String) { }
-}
-DatabaseManager.executeQuery("SELECT *")
+    private val connection = createConnection()
 
-// companion object - factory pattern
-class User private constructor(val name: String) {
-    companion object {
-        fun create(name: String) = User(name)
+    fun executeQuery(sql: String): Result {
+        return connection.execute(sql)
+    }
+
+    fun close() {
+        connection.close()
     }
 }
-val user = User.create("Alice")
+
+// Usage
+DatabaseManager.executeQuery("SELECT * FROM users")
+DatabaseManager.close()
+```
+
+Key properties of `object`:
+- Exactly one instance per `object` declaration
+- Lazily initialized on first access with its initialization code
+- Initialization is thread-safe by default
+- Cannot have a constructor with parameters
+
+```kotlin
+// Incorrect
+object Config(val apiKey: String)  // Compilation error!
+
+// Correct
+object Config {
+    const val API_KEY = "your_api_key"
+}
+```
+
+Note: there are also object expressions and local object declarations that use the `object` keyword but are not application-wide singletons (they are created where they are used).
+
+### Companion Object - Static-like Members
+
+A `companion object` is declared inside a class and provides members that can be accessed without creating an instance of that class (similar to `static` members in Java).
+
+```kotlin
+class User private constructor(val id: Int, val name: String) {
+    companion object {
+        private var nextId = 1
+
+        fun create(name: String): User {
+            return User(nextId++, name)
+        }
+
+        const val MAX_NAME_LENGTH = 50
+    }
+}
+
+// Usage
+val user1 = User.create("Alice")
+val user2 = User.create("Bob")
+println(User.MAX_NAME_LENGTH)  // 50
+```
+
+### Key Differences
+
+| Aspect | object | companion object |
+|--------|--------|------------------|
+| Location | Separate declaration (top-level, local, nested) | Inside a class, declared as `companion object` |
+| Access | Via the object name | Via the class name (or companion name if specified) |
+| Purpose | Singleton for that declaration, utilities, object expressions | Static-like members and factories associated with the class |
+| Count | One instance per `object` declaration | At most one `companion object` per class (optional) |
+
+### Usage Examples
+
+#### 1. Factory Pattern with Companion Object
+
+```kotlin
+class DatabaseConnection private constructor(
+    private val host: String,
+    private val port: Int
+) {
+    companion object Factory {
+        fun createLocalConnection(): DatabaseConnection {
+            return DatabaseConnection("localhost", 5432)
+        }
+
+        fun createRemoteConnection(host: String): DatabaseConnection {
+            return DatabaseConnection(host, 5432)
+        }
+    }
+
+    fun connect() {
+        println("Connecting to $host:$port")
+    }
+}
+
+// Usage
+val localDb = DatabaseConnection.createLocalConnection()
+val remoteDb = DatabaseConnection.createRemoteConnection("192.168.1.1")
+```
+
+#### 2. Constants in Companion Object
+
+```kotlin
+class HttpClient {
+    companion object {
+        const val DEFAULT_TIMEOUT = 30_000
+        const val MAX_RETRIES = 3
+        private const val USER_AGENT = "MyApp/1.0"
+
+        fun create(): HttpClient {
+            return HttpClient()
+        }
+    }
+}
+
+// Usage
+val timeout = HttpClient.DEFAULT_TIMEOUT
+val client = HttpClient.create()
+```
+
+#### 3. Object for Utilities
+
+```kotlin
+object MathUtils {
+    fun factorial(n: Int): Long {
+        return if (n <= 1) 1 else n * factorial(n - 1)
+    }
+
+    fun isPrime(n: Int): Boolean {
+        if (n < 2) return false
+        for (i in 2..Math.sqrt(n.toDouble()).toInt()) {
+            if (n % i == 0) return false
+        }
+        return true
+    }
+}
+
+// Usage
+val fact = MathUtils.factorial(5)  // 120
+val prime = MathUtils.isPrime(17)  // true
+```
+
+#### 4. Anonymous Objects
+
+```kotlin
+// One-off interface implementations
+button.setOnClickListener(object : View.OnClickListener {
+    override fun onClick(v: View?) {
+        println("Button clicked")
+    }
+})
+
+// Or shorter with SAM conversion
+button.setOnClickListener { println("Button clicked") }
+```
+
+### Extending a Companion Object
+
+```kotlin
+class MyClass {
+    companion object {
+        fun foo() = "foo"
+    }
+}
+
+// Extension on companion object
+fun MyClass.Companion.bar() = "bar"
+
+// Usage
+MyClass.foo()  // "foo"
+MyClass.bar()  // "bar"
 ```
 
 ---
@@ -241,7 +391,8 @@ val user = User.create("Alice")
 
 ## References
 
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [Kotlin Documentation]("https://kotlinlang.org/docs/home.html")
+- [[c-kotlin]]
 
 ## Related Questions
 

@@ -1,7 +1,7 @@
 ---
 id: kotlin-016
 title: "StateFlow and SharedFlow / StateFlow и SharedFlow"
-aliases: ["StateFlow and SharedFlow, StateFlow и SharedFlow"]
+aliases: ["StateFlow and SharedFlow", "StateFlow и SharedFlow"]
 
 # Classification
 topic: kotlin
@@ -12,44 +12,45 @@ difficulty: medium
 # Language & provenance
 original_language: en
 language_tags: [en, ru]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
+source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium]
+related: [c-kotlin, c-flow, q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-android--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-18
+updated: 2025-11-09
 
 tags: [coroutines, difficulty/medium, flow, hot-flows, kotlin, sharedflow, stateflow]
 ---
 # Вопрос (RU)
-> Что такое StateFlow и SharedFlow в Kotlin? В чем их отличия?
+> Что такое `StateFlow` и `SharedFlow` в Kotlin? В чем их отличия?
 
 ---
 
 # Question (EN)
-> What are StateFlow and SharedFlow in Kotlin? What are the differences between them?
+> What are `StateFlow` and `SharedFlow` in Kotlin? What are the differences between them?
+
 ## Ответ (RU)
 
-`StateFlow` и `SharedFlow` — это API для Flow, которые позволяют эффективно передавать обновления состояния и значения нескольким подписчикам. Это **горячие потоки** (hot flows), то есть они активны и могут испускать значения даже без подписчиков.
+`StateFlow` и `SharedFlow` — это API для `Flow`, которые позволяют эффективно передавать обновления состояния и значения нескольким подписчикам. Это **горячие потоки** (hot flows), то есть они активны и могут испускать значения даже без подписчиков. Подробнее о контексте см. [[c-kotlin]] и [[c-flow]].
 
 ### StateFlow
 
 `StateFlow` — это наблюдаемый поток-держатель состояния, который испускает текущее состояние и новые обновления состояния своим подписчикам. Текущее значение состояния также доступно через свойство `value`.
 
-#### Ключевые Характеристики
+#### Ключевые характеристики
 
-1. **Всегда имеет значение** - Требует начальное состояние при создании
-2. **Держатель состояния** - Всегда представляет текущее состояние
-3. **Объединяет значения** - Испускает только отличающиеся значения, пропускает дубликаты
-4. **Горячий поток** - Активен и в памяти даже без подписчиков
-5. **Потокобезопасный** - Можно безопасно обновлять из любого потока
+1. **Всегда имеет значение** — требуется начальное состояние при создании.
+2. **Держатель состояния** — всегда представляет актуальное состояние.
+3. **Объединяет значения** — испускает только отличающиеся подряд значения (поведение аналогично `distinctUntilChanged`).
+4. **Горячий поток** — активен и находится в памяти даже без подписчиков.
+5. **Потокобезопасный** — можно безопасно обновлять из любого потока.
 
-#### Пример Использования
+#### Пример использования
 
 ```kotlin
 class LatestNewsViewModel(
@@ -57,7 +58,7 @@ class LatestNewsViewModel(
 ) : ViewModel() {
     // Приватное свойство для предотвращения обновлений извне
     private val _uiState = MutableStateFlow(LatestNewsUiState.Success(emptyList()))
-    // UI подписывается на этот StateFlow для получения обновлений состояния
+    // UI подписывается на этот `StateFlow` для получения обновлений состояния
     val uiState: StateFlow<LatestNewsUiState> = _uiState
 
     init {
@@ -78,22 +79,30 @@ sealed class LatestNewsUiState {
 }
 ```
 
-#### StateFlow Vs LiveData
+#### StateFlow vs `LiveData`
 
-| Функция | StateFlow | LiveData |
-|---------|-----------|----------|
+| Функция | `StateFlow` | `LiveData` |
+|---------|------------|-----------|
 | **Начальное значение** | Обязательно | Необязательно |
-| **Lifecycle awareness** | Вручную (collect в lifecycle scope) | Автоматически (observe) |
+| **Lifecycle awareness** | Нет, нужно собирать в lifecycle scope вручную | Да, автоматическое управление подпиской |
 | **Потокобезопасность** | Встроенная | Встроенная |
-| **Трансформации** | Flow операторы | LiveData трансформации |
+| **Трансформации** | Операторы `Flow` | Трансформации `LiveData` |
 
-**Ключевое отличие**: `LiveData.observe()` автоматически отписывается когда view переходит в состояние STOPPED, тогда как сбор из StateFlow не останавливается автоматически - нужно собирать в lifecycle-aware scope.
+**Ключевое отличие**: `LiveData.observe()` автоматически отписывается, когда `LifecycleOwner` переходит в состояние ниже STARTED, тогда как сбор из `StateFlow` сам по себе не останавливается — нужно собирать его в lifecycle-aware scope (например, `lifecycleScope.launch { repeatOnLifecycle(STARTED) { ... } }`).
 
 ### SharedFlow
 
-`SharedFlow` — это горячий поток, который испускает значения всем подписчикам. Это высоко настраиваемое обобщение StateFlow.
+`SharedFlow` — это горячий поток, который испускает значения всем подписчикам. Это высоко настраиваемое обобщение `StateFlow` (сам `StateFlow` реализован поверх `SharedFlow`). Значения `SharedFlow` могут производиться из разных источников, включая `MutableSharedFlow`, `shareIn` и `stateIn`.
 
-#### Опции Конфигурации
+#### Ключевые характеристики
+
+1. **Начальное значение не требуется** — может быть создан без стартового значения.
+2. **Широковещательная рассылка нескольким коллекторам** — все активные коллектора получают одинаковые эмиссии.
+3. **Настраиваемый кэш replay** — можно повторять N предыдущих значений новым коллекторам.
+4. **Настраиваемый буфер** — управление переполнением через `replay`, `extraBufferCapacity` и `onBufferOverflow`.
+5. **Гибкая семантика** — может представлять события, общие потоки или даже состояние при соответствующей конфигурации.
+
+#### Опции конфигурации
 
 ```kotlin
 private val _tickFlow = MutableSharedFlow<Unit>(
@@ -104,41 +113,109 @@ private val _tickFlow = MutableSharedFlow<Unit>(
 ```
 
 **Варианты BufferOverflow**:
-- `SUSPEND` (по умолчанию) - Приостанавливает вызывающего при переполнении
-- `DROP_LATEST` - Отбрасывает последнее значение при переполнении
-- `DROP_OLDEST` - Отбрасывает самое старое значение при переполнении
+- `SUSPEND` (по умолчанию) — приостанавливает вызывающего при переполнении.
+- `DROP_LATEST` — отбрасывает последнее новое значение при переполнении.
+- `DROP_OLDEST` — отбрасывает самое старое значение при переполнении.
 
-### Сравнение StateFlow Vs SharedFlow
+#### Пример использования
 
-| Функция | StateFlow | SharedFlow |
-|---------|-----------|------------|
+```kotlin
+// Класс, который централизует моменты, когда нужно обновить контент приложения
+class TickHandler(
+    private val externalScope: CoroutineScope,
+    private val tickIntervalMs: Long = 5000
+) {
+    // Приватное свойство для предотвращения внешних эмиссий
+    private val _tickFlow = MutableSharedFlow<Unit>(replay = 0)
+    val tickFlow: SharedFlow<Unit> = _tickFlow
+
+    init {
+        externalScope.launch {
+            while (true) {
+                _tickFlow.emit(Unit)
+                delay(tickIntervalMs)
+            }
+        }
+    }
+}
+
+class NewsRepository(
+    private val tickHandler: TickHandler,
+    private val externalScope: CoroutineScope
+) {
+    init {
+        externalScope.launch {
+            // Слушаем "тики" для обновления новостей
+            tickHandler.tickFlow.collect {
+                refreshLatestNews()
+            }
+        }
+    }
+
+    suspend fun refreshLatestNews() { /* ... */ }
+}
+```
+
+### Сравнение `StateFlow` vs `SharedFlow`
+
+| Функция | `StateFlow` | `SharedFlow` |
+|---------|------------|-------------|
 | **Начальное значение** | Обязательно | Опционально |
 | **Всегда имеет значение** | Да | Нет |
-| **Случай использования** | UI состояние | События/сигналы |
-| **Объединение** | Да (всегда) | Настраиваемое |
-| **Повтор** | 1 (всегда) | Настраиваемый (0...∞) |
+| **Случай использования** | UI-состояние / держатель состояния | События/сигналы, общие потоки событий или настраиваемое общее состояние |
+| **Объединение** | Да (для подряд идущих одинаковых значений) | Настраивается через буфер/replay и логику эмиссий |
+| **Повтор (replay)** | 1 (последнее значение) | Настраиваемый (0...∞) |
+| **subscriptionCount** | Доступен | Доступен |
 
-### Когда Что Использовать
+### Когда что использовать
 
-**Используйте StateFlow когда**:
-- Нужно представить текущее состояние (например, UI состояние, состояние загрузки)
-- Нужно автоматическое объединение значений
-- Новые подписчики должны сразу получить последнее значение
-- Мигрируете с LiveData
+**Используйте `StateFlow`, когда**:
+- Нужно представить текущее состояние (например, UI-состояние, состояние загрузки).
+- Нужна автоматическая конденсация подряд идущих одинаковых значений.
+- Новые подписчики должны сразу получать последнее значение.
+- Мигрируете с `LiveData`.
 
-**Используйте SharedFlow когда**:
-- Нужно представить события (например, навигационные события, одноразовые сообщения)
-- Нужно настраиваемое поведение повтора
-- Нужно транслировать нескольким подписчикам
-- Нужен контроль над переполнением буфера
+**Используйте `SharedFlow`, когда**:
+- Нужно представить события (например, навигационные события, одноразовые сообщения).
+- Нужен настраиваемый `replay`.
+- Нужно транслировать значения нескольким коллекторам.
+- Нужен контроль над переполнением буфера или более гибкие неконфлюирующие семантики.
 
-**Краткое содержание**: StateFlow — это горячий поток-держатель состояния с обязательным текущим значением и объединением обновлений. SharedFlow — более общий горячий поток для трансляции событий с настраиваемым повтором и буферизацией. Используйте StateFlow для UI состояния, SharedFlow для событий.
+### Пример: счетчик с использованием `StateFlow`
 
----
+```kotlin
+class CounterModel {
+    private val _counter = MutableStateFlow(0) // приватный изменяемый `StateFlow`
+    val counter = _counter.asStateFlow() // публично только для чтения
+
+    fun inc() {
+        _counter.value++
+    }
+}
+
+// Использование
+val aModel = CounterModel()
+val bModel = CounterModel()
+val sumFlow: Flow<Int> = aModel.counter.combine(bModel.counter) { a, b -> a + b }
+```
+
+### Дополнительные возможности `MutableSharedFlow`
+
+```kotlin
+val sharedFlow = MutableSharedFlow<String>(replay = 3)
+
+// Количество активных коллекторов
+val collectorCount: Int = sharedFlow.subscriptionCount.value
+
+// Сбросить кэш replay при необходимости
+sharedFlow.resetReplayCache()
+```
+
+**Краткое резюме (RU)**: `StateFlow` — это горячий поток-держатель состояния с обязательным текущим значением и объединением подряд идущих одинаковых обновлений. `SharedFlow` — более общий горячий поток для трансляции состояний и/или событий с настраиваемым `replay` и буферизацией. Используйте `StateFlow` для UI-состояния, `SharedFlow` — для событий и широковещательных сценариев.
 
 ## Answer (EN)
 
-`StateFlow` and `SharedFlow` are Flow APIs that enable flows to optimally emit state updates and emit values to multiple consumers. They are **hot flows**, meaning they are active and can emit values even when there are no collectors.
+`StateFlow` and `SharedFlow` are `Flow` APIs that enable flows to efficiently emit state updates and values to multiple collectors. They are **hot flows**, meaning they are active and can emit values even when there are no collectors.
 
 ### StateFlow
 
@@ -146,11 +223,11 @@ private val _tickFlow = MutableSharedFlow<Unit>(
 
 #### Key Characteristics
 
-1. **Always has a value** - Requires an initial state to be passed to the constructor
-2. **State holder** - Always represents the current state
-3. **Conflates values** - Only emits distinct values, skips duplicate consecutive values
-4. **Hot flow** - Active and in memory even without collectors
-5. **Thread-safe** - Can be safely updated from any thread
+1. **Always has a value** - Requires an initial state value when created.
+2. **State holder** - Always represents the latest state.
+3. **Conflates values** - Only emits distinct consecutive values (behavior similar to `distinctUntilChanged`).
+4. **Hot flow** - Active and kept in memory even without collectors.
+5. **Thread-safe** - Can be safely updated from any thread.
 
 #### Example Usage
 
@@ -160,7 +237,7 @@ class LatestNewsViewModel(
 ) : ViewModel() {
     // Backing property to avoid state updates from other classes
     private val _uiState = MutableStateFlow(LatestNewsUiState.Success(emptyList()))
-    // The UI collects from this StateFlow to get its state updates
+    // The UI collects from this `StateFlow` to get its state updates
     val uiState: StateFlow<LatestNewsUiState> = _uiState
 
     init {
@@ -181,31 +258,30 @@ sealed class LatestNewsUiState {
 }
 ```
 
-#### StateFlow Vs LiveData
+#### `StateFlow` vs `LiveData`
 
 Both are observable data holder classes with similar patterns:
 
-| Feature | StateFlow | LiveData |
-|---------|-----------|----------|
+| Feature | `StateFlow` | `LiveData` |
+|---------|------------|-----------|
 | **Initial value** | Required | Not required |
-| **Lifecycle awareness** | Manual (collect in lifecycle scope) | Automatic (observe) |
+| **Lifecycle awareness** | Not lifecycle-aware by itself; must collect in lifecycle-aware scope | Built-in lifecycle awareness |
 | **Thread safety** | Built-in | Built-in |
-| **Transformation** | Flow operators | LiveData transformations |
-| **Backpressure** | Conflation | N/A |
+| **Transformation** | `Flow` operators | `LiveData` transformations |
 
-**Key Difference**: `LiveData.observe()` automatically unregisters when view goes to STOPPED state, whereas collecting from StateFlow doesn't stop automatically - you need to collect in a lifecycle-aware scope like `lifecycleScope.launch { repeatOnLifecycle(STARTED) { ... } }`.
+**Key Difference**: `LiveData.observe()` automatically unregisters when the `LifecycleOwner` goes below the STARTED state, whereas collecting from `StateFlow` does not stop automatically — you must collect it in a lifecycle-aware scope such as `lifecycleScope.launch { repeatOnLifecycle(STARTED) { ... } }`.
 
 ### SharedFlow
 
-The `shareIn` function returns a `SharedFlow`, a hot flow that emits values to all consumers that collect from it. A `SharedFlow` is a highly-configurable generalization of `StateFlow`.
+`SharedFlow` is a hot flow that emits values to all collectors. It is a highly-configurable generalization of `StateFlow` (and `StateFlow` is implemented on top of `SharedFlow`). `SharedFlow` values can be produced by many sources, including `MutableSharedFlow`, `shareIn`, and `stateIn`.
 
 #### Key Characteristics
 
-1. **No initial value required** - Can start without any value
-2. **Broadcasts events** - All collectors receive the same emissions
-3. **Configurable replay cache** - Can replay N previous values to new subscribers
-4. **Configurable buffer** - Control overflow behavior
-5. **More flexible** - Can represent events, not just state
+1. **No initial value required** - Can start without any value.
+2. **Broadcasts to multiple collectors** - All active collectors receive the same emissions.
+3. **Configurable replay cache** - Can replay N previous values to new collectors.
+4. **Configurable buffer** - Control overflow behavior via `replay`, `extraBufferCapacity`, and `onBufferOverflow`.
+5. **Flexible semantics** - Can represent events, shared streams, or even state when configured appropriately.
 
 #### Configuration Options
 
@@ -218,9 +294,9 @@ private val _tickFlow = MutableSharedFlow<Unit>(
 ```
 
 **BufferOverflow Options**:
-- `SUSPEND` (default) - Suspends the caller when buffer is full
-- `DROP_LATEST` - Drops the latest value when buffer is full
-- `DROP_OLDEST` - Drops the oldest value when buffer is full
+- `SUSPEND` (default) - Suspends the caller when buffer is full.
+- `DROP_LATEST` - Drops the latest new value when buffer is full.
+- `DROP_OLDEST` - Drops the oldest value when buffer is full.
 
 #### Example Usage
 
@@ -236,7 +312,7 @@ class TickHandler(
 
     init {
         externalScope.launch {
-            while(true) {
+            while (true) {
                 _tickFlow.emit(Unit)
                 delay(tickIntervalMs)
             }
@@ -261,37 +337,37 @@ class NewsRepository(
 }
 ```
 
-### StateFlow Vs SharedFlow Comparison
+### `StateFlow` vs `SharedFlow` Comparison
 
-| Feature | StateFlow | SharedFlow |
-|---------|-----------|------------|
+| Feature | `StateFlow` | `SharedFlow` |
+|---------|------------|------------|
 | **Initial value** | Required | Optional |
 | **Always has value** | Yes | No |
-| **Use case** | UI state | Events/signals |
-| **Conflation** | Yes (always) | Configurable |
-| **Replay** | 1 (always) | Configurable (0...∞) |
+| **Use case** | UI state / state holder | Events/signals, shared event streams, or configurable shared state |
+| **Conflation** | Yes (for consecutive equal values) | Configurable via buffer/replay setup and emission logic |
+| **Replay** | 1 (last value) | Configurable (0...∞) |
 | **subscriptionCount** | Available | Available |
 
 ### When to Use Each
 
-**Use StateFlow when**:
-- You need to represent current state (e.g., UI state, loading state)
-- You want automatic conflation of values
-- New subscribers should immediately receive the latest value
-- You're migrating from LiveData
+**Use `StateFlow` when**:
+- You need to represent current state (e.g., UI state, loading state).
+- You want automatic conflation of consecutive equal values.
+- New subscribers should immediately receive the latest value.
+- You're migrating from `LiveData`.
 
-**Use SharedFlow when**:
-- You need to represent events (e.g., navigation events, one-time messages)
-- You need configurable replay behavior
-- You want to broadcast to multiple collectors
-- You need control over buffer overflow behavior
+**Use `SharedFlow` when**:
+- You need to represent events (e.g., navigation events, one-time messages).
+- You need configurable replay behavior.
+- You want to broadcast to multiple collectors.
+- You need control over buffer overflow behavior or non-conflated semantics.
 
-### Example: Counter with StateFlow
+### Example: Counter with `StateFlow`
 
 ```kotlin
 class CounterModel {
-    private val _counter = MutableStateFlow(0) // private mutable state flow
-    val counter = _counter.asStateFlow() // publicly exposed as read-only state flow
+    private val _counter = MutableStateFlow(0) // private mutable `StateFlow`
+    val counter = _counter.asStateFlow() // publicly exposed as read-only `StateFlow`
 
     fun inc() {
         _counter.value++
@@ -304,7 +380,7 @@ val bModel = CounterModel()
 val sumFlow: Flow<Int> = aModel.counter.combine(bModel.counter) { a, b -> a + b }
 ```
 
-### Additional MutableSharedFlow Features
+### Additional `MutableSharedFlow` Features
 
 ```kotlin
 val sharedFlow = MutableSharedFlow<String>(replay = 3)
@@ -316,7 +392,7 @@ val collectorCount: Int = sharedFlow.subscriptionCount.value
 sharedFlow.resetReplayCache()
 ```
 
-**English Summary**: StateFlow is a state-holder hot flow that always has a current value and conflates updates. SharedFlow is a more general hot flow for broadcasting events with configurable replay and buffer behavior. Use StateFlow for UI state, SharedFlow for events.
+**English Summary**: `StateFlow` is a state-holder hot flow that always has a current value and conflates consecutive equal updates. `SharedFlow` is a more general hot flow for broadcasting events or shared streams with configurable replay and buffer behavior. Use `StateFlow` for UI state, `SharedFlow` for events and broadcast-style sharing.
 
 ## Follow-ups
 
@@ -342,4 +418,3 @@ sharedFlow.resetReplayCache()
 
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
-

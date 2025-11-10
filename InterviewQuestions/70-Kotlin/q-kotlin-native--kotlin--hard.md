@@ -1,15 +1,13 @@
 ---
 id: kotlin-129
-title: "Kotlin"
+title: "Kotlin/Native / Kotlin/Native"
 aliases: []
 
 # Classification
 topic: kotlin
 subtopics:
   - cinterop
-  - interop
   - kotlin-native
-  - memory-model
   - multiplatform
 question_kind: theory
 difficulty: hard
@@ -23,117 +21,36 @@ source_note: Comprehensive guide on Kotlin/Native
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-expect-actual-kotlin--kotlin--medium, q-kotlin-collections--kotlin--medium, q-structured-concurrency--kotlin--hard]
+related: [c-kotlin, q-expect-actual-kotlin--kotlin--medium, q-structured-concurrency--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-10
 
 tags: [cinterop, difficulty/hard, interop, ios, kotlin, kotlin-native, multiplatform, native]
 ---
 # Вопрос (RU)
 > Что такое Kotlin/Native? Объясните нативную компиляцию, interop с C библиотеками и Objective-C/Swift, различия в модели памяти и случаи использования для iOS разработки.
 
----
-
 # Question (EN)
 > What is Kotlin/Native? Explain native compilation, interop with C libraries and Objective-C/Swift, memory model differences, and use cases for iOS development.
 
 ## Ответ (RU)
 
-**Kotlin/Native** - это технология для компиляции Kotlin кода в нативные бинарные файлы, которые могут работать без виртуальной машины. Позволяет Kotlin таргетировать платформы как iOS, macOS, Linux, Windows и встроенные системы.
+**Kotlin/Native** — это технология для компиляции Kotlin-кода в нативные бинарные файлы, которые могут работать без виртуальной машины (без JVM). Позволяет Kotlin таргетировать платформы вроде iOS, macOS, Linux, Windows и некоторые встроенные системы.
 
-### Ключевые Возможности
+См. также: [[c-kotlin]].
 
-1. **Нативная компиляция**: Компилируется в платформо-специфичный машинный код
-2. **Не требует JVM**: Автономные исполняемые файлы
-3. **C Interop**: Прямая интеграция с C библиотеками
-4. **Objective-C/Swift Interop**: iOS/macOS разработка
-5. **Мультиплатформа**: Разделение кода между платформами
-6. **Управление памятью**: Автоматическое управление без GC
+### Ключевые возможности
 
-### C Interop
+1. **Нативная компиляция**: компиляция в платформенно-специфичный машинный код через LLVM.
+2. **Без JVM**: автономные исполняемые файлы и библиотеки.
+3. **C interop**: прямая интеграция с C-библиотеками через `cinterop`.
+4. **Objective-C/Swift interop**: взаимодействие с кодом и фреймворками iOS/macOS.
+5. **Мультиплатформа**: разделение бизнес-логики между платформами (через KMP).
+6. **Управление памятью**: автоматическое управление памятью (современный единый менеджер памяти; ручное управление только для interop с нативными API).
 
-```kotlin
-import kotlinx.cinterop.*
-import curl.*
-
-fun httpGet(url: String): String? {
-    val curl = curl_easy_init()
-
-    if (curl != null) {
-        curl_easy_setopt(curl, CURLOPT_URL, url)
-        val result = curl_easy_perform(curl)
-        curl_easy_cleanup(curl)
-
-        if (result == CURLE_OK) {
-            return "Success"
-        }
-    }
-
-    return null
-}
-```
-
-### Objective-C/Swift Interop
-
-```kotlin
-// Kotlin
-fun useObjCClass() {
-    val obj = MyClass()
-    val greeting = obj.greet("World")
-    println(greeting) // Hello, World!
-}
-```
-
-```swift
-// Swift
-import Shared
-
-class ViewModel {
-    func loadUsers() {
-        SharedKt.iosGetUsers { users in
-            print(users)
-        }
-    }
-}
-```
-
-### Модель Памяти
-
-**Новая модель памяти (1.7.20+):**
-
-```kotlin
-// Конкурентная изменяемость как JVM/JS
-class DataHolder {
-    var data = "Hello" // Может быть изменено из любого потока
-}
-```
-
-### Случаи Использования
-
-1. **iOS разработка** - Разделение бизнес-логики
-2. **Кросс-платформенные библиотеки** - Один код, множество платформ
-3. **Встроенные системы** - IoT устройства
-4. **Нативные CLI инструменты** - Утилиты командной строки
-5. **Разработка игр** - Разделённая игровая логика
-
----
-
-## Answer (EN)
-
-**Kotlin/Native** is a technology for compiling Kotlin code to native binaries that can run without a virtual machine. It enables Kotlin to target platforms like iOS, macOS, Linux, Windows, and embedded systems.
-
-### Key Features
-
-1. **Native Compilation**: Compiles to platform-specific machine code
-2. **No JVM Required**: Standalone executables
-3. **C Interop**: Direct integration with C libraries
-4. **Objective-C/Swift Interop**: iOS/macOS development
-5. **Multiplatform**: Share code across platforms
-6. **Memory Management**: Automatic memory management without GC
-
-### Kotlin/Native Architecture
+### Архитектура Kotlin/Native
 
 ```
 
@@ -146,8 +63,6 @@ class DataHolder {
 
 
 
-
-
   LLVM                LLVM
   iOS                 macOS
 
@@ -157,7 +72,7 @@ class DataHolder {
 
 ```
 
-### Basic Kotlin/Native Project
+### Базовая мультиплатформенная настройка (Kotlin/Native)
 
 ```kotlin
 // commonMain/Platform.kt
@@ -165,9 +80,7 @@ expect class Platform() {
     val name: String
 }
 
-fun getPlatformName(): String {
-    return Platform().name
-}
+fun getPlatformName(): String = Platform().name
 
 // iosMain/Platform.kt
 import platform.UIKit.UIDevice
@@ -177,21 +90,14 @@ actual class Platform {
         UIDevice.currentDevice.systemName() + " " +
         UIDevice.currentDevice.systemVersion
 }
-
-// Usage in iOS
-fun main() {
-    println("Running on: ${getPlatformName()}")
-    // Output: Running on: iOS 16.0
-}
 ```
 
-### C Interop (cinterop)
+### C interop и cinterop-конфигурация
 
-**Calling C libraries from Kotlin:**
+Взаимодействие с C-библиотеками настраивается через `.def` файл, который описывает заголовки и опции линковки.
 
 ```kotlin
-// 1. Create .def file
-// curl.def:
+// curl.def
 headers = curl/curl.h
 headerFilter = curl/*
 compilerOpts.linux = -I/usr/include -I/usr/include/x86_64-linux-gnu
@@ -199,8 +105,9 @@ linkerOpts.osx = -L/opt/local/lib -L/usr/local/opt/curl/lib -lcurl
 linkerOpts.linux = -L/usr/lib/x86_64-linux-gnu -lcurl
 ```
 
+Пример вызова `libcurl` (упрощённо):
+
 ```kotlin
-// 2. Use in Kotlin
 import kotlinx.cinterop.*
 import curl.*
 
@@ -215,21 +122,16 @@ fun httpGet(url: String): String? {
         curl_easy_cleanup(curl)
 
         if (result == CURLE_OK) {
+            // Для реального получения тела нужно использовать CURLOPT_WRITEFUNCTION.
             return "Success"
         }
     }
 
     return null
 }
-
-// Usage
-fun main() {
-    val result = httpGet("https://example.com")
-    println(result)
-}
 ```
 
-**Working with C structs:**
+#### Работа с C-структурами
 
 ```c
 // mylib.h
@@ -248,30 +150,31 @@ import kotlinx.cinterop.*
 import mylib.*
 
 fun useStruct() {
-    val struct = nativeHeap.alloc<MyStruct>()
+    memScoped {
+        val struct = alloc<MyStruct>()
 
-    struct.id = 42
-    struct.name[0] = 'T'.code.toByte()
-    struct.name[1] = 'e'.code.toByte()
-    struct.name[2] = 's'.code.toByte()
-    struct.name[3] = 't'.code.toByte()
-    struct.value = 3.14
+        struct.id = 42
+        struct.name[0] = 'T'.code.toByte()
+        struct.name[1] = 'e'.code.toByte()
+        struct.name[2] = 's'.code.toByte()
+        struct.name[3] = 't'.code.toByte()
+        struct.value = 3.14
 
-    process_struct(struct.ptr)
-
-    nativeHeap.free(struct)
+        process_struct(struct.ptr)
+        // Память освобождается автоматически при выходе из memScoped.
+    }
 }
 ```
 
-### Objective-C/Swift Interop
+### Objective-C/Swift interop
 
-**Calling Objective-C from Kotlin:**
+Вызов Objective-C из Kotlin:
 
 ```objective-c
 // MyClass.h
 @interface MyClass : NSObject
 - (NSString *)greet:(NSString *)name;
-- (NSInteger)add:(NSInteger)a and:(NSInteger)b;
+- (NSInteger)addA:(NSInteger)a b:(NSInteger)b;
 @property (nonatomic, strong) NSString *title;
 @end
 
@@ -281,7 +184,7 @@ fun useStruct() {
     return [NSString stringWithFormat:@"Hello, %@!", name];
 }
 
-- (NSInteger)add:(NSInteger)a and:(NSInteger)b {
+- (NSInteger)addA:(NSInteger)a b:(NSInteger)b {
     return a + b;
 }
 @end
@@ -295,50 +198,42 @@ import cocoapods.MyFramework.*
 fun useObjCClass() {
     val obj = MyClass()
 
-    // Call methods
     val greeting = obj.greet("World")
-    println(greeting) // Hello, World!
+    println(greeting) // "Hello, World!"
 
-    val sum = obj.addAnd(5, 3)
+    val sum = obj.addA(5, b = 3)
     println(sum) // 8
 
-    // Properties
     obj.title = "My Title"
     println(obj.title)
 }
 ```
 
-**iOS Framework Creation:**
+Экспорт Kotlin в Swift (схематично):
 
 ```kotlin
-// Shared Kotlin code for iOS
 class UserRepository {
     suspend fun getUsers(): List<User> {
-        delay(1000)
-        return listOf(
-            User(1, "Alice"),
-            User(2, "Bob")
-        )
+        // ...
+        return listOf(User(1, "Alice"), User(2, "Bob"))
     }
 }
 
 data class User(val id: Int, val name: String)
 
-// Expose to iOS
 @OptIn(ExperimentalForeignApi::class)
-fun iosGetUsers(completion: (List<User>) -> Unit) {
+fun iosGetUsers(callback: (List<User>) -> Unit) {
     val repository = UserRepository()
 
     MainScope().launch {
         val users = repository.getUsers()
-        completion(users)
+        callback(users)
     }
 }
 ```
 
-**Swift usage:**
-
 ```swift
+// Swift (упрощённая сигнатура; реальные типы и bridging берутся из сгенерированного фреймворка)
 import Shared
 
 class ViewModel: ObservableObject {
@@ -346,101 +241,83 @@ class ViewModel: ObservableObject {
 
     func loadUsers() {
         SharedKt.iosGetUsers { users in
-            DispatchQueue.main.async {
-                self.users = users
-            }
-        }
-    }
-}
-
-// SwiftUI View
-struct UsersView: View {
-    @StateObject var viewModel = ViewModel()
-
-    var body: some View {
-        List(viewModel.users, id: \.id) { user in
-            Text(user.name)
-        }
-        .onAppear {
-            viewModel.loadUsers()
+            self.users = users
         }
     }
 }
 ```
 
-### Memory Model
+### Модель памяти
 
-**Old Memory Model (before 1.7.20):**
+#### Старая модель памяти (до единого менеджера)
+
+Исторически использовались `freeze()`, `Worker`, `DetachedObjectGraph` и строгие ограничения на совместное использование изменяемых объектов между потоками. Нарушения приводили к runtime-ошибкам (`InvalidMutabilityException`). Сейчас эта модель устарела, но может встречаться в легаси-коде.
 
 ```kotlin
-// Strict thread isolation
+// Концептуальный пример (legacy):
 class DataHolder {
-    var data = "Hello" // Frozen after first access from another thread
+    var data = "Hello"
 }
 
 val holder = DataHolder()
 
-// Main thread
-holder.data = "World" // OK
+// main thread
+holder.data = "World"
 
-// Background thread
-GlobalScope.launch {
-    holder.data = "Modified" // Error! Object is frozen
-}
+// другой поток (при использовании freeze и старой модели)
+// попытка некорректной мутации могла привести к InvalidMutabilityException.
 ```
 
-**New Memory Model (1.7.20+):**
+#### Новая модель памяти (1.7.20+ по умолчанию)
+
+- Единый менеджер памяти.
+- Объекты можно свободно передавать между потоками.
+- Нет автоматического `freeze`; действуют обычные правила конкурентности.
+- Коллекции не становятся автоматически потокобезопасными — требуется явная синхронизация.
 
 ```kotlin
-// Concurrent mutability like JVM/JS
 class DataHolder {
-    var data = "Hello" // Can be modified from any thread
+    var data = "Hello"
 }
 
 val holder = DataHolder()
 
-// Any thread
-holder.data = "Modified" // OK
-
-// Thread-safe collections
-val safeList = mutableListOf<String>().also {
-    it.add("Item 1")
-}
+// Любой поток может читать/писать; при конкурентных изменениях используйте lock/atomics.
+holder.data = "Modified"
 ```
 
-**Memory management:**
+#### Управление памятью при interop
 
 ```kotlin
 import kotlinx.cinterop.*
 
-// Manual memory management for C interop
+// Ручное управление памятью для C interop
 fun manualMemory() {
-    // Allocate
     val buffer = nativeHeap.allocArray<ByteVar>(1024)
-
     try {
-        // Use buffer
         buffer[0] = 'H'.code.toByte()
         buffer[1] = 'i'.code.toByte()
     } finally {
-        // Must free manually
         nativeHeap.free(buffer)
     }
 }
 
-// Arena for grouped allocations
-fun arenaMemory() {
+fun scopedMemory() {
     memScoped {
         val buffer = allocArray<ByteVar>(1024)
-        // Automatically freed when memScoped exits
+        // Автоматическое освобождение при выходе из memScoped.
     }
 }
 ```
 
-### Coroutines in Kotlin/Native
+### Корутины в Kotlin/Native
+
+Корутины поддерживаются, но для iOS/Swift обычно предоставляют обёртки (callback- или `Flow`-wrapper), чтобы сделать API удобным для потребления.
 
 ```kotlin
-// iOS-compatible coroutines wrapper
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+
 class FlowWrapper<T>(private val flow: Flow<T>) {
     fun subscribe(
         onEach: (T) -> Unit,
@@ -449,20 +326,18 @@ class FlowWrapper<T>(private val flow: Flow<T>) {
     ): Cancellable {
         val scope = MainScope()
 
-        scope.launch {
+        val job = scope.launch {
             try {
-                flow.collect { value ->
-                    onEach(value)
-                }
+                flow.collect { value -> onEach(value) }
                 onComplete()
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 onThrow(e)
             }
         }
 
         return object : Cancellable {
             override fun cancel() {
-                scope.cancel()
+                job.cancel()
             }
         }
     }
@@ -471,73 +346,62 @@ class FlowWrapper<T>(private val flow: Flow<T>) {
 interface Cancellable {
     fun cancel()
 }
-
-// Swift usage
-func observeFlow() {
-    let wrapper = FlowWrapper(flow: myFlow)
-
-    let cancellable = wrapper.subscribe(
-        onEach: { value in
-            print("Got value: \(value)")
-        },
-        onComplete: {
-            print("Completed")
-        },
-        onThrow: { error in
-            print("Error: \(error)")
-        }
-    )
-
-    // Later
-    cancellable.cancel()
-}
 ```
 
-### Platform-Specific APIs
+### Платформенно-специфичные API
+
+Используйте `expect`/`actual` для инкапсуляции платформенных вызовов.
 
 ```kotlin
-// iOS specific
+// commonMain
 expect class PlatformFile(path: String) {
     fun readText(): String
     fun writeText(text: String)
 }
+```
 
-// iOS implementation
+```kotlin
+// iosMain (упрощённо)
 import platform.Foundation.*
+import kotlinx.cinterop.*
 
 actual class PlatformFile actual constructor(private val path: String) {
     actual fun readText(): String {
-        val url = NSURL.fileURLWithPath(path)
-        return NSString.stringWithContentsOfURL(
-            url,
-            encoding = NSUTF8StringEncoding,
-            error = null
-        ) as String
+        memScoped {
+            val errorPtr = alloc<ObjCObjectVar<NSError?>>()
+            val url = NSURL.fileURLWithPath(path)
+            val content = NSString.stringWithContentsOfURL(
+                url,
+                NSUTF8StringEncoding,
+                errorPtr.ptr
+            )
+            val error = errorPtr.value
+            if (error != null) throw Exception(error.localizedDescription)
+            return content?.toString() ?: ""
+        }
     }
 
     actual fun writeText(text: String) {
-        val url = NSURL.fileURLWithPath(path)
-        (text as NSString).writeToURL(
-            url,
-            atomically = true,
-            encoding = NSUTF8StringEncoding,
-            error = null
-        )
+        memScoped {
+            val errorPtr = alloc<ObjCObjectVar<NSError?>>()
+            val url = NSURL.fileURLWithPath(path)
+            val nsText: NSString = text as NSString
+            nsText.writeToURL(url, true, NSUTF8StringEncoding, errorPtr.ptr)
+            val error = errorPtr.value
+            if (error != null) throw Exception(error.localizedDescription)
+        }
     }
 }
 ```
 
-### Build Configuration
+### Конфигурация сборки
 
 ```kotlin
-// build.gradle.kts
+// build.gradle.kts (KMP-фрагмент)
 kotlin {
-    ios()
-
-    // Or specific targets
     iosArm64()
-    iosX64() // iOS Simulator
-    iosSimulatorArm64() // M1 Simulator
+    iosX64()
+    iosSimulatorArm64()
 
     sourceSets {
         val commonMain by getting {
@@ -548,26 +412,25 @@ kotlin {
 
         val iosMain by creating {
             dependsOn(commonMain)
-            dependencies {
-                // iOS-specific dependencies
-            }
         }
 
-        val iosArm64Main by getting {
-            dependsOn(iosMain)
-        }
-
-        val iosX64Main by getting {
-            dependsOn(iosMain)
-        }
+        val iosArm64Main by getting { dependsOn(iosMain) }
+        val iosX64Main by getting { dependsOn(iosMain) }
+        val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
     }
 }
 ```
 
-### Real-World Example: Shared Networking
+### Практический пример: общий сетевой слой
 
 ```kotlin
 // commonMain
+import kotlinx.serialization.*
+import kotlinx.serialization.json.Json
+
+@Serializable
+data class User(val id: Int, val name: String)
+
 interface ApiService {
     suspend fun fetchUsers(): List<User>
     suspend fun createUser(user: User): User
@@ -590,16 +453,22 @@ class ApiServiceImpl(private val client: NetworkClient) : ApiService {
         return Json.decodeFromString(json)
     }
 }
+```
 
-// iosMain
+```kotlin
+// iosMain (упрощённо)
+import kotlinx.cinterop.*
 import platform.Foundation.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 actual class NetworkClient {
     actual suspend fun get(url: String): String = suspendCoroutine { continuation ->
         val nsUrl = NSURL(string = url)
-        val request = NSURLRequest(uRL = nsUrl)
+        val request = NSURLRequest.requestWithURL(nsUrl)
 
-        NSURLSession.sharedSession.dataTaskWithRequest(request) { data, response, error ->
+        NSURLSession.sharedSession.dataTaskWithRequest(request) { data, _, error ->
             when {
                 error != null -> continuation.resumeWithException(
                     Exception(error.localizedDescription)
@@ -613,9 +482,517 @@ actual class NetworkClient {
         }.resume()
     }
 
-    actual suspend fun post(url: String, body: String): String {
-        // Similar implementation
-        return ""
+    actual suspend fun post(url: String, body: String): String = suspendCoroutine { continuation ->
+        // Аналогичная реализация: настройка HTTP-метода и тела запроса.
+        continuation.resume("") // Placeholder для краткости.
+    }
+}
+```
+
+### Сценарии использования
+
+1. **iOS-разработка**
+   - Общий бизнес-/доменный код для Android и iOS.
+   - UI остаётся нативным (SwiftUI/UIKit на iOS, Jetpack Compose/`View` на Android).
+2. **Кроссплатформенные библиотеки**
+   - Сеть, хранение, криптография, аналитика и т.п.
+3. **Встроенные/нативные утилиты и некоторые десктоп/embedded таргеты**
+   - CLI-инструменты и приложения, где поддерживаются целевые платформы Kotlin/Native.
+4. **Игровая логика**
+   - Общий core, при этом рендеринг остаётся нативным.
+
+### Рекомендации (Best Practices)
+
+#### Делайте (DO)
+
+```kotlin
+// Общая бизнес-логика в commonMain
+class UserRepository {
+    suspend fun getUsers(): List<User> { /* ... */ return emptyList() }
+}
+
+// UI оставляйте платформенно-специфичным.
+
+// Используйте expect/actual для платформенных API
+expect fun getCurrentTimestamp(): Long
+
+// Используйте memScoped/nativeHeap только для interop-буферов
+memScoped {
+    val buffer = allocArray<ByteVar>(1024)
+    // Автоматическое освобождение по выходу из scope
+}
+
+// Оборачивайте корутины/Flow для удобного потребления на iOS
+class FlowWrapper<T>(private val flow: Flow<T>)
+```
+
+#### Не делайте (DON'T)
+
+```kotlin
+// Не забывайте вызывать free для nativeHeap-аллоцированной памяти
+val buffer = nativeHeap.allocArray<ByteVar>(1024)
+// nativeHeap.free(buffer) обязателен
+
+// Не экспортируйте suspend напрямую в Swift без обёртки
+suspend fun getData(): List<User>
+
+// Не пытайтесь полностью шарить UI между iOS и Android
+
+// Не полагайтесь на устаревшие freeze-паттерны с новой моделью памяти
+```
+
+---
+
+## Answer (EN)
+
+**Kotlin/Native** is a technology for compiling Kotlin code to native binaries that run without a virtual machine (no JVM). It enables Kotlin to target platforms like iOS, macOS, Linux, Windows, and some embedded systems.
+
+See also: [[c-kotlin]].
+
+### Key Features
+
+1. **Native Compilation**: Compiles to platform-specific machine code via LLVM.
+2. **No JVM Required**: Produces standalone executables and libraries.
+3. **C Interop**: Direct integration with C libraries via `cinterop`.
+4. **Objective-C/Swift Interop**: Interoperability with iOS/macOS code and frameworks.
+5. **Multiplatform**: Share business logic across platforms (via KMP).
+6. **Memory Management**: Automatic memory management with the new memory manager; manual allocation only for interop with native APIs (e.g., C).
+
+### Kotlin/Native Architecture
+
+```
+
+       Kotlin Source Code
+
+
+
+          Kotlin/Native
+            Compiler
+
+
+
+  LLVM                LLVM
+  iOS                 macOS
+
+
+
+ .framework           Binary
+
+```
+
+(Simplified: Kotlin/Native compiler lowers Kotlin to LLVM IR and produces platform-specific binaries/frameworks.)
+
+### Basic Kotlin/Native Multiplatform Setup
+
+```kotlin
+// commonMain/Platform.kt
+expect class Platform() {
+    val name: String
+}
+
+fun getPlatformName(): String = Platform().name
+
+// iosMain/Platform.kt
+import platform.UIKit.UIDevice
+
+actual class Platform {
+    actual val name: String =
+        UIDevice.currentDevice.systemName() + " " +
+        UIDevice.currentDevice.systemVersion
+}
+```
+
+### C Interop (cinterop)
+
+Calling C libraries from Kotlin using a `.def` file:
+
+```kotlin
+// curl.def
+headers = curl/curl.h
+headerFilter = curl/*
+compilerOpts.linux = -I/usr/include -I/usr/include/x86_64-linux-gnu
+linkerOpts.osx = -L/opt/local/lib -L/usr/local/opt/curl/lib -lcurl
+linkerOpts.linux = -L/usr/lib/x86_64-linux-gnu -lcurl
+```
+
+```kotlin
+import kotlinx.cinterop.*
+import curl.*
+
+fun httpGet(url: String): String? {
+    val curl = curl_easy_init()
+
+    if (curl != null) {
+        curl_easy_setopt(curl, CURLOPT_URL, url)
+        curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L)
+
+        val result = curl_easy_perform(curl)
+        curl_easy_cleanup(curl)
+
+        if (result == CURLE_OK) {
+            // Real-world code should use CURLOPT_WRITEFUNCTION to capture response.
+            return "Success"
+        }
+    }
+
+    return null
+}
+```
+
+Working with C structs:
+
+```c
+// mylib.h
+typedef struct {
+    int id;
+    char name[100];
+    double value;
+} MyStruct;
+
+void process_struct(MyStruct* s);
+```
+
+```kotlin
+// Kotlin
+import kotlinx.cinterop.*
+import mylib.*
+
+fun useStruct() {
+    memScoped {
+        val struct = alloc<MyStruct>()
+
+        struct.id = 42
+        struct.name[0] = 'T'.code.toByte()
+        struct.name[1] = 'e'.code.toByte()
+        struct.name[2] = 's'.code.toByte()
+        struct.name[3] = 't'.code.toByte()
+        struct.value = 3.14
+
+        process_struct(struct.ptr)
+        // Memory is released automatically when memScoped exits.
+    }
+}
+```
+
+### Objective-C/Swift Interop
+
+Calling Objective-C from Kotlin:
+
+```objective-c
+// MyClass.h
+@interface MyClass : NSObject
+- (NSString *)greet:(NSString *)name;
+- (NSInteger)addA:(NSInteger)a b:(NSInteger)b;
+@property (nonatomic, strong) NSString *title;
+@end
+
+// MyClass.m
+@implementation MyClass
+- (NSString *)greet:(NSString *)name {
+    return [NSString stringWithFormat:@"Hello, %@!", name];
+}
+
+- (NSInteger)addA:(NSInteger)a b:(NSInteger)b {
+    return a + b;
+}
+@end
+```
+
+```kotlin
+// Kotlin
+import platform.Foundation.*
+import cocoapods.MyFramework.*
+
+fun useObjCClass() {
+    val obj = MyClass()
+
+    val greeting = obj.greet("World")
+    println(greeting) // "Hello, World!"
+
+    val sum = obj.addA(5, b = 3)
+    println(sum) // 8
+
+    obj.title = "My Title"
+    println(obj.title)
+}
+```
+
+Exposing Kotlin to Swift (schematic):
+
+```kotlin
+class UserRepository {
+    suspend fun getUsers(): List<User> {
+        // ...
+        return listOf(User(1, "Alice"), User(2, "Bob"))
+    }
+}
+
+data class User(val id: Int, val name: String)
+
+@OptIn(ExperimentalForeignApi::class)
+fun iosGetUsers(callback: (List<User>) -> Unit) {
+    val repository = UserRepository()
+
+    MainScope().launch {
+        val users = repository.getUsers()
+        callback(users)
+    }
+}
+```
+
+Swift usage (signature simplified for illustration; actual types and bridging use generated types from the produced framework):
+
+```swift
+import Shared
+
+class ViewModel: ObservableObject {
+    @Published var users: [User] = []
+
+    func loadUsers() {
+        SharedKt.iosGetUsers { users in
+            self.users = users
+        }
+    }
+}
+```
+
+### Memory Model
+
+#### Old Memory Model (pre unified memory manager)
+
+- Required `freeze()`, `Worker`, `DetachedObjectGraph` patterns.
+- Sharing mutable objects across threads without freeze caused runtime errors.
+
+```kotlin
+// Conceptual example (legacy):
+class DataHolder {
+    var data = "Hello"
+}
+
+val holder = DataHolder()
+
+// main thread
+holder.data = "World"
+
+// other thread (if holder was frozen explicitly):
+// mutation would throw InvalidMutabilityException in old model.
+```
+
+#### New Memory Model (1.7.20+ default)
+
+- Unified memory manager.
+- Objects can be shared between threads.
+- No automatic freezing; standard concurrency rules apply.
+- Collections are not magically thread-safe.
+
+```kotlin
+class DataHolder {
+    var data = "Hello"
+}
+
+val holder = DataHolder()
+
+// Any thread can read/write; use locks/atomics if mutated concurrently.
+holder.data = "Modified"
+```
+
+#### Interop-related memory management
+
+```kotlin
+import kotlinx.cinterop.*
+
+// Manual memory management for C interop
+fun manualMemory() {
+    val buffer = nativeHeap.allocArray<ByteVar>(1024)
+    try {
+        buffer[0] = 'H'.code.toByte()
+        buffer[1] = 'i'.code.toByte()
+    } finally {
+        nativeHeap.free(buffer)
+    }
+}
+
+fun scopedMemory() {
+    memScoped {
+        val buffer = allocArray<ByteVar>(1024)
+        // Automatically freed when memScoped exits
+    }
+}
+```
+
+### Coroutines in Kotlin/Native
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+
+class FlowWrapper<T>(private val flow: Flow<T>) {
+    fun subscribe(
+        onEach: (T) -> Unit,
+        onComplete: () -> Unit,
+        onThrow: (Throwable) -> Unit
+    ): Cancellable {
+        val scope = MainScope()
+
+        val job = scope.launch {
+            try {
+                flow.collect { value -> onEach(value) }
+                onComplete()
+            } catch (e: Throwable) {
+                onThrow(e)
+            }
+        }
+
+        return object : Cancellable {
+            override fun cancel() {
+                job.cancel()
+            }
+        }
+    }
+}
+
+interface Cancellable {
+    fun cancel()
+}
+```
+
+(Swift side would receive a bridged API; signatures here are conceptual.)
+
+### Platform-Specific APIs
+
+```kotlin
+// expect declaration in commonMain
+expect class PlatformFile(path: String) {
+    fun readText(): String
+    fun writeText(text: String)
+}
+```
+
+```kotlin
+// actual implementation for iOS (simplified)
+import platform.Foundation.*
+import kotlinx.cinterop.*
+
+actual class PlatformFile actual constructor(private val path: String) {
+    actual fun readText(): String {
+        memScoped {
+            val errorPtr = alloc<ObjCObjectVar<NSError?>>()
+            val url = NSURL.fileURLWithPath(path)
+            val content = NSString.stringWithContentsOfURL(
+                url,
+                NSUTF8StringEncoding,
+                errorPtr.ptr
+            )
+            val error = errorPtr.value
+            if (error != null) throw Exception(error.localizedDescription)
+            return content?.toString() ?: ""
+        }
+    }
+
+    actual fun writeText(text: String) {
+        memScoped {
+            val errorPtr = alloc<ObjCObjectVar<NSError?>>()
+            val url = NSURL.fileURLWithPath(path)
+            val nsText: NSString = text as NSString
+            nsText.writeToURL(url, true, NSUTF8StringEncoding, errorPtr.ptr)
+            val error = errorPtr.value
+            if (error != null) throw Exception(error.localizedDescription)
+        }
+    }
+}
+```
+
+### Build Configuration
+
+```kotlin
+// build.gradle.kts (KMP snippet)
+kotlin {
+    iosArm64()
+    iosX64()
+    iosSimulatorArm64()
+
+    sourceSets {
+        val commonMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+            }
+        }
+
+        val iosMain by creating {
+            dependsOn(commonMain)
+        }
+
+        val iosArm64Main by getting { dependsOn(iosMain) }
+        val iosX64Main by getting { dependsOn(iosMain) }
+        val iosSimulatorArm64Main by getting { dependsOn(iosMain) }
+    }
+}
+```
+
+### Real-World Example: Shared Networking
+
+```kotlin
+// commonMain
+import kotlinx.serialization.*
+import kotlinx.serialization.json.Json
+
+@Serializable
+data class User(val id: Int, val name: String)
+
+interface ApiService {
+    suspend fun fetchUsers(): List<User>
+    suspend fun createUser(user: User): User
+}
+
+expect class NetworkClient() {
+    suspend fun get(url: String): String
+    suspend fun post(url: String, body: String): String
+}
+
+class ApiServiceImpl(private val client: NetworkClient) : ApiService {
+    override suspend fun fetchUsers(): List<User> {
+        val json = client.get("https://api.example.com/users")
+        return Json.decodeFromString(json)
+    }
+
+    override suspend fun createUser(user: User): User {
+        val body = Json.encodeToString(user)
+        val json = client.post("https://api.example.com/users", body)
+        return Json.decodeFromString(json)
+    }
+}
+```
+
+```kotlin
+// iosMain (simplified)
+import kotlinx.cinterop.*
+import platform.Foundation.*
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
+
+actual class NetworkClient {
+    actual suspend fun get(url: String): String = suspendCoroutine { continuation ->
+        val nsUrl = NSURL(string = url)
+        val request = NSURLRequest.requestWithURL(nsUrl)
+
+        NSURLSession.sharedSession.dataTaskWithRequest(request) { data, _, error ->
+            when {
+                error != null -> continuation.resumeWithException(
+                    Exception(error.localizedDescription)
+                )
+                data != null -> {
+                    val string = NSString.create(data = data, encoding = NSUTF8StringEncoding)
+                    continuation.resume(string.toString())
+                }
+                else -> continuation.resumeWithException(Exception("Unknown error"))
+            }
+        }.resume()
+    }
+
+    actual suspend fun post(url: String, body: String): String = suspendCoroutine { continuation ->
+        // Implementation analogous to get(): configure HTTP method and body.
+        continuation.resume("") // Placeholder for brevity.
     }
 }
 ```
@@ -623,93 +1000,104 @@ actual class NetworkClient {
 ### Use Cases
 
 1. **iOS App Development**
-   - Share business logic between Android and iOS
-   - Keep UI platform-specific (Swift/Compose)
+   - Share business/domain logic between Android and iOS.
+   - Keep UI platform-specific (SwiftUI/UIKit on iOS, Jetpack Compose/Views on Android).
 
 2. **Cross-Platform Libraries**
-   - Networking, database, crypto
-   - One codebase, multiple platforms
+   - Networking, persistence, crypto, analytics, etc.
 
-3. **Embedded Systems**
-   - IoT devices
-   - Microcontrollers
+3. **Embedded / Native Utilities and certain desktop/embedded targets**
+   - CLI tools and applications where Kotlin/Native targets are supported.
 
-4. **Native CLI Tools**
-   - Command-line utilities
-   - System tools
-
-5. **Game Development**
-   - Shared game logic
-   - Platform-specific rendering
+4. **Game Development**
+   - Shared core game logic with native renderers.
 
 ### Best Practices
 
 #### DO:
 
 ```kotlin
-// Share business logic
-// commonMain
+// Share business logic in commonMain
 class UserRepository {
-    suspend fun getUsers(): List<User> { /* */ }
+    suspend fun getUsers(): List<User> { /* ... */ return emptyList() }
 }
 
 // Keep UI platform-specific
-// iOS uses SwiftUI
-// Android uses Jetpack Compose
 
 // Use expect/actual for platform APIs
 expect fun getCurrentTimestamp(): Long
 
-// Memory management in cinterop
+// Use memScoped/nativeHeap only for interop buffers
 memScoped {
     val buffer = allocArray<ByteVar>(1024)
-    // Auto-freed
+    // Auto-freed on scope exit
 }
 
-// Wrap coroutines for iOS
+// Wrap coroutines/Flow for idiomatic iOS consumption
 class FlowWrapper<T>(private val flow: Flow<T>)
 ```
 
 #### DON'T:
 
 ```kotlin
-// Don't forget memory management
+// Don't forget manual free for nativeHeap allocations
 val buffer = nativeHeap.allocArray<ByteVar>(1024)
-// Forgot to free - memory leak!
+// nativeHeap.free(buffer) is required
 
-// Don't expose suspend functions directly to Swift
-// Won't work well
+// Don't expose suspend directly to Swift without a wrapper
 suspend fun getData(): List<User>
 
-// Don't share UI code
-// Keep UI platform-specific
+// Don't try to share full UI across iOS/Android with Kotlin/Native
 
-// Don't use old memory model patterns
-// Use new memory model (1.7.20+)
+// Don't rely on deprecated freezing patterns with the new memory manager
 ```
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чём ключевые отличия между Kotlin/Native и запуском Kotlin на JVM?
+- В каких практических сценариях вы бы выбрали Kotlin/Native или KMP для iOS?
+- Какие типичные подводные камни при interop с C/ObjC и работе с моделью памяти?
+
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- What are the key differences between Kotlin/Native and running Kotlin on the JVM?
+- When would you use Kotlin/Native or KMP with iOS in practice?
+- What are common pitfalls to avoid with C/ObjC interop and the memory model?
 
-## References
+## Ссылки (RU)
 
-- [Kotlin/Native Documentation](https://kotlinlang.org/docs/native-overview.html)
-- [C Interop](https://kotlinlang.org/docs/native-c-interop.html)
-- [Objective-C Interop](https://kotlinlang.org/docs/native-objc-interop.html)
-- [Memory Management](https://kotlinlang.org/docs/native-memory-manager.html)
+- https://kotlinlang.org/docs/native-overview.html
+- https://kotlinlang.org/docs/native-c-interop.html
+- https://kotlinlang.org/docs/native-objc-interop.html
+- https://kotlinlang.org/docs/native-memory-manager.html
 
-## Related Questions
+## References (EN)
+
+- https://kotlinlang.org/docs/native-overview.html
+- https://kotlinlang.org/docs/native-c-interop.html
+- https://kotlinlang.org/docs/native-objc-interop.html
+- https://kotlinlang.org/docs/native-memory-manager.html
+
+## Связанные вопросы (RU)
 
 - [[q-expect-actual-kotlin--kotlin--medium]]
 - [[q-structured-concurrency--kotlin--hard]]
 - [[q-kotlin-collections--kotlin--medium]]
 - [[q-flow-basics--kotlin--easy]]
 
-## MOC Links
+## Related Questions (EN)
+
+- [[q-expect-actual-kotlin--kotlin--medium]]
+- [[q-structured-concurrency--kotlin--hard]]
+- [[q-kotlin-collections--kotlin--medium]]
+- [[q-flow-basics--kotlin--easy]]
+
+## MOC-ссылки (RU)
+
+- [[moc-kotlin]]
+
+## MOC Links (EN)
 
 - [[moc-kotlin]]

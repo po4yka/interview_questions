@@ -2,7 +2,7 @@
 id: lang-080
 title: "Garbage Collector Roots / Корни Garbage Collector"
 aliases: [Garbage Collector Roots, Корни Garbage Collector]
-topic: programming-languages
+topic: kotlin
 subtopics: [garbage-collection, jvm, memory-management]
 question_kind: theory
 difficulty: medium
@@ -12,11 +12,9 @@ status: draft
 moc: moc-kotlin
 related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-garbage-collector-definition--programming-languages--easy]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags: [difficulty/medium, garbage-collection, jvm, kotlin, memory-management, programming-languages]
 ---
-# Что Такое Garbage Collector Roots?
-
 # Вопрос (RU)
 > Что такое Garbage Collector Roots?
 
@@ -27,47 +25,51 @@ tags: [difficulty/medium, garbage-collection, jvm, kotlin, memory-management, pr
 
 ## Ответ (RU)
 
-**Garbage Collector (GC) Roots** — это начальные точки, которые сборщик мусора использует для определения того, какие объекты достижимы (живы) и какие могут быть собраны сборщиком мусора.
+**Garbage Collector (GC) Roots** — это набор корневых ссылок, от которых сборщик мусора (в трассирующих GC, как в JVM) начинает обход графа объектов, чтобы определить, какие объекты достижимы (живы), а какие можно собрать.
 
-**Как работает GC:**
+**Как работает трассирующий GC (упрощённо):**
 
-1. Начать с GC Roots
-2. Пометить все достижимые объекты
-3. Удалить (sweep) недостижимые объекты
+1. Начать обход от всех GC Roots
+2. Пометить все объекты, достижимые по цепочкам ссылок
+3. Освободить (sweep/compact) объекты, которые не были помечены (недостижимы)
 
 **Объект достижим, если к нему можно получить доступ из любого GC Root через цепочку ссылок.**
 
-**Типы GC Roots:**
+Важно: GC Root — это не "любой объект", а конкретные корневые ссылки среды выполнения (стек, статические поля, и т.п.), от которых начинается поиск.
 
-**1. Локальные переменные и параметры**
+**Типы GC Roots (на JVM, в контексте Kotlin/Java):**
+
+**1. Локальные переменные и параметры в активных фреймах стека**
 ```kotlin
 fun example() {
-    val user = User("John")  // GC Root (локальная переменная)
-    // user достижим пока выполняется метод
+    val user = User("John")  // Ссылка в стеке потока учитывается как GC Root
+    // user достижим, пока фрейм метода активен и ссылка доступна
 }
-// После выхода из метода user больше не GC Root
+// После выхода из метода стековый фрейм уничтожается, ссылка перестаёт быть корнем
 ```
 
-**2. Активные фреймы стека потоков**
+**2. Активные потоки и их стеки**
 ```kotlin
 Thread.start {
-    val data = Data()  // GC Root (в активном потоке)
-    // data достижим пока поток выполняется
+    val data = Data()  // Ссылки из активного стека потока считаются корнями
+    // data достижим, пока поток и этот фрейм стека активны
 }
 ```
 
-**3. Статические поля**
+**3. Статические поля (JVM), в том числе через `object` / `companion object` в Kotlin**
 ```kotlin
 object AppConfig {
-    val instance = Config()  // GC Root (статическое поле)
-    // Всегда достижим пока класс загружен
+    val instance = Config()  // Ссылка хранится в статическом поле на JVM и служит GC Root
+    // Ссылка остаётся корнем, пока класс загружен и поле доступно
 }
 ```
 
 **4. JNI ссылки**
 ```kotlin
-// Ссылки из нативного кода
-external fun nativeMethod()  // Может создавать JNI GC Roots
+// Нативный код может хранить ссылки на объекты JVM.
+// Глобальные JNI-ссылки (и некоторые другие управляемые формы ссылок)
+// учитываются как GC Roots до тех пор, пока они не будут освобождены.
+external fun nativeMethod()
 ```
 
 **Пример:**
@@ -76,88 +78,93 @@ external fun nativeMethod()  // Может создавать JNI GC Roots
 class Node(val value: Int, var next: Node? = null)
 
 fun main() {
-    val root = Node(1)  // GC Root (локальная переменная)
+    val root = Node(1)  // Ссылка root в стеке main — часть GC Roots
     root.next = Node(2)
     root.next?.next = Node(3)
 
     // Достижимые: root, Node(2), Node(3)
-    // Все остаются живыми, так как достижимы из GC Root
+    // Все живы, так как достижимы по ссылкам, начиная от GC Root (root в стеке)
 
-    root.next = null  // Node(2) и Node(3) теперь недостижимы
-    // Node(2) и Node(3) могут быть собраны сборщиком мусора
+    root.next = null
+    // Теперь цепочка обрывается: бывшие Node(2) и Node(3) (если на них больше нет ссылок)
+    // становятся недостижимыми и могут быть собраны GC.
 }
 ```
 
-**Пример утечки памяти:**
+**Пример логической утечки памяти:**
 
 ```kotlin
 object Cache {
-    private val data = mutableListOf<Data>()  // GC Root!
+    private val data = mutableListOf<Data>()  // Ссылка на список хранится в статическом поле (через object)
 
     fun add(item: Data) {
         data.add(item)
-        // Элементы никогда не удаляются - утечка памяти!
-        // Все элементы всегда достижимы из статического поля
+        // Если элементы никогда не удаляются и нет других ссылок, список остаётся достижимым как GC Root-цепочка,
+        // поэтому объекты Data не будут собраны — фактическая утечка памяти на уровне логики приложения.
     }
 }
 ```
 
 **Категории:**
 
-| Тип GC Root | Время жизни | Пример |
-|-------------|-------------|--------|
-| Локальные переменные | Выполнение метода | `val x = User()` |
-| Статические поля | Класс загружен | `companion object { val x }` |
-| Активные потоки | Поток выполняется | Переменные в стеке потока |
-| JNI ссылки | Нативный код | Глобальные JNI ссылки |
+| Тип GC Root                   | Время жизни                             | Пример                                |
+|------------------------------|------------------------------------------|----------------------------------------|
+| Локальные переменные в стеке | Пока выполняется соответствующий фрейм  | `val x = User()` в активном методе     |
+| Статические поля             | Пока класс загружен                      | `companion object { val x = ... }`     |
+| Активные потоки              | Пока поток выполняется                   | Переменные в стеке потока              |
+| JNI ссылки                   | Пока JNI-ссылка не освобождена          | Глобальные JNI ссылки                  |
 
 **Резюме:**
 
-GC Roots — это **начальные точки** для сборки мусора. Объекты, достижимые из GC Roots, **остаются живыми**. Объекты, не достижимые, являются **мусором** и будут собраны. Основные типы GC Roots: локальные переменные активных методов, статические поля загруженных классов, активные потоки и JNI ссылки. Понимание GC Roots важно для предотвращения утечек памяти и оптимизации использования памяти.
+GC Roots — это **корневые ссылки среды выполнения**, от которых трассирующий GC начинает поиск. Объекты, достижимые из GC Roots, считаются **живыми**. Объекты, которые не достижимы из ни одного корня, считаются **мусором** и могут быть собраны. Понимание GC Roots важно для предотвращения логических утечек памяти и оптимизации использования памяти.
 
 ## Answer (EN)
 
-**Garbage Collector (GC) Roots** are the starting points that the garbage collector uses to determine which objects are reachable (alive) and which can be garbage collected.
+**Garbage Collector (GC) Roots** are the set of root references from which a tracing garbage collector (such as the JVM GC) starts traversing the object graph to determine which objects are reachable (alive) and which can be collected.
 
-**How GC Works:**
+**How a tracing GC works (simplified):**
 
-1. Start from GC Roots
-2. Mark all reachable objects
-3. Sweep (delete) unreachable objects
+1. Start traversal from all GC Roots
+2. Mark all objects reachable via chains of references
+3. Sweep/compact objects that were not marked (unreachable)
 
 **An object is reachable if it can be accessed from any GC Root through a chain of references.**
 
-**Types of GC Roots:**
+Important: a GC Root is not "any object"; it is a special root reference managed by the runtime (stack, static fields, etc.) from which reachability analysis starts.
 
-**1. Local Variables & Parameters**
+**Types of GC Roots (on the JVM, in Kotlin/Java context):**
+
+**1. Local Variables & Parameters in Active Stack Frames**
 ```kotlin
 fun example() {
-    val user = User("John")  // GC Root (local variable)
-    // user is reachable while method is executing
+    val user = User("John")  // The reference in the thread's stack frame is treated as part of GC Roots
+    // user is reachable while the frame is active and the reference is live
 }
-// After method exits, user is no longer a GC Root
+// After the method exits, the frame is removed and this reference is no longer a root
 ```
 
-**2. Active Thread Stack Frames**
+**2. Active Thread Stack Frames / Threads**
 ```kotlin
 Thread.start {
-    val data = Data()  // GC Root (in active thread)
-    // data is reachable while thread is running
+    val data = Data()  // References from an active thread stack are considered roots
+    // data is reachable while the thread (and this frame) is active
 }
 ```
 
-**3. Static Fields**
+**3. Static Fields (JVM), including Kotlin `object` / `companion object`**
 ```kotlin
 object AppConfig {
-    val instance = Config()  // GC Root (static field)
-    // Always reachable while class is loaded
+    val instance = Config()  // Stored in a JVM static field; that static reference is a GC Root
+    // The reference remains a root while the class is loaded and the field is present
 }
 ```
 
 **4. JNI References**
 ```kotlin
-// Native code references
-external fun nativeMethod()  // May create JNI GC Roots
+// Native code can hold references to JVM objects.
+// Global (and certain managed) JNI references are treated as GC Roots
+// until they are explicitly released.
+external fun nativeMethod()
 ```
 
 **Example:**
@@ -166,46 +173,64 @@ external fun nativeMethod()  // May create JNI GC Roots
 class Node(val value: Int, var next: Node? = null)
 
 fun main() {
-    val root = Node(1)  // GC Root (local variable)
+    val root = Node(1)  // The `root` variable on the main stack acts as a root reference
     root.next = Node(2)
     root.next?.next = Node(3)
 
     // Reachable: root, Node(2), Node(3)
-    // All are kept alive because reachable from GC Root
+    // All are kept alive because they are reachable from a GC Root reference (`root`)
 
-    root.next = null  // Node(2) and Node(3) now unreachable
-    // Node(2) and Node(3) can be garbage collected
+    root.next = null
+    // Now the chain is broken: Node(2) and Node(3) (assuming no other references)
+    // become unreachable and can be garbage collected.
 }
 ```
 
-**Memory Leak Example:**
+**Memory Leak Example (logical leak):**
 
 ```kotlin
 object Cache {
-    private val data = mutableListOf<Data>()  // GC Root!
+    private val data = mutableListOf<Data>()  // The list reference is in a JVM static field (via object)
 
     fun add(item: Data) {
         data.add(item)
-        // Items never removed - memory leak!
-        // All items are always reachable from static field
+        // If items are never removed and there are no other constraints,
+        // they remain reachable through this root chain → effective memory leak at app logic level.
     }
 }
 ```
 
 **Categories:**
 
-| GC Root Type | Lifetime | Example |
-|--------------|----------|---------|
-| Local variables | Method execution | `val x = User()` |
-| Static fields | Class loaded | `companion object { val x }` |
-| Active threads | Thread running | Thread stack variables |
-| JNI references | Native code | JNI global refs |
+| GC Root Type        | Lifetime                           | Example                              |
+|---------------------|------------------------------------|--------------------------------------|
+| Local variables     | While the stack frame is executing | `val x = User()` in an active method |
+| Static fields       | While the class is loaded          | `companion object { val x = ... }`   |
+| Active threads      | While the thread is running        | Thread stack variables                |
+| JNI references      | While the JNI ref is not released  | JNI global references                 |
 
 **Summary:**
 
-GC Roots are the **starting points** for garbage collection. Objects reachable from GC Roots are **kept alive**. Objects not reachable are **garbage** and will be collected.
+GC Roots are the **runtime root references** from which a tracing garbage collector starts reachability analysis. Objects reachable from GC Roots are **kept alive**. Objects not reachable from any root are **garbage** and may be collected.
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого подхода от Java?
+- Когда вы бы применили это на практике?
+- Каковы распространенные ошибки и подводные камни?
+
+## Ссылки (RU)
+
+- [[c-garbage-collection]]
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-extension-properties--programming-languages--medium]]
+- [[q-java-lambda-type--programming-languages--easy]]
+- [[q-inheritance-vs-composition--oop--medium]]
 
 ## Follow-ups
 
@@ -215,6 +240,7 @@ GC Roots are the **starting points** for garbage collection. Objects reachable f
 
 ## References
 
+- [[c-garbage-collection]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions

@@ -1,16 +1,14 @@
 ---
 id: kotlin-014
 title: "Kotlin Scope Functions / Функции области видимости в Kotlin"
-aliases: ["Kotlin Scope Functions, Функции области видимости в Kotlin"]
+aliases: ["Kotlin Scope Functions", "Функции области видимости в Kotlin"]
 
 # Classification
 topic: kotlin
 subtopics:
   - apply
   - let
-  - run
   - scope-functions
-  - with
 question_kind: theory
 difficulty: medium
 
@@ -23,11 +21,11 @@ source_note: Kirchhoff Android Interview Questions repository
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-data-sealed-classes-definition--programming-languages--hard, q-kotlin-crossinline--programming-languages--hard, q-testing-coroutines-runtest--kotlin--medium]
+related: [c-kotlin, q-testing-coroutines-runtest--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-11-09
 
 tags: [also, apply, difficulty/medium, kotlin, let, run, scope-functions, with]
 ---
@@ -38,6 +36,7 @@ tags: [also, apply, difficulty/medium, kotlin, let, run, scope-functions, with]
 
 # Question (EN)
 > What are scope functions in Kotlin?
+
 ## Ответ (RU)
 
 Стандартная библиотека Kotlin содержит несколько функций, единственная цель которых — выполнить блок кода в контексте объекта. Когда вы вызываете такую функцию на объекте с предоставленным лямбда-выражением, она формирует временную область видимости. В этой области видимости вы можете получить доступ к объекту без его имени. Такие функции называются **функциями области видимости**. Их пять: `let`, `run`, `with`, `apply` и `also`.
@@ -84,9 +83,9 @@ fun main() {
 }
 ```
 
-**this**. `run`, `with` и `apply` ссылаются на контекстный объект как на получателя лямбды - по ключевому слову `this`. Следовательно, в их лямбдах объект доступен так, как он был бы доступен в обычных функциях класса. В большинстве случаев вы можете опустить this при доступе к членам объекта-получателя, делая код короче. С другой стороны, если `this` опущен, может быть трудно отличить члены получателя от внешних объектов или функций. Таким образом, наличие контекстного объекта в качестве получателя (`this`) рекомендуется для лямбд, которые в основном работают с членами объекта: вызывают его функции или присваивают свойства.
+**this**. `run`, `with` и `apply` ссылаются на контекстный объект как на получателя лямбды - по ключевому слову `this`. Следовательно, в их лямбдах объект доступен так, как он был бы доступен в обычных функциях класса. В большинстве случаев вы можете опустить `this` при доступе к членам объекта-получателя, делая код короче. С другой стороны, если `this` опущен, может быть трудно отличить члены получателя от внешних объектов или функций. Таким образом, наличие контекстного объекта в качестве получателя (`this`) рекомендуется для лямбд, которые в основном работают с членами объекта: вызывают его функции или присваивают свойства.
 
-**it**. В свою очередь, `let` и `also` имеют контекстный объект в качестве аргумента лямбды. Если имя аргумента не указано, к объекту осуществляется доступ по неявному имени по умолчанию it. `it` короче, чем `this`, и выражения с `it` обычно легче читать. Однако при вызове функций или свойств объекта у вас нет объекта, доступного неявно, как this. Следовательно, наличие контекстного объекта в качестве `it` лучше, когда объект в основном используется в качестве аргумента в вызовах функций. `it` также лучше, если вы используете несколько переменных в блоке кода.
+**it**. В свою очередь, `let` и `also` имеют контекстный объект в качестве аргумента лямбды. Если имя аргумента не указано, к объекту осуществляется доступ по неявному имени по умолчанию `it`. `it` короче, чем `this`, и выражения с `it` обычно легче читать. Однако при вызове функций или свойств объекта у вас нет объекта, доступного неявно, как `this`. Следовательно, наличие контекстного объекта в качестве `it` лучше, когда объект в основном используется в качестве аргумента в вызовах функций. `it` также лучше, если вы используете несколько переменных в блоке кода.
 
 #### Возвращаемое Значение
 
@@ -108,7 +107,7 @@ numberList.also { println("Populating the list") }
     .sort()
 ```
 
-Они также могут использоваться в операторах return функций, возвращающих контекстный объект.
+Они также могут использоваться в операторах `return` функций, возвращающих контекстный объект.
 
 ```kotlin
 fun getRandomInt(): Int {
@@ -167,7 +166,7 @@ numbers.map { it.length }.filter { it > 3 }.let {
 }
 ```
 
-`let` часто используется для выполнения блока кода только с non-null значениями. Чтобы выполнить действия на non-null объекте, используйте оператор безопасного вызова ?. на нем и вызовите let с действиями в его лямбде.
+`let` часто используется для выполнения блока кода только с non-null значениями. Чтобы выполнить действия на non-null объекте, используйте оператор безопасного вызова `?.` на нем и вызовите `let` с действиями в его лямбде.
 
 ```kotlin
 val str: String? = "Hello"
@@ -194,7 +193,7 @@ println("First item after modifications: '$modifiedFirstItem'")
 
 Функция-не-расширение: **контекстный объект** передается в качестве аргумента, но внутри лямбды он доступен как получатель (`this`). **Возвращаемое значение** — результат лямбды.
 
-Мы рекомендуем `with` для вызова функций на контекстном объекте без предоставления результата лямбды. В коде `with` можно читать как *"с этим объектом, сделай следующее."*
+Мы рекомендуем `with` для вызова функций на контекстном объекте без предоставления результата лямбды. В коде `with` можно читать как "с этим объектом, сделай следующее."
 
 ```kotlin
 val numbers = mutableListOf("one", "two", "three")
@@ -217,7 +216,7 @@ println(firstAndLast)
 
 #### Run
 
-**Контекстный объект** доступен как получатель (this). **Возвращаемое значение** — результат лямбды.
+**Контекстный объект** доступен как получатель (`this`). **Возвращаемое значение** — результат лямбды.
 
 `run` делает то же самое, что `with`, но вызывается как `let` - как функция-расширение контекстного объекта.
 
@@ -258,7 +257,7 @@ for (match in hexNumberRegex.findAll("+1234 -FFFF not-a-number")) {
 
 **Контекстный объект** доступен как получатель (`this`). **Возвращаемое значение** — сам объект.
 
-Используйте `apply` для блоков кода, которые не возвращают значение и в основном работают с членами объекта-получателя. Общий случай для `apply` — конфигурация объекта. Такие вызовы можно читать как *"применить следующие присваивания к объекту."*
+Используйте `apply` для блоков кода, которые не возвращают значение и в основном работают с членами объекта-получателя. Общий случай для `apply` — конфигурация объекта. Такие вызовы можно читать как "применить следующие присваивания к объекту."
 
 ```kotlin
 val adam = Person("Adam").apply {
@@ -272,11 +271,11 @@ println(adam)
 
 #### Also
 
-**Контекстный объект** доступен как аргумент (it). **Возвращаемое значение** — сам объект.
+**Контекстный объект** доступен как аргумент (`it`). **Возвращаемое значение** — сам объект.
 
 `also` хорош для выполнения некоторых действий, которые принимают контекстный объект в качестве аргумента. Используйте `also` для действий, которым нужна ссылка скорее на объект, чем на его свойства и функции, или когда вы не хотите затенить ссылку `this` из внешней области видимости.
 
-Когда вы видите `also` в коде, вы можете прочитать это как *"и также сделать следующее с объектом."*
+Когда вы видите `also` в коде, вы можете прочитать это как "и также сделать следующее с объектом."
 
 ```kotlin
 val numbers = mutableListOf("one", "two", "three")
@@ -345,9 +344,9 @@ fun main() {
 }
 ```
 
-**this**. `run`, `with`, and `apply` refer to the context object as a lambda receiver - by keyword `this`. Hence, in their lambdas, the object is available as it would be in ordinary class functions. In most cases, you can omit this when accessing the members of the receiver object, making the code shorter. On the other hand, if `this` is omitted, it can be hard to distinguish between the receiver members and external objects or functions. So, having the context object as a receiver (`this`) is recommended for lambdas that mainly operate on the object members: call its functions or assign properties.
+**this**. `run`, `with`, and `apply` refer to the context object as a lambda receiver - by keyword `this`. Hence, in their lambdas, the object is available as it would be in ordinary class functions. In most cases, you can omit `this` when accessing the members of the receiver object, making the code shorter. On the other hand, if `this` is omitted, it can be hard to distinguish between the receiver members and external objects or functions. So, having the context object as a receiver (`this`) is recommended for lambdas that mainly operate on the object members: call its functions or assign properties.
 
-**it**. In turn, `let` and `also` have the context object as a lambda argument. If the argument name is not specified, the object is accessed by the implicit default name it. `it` is shorter than `this` and expressions with `it` are usually easier for reading. However, when calling the object functions or properties you don't have the object available implicitly like this. Hence, having the context object as `it` is better when the object is mostly used as an argument in function calls. `it` is also better if you use multiple variables in the code block.
+**it**. In turn, `let` and `also` have the context object as a lambda argument. If the argument name is not specified, the object is accessed by the implicit default name `it`. `it` is shorter than `this` and expressions with `it` are usually easier for reading. However, when calling the object functions or properties you don't have the object available implicitly like `this`. Hence, having the context object as `it` is better when the object is mostly used as an argument in function calls. `it` is also better if you use multiple variables in the code block.
 
 #### Return Value
 
@@ -428,7 +427,7 @@ numbers.map { it.length }.filter { it > 3 }.let {
 }
 ```
 
-`let` is often used for executing a code block only with non-null values. To perform actions on a non-null object, use the safe call operator ?. on it and call let with the actions in its lambda.
+`let` is often used for executing a code block only with non-null values. To perform actions on a non-null object, use the safe call operator `?.` on it and call `let` with the actions in its lambda.
 
 ```kotlin
 val str: String? = "Hello"
@@ -455,7 +454,7 @@ println("First item after modifications: '$modifiedFirstItem'")
 
 A non-extension function: **the context object** is passed as an argument, but inside the lambda, it's available as a receiver (`this`). **The return value** is the lambda result.
 
-We recommend `with` for calling functions on the context object without providing the lambda result. In the code, `with` can be read as *"with this object, do the following."*
+We recommend `with` for calling functions on the context object without providing the lambda result. In the code, `with` can be read as "with this object, do the following."
 
 ```kotlin
 val numbers = mutableListOf("one", "two", "three")
@@ -478,7 +477,7 @@ println(firstAndLast)
 
 #### Run
 
-**The context object** is available as a receiver (this). **The return value** is the lambda result.
+**The context object** is available as a receiver (`this`). **The return value** is the lambda result.
 
 `run` does the same as `with` but invokes as `let` - as an extension function of the context object.
 
@@ -519,7 +518,7 @@ for (match in hexNumberRegex.findAll("+1234 -FFFF not-a-number")) {
 
 **The context object** is available as a receiver (`this`). **The return value** is the object itself.
 
-Use `apply` for code blocks that don't return a value and mainly operate on the members of the receiver object. The common case for `apply` is the object configuration. Such calls can be read as *"apply the following assignments to the object."*
+Use `apply` for code blocks that don't return a value and mainly operate on the members of the receiver object. The common case for `apply` is the object configuration. Such calls can be read as "apply the following assignments to the object."
 
 ```kotlin
 val adam = Person("Adam").apply {
@@ -533,11 +532,11 @@ Having the receiver as the return value, you can easily include `apply` into cal
 
 #### Also
 
-**The context object** is available as an argument (it). **The return value** is the object itself.
+**The context object** is available as an argument (`it`). **The return value** is the object itself.
 
 `also` is good for performing some actions that take the context object as an argument. Use `also` for actions that need a reference rather to the object than to its properties and functions, or when you don't want to shadow `this` reference from an outer scope.
 
-When you see `also` in the code, you can read it as *"and also do the following with the object."*
+When you see `also` in the code, you can read it as "and also do the following with the object."
 
 ```kotlin
 val numbers = mutableListOf("one", "two", "three")
@@ -558,15 +557,34 @@ Here is a short guide for choosing scope functions depending on the intended pur
 - Additional effects: `also`
 - Grouping function calls on an object: `with`
 
+## Дополнительные вопросы (RU)
+
+- Каковы ключевые отличия этого подхода от Java?
+- Когда вы бы использовали это на практике?
+- Какие распространенные ошибки следует избегать?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
-## References
+## Ссылки (RU)
+
 - [Scope functions](https://kotlinlang.org/docs/reference/scope-functions.html)
+- [[c-kotlin]]
+
+## References
+
+- [Scope functions](https://kotlinlang.org/docs/reference/scope-functions.html)
+- [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-extension-functions--kotlin--medium]]
+- [[q-kotlin-null-safety--kotlin--medium]]
 
 ## Related Questions
+
 - [[q-kotlin-extension-functions--kotlin--medium]]
 - [[q-kotlin-null-safety--kotlin--medium]]

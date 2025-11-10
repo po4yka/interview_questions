@@ -1,21 +1,20 @@
 ---
 id: kotlin-218
-title: "Executor Service Java / ExecutorService в Java"
-aliases: [Executor, Java, Service]
+title: "ExecutorService in Java: How It Works"
+aliases: [Executor, ExecutorService, Java]
 topic: kotlin
-subtopics: [access-modifiers, class-features, type-system]
+subtopics: [c-kotlin, c-java-features, c-concepts--kotlin--medium]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-inline-functions--kotlin--medium, q-kotlin-partition-function--programming-languages--easy]
+related: [c-kotlin, c-java-features, q-kotlin-inline-functions--kotlin--medium, q-kotlin-partition-function--programming-languages--easy]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/medium]
 ---
-# Как Работают Executor И ExecutorService?
 
 # Вопрос (RU)
 > Как работают Executor и ExecutorService в Java?
@@ -23,7 +22,7 @@ tags: [difficulty/medium]
 ---
 
 # Question (EN)
-> How does Executor and ExecutorService work in Java?
+> How do Executor and ExecutorService work in Java?
 
 ## Ответ (RU)
 
@@ -68,7 +67,7 @@ public interface ExecutorService extends Executor {
     List<Runnable> shutdownNow();
     boolean isShutdown();
     boolean isTerminated();
-    boolean awaitTermination(long timeout, TimeUnit unit);
+    boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException;
 
     // Выполнение задач с результатом
     <T> Future<T> submit(Callable<T> task);
@@ -76,8 +75,8 @@ public interface ExecutorService extends Executor {
     <T> Future<T> submit(Runnable task, T result);
 
     // Массовое выполнение
-    <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks);
-    <T> T invokeAny(Collection<? extends Callable<T>> tasks);
+    <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException;
+    <T> T invokeAny(Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException;
 }
 ```
 
@@ -88,7 +87,7 @@ public interface ExecutorService extends Executor {
 ExecutorService executor = Executors.newFixedThreadPool(4);
 
 try {
-    // Submit задачи с результатом
+    // Submit задачи с результатом (Callable)
     Future<Integer> future = executor.submit(() -> {
         Thread.sleep(1000);
         return 42;
@@ -98,7 +97,7 @@ try {
     Integer result = future.get();
     System.out.println("Result: " + result);
 
-    // Submit задачи без результата
+    // Submit задачи без результата (Runnable)
     executor.submit(() -> {
         System.out.println("Task executed in: " + Thread.currentThread().getName());
     });
@@ -113,8 +112,13 @@ try {
     executor.shutdown();
 
     // Ждать завершения всех задач
-    if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
-        executor.shutdownNow(); // Force shutdown
+    try {
+        if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
+            executor.shutdownNow(); // Force shutdown
+        }
+    } catch (InterruptedException e) {
+        executor.shutdownNow();
+        Thread.currentThread().interrupt();
     }
 }
 ```
@@ -129,13 +133,17 @@ try {
 // Создать пул с 4 потоками
 ExecutorService executor = Executors.newFixedThreadPool(4);
 
-// Отправить 10 задач - только 4 будут выполняться одновременно
+// Отправить 10 задач - одновременно будет выполняться не более 4 задач
 for (int i = 0; i < 10; i++) {
     final int taskId = i;
     executor.submit(() -> {
         System.out.println("Task " + taskId + " on " + Thread.currentThread().getName());
-        Thread.sleep(1000);
-        return taskId;
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return taskId; // Используем Callable, чтобы показать возвращаемое значение
     });
 }
 
@@ -162,7 +170,7 @@ for (int i = 0; i < 100; i++) {
 executor.shutdown();
 ```
 
-**Use case**: Много коротких асинхронных задач. Потоки переиспользуются, неактивные убираются через 60 секунд.
+**Use case**: Много коротких асинхронных задач. Потоки переиспользуются, неактивные потоки завершаются (по умолчанию keep-alive около 60 секунд).
 
 #### SingleThreadExecutor
 
@@ -179,7 +187,7 @@ executor.submit(() -> System.out.println("Task 3"));
 executor.shutdown();
 ```
 
-**Use case**: Гарантированная последовательность выполнения (альтернатива synchronized блокам).
+**Use case**: Гарантированная последовательность выполнения (альтернатива ручной синхронизации для некоторого состояния).
 
 #### ScheduledThreadPool
 
@@ -193,7 +201,7 @@ scheduler.schedule(() -> {
     System.out.println("Delayed task");
 }, 5, TimeUnit.SECONDS);
 
-// Повторять каждые 3 секунды
+// Повторять каждые 3 секунды (фиксированный период от старта предыдущей задачи)
 scheduler.scheduleAtFixedRate(() -> {
     System.out.println("Periodic task: " + System.currentTimeMillis());
 }, 0, 3, TimeUnit.SECONDS); // initialDelay=0, period=3
@@ -201,8 +209,12 @@ scheduler.scheduleAtFixedRate(() -> {
 // Повторять с задержкой 2 секунды после завершения предыдущей
 scheduler.scheduleWithFixedDelay(() -> {
     System.out.println("Task with delay");
-    Thread.sleep(1000); // Задача занимает 1 сек
-}, 0, 2, TimeUnit.SECONDS); // Следующая через 1+2=3 сек после старта
+    try {
+        Thread.sleep(1000); // Задача занимает ~1 сек
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+}, 0, 2, TimeUnit.SECONDS); // Следующий запуск планируется через 2 сек после завершения предыдущего
 
 // Остановить через 30 секунд
 scheduler.schedule(() -> {
@@ -247,6 +259,8 @@ executor.shutdown();
 #### Future С Timeout
 
 ```java
+ExecutorService executor = Executors.newSingleThreadExecutor();
+
 Future<String> future = executor.submit(() -> {
     Thread.sleep(5000);
     return "Late result";
@@ -257,27 +271,40 @@ try {
     String result = future.get(2, TimeUnit.SECONDS);
 } catch (TimeoutException e) {
     System.out.println("Task took too long");
-    future.cancel(true); // Прервать задачу
+    future.cancel(true); // Прервать задачу (если поддерживает прерывание)
+} catch (InterruptedException | ExecutionException e) {
+    Thread.currentThread().interrupt();
 }
+
+executor.shutdown();
 ```
 
 #### Отмена Задач
 
 ```java
+ExecutorService executor = Executors.newSingleThreadExecutor();
+
 Future<Integer> future = executor.submit(() -> {
     for (int i = 0; i < 100; i++) {
         if (Thread.currentThread().isInterrupted()) {
             System.out.println("Task was cancelled");
             return -1;
         }
-        Thread.sleep(100);
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return -1;
+        }
     }
     return 100;
 });
 
 // Отменить через 1 секунду
 Thread.sleep(1000);
-future.cancel(true); // true = прервать поток если задача уже запущена
+future.cancel(true); // true = попытаться прервать, если задача уже запущена
+
+executor.shutdown();
 ```
 
 ### 5. invokeAll И invokeAny
@@ -315,10 +342,10 @@ List<Callable<String>> tasks = Arrays.asList(
 
 ExecutorService executor = Executors.newFixedThreadPool(3);
 
-// Вернуть результат первой завершенной задачи
-// Остальные будут отменены
+// Вернуть результат первой успешно завершенной задачи
+// Остальные будут отменены и/или прерваны (в зависимости от реализации и кода задач)
 String result = executor.invokeAny(tasks);
-System.out.println("First result: " + result); // "Fast task"
+System.out.println("First result: " + result); // Ожидаемо "Fast task"
 
 executor.shutdown();
 ```
@@ -358,7 +385,7 @@ for (int i = 0; i < 200; i++) {
     });
 }
 
-// Статистика
+// Статистика (могут измениться к моменту вызова)
 System.out.println("Active threads: " + executor.getActiveCount());
 System.out.println("Pool size: " + executor.getPoolSize());
 System.out.println("Queue size: " + executor.getQueue().size());
@@ -368,20 +395,20 @@ executor.shutdown();
 
 ### 7. Rejection Policies
 
-Политики обработки когда очередь заполнена:
+Политики обработки, когда очередь заполнена и пул не может принять новую задачу:
 
 ```java
 // 1. AbortPolicy (по умолчанию) - выбросить RejectedExecutionException
-new ThreadPoolExecutor.AbortPolicy()
+new ThreadPoolExecutor.AbortPolicy();
 
 // 2. CallerRunsPolicy - выполнить в вызывающем потоке
-new ThreadPoolExecutor.CallerRunsPolicy()
+new ThreadPoolExecutor.CallerRunsPolicy();
 
 // 3. DiscardPolicy - тихо отбросить задачу
-new ThreadPoolExecutor.DiscardPolicy()
+new ThreadPoolExecutor.DiscardPolicy();
 
-// 4. DiscardOldestPolicy - отбросить самую старую задачу
-new ThreadPoolExecutor.DiscardOldestPolicy()
+// 4. DiscardOldestPolicy - отбросить самую старую задачу в очереди и попробовать добавить новую
+new ThreadPoolExecutor.DiscardOldestPolicy();
 
 // 5. Custom policy
 new RejectedExecutionHandler() {
@@ -390,13 +417,13 @@ new RejectedExecutionHandler() {
         // Логирование, метрики, retry логика
         System.err.println("Task rejected: " + r);
     }
-}
+};
 ```
 
 ### 8. Android Использование
 
 ```kotlin
-// Android - использовать Executors для фоновых задач
+// Android - пример использования Executor для фоновых задач в Java-стиле
 class UserRepository(private val apiService: ApiService) {
     private val executor = Executors.newFixedThreadPool(4)
 
@@ -409,7 +436,7 @@ class UserRepository(private val apiService: ApiService) {
                     callback(users)
                 }
             } catch (e: Exception) {
-                // Handle error
+                // TODO: handle error / callback on error
             }
         }
     }
@@ -419,8 +446,9 @@ class UserRepository(private val apiService: ApiService) {
     }
 }
 
-// Современный подход - использовать Coroutines или WorkManager
-// Executor подходит для простых случаев или Java кода
+// На практике в Android для долгоживущих и UI-связанных задач
+// обычно предпочтительны Coroutines (Dispatchers.IO) или WorkManager.
+// Executor полезен для простых случаев или Java-кода без корутин.
 ```
 
 ### Сравнительная Таблица
@@ -428,13 +456,15 @@ class UserRepository(private val apiService: ApiService) {
 | Тип | Потоки | Use Case | Преимущества |
 |-----|--------|----------|--------------|
 | **FixedThreadPool** | Фиксированное кол-во | Ограничение параллелизма | Контроль ресурсов |
-| **CachedThreadPool** | Динамическое | Много коротких задач | Переиспользование |
+| **CachedThreadPool** | Динамическое | Много коротких задач | Переиспользование потоков |
 | **SingleThreadExecutor** | 1 | Последовательное выполнение | Гарантия порядка |
-| **ScheduledThreadPool** | Фиксированное кол-во | Отложенные/периодические | Scheduling |
+| **ScheduledThreadPool** | Фиксированное кол-во | Отложенные/периодические задачи | Scheduling |
 
 ### Best Practices
 
 ```java
+ExecutorService executor = Executors.newFixedThreadPool(4);
+
 // 1. Всегда закрывать executor
 executor.shutdown();
 try {
@@ -446,9 +476,9 @@ try {
     Thread.currentThread().interrupt();
 }
 
-// 2. Использовать try-with-resources (Java 19+)
-try (ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor()) {
-    executor.submit(() -> System.out.println("Task"));
+// 2. Использовать try-with-resources для Executor, реализующего AutoCloseable (например, Executors.newVirtualThreadPerTaskExecutor() в новых версиях Java)
+try (ExecutorService vExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
+    vExecutor.submit(() -> System.out.println("Task"));
 } // Автоматически закроется
 
 // 3. Обрабатывать исключения в задачах
@@ -461,7 +491,7 @@ executor.submit(() -> {
     }
 });
 
-// 4. Использовать CompletableFuture для composition (Java 8+)
+// 4. Использовать CompletableFuture для композиции асинхронных операций (Java 8+)
 CompletableFuture<String> future = CompletableFuture.supplyAsync(
     () -> "Hello",
     executor
@@ -470,30 +500,411 @@ CompletableFuture<String> future = CompletableFuture.supplyAsync(
 
 ## Answer (EN)
 
-**Executor** is a basic interface with `execute(Runnable)` method for task execution. **ExecutorService** extends it with lifecycle management (`shutdown()`, `awaitTermination()`) and result-returning methods (`submit(Callable)`, `invokeAll()`, `invokeAny()`).
+Executor is an interface from `java.util.concurrent` with a single `execute(Runnable)` method that decouples task submission from execution.
 
-**Types:**
-- **FixedThreadPool**: Fixed number of threads for controlled parallelism
-- **CachedThreadPool**: Dynamic thread creation, reuses idle threads
-- **SingleThreadExecutor**: One thread for sequential execution
-- **ScheduledThreadPool**: Delayed and periodic task execution
+### 1. Basic Executor Interface
 
-**Future** represents async result with `get()`, `cancel()`, `isDone()`. **ThreadPoolExecutor** allows custom configuration (core/max pool size, queue, rejection policies). Always call `shutdown()` and handle exceptions in tasks.
+```java
+public interface Executor {
+    void execute(Runnable command);
+}
+
+class DirectExecutor implements Executor {
+    @Override
+    public void execute(Runnable command) {
+        command.run();
+    }
+}
+
+class ThreadPerTaskExecutor implements Executor {
+    @Override
+    public void execute(Runnable command) {
+        new Thread(command).start();
+    }
+}
+
+Executor executor = new ThreadPerTaskExecutor();
+executor.execute(() -> System.out.println("Task executed"));
+```
+
+### 2. ExecutorService
+
+ExecutorService extends Executor and adds lifecycle management and result-bearing task APIs.
+
+```java
+public interface ExecutorService extends Executor {
+    void shutdown();
+    List<Runnable> shutdownNow();
+    boolean isShutdown();
+    boolean isTerminated();
+    boolean awaitTermination(long timeout, TimeUnit unit) throws InterruptedException;
+
+    <T> Future<T> submit(Callable<T> task);
+    Future<?> submit(Runnable task);
+    <T> Future<T> submit(Runnable task, T result);
+
+    <T> List<Future<T>> invokeAll(Collection<? extends Callable<T>> tasks) throws InterruptedException;
+    <T> T invokeAny(Collection<? extends Callable<T>> tasks) throws InterruptedException, ExecutionException;
+}
+```
+
+Example usage:
+
+```java
+ExecutorService executor = Executors.newFixedThreadPool(4);
+
+try {
+    Future<Integer> future = executor.submit(() -> {
+        Thread.sleep(1000);
+        return 42;
+    });
+
+    Integer result = future.get();
+    System.out.println("Result: " + result);
+
+    executor.submit(() -> {
+        System.out.println("Task executed in: " + Thread.currentThread().getName());
+    });
+
+    executor.execute(() -> {
+        System.out.println("Another task");
+    });
+
+} finally {
+    executor.shutdown();
+    try {
+        if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
+            executor.shutdownNow();
+        }
+    } catch (InterruptedException e) {
+        executor.shutdownNow();
+        Thread.currentThread().interrupt();
+    }
+}
+```
+
+### 3. Types of ExecutorService
+
+- FixedThreadPool: fixed number of threads, limits concurrency and controls resources.
+- CachedThreadPool: creates threads as needed, reuses idle threads, good for many short tasks.
+- SingleThreadExecutor: single worker thread, guarantees sequential execution.
+- ScheduledThreadPool (ScheduledExecutorService): delayed and periodic task execution.
+
+```java
+// FixedThreadPool example
+ExecutorService executor = Executors.newFixedThreadPool(4);
+for (int i = 0; i < 10; i++) {
+    final int taskId = i;
+    executor.submit(() -> {
+        System.out.println("Task " + taskId + " on " + Thread.currentThread().getName());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return taskId;
+    });
+}
+executor.shutdown();
+```
+
+```java
+// CachedThreadPool example
+ExecutorService cached = Executors.newCachedThreadPool();
+for (int i = 0; i < 100; i++) {
+    cached.submit(() -> System.out.println("Quick task on " + Thread.currentThread().getName()));
+}
+cached.shutdown();
+```
+
+```java
+// SingleThreadExecutor example
+ExecutorService single = Executors.newSingleThreadExecutor();
+single.submit(() -> System.out.println("Task 1"));
+single.submit(() -> System.out.println("Task 2"));
+single.submit(() -> System.out.println("Task 3"));
+single.shutdown();
+```
+
+```java
+// ScheduledThreadPool example
+ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(2);
+
+scheduler.schedule(() -> System.out.println("Delayed task"), 5, TimeUnit.SECONDS);
+
+scheduler.scheduleAtFixedRate(
+    () -> System.out.println("Periodic task: " + System.currentTimeMillis()),
+    0,
+    3,
+    TimeUnit.SECONDS
+);
+
+scheduler.scheduleWithFixedDelay(
+    () -> {
+        System.out.println("Task with delay");
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    },
+    0,
+    2,
+    TimeUnit.SECONDS
+);
+```
+
+### 4. Future and Callable
+
+```java
+Callable<String> task = () -> {
+    Thread.sleep(2000);
+    return "Result from task";
+};
+
+ExecutorService executor = Executors.newSingleThreadExecutor();
+Future<String> future = executor.submit(task);
+
+System.out.println("Is done: " + future.isDone());
+System.out.println("Is cancelled: " + future.isCancelled());
+
+try {
+    String result = future.get();
+    System.out.println("Result: " + result);
+} catch (ExecutionException e) {
+    System.err.println("Task failed: " + e.getCause());
+} catch (InterruptedException e) {
+    Thread.currentThread().interrupt();
+}
+
+executor.shutdown();
+```
+
+Timeout example:
+
+```java
+ExecutorService executor = Executors.newSingleThreadExecutor();
+
+Future<String> future = executor.submit(() -> {
+    Thread.sleep(5000);
+    return "Late result";
+});
+
+try {
+    String result = future.get(2, TimeUnit.SECONDS);
+} catch (TimeoutException e) {
+    System.out.println("Task took too long");
+    future.cancel(true);
+} catch (InterruptedException | ExecutionException e) {
+    Thread.currentThread().interrupt();
+}
+
+executor.shutdown();
+```
+
+Cancellation example:
+
+```java
+ExecutorService executor = Executors.newSingleThreadExecutor();
+
+Future<Integer> future = executor.submit(() -> {
+    for (int i = 0; i < 100; i++) {
+        if (Thread.currentThread().isInterrupted()) {
+            System.out.println("Task was cancelled");
+            return -1;
+        }
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return -1;
+        }
+    }
+    return 100;
+});
+
+Thread.sleep(1000);
+future.cancel(true);
+
+executor.shutdown();
+```
+
+### 5. invokeAll and invokeAny
+
+```java
+List<Callable<Integer>> tasks = Arrays.asList(
+    () -> { Thread.sleep(1000); return 1; },
+    () -> { Thread.sleep(2000); return 2; },
+    () -> { Thread.sleep(500); return 3; }
+);
+
+ExecutorService executor = Executors.newFixedThreadPool(3);
+List<Future<Integer>> futures = executor.invokeAll(tasks);
+
+for (Future<Integer> f : futures) {
+    System.out.println("Result: " + f.get());
+}
+
+executor.shutdown();
+```
+
+```java
+List<Callable<String>> tasks2 = Arrays.asList(
+    () -> { Thread.sleep(3000); return "Slow task"; },
+    () -> { Thread.sleep(1000); return "Fast task"; },
+    () -> { Thread.sleep(2000); return "Medium task"; }
+);
+
+ExecutorService exec2 = Executors.newFixedThreadPool(3);
+String first = exec2.invokeAny(tasks2);
+System.out.println("First result: " + first);
+exec2.shutdown();
+```
+
+### 6. Custom ThreadPoolExecutor Configuration
+
+```java
+ThreadPoolExecutor executor = new ThreadPoolExecutor(
+    2,
+    4,
+    60L,
+    TimeUnit.SECONDS,
+    new LinkedBlockingQueue<>(100),
+    new ThreadFactory() {
+        private final AtomicInteger counter = new AtomicInteger(0);
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread t = new Thread(r, "MyPool-" + counter.incrementAndGet());
+            t.setDaemon(false);
+            return t;
+        }
+    },
+    new ThreadPoolExecutor.CallerRunsPolicy()
+);
+
+for (int i = 0; i < 200; i++) {
+    final int taskId = i;
+    executor.execute(() -> {
+        System.out.println("Task " + taskId + " on " + Thread.currentThread().getName());
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+    });
+}
+
+System.out.println("Active threads: " + executor.getActiveCount());
+System.out.println("Pool size: " + executor.getPoolSize());
+System.out.println("Queue size: " + executor.getQueue().size());
+
+executor.shutdown();
+```
+
+### 7. Rejection Policies
+
+```java
+new ThreadPoolExecutor.AbortPolicy();      // throws RejectedExecutionException
+new ThreadPoolExecutor.CallerRunsPolicy(); // runs in caller thread
+new ThreadPoolExecutor.DiscardPolicy();    // silently discards
+new ThreadPoolExecutor.DiscardOldestPolicy(); // drops oldest then retries
+
+new RejectedExecutionHandler() {
+    @Override
+    public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+        System.err.println("Task rejected: " + r);
+    }
+};
+```
+
+### 8. Android Usage
+
+```kotlin
+class UserRepository(private val apiService: ApiService) {
+    private val executor = Executors.newFixedThreadPool(4)
+
+    fun loadUsers(callback: (List<User>) -> Unit) {
+        executor.submit {
+            try {
+                val users = apiService.getUsers()
+                Handler(Looper.getMainLooper()).post {
+                    callback(users)
+                }
+            } catch (e: Exception) {
+                // handle error
+            }
+        }
+    }
+
+    fun shutdown() {
+        executor.shutdown()
+    }
+}
+
+// In modern Android code prefer Kotlin coroutines (Dispatchers.IO) or WorkManager
+// for long-running, structured, or deferrable work, using Executors mainly for
+// interoperability with existing Java-style APIs.
+```
+
+### Comparative Table
+
+| Type | Threads | Use Case | Advantages |
+|------|---------|----------|------------|
+| FixedThreadPool | Fixed number | Limit parallelism | Resource control |
+| CachedThreadPool | Dynamic | Many short tasks | Thread reuse |
+| SingleThreadExecutor | 1 | Sequential execution | Ordering guarantees |
+| ScheduledThreadPool | Fixed number | Delayed/periodic tasks | Scheduling support |
+
+### Best Practices
+
+```java
+ExecutorService executor = Executors.newFixedThreadPool(4);
+
+// Always shut down
+executor.shutdown();
+try {
+    if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
+        executor.shutdownNow();
+    }
+} catch (InterruptedException e) {
+    executor.shutdownNow();
+    Thread.currentThread().interrupt();
+}
+
+// Use try-with-resources for AutoCloseable executors (e.g. virtual thread executor)
+try (ExecutorService vExecutor = Executors.newVirtualThreadPerTaskExecutor()) {
+    vExecutor.submit(() -> System.out.println("Task"));
+}
+
+// Handle exceptions inside tasks
+executor.submit(() -> {
+    try {
+        // Task logic
+    } catch (Exception e) {
+        logger.error("Task failed", e);
+    }
+});
+
+// Use CompletableFuture for async composition
+CompletableFuture<String> future = CompletableFuture
+    .supplyAsync(() -> "Hello", executor)
+    .thenApply(s -> s + " World");
+```
 
 ---
 
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- When would you choose a specific ExecutorService type (fixed, cached, single, scheduled) in practice?
+- How does this compare to using threads directly?
+- What are common pitfalls (thread leaks, deadlocks, blocking in shared pools, lost interruptions)?
 
 ## References
 
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
 
 ## Related Questions
 
--
 - [[q-kotlin-inline-functions--kotlin--medium]]
 - [[q-kotlin-partition-function--programming-languages--easy]]

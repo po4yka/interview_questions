@@ -1,28 +1,28 @@
 ---
 id: kotlin-048
 title: "CoroutineContext explained in detail / CoroutineContext детально"
-aliases: ["CoroutineContext explained in detail, CoroutineContext детально"]
+aliases: ["CoroutineContext explained in detail", "CoroutineContext детально"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutinecontext, coroutines, dispatchers]
+subtopics: [coroutines, dispatchers, flow]
 question_kind: theory
 difficulty: hard
 
 # Language & provenance
 original_language: en
 language_tags: [en, ru]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
+source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-flow-backpressure--kotlin--hard, q-kotlin-sam-conversions--programming-languages--medium, q-testing-coroutine-cancellation--kotlin--medium]
+related: [c-kotlin, c-coroutines, q-flow-backpressure--kotlin--hard]
 
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-11-10
 
 tags: [coroutinecontext, coroutines, difficulty/hard, dispatchers, job, kotlin]
 ---
@@ -33,15 +33,16 @@ tags: [coroutinecontext, coroutines, difficulty/hard, dispatchers, job, kotlin]
 
 # Question (EN)
 > What is CoroutineContext in Kotlin? How does it work and what are its key elements?
+
 ## Ответ (RU)
 
-**CoroutineContext** — это индексированный набор элементов, которые определяют поведение и окружение корутины. Это персистентная структура данных похожая на map.
+**CoroutineContext** — это индексированный набор элементов, которые определяют поведение и окружение корутины. Это персистентная структура данных, похожая на map.
 
 ### Основные Элементы
 
-**1. Job - Жизненный цикл и отмена**
-**2. CoroutineDispatcher - Выполнение на потоках**
-**3. CoroutineName - Имя для отладки**
+**1. Job - Жизненный цикл и отмена**  
+**2. CoroutineDispatcher - Выполнение на потоках**  
+**3. CoroutineName - Имя для отладки**  
 **4. CoroutineExceptionHandler - Обработка исключений**
 
 ```kotlin
@@ -63,7 +64,7 @@ val context2 = CoroutineName("Worker")
 val combined = context1 + context2
 // Результат: Dispatchers.Main + Job + CoroutineName("Worker")
 
-// Добавление заменяет тот же тип
+// Добавление заменяет элемент того же типа
 val replaced = context1 + Dispatchers.IO
 // Результат: Dispatchers.IO + Job (Main заменен на IO)
 ```
@@ -84,7 +85,7 @@ launch(Dispatchers.Main + CoroutineName("UI")) {
 
 ### Наследование Контекста
 
-**Дочерние корутины наследуют родительский контекст:**
+**Дочерние корутины наследуют родительский контекст (элементы, кроме Job, могут быть переопределены):**
 
 ```kotlin
 val parentContext = Dispatchers.Main + CoroutineName("Parent")
@@ -137,11 +138,54 @@ launch(Dispatchers.Main) {
 }
 ```
 
+**3. CoroutineName - Для отладки**
+
+```kotlin
+launch(CoroutineName("DataLoader")) {
+    // Имя корутины включает "DataLoader"
+    // Полезно в логах и отладчике
+}
+```
+
+**4. CoroutineExceptionHandler - Обработка исключений в корутинах верхнего уровня**
+
+```kotlin
+val handler = CoroutineExceptionHandler { _, exception ->
+    Log.e("Coroutine", "Error", exception)
+}
+
+// Обычно используется для корутин верхнего уровня (например, в scope)
+launch(handler) {
+    throw Exception("Failed")
+}
+```
+
+### Реальный пример использования
+
+```kotlin
+class DataViewModel : ViewModel() {
+    private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
+        _errorState.value = exception.toErrorMessage()
+    }
+
+    private val ioContext = Dispatchers.IO + CoroutineName("DataLoader")
+
+    fun loadData() {
+        viewModelScope.launch(exceptionHandler + ioContext) {
+            val data = repository.getData()
+            withContext(Dispatchers.Main) {
+                _uiState.value = UiState.Success(data)
+            }
+        }
+    }
+}
+```
+
 ### Правила Распространения Контекста
 
-**1. Ребенок наследует родительский контекст**
-**2. Ребенок может переопределить специфичные элементы**
-**3. Job НЕ наследуется (ребенок создает новый Job с родителем как parent)**
+**1. Ребенок наследует родительский контекст.**  
+**2. Ребенок может переопределить специфичные элементы.**  
+**3. Job НЕ переиспользуется: для дочерней корутины создается новый Job, у которого родитель — исходный Job.**
 
 ```kotlin
 val parentJob = Job()
@@ -149,12 +193,12 @@ val parentContext = parentJob + Dispatchers.IO
 
 launch(parentContext) {
     val childJob = coroutineContext[Job]
-    println(childJob === parentJob)  // false
+    println(childJob === parentJob)          // false
     println(childJob?.parent === parentJob)  // true
 }
 ```
 
-**Краткое содержание**: CoroutineContext — индексированный набор элементов определяющих поведение корутины. Ключевые элементы: Job (жизненный цикл), CoroutineDispatcher (потоки), CoroutineName (отладка), CoroutineExceptionHandler (ошибки). Контексты комбинируются с `+`, элементы одного типа заменяются. Дети наследуют родительский контекст но могут переопределить. Job особый: ребенок получает новый Job с родителем как parent.
+**Краткое содержание**: **CoroutineContext** — индексированный набор элементов, определяющих поведение корутины. Ключевые элементы: Job (жизненный цикл), CoroutineDispatcher (управление потоками), CoroutineName (имя для отладки), CoroutineExceptionHandler (обработка ошибок). Контексты комбинируются с `+`, элементы одного типа заменяются. Дочерние корутины наследуют родительский контекст, но могут переопределять отдельные элементы. Job — особый: для дочерней корутины создается новый Job с родительским Job в качестве parent. Используйте `CoroutineContext` для управления потоками, навешивания имен для отладки, обработки исключений и управления жизненным циклом корутин.
 
 ---
 
@@ -164,9 +208,9 @@ launch(parentContext) {
 
 ### Core Elements
 
-**1. Job - Lifecycle and cancellation**
-**2. CoroutineDispatcher - Thread execution**
-**3. CoroutineName - Debugging name**
+**1. Job - Lifecycle and cancellation**  
+**2. CoroutineDispatcher - Thread execution**  
+**3. CoroutineName - Debugging name**  
 **4. CoroutineExceptionHandler - Exception handling**
 
 ```kotlin
@@ -188,9 +232,9 @@ val context2 = CoroutineName("Worker")
 val combined = context1 + context2
 // Result: Dispatchers.Main + Job + CoroutineName("Worker")
 
-// Adding replaces same type
+// Adding replaces same type element
 val replaced = context1 + Dispatchers.IO
-// Result: Dispatchers.IO + Job (Main replaced by IO)
+// Result: Dispatchers.IO + Job (`Main` replaced by `IO`)
 ```
 
 ### Accessing Context Elements
@@ -209,7 +253,7 @@ launch(Dispatchers.Main + CoroutineName("UI")) {
 
 ### Context Inheritance
 
-**Child coroutines inherit parent context:**
+**Child coroutines inherit the parent context (elements can be overridden as needed):**
 
 ```kotlin
 val parentContext = Dispatchers.Main + CoroutineName("Parent")
@@ -266,7 +310,7 @@ launch(Dispatchers.Main) {
 
 ```kotlin
 launch(CoroutineName("DataLoader")) {
-    // Thread name includes "DataLoader"
+    // Coroutine name includes "DataLoader"
     // Useful in logs/debugger
 }
 ```
@@ -278,6 +322,7 @@ val handler = CoroutineExceptionHandler { _, exception ->
     Log.e("Coroutine", "Error", exception)
 }
 
+// Commonly used for top-level coroutines in a scope
 launch(handler) {
     throw Exception("Failed")
 }
@@ -306,9 +351,9 @@ class DataViewModel : ViewModel() {
 
 ### Context Propagation Rules
 
-**1. Child inherits parent context**
-**2. Child can override specific elements**
-**3. Job is NOT inherited (child creates new Job with parent as parent)**
+**1. Child inherits parent context.**  
+**2. Child can override specific elements.**  
+**3. Job is NOT reused: a new child Job is created with the parent Job as its parent.**
 
 ```kotlin
 val parentJob = Job()
@@ -316,20 +361,36 @@ val parentContext = parentJob + Dispatchers.IO
 
 launch(parentContext) {
     val childJob = coroutineContext[Job]
-    println(childJob === parentJob)  // false
+    println(childJob === parentJob)          // false
     println(childJob?.parent === parentJob)  // true
 }
 ```
 
-**English Summary**: CoroutineContext is indexed set of elements defining coroutine behavior. Key elements: Job (lifecycle), CoroutineDispatcher (threading), CoroutineName (debugging), CoroutineExceptionHandler (errors). Contexts combine with `+`, same-type elements replace. Children inherit parent context but can override. Job is special: child gets new Job with parent as parent. Use for: controlling threads, naming for debugging, exception handling, lifecycle management.
+**English Summary**: `CoroutineContext` is an indexed set of elements defining coroutine behavior. Key elements: `Job` (lifecycle), `CoroutineDispatcher` (threading), `CoroutineName` (debugging), `CoroutineExceptionHandler` (errors). Contexts combine with `+`, same-type elements replace each other. Children inherit parent context but can override individual elements. `Job` is special: each child has its own `Job` with the parent `Job` set as its parent. Use it for thread control, naming for debugging, exception handling, and lifecycle management.
 
-## Follow-ups
+## Дополнительные вопросы (RU)
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- В чем ключевые отличия подхода к контексту по сравнению с Java-потоками?
+- Когда и как вы бы использовали `CoroutineContext` на практике?
+- Какие распространенные ошибки и подводные камни при работе с `CoroutineContext`?
 
-## References
+## Follow-ups (EN)
+
+- What are the key differences between this and Java threads?
+- When and how would you use `CoroutineContext` in practice?
+- What are common mistakes and pitfalls when working with `CoroutineContext`?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [[c-coroutines]]
+- [CoroutineContext - Kotlin Documentation](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Coroutine Context](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
+
+## References (EN)
+
+- [[c-kotlin]]
+- [[c-coroutines]]
 - [CoroutineContext - Kotlin Documentation](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [Coroutine Context](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
 
@@ -339,6 +400,7 @@ launch(parentContext) {
 - [[q-coroutine-context-elements--kotlin--hard]] - Coroutines
 - [[q-coroutine-dispatchers--kotlin--medium]] - Coroutines
 - [[q-coroutine-supervisorjob-use-cases--kotlin--medium]] - Coroutines
+
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
 

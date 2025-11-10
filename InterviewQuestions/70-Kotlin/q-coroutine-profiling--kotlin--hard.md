@@ -1,11 +1,11 @@
 ---
 id: kotlin-077
 title: "Coroutine Profiling and Debugging / Профилирование и отладка корутин"
-aliases: ["Coroutine Profiling and Debugging, Профилирование и отладка корутин"]
+aliases: ["Coroutine Profiling and Debugging", "Профилирование и отладка корутин"]
 
 # Classification
 topic: kotlin
-subtopics: [advanced, coroutines, patterns]
+subtopics: [coroutines, patterns]
 question_kind: theory
 difficulty: hard
 
@@ -18,25 +18,23 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140025
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-associatewith-vs-associateby--kotlin--easy, q-kotlin-higher-order-functions--kotlin--medium, q-sam-conversions--kotlin--medium]
+related: [c-kotlin, c-coroutines, q-advanced-coroutine-patterns--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 
-tags: [coroutines, difficulty/hard, difficulty/medium, kotlin]
+tags: [coroutines, difficulty/hard, kotlin]
 ---
 # Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140025
-
----
+> Профилирование и отладка корутин в Kotlin: какие инструменты и подходы использовать для эффективной диагностики, поиска утечек и оптимизации производительности?
 
 # Question (EN)
-> Kotlin Coroutines advanced topic 140025
+> Coroutine profiling and debugging in Kotlin: which tools and approaches should you use to effectively diagnose issues, detect leaks, and optimize performance?
 
 ## Ответ (RU)
 
-Профилирование и отладка корутин требуют специализированных инструментов и техник, поскольку корутины могут переключаться между потоками и имеют сложные потоки выполнения. Понимание эффективного профилирования и отладки критически важно для продакшн-приложений.
+Профилирование и отладка корутин требуют специализированных инструментов и техник, поскольку корутины могут переключаться между потоками и имеют сложные потоки выполнения. Понимание эффективного профилирования и отладки критически важно для продакшн-приложений. См. также [[c-kotlin]] и [[c-coroutines]].
 
 ### Инструменты Отладки
 
@@ -44,27 +42,29 @@ tags: [coroutines, difficulty/hard, difficulty/medium, kotlin]
 
 IntelliJ предоставляет встроенную поддержку отладки корутин:
 - **Вкладка Coroutines**: Показывает все активные корутины с их состояниями
-- **Stack traces**: Просмотр полных стеков вызовов корутин, не только потоков
-- **Точки приостановки**: Видно где корутины приостановлены
+- **Stack traces**: Просмотр объединённых стеков вызовов корутин, а не только потоков
+- **Точки приостановки**: Видно, где корутины приостановлены
 
 ```kotlin
-suspend fun debugExample() {
+suspend fun debugExample() = coroutineScope {
     val data1 = async { fetchData1() }  // Breakpoint здесь
     val data2 = async { fetchData2() }  // И здесь
     println("${data1.await()} ${data2.await()}")
 }
 ```
 
-**2. Утилита CoroutineDebugger**
+**2. Режим отладки kotlinx.coroutines**
 
-Включите режим отладки чтобы получить имена корутин в именах потоков:
+Включите режим отладки, чтобы видеть идентификаторы корутин в именах потоков и расширенные трассировки:
 ```kotlin
 // Добавьте VM опцию:
 // -Dkotlinx.coroutines.debug
 
-launch(Dispatchers.Default) {
-    println(Thread.currentThread().name)
-    // Выводит: "DefaultDispatcher-worker-1 @coroutine#1"
+runBlocking {
+    launch(Dispatchers.Default) {
+        println(Thread.currentThread().name)
+        // Например: "DefaultDispatcher-worker-1 @coroutine#1"
+    }
 }
 ```
 
@@ -72,20 +72,22 @@ launch(Dispatchers.Default) {
 
 **1. Android Studio Profiler**
 
-Для Android приложений используйте встроенный profiler:
-- **CPU Profiler**: Отслеживание выполнения корутин по потокам
-- **Memory Profiler**: Обнаружение утечек связанных с корутинами
+Для Android-приложений используйте встроенный profiler:
+- **CPU Profiler**: Отслеживание выполнения корутин через потоки (особенно полезно с включённым `kotlinx.coroutines.debug` для понимания связей)
+- **Memory Profiler**: Обнаружение утечек, связанных с длительно живущими корутинами и ссылками
 - **Energy Profiler**: Влияние корутин на батарею
 
-**2. JVM Profilers**
+**2. JVM Profiler'ы**
 
-Популярные JVM профайлеры с поддержкой корутин:
-- **Async Profiler**: Профайлер с низкими накладными расходами
-- **YourKit**: Коммерческий профайлер с визуализацией корутин
-- **JProfiler**: Показывает метрики специфичные для корутин
+Популярные JVM-профайлеры, которые можно эффективно использовать с корутинами:
+- **Async Profiler**: Низкие накладные расходы, хорошо работает с асинхронными сценариями
+- **YourKit**: Коммерческий профайлер, улучшенные стек-трейсы и визуализация потоков
+- **JProfiler**: Расширенные метрики потоков; в сочетании с debug-режимом корутин упрощает анализ
+
+Важно: поддержка именно "корутин-специфичных" метрик может быть ограниченной; чаще используется комбинация обычных JVM-метрик и debug-режима корутин.
 
 ```kotlin
-// Включить хуки профилирования
+// Пример настройки пула планировщика корутин (не включает профилирование сам по себе)
 System.setProperty("kotlinx.coroutines.scheduler.core.pool.size", "4")
 System.setProperty("kotlinx.coroutines.scheduler.max.pool.size", "128")
 ```
@@ -94,9 +96,11 @@ System.setProperty("kotlinx.coroutines.scheduler.max.pool.size", "128")
 
 **Паттерн 1: Добавление отладочных имен корутинам**
 ```kotlin
-launch(CoroutineName("UserDataLoader")) {
-    // Легче идентифицировать в отладчике
-    val data = loadUserData()
+runBlocking {
+    launch(CoroutineName("UserDataLoader")) {
+        // Легче идентифицировать в отладчике
+        val data = loadUserData()
+    }
 }
 ```
 
@@ -131,7 +135,7 @@ suspend fun debugMultipleOperations() = supervisorScope {
     val job2 = launch(CoroutineName("Operation2")) {
         operation2()
     }
-    // Если одна упадет, можно отлаживать другую
+    // Если одна упадет, другая продолжит, что упрощает изолированную отладку
 }
 ```
 
@@ -140,16 +144,17 @@ suspend fun debugMultipleOperations() = supervisorScope {
 **Распространенные причины утечек**:
 1. **Не отменяются корутины**:
 ```kotlin
+// Упрощённый пример. В Android предпочтительно использовать viewModelScope.
 class ViewModel {
     private val scope = CoroutineScope(Dispatchers.Main)
 
     fun loadData() {
         scope.launch {
-            // Утечка если ViewModel уничтожена без вызова clear()
+            // Возможна утечка, если ViewModel уничтожена без вызова clear()
         }
     }
 
-    // Исправление: Отменить scope
+    // Исправление: Отменить scope (или использовать lifecycle-aware scope)
     fun clear() {
         scope.cancel()
     }
@@ -166,7 +171,7 @@ class Activity {
         }
     }
 
-    // Исправление: Использовать lifecycle scope
+    // Исправление: использовать lifecycleScope (AndroidX lifecycle-runtime-ktx)
     fun startWorkCorrect() {
         lifecycleScope.launch {
             updateUI()
@@ -203,6 +208,7 @@ suspend fun profileSuspendPoints() {
         fetchData()
     }.let { (result, duration) ->
         println("fetchData took ${duration.inWholeMilliseconds}ms")
+        // result можно использовать по назначению
     }
 }
 ```
@@ -214,15 +220,19 @@ suspend fun profileSuspendPoints() {
 class CoroutineLogger(private val logger: Logger) : CoroutineContext.Element {
     companion object Key : CoroutineContext.Key<CoroutineLogger>
 
-    override val key = Key
+    override val key: CoroutineContext.Key<CoroutineLogger> = Key
 
     fun log(message: String) {
         logger.info(message)
     }
 }
 
-launch(CoroutineLogger(myLogger)) {
-    coroutineContext[CoroutineLogger]?.log("Operation started")
+val coroutineLogger = CoroutineLogger(myLogger)
+
+runBlocking {
+    launch(coroutineLogger + CoroutineName("Operation")) {
+        coroutineContext[CoroutineLogger]?.log("Operation started")
+    }
 }
 ```
 
@@ -234,19 +244,21 @@ val handler = CoroutineExceptionHandler { context, exception ->
     println("Caught in ${context[CoroutineName]}: $exception")
 }
 
-launch(handler + CoroutineName("CriticalOperation")) {
-    criticalWork()
+runBlocking {
+    launch(handler + CoroutineName("CriticalOperation")) {
+        criticalWork()
+    }
 }
 ```
 
 **3. Мониторинг пулов корутин**:
 ```kotlin
-// Предоставить метрики
+// Пример-заглушка: нет стандартного API, это иллюстрация того, что можно собирать свои метрики
 fun getCoroutinePoolStats(): PoolStats {
     return PoolStats(
-        activeCoroutines = ...,
-        queuedTasks = ...,
-        completedTasks = ...
+        activeCoroutines = /* custom metric */ 0,
+        queuedTasks = /* custom metric */ 0,
+        completedTasks = /* custom metric */ 0
     )
 }
 ```
@@ -259,41 +271,43 @@ fun getCoroutinePoolStats(): PoolStats {
 4. **Включайте режим отладки** в разработке: `-Dkotlinx.coroutines.debug`
 5. **Мониторьте утечки** используя memory profiler
 6. **Добавляйте логирование** в ключевых точках приостановки
-7. **Используйте `supervisorScope`** при отладке независимых операций
+7. **Используйте `supervisorScope`** при отладке и реализации независимых операций
 
 ---
 
 ## Answer (EN)
 
-Coroutine profiling and debugging require specialized tools and techniques because coroutines can jump between threads and have complex execution flows. Understanding how to profile and debug them effectively is crucial for production applications.
+Coroutine profiling and debugging require specialized tools and techniques because coroutines can jump between threads and have complex execution flows. Understanding how to profile and debug them effectively is crucial for production applications. See also [[c-kotlin]] and [[c-coroutines]].
 
 ### Debugging Tools
 
 **1. IntelliJ IDEA Coroutine Debugger**
 
 IntelliJ provides built-in coroutine debugging support:
-- **Coroutines tab**: Shows all active coroutines with their states
-- **Stack traces**: View full coroutine call stacks, not just thread stacks
+- **Coroutines tab**: Shows active coroutines with their states
+- **Stack traces**: View combined coroutine call stacks, not just thread stacks
 - **Suspend points**: See where coroutines are suspended
 
 ```kotlin
-suspend fun debugExample() {
+suspend fun debugExample() = coroutineScope {
     val data1 = async { fetchData1() }  // Breakpoint here
     val data2 = async { fetchData2() }  // And here
     println("${data1.await()} ${data2.await()}")
 }
 ```
 
-**2. CoroutineDebugger utility**
+**2. kotlinx.coroutines debug mode**
 
-Enable debug mode to get coroutine names in thread names:
+Enable debug mode to include coroutine identifiers in thread names and improve traces:
 ```kotlin
 // Add VM option:
 // -Dkotlinx.coroutines.debug
 
-launch(Dispatchers.Default) {
-    println(Thread.currentThread().name)
-    // Prints: "DefaultDispatcher-worker-1 @coroutine#1"
+runBlocking {
+    launch(Dispatchers.Default) {
+        println(Thread.currentThread().name)
+        // Example: "DefaultDispatcher-worker-1 @coroutine#1"
+    }
 }
 ```
 
@@ -302,19 +316,21 @@ launch(Dispatchers.Default) {
 **1. Android Studio Profiler**
 
 For Android apps, use the built-in profiler:
-- **CPU Profiler**: Track coroutine execution across threads
-- **Memory Profiler**: Detect coroutine-related leaks
-- **Energy Profiler**: See impact of coroutines on battery
+- **CPU Profiler**: Track coroutine execution across threads (especially helpful with `kotlinx.coroutines.debug` enabled)
+- **Memory Profiler**: Detect leaks caused by long-lived coroutines and references
+- **Energy Profiler**: See the impact of coroutine-based work on battery
 
 **2. JVM Profilers**
 
-Popular JVM profilers with coroutine support:
-- **Async Profiler**: Low-overhead profiler
-- **YourKit**: Commercial profiler with coroutine visualization
-- **JProfiler**: Shows coroutine-specific metrics
+Popular JVM profilers that can be effectively used with coroutines:
+- **Async Profiler**: Low-overhead profiler, works well with async workloads
+- **YourKit**: Commercial profiler with improved stack trace visualization
+- **JProfiler**: Advanced thread metrics; combined with coroutine debug mode helps analysis
+
+Note: explicit, first-class "coroutine-specific" metrics may be limited; typically you combine JVM metrics with coroutine debug data.
 
 ```kotlin
-// Enable profiling hooks
+// Example of configuring coroutine scheduler pool sizes (does NOT itself enable profiling)
 System.setProperty("kotlinx.coroutines.scheduler.core.pool.size", "4")
 System.setProperty("kotlinx.coroutines.scheduler.max.pool.size", "128")
 ```
@@ -323,9 +339,11 @@ System.setProperty("kotlinx.coroutines.scheduler.max.pool.size", "128")
 
 **Pattern 1: Adding debug names to coroutines**
 ```kotlin
-launch(CoroutineName("UserDataLoader")) {
-    // Easier to identify in debugger
-    val data = loadUserData()
+runBlocking {
+    launch(CoroutineName("UserDataLoader")) {
+        // Easier to identify in debugger
+        val data = loadUserData()
+    }
 }
 ```
 
@@ -360,7 +378,7 @@ suspend fun debugMultipleOperations() = supervisorScope {
     val job2 = launch(CoroutineName("Operation2")) {
         operation2()
     }
-    // If one fails, can still debug the other
+    // If one fails, the other continues, which simplifies isolated debugging
 }
 ```
 
@@ -369,16 +387,17 @@ suspend fun debugMultipleOperations() = supervisorScope {
 **Common leak causes**:
 1. **Not cancelling coroutines**:
 ```kotlin
+// Simplified example. On Android prefer viewModelScope for lifecycle awareness.
 class ViewModel {
     private val scope = CoroutineScope(Dispatchers.Main)
 
     fun loadData() {
         scope.launch {
-            // Leak if ViewModel is destroyed without calling clear()
+            // Potential leak if ViewModel is destroyed without calling clear()
         }
     }
 
-    // Fix: Cancel scope
+    // Fix: Cancel scope (or use a lifecycle-aware scope)
     fun clear() {
         scope.cancel()
     }
@@ -395,7 +414,7 @@ class Activity {
         }
     }
 
-    // Fix: Use lifecycle scope
+    // Fix: Use lifecycleScope (AndroidX lifecycle-runtime-ktx)
     fun startWorkCorrect() {
         lifecycleScope.launch {
             updateUI()
@@ -432,6 +451,7 @@ suspend fun profileSuspendPoints() {
         fetchData()
     }.let { (result, duration) ->
         println("fetchData took ${duration.inWholeMilliseconds}ms")
+        // use result as needed
     }
 }
 ```
@@ -443,15 +463,19 @@ suspend fun profileSuspendPoints() {
 class CoroutineLogger(private val logger: Logger) : CoroutineContext.Element {
     companion object Key : CoroutineContext.Key<CoroutineLogger>
 
-    override val key = Key
+    override val key: CoroutineContext.Key<CoroutineLogger> = Key
 
     fun log(message: String) {
         logger.info(message)
     }
 }
 
-launch(CoroutineLogger(myLogger)) {
-    coroutineContext[CoroutineLogger]?.log("Operation started")
+val coroutineLogger = CoroutineLogger(myLogger)
+
+runBlocking {
+    launch(coroutineLogger + CoroutineName("Operation")) {
+        coroutineContext[CoroutineLogger]?.log("Operation started")
+    }
 }
 ```
 
@@ -463,19 +487,21 @@ val handler = CoroutineExceptionHandler { context, exception ->
     println("Caught in ${context[CoroutineName]}: $exception")
 }
 
-launch(handler + CoroutineName("CriticalOperation")) {
-    criticalWork()
+runBlocking {
+    launch(handler + CoroutineName("CriticalOperation")) {
+        criticalWork()
+    }
 }
 ```
 
 **3. Monitoring coroutine pools**:
 ```kotlin
-// Expose metrics
+// Stub example: there is no standard API; illustrates collecting custom metrics
 fun getCoroutinePoolStats(): PoolStats {
     return PoolStats(
-        activeCoroutines = ...,
-        queuedTasks = ...,
-        completedTasks = ...
+        activeCoroutines = /* custom metric */ 0,
+        queuedTasks = /* custom metric */ 0,
+        completedTasks = /* custom metric */ 0
     )
 }
 ```
@@ -486,24 +512,54 @@ fun getCoroutinePoolStats(): PoolStats {
 2. **Use structured concurrency** to avoid orphaned coroutines
 3. **Profile early** to catch performance issues
 4. **Enable debug mode** in development: `-Dkotlinx.coroutines.debug`
-5. **Monitor for leaks** using memory profiler
+5. **Monitor for leaks** using a memory profiler
 6. **Add logging** at key suspend points
-7. **Use `supervisorScope`** when debugging independent operations
+7. **Use `supervisorScope`** when debugging and implementing independent operations
 
 ---
+
+## Дополнительные вопросы (RU)
+
+1. Как использовать `kotlinx.coroutines.debug` совместно с JVM-профайлерами (`Async Profiler`, `YourKit`, `JProfiler`) для анализа сложных асинхронных сценариев?
+2. Какие признаки в профайлерах указывают на утечки корутин или неправильно управляемый жизненный цикл (например, в `ViewModel` или `Activity`)?
+3. Как организовать структурированное логирование корутин в продакшене так, чтобы можно было трассировать запрос end-to-end?
+4. Как выбирать размеры пулов потоков и диспетчеров для высоконагруженных систем с корутинами?
+5. Какие подходы и метрики использовать для сравнения накладных расходов корутин и потоков в конкретном проекте?
 
 ## Follow-ups
 
-1. **Follow-up question 1**
-2. **Follow-up question 2**
+1. How can you combine `kotlinx.coroutines.debug` with JVM profilers (`Async Profiler`, `YourKit`, `JProfiler`) to analyze complex async scenarios?
+2. What profiler signals indicate coroutine leaks or mismanaged lifecycle (for example in a `ViewModel` or `Activity`)?
+3. How would you design structured logging for coroutines in production to enable end-to-end tracing of requests?
+4. How do you choose dispatcher and thread pool sizes for high-load systems using coroutines?
+5. Which approaches and metrics would you use to compare coroutine overhead vs threads in your specific project?
 
 ---
+
+## Ссылки (RU)
+
+- [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
 
 ## References
 
 - [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
 
 ---
+
+## Связанные вопросы (RU)
+
+### Сложные (Hard)
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Коррутины
+- [[q-coroutine-memory-leaks--kotlin--hard]] - Коррутины
+- [[q-advanced-coroutine-patterns--kotlin--hard]] - Коррутины
+- [[q-select-expression-channels--kotlin--hard]] - Коррутины
+
+### Предварительные (Easier)
+- [[q-flow-combining-zip-combine--kotlin--medium]] - Коррутины
+- [[q-what-is-coroutine--kotlin--easy]] - Коррутины
+
+### Хаб
+- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Введение в корутины
 
 ## Related Questions
 
@@ -519,4 +575,3 @@ fun getCoroutinePoolStats(): PoolStats {
 
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
-

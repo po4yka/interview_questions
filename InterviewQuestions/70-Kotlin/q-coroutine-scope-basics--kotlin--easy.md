@@ -1,11 +1,11 @@
 ---
 id: kotlin-116
 title: "CoroutineScope Basics and Usage / Основы CoroutineScope и использование"
-aliases: ["CoroutineScope Basics and Usage, Основы CoroutineScope и использование"]
+aliases: ["CoroutineScope Basics and Usage", "Основы CoroutineScope и использование"]
 
 # Classification
 topic: kotlin
-subtopics: [advanced, coroutines, patterns]
+subtopics: [coroutines, patterns]
 question_kind: theory
 difficulty: easy
 
@@ -18,26 +18,25 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140030
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-coroutinescope-vs-supervisorscope--kotlin--medium, q-data-class-variables--programming-languages--medium, q-kotlin-sealed-classes-features--programming-languages--medium]
+related: [c-kotlin-coroutines-basics, q-coroutinescope-vs-supervisorscope--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 
-tags: [coroutines, difficulty/easy, difficulty/medium, kotlin]
+tags: [coroutines, difficulty/easy, kotlin]
 ---
 # Вопрос (RU)
-> Продвинутая тема корутин Kotlin 140030
+> Базовый вопрос по `CoroutineScope` в Kotlin (на основе темы 140030)
 
 ---
 
 # Question (EN)
-> Kotlin Coroutines advanced topic 140030
+> Basic question about `CoroutineScope` in Kotlin (based on topic 140030)
 
 ## Ответ (RU)
 
-
-CoroutineScope определяет жизненный цикл и контекст для корутин. Каждая корутина выполняется внутри scope.
+`CoroutineScope` определяет жизненный цикл и контекст для корутин. Каждая корутина выполняется внутри `CoroutineScope`.
 
 ### Создание Scopes
 ```kotlin
@@ -74,15 +73,13 @@ suspend fun fetchData() = coroutineScope {
 1. Используйте lifecycle-aware scopes в Android
 2. Всегда отменяйте кастомные scopes
 3. Предпочитайте `coroutineScope` вместо `GlobalScope`
-4. Используйте `supervisorScope` когда дочерние должны быть независимы
+4. Используйте `supervisorScope`, когда дочерние корутины должны быть независимы
 
----
 ---
 
 ## Answer (EN)
 
-
-CoroutineScope defines the lifecycle and context for coroutines. Every coroutine runs within a scope.
+`CoroutineScope` defines the lifecycle and context for coroutines. Every coroutine runs within a `CoroutineScope`.
 
 ### Creating Scopes
 ```kotlin
@@ -119,21 +116,70 @@ suspend fun fetchData() = coroutineScope {
 1. Use lifecycle-aware scopes in Android
 2. Always cancel custom scopes
 3. Prefer `coroutineScope` over `GlobalScope`
-4. Use `supervisorScope` when children should be independent
+4. Use `supervisorScope` when child coroutines should be independent
 
 ---
+
+## Дополнительные вопросы (RU)
+
+1. Объясните разницу между `CoroutineScope` и `coroutineScope` и приведите пример, когда использовать каждый из них в реальном коде.
+2. Какие проблемы могут возникнуть при использовании `GlobalScope`, и почему его следует избегать в продакшене?
+3. Как правильно привязать `CoroutineScope` к жизненному циклу `Activity` или `ViewModel` в Android, чтобы избежать утечек памяти?
+4. В каких случаях стоит использовать `supervisorScope` вместо обычного `CoroutineScope`, и как это влияет на обработку ошибок?
+5. Как организовать обработку ошибок внутри `CoroutineScope`, чтобы не нарушать структурированную конкурентность и не прерывать независимые задачи?
+
 ---
 
 ## Follow-ups
 
-1. **Follow-up question 1**
-2. **Follow-up question 2**
+1. Explain the difference between `CoroutineScope` and `coroutineScope` and provide a concrete example of when to use each in real-world code.
+2. What issues can arise from using `GlobalScope`, and why should it be avoided in production code?
+3. How do you properly tie a `CoroutineScope` to an `Activity` or `ViewModel` lifecycle on Android to prevent memory leaks?
+4. In which scenarios should you use `supervisorScope` instead of a regular `CoroutineScope`, and how does it affect error handling?
+5. How can you organize error handling within a `CoroutineScope` to preserve structured concurrency while isolating failures?
+
+---
+
+## Ссылки (RU)
+
+- [[c-kotlin-coroutines-basics]]
+- [Документация Kotlin Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
 
 ---
 
 ## References
 
+- [[c-kotlin-coroutines-basics]]
 - [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
+
+---
+
+## Связанные вопросы (RU)
+
+### Похожие (Easy)
+- [[q-coroutine-builders-basics--kotlin--easy]] - Основы корутин
+- [[q-what-is-coroutine--kotlin--easy]] - Что такое корутина
+- [[q-suspend-functions-basics--kotlin--easy]] - Базовые `suspend` функции
+- [[q-launch-vs-async--kotlin--easy]] - `launch` vs `async`
+
+### Того же уровня (Easy)
+- [[q-what-is-coroutine--kotlin--easy]] - Базовые концепции корутин
+- [[q-coroutine-builders-basics--kotlin--easy]] - `launch`, `async`, `runBlocking`
+- [[q-coroutine-delay-vs-thread-sleep--kotlin--easy]] - `delay()` vs `Thread.sleep()`
+- [[q-coroutines-threads-android-differences--kotlin--easy]] - Coroutines vs Threads на Android
+
+### Следующие шаги (Medium)
+- [[q-suspend-functions-basics--kotlin--easy]] - Понимание `suspend` функций
+- [[q-coroutine-dispatchers--kotlin--medium]] - Обзор диспетчеров корутин
+- [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Сравнение Scope и Context
+
+### Продвинутые (Harder)
+- [[q-flow-combining-zip-combine--kotlin--medium]] - Работа с `Flow`
+- [[q-coroutine-profiling--kotlin--hard]] - Профилирование корутин
+- [[q-coroutine-performance-optimization--kotlin--hard]] - Оптимизация производительности корутин
+
+### Hub
+- [[q-kotlin-coroutines-introduction--kotlin--medium]] - Обзор корутин в Kotlin
 
 ---
 
@@ -163,4 +209,3 @@ suspend fun fetchData() = coroutineScope {
 
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
-

@@ -10,38 +10,34 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-exception-handler--kotlin--medium, q-destructuring-declarations--kotlin--medium, q-kotlin-inline-functions--kotlin--medium]
-created: 2025-10-15
-updated: 2025-10-31
+related: [c-kotlin, c-equality, c-hash-map]
+created: 2025-10-09
+updated: 2025-11-09
 tags: [contracts, difficulty/hard, equals, hashcode, programming-languages]
 ---
-# Tell about Equals and hashCode Contracts
-
 # Вопрос (RU)
 > Расскажите о контрактах equals() и hashCode() в Kotlin. Каковы их требования и как они работают вместе?
-
----
 
 # Question (EN)
 > Tell about equals() and hashCode() contracts in Kotlin. What are their requirements and how do they work together?
 
 ## Ответ (RU)
 
-Методы `equals()` и `hashCode()` используются для сравнения объектов и их корректной работы в коллекциях (Set, Map).
+Методы `equals()` и `hashCode()` используются для сравнения объектов и их корректной работы в коллекциях (`Set`, `Map`). В Kotlin оператор `==` вызывает `equals()` (безопасно для null), а оператор `===` проверяет ссылочное равенство.
 
 **Контракт equals():**
 1. **Рефлексивность**: `a.equals(a)` → true (объект равен самому себе)
-2. **Симметричность**: `a.equals(b) == b.equals(a)`
+2. **Симметричность**: `a.equals(b)` и `b.equals(a)` всегда дают одинаковый результат
 3. **Транзитивность**: если `a == b` и `b == c`, то `a == c`
-4. **Согласованность**: если `a == b`, то `a.equals(b)` всегда возвращает одинаковый результат, пока объект не изменился
+4. **Согласованность**: повторные вызовы `a.equals(b)` возвращают один и тот же результат, пока значения, участвующие в сравнении, не изменились
 5. **Сравнение с null**: `a.equals(null) == false`
 
 **Контракт hashCode():**
 1. **Согласованность с equals()**: если `a == b`, то `a.hashCode() == b.hashCode()`
-2. **Обратное не требуется**: Два разных объекта могут иметь одинаковый hashCode() (коллизия хешей)
-3. **Согласованность**: Хеш-код не должен меняться, если объект не изменился
+2. **Обратное не требуется**: два разных объекта (и/или не равных по equals) могут иметь одинаковый `hashCode()` (коллизия)
+3. **Согласованность**: хеш-код не должен меняться, если значения, участвующие в equals/hashCode, не изменились
 
-**В Kotlin можно использовать `data class` для автоматической генерации `equals()`, `hashCode()`, а также `copy()` и `toString()`.**
+**В Kotlin можно использовать `data class` для автоматической генерации `equals()`, `hashCode()`, а также `copy()` и `toString()`. См. также [[c-kotlin]] и [[c-equality]].**
 
 ### Примеры Кода
 
@@ -64,10 +60,10 @@ class BadPerson(val name: String, val age: Int) {
     override fun hashCode() = name.hashCode()
 }
 
-// ХОРОШО: Правильная реализация equals
+// ХОРОШО: Правильная реализация equals/hashCode
 class GoodPerson(val name: String, val age: Int) {
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true  // Рефлексивность
+        if (this === other) return true  // Рефлексивность (и быстрая проверка ссылок)
         if (other !is GoodPerson) return false  // Проверка типа
         return name == other.name && age == other.age
     }
@@ -124,9 +120,11 @@ class BrokenPerson(val name: String, val age: Int) {
         return name == other.name && age == other.age
     }
 
-    // НЕПРАВИЛЬНО: hashCode НЕ согласован с equals
+    // ПРОБЛЕМА: hashCode не использует все поля, участвующие в equals
+    // Это не нарушает формальный контракт напрямую (равные объекты все ещё имеют одинаковый hashCode),
+    // но ухудшает распределение в хеш-структурах и может приводить к деградации производительности.
     override fun hashCode(): Int {
-        return name.hashCode()  // Не включает age!
+        return name.hashCode()  // Не включает age
     }
 }
 
@@ -141,17 +139,16 @@ fun main() {
     val set = hashSetOf(p1, p2)
     println("Размер Set (правильно): ${set.size}")  // 1 (работает корректно)
 
-    // Сломанная реализация
+    // Реализация с плохим hashCode (но без нарушения формального контракта)
     val b1 = BrokenPerson("Alice", 30)
     val b2 = BrokenPerson("Alice", 31)
 
     println("\nequals: ${b1 == b2}")  // false
-    println("hashCode равны: ${b1.hashCode() == b2.hashCode()}")  // true (ПРОБЛЕМА!)
+    println("hashCode равны: ${b1.hashCode() == b2.hashCode()}")  // true (коллизия, допустимо)
 
-    // HashSet может работать неправильно
     val brokenSet = hashSetOf(b1)
     println("Содержит b1: ${brokenSet.contains(b1)}")  // true
-    println("Содержит b2: ${brokenSet.contains(b2)}")  // Может быть true или false!
+    println("Содержит b2: ${brokenSet.contains(b2)}")  // false (ожидаемо: объекты не равны)
 }
 ```
 
@@ -302,7 +299,7 @@ class Mistake1(val value: Int) {
     // Отсутствует hashCode()!
 }
 
-// ОШИБКА 2: Использование изменяемых свойств
+// ОШИБКА 2: Использование изменяемых свойств в equals/hashCode
 class Mistake2(var value: Int) {
     override fun equals(other: Any?) = (other as? Mistake2)?.value == value
     override fun hashCode() = value
@@ -313,47 +310,50 @@ class Mistake3(val a: Int, val b: Int) {
     override fun equals(other: Any?) =
         (other as? Mistake3)?.let { a == it.a && b == it.b } ?: false
 
-    override fun hashCode() = a  // Использует только 'a', не 'b'!
+    // Нарушение контракта: hashCode не учитывает b, хотя он участвует в equals
+    override fun hashCode() = a
 }
 
 fun demonstrateMistakes() {
-    // Ошибка 1: HashMap не будет работать правильно
+    // Ошибка 1: HashMap не будет работать корректно для поиска по "равному" ключу
     val m1a = Mistake1(5)
     val m1b = Mistake1(5)
     val map1 = hashMapOf(m1a to "value")
-    println("Найдено по equals ключу: ${map1[m1b]}")  // null! (должно быть "value")
+    println("Найдено по equals ключу: ${map1[m1b]}")  // null (контракт нарушен)
 
-    // Ошибка 2: Изменение значения нарушает контракт
+    // Ошибка 2: Изменение значения нарушает контракт после помещения в Set/Map
     val m2 = Mistake2(10)
     val set2 = hashSetOf(m2)
     m2.value = 20  // Изменено после добавления в set!
-    println("Set содержит m2: ${set2.contains(m2)}")  // false! (сломано)
+    println("Set содержит m2: ${set2.contains(m2)}")  // Может быть false (сломано)
 
-    // Ошибка 3: Равные объекты с разными хеш-кодами
+    // Ошибка 3: Равные объекты могут иметь разные hashCode, что нарушает контракт
     val m3a = Mistake3(1, 2)
-    val m3b = Mistake3(1, 3)
-    println("Равны: ${m3a == m3b}")  // false
-    println("Одинаковый хеш: ${m3a.hashCode() == m3b.hashCode()}")  // true (нарушение!)
+    val m3b = Mistake3(1, 2)
+    println("Равны: ${m3a == m3b}")  // true
+    println("Одинаковый хеш: ${m3a.hashCode() == m3b.hashCode()}")  // может быть false (нарушение контракта)
 }
 ```
 
+---
+
 ## Answer (EN)
 
-The `equals()` and `hashCode()` methods are used for object comparison and their correct operation in collections (Set, Map).
+The `equals()` and `hashCode()` methods are used for object comparison and correct behavior in collections (`Set`, `Map`). In Kotlin, the `==` operator calls `equals()` (null-safe), while `===` checks referential equality.
 
 **equals() contract:**
 1. **Reflexive**: `a.equals(a)` → true (object equals itself)
-2. **Symmetric**: `a.equals(b) == b.equals(a)`
+2. **Symmetric**: `a.equals(b)` and `b.equals(a)` must always return the same result
 3. **Transitive**: if `a == b` and `b == c`, then `a == c`
-4. **Consistent**: if `a == b`, then `a.equals(b)` always returns the same result as long as the object doesn't change
-5. **Comparison with null**: `a.equals(null) == false`
+4. **Consistent**: repeated calls to `a.equals(b)` must return the same result as long as the values used in comparison do not change
+5. **Null comparison**: `a.equals(null) == false`
 
 **hashCode() contract:**
 1. **Consistency with equals()**: if `a == b`, then `a.hashCode() == b.hashCode()`
-2. **Reverse not required**: Two different objects can have the same hashCode() (hash collision)
-3. **Consistency**: Hash code should not change if the object hasn't changed
+2. **No reverse requirement**: two different / non-equal objects may have the same `hashCode()` (collision)
+3. **Consistency**: hash code should not change as long as the values used in equals/hashCode remain unchanged
 
-**In Kotlin, you can use `data class` for automatic generation of `equals()`, `hashCode()`, as well as `copy()` and `toString()`.**
+**In Kotlin, you can use `data class` for automatic generation of `equals()`, `hashCode()`, along with `copy()` and `toString()`. See also [[c-kotlin]] and [[c-equality]].**
 
 ### Code Examples
 
@@ -376,10 +376,10 @@ class BadPerson(val name: String, val age: Int) {
     override fun hashCode() = name.hashCode()
 }
 
-// GOOD: Proper equals implementation
+// GOOD: Proper equals/hashCode implementation
 class GoodPerson(val name: String, val age: Int) {
     override fun equals(other: Any?): Boolean {
-        if (this === other) return true  // Reflexive
+        if (this === other) return true  // Reflexive / fast path
         if (other !is GoodPerson) return false  // Type check
         return name == other.name && age == other.age
     }
@@ -436,9 +436,11 @@ class BrokenPerson(val name: String, val age: Int) {
         return name == other.name && age == other.age
     }
 
-    // WRONG: hashCode NOT consistent with equals
+    // PROBLEM: hashCode does not use all properties used in equals.
+    // This does not break the formal contract directly (equal objects still share the same hashCode),
+    // but leads to poor distribution and potential performance degradation.
     override fun hashCode(): Int {
-        return name.hashCode()  // Doesn't include age!
+        return name.hashCode()  // Doesn't include age
     }
 }
 
@@ -453,17 +455,16 @@ fun main() {
     val set = hashSetOf(p1, p2)
     println("Set size (correct): ${set.size}")  // 1 (works correctly)
 
-    // Broken implementation
+    // Implementation with poor hashCode (but no formal contract violation)
     val b1 = BrokenPerson("Alice", 30)
     val b2 = BrokenPerson("Alice", 31)
 
     println("\nequals: ${b1 == b2}")  // false
-    println("hashCode equal: ${b1.hashCode() == b2.hashCode()}")  // true (PROBLEM!)
+    println("hashCode equal: ${b1.hashCode() == b2.hashCode()}")  // true (collision, allowed)
 
-    // HashSet may malfunction
     val brokenSet = hashSetOf(b1)
     println("Contains b1: ${brokenSet.contains(b1)}")  // true
-    println("Contains b2: ${brokenSet.contains(b2)}")  // May be true or false!
+    println("Contains b2: ${brokenSet.contains(b2)}")  // false (expected: objects are not equal)
 }
 ```
 
@@ -614,7 +615,7 @@ class Mistake1(val value: Int) {
     // Missing hashCode()!
 }
 
-// MISTAKE 2: Using mutable properties
+// MISTAKE 2: Using mutable properties in equals/hashCode
 class Mistake2(var value: Int) {
     override fun equals(other: Any?) = (other as? Mistake2)?.value == value
     override fun hashCode() = value
@@ -625,27 +626,28 @@ class Mistake3(val a: Int, val b: Int) {
     override fun equals(other: Any?) =
         (other as? Mistake3)?.let { a == it.a && b == it.b } ?: false
 
-    override fun hashCode() = a  // Only uses 'a', not 'b'!
+    // Violates the contract: hashCode ignores b, which participates in equals
+    override fun hashCode() = a
 }
 
 fun demonstrateMistakes() {
-    // Mistake 1: HashMap won't work correctly
+    // Mistake 1: HashMap lookup by an "equal" key won't work correctly
     val m1a = Mistake1(5)
     val m1b = Mistake1(5)
     val map1 = hashMapOf(m1a to "value")
-    println("Found via equals key: ${map1[m1b]}")  // null! (should be "value")
+    println("Found via equals key: ${map1[m1b]}")  // null (contract violated)
 
-    // Mistake 2: Changing value breaks contract
+    // Mistake 2: Changing value after insertion breaks the contract
     val m2 = Mistake2(10)
     val set2 = hashSetOf(m2)
     m2.value = 20  // Changed after adding to set!
-    println("Set contains m2: ${set2.contains(m2)}")  // false! (broken)
+    println("Set contains m2: ${set2.contains(m2)}")  // May be false (broken)
 
-    // Mistake 3: Equal objects with different hash codes
+    // Mistake 3: Equal objects may produce different hashCodes, violating the contract
     val m3a = Mistake3(1, 2)
-    val m3b = Mistake3(1, 3)
-    println("Equal: ${m3a == m3b}")  // false
-    println("Same hash: ${m3a.hashCode() == m3b.hashCode()}")  // true (violation!)
+    val m3b = Mistake3(1, 2)
+    println("Equal: ${m3a == m3b}")  // true
+    println("Same hash: ${m3a.hashCode() == m3b.hashCode()}")  // may be false (violation)
 }
 ```
 

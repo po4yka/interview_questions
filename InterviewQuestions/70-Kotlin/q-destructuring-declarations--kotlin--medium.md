@@ -1,7 +1,7 @@
 ---
 id: kotlin-034
 title: "Destructuring Declarations / Деструктурирующие объявления"
-aliases: ["Destructuring Declarations, Деструктурирующие объявления"]
+aliases: ["Destructuring Declarations", "Деструктурирующие объявления"]
 
 # Classification
 topic: kotlin
@@ -18,11 +18,11 @@ source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-data-class-detailed--kotlin--medium, q-data-class-purpose--kotlin--easy, q-kotlin-operator-overloading--kotlin--medium]
+related: [c-kotlin, q-data-class-detailed--kotlin--medium, q-data-class-purpose--kotlin--easy]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-18
+updated: 2025-11-10
 
 tags: [componentN, data-classes, destructuring, difficulty/medium, kotlin]
 ---
@@ -33,6 +33,7 @@ tags: [componentN, data-classes, destructuring, difficulty/medium, kotlin]
 
 # Question (EN)
 > What are destructuring declarations in Kotlin?
+
 ## Ответ (RU)
 
 Деструктурирующие объявления — это техника распаковки экземпляра класса в отдельные переменные. Можно взять объект и создать отдельные переменные из его свойств одной строкой кода.
@@ -62,7 +63,7 @@ fun function(...): Result {
 val (result, status) = function(...)
 ```
 
-### Обход Map
+### Обход `Map`
 
 ```kotlin
 for ((key, value) in map) {
@@ -76,12 +77,23 @@ for ((key, value) in map) {
 val (_, status) = getResult()  // Игнорируем первый компонент
 ```
 
+### Деструктуризация в лямбдах
+
+```kotlin
+// Пример с Map.Entry
+map.mapValues { (key, value) -> "$value!" }  // key и value получены через деструктуризацию
+
+// С подчёркиванием для пропуска
+map.mapValues { (_, value) -> "$value!" }
+```
+
 ### Как Это Работает: Функции componentN
 
 ```kotlin
 data class Person(val name: String, val age: Int)
 
-val (name, age) = Person("Alice", 25)
+val person = Person("Alice", 25)
+val (name, age) = person
 
 // Компилируется в:
 val name = person.component1()
@@ -90,6 +102,17 @@ val age = person.component2()
 
 Data классы автоматически генерируют `component1()`, `component2()` и т.д. для всех свойств.
 
+### Пользовательская Деструктуризация
+
+```kotlin
+class MyClass(val a: String, val b: Int) {
+    operator fun component1() = a
+    operator fun component2() = b
+}
+
+val (a, b) = MyClass("test", 42)  // Работает!
+```
+
 ### Случаи Использования
 
 1. **Возврат нескольких значений из функций**
@@ -97,13 +120,15 @@ Data классы автоматически генерируют `component1()`
 3. **Работа с Pair и Triple**
 4. **Извлечение значений из data классов**
 
-**Краткое содержание**: Деструктурирующие объявления позволяют распаковывать объекты в отдельные переменные одной строкой. Работает с data классами, Pair/Triple и любым классом с операторными функциями componentN(). Можно использовать в объявлениях переменных, циклах for и параметрах лямбд. Используйте подчеркивание для пропуска ненужных компонентов.
+**Краткое содержание**: Деструктурирующие объявления позволяют распаковывать объекты в отдельные переменные одной строкой. Работает с data классами, Pair/Triple и любым классом с операторными функциями `componentN()`. Можно использовать в объявлениях переменных, циклах `for` и параметрах лямбд. Используйте подчеркивание для пропуска ненужных компонентов.
+
+См. также: [[c-kotlin]].
 
 ---
 
 ## Answer (EN)
 
-Destructuring declarations is a technique for unpacking a class instance into separate variables. You can take an object and create standalone variables from its class variables with just a single line of code.
+Destructuring declarations are a technique for unpacking a class instance into separate variables. You can take an object and create standalone variables from its properties with just a single line of code.
 
 ### Basic Example
 
@@ -132,7 +157,7 @@ fun function(...): Result {
 val (result, status) = function(...)
 ```
 
-### Traversing a Map
+### Traversing a `Map`
 
 ```kotlin
 for ((key, value) in map) {
@@ -149,22 +174,11 @@ val (_, status) = getResult()  // Ignore first component
 ### Destructuring in Lambdas
 
 ```kotlin
-// For Pair
-map.mapValues { entry -> "${entry.value}!" }
-map.mapValues { (key, value) -> "$value!" }  // Destructured
+// Using destructuring with Map.Entry
+map.mapValues { (key, value) -> "$value!" }  // key and value destructured from entry
 
-// Difference between parameters
-{ a -> ... }           // one parameter
-{ a, b -> ... }        // two parameters
-{ (a, b) -> ... }      // a destructured pair
-{ (a, b), c -> ... }   // a destructured pair and another parameter
-
-// With underscore
+// With underscore to skip unused components
 map.mapValues { (_, value) -> "$value!" }
-
-// With types
-map.mapValues { (_, value): Map.Entry<Int, String> -> "$value!" }
-map.mapValues { (_, value: String) -> "$value!" }
 ```
 
 ### How it Works: componentN Functions
@@ -182,7 +196,7 @@ val name = person.component1()
 val age = person.component2()
 ```
 
-Data classes automatically generate `component1()`, `component2()`, etc. for all properties.
+Data classes automatically generate `component1()`, `component2()`, etc. for their properties.
 
 ### Custom Destructuring
 
@@ -201,9 +215,16 @@ val (a, b) = MyClass("test", 42)  // Works!
 2. **Iterating over collections with structured data**
 3. **Working with Pair and Triple**
 4. **Extracting values from data classes**
-5. **Pattern matching with when expressions**
 
-**English Summary**: Destructuring declarations allow unpacking objects into separate variables in one line. Works with data classes, Pair/Triple, and any class with componentN() operator functions. Can be used in variable declarations, for loops, and lambda parameters. Use underscore to skip unwanted components.
+**English Summary**: Destructuring declarations allow unpacking objects into separate variables in one line. Works with data classes, Pair/Triple, and any class with `componentN()` operator functions. Can be used in variable declarations, for loops, and lambda parameters. Use underscore to skip unwanted components.
+
+See also: [[c-kotlin]].
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого механизма от Java?
+- Когда вы бы использовали деструктуризацию на практике?
+- Какие распространенные подводные камни стоит учитывать?
 
 ## Follow-ups
 
@@ -211,9 +232,18 @@ val (a, b) = MyClass("test", 42)  // Works!
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
-## References
-- [Destructuring Declarations - Kotlin Documentation](https://kotlinlang.org/docs/reference/multi-declarations.html)
+## Ссылки (RU)
+- [Destructuring Declarations - Документация Kotlin](https://kotlinlang.org/docs/destructuring-declarations.html)
 - [Kotlin Destructuring Declarations](https://www.kotlindevelopment.com/destructuring-declarations/)
+
+## References
+- [Destructuring Declarations - Kotlin Documentation](https://kotlinlang.org/docs/destructuring-declarations.html)
+- [Kotlin Destructuring Declarations](https://www.kotlindevelopment.com/destructuring-declarations/)
+
+## Связанные вопросы (RU)
+
+### Связанные (Medium)
+- [[q-infix-functions--kotlin--medium]] - Infix
 
 ## Related Questions
 
