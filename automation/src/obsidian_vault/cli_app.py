@@ -15,6 +15,7 @@ Use `vault-app` for this enhanced version.
 from __future__ import annotations
 
 import json
+import os
 import sys
 from enum import Enum
 from pathlib import Path
@@ -29,6 +30,9 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 from rich.text import Text
 
+from obsidian_vault.qa_generation.workflow import NoteIngestionWorkflow, WorkflowConfig
+from obsidian_vault.qa_generation.gap_analysis import GapAnalysisWorkflow, GapWorkflowConfig
+from obsidian_vault.llm_review import CompletionMode, ProcessingProfile
 from obsidian_vault.technical_validation import TechnicalValidationFlow
 from obsidian_vault.utils import (
     FileResult,
@@ -1229,6 +1233,258 @@ def llm_review(
         console.print(f"[red]✗ Error:[/red] {e}")
         logger.exception(f"LLM review failed: {e}")
         raise typer.Exit(code=1)
+
+
+@app.command("qa-ingest")
+def qa_ingest(
+    url: str = typer.Argument(..., help="URL of the article to convert into Q&A notes"),
+    max_cards: int = typer.Option(3, "--max-cards", help="Maximum number of cards to generate"),
+    dry_run: bool = typer.Option(
+        False,
+        "--dry-run/--no-dry-run",
+        help="If enabled, do not write files or run review; only show a preview",
+    ),
+    completion_mode: str = typer.Option(
+        "standard",
+        "--completion-mode",
+        help="Completion strictness for automated review (strict | standard | permissive)",
+    ),
+    processing_profile: str = typer.Option(
+        "balanced",
+        "--profile",
+        help="Processing profile for review (balanced | stability | thorough)",
+    ),
+    review_iterations: int = typer.Option(
+        6,
+        "--review-iterations",
+        help="Maximum number of automated fix iterations during review",
+    ),
+):
+    """Generate new bilingual notes from an external article using Firecrawl + LLM."""
+
+    if max_cards < 1 or max_cards > 5:
+        console.print("[red]✗[/red] max-cards must be between 1 and 5")
+        raise typer.Exit(code=1)
+
+    if not os.getenv("FIRECRAWL_API_KEY"):
+        console.print(
+            "[red]✗[/red] FIRECRAWL_API_KEY environment variable not set."
+            "\nCreate a Firecrawl account and set the API key to fetch articles."
+        )
+        raise typer.Exit(code=1)
+
+    if not os.getenv("OPENROUTER_API_KEY"):
+        console.print(
+            "[red]✗[/red] OPENROUTER_API_KEY environment variable not set."
+            "\nObtain an API key from https://openrouter.ai/keys and export it before running."
+        )
+        raise typer.Exit(code=1)
+
+    try:
+        mode = CompletionMode(completion_mode.lower())
+    except ValueError:
+        console.print(
+            f"[red]✗[/red] Invalid completion mode: {completion_mode}\n"
+            "Valid options: strict, standard, permissive"
+        )
+        raise typer.Exit(code=1)
+
+    try:
+        profile = ProcessingProfile(processing_profile.lower())
+    except ValueError:
+        console.print(
+            f"[red]✗[/red] Invalid processing profile: {processing_profile}\n"
+            "Valid options: balanced, stability, thorough"
+        )
+        raise typer.Exit(code=1)
+
+    console.print(Panel.fit(f"[bold]Fetching and processing article:[/bold]\n{url}"))
+    workflow = NoteIngestionWorkflow()
+    config = WorkflowConfig(
+        max_cards=max_cards,
+        dry_run=dry_run,
+        completion_mode=mode,
+        processing_profile=profile,
+        review_iterations=review_iterations,
+    )
+
+    try:
+        result = workflow.run(url, config=config)
+    except Exception as exc:  # pragma: no cover - top-level workflow guard
+        console.print(f"[red]✗ Error:[/red] {exc}")
+        logger.exception("Q&A ingestion workflow failed: {}", exc)
+        raise typer.Exit(code=1)
+
+    created_count = len(result.created_paths)
+    duplicates_count = len(result.skipped_duplicates)
+    console.print()
+    summary_table = Table(title="Q&A Ingestion Summary", show_header=True, header_style="bold cyan")
+    summary_table.add_column("Metric", style="cyan")
+    summary_table.add_column("Value", style="magenta", justify="right")
+    summary_table.add_row("Generated cards", str(len(result.generated_cards)))
+    summary_table.add_row("Written notes", str(created_count))
+    summary_table.add_row("Skipped duplicates", str(duplicates_count))
+    summary_table.add_row("Dry run", "Yes" if dry_run else "No")
+    console.print(summary_table)
+
+    if result.created_paths:
+        console.print("\n[bold]Created notes:[/bold]")
+        for path in result.created_paths:
+            console.print(f"  • {path}")
+
+    if result.skipped_duplicates:
+        console.print("\n[yellow]⚠[/yellow] Skipped potential duplicates:")
+        for slug in result.skipped_duplicates:
+            console.print(f"  • {slug}")
+
+    if dry_run:
+        console.print(
+            "\n[yellow]⚠[/yellow] Dry run mode was enabled. No files were written and review did not run."
+        )
+
+    logger.success("Q&A ingestion completed", created=created_count, duplicates=duplicates_count)
+
+
+@app.command("qa-gap-analysis")
+def qa_gap_analysis(
+    preview_only: bool = typer.Option(
+        False,
+        "--preview-only/--create-notes",
+        help="Only generate the report without writing new notes",
+    ),
+    auto_create: bool = typer.Option(
+        False,
+        "--auto-create",
+        help="Skip the confirmation prompt and immediately create notes",
+    ),
+    completion_mode: str = typer.Option(
+        "standard",
+        "--completion-mode",
+        help="Completion strictness for automated review (strict | standard | permissive)",
+    ),
+    processing_profile: str = typer.Option(
+        "balanced",
+        "--profile",
+        help="Processing profile for review (balanced | stability | thorough)",
+    ),
+    review_iterations: int = typer.Option(
+        6,
+        "--review-iterations",
+        help="Maximum number of automated fix iterations during review",
+    ),
+):
+    """Analyze vault coverage, propose missing questions, and optionally create notes."""
+
+    if not os.getenv("OPENROUTER_API_KEY"):
+        console.print(
+            "[red]✗[/red] OPENROUTER_API_KEY environment variable not set."
+            "\nObtain an API key from https://openrouter.ai/keys and export it before running."
+        )
+        raise typer.Exit(code=1)
+
+    try:
+        mode = CompletionMode(completion_mode.lower())
+    except ValueError:
+        console.print(
+            f"[red]✗[/red] Invalid completion mode: {completion_mode}\n"
+            "Valid options: strict, standard, permissive"
+        )
+        raise typer.Exit(code=1)
+
+    try:
+        profile = ProcessingProfile(processing_profile.lower())
+    except ValueError:
+        console.print(
+            f"[red]✗[/red] Invalid processing profile: {processing_profile}\n"
+            "Valid options: balanced, stability, thorough"
+        )
+        raise typer.Exit(code=1)
+
+    workflow = GapAnalysisWorkflow()
+    config = GapWorkflowConfig(
+        dry_run=preview_only,
+        auto_create=auto_create,
+        completion_mode=mode,
+        processing_profile=profile,
+        review_iterations=review_iterations,
+    )
+
+    console.print("[bold]Analyzing vault coverage. This may take a moment...[/bold]")
+
+    try:
+        result = workflow.analyze()
+    except Exception as exc:  # pragma: no cover - top-level workflow guard
+        console.print(f"[red]✗ Error:[/red] {exc}")
+        logger.exception("Gap analysis workflow failed: {}", exc)
+        raise typer.Exit(code=1)
+
+    console.print()
+    summary_table = Table(title="Coverage Gap Report", show_header=True, header_style="bold cyan")
+    summary_table.add_column("Topic", style="cyan")
+    summary_table.add_column("Rationale", style="magenta")
+    summary_table.add_column("Proposed", justify="right")
+    for topic in result.topics:
+        rationale = topic.rationale
+        if len(rationale) > 90:
+            rationale = rationale[:87] + "..."
+        summary_table.add_row(topic.topic, rationale, str(len(topic.cards)))
+    console.print(summary_table)
+
+    for topic in result.topics:
+        console.print(f"\n[bold]{topic.topic} recommendations:[/bold]")
+        for card in topic.cards:
+            console.print(
+                f"  • {card.slug} — {card.title_en} "
+                f"(difficulty={card.difficulty}, kind={card.question_kind})"
+            )
+
+    if result.duplicates:
+        console.print("\n[yellow]⚠[/yellow] Potential duplicates skipped:")
+        for slug in result.duplicates:
+            console.print(f"  • {slug}")
+
+    console.print(
+        f"\n[bold]Total recommendations:[/bold] {result.total_recommendations()}"
+        f" from {result.total_notes} existing notes"
+    )
+
+    if not result.unique_cards:
+        console.print("\n[yellow]⚠[/yellow] No unique notes to create after duplicate filtering")
+        raise typer.Exit(code=0)
+
+    if preview_only:
+        console.print(
+            "\n[yellow]⚠[/yellow] Preview-only mode enabled. Notes were not created and review did not run."
+        )
+        return
+
+    should_create = auto_create or typer.confirm(
+        "\nCreate the proposed notes and run automated review now?"
+    )
+    if not should_create:
+        console.print("\n[yellow]⚠[/yellow] Creation cancelled by user. Report preserved above.")
+        return
+
+    try:
+        apply_result = workflow.apply(result, config)
+    except Exception as exc:  # pragma: no cover - top-level workflow guard
+        console.print(f"[red]✗ Error:[/red] {exc}")
+        logger.exception("Failed to create notes from gap analysis: {}", exc)
+        raise typer.Exit(code=1)
+
+    if apply_result.created_paths:
+        console.print("\n[bold]Created notes:[/bold]")
+        for path in apply_result.created_paths:
+            console.print(f"  • {path}")
+
+    console.print(
+        f"\n[green]✓[/green] Gap analysis flow completed with {apply_result.reviewed_notes} notes reviewed"
+    )
+    logger.success(
+        "Gap analysis workflow completed",
+        created=len(apply_result.created_paths),
+        reviewed=apply_result.reviewed_notes,
+    )
 
 
 if __name__ == "__main__":
