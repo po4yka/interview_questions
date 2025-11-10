@@ -7,6 +7,7 @@ Modules:
 - validators: Comprehensive validation framework for note structure and quality
 - utils: Utility helpers for YAML loading, taxonomy management, and reporting
 - cli: Unified command-line interface with subcommands
+- technical_validation: LangChain-powered technical accuracy auditing
 
 Use the 'vault' CLI tool with subcommands:
 - vault validate: Comprehensive note validation
@@ -16,4 +17,4 @@ Use the 'vault' CLI tool with subcommands:
 
 __version__ = "0.3.1"
 
-__all__ = ["validators", "utils", "cli"]
+__all__ = ["validators", "utils", "cli", "technical_validation"]
