@@ -12,7 +12,15 @@ def _severity_from_signature(signature: str) -> str:
     """Extract the severity prefix from an issue signature."""
 
     severity, _, _ = signature.partition(":")
-    return severity or signature
+
+    if not severity:
+        return signature
+
+    # Signatures may occasionally contain Enum reprs like "Severity.WARNING".
+    if "." in severity:
+        severity = severity.rsplit(".", 1)[-1]
+
+    return severity
 
 
 def filter_blocking_issue_history(history: Iterable[set[str]]) -> list[set[str]]:
