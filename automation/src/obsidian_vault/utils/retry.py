@@ -2,6 +2,11 @@
 
 Provides async retry decorators for LLM API calls and other operations
 that may fail temporarily due to network issues, rate limits, or service errors.
+
+IMPORTANT: When using retry_on and skip_on together:
+- skip_on takes precedence over retry_on
+- Exceptions matching skip_on will NEVER be retried, even if they also match retry_on
+- Make sure skip_on and retry_on are mutually exclusive to avoid confusion
 """
 
 from __future__ import annotations
@@ -57,17 +62,31 @@ def async_retry(
             for attempt in range(1, max_attempts + 1):
                 try:
                     return await func(*args, **kwargs)
-                except skip_on as e:
-                    # Don't retry these exceptions
-                    logger.debug(
-                        "Not retrying {} (attempt {}/{}) due to non-retryable error: {}",
-                        func.__name__,
-                        attempt,
-                        max_attempts,
-                        type(e).__name__,
-                    )
-                    raise
-                except retry_on as e:
+                except Exception as e:
+                    # Check skip_on FIRST (takes precedence)
+                    if skip_on and isinstance(e, skip_on):
+                        logger.debug(
+                            "Not retrying {} (attempt {}/{}) due to non-retryable error: {}",
+                            func.__name__,
+                            attempt,
+                            max_attempts,
+                            type(e).__name__,
+                        )
+                        raise
+
+                    # Then check if it's retryable
+                    if not isinstance(e, retry_on):
+                        # Not in retry_on list, re-raise immediately
+                        logger.debug(
+                            "Not retrying {} (attempt {}/{}) - exception type {} not in retry_on list",
+                            func.__name__,
+                            attempt,
+                            max_attempts,
+                            type(e).__name__,
+                        )
+                        raise
+
+                    # Exception is retryable
                     last_exception = e
 
                     # Don't retry if this was the last attempt
@@ -154,17 +173,31 @@ def sync_retry(
             for attempt in range(1, max_attempts + 1):
                 try:
                     return func(*args, **kwargs)
-                except skip_on as e:
-                    # Don't retry these exceptions
-                    logger.debug(
-                        "Not retrying {} (attempt {}/{}) due to non-retryable error: {}",
-                        func.__name__,
-                        attempt,
-                        max_attempts,
-                        type(e).__name__,
-                    )
-                    raise
-                except retry_on as e:
+                except Exception as e:
+                    # Check skip_on FIRST (takes precedence)
+                    if skip_on and isinstance(e, skip_on):
+                        logger.debug(
+                            "Not retrying {} (attempt {}/{}) due to non-retryable error: {}",
+                            func.__name__,
+                            attempt,
+                            max_attempts,
+                            type(e).__name__,
+                        )
+                        raise
+
+                    # Then check if it's retryable
+                    if not isinstance(e, retry_on):
+                        # Not in retry_on list, re-raise immediately
+                        logger.debug(
+                            "Not retrying {} (attempt {}/{}) - exception type {} not in retry_on list",
+                            func.__name__,
+                            attempt,
+                            max_attempts,
+                            type(e).__name__,
+                        )
+                        raise
+
+                    # Exception is retryable
                     last_exception = e
 
                     # Don't retry if this was the last attempt

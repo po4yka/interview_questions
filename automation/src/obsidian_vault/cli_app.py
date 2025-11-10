@@ -38,12 +38,15 @@ from obsidian_vault.utils import (
     FileResult,
     ReportGenerator,
     TaxonomyLoader,
+    atomic_write,
     build_note_index,
     collect_validatable_files,
     discover_repo_root,
     parse_note,
     sanitize_text_for_yaml,
     setup_logging,
+    validate_integer,
+    validate_url,
 )
 from obsidian_vault.utils.graph_analytics import VaultGraph, generate_link_health_report
 from obsidian_vault.validators import Severity, ValidatorRegistry
@@ -1141,11 +1144,6 @@ def llm_review(
 
                     # Save if not dry-run
                     if not dry_run and state.changed:
-                        if backup:
-                            backup_path = note_path.with_suffix(".md.backup")
-                            backup_path.write_text(state.original_text, encoding="utf-8")
-                            console.print(f"  [dim]Backup: {backup_path.name}[/dim]")
-
                         sanitized_text = sanitize_text_for_yaml(state.current_text)
                         if sanitized_text != state.current_text:
                             logger.warning(
@@ -1153,8 +1151,15 @@ def llm_review(
                                 f"invalid character(s) from {note_path.name}"
                             )
 
-                        note_path.write_text(sanitized_text, encoding="utf-8")
-                        console.print(f"  [dim]Saved changes to {note_path.name}[/dim]")
+                        # Use atomic write with optional backup
+                        try:
+                            atomic_write(note_path, sanitized_text, encoding="utf-8", create_backup=backup)
+                            console.print(f"  [dim]Saved changes to {note_path.name}[/dim]")
+                            if backup:
+                                console.print(f"  [dim]Backup created: {note_path.name}.backup[/dim]")
+                        except Exception as e:
+                            console.print(f"  [red]✗[/red] Failed to save {note_path.name}: {e}")
+                            logger.error(f"Failed to write {note_path}: {e}")
 
                     console.print()
                     return (note_path, state)
@@ -1261,9 +1266,19 @@ def qa_ingest(
     ),
 ):
     """Generate new bilingual notes from an external article using Firecrawl + LLM."""
+    from obsidian_vault.exceptions import ValidationError
 
-    if max_cards < 1 or max_cards > 5:
-        console.print("[red]✗[/red] max-cards must be between 1 and 5")
+    # Validate inputs
+    try:
+        url = validate_url(url)
+    except ValidationError as e:
+        console.print(f"[red]✗[/red] Invalid URL: {e}")
+        raise typer.Exit(code=1)
+
+    try:
+        max_cards = validate_integer(max_cards, min_value=1, max_value=5, param_name="max_cards")
+    except ValidationError as e:
+        console.print(f"[red]✗[/red] {e}")
         raise typer.Exit(code=1)
 
     if not os.getenv("FIRECRAWL_API_KEY"):
