@@ -9,6 +9,7 @@ from .config import get_openrouter_model
 from .models import (
     BilingualParityResult,
     ConceptEnrichmentResult,
+    FixPlanResult,
     IssueFixResult,
     MetadataSanityResult,
     QAFailureSummaryResult,
@@ -18,6 +19,7 @@ from .models import (
 from .prompts import (
     BILINGUAL_PARITY_PROMPT,
     CONCEPT_ENRICHMENT_PROMPT,
+    FIX_COORDINATOR_PROMPT,
     ISSUE_FIX_PROMPT,
     METADATA_SANITY_PROMPT,
     QA_FAILURE_SUMMARY_PROMPT,
@@ -27,6 +29,7 @@ from .prompts import (
 from .settings import (
     BILINGUAL_PARITY_SETTINGS,
     CONCEPT_ENRICHMENT_SETTINGS,
+    FIX_COORDINATOR_SETTINGS,
     ISSUE_FIX_SETTINGS,
     METADATA_SANITY_SETTINGS,
     QA_FAILURE_SUMMARY_SETTINGS,
@@ -130,4 +133,18 @@ def get_qa_failure_summary_agent() -> Agent:
         model=get_openrouter_model(agent_settings=QA_FAILURE_SUMMARY_SETTINGS),
         output_type=QAFailureSummaryResult,
         system_prompt=QA_FAILURE_SUMMARY_PROMPT,
+    )
+
+
+def get_fix_coordinator_agent() -> Agent:
+    """Get the fix coordinator agent (lazy initialization).
+
+    Uses low-moderate temperature (0.2) for systematic, strategic planning
+    to create optimal fix execution plans with dependency resolution.
+    """
+    logger.debug("Creating fix coordinator agent with custom settings")
+    return Agent(
+        model=get_openrouter_model(agent_settings=FIX_COORDINATOR_SETTINGS),
+        output_type=FixPlanResult,
+        system_prompt=FIX_COORDINATOR_PROMPT,
     )

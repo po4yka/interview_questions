@@ -19,6 +19,7 @@ from .config import get_openrouter_model
 from .factories import (
     get_bilingual_parity_agent,
     get_concept_enrichment_agent,
+    get_fix_coordinator_agent,
     get_issue_fix_agent,
     get_metadata_sanity_agent,
     get_qa_failure_summary_agent,
@@ -27,6 +28,7 @@ from .factories import (
 from .models import (
     BilingualParityResult,
     ConceptEnrichmentResult,
+    FixPlanResult,
     IssueFixResult,
     MetadataSanityResult,
     QAFailureSummaryResult,
@@ -895,4 +897,113 @@ Analyze why the automated workflow could not resolve these issues and provide sp
         return result.output
     except Exception as e:
         logger.error("QA failure summary failed for {}: {}", note_path, e)
+        raise
+
+
+async def run_fix_coordination(
+    issues: list[str],
+    iteration: int,
+    max_iterations: int,
+    fix_history: list[dict[str, Any]],
+    note_path: str,
+    **kwargs: Any,
+) -> FixPlanResult:
+    """Coordinate and plan the fix strategy for validation issues.
+
+    This agent analyzes issues, identifies dependencies, and creates an
+    optimal execution plan that maximizes fix success while minimizing
+    conflicts and rework.
+
+    Args:
+        issues: List of validation issue messages to fix
+        iteration: Current iteration number (1-indexed)
+        max_iterations: Maximum iterations allowed
+        fix_history: History of previous fix attempts
+        note_path: Path to the note (for context)
+        **kwargs: Additional context
+
+    Returns:
+        FixPlanResult with prioritized groups, fix order, and strategy
+    """
+    logger.debug(f"Starting fix coordination for: {note_path}")
+    logger.debug(
+        f"Iteration: {iteration}/{max_iterations}, Issues: {len(issues)}"
+    )
+
+    # Format fix history for context
+    history_summary = []
+    for attempt in fix_history[-5:]:  # Last 5 attempts
+        iteration_num = attempt.get("iteration", "?")
+        result_status = attempt.get("result", "unknown")
+        targeted = attempt.get("issues_targeted", [])
+        applied = attempt.get("fixes_applied", [])
+        remaining = attempt.get("issues_remaining", [])
+
+        history_summary.append(
+            f"Iteration {iteration_num} [{result_status}]: "
+            f"Targeted {len(targeted)} issue(s), "
+            f"Applied {len(applied)} fix(es), "
+            f"{len(remaining)} remained"
+        )
+
+    history_text = "\n".join(history_summary) if history_summary else "No previous fix attempts"
+
+    # Format issues for analysis
+    issues_text = "\n".join(f"- {issue}" for issue in issues)
+
+    # Count issues by severity
+    from collections import Counter
+    severity_counts = Counter()
+    for issue in issues:
+        if "CRITICAL" in issue or "[CRITICAL]" in issue:
+            severity_counts["CRITICAL"] += 1
+        elif "ERROR" in issue or "[ERROR]" in issue:
+            severity_counts["ERROR"] += 1
+        elif "WARNING" in issue or "[WARNING]" in issue:
+            severity_counts["WARNING"] += 1
+        else:
+            severity_counts["INFO"] += 1
+
+    severity_summary = ", ".join(f"{sev}={count}" for sev, count in severity_counts.items())
+
+    prompt = f"""Analyze these validation issues and create an optimal fix plan.
+
+Note path: {note_path}
+Current iteration: {iteration}/{max_iterations}
+Total issues: {len(issues)}
+Issue breakdown: {severity_summary}
+
+PREVIOUS FIX ATTEMPTS:
+{history_text}
+
+ISSUES TO FIX:
+{issues_text}
+
+Create a fix plan that:
+1. Groups related issues (e.g., all timestamp issues together)
+2. Prioritizes by severity (CRITICAL > ERROR > WARNING > INFO)
+3. Identifies dependencies (e.g., "fix YAML before adding links")
+4. Recommends fixer type (deterministic vs LLM) per group
+5. Suggests order of operations to avoid conflicts
+
+Return a structured fix plan that respects dependencies and maximizes convergence."""
+
+    try:
+        agent = get_fix_coordinator_agent()
+        logger.debug("Running fix coordinator agent...")
+        result = await agent.run(prompt)
+
+        logger.info(
+            f"Fix coordination complete - "
+            f"Groups: {len(result.output.issue_groups)}, "
+            f"Estimated iterations: {result.output.estimated_iterations}, "
+            f"High-risk fixes: {len(result.output.high_risk_fixes)}"
+        )
+
+        logger.debug(f"Fix order: {' → '.join(result.output.fix_order)}")
+        logger.debug(f"Strategy: {result.output.explanation}")
+
+        return result.output
+    except Exception as e:
+        logger.error("Fix coordination failed for {}: {}", note_path, e)
         raise
