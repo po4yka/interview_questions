@@ -14,6 +14,7 @@ Use `vault-app` for this enhanced version.
 
 from __future__ import annotations
 
+import json
 import sys
 from enum import Enum
 from pathlib import Path
@@ -28,6 +29,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn
 from rich.table import Table
 from rich.text import Text
 
+from obsidian_vault.technical_validation import TechnicalValidationFlow
 from obsidian_vault.utils import (
     FileResult,
     ReportGenerator,
@@ -188,6 +190,127 @@ def validate(
         logger.exception(f"Validation failed with error: {e}")
         raise typer.Exit(code=1)
 
+
+@app.command("technical-validate")
+def technical_validate(
+    path: Optional[str] = typer.Argument(None, help="File or directory to analyze"),
+    all: bool = typer.Option(False, "--all", "-a", help="Validate every note in the vault"),
+    limit: Optional[int] = typer.Option(None, "--limit", "-l", help="Limit the number of notes"),
+    json_output: Optional[str] = typer.Option(None, "--json", help="Write JSON results to file"),
+):
+    """Run the LangChain-powered technical validation workflow."""
+
+    from obsidian_vault.utils import ensure_vault_exists, safe_resolve_path
+
+    logger.info("Starting technical validation run")
+    try:
+        repo_root = discover_repo_root()
+        vault_dir = ensure_vault_exists(repo_root)
+    except ValueError as error:
+        console.print(f"[red]✗[/red] {error}")
+        logger.error("Vault discovery failed: {}", error)
+        raise typer.Exit(code=1)
+
+    if all:
+        targets = collect_validatable_files(vault_dir)
+    elif path:
+        try:
+            safe_path = safe_resolve_path(path, vault_dir)
+        except ValueError:
+            try:
+                safe_path = safe_resolve_path(path, repo_root)
+            except ValueError as error:
+                console.print(f"[red]✗[/red] Invalid path: {error}")
+                raise typer.Exit(code=1)
+
+        if safe_path.is_file() and safe_path.suffix.lower() == ".md":
+            targets = [safe_path]
+        elif safe_path.is_dir():
+            targets = collect_validatable_files(safe_path)
+        else:
+            console.print(f"[red]✗[/red] Invalid path: {path} is not a markdown file or directory")
+            raise typer.Exit(code=1)
+    else:
+        console.print("[yellow]⚠[/yellow] Either provide a path or use --all")
+        raise typer.Exit(code=1)
+
+    if not targets:
+        console.print("[yellow]⚠[/yellow] No Markdown notes found")
+        logger.warning("No Markdown notes available for technical validation")
+        raise typer.Exit(code=1)
+
+    if limit is not None and limit > 0:
+        targets = targets[:limit]
+        logger.debug("Limiting validation to {} notes", len(targets))
+
+    flow = TechnicalValidationFlow.from_repo(repo_root)
+    reports = flow.validate_paths(targets)
+
+    if not reports:
+        console.print("[green]✓[/green] No technical issues detected in the selected notes.")
+        logger.success("Technical validation completed without findings")
+        raise typer.Exit(code=0)
+
+    table = Table(show_header=True, header_style="bold cyan")
+    table.add_column("Note")
+    table.add_column("Severity", style="magenta")
+    table.add_column("Summary", style="white")
+
+    for report in reports:
+        relative_path = report.path.relative_to(repo_root)
+        severity = report.highest_severity.value if report.highest_severity else "INFO"
+        summary = (report.summary or "See detailed findings below.").strip()
+        table.add_row(str(relative_path), severity, summary[:160] + ("…" if len(summary) > 160 else ""))
+
+    console.print("\n[bold]Technical Validation Findings[/bold]\n")
+    console.print(table)
+
+    for report in reports:
+        relative_path = report.path.relative_to(repo_root)
+        console.print()
+        console.rule(f"{relative_path}")
+        for finding in report.findings:
+            issue = finding.issue
+            context = f" (field: {issue.field})" if issue.field else ""
+            location = f" line {issue.line}" if issue.line is not None else ""
+            console.print(
+                f"[bold]{issue.severity.value}[/bold]{context}{location}: {issue.message}",
+            )
+            if finding.fix:
+                console.print(f"  [green]Suggested fix:[/green] {finding.fix}")
+            if finding.references:
+                console.print(f"  [blue]References:[/blue] {' | '.join(finding.references)}")
+        if report.summary:
+            console.print(f"\n[italic]Agent summary:[/italic] {report.summary}")
+
+    if json_output:
+        output_path = Path(json_output)
+        payload = [
+            {
+                "path": str(report.path.relative_to(repo_root)),
+                "summary": report.summary,
+                "issues": [
+                    {
+                        "validator": finding.validator,
+                        "severity": finding.issue.severity.value,
+                        "message": finding.issue.message,
+                        "field": finding.issue.field,
+                        "line": finding.issue.line,
+                        "fix": finding.fix,
+                        "references": finding.references,
+                    }
+                    for finding in report.findings
+                ],
+            }
+            for report in reports
+        ]
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+        console.print(f"\n[green]✓[/green] JSON report written to {output_path}")
+        logger.info("Technical validation JSON report written to {}", output_path)
+
+    logger.success("Technical validation completed with {} notes showing issues", len(reports))
+    raise typer.Exit(code=0)
 
 def _validate_files(targets, repo_root, vault_dir, taxonomy, note_index) -> list[FileResult]:
     """Validate a list of files."""
