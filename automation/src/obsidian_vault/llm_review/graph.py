@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 import uuid
-from collections import Counter
+from collections import Counter, OrderedDict
 from dataclasses import dataclass, replace
 from datetime import datetime
 from enum import Enum
@@ -120,6 +120,10 @@ PROFILE_SETTINGS: dict[ProcessingProfile, _ProfileSettings] = {
         "enable_analytics": True,
     },
 }
+
+# Maximum number of fix memory entries to keep (LRU cache limit)
+# This prevents unbounded memory growth in long-running processes
+MAX_FIX_MEMORY_SIZE = 100
 
 
 class ReviewGraph:
@@ -238,7 +242,8 @@ class ReviewGraph:
         self.max_iterations = max_iterations + bonus_iterations
         self.dry_run = dry_run
         self.completion_mode = completion_mode
-        self.fix_memory: dict[str, FixMemory] = {}
+        # Use OrderedDict for LRU eviction (Python 3.7+ dicts are ordered, but explicit is better)
+        self.fix_memory: OrderedDict[str, FixMemory] = OrderedDict()
         self.timestamp_policy = TimestampPolicy(vault_root)
         self.smart_selector = SmartValidatorSelector()
         self.atomic_related = AtomicRelatedFixer()
@@ -252,6 +257,43 @@ class ReviewGraph:
         )
         self.analytics = ReviewAnalyticsRecorder(enabled=analytics_enabled)
         self.graph = self._build_graph()
+
+    def _get_fix_memory(self, note_path: str) -> FixMemory | None:
+        """Get fix memory for a note (LRU access).
+
+        Args:
+            note_path: Path to the note
+
+        Returns:
+            FixMemory object or None if not found
+        """
+        if note_path in self.fix_memory:
+            # Move to end (most recently used)
+            self.fix_memory.move_to_end(note_path)
+            return self.fix_memory[note_path]
+        return None
+
+    def _set_fix_memory(self, note_path: str, memory: FixMemory) -> None:
+        """Set fix memory for a note with LRU eviction.
+
+        Args:
+            note_path: Path to the note
+            memory: FixMemory object to store
+        """
+        # Remove if already exists (we'll re-add at the end)
+        if note_path in self.fix_memory:
+            del self.fix_memory[note_path]
+
+        # Add to end (most recently used)
+        self.fix_memory[note_path] = memory
+
+        # Evict oldest entries if we exceeded the limit
+        while len(self.fix_memory) > MAX_FIX_MEMORY_SIZE:
+            oldest_key = next(iter(self.fix_memory))
+            evicted = self.fix_memory.pop(oldest_key)
+            logger.debug(
+                f"Evicted fix memory for {oldest_key} (LRU cache limit: {MAX_FIX_MEMORY_SIZE})"
+            )
 
     def _build_graph(self) -> StateGraph:
         """Build the LangGraph workflow."""
@@ -1574,10 +1616,12 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         Returns:
             FixMemory instance for this note
         """
-        if note_path not in self.fix_memory:
-            self.fix_memory[note_path] = FixMemory()
+        memory = self._get_fix_memory(note_path)
+        if memory is None:
+            memory = FixMemory()
+            self._set_fix_memory(note_path, memory)
             logger.debug(f"Created new FixMemory for {note_path}")
-        return self.fix_memory[note_path]
+        return memory
 
     def _format_fix_history(self, fix_attempts: list, note_path: str, current_iteration: int) -> str:
         """Format fix attempt history for fixer agent context.
@@ -2481,8 +2525,9 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         )
         bound_logger.debug(f"Initialized state with max_iterations={self.max_iterations}")
 
-        if note_path_key in self.fix_memory:
-            self.fix_memory[note_path_key].clear()
+        memory = self._get_fix_memory(note_path_key)
+        if memory is not None:
+            memory.clear()
             bound_logger.debug("Cleared existing Fix Memory for this note")
 
         bound_logger.info(f"Starting LangGraph workflow for {note_path.name}")

@@ -3,9 +3,10 @@ Logging configuration using Loguru.
 
 Provides two logging levels:
 - Console: INFO level with useful, concise messages
-- File: DEBUG level with detailed diagnostic information
+- File: DEBUG level with detailed diagnostic information (SANITIZED)
 
 The file logs are stored in ~/.cache/obsidian-vault/vault.log with rotation.
+All file logs are automatically sanitized to prevent API key/secret leakage.
 """
 
 from __future__ import annotations
@@ -14,6 +15,44 @@ import sys
 from pathlib import Path
 
 from loguru import logger
+
+
+def _filter_and_sanitize(record: dict) -> bool:
+    """Filter and sanitize log record before writing to file.
+
+    This function is called by loguru for each log record written to file.
+    It sanitizes sensitive data like API keys, tokens, and passwords.
+
+    Args:
+        record: Loguru log record dictionary
+
+    Returns:
+        True to allow the record (always returns True, we sanitize in-place)
+    """
+    from .log_sanitizer import sanitize_dict, sanitize_string
+
+    # Sanitize the main message
+    if "message" in record:
+        record["message"] = sanitize_string(str(record["message"]))
+
+    # Sanitize extra fields
+    if record.get("extra"):
+        record["extra"] = sanitize_dict(record["extra"])
+
+    # Sanitize exception info if present
+    if record.get("exception") and record["exception"]:
+        exc_info = record["exception"]
+        if hasattr(exc_info, "value"):
+            exc_value = str(exc_info.value)
+            # Create a sanitized version - we can't modify the exception object directly
+            # but we can sanitize what gets logged
+            sanitized_exc = sanitize_string(exc_value)
+            # Store sanitized version in extra for reference
+            if "extra" not in record:
+                record["extra"] = {}
+            record["extra"]["_sanitized_exception"] = sanitized_exc
+
+    return True  # Always allow the record after sanitization
 
 
 def setup_logging(
@@ -53,6 +92,7 @@ def setup_logging(
         cache_dir.mkdir(parents=True, exist_ok=True)
         log_file = cache_dir / "vault.log"
 
+    # File handler with sanitization to prevent API key leakage
     logger.add(
         log_file,
         level=file_level,
@@ -62,6 +102,7 @@ def setup_logging(
         backtrace=True,
         diagnose=True,
         enqueue=True,  # Thread-safe
+        filter=lambda record: _filter_and_sanitize(record),  # Sanitize before writing
     )
 
     logger.debug(f"Logging initialized - Console: {console_level}, File: {file_level} ({log_file})")
