@@ -5,7 +5,7 @@ from __future__ import annotations
 import re
 import uuid
 from collections import Counter
-from dataclasses import replace
+from dataclasses import dataclass, replace
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
@@ -15,7 +15,7 @@ from langgraph.graph import END, START, StateGraph
 from loguru import logger
 
 from obsidian_vault.utils import TaxonomyLoader, build_note_index
-from obsidian_vault.utils.frontmatter import load_frontmatter_text
+from obsidian_vault.utils.frontmatter import dump_frontmatter, load_frontmatter_text
 from obsidian_vault.validators import ValidatorRegistry
 
 from .agents import (
@@ -333,31 +333,47 @@ class ReviewGraph:
 
             updates: dict[str, Any] = {}
             if result.changes_made:
-                is_valid, validation_error = self._validate_fix(
+                validation = self._validate_fix(
                     state_obj.current_text,
                     result.revised_text,
                     state_obj.note_path,
                 )
 
-                if not is_valid:
+                if not validation.is_valid:
                     logger.error(
                         "Technical review validation FAILED: {}",
-                        validation_error,
+                        validation.error,
                     )
                     history_updates.append(
                         state_obj.add_history_entry(
                             "initial_llm_review",
-                            f"Technical review rejected: {validation_error}",
-                            validation_error=validation_error,
+                            f"Technical review rejected: {validation.error}",
+                            validation_error=validation.error,
                         )
                     )
                     return {
-                        "error": f"Technical review produced invalid output: {validation_error}",
+                        "error": f"Technical review produced invalid output: {validation.error}",
                         "requires_human_review": True,
                         "completed": True,
                         "decision": "done",
                         "history": history_updates,
                     }
+
+                if validation.restored_sections:
+                    logger.info(
+                        "Restored missing sections after technical review: {}",
+                        ", ".join(validation.restored_sections),
+                    )
+                    history_updates.append(
+                        state_obj.add_history_entry(
+                            "initial_llm_review",
+                            "Auto-restored required sections removed by technical review",
+                            restored_sections=validation.restored_sections,
+                        )
+                    )
+
+                if validation.corrected_text is not None:
+                    result.revised_text = validation.corrected_text
 
                 updates["current_text"] = result.revised_text
                 updates["changed"] = True
@@ -492,7 +508,18 @@ class ReviewGraph:
 
         return changed
 
-    def _validate_fix(self, text_before: str, text_after: str, note_path: str) -> tuple[bool, str | None]:
+    @dataclass
+    class FixValidationResult:
+        """Outcome of fix validation."""
+
+        is_valid: bool
+        error: str | None = None
+        corrected_text: str | None = None
+        restored_sections: list[str] | None = None
+
+    def _validate_fix(
+        self, text_before: str, text_after: str, note_path: str
+    ) -> "LLMReviewGraph.FixValidationResult":
         """Validate that a fix didn't break the note structure.
 
         IMPROVEMENT 2: Post-fix validation to reject broken fixes.
@@ -509,12 +536,23 @@ class ReviewGraph:
 
         # Check 1: YAML is still parseable
         try:
-            from obsidian_vault.utils.frontmatter import load_frontmatter_text
+            yaml_before, body_before = load_frontmatter_text(text_before)
+        except Exception as e:
+            logger.debug(
+                "Failed to parse original text during fix validation: {}", e
+            )
+            yaml_before, body_before = None, text_before
+
+        try:
             yaml_after, body_after = load_frontmatter_text(text_after)
             if yaml_after is None:
-                return False, "Fix broke YAML frontmatter - YAML is no longer parseable"
+                return self.FixValidationResult(
+                    False, "Fix broke YAML frontmatter - YAML is no longer parseable"
+                )
         except Exception as e:
-            return False, f"Fix broke YAML frontmatter - parsing error: {e}"
+            return self.FixValidationResult(
+                False, f"Fix broke YAML frontmatter - parsing error: {e}"
+            )
 
         # Check 2: Content didn't shrink dramatically (>30% loss is suspicious)
         len_before = len(text_before)
@@ -522,7 +560,13 @@ class ReviewGraph:
         if len_before > 0:
             shrinkage = (len_before - len_after) / len_before
             if shrinkage > 0.3:
-                return False, f"Fix removed too much content - {shrinkage*100:.1f}% shrinkage (before: {len_before} chars, after: {len_after} chars)"
+                return self.FixValidationResult(
+                    False,
+                    (
+                        "Fix removed too much content - "
+                        f"{shrinkage*100:.1f}% shrinkage (before: {len_before} chars, after: {len_after} chars)"
+                    ),
+                )
 
         # Check 3: Essential bilingual sections still present
         required_sections = [
@@ -537,20 +581,180 @@ class ReviewGraph:
                 missing_sections.append(section)
 
         if missing_sections:
-            return False, f"Fix removed required sections: {', '.join(missing_sections)}"
+            restored_text = self._restore_required_sections(
+                text_before=text_before,
+                text_after=text_after,
+                yaml_after=yaml_after or yaml_before,
+                body_before=body_before,
+                body_after=body_after,
+                missing_sections=missing_sections,
+            )
+
+            if restored_text is not None:
+                logger.warning(
+                    "Fix removed required sections {} - auto-restoring from previous version",
+                    ", ".join(missing_sections),
+                )
+                return self.FixValidationResult(
+                    True,
+                    None,
+                    restored_text,
+                    restored_sections=missing_sections,
+                )
+
+            return self.FixValidationResult(
+                False,
+                f"Fix removed required sections: {', '.join(missing_sections)}",
+            )
 
         # Check 4: No null bytes or invalid characters
         if '\x00' in text_after:
-            return False, "Fix introduced null bytes into the content"
+            return self.FixValidationResult(
+                False, "Fix introduced null bytes into the content"
+            )
 
         # Check 5: Text is valid UTF-8
         try:
             text_after.encode('utf-8')
         except UnicodeEncodeError as e:
-            return False, f"Fix introduced invalid UTF-8 characters: {e}"
+            return self.FixValidationResult(
+                False, f"Fix introduced invalid UTF-8 characters: {e}"
+            )
 
         logger.debug("Fix validation passed - all checks successful")
-        return True, None
+        return self.FixValidationResult(True, None, text_after)
+
+    def _restore_required_sections(
+        self,
+        *,
+        text_before: str,
+        text_after: str,
+        yaml_after: dict | None,
+        body_before: str,
+        body_after: str,
+        missing_sections: list[str],
+    ) -> str | None:
+        """Restore required sections removed by a fix using original text snippets."""
+
+        required_order = [
+            "# Вопрос (RU)",
+            "# Question (EN)",
+            "## Ответ (RU)",
+            "## Answer (EN)",
+        ]
+
+        before_lines = body_before.splitlines()
+        after_lines = body_after.splitlines()
+
+        section_ranges_before: dict[str, tuple[int, int]] = {}
+        section_ranges_after: dict[str, tuple[int, int]] = {}
+
+        for heading in required_order:
+            before_range = self._extract_section_range(before_lines, heading)
+            if before_range:
+                section_ranges_before[heading] = before_range
+
+            after_range = self._extract_section_range(after_lines, heading)
+            if after_range:
+                section_ranges_after[heading] = after_range
+
+        for heading in missing_sections:
+            if heading not in section_ranges_before:
+                logger.debug(
+                    "Cannot restore section '{}' - not found in original text",
+                    heading,
+                )
+                return None
+
+        present_ranges = [
+            section_ranges_after[h]
+            for h in required_order
+            if h in section_ranges_after
+        ]
+
+        if present_ranges:
+            start_line = min(r[0] for r in present_ranges)
+            end_line = max(r[1] for r in present_ranges)
+            prefix_lines = after_lines[:start_line]
+            suffix_lines = after_lines[end_line:]
+        else:
+            prefix_lines = []
+            suffix_lines = after_lines
+
+        restored_lines: list[str] = []
+
+        for heading in required_order:
+            if heading in section_ranges_after:
+                start, end = section_ranges_after[heading]
+                lines = after_lines[start:end]
+            else:
+                before_range = section_ranges_before.get(heading)
+                if before_range is None:
+                    continue
+                start, end = before_range
+                lines = before_lines[start:end]
+
+            if restored_lines and lines:
+                if restored_lines[-1].strip() and lines[0].strip():
+                    restored_lines.append("")
+
+            restored_lines.extend(lines)
+
+        combined_lines: list[str] = []
+        if prefix_lines:
+            combined_lines.extend(prefix_lines)
+            if prefix_lines[-1].strip() and restored_lines:
+                combined_lines.append("")
+
+        combined_lines.extend(restored_lines)
+
+        if suffix_lines:
+            if combined_lines and combined_lines[-1].strip() and suffix_lines[0].strip():
+                combined_lines.append("")
+            combined_lines.extend(suffix_lines)
+
+        new_body = "\n".join(combined_lines).rstrip() + "\n"
+
+        if yaml_after is None:
+            logger.debug("YAML frontmatter missing while restoring sections - aborting")
+            return None
+
+        return dump_frontmatter(yaml_after, new_body)
+
+    def _extract_section_range(
+        self, lines: list[str], heading: str
+    ) -> tuple[int, int] | None:
+        """Get the line range for a heading including its content."""
+
+        try:
+            start = next(
+                idx for idx, line in enumerate(lines) if line.strip() == heading
+            )
+        except StopIteration:
+            return None
+
+        end = len(lines)
+        for idx in range(start + 1, len(lines)):
+            stripped = lines[idx].lstrip()
+            if stripped.startswith("#"):
+                level = self._heading_level(stripped)
+                if level in (1, 2):
+                    end = idx
+                    break
+
+        return start, end
+
+    @staticmethod
+    def _heading_level(line: str) -> int:
+        """Count heading level from a markdown heading line."""
+
+        level = 0
+        for char in line:
+            if char == "#":
+                level += 1
+            else:
+                break
+        return level
 
     async def _pre_flight_check(self, state: NoteReviewStateDict) -> dict[str, Any]:
         """Node: Pre-flight validation before starting the review workflow.
@@ -1509,20 +1713,22 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 )
 
                 # IMPROVEMENT 2: Validate deterministic fix before accepting
-                is_valid, validation_error = self._validate_fix(
+                validation = self._validate_fix(
                     state_obj.current_text,
                     deterministic_result.revised_text,
                     state_obj.note_path
                 )
 
-                if not is_valid:
-                    logger.error(f"Deterministic fix validation FAILED: {validation_error}")
+                if not validation.is_valid:
+                    logger.error(
+                        f"Deterministic fix validation FAILED: {validation.error}"
+                    )
                     logger.warning("Rejecting deterministic fix and keeping original text")
                     history_updates.append(
                         state_obj.add_history_entry(
                             "deterministic_fix_validation",
-                            f"Deterministic fix rejected: {validation_error}",
-                            validation_error=validation_error,
+                            f"Deterministic fix rejected: {validation.error}",
+                            validation_error=validation.error,
                         )
                     )
 
@@ -1530,6 +1736,28 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                     logger.info("Continuing to LLM fixer despite deterministic fix rejection")
                 else:
                     logger.info("Deterministic fix validation passed - accepting changes")
+                    if validation.restored_sections:
+                        logger.info(
+                            "Restored missing sections after deterministic fix: {}",
+                            ", ".join(validation.restored_sections),
+                        )
+                        history_updates.append(
+                            state_obj.add_history_entry(
+                                "deterministic_fix_validation",
+                                "Auto-restored required sections removed by deterministic fix",
+                                restored_sections=validation.restored_sections,
+                            )
+                        )
+
+                    validated_text = (
+                        validation.corrected_text
+                        if validation.corrected_text is not None
+                        else deterministic_result.revised_text
+                    )
+                    if validation.corrected_text is not None:
+                        deterministic_result = replace(
+                            deterministic_result, revised_text=validated_text
+                        )
                     history_updates.append(
                         state_obj.add_history_entry(
                             "deterministic_fixer",
@@ -1539,7 +1767,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                         )
                     )
 
-                    state_obj.current_text = deterministic_result.revised_text
+                    state_obj.current_text = validated_text
 
                 remaining_issues = [
                     issue for issue in state_obj.issues
@@ -1629,33 +1857,47 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             updates: dict[str, Any] = {}
             if result.changes_made:
                 # IMPROVEMENT 2: Validate fix before accepting it
-                is_valid, validation_error = self._validate_fix(
+                validation = self._validate_fix(
                     state_obj.current_text,
                     result.revised_text,
                     state_obj.note_path
                 )
 
-                if not is_valid:
-                    logger.error(f"Fix validation FAILED: {validation_error}")
+                if not validation.is_valid:
+                    logger.error(f"Fix validation FAILED: {validation.error}")
                     logger.warning("Rejecting fix and keeping original text")
                     history_updates.append(
                         state_obj.add_history_entry(
                             "fix_validation",
-                            f"Fix rejected: {validation_error}",
-                            validation_error=validation_error,
+                            f"Fix rejected: {validation.error}",
+                            validation_error=validation.error,
                         )
                     )
 
-                    # Mark for human review
-                    return {
-                        "error": f"Fix validation failed: {validation_error}",
-                        "requires_human_review": True,
-                        "history": history_updates,
-                        "decision": "summarize_failures",
-                        "changed": False,
-                    }
+                    attempt.result = "failed"
+                    updates["fix_attempts"] = state_obj.fix_attempts + [attempt]
+                    updates["history"] = history_updates
+                    updates.setdefault("decision", None)
+                    updates.setdefault("changed", False)
+                    return updates
 
                 logger.info("Fix validation passed - accepting changes")
+                if validation.restored_sections:
+                    logger.info(
+                        "Restored missing sections after fix: {}",
+                        ", ".join(validation.restored_sections),
+                    )
+                    history_updates.append(
+                        state_obj.add_history_entry(
+                            "fix_validation",
+                            "Auto-restored required sections removed by fix",
+                            restored_sections=validation.restored_sections,
+                        )
+                    )
+
+                if validation.corrected_text is not None:
+                    result.revised_text = validation.corrected_text
+
                 updates["current_text"] = result.revised_text
                 updates["changed"] = True
                 logger.info(f"Applied fixes: {', '.join(result.fixes_applied)}")
