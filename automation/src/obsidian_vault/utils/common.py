@@ -3,11 +3,46 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 from loguru import logger
 
 from obsidian_vault.exceptions import VaultParsingError
+
+
+def sanitize_text_for_yaml(text: str) -> str:
+    """
+    Sanitize text to remove characters that are invalid in YAML.
+
+    This function removes null bytes and other problematic characters that
+    can cause YAML parsing errors. LLMs sometimes generate these characters
+    in their output, particularly null bytes (\x00).
+
+    Args:
+        text: Raw text from LLM or other source
+
+    Returns:
+        Sanitized text safe for YAML parsing
+
+    Examples:
+        >>> sanitize_text_for_yaml("hello\\x00world")
+        'helloworld'
+        >>> sanitize_text_for_yaml("title: Test\\x00Note")
+        'title: TestNote'
+    """
+    if not text:
+        return text
+
+    # Remove null bytes (the most common issue)
+    text = text.replace('\x00', '')
+
+    # Remove other control characters that are invalid in YAML
+    # Keep only valid control chars: \t (tab), \n (newline), \r (carriage return)
+    # Remove: \x01-\x08, \x0b-\x0c, \x0e-\x1f
+    text = re.sub(r'[\x01-\x08\x0b\x0c\x0e-\x1f]', '', text)
+
+    return text
 
 
 def discover_repo_root() -> Path:

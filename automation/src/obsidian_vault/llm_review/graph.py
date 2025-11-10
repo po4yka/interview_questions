@@ -1282,6 +1282,9 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                 atomic_related_rules=atomic_related_rules,
                 code_parity_rules=code_parity_rules,
                 timestamp_rules=timestamp_rules,
+                # RECURSION FIX: Add taxonomy context for Android subtopic validation
+                taxonomy=self.taxonomy,
+                vault_root=self.vault_root,
             )
 
             # Record this fix attempt (will be updated with remaining issues after validation)
@@ -1931,7 +1934,11 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
         logger.info(f"Starting LangGraph workflow for {note_path.name}")
         try:
-            final_state_dict = await self.graph.ainvoke(initial_state.to_dict())
+            # Configure recursion limit (doubled from default 25 to 50)
+            config = {"recursion_limit": 50}
+            final_state_dict = await self.graph.ainvoke(
+                initial_state.to_dict(), config=config
+            )
             final_state = NoteReviewState.from_dict(final_state_dict)
             elapsed_time = time.time() - start_time
             logger.debug(f"LangGraph workflow completed in {elapsed_time:.2f}s")

@@ -12,6 +12,7 @@ from pydantic_ai import Agent
 from pydantic_ai.exceptions import AgentRunError, ModelHTTPError, UserError
 
 from obsidian_vault.exceptions import LLMResponseError
+from obsidian_vault.utils import sanitize_text_for_yaml
 from obsidian_vault.utils.retry import async_retry
 
 from .config import get_openrouter_model
@@ -264,6 +265,9 @@ async def run_technical_review(
 
         if result.output.changes_made:
             logger.info(f"Technical review made changes: {result.output.explanation}")
+            # Sanitize the revised text to remove null bytes and other invalid characters
+            result.output.revised_text = sanitize_text_for_yaml(result.output.revised_text)
+            logger.debug("Sanitized revised text for YAML compatibility")
 
         return result.output
     except AgentRunError as e:
@@ -362,6 +366,8 @@ async def run_issue_fixing(
             - available_qa_files: List of Q&A file basenames
             - valid_moc_files: List of MOC file basenames
             - fix_history: Formatted string of previous fix attempts
+            - taxonomy: TaxonomyLoader instance for valid topics/subtopics
+            - vault_root: Path to vault root
 
     Returns:
         IssueFixResult with corrected text
@@ -377,9 +383,22 @@ async def run_issue_fixing(
     available_qa_files = kwargs.get('available_qa_files', [])
     valid_moc_files = kwargs.get('valid_moc_files', [])
     fix_history = kwargs.get('fix_history', 'No previous fix attempts in this session.')
+    taxonomy = kwargs.get('taxonomy')
+    vault_root = kwargs.get('vault_root')
 
     # Build vault index context
     context_parts = []
+
+    # Add taxonomy context if available
+    if taxonomy:
+        topics_str = ", ".join(sorted(taxonomy.topics)) if taxonomy.topics else "None"
+        android_subtopics_str = ", ".join(sorted(taxonomy.android_subtopics)) if taxonomy.android_subtopics else "None"
+        context_parts.append(
+            f"TAXONOMY CONTEXT:\n"
+            f"Valid Topics (choose exactly ONE):\n{topics_str}\n\n"
+            f"Valid Android Subtopics (when topic=android):\n{android_subtopics_str}"
+        )
+
     if available_concepts:
         # Limit to avoid token bloat
         concept_sample = available_concepts[:100]
@@ -533,6 +552,11 @@ Return the corrected text."""
 
         if result.output.fixes_applied:
             logger.info(f"Applied fixes: {', '.join(result.output.fixes_applied[:5])}...")
+
+        # Sanitize the revised text to remove null bytes and other invalid characters
+        if result.output.revised_text:
+            result.output.revised_text = sanitize_text_for_yaml(result.output.revised_text)
+            logger.debug("Sanitized revised text for YAML compatibility")
 
         return result.output
     except Exception as e:
@@ -715,6 +739,11 @@ Return the enriched content with meaningful definitions, key points, and context
         )
 
         logger.info(f"Enriched concept '{concept_name}': {result.output.explanation}")
+
+        # Sanitize the enriched content to remove null bytes and other invalid characters
+        if result.output.enriched_content:
+            result.output.enriched_content = sanitize_text_for_yaml(result.output.enriched_content)
+            logger.debug("Sanitized enriched content for YAML compatibility")
 
         return result.output
     except Exception as e:
