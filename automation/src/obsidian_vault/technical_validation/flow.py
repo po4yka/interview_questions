@@ -8,7 +8,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Iterable, Sequence
 
-from langchain.agents import AgentExecutor
+from langchain.agents.agent import AgentExecutor
 from loguru import logger
 from ruamel.yaml import YAML
 
