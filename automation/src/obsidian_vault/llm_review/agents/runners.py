@@ -366,6 +366,8 @@ async def run_issue_fixing(
             - available_qa_files: List of Q&A file basenames
             - valid_moc_files: List of MOC file basenames
             - fix_history: Formatted string of previous fix attempts
+            - taxonomy: TaxonomyLoader instance for valid topics/subtopics
+            - vault_root: Path to vault root
 
     Returns:
         IssueFixResult with corrected text
@@ -381,9 +383,22 @@ async def run_issue_fixing(
     available_qa_files = kwargs.get('available_qa_files', [])
     valid_moc_files = kwargs.get('valid_moc_files', [])
     fix_history = kwargs.get('fix_history', 'No previous fix attempts in this session.')
+    taxonomy = kwargs.get('taxonomy')
+    vault_root = kwargs.get('vault_root')
 
     # Build vault index context
     context_parts = []
+
+    # Add taxonomy context if available
+    if taxonomy:
+        topics_str = ", ".join(sorted(taxonomy.topics)) if taxonomy.topics else "None"
+        android_subtopics_str = ", ".join(sorted(taxonomy.android_subtopics)) if taxonomy.android_subtopics else "None"
+        context_parts.append(
+            f"TAXONOMY CONTEXT:\n"
+            f"Valid Topics (choose exactly ONE):\n{topics_str}\n\n"
+            f"Valid Android Subtopics (when topic=android):\n{android_subtopics_str}"
+        )
+
     if available_concepts:
         # Limit to avoid token bloat
         concept_sample = available_concepts[:100]

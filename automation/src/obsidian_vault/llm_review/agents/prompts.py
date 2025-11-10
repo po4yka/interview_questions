@@ -194,6 +194,34 @@ subtopics: [ui-compose, ui-state, recomposition]
 # Removed: performance (more general, can be implied)
 ```
 
+ANDROID SUBTOPIC VALIDATION:
+
+For Android notes (when topic=android), subtopics MUST come from the controlled vocabulary
+provided in TAXONOMY CONTEXT above. Common invalid subtopics and their correct replacements:
+
+```yaml
+# BEFORE (INVALID - not in Android taxonomy)
+topic: android
+subtopics: [data-storage]  # ❌ Invalid - not in allowed list
+tags: [android/data-storage, difficulty/easy]
+
+# AFTER (CORRECT - uses valid Android subtopic)
+topic: android
+subtopics: [datastore]  # ✅ Valid - from allowed list (room, sqldelight, datastore, files-media, etc.)
+tags: [android/datastore, difficulty/easy]  # ✅ Must mirror subtopic with android/ prefix
+```
+
+Common invalid → valid mappings for Android:
+- data-storage → datastore (or room, files-media depending on context)
+- storage → datastore or files-media
+- preferences → datastore
+- database → room or sqldelight
+- ui → ui-compose or ui-views (be specific)
+- architecture → architecture-mvvm, architecture-mvi, or architecture-clean
+- testing → testing-unit, testing-instrumented, or testing-ui
+
+CRITICAL: After fixing Android subtopics, ALWAYS mirror them to tags with android/ prefix!
+
 Fix each issue precisely with minimal changes and return the corrected text."""
 
 METADATA_SANITY_PROMPT = """You are a metadata/frontmatter sanity checker for Obsidian interview notes.
