@@ -10,6 +10,7 @@ from .common import (
     listify,
     parse_note,
     safe_resolve_path,
+    sanitize_text_for_yaml,
     validate_choice,
 )
 from .frontmatter import (
@@ -50,6 +51,7 @@ __all__ = [
     "collect_validatable_files",
     "dump_yaml",
     "listify",
+    "sanitize_text_for_yaml",
     # Security utilities
     "safe_resolve_path",
     "ensure_vault_exists",

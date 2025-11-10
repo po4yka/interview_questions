@@ -12,6 +12,7 @@ from pydantic_ai import Agent
 from pydantic_ai.exceptions import AgentRunError, ModelHTTPError, UserError
 
 from obsidian_vault.exceptions import LLMResponseError
+from obsidian_vault.utils import sanitize_text_for_yaml
 from obsidian_vault.utils.retry import async_retry
 
 from .config import get_openrouter_model
@@ -264,6 +265,9 @@ async def run_technical_review(
 
         if result.output.changes_made:
             logger.info(f"Technical review made changes: {result.output.explanation}")
+            # Sanitize the revised text to remove null bytes and other invalid characters
+            result.output.revised_text = sanitize_text_for_yaml(result.output.revised_text)
+            logger.debug("Sanitized revised text for YAML compatibility")
 
         return result.output
     except AgentRunError as e:
@@ -534,6 +538,11 @@ Return the corrected text."""
         if result.output.fixes_applied:
             logger.info(f"Applied fixes: {', '.join(result.output.fixes_applied[:5])}...")
 
+        # Sanitize the revised text to remove null bytes and other invalid characters
+        if result.output.revised_text:
+            result.output.revised_text = sanitize_text_for_yaml(result.output.revised_text)
+            logger.debug("Sanitized revised text for YAML compatibility")
+
         return result.output
     except Exception as e:
         logger.error("Issue fixing failed for {}: {}", note_path, e)
@@ -715,6 +724,11 @@ Return the enriched content with meaningful definitions, key points, and context
         )
 
         logger.info(f"Enriched concept '{concept_name}': {result.output.explanation}")
+
+        # Sanitize the enriched content to remove null bytes and other invalid characters
+        if result.output.enriched_content:
+            result.output.enriched_content = sanitize_text_for_yaml(result.output.enriched_content)
+            logger.debug("Sanitized enriched content for YAML compatibility")
 
         return result.output
     except Exception as e:

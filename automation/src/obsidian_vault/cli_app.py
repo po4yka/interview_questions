@@ -36,6 +36,7 @@ from obsidian_vault.utils import (
     collect_validatable_files,
     discover_repo_root,
     parse_note,
+    sanitize_text_for_yaml,
     setup_logging,
 )
 from obsidian_vault.utils.graph_analytics import VaultGraph, generate_link_health_report
@@ -1079,7 +1080,15 @@ def llm_review(
                             backup_path.write_text(state.original_text, encoding="utf-8")
                             console.print(f"  [dim]Backup: {backup_path.name}[/dim]")
 
-                        note_path.write_text(state.current_text, encoding="utf-8")
+                        # Sanitize text before writing (safety net to prevent YAML parsing errors)
+                        sanitized_text = sanitize_text_for_yaml(state.current_text)
+                        if sanitized_text != state.current_text:
+                            logger.warning(
+                                f"Sanitized {len(state.current_text) - len(sanitized_text)} "
+                                f"invalid character(s) from {note_path.name}"
+                            )
+
+                        note_path.write_text(sanitized_text, encoding="utf-8")
                         console.print(f"  [dim]Saved changes to {note_path.name}[/dim]")
 
                     console.print()
