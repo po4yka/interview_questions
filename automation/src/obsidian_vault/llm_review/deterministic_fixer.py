@@ -384,6 +384,7 @@ class DeterministicFixer:
 
         segments = self._split_by_code_blocks(body)
         pattern = re.compile(rf"(?<!`)\b{re.escape(type_name)}\b(?!`)")
+        url_pattern = re.compile(r"https?://[^\s)]+")
 
         updated_segments: list[str] = []
         total_replacements = 0
@@ -393,9 +394,23 @@ class DeterministicFixer:
                 updated_segments.append(segment)
                 continue
 
+            placeholders: dict[str, str] = {}
+
+            def _mask_url(match: re.Match[str]) -> str:
+                placeholder = f"__URL_PLACEHOLDER_{len(placeholders)}__"
+                placeholders[placeholder] = match.group(0)
+                return placeholder
+
+            masked_segment = url_pattern.sub(_mask_url, segment)
+
             replaced_segment, replacements = pattern.subn(
-                lambda match: f"`{match.group(0)}`", segment
+                lambda match: f"`{match.group(0)}`", masked_segment
             )
+
+            if placeholders:
+                for placeholder, url in placeholders.items():
+                    replaced_segment = replaced_segment.replace(placeholder, url)
+
             updated_segments.append(replaced_segment)
             total_replacements += replacements
 

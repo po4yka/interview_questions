@@ -48,3 +48,37 @@ Content
     assert yaml_data["created"] == today
     assert yaml_data["updated"] == today
 
+
+def test_type_name_backticks_skip_urls():
+    """Type name wrapping should not alter URLs containing the name."""
+
+    note = """---
+title: Sample
+created: 2024-01-01
+updated: 2024-01-01
+---
+See Bundle docs at https://developer.android.com/reference/android/os/Bundle.
+Parcelable details are similar.
+"""
+
+    issues = [
+        ReviewIssue(
+            severity="WARNING",
+            message="WARNING:Type name 'Bundle' found without backticks.",
+            field="content",
+        ),
+        ReviewIssue(
+            severity="WARNING",
+            message="WARNING:Type name 'Parcelable' found without backticks.",
+            field="content",
+        ),
+    ]
+
+    fixer = DeterministicFixer()
+    result = fixer.fix(note, issues)
+
+    assert result.changes_made
+    assert "`Bundle`" in result.revised_text
+    assert "`Parcelable`" in result.revised_text
+    assert "https://developer.android.com/reference/android/os/Bundle" in result.revised_text
+
