@@ -2,7 +2,7 @@
 id: lang-058
 title: "Kotlin Null Checks Methods / Методы проверки на null в Kotlin"
 aliases: [Kotlin Null Checks Methods, Методы проверки на null в Kotlin]
-topic: programming-languages
+topic: kotlin
 subtopics: [null-safety, operators]
 question_kind: theory
 difficulty: easy
@@ -10,12 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-catch-operator-flow--kotlin--medium, q-coroutine-scope-basics--kotlin--easy]
+related: [c-kotlin, q-catch-operator-flow--kotlin--medium, q-coroutine-scope-basics--kotlin--easy]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [difficulty/easy, elvis, null-checks, null-safety, operators, programming-languages, safe-call]
+updated: 2025-11-09
+tags: [difficulty/easy, elvis, null-checks, null-safety, operators, kotlin, safe-call]
 ---
-# Каким Образом Осуществлять Проверки На Null?
 
 # Вопрос (RU)
 > Каким образом осуществлять проверки на null?
@@ -217,18 +216,34 @@ val validEmail = email.takeIf { it.contains("@") }
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия подхода к null-безопасности в Kotlin и Java?
+- Когда вы бы использовали эти операторы и функции на практике?
+- Каковы распространенные ошибки и подводные камни при работе с null в Kotlin?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+- [[q-catch-operator-flow--kotlin--medium]]
+- [[q-coroutine-scope-basics--kotlin--easy]]
 
 ## Related Questions
 
--
 - [[q-catch-operator-flow--kotlin--medium]]
 - [[q-coroutine-scope-basics--kotlin--easy]]

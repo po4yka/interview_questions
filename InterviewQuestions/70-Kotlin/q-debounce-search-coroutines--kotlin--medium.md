@@ -25,11 +25,6 @@ tags:
   - ru
 original_language: en
 source: Kotlin Coroutines Interview Questions PDF
-subtopics:
-  - coroutines
-  - debouncing
-  - search
-  - job-cancellation
 ---
 # Вопрос (RU)
 > Как реализовать функцию поиска при вводе с отложенным выполнением (debouncing) используя Kotlin корутины?
@@ -70,6 +65,8 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // setContentView(...) предполагается определён в реальном коде,
+        // здесь используется упрощённый пример
 
         searchEditText.addTextChangedListener { text ->
             // Отменить предыдущий поиск
@@ -116,7 +113,9 @@ class SearchActivity : AppCompatActivity() {
 **Лучшая Архитектура**: Переместить логику в ViewModel для тестируемости и независимости от жизненного цикла.
 
 ```kotlin
-class SearchViewModel : ViewModel() {
+class SearchViewModel(
+    private val searchRepository: SearchRepository
+) : ViewModel() {
     private var searchJob: Job? = null
 
     private val _searchResults = MutableStateFlow<List<SearchResult>>(emptyList())
@@ -154,6 +153,32 @@ class SearchViewModel : ViewModel() {
         }
     }
 }
+
+// В Activity/Fragment
+class SearchActivity : AppCompatActivity() {
+    private val viewModel: SearchViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // setContentView(...) предполагается в реальном коде
+
+        searchEditText.addTextChangedListener { text ->
+            viewModel.onSearchQueryChanged(text.toString())
+        }
+
+        lifecycleScope.launch {
+            viewModel.searchResults.collect { results ->
+                displayResults(results)
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.isLoading.collect { isLoading ->
+                progressBar.isVisible = isLoading
+            }
+        }
+    }
+}
 ```
 
 **Преимущества**:
@@ -167,7 +192,9 @@ class SearchViewModel : ViewModel() {
 **Использование операторов Flow** для декларативного debouncing.
 
 ```kotlin
-class SearchViewModel : ViewModel() {
+class SearchViewModel(
+    private val searchRepository: SearchRepository
+) : ViewModel() {
     private val searchQuery = MutableStateFlow("")
 
     val searchResults: StateFlow<List<SearchResult>> = searchQuery
@@ -178,7 +205,7 @@ class SearchViewModel : ViewModel() {
             // Отменить предыдущий поиск автоматически
             flow {
                 emit(searchRepository.search(query))
-            }.catch { e ->
+            }.catch {
                 // Обработать ошибки
                 emit(emptyList())
             }
@@ -209,23 +236,106 @@ class SearchViewModel : ViewModel() {
 - Нет ручного управления Job
 - Композируемые операторы
 
+### Решение 4: Практичное Улучшение — Минимальная Длина Запроса
+
+**Практичное улучшение**: Искать только при запросах с минимальной длиной.
+
+```kotlin
+class SearchViewModel(
+    private val searchRepository: SearchRepository
+) : ViewModel() {
+    private val searchQuery = MutableStateFlow("")
+
+    private val _searchState = MutableStateFlow<SearchState>(SearchState.Idle)
+    val searchState: StateFlow<SearchState> = _searchState
+
+    val searchResults: StateFlow<List<SearchResult>> = searchQuery
+        .debounce(300)
+        .filter { it.length >= 3 } // Минимум 3 символа
+        .distinctUntilChanged()
+        .onEach { _searchState.value = SearchState.Loading }
+        .flatMapLatest { query ->
+            flow {
+                val results = searchRepository.search(query)
+                _searchState.value = SearchState.Success(results.size)
+                emit(results)
+            }.catch { e ->
+                _searchState.value = SearchState.Error(e.message ?: "Unknown error")
+                emit(emptyList())
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+
+    fun onSearchQueryChanged(query: String) {
+        searchQuery.value = query
+    }
+}
+
+sealed class SearchState {
+    object Idle : SearchState()
+    object Loading : SearchState()
+    data class Success(val resultCount: Int) : SearchState()
+    data class Error(val message: String) : SearchState()
+}
+```
+
+### Решение 5: Пользовательская Debounce-Функция
+
+**Переиспользуемое расширение**: пример корректной реализации пользовательского debounce-оператора, отменяющего предыдущие отложенные эмиссии.
+
+```kotlin
+fun <T> Flow<T>.debounceAfterFirst(
+    waitMillis: Long,
+    skipFirst: Boolean = false
+): Flow<T> = flow {
+    coroutineScope {
+        var debounceJob: Job? = null
+        var firstEmitted = false
+
+        collect { value ->
+            if (!firstEmitted && !skipFirst) {
+                emit(value)
+                firstEmitted = true
+            } else {
+                debounceJob?.cancel()
+                debounceJob = launch {
+                    delay(waitMillis)
+                    emit(value)
+                }
+            }
+        }
+    }
+}
+
+// Использование
+searchQuery
+    .debounceAfterFirst(300, skipFirst = false)
+    .collect { query ->
+        performSearch(query)
+    }
+```
+
 ### Резюме
 
 **Debouncing с Корутинами**:
 - **Отмена Job**: Простой паттерн, отмена предыдущего поиска при новом вводе
-- **delay(300)**: Стандартное время debounce для поиска
+- **delay(300)**: Часто используемое значение debounce для поиска (можно адаптировать под UX)
 - **Flow.debounce()**: Декларативный подход на основе операторов
 - **flatMapLatest**: Автоматическая отмена предыдущего поиска
 - **distinctUntilChanged()**: Предотвращает дублирующиеся поиски
-- **Тестируемость**: Используйте TestDispatcher и advanceTimeBy()
+- **Тестируемость**: Используйте TestDispatcher и `advanceTimeBy()` / `advanceUntilIdle()` для проверки поведения
 
 **Ключевой Паттерн**:
 ```kotlin
 searchQuery
-    .debounce(300)           // Ждать паузы в печати
+    .debounce(300)             // Ждать паузы в печати
     .filter { it.length >= 3 } // Минимальная длина запроса
-    .distinctUntilChanged()   // Пропустить дубликаты
-    .flatMapLatest { query -> // Отменить предыдущий поиск
+    .distinctUntilChanged()    // Пропустить дубликаты
+    .flatMapLatest { query ->  // Отменить предыдущий поиск
         performSearch(query)
     }
 ```
@@ -264,6 +374,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // setContentView(...) is assumed in real code; simplified here
 
         searchEditText.addTextChangedListener { text ->
             // Cancel previous search
@@ -310,7 +421,9 @@ class SearchActivity : AppCompatActivity() {
 **Better Architecture**: Move logic to ViewModel for testability and lifecycle independence.
 
 ```kotlin
-class SearchViewModel : ViewModel() {
+class SearchViewModel(
+    private val searchRepository: SearchRepository
+) : ViewModel() {
     private var searchJob: Job? = null
 
     private val _searchResults = MutableStateFlow<List<SearchResult>>(emptyList())
@@ -355,6 +468,7 @@ class SearchActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // setContentView(...) is assumed in real code
 
         searchEditText.addTextChangedListener { text ->
             viewModel.onSearchQueryChanged(text.toString())
@@ -386,7 +500,9 @@ class SearchActivity : AppCompatActivity() {
 **Using Flow operators** for declarative debouncing.
 
 ```kotlin
-class SearchViewModel : ViewModel() {
+class SearchViewModel(
+    private val searchRepository: SearchRepository
+) : ViewModel() {
     private val searchQuery = MutableStateFlow("")
 
     val searchResults: StateFlow<List<SearchResult>> = searchQuery
@@ -397,7 +513,7 @@ class SearchViewModel : ViewModel() {
             // Cancel previous search automatically
             flow {
                 emit(searchRepository.search(query))
-            }.catch { e ->
+            }.catch {
                 // Handle errors
                 emit(emptyList())
             }
@@ -433,7 +549,9 @@ class SearchViewModel : ViewModel() {
 **Practical Enhancement**: Only search for queries with minimum length.
 
 ```kotlin
-class SearchViewModel : ViewModel() {
+class SearchViewModel(
+    private val searchRepository: SearchRepository
+) : ViewModel() {
     private val searchQuery = MutableStateFlow("")
 
     private val _searchState = MutableStateFlow<SearchState>(SearchState.Idle)
@@ -475,7 +593,7 @@ sealed class SearchState {
 
 ### Solution 5: Custom Debounce Function
 
-**Reusable Extension**: Create custom debounce function.
+**Reusable Extension**: Correct implementation of a custom debounce operator that cancels previous delayed emissions.
 
 ```kotlin
 fun <T> Flow<T>.debounceAfterFirst(
@@ -483,7 +601,7 @@ fun <T> Flow<T>.debounceAfterFirst(
     skipFirst: Boolean = false
 ): Flow<T> = flow {
     coroutineScope {
-        val debounceJob: Job? = null
+        var debounceJob: Job? = null
         var firstEmitted = false
 
         collect { value ->
@@ -494,7 +612,7 @@ fun <T> Flow<T>.debounceAfterFirst(
             } else {
                 // Debounce subsequent values
                 debounceJob?.cancel()
-                launch {
+                debounceJob = launch {
                     delay(waitMillis)
                     emit(value)
                 }
@@ -573,7 +691,7 @@ class SearchViewModelTest {
 
 ```kotlin
 // DO: Use appropriate debounce delay
-searchQuery.debounce(300) // 300ms is standard for search
+searchQuery.debounce(300) // 300ms is a common starting point for search
 
 // DO: Filter blank queries
 .filter { it.isNotBlank() }
@@ -587,13 +705,13 @@ catch (e: CancellationException) {
 }
 
 // DO: Show loading state
-onEach { _isLoading.value = true }
+.onEach { _isLoading.value = true }
 
 // DON'T: Use too short delay
-searchQuery.debounce(50) // Too aggressive
+searchQuery.debounce(50) // Often too aggressive
 
 // DON'T: Use too long delay
-searchQuery.debounce(1000) // Feels unresponsive
+searchQuery.debounce(1000) // May feel unresponsive
 
 // DON'T: Forget to cancel previous job
 searchJob = launch { ... } // Lost reference to previous job!
@@ -603,19 +721,19 @@ searchJob = launch { ... } // Lost reference to previous job!
 
 **Debouncing with Coroutines**:
 - **Job Cancellation**: Simple pattern, cancel previous search when new input arrives
-- **delay(300)**: Standard debounce time for search
+- **delay(300)**: Common debounce time for search (tune for UX)
 - **Flow.debounce()**: Declarative, operator-based approach
 - **flatMapLatest**: Automatic cancellation of previous search
 - **distinctUntilChanged()**: Prevents duplicate searches
-- **Testable**: Use TestDispatcher and advanceTimeBy()
+- **Testable**: Use TestDispatcher and `advanceTimeBy()` / `advanceUntilIdle()`
 
 **Key Pattern**:
 ```kotlin
 searchQuery
-    .debounce(300)           // Wait for typing pause
+    .debounce(300)             // Wait for typing pause
     .filter { it.length >= 3 } // Minimum query length
-    .distinctUntilChanged()   // Skip duplicates
-    .flatMapLatest { query -> // Cancel previous search
+    .distinctUntilChanged()    // Skip duplicates
+    .flatMapLatest { query ->  // Cancel previous search
         performSearch(query)
     }
 ```

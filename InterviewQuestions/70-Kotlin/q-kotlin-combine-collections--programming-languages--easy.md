@@ -1,22 +1,20 @@
 ---
 id: lang-007
 title: "Kotlin Combine Collections / Объединение коллекций Kotlin"
-aliases: ["Kotlin Combine Collections, Объединение коллекций Kotlin"]
-topic: programming-languages
-subtopics: [class-features, java-interop, operators]
+aliases: ["Kotlin Combine Collections", "Объединение коллекций Kotlin"]
+topic: kotlin
+subtopics: [collections]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-channels-vs-flow--kotlin--medium, q-custom-dispatchers-limited-parallelism--kotlin--hard, q-kotlin-vs-java-class-creation--programming-languages--medium]
+related: [c-kotlin, c-collections, q-channels-vs-flow--kotlin--medium]
 created: 2025-10-13
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/easy]
 ---
-# Какая Функция Kotlin Используется Для Объединения Двух Коллекций?
-
 # Вопрос (RU)
 > Какая функция Kotlin используется для объединения двух коллекций?
 
@@ -27,11 +25,11 @@ tags: [difficulty/easy]
 
 ## Ответ (RU)
 
-Оператор + (функция plus) используется для объединения двух коллекций в Kotlin.
+Оператор `+` (функция `plus`) используется для объединения двух коллекций в Kotlin.
 
 **Принцип работы:**
 
-Оператор `+` создает новую коллекцию, содержащую элементы из обеих исходных коллекций. Исходные коллекции остаются неизменными.
+Оператор `+` создает новую коллекцию, содержащую элементы из обеих исходных коллекций. Исходные коллекции не изменяются, даже если они изменяемые (mutable).
 
 **Примеры использования:**
 
@@ -41,19 +39,19 @@ val list1 = listOf(1, 2, 3)
 val list2 = listOf(4, 5, 6)
 val combined = list1 + list2  // [1, 2, 3, 4, 5, 6]
 
-// Объединение множеств
+// Объединение множеств (результат - Set)
 val set1 = setOf("a", "b", "c")
 val set2 = setOf("c", "d", "e")
-val combinedSet = set1 + set2  // [a, b, c, d, e] - дубликаты удаляются
+val combinedSet = set1 + set2  // [a, b, c, d, e] - дубликаты удаляются, возвращается Set
 
 // Добавление одного элемента
 val list = listOf(1, 2, 3)
 val newList = list + 4  // [1, 2, 3, 4]
 
-// Объединение Map
+// Объединение Map (результат - новый Map)
 val map1 = mapOf("a" to 1, "b" to 2)
-val map2 = mapOf("c" to 3, "d" to 4)
-val combinedMap = map1 + map2  // {a=1, b=2, c=3, d=4}
+val map2 = mapOf("b" to 20, "c" to 3)
+val combinedMap = map1 + map2  // {a=1, b=20, c=3} - значения из второй карты перекрывают первую по одинаковым ключам
 ```
 
 **Альтернативные методы:**
@@ -65,25 +63,78 @@ val result1 = list1.plus(list2)
 // union() - для множеств (возвращает Set)
 val unionSet = set1.union(set2)
 
-// addAll() - для изменяемых коллекций
+// addAll() - для изменяемых коллекций (изменяет коллекцию на месте)
 val mutableList = mutableListOf(1, 2, 3)
 mutableList.addAll(listOf(4, 5, 6))
 ```
 
 **Важные особенности:**
 
-- Оператор `+` работает с неизменяемыми коллекциями
-- Всегда создается новая коллекция
-- Исходные коллекции не изменяются
-- Для Set дубликаты автоматически удаляются
-- Для Map при совпадении ключей значение из второй коллекции перезаписывает значение из первой
+- Оператор `+` доступен для разных типов коллекций и всегда возвращает новую коллекцию.
+- Исходные коллекции не изменяются при использовании `+`/`plus`, даже если они mutable.
+- Для `Set` дубликаты автоматически удаляются, результат соответствует семантике множества.
+- Для `Map` при совпадении ключей значение из второй коллекции перезаписывает значение из первой в результирующей карте.
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого подхода от Java?
+- Когда вы бы использовали это на практике?
+- Какие распространенные ошибки стоит избегать?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [[c-collections]]
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+### Реализация в Android
+- [[q-kotlin-collections--kotlin--medium]] - Структуры данных
+
+### Особенности языка Kotlin
+- [[q-kotlin-collections--kotlin--easy]] - Структуры данных
 
 ---
 
 ## Answer (EN)
 
-The + operator (plus function)
+The `+` operator (the `plus` function) is used to combine two collections in Kotlin.
+
+Key points:
+
+- `+` creates a new collection containing elements from both operands; the original collections are not modified (even if they are mutable).
+- It is available for lists, sets, maps, and works with single elements as well.
+
+Examples:
+
+```kotlin
+// Combine lists
+val list1 = listOf(1, 2, 3)
+val list2 = listOf(4, 5, 6)
+val combined = list1 + list2  // [1, 2, 3, 4, 5, 6]
+
+// Combine sets (result is a Set)
+val set1 = setOf("a", "b", "c")
+val set2 = setOf("c", "d", "e")
+val combinedSet = set1 + set2  // [a, b, c, d, e] - duplicates removed, returns a Set
+
+// Add single element
+val list = listOf(1, 2, 3)
+val newList = list + 4  // [1, 2, 3, 4]
+
+// Combine maps (result is a new Map)
+val map1 = mapOf("a" to 1, "b" to 2)
+val map2 = mapOf("b" to 20, "c" to 3)
+val combinedMap = map1 + map2  // {a=1, b=20, c=3} - entries from the second map override on key collisions
+```
+
+Alternative methods:
+
+- `plus()` explicit call: `val result = list1.plus(list2)`
+- `union()` for sets (returns a `Set`): `val unionSet = set1.union(set2)`
+- `addAll()` for mutable collections (modifies in place):
+  - `mutableList.addAll(listOf(4, 5, 6))`
 
 ---
 
@@ -95,17 +146,14 @@ The + operator (plus function)
 
 ## References
 
+- [[c-kotlin]]
+- [[c-collections]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
 ## Related Questions
 
 ### Android Implementation
--  - Data Structures
+- [[q-kotlin-collections--kotlin--medium]] - Data Structures
 
 ### Kotlin Language Features
-- [[q-kotlin-immutable-collections--programming-languages--easy]] - Data Structures
--  - Data Structures
--  - Data Structures
--  - Data Structures
-- [[q-kotlin-collections--kotlin--medium]] - Data Structures
 - [[q-kotlin-collections--kotlin--easy]] - Data Structures

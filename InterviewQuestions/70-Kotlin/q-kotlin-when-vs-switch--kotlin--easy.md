@@ -10,24 +10,23 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-channel-buffering-strategies--kotlin--hard, q-cold-vs-hot-flows--kotlin--medium, q-flow-operators--kotlin--medium]
+related: [c-kotlin, q-channel-buffering-strategies--kotlin--hard, q-cold-vs-hot-flows--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [control-flow, difficulty/easy, kotlin, switch, syntax, when]
 ---
-# Какой Оператор Используется Вместо Switch В Kotlin?
 
 # Вопрос (RU)
 > Какой оператор используется вместо switch в Kotlin?
-
----
 
 # Question (EN)
 > Which operator is used instead of switch in Kotlin?
 
 ## Ответ (RU)
 
-В Kotlin вместо `switch` используется **выражение `when`**. Это более мощный инструмент с поддержкой значений, диапазонов, условий и множественных веток.
+В Kotlin вместо `switch` используется **выражение `when`**. Оно может использоваться и как выражение (возвращает значение), и как оператор (как `if`), и при этом более мощное: поддерживает значения, диапазоны, условия и множественные ветки.
+
+См. также: [[c-kotlin]]
 
 **Базовое использование:**
 
@@ -42,7 +41,7 @@ fun describe(x: Int): String {
 }
 ```
 
-**Ключевые преимущества по сравнению с Java `switch`:**
+**Ключевые преимущества по сравнению с классическим Java `switch`:**
 
 **1. Множественные значения в одной ветке:**
 
@@ -76,7 +75,7 @@ when (obj) {
 }
 ```
 
-**4. Условия (без аргумента):**
+**4. Условия (when без аргумента):**
 
 ```kotlin
 when {
@@ -86,6 +85,8 @@ when {
     else -> "Неизвестно"
 }
 ```
+
+(Важно: произвольные булевы условия вида `x > 0` допустимы только в форме `when` без аргумента. В форме `when (x)` ветки сопоставляются со значением `x`.)
 
 **5. Как выражение:**
 
@@ -98,7 +99,7 @@ val result = when (status) {
 }
 ```
 
-**6. Нет проваливания (не нужен `break`):**
+**6. Нет неявного проваливания (не нужен `break`):**
 
 ```kotlin
 // Java switch (до Java 14):
@@ -126,18 +127,20 @@ when (x) {
 | Множественные значения | - | `1, 2, 3 ->` |
 | Диапазоны | - | `in 1..10 ->` |
 | Проверки типа | - | `is String ->` |
-| Условия | - | `x > 0 ->` |
-| Выражение | (Java 14+) | Всегда |
-| Проваливание | (по умолчанию) | Не разрешено |
-| `break` | Обязателен | Не нужен |
+| Условия | - | `when { x > 0 -> }` |
+| Выражение | (как switch-выражение с Java 14+) | `when` является выражением и может возвращать значение |
+| Проваливание | По умолчанию есть, без `break` | Неявное проваливание отсутствует |
+| `break` | Часто требуется | Не нужен |
 
 **Резюме:**
 
-`when` - это замена Kotlin для `switch`, предлагающая большую гибкость, безопасность и выразительность.
+`when` — это замена `switch` в Kotlin, предлагающая большую гибкость, безопасность и выразительность.
 
 ## Answer (EN)
 
-In Kotlin, the **`when` expression** is used instead of `switch`. It is a more powerful tool with support for values, ranges, conditions, and multiple branches.
+In Kotlin, the **`when` expression** is used instead of `switch`. It can be used both as an expression (returning a value) and as a statement (like `if`), and it is more powerful: it supports values, ranges, conditions, and multiple branches.
+
+See also: [[c-kotlin]]
 
 **Basic usage:**
 ```kotlin
@@ -151,7 +154,7 @@ fun describe(x: Int): String {
 }
 ```
 
-**Key advantages over Java's `switch`:**
+**Key advantages over the classic Java `switch`:**
 
 **1. Multiple values in one branch:**
 ```kotlin
@@ -182,7 +185,7 @@ when (obj) {
 }
 ```
 
-**4. Conditions (without argument):**
+**4. Conditions (when without argument):**
 ```kotlin
 when {
     x < 0 -> "Negative"
@@ -191,6 +194,8 @@ when {
     else -> "Unknown"
 }
 ```
+
+(Important: arbitrary boolean conditions like `x > 0` are valid only in the `when` without an argument. In `when (x)`, branches are matched against the value of `x`.)
 
 **5. As expression:**
 ```kotlin
@@ -202,7 +207,7 @@ val result = when (status) {
 }
 ```
 
-**6. No fall-through (no `break` needed):**
+**6. No implicit fall-through (no `break` needed):**
 ```kotlin
 // Java switch (before Java 14):
 switch (x) {
@@ -229,10 +234,10 @@ when (x) {
 | Multiple values | - | `1, 2, 3 ->` |
 | Ranges | - | `in 1..10 ->` |
 | Type checks | - | `is String ->` |
-| Conditions | - | `x > 0 ->` |
-| Expression | (Java 14+) | Always |
-| Fall-through | (default) | Not allowed |
-| `break` | Required | Not needed |
+| Conditions | - | `when { x > 0 -> }` |
+| Expression | (as switch expression since Java 14+) | `when` is an expression and can return a value |
+| Fall-through | Enabled by default without `break` | No implicit fall-through |
+| `break` | Often required | Not needed |
 
 **Summary:**
 `when` is Kotlin's replacement for `switch`, offering more flexibility, safety, and expressiveness.

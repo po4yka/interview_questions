@@ -1,11 +1,11 @@
 ---
 id: kotlin-126
 title: "Testing Coroutine Cancellation Scenarios / Тестирование сценариев отмены корутин"
-aliases: ["Testing Coroutine Cancellation Scenarios, Тестирование сценариев отмены корутин"]
+aliases: ["Testing Coroutine Cancellation Scenarios", "Тестирование сценариев отмены корутин"]
 
 # Classification
 topic: kotlin
-subtopics: [cancellation, coroutines, testing]
+subtopics: [coroutines, testing]
 question_kind: theory
 difficulty: medium
 
@@ -18,25 +18,25 @@ source_note: Coroutine Cancellation Testing Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-cancellation-cooperation--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
+related: [c-coroutines, q-coroutine-cancellation-cooperation--kotlin--medium, q-coroutine-cancellation-mechanisms--kotlin--medium, q-testing-coroutines-runtest--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-10
 
 tags: [cancellation, coroutines, difficulty/medium, kotlin, testing]
 ---
 # Вопрос (RU)
 > Как тестировать сценарии отмены корутин? Покрыть тестирование кооперативной отмены, timeout, ensureActive, CancellationException и очистки ресурсов с NonCancellable.
 
----
+***
 
 # Question (EN)
 > How to test coroutine cancellation scenarios? Cover testing cooperative cancellation, timeout, ensureActive, CancellationException, and resource cleanup with NonCancellable.
 
 ## Ответ (RU)
 
-Тестирование отмены критически важно для обеспечения правильной очистки ресурсов и ответа на запросы отмены.
+Тестирование отмены критически важно для обеспечения правильной очистки ресурсов и корректной реакции на запросы отмены. В корутинах Kotlin отмена кооперативна, поэтому важно тестировать как своевременную остановку работы, так и корректную очистку.
 
 ### Базовое Тестирование Отмены
 
@@ -46,67 +46,11 @@ fun `корутина может быть отменена`() = runTest {
     val job = launch {
         repeat(1000) {
             delay(100)
-        }
-    }
-
-    advanceTimeBy(250)
-    job.cancel()
-    advanceUntilIdle()
-
-    assertTrue(job.isCancelled)
-}
-```
-
-### Тестирование Кооперативной Отмены
-
-```kotlin
-@Test
-fun `ensureActive выбрасывает исключение при отмене`() = runTest {
-    val job = launch {
-        try {
-            repeat(1000000) {
-                ensureActive()
-                // Обработка
-            }
-        } catch (e: CancellationException) {
-            // Ожидается
-        }
-    }
-
-    job.cancel()
-    advanceUntilIdle()
-
-    assertTrue(job.isCancelled)
-}
-```
-
-### Лучшие Практики
-
-1. **Используйте ensureActive** для CPU-интенсивной работы
-2. **Пробрасывайте CancellationException** после очистки
-3. **Используйте NonCancellable** для критичной очистки
-4. **Тестируйте очистку ресурсов** при отмене
-5. **Используйте use()** для автоматической очистки
-
----
-
-## Answer (EN)
-
-Testing cancellation is crucial for ensuring coroutines properly clean up resources and respond to cancellation requests. Kotlin coroutines use cooperative cancellation, which requires specific testing strategies.
-
-### Basic Cancellation Testing
-
-```kotlin
-@Test
-fun `coroutine can be cancelled`() = runTest {
-    val job = launch {
-        repeat(1000) {
-            delay(100)
             println("Working $it")
         }
     }
 
-    advanceTimeBy(250) // Let it run a bit
+    advanceTimeBy(250) // даем ей немного поработать
     assertTrue(job.isActive)
 
     job.cancel()
@@ -117,7 +61,7 @@ fun `coroutine can be cancelled`() = runTest {
 }
 
 @Test
-fun `cancel stops execution`() = runTest {
+fun `cancel останавливает выполнение`() = runTest {
     var counter = 0
 
     val job = launch {
@@ -133,29 +77,29 @@ fun `cancel stops execution`() = runTest {
     job.cancel()
     advanceUntilIdle()
 
-    // Counter doesn't reach 10
+    // Счетчик не доходит до 10
     assertTrue(counter < 10)
 }
 ```
 
-### Testing Cooperative Cancellation
+### Тестирование Кооперативной Отмены
 
-Coroutines must cooperate with cancellation by checking `isActive` or calling suspending functions.
+Коррутины должны "сотрудничать" с отменой: вызывать приостановленные функции или явно проверять состояние с помощью `isActive` / `ensureActive()`.
 
 ```kotlin
-// Non-cooperative coroutine (BAD)
+// Некооперативная корутина (ПЛОХО)
 class NonCooperativeTask {
     suspend fun process(): Int {
         var result = 0
-        repeat(1000000) {
-            result += it // CPU-intensive, doesn't check cancellation
+        repeat(1_000_000) {
+            result += it // CPU-интенсивно, нет проверок отмены
         }
         return result
     }
 }
 
 @Test
-fun `non-cooperative coroutine doesn't cancel immediately`() = runTest {
+fun `некооперативная корутина игнорирует запрос отмены`() = runTest {
     val task = NonCooperativeTask()
     var completed = false
 
@@ -164,19 +108,23 @@ fun `non-cooperative coroutine doesn't cancel immediately`() = runTest {
         completed = true
     }
 
-    advanceTimeBy(100)
+    // Запрашиваем отмену
     job.cancel()
+    advanceUntilIdle()
 
-    // Coroutine continues running!
-    assertTrue(job.isActive) // Still processing
+    // Job переходит в состояние отмены, но работа могла выполниться до этого,
+    // так как внутри нет точек кооперации
+    assertTrue(job.isCancelled)
+    // completed может быть как true, так и false в зависимости от того,
+    // успела ли корутина завершиться до обработки отмены, поэтому на него не полагаемся
 }
 
-// Cooperative coroutine (GOOD)
+// Кооперативная корутина (ХОРОШО)
 class CooperativeTask {
     suspend fun process(): Int = coroutineScope {
         var result = 0
-        repeat(1000000) {
-            ensureActive() // Checks cancellation
+        repeat(1_000_000) {
+            ensureActive() // Проверка отмены
             result += it
         }
         result
@@ -184,16 +132,16 @@ class CooperativeTask {
 }
 
 @Test
-fun `cooperative coroutine cancels immediately`() = runTest {
+fun `кооперативная корутина корректно отменяется`() = runTest {
     val task = CooperativeTask()
     var completed = false
 
     val job = launch {
         try {
             task.process()
-            completed = false
+            completed = true
         } catch (e: CancellationException) {
-            // Expected
+            // Ожидается при отмене
         }
     }
 
@@ -205,7 +153,7 @@ fun `cooperative coroutine cancels immediately`() = runTest {
 }
 ```
 
-### Testing ensureActive
+### Тестирование ensureActive
 
 ```kotlin
 class DataProcessor {
@@ -213,7 +161,7 @@ class DataProcessor {
         val results = mutableListOf<Int>()
 
         for (item in data) {
-            ensureActive() // Throws if cancelled
+            ensureActive() // бросит, если корутина отменена
             results.add(processItem(item))
         }
 
@@ -224,16 +172,16 @@ class DataProcessor {
 }
 
 @Test
-fun `ensureActive throws on cancellation`() = runTest {
+fun `ensureActive бросает при отмене`() = runTest {
     val processor = DataProcessor()
-    val largeDataset = (1..10000).toList()
+    val largeDataset = (1..10_000).toList()
 
     val job = launch {
         try {
             processor.processLargeDataset(largeDataset)
-            fail("Should have been cancelled")
+            fail("Должна была произойти отмена")
         } catch (e: CancellationException) {
-            // Expected
+            // ожидается
         }
     }
 
@@ -245,7 +193,7 @@ fun `ensureActive throws on cancellation`() = runTest {
 }
 
 @Test
-fun `ensureActive allows completion if not cancelled`() = runTest {
+fun `ensureActive позволяет завершиться без отмены`() = runTest {
     val processor = DataProcessor()
     val dataset = (1..100).toList()
 
@@ -256,7 +204,7 @@ fun `ensureActive allows completion if not cancelled`() = runTest {
 }
 ```
 
-### Testing isActive Check
+### Тестирование isActive
 
 ```kotlin
 class FileProcessor {
@@ -264,7 +212,7 @@ class FileProcessor {
         var processed = 0
 
         for (file in files) {
-            if (!isActive) break // Check cancellation
+            if (!isActive) break // проверка отмены
 
             processFile(file)
             processed++
@@ -279,7 +227,7 @@ class FileProcessor {
 }
 
 @Test
-fun `isActive check stops processing on cancellation`() = runTest {
+fun `isActive останавливает обработку при отмене`() = runTest {
     val processor = FileProcessor()
     val files = List(10) { File("file$it") }
 
@@ -289,20 +237,19 @@ fun `isActive check stops processing on cancellation`() = runTest {
         result = processor.processFiles(files)
     }
 
-    advanceTimeBy(350) // Process 3 files
+    advanceTimeBy(350) // обработано 3 файла
     job.cancel()
     advanceUntilIdle()
 
-    // Processed 3 files, stopped cleanly
     assertEquals(3, result)
 }
 ```
 
-### Testing CancellationException
+### Тестирование CancellationException
 
 ```kotlin
 @Test
-fun `CancellationException is thrown on cancel`() = runTest {
+fun `CancellationException выбрасывается при cancel`() = runTest {
     var exception: Throwable? = null
 
     val job = launch {
@@ -310,7 +257,7 @@ fun `CancellationException is thrown on cancel`() = runTest {
             delay(1000)
         } catch (e: CancellationException) {
             exception = e
-            throw e // Must rethrow!
+            throw e // важно пробросить дальше
         }
     }
 
@@ -326,7 +273,7 @@ fun `CancellationException is thrown on cancel`() = runTest {
 class TestException : Exception("Test")
 
 @Test
-fun `don't suppress CancellationException`() = runTest {
+fun `CancellationException не подавляется`() = runTest {
     var finalized = false
 
     val job = launch {
@@ -346,18 +293,18 @@ fun `don't suppress CancellationException`() = runTest {
 }
 ```
 
-### Testing Timeout
+### Тестирование Timeout
 
 ```kotlin
 class SlowApi {
     suspend fun fetchData(): String {
-        delay(5000) // Very slow
+        delay(5000)
         return "data"
     }
 }
 
 @Test
-fun `timeout cancels long-running operation`() = runTest {
+fun `timeout отменяет долгую операцию`() = runTest {
     val api = SlowApi()
 
     val result = try {
@@ -369,11 +316,10 @@ fun `timeout cancels long-running operation`() = runTest {
     }
 
     assertNull(result)
-    assertEquals(1000, currentTime)
 }
 
 @Test
-fun `timeout succeeds if completes in time`() = runTest {
+fun `timeout успешен если операция успевает`() = runTest {
     val api = object {
         suspend fun fetchData(): String {
             delay(500)
@@ -386,33 +332,30 @@ fun `timeout succeeds if completes in time`() = runTest {
     }
 
     assertEquals("data", result)
-    assertEquals(500, currentTime)
 }
 
 @Test
-fun `withTimeoutOrNull returns null on timeout`() = runTest {
+fun `withTimeoutOrNull возвращает null при таймауте`() = runTest {
     val result = withTimeoutOrNull(1000) {
         delay(2000)
         "completed"
     }
 
     assertNull(result)
-    assertEquals(1000, currentTime)
 }
 
 @Test
-fun `withTimeoutOrNull returns value on success`() = runTest {
+fun `withTimeoutOrNull возвращает значение при успехе`() = runTest {
     val result = withTimeoutOrNull(1000) {
         delay(500)
         "completed"
     }
 
     assertEquals("completed", result)
-    assertEquals(500, currentTime)
 }
 ```
 
-### Testing Resource Cleanup
+### Тестирование Очистки Ресурсов
 
 ```kotlin
 class DatabaseConnection : Closeable {
@@ -436,7 +379,7 @@ class DatabaseService {
     suspend fun performTransaction(connection: DatabaseConnection) {
         try {
             connection.beginTransaction()
-            delay(1000) // Simulate work
+            delay(1000) // имитация работы
             connection.commit()
         } finally {
             connection.close()
@@ -445,7 +388,7 @@ class DatabaseService {
 }
 
 @Test
-fun `resources cleaned up on cancellation`() = runTest {
+fun `ресурсы закрываются при отмене`() = runTest {
     val connection = DatabaseConnection()
     val service = DatabaseService()
 
@@ -457,12 +400,12 @@ fun `resources cleaned up on cancellation`() = runTest {
     job.cancel()
     advanceUntilIdle()
 
-    // Transaction was active but connection is closed
+    // Соединение закрыто даже при отмене до commit
     assertTrue(connection.closed)
 }
 
 @Test
-fun `use ensures resource cleanup`() = runTest {
+fun `use гарантирует очистку ресурсов`() = runTest {
     val connection = DatabaseConnection()
 
     val job = launch {
@@ -481,9 +424,7 @@ fun `use ensures resource cleanup`() = runTest {
 }
 ```
 
-### Testing NonCancellable
-
-When cleanup must complete even after cancellation, use `withContext(NonCancellable)`.
+### Тестирование NonCancellable
 
 ```kotlin
 class FileWriter {
@@ -511,9 +452,8 @@ class FileService {
     suspend fun writeData(writer: FileWriter, data: String) {
         try {
             writer.open()
-            delay(500) // Write data
+            delay(500) // запись данных
         } finally {
-            // Ensure cleanup completes even if cancelled
             withContext(NonCancellable) {
                 writer.flush()
                 writer.close()
@@ -523,7 +463,7 @@ class FileService {
 }
 
 @Test
-fun `NonCancellable allows cleanup to complete`() = runTest {
+fun `NonCancellable позволяет завершить очистку`() = runTest {
     val writer = FileWriter()
     val service = FileService()
 
@@ -535,14 +475,13 @@ fun `NonCancellable allows cleanup to complete`() = runTest {
     job.cancel()
     advanceUntilIdle()
 
-    // Cleanup completed despite cancellation
     assertTrue(writer.bufferFlushed)
     assertTrue(writer.fileClosed)
     assertFalse(writer.fileOpen)
 }
 
 @Test
-fun `cleanup with NonCancellable takes time`() = runTest {
+fun `очистка с NonCancellable занимает время`() = runTest {
     val writer = FileWriter()
     val service = FileService()
 
@@ -556,13 +495,867 @@ fun `cleanup with NonCancellable takes time`() = runTest {
     advanceUntilIdle()
     val completeTime = currentTime
 
-    // Cleanup took 150ms (flush 100ms + close 50ms)
     val cleanupTime = completeTime - cancelTime
     assertEquals(150, cleanupTime)
 }
 ```
 
-### Testing Child Cancellation
+### Тестирование Отмены Дочерних Корутин
+
+```kotlin
+@Test
+fun `отмена родителя отменяет детей`() = runTest {
+    val child1Cancelled = CompletableDeferred<Unit>()
+    val child2Cancelled = CompletableDeferred<Unit>()
+
+    val parent = launch {
+        launch {
+            try {
+                delay(Long.MAX_VALUE)
+            } catch (e: CancellationException) {
+                child1Cancelled.complete(Unit)
+                throw e
+            }
+        }
+
+        launch {
+            try {
+                delay(Long.MAX_VALUE)
+            } catch (e: CancellationException) {
+                child2Cancelled.complete(Unit)
+                throw e
+            }
+        }
+
+        delay(Long.MAX_VALUE)
+    }
+
+    advanceTimeBy(100)
+    parent.cancel()
+    advanceUntilIdle()
+
+    assertTrue(child1Cancelled.isCompleted)
+    assertTrue(child2Cancelled.isCompleted)
+    assertTrue(parent.isCancelled)
+}
+
+@Test
+fun `с SupervisorJob сбой ребенка не отменяет сиблингов`() = runTest {
+    val child1Completed = CompletableDeferred<Unit>()
+    val child2Completed = CompletableDeferred<Unit>()
+
+    supervisorScope {
+        launch {
+            try {
+                delay(500)
+                child1Completed.complete(Unit)
+            } catch (e: CancellationException) {
+                // не должно случиться
+            }
+        }
+
+        launch {
+            delay(100)
+            throw IllegalStateException("Child 2 failed")
+        }
+
+        launch {
+            delay(500)
+            child2Completed.complete(Unit)
+        }
+    }
+
+    assertTrue(child1Completed.isCompleted)
+    assertTrue(child2Completed.isCompleted)
+}
+```
+
+### Тестирование invokeOnCancellation
+
+```kotlin
+class ResourceManager {
+    val releasedResources = mutableListOf<String>()
+
+    suspend fun acquireResource(name: String) = suspendCancellableCoroutine<Unit> { continuation ->
+        continuation.invokeOnCancellation {
+            releasedResources.add(name)
+        }
+        continuation.resume(Unit)
+    }
+}
+
+@Test
+fun `invokeOnCancellation вызывается при отмене`() = runTest {
+    val manager = ResourceManager()
+
+    val job = launch {
+        manager.acquireResource("Resource1")
+        delay(1000)
+    }
+
+    advanceTimeBy(500)
+    job.cancel()
+    advanceUntilIdle()
+
+    assertEquals(listOf("Resource1"), manager.releasedResources)
+}
+
+@Test
+fun `invokeOnCancellation не вызывается при завершении`() = runTest {
+    val manager = ResourceManager()
+
+    val job = launch {
+        manager.acquireResource("Resource1")
+        delay(100)
+    }
+
+    advanceUntilIdle()
+
+    assertTrue(manager.releasedResources.isEmpty())
+}
+```
+
+### Тестирование Job.join и cancelAndJoin
+
+```kotlin
+@Test
+fun `join ждет завершения`() = runTest {
+    var completed = false
+
+    val job = launch {
+        delay(500)
+        completed = true
+    }
+
+    assertFalse(completed)
+
+    job.join()
+
+    assertTrue(completed)
+}
+
+@Test
+fun `cancelAndJoin отменяет и ждет очистку`() = runTest {
+    var cleanedUp = false
+
+    val job = launch {
+        try {
+            delay(1000)
+        } finally {
+            withContext(NonCancellable) {
+                delay(200)
+                cleanedUp = true
+            }
+        }
+    }
+
+    advanceTimeBy(500)
+
+    val cancelTime = currentTime
+    job.cancelAndJoin()
+    val joinTime = currentTime
+
+    assertTrue(job.isCancelled)
+    assertTrue(cleanedUp)
+    assertEquals(200, joinTime - cancelTime)
+}
+```
+
+### Тестирование Structured Concurrency Cancellation
+
+```kotlin
+@Test
+fun `coroutineScope отменяет всех детей при сбое одного`() = runTest {
+    val task1Started = CompletableDeferred<Unit>()
+    val task1Cancelled = CompletableDeferred<Unit>()
+    val task2Started = CompletableDeferred<Unit>()
+    val task2Cancelled = CompletableDeferred<Unit>()
+
+    val result = try {
+        coroutineScope {
+            launch {
+                task1Started.complete(Unit)
+                try {
+                    delay(Long.MAX_VALUE)
+                } catch (e: CancellationException) {
+                    task1Cancelled.complete(Unit)
+                    throw e
+                }
+            }
+
+            launch {
+                task2Started.complete(Unit)
+                delay(100)
+                task2Cancelled.complete(Unit)
+                throw IllegalStateException("Task 2 failed")
+            }
+
+            delay(Long.MAX_VALUE)
+        }
+        "completed"
+    } catch (e: IllegalStateException) {
+        "failed"
+    }
+
+    assertEquals("failed", result)
+    assertTrue(task1Started.isCompleted)
+    assertTrue(task1Cancelled.isCompleted)
+    assertTrue(task2Started.isCompleted)
+    assertTrue(task2Cancelled.isCompleted)
+}
+
+@Test
+fun `supervisorScope не отменяет сиблингов при сбое одного`() = runTest {
+    val task1Completed = CompletableDeferred<Unit>()
+    val task2Failed = CompletableDeferred<Unit>()
+
+    supervisorScope {
+        launch {
+            delay(500)
+            task1Completed.complete(Unit)
+        }
+
+        launch {
+            delay(100)
+            task2Failed.complete(Unit)
+            throw IllegalStateException("Task 2 failed")
+        }
+    }
+
+    assertTrue(task1Completed.isCompleted)
+    assertTrue(task2Failed.isCompleted)
+}
+```
+
+### Тестирование Cancellation в `Flow`
+
+```kotlin
+@Test
+fun `коллекция Flow может быть отменена`() = runTest {
+    var emissionCount = 0
+
+    val flow = flow {
+        repeat(10) {
+            emit(it)
+            emissionCount++
+            delay(100)
+        }
+    }
+
+    val job = launch {
+        flow.collect { }
+    }
+
+    advanceTimeBy(350)
+    job.cancel()
+    advanceUntilIdle()
+
+    assertEquals(3, emissionCount)
+}
+
+@Test
+fun `отмена коллектора отменяет upstream`() = runTest {
+    var upstreamCancelled = false
+
+    val flow = flow {
+        try {
+            repeat(10) {
+                emit(it)
+                delay(100)
+            }
+        } catch (e: CancellationException) {
+            upstreamCancelled = true
+            throw e
+        }
+    }
+
+    val job = launch {
+        flow.collect { }
+    }
+
+    advanceTimeBy(250)
+    job.cancel()
+    advanceUntilIdle()
+
+    assertTrue(upstreamCancelled)
+}
+
+@Test
+fun `onCompletion видит причину отмены`() = runTest {
+    var cancellationDetected = false
+    var cause: Throwable? = null
+
+    val flow = flow {
+        repeat(10) {
+            emit(it)
+            delay(100)
+        }
+    }.onCompletion { throwable ->
+        cause = throwable
+        cancellationDetected = throwable is CancellationException
+    }
+
+    val job = launch {
+        flow.collect { }
+    }
+
+    advanceTimeBy(250)
+    job.cancel()
+    advanceUntilIdle()
+
+    assertTrue(cancellationDetected)
+    assertNotNull(cause)
+}
+```
+
+### Лучшие Практики
+
+```kotlin
+//  DO: используйте ensureActive для CPU-интенсивной работы
+suspend fun processData(data: List<Int>) = coroutineScope {
+    data.map { item ->
+        ensureActive()
+        processItem(item)
+    }
+}
+
+//  DON'T: игнорировать отмену
+suspend fun badProcess(data: List<Int>) {
+    data.forEach { item ->
+        // нет проверки отмены
+        processItem(item)
+    }
+}
+
+//  DO: используйте NonCancellable для критичной очистки
+try {
+    // основная работа
+} finally {
+    withContext(NonCancellable) {
+        cleanup()
+    }
+}
+
+//  DON'T: подавлять CancellationException
+try {
+    delay(1000)
+} catch (e: CancellationException) {
+    // нельзя просто игнорировать
+    throw e
+}
+
+//  DO: пробрасывать CancellationException после очистки
+try {
+    delay(1000)
+} catch (e: CancellationException) {
+    cleanup()
+    throw e
+}
+
+//  DO: использовать use() для ресурсов
+resource.use {
+    // автоматическая очистка при отмене/ошибке
+}
+
+//  DO: тестировать тайминг отмены
+@Test
+fun testCancellationTiming() = runTest {
+    val job = launch { /* ... */ }
+    advanceTimeBy(500)
+    job.cancel()
+    advanceUntilIdle()
+    assertTrue(job.isCancelled)
+}
+```
+
+### Итог (RU)
+
+Ключевые моменты:
+- Кооперативная отмена: корутины должны проверять `isActive` или вызывать приостановленные функции.
+- `ensureActive()`: выбрасывает `CancellationException`, если корутина отменена.
+- `CancellationException`: после очистки должен быть проброшен дальше, не подавлять без необходимости.
+- `NonCancellable`: используется для очистки, которая обязана завершиться даже после отмены.
+- `invokeOnCancellation`: регистрирует колбэк очистки для пользовательских приостанавливаний.
+- Отмена в `Flow`: важно проверять корректное завершение и отмену upstream-потока.
+
+Стратегии тестирования:
+- Проверяйте, что отмена своевременно останавливает работу кооперативного кода.
+- Проверяйте, что ресурсы корректно очищаются при отмене (try/finally, `use`, `NonCancellable`).
+- Проверяйте, что `CancellationException` корректно пробрасывается и не подавляется.
+- Покрывайте сценарии таймаутов (`withTimeout`, `withTimeoutOrNull`).
+- Тестируйте отмену дочерних корутин и поведение структурированной конкуренции.
+- Используйте виртуальное время в `runTest` для детерминированного контроля таймингов.
+
+Типичные ошибки:
+- Отсутствие проверок отмены в CPU-интенсивных циклах.
+- Подавление или игнорирование `CancellationException`.
+- Неиспользование `NonCancellable` для критичной очистки.
+- Непротестированная очистка ресурсов и сценарии отмены.
+
+---
+
+## Answer (EN)
+
+Testing cancellation is critical to ensure proper resource cleanup and correct reaction to cancellation requests. In Kotlin coroutines, cancellation is cooperative, so you must test both timely stopping and proper cleanup.
+
+### Basic Cancellation Testing
+
+```kotlin
+@Test
+fun `coroutine can be cancelled`() = runTest {
+    val job = launch {
+        repeat(1000) {
+            delay(100)
+            println("Working $it")
+        }
+    }
+
+    advanceTimeBy(250) // let it run a bit
+    assertTrue(job.isActive)
+
+    job.cancel()
+    advanceUntilIdle()
+
+    assertTrue(job.isCancelled)
+    assertTrue(job.isCompleted)
+}
+
+@Test
+fun `cancel stops execution`() = runTest {
+    var counter = 0
+
+    val job = launch {
+        repeat(10) {
+            delay(100)
+            counter++
+        }
+    }
+
+    advanceTimeBy(250)
+    assertEquals(2, counter)
+
+    job.cancel()
+    advanceUntilIdle()
+
+    // Counter never reaches 10
+    assertTrue(counter < 10)
+}
+```
+
+### Testing Cooperative Cancellation
+
+Coroutines should cooperate with cancellation by invoking suspending functions or explicitly checking `isActive` / `ensureActive()`.
+
+```kotlin
+// Non-cooperative coroutine (BAD)
+class NonCooperativeTaskEn {
+    suspend fun process(): Int {
+        var result = 0
+        repeat(1_000_000) {
+            result += it // CPU-intensive, no cancellation checks
+        }
+        return result
+    }
+}
+
+@Test
+fun `non-cooperative coroutine ignores cancellation`() = runTest {
+    val task = NonCooperativeTaskEn()
+    var completed = false
+
+    val job = launch {
+        task.process()
+        completed = true
+    }
+
+    job.cancel()
+    advanceUntilIdle()
+
+    assertTrue(job.isCancelled)
+    // `completed` may or may not be true; we don't assert on it
+}
+
+// Cooperative coroutine (GOOD)
+class CooperativeTaskEn {
+    suspend fun process(): Int = coroutineScope {
+        var result = 0
+        repeat(1_000_000) {
+            ensureActive() // cancellation check
+            result += it
+        }
+        result
+    }
+}
+
+@Test
+fun `cooperative coroutine cancels correctly`() = runTest {
+    val task = CooperativeTaskEn()
+    var completed = false
+
+    val job = launch {
+        try {
+            task.process()
+            completed = true
+        } catch (e: CancellationException) {
+            // expected on cancellation
+        }
+    }
+
+    job.cancel()
+    advanceUntilIdle()
+
+    assertTrue(job.isCancelled)
+    assertFalse(completed)
+}
+```
+
+### Testing ensureActive
+
+```kotlin
+class DataProcessorEn {
+    suspend fun processLargeDataset(data: List<Int>): List<Int> = coroutineScope {
+        val results = mutableListOf<Int>()
+
+        for (item in data) {
+            ensureActive() // throws if cancelled
+            results.add(processItem(item))
+        }
+
+        results
+    }
+
+    private fun processItem(item: Int): Int = item * 2
+}
+
+@Test
+fun `ensureActive throws on cancellation`() = runTest {
+    val processor = DataProcessorEn()
+    val largeDataset = (1..10_000).toList()
+
+    val job = launch {
+        try {
+            processor.processLargeDataset(largeDataset)
+            fail("Cancellation expected")
+        } catch (e: CancellationException) {
+            // expected
+        }
+    }
+
+    advanceTimeBy(50)
+    job.cancel()
+    advanceUntilIdle()
+
+    assertTrue(job.isCancelled)
+}
+
+@Test
+fun `ensureActive allows completion when not cancelled`() = runTest {
+    val processor = DataProcessorEn()
+    val dataset = (1..100).toList()
+
+    val result = processor.processLargeDataset(dataset)
+
+    assertEquals(100, result.size)
+    assertEquals(dataset.map { it * 2 }, result)
+}
+```
+
+### Testing isActive
+
+```kotlin
+class FileProcessorEn {
+    suspend fun processFiles(files: List<File>): Int = coroutineScope {
+        var processed = 0
+
+        for (file in files) {
+            if (!isActive) break // cancellation check
+
+            processFile(file)
+            processed++
+        }
+
+        processed
+    }
+
+    private suspend fun processFile(file: File) {
+        delay(100)
+    }
+}
+
+@Test
+fun `isActive stops processing on cancellation`() = runTest {
+    val processor = FileProcessorEn()
+    val files = List(10) { File("file$it") }
+
+    var result = 0
+
+    val job = launch {
+        result = processor.processFiles(files)
+    }
+
+    advanceTimeBy(350)
+    job.cancel()
+    advanceUntilIdle()
+
+    assertEquals(3, result)
+}
+```
+
+### Testing CancellationException
+
+```kotlin
+@Test
+fun `CancellationException is thrown on cancel`() = runTest {
+    var exception: Throwable? = null
+
+    val job = launch {
+        try {
+            delay(1000)
+        } catch (e: CancellationException) {
+            exception = e
+            throw e // rethrow is important
+        }
+    }
+
+    advanceTimeBy(500)
+    job.cancel("Test cancellation", TestExceptionEn())
+    advanceUntilIdle()
+
+    assertNotNull(exception)
+    assertTrue(exception is CancellationException)
+    assertEquals("Test cancellation", exception?.message)
+}
+
+class TestExceptionEn : Exception("Test")
+
+@Test
+fun `CancellationException is not swallowed`() = runTest {
+    var finalized = false
+
+    val job = launch {
+        try {
+            delay(1000)
+        } catch (e: CancellationException) {
+            finalized = true
+            throw e // MUST rethrow
+        }
+    }
+
+    job.cancel()
+    advanceUntilIdle()
+
+    assertTrue(finalized)
+    assertTrue(job.isCancelled)
+}
+```
+
+### Testing Timeout
+
+```kotlin
+class SlowApiEn {
+    suspend fun fetchData(): String {
+        delay(5000)
+        return "data"
+    }
+}
+
+@Test
+fun `timeout cancels long-running operation`() = runTest {
+    val api = SlowApiEn()
+
+    val result = try {
+        withTimeout(1000) {
+            api.fetchData()
+        }
+    } catch (e: TimeoutCancellationException) {
+        null
+    }
+
+    assertNull(result)
+}
+
+@Test
+fun `timeout succeeds when operation fits limit`() = runTest {
+    val api = object {
+        suspend fun fetchData(): String {
+            delay(500)
+            return "data"
+        }
+    }
+
+    val result = withTimeout(1000) {
+        api.fetchData()
+    }
+
+    assertEquals("data", result)
+}
+
+@Test
+fun `withTimeoutOrNull returns null on timeout`() = runTest {
+    val result = withTimeoutOrNull(1000) {
+        delay(2000)
+        "completed"
+    }
+
+    assertNull(result)
+}
+
+@Test
+fun `withTimeoutOrNull returns value on success`() = runTest {
+    val result = withTimeoutOrNull(1000) {
+        delay(500)
+        "completed"
+    }
+
+    assertEquals("completed", result)
+}
+```
+
+### Testing Resource Cleanup
+
+```kotlin
+class DatabaseConnectionEn : Closeable {
+    var closed = false
+    var transactionActive = false
+
+    fun beginTransaction() {
+        transactionActive = true
+    }
+
+    fun commit() {
+        transactionActive = false
+    }
+
+    override fun close() {
+        closed = true
+    }
+}
+
+class DatabaseServiceEn {
+    suspend fun performTransaction(connection: DatabaseConnectionEn) {
+        try {
+            connection.beginTransaction()
+            delay(1000)
+            connection.commit()
+        } finally {
+            connection.close()
+        }
+    }
+}
+
+@Test
+fun `resources are closed on cancellation`() = runTest {
+    val connection = DatabaseConnectionEn()
+    val service = DatabaseServiceEn()
+
+    val job = launch {
+        service.performTransaction(connection)
+    }
+
+    advanceTimeBy(500)
+    job.cancel()
+    advanceUntilIdle()
+
+    assertTrue(connection.closed)
+}
+
+@Test
+fun `use ensures resource cleanup`() = runTest {
+    val connection = DatabaseConnectionEn()
+
+    val job = launch {
+        connection.use {
+            it.beginTransaction()
+            delay(1000)
+            it.commit()
+        }
+    }
+
+    advanceTimeBy(500)
+    job.cancel()
+    advanceUntilIdle()
+
+    assertTrue(connection.closed)
+}
+```
+
+### Testing NonCancellable
+
+```kotlin
+class FileWriterEn {
+    var fileOpen = false
+    var bufferFlushed = false
+    var fileClosed = false
+
+    fun open() {
+        fileOpen = true
+    }
+
+    suspend fun flush() {
+        delay(100)
+        bufferFlushed = true
+    }
+
+    suspend fun close() {
+        delay(50)
+        fileClosed = true
+        fileOpen = false
+    }
+}
+
+class FileServiceEn {
+    suspend fun writeData(writer: FileWriterEn, data: String) {
+        try {
+            writer.open()
+            delay(500)
+        } finally {
+            withContext(NonCancellable) {
+                writer.flush()
+                writer.close()
+            }
+        }
+    }
+}
+
+@Test
+fun `NonCancellable completes cleanup after cancellation`() = runTest {
+    val writer = FileWriterEn()
+    val service = FileServiceEn()
+
+    val job = launch {
+        service.writeData(writer, "test data")
+    }
+
+    advanceTimeBy(250)
+    job.cancel()
+    advanceUntilIdle()
+
+    assertTrue(writer.bufferFlushed)
+    assertTrue(writer.fileClosed)
+    assertFalse(writer.fileOpen)
+}
+
+@Test
+fun `NonCancellable cleanup takes expected time`() = runTest {
+    val writer = FileWriterEn()
+    val service = FileServiceEn()
+
+    val job = launch {
+        service.writeData(writer, "test data")
+    }
+
+    advanceTimeBy(250)
+    val cancelTime = currentTime
+    job.cancel()
+    advanceUntilIdle()
+    val completeTime = currentTime
+
+    val cleanupTime = completeTime - cancelTime
+    assertEquals(150, cleanupTime)
+}
+```
+
+### Testing Child Coroutine Cancellation
 
 ```kotlin
 @Test
@@ -602,7 +1395,7 @@ fun `cancelling parent cancels children`() = runTest {
 }
 
 @Test
-fun `child failure doesn't cancel siblings with SupervisorJob`() = runTest {
+fun `SupervisorJob child failure does not cancel siblings`() = runTest {
     val child1Completed = CompletableDeferred<Unit>()
     val child2Completed = CompletableDeferred<Unit>()
 
@@ -612,7 +1405,7 @@ fun `child failure doesn't cancel siblings with SupervisorJob`() = runTest {
                 delay(500)
                 child1Completed.complete(Unit)
             } catch (e: CancellationException) {
-                // Shouldn't happen
+                // should not happen
             }
         }
 
@@ -627,7 +1420,6 @@ fun `child failure doesn't cancel siblings with SupervisorJob`() = runTest {
         }
     }
 
-    // Child 1 and 2 complete despite sibling failure
     assertTrue(child1Completed.isCompleted)
     assertTrue(child2Completed.isCompleted)
 }
@@ -636,7 +1428,7 @@ fun `child failure doesn't cancel siblings with SupervisorJob`() = runTest {
 ### Testing invokeOnCancellation
 
 ```kotlin
-class ResourceManager {
+class ResourceManagerEn {
     val releasedResources = mutableListOf<String>()
 
     suspend fun acquireResource(name: String) = suspendCancellableCoroutine<Unit> { continuation ->
@@ -648,8 +1440,8 @@ class ResourceManager {
 }
 
 @Test
-fun `invokeOnCancellation called on cancel`() = runTest {
-    val manager = ResourceManager()
+fun `invokeOnCancellation called on cancellation`() = runTest {
+    val manager = ResourceManagerEn()
 
     val job = launch {
         manager.acquireResource("Resource1")
@@ -664,8 +1456,8 @@ fun `invokeOnCancellation called on cancel`() = runTest {
 }
 
 @Test
-fun `invokeOnCancellation not called on completion`() = runTest {
-    val manager = ResourceManager()
+fun `invokeOnCancellation not called on normal completion`() = runTest {
+    val manager = ResourceManagerEn()
 
     val job = launch {
         manager.acquireResource("Resource1")
@@ -674,7 +1466,6 @@ fun `invokeOnCancellation not called on completion`() = runTest {
 
     advanceUntilIdle()
 
-    // No cancellation, so invokeOnCancellation wasn't called
     assertTrue(manager.releasedResources.isEmpty())
 }
 ```
@@ -696,11 +1487,10 @@ fun `join waits for completion`() = runTest {
     job.join()
 
     assertTrue(completed)
-    assertEquals(500, currentTime)
 }
 
 @Test
-fun `cancelAndJoin cancels and waits`() = runTest {
+fun `cancelAndJoin cancels and waits for cleanup`() = runTest {
     var cleanedUp = false
 
     val job = launch {
@@ -722,7 +1512,7 @@ fun `cancelAndJoin cancels and waits`() = runTest {
 
     assertTrue(job.isCancelled)
     assertTrue(cleanedUp)
-    assertEquals(200, joinTime - cancelTime) // Waited for cleanup
+    assertEquals(200, joinTime - cancelTime)
 }
 ```
 
@@ -751,6 +1541,7 @@ fun `coroutineScope cancels all children on failure`() = runTest {
             launch {
                 task2Started.complete(Unit)
                 delay(100)
+                task2Cancelled.complete(Unit)
                 throw IllegalStateException("Task 2 failed")
             }
 
@@ -765,10 +1556,11 @@ fun `coroutineScope cancels all children on failure`() = runTest {
     assertTrue(task1Started.isCompleted)
     assertTrue(task1Cancelled.isCompleted)
     assertTrue(task2Started.isCompleted)
+    assertTrue(task2Cancelled.isCompleted)
 }
 
 @Test
-fun `supervisorScope doesn't cancel siblings on failure`() = runTest {
+fun `supervisorScope does not cancel siblings on failure`() = runTest {
     val task1Completed = CompletableDeferred<Unit>()
     val task2Failed = CompletableDeferred<Unit>()
 
@@ -790,7 +1582,7 @@ fun `supervisorScope doesn't cancel siblings on failure`() = runTest {
 }
 ```
 
-### Testing Cancellation in Flow
+### Testing Cancellation in `Flow`
 
 ```kotlin
 @Test
@@ -813,12 +1605,11 @@ fun `Flow collection can be cancelled`() = runTest {
     job.cancel()
     advanceUntilIdle()
 
-    // Only 3 emissions before cancellation
     assertEquals(3, emissionCount)
 }
 
 @Test
-fun `Flow cancels upstream on collector cancellation`() = runTest {
+fun `cancelling collector cancels upstream`() = runTest {
     var upstreamCancelled = false
 
     val flow = flow {
@@ -845,7 +1636,7 @@ fun `Flow cancels upstream on collector cancellation`() = runTest {
 }
 
 @Test
-fun `onCompletion detects cancellation`() = runTest {
+fun `onCompletion observes cancellation cause`() = runTest {
     var cancellationDetected = false
     var cause: Throwable? = null
 
@@ -872,57 +1663,58 @@ fun `onCompletion detects cancellation`() = runTest {
 }
 ```
 
-### Best Practices
+### Best Practices (EN)
 
 ```kotlin
-//  DO: Use ensureActive for CPU-intensive work
-suspend fun processData(data: List<Int>) = coroutineScope {
+// DO: use ensureActive for CPU-intensive work
+suspend fun processDataEn(data: List<Int>) = coroutineScope {
     data.map { item ->
         ensureActive()
         processItem(item)
     }
 }
 
-//  DON'T: Ignore cancellation
-suspend fun badProcess(data: List<Int>) {
+// DON'T: ignore cancellation
+suspend fun badProcessEn(data: List<Int>) {
     data.forEach { item ->
-        // No cancellation check!
+        // no cancellation check
         processItem(item)
     }
 }
 
-//  DO: Use NonCancellable for cleanup
+// DO: use NonCancellable for critical cleanup
 try {
-    // Main work
+    // main work
 } finally {
     withContext(NonCancellable) {
         cleanup()
     }
 }
 
-//  DON'T: Suppress CancellationException
+// DON'T: swallow CancellationException
 try {
     delay(1000)
 } catch (e: CancellationException) {
-    // Don't catch and ignore!
+    // must not ignore
+    throw e
 }
 
-//  DO: Rethrow CancellationException
+// DO: rethrow CancellationException after cleanup
 try {
     delay(1000)
 } catch (e: CancellationException) {
     cleanup()
-    throw e // MUST rethrow
+    throw e
 }
 
-//  DO: Use use() for resources
+// DO: use use() for resources
 resource.use {
-    // Automatic cleanup on cancellation
+    // automatic cleanup on cancel/error
 }
 
-//  DO: Test cancellation timing
+// DO: test cancellation timing
 @Test
-fun test() = runTest {
+fun testCancellationTimingEn() = runTest {
     val job = launch { /* ... */ }
     advanceTimeBy(500)
     job.cancel()
@@ -931,52 +1723,58 @@ fun test() = runTest {
 }
 ```
 
-### Summary
+### Summary (EN)
 
-**Key concepts**:
-- **Cooperative cancellation**: Coroutines must check `isActive` or call suspending functions
-- **ensureActive()**: Throws CancellationException if cancelled
-- **CancellationException**: Must be rethrown after cleanup
-- **NonCancellable**: Context for cleanup that must complete
-- **invokeOnCancellation**: Register cleanup callback
+Key points:
+- Cooperative cancellation: coroutines should check `isActive` or call suspending functions.
+- `ensureActive()`: throws `CancellationException` when the coroutine is cancelled.
+- `CancellationException`: should be rethrown after cleanup; avoid suppressing it.
+- `NonCancellable`: use it for cleanup that must complete even after cancellation.
+- `invokeOnCancellation`: registers cleanup callbacks for custom suspensions.
+- Cancellation in `Flow`: verify correct termination and upstream cancellation.
 
-**Testing strategies**:
-- Test that cancellation stops work promptly
-- Test that resources are cleaned up properly
-- Test that CancellationException is propagated
-- Test timeout scenarios
-- Test child cancellation in structured concurrency
-- Use virtual time to control cancellation timing
+Testing strategies:
+- Assert that cancellation stops cooperative work promptly.
+- Assert that resources are cleaned up on cancellation (`try/finally`, `use`, `NonCancellable`).
+- Assert that `CancellationException` is propagated, not swallowed.
+- Cover timeout scenarios (`withTimeout`, `withTimeoutOrNull`).
+- Test child coroutine cancellation and structured concurrency behavior.
+- Use virtual time in `runTest` for deterministic control of timing.
 
-**Common pitfalls**:
-- Not checking cancellation in CPU-intensive loops
-- Catching and suppressing CancellationException
-- Not using NonCancellable for critical cleanup
-- Forgetting to test resource cleanup on cancellation
+Typical mistakes:
+- Missing cancellation checks in CPU-intensive loops.
+- Swallowing or ignoring `CancellationException`.
+- Not using `NonCancellable` for critical cleanup.
+- Not testing resource cleanup and cancellation scenarios thoroughly.
 
----
+## Дополнительные вопросы (RU)
+
+- Как протестировать взаимодействие `withTimeout` с несколькими вложенными корутинами?
+- Как убедиться, что пользовательские операции на основе `suspendCancellableCoroutine` корректно обрабатывают отмену?
+- Как тестировать поведение `Flow`, когда отмена происходит одновременно с выбросом исключения?
 
 ## Follow-ups
 
-1. What happens if you don't rethrow CancellationException?
-2. How does cancellation work with supervisorScope?
-3. What is the difference between cancel() and cancelAndJoin()?
-4. How to handle cancellation in custom suspending functions?
-5. What are the performance implications of frequent ensureActive() calls?
+- How to test interaction of `withTimeout` with multiple nested coroutines?
+- How to ensure custom `suspendCancellableCoroutine`-based operations handle cancellation correctly?
+- How to test `Flow` behavior when cancellation happens concurrently with an exception being thrown?
 
----
+## Ссылки (RU)
+
+- [[c-coroutines]]
 
 ## References
 
-- [Cancellation and Timeouts - Kotlin Docs](https://kotlinlang.org/docs/cancellation-and-timeouts.html)
-- [Cooperative Cancellation](https://kotlinlang.org/docs/cancellation-and-timeouts.html#cancellation-is-cooperative)
-- [Testing Coroutines - Android Developers](https://developer.android.com/kotlin/coroutines/test)
+- [[c-coroutines]]
 
----
+## Связанные вопросы (RU)
+
+- [[q-coroutine-cancellation-cooperation--kotlin--medium]]
+- [[q-coroutine-cancellation-mechanisms--kotlin--medium]]
+- [[q-testing-coroutines-runtest--kotlin--medium]]
 
 ## Related Questions
 
-- [[q-coroutine-cancellation-cooperation--kotlin--medium]] - Cooperative cancellation explained
-- [[q-coroutine-cancellation-mechanisms--kotlin--medium]] - Cancellation mechanisms
-- [[q-coroutine-resource-cleanup--kotlin--medium]] - Resource cleanup patterns
-- [[q-testing-coroutines-runtest--kotlin--medium]] - runTest basics
+- [[q-coroutine-cancellation-cooperation--kotlin--medium]]
+- [[q-coroutine-cancellation-mechanisms--kotlin--medium]]
+- [[q-testing-coroutines-runtest--kotlin--medium]]

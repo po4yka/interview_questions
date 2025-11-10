@@ -1,14 +1,12 @@
 ---
 id: kotlin-120
-title: "Val vs Var in Kotlin"
-aliases: []
+title: "Val vs Var in Kotlin / Разница между val и var в Kotlin"
+aliases: ["Val vs Var in Kotlin"]
 
 # Classification
 topic: kotlin
 subtopics:
   - immutability
-  - mutability
-  - read-only
   - val
   - var
 question_kind: theory
@@ -23,11 +21,11 @@ source_note: Deep dive into val vs var in Kotlin
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-const--kotlin--easy, q-kotlin-constructors--kotlin--easy, q-kotlin-properties--kotlin--easy]
+related: [c-kotlin, q-kotlin-const--kotlin--easy, q-kotlin-constructors--kotlin--easy, q-kotlin-properties--kotlin--easy]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-31
+updated: 2025-11-09
 
 tags: [constants, difficulty/easy, immutability, kotlin, mutability, read-only, val, var]
 ---
@@ -43,7 +41,7 @@ tags: [constants, difficulty/easy, immutability, kotlin, mutability, read-only, 
 
 `val` и `var` — ключевые слова для объявления переменных/свойств в Kotlin. Понимание когда использовать каждое из них фундаментально для написания идиоматичного, безопасного Kotlin кода.
 
-### Основное Различие
+### Основное различие
 
 ```kotlin
 val name = "Alice"      // Только для чтения (неизменяемая ссылка)
@@ -56,7 +54,21 @@ age = 26                // OK: Var можно переназначить
 **val** = **value** = ссылка только для чтения (как `final` в Java)
 **var** = **variable** = изменяемая ссылка
 
-### Val: Ссылка Только Для Чтения
+### Вывод типа (Type Inference)
+
+`val` и `var` работают с выводом типов:
+
+```kotlin
+val name = "Alice"              // Тип выведен как String
+val age = 25                    // Тип выведен как Int
+val items = listOf(1, 2, 3)     // Тип выведен как List<Int>
+
+var counter = 0                 // Тип выведен как Int
+var text: String                // Тип нужно указать явно, если не инициализируем сразу
+text = "Hello"
+```
+
+### Val: ссылка только для чтения
 
 ```kotlin
 val x = 10
@@ -69,12 +81,12 @@ list.add(4)                // OK: содержимое может менятьс
 
 **Ключевые моменты о val**:
 1. Ссылку нельзя переназначить
-2. Должна быть инициализирована при объявлении или в init блоке
+2. Должна быть инициализирована при объявлении или в init-блоке
 3. Может быть присвоена только один раз
 4. НЕ означает, что объект неизменяем
 5. Предпочтительна в Kotlin (подход immutability-first)
 
-### Var: Изменяемая Ссылка
+### Var: изменяемая ссылка
 
 ```kotlin
 var counter = 0
@@ -89,13 +101,13 @@ counter += 10    // OK
 3. Использовать когда значение нужно менять со временем
 4. Менее предпочтительна чем val
 
-### Val Это Не Глубокая Неизменяемость
+### Val — это не глубокая неизменяемость
 
 ```kotlin
-// Val означает что ссылка только для чтения, НЕ объект
+// Val означает, что неизменяема ссылка, а не объект
 val person = Person("Alice", 25)
 // person = Person("Bob", 30)    // Ошибка: нельзя переназначить ссылку
-person.age = 26                  // OK если age это var
+person.age = 26                  // OK, если age — var
 
 val numbers = mutableListOf(1, 2, 3)
 // numbers = mutableListOf(4, 5) // Ошибка: нельзя переназначить ссылку
@@ -107,9 +119,25 @@ val immutableNumbers = listOf(1, 2, 3)
 // immutableNumbers.add(4)       // Ошибка: List<T> неизменяем
 ```
 
-### Когда Использовать Val
+### Пользовательские геттеры у val (Custom Getters with Val)
 
-#### ИСПОЛЬЗОВАТЬ Val Когда:
+`val` может иметь пользовательский геттер и вычисляться при каждом обращении:
+
+```kotlin
+class Rectangle(val width: Int, val height: Int) {
+    val area: Int
+        get() = width * height  // Вычисляется каждый раз
+}
+
+val rect = Rectangle(10, 20)
+println(rect.area)  // 200
+
+// Площадь не хранится, а пересчитывается
+```
+
+### Когда использовать val
+
+#### ИСПОЛЬЗОВАТЬ val, когда:
 
 ```kotlin
 // 1. Значение не нужно менять
@@ -120,12 +148,12 @@ val appName = "MyApp"
 class User(val id: Int, val name: String)
 
 // 3. Параметры функции (неявно val)
-fun greet(name: String) {  // name это val по умолчанию
+fun greet(name: String) {  // name — это val по умолчанию
     // name = "Bob"  // Ошибка
     println("Hello, $name")
 }
 
-// 4. Локальные переменные которые не меняются
+// 4. Локальные переменные, которые не меняются
 fun calculateTotal(items: List<Item>): Double {
     val subtotal = items.sumOf { it.price }
     val tax = subtotal * 0.1
@@ -136,13 +164,19 @@ fun calculateTotal(items: List<Item>): Double {
 // 5. Предоставление коллекций только для чтения
 class DataStore {
     private val _items = mutableListOf<String>()
-    val items: List<String> = _items  // Открыто только для чтения
+    val items: List<String> = _items  // Снаружи только для чтения
+}
+
+// 6. Вычисляемые свойства
+class Circle(val radius: Double) {
+    val area: Double
+        get() = Math.PI * radius * radius
 }
 ```
 
-### Когда Использовать Var
+### Когда использовать var
 
-#### ИСПОЛЬЗОВАТЬ Var Когда:
+#### ИСПОЛЬЗОВАТЬ var, когда:
 
 ```kotlin
 // 1. Значение нужно менять со временем
@@ -155,7 +189,7 @@ for (i in 1..10) {
     sum += i
 }
 
-// 3. Состояние которое меняется
+// 3. Состояние, которое меняется
 class Game {
     var score: Int = 0
     var isRunning: Boolean = false
@@ -166,11 +200,136 @@ class ViewModel {
     var isLoading: Boolean = false
     var errorMessage: String? = null
 }
+
+// 5. Builder-паттерн
+class HttpRequestBuilder {
+    var url: String = ""
+    var method: String = "GET"
+    var body: String? = null
+}
 ```
 
-### Лучшие Практики
+### Val vs var в классах
+
+```kotlin
+// Основной конструктор
+class Person(
+    val name: String,      // Свойство только для чтения
+    var age: Int           // Изменяемое свойство
+)
+
+val person = Person("Alice", 25)
+println(person.name)      // Alice
+person.age = 26           // OK
+// person.name = "Bob"    // Ошибка
+
+// Свойства в теле класса
+class User {
+    val id: Int = generateId()                     // Инициализируется один раз
+    var username: String = ""                     // Можно изменять
+    val createdAt: Long = System.currentTimeMillis()  // Только один раз
+
+    private var _loginCount = 0                    // Приватное изменяемое состояние
+    val loginCount: Int                            // Публичное только для чтения
+        get() = _loginCount
+}
+```
+
+### Val vs var с nullable-типами
+
+```kotlin
+val name: String? = null
+// name = "Alice"  // Ошибка: val нельзя переназначить
+
+var username: String? = null
+username = "Alice"  // OK
+username = null     // OK
+
+// Smart cast лучше работает с val
+fun printLength(text: String?) {
+    if (text != null) {
+        println(text.length)  // Smart cast к String
+    }
+}
+
+val message: String? = getMessage()
+if (message != null) {
+    println(message.length)  // Smart cast работает
+}
+
+var mutableMessage: String? = getMessage()
+if (mutableMessage != null) {
+    // println(mutableMessage.length)  // Может не сработать smart cast (значение могло измениться)
+}
+```
+
+### Val в циклах
+
+```kotlin
+// Переменная цикла — val (неявно)
+for (item in items) {
+    // item = something  // Ошибка: переменная цикла — val
+    println(item)
+}
+
+// Индекс в цикле тоже val
+for (i in 0..10) {
+    // i = 5  // Ошибка
+    println(i)
+}
+
+// Для while нужен var
+var i = 0
+while (i < 10) {
+    println(i)
+    i++  // OK: i — var
+}
+```
+
+### Val и отложенная инициализация (lateinit / lazy)
+
+```kotlin
+class MyTest {
+    // lateinit работает только с var
+    lateinit var subject: TestSubject
+
+    @Before
+    fun setup() {
+        subject = TestSubject()
+    }
+}
+
+// Для val используйте lazy
+class DatabaseManager {
+    val connection: Connection by lazy {
+        DriverManager.getConnection(DATABASE_URL)
+    }
+}
+```
+
+### Соображения по производительности
+
+```kotlin
+// Сам по себе val не гарантирует лучшую производительность
+class Example {
+    // Хранится один раз, используется много раз
+    val storedValue = expensiveComputation()
+
+    // Вычисляется при каждом обращении
+    val computedValue: Int
+        get() = expensiveComputation()
+
+    // Подходит для дорогих вычислений, к которым обращаются не всегда
+    val lazyValue: Int by lazy {
+        expensiveComputation()
+    }
+}
+```
+
+### Лучшие практики
 
 #### ДЕЛАТЬ:
+
 ```kotlin
 // Предпочитать val вместо var (immutability first)
 val name = "Alice"
@@ -188,21 +347,169 @@ class ViewModel {
     private val _state = MutableStateFlow<State>(State.Initial)
     val state: StateFlow<State> = _state.asStateFlow()
 }
+
+// Использовать val для константных значений
+val MAX_RETRY_COUNT = 3
+val DEFAULT_TIMEOUT = 5000
+
+// Давать осмысленные имена изменяемому состоянию
+var isLoading = false
+var currentIndex = 0
 ```
 
 #### НЕ ДЕЛАТЬ:
+
 ```kotlin
-// Не использовать var когда достаточно val
-var name = "Alice"  // Плохо если name никогда не меняется
+// Не использовать var, когда достаточно val
+var name = "Alice"  // Плохо, если name никогда не меняется
 val name = "Alice"  // Лучше
 
-// Не открывать изменяемое состояние напрямую
+// Не раскрывать изменяемое состояние напрямую
 class BadViewModel {
-    var state = State.Initial  // Плохо: внешний код может изменить
+    var state = State.Initial  // Плохо: внешний код может менять состояние
+}
+
+// Не использовать val бездумно для всего
+class Counter {
+    val count = 0  // Плохо: count должен быть var
 }
 
 // Не использовать var для констант
 var PI = 3.14159  // Плохо: должно быть val или const val
+```
+
+### Общие паттерны (Common Patterns)
+
+#### Управление состоянием
+
+```kotlin
+class ViewModel {
+    // Внутреннее изменяемое состояние
+    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
+
+    // Внешнее только для чтения
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    fun loadData() {
+        _uiState.value = UiState.Loading
+        // ...
+        _uiState.value = UiState.Success(data)
+    }
+}
+```
+
+#### Builder-паттерн
+
+```kotlin
+class HttpRequest private constructor(
+    val url: String,
+    val method: String,
+    val headers: Map<String, String>
+) {
+    class Builder {
+        var url: String = ""
+        var method: String = "GET"
+        private val headers = mutableMapOf<String, String>()
+
+        fun url(url: String) = apply { this.url = url }
+        fun method(method: String) = apply { this.method = method }
+        fun header(key: String, value: String) = apply {
+            headers[key] = value
+        }
+
+        fun build(): HttpRequest {
+            require(url.isNotBlank()) { "URL required" }
+            return HttpRequest(url, method, headers)
+        }
+    }
+}
+```
+
+#### Отложенная инициализация
+
+```kotlin
+class ResourceManager {
+    // Инициализируется при первом обращении
+    val database: Database by lazy {
+        Database.connect(DATABASE_URL)
+    }
+
+    // Всегда изменяемое поле
+    var cacheSize: Int = 100
+}
+```
+
+### Val vs const val
+
+```kotlin
+// const val: константа времени компиляции
+const val MAX_SIZE = 100
+const val API_KEY = "secret"
+
+// val: константа времени выполнения
+val timestamp = System.currentTimeMillis()
+val random = Random.nextInt()
+
+class Config {
+    companion object {
+        const val VERSION = "1.0"  // Константа времени компиляции
+        val BUILD_TIME = System.currentTimeMillis()  // Константа времени выполнения
+    }
+}
+```
+
+### Реальные примеры (Real-World Examples)
+
+#### Data class
+
+```kotlin
+data class User(
+    val id: Int,              // Неизменяемый
+    val email: String,        // Неизменяемый
+    var username: String,     // Можно изменить
+    var lastLogin: Long       // Можно обновлять
+)
+
+val user = User(1, "user@test.com", "alice", System.currentTimeMillis())
+// user.id = 2           // Ошибка: val
+// user.email = "new"    // Ошибка: val
+user.username = "bob"    // OK: var
+user.lastLogin = System.currentTimeMillis()  // OK: var
+```
+
+#### Android `ViewModel`
+
+```kotlin
+class UserViewModel : ViewModel() {
+    // Приватное изменяемое состояние
+    private val _users = MutableLiveData<List<User>>()
+    private val _isLoading = MutableLiveData<Boolean>()
+
+    // Публичное только для чтения
+    val users: LiveData<List<User>> = _users
+    val isLoading: LiveData<Boolean> = _isLoading
+
+    fun loadUsers() {
+        _isLoading.value = true
+        viewModelScope.launch {
+            val result = repository.getUsers()
+            _users.value = result
+            _isLoading.value = false
+        }
+    }
+}
+```
+
+#### Конфигурация
+
+```kotlin
+class AppConfig {
+    val apiUrl: String = BuildConfig.API_URL      // Неизменяемое
+    val appVersion: String = BuildConfig.VERSION  // Неизменяемое
+
+    var debugMode: Boolean = false                // Можно переключать
+    var logLevel: LogLevel = LogLevel.INFO        // Можно менять
+}
 ```
 
 ### Резюме
@@ -513,6 +820,7 @@ class Example {
 ### Best Practices
 
 #### DO:
+
 ```kotlin
 // Prefer val over var (immutability first)
 val name = "Alice"
@@ -541,6 +849,7 @@ var currentIndex = 0
 ```
 
 #### DON'T:
+
 ```kotlin
 // Don't use var when val is sufficient
 var name = "Alice"  // Bad if name never changes
@@ -710,17 +1019,38 @@ class AppConfig {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чём ключевые отличия подхода Kotlin от Java в контексте `val`/`var` и `final`?
+- Когда вы бы использовали `val`/`var` в реальных проектах?
+- Какие распространённые ошибки при использовании `val` и `var` стоит избегать?
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Kotlin Basic Types](https://kotlinlang.org/docs/basic-types.html)
+- [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
+- [Effective Kotlin - Item 1: Limit mutability](https://kt.academy/article/ek-mutability)
+- [[c-kotlin]]
+
 ## References
 
 - [Kotlin Basic Types](https://kotlinlang.org/docs/basic-types.html)
 - [Kotlin Properties](https://kotlinlang.org/docs/properties.html)
 - [Effective Kotlin - Item 1: Limit mutability](https://kt.academy/article/ek-mutability)
+- [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-properties--kotlin--easy]]
+- [[q-kotlin-const--kotlin--easy]]
+- [[q-kotlin-constructors--kotlin--easy]]
+- [[q-lazy-vs-lateinit--kotlin--medium]]
 
 ## Related Questions
 
@@ -728,6 +1058,10 @@ class AppConfig {
 - [[q-kotlin-const--kotlin--easy]]
 - [[q-kotlin-constructors--kotlin--easy]]
 - [[q-lazy-vs-lateinit--kotlin--medium]]
+
+## MOC Ссылки (RU)
+
+- [[moc-kotlin]]
 
 ## MOC Links
 

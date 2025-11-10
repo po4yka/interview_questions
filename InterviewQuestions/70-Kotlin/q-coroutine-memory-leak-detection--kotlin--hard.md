@@ -9,42 +9,1024 @@ difficulty: hard
 original_language: en
 language_tags: [en, ru]
 moc: moc-kotlin
-related: [q-coroutine-resource-cleanup--kotlin--medium]
+related: [c-coroutines, c-memory-leaks, q-coroutine-resource-cleanup--kotlin--medium]
 status: draft
 created: 2025-10-12
-updated: 2025-10-31
+updated: 2025-11-10
 tags: [android, coroutines, debugging, difficulty/hard, kotlin, leakcanary, lifecycle, memory-leaks, profiling]
 ---
 
-# Detecting and Preventing Coroutine Memory Leaks / Обнаружение И Предотвращение Утечек Памяти
+# Вопрос (RU)
 
-## English
+> Как обнаруживать и предотвращать утечки памяти, связанные с корутинами, в Kotlin/Android (LeakCanary, профилировщики, типичные паттерны утечек и лучшие практики)?
 
-### Overview
+# Question (EN)
 
-Memory leaks in coroutine-based applications can be subtle and devastating. A single leaked coroutine can hold references to large objects (Activities, Fragments, Views), preventing garbage collection and causing OutOfMemoryErrors. Understanding common leak patterns, detection techniques, and prevention strategies is essential for production Android development.
+> How to detect and prevent coroutine-related memory leaks in Kotlin/Android (LeakCanary, profilers, common leak patterns, and best practices)?
 
-This comprehensive guide covers the 5 most common coroutine leak sources, detection tools (LeakCanary, Memory Profiler, DebugProbes), prevention strategies, and automated testing approaches.
+## Ответ (RU)
 
-### What Is a Coroutine Memory Leak?
+### Обзор
 
-A coroutine memory leak occurs when:
-1. A coroutine continues running after its associated component (Activity, ViewModel) is destroyed
-2. The coroutine holds strong references to destroyed objects
-3. These objects cannot be garbage collected
-4. Memory accumulates over time
+Утечки памяти в приложениях с корутинами часто малозаметны и при этом опасны. Долгоживущая `Coroutine` может удерживать ссылки на тяжёлые объекты (`Activity`, `Fragment`, `View`, `ViewModel`), мешая сборке мусора и в итоге приводя к OutOfMemoryError, если она живёт дольше предполагаемого жизненного цикла этих объектов.
+
+Важно понимать типичные паттерны утечек, способы их обнаружения и стратегии предотвращения, особенно в Android.
+
+### Что такое утечка памяти, связанная с корутинами?
+
+Строго говоря, утечка памяти возникает, когда объекты, которые больше не нужны, остаются достижимыми бесконечно долго.
+
+Типичный сценарий утечки с корутинами:
+1. Корутина продолжает выполняться после того, как связанный компонент (`Activity`, `Fragment`, `View`, `ViewModel` и т.п.) должен считаться завершённым.
+2. Корутина (её `Job`, scope или лямбды) удерживает сильные ссылки на эти устаревшие объекты.
+3. Эти объекты не могут быть собраны GC.
+4. Память накапливается с течением времени.
+
+Важно отличать:
+- Временное удержание (например, долгий `delay` внутри `lifecycleScope`, который будет отменён в `onDestroy`) — не утечка, но может быть проблемой производительности/UX.
+- Реальную утечку — когда корутина живёт за пределами ожидаемого жизненного цикла владельца и не освобождает ссылки.
 
 ```kotlin
-// LEAK EXAMPLE
+// ПРИМЕР УТЕЧКИ (концептуальный)
 class LeakyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // BAD: Coroutine outlives Activity
-        GlobalScope.launch {
+        // ПЛОХО: корутина переживает Activity, если не отменена
+        GlobalScope.launch(Dispatchers.Main) {
             while (true) {
                 delay(1000)
-                updateUI() // Holds reference to Activity!
+                updateUI() // Захватывает Activity (this) и её View
+            }
+        }
+    }
+
+    private fun updateUI() {
+        // Доступ к Activity/View
+    }
+}
+```
+
+### Обзор типичных источников утечек
+
+| Тип утечки | Причина | Тяжесть | Сложность обнаружения |
+|-----------|---------|--------|------------------------|
+| `GlobalScope` | Скоуп с временем жизни `Application` используется для UI/компонентной логики, нет автоотмены | Критично | Легко |
+| Нет отмены | Кастомные scope не отменяются при уничтожении компонента | Высокая | Средняя |
+| Захваченный контекст | Лямбды захватывают `Activity`/`View`/`Context` в долгоживущих задачах | Высокая | Средне–сложно |
+| Длинные операции | Долгие I/O/CPU задачи жёстко связаны с UI или запускаются в скоупах, живущих дольше UI | Средне–высокая | Средняя |
+| Утечки коллектора `Flow` | `collect` живёт дольше жизненного цикла (например, в `GlobalScope`) | Высокая | Сложно |
+
+### Утечка #1: Использование GlobalScope
+
+Проблема: `GlobalScope` живёт всё время работы процесса и не отменяется автоматически. Использование его для работы, логически принадлежащей компоненту UI, может привести к удержанию этого компонента.
+
+#### Проблема
+
+```kotlin
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.*
+
+class GlobalScopeLeakActivity : AppCompatActivity() {
+    private var data: String = ""
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // ПЛОХО: работа Activity запускается в GlobalScope
+        GlobalScope.launch(Dispatchers.IO) {
+            delay(10_000)
+
+            // Activity могла быть уничтожена, но корутина продолжает работать
+            val result = fetchDataFromNetwork()
+
+            // Захватывает Activity через withContext/this
+            withContext(Dispatchers.Main) {
+                updateUI(result)
+            }
+        }
+    }
+
+    private suspend fun fetchDataFromNetwork(): String {
+        delay(5_000)
+        return "Network data"
+    }
+
+    private fun updateUI(data: String) {
+        // Доступ к View — может привести к крэшу или утечке
+    }
+}
+```
+
+#### Почему это приводит к утечке
+
+1. `GlobalScope` никогда не отменяется автоматически.
+2. Лямбды внутри корутины захватывают экземпляр `Activity` и её `View`.
+3. Пока корутина жива, `Activity` не может быть собрана GC.
+4. При поворотах/навигации такие корутины накапливаются, удерживая старые экземпляры.
+
+#### Концептуальное влияние на память
+
+```kotlin
+class GlobalScopeLeakSimulation {
+    fun demonstrateLeak() {
+        repeat(10) {
+            GlobalScopeLeakActivity().onCreate(null)
+            // Допустим, система затем уничтожает каждую Activity
+        }
+
+        // Если корутины не отменены, они могут удерживать все эти Activity и их иерархии View.
+    }
+}
+```
+
+#### Исправление
+
+Привязывайте корутины к корректному lifecycle-aware scope.
+
+```kotlin
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
+
+class FixedActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // ХОРОШО: работа привязана к lifecycleScope Activity
+        lifecycleScope.launch {
+            try {
+                val data = fetchDataFromNetwork()
+                updateUI(data)
+            } catch (e: CancellationException) {
+                // Отмена произойдёт автоматически в onDestroy
+                throw e
+            }
+        }
+    }
+
+    private suspend fun fetchDataFromNetwork(): String {
+        delay(5_000)
+        return "Network data"
+    }
+
+    private fun updateUI(data: String) {
+        // Не будет вызвано после отмены lifecycleScope
+    }
+}
+```
+
+#### Обнаружение
+
+Используйте статический анализ (Detekt, Lint) для флага `GlobalScope` в UI/компонентном коде и рассматривайте его как smell, кроме чётко процесс-широких задач.
+
+### Утечка #2: Неотмена при уничтожении компонента
+
+Проблема: создаются собственные `CoroutineScope`, но не отменяются при уничтожении компонента.
+
+#### Пример с `Fragment`
+
+```kotlin
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import kotlinx.coroutines.*
+
+class LeakyFragment : Fragment() {
+    // ПЛОХО: кастомный scope никогда не отменяется
+    private val customScope = CoroutineScope(Dispatchers.Main + Job())
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        customScope.launch {
+            while (isActive) {
+                delay(1_000)
+                updateCounter() // Удерживает Fragment/View
+            }
+        }
+    }
+
+    private fun updateCounter() {
+        view?.findViewById<TextView>(R.id.counter)?.text = "Updated"
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        // ОШИБКА: customScope не отменён; Fragment и View могут удерживаться
+        // customScope.cancel()
+    }
+}
+```
+
+#### Исправление: lifecycle-aware scope
+
+```kotlin
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
+
+class FixedFragment : Fragment() {
+    // Вариант 1: использовать viewLifecycleOwner.lifecycleScope для UI-логики
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            while (isActive) {
+                delay(1_000)
+                updateCounter()
+            }
+        }
+    }
+
+    private fun updateCounter() {
+        view?.findViewById<TextView>(R.id.counter)?.text = "Updated"
+    }
+}
+```
+
+```kotlin
+// Вариант 2: ручное управление scope для не-UI времени жизни
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import kotlinx.coroutines.*
+
+class FixedFragmentWithCustomScope : Fragment() {
+    private var customScope: CoroutineScope? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        customScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        customScope?.cancel()
+        customScope = null
+    }
+}
+```
+
+#### Пример с `ViewModel`
+
+```kotlin
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.*
+
+class LeakyViewModel : ViewModel() {
+    // ПЛОХО: кастомный scope, не отменяемый в onCleared
+    private val customScope = CoroutineScope(Dispatchers.IO + Job())
+
+    fun loadData() {
+        customScope.launch {
+            val data = fetchData()
+            processData(data)
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        // ОШИБКА: нет customScope.cancel()
+    }
+
+    private suspend fun fetchData(): String {
+        delay(1_000)
+        return "data"
+    }
+
+    private fun processData(data: String) {
+        // ...
+    }
+}
+
+class FixedViewModel : ViewModel() {
+    // ХОРОШО: использовать viewModelScope
+    fun loadData() {
+        viewModelScope.launch {
+            val data = fetchData()
+            processData(data)
+        }
+    }
+
+    private suspend fun fetchData(): String {
+        delay(1_000)
+        return "data"
+    }
+
+    private fun processData(data: String) {
+        // ...
+    }
+}
+```
+
+### Утечка #3: Захваченные сильные ссылки
+
+Проблема: корутины захватывают сильные ссылки на `Activity`, `View` или `Context` в долгих операциях и выполняются в scope, который может жить дольше владельца.
+
+#### Пример (удержание, а не утечка при правильном scope)
+
+```kotlin
+import android.os.Bundle
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
+
+class CapturedReferenceLeakActivity : AppCompatActivity() {
+    private lateinit var textView: TextView
+    private var userData: LargeUserData? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        textView = findViewById(R.id.textView)
+        userData = LargeUserData() // Большой объект
+
+        // Здесь используется lifecycleScope, поэтому корутина будет отменена в onDestroy.
+        lifecycleScope.launch {
+            delay(30_000)
+            textView.text = "Updated: ${userData?.info}"
+        }
+    }
+}
+
+data class LargeUserData(
+    val info: String = "User info",
+    val largeArray: ByteArray = ByteArray(1024 * 1024) // 1MB
+)
+```
+
+Это пример временного удержания, а не утечки, пока используется правильный scope. Утечка появится, если аналогичный код поместить в scope, который живёт дольше `Activity`.
+
+#### Безопасные паттерны
+
+- Не захватывать `Activity`/`View` в долгоживущих задачах; выносить обработку в независимые слои (`ViewModel`/репозиторий).
+- Использовать проверки `Lifecycle` перед обновлением UI.
+- При необходимости — `WeakReference`, но не как замену правильной архитектуре.
+
+##### Вариант исправления: WeakReference (точечно)
+
+```kotlin
+import android.os.Bundle
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
+import java.lang.ref.WeakReference
+
+class FixedCapturedReferenceActivity : AppCompatActivity() {
+    private lateinit var textView: TextView
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        textView = findViewById(R.id.textView)
+        val textViewRef = WeakReference(textView)
+        val userData = LargeUserData()
+
+        lifecycleScope.launch {
+            val result = withContext(Dispatchers.Default) {
+                delay(5_000)
+                "Updated: ${userData.info}"
+            }
+
+            textViewRef.get()?.text = result
+        }
+    }
+}
+```
+
+##### Вариант исправления: проверка Lifecycle
+
+```kotlin
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
+
+class LifecycleAwareActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            val data = fetchData()
+
+            if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
+                updateUI(data)
+            }
+        }
+    }
+
+    private suspend fun fetchData(): String {
+        delay(5_000)
+        return "data"
+    }
+
+    private fun updateUI(data: String) {
+        // Обновление UI только если Activity ещё жива
+    }
+}
+```
+
+##### Вариант исправления: вынести обработку из UI
+
+```kotlin
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
+
+class ExtractedProcessingActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            val result = processDataWithoutContext()
+            updateUI(result)
+        }
+    }
+
+    private suspend fun processDataWithoutContext(): String = withContext(Dispatchers.Default) {
+        delay(5_000)
+        "Processed result"
+    }
+
+    private fun updateUI(result: String) {
+        // Быстрое обновление UI без тяжёлых ссылок
+    }
+}
+```
+
+### Утечка #4: Длительные операции удерживают ссылки
+
+Проблема: долгие I/O или CPU-задачи напрямую удерживают UI-объекты или запускаются из scope, живущего дольше UI.
+
+#### Пример
+
+```kotlin
+import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
+
+class LongOperationLeakActivity : AppCompatActivity() {
+    private lateinit var progressBar: ProgressBar
+    private val results = mutableListOf<String>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // setContentView(...)
+        // progressBar = findViewById(...)
+    }
+
+    fun downloadLargeFile() {
+        // Привязано к lifecycleScope, поэтому это не утечка при корректном использовании,
+        // но удерживает память на длительное время.
+        lifecycleScope.launch {
+            progressBar.visibility = View.VISIBLE
+
+            repeat(100) { i ->
+                val chunk = withContext(Dispatchers.IO) {
+                    downloadChunk(i)
+                }
+                results.add(chunk)
+                progressBar.progress = i
+            }
+
+            progressBar.visibility = View.GONE
+        }
+    }
+
+    private suspend fun downloadChunk(index: Int): String {
+        delay(1_000)
+        return "Chunk $index"
+    }
+}
+```
+
+Если запустить подобное из `GlobalScope` или не отменять при уничтожении компонента, это превращается в утечку.
+
+#### Исправление: `Flow` + lifecycle-aware сбор
+
+```kotlin
+import android.os.Bundle
+import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+
+class FixedLongOperationActivity : AppCompatActivity() {
+    private lateinit var progressBar: ProgressBar
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // setContentView(...)
+        // progressBar = findViewById(...)
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                downloadFlow()
+                    .flowOn(Dispatchers.IO)
+                    .collect { progress ->
+                        updateProgress(progress)
+                    }
+            }
+        }
+    }
+
+    private fun downloadFlow(): Flow<DownloadProgress> = flow {
+        repeat(100) { i ->
+            delay(1_000)
+            val chunk = "Chunk $i"
+            emit(DownloadProgress(i, chunk))
+        }
+    }
+
+    private fun updateProgress(progress: DownloadProgress) {
+        progressBar.progress = progress.percentage
+    }
+}
+
+data class DownloadProgress(val percentage: Int, val data: String)
+```
+
+#### Исправление: разделение UI и бизнес-логики
+
+```kotlin
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+
+class DownloadViewModel : ViewModel() {
+    private val _downloadProgress = MutableStateFlow<DownloadState>(DownloadState.Idle)
+    val downloadProgress: StateFlow<DownloadState> = _downloadProgress.asStateFlow()
+
+    fun startDownload() {
+        viewModelScope.launch {
+            _downloadProgress.value = DownloadState.Downloading(0)
+
+            repeat(100) { i ->
+                delay(1_000)
+                _downloadProgress.value = DownloadState.Downloading(i)
+            }
+
+            _downloadProgress.value = DownloadState.Complete
+        }
+    }
+}
+
+sealed class DownloadState {
+    object Idle : DownloadState()
+    data class Downloading(val progress: Int) : DownloadState()
+    object Complete : DownloadState()
+}
+```
+
+```kotlin
+import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
+
+class DownloadActivity : AppCompatActivity() {
+    private val viewModel: DownloadViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // setContentView(...)
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.downloadProgress.collect { state ->
+                    updateUI(state)
+                }
+            }
+        }
+
+        viewModel.startDownload()
+    }
+
+    private fun updateUI(state: DownloadState) {
+        when (state) {
+            DownloadState.Idle -> { /* ... */ }
+            is DownloadState.Downloading -> { /* ... */ }
+            DownloadState.Complete -> { /* ... */ }
+        }
+    }
+}
+```
+
+### Утечка #5: Коллекторы `Flow` не отменены
+
+Проблема: сбор `Flow` выполняется в scope, который живёт дольше UI-компонента (`GlobalScope` и т.п.), удерживая `Fragment`/`Activity`.
+
+#### Пример
+
+```kotlin
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
+
+class LeakyFlowFragment : Fragment() {
+    private val dataFlow = MutableSharedFlow<String>()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // ПЛОХО: коллектор не привязан к жизненному циклу
+        GlobalScope.launch {
+            dataFlow.collect { data ->
+                updateUI(data)
+            }
+        }
+    }
+
+    private fun updateUI(data: String) {
+        view?.findViewById<TextView>(R.id.textView)?.text = data
+    }
+}
+```
+
+#### Исправление
+
+```kotlin
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
+
+class FixedFlowFragment : Fragment() {
+    private val dataFlow = MutableSharedFlow<String>()
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                dataFlow.collect { data ->
+                    updateUI(data)
+                }
+            }
+        }
+    }
+
+    private fun updateUI(data: String) {
+        view?.findViewById<TextView>(R.id.textView)?.text = data
+    }
+}
+```
+
+### Инструмент обнаружения #1: LeakCanary 2.x
+
+LeakCanary 2.x помогает находить случаи, когда корутины/`Job`/`CoroutineScope` удерживают уничтоженные `Activity`, `Fragment` или `View`.
+
+#### Настройка
+
+```kotlin
+// build.gradle.kts
+dependencies {
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
+}
+// Дополнительной инициализации в типичном случае не требуется.
+```
+
+#### Интерпретация отчётов
+
+Признаки корутинных утечек:
+- GC-root — поток (например, `DefaultDispatcher-worker-1`) или долгоживущий scope.
+- В цепочке ссылок видны `CoroutineScope`, `Job`, диспетчеры, ведущие к экземплярам `Activity`/`Fragment`.
+
+### Инструмент обнаружения #2: Android Studio Memory Profiler
+
+Подход:
+1. Воспроизвести сценарий: создать и уничтожить подозряемый компонент.
+2. Сделать heap dump.
+3. Найти несколько экземпляров класса и проверить, удерживаются ли они через `Job`/`CoroutineScope`/диспетчеры.
+
+```kotlin
+import android.content.Context
+import android.os.Debug
+import java.io.File
+
+class MemoryProfilerHelper(private val context: Context) {
+    fun dumpHeap() {
+        val heapDumpFile = File(context.filesDir, "heap_dump.hprof")
+        Debug.dumpHprofData(heapDumpFile.absolutePath)
+    }
+}
+```
+
+### Инструмент обнаружения #3: DebugProbes для корутин
+
+`kotlinx-coroutines-debug` даёт возможность видеть активные корутины и их состояния (использовать только в debug-билдах).
+
+#### Настройка
+
+```kotlin
+// build.gradle.kts
+dependencies {
+    debugImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-debug:1.7.3")
+}
+```
+
+```kotlin
+import android.app.Application
+import kotlinx.coroutines.debug.DebugProbes
+
+class MyApplication : Application() {
+    override fun onCreate() {
+        super.onCreate()
+        if (BuildConfig.DEBUG) {
+            DebugProbes.install()
+        }
+    }
+}
+```
+
+#### Выгрузка информации о корутинах
+
+```kotlin
+import kotlinx.coroutines.debug.DebugProbes
+
+class CoroutineDebugger {
+    fun dumpActiveCoroutines() {
+        val coroutines = DebugProbes.dumpCoroutinesInfo()
+        println("Active coroutines: ${coroutines.size}")
+
+        coroutines.forEach { info ->
+            println("Coroutine context: ${info.context}")
+            println("State: ${info.state}")
+        }
+    }
+}
+```
+
+### Инспекция дерева `Job`
+
+Ручная проверка иерархии `Job` помогает убедиться, что scope корректно отменяются.
+
+```kotlin
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+
+class JobTreeInspector {
+    fun inspectJobTree(job: Job, indent: String = "") {
+        println("${indent}Job: $job")
+        println("${indent}  isActive: ${job.isActive}")
+        println("${indent}  isCompleted: ${job.isCompleted}")
+        println("${indent}  isCancelled: ${job.isCancelled}")
+
+        job.children.forEach { child ->
+            inspectJobTree(child, "$indent  ")
+        }
+    }
+
+    fun findActiveJobs(scope: CoroutineScope): List<Job> {
+        val root = scope.coroutineContext[Job] ?: return emptyList()
+        return collectActiveJobs(root)
+    }
+
+    private fun collectActiveJobs(job: Job): List<Job> {
+        val active = mutableListOf<Job>()
+        if (job.isActive) active.add(job)
+        job.children.forEach { child ->
+            active += collectActiveJobs(child)
+        }
+        return active
+    }
+}
+```
+
+### Предотвращение: lifecycle-aware scope
+
+Используйте стандартные Android lifecycle-aware scope:
+
+```kotlin
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
+
+class LifecycleScopesDemo : AppCompatActivity() {
+    fun demonstrateScopes() {
+        // Scope Activity — отменяется в onDestroy
+        lifecycleScope.launch {
+            // Безопасно: корутина не переживёт Activity
+        }
+    }
+}
+
+class FragmentScopesDemo : Fragment() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        // Для логики, завязанной на View
+        viewLifecycleOwner.lifecycleScope.launch {
+            // Живёт столько же, сколько View
+        }
+    }
+}
+
+class MyViewModel : ViewModel() {
+    init {
+        // viewModelScope — отменяется в onCleared
+        viewModelScope.launch {
+            // Бизнес-логика
+        }
+    }
+}
+```
+
+#### Выбор правильного scope
+
+- `GlobalScope`: только для действительно процесс-широких задач; почти никогда не подходит для UI.
+- `lifecycleScope` (`Activity`/`Fragment`): для задач, привязанных к жизненному циклу компонента.
+- `viewLifecycleOwner.lifecycleScope`: для задач, завязанных на View фрагмента.
+- `viewModelScope`: для логики `ViewModel`, независимой от конкретных `View`.
+
+### Предотвращение: структурированная конкуррентность
+
+```kotlin
+import kotlinx.coroutines.*
+
+class StructuredConcurrencyDemo {
+    // ПЛОХО: неструктурированная конкуррентность
+    fun unstructuredExample() {
+        GlobalScope.launch {
+            // Родитель не знает об этой корутине
+        }
+    }
+
+    // ХОРОШО: структурированная конкуррентность
+    suspend fun structuredExample() = coroutineScope {
+        launch {
+            // Child 1
+        }
+
+        launch {
+            // Child 2
+        }
+        // coroutineScope ждёт всех детей; отмена распространяется.
+    }
+}
+```
+
+### Тестирование на утечки (концептуально)
+
+Можно проверять, что scope корректно отменяется и не оставляет активных `Job`.
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
+
+class LeakDetectionTest {
+    @Test
+    fun testNoLeakedCoroutines() = runTest {
+        val scope = CoroutineScope(Job() + Dispatchers.Default)
+
+        scope.launch {
+            delay(1_000)
+        }
+
+        scope.cancel()
+        advanceUntilIdle()
+
+        val job = scope.coroutineContext[Job]!!
+        assertFalse(job.isActive, "Scope should be cancelled")
+        assertTrue(job.children.none(), "All children should be cancelled")
+    }
+}
+```
+
+Для Android интеграции можно использовать LeakCanary-подходы (например, `DetectLeaksAfterTestSuccess`).
+
+### Статический анализ: правила Detekt (концептуально)
+
+```yaml
+# detekt.yml (концептуальный пример)
+coroutines:
+  # Идеи для правил:
+  # - флагать использование GlobalScope
+  # - флагать поля CoroutineScope без явной отмены в onCleared/onDestroy/close
+```
+
+### Мониторинг в продакшене (концептуально)
+
+```kotlin
+import kotlinx.coroutines.*
+
+class CoroutineLeakMonitor {
+    @Volatile
+    private var activeScopes = 0
+
+    fun onScopeCreated() {
+        activeScopes++
+        if (activeScopes > 100) {
+            logWarning("Too many active scopes: $activeScopes")
+        }
+    }
+
+    fun onScopeCancelled() {
+        activeScopes--
+    }
+
+    private fun logWarning(message: String) {
+        // Логирование / репортинг
+    }
+}
+
+class InstrumentedScopeFactory(private val monitor: CoroutineLeakMonitor) {
+    fun createScope(): CoroutineScope {
+        monitor.onScopeCreated()
+        val job = SupervisorJob().apply {
+            invokeOnCompletion { monitor.onScopeCancelled() }
+        }
+        return CoroutineScope(job + Dispatchers.Main)
+    }
+}
+```
+
+### Резюме лучших практик
+
+1. Используйте lifecycle-aware scope (`lifecycleScope`, `viewModelScope`, `viewLifecycleOwner.lifecycleScope`).
+2. Не используйте `GlobalScope` для логики, связанной с `Activity`/`Fragment`/`View`.
+3. Любой созданный вручную `CoroutineScope` должен быть явно отменён.
+4. Избегайте захвата ссылок на `Activity`/`View`/`Context` в долгоживущих корутинах; передавайте только необходимые данные или выносите логику в отдельные слои.
+5. Для коллекции `Flow` используйте `repeatOnLifecycle` и соответствующие lifecycle-aware scope.
+6. Подключайте LeakCanary в debug-сборках для раннего обнаружения утечек.
+7. На code review системно проверяйте использование корутин (scope, отмена, `GlobalScope`, коллекция `Flow`).
+8. Отличайте реальные утечки от временного удержания — стратегии их устранения различаются.
+
+## Answer (EN)
+
+### Overview
+
+Memory leaks in coroutine-based applications can be subtle and devastating. A single long-lived `Coroutine` can hold references to large objects (`Activity`, `Fragment`, `View`, `ViewModel`), preventing garbage collection and causing OutOfMemoryErrors if it outlives their intended lifecycle. Understanding common leak patterns, detection techniques, and prevention strategies is essential for production Android development.
+
+This guide covers common coroutine-related leak patterns, detection tools (LeakCanary, Memory Profiler, DebugProbes), prevention strategies, and high-level testing approaches.
+
+### What Is a Coroutine Memory Leak?
+
+Strictly speaking, a memory leak occurs when objects that are no longer needed remain strongly reachable indefinitely.
+
+A coroutine-related leak pattern typically occurs when:
+1. A coroutine continues running after its associated component (`Activity`, `Fragment`, `View`, `ViewModel`, etc.) should be considered finished.
+2. The coroutine (its `Job`, scope, or captured lambdas) holds strong references to those obsolete objects.
+3. These objects cannot be garbage collected.
+4. Memory usage accumulates over time.
+
+Note: Temporary retention during a valid lifecycle (e.g., a long `delay` in a scope that will be cancelled in `onDestroy`) is not a leak, but can still be a performance/UX issue.
+
+```kotlin
+// LEAK EXAMPLE (conceptual)
+class LeakyActivity : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // BAD: Coroutine outlives Activity if not cancelled
+        GlobalScope.launch(Dispatchers.Main) {
+            while (true) {
+                delay(1000)
+                updateUI() // Captures Activity (this) and its Views
             }
         }
     }
@@ -59,22 +1041,22 @@ class LeakyActivity : AppCompatActivity() {
 
 | Leak Type | Root Cause | Severity | Detection Difficulty |
 |-----------|-----------|----------|---------------------|
-| **GlobalScope** | No cancellation | Critical | Easy |
-| **Missing cancellation** | Forgot to cancel | High | Medium |
-| **Captured context** | Strong references | High | Hard |
-| **Long operations** | Holds refs during I/O | Medium | Medium |
-| **Leaked collectors** | Flow collectors alive | High | Hard |
+| `GlobalScope` | `Application`-lifetime scope used for UI / component work, no automatic cancellation | Critical | Easy |
+| Missing cancellation | Custom scopes not cancelled on component teardown | High | Medium |
+| Captured context | Lambdas capture `Activity`/`View`/`Context` in long-running work | High | Medium–Hard |
+| Long operations | Tightly couple long I/O/CPU work with UI scope, or run off-scope work that still references UI | Medium–High | Medium |
+| Leaked collectors | `Flow` collectors live beyond lifecycle (e.g., `GlobalScope.collect`) | High | Hard |
 
-### Leak #1: GlobalScope Usage
+### Leak #1: `GlobalScope` Usage
 
-**Problem:** `GlobalScope` coroutines live for the entire application lifetime and are never cancelled automatically.
+Problem: `GlobalScope` coroutines live for the entire process lifetime and are never cancelled automatically. Using it for work that conceptually belongs to a UI component will leak that component.
 
 #### The Problem
 
 ```kotlin
-import kotlinx.coroutines.*
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import kotlinx.coroutines.*
 
 class GlobalScopeLeakActivity : AppCompatActivity() {
     private var data: String = ""
@@ -82,123 +1064,109 @@ class GlobalScopeLeakActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // BAD: GlobalScope coroutine
-        GlobalScope.launch {
+        // BAD: GlobalScope coroutine on Activity work
+        GlobalScope.launch(Dispatchers.IO) {
             // Simulate loading data
-            delay(10000) // 10 seconds
+            delay(10_000)
 
             // Activity might be destroyed, but coroutine continues
-            data = fetchDataFromNetwork()
+            val result = fetchDataFromNetwork()
 
-            // Crash if Activity is destroyed!
-            runOnUiThread {
-                updateUI(data)
+            // Captures this Activity via runOnUiThread / outer scope
+            withContext(Dispatchers.Main) {
+                updateUI(result)
             }
         }
     }
 
     private suspend fun fetchDataFromNetwork(): String {
-        delay(5000)
+        delay(5_000)
         return "Network data"
     }
 
     private fun updateUI(data: String) {
-        // Access views - will crash if Activity destroyed
+        // Access views - may crash or leak if Activity is destroyed
     }
 }
 ```
 
 #### Why It Leaks
 
-1. **GlobalScope never cancels** - coroutine runs even after Activity destroyed
-2. **Holds Activity reference** - via `this` in `runOnUiThread`
-3. **Holds View references** - in `updateUI`
-4. **Multiple instances accumulate** - each Activity rotation creates new leak
+1. `GlobalScope` is never cancelled automatically.
+2. The launched coroutine captures the enclosing `Activity` instance and its views via lambdas.
+3. As long as the coroutine is running, the Activity cannot be collected.
+4. Rotations / navigations can start more such coroutines → accumulated leaked Activities.
 
-#### Memory Impact
+#### Memory Impact (Conceptual)
 
 ```kotlin
-// Simulating the leak
 class GlobalScopeLeakSimulation {
     fun demonstrateLeak() {
-        repeat(10) { iteration ->
-            // Simulate Activity being created and destroyed
-            val activity = GlobalScopeLeakActivity()
-
-            // Each Activity starts a GlobalScope coroutine
-            // Activity destroyed, but coroutine continues
-            // After 10 rotations: 10 leaked Activities!
+        repeat(10) {
+            // Each new instance would start a GlobalScope coroutine
+            GlobalScopeLeakActivity().onCreate(null)
+            // Assume each corresponding Activity is later destroyed by the system
         }
 
-        // Heap contains:
-        // - 10 Activity instances (should be 1)
-        // - 10 View hierarchies
-        // - All associated resources
-        // = Potential OutOfMemoryError
+        // If none of those coroutines are cancelled, they may all retain their
+        // respective Activity instances and view hierarchies until completion.
     }
 }
 ```
 
 #### The Fix
 
+Tie coroutines to the appropriate lifecycle-aware scope:
+
 ```kotlin
-import kotlinx.coroutines.*
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import android.os.Bundle
+import kotlinx.coroutines.*
 
 class FixedActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // GOOD: Use lifecycleScope
+        // GOOD: Use lifecycleScope for Activity-bound work
         lifecycleScope.launch {
             try {
                 val data = fetchDataFromNetwork()
                 updateUI(data)
             } catch (e: CancellationException) {
-                // Properly cancelled when Activity destroyed
+                // Cancelled automatically in onDestroy
                 throw e
             }
         }
     }
 
     private suspend fun fetchDataFromNetwork(): String {
-        delay(5000)
+        delay(5_000)
         return "Network data"
     }
 
     private fun updateUI(data: String) {
-        // Safe: only called if Activity still alive
+        // Safe: will not be called after lifecycleScope is cancelled
     }
 }
 ```
 
 #### Detection
 
-```kotlin
-// Add this to debug builds
-class GlobalScopeDetector {
-    companion object {
-        fun detectGlobalScopeUsage() {
-            // Use Detekt or custom lint rule
-            // Fail CI if GlobalScope detected
-        }
-    }
-}
-```
+Use static analysis to flag `GlobalScope` usage in UI / component code (Detekt, custom Lint, etc.) and treat it as a code smell except for clearly process-lifetime work.
 
 ### Leak #2: Not Cancelling When Component Dies
 
-**Problem:** Creating coroutines with custom scopes and forgetting to cancel them.
+Problem: Creating custom `CoroutineScope`s and forgetting to cancel them on component teardown.
 
 #### The Problem
 
 ```kotlin
-import kotlinx.coroutines.*
-import androidx.fragment.app.Fragment
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import kotlinx.coroutines.*
 
 class LeakyFragment : Fragment() {
     // BAD: Custom scope never cancelled
@@ -207,75 +1175,75 @@ class LeakyFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Starts coroutine in custom scope
         customScope.launch {
-            while (true) {
-                delay(1000)
-                updateCounter() // Holds Fragment reference
+            while (isActive) {
+                delay(1_000)
+                updateCounter() // Holds Fragment / View references
             }
         }
     }
 
     private fun updateCounter() {
-        // Access views
         view?.findViewById<TextView>(R.id.counter)?.text = "Updated"
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        // MISTAKE: Forgot to cancel customScope!
+        // MISTAKE: forgot to cancel; Fragment and Views may be retained
         // customScope.cancel()
     }
 }
 ```
 
-#### Why It Leaks
-
-1. **Fragment destroyed** - `onDestroyView()` called
-2. **Views released** - but coroutine still running
-3. **Fragment held in memory** - by running coroutine
-4. **Multiple fragments accumulate** - navigation creates multiple leaks
-
 #### The Fix
 
+Prefer lifecycle-aware scopes, or ensure manual cancellation.
+
 ```kotlin
-import kotlinx.coroutines.*
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.viewLifecycleOwner
-import androidx.lifecycle.lifecycleScope
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
 
 class FixedFragment : Fragment() {
-    // Option 1: Use viewLifecycleOwner.lifecycleScope
+    // Option 1: Use viewLifecycleOwner.lifecycleScope for UI-related work
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewLifecycleOwner.lifecycleScope.launch {
-            // Automatically cancelled when view destroyed
-            while (true) {
-                delay(1000)
+            while (isActive) {
+                delay(1_000)
                 updateCounter()
             }
         }
     }
 
-    // Option 2: Manual scope management
+    private fun updateCounter() {
+        view?.findViewById<TextView>(R.id.counter)?.text = "Updated"
+    }
+}
+```
+
+```kotlin
+// Option 2: Manual scope management for non-View lifetimes
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import kotlinx.coroutines.*
+
+class FixedFragmentWithCustomScope : Fragment() {
     private var customScope: CoroutineScope? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        customScope = CoroutineScope(Dispatchers.Main + Job())
+        customScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
     }
 
     override fun onDestroy() {
         super.onDestroy()
         customScope?.cancel()
         customScope = null
-    }
-
-    private fun updateCounter() {
-        view?.findViewById<TextView>(R.id.counter)?.text = "Updated"
     }
 }
 ```
@@ -293,7 +1261,6 @@ class LeakyViewModel : ViewModel() {
 
     fun loadData() {
         customScope.launch {
-            // This coroutine might outlive ViewModel!
             val data = fetchData()
             processData(data)
         }
@@ -304,40 +1271,49 @@ class LeakyViewModel : ViewModel() {
         // MISTAKE: Forgot to cancel!
         // customScope.cancel()
     }
+
+    private suspend fun fetchData(): String {
+        delay(1_000)
+        return "data"
+    }
+
+    private fun processData(data: String) {
+        // ...
+    }
 }
 
 class FixedViewModel : ViewModel() {
     // GOOD: Use viewModelScope
     fun loadData() {
         viewModelScope.launch {
-            // Automatically cancelled in onCleared()
             val data = fetchData()
             processData(data)
         }
     }
 
     private suspend fun fetchData(): String {
-        delay(1000)
+        delay(1_000)
         return "data"
     }
 
     private fun processData(data: String) {
-        // Process
+        // ...
     }
 }
 ```
 
 ### Leak #3: Captured Strong References
 
-**Problem:** Coroutines capture strong references to Activities, Views, or Contexts in lambdas.
+Problem: Coroutines capture strong references to Activities, Views, or `Context`s in lambdas used for long-running work that may outlive those owners.
 
 #### The Problem
 
 ```kotlin
-import kotlinx.coroutines.*
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
 
 class CapturedReferenceLeakActivity : AppCompatActivity() {
     private lateinit var textView: TextView
@@ -350,18 +1326,13 @@ class CapturedReferenceLeakActivity : AppCompatActivity() {
         textView = findViewById(R.id.textView)
         userData = LargeUserData() // Large object
 
+        // NOTE: Using lifecycleScope means this coroutine is cancelled in onDestroy,
+        // so this is not a true leak. But the references are retained until then.
         lifecycleScope.launch {
-            delay(30000) // Long operation
+            delay(30_000) // Long operation within Activity lifetime
 
-            // BAD: Captures Activity, TextView, userData
-            // Even if Activity destroyed, these are kept alive
             textView.text = "Updated: ${userData?.info}"
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // Activity destroyed, but coroutine holds references!
     }
 }
 
@@ -371,21 +1342,22 @@ data class LargeUserData(
 )
 ```
 
-#### Why It Leaks
+This example illustrates retention, not a leak, because `lifecycleScope` cancels in `onDestroy`. It becomes a leak only if the coroutine is in a scope that outlives the Activity.
 
-1. **Lambda captures references** - `textView`, `userData`, implicit `this`
-2. **Long-running coroutine** - 30 second delay
-3. **Activity destroyed early** - user navigates away
-4. **Objects held for 30 seconds** - preventing GC
+#### Safer Patterns
 
-#### The Fix: Weak References
+- Avoid capturing `Activity`/`View` in long-running background work.
+- Use separate layers (e.g., ViewModel, repository) that do not depend on UI references.
+- Optionally, use weak references or lifecycle checks when necessary.
+
+##### Fix Variant: Weak References (use sparingly)
 
 ```kotlin
-import kotlinx.coroutines.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import android.os.Bundle
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
 import java.lang.ref.WeakReference
 
 class FixedCapturedReferenceActivity : AppCompatActivity() {
@@ -396,32 +1368,29 @@ class FixedCapturedReferenceActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         textView = findViewById(R.id.textView)
-
-        // Create weak references
         val textViewRef = WeakReference(textView)
         val userData = LargeUserData()
 
         lifecycleScope.launch {
-            val result = withContext(Dispatchers.IO) {
-                delay(5000)
+            val result = withContext(Dispatchers.Default) {
+                delay(5_000)
                 "Updated: ${userData.info}"
             }
 
-            // Check if Activity still alive
             textViewRef.get()?.text = result
-            // If Activity destroyed, textViewRef.get() returns null
         }
     }
 }
 ```
 
-#### The Fix: Check Lifecycle State
+##### Fix Variant: Check Lifecycle State
 
 ```kotlin
-import kotlinx.coroutines.*
-import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.*
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
 
 class LifecycleAwareActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -430,7 +1399,6 @@ class LifecycleAwareActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val data = fetchData()
 
-            // Check if still in valid state
             if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                 updateUI(data)
             }
@@ -438,7 +1406,7 @@ class LifecycleAwareActivity : AppCompatActivity() {
     }
 
     private suspend fun fetchData(): String {
-        delay(5000)
+        delay(5_000)
         return "data"
     }
 
@@ -448,30 +1416,26 @@ class LifecycleAwareActivity : AppCompatActivity() {
 }
 ```
 
-#### The Fix: Extract Processing
+##### Fix Variant: Extract Processing Away From UI
 
 ```kotlin
-import kotlinx.coroutines.*
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.*
 
 class ExtractedProcessingActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-            // Do heavy work without capturing Activity
             val result = processDataWithoutContext()
-
-            // Only capture Activity briefly for UI update
             updateUI(result)
         }
     }
 
-    // No Activity references captured
     private suspend fun processDataWithoutContext(): String = withContext(Dispatchers.Default) {
-        delay(5000)
-        // Heavy computation without UI references
+        delay(5_000)
         "Processed result"
     }
 
@@ -483,33 +1447,39 @@ class ExtractedProcessingActivity : AppCompatActivity() {
 
 ### Leak #4: Long-Running Operations Holding References
 
-**Problem:** Long network/database operations holding references to UI components.
+Problem: Long-running I/O or CPU operations that are coupled directly to UI scopes and capture UI objects, or operations started from a scope that outlives the UI (e.g., `GlobalScope`).
 
 #### The Problem
 
 ```kotlin
-import kotlinx.coroutines.*
+import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import java.io.File
+import kotlinx.coroutines.*
 
 class LongOperationLeakActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
-    private var results = mutableListOf<String>()
+    private val results = mutableListOf<String>()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // setContentView(...)
+        // progressBar = findViewById(...)
+    }
 
     fun downloadLargeFile() {
+        // Tied to Activity lifecycle, so not a leak if correctly scoped,
+        // but can retain large objects for a long time.
         lifecycleScope.launch {
-            // BAD: Holds Activity reference for entire download
             progressBar.visibility = View.VISIBLE
 
             repeat(100) { i ->
-                delay(1000) // Simulate slow download (100 seconds!)
-
-                // Captures 'this' Activity and 'results'
-                val chunk = downloadChunk(i)
+                val chunk = withContext(Dispatchers.IO) {
+                    downloadChunk(i)
+                }
                 results.add(chunk)
-
-                // Holds progressBar reference
                 progressBar.progress = i
             }
 
@@ -518,48 +1488,51 @@ class LongOperationLeakActivity : AppCompatActivity() {
     }
 
     private suspend fun downloadChunk(index: Int): String {
-        delay(1000)
+        delay(1_000)
         return "Chunk $index"
     }
 }
 ```
 
-#### The Fix: Use Flow with Lifecycle-Aware Collection
+This is lifecycle-safe but can cause high memory usage. It becomes a leak if launched from a scope outliving the Activity or if the `Job` is not cancelled.
+
+#### The Fix: Use `Flow` with Lifecycle-Aware Collection
 
 ```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import android.os.Bundle
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.lifecycle.Lifecycle
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 
 class FixedLongOperationActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
 
-    fun downloadLargeFile() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // setContentView(...)
+        // progressBar = findViewById(...)
+
         lifecycleScope.launch {
-            // Flow doesn't hold Activity reference
-            downloadFlow()
-                .flowOn(Dispatchers.IO)
-                .collect { progress ->
-                    // Only updates UI when Activity is STARTED
-                    updateProgress(progress)
-                }
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                downloadFlow()
+                    .flowOn(Dispatchers.IO)
+                    .collect { progress ->
+                        updateProgress(progress)
+                    }
+            }
         }
     }
 
     private fun downloadFlow(): Flow<DownloadProgress> = flow {
         repeat(100) { i ->
-            delay(1000)
-            val chunk = downloadChunk(i)
+            delay(1_000)
+            val chunk = "Chunk $i"
             emit(DownloadProgress(i, chunk))
         }
-    }
-
-    private suspend fun downloadChunk(index: Int): String {
-        delay(1000)
-        return "Chunk $index"
     }
 
     private fun updateProgress(progress: DownloadProgress) {
@@ -573,10 +1546,13 @@ data class DownloadProgress(val percentage: Int, val data: String)
 #### The Fix: Separate Business Logic from UI
 
 ```kotlin
-import kotlinx.coroutines.*
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 class DownloadViewModel : ViewModel() {
     private val _downloadProgress = MutableStateFlow<DownloadState>(DownloadState.Idle)
@@ -587,19 +1563,12 @@ class DownloadViewModel : ViewModel() {
             _downloadProgress.value = DownloadState.Downloading(0)
 
             repeat(100) { i ->
-                delay(1000)
-                val chunk = downloadChunk(i)
-                // No UI references - just state
+                delay(1_000)
                 _downloadProgress.value = DownloadState.Downloading(i)
             }
 
             _downloadProgress.value = DownloadState.Complete
         }
-    }
-
-    private suspend fun downloadChunk(index: Int): String {
-        delay(1000)
-        return "Chunk $index"
     }
 }
 
@@ -608,14 +1577,24 @@ sealed class DownloadState {
     data class Downloading(val progress: Int) : DownloadState()
     object Complete : DownloadState()
 }
+```
+
+```kotlin
+import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
 
 class DownloadActivity : AppCompatActivity() {
     private val viewModel: DownloadViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // setContentView(...)
 
-        // Collect safely with lifecycle awareness
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.downloadProgress.collect { state ->
@@ -629,24 +1608,29 @@ class DownloadActivity : AppCompatActivity() {
 
     private fun updateUI(state: DownloadState) {
         when (state) {
-            is DownloadState.Idle -> { /* ... */ }
+            DownloadState.Idle -> { /* ... */ }
             is DownloadState.Downloading -> { /* ... */ }
-            is DownloadState.Complete -> { /* ... */ }
+            DownloadState.Complete -> { /* ... */ }
         }
     }
 }
 ```
 
-### Leak #5: Flow Collectors Not Cancelled
+### Leak #5: `Flow` Collectors Not Cancelled
 
-**Problem:** Flow collectors that continue collecting after component destruction.
+Problem: `Flow` collectors run in scopes that outlive their UI/component, e.g., `GlobalScope.launch { flow.collect { ... } }` from a Fragment, retaining the Fragment.
 
 #### The Problem
 
 ```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
 
 class LeakyFlowFragment : Fragment() {
     private val dataFlow = MutableSharedFlow<String>()
@@ -654,10 +1638,9 @@ class LeakyFlowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // BAD: Collector never cancelled
+        // BAD: Collector not bound to lifecycle
         GlobalScope.launch {
             dataFlow.collect { data ->
-                // Holds Fragment reference
                 updateUI(data)
             }
         }
@@ -671,12 +1654,19 @@ class LeakyFlowFragment : Fragment() {
 
 #### The Fix
 
+Bind collection to the appropriate lifecycle.
+
 ```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import android.os.Bundle
+import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
 
 class FixedFlowFragment : Fragment() {
     private val dataFlow = MutableSharedFlow<String>()
@@ -684,7 +1674,6 @@ class FixedFlowFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // GOOD: Collector cancelled with lifecycle
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 dataFlow.collect { data ->
@@ -702,7 +1691,7 @@ class FixedFlowFragment : Fragment() {
 
 ### Detection Tool #1: LeakCanary 2.x
 
-LeakCanary 2.x has built-in coroutine support and can detect leaked coroutines.
+LeakCanary 2.x can detect leaks where coroutines (and their contexts/scopes) retain destroyed `Activity`/`Fragment`/`View`.
 
 #### Setup
 
@@ -711,101 +1700,41 @@ LeakCanary 2.x has built-in coroutine support and can detect leaked coroutines.
 dependencies {
     debugImplementation("com.squareup.leakcanary:leakcanary-android:2.12")
 }
-
-// No initialization needed - auto-installs
+// No manual initialization required for standard setup.
 ```
 
 #### Reading LeakCanary Reports
 
-```
-====================================
-HEAP ANALYSIS RESULT
-====================================
-1 APPLICATION LEAKS
+Typical signs of coroutine-related leaks:
 
-Leak 1:
-
- GC Root: Thread
-
- Thread name: DefaultDispatcher-worker-1
-
- CoroutineScope instance
-
- LeakyActivity instance
-    Leaking: YES (Activity destroyed but not GC'd)
-    Retained size: 8.5 MB
-
-→ View hierarchy (leaked)
-
-LEAK TRACE:
-GlobalScope.launch -> LeakyActivity -> ViewRoot -> Views
-```
-
-#### Example: Detecting GlobalScope Leak
-
-```kotlin
-import com.squareup.leakcanary.ObjectWatcher
-import kotlinx.coroutines.*
-
-class LeakCanaryIntegration {
-    fun detectLeakedCoroutine() {
-        val activity = LeakyActivity()
-
-        // Simulate Activity lifecycle
-        activity.onCreate(null)
-        activity.onDestroy()
-
-        // LeakCanary will detect that Activity is still retained
-        // by running GlobalScope coroutine
-
-        // Report will show:
-        // - Thread: DefaultDispatcher-worker-X
-        // - Coroutine: launch
-        // - Retained object: LeakyActivity
-    }
-}
-```
+- GC root is a thread (e.g., `DefaultDispatcher-worker-1`) or a long-lived scope.
+- Trace shows `CoroutineScope`, `Job`, or dispatcher holding an Activity/Fragment instance.
 
 ### Detection Tool #2: Android Studio Memory Profiler
 
-#### Heap Dump Analysis
+Use heap dumps to:
 
-1. **Trigger heap dump** after Activity destroyed
-2. **Look for multiple instances** of Activity/Fragment classes
-3. **Inspect references** to find holding coroutines
+1. Trigger a heap dump after destroying the suspected Activity/Fragment.
+2. Look for multiple instances of that class.
+3. Inspect references to see if they are retained via coroutine jobs/scopes/dispatchers.
 
 ```kotlin
-// Trigger heap dump programmatically in debug
-class MemoryProfilerHelper {
+// Example: trigger heap dump in debug-only helper
+import android.content.Context
+import android.os.Debug
+import java.io.File
+
+class MemoryProfilerHelper(private val context: Context) {
     fun dumpHeap() {
-        if (BuildConfig.DEBUG) {
-            val heapDumpFile = File(context.filesDir, "heap_dump.hprof")
-            Debug.dumpHprofData(heapDumpFile.absolutePath)
-            println("Heap dumped to: ${heapDumpFile.absolutePath}")
-        }
+        val heapDumpFile = File(context.filesDir, "heap_dump.hprof")
+        Debug.dumpHprofData(heapDumpFile.absolutePath)
     }
 }
-```
-
-#### Analyzing Dump
-
-```
-1. Open Memory Profiler
-2. Capture heap dump
-3. Search for "Activity" or "Fragment"
-4. If count > expected:
-   - Select instance
-   - View "References" tab
-   - Look for:
-     - CoroutineScope
-     - Job
-     - Thread references
-   - Trace to root GC cause
 ```
 
 ### Detection Tool #3: DebugProbes for Coroutines
 
-`kotlinx-coroutines-debug` provides coroutine-specific debugging.
+`kotlinx-coroutines-debug` provides coroutine-specific debugging. Use only in debug builds.
 
 #### Setup
 
@@ -814,12 +1743,15 @@ class MemoryProfilerHelper {
 dependencies {
     debugImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-debug:1.7.3")
 }
+```
 
-// Enable in Application class
+```kotlin
+import android.app.Application
+import kotlinx.coroutines.debug.DebugProbes
+
 class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-
         if (BuildConfig.DEBUG) {
             DebugProbes.install()
         }
@@ -831,72 +1763,15 @@ class MyApplication : Application() {
 
 ```kotlin
 import kotlinx.coroutines.debug.DebugProbes
-import kotlinx.coroutines.*
 
 class CoroutineDebugger {
     fun dumpActiveCoroutines() {
-        // Get all active coroutines
         val coroutines = DebugProbes.dumpCoroutinesInfo()
-
         println("Active coroutines: ${coroutines.size}")
 
         coroutines.forEach { info ->
-            println("Coroutine: ${info.context}")
-            println("  State: ${info.state}")
-            println("  Stack trace:")
-            info.lastObservedStackTrace().forEach { frame ->
-                println("    $frame")
-            }
-        }
-    }
-
-    fun detectLeakedCoroutines(expectedCount: Int) {
-        val coroutines = DebugProbes.dumpCoroutinesInfo()
-
-        if (coroutines.size > expectedCount) {
-            println("WARNING: ${coroutines.size - expectedCount} leaked coroutines!")
-
-            coroutines.drop(expectedCount).forEach { leaked ->
-                println("Leaked coroutine:")
-                println("  Context: ${leaked.context}")
-                println("  Created at:")
-                leaked.creationStackTrace().forEach { frame ->
-                    println("    $frame")
-                }
-            }
-        }
-    }
-}
-```
-
-#### Example Usage
-
-```kotlin
-class DebugActivity : AppCompatActivity() {
-    private val debugger = CoroutineDebugger()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Start some coroutines
-        lifecycleScope.launch {
-            delay(10000)
-        }
-
-        // Dump after 1 second
-        lifecycleScope.launch {
-            delay(1000)
-            debugger.dumpActiveCoroutines()
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // Check for leaks after destroy
-        GlobalScope.launch {
-            delay(1000)
-            debugger.detectLeakedCoroutines(0)
+            println("Coroutine context: ${info.context}")
+            println("State: ${info.state}")
         }
     }
 }
@@ -904,8 +1779,11 @@ class DebugActivity : AppCompatActivity() {
 
 ### Job Tree Inspection
 
+Manual inspection of a `Job` hierarchy can help ensure scopes are cancelled.
+
 ```kotlin
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 
 class JobTreeInspector {
     fun inspectJobTree(job: Job, indent: String = "") {
@@ -919,85 +1797,39 @@ class JobTreeInspector {
         }
     }
 
-    fun findLeakedJobs(scope: CoroutineScope): List<Job> {
-        val job = scope.coroutineContext[Job] ?: return emptyList()
-        return findActiveJobs(job)
+    fun findActiveJobs(scope: CoroutineScope): List<Job> {
+        val root = scope.coroutineContext[Job] ?: return emptyList()
+        return collectActiveJobs(root)
     }
 
-    private fun findActiveJobs(job: Job): List<Job> {
-        val leaked = mutableListOf<Job>()
-
-        if (job.isActive) {
-            leaked.add(job)
-        }
-
+    private fun collectActiveJobs(job: Job): List<Job> {
+        val active = mutableListOf<Job>()
+        if (job.isActive) active.add(job)
         job.children.forEach { child ->
-            leaked.addAll(findActiveJobs(child))
+            active += collectActiveJobs(child)
         }
-
-        return leaked
-    }
-}
-
-// Usage
-class InspectedActivity : AppCompatActivity() {
-    private val inspector = JobTreeInspector()
-    private lateinit var activityScope: CoroutineScope
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        activityScope = CoroutineScope(Job() + Dispatchers.Main)
-
-        activityScope.launch {
-            delay(5000)
-        }
-
-        activityScope.launch {
-            delay(10000)
-        }
-
-        // Inspect job tree
-        val job = activityScope.coroutineContext[Job]!!
-        inspector.inspectJobTree(job)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-
-        // Check for leaks before cancelling
-        val leakedJobs = inspector.findLeakedJobs(activityScope)
-        println("Leaked jobs before cancel: ${leakedJobs.size}")
-
-        activityScope.cancel()
+        return active
     }
 }
 ```
 
 ### Prevention: Lifecycle-Aware Scopes
 
-#### Android Built-in Scopes
+Use the standard Android lifecycle-aware scopes:
 
 ```kotlin
-import androidx.lifecycle.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import kotlinx.coroutines.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 class LifecycleScopesDemo : AppCompatActivity() {
     fun demonstrateScopes() {
         // Activity scope - cancelled in onDestroy
         lifecycleScope.launch {
             // Safe: cancelled when Activity destroyed
-        }
-
-        // ViewModel scope (in ViewModel class)
-        class MyViewModel : ViewModel() {
-            init {
-                viewModelScope.launch {
-                    // Safe: cancelled in onCleared()
-                }
-            }
         }
     }
 }
@@ -1006,15 +1838,18 @@ class FragmentScopesDemo : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Fragment lifecycle scope - cancelled in onDestroy
-        lifecycleScope.launch {
-            // Lives as long as Fragment
-        }
-
-        // View lifecycle scope - cancelled in onDestroyView
+        // Fragment lifecycle scope - cancelled with the View
         viewLifecycleOwner.lifecycleScope.launch {
-            // Lives as long as View
-            // PREFERRED for UI updates
+            // Lives as long as the View
+        }
+    }
+}
+
+class MyViewModel : ViewModel() {
+    init {
+        // viewModelScope - cancelled in onCleared
+        viewModelScope.launch {
+            // Business logic
         }
     }
 }
@@ -1022,13 +1857,10 @@ class FragmentScopesDemo : Fragment() {
 
 #### Choosing the Right Scope
 
-| Scope | Lifecycle | Use Case |
-|-------|-----------|----------|
-| `GlobalScope` | Application | **AVOID** (almost never correct) |
-| `lifecycleScope` (Activity) | onCreate → onDestroy | Activity-level operations |
-| `lifecycleScope` (Fragment) | onCreate → onDestroy | Fragment-level operations |
-| `viewLifecycleOwner.lifecycleScope` | onCreateView → onDestroyView | UI updates in Fragment |
-| `viewModelScope` | ViewModel creation → onCleared | Business logic |
+- `GlobalScope`: process-lifetime work only; almost never appropriate for UI.
+- `lifecycleScope` (`Activity`/`Fragment`): for work bound to that component.
+- `viewLifecycleOwner.lifecycleScope`: for work bound to Fragment view.
+- `viewModelScope`: for ViewModel/business logic, independent of specific views.
 
 ### Prevention: Structured Concurrency
 
@@ -1045,7 +1877,6 @@ class StructuredConcurrencyDemo {
 
     // GOOD: Structured
     suspend fun structuredExample() = coroutineScope {
-        // All children launched here
         launch {
             // Child 1
         }
@@ -1053,169 +1884,66 @@ class StructuredConcurrencyDemo {
         launch {
             // Child 2
         }
-
-        // coroutineScope waits for all children
-        // If cancelled, all children cancelled
+        // coroutineScope waits for all children; cancellation is propagated.
     }
 }
 ```
 
-### Testing for Leaks
+### Testing for Leaks (Conceptual)
 
-#### Automated Leak Detection Test
+You can test that your scopes cancel correctly.
 
 ```kotlin
 import kotlinx.coroutines.*
-import kotlinx.coroutines.test.*
-import org.junit.Test
-import kotlin.test.*
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
+import kotlin.test.Test
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class LeakDetectionTest {
     @Test
     fun testNoLeakedCoroutines() = runTest {
         val scope = CoroutineScope(Job() + Dispatchers.Default)
 
-        // Start some work
         scope.launch {
-            delay(1000)
+            delay(1_000)
         }
 
-        // Cancel scope
         scope.cancel()
-
-        // Verify all coroutines cancelled
         advanceUntilIdle()
 
         val job = scope.coroutineContext[Job]!!
         assertFalse(job.isActive, "Scope should be cancelled")
-        assertTrue(job.children.toList().isEmpty(), "All children should be cancelled")
-    }
-
-    @Test
-    fun testViewModelScopeCancellation() {
-        val viewModel = MyViewModel()
-
-        // Start work
-        viewModel.loadData()
-
-        // Simulate onCleared
-        viewModel.onCleared()
-
-        // Verify scope cancelled
-        // (Requires exposing scope for testing or using reflection)
+        assertTrue(job.children.none(), "All children should be cancelled")
     }
 }
 ```
 
-#### LeakCanary Test
+For Android integration, LeakCanary tests (`DetectLeaksAfterTestSuccess`) can be used as in official docs.
 
-```kotlin
-import leakcanary.DetectLeaksAfterTestSuccess
-import org.junit.Rule
-import org.junit.Test
-
-class ActivityLeakTest {
-    @get:Rule
-    val rule = DetectLeaksAfterTestSuccess()
-
-    @Test
-    fun testActivityDoesNotLeak() {
-        val scenario = ActivityScenario.launch(MyActivity::class.java)
-
-        // Perform actions
-        scenario.onActivity { activity ->
-            activity.doSomething()
-        }
-
-        // Destroy activity
-        scenario.close()
-
-        // LeakCanary will detect leaks after test
-    }
-}
-```
-
-### Code Review Checklist
-
-#### Manual Review Points
-
-```kotlin
-// Checklist for code review:
-
-//  GlobalScope usage
-GlobalScope.launch { }
-
-//  Custom scope without cancellation
-class MyClass {
-    private val scope = CoroutineScope(Job())
-    // Missing: fun cleanup() { scope.cancel() }
-}
-
-//  Capturing Activity/View in long operations
-lifecycleScope.launch {
-    delay(60000)
-    activity.updateUI() // BAD: holds Activity for 1 minute
-}
-
-//  Flow collection without lifecycle awareness
-GlobalScope.launch {
-    flow.collect { } // BAD: never cancelled
-}
-
-//  Lifecycle-aware scope
-lifecycleScope.launch { }
-
-//  ViewModel scope
-viewModelScope.launch { }
-
-//  Proper cancellation
-private val scope = CoroutineScope(Job())
-fun cleanup() {
-    scope.cancel()
-}
-
-//  Lifecycle-aware Flow collection
-lifecycleScope.launch {
-    repeatOnLifecycle(Lifecycle.State.STARTED) {
-        flow.collect { }
-    }
-}
-```
-
-### Static Analysis: Detekt Rules
+### Static Analysis: Detekt Rules (Conceptual)
 
 ```yaml
-# detekt.yml
-potential-bugs:
-  GlobalScope:
-    active: true
-    description: "GlobalScope usage can cause memory leaks"
-
+# detekt.yml (conceptual snippet)
 coroutines:
-  SuspendFunctionOnCoroutineScope:
-    active: true
-
-  RedundantSuspendModifier:
-    active: true
-
-custom-rules:
-  UncancelledCoroutineScope:
-    active: true
-    description: "CoroutineScope should be cancelled"
+  # Use existing coroutine rules and/or custom rules
+  # - flag GlobalScope usage
+  # - flag CoroutineScope fields without corresponding cancel in onCleared/onDestroy/close
 ```
 
-### Production Monitoring
+### Production Monitoring (Conceptual)
 
 ```kotlin
 import kotlinx.coroutines.*
 
 class CoroutineLeakMonitor {
+    @Volatile
     private var activeScopes = 0
 
     fun onScopeCreated() {
         activeScopes++
         if (activeScopes > 100) {
-            // Alert: possible leak!
             logWarning("Too many active scopes: $activeScopes")
         }
     }
@@ -1225,21 +1953,16 @@ class CoroutineLeakMonitor {
     }
 
     private fun logWarning(message: String) {
-        // Send to crash reporting
-        // Crashlytics.log(message)
+        // Send to logging / crash reporting
     }
 }
 
-// Instrumented scope factory
 class InstrumentedScopeFactory(private val monitor: CoroutineLeakMonitor) {
     fun createScope(): CoroutineScope {
         monitor.onScopeCreated()
-
-        val job = Job()
-        job.invokeOnCompletion {
-            monitor.onScopeCancelled()
+        val job = SupervisorJob().apply {
+            invokeOnCompletion { monitor.onScopeCancelled() }
         }
-
         return CoroutineScope(job + Dispatchers.Main)
     }
 }
@@ -1247,107 +1970,33 @@ class InstrumentedScopeFactory(private val monitor: CoroutineLeakMonitor) {
 
 ### Best Practices Summary
 
-1. **Always use lifecycle-aware scopes**
-   - `lifecycleScope`, `viewModelScope`, `viewLifecycleOwner.lifecycleScope`
+1. Use lifecycle-aware scopes (`lifecycleScope`, `viewModelScope`, `viewLifecycleOwner.lifecycleScope`).
+2. Avoid `GlobalScope` for anything tied to a component lifecycle.
+3. If you create a custom `CoroutineScope`, you are responsible for cancelling it.
+4. Avoid capturing Activity/View/`Context` references in long-running operations; prefer passing minimal data or using separate layers.
+5. Use `repeatOnLifecycle` (or similar) for `Flow` collection to auto-start/stop collectors.
+6. Enable LeakCanary in debug builds to catch leaks early.
+7. Review coroutine usage in code reviews (scope ownership, cancellation, `GlobalScope`, `Flow` collectors).
+8. Distinguish between true leaks (never-released objects) and temporary retention; both matter, but fixes differ.
 
-2. **Never use GlobalScope**
-   - Except for application-lifetime operations (rare)
+## Follow-ups (RU)
 
-3. **Cancel custom scopes**
-   - If you create `CoroutineScope`, you must cancel it
+1. Как вы будете обнаруживать утечку памяти, если корутина в итоге завершается, но работает «слишком долго»?
+2. В чём разница между реальной утечкой памяти и временным удержанием памяти в корутинах?
+3. Как использовать heap dump для явного выявления утечек, связанных с корутинами?
+4. В каких случаях допустимо использовать `GlobalScope` и как сделать это безопасно?
+5. Как протестировать, что `ViewModel` корректно отменяет все корутины в `onCleared()`?
+6. Каковы накладные расходы использования `WeakReference` в корутинах?
+7. Как отслеживать потенциальные утечки корутин в продакшене без LeakCanary?
 
-4. **Avoid capturing Activity/View references in long operations**
-   - Use Flow, weak references, or lifecycle checks
-
-5. **Use `repeatOnLifecycle` for Flow collection**
-   - Automatically starts/stops with lifecycle
-
-6. **Enable LeakCanary in debug builds**
-   - Catches leaks during development
-
-7. **Review coroutine usage in code reviews**
-   - Check for scope management, cancellation
-
-8. **Test for leaks**
-   - Automated tests for scope cancellation
-
----
-
-## Русский
-
-### Обзор
-
-Утечки памяти в приложениях на основе корутин могут быть незаметными и разрушительными. Одна утёкшая корутина может удерживать ссылки на большие объекты (Activities, Fragments, Views), предотвращая сборку мусора и вызывая OutOfMemoryErrors.
-
-### Что Такое Утечка Памяти Корутины?
-
-Утечка памяти корутины происходит когда:
-1. Корутина продолжает работать после уничтожения компонента
-2. Корутина удерживает сильные ссылки на уничтоженные объекты
-3. Эти объекты не могут быть собраны сборщиком мусора
-4. Память накапливается со временем
-
-### Утечка #1: Использование GlobalScope
-
-**Проблема:** Корутины `GlobalScope` живут всё время работы приложения и никогда не отменяются автоматически.
-
-### Утечка #2: Неотмена При Уничтожении Компонента
-
-**Проблема:** Создание корутин с пользовательскими скоупами и забывание их отменить.
-
-### Утечка #3: Захваченные Сильные Ссылки
-
-**Проблема:** Корутины захватывают сильные ссылки на Activities, Views или Contexts в лямбдах.
-
-### Утечка #4: Длительные Операции Удерживают Ссылки
-
-**Проблема:** Долгие сетевые/БД операции удерживают ссылки на UI компоненты.
-
-### Утечка #5: Коллекторы Flow Не Отменены
-
-**Проблема:** Коллекторы Flow продолжают собирать после уничтожения компонента.
-
-### Инструмент Обнаружения #1: LeakCanary 2.x
-
-LeakCanary 2.x имеет встроенную поддержку корутин и может обнаруживать утёкшие корутины.
-
-### Инструмент Обнаружения #2: Android Studio Memory Profiler
-
-Анализ heap dump для поиска утёкших объектов.
-
-### Инструмент Обнаружения #3: DebugProbes Для Корутин
-
-`kotlinx-coroutines-debug` предоставляет специфичную для корутин отладку.
-
-### Предотвращение: Lifecycle-Aware Scopes
-
-Использование встроенных в Android скоупов для автоматической отмены.
-
-### Тестирование На Утечки
-
-Автоматизированные тесты для обнаружения утечек корутин.
-
-### Лучшие Практики
-
-1. **Всегда используйте lifecycle-aware скоупы**
-2. **Никогда не используйте GlobalScope**
-3. **Отменяйте пользовательские скоупы**
-4. **Избегайте захвата Activity/View ссылок**
-5. **Используйте `repeatOnLifecycle` для Flow**
-6. **Включайте LeakCanary в debug сборках**
-7. **Проверяйте использование корутин в code review**
-8. **Тестируйте на утечки**
-
----
-
-## Follow-ups
+## Follow-ups (EN)
 
 1. How do you detect a memory leak caused by a coroutine that completes eventually but takes too long?
 2. What's the difference between a memory leak and a memory retention issue in coroutines?
 3. How can you use Java heap dumps to specifically identify coroutine-related leaks?
-4. When is it acceptable to use GlobalScope, and how do you do it safely?
-5. How do you test that a ViewModel properly cancels all coroutines in onCleared()?
-6. What are the performance implications of using WeakReference in coroutines?
+4. When is it acceptable to use `GlobalScope`, and how do you do it safely?
+5. How do you test that a `ViewModel` properly cancels all coroutines in `onCleared()`?
+6. What are the performance implications of using `WeakReference` in coroutines?
 7. How do you monitor coroutine memory usage in production without LeakCanary?
 
 ## References
@@ -1360,3 +2009,5 @@ LeakCanary 2.x имеет встроенную поддержку корутин
 ## Related Questions
 
 - [[q-coroutine-resource-cleanup--kotlin--medium|Resource cleanup in coroutines]]
+- [[c-coroutines]]
+- [[c-memory-leaks]]

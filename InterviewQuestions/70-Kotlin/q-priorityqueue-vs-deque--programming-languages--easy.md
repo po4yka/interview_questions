@@ -2,7 +2,7 @@
 id: lang-070
 title: "PriorityQueue Vs Deque / PriorityQueue против Deque"
 aliases: [PriorityQueue Vs Deque, PriorityQueue против Deque]
-topic: programming-languages
+topic: kotlin
 subtopics: [collections, data-structures, queues]
 question_kind: theory
 difficulty: easy
@@ -10,50 +10,73 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-class-composition--oop--medium, q-what-is-coroutinescope--programming-languages--medium]
+related: [c-kotlin, c-collections, q-class-composition--oop--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [collections, data-structures, deque, difficulty/easy, kotlin, priority-queue, programming-languages, queue]
 ---
-# Какова Разница Между PriorityQueue И Deque?
-
 # Вопрос (RU)
-> Какова разница между PriorityQueue и Deque?
+> Какова разница между `PriorityQueue` и `Deque`?
+
+## Ответ (RU)
+
+`PriorityQueue` — структура данных, где элемент для извлечения выбирается по приоритету (обычно минимальный или максимальный по заданному сравнению), а не по простому порядку добавления. Как правило, эффективные реализации основаны на куче и обеспечивают быстрый доступ только к элементу с наивысшим (или наинизшим) приоритетом в "голове".
+
+`Deque` (двусторонняя очередь) — структура данных, которая позволяет эффективно добавлять и удалять элементы как с начала, так и с конца. Она может моделировать:
+- обычную очередь (FIFO), если операции идут с разных концов;
+- стек (LIFO), если операции идут с одного конца.
+
+Ключевые отличия:
+- Упорядочивание: `PriorityQueue` упорядочивает элементы по приоритету (естественный порядок или компаратор); `Deque` сохраняет последовательность в соответствии с тем, как элементы добавляются в начало и/или конец.
+- Шаблоны доступа: `PriorityQueue` обеспечивает эффективный доступ к элементу с наивысшим приоритетом в голове структуры; `Deque` обеспечивает эффективный доступ к элементам с обоих концов.
+- Применение: `PriorityQueue` — для задач планирования, обработки событий, когда важен приоритет; `Deque` — для реализации очередей, стеков, алгоритмов со скользящим окном и двусторонних буферов.
+- В контексте Kotlin/JVM: стандартная библиотека Kotlin не имеет собственных `PriorityQueue`/`Deque`, обычно используются соответствующие реализации Java (например, `java.util.PriorityQueue` и `java.util.ArrayDeque`), которые ведут себя описанным образом.
+
+## Follow-ups (RU)
+
+- В чем ключевые отличия между этими структурами и Java-реализациями, которые вы используете из Kotlin?
+- Когда вы бы использовали каждую из этих структур на практике?
+- Какие распространенные подводные камни нужно учитывать?
+
+## Ссылки (RU)
+
+- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+- [[q-class-composition--oop--medium]]
 
 ---
 
 # Question (EN)
-> What is the difference between PriorityQueue and Deque?
-
-## Ответ (RU)
-
-PriorityQueue — структура данных, где элементы обрабатываются по приоритету вместо порядка добавления. Deque (двусторонняя очередь) позволяет добавлять и удалять элементы с обеих сторон, поддерживая поведение как стека, так и очереди.
+> What is the difference between `PriorityQueue` and `Deque`?
 
 ## Answer (EN)
 
-**PriorityQueue** is a data structure where elements are processed by priority instead of insertion order. Elements with higher priority are dequeued first, regardless of when they were added.
+A `PriorityQueue` is a data structure where the element to be removed next is chosen by priority (typically smallest or largest according to a comparator), not by simple insertion order. Efficient implementations are usually heap-based and provide fast access only to the head element with highest (or lowest) priority.
 
-**Deque** (double-ended queue) allows adding and removing elements from both ends, supporting behavior of both stack (LIFO) and queue (FIFO).
+A `Deque` (double-ended queue) is a data structure that allows efficient insertion and removal of elements at both the front and the back. It can act as:
+- a queue (FIFO) if you enqueue at one end and dequeue at the other;
+- a stack (LIFO) if you push and pop at the same end.
 
-**Key differences:**
-- **Ordering**: PriorityQueue orders by priority (natural ordering or comparator), Deque maintains insertion order
-- **Access patterns**: PriorityQueue only allows access to the highest-priority element, Deque allows access from both ends
-- **Use cases**: PriorityQueue for task scheduling, event processing; Deque for implementing stacks, queues, or sliding window algorithms
-
----
+Key differences:
+- Ordering: `PriorityQueue` orders elements by priority (natural ordering or a comparator); `Deque` preserves the sequence according to how elements are added to the front and/or back.
+- Access patterns: `PriorityQueue` provides efficient access/removal for the head element with highest priority; `Deque` provides efficient access/removal from both ends.
+- Use cases: `PriorityQueue` is used for task scheduling, event processing, and algorithms where priority matters; `Deque` is used to implement queues, stacks, sliding window algorithms, and double-ended buffers.
+- In the Kotlin/JVM context: the Kotlin standard library does not define its own concrete `PriorityQueue`/`Deque` types; you typically use the underlying Java implementations (such as `java.util.PriorityQueue` and `java.util.ArrayDeque`), which follow this behavior.
 
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
+- What are the key differences between this and Java implementations you would use from Kotlin?
+- When would you use each of these in practice?
 - What are common pitfalls to avoid?
 
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
 
 ## Related Questions
 
--
 - [[q-class-composition--oop--medium]]
-- [[q-what-is-coroutinescope--programming-languages--medium]]

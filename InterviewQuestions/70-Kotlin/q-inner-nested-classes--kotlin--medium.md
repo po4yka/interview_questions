@@ -10,11 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-class-initialization-order--kotlin--medium, q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium]
+related: [c-kotlin, q-class-initialization-order--kotlin--medium, q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium]
 created: "2025-10-12"
-updated: 2025-01-25
+updated: "2025-11-09"
 tags: [classes, difficulty/medium, inner-classes, kotlin, kotlin-features, nested-classes]
-sources: [https://kotlinlang.org/docs/nested-classes.html]
+sources: ["https://kotlinlang.org/docs/nested-classes.html"]
 ---
 
 # Вопрос (RU)
@@ -28,19 +28,20 @@ sources: [https://kotlinlang.org/docs/nested-classes.html]
 ## Ответ (RU)
 
 **Теория вложенных и внутренних классов:**
-В Kotlin есть два типа классов внутри другого класса: вложенные (nested) и внутренние (inner). Nested класс не имеет доступа к членам внешнего класса. Inner класс имеет доступ к членам внешнего класса. Ключевое отличие: inner класс хранит ссылку на экземпляр внешнего класса.
+В Kotlin есть два типа классов внутри другого класса: вложенные (nested) и внутренние (inner).
+По умолчанию класс, объявленный внутри другого, является вложенным (nested) и не имеет доступа к экземпляру внешнего класса. Внутренний (inner) класс явно помечается ключевым словом `inner` и имеет доступ к членам экземпляра внешнего класса. Ключевое отличие: inner класс хранит ссылку на экземпляр внешнего класса.
 
 **Основные различия:**
-- **Nested класс**: Как static внутренний класс в Java - без доступа к внешнему классу
-- **Inner класс**: Имеет доступ к членам внешнего класса, хранит ссылку на экземпляр
-- **Память**: Inner класс увеличивает размер объекта из-за хранения ссылки на внешний класс
+- **Nested класс**: Как `static` вложенный класс в Java — не имеет доступа к экземпляру внешнего класса.
+- **Inner класс**: Имеет доступ к членам экземпляра внешнего класса, хранит ссылку на его экземпляр.
+- **Память**: Ссылка на внешний класс хранится в экземпляре inner класса (увеличивает размер объекта inner класса, но не объекта внешнего класса).
 
 **Nested классы:**
 ```kotlin
 class Outer {
     private val outerValue = "Outer"
 
-    // ✅ Вложенный класс - не имеет доступа к Outer
+    // ✅ Вложенный класс (по умолчанию) - не имеет доступа к экземпляру Outer
     class Nested {
         fun describe() = "Nested class"
         // ❌ нельзя получить outerValue здесь
@@ -56,7 +57,7 @@ val nested = Outer.Nested() // Можно создать без экземпля
 class Outer {
     private val outerValue = "Outer"
 
-    // ✅ Внутренний класс - имеет доступ к Outer
+    // ✅ Внутренний класс - имеет доступ к экземпляру Outer
     inner class Inner {
         fun describe() = "Inner class, outerValue: ${outerValue}"
         // ✅ можно получить outerValue
@@ -96,7 +97,7 @@ class ViewHolder(private val view: View) {
         }
     }
 
-    // ✅ Inner класс для доступа к ViewHolder
+    // ✅ Inner класс для доступа к членам ViewHolder
     inner class Loader {
         fun loadContent() {
             println(data) // ✅ Доступ к data из ViewHolder
@@ -122,7 +123,7 @@ class Activity {
         }
     }
 
-    // ✅ ХОРОШО: Nested класс не держит ссылку
+    // ✅ ХОРОШО: Nested класс не держит ссылку на Activity
     class SafeCallback {
         fun onComplete(data: String) {
             println(data)
@@ -131,24 +132,49 @@ class Activity {
 }
 ```
 
+## Дополнительные вопросы (RU)
+
+- Когда использовать вложенные (nested) vs внутренние (inner) классы?
+- Как избежать утечек памяти при использовании inner классов?
+- Каковы последствия для производительности при использовании inner классов?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- https://kotlinlang.org/docs/nested-classes.html
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- [[q-kotlin-enum-classes--kotlin--easy]] - Базовые классы
+
+### Связанные (средней сложности)
+- [[q-class-initialization-order--kotlin--medium]] - Порядок инициализации классов
+- [[q-inheritance-open-final--kotlin--medium]] - Наследование
+- [[q-data-class-detailed--kotlin--medium]] - Data-классы
+
+### Продвинутые (сложнее)
+- [[q-delegation-by-keyword--kotlin--medium]] - Делегирование классов
+
 ---
 
 ## Answer (EN)
 
 **Nested vs Inner Class Theory:**
-Kotlin has two types of classes inside another class: nested and inner. Nested class has no access to outer class members. Inner class has access to outer class members. Key difference: inner class holds reference to outer class instance.
+Kotlin has two types of classes inside another class: nested and inner.
+By default, a class declared inside another is a nested class and has no access to the outer class instance. An inner class is explicitly marked with the `inner` keyword and has access to the outer class instance members. Key difference: an inner class holds a reference to an instance of the outer class.
 
 **Key Differences:**
-- **Nested class**: Like static inner class in Java - no access to outer class
-- **Inner class**: Has access to outer class members, holds reference to instance
-- **Memory**: Inner class increases object size due to holding reference to outer class
+- **Nested class**: Like a `static` nested class in Java — no access to the outer class instance.
+- **Inner class**: Has access to outer class instance members, holds a reference to its instance.
+- **Memory**: The reference to the outer class is stored in the inner class instance (increasing the size of the inner object, not the outer object).
 
 **Nested Classes:**
 ```kotlin
 class Outer {
     private val outerValue = "Outer"
 
-    // ✅ Nested class - no access to Outer
+    // ✅ Nested class (default) - no access to Outer instance
     class Nested {
         fun describe() = "Nested class"
         // ❌ cannot access outerValue here
@@ -164,7 +190,7 @@ val nested = Outer.Nested() // Can create without Outer instance
 class Outer {
     private val outerValue = "Outer"
 
-    // ✅ Inner class - has access to Outer
+    // ✅ Inner class - has access to Outer instance
     inner class Inner {
         fun describe() = "Inner class, outerValue: ${outerValue}"
         // ✅ can access outerValue
@@ -204,7 +230,7 @@ class ViewHolder(private val view: View) {
         }
     }
 
-    // ✅ Inner class for access to ViewHolder
+    // ✅ Inner class for access to ViewHolder members
     inner class Loader {
         fun loadContent() {
             println(data) // ✅ Access to data from ViewHolder
@@ -230,7 +256,7 @@ class Activity {
         }
     }
 
-    // ✅ GOOD: Nested class doesn't hold reference
+    // ✅ GOOD: Nested class doesn't hold reference to Activity
     class SafeCallback {
         fun onComplete(data: String) {
             println(data)
@@ -247,7 +273,7 @@ class Activity {
 
 ## References
 
-- [[c-oop-fundamentals]]
+- [[c-kotlin]]
 - https://kotlinlang.org/docs/nested-classes.html
 
 ## Related Questions

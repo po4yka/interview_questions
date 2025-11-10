@@ -7,14 +7,16 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-12
+updated: 2025-11-09
 tags: [coroutines, debugging, difficulty/medium, kotlin, profiling, tools, troubleshooting]
 moc: moc-kotlin
-related: [q-common-coroutine-mistakes--kotlin--medium, q-coroutine-exception-handler--kotlin--medium, q-kotlin-any-unit-nothing--programming-languages--medium, q-kotlin-null-safety--kotlin--medium, q-produce-actor-builders--kotlin--medium, q-race-conditions-coroutines--kotlin--hard]
+aliases: []
+question_kind: coding
+related: [c-kotlin, q-common-coroutine-mistakes--kotlin--medium, q-coroutine-exception-handler--kotlin--medium, q-kotlin-null-safety--kotlin--medium, q-produce-actor-builders--kotlin--medium]
 subtopics:
   - coroutines
   - debugging
   - profiling
-  - troubleshooting
 ---
 # Вопрос (RU)
 > Какие инструменты и техники доступны для отладки Kotlin корутин? Как идентифицировать deadlock, утечки и проблемы производительности?
@@ -26,25 +28,23 @@ subtopics:
 
 ## Ответ (RU)
 
-Отладка корутин сложна, потому что традиционные инструменты отладки разработаны для потоков, а не для suspend функций. Корутины могут приостанавливаться, возобновляться на разных потоках и имеют сложные иерархии. Понимание эффективной отладки корутин критично для production готовности.
+Отладка корутин сложна, потому что традиционные инструменты отладки разработаны для потоков, а не для `suspend`-функций. Корутины могут приостанавливаться, возобновляться на разных потоках и иметь сложные иерархии. Понимание эффективной отладки корутин критично для production-готовности. См. также [[c-coroutines]].
 
+### 1. Включение режима отладки
 
-
-### 1. Включение Режима Отладки
-
-**Первый шаг:** Включите режим отладки kotlinx.coroutines для добавления информации о корутинах в имена потоков.
+**Первый шаг:** включите режим отладки `kotlinx.coroutines`, чтобы добавить информацию о корутинах в имена потоков.
 
 ```kotlin
-// Добавьте JVM аргумент:
+// JVM-аргумент:
 -Dkotlinx.coroutines.debug
 
-// Или программно (должно быть сделано до запуска любых корутин):
+// Или программно (до запуска любых корутин):
 System.setProperty("kotlinx.coroutines.debug", "on")
 ```
 
-**Эффект:** Имена потоков включают информацию о корутинах:
+**Эффект:** имена потоков включают информацию о корутинах:
 
-```
+```text
 // Без режима отладки:
 Thread: DefaultDispatcher-worker-1
 
@@ -52,76 +52,7 @@ Thread: DefaultDispatcher-worker-1
 Thread: DefaultDispatcher-worker-1 @coroutine#2
 ```
 
-### 2. CoroutineName Для Отладки
-
-**Используйте CoroutineName** для идентификации корутин в логах и отладчике:
-
-```kotlin
-import kotlinx.coroutines.*
-
-fun main() = runBlocking {
-    System.setProperty("kotlinx.coroutines.debug", "on")
-
-    launch(CoroutineName("DataLoader")) {
-        println("Загрузка данных на: ${Thread.currentThread().name}")
-        loadData()
-    }
-
-    launch(CoroutineName("ImageDownloader")) {
-        println("Загрузка изображений на: ${Thread.currentThread().name}")
-        downloadImages()
-    }
-}
-
-// Вывод:
-// Загрузка данных на: main @DataLoader#2
-// Загрузка изображений на: main @ImageDownloader#3
-```
-
-### Ключевые Выводы
-
-1. **Включайте режим отладки** - Добавляет информацию о корутинах в имена потоков
-2. **Используйте CoroutineName** - Значительно упрощает отладку
-3. **IntelliJ IDEA имеет отличные инструменты** - Панель корутин, пошаговая отладка
-4. **Стектрейсы отличаются** - Показывают точки приостановки
-5. **Обнаруживайте deadlock таймаутами** - Не ждите вечно
-6. **Отслеживайте корутины** - Предотвращайте утечки
-7. **LeakCanary помогает** - Автоматически обнаруживает утечки корутин
-8. **Структурированное логирование** - Включайте контекст корутины
-9. **Профилируйте производительность** - Находите узкие места
-10. **Тестируйте с kotlinx-coroutines-test** - Контролируйте время и выполнение
-
----
-
-## Answer (EN)
-
-Debugging coroutines is challenging because traditional debugging tools are designed for threads, not suspending functions. Coroutines can suspend, resume on different threads, and have complex hierarchies. Understanding how to debug coroutines effectively is crucial for production readiness.
-
-
-
-### 1. Enable Debug Mode
-
-**First step:** Enable kotlinx.coroutines debug mode to add coroutine info to thread names.
-
-```kotlin
-// Add JVM argument:
--Dkotlinx.coroutines.debug
-
-// Or programmatically (must be done before any coroutines run):
-System.setProperty("kotlinx.coroutines.debug", "on")
-```
-
-**Effect:** Thread names include coroutine info:
-
-```
-// Without debug mode:
-Thread: DefaultDispatcher-worker-1
-
-// With debug mode:
-Thread: DefaultDispatcher-worker-1 @coroutine#2
-```
-
-**Example:**
+Пример:
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -136,13 +67,13 @@ fun main() {
     }
 }
 
-// Output:
+// Возможный вывод:
 // Running on: main @coroutine#2
 ```
 
-### 2. CoroutineName for Debugging
+### 2. CoroutineName для отладки
 
-**Use CoroutineName** to identify coroutines in logs and debugger:
+Используйте `CoroutineName` для идентификации корутин в логах и отладчике:
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -151,51 +82,46 @@ fun main() = runBlocking {
     System.setProperty("kotlinx.coroutines.debug", "on")
 
     launch(CoroutineName("DataLoader")) {
-        println("Loading data on: ${Thread.currentThread().name}")
-        loadData()
+        println("Загрузка данных на: ${Thread.currentThread().name}")
+        // loadData()
     }
 
     launch(CoroutineName("ImageDownloader")) {
-        println("Downloading images on: ${Thread.currentThread().name}")
-        downloadImages()
+        println("Загрузка изображений на: ${Thread.currentThread().name}")
+        // downloadImages()
     }
 }
 
-// Output:
-// Loading data on: main @DataLoader#2
-// Downloading images on: main @ImageDownloader#3
+// Пример вывода:
+// Загрузка данных на: main @DataLoader#2
+// Загрузка изображений на: main @ImageDownloader#3
 ```
 
-**Production usage:**
+Продакшен-пример использования:
 
 ```kotlin
 class UserRepository {
-    suspend fun loadUser(userId: String): User {
-        return withContext(Dispatchers.IO + CoroutineName("LoadUser-$userId")) {
+    suspend fun loadUser(userId: String): User =
+        withContext(Dispatchers.IO + CoroutineName("LoadUser-$userId")) {
             println("Loading user $userId on ${Thread.currentThread().name}")
             api.getUser(userId)
         }
-    }
 }
 
-// Log output:
-// Loading user 123 on: DefaultDispatcher-worker-2 @LoadUser-123#5
+// Логи:
+// Loading user 123 on DefaultDispatcher-worker-2 @LoadUser-123#5
 ```
 
-### 3. Reading Coroutine Stack Traces
+### 3. Чтение стек-трейсов корутин
 
-**Problem:** Coroutine stack traces can be confusing because they show suspension points, not call stacks.
+Стек-трейсы корутин показывают цепочку вызовов через точки приостановки. Включенный debug-режим и `CoroutineName` помогают понять, в каком контексте произошла ошибка.
 
-**Example:**
+Пример:
 
 ```kotlin
-suspend fun functionA() {
-    functionB()
-}
+suspend fun functionA() { functionB() }
 
-suspend fun functionB() {
-    functionC()
-}
+suspend fun functionB() { functionC() }
 
 suspend fun functionC() {
     delay(100)
@@ -205,218 +131,384 @@ suspend fun functionC() {
 fun main() = runBlocking {
     functionA()
 }
-
-// Stack trace:
-// Exception in thread "main" java.lang.RuntimeException: Error in C
-//     at FileKt.functionC(File.kt:12)
-//     at FileKt.functionB(File.kt:8)
-//     at FileKt.functionA(File.kt:4)
-//     at FileKt.main(File.kt:16)
 ```
 
-**With debug mode + CoroutineName:**
+### 4. IntelliJ IDEA / Android Studio Coroutine Debugger
 
-```kotlin
-fun main() = runBlocking(CoroutineName("MainCoroutine")) {
-    launch(CoroutineName("Worker")) {
-        functionA()
-    }.join()
-}
+Современные версии IntelliJ IDEA / Android Studio имеют встроенную поддержку отладки корутин:
+- Панель Coroutines: просмотр активных корутин.
+- Стек вызовов корутин: отображение точек приостановки и путей вызова.
+- Состояния корутин: suspended, running, cancelled.
+- Пошаговая отладка `suspend`-функций.
 
-// Stack trace includes coroutine info:
-// Exception in thread "main @Worker#2" java.lang.RuntimeException: Error in C
-//     at FileKt.functionC(File.kt:12)
-//     ...
-```
+Шаги:
+1. Поставьте breakpoint в `suspend`-функции.
+2. Запустите приложение в debug-режиме.
+3. Откройте панель Coroutines в окне Debug.
 
-### 4. IntelliJ IDEA Coroutine Debugger
+### 5. DebugProbes и дамп корутин
 
-**IntelliJ IDEA** has built-in coroutine debugging support (2021.2+).
+Модуль `kotlinx-coroutines-debug` предоставляет `DebugProbes` для инспекции корутин во время выполнения.
 
-**Features:**
-- **Coroutines panel**: View all running coroutines
-- **Coroutine call stack**: See full suspension path
-- **Coroutine state**: Check if suspended, running, or cancelled
-- **Step through suspending functions**: Debug like regular functions
-
-**How to use:**
-
-1. Set breakpoint in suspend function
-2. Run in debug mode
-3. Open **Coroutines** panel (View > Tool Windows > Debug > Coroutines)
-4. See all coroutines, their state, and call stacks
-
-**Example debugging session:**
-
-```kotlin
-suspend fun loadUser(userId: String): User {
-    println("Start loading user")  // Breakpoint here
-    val user = api.getUser(userId) // Breakpoint here
-    println("User loaded")
-    return user
-}
-
-// In Coroutines panel:
-// - Coroutine #2 (LoadUser-123): SUSPENDED at api.getUser()
-// - Coroutine #3 (DataProcessor): RUNNING
-// - Coroutine #4 (ImageDownloader): CANCELLED
-```
-
-### 5. Coroutine Dump Analysis
-
-**Dump all coroutines** to see what's running:
+Простой пример использования (печать в лог):
 
 ```kotlin
 import kotlinx.coroutines.*
-import kotlinx.coroutines.debug.*
+import kotlinx.coroutines.debug.DebugProbes
 
-fun main() = runBlocking {
-    repeat(5) { index ->
-        launch(CoroutineName("Worker-$index")) {
-            delay(1000)
-        }
-    }
-
-    delay(100) // Let coroutines start
-
-    // Dump all coroutines
-    DebugProbes.dumpCoroutines()
-
-    delay(2000)
-}
-```
-
-**Enable DebugProbes:**
-
-```kotlin
 fun main() {
     DebugProbes.install()
 
     runBlocking {
-        launch(CoroutineName("Worker")) {
-            delay(1000)
+        repeat(5) { index ->
+            launch(CoroutineName("Worker-$index")) {
+                delay(1000)
+            }
         }
 
-        delay(100)
-        DebugProbes.dumpCoroutines().forEach { info ->
-            println("Coroutine: ${info.name}")
-            println("State: ${info.state}")
-            println("Context: ${info.context}")
-        }
+        delay(100) // дать корутинам стартовать
+        // Печатает информацию о состоянии и стеке корутин в stdout
+        DebugProbes.dumpCoroutines()
     }
 
     DebugProbes.uninstall()
 }
 ```
 
-### 6. Finding Suspended Coroutines
+Это помогает увидеть, какие корутины активны, приостановлены или потенциально "зависли".
 
-**Problem:** Coroutine appears "stuck" - is it suspended or deadlocked?
+### 6. Поиск "зависших" корутин и псевдо-deadlock
 
-**Technique: Periodic logging**
+Если корутина "застыла", важно отличать нормальную приостановку от взаимной блокировки:
+- Используйте логирование и debug-режим, чтобы увидеть, на чём она приостановлена (`delay`, канал, `Mutex`).
+- Используйте таймауты (`withTimeout`/`withTimeoutOrNull`) вокруг потенциально блокирующих операций.
 
 ```kotlin
-class MonitoredScope : CoroutineScope {
-    private val job = SupervisorJob()
-    override val coroutineContext = job + Dispatchers.Default
+import kotlinx.coroutines.withTimeout
 
-    private val activeCoroutines = ConcurrentHashMap<String, Long>()
-
-    fun launchMonitored(name: String, block: suspend CoroutineScope.() -> Unit): Job {
-        return launch(CoroutineName(name)) {
-            activeCoroutines[name] = System.currentTimeMillis()
-            try {
-                block()
-            } finally {
-                activeCoroutines.remove(name)
-            }
-        }
-    }
-
-    fun printActiveCoroutines() {
-        val now = System.currentTimeMillis()
-        activeCoroutines.forEach { (name, startTime) ->
-            val duration = now - startTime
-            println("$name: running for ${duration}ms")
-        }
-    }
-}
-
-// Usage
-val scope = MonitoredScope()
-
-scope.launchMonitored("DataLoader") {
-    loadData() // Takes long time
-}
-
-// Periodically check
-repeat(10) {
-    delay(1000)
-    scope.printActiveCoroutines()
-}
+suspend fun <T> withTimeoutCheck(name: String, timeoutMs: Long, block: suspend () -> T): T =
+    withTimeout(timeoutMs) { block() }
 ```
 
-### 7. Detecting Deadlocks
+Если таймаут стабильно срабатывает, проанализируйте `DebugProbes.dumpCoroutines()` и панель Coroutines, чтобы увидеть точку ожидания.
 
-**Scenario: Two coroutines waiting for each other**
+### 7. Deadlock с Mutex и его выявление
+
+Классический пример взаимной блокировки с `Mutex`:
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
 val mutex1 = Mutex()
 val mutex2 = Mutex()
 
-// Coroutine 1
-launch(CoroutineName("Coroutine-1")) {
-    mutex1.withLock {
-        println("C1: Acquired mutex1")
-        delay(100)
-        mutex2.withLock { // Waiting for C2 to release
-            println("C1: Acquired mutex2")
-        }
-    }
-}
-
-// Coroutine 2
-launch(CoroutineName("Coroutine-2")) {
-    mutex2.withLock {
-        println("C2: Acquired mutex2")
-        delay(100)
-        mutex1.withLock { // Waiting for C1 to release - DEADLOCK!
-            println("C2: Acquired mutex1")
-        }
-    }
-}
-```
-
-**Detection technique: Timeout**
-
-```kotlin
-suspend fun <T> withTimeout(name: String, timeoutMs: Long, block: suspend () -> T): T {
-    return withTimeoutOrNull(timeoutMs) {
-        block()
-    } ?: throw TimeoutException("$name timed out after ${timeoutMs}ms")
-}
-
-// Usage
-launch(CoroutineName("Coroutine-1")) {
-    withTimeout("Mutex acquisition", 5000) {
+fun main() = runBlocking {
+    launch(CoroutineName("Coroutine-1")) {
         mutex1.withLock {
+            println("C1: acquired mutex1")
+            delay(100)
             mutex2.withLock {
-                // Work
+                println("C1: acquired mutex2")
+            }
+        }
+    }
+
+    launch(CoroutineName("Coroutine-2")) {
+        mutex2.withLock {
+            println("C2: acquired mutex2")
+            delay(100)
+            mutex1.withLock { // риск deadlock при неправильном порядке
+                println("C2: acquired mutex1")
             }
         }
     }
 }
 ```
 
+Для обнаружения и избежания:
+- Соблюдайте единый порядок захвата ресурсов.
+- Используйте таймауты вокруг последовательного захвата.
+
+### 8. Выявление утечек корутин
+
+Утечки корутин возникают, когда корутины продолжают работать после окончания их жизненного цикла (например, использование `GlobalScope` в Android `ViewModel`/`Activity`).
+
+Правильные практики:
+- Используйте `viewModelScope`, `lifecycleScope` и собственные `CoroutineScope` с правильно управляемым `Job`.
+- В отладочном/тестовом коде регистрируйте активные `Job` и проверяйте, что они завершаются.
+
+```kotlin
+object CoroutineTracker {
+    private val activeCoroutines = ConcurrentHashMap<String, Job>()
+
+    fun track(name: String, job: Job) {
+        activeCoroutines[name] = job
+        job.invokeOnCompletion { activeCoroutines.remove(name) }
+    }
+
+    fun printActiveCoroutines() {
+        println("Active coroutines: ${activeCoroutines.size}")
+        activeCoroutines.forEach { (name, job) ->
+            println("  - $name: ${if (job.isActive) "ACTIVE" else "COMPLETED"}")
+        }
+    }
+}
+```
+
+В Android `LeakCanary` помогает находить утечки объектов (`Activity`, `Fragment` и т.п.), которые могут утекать из-за долгоживущих корутин, но он не отслеживает `Job` напрямую — он сигнализирует, что объект удерживается дольше, чем должен.
+
+### 9. Логирование и контекст корутины
+
+Структурированное логирование с использованием контекста корутины помогает сопоставлять события:
+
+```kotlin
+import kotlin.coroutines.coroutineContext
+
+suspend fun logWithContext(message: String) {
+    val context = coroutineContext
+    val name = context[CoroutineName]?.name ?: "unnamed"
+    val job = context[Job]
+    val thread = Thread.currentThread().name
+    println("[$name][${job?.hashCode()}][$thread] $message")
+}
+```
+
+Это облегчает отслеживание конкретной корутины по логам.
+
+### 10. Производительность и профилирование
+
+- Используйте профайлеры (CPU/Memory) в Android Studio/IntelliJ, чтобы увидеть активность потоков, allocation-спайки и косвенно связать их с корутинами.
+- Используйте инспекторы БД/сети для корреляции запросов, инициированных из корутин.
+- Избегайте долгих блокирующих операций на `Dispatchers.Default`/`Dispatchers.Main`.
+- Для тестов применяйте `kotlinx-coroutines-test`, чтобы контролировать виртуальное время и планирование.
+
+### 11. Интерпретация Thread Dump
+
+Thread dump полезен, когда приложение "подвисло" под нагрузкой или в production:
+
+- При включённом `kotlinx.coroutines.debug` идентификаторы корутин появляются в именах потоков (например, `DefaultDispatcher-worker-1 @coroutine#2`).
+- Снятие thread dump (через `jstack` или инструменты IDE) позволяет увидеть, где потоки диспетчеров блокируются или какие точки приостановки активны.
+- В непроизводственной среде можно комбинировать это с `DebugProbes` для более полного представления о состоянии корутин.
+
+---
+
+## Answer (EN)
+
+Debugging coroutines is challenging because traditional debugging tools are designed for threads, not suspending functions. Coroutines can suspend, resume on different threads, and have complex hierarchies. Understanding how to debug coroutines effectively is crucial for production readiness. See also [[c-coroutines]].
+
+### 1. Enable Debug Mode
+
+First step: enable `kotlinx.coroutines` debug mode to add coroutine info to thread names.
+
+```kotlin
+// Add JVM argument:
+-Dkotlinx.coroutines.debug
+
+// Or programmatically (must be done before any coroutines run):
+System.setProperty("kotlinx.coroutines.debug", "on")
+```
+
+Effect: thread names include coroutine info:
+
+```text
+// Without debug mode:
+Thread: DefaultDispatcher-worker-1
+
+// With debug mode:
+Thread: DefaultDispatcher-worker-1 @coroutine#2
+```
+
+Example:
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun main() {
+    System.setProperty("kotlinx.coroutines.debug", "on")
+
+    runBlocking {
+        launch {
+            println("Running on: ${Thread.currentThread().name}")
+        }
+    }
+}
+
+// Possible output:
+// Running on: main @coroutine#2
+```
+
+### 2. CoroutineName for Debugging
+
+Use `CoroutineName` to identify coroutines in logs and debugger:
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun main() = runBlocking {
+    System.setProperty("kotlinx.coroutines.debug", "on")
+
+    launch(CoroutineName("DataLoader")) {
+        println("Loading data on: ${Thread.currentThread().name}")
+        // loadData()
+    }
+
+    launch(CoroutineName("ImageDownloader")) {
+        println("Downloading images on: ${Thread.currentThread().name}")
+        // downloadImages()
+    }
+}
+
+// Output:
+// Loading data on: main @DataLoader#2
+// Downloading images on: main @ImageDownloader#3
+```
+
+Production-style usage:
+
+```kotlin
+class UserRepository {
+    suspend fun loadUser(userId: String): User =
+        withContext(Dispatchers.IO + CoroutineName("LoadUser-$userId")) {
+            println("Loading user $userId on ${Thread.currentThread().name}")
+            api.getUser(userId)
+        }
+}
+
+// Logs:
+// Loading user 123 on DefaultDispatcher-worker-2 @LoadUser-123#5
+```
+
+### 3. Reading Coroutine Stack Traces
+
+Coroutine stack traces show suspension points and the logical call chain when debugging is enabled.
+
+Example:
+
+```kotlin
+suspend fun functionA() { functionB() }
+
+suspend fun functionB() { functionC() }
+
+suspend fun functionC() {
+    delay(100)
+    throw RuntimeException("Error in C")
+}
+
+fun main() = runBlocking {
+    functionA()
+}
+```
+
+With debug mode and `CoroutineName`, the stack trace and thread name help you see which coroutine and context failed.
+
+### 4. IntelliJ IDEA / Android Studio Coroutine Debugger
+
+Modern IntelliJ IDEA / Android Studio versions provide dedicated coroutine debugging support:
+
+- Coroutines panel: view all running coroutines.
+- Coroutine call stack: see suspension points and call paths.
+- Coroutine state: suspended, running, cancelled.
+- Step through suspending functions similar to regular functions.
+
+How to use:
+1. Set breakpoint in a suspending function.
+2. Run in debug mode.
+3. Open the Coroutines panel in the Debug tool window.
+
+### 5. Coroutine Dump with DebugProbes
+
+The `kotlinx-coroutines-debug` module provides `DebugProbes` to inspect coroutines.
+
+Basic usage:
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.debug.DebugProbes
+
+fun main() {
+    DebugProbes.install()
+
+    runBlocking {
+        repeat(5) { index ->
+            launch(CoroutineName("Worker-$index")) {
+                delay(1000)
+            }
+        }
+
+        delay(100)
+        // Prints coroutine information (state, stack) to stdout
+        DebugProbes.dumpCoroutines()
+    }
+
+    DebugProbes.uninstall()
+}
+```
+
+This is useful to see which coroutines are active, suspended, or potentially stuck.
+
+### 6. Finding Stuck Coroutines vs Deadlocks
+
+When a coroutine seems "stuck":
+
+- Use logging and debug mode to see whether it is suspended on a known primitive (e.g., `delay`, channel, `Mutex`).
+- Use timeouts around blocking or coordination logic to surface hangs:
+
+```kotlin
+import kotlinx.coroutines.withTimeout
+
+suspend fun <T> withTimeoutCheck(name: String, timeoutMs: Long, block: suspend () -> T): T =
+    withTimeout(timeoutMs) { block() }
+```
+
+If a timeout consistently fires, inspect `DebugProbes.dumpCoroutines()` / Coroutines panel to locate the wait point.
+
+### 7. Detecting Deadlocks with Mutex
+
+Example of a potential deadlock:
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
+val mutex1 = Mutex()
+val mutex2 = Mutex()
+
+fun main() = runBlocking {
+    launch(CoroutineName("Coroutine-1")) {
+        mutex1.withLock {
+            println("C1: acquired mutex1")
+            delay(100)
+            mutex2.withLock {
+                println("C1: acquired mutex2")
+            }
+        }
+    }
+
+    launch(CoroutineName("Coroutine-2")) {
+        mutex2.withLock {
+            println("C2: acquired mutex2")
+            delay(100)
+            mutex1.withLock {
+                println("C2: acquired mutex1")
+            }
+        }
+    }
+}
+```
+
+Use ordering (always lock in the same order) or timeouts to detect and avoid such patterns.
+
 ### 8. Identifying Leaked Coroutines
 
-**Coroutine leaks** occur when coroutines keep running after they should have been cancelled.
+Coroutine leaks happen when jobs outlive their intended scope (e.g., using `GlobalScope` or forgetting to cancel a custom scope tied to a lifecycle).
 
-**Example leak:**
+Bad example (Android `ViewModel`):
 
 ```kotlin
 class LeakyViewModel : ViewModel() {
-    //  BAD: Using GlobalScope
     fun loadData() {
         GlobalScope.launch {
             while (true) {
@@ -425,21 +517,19 @@ class LeakyViewModel : ViewModel() {
             }
         }
     }
-    // Coroutine continues even after ViewModel is cleared!
+    // The coroutine continues even after ViewModel is cleared.
 }
 ```
 
-**Detection: Track active coroutines**
+Better: use `viewModelScope` (or a well-managed scope) and optional tracking in debug builds:
 
 ```kotlin
 object CoroutineTracker {
     private val activeCoroutines = ConcurrentHashMap<String, Job>()
 
-    fun trackCoroutine(name: String, job: Job) {
+    fun track(name: String, job: Job) {
         activeCoroutines[name] = job
-        job.invokeOnCompletion {
-            activeCoroutines.remove(name)
-        }
+        job.invokeOnCompletion { activeCoroutines.remove(name) }
     }
 
     fun printActiveCoroutines() {
@@ -450,132 +540,103 @@ object CoroutineTracker {
     }
 }
 
-// Usage
 class TrackedViewModel : ViewModel() {
     fun loadData() {
         val job = viewModelScope.launch(CoroutineName("LoadData")) {
             // Work
         }
-        CoroutineTracker.trackCoroutine("ViewModel-LoadData", job)
-    }
-}
-
-// In tests or debug menu:
-CoroutineTracker.printActiveCoroutines()
-```
-
-### 9. LeakCanary for Coroutine Leaks
-
-**LeakCanary** can detect coroutine leaks:
-
-```kotlin
-// In build.gradle:
-dependencies {
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.x'
-}
-
-// LeakCanary automatically detects leaked coroutines
-class MyActivity : AppCompatActivity() {
-    private val scope = CoroutineScope(Job() + Dispatchers.Main)
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // If you forget to cancel, LeakCanary will report it
-        // scope.cancel() // ← Forgot to cancel!
+        CoroutineTracker.track("ViewModel-LoadData", job)
     }
 }
 ```
 
-### 10. Logging Best Practices
+On Android, LeakCanary helps detect leaked `Activity`/`View`/`Fragment` instances that are kept alive by coroutines or other references. It does not directly track coroutine `Job` lifecycles, but is very useful to surface leaks caused by long-running coroutines capturing UI references.
 
-**Pattern: Structured logging with coroutine context**
+### 9. Logging Best Practices
+
+Pattern: structured logging with coroutine context.
 
 ```kotlin
+import kotlin.coroutines.coroutineContext
+
 suspend fun logWithContext(message: String) {
     val context = coroutineContext
     val name = context[CoroutineName]?.name ?: "unnamed"
     val job = context[Job]
     val thread = Thread.currentThread().name
 
-    println("[$name] [${job?.hashCode()}] [$thread] $message")
+    println("[$name][${job?.hashCode()}][$thread] $message")
 }
 
-// Usage
 suspend fun loadData() {
     logWithContext("Starting data load")
     val data = api.fetchData()
     logWithContext("Data loaded: ${data.size} items")
 }
-
-// Output:
-// [DataLoader] [123456] [DefaultDispatcher-worker-1 @DataLoader#2] Starting data load
-// [DataLoader] [123456] [DefaultDispatcher-worker-3 @DataLoader#2] Data loaded: 42 items
 ```
 
-**Production logging wrapper:**
+### 10. Производительность и профилирование / Android Studio Profiling and Tooling
 
-```kotlin
-object CoroutineLogger {
-    suspend fun d(tag: String, message: String) {
-        val name = coroutineContext[CoroutineName]?.name ?: "unnamed"
-        Log.d(tag, "[$name] $message")
-    }
+- Используйте профайлеры (CPU/Memory) в Android Studio/IntelliJ, чтобы увидеть активность потоков, allocation-спайки и косвенно связать их с корутинами.
+- Используйте инспекторы БД/сети для корреляции запросов, инициированных из корутин.
+- Избегайте долгих блокирующих операций на `Dispatchers.Default`/`Dispatchers.Main`.
+- Эти инструменты не "понимают" `Job` напрямую, но дополняют режим отладки и coroutine-debugger.
 
-    suspend fun e(tag: String, message: String, throwable: Throwable? = null) {
-        val name = coroutineContext[CoroutineName]?.name ?: "unnamed"
-        Log.e(tag, "[$name] $message", throwable)
-    }
-}
+### 11. Thread Dumps Interpretation
 
-// Usage
-suspend fun loadUser(userId: String) {
-    CoroutineLogger.d("UserRepo", "Loading user $userId")
-    try {
-        val user = api.getUser(userId)
-        CoroutineLogger.d("UserRepo", "User loaded: ${user.name}")
-    } catch (e: Exception) {
-        CoroutineLogger.e("UserRepo", "Failed to load user", e)
-    }
-}
-```
+Thread dumps can help when the app is stuck in production or under load:
 
-### 11. Android Studio Debugging Features
+- With `kotlinx.coroutines.debug` enabled, coroutine identifiers appear in thread names (e.g., `DefaultDispatcher-worker-1 @coroutine#2`).
+- Capturing a thread dump (e.g., via `jstack` or IDE tools) lets you see where dispatcher threads are blocked or what suspending points are active.
+- Combine this with `DebugProbes` (in non-production or staging) for a more complete view of coroutine states.
 
-**Android Studio** provides specific coroutine debugging tools:
+---
 
-**Layout Inspector:**
-- Shows coroutines attached to Views
-- Detects leaked coroutines in UI components
+## Дополнительные вопросы (RU)
 
-**Profiler:**
-- CPU Profiler shows coroutine traces
-- Memory Profiler detects coroutine-related leaks
+1. Как отлаживать корутины, которые приостанавливаются и продолжаются на разных потоках, сохраняя понятный контекст вызовов?
+2. Какой оверхед и риски у включения debug-режима корутин в production-среде, и когда его стоит отключать?
+3. Какие подходы позволяют собирать диагностическую информацию о корутинах в production, не раскрывая конфиденциальные данные и не ухудшая производительность?
+4. Какие инструменты или подходы помогают визуализировать выполнение корутин и их зависимостей?
+5. Как находить и отлаживать race condition, которые проявляются только под высокой нагрузкой при работе корутин?
 
-**Database Inspector:**
-- View Room database queries triggered by coroutines
-- See active queries and their coroutine context
+---
 
-### 12. Thread Dumps Interpretation
-
-**Get thread dump:**
-
-```bash
 ## Follow-ups
 
-1. How do you debug coroutines that suspend across multiple threads?
-2. What's the performance impact of enabling debug mode in production?
-3. How can you implement custom DebugProbes for production monitoring?
-4. What tools exist for visualizing coroutine execution flow?
-5. How do you debug race conditions that only appear under high load?
-6. Can you explain how to interpret coroutine state machine bytecode?
-7. How do you set up continuous monitoring of coroutine health in production?
+1. How do you debug coroutines that suspend across multiple threads while keeping context understandable?
+2. What's the performance impact and risk of enabling coroutine debug mode in production, and when should you avoid it?
+3. How can you implement safe coroutine diagnostics in production without exposing sensitive data or adding high overhead?
+4. What tools or patterns can help visualize coroutine execution flow and dependencies?
+5. How do you debug race conditions that appear only under high load in coroutine-based code?
+
+---
+
+## Ссылки (RU)
+
+- [Debugging Coroutines](https://kotlinlang.org/docs/debug-coroutines-with-idea.html)
+- [kotlinx-coroutines-debug](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-debug/)
+- [Android Coroutine testing and tools](https://developer.android.com/kotlin/coroutines/test)
+- [LeakCanary](https://square.github.io/leakcanary/)
+
+---
 
 ## References
 
 - [Debugging Coroutines](https://kotlinlang.org/docs/debug-coroutines-with-idea.html)
 - [kotlinx-coroutines-debug](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-debug/)
-- [Android Studio Coroutine Debugging](https://developer.android.com/kotlin/coroutines/test)
+- [Android Coroutine testing and tools](https://developer.android.com/kotlin/coroutines/test)
 - [LeakCanary](https://square.github.io/leakcanary/)
+
+---
+
+## Связанные вопросы (RU)
+
+- [[q-coroutine-exception-handler--kotlin--medium|Использование CoroutineExceptionHandler]]
+- [[q-common-coroutine-mistakes--kotlin--medium|Типичные ошибки при работе с корутинами]]
+- [[q-race-conditions-coroutines--kotlin--hard|Race condition в корутинах]]
+
+---
 
 ## Related Questions
 

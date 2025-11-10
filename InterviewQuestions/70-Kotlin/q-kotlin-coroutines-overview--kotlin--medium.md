@@ -1,22 +1,20 @@
 ---
 id: kotlin-194
 title: "Kotlin Coroutines Overview / Обзор корутин Kotlin"
-aliases: ["Kotlin Coroutines Overview, Обзор корутин Kotlin"]
+aliases: ["Kotlin Coroutines Overview", "Обзор корутин Kotlin"]
 topic: kotlin
-subtopics: [functions, java-interop, type-system]
+subtopics: [c-coroutines, c-kotlin-coroutines-basics]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-debounce-throttle-flow--kotlin--medium, q-flow-performance--kotlin--hard, q-kotlin-java-type-differences--programming-languages--medium]
+related: [c-coroutines, q-debounce-throttle-flow--kotlin--medium, q-flow-performance--kotlin--hard]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/medium]
 ---
-# Что Известно Про Корутины?
-
 # Вопрос (RU)
 > Что вы знаете о корутинах в Kotlin?
 
@@ -27,29 +25,47 @@ tags: [difficulty/medium]
 
 ## Ответ (RU)
 
-Корутины — это мощный инструмент для асинхронного программирования, позволяющий писать асинхронный код почти так же просто и понятно как и синхронный. Они облегчают выполнение таких задач как асинхронный ввод вывод длительные вычисления и работу с сетью не блокируя основной поток и не усложняя код избыточной вложенностью и обратными вызовами. Основные характеристики и преимущества: Легковесность: Корутины позволяют запускать тысячи параллельных операций потребляя гораздо меньше ресурсов по сравнению с традиционными потоками. Это достигается благодаря тому что корутины не привязаны к системным потокам и могут переключаться между ними. Понятный асинхронный код: С помощью корутин можно писать асинхронный код который выглядит как обычный синхронный код что упрощает его понимание и поддержку. Управление асинхронностью: Корутины предоставляют механизмы для управления асинхронными операциями такие как отмена операций тайм ауты и обработка ошибок. Эффективность: Поскольку корутины уменьшают необходимость в использовании обратных вызовов и упрощают асинхронный код они могут сделать приложение более отзывчивым и эффективным. Ключевые компоненты: Coroutine Scope — определяет контекст выполнения корутины управляя её жизненным циклом. Coroutine Context — содержит различные элементы такие как диспетчеры которые определяют в каком потоке будет выполняться корутина. Dispatchers — помогают управлять потоками на которых выполняются корутины Например Dispatchers.IO предназначен для ввода вывода Dispatchers.Main используется для взаимодействия с пользовательским интерфейсом. Builders — функции которые используются для запуска корутин такие как launch и async последняя из которых позволяет получить результат асинхронной операции.
+Корутины — это механизм для асинхронного и конкурентного программирования в Kotlin, позволяющий писать неблокирующий код почти так же просто и понятно, как синхронный. Они упрощают работу с асинхронным вводом-выводом, длительными вычислениями и сетевыми запросами без блокировки потоков (особенно главного/UI потока) и без избыточной вложенности и коллбеков.
+
+Основные характеристики и преимущества:
+
+- Легковесность: корутина — не системный поток. Можно запускать тысячи и десятки тысяч конкурентных задач в рамках ограниченного пула потоков. Планирование выполняется диспетчерами, корутины могут приостанавливаться и возобновляться на доступных потоках.
+- Понятный асинхронный код: благодаря приостанавливаемым (`suspend`) функциям корутинный код выглядит последовательным, но при этом не блокирует поток на ожиданиях.
+- Управление асинхронностью: встроенная поддержка отмены, тайм-аутов и обработки ошибок через контекст корутины и структурированную конкуррентность (например, через `supervisorScope`/`coroutineScope`).
+- Эффективность: сокращение количества коллбеков, отсутствие лишней блокировки потоков и лучшее управление жизненным циклом делают приложения более отзывчивыми и предсказуемыми.
+
+Ключевые компоненты:
+
+- `CoroutineScope` — определяет область и контекст выполнения корутин и управляет их жизненным циклом (например, `viewModelScope`, `lifecycleScope`).
+- `CoroutineContext` — набор элементов (`Job`, `Dispatcher` и др.), которые описывают, как и где выполняется корутина.
+- `Dispatchers` — определяют, на каких потоках или пулах потоков выполняются корутины (`Dispatchers.IO` для I/O-операций, `Dispatchers.Default` для CPU-связанных задач, `Dispatchers.Main` для работы с UI и т.д.).
+- Builders — функции для запуска корутин, такие как `launch` (возвращает `Job`, для побочных эффектов) и `async` (возвращает `Deferred` и используется для получения результата асинхронной операции).
 
 ## Answer (EN)
 
-Coroutines are a powerful tool for asynchronous programming, allowing you to write asynchronous code almost as simply and clearly as synchronous code. They facilitate tasks such as asynchronous I/O, long computations, and network operations without blocking the main thread or complicating code with excessive nesting and callbacks.
+Coroutines are a mechanism for asynchronous and concurrent programming in Kotlin, allowing you to write non-blocking code almost as simply and clearly as synchronous code. They simplify tasks such as asynchronous I/O, long-running computations, and network requests without blocking threads (especially the main/UI thread) and without excessive nesting and callbacks.
 
-**Key characteristics and advantages:**
+Key characteristics and advantages:
 
-1. **Lightweight**: Coroutines allow running thousands of parallel operations consuming much fewer resources compared to traditional threads. This is achieved because coroutines are not bound to system threads and can switch between them.
+1. Lightweight: A coroutine is not an OS thread. You can run thousands or tens of thousands of concurrent tasks on a limited thread pool. Scheduling is handled by dispatchers; coroutines can be suspended and resumed on available threads.
+2. Clear asynchronous code: With suspending (`suspend`) functions, coroutine-based code looks sequential while still avoiding thread blocking during waits.
+3. Asynchronous management: Built-in support for cancellation, timeouts, and error handling via the coroutine context and structured concurrency (e.g., `coroutineScope`/`supervisorScope`).
+4. Efficiency: Fewer callbacks, reduced blocking, and better lifecycle management lead to more responsive and predictable applications.
 
-2. **Clear asynchronous code**: With coroutines, you can write asynchronous code that looks like regular synchronous code, simplifying understanding and maintenance.
+Key components:
 
-3. **Asynchronous management**: Coroutines provide mechanisms for managing asynchronous operations such as operation cancellation, timeouts, and error handling.
-
-4. **Efficiency**: Since coroutines reduce the need for callbacks and simplify asynchronous code, they can make applications more responsive and efficient.
-
-**Key components:**
-- **CoroutineScope**: Defines the coroutine execution context managing its lifecycle
-- **CoroutineContext**: Contains various elements such as dispatchers that determine which thread the coroutine will execute on
-- **Dispatchers**: Help manage threads on which coroutines execute (Dispatchers.IO for I/O, Dispatchers.Main for UI)
-- **Builders**: Functions used to launch coroutines such as `launch` and `async`
+- `CoroutineScope`: Defines the scope and context of coroutine execution and manages their lifecycle (e.g., `viewModelScope`, `lifecycleScope`).
+- `CoroutineContext`: A set of elements (`Job`, `Dispatcher`, etc.) that describe how and where a coroutine runs.
+- `Dispatchers`: Determine which threads or thread pools coroutines run on (`Dispatchers.IO` for I/O operations, `Dispatchers.Default` for CPU-intensive work, `Dispatchers.Main` for UI, etc.).
+- Builders: Functions used to launch coroutines such as `launch` (returns a `Job`, used for side effects) and `async` (returns a `Deferred` result of an async operation).
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия корутин от подхода в Java?
+- Когда вы бы применили корутины на практике?
+- Какие распространенные ошибки при работе с корутинами стоит избегать?
 
 ## Follow-ups
 
@@ -57,12 +73,22 @@ Coroutines are a powerful tool for asynchronous programming, allowing you to wri
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [[c-coroutines]]
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
 ## References
 
+- [[c-coroutines]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-flow-performance--kotlin--hard]]
+- [[q-debounce-throttle-flow--kotlin--medium]]
 
 ## Related Questions
 
 - [[q-flow-performance--kotlin--hard]]
-- [[q-kotlin-java-type-differences--programming-languages--medium]]
 - [[q-debounce-throttle-flow--kotlin--medium]]

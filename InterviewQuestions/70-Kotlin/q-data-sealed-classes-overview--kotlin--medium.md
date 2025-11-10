@@ -3,20 +3,18 @@ id: kotlin-206
 title: "Data Sealed Classes Overview / Data и Sealed классы обзор"
 aliases: [Data Sealed Classes Overview, Data и Sealed классы обзор]
 topic: kotlin
-subtopics: [data-classes, sealed-classes]
+subtopics: [sealed-classes]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutinescope-vs-supervisorscope--kotlin--medium, q-job-state-machine-transitions--kotlin--medium]
+related: [c-sealed-classes, q-coroutinescope-vs-supervisorscope--kotlin--medium, q-job-state-machine-transitions--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 ---
-# What is Known about Data Classes and Sealed Classes?
-
 # Вопрос (RU)
 > Что известно о data классах и sealed классах в Kotlin? Каковы их характеристики и применения?
 
@@ -29,7 +27,7 @@ tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 
 ### Data Классы
 
-**Data классы** предназначены для хранения данных и автоматически генерируют несколько полезных методов:
+**Data классы** предназначены для хранения данных и автоматически генерируют несколько полезных методов (на основе объявленных в первичном конструкторе свойств):
 - `equals()` - для сравнения по содержимому
 - `hashCode()` - для использования в hash-коллекциях
 - `toString()` - для строкового представления
@@ -39,7 +37,7 @@ tags: [data-classes, difficulty/medium, programming-languages, sealed-classes]
 **Применение:**
 - Модели данных в приложениях
 - DTO (Data Transfer Objects)
-- POJO (Plain Old Java Objects)
+- POJO/POKO модели
 - API response models
 
 **Пример:**
@@ -70,11 +68,13 @@ println("$name is $age years old")
 
 ### Sealed Классы
 
-**Sealed классы** ограничивают создание подклассов тем же файлом (или модулем в Kotlin 1.5+) и используются для создания типобезопасных иерархий:
-- Все возможные подклассы известны на этапе компиляции
-- Идеальны для представления ограниченных иерархий классов
-- Отлично работают с `when` выражениями (exhaustive checking)
+**Sealed классы** ограничивают множество допустимых подклассов и используются для создания типобезопасных иерархий:
+- Все разрешённые подклассы известны на этапе компиляции
+- Идеальны для представления ограниченных иерархий классов (закрытых наборов вариантов)
+- Отлично работают с `when` выражениями (exhaustive checking без `else` при обработке всех вариантов)
 - Часто используются для управления состояниями в архитектурных компонентах
+
+Исторически sealed классы позволяли наследование только в том же файле. В более новых версиях Kotlin (и с sealed интерфейсами) правила могут расширяться (например, до одного модуля или пакета для определённых таргетов), но ключевая идея остаётся: набор подклассов замкнут и контролируем.
 
 **Применение:**
 - Управление UI состояниями (Loading, Success, Error)
@@ -105,7 +105,7 @@ fun renderUi(state: UiState) {
 **Пример сетевого результата:**
 ```kotlin
 sealed class NetworkResult<out T> {
-    data class Success<T>(val data: T) : NetworkResult<T>()
+    data class Success<out T>(val data: T) : NetworkResult<T>()
     data class Error(val exception: Exception) : NetworkResult<Nothing>()
     object Loading : NetworkResult<Nothing>()
 }
@@ -135,16 +135,16 @@ fun handleResult(result: NetworkResult<List<Product>>) {
         is NetworkResult.Error -> {
             println("Ошибка: ${result.exception.message}")
         }
-        NetworkResult.Loading -> {
+        is NetworkResult.Loading -> {
             println("Загрузка товаров...")
         }
     }
 }
 ```
 
-### Комбинирование Data И Sealed Классов
+### Комбинирование Data и Sealed Классов
 
-**Очень распространённый паттерн - sealed класс с data подклассами:**
+**Очень распространённый паттерн — sealed класс с data подклассами:**
 ```kotlin
 sealed class Result {
     data class Success(val value: Int) : Result()
@@ -168,7 +168,7 @@ when (result1) {
 
 ### Android MVVM Пример
 
-**Типичное использование в Android с ViewModel:**
+**Типичное использование в Android с `ViewModel`:**
 ```kotlin
 // Data класс для данных профиля
 data class UserProfile(
@@ -220,41 +220,55 @@ when (val state = viewModel.getState()) {
 
 | Характеристика | Data класс | Sealed класс |
 |----------------|-----------|--------------|
-| **Назначение** | Хранение данных | Ограниченная иерархия типов |
-| **Автогенерация** | equals, hashCode, toString, copy, componentN | Нет |
-| **Наследование** | Может быть final или open | Всегда open для подклассов |
-| **Подклассы** | Не ограничены | Ограничены файлом/модулем |
-| **Применение** | Модели, DTOs | Состояния, результаты, события |
-| **When exhaustive** | Нет | Да |
+| **Назначение** | Хранение данных | Ограниченная иерархия типов (закрытый набор вариантов) |
+| **Автогенерация** | equals, hashCode, toString, copy, componentN для свойств из первичного конструктора | Нет автогенерации этих методов по умолчанию |
+| **Наследование** | Обычный класс, может быть final/open/abstract | Является абстрактным, разрешает наследование только в контролируемой области (файл/модуль в зависимости от версии/таргета) |
+| **Подклассы** | Не ограничены языком | Жёстко ограничены: компилятор знает полный набор подклассов |
+| **Применение** | Модели, DTOs, value-объекты | Состояния, результаты, события, sum types |
+| **When exhaustiveness** | Не даёт исчерпывающей проверки сам по себе | Позволяет исчерпывающие `when` без `else` при обработке всех подклассов |
 
 ### Краткий Ответ
 
-**Data классы**: Предназначены для хранения данных. Автоматически генерируют `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()`. Используются для моделей данных, DTOs, API responses.
+**Data классы**: Предназначены для хранения данных. Автоматически генерируют `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()` (для свойств из первичного конструктора). Используются для моделей данных, DTOs, API responses.
 
-**Sealed классы**: Ограничивают подклассы одним файлом/модулем. Создают типобезопасные иерархии с exhaustive when-проверками. Используются для UI состояний (Loading/Success/Error), Result типов, навигационных событий.
+**Sealed классы**: Ограничивают множество подклассов контролируемой областью (как минимум файл, в новых версиях — расширенные правила). Создают типобезопасные иерархии и позволяют исчерпывающие `when`-проверки. Используются для UI состояний (Loading/Success/Error), Result типов, навигационных событий и иерархий команд/действий.
 
-**В Android**: Data классы - для моделей данных, sealed классы - для управления состояниями в ViewModel. Часто комбинируются: sealed класс с data подклассами.
+**В Android**: Data классы — для моделей данных, sealed классы — для управления состояниями во `ViewModel` и других слоях. Часто комбинируются: sealed класс с data подклассами.
 
 ## Answer (EN)
 
-**Data Classes:**
-Data classes are designed for storing data and automatically generate several useful methods:
+### Data Classes
+
+Data classes are designed for holding data and automatically generate several useful methods based on properties declared in the primary constructor:
 - `equals()` - for content-based equality comparison
 - `hashCode()` - for hash-based collections
-- `toString()` - for string representation
+- `toString()` - for readable string representation
 - `copy()` - for creating copies with modified properties
-- `componentN()` - component functions for destructuring
+- `componentN()` - component functions for destructuring declarations
 
-Data classes are commonly used as data models in applications, DTOs (Data Transfer Objects), and POJO (Plain Old Java Objects).
+Use cases:
+- Data models in applications
+- DTOs (Data Transfer Objects)
+- POJO/POKO-style models
+- API response models
 
-**Sealed Classes:**
-Sealed classes restrict subclass creation to the same file (or module in Kotlin 1.5+) and are used to create type-safe hierarchies:
-- All possible subclasses are known at compile time
-- Perfect for representing restricted class hierarchies
-- Excellent with `when` expressions (exhaustive checking)
-- Often used for state management in architectural components
+### Sealed Classes
 
-Both are frequently used in Android development - data classes for models and sealed classes for managing states.
+Sealed classes define a restricted hierarchy of subclasses and are used to model closed sets of variants:
+- All permitted subclasses are known at compile time
+- Great for representing restricted class hierarchies / algebraic sum types
+- Work very well with `when` expressions, enabling exhaustive checks without `else` when all cases are covered
+- Commonly used for state management in architectural components
+
+Historically, sealed classes restricted inheritance to the same file. In newer Kotlin versions (and with sealed interfaces / platform specifics), rules are extended (e.g., controlled within a module/package for some targets), but the core idea is the same: the set of subclasses is closed and compiler-controlled.
+
+Use cases:
+- UI state management (Loading, Success, Error)
+- Result/Response types for network calls
+- Navigation events
+- Sealed hierarchies of commands or actions
+
+Both are heavily used in Kotlin and Android: data classes for models, sealed classes for expressing states, results, and events.
 
 ### Code Examples
 
@@ -310,7 +324,7 @@ data class User(
 )
 
 fun parseApiResponse(json: String): ApiResponse {
-    // Parse JSON and return
+    // Parse JSON and return (simplified example)
     return ApiResponse(
         success = true,
         message = "Users fetched successfully",
@@ -331,9 +345,8 @@ fun main() {
 }
 ```
 
-**Sealed class example:**
+**Sealed class example (UI state):**
 ```kotlin
-// Sealed class for UI state
 sealed class UiState {
     object Loading : UiState()
     data class Success(val data: List<String>) : UiState()
@@ -341,7 +354,6 @@ sealed class UiState {
     object Empty : UiState()
 }
 
-// Handling all possible states
 fun renderUi(state: UiState) {
     when (state) {
         is UiState.Loading -> println("Showing loading spinner...")
@@ -363,7 +375,7 @@ fun main() {
 **Sealed class for network result:**
 ```kotlin
 sealed class NetworkResult<out T> {
-    data class Success<T>(val data: T) : NetworkResult<T>()
+    data class Success<out T>(val data: T) : NetworkResult<T>()
     data class Error(val exception: Exception) : NetworkResult<Nothing>()
     object Loading : NetworkResult<Nothing>()
 }
@@ -394,7 +406,7 @@ fun handleResult(result: NetworkResult<List<Product>>) {
         is NetworkResult.Error -> {
             println("Error: ${result.exception.message}")
         }
-        NetworkResult.Loading -> {
+        is NetworkResult.Loading -> {
             println("Loading products...")
         }
     }
@@ -438,7 +450,7 @@ fun main() {
 }
 ```
 
-**Android ViewModel state example:**
+**Android `ViewModel` state example:**
 ```kotlin
 // Typical usage in Android MVVM
 data class UserProfile(
@@ -494,6 +506,23 @@ fun main() {
 }
 ```
 
+### Key Differences
+
+| Aspect | Data class | Sealed class |
+|--------|-----------|--------------|
+| Purpose | Storing and representing data | Restricted type hierarchy (closed set of variants) |
+| Auto-generated members | `equals`, `hashCode`, `toString`, `copy`, `componentN` for primary-constructor properties | No such auto-generation by default |
+| Inheritance | Regular class, may be `final`/`open`/`abstract` | Abstract, allows subclasses only in a controlled scope (file/module depending on version/target) |
+| Subclasses | Not restricted by language | Strictly limited; compiler knows all subclasses |
+| Typical usage | Models, DTOs, value objects | States, results, events, sum types |
+| `when` exhaustiveness | Does not itself enable exhaustive `when` | Enables exhaustive `when` without `else` when all subclasses are covered |
+
+### Short Answer
+
+- Data classes: For representing data with automatically generated utility methods; ideal for models, DTOs, and API responses.
+- Sealed classes: For defining a closed set of variants; ideal for UI states (Loading/Success/Error), Result types, navigation events, and command/action hierarchies with exhaustive `when` handling.
+- In Android: Data classes are used for data models, sealed classes for representing states, results, and events in `ViewModel` and other layers; often combined as sealed hierarchies with data subclasses.
+
 ---
 
 ## Follow-ups
@@ -505,9 +534,9 @@ fun main() {
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-sealed-classes]]
 
 ## Related Questions
 
 - [[q-job-state-machine-transitions--kotlin--medium]]
 - [[q-coroutinescope-vs-supervisorscope--kotlin--medium]]
--

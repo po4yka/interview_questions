@@ -1,7 +1,7 @@
 ---
 id: kotlin-073
 title: "Virtual Time in Coroutine Testing / Виртуальное время в тестировании корутин"
-aliases: ["Virtual Time in Coroutine Testing, Виртуальное время в тестировании корутин"]
+aliases: ["Virtual Time in Coroutine Testing", "Виртуальное время в тестировании корутин"]
 
 # Classification
 topic: kotlin
@@ -18,11 +18,11 @@ source_note: Virtual Time Testing Deep Dive
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-testing-coroutines-runtest--kotlin--medium, q-testing-flow-operators--kotlin--hard]
+related: [c-kotlin, c-coroutines, q-testing-coroutines-runtest--kotlin--medium, q-testing-flow-operators--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 
 tags: [coroutines, difficulty/medium, kotlin, testing, virtual-time]
 ---
@@ -36,7 +36,7 @@ tags: [coroutines, difficulty/medium, kotlin, testing, virtual-time]
 
 ## Ответ (RU)
 
-Виртуальное время - ключевая функция тестирования корутин, которая позволяет тестам выполняться мгновенно, при этом симулируя прохождение времени. Это делает тесты быстрыми, детерминированными и легкими для понимания.
+Виртуальное время — ключевая функция тестирования корутин, которая позволяет тестам управлять временем явно и выполнять проверки мгновенно, при этом симулируя прохождение времени. Это делает тесты быстрыми, детерминированными и предсказуемыми.
 
 ### Проблема: Реальное Время Медленное
 
@@ -58,15 +58,17 @@ fun `таймер считает до 10 - быстрая версия`() = runT
     val timer = Timer()
     timer.start()
 
-    advanceTimeBy(10000) // Мгновенно "продвигаем" 10 секунд
+    advanceTimeBy(10000) // Явно "продвигаем" 10 секунд виртуального времени
 
     assertEquals(10, timer.seconds)
 }
 ```
 
+(Класс Timer предполагается использовать delay внутри и запускаться в контексте тестового диспетчера.)
+
 ### Основы Виртуального Времени
 
-При использовании `runTest`, тестовый диспетчер использует виртуальное время вместо реального:
+При использовании `runTest`, он устанавливает специальный тестовый диспетчер/планировщик, который оперирует виртуальным временем вместо реального для операций, основанных на `delay`/`kotlinx.coroutines`.
 
 ```kotlin
 @Test
@@ -79,15 +81,16 @@ fun `демонстрация виртуального времени`() = runTe
     delay(2000)
     println("После 3с: $currentTime") // 3000
 
-    // Тест завершается мгновенно, несмотря на 3 секунды задержек!
+    // Тест завершается мгновенно с точки зрения реального времени, 
+    // потому что виртуальное время продвигается планировщиком теста.
 }
 ```
 
-**Ключевой момент**: `delay()` на самом деле не ждёт — она просто продвигает виртуальное время и планирует возобновление.
+**Ключевой момент**: `delay()` под тестовым диспетчером не блокирует поток и не использует реальное время. Виртуальное время продвигается, когда вы явно двигаете его (`advanceTimeBy`, `advanceUntilIdle`, `runCurrent`) или когда планировщик обрабатывает запланированные задачи в рамках `runTest`.
 
 ### currentTime
 
-`currentTime` возвращает текущее виртуальное время в миллисекундах:
+`currentTime` возвращает текущее виртуальное время тестового планировщика в миллисекундах:
 
 ```kotlin
 @Test
@@ -164,13 +167,13 @@ fun `advanceTimeBy продвигает время точно`() = runTest {
 ```
 
 **Поведение**:
-- Продвигает виртуальное время на указанное количество миллисекунд
-- Выполняет все корутины, запланированные до или в новое время
-- Не выполняет корутины, запланированные после нового времени
+- Продвигает виртуальное время на указанное количество миллисекунд.
+- Выполняет все задачи с `delay`, запланированные до или на новом времени.
+- Не выполняет корутины, запланированные после нового времени.
 
 ### advanceUntilIdle()
 
-Выполняет все ожидающие корутины, пока не останется запланированных задач:
+Выполняет все ожидающие корутины, пока не останется запланированных задач (при условии, что нет бесконечных циклов, постоянно планирующих новые события):
 
 ```kotlin
 @Test
@@ -202,7 +205,7 @@ fun `advanceUntilIdle запускает всё`() = runTest {
 }
 
 @Test
-fun `advanceUntilIdle с бесконечным циклом`() = runTest {
+fun `advanceUntilIdle с конечным циклом`() = runTest {
     var count = 0
 
     val job = launch {
@@ -221,10 +224,10 @@ fun `advanceUntilIdle с бесконечным циклом`() = runTest {
 ```
 
 **Поведение**:
-- Продвигает время до следующего запланированного события
-- Выполняет это событие
-- Повторяет, пока не останется событий
-- Полезно для сценариев "выполнить до завершения"
+- Последовательно продвигает виртуальное время к следующему запланированному событию.
+- Выполняет это событие.
+- Повторяет, пока не останется задач.
+- Если задачи создают бесконечные новые события, `advanceUntilIdle` не завершится (или завершится с ошибкой в зависимости от конфигурации теста).
 
 ### runCurrent()
 
@@ -281,9 +284,9 @@ fun `runCurrent vs advanceTimeBy(0)`() = runTest {
 ```
 
 **Поведение**:
-- Выполняет только корутины, запланированные на текущее время
-- НЕ продвигает виртуальное время
-- Полезно для тестирования немедленных эффектов
+- Выполняет только корутины, запланированные на текущее время.
+- НЕ продвигает виртуальное время.
+- Полезно для тестирования немедленных эффектов и стартового поведения.
 
 ### Тестирование Задержек
 
@@ -351,7 +354,11 @@ class DataPoller(private val api: Api) {
         }
     }
 }
+```
 
+(Интерфейсы `Api`, `FakeApi`, `Data` предполагаются как тестовые заглушки.)
+
+```kotlin
 @Test
 fun `опрос происходит с регулярными интервалами`() = runTest {
     val api = FakeApi()
@@ -636,7 +643,9 @@ fun `параллельное выполнение экономит время`(
     val parallelResult2 = deferred2.await()
     val parallelDuration = currentTime - parallelStart
 
-    assertEquals(1000, parallelDuration) // Оба выполнились параллельно!
+    assertEquals(42, parallelResult1)
+    assertEquals(42, parallelResult2)
+    assertEquals(1000, parallelDuration) // Оба выполнились параллельно в терминах виртуального времени
 }
 ```
 
@@ -647,19 +656,19 @@ fun `параллельное выполнение экономит время`(
 @Test
 fun `неправильно - Thread sleep`() = runTest {
     launch {
-        Thread.sleep(1000) // Реально спит!
+        Thread.sleep(1000) // Реально спит и блокирует поток!
         println("После сна")
     }
 
-    advanceTimeBy(1000) // Не помогает
-    // Тест зависает или выполняется 1 секунду
+    advanceTimeBy(1000) // Не помогает для Thread.sleep
+    // Тест реально ждёт или может зависнуть
 }
 
 // ПРАВИЛЬНО: Использование delay
 @Test
 fun `правильно - delay`() = runTest {
     launch {
-        delay(1000) // Виртуальное время
+        delay(1000) // Использует виртуальное время
         println("После задержки")
     }
 
@@ -674,13 +683,13 @@ fun `неправильно - System.currentTimeMillis`() = runTest {
     val end = System.currentTimeMillis()
 
     val duration = end - start
-    assertTrue(duration < 100) // Реально заняло < 100мс
+    assertTrue(duration < 100) // Проверяем реальное время, а не виртуальное
 }
 
 // ПРАВИЛЬНО: Виртуальное время
 @Test
 fun `правильно - currentTime`() = runTest {
-    val start = currentTime // Виртуальное время
+    val start = currentTime // Виртуальное время тестового планировщика
     delay(1000)
     val end = currentTime
 
@@ -692,17 +701,17 @@ fun `правильно - currentTime`() = runTest {
 @Test
 fun `неправильно - блокирующий API`() = runTest {
     launch {
-        val result = blockingNetworkCall() // Блокирует поток!
+        val result = blockingNetworkCall() // Блокирует поток, не управляется виртуальным временем
     }
 
-    advanceUntilIdle() // Не помогает
+    advanceUntilIdle() // Не разблокирует blockingNetworkCall
 }
 
 // ПРАВИЛЬНО: Приостанавливаемые API
 @Test
 fun `правильно - suspending API`() = runTest {
     launch {
-        val result = suspendingNetworkCall() // Правильно приостанавливается
+        val result = suspendingNetworkCall() // Приостанавливается и управляется тестовым диспетчером
     }
 
     advanceUntilIdle() // Работает
@@ -712,40 +721,37 @@ fun `правильно - suspending API`() = runTest {
 ### Резюме
 
 **Функции виртуального времени**:
-- **currentTime**: Получить текущее виртуальное время в миллисекундах
-- **advanceTimeBy(ms)**: Продвинуть время на указанную величину, выполнить запланированные корутины
-- **advanceUntilIdle()**: Выполнить все ожидающие корутины до завершения
-- **runCurrent()**: Выполнить только задачи текущего времени, не продвигая время
+- **currentTime**: Получить текущее виртуальное время планировщика в миллисекундах.
+- **advanceTimeBy(ms)**: Продвинуть время на указанную величину, выполнить запланированные на этом интервале корутины.
+- **advanceUntilIdle()**: Выполнить все ожидающие корутины до отсутствия задач (если нет бесконечного планирования).
+- **runCurrent()**: Выполнить только задачи текущего времени, не продвигая время.
 
 **Ключевые принципы**:
-1. `delay()` использует виртуальное время — мгновенно в тестах
-2. Виртуальное время продвигается только явно (advanceTimeBy, advanceUntilIdle)
-3. Реальное время НЕ используется
-4. Тесты выполняются мгновенно независимо от задержек
-5. Время детерминировано и управляемо
+1. `delay()` под тестовым диспетчером не использует реальное время.
+2. Виртуальное время продвигается контролируемо: через `advanceTimeBy`, `advanceUntilIdle`, `runCurrent` и логику `runTest`.
+3. Реальное время и блокирующие вызовы (`Thread.sleep`, `System.currentTimeMillis`, блокирующий IO) не контролируются виртуальным временем, их следует избегать или абстрагировать.
+4. Тесты могут выполняться мгновенно независимо от количества задержек, если не используют блокирующие API.
+5. Тайминг детерминирован и управляем, если всё основано на корутинных примитивах.
 
 **Используйте advanceTimeBy когда**:
-- Тестирование конкретных временных сценариев
-- Нужен точный контроль выполнения
-- Тестирование таймаутов или интервалов
-- Проверка корректности задержек
+- Тестируете конкретные временные сценарии.
+- Нужен точный контроль пошагового выполнения.
+- Проверяете таймауты или интервалы.
 
 **Используйте advanceUntilIdle когда**:
-- Хотите выполнить всё до завершения
-- Не заботитесь о промежуточном времени
-- Тестирование финального состояния
-- Запуск полных потоков
+- Хотите выполнить всё до завершения.
+- Не важны промежуточные отметки времени.
+- Проверяете финальное состояние или полные цепочки операций.
 
 **Используйте runCurrent когда**:
-- Тестирование немедленных эффектов
-- Хотите выполнить синхронный код
-- Нужно проверить состояние до продвижения времени
+- Тестируете немедленные эффекты и стартовое поведение.
+- Хотите выполнить синхронный код/обработчики, не продвигая время.
 
 ---
 
 ## Answer (EN)
 
-Virtual time is a key feature of coroutine testing that allows tests to run instantly while simulating the passage of time. This makes tests fast, deterministic, and easy to reason about.
+Virtual time is a key feature of coroutine testing that lets you control time explicitly so tests complete instantly while simulating the passage of time. This makes tests fast, deterministic, and predictable.
 
 ### The Problem: Real Time is Slow
 
@@ -767,15 +773,17 @@ fun `timer counts to 10 - fast version`() = runTest {
     val timer = Timer()
     timer.start()
 
-    advanceTimeBy(10000) // Instantly "advance" 10 seconds
+    advanceTimeBy(10000) // Explicitly "advance" 10 seconds of virtual time
 
     assertEquals(10, timer.seconds)
 }
 ```
 
+(The Timer class is assumed to use delay under the test dispatcher.)
+
 ### Virtual Time Basics
 
-When using `runTest`, the test dispatcher uses virtual time instead of real time:
+When using `runTest`, it installs a special test dispatcher/scheduler that operates on virtual time for coroutine-based delays instead of real wall-clock time.
 
 ```kotlin
 @Test
@@ -788,15 +796,15 @@ fun `virtual time demonstration`() = runTest {
     delay(2000)
     println("After 3s total: $currentTime") // 3000
 
-    // Test completes instantly despite 3 seconds of delays!
+    // The test completes instantly in real time because virtual time is driven by the test scheduler.
 }
 ```
 
-**Key insight**: `delay()` doesn't actually wait—it just advances virtual time and schedules resumption.
+**Key insight**: `delay()` under the test dispatcher does not block a thread or use real time. Virtual time is advanced when you drive the scheduler (`advanceTimeBy`, `advanceUntilIdle`, `runCurrent`) or when `runTest` processes scheduled tasks.
 
 ### currentTime
 
-`currentTime` returns the current virtual time in milliseconds:
+`currentTime` returns the current virtual time of the test scheduler in milliseconds:
 
 ```kotlin
 @Test
@@ -833,7 +841,7 @@ suspend fun performOperation() {
 
 ### advanceTimeBy(milliseconds)
 
-Advances virtual time by the specified amount and executes coroutines scheduled within that timeframe:
+Advances virtual time by the specified amount and executes coroutines scheduled within that interval:
 
 ```kotlin
 @Test
@@ -873,13 +881,13 @@ fun `advanceTimeBy advances time precisely`() = runTest {
 ```
 
 **Behavior**:
-- Advances virtual time by specified milliseconds
-- Executes all coroutines scheduled before or at the new time
-- Does not execute coroutines scheduled after the new time
+- Advances virtual time by the given milliseconds.
+- Executes all tasks scheduled at or before the new time.
+- Does not execute tasks scheduled after the new time.
 
 ### advanceUntilIdle()
 
-Executes all pending coroutines until there are no more scheduled tasks:
+Executes all pending coroutines until there are no more scheduled tasks (as long as coroutines are not endlessly scheduling more work):
 
 ```kotlin
 @Test
@@ -911,7 +919,7 @@ fun `advanceUntilIdle runs everything`() = runTest {
 }
 
 @Test
-fun `advanceUntilIdle with infinite loop`() = runTest {
+fun `advanceUntilIdle with finite loop`() = runTest {
     var count = 0
 
     val job = launch {
@@ -930,10 +938,10 @@ fun `advanceUntilIdle with infinite loop`() = runTest {
 ```
 
 **Behavior**:
-- Advances time to the next scheduled event
-- Executes that event
-- Repeats until no more events are scheduled
-- Useful for "run to completion" scenarios
+- Repeatedly advances virtual time to the next scheduled event.
+- Executes that event.
+- Stops when no tasks remain.
+- If coroutines keep scheduling new delayed work forever, `advanceUntilIdle` may not complete.
 
 ### runCurrent()
 
@@ -990,9 +998,9 @@ fun `runCurrent vs advanceTimeBy(0)`() = runTest {
 ```
 
 **Behavior**:
-- Executes only coroutines scheduled at current time
-- Does NOT advance virtual time
-- Useful for testing immediate effects
+- Runs only tasks scheduled for the current virtual time.
+- Does NOT advance virtual time.
+- Useful for testing immediate effects and initial emissions.
 
 ### Testing Delays
 
@@ -1060,7 +1068,11 @@ class DataPoller(private val api: Api) {
         }
     }
 }
+```
 
+(Api, FakeApi, and Data are assumed as test doubles.)
+
+```kotlin
 @Test
 fun `polling happens at regular intervals`() = runTest {
     val api = FakeApi()
@@ -1233,7 +1245,7 @@ class RateLimiter(private val minIntervalMs: Long) {
 
     suspend fun execute(action: suspend () -> Unit) {
         val now = System.currentTimeMillis()
-        val timeSinceL ast = now - lastExecutionTime
+        val timeSinceLast = now - lastExecutionTime
 
         if (timeSinceLast < minIntervalMs) {
             delay(minIntervalMs - timeSinceLast)
@@ -1345,37 +1357,39 @@ fun `parallel execution saves time`() = runTest {
     val parallelResult2 = deferred2.await()
     val parallelDuration = currentTime - parallelStart
 
-    assertEquals(1000, parallelDuration) // Both ran in parallel!
+    assertEquals(42, parallelResult1)
+    assertEquals(42, parallelResult2)
+    assertEquals(1000, parallelDuration) // Both ran in parallel in terms of virtual time
 }
 ```
 
 ### Virtual Time Gotchas
 
 ```kotlin
-//  WRONG: Using Thread.sleep
+// WRONG: Using Thread.sleep
 @Test
 fun `wrong - Thread sleep`() = runTest {
     launch {
-        Thread.sleep(1000) // Actually sleeps!
+        Thread.sleep(1000) // Actually sleeps and blocks a thread!
         println("After sleep")
     }
 
-    advanceTimeBy(1000) // Doesn't help
-    // Test hangs or takes 1 second
+    advanceTimeBy(1000) // Doesn't affect Thread.sleep
+    // Test will really wait or may hang
 }
 
-//  CORRECT: Using delay
+// CORRECT: Using delay
 @Test
 fun `correct - delay`() = runTest {
     launch {
-        delay(1000) // Virtual time
+        delay(1000) // Uses virtual time
         println("After delay")
     }
 
     advanceTimeBy(1000) // Works instantly
 }
 
-//  WRONG: Real time API
+// WRONG: Real time API
 @Test
 fun `wrong - System.currentTimeMillis`() = runTest {
     val start = System.currentTimeMillis() // Real time!
@@ -1383,13 +1397,13 @@ fun `wrong - System.currentTimeMillis`() = runTest {
     val end = System.currentTimeMillis()
 
     val duration = end - start
-    assertTrue(duration < 100) // Actually took < 100ms real time
+    assertTrue(duration < 100) // This asserts real elapsed time, not virtual
 }
 
-//  CORRECT: Virtual time
+// CORRECT: Virtual time
 @Test
 fun `correct - currentTime`() = runTest {
-    val start = currentTime // Virtual time
+    val start = currentTime // Virtual test scheduler time
     delay(1000)
     val end = currentTime
 
@@ -1397,21 +1411,21 @@ fun `correct - currentTime`() = runTest {
     assertEquals(1000, duration)
 }
 
-//  WRONG: Blocking APIs
+// WRONG: Blocking APIs
 @Test
 fun `wrong - blocking API`() = runTest {
     launch {
-        val result = blockingNetworkCall() // Blocks thread!
+        val result = blockingNetworkCall() // Blocks a thread, not controlled by virtual time
     }
 
-    advanceUntilIdle() // Doesn't help
+    advanceUntilIdle() // Cannot unblock blockingNetworkCall
 }
 
-//  CORRECT: Suspending APIs
+// CORRECT: Suspending APIs
 @Test
 fun `correct - suspending API`() = runTest {
     launch {
-        val result = suspendingNetworkCall() // Properly suspends
+        val result = suspendingNetworkCall() // Properly suspends under test dispatcher
     }
 
     advanceUntilIdle() // Works
@@ -1421,44 +1435,60 @@ fun `correct - suspending API`() = runTest {
 ### Summary
 
 **Virtual time functions**:
-- **currentTime**: Get current virtual time in milliseconds
-- **advanceTimeBy(ms)**: Advance time by specific amount, execute scheduled coroutines
-- **advanceUntilIdle()**: Run all pending coroutines to completion
-- **runCurrent()**: Execute only current-time tasks, don't advance time
+- **currentTime**: Get current virtual scheduler time in milliseconds.
+- **advanceTimeBy(ms)**: Advance time by a specific amount, run scheduled coroutines in that interval.
+- **advanceUntilIdle()**: Run all pending coroutines until none remain (assuming no infinite rescheduling).
+- **runCurrent()**: Run only tasks scheduled for the current time without advancing time.
 
 **Key principles**:
-1. `delay()` uses virtual time—instant in tests
-2. Virtual time only advances explicitly (advanceTimeBy, advanceUntilIdle)
-3. Real wall-clock time is NOT used
-4. Tests run instantly regardless of delays
-5. Timing is deterministic and controllable
+1. `delay()` under the test dispatcher uses virtual time and is non-blocking.
+2. Virtual time is advanced in a controlled way: via `advanceTimeBy`, `advanceUntilIdle`, `runCurrent`, and `runTest`'s scheduler.
+3. Real-time based APIs (`Thread.sleep`, `System.currentTimeMillis`, blocking IO) are not controlled by virtual time and should be avoided or abstracted.
+4. Tests can run instantly regardless of logical delays when they rely on coroutine primitives.
+5. Timing is deterministic and controllable when all time-dependent code is expressed via the test scheduler.
 
 **Use advanceTimeBy when**:
-- Testing specific timing scenarios
-- Need precise control over execution
-- Testing timeouts or intervals
-- Verifying delays are correct
+- Testing specific timing scenarios.
+- You need precise stepwise control over execution.
+- Testing timeouts or fixed intervals.
 
 **Use advanceUntilIdle when**:
-- Want to run everything to completion
-- Don't care about intermediate timing
-- Testing final state
-- Running entire flows
+- You want to run everything to completion.
+- Intermediate timestamps are irrelevant.
+- Testing final/end state or full flows.
 
 **Use runCurrent when**:
-- Testing immediate effects
-- Want to execute synchronous code
-- Need to verify state before time advances
+- Testing immediate effects and startup behavior.
+- You want to run synchronous-looking work without advancing time.
+
+---
+
+## Дополнительные вопросы (RU)
+
+1. Как виртуальное время взаимодействует с `Dispatchers.IO` и другими реальными диспетчерами?
+2. Можно ли сочетать виртуальное время и реальные задержки в одном тесте, и чем это чревато?
+3. Как тестировать код, зависящий от `System.currentTimeMillis()` или других реальных источников времени?
+4. Что произойдёт, если вызвать `Thread.sleep` внутри `runTest` и почему это проблема?
+5. Как виртуальное время применяется при тестировании операторов `Flow` и горячих потоков?
 
 ---
 
 ## Follow-ups
 
-1. How does virtual time interact with Dispatchers.IO?
-2. Can you mix virtual time with real delays in tests?
-3. How to test code that depends on System.currentTimeMillis()?
-4. What happens when you use Thread.sleep in runTest?
-5. How does virtual time work with Flow operators?
+1. How does virtual time interact with `Dispatchers.IO` and other real dispatchers?
+2. Can you mix virtual time with real delays in a single test, and what are the pitfalls?
+3. How can you test code that depends on `System.currentTimeMillis()` or other real time sources?
+4. What happens when you use `Thread.sleep` inside `runTest`, and why is it problematic?
+5. How is virtual time applied when testing `Flow` operators and hot streams?
+
+---
+
+## Ссылки (RU)
+
+- [Testing Coroutines - Kotlin Docs](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
+- [runTest Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/kotlinx.coroutines.test/run-test.html)
+- [[c-kotlin]]
+- [[c-coroutines]]
 
 ---
 
@@ -1466,11 +1496,21 @@ fun `correct - suspending API`() = runTest {
 
 - [Testing Coroutines - Kotlin Docs](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
 - [runTest Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/kotlinx.coroutines.test/run-test.html)
+- [[c-kotlin]]
+- [[c-coroutines]]
+
+---
+
+## Связанные вопросы (RU)
+
+- [[q-testing-coroutines-runtest--kotlin--medium]] — основы `runTest`
+- [[q-testing-flow-operators--kotlin--hard]] — тестирование операторов `Flow`
+- [[q-testing-coroutine-cancellation--kotlin--medium]] — тестирование отмены корутин
 
 ---
 
 ## Related Questions
 
 - [[q-testing-coroutines-runtest--kotlin--medium]] - runTest basics
-- [[q-testing-flow-operators--kotlin--hard]] - Testing Flow operators
+- [[q-testing-flow-operators--kotlin--hard]] - Testing `Flow` operators
 - [[q-testing-coroutine-cancellation--kotlin--medium]] - Testing cancellation

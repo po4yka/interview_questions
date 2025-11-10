@@ -1,7 +1,7 @@
 ---
 id: kotlin-011
 title: "Kotlin Collections / Коллекции в Kotlin"
-aliases: ["Kotlin Collections, Коллекции в Kotlin"]
+aliases: ["Kotlin Collections", "Коллекции в Kotlin"]
 
 # Classification
 topic: kotlin
@@ -12,17 +12,17 @@ difficulty: easy
 # Language & provenance
 original_language: en
 language_tags: [en, ru]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
+source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-profiling--kotlin--hard, q-kotlin-generic-function-syntax--programming-languages--easy, q-suspend-functions-basics--kotlin--easy]
+related: [c-collections, q-coroutine-profiling--kotlin--hard, q-kotlin-generic-function-syntax--programming-languages--easy, q-suspend-functions-basics--kotlin--easy]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-11-09
 
 tags: [collections, data-structures, difficulty/easy, kotlin, list, map, set]
 ---
@@ -33,19 +33,20 @@ tags: [collections, data-structures, difficulty/easy, kotlin, list, map, set]
 
 # Question (EN)
 > What do you know about Collections in Kotlin?
+
 ## Ответ (RU)
 
 `Collection` обычно содержит несколько объектов одного типа. Объекты в коллекции называются `элементами` или `items`. Например, все студенты на факультете образуют коллекцию, которую можно использовать для вычисления их среднего возраста. Для Kotlin актуальны следующие типы коллекций:
 
-- **List** — это упорядоченная коллекция с доступом к элементам по индексам – целым числам, которые отражают их позицию. Элементы могут встречаться в списке более одного раза.
+- `List` — это упорядоченная коллекция с доступом к элементам по индексам – целым числам, которые отражают их позицию. Элементы могут встречаться в списке более одного раза.
 
-- **Set** — это коллекция уникальных элементов. Она отражает математическую абстракцию множества: группу объектов без повторений.
+- `Set` — это коллекция уникальных элементов. Она отражает математическую абстракцию множества: группу объектов без повторений.
 
-- **Map (или словарь)** — это набор пар ключ-значение. Ключи уникальны, и каждый из них соответствует ровно одному значению. Значения могут дублироваться. Maps полезны для хранения логических связей между объектами.
+- `Map` (или словарь) — это набор пар ключ-значение. Ключи уникальны, и каждый из них соответствует ровно одному значению. Значения могут дублироваться. `Map` полезны для хранения логических связей между объектами.
 
 ### Типы Коллекций
 
-Стандартная библиотека Kotlin предоставляет реализации для базовых типов коллекций: множеств, списков и карт (map). Пара интерфейсов представляет каждый тип коллекции:
+Стандартная библиотека Kotlin предоставляет реализации для базовых типов коллекций: множеств, списков и карт (`Map`). Пара интерфейсов представляет каждый тип коллекции:
 
 - **Интерфейс только для чтения**, который предоставляет операции для доступа к элементам коллекции. Типы коллекций только для чтения являются `ковариантными` (типы коллекций имеют такое же отношение подтипов, как и типы элементов. Если класс `Rectangle` наследуется от `Shape`, вы можете использовать `List<Rectangle>` везде, где требуется `List<Shape>`.)
 
@@ -57,17 +58,37 @@ tags: [collections, data-structures, difficulty/easy, kotlin, list, map, set]
 
 ![Диаграмма коллекций Kotlin](https://raw.githubusercontent.com/swayangjit/Android-Interview-Questions/master/Kotlin/res/collections-diagram.png)
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия коллекций Kotlin от коллекций Java?
+- Когда вы бы использовали эти коллекции на практике?
+- Какие распространенные подводные камни стоит избегать?
+
+## Ссылки (RU)
+- [[c-collections]]
+- [Обзор коллекций Kotlin](https://kotlinlang.org/docs/reference/collections-overview.html)
+
+## Связанные вопросы (RU)
+
+### Связанные (Простые)
+- [[q-data-structures-overview--algorithms--easy]] - Структуры данных
+
+### Продвинутые (Сложнее)
+- [[q-kotlin-collections--kotlin--medium]] - Коллекции
+- [[q-kotlin-map-flatmap--kotlin--medium]] - Коллекции
+- [[q-flow-operators-map-filter--kotlin--medium]] - Корутины
+
 ---
 
 ## Answer (EN)
 
 `Collection` usually contains a number of objects of the same type. Objects in a collection are called `elements` or `items`. For example, all the students in a department form a collection that can be used to calculate their average age. The following collection types are relevant for Kotlin:
 
-- **List** is an ordered collection with access to elements by indices – integer numbers that reflect their position. Elements can occur more than once in a list.
+- `List` is an ordered collection with access to elements by indices – integer numbers that reflect their position. Elements can occur more than once in a list.
 
-- **Set** is a collection of unique elements. It reflects the mathematical abstraction of set: a group of objects without repetitions.
+- `Set` is a collection of unique elements. It reflects the mathematical abstraction of set: a group of objects without repetitions.
 
-- **Map (or dictionary)** is a set of key-value pairs. Keys are unique, and each of them maps to exactly one value. The values can be duplicates. Maps are useful for storing logical connections between objects.
+- `Map` (or dictionary) is a set of key-value pairs. Keys are unique, and each of them maps to exactly one value. The values can be duplicates. `Map`s are useful for storing logical connections between objects.
 
 ### Collection Types
 
@@ -90,6 +111,7 @@ Below is a diagram of the Kotlin collection interfaces:
 - What are common pitfalls to avoid?
 
 ## References
+- [[c-collections]]
 - [Kotlin Collections Overview](https://kotlinlang.org/docs/reference/collections-overview.html)
 
 ## Related Questions

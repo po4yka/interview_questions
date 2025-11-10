@@ -2,20 +2,19 @@
 id: lang-036
 title: "Regular Vs Extension Method / Обычный метод против Extension метода"
 aliases: [Regular Vs Extension Method, Обычный метод против Extension метода]
-topic: programming-languages
-subtopics: [extension-functions, functions, language-features]
+topic: kotlin
+subtopics: [functions, language-features, extension-functions]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-hot-vs-cold-flows--programming-languages--medium, q-reference-types-protect-from-deletion--programming-languages--easy, q-solid-principles--software-design--medium]
+related: [c-kotlin, q-hot-vs-cold-flows--programming-languages--medium, q-reference-types-protect-from-deletion--programming-languages--easy]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/easy, extension-functions, functions, kotlin, programming-languages, static-methods]
 ---
-# В Чём Отличие Обычного Метода От Extension Метода В Kotlin
 
 # Вопрос (RU)
 > В чём отличие обычного метода от extension метода в Kotlin
@@ -33,31 +32,31 @@ tags: [difficulty/easy, extension-functions, functions, kotlin, programming-lang
 
 **Обычный метод (Member Function):**
 - Определяется **внутри класса**
-- Имеет прямой доступ к **приватным** членам класса
-- Может быть **переопределен** в подклассах
-- Изменяет байткод класса
+- Имеет прямой доступ к **private/protected/internal** членам в пределах области видимости
+- Может быть **переопределён** в подклассах, если объявлен как `open`/`abstract` в `open`/`abstract` классе и не `final`
+- Компилируется как часть байткода класса (метод внутри класса)
 
 **Extension функция:**
-- Определяется **вне класса**
-- Доступ только к **публичным** членам
-- **Не может** быть переопределена (статическая)
-- **Не изменяет** байткод класса
+- Определяется **вне класса** (или в другом контексте, например внутри класса/файла как extension)
+- Имеет доступ только к тем членам, которые видимы в месте объявления extension (обычно это публичные, но также `internal`/`protected` при корректной области видимости)
+- **Не может** быть переопределена как виртуальный метод базового класса (разрешается статически по типу receiver на этапе компиляции)
+- Компилируется как **top-level статическая функция** (в Java-байткоде) и **не изменяет** определение исходного класса
 
 ### Сравнительная Таблица
 
 | Аспект | Обычный метод | Extension функция |
 |--------|---------------|-------------------|
-| **Расположение** | Внутри класса | Вне класса |
-| **Доступ** | К приватным членам | Только к публичным |
-| **Виртуальность** | Да (полиморфный) | Нет (статический) |
-| **Переопределение** | Можно переопределить | Нельзя переопределить |
-| **Изменяет класс** | Да | Нет |
-| **Байткод** | Метод в классе | Статический метод |
-| **Синтаксис вызова** | `obj.method()` | `obj.extension()` (но статический) |
+| **Расположение** | Внутри класса | Вне класса (или как extension в другом контексте) |
+| **Доступ** | К членам согласно модификаторам видимости (включая private внутри класса) | Только к членам, видимым в месте объявления extension (обычно не private) |
+| **Виртуальность** | Может быть виртуальным (при `open`/`abstract`) | Нет (разрешается статически) |
+| **Переопределение** | Можно, если не `final` | Нельзя переопределить как виртуальный метод |
+| **Изменяет класс** | Является частью байткода класса | Не изменяет байткод существующего класса |
+| **Байткод** | Метод внутри класса | Top-level статический метод с параметром-receiver |
+| **Синтаксис вызова** | `obj.method()` | `obj.extension()` (но реализация статическая) |
 
 ### Обычный Метод (Member Function)
 
-Определен внутри класса, имеет полный доступ:
+Определён внутри класса, имеет полный доступ к состоянию согласно модификаторам видимости:
 
 ```kotlin
 class User(val name: String, private val password: String) {
@@ -89,14 +88,13 @@ user.validatePassword("secret123")  // true
 
 **Характеристики:**
 - Часть определения класса
-- Доступ к private/protected членам
-- Может быть переопределен в подклассах
-- Виртуальная диспетчеризация (полиморфизм)
-- Изменяет байткод класса
+- Доступ к private/protected/internal членам в рамках правил видимости
+- Может быть переопределён в наследниках, если объявлен как `open`/`abstract` и не `final`
+- Вызывает динамическую (виртуальную) диспетчеризацию для `open`/`override` методов (полиморфизм)
 
 ### Extension Функция
 
-Определена вне класса, выглядит как метод но это статическая функция:
+Определена вне класса, выглядит как метод, но это статическая функция с параметром-receiver:
 
 ```kotlin
 // Extension функция (определена вне класса)
@@ -125,11 +123,11 @@ println(7.isEven())   // false
 ```
 
 **Характеристики:**
-- Определена вне класса
-- Нет доступа к private/protected членам
-- Не может быть переопределена (не виртуальная)
+- Определена вне класса или в другом контексте как extension
+- Нет доступа к `private` членам класса; доступ только к тому, что видно в месте объявления
+- Не может быть виртуальной: выбор реализации делается на этапе компиляции по статическому типу receiver
 - Статическая диспетчеризация
-- НЕ изменяет байткод класса
+- Не изменяет байткод исходного класса
 
 ### Как Работают Extension Функции
 
@@ -137,22 +135,22 @@ println(7.isEven())   // false
 
 ```kotlin
 // Kotlin extension
-fun String.reverse(): String {
+fun String.reverseCustom(): String {
     return this.reversed()
 }
 
-"привет".reverse()
+"привет".reverseCustom()
 
-// Компилируется в статический метод в Java:
-public static String reverse(String receiver) {
+// Компилируется в статический метод в Java (упрощённо):
+public static String reverseCustom(String receiver) {
     return new StringBuilder(receiver).reverse().toString();
 }
 
 // Вызывается как:
-StringExtensionsKt.reverse("привет")
+StringExtensionsKt.reverseCustom("привет");
 ```
 
-**Ключевой момент:** Extension функция это **синтаксический сахар** для статических методов!
+**Ключевой момент:** Extension функция — это **синтаксический сахар** для статических методов с явным параметром-receiver.
 
 ### Доступ К Членам Класса
 
@@ -182,7 +180,7 @@ fun User.canVote(): Boolean {
 
 ### Полиморфизм
 
-**Member функции виртуальные:**
+**Member функции могут быть виртуальными:**
 
 ```kotlin
 open class Animal {
@@ -204,7 +202,7 @@ val cat: Animal = Cat()
 cat.sound()  // "Мяу"
 ```
 
-**Extension функции НЕ виртуальные:**
+**Extension функции НЕ полиморфны:**
 
 ```kotlin
 open class Animal
@@ -220,7 +218,7 @@ animal.sound()  // "Какой-то звук" (НЕ "Гав"!)
 // Разрешается на основе объявленного типа (Animal), а не реального (Dog)
 
 val dog: Dog = Dog()
-dog.sound()  // "Гав" (теперь тип Dog)
+dog.sound()  // "Гав" (тип Dog)
 
 // Extension функции не полиморфны!
 ```
@@ -236,13 +234,13 @@ class Circle(val radius: Double) : Shape() {
     override fun area(): Double = Math.PI * radius * radius
 }
 
-// Extension функция
+// Extension функции
 fun Shape.describe() = "Это фигура"
 fun Circle.describe() = "Это круг"
 
 val shape: Shape = Circle(5.0)
 println(shape.area())     // ~78.5 (виртуальный метод - полиморфизм)
-println(shape.describe()) // "Это фигура" (extension - статический)
+println(shape.describe()) // "Это фигура" (extension - статический выбор по типу Shape)
 
 val circle: Circle = Circle(5.0)
 println(circle.describe()) // "Это круг" (тип Circle)
@@ -250,7 +248,7 @@ println(circle.describe()) // "Это круг" (тип Circle)
 
 ### Member Имеет Приоритет
 
-Если существуют и member, и extension с одним именем, **вызывается member**:
+Если существуют и member, и extension с одним именем и сигнатурой, **вызывается member**:
 
 ```kotlin
 class MyClass {
@@ -267,8 +265,8 @@ MyClass().foo()  // Выводит: "Member функция" (не "Extension ф�
 ```
 
 **Почему:**
-- Member функция часть класса
-- Extension функция просто удобный синтаксис
+- Member функция — часть класса
+- Extension функция — просто удобный синтаксис (top-level функция)
 - Приоритет всегда у настоящего member
 
 ### Когда Использовать
@@ -280,9 +278,9 @@ MyClass().foo()  // Выводит: "Member функция" (не "Extension ф�
 - Вы контролируете класс
 
 **Extension функции когда:**
-- Расширение классов, которыми вы не владеете (String, List, etc.)
+- Расширение классов, которыми вы не владеете (`String`, `List`, etc.)
 - Утилитные функции, не требующие приватного доступа
-- Сохранение фокуса класса (разделение concern)
+- Сохранение фокуса класса (разделение ответственности)
 - Создание DSL
 
 ### Практические Примеры
@@ -335,7 +333,7 @@ fun <T> List<T>.secondOrNull(): T? {
 
 // Использование
 val email = "test@example.com"
-println(email.isValidEmail())  // true
+println(email.isValidEmail())  // true (упрощённая проверка)
 
 val numbers = listOf(1, 2, 3)
 println(numbers.secondOrNull())  // 2
@@ -366,17 +364,17 @@ StringUtils.capitalize(text)
 StringUtils.reverse(text)
 MathUtils.square(number)
 
-// После: extensions
-text.capitalize()
-text.reverse()
-number.square()
+// После: extensions (пример)
+text.trim().uppercase() // стандартные extension
+
+// Пользовательские extension
+fun String.addPrefix(prefix: String): String = "$prefix$this"
 
 // Fluent API
 text
     .trim()
     .lowercase()
-    .capitalize()
-    .addQuotes()
+    .let { it.addPrefix("> ") }
 ```
 
 **3. Контроль области видимости:**
@@ -395,7 +393,7 @@ class HtmlBuilder {
 
 // "World".wrapInTag("p")  // ОШИБКА: не видна снаружи
 
-// Или в файле
+// Или ограничение файлом
 private fun String.internalHelper() {
     // Видна только в этом файле
 }
@@ -415,27 +413,28 @@ fun String.removeWhitespace(): String = this.replace("\\s".toRegex(), "")
 fun <T> List<T>.middle(): T? =
     if (this.isNotEmpty()) this[this.size / 2] else null
 
-fun <T> List<T>.shuffle(): List<T> = this.shuffled()
+fun <T> List<T>.shuffleCopy(): List<T> = this.shuffled()
 ```
 
-### Receiver Типы
+### Extension и DSL / Receiver Типы
 
-Extensions могут иметь receiver type (this):
+Extensions всегда имеют receiver type. В сочетании с function types with receiver они активно используются для построения DSL:
 
 ```kotlin
-// Regular extension
+// Простейший extension
 fun String.addPrefix(prefix: String): String {
     return "$prefix$this"
 }
 
-// Extension с receiver типом (для DSL)
 class HtmlBuilder {
     private val content = StringBuilder()
 
+    // Extension на String внутри HtmlBuilder
     fun String.unaryPlus() {
         content.append(this)
     }
 
+    // Функция с receiver HtmlBuilder для DSL
     fun tag(name: String, init: HtmlBuilder.() -> Unit): String {
         val builder = HtmlBuilder()
         builder.init()
@@ -443,9 +442,9 @@ class HtmlBuilder {
     }
 }
 
-// Использование
+// Использование DSL-подхода
 val html = HtmlBuilder().tag("div") {
-    +"Hello "  // String.unaryPlus()
+    +"Hello "  // вызывает String.unaryPlus()
     +"World"
 }
 ```
@@ -453,14 +452,14 @@ val html = HtmlBuilder().tag("div") {
 ### Тестирование
 
 ```kotlin
-// Обычный метод - требует mock/stub
+// Обычный метод - требует mock/stub зависимостей
 class UserService(private val repository: UserRepository) {
     fun findUser(id: Int): User? {
         return repository.findById(id)
     }
 }
 
-// Extension - легко тестировать
+// Extension - чистая функция, легко тестировать
 fun String.toSlug(): String {
     return this.lowercase()
         .replace(" ", "-")
@@ -481,37 +480,36 @@ class MyClass(private val value: Int) {
     private fun privateMethod() {}
 }
 
-// 1. Нет доступа к private
+// 1. Нет доступа к private-членам
 fun MyClass.cantAccessPrivate() {
-    // println(value)  // ОШИБКА!
-    // privateMethod()  // ОШИБКА!
+    // println(value)      // ОШИБКА!
+    // privateMethod()     // ОШИБКА!
 }
 
-// 2. Нельзя переопределить
+// 2. Нельзя переопределить как виртуальный метод
 open class Base
 class Derived : Base()
 
 fun Base.method() = "Base"
-// Derived не может "override" это
+// Никакое объявление в Derived не "override"-ит эту extension для Base
 
-// 3. Нельзя иметь состояние
+// 3. Нельзя добавить состояние к существующему классу
 fun String.addCounter() {
-    // var counter = 0  // Можно, но это локальная переменная
-    // Нельзя добавить поле в String
+    // var counter = 0  // Только локальная переменная, не поле экземпляра
 }
 ```
 
 ### Интероперабельность С Java
 
 **Вызов из Java:**
+
 ```java
 // Kotlin extension:
-// fun String.reverse(): String
+// public fun String.reverseCustom(): String
 
 // Java вызов:
-String reversed = StringExtensionsKt.reverse("hello");
-
-// Не выглядит как метод в Java
+String reversed = StringExtensionsKt.reverseCustom("hello");
+// Для Java это обычный статический метод, а не член String
 ```
 
 ### Nullable Receiver
@@ -520,37 +518,37 @@ Extensions могут работать с nullable типами:
 
 ```kotlin
 // Extension для nullable типа
-fun String?.isNullOrEmpty(): Boolean {
+fun String?.isNullOrEmptySafe(): Boolean {
     return this == null || this.isEmpty()
 }
 
 val text: String? = null
-println(text.isNullOrEmpty())  // true - не crash!
+println(text.isNullOrEmptySafe())  // true - без NPE
 
-// Обычная extension для non-null
-fun String.capitalize(): String {
+// Extension для non-null
+fun String.capitalizeFirst(): String {
     return this.replaceFirstChar { it.uppercase() }
 }
 
-// val result = text.capitalize()  // ОШИБКА: text nullable
+// val result = text.capitalizeFirst()  // ОШИБКА: text nullable
 ```
 
 ### Резюме
 
 **Extension функция:**
 - Выглядит как добавленная к классу
-- На самом деле статическая функция
+- На самом деле top-level статическая функция с параметром-receiver
 - Предоставляет синтаксический сахар
-- Не изменяет байткод класса
-- Нет доступа к приватным членам
-- Не виртуальная/не полиморфная
+- Не изменяет байткод существующего класса
+- Нет доступа к private-членам класса
+- Разрешается статически, не виртуальна
 
 **Обычный метод:**
 - Реальный член класса
-- Доступ к приватному состоянию
-- Виртуальный/полиморфный
-- Может быть переопределен
-- Часть байткода класса
+- Имеет доступ к приватному состоянию
+- Может быть виртуальным/полиморфным (`open`/`override`)
+- Может быть переопределён
+- Компилируется как часть байткода класса
 
 **Выбор между ними:**
 
@@ -564,26 +562,33 @@ fun String.capitalize(): String {
 | DSL | Extension |
 
 **Практический совет:**
+
 ```kotlin
 // Основной функционал - member
-class User(private val password: String) {
+class User(val name: String, private val password: String) {
     fun authenticate(input: String): Boolean {
         return password == input  // Нужен private доступ
     }
 }
 
-// Вспомогательный функционал - extension
+// Вспомогательный функционал - extension (использует только публичный API)
 fun User.toJson(): String {
-    // Использует только публичный API
-    return """{"name": "$name"}"""
+    return """{"name": "${this.name}"}"""
 }
 ```
 
 ## Answer (EN)
 
+### Main Difference
+
+Regular (member) functions are real methods declared inside a class, participate in visibility rules and polymorphism, and have access to the class internals. Extension functions are top-level static functions with receiver syntax that:
+- Do not change the original class
+- Are resolved statically by the declared receiver type
+- Cannot access private members
+
 ### Regular Method (Member Function)
 
-**Defined inside class**, has direct access to private members:
+Defined inside the class, has direct access to members according to visibility modifiers:
 
 ```kotlin
 class User(val name: String, private val password: String) {
@@ -595,6 +600,14 @@ class User(val name: String, private val password: String) {
     fun greet() {
         println("Hello, $name!")
     }
+
+    private fun internalMethod() {
+        println("Password hash: ${password.hashCode()}")
+    }
+
+    fun process() {
+        internalMethod()  // OK
+    }
 }
 
 val user = User("John", "secret123")
@@ -603,21 +616,21 @@ user.validatePassword("secret123")  // true
 ```
 
 **Characteristics:**
-- Part of class definition
-- Can access private/protected members
-- Can be overridden in subclasses
-- Dispatched virtually (polymorphic)
-- Modifies class bytecode
+- Part of the class definition
+- Can access `private`/`protected`/`internal` members (within visibility rules)
+- Can be overridden in subclasses if declared `open`/`abstract` in an `open`/`abstract` class and not `final`
+- Uses virtual dispatch for `open`/`override` methods (polymorphism)
+- Compiled as a regular method in the class bytecode
 
 ### Extension Function
 
-**Defined outside class**, looks like member but is actually static:
+Defined outside the class (or in another scope) and looks like a member, but compiles to a static function with a receiver parameter:
 
 ```kotlin
 // Extension function (defined outside class)
 fun User.displayInfo() {
     println("User: $name")
-    // println(password)  // ERROR: Cannot access private members!
+    // println(password)  // ERROR: Cannot access private!
 }
 
 // Can extend classes you don't own
@@ -625,62 +638,59 @@ fun String.addQuotes(): String {
     return "\"$this\""
 }
 
+fun Int.isEven(): Boolean {
+    return this % 2 == 0
+}
+
 val user = User("John", "secret123")
 user.displayInfo()  // Looks like member call
 
 val text = "Hello"
 val quoted = text.addQuotes()  // "Hello"
+
+println(42.isEven())  // true
+println(7.isEven())   // false
 ```
 
 **Characteristics:**
-- Defined outside class
-- Cannot access private/protected members
-- Cannot be overridden (not virtual)
-- Resolved statically
-- Does NOT modify class bytecode
+- Declared outside the target class or inside another scope
+- Can only access members visible where the extension is declared (no `private` access)
+- Resolved statically based on the declared receiver type (not virtual)
+- Does not modify the original class bytecode
+- Compiled as a top-level static method with the receiver as the first parameter
 
-### How Extension Functions Work
-
-**Under the hood:**
+### How Extension Functions Work (Under the Hood)
 
 ```kotlin
 // Kotlin extension
-fun String.reverse(): String {
+fun String.reverseCustom(): String {
     return this.reversed()
 }
 
-"hello".reverse()
+"hello".reverseCustom()
 
-// Compiles to static method in Java:
-public static String reverse(String receiver) {
+// Compiles to static method in Java (simplified):
+public static String reverseCustom(String receiver) {
     return new StringBuilder(receiver).reverse().toString();
 }
 
 // Called as:
-StringExtensionsKt.reverse("hello")
+StringExtensionsKt.reverseCustom("hello");
 ```
 
-**Key point:** Extension is **syntactic sugar** for static method calls!
+Key point: an extension function is syntactic sugar for a static method with an explicit receiver parameter.
 
-### Comparison
-
-| Aspect | Regular Method | Extension Function |
-|--------|---------------|-------------------|
-| **Location** | Inside class | Outside class |
-| **Access** | Private members | Public members only |
-| **Virtual** | Yes (polymorphic) | No (static) |
-| **Override** | Can override | Cannot override |
-| **Modifies class** | Yes | No |
-| **Bytecode** | Method in class | Static method |
-| **Syntax** | `obj.method()` | `obj.extension()` (but static) |
-
-### Access to Members
+### Access to Class Members
 
 ```kotlin
 class User(val name: String, private val age: Int) {
     // Regular method - can access private
     fun isAdult(): Boolean {
-        return age >= 18  // OK
+        return age >= 18
+    }
+
+    fun getInfo(): String {
+        return "$name, $age years"
     }
 }
 
@@ -689,11 +699,16 @@ fun User.printAge() {
     println(name)  // OK (public)
     // println(age)  // ERROR: age is private!
 }
+
+fun User.canVote(): Boolean {
+    // return age >= 18  // ERROR: cannot access age
+    return isAdult()    // Use public API instead
+}
 ```
 
 ### Polymorphism
 
-**Member functions are virtual:**
+Member functions can be virtual:
 
 ```kotlin
 open class Animal {
@@ -701,31 +716,64 @@ open class Animal {
 }
 
 class Dog : Animal() {
-    override fun sound() = "Woof"  // Override
+    override fun sound() = "Woof"
+}
+
+class Cat : Animal() {
+    override fun sound() = "Meow"
 }
 
 val animal: Animal = Dog()
 animal.sound()  // "Woof" (polymorphic call)
+
+val cat: Animal = Cat()
+cat.sound()  // "Meow"
 ```
 
-**Extension functions are NOT virtual:**
+Extension functions are NOT virtual:
 
 ```kotlin
 open class Animal
-
 class Dog : Animal()
+class Cat : Animal()
 
 fun Animal.sound() = "Some sound"
 fun Dog.sound() = "Woof"
+fun Cat.sound() = "Meow"
 
 val animal: Animal = Dog()
 animal.sound()  // "Some sound" (NOT "Woof"!)
-// Resolved based on declared type (Animal), not actual type (Dog)
+// Resolved by declared type (Animal), not runtime type (Dog)
+
+val dog: Dog = Dog()
+dog.sound()  // "Woof"
+```
+
+More detailed example mirroring shapes:
+
+```kotlin
+open class Shape {
+    open fun area(): Double = 0.0
+}
+
+class Circle(val radius: Double) : Shape() {
+    override fun area(): Double = Math.PI * radius * radius
+}
+
+fun Shape.describe() = "This is a shape"
+fun Circle.describe() = "This is a circle"
+
+val shape: Shape = Circle(5.0)
+println(shape.area())     // ~78.5 (virtual call)
+println(shape.describe()) // "This is a shape" (extension resolved statically)
+
+val circle: Circle = Circle(5.0)
+println(circle.describe()) // "This is a circle"
 ```
 
 ### Member Takes Precedence
 
-**If both exist, member wins:**
+If both a member and an extension with the same signature exist, the member is called:
 
 ```kotlin
 class MyClass {
@@ -738,31 +786,35 @@ fun MyClass.foo() {  // Extension with same name
     println("Extension")
 }
 
-MyClass().foo()  // Prints: "Member" (not "Extension")
+MyClass().foo()  // Prints: "Member"
 ```
 
-### Use Cases
+Because the member is a real part of the class, it always wins over an extension with the same signature.
 
-**Regular methods when:**
-- Need access to private state
-- Want polymorphism/overriding
-- Core functionality of the class
-- You control the class
+### When to Use What
 
-**Extension functions when:**
-- Extending classes you don't own (String, List, etc.)
-- Utility functions that don't need private access
-- Keeping class focused (separate concerns)
-- Creating DSLs
+Use regular methods when:
+- You need access to private/internal state
+- You need polymorphism/overriding
+- Implementing core behavior of the class
+- You own/control the class
 
-### Real-World Examples
+Use extension functions when:
+- Extending classes you do not own (`String`, `List`, framework types)
+- Adding utility helpers that rely only on the public API
+- Keeping classes focused (separation of concerns)
+- Building DSL-style APIs
 
-**Regular methods (core functionality):**
+### Practical Examples
+
+Regular methods (core functionality):
+
 ```kotlin
 class BankAccount(private var balance: Double) {
-    // Core operations need private access
     fun deposit(amount: Double) {
-        balance += amount
+        if (amount > 0) {
+            balance += amount
+        }
     }
 
     fun withdraw(amount: Double): Boolean {
@@ -773,19 +825,28 @@ class BankAccount(private var balance: Double) {
             false
         }
     }
+
+    fun getBalance(): Double {
+        return balance
+    }
+
+    private fun logTransaction(type: String, amount: Double) {
+        println("$type: $amount, new balance: $balance")
+    }
 }
 ```
 
-**Extension functions (utilities):**
+Extension functions (utilities):
+
 ```kotlin
-// Extending String (don't own this class)
+// Extending String
 fun String.isValidEmail(): Boolean {
     return this.contains("@") && this.contains(".")
 }
 
 // Extending Context (Android)
-fun Context.showToast(message: String) {
-    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+fun Context.showToast(message: String, duration: Int = Toast.LENGTH_SHORT) {
+    Toast.makeText(this, message, duration).show()
 }
 
 // Extending List
@@ -794,57 +855,192 @@ fun <T> List<T>.secondOrNull(): T? {
 }
 ```
 
-### Benefits of Extensions
+### Benefits of Extension Functions
 
-**1. No class modification:**
+1. No class modification:
+
 ```kotlin
-// Can't modify String class, but can add functionality
 fun String.camelToSnakeCase(): String {
     return this.replace(Regex("([a-z])([A-Z])"), "$1_$2").lowercase()
 }
 
 "camelCase".camelToSnakeCase()  // "camel_case"
+
+fun String.isPalindrome(): Boolean {
+    return this == this.reversed()
+}
+
+"radar".isPalindrome()  // true
 ```
 
-**2. Cleaner API:**
+2. Cleaner API:
+
 ```kotlin
-// Before: static utility
+// Before: static utilities
 StringUtils.capitalize(text)
 StringUtils.reverse(text)
 
-// After: extensions
-text.capitalize()
-text.reverse()
+// After: extensions / stdlib-style
+text.trim().uppercase()
+
+fun String.addPrefix(prefix: String): String = "$prefix$this"
 ```
 
-**3. Scope control:**
+3. Scope control:
+
 ```kotlin
-// Extension only available in specific context
-class Config {
-    fun String.parseConfig(): Map<String, String> {
-        // Only available inside Config class
+class HtmlBuilder {
+    fun String.wrapInTag(tag: String): String {
+        return "<$tag>$this</$tag>"
+    }
+
+    fun build(): String {
+        return "Hello".wrapInTag("h1")
     }
 }
+
+private fun String.internalHelper() {
+    // Visible only in this file
+}
+```
+
+4. Grouped organization:
+
+```kotlin
+// StringExtensions.kt
+fun String.truncate(maxLength: Int): String =
+    if (this.length > maxLength) "${this.take(maxLength)}..." else this
+
+fun String.words(): List<String> = this.split(" ")
+
+fun String.removeWhitespace(): String = this.replace("\\s".toRegex(), "")
+
+// CollectionExtensions.kt
+fun <T> List<T>.middle(): T? =
+    if (this.isNotEmpty()) this[this.size / 2] else null
+
+fun <T> List<T>.shuffleCopy(): List<T> = this.shuffled()
+```
+
+### Extensions and DSL / Receiver Types
+
+Extensions use a receiver type; together with function types with receiver they are powerful for building DSLs:
+
+```kotlin
+fun String.addPrefix(prefix: String): String {
+    return "$prefix$this"
+}
+
+class HtmlBuilder {
+    private val content = StringBuilder()
+
+    fun String.unaryPlus() {
+        content.append(this)
+    }
+
+    fun tag(name: String, init: HtmlBuilder.() -> Unit): String {
+        val builder = HtmlBuilder()
+        builder.init()
+        return "<$name>${builder.content}</$name>"
+    }
+}
+
+val html = HtmlBuilder().tag("div") {
+    +"Hello "
+    +"World"
+}
+```
+
+### Testing
+
+```kotlin
+class UserService(private val repository: UserRepository) {
+    fun findUser(id: Int): User? {
+        return repository.findById(id)
+    }
+}
+
+fun String.toSlug(): String {
+    return this.lowercase()
+        .replace(" ", "-")
+        .replace(Regex("[^a-z0-9-]"), "")
+}
+
+@Test
+fun testToSlug() {
+    assertEquals("hello-world", "Hello World!".toSlug())
+}
+```
+
+### Limitations of Extension Functions
+
+You cannot:
+
+```kotlin
+class MyClass(private val value: Int) {
+    private fun privateMethod() {}
+}
+
+fun MyClass.cantAccessPrivate() {
+    // println(value)      // ERROR
+    // privateMethod()     // ERROR
+}
+
+open class Base
+class Derived : Base()
+
+fun Base.method() = "Base"
+// No extension on Derived can override this for Base
+
+fun String.addCounter() {
+    // Only local vars, cannot add real state to String
+}
+```
+
+### Interoperability with Java
+
+```java
+// Kotlin extension:
+// public fun String.reverseCustom(): String
+
+// From Java:
+String reversed = StringExtensionsKt.reverseCustom("hello");
+// It's just a static method for Java callers
+```
+
+### Nullable Receiver
+
+```kotlin
+fun String?.isNullOrEmptySafe(): Boolean {
+    return this == null || this.isEmpty()
+}
+
+val text: String? = null
+println(text.isNullOrEmptySafe())  // true
+
+fun String.capitalizeFirst(): String {
+    return this.replaceFirstChar { it.uppercase() }
+}
+
+// text.capitalizeFirst() // ERROR: text is nullable
 ```
 
 ### Summary
 
-**Extension function:**
-- Looks like it's added to the class
-- Actually a static function
-- Provides syntactic sugar
-- Doesn't modify class bytecode
+Extension function:
+- Syntactic sugar over a top-level static function with receiver
+- Does not change the class
 - Cannot access private members
-- Not virtual/polymorphic
+- Resolved statically, not polymorphic
 
-**Regular method:**
-- Actual member of class
-- Can access private state
-- Virtual/polymorphic
-- Can be overridden
-- Part of class bytecode
+Regular method:
+- Real class member in bytecode
+- Has access to private/internal state
+- Supports virtual dispatch and overriding when `open`/`override`
 
----
+Choose:
+- Member for core behavior, encapsulation, and polymorphism
+- Extension for utilities, DSLs, and extending existing APIs without modifying them
 
 ## Follow-ups
 
@@ -855,6 +1051,7 @@ class Config {
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
 
 ## Related Questions
 

@@ -2,7 +2,7 @@
 id: lang-051
 title: "Kotlin Java Type Differences / Различия типов Kotlin и Java"
 aliases: [Kotlin Java Type Differences, Различия типов Kotlin и Java]
-topic: programming-languages
+topic: kotlin
 subtopics: [null-safety, type-system]
 question_kind: theory
 difficulty: medium
@@ -10,15 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-executor-service-java--kotlin--medium, q-kotlin-static-variable--programming-languages--easy]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [collections, comparison, difficulty/medium, java, null-safety, programming-languages, type-inference, type-system]
+related: [c-kotlin, q-executor-service-java--kotlin--medium]
+created: 2024-10-15
+updated: 2025-11-09
+tags: [collections, comparison, difficulty/medium, java, null-safety, kotlin, type-inference, type-system]
 ---
-# Чем Типы В Kotlin Отличаются От Типов В Java
-
 # Вопрос (RU)
-> Чем типы в Kotlin отличаются от типов в Java
+> Чем типы в Kotlin отличаются от типов в Java?
 
 ---
 
@@ -33,12 +31,13 @@ tags: [collections, comparison, difficulty/medium, java, null-safety, programmin
 
 | Особенность | Kotlin | Java |
 |---------|--------|------|
-| **Null Safety** | Переменные не могут быть null по умолчанию (`String` vs `String?`) | Все объекты могут быть null |
-| **Коллекции** | Четкое разделение: `List` vs `MutableList` | Нет различия (все изменяемые) |
-| **Data классы** | Автоматическая генерация методов с `data class` | Требуется ручная реализация |
-| **Вывод типов** | Обширный: `val x = 10` | Ограниченный (локальные переменные с `var`) |
-| **Умные приведения** | Автоматические после проверки `is` | Явное приведение после `instanceof` |
-| **Примитивные типы** | Нет примитивов (унифицированная система типов) | Отдельные примитивы (`int`) и обертки (`Integer`) |
+| **Null Safety** | Переменные не могут быть null по умолчанию (`String` vs `String?`) | Объектные ссылки могут быть null, типовая система это не выражает явно |
+| **Коллекции** | Четкое различие по типам: `List` (read-only) vs `MutableList` (mutable) | Нет отличия на уровне типов между изменяемыми и неизменяемыми коллекциями |
+| **Data классы** | Автоматическая генерация методов с `data class` | Требуется ручная реализация (до `record`), либо использование `record` |
+| **Вывод типов** | Обширный: вывод для локальных переменных, выражений, лямбд и простых возвращаемых типов функций | Более ограниченный: `var` только для локальных переменных, большинство сигнатур и полей требуют явных типов |
+| **Умные приведения** | Автоматические после проверки `is` | Явное приведение после `instanceof` (частично улучшено pattern matching) |
+| **Модель примитивных типов** | Унифицированная модель на уровне языка: примитивы/обертки скрыты, компилятор выбирает представление | Отдельные примитивы (`int`) и обертки (`Integer`) |
+| **Функциональные типы** | Встроенные функциональные типы `(A, B) -> R` | Функциональные интерфейсы, нет нативного синтаксиса функциональных типов |
 
 ### 1. Null Safety - Безопасность От Null
 
@@ -68,11 +67,11 @@ val forcedLength = nullable!!.length  // NullPointerException если null
 
 **Java:**
 ```java
-// Любая переменная может быть null
+// Любая объектная переменная может быть null
 String name = "John";
 name = null;  // OK, но опасно
 
-// Нет различия между nullable и non-nullable
+// Нет различия в типах между nullable и non-nullable
 String nullable = null;
 // int length = nullable.length();  // NullPointerException!
 
@@ -92,8 +91,10 @@ if (nullable != null) {
 public String getUpperCase(String text) {
     return text.toUpperCase();  // Crash если text == null!
 }
+```
 
-// Kotlin - ошибка компиляции
+```kotlin
+// Kotlin - ошибка компиляции, если в сигнатуре тип non-nullable
 fun getUpperCase(text: String): String {
     return text.uppercase()  // Гарантированно не null
 }
@@ -103,11 +104,11 @@ fun getUpperCaseSafe(text: String?): String? {
 }
 ```
 
-### 2. Коллекции - Изменяемые Vs Неизменяемые
+### 2. Коллекции - Изменяемые Vs Read-Only
 
 **Kotlin:**
 ```kotlin
-// Неизменяемый список (read-only)
+// Read-only список: интерфейс не позволяет модификацию
 val immutableList: List<Int> = listOf(1, 2, 3)
 // immutableList.add(4)  // Ошибка компиляции!
 
@@ -116,39 +117,39 @@ val mutableList: MutableList<Int> = mutableListOf(1, 2, 3)
 mutableList.add(4)  // OK
 mutableList[0] = 10  // OK
 
-// Неизменяемые vs изменяемые
+// Read-only vs mutable
 val readOnlySet: Set<String> = setOf("a", "b")
 val mutableSet: MutableSet<String> = mutableSetOf("a", "b")
 
 val readOnlyMap: Map<String, Int> = mapOf("key" to 1)
 val mutableMap: MutableMap<String, Int> = mutableMapOf("key" to 1)
 
-// Преобразование
+// Важно: read-only не гарантирует структурную неизменяемость источника
 val list1 = mutableListOf(1, 2, 3)
-val list2: List<Int> = list1  // Upcast к read-only
+val list2: List<Int> = list1  // Upcast к read-only интерфейсу
 // list2.add(4)  // Ошибка компиляции
 list1.add(4)  // OK, исходный список все еще изменяемый
 ```
 
 **Java:**
 ```java
-// Все коллекции изменяемые по умолчанию
+// Тип List не различает изменяемые и неизменяемые реализации
 List<Integer> list = new ArrayList<>(List.of(1, 2, 3));
-list.add(4);  // OK
+list.add(4);  // OK (конкретная реализация mutable)
 
-// "Неизменяемые" коллекции появились в Java 9
+// Фабрики Java 9+ возвращают неизменяемые реализации
 List<Integer> immutable = List.of(1, 2, 3);
 // immutable.add(4);  // UnsupportedOperationException во время выполнения!
 
-// Collections.unmodifiableList - обертка
+// Collections.unmodifiableList - обертка над исходной коллекцией
 List<Integer> wrapped = Collections.unmodifiableList(list);
 // wrapped.add(5);  // Runtime exception
-list.add(5);  // Изменяет wrapped тоже!
+list.add(5);  // Изменяет содержимое wrapped тоже, так как это view
 
-// Нет различия на уровне типов
-List<String> list1 = new ArrayList<>();
-List<String> list2 = List.of("a", "b");
-// Оба имеют тип List<String>, но разное поведение
+// На уровне типов нет разделения
+List<String> list1 = new ArrayList<>();      // Изменяемая реализация
+List<String> list2 = List.of("a", "b");   // Неизменяемая реализация
+// Оба имеют тип List<String>, поведение определяется реализацией
 ```
 
 ### 3. Data Классы - Автогенерация Методов
@@ -185,7 +186,7 @@ println("ID: $id, Name: $name")
 
 **Java:**
 ```java
-// Требуется ручная реализация всех методов
+// До records требовалась ручная реализация всех методов
 public class User {
     private final int id;
     private final String name;
@@ -235,8 +236,8 @@ public class User {
     }
 }
 
-// Records в Java 14+ упрощают (но все равно многословнее Kotlin)
-public record User(int id, String name, String email) {}
+// Records в Java 14+ упрощают, но синтаксис все равно отличается от Kotlin data class
+public record UserRecord(int id, String name, String email) {}
 ```
 
 ### 4. Вывод Типов - Type Inference
@@ -244,10 +245,10 @@ public record User(int id, String name, String email) {}
 **Kotlin:**
 ```kotlin
 // Обширный вывод типов
-val number = 42                    // Int
-val pi = 3.14                      // Double
-val text = "Hello"                 // String
-val list = listOf(1, 2, 3)         // List<Int>
+val number = 42                     // Int
+val pi = 3.14                       // Double
+val text = "Hello"                  // String
+val list = listOf(1, 2, 3)          // List<Int>
 val map = mapOf("a" to 1, "b" to 2) // Map<String, Int>
 
 // Лямбды
@@ -283,7 +284,7 @@ Map<String, Integer> map = new HashMap<>();
 
 // Лямбды требуют контекста
 Function<Integer, Integer> square = x -> x * x;
-// var square = x -> x * x;  // Ошибка! Нужен тип
+// var square = x -> x * x;  // Ошибка! Нужен тип-таргет (функциональный интерфейс)
 
 // Методы требуют явного возвращаемого типа
 public int add(int a, int b) {  // Нельзя опустить int
@@ -345,10 +346,10 @@ fun example(obj: Any?) {
 
 **Java:**
 ```java
-// Требуется явное приведение
+// Требуется явное приведение (до pattern matching)
 public void printLength(Object obj) {
     if (obj instanceof String) {
-        String str = (String) obj;  // Явное приведение!
+        String str = (String) obj;  // Явное приведение
         System.out.println(str.length());
         System.out.println(str.toUpperCase());
     }
@@ -371,32 +372,32 @@ public String process(Object value) {
     };
 }
 
-// Но все еще менее мощный чем Kotlin
+// Но система приведения и pattern matching все еще менее гибкая, чем smart casts в Kotlin
 ```
 
 ### 6. Примитивные Типы
 
 **Kotlin:**
 ```kotlin
-// Унифицированная система типов - все объекты
+// Унифицированная система типов на уровне языка
 val number: Int = 42
 println(number.toString())  // Методы доступны
 println(number.plus(8))
 
-// Автоматическая оптимизация компилятором
-val x: Int = 10        // Компилируется в int (примитив)
+// Компилятор сам выбирает представление для JVM
+val x: Int = 10        // Обычно компилируется в int (примитив)
 val y: Int? = 10       // Компилируется в Integer (объект)
-val list: List<Int> = listOf(1, 2)  // List<Integer>
+val list: List<Int> = listOf(1, 2)  // Использует Integer внутри
 
-// Нет autoboxing проблем
+// == всегда сравнивает значения, === — ссылки
 val a: Int = 1000
 val b: Int = 1000
-println(a == b)   // true (всегда сравнение значений)
-println(a === b)  // зависит от оптимизации
+println(a == b)   // true (сравнение значений)
+println(a === b)  // зависит от боксинга/оптимизаций
 
 // Специальные массивы для производительности
-val primitiveArray: IntArray = intArrayOf(1, 2, 3)  // int[]
-val objectArray: Array<Int> = arrayOf(1, 2, 3)      // Integer[]
+val primitiveArray: IntArray = intArrayOf(1, 2, 3)  // компилируется в int[]
+val objectArray: Array<Int> = arrayOf(1, 2, 3)      // компилируется в Integer[]
 ```
 
 **Java:**
@@ -405,21 +406,21 @@ val objectArray: Array<Int> = arrayOf(1, 2, 3)      // Integer[]
 int primitive = 42;
 Integer object = 42;  // Autoboxing
 
-// primitive.toString();  // Ошибка! Нет методов
+// primitive.toString();  // Нельзя напрямую
 object.toString();  // OK
 
 // Autoboxing проблемы
 Integer a = 1000;
 Integer b = 1000;
-System.out.println(a == b);      // false! (разные объекты)
+System.out.println(a == b);      // false (разные объекты)
 System.out.println(a.equals(b)); // true (значения равны)
 
 // Кэширование Integer (-128 до 127)
 Integer x = 100;
 Integer y = 100;
-System.out.println(x == y);  // true (кэшированные)
+System.out.println(x == y);  // true (кэш)
 
-// Требуется явное указание типов
+// Нельзя использовать примитивы как параметры типа
 List<Integer> list = new ArrayList<>();  // Нельзя List<int>
 int[] primitiveArray = {1, 2, 3};
 Integer[] objectArray = {1, 2, 3};
@@ -429,7 +430,7 @@ Integer[] objectArray = {1, 2, 3};
 
 **Kotlin:**
 ```kotlin
-// Функции - first-class citizens
+// Функции — объекты первого класса
 val operation: (Int, Int) -> Int = { a, b -> a + b }
 val result = operation(5, 3)  // 8
 
@@ -439,9 +440,9 @@ val text = "Hello".append()  // "Hello!"
 
 // Nullable функциональные типы
 val nullableFunc: ((Int) -> Int)? = null
-val result = nullableFunc?.invoke(5)
+val res = nullableFunc?.invoke(5)
 
-// Высокого порядка функции
+// Функции высшего порядка
 fun <T> List<T>.customFilter(predicate: (T) -> Boolean): List<T> {
     return this.filter(predicate)
 }
@@ -453,12 +454,12 @@ fun <T> List<T>.customFilter(predicate: (T) -> Boolean): List<T> {
 Function<Integer, Integer> operation = x -> x * 2;
 int result = operation.apply(5);  // 10
 
-// Нужны готовые интерфейсы
+// Использование стандартных функциональных интерфейсов
 BiFunction<Integer, Integer, Integer> add = (a, b) -> a + b;
 Predicate<String> isEmpty = String::isEmpty;
 Consumer<String> print = System.out::println;
 
-// Или создавать свои
+// Или создание своих
 @FunctionalInterface
 interface MyFunction {
     int apply(int a, int b);
@@ -469,15 +470,15 @@ MyFunction multiply = (a, b) -> a * b;
 
 ### Итоговое Сравнение
 
-**Почему типы Kotlin лучше:**
+1. **Null Safety**: Kotlin выражает nullability в системе типов и предотвращает часть NPE на этапе компиляции.
+2. **Коллекции**: Явное различие read-only/mutable интерфейсов.
+3. **Data классы**: Автоматическая генерация boilerplate-кода.
+4. **Вывод типов**: Меньше явных деклараций типов при сохранении читаемости.
+5. **Smart Casts**: Автоматическое приведение типов после проверок.
+6. **Упрощенная модель примитивных типов**: Примитивы и объекты объединены на уровне языка, детали JVM скрыты.
+7. **Функциональные типы**: Встроенная поддержка функциональных типов и функций высшего порядка.
 
-1. **Безопасность**: Null safety предотвращает NullPointerException на этапе компиляции
-2. **Выразительность**: Data классы, вывод типов, умные приведения
-3. **Читаемость**: Меньше boilerplate кода
-4. **Правильность**: Различие изменяемых/неизменяемых коллекций
-5. **Производительность**: Оптимизация примитивов автоматическая
-
-**Практический пример:**
+### Практический пример
 
 ```kotlin
 // Kotlin - краткий и безопасный
@@ -497,7 +498,7 @@ adult?.let { println("Found: ${it.name}") }
 ```
 
 ```java
-// Java - многословный и небезопасный
+// Java - более многословный пример
 public class Person {
     private final String name;
     private final int age;
@@ -530,7 +531,7 @@ public Person findAdult(List<Person> people) {
             return person;
         }
     }
-    return null;  // Может быть null!
+    return null;  // Может быть null
 }
 
 List<Person> people = List.of(
@@ -539,78 +540,246 @@ List<Person> people = List.of(
 );
 
 Person adult = findAdult(people);
-if (adult != null) {  // Обязательная проверка
+if (adult != null) {
     System.out.println("Found: " + adult.getName());
 }
 ```
 
-### Резюме Ключевых Различий
-
-1. **Null Safety**: Kotlin предотвращает NPE на этапе компиляции
-2. **Коллекции**: Явное различие изменяемых/неизменяемых
-3. **Data классы**: Автоматическая генерация boilerplate кода
-4. **Вывод типов**: Меньше явных деклараций типов
-5. **Smart Casts**: Автоматическое приведение после проверок
-6. **Унифицированная система**: Нет различия примитивы/объекты для разработчика
-
 ## Answer (EN)
+
+Kotlin and Java type systems differ in several fundamental ways that impact safety, expressiveness, and boilerplate.
+
+### Overview
 
 | Feature | Kotlin | Java |
 |---------|--------|------|
-| **Null Safety** | Variables cannot be null by default (`String` vs `String?`) | All objects can be null |
-| **Collections** | Clear separation: `List` vs `MutableList` | No distinction (all mutable) |
-| **Data Classes** | Automatic method generation with `data class` | Manual implementation required |
-| **Type Inference** | Extensive: `val x = 10` | Limited (local variables with `var`) |
-| **Smart Casts** | Automatic after `is` check | Explicit cast after `instanceof` |
-| **Primitive Types** | No primitives (unified type system) | Separate primitives (`int`) and wrappers (`Integer`) |
+| **Null Safety** | Non-null by default; explicit nullable types (`String?`) | Any reference can be null; nullability is mostly by convention/annotations |
+| **Collections** | Type-level split: `List` (read-only) vs `MutableList` (mutable); same for `Set`/`Map` | One `List` type; mutability depends on implementation/wrappers |
+| **Data Classes** | `data class` auto-generates `equals`/`hashCode`/`toString`/`copy`/`componentN` | Manual boilerplate or `record` (newer Java); different syntax/semantics |
+| **Type Inference** | Wide: locals, expressions, lambdas, simple function return types | Narrower: `var` for locals (Java 10+), explicit types for members and returns |
+| **Smart Casts** | Automatic after `is`/null checks | Traditionally explicit casts; pattern matching improves but still less integrated |
+| **Primitive Types** | Unified model at language level; boxing details mostly hidden | Distinct primitives vs wrapper types; autoboxing pitfalls |
+| **Functional Types** | First-class function types `(A, B) -> R`, receivers, HOFs | Functional interfaces (`Function`, `Predicate`, etc.), no native function type syntax |
 
-**Examples:**
+### 1. Null Safety
 
 ```kotlin
-// Kotlin
-val name: String = "John"        // Cannot be null
-val nullable: String? = null     // Explicitly nullable
-val list = listOf(1, 2, 3)       // Immutable
-val x = 10                       // Type inferred
+val name: String = "John"              // Cannot be null
+val nullable: String? = null            // Explicitly nullable
+val length = nullable?.length           // Safe call
+val len = nullable?.length ?: 0         // Elvis
 
-if (obj is String) {
-    println(obj.length)          // Auto-cast
+fun getUpperCase(text: String): String = text.uppercase()
+fun getUpperCaseSafe(text: String?): String? = text?.uppercase()
+```
+
+```java
+String name = "John";
+name = null;                             // Allowed
+String nullable = null;
+// nullable.length();                    // NPE if not checked
+
+@NonNull String nonNull = "text";       // Convention-only
+@Nullable String maybeNull = null;
+```
+
+Kotlin encodes nullability in types and forces compile-time checks; Java mostly relies on discipline and annotations.
+
+### 2. Collections: Mutable vs Read-Only
+
+```kotlin
+val list: List<Int> = listOf(1, 2, 3)          // Read-only interface
+// list.add(4)                                 // Compile error
+
+val mutableList: MutableList<Int> = mutableListOf(1, 2, 3)
+mutableList.add(4)                             // OK
+
+val list1 = mutableListOf(1, 2, 3)
+val list2: List<Int> = list1                   // Read-only view
+list1.add(4)                                   // Mutates underlying data
+```
+
+```java
+List<Integer> list = new ArrayList<>(List.of(1, 2, 3));
+list.add(4);                                   // OK (mutable implementation)
+
+List<Integer> immutable = List.of(1, 2, 3);
+// immutable.add(4);                          // Runtime exception
+
+List<Integer> wrapped = Collections.unmodifiableList(list);
+// wrapped.add(5);                            // Runtime exception
+list.add(5);                                   // Reflected via wrapped
+```
+
+Kotlin distinguishes read-only vs mutable via types (without guaranteeing deep immutability); Java exposes mutability only via runtime behavior.
+
+### 3. Data Classes
+
+```kotlin
+data class User(val id: Int, val name: String, val email: String)
+
+val u1 = User(1, "Alice", "alice@example.com")
+val u2 = User(1, "Alice", "alice@example.com")
+println(u1 == u2)                             // true (value equality)
+println(u1.copy(name = "Bob"))               // copy with modification
+val (id, name, email) = u1                    // destructuring
+```
+
+```java
+public class User {
+    // fields, constructor, getters, equals, hashCode, toString, etc.
+}
+
+public record UserRecord(int id, String name, String email) {}
+```
+
+Kotlin `data class` is built-in for value objects; Java uses manual code or records (newer JDKs).
+
+### 4. Type Inference
+
+```kotlin
+val number = 42                  // Int
+val list = listOf(1, 2, 3)       // List<Int>
+val sum = { a: Int, b: Int -> a + b }
+
+fun add(a: Int, b: Int) = a + b  // Return type inferred
+```
+
+```java
+var number = 42;                  // int
+var list = List.of(1, 2);         // List<Integer>
+
+List<Integer> nums = new ArrayList<>();
+Function<Integer, Integer> square = x -> x * x;
+
+public int add(int a, int b) { return a + b; }
+```
+
+Kotlin infers more (including many return types); Java keeps method signatures explicit and uses `var` only for locals.
+
+### 5. Smart Casts
+
+```kotlin
+fun printLength(obj: Any) {
+    if (obj is String) {
+        println(obj.length)      // Smart cast to String
+    }
+}
+
+fun process(value: Any?) {
+    if (value != null) {
+        println(value.toString())
+    }
+
+    when (value) {
+        is Int -> println(value + 1)
+        is String -> println(value.length)
+        is List<*> -> println(value.size)
+    }
 }
 ```
 
 ```java
-// Java
-String name = "John";             // Can be null
-String nullable = null;           // No distinction
-List<Integer> list = List.of(1, 2, 3); // Can be modified with reflection
-int x = 10;                       // Must specify type
+public void printLength(Object obj) {
+    if (obj instanceof String) {
+        String s = (String) obj; // Explicit cast
+        System.out.println(s.length());
+    }
+}
 
-if (obj instanceof String) {
-    println(((String) obj).length()); // Explicit cast
+public void printLengthModern(Object obj) {
+    if (obj instanceof String s) { // Pattern matching
+        System.out.println(s.length());
+    }
 }
 ```
 
-**Key differences:**
-1. **Kotlin**: Null safety by default
-2. **Kotlin**: Immutable/mutable collections distinction
-3. **Kotlin**: Auto-generated methods for data classes
-4. **Kotlin**: Better type inference
-5. **Kotlin**: Smart casts after type checks
+Kotlin flow analysis performs smart casts automatically; Java pattern matching narrows types but is less integrated.
+
+### 6. Primitive Types
+
+```kotlin
+val x: Int = 10                  // Usually primitive on JVM
+val y: Int? = 10                 // Boxed
+val arr: IntArray = intArrayOf(1, 2, 3)
+
+val a = 1000
+val b = 1000
+println(a == b)                  // Value equality
+println(a === b)                 // Reference equality
+```
+
+```java
+int primitive = 42;
+Integer object = 42;
+
+Integer a = 1000;
+Integer b = 1000;
+System.out.println(a == b);      // false
+System.out.println(a.equals(b)); // true
+```
+
+Kotlin exposes a simpler, unified number model while compiling efficiently to JVM primitives and wrappers; Java exposes primitives vs wrappers directly.
+
+### 7. Functional Types
+
+```kotlin
+val operation: (Int, Int) -> Int = { a, b -> a + b }
+val r = operation(5, 3)
+
+val withReceiver: String.() -> String = { this + "!" }
+val text = "Hi".withReceiver()
+
+fun <T> List<T>.customFilter(pred: (T) -> Boolean): List<T> =
+    this.filter(pred)
+```
+
+```java
+Function<Integer, Integer> op = x -> x * 2;
+BiFunction<Integer, Integer, Integer> add = (a, b) -> a + b;
+
+@FunctionalInterface
+interface MyFunction { int apply(int a, int b); }
+
+MyFunction mul = (a, b) -> a * b;
+```
+
+Kotlin has native function types and extension functions; Java uses functional interfaces.
+
+### Key Takeaways
+
+1. Kotlin encodes nullability in the type system, reducing accidental NPEs.
+2. Kotlin separates read-only and mutable collections at the type level.
+3. Kotlin `data class` and function types reduce boilerplate and improve expressiveness.
+4. Kotlin offers broader type inference and built-in smart casts.
+5. Kotlin simplifies working with primitives vs wrappers while remaining efficient.
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем практические преимущества null safety в Kotlin по сравнению с Java?
+- Как различие в работе с коллекциями влияет на дизайн API?
+- Когда уместно предпочесть Java-подход Kotlin-подходу (и наоборот) в существующей JVM-кодовой базе?
+
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- What are the practical benefits of Kotlin's null safety compared to Java?
+- How does the difference in collection mutability handling affect API design?
+- When is it reasonable to prefer a Java-style approach over Kotlin's (and vice versa) in an existing JVM codebase?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- Документация Kotlin: https://kotlinlang.org/docs/home.html
+- Java Language Specification: https://docs.oracle.com/javase/specs/
 
 ## References
 
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+- Kotlin Documentation: https://kotlinlang.org/docs/home.html
+- Java Language Specification: https://docs.oracle.com/javase/specs/
 
 ## Related Questions
 
-- [[q-kotlin-static-variable--programming-languages--easy]]
 - [[q-executor-service-java--kotlin--medium]]
--

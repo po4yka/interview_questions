@@ -1,28 +1,28 @@
 ---
 id: kotlin-007
 title: "Lambda Expressions in Kotlin / Лямбда-выражения в Kotlin"
-aliases: ["Lambda Expressions in Kotlin, Лямбда-выражения в Kotlin"]
+aliases: ["Lambda Expressions in Kotlin", "Лямбда-выражения в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [functional-programming, higher-order-functions, lambda-expressions]
+subtopics: [higher-order-functions, lambda-expressions]
 question_kind: theory
 difficulty: medium
 
 # Language & provenance
 original_language: en
 language_tags: [en, ru]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
+source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository - adapted from functional interfaces content
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-timeout-withtimeout--kotlin--medium, q-dispatchers-unconfined--kotlin--medium, q-kotlin-higher-order-functions--kotlin--medium, q-withcontext-use-cases--kotlin--medium]
+related: [c-kotlin, c-kotlin-features, q-kotlin-higher-order-functions--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-18
+updated: 2025-11-09
 
 tags: [difficulty/medium, functional-programming, kotlin, lambda-expressions, sam-conversion]
 ---
@@ -33,9 +33,12 @@ tags: [difficulty/medium, functional-programming, kotlin, lambda-expressions, sa
 
 # Question (EN)
 > What are lambda expressions in Kotlin and how do they work?
+
 ## Ответ (RU)
 
 Лямбда-выражения (или лямбда-функции) — это анонимные функции, которые можно использовать для создания функциональных литералов. Они предоставляют лаконичный способ представления блока кода, который можно передавать и выполнять позже.
+
+См. также: [[c-kotlin]], [[c-kotlin-features]].
 
 ### Базовый Синтаксис
 
@@ -94,7 +97,9 @@ val reversed = processString("hello") { it.reversed() }   // "olleh"
 
 ### SAM-преобразование (Single Abstract Method)
 
-Для функциональных интерфейсов (интерфейсов с одним абстрактным методом) можно использовать SAM-преобразования, которые помогают сделать код более лаконичным, используя лямбда-выражения.
+Для функциональных интерфейсов (интерфейсов с одним абстрактным методом) можно использовать SAM-преобразования, которые помогают сделать код более лаконичным, используя лямбда-выражения. В Kotlin это применимо к:
+- Java-функциональным интерфейсам;
+- Kotlin-интерфейсам, объявленным как `fun interface`.
 
 Вместо создания класса, который реализует функциональный интерфейс вручную, можно использовать лямбда-выражение:
 
@@ -179,21 +184,21 @@ numbers.map { "$prefix$it" }  // [Number: 1, Number: 2, ...]
 
 ### Возврат Из Лямбды
 
-По умолчанию `return` в лямбде возвращает управление из охватывающей функции:
+Поведение `return` в лямбдах зависит от контекста вызова:
 
 ```kotlin
-// Нелокальный возврат (возвращает из охватывающей функции)
+// Нелокальный возврат возможен только при вызове из inline-функции
 fun processNumbers(numbers: List<Int>): Int {
     numbers.forEach {
-        if (it < 0) return -1  // Возвращает из processNumbers, не forEach
+        if (it < 0) return -1  // Нелокальный return: возвращает из processNumbers, т.к. forEach - inline
     }
     return 0
 }
 
-// Метка для возврата только из лямбды
+// Метка для возврата только из лямбды (локальный возврат)
 fun processNumbersLabeled(numbers: List<Int>): Int {
     numbers.forEach {
-        if (it < 0) return@forEach  // Возвращает из лямбды, продолжает forEach
+        if (it < 0) return@forEach  // Возвращает управление только из лямбды, цикл продолжается
     }
     return 0
 }
@@ -201,11 +206,13 @@ fun processNumbersLabeled(numbers: List<Int>): Int {
 // Пользовательская метка
 fun processNumbersCustomLabel(numbers: List<Int>): Int {
     numbers.forEach loop@{
-        if (it < 0) return@loop  // Возвращает из лямбды с пользовательской меткой
+        if (it < 0) return@loop  // Локальный возврат из лямбды с пользовательской меткой
     }
     return 0
 }
 ```
+
+Коротко: нелокальные `return` возможны только в лямбдах, передаваемых в inline-функции (и не помеченных `crossinline`/`noinline`). В противном случае `return` (или `return@label`) относится только к самой лямбде.
 
 ### Общие Случаи Использования
 
@@ -254,7 +261,7 @@ html {
 // Лямбда
 val lambda = { x: Int -> x * 2 }
 
-// Анонимная функция (похожа, но разное поведение return)
+// Анонимная функция (похожа, но иное поведение return)
 val anonymousFunc = fun(x: Int): Int {
     return x * 2
 }
@@ -263,13 +270,15 @@ val anonymousFunc = fun(x: Int): Int {
 val typedFunc = fun(x: Int): String = x.toString()
 ```
 
-**Краткое содержание**: Лямбда-выражения — это анонимные функции с лаконичным синтаксисом `{ параметры -> тело }`. Они поддерживают вывод типов, могут захватывать переменные из окружающей области видимости (замыкания), работают с SAM-преобразованием для функциональных интерфейсов и поддерживают синтаксис замыкающей лямбды. Часто используются в операциях с коллекциями, обработчиках событий и паттернах функционального программирования.
+**Краткое содержание**: Лямбда-выражения — это анонимные функции с лаконичным синтаксисом `{ параметры -> тело }`. Они поддерживают вывод типов, могут захватывать переменные из окружающей области видимости (замыкания), работают с SAM-преобразованием для функциональных интерфейсов (`fun interface` и Java SAM-типы) и поддерживают синтаксис замыкающей лямбды. Часто используются в операциях с коллекциями, обработчиках событий и паттернах функционального программирования.
 
 ---
 
 ## Answer (EN)
 
 Lambda expressions (or lambda functions) are anonymous functions that can be used to create function literals. They provide a concise way to represent a block of code that can be passed around and executed later.
+
+See also: [[c-kotlin]], [[c-kotlin-features]].
 
 ### Basic Syntax
 
@@ -328,7 +337,9 @@ val reversed = processString("hello") { it.reversed() }   // "olleh"
 
 ### SAM Conversion (Single Abstract Method)
 
-For functional interfaces (interfaces with only one abstract method), you can use SAM conversions that help make code more concise by using lambda expressions.
+For functional interfaces (interfaces with only one abstract method), you can use SAM conversions that help make code more concise by using lambda expressions. In Kotlin this applies to:
+- Java functional interfaces;
+- Kotlin interfaces declared as `fun interface`.
 
 Instead of creating a class that implements a functional interface manually, you can use a lambda expression:
 
@@ -413,21 +424,21 @@ numbers.map { "$prefix$it" }  // [Number: 1, Number: 2, ...]
 
 ### Returning from Lambda
 
-By default, `return` in a lambda returns from the enclosing function:
+The behavior of `return` inside lambdas depends on the call context:
 
 ```kotlin
-// Non-local return (returns from the enclosing function)
+// Non-local return is possible only when called from an inline function
 fun processNumbers(numbers: List<Int>): Int {
     numbers.forEach {
-        if (it < 0) return -1  // Returns from processNumbers, not forEach
+        if (it < 0) return -1  // Non-local return: returns from processNumbers because forEach is inline
     }
     return 0
 }
 
-// Label to return from lambda only
+// Label to return from the lambda only (local return)
 fun processNumbersLabeled(numbers: List<Int>): Int {
     numbers.forEach {
-        if (it < 0) return@forEach  // Returns from lambda, continues forEach
+        if (it < 0) return@forEach  // Returns only from the lambda, continues forEach
     }
     return 0
 }
@@ -435,11 +446,13 @@ fun processNumbersLabeled(numbers: List<Int>): Int {
 // Custom label
 fun processNumbersCustomLabel(numbers: List<Int>): Int {
     numbers.forEach loop@{
-        if (it < 0) return@loop  // Returns from lambda using custom label
+        if (it < 0) return@loop  // Local return from the lambda using custom label
     }
     return 0
 }
 ```
+
+In short: non-local `return` is only allowed from lambdas passed to inline functions (that are not marked `crossinline`/`noinline`). Otherwise, `return` (or `return@label`) applies only to the lambda itself.
 
 ### Common Use Cases
 
@@ -497,7 +510,7 @@ val anonymousFunc = fun(x: Int): Int {
 val typedFunc = fun(x: Int): String = x.toString()
 ```
 
-**English Summary**: Lambda expressions are anonymous functions with concise syntax `{ parameters -> body }`. They support type inference, can capture variables from enclosing scope (closures), work with SAM conversion for functional interfaces, and support trailing lambda syntax. Common in collection operations, event handlers, and functional programming patterns.
+**English Summary**: Lambda expressions are anonymous functions with concise syntax `{ parameters -> body }`. They support type inference, can capture variables from enclosing scope (closures), work with SAM conversion for functional interfaces (`fun interface` and Java SAM types), and support trailing lambda syntax. Common in collection operations, event handlers, and functional programming patterns.
 
 ## Follow-ups
 

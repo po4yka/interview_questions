@@ -2,7 +2,7 @@
 id: lang-085
 title: "Kotlin Java Equality Operators / Операторы равенства Kotlin и Java"
 aliases: [Kotlin Java Equality Operators, Операторы равенства Kotlin и Java]
-topic: programming-languages
+topic: kotlin
 subtopics: [operators, type-system]
 question_kind: theory
 difficulty: medium
@@ -10,28 +10,25 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-null-checks-methods--programming-languages--easy, q-kotlin-partition-function--programming-languages--easy]
+related: [c-kotlin, c-equality, q-kotlin-non-inheritable-class--programming-languages--easy, q-kotlin-null-checks-methods--programming-languages--easy]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [comparison, difficulty/medium, equality, java, operators, programming-languages]
+updated: 2025-11-10
+tags: [comparison, difficulty/medium, equality, java, operators, kotlin]
 ---
-# Чем Отличаются Двойное Равно В Java И Kotlin?
-
 # Вопрос (RU)
 > Чем отличаются двойное равно в Java и Kotlin?
-
----
 
 # Question (EN)
 > What is the difference between double equals in Java and Kotlin?
 
 ## Ответ (RU)
 
+Kotlin имеет два оператора равенства: `==` для структурного равенства и `===` для ссылочного равенства. В отличие от Java, оператор `==` в Kotlin ведет себя как null-safe обертка над `equals()` для ссылочных типов.
 
-Kotlin имеет два оператора равенства: `==` для структурного равенства и `===` для ссылочного равенства, отличаясь от поведения Java.
+См. также: [[c-kotlin]], [[c-equality]].
 
 ### Структурное Равенство (`==`)
-Сравнивает значения (вызывает `equals()`):
+Сравнивает значения (для ссылочных типов вызывает безопасно `equals()`):
 ```kotlin
 val a = "Hello"
 val b = "Hello"
@@ -43,12 +40,16 @@ val p2 = Person("Alice")
 println(p1 == p2)  // true (data классы авто-реализуют equals)
 ```
 
+Для ссылочных типов выражение `a == b` компилируется в `a?.equals(b) ?: (b === null)`, поэтому оно:
+- не выбрасывает NPE при `a == null`;
+- корректно обрабатывает сравнение с `null`.
+
 ### Ссылочное Равенство (`===`)
 Сравнивает ссылки (тот же объект):
 ```kotlin
 val a = "Hello"
 val b = "Hello"
-println(a === b)  // true (string pooling)
+println(a === b)  // может быть true из-за интернирования строк, но это деталь реализации, а не гарантия языка
 
 val p1 = Person("Alice")
 val p2 = Person("Alice")
@@ -62,7 +63,7 @@ println(p1 === p3)  // true (та же ссылка)
 
 | Операция | Kotlin | Java |
 |----------|--------|------|
-| Равенство значений | `==` | `.equals()` |
+| Равенство значений | `==` (null-safe, вызывает `equals()` для ссылочных типов) | `.equals()` |
 | Равенство ссылок | `===` | `==` |
 | Null-safe сравнение | `==` | Ручная проверка null |
 
@@ -93,20 +94,19 @@ a == "text"  // false (null-safe, не выбрасывает NPE)
 ```
 
 ### Лучшие Практики
-- Используйте `==` для сравнения значений
-- Используйте `===` только когда нужно равенство ссылок
-- Для коллекций `==` сравнивает содержимое
-- Data классы предоставляют структурное равенство автоматически
-
----
+- Используйте `==` для сравнения значений.
+- Используйте `===` только когда нужно равенство ссылок.
+- Для коллекций `==` сравнивает содержимое.
+- Data классы предоставляют структурное равенство автоматически.
 
 ## Answer (EN)
 
+Kotlin has two equality operators: `==` for structural equality and `===` for referential equality. Unlike Java, the `==` operator in Kotlin acts as a null-safe wrapper around `equals()` for reference types.
 
-Kotlin has two equality operators: `==` for structural equality and `===` for referential equality, differing from Java's behavior.
+See also: [[c-kotlin]], [[c-equality]].
 
 ### Structural Equality (`==`)
-Compares values (calls `equals()`):
+Compares values (for reference types safely calls `equals()`):
 ```kotlin
 val a = "Hello"
 val b = "Hello"
@@ -118,12 +118,16 @@ val p2 = Person("Alice")
 println(p1 == p2)  // true (data classes auto-implement equals)
 ```
 
+For reference types, `a == b` is compiled to `a?.equals(b) ?: (b === null)`, so it:
+- does not throw NPE when `a` is null;
+- correctly handles comparison with `null`.
+
 ### Referential Equality (`===`)
 Compares references (same object):
 ```kotlin
 val a = "Hello"
 val b = "Hello"
-println(a === b)  // true (string pooling)
+println(a === b)  // may be true due to string interning, but this is an implementation detail, not a language guarantee
 
 val p1 = Person("Alice")
 val p2 = Person("Alice")
@@ -137,7 +141,7 @@ println(p1 === p3)  // true (same reference)
 
 | Operation | Kotlin | Java |
 |-----------|--------|------|
-| Value equality | `==` | `.equals()` |
+| Value equality | `==` (null-safe, calls `equals()` for reference types) | `.equals()` |
 | Reference equality | `===` | `==` |
 | Null-safe comparison | `==` | Manual null check |
 
@@ -168,13 +172,16 @@ a == "text"  // false (null-safe, doesn't throw NPE)
 ```
 
 ### Best Practices
-- Use `==` for value comparison
-- Use `===` only when you need reference equality
-- For collections, `==` compares contents
-- Data classes provide structural equality automatically
+- Use `==` for value comparison.
+- Use `===` only when you need reference equality.
+- For collections, `==` compares contents.
+- Data classes provide structural equality automatically.
 
----
----
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого поведения от Java?
+- Когда вы бы использовали это на практике?
+- Каких типичных ошибок следует избегать?
 
 ## Follow-ups
 
@@ -182,13 +189,22 @@ a == "text"  // false (null-safe, doesn't throw NPE)
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-partition-function--programming-languages--easy]]
+- [[q-kotlin-null-checks-methods--programming-languages--easy]]
+- [[q-kotlin-non-inheritable-class--programming-languages--easy]]
 
 ## Related Questions
 
 - [[q-kotlin-partition-function--programming-languages--easy]]
 - [[q-kotlin-null-checks-methods--programming-languages--easy]]
 - [[q-kotlin-non-inheritable-class--programming-languages--easy]]
-

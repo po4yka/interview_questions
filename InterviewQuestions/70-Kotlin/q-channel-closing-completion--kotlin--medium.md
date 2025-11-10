@@ -1,11 +1,11 @@
 ---
 id: kotlin-078
 title: "Channel Closing and Completion / Закрытие и завершение каналов"
-aliases: ["Channel Closing and Completion, Закрытие и завершение каналов"]
+aliases: ["Channel Closing and Completion", "Закрытие и завершение каналов"]
 
 # Classification
 topic: kotlin
-subtopics: [channel-closing, channels, cleanup]
+subtopics: [channels, coroutines, cleanup]
 question_kind: theory
 difficulty: medium
 
@@ -18,20 +18,720 @@ source_note: Comprehensive Kotlin Coroutines Channel Lifecycle Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-channel-exception-handling--kotlin--hard, q-channels-basics-types--kotlin--medium, q-produce-actor-builders--kotlin--medium]
+related: [c-kotlin, c-coroutines, q-channels-basics-types--kotlin--medium, q-produce-actor-builders--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 
 tags: [channels, cleanup, closing, completion, coroutines, difficulty/medium, kotlin]
 ---
 
+# Вопрос (RU)
+> Как правильно закрывать и завершать каналы? Объясните close(), cancel(), разницу между ClosedSendChannelException и ClosedReceiveChannelException и лучшие практики очистки ресурсов.
+
 # Question (EN)
 > How do you properly close and complete channels? Explain close(), cancel(), the difference between ClosedSendChannelException and ClosedReceiveChannelException, and best practices for cleanup.
 
-# Вопрос (RU)
-> Как правильно закрывать и завершать каналы? Объясните close(), cancel(), разницу между ClosedSendChannelException и ClosedReceiveChannelException и лучшие практики очистки ресурсов.
+---
+
+## Ответ (RU)
+
+Правильное управление жизненным циклом каналов критически важно для предотвращения утечек ресурсов, корректной обработки ошибок и управляемого завершения работы корутинных систем.
+
+### Понимание состояний канала
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
+// Канал имеет три основных состояния
+fun channelStates() = runBlocking {
+    val channel = Channel<Int>()
+
+    // 1. АКТИВЕН: можно отправлять и получать
+    println("isClosedForSend: ${channel.isClosedForSend}") // false
+    println("isClosedForReceive: ${channel.isClosedForReceive}") // false
+
+    channel.send(1)
+
+    // 2. ЗАКРЫТ ДЛЯ ОТПРАВКИ: новые send() запрещены, но можно получать
+    channel.close()
+    println("isClosedForSend: ${channel.isClosedForSend}") // true
+    println("isClosedForReceive: ${channel.isClosedForReceive}") // false
+
+    // Все еще можно получить буферизованные значения
+    println("Received: ${channel.receive()}") // 1
+
+    // 3. ЗАКРЫТ ДЛЯ ПОЛУЧЕНИЯ: все значения прочитаны
+    println("isClosedForReceive: ${channel.isClosedForReceive}") // true
+}
+```
+
+Кратко:
+- isClosedForSend == true: новые send/trySend недопустимы, но чтение возможно, пока есть элементы.
+- isClosedForReceive == true: канал полностью исчерпан, дальнейшие receive() приведут к ClosedReceiveChannelException.
+
+### close() vs cancel() vs close(cause)
+
+Ключевые идеи:
+- close(): мягкое (graceful) завершение, сигнал "значений больше не будет"; уже отправленные элементы остаются доступны для чтения.
+- cancel(cause): немедленная отмена с причиной; операции send/receive возобновляются с исключением; на сохранность буфера полагаться нельзя.
+- close(cause): как close(), но дополнительно фиксирует причину завершения для диагностики/проброса.
+
+```kotlin
+class ChannelClosingMethodsRu(private val scope: CoroutineScope) {
+
+    // close(): изящное завершение
+    suspend fun closeExample() = coroutineScope {
+        val channel = Channel<Int>(capacity = 10)
+
+        val producer = launch {
+            try {
+                for (i in 1..5) {
+                    channel.send(i)
+                }
+            } finally {
+                channel.close() // Сигнал, что значений больше не будет
+                println("Channel closed normally")
+            }
+        }
+
+        // Потребитель читает все значения
+        for (value in channel) {
+            println("Received: $value")
+        }
+        producer.join()
+        println("All values consumed")
+    }
+
+    // cancel(): немедленная отмена с причиной, буфер может быть отброшен
+    suspend fun cancelExample() = coroutineScope {
+        val channel = Channel<Int>(capacity = 10)
+
+        val producerJob = launch {
+            try {
+                for (i in 1..100) {
+                    channel.send(i)
+                    delay(100)
+                }
+            } catch (e: CancellationException) {
+                println("Producer cancelled")
+                throw e
+            }
+        }
+
+        delay(250)
+
+        // Останавливаем продюсера и канал
+        producerJob.cancel()
+        channel.cancel()
+
+        println("Channel cancelled")
+    }
+
+    // close(cause): закрытие с причиной для диагностики
+    suspend fun closeWithCauseExample() = coroutineScope {
+        val channel = Channel<Int>()
+
+        val producer = launch {
+            try {
+                repeat(10) {
+                    if (it == 5) {
+                        throw IllegalStateException("Something went wrong")
+                    }
+                    channel.send(it)
+                }
+            } catch (e: Exception) {
+                channel.close(e) // Закрываем с причиной
+            }
+        }
+
+        for (value in channel) {
+            println("Received: $value")
+        }
+
+        producer.join()
+
+        // ВАЖНО: причину берем через getCompletionExceptionOrNull(), а не из ClosedReceiveChannelException
+        val cause = channel.getCompletionExceptionOrNull()?.cause
+        if (cause != null) {
+            println("Channel closed due to: ${cause.message}")
+        }
+    }
+}
+```
+
+### Исключения: ClosedSendChannelException vs ClosedReceiveChannelException
+
+```kotlin
+class ChannelExceptionsRu(private val scope: CoroutineScope) {
+
+    // ClosedSendChannelException: send() в закрытый канал
+    suspend fun closedSendExample() = coroutineScope {
+        val channel = Channel<Int>()
+
+        channel.close()
+
+        try {
+            channel.send(1) // Бросит ClosedSendChannelException
+        } catch (e: ClosedSendChannelException) {
+            println("Cannot send to closed channel: $e")
+        }
+
+        // Безопасная альтернатива: trySend
+        val result = channel.trySend(1)
+        if (result.isFailure) {
+            println("trySend failed; closed=${result.isClosed}")
+        }
+    }
+
+    // ClosedReceiveChannelException: receive() из пустого закрытого канала
+    suspend fun closedReceiveExample() = coroutineScope {
+        val channel = Channel<Int>()
+
+        channel.send(1)
+        channel.close()
+
+        // Первое чтение успешно
+        println("First: ${channel.receive()}") // 1
+
+        try {
+            // Второе чтение — элементов нет
+            channel.receive() // ClosedReceiveChannelException
+        } catch (e: ClosedReceiveChannelException) {
+            println("No more values: $e")
+        }
+
+        // Безопасная альтернатива: tryReceive
+        val result = channel.tryReceive()
+        if (result.isFailure) {
+            println("tryReceive failed; closed=${result.isClosed}")
+        }
+
+        // Рекомендуется: итерация for (x in channel)
+        val channel2 = Channel<Int>()
+        channel2.send(1)
+        channel2.send(2)
+        channel2.close()
+
+        for (value in channel2) {
+            println(value) // Без исключений, цикл завершится по закрытию канала
+        }
+    }
+
+    // Обработка причины закрытия (НЕ использовать cause из ClosedReceiveChannelException)
+    suspend fun closeCauseExample() = coroutineScope {
+        val channel = Channel<String>()
+
+        val producer = launch {
+            try {
+                channel.send("First")
+                throw java.io.IOException("Network error")
+            } catch (e: Exception) {
+                channel.close(e) // Пробрасываем ошибку как причину завершения
+            }
+        }
+
+        for (value in channel) {
+            println("Received: $value")
+        }
+
+        producer.join()
+
+        val completion = channel.getCompletionExceptionOrNull()
+        val cause = completion?.cause
+        if (cause is java.io.IOException) {
+            println("Channel closed due to network error: ${cause.message}")
+        }
+    }
+}
+```
+
+### Паттерны producer-consumer с корректной очисткой
+
+```kotlin
+class ProperCleanupPatternsRu(private val scope: CoroutineScope) {
+
+    // Паттерн 1: продюсер закрывает канал
+    suspend fun producerClosesChannel() = coroutineScope {
+        val channel = Channel<Int>()
+
+        val producer = launch {
+            try {
+                for (i in 1..10) {
+                    channel.send(i)
+                }
+            } catch (e: Exception) {
+                println("Producer error: $e")
+            } finally {
+                channel.close()
+                println("Producer closed channel")
+            }
+        }
+
+        for (value in channel) {
+            println("Processed: $value")
+        }
+
+        producer.join()
+    }
+
+    // Паттерн 2: несколько продюсеров, координатор закрывает канал
+    suspend fun multipleProducersPattern() = coroutineScope {
+        val channel = Channel<Int>(capacity = 100)
+
+        val producers = List(3) { id ->
+            launch {
+                try {
+                    repeat(10) {
+                        channel.send(id * 100 + it)
+                    }
+                } catch (e: ClosedSendChannelException) {
+                    println("Producer $id: Channel already closed")
+                }
+            }
+        }
+
+        producers.joinAll()
+
+        channel.close()
+        println("All producers finished, channel closed")
+
+        for (value in channel) {
+            println("Received: $value")
+        }
+    }
+
+    // Паттерн 3: потребитель завершает работу раньше и инициирует отмену
+    suspend fun consumerCancelsEarly() = coroutineScope {
+        val channel = Channel<Int>()
+
+        val producer = launch {
+            try {
+                var i = 0
+                while (true) {
+                    channel.send(i++)
+                    delay(100)
+                }
+            } catch (e: ClosedSendChannelException) {
+                println("Channel closed by consumer")
+            } finally {
+                println("Producer cleaning up")
+            }
+        }
+
+        val consumer = launch {
+            repeat(5) {
+                println("Received: ${channel.receive()}")
+            }
+            channel.cancel()
+            producer.cancel()
+        }
+
+        consumer.join()
+    }
+
+    // Паттерн 4: закрытие по тайм-ауту
+    suspend fun timeoutBasedClosure() = coroutineScope {
+        val channel = Channel<Int>()
+
+        val producer = launch {
+            try {
+                var i = 0
+                while (true) {
+                    channel.send(i++)
+                    delay(50)
+                }
+            } catch (e: ClosedSendChannelException) {
+                println("Channel closed")
+            }
+        }
+
+        try {
+            withTimeout(500) {
+                for (value in channel) {
+                    println("Received: $value")
+                }
+            }
+        } catch (e: TimeoutCancellationException) {
+            println("Timeout reached")
+        } finally {
+            channel.cancel()
+            producer.cancel()
+        }
+    }
+}
+```
+
+### Использование produce builder (рекомендуется)
+
+```kotlin
+class ProduceBuilderPatternRu {
+
+    // produce автоматически закрывает канал при завершении корутины-продюсера
+    fun produceExample() = runBlocking {
+        val numbers = produce {
+            for (i in 1..10) {
+                send(i)
+            }
+            // Явный close() не нужен
+        }
+
+        for (num in numbers) {
+            println(num)
+        }
+    }
+
+    // produce с обработкой исключений: канал закрывается с причиной
+    fun produceWithException() = runBlocking {
+        val numbers = produce {
+            for (i in 1..10) {
+                if (i == 5) throw IllegalStateException("Error at 5")
+                send(i)
+            }
+        }
+
+        try {
+            for (num in numbers) {
+                println(num)
+            }
+        } catch (e: ClosedReceiveChannelException) {
+            // Само исключение не несет полезной cause — берем причину из канала
+            val cause = numbers.getCompletionExceptionOrNull()?.cause
+            println("Channel closed due to: ${cause?.message}")
+        }
+    }
+
+    // produce с отменой
+    fun produceWithCancellation() = runBlocking {
+        val numbers = produce {
+            var i = 0
+            try {
+                while (true) {
+                    send(i++)
+                    delay(100)
+                }
+            } finally {
+                println("Producer cancelled after $i items")
+            }
+        }
+
+        repeat(5) {
+            println(numbers.receive())
+        }
+
+        numbers.cancel() // Отмена продюсера и закрытие канала
+    }
+}
+```
+
+### Продвинутые сценарии очистки
+
+```kotlin
+class AdvancedCleanupRu(private val scope: CoroutineScope) {
+
+    // Работа с внешними ресурсами
+    suspend fun channelWithResources() = coroutineScope {
+        class DatabaseConnection : AutoCloseable {
+            fun query(sql: String): List<Int> = listOf(1, 2, 3)
+            override fun close() {
+                println("Database connection closed")
+            }
+        }
+
+        val channel = Channel<Int>()
+
+        val producer = launch {
+            DatabaseConnection().use { db ->
+                try {
+                    val results = db.query("SELECT * FROM data")
+                    for (result in results) {
+                        channel.send(result)
+                    }
+                } finally {
+                    channel.close()
+                    println("Channel closed")
+                }
+            }
+        }
+
+        for (value in channel) {
+            println("Received: $value")
+        }
+
+        producer.join()
+    }
+
+    // Очистка в pipeline
+    suspend fun pipelineCleanup() = coroutineScope {
+        val input = Channel<Int>()
+        val output = Channel<String>()
+
+        val producer = launch {
+            try {
+                for (i in 1..10) {
+                    input.send(i)
+                }
+            } finally {
+                input.close()
+                println("Input closed")
+            }
+        }
+
+        val processor = launch {
+            try {
+                for (value in input) {
+                    output.send("Processed: $value")
+                }
+            } finally {
+                output.close()
+                println("Output closed")
+            }
+        }
+
+        for (result in output) {
+            println(result)
+        }
+
+        joinAll(producer, processor)
+        println("Pipeline complete")
+    }
+
+    // Проброс ошибок по pipeline
+    suspend fun errorPropagation() = coroutineScope {
+        val channel1 = Channel<Int>()
+        val channel2 = Channel<String>()
+
+        val stage1 = launch {
+            try {
+                for (i in 1..10) {
+                    if (i == 5) throw RuntimeException("Stage 1 error")
+                    channel1.send(i)
+                }
+                channel1.close()
+            } catch (e: Exception) {
+                channel1.close(e)
+            }
+        }
+
+        val stage2 = launch {
+            try {
+                for (value in channel1) {
+                    channel2.send("Stage2: $value")
+                }
+                channel2.close()
+            } catch (e: Exception) {
+                val cause = channel1.getCompletionExceptionOrNull()?.cause ?: e
+                channel2.close(cause)
+            }
+        }
+
+        try {
+            for (result in channel2) {
+                println(result)
+            }
+        } catch (e: ClosedReceiveChannelException) {
+            val cause = channel2.getCompletionExceptionOrNull()?.cause
+            println("Consumer received error: ${cause?.message}")
+        }
+
+        joinAll(stage1, stage2)
+    }
+}
+```
+
+### Тестирование закрытия каналов
+
+```kotlin
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.test.runTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import kotlin.test.assertFailsWith
+
+class ChannelClosureTestsRu {
+
+    @Test
+    fun `test channel closes after all values sent`() = runTest {
+        val channel = Channel<Int>()
+
+        launch {
+            channel.send(1)
+            channel.send(2)
+            channel.close()
+        }
+
+        val values = mutableListOf<Int>()
+        for (value in channel) {
+            values.add(value)
+        }
+
+        assertEquals(listOf(1, 2), values)
+        assertTrue(channel.isClosedForReceive)
+    }
+
+    @Test
+    fun `test send to closed channel throws exception`() = runTest {
+        val channel = Channel<Int>()
+        channel.close()
+
+        assertFailsWith<ClosedSendChannelException> {
+            channel.send(1)
+        }
+    }
+
+    @Test
+    fun `test receive from empty closed channel throws exception`() = runTest {
+        val channel = Channel<Int>()
+        channel.close()
+
+        assertFailsWith<ClosedReceiveChannelException> {
+            channel.receive()
+        }
+    }
+
+    @Test
+    fun `test close with cause propagates error`() = runTest {
+        val channel = Channel<Int>()
+        val error = IllegalStateException("Test error")
+
+        channel.close(error)
+
+        val ex = assertFailsWith<ClosedReceiveChannelException> {
+            channel.receive()
+        }
+
+        val completionCause = channel.getCompletionExceptionOrNull()?.cause
+        assertEquals(error, completionCause)
+    }
+
+    @Test
+    fun `test trySend on closed channel returns failure`() = runTest {
+        val channel = Channel<Int>()
+        channel.close()
+
+        val result = channel.trySend(1)
+
+        assertTrue(result.isFailure)
+        assertTrue(result.isClosed)
+    }
+}
+```
+
+### Лучшие практики и анти-паттерны
+
+```kotlin
+class BestPracticesRu(private val scope: CoroutineScope) {
+
+    // ХОРОШО: закрывать канал в finally в ответственной корутине-продюсере
+    suspend fun goodClosePattern() = coroutineScope {
+        val channel = Channel<Int>()
+
+        launch {
+            try {
+                repeat(10) {
+                    channel.send(it)
+                }
+            } finally {
+                channel.close()
+            }
+        }
+    }
+
+    // ПЛОХО: не закрыть канал — потребитель, итерирующийся по нему, может зависнуть
+    suspend fun badNoClose() = coroutineScope {
+        val channel = Channel<Int>()
+
+        launch {
+            repeat(10) {
+                channel.send(it)
+            }
+            // Нет close() — for (x in channel) не завершится
+        }
+
+        for (value in channel) {
+            println(value)
+        }
+    }
+
+    // ХОРОШО: использовать produce builder
+    suspend fun goodProduceBuilder() = coroutineScope {
+        val numbers = produce {
+            repeat(10) { send(it) }
+            // Автоматическое закрытие при завершении
+        }
+
+        for (num in numbers) {
+            println(num)
+        }
+    }
+
+    // ХОРОШО: обрабатывать ошибки закрытия/отправки
+    suspend fun goodErrorHandling() = coroutineScope {
+        val channel = Channel<Int>()
+
+        launch {
+            try {
+                channel.send(1)
+            } catch (e: ClosedSendChannelException) {
+                println("Channel already closed")
+            }
+        }
+    }
+
+    // ПЛОХО: многократное закрытие
+    suspend fun badMultipleClose() = coroutineScope {
+        val channel = Channel<Int>()
+
+        val first = channel.close()
+        val second = channel.close() // Бесполезно, вернет false
+        val third = channel.close(IllegalStateException()) // Причина не переопределится
+
+        println("First close=$first, second close=$second, third close=$third")
+    }
+
+    // ХОРОШО: закрывать после завершения всех продюсеров
+    suspend fun goodMultipleProducers() = coroutineScope {
+        val channel = Channel<Int>()
+
+        val jobs = List(3) { id ->
+            launch {
+                repeat(10) {
+                    channel.send(id * 10 + it)
+                }
+            }
+        }
+
+        jobs.joinAll()
+        channel.close()
+    }
+
+    // ХОРОШО: cancel() при ошибке (закрывает канал с CancellationException)
+    suspend fun goodCancelOnError() = coroutineScope {
+        val channel = Channel<Int>()
+
+        try {
+            launch {
+                for (i in generateSequence(0) { it + 1 }) {
+                    channel.send(i)
+                    delay(100)
+                }
+            }
+
+            for (value in channel) {
+                if (value > 10) {
+                    throw IllegalStateException("Value too high")
+                }
+                println(value)
+            }
+        } finally {
+            channel.cancel()
+        }
+    }
+}
+```
 
 ---
 
@@ -68,16 +768,21 @@ fun channelStates() = runBlocking {
 }
 ```
 
-### close() Vs cancel() Vs closeCause
+### close() vs cancel() vs close(cause)
+
+Key ideas:
+- close(): graceful, signals "no more elements"; buffered elements remain available for receive.
+- cancel(cause): closes the channel with a (cancellation) cause; suspending send/receive operations are resumed with an exception; buffered elements may be discarded and should not be relied upon.
+- close(cause): similar to close(), but records a completion cause (e.g., an error) for diagnostic/propagation purposes.
 
 ```kotlin
-class ChannelClosingMethods {
+class ChannelClosingMethods(private val scope: CoroutineScope) {
 
     // close(): Graceful shutdown
-    suspend fun closeExample() {
+    suspend fun closeExample() = coroutineScope {
         val channel = Channel<Int>(capacity = 10)
 
-        launch {
+        val producer = launch {
             try {
                 for (i in 1..5) {
                     channel.send(i)
@@ -92,11 +797,12 @@ class ChannelClosingMethods {
         for (value in channel) {
             println("Received: $value")
         }
+        producer.join()
         println("All values consumed")
     }
 
-    // cancel(): Immediate cancellation
-    suspend fun cancelExample() {
+    // cancel(): Immediate cancellation with cause, may discard buffered elements
+    suspend fun cancelExample() = coroutineScope {
         val channel = Channel<Int>(capacity = 10)
 
         val producerJob = launch {
@@ -108,25 +814,23 @@ class ChannelClosingMethods {
             } catch (e: CancellationException) {
                 println("Producer cancelled")
                 throw e
-            } finally {
-                channel.close()
             }
         }
 
-        delay(250) // Receive a few values
+        delay(250) // Receive a few values (if there is a consumer)
 
-        producerJob.cancel() // Stop producer immediately
-        channel.cancel() // Cancel channel
+        // Stop producer & channel; channel.cancel() closes it with CancellationException
+        producerJob.cancel()
+        channel.cancel()
 
-        // No more values available
         println("Channel cancelled")
     }
 
-    // close(cause): Close with exception
-    suspend fun closeWithCauseExample() {
+    // close(cause): Close with exception cause for diagnostic purposes
+    suspend fun closeWithCauseExample() = coroutineScope {
         val channel = Channel<Int>()
 
-        launch {
+        val producer = launch {
             try {
                 repeat(10) {
                     if (it == 5) {
@@ -135,28 +839,32 @@ class ChannelClosingMethods {
                     channel.send(it)
                 }
             } catch (e: Exception) {
-                channel.close(e) // Close with cause
+                channel.close(e) // Close with cause; consumers will observe closure
             }
         }
 
-        try {
-            for (value in channel) {
-                println("Received: $value")
-            }
-        } catch (e: ClosedReceiveChannelException) {
-            println("Channel closed due to: ${e.cause}")
+        for (value in channel) {
+            println("Received: $value")
+        }
+
+        producer.join()
+
+        // Access completion cause explicitly if needed
+        val cause = channel.getCompletionExceptionOrNull()?.cause
+        if (cause != null) {
+            println("Channel closed due to: ${cause.message}")
         }
     }
 }
 ```
 
-### Exceptions: ClosedSendChannelException Vs ClosedReceiveChannelException
+### Exceptions: ClosedSendChannelException vs ClosedReceiveChannelException
 
 ```kotlin
-class ChannelExceptions {
+class ChannelExceptions(private val scope: CoroutineScope) {
 
     // ClosedSendChannelException: send() on closed channel
-    suspend fun closedSendExample() {
+    suspend fun closedSendExample() = coroutineScope {
         val channel = Channel<Int>()
 
         channel.close()
@@ -170,12 +878,12 @@ class ChannelExceptions {
         // Safe alternative: trySend
         val result = channel.trySend(1)
         if (result.isFailure) {
-            println("trySend failed: ${result.isClosedForSend}")
+            println("trySend failed; closed=${result.isClosed}")
         }
     }
 
     // ClosedReceiveChannelException: receive() on empty closed channel
-    suspend fun closedReceiveExample() {
+    suspend fun closedReceiveExample() = coroutineScope {
         val channel = Channel<Int>()
 
         channel.send(1)
@@ -194,7 +902,7 @@ class ChannelExceptions {
         // Safe alternative: tryReceive
         val result = channel.tryReceive()
         if (result.isFailure) {
-            println("tryReceive failed: ${result.isClosedForReceive}")
+            println("tryReceive failed; closed=${result.isClosed}")
         }
 
         // Best practice: iterate with for loop
@@ -208,28 +916,29 @@ class ChannelExceptions {
         }
     }
 
-    // Handling close cause
-    suspend fun closeCauseExample() {
+    // Handling close cause (do NOT rely on ClosedReceiveChannelException.cause)
+    suspend fun closeCauseExample() = coroutineScope {
         val channel = Channel<String>()
 
-        launch {
+        val producer = launch {
             try {
                 channel.send("First")
-                throw IOException("Network error")
-            } catch (e: IOException) {
-                channel.close(e) // Propagate error
+                throw java.io.IOException("Network error")
+            } catch (e: Exception) {
+                channel.close(e) // Propagate error as channel completion cause
             }
         }
 
-        try {
-            for (value in channel) {
-                println("Received: $value")
-            }
-        } catch (e: ClosedReceiveChannelException) {
-            val cause = e.cause
-            if (cause is IOException) {
-                println("Channel closed due to network error: ${cause.message}")
-            }
+        for (value in channel) {
+            println("Received: $value")
+        }
+
+        producer.join()
+
+        val completion = channel.getCompletionExceptionOrNull()
+        val cause = completion?.cause
+        if (cause is java.io.IOException) {
+            println("Channel closed due to network error: ${cause.message}")
         }
     }
 }
@@ -238,10 +947,10 @@ class ChannelExceptions {
 ### Producer-Consumer Patterns with Proper Cleanup
 
 ```kotlin
-class ProperCleanupPatterns {
+class ProperCleanupPatterns(private val scope: CoroutineScope) {
 
     // Pattern 1: Producer closes channel
-    suspend fun producerClosesChannel() {
+    suspend fun producerClosesChannel() = coroutineScope {
         val channel = Channel<Int>()
 
         // Producer responsible for closing
@@ -267,7 +976,7 @@ class ProperCleanupPatterns {
     }
 
     // Pattern 2: Multiple producers, coordinator closes
-    suspend fun multipleProducersPattern() {
+    suspend fun multipleProducersPattern() = coroutineScope {
         val channel = Channel<Int>(capacity = 100)
 
         // Multiple producers
@@ -297,7 +1006,7 @@ class ProperCleanupPatterns {
     }
 
     // Pattern 3: Consumer cancels early
-    suspend fun consumerCancelsEarly() {
+    suspend fun consumerCancelsEarly() = coroutineScope {
         val channel = Channel<Int>()
 
         val producer = launch {
@@ -328,7 +1037,7 @@ class ProperCleanupPatterns {
     }
 
     // Pattern 4: Timeout-based closure
-    suspend fun timeoutBasedClosure() {
+    suspend fun timeoutBasedClosure() = coroutineScope {
         val channel = Channel<Int>()
 
         val producer = launch {
@@ -360,37 +1069,32 @@ class ProperCleanupPatterns {
 }
 ```
 
-### Using Produce Builder (Recommended)
+### Using produce Builder (Recommended)
 
 ```kotlin
 class ProduceBuilderPattern {
 
-    // produce automatically handles closing
+    // produce automatically closes the channel when the producer coroutine completes
     fun produceExample() = runBlocking {
         val numbers = produce {
             for (i in 1..10) {
                 send(i)
             }
-            // No need to close() - done automatically
+            // No need to close() - done automatically when this coroutine completes
         }
 
         for (num in numbers) {
             println(num)
         }
-        // Channel automatically closed
+        // Channel is closed after the producer completes
     }
 
-    // produce with exception handling
+    // produce with exception handling: channel is closed with the exception as completion cause
     fun produceWithException() = runBlocking {
         val numbers = produce {
-            try {
-                for (i in 1..10) {
-                    if (i == 5) throw IllegalStateException("Error at 5")
-                    send(i)
-                }
-            } catch (e: IllegalStateException) {
-                println("Producer error: ${e.message}")
-                // Channel automatically closed with cause
+            for (i in 1..10) {
+                if (i == 5) throw IllegalStateException("Error at 5")
+                send(i)
             }
         }
 
@@ -399,7 +1103,9 @@ class ProduceBuilderPattern {
                 println(num)
             }
         } catch (e: ClosedReceiveChannelException) {
-            println("Channel closed: ${e.cause}")
+            // ClosedReceiveChannelException itself has no useful cause; inspect the channel
+            val cause = numbers.getCompletionExceptionOrNull()?.cause
+            println("Channel closed due to: ${cause?.message}")
         }
     }
 
@@ -422,7 +1128,7 @@ class ProduceBuilderPattern {
             println(numbers.receive())
         }
 
-        numbers.cancel() // Automatically cancels producer
+        numbers.cancel() // Cancels the producer coroutine and closes the channel
     }
 }
 ```
@@ -430,10 +1136,10 @@ class ProduceBuilderPattern {
 ### Advanced Cleanup Scenarios
 
 ```kotlin
-class AdvancedCleanup {
+class AdvancedCleanup(private val scope: CoroutineScope) {
 
     // Cleanup with resources
-    suspend fun channelWithResources() {
+    suspend fun channelWithResources() = coroutineScope {
         class DatabaseConnection : AutoCloseable {
             fun query(sql: String): List<Int> = listOf(1, 2, 3)
             override fun close() {
@@ -465,7 +1171,7 @@ class AdvancedCleanup {
     }
 
     // Pipeline cleanup
-    suspend fun pipelineCleanup() {
+    suspend fun pipelineCleanup() = coroutineScope {
         val input = Channel<Int>()
         val output = Channel<String>()
 
@@ -503,7 +1209,7 @@ class AdvancedCleanup {
     }
 
     // Error propagation through pipeline
-    suspend fun errorPropagation() {
+    suspend fun errorPropagation() = coroutineScope {
         val channel1 = Channel<Int>()
         val channel2 = Channel<String>()
 
@@ -513,8 +1219,9 @@ class AdvancedCleanup {
                     if (i == 5) throw RuntimeException("Stage 1 error")
                     channel1.send(i)
                 }
+                channel1.close()
             } catch (e: Exception) {
-                channel1.close(e) // Propagate error
+                channel1.close(e) // Propagate error as completion cause
             }
         }
 
@@ -523,9 +1230,11 @@ class AdvancedCleanup {
                 for (value in channel1) {
                     channel2.send("Stage2: $value")
                 }
-            } catch (e: ClosedReceiveChannelException) {
-                println("Stage 2 received error: ${e.cause}")
-                channel2.close(e.cause) // Propagate error
+                channel2.close()
+            } catch (e: Exception) {
+                // On error or upstream close with cause, close downstream with same cause
+                val cause = channel1.getCompletionExceptionOrNull()?.cause ?: e
+                channel2.close(cause)
             }
         }
 
@@ -534,7 +1243,8 @@ class AdvancedCleanup {
                 println(result)
             }
         } catch (e: ClosedReceiveChannelException) {
-            println("Consumer received error: ${e.cause}")
+            val cause = channel2.getCompletionExceptionOrNull()?.cause
+            println("Consumer received error: ${cause?.message}")
         }
 
         joinAll(stage1, stage2)
@@ -545,6 +1255,13 @@ class AdvancedCleanup {
 ### Testing Channel Closure
 
 ```kotlin
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.test.runTest
+import kotlin.test.Test
+import kotlin.test.assertEquals
+import kotlin.test.assertTrue
+import kotlin.test.assertFailsWith
+
 class ChannelClosureTests {
 
     @Test
@@ -571,7 +1288,7 @@ class ChannelClosureTests {
         val channel = Channel<Int>()
         channel.close()
 
-        assertThrows<ClosedSendChannelException> {
+        assertFailsWith<ClosedSendChannelException> {
             channel.send(1)
         }
     }
@@ -581,7 +1298,7 @@ class ChannelClosureTests {
         val channel = Channel<Int>()
         channel.close()
 
-        assertThrows<ClosedReceiveChannelException> {
+        assertFailsWith<ClosedReceiveChannelException> {
             channel.receive()
         }
     }
@@ -593,11 +1310,13 @@ class ChannelClosureTests {
 
         channel.close(error)
 
-        val exception = assertThrows<ClosedReceiveChannelException> {
+        val ex = assertFailsWith<ClosedReceiveChannelException> {
             channel.receive()
         }
 
-        assertEquals(error, exception.cause)
+        // Completion cause is available from the channel
+        val completionCause = channel.getCompletionExceptionOrNull()?.cause
+        assertEquals(error, completionCause)
     }
 
     @Test
@@ -608,7 +1327,7 @@ class ChannelClosureTests {
         val result = channel.trySend(1)
 
         assertTrue(result.isFailure)
-        assertTrue(result.isClosedForSend)
+        assertTrue(result.isClosed)
     }
 }
 ```
@@ -616,10 +1335,10 @@ class ChannelClosureTests {
 ### Best Practices and Anti-patterns
 
 ```kotlin
-class BestPractices {
+class BestPractices(private val scope: CoroutineScope) {
 
-    //  GOOD: Always close in finally
-    suspend fun goodClosePattern() {
+    //  GOOD: Always close in finally (from within a producer responsible for the channel)
+    suspend fun goodClosePattern() = coroutineScope {
         val channel = Channel<Int>()
 
         launch {
@@ -633,15 +1352,15 @@ class BestPractices {
         }
     }
 
-    //  BAD: Forgot to close
-    suspend fun badNoClose() {
+    //  BAD: Forgot to close — consumer that iterates will hang waiting for closure
+    suspend fun badNoClose() = coroutineScope {
         val channel = Channel<Int>()
 
         launch {
             repeat(10) {
                 channel.send(it)
             }
-            // Missing close() - consumer hangs!
+            // Missing close() - consumer using `for (x in channel)` would hang
         }
 
         for (value in channel) {
@@ -650,10 +1369,10 @@ class BestPractices {
     }
 
     //  GOOD: Use produce builder
-    suspend fun goodProduceBuilder() {
+    suspend fun goodProduceBuilder() = coroutineScope {
         val numbers = produce {
             repeat(10) { send(it) }
-            // Automatic close
+            // Automatic close when producer completes
         }
 
         for (num in numbers) {
@@ -662,7 +1381,7 @@ class BestPractices {
     }
 
     //  GOOD: Handle close errors
-    suspend fun goodErrorHandling() {
+    suspend fun goodErrorHandling() = coroutineScope {
         val channel = Channel<Int>()
 
         launch {
@@ -675,16 +1394,18 @@ class BestPractices {
     }
 
     //  BAD: Closing multiple times
-    suspend fun badMultipleClose() {
+    suspend fun badMultipleClose() = coroutineScope {
         val channel = Channel<Int>()
 
-        channel.close()
-        channel.close() // Harmless but unnecessary
-        channel.close(IllegalStateException()) // Ignored!
+        val first = channel.close()
+        val second = channel.close() // Harmless but unnecessary; returns false
+        val third = channel.close(IllegalStateException()) // Ignored: cause is not updated
+
+        println("First close=$first, second close=$second, third close=$third")
     }
 
     //  GOOD: Close after all producers finish
-    suspend fun goodMultipleProducers() {
+    suspend fun goodMultipleProducers() = coroutineScope {
         val channel = Channel<Int>()
 
         val jobs = List(3) { id ->
@@ -699,7 +1420,7 @@ class BestPractices {
         channel.close() // Close after all done
     }
 
-    //  GOOD: Cancel on error
+    //  GOOD: Cancel on error (channel.cancel closes with a CancellationException)
     suspend fun goodCancelOnError() = coroutineScope {
         val channel = Channel<Int>()
 
@@ -718,7 +1439,7 @@ class BestPractices {
                 println(value)
             }
         } finally {
-            channel.cancel() // Clean cancellation
+            channel.cancel() // Clean cancellation, signals error to sender/receivers
         }
     }
 }
@@ -726,81 +1447,29 @@ class BestPractices {
 
 ---
 
-## Ответ (RU)
+## Follow-ups
 
-Правильное управление жизненным циклом каналов критически важно для предотвращения утечек ресурсов и обеспечения корректного завершения работы.
-
-### Понимание Состояний Канала
-
-Канал имеет три основных состояния:
-1. **АКТИВЕН**: Можно отправлять и получать
-2. **ЗАКРЫТ ДЛЯ ОТПРАВКИ**: Нельзя отправлять, но можно получать буферизованные значения
-3. **ЗАКРЫТ ДЛЯ ПОЛУЧЕНИЯ**: Все значения получены
-
-### close() Vs cancel()
-
-```kotlin
-// close(): Изящное завершение
-channel.close() // Новые отправки запрещены, можно получить оставшиеся
-
-// cancel(): Немедленная отмена
-channel.cancel() // Все операции прекращаются
-```
-
-### Исключения
-
-- **ClosedSendChannelException**: При send() в закрытый канал
-- **ClosedReceiveChannelException**: При receive() из пустого закрытого канала
-
-### Лучшие Практики
-
-```kotlin
-//  Всегда закрывать в finally
-launch {
-    try {
-        channel.send(1)
-    } finally {
-        channel.close()
-    }
-}
-
-//  Использовать produce builder
-val numbers = produce {
-    send(1)
-    // Автоматическое закрытие
-}
-
-//  Использовать for loop вместо receive()
-for (value in channel) {
-    // Автоматическая обработка закрытия
-}
-```
-
----
-
-## Follow-up Questions (Следующие вопросы)
-
-1. **How to handle cleanup in complex channel pipelines?**
+1. How to handle cleanup in complex channel pipelines?
    - Multiple stages
    - Error propagation
    - Resource management
 
-2. **What happens to buffered values when a channel is cancelled?**
+2. What happens to buffered values when a channel is cancelled?
    - Buffer behavior
    - Data loss scenarios
    - Recovery strategies
 
-3. **How to implement graceful shutdown with channels?**
+3. How to implement graceful shutdown with channels?
    - Drain strategy
    - Timeout handling
    - Coordinated shutdown
 
-4. **How does produce builder simplify channel management?**
+4. How does `produce` builder simplify channel management?
    - Automatic closing
    - Exception handling
    - Scope integration
 
-5. **How to test channel closure scenarios?**
+5. How to test channel closure scenarios?
    - Testing normal closure
    - Testing error cases
    - Testing cancellation
@@ -819,10 +1488,8 @@ for (value in channel) {
 - [Channel Closing Best Practices](https://kotlinlang.org/docs/channels.html#closing-and-iteration-over-channels)
 
 ### Related Topics
-- Resource Management
-- Exception Handling
-- Graceful Shutdown
-- Producer-Consumer Patterns
+- [[c-kotlin]]
+- [[c-coroutines]]
 
 ---
 
@@ -830,6 +1497,3 @@ for (value in channel) {
 
 - [[q-channels-basics-types--kotlin--medium]] - Channel fundamentals
 - [[q-produce-actor-builders--kotlin--medium]] - Channel builders
-- [[q-coroutine-resource-cleanup--kotlin--medium]] - Resource cleanup
-- [[q-coroutine-exception-handling--kotlin--medium]] - Exception handling
-- [[q-channel-pipelines--kotlin--hard]] - Channel pipelines

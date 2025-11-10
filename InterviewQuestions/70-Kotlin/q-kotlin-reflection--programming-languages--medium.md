@@ -2,21 +2,19 @@
 id: lang-022
 title: "Kotlin Reflection / Рефлексия в Kotlin"
 aliases: [Kotlin Reflection, Рефлексия в Kotlin]
-topic: programming-languages
-subtopics: [metaprogramming, type-system]
+topic: kotlin
+subtopics: [c-kotlin, c-kotlin-features]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-serialization--programming-languages--easy, q-object-companion-object--kotlin--medium]
+related: [c-kotlin, q-kotlin-serialization--programming-languages--easy, q-object-companion-object--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/medium, kotlin-reflect, metaprogramming, programming-languages, reflection, runtime]
 ---
-# Что Такое Рефлексия?
-
 # Вопрос (RU)
 > Что такое рефлексия?
 
@@ -27,15 +25,15 @@ tags: [difficulty/medium, kotlin-reflect, metaprogramming, programming-languages
 
 ## Ответ (RU)
 
-**Рефлексия** — это механизм, позволяющий программе **исследовать и изменять свою собственную структуру** (классы, методы, поля) во время выполнения.
+**Рефлексия** — это механизм, позволяющий программе **исследовать и (в ограничённых случаях) изменять свою собственную структуру** (классы, методы, поля, аннотации) во время выполнения.
 
-Она позволяет:
+Она позволяет (при использовании `kotlin-reflect` и/или Java Reflection API):
 - Вызывать private методы
 - Создавать экземпляры классов по имени
 - Получать доступ/изменять private поля
 - Исследовать аннотации
 
-Это мощный, но **небезопасный и затратный по производительности** инструмент.
+Это мощный инструмент, но при злоупотреблении может быть **опасным для типобезопасности, инкапсуляции и производительности**.
 
 **Настройка:**
 
@@ -46,11 +44,15 @@ dependencies {
 }
 ```
 
+(Далее примеры используют Kotlin reflection API из `kotlin-reflect`.)
+
 **Основные применения:**
 
 **1. Получение информации о классе:**
 
 ```kotlin
+import kotlin.reflect.full.memberProperties
+
 class Person(val name: String, var age: Int) {
     private fun secret() = "Секретный метод"
 }
@@ -60,7 +62,7 @@ val person = Person("Алиса", 30)
 // Получить класс
 val kClass = person::class
 println(kClass.simpleName)  // "Person"
-println(kClass.qualifiedName)  // "com.example.Person"
+println(kClass.qualifiedName)  // "Person" или FQCN в зависимости от пакета
 
 // Получить свойства
 kClass.memberProperties.forEach { prop ->
@@ -74,10 +76,12 @@ kClass.memberProperties.forEach { prop ->
 **2. Динамическое создание экземпляров:**
 
 ```kotlin
-// Получить класс по имени
+import kotlin.reflect.full.primaryConstructor
+
+// Получить KClass по имени через Java Reflection
 val kClass = Class.forName("com.example.Person").kotlin
 
-// Получить конструктор
+// Получить конструктор (в реальном коде лучше искать primaryConstructor по сигнатуре)
 val constructor = kClass.constructors.first()
 
 // Создать экземпляр
@@ -87,6 +91,10 @@ val person = constructor.call("Боб", 25)
 **3. Доступ к private членам:**
 
 ```kotlin
+import kotlin.reflect.full.memberFunctions
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
+
 class User(private val password: String) {
     private fun getSecret() = "Секрет: $password"
 }
@@ -111,6 +119,8 @@ println(secret)  // "Секрет: 12345"
 **4. Исследование аннотаций:**
 
 ```kotlin
+import kotlin.reflect.full.memberProperties
+
 @Target(AnnotationTarget.CLASS)
 annotation class Entity(val tableName: String)
 
@@ -144,6 +154,8 @@ User::class.memberProperties.forEach { prop ->
 **5. Динамический вызов функций:**
 
 ```kotlin
+import kotlin.reflect.full.memberFunctions
+
 class Calculator {
     fun add(a: Int, b: Int) = a + b
     fun multiply(a: Int, b: Int) = a * b
@@ -163,6 +175,9 @@ println(result)  // 8
 **6. Изменение свойств:**
 
 ```kotlin
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.full.memberProperties
+
 class Settings {
     var theme: String = "light"
 }
@@ -180,14 +195,16 @@ println(settings.theme)  // "dark"
 
 **Распространённые случаи использования:**
 
-**Сериализация/Десериализация:**
+**Сериализация/Десериализация (упрощённый пример):**
 ```kotlin
+import kotlin.reflect.full.memberProperties
+
 fun <T : Any> toJson(obj: T): String {
     val kClass = obj::class
     val props = kClass.memberProperties
 
     val json = props.joinToString(", ") { prop ->
-        """"${prop.name}": "${prop.get(obj)}""""
+        "\"${prop.name}\": \"${prop.get(obj)}\""
     }
 
     return "{$json}"
@@ -199,30 +216,40 @@ val user = User("Алиса", 30)
 println(toJson(user))  // {"name": "Алиса", "age": "30"}
 ```
 
-**Dependency Injection:**
+**Dependency Injection (упрощённый рекурсивный пример):**
 ```kotlin
-class UserService
+import kotlin.reflect.KClass
+import kotlin.reflect.full.primaryConstructor
+
+class UserService(val repository: UserRepository)
 class UserRepository
 
 fun <T : Any> inject(kClass: KClass<T>): T {
     // Найти конструктор
-    val constructor = kClass.primaryConstructor!!
+    val constructor = kClass.primaryConstructor
+        ?: error("Primary constructor required for ${kClass.simpleName}")
 
-    // Получить типы параметров
+    // Получить зависимости по типам параметров
     val params = constructor.parameters.map { param ->
-        inject(param.type.classifier as KClass<*>)
+        val depClass = param.type.classifier as? KClass<*>
+            ?: error("Unsupported parameter type: ${param.type}")
+        inject(depClass)
     }
 
     // Создать экземпляр
-    return constructor.call(*params.toTypedArray())
+    @Suppress("UNCHECKED_CAST")
+    return constructor.call(*params.toTypedArray()) as T
 }
 
-// Использование
+// Использование (только для демонстрации идеи)
 val service = inject(UserService::class)
 ```
 
-**Тестирование - Доступ к private членам:**
+**Тестирование - доступ к private членам:**
 ```kotlin
+import kotlin.reflect.full.memberFunctions
+import kotlin.reflect.jvm.isAccessible
+
 class ViewModel {
     private val repository = UserRepository()
 
@@ -248,12 +275,18 @@ fun testLoadData() {
 **Влияние на производительность:**
 
 ```kotlin
-// Прямой доступ - БЫСТРО
-val name = person.name
+class Person(val name: String)
 
-// Рефлексия - МЕДЛЕННО (в 10-100 раз медленнее)
+val person = Person("Алиса")
+
+// Прямой доступ - БЫСТРО
+val direct = person.name
+
+// Рефлексия - МЕДЛЕННЕЕ (обычно заметно, может быть в разы медленнее)
+import kotlin.reflect.full.memberProperties
+
 val nameProp = Person::class.memberProperties.find { it.name == "name" }
-val name = nameProp?.get(person)
+val viaReflection = nameProp?.get(person)
 ```
 
 **Плюсы и минусы:**
@@ -261,44 +294,44 @@ val name = nameProp?.get(person)
 | Плюсы | Минусы |
 |-------|--------|
 | Динамическое поведение | Накладные расходы на производительность |
-| Универсальные фреймворки | Потеря типобезопасности |
-| Мощность | Сложный код |
-| Гибкость | Риски безопасности |
+| Универсальные фреймворки | Потеря явной типобезопасности |
+| Мощность | Усложнение кода |
+| Гибкость | Риски безопасности и нарушения инкапсуляции |
 
 **Когда использовать:**
 
 - **Используйте рефлексию для:**
-- Библиотек сериализации (Gson, Jackson)
-- Dependency injection (Dagger, Koin)
+- Библиотек сериализации (например, библиотеки, использующие `kotlin-reflect`)
+- Runtime-based DI фреймворков (например, Koin)
 - Фреймворков тестирования
 - ORM библиотек
-- Универсальных утилит
+- Универсальных утилит, где нужна работа с неизвестными заранее типами
 
-- **Избегайте рефлексии для:**
+- **С осторожностью относиться к рефлексии для:**
 - Критичного по производительности кода
-- Простых задач (используйте прямой доступ)
-- Production кода (используйте compile-time альтернативы)
-- Операций, критичных для безопасности
+- Простых задач (используйте прямой доступ и обычные вызовы)
+- Сценариев, где доступны compile-time альтернативы (kapt/KSP, codegen)
+- Операций, критичных для безопасности и инкапсуляции
 
 **Резюме:**
 
-- **Рефлексия**: Исследование/изменение кода во время выполнения
-- **Мощная**: Доступ к private членам, динамическое создание экземпляров
-- **Затратная**: Накладные расходы на производительность, потеря типобезопасности
-- **Применения**: Сериализация, DI, тестирование, ORM
-- **Зависимость**: Требуется библиотека `kotlin-reflect`
+- **Рефлексия**: Исследование/частичное изменение структуры программы во время выполнения
+- **Мощная**: Доступ к закрытым членам, динамическое создание экземпляров, обработка аннотаций
+- **Затратная**: Накладные расходы на производительность, потеря явной типобезопасности, нарушение инкапсуляции
+- **Применения**: Сериализация, DI, тестирование, ORM и другие фреймворки
+- **Зависимость**: Для Kotlin runtime reflection требуется библиотека `kotlin-reflect`
 
 ## Answer (EN)
 
-**Reflection** is a mechanism that allows a program to **inspect and modify its own structure** (classes, methods, fields) at runtime.
+**Reflection** is a mechanism that allows a program to **inspect and (in limited cases) modify its own structure** (classes, methods, fields, annotations) at runtime.
 
-It allows you to:
+In Kotlin (using `kotlin-reflect` and/or Java Reflection API), it allows you to:
 - Call private methods
 - Create class instances by name
 - Access/modify private fields
 - Inspect annotations
 
-This is a powerful but **unsafe and performance-heavy** tool.
+It is powerful, but heavy use can harm **type safety, encapsulation, and performance**.
 
 **Setup:**
 
@@ -309,11 +342,15 @@ dependencies {
 }
 ```
 
+(The following examples use the Kotlin reflection API from `kotlin-reflect`.)
+
 **Key Uses:**
 
 **1. Get Class Information:**
 
 ```kotlin
+import kotlin.reflect.full.memberProperties
+
 class Person(val name: String, var age: Int) {
     private fun secret() = "Secret method"
 }
@@ -323,7 +360,7 @@ val person = Person("Alice", 30)
 // Get class
 val kClass = person::class
 println(kClass.simpleName)  // "Person"
-println(kClass.qualifiedName)  // "com.example.Person"
+println(kClass.qualifiedName)  // "Person" or FQCN depending on package
 
 // Get properties
 kClass.memberProperties.forEach { prop ->
@@ -337,10 +374,12 @@ kClass.memberProperties.forEach { prop ->
 **2. Create Instances Dynamically:**
 
 ```kotlin
-// Get class by name
+import kotlin.reflect.full.primaryConstructor
+
+// Get KClass by name via Java Reflection
 val kClass = Class.forName("com.example.Person").kotlin
 
-// Get constructor
+// Get constructor (in real code prefer selecting primaryConstructor by signature)
 val constructor = kClass.constructors.first()
 
 // Create instance
@@ -350,6 +389,10 @@ val person = constructor.call("Bob", 25)
 **3. Access Private Members:**
 
 ```kotlin
+import kotlin.reflect.full.memberFunctions
+import kotlin.reflect.full.memberProperties
+import kotlin.reflect.jvm.isAccessible
+
 class User(private val password: String) {
     private fun getSecret() = "Secret: $password"
 }
@@ -374,6 +417,8 @@ println(secret)  // "Secret: 12345"
 **4. Inspect Annotations:**
 
 ```kotlin
+import kotlin.reflect.full.memberProperties
+
 @Target(AnnotationTarget.CLASS)
 annotation class Entity(val tableName: String)
 
@@ -407,6 +452,8 @@ User::class.memberProperties.forEach { prop ->
 **5. Invoke Functions Dynamically:**
 
 ```kotlin
+import kotlin.reflect.full.memberFunctions
+
 class Calculator {
     fun add(a: Int, b: Int) = a + b
     fun multiply(a: Int, b: Int) = a * b
@@ -426,6 +473,9 @@ println(result)  // 8
 **6. Modify Properties:**
 
 ```kotlin
+import kotlin.reflect.KMutableProperty
+import kotlin.reflect.full.memberProperties
+
 class Settings {
     var theme: String = "light"
 }
@@ -443,14 +493,16 @@ println(settings.theme)  // "dark"
 
 **Common Use Cases:**
 
-**Serialization/Deserialization:**
+**Serialization/Deserialization (simplified):**
 ```kotlin
+import kotlin.reflect.full.memberProperties
+
 fun <T : Any> toJson(obj: T): String {
     val kClass = obj::class
     val props = kClass.memberProperties
 
     val json = props.joinToString(", ") { prop ->
-        """"${prop.name}": "${prop.get(obj)}""""
+        "\"${prop.name}\": \"${prop.get(obj)}\""
     }
 
     return "{$json}"
@@ -462,30 +514,40 @@ val user = User("Alice", 30)
 println(toJson(user))  // {"name": "Alice", "age": "30"}
 ```
 
-**Dependency Injection:**
+**Dependency Injection (simplified recursive example):**
 ```kotlin
-class UserService
+import kotlin.reflect.KClass
+import kotlin.reflect.full.primaryConstructor
+
+class UserService(val repository: UserRepository)
 class UserRepository
 
 fun <T : Any> inject(kClass: KClass<T>): T {
     // Find constructor
-    val constructor = kClass.primaryConstructor!!
+    val constructor = kClass.primaryConstructor
+        ?: error("Primary constructor required for ${kClass.simpleName}")
 
-    // Get parameter types
+    // Resolve dependencies by parameter types
     val params = constructor.parameters.map { param ->
-        inject(param.type.classifier as KClass<*>)
+        val depClass = param.type.classifier as? KClass<*>
+            ?: error("Unsupported parameter type: ${param.type}")
+        inject(depClass)
     }
 
     // Create instance
-    return constructor.call(*params.toTypedArray())
+    @Suppress("UNCHECKED_CAST")
+    return constructor.call(*params.toTypedArray()) as T
 }
 
-// Usage
+// Usage (for demonstration only)
 val service = inject(UserService::class)
 ```
 
 **Testing - Access Private Members:**
 ```kotlin
+import kotlin.reflect.full.memberFunctions
+import kotlin.reflect.jvm.isAccessible
+
 class ViewModel {
     private val repository = UserRepository()
 
@@ -511,12 +573,18 @@ fun testLoadData() {
 **Performance Impact:**
 
 ```kotlin
-// Direct access - FAST
-val name = person.name
+class Person(val name: String)
 
-// Reflection - SLOW (10-100x slower)
+val person = Person("Alice")
+
+// Direct access - FAST
+val direct = person.name
+
+// Reflection - SLOWER (often significantly)
+import kotlin.reflect.full.memberProperties
+
 val nameProp = Person::class.memberProperties.find { it.name == "name" }
-val name = nameProp?.get(person)
+val viaReflection = nameProp?.get(person)
 ```
 
 **Pros & Cons:**
@@ -524,32 +592,32 @@ val name = nameProp?.get(person)
 | Pros | Cons |
 |---------|---------|
 | Dynamic behavior | Performance overhead |
-| Generic frameworks | Type safety lost |
-| Powerful | Complex code |
-| Flexibility | Security risks |
+| Enables generic frameworks | Loss of explicit type safety |
+| Powerful | More complex code |
+| Flexibility | Security and encapsulation risks |
 
 **When to Use:**
 
 - **Use reflection for:**
-- Serialization libraries (Gson, Jackson)
-- Dependency injection (Dagger, Koin)
+- Serialization libraries that rely on runtime introspection
+- Runtime-based DI frameworks (e.g., Koin)
 - Testing frameworks
 - ORM libraries
-- Generic utilities
+- Generic utilities that must work with unknown types
 
-- **Avoid reflection for:**
+- **Be cautious with reflection for:**
 - Performance-critical code
-- Simple tasks (use direct access)
-- Production code (use compile-time alternatives)
-- Security-sensitive operations
+- Simple tasks (prefer direct access and normal calls)
+- Cases where compile-time/codegen alternatives exist (kapt/KSP, annotation processing)
+- Security- or encapsulation-critical operations
 
 **Summary:**
 
-- **Reflection**: Inspect/modify code at runtime
-- **Powerful**: Access private members, create instances dynamically
-- **Costly**: Performance overhead, type safety loss
-- **Use cases**: Serialization, DI, testing, ORMs
-- **Dependency**: `kotlin-reflect` library required
+- **Reflection**: Inspect / (partially) modify program structure at runtime
+- **Powerful**: Access private members, create instances dynamically, process annotations
+- **Costly**: Performance overhead, loss of explicit type safety, encapsulation risks
+- **Use cases**: Serialization, DI, testing, ORMs, and other frameworks
+- **Dependency**: `kotlin-reflect` library required for Kotlin runtime reflection
 
 ---
 
@@ -562,9 +630,9 @@ val name = nameProp?.get(person)
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
 
 ## Related Questions
 
 - [[q-object-companion-object--kotlin--medium]]
--
 - [[q-kotlin-serialization--programming-languages--easy]]

@@ -3,49 +3,47 @@ id: kotlin-144
 title: "Flow vs LiveData Comparison / Сравнение Flow и LiveData"
 aliases: [Comparison, Flow, Livedata, Vs]
 topic: kotlin
-subtopics: []
+subtopics: [c-flow]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-executor-service-java--java--medium, q-retry-operators-flow--kotlin--medium, q-testing-flow-operators--kotlin--hard]
+related: [c-kotlin, c-flow, q-retry-operators-flow--kotlin--medium, q-testing-flow-operators--kotlin--hard]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/medium]
 ---
 # Вопрос (RU)
-> В чем разница между Kotlin Flow и LiveData? Когда следует использовать каждый из них?
+> В чем разница между Kotlin `Flow` и `LiveData`? Когда следует использовать каждый из них?
 
 ---
 
-# Question (EN)
-> What are the differences between Kotlin Flow and LiveData? When should you use each?
 ## Ответ (RU)
 
-**Flow и LiveData** - оба являются реактивными держателями данных, но фундаментально отличаются по дизайну, возможностям и сценариям использования. Flow более мощный и гибкий, в то время как LiveData проще и учитывает жизненный цикл по умолчанию.
+**`Flow` и `LiveData`** - оба являются реактивными держателями данных, но фундаментально отличаются по дизайну, возможностям и сценариям использования. `Flow` более мощный и гибкий, в то время как `LiveData` проще и учитывает жизненный цикл по умолчанию.
 
 ### Основные Различия
 
-| Функция | LiveData | Flow (StateFlow/SharedFlow) |
-|---------|----------|----------------------------|
-| **Тип** | Горячий поток (всегда активен) | Холодный поток (Flow) / Горячий поток (StateFlow/SharedFlow) |
-| **Учет Жизненного Цикла** | Да, встроенный | Нет, требует `repeatOnLifecycle` |
+| Функция | `LiveData` | `Flow` (`StateFlow`/`SharedFlow`) |
+|---------|------------|-----------------------------------|
+| **Тип** | Горячий поток (хранит состояние и доставляет активным наблюдателям) | Холодный поток (`Flow`) / Горячий поток (`StateFlow`/`SharedFlow`) |
+| **Учет Жизненного Цикла** | Да, встроенный | Нет, требует явного учета (например, `repeatOnLifecycle`) |
 | **Платформа** | Специфичен для Android | Платформо-независимый (Kotlin) |
-| **Операторы** | Ограниченные (map, switchMap и т.д.) | Богатые (100+ операторов) |
-| **Потоки** | Main поток по умолчанию | Настраиваемый через dispatchers |
-| **Backpressure** | Нет | Да (buffer, conflate и т.д.) |
-| **Начальное Значение** | Опционально | StateFlow требует, Flow нет |
-| **Null-безопасность** | Разрешает null | StateFlow не разрешает null |
-| **Multicast** | Да | StateFlow/SharedFlow да, Flow нет |
-| **Тестирование** | Требует InstantTaskExecutorRule | Легко с TestDispatcher |
+| **Операторы** | Ограниченные (map, switchMap и т.д.) | Богатые (много операторов трансформации и комбинирования) |
+| **Потоки** | Обновления наблюдаются на Main потоке | Настраиваемый через dispatchers |
+| **Backpressure** | Нет специальных операторов | Есть операторы для управления скоростью (buffer, conflate и т.д.) |
+| **Начальное Значение** | Необязательно | `StateFlow` требует, `Flow` нет |
+| **Null-безопасность** | Разрешает null | Типобезопасен: null недопустим для не-null типов, для null нужен nullable тип |
+| **Multicast** | Да | `StateFlow`/`SharedFlow` да, `Flow` нет |
+| **Тестирование** | Часто требует InstantTaskExecutorRule | Удобно с TestDispatcher и coroutines test API |
 
 ### Горячие Vs Холодные Потоки
 
-**LiveData (Горячий Поток)**:
+**`LiveData` (Горячий Поток)**:
 ```kotlin
-// LiveData всегда активен - производит значения даже без наблюдателей
+// Источник обновляет LiveData независимо от наличия наблюдателей
 class UserViewModel : ViewModel() {
     val currentTime = MutableLiveData<Long>()
 
@@ -61,7 +59,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-**Flow (Холодный Поток)**:
+**`Flow` (Холодный Поток)**:
 ```kotlin
 // Flow ленивый - производит значения только при сборе
 class UserViewModel : ViewModel() {
@@ -83,65 +81,9 @@ lifecycleScope.launch {
 }
 ```
 
-### Учет Жизненного Цикла
-
-**LiveData - Встроенный Учет Жизненного Цикла**:
+**`StateFlow` (Горячий Поток)**:
 ```kotlin
-// LiveData автоматически останавливается когда lifecycle неактивен
-class UserActivity : AppCompatActivity() {
-    private val viewModel: UserViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Автоматически приостанавливается когда приложение уходит в фон
-        viewModel.userData.observe(this) { user ->
-            updateUI(user) // Безопасно - вызывается только когда STARTED
-        }
-    }
-}
-```
-
-**Flow - Требуется Ручная Обработка Жизненного Цикла**:
-```kotlin
-// ПЛОХО: Flow не учитывает lifecycle автоматически
-class UserActivity : AppCompatActivity() {
-    private val viewModel: UserViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        lifecycleScope.launch {
-            // Продолжает собирать даже в фоне!
-            viewModel.userData.collect { user ->
-                updateUI(user) // Может крэшнуться если приложение в фоне
-            }
-        }
-    }
-}
-
-// ХОРОШО: Используйте repeatOnLifecycle
-class UserActivity : AppCompatActivity() {
-    private val viewModel: UserViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // Приостанавливает сбор когда приложение уходит в фон
-                viewModel.userData.collect { user ->
-                    updateUI(user) // Безопасно!
-                }
-            }
-        }
-    }
-}
-```
-
-**StateFlow (Горячий Поток)**:
-```kotlin
-// StateFlow горячий - но лучше чем LiveData
+// StateFlow горячий - хранит текущее значение и продолжает эмитить независимо от подписчиков
 class UserViewModel : ViewModel() {
     private val _currentTime = MutableStateFlow(0L)
     val currentTime: StateFlow<Long> = _currentTime
@@ -157,9 +99,65 @@ class UserViewModel : ViewModel() {
 }
 ```
 
+### Учет Жизненного Цикла
+
+**`LiveData` - Встроенный Учет Жизненного Цикла**:
+```kotlin
+// LiveData автоматически доставляет значения только активным наблюдателям
+class UserActivity : AppCompatActivity() {
+    private val viewModel: UserViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Наблюдатель будет получать обновления только когда lifecycle в STARTED или RESUMED
+        viewModel.userData.observe(this) { user ->
+            updateUI(user)
+        }
+    }
+}
+```
+
+**`Flow` - Требуется Ручная Обработка Жизненного Цикла**:
+```kotlin
+// ПЛОХО: Flow сам по себе не останавливается при смене состояния lifecycle
+class UserActivity : AppCompatActivity() {
+    private val viewModel: UserViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            // Будет продолжать собирать, пока scope не отменён
+            viewModel.userData.collect { user ->
+                updateUI(user)
+            }
+        }
+    }
+}
+
+// ХОРОШО: Используйте repeatOnLifecycle
+class UserActivity : AppCompatActivity() {
+    private val viewModel: UserViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                // Сбор приостанавливается, когда lifecycle < STARTED
+                viewModel.userData.collect { user ->
+                    updateUI(user)
+                }
+            }
+        }
+    }
+}
+```
+
 ### Операторы И Трансформации
 
-**LiveData - Ограниченные операторы**:
+**`LiveData` - Ограниченные операторы**:
 ```kotlin
 class UserViewModel : ViewModel() {
     val userId = MutableLiveData<String>()
@@ -177,19 +175,19 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-**Flow - Богатый набор операторов**:
+**`Flow` - Богатый набор операторов**:
 ```kotlin
 class UserViewModel : ViewModel() {
     val userId = MutableStateFlow("")
 
     val userData = userId
-        .debounce(300)           // Ждать паузы в наборе текста
+        .debounce(300)              // Ждать паузы в наборе текста
         .filter { it.isNotBlank() } // Пропустить пустые ID
-        .distinctUntilChanged()  // Предотвратить дублирующие запросы
-        .flatMapLatest { id ->   // Отменить предыдущий запрос
+        .distinctUntilChanged()     // Предотвратить дублирующие запросы
+        .flatMapLatest { id ->      // Отменить предыдущий запрос
             repository.getUserFlow(id)
         }
-        .catch { e ->            // Обработка ошибок
+        .catch { e ->               // Обработка ошибок
             emit(User.EMPTY)
         }
         .stateIn(
@@ -202,7 +200,7 @@ class UserViewModel : ViewModel() {
 
 ### Модель Потоков
 
-**LiveData - Main поток по умолчанию**:
+**`LiveData` - Main поток по умолчанию**:
 ```kotlin
 class UserViewModel : ViewModel() {
     private val _userData = MutableLiveData<User>()
@@ -212,19 +210,19 @@ class UserViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val user = repository.getUser()
 
-            // Нужно вручную переключиться на Main поток
+            // Нужно вручную переключиться на Main поток перед value
             withContext(Dispatchers.Main) {
                 _userData.value = user
             }
 
-            // Или использовать postValue (может потерять обновления)
+            // Или использовать postValue (может объединять быстрые обновления)
             _userData.postValue(user)
         }
     }
 }
 ```
 
-**Flow - Гибкие потоки**:
+**`Flow` - Гибкие потоки**:
 ```kotlin
 class UserViewModel : ViewModel() {
     private val _userData = MutableStateFlow<User?>(null)
@@ -236,12 +234,12 @@ class UserViewModel : ViewModel() {
                 repository.getUser()
             }
 
-            // Можно emit из любого dispatcher
+            // Можно обновлять из любого dispatcher, учитывая thread-safety
             _userData.value = user
         }
     }
 
-    // Или использовать flowOn
+    // Или использовать flowOn для изменения контекста upstream
     val userDataFlow: Flow<User> = flow {
         emit(repository.getUser())
     }.flowOn(Dispatchers.IO) // Запускается на IO dispatcher
@@ -250,7 +248,7 @@ class UserViewModel : ViewModel() {
 
 ### Комбинирование Нескольких Потоков
 
-**LiveData - MediatorLiveData**:
+**`LiveData` - MediatorLiveData**:
 ```kotlin
 class UserViewModel : ViewModel() {
     val userName = MutableLiveData<String>()
@@ -274,7 +272,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-**Flow - оператор combine()**:
+**`Flow` - оператор combine()**:
 ```kotlin
 class UserViewModel : ViewModel() {
     val userName = MutableStateFlow("")
@@ -296,26 +294,26 @@ class UserViewModel : ViewModel() {
 
 ### Null-безопасность
 
-**LiveData - Разрешает Null**:
+**`LiveData` - Разрешает Null**:
 ```kotlin
 // LiveData может хранить null значения
 val userData: LiveData<User?> = MutableLiveData(null)
 userData.value = null // OK
 ```
 
-**StateFlow - Нет Null (по дизайну)**:
+**`StateFlow` - Типобезопасность**:
 ```kotlin
-// StateFlow не может хранить null (нужно явно указать nullable тип)
-val userData: StateFlow<User?> = MutableStateFlow(null) // Должен указать nullable
+// Для разрешения null нужно явно указать nullable тип
+val userData: StateFlow<User?> = MutableStateFlow(null)
 
 // Для non-null типов
-val count: MutableStateFlow<Int> = MutableStateFlow(0) // Не может быть null
-count.value = null // Ошибка компиляции!
+val count: MutableStateFlow<Int> = MutableStateFlow(0) // Не может быть null по типу
+// count.value = null // Ошибка компиляции, т.к. Int не nullable
 ```
 
 ### Тестирование
 
-**LiveData - Требуется настройка**:
+**`LiveData` - Требуется настройка**:
 ```kotlin
 class UserViewModelTest {
     // Требуется для тестирования LiveData
@@ -339,7 +337,7 @@ class UserViewModelTest {
 }
 ```
 
-**Flow - Более простое тестирование**:
+**`Flow` - Более простое тестирование**:
 ```kotlin
 class UserViewModelTest {
     @get:Rule
@@ -376,25 +374,25 @@ class UserViewModelTest {
 
 ### Когда Использовать Каждый
 
-**Используйте LiveData когда**:
+**Используйте `LiveData` когда**:
 - Простое управление UI состоянием
-- Работаете с legacy Android кодовой базой (уже используется LiveData)
+- Работаете с legacy Android кодовой базой (уже используется `LiveData`)
 - Нужен учет жизненного цикла с минимальным boilerplate
-- Команда не знакома с Flow/корутинами
+- Команда не знакома с `Flow`/корутинами
 - Простой паттерн observe-and-update
 
-**Используйте Flow/StateFlow когда**:
+**Используйте `Flow`/`StateFlow` когда**:
 - Сложные трансформации данных (нужны операторы)
 - Слой репозитория (платформо-независимый)
-- Нужна обработка backpressure
+- Нужна обработка различий скоростей (buffer/conflate и т.д.)
 - Комбинирование множественных потоков данных
 - Современная Kotlin-first кодовая база
 - Продвинутые use cases (debouncing, retry логика и т.д.)
 - Мультиплатформенные проекты (KMM)
 
-### Паттерн Миграции: LiveData → Flow
+### Паттерн Миграции: `LiveData` → `Flow`
 
-**До (LiveData)**:
+**До (`LiveData`)**:
 ```kotlin
 class UserViewModel : ViewModel() {
     private val _userData = MutableLiveData<User>()
@@ -414,7 +412,7 @@ viewModel.userData.observe(this) { user ->
 }
 ```
 
-**После (StateFlow)**:
+**После (`StateFlow`)**:
 ```kotlin
 class UserViewModel : ViewModel() {
     private val _userData = MutableStateFlow<User?>(null)
@@ -440,13 +438,13 @@ lifecycleScope.launch {
 
 ### Взаимодействие
 
-**LiveData → Flow**:
+**`LiveData` → `Flow`**:
 ```kotlin
 // Конвертация LiveData в Flow
 val userDataFlow: Flow<User> = userData.asFlow()
 ```
 
-**Flow → LiveData**:
+**`Flow` → `LiveData`**:
 ```kotlin
 // Конвертация Flow в LiveData (для legacy кода)
 val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
@@ -454,7 +452,7 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 
 ### Резюме
 
-**LiveData**:
+**`LiveData`**:
 - Простой, специфичный для Android
 - Встроенный учет жизненного цикла
 - Легко изучить
@@ -462,42 +460,45 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 - Только для Android
 - Менее мощный
 
-**Flow/StateFlow**:
+**`Flow`/`StateFlow`**:
 - Мощный, гибкий
 - Богатый набор операторов
 - Платформо-независимый
-- Лучшее тестирование
-- Требует ручной обработки жизненного цикла
+- Улучшенная тестируемость
+- Требует явного учета жизненного цикла при работе в Android UI
 - Более крутая кривая обучения
 
-**Современная Рекомендация**: Используйте **StateFlow/SharedFlow** для новых проектов, мигрируйте с LiveData при добавлении сложных функций или работе со слоем репозитория.
+**Современная Рекомендация**: В современных Android-приложениях с корутинами чаще предпочтительнее `StateFlow`/`SharedFlow` для новых фич и слоев данных, при этом `LiveData` может оставаться в слое UI или legacy-коде.
 
 ---
 
+# Question (EN)
+> What are the differences between Kotlin `Flow` and `LiveData`? When should you use each?
+
 ## Answer (EN)
 
-**Flow and LiveData** are both reactive data holders, but they differ fundamentally in design, capabilities, and use cases. Flow is more powerful and flexible, while LiveData is simpler and lifecycle-aware by default.
+**`Flow` and `LiveData`** are both reactive data holders, but they differ fundamentally in design, capabilities, and use cases. `Flow` is more powerful and flexible, while `LiveData` is simpler and lifecycle-aware by default.
 
 ### Core Differences
 
-| Feature | LiveData | Flow (StateFlow/SharedFlow) |
-|---------|----------|----------------------------|
-| **Type** | Hot stream (always active) | Cold stream (Flow) / Hot stream (StateFlow/SharedFlow) |
-| **Lifecycle Aware** | Yes, built-in | No, requires `repeatOnLifecycle` |
+| Feature | `LiveData` | `Flow` (`StateFlow`/`SharedFlow`) |
+|---------|------------|-----------------------------------|
+| **Type** | Hot stream (holds state, delivers to active observers) | Cold stream (`Flow`) / Hot stream (`StateFlow`/`SharedFlow`) |
+| **Lifecycle Aware** | Yes, built-in | No, requires explicit handling (e.g., `repeatOnLifecycle`) |
 | **Platform** | Android-specific | Platform-agnostic (Kotlin) |
-| **Operators** | Limited (map, switchMap, etc.) | Rich (100+ operators) |
-| **Threading** | Main thread by default | Configurable with dispatchers |
-| **Backpressure** | No | Yes (buffer, conflate, etc.) |
-| **Initial Value** | Optional | StateFlow requires, Flow doesn't |
-| **Null Safety** | Allows null values | StateFlow doesn't allow null |
-| **Multicast** | Yes | StateFlow/SharedFlow yes, Flow no |
-| **Testing** | Requires InstantTaskExecutorRule | Easy with TestDispatcher |
+| **Operators** | Limited (map, switchMap, etc.) | Rich set of transformation/combination operators |
+| **Threading** | Observers receive updates on Main thread | Configurable with dispatchers |
+| **Backpressure** | No dedicated operators | Has tools for rate handling (buffer, conflate, etc.) |
+| **Initial Value** | Optional | Required for `StateFlow`, not for `Flow` |
+| **Null Safety** | Allows null values | Type-safe: non-null types can't be null; use nullable type for null |
+| **Multicast** | Yes | `StateFlow`/`SharedFlow` yes, `Flow` no |
+| **Testing** | Often requires InstantTaskExecutorRule | Convenient with TestDispatcher and coroutines test API |
 
 ### Hot Vs Cold Streams
 
-**LiveData (Hot Stream)**:
+**`LiveData` (Hot Stream)**:
 ```kotlin
-// LiveData is always active - produces values even without observers
+// A producer updates LiveData regardless of observers
 class UserViewModel : ViewModel() {
     val currentTime = MutableLiveData<Long>()
 
@@ -513,7 +514,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-**Flow (Cold Stream)**:
+**`Flow` (Cold Stream)**:
 ```kotlin
 // Flow is lazy - only produces values when collected
 class UserViewModel : ViewModel() {
@@ -535,9 +536,9 @@ lifecycleScope.launch {
 }
 ```
 
-**StateFlow (Hot Stream)**:
+**`StateFlow` (Hot Stream)**:
 ```kotlin
-// StateFlow is hot - but better than LiveData
+// StateFlow is hot - holds the current value and keeps updating irrespective of collectors
 class UserViewModel : ViewModel() {
     private val _currentTime = MutableStateFlow(0L)
     val currentTime: StateFlow<Long> = _currentTime
@@ -555,26 +556,26 @@ class UserViewModel : ViewModel() {
 
 ### Lifecycle Awareness
 
-**LiveData - Built-in Lifecycle Awareness**:
+**`LiveData` - Built-in Lifecycle Awareness**:
 ```kotlin
-// LiveData automatically stops when lifecycle is not active
+// LiveData automatically delivers values only to active observers
 class UserActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Automatically paused when app goes to background
+        // Observer receives updates only when lifecycle is STARTED or RESUMED
         viewModel.userData.observe(this) { user ->
-            updateUI(user) // Safe - only called when STARTED
+            updateUI(user)
         }
     }
 }
 ```
 
-**Flow - Manual Lifecycle Handling Required**:
+**`Flow` - Manual Lifecycle Handling Required**:
 ```kotlin
-// BAD: Flow doesn't respect lifecycle automatically
+// BAD: Flow does not stop automatically with lifecycle state changes
 class UserActivity : AppCompatActivity() {
     private val viewModel: UserViewModel by viewModels()
 
@@ -582,9 +583,9 @@ class UserActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         lifecycleScope.launch {
-            // Keeps collecting even in background!
+            // Keeps collecting until this scope is cancelled
             viewModel.userData.collect { user ->
-                updateUI(user) // Can crash if app is in background
+                updateUI(user)
             }
         }
     }
@@ -599,9 +600,9 @@ class UserActivity : AppCompatActivity() {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // Pauses collection when app goes to background
+                // Collection is paused when lifecycle < STARTED
                 viewModel.userData.collect { user ->
-                    updateUI(user) // Safe!
+                    updateUI(user)
                 }
             }
         }
@@ -611,7 +612,7 @@ class UserActivity : AppCompatActivity() {
 
 ### Operators and Transformations
 
-**LiveData - Limited Operators**:
+**`LiveData` - Limited Operators**:
 ```kotlin
 class UserViewModel : ViewModel() {
     val userId = MutableLiveData<String>()
@@ -629,19 +630,19 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-**Flow - Rich Operator Set**:
+**`Flow` - Rich Operator Set**:
 ```kotlin
 class UserViewModel : ViewModel() {
     val userId = MutableStateFlow("")
 
     val userData = userId
-        .debounce(300)           // Wait for typing pause
+        .debounce(300)              // Wait for typing pause
         .filter { it.isNotBlank() } // Skip empty IDs
-        .distinctUntilChanged()  // Prevent duplicate requests
-        .flatMapLatest { id ->   // Cancel previous request
+        .distinctUntilChanged()     // Prevent duplicate requests
+        .flatMapLatest { id ->      // Cancel previous request
             repository.getUserFlow(id)
         }
-        .catch { e ->            // Error handling
+        .catch { e ->               // Error handling
             emit(User.EMPTY)
         }
         .stateIn(
@@ -654,7 +655,7 @@ class UserViewModel : ViewModel() {
 
 ### Threading Model
 
-**LiveData - Main Thread Default**:
+**`LiveData` - Main Thread Default**:
 ```kotlin
 class UserViewModel : ViewModel() {
     private val _userData = MutableLiveData<User>()
@@ -664,19 +665,19 @@ class UserViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             val user = repository.getUser()
 
-            // Must switch to Main thread manually
+            // Must switch to Main thread for setting value
             withContext(Dispatchers.Main) {
                 _userData.value = user
             }
 
-            // Or use postValue (can lose updates)
+            // Or use postValue (may coalesce rapid updates)
             _userData.postValue(user)
         }
     }
 }
 ```
 
-**Flow - Flexible Threading**:
+**`Flow` - Flexible Threading**:
 ```kotlin
 class UserViewModel : ViewModel() {
     private val _userData = MutableStateFlow<User?>(null)
@@ -688,12 +689,12 @@ class UserViewModel : ViewModel() {
                 repository.getUser()
             }
 
-            // Can emit from any dispatcher
+            // Can update from any dispatcher, respecting thread-safety
             _userData.value = user
         }
     }
 
-    // Or use flowOn
+    // Or use flowOn to move upstream work to another dispatcher
     val userDataFlow: Flow<User> = flow {
         emit(repository.getUser())
     }.flowOn(Dispatchers.IO) // Runs on IO dispatcher
@@ -702,7 +703,7 @@ class UserViewModel : ViewModel() {
 
 ### Combining Multiple Streams
 
-**LiveData - MediatorLiveData**:
+**`LiveData` - MediatorLiveData**:
 ```kotlin
 class UserViewModel : ViewModel() {
     val userName = MutableLiveData<String>()
@@ -726,7 +727,7 @@ class UserViewModel : ViewModel() {
 }
 ```
 
-**Flow - combine() Operator**:
+**`Flow` - combine() Operator**:
 ```kotlin
 class UserViewModel : ViewModel() {
     val userName = MutableStateFlow("")
@@ -748,26 +749,26 @@ class UserViewModel : ViewModel() {
 
 ### Null Safety
 
-**LiveData - Allows Null**:
+**`LiveData` - Allows Null**:
 ```kotlin
 // LiveData can hold null values
 val userData: LiveData<User?> = MutableLiveData(null)
 userData.value = null // OK
 ```
 
-**StateFlow - No Null (by design)**:
+**`StateFlow` - Type-safe**:
 ```kotlin
-// StateFlow cannot hold null (must use nullable type explicitly)
-val userData: StateFlow<User?> = MutableStateFlow(null) // Must specify nullable
+// To allow null, declare a nullable type explicitly
+val userData: StateFlow<User?> = MutableStateFlow(null)
 
 // For non-null types
-val count: MutableStateFlow<Int> = MutableStateFlow(0) // Cannot be null
-count.value = null // Compile error!
+val count: MutableStateFlow<Int> = MutableStateFlow(0) // Cannot be null by type
+// count.value = null // Compile error because Int is not nullable
 ```
 
 ### Testing
 
-**LiveData - Requires Setup**:
+**`LiveData` - Requires Setup**:
 ```kotlin
 class UserViewModelTest {
     // Required for LiveData testing
@@ -791,7 +792,7 @@ class UserViewModelTest {
 }
 ```
 
-**Flow - Simpler Testing**:
+**`Flow` - Simpler Testing**:
 ```kotlin
 class UserViewModelTest {
     @get:Rule
@@ -828,25 +829,25 @@ class UserViewModelTest {
 
 ### When to Use Each
 
-**Use LiveData When**:
+**Use `LiveData` When**:
 - Simple UI state management
-- Working in legacy Android codebase (already using LiveData)
+- Working in a legacy Android codebase (already using `LiveData`)
 - You need lifecycle awareness with minimal boilerplate
-- Team is unfamiliar with Flow/coroutines
+- Team is unfamiliar with `Flow`/coroutines
 - Simple observe-and-update pattern
 
-**Use Flow/StateFlow When**:
+**Use `Flow`/`StateFlow` When**:
 - Complex data transformations (operators needed)
 - Repository layer (platform-agnostic)
-- Need backpressure handling
+- Need to handle producer/consumer speed differences (buffer/conflate, etc.)
 - Combining multiple data streams
 - Modern Kotlin-first codebase
 - Advanced use cases (debouncing, retry logic, etc.)
 - Multi-platform projects (KMM)
 
-### Migration Pattern: LiveData → Flow
+### Migration Pattern: `LiveData` → `Flow`
 
-**Before (LiveData)**:
+**Before (`LiveData`)**:
 ```kotlin
 class UserViewModel : ViewModel() {
     private val _userData = MutableLiveData<User>()
@@ -866,7 +867,7 @@ viewModel.userData.observe(this) { user ->
 }
 ```
 
-**After (StateFlow)**:
+**After (`StateFlow`)**:
 ```kotlin
 class UserViewModel : ViewModel() {
     private val _userData = MutableStateFlow<User?>(null)
@@ -892,13 +893,13 @@ lifecycleScope.launch {
 
 ### Interoperability
 
-**LiveData → Flow**:
+**`LiveData` → `Flow`**:
 ```kotlin
 // Convert LiveData to Flow
 val userDataFlow: Flow<User> = userData.asFlow()
 ```
 
-**Flow → LiveData**:
+**`Flow` → `LiveData`**:
 ```kotlin
 // Convert Flow to LiveData (for legacy code)
 val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
@@ -906,7 +907,7 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 
 ### Summary
 
-**LiveData**:
+**`LiveData`**:
 - Simple, Android-specific
 - Built-in lifecycle awareness
 - Easy to learn
@@ -914,15 +915,15 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 - Android-only
 - Less powerful
 
-**Flow/StateFlow**:
+**`Flow`/`StateFlow`**:
 - Powerful, flexible
 - Rich operator set
 - Platform-agnostic
-- Better testing
-- Requires manual lifecycle handling
+- Better testability
+- Requires explicit lifecycle handling when used with Android UI
 - Steeper learning curve
 
-**Modern Recommendation**: Use **StateFlow/SharedFlow** for new projects, migrate from LiveData when adding complex features or working on repository layer.
+**Modern Recommendation**: In modern Android apps using coroutines, prefer `StateFlow`/`SharedFlow` for new features and data layers, while keeping `LiveData` where it already fits well (e.g., existing UI or legacy code).
 
 ---
 
@@ -937,11 +938,12 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 - [StateFlow and SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 - [Migrate from LiveData to Kotlin Flow - Android Developers](https://developer.android.com/codelabs/android-flow)
 - [LiveData Overview - Android Developers](https://developer.android.com/topic/libraries/architecture/livedata)
+- [[c-kotlin]]
+- [[c-flow]]
 
 ---
 
 **Source**: Kotlin Coroutines Interview Questions for Android Developers PDF
-
 
 ---
 
@@ -959,6 +961,4 @@ val userDataLiveData: LiveData<User> = userDataFlow.asLiveData()
 
 ### Advanced (Harder)
 - [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching
-- [[q-flow-backpressure--kotlin--hard]] - Backpressure handling
 - [[q-flow-backpressure-strategies--kotlin--hard]] - Backpressure strategies
-

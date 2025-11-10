@@ -2,21 +2,19 @@
 id: lang-023
 title: "Suspend Function Return Type After Compilation / Тип возвращаемого значения suspend функции после компиляции"
 aliases: [Suspend Function Return Type After Compilation, Тип возвращаемого значения suspend функции после компиляции]
-topic: programming-languages
-subtopics: [compilation, coroutines, type-system]
+topic: kotlin
+subtopics: [coroutines, kotlin-coroutines-basics]
 question_kind: theory
 difficulty: hard
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-how-to-create-suspend-function--programming-languages--medium, q-java-all-classes-inherit-from-object--programming-languages--easy, q-what-is-garbage-in-gc--programming-languages--easy]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [compilation, coroutines, difficulty/hard, kotlin, programming-languages]
+related: [c-kotlin, c-coroutines, q-how-to-create-suspend-function--programming-languages--medium]
+created: 2024-10-15
+updated: 2025-11-09
+tags: [coroutines, difficulty/hard, kotlin]
 ---
-# Suspend Function Return Type After Compilation
-
 # Вопрос (RU)
 > Каким становится тип возврата suspend-функции после компиляции?
 
@@ -27,9 +25,11 @@ tags: [compilation, coroutines, difficulty/hard, kotlin, programming-languages]
 
 ## Ответ (RU)
 
-Возвращаемый тип становится **Any?** (или `Object` в JVM байткоде), потому что функция может вернуть либо значение String, либо специальный маркер **COROUTINE_SUSPENDED**, указывающий что корутина приостановлена.
+На уровне байткода JVM сгенерированная функция имеет возвращаемый тип `Object` (в обобщённом виде `Any?` в Kotlin-терминах), потому что она должна иметь возможность вернуть либо специальный маркер `COROUTINE_SUSPENDED`, сигнализирующий приостановку, либо результат вычисления. Это деталь реализации компилятора Kotlin (в частности Kotlin/JVM), а не часть стабильного языкового контракта исходного `suspend` API.
 
-Под капотом компилятор Kotlin преобразует suspend функции используя **трансформацию Continuation-Passing Style (CPS)**. Сигнатура функции значительно изменяется во время компиляции.
+Под капотом компилятор Kotlin преобразует `suspend`-функции, используя вариацию Continuation-Passing Style (`CPS`). Сигнатура функции значительно изменяется во время компиляции: к параметрам добавляется `Continuation`, а тело превращается в машину состояний.
+
+См. также: [[c-kotlin]], [[c-coroutines]], [[c-kotlin-coroutines-basics]]
 
 ### Исходный Код
 
@@ -40,50 +40,55 @@ suspend fun fetchUserName(userId: Int): String {
 }
 ```
 
-### После Компиляции (концептуальная Декомпилированная версия)
+### После Компиляции (концептуальная декомпилированная версия)
 
 ```kotlin
-// Упрощенное представление того, что генерирует компилятор
-fun fetchUserName(userId: Int, continuation: Continuation<String>): Any? {
-    // Реализация машины состояний
+// Упрощённое представление того, что генерирует компилятор (Kotlin/JVM)
+fun fetchUserName(userId: Int, continuation: `Continuation<String>`): Any? {
+    // Реализация машины состояний (упрощённо)
     val sm = continuation as? FetchUserNameStateMachine
         ?: FetchUserNameStateMachine(continuation)
 
-    when (sm.label) {
+    return when (sm.label) {
         0 -> {
             sm.label = 1
-            if (delay(100, sm) == COROUTINE_SUSPENDED) {
-                return COROUTINE_SUSPENDED
+            val r = delay(100, sm)
+            if (r === COROUTINE_SUSPENDED) {
+                COROUTINE_SUSPENDED
+            } else {
+                // немедленно продолжаем
+                "User_$userId"
             }
         }
         1 -> {
-            return "User_$userId"
+            // возобновление после приостановки
+            "User_$userId"
         }
+        else -> throw IllegalStateException("Unexpected state")
     }
-    throw IllegalStateException("Unexpected state")
 }
 
-// Возвращаемый тип Any?, потому что может вернуть:
-// 1. COROUTINE_SUSPENDED (специальный объект-маркер)
-// 2. Фактический результат String
-// 3. null (в некоторых случаях)
+// Возвращаемый тип Any? (Object в байткоде JVM), потому что функция:
+// 1. Может вернуть COROUTINE_SUSPENDED (специальный объект-маркер)
+// 2. Может вернуть фактический результат `String` при нормальном завершении
+// Исключения не возвращаются значением: они пробрасываются или доставляются через resumeWith.
 ```
 
-### Понимание Трансформации
+### Понимание трансформации
 
 ```kotlin
-// Оригинальная suspend функция
+// Оригинальная suspend-функция
 suspend fun getData(): String {
     delay(1000)
     return "Data"
 }
 
-// Что фактически генерирует компилятор (упрощенно):
-fun getData(continuation: Continuation<String>): Any? {
+// Что компилятор генерирует (упрощённо, для Kotlin/JVM):
+fun getData(continuation: `Continuation<String>`): Any? {
     // Может вернуть:
     // - COROUTINE_SUSPENDED: если функция приостанавливается
-    // - String: если функция завершается немедленно
-    // - Exception: если произошла ошибка
+    // - "Data" (`String`): если функция завершается без асинхронной приостановки
+    // При ошибке будет выброшено исключение или вызвано continuation.resumeWith(Result.failure(e)).
 
     // ... реализация машины состояний ...
 }
@@ -92,241 +97,247 @@ fun getData(continuation: Continuation<String>): Any? {
 ### Маркер COROUTINE_SUSPENDED
 
 ```kotlin
-// Это внутренний объект Kotlin coroutine
+// Внутренний объект, используемый реализацией корутин
 internal object COROUTINE_SUSPENDED
 
-// Скомпилированная функция возвращает это при приостановке:
-fun example(cont: Continuation<String>): Any? {
+// Скомпилированная функция возвращает его при приостановке:
+fun example(cont: `Continuation<String>`): Any? {
     // ... некоторая логика ...
 
-    if (needsToSuspend) {
-        return COROUTINE_SUSPENDED  // Тип Any
+    return if (needsToSuspend) {
+        COROUTINE_SUSPENDED  // Тип Any
     } else {
-        return "Result"  // Тип String
+        "Result"            // Тип `String`
     }
 
-    // Возвращаемый тип должен быть Any?, чтобы вместить оба варианта
+    // Возвращаемый тип должен быть Any?, чтобы вместить оба варианта.
 }
 ```
 
-### Реальный Пример: Машина Состояний
+### Реальный пример: машина состояний
 
 ```kotlin
 // Оригинальный код
 suspend fun multiStepProcess(): String {
-    val step1 = delay(100)           // Точка приостановки 1
-    val step2 = fetchData()          // Точка приостановки 2
+    delay(100)                  // Точка приостановки 1
+    val step2 = fetchData()     // Точка приостановки 2
     return "Completed: $step2"
 }
 
-// Скомпилированная версия (сильно упрощенная)
-fun multiStepProcess(completion: Continuation<String>): Any? {
+// Сильно упрощённая форма скомпилированной версии
+fun multiStepProcess(completion: `Continuation<String>`): Any? {
     val sm = completion as? MultiStepStateMachine
         ?: MultiStepStateMachine(completion)
 
-    when (sm.label) {
+    return when (sm.label) {
         0 -> {
             sm.label = 1
-            val result = delay(100, sm)
-            if (result == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
-            // Переход к label 1
+            val r = delay(100, sm)
+            if (r === COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
+            // продолжаем к следующему состоянию
+            multiStepProcess(sm)
         }
         1 -> {
             sm.label = 2
-            val result = fetchData(sm)
-            if (result == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
-            sm.step2Result = result as String
-            // Переход к label 2
+            val r = fetchData(sm)
+            if (r === COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
+            sm.step2Result = r as `String`
+            multiStepProcess(sm)
         }
         2 -> {
-            return "Completed: ${sm.step2Result}"  // Возвращает String
+            "Completed: ${sm.step2Result}"
         }
+        else -> throw IllegalStateException()
     }
-
-    throw IllegalStateException()
 }
 
 // Машина состояний для сохранения локальных переменных между приостановками
 class MultiStepStateMachine(
-    val completion: Continuation<String>
+    val completion: `Continuation<String>`
 ) : Continuation<Any?> {
     var label = 0
     var step2Result: String? = null
 
-    override fun resumeWith(result: Result<Any?>) {
-        multiStepProcess(this)
-    }
-
     override val context: CoroutineContext
         get() = completion.context
+
+    override fun resumeWith(result: Result<Any?>) {
+        // В реальном коде логика сложнее; здесь — упрощённая иллюстрация повторного входа
+        multiStepProcess(this)
+    }
 }
 ```
 
-### Проверка С Декомпилированным Кодом
+### Проверка с декомпилированным кодом
 
 ```kotlin
-// Оригинальный Kotlin код
+// Оригинальный Kotlin-код
 suspend fun simpleFunction(): String {
     delay(1000)
     return "Done"
 }
 
-// Фактический декомпилированный Java байткод (из IntelliJ)
+// Типичный (упрощённый) декомпилированный Java-код для Kotlin/JVM
 public static final Object simpleFunction(Continuation $completion) {
-    Object $continuation;
-    label27: {
-        if ($completion instanceof SimpleFunctionContinuation) {
-            $continuation = (SimpleFunctionContinuation)$completion;
-            if (((SimpleFunctionContinuation)$continuation).label >= Integer.MIN_VALUE) {
-                ((SimpleFunctionContinuation)$continuation).label -= Integer.MIN_VALUE;
-                break label27;
-            }
-        }
-        $continuation = new SimpleFunctionContinuation($completion);
+    SimpleFunctionContinuation $cont;
+    if ($completion instanceof SimpleFunctionContinuation) {
+        $cont = (SimpleFunctionContinuation) $completion;
+    } else {
+        $cont = new SimpleFunctionContinuation($completion);
     }
 
-    Object result = ((SimpleFunctionContinuation)$continuation).result;
+    Object result = $cont.result;
     Object COROUTINE_SUSPENDED = IntrinsicsKt.getCOROUTINE_SUSPENDED();
 
-    switch(((SimpleFunctionContinuation)$continuation).label) {
-        case 0:
+    switch ($cont.label) {
+        case 0: {
             ResultKt.throwOnFailure(result);
-            ((SimpleFunctionContinuation)$continuation).label = 1;
-            if (DelayKt.delay(1000L, $continuation) == COROUTINE_SUSPENDED) {
-                return COROUTINE_SUSPENDED;  // Возвращает Object (COROUTINE_SUSPENDED)
+            $cont.label = 1;
+            if (DelayKt.delay(1000L, $cont) == COROUTINE_SUSPENDED) {
+                return COROUTINE_SUSPENDED;  // Возвращает Object-маркер
             }
             break;
-        case 1:
+        }
+        case 1: {
             ResultKt.throwOnFailure(result);
             break;
+        }
         default:
             throw new IllegalStateException("call to 'resume' before 'invoke'");
     }
 
-    return "Done";  // Возвращает String
-
-    // Возвращаемый тип Object для поддержки COROUTINE_SUSPENDED и String
+    return "Done";  // Возвращает результат как Object
+    // Возвращаемый тип Object объединяет COROUTINE_SUSPENDED и фактический результат.
 }
 ```
 
-### Почему Any?, А Не String?
+### Почему Any?, а не String?
 
 ```kotlin
-// Это не сработает с возвращаемым типом String:
-fun fetchData(cont: Continuation<String>): String {
+// Так работать не может:
+fun fetchData(cont: `Continuation<String>`): String {
     if (suspended) {
-        return COROUTINE_SUSPENDED  // - ОШИБКА: Несоответствие типов
+        return COROUTINE_SUSPENDED  // ОШИБКА: несоответствие типов
     }
-    return "Data"  // - OK
+    return "Data"
 }
 
-// Необходимо использовать Any? для обоих вариантов:
-fun fetchData(cont: Continuation<String>): Any? {
-    if (suspended) {
-        return COROUTINE_SUSPENDED  // - OK (Any)
+// Необходимо использовать Any?, чтобы представить и маркер, и результат:
+fun fetchData(cont: `Continuation<String>`): Any? {
+    return if (suspended) {
+        COROUTINE_SUSPENDED       // OK: Any
+    } else {
+        "Data"                   // OK: `String` — подтип Any
     }
-    return "Data"  // - OK (String - подтип Any)
 }
+
+// При этом контракт suspend-функции для вызывающего кода остаётся:
+// suspend fun fetchData(): String
+// Вызывающий видит и проверяет именно тип `String`; Any?/Object — внутренняя деталь реализации.
 ```
 
 ### Интерфейс Continuation
 
 ```kotlin
-// Интерфейс Continuation, который добавляется как параметр
+// Интерфейс Continuation, который фигурирует в скомпилированной сигнатуре
 public interface Continuation<in T> {
     public val context: CoroutineContext
     public fun resumeWith(result: Result<T>)
 }
 
-// Итак, это:
-suspend fun getName(): String
+// То есть это:
+// suspend fun getName(): String
+// на уровне байткода (упрощённо) становится:
+// public static final Object getName(Continuation<? super String> continuation)
 
-// Становится этим:
-fun getName(continuation: Continuation<String>): Any?
+// В концептуальной форме для Kotlin:
+fun getName(continuation: `Continuation<String>`): Any?
 ```
 
-### Пример: Немедленный Возврат Vs Приостановка
+### Пример: немедленный возврат vs приостановка
 
 ```kotlin
 suspend fun smartFunction(needDelay: Boolean): String {
     if (needDelay) {
-        delay(1000)  // Может вернуть COROUTINE_SUSPENDED
+        delay(1000)
     }
-    return "Result"  // Всегда возвращает String в конце
+    return "Result"
 }
 
-// Скомпилированное поведение:
-fun smartFunction(needDelay: Boolean, cont: Continuation<String>): Any? {
-    if (needDelay) {
-        // Первый вызов: возвращает COROUTINE_SUSPENDED
-        // Возобновляется позже после delay
-    }
-    // В конце возвращает: "Result" (String)
+// Упрощённое скомпилированное представление:
+fun smartFunction(needDelay: Boolean, cont: `Continuation<String>`): Any? {
+    // При первом вызове:
+    // - либо сразу возвращает "Result" (как Object/Any?) при отсутствии приостановки,
+    // - либо возвращает COROUTINE_SUSPENDED, если была приостановка.
+    // После возобновления продолжит выполнение и в итоге вернёт результат.
 
-    // Возвращаемый тип Any? охватывает оба случая
+    // Тип Any? охватывает оба возможных значения на этом уровне.
 }
 ```
 
-### Тестирование Возвращаемого Типа
+### Тестирование возвращаемого типа
 
 ```kotlin
-// Вы не можете получить прямой доступ к скомпилированному возвращаемому типу,
-// но можете наблюдать поведение:
+// Нельзя напрямую полагаться на внутренний тип возврата (Any?/Object) при обычном вызове suspend-функции;
+// с точки зрения вызывающего кода контракт остаётся тем, что объявлено в сигнатуре.
 
 fun main() = runBlocking {
-    // Эта suspend функция возвращает String вызывающему коду
-    val result: String = fetchUserName(1)
+    val result: `String` = fetchUserName(1)
     println(result)  // "User_1"
 
-    // Но внутри скомпилированная версия возвращает Any?
-    // и machinery корутин обрабатывает это
+    // Внутри реализация может работать через функцию вида
+    // fun fetchUserName(userId: Int, cont: `Continuation<String>`): Any?
 }
 
-// Инфраструктура корутин проверяет:
+// Внутренняя инфраструктура корутин делает примерно следующее:
 val internalResult = fetchUserName(1, continuation)
 when (internalResult) {
     COROUTINE_SUSPENDED -> {
-        // Функция приостановлена, возобновится позже
+        // Функция приостановлена, продолжение сохранено
     }
     else -> {
-        // Функция завершилась немедленно
-        continuation.resumeWith(Result.success(internalResult as String))
+        // Функция завершилась синхронно
+        @Suppress("UNCHECKED_CAST")
+        continuation.resumeWith(Result.success(internalResult as `String`))
     }
 }
 ```
 
-### Ключевые Выводы
+### Ключевые выводы
 
-1. **Оригинальная сигнатура**: `suspend fun foo(): String`
-2. **Скомпилированная сигнатура**: `fun foo(continuation: Continuation<String>): Any?`
-3. **Причина возвращаемого типа**: Может вернуть либо `COROUTINE_SUSPENDED`, либо фактический результат `String`
-4. **Иерархия типов**: `String` и `COROUTINE_SUSPENDED` имеют `Any?` как общий супертип
-5. **Машина состояний**: Функция преобразуется в машину состояний, которая сохраняет состояние между точками приостановки
+1. Оригинальная сигнатура: `suspend fun foo(): String`.
+2. На уровне реализации Kotlin/JVM компилятор превращает её в форму вида: `fun foo(continuation: `Continuation<String>`): Any?` (в байткоде: `Object`).
+3. Такой тип возврата нужен, чтобы через одно значение отличать `COROUTINE_SUSPENDED` от фактического результата.
+4. Общий супертип для `String` и `COROUTINE_SUSPENDED` — `Any?` (на уровне байткода — `Object`).
+5. Тело `suspend`-функции трансформируется в машину состояний, которая управляет переходами между точками приостановки.
+6. Это — деталь реализации компилятора; с точки зрения пользователя контракт типа `suspend fun foo(): String` остаётся неизменным.
 
-### Дополнительные Детали Трансформации
+### Дополнительные детали трансформации
 
 ```kotlin
-// Модификатор suspend добавляет:
-// 1. Параметр Continuation
-// 2. Реализацию машины состояний
-// 3. Изменение возвращаемого типа на Any?
-// 4. Отслеживание точек приостановки
+// Модификатор suspend приводит к тому, что компилятор:
+// 1. Добавляет параметр `Continuation` в сгенерированную форму.
+// 2. Строит машину состояний.
+// 3. Использует возвращаемый тип Any?/Object для различения COROUTINE_SUSPENDED и результата.
+// 4. Отслеживает точки приостановки.
 
 suspend fun original(x: Int): String
-//  Преобразуется в
-fun original(x: Int, $completion: Continuation<String>): Any?
+// Примерно преобразуется в (Kotlin/JVM):
+fun original(x: Int, completion: `Continuation<String>`): Any?
 
-// Общий паттерн:
+// Обобщённый паттерн:
 suspend fun <T> func(): T
-//  Становится
-fun <T> func($completion: Continuation<T>): Any?
+// Становится на уровне реализации:
+fun <T> func(completion: Continuation<T>): Any?
 ```
 
 ## Answer (EN)
 
-The return type becomes **Any?** (or `Object` in JVM bytecode) because the function can return either the String value or a special marker **COROUTINE_SUSPENDED** to indicate that the coroutine is suspended.
+At the JVM bytecode level, the compiled suspend function has the return type `Object` (conceptually `Any?` in Kotlin) because it must be able to return either the special `COROUTINE_SUSPENDED` marker indicating suspension or the computed result. This is an implementation detail of the Kotlin compiler (specifically on Kotlin/JVM), not a stable part of the public `suspend` language contract.
 
-Under the hood, the Kotlin compiler transforms suspend functions using the **Continuation-Passing Style (CPS)** transformation. The function signature changes significantly during compilation.
+Under the hood, the Kotlin compiler transforms suspend functions using a variant of Continuation-Passing Style (`CPS`). The function signature is rewritten to accept a `Continuation`, and the body is converted into a state machine.
+
+See also: [[c-kotlin]], [[c-coroutines]], [[c-kotlin-coroutines-basics]]
 
 ### Source Code
 
@@ -340,30 +351,34 @@ suspend fun fetchUserName(userId: Int): String {
 ### After Compilation (Conceptual Decompiled Version)
 
 ```kotlin
-// Simplified representation of what the compiler generates
-fun fetchUserName(userId: Int, continuation: Continuation<String>): Any? {
-    // State machine implementation
+// Simplified representation of what the Kotlin/JVM compiler generates
+fun fetchUserName(userId: Int, continuation: `Continuation<String>`): Any? {
+    // State machine implementation (simplified)
     val sm = continuation as? FetchUserNameStateMachine
         ?: FetchUserNameStateMachine(continuation)
 
-    when (sm.label) {
+    return when (sm.label) {
         0 -> {
             sm.label = 1
-            if (delay(100, sm) == COROUTINE_SUSPENDED) {
-                return COROUTINE_SUSPENDED
+            val r = delay(100, sm)
+            if (r === COROUTINE_SUSPENDED) {
+                COROUTINE_SUSPENDED
+            } else {
+                "User_$userId"
             }
         }
         1 -> {
-            return "User_$userId"
+            // Resumed after suspension
+            "User_$userId"
         }
+        else -> throw IllegalStateException("Unexpected state")
     }
-    throw IllegalStateException("Unexpected state")
 }
 
-// Return type is Any? because it can return:
-// 1. COROUTINE_SUSPENDED (a special marker object)
-// 2. The actual String result
-// 3. null (in some cases)
+// Return type is Any? (Object in JVM bytecode) because it may hold:
+// 1. COROUTINE_SUSPENDED (special marker object)
+// 2. The actual `String` result on normal completion
+// Exceptions are not returned as values; they are thrown or delivered via resumeWith.
 ```
 
 ### Understanding the Transformation
@@ -375,12 +390,12 @@ suspend fun getData(): String {
     return "Data"
 }
 
-// What the compiler actually generates (simplified):
-fun getData(continuation: Continuation<String>): Any? {
-    // Can return:
+// What the compiler generates (simplified, Kotlin/JVM):
+fun getData(continuation: `Continuation<String>`): Any? {
+    // It can return:
     // - COROUTINE_SUSPENDED: if the function suspends
-    // - String: if the function completes immediately
-    // - Exception: if an error occurs
+    // - "Data" (`String`): if it completes synchronously without suspension
+    // On failure, an exception is thrown or continuation.resumeWith(Result.failure(e)) is invoked.
 
     // ... state machine implementation ...
 }
@@ -389,20 +404,20 @@ fun getData(continuation: Continuation<String>): Any? {
 ### COROUTINE_SUSPENDED Marker
 
 ```kotlin
-// This is an internal Kotlin coroutine object
+// Internal object used by coroutine implementation
 internal object COROUTINE_SUSPENDED
 
 // The compiled function returns this when it suspends:
-fun example(cont: Continuation<String>): Any? {
+fun example(cont: `Continuation<String>`): Any? {
     // ... some logic ...
 
-    if (needsToSuspend) {
-        return COROUTINE_SUSPENDED  // Type is Any
+    return if (needsToSuspend) {
+        COROUTINE_SUSPENDED  // Type Any
     } else {
-        return "Result"  // Type is String
+        "Result"            // Type `String`
     }
 
-    // Return type must be Any? to accommodate both
+    // Return type must be Any? to accommodate both.
 }
 ```
 
@@ -411,51 +426,52 @@ fun example(cont: Continuation<String>): Any? {
 ```kotlin
 // Original code
 suspend fun multiStepProcess(): String {
-    val step1 = delay(100)           // Suspension point 1
-    val step2 = fetchData()          // Suspension point 2
+    delay(100)                  // Suspension point 1
+    val step2 = fetchData()     // Suspension point 2
     return "Completed: $step2"
 }
 
-// Compiled version (highly simplified)
-fun multiStepProcess(completion: Continuation<String>): Any? {
+// Highly simplified compiled form
+fun multiStepProcess(completion: `Continuation<String>`): Any? {
     val sm = completion as? MultiStepStateMachine
         ?: MultiStepStateMachine(completion)
 
-    when (sm.label) {
+    return when (sm.label) {
         0 -> {
             sm.label = 1
-            val result = delay(100, sm)
-            if (result == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
-            // Fall through to label 1
+            val r = delay(100, sm)
+            if (r === COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
+            // fall through by reinvoking with updated state
+            multiStepProcess(sm)
         }
         1 -> {
             sm.label = 2
-            val result = fetchData(sm)
-            if (result == COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
-            sm.step2Result = result as String
-            // Fall through to label 2
+            val r = fetchData(sm)
+            if (r === COROUTINE_SUSPENDED) return COROUTINE_SUSPENDED
+            sm.step2Result = r as `String`
+            multiStepProcess(sm)
         }
         2 -> {
-            return "Completed: ${sm.step2Result}"  // Returns String
+            "Completed: ${sm.step2Result}"
         }
+        else -> throw IllegalStateException()
     }
-
-    throw IllegalStateException()
 }
 
-// State machine to preserve local variables across suspensions
+// State machine to preserve locals across suspensions
 class MultiStepStateMachine(
-    val completion: Continuation<String>
+    val completion: `Continuation<String>`
 ) : Continuation<Any?> {
     var label = 0
     var step2Result: String? = null
 
-    override fun resumeWith(result: Result<Any?>) {
-        multiStepProcess(this)
-    }
-
     override val context: CoroutineContext
         get() = completion.context
+
+    override fun resumeWith(result: Result<Any?>) {
+        // In real generated code, resumeWith drives the state machine; here it's simplified
+        multiStepProcess(this)
+    }
 }
 ```
 
@@ -468,159 +484,162 @@ suspend fun simpleFunction(): String {
     return "Done"
 }
 
-// Actual decompiled Java bytecode (from IntelliJ)
+// Typical (simplified) decompiled Java for Kotlin/JVM
 public static final Object simpleFunction(Continuation $completion) {
-    Object $continuation;
-    label27: {
-        if ($completion instanceof SimpleFunctionContinuation) {
-            $continuation = (SimpleFunctionContinuation)$completion;
-            if (((SimpleFunctionContinuation)$continuation).label >= Integer.MIN_VALUE) {
-                ((SimpleFunctionContinuation)$continuation).label -= Integer.MIN_VALUE;
-                break label27;
-            }
-        }
-        $continuation = new SimpleFunctionContinuation($completion);
+    SimpleFunctionContinuation $cont;
+    if ($completion instanceof SimpleFunctionContinuation) {
+        $cont = (SimpleFunctionContinuation) $completion;
+    } else {
+        $cont = new SimpleFunctionContinuation($completion);
     }
 
-    Object result = ((SimpleFunctionContinuation)$continuation).result;
+    Object result = $cont.result;
     Object COROUTINE_SUSPENDED = IntrinsicsKt.getCOROUTINE_SUSPENDED();
 
-    switch(((SimpleFunctionContinuation)$continuation).label) {
-        case 0:
+    switch ($cont.label) {
+        case 0: {
             ResultKt.throwOnFailure(result);
-            ((SimpleFunctionContinuation)$continuation).label = 1;
-            if (DelayKt.delay(1000L, $continuation) == COROUTINE_SUSPENDED) {
-                return COROUTINE_SUSPENDED;  // Returns Object (COROUTINE_SUSPENDED)
+            $cont.label = 1;
+            if (DelayKt.delay(1000L, $cont) == COROUTINE_SUSPENDED) {
+                return COROUTINE_SUSPENDED;  // Returns marker as Object
             }
             break;
-        case 1:
+        }
+        case 1: {
             ResultKt.throwOnFailure(result);
             break;
+        }
         default:
             throw new IllegalStateException("call to 'resume' before 'invoke'");
     }
 
-    return "Done";  // Returns String
-
-    // Return type is Object to support both COROUTINE_SUSPENDED and String
+    return "Done";  // Returns result as Object
+    // Return type Object supports both COROUTINE_SUSPENDED and the actual result.
 }
 ```
 
 ### Why Any? and not String?
 
 ```kotlin
-// This wouldn't work with return type String:
-fun fetchData(cont: Continuation<String>): String {
+// This would not work with return type String:
+fun fetchData(cont: `Continuation<String>`): String {
     if (suspended) {
-        return COROUTINE_SUSPENDED  // - ERROR: Type mismatch
+        return COROUTINE_SUSPENDED  // ERROR: type mismatch
     }
-    return "Data"  // - OK
+    return "Data"
 }
 
-// Must use Any? to allow both:
-fun fetchData(cont: Continuation<String>): Any? {
-    if (suspended) {
-        return COROUTINE_SUSPENDED  // - OK (Any)
+// Must use Any? so it can hold both marker and result:
+fun fetchData(cont: `Continuation<String>`): Any? {
+    return if (suspended) {
+        COROUTINE_SUSPENDED       // OK (Any)
+    } else {
+        "Data"                   // OK (`String` is subtype of Any)
     }
-    return "Data"  // - OK (String is subtype of Any)
 }
+
+// For callers, the suspend function's declared type remains:
+// suspend fun fetchData(): String
+// The Any?/Object return type is an internal implementation detail.
 ```
 
 ### Continuation Interface
 
 ```kotlin
-// The Continuation interface that's added as a parameter
+// Continuation interface as used in the compiled signature
 public interface Continuation<in T> {
     public val context: CoroutineContext
     public fun resumeWith(result: Result<T>)
 }
 
 // So this:
-suspend fun getName(): String
+// suspend fun getName(): String
+// is compiled (simplified, JVM) to:
+// public static final Object getName(Continuation<? super String> continuation)
 
-// Becomes this:
-fun getName(continuation: Continuation<String>): Any?
+// Conceptual Kotlin form:
+fun getName(continuation: `Continuation<String>`): Any?
 ```
 
-### Example: Immediate Return Vs Suspension
+### Example: Immediate Return vs Suspension
 
 ```kotlin
 suspend fun smartFunction(needDelay: Boolean): String {
     if (needDelay) {
-        delay(1000)  // May return COROUTINE_SUSPENDED
+        delay(1000)
     }
-    return "Result"  // Always returns String at the end
+    return "Result"
 }
 
-// Compiled behavior:
-fun smartFunction(needDelay: Boolean, cont: Continuation<String>): Any? {
-    if (needDelay) {
-        // First call: returns COROUTINE_SUSPENDED
-        // Resumed later after delay
-    }
-    // Eventually returns: "Result" (String)
+// Simplified compiled behavior:
+fun smartFunction(needDelay: Boolean, cont: `Continuation<String>`): Any? {
+    // On first call it may either:
+    // - return "Result" immediately (as Any?) if no suspension occurs,
+    // - or return COROUTINE_SUSPENDED if it suspends.
+    // After resumption, it continues and eventually returns the result.
 
-    // Return type Any? covers both cases
+    // Any? covers both possibilities at this internal level.
 }
 ```
 
 ### Testing the Return Type
 
 ```kotlin
-// You can't access the compiled return type directly,
-// but you can observe the behavior:
+// You cannot and should not rely on the internal Any?/Object return type
+// when calling a suspend function normally; you see the declared suspend signature.
 
 fun main() = runBlocking {
-    // This suspend function returns String to the caller
-    val result: String = fetchUserName(1)
+    val result: `String` = fetchUserName(1)
     println(result)  // "User_1"
 
-    // But internally, the compiled version returns Any?
-    // and the coroutine machinery handles it
+    // Internally, an implementation-specific form like
+    // fun fetchUserName(userId: Int, cont: `Continuation<String>`): Any?
+    // is used by the coroutine machinery.
 }
 
-// The coroutine infrastructure checks:
+// Internally, coroutine infrastructure does something like:
 val internalResult = fetchUserName(1, continuation)
 when (internalResult) {
     COROUTINE_SUSPENDED -> {
-        // Function suspended, will resume later
+        // Function suspended; continuation saved
     }
     else -> {
-        // Function completed immediately
-        continuation.resumeWith(Result.success(internalResult as String))
+        // Function completed synchronously
+        @Suppress("UNCHECKED_CAST")
+        continuation.resumeWith(Result.success(internalResult as `String`))
     }
 }
 ```
 
 ### Key Takeaways
 
-1. **Original Signature**: `suspend fun foo(): String`
-2. **Compiled Signature**: `fun foo(continuation: Continuation<String>): Any?`
-3. **Return Type Reason**: Can return either `COROUTINE_SUSPENDED` or the actual `String` result
-4. **Type Hierarchy**: `String` and `COROUTINE_SUSPENDED` share `Any?` as common supertype
-5. **State Machine**: The function is transformed into a state machine that preserves state across suspension points
+1. Original signature: `suspend fun foo(): String`.
+2. On Kotlin/JVM, the compiler rewrites it into an implementation form like: `fun foo(continuation: `Continuation<String>`): Any?` (bytecode return type `Object`).
+3. This return type is needed so the implementation can use a single channel to indicate either `COROUTINE_SUSPENDED` or the actual result.
+4. `String` and `COROUTINE_SUSPENDED` share `Any?` (`Object`) as a common supertype.
+5. The suspend body is compiled into a state machine that manages suspension and resumption.
+6. This is an implementation detail; at the source level the contract remains `suspend fun foo(): String`.
 
 ### Additional Transformation Details
 
 ```kotlin
-// Suspend modifier adds:
-// 1. Continuation parameter
-// 2. State machine implementation
-// 3. Return type change to Any?
-// 4. Suspension point tracking
+// The suspend modifier causes the compiler to:
+// 1. Add a `Continuation` parameter to the compiled form.
+// 2. Generate a state machine.
+// 3. Use Any?/Object as the compiled return type to distinguish COROUTINE_SUSPENDED from the result.
+// 4. Track suspension points.
 
 suspend fun original(x: Int): String
-//  Transformed to
-fun original(x: Int, $completion: Continuation<String>): Any?
+// Transformed (Kotlin/JVM, simplified) to:
+fun original(x: Int, completion: `Continuation<String>`): Any?
 
 // Generic pattern:
 suspend fun <T> func(): T
-//  Becomes
-fun <T> func($completion: Continuation<T>): Any?
+// Becomes in the compiled form:
+fun <T> func(completion: Continuation<T>): Any?
 ```
 
 ---
-
 
 ## Follow-ups
 

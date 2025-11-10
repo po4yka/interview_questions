@@ -10,11 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
+related: [c-kotlin, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
 created: "2025-10-12"
-updated: 2025-01-25
+updated: "2025-11-09"
 tags: [access-modifiers, difficulty/medium, encapsulation, kotlin, kotlin-features, visibility-modifiers]
-sources: [https://kotlinlang.org/docs/visibility-modifiers.html]
+sources: ["https://kotlinlang.org/docs/visibility-modifiers.html"]
 ---
 
 # Вопрос (RU)
@@ -28,13 +28,15 @@ sources: [https://kotlinlang.org/docs/visibility-modifiers.html]
 ## Ответ (RU)
 
 **Теория модификаторов видимости:**
-Kotlin имеет 4 уровня видимости: `private`, `protected`, `internal`, `public`. В отличие от Java, default modifier - `public`, а не `package-private`. `internal` позволяет видеть элемент в пределах одного модуля - основная инкапсуляция для модульных проектов. В Kotlin нет package-private модификатора.
+Kotlin имеет 4 уровня видимости: `private`, `protected`, `internal`, `public`. В отличие от Java, default modifier — `public`, а не package-private. `internal` позволяет видеть элемент в пределах одного модуля — основная инкапсуляция для модульных проектов. В Kotlin нет отдельного package-private модификатора.
+
+См. также: [[c-kotlin]].
 
 **Уровни видимости:**
-- **public**: Видим везде (default модификатор)
-- **internal**: Видим внутри модуля
-- **protected**: Видим в классе и наследниках (только для members класса)
-- **private**: Видим только в пределах объявления
+- **public**: Видим везде (default модификатор).
+- **internal**: Видим внутри модуля.
+- **protected**: Видим в классе и наследниках (только для членов класса и его наследников; для top-level деклараций `protected` недоступен).
+- **private**: Видим только в пределах объявления или файла (для top-level деклараций — в пределах файла; для членов класса — в пределах этого класса).
 
 **Базовые примеры:**
 ```kotlin
@@ -43,12 +45,12 @@ class PublicClass {
     fun publicMethod() {} // public
 }
 
-// ✅ internal - видим только в модуле
+// ✅ internal — видим только в модуле
 internal class InternalClass {
     internal fun internalMethod() {}
 }
 
-// ✅ private - только внутри класса
+// ✅ private — только внутри класса
 class Example {
     private fun privateMethod() {}
 
@@ -57,14 +59,14 @@ class Example {
     }
 }
 
-// ❌ Ошибка - недоступен приватный метод
+// ❌ Ошибка — недоступен приватный метод
 // val ex = Example()
 // ex.privateMethod() // Ошибка!
 ```
 
 **Protected visibility:**
 ```kotlin
-// ✅ protected - видим в классе и наследниках
+// ✅ protected — видим в классе и наследниках
 open class Base {
     protected val value = 42
     protected fun protectedMethod() {}
@@ -86,7 +88,7 @@ fun test() {
 
 **Internal visibility:**
 ```kotlin
-// ✅ internal - модульная инкапсуляция
+// ✅ internal — модульная инкапсуляция
 // Файл: utils/network.kt (модуль A)
 internal class NetworkHelper {
     internal fun connect() {}
@@ -102,7 +104,7 @@ fun main() {
 // Файл: client/app.kt (модуль B)
 import utils.*
 fun usage() {
-    // val helper = NetworkHelper() // ❌ Недоступно - другой модуль
+    // val helper = NetworkHelper() // ❌ Недоступно — другой модуль
 }
 ```
 
@@ -144,16 +146,16 @@ class Database private constructor() {
 // ❌ Нельзя создать напрямую
 // val db = Database() // Ошибка!
 
-// ✅ Приватные setters
+// ✅ Инкапсуляция через приватное хранилище
 class User(val name: String) {
     private var password: String = ""
 
     fun setPassword(newPassword: String) {
-        password = newPassword // ✅ Можно установить
+        password = newPassword // ✅ Управляем изменение изнутри
     }
 
-    fun getPassword(): String {
-        return "***" // ❌ Нельзя получить реальный пароль
+    fun getMaskedPassword(): String {
+        return "***" // ✅ Не раскрываем внутреннее значение вовне
     }
 }
 ```
@@ -167,8 +169,8 @@ public fun publicHelper() {} // Видна везде
 
 // Файл: main.kt (тот же модуль)
 fun test() {
-    // privateHelper() // ❌ Недоступно - другой файл
-    internalHelper() // ✅ Доступно - тот же модуль
+    // privateHelper() // ❌ Недоступно — другая файл-область
+    internalHelper() // ✅ Доступно — тот же модуль
     publicHelper() // ✅ Доступно
 }
 ```
@@ -178,13 +180,15 @@ fun test() {
 ## Answer (EN)
 
 **Visibility Modifiers Theory:**
-Kotlin has 4 visibility levels: `private`, `protected`, `internal`, `public`. Unlike Java, default modifier is `public`, not package-private. `internal` allows seeing element within one module - main encapsulation for modular projects. Kotlin has no package-private modifier.
+Kotlin has 4 visibility levels: `private`, `protected`, `internal`, `public`. Unlike Java, the default modifier is `public`, not package-private. `internal` makes a declaration visible within one module — primary encapsulation for modular projects. Kotlin has no dedicated package-private modifier.
+
+See also: [[c-kotlin]].
 
 **Visibility Levels:**
-- **public**: Visible everywhere (default modifier)
-- **internal**: Visible within module
-- **protected**: Visible in class and inheritors (only for class members)
-- **private**: Visible only within declaring scope
+- **public**: Visible everywhere (default modifier).
+- **internal**: Visible within the same module.
+- **protected**: Visible in the class and its subclasses (only for class members; not allowed for top-level declarations).
+- **private**: Visible only within the declaring scope or file (for top-level declarations — within the file; for class members — within that class).
 
 **Basic Examples:**
 ```kotlin
@@ -193,12 +197,12 @@ class PublicClass {
     fun publicMethod() {} // public
 }
 
-// ✅ internal - visible only in module
+// ✅ internal — visible only in the module
 internal class InternalClass {
     internal fun internalMethod() {}
 }
 
-// ✅ private - only inside class
+// ✅ private — only inside the class
 class Example {
     private fun privateMethod() {}
 
@@ -207,14 +211,14 @@ class Example {
     }
 }
 
-// ❌ Error - private method not accessible
+// ❌ Error — private method not accessible
 // val ex = Example()
 // ex.privateMethod() // Error!
 ```
 
 **Protected Visibility:**
 ```kotlin
-// ✅ protected - visible in class and inheritors
+// ✅ protected — visible in class and inheritors
 open class Base {
     protected val value = 42
     protected fun protectedMethod() {}
@@ -222,8 +226,8 @@ open class Base {
 
 class Derived : Base() {
     fun accessProtected() {
-        println(value) // ✅ Accessible in inheritor
-        protectedMethod() // ✅ Accessible in inheritor
+        println(value) // ✅ Accessible in subclass
+        protectedMethod() // ✅ Accessible in subclass
     }
 }
 
@@ -236,7 +240,7 @@ fun test() {
 
 **Internal Visibility:**
 ```kotlin
-// ✅ internal - module-level encapsulation
+// ✅ internal — module-level encapsulation
 // File: utils/network.kt (module A)
 internal class NetworkHelper {
     internal fun connect() {}
@@ -252,7 +256,7 @@ fun main() {
 // File: client/app.kt (module B)
 import utils.*
 fun usage() {
-    // val helper = NetworkHelper() // ❌ Not accessible - different module
+    // val helper = NetworkHelper() // ❌ Not accessible — different module
 }
 ```
 
@@ -294,16 +298,16 @@ class Database private constructor() {
 // ❌ Cannot create directly
 // val db = Database() // Error!
 
-// ✅ Private setters
+// ✅ Encapsulation via private backing storage
 class User(val name: String) {
     private var password: String = ""
 
     fun setPassword(newPassword: String) {
-        password = newPassword // ✅ Can set
+        password = newPassword // ✅ Control modifications internally
     }
 
-    fun getPassword(): String {
-        return "***" // ❌ Cannot get real password
+    fun getMaskedPassword(): String {
+        return "***" // ✅ Do not expose the internal value directly
     }
 }
 ```
@@ -311,14 +315,14 @@ class User(val name: String) {
 **Package-level Visibility:**
 ```kotlin
 // ✅ File: helpers.kt
-private fun privateHelper() {} // Private file function
-internal fun internalHelper() {} // Visible in module
+private fun privateHelper() {} // Private to this file
+internal fun internalHelper() {} // Visible in the module
 public fun publicHelper() {} // Visible everywhere
 
 // File: main.kt (same module)
 fun test() {
-    // privateHelper() // ❌ Not accessible - different file
-    internalHelper() // ✅ Accessible - same module
+    // privateHelper() // ❌ Not accessible — different file scope
+    internalHelper() // ✅ Accessible — same module
     publicHelper() // ✅ Accessible
 }
 ```
@@ -339,7 +343,7 @@ fun test() {
 - [[q-kotlin-enum-classes--kotlin--easy]] - Basic classes
 
 ### Related (Medium)
--  - Access modifiers
+- [[q-access-modifiers--kotlin--medium]] - Access modifiers
 - [[q-inheritance-open-final--kotlin--medium]] - Inheritance
 - [[q-inner-nested-classes--kotlin--medium]] - Nested classes
 

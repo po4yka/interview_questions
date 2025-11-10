@@ -1,11 +1,11 @@
 ---
 id: kotlin-005
 title: "Higher-Order Functions in Kotlin / Функции высшего порядка в Kotlin"
-aliases: ["Higher-Order Functions in Kotlin, Функции высшего порядка в Kotlin"]
+aliases: ["Higher-Order Functions in Kotlin", "Функции высшего порядка в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [functional-programming, higher-order-functions, inline-functions]
+subtopics: [higher-order-functions, functional-programming, inline-functions]
 question_kind: theory
 difficulty: medium
 
@@ -18,11 +18,11 @@ source_note: Kirchhoff Android Interview Questions repository - adapted from inl
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-any-inheritance--programming-languages--easy, q-kotlin-collections--kotlin--easy, q-kotlin-extensions--programming-languages--easy]
+related: [c-kotlin, q-kotlin-collections--kotlin--easy, q-kotlin-extensions--programming-languages--easy]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-11-09
 
 tags: [difficulty/medium, functional-programming, higher-order-functions, kotlin, lambda-expressions]
 ---
@@ -33,9 +33,12 @@ tags: [difficulty/medium, functional-programming, higher-order-functions, kotlin
 
 # Question (EN)
 > What are higher-order functions in Kotlin?
+
 ## Ответ (RU)
 
-**Функция высшего порядка** — это функция, которая принимает одну или несколько функций в качестве параметров, или возвращает функцию в качестве результата. Это обеспечивает паттерны функционального программирования и делает код более переиспользуемым и выразительным.
+**Функция высшего порядка** — это функция, которая принимает одну или несколько функций в качестве параметров или возвращает функцию в качестве результата (или и то, и другое). Это обеспечивает паттерны функционального программирования и делает код более переиспользуемым и выразительным.
+
+См. также: [[c-kotlin]]
 
 ### Базовая Концепция
 
@@ -167,24 +170,24 @@ val grouped = numbers.groupBy { it % 2 }
 
 ### Соображения Производительности
 
-Использование функций высшего порядка создаёт определённые накладные расходы времени выполнения: каждая функция — это объект, и она захватывает замыкание (переменные, к которым обращается в теле функции). Выделение памяти (как для функциональных объектов, так и для классов) и виртуальные вызовы создают накладные расходы времени выполнения.
+Использование функций высшего порядка может создавать накладные расходы времени выполнения. Лямбды и ссылки на функции представляются объектами, и если они захватывают внешние переменные, создаются замыкания. Выделение памяти (для функциональных объектов и возможных замыканий) и виртуальные вызовы вносят дополнительный оверхед.
 
 #### Ключевое Слово Inline
 
-Чтобы устранить эти накладные расходы, вы можете пометить функции высшего порядка модификатором `inline`. Компилятор затем скопирует код функции в место вызова:
+Чтобы уменьшить эти накладные расходы, вы можете пометить функции высшего порядка модификатором `inline`. Во многих случаях компилятор встраивает вызов функции и лямбд, переданных как параметры, непосредственно в место вызова, что позволяет избежать создания дополнительных объектов и косвенных вызовов.
 
 ```kotlin
-// Без inline - создаётся объект функции
+// Без inline - обычно создаётся объект функции для лямбды
 fun repeat(times: Int, action: () -> Unit) {
     for (i in 0 until times) {
-        action()  // Вызов через объект
+        action()  // Вызов через функциональный объект
     }
 }
 
-// С inline - код встраивается
+// С inline - код (включая лямбду) может быть встроен
 inline fun repeatInlined(times: Int, action: () -> Unit) {
     for (i in 0 until times) {
-        action()  // Код лямбды встроен напрямую
+        action()  // Тело лямбды может быть встроено напрямую
     }
 }
 ```
@@ -207,10 +210,10 @@ lock(myLock) {
     performOperation()
 }
 
-// После компиляции становится:
+// После компиляции (упрощённо) может быть преобразовано в:
 myLock.lock()
 try {
-    performOperation()  // Встроено!
+    performOperation()
 } finally {
     myLock.unlock()
 }
@@ -336,13 +339,15 @@ val page = html {
 4. **Читаемость** - Выражайте намерение ясно и лаконично
 5. **Гибкость** - Изменяйте поведение без изменения структуры функции
 
-**Краткое содержание**: Функции высшего порядка принимают функции как параметры или возвращают функции как результаты. Они обеспечивают паттерны функционального программирования, переиспользуемость кода и абстракцию. Стандартная библиотека Kotlin (map, filter, reduce) активно их использует. Ключевое слово `inline` устраняет накладные расходы производительности, встраивая код лямбды во время компиляции.
+**Краткое содержание**: Функции высшего порядка принимают функции как параметры или возвращают функции как результаты. Они обеспечивают паттерны функционального программирования, переиспользуемость кода и абстракцию. Стандартная библиотека Kotlin (map, filter, reduce) активно их использует. Ключевое слово `inline` помогает снизить накладные расходы, встраивая код лямбд и тела функции во время компиляции там, где это возможно.
 
 ---
 
 ## Answer (EN)
 
-A **higher-order function** is a function that takes one or more functions as parameters, or returns a function as a result. This enables functional programming patterns and makes code more reusable and expressive.
+A **higher-order function** is a function that takes one or more functions as parameters or returns a function as a result (or both). This enables functional programming patterns and makes code more reusable and expressive.
+
+See also: [[c-kotlin]]
 
 ### Basic Concept
 
@@ -360,7 +365,7 @@ val max = calculate(5, 3) { a, b -> if (a > b) a else b }  // 5
 
 ### Function Types
 
-In Kotlin, function types are specified using the syntax: `(ParameterTypes) -> ReturnType`
+In Kotlin, function types are specified using the syntax: `(ParameterTypes) -> ReturnType`.
 
 ```kotlin
 // Function type examples
@@ -474,24 +479,24 @@ val grouped = numbers.groupBy { it % 2 }
 
 ### Performance Considerations
 
-Using higher-order functions imposes certain runtime penalties: each function is an object, and it captures a closure (variables accessed in the function body). Memory allocations (both for function objects and classes) and virtual calls introduce runtime overhead.
+Using higher-order functions can introduce runtime overhead. Lambdas and function references are represented as objects, and when they capture external variables, closures are created. Memory allocations (for such function objects and closures) and virtual calls add overhead.
 
 #### The Inline Keyword
 
-To eliminate this overhead, you can mark higher-order functions with the `inline` modifier. The compiler will then copy the function code at the calling place:
+To reduce this overhead, you can mark higher-order functions with the `inline` modifier. In many cases, the compiler will inline the function body and the lambdas passed as arguments at the call site, which can avoid extra allocations and indirection.
 
 ```kotlin
-// Without inline - creates function object
+// Without inline - typically creates a function object for the lambda
 fun repeat(times: Int, action: () -> Unit) {
     for (i in 0 until times) {
-        action()  // Call through object
+        action()  // Call through functional object
     }
 }
 
-// With inline - code is inlined
+// With inline - code (including lambda) can be inlined
 inline fun repeatInlined(times: Int, action: () -> Unit) {
     for (i in 0 until times) {
-        action()  // Lambda code inlined directly
+        action()  // Lambda body may be inlined directly
     }
 }
 ```
@@ -514,10 +519,10 @@ lock(myLock) {
     performOperation()
 }
 
-// After compilation, becomes:
+// After compilation, this can (simplified) become:
 myLock.lock()
 try {
-    performOperation()  // Inlined!
+    performOperation()
 } finally {
     myLock.unlock()
 }
@@ -643,7 +648,13 @@ val page = html {
 4. **Readability** - Express intent clearly and concisely
 5. **Flexibility** - Change behavior without modifying function structure
 
-**English Summary**: Higher-order functions take functions as parameters or return functions as results. They enable functional programming patterns, code reusability, and abstraction. Kotlin's standard library (map, filter, reduce) extensively uses them. The `inline` keyword eliminates performance overhead by inlining lambda code at compile time.
+**English Summary**: Higher-order functions take functions as parameters or return functions as results. They enable functional programming patterns, code reusability, and abstraction. Kotlin's standard library (map, filter, reduce) extensively uses them. The `inline` keyword helps reduce performance overhead by inlining function and lambda bodies at compile time where applicable.
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого подхода от Java?
+- Когда вы бы использовали функции высшего порядка на практике?
+- Какие распространенные подводные камни следует учитывать?
 
 ## Follow-ups
 
@@ -651,11 +662,24 @@ val page = html {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Функции высшего порядка и лямбды - документация Kotlin](https://kotlinlang.org/docs/lambdas.html)
+- [Inline-функции - документация Kotlin](https://kotlinlang.org/docs/inline-functions.html)
+- [Практическое руководство по модификатору inline в Kotlin](https://maxkim.eu/a-practical-guide-to-kotlins-inline-modifier)
+- [Inline function: Kotlin (статья)](https://agrawalsuneet.medium.com/inline-function-kotlin-3f05d2ea1b59)
+
 ## References
 - [Higher-Order Functions and Lambdas - Kotlin Documentation](https://kotlinlang.org/docs/lambdas.html)
 - [Inline functions - Kotlin Documentation](https://kotlinlang.org/docs/inline-functions.html)
 - [A Practical Guide to Kotlin's inline Modifier](https://maxkim.eu/a-practical-guide-to-kotlins-inline-modifier)
 - [Inline function: Kotlin](https://agrawalsuneet.medium.com/inline-function-kotlin-3f05d2ea1b59)
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-lambda-expressions--kotlin--medium]]
+- [[q-kotlin-inline-functions--kotlin--medium]]
+- [[q-kotlin-scope-functions--kotlin--medium]]
 
 ## Related Questions
 - [[q-kotlin-lambda-expressions--kotlin--medium]]

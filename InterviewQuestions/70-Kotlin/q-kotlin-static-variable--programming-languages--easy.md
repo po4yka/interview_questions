@@ -2,25 +2,21 @@
 id: lang-093
 title: "Kotlin Static Variable / Статические переменные в Kotlin"
 aliases: [Kotlin Static Variable, Статические переменные в Kotlin]
-topic: programming-languages
-subtopics: [initialization, type-system]
+topic: kotlin
+subtopics: [companion-object, jvm-interop]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-enum-class-advanced--kotlin--medium, q-kotlin-java-data-types--programming-languages--medium, q-structured-concurrency-patterns--kotlin--hard]
+related: [c-kotlin, c-kotlin-features, q-enum-class-advanced--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [companion-object, const, difficulty/easy, jvmstatic, programming-languages, static]
+updated: 2025-11-10
+tags: [companion-object, const, difficulty/easy, jvmstatic, kotlin, static]
 ---
-# Как Сделать Статическую Переменную?
-
 # Вопрос (RU)
 > Как сделать статическую переменную?
-
----
 
 # Question (EN)
 > How to create a static variable?
@@ -163,7 +159,29 @@ DatabaseConfig.host = "192.168.1.1"
 DatabaseConfig.connect()
 ```
 
-### Таблица Сравнения:
+### Java Interop (RU)
+
+```kotlin
+// Kotlin
+class MyClass {
+    companion object {
+        const val CONST = "constant"
+        @JvmField var field = "field"
+        @JvmStatic fun method() = "method"
+        fun regularMethod() = "regular"
+    }
+}
+```
+
+```java
+// Java доступ
+String constValue = MyClass.CONST;  // Прямой доступ
+String fieldValue = MyClass.field;  // Прямой доступ с @JvmField
+String methodValue = MyClass.method();  // Прямой доступ с @JvmStatic
+String regular = MyClass.Companion.regularMethod();  // Через Companion
+```
+
+### Сравнение (RU)
 
 | Метод | Расположение | Java совместимость | Время компиляции |
 |-------|--------------|-------------------|-----------------|
@@ -174,7 +192,7 @@ DatabaseConfig.connect()
 | **Top-level** | Вне класса | Static | Нет |
 | **object** | Автономный | Instance | Нет |
 
-### Полный Пример:
+### Полный Пример (RU)
 
 ```kotlin
 class User(val name: String) {
@@ -211,7 +229,7 @@ val id = User.generateId()
 val admin = User.createAdmin("Алиса")
 ```
 
-### Когда Использовать Каждый Метод:
+### Когда Использовать Каждый Метод (RU)
 
 | Случай использования | Решение |
 |---------------------|---------|
@@ -222,7 +240,7 @@ val admin = User.createAdmin("Алиса")
 | Синглтон | `object` |
 | Фабричные методы | companion object |
 
-### Резюме:
+### Резюме (RU)
 
 - **Нет ключевого слова `static`** в Kotlin
 - **companion object** - наиболее распространенный подход
@@ -230,6 +248,23 @@ val admin = User.createAdmin("Алиса")
 - **@JvmField / @JvmStatic** - Java совместимость
 - **const val** - константы времени компиляции
 - **object** - паттерн синглтон
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия от Java-подхода со `static`?
+- Когда вы бы использовали каждый из этих подходов на практике?
+- Как избежать распространенных ошибок при использовании `companion object`, `const val` и `object`?
+
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+- [[q-structured-concurrency-patterns--kotlin--hard]]
+- [[q-enum-class-advanced--kotlin--medium]]
+- [[q-kotlin-java-data-types--programming-languages--medium]]
 
 ## Answer (EN)
 
@@ -343,10 +378,10 @@ class Constants {
         const val APP_NAME = "MyApp"
         const val PI = 3.14159
 
-        // - Cannot use const with computed values
+        // Cannot use const with computed values
         // const val TIMESTAMP = System.currentTimeMillis()  // Error
 
-        // - Use val instead
+        // Use val instead
         val TIMESTAMP = System.currentTimeMillis()
     }
 }
@@ -367,6 +402,28 @@ object DatabaseConfig {
 // Usage - like static
 DatabaseConfig.host = "192.168.1.1"
 DatabaseConfig.connect()
+```
+
+**Java Interop:**
+
+```kotlin
+// Kotlin
+class MyClass {
+    companion object {
+        const val CONST = "constant"
+        @JvmField var field = "field"
+        @JvmStatic fun method() = "method"
+        fun regularMethod() = "regular"
+    }
+}
+```
+
+```java
+// Java access
+String constValue = MyClass.CONST;  // Direct
+String fieldValue = MyClass.field;  // Direct with @JvmField
+String methodValue = MyClass.method();  // Direct with @JvmStatic
+String regular = MyClass.Companion.regularMethod();  // Through Companion
 ```
 
 **Comparison:**
@@ -417,28 +474,6 @@ val id = User.generateId()
 val admin = User.createAdmin("Alice")
 ```
 
-**Java Interop:**
-
-```kotlin
-// Kotlin
-class MyClass {
-    companion object {
-        const val CONST = "constant"
-        @JvmField var field = "field"
-        @JvmStatic fun method() = "method"
-        fun regularMethod() = "regular"
-    }
-}
-```
-
-```java
-// Java access
-String const = MyClass.CONST;  // Direct
-String field = MyClass.field;  // Direct with @JvmField
-String method = MyClass.method();  // Direct with @JvmStatic
-String regular = MyClass.Companion.regularMethod();  // Through Companion
-```
-
 **When to Use Each:**
 
 | Use Case | Solution |
@@ -459,17 +494,16 @@ String regular = MyClass.Companion.regularMethod();  // Through Companion
 - **const val** - compile-time constants
 - **object** - singleton pattern
 
----
-
 ## Follow-ups
 
 - What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- When would you use each of these approaches in practice?
+- What are common pitfalls when using `companion object`, `const val`, and `object`?
 
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
 
 ## Related Questions
 

@@ -2,25 +2,21 @@
 id: lang-043
 title: "Sealed Vs Enum Classes / Sealed против Enum Классов"
 aliases: [Sealed Vs Enum Classes, Sealed против Enum Классов]
-topic: programming-languages
-subtopics: [class-hierarchy, enum, oop]
+topic: kotlin
+subtopics: [enum, oop, class-hierarchy]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-primitive-vs-reference-types--programming-languages--easy, q-suspend-function-suspension-mechanism--programming-languages--hard, q-what-is-garbage-in-gc--programming-languages--easy]
+related: [c-kotlin, c-sealed-classes, q-primitive-vs-reference-types--programming-languages--easy]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [comparison, difficulty/medium, enum, kotlin, oop, programming-languages, sealed-class]
 ---
-# Каковы Отличия Sealed И Enum Классов В Kotlin?
-
 # Вопрос (RU)
 > Каковы отличия sealed и enum классов в Kotlin?
-
----
 
 # Question (EN)
 > What are the differences between sealed and enum classes in Kotlin?
@@ -31,15 +27,15 @@ tags: [comparison, difficulty/medium, enum, kotlin, oop, programming-languages, 
 
 | Характеристика | Enum Class | Sealed Class |
 |---------------|-----------|--------------|
-| **Структура** | Фиксированный набор однородных объектов | Ограниченная иерархия классов |
-| **Количество экземпляров** | Фиксировано на этапе компиляции | Можно создавать множество экземпляров |
-| **Свойства** | Все экземпляры имеют одинаковую структуру | Подклассы могут иметь разные свойства |
-| **Наследование** | Не может иметь подклассов | Может иметь множество подклассов |
-| **Применение** | Простые фиксированные значения | Сложные состояния с разными данными |
+| **Структура** | Фиксированный набор именованных значений с общей объявленной структурой (возможны переопределения по константам) | Ограниченная иерархия классов |
+| **Количество экземпляров** | Фиксировано на этапе компиляции для каждого значения (одиночные экземпляры констант) | Можно создавать множество экземпляров подклассов |
+| **Свойства** | Все значения разделяют общий набор объявленных свойств и методов | Подклассы могут иметь разные свойства |
+| **Наследование** | Наследует `Enum` и не может быть произвольно расширен, константы могут иметь собственные реализации | Может иметь несколько подклассов в пределах разрешённой области (файл/пакет/модуль) |
+| **Применение** | Простые фиксированные значения или состояния | Сложные состояния с разными данными |
 
 ### Enum Class
 
-**Фиксированный набор однородных объектов с идентичной структурой:**
+**Фиксированный набор однородных именованных значений с общей структурой:**
 
 ```kotlin
 enum class Color(val rgb: Int) {
@@ -55,7 +51,8 @@ val color = Color.RED
 println(color.rgb)  // 16711680
 println(color.hex()) // #ff0000
 
-// Все enum-экземпляры имеют одинаковую структуру
+// Все enum-константы имеют общий набор свойств/методов,
+// возможны разные реализации поведения для конкретных констант
 when (color) {
     Color.RED -> println("Red")
     Color.GREEN -> println("Green")
@@ -65,9 +62,10 @@ when (color) {
 ```
 
 **Характеристики:**
-- Каждое значение — это единственный экземпляр
-- Все значения имеют одинаковые свойства
-- Нельзя создать новые экземпляры в runtime
+- Каждое значение — это единственный экземпляр (singleton)
+- Все значения разделяют общий набор объявленных свойств и методов
+- Можно определить дополнительные свойства/методы и переопределять поведение на уровне конкретных констант
+- Нельзя создавать новые значения enum в runtime
 - Можно перебрать все значения: `Color.values()`
 
 ### Sealed Class
@@ -76,7 +74,7 @@ when (color) {
 
 ```kotlin
 sealed class Result<out T> {
-    data class Success<T>(val data: T, val timestamp: Long) : Result<T>()
+    data class Success<out T>(val data: T, val timestamp: Long) : Result<T>()
     data class Error(val exception: Exception, val code: Int) : Result<Nothing>()
     object Loading : Result<Nothing>()
 }
@@ -88,7 +86,7 @@ when (result) {
     is Result.Success -> println("Данные: ${result.data}, время: ${result.timestamp}")
     is Result.Error -> println("Ошибка: ${result.exception.message}, код: ${result.code}")
     is Result.Loading -> println("Загрузка...")
-    // Исчерпывающе: компилятор знает все подклассы
+    // Исчерпывающе: компилятор знает все разрешённые подклассы
 }
 
 // Можно создать несколько экземпляров Success с разными данными
@@ -98,15 +96,16 @@ val result2 = Result.Success("data2", 456L)
 
 **Характеристики:**
 - Допускается множество экземпляров каждого подкласса
-- Подклассы могут иметь совершенно разные свойства
-- Могут быть data-классы, object'ы, обычные классы в качестве подклассов
+- Подклассы могут иметь совершенно разные свойства и типы
+- В качестве подклассов могут быть data-классы, object'ы, обычные классы
 - Нельзя создать экземпляр самого sealed-класса
+- Наследование ограничено: разрешённые подклассы должны находиться в том же файле (для ранних версий) или в том же пакете/модуле в зависимости от платформы и версии Kotlin
 
 ### Когда Использовать Каждый
 
-**Используйте `enum class` когда:**
-- Фиксированный набор значений, который не изменится
-- Все значения имеют одинаковую структуру
+**Используйте `enum class`, когда:**
+- Фиксированный набор значений
+- Все значения разделяют общий набор свойств и конструкторов
 - Простые состояния или константы
 - Нужно перебрать все значения
 
@@ -116,16 +115,16 @@ enum class HttpStatus(val code: Int) { OK(200), NOT_FOUND(404), ERROR(500) }
 enum class DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY }
 ```
 
-**Используйте `sealed class` когда:**
+**Используйте `sealed class`, когда:**
 - Сложные состояния с разной структурой
 - Каждое состояние имеет разные параметры
-- Нужна типобезопасная конечная автоматизация
-- Моделирование дискриминированных объединений
+- Нужен типобезопасный конечный автомат или моделирование протокола
+- Нужно моделировать дискриминированные объединения
 
 ```kotlin
 // Результат сети с разными данными для каждого состояния
 sealed class NetworkResult<out T> {
-    data class Success<T>(val data: T, val cached: Boolean) : NetworkResult<T>()
+    data class Success<out T>(val data: T, val cached: Boolean) : NetworkResult<T>()
     data class Error(val message: String, val retryable: Boolean) : NetworkResult<Nothing>()
     object Loading : NetworkResult<Nothing>()
 }
@@ -158,15 +157,15 @@ sealed class TaskResult {
 
 | Feature | Enum Class | Sealed Class |
 |---------|-----------|--------------|
-| **Structure** | Fixed set of homogeneous objects | Restricted class hierarchy |
-| **Instance count** | Fixed at compile time | Can create multiple instances |
-| **Properties** | All instances have same structure | Subclasses can have different properties |
-| **Inheritance** | Cannot have subclasses | Can have multiple subclasses |
-| **Use case** | Simple fixed values | Complex states with different data |
+| **Structure** | Fixed set of named values with a shared declared structure (per-constant overrides possible) | Restricted class hierarchy |
+| **Instance count** | One singleton instance per enum constant, fixed at compile time | Can create multiple instances of subclasses |
+| **Properties** | All values share the same declared properties/methods | Subclasses can have different properties |
+| **Inheritance** | Extends `Enum` and cannot be arbitrarily subclassed; constants may provide their own implementations | Can have multiple subclasses within the allowed scope (file/package/module) |
+| **Use case** | Simple fixed values or states | Complex states with different data |
 
 ### Enum Class
 
-**Fixed set of homogeneous objects with identical structure:**
+**Fixed set of homogeneous named values with a common structure:**
 
 ```kotlin
 enum class Color(val rgb: Int) {
@@ -182,7 +181,8 @@ val color = Color.RED
 println(color.rgb)  // 16711680
 println(color.hex()) // #ff0000
 
-// All enum instances have same structure
+// All enum constants share the same declared properties/methods;
+// per-constant behavior overrides are possible
 when (color) {
     Color.RED -> println("Red")
     Color.GREEN -> println("Green")
@@ -192,9 +192,10 @@ when (color) {
 ```
 
 **Characteristics:**
-- Each value is a single instance
-- All values have same properties
-- Cannot create new instances at runtime
+- Each enum constant is a single (singleton) instance
+- All values share the same declared properties and methods
+- You can define additional properties/methods and override behavior per constant
+- Cannot create new enum constants at runtime
 - Can iterate over all values: `Color.values()`
 
 ### Sealed Class
@@ -203,7 +204,7 @@ when (color) {
 
 ```kotlin
 sealed class Result<out T> {
-    data class Success<T>(val data: T, val timestamp: Long) : Result<T>()
+    data class Success<out T>(val data: T, val timestamp: Long) : Result<T>()
     data class Error(val exception: Exception, val code: Int) : Result<Nothing>()
     object Loading : Result<Nothing>()
 }
@@ -215,7 +216,7 @@ when (result) {
     is Result.Success -> println("Data: ${result.data}, time: ${result.timestamp}")
     is Result.Error -> println("Error: ${result.exception.message}, code: ${result.code}")
     is Result.Loading -> println("Loading...")
-    // Exhaustive: compiler knows all subclasses
+    // Exhaustive: compiler knows all permitted subclasses
 }
 
 // Can create multiple Success instances with different data
@@ -225,15 +226,16 @@ val result2 = Result.Success("data2", 456L)
 
 **Characteristics:**
 - Multiple instances of each subclass allowed
-- Subclasses can have completely different properties
-- Can have data classes, objects, regular classes as subclasses
+- Subclasses can have completely different properties and types
+- Subclasses can be data classes, objects, or regular classes
 - Cannot create instances of sealed class itself
+- Inheritance is restricted: permitted subclasses must be defined in the same file (older versions) or in the same package/module depending on platform and Kotlin version
 
 ### When to Use Each
 
 **Use `enum class` when:**
-- Fixed set of values that won't change
-- All values have same structure
+- Fixed set of values
+- All values share the same declared properties/constructors
 - Simple states or constants
 - Need to iterate over all values
 
@@ -246,13 +248,13 @@ enum class DayOfWeek { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, S
 **Use `sealed class` when:**
 - Complex states with different structures
 - Each state has different parameters
-- Need type-safe state machine
+- Need a type-safe state machine or protocol modeling
 - Modeling discriminated unions
 
 ```kotlin
 // Network result with different data per state
 sealed class NetworkResult<out T> {
-    data class Success<T>(val data: T, val cached: Boolean) : NetworkResult<T>()
+    data class Success<out T>(val data: T, val cached: Boolean) : NetworkResult<T>()
     data class Error(val message: String, val retryable: Boolean) : NetworkResult<Nothing>()
     object Loading : NetworkResult<Nothing>()
 }
@@ -281,6 +283,24 @@ sealed class TaskResult {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия от Java-подхода?
+- Когда вы бы применили это на практике?
+- Каковы распространенные ошибки, которых следует избегать?
+
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+- [[c-sealed-classes]]
+
+## Связанные вопросы (RU)
+
+- [[q-what-is-garbage-in-gc--programming-languages--easy]]
+- [[q-suspend-function-suspension-mechanism--programming-languages--hard]]
+- [[q-primitive-vs-reference-types--programming-languages--easy]]
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
@@ -290,6 +310,8 @@ sealed class TaskResult {
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+- [[c-sealed-classes]]
 
 ## Related Questions
 

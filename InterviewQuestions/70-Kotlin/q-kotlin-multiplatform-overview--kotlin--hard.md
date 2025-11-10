@@ -1,28 +1,28 @@
 ---
 id: kotlin-040
 title: "Kotlin Multiplatform - How does it work? / Kotlin Multiplatform - Как это работает?"
-aliases: ["Kotlin Multiplatform - How does it work?, Kotlin Multiplatform - Как это работает?"]
+aliases: ["Kotlin Multiplatform - How does it work?", "Kotlin Multiplatform - Как это работает?"]
 
 # Classification
 topic: kotlin
-subtopics: [cross-platform, kmp, kotlin-multiplatform]
+subtopics: [kotlin-multiplatform, kmp]
 question_kind: theory
 difficulty: hard
 
 # Language & provenance
 original_language: en
 language_tags: [en, ru]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
+source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-enum-class-advanced--kotlin--medium, q-extensions-in-java--programming-languages--medium, q-type-aliases--kotlin--medium]
+related: [c-kotlin, q-enum-class-advanced--kotlin--medium, q-type-aliases--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-11-09
 
 tags: [cross-platform, difficulty/hard, kmp, kotlin, kotlin-multiplatform, native]
 ---
@@ -33,15 +33,40 @@ tags: [cross-platform, difficulty/hard, kmp, kotlin, kotlin-multiplatform, nativ
 
 # Question (EN)
 > Kotlin Multiplatform - How does it work?
+
 ## Ответ (RU)
 
 **Kotlin Multiplatform (KMP)** — это технология, позволяющая использовать общий код на разных платформах (Android, iOS, web, desktop, backend), сохраняя возможность доступа к платформо-специфичным API.
 
-### Основная Концепция
+### Основная концепция
 
-KMP использует **механизм "expect/actual"** для определения платформо-агностического кода в общих модулях и платформо-специфичных реализаций.
+KMP использует механизм **`expect` / `actual`** для определения платформо-агностического API в общих модулях и платформо-специфичных реализаций.
 
-### Архитектура Слоев
+```kotlin
+// commonMain (shared code)
+expect class Platform() {
+    val name: String
+}
+
+expect fun getPlatform(): Platform
+
+// androidMain
+actual class Platform actual constructor() {
+    actual val name: String = "Android ${android.os.Build.VERSION.SDK_INT}"
+}
+
+actual fun getPlatform(): Platform = Platform()
+
+// iosMain
+actual class Platform actual constructor() {
+    actual val name: String = UIDevice.currentDevice.systemName() + " " +
+                              UIDevice.currentDevice.systemVersion
+}
+
+actual fun getPlatform(): Platform = Platform()
+```
+
+### Архитектура слоев
 
 **1. Общий код (shared code)**
 
@@ -57,13 +82,15 @@ class UserRepository(
             database.saveUser(user)
             Result.success(user)
         } catch (e: Exception) {
-            database.getUser(id)?.let {
-                Result.success(it)
+            database.getUser(id)?.let { cached ->
+                Result.success(cached)
             } ?: Result.failure(e)
         }
     }
 }
 ```
+
+Общий код содержит бизнес-логику, доступ к данным и модели.
 
 **2. Платформо-специфичный код**
 
@@ -79,7 +106,7 @@ actual class DatabaseDriver {
     actual fun createDatabase(): SqlDriver {
         return AndroidSqliteDriver(
             schema = Database.Schema,
-            context = ApplicationContext,
+            context = androidContext, // платформенный контекст передаётся из Android слоя
             name = "app.db"
         )
     }
@@ -96,41 +123,105 @@ actual class DatabaseDriver {
 }
 ```
 
-### Как Это Работает Внутри
+### Как это работает внутри
 
-**Процесс компиляции:**
+**Процесс компиляции (упрощённо):**
 
 ```
 Общий код (Kotlin)
         ↓
-   Компилятор
+   Фронтенд компилятора
         ↓
-Kotlin IR (Промежуточное представление)
+Kotlin IR (промежуточное представление)
         ↓
 
-
-Android Backend        iOS/Native Backend
-(JVM bytecode)         (LLVM IR → native)
-
-        ↓                       ↓
-    .dex/.jar              .framework/.klib
+Android backend          iOS/Native backend         JS backend
+(JVM bytecode)           (LLVM IR → native)        (JS)
+        ↓                        ↓                     ↓
+   .class → .dex/.jar      .klib → .framework      .js
 ```
 
-### Ключевые Технологии
+Общий код компилируется в таргеты конкретных платформ: JVM (Android, backend), Kotlin/Native (iOS, desktop native), JS и др.
 
-**Популярные KMP библиотеки:**
-- **Ktor** - Сеть (HTTP клиент)
-- **SQLDelight** - База данных
-- **Kotlinx.serialization** - Парсинг JSON
-- **Kotlinx.coroutines** - Асинхронные операции
-- **Kotlinx.datetime** - Работа с датой/временем
+#### Примеры компиляции под платформы
 
-### Конфигурация Gradle
+- Android: Kotlin → JVM bytecode → DEX
+- iOS: Kotlin → Kotlin/Native → LLVM IR → ARM64/x86_64 → framework/xcframework
+- JS: Kotlin → JavaScript
+- Другие native-таргеты: Kotlin → Kotlin/Native → нативные бинарники
+
+### Структура проекта (концептуально)
+
+```
+project/
+  shared/
+    commonMain/
+      kotlin/
+        data/
+          UserRepository.kt
+        domain/
+          LoginUseCase.kt
+        expect/
+          Platform.kt
+    androidMain/
+      kotlin/
+        actual/
+          Platform.kt
+    iosMain/
+      kotlin/
+        actual/
+          Platform.kt
+    build.gradle.kts
+  androidApp/
+    build.gradle.kts
+  iosApp/
+    iosApp.xcodeproj
+```
+
+### Ключевые технологии
+
+- Kotlin/JVM для Android и backend
+- Kotlin/Native для iOS и других native-таргетов
+- Kotlin/JS для web
+
+Популярные библиотеки для KMP:
+- **Ktor** — HTTP-клиент / сеть
+- **SQLDelight** — работа с БД
+- **kotlinx.serialization** — сериализация (JSON и др.)
+- **kotlinx.coroutines** — асинхронность
+- **kotlinx.datetime** — дата/время
+
+```kotlin
+// commonMain - пример использования Ktor
+class ApiClient {
+    private val client = HttpClient {
+        install(ContentNegotiation) {
+            json(Json {
+                ignoreUnknownKeys = true
+            })
+        }
+    }
+
+    suspend fun fetchUser(id: String): User {
+        return client.get("https://api.example.com/users/$id").body()
+    }
+}
+```
+
+Версии библиотек в примерах условные и могут отличаться от актуальных.
+
+### Конфигурация Gradle (пример)
 
 ```kotlin
 // shared/build.gradle.kts
 kotlin {
-    androidTarget()
+    androidTarget {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
+    }
 
     listOf(
         iosX64(),
@@ -146,64 +237,70 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-                implementation("io.ktor:ktor-client-core:2.3.5")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+                implementation("io.ktor:ktor-client-core")
             }
         }
 
         val androidMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-android:2.3.5")
+                implementation("io.ktor:ktor-client-android")
             }
         }
 
         val iosMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-darwin:2.3.5")
+                implementation("io.ktor:ktor-client-darwin")
             }
         }
     }
 }
 ```
 
-### Стратегии Использования
+### Стратегии использования
 
-**Делиться всем (кроме UI):**
+**1. Делиться всем (кроме UI)**
 
 ```
-
    Платформенный UI            ← Android: Jetpack Compose
    (Android/iOS)               ← iOS: SwiftUI
 
-   Общий Presentation          ← ViewModels, States
+   Общий Presentation          ← ViewModel'и, состояние
 
    Общая бизнес-логика         ← Use Cases, Repositories
 
    Общий Data Layer            ← Network, Database, Models
-
 ```
 
-### Интеграция С iOS
+**2. Делить только Data/Business Logic**
 
-**Генерация iOS Framework:**
+```
+   Платформенный UI
+   + Presentation              ← ViewModel'и на каждую платформу
+
+   Общая бизнес-логика         ← Use Cases
+
+   Общий Data Layer            ← API, DB
+```
+
+### Интеграция с iOS
+
+**Генерация iOS Framework/XCFramework:**
 
 ```bash
 ./gradlew :shared:assembleXCFramework
 ```
 
-**Использование в Swift:**
+**Использование в Swift (концептуально):**
 
 ```swift
 import shared
 
 class ViewController: UIViewController {
-    private let viewModel = LoginViewModel()
+    private let repository: LoginRepository = LoginRepository(/* deps */)
 
     func login() {
-        viewModel.login(
-            username: "user@example.com",
-            password: "password"
-        ) { result, error in
+        repository.login(email: "user@example.com", password: "password") { result, error in
             if let result = result {
                 // Обработка успеха
             }
@@ -212,74 +309,177 @@ class ViewController: UIViewController {
 }
 ```
 
-### Модель Потоков
+Suspend-функции из общего кода при экспорте в Swift доступны как функции с completion handler или как async/await (в зависимости от версии Kotlin/Native и настроек interop).
 
-**Корутины работают по-разному на iOS:**
+### Обработка платформенных различий
+
+**1. Expect/Actual для платформенных API**
+
+```kotlin
+// commonMain
+expect fun currentTimeMillis(): Long
+
+// androidMain
+actual fun currentTimeMillis(): Long = System.currentTimeMillis()
+
+// iosMain
+actual fun currentTimeMillis(): Long =
+    (NSDate().timeIntervalSince1970 * 1000).toLong()
+```
+
+**2. Dependency Injection (концептуально)**
+
+```kotlin
+// commonMain
+expect fun getPlatform(): Platform
+
+class AppModule {
+    private val platform: Platform = getPlatform()
+    private val database: Database = createDatabase(platform) // платформенная реализация
+    val repository: UserRepository = UserRepository(api = ApiClient(), database = database)
+}
+```
+
+(Вспомогательные функции вроде `createDatabase` реализуются через expect/actual или предоставляются платформами; пример концептуальный.)
+
+### Модель потоков
+
+KMP и корутины предоставляют единый API; конкретные диспетчеры реализуются для каждой платформы.
 
 ```kotlin
 // Общий код
-class DataRepository {
+class DataRepository(private val api: ApiClient) {
     suspend fun fetchData(): Data {
         return withContext(Dispatchers.IO) {
             api.getData()
         }
     }
 }
+```
 
-// iOS: Suspend функции экспонируются как async callbacks
-// Swift:
-repository.fetchData { data, error in
-    // Обработка результата
+На iOS Kotlin/Native генерирует обёртки, чтобы suspend-функции вызывались из Swift через callbacks или async/await. Нужно уважать правила работы с потоками конкретной платформы и UI-потока.
+
+### Управление памятью
+
+Kotlin/JVM использует GC; Kotlin/Native использует собственную модель памяти (в новых версиях — новый memory manager). Рекомендации для общего кода:
+
+- Избегать лишних долгоживущих ссылок на платформенные объекты и callbacks.
+- Очищать callbacks/слушатели, когда они больше не нужны, чтобы избежать утечек.
+
+```kotlin
+class ViewModel {
+    private var callback: ((Result) -> Unit)? = null
+
+    fun setCallback(cb: (Result) -> Unit) {
+        callback = cb
+    }
+
+    fun cleanup() {
+        callback = null
+    }
 }
-
-// Или с async/await (Swift 5.5+):
-let data = try await repository.fetchData()
 ```
 
 ### Преимущества
 
-1. **Переиспользование кода**: Разделяйте 60-90% кода
-2. **Типобезопасность**: Проверка на этапе компиляции
-3. **Производительность**: Нативная производительность на всех платформах
-4. **Постепенное внедрение**: Можно внедрять инкрементально
-5. **Экосистема Kotlin**: Используйте библиотеки Kotlin везде
+1. Переиспользование кода: 60–90% общей логики
+2. Типобезопасность: проверки на этапе компиляции для всех платформ
+3. Производительность: близкая к нативной за счёт JVM/Native/JS таргетов
+4. Постепенное внедрение: можно интегрировать KMP в существующие проекты
+5. Экосистема Kotlin: использование общих библиотек
 
 ### Ограничения
 
-1. **Размер iOS Framework**: Может быть больше нативного
-2. **Кривая обучения**: Нужно понимать обе платформы
-3. **Отладка**: Более сложная кросс-платформенная отладка
-4. **Поддержка библиотек**: Не все библиотеки поддерживают KMP
-5. **Разделение UI**: Всё ещё нужен платформо-специфичный UI
+1. Размер артефактов для iOS: framework/xcframework может быть больше нативного аналога
+2. Кривая обучения: требуется знание Kotlin и платформ-таргетов
+3. Отладка: кросс-платформенная отладка сложнее
+4. Поддержка библиотек: не все библиотеки имеют KMP-версии
+5. UI: обычно остаётся платформо-специфичным (если не использовать отдельные multiplatform UI-решения)
 
-**Краткое содержание**: Kotlin Multiplatform позволяет разделять код между платформами используя механизм expect/actual. Общий код компилируется в платформо-специфичные таргеты (JVM для Android, Native для iOS). Делитесь бизнес-логикой, data layer, моделями, сохраняя UI платформо-специфичным. Использует Kotlin/Native для iOS, Kotlin/JVM для Android. Популярные библиотеки: Ktor, SQLDelight, kotlinx.serialization. Переиспользование кода: 60-90%. Поддерживает постепенное внедрение и нативную производительность.
+### Реальный пример: Login Flow (концептуально)
+
+```kotlin
+// shared/commonMain
+class LoginRepository(
+    private val api: ApiClient,
+    private val tokenStorage: TokenStorage,
+    private val analytics: Analytics
+) {
+    suspend fun login(email: String, password: String): Result<User> {
+        return try {
+            analytics.logEvent("login_attempt")
+
+            val response = api.login(LoginRequest(email, password))
+            tokenStorage.saveToken(response.token)
+
+            analytics.logEvent("login_success")
+            Result.success(response.user)
+        } catch (e: Exception) {
+            analytics.logEvent("login_failure", mapOf("error" to (e.message ?: "unknown")))
+            Result.failure(e)
+        }
+    }
+}
+
+// expect/actual для хранения токена
+expect class TokenStorage {
+    suspend fun saveToken(token: String)
+    suspend fun getToken(): String?
+}
+
+// Android
+actual class TokenStorage(private val context: Context) {
+    private val dataStore = context.dataStore
+
+    actual suspend fun saveToken(token: String) {
+        dataStore.edit { it[TOKEN_KEY] = token }
+    }
+
+    actual suspend fun getToken(): String? {
+        return dataStore.data.first()[TOKEN_KEY]
+    }
+}
+
+// iOS
+actual class TokenStorage {
+    actual suspend fun saveToken(token: String) {
+        NSUserDefaults.standardUserDefaults.setObject(token, forKey = "auth_token")
+    }
+
+    actual suspend fun getToken(): String? {
+        return NSUserDefaults.standardUserDefaults.stringForKey("auth_token")
+    }
+}
+```
+
+**Краткое содержание**: Kotlin Multiplatform позволяет разделять код между платформами с помощью механизма `expect` / `actual`. Общий код компилируется в платформо-специфичные таргеты (JVM для Android, Native для iOS, JS и др.). Обычно делят бизнес-логику, слой данных и модели, а UI оставляют нативным. Поддерживается постепенное внедрение при сохранении производительности, близкой к нативной.
 
 ---
 
 ## Answer (EN)
 
-**Kotlin Multiplatform (KMP)** is a technology that allows sharing code across different platforms (Android, iOS, web, desktop, backend) while maintaining the ability to access platform-specific APIs when needed.
+**Kotlin Multiplatform (KMP)** is a technology that allows sharing code across different platforms (Android, iOS, web, desktop, backend) while still calling platform-specific APIs when needed.
 
 ### Core Concept
 
-KMP uses a **"expect/actual" mechanism** to define platform-agnostic code in common modules and platform-specific implementations.
+KMP uses the **`expect` / `actual` mechanism** to define platform-agnostic APIs in common modules and provide platform-specific implementations.
 
 ```kotlin
-// Common module (shared code)
+// commonMain (shared code)
 expect class Platform() {
     val name: String
 }
 
 expect fun getPlatform(): Platform
 
-// Android implementation (androidMain)
+// androidMain
 actual class Platform actual constructor() {
     actual val name: String = "Android ${android.os.Build.VERSION.SDK_INT}"
 }
 
 actual fun getPlatform(): Platform = Platform()
 
-// iOS implementation (iosMain)
+// iosMain
 actual class Platform actual constructor() {
     actual val name: String = UIDevice.currentDevice.systemName() + " " +
                               UIDevice.currentDevice.systemVersion
@@ -304,22 +504,15 @@ class UserRepository(
             database.saveUser(user)
             Result.success(user)
         } catch (e: Exception) {
-            database.getUser(id)?.let {
-                Result.success(it)
+            database.getUser(id)?.let { cached ->
+                Result.success(cached)
             } ?: Result.failure(e)
         }
     }
 }
-
-// Shared business logic
-class LoginViewModel {
-    private val repository = UserRepository(/* ... */)
-
-    suspend fun login(username: String, password: String): LoginResult {
-        return repository.authenticate(username, password)
-    }
-}
 ```
+
+Shared code holds business logic, data access, and models.
 
 **2. Platform-Specific Code**
 
@@ -335,7 +528,7 @@ actual class DatabaseDriver {
     actual fun createDatabase(): SqlDriver {
         return AndroidSqliteDriver(
             schema = Database.Schema,
-            context = ApplicationContext,
+            context = androidContext, // provided from Android layer
             name = "app.db"
         )
     }
@@ -354,98 +547,71 @@ actual class DatabaseDriver {
 
 ### How It Works Internally
 
-**1. Compilation Process**
+**1. Compilation Process (simplified)**
 
 ```
 Common Code (Kotlin)
         ↓
-
-   Compiler
-   Frontend
-
+   Compiler Frontend
         ↓
    Kotlin IR (Intermediate Representation)
         ↓
 
-
-Android Backend        iOS/Native Backend
-(JVM bytecode)         (LLVM IR → native)
-
-        ↓                       ↓
-    .dex/.jar              .framework/.klib
+Android backend          iOS/Native backend         JS backend
+(JVM bytecode)           (LLVM IR → native)        (JS)
+        ↓                        ↓                     ↓
+   .class → .dex/.jar      .klib → .framework      .js
 ```
 
-**2. Platform Compilation**
+Common code is compiled to concrete platform targets: JVM (Android, server), Native (iOS, desktop), JS, etc.
 
-- **Android**: Kotlin → JVM bytecode → DEX
-- **iOS**: Kotlin → Kotlin/Native → LLVM IR → ARM64/x86_64
-- **JS**: Kotlin → JavaScript
-- **Native**: Kotlin → Native binary
+**2. Platform Compilation Examples**
 
-### Project Structure
+- Android: Kotlin → JVM bytecode → DEX
+- iOS: Kotlin → Kotlin/Native → LLVM IR → ARM64/x86_64 → framework/xcframework
+- JS: Kotlin → JavaScript
+- Other Native targets: Kotlin → Kotlin/Native → native binaries
+
+### Project Structure (Conceptual)
 
 ```
 project/
- shared/
+  shared/
     commonMain/
-       kotlin/
-           data/
-              UserRepository.kt
-              models/
-           domain/
-              LoginUseCase.kt
-           expect/
-               Platform.kt
+      kotlin/
+        data/
+          UserRepository.kt
+        domain/
+          LoginUseCase.kt
+        expect/
+          Platform.kt
     androidMain/
-       kotlin/
-           actual/
-               Platform.kt
+      kotlin/
+        actual/
+          Platform.kt
     iosMain/
-       kotlin/
-           actual/
-               Platform.kt
+      kotlin/
+        actual/
+          Platform.kt
     build.gradle.kts
- androidApp/
+  androidApp/
     build.gradle.kts
- iosApp/
-     iosApp.xcodeproj
+  iosApp/
+    iosApp.xcodeproj
 ```
 
 ### Key Technologies
 
-**1. Kotlin/Native for iOS**
-
-```kotlin
-// iOS bindings are generated automatically
-// Can call iOS frameworks directly
-import platform.UIKit.*
-import platform.Foundation.*
-
-actual fun showNativeDialog(message: String) {
-    val alert = UIAlertController.alertControllerWithTitle(
-        title = "Alert",
-        message = message,
-        preferredStyle = UIAlertControllerStyleAlert
-    )
-
-    alert.addAction(UIAlertAction.actionWithTitle(
-        title = "OK",
-        style = UIAlertActionStyleDefault,
-        handler = null
-    ))
-
-    // Show alert
-}
-```
-
-**2. Shared Libraries**
+- Kotlin/JVM for Android and backend
+- Kotlin/Native for iOS and other native targets
+- Kotlin/JS for web
 
 Popular KMP libraries:
-- **Ktor** - Networking (HTTP client)
-- **SQLDelight** - Database
-- **Kotlinx.serialization** - JSON parsing
-- **Kotlinx.coroutines** - Async operations
-- **Kotlinx.datetime** - Date/time handling
+- **Ktor** — Networking (HTTP client)
+- **SQLDelight** — Database
+- **kotlinx.serialization** — Serialization / JSON
+- **kotlinx.coroutines** — Async operations
+- **kotlinx.datetime** — Date/time
 
 ```kotlin
 // commonMain - Ktor usage
@@ -464,12 +630,13 @@ class ApiClient {
 }
 ```
 
-### Gradle Configuration
+(Dependency versions omitted intentionally; use current stable versions.)
+
+### Gradle Configuration (Example)
 
 ```kotlin
 // shared/build.gradle.kts
 kotlin {
-    // Define targets
     androidTarget {
         compilations.all {
             kotlinOptions {
@@ -489,24 +656,23 @@ kotlin {
         }
     }
 
-    // Source sets
     sourceSets {
         val commonMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
-                implementation("io.ktor:ktor-client-core:2.3.5")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core")
+                implementation("io.ktor:ktor-client-core")
             }
         }
 
         val androidMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-android:2.3.5")
+                implementation("io.ktor:ktor-client-android")
             }
         }
 
         val iosMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-darwin:2.3.5")
+                implementation("io.ktor:ktor-client-darwin")
             }
         }
     }
@@ -518,52 +684,45 @@ kotlin {
 **1. Share Everything (except UI)**
 
 ```
-
    Platform-Specific UI        ← Android: Jetpack Compose
    (Android/iOS)               ← iOS: SwiftUI
 
-   Shared Presentation         ← ViewModels, States
+   Shared Presentation         ← ViewModels, state
 
    Shared Business Logic       ← Use Cases, Repositories
 
    Shared Data Layer           ← Network, Database, Models
-
 ```
 
 **2. Share Only Data/Business Logic**
 
 ```
-
    Platform-Specific UI
-   + Presentation              ← ViewModels are native
+   + Presentation              ← ViewModels are per-platform
 
    Shared Business Logic       ← Use Cases
 
    Shared Data Layer           ← API, DB
-
 ```
 
 ### iOS Integration
 
-**1. Generate iOS Framework**
+**1. Generate iOS Framework/XCFramework**
 
 ```bash
 ./gradlew :shared:assembleXCFramework
 ```
 
-**2. Use in Swift**
+**2. Use in Swift (conceptual)**
 
 ```swift
 import shared
 
 class ViewController: UIViewController {
-    private let viewModel = LoginViewModel()
+    private let repository: LoginRepository = LoginRepository(/* deps */)
 
     func login() {
-        viewModel.login(
-            username: "user@example.com",
-            password: "password"
-        ) { result, error in
+        repository.login(email: "user@example.com", password: "password") { result, error in
             if let result = result {
                 // Handle success
             }
@@ -571,6 +730,8 @@ class ViewController: UIViewController {
     }
 }
 ```
+
+Suspend functions from Kotlin are exposed to Swift as completion-based APIs or async/await functions depending on interop configuration.
 
 ### Handling Platform Differences
 
@@ -588,59 +749,46 @@ actual fun currentTimeMillis(): Long =
     (NSDate().timeIntervalSince1970 * 1000).toLong()
 ```
 
-**2. Dependency Injection**
+**2. Dependency Injection (conceptual)**
 
 ```kotlin
-// Common interface
-interface Platform {
-    val name: String
-    val type: PlatformType
-}
+// Common
+expect fun getPlatform(): Platform
 
-// Android implementation
-class AndroidPlatform : Platform {
-    override val name = "Android"
-    override val type = PlatformType.ANDROID
-}
-
-// DI setup (common)
 class AppModule {
-    val platform: Platform = getPlatform()
-    val database: Database = createDatabase(platform)
-    val repository: UserRepository = UserRepository(database)
+    private val platform: Platform = getPlatform()
+    private val database: Database = createDatabase(platform) // platform-specific implementation
+    val repository: UserRepository = UserRepository(api = ApiClient(), database = database)
 }
 ```
 
+(Helper functions like `createDatabase` are expected/actual or platform-provided; shown conceptually.)
+
 ### Threading Model
 
-**Coroutines work differently on iOS**:
+KMP coroutines provide a unified API; underlying dispatchers are implemented per platform.
 
 ```kotlin
 // Common code
-class DataRepository {
+class DataRepository(private val api: ApiClient) {
     suspend fun fetchData(): Data {
         return withContext(Dispatchers.IO) {
             api.getData()
         }
     }
 }
-
-// iOS: Suspend functions are exposed as async callbacks
-// Swift:
-repository.fetchData { data, error in
-    // Handle result
-}
-
-// Or with async/await (Swift 5.5+):
-let data = try await repository.fetchData()
 ```
+
+On iOS, Kotlin/Native generates appropriate bridge functions so that suspend functions can be called from Swift via callbacks or async/await. The coroutine model itself is not "different" on iOS, but you must respect the threading rules of Kotlin/Native and the platform UI thread.
 
 ### Memory Management
 
-**iOS uses ARC, need to be careful with retain cycles**:
+Kotlin/JVM uses GC; Kotlin/Native (including iOS) has its own memory management (new memory manager in recent versions). General guidelines for shared code:
+
+- Avoid unnecessary long-lived references to platform objects or callbacks.
+- Clear callbacks/listeners when they are no longer needed to prevent leaks across all platforms.
 
 ```kotlin
-// Common - avoid capturing strong references
 class ViewModel {
     private var callback: ((Result) -> Unit)? = null
 
@@ -649,28 +797,28 @@ class ViewModel {
     }
 
     fun cleanup() {
-        callback = null  // Important for iOS to avoid leaks
+        callback = null
     }
 }
 ```
 
 ### Advantages
 
-1. **Code Reuse**: Share 60-90% of code
-2. **Type Safety**: Compile-time checking across platforms
-3. **Performance**: Native performance on all platforms
-4. **Gradual Adoption**: Can adopt incrementally
-5. **Kotlin Ecosystem**: Use Kotlin libraries everywhere
+1. Code Reuse: 60–90% of shared logic
+2. Type Safety: Compile-time checks across platforms
+3. Performance: Close-to-native performance via proper backends (JVM/Native/JS)
+4. Gradual Adoption: Can be integrated incrementally into existing apps
+5. Kotlin Ecosystem: Leverage common libraries across platforms
 
 ### Limitations
 
-1. **iOS Framework Size**: Can be larger than native
-2. **Learning Curve**: Need to understand both platforms
-3. **Debugging**: More complex cross-platform debugging
-4. **Library Support**: Not all libraries support KMP yet
-5. **UI Sharing**: Still need platform-specific UI
+1. iOS Framework Size: May be larger than a purely native implementation
+2. Learning Curve: Requires understanding Kotlin and multiple platforms
+3. Debugging: Cross-platform debugging can be more complex
+4. Library Support: Not all libraries are KMP-ready
+5. UI Sharing: UI is typically platform-specific (unless using separate multiplatform UI solutions)
 
-### Real-World Example: Login Flow
+### Real-World Example: Login Flow (Conceptual)
 
 ```kotlin
 // shared/commonMain
@@ -689,7 +837,7 @@ class LoginRepository(
             analytics.logEvent("login_success")
             Result.success(response.user)
         } catch (e: Exception) {
-            analytics.logEvent("login_failure", mapOf("error" to e.message))
+            analytics.logEvent("login_failure", mapOf("error" to (e.message ?: "unknown")))
             Result.failure(e)
         }
     }
@@ -726,7 +874,7 @@ actual class TokenStorage {
 }
 ```
 
-**English Summary**: Kotlin Multiplatform enables code sharing across platforms using expect/actual mechanism. Common code compiles to platform-specific targets (JVM for Android, Native for iOS). Share business logic, data layer, models while keeping UI platform-specific. Uses Kotlin/Native for iOS (generates frameworks), Kotlin/JVM for Android. Popular libraries: Ktor, SQLDelight, kotlinx.serialization. Code reuse: 60-90%. Supports gradual adoption and maintains native performance.
+**English Summary**: Kotlin Multiplatform enables sharing code across platforms using the `expect` / `actual` mechanism. Common code compiles to platform-specific targets (JVM for Android, Native for iOS, JS, etc.). You typically share business logic, data layer, and models while keeping UI platform-specific. It uses Kotlin/JVM, Kotlin/Native, and Kotlin/JS backends, supports gradual adoption, and maintains near-native performance.
 
 ## Follow-ups
 
@@ -742,3 +890,4 @@ actual class TokenStorage {
 ## Related Questions
 - [[q-expect-actual-kotlin--kotlin--medium]]
 - [[q-kotlin-native--kotlin--hard]]
+- [[c-kotlin]]

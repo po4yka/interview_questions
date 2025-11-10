@@ -1,11 +1,11 @@
 ---
 id: kotlin-043
 title: "Kotlin Delegation Pattern Deep Dive / Паттерн делегирования в Kotlin - детально"
-aliases: ["Kotlin Delegation Pattern Deep Dive, Паттерн делегирования в Kotlin - детально"]
+aliases: ["Kotlin Delegation Pattern Deep Dive", "Паттерн делегирования в Kotlin - детально"]
 
 # Classification
 topic: kotlin
-subtopics: [by-keyword, delegates, delegation]
+subtopics: [by-keyword, delegates]
 question_kind: theory
 difficulty: medium
 
@@ -18,11 +18,11 @@ source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priori
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-destructuring-declarations--kotlin--medium, q-infix-functions--kotlin--medium, q-sequences-vs-collections-performance--kotlin--medium]
+related: [c-kotlin, q-destructuring-declarations--kotlin--medium, q-infix-functions--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-11-09
 
 tags: [by-keyword, delegates, delegation, difficulty/medium, kotlin, patterns]
 ---
@@ -53,7 +53,7 @@ class RepositoryImpl : Repository {
 }
 
 // Без делегирования - ручная переадресация
-class CachedRepository(private val repo: Repository) : Repository {
+class CachedRepositoryManual(private val repo: Repository) : Repository {
     override fun getData() = repo.getData()  // Шаблонный код
     override fun saveData(data: String) = repo.saveData(data)  // Шаблонный код
 }
@@ -73,6 +73,11 @@ class CachedRepository(
 }
 ```
 
+**Преимущества:**
+- Устраняет шаблонный код
+- Поощряет композицию вместо наследования
+- Позволяет переопределять отдельные методы при необходимости
+
 ### Делегирование Свойств
 
 **Делегирует логику getter/setter свойства другому объекту.**
@@ -85,7 +90,7 @@ class CachedRepository(
 class ExpensiveResource {
     val data: String by lazy {
         println("Вычисление дорогого значения...")
-        loadFromNetwork()  // Вызывается только раз при первом доступе
+        loadFromNetwork()  // Вызывается только один раз при первом доступе
     }
 }
 ```
@@ -93,14 +98,15 @@ class ExpensiveResource {
 **2. observable - Наблюдение за изменениями свойства**
 
 ```kotlin
-class User {
+class UserObservable {
     var name: String by Delegates.observable("<no name>") { prop, old, new ->
         println("$old -> $new")
     }
 }
 
-val user = User()
-user.name = "Alice"  // Печатает: <no name> -> Alice
+val userObservable = UserObservable()
+userObservable.name = "Alice"  // Печатает: <no name> -> Alice
+userObservable.name = "Bob"    // Печатает: <no name> -> Alice, Alice -> Bob
 ```
 
 **3. vetoable - Вето на изменения свойства**
@@ -111,6 +117,19 @@ class Product {
         new >= 0  // Разрешить только неотрицательные цены
     }
 }
+```
+
+**4. notNull - Поздняя инициализация с проверкой**
+
+```kotlin
+class Config {
+    var apiKey: String by Delegates.notNull()
+}
+
+val config = Config()
+// config.apiKey  // Бросит IllegalStateException, если обратиться до инициализации
+config.apiKey = "abc123"
+println(config.apiKey)  // OK
 ```
 
 ### Пользовательский Делегат Свойства
@@ -128,18 +147,44 @@ class Uppercase : ReadWriteProperty<Any?, String> {
     }
 }
 
-class User {
+class UserUppercase {
     var name: String by Uppercase()
 }
 
-val user = User()
-user.name = "alice"
-println(user.name)  // Печатает: ALICE
+val userUppercase = UserUppercase()
+userUppercase.name = "alice"
+println(userUppercase.name)  // Печатает: ALICE
 ```
 
 ### Примеры Из Реальной Практики
 
-**Пример 1: SharedPreferences делегат**
+**Пример 1: `ViewModel` с делегированием**
+
+```kotlin
+interface UserRepository {
+    fun getUser(): Flow<User>
+    fun updateUser(user: User): Flow<Result<Unit>>
+}
+
+class UserViewModel(
+    repository: UserRepository
+) : ViewModel(), UserRepository by repository {
+    // Все методы репозитория доступны без шаблонного кода
+
+    val user: StateFlow<User?> = getUser()
+        .stateIn(viewModelScope, SharingStarted.Lazily, null)
+
+    fun updateName(name: String) {
+        viewModelScope.launch {
+            user.value?.let { currentUser ->
+                updateUser(currentUser.copy(name = name))
+            }
+        }
+    }
+}
+```
+
+**Пример 2: Делегат `SharedPreferences` (поддерживает только конкретные типы)**
 
 ```kotlin
 class PreferenceDelegate<T>(
@@ -164,6 +209,7 @@ class PreferenceDelegate<T>(
                 is String -> putString(key, value)
                 is Int -> putInt(key, value)
                 is Boolean -> putBoolean(key, value)
+                else -> throw IllegalArgumentException("Unsupported type")
             }
         }
     }
@@ -172,10 +218,30 @@ class PreferenceDelegate<T>(
 class AppSettings(prefs: SharedPreferences) {
     var username: String by PreferenceDelegate("username", "", prefs)
     var darkMode: Boolean by PreferenceDelegate("dark_mode", false, prefs)
+    var fontSize: Int by PreferenceDelegate("font_size", 14, prefs)
 }
 ```
 
-**Пример 2: Делегат валидации**
+**Пример 3: Делегирование к `Map`**
+
+```kotlin
+class UserFromMap(map: Map<String, Any?>) {
+    val name: String by map
+    val age: Int by map
+    val email: String by map
+}
+
+val userFromMap = UserFromMap(mapOf(
+    "name" to "Alice",
+    "age" to 30,
+    "email" to "alice@example.com"
+))
+
+println(userFromMap.name)  // Alice
+println(userFromMap.age)   // 30
+```
+
+**Пример 4: Делегат валидации**
 
 ```kotlin
 class ValidatedProperty<T>(
@@ -192,13 +258,16 @@ class ValidatedProperty<T>(
     }
 }
 
-class User {
+fun <T> validated(errorMessage: String, validator: (T) -> Boolean) =
+    ValidatedProperty(validator, errorMessage)
+
+class UserValidated {
     var email: String by validated("Invalid email") { it.contains("@") }
     var age: Int by validated("Age must be positive") { it > 0 }
 }
 ```
 
-**Краткое содержание**: Делегирование в Kotlin: **Делегирование классов** (ключевое слово `by`) - делегирует реализацию интерфейса объекту, устраняет шаблонный код. **Делегирование свойств** - делегирует логику getter/setter. Встроенные: `lazy` (ленивая инициализация), `observable` (наблюдение за изменениями), `vetoable` (вето на изменения), `notNull` (поздняя инициализация). Пользовательские делегаты: реализуют ReadWriteProperty. Применение: SharedPreferences, валидация, кэширование, композиция вместо наследования.
+**Краткое содержание**: Делегирование в Kotlin: **Делегирование классов** (ключевое слово `by`) — делегирует реализацию интерфейса объекту, устраняет шаблонный код. **Делегирование свойств** — делегирует логику getter/setter. Встроенные: `lazy` (ленивая инициализация), `observable` (наблюдение за изменениями), `vetoable` (вето на изменения), `notNull` (поздняя инициализация). Пользовательские делегаты: реализуют `ReadOnlyProperty` / `ReadWriteProperty`. Применение: `SharedPreferences`, валидация, кэширование, композиция вместо наследования.
 
 ---
 
@@ -222,7 +291,7 @@ class RepositoryImpl : Repository {
 }
 
 // Without delegation - manual forwarding
-class CachedRepository(private val repo: Repository) : Repository {
+class CachedRepositoryManual(private val repo: Repository) : Repository {
     override fun getData() = repo.getData()  // Boilerplate
     override fun saveData(data: String) = repo.saveData(data)  // Boilerplate
 }
@@ -244,9 +313,9 @@ class CachedRepository(
 ```
 
 **Benefits:**
-- - Eliminates boilerplate
-- - Composition over inheritance
-- - Can override specific methods
+- Eliminates boilerplate
+- Encourages composition over inheritance
+- Allows overriding specific methods when needed
 
 ### Property Delegation
 
@@ -273,15 +342,15 @@ println(resource.data)  // Uses cached value
 **2. observable - Observe property changes**
 
 ```kotlin
-class User {
+class UserObservable {
     var name: String by Delegates.observable("<no name>") { prop, old, new ->
         println("$old -> $new")
     }
 }
 
-val user = User()
+val user = UserObservable()
 user.name = "Alice"  // Prints: <no name> -> Alice
-user.name = "Bob"    // Prints: Alice -> Bob
+user.name = "Bob"    // Prints: <no name> -> Alice, Alice -> Bob
 ```
 
 **3. vetoable - Veto property changes**
@@ -313,7 +382,7 @@ println(config.apiKey)  // OK
 
 ### Custom Property Delegate
 
-**Implement ReadOnlyProperty or ReadWriteProperty:**
+**Implement `ReadOnlyProperty` or `ReadWriteProperty`:**
 
 ```kotlin
 class Uppercase : ReadWriteProperty<Any?, String> {
@@ -328,13 +397,13 @@ class Uppercase : ReadWriteProperty<Any?, String> {
     }
 }
 
-class User {
+class UserUppercase {
     var name: String by Uppercase()
 }
 
-val user = User()
-user.name = "alice"
-println(user.name)  // Prints: ALICE
+val userUppercase = UserUppercase()
+userUppercase.name = "alice"
+println(userUppercase.name)  // Prints: ALICE
 ```
 
 ### Real-World Examples
@@ -365,7 +434,7 @@ class UserViewModel(
 }
 ```
 
-**Example 2: SharedPreferences delegate**
+**Example 2: SharedPreferences delegate (supports only specific types)**
 
 ```kotlin
 class PreferenceDelegate<T>(
@@ -390,6 +459,7 @@ class PreferenceDelegate<T>(
                 is String -> putString(key, value)
                 is Int -> putInt(key, value)
                 is Boolean -> putBoolean(key, value)
+                else -> throw IllegalArgumentException("Unsupported type")
             }
         }
     }
@@ -410,20 +480,20 @@ println(settings.darkMode)
 **Example 3: Map delegation**
 
 ```kotlin
-class User(map: Map<String, Any?>) {
+class UserFromMap(map: Map<String, Any?>) {
     val name: String by map
     val age: Int by map
     val email: String by map
 }
 
-val user = User(mapOf(
+val userFromMap = UserFromMap(mapOf(
     "name" to "Alice",
     "age" to 30,
     "email" to "alice@example.com"
 ))
 
-println(user.name)  // Alice
-println(user.age)   // 30
+println(userFromMap.name)  // Alice
+println(userFromMap.age)   // 30
 ```
 
 **Example 4: Validation delegate**
@@ -446,18 +516,30 @@ class ValidatedProperty<T>(
 fun <T> validated(errorMessage: String, validator: (T) -> Boolean) =
     ValidatedProperty(validator, errorMessage)
 
-class User {
-    var email: String by validated("Invalid email") {
-        it.contains("@")
-    }
-
-    var age: Int by validated("Age must be positive") {
-        it > 0
-    }
+class UserValidated {
+    var email: String by validated("Invalid email") { it.contains("@") }
+    var age: Int by validated("Age must be positive") { it > 0 }
 }
 ```
 
-**English Summary**: Kotlin delegation: **Class delegation** (`by` keyword) - delegates interface implementation to object, eliminates boilerplate. **Property delegation** - delegates getter/setter logic. Built-in: `lazy` (lazy init), `observable` (observe changes), `vetoable` (veto changes), `notNull` (late init). Custom delegates: implement ReadWriteProperty. Use cases: SharedPreferences, validation, caching, composition over inheritance.
+**English Summary**: Kotlin delegation: **Class delegation** (`by` keyword) — delegates interface implementation to another object, eliminating boilerplate. **Property delegation** — delegates getter/setter logic. Built-in: `lazy` (lazy init), `observable` (observe changes), `vetoable` (veto changes), `notNull` (late init). Custom delegates: implement `ReadOnlyProperty` / `ReadWriteProperty`. Use cases: SharedPreferences, validation, caching, composition over inheritance.
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия делегирования в Kotlin от подхода в Java?
+- Когда вы бы использовали делегирование на практике?
+- Какие распространенные подводные камни при использовании делегирования?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [Delegation - Kotlin Documentation](https://kotlinlang.org/docs/delegation.html)
+- [Delegated Properties](https://kotlinlang.org/docs/delegated-properties.html)
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-delegation--programming-languages--easy]]
+- [[q-lazy-vs-lateinit--kotlin--medium]]
 
 ## Follow-ups
 

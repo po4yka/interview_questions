@@ -2,7 +2,7 @@
 id: lang-086
 title: "How System Knows Weakreference Can Be Cleared / Как система знает что WeakReference можно очистить"
 aliases: [How System Knows Weakreference Can Be Cleared, Как система знает что WeakReference можно очистить]
-topic: programming-languages
+topic: kotlin
 subtopics: [garbage-collection, memory-management, references]
 question_kind: theory
 difficulty: medium
@@ -10,9 +10,9 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-garbage-collection, c-references, q-garbage-collector-basics--programming-languages--medium]
+related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags: [difficulty/medium, garbage-collection, kotlin, memory-management, programming-languages, weak-references]
 ---
 # Как Система Понимает, Что WeakReference Можно Очистить?
@@ -27,58 +27,54 @@ tags: [difficulty/medium, garbage-collection, kotlin, memory-management, program
 
 ## Ответ (RU)
 
-Система определяет, что WeakReference можно очистить, используя механизм сборщика мусора. Если объект достижим только через слабые ссылки (нет сильных ссылок), GC очищает WeakReference.
+Система определяет, что `WeakReference` можно очистить, с помощью сборщика мусора и анализа достижимости объектов.
 
-## Answer (EN)
+Ключевой принцип:
+- Объект, на который ссылается `WeakReference`, может быть собран, когда он становится достижимым ТОЛЬКО через слабые ссылки (нет сильных ссылок). В момент выполнения GC такие объекты помечаются как подлежащие сборке, а их слабые ссылки очищаются.
 
-The system uses the **garbage collector (GC)** to determine when a WeakReference can be cleared.
+Как это работает (упрощённо):
 
-**Key Principle:**
+1. Фаза пометки:
+   - GC находит все объекты, достижимые по сильным ссылкам, и помечает их как "сильно достижимые".
 
-WeakReference can be cleared when the referenced object is **reachable ONLY through weak references** (no strong references).
+2. Обработка слабых ссылок:
+   - Для каждой `WeakReference` проверяется, является ли её объект сильно достижимым.
+   - Если нет — ссылка на объект внутри `WeakReference` очищается (становится `null`), а сама слабая ссылка может быть поставлена в `ReferenceQueue` для последующей обработки.
 
-**How It Works:**
+3. Фаза очистки:
+   - Непомеченные объекты освобождаются.
 
-**1. GC Runs:**
+Важно:
+- Очистка слабых ссылок и сборка объекта происходят только при выполнении GC; вызов `System.gc()` лишь даёт подсказку, но не гарантирует немедленный запуск.
+- После того как GC очистил слабую ссылку, вызов `weakRef.get()` для неё будет возвращать `null`, что сигнализирует об удалении объекта.
+
+### Пример 1: Базовое поведение
+
 ```kotlin
 import java.lang.ref.WeakReference
 
-val data = Data()  // Strong reference
+val data = Data()  // Сильная ссылка
 val weakRef = WeakReference(data)
 
-// data is reachable through strong reference
-// weakRef.get() != null GOOD
+// data сильно достижим
+// Во время GC объект сохраняется
+// weakRef.get() != null
 ```
 
-**2. Strong References Removed:**
 ```kotlin
 val weakRef = WeakReference(Data())
 
-// No strong reference to Data object
-// GC can clear it
+// Других сильных ссылок на этот экземпляр Data нет
+// Во время цикла GC объект может быть собран,
+// а ссылка WeakReference — очищена
 
-System.gc()  // Suggest GC run
+System.gc()  // Подсказка: может вызвать GC
 
-// weakRef.get() == null - (may be cleared)
+// После GC weakRef.get() может вернуть null,
+// если объект был собран
 ```
 
-**GC Algorithm for Weak References:**
-
-```
-1. Mark Phase:
-   - Find all objects reachable through STRONG references
-   - Mark them as "strongly reachable"
-
-2. Weak Reference Phase:
-   - For each WeakReference:
-     - If referenced object is NOT strongly reachable:
-       → Clear the WeakReference (set to null)
-
-3. Sweep Phase:
-   - Delete unmarked objects
-```
-
-**Example:**
+### Пример 2: Простой кэш
 
 ```kotlin
 class Cache {
@@ -93,7 +89,7 @@ class Cache {
         val data = weakRef?.get()
 
         if (data == null) {
-            // Object was garbage collected
+            // Объект был собран; очищаем запись
             weakCache.remove(key)
         }
 
@@ -107,45 +103,51 @@ fun example() {
     var data: Data? = Data()
     cache.put("key1", data!!)
 
-    println(cache.get("key1"))  // Data object GOOD
+    println(cache.get("key1"))  // Скорее всего не null: сильная ссылка ещё есть
 
-    data = null  // Remove strong reference
+    data = null  // Удаляем сильную ссылку
 
-    System.gc()  // Suggest GC
+    System.gc()  // Только подсказка GC
 
-    println(cache.get("key1"))  // null - (GC cleared it)
+    println(cache.get("key1"))  // Может быть null, если GC собрал объект
 }
 ```
 
-**Strong vs Weak References:**
+### Сильные vs слабые ссылки
 
 ```kotlin
-// Scenario 1: Strong reference exists
+// Сценарий 1: Есть сильная ссылка
 val strongRef = Data()
-val weakRef = WeakReference(strongRef)
+val weakRef1 = WeakReference(strongRef)
 
-// GC runs:
-// 1. strongRef keeps Data alive
-// 2. weakRef.get() returns Data GOOD
+// При работе GC:
+// - strongRef удерживает Data
+// - weakRef1.get() возвращает экземпляр Data
 
-// Scenario 2: No strong reference
-val weakRef = WeakReference(Data())
+// Сценарий 2: Осталась только слабая ссылка
+val weakRef2 = WeakReference(Data())
 
-// GC runs:
-// 1. No strong reference to Data
-// 2. GC clears WeakReference
-// 3. weakRef.get() returns null BAD
+// При работе GC:
+// - Нет сильных ссылок на этот экземпляр Data
+// - Объект становится кандидатом на сборку
+// - После сборки weakRef2.get() возвращает null
 ```
 
-**Reachability States:**
+### Состояния достижимости (упрощённо)
 
-| Object State | Strong Ref | Weak Ref | GC Action |
-|-------------|------------|----------|-----------|
-| Strongly reachable | - Yes | Optional | Keep object |
-| Weakly reachable | - No | - Yes | Clear WeakRef, GC object |
-| Unreachable | - No | - No | GC object |
+- Сильно достижимый:
+  - Есть хотя бы одна цепочка сильных ссылок от GC root.
+  - Действие: объект сохраняется; `WeakReference` к нему не очищаются.
 
-**Practical Example:**
+- Слабо достижимый:
+  - Нет сильных ссылок от GC root, но есть слабые ссылки.
+  - Действие: во время GC объект может быть собран; соответствующие `WeakReference` очищаются (и могут быть поставлены в `ReferenceQueue`); после этого объект собирается.
+
+- Недостижимый:
+  - Нет ссылок, удерживающих объект.
+  - Действие: объект собирается.
+
+### Практический пример
 
 ```kotlin
 class ImageCache {
@@ -155,7 +157,159 @@ class ImageCache {
         return cache[url]?.get()?.also {
             println("Cache hit!")
         } ?: run {
-            println("Cache miss (GC cleared)")
+            println("Cache miss (возможно, GC очистил ссылку)")
+            null
+        }
+    }
+
+    fun put(url: String, bitmap: Bitmap) {
+        cache[url] = WeakReference(bitmap)
+    }
+}
+
+// Использование:
+val imageCache = ImageCache()
+var bitmap: Bitmap? = loadBitmap()
+
+imageCache.put("url", bitmap!!)
+// bitmap сильно удерживает объект → он жив
+
+bitmap = null  // Удаляем сильную ссылку
+System.gc()     // Только подсказка GC
+
+// Позже imageCache.get("url") может вернуть null,
+// если GC собрал Bitmap и очистил WeakReference
+```
+
+## Answer (EN)
+
+The system uses the garbage collector (GC) and reachability analysis to determine when a WeakReference can be cleared.
+
+Key principle:
+- The referent of a WeakReference becomes eligible for collection when it is reachable ONLY through weak references (no strong references). During a GC cycle, such objects are treated as collectible, and their weak references are cleared.
+
+How it works:
+
+1. Mark phase:
+   - The GC finds all objects reachable through strong references and marks them as strongly reachable.
+
+2. Weak reference processing:
+   - For each WeakReference, the GC checks whether its referent is strongly reachable.
+   - If the referent is not strongly reachable, the GC clears the referent inside the WeakReference (its get() will later return null) and may enqueue the WeakReference into an associated ReferenceQueue.
+
+3. Sweep phase:
+   - Unmarked (unreachable) objects are reclaimed.
+
+Note: System.gc() only suggests that the GC may run; it does not guarantee immediate collection or clearing.
+
+### Example 1: Basic behavior
+
+```kotlin
+import java.lang.ref.WeakReference
+
+val data = Data()  // Strong reference
+val weakRef = WeakReference(data)
+
+// data is strongly reachable
+// So during GC, the referent is kept alive
+// weakRef.get() != null
+```
+
+```kotlin
+val weakRef = WeakReference(Data())
+
+// No other strong reference to this Data instance is kept
+// On a GC cycle, the referent may be collected and the WeakReference referent cleared
+
+System.gc()  // Hint: may trigger GC
+
+// After GC, weakRef.get() may return null if the referent was collected
+```
+
+### Example 2: Simple cache
+
+```kotlin
+class Cache {
+    val weakCache = mutableMapOf<String, WeakReference<Data>>()
+
+    fun put(key: String, value: Data) {
+        weakCache[key] = WeakReference(value)
+    }
+
+    fun get(key: String): Data? {
+        val weakRef = weakCache[key]
+        val data = weakRef?.get()
+
+        if (data == null) {
+            // Referent was collected; clean up the entry
+            weakCache.remove(key)
+        }
+
+        return data
+    }
+}
+
+fun example() {
+    val cache = Cache()
+
+    var data: Data? = Data()
+    cache.put("key1", data!!)
+
+    println(cache.get("key1"))  // Likely non-null: strong reference still exists
+
+    data = null  // Remove strong reference
+
+    System.gc()  // Hint: may trigger GC
+
+    println(cache.get("key1"))  // May be null if GC collected the referent
+}
+```
+
+### Strong vs Weak References
+
+```kotlin
+// Scenario 1: Strong reference exists
+val strongRef = Data()
+val weakRef1 = WeakReference(strongRef)
+
+// When GC runs:
+// - strongRef keeps Data strongly reachable
+// - weakRef1.get() returns the Data instance
+
+// Scenario 2: Only weak reference remains
+val weakRef2 = WeakReference(Data())
+
+// When GC runs:
+// - No strong reference to this Data instance is kept
+// - The referent becomes eligible for collection
+// - After collection, weakRef2.get() returns null
+```
+
+### Reachability states (simplified)
+
+- Strongly reachable:
+  - Has at least one chain of strong references from GC roots.
+  - Action: object is kept; WeakReferences to it are not cleared.
+
+- Weakly reachable:
+  - No strong references from GC roots, but at least one weak reference exists.
+  - Action: during GC, the referent is eligible for reclamation; WeakReferences to it are cleared (and may be enqueued); after that it is collected.
+
+- Unreachable:
+  - No strong or weak references keep it; purely garbage.
+  - Action: collected.
+
+### Practical example
+
+```kotlin
+class ImageCache {
+    private val cache = mutableMapOf<String, WeakReference<Bitmap>>()
+
+    fun get(url: String): Bitmap? {
+        return cache[url]?.get()?.also {
+            println("Cache hit!")
+        } ?: run {
+            println("Cache miss (possibly GC cleared referent)")
             null
         }
     }
@@ -170,36 +324,49 @@ val imageCache = ImageCache()
 var bitmap: Bitmap? = loadBitmap()
 
 imageCache.put("url", bitmap!!)
-// bitmap is strongly held → cache works
+// bitmap is strongly held → referent is alive
 
 bitmap = null  // Remove strong reference
-System.gc()
+System.gc()     // Hint only
 
-// imageCache.get("url") returns null
-// GC cleared WeakReference
+// Later, imageCache.get("url") may return null
+// if GC has collected the Bitmap referent and cleared the WeakReference
 ```
 
-**Summary:**
+### Summary
 
-The GC determines WeakReference can be cleared when:
-- Object is **NOT strongly reachable**
-- Object is **ONLY weakly reachable**
-- GC run occurs (mark & sweep)
+The GC determines a WeakReference's referent can be cleared when:
+- The object is not strongly reachable from GC roots.
+- It is reachable only via weak references.
+- A GC cycle processes weak references and clears them before reclaiming the object.
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как это связано с Kotlin на JVM по сравнению с другими таргетами Kotlin (например, Native)?
+- Когда на практике стоит использовать `WeakReference`?
+- Каковы типичные подводные камни при использовании `WeakReference` и полагании на `System.gc()` в примерах?
+
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- How does this relate to Kotlin on JVM vs other Kotlin targets (e.g., Native)?
+- When would you use WeakReference in practice?
+- What are common pitfalls when relying on WeakReference and System.gc() in examples?
+
+## Ссылки (RU)
+
+- [[c-garbage-collection]]
 
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-garbage-collection]]
+
+## Связанные вопросы (RU)
+
+- [[q-garbage-collector-basics--programming-languages--medium]]
 
 ## Related Questions
 
--
-- [[q-java-access-modifiers--programming-languages--medium]]
--
+- [[q-garbage-collector-basics--programming-languages--medium]]

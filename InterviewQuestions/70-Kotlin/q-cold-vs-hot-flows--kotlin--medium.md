@@ -1,11 +1,11 @@
 ---
 id: kotlin-059
 title: "Cold vs Hot Flows / Холодные и горячие потоки"
-aliases: ["Cold vs Hot Flows, Холодные и горячие потоки"]
+aliases: ["Cold vs Hot Flows", "Холодные и горячие потоки"]
 
 # Classification
 topic: kotlin
-subtopics: [cold-flows, flow, hot-flows]
+subtopics: [flow]
 question_kind: theory
 difficulty: medium
 
@@ -18,292 +18,42 @@ source_note: Phase 1 Coroutines & Flow Advanced Questions
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
+related: [c-flow, c-coroutines, q-kotlin-flow-basics--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 
 # Timestamps
 created: 2025-10-11
-updated: 2025-10-11
+updated: 2025-11-10
 
 tags: [cold-flows, difficulty/medium, flow, hot-flows, kotlin, shareIn, stateIn]
 ---
 # Вопрос (RU)
-> Объясните холодные и горячие потоки. Как shareIn и stateIn конвертируют холодные в горячие? Правильно настройте параметры replay и started.
+> Объясните холодные и горячие потоки. Как `shareIn` и `stateIn` конвертируют холодные в горячие? Как правильно настроить параметры `replay` и `started`?
+
+# Question (EN)
+> Explain cold vs hot flows. How do `shareIn` and `stateIn` convert cold to hot? Configure `replay` and `started` parameters properly.
 
 ---
 
-# Question (EN)
-> Explain cold vs hot flows. How do shareIn and stateIn convert cold to hot? Configure replay and started parameters properly.
-
 ## Ответ (RU)
 
-Понимание холодных и горячих потоков фундаментально для построения эффективных реактивных приложений с Kotlin Flow.
+Понимание холодных и горячих потоков фундаментально для построения эффективных и ресурс-эффективных реактивных приложений с Kotlin `Flow` и корутинами (`Coroutine`, [[c-coroutines]]).
 
 ### Холодные Потоки
 
-**Холодные потоки** активируются при сборе. Каждый коллектор независимо запускает код билдера потока.
+**Холодные потоки** запускают свой upstream при начале коллекции. Каждый коллектор независимо запускает код билдера потока.
 
 #### Ключевые Характеристики
 
 1. **Ленивые** - Начинают выполнение только при сборе
-2. **Unicast** - Каждый коллектор получает свой независимый поток
-3. **Нет общего состояния** - Множественные коллекторы не делят данные
-4. **Свежие данные** - Каждый коллектор запускает новое выполнение
+2. **Unicast по умолчанию** - Каждый коллектор получает свой независимый поток выполнения
+3. **Нет общего состояния** - Множественные коллекторы не делят одно и то же выполнение
+4. **Свежие данные** - Каждый коллектор запускает новое выполнение upstream
 
 #### Пример: Поведение Холодного Потока
 
 ```kotlin
 fun createColdFlow(): Flow<Int> = flow {
-    println("Поток запущен")
-    repeat(3) { i ->
-        delay(1000)
-        emit(i)
-        println("Испущено: $i")
-    }
-    println("Поток завершен")
-}
-
-// Каждый коллектор запускает независимое выполнение
-coldFlow.collect { println("Коллектор 1: $it") }
-coldFlow.collect { println("Коллектор 2: $it") }
-// Код билдера выполняется дважды!
-```
-
-#### Реальные Примеры Холодных Потоков
-
-```kotlin
-// Запрос к БД - каждый коллектор выполняет запрос
-fun getUserFlow(userId: Int): Flow<User> = flow {
-    val user = database.getUser(userId) // Свежий запрос каждый раз
-    emit(user)
-}
-
-// Сетевой запрос - каждый коллектор делает новый запрос
-fun fetchArticles(): Flow<List<Article>> = flow {
-    val response = api.getArticles() // Новый сетевой вызов каждый раз
-    emit(response)
-}
-```
-
-### Горячие Потоки
-
-**Горячие потоки** всегда активны и испускают значения независимо от наличия коллекторов.
-
-#### Ключевые Характеристики
-
-1. **Активные** - Работают даже без коллекторов
-2. **Multicast** - Все коллекторы получают одинаковые испускания
-3. **Общее состояние** - Единое выполнение для всех
-4. **Могут пропустить значения** - Коллекторы получают только значения после подписки
-
-### Конвертация Холодного В Горячий: shareIn()
-
-Оператор `shareIn` конвертирует холодный поток в горячий SharedFlow.
-
-```kotlin
-fun <T> Flow<T>.shareIn(
-    scope: CoroutineScope,
-    started: SharingStarted,
-    replay: Int = 0
-): SharedFlow<T>
-```
-
-#### Объяснение Параметров
-
-**1. scope** - CoroutineScope, контролирующий время жизни
-
-**2. replay** - Количество значений для повтора новым подписчикам
-- `0` - Нет повтора, новые коллекторы получают только будущие значения
-- `1` - Повтор последнего значения (как StateFlow)
-- `n` - Повтор последних n значений
-
-**3. started** - Когда запускать/останавливать поток
-
-| Стратегия | Поведение | Применение |
-|-----------|-----------|------------|
-| **Eagerly** | Запускается сразу, никогда не останавливается | Фоновые сервисы |
-| **Lazily** | Запускается при первом подписчике | Кешированные данные |
-| **WhileSubscribed** | Запуск/остановка по подписчикам | Наиболее частый, эффективный |
-
-#### Примеры shareIn
-
-```kotlin
-// Пример: Данные температурного датчика
-class TemperatureSensor(scope: CoroutineScope) {
-    private val temperatureReadings = flow {
-        while (true) {
-            val temp = readTemperature() // Дорогое чтение датчика
-            emit(temp)
-            delay(1000)
-        }
-    }
-
-    // Разделение показаний датчика - запуск немедленный
-    val temperature: SharedFlow<Float> = temperatureReadings
-        .shareIn(
-            scope = scope,
-            started = SharingStarted.Eagerly,
-            replay = 1 // Новые подписчики получают последнюю температуру
-        )
-}
-
-// Использование - множественные коллекторы разделяют чтения датчика
-// Датчик читается только раз в секунду для всех!
-```
-
-```kotlin
-// Пример: Сетевые данные с WhileSubscribed
-class NewsRepository(private val scope: CoroutineScope) {
-    val latestNews: SharedFlow<List<Article>> = flow {
-        while (true) {
-            val news = fetchNewsFromNetwork()
-            emit(news)
-            delay(60_000)
-        }
-    }
-    .shareIn(
-        scope = scope,
-        started = SharingStarted.WhileSubscribed(5000), // Остановка через 5с
-        replay = 1
-    )
-}
-```
-
-#### Конфигурация WhileSubscribed
-
-```kotlin
-SharingStarted.WhileSubscribed(
-    stopTimeoutMillis: Long = 0,
-    replayExpirationMillis: Long = Long.MAX_VALUE
-)
-```
-
-**stopTimeoutMillis** - Как долго держать поток активным после последнего подписчика
-- `0` - Остановить сразу
-- `5000` - 5 секунд (хорошо для поворота экрана)
-
-### Конвертация Холодного В Горячий: stateIn()
-
-Оператор `stateIn` конвертирует холодный поток в горячий StateFlow.
-
-```kotlin
-fun <T> Flow<T>.stateIn(
-    scope: CoroutineScope,
-    started: SharingStarted,
-    initialValue: T
-): StateFlow<T>
-```
-
-#### Примеры stateIn
-
-```kotlin
-// Пример: Состояние аутентификации
-class AuthRepository(private val scope: CoroutineScope) {
-    val isAuthenticated: StateFlow<Boolean> = authChanges
-        .stateIn(
-            scope = scope,
-            started = SharingStarted.Eagerly,
-            initialValue = false // Состояние по умолчанию
-        )
-}
-
-// Использование - всегда имеет текущее состояние
-println("Текущее состояние: ${auth.isAuthenticated.value}") // Немедленный доступ
-```
-
-```kotlin
-// Пример: Результаты поиска
-class SearchViewModel : ViewModel() {
-    val searchResults: StateFlow<List<SearchResult>> = _searchQuery
-        .debounce(300)
-        .distinctUntilChanged()
-        .flatMapLatest { query ->
-            searchRepository.search(query)
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-}
-```
-
-### Таблица Сравнения
-
-| Аспект | Холодный поток | Горячий поток |
-|--------|----------------|---------------|
-| **Активация** | При сборе | Всегда/Условно |
-| **Выполнение** | На коллектор | Общее выполнение |
-| **Источник данных** | Свежий для каждого | Общий источник |
-| **Использование ресурсов** | Множественные выполнения | Единое выполнение |
-| **Пропуск значений** | Нет | Да |
-
-### Лучшие Практики
-
-1. **Используйте холодные потоки для**:
-   - Одноразовых операций
-   - Свежих данных для каждого подписчика
-   - Простых трансформаций
-
-2. **Используйте горячие потоки для**:
-   - Дорогих операций (сеть, датчики)
-   - Множественных подписчиков
-   - Управления состоянием UI
-   - Кеширования
-
-3. **Выбирайте стратегию started**:
-   ```kotlin
-   // Фоновый сервис
-   .shareIn(scope, SharingStarted.Eagerly, replay = 1)
-
-   // UI обновления
-   .stateIn(scope, SharingStarted.WhileSubscribed(5000), initialValue)
-   ```
-
-### Распространенные Ошибки
-
-1. **Не использование горячих потоков для дорогих операций**:
-   ```kotlin
-   //  Каждый поворот - новый сетевой вызов
-   val data = flow { emit(api.fetchData()) }
-
-   //  Сетевой вызов переживает поворот
-   val data = flow { emit(api.fetchData()) }
-       .stateIn(viewModelScope, WhileSubscribed(5000), emptyList())
-   ```
-
-2. **Утечки памяти с неправильным scope**:
-   ```kotlin
-   //  Поток никогда не останавливается
-   .shareIn(GlobalScope, SharingStarted.Eagerly, 1)
-
-   //  Жизненный цикл привязан к ViewModel
-   .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
-   ```
-
-**Краткое содержание**: Холодные потоки выполняются независимо для каждого коллектора, горячие потоки разделяют единое выполнение между множественными коллекторами. Используйте shareIn() для конвертации в SharedFlow с настраиваемым replay и стратегиями запуска. Используйте stateIn() для конвертации в StateFlow когда нужен держатель состояния с текущим значением. Выбирайте WhileSubscribed для UI, Lazily для одноразовой инициализации, Eagerly для всегда активных сервисов.
-
----
-
-## Answer (EN)
-
-Understanding cold vs hot flows is fundamental to building efficient reactive applications with Kotlin Flow. The distinction affects performance, resource management, and data sharing patterns.
-
-### Cold Flows
-
-**Cold flows** are flows that are activated when collected. Each collector triggers the flow builder code independently.
-
-#### Key Characteristics
-
-1. **Lazy** - Only start executing when collected
-2. **Unicast** - Each collector gets its own independent flow
-3. **No shared state** - Multiple collectors don't share data
-4. **Fresh data** - Each collector triggers new execution
-
-#### Example: Cold Flow Behavior
-
-```kotlin
-fun createColdFlow(): Flow<Int> = flow {
-    println("Flow started at ${System.currentTimeMillis()}")
+    println("Flow started at ${'$'}{System.currentTimeMillis()}")
     repeat(3) { i ->
         delay(1000)
         emit(i)
@@ -335,29 +85,436 @@ fun main() = runBlocking {
 }
 
 /*
-Output:
-Starting first collector
-Flow started at 1000
-Emitted: 0
-Collector 1 received: 0
-Emitted: 1
-Collector 1 received: 1
-Starting second collector
-Flow started at 3500  // NEW flow execution!
-Emitted: 2
-Collector 1 received: 2
-Flow completed
-Emitted: 0
-Collector 2 received: 0
-Emitted: 1
-Collector 2 received: 1
-Emitted: 2
-Collector 2 received: 2
-Flow completed
+Ключевой момент: каждый коллектор запускает собственное выполнение.
+Вы увидите "Flow started" дважды, в разные моменты времени.
 */
 ```
 
-**Each collector triggers independent execution** - the flow builder code runs twice.
+#### Реальные Примеры Холодных Потоков
+
+```kotlin
+// Запрос к БД - каждый коллектор выполняет запрос
+fun getUserFlow(userId: Int): Flow<User> = flow {
+    val user = database.getUser(userId) // Свежий запрос каждый раз
+    emit(user)
+}
+
+// Сетевой запрос - каждый коллектор делает новый запрос
+fun fetchArticles(): Flow<List<Article>> = flow {
+    val response = api.getArticles() // Новый сетевой вызов каждый раз
+    emit(response)
+}
+
+// Чтение файла - каждый коллектор читает файл с начала
+fun readLogFile(): Flow<String> = flow {
+    File("logs.txt").forEachLine { line ->
+        emit(line)
+    }
+}
+```
+
+### Горячие Потоки
+
+**Горячие потоки** продолжают испускать значения независимо от того, кто и когда на них подписывается. Коллекторы разделяют одно и то же исполнение или состояние.
+
+#### Ключевые Характеристики
+
+1. **Не зависят от коллектора** - Могут испускать значения, даже когда подписчиков нет (в зависимости от реализации/стратегии)
+2. **Multicast** - Несколько коллекторов получают одно и то же последовательное исполнение
+3. **Общее состояние/исполнение** - Один upstream разделяется между всеми подписчиками
+4. **Могут пропустить значения** - Подписчики получают только значения, испущенные после подписки (за исключением того, что покрывает `replay`)
+
+### Встроенные Горячие Потоки
+
+```kotlin
+// `StateFlow` - всегда хранит текущее значение
+val stateFlow = MutableStateFlow(0)
+
+// `SharedFlow` - настраиваемый горячий поток
+val sharedFlow = MutableSharedFlow<Int>(
+    replay = 0,
+    extraBufferCapacity = 0,
+    onBufferOverflow = BufferOverflow.SUSPEND
+)
+```
+
+### Конвертация Холодного в Горячий: `shareIn()`
+
+Оператор `shareIn` конвертирует холодный поток в горячий `SharedFlow`, запуская общий корутин, который коллекционирует исходный `Flow` и шарит значения.
+
+```kotlin
+fun <T> Flow<T>.shareIn(
+    scope: CoroutineScope,
+    started: SharingStarted,
+    replay: Int = 0
+): SharedFlow<T>
+```
+
+#### Объяснение Параметров
+
+**1. scope** - `CoroutineScope`, контролирующий время жизни шарящего корутина.
+
+**2. replay** - Количество значений для повтора новым подписчикам:
+- `0` - Нет повтора, новые коллекторы получают только будущие значения
+- `1` - Повтор последнего значения (поведение, похожее на `StateFlow`)
+- `n` - Повтор последних `n` значений
+
+**3. started** - Когда запускать/останавливать общий сбор исходного потока.
+
+| Стратегия | Поведение | Применение |
+|-----------|-----------|------------|
+| **Eagerly** | Сбор стартует сразу и не останавливается до отмены `scope` | Фоновые сервисы, постоянные потоки |
+| **Lazily** | Старт при первом подписчике и без авто-остановки | Кешированные/инициализационные данные в рамках `scope` |
+| **WhileSubscribed** | Старт при появлении первого подписчика, остановка с таймаутом после ухода последнего | Наиболее часто для UI, ресурс-эффективно |
+
+#### Примеры `shareIn`
+
+```kotlin
+// Пример: Данные температурного датчика
+class TemperatureSensor(scope: CoroutineScope) {
+    private val temperatureReadings = flow {
+        while (true) {
+            val temp = readTemperature() // Дорогое чтение датчика
+            emit(temp)
+            delay(1000)
+        }
+    }
+
+    // Разделение показаний датчика
+    val temperature: SharedFlow<Float> = temperatureReadings
+        .shareIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            replay = 1 // Новые подписчики получают последнюю температуру
+        )
+
+    private fun readTemperature(): Float {
+        println("Reading temperature sensor...")
+        return (20..30).random().toFloat()
+    }
+}
+
+// Множественные коллекторы разделяют одно чтение в секунду
+```
+
+```kotlin
+// Пример: Сетевые данные с WhileSubscribed
+class NewsRepository(private val scope: CoroutineScope) {
+    private val newsUpdates = flow {
+        while (true) {
+            val news = fetchNewsFromNetwork()
+            emit(news)
+            delay(60_000)
+        }
+    }
+
+    val latestNews: SharedFlow<List<Article>> = newsUpdates
+        .shareIn(
+            scope = scope,
+            started = SharingStarted.WhileSubscribed(5000), // Остановка через 5с после последнего подписчика
+            replay = 1
+        )
+}
+```
+
+#### Конфигурация `WhileSubscribed`
+
+```kotlin
+SharingStarted.WhileSubscribed(
+    stopTimeoutMillis: Long = 0,
+    replayExpirationMillis: Long = Long.MAX_VALUE
+)
+```
+
+**stopTimeoutMillis** - Как долго держать сбор активным после ухода последнего подписчика:
+- `0` - Остановить сразу
+- `5000` - 5 секунд (удобно для поворота экрана)
+
+**replayExpirationMillis** - Как долго кеш `replay` остаётся доступен без подписчиков:
+- `Long.MAX_VALUE` (по умолчанию) - не очищать автоматически
+- другое значение - очистка после заданной паузы
+
+```kotlin
+// Пример: ViewModel с WhileSubscribed
+class MyViewModel : ViewModel() {
+    val uiState = repository.dataFlow
+        .shareIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            replay = 1
+        )
+}
+```
+
+### Конвертация Холодного в Горячий: `stateIn()`
+
+Оператор `stateIn` конвертирует холодный поток в горячий `StateFlow`, который всегда имеет текущее значение и ведёт себя как "горячий" источник состояния.
+
+```kotlin
+fun <T> Flow<T>.stateIn(
+    scope: CoroutineScope,
+    started: SharingStarted,
+    initialValue: T
+): StateFlow<T>
+```
+
+#### Ключевые Отличия от `shareIn`
+
+| Характеристика | `shareIn` | `stateIn` |
+|----------------|-----------|-----------|
+| **Тип результата** | `SharedFlow` | `StateFlow` |
+| **Начальное значение** | Через `replay` (необязательно) | Обязательно `initialValue` |
+| **Всегда есть значение** | Нет | Да |
+| **Конфляция** | Настраивается | Всегда хранит только последнее |
+| **Использование** | Потоки событий/несколько значений | Держатель текущего состояния |
+
+#### Примеры `stateIn`
+
+```kotlin
+// Пример 1: Состояние аутентификации
+class AuthRepository(private val scope: CoroutineScope) {
+    private val authChanges: Flow<Boolean> = flow {
+        while (true) {
+            emit(checkAuthStatus())
+            delay(5000)
+        }
+    }
+
+    val isAuthenticated: StateFlow<Boolean> = authChanges
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Eagerly,
+            initialValue = false // Состояние по умолчанию
+        )
+}
+
+// Всегда есть текущее состояние
+println("Текущее состояние: ${'$'}{authRepository.isAuthenticated.value}")
+```
+
+```kotlin
+// Пример 2: Результаты поиска с debounce и фильтрацией
+class SearchViewModel : ViewModel() {
+    private val _searchQuery = MutableStateFlow("")
+
+    val searchResults: StateFlow<List<SearchResult>> = _searchQuery
+        .debounce(300)
+        .filter { it.length >= 3 }
+        .distinctUntilChanged()
+        .flatMapLatest { query ->
+            searchRepository.search(query)
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+}
+```
+
+```kotlin
+// Пример 3: Сложное UI-состояние из нескольких потоков
+
+data class UiState(
+    val isLoading: Boolean = false,
+    val data: List<Item> = emptyList(),
+    val error: String? = null
+)
+
+class DataViewModel : ViewModel() {
+    val uiState: StateFlow<UiState> = combine(
+        loadingFlow,
+        dataFlow,
+        errorFlow
+    ) { isLoading, data, error ->
+        UiState(isLoading, data, error)
+    }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = UiState() // Значение по умолчанию
+        )
+}
+```
+
+### Таблица Сравнения: Холодные vs Горячие Потоки
+
+| Аспект | Холодный поток | Горячий поток |
+|--------|----------------|---------------|
+| **Активация** | При сборе | Активен независимо от конкретного коллектора (в рамках стратегии) |
+| **Выполнение** | На коллектор | Общее выполнение |
+| **Источник данных** | Свежий для каждого | Общий источник |
+| **Использование ресурсов** | Множественные выполнения | Единое выполнение на `scope`/шару |
+| **Пропуск значений** | Как правило, нет: каждый сбор с начала | Возможны пропуски; `replay` частично компенсирует |
+| **Состояние** | Нет встроенного состояния | Может хранить состояние (например, `StateFlow`) |
+| **Примеры типов** | `flow { }`, `flowOf()` | `StateFlow`, `SharedFlow` |
+
+### Соображения Производительности
+
+```kotlin
+// Плохо: каждый коллектор триггерит API вызов
+class BadRepository {
+    fun getUsers(): Flow<List<User>> = flow {
+        emit(api.getUsers())
+    }
+}
+
+// Во ViewModel несколько подписчиков => несколько сетевых запросов
+val usersFlow1 = repository.getUsers()
+val usersFlow2 = repository.getUsers()
+
+// Хорошо: шарим выполнение в рамках scope
+class GoodRepository(scope: CoroutineScope) {
+    val users: StateFlow<List<User>> = flow {
+        emit(api.getUsers()) // Вызывается один раз за жизненный цикл шаринга
+    }
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Lazily,
+            initialValue = emptyList()
+        )
+}
+
+// Во ViewModel оба используют одно и то же состояние
+val users1 = repository.users
+val users2 = repository.users
+```
+
+### Лучшие Практики
+
+1. **Используйте холодные потоки для**:
+   - Одноразовых операций (один API вызов)
+   - Когда каждому подписчику нужно независимое выполнение
+   - Простых ленивых трансформаций и репозиторных API
+
+2. **Используйте горячие потоки (`shareIn`/`stateIn`) для**:
+   - Дорогих операций, результаты которых нужно шарить
+   - Множественных подписчиков одного и того же источника данных
+   - Фоновых/непрерывных потоков данных
+   - Управления состоянием UI и кеширования в рамках `scope`
+
+3. **Выбор стратегии `started`**:
+   ```kotlin
+   // Поток, похожий на сервис, всегда активен в рамках scope
+   .shareIn(scope, SharingStarted.Eagerly, replay = 1)
+
+   // Ленивое начало без авто-остановки
+   .stateIn(scope, SharingStarted.Lazily, initialValue)
+
+   // UI-обновления, которые останавливаются, когда нет подписчиков
+   .stateIn(scope, SharingStarted.WhileSubscribed(5000), initialValue)
+   ```
+
+4. **Правильная конфигурация `replay`**:
+   ```kotlin
+   // Без повторов — одноразовые события
+   .shareIn(scope, started, replay = 0)
+
+   // Повтор последнего — распространено для UI-состояния
+   .shareIn(scope, started, replay = 1)
+
+   // Несколько значений — следите за памятью
+   .shareIn(scope, started, replay = 100)
+   ```
+
+### Распространенные Ошибки
+
+1. **Неиспользование горячих потоков для дорогих операций**:
+   ```kotlin
+   // Каждый сбор запускает новый сетевой вызов
+   val data: Flow<List<Item>> = flow { emit(api.fetchData()) }
+
+   // Правильно: расшарить результат в рамках scope
+   val sharedData: StateFlow<List<Item>> = flow { emit(api.fetchData()) }
+       .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
+   ```
+
+2. **Использование `Eagerly`, когда лучше `WhileSubscribed`**:
+   ```kotlin
+   // Поток активен даже без подписчиков
+   .shareIn(scope, SharingStarted.Eagerly, 1)
+
+   // Экономия ресурсов: активен только при наличии подписчиков
+   .shareIn(scope, SharingStarted.WhileSubscribed(5000), 1)
+   ```
+
+3. **Забывают про `initialValue` в `stateIn`**:
+   ```kotlin
+   // Неверно: отсутствует начальное значение (ошибка компиляции)
+   // .stateIn(scope, SharingStarted.Lazily)
+
+   // Верно: задать подходящее значение по умолчанию
+   .stateIn(scope, SharingStarted.Lazily, emptyList())
+   ```
+
+4. **Утечки памяти / неверный жизненный цикл из-за `scope`**:
+   ```kotlin
+   // Поток может жить дольше, чем нужно
+   .shareIn(GlobalScope, SharingStarted.Eagerly, 1)
+
+   // Верно: привязать к жизненному циклу (например, ViewModel)
+   .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
+   ```
+
+**Краткое резюме (RU)**: Холодные потоки выполняются независимо для каждого коллектора; горячие потоки разделяют единое выполнение или состояние между несколькими коллекторами и могут эмитить значения независимо от подписчиков (в зависимости от стратегии). Используйте `shareIn()` для конвертации `Flow` в `SharedFlow` с настраиваемыми `replay` и стратегиями запуска. Используйте `stateIn()` для получения `StateFlow` как держателя текущего состояния. Предпочитайте `WhileSubscribed` для UI, `Lazily` для одноразовой инициализации в `scope`, `Eagerly` для всегда-активных сервисов.
+
+---
+
+## Answer (EN)
+
+Understanding cold vs hot flows is fundamental to building efficient reactive applications with Kotlin `Flow`. The distinction affects performance, resource usage, and data sharing patterns.
+
+### Cold Flows
+
+**Cold flows** start their upstream when collected. Each collector independently triggers the flow builder code.
+
+#### Key Characteristics
+
+1. **Lazy** - Start executing only when collected
+2. **Unicast by default** - Each collector gets its own independent execution
+3. **No shared upstream state** - Multiple collectors don't share a single execution
+4. **Fresh data** - Each collector triggers a new upstream run
+
+#### Example: Cold Flow Behavior
+
+```kotlin
+fun createColdFlow(): Flow<Int> = flow {
+    println("Flow started at ${'$'}{System.currentTimeMillis()}")
+    repeat(3) { i ->
+        delay(1000)
+        emit(i)
+        println("Emitted: $i")
+    }
+    println("Flow completed")
+}
+
+fun main() = runBlocking {
+    val coldFlow = createColdFlow()
+
+    println("Starting first collector")
+    launch {
+        coldFlow.collect { value ->
+            println("Collector 1 received: $value")
+        }
+    }
+
+    delay(2500)
+
+    println("Starting second collector")
+    launch {
+        coldFlow.collect { value ->
+            println("Collector 2 received: $value")
+        }
+    }
+
+    delay(5000)
+}
+
+/*
+Key point: each collector triggers its own execution.
+You'll see "Flow started" printed twice at different times.
+*/
+```
 
 #### Real-world Cold Flow Examples
 
@@ -374,32 +531,32 @@ fun fetchArticles(): Flow<List<Article>> = flow {
     emit(response)
 }
 
-// File reading - each collector reads file
+// File reading - each collector reads file from beginning
 fun readLogFile(): Flow<String> = flow {
     File("logs.txt").forEachLine { line ->
-        emit(line) // Read from beginning each time
+        emit(line)
     }
 }
 ```
 
 ### Hot Flows
 
-**Hot flows** are always active and emit values regardless of whether there are collectors. Multiple collectors share the same flow execution.
+**Hot flows** produce values independently of any particular collector. Multiple collectors observe a shared execution or shared state, and may miss values emitted before they start collecting (except for what is covered by `replay`).
 
 #### Key Characteristics
 
-1. **Eager** - Active even without collectors
-2. **Multicast** - All collectors receive same emissions
-3. **Shared state** - Single execution shared by all
-4. **May miss values** - Collectors only receive values emitted after subscription
+1. **Independent from individual collectors** - Can keep emitting even with zero subscribers, depending on implementation/`SharingStarted`
+2. **Multicast** - Multiple collectors observe the same logical stream
+3. **Shared state/execution** - Single upstream shared among collectors
+4. **May miss values** - Collectors receive values emitted after subscription (plus any replayed ones)
 
 #### Built-in Hot Flows
 
 ```kotlin
-// StateFlow - always has a value
+// `StateFlow` - always holds a current value
 val stateFlow = MutableStateFlow(0)
 
-// SharedFlow - configurable hot flow
+// `SharedFlow` - configurable hot flow
 val sharedFlow = MutableSharedFlow<Int>(
     replay = 0,
     extraBufferCapacity = 0,
@@ -407,9 +564,9 @@ val sharedFlow = MutableSharedFlow<Int>(
 )
 ```
 
-### Converting Cold to Hot: shareIn()
+### Converting Cold to Hot: `shareIn()`
 
-The `shareIn` operator converts a cold flow into a hot SharedFlow.
+The `shareIn` operator converts a cold `Flow` into a hot `SharedFlow` by launching a single collector in the given scope and multicasting emissions.
 
 ```kotlin
 fun <T> Flow<T>.shareIn(
@@ -421,22 +578,22 @@ fun <T> Flow<T>.shareIn(
 
 #### Parameters Explained
 
-**1. scope** - CoroutineScope that controls the sharing coroutine lifetime
+**1. scope** - `CoroutineScope` that controls the lifetime of the sharing coroutine.
 
-**2. replay** - Number of values to replay to new subscribers
+**2. replay** - Number of values to replay to new subscribers:
 - `0` - No replay, new collectors only get future values
-- `1` - Replay last value (like StateFlow behavior)
-- `n` - Replay last n values
+- `1` - Replay last value (`StateFlow`-like behavior)
+- `n` - Replay last `n` values
 
-**3. started** - When to start/stop the upstream flow
+**3. started** - When to start/stop collecting the upstream `Flow`.
 
 | Strategy | Behavior | Use Case |
 |----------|----------|----------|
-| **Eagerly** | Starts immediately, never stops | Background services, always-on streams |
-| **Lazily** | Starts on first subscriber, never stops | Cached data, single initialization |
-| **WhileSubscribed** | Starts/stops based on subscribers | Most common, resource efficient |
+| **Eagerly** | Start immediately and keep running until scope is cancelled | Background services, always-on streams |
+| **Lazily** | Start on first subscriber and never stop automatically | Cached data, one-time initialization in a scope |
+| **WhileSubscribed** | Start when first subscriber appears; stop after timeout when last leaves | Most common for UI, resource-efficient |
 
-#### shareIn Examples
+#### `shareIn` Examples
 
 ```kotlin
 // Example 1: Temperature sensor data
@@ -449,7 +606,7 @@ class TemperatureSensor(scope: CoroutineScope) {
         }
     }
 
-    // Share sensor readings - start eagerly, never stop
+    // Share sensor readings
     val temperature: SharedFlow<Float> = temperatureReadings
         .shareIn(
             scope = scope,
@@ -462,40 +619,6 @@ class TemperatureSensor(scope: CoroutineScope) {
         return (20..30).random().toFloat()
     }
 }
-
-// Usage - multiple collectors share same sensor readings
-fun main() = runBlocking {
-    val sensor = TemperatureSensor(this)
-
-    // Collector 1
-    launch {
-        sensor.temperature.collect { temp ->
-            println("Display 1: $temp°C")
-        }
-    }
-
-    delay(2000)
-
-    // Collector 2 - gets latest value immediately due to replay=1
-    launch {
-        sensor.temperature.collect { temp ->
-            println("Display 2: $temp°C")
-        }
-    }
-
-    delay(5000)
-}
-/*
-Output (sensor read only once per second):
-Reading temperature sensor...
-Display 1: 24°C
-Reading temperature sensor...
-Display 1: 27°C
-Display 2: 27°C  // Gets replayed value immediately
-Reading temperature sensor...
-Display 1: 22°C
-Display 2: 22°C  // Both share same reading
-*/
 ```
 
 ```kotlin
@@ -515,39 +638,6 @@ class NewsRepository(private val scope: CoroutineScope) {
             started = SharingStarted.WhileSubscribed(5000), // Stop 5s after last subscriber
             replay = 1 // New subscribers get latest news
         )
-
-    private suspend fun fetchNewsFromNetwork(): List<Article> {
-        println("Fetching news from network...")
-        delay(1000)
-        return listOf(Article("Breaking news"))
-    }
-}
-
-// Usage
-fun main() = runBlocking {
-    val repo = NewsRepository(this)
-
-    // First subscriber - starts flow
-    val job1 = launch {
-        repo.latestNews.collect { news ->
-            println("UI 1: ${news.size} articles")
-        }
-    }
-
-    delay(3000)
-    job1.cancel() // Last subscriber stopped
-
-    // Flow continues for 5 more seconds (stopTimeout)
-    delay(3000) // Still running
-
-    // New subscriber within stopTimeout - flow still active
-    launch {
-        repo.latestNews.collect { news ->
-            println("UI 2: ${news.size} articles")
-        }
-    }
-
-    delay(10000)
 }
 ```
 
@@ -560,30 +650,29 @@ SharingStarted.WhileSubscribed(
 )
 ```
 
-**stopTimeoutMillis** - How long to keep flow active after last subscriber
-- `0` - Stop immediately when last subscriber cancels
-- `5000` - Keep active for 5 seconds (good for screen rotations)
-- Prevents restart if user quickly navigates back
+**stopTimeoutMillis** - How long to keep collecting after the last subscriber:
+- `0` - Stop immediately
+- `5000` - Keep active for 5 seconds (good for configuration changes)
 
-**replayExpirationMillis** - How long replay cache remains valid
+**replayExpirationMillis** - How long replay cache stays valid without subscribers:
 - `Long.MAX_VALUE` - Never expire (default)
-- Custom value - Clear cache after period of no subscribers
+- Custom value - Clear cache after period with no subscribers
 
 ```kotlin
-// Android ViewModel example - survive configuration changes
+// Android ViewModel example - survive configuration changes within timeout
 class MyViewModel : ViewModel() {
     val uiState = repository.dataFlow
         .shareIn(
             scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000), // Survive rotation
+            started = SharingStarted.WhileSubscribed(5000),
             replay = 1
         )
 }
 ```
 
-### Converting Cold to Hot: stateIn()
+### Converting Cold to Hot: `stateIn()`
 
-The `stateIn` operator converts a cold flow into a hot StateFlow.
+The `stateIn` operator converts a cold `Flow` into a hot `StateFlow` that always has a current value and shares a single collection.
 
 ```kotlin
 fun <T> Flow<T>.stateIn(
@@ -593,23 +682,22 @@ fun <T> Flow<T>.stateIn(
 ): StateFlow<T>
 ```
 
-#### Key Differences from shareIn
+#### Key Differences from `shareIn`
 
-| Feature | shareIn | stateIn |
-|---------|---------|---------|
-| **Return type** | SharedFlow | StateFlow |
-| **Initial value** | Optional (replay) | Required |
+| Feature | `shareIn` | `stateIn` |
+|---------|-----------|-----------|
+| **Return type** | `SharedFlow` | `StateFlow` |
+| **Initial value** | Optional via `replay` | Required |
 | **Always has value** | No | Yes |
-| **Conflation** | Configurable | Always conflates |
-| **Use case** | Events, multiple values | Current state |
+| **Conflation** | Configurable | Always conflates to latest |
+| **Use case** | Event/multi-value streams | Current state holder |
 
-#### stateIn Examples
+#### `stateIn` Examples
 
 ```kotlin
 // Example 1: User authentication state
 class AuthRepository(private val scope: CoroutineScope) {
     private val authChanges = flow {
-        // Listen to auth state changes
         while (true) {
             val isAuthenticated = checkAuthStatus()
             emit(isAuthenticated)
@@ -620,24 +708,9 @@ class AuthRepository(private val scope: CoroutineScope) {
     val isAuthenticated: StateFlow<Boolean> = authChanges
         .stateIn(
             scope = scope,
-            started = SharingStarted.Eagerly, // Start immediately
+            started = SharingStarted.Eagerly, // Start immediately in this scope
             initialValue = false // Default state
         )
-}
-
-// Usage - always has current auth state
-fun main() = runBlocking {
-    val auth = AuthRepository(this)
-
-    println("Current state: ${auth.isAuthenticated.value}") // Immediate access
-
-    launch {
-        auth.isAuthenticated.collect { authenticated ->
-            println("Auth state: $authenticated")
-        }
-    }
-
-    delay(10000)
 }
 ```
 
@@ -663,16 +736,11 @@ class SearchViewModel : ViewModel() {
         _searchQuery.value = query
     }
 }
-
-// UI can access current value synchronously
-fun updateUI(viewModel: SearchViewModel) {
-    val currentResults = viewModel.searchResults.value // No suspend needed
-    println("Current results: ${currentResults.size}")
-}
 ```
 
 ```kotlin
 // Example 3: Complex UI state
+
 data class UiState(
     val isLoading: Boolean = false,
     val data: List<Item> = emptyList(),
@@ -687,11 +755,11 @@ class DataViewModel : ViewModel() {
     ) { isLoading, data, error ->
         UiState(isLoading, data, error)
     }
-    .stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = UiState() // Default state
-    )
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = UiState() // Default state
+        )
 }
 ```
 
@@ -699,124 +767,128 @@ class DataViewModel : ViewModel() {
 
 | Aspect | Cold Flow | Hot Flow |
 |--------|-----------|----------|
-| **Activation** | On collection | Always/Conditionally active |
+| **Activation** | On collection | Active independently of individual collectors (per strategy) |
 | **Execution** | Per collector | Shared execution |
 | **Data source** | Fresh per collector | Shared data source |
-| **Resource usage** | Multiple executions | Single execution |
-| **Missed values** | No (starts from beginning) | Yes (joins in progress) |
-| **State** | No state | Can have state (StateFlow) |
+| **Resource usage** | Multiple executions | Single execution per sharing lifecycle |
+| **Missed values** | Typically no (starts from beginning) | Possible (unless covered by `replay`) |
+| **State** | No inherent state | Can hold state (e.g., `StateFlow`) |
 | **Example types** | `flow { }`, `flowOf()` | `StateFlow`, `SharedFlow` |
 
 ### Performance Considerations
 
 ```kotlin
-//  Bad: Multiple collectors each make network call
+// Bad: Each collector triggers an API call (per execution of this flow)
 class BadRepository {
     fun getUsers(): Flow<List<User>> = flow {
-        emit(api.getUsers()) // Called per collector!
+        emit(api.getUsers())
     }
 }
 
-// In ViewModel
-val users1 = repository.getUsers()
-val users2 = repository.getUsers() // Another network call!
+// In ViewModel, separate calls cause multiple network requests
+val usersFlow1 = repository.getUsers()
+val usersFlow2 = repository.getUsers()
 
-//  Good: Share single network call
+// Better: Share within a scope so collectors reuse the same execution
 class GoodRepository(scope: CoroutineScope) {
     val users: StateFlow<List<User>> = flow {
-        emit(api.getUsers()) // Called once
+        emit(api.getUsers()) // Executed once per sharing lifecycle
     }
-    .stateIn(
-        scope = scope,
-        started = SharingStarted.Lazily, // Start on first subscriber
-        initialValue = emptyList()
-    )
+        .stateIn(
+            scope = scope,
+            started = SharingStarted.Lazily, // Start on first subscriber
+            initialValue = emptyList()
+        )
 }
 
 // In ViewModel
-val users1 = repository.users // Same data
-val users2 = repository.users // No extra call
+val users1 = repository.users // Same shared data
+val users2 = repository.users
 ```
 
 ### Best Practices
 
 1. **Use cold flows for**:
    - One-time operations (single API call)
-   - Per-subscriber fresh data needed
-   - Simple transformations
-   - Room database queries (already optimized)
+   - When each subscriber needs an independent execution
+   - Simple transformations and repository APIs that remain lazy
 
-2. **Use hot flows (shareIn/stateIn) for**:
-   - Expensive operations (network, sensors)
-   - Multiple subscribers
-   - Background data streams
-   - UI state management
-   - Caching
+2. **Use hot flows (`shareIn`/`stateIn`) for**:
+   - Expensive operations that should be shared
+   - Multiple subscribers observing same data
+   - Background/continuous data streams
+   - UI state management and caching within a scope
 
-3. **Choose started strategy**:
+3. **Choose `started` strategy**:
    ```kotlin
-   // Background service - always active
+   // Background service-like streams
    .shareIn(scope, SharingStarted.Eagerly, replay = 1)
 
-   // Lazy initialization - start once
+   // Lazy initialization within scope (no auto-stop)
    .stateIn(scope, SharingStarted.Lazily, initialValue)
 
-   // UI updates - efficient resource usage
+   // UI updates that stop when not observed
    .stateIn(scope, SharingStarted.WhileSubscribed(5000), initialValue)
    ```
 
-4. **Configure replay appropriately**:
+4. **Configure `replay` appropriately**:
    ```kotlin
-   // No replay - events only
+   // No replay - fire-and-forget events
    .shareIn(scope, started, replay = 0)
 
-   // Replay latest - most common
+   // Replay latest - common for UI state-ish data
    .shareIn(scope, started, replay = 1)
 
-   // Multiple values - careful with memory
-   .shareIn(scope, started, replay = 100) // 100 items in memory!
+   // Multiple values - be mindful of memory
+   .shareIn(scope, started, replay = 100)
    ```
 
 ### Common Pitfalls
 
 1. **Not using hot flows for expensive operations**:
    ```kotlin
-   //  Each screen rotation makes new network call
-   val data = flow { emit(api.fetchData()) }
+   // Each collection triggers a new network call
+   val data: Flow<List<Item>> = flow { emit(api.fetchData()) }
 
-   //  Network call survives rotation
-   val data = flow { emit(api.fetchData()) }
-       .stateIn(viewModelScope, WhileSubscribed(5000), emptyList())
+   // Share result within ViewModel scope across collectors
+   val sharedData: StateFlow<List<Item>> = flow { emit(api.fetchData()) }
+       .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), emptyList())
    ```
 
-2. **Using Eagerly when WhileSubscribed is better**:
+2. **Using `Eagerly` when `WhileSubscribed` is better**:
    ```kotlin
-   //  Flow active even when app in background
+   // Flow active even when nobody is observing
    .shareIn(scope, SharingStarted.Eagerly, 1)
 
-   //  Flow stops when no subscribers (saves resources)
+   // Flow stops when no subscribers (saves resources)
    .shareIn(scope, SharingStarted.WhileSubscribed(5000), 1)
    ```
 
-3. **Forgetting initial value with stateIn**:
+3. **Forgetting initial value with `stateIn`**:
    ```kotlin
-   //  Compilation error - no initial value
-   .stateIn(scope, SharingStarted.Lazily)
+   // Compilation error - missing initial value
+   // .stateIn(scope, SharingStarted.Lazily)
 
-   //  Provide appropriate default
+   // Correct: provide appropriate default
    .stateIn(scope, SharingStarted.Lazily, emptyList())
    ```
 
-4. **Memory leaks with wrong scope**:
+4. **Memory leaks / unexpected lifetime with wrong scope**:
    ```kotlin
-   //  Flow never stops - GlobalScope leaks
+   // May run longer than intended
    .shareIn(GlobalScope, SharingStarted.Eagerly, 1)
 
-   //  Flow lifecycle tied to ViewModel
+   // Correct: tie to lifecycle (e.g., ViewModel)
    .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 1)
    ```
 
-**English Summary**: Cold flows execute independently for each collector, while hot flows share a single execution among multiple collectors. Use shareIn() to convert cold to hot SharedFlow with configurable replay and started strategies. Use stateIn() to convert to StateFlow when you need a state holder with a current value. Choose WhileSubscribed for UI, Lazily for one-time initialization, and Eagerly for always-on services. Hot flows are essential for sharing expensive operations like network calls and sensor data.
+**English Summary**: Cold flows execute independently for each collector; hot flows share a single execution or state among multiple collectors and may emit regardless of who is collecting, depending on the strategy. Use `shareIn()` to convert a cold `Flow` into a `SharedFlow` with configurable `replay` and starting behavior. Use `stateIn()` to convert into a `StateFlow` when you need a state holder with a current value. Prefer `WhileSubscribed` for UI, `Lazily` for one-time initialization that stays active within scope, and `Eagerly` for always-on services.
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этого подхода от Java без `Flow`/горячих потоков?
+- Когда бы вы использовали это на практике?
+- Как избежать распространенных ошибок при использовании `shareIn` и `stateIn`?
 
 ## Follow-ups
 
@@ -824,22 +896,42 @@ val users2 = repository.users // No extra call
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [StateFlow и SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [Холодные и горячие потоки - Документация Kotlin](https://kotlinlang.org/docs/flow.html#flows-are-cold)
+- [Операторы `shareIn` и `stateIn` - Kotlinx Coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
+
 ## References
+
 - [StateFlow and SharedFlow - Android Developers](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
 - [Cold flows, hot flows - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flows-are-cold)
-- [shareIn and stateIn operators - Kotlin Blog](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
+- [shareIn and stateIn operators - Kotlinx Coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/)
+
+## Связанные вопросы (RU)
+
+### Похожие (Medium)
+- [[q-hot-cold-flows--kotlin--medium]]
+- [[q-sharedin-statein--kotlin--medium]]
+- [[q-stateflow-sharedflow-differences--kotlin--medium]]
+- [[q-flow-cold-flow-fundamentals--kotlin--easy]]
+
+### Продвинутые (Harder)
+- [[q-testing-flow-operators--kotlin--hard]]
+
+### Хаб
+- [[q-kotlin-flow-basics--kotlin--medium]]
 
 ## Related Questions
 
 ### Related (Medium)
-- [[q-hot-cold-flows--kotlin--medium]] - Coroutines
-- [[q-sharedin-statein--kotlin--medium]] - Coroutines
-- [[q-stateflow-sharedflow-differences--kotlin--medium]] - Stateflow
-- [[q-flow-cold-flow-fundamentals--kotlin--easy]] - Coroutines
+- [[q-hot-cold-flows--kotlin--medium]]
+- [[q-sharedin-statein--kotlin--medium]]
+- [[q-stateflow-sharedflow-differences--kotlin--medium]]
+- [[q-flow-cold-flow-fundamentals--kotlin--easy]]
 
 ### Advanced (Harder)
-- [[q-testing-flow-operators--kotlin--hard]] - Coroutines
+- [[q-testing-flow-operators--kotlin--hard]]
 
 ### Hub
-- [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
-
+- [[q-kotlin-flow-basics--kotlin--medium]]

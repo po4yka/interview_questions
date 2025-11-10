@@ -2,7 +2,7 @@
 id: lang-033
 title: "Kotlin Init Block Features / Возможности блока init в Kotlin"
 aliases: [Kotlin Init Block Features, Возможности блока init в Kotlin]
-topic: programming-languages
+topic: kotlin
 subtopics: [initialization, type-system]
 question_kind: theory
 difficulty: easy
@@ -10,25 +10,20 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-favorite-features--programming-languages--easy, q-noncancellable-context-cleanup--kotlin--medium, q-room-coroutines-flow--kotlin--medium]
-created: 2025-10-15
-updated: 2025-10-31
-tags: [constructors, difficulty/easy, init, initialization, oop, programming-languages]
+related: [c-kotlin, q-noncancellable-context-cleanup--kotlin--medium, q-room-coroutines-flow--kotlin--medium]
+created: 2024-10-15
+updated: 2025-11-09
+tags: [constructors, difficulty/easy, init, initialization, oop, kotlin]
 ---
-# Есть Какие-то Особенности Использования Init Block?
-
 # Вопрос (RU)
-> Есть какие-то особенности использования init block?
-
----
+> Есть какие-то особенности использования `init` блока?
 
 # Question (EN)
-> Are there any features of using init block?
+> Are there any features of using `init` block?
 
 ## Ответ (RU)
 
-
-Init блоки в Kotlin выполняют код инициализации когда создается экземпляр класса. Они выполняются в порядке появления в теле класса.
+Init блоки в Kotlin выполняют код инициализации, когда создается экземпляр класса. Они являются частью первичного конструктора и выполняются вместе с инициализацией свойств в порядке, в котором объявлены в теле класса (инициализаторы свойств и init блоки перемежаются). См. также [[c-kotlin]].
 
 ### Базовое Использование
 ```kotlin
@@ -61,12 +56,13 @@ class Example(val value: Int) {
     }
 }
 
-// Порядок: Первичный конструктор → свойства → init блоки (по порядку)
+// Важно: инициализаторы свойств и init блоки выполняются сверху вниз
+// в порядке объявления в классе. Это часть логики первичного конструктора.
 ```
 
 ### Распространенные Применения
 
-**1. Валидация**
+**1. Валидация аргументов конструктора**
 ```kotlin
 class Email(val address: String) {
     init {
@@ -75,7 +71,7 @@ class Email(val address: String) {
 }
 ```
 
-**2. Логика инициализации**
+**2. Логика инициализации сложных свойств**
 ```kotlin
 class Database(val url: String) {
     val connection: Connection
@@ -87,7 +83,7 @@ class Database(val url: String) {
 }
 ```
 
-**3. Логирование**
+**3. Логирование создания экземпляра**
 ```kotlin
 class Service {
     init {
@@ -96,7 +92,7 @@ class Service {
 }
 ```
 
-### Множественные Init Блоки
+### Множественные Init Блоки и Подводные Камни
 ```kotlin
 class Complex {
     init { step1() }
@@ -105,14 +101,16 @@ class Complex {
     val prop2 = compute2()
     init { step3() }
 }
-```
 
----
+// Разрешено иметь несколько init блоков, но их выполнение тоже идет сверху вниз
+// вместе с инициализаторами свойств. Слишком много init блоков ухудшают читаемость.
+// Важно не обращаться в init к свойствам, которые объявлены ниже и зависят от еще
+// не выполненной инициализации.
+```
 
 ## Answer (EN)
 
-
-Init blocks in Kotlin execute initialization code when a class instance is created. They run in the order they appear in the class body.
+Init blocks in Kotlin execute initialization code when a class instance is created. They are part of the primary constructor and are executed together with property initializers in the order they are declared in the class body (property initializers and init blocks are interleaved top-down). See also [[c-kotlin]].
 
 ### Basic Usage
 ```kotlin
@@ -145,12 +143,13 @@ class Example(val value: Int) {
     }
 }
 
-// Order: Primary constructor → properties → init blocks (in order)
+// Important: property initializers and init blocks are executed top-down
+// in the order they appear in the class. This is part of primary constructor logic.
 ```
 
 ### Common Use Cases
 
-**1. Validation**
+**1. Constructor argument validation**
 ```kotlin
 class Email(val address: String) {
     init {
@@ -159,7 +158,7 @@ class Email(val address: String) {
 }
 ```
 
-**2. Initialization Logic**
+**2. Complex property initialization**
 ```kotlin
 class Database(val url: String) {
     val connection: Connection
@@ -171,7 +170,7 @@ class Database(val url: String) {
 }
 ```
 
-**3. Logging**
+**3. Instance creation logging**
 ```kotlin
 class Service {
     init {
@@ -180,7 +179,7 @@ class Service {
 }
 ```
 
-### Multiple Init Blocks
+### Multiple Init Blocks and Pitfalls
 ```kotlin
 class Complex {
     init { step1() }
@@ -189,10 +188,17 @@ class Complex {
     val prop2 = compute2()
     init { step3() }
 }
+
+// Having multiple init blocks is allowed; they also run top-down with property
+// initializers. Too many init blocks can hurt readability. Be careful not to
+// rely in an init block on properties whose initialization has not run yet.
 ```
 
----
----
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия от подхода в Java?
+- Когда вы бы использовали `init` блок на практике?
+- Какие распространенные подводные камни стоит учитывать?
 
 ## Follow-ups
 
@@ -200,13 +206,22 @@ class Complex {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-noncancellable-context-cleanup--kotlin--medium]]
+- [[q-room-coroutines-flow--kotlin--medium]]
+- [[q-kotlin-favorite-features--programming-languages--easy]]
 
 ## Related Questions
 
 - [[q-noncancellable-context-cleanup--kotlin--medium]]
 - [[q-room-coroutines-flow--kotlin--medium]]
 - [[q-kotlin-favorite-features--programming-languages--easy]]
-

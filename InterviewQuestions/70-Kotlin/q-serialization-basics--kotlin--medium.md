@@ -10,19 +10,107 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-delegation--programming-languages--easy, q-kotlin-extension-functions--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
+related: [c-kotlin, q-kotlin-delegation--programming-languages--easy, q-kotlin-extension-functions--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [data-formats, difficulty/medium, json, kotlin, serialization]
 ---
 
-# What is Serialization?
+# Вопрос (RU)
 
-**English**: What is serialization in Kotlin and programming in general?
+> Что такое сериализация в Kotlin и в программировании в целом?
+
+# Question (EN)
+
+> What is serialization in Kotlin and programming in general?
+
+## Ответ (RU)
+
+Сериализация — это процесс преобразования объектов в памяти (и их состояния) в формат, пригодный для хранения или передачи (например, JSON, ProtoBuf, CBOR), а десериализация — обратное преобразование этого формата обратно в объекты.
+
+В Kotlin часто используется библиотека `kotlinx.serialization`, которая генерирует сериализаторы на этапе компиляции и поддерживает несколько форматов через отдельные модули. См. также [[c-kotlin]].
+
+### Настройка
+```kotlin
+// build.gradle.kts
+plugins {
+    kotlin("plugin.serialization") version "1.9.0"
+}
+
+dependencies {
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    // Для других форматов (например, CBOR, ProtoBuf) добавляются отдельные артефакты:
+    // implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:<version>")
+    // implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:<version>")
+}
+```
+
+### Базовое использование
+```kotlin
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+
+@Serializable
+data class User(
+    val name: String,
+    val age: Int,
+    val email: String? = null
+)
+
+// Сериализация
+val user = User("Alice", 25, "alice@example.com")
+val json = Json.encodeToString(user)
+// {"name":"Alice","age":25,"email":"alice@example.com"}
+
+// Десериализация
+val user2 = Json.decodeFromString<User>(json)
+```
+
+### Кастомные сериализаторы
+```kotlin
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+
+// Пример: кастомный сериализатор для java.util.Date
+object DateAsLongSerializer : KSerializer<java.util.Date> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("DateAsLong", PrimitiveKind.LONG)
+
+    override fun serialize(encoder: Encoder, value: java.util.Date) {
+        encoder.encodeLong(value.time)
+    }
+
+    override fun deserialize(decoder: Decoder): java.util.Date {
+        return java.util.Date(decoder.decodeLong())
+    }
+}
+
+@Serializable
+data class Event(
+    @Serializable(with = DateAsLongSerializer::class)
+    val timestamp: java.util.Date
+)
+```
+
+### Конфигурация JSON
+```kotlin
+val json = Json {
+    prettyPrint = true
+    ignoreUnknownKeys = true
+    encodeDefaults = false
+    isLenient = true
+}
+```
 
 ## Answer (EN)
 
-Kotlin serialization converts objects to formats like JSON, Protocol Buffers, or CBOR for storage or network transmission.
+Serialization is the process of converting in-memory objects (and their state) into a format that can be stored or transmitted (e.g., JSON, ProtoBuf, CBOR), and deserialization is converting that data back into objects.
+
+In Kotlin, a common solution is the `kotlinx.serialization` library, which provides compile-time generated serializers and supports multiple formats via separate modules.
 
 ### Setup
 ```kotlin
@@ -33,13 +121,16 @@ plugins {
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
+    // For other formats (e.g., CBOR, ProtoBuf), add corresponding artifacts:
+    // implementation("org.jetbrains.kotlinx:kotlinx-serialization-cbor:<version>")
+    // implementation("org.jetbrains.kotlinx:kotlinx-serialization-protobuf:<version>")
 }
 ```
 
 ### Basic Usage
 ```kotlin
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 
 @Serializable
 data class User(
@@ -59,21 +150,32 @@ val user2 = Json.decodeFromString<User>(json)
 
 ### Custom Serializers
 ```kotlin
-@Serializable
-data class Date(
-    @Serializable(with = DateSerializer::class)
-    val timestamp: java.util.Date
-)
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 
-object DateSerializer : KSerializer<java.util.Date> {
+// Example: custom serializer for java.util.Date
+object DateAsLongSerializer : KSerializer<java.util.Date> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("DateAsLong", PrimitiveKind.LONG)
+
     override fun serialize(encoder: Encoder, value: java.util.Date) {
         encoder.encodeLong(value.time)
     }
-    
+
     override fun deserialize(decoder: Decoder): java.util.Date {
         return java.util.Date(decoder.decodeLong())
     }
 }
+
+@Serializable
+data class Event(
+    @Serializable(with = DateAsLongSerializer::class)
+    val timestamp: java.util.Date
+)
 ```
 
 ### JSON Configuration
@@ -86,90 +188,34 @@ val json = Json {
 }
 ```
 
----
----
+## Дополнительные вопросы (RU)
 
-## Ответ (RU)
-
-Kotlin serialization преобразует объекты в форматы как JSON, Protocol Buffers или CBOR для хранения или передачи по сети.
-
-### Настройка
-```kotlin
-// build.gradle.kts
-plugins {
-    kotlin("plugin.serialization") version "1.9.0"
-}
-
-dependencies {
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.0")
-}
-```
-
-### Базовое Использование
-```kotlin
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
-
-@Serializable
-data class User(
-    val name: String,
-    val age: Int,
-    val email: String? = null
-)
-
-// Сериализация
-val user = User("Alice", 25, "alice@example.com")
-val json = Json.encodeToString(user)
-// {"name":"Alice","age":25,"email":"alice@example.com"}
-
-// Десериализация
-val user2 = Json.decodeFromString<User>(json)
-```
-
-### Кастомные Сериализаторы
-```kotlin
-@Serializable
-data class Date(
-    @Serializable(with = DateSerializer::class)
-    val timestamp: java.util.Date
-)
-
-object DateSerializer : KSerializer<java.util.Date> {
-    override fun serialize(encoder: Encoder, value: java.util.Date) {
-        encoder.encodeLong(value.time)
-    }
-    
-    override fun deserialize(decoder: Decoder): java.util.Date {
-        return java.util.Date(decoder.decodeLong())
-    }
-}
-```
-
-### Конфигурация JSON
-```kotlin
-val json = Json {
-    prettyPrint = true
-    ignoreUnknownKeys = true
-    encodeDefaults = false
-    isLenient = true
-}
-```
-
----
+- В чем ключевые отличия этого подхода от механизмов сериализации в Java?
+- Когда вы бы использовали этот подход на практике?
+- Каковы распространенные подводные камни при использовании `kotlinx.serialization`?
 
 ## Follow-ups
 
-- What are the key differences between this and Java?
+- What are the key differences between this and Java serialization mechanisms?
 - When would you use this in practice?
-- What are common pitfalls to avoid?
+- What are common pitfalls to avoid when using `kotlinx.serialization`?
+
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
 
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-delegation--programming-languages--easy]]
+- [[q-suspend-cancellable-coroutine--kotlin--hard]]
+- [[q-kotlin-extension-functions--kotlin--medium]]
 
 ## Related Questions
 
 - [[q-kotlin-delegation--programming-languages--easy]]
 - [[q-suspend-cancellable-coroutine--kotlin--hard]]
 - [[q-kotlin-extension-functions--kotlin--medium]]
-

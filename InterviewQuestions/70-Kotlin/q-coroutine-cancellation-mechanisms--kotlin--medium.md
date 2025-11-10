@@ -37,19 +37,20 @@ subtopics:
 > How does coroutine cancellation work, and how is it different from canceling a Thread?
 ## Ответ (RU)
 
-**Отмена корутин является кооперативной**, то есть корутина должна сотрудничать, проверяя отмену в точках приостановки или вручную. Это фундаментально отличается от прерывания потоков.
+**Отмена корутин является кооперативной**, то есть корутина должна сотрудничать, проверяя отмену в точках приостановки или вручную. Это фундаментально отличается от небезопасного принудительного завершения потока и от устаревших механизмов типа `Thread.stop()`.
 
 ### Кооперативная Отмена
 
-**Ключевой Принцип**: Корутины не отменяются немедленно - они проверяют отмену в определенных точках.
+**Ключевой Принцип**: Корутины не отменяются немедленно автоматически — они проверяют отмену в определенных точках.
 
 **Точки Отмены**:
 ```kotlin
 // Корутина проверяет отмену в этих точках:
 delay(1000)           // - Проверяет отмену
 yield()               // - Проверяет отмену
-withContext(IO) { }   // - Проверяет отмену
-// Любая приостанавливающая функция из kotlinx.coroutines
+withContext(Dispatchers.IO) { }   // - Проверяет отмену
+// Любая приостанавливающая функция из kotlinx.coroutines,
+// корректно поддерживающая cooperative cancellation
 ```
 
 ### Как Работает Отмена
@@ -69,7 +70,7 @@ job.cancel() // Запрос на отмену
 job.join()   // Ожидание завершения отмены
 println("Job отменен")
 
-// Вывод:
+// Возможный вывод:
 // Job: Работаю 0...
 // Job: Работаю 1...
 // Job: Работаю 2...
@@ -80,9 +81,9 @@ println("Job отменен")
 **Что Происходит При Отмене**:
 1. Вызывается `job.cancel()`
 2. Job помечается как отменяющийся
-3. В следующей точке приостановки (`delay()`) корутина проверяет статус
+3. В следующей точке приостановки (например, `delay()`) корутина проверяет статус
 4. Выбрасывается `CancellationException`
-5. Корутина завершается
+5. Корутина завершается (или выполняет `finally`, затем завершается)
 
 ### Ручные Проверки Отмены
 
@@ -152,7 +153,7 @@ val job = launch {
         }
     } catch (e: CancellationException) {
         println("Корутина отменена: ${e.message}")
-        // Не проглатывайте! Перебросьте или дайте распространиться
+        // Обычно не следует бесследно проглатывать отмену
         throw e
     } finally {
         println("Код очистки выполняется здесь")
@@ -163,7 +164,7 @@ delay(1300)
 job.cancel()
 ```
 
-**Важно**: `CancellationException` - особенное исключение, его нужно перебрасывать, а не проглатывать.
+**Важно**: `CancellationException` — особое исключение, сигнализирующее об отмене. Как правило, его нужно пропускать дальше (или перебрасывать), а не бесшумно проглатывать, чтобы не ломать кооперативную отмену.
 
 ### Очистка Ресурсов
 
@@ -177,7 +178,7 @@ val job = launch {
             delay(500)
         }
     } finally {
-        // Всегда выполняется, даже при отмене
+        // Всегда выполняется при нормальном завершении или отмене этой корутины
         resource.close()
         println("Ресурс закрыт")
     }
@@ -211,40 +212,41 @@ val parent = launch {
 }
 
 delay(1000)
-parent.cancel() // Отменяет родителя И обоих потомков
+parent.cancel() // Отменяет родителя И обоих потомков (в рамках структурированной конкуррентности)
 parent.join()
 ```
 
 ### Резюме
 
 **Отмена корутин**:
-- - **Кооперативная** - требует проверки корутиной
-- - **Безопасная** - предсказуемая, не повреждает состояние
-- - **Структурированная** - родитель отменяет всех потомков
-- - **Чистая** - finally блоки всегда выполняются
-- - **Явная** - использует `isActive`, `yield()`, точки приостановки
+- **Кооперативная** — требует проверки корутиной
+- **Безопасная** — предсказуемая, не повреждает состояние при корректном использовании
+- **Структурированная** — родитель отменяет всех потомков
+- **Чистая** — `finally` блоки выполняются при отмене корутин в рамках обычного жизненного цикла
+- **Явная** — использует `isActive`, `yield()`, точки приостановки
 
 **Отличия от потоков**:
-- Потоки: Преемптивная, рискованная, немедленная
-- Корутины: Кооперативная, безопасная, в точках отмены
+- Потоки (современный подход): отмена через `interrupt()` тоже кооперативна и требует явных проверок; принудительное завершение (как `stop()`) считается небезопасным и не должно использоваться
+- Корутины: встроенная кооперативная отмена, лучше интегрированная со структурированной конкуррентностью
 
 ---
 
 ## Answer (EN)
 
-**Coroutine cancellation is cooperative**, meaning a coroutine must cooperate by checking for cancellation at suspension points or manually. This differs fundamentally from thread interruption.
+**Coroutine cancellation is cooperative**, meaning a coroutine must cooperate by checking for cancellation at suspension points or manually. This contrasts with unsafe forced thread termination mechanisms (like the deprecated `Thread.stop()`), and is similar in spirit to cooperative thread interruption.
 
 ### Cooperative Cancellation
 
-**Key Principle**: Coroutines don't cancel immediately - they check for cancellation at specific points.
+**Key Principle**: Coroutines don't cancel themselves immediately; they observe cancellation at specific points.
 
 **Cancellation Points**:
 ```kotlin
 // Coroutine checks for cancellation at these points:
 delay(1000)           // - Checks cancellation
 yield()               // - Checks cancellation
-withContext(IO) { }   // - Checks cancellation
+withContext(Dispatchers.IO) { }   // - Checks cancellation
 // Any suspending function from kotlinx.coroutines
+// that is implemented to respect cooperative cancellation
 ```
 
 ### How Cancellation Works
@@ -264,7 +266,7 @@ job.cancel() // Request cancellation
 job.join()   // Wait for cancellation to complete
 println("Job canceled")
 
-// Output:
+// Possible output:
 // Job: I'm working 0...
 // Job: I'm working 1...
 // Job: I'm working 2...
@@ -274,10 +276,10 @@ println("Job canceled")
 
 **What Happens During Cancellation**:
 1. `job.cancel()` is called
-2. Job is marked as canceling
-3. At next suspension point (`delay()`), coroutine checks status
-4. `CancellationException` is thrown
-5. Coroutine terminates
+2. The job is marked as canceling
+3. At the next suspension point (e.g., `delay()`), the coroutine checks its status
+4. A `CancellationException` is thrown
+5. The coroutine terminates (running `finally` before completion)
 
 ### Manual Cancellation Checks
 
@@ -297,7 +299,7 @@ val job = launch {
 }
 
 delay(1000)
-job.cancel() // Cancellation won't work immediately!
+job.cancel() // Cancellation won't take effect immediately!
 ```
 
 **Solution 1 - Check isActive**:
@@ -352,7 +354,7 @@ val job = launch {
         }
     } catch (e: CancellationException) {
         println("Coroutine was cancelled: ${e.message}")
-        // Don't swallow! Re-throw or let it propagate
+        // In most cases, don't swallow cancellation silently
         throw e
     } finally {
         println("Cleanup code runs here")
@@ -370,7 +372,7 @@ job.cancel()
 // Cleanup code runs here
 ```
 
-**Important**: `CancellationException` is special - it should be re-thrown, not swallowed.
+**Important**: `CancellationException` is special — it indicates normal cancellation. Typically you should let it propagate (or rethrow) instead of swallowing it silently, unless you intentionally convert cancellation into another outcome.
 
 ### Resource Cleanup
 
@@ -384,7 +386,7 @@ val job = launch {
             delay(500)
         }
     } finally {
-        // Always runs, even if canceled
+        // Always runs for this coroutine on completion or cancellation
         resource.close()
         println("Resource closed")
     }
@@ -402,7 +404,7 @@ val job = launch {
         work()
     } finally {
         withContext(NonCancellable) {
-            // This block won't be cancelled
+            // This block itself will not be cancelled
             delay(1000) // Cleanup that takes time
             println("Cleanup completed")
         }
@@ -435,7 +437,7 @@ val parent = launch {
 }
 
 delay(1000)
-parent.cancel() // Cancels parent AND both children
+parent.cancel() // Cancels parent AND both children (in structured concurrency)
 parent.join()
 
 // Both child1 and child2 are automatically canceled
@@ -443,18 +445,17 @@ parent.join()
 
 ### Coroutine vs Thread Cancellation
 
-| Aspect | Coroutines | Threads |
-|--------|-----------|---------|
-| **Type** | Cooperative | Preemptive (interrupt) |
-| **Mechanism** | Checks at suspension points | Can halt at any point |
-| **Control** | Must reach cancellation point | Immediate (but unsafe) |
-| **Safety** | Safe, predictable | Risky, can corrupt state |
-| **Cleanup** | `finally` guaranteed to run | `finally` might not run |
-| **Child handling** | Auto-cancels all children | Manual tracking needed |
+| Aspect | Coroutines | Threads (modern best practice) |
+|--------|-----------|---------------------------------|
+| **Type** | Cooperative | Cooperative via `interrupt()` |
+| **Mechanism** | Checks at suspension points / `isActive` | Check interruption status or handle `InterruptedException` in blocking calls |
+| **Control** | Integrated with structured concurrency | Manual management; no hierarchy by default |
+| **Safety** | Safe, predictable; no forced kill | Forced termination APIs (`stop`) are unsafe and deprecated |
+| **Cleanup** | `finally` runs on completion/cancellation of a coroutine | `finally` runs when thread exits normally or by cooperative interruption |
 
 **Thread Interruption (for comparison)**:
 ```kotlin
-// Thread interruption (old way)
+// Thread interruption (cooperative)
 val thread = Thread {
     try {
         while (!Thread.currentThread().isInterrupted) {
@@ -466,12 +467,12 @@ val thread = Thread {
 }
 
 thread.start()
-thread.interrupt() // Can interrupt at any point - risky!
+thread.interrupt() // Signals interruption; thread must cooperate
 ```
 
 **Coroutine Cancellation (modern way)**:
 ```kotlin
-// Coroutine cancellation (better)
+// Coroutine cancellation (structured & cooperative)
 val job = launch {
     while (isActive) {
         // Work
@@ -503,35 +504,35 @@ try {
     cleanupResource()
 }
 
-// - DO: Let CancellationException propagate
+// - DO: Let CancellationException propagate (unless you have a clear policy)
 catch (e: CancellationException) {
     cleanup()
-    throw e // Re-throw!
+    throw e // Re-throw in most cases
 }
 
-// - DON'T: Ignore cancellation
+// - DON'T: Ignore cancellation in infinite loops
 while (true) { // No cancellation check!
     doWork()
 }
 
-// - DON'T: Swallow CancellationException
+// - DON'T: Silently swallow CancellationException
 catch (e: CancellationException) {
-    // Don't just ignore it!
+    // Don't just ignore it without reason!
 }
 ```
 
 ### Summary
 
 **Coroutine cancellation** is:
-- - **Cooperative** - requires coroutine to check
-- - **Safe** - predictable, won't corrupt state
-- - **Structured** - parent cancels all children
-- - **Clean** - finally blocks always run
-- - **Explicit** - uses `isActive`, `yield()`, suspension points
+- **Cooperative** — requires the coroutine to check
+- **Safe** — predictable when cancellation points are used correctly
+- **Structured** — parent cancels all children within its scope
+- **Clean** — `finally` blocks run for coroutine completion/cancellation
+- **Explicit** — uses `isActive`, `yield()`, and suspension points
 
-**Different from threads**:
-- Threads: Preemptive, risky, immediate
-- Coroutines: Cooperative, safe, at cancellation points
+**Different from threads** (in practice):
+- Threads: cooperative interruption without built-in structured hierarchy; forced termination APIs are unsafe
+- Coroutines: built-in cooperative cancellation + structured concurrency and better integration with libraries
 
 ---
 

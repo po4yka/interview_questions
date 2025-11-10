@@ -1,21 +1,20 @@
 ---
 id: kotlin-174
 title: "Generics Types Overview / Обзор обобщенных типов"
-aliases: ["Generics Types Overview, Обзор обобщенных типов"]
+aliases: ["Generics Types Overview", "Обзор обобщенных типов", "Kotlin generics types overview", "Обзор дженериков Kotlin"]
 topic: kotlin
-subtopics: [class-features, functions, type-system]
+subtopics: [functions, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-parent-child-relationship--kotlin--medium, q-produce-actor-builders--kotlin--medium]
+related: [c-kotlin, c-kotlin-features, q-coroutine-parent-child-relationship--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/medium]
 ---
-# Какие Виды Дженериков Есть?
 
 # Вопрос (RU)
 > Какие виды дженериков существуют в Kotlin и Java?
@@ -27,7 +26,7 @@ tags: [difficulty/medium]
 
 ## Ответ (RU)
 
-Дженерики существуют в нескольких формах:
+Дженерики существуют в нескольких формах. Они являются частью системы типов языка [[c-kotlin]] и его особенностей ([[c-kotlin-features]]):
 
 ### 1. Обобщённые Классы (Generic Classes)
 Классы с параметрами типа:
@@ -60,7 +59,9 @@ fun <T : Number> sum(a: T, b: T): Double {
 }
 
 // Java
-<T extends Number> double sum(T a, T b)
+public static <T extends Number> double sum(T a, T b) {
+    return a.doubleValue() + b.doubleValue();
+}
 ```
 
 **Множественные границы:**
@@ -74,41 +75,46 @@ fun <T> process(value: T)
 
 ### 4. Аннотации Вариантности (Variance Annotations)
 
-**Ковариантность** (`out` в Kotlin, `extends` в Java):
+**Ковариантность** (`out` в Kotlin, `extends`-ограничения и `? extends` wildcard в Java):
 ```kotlin
 interface Producer<out T> {  // Может только производить T
     fun produce(): T
 }
 ```
 
-**Контравариантность** (`in` в Kotlin, `super` в Java):
+**Контравариантность** (`in` в Kotlin, `? super` wildcard в Java):
 ```kotlin
 interface Consumer<in T> {   // Может только потреблять T
     fun consume(item: T)
 }
 ```
 
-### 5. Звездочная Проекция (Star Projection) / Сырые Типы (Raw Types)
+### 5. Звездочная Проекция и Сырые Типы
+
 ```kotlin
-List<*>  // Kotlin - звездочная проекция
-List     // Java - сырой тип (deprecated)
+List<*>  // Kotlin — звездочная проекция (неизвестный тип)
+```
+```java
+List<?>  // Java — wildcard с неизвестным типом
+List     // Java — сырой тип (устаревший, использовать не рекомендуется)
 ```
 
 **Резюме:**
 
-| Тип | Назначение | Пример |
-|------|---------|---------|
-| Обобщённый класс | Параметризованный класс | `Box<T>` |
-| Обобщённый метод | Параметризованный метод | `<T> T identity(T)` |
-| Верхняя граница | Ограничение подтипом | `<T : Number>` |
-| Нижняя граница | Только в Java | `<T super Integer>` |
-| Ковариантность | Производитель | `out T` |
-| Контравариантность | Потребитель | `in T` |
-| Звездочная проекция | Неизвестный тип | `List<*>` |
+| Тип                     | Назначение                          | Пример                    |
+|-------------------------|-------------------------------------|---------------------------|
+| Обобщённый класс        | Параметризованный класс            | `Box<T>`                  |
+| Обобщённый метод        | Параметризованный метод/функция    | `<T> T identity(T)`       |
+| Верхняя граница         | Ограничение подтипом               | `<T : Number>`, `<T extends Number>` |
+| Нижняя граница (Java)   | Ограничение супертипом через wildcard | `List<? super Integer>` |
+| Ковариантность          | Производитель                      | `out T`, `? extends T`    |
+| Контравариантность      | Потребитель                        | `in T`, `? super T`       |
+| Звездочная проекция     | Неизвестный тип в Kotlin           | `List<*>`                 |
+| Сырой тип (Java)        | Тип без параметров (устаревший)    | `List`                    |
 
 ## Answer (EN)
 
-Generics come in several forms:
+Generics come in several forms. They are part of the [[c-kotlin]] type system and its language features ([[c-kotlin-features]]):
 
 ### 1. Generic Classes
 Classes with type parameters:
@@ -141,7 +147,9 @@ fun <T : Number> sum(a: T, b: T): Double {
 }
 
 // Java
-<T extends Number> double sum(T a, T b)
+public static <T extends Number> double sum(T a, T b) {
+    return a.doubleValue() + b.doubleValue();
+}
 ```
 
 **Multiple bounds:**
@@ -155,37 +163,42 @@ fun <T> process(value: T)
 
 ### 4. Variance Annotations
 
-**Covariance** (`out` in Kotlin, `extends` in Java):
+**Covariance** (`out` in Kotlin, `? extends` wildcard / extends-bounded types in Java):
 ```kotlin
 interface Producer<out T> {  // Can only produce T
     fun produce(): T
 }
 ```
 
-**Contravariance** (`in` in Kotlin, `super` in Java):
+**Contravariance** (`in` in Kotlin, `? super` wildcard in Java):
 ```kotlin
 interface Consumer<in T> {   // Can only consume T
     fun consume(item: T)
 }
 ```
 
-### 5. Star Projection (Raw Types)
+### 5. Star Projections and Raw Types
+
 ```kotlin
-List<*>  // Kotlin - star projection
-List     // Java - raw type (deprecated)
+List<*>  // Kotlin - star projection (unknown type)
+```
+```java
+List<?>  // Java - wildcard with unknown type
+List     // Java - raw type (legacy, not recommended)
 ```
 
 **Summary:**
 
-| Type | Purpose | Example |
-|------|---------|---------|
-| Generic class | Parameterized class | `Box<T>` |
-| Generic method | Parameterized method | `<T> T identity(T)` |
-| Upper bound | Restrict to subtype | `<T : Number>` |
-| Lower bound | Java only | `<T super Integer>` |
-| Covariance | Producer | `out T` |
-| Contravariance | Consumer | `in T` |
-| Star projection | Unknown type | `List<*>` |
+| Type                 | Purpose                                 | Example                          |
+|----------------------|-----------------------------------------|----------------------------------|
+| Generic class        | Parameterized class                     | `Box<T>`                         |
+| Generic method       | Parameterized method/function           | `<T> T identity(T)`              |
+| Upper bound          | Restrict to subtype                     | `<T : Number>`, `<T extends Number>` |
+| Lower bound (Java)   | Restrict to supertype via wildcard      | `List<? super Integer>`          |
+| Covariance           | Producer                                | `out T`, `? extends T`           |
+| Contravariance       | Consumer                                | `in T`, `? super T`              |
+| Star projection      | Unknown type in Kotlin                  | `List<*>`                        |
+| Raw type (Java)      | Type without parameters (legacy)        | `List`                           |
 
 ---
 
@@ -197,10 +210,9 @@ List     // Java - raw type (deprecated)
 
 ## References
 
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [Kotlin Documentation]("https://kotlinlang.org/docs/home.html")
 
 ## Related Questions
 
 - [[q-produce-actor-builders--kotlin--medium]]
--
 - [[q-coroutine-parent-child-relationship--kotlin--medium]]

@@ -1,11 +1,11 @@
 ---
 id: kotlin-084
 title: "StateFlow and SharedFlow in Android / StateFlow и SharedFlow в Android"
-aliases: ["StateFlow and SharedFlow in Android, StateFlow и SharedFlow в Android"]
+aliases: ["StateFlow and SharedFlow in Android", "StateFlow и SharedFlow в Android"]
 
 # Classification
 topic: kotlin
-subtopics: [android, coroutines, flow]
+subtopics: [coroutines, flow, android]
 question_kind: theory
 difficulty: medium
 
@@ -18,25 +18,25 @@ source_note: Comprehensive Kotlin Android StateFlow SharedFlow Guide
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-flow-basics--kotlin--medium, q-lifecyclescope-viewmodelscope--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium, q-viewmodel-coroutines-lifecycle--kotlin--medium]
+related: [c-kotlin, c-flow, q-lifecyclescope-viewmodelscope--kotlin--medium, q-stateflow-sharedflow-differences--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-18
+updated: 2025-11-09
 
 tags: [android, coroutines, difficulty/medium, flow, kotlin, sharedflow, stateflow]
 ---
 # Вопрос (RU)
-> Как использовать StateFlow и SharedFlow в Android? Объясните разницу, replay cache, когда использовать каждый и паттерны для ViewModels.
+> Как использовать `StateFlow` и `SharedFlow` в Android? Объясните разницу, replay cache, когда использовать каждый и паттерны для `ViewModel`.
 
 ---
 
 # Question (EN)
-> How to use StateFlow and SharedFlow in Android? Explain the difference, replay cache, when to use each, and patterns for ViewModels.
+> How to use `StateFlow` and `SharedFlow` in Android? Explain the difference, replay cache, when to use each, and patterns for `ViewModel`s.
 
 ## Ответ (RU)
 
-StateFlow и SharedFlow — это горячие типы Flow, предназначенные для обмена состоянием и событиями между компонентами в Android приложениях.
+`StateFlow` и `SharedFlow` — это горячие типы `Flow`, предназначенные для обмена состоянием и событиями между компонентами в Android приложениях.
 
 ### StateFlow: Управление Состоянием
 
@@ -77,7 +77,8 @@ class UserViewModel : ViewModel() {
 
 ```kotlin
 class EventViewModel : ViewModel() {
-    // SharedFlow для одноразовых событий
+    // SharedFlow для одноразовых событий (по умолчанию replay = 0, без буфера —
+    // коллектор должен быть активен в момент эмиссии, иначе событие потеряется)
     private val _events = MutableSharedFlow<Event>()
     val events: SharedFlow<Event> = _events.asSharedFlow()
 
@@ -111,16 +112,19 @@ class EventViewModel : ViewModel() {
  * StateFlow vs SharedFlow
  *
  * StateFlow:
- * - Всегда имеет значение
- * - Replay = 1 (всегда)
- * - Conflates (отбрасывает промежуточные значения)
- * - Для управления СОСТОЯНИЕМ
+ * - Всегда имеет текущее значение
+ * - Встроенный replay = 1 (последнее значение всегда доступно новым коллекторам)
+ * - Эмиттирует только последнее установленное значение (промежуточные значения
+ *   могут быть пропущены для медленных коллекторах)
+ * - Для управления СОСТОЯНИЕМ (UI state, необходимые для восстановления значения)
  *
  * SharedFlow:
- * - Может не иметь значения
- * - Настраиваемый replay
- * - Может буферизовать все значения
- * - Для СОБЫТИЙ
+ * - Может не иметь значения по умолчанию
+ * - Настраиваемый replay (сколько последних значений получат новые коллектора)
+ * - Дополнительная емкость буфера и onBufferOverflow позволяют настраивать,
+ *   сколько значений хранится; по умолчанию replay = 0 и нет буфера
+ * - Для СОБЫТИЙ и потоков, где важно доставить последовательность значений,
+ *   при необходимости настраивая replay/буфер
  */
 
 class ComparisonExample : ViewModel() {
@@ -128,8 +132,9 @@ class ComparisonExample : ViewModel() {
     private val _screenState = MutableStateFlow(ScreenState.Loading)
     val screenState = _screenState.asStateFlow()
 
-    // SharedFlow: Одноразовые события
-    private val _navigationEvents = MutableSharedFlow<Navigation>()
+    // SharedFlow: Одноразовые события навигации
+    // (обычно используют replay = 0 для "одноразовости")
+    private val _navigationEvents = MutableSharedFlow<Navigation>(replay = 0)
     val navigationEvents = _navigationEvents.asSharedFlow()
 
     sealed class ScreenState {
@@ -147,7 +152,7 @@ class ComparisonExample : ViewModel() {
 ### Когда Использовать Каждый
 
 ```kotlin
-// StateFlow: Всегда используйте для состояния, которое должен отображать UI
+// StateFlow: Для состояния, которое должен стабильно отображать UI
 class GoodStateUsage : ViewModel() {
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn = _isLoggedIn.asStateFlow()
@@ -156,12 +161,13 @@ class GoodStateUsage : ViewModel() {
     val userName = _userName.asStateFlow()
 }
 
-// SharedFlow: Используйте для одноразовых событий
+// SharedFlow: Для событий (навигация, сообщения), где подходящий выбор
+// параметров (replay/буфер) предотвращает потерю нужных событий
 class GoodEventUsage : ViewModel() {
-    private val _snackbarMessages = MutableSharedFlow<String>()
+    private val _snackbarMessages = MutableSharedFlow<String>(replay = 0)
     val snackbarMessages = _snackbarMessages.asSharedFlow()
 
-    private val _navigationCommands = MutableSharedFlow<NavCommand>()
+    private val _navigationCommands = MutableSharedFlow<NavCommand>(replay = 0)
     val navigationCommands = _navigationCommands.asSharedFlow()
 
     sealed class NavCommand {
@@ -174,7 +180,7 @@ class GoodEventUsage : ViewModel() {
 
 ## Answer (EN)
 
-StateFlow and SharedFlow are hot Flow types designed for sharing state and events between components in Android applications.
+`StateFlow` and `SharedFlow` are hot `Flow` types designed for sharing state and events between components in Android applications.
 
 ### StateFlow: State Management
 
@@ -215,7 +221,8 @@ class UserViewModel : ViewModel() {
 
 ```kotlin
 class EventViewModel : ViewModel() {
-    // SharedFlow for one-time events
+    // SharedFlow for one-time events (by default replay = 0 and no extra buffer,
+    // so collectors must be active at emission time or the event is lost)
     private val _events = MutableSharedFlow<Event>()
     val events: SharedFlow<Event> = _events.asSharedFlow()
 
@@ -249,16 +256,19 @@ class EventViewModel : ViewModel() {
  * StateFlow vs SharedFlow
  *
  * StateFlow:
- * - Always has value
- * - Replay = 1 (always)
- * - Conflates (drops intermediate values)
- * - For STATE management
+ * - Always has a current value
+ * - Built-in replay = 1 (latest value is always delivered to new collectors)
+ * - Effectively emits only the latest set value (intermediate values may be
+ *   skipped for slow collectors)
+ * - For STATE management (UI state, values that must be restorable)
  *
  * SharedFlow:
- * - May not have value
- * - Configurable replay
- * - Can buffer all values
- * - For EVENTS
+ * - May have no value by default
+ * - Configurable replay (how many recent values new collectors get)
+ * - Extra buffer capacity and onBufferOverflow control how many values are kept;
+ *   by default replay = 0 and no buffer
+ * - For EVENTS and streams where delivering a sequence of values matters,
+ *   using appropriate replay/buffer configuration
  */
 
 class ComparisonExample : ViewModel() {
@@ -266,8 +276,9 @@ class ComparisonExample : ViewModel() {
     private val _screenState = MutableStateFlow(ScreenState.Loading)
     val screenState = _screenState.asStateFlow()
 
-    // SharedFlow: One-time events
-    private val _navigationEvents = MutableSharedFlow<Navigation>()
+    // SharedFlow: One-time navigation events
+    // (commonly configured with replay = 0 for "one-off" semantics)
+    private val _navigationEvents = MutableSharedFlow<Navigation>(replay = 0)
     val navigationEvents = _navigationEvents.asSharedFlow()
 
     sealed class ScreenState {
@@ -285,7 +296,7 @@ class ComparisonExample : ViewModel() {
 ### When to Use Each
 
 ```kotlin
-// StateFlow: Always use for state that UI needs to reflect
+// StateFlow: For state that UI must consistently reflect
 class GoodStateUsage : ViewModel() {
     private val _isLoggedIn = MutableStateFlow(false)
     val isLoggedIn = _isLoggedIn.asStateFlow()
@@ -294,12 +305,13 @@ class GoodStateUsage : ViewModel() {
     val userName = _userName.asStateFlow()
 }
 
-// SharedFlow: Use for one-time events
+// SharedFlow: For events (navigation, messages); choose replay/buffer so that
+// you don't lose important events unintentionally
 class GoodEventUsage : ViewModel() {
-    private val _snackbarMessages = MutableSharedFlow<String>()
+    private val _snackbarMessages = MutableSharedFlow<String>(replay = 0)
     val snackbarMessages = _snackbarMessages.asSharedFlow()
 
-    private val _navigationCommands = MutableSharedFlow<NavCommand>()
+    private val _navigationCommands = MutableSharedFlow<NavCommand>(replay = 0)
     val navigationCommands = _navigationCommands.asSharedFlow()
 
     sealed class NavCommand {
@@ -312,16 +324,19 @@ class GoodEventUsage : ViewModel() {
 
 ## Follow-ups
 
-1. **How to collect StateFlow in Activity/Fragment?**
-2. **What is replay cache in SharedFlow?**
-3. **StateFlow vs LiveData comparison?**
-4. **How to test StateFlow/SharedFlow?**
+1. How would you collect `StateFlow` in an `Activity` or `Fragment` using lifecycle-aware scopes (e.g., `repeatOnLifecycle`), and what are the common pitfalls such as leaks or missed emissions?
+2. How does the replay cache in `SharedFlow` work in practice, and how would you configure `replay` and buffer capacity differently for one-off UI events versus continuous data streams?
+3. Compare `StateFlow` and `LiveData` for UI state management in Android, considering cancellation, backpressure, and testing. When would you choose one over the other?
+4. How do you test `StateFlow` and `SharedFlow` in unit tests, including controlling coroutine dispatchers, using `Turbine` or similar libraries, and asserting emissions order?
+5. How would you migrate an existing `LiveData`-based `ViewModel` to use `StateFlow`/`SharedFlow` while keeping the UI compatible during the transition period?
 
 ---
 
 ## References
 
 - [StateFlow Documentation](https://developer.android.com/kotlin/flow/stateflow-and-sharedflow)
+- [[c-kotlin]]
+- [[c-flow]]
 
 ---
 
@@ -338,4 +353,3 @@ class GoodEventUsage : ViewModel() {
 
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
-

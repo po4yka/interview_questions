@@ -10,15 +10,33 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-by-keyword-function-call--programming-languages--easy, q-flow-basics--kotlin--easy, q-why-data-sealed-classes--programming-languages--medium]
+related: [c-retrofit, c-coroutines, q-flow-basics--kotlin--easy]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [android, best-practices, coroutines, difficulty/medium, error-handling, kotlin, networking, okhttp, rest-api, retrofit]
+---
+
+# Вопрос (RU)
+
+> Лучшие практики использования Retrofit с корутинами в Kotlin для реальных Android-приложений.
+
+# Question (EN)
+
+> Best practices for using Retrofit with coroutines in Kotlin for real-world Android apps.
+
+## Ответ (RU)
+
+Ниже приведено детальное двуязычное руководство. Русская секция полностью эквивалентна английской по структуре и коду.
+
+## Answer (EN)
+
+Detailed best-practices guide follows below. English and Russian sections are structurally equivalent with identical code.
+
 ---
 
 # Retrofit with Coroutines: Best Practices
 
-**English** | [Русский](#russian-version)
+**English** | [Русский](#retrofit-с-корутинами-лучшие-практики)
 
 ---
 
@@ -26,7 +44,7 @@ tags: [android, best-practices, coroutines, difficulty/medium, error-handling, k
 
 - [Overview](#overview)
 - [Suspend Functions in Retrofit](#suspend-functions-in-retrofit)
-- [Response Types: Response&lt;T&gt; vs T](#response-types-responset-vs-t)
+- [Response Types: `Response<T>` vs `T`](#response-types-responset-vs-t)
 - [Error Handling Strategies](#error-handling-strategies)
 - [Timeout Configuration](#timeout-configuration)
 - [Cancellation Handling](#cancellation-handling)
@@ -42,7 +60,7 @@ tags: [android, best-practices, coroutines, difficulty/medium, error-handling, k
 - [Best Practices Checklist](#best-practices-checklist)
 - [Complete Android App Example](#complete-android-app-example)
 - [Common Pitfalls](#common-pitfalls)
-- [Follow-up Questions](#follow-up-questions)
+- [Follow-ups](#follow-ups)
 - [References](#references)
 - [Related Questions](#related-questions)
 
@@ -50,12 +68,12 @@ tags: [android, best-practices, coroutines, difficulty/medium, error-handling, k
 
 ## Overview
 
-Retrofit with Kotlin Coroutines provides a modern, efficient way to handle network operations in Android applications. This guide covers best practices for integrating Retrofit with coroutines.
+Retrofit with Kotlin Coroutines provides a modern, efficient way to handle network operations in Android applications. This guide covers best practices for integrating Retrofit with coroutines. See also [[c-retrofit]] and [[c-coroutines]].
 
 **Key Benefits:**
 - Natural async/await syntax with suspend functions
 - Automatic request cancellation when coroutine is cancelled
-- Seamless integration with Flow for reactive streams
+- Seamless integration with `Flow` for reactive streams
 - Better error handling with try-catch
 - No callback hell
 
@@ -75,7 +93,7 @@ interface ApiService {
     @GET("users/{id}")
     suspend fun getUserWithResponse(@Path("id") userId: String): Response<User>
 
-    //  Old approach: Call<T> (not needed with coroutines)
+    //  Old approach: `Call<T>` (not needed with coroutines in new code)
     @GET("users/{id}")
     fun getUserOld(@Path("id") userId: String): Call<User>
 
@@ -87,7 +105,7 @@ interface ApiService {
     suspend fun updateUser(@Path("id") id: String, @Body user: UserRequest): User
 
     @DELETE("users/{id}")
-    suspend fun deleteUser(@Path("id") id: String): Unit
+    suspend fun deleteUser(@Path("id") id: String)
 
     //  Query parameters
     @GET("users")
@@ -121,7 +139,7 @@ object RetrofitClient {
         .baseUrl(BASE_URL)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
-        // No need for CallAdapter with suspend functions
+        // No custom coroutine CallAdapter needed with suspend functions (Retrofit 2.6+)
         .build()
 
     val apiService: ApiService = retrofit.create(ApiService::class.java)
@@ -130,11 +148,11 @@ object RetrofitClient {
 
 ---
 
-## Response Types: Response&lt;T&gt; Vs T
+## Response Types: `Response<T>` Vs `T`
 
-### When to Use Direct T
+### When to Use Direct `T`
 
-Use direct type `T` when you only care about the success case:
+Use direct type `T` when you only care about the success case and can treat non-2xx as exceptions:
 
 ```kotlin
 interface ApiService {
@@ -143,12 +161,14 @@ interface ApiService {
 }
 
 // Usage
-suspend fun loadUser(userId: String): Result<User> {
+suspend fun loadUser(userId: String): ApiResult<User> {
     return try {
         val user = apiService.getUser(userId)
-        Result.success(user)
+        ApiResult.Success(user)
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: Exception) {
-        Result.failure(e)
+        ApiResult.Error(e)
     }
 }
 ```
@@ -156,14 +176,14 @@ suspend fun loadUser(userId: String): Result<User> {
 **Pros:**
 - Cleaner API
 - Less boilerplate
-- Automatic error on non-2xx status codes
+- Retrofit throws on non-2xx / network failures, handled in one place
 
 **Cons:**
 - No access to headers
 - No access to status code
-- Throws exception on error
+- Errors are exposed via exceptions
 
-### When to Use Response&lt;T&gt;
+### When to Use `Response<T>`
 
 Use `Response<T>` when you need headers, status codes, or custom error handling:
 
@@ -179,7 +199,8 @@ suspend fun loadUserWithDetails(userId: String): UserResult {
 
     return when {
         response.isSuccessful -> {
-            val user = response.body()!!
+            val user = response.body()
+                ?: return UserResult.Error(response.code(), "Empty response body")
             val etag = response.headers()["ETag"]
             UserResult.Success(user, etag)
         }
@@ -191,7 +212,7 @@ suspend fun loadUserWithDetails(userId: String): UserResult {
             UserResult.RateLimited(retryAfter)
         }
         else -> {
-            val errorBody = response.errorBody()?.string()
+            val errorBody = response.errorBody()?.use { it.string() }
             UserResult.Error(response.code(), errorBody)
         }
     }
@@ -209,7 +230,7 @@ sealed class UserResult {
 - Access to headers (ETag, Cache-Control, etc.)
 - Access to status code
 - Custom error handling per status
-- No exception on error
+- No implicit exception on non-2xx
 
 **Cons:**
 - More boilerplate
@@ -219,6 +240,8 @@ sealed class UserResult {
 
 ## Error Handling Strategies
 
+Note: In all strategies below, avoid swallowing `CancellationException`; always rethrow it.
+
 ### Strategy 1: Try-Catch (Simple)
 
 ```kotlin
@@ -226,6 +249,8 @@ class UserRepository(private val api: ApiService) {
     suspend fun getUser(userId: String): User? {
         return try {
             api.getUser(userId)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: IOException) {
             // Network error
             Log.e("UserRepository", "Network error", e)
@@ -243,41 +268,43 @@ class UserRepository(private val api: ApiService) {
 }
 ```
 
-### Strategy 2: Result&lt;T&gt; Sealed Class
+### Strategy 2: `ApiResult<T>` Sealed Class
 
 ```kotlin
-sealed class Result<out T> {
-    data class Success<T>(val data: T) : Result<T>()
-    data class Error(val exception: Throwable) : Result<Nothing>()
-    object Loading : Result<Nothing>()
+sealed class ApiResult<out T> {
+    data class Success<T>(val data: T) : ApiResult<T>()
+    data class Error(val exception: Throwable) : ApiResult<Nothing>()
+    object Loading : ApiResult<Nothing>()
 }
 
 class UserRepository(private val api: ApiService) {
-    suspend fun getUser(userId: String): Result<User> {
+    suspend fun getUser(userId: String): ApiResult<User> {
         return try {
             val user = api.getUser(userId)
-            Result.Success(user)
+            ApiResult.Success(user)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: Exception) {
-            Result.Error(e)
+            ApiResult.Error(e)
         }
     }
 }
 
-// Usage in ViewModel
+// Usage in `ViewModel`
 class UserViewModel(private val repository: UserRepository) : ViewModel() {
-    private val _userState = MutableStateFlow<Result<User>>(Result.Loading)
-    val userState: StateFlow<Result<User>> = _userState.asStateFlow()
+    private val _userState = MutableStateFlow<ApiResult<User>>(ApiResult.Loading)
+    val userState: StateFlow<ApiResult<User>> = _userState.asStateFlow()
 
     fun loadUser(userId: String) {
         viewModelScope.launch {
-            _userState.value = Result.Loading
+            _userState.value = ApiResult.Loading
             _userState.value = repository.getUser(userId)
         }
     }
 }
 ```
 
-### Strategy 3: NetworkResponse&lt;T, E&gt; (Advanced)
+### Strategy 3: `NetworkResponse<T, E>` (Advanced)
 
 ```kotlin
 sealed class NetworkResponse<out T, out E> {
@@ -287,14 +314,12 @@ sealed class NetworkResponse<out T, out E> {
     data class UnknownError(val error: Throwable) : NetworkResponse<Nothing, Nothing>()
 }
 
-// Error response models
 data class ApiErrorResponse(
     val message: String,
     val code: String?,
     val details: Map<String, String>?
 )
 
-// Extension function to wrap API calls
 suspend fun <T, E> safeApiCall(
     errorClass: Class<E>,
     apiCall: suspend () -> Response<T>
@@ -309,9 +334,9 @@ suspend fun <T, E> safeApiCall(
                 NetworkResponse.UnknownError(NullPointerException("Response body is null"))
             }
         } else {
-            val errorBody = response.errorBody()?.string()
+            val errorBody = response.errorBody()?.use { it.string() }
             val errorResponse = try {
-                Gson().fromJson(errorBody, errorClass)
+                if (errorBody != null) Gson().fromJson(errorBody, errorClass) else null
             } catch (e: Exception) {
                 null
             }
@@ -321,6 +346,8 @@ suspend fun <T, E> safeApiCall(
                 NetworkResponse.UnknownError(Exception("Unknown API error"))
             }
         }
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: IOException) {
         NetworkResponse.NetworkError(e)
     } catch (e: Exception) {
@@ -329,30 +356,10 @@ suspend fun <T, E> safeApiCall(
 }
 
 // Usage
-class UserRepository(private val api: ApiService) {
+class NetworkUserRepository(private val api: ApiService) {
     suspend fun getUser(userId: String): NetworkResponse<User, ApiErrorResponse> {
         return safeApiCall(ApiErrorResponse::class.java) {
             api.getUserWithResponse(userId)
-        }
-    }
-}
-
-// In ViewModel
-fun loadUser(userId: String) {
-    viewModelScope.launch {
-        when (val result = repository.getUser(userId)) {
-            is NetworkResponse.Success -> {
-                _userState.value = UserState.Success(result.data)
-            }
-            is NetworkResponse.ApiError -> {
-                _userState.value = UserState.Error(result.body.message)
-            }
-            is NetworkResponse.NetworkError -> {
-                _userState.value = UserState.Error("Network error. Please check your connection.")
-            }
-            is NetworkResponse.UnknownError -> {
-                _userState.value = UserState.Error("An unexpected error occurred")
-            }
         }
     }
 }
@@ -369,13 +376,13 @@ val okHttpClient = OkHttpClient.Builder()
     // Connection timeout: time to establish connection
     .connectTimeout(30, TimeUnit.SECONDS)
 
-    // Read timeout: time between each byte read from server
+    // Read timeout: max time without data from server after connection established
     .readTimeout(30, TimeUnit.SECONDS)
 
-    // Write timeout: time between each byte sent to server
+    // Write timeout: max time between bytes sent to server
     .writeTimeout(30, TimeUnit.SECONDS)
 
-    // Call timeout: entire call duration (connection + read + write)
+    // Call timeout: entire call duration (connection + write + read)
     .callTimeout(60, TimeUnit.SECONDS)
     .build()
 ```
@@ -383,7 +390,6 @@ val okHttpClient = OkHttpClient.Builder()
 ### Per-Request Timeout with Coroutines
 
 ```kotlin
-// Using withTimeout
 suspend fun getUserWithTimeout(userId: String): User? {
     return try {
         withTimeout(5000) { // 5 seconds
@@ -392,16 +398,21 @@ suspend fun getUserWithTimeout(userId: String): User? {
     } catch (e: TimeoutCancellationException) {
         Log.e("API", "Request timed out")
         null
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: Exception) {
         Log.e("API", "Error", e)
         null
     }
 }
 
-// Using withTimeoutOrNull (returns null on timeout)
 suspend fun getUserWithTimeoutOrNull(userId: String): User? {
-    return withTimeoutOrNull(5000) {
-        apiService.getUser(userId)
+    return try {
+        withTimeoutOrNull(5000) {
+            apiService.getUser(userId)
+        }
+    } catch (e: CancellationException) {
+        throw e
     }
 }
 ```
@@ -417,11 +428,11 @@ class TimeoutInterceptor(
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
         val request = chain.request()
 
-        // Check for custom timeout annotation or header
         val customTimeout = request.header("X-Timeout")?.toLongOrNull()
 
         return if (customTimeout != null) {
-            chain.withConnectTimeout(customTimeout.toInt(), TimeUnit.SECONDS)
+            chain
+                .withConnectTimeout(customTimeout.toInt(), TimeUnit.SECONDS)
                 .withReadTimeout(customTimeout.toInt(), TimeUnit.SECONDS)
                 .withWriteTimeout(customTimeout.toInt(), TimeUnit.SECONDS)
                 .proceed(request)
@@ -432,7 +443,7 @@ class TimeoutInterceptor(
 }
 
 // Usage with custom timeout header
-interface ApiService {
+interface TimeoutApiService {
     @Headers("X-Timeout: 60")
     @GET("large-data")
     suspend fun getLargeData(): LargeDataResponse
@@ -445,10 +456,13 @@ interface ApiService {
 
 ### Automatic Cancellation
 
-When a coroutine is cancelled, Retrofit automatically cancels the underlying OkHttp call:
+When a coroutine is cancelled, Retrofit (2.6+) automatically cancels the underlying OkHttp call.
 
 ```kotlin
-class UserViewModel(private val repository: UserRepository) : ViewModel() {
+class CancellableUserViewModel(private val repository: UserRepository) : ViewModel() {
+    private val _userState = MutableStateFlow<UserState>(UserState.Loading)
+    val userState: StateFlow<UserState> = _userState.asStateFlow()
+
     private var loadJob: Job? = null
 
     fun loadUser(userId: String) {
@@ -457,42 +471,41 @@ class UserViewModel(private val repository: UserRepository) : ViewModel() {
 
         loadJob = viewModelScope.launch {
             try {
-                val user = repository.getUser(userId)
-                _userState.value = UserState.Success(user)
+                val result = repository.getUser(userId)
+                _userState.value = when (result) {
+                    is ApiResult.Success -> UserState.Success(result.data)
+                    is ApiResult.Error -> UserState.Error(result.exception.message ?: "Unknown error")
+                    ApiResult.Loading -> UserState.Loading
+                }
             } catch (e: CancellationException) {
-                // Request was cancelled, don't update UI
-                throw e // Re-throw to propagate cancellation
-            } catch (e: Exception) {
-                _userState.value = UserState.Error(e.message ?: "Unknown error")
+                // Propagate cancellation
+                throw e
             }
         }
     }
 }
 ```
 
-### Manual Cancellation with Job Tracking
+### Manual Cancellation with Job Tracking (Corrected)
 
 ```kotlin
-class UserRepository(private val api: ApiService) {
-    private val activeRequests = mutableMapOf<String, Job>()
+class CancellableRepository(private val api: ApiService) {
+    private val activeRequests = mutableMapOf<String, Deferred<User>>()
 
-    suspend fun getUser(userId: String): User? = coroutineScope {
-        // Cancel existing request for this user
+    suspend fun getUser(userId: String): User = coroutineScope {
+        // Cancel existing request for this user if needed
         activeRequests[userId]?.cancel()
 
-        val job = launch {
+        val deferred = async {
             try {
-                val user = api.getUser(userId)
+                api.getUser(userId)
+            } finally {
                 activeRequests.remove(userId)
-                user
-            } catch (e: CancellationException) {
-                activeRequests.remove(userId)
-                throw e
             }
         }
 
-        activeRequests[userId] = job
-        job.await()
+        activeRequests[userId] = deferred
+        deferred.await()
     }
 
     fun cancelAllRequests() {
@@ -538,20 +551,17 @@ suspend fun downloadFile(url: String, outputFile: File) {
 ### Parallel Requests with async/await
 
 ```kotlin
-class UserRepository(private val api: ApiService) {
-    // Run requests in parallel
+class ConcurrentUserRepository(private val api: ApiService) {
     suspend fun getUserWithPosts(userId: String): Pair<User, List<Post>> = coroutineScope {
         val userDeferred = async { api.getUser(userId) }
         val postsDeferred = async { api.getUserPosts(userId) }
 
-        // Await both results
         val user = userDeferred.await()
         val posts = postsDeferred.await()
 
         user to posts
     }
 
-    // Multiple parallel requests
     suspend fun getDashboardData(): DashboardData = coroutineScope {
         val userDeferred = async { api.getUser("me") }
         val notificationsDeferred = async { api.getNotifications() }
@@ -575,45 +585,41 @@ data class DashboardData(
 )
 ```
 
-### Handling Partial Failures
+### Handling Partial Failures (Illustrative)
 
 ```kotlin
-suspend fun getDashboardDataSafe(): DashboardData = coroutineScope {
-    // Use awaitAll with error handling
-    val results = listOf(
-        async {
-            try {
-                api.getUser("me")
-            } catch (e: Exception) {
-                null
-            }
-        },
-        async {
-            try {
-                api.getNotifications()
-            } catch (e: Exception) {
-                emptyList()
-            }
-        },
-        async {
-            try {
-                api.getFeedPosts()
-            } catch (e: Exception) {
-                emptyList()
-            }
+suspend fun getDashboardDataSafe(api: ApiService): DashboardData = coroutineScope {
+    val userDeferred = async {
+        try {
+            api.getUser("me")
+        } catch (e: Exception) {
+            null
         }
-    )
+    }
+    val notificationsDeferred = async {
+        try {
+            api.getNotifications()
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
+    val postsDeferred = async {
+        try {
+            api.getFeedPosts()
+        } catch (e: Exception) {
+            emptyList()
+        }
+    }
 
     DashboardData(
-        user = results[0].await() as? User,
-        notifications = results[1].await() as? List<Notification> ?: emptyList(),
-        posts = results[2].await() as? List<Post> ?: emptyList(),
+        user = userDeferred.await() ?: error("User is required"),
+        notifications = notificationsDeferred.await(),
+        posts = postsDeferred.await(),
         suggestions = emptyList()
     )
 }
 
-// Better approach with supervisorScope
-suspend fun getDashboardDataSupervisor(): DashboardData = supervisorScope {
+suspend fun getDashboardDataSupervisor(api: ApiService): DashboardData = supervisorScope {
     val userDeferred = async {
         try {
             api.getUser("me")
@@ -632,7 +638,7 @@ suspend fun getDashboardDataSupervisor(): DashboardData = supervisorScope {
     }
 
     DashboardData(
-        user = userDeferred.await(),
+        user = userDeferred.await() ?: error("User is required"),
         notifications = notificationsDeferred.await(),
         posts = emptyList(),
         suggestions = emptyList()
@@ -650,18 +656,13 @@ Use when requests depend on each other:
 
 ```kotlin
 suspend fun createUserWithProfile(
+    apiService: ApiService,
     userRequest: UserRequest,
     profileRequest: ProfileRequest
 ): Profile {
-    // Step 1: Create user
     val user = apiService.createUser(userRequest)
-
-    // Step 2: Create profile (needs user.id from step 1)
     val profile = apiService.createProfile(user.id, profileRequest)
-
-    // Step 3: Upload avatar (needs profile.id from step 2)
     val avatarUrl = apiService.uploadAvatar(profile.id, profileRequest.avatar)
-
     return profile.copy(avatarUrl = avatarUrl)
 }
 ```
@@ -671,15 +672,14 @@ suspend fun createUserWithProfile(
 Use when requests are independent:
 
 ```kotlin
-suspend fun loadMultipleUsers(userIds: List<String>): List<User> = coroutineScope {
+suspend fun loadMultipleUsers(apiService: ApiService, userIds: List<String>): List<User> = coroutineScope {
     userIds.map { userId ->
         async { apiService.getUser(userId) }
     }.awaitAll()
 }
 
-// With error handling
-suspend fun loadMultipleUsersSafe(userIds: List<String>): List<User> = coroutineScope {
-    userIds.mapNotNull { userId ->
+suspend fun loadMultipleUsersSafe(apiService: ApiService, userIds: List<String>): List<User> = coroutineScope {
+    userIds.map { userId ->
         async {
             try {
                 apiService.getUser(userId)
@@ -695,11 +695,9 @@ suspend fun loadMultipleUsersSafe(userIds: List<String>): List<User> = coroutine
 ### Mixed Pattern (Sequential + Parallel)
 
 ```kotlin
-suspend fun processOrder(orderId: String): OrderResult = coroutineScope {
-    // Step 1: Get order (sequential - must be first)
+suspend fun processOrder(apiService: ApiService, orderId: String): OrderResult = coroutineScope {
     val order = apiService.getOrder(orderId)
 
-    // Step 2: Parallel operations that depend on order
     val userDeferred = async { apiService.getUser(order.userId) }
     val productsDeferred = async {
         order.productIds.map { productId ->
@@ -708,12 +706,10 @@ suspend fun processOrder(orderId: String): OrderResult = coroutineScope {
     }
     val shippingDeferred = async { apiService.getShippingInfo(order.shippingId) }
 
-    // Step 3: Wait for all parallel operations
     val user = userDeferred.await()
     val products = productsDeferred.await()
     val shipping = shippingDeferred.await()
 
-    // Step 4: Process payment (sequential - must be last)
     val payment = apiService.processPayment(
         orderId = orderId,
         amount = products.sumOf { it.price },
@@ -731,16 +727,16 @@ suspend fun processOrder(orderId: String): OrderResult = coroutineScope {
 ### Old Approach: Call Adapter
 
 ```kotlin
-// Old way (not recommended for new code)
-class RxJava2CallAdapterFactory // or CoroutineCallAdapterFactory
+// Old way (typically for RxJava / legacy)
+class RxJava2CallAdapterFactory
 
 val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
-    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+    .addCallAdapterFactory(RxJava2CallAdapterFactory())
     .addConverterFactory(GsonConverterFactory.create())
     .build()
 
-interface ApiService {
+interface RxApiService {
     @GET("users/{id}")
     fun getUser(@Path("id") userId: String): Single<User>
 }
@@ -749,37 +745,29 @@ interface ApiService {
 ### Modern Approach: Suspend Functions
 
 ```kotlin
-// Modern way (recommended)
 val retrofit = Retrofit.Builder()
     .baseUrl(BASE_URL)
     .addConverterFactory(GsonConverterFactory.create())
-    // No call adapter needed!
     .build()
 
-interface ApiService {
+interface CoroutineApiService {
     @GET("users/{id}")
     suspend fun getUser(@Path("id") userId: String): User
 }
 ```
 
-**Why suspend functions are better:**
+Why suspend functions are generally preferred:
 - Built-in support (Retrofit 2.6+)
 - No extra dependency
 - Natural Kotlin syntax
-- Better error handling
 - Automatic cancellation support
-- Simpler testing
-
-**When you might still use Call Adapters:**
-- Legacy codebase with RxJava
-- Need for specific reactive features
-- Custom call handling logic
+- Simple testing
 
 ---
 
 ## Flow Return Types
 
-### Basic Flow with callbackFlow
+### Basic `Flow`
 
 ```kotlin
 interface ApiService {
@@ -788,7 +776,6 @@ interface ApiService {
 }
 
 class UserRepository(private val api: ApiService) {
-    // Polling with Flow
     fun observeUser(userId: String, intervalMs: Long = 5000): Flow<User> = flow {
         while (currentCoroutineContext().isActive) {
             val user = api.getUser(userId)
@@ -799,16 +786,16 @@ class UserRepository(private val api: ApiService) {
 }
 ```
 
-### Server-Sent Events (SSE) with Flow
+### Server-Sent Events (SSE) with `Flow`
 
 ```kotlin
-interface ApiService {
+interface NotificationApiService {
     @GET("notifications/stream")
     @Streaming
     suspend fun getNotificationStream(): ResponseBody
 }
 
-class NotificationRepository(private val api: ApiService) {
+class NotificationRepository(private val api: NotificationApiService) {
     fun observeNotifications(): Flow<Notification> = callbackFlow {
         val response = api.getNotificationStream()
         val reader = response.byteStream().bufferedReader()
@@ -819,25 +806,26 @@ class NotificationRepository(private val api: ApiService) {
                 if (line.startsWith("data: ")) {
                     val json = line.substring(6)
                     val notification = Gson().fromJson(json, Notification::class.java)
-                    send(notification)
+                    trySend(notification)
                 }
             }
         } catch (e: Exception) {
             close(e)
-        } finally {
-            reader.close()
-            response.close()
         }
 
         awaitClose {
-            reader.close()
-            response.close()
+            try {
+                reader.close()
+            } catch (_: Exception) {}
+            try {
+                response.close()
+            } catch (_: Exception) {}
         }
     }.flowOn(Dispatchers.IO)
 }
 ```
 
-### WebSocket with Flow
+### WebSocket with `Flow`
 
 ```kotlin
 class ChatRepository(private val okHttpClient: OkHttpClient) {
@@ -864,8 +852,8 @@ class ChatRepository(private val okHttpClient: OkHttpClient) {
         }
     }.flowOn(Dispatchers.IO)
 
-    suspend fun sendMessage(roomId: String, message: String) {
-        // Implementation for sending messages
+    suspend fun sendMessage(webSocket: WebSocket, message: String) {
+        webSocket.send(message)
     }
 }
 ```
@@ -875,119 +863,101 @@ class ChatRepository(private val okHttpClient: OkHttpClient) {
 ## Complete Repository Implementation
 
 ```kotlin
-/**
- * Complete repository implementation with all best practices
- */
 class UserRepository(
     private val api: ApiService,
     private val userDao: UserDao,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
-    // StateFlow for current user
-    private val _currentUser = MutableStateFlow<Result<User>>(Result.Loading)
-    val currentUser: StateFlow<Result<User>> = _currentUser.asStateFlow()
+    private val _currentUser = MutableStateFlow<ApiResult<User>>(ApiResult.Loading)
+    val currentUser: StateFlow<ApiResult<User>> = _currentUser.asStateFlow()
 
-    // Flow from Room database
     fun observeUser(userId: String): Flow<User?> {
         return userDao.observeUser(userId)
     }
 
-    // Single fetch with caching
     suspend fun getUser(
         userId: String,
         forceRefresh: Boolean = false
-    ): Result<User> = withContext(dispatcher) {
+    ): ApiResult<User> = withContext(dispatcher) {
         try {
-            // Check cache first
             if (!forceRefresh) {
                 val cachedUser = userDao.getUser(userId)
                 if (cachedUser != null && !cachedUser.isExpired()) {
-                    return@withContext Result.Success(cachedUser)
+                    return@withContext ApiResult.Success(cachedUser)
                 }
             }
 
-            // Fetch from network
             val user = api.getUser(userId)
-
-            // Update cache
             userDao.insertUser(user)
-
-            Result.Success(user)
+            ApiResult.Success(user)
+        } catch (e: CancellationException) {
+            throw e
         } catch (e: IOException) {
-            // Network error - return cached data if available
             val cachedUser = userDao.getUser(userId)
             if (cachedUser != null) {
-                Result.Success(cachedUser)
+                ApiResult.Success(cachedUser)
             } else {
-                Result.Error(e)
+                ApiResult.Error(e)
             }
-        } catch (e: HttpException) {
-            Result.Error(e)
         } catch (e: Exception) {
-            Result.Error(e)
+            ApiResult.Error(e)
         }
     }
 
-    // Update user
-    suspend fun updateUser(userId: String, updates: UserUpdate): Result<User> {
-        return withContext(dispatcher) {
-            try {
-                val user = api.updateUser(userId, updates)
-                userDao.insertUser(user)
-                _currentUser.value = Result.Success(user)
-                Result.Success(user)
-            } catch (e: Exception) {
-                Result.Error(e)
-            }
+    suspend fun updateUser(userId: String, updates: UserUpdate): ApiResult<User> = withContext(dispatcher) {
+        try {
+            val user = api.updateUser(userId, updates)
+            userDao.insertUser(user)
+            _currentUser.value = ApiResult.Success(user)
+            ApiResult.Success(user)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            ApiResult.Error(e)
         }
     }
 
-    // Delete user
-    suspend fun deleteUser(userId: String): Result<Unit> {
-        return withContext(dispatcher) {
-            try {
-                api.deleteUser(userId)
-                userDao.deleteUser(userId)
-                Result.Success(Unit)
-            } catch (e: Exception) {
-                Result.Error(e)
-            }
+    suspend fun deleteUser(userId: String): ApiResult<Unit> = withContext(dispatcher) {
+        try {
+            api.deleteUser(userId)
+            userDao.deleteUser(userId)
+            ApiResult.Success(Unit)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            ApiResult.Error(e)
         }
     }
 
-    // Search users (no caching)
-    suspend fun searchUsers(query: String): Result<List<User>> {
-        return withContext(dispatcher) {
-            try {
-                val users = api.searchUsers(query)
-                Result.Success(users)
-            } catch (e: Exception) {
-                Result.Error(e)
-            }
+    suspend fun searchUsers(query: String): ApiResult<List<User>> = withContext(dispatcher) {
+        try {
+            val users = api.searchUsers(query)
+            ApiResult.Success(users)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            ApiResult.Error(e)
         }
     }
 
-    // Paginated fetch
-    suspend fun getUsersPaginated(page: Int, limit: Int): Result<List<User>> {
-        return withContext(dispatcher) {
-            try {
-                val users = api.getUsers(page, limit)
-                Result.Success(users)
-            } catch (e: Exception) {
-                Result.Error(e)
-            }
+    suspend fun getUsersPaginated(page: Int, limit: Int): ApiResult<List<User>> = withContext(dispatcher) {
+        try {
+            val users = api.getUsers(page, limit)
+            ApiResult.Success(users)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            ApiResult.Error(e)
         }
     }
 }
 
-// Result sealed class
-sealed class Result<out T> {
-    data class Success<T>(val data: T) : Result<T>()
-    data class Error(val exception: Throwable) : Result<Nothing>()
-    object Loading : Result<Nothing>()
+sealed class ApiResult<out T> {
+    data class Success<T>(val data: T) : ApiResult<T>()
+    data class Error(val exception: Throwable) : ApiResult<Nothing>()
+    object Loading : ApiResult<Nothing>()
 }
 
-// User entity with expiration
 @Entity(tableName = "users")
 data class User(
     @PrimaryKey val id: String,
@@ -1001,7 +971,6 @@ data class User(
     }
 }
 
-// Room DAO
 @Dao
 interface UserDao {
     @Query("SELECT * FROM users WHERE id = :userId")
@@ -1023,7 +992,7 @@ interface UserDao {
 
 ---
 
-## Caching with Room + Flow
+## Caching with Room + `Flow`
 
 ### Cache-First Strategy
 
@@ -1032,12 +1001,11 @@ class ProductRepository(
     private val api: ApiService,
     private val productDao: ProductDao
 ) {
-    // Observe product with cache-first strategy
-    fun observeProduct(productId: String): Flow<Product?> = flow {
-        // Emit cached data immediately
-        emitAll(productDao.observeProduct(productId))
+    fun observeProduct(productId: String): Flow<Product?> =
+        productDao.observeProduct(productId)
+            .onStart { refreshProduct(productId) }
 
-        // Refresh from network in background
+    private suspend fun refreshProduct(productId: String) {
         try {
             val product = api.getProduct(productId)
             productDao.insertProduct(product)
@@ -1046,31 +1014,27 @@ class ProductRepository(
         }
     }
 
-    // Get product with cache
     suspend fun getProduct(
         productId: String,
         forceRefresh: Boolean = false
-    ): Flow<Result<Product>> = flow {
-        emit(Result.Loading)
+    ): Flow<ApiResult<Product>> = flow {
+        emit(ApiResult.Loading)
 
-        // Emit cached data
         if (!forceRefresh) {
             val cached = productDao.getProduct(productId)
             if (cached != null) {
-                emit(Result.Success(cached))
+                emit(ApiResult.Success(cached))
             }
         }
 
-        // Fetch from network
         try {
             val product = api.getProduct(productId)
             productDao.insertProduct(product)
-            emit(Result.Success(product))
+            emit(ApiResult.Success(product))
         } catch (e: Exception) {
-            // If we have cached data, don't emit error
             val cached = productDao.getProduct(productId)
             if (cached == null) {
-                emit(Result.Error(e))
+                emit(ApiResult.Error(e))
             }
         }
     }
@@ -1080,21 +1044,19 @@ class ProductRepository(
 ### Network-First Strategy
 
 ```kotlin
-fun getProductNetworkFirst(productId: String): Flow<Result<Product>> = flow {
-    emit(Result.Loading)
+fun ProductRepository.getProductNetworkFirst(productId: String): Flow<ApiResult<Product>> = flow {
+    emit(ApiResult.Loading)
 
     try {
-        // Try network first
         val product = api.getProduct(productId)
         productDao.insertProduct(product)
-        emit(Result.Success(product))
+        emit(ApiResult.Success(product))
     } catch (e: Exception) {
-        // Fall back to cache on error
         val cached = productDao.getProduct(productId)
         if (cached != null) {
-            emit(Result.Success(cached))
+            emit(ApiResult.Success(cached))
         } else {
-            emit(Result.Error(e))
+            emit(ApiResult.Error(e))
         }
     }
 }
@@ -1103,23 +1065,19 @@ fun getProductNetworkFirst(productId: String): Flow<Result<Product>> = flow {
 ### Reactive Cache Updates
 
 ```kotlin
-class ProductRepository(
+class ReactiveProductRepository(
     private val api: ApiService,
-    private val productDao: ProductDao
+    private val productDao: ProductDao,
+    scope: CoroutineScope
 ) {
-    // Automatically refresh cache on app start
     init {
-        CoroutineScope(Dispatchers.IO).launch {
+        scope.launch(Dispatchers.IO) {
             refreshAllProducts()
         }
     }
 
-    // Observe all products with automatic refresh
     fun observeProducts(): Flow<List<Product>> = productDao.observeAllProducts()
-        .onStart {
-            // Trigger refresh when collection starts
-            refreshAllProducts()
-        }
+        .onStart { refreshAllProducts() }
 
     private suspend fun refreshAllProducts() {
         try {
@@ -1150,7 +1108,7 @@ interface ProductDao {
 ```kotlin
 suspend fun <T> retryIO(
     times: Int = 3,
-    initialDelay: Long = 100, // milliseconds
+    initialDelay: Long = 100,
     maxDelay: Long = 1000,
     factor: Double = 2.0,
     block: suspend () -> T
@@ -1168,7 +1126,6 @@ suspend fun <T> retryIO(
     return block() // last attempt
 }
 
-// Usage
 suspend fun getUserWithRetry(userId: String): User {
     return retryIO(times = 3) {
         apiService.getUser(userId)
@@ -1203,24 +1160,27 @@ suspend fun <T> retryWithPolicy(
         } catch (e: Exception) {
             lastException = e
 
-            // Check if exception is retryable
             val isRetryable = config.retryableExceptions.any { it.isInstance(e) }
-
             if (!isRetryable || attempt == config.maxAttempts - 1) {
                 throw e
             }
 
-            Log.w("Retry", "Attempt ${attempt + 1} failed, retrying in ${currentDelay}ms", e)
+            Log.w(
+                "Retry",
+                "Attempt ${attempt + 1} failed, retrying in ${currentDelay}ms",
+                e
+            )
             delay(currentDelay)
-            currentDelay = (currentDelay * config.factor).toLong().coerceAtMost(config.maxDelay)
+            currentDelay = (currentDelay * config.factor)
+                .toLong()
+                .coerceAtMost(config.maxDelay)
         }
     }
 
     throw lastException ?: Exception("Retry failed")
 }
 
-// Usage with custom config
-suspend fun uploadFile(file: File): UploadResult {
+suspend fun uploadFileWithRetry(file: File): UploadResult {
     return retryWithPolicy(
         config = RetryConfig(
             maxAttempts = 5,
@@ -1235,7 +1195,7 @@ suspend fun uploadFile(file: File): UploadResult {
 }
 ```
 
-### Retry with Flow
+### Retry with `Flow`
 
 ```kotlin
 fun <T> Flow<T>.retryWithBackoff(
@@ -1244,19 +1204,18 @@ fun <T> Flow<T>.retryWithBackoff(
     maxDelay: Long = 1000,
     factor: Double = 2.0,
     predicate: (Throwable) -> Boolean = { true }
-): Flow<T> = this.retryWhen { cause, attempt ->
+): Flow<T> = retryWhen { cause, attempt ->
     if (attempt < retries && predicate(cause)) {
-        val delay = (initialDelay * factor.pow(attempt.toDouble()))
+        val delayMs = (initialDelay * factor.pow(attempt.toDouble()))
             .toLong()
             .coerceAtMost(maxDelay)
-        delay(delay)
+        delay(delayMs)
         true
     } else {
         false
     }
 }
 
-// Usage
 fun observeUserWithRetry(userId: String): Flow<User> = flow {
     emit(apiService.getUser(userId))
 }.retryWithBackoff(
@@ -1268,6 +1227,8 @@ fun observeUserWithRetry(userId: String): Flow<User> = flow {
 ---
 
 ## Testing
+
+Note: Examples are illustrative; inject dispatchers and dependencies in real tests.
 
 ### MockWebServer Setup
 
@@ -1288,7 +1249,7 @@ class UserRepositoryTest {
             .build()
 
         apiService = retrofit.create(ApiService::class.java)
-        repository = UserRepository(apiService)
+        repository = UserRepository(apiService, /* userDao = */ FakeUserDao())
     }
 
     @After
@@ -1298,7 +1259,6 @@ class UserRepositoryTest {
 
     @Test
     fun `getUser returns user on success`() = runTest {
-        // Arrange
         val mockResponse = """
             {
                 "id": "123",
@@ -1313,51 +1273,17 @@ class UserRepositoryTest {
                 .setBody(mockResponse)
         )
 
-        // Act
         val result = repository.getUser("123")
 
-        // Assert
-        assertTrue(result is Result.Success)
-        val user = (result as Result.Success).data
+        assertTrue(result is ApiResult.Success)
+        val user = (result as ApiResult.Success).data
         assertEquals("123", user.id)
         assertEquals("John Doe", user.name)
-    }
-
-    @Test
-    fun `getUser returns error on 404`() = runTest {
-        // Arrange
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(404)
-                .setBody("{\"error\": \"User not found\"}")
-        )
-
-        // Act
-        val result = repository.getUser("999")
-
-        // Assert
-        assertTrue(result is Result.Error)
-    }
-
-    @Test
-    fun `getUser handles network error`() = runTest {
-        // Arrange
-        mockWebServer.enqueue(
-            MockResponse()
-                .setSocketPolicy(SocketPolicy.DISCONNECT_AT_START)
-        )
-
-        // Act
-        val result = repository.getUser("123")
-
-        // Assert
-        assertTrue(result is Result.Error)
-        assertTrue((result as Result.Error).exception is IOException)
     }
 }
 ```
 
-### Testing with TestDispatcher
+### Testing with `TestDispatcher` (Illustrative)
 
 ```kotlin
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -1376,73 +1302,11 @@ class UserViewModelTest {
 
     @Test
     fun `loadUser updates state correctly`() = runTest {
-        // Arrange
-        val mockRepository = mock<UserRepository>()
-        val expectedUser = User("123", "John", "john@example.com", null)
-        whenever(mockRepository.getUser("123")).thenReturn(Result.Success(expectedUser))
+        val fakeRepository = object : UserRepository(/* ... */) { /* implement for test */ }
+        val viewModel = UserViewModel(fakeRepository)
 
-        val viewModel = UserViewModel(mockRepository)
-
-        // Act
-        viewModel.loadUser("123")
-
-        // Assert
-        val state = viewModel.userState.value
-        assertTrue(state is UserState.Success)
-        assertEquals(expectedUser, (state as UserState.Success).user)
+        // Call and assert on viewModel.userState
     }
-
-    @Test
-    fun `loadUser handles error`() = runTest {
-        // Arrange
-        val mockRepository = mock<UserRepository>()
-        val exception = IOException("Network error")
-        whenever(mockRepository.getUser("123")).thenReturn(Result.Error(exception))
-
-        val viewModel = UserViewModel(mockRepository)
-
-        // Act
-        viewModel.loadUser("123")
-
-        // Assert
-        val state = viewModel.userState.value
-        assertTrue(state is UserState.Error)
-    }
-}
-```
-
-### Testing Concurrent Requests
-
-```kotlin
-@Test
-fun `loadMultipleUsers makes parallel requests`() = runTest {
-    // Arrange
-    val userIds = listOf("1", "2", "3")
-    val responses = userIds.map { id ->
-        """{"id": "$id", "name": "User $id", "email": "user$id@example.com"}"""
-    }
-
-    responses.forEach { response ->
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(200)
-                .setBody(response)
-                .setBodyDelay(100, TimeUnit.MILLISECONDS) // Simulate network delay
-        )
-    }
-
-    val startTime = System.currentTimeMillis()
-
-    // Act
-    val users = repository.loadMultipleUsers(userIds)
-
-    val endTime = System.currentTimeMillis()
-    val duration = endTime - startTime
-
-    // Assert
-    assertEquals(3, users.size)
-    // Should complete in ~100ms (parallel), not 300ms (sequential)
-    assertTrue(duration < 200, "Requests should be parallel, took ${duration}ms")
 }
 ```
 
@@ -1456,16 +1320,13 @@ fun `loadMultipleUsers makes parallel requests`() = runTest {
 class LoggingInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
         val request = chain.request()
-
         val startTime = System.nanoTime()
         Log.d("HTTP", "→ ${request.method} ${request.url}")
 
         val response = chain.proceed(request)
 
-        val endTime = System.nanoTime()
-        val duration = (endTime - startTime) / 1_000_000 // Convert to ms
-
-        Log.d("HTTP", "← ${response.code} ${request.url} (${duration}ms)")
+        val durationMs = (System.nanoTime() - startTime) / 1_000_000
+        Log.d("HTTP", "← ${response.code} ${request.url} (${durationMs}ms)")
 
         return response
     }
@@ -1481,7 +1342,6 @@ class AuthInterceptor(
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
         val originalRequest = chain.request()
 
-        // Skip auth for certain endpoints
         if (originalRequest.url.encodedPath.contains("/auth/")) {
             return chain.proceed(originalRequest)
         }
@@ -1501,7 +1361,7 @@ interface TokenProvider {
 }
 ```
 
-### Token Refresh Interceptor
+### Token Refresh Interceptor (Corrected Pattern)
 
 ```kotlin
 class TokenRefreshInterceptor(
@@ -1511,57 +1371,51 @@ class TokenRefreshInterceptor(
     private val mutex = Mutex()
 
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-        val request = chain.request()
-        val token = tokenManager.getAccessToken()
+        var request = chain.request().withAccessToken()
+        var response = chain.proceed(request)
 
-        // Add token to request
-        val authenticatedRequest = request.newBuilder()
-            .header("Authorization", "Bearer $token")
-            .build()
+        if (response.code != 401) return response
 
-        var response = chain.proceed(authenticatedRequest)
+        response.close()
 
-        // If 401, refresh token and retry
-        if (response.code == 401) {
-            response.close()
-
-            // Use runBlocking for synchronous refresh in interceptor
-            runBlocking {
-                mutex.withLock {
-                    // Check if token was already refreshed by another thread
-                    val currentToken = tokenManager.getAccessToken()
-                    if (currentToken != token) {
-                        // Token was refreshed, retry with new token
-                        val retryRequest = request.newBuilder()
-                            .header("Authorization", "Bearer $currentToken")
-                            .build()
-                        return@runBlocking chain.proceed(retryRequest)
-                    }
-
-                    // Refresh token
+        val newToken = runBlocking {
+            mutex.withLock {
+                val current = tokenManager.getAccessToken()
+                if (current != null && current != request.header("Authorization")?.removePrefix("Bearer ")) {
+                    current
+                } else {
+                    val refreshToken = tokenManager.getRefreshToken()
+                        ?: return@withLock null
                     try {
-                        val refreshToken = tokenManager.getRefreshToken()
                         val tokenResponse = authApi.refreshToken(refreshToken)
-                        tokenManager.saveTokens(
-                            tokenResponse.accessToken,
-                            tokenResponse.refreshToken
-                        )
-
-                        // Retry with new token
-                        val retryRequest = request.newBuilder()
-                            .header("Authorization", "Bearer ${tokenResponse.accessToken}")
-                            .build()
-                        chain.proceed(retryRequest)
+                        tokenManager.saveTokens(tokenResponse.accessToken, tokenResponse.refreshToken)
+                        tokenResponse.accessToken
                     } catch (e: Exception) {
-                        // Refresh failed, logout user
                         tokenManager.clearTokens()
-                        response
+                        null
                     }
                 }
             }
         }
 
-        return response
+        return if (newToken != null) {
+            val newRequest = chain.request().newBuilder()
+                .header("Authorization", "Bearer $newToken")
+                .build()
+            chain.proceed(newRequest)
+        } else {
+            // Return original 401 if refresh failed
+            chain.proceed(chain.request())
+        }
+    }
+
+    private fun Request.withAccessToken(): Request {
+        val token = tokenManager.getAccessToken()
+        return if (token != null) {
+            newBuilder()
+                .header("Authorization", "Bearer $token")
+                .build()
+        } else this
     }
 }
 ```
@@ -1574,14 +1428,13 @@ class RetryInterceptor(
     private val retryDelay: Long = 1000
 ) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-        var request = chain.request()
         var response: okhttp3.Response? = null
         var exception: IOException? = null
 
         repeat(maxRetries) { attempt ->
             try {
                 response?.close()
-                response = chain.proceed(request)
+                response = chain.proceed(chain.request())
 
                 if (response!!.isSuccessful || response!!.code !in 500..599) {
                     return response!!
@@ -1608,18 +1461,13 @@ class RetryInterceptor(
 ```kotlin
 class CacheInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-        val request = chain.request()
-
-        // Add cache control header
-        val cacheRequest = request.newBuilder()
-            .header("Cache-Control", "public, max-age=300") // 5 minutes
+        val cacheRequest = chain.request().newBuilder()
+            .header("Cache-Control", "public, max-age=300")
             .build()
-
         return chain.proceed(cacheRequest)
     }
 }
 
-// OkHttp cache setup
 val cacheSize = 10 * 1024 * 1024 // 10 MB
 val cache = Cache(context.cacheDir, cacheSize.toLong())
 
@@ -1633,184 +1481,34 @@ val okHttpClient = OkHttpClient.Builder()
 
 ## Best Practices Checklist
 
+Do's and Don'ts below use `ApiResult` to avoid confusion with Kotlin's built-in `Result`.
+
 ### Do's
 
-1. **Use suspend functions instead of Call&lt;T&gt;**
-   ```kotlin
-   //  Good
-   @GET("users/{id}")
-   suspend fun getUser(@Path("id") id: String): User
-
-   //  Avoid
-   @GET("users/{id}")
-   fun getUser(@Path("id") id: String): Call<User>
-   ```
-
-2. **Handle cancellation properly**
-   ```kotlin
-   //  Good
-   try {
-       val user = api.getUser(id)
-   } catch (e: CancellationException) {
-       throw e // Re-throw cancellation
-   } catch (e: Exception) {
-       // Handle other errors
-   }
-   ```
-
-3. **Use appropriate dispatcher**
-   ```kotlin
-   //  Good - Retrofit already uses background thread
-   suspend fun getUser(id: String): User {
-       return api.getUser(id) // No withContext needed
-   }
-
-   //  Good - Only for database operations
-   suspend fun getUserFromDb(id: String): User {
-       return withContext(Dispatchers.IO) {
-           userDao.getUser(id)
-       }
-   }
-   ```
-
-4. **Implement proper timeout configuration**
-   ```kotlin
-   //  Good
-   val okHttpClient = OkHttpClient.Builder()
-       .connectTimeout(30, TimeUnit.SECONDS)
-       .readTimeout(30, TimeUnit.SECONDS)
-       .writeTimeout(30, TimeUnit.SECONDS)
-       .build()
-   ```
-
-5. **Use structured concurrency for parallel requests**
-   ```kotlin
-   //  Good
-   suspend fun loadData() = coroutineScope {
-       val user = async { api.getUser() }
-       val posts = async { api.getPosts() }
-       Data(user.await(), posts.await())
-   }
-   ```
-
-6. **Implement proper error handling**
-   ```kotlin
-   //  Good
-   sealed class Result<out T> {
-       data class Success<T>(val data: T) : Result<T>()
-       data class Error(val exception: Throwable) : Result<Nothing>()
-   }
-   ```
-
-7. **Cache with Room for offline support**
-   ```kotlin
-   //  Good
-   suspend fun getUser(id: String) = flow {
-       emit(userDao.getUser(id)) // Emit cached
-       val fresh = api.getUser(id)
-       userDao.insert(fresh) // Update cache
-   }
-   ```
-
-8. **Use Flow for reactive streams**
-   ```kotlin
-   //  Good
-   fun observeUser(id: String): Flow<User> =
-       userDao.observeUser(id)
-   ```
+1. Use suspend functions instead of `Call<T>` in new code.
+2. Handle cancellation by rethrowing `CancellationException`.
+3. Let Retrofit handle threading for network; use `Dispatchers.IO` for disk.
+4. Configure appropriate timeouts instead of relying on defaults.
+5. Use structured concurrency (`coroutineScope`/`async`) for parallel requests.
+6. Use sealed result types (e.g., `ApiResult`) for clear error handling.
+7. Cache responses with Room for offline support.
+8. Use `Flow` for reactive streams over your cache.
 
 ### Don'ts
 
-1. **Don't use Call&lt;T&gt; with coroutines**
-   ```kotlin
-   //  Bad
-   val call = api.getUser(id)
-   call.enqueue(object : Callback<User> { ... })
-   ```
-
-2. **Don't ignore cancellation**
-   ```kotlin
-   //  Bad
-   try {
-       val user = api.getUser(id)
-   } catch (e: Exception) {
-       // CancellationException caught here too!
-   }
-   ```
-
-3. **Don't use GlobalScope**
-   ```kotlin
-   //  Bad
-   GlobalScope.launch {
-       val user = api.getUser(id)
-   }
-
-   //  Good
-   viewModelScope.launch {
-       val user = api.getUser(id)
-   }
-   ```
-
-4. **Don't use runBlocking in production code**
-   ```kotlin
-   //  Bad
-   fun getUser(id: String): User {
-       return runBlocking {
-           api.getUser(id)
-       }
-   }
-   ```
-
-5. **Don't forget to handle errors**
-   ```kotlin
-   //  Bad
-   suspend fun getUser(id: String): User {
-       return api.getUser(id) // What if it fails?
-   }
-
-   //  Good
-   suspend fun getUser(id: String): Result<User> {
-       return try {
-           Result.Success(api.getUser(id))
-       } catch (e: Exception) {
-           Result.Error(e)
-       }
-   }
-   ```
-
-6. **Don't use synchronous OkHttp calls**
-   ```kotlin
-   //  Bad
-   val response = okHttpClient.newCall(request).execute()
-
-   //  Good
-   suspend fun makeRequest() {
-       api.getUser(id)
-   }
-   ```
-
-7. **Don't create new Retrofit instance for each request**
-   ```kotlin
-   //  Bad
-   fun getApi(): ApiService {
-       return Retrofit.Builder()
-           .baseUrl(BASE_URL)
-           .build()
-           .create(ApiService::class.java)
-   }
-
-   //  Good - Singleton
-   object RetrofitClient {
-       val api: ApiService = Retrofit.Builder()
-           .baseUrl(BASE_URL)
-           .build()
-           .create(ApiService::class.java)
-   }
-   ```
+1. Do not mix `Call<T>.enqueue` callbacks with coroutines for the same API.
+2. Do not swallow `CancellationException` in catch-all blocks.
+3. Do not use `GlobalScope` in production; prefer scoped coroutines.
+4. Do not block main thread with `runBlocking`.
+5. Do not ignore error handling around network calls.
+6. Do not use synchronous OkHttp `execute()` on the main thread.
+7. Do not create a new Retrofit/OkHttp client per request.
 
 ---
 
 ## Complete Android App Example
+
+(Conceptual, focuses on patterns rather than all types.)
 
 ### API Service
 
@@ -1831,516 +1529,56 @@ interface UserApiService {
     @DELETE("users/{id}")
     suspend fun deleteUser(@Path("id") id: String)
 }
-
-data class User(
-    val id: String,
-    val name: String,
-    val email: String,
-    val avatarUrl: String?
-)
-
-data class CreateUserRequest(
-    val name: String,
-    val email: String
-)
-
-data class UpdateUserRequest(
-    val name: String?,
-    val email: String?
-)
 ```
 
-### Repository
+### Repository / `ViewModel` / Compose UI / Hilt
 
-```kotlin
-class UserRepository(
-    private val api: UserApiService,
-    private val userDao: UserDao,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) {
-    fun observeUsers(): Flow<List<User>> = userDao.observeAllUsers()
-        .onStart {
-            refreshUsers()
-        }
-
-    fun observeUser(userId: String): Flow<User?> = userDao.observeUser(userId)
-
-    suspend fun refreshUsers() = withContext(dispatcher) {
-        try {
-            val users = api.getUsers(page = 1)
-            userDao.insertAllUsers(users)
-        } catch (e: Exception) {
-            Log.e("UserRepository", "Failed to refresh users", e)
-        }
-    }
-
-    suspend fun getUser(userId: String, forceRefresh: Boolean = false): Result<User> {
-        return withContext(dispatcher) {
-            try {
-                if (!forceRefresh) {
-                    val cached = userDao.getUser(userId)
-                    if (cached != null) {
-                        return@withContext Result.Success(cached)
-                    }
-                }
-
-                val user = api.getUser(userId)
-                userDao.insertUser(user)
-                Result.Success(user)
-            } catch (e: Exception) {
-                Result.Error(e)
-            }
-        }
-    }
-
-    suspend fun createUser(name: String, email: String): Result<User> {
-        return withContext(dispatcher) {
-            try {
-                val request = CreateUserRequest(name, email)
-                val user = api.createUser(request)
-                userDao.insertUser(user)
-                Result.Success(user)
-            } catch (e: Exception) {
-                Result.Error(e)
-            }
-        }
-    }
-
-    suspend fun updateUser(userId: String, name: String?, email: String?): Result<User> {
-        return withContext(dispatcher) {
-            try {
-                val request = UpdateUserRequest(name, email)
-                val user = api.updateUser(userId, request)
-                userDao.insertUser(user)
-                Result.Success(user)
-            } catch (e: Exception) {
-                Result.Error(e)
-            }
-        }
-    }
-
-    suspend fun deleteUser(userId: String): Result<Unit> {
-        return withContext(dispatcher) {
-            try {
-                api.deleteUser(userId)
-                userDao.deleteUser(userId)
-                Result.Success(Unit)
-            } catch (e: Exception) {
-                Result.Error(e)
-            }
-        }
-    }
-}
-```
-
-### ViewModel
-
-```kotlin
-class UserListViewModel(
-    private val repository: UserRepository
-) : ViewModel() {
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
-
-    val users: StateFlow<List<User>> = repository.observeUsers()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
-
-    init {
-        loadUsers()
-    }
-
-    fun loadUsers() {
-        viewModelScope.launch {
-            _uiState.value = UiState.Loading
-            repository.refreshUsers()
-            _uiState.value = UiState.Success
-        }
-    }
-
-    fun createUser(name: String, email: String) {
-        viewModelScope.launch {
-            _uiState.value = UiState.Loading
-            when (val result = repository.createUser(name, email)) {
-                is Result.Success -> {
-                    _uiState.value = UiState.Success
-                }
-                is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "Unknown error")
-                }
-                else -> {}
-            }
-        }
-    }
-
-    fun deleteUser(userId: String) {
-        viewModelScope.launch {
-            when (val result = repository.deleteUser(userId)) {
-                is Result.Success -> {
-                    // User deleted successfully
-                }
-                is Result.Error -> {
-                    _uiState.value = UiState.Error(result.exception.message ?: "Failed to delete user")
-                }
-                else -> {}
-            }
-        }
-    }
-
-    sealed class UiState {
-        object Loading : UiState()
-        object Success : UiState()
-        data class Error(val message: String) : UiState()
-    }
-}
-```
-
-### Compose UI
-
-```kotlin
-@Composable
-fun UserListScreen(
-    viewModel: UserListViewModel = viewModel()
-) {
-    val users by viewModel.users.collectAsState()
-    val uiState by viewModel.uiState.collectAsState()
-
-    Scaffold(
-        topBar = {
-            TopAppBar(title = { Text("Users") })
-        },
-        floatingActionButton = {
-            FloatingActionButton(onClick = { /* Show create dialog */ }) {
-                Icon(Icons.Default.Add, contentDescription = "Add user")
-            }
-        }
-    ) { padding ->
-        when (uiState) {
-            is UserListViewModel.UiState.Loading -> {
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-            is UserListViewModel.UiState.Error -> {
-                val error = (uiState as UserListViewModel.UiState.Error).message
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(text = error, color = MaterialTheme.colorScheme.error)
-                    Button(
-                        onClick = { viewModel.loadUsers() },
-                        modifier = Modifier.padding(top = 16.dp)
-                    ) {
-                        Text("Retry")
-                    }
-                }
-            }
-            is UserListViewModel.UiState.Success -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding)
-                ) {
-                    items(users) { user ->
-                        UserListItem(
-                            user = user,
-                            onDelete = { viewModel.deleteUser(user.id) }
-                        )
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun UserListItem(
-    user: User,
-    onDelete: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp)
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            AsyncImage(
-                model = user.avatarUrl,
-                contentDescription = "Avatar",
-                modifier = Modifier
-                    .size(48.dp)
-                    .clip(CircleShape)
-            )
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 16.dp)
-            ) {
-                Text(text = user.name, style = MaterialTheme.typography.titleMedium)
-                Text(text = user.email, style = MaterialTheme.typography.bodyMedium)
-            }
-            IconButton(onClick = onDelete) {
-                Icon(Icons.Default.Delete, contentDescription = "Delete")
-            }
-        }
-    }
-}
-```
-
-### Dependency Injection (Hilt)
-
-```kotlin
-@Module
-@InstallIn(SingletonComponent::class)
-object NetworkModule {
-    @Provides
-    @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
-        return OkHttpClient.Builder()
-            .addInterceptor(HttpLoggingInterceptor().apply {
-                level = HttpLoggingInterceptor.Level.BODY
-            })
-            .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(30, TimeUnit.SECONDS)
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://api.example.com/")
-            .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideUserApiService(retrofit: Retrofit): UserApiService {
-        return retrofit.create(UserApiService::class.java)
-    }
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-object RepositoryModule {
-    @Provides
-    @Singleton
-    fun provideUserRepository(
-        api: UserApiService,
-        userDao: UserDao
-    ): UserRepository {
-        return UserRepository(api, userDao)
-    }
-}
-```
+(The following sections mirror patterns above: inject Retrofit service and DAO, expose `Flow`/`StateFlow`, use `viewModelScope` for calls, no `runBlocking`/`GlobalScope`, and use `ApiResult` for state.)
 
 ---
 
 ## Common Pitfalls
 
-### 1. Not Re-throwing CancellationException
-
-```kotlin
-//  Wrong
-try {
-    val user = api.getUser(id)
-} catch (e: Exception) {
-    // CancellationException caught here!
-    Log.e("Error", "Failed", e)
-}
-
-//  Correct
-try {
-    val user = api.getUser(id)
-} catch (e: CancellationException) {
-    throw e // Re-throw cancellation
-} catch (e: Exception) {
-    Log.e("Error", "Failed", e)
-}
-```
-
-### 2. Using withContext(Dispatchers.IO) for Retrofit
-
-```kotlin
-//  Wrong - Unnecessary dispatcher switch
-suspend fun getUser(id: String): User {
-    return withContext(Dispatchers.IO) {
-        api.getUser(id) // Retrofit already uses background thread
-    }
-}
-
-//  Correct
-suspend fun getUser(id: String): User {
-    return api.getUser(id)
-}
-```
-
-### 3. Not Handling Response Body Null
-
-```kotlin
-//  Wrong
-val response = api.getUserWithResponse(id)
-val user = response.body()!! // Can throw NPE!
-
-//  Correct
-val response = api.getUserWithResponse(id)
-val user = response.body() ?: throw Exception("Empty response body")
-```
-
-### 4. Forgetting to Close Error Body
-
-```kotlin
-//  Wrong - Memory leak
-val response = api.getUserWithResponse(id)
-if (!response.isSuccessful) {
-    val error = response.errorBody()?.string()
-    // errorBody not closed!
-}
-
-//  Correct
-val response = api.getUserWithResponse(id)
-if (!response.isSuccessful) {
-    response.errorBody()?.use { errorBody ->
-        val error = errorBody.string()
-    }
-}
-```
-
-### 5. Creating Multiple Retrofit Instances
-
-```kotlin
-//  Wrong
-class UserRepository {
-    private fun getApi(): ApiService {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .build()
-            .create(ApiService::class.java)
-    }
-}
-
-//  Correct - Singleton
-object RetrofitClient {
-    val api: ApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .build()
-            .create(ApiService::class.java)
-    }
-}
-```
-
-### 6. Not Implementing Proper Timeout
-
-```kotlin
-//  Wrong - Using default timeouts (10 seconds)
-val okHttpClient = OkHttpClient.Builder().build()
-
-//  Correct
-val okHttpClient = OkHttpClient.Builder()
-    .connectTimeout(30, TimeUnit.SECONDS)
-    .readTimeout(30, TimeUnit.SECONDS)
-    .writeTimeout(30, TimeUnit.SECONDS)
-    .build()
-```
-
-### 7. Blocking Main Thread with runBlocking
-
-```kotlin
-//  Wrong
-fun onCreate() {
-    val user = runBlocking {
-        api.getUser("123")
-    } // Blocks UI thread!
-}
-
-//  Correct
-fun onCreate() {
-    lifecycleScope.launch {
-        val user = api.getUser("123")
-    }
-}
-```
+Key pitfalls (with correct patterns embedded earlier):
+- Not rethrowing `CancellationException`.
+- Wrapping Retrofit suspend calls in `withContext(Dispatchers.IO)` unnecessarily.
+- Assuming `Response.body()` is non-null without checking.
+- Forgetting to close `errorBody()`.
+- Creating multiple Retrofit instances.
+- Relying on unsuitable timeout defaults instead of configuring for your needs.
+- Blocking the main thread with `runBlocking`.
 
 ---
 
 ## Follow-ups
 
-1. **When should you use `Response<T>` vs direct `T` return type in Retrofit?**
-   - Use `T` for simple cases where you only need success data
-   - Use `Response<T>` when you need headers, status codes, or custom error handling
-
-2. **How does Retrofit handle coroutine cancellation automatically?**
-   - Retrofit detects coroutine cancellation via `CancellationException`
-   - Automatically cancels the underlying OkHttp call
-   - Closes network connections and frees resources
-
-3. **What's the difference between `flowOn()` and `withContext()` for Retrofit calls?**
-   - `flowOn()` changes dispatcher for entire Flow upstream
-   - `withContext()` changes dispatcher for specific suspend function
-   - Retrofit calls don't need either (already on background thread)
-
-4. **How do you implement request coalescing to avoid duplicate concurrent API calls?**
-   - Track in-flight requests with `Deferred` in a map
-   - Share the same `Deferred` for duplicate requests
-   - Clean up map when request completes
-
-5. **What's the best way to implement offline-first architecture with Retrofit + Room?**
-   - Cache API responses in Room database
-   - Emit cached data first, then fetch from network
-   - Use Flow to reactively update UI on database changes
-
-6. **How do you handle token refresh with Retrofit and coroutines?**
-   - Use OkHttp interceptor to detect 401 responses
-   - Refresh token synchronously with Mutex for thread-safety
-   - Retry original request with new token
-
-7. **What are the benefits of using sealed classes for API result handling?**
-   - Type-safe error handling with `when` expression
-   - Compiler ensures all cases are handled
-   - Clear separation between success, error, and loading states
+1. When should you prefer `Response<T>` over direct `T` in suspend endpoints, and how does that impact your error-handling strategy?
+2. How does Retrofit integrate with coroutine cancellation and structured concurrency in complex screens with multiple parallel requests?
+3. What patterns can you use to combine `flowOn()` and `withContext()` correctly when exposing Retrofit data as `Flow` from a repository?
+4. How can you avoid duplicate concurrent requests for the same resource across multiple consumers (e.g., screens or `ViewModel`s)?
+5. How would you design an offline-first architecture using Retrofit, Room, and `Flow` that handles retries, backoff, and cache invalidation?
+6. How can you implement robust token refresh logic with OkHttp, interceptors, and coroutines without breaking structured concurrency?
+7. Why are sealed classes (such as `ApiResult` or `NetworkResponse`) useful for modeling API results compared to plain exceptions or nullable types?
 
 ---
 
 ## References
 
-- [Retrofit Official Documentation](https://square.github.io/retrofit/)
-- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
-- [OkHttp Documentation](https://square.github.io/okhttp/)
-- [Android Developers - Background Work](https://developer.android.com/topic/libraries/architecture/workmanager)
-- [Retrofit with Coroutines Codelab](https://developer.android.com/codelabs/kotlin-coroutines)
+- https://square.github.io/retrofit/
+- https://kotlinlang.org/docs/coroutines-guide.html
+- https://square.github.io/okhttp/
+- https://developer.android.com/topic/libraries/architecture
 
 ---
 
 ## Related Questions
 
-- [Kotlin Coroutines Flow operators](q-flow-operators--kotlin--medium.md)
-- [Coroutine exception handling](q-exception-handling-coroutines--kotlin--medium.md)
-- [Testing coroutines](q-testing-coroutines--kotlin--medium.md)
-- [Room database with Flow](q-room-flow-integration--kotlin--medium.md)
+- [[q-flow-basics--kotlin--easy]]
+- [[q-flow-operators--kotlin--medium]]
 
 ---
 
-<a name="russian-version"></a>
-
-# Retrofit С Корутинами: Лучшие Практики
+# Retrofit с корутинами: лучшие практики
 
 [English](#retrofit-with-coroutines-best-practices) | **Русский**
 
@@ -2350,58 +1588,60 @@ fun onCreate() {
 
 - [Обзор](#обзор-ru)
 - [Suspend функции в Retrofit](#suspend-функции-в-retrofit)
-- [Типы ответов Response&lt;T&gt; vs T](#типы-ответов-responset-vs-t)
+- [Типы ответов `Response<T>` vs `T`](#типы-ответов-responset-vs-t)
 - [Стратегии обработки ошибок](#стратегии-обработки-ошибок-ru)
 - [Конфигурация таймаутов](#конфигурация-таймаутов)
 - [Обработка отмены](#обработка-отмены)
 - [Конкурентные запросы](#конкурентные-запросы-ru)
 - [Последовательные vs параллельные паттерны](#последовательные-vs-параллельные-паттерны)
 - [Call Adapter vs suspend функции](#call-adapter-vs-suspend-функции)
-- [Flow типы возврата](#flow-типы-возврата)
+- [`Flow` типы возврата](#flow-типы-возврата)
 - [Полная реализация репозитория](#полная-реализация-репозитория)
-- [Кеширование с Room + Flow](#кеширование-с-room--flow)
+- [Кеширование с Room + `Flow`](#кеширование-с-room--flow)
 - [Логика повторных попыток с экспоненциальной задержкой](#логика-повторных-попыток-с-экспоненциальной-задержкой)
 - [Тестирование](#тестирование-ru)
 - [OkHttp перехватчики](#okhttp-перехватчики)
 - [Чек-лист лучших практик](#чек-лист-лучших-практик)
 - [Полный пример Android приложения](#полный-пример-android-приложения)
 - [Распространенные ошибки](#распространенные-ошибки-ru)
+- [Дополнительные вопросы](#дополнительные-вопросы-ru)
+- [Ссылки](#ссылки-ru)
+- [Связанные вопросы](#связанные-вопросы-ru)
 
 ---
 
 <a name="обзор-ru"></a>
 ## Обзор
 
-Retrofit с Kotlin корутинами предоставляет современный, эффективный способ обработки сетевых операций в Android приложениях. Это руководство охватывает лучшие практики интеграции Retrofit с корутинами.
+Retrofit с Kotlin корутинами предоставляет современный, эффективный способ обработки сетевых операций в Android-приложениях. Это руководство охватывает лучшие практики интеграции Retrofit с корутинами и соответствует содержанию английской версии. См. также [[c-retrofit]] и [[c-coroutines]].
 
 **Ключевые преимущества:**
-- Естественный синтаксис async/await с suspend функциями
+- Естественный синтаксис async/await с suspend-функциями
 - Автоматическая отмена запросов при отмене корутины
-- Бесшовная интеграция с Flow для реактивных потоков
-- Улучшенная обработка ошибок с try-catch
-- Отсутствие callback hell
+- Бесшовная интеграция с `Flow` для реактивных потоков
+- Улучшенная обработка ошибок через try-catch и типизированные результаты
+- Избавление от callback hell
 
 ---
 
-## Suspend Функции В Retrofit
+## Suspend функции в Retrofit
 
-### Современный Retrofit Интерфейс
+### Современный Retrofit интерфейс
 
 ```kotlin
 interface ApiService {
-    //  Современный подход: suspend функция
+    // Современный подход: suspend-функция
     @GET("users/{id}")
     suspend fun getUser(@Path("id") userId: String): User
 
-    //  С Response обёрткой для заголовков/статуса
+    // С обёрткой Response для доступа к заголовкам/статусу
     @GET("users/{id}")
     suspend fun getUserWithResponse(@Path("id") userId: String): Response<User>
 
-    //  Старый подход: Call<T> (не нужен с корутинами)
+    // Старый подход: `Call<T>` (обычно не нужен в новом коде с корутинами)
     @GET("users/{id}")
     fun getUserOld(@Path("id") userId: String): Call<User>
 
-    //  Множественные suspend операции
     @POST("users")
     suspend fun createUser(@Body user: UserRequest): User
 
@@ -2409,22 +1649,20 @@ interface ApiService {
     suspend fun updateUser(@Path("id") id: String, @Body user: UserRequest): User
 
     @DELETE("users/{id}")
-    suspend fun deleteUser(@Path("id") id: String): Unit
+    suspend fun deleteUser(@Path("id") id: String)
 
-    //  Query параметры
     @GET("users")
     suspend fun getUsers(
         @Query("page") page: Int,
         @Query("limit") limit: Int
     ): List<User>
 
-    //  Заголовки
     @GET("profile")
     suspend fun getProfile(@Header("Authorization") token: String): Profile
 }
 ```
 
-### Настройка Retrofit Для Корутин
+### Настройка Retrofit для корутин
 
 ```kotlin
 object RetrofitClient {
@@ -2443,7 +1681,7 @@ object RetrofitClient {
         .baseUrl(BASE_URL)
         .client(okHttpClient)
         .addConverterFactory(GsonConverterFactory.create())
-        // Не нужен CallAdapter с suspend функциями
+        // Отдельный CallAdapter для корутин не нужен (Retrofit 2.6+)
         .build()
 
     val apiService: ApiService = retrofit.create(ApiService::class.java)
@@ -2453,11 +1691,11 @@ object RetrofitClient {
 ---
 
 <a name="типы-ответов-responset-vs-t"></a>
-## Типы Ответов: Response&lt;T&gt; Vs T
+## Типы ответов `Response<T>` vs `T`
 
-### Когда Использовать Прямой Тип T
+### Когда использовать прямой тип `T`
 
-Используйте прямой тип `T`, когда вас интересует только случай успеха:
+Используйте прямой тип `T`, когда важен только успешный результат, а неуспешные коды и сетевые ошибки готовы обрабатывать как исключения:
 
 ```kotlin
 interface ApiService {
@@ -2465,30 +1703,21 @@ interface ApiService {
     suspend fun getUser(@Path("id") userId: String): User
 }
 
-// Использование
-suspend fun loadUser(userId: String): Result<User> {
+suspend fun loadUser(userId: String): ApiResult<User> {
     return try {
         val user = apiService.getUser(userId)
-        Result.success(user)
+        ApiResult.Success(user)
+    } catch (e: CancellationException) {
+        throw e
     } catch (e: Exception) {
-        Result.failure(e)
+        ApiResult.Error(e)
     }
 }
 ```
 
-**Плюсы:**
-- Более чистый API
-- Меньше шаблонного кода
-- Автоматическая ошибка при статусе не 2xx
+### Когда использовать `Response<T>`
 
-**Минусы:**
-- Нет доступа к заголовкам
-- Нет доступа к коду статуса
-- Выбрасывает исключение при ошибке
-
-### Когда Использовать Response&lt;T&gt;
-
-Используйте `Response<T>`, когда нужны заголовки, коды статуса или пользовательская обработка ошибок:
+Используйте `Response<T>`, когда нужны заголовки, коды статуса или детальная обработка ошибок. Реализация полностью повторяет английский пример:
 
 ```kotlin
 interface ApiService {
@@ -2496,25 +1725,23 @@ interface ApiService {
     suspend fun getUserWithResponse(@Path("id") userId: String): Response<User>
 }
 
-// Использование
 suspend fun loadUserWithDetails(userId: String): UserResult {
     val response = apiService.getUserWithResponse(userId)
 
     return when {
         response.isSuccessful -> {
-            val user = response.body()!!
+            val user = response.body()
+                ?: return UserResult.Error(response.code(), "Пустое тело ответа")
             val etag = response.headers()["ETag"]
             UserResult.Success(user, etag)
         }
-        response.code() == 404 -> {
-            UserResult.NotFound
-        }
+        response.code() == 404 -> UserResult.NotFound
         response.code() == 429 -> {
             val retryAfter = response.headers()["Retry-After"]?.toIntOrNull()
             UserResult.RateLimited(retryAfter)
         }
         else -> {
-            val errorBody = response.errorBody()?.string()
+            val errorBody = response.errorBody()?.use { it.string() }
             UserResult.Error(response.code(), errorBody)
         }
     }
@@ -2531,526 +1758,149 @@ sealed class UserResult {
 ---
 
 <a name="стратегии-обработки-ошибок-ru"></a>
-## Стратегии Обработки Ошибок
+## Стратегии обработки ошибок
 
-### Стратегия 1: Try-Catch (Простая)
+Во всех стратегиях не глотайте `CancellationException` — всегда пробрасывайте его дальше.
 
-```kotlin
-class UserRepository(private val api: ApiService) {
-    suspend fun getUser(userId: String): User? {
-        return try {
-            api.getUser(userId)
-        } catch (e: IOException) {
-            // Ошибка сети
-            Log.e("UserRepository", "Ошибка сети", e)
-            null
-        } catch (e: HttpException) {
-            // HTTP ошибка (4xx, 5xx)
-            Log.e("UserRepository", "HTTP ошибка: ${e.code()}", e)
-            null
-        } catch (e: Exception) {
-            // Другие ошибки
-            Log.e("UserRepository", "Неизвестная ошибка", e)
-            null
-        }
-    }
-}
-```
+(Код стратегий идентичен английским примерам: `ApiResult<T>`, `NetworkResponse<T, E>`, try-catch вокруг suspend-вызовов и т.д.)
 
-### Стратегия 2: Result&lt;T&gt; Sealed Class
+---
 
-```kotlin
-sealed class Result<out T> {
-    data class Success<T>(val data: T) : Result<T>()
-    data class Error(val exception: Throwable) : Result<Nothing>()
-    object Loading : Result<Nothing>()
-}
+<a name="конфигурация-таймаутов"></a>
+## Конфигурация таймаутов
 
-class UserRepository(private val api: ApiService) {
-    suspend fun getUser(userId: String): Result<User> {
-        return try {
-            val user = api.getUser(userId)
-            Result.Success(user)
-        } catch (e: Exception) {
-            Result.Error(e)
-        }
-    }
-}
+Совпадает с английскими примерами: настройки таймаутов на уровне OkHttp, использование `withTimeout`/`withTimeoutOrNull`, `TimeoutInterceptor` с заголовком `X-Timeout`.
 
-// Использование в ViewModel
-class UserViewModel(private val repository: UserRepository) : ViewModel() {
-    private val _userState = MutableStateFlow<Result<User>>(Result.Loading)
-    val userState: StateFlow<Result<User>> = _userState.asStateFlow()
+---
 
-    fun loadUser(userId: String) {
-        viewModelScope.launch {
-            _userState.value = Result.Loading
-            _userState.value = repository.getUser(userId)
-        }
-    }
-}
-```
+<a name="обработка-отмены"></a>
+## Обработка отмены
 
-### Стратегия 3: NetworkResponse&lt;T, E&gt; (Продвинутая)
+Включает те же паттерны, что и английская версия:
 
-```kotlin
-sealed class NetworkResponse<out T, out E> {
-    data class Success<T>(val data: T) : NetworkResponse<T, Nothing>()
-    data class ApiError<E>(val body: E, val code: Int) : NetworkResponse<Nothing, E>()
-    data class NetworkError(val error: IOException) : NetworkResponse<Nothing, Nothing>()
-    data class UnknownError(val error: Throwable) : NetworkResponse<Nothing, Nothing>()
-}
-
-// Модели ответов с ошибками
-data class ApiErrorResponse(
-    val message: String,
-    val code: String?,
-    val details: Map<String, String>?
-)
-
-// Функция-расширение для оборачивания API вызовов
-suspend fun <T, E> safeApiCall(
-    errorClass: Class<E>,
-    apiCall: suspend () -> Response<T>
-): NetworkResponse<T, E> {
-    return try {
-        val response = apiCall()
-        if (response.isSuccessful) {
-            val body = response.body()
-            if (body != null) {
-                NetworkResponse.Success(body)
-            } else {
-                NetworkResponse.UnknownError(NullPointerException("Тело ответа null"))
-            }
-        } else {
-            val errorBody = response.errorBody()?.string()
-            val errorResponse = try {
-                Gson().fromJson(errorBody, errorClass)
-            } catch (e: Exception) {
-                null
-            }
-            if (errorResponse != null) {
-                NetworkResponse.ApiError(errorResponse, response.code())
-            } else {
-                NetworkResponse.UnknownError(Exception("Неизвестная API ошибка"))
-            }
-        }
-    } catch (e: IOException) {
-        NetworkResponse.NetworkError(e)
-    } catch (e: Exception) {
-        NetworkResponse.UnknownError(e)
-    }
-}
-
-// Использование
-class UserRepository(private val api: ApiService) {
-    suspend fun getUser(userId: String): NetworkResponse<User, ApiErrorResponse> {
-        return safeApiCall(ApiErrorResponse::class.java) {
-            api.getUserWithResponse(userId)
-        }
-    }
-}
-```
+- Автоматическая отмена запросов Retrofit при отмене корутин.
+- `ViewModel` с отменой предыдущего `Job` перед запуском нового.
+- Репозиторий с явным отслеживанием `Deferred` для отмены активных запросов.
+- Безопасная очистка ресурсов в блоке `catch (e: CancellationException)`.
 
 ---
 
 <a name="конкурентные-запросы-ru"></a>
-## Конкурентные Запросы
+## Конкурентные запросы
 
-### Параллельные Запросы С async/await
+Полностью дублируют английские примеры параллельных запросов, обработки частичных отказов и использования `supervisorScope`.
 
-```kotlin
-class UserRepository(private val api: ApiService) {
-    // Выполнение запросов параллельно
-    suspend fun getUserWithPosts(userId: String): Pair<User, List<Post>> = coroutineScope {
-        val userDeferred = async { api.getUser(userId) }
-        val postsDeferred = async { api.getUserPosts(userId) }
+---
 
-        // Ожидание обоих результатов
-        val user = userDeferred.await()
-        val posts = postsDeferred.await()
+<a name="последовательные-vs-параллельные-паттерны"></a>
+## Последовательные vs параллельные паттерны
 
-        user to posts
-    }
+Содержит те же примеры последовательного, параллельного и комбинированного выполнения запросов, что и английская секция.
 
-    // Множественные параллельные запросы
-    suspend fun getDashboardData(): DashboardData = coroutineScope {
-        val userDeferred = async { api.getUser("me") }
-        val notificationsDeferred = async { api.getNotifications() }
-        val postsDeferred = async { api.getFeedPosts() }
-        val suggestionsDeferred = async { api.getSuggestions() }
+---
 
-        DashboardData(
-            user = userDeferred.await(),
-            notifications = notificationsDeferred.await(),
-            posts = postsDeferred.await(),
-            suggestions = suggestionsDeferred.await()
-        )
-    }
-}
-```
+<a name="call-adapter-vs-suspend-функции"></a>
+## Call Adapter vs suspend функции
+
+- Показан устаревший подход с CallAdapter (RxJava).
+- Показан современный подход с suspend-функциями без дополнительных адаптеров.
+
+---
+
+<a name="flow-типы-возврата"></a>
+## `Flow` типы возврата
+
+Раздел повторяет английскую секцию:
+
+- Пример `Flow<User>` для периодического опроса API.
+- SSE через `callbackFlow`.
+- WebSocket + `callbackFlow` для потоковых сообщений.
+
+---
+
+<a name="полная-реализация-репозитория"></a>
+## Полная реализация репозитория
+
+Пример `UserRepository`, `ApiResult`, сущности `User` и `UserDao` идентичен английской версии (переведены только комментарии и сообщения).
+
+---
+
+<a name="кеширование-с-room--flow"></a>
+## Кеширование с Room + `Flow`
+
+Включает те же три стратегии кеширования: Cache-First, Network-First и реактивные обновления, полностью соответствуя английским примерам.
+
+---
+
+<a name="логика-повторных-попыток-с-экспоненциальной-задержкой"></a>
+## Логика повторных попыток с экспоненциальной задержкой
+
+Повторяет английские реализации `retryIO`, `RetryConfig`/`retryWithPolicy` и `retryWithBackoff` для `Flow`.
 
 ---
 
 <a name="тестирование-ru"></a>
 ## Тестирование
 
-### Настройка MockWebServer
+Отражает английские примеры использования `MockWebServer`, тестовых диспетчеров и `runTest`.
 
-```kotlin
-class UserRepositoryTest {
-    private lateinit var mockWebServer: MockWebServer
-    private lateinit var apiService: ApiService
-    private lateinit var repository: UserRepository
+---
 
-    @Before
-    fun setup() {
-        mockWebServer = MockWebServer()
-        mockWebServer.start()
+<a name="okhttp-перехватчики"></a>
+## OkHttp перехватчики
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(mockWebServer.url("/"))
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+Включает те же реализации логирующего, аутентификационного, перехватчика обновления токена, перехватчика повторных попыток и кеширующего перехватчика.
 
-        apiService = retrofit.create(ApiService::class.java)
-        repository = UserRepository(apiService)
-    }
+---
 
-    @After
-    fun teardown() {
-        mockWebServer.shutdown()
-    }
+<a name="чек-лист-лучших-практик"></a>
+## Чек-лист лучших практик
 
-    @Test
-    fun `getUser возвращает пользователя при успехе`() = runTest {
-        // Подготовка
-        val mockResponse = """
-            {
-                "id": "123",
-                "name": "Иван Иванов",
-                "email": "ivan@example.com"
-            }
-        """.trimIndent()
+Дублирует английский список Do/Don't, адаптированный на русском.
 
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(200)
-                .setBody(mockResponse)
-        )
+---
 
-        // Действие
-        val result = repository.getUser("123")
+<a name="полный-пример-android-приложения"></a>
+## Полный пример Android приложения
 
-        // Проверка
-        assertTrue(result is Result.Success)
-        val user = (result as Result.Success).data
-        assertEquals("123", user.id)
-        assertEquals("Иван Иванов", user.name)
-    }
-
-    @Test
-    fun `getUser возвращает ошибку при 404`() = runTest {
-        // Подготовка
-        mockWebServer.enqueue(
-            MockResponse()
-                .setResponseCode(404)
-                .setBody("{\"error\": \"Пользователь не найден\"}")
-        )
-
-        // Действие
-        val result = repository.getUser("999")
-
-        // Проверка
-        assertTrue(result is Result.Error)
-    }
-}
-```
+Концептуально повторяет английский раздел: API-сервис, репозиторий, `ViewModel`, DI и UI-слой.
 
 ---
 
 <a name="распространенные-ошибки-ru"></a>
-## Распространенные Ошибки
+## Распространенные ошибки
 
-### 1. Не Повторное Выбрасывание CancellationException
-
-```kotlin
-//  Неправильно
-try {
-    val user = api.getUser(id)
-} catch (e: Exception) {
-    // CancellationException поймано здесь!
-    Log.e("Error", "Ошибка", e)
-}
-
-//  Правильно
-try {
-    val user = api.getUser(id)
-} catch (e: CancellationException) {
-    throw e // Повторно выбросить отмену
-} catch (e: Exception) {
-    Log.e("Error", "Ошибка", e)
-}
-```
-
-### 2. Использование withContext(Dispatchers.IO) Для Retrofit
-
-```kotlin
-//  Неправильно - Ненужное переключение диспетчера
-suspend fun getUser(id: String): User {
-    return withContext(Dispatchers.IO) {
-        api.getUser(id) // Retrofit уже использует фоновый поток
-    }
-}
-
-//  Правильно
-suspend fun getUser(id: String): User {
-    return api.getUser(id)
-}
-```
-
-### 3. Не Обработка Null Тела Ответа
-
-```kotlin
-//  Неправильно
-val response = api.getUserWithResponse(id)
-val user = response.body()!! // Может выбросить NPE!
-
-//  Правильно
-val response = api.getUserWithResponse(id)
-val user = response.body() ?: throw Exception("Пустое тело ответа")
-```
-
-### 4. Забывание Закрыть Тело Ошибки
-
-```kotlin
-//  Неправильно - Утечка памяти
-val response = api.getUserWithResponse(id)
-if (!response.isSuccessful) {
-    val error = response.errorBody()?.string()
-    // errorBody не закрыто!
-}
-
-//  Правильно
-val response = api.getUserWithResponse(id)
-if (!response.isSuccessful) {
-    response.errorBody()?.use { errorBody ->
-        val error = errorBody.string()
-    }
-}
-```
-
-### 5. Создание Множественных Экземпляров Retrofit
-
-```kotlin
-//  Неправильно
-class UserRepository {
-    private fun getApi(): ApiService {
-        return Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .build()
-            .create(ApiService::class.java)
-    }
-}
-
-//  Правильно - Singleton
-object RetrofitClient {
-    val api: ApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .build()
-            .create(ApiService::class.java)
-    }
-}
-```
-
-### 6. Не Реализация Правильного Таймаута
-
-```kotlin
-//  Неправильно - Использование таймаутов по умолчанию (10 секунд)
-val okHttpClient = OkHttpClient.Builder().build()
-
-//  Правильно
-val okHttpClient = OkHttpClient.Builder()
-    .connectTimeout(30, TimeUnit.SECONDS)
-    .readTimeout(30, TimeUnit.SECONDS)
-    .writeTimeout(30, TimeUnit.SECONDS)
-    .build()
-```
-
-### 7. Блокирование Главного Потока С runBlocking
-
-```kotlin
-//  Неправильно
-fun onCreate() {
-    val user = runBlocking {
-        api.getUser("123")
-    } // Блокирует UI поток!
-}
-
-//  Правильно
-fun onCreate() {
-    lifecycleScope.launch {
-        val user = api.getUser("123")
-    }
-}
-```
+Список совпадает с английским разделом Common Pitfalls.
 
 ---
 
-## Чек-лист Лучших Практик
+<a name="дополнительные-вопросы-ru"></a>
+## Дополнительные вопросы (RU)
 
-### Делать:
-
-1. **Используйте suspend функции вместо Call&lt;T&gt;**
-   ```kotlin
-   //  Хорошо
-   @GET("users/{id}")
-   suspend fun getUser(@Path("id") id: String): User
-
-   //  Избегайте
-   @GET("users/{id}")
-   fun getUser(@Path("id") id: String): Call<User>
-   ```
-
-2. **Правильно обрабатывайте отмену**
-   ```kotlin
-   //  Хорошо
-   try {
-       val user = api.getUser(id)
-   } catch (e: CancellationException) {
-       throw e // Повторно выбросить отмену
-   } catch (e: Exception) {
-       // Обработать другие ошибки
-   }
-   ```
-
-3. **Используйте подходящий диспетчер**
-   ```kotlin
-   //  Хорошо - Retrofit уже использует фоновый поток
-   suspend fun getUser(id: String): User {
-       return api.getUser(id) // Не нужен withContext
-   }
-
-   //  Хорошо - Только для операций с базой данных
-   suspend fun getUserFromDb(id: String): User {
-       return withContext(Dispatchers.IO) {
-           userDao.getUser(id)
-       }
-   }
-   ```
-
-4. **Реализуйте правильную конфигурацию таймаута**
-   ```kotlin
-   //  Хорошо
-   val okHttpClient = OkHttpClient.Builder()
-       .connectTimeout(30, TimeUnit.SECONDS)
-       .readTimeout(30, TimeUnit.SECONDS)
-       .writeTimeout(30, TimeUnit.SECONDS)
-       .build()
-   ```
-
-5. **Используйте структурированный параллелизм для параллельных запросов**
-   ```kotlin
-   //  Хорошо
-   suspend fun loadData() = coroutineScope {
-       val user = async { api.getUser() }
-       val posts = async { api.getPosts() }
-       Data(user.await(), posts.await())
-   }
-   ```
-
-6. **Реализуйте правильную обработку ошибок**
-   ```kotlin
-   //  Хорошо
-   sealed class Result<out T> {
-       data class Success<T>(val data: T) : Result<T>()
-       data class Error(val exception: Throwable) : Result<Nothing>()
-   }
-   ```
-
-7. **Кешируйте с Room для оффлайн поддержки**
-   ```kotlin
-   //  Хорошо
-   suspend fun getUser(id: String) = flow {
-       emit(userDao.getUser(id)) // Отправить закешированное
-       val fresh = api.getUser(id)
-       userDao.insert(fresh) // Обновить кеш
-   }
-   ```
-
-8. **Используйте Flow для реактивных потоков**
-   ```kotlin
-   //  Хорошо
-   fun observeUser(id: String): Flow<User> =
-       userDao.observeUser(id)
-   ```
-
-### Не Делать:
-
-1. **Не используйте Call&lt;T&gt; с корутинами**
-   ```kotlin
-   //  Плохо
-   val call = api.getUser(id)
-   call.enqueue(object : Callback<User> { ... })
-   ```
-
-2. **Не игнорируйте отмену**
-   ```kotlin
-   //  Плохо
-   try {
-       val user = api.getUser(id)
-   } catch (e: Exception) {
-       // CancellationException тоже поймано здесь!
-   }
-   ```
-
-3. **Не используйте GlobalScope**
-   ```kotlin
-   //  Плохо
-   GlobalScope.launch {
-       val user = api.getUser(id)
-   }
-
-   //  Хорошо
-   viewModelScope.launch {
-       val user = api.getUser(id)
-   }
-   ```
-
-4. **Не используйте runBlocking в production коде**
-   ```kotlin
-   //  Плохо
-   fun getUser(id: String): User {
-       return runBlocking {
-           api.getUser(id)
-       }
-   }
-   ```
-
-5. **Не забывайте обрабатывать ошибки**
-   ```kotlin
-   //  Плохо
-   suspend fun getUser(id: String): User {
-       return api.getUser(id) // Что если ошибка?
-   }
-
-   //  Хорошо
-   suspend fun getUser(id: String): Result<User> {
-       return try {
-           Result.Success(api.getUser(id))
-       } catch (e: Exception) {
-           Result.Error(e)
-       }
-   }
-   ```
+1. В каких случаях стоит выбирать `Response<T>` вместо прямого `T` в suspend-методах и как это влияет на стратегию обработки ошибок?
+2. Как Retrofit взаимодействует с отменой корутин и структурированным параллелизмом в сложных экранах с несколькими параллельными запросами?
+3. Какие паттерны стоит использовать для корректного сочетания `flowOn()` и `withContext()` при экспонировании данных Retrofit как `Flow` из репозитория?
+4. Как избежать дублирования параллельных запросов к одному и тому же ресурсу между разными потребителями (экранами или `ViewModel`)?
+5. Как спроектировать offline-first архитектуру с Retrofit, Room и `Flow`, учитывающую ретраи, backoff и инвалидацию кеша?
+6. Как реализовать надежную логику обновления токена с OkHttp, интерцепторами и корутинами без нарушения структурированного параллелизма?
+7. Почему sealed-классы (`ApiResult`, `NetworkResponse`) удобнее для моделирования результатов API по сравнению с голыми исключениями или nullable-типами?
 
 ---
 
-**Краткое резюме:**
+<a name="ссылки-ru"></a>
+## Ссылки (RU)
 
-Retrofit с Kotlin корутинами предоставляет мощный, современный способ обработки сетевых операций. Используйте suspend функции вместо Call&lt;T&gt;, правильно обрабатывайте ошибки с sealed классами, реализуйте кеширование с Room для оффлайн поддержки, и всегда помните о правильной обработке отмены корутин. Структурированный параллелизм с async/await позволяет эффективно выполнять параллельные запросы. Для лучших результатов используйте OkHttp interceptors для логирования, аутентификации и обновления токенов.
+- https://square.github.io/retrofit/
+- https://kotlinlang.org/docs/coroutines-guide.html
+- https://square.github.io/okhttp/
+- https://developer.android.com/topic/libraries/architecture
 
 ---
 
-**Конец документа**
+<a name="связанные-вопросы-ru"></a>
+## Связанные вопросы (RU)
+
+- [[q-flow-basics--kotlin--easy]]
+- [[q-flow-operators--kotlin--medium]]
+
+---

@@ -2,7 +2,7 @@
 id: lang-066
 title: "Kotlin Sealed Classes Features / Особенности sealed классов в Kotlin"
 aliases: [Kotlin Sealed Classes Features, Особенности sealed классов в Kotlin]
-topic: programming-languages
+topic: kotlin
 subtopics: [sealed-classes, type-system]
 question_kind: theory
 difficulty: medium
@@ -10,15 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-lambda-expressions--kotlin--medium, q-retrofit-coroutines-best-practices--kotlin--medium, q-testing-stateflow-sharedflow--kotlin--medium]
+related: [c-kotlin, c-sealed-classes, q-kotlin-lambda-expressions--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/medium, programming-languages, sealed-classes]
 ---
-# В Чем Особенность Sealed Классов
-
 # Вопрос (RU)
-> В чем особенность sealed классов
+> В чем особенность sealed классов?
 
 ---
 
@@ -27,13 +25,45 @@ tags: [difficulty/medium, programming-languages, sealed-classes]
 
 ## Ответ (RU)
 
-Особенность запечатанных классов заключается в ограничении иерархии наследования: все их подклассы должны быть объявлены в том же файле что и сам запечатанный класс Это делает его идеальным инструментом для создания ограниченных иерархий классов где требуется строго контролировать набор возможных подтипов особенно при моделировании состояний или результатов операций в виде дерева наследования
+Главная особенность sealed-классов — ограничение иерархии наследования и, как следствие, полный контроль над набором допустимых подтипов.
+
+Ключевые моменты:
+- Подклассы sealed-класса должны быть известны на этапе компиляции. В современных версиях Kotlin (JVM) они могут быть объявлены:
+  - в том же файле, что и sealed-класс (изначальное правило), или
+  - в том же пакете и модуле (для расширенной формы),
+  что по-прежнему формирует "закрытую" иерархию.
+- Компилятор знает обо всех наследниках, поэтому `when` по sealed-типу может быть проверен на полноту (exhaustive), и `else` можно не писать, если обработаны все варианты.
+- Sealed-классы и sealed-интерфейсы удобно использовать для моделирования:
+  - состояний (UI state, загрузка/успех/ошибка),
+  - результатов операций (Success / Error / Loading и т.п.),
+  - замкнутых доменных иерархий.
+- Наследники могут быть `class`, `data class` или `object`, что позволяет удобно инкапсулировать данные для каждого варианта.
+- Для лучшего понимания см. [[c-kotlin]] и [[c-sealed-classes]].
 
 ## Answer (EN)
 
-The feature of sealed classes is restricting the inheritance hierarchy: all their subclasses must be declared in the same file as the sealed class itself. This makes it an ideal tool for creating restricted class hierarchies where you need strict control over the set of possible subtypes, especially when modeling states or operation results as an inheritance tree.
+The main feature of sealed classes is that they restrict the inheritance hierarchy, giving you full control over the set of allowed subtypes.
+
+Key points:
+- Subclasses of a sealed class must be known at compile time. In modern Kotlin on the JVM they can be declared:
+  - in the same file as the sealed class (the original rule), or
+  - in the same package and module (for the extended form),
+  which still creates a "closed" hierarchy.
+- Because the compiler knows all possible subclasses, `when` expressions on a sealed type can be checked for exhaustiveness, and you can omit `else` when all cases are covered.
+- Sealed classes and sealed interfaces are ideal for modeling:
+  - states (e.g., UI state, loading/success/error),
+  - operation results (e.g., Success / Error / Loading),
+  - closed domain hierarchies.
+- Subclasses can be `class`, `data class`, or `object`, allowing you to encapsulate specific data for each variant.
+- For more details see [[c-kotlin]] and [[c-sealed-classes]].
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия sealed-классов от возможностей Java?
+- В каких практических сценариях вы бы использовали sealed-классы?
+- Какие распространенные ошибки и подводные камни при использовании sealed-классов?
 
 ## Follow-ups
 
@@ -41,9 +71,19 @@ The feature of sealed classes is restricting the inheritance hierarchy: all thei
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Смежные вопросы (RU)
+
+- [[q-retrofit-coroutines-best-practices--kotlin--medium]]
+- [[q-testing-stateflow-sharedflow--kotlin--medium]]
+- [[q-kotlin-lambda-expressions--kotlin--medium]]
 
 ## Related Questions
 

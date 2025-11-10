@@ -1,15 +1,13 @@
 ---
 id: kotlin-127
 title: "Flow Time Operators: debounce, sample, throttle / Временные операторы Flow"
-aliases: ["Flow Time Operators: debounce, sample, throttle, Временные операторы Flow"]
+aliases: ["Flow Time Operators: debounce, sample, throttle", "Временные операторы Flow"]
 
 # Classification
 topic: kotlin
 subtopics:
-  - debounce
   - flow
-  - sample
-  - throttle
+  - coroutines
   - time-operators
 question_kind: theory
 difficulty: medium
@@ -23,37 +21,37 @@ source_note: Guide to time-based Flow operators
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-flow-basics--kotlin--easy, q-flow-operators-deep-dive--kotlin--hard, q-instant-search-flow-operators--kotlin--medium]
+related: [c-flow, c-coroutines, q-flow-basics--kotlin--easy]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-31
+updated: 2025-11-10
 
 tags: [coroutines, debounce, difficulty/medium, flow, kotlin, sample, throttle, time-operators]
 ---
 # Вопрос (RU)
-> Что такое операторы debounce, sample и throttle в Kotlin Flow? В чём различия и случаи использования?
+> Что такое операторы `debounce`, `sample` и throttle в Kotlin `Flow`? В чём различия и случаи использования?
 
 ---
 
 # Question (EN)
-> What are debounce, sample, and throttle operators in Kotlin Flow? What are the differences and use cases?
+> What are `debounce`, `sample`, and throttle operators in Kotlin `Flow`? What are the differences and use cases?
 
 ## Ответ (RU)
 
-Временные операторы в Kotlin Flow контролируют частоту эмиссий на основе временных интервалов. Три основных оператора—**debounce**, **sample** и **throttleFirst**—служат разным целям для обработки быстрых эмиссий.
+Временные операторы в Kotlin `Flow` контролируют частоту эмиссий на основе временных интервалов. Два стандартных оператора — **`debounce`** и **`sample`** — и часто используемый паттерн **`throttleFirst`** (реализуется вручную как расширение, так как не является встроенным оператором) служат разным целям для обработки быстрых эмиссий.
 
 ### Быстрое Сравнение
 
 | Оператор | Назначение | Когда излучает | Случай использования |
-|----------|---------|------------|----------|
-| **debounce** | Ждать паузы | После таймаута с последней эмиссии | Поиск, валидация формы |
-| **sample** | Периодическая выборка | В фиксированные интервалы | Real-time данные, сенсоры |
-| **throttleFirst** | Ограничение частоты | Первое в временном окне | Клики кнопки, быстрые события |
+|----------|------------|----------------|----------------------|
+| **`debounce`** | Ждать паузы | После таймаута с последней эмиссии | Поиск, валидация формы |
+| **`sample`** | Периодическая выборка | В фиксированные интервалы | Real-time данные, сенсоры |
+| **`throttleFirst`** (кастомный) | Ограничение частоты | Первое в временном окне | Клики кнопки, быстрые события |
 
 ### Debounce: Ждать Тишины
 
-**debounce** ждёт паузу в эмиссиях перед излучением последнего значения:
+**`debounce`** ждёт паузу в эмиссиях перед излучением последнего значения:
 
 ```kotlin
 searchQuery
@@ -102,7 +100,7 @@ class SearchViewModel : ViewModel() {
 
 ### Sample: Периодическая Выборка
 
-**sample** излучает самое недавнее значение через фиксированные временные интервалы:
+**`sample`** излучает самое недавнее значение через фиксированные временные интервалы:
 
 ```kotlin
 locationUpdates
@@ -113,13 +111,40 @@ locationUpdates
 
 // Таймлайн:
 // Вход:    A-B-C-D-E-F-G-H-I-J-K-L-M-N-O-P
-// Sample:  ----D-------H-------L-------P---
-//          (каждые 1000мс, берём последнее значение)
+// Выход:   ----D-------H-------L-------P---
+//          (каждые 1000мс берётся последнее значение)
 ```
 
-### ThrottleFirst: Ограничение Частоты
+**Как работает** (упрощённо):
+1. Определяется фиксированный интервал (например, 1000мс)
+2. В конце каждого интервала оператор излучает последнее полученное значение, если оно было
+3. Если в интервале не было новых значений, новое значение не излучается
 
-**throttleFirst** излучает первое значение, затем игнорирует последующие значения в течение временного окна:
+**Пример: Real-time дашборд**
+
+```kotlin
+class DashboardViewModel : ViewModel() {
+    val cpuUsage: StateFlow<Float> = cpuMonitor.observe()
+        .sample(1000) // Обновлять UI раз в секунду
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = 0f
+        )
+
+    val networkSpeed: StateFlow<Long> = networkMonitor.observe()
+        .sample(500) // Обновлять дважды в секунду
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = 0L
+        )
+}
+```
+
+### ThrottleFirst: Ограничение Частоты (кастомный)
+
+**`throttleFirst`** — распространённый паттерн (не встроенный оператор `Flow`), который можно реализовать как оператор-расширение. Он излучает первое значение, затем игнорирует последующие значения в течение временного окна:
 
 ```kotlin
 buttonClicks
@@ -134,9 +159,51 @@ buttonClicks
 //          (взять первое, игнорировать 1000мс)
 ```
 
+Реализация (пример):
+
+```kotlin
+fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
+    var lastEmissionTime = 0L
+    collect { value ->
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - lastEmissionTime >= windowDuration) {
+            lastEmissionTime = currentTime
+            emit(value)
+        }
+    }
+}
+```
+
+Эта реализация опирается на `System.currentTimeMillis()` и ограничивает частоту относительно времени обработки коллекции. Для тестов или виртуального времени можно адаптировать подход.
+
+Пример использования (защита от дорогих операций по клику):
+
+```kotlin
+button.setOnClickListener {
+    viewModel.onButtonClick()
+}
+
+val clicks = MutableSharedFlow<Unit>()
+
+fun onButtonClick() {
+    viewModelScope.launch {
+        clicks.emit(Unit)
+    }
+}
+
+init {
+    clicks
+        .throttleFirst(1000) // Предотвращать двойные клики
+        .onEach {
+            performExpensiveOperation()
+        }
+        .launchIn(viewModelScope)
+}
+```
+
 ### Реальные Примеры
 
-#### 1. Мгновенный Поиск
+#### 1. Мгновенный поиск
 
 ```kotlin
 class SearchActivity : AppCompatActivity() {
@@ -157,7 +224,7 @@ class SearchActivity : AppCompatActivity() {
 }
 ```
 
-#### 2. Отслеживание Местоположения
+#### 2. Отслеживание местоположения
 
 ```kotlin
 class MapViewModel : ViewModel() {
@@ -169,10 +236,19 @@ class MapViewModel : ViewModel() {
             started = SharingStarted.WhileSubscribed(),
             initialValue = null
         )
+
+    val preciseLocation: StateFlow<Location?> = locationProvider
+        .getLocationUpdates()
+        .debounce(1000) // Ждать более стабильного положения
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = null
+        )
 }
 ```
 
-#### 3. Защита От Двойных Кликов
+#### 3. Защита от двойных кликов
 
 ```kotlin
 class FormViewModel : ViewModel() {
@@ -199,6 +275,78 @@ class FormViewModel : ViewModel() {
 }
 ```
 
+#### 4. Валидация формы
+
+```kotlin
+class RegistrationViewModel : ViewModel() {
+    private val _email = MutableStateFlow("")
+    val email: StateFlow<String> = _email
+
+    val emailValidation: StateFlow<ValidationResult> = _email
+        .debounce(500) // Ждать, пока пользователь закончит ввод
+        .map { email ->
+            when {
+                email.isBlank() -> ValidationResult.Empty
+                !email.contains("@") -> ValidationResult.Invalid("Неверный формат email")
+                else -> ValidationResult.Valid
+            }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = ValidationResult.Empty
+        )
+
+    fun onEmailChanged(newEmail: String) {
+        _email.value = newEmail
+    }
+}
+
+sealed class ValidationResult {
+    object Empty : ValidationResult()
+    object Valid : ValidationResult()
+    data class Invalid(val message: String) : ValidationResult()
+}
+```
+
+### Соображения по Производительности
+
+```kotlin
+// ПЛОХО: без debounce для поиска
+searchInput.textChanges()
+    .onEach { query ->
+        // Вызов API на каждый ввод символа
+        performSearch(query.toString())
+    }
+    .launchIn(lifecycleScope)
+
+// ХОРОШО: использовать debounce для сокращения числа вызовов
+searchInput.textChanges()
+    .debounce(300)
+    .onEach { query ->
+        performSearch(query.toString())
+    }
+    .launchIn(lifecycleScope)
+```
+
+### Комбинация Временных Операторов
+
+```kotlin
+class DataSyncViewModel : ViewModel() {
+    val syncStatus: StateFlow<SyncStatus> = dataSource
+        .observe()
+        .debounce(100) // Подождать, пока схлынет серия изменений
+        .sample(1000) // Обновлять UI не чаще раза в секунду
+        .map { data -> SyncStatus.Synced(data.size) }
+        .catch { e -> emit(SyncStatus.Error(e.message)) }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = SyncStatus.Idle
+        )
+}
+```
+
 ### Лучшие Практики
 
 #### ДЕЛАТЬ:
@@ -213,42 +361,55 @@ sensorData
     .sample(100)
     .collect { updateUI(it) }
 
-// Использовать throttleFirst для предотвращения кликов
+// Использовать throttleFirst-подход для предотвращения частых кликов
 clicks
     .throttleFirst(1000)
     .collect { performAction() }
+
+// Комбинировать с другими операторами
+input
+    .debounce(300)
+    .filter { it.length >= 3 }
+    .distinctUntilChanged()
+    .collect { search(it) }
 ```
 
 #### НЕ ДЕЛАТЬ:
 ```kotlin
-// Не использовать неправильный оператор
+// Не путать семантику операторов
 clicks
-    .debounce(1000) // Неправильно: ждёт после всех кликов
-    // Использовать throttleFirst
+    .debounce(1000) // Обычно не подходит для основных кликов: сработает только после паузы
+    // Для такого кейса лучше throttleFirst-подход
 
-// Не использовать sample для пользовательского ввода
+// Не использовать sample для ввода, где важен финальный результат
 searchQuery
-    .sample(300) // Неправильно: может пропустить финальный ввод
-    // Использовать debounce
+    .sample(300) // Может пропустить финальный ввод пользователя
+    // Используйте debounce
+
+// Не забывать про крайние случаи с debounce
+input
+    .debounce(300)
+    // Продумайте, что произойдёт, если пользователь вводит текст и сразу триггерит submit другим событием
+    .collect { search(it) }
 ```
 
 ---
 
 ## Answer (EN)
 
-Time-based operators in Kotlin Flow control the rate of emissions based on time intervals. The three main operators—**debounce**, **sample**, and **throttleFirst**—serve different purposes for handling rapid emissions.
+Time-based operators in Kotlin `Flow` control the rate of emissions based on time intervals. Two standard operators — **`debounce`** and **`sample`** — plus a commonly used pattern **`throttleFirst`** (implemented as an extension, not a built-in Flow operator) serve different purposes for handling rapid emissions.
 
 ### Quick Comparison
 
 | Operator | Purpose | When Emits | Use Case |
 |----------|---------|------------|----------|
-| **debounce** | Wait for pause | After timeout since last emission | Search input, form validation |
-| **sample** | Periodic sampling | At fixed intervals | Real-time data, sensor readings |
-| **throttleFirst** | Rate limiting | First in time window | Button clicks, rapid events |
+| **`debounce`** | Wait for pause | After timeout since last emission | Search input, form validation |
+| **`sample`** | Periodic sampling | At fixed intervals | Real-time data, sensor readings |
+| **`throttleFirst`** (custom) | Rate limiting | First in time window | Button clicks, rapid events |
 
 ### Debounce: Wait for Silence
 
-**debounce** waits for a pause in emissions before emitting the latest value:
+**`debounce`** waits for a pause in emissions before emitting the latest value:
 
 ```kotlin
 searchQuery
@@ -297,7 +458,7 @@ class SearchViewModel : ViewModel() {
 
 ### Sample: Periodic Sampling
 
-**sample** emits the most recent value at fixed time intervals:
+**`sample`** emits the most recent value at fixed time intervals:
 
 ```kotlin
 locationUpdates
@@ -308,14 +469,14 @@ locationUpdates
 
 // Timeline:
 // Input:    A-B-C-D-E-F-G-H-I-J-K-L-M-N-O-P
-// Sample:   ----D-------H-------L-------P---
+// Output:   ----D-------H-------L-------P---
 //           (every 1000ms, take latest value)
 ```
 
-**How it works**:
-1. Sets up a fixed time interval (1000ms)
-2. At each interval, emits the most recent value
-3. If no new value since last emission, doesn't emit
+**How it works** (simplified):
+1. A fixed interval (e.g., 1000ms) is defined
+2. At each interval, it emits the most recent value if there was one
+3. If no new value since last emission, nothing is emitted for that interval
 
 **Example: Real-time Dashboard**
 
@@ -339,9 +500,9 @@ class DashboardViewModel : ViewModel() {
 }
 ```
 
-### ThrottleFirst: Rate Limiting
+### ThrottleFirst: Rate Limiting (custom)
 
-**throttleFirst** emits the first value, then ignores subsequent values for a time window:
+**`throttleFirst`** is not a built-in `Flow` operator; it is typically implemented as an extension that emits the first value, then ignores subsequent values for a time window:
 
 ```kotlin
 buttonClicks
@@ -356,13 +517,7 @@ buttonClicks
 //           (take first, ignore for 1000ms)
 ```
 
-**How it works**:
-1. Emits first value immediately
-2. Starts a time window (1000ms)
-3. Ignores all values during window
-4. After window closes, emits next value
-
-Note: `throttleFirst` is not built-in, but can be implemented:
+One possible implementation:
 
 ```kotlin
 fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
@@ -375,8 +530,13 @@ fun <T> Flow<T>.throttleFirst(windowDuration: Long): Flow<T> = flow {
         }
     }
 }
+```
 
-// Usage: Button click prevention
+This implementation uses `System.currentTimeMillis()` and throttles relative to collection time. For better testability or virtual time, you could adapt the time source.
+
+Usage example (button click prevention):
+
+```kotlin
 button.setOnClickListener {
     viewModel.onButtonClick()
 }
@@ -448,7 +608,7 @@ class MapViewModel : ViewModel() {
 
     val preciseLocation: StateFlow<Location?> = locationProvider
         .getLocationUpdates()
-        .debounce(1000) // Wait for stable location
+        .debounce(1000) // Wait for a more stable location
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
@@ -570,7 +730,7 @@ sensorData
     .sample(100)
     .collect { updateUI(it) }
 
-// Use throttleFirst for click prevention
+// Use throttleFirst-style pattern for click prevention
 clicks
     .throttleFirst(1000)
     .collect { performAction() }
@@ -585,19 +745,20 @@ input
 
 #### DON'T:
 ```kotlin
-// Don't use wrong operator
+// Don't confuse operator semantics
 clicks
-    .debounce(1000) // Wrong: waits after all clicks stop
-    // Use throttleFirst instead
+    .debounce(1000) // Typically not ideal for primary click handling: fires only after a quiet period
+    // Prefer a throttleFirst-style pattern when you want to accept the first click and ignore the rest for a window
 
-// Don't use sample for user input
+// Don't use sample for user input where the final value must not be lost
 searchQuery
-    .sample(300) // Wrong: might miss final input
+    .sample(300) // Might miss the final user input
     // Use debounce instead
 
-// Don't forget to handle edge cases
+// Don't forget edge cases with debounce
 input
-    .debounce(300) // What if user types and immediately submits?
+    .debounce(300)
+    // Consider what happens if the user types and immediately triggers submit via another event
     .collect { search(it) }
 ```
 

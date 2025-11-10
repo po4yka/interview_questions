@@ -1,9 +1,9 @@
 ---
 id: lang-065
-title: "Flow Map Operator / Оператор map для Flow"
+title: "Flow map operator"
 aliases: [Flow Map Operator, Оператор map для Flow]
-topic: programming-languages
-subtopics: [coroutines, flow, operators]
+topic: kotlin
+subtopics: [flow, coroutines, operators]
 question_kind: theory
 difficulty: medium
 original_language: en
@@ -12,11 +12,9 @@ status: draft
 moc: moc-kotlin
 related: [c-coroutines, c-flow, q-flow-flatmap-operator--programming-languages--easy]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [coroutines, difficulty/medium, flow, kotlin, operators, programming-languages, reactive]
+updated: 2025-11-09
+tags: [coroutines, difficulty/medium, flow, kotlin, operators, reactive]
 ---
-# Flow Map Operator for Type Transformation
-
 # Вопрос (RU)
 > Чем воспользоваться чтобы преобразовать внутри одного потока данных данные из одного типа в другой?
 
@@ -27,16 +25,16 @@ tags: [coroutines, difficulty/medium, flow, kotlin, operators, programming-langu
 
 ## Ответ (RU)
 
-Используйте оператор **map**. Он преобразует каждый элемент исходного потока в новый элемент другого типа.
+Используйте оператор `map`. Он преобразует каждый элемент исходного потока в новый элемент другого типа.
 
-Оператор `map` — один из наиболее часто используемых операторов трансформации в Kotlin Flow. Он применяет функцию трансформации к каждому элементу, эмитируемому upstream Flow, и эмитирует трансформированный результат downstream.
+Оператор `map` — один из наиболее часто используемых операторов трансформации в Kotlin `Flow`. Он применяет функцию трансформации к каждому элементу, эмитируемому upstream `Flow`, и эмитирует трансформированный результат downstream, сохраняя порядок элементов.
 
 ### Ключевые Характеристики
 
 1. **Трансформация типов**: Преобразует элементы из типа A в тип B
-2. **Последовательная обработка**: Обрабатывает элементы один за другим
-3. **Поддержка suspend**: Лямбда трансформации может быть suspend функцией
-4. **Cold Stream**: Сохраняет cold природу Flow
+2. **Последовательная обработка**: Для одного коллектора элементы обрабатываются по мере поступления, в порядке upstream
+3. **Поддержка suspend**: Лямбда трансформации может быть suspend-функцией
+4. **Cold Stream**: Сохраняет cold-природу `Flow`, не изменяет контекст выполнения сам по себе
 
 ### Базовый Синтаксис
 
@@ -76,7 +74,7 @@ getUserFlow()
     }
 ```
 
-### Suspend Функция В Map
+### Suspend Функция В map
 
 ```kotlin
 suspend fun fetchUserDetails(id: Int): UserDetails {
@@ -86,21 +84,21 @@ suspend fun fetchUserDetails(id: Int): UserDetails {
 
 flowOf(1, 2, 3)
     .map { id ->
-        fetchUserDetails(id)  // Можно вызывать suspend функции
+        fetchUserDetails(id)  // Можно вызывать suspend-функции
     }
     .collect { details ->
         println(details)
     }
 ```
 
-### Цепочка Нескольких Map
+### Цепочка Нескольких map
 
 ```kotlin
 flowOf("1", "2", "3")
-    .map { it.toInt() }           // String -> Int
+    .map { it.toInt() }            // String -> Int
     .map { it * 2 }                // Int -> Int
-    .map { "Result: $it" }         // Int -> String
-    .collect { println(it) }        // Выводит: Result: 2, Result: 4, Result: 6
+    .map { "Result: $it" }        // Int -> String
+    .collect { println(it) }       // Выводит: Result: 2, Result: 4, Result: 6
 ```
 
 ### Реальный Пример: Трансформация Ответа API
@@ -127,21 +125,25 @@ fetchData()
     }
 ```
 
-### Map Vs MapLatest Vs MapNotNull
+### map vs mapLatest vs mapNotNull
 
 ```kotlin
-// map: Обрабатывает все элементы
+// map: Обрабатывает все элементы по порядку
 flowOf(1, 2, 3)
     .map { it * 2 }
     .collect { println(it) }  // 2, 4, 6
 
-// mapLatest: Отменяет предыдущую трансформацию если приходит новый элемент
+// mapLatest: Отменяет предыдущую suspend-трансформацию,
+// если приходит новый элемент до её завершения
 flowOf(1, 2, 3)
+    .onEach { delay(100) }
     .mapLatest { value ->
         delay(100)
         value * 2
     }
-    .collect { println(it) }  // Может вывести только 6
+    .collect { println(it) }
+// В этом примере будут обработаны только "актуальные" значения;
+// для синхронного flowOf(1, 2, 3) без задержек обычно будет напечатано только 6.
 
 // mapNotNull: Фильтрует null результаты
 flowOf(1, 2, 3, 4)
@@ -155,27 +157,28 @@ flowOf(1, 2, 3, 4)
 2. **Форматирование данных** (например, timestamp в читаемые даты)
 3. **Трансформация Entity в UI Model**
 4. **Применение бизнес-логики** к каждому элементу
-5. **Преобразования типов** (String в Int, и т.д.)
+5. **Преобразования типов** (`String` в `Int`, и т.д.)
 
 ### Соображения Производительности
 
-- Map — это **легковесный** оператор
-- Каждый элемент обрабатывается **независимо**
-- Нет буферизации или батчинга
-- Используйте `mapLatest` если важен только последний результат
+- `map` — **легковесный** оператор
+- Каждый элемент обрабатывается **независимо**, в порядке поступления
+- Сам по себе не добавляет буферизацию или батчинг
+- Не изменяет диспетчер/контекст; используйте `flowOn` для смены контекста
+- Используйте `mapLatest`, если важен только последний актуальный результат для длительных операций
 
 ## Answer (EN)
 
-Use the **map** operator. It transforms each element of the source stream into a new element of another type.
+Use the `map` operator. It transforms each element of the source stream into a new element of another type.
 
-The `map` operator is one of the most commonly used transformation operators in Kotlin Flow. It applies a transformation function to each element emitted by the upstream Flow and emits the transformed result downstream.
+The `map` operator is one of the most commonly used transformation operators in Kotlin `Flow`. It applies a transformation function to each element emitted by the upstream `Flow` and emits the transformed result downstream while preserving element order.
 
 ### Key Characteristics
 
 1. **Type Transformation**: Converts elements from type A to type B
-2. **Sequential Processing**: Processes elements one by one
+2. **Sequential Processing**: For a single collector, elements are processed as they arrive, in upstream order
 3. **Suspension Support**: The transformation lambda can be a suspend function
-4. **Cold Stream**: Maintains the cold nature of Flow
+4. **Cold Stream**: Maintains the cold nature of `Flow` and does not change the execution context by itself
 
 ### Basic Syntax
 
@@ -215,7 +218,7 @@ getUserFlow()
     }
 ```
 
-### Suspend Function in Map
+### Suspend Function in map
 
 ```kotlin
 suspend fun fetchUserDetails(id: Int): UserDetails {
@@ -236,10 +239,10 @@ flowOf(1, 2, 3)
 
 ```kotlin
 flowOf("1", "2", "3")
-    .map { it.toInt() }           // String -> Int
+    .map { it.toInt() }            // String -> Int
     .map { it * 2 }                // Int -> Int
-    .map { "Result: $it" }         // Int -> String
-    .collect { println(it) }        // Prints: Result: 2, Result: 4, Result: 6
+    .map { "Result: $it" }        // Int -> String
+    .collect { println(it) }       // Prints: Result: 2, Result: 4, Result: 6
 ```
 
 ### Real-World Example: API Response Transformation
@@ -266,21 +269,25 @@ fetchData()
     }
 ```
 
-### Map Vs MapLatest Vs MapNotNull
+### map vs mapLatest vs mapNotNull
 
 ```kotlin
-// map: Processes all elements
+// map: Processes all elements in order
 flowOf(1, 2, 3)
     .map { it * 2 }
     .collect { println(it) }  // 2, 4, 6
 
-// mapLatest: Cancels previous transformation if new element arrives
+// mapLatest: Cancels the previous suspend transformation
+// if a new element arrives before it completes
 flowOf(1, 2, 3)
+    .onEach { delay(100) }
     .mapLatest { value ->
         delay(100)
         value * 2
     }
-    .collect { println(it) }  // May only print 6
+    .collect { println(it) }
+// In this pattern, only the "latest" values finish;
+// with a synchronous flowOf(1, 2, 3) without delays, you'll typically see only 6 printed.
 
 // mapNotNull: Filters out null results
 flowOf(1, 2, 3, 4)
@@ -294,14 +301,15 @@ flowOf(1, 2, 3, 4)
 2. **Data Formatting** (e.g., timestamps to readable dates)
 3. **Entity to UI Model Transformation**
 4. **Applying Business Logic** to each element
-5. **Type Conversions** (String to Int, etc.)
+5. **Type Conversions** (`String` to `Int`, etc.)
 
 ### Performance Considerations
 
-- Map is a **lightweight** operator
-- Each element is processed **independently**
-- No buffering or batching occurs
-- Use `mapLatest` if only the latest result matters
+- `map` is a **lightweight** operator
+- Each element is processed **independently**, in order
+- It does not introduce buffering or batching by itself
+- It does not change dispatcher/context; use `flowOn` to change context when needed
+- Use `mapLatest` when only the latest relevant result matters for long-running transformations
 
 ---
 
@@ -314,9 +322,9 @@ flowOf(1, 2, 3, 4)
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-flow]]
 
 ## Related Questions
 
 - [[q-how-gc-knows-object-can-be-destroyed--programming-languages--easy]]
--
 - [[q-suspend-functions-under-the-hood--programming-languages--hard]]

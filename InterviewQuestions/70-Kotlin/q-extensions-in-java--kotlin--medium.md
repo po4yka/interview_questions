@@ -1,22 +1,20 @@
 ---
 id: kotlin-187
 title: "Extensions In Java / Расширения в Java"
-aliases: ["Extensions In Java, Расширения в Java"]
+aliases: ["Extensions In Java", "Расширения в Java"]
 topic: kotlin
-subtopics: [access-modifiers, null-safety, type-system]
+subtopics: [null-safety, type-system]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-flow-testing-advanced--kotlin--hard, q-kotlin-delegation-detailed--kotlin--medium, q-kotlin-property-delegates--programming-languages--medium]
+related: [c-kotlin, c-kotlin-features, q-kotlin-delegation-detailed--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/medium]
 ---
-# How Are Extensions Applied in Java?
-
 # Вопрос (RU)
 > Как применяются расширения (Extensions) в Java? Поддерживает ли Java extension-функции как в Kotlin?
 
@@ -27,14 +25,14 @@ tags: [difficulty/medium]
 
 ## Ответ (RU)
 
-В Java нет прямой поддержки extension-функций как в Kotlin. Однако можно реализовать аналогичную функциональность через **утилитные методы (Utility Methods)**. Это позволяет добавлять функциональные возможности к существующим классам без изменения их исходного кода.
+В Java нет прямой языковой поддержки extension-функций как в Kotlin. Аналогичное поведение достигается через **утилитные статические методы (Utility Methods)** или статический импорт. Это позволяет добавлять функциональные возможности к существующим классам без изменения их исходного кода, но не меняет сами типы.
 
 **Ключевые отличия:**
-- **Kotlin extensions**: Выглядят как методы класса, вызываются через точку
-- **Java utility methods**: Статические методы, которые принимают объект как параметр
+- **Kotlin extensions**: Выглядят как методы класса, вызываются через точку, но реализация не меняет класс; разрешение происходит статически по типу на этапе компиляции.
+- **Java utility methods**: Статические методы, которые принимают объект как параметр; поведение явно видно в сигнатуре.
 
 **Как работают extension-функции Kotlin:**
-При компиляции extension-функции Kotlin превращаются в статические методы в Java bytecode. Объект-получатель становится первым параметром.
+При компиляции extension-функции Kotlin превращаются в статические методы в Java bytecode. Объект-получатель становится первым параметром. Вызов `a.foo()` для extension-функции — это синтаксический сахар над статическим вызовом; динамическое (виртуальное) переопределение при этом не используется.
 
 ### Примеры Кода
 
@@ -83,6 +81,7 @@ public class StringUtils {
     }
 
     public static String addExclamation(String str) {
+        // При str == null будет NullPointerException — null нужно обрабатывать вручную
         return str + "!";
     }
 
@@ -98,6 +97,7 @@ public class StringUtils {
     }
 
     public static String repeat(String str, int times) {
+        // Упрощенный пример без проверки на null/отрицательный times
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < times; i++) {
             sb.append(str);
@@ -113,7 +113,7 @@ public class Main {
 
         System.out.println(StringUtils.addExclamation(text));  // hello!
         System.out.println(StringUtils.capitalize(text));      // Hello
-        System.out.println(StringUtils.repeat("*", 5));        // *****
+        System.out.println(StringUtils.repeat("*", 5));       // *****
 
         if (StringUtils.isNullOrEmpty(text)) {
             System.out.println("Empty string");
@@ -197,6 +197,10 @@ public class CollectionUtils {
     public static <T> T lastOrNull(List<T> list) {
         return list.isEmpty() ? null : list.get(list.size() - 1);
     }
+
+    public static <T> boolean contains(List<T> list, T element) {
+        return list.contains(element);
+    }
 }
 
 // Использование
@@ -215,6 +219,10 @@ public class Main {
         // Получить последний элемент
         Integer last = CollectionUtils.lastOrNull(numbers);
         System.out.println(last);  // 10
+
+        // Проверка на наличие элемента
+        boolean containsFive = CollectionUtils.contains(numbers, 5);
+        System.out.println(containsFive);  // true
     }
 }
 ```
@@ -332,14 +340,14 @@ public class Main {
 
 ## Answer (EN)
 
-Java does not have direct support for extension functions like Kotlin. However, you can implement similar functionality through **utility methods (Utility Methods)**. This allows adding functional capabilities to existing classes without modifying their source code.
+Java does not have direct language-level support for extension functions like Kotlin. Similar behavior is achieved via **static utility methods (Utility Methods)** or static imports. This lets you add reusable operations for existing types without modifying their source code, but it does not actually extend the types.
 
 **Key differences:**
-- **Kotlin extensions**: Look like methods on the class, called with dot notation
-- **Java utility methods**: Static methods that take the object as a parameter
+- **Kotlin extensions**: Look like member methods and are called with dot notation, but they do not modify the class; resolution is static based on the compile-time type.
+- **Java utility methods**: Static methods that take the target object as a parameter; behavior is explicit in the method signature.
 
 **Kotlin extension under the hood:**
-When Kotlin compiles extension functions, they become static methods in Java bytecode. The receiver object becomes the first parameter.
+When Kotlin compiles extension functions, they become static methods in Java bytecode. The receiver object becomes the first parameter. A call like `a.foo()` for an extension is syntactic sugar over a static call; it is not a virtual dispatch override.
 
 ### Code Examples
 
@@ -388,6 +396,7 @@ public class StringUtils {
     }
 
     public static String addExclamation(String str) {
+        // If str is null, this will throw NullPointerException — must be handled explicitly
         return str + "!";
     }
 
@@ -403,6 +412,7 @@ public class StringUtils {
     }
 
     public static String repeat(String str, int times) {
+        // Simplified example without null/negative times checks
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < times; i++) {
             sb.append(str);
@@ -418,7 +428,7 @@ public class Main {
 
         System.out.println(StringUtils.addExclamation(text));  // hello!
         System.out.println(StringUtils.capitalize(text));      // Hello
-        System.out.println(StringUtils.repeat("*", 5));        // *****
+        System.out.println(StringUtils.repeat("*", 5));       // *****
 
         if (StringUtils.isNullOrEmpty(text)) {
             System.out.println("Empty string");
@@ -524,6 +534,10 @@ public class Main {
         // Get last element
         Integer last = CollectionUtils.lastOrNull(numbers);
         System.out.println(last);  // 10
+
+        // Check if list contains an element
+        boolean containsFive = CollectionUtils.contains(numbers, 5);
+        System.out.println(containsFive);  // true
     }
 }
 ```
@@ -641,6 +655,23 @@ public class Main {
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия подхода с утилитными методами в Java и extension-функциями в Kotlin?
+- Когда на практике стоит использовать утилитные методы вместо расширений?
+- Какие типичные ошибки и подводные камни при использовании подобных подходов?
+
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-property-delegates--programming-languages--medium]]
+- [[q-kotlin-delegation-detailed--kotlin--medium]]
+- [[q-flow-testing-advanced--kotlin--hard]]
+
 ## Follow-ups
 
 - What are the key differences between this and Java?
@@ -650,6 +681,7 @@ public class Main {
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
 
 ## Related Questions
 

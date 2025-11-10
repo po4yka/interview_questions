@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-stateflow-sharedflow-differences--kotlin--medium, q-suspend-functions-basics--kotlin--easy]
+related: [c-kotlin, q-stateflow-sharedflow-differences--kotlin--medium, q-suspend-functions-basics--kotlin--easy]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [data-classes, difficulty/medium, programming-languages]
 ---
-# What Variables Can Be Used in Data Class?
-
 # Вопрос (RU)
 > Какие переменные можно использовать в data class в Kotlin?
 
@@ -27,120 +25,44 @@ tags: [data-classes, difficulty/medium, programming-languages]
 
 ## Ответ (RU)
 
-В data class можно использовать только свойства, объявленные в первичном конструкторе с `val` или `var`. Эти свойства автоматически участвуют в `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()`. Другие свойства (объявленные в теле класса) не считаются частью данных класса.
+В `data class` учитываются только свойства, объявленные в первичном конструкторе с `val` или `var`. Эти свойства автоматически участвуют в `equals()`, `hashCode()`, `toString()`, `copy()` и `componentN()`. Свойства, объявленные в теле класса, не считаются частью "данных" класса и не включаются в автогенерируемые методы.
 
 **Ключевые правила:**
-- Параметры первичного конструктора должны быть помечены `val` или `var`
-- Только свойства первичного конструктора используются в автогенерируемых методах
-- Свойства в теле класса исключаются из `equals()`, `hashCode()`, `toString()`, `copy()`
-- Требуется хотя бы один параметр в первичном конструкторе
+- Параметры первичного конструктора должны быть помечены `val` или `var`.
+- Только свойства первичного конструктора используются в автогенерируемых методах.
+- Свойства в теле класса исключаются из `equals()`, `hashCode()`, `toString()`, `copy()`.
+- Требуется хотя бы один параметр в первичном конструкторе.
 
-### Пример
+### Примеры кода
 
 **Базовый data class:**
+
 ```kotlin
 data class User(
     val id: Int,           // Включается во все методы
     val name: String,      // Включается во все методы
-    var email: String      // Включается (var разрешен)
-)
-```
-
-**Свойства в теле класса (НЕ участвуют):**
-```kotlin
-data class Product(
-    val id: Int,
-    val name: String
-) {
-    var discount: Double = 0.0  // НЕ участвует в equals, hashCode, toString, copy
-    var quantity: Int = 0       // НЕ участвует
-}
-
-val p1 = Product(1, "Laptop")
-p1.discount = 100.0
-
-val p2 = Product(1, "Laptop")
-p2.discount = 50.0  // Другая скидка
-
-println(p1 == p2)  // true! (discount не сравнивается)
-println(p1)        // Product(id=1, name=Laptop) - без discount
-val copy = p1.copy()
-println(copy.discount)  // 0.0 (не скопирован!)
-```
-
-**Правильный подход** - все важные данные в конструкторе:
-```kotlin
-data class BetterProduct(
-    val id: Int,
-    val name: String,
-    val discount: Double = 0.0,  // В конструкторе
-    val quantity: Int = 0         // В конструкторе
-)
-
-val p1 = BetterProduct(1, "Laptop", 100.0, 5)
-val p2 = BetterProduct(1, "Laptop", 50.0, 3)
-
-println(p1 == p2)  // false (все свойства сравниваются)
-println(p1)        // Показывает все свойства
-val copy = p1.copy(quantity = 10)
-println(copy.discount)  // 100.0 (сохранен!)
-```
-
-**Когда использовать свойства в теле:**
-- Для метаданных, которые не должны влиять на равенство объектов
-- Для временных/вычисляемых значений
-- Для кэшей и счетчиков
-
-```kotlin
-data class CachedData(
-    val key: String,
-    val value: String
-) {
-    var accessCount: Int = 0    // Метаданные
-    var lastAccessed: Long = 0  // Не часть данных
-}
-```
-
-## Answer (EN)
-
-In a data class, you can only use properties declared in the primary constructor with `val` or `var`. These properties automatically participate in `equals()`, `hashCode()`, `toString()`, `copy()`, and `componentN()` functions. Other properties (declared in the class body) are not considered part of the class data.
-
-**Key rules:**
-- Primary constructor parameters must be marked as `val` or `var`
-- Only primary constructor properties are used in auto-generated methods
-- Properties in class body are excluded from `equals()`, `hashCode()`, `toString()`, `copy()`
-- At least one primary constructor parameter is required
-
-### Code Examples
-
-**Basic data class:**
-
-```kotlin
-data class User(
-    val id: Int,           // Included in all methods
-    val name: String,      // Included in all methods
-    var email: String,     // Included in all methods (var is allowed)
-    val age: Int = 0       // Included (default values allowed)
+    var email: String,     // Включается во все методы (var допускается)
+    val age: Int = 0       // Включается (допустимы значения по умолчанию)
 )
 
 fun main() {
     val user = User(1, "Alice", "alice@example.com", 30)
 
-    // toString includes all primary constructor properties
+    // toString включает все свойства из первичного конструктора
     println(user)
     // User(id=1, name=Alice, email=alice@example.com, age=30)
 
-    // Destructuring uses componentN() for primary constructor properties
+    // Деструктуризация использует componentN() для свойств конструктора
     val (id, name, email, age) = user
     println("$name ($id): $email, age $age")
 
-    // copy() works with primary constructor properties
+    // copy() работает только с этими свойствами
     val updated = user.copy(email = "newemail@example.com")
     println(updated)
 }
 ```
 
-**Properties in class body (excluded from data methods):**
+**Свойства в теле класса (ИСКЛЮЧЕНЫ из data-методов):**
 
 ```kotlin
 data class Product(
@@ -148,12 +70,12 @@ data class Product(
     val name: String,
     val price: Double
 ) {
-    // Properties in body - NOT included in equals, hashCode, toString, copy
+    // Свойства тела класса не включаются в equals, hashCode, toString, copy
     var discount: Double = 0.0
     var quantity: Int = 0
     var lastUpdated: Long = System.currentTimeMillis()
 
-    // Computed property - also not included
+    // Вычисляемое свойство также не включается
     val finalPrice: Double
         get() = price - discount
 }
@@ -164,54 +86,49 @@ fun main() {
     product1.quantity = 5
 
     val product2 = Product(1, "Laptop", 999.99)
-    product2.discount = 50.0  // Different discount
-    product2.quantity = 3     // Different quantity
+    product2.discount = 50.0  // Другая скидка
+    product2.quantity = 3     // Другое количество
 
-    // equals() only compares primary constructor properties
+    // equals() сравнивает только свойства первичного конструктора
     println("product1 == product2: ${product1 == product2}")  // true!
 
-    // toString() only includes primary constructor properties
+    // toString() показывает только свойства конструктора
     println(product1)
     // Product(id=1, name=Laptop, price=999.99)
-    // Note: discount, quantity not shown!
 
-    // copy() only copies primary constructor properties
+    // copy() копирует только свойства конструктора
     val copy = product1.copy()
-    println("Copy discount: ${copy.discount}")   // 0.0 (not copied!)
-    println("Copy quantity: ${copy.quantity}")   // 0 (not copied!)
+    println("Copy discount: ${copy.discount}")   // 0.0 (не скопировано)
+    println("Copy quantity: ${copy.quantity}")   // 0 (не скопировано)
 
-    // componentN() only for primary constructor
+    // componentN() только для свойств конструктора
     val (id, name, price) = product1
-    // Cannot destructure discount or quantity
     println("Destructured: id=$id, name=$name, price=$price")
 }
 ```
 
-**val vs var in data class:**
+**`val` vs `var` в data class:**
 
 ```kotlin
 data class Person(
-    val id: Int,          // Immutable - cannot change
-    var name: String,     // Mutable - can change
-    var age: Int          // Mutable - can change
+    val id: Int,          // Неизменяемое поле
+    var name: String,     // Изменяемое поле
+    var age: Int          // Изменяемое поле
 )
 
 fun main() {
     val person = Person(1, "Alice", 30)
 
-    // Can modify var properties
-    person.name = "Alice Smith"
-    person.age = 31
+    person.name = "Alice Smith"  // OK
+    person.age = 31               // OK
 
-    // Cannot modify val property
-    // person.id = 2  // ERROR: Val cannot be reassigned
+    // person.id = 2  // ОШИБКА: val нельзя переназначить
 
     println(person)
-    // Person(id=1, name=Alice Smith, age=31)
 }
 ```
 
-**Demonstration of equals() behavior:**
+**Демонстрация поведения `equals()` и коллекций:**
 
 ```kotlin
 data class Book(
@@ -228,23 +145,21 @@ fun main() {
     book1.publisher = "Addison-Wesley"
 
     val book2 = Book("978-0-13-468599-1", "Effective Java")
-    book2.pages = 500  // Different!
-    book2.publisher = "Different Publisher"  // Different!
+    book2.pages = 500
+    book2.publisher = "Другой издатель"
 
-    // Still equal because only ISBN and title are compared
+    // Равенство основано только на isbn и title
     println("Books equal: ${book1 == book2}")  // true
 
-    // HashCode also ignores class body properties
     val set = setOf(book1, book2)
-    println("Set size: ${set.size}")  // 1 (treated as duplicates)
+    println("Set size: ${set.size}")           // 1
 
-    // HashMap uses hashCode + equals
     val map = mapOf(book1 to "First edition")
     println("Find with book2: ${map[book2]}")  // "First edition"
 }
 ```
 
-**Why this matters - tracking changes:**
+**Почему это важно — пример с версионированием:**
 
 ```kotlin
 data class Entity(
@@ -261,66 +176,32 @@ data class Entity(
         return updated
     }
 }
-
-fun main() {
-    val entity1 = Entity(1, "Original data")
-    entity1.version = 1
-    entity1.modifiedAt = System.currentTimeMillis()
-
-    Thread.sleep(100)
-
-    val entity2 = entity1.update("Updated data")
-
-    println("Entity 1: $entity1, version=${entity1.version}")
-    println("Entity 2: $entity2, version=${entity2.version}")
-
-    // Different versions but copy() didn't preserve it
-    println("entity2 version: ${entity2.version}")  // 2
-    println("entity2 modifiedAt: ${entity2.modifiedAt}")  // Updated time
-}
 ```
 
-**Correct approach - all data in constructor:**
+**Корректный подход — все значимые данные в конструкторе:**
 
 ```kotlin
 data class BetterProduct(
     val id: Int,
     val name: String,
     val price: Double,
-    val discount: Double = 0.0,    // In constructor
-    val quantity: Int = 0,         // In constructor
+    val discount: Double = 0.0,    // В конструкторе
+    val quantity: Int = 0,         // В конструкторе
     val lastUpdated: Long = System.currentTimeMillis()
 ) {
     val finalPrice: Double
         get() = price - discount
 }
-
-fun main() {
-    val product1 = BetterProduct(1, "Laptop", 999.99, 100.0, 5)
-    val product2 = BetterProduct(1, "Laptop", 999.99, 50.0, 3)
-
-    // Now equals() compares all properties
-    println("product1 == product2: ${product1 == product2}")  // false
-
-    // toString() shows all properties
-    println(product1)
-    // BetterProduct(id=1, name=Laptop, price=999.99, discount=100.0, quantity=5, lastUpdated=...)
-
-    // copy() preserves all properties
-    val copy = product1.copy(quantity = 10)
-    println("Copy discount: ${copy.discount}")   // 100.0 (copied!)
-    println("Copy quantity: ${copy.quantity}")   // 10 (updated)
-}
 ```
 
-**Mixed approach - when to use body properties:**
+**Смешанный подход — метаданные в теле:**
 
 ```kotlin
 data class CachedData(
     val key: String,
     val value: String
 ) {
-    // Metadata - not part of data identity
+    // Метаданные, не влияющие на идентичность данных
     @Transient
     var accessCount: Int = 0
 
@@ -333,29 +214,9 @@ data class CachedData(
         return value
     }
 }
-
-fun main() {
-    val cache1 = CachedData("user_1", "Alice")
-    val cache2 = CachedData("user_1", "Alice")
-
-    cache1.access()
-    cache1.access()
-    cache2.access()
-
-    // Same data, different metadata
-    println("cache1 == cache2: ${cache1 == cache2}")  // true (correct!)
-    println("cache1 accesses: ${cache1.accessCount}")  // 2
-    println("cache2 accesses: ${cache2.accessCount}")  // 1
-
-    // Both can be keys in map because they're equal
-    val map = mutableMapOf<CachedData, String>()
-    map[cache1] = "First"
-    map[cache2] = "Second"  // Replaces first
-    println("Map size: ${map.size}")  // 1
-}
 ```
 
-**Validation with primary constructor properties:**
+**Валидация в init-блоке и вычисляемые свойства:**
 
 ```kotlin
 data class Email(val address: String) {
@@ -368,7 +229,6 @@ data class Email(val address: String) {
         }
     }
 
-    // Additional computed property
     val domain: String
         get() = address.substringAfter("@")
 }
@@ -383,38 +243,23 @@ data class Age(val years: Int) {
     val isAdult: Boolean
         get() = years >= 18
 }
-
-fun main() {
-    val email = Email("user@example.com")
-    println(email)
-    println("Domain: ${email.domain}")
-
-    val age = Age(25)
-    println(age)
-    println("Is adult: ${age.isAdult}")
-
-    // These would throw exceptions:
-    // Email("invalid")  // No @
-    // Age(-5)  // Negative
-}
 ```
 
-**Complete example:**
+**Полный пример:**
 
 ```kotlin
 data class UserProfile(
-    // Core data - in primary constructor
+    // Основные данные — в первичном конструкторе
     val userId: Int,
     val username: String,
     var email: String,
     var displayName: String
 ) {
-    // Metadata - in class body
+    // Метаданные — в теле класса
     var loginCount: Int = 0
     var lastLoginAt: Long = 0
     var createdAt: Long = System.currentTimeMillis()
 
-    // Computed properties
     val isNewUser: Boolean
         get() = loginCount < 5
 
@@ -424,50 +269,294 @@ data class UserProfile(
     }
 
     override fun toString(): String {
-        // Custom toString including metadata
         return "UserProfile(userId=$userId, username='$username', email='$email', " +
                 "displayName='$displayName', loginCount=$loginCount, lastLoginAt=$lastLoginAt)"
     }
 }
+```
+
+## Answer (EN)
+
+In a `data class`, only properties declared in the primary constructor with `val` or `var` are considered part of the data. These properties automatically participate in `equals()`, `hashCode()`, `toString()`, `copy()`, and `componentN()` functions. Properties declared in the class body are not part of the structural data and are ignored by the generated methods.
+
+**Key rules:**
+- Primary constructor parameters must be marked with `val` or `var`.
+- Only primary constructor properties are used in the auto-generated methods.
+- Properties in the class body are excluded from `equals()`, `hashCode()`, `toString()`, `copy()`.
+- At least one primary constructor parameter is required.
+
+### Code Examples
+
+The following Kotlin examples mirror the RU section and illustrate the same rules.
+
+**Basic data class:**
+
+```kotlin
+data class User(
+    val id: Int,           // Included in all generated methods
+    val name: String,      // Included in all generated methods
+    var email: String,     // Included in all generated methods (var is allowed)
+    val age: Int = 0       // Included; default values are allowed
+)
 
 fun main() {
-    val user1 = UserProfile(1, "alice", "alice@example.com", "Alice")
-    val user2 = UserProfile(1, "alice", "alice@example.com", "Alice")
+    val user = User(1, "Alice", "alice@example.com", 30)
 
-    user1.login()
-    user1.login()
-    user2.login()
+    // toString includes all primary-constructor properties
+    println(user)
+    // User(id=1, name=Alice, email=alice@example.com, age=30)
 
-    // Data equality - only primary constructor
-    println("Data equal: ${user1 == user2}")  // true
+    // Destructuring uses componentN() for primary-constructor properties
+    val (id, name, email, age) = user
+    println("$name ($id): $email, age $age")
 
-    // But different state
-    println("User1 logins: ${user1.loginCount}")  // 2
-    println("User2 logins: ${user2.loginCount}")  // 1
-
-    // Custom toString shows everything
-    println(user1)
-
-    // copy() only copies primary constructor
-    val user3 = user1.copy(displayName = "Alice Smith")
-    println("User3 login count: ${user3.loginCount}")  // 0 (not copied)
+    // copy() works only with these properties
+    val updated = user.copy(email = "newemail@example.com")
+    println(updated)
 }
 ```
 
----
+**Properties in the class body (EXCLUDED from data methods):**
+
+```kotlin
+data class Product(
+    val id: Int,
+    val name: String,
+    val price: Double
+) {
+    // Body properties are not included in equals, hashCode, toString, copy
+    var discount: Double = 0.0
+    var quantity: Int = 0
+    var lastUpdated: Long = System.currentTimeMillis()
+
+    // Computed property is also not included
+    val finalPrice: Double
+        get() = price - discount
+}
+
+fun main() {
+    val product1 = Product(1, "Laptop", 999.99)
+    product1.discount = 100.0
+    product1.quantity = 5
+
+    val product2 = Product(1, "Laptop", 999.99)
+    product2.discount = 50.0  // Different discount
+    product2.quantity = 3     // Different quantity
+
+    // equals() compares only primary-constructor properties
+    println("product1 == product2: ${product1 == product2}")  // true!
+
+    // toString() shows only constructor properties
+    println(product1)
+    // Product(id=1, name=Laptop, price=999.99)
+
+    // copy() copies only constructor properties
+    val copy = product1.copy()
+    println("Copy discount: ${copy.discount}")   // 0.0 (not copied)
+    println("Copy quantity: ${copy.quantity}")   // 0 (not copied)
+
+    // componentN() exists only for constructor properties
+    val (id, name, price) = product1
+    println("Destructured: id=$id, name=$name, price=$price")
+}
+```
+
+**`val` vs `var` in a data class:**
+
+```kotlin
+data class Person(
+    val id: Int,          // Immutable field
+    var name: String,     // Mutable field
+    var age: Int          // Mutable field
+)
+
+fun main() {
+    val person = Person(1, "Alice", 30)
+
+    person.name = "Alice Smith"  // OK
+    person.age = 31               // OK
+
+    // person.id = 2  // ERROR: val cannot be reassigned
+
+    println(person)
+}
+```
+
+**Demonstrating `equals()` behavior and collections:**
+
+```kotlin
+data class Book(
+    val isbn: String,
+    val title: String
+) {
+    var pages: Int = 0
+    var publisher: String = ""
+}
+
+fun main() {
+    val book1 = Book("978-0-13-468599-1", "Effective Java")
+    book1.pages = 416
+    book1.publisher = "Addison-Wesley"
+
+    val book2 = Book("978-0-13-468599-1", "Effective Java")
+    book2.pages = 500
+    book2.publisher = "Another publisher"
+
+    // Equality is based only on isbn and title
+    println("Books equal: ${book1 == book2}")  // true
+
+    val set = setOf(book1, book2)
+    println("Set size: ${set.size}")           // 1
+
+    val map = mapOf(book1 to "First edition")
+    println("Find with book2: ${map[book2]}")  // "First edition"
+}
+```
+
+**Why this matters — versioning example:**
+
+```kotlin
+data class Entity(
+    val id: Int,
+    val data: String
+) {
+    var version: Int = 0
+    var modifiedAt: Long = 0
+
+    fun update(newData: String): Entity {
+        val updated = this.copy(data = newData)
+        updated.version = this.version + 1
+        updated.modifiedAt = System.currentTimeMillis()
+        return updated
+    }
+}
+```
+
+**Correct approach — all significant data in the constructor:**
+
+```kotlin
+data class BetterProduct(
+    val id: Int,
+    val name: String,
+    val price: Double,
+    val discount: Double = 0.0,    // In constructor
+    val quantity: Int = 0,         // In constructor
+    val lastUpdated: Long = System.currentTimeMillis()
+) {
+    val finalPrice: Double
+        get() = price - discount
+}
+```
+
+**Mixed approach — metadata in the body:**
+
+```kotlin
+data class CachedData(
+    val key: String,
+    val value: String
+) {
+    // Metadata that does not affect data identity
+    @Transient
+    var accessCount: Int = 0
+
+    @Transient
+    var lastAccessed: Long = 0
+
+    fun access(): String {
+        accessCount++
+        lastAccessed = System.currentTimeMillis()
+        return value
+    }
+}
+```
+
+**Validation in init block and computed properties:**
+
+```kotlin
+data class Email(val address: String) {
+    init {
+        require(address.contains("@")) {
+            "Email must contain @"
+        }
+        require(address.length >= 5) {
+            "Email too short"
+        }
+    }
+
+    val domain: String
+        get() = address.substringAfter("@")
+}
+
+data class Age(val years: Int) {
+    init {
+        require(years in 0..150) {
+            "Age must be between 0 and 150"
+        }
+    }
+
+    val isAdult: Boolean
+        get() = years >= 18
+}
+```
+
+**Full example:**
+
+```kotlin
+data class UserProfile(
+    // Core data — in the primary constructor
+    val userId: Int,
+    val username: String,
+    var email: String,
+    var displayName: String
+) {
+    // Metadata — in the class body
+    var loginCount: Int = 0
+    var lastLoginAt: Long = 0
+    var createdAt: Long = System.currentTimeMillis()
+
+    val isNewUser: Boolean
+        get() = loginCount < 5
+
+    fun login() {
+        loginCount++
+        lastLoginAt = System.currentTimeMillis()
+    }
+
+    override fun toString(): String {
+        return "UserProfile(userId=$userId, username='$username', email='$email', " +
+                "displayName='$displayName', loginCount=$loginCount, lastLoginAt=$lastLoginAt)"
+    }
+}
+```
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия поведения `data class` по сравнению с Java-классами?
+- В каких практических сценариях особенно полезны `data class` и их автогенерируемые методы?
+- Каковы распространенные ошибки при использовании свойств тела класса в `data class`?
 
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- What are the key differences between this and Java classes?
+- In which practical scenarios are data classes and their generated methods especially useful?
+- What are common pitfalls when using body properties in data classes?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
 
 ## References
 
+- [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-stateflow-sharedflow-differences--kotlin--medium]]
+- [[q-suspend-functions-basics--kotlin--easy]]
 
 ## Related Questions
 
 - [[q-stateflow-sharedflow-differences--kotlin--medium]]
 - [[q-suspend-functions-basics--kotlin--easy]]
--

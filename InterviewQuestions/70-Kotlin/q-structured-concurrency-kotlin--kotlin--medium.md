@@ -37,15 +37,15 @@ subtopics:
 > What is structured concurrency and why is it important in Android coroutine usage?
 ## Ответ (RU)
 
-**Структурированная конкурентность** - это парадигма программирования, которая привязывает время жизни корутин к области видимости (scope), гарантируя, что когда область завершается (например, Activity уничтожается), все дочерние корутины завершаются или отменяются.
+**Структурированная конкурентность** — это подход к работе с конкурентностью, который привязывает время жизни корутин к области видимости (scope), формируя иерархию родитель–потомок и гарантируя, что когда область завершается (например, Activity уничтожается), все дочерние корутины завершаются или отменяются.
 
 ### Основные Принципы
 
-**Определение**: Структурированная конкурентность - это принцип, который:
+**Определение**: Структурированная конкурентность — это принцип, который:
 - Привязывает время жизни корутин к конкретной области
 - Гарантирует, что все дочерние корутины завершаются или отменяются при завершении родительской области
 - Предотвращает утечки корутин, когда фоновая работа продолжается после уничтожения UI
-- Обеспечивает предсказуемую отмену и очистку
+- Обеспечивает предсказуемую отмену, очистку и распространение ошибок по иерархии
 
 ### Почему Это Важно в Android
 
@@ -56,12 +56,13 @@ class MyActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Глобальная область - работает вечно без ручной отмены
+        // Глобальная область — живёт дольше Activity и не учитывает её жизненный цикл
         GlobalScope.launch {
             while (true) {
                 delay(1000)
-                // Продолжает работать даже после уничтожения Activity!
-                updateUI() // Может вызвать крэши или утечки памяти
+                // Эта корутина продолжит работу даже после уничтожения Activity,
+                // если явно не отменить её.
+                updateUI() // Риск: вызовы к UI после уничтожения или из неправильного потока
             }
         }
     }
@@ -75,11 +76,11 @@ class MyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Область, учитывающая жизненный цикл - отменяется автоматически
+        // Область, учитывающая жизненный цикл — отменяется автоматически
         lifecycleScope.launch {
             while (true) {
                 delay(1000)
-                updateUI() // Безопасно: отменяется при уничтожении Activity
+                updateUI() // Безопаснее: корутина отменяется при уничтожении Activity
             }
         }
     }
@@ -92,15 +93,15 @@ class MyActivity : AppCompatActivity() {
 ```kotlin
 class MyViewModel : ViewModel() {
     fun loadData() {
-        // Родительская корутина в viewModelScope
+        // Родительская корутина в viewModelScope (на основе SupervisorJob)
         viewModelScope.launch {
             val user = async { fetchUser() }        // Дочерняя 1
             val posts = async { fetchPosts() }      // Дочерняя 2
 
-            // Если viewModelScope отменяется:
-            // - Родительская корутина отменяется
+            // Если viewModelScope отменяется (например, при onCleared()):
+            // - Отменяется родительский scope
             // - Все дочерние корутины (async блоки) автоматически отменяются
-            // - Не остается сирот
+            // - Не остается "сиротских" задач
 
             displayData(user.await(), posts.await())
         }
@@ -111,7 +112,7 @@ class MyViewModel : ViewModel() {
 **2. Автоматическая Отмена**:
 ```kotlin
 lifecycleScope.launch {
-    // Все это - дочерние элементы lifecycleScope
+    // Все эти корутины — дочерние относительно lifecycleScope
     launch {
         // Задача 1
     }
@@ -122,21 +123,21 @@ lifecycleScope.launch {
     // При уничтожении жизненного цикла:
     // - lifecycleScope отменяется
     // - Все дочерние корутины автоматически отменяются
-    // - Предотвращает утечки памяти
+    // - Это помогает предотвратить утечки памяти и лишнюю работу
 }
 ```
 
-**3. Распространение Ошибок**:
+**3. Распространение Ошибок (обычная иерархия Job)**:
 ```kotlin
 viewModelScope.launch {
     try {
         val result1 = async { riskyOperation1() }
         val result2 = async { riskyOperation2() }
 
-        // Если любой async падает:
-        // - Исключение распространяется на родителя
-        // - Другой соседний элемент автоматически отменяется
-        // - Родительская область может обработать ошибку
+        // Внутри одной родительской корутины:
+        // - Если один async выбрасывает исключение при await(), оно будет поймано в этом try/catch
+        // - Можно отменить другие операции вручную при необходимости
+        // - В обычной иерархии Job ошибка дочернего элемента приводит к отмене родителя и его детей
 
         processResults(result1.await(), result2.await())
     } catch (e: Exception) {
@@ -153,44 +154,44 @@ viewModelScope.launch {
 - Ресурсы корректно освобождаются
 
 **2. Предсказуемая Отмена**:
-- Отмена родителя → все дети отменены
+- Отмена родителя → все его дочерние Job отменяются
 - Четкая иерархия отмены
 - Нет корутин-сирот
 
 **3. Обработка Исключений**:
-- Исключения предсказуемо распространяются через иерархию
-- Можно установить CoroutineExceptionHandler на уровне области
-- Ошибки не остаются незамеченными
+- Исключения предсказуемо распространяются по иерархии Job
+- Можно установить CoroutineExceptionHandler на уровне области для необработанных исключений в корне
+- Ошибки не остаются незамеченными при правильной структуре
 
 **4. Управление Ресурсами**:
-- Очистка происходит автоматически
-- Не нужно вручную отслеживать Job корутин
-- Следует жизненному циклу компонента
+- Очистка происходит автоматически при завершении scope
+- Не нужно вручную отслеживать Job корутин в большинстве случаев
+- Логика следует жизненному циклу компонента
 
 ### Резюме
 
 **Структурированная конкурентность** гарантирует:
-- - Корутины привязаны к областям
-- - Автоматическая отмена при завершении области
-- - Предсказуемое распространение ошибок
-- - Отсутствие утечек памяти
-- - Чистое управление ресурсами
+- Корутины привязаны к областям
+- Автоматическую отмену при завершении области
+- Предсказуемое распространение ошибок
+- Отсутствие утечек памяти
+- Чистое управление ресурсами
 
-В Android это означает использование `viewModelScope`, `lifecycleScope` или пользовательских областей вместо `GlobalScope` или неограниченных запусков.
+В Android это означает использование `viewModelScope`, `lifecycleScope` или пользовательских областей, привязанных к жизненному циклу, вместо `GlobalScope` или корутин без явной области.
 
 ---
 
 ## Answer (EN)
 
-**Structured concurrency** is a programming paradigm that ties the lifetime of coroutines to a scope, ensuring that when a scope ends (e.g., an Activity is destroyed), all its child coroutines are completed or cancelled.
+**Structured concurrency** is a concurrency model that ties the lifetime of coroutines to a scope, forming a parent–child hierarchy and ensuring that when a scope ends (e.g., an Activity is destroyed), all its child coroutines are completed or cancelled.
 
 ### Core Principles
 
 **Definition**: Structured concurrency is a principle that:
 - Ties coroutine lifetimes to a specific scope
-- Ensures all child coroutines complete or cancel when parent scope ends
-- Prevents coroutine leaks where background work continues after UI is destroyed
-- Provides predictable cancellation and cleanup
+- Ensures all child coroutines complete or cancel when the parent scope ends
+- Prevents coroutine leaks where background work continues after the UI is destroyed
+- Provides predictable cancellation, cleanup, and error propagation through the hierarchy
 
 ### Why It Matters in Android
 
@@ -201,12 +202,13 @@ class MyActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Global scope - runs forever unless manually canceled
+        // Global scope — lives longer than Activity and ignores its lifecycle
         GlobalScope.launch {
             while (true) {
                 delay(1000)
-                // This keeps running even after Activity is destroyed!
-                updateUI() // Can cause crashes or memory leaks
+                // This keeps running even after Activity is destroyed
+                // unless you cancel it manually.
+                updateUI() // Risky: UI calls after destruction or from wrong thread
             }
         }
     }
@@ -220,11 +222,11 @@ class MyActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Lifecycle-aware scope - cancels automatically
+        // Lifecycle-aware scope — canceled automatically
         lifecycleScope.launch {
             while (true) {
                 delay(1000)
-                updateUI() // Safe: canceled when Activity destroyed
+                updateUI() // Safer: coroutine is canceled when Activity is destroyed
             }
         }
     }
@@ -237,14 +239,14 @@ class MyActivity : AppCompatActivity() {
 ```kotlin
 class MyViewModel : ViewModel() {
     fun loadData() {
-        // Parent coroutine in viewModelScope
+        // Parent coroutine in viewModelScope (backed by SupervisorJob)
         viewModelScope.launch {
             val user = async { fetchUser() }        // Child 1
             val posts = async { fetchPosts() }      // Child 2
 
-            // If viewModelScope is canceled:
-            // - Parent coroutine is canceled
-            // - All child coroutines (async blocks) are automatically canceled
+            // If viewModelScope is canceled (e.g. ViewModel.onCleared()):
+            // - The scope is canceled
+            // - All its child coroutines (including async blocks) are automatically canceled
             // - No orphan work remains
 
             displayData(user.await(), posts.await())
@@ -267,21 +269,21 @@ lifecycleScope.launch {
     // When lifecycle is destroyed:
     // - lifecycleScope is canceled
     // - All child coroutines are automatically canceled
-    // - Prevents memory leaks
+    // - Helps prevent memory leaks and wasted work
 }
 ```
 
-**3. Failure Propagation**:
+**3. Failure Propagation (regular Job hierarchy)**:
 ```kotlin
 viewModelScope.launch {
     try {
         val result1 = async { riskyOperation1() }
         val result2 = async { riskyOperation2() }
 
-        // If either async fails:
-        // - Exception propagates to parent
-        // - Other sibling is automatically canceled
-        // - Parent scope can handle the error
+        // Within a single parent coroutine:
+        // - If an async throws when awaited, the exception is caught here
+        // - You can cancel other operations explicitly if needed
+        // - In a regular Job hierarchy, a failing child cancels its parent and siblings
 
         processResults(result1.await(), result2.await())
     } catch (e: Exception) {
@@ -293,24 +295,24 @@ viewModelScope.launch {
 ### Benefits of Structured Concurrency
 
 **1. Memory Leak Prevention**:
-- Coroutines are automatically canceled when scope ends
-- No background work continues after UI destruction
+- Coroutines are automatically canceled when the scope ends
+- Background work doesn’t continue after UI destruction
 - Resources are properly cleaned up
 
 **2. Predictable Cancellation**:
-- Cancel parent → all children canceled
+- Cancel parent → all its child Jobs are canceled
 - Clear cancellation hierarchy
 - No orphan coroutines
 
 **3. Exception Handling**:
-- Exceptions propagate predictably through scope hierarchy
-- Can install CoroutineExceptionHandler at scope level
-- Failures don't go unnoticed
+- Exceptions propagate predictably through the Job hierarchy
+- Can install a CoroutineExceptionHandler at a scope root for uncaught exceptions
+- Failures are less likely to go unnoticed when scopes are structured correctly
 
 **4. Resource Management**:
-- Cleanup happens automatically
-- No manual tracking of coroutine jobs
-- Follows component lifecycle
+- Cleanup happens automatically when scopes complete or are canceled
+- No need to manually track most coroutine Jobs
+- Behavior follows the component lifecycle
 
 ### Android-Specific Scopes
 
@@ -348,47 +350,47 @@ class MyActivity : AppCompatActivity() {
 ### Comparison: Unstructured vs Structured
 
 | Aspect | Unstructured (GlobalScope) | Structured (lifecycleScope) |
-|--------|---------------------------|----------------------------|
-| **Lifetime** | Forever (until manual cancel) | Tied to component lifecycle |
-| **Cancellation** | Manual | Automatic |
-| **Memory Leaks** | Risk of leaks | Leak-safe |
-| **Error Handling** | Must handle manually | Propagates through hierarchy |
-| **Resource Cleanup** | Manual cleanup needed | Automatic cleanup |
+|--------|---------------------------|-----------------------------|
+| **Lifetime** | Often global / until manual cancel | Tied to component lifecycle |
+| **Cancellation** | Manual | Automatic via lifecycle |
+| **Memory Leaks** | Higher risk of leaks | Safer by design |
+| **Error Handling** | Must manage manually | Propagates through hierarchy |
+| **Resource Cleanup** | Manual cleanup needed | Automatic cleanup in scope |
 
 ### Best Practices
 
 ```kotlin
-// - DO: Use scoped builders
+// - DO: Use lifecycle- or component-scoped builders
 viewModelScope.launch { /* ... */ }
 lifecycleScope.launch { /* ... */ }
 
-// - DO: Create custom scopes tied to lifecycle
+// - DO: Create custom scopes tied to lifecycle/ownership
 class MyRepository {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     fun close() {
-        scope.cancel() // Clean up when repository is done
+        scope.cancel() // Clean up when repository is no longer used
     }
 }
 
-// - DON'T: Use GlobalScope
-GlobalScope.launch { /* ... */ } // Ignores lifecycle!
+// - DON'T: Use GlobalScope for app/business logic
+GlobalScope.launch { /* ... */ } // Ignores lifecycle; easy to leak or mis-handle
 
-// - DON'T: Launch unscoped coroutines
+// - DON'T: Launch coroutines in ad-hoc scopes without canceling
 CoroutineScope(Dispatchers.Main).launch { /* ... */ }
-// No lifecycle tie - must cancel manually
+// If you create a scope manually, you must also manage its Job and cancellation.
 ```
 
 ### Summary
 
 **Structured concurrency** ensures:
-- - Coroutines tied to scopes
-- - Automatic cancellation when scope ends
-- - Predictable error propagation
-- - No memory leaks
-- - Clean resource management
+- Coroutines tied to scopes
+- Automatic cancellation when the scope ends
+- Predictable error propagation
+- Reduced risk of memory leaks
+- Clean resource management
 
-In Android, this means using `viewModelScope`, `lifecycleScope`, or custom scopes rather than `GlobalScope` or unscoped launches.
+In Android, this means using `viewModelScope`, `lifecycleScope`, or well-defined custom scopes rather than `GlobalScope` or unscoped launches.
 
 ---
 
@@ -426,4 +428,3 @@ In Android, this means using `viewModelScope`, `lifecycleScope`, or custom scope
 - [[q-coroutine-context-detailed--kotlin--hard]] - Deep dive into CoroutineContext
 - [[q-advanced-coroutine-patterns--kotlin--hard]] - Advanced patterns
 - [[q-coroutine-performance-optimization--kotlin--hard]] - Performance optimization
-

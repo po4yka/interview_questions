@@ -1,6 +1,6 @@
 ---
 id: kotlin-178
-title: "Nothing Instances / Экземпляры Nothing"
+title: "Nothing Instances"
 aliases: [Bottom Type, Nothing, Nothing Type, Nothing тип]
 topic: kotlin
 subtopics: [type-system]
@@ -10,13 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-circuit-breaker-coroutines--kotlin--hard, q-request-coalescing-deduplication--kotlin--hard, q-stateflow-sharedflow-android--kotlin--medium]
+related: [c-kotlin, q-circuit-breaker-coroutines--kotlin--hard, q-request-coalescing-deduplication--kotlin--hard]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [bottom-type, difficulty/easy, kotlin, nothing, type-system]
 ---
-# How Many Instance Types Does Nothing Have?
-
 # Вопрос (RU)
 > Сколько экземпляров имеет тип Nothing в Kotlin?
 
@@ -37,14 +35,14 @@ tags: [bottom-type, difficulty/easy, kotlin, nothing, type-system]
 - Часто используется в функциях, которые всегда выбрасывают исключения или выполняются бесконечно
 
 **Когда используется Nothing:**
-- Функции, которые всегда выбрасывают исключения (`throw`, `error()`, `TODO()`)
+- Функции, которые всегда выбрасывают исключения (`throw`, `error()`, `TODO()`) — они объявляют `Nothing` как возвращаемый тип, потому что не завершаются нормально
 - Функции с бесконечными циклами
 - Выражения, которые никогда не производят значение
 - Как параметр типа для пустых коллекций
 
-### Примеры Кода
+### Примеры кода
 
-**Функции, возвращающие Nothing:**
+**Функции, возвращающие Nothing (нормально не завершаются):**
 
 ```kotlin
 // Функция всегда выбрасывает исключение - возвращает Nothing
@@ -62,8 +60,8 @@ fun infiniteLoop(): Nothing {
 
 // Встроенные функции, возвращающие Nothing
 fun demonstrateBuiltIn() {
-    TODO("Ещё не реализовано")  // Возвращает Nothing
-    error("Что-то пошло не так")  // Возвращает Nothing
+    TODO("Ещё не реализовано")  // TODO() всегда выбрасывает NotImplementedError, поэтому его тип Nothing
+    error("Что-то пошло не так")  // error() всегда выбрасывает исключение, тип Nothing
 }
 ```
 
@@ -71,17 +69,19 @@ fun demonstrateBuiltIn() {
 
 ```kotlin
 fun processValue(value: String?): Int {
-    // Nothing - подтип Int, поэтому компилируется
+    // Nothing - подтип Int, поэтому выражение компилируется
     val length: Int = value?.length ?: fail("Значение null")
     return length
 }
 
 fun getUser(id: Int): User {
-    // Nothing - подтип User
+    // Nothing - подтип User, поэтому elvis с error() допустим
     return findUser(id) ?: error("Пользователь не найден")
 }
 
 data class User(val id: Int, val name: String)
+
+fun findUser(id: Int): User? = null // Заглушка поиска пользователя
 ```
 
 **Nothing с when-выражениями:**
@@ -95,7 +95,7 @@ sealed class Result {
 fun handleResult(result: Result): Int {
     return when (result) {
         is Result.Success -> result.value
-        is Result.Error -> error(result.message)  // Возвращает Nothing
+        is Result.Error -> error(result.message)  // Возвращает Nothing, ветка не завершается нормально
     }
 }
 ```
@@ -103,15 +103,15 @@ fun handleResult(result: Result): Int {
 **Nothing в коллекциях:**
 
 ```kotlin
-// Пустой список имеет тип List<Nothing>
+// Пустой список по умолчанию имеет тип List<Nothing>
 val emptyList: List<Nothing> = emptyList()
 
-// Nothing - подтип всех типов
-val strings: List<String> = emptyList  // Работает!
-val numbers: List<Int> = emptyList     // Работает!
-val users: List<User> = emptyList      // Работает!
+// Благодаря тому, что Nothing - подтип всех типов, этот список можно присвоить переменным с более конкретными типами
+val strings: List<String> = emptyList  // Работает
+val numbers: List<Int> = emptyList     // Работает
+val users: List<User> = emptyList      // Работает
 
-// listOf() возвращает List<Nothing> когда пуст
+// listOf() возвращает List<Nothing>, когда вызывается без аргументов
 val empty = listOf()
 ```
 
@@ -122,16 +122,16 @@ val empty = listOf()
 val nothingNullable: Nothing? = null
 
 // Это единственное допустимое значение для Nothing?
-// val invalid: Nothing? = something  // Другое значение невозможно!
+// val invalid: Nothing? = something  // Другие значения невозможны
 
-// Часто используется как параметр типа для функций, возвращающих null
+// Можно явно объявить функцию, всегда возвращающую null, как Nothing?
 fun alwaysNull(): Nothing? = null
 ```
 
 **Nothing vs Unit:**
 
 ```kotlin
-// Unit: Функция завершается нормально, ничего полезного не возвращает
+// Unit: Функция завершается нормально, но не возвращает полезного значения
 fun printMessage(msg: String): Unit {
     println(msg)
     // Неявно возвращает Unit
@@ -148,7 +148,7 @@ fun demonstrateDifference() {
     printMessage("Hello")  // Печатает и продолжает
     println("После printMessage")
 
-    // Nothing функция никогда не возвращается
+    // Nothing функция никогда не возвращается (нормально)
     // failWithError("Error")  // Выбросит исключение
     // println("После failWithError")  // Недостижимый код
 }
@@ -158,8 +158,8 @@ fun demonstrateDifference() {
 
 ```kotlin
 fun checkValue(value: Int?): Int {
-    // Компилятор знает, что если value null, fail() выбросит исключение
-    // Поэтому тип возврата выводится как Int (не Int?)
+    // Компилятор знает, что если value == null, fail() выбросит исключение (тип Nothing)
+    // Поэтому тип результата выражения elvis - Int, а не Int?
     return value ?: fail("Значение не может быть null")
 }
 
@@ -177,9 +177,11 @@ interface UserRepository {
     fun deleteUser(id: Int): Boolean
 }
 
+data class User(val id: Int, val name: String)
+
 class UserRepositoryImpl : UserRepository {
     override fun getUser(id: Int): User {
-        TODO("Реализовать запрос к БД")  // Возвращает Nothing
+        TODO("Реализовать запрос к БД")  // TODO() объявлен с типом Nothing: выполнение не продолжится нормально
     }
 
     override fun saveUser(user: User) {
@@ -192,36 +194,36 @@ class UserRepositoryImpl : UserRepository {
 }
 ```
 
-### Краткий Ответ
+### Краткий ответ
 
 Nothing имеет **ноль экземпляров**. Это необитаемый тип (bottom type), который:
 - Не может быть проинстанцирован
 - Является подтипом всех типов
-- Используется для функций, которые никогда не возвращаются (`throw`, `error()`, `TODO()`)
-- Используется для пустых коллекций (`emptyList()` возвращает `List<Nothing>`)
+- Используется для функций и выражений, которые никогда не завершаются нормально (`throw`, `error()`, `TODO()` и т.п.)
+- Используется в типовом выводе для пустых коллекций (`emptyList()` без явного типа возвращает `List<Nothing>`)
 
 Nothing? может иметь только одно значение: `null`.
 
 ## Answer (EN)
 
-**Nothing has no instances.** It is an uninhabited type that cannot be instantiated.
+**Nothing has no instances.** It is an uninhabited type (bottom type) that cannot be instantiated.
 
 **Key characteristics:**
 - Nothing is a type that has no values
 - It is the subtype of all types (bottom type)
 - Used to represent functions that never return normally
-- Used to represent expressions that never complete
+- Used to represent expressions that never complete normally
 - Commonly used with functions that always throw exceptions or run infinite loops
 
 **When Nothing is used:**
-- Functions that always throw exceptions (`throw`, `error()`, `TODO()`)
+- Functions that always throw exceptions (`throw`, `error()`, `TODO()`) — they declare `Nothing` as the return type because they do not complete normally
 - Functions with infinite loops
 - Expressions that never produce a value
 - As a type parameter for empty collections
 
-### Code Examples
+### Code examples
 
-**Functions that return Nothing:**
+**Functions that return Nothing (do not complete normally):**
 
 ```kotlin
 // Function that always throws - returns Nothing
@@ -239,14 +241,8 @@ fun infiniteLoop(): Nothing {
 
 // Built-in functions that return Nothing
 fun demonstrateBuiltIn() {
-    TODO("Not implemented yet")  // Returns Nothing
-    error("Something went wrong")  // Returns Nothing
-}
-
-fun main() {
-    // These functions never return a value
-    // fail("Error occurred")  // Would throw exception
-    // infiniteLoop()  // Would run forever
+    TODO("Not implemented yet")  // TODO() always throws NotImplementedError, so its type is Nothing
+    error("Something went wrong")  // error() always throws, type Nothing
 }
 ```
 
@@ -254,28 +250,19 @@ fun main() {
 
 ```kotlin
 fun processValue(value: String?): Int {
-    // Nothing is a subtype of Int, so this compiles
+    // Nothing is a subtype of Int, so this expression compiles
     val length: Int = value?.length ?: fail("Value is null")
     return length
 }
 
 fun getUser(id: Int): User {
-    // Nothing is a subtype of User
+    // Nothing is a subtype of User, so using error() in elvis is valid
     return findUser(id) ?: error("User not found")
 }
 
 data class User(val id: Int, val name: String)
 
-fun findUser(id: Int): User? = null  // Simulate database lookup
-
-fun main() {
-    try {
-        val length = processValue(null)
-        println(length)
-    } catch (e: Exception) {
-        println("Caught: ${e.message}")
-    }
-}
+fun findUser(id: Int): User? = null  // Stub for user lookup
 ```
 
 **Nothing with when expressions:**
@@ -289,19 +276,7 @@ sealed class Result {
 fun handleResult(result: Result): Int {
     return when (result) {
         is Result.Success -> result.value
-        is Result.Error -> error(result.message)  // Returns Nothing
-    }
-}
-
-fun main() {
-    val success = Result.Success(42)
-    println(handleResult(success))  // 42
-
-    val failure = Result.Error("Something went wrong")
-    try {
-        handleResult(failure)  // Throws exception
-    } catch (e: Exception) {
-        println("Error handled: ${e.message}")
+        is Result.Error -> error(result.message)  // Returns Nothing, branch does not complete normally
     }
 }
 ```
@@ -309,83 +284,35 @@ fun main() {
 **Nothing in collections:**
 
 ```kotlin
-fun main() {
-    // Empty list has type List<Nothing>
-    val emptyList: List<Nothing> = emptyList()
-    println("Empty list size: ${emptyList.size}")  // 0
+// Empty list has type List<Nothing> by default
+val emptyList: List<Nothing> = emptyList()
 
-    // Nothing is a subtype of all types
-    val strings: List<String> = emptyList  // Works!
-    val numbers: List<Int> = emptyList     // Works!
-    val users: List<User> = emptyList      // Works!
+// Because Nothing is a subtype of all types, this list can be assigned to variables with more specific element types
+val strings: List<String> = emptyList  // Works
+val numbers: List<Int> = emptyList     // Works
+val users: List<User> = emptyList      // Works
 
-    // listOf() returns List<Nothing> when empty
-    val empty = listOf()
-    println(empty::class)  // class kotlin.collections.EmptyList
-}
-
-data class User(val name: String)
+// listOf() returns List<Nothing> when called without arguments
+val empty = listOf()
 ```
 
 **Nothing? (nullable Nothing):**
 
 ```kotlin
-fun main() {
-    // Nothing? can only hold null
-    val nothingNullable: Nothing? = null
-    println(nothingNullable)  // null
+// Nothing? can only hold null
+val nothingNullable: Nothing? = null
 
-    // This is the only valid value for Nothing?
-    // val invalid: Nothing? = something  // No other value possible!
+// This is the only valid value for Nothing?
+// val invalid: Nothing? = something  // No other value possible
 
-    // Often used as a type parameter for functions that return null
-    fun alwaysNull(): Nothing? = null
-
-    val result = alwaysNull()
-    println(result)  // null
-}
-```
-
-**Practical usage with TODO():**
-
-```kotlin
-interface UserRepository {
-    fun getUser(id: Int): User
-    fun saveUser(user: User)
-    fun deleteUser(id: Int): Boolean
-}
-
-data class User(val id: Int, val name: String)
-
-class UserRepositoryImpl : UserRepository {
-    override fun getUser(id: Int): User {
-        TODO("Implement database query")  // Returns Nothing
-    }
-
-    override fun saveUser(user: User) {
-        TODO("Implement save operation")
-    }
-
-    override fun deleteUser(id: Int): Boolean {
-        TODO("Implement delete operation")
-    }
-}
-
-fun main() {
-    val repo = UserRepositoryImpl()
-
-    try {
-        val user = repo.getUser(1)
-    } catch (e: NotImplementedError) {
-        println("Function not implemented: ${e.message}")
-    }
-}
+// You can explicitly declare a function that always returns null as Nothing?
+fun alwaysNull(): Nothing? = null
 ```
 
 **Nothing vs Unit:**
 
 ```kotlin
-// Unit: Function completes normally, returns nothing useful
+// Unit: Function completes normally, returns no meaningful value
 fun printMessage(msg: String): Unit {
     println(msg)
     // Implicitly returns Unit
@@ -402,13 +329,9 @@ fun demonstrateDifference() {
     printMessage("Hello")  // Prints and continues
     println("After printMessage")
 
-    // Nothing function never returns
+    // Nothing function never returns (normally)
     // failWithError("Error")  // Would throw and never reach next line
     // println("After failWithError")  // Unreachable code
-}
-
-fun main() {
-    demonstrateDifference()
 }
 ```
 
@@ -416,27 +339,49 @@ fun main() {
 
 ```kotlin
 fun checkValue(value: Int?): Int {
-    // Compiler knows that if value is null, fail() throws
-    // So the return type can be inferred as Int (not Int?)
+    // Compiler knows that if value is null, fail() throws (type Nothing)
+    // So the resulting type of the elvis expression is Int, not Int?
     return value ?: fail("Value cannot be null")
 }
 
 fun fail(message: String): Nothing {
     throw IllegalArgumentException(message)
 }
+```
 
-fun main() {
-    println(checkValue(42))  // 42
+**Practical usage with TODO():**
 
-    try {
-        println(checkValue(null))  // Throws exception
-    } catch (e: Exception) {
-        println("Caught: ${e.message}")
+```kotlin
+interface UserRepository {
+    fun getUser(id: Int): User
+    fun saveUser(user: User)
+    fun deleteUser(id: Int): Boolean
+}
+
+data class User(val id: Int, val name: String)
+
+class UserRepositoryImpl : UserRepository {
+    override fun getUser(id: Int): User {
+        TODO("Implement database query")  // TODO() has return type Nothing: execution does not continue normally
+    }
+
+    override fun saveUser(user: User) {
+        TODO("Implement save operation")
+    }
+
+    override fun deleteUser(id: Int): Boolean {
+        TODO("Implement delete operation")
     }
 }
 ```
 
 ---
+
+## Дополнительные вопросы (RU)
+
+- В чём ключевые отличия этого подхода от Java?
+- Когда вы бы использовали Nothing на практике?
+- Какие распространённые ошибки стоит избегать?
 
 ## Follow-ups
 
@@ -444,9 +389,21 @@ fun main() {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
 ## References
 
+- [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-circuit-breaker-coroutines--kotlin--hard]]
+- [[q-stateflow-sharedflow-android--kotlin--medium]]
+- [[q-request-coalescing-deduplication--kotlin--hard]]
 
 ## Related Questions
 

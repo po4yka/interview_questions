@@ -3,92 +3,44 @@ id: kotlin-222
 title: "Companion Object Initialization / Инициализация Companion Object"
 aliases: [Companion Object Initialization, Инициализация Companion Object]
 topic: kotlin
-subtopics: [companion-objects]
+subtopics: [companion-object]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-kotlin-features]
+related: [c-kotlin-features, c-kotlin, q-abstract-class-vs-interface--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-10
 tags: [companion-objects, difficulty/easy, initialization, programming-languages]
 ---
-# When is Companion Object Initialized?
-
 # Вопрос (RU)
 > Когда инициализируется companion object в Kotlin?
-
----
 
 # Question (EN)
 > When is a companion object initialized in Kotlin?
 
 ## Ответ (RU)
 
-Companion object инициализируется **лениво при первом доступе**. Он инициализируется при первом обращении к любому из его членов (свойствам или функциям), включая случаи, когда происходит обращение к самому companion object.
+Companion object инициализируется **при инициализации соответствующего класса** (на JVM — при инициализации сгенерированного `Companion`/класса-холдера), которая обычно происходит при первом реальном использовании его членов или других статических аспектов класса. Инициализация выполняется один раз; дальнейшие обращения используют уже инициализированный объект.
+
+Важно: точный момент инициализации зависит от целевой платформы и правил инициализации классов (особенно на JVM). Поэтому фразу "лениво при первом использовании" стоит понимать как практическое наблюдение, а не как жесткую гарантию, отделенную от механики инициализации класса: создание экземпляра, статические вызовы или другие обращения, которые требуют инициализации класса, могут инициализировать companion object раньше, чем первое явное обращение к его членам.
 
 **Ключевые моменты:**
-- Инициализация при первом доступе (ленивая инициализация)
-- Потокобезопасна по умолчанию
-- Инициализируется только один раз за весь жизненный цикл приложения
-- Инициализация происходит до первого использования любого члена companion
-- Аналогично статическим блокам инициализации в Java
+- Инициализация companion object привязана к инициализации соответствующего класса
+- Обычно выглядит как "ленивая" (часто происходит при первом фактическом использовании), но не гарантируется отдельно от правил инициализации класса
+- Потокобезопасна по умолчанию (инициализация выполняется один раз, даже при многопоточном доступе)
+- Инициализируется только один раз за весь жизненный цикл процесса
+- На JVM поведение сопоставимо со статическими блоками инициализации и правилами инициализации классов в Java
 
-**НЕ инициализируется когда:**
-- Просто создается экземпляр содержащего класса (если члены companion не используются)
-- Класс загружен, но члены companion object не используются
+**Не гарантировано, что companion object НЕ будет инициализирован, если:**
+- Просто создается экземпляр содержащего класса: в конкретной ситуации это может привести к инициализации companion object, если байткод требует инициализации класса
+- Класс загружен: при определенных оптимизациях или обращениях к статическим элементам/метаданным инициализация может произойти до первого явного обращения к членам companion object
 
-### Пример Базовой Инициализации
+(Примеры ниже иллюстрируют типичное поведение, но фактический момент инициализации может отличаться в зависимости от платформы и реализации.)
 
-```kotlin
-class MyClass {
-    companion object {
-        init {
-            println("Companion object initialized!")
-        }
-        val value = "Hello"
-    }
-
-    init {
-        println("MyClass instance created!")
-    }
-}
-
-fun main() {
-    val instance = MyClass()  // Выведет: "MyClass instance created!"
-    println(MyClass.value)     // Выведет: "Companion object initialized!" затем "Hello"
-    println(MyClass.value)     // Выведет только: "Hello" (уже инициализирован)
-}
-```
-
-### Важные Особенности
-
-1. **Один companion на все экземпляры** - companion object инициализируется один раз, независимо от количества созданных экземпляров класса
-
-2. **Ленивая загрузка** - если companion object содержит дорогостоящие операции, они не выполнятся, пока не понадобятся
-
-3. **Потокобезопасность** - инициализация гарантированно произойдет только один раз, даже при многопоточном доступе
-
-## Answer (EN)
-
-A companion object is initialized **lazily when first accessed**. It is initialized on the first access to any of its members (properties or functions), including when the companion object itself is referenced.
-
-**Key points:**
-- Initialized on first access (lazy initialization)
-- Thread-safe by default
-- Initialized only once throughout the application lifecycle
-- Initialization happens before the first use of any companion member
-- Similar to Java static initializer blocks
-
-**Not initialized when:**
-- Just creating an instance of the containing class (if companion members aren't accessed)
-- Class is loaded but companion object members aren't used
-
-### Code Examples
-
-**Basic initialization timing:**
+### Пример базовой инициализации
 
 ```kotlin
 class MyClass {
@@ -96,7 +48,6 @@ class MyClass {
         init {
             println("Companion object initialized!")
         }
-
         val value = "Hello"
     }
 
@@ -107,28 +58,17 @@ class MyClass {
 
 fun main() {
     println("Before creating instance")
-    val instance = MyClass()
-    // Output:
-    // Before creating instance
-    // MyClass instance created!
+    val instance = MyClass()  // Инициализация класса (и companion) может произойти здесь на JVM
 
     println("\nBefore accessing companion")
-    println(MyClass.value)
-    // Output:
-    // Before accessing companion
-    // Companion object initialized!
-    // Hello
+    println(MyClass.value)    // Если companion еще не инициализирован, он будет инициализирован к этому моменту
 
     println("\nAccessing companion again")
-    println(MyClass.value)
-    // Output:
-    // Accessing companion again
-    // Hello
-    // (No initialization message - already initialized)
+    println(MyClass.value)    // Повторное обращение: только "Hello" (companion уже инициализирован)
 }
 ```
 
-**Companion object initialization with properties:**
+### Инициализация companion object с состоянием
 
 ```kotlin
 class Database {
@@ -153,33 +93,27 @@ class Database {
 
 fun main() {
     println("Starting application...")
-
-    // Companion object NOT initialized yet
     val db1 = Database()
     println("Created Database instance")
 
-    // First access - companion object initialized here
     println("\nFirst companion access:")
     println(Database.connect())
-    // Initializing Database companion object...
-    // Connection #1 established
 
-    // Already initialized
     println("\nSecond companion access:")
     println(Database.connect())
-    // Connection #2 established
 
     println(Database.getStats())
-    // Total connections: 2
 }
 ```
 
-**Multiple class instances vs single companion:**
+### Один companion для множества экземпляров
 
 ```kotlin
 class Counter(val instanceId: Int) {
     companion object {
-        private var instanceCount = 0
+        var instanceCount = 0
+            private set
+
         private val creationTime = System.currentTimeMillis()
 
         init {
@@ -191,39 +125,33 @@ class Counter(val instanceId: Int) {
     }
 
     init {
-        companion object.instanceCount++
-        println("Instance #$instanceId created (total: ${companion object.instanceCount})")
+        instanceCount++
+        println("Instance #$instanceId created (total: $instanceCount)")
     }
 }
 
 fun main() {
     println("Creating first instance:")
     val c1 = Counter(1)
-    // Companion object initialized at 1696348800000
-    // Instance #1 created (total: 1)
 
     println("\nCreating second instance:")
     val c2 = Counter(2)
-    // Instance #2 created (total: 2)
-    // (Companion already initialized)
 
     println("\nCreating third instance:")
     val c3 = Counter(3)
-    // Instance #3 created (total: 3)
 
     println("\nTotal instances: ${Counter.getInstanceCount()}")
-    // Total instances: 3
 }
 ```
 
-**Lazy initialization demonstration:**
+### Ленивая семантика и дорогостоящая инициализация
 
 ```kotlin
 class ExpensiveResource {
     companion object {
         init {
             println("Loading expensive resources...")
-            Thread.sleep(1000)  // Simulate expensive operation
+            Thread.sleep(1000)
             println("Resources loaded!")
         }
 
@@ -243,23 +171,16 @@ fun main() {
     println("\nCreating instances...")
     val r1 = ExpensiveResource()
     val r2 = ExpensiveResource()
-    // Companion NOT initialized yet - expensive operation avoided
 
     println("\nNow accessing companion for first time...")
     ExpensiveResource.doSomething()
-    // Loading expensive resources...
-    // (1 second delay)
-    // Resources loaded!
-    // Doing something with resources
 
     println("\nAccessing companion again...")
     ExpensiveResource.doSomething()
-    // Doing something with resources
-    // (No delay - already initialized)
 }
 ```
 
-**Initialization order with inheritance:**
+### Порядок инициализации при наследовании
 
 ```kotlin
 open class Base {
@@ -293,23 +214,16 @@ class Derived : Base() {
 fun main() {
     println("Creating Derived instance:")
     val d = Derived()
-    // Base instance created
-    // Derived instance created
-    // (No companion initialized)
 
     println("\nAccessing Base companion:")
     println(Base.baseValue)
-    // Base companion initialized
-    // Base
 
     println("\nAccessing Derived companion:")
     println(Derived.derivedValue)
-    // Derived companion initialized
-    // Derived
 }
 ```
 
-**Factory pattern with lazy companion:**
+### Компаньон как фабрика (ленивая инициализация фабрики)
 
 ```kotlin
 class User private constructor(val id: Int, val name: String) {
@@ -337,15 +251,11 @@ class User private constructor(val id: Int, val name: String) {
 fun main() {
     println("Application started")
 
-    // Companion initialized on first use
     println("\nCreating first user:")
     val user1 = User.create("Alice")
-    // User companion object initialized
-    // User factory ready
 
     println("User created: ${user1.name} (ID: ${user1.id})")
 
-    // Already initialized
     val user2 = User.create("Bob")
     println("User created: ${user2.name} (ID: ${user2.id})")
 
@@ -353,7 +263,7 @@ fun main() {
 }
 ```
 
-**Thread-safe initialization:**
+### Потокобезопасная инициализация
 
 ```kotlin
 class ThreadSafeExample {
@@ -370,7 +280,6 @@ class ThreadSafeExample {
 }
 
 fun main() {
-    // Create multiple threads trying to access companion
     val threads = List(10) { index ->
         Thread {
             println("Thread $index accessing companion")
@@ -381,23 +290,22 @@ fun main() {
     threads.forEach { it.start() }
     threads.forEach { it.join() }
 
-    // Only initialized once by first thread to access it
     println("\nInitialized by: ${ThreadSafeExample.getInitThread()}")
 }
 ```
 
-**Avoiding premature initialization:**
+### Избежание преждевременной инициализации
 
 ```kotlin
 class ConfigManager {
     companion object {
         init {
             println("Loading configuration from file...")
-            Thread.sleep(500)  // Simulate file I/O
+            Thread.sleep(500)
             println("Configuration loaded!")
         }
 
-        val config = mapOf(
+        private val config = mapOf(
             "api_url" to "https://api.example.com",
             "timeout" to "30",
             "debug" to "true"
@@ -410,30 +318,356 @@ class ConfigManager {
 fun main() {
     println("App starting...")
 
-    // Do other work - companion not initialized yet
     println("Doing some work...")
     repeat(3) { i ->
         println("  Step ${i + 1}")
         Thread.sleep(200)
     }
 
-    // Now we need config - initialized here
     println("\nNeed configuration now:")
     val apiUrl = ConfigManager.get("api_url")
     println("API URL: $apiUrl")
 }
 ```
 
----
+## Answer (EN)
 
-## Follow-ups
+A companion object is initialized **when its containing class (or the generated `Companion`/holder class) is initialized**, which typically happens around the first real use of its members or other static aspects of the class. Initialization happens once; all subsequent accesses use the already initialized instance.
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+Important: The exact timing depends on the target platform and class initialization rules (notably on the JVM). The common "initialized on first use" description is a useful intuition, but not a strict, platform-independent guarantee that is fully decoupled from class initialization. Creating instances, calling certain methods, or other bytecode-level accesses that require class initialization may trigger the companion object initialization earlier than the first explicit access to its members.
 
-## References
+**Key points:**
+- Companion object initialization is tied to initialization of the corresponding class
+- Often appears "lazy" (commonly near first actual use), but this is not a separate hard guarantee from the class initialization rules
+- Thread-safe by default (initialization happens only once, even with concurrent access)
+- Initialized only once for the process lifetime
+- On the JVM, behavior aligns with Java's class initialization and static initializer semantics
 
+**Not guaranteed to avoid initialization when:**
+- Merely creating an instance of the containing class: in specific cases this can cause class (and thus companion) initialization, depending on generated bytecode
+- The class is loaded: certain accesses/optimizations may cause initialization before the first explicit companion member use
+
+(The examples below illustrate typical behavior; actual timing may vary by platform and implementation.)
+
+### Code examples
+
+#### Basic initialization timing
+
+```kotlin
+class MyClass {
+    companion object {
+        init {
+            println("Companion object initialized!")
+        }
+
+        val value = "Hello"
+    }
+
+    init {
+        println("MyClass instance created!")
+    }
+}
+
+fun main() {
+    println("Before creating instance")
+    val instance = MyClass()  // On JVM, class (and companion) initialization may occur here
+
+    println("\nBefore accessing companion")
+    println(MyClass.value)    // If not yet initialized, companion will be initialized by this point
+
+    println("\nAccessing companion again")
+    println(MyClass.value)
+}
+```
+
+#### Companion object initialization with state
+
+```kotlin
+class Database {
+    companion object {
+        private var connectionCount = 0
+
+        init {
+            println("Initializing Database companion object...")
+            connectionCount = 0
+        }
+
+        fun connect(): String {
+            connectionCount++
+            return "Connection #$connectionCount established"
+        }
+
+        fun getStats(): String {
+            return "Total connections: $connectionCount"
+        }
+    }
+}
+
+fun main() {
+    println("Starting application...")
+    val db1 = Database()
+    println("Created Database instance")
+
+    println("\nFirst companion access:")
+    println(Database.connect())
+
+    println("\nSecond companion access:")
+    println(Database.connect())
+
+    println(Database.getStats())
+}
+```
+
+#### One companion for many instances
+
+```kotlin
+class Counter(val instanceId: Int) {
+    companion object {
+        var instanceCount = 0
+            private set
+
+        private val creationTime = System.currentTimeMillis()
+
+        init {
+            println("Companion object initialized at $creationTime")
+        }
+
+        fun getInstanceCount() = instanceCount
+        fun getCreationTime() = creationTime
+    }
+
+    init {
+        instanceCount++
+        println("Instance #$instanceId created (total: $instanceCount)")
+    }
+}
+
+fun main() {
+    println("Creating first instance:")
+    val c1 = Counter(1)
+
+    println("\nCreating second instance:")
+    val c2 = Counter(2)
+
+    println("\nCreating third instance:")
+    val c3 = Counter(3)
+
+    println("\nTotal instances: ${Counter.getInstanceCount()}")
+}
+```
+
+#### Lazy-like semantics and expensive initialization
+
+```kotlin
+class ExpensiveResource {
+    companion object {
+        init {
+            println("Loading expensive resources...")
+            Thread.sleep(1000)
+            println("Resources loaded!")
+        }
+
+        fun doSomething() {
+            println("Doing something with resources")
+        }
+    }
+
+    init {
+        println("ExpensiveResource instance created")
+    }
+}
+
+fun main() {
+    println("Application started")
+
+    println("\nCreating instances...")
+    val r1 = ExpensiveResource()
+    val r2 = ExpensiveResource()
+
+    println("\nNow accessing companion for first time...")
+    ExpensiveResource.doSomething()
+
+    println("\nAccessing companion again...")
+    ExpensiveResource.doSomething()
+}
+```
+
+#### Initialization order with inheritance
+
+```kotlin
+open class Base {
+    companion object {
+        init {
+            println("Base companion initialized")
+        }
+
+        val baseValue = "Base"
+    }
+
+    init {
+        println("Base instance created")
+    }
+}
+
+class Derived : Base() {
+    companion object {
+        init {
+            println("Derived companion initialized")
+        }
+
+        val derivedValue = "Derived"
+    }
+
+    init {
+        println("Derived instance created")
+    }
+}
+
+fun main() {
+    println("Creating Derived instance:")
+    val d = Derived()
+
+    println("\nAccessing Base companion:")
+    println(Base.baseValue)
+
+    println("\nAccessing Derived companion:")
+    println(Derived.derivedValue)
+}
+```
+
+#### Companion as factory (lazy initialization of factory)
+
+```kotlin
+class User private constructor(val id: Int, val name: String) {
+    companion object {
+        private val users = mutableMapOf<Int, User>()
+        private var nextId = 1
+
+        init {
+            println("User companion object initialized")
+            println("User factory ready")
+        }
+
+        fun create(name: String): User {
+            val user = User(nextId++, name)
+            users[user.id] = user
+            return user
+        }
+
+        fun getById(id: Int): User? = users[id]
+
+        fun getAllUsers(): List<User> = users.values.toList()
+    }
+}
+
+fun main() {
+    println("Application started")
+
+    println("\nCreating first user:")
+    val user1 = User.create("Alice")
+
+    println("User created: ${user1.name} (ID: ${user1.id})")
+
+    val user2 = User.create("Bob")
+    println("User created: ${user2.name} (ID: ${user2.id})")
+
+    println("\nAll users: ${User.getAllUsers().map { it.name }}")
+}
+```
+
+#### Thread-safe initialization
+
+```kotlin
+class ThreadSafeExample {
+    companion object {
+        private var initializationThread: String? = null
+
+        init {
+            initializationThread = Thread.currentThread().name
+            println("Initialized by thread: $initializationThread")
+        }
+
+        fun getInitThread() = initializationThread
+    }
+}
+
+fun main() {
+    val threads = List(10) { index ->
+        Thread {
+            println("Thread $index accessing companion")
+            ThreadSafeExample.getInitThread()
+        }
+    }
+
+    threads.forEach { it.start() }
+    threads.forEach { it.join() }
+
+    println("\nInitialized by: ${ThreadSafeExample.getInitThread()}")
+}
+```
+
+#### Avoiding premature initialization
+
+```kotlin
+class ConfigManager {
+    companion object {
+        init {
+            println("Loading configuration from file...")
+            Thread.sleep(500)
+            println("Configuration loaded!")
+        }
+
+        private val config = mapOf(
+            "api_url" to "https://api.example.com",
+            "timeout" to "30",
+            "debug" to "true"
+        )
+
+        fun get(key: String): String? = config[key]
+    }
+}
+
+fun main() {
+    println("App starting...")
+
+    println("Doing some work...")
+    repeat(3) { i ->
+        println("  Step ${i + 1}")
+        Thread.sleep(200)
+    }
+
+    println("\nNeed configuration now:")
+    val apiUrl = ConfigManager.get("api_url")
+    println("API URL: $apiUrl")
+}
+```
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия поведения companion object по сравнению со `static` в Java?
+- Когда на практике стоит опираться на кажущуюся "ленивую" инициализацию companion object и как учитывать правила инициализации класса?
+- Какие типичные ошибки связаны с тяжелой инициализацией в companion object с учетом того, что она может выполниться раньше, чем ожидается, и как их избегать?
+
+## Follow-ups (EN)
+
+- What are the key differences between companion object behavior and `static` in Java?
+- When would you rely on the apparent "initialized on first use" semantics in practice, and how should you factor in class initialization rules?
+- What common pitfalls are associated with heavy initialization in a companion object, given that it may run earlier than expected, and how can they be avoided?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
+## References (EN)
+
+- [[c-kotlin]]
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
-## Related Questions
+## Связанные вопросы (RU)
+
+- [[q-abstract-class-vs-interface--kotlin--medium]]
+
+## Related Questions (EN)
+
+- [[q-abstract-class-vs-interface--kotlin--medium]]

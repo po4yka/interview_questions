@@ -10,11 +10,11 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-class-initialization-order--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
-created: "2025-10-12"
-updated: 2025-01-25
+related: [c-kotlin, q-class-initialization-order--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-inner-nested-classes--kotlin--medium]
+created: 2025-10-12
+updated: 2025-11-09
 tags: [companion-object, difficulty/medium, kotlin, kotlin-features, object-keyword, singleton-pattern]
-sources: [https://kotlinlang.org/docs/object-declarations.html]
+sources: ["https://kotlinlang.org/docs/object-declarations.html"]
 ---
 
 # Вопрос (RU)
@@ -28,17 +28,17 @@ sources: [https://kotlinlang.org/docs/object-declarations.html]
 ## Ответ (RU)
 
 **Теория object и companion object:**
-В Kotlin `object` ключевое слово создаёт singleton - единственный экземпляр класса, инициализируемый лениво при первом доступе. `companion object` - специальный `object` внутри класса, доступ к которому идёт через имя класса. Используются для реализации singleton-паттерна, утилитных функций и factory методов.
+В Kotlin ключевое слово `object` объявляет singleton — единственный экземпляр, который создаётся и инициализируется при первом обращении к этому объекту (инициализация гарантированно потокобезопасна). `companion object` — это специальный `object` внутри класса, доступ к которому идёт через имя класса. Они используются для реализации singleton-паттерна, утилитных функций, factory-методов и псевдо-"статических" членов. См. также [[c-kotlin]].
 
 **Основные концепции:**
-- **object**: Создаёт singleton объект
+- **object**: Объявляет singleton-объект (единственный экземпляр типа)
 - **companion object**: Объект внутри класса, доступный через имя класса
-- **Ленивая инициализация**: Инициализируется при первом доступе
-- **Thread-safe**: Автоматически потокобезопасный
+- **Инициализация при первом использовании**: Инициализируется при первом обращении к объекту
+- **Потокобезопасная инициализация**: Создание экземпляра `object` / `companion object` потокобезопасно, но внутреннее изменяемое состояние не становится автоматически потокобезопасным
 
 **Object Singleton:**
 ```kotlin
-// ✅ object создаёт singleton
+// ✅ object объявляет singleton
 object DatabaseManager {
     private val connection = "Connected"
 
@@ -55,7 +55,7 @@ object DatabaseManager {
 DatabaseManager.connect() // Connected
 DatabaseManager.disconnect() // Disconnected
 
-// ❌ не может создать экземпляр
+// ❌ нельзя создать новый экземпляр
 // val db = DatabaseManager() // Ошибка!
 ```
 
@@ -90,13 +90,13 @@ class User {
     }
 }
 
-// ✅ Можно использовать имя companion
-val user = User.create() // Через интерфейс Factory
+// ✅ Можно вызывать User.create(), т.к. companion реализует Factory
+val user = User.create()
 ```
 
 **Практическое применение:**
 ```kotlin
-// ✅ Singleton для настроек
+// ✅ Singleton для настроек (общая точка доступа к состоянию)
 object SettingsManager {
     private var theme: String = "light"
 
@@ -107,7 +107,7 @@ object SettingsManager {
     fun getTheme(): String = theme
 }
 
-// ✅ Factory методы в companion
+// ✅ Factory-методы в companion
 class User private constructor(val name: String) {
     companion object {
         fun create(name: String): User {
@@ -123,12 +123,13 @@ class User private constructor(val name: String) {
 
 **Избегание проблем singleton:**
 ```kotlin
-// ❌ ПЛОХО: Глобальное состояние
+// ❌ ПЛОХО: Глобальное изменяемое состояние, усложняет тестирование и потокобезопасность
 object GlobalState {
     var counter = 0
 }
 
-// ✅ ХОРОШО: Инкапсулированное состояние
+// ✅ ЛУЧШЕ: Инкапсулированное состояние и контролируемый доступ
+// (но при работе из нескольких потоков всё равно требуется забота о потокобезопасности)
 object Logger {
     private val logs = mutableListOf<String>()
 
@@ -145,17 +146,17 @@ object Logger {
 ## Answer (EN)
 
 **Object and Companion Object Theory:**
-In Kotlin, the `object` keyword creates a singleton - a single instance of a class, initialized lazily on first access. `companion object` is a special `object` inside a class, accessible through the class name. Used for implementing singleton pattern, utility functions, and factory methods.
+In Kotlin, the `object` keyword declares a singleton — a single instance that is created and initialized upon its first use (the initialization itself is guaranteed to be thread-safe). A `companion object` is a special `object` inside a class, accessible through the class name. They are used for implementing the singleton pattern, utility functions, factory methods, and pseudo-"static" members. See also [[c-kotlin]].
 
 **Core Concepts:**
-- **object**: Creates a singleton object
-- **companion object**: Object inside class, accessible through class name
-- **Lazy initialization**: Initialized on first access
-- **Thread-safe**: Automatically thread-safe
+- **object**: Declares a singleton object (a single instance of that type)
+- **companion object**: Object inside a class, accessible through the class name
+- **Initialization on first use**: Initialized when first referenced
+- **Thread-safe initialization**: Creation of `object` / `companion object` is thread-safe, but mutable state inside is not automatically thread-safe
 
 **Object Singleton:**
 ```kotlin
-// ✅ object creates singleton
+// ✅ object creates a singleton
 object DatabaseManager {
     private val connection = "Connected"
 
@@ -172,7 +173,7 @@ object DatabaseManager {
 DatabaseManager.connect() // Connected
 DatabaseManager.disconnect() // Disconnected
 
-// ❌ cannot create instance
+// ❌ cannot create a new instance
 // val db = DatabaseManager() // Error!
 ```
 
@@ -207,13 +208,13 @@ class User {
     }
 }
 
-// ✅ Can use companion name
-val user = User.create() // Through Factory interface
+// ✅ You can call User.create(), since the companion implements Factory
+val user = User.create()
 ```
 
 **Practical Application:**
 ```kotlin
-// ✅ Singleton for settings
+// ✅ Singleton for settings (shared state access point)
 object SettingsManager {
     private var theme: String = "light"
 
@@ -240,12 +241,13 @@ class User private constructor(val name: String) {
 
 **Avoiding Singleton Problems:**
 ```kotlin
-// ❌ BAD: Global state
+// ❌ BAD: Global mutable state, hard to test and reason about
 object GlobalState {
     var counter = 0
 }
 
-// ✅ GOOD: Encapsulated state
+// ✅ BETTER: Encapsulated state with controlled access
+// (but you still must handle thread-safety if accessed from multiple threads)
 object Logger {
     private val logs = mutableListOf<String>()
 
@@ -259,9 +261,9 @@ object Logger {
 
 ## Follow-ups
 
-- When to use object vs class with private constructor?
-- How to test code with object singletons?
-- Performance implications of lazy initialization?
+- When to use `object` vs class with private constructor?
+- How to test code with `object` singletons?
+- Performance implications of initialization on first use?
 
 ## References
 

@@ -2,7 +2,7 @@
 id: lang-078
 title: "Kotlin Null Safety / Null Safety в Kotlin"
 aliases: [Kotlin Null Safety, Null Safety в Kotlin]
-topic: programming-languages
+topic: kotlin
 subtopics: [null-safety, type-system]
 question_kind: theory
 difficulty: medium
@@ -10,24 +10,20 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-static-variable--programming-languages--easy, q-testing-viewmodels-coroutines--kotlin--medium]
+related: [c-kotlin, q-kotlin-coroutines-introduction--kotlin--medium, q-kotlin-static-variable--programming-languages--easy, q-testing-viewmodels-coroutines--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
-tags: [difficulty/medium, elvis, null-safety, nullable, operators, programming-languages, safe-call]
+updated: 2025-11-09
+tags: [difficulty/medium, elvis, null-safety, nullable, operators, kotlin, safe-call]
 ---
-# Что Такое Null Safety И Как Это Пишется?
-
 # Вопрос (RU)
 > Что такое null safety и как это пишется?
-
----
 
 # Question (EN)
 > What is null safety and how is it written?
 
 ## Ответ (RU)
 
-Null safety, или безопасность относительно null, — это концепция, направленная на предотвращение ошибок времени выполнения, которые возникают из-за неожиданного использования null значений (как NullPointerException в Java).
+Null safety, или безопасность относительно null, — это концепция, направленная на предотвращение ошибок времени выполнения, которые возникают из-за неожиданного использования null значений (как NullPointerException в Java). См. также [[c-kotlin]].
 
 **Возможности null safety в Kotlin:**
 
@@ -61,7 +57,7 @@ Null safety в Kotlin предотвращает большинство ошиб
 
 ## Answer (EN)
 
-Null safety is a concept aimed at preventing runtime errors that occur due to unexpected use of null values (like NullPointerException in Java).
+Null safety is a concept aimed at preventing runtime errors that occur due to unexpected use of null values (like NullPointerException in Java). See also [[c-kotlin]].
 
 **Kotlin null safety features:**
 
@@ -93,7 +89,21 @@ val result = value as? String // Returns null if cast fails
 
 Kotlin's null safety prevents most null-related crashes at compile time.
 
----
+## Дополнительные вопросы (RU)
+
+- Каковы ключевые отличия null safety в Kotlin и Java?
+- Когда вы бы использовали эти механизмы на практике?
+- Каковы распространенные ошибки и подводные камни при работе с null safety?
+
+## Ссылки (RU)
+
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
+
+## Связанные вопросы (RU)
+
+- [[q-kotlin-coroutines-introduction--kotlin--medium]]
+- [[q-testing-viewmodels-coroutines--kotlin--medium]]
+- [[q-kotlin-static-variable--programming-languages--easy]]
 
 ## Follow-ups
 

@@ -1,16 +1,14 @@
 ---
 id: kotlin-133
 title: "Advanced Coroutine Patterns / Продвинутые паттерны корутин"
-aliases: ["Advanced Coroutine Patterns, Продвинутые паттерны корутин"]
+aliases: ["Advanced Coroutine Patterns", "Продвинутые паттерны корутин"]
 
 # Classification
 topic: kotlin
 subtopics:
   - coroutines
-  - patterns
   - pipeline
   - producer-consumer
-  - resource-pooling
 question_kind: theory
 difficulty: hard
 
@@ -23,11 +21,11 @@ source_note: Comprehensive guide on advanced Kotlin Coroutine patterns
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-actor-pattern--kotlin--hard, q-fan-in-fan-out--kotlin--hard, q-structured-concurrency--kotlin--hard]
+related: [c-kotlin, c-coroutines, q-actor-pattern--kotlin--hard]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-10
 
 tags: [coroutines, difficulty/hard, kotlin, mutex, patterns, pipeline, producer-consumer, semaphore]
 ---
@@ -41,13 +39,21 @@ tags: [coroutines, difficulty/hard, kotlin, mutex, patterns, pipeline, producer-
 
 ## Ответ (RU)
 
-Продвинутые паттерны корутин позволяют решать сложные задачи параллельного программирования, сохраняя при этом чистоту и безопасность кода.
+Продвинутые паттерны корутин позволяют решать сложные задачи конкурентного и асинхронного программирования, сохраняя при этом читаемость, безопасность и принципы структурированной конкуренции.
+
+Ниже приведены ключевые паттерны с примерами, концептуально согласованные с EN-версией.
 
 ### Паттерн Pipeline
 
-Паттерн pipeline связывает несколько стадий обработки, где каждая стадия потребляет из предыдущей и производит для следующей.
+Паттерн pipeline связывает несколько стадий обработки, где каждая стадия:
+- читает данные из предыдущего канала,
+- обрабатывает их,
+- отправляет результат в следующий канал.
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
 // Pipeline: числа -> квадраты -> строки
 fun CoroutineScope.produceNumbers() = produce {
     var x = 1
@@ -62,191 +68,37 @@ fun CoroutineScope.square(numbers: ReceiveChannel<Int>) = produce {
         send(x * x)
     }
 }
-```
 
-### Пулинг Ресурсов С Semaphore
-
-```kotlin
-class ConnectionPool(private val size: Int) {
-    private val connections = List(size) { DatabaseConnection(it) }
-    private val semaphore = Semaphore(size)
-
-    suspend fun <T> withConnection(block: suspend (DatabaseConnection) -> T): T {
-        semaphore.acquire()
-        val connection = getConnection()
-
-        return try {
-            block(connection)
-        } finally {
-            releaseConnection(connection)
-            semaphore.release()
-        }
-    }
-}
-```
-
-### Rate Limiting
-
-```kotlin
-class RateLimiter(
-    private val maxRequests: Int,
-    private val window: Duration
-) {
-    private val semaphore = Semaphore(maxRequests)
-
-    suspend fun <T> execute(block: suspend () -> T): T {
-        semaphore.acquire()
-
-        CoroutineScope(Dispatchers.Default).launch {
-            delay(window)
-            semaphore.release()
-        }
-
-        return block()
-    }
-}
-```
-
-### Лучшие Практики
-
-#### ДЕЛАТЬ:
-
-```kotlin
-// Использовать pipeline для последовательных стадий
-val stage1 = produceData()
-val stage2 = transformData(stage1)
-
-// Использовать semaphore для ограничения ресурсов
-val semaphore = Semaphore(10)
-
-// Использовать кастомные скоупы для переиспользуемых паттернов
-suspend fun <T> retryScope(times: Int, block: suspend () -> T): T
-```
-
-#### НЕ ДЕЛАТЬ:
-
-```kotlin
-// Не создавать неограниченные каналы
-val channel = Channel<Int>(Channel.UNLIMITED)  // Может вызвать OOM
-
-// Не блокировать в корутинах
-GlobalScope.launch {
-    Thread.sleep(1000)  // Плохо! Используйте delay()
-}
-```
-
----
-
-## Answer (EN)
-
-Advanced coroutine patterns enable sophisticated concurrent programming scenarios while maintaining code clarity and safety. These patterns build upon basic coroutine concepts to solve complex real-world problems.
-
-### Pipeline Pattern
-
-The pipeline pattern chains multiple processing stages where each stage consumes from the previous and produces for the next.
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.*
-
-// Pipeline: numbers -> squares -> strings
-fun CoroutineScope.produceNumbers() = produce {
-    var x = 1
-    while (true) {
-        send(x++)
-        delay(100)
-    }
-}
-
-fun CoroutineScope.square(numbers: ReceiveChannel<Int>) = produce {
-    for (x in numbers) {
-        send(x * x)
-    }
-}
-
-fun CoroutineScope.toString(numbers: ReceiveChannel<Int>) = produce {
+fun CoroutineScope.toStringChannel(numbers: ReceiveChannel<Int>) = produce {
     for (x in numbers) {
         send("Number: $x")
     }
 }
 
-suspend fun main() = coroutineScope {
+suspend fun pipelineExample() = coroutineScope {
     val numbers = produceNumbers()
     val squares = square(numbers)
-    val strings = toString(squares)
+    val strings = toStringChannel(squares)
 
     repeat(5) {
         println(strings.receive())
     }
 
-    coroutineContext.cancelChildren()
+    coroutineContext.cancelChildren() // корректно завершаем pipeline
 }
 ```
 
-**Real-world pipeline: Image processing**
+Ключевые моменты:
+- использовать `CoroutineScope.produce` и `ReceiveChannel` для композиции стадий;
+- обязательно отменять/закрывать каналы, когда результат больше не нужен.
+
+### Producer-Consumer с несколькими стадиями
+
+Многостадийный producer-consumer — это частный случай pipeline, где между стадиями могут быть несколько воркеров.
 
 ```kotlin
-data class Image(val id: Int, val data: ByteArray, val metadata: Map<String, String> = emptyMap())
-
-// Stage 1: Load images from disk
-fun CoroutineScope.loadImages(paths: List<String>) = produce {
-    for ((index, path) in paths.withIndex()) {
-        delay(50) // Simulate I/O
-        val data = ByteArray(1024) // Simulate loaded data
-        send(Image(index, data))
-    }
-}
-
-// Stage 2: Resize images
-fun CoroutineScope.resizeImages(
-    images: ReceiveChannel<Image>,
-    targetSize: Int
-) = produce {
-    for (image in images) {
-        delay(100) // Simulate resizing
-        val resized = image.copy(
-            data = image.data.copyOf(targetSize),
-            metadata = image.metadata + ("size" to "$targetSize")
-        )
-        send(resized)
-    }
-}
-
-// Stage 3: Apply filters
-fun CoroutineScope.applyFilters(images: ReceiveChannel<Image>) = produce {
-    for (image in images) {
-        delay(80) // Simulate filter processing
-        val filtered = image.copy(
-            metadata = image.metadata + ("filtered" to "true")
-        )
-        send(filtered)
-    }
-}
-
-// Stage 4: Save to disk
-suspend fun saveImages(images: ReceiveChannel<Image>, outputDir: String) {
-    for (image in images) {
-        delay(50) // Simulate disk I/O
-        println("Saved image ${image.id} to $outputDir with metadata: ${image.metadata}")
-    }
-}
-
-// Usage
-suspend fun main() = coroutineScope {
-    val paths = List(10) { "image_$it.jpg" }
-
-    val loaded = loadImages(paths)
-    val resized = resizeImages(loaded, 800)
-    val filtered = applyFilters(resized)
-
-    saveImages(filtered, "/output")
-}
-```
-
-### Producer-Consumer with Multiple Stages
-
-```kotlin
-// Multi-stage producer-consumer for data processing
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
 
 data class RawData(val id: Int, val content: String)
 data class ProcessedData(val id: Int, val processed: String, val timestamp: Long)
@@ -254,7 +106,7 @@ data class EnrichedData(val id: Int, val final: String, val metadata: Map<String
 
 class DataPipeline(private val scope: CoroutineScope) {
 
-    // Stage 1: Fetch raw data
+    // Stage 1: источник сырых данных
     private fun produceRawData(count: Int) = scope.produce {
         repeat(count) { i ->
             delay(50)
@@ -262,33 +114,42 @@ class DataPipeline(private val scope: CoroutineScope) {
         }
     }
 
-    // Stage 2: Process data (multiple workers)
+    // Stage 2: обработка с несколькими воркерами
     private fun processData(
         rawChannel: ReceiveChannel<RawData>,
         workers: Int = 3
-    ) = scope.produce {
+    ): ReceiveChannel<ProcessedData> {
+        val out = Channel<ProcessedData>()
+
         repeat(workers) { workerId ->
-            launch {
+            scope.launch {
                 for (raw in rawChannel) {
-                    delay(100) // Simulate processing
+                    delay(100)
                     val processed = ProcessedData(
                         id = raw.id,
                         processed = raw.content.uppercase(),
                         timestamp = System.currentTimeMillis()
                     )
-                    send(processed)
+                    out.send(processed)
                     println("Worker $workerId processed item ${raw.id}")
                 }
             }
         }
+
+        scope.launch {
+            // Здесь можно дождаться завершения всех воркеров и закрыть out,
+            // координируя закрытие rawChannel.
+        }
+
+        return out
     }
 
-    // Stage 3: Enrich data
+    // Stage 3: обогащение
     private fun enrichData(
         processedChannel: ReceiveChannel<ProcessedData>
     ) = scope.produce {
         for (processed in processedChannel) {
-            delay(80) // Simulate enrichment
+            delay(80)
             val enriched = EnrichedData(
                 id = processed.id,
                 final = "${processed.processed}_enriched",
@@ -301,30 +162,26 @@ class DataPipeline(private val scope: CoroutineScope) {
         }
     }
 
-    // Stage 4: Save to database (batch processing)
+    // Stage 4: сохранение батчами (упрощённый пример)
     private suspend fun saveToDatabase(
         enrichedChannel: ReceiveChannel<EnrichedData>,
         batchSize: Int = 5
     ) {
         val batch = mutableListOf<EnrichedData>()
-
         for (enriched in enrichedChannel) {
             batch.add(enriched)
-
             if (batch.size >= batchSize) {
                 saveBatch(batch.toList())
                 batch.clear()
             }
         }
-
-        // Save remaining items
         if (batch.isNotEmpty()) {
             saveBatch(batch)
         }
     }
 
     private suspend fun saveBatch(items: List<EnrichedData>) {
-        delay(100) // Simulate database write
+        delay(100)
         println("Saved batch of ${items.size} items: ${items.map { it.id }}")
     }
 
@@ -335,23 +192,20 @@ class DataPipeline(private val scope: CoroutineScope) {
         saveToDatabase(enriched, batchSize = 5)
     }
 }
-
-// Usage
-suspend fun main() = coroutineScope {
-    val pipeline = DataPipeline(this)
-    pipeline.execute(20)
-}
 ```
 
-### Resource Pooling with Semaphore
+Идея: использовать каналы для связывания стадий и `launch` для параллельных воркеров.
+
+### Пулинг ресурсов с Semaphore
 
 ```kotlin
+import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 
-// Database connection pool
 class DatabaseConnection(val id: Int) {
     suspend fun query(sql: String): List<String> {
-        delay(100) // Simulate query
+        delay(100)
         return listOf("Result from connection $id")
     }
 }
@@ -361,109 +215,31 @@ class ConnectionPool(private val size: Int) {
     private val semaphore = Semaphore(size)
     private val available = ArrayDeque(connections)
 
-    suspend fun <T> withConnection(block: suspend (DatabaseConnection) -> T): T {
-        semaphore.acquire()
-        val connection = synchronized(available) {
-            available.removeFirst()
-        }
-
-        return try {
-            block(connection)
-        } finally {
-            synchronized(available) {
-                available.addLast(connection)
+    suspend fun <T> withConnection(block: suspend (DatabaseConnection) -> T): T =
+        semaphore.withPermit {
+            val connection = synchronized(available) {
+                require(available.isNotEmpty())
+                available.removeFirst()
             }
-            semaphore.release()
-        }
-    }
-}
-
-// Usage
-suspend fun main() = coroutineScope {
-    val pool = ConnectionPool(size = 3)
-
-    // Launch 10 concurrent queries
-    val jobs = List(10) { i ->
-        async {
-            pool.withConnection { conn ->
-                println("Query $i using connection ${conn.id}")
-                conn.query("SELECT * FROM users WHERE id = $i")
+            try {
+                block(connection)
+            } finally {
+                synchronized(available) {
+                    available.addLast(connection)
+                }
             }
         }
-    }
-
-    jobs.awaitAll().forEach { println(it) }
 }
 ```
 
-**Advanced resource pool with metrics**
+Идея: `Semaphore` ограничивает одновременное количество пользователей ресурса; очередь ресурсов защищена синхронизацией.
 
-```kotlin
-class AdvancedConnectionPool(private val size: Int) {
-    private val connections = List(size) { DatabaseConnection(it) }
-    private val semaphore = Semaphore(size)
-    private val available = ArrayDeque(connections)
-
-    // Metrics
-    private var totalAcquisitions = 0
-    private var totalWaitTime = 0L
-    private val activeBorrows = mutableMapOf<Int, Long>()
-
-    suspend fun <T> withConnection(block: suspend (DatabaseConnection) -> T): T {
-        val startWait = System.currentTimeMillis()
-        semaphore.acquire()
-        val waitTime = System.currentTimeMillis() - startWait
-
-        val connection = synchronized(available) {
-            totalAcquisitions++
-            totalWaitTime += waitTime
-            val conn = available.removeFirst()
-            activeBorrows[conn.id] = System.currentTimeMillis()
-            conn
-        }
-
-        println("Acquired connection ${connection.id} after waiting ${waitTime}ms")
-
-        return try {
-            block(connection)
-        } finally {
-            synchronized(available) {
-                activeBorrows.remove(connection.id)
-                available.addLast(connection)
-            }
-            semaphore.release()
-        }
-    }
-
-    fun getMetrics(): PoolMetrics {
-        synchronized(available) {
-            return PoolMetrics(
-                totalSize = size,
-                available = available.size,
-                inUse = size - available.size,
-                totalAcquisitions = totalAcquisitions,
-                averageWaitTime = if (totalAcquisitions > 0) totalWaitTime / totalAcquisitions else 0
-            )
-        }
-    }
-}
-
-data class PoolMetrics(
-    val totalSize: Int,
-    val available: Int,
-    val inUse: Int,
-    val totalAcquisitions: Int,
-    val averageWaitTime: Long
-)
-```
-
-### Resource Pooling with Mutex
+### Пулинг ресурсов с Mutex
 
 ```kotlin
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-// Thread-safe resource manager
 class ResourceManager<T>(
     private val create: () -> T,
     private val destroy: (T) -> Unit = {}
@@ -472,11 +248,7 @@ class ResourceManager<T>(
     private val mutex = Mutex()
 
     suspend fun acquire(): T = mutex.withLock {
-        if (resources.isEmpty()) {
-            create()
-        } else {
-            resources.removeAt(0)
-        }
+        if (resources.isEmpty()) create() else resources.removeAt(0)
     }
 
     suspend fun release(resource: T) = mutex.withLock {
@@ -497,50 +269,31 @@ class ResourceManager<T>(
         resources.clear()
     }
 }
-
-// Usage: HTTP client pool
-data class HttpClient(val id: Int)
-
-suspend fun main() = coroutineScope {
-    val clientPool = ResourceManager(
-        create = { HttpClient((0..1000).random()) },
-        destroy = { println("Destroying client ${it.id}") }
-    )
-
-    val jobs = List(5) { i ->
-        async {
-            clientPool.withResource { client ->
-                println("Request $i using client ${client.id}")
-                delay(100)
-                "Response $i"
-            }
-        }
-    }
-
-    jobs.awaitAll().forEach { println(it) }
-    clientPool.clear()
-}
 ```
 
-### Rate Limiting Pattern
+Mutex защищает структуру данных пула; `Semaphore` ограничивает конкуренцию по числу пользователей.
+
+### Rate Limiting (ограничение частоты)
+
+Упрощённый token-bucket через `Semaphore`:
 
 ```kotlin
+import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Semaphore
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
 
-// Token bucket rate limiter
 class RateLimiter(
     private val maxRequests: Int,
-    private val window: Duration
+    private val window: Duration,
+    private val scope: CoroutineScope
 ) {
     private val semaphore = Semaphore(maxRequests)
 
     suspend fun <T> execute(block: suspend () -> T): T {
         semaphore.acquire()
 
-        // Release permit after window duration
-        CoroutineScope(Dispatchers.Default).launch {
+        // Планируем возврат токена через окно; используем переданный scope
+        scope.launch {
             delay(window)
             semaphore.release()
         }
@@ -548,29 +301,17 @@ class RateLimiter(
         return block()
     }
 }
-
-// Usage
-suspend fun main() = coroutineScope {
-    val rateLimiter = RateLimiter(maxRequests = 3, window = 1.seconds)
-
-    val jobs = List(10) { i ->
-        async {
-            val start = System.currentTimeMillis()
-            rateLimiter.execute {
-                val elapsed = System.currentTimeMillis() - start
-                println("Request $i executed after ${elapsed}ms")
-                delay(100)
-            }
-        }
-    }
-
-    jobs.awaitAll()
-}
 ```
 
-**Advanced rate limiter with sliding window**
+Замечание: для продакшена стоит аккуратно выбирать scope и учитывать отмену.
+
+Скользящее окно через `Mutex`:
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
 class SlidingWindowRateLimiter(
     private val maxRequests: Int,
     private val windowMillis: Long
@@ -580,10 +321,7 @@ class SlidingWindowRateLimiter(
 
     suspend fun tryAcquire(): Boolean = mutex.withLock {
         val now = System.currentTimeMillis()
-
-        // Remove old timestamps outside the window
         timestamps.removeIf { it < now - windowMillis }
-
         if (timestamps.size < maxRequests) {
             timestamps.add(now)
             true
@@ -603,139 +341,81 @@ class SlidingWindowRateLimiter(
         return block()
     }
 }
-
-// Usage
-suspend fun main() = coroutineScope {
-    val rateLimiter = SlidingWindowRateLimiter(
-        maxRequests = 5,
-        windowMillis = 1000
-    )
-
-    repeat(10) { i ->
-        launch {
-            val allowed = rateLimiter.tryAcquire()
-            println("Request $i: ${if (allowed) "ALLOWED" else "DENIED"}")
-        }
-    }
-
-    delay(1100) // Wait for window to pass
-
-    repeat(5) { i ->
-        launch {
-            val allowed = rateLimiter.tryAcquire()
-            println("Request ${i + 10}: ${if (allowed) "ALLOWED" else "DENIED"}")
-        }
-    }
-}
 ```
 
-### Custom Scope Builders
+### Кастомные scope builders
 
 ```kotlin
-// Custom scope for retry logic
+import kotlinx.coroutines.*
+
 suspend fun <T> retryScope(
     times: Int = 3,
     delayMillis: Long = 1000,
     block: suspend CoroutineScope.() -> T
 ): T {
+    require(times >= 1)
     repeat(times - 1) { attempt ->
         try {
             return coroutineScope { block() }
         } catch (e: Exception) {
+            if (e is CancellationException) throw e
             println("Attempt ${attempt + 1} failed: ${e.message}")
             delay(delayMillis * (attempt + 1))
         }
     }
-
-    // Last attempt - throw exception if fails
     return coroutineScope { block() }
-}
-
-// Usage
-suspend fun main() {
-    try {
-        retryScope(times = 3, delayMillis = 500) {
-            println("Attempting operation...")
-            if (Random.nextBoolean()) {
-                throw Exception("Random failure")
-            }
-            "Success"
-        }
-    } catch (e: Exception) {
-        println("All attempts failed")
-    }
 }
 ```
 
-**Custom timeout scope**
+Обертка с таймаутом:
 
 ```kotlin
+import kotlinx.coroutines.*
+
 suspend fun <T> timeoutScope(
     timeoutMillis: Long,
     onTimeout: () -> T,
     block: suspend CoroutineScope.() -> T
 ): T {
     return try {
-        withTimeout(timeoutMillis) {
-            block()
-        }
+        withTimeout(timeoutMillis) { block() }
     } catch (e: TimeoutCancellationException) {
         println("Operation timed out after ${timeoutMillis}ms")
         onTimeout()
     }
 }
-
-// Usage
-suspend fun main() {
-    val result = timeoutScope(
-        timeoutMillis = 1000,
-        onTimeout = { "Default value" }
-    ) {
-        delay(2000)
-        "Completed"
-    }
-
-    println("Result: $result")  // "Default value"
-}
 ```
 
-**Custom parallel scope**
+Параллельная обработка с ограничением конкуренции:
 
 ```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
+
 suspend fun <T, R> List<T>.parallelMap(
     concurrency: Int = 10,
     transform: suspend (T) -> R
 ): List<R> = coroutineScope {
     val semaphore = Semaphore(concurrency)
-
     map { item ->
         async {
-            semaphore.acquire()
-            try {
+            semaphore.withPermit {
                 transform(item)
-            } finally {
-                semaphore.release()
             }
         }
     }.awaitAll()
 }
-
-// Usage
-suspend fun main() {
-    val numbers = (1..100).toList()
-
-    val results = numbers.parallelMap(concurrency = 5) { number ->
-        delay(100)
-        number * 2
-    }
-
-    println("Processed ${results.size} items")
-}
 ```
 
-### Circuit Breaker Pattern
+Ключевая идея: инкапсулировать повтор, таймаут, параллелизм и др. в переиспользуемые билдеры, сохраняя структурированную конкуренцию.
+
+### Circuit Breaker (предохранитель)
 
 ```kotlin
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
 sealed class CircuitState {
     object Closed : CircuitState()
     data class Open(val openedAt: Long) : CircuitState()
@@ -744,158 +424,622 @@ sealed class CircuitState {
 
 class CircuitBreaker(
     private val failureThreshold: Int = 5,
-    private val timeoutMillis: Long = 60000,
-    private val halfOpenTimeout: Long = 5000
+    private val timeoutMillis: Long = 60000
 ) {
     private var state: CircuitState = CircuitState.Closed
     private var failureCount = 0
     private val mutex = Mutex()
 
-    suspend fun <T> execute(block: suspend () -> T): T = mutex.withLock {
-        when (val currentState = state) {
-            is CircuitState.Closed -> {
-                try {
-                    val result = block()
-                    failureCount = 0
-                    result
-                } catch (e: Exception) {
-                    failureCount++
-                    if (failureCount >= failureThreshold) {
-                        state = CircuitState.Open(System.currentTimeMillis())
-                        println("Circuit opened due to failures")
-                    }
-                    throw e
-                }
-            }
+    suspend fun <T> execute(block: suspend () -> T): T {
+        // Быстрая проверка состояния + обновление под мьютексом.
+        return when (val currentState = mutex.withLock { state }) {
+            is CircuitState.Closed -> runClosed(block)
+            is CircuitState.Open -> runOpen(currentState, block)
+            is CircuitState.HalfOpen -> runHalfOpen(block)
+        }
+    }
 
-            is CircuitState.Open -> {
-                val elapsed = System.currentTimeMillis() - currentState.openedAt
-                if (elapsed >= timeoutMillis) {
-                    state = CircuitState.HalfOpen
-                    println("Circuit half-open, testing...")
-                    execute(block)
-                } else {
-                    throw Exception("Circuit is open, request rejected")
-                }
-            }
-
-            is CircuitState.HalfOpen -> {
-                try {
-                    val result = block()
-                    state = CircuitState.Closed
-                    failureCount = 0
-                    println("Circuit closed, service recovered")
-                    result
-                } catch (e: Exception) {
+    private suspend fun <T> runClosed(block: suspend () -> T): T =
+        try {
+            val result = block()
+            mutex.withLock { failureCount = 0 }
+            result
+        } catch (e: Exception) {
+            mutex.withLock {
+                if (++failureCount >= failureThreshold) {
                     state = CircuitState.Open(System.currentTimeMillis())
-                    println("Circuit reopened, service still failing")
-                    throw e
+                    println("Circuit opened")
                 }
             }
+            throw e
+        }
+
+    private suspend fun <T> runOpen(current: CircuitState.Open, block: suspend () -> T): T {
+        val now = System.currentTimeMillis()
+        return if (now - current.openedAt >= timeoutMillis) {
+            mutex.withLock { state = CircuitState.HalfOpen }
+            runHalfOpen(block)
+        } else {
+            throw Exception("Circuit is open, request rejected")
         }
     }
-}
 
-// Usage
-suspend fun main() = coroutineScope {
-    val circuit = CircuitBreaker(failureThreshold = 3, timeoutMillis = 2000)
-
-    repeat(10) { i ->
-        launch {
-            delay(i * 100L)
-            try {
-                circuit.execute {
-                    if (i < 5) throw Exception("Service failure")
-                    "Success"
-                }
-                println("Request $i: SUCCESS")
-            } catch (e: Exception) {
-                println("Request $i: FAILED - ${e.message}")
+    private suspend fun <T> runHalfOpen(block: suspend () -> T): T =
+        try {
+            val result = block()
+            mutex.withLock {
+                state = CircuitState.Closed
+                failureCount = 0
+                println("Circuit closed")
             }
+            result
+        } catch (e: Exception) {
+            mutex.withLock {
+                state = CircuitState.Open(System.currentTimeMillis())
+                println("Circuit reopened")
+            }
+            throw e
         }
-    }
 }
 ```
 
-### Bulkhead Pattern
+Комментарий: здесь только операции над состоянием защищены `Mutex`, выполнение `block` не держит мьютекс и не блокирует конкуренцию.
+
+### Bulkhead Pattern (отсекание)
 
 ```kotlin
-// Isolate resources between different operations
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
+import java.util.concurrent.atomic.AtomicInteger
+
 class Bulkhead(private val maxConcurrent: Int) {
     private val semaphore = Semaphore(maxConcurrent)
-    private var activeCount = 0
-    private var rejectedCount = 0
+    private val activeCount = AtomicInteger(0)
+    private val rejectedCount = AtomicInteger(0)
 
     suspend fun <T> execute(block: suspend () -> T): T {
         if (!semaphore.tryAcquire()) {
-            rejectedCount++
+            rejectedCount.incrementAndGet()
             throw Exception("Bulkhead full, request rejected")
         }
-
-        activeCount++
+        activeCount.incrementAndGet()
         return try {
             block()
         } finally {
-            activeCount--
+            activeCount.decrementAndGet()
             semaphore.release()
         }
     }
 
-    fun getMetrics() = "Active: $activeCount, Rejected: $rejectedCount"
-}
-
-class BulkheadManager {
-    private val readBulkhead = Bulkhead(maxConcurrent = 10)
-    private val writeBulkhead = Bulkhead(maxConcurrent = 5)
-    private val heavyBulkhead = Bulkhead(maxConcurrent = 2)
-
-    suspend fun readOperation() = readBulkhead.execute {
-        delay(100)
-        "Read result"
-    }
-
-    suspend fun writeOperation() = writeBulkhead.execute {
-        delay(200)
-        "Write result"
-    }
-
-    suspend fun heavyOperation() = heavyBulkhead.execute {
-        delay(1000)
-        "Heavy result"
-    }
-
-    fun getMetrics() = """
-        Read: ${readBulkhead.getMetrics()}
-        Write: ${writeBulkhead.getMetrics()}
-        Heavy: ${heavyBulkhead.getMetrics()}
-    """.trimIndent()
-}
-
-// Usage
-suspend fun main() = coroutineScope {
-    val manager = BulkheadManager()
-
-    // Launch many operations
-    val jobs = List(30) { i ->
-        async {
-            try {
-                when (i % 3) {
-                    0 -> manager.readOperation()
-                    1 -> manager.writeOperation()
-                    else -> manager.heavyOperation()
-                }
-            } catch (e: Exception) {
-                "REJECTED"
-            }
-        }
-    }
-
-    jobs.awaitAll()
-    println(manager.getMetrics())
+    fun getMetrics() = "Active: ${activeCount.get()}, Rejected: ${rejectedCount.get()}"
 }
 ```
 
-### Best Practices
+Идея: разделять ресурсы по типам нагрузки и ограничивать конкуренцию для каждой группы отдельно (часто с немедленным отказом).
+
+### Лучшие практики (RU)
+
+#### ДЕЛАТЬ:
+
+```kotlin
+// Использовать pipeline для последовательных стадий
+val stage1 = produceData()
+val stage2 = transformData(stage1)
+val stage3 = saveData(stage2)
+
+// Использовать Semaphore для ограничения параллелизма
+val semaphore = Semaphore(10)
+semaphore.withPermit { /* operation */ }
+
+// Использовать кастомные scope builders для повторяемых шаблонов
+suspend fun <T> retryScope(times: Int, block: suspend () -> T): T
+
+// Использовать circuit breaker для отказоустойчивости
+val circuit = CircuitBreaker()
+circuit.execute { apiCall() }
+```
+
+#### НЕ ДЕЛАТЬ:
+
+```kotlin
+// Не создавать неограниченные каналы без необходимости
+val channel = Channel<Int>(Channel.UNLIMITED)  // Может вызвать OOM
+
+// Не игнорировать отмену
+try {
+    operation()
+} catch (e: Exception) {
+    // Не гасите CancellationException без повторного выброса
+}
+
+// Не забывать закрывать/отменять каналы
+val channel = produce { /* ... */ }
+// После использования — channel.cancel() / close()
+
+// Не блокировать потоки внутри корутин
+GlobalScope.launch {
+    Thread.sleep(1000)  // Плохо! Используйте delay()
+}
+```
+
+---
+
+## Answer (EN)
+
+Advanced coroutine patterns enable sophisticated concurrent and asynchronous programming while preserving clarity, safety, and structured concurrency principles.
+
+Below are key patterns with examples.
+
+### Pipeline Pattern
+
+The pipeline pattern chains multiple processing stages, where each stage:
+- consumes from the previous channel,
+- transforms data,
+- produces to the next channel.
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
+// Pipeline: numbers -> squares -> strings
+fun CoroutineScope.produceNumbers() = produce {
+    var x = 1
+    while (true) {
+        send(x++)
+        delay(100)
+    }
+}
+
+fun CoroutineScope.square(numbers: ReceiveChannel<Int>) = produce {
+    for (x in numbers) {
+        send(x * x)
+    }
+}
+
+fun CoroutineScope.toStringChannel(numbers: ReceiveChannel<Int>) = produce {
+    for (x in numbers) {
+        send("Number: $x")
+    }
+}
+
+suspend fun pipelineExample() = coroutineScope {
+    val numbers = produceNumbers()
+    val squares = square(numbers)
+    val strings = toStringChannel(squares)
+
+    repeat(5) {
+        println(strings.receive())
+    }
+
+    coroutineContext.cancelChildren() // cancel the pipeline when done
+}
+```
+
+Key points:
+- use `produce`/`ReceiveChannel` to compose stages;
+- always cancel/close channels when you no longer need results.
+
+### Producer-Consumer with Multiple Stages
+
+A multi-stage producer-consumer setup is a specialized pipeline where some stages have multiple workers.
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.*
+
+data class RawData(val id: Int, val content: String)
+data class ProcessedData(val id: Int, val processed: String, val timestamp: Long)
+data class EnrichedData(val id: Int, val final: String, val metadata: Map<String, Any>)
+
+class DataPipeline(private val scope: CoroutineScope) {
+
+    // Stage 1: raw data source
+    private fun produceRawData(count: Int) = scope.produce {
+        repeat(count) { i ->
+            delay(50)
+            send(RawData(i, "raw_$i"))
+        }
+    }
+
+    // Stage 2: processing with multiple workers
+    private fun processData(
+        rawChannel: ReceiveChannel<RawData>,
+        workers: Int = 3
+    ): ReceiveChannel<ProcessedData> {
+        val out = Channel<ProcessedData>()
+
+        repeat(workers) { workerId ->
+            scope.launch {
+                for (raw in rawChannel) {
+                    delay(100)
+                    val processed = ProcessedData(
+                        id = raw.id,
+                        processed = raw.content.uppercase(),
+                        timestamp = System.currentTimeMillis()
+                    )
+                    out.send(processed)
+                    println("Worker $workerId processed item ${raw.id}")
+                }
+            }
+        }
+
+        scope.launch {
+            // Here you can coordinate closing of rawChannel and out
+            // once all producers/consumers are finished.
+        }
+
+        return out
+    }
+
+    // Stage 3: enrichment
+    private fun enrichData(
+        processedChannel: ReceiveChannel<ProcessedData>
+    ) = scope.produce {
+        for (processed in processedChannel) {
+            delay(80)
+            val enriched = EnrichedData(
+                id = processed.id,
+                final = "${processed.processed}_enriched",
+                metadata = mapOf(
+                    "timestamp" to processed.timestamp,
+                    "enriched_at" to System.currentTimeMillis()
+                )
+            )
+            send(enriched)
+        }
+    }
+
+    // Stage 4: batched persistence (simplified)
+    private suspend fun saveToDatabase(
+        enrichedChannel: ReceiveChannel<EnrichedData>,
+        batchSize: Int = 5
+    ) {
+        val batch = mutableListOf<EnrichedData>()
+        for (enriched in enrichedChannel) {
+            batch.add(enriched)
+            if (batch.size >= batchSize) {
+                saveBatch(batch.toList())
+                batch.clear()
+            }
+        }
+        if (batch.isNotEmpty()) {
+            saveBatch(batch)
+        }
+    }
+
+    private suspend fun saveBatch(items: List<EnrichedData>) {
+        delay(100)
+        println("Saved batch of ${items.size} items: ${items.map { it.id }}")
+    }
+
+    suspend fun execute(count: Int) {
+        val raw = produceRawData(count)
+        val processed = processData(raw, workers = 3)
+        val enriched = enrichData(processed)
+        saveToDatabase(enriched, batchSize = 5)
+    }
+}
+```
+
+Idea: use channels to connect stages and `launch` for parallel workers.
+
+### Resource Pooling with Semaphore
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
+
+class DatabaseConnection(val id: Int) {
+    suspend fun query(sql: String): List<String> {
+        delay(100)
+        return listOf("Result from connection $id")
+    }
+}
+
+class ConnectionPool(private val size: Int) {
+    private val connections = List(size) { DatabaseConnection(it) }
+    private val semaphore = Semaphore(size)
+    private val available = ArrayDeque(connections)
+
+    suspend fun <T> withConnection(block: suspend (DatabaseConnection) -> T): T =
+        semaphore.withPermit {
+            val connection = synchronized(available) {
+                require(available.isNotEmpty())
+                available.removeFirst()
+            }
+            try {
+                block(connection)
+            } finally {
+                synchronized(available) {
+                    available.addLast(connection)
+                }
+            }
+        }
+}
+```
+
+Key ideas:
+- `Semaphore` bounds concurrent usage;
+- shared queue is synchronized;
+- `withPermit` ensures permit release.
+
+### Resource Pooling with Mutex
+
+```kotlin
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
+class ResourceManager<T>(
+    private val create: () -> T,
+    private val destroy: (T) -> Unit = {}
+) {
+    private val resources = mutableListOf<T>()
+    private val mutex = Mutex()
+
+    suspend fun acquire(): T = mutex.withLock {
+        if (resources.isEmpty()) create() else resources.removeAt(0)
+    }
+
+    suspend fun release(resource: T) = mutex.withLock {
+        resources.add(resource)
+    }
+
+    suspend fun <R> withResource(block: suspend (T) -> R): R {
+        val resource = acquire()
+        return try {
+            block(resource)
+        } finally {
+            release(resource)
+        }
+    }
+
+    suspend fun clear() = mutex.withLock {
+        resources.forEach { destroy(it) }
+        resources.clear()
+    }
+}
+```
+
+### Rate Limiting Pattern
+
+Simple token-bucket-style limiter using `Semaphore`:
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Semaphore
+import kotlin.time.Duration
+
+class RateLimiter(
+    private val maxRequests: Int,
+    private val window: Duration,
+    private val scope: CoroutineScope
+) {
+    private val semaphore = Semaphore(maxRequests)
+
+    suspend fun <T> execute(block: suspend () -> T): T {
+        semaphore.acquire()
+
+        // Schedule permit release after the window using caller-provided scope
+        scope.launch {
+            delay(window)
+            semaphore.release()
+        }
+
+        return block()
+    }
+}
+```
+
+A sliding-window limiter using `Mutex`:
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
+class SlidingWindowRateLimiter(
+    private val maxRequests: Int,
+    private val windowMillis: Long
+) {
+    private val timestamps = mutableListOf<Long>()
+    private val mutex = Mutex()
+
+    suspend fun tryAcquire(): Boolean = mutex.withLock {
+        val now = System.currentTimeMillis()
+        timestamps.removeIf { it < now - windowMillis }
+        if (timestamps.size < maxRequests) {
+            timestamps.add(now)
+            true
+        } else {
+            false
+        }
+    }
+
+    suspend fun acquire() {
+        while (!tryAcquire()) {
+            delay(10)
+        }
+    }
+
+    suspend fun <T> execute(block: suspend () -> T): T {
+        acquire()
+        return block()
+    }
+}
+```
+
+Note: using an injected scope and proper cancellation handling is important for production-grade implementations.
+
+### Custom Scope Builders
+
+```kotlin
+import kotlinx.coroutines.*
+
+suspend fun <T> retryScope(
+    times: Int = 3,
+    delayMillis: Long = 1000,
+    block: suspend CoroutineScope.() -> T
+): T {
+    require(times >= 1)
+    repeat(times - 1) { attempt ->
+        try {
+            return coroutineScope { block() }
+        } catch (e: Exception) {
+            if (e is CancellationException) throw e
+            println("Attempt ${attempt + 1} failed: ${e.message}")
+            delay(delayMillis * (attempt + 1))
+        }
+    }
+    return coroutineScope { block() }
+}
+```
+
+Timeout wrapper:
+
+```kotlin
+import kotlinx.coroutines.*
+
+suspend fun <T> timeoutScope(
+    timeoutMillis: Long,
+    onTimeout: () -> T,
+    block: suspend CoroutineScope.() -> T
+): T {
+    return try {
+        withTimeout(timeoutMillis) { block() }
+    } catch (e: TimeoutCancellationException) {
+        println("Operation timed out after ${timeoutMillis}ms")
+        onTimeout()
+    }
+}
+```
+
+Parallel map with bounded concurrency:
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
+
+suspend fun <T, R> List<T>.parallelMap(
+    concurrency: Int = 10,
+    transform: suspend (T) -> R
+): List<R> = coroutineScope {
+    val semaphore = Semaphore(concurrency)
+    map { item ->
+        async {
+            semaphore.withPermit {
+                transform(item)
+            }
+        }
+    }.awaitAll()
+}
+```
+
+### Circuit Breaker Pattern
+
+```kotlin
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
+
+sealed class CircuitState {
+    object Closed : CircuitState()
+    data class Open(val openedAt: Long) : CircuitState()
+    object HalfOpen : CircuitState()
+}
+
+class CircuitBreaker(
+    private val failureThreshold: Int = 5,
+    private val timeoutMillis: Long = 60000
+) {
+    private var state: CircuitState = CircuitState.Closed
+    private var failureCount = 0
+    private val mutex = Mutex()
+
+    suspend fun <T> execute(block: suspend () -> T): T {
+        return when (val currentState = mutex.withLock { state }) {
+            is CircuitState.Closed -> runClosed(block)
+            is CircuitState.Open -> runOpen(currentState, block)
+            is CircuitState.HalfOpen -> runHalfOpen(block)
+        }
+    }
+
+    private suspend fun <T> runClosed(block: suspend () -> T): T =
+        try {
+            val result = block()
+            mutex.withLock { failureCount = 0 }
+            result
+        } catch (e: Exception) {
+            mutex.withLock {
+                if (++failureCount >= failureThreshold) {
+                    state = CircuitState.Open(System.currentTimeMillis())
+                    println("Circuit opened")
+                }
+            }
+            throw e
+        }
+
+    private suspend fun <T> runOpen(current: CircuitState.Open, block: suspend () -> T): T {
+        val now = System.currentTimeMillis()
+        return if (now - current.openedAt >= timeoutMillis) {
+            mutex.withLock { state = CircuitState.HalfOpen }
+            runHalfOpen(block)
+        } else {
+            throw Exception("Circuit is open, request rejected")
+        }
+    }
+
+    private suspend fun <T> runHalfOpen(block: suspend () -> T): T =
+        try {
+            val result = block()
+            mutex.withLock {
+                state = CircuitState.Closed
+                failureCount = 0
+                println("Circuit closed")
+            }
+            result
+        } catch (e: Exception) {
+            mutex.withLock {
+                state = CircuitState.Open(System.currentTimeMillis())
+                println("Circuit reopened")
+            }
+            throw e
+        }
+}
+```
+
+Key idea: protect only state transitions with `Mutex`; do not hold it while executing `block`.
+
+### Bulkhead Pattern
+
+```kotlin
+import kotlinx.coroutines.sync.Semaphore
+import java.util.concurrent.atomic.AtomicInteger
+
+class Bulkhead(private val maxConcurrent: Int) {
+    private val semaphore = Semaphore(maxConcurrent)
+    private val activeCount = AtomicInteger(0)
+    private val rejectedCount = AtomicInteger(0)
+
+    suspend fun <T> execute(block: suspend () -> T): T {
+        if (!semaphore.tryAcquire()) {
+            rejectedCount.incrementAndGet()
+            throw Exception("Bulkhead full, request rejected")
+        }
+        activeCount.incrementAndGet()
+        return try {
+            block()
+        } finally {
+            activeCount.decrementAndGet()
+            semaphore.release()
+        }
+    }
+
+    fun getMetrics() = "Active: ${activeCount.get()}, Rejected: ${rejectedCount.get()}"
+}
+```
+
+### Best Practices (EN)
 
 #### DO:
 
@@ -905,7 +1049,7 @@ val stage1 = produceData()
 val stage2 = transformData(stage1)
 val stage3 = saveData(stage2)
 
-// Use semaphore for resource limits
+// Use Semaphore for resource limits
 val semaphore = Semaphore(10)
 semaphore.withPermit { /* operation */ }
 
@@ -920,21 +1064,21 @@ circuit.execute { apiCall() }
 #### DON'T:
 
 ```kotlin
-// Don't create unbounded channels
+// Don't create unbounded channels without a clear reason
 val channel = Channel<Int>(Channel.UNLIMITED)  // Can cause OOM
 
-// Don't ignore cancellation
+// Don't swallow CancellationException
 try {
     operation()
 } catch (e: Exception) {
-    // Don't catch CancellationException!
+    // Re-throw CancellationException if caught
 }
 
-// Don't forget to close channels
+// Don't forget to close or cancel channels
 val channel = produce { /* ... */ }
-// Always close or cancel when done
+// Cancel/close when done
 
-// Don't block in coroutines
+// Don't block threads in coroutines
 GlobalScope.launch {
     Thread.sleep(1000)  // Bad! Use delay()
 }
@@ -945,15 +1089,15 @@ GlobalScope.launch {
 ## Follow-ups
 
 - What are the key differences between this and Java?
-- When would you use this in practice?
+- When would you use these patterns in practice?
 - What are common pitfalls to avoid?
 
 ## References
 
-- [Kotlin Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
-- [Channels Documentation](https://kotlinlang.org/docs/channels.html)
-- [Shared Mutable State and Concurrency](https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html)
-- [Coroutine Context and Dispatchers](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
+- [Kotlin Coroutines Guide]("https://kotlinlang.org/docs/coroutines-guide.html")
+- [Channels Documentation]("https://kotlinlang.org/docs/channels.html")
+- [Shared Mutable State and Concurrency]("https://kotlinlang.org/docs/shared-mutable-state-and-concurrency.html")
+- [Coroutine Context and Dispatchers]("https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html")
 
 ## Related Questions
 
@@ -974,3 +1118,8 @@ GlobalScope.launch {
 ## MOC Links
 
 - [[moc-kotlin]]
+
+## Concept Links
+
+- [[c-kotlin]]
+- [[c-coroutines]]

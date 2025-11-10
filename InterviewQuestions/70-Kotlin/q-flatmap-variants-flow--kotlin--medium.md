@@ -1,41 +1,42 @@
 ---
 id: kotlin-050
 title: "flatMapConcat vs flatMapMerge vs flatMapLatest / flatMapConcat против flatMapMerge против flatMapLatest"
-aliases: ["flatMapConcat vs flatMapMerge vs flatMapLatest, flatMapConcat против flatMapMerge против flatMapLatest"]
+aliases: ["flatMapConcat vs flatMapMerge vs flatMapLatest", "flatMapConcat против flatMapMerge против flatMapLatest"]
 
 # Classification
 topic: kotlin
-subtopics: [coroutines, flatmap, flow]
+subtopics: [coroutines, flow]
 question_kind: theory
 difficulty: medium
 
 # Language & provenance
 original_language: en
 language_tags: [en, ru]
-source: https://github.com/amitshekhariitbhu/android-interview-questions
+source: "https://github.com/amitshekhariitbhu/android-interview-questions"
 source_note: Amit Shekhar Android Interview Questions repository - MEDIUM priority
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-inline-functions--kotlin--medium, q-stateflow-purpose--programming-languages--medium, q-test-dispatcher-types--kotlin--medium]
+related: [c-kotlin, c-flow, q-kotlin-inline-functions--kotlin--medium, q-test-dispatcher-types--kotlin--medium]
 
 # Timestamps
 created: 2025-10-06
-updated: 2025-10-06
+updated: 2025-11-10
 
 tags: [coroutines, difficulty/medium, flatmap, flow, kotlin, operators]
 ---
 # Вопрос (RU)
-> В чем разница между flatMapConcat, flatMapMerge и flatMapLatest в Kotlin Flow?
+> В чем разница между `flatMapConcat`, `flatMapMerge` и `flatMapLatest` в Kotlin `Flow`?
 
 ---
 
 # Question (EN)
-> What is the difference between flatMapConcat, flatMapMerge, and flatMapLatest in Kotlin Flow?
+> What is the difference between `flatMapConcat`, `flatMapMerge`, and `flatMapLatest` in Kotlin `Flow`?
+
 ## Ответ (RU)
 
-**flatMapConcat**, **flatMapMerge** и **flatMapLatest** — операторы Flow, которые трансформируют каждое значение в новый Flow, но отличаются в обработке конкурентных потоков.
+**flatMapConcat**, **flatMapMerge** и **flatMapLatest** — операторы `Flow`, которые трансформируют каждое значение в новый `Flow`, но отличаются тем, как обрабатывают одновременные внутренние потоки и отмену.
 
 ### Визуальное Сравнение
 
@@ -45,10 +46,13 @@ tags: [coroutines, difficulty/medium, flatmap, flow, kotlin, operators]
 Трансформация в flows (каждый требует времени):
            A1-A2-A3 B1-B2-B3 C1-C2-C3
 
-flatMapConcat:  A1-A2-A3-B1-B2-B3-C1-C2-C3  (последовательно, ждет завершения)
-flatMapMerge:   A1-B1-A2-C1-B2-A3-B3-C2-C3  (конкурентно, чередуется)
-flatMapLatest:  A1-B1-C1-C2-C3              (отменяет предыдущий, только последний)
+flatMapConcat:  A1-A2-A3-B1-B2-B3-C1-C2-C3  (строго последовательно)
+flatMapMerge:   A1-B1-A2-C1-B2-A3-B3-C2-C3  (конкурентно, эмиссии чередуются; порядок не гарантирован)
+flatMapLatest:  при каждом новом значении предыдущий flow отменяется,
+               в каждый момент времени эмитятся элементы только из последнего активного flow
 ```
+
+(Диаграммы для `flatMapMerge` и `flatMapLatest` иллюстративны: конкретный порядок эмиссий не гарантируется.)
 
 ### flatMapConcat - Последовательное Выполнение
 
@@ -72,7 +76,7 @@ fun flatMapConcat() {
     .collect { println(it) }
 }
 
-// Вывод (последовательно):
+// Возможный вывод (строго последовательно и в порядке источника):
 // 1-A
 // 1-B
 // 2-A
@@ -82,14 +86,14 @@ fun flatMapConcat() {
 ```
 
 **Характеристики:**
-- **Сохраняет порядок** - эмиссии в том же порядке что и источник
-- **Последовательно** - один внутренний flow за раз
-- **Медленнее** - ждет завершения каждого flow
-- **Использовать когда**: Важен порядок, операции должны быть последовательными
+- **Сохраняет порядок** — элементы выходного `Flow` упорядочены как во входном.
+- **Последовательно** — только один внутренний `Flow` активен в каждый момент времени.
+- **Потенциально медленнее** — общее время ≈ сумме времен всех внутренних `Flow`.
+- **Использовать когда**: важен порядок и/или операции логически должны выполняться по очереди.
 
 ### flatMapMerge - Конкурентное Выполнение
 
-**Выполняет несколько внутренних flows конкурентно.**
+**Запускает несколько внутренних `Flow` конкурентно (до указанного `concurrency`).**
 
 ```kotlin
 fun flatMapMerge() {
@@ -109,7 +113,7 @@ fun flatMapMerge() {
     .collect { println(it) }
 }
 
-// Вывод (конкурентно, порядок не гарантирован):
+// Пример возможного вывода (конкретный порядок не гарантируется):
 // 1-A
 // 2-A
 // 1-B
@@ -119,22 +123,23 @@ fun flatMapMerge() {
 ```
 
 **Характеристики:**
-- **Порядок не сохраняется** - эмиссии могут чередоваться
-- **Конкурентно** - множественные flows работают параллельно
-- **Быстрее** - не ждет завершения
-- **Использовать когда**: Важна скорость, порядок не важен
+- **Порядок не сохраняется** — эмиссии внутренних `Flow` могут чередоваться.
+- **Конкурентно** — несколько внутренних `Flow` выполняются одновременно до лимита `concurrency`.
+- **Часто быстрее flatMapConcat** — за счет параллельной работы внутренних `Flow`;
+  при этом итоговый оператор завершится только после завершения всех внутренних `Flow`.
+- **Использовать когда**: важна производительность, порядок не критичен.
 
 ### flatMapLatest - Отмена Предыдущего
 
-**Отменяет предыдущий внутренний flow когда приходит новое значение.**
+**Отменяет предыдущий внутренний `Flow`, когда приходит новое значение источника, и начинает новый. В каждый момент времени активен только последний внутренний `Flow`.**
 
 ```kotlin
 fun flatMapLatest() {
     flow {
         emit(1)
-        delay(150)  // Новое значение до завершения предыдущего flow
+        delay(150)  // 2 приходит до завершения flow для 1
         emit(2)
-        delay(150)
+        delay(150)  // 3 приходит до завершения flow для 2
         emit(3)
     }
     .flatMapLatest { value ->
@@ -148,19 +153,19 @@ fun flatMapLatest() {
     .collect { println(it) }
 }
 
-// Вывод (только последний):
-// 1-A
-// 2-A
+// Возможный вывод с указанными задержками:
+// 1-A        (flow(1) стартует и успевает выдать A до 2)
+// 2-A        (flow(1) отменен перед 1-B; flow(2) успевает выдать A до 3)
 // 3-A
-// 3-B
-// (Предыдущие flows отменены до завершения)
+// 3-B        (flow(2) отменен перед 2-B; flow(3) дорабатывает до конца)
+// Предыдущие flows отменяются в момент новой эмиссии источника.
 ```
 
 **Характеристики:**
-- **Отменяет предыдущий** - только последний flow завершается
-- **Самые свежие данные** - всегда показывает последнее
-- **Эффективно** - не тратит ресурсы на устаревшие данные
-- **Использовать когда**: Важен только последний результат (поиск, автозаполнение)
+- **Отменяет предыдущие** — продолжается только последний запущенный внутренний `Flow`.
+- **Отдает самые свежие данные** — подходит для сценариев, где важен только актуальный результат.
+- **Эффективно** — не расходует ресурсы на устаревшие операции.
+- **Использовать когда**: важен только последний результат (поиск, автодополнение, обновление экрана).
 
 ### Примеры Из Реальной Практики
 
@@ -183,105 +188,87 @@ class SearchViewModel : ViewModel() {
 }
 ```
 
-**Почему flatMapLatest?** Если пользователь печатает "kotlin", нам не нужны результаты для "k", "ko", "kot" - только для финального "kotlin". Предыдущие поиски отменяются.
+**Почему flatMapLatest?** Если пользователь печатает "kotlin", нам не нужны результаты для "k", "ko", "kot" — только для финального значения. Предыдущие поиски отменяются.
 
-**Пример 2: Параллельные сетевые запросы с flatMapMerge**
+**Пример 2: Загрузка пользователей последовательно с flatMapConcat**
+
+```kotlin
+class UserViewModel : ViewModel() {
+    fun loadUsersSequentially(userIds: List<String>): Flow<User> {
+        return userIds.asFlow()
+            .flatMapConcat { userId ->  // Загружать по одному пользователю, сохраняя порядок
+                repository.getUserById(userId)
+            }
+    }
+}
+```
+
+**Почему flatMapConcat?** Нужно сохранить порядок при отображении пользователей или при цепочке зависимых вызовов.
+
+**Пример 3: Параллельные сетевые запросы с flatMapMerge**
 
 ```kotlin
 class DownloadViewModel : ViewModel() {
     fun downloadFiles(urls: List<String>): Flow<DownloadResult> {
         return urls.asFlow()
-            .flatMapMerge(concurrency = 5) { url ->  // Загрузка 5 файлов конкурентно
+            .flatMapMerge(concurrency = 5) { url ->  // Загрузка до 5 файлов конкурентно
                 repository.downloadFile(url)
             }
     }
 }
 ```
 
-**Почему flatMapMerge?** Загружаем несколько файлов одновременно для лучшей производительности. Порядок не важен.
+**Почему flatMapMerge?** Загружаем несколько файлов одновременно для лучшей производительности, порядок результатов не важен.
 
-### Сравнение Производительности
+### Сравнение Производительности (Иллюстративно)
 
 ```kotlin
-// Тест: Обработать 5 элементов, каждый требует 100мс
+// Тестовый сценарий: 5 элементов, обработка каждого занимает 100 мс,
+// новые элементы приходят достаточно быстро.
 
-// flatMapConcat: 500мс всего (5 * 100мс последовательно)
-items.flatMapConcat { processItem(it) }  // 500мс
+// flatMapConcat: ≈500 мс (5 * 100 мс последовательно)
+items.flatMapConcat { processItem(it) }
 
-// flatMapMerge(3): ~200мс всего (максимум 3 конкурентных)
-items.flatMapMerge(3) { processItem(it) }  // ~200мс
+// flatMapMerge(3): ≈200 мс (до 3 элементов обрабатываются параллельно)
+items.flatMapMerge(3) { processItem(it) }
 
-// flatMapLatest: 100мс всего (только последний элемент завершается)
-items.flatMapLatest { processItem(it) }  // 100мс (если элементы приходят быстро)
+// flatMapLatest: ≈100 мс (если новые элементы приходят до
+// завершения предыдущих, реально завершается только последний)
+items.flatMapLatest { processItem(it) }
 ```
+
+(Цифры приведены для иллюстрации принципа; фактическое время зависит от задержек и шаблона эмиссий.)
 
 ### Когда Использовать Каждый
 
 | Оператор | Применение | Пример |
 |----------|------------|--------|
-| **flatMapConcat** | Важен порядок, последовательная обработка | Загрузка упорядоченного списка, последовательные API вызовы |
+| **flatMapConcat** | Важен порядок, последовательная обработка | Загрузка упорядоченного списка, цепочка API вызовов |
 | **flatMapMerge** | Важна скорость, порядок не важен | Параллельные загрузки, конкурентные запросы |
-| **flatMapLatest** | Важен только последний | Поиск, автозаполнение, обновление |
+| **flatMapLatest** | Важен только последний результат | Поиск, автозаполнение, обновление данных |
 
-### Продвинутое Использование
+### Общие Паттерны
 
-**Пример 4: Авто-обновление с flatMapLatest**
+**Паттерн 1: Поиск (flatMapLatest)**
 
 ```kotlin
-class DashboardViewModel : ViewModel() {
-    private val refreshTrigger = MutableSharedFlow<Unit>()
-
-    val dashboardData: Flow<DashboardData> = merge(
-        flowOf(Unit),  // Начальная загрузка
-        refreshTrigger  // Ручное обновление
-    )
-    .flatMapLatest {  // Отменить предыдущую загрузку если триггерится новое обновление
-        repository.getDashboardData()
-    }
-
-    fun refresh() {
-        viewModelScope.launch {
-            refreshTrigger.emit(Unit)
-        }
-    }
-}
+searchQueryFlow
+    .debounce(300)
+    .flatMapLatest { query -> repository.search(query) }
 ```
 
-**Пример 5: Загрузка деталей для элементов списка с flatMapMerge**
+**Паттерн 2: Пагинация (flatMapConcat)**
 
 ```kotlin
-class ProductListViewModel : ViewModel() {
-    val productsWithDetails: Flow<List<ProductDetails>> = repository
-        .getProductIds()
-        .flatMapConcat { productIds ->  // Получить все ID сначала
-            productIds.asFlow()
-                .flatMapMerge(concurrency = 10) { productId ->  // Загрузить детали конкурентно
-                    repository.getProductDetails(productId)
-                }
-                .toList()
-                .asFlow()
-        }
-}
+pageNumberFlow
+    .flatMapConcat { page -> repository.loadPage(page) }
 ```
 
-**Пример 6: Поиск с debounce и конкурентными запросами**
+**Паттерн 3: Пакетная обработка (flatMapMerge)**
 
 ```kotlin
-class SearchViewModel : ViewModel() {
-    private val searchQuery = MutableStateFlow("")
-
-    val searchResults: Flow<SearchResults> = searchQuery
-        .debounce(300)
-        .flatMapLatest { query ->  // Отменить предыдущий поиск
-            combine(
-                repository.searchProducts(query),
-                repository.searchCategories(query),
-                repository.searchBrands(query)
-            ) { products, categories, brands ->
-                SearchResults(products, categories, brands)
-            }
-        }
-}
+itemsFlow
+    .flatMapMerge(concurrency = 10) { item -> processItem(item) }
 ```
 
 ### Граничные Случаи
@@ -289,10 +276,11 @@ class SearchViewModel : ViewModel() {
 **flatMapLatest с медленным источником:**
 
 ```kotlin
-// Если источник эмитит медленно, все элементы завершаются
+// Если источник эмитит редко и каждый внутренний flow успевает завершиться до следующей эмиссии,
+// отмен не произойдет, и будут получены результаты всех значений.
 flow {
     emit(1)
-    delay(1000)  // Достаточно времени для завершения внутреннего flow
+    delay(1000)
     emit(2)
     delay(1000)
     emit(3)
@@ -309,7 +297,7 @@ flow {
 **flatMapMerge с ограничением конкурентности:**
 
 ```kotlin
-// Только 2 конкурентных flow
+// Только 2 конкурентных flow одновременно
 (1..10).asFlow()
     .flatMapMerge(concurrency = 2) { value ->
         flow {
@@ -317,7 +305,8 @@ flow {
             emit(value)
         }
     }
-// Обрабатывает пакетами по 2: [1,2], [3,4], [5,6], и т.д.
+// Элементы обрабатываются максимум по 2 параллельно;
+// конкретные пары и порядок зависят от времени выполнения.
 ```
 
 ### Комбинация С Другими Операторами
@@ -342,13 +331,13 @@ urls.asFlow()
     }
 ```
 
-**Краткое содержание**: `flatMapConcat` выполняет внутренние flows последовательно (сохраняет порядок, медленнее). `flatMapMerge` выполняет конкурентно (быстрее, порядок не сохраняется, настраиваемая конкурентность). `flatMapLatest` отменяет предыдущий внутренний flow когда приходит новое значение (завершается только последний). Используйте `flatMapConcat` для: упорядоченной обработки, последовательных операций. Используйте `flatMapMerge` для: параллельных загрузок, конкурентных запросов. Используйте `flatMapLatest` для: поиска, автозаполнения, обновления.
+**Краткое содержание**: `flatMapConcat` выполняет внутренние `Flow` последовательно и сохраняет порядок. `flatMapMerge` выполняет внутренние `Flow` конкурентно до заданного лимита и не гарантирует порядок, завершается после завершения всех внутренних `Flow`. `flatMapLatest` при каждом новом элементе источника отменяет предыдущий внутренний `Flow` и продолжает только с последним, поэтому подходит для сценариев, где важен только актуальный результат.
 
 ---
 
 ## Answer (EN)
 
-**flatMapConcat**, **flatMapMerge**, and **flatMapLatest** are Flow operators that transform each value into a new Flow, but differ in how they handle concurrent flows.
+**flatMapConcat**, **flatMapMerge**, and **flatMapLatest** are `Flow` operators that transform each value into a new `Flow`, but differ in how they handle concurrent inner flows and cancellation.
 
 ### Visual Comparison
 
@@ -358,14 +347,17 @@ Source:  A -----> B -----> C
 Transform to flows (each takes time):
          A1-A2-A3 B1-B2-B3 C1-C2-C3
 
-flatMapConcat:  A1-A2-A3-B1-B2-B3-C1-C2-C3  (sequential, wait for completion)
-flatMapMerge:   A1-B1-A2-C1-B2-A3-B3-C2-C3  (concurrent, interleaved)
-flatMapLatest:  A1-B1-C1-C2-C3              (cancel previous, only latest)
+flatMapConcat:  A1-A2-A3-B1-B2-B3-C1-C2-C3  (strictly sequential)
+flatMapMerge:   A1-B1-A2-C1-B2-A3-B3-C2-C3  (concurrent, interleaved; order not guaranteed)
+flatMapLatest:  on each new value, the previous inner flow is cancelled;
+               at any time, emissions come only from the latest active flow
 ```
+
+(The diagrams for `flatMapMerge` and `flatMapLatest` are illustrative: exact emission order is not guaranteed.)
 
 ### flatMapConcat - Sequential Execution
 
-**Waits for each inner flow to complete before starting the next.**
+**Waits for each inner `Flow` to complete before starting the next.**
 
 ```kotlin
 fun flatMapConcat() {
@@ -385,7 +377,7 @@ fun flatMapConcat() {
     .collect { println(it) }
 }
 
-// Output (sequential):
+// Possible output (strictly sequential, source order preserved):
 // 1-A
 // 1-B
 // 2-A
@@ -395,14 +387,14 @@ fun flatMapConcat() {
 ```
 
 **Characteristics:**
-- **Preserves order** - emissions in same order as source
-- **Sequential** - one inner flow at a time
-- **Slower** - waits for each flow to complete
-- **Use when**: Order matters, operations must be sequential
+- **Preserves order** — output `Flow` emissions follow the source order.
+- **Sequential** — only one inner `Flow` is active at a time.
+- **Potentially slower** — total time ≈ sum of all inner `Flow` times.
+- **Use when**: order matters and/or operations must logically be performed one by one.
 
 ### flatMapMerge - Concurrent Execution
 
-**Executes multiple inner flows concurrently.**
+**Runs multiple inner `Flow`s concurrently (up to the given `concurrency`).**
 
 ```kotlin
 fun flatMapMerge() {
@@ -422,7 +414,7 @@ fun flatMapMerge() {
     .collect { println(it) }
 }
 
-// Output (concurrent, order not guaranteed):
+// Example of a possible output (exact order is not guaranteed):
 // 1-A
 // 2-A
 // 1-B
@@ -432,22 +424,23 @@ fun flatMapMerge() {
 ```
 
 **Characteristics:**
-- **Order not preserved** - emissions can be interleaved
-- **Concurrent** - multiple flows run in parallel
-- **Faster** - doesn't wait for completion
-- **Use when**: Speed matters, order doesn't matter
+- **Order not preserved** — inner `Flow` emissions may be interleaved.
+- **Concurrent** — multiple inner `Flow`s run at the same time up to the `concurrency` limit.
+- **Often faster than flatMapConcat** — due to parallel execution of inner `Flow`s;
+  the resulting `Flow` completes only after all inner flows complete.
+- **Use when**: performance matters and you do not require ordered results.
 
 ### flatMapLatest - Cancel Previous
 
-**Cancels previous inner flow when new value arrives.**
+**Cancels the previous inner `Flow` when a new value is emitted by the source and starts a new inner `Flow`. At any time, only the latest inner `Flow` is active.**
 
 ```kotlin
 fun flatMapLatest() {
     flow {
         emit(1)
-        delay(150)  // New value before previous flow completes
+        delay(150)  // 2 arrives before flow for 1 completes
         emit(2)
-        delay(150)
+        delay(150)  // 3 arrives before flow for 2 completes
         emit(3)
     }
     .flatMapLatest { value ->
@@ -461,19 +454,19 @@ fun flatMapLatest() {
     .collect { println(it) }
 }
 
-// Output (only latest):
-// 1-A
-// 2-A
+// Possible output with the given delays:
+// 1-A        (flow(1) starts and emits A before 2)
+// 2-A        (flow(1) is cancelled before 1-B; flow(2) emits A before 3)
 // 3-A
-// 3-B
-// (Previous flows cancelled before completion)
+// 3-B        (flow(2) is cancelled before 2-B; flow(3) runs to completion)
+// Previous inner flows are cancelled at the moment of new source emissions.
 ```
 
 **Characteristics:**
-- **Cancels previous** - only latest flow completes
-- **Most recent data** - always shows latest
-- **Efficient** - doesn't waste resources on outdated data
-- **Use when**: Only latest result matters (search, autocomplete)
+- **Cancels previous** — only the latest started inner `Flow` is allowed to continue.
+- **Most recent data** — always reflects the latest relevant result.
+- **Efficient** — avoids spending resources on outdated work.
+- **Use when**: only the latest result matters (search, autocomplete, refreshing UI data).
 
 ### Real-World Examples
 
@@ -496,7 +489,7 @@ class SearchViewModel : ViewModel() {
 }
 ```
 
-**Why flatMapLatest?** If user types "kotlin", we don't need results for "k", "ko", "kot" - only final "kotlin". Previous searches are cancelled.
+**Why flatMapLatest?** When the user types "kotlin", results for "k", "ko", "kot" are not needed — only for the final query. Previous searches are cancelled.
 
 **Example 2: Loading User Details with flatMapConcat**
 
@@ -504,14 +497,14 @@ class SearchViewModel : ViewModel() {
 class UserViewModel : ViewModel() {
     fun loadUsersSequentially(userIds: List<String>): Flow<User> {
         return userIds.asFlow()
-            .flatMapConcat { userId ->  // Load one user at a time
+            .flatMapConcat { userId ->  // Load one user at a time, in order
                 repository.getUserById(userId)
             }
     }
 }
 ```
 
-**Why flatMapConcat?** Need to maintain order when displaying users in specific sequence.
+**Why flatMapConcat?** You need to maintain ordering when displaying users in a specific sequence or chaining dependent calls.
 
 **Example 3: Parallel Network Requests with flatMapMerge**
 
@@ -519,98 +512,41 @@ class UserViewModel : ViewModel() {
 class DownloadViewModel : ViewModel() {
     fun downloadFiles(urls: List<String>): Flow<DownloadResult> {
         return urls.asFlow()
-            .flatMapMerge(concurrency = 5) { url ->  // Download 5 files concurrently
+            .flatMapMerge(concurrency = 5) { url ->  // Download up to 5 files concurrently
                 repository.downloadFile(url)
             }
     }
 }
 ```
 
-**Why flatMapMerge?** Download multiple files at once for better performance. Order doesn't matter.
+**Why flatMapMerge?** Download multiple files in parallel for better performance; result order is not important.
 
-### Performance Comparison
-
-```kotlin
-// Test: Process 5 items, each takes 100ms
-
-// flatMapConcat: 500ms total (5 * 100ms sequential)
-items.flatMapConcat { processItem(it) }  // 500ms
-
-// flatMapMerge(3): ~200ms total (max 3 concurrent)
-items.flatMapMerge(3) { processItem(it) }  // ~200ms
-
-// flatMapLatest: 100ms total (only last item completes)
-items.flatMapLatest { processItem(it) }  // 100ms (if items arrive quickly)
-```
-
-### Advanced Usage
-
-**Example 4: Auto-refresh with flatMapLatest**
+### Performance Comparison (Illustrative)
 
 ```kotlin
-class DashboardViewModel : ViewModel() {
-    private val refreshTrigger = MutableSharedFlow<Unit>()
+// Scenario: process 5 items, each inner flow takes 100 ms,
+// and items are available quickly.
 
-    val dashboardData: Flow<DashboardData> = merge(
-        flowOf(Unit),  // Initial load
-        refreshTrigger  // Manual refresh
-    )
-    .flatMapLatest {  // Cancel previous load if new refresh triggered
-        repository.getDashboardData()
-    }
+// flatMapConcat: ≈500 ms total (5 * 100 ms sequential)
+items.flatMapConcat { processItem(it) }
 
-    fun refresh() {
-        viewModelScope.launch {
-            refreshTrigger.emit(Unit)
-        }
-    }
-}
+// flatMapMerge(3): ≈200 ms total (up to 3 concurrent flows)
+items.flatMapMerge(3) { processItem(it) }
+
+// flatMapLatest: ≈100 ms total if new items arrive before previous
+// inner flows finish, so effectively only the last one completes
+items.flatMapLatest { processItem(it) }
 ```
 
-**Example 5: Load Details for List Items with flatMapMerge**
-
-```kotlin
-class ProductListViewModel : ViewModel() {
-    val productsWithDetails: Flow<List<ProductDetails>> = repository
-        .getProductIds()
-        .flatMapConcat { productIds ->  // Get all IDs first
-            productIds.asFlow()
-                .flatMapMerge(concurrency = 10) { productId ->  // Load details concurrently
-                    repository.getProductDetails(productId)
-                }
-                .toList()
-                .asFlow()
-        }
-}
-```
-
-**Example 6: Debounced Search with Concurrent Requests**
-
-```kotlin
-class SearchViewModel : ViewModel() {
-    private val searchQuery = MutableStateFlow("")
-
-    val searchResults: Flow<SearchResults> = searchQuery
-        .debounce(300)
-        .flatMapLatest { query ->  // Cancel previous search
-            combine(
-                repository.searchProducts(query),
-                repository.searchCategories(query),
-                repository.searchBrands(query)
-            ) { products, categories, brands ->
-                SearchResults(products, categories, brands)
-            }
-        }
-}
-```
+(The numbers are illustrative; real timings depend on delays and emission patterns.)
 
 ### When to Use Each
 
 | Operator | Use Case | Example |
 |----------|----------|---------|
-| **flatMapConcat** | Order matters, sequential processing | Loading ordered list, sequential API calls |
-| **flatMapMerge** | Speed matters, order doesn't | Parallel downloads, concurrent requests |
-| **flatMapLatest** | Only latest matters | Search, autocomplete, refresh |
+| **flatMapConcat** | Order matters, sequential processing | Loading an ordered list, dependent API calls |
+| **flatMapMerge** | Speed matters, order does not | Parallel downloads, concurrent requests |
+| **flatMapLatest** | Only latest result matters | Search, autocomplete, refresh / live updates |
 
 ### Common Patterns
 
@@ -641,7 +577,8 @@ itemsFlow
 **flatMapLatest with slow source:**
 
 ```kotlin
-// If source emits slowly, all items complete
+// If the source emits slowly and each inner flow completes
+// before the next emission, no cancellations occur and all results are seen.
 flow {
     emit(1)
     delay(1000)  // Enough time for inner flow to complete
@@ -661,7 +598,7 @@ flow {
 **flatMapMerge with concurrency limit:**
 
 ```kotlin
-// Only 2 concurrent flows
+// Only 2 concurrent inner flows at a time
 (1..10).asFlow()
     .flatMapMerge(concurrency = 2) { value ->
         flow {
@@ -669,7 +606,8 @@ flow {
             emit(value)
         }
     }
-// Processes in batches of 2: [1,2], [3,4], [5,6], etc.
+// Items are processed with at most 2 running concurrently;
+// exact grouping and order depend on timing.
 ```
 
 ### Combination with Other Operators
@@ -694,7 +632,15 @@ urls.asFlow()
     }
 ```
 
-**English Summary**: `flatMapConcat` executes inner flows sequentially (preserves order, slower). `flatMapMerge` executes concurrently (faster, order not preserved, configurable concurrency). `flatMapLatest` cancels previous inner flow when new value arrives (only latest completes). Use `flatMapConcat` for: ordered processing, sequential operations. Use `flatMapMerge` for: parallel downloads, concurrent requests. Use `flatMapLatest` for: search, autocomplete, refresh (only latest matters).
+**English Summary**: `flatMapConcat` runs inner `Flow`s sequentially and preserves order. `flatMapMerge` runs inner `Flow`s concurrently up to a configurable limit and does not preserve order; it completes when all inner flows are done. `flatMapLatest` cancels the previous inner `Flow` whenever a new value arrives from the source and continues only with the latest, making it ideal when only the freshest result matters.
+
+---
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия этих операторов от подходов в Java?
+- Когда вы бы использовали каждый из этих операторов на практике?
+- Каковы распространенные подводные камни при использовании этих операторов?
 
 ## Follow-ups
 
@@ -702,9 +648,34 @@ urls.asFlow()
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- [[c-flow]]
+- [Операторы Flow - документация Kotlin](https://kotlinlang.org/docs/flow.html#flattening-flows)
+- [flatMap variants in Flow](https://elizarov.medium.com/reactive-streams-and-kotlin-flows-bfd12772cda4)
+
 ## References
+
+- [[c-kotlin]]
+- [[c-flow]]
 - [Flow Operators - Kotlin Documentation](https://kotlinlang.org/docs/flow.html#flattening-flows)
 - [flatMap variants in Flow](https://elizarov.medium.com/reactive-streams-and-kotlin-flows-bfd12772cda4)
+
+## Связанные Вопросы (RU)
+
+### Средний Уровень
+- [[q-instant-search-flow-operators--kotlin--medium]] — Flow
+- [[q-catch-operator-flow--kotlin--medium]] — Flow
+- [[q-flow-operators-map-filter--kotlin--medium]] — Coroutines
+- [[q-channel-flow-comparison--kotlin--medium]] — Coroutines
+
+### Продвинутый Уровень
+- [[q-testing-flow-operators--kotlin--hard]] — Coroutines
+- [[q-flow-operators-deep-dive--kotlin--hard]] — Flow
+
+### Хаб
+- [[q-kotlin-flow-basics--kotlin--medium]] — Введение в Flow
 
 ## Related Questions
 
@@ -720,4 +691,3 @@ urls.asFlow()
 
 ### Hub
 - [[q-kotlin-flow-basics--kotlin--medium]] - Comprehensive Flow introduction
-

@@ -3,18 +3,18 @@ id: kotlin-232
 title: "Inheritance in Kotlin: open, final, abstract, override / Наследование в Kotlin: open, final, abstract, override"
 aliases: ["Inheritance in Kotlin", "Наследование в Kotlin"]
 topic: kotlin
-subtopics: [classes, inheritance, kotlin-features]
+subtopics: [inheritance, kotlin-features]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-class-initialization-order--kotlin--medium, q-data-class-detailed--kotlin--medium, q-delegation-by-keyword--kotlin--medium]
-created: "2025-10-12"
-updated: 2025-01-25
+related: [c-kotlin, q-class-initialization-order--kotlin--medium, q-data-class-detailed--kotlin--medium]
+created: 2025-10-12
+updated: 2025-11-10
 tags: [abstract, classes, difficulty/medium, inheritance, kotlin, kotlin-features, open-final]
-sources: [https://kotlinlang.org/docs/inheritance.html]
+sources: ["https://kotlinlang.org/docs/inheritance.html"]
 ---
 
 # Вопрос (RU)
@@ -28,13 +28,15 @@ sources: [https://kotlinlang.org/docs/inheritance.html]
 ## Ответ (RU)
 
 **Теория наследования в Kotlin:**
-В Kotlin по умолчанию все классы `final` (закрыты для наследования) - противоположность Java, где всё открыто. Это обеспечивает безопасность по умолчанию: классы нельзя наследовать без явного `open`. Для наследования требуется `open`, для переопределения методов - `override`. Абстрактные классы и методы помечаются `abstract`.
+В Kotlin по умолчанию все классы `final` (закрыты для наследования) — в отличие от Java, где классы по умолчанию открыты для наследования. Это обеспечивает безопасность по умолчанию: класс нельзя наследовать без явного `open` (или других специальных модификаторов, например `abstract`, `sealed`). Внутри не-`final` класса его члены (функции и свойства) по умолчанию также `final`: чтобы их можно было переопределять, нужно явно указать `open` или `abstract`. Для переопределения используется `override`. Абстрактные классы и методы помечаются `abstract`.
 
 **Основные правила:**
-- **final по умолчанию**: Все классы и методы закрыты для наследования
-- **open**: Явно открывает класс/метод для наследования/переопределения
-- **abstract**: Абстрактные классы/методы, которые должны быть реализованы
-- **override**: Обязательное ключевое слово для переопределения методов
+- **class final по умолчанию**: Классы закрыты для наследования, если явно не указано `open` / `abstract` / `sealed` и т.п.
+- **members final по умолчанию**: В открытом/абстрактном классе методы и свойства по умолчанию не переопределяемы; нужны `open` или `abstract`.
+- **open**: Явно открывает класс/член для наследования/переопределения.
+- **abstract**: Абстрактный класс нельзя инстанцировать, абстрактные члены обязаны быть реализованы в неабстрактных подклассах.
+- **override**: Обязательное ключевое слово для переопределения открытых/абстрактных членов базового типа.
+- Переопределённый член по умолчанию снова `open`, если не помечен `final`.
 
 **Открытый класс и методы:**
 ```kotlin
@@ -57,7 +59,7 @@ class Car(brand: String, val model: String) : Vehicle(brand) {
         println("$brand $model is starting")
     }
 
-    // ❌ нельзя переопределить stop - он final
+    // ❌ нельзя переопределить stop - он final по умолчанию
 }
 ```
 
@@ -65,10 +67,10 @@ class Car(brand: String, val model: String) : Vehicle(brand) {
 ```kotlin
 // ✅ abstract класс не может быть инстанцирован
 abstract class Shape {
-    // ✅ abstract метод должен быть реализован в подклассе
+    // ✅ abstract метод должен быть реализован в неабстрактном подклассе
     abstract fun area(): Double
 
-    // ✅ Обычный метод может иметь реализацию
+    // ✅ Обычный метод может иметь реализацию и вызывать абстрактные члены
     fun describe() {
         println("Area: ${area()}")
     }
@@ -94,7 +96,7 @@ final class NetworkManager {
 // class CustomNetworkManager : NetworkManager() { } // Ошибка!
 ```
 
-**Множественное наследование интерфейсов:**
+**Множественная реализация интерфейсов:**
 ```kotlin
 interface Flyable {
     fun fly()
@@ -104,7 +106,8 @@ interface Swimable {
     fun swim()
 }
 
-// ✅ Класс может реализовать несколько интерфейсов
+// ✅ Класс может реализовать несколько интерфейсов,
+//    их абстрактные методы требуют override
 class Duck : Flyable, Swimable {
     override fun fly() {
         println("Flying")
@@ -124,10 +127,10 @@ open class Base {
 }
 
 class Derived : Base() {
-    // ✅ Можно переопределить val в var, но не наоборот
+    // ✅ Можно переопределить val как var, но не var как val
     override var value: Int = 10
 
-    // ✅ Можно переопределить var
+    // ✅ Можно переопределить var как var
     override var count: Int = 5
 
     init {
@@ -136,18 +139,44 @@ class Derived : Base() {
 }
 ```
 
+## Дополнительные вопросы (RU)
+
+- Почему классы в Kotlin по умолчанию final?
+- Когда использовать `abstract` по сравнению с интерфейсом?
+- Как наследование работает с `data`-классами?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- https://kotlinlang.org/docs/inheritance.html
+
+## Связанные вопросы (RU)
+
+### Предварительные (проще)
+- [[q-kotlin-enum-classes--kotlin--easy]] - Enum-классы
+
+### Похожие (средней сложности)
+- [[q-data-class-detailed--kotlin--medium]] - Data-классы
+- [[q-class-initialization-order--kotlin--medium]] - Порядок инициализации классов
+- [[q-sealed-class-sealed-interface--kotlin--medium]] - Sealed-классы
+
+### Продвинутые (сложнее)
+- [[q-delegation-by-keyword--kotlin--medium]] - Делегирование классов
+
 ---
 
 ## Answer (EN)
 
 **Kotlin Inheritance Theory:**
-In Kotlin, all classes are `final` (closed for inheritance) by default - opposite of Java where everything is open. This provides safety by default: classes cannot be inherited without explicit `open`. Inheritance requires `open`, method overriding requires `override`. Abstract classes and methods are marked `abstract`.
+In Kotlin, all classes are `final` (closed for inheritance) by default — unlike Java, where classes are inheritable by default. This gives "safe by default" semantics: a class cannot be extended without an explicit `open` (or other special modifiers such as `abstract`, `sealed`). Inside a non-`final` class, its members (functions and properties) are also `final` by default: to allow overriding, they must be explicitly marked `open` or `abstract`. Overriding uses the `override` keyword. Abstract classes and members are marked with `abstract`.
 
 **Core Rules:**
-- **final by default**: All classes and methods are closed for inheritance
-- **open**: Explicitly opens class/method for inheritance/overriding
-- **abstract**: Abstract classes/methods that must be implemented
-- **override**: Required keyword for method overriding
+- **Classes final by default**: A class is closed for inheritance unless marked `open` / `abstract` / `sealed`, etc.
+- **Members final by default**: In an open/abstract class, member functions and properties are not overridable unless marked `open` or `abstract`.
+- **open**: Explicitly opens a class/member for inheritance/overriding.
+- **abstract**: Abstract class cannot be instantiated; abstract members must be implemented in non-abstract subclasses.
+- **override**: Required keyword for overriding open/abstract members from a supertype.
+- Overridden members are `open` again by default unless explicitly marked `final`.
 
 **Open Class and Methods:**
 ```kotlin
@@ -158,7 +187,7 @@ open class Vehicle(val brand: String) {
         println("$brand vehicle starting")
     }
 
-    // ❌ final method cannot be overridden
+    // ❌ final method cannot be overridden (final by default)
     fun stop() {
         println("$brand vehicle stopped")
     }
@@ -170,7 +199,7 @@ class Car(brand: String, val model: String) : Vehicle(brand) {
         println("$brand $model is starting")
     }
 
-    // ❌ cannot override stop - it's final
+    // ❌ cannot override stop - it's final by default
 }
 ```
 
@@ -178,10 +207,10 @@ class Car(brand: String, val model: String) : Vehicle(brand) {
 ```kotlin
 // ✅ abstract class cannot be instantiated
 abstract class Shape {
-    // ✅ abstract method must be implemented in subclass
+    // ✅ abstract method must be implemented in a non-abstract subclass
     abstract fun area(): Double
 
-    // ✅ Regular method can have implementation
+    // ✅ Regular method can have an implementation and call abstract members
     fun describe() {
         println("Area: ${area()}")
     }
@@ -217,7 +246,8 @@ interface Swimable {
     fun swim()
 }
 
-// ✅ Class can implement multiple interfaces
+// ✅ Class can implement multiple interfaces;
+//    their abstract methods require override
 class Duck : Flyable, Swimable {
     override fun fly() {
         println("Flying")
@@ -237,10 +267,10 @@ open class Base {
 }
 
 class Derived : Base() {
-    // ✅ Can override val to var, but not vice versa
+    // ✅ Can override val with var, but not var with val
     override var value: Int = 10
 
-    // ✅ Can override var
+    // ✅ Can override var with var
     override var count: Int = 5
 
     init {
@@ -252,12 +282,12 @@ class Derived : Base() {
 ## Follow-ups
 
 - Why are classes final by default in Kotlin?
-- When to use abstract vs interface?
-- How does inheritance work with data classes?
+- When to use `abstract` vs interface?
+- How does inheritance work with `data` classes?
 
 ## References
 
-- [[c-oop-fundamentals]]
+- [[c-kotlin]]
 - https://kotlinlang.org/docs/inheritance.html
 
 ## Related Questions

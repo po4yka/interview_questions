@@ -2,20 +2,19 @@
 id: lang-009
 title: "Java All Classes Inherit From Object / В Java все классы наследуются от Object"
 aliases: [Java All Classes Inherit From Object, В Java все классы наследуются от Object]
-topic: programming-languages
-subtopics: [inheritance, java, object-class]
+topic: kotlin
+subtopics: [inheritance, object-class]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-inheritance, c-java-features, q-interface-vs-abstract-class--programming-languages--medium]
+related: [c-kotlin, c-java-features, q-interface-vs-abstract-class--programming-languages--medium]
 created: 2025-10-13
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/easy, inheritance, java, object-class, oop, programming-languages]
 ---
-# От Какого Объекта Наследуются Все Классы В Java?
 
 # Вопрос (RU)
 > От какого объекта наследуются все классы в Java?
@@ -27,11 +26,15 @@ tags: [difficulty/easy, inheritance, java, object-class, oop, programming-langua
 
 ## Ответ (RU)
 
-В Java все классы неявно наследуются от класса **Object**, если явно не указано другое наследование.
+В Java все ссылочные типы (обычные классы) неявно наследуются от класса **Object**, если явно не указано другое наследование (кроме случая с `Object` и `enum`/`record`/`array`, которые тоже в конечном итоге связаны с `Object`). Примитивные типы не наследуются от `Object`.
 
-**Методы класса Object:**
+Знание этого важно и для Kotlin-разработчиков: при работе на JVM корневым типом для всех классов также является `java.lang.Object` (в Kotlin он заворачивается в тип `Any`), а стандартные комментарии о `toString()`, `equals()`, `hashCode()` и других методах остаются актуальными.
 
-Каждый класс автоматически получает эти методы:
+См. также: [[c-kotlin]], [[c-java-features]]
+
+**Методы класса Object (основные):**
+
+Каждый такой класс автоматически получает унаследованные методы `Object`, например:
 
 ```java
 public class MyClass {
@@ -80,7 +83,7 @@ public boolean equals(Object obj) {
 ```java
 @Override
 public int hashCode() {
-    return Objects.hash(name);
+    return java.util.Objects.hash(name);
 }
 ```
 
@@ -91,7 +94,7 @@ Class<?> clazz = person.getClass();
 System.out.println(clazz.getName());  // Person
 ```
 
-**5. clone()** - копирование объекта
+**5. clone()** - поверхностное копирование объекта
 
 ```java
 class Person implements Cloneable {
@@ -102,12 +105,13 @@ class Person implements Cloneable {
 }
 ```
 
-**6. finalize()** - очистка (устарел)
+**6. finalize()** - очистка (устарел, не использовать в новом коде)
 
 ```java
 @Override
+@Deprecated // finalize() устарел начиная с Java 9 и помечен к удалению
 protected void finalize() throws Throwable {
-    // Код очистки (устарел в Java 9+)
+    // Код очистки (для современного кода НЕ рекомендуется)
 }
 ```
 
@@ -115,23 +119,31 @@ protected void finalize() throws Throwable {
 
 ```java
 synchronized (obj) {
-    obj.wait();    // Ожидание уведомления
-    obj.notify();  // Разбудить один ожидающий поток
+    try {
+        obj.wait();    // Ожидание уведомления (может быть прервано InterruptedException)
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+    obj.notify();      // Разбудить один ожидающий поток
+    obj.notifyAll();   // Разбудить все ожидающие потоки
 }
 ```
 
-**Все методы Object:**
+(Также существуют перегруженные версии `wait(long)` и `wait(long, int)`. Методы `wait`, `notify`, `notifyAll` и `getClass` являются final.)
 
-| Метод | Назначение | Переопределять? |
-|--------|---------|-----------|
-| toString() | Строковое представление | Рекомендуется |
-| equals() | Логическое равенство | Часто нужно |
-| hashCode() | Хэш-значение | Вместе с equals() |
-| clone() | Копировать объект | Если Cloneable |
-| getClass() | Тип во время выполнения | Final |
-| wait() | Ожидание потока | Final |
-| notify() | Разбудить поток | Final |
-| finalize() | Очистка | Устарел |
+**Основные методы Object (кратко):**
+
+| Метод         | Назначение                | Переопределять?              |
+|---------------|---------------------------|------------------------------|
+| toString()    | Строковое представление   | Часто рекомендуется          |
+| equals()      | Логическое равенство      | Часто нужно                  |
+| hashCode()    | Хэш-значение              | Всегда вместе с equals()     |
+| clone()       | Копировать объект         | Только если реализуете Cloneable |
+| getClass()    | Тип во время выполнения   | final, не переопределяется   |
+| wait(...)     | Ожидание в мониторе       | final, не переопределяется   |
+| notify()      | Разбудить один поток      | final, не переопределяется   |
+| notifyAll()   | Разбудить все потоки      | final, не переопределяется   |
+| finalize()    | Очистка (устарел)         | Не использовать в новом коде |
 
 **Пример:**
 
@@ -148,35 +160,40 @@ class User {
 
     @Override
     public boolean equals(Object obj) {
+        if (this == obj) return true;
         if (!(obj instanceof User)) return false;
         User other = (User) obj;
-        return username.equals(other.username);
+        return java.util.Objects.equals(username, other.username);
     }
 
     @Override
     public int hashCode() {
-        return username.hashCode();
+        return java.util.Objects.hash(username);
     }
 }
 ```
 
 **Резюме:**
 
-- **Все Java классы** наследуются от Object
-- **Неявное наследование** если не указано
-- **Общие методы** доступны всем объектам
-- **Переопределяйте** toString(), equals(), hashCode() по необходимости
-
+- Все классы-ссылочные типы в Java (кроме самого `Object`) имеют `Object` в вершине своей иерархии.
+- Наследование от `Object` происходит неявно, если не указано иное.
+- Общие методы `Object` доступны всем экземплярам таких классов.
+- При необходимости переопределяйте `toString()`, `equals()`, `hashCode()` с соблюдением их контрактов.
+- Для Kotlin на JVM важно понимать, что под капотом корнем иерархии также является `java.lang.Object` (тип `Any` компилируется к нему).
 
 ---
 
 ## Answer (EN)
 
-In Java, **all classes implicitly inherit from the Object class** if no other inheritance is explicitly specified.
+In Java, all reference types (regular classes) implicitly inherit from the **Object** class if no other superclass is explicitly specified (except for `Object` itself and special cases like `enum`/`record`/arrays, which are also ultimately related to `Object`). Primitive types do not inherit from `Object`.
 
-**Object Class Methods:**
+This is also relevant for Kotlin developers targeting the JVM: the root of the hierarchy at the bytecode level is still `java.lang.Object` (Kotlin's `Any` maps to it), so the usual considerations around `toString()`, `equals()`, `hashCode()`, and other methods remain applicable.
 
-Every class automatically has these methods:
+See also: [[c-kotlin]], [[c-java-features]]
+
+**Object Class Methods (core):**
+
+Every such class automatically has the methods inherited from `Object`, for example:
 
 ```java
 public class MyClass {
@@ -191,7 +208,7 @@ public class MyClass extends Object {
 
 **Key Object Methods:**
 
-**1. toString()** - String representation
+**1. toString()** - `String` representation
 
 ```java
 class Person {
@@ -208,7 +225,7 @@ person.name = "John";
 System.out.println(person.toString());  // Person{name='John'}
 ```
 
-**2. equals()** - Object comparison
+**2. equals()** - Object comparison (logical equality)
 
 ```java
 @Override
@@ -225,9 +242,11 @@ public boolean equals(Object obj) {
 ```java
 @Override
 public int hashCode() {
-    return Objects.hash(name);
+    return java.util.Objects.hash(name);
 }
 ```
+
+`equals()` and `hashCode()` must follow their contracts, especially when objects are used in hash-based collections.
 
 **4. getClass()** - Runtime class info
 
@@ -236,7 +255,7 @@ Class<?> clazz = person.getClass();
 System.out.println(clazz.getName());  // Person
 ```
 
-**5. clone()** - Object copying
+**5. clone()** - Shallow object copying
 
 ```java
 class Person implements Cloneable {
@@ -247,12 +266,13 @@ class Person implements Cloneable {
 }
 ```
 
-**6. finalize()** - Cleanup (deprecated)
+**6. finalize()** - Cleanup (deprecated, avoid in new code)
 
 ```java
 @Override
+@Deprecated // finalize() is deprecated since Java 9 and marked for removal
 protected void finalize() throws Throwable {
-    // Cleanup code (deprecated in Java 9+)
+    // Cleanup code (NOT recommended in modern code)
 }
 ```
 
@@ -260,23 +280,31 @@ protected void finalize() throws Throwable {
 
 ```java
 synchronized (obj) {
-    obj.wait();    // Wait for notification
-    obj.notify();  // Wake one waiting thread
+    try {
+        obj.wait();    // Wait for notification (may throw InterruptedException)
+    } catch (InterruptedException e) {
+        Thread.currentThread().interrupt();
+    }
+    obj.notify();      // Wake one waiting thread
+    obj.notifyAll();   // Wake all waiting threads
 }
 ```
 
-**All Object Methods:**
+(There are also overloaded versions `wait(long)` and `wait(long, int)`. Methods `wait`, `notify`, `notifyAll`, and `getClass` are final.)
 
-| Method | Purpose | Override? |
-|--------|---------|-----------|
-| toString() | String representation | - Recommended |
-| equals() | Logical equality | - Often needed |
-| hashCode() | Hash value | - With equals() |
-| clone() | Copy object | WARNING: If Cloneable |
-| getClass() | Runtime type | - Final |
-| wait() | Thread wait | - Final |
-| notify() | Wake thread | - Final |
-| finalize() | Cleanup | WARNING: Deprecated |
+**Main Object Methods (short list):**
+
+| Method        | Purpose                   | Override?                     |
+|---------------|---------------------------|-------------------------------|
+| toString()    | `String` representation   | Often recommended             |
+| equals()      | Logical equality          | Often needed                  |
+| hashCode()    | Hash value                | Always with equals()          |
+| clone()       | Copy object               | Only if implementing Cloneable|
+| getClass()    | Runtime type              | final, not overridable        |
+| wait(...)     | Monitor wait              | final, not overridable        |
+| notify()      | Wake one thread           | final, not overridable        |
+| notifyAll()   | Wake all threads          | final, not overridable        |
+| finalize()    | Cleanup (deprecated)      | Avoid in new code             |
 
 **Example:**
 
@@ -293,36 +321,52 @@ class User {
 
     @Override
     public boolean equals(Object obj) {
+        if (this == obj) return true;
         if (!(obj instanceof User)) return false;
         User other = (User) obj;
-        return username.equals(other.username);
+        return java.util.Objects.equals(username, other.username);
     }
 
     @Override
     public int hashCode() {
-        return username.hashCode();
+        return java.util.Objects.hash(username);
     }
 }
 ```
 
 **Summary:**
 
-- **All Java classes** inherit from Object
-- **Implicit inheritance** if not specified
-- **Common methods** available to all objects
-- **Override** toString(), equals(), hashCode() as needed
+- All Java reference-type classes (except `Object` itself) have `Object` at the top of their hierarchy.
+- Inheritance from `Object` is implicit if no other superclass is specified.
+- Common `Object` methods are available to all such instances.
+- Override `toString()`, `equals()`, and `hashCode()` when needed and respect their contracts.
+- For Kotlin on the JVM, it is important to remember that the underlying root is still `java.lang.Object` (Kotlin's `Any` compiles to it).
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как эта единая корневая иерархия `Object` сравнивается с языками, где нет единого универсального базового класса?
+- В каких практических ситуациях вы будете переопределять `equals()`, `hashCode()` и `toString()`?
+- Каковы типичные ошибки при переопределении `equals()` и `hashCode()`?
+
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- How does this root `Object` hierarchy compare to languages without a single universal base class?
+- When would you override equals(), hashCode(), and toString() in practice?
+- What are common pitfalls when overriding equals() and hashCode()?
+
+## Ссылки (RU)
+
+- Официальная документация Java SE для `java.lang.Object`
+- [[c-kotlin]]
+- [[c-java-features]]
 
 ## References
 
-- [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- Official Java SE API documentation for `java.lang.Object`
+- [[c-kotlin]]
+- [[c-java-features]]
 
 ## Related Questions
 

@@ -1,7 +1,7 @@
 ---
 id: kotlin-031
 title: "Nested Class vs Inner Class / Вложенный vs внутренний класс"
-aliases: ["Nested Class vs Inner Class, Вложенный vs внутренний класс"]
+aliases: ["Nested Class vs Inner Class", "Вложенный vs внутренний класс"]
 
 # Classification
 topic: kotlin
@@ -12,32 +12,31 @@ difficulty: medium
 # Language & provenance
 original_language: en
 language_tags: [en, ru]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
+source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository - Kotlin Batch 2
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-memory-leaks--kotlin--hard, q-prohibit-object-creation--programming-languages--easy, q-retry-operators-flow--kotlin--medium]
+related: [c-kotlin, q-coroutine-memory-leaks--kotlin--hard, q-retry-operators-flow--kotlin--medium]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-11-10
 
 tags: [classes, difficulty/medium, inner-class, kotlin, nested-class, oop]
 ---
 # Вопрос (RU)
 > В чем разница между вложенным (nested) и внутренним (inner) классом в Kotlin?
 
----
-
 # Question (EN)
 > What is the difference between nested class and inner class in Kotlin?
+
 ## Ответ (RU)
 
-### Вложенный Класс (Nested)
+### Вложенный класс (Nested Class)
 
-Класс, объявленный внутри другого класса. **Не может получить доступ к членам внешнего класса**. Не требует экземпляра внешнего класса.
+Класс, объявленный внутри другого класса. **Не может получить доступ к членам внешнего класса** (включая `private`). Не требует экземпляра внешнего класса для создания.
 
 ```kotlin
 class Outer {
@@ -51,34 +50,75 @@ class Outer {
 val demo = Outer.Nested().foo()  // Не нужен экземпляр Outer!
 ```
 
-### Внутренний Класс (Inner)
+### Внутренний класс (Inner Class)
 
-Вложенный класс с ключевым словом `inner`. **Может получить доступ ко всем членам** внешнего класса. Требует экземпляр внешнего класса.
+Вложенный класс с ключевым словом `inner`. **Может получить доступ ко всем членам внешнего класса**, включая приватные. Требует экземпляр внешнего класса.
+
+Важно: внутренний класс неявно хранит ссылку на экземпляр внешнего класса.
 
 ```kotlin
 class Outer {
     private val bar: Int = 1
 
     inner class Inner {
-        fun foo() = bar  // - Доступ к private членам
+        fun foo() = bar  // Доступ к private-членам Outer
     }
 }
 
 val demo = Outer().Inner().foo()  // Нужен экземпляр Outer!
 ```
 
-### Ключевые Отличия
+### Ключевые отличия
 
-| Функция | Nested | Inner |
-|---------|--------|-------|
+| Характеристика | Вложенный класс (Nested) | Внутренний класс (Inner) |
+|----------------|--------------------------|--------------------------|
 | **Ключевое слово** | Нет (по умолчанию) | `inner` |
-| **Доступ к внешнему** | - Нет | - Да |
-| **Создание** | `Outer.Nested()` | `outerInstance.Inner()` |
-| **Java эквивалент** | Static nested class | Non-static nested |
+| **Доступ к внешнему классу** | Нет доступа | Есть доступ |
+| **Создание экземпляра** | `Outer.Nested()` | `outerInstance.Inner()` |
+| **Java-эквивалент** | Static nested class | Non-static nested class |
+| **Память** | Не содержит ссылки на внешний класс | Хранит ссылку на экземпляр внешнего класса |
+| **Типичные случаи использования** | Вспомогательные/utility-классы, логическая группировка | Коллбеки, тесно связанная с внешним классом логика |
 
-**Краткое содержание**: Вложенные классы (по умолчанию в Kotlin) как Java static nested - нет доступа к внешнему, не нужен экземпляр внешнего. Внутренние классы (с `inner`) как Java non-static nested - могут обращаться к членам внешнего, нужен экземпляр. Используйте вложенные для независимости, внутренние для тесной связи.
+### Kotlin vs Java: сравнение
 
----
+| Kotlin | Java |
+|--------|------|
+| Вложенный класс (по умолчанию) | Static nested class |
+| Внутренний класс (`inner`) | Non-static nested class |
+
+### Лучшие практики
+
+**Используйте вложенный класс (Nested), когда:**
+- Внутренний тип не нуждается в доступе к членам внешнего класса.
+- Нужна только логическая группировка.
+- Важно избежать удержания ссылки на внешний объект и потенциальных утечек памяти.
+
+**Используйте внутренний класс (Inner), когда:**
+- Нужен прямой доступ к полям/методам внешнего класса.
+- Логика тесно связана с состоянием внешнего класса.
+- Реализуете коллбеки/листенеры, которым нужен контекст внешнего класса.
+
+### Пример: влияние на память
+
+```kotlin
+class Activity {
+    // ПЛОХО: inner-класс неявно удерживает ссылку на Activity (риск утечки памяти)
+    inner class BackgroundTask {
+        fun doWork() {
+            // Может обращаться к членам Activity
+        }
+    }
+
+    // ХОРОШО: вложенный класс не хранит ссылку на Activity
+    class StaticHelper {
+        fun processData(data: Data) {
+            // Независимая обработка данных
+        }
+    }
+}
+```
+
+**Краткое резюме (RU)**: Вложенные классы в Kotlin по умолчанию ведут себя как `static` nested классы в Java: не имеют доступа к членам внешнего класса и не требуют экземпляра внешнего класса. Внутренние классы с `inner` аналогичны не-`static` вложенным классам в Java: имеют доступ к членам внешнего класса и хранят ссылку на его экземпляр, что важно учитывать с точки зрения памяти.
 
 ## Answer (EN)
 
@@ -174,9 +214,23 @@ class Activity {
 - When would you use this in practice?
 - What are common pitfalls to avoid?
 
-## References
+## Ссылки (RU)
+- [[c-kotlin]]
 - [Nested and Inner Classes - Kotlin](https://kotlinlang.org/docs/nested-classes.html)
 - [Understanding Nested and Inner Classes in Kotlin](https://medium.com/@sandeepkella23/understanding-nested-and-inner-classes-in-kotlin-ae1c4d699053)
+
+## References
+- [[c-kotlin]]
+- [Nested and Inner Classes - Kotlin](https://kotlinlang.org/docs/nested-classes.html)
+- [Understanding Nested and Inner Classes in Kotlin](https://medium.com/@sandeepkella23/understanding-nested-and-inner-classes-in-kotlin-ae1c4d699053)
+
+## Связанные вопросы (RU)
+
+### Связанные (Medium)
+- [[q-inner-nested-classes--kotlin--medium]] - Классы
+- [[q-class-initialization-order--kotlin--medium]] - Классы
+- [[q-enum-class-advanced--kotlin--medium]] - Классы
+- [[q-value-classes-inline-classes--kotlin--medium]] - Классы
 
 ## Related Questions
 

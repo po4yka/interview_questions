@@ -7,14 +7,14 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 tags: [builders, callbackflow, channelflow, coroutines, difficulty/medium, flow, kotlin]
 moc: moc-kotlin
-related: [q-channel-pipelines--kotlin--hard, q-common-coroutine-mistakes--kotlin--medium, q-compose-side-effects-coroutines--kotlin--medium, q-kotlin-flow-basics--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium, q-suspend-cancellable-coroutine--kotlin--hard]
+aliases: ["channelFlow vs callbackFlow vs flow", "channelFlow vs callbackFlow vs flow: когда использовать"]
+question_kind: coding
+related: [c-kotlin, c-flow, c-coroutines, q-kotlin-flow-basics--kotlin--medium, q-channels-vs-flow--kotlin--medium]
 subtopics:
   - builders
-  - callbackflow
-  - channelflow
   - coroutines
   - flow
 ---
@@ -28,56 +28,719 @@ subtopics:
 
 ## Ответ (RU)
 
-Kotlin Flow предоставляет несколько билдеров (`flow{}`, `channelFlow{}`, `callbackFlow{}`), каждый с разными характеристиками. Выбор неправильного билдера может привести к проблемам производительности, крашам или некорректному поведению. Понимание когда использовать каждый критично для production-ready Flow кода.
+Kotlin `Flow` предоставляет несколько билдеров (`flow{}`, `channelFlow{}`, `callbackFlow{}`), каждый с разными характеристиками. Неверный выбор билдера может привести к лишним накладным расходам, сложностям с отменой, утечкам ресурсов или некорректному поведению. Важно понимать точные семантики каждого, чтобы писать production-ready `Flow` код.
 
+### Обзор билдера Flow
 
+| Билдер | Тип потока | Конкурентность | Буферизация | Основной кейс |
+|--------|------------|----------------|-------------|---------------|
+| `flow{}` | Холодный | Только последовательные эмиссии (одна корутина) | Без дополнительного буфера (back-pressure через приостановку `emit`) | Простая последовательная генерация/трансформации данных |
+| `channelFlow{}` | Холодный `Flow` с внутренним `Channel` | Поддерживает конкурентных продюсеров внутри блока | Буферизованный канал (можно настраивать) | Объединение/координация нескольких конкурентных источников |
+| `callbackFlow{}` | Холодный `Flow` с внутренним `Channel` | Безопасная обертка над callback + корутинами | Буфер + требуются корректные `awaitClose`-очистки | Обертка над callback/listener API |
 
-[Полный русский перевод следует той же структуре]
+Важно: все три билдера создают холодные `Flow`. Для `channelFlow{}` и `callbackFlow{}` продюсер запускается на каждую коллекцию, но внутри используется `Channel`, что делает поведение ближе к «горячему» источнику, ограниченному жизненным циклом коллектора.
 
-### Ключевые Выводы
+### `flow{}` — холодный, последовательный Flow
 
-1. **flow{}** - Выбор по умолчанию, последовательный, холодный
-2. **channelFlow{}** - Конкурентные производители, горячий
-3. **callbackFlow{}** - Callback API, горячий, требует awaitClose
-4. **emit() vs send() vs trySend()** - Знайте когда использовать каждый
-5. **awaitClose обязателен** - В callbackFlow для очистки
-6. **Холодный vs Горячий** - flow{} холодный, остальные горячие
-7. **Буферизация** - channelFlow/callbackFlow имеют буферы
-8. **Выбирайте на основе источника данных** - Последовательный, конкурентный или callback
-9. **Тестируйте отмену** - Убедитесь что очистка происходит
-10. **Учитывайте производительность** - flow{} имеет наименьшие накладные расходы
+Характеристики:
+- Холодный: выполнение начинается только при запуске терминального оператора; каждый новый коллектор заново запускает блок.
+- Последовательный: `emit()` — приостанавливающая функция, вызывать её можно только из той же корутины, конкурентные эмиссии запрещены (иначе нарушение инварианта Flow).
+- Back-pressure: реализуется через приостановку `emit()` до готовности downstream.
+- Без дополнительной буферизации: значения идут напрямую коллекторам (если явно не добавить `buffer`).
 
----
-
-## Answer (EN)
-
-Kotlin Flow provides multiple builders (`flow{}`, `channelFlow{}`, `callbackFlow{}`) each with different characteristics. Choosing the wrong builder can lead to performance issues, crashes, or incorrect behavior. Understanding when to use each is essential for production-ready Flow code.
-
-
-
-### Overview of Flow Builders
-
-| Builder | Type | Concurrency | Buffering | Use Case |
-|---------|------|-------------|-----------|----------|
-| **flow{}** | Cold | Sequential only | No buffer | Simple sequential emissions |
-| **channelFlow{}** | Hot | Concurrent sends | Buffered channel | Concurrent data sources |
-| **callbackFlow{}** | Hot | Concurrent sends | Buffered + awaitClose | Callback-based APIs |
-
-### flow{} - Cold, Sequential Flow
-
-**Characteristics:**
-- **Cold**: Starts on collection
-- **Sequential**: `emit()` is suspend, blocks until collected
-- **No concurrency**: Cannot emit from multiple coroutines
-- **No buffer**: Back-pressure by default
-
-**Basic usage:**
+Базовый пример:
 
 ```kotlin
 fun simpleFlow(): Flow<Int> = flow {
     for (i in 1..5) {
         delay(100)
-        emit(i) // Suspends until collector processes
+        emit(i) // Приостанавливается, пока коллектор не готов
+    }
+}
+
+// Использование
+launch {
+    simpleFlow().collect { value ->
+        println(value)
+    }
+}
+```
+
+Когда использовать `flow{}`:
+- Простая последовательная генерация значений.
+- Трансформация других `Flow`.
+- Обертка над suspend-функциями.
+- Вариант по умолчанию, когда не нужны каналы, callback-и или несколько продюсеров.
+
+Пример: пагинация API
+
+```kotlin
+fun fetchPages(): Flow<List<Item>> = flow {
+    var page = 1
+    var hasMore = true
+
+    while (hasMore) {
+        val response = api.fetchPage(page)
+        emit(response.items)
+
+        hasMore = response.hasNext
+        page++
+    }
+}
+
+// Использование
+fetchPages().collect { items ->
+    displayItems(items)
+}
+```
+
+Нельзя эмитить конкурентно (инвариант Flow):
+
+```kotlin
+// ОШИБКА: нарушение инварианта Flow
+fun concurrentFlow(): Flow<Int> = flow {
+    launch {
+        emit(1) // Нельзя: emit() из другой корутины
+    }
+}
+
+// Пример исключения:
+// Flow invariant is violated: Flow was collected in [coroutine#1],
+// but emission happened in [coroutine#2].
+```
+
+### `channelFlow{}` — конкурентные продюсеры и Channel
+
+Характеристики:
+- Холодный `Flow`, блок выполняется в `ProducerScope`, основанном на `Channel`.
+- Можно запускать несколько корутин внутри блока и вызывать `send`/`emit` из любой из них.
+- По умолчанию используется буферизованный `Channel` (например, `Channel.BUFFERED`), емкость можно конфигурировать.
+- Back-pressure: через приостановку `send`/`emit`, когда буфер заполнен.
+
+Базовый пример:
+
+```kotlin
+fun concurrentFlow(): Flow<Int> = channelFlow {
+    launch {
+        repeat(5) { i ->
+            delay(100)
+            send(i) // Можно из дочерней корутины
+        }
+    }
+
+    launch {
+        repeat(5) { i ->
+            delay(150)
+            send(i + 10)
+        }
+    }
+}
+
+// Порядок значений не гарантирован, т.к. источники конкурентные
+```
+
+Когда использовать `channelFlow{}`:
+- Нужно слить несколько конкурентных источников в один `Flow`.
+- Параллельная работа продюсеров с независимыми эмиссиями.
+- Нужна явная буферизация между продюсером(ами) и потребителем.
+- Обертка над существующими `Channel`-ами или fan-in паттернами.
+
+Пример: параллельные API-запросы
+
+```kotlin
+fun fetchMultipleSources(): Flow<Data> = channelFlow {
+    val sources = listOf("source1", "source2", "source3")
+
+    sources.forEach { source ->
+        launch {
+            val data = api.fetchFromSource(source)
+            send(data) // Конкурентные send
+        }
+    }
+}
+
+// Использование
+fetchMultipleSources().collect { data ->
+    println("Received: $data")
+}
+```
+
+Пример с настройкой буфера:
+
+```kotlin
+fun bufferedFlow(): Flow<Int> = channelFlow {
+    launch {
+        repeat(100) { i ->
+            send(i)
+        }
+    }
+}.buffer(capacity = Channel.UNLIMITED) // либо CONFLATED, RENDEZVOUS и т.п.
+```
+
+### `callbackFlow{}` — обертка над callback API
+
+Характеристики:
+- Холодный `Flow` с `ProducerScope` и `Channel`.
+- Специально предназначен для обертки callback/listener-API.
+- Разрешено использовать `send()` из корутин и `trySend()` из обычных (несуспендящихся) callback-ов.
+- Требует `awaitClose {}` для корректного снятия слушателей и освобождения ресурсов.
+
+Базовый пример:
+
+```kotlin
+fun locationUpdates(locationManager: LocationManager): Flow<Location> = callbackFlow {
+    val listener = object : LocationListener {
+        override fun onLocationChanged(location: Location) {
+            trySend(location).isSuccess // Несуспендирующая отправка
+        }
+
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+        override fun onProviderEnabled(provider: String) {}
+        override fun onProviderDisabled(provider: String) {
+            close(Exception("Provider disabled"))
+        }
+    }
+
+    locationManager.requestLocationUpdates(
+        LocationManager.GPS_PROVIDER,
+        1000L,
+        10f,
+        listener
+    )
+
+    // ОБЯЗАТЕЛЬНО: очистка при отмене/завершении Flow
+    awaitClose {
+        locationManager.removeUpdates(listener)
+    }
+}
+
+// Использование
+locationUpdates(locationManager)
+    .collect { location ->
+        println("Location: $location")
+    }
+```
+
+Когда использовать `callbackFlow{}`:
+- Обертка над callback-/listener-базированными API.
+- Событийные источники (клики, сенсоры, сеть, подключения и т.п.).
+- WebSocket, SSE и любые push-стили.
+
+Про `awaitClose`:
+- Компилятор не заставляет, но практически всегда нужно вызвать `awaitClose {}` или закрыть канал/отписаться иным образом, иначе ресурсы будут течь.
+
+Неправильное и правильное использование:
+
+```kotlin
+// НЕПРАВИЛЬНО: нет awaitClose -> listener не снимается
+fun badCallbackFlow() = callbackFlow {
+    val listener = { data: String ->
+        trySend(data)
+    }
+    api.registerListener(listener)
+    // Нет awaitClose
+}
+
+// ПРАВИЛЬНО
+fun goodCallbackFlow() = callbackFlow {
+    val listener = { data: String ->
+        trySend(data)
+    }
+    api.registerListener(listener)
+
+    awaitClose {
+        api.unregisterListener(listener)
+    }
+}
+```
+
+### Реальный пример: Firebase Realtime Database
+
+```kotlin
+fun DatabaseReference.asFlow(): Flow<DataSnapshot> = callbackFlow {
+    val listener = object : ValueEventListener {
+        override fun onDataChange(snapshot: DataSnapshot) {
+            trySend(snapshot).isSuccess
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            close(error.toException())
+        }
+    }
+
+    addValueEventListener(listener)
+
+    awaitClose {
+        removeEventListener(listener)
+    }
+}
+
+// Использование
+database.child("users").asFlow()
+    .map { snapshot -> snapshot.getValue(User::class.java) }
+    .collect { user ->
+        updateUI(user)
+    }
+```
+
+### Реальный пример: Room Database
+
+```kotlin
+@Dao
+interface UserDao {
+    @Query("SELECT * FROM users WHERE id = :userId")
+    fun getUserFlow(userId: String): Flow<User>
+
+    // Упрощенная ручная реализация через callbackFlow
+    fun getUserFlowManual(userId: String): Flow<User> = callbackFlow {
+        val observer = object : InvalidationTracker.Observer("users") {
+            override fun onInvalidated(tables: Set<String>) {
+                val user = queryUser(userId)
+                trySend(user)
+            }
+        }
+
+        database.invalidationTracker.addObserver(observer)
+
+        val initialUser = queryUser(userId)
+        send(initialUser)
+
+        awaitClose {
+            database.invalidationTracker.removeObserver(observer)
+        }
+    }
+}
+```
+
+### Реальный пример: WebSocket
+
+```kotlin
+fun webSocketFlow(url: String): Flow<String> = callbackFlow {
+    val client = OkHttpClient()
+    val request = Request.Builder().url(url).build()
+
+    val listener = object : WebSocketListener() {
+        override fun onMessage(webSocket: WebSocket, text: String) {
+            trySend(text).isSuccess
+        }
+
+        override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
+            close(t)
+        }
+
+        override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
+            close()
+        }
+    }
+
+    val webSocket = client.newWebSocket(request, listener)
+
+    awaitClose {
+        webSocket.close(1000, "Flow cancelled")
+    }
+}
+
+// Использование
+webSocketFlow("wss://example.com/ws")
+    .catch { e -> println("Error: $e") }
+    .collect { message ->
+        println("Received: $message")
+    }
+```
+
+### `send()` vs `trySend()` vs `emit()`
+
+`emit()`:
+- Приостанавливающая функция, уважает back-pressure.
+- Используется в `flow{}` и доступна в `channelFlow{}`/`callbackFlow{}` через `FlowCollector`/`ProducerScope`.
+
+`send()`:
+- Приостанавливающая отправка в `Channel` (`ProducerScope`).
+- Доступна в `channelFlow{}`/`callbackFlow{}`.
+
+`trySend()`:
+- Не приостанавливающая, сразу возвращает `ChannelResult<Unit>`.
+- Предпочтительно внутри обычных callback-ов в `callbackFlow{}`.
+
+Примеры:
+
+```kotlin
+// flow{} — используем emit()
+flow {
+    emit(1)
+}
+
+// channelFlow{} — можно send() или emit() (emit делегирует в send)
+channelFlow {
+    send(1)
+    emit(2)
+}
+
+// callbackFlow{} — send() в корутинах, trySend() в callback-ах
+callbackFlow {
+    launch {
+        send(1)
+    }
+
+    val callback = { value: Int ->
+        trySend(value)
+    }
+
+    awaitClose { }
+}
+```
+
+### Обработка ошибок
+
+`flow{}`:
+
+```kotlin
+fun flowWithError(): Flow<Int> = flow {
+    emit(1)
+    throw RuntimeException("Error")
+}
+
+flowWithError()
+    .catch { e -> println("Caught: $e") }
+    .collect { value -> println(value) }
+```
+
+`channelFlow{}`:
+
+```kotlin
+fun channelFlowWithError(): Flow<Int> = channelFlow {
+    launch {
+        send(1)
+        throw RuntimeException("Error in launch")
+    }
+
+    launch {
+        send(2)
+    }
+}
+
+// Ошибки в дочерних корутинах могут отменить scope; явно обрабатывайте их
+// (try/catch, CoroutineExceptionHandler, структурированная конкуррентность).
+```
+
+`callbackFlow{}`:
+
+```kotlin
+fun callbackFlowWithError(): Flow<String> = callbackFlow {
+    val listener = object : Listener {
+        override fun onData(data: String) {
+            trySend(data)
+        }
+
+        override fun onError(error: Exception) {
+            close(error)
+        }
+    }
+
+    api.register(listener)
+
+    awaitClose {
+        api.unregister(listener)
+    }
+}
+
+callbackFlowWithError()
+    .catch { e -> println("Error: $e") }
+    .collect { data -> println(data) }
+```
+
+### Обработка отмены
+
+`flow{}`:
+- Автоматически отменяется при отмене корутины коллектора.
+- Для очистки можно использовать `finally`.
+
+```kotlin
+flow {
+    try {
+        repeat(10) { i ->
+            emit(i)
+            delay(100)
+        }
+    } finally {
+        println("Flow cancelled")
+    }
+}
+```
+
+`channelFlow{}` / `callbackFlow{}`:
+- Для очистки используйте `awaitClose {}` и/или `try/finally`.
+
+```kotlin
+callbackFlow {
+    println("Started")
+
+    val listener = { data: String -> trySend(data) }
+    api.register(listener)
+
+    awaitClose {
+        println("Cleaning up")
+        api.unregister(listener)
+    }
+}
+```
+
+### Соображения по производительности
+
+- `flow{}`:
+  - Минимальные накладные расходы, нет внутреннего `Channel`.
+  - Предпочтителен для простых последовательных операций и трансформаций.
+- `channelFlow{}`:
+  - Выше накладные расходы из-за `Channel` и конкуренции.
+  - Используйте только при реальной необходимости нескольких продюсеров или канал-семантики.
+- `callbackFlow{}`:
+  - Похож на `channelFlow{}`, плюс цена интеграции с callback-ами.
+  - Используйте для обертки внешних API, а не для обычной логики.
+
+Точные цифры зависят от окружения — при необходимости измеряйте отдельно.
+
+### Стратегии тестирования
+
+Тестирование `flow{}`:
+
+```kotlin
+@Test
+fun `test simple flow`() = runTest {
+    val flow = flow {
+        emit(1)
+        emit(2)
+        emit(3)
+    }
+
+    val result = flow.toList()
+    assertEquals(listOf(1, 2, 3), result)
+}
+```
+
+Тестирование `channelFlow{}`:
+
+```kotlin
+@Test
+fun `test concurrent channel flow`() = runTest {
+    val flow = channelFlow {
+        launch { send(1) }
+        launch { send(2) }
+        launch { send(3) }
+    }
+
+    val result = flow.toList().sorted()
+    assertEquals(listOf(1, 2, 3), result)
+}
+```
+
+Тестирование `callbackFlow{}`:
+
+```kotlin
+@Test
+fun `test callback flow`() = runTest {
+    val listener = FakeListener()
+
+    val flow = callbackFlow {
+        listener.callback = { value -> trySend(value) }
+        awaitClose { listener.callback = null }
+    }
+
+    val collected = mutableListOf<String>()
+
+    val job = launch {
+        flow.take(3).toList(collected)
+    }
+
+    listener.emit("A")
+    listener.emit("B")
+    listener.emit("C")
+
+    job.join()
+
+    assertEquals(listOf("A", "B", "C"), collected)
+}
+
+class FakeListener {
+    var callback: ((String) -> Unit)? = null
+
+    fun emit(value: String) {
+        callback?.invoke(value)
+    }
+}
+```
+
+### Типичные ошибки
+
+1. Использование `flow{}` для конкурентных эмиссий:
+
+```kotlin
+// НЕПРАВИЛЬНО
+fun concurrentEmit() = flow {
+    launch {
+        emit(1)
+    }
+}
+
+// ПРАВИЛЬНО: channelFlow
+fun concurrentEmitFixed() = channelFlow {
+    launch {
+        send(1)
+    }
+}
+```
+
+2. Забытый `awaitClose` в `callbackFlow{}`:
+
+```kotlin
+// НЕПРАВИЛЬНО: listener-утечка
+fun leakyFlow() = callbackFlow {
+    val listener = { data: String -> trySend(data) }
+    api.register(listener)
+}
+
+// ПРАВИЛЬНО
+fun cleanFlow() = callbackFlow {
+    val listener = { data: String -> trySend(data) }
+    api.register(listener)
+    awaitClose { api.unregister(listener) }
+}
+```
+
+3. Использование `emit()` напрямую в callback-е:
+
+```kotlin
+// НЕПРАВИЛЬНО: emit() — suspend, нельзя в обычном callback-е
+fun badFlow() = callbackFlow {
+    val listener = { data: String ->
+        emit(data) // Ошибка
+    }
+}
+
+// ПРАВИЛЬНО: trySend()
+fun goodFlow() = callbackFlow {
+    val listener = { data: String ->
+        trySend(data)
+    }
+}
+```
+
+4. Игнорирование результата `trySend()`:
+
+```kotlin
+// Может терять данные, если буфер полон или канал закрыт
+callbackFlow {
+    val listener = { data: String ->
+        trySend(data)
+    }
+}
+
+// Лучше явно обрабатывать неудачу
+callbackFlow {
+    val listener = { data: String ->
+        trySend(data).onFailure {
+            Log.w("Flow", "Failed to send $data")
+        }
+    }
+}
+
+// Или настроить стратегию буферизации
+callbackFlow {
+    val listener = { data: String ->
+        trySend(data)
+    }
+}.buffer(Channel.CONFLATED)
+```
+
+### Выбор правильного билдера: шпаргалка
+
+- Нужно последовательно эмитить значения из suspend-кода в одной корутине?
+  - Используйте `flow{}`.
+- Нужно объединить эмиссии из нескольких конкурентных корутин в один поток?
+  - Используйте `channelFlow{}`.
+- Нужно превратить callback-/listener- или внешние push-API в `Flow`?
+  - Используйте `callbackFlow{}`.
+
+Примеры:
+
+```kotlin
+// Последовательная генерация → flow{}
+fun countDown() = flow {
+    for (i in 10 downTo 1) {
+        delay(1000)
+        emit(i)
+    }
+}
+
+// Параллельные API вызовы → channelFlow{}
+fun fetchAllUsers(userIds: List<String>) = channelFlow {
+    userIds.forEach { id ->
+        launch {
+            val user = api.getUser(id)
+            send(user)
+        }
+    }
+}
+
+// Callback-основанный сенсор → callbackFlow{}
+fun sensorData(sensor: Sensor): Flow<SensorEvent> = callbackFlow {
+    val listener = object : SensorEventListener {
+        override fun onSensorChanged(event: SensorEvent) {
+            trySend(event)
+        }
+
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
+    }
+
+    sensorManager.registerListener(listener, sensor, SENSOR_DELAY_NORMAL)
+
+    awaitClose {
+        sensorManager.unregisterListener(listener)
+    }
+}
+```
+
+### Ключевые выводы
+
+1. `flow{}` — выбор по умолчанию: холодный, последовательный, минимальные накладные расходы.
+2. `channelFlow{}` — холодный `Flow` на базе `Channel`; позволяет конкурентных продюсеров и настраиваемую буферизацию.
+3. `callbackFlow{}` — холодный `Flow` на базе `Channel`; идеален для callback/listener API; почти всегда требует `awaitClose {}`.
+4. Используйте `emit()` в обычном `flow{}` и в `ProducerScope` где уместно; `send()` — для приостанавливающих отправок в `Channel`; `trySend()` — для не-блокирующих callback-ов.
+5. Back-pressure обеспечивается приостановкой; стратегия буферизации влияет на поведение быстрых продюсеров.
+6. Все три билдера создают холодные потоки; для реально разделяемых горячих потоков используйте `shareIn`, `stateIn` или отдельные hot-источники (`StateFlow`, `SharedFlow`).
+7. Всегда тестируйте отмену и очистку ресурсов, особенно при интеграции с внешними API.
+8. Предпочитайте `flow{}` для простоты и производительности, а `channelFlow{}`/`callbackFlow{}` включайте осознанно.
+
+---
+
+## Answer (EN)
+
+Kotlin `Flow` provides multiple builders (`flow{}`, `channelFlow{}`, `callbackFlow{}`), each with distinct semantics. Choosing the wrong builder can add unnecessary overhead, complicate cancellation, or cause resource leaks and incorrect behavior. Understanding when to use each is essential for production-ready `Flow` code.
+
+### Overview of Flow Builders
+
+| Builder | Flow nature | Concurrency | Buffering | Primary use case |
+|---------|------------|-------------|-----------|------------------|
+| `flow{}` | Cold | Sequential emissions only (single coroutine) | No extra buffer (direct backpressure via suspension) | Simple sequential suspending emissions, transformations |
+| `channelFlow{}` | Cold Flow using a Channel internally | Concurrent producers inside the builder | Buffered channel (configurable) | Merge/coordinate multiple concurrent sources |
+| `callbackFlow{}` | Cold Flow using a Channel internally | Safe from callbacks + coroutines | Buffered + requires proper `awaitClose` cleanup | Wrapping callback/listener-style APIs |
+
+Note: All three builders create cold Flows. For `channelFlow{}` and `callbackFlow{}`, the producer logic is started per collection, but internally they use a Channel which can make their behavior resemble a hot source while being scoped to the collector.
+
+### flow{} - Cold, Sequential Flow
+
+Characteristics:
+- Cold: Execution starts when a terminal operator (collector) is called; each new collector re-runs the block.
+- Sequential: `emit()` is suspending and must be called from the same coroutine (no concurrent emissions).
+- Backpressure: Implemented by suspension — `emit()` suspends until the downstream is ready.
+- No extra buffering: Values are delivered directly to the collector (unless you explicitly add operators like `buffer`).
+
+Basic usage:
+
+```kotlin
+fun simpleFlow(): Flow<Int> = flow {
+    for (i in 1..5) {
+        delay(100)
+        emit(i) // Suspends until collector is ready
     }
 }
 
@@ -89,13 +752,13 @@ launch {
 }
 ```
 
-**When to use:**
-- Simple sequential data generation
-- Transforming other flows
-- Wrapping suspend functions
-- Default choice for most cases
+When to use:
+- Simple sequential data generation.
+- Transforming other Flows.
+- Wrapping suspend functions.
+- Default choice when you don't explicitly need channels, callbacks, or concurrent producers.
 
-**Example: API pagination**
+Example: API pagination
 
 ```kotlin
 fun fetchPages(): Flow<List<Item>> = flow {
@@ -117,37 +780,37 @@ fetchPages().collect { items ->
 }
 ```
 
-**Cannot emit concurrently:**
+Cannot emit concurrently (Flow invariant):
 
 ```kotlin
-//  ERROR: Flow invariant is violated
+// ERROR: Flow invariant is violated
 fun concurrentFlow(): Flow<Int> = flow {
     launch {
-        emit(1) // ERROR: emit() called from different coroutine
+        emit(1) // ERROR: emit() called from a different coroutine
     }
 }
 
-// Exception: Flow invariant is violated:
-// Flow was collected in [coroutine#1],
+// Exception example:
+// Flow invariant is violated: Flow was collected in [coroutine#1],
 // but emission happened in [coroutine#2].
 ```
 
-### channelFlow{} - Concurrent Flow
+### channelFlow{} - Concurrent Producers with Channel
 
-**Characteristics:**
-- **Hot**: Producer runs independently
-- **Concurrent**: Can `send()` from multiple coroutines
-- **Buffered**: Uses Channel internally
-- **No back-pressure control**: By default
+Characteristics:
+- Cold Flow whose block runs in a `ProducerScope` backed by a Channel.
+- Concurrent: You can launch multiple coroutines inside the block and `send`/`emit` from any of them.
+- Buffered: Uses a Channel; default capacity is `Channel.BUFFERED` (e.g. 64) unless changed.
+- Backpressure: Achieved via suspending `send`/`emit` when the buffer is full.
 
-**Basic usage:**
+Basic usage:
 
 ```kotlin
 fun concurrentFlow(): Flow<Int> = channelFlow {
     launch {
         repeat(5) { i ->
             delay(100)
-            send(i) // Can send from any coroutine
+            send(i) // Can send from any child coroutine of this scope
         }
     }
 
@@ -159,17 +822,17 @@ fun concurrentFlow(): Flow<Int> = channelFlow {
     }
 }
 
-// Output: 0, 10, 1, 2, 11, 3, 4, 12, 13, 14
-// Interleaved from both coroutines
+// Output example (order not guaranteed, interleaved from both coroutines):
+// 0, 10, 1, 2, 11, 3, 4, 12, 13, 14
 ```
 
-**When to use:**
-- Multiple concurrent data sources
-- Parallel data processing
-- Need buffering between producer and consumer
-- Converting channels to flows
+When to use:
+- Multiple concurrent data sources that should be merged into a single Flow.
+- Parallel data processing where producers may emit independently.
+- Need explicit buffering between producer(s) and consumer.
+- Bridging existing channels or fan-in patterns into a Flow.
 
-**Example: Parallel API calls**
+Example: Parallel API calls
 
 ```kotlin
 fun fetchMultipleSources(): Flow<Data> = channelFlow {
@@ -189,12 +852,10 @@ fetchMultipleSources().collect { data ->
 }
 ```
 
-**Buffer configuration:**
+Buffer configuration example:
 
 ```kotlin
 fun bufferedFlow(): Flow<Int> = channelFlow {
-    // Set buffer capacity
-    // Default: Channel.BUFFERED (64)
     launch {
         repeat(100) { i ->
             send(i)
@@ -203,22 +864,21 @@ fun bufferedFlow(): Flow<Int> = channelFlow {
 }.buffer(capacity = Channel.UNLIMITED) // Or CONFLATED, RENDEZVOUS, etc.
 ```
 
-### callbackFlow{} - Callback-Based APIs
+### callbackFlow{} - Wrapping Callback-Based APIs
 
-**Characteristics:**
-- **Hot**: Producer runs independently
-- **Concurrent**: Can `send()` from callbacks
-- **Buffered**: Uses Channel
-- **awaitClose {}**: Required cleanup block
-- **trySend()**: Non-suspending send for callbacks
+Characteristics:
+- Cold Flow whose block runs in a `ProducerScope` with a Channel.
+- Designed for callback/listener-style APIs.
+- Can safely use `send()` from coroutines in the scope and `trySend()` from non-suspending callbacks.
+- Requires `awaitClose {}` to unregister listeners / close resources correctly.
 
-**Basic usage:**
+Basic usage:
 
 ```kotlin
 fun locationUpdates(locationManager: LocationManager): Flow<Location> = callbackFlow {
     val listener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
-            trySend(location) // Non-suspending for callback
+            trySend(location).isSuccess // Non-suspending, handle result if needed
         }
 
         override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
@@ -236,7 +896,7 @@ fun locationUpdates(locationManager: LocationManager): Flow<Location> = callback
         listener
     )
 
-    // REQUIRED: Cleanup when flow is closed/cancelled
+    // REQUIRED FOR CLEANUP: called when the flow is cancelled or completed
     awaitClose {
         locationManager.removeUpdates(listener)
     }
@@ -249,25 +909,27 @@ locationUpdates(locationManager)
     }
 ```
 
-**When to use:**
-- Converting callback-based APIs
-- Event listeners (clicks, sensors, network)
-- WebSockets, SSE (Server-Sent Events)
-- Any API that pushes data via callbacks
+When to use:
+- Converting callback-based or listener-based APIs into Flows.
+- Event listeners (clicks, sensors, connectivity, etc.).
+- WebSockets, SSE, or other push-style APIs.
 
-**awaitClose is mandatory:**
+On `awaitClose`:
+- The compiler does not enforce it, but in practice you almost always must provide `awaitClose {}` (or otherwise close/unregister) to avoid leaks.
+
+Incorrect vs correct usage:
 
 ```kotlin
-//  WRONG: No awaitClose
+// WRONG: No awaitClose -> listener never removed, potential leak
 fun badCallbackFlow() = callbackFlow {
     val listener = { data: String ->
         trySend(data)
     }
     api.registerListener(listener)
-    // Missing awaitClose - listener never removed!
+    // Missing awaitClose
 }
 
-//  CORRECT: With awaitClose
+// CORRECT: With awaitClose
 fun goodCallbackFlow() = callbackFlow {
     val listener = { data: String ->
         trySend(data)
@@ -286,11 +948,11 @@ fun goodCallbackFlow() = callbackFlow {
 fun DatabaseReference.asFlow(): Flow<DataSnapshot> = callbackFlow {
     val listener = object : ValueEventListener {
         override fun onDataChange(snapshot: DataSnapshot) {
-            trySend(snapshot).isSuccess // Check if sent successfully
+            trySend(snapshot).isSuccess
         }
 
         override fun onCancelled(error: DatabaseError) {
-            close(error.toException()) // Close flow with error
+            close(error.toException())
         }
     }
 
@@ -318,11 +980,10 @@ interface UserDao {
     @Query("SELECT * FROM users WHERE id = :userId")
     fun getUserFlow(userId: String): Flow<User>
 
-    // Under the hood, Room uses something like:
+    // Conceptual manual implementation (simplified)
     fun getUserFlowManual(userId: String): Flow<User> = callbackFlow {
         val observer = object : InvalidationTracker.Observer("users") {
             override fun onInvalidated(tables: Set<String>) {
-                // Query and send new data
                 val user = queryUser(userId)
                 trySend(user)
             }
@@ -330,7 +991,6 @@ interface UserDao {
 
         database.invalidationTracker.addObserver(observer)
 
-        // Send initial value
         val initialUser = queryUser(userId)
         send(initialUser)
 
@@ -350,7 +1010,7 @@ fun webSocketFlow(url: String): Flow<String> = callbackFlow {
 
     val listener = object : WebSocketListener() {
         override fun onMessage(webSocket: WebSocket, text: String) {
-            trySend(text)
+            trySend(text).isSuccess
         }
 
         override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
@@ -358,7 +1018,7 @@ fun webSocketFlow(url: String): Flow<String> = callbackFlow {
         }
 
         override fun onClosing(webSocket: WebSocket, code: Int, reason: String) {
-            channel.close()
+            close() // Signal normal completion of the flow
         }
     }
 
@@ -377,40 +1037,42 @@ webSocketFlow("wss://example.com/ws")
     }
 ```
 
-### send() Vs trySend() Vs emit()
+### send() vs trySend() vs emit()
 
-**emit():** Suspending, waits for collector
-- Use in: `flow{}`, `channelFlow{}`
-- Cannot use in: callbacks (not suspend)
+`emit()`:
+- Suspending, respects backpressure.
+- Used in `flow{}` and also available in `channelFlow{}`/`callbackFlow{}` via `FlowCollector`/`ProducerScope` extensions.
 
-**send():** Suspending, waits for buffer space
-- Use in: `channelFlow{}`, `callbackFlow{}`
-- Cannot use in: `flow{}`
+`send()`:
+- Suspending send to the underlying Channel (`ProducerScope`).
+- Available in `channelFlow{}`/`callbackFlow{}`.
 
-**trySend():** Non-suspending, returns immediately
-- Use in: callbacks within `callbackFlow{}`
-- Returns: `ChannelResult<Unit>` (success/failure)
+`trySend()`:
+- Non-suspending, immediately returns a `ChannelResult<Unit>`.
+- Preferred inside non-suspending callbacks in `callbackFlow{}`.
+
+Usage examples:
 
 ```kotlin
 // flow{} - use emit()
 flow {
-    emit(1) // Suspending
+    emit(1)
 }
 
-// channelFlow{} - use send() or emit()
+// channelFlow{} - can use send() or emit() (in this scope emit delegates to send)
 channelFlow {
-    send(1) // Suspending
-    emit(1) // Also available, same as send()
+    send(1)
+    emit(2) // In ProducerScope, effectively send(2)
 }
 
-// callbackFlow{} - use send() in coroutines, trySend() in callbacks
+// callbackFlow{} - send() in coroutines, trySend() in callbacks
 callbackFlow {
     launch {
-        send(1) // Suspending - OK in coroutine
+        send(1)
     }
 
     val callback = { value: Int ->
-        trySend(value) // Non-suspending - OK in callback
+        trySend(value)
     }
 
     awaitClose { }
@@ -419,7 +1081,7 @@ callbackFlow {
 
 ### Error Handling
 
-**flow{}:**
+`flow{}`:
 
 ```kotlin
 fun flowWithError(): Flow<Int> = flow {
@@ -434,7 +1096,7 @@ flowWithError()
     .collect { value -> println(value) }
 ```
 
-**channelFlow{}:**
+`channelFlow{}`:
 
 ```kotlin
 fun channelFlowWithError(): Flow<Int> = channelFlow {
@@ -444,15 +1106,16 @@ fun channelFlowWithError(): Flow<Int> = channelFlow {
     }
 
     launch {
-        send(2) // This still executes
+        send(2)
     }
 }
 
-// Errors in launch don't automatically close flow
-// Use CoroutineExceptionHandler or try-catch
+// Errors in child coroutines do not automatically turn into Flow emissions.
+// Depending on the CoroutineScope and exception handling, they may cancel the scope.
+// Use structured concurrency, try/catch, or a CoroutineExceptionHandler as appropriate.
 ```
 
-**callbackFlow{}:**
+`callbackFlow{}`:
 
 ```kotlin
 fun callbackFlowWithError(): Flow<String> = callbackFlow {
@@ -462,7 +1125,7 @@ fun callbackFlowWithError(): Flow<String> = callbackFlow {
         }
 
         override fun onError(error: Exception) {
-            close(error) // Close flow with error
+            close(error)
         }
     }
 
@@ -481,7 +1144,9 @@ callbackFlowWithError()
 
 ### Cancellation Handling
 
-**flow{}:** Automatically cancelled when collector cancels
+`flow{}`:
+- Automatically cancelled when the collector's coroutine is cancelled.
+- Use `finally` for cleanup if needed.
 
 ```kotlin
 flow {
@@ -496,7 +1161,8 @@ flow {
 }
 ```
 
-**channelFlow{}/callbackFlow{}:** Use awaitClose for cleanup
+`channelFlow{}` / `callbackFlow{}`:
+- Use `awaitClose {}` (and/or `try/finally`) to clean up resources when the Flow is cancelled.
 
 ```kotlin
 callbackFlow {
@@ -512,42 +1178,24 @@ callbackFlow {
 }
 ```
 
-### Performance Implications
+### Performance Considerations
 
-**flow{}:**
-- **Lowest overhead**: Direct emit, no channel
-- **Best for**: Simple sequential operations
-- **Latency**: Lowest (no buffering)
+Relative guidelines (not exact benchmarks):
+- `flow{}`:
+  - Lowest overhead: direct emissions, no internal Channel.
+  - Best for simple sequential operations and transformations.
+- `channelFlow{}`:
+  - Higher overhead due to Channel operations and concurrency.
+  - Use when you truly need multiple concurrent producers or channel semantics.
+- `callbackFlow{}`:
+  - Similar overhead to `channelFlow{}` plus cost of callback integration.
+  - Use when wrapping external callback-based APIs.
 
-**channelFlow{}:**
-- **Medium overhead**: Channel buffering
-- **Best for**: Concurrent producers
-- **Latency**: Higher (buffering delay)
-
-**callbackFlow{}:**
-- **Medium overhead**: Channel buffering + callback management
-- **Best for**: Callback-based APIs
-- **Latency**: Depends on callback frequency
-
-**Benchmark:**
-
-```kotlin
-// flow{}: ~100ns per emission
-flow {
-    repeat(10000) { emit(it) }
-}.collect { }
-
-// channelFlow{}: ~500ns per emission (channel overhead)
-channelFlow {
-    repeat(10000) { send(it) }
-}.collect { }
-
-// callbackFlow{}: ~500ns + callback overhead
-```
+Avoid relying on fixed nanosecond-per-emission numbers; measure in your own environment if needed.
 
 ### Testing Strategies
 
-**Testing flow{}:**
+Testing `flow{}`:
 
 ```kotlin
 @Test
@@ -563,7 +1211,7 @@ fun `test simple flow`() = runTest {
 }
 ```
 
-**Testing channelFlow{}:**
+Testing `channelFlow{}`:
 
 ```kotlin
 @Test
@@ -579,7 +1227,7 @@ fun `test concurrent channel flow`() = runTest {
 }
 ```
 
-**Testing callbackFlow{}:**
+Testing `callbackFlow{}`:
 
 ```kotlin
 @Test
@@ -587,19 +1235,23 @@ fun `test callback flow`() = runTest {
     val listener = FakeListener()
 
     val flow = callbackFlow {
-        listener.callback = { trySend(it) }
+        listener.callback = { value -> trySend(value) }
         awaitClose { listener.callback = null }
     }
 
-    launch {
-        flow.take(3).collect { value ->
-            println(value)
-        }
+    val collected = mutableListOf<String>()
+
+    val job = launch {
+        flow.take(3).toList(collected)
     }
 
     listener.emit("A")
     listener.emit("B")
     listener.emit("C")
+
+    job.join()
+
+    assertEquals(listOf("A", "B", "C"), collected)
 }
 
 class FakeListener {
@@ -613,71 +1265,71 @@ class FakeListener {
 
 ### Common Pitfalls
 
-**Pitfall 1: Using flow{} for concurrent emissions**
+Pitfall 1: Using `flow{}` for concurrent emissions
 
 ```kotlin
-//  WRONG: Crashes
+// WRONG: Violates Flow invariant
 fun concurrentEmit() = flow {
     launch {
-        emit(1) // ERROR: Flow invariant violated
+        emit(1)
     }
 }
 
-//  CORRECT: Use channelFlow
-fun concurrentEmit() = channelFlow {
+// CORRECT: Use channelFlow
+fun concurrentEmitFixed() = channelFlow {
     launch {
-        send(1) // OK
+        send(1)
     }
 }
 ```
 
-**Pitfall 2: Forgetting awaitClose in callbackFlow**
+Pitfall 2: Forgetting `awaitClose` in `callbackFlow{}`
 
 ```kotlin
-//  WRONG: Listener leak
+// WRONG: Listener leak
 fun leakyFlow() = callbackFlow {
-    val listener = { trySend(it) }
+    val listener = { data: String -> trySend(data) }
     api.register(listener)
-    // Listener never unregistered!
+    // No awaitClose -> no unregister
 }
 
-//  CORRECT: awaitClose
+// CORRECT
 fun cleanFlow() = callbackFlow {
-    val listener = { trySend(it) }
+    val listener = { data: String -> trySend(data) }
     api.register(listener)
     awaitClose { api.unregister(listener) }
 }
 ```
 
-**Pitfall 3: Using emit() in callbacks**
+Pitfall 3: Using `emit()` directly in callbacks
 
 ```kotlin
-//  WRONG: emit is suspend, can't use in callback
+// WRONG: emit is suspend, cannot be called from a regular callback
 fun badFlow() = callbackFlow {
     val listener = { data: String ->
-        emit(data) // ERROR: suspend function in non-suspend callback
+        emit(data) // ERROR
     }
 }
 
-//  CORRECT: Use trySend()
+// CORRECT: Use trySend()
 fun goodFlow() = callbackFlow {
     val listener = { data: String ->
-        trySend(data) // Non-suspending
+        trySend(data)
     }
 }
 ```
 
-**Pitfall 4: Not checking trySend() result**
+Pitfall 4: Ignoring `trySend()` result
 
 ```kotlin
-//  WARNING: Silently drops if buffer full
+// May drop silently if buffer is full or channel closed
 callbackFlow {
     val listener = { data: String ->
-        trySend(data) // Drops if buffer full!
+        trySend(data)
     }
 }
 
-//  BETTER: Handle failure
+// Better: Handle failure
 callbackFlow {
     val listener = { data: String ->
         trySend(data).onFailure {
@@ -686,29 +1338,24 @@ callbackFlow {
     }
 }
 
-//  BEST: Use channel buffer strategy
+// Or configure buffer strategy
 callbackFlow {
     val listener = { data: String ->
         trySend(data)
     }
-}.buffer(Channel.CONFLATED) // Drop oldest on buffer full
+}.buffer(Channel.CONFLATED)
 ```
 
-### Choosing the Right Builder: Decision Tree
+### Choosing the Right Builder: Decision Guide
 
-```
-Need to emit values?
- Sequential emissions?
-   Use flow{}
+- Need to emit values sequentially from suspend code in a single coroutine?
+  - Use `flow{}`.
+- Need to combine emissions from multiple concurrent coroutines in one Flow?
+  - Use `channelFlow{}`.
+- Need to turn callbacks/listeners or external push APIs into a Flow?
+  - Use `callbackFlow{}`.
 
- Concurrent emissions from multiple coroutines?
-   Use channelFlow{}
-
- Emissions from callbacks/listeners?
-    Use callbackFlow{}
-```
-
-**Examples:**
+Examples:
 
 ```kotlin
 // Sequential data generation → flow{}
@@ -720,7 +1367,7 @@ fun countDown() = flow {
 }
 
 // Parallel API calls → channelFlow{}
-fun fetchAllUsers() = channelFlow {
+fun fetchAllUsers(userIds: List<String>) = channelFlow {
     userIds.forEach { id ->
         launch {
             val user = api.getUser(id)
@@ -730,47 +1377,84 @@ fun fetchAllUsers() = channelFlow {
 }
 
 // Callback-based sensor → callbackFlow{}
-fun sensorData(sensor: Sensor) = callbackFlow {
+fun sensorData(sensor: Sensor): Flow<SensorEvent> = callbackFlow {
     val listener = object : SensorEventListener {
         override fun onSensorChanged(event: SensorEvent) {
             trySend(event)
         }
+
+        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
     }
+
     sensorManager.registerListener(listener, sensor, SENSOR_DELAY_NORMAL)
-    awaitClose { sensorManager.unregisterListener(listener) }
+
+    awaitClose {
+        sensorManager.unregisterListener(listener)
+    }
 }
 ```
 
 ### Key Takeaways
 
-1. **flow{}** - Default choice, sequential, cold
-2. **channelFlow{}** - Concurrent producers, hot
-3. **callbackFlow{}** - Callback APIs, hot, requires awaitClose
-4. **emit() vs send() vs trySend()** - Know when to use each
-5. **awaitClose is mandatory** - In callbackFlow for cleanup
-6. **Cold vs Hot** - flow{} is cold, others are hot
-7. **Buffering** - channelFlow/callbackFlow have buffers
-8. **Choose based on data source** - Sequential, concurrent, or callback
-9. **Test cancellation** - Ensure cleanup happens
-10. **Consider performance** - flow{} has lowest overhead
+1. `flow{}` — default choice, cold, sequential, minimal overhead.
+2. `channelFlow{}` — cold Flow backed by Channel; supports concurrent producers and buffering.
+3. `callbackFlow{}` — cold Flow backed by Channel; ideal for callback/listener APIs; requires `awaitClose {}` for proper cleanup.
+4. Use `emit()` in regular `flow{}` and in producer scopes when appropriate; use `send()` for suspending channel sends; use `trySend()` for non-suspending callbacks.
+5. Remember that backpressure is handled by suspension; buffering strategies affect behavior for fast producers.
+6. All three builders are cold; to get truly shared hot behavior, use `shareIn`, `stateIn`, or explicit shared scopes (`StateFlow`, `SharedFlow`).
+7. Always test cancellation and cleanup, especially when integrating with external resources.
+8. Prefer `flow{}` for simplicity and performance unless you specifically need channel- or callback-based behavior.
 
 ---
 
+## Дополнительные вопросы (RU)
+
+1. Как преобразовать `Flow` в `Channel` и обратно?
+2. В чем различия стратегий буферизации в `channelFlow` и как они влияют на back-pressure?
+3. Как обрабатывать ситуацию, когда продюсер в `callbackFlow` быстрее потребителя?
+4. Какие внутренние отличия реализации между `channelFlow` и `flow` наиболее важны для понимания поведения?
+5. Как тестировать долгоживущие потоки, которые эмитят значения в течение длительного времени?
+6. Что произойдет, если блок `awaitClose` выбросит исключение?
+7. Как построить горячий, разделяемый поток на основе этих билдеров (например, с помощью `shareIn`, `stateIn`)?
+
 ## Follow-ups
 
-1. How do you convert a Flow to a Channel and vice versa?
-2. What's the difference between buffer strategies in channelFlow?
-3. How do you handle backpressure in callbackFlow when producer is faster than consumer?
-4. Can you explain the internal implementation of channelFlow vs flow?
-5. How do you test flows that emit values over long periods?
-6. What happens if awaitClose throws an exception?
-7. How do you implement a hybrid flow that's both hot and cold?
+1. How do you convert a `Flow` to a `Channel` and vice versa?
+2. What's the difference between buffer strategies in `channelFlow` and how do they affect backpressure?
+3. How do you handle producers in `callbackFlow` that are faster than consumers?
+4. What internal implementation differences between `channelFlow` and `flow` matter for behavior?
+5. How do you test long-lived flows that emit over extended periods?
+6. What happens if an `awaitClose` block throws an exception?
+7. How do you build a hot, shared stream on top of these builders (e.g., with `shareIn`, `stateIn`)?
+
+## Ссылки (RU)
+
+- Документация по Kotlin Flow: https://kotlinlang.org/docs/flow.html
+- `channelFlow` и `callbackFlow` в kotlinx.coroutines: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/channel-flow.html
+- Статья Романа Елизарова о callback-ах и Flows: https://elizarov.medium.com/callbacks-and-kotlin-flows-2b53aa2525cf
 
 ## References
 
-- [Kotlin Flow Documentation](https://kotlinlang.org/docs/flow.html)
-- [channelFlow vs callbackFlow](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/channel-flow.html)
-- [Flow Builders](https://elizarov.medium.com/callbacks-and-kotlin-flows-2b53aa2525cf)
+- Kotlin Flow Documentation: https://kotlinlang.org/docs/flow.html
+- channelFlow vs callbackFlow: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.flow/channel-flow.html
+- Callbacks and Kotlin Flows (Elizarov): https://elizarov.medium.com/callbacks-and-kotlin-flows-2b53aa2525cf
+
+## Связанные вопросы (RU)
+
+### Хаб
+- [[q-kotlin-flow-basics--kotlin--medium]] — ввод в `Flow`
+
+### Похожие (medium)
+- [[q-hot-cold-flows--kotlin--medium]] — горячие vs холодные потоки
+- [[q-cold-vs-hot-flows--kotlin--medium]] — объяснение разницы холодных и горячих потоков
+- [[q-flow-vs-livedata-comparison--kotlin--medium]] — `Flow` vs `LiveData`
+- [[q-channels-vs-flow--kotlin--medium]] — каналы против `Flow`
+- [[q-sharedflow-stateflow--kotlin--medium]] — `SharedFlow` vs `StateFlow`
+
+### Продвинутое (hard)
+- [[q-flowon-operator-context-switching--kotlin--hard]] — `flowOn` и переключение контекста
+- [[q-flow-backpressure--kotlin--hard]] — обработка back-pressure
+- [[q-flow-backpressure-strategies--kotlin--hard]] — стратегии back-pressure
 
 ## Related Questions
 
@@ -780,9 +1464,9 @@ fun sensorData(sensor: Sensor) = callbackFlow {
 ### Related (Medium)
 - [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
+- [[q-flow-vs-livedata-comparison--kotlin--medium]] - `Flow` vs `LiveData`
 - [[q-channels-vs-flow--kotlin--medium]] - Channels vs Flow
-- [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
+- [[q-sharedflow-stateflow--kotlin--medium]] - `SharedFlow` vs `StateFlow`
 
 ### Advanced (Harder)
 - [[q-flowon-operator-context-switching--kotlin--hard]] - flowOn & context switching

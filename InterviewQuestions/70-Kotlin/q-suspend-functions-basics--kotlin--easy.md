@@ -1,11 +1,11 @@
 ---
 id: kotlin-075
 title: "Suspend Functions Basics / Основы suspend функций"
-aliases: ["Suspend Functions Basics, Основы suspend функций"]
+aliases: ["Suspend Functions Basics", "Основы suspend функций"]
 
 # Classification
 topic: kotlin
-subtopics: [advanced, coroutines, patterns]
+subtopics: [coroutines, functions, c-kotlin-coroutines-basics]
 question_kind: theory
 difficulty: easy
 
@@ -18,13 +18,13 @@ source_note: Comprehensive Kotlin Coroutines Guide - Question 140028
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-exception-handling--kotlin--medium, q-delegates-compilation--kotlin--hard, q-launch-vs-async-vs-runblocking--kotlin--medium]
+related: [c-kotlin, c-coroutines, q-launch-vs-async-vs-runblocking--kotlin--medium]
 
 # Timestamps
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 
-tags: [coroutines, difficulty/easy, difficulty/medium, kotlin]
+tags: [coroutines, difficulty/easy, kotlin]
 ---
 # Вопрос (RU)
 > Продвинутая тема корутин Kotlin 140028
@@ -44,14 +44,14 @@ Suspend-функция объявляется с модификатором `sus
 
 ```kotlin
 suspend fun fetchData(): String {
-    delay(1000)  // Приостанавливает корутину на 1 секунду
+    delay(1000)  // Приостанавливает корутину на 1 секунду (не блокируя поток)
     return "Data loaded"
 }
 ```
 
 ### Ключевые Характеристики
 
-1. **Могут вызываться только из корутин или других suspend-функций**:
+1. **Могут вызываться только из корутин или других suspend-функций** (напрямую из обычного кода — только через корутинные билдеры вроде `launch`, `async`, `runBlocking`):
 ```kotlin
 suspend fun loadUser(): User {
     // Можно вызывать другие suspend-функции
@@ -59,12 +59,12 @@ suspend fun loadUser(): User {
     return parseUser(data)
 }
 
-// Ошибка: suspend-функцию нельзя вызвать вне корутины
+// Ошибка: suspend-функцию нельзя вызвать как обычную функцию вне корутины
 // fun main() {
 //     loadUser()  // Ошибка компиляции!
 // }
 
-// Правильно: вызов из корутины
+// Правильно: запуск в корутине через билдер
 fun main() = runBlocking {
     val user = loadUser()  // OK
 }
@@ -79,14 +79,14 @@ suspend fun processData() {
 }
 ```
 
-3. **Основаны на continuation**: Под капотом suspend-функции используют continuation:
+3. **Основаны на `Continuation`**: Под капотом suspend-функции компилируются в функции с дополнительным параметром `Continuation` и машиной состояний:
 ```kotlin
 // Что вы пишете:
 suspend fun example(): String {
     return "Hello"
 }
 
-// Что генерирует компилятор (упрощенно):
+// Что компилятор генерирует (упрощенно):
 fun example(continuation: Continuation<String>): Any {
     // Реализация state machine
 }
@@ -94,7 +94,7 @@ fun example(continuation: Continuation<String>): Any {
 
 ### Распространенные Suspend-функции
 
-**Из стандартной библиотеки**:
+**Из стандартных корутинных библиотек (`kotlinx.coroutines`)**:
 - `delay(ms)` - Приостанавливает на указанное время
 - `yield()` - Передает выполнение другим корутинам
 - `withContext(dispatcher)` - Переключает контекст корутины
@@ -141,8 +141,8 @@ suspend fun safeLoadData(): Result<String> {
 
 ### Важные Правила
 
-1. **Suspend-функции не создают корутины** - они должны вызываться из существующей
-2. **Они сохраняют структурированную конкурентность** - отмена распространяется корректно
+1. **Suspend-функции сами по себе не создают корутины** — они выполняются внутри уже созданной корутины (которая обычно запускается через билдеры `launch`, `async`, `runBlocking` и т.п.).
+2. **Поддержка структурированной конкуренции**: корректное распространение отмены и управление жизненным циклом обеспечиваются корутинными скоупами и билдерами; suspend-функции должны быть кооперативными (проверять `coroutineContext`, использовать `suspend` API), чтобы вписываться в эту модель.
 3. **Могут использоваться как функции высшего порядка**:
 ```kotlin
 suspend fun <T> retry(
@@ -175,14 +175,14 @@ A suspend function is declared with the `suspend` modifier:
 
 ```kotlin
 suspend fun fetchData(): String {
-    delay(1000)  // Suspends the coroutine for 1 second
+    delay(1000)  // Suspends the coroutine for 1 second (without blocking the thread)
     return "Data loaded"
 }
 ```
 
 ### Key Characteristics
 
-1. **Can only be called from coroutines or other suspend functions**:
+1. **Can only be called from coroutines or other suspend functions** (directly from regular code only via coroutine builders like `launch`, `async`, `runBlocking`):
 ```kotlin
 suspend fun loadUser(): User {
     // Can call other suspend functions
@@ -190,12 +190,12 @@ suspend fun loadUser(): User {
     return parseUser(data)
 }
 
-// Error: suspend function can't be called outside coroutine
+// Error: a suspend function cannot be called like a normal function outside a coroutine
 // fun main() {
 //     loadUser()  // Compilation error!
 // }
 
-// Correct: call from coroutine
+// Correct: run inside a coroutine via a builder
 fun main() = runBlocking {
     val user = loadUser()  // OK
 }
@@ -210,7 +210,7 @@ suspend fun processData() {
 }
 ```
 
-3. **Continuation-based**: Under the hood, suspend functions use continuations:
+3. **Continuation-based**: Under the hood, suspend functions are compiled to functions with an extra `Continuation` parameter and a state machine:
 ```kotlin
 // What you write:
 suspend fun example(): String {
@@ -225,7 +225,7 @@ fun example(continuation: Continuation<String>): Any {
 
 ### Common Suspend Functions
 
-**From standard library**:
+**From coroutine libraries (`kotlinx.coroutines`)**:
 - `delay(ms)` - Suspends for specified time
 - `yield()` - Yields execution to other coroutines
 - `withContext(dispatcher)` - Switches coroutine context
@@ -272,8 +272,8 @@ suspend fun safeLoadData(): Result<String> {
 
 ### Important Rules
 
-1. **Suspend functions don't create coroutines** - they must be called from one
-2. **They preserve structured concurrency** - cancellation propagates correctly
+1. **Suspend functions do not by themselves create coroutines** — they run inside an already created coroutine (which is typically started via builders like `launch`, `async`, `runBlocking`, etc.).
+2. **Structured concurrency support**: proper cancellation propagation and lifecycle management are provided by coroutine scopes and builders; suspend functions should be cooperative (checking `coroutineContext`, using suspending APIs) to integrate correctly with this model.
 3. **They can be used as higher-order functions**:
 ```kotlin
 suspend fun <T> retry(
@@ -296,16 +296,29 @@ val data = retry(3) { fetchData() }
 
 ---
 
+## Дополнительные вопросы (RU)
+
+1. Объясните различие между `suspend`-функцией и обычной функцией с точки зрения блокировки потоков.
+2. Почему `suspend`-функции должны вызываться только из корутин или других `suspend`-функций?
+3. Как `withContext` используется внутри `suspend`-функций для смены диспетчера и почему это важно?
+4. Какие подводные камни существуют при использовании `suspend`-функций во внешних библиотеках?
+5. Как реализована машина состояний для `suspend`-функций на уровне байткода Kotlin?
+
 ## Follow-ups
 
-1. **Follow-up question 1**
-2. **Follow-up question 2**
+1. Explain the difference between a `suspend` function and a regular function in terms of thread blocking.
+2. Why must `suspend` functions be invoked only from coroutines or other `suspend` functions?
+3. How is `withContext` used inside `suspend` functions to switch dispatchers, and why does it matter?
+4. What pitfalls should you watch for when using library-provided `suspend` functions?
+5. How is the state machine for `suspend` functions implemented at the Kotlin bytecode level?
 
 ---
 
 ## References
 
 - [Kotlin Coroutines Documentation](https://kotlinlang.org/docs/coroutines-overview.html)
+- [[c-kotlin]]
+- [[c-coroutines]]
 
 ---
 
@@ -321,7 +334,7 @@ val data = retry(3) { fetchData() }
 - [[q-coroutine-dispatchers--kotlin--medium]] - Coroutine dispatchers overview
 - [[q-coroutinescope-vs-coroutinecontext--kotlin--medium]] - Scope vs Context
 - [[q-coroutine-context-explained--kotlin--medium]] - CoroutineContext explained
--  - Cancellation basics
+- Cancellation basics
 
 ### Advanced (Harder)
 - [[q-flow-combining-zip-combine--kotlin--medium]] - Coroutines
@@ -330,4 +343,3 @@ val data = retry(3) { fetchData() }
 
 ### Hub
 - [[q-kotlin-coroutines-introduction--kotlin--medium]] - Comprehensive coroutines introduction
-

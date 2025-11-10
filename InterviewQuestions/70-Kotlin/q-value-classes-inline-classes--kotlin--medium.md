@@ -3,18 +3,18 @@ id: kotlin-235
 title: "Value Classes (Inline Classes) in Kotlin / Value классы в Kotlin"
 aliases: ["Value Classes", "Встраиваемые классы"]
 topic: kotlin
-subtopics: [inline-classes, performance, value-classes]
+subtopics: [value-classes, inline-classes, performance]
 question_kind: theory
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-object-singleton-companion--kotlin--medium]
-created: "2025-10-12"
-updated: 2025-01-25
+related: [c-kotlin, q-data-class-detailed--kotlin--medium, q-inheritance-open-final--kotlin--medium, q-object-singleton-companion--kotlin--medium]
+created: "2024-10-12"
+updated: "2025-11-09"
 tags: [difficulty/medium, inline-classes, kotlin, kotlin-features, performance, value-classes]
-sources: [https://kotlinlang.org/docs/inline-classes.html]
+sources: ["https://kotlinlang.org/docs/inline-classes.html"]
 ---
 
 # Вопрос (RU)
@@ -23,18 +23,16 @@ sources: [https://kotlinlang.org/docs/inline-classes.html]
 # Question (EN)
 > What are value classes (inline classes) in Kotlin and why are they needed?
 
----
-
 ## Ответ (RU)
 
 **Теория Value классов:**
-Value классы (inline классы) - экспериментальная фича Kotlin, созданная для обёртки одного значения без риска накладных расходов на allocation. Компилятор может встроить класс в базовый тип, избегая упаковки в runtime. Обеспечивает type-safety без overhead - zero-cost abstractions.
+Value классы (ранее называвшиеся inline классами) — механизм Kotlin для обёртки одного значения без существенных накладных расходов на allocation. Компилятор может представлять value класс как его базовый тип (underlying type), избегая создания дополнительного объекта в runtime, когда это безопасно. Это даёт type-safety с минимальными накладными расходами — близко к zero-cost abstractions, но не гарантируется в 100% случаев (есть сценарии boxing-а).
 
 **Основные концепции:**
-- **Одно property**: Должен иметь ровно один val property
-- **Inlining**: Компилятор встраивает класс в базовый тип когда возможно
-- **Type safety**: Обеспечивает безопасность типов без накладных расходов
-- **No allocation**: Избегает создания wrapper объектов в большинстве случаев
+- **Одно underlying property**: Должен иметь ровно одно `val` или `var` property в первичном конструкторе — это underlying значение
+- **Inlining представления**: Компилятор использует underlying тип представления, когда это возможно
+- **Type safety**: Обеспечивает безопасность типов поверх одинаковых базовых типов (например, `UserId` vs `OrderId` оба на `Long`)
+- **Меньше allocation**: В большинстве сценариев избегает создания wrapper-объектов; при определённых использованиях происходит boxing
 
 **Базовый синтаксис:**
 ```kotlin
@@ -52,7 +50,7 @@ val userId = UserId(12345L)
 // val badPassword = Password() // Ошибка компиляции
 ```
 
-**Type safety без allocation:**
+**Type safety без лишних allocation:**
 ```kotlin
 @JvmInline
 value class Email(private val value: String) {
@@ -79,29 +77,30 @@ fun signup(email: Email, username: Username) {
 
 **Требования к value class:**
 ```kotlin
-// ❌ ПЛОХО: больше одного property
+// ❌ ПЛОХО: больше одного значения в primary constructor
 // value class Bad(private val a: String, private val b: String)
 
-// ❌ ПЛОХО: var вместо val
-// value class Bad(private var value: String)
-
-// ✅ ХОРОШО: ровно один val
+// ✅ underlying свойство может быть val или var
 @JvmInline
-value class Good(private val value: String)
+value class Good1(val value: String)
 
-// ✅ ХОРОШО: может иметь methods
 @JvmInline
-value class Point(val x: Int, val y: Int) {
-    fun distance(): Double = Math.sqrt((x * x + y * y).toDouble())
+value class Good2(var value: String)
+
+// ✅ Может иметь дополнительные свойства/функции, 
+// но underlying остаётся единственным параметром primary constructor
+@JvmInline
+value class Distance(val meters: Int) {
+    val inKm: Double get() = meters / 1000.0
 }
 ```
 
 **Практическое применение:**
 ```kotlin
 @JvmInline
-value class Price(val amount: Long) {
+value class Price(val amountCents: Long) {
     fun format(): String {
-        return "$${amount / 100.0}"
+        return "$${amountCents / 100.0}"
     }
 }
 
@@ -112,27 +111,28 @@ value class Minutes(val value: Int) {
 
 // ✅ Типобезопасная работа с единицами измерения
 fun calculateCost(price: Price, duration: Minutes): String {
-    val total = price.amount * duration.value
+    val total = price.amountCents * duration.value
     return "Total: ${total / 100.0}"
 }
 ```
 
-**Boxing scenarios:**
+**Boxing scenarios (где возможны allocation):**
 ```kotlin
 @JvmInline
 value class Id(val value: Int)
 
-// ✅ Inlined: нет boxing
+// ✅ Inlined-представление: нет boxing
 fun processId(id: Id): Int {
     return id.value
 }
 
-// ❌ Boxing происходит когда:
+// ❌ Boxing может происходить, например, когда value класс:
+
 interface Wrapper {
-    fun getValue(): Id
+    fun getValue(): Id // Id здесь хранится в boxed-форме
 }
 
-// ❌ Передача в Any
+// ❌ Передача в Any (или другой тип, не знающий о value class)
 fun boxId(id: Id): Any {
     return id // Boxing здесь
 }
@@ -143,18 +143,40 @@ fun nullableId(id: Id?): Id? {
 }
 ```
 
----
+## Дополнительные вопросы (RU)
+
+- Когда использовать value class vs `data class`?
+- Каковы особенности производительности value классов?
+- Какие boxing-сценарии стоит избегать?
+
+## Ссылки (RU)
+
+- [[c-kotlin]]
+- https://kotlinlang.org/docs/inline-classes.html
+
+## Связанные вопросы (RU)
+
+### Предпосылки (проще)
+- [[q-kotlin-enum-classes--kotlin--easy]] - Базовые классы
+
+### Связанные (средняя сложность)
+- [[q-data-class-detailed--kotlin--medium]] - Data классы
+- [[q-inheritance-open-final--kotlin--medium]] - Наследование
+- [[q-class-initialization-order--kotlin--medium]] - Порядок инициализации классов
+
+### Продвинутое (сложнее)
+- [[q-kotlin-reified-types--kotlin--hard]] - Reified типы
 
 ## Answer (EN)
 
 **Value Class Theory:**
-Value classes (inline classes) are experimental Kotlin feature for wrapping single value without allocation overhead. Compiler can inline class into underlying type, avoiding wrapping at runtime. Provides type safety without overhead - zero-cost abstractions.
+Value classes (previously called inline classes) are a Kotlin mechanism for wrapping a single value with minimal allocation overhead. The compiler can represent a value class as its underlying type, avoiding creating wrapper objects at runtime when safe. This provides type safety with very low overhead — close to zero-cost abstractions, though boxing can still occur in some scenarios.
 
 **Core Concepts:**
-- **Single property**: Must have exactly one val property
-- **Inlining**: Compiler inlines class into underlying type when possible
-- **Type safety**: Provides type safety without overhead
-- **No allocation**: Avoids creating wrapper objects in most cases
+- **Single underlying property**: Must have exactly one `val` or `var` property in the primary constructor — this is the underlying value
+- **Inline-like representation**: The compiler uses the underlying type representation when possible
+- **Type safety**: Provides stronger type safety over identical underlying types (e.g., `UserId` vs `OrderId` over `Long`)
+- **Reduced allocations**: Avoids creating wrapper objects in most common cases; boxing appears in specific usages
 
 **Basic Syntax:**
 ```kotlin
@@ -172,7 +194,7 @@ val userId = UserId(12345L)
 // val badPassword = Password() // Compilation error
 ```
 
-**Type Safety Without Allocation:**
+**Type Safety Without Extra Allocation:**
 ```kotlin
 @JvmInline
 value class Email(private val value: String) {
@@ -199,29 +221,30 @@ fun signup(email: Email, username: Username) {
 
 **Value Class Requirements:**
 ```kotlin
-// ❌ BAD: more than one property
+// ❌ BAD: more than one value in primary constructor
 // value class Bad(private val a: String, private val b: String)
 
-// ❌ BAD: var instead of val
-// value class Bad(private var value: String)
-
-// ✅ GOOD: exactly one val
+// ✅ Underlying property can be val or var
 @JvmInline
-value class Good(private val value: String)
+value class Good1(val value: String)
 
-// ✅ GOOD: can have methods
 @JvmInline
-value class Point(val x: Int, val y: Int) {
-    fun distance(): Double = Math.sqrt((x * x + y * y).toDouble())
+value class Good2(var value: String)
+
+// ✅ May have additional members,
+// but the underlying value must be the only primary constructor parameter
+@JvmInline
+value class Distance(val meters: Int) {
+    val inKm: Double get() = meters / 1000.0
 }
 ```
 
 **Practical Application:**
 ```kotlin
 @JvmInline
-value class Price(val amount: Long) {
+value class Price(val amountCents: Long) {
     fun format(): String {
-        return "$${amount / 100.0}"
+        return "$${amountCents / 100.0}"
     }
 }
 
@@ -232,32 +255,33 @@ value class Minutes(val value: Int) {
 
 // ✅ Type-safe work with measurement units
 fun calculateCost(price: Price, duration: Minutes): String {
-    val total = price.amount * duration.value
+    val total = price.amountCents * duration.value
     return "Total: ${total / 100.0}"
 }
 ```
 
-**Boxing Scenarios:**
+**Boxing Scenarios (where allocations may occur):**
 ```kotlin
 @JvmInline
 value class Id(val value: Int)
 
-// ✅ Inlined: no boxing
+// ✅ Inlined representation: no boxing
 fun processId(id: Id): Int {
     return id.value
 }
 
-// ❌ Boxing occurs when:
+// ❌ Boxing may occur, for example, when the value class:
+
 interface Wrapper {
-    fun getValue(): Id
+    fun getValue(): Id // Id may be boxed here
 }
 
-// ❌ Passing to Any
+// ❌ Passed as Any (or other types unaware of the value class)
 fun boxId(id: Id): Any {
     return id // Boxing here
 }
 
-// ❌ Using as nullable
+// ❌ Used as nullable
 fun nullableId(id: Id?): Id? {
     return id // Boxing here
 }
@@ -265,12 +289,13 @@ fun nullableId(id: Id?): Id? {
 
 ## Follow-ups
 
-- When to use value class vs data class?
+- When to use value class vs `data class`?
 - Performance implications of value classes?
 - Boxing scenarios to avoid?
 
 ## References
 
+- [[c-kotlin]]
 - https://kotlinlang.org/docs/inline-classes.html
 
 ## Related Questions

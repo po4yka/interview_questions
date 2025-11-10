@@ -1,28 +1,28 @@
 ---
 id: kotlin-033
 title: "Kotlin Extension Functions / Функции-расширения в Kotlin"
-aliases: ["Kotlin Extension Functions, Функции-расширения в Kotlin"]
+aliases: ["Kotlin Extension Functions", "Функции-расширения в Kotlin"]
 
 # Classification
 topic: kotlin
-subtopics: [extensions, functions, language-features]
+subtopics: [functions, language-features]
 question_kind: theory
 difficulty: medium
 
 # Language & provenance
 original_language: en
 language_tags: [en, ru]
-source: https://github.com/Kirchhoff-/Android-Interview-Questions
+source: "https://github.com/Kirchhoff-/Android-Interview-Questions"
 source_note: Kirchhoff Android Interview Questions repository
 
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-job-lifecycle--kotlin--medium, q-flow-backpressure--kotlin--hard, q-viewmodel-coroutines-lifecycle--kotlin--medium]
+related: [c-kotlin, q-kotlin-extension-functions-advanced--kotlin--hard]
 
 # Timestamps
 created: 2025-10-05
-updated: 2025-10-05
+updated: 2025-11-10
 
 tags: [difficulty/medium, extensions, functions, kotlin, language-features]
 ---
@@ -33,6 +33,7 @@ tags: [difficulty/medium, extensions, functions, kotlin, language-features]
 
 # Question (EN)
 > What do you know about extensions in Kotlin?
+
 ## Ответ (RU)
 
 Kotlin предоставляет возможность расширить класс или интерфейс новой функциональностью без необходимости наследования от класса или использования паттернов проектирования, таких как *Decorator*. Это делается с помощью специальных объявлений, называемых **расширениями**.
@@ -149,11 +150,34 @@ fun Example.printFunctionType(i: Int) { println("Extension function #$i") }
 Example().printFunctionType(1)
 ```
 
-### Примечание О Видимости
+### Примечание о видимости
 
 Расширения используют те же модификаторы видимости, что и обычные функции, объявленные в той же области видимости. Например:
 - Расширение, объявленное на верхнем уровне файла, имеет доступ к другим `private` объявлениям верхнего уровня в том же файле;
 - Если расширение объявлено вне своего типа-получателя, оно не может получить доступ к `private` или `protected` членам получателя.
+
+## Дополнительные вопросы (RU)
+
+- В чем ключевые отличия расширений в Kotlin от аналогичных возможностей или отсутствия таковых в Java?
+- Когда вы бы использовали функции-расширения на практике?
+- Какие распространенные ошибки и подводные камни при использовании расширений вы знаете?
+
+## Ссылки (RU)
+
+- [[c-kotlin]] — базовые концепции языка Kotlin
+- [Extensions](https://kotlinlang.org/docs/extensions.html)
+- [Extension Functions in Kotlin](https://www.baeldung.com/kotlin/extension-methods)
+- [Writing clean models using extensions](https://okkotlin.com/clean-models/)
+- [Bad Kotlin Extensions](https://krossovochkin.com/posts/2021_01_25_bad_kotlin_extensions/)
+
+## Связанные вопросы (RU)
+
+### Средний уровень
+- [[q-infix-functions--kotlin--medium]] — инфиксные функции в Kotlin
+- [[q-kotlin-operator-overloading--kotlin--medium]] — перегрузка операторов в Kotlin
+
+### Продвинутый уровень
+- [[q-kotlin-extension-functions-advanced--kotlin--hard]] — продвинутые функции-расширения в Kotlin
 
 ---
 
@@ -286,6 +310,7 @@ Extensions utilize the same visibility modifiers as regular functions declared i
 - What are common pitfalls to avoid?
 
 ## References
+- [[c-kotlin]]
 - [Extensions](https://kotlinlang.org/docs/extensions.html)
 - [Extension Functions in Kotlin](https://www.baeldung.com/kotlin/extension-methods)
 - [Writing clean models using extensions](https://okkotlin.com/clean-models/)

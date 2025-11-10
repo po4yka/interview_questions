@@ -2,21 +2,19 @@
 id: lang-046
 title: "How Gc Knows Object Can Be Destroyed / Как GC знает что объект можно уничтожить"
 aliases: [How Gc Knows Object Can Be Destroyed, Как GC знает что объект можно уничтожить]
-topic: programming-languages
-subtopics: [garbage-collection, jvm, memory-management]
+topic: kotlin
+subtopics: [garbage-collection, memory-management]
 question_kind: theory
 difficulty: easy
 original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [c-garbage-collection, q-garbage-collector-basics--programming-languages--medium, q-garbage-collector-roots--programming-languages--medium]
+related: [c-garbage-collection, c-kotlin, q-garbage-collector-basics--programming-languages--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, programming-languages]
 ---
-# Как Сборщик Мусора Понимает Что Объект Можно Уничтожить?
-
 # Вопрос (RU)
 > Как сборщик мусора понимает что объект можно уничтожить?
 
@@ -27,32 +25,137 @@ tags: [difficulty/easy, garbage-collection, jvm, kotlin, memory-management, prog
 
 ## Ответ (RU)
 
-Сборщик мусора использует анализ ссылок. Объект считается 'мёртвым', если на него нет доступных ссылок из корневых объектов. GC обходит все достижимые объекты, начиная с корневых. Недостижимые объекты считаются мусором и удаляются.
+Сборщик мусора использует анализ достижимости (`reachability analysis`) от корневых объектов (`GC Roots`). Объект может быть уничтожен (становится кандидатом на сборку), если он недостижим ни из одного `GC Root`.
+
+Типичный алгоритм (например, в JVM) — `Mark and Sweep`:
+
+1. Находятся `GC Roots` (стековые ссылки локальных переменных, активные потоки, статические поля, некоторые нативные ссылки и т.п.).
+2. Помечаются все объекты, достижимые по цепочкам ссылок от `GC Roots`.
+3. Все непомеченные (недостижимые) объекты считаются мусором и могут быть удалены.
+
+Круговые ссылки не мешают сборке мусора: если вся группа объектов недостижима от `GC Roots`, она будет собрана, даже если объекты ссылаются друг на друга.
+
+Ядро условия:
+
+- Объект может быть уничтожен, если он недостижим из любых `GC Roots`.
+
+Примеры:
+
+```kotlin
+fun example() {
+    val user1 = User("Alice")  // Ссылка из текущего фрейма стека
+    val user2 = User("Bob")    // Ссылка из текущего фрейма стека
+
+    val temp = User("Charlie") // Ссылка из текущего фрейма стека
+    // Все 3 объекта достижимы через ссылки на стеке
+
+    // Когда temp выходит из области видимости или присваивается null,
+    // ссылка удаляется. Если других ссылок нет,
+    // User("Charlie") становится недостижимым → МОЖЕТ БЫТЬ УНИЧТОЖЕН.
+}
+```
+
+Граф достижимости:
+
+```kotlin
+class Node(val value: Int, var next: Node? = null)
+
+fun main() {
+    val root = Node(1)  // Ссылка из текущего фрейма стека
+    root.next = Node(2)
+    root.next?.next = Node(3)
+
+    // Цепочка достижимости:
+    // стек → root → Node(2) → Node(3)
+    // Все достижимы → НЕ КАНДИДАТЫ НА GC
+
+    root.next = null
+    // Теперь пути от GC Roots к Node(2) и Node(3) нет
+    // Node(2) и Node(3) НЕДОСТИЖИМЫ → МОГУТ БЫТЬ УНИЧТОЖЕНЫ
+}
+```
+
+Визуально:
+
+До:
+
+[GC Root (stack)] → [Node(1)] → [Node(2)] → [Node(3)]
+Все достижимы → не подлежат GC
+
+После root.next = null:
+
+[GC Root (stack)] → [Node(1)]
+[Node(2)] → [Node(3)]  ← недостижимы → кандидаты на GC
+
+"Мёртвый" объект:
+
+```kotlin
+class Activity {
+    private var listener: (() -> Unit)? = null
+
+    fun setListener(callback: () -> Unit) {
+        listener = callback
+    }
+
+    fun destroy() {
+        listener = null  // Убираем ссылку из этого экземпляра
+        // Если других ссылок на callback нет, он становится кандидатом на GC
+    }
+}
+```
+
+Циклические ссылки:
+
+```kotlin
+class Node(var next: Node? = null)
+
+fun circularExample() {
+    val node1 = Node()
+    val node2 = Node()
+
+    node1.next = node2
+    node2.next = node1  // Циклическая ссылка
+
+    // Пока есть ссылки из локальных переменных, оба достижимы.
+
+    // После выхода из функции ссылки со стека исчезают.
+    // Цикл {node1, node2} недостижим от любых GC Roots
+    // → МОЖЕТ БЫТЬ УНИЧТОЖЕН, несмотря на взаимные ссылки.
+}
+```
+
+Ключевые моменты:
+
+- Достижим от `GC Root` → сохранить (не кандидат на GC).
+- Недостижим от `GC Root` → можно удалить (кандидат на GC).
+- Есть ссылки, но объект недостижим от корней → можно удалить.
+- Циклические ссылки, недостижимые от корней → можно удалить (трассирующий GC умеет работать с циклами).
 
 ## Answer (EN)
 
-The garbage collector uses **reachability analysis** to determine if an object can be destroyed.
+The garbage collector uses reachability analysis to determine if an object can be destroyed.
 
-**Algorithm: Mark and Sweep**
+Typical algorithm (e.g., on the JVM): Mark and Sweep
 
-1. **Find GC Roots** (starting points)
-2. **Mark** all reachable objects
-3. **Sweep** (delete) unmarked objects
+1. Find GC Roots (starting points: references in stack frames of active methods, active threads, static fields, some native references, etc.).
+2. Mark all objects reachable by following references from GC Roots.
+3. Sweep (reclaim) all unmarked (unreachable) objects.
 
-**An object can be destroyed if it's UNREACHABLE from any GC Root.**
+An object can be destroyed (is eligible for GC) if it is unreachable from any GC Root.
 
 **Example:**
 
 ```kotlin
 fun example() {
-    val user1 = User("Alice")  // GC Root (local variable)
-    val user2 = User("Bob")    // GC Root
+    val user1 = User("Alice")  // Referenced from the current stack frame
+    val user2 = User("Bob")    // Referenced from the current stack frame
 
-    val temp = User("Charlie") // GC Root
-    // All 3 objects are reachable
+    val temp = User("Charlie") // Referenced from the current stack frame
+    // All 3 objects are reachable via stack references
 
-    // temp goes out of scope or set to null
-    // User("Charlie") becomes unreachable → CAN BE DESTROYED
+    // When temp goes out of scope or is set to null,
+    // the reference is removed. If no other references exist,
+    // User("Charlie") becomes unreachable → CAN BE DESTROYED.
 }
 ```
 
@@ -62,16 +165,17 @@ fun example() {
 class Node(val value: Int, var next: Node? = null)
 
 fun main() {
-    val root = Node(1)  // GC Root
+    val root = Node(1)  // Referenced from the current stack frame
     root.next = Node(2)
     root.next?.next = Node(3)
 
     // Reachability chain:
-    // root (GC Root) → Node(2) → Node(3)
-    // All are REACHABLE → SAFE
+    // stack frame → root → Node(2) → Node(3)
+    // All are reachable → NOT ELIGIBLE FOR GC
 
     root.next = null
-    // Node(2) and Node(3) are now UNREACHABLE → CAN BE DESTROYED
+    // Now there is no path from GC Roots to Node(2) and Node(3)
+    // Node(2) and Node(3) are UNREACHABLE → CAN BE DESTROYED
 }
 ```
 
@@ -79,12 +183,12 @@ fun main() {
 
 ```
 Before:
-[GC Root: root] → [Node(1)] → [Node(2)] → [Node(3)]
-All reachable GOOD
+[GC Root (stack)] → [Node(1)] → [Node(2)] → [Node(3)]
+All reachable → not eligible for GC
 
 After root.next = null:
-[GC Root: root] → [Node(1)]
-[Node(2)] → [Node(3)]  ← Unreachable - → Will be destroyed
+[GC Root (stack)] → [Node(1)]
+[Node(2)] → [Node(3)]  ← Unreachable → eligible for GC
 ```
 
 **Dead Object Example:**
@@ -98,8 +202,8 @@ class Activity {
     }
 
     fun destroy() {
-        listener = null  // Remove reference
-        // If no other references exist, callback can be GC'd
+        listener = null  // Remove reference from this instance
+        // If no other references to the callback exist, it becomes eligible for GC
     }
 }
 ```
@@ -116,41 +220,55 @@ fun circularExample() {
     node1.next = node2
     node2.next = node1  // Circular reference
 
-    // Both are reachable from local variables
+    // Both are reachable from local variables here.
 
-    // Function ends, node1 and node2 go out of scope
-    // Even though they reference each other,
-    // they're UNREACHABLE from GC Roots → CAN BE DESTROYED
+    // When the function ends, references from the stack frame disappear.
+    // The cycle {node1, node2} is no longer reachable from any GC Root
+    // → CAN BE DESTROYED, despite the circular references.
 }
 ```
 
 **Key Points:**
 
-| Condition | Result |
-|-----------|--------|
-| Reachable from GC Root | - KEEP (safe from GC) |
-| Unreachable from GC Root | - DESTROY (eligible for GC) |
-| Has references but unreachable | - DESTROY (references don't matter) |
-| Circular references but unreachable | - DESTROY (GC handles this) |
+- Reachable from GC Root → KEEP (not eligible for GC).
+- Unreachable from GC Root → DESTROY (eligible for GC).
+- Has references but unreachable → DESTROY (eligibility depends on reachability, not count).
+- Circular references but unreachable → DESTROY (traced GC handles cycles).
 
 **Summary:**
 
-GC uses **reachability analysis from GC Roots**. If an object cannot be reached through any chain of references from a GC Root, it's considered **dead** and will be destroyed.
+GC uses reachability analysis from GC Roots. If an object cannot be reached through any chain of references starting from a GC Root, it is considered dead (garbage) and becomes eligible for collection.
 
 ---
 
+## Дополнительные вопросы (RU)
+
+- Как определяются `GC Roots` в JVM, и как Kotlin/JVM опирается на них?
+- Чем это отличается от управления памятью на основе подсчёта ссылок?
+- Каковы типичные проблемы (например, утечки памяти из-за висящих ссылок, слушателей, кэшей)?
+
 ## Follow-ups
 
-- What are the key differences between this and Java?
-- When would you use this in practice?
-- What are common pitfalls to avoid?
+- How are GC Roots defined on the JVM, and how does Kotlin/JVM rely on them?
+- How does this differ from reference-counting-based memory management?
+- What are common pitfalls (e.g., memory leaks due to lingering references, listeners, caches)?
+
+## Ссылки (RU)
+
+- [[c-garbage-collection]]
+- [Документация Kotlin](https://kotlinlang.org/docs/home.html)
 
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
 
+## Связанные вопросы (RU)
+
+- [[q-garbage-collector-basics--programming-languages--medium]]
+- [[q-what-is-job-object--programming-languages--medium]]
+- [[q-mediator-pattern--design-patterns--medium]]
+
 ## Related Questions
 
 - [[q-what-is-job-object--programming-languages--medium]]
 - [[q-mediator-pattern--design-patterns--medium]]
--

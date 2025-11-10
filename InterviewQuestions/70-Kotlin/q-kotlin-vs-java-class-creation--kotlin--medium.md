@@ -10,15 +10,13 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-inline-function-limitations--kotlin--medium, q-kotlin-lambda-expressions--kotlin--medium, q-mutex-synchronized-coroutines--kotlin--medium]
+related: [c-kotlin, q-inline-function-limitations--kotlin--medium, q-kotlin-lambda-expressions--kotlin--medium]
 created: 2025-10-15
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [classes, data-classes, difficulty/medium, java, kotlin, syntax]
 ---
-# Что При Создании Классов В Kotlin Изменились По Сравнению С Java?
-
 # Вопрос (RU)
-> Что при создании классов в Kotlin изменились по сравнению с Java?
+> Что при создании классов в Kotlin изменилось по сравнению с Java?
 
 ---
 
@@ -27,7 +25,184 @@ tags: [classes, data-classes, difficulty/medium, java, kotlin, syntax]
 
 ## Ответ (RU)
 
-При создании классов по сравнению с Java произошли несколько значительных изменений и упрощений. Kotlin предлагает более лаконичный и выразительный синтаксис, что делает код более читаемым и удобным. Объявление классов и конструкторов в Kotlin упрощено, например: class Person(val name: String, val age: Int). Для статических членов используется companion object вместо static. Kotlin предоставляет data классы, которые автоматически генерируют методы equals(), hashCode(), toString(), copy(), и componentN(). Свойства объявляются напрямую, и методы доступа генерируются автоматически.
+При создании классов по сравнению с Java в Kotlin появилось несколько значительных изменений и упрощений.
+
+1. Объявление класса и конструкторов
+
+Java:
+```java
+public class Person {
+    private String name;
+    private int age;
+
+    public Person(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+}
+```
+
+Kotlin:
+```kotlin
+class Person(val name: String, val age: Int)
+```
+
+2. Статические члены (`static`) и `companion object`
+
+Java:
+```java
+public class MyClass {
+    public static final String CONSTANT = "constant";
+
+    public static void staticMethod() {
+        // code
+    }
+}
+```
+
+Kotlin:
+```kotlin
+class MyClass {
+    companion object {
+        const val CONSTANT = "constant"
+
+        @JvmStatic
+        fun staticMethod() {
+            // код
+        }
+    }
+}
+```
+
+3. `data class`
+
+Java:
+```java
+public class User {
+    private String name;
+    private int age;
+
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        // реализация
+    }
+
+    @Override
+    public int hashCode() {
+        // реализация
+    }
+
+    @Override
+    public String toString() {
+        // реализация
+    }
+}
+```
+
+Kotlin:
+```kotlin
+data class User(val name: String, val age: Int)
+// Автоматически генерирует: equals(), hashCode(), toString(), copy(), componentN()
+```
+
+4. Свойства и аксессоры
+
+Java:
+```java
+public class Rectangle {
+    private int width;
+    private int height;
+
+    public int getWidth() { return width; }
+    public void setWidth(int width) { this.width = width; }
+
+    public int getHeight() { return height; }
+    public void setHeight(int height) { this.height = height; }
+}
+```
+
+Kotlin:
+```kotlin
+class Rectangle(var width: Int, var height: Int)
+// Геттеры и сеттеры генерируются автоматически
+```
+
+5. Наследование
+
+Java (по умолчанию класс открытый для наследования):
+```java
+public class Base {}  // можно наследовать
+public final class Final {}  // нельзя наследовать
+```
+
+Kotlin (по умолчанию `final`):
+```kotlin
+class Base  // нельзя наследовать (final по умолчанию)
+open class Open  // можно наследовать
+```
+
+6. Модификаторы видимости
+
+| Модификатор            | Java по умолчанию        | Kotlin по умолчанию          |
+|------------------------|--------------------------|------------------------------|
+| Верхнеуровневые сущности | package-private          | public                       |
+| Члены класса           | package-private          | public                       |
+| `internal` Kotlin      | Нет прямого аналога      | Видимость в пределах модуля  |
+
+7. Создание объектов без `new`
+
+Java:
+```java
+Person person = new Person("Alice", 30);
+```
+
+Kotlin:
+```kotlin
+val person = Person("Alice", 30)
+```
+
+8. Однострочные (single-expression) функции
+
+Kotlin позволяет задавать методы в виде однострочных функций, что делает объявления короче:
+
+```kotlin
+class Calculator {
+    fun add(a: Int, b: Int) = a + b  // однострочная функция
+}
+```
+
+9. `sealed`-классы
+
+```kotlin
+sealed class Result
+class Success(val data: String) : Result()
+class Error(val message: String) : Result()
+```
+
+Современный Java также поддерживает sealed-классы, но в Kotlin они появились раньше и тесно интегрированы с `when`-выражениями для исчерпывающих проверок.
+
+Итоговые отличия:
+
+| Характеристика     | Java                              | Kotlin                                           |
+|--------------------|-----------------------------------|--------------------------------------------------|
+| Шаблонный код      | Много бойлерплейта               | Лаконичный синтаксис                            |
+| Свойства           | Ручные геттеры/сеттеры           | `val`/`var`, аксессоры генерируются автоматически |
+| Data-классы        | Ручная реализация методов         | Ключевое слово `data class`                     |
+| Статические члены  | `static`                          | `companion object`, `@JvmStatic`                |
+| Наследование       | Открыто по умолчанию              | `final` по умолчанию, нужен `open`              |
+| Видимость          | package-private по умолчанию      | `public` по умолчанию, есть `internal`          |
+| Конструкторы       | Отдельно от объявления класса     | Первичный конструктор в заголовке класса        |
+| Создание объектов  | Ключевое слово `new`              | Без `new`                                       |
+
+Эти особенности делают Kotlin более лаконичным, безопасным и выразительным при работе с классами по сравнению с Java. См. также [[c-kotlin]] для общей информации о языке.
 
 ## Answer (EN)
 
@@ -157,11 +332,11 @@ open class Open  // Can be inherited
 
 **6. Visibility Modifiers**
 
-| Modifier | Java Default | Kotlin Default |
-|----------|--------------|----------------|
-| Top-level | package-private | `public` |
-| Class members | package-private | `public` |
-| Kotlin `internal` | No equivalent | Module-visible |
+| Modifier          | Java Default                 | Kotlin Default                          |
+|-------------------|-----------------------------|-----------------------------------------|
+| Top-level         | package-private              | public                                  |
+| Class members     | package-private              | public                                  |
+| Kotlin `internal` | No direct equivalent         | Module-visible                          |
 
 **7. No `new` Keyword**
 
@@ -175,16 +350,16 @@ Person person = new Person("Alice", 30);
 val person = Person("Alice", 30)
 ```
 
-**8. Single-Expression Classes**
+**8. Single-Expression Functions**
 
 **Kotlin:**
 ```kotlin
 class Calculator {
-    fun add(a: Int, b: Int) = a + b  // Single expression
+    fun add(a: Int, b: Int) = a + b  // Single-expression function
 }
 ```
 
-**9. Sealed Classes (No Java Equivalent)**
+**9. Sealed Classes**
 
 **Kotlin:**
 ```kotlin
@@ -193,20 +368,22 @@ class Success(val data: String) : Result()
 class Error(val message: String) : Result()
 ```
 
+Note: Modern Java (since Java 17) also supports sealed classes, but Kotlin's sealed classes were introduced earlier and integrate closely with `when` expressions for exhaustive checks.
+
 **Summary of Key Changes:**
 
-| Feature | Java | Kotlin |
-|---------|------|--------|
-| **Boilerplate** | Verbose | Concise |
-| **Properties** | Manual getters/setters | Auto-generated |
-| **Data classes** | Manual equals/hashCode/toString | `data class` |
-| **Static members** | `static` keyword | `companion object` |
-| **Inheritance** | Open by default | Final by default (`open` required) |
-| **Visibility** | package-private default | `public` default |
-| **Constructors** | Separate from class | Primary in header |
-| **Object creation** | `new` keyword | No `new` |
+| Feature          | Java                         | Kotlin                                      |
+|------------------|------------------------------|---------------------------------------------|
+| Boilerplate      | Verbose                      | Concise                                    |
+| Properties       | Manual getters/setters       | Auto-generated (`val`/`var`)               |
+| Data classes     | Manual equals/hashCode/toString | `data class` keyword                    |
+| Static members   | `static` keyword             | `companion object` (+ `@JvmStatic` for Java interop) |
+| Inheritance      | Open by default              | Final by default (`open` required)         |
+| Visibility       | package-private default (no modifier) | `public` default; has `internal` (module scope) |
+| Constructors     | Separate from class header   | Primary constructor in class header        |
+| Object creation  | `new` keyword                | No `new`                                   |
 
-Kotlin's design emphasizes **conciseness**, **safety**, and **expressiveness**, reducing boilerplate while maintaining readability.
+Kotlin's design emphasizes conciseness, safety, and expressiveness, reducing boilerplate while maintaining readability.
 
 ---
 
@@ -219,6 +396,7 @@ Kotlin's design emphasizes **conciseness**, **safety**, and **expressiveness**, 
 ## References
 
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)
+- [[c-kotlin]]
 
 ## Related Questions
 

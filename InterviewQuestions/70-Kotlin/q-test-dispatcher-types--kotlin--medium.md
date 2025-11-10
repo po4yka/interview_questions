@@ -1,20 +1,21 @@
 ---
 id: kotlin-067
 title: "StandardTestDispatcher vs UnconfinedTestDispatcher / StandardTestDispatcher против UnconfinedTestDispatcher"
+aliases: ["StandardTestDispatcher vs UnconfinedTestDispatcher", "StandardTestDispatcher против UnconfinedTestDispatcher"]
 topic: kotlin
+question_kind: coding
 difficulty: medium
 original_language: en
 language_tags: [en, ru]
 status: draft
 created: 2025-10-12
-updated: 2025-10-12
+updated: 2025-11-09
 tags: [coroutines, difficulty/medium, kotlin, runtest, test-dispatcher, testing]
 moc: moc-kotlin
-related: [q-channelflow-callbackflow-flow--kotlin--medium, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-flow-backpressure--kotlin--hard, q-inline-function-limitations--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium]
+related: [c-coroutines, q-common-coroutine-mistakes--kotlin--medium, q-debugging-coroutines-techniques--kotlin--medium, q-suspend-functions-deep-dive--kotlin--medium]
 subtopics:
   - coroutines
   - runtest
-  - test-dispatcher
   - testing
 ---
 # Вопрос (RU)
@@ -27,127 +28,89 @@ subtopics:
 
 ## Ответ (RU)
 
-Тестирование корутин требует специальных тестовых диспетчеров, которые контролируют время и порядок выполнения. Kotlin предоставляет `StandardTestDispatcher` и `UnconfinedTestDispatcher`, каждый с разным поведением. Выбор неправильного может привести к нестабильным тестам, проблемам с временем или неверным результатам тестов.
+Тестирование корутин требует специальных тестовых диспетчеров и планировщика, которые позволяют контролировать виртуальное время и порядок выполнения. В `kotlinx-coroutines-test` есть `StandardTestDispatcher` и `UnconfinedTestDispatcher`, которые работают поверх общего `TestCoroutineScheduler`, но ведут себя по-разному. Неправильный выбор или неверные ожидания их поведения могут привести к нестабильным тестам, тайм-аутам или некорректным результатам. См. также [[c-coroutines]].
 
+### Обзор тестовых диспетчеров
 
+Ключевая идея: оба диспетчера используют виртуальное время `TestCoroutineScheduler` и не продвигают его «магическим образом» — время сдвигается `runTest` и/или явными вызовами `advanceTimeBy` / `advanceUntilIdle`.
 
-[Полный русский перевод следует той же структуре]
+- `StandardTestDispatcher` — ставит задачи в очередь и выполняет их детерминированно под контролем планировщика. Он является значением по умолчанию в `runTest` и подходит для большинства тестов.
+- `UnconfinedTestDispatcher` — выполняет код немедленно до первой приостановки, после чего возобновление также планируется через тот же `TestCoroutineScheduler`. Не привязан к конкретному потоку и полезен, когда важны немедленные эффекты до первой приостановки.
 
-### Ключевые Выводы
+### Поведение StandardTestDispatcher
 
-1. **StandardTestDispatcher по умолчанию** - Ставит корутины в очередь
-2. **UnconfinedTestDispatcher выполняется немедленно** - До первой приостановки
-3. **advanceUntilIdle() критичен** - С StandardTestDispatcher
-4. **Виртуальное время** - Тесты выполняются мгновенно
-5. **runTest** - Предпочтительнее runBlocking для тестов
-6. **backgroundScope** - Для коллекторов которые не должны блокировать
-7. **Контроль порядка выполнения** - StandardTestDispatcher дает полный контроль
-8. **Тестирование обновлений StateFlow** - Собирайте в backgroundScope
-9. **Миграция** - Старый API устарел, используйте новые тестовые диспетчеры
-10. **Выбирайте по потребностям** - Standard для контроля, Unconfined для немедленности
+Основные свойства:
+- Все корутины ставятся в очередь и управляются `TestCoroutineScheduler`.
+- Детерминированный порядок выполнения.
+- Предпочитаемый диспетчер по умолчанию для юнит-тестов.
 
----
-
-## Answer (EN)
-
-Testing coroutines requires special test dispatchers that control time and execution order. Kotlin provides `StandardTestDispatcher` and `UnconfinedTestDispatcher`, each with different behavior. Choosing the wrong one can lead to flaky tests, timing issues, or incorrect test results.
-
-
-
-### Overview of Test Dispatchers
-
-| Feature | StandardTestDispatcher | UnconfinedTestDispatcher |
-|---------|------------------------|--------------------------|
-| **Execution** | Queues coroutines | Executes immediately |
-| **Control** | Manual advancement | Auto-advances |
-| **Virtual time** | Full control | Limited control |
-| **Default in runTest** |  Yes (since 1.6) |  No |
-| **Use case** | Most tests | Tests needing immediate execution |
-
-### StandardTestDispatcher Behavior
-
-**Key characteristics:**
-- **Queues coroutines**: Doesn't execute until explicitly advanced
-- **Controlled timing**: Full control over virtual time
-- **Predictable**: Execution order is deterministic
-
-**Basic example:**
+Пример (нужно «сотрудничать» с планировщиком):
 
 ```kotlin
 @Test
 fun testStandardDispatcher() = runTest {
-    // runTest uses StandardTestDispatcher by default
     var value = 0
 
-    launch {
+    val job = launch {
         value = 1
-        println("Launch executed: value = $value")
     }
 
-    // Coroutine NOT executed yet (queued)
-    println("After launch: value = $value") // value = 0
+    // На этом этапе корутина запланирована, но может ещё не выполниться.
+    // Синхронизируемся через join или advanceUntilIdle.
+    job.join() // или advanceUntilIdle()
 
-    // Advance virtual time to execute queued coroutines
-    advanceUntilIdle()
-
-    println("After advanceUntilIdle: value = $value") // value = 1
+    assertEquals(1, value)
 }
-
-// Output:
-// After launch: value = 0
-// Launch executed: value = 1
-// After advanceUntilIdle: value = 1
 ```
 
-### UnconfinedTestDispatcher Behavior
+### Поведение UnconfinedTestDispatcher
 
-**Key characteristics:**
-- **Executes immediately**: Coroutines run until first suspension
-- **Less control**: Auto-advances after suspensions
-- **Eager execution**: Runs code before returning to caller
+Основные свойства:
+- Выполняет тело корутины немедленно в текущем стеке до первой приостановки.
+- После приостановки возобновление планируется `TestCoroutineScheduler`.
+- Не привязан к конкретному потоку.
+- Полезен, когда требуется явно проверить немедленные эффекты до первой приостановки.
 
-**Basic example:**
+Пример:
 
 ```kotlin
 @Test
-fun testUnconfinedDispatcher() = runTest(UnconfinedTestDispatcher()) {
+fun testUnconfinedDispatcher() = runTest(UnconfinedTestDispatcher(testScheduler)) {
     var value = 0
 
     launch {
-        value = 1 // Executes immediately
-        println("Launch executed: value = $value")
+        value = 1 // Выполнится сразу до первой приостановки
     }
 
-    // Coroutine already executed!
-    println("After launch: value = $value") // value = 1
+    // На этом шаге тело до первой приостановки уже выполнено
+    assertEquals(1, value)
 }
-
-// Output:
-// Launch executed: value = 1
-// After launch: value = 1
 ```
 
-### runTest Default Behavior
+### Поведение runTest по умолчанию
 
-**runTest uses StandardTestDispatcher by default (since kotlinx.coroutines 1.6):**
+`runTest` по умолчанию использует `StandardTestDispatcher` с общим `TestCoroutineScheduler`:
 
 ```kotlin
 @Test
 fun defaultRunTest() = runTest {
-    // Uses StandardTestDispatcher
-    // Need to call advanceUntilIdle() to execute queued coroutines
+    // Внутри используется StandardTestDispatcher(testScheduler).
 }
 
-// Equivalent to:
 @Test
-fun explicitStandardDispatcher() = runTest(StandardTestDispatcher()) {
-    // ...
+fun explicitStandardDispatcher() = runTest(StandardTestDispatcher(testScheduler)) {
+    // Эквивалентная явная конфигурация.
 }
 ```
 
-### advanceUntilIdle with StandardTestDispatcher
+Особенности `runTest`:
+- Интегрирован с виртуальным временем.
+- Автоматически выполняет задачи, необходимые для завершения тела теста.
+- Требует явного ожидания (`join`/`await`) или продвижения времени, когда вы тестируете отложенное/асинхронное поведение.
 
-**advanceUntilIdle():** Executes all pending coroutines and advances time until nothing left to run.
+### advanceUntilIdle с StandardTestDispatcher
+
+`advanceUntilIdle()` выполняет все задачи, запланированные в `TestCoroutineScheduler`, включая те, что следуют за задержками, пока не останется работы.
 
 ```kotlin
 @Test
@@ -162,18 +125,18 @@ fun testAdvanceUntilIdle() = runTest {
         step = 3
     }
 
-    println("Before: step = $step") // 0
+    assertEquals(0, step)
 
-    advanceUntilIdle() // Runs all delays and code
+    advanceUntilIdle()
 
-    println("After: step = $step") // 3
-    println("Virtual time: ${currentTime}ms") // 300ms
+    assertEquals(3, step)
+    assertEquals(300, currentTime)
 }
 ```
 
-### advanceTimeBy - Precise Time Control
+### advanceTimeBy — точный контроль времени
 
-**advanceTimeBy(millis):** Advances virtual time by specific amount.
+`advanceTimeBy(millis)` сдвигает виртуальное время и выполняет задачи, запланированные до этого момента:
 
 ```kotlin
 @Test
@@ -187,84 +150,87 @@ fun testAdvanceTimeBy() = runTest {
         value = "after 200ms"
     }
 
-    println("0ms: $value") // "start"
+    assertEquals("start", value)
 
     advanceTimeBy(100)
-    println("100ms: $value") // "after 100ms"
+    assertEquals("after 100ms", value)
 
     advanceTimeBy(100)
-    println("200ms: $value") // "after 200ms"
+    assertEquals("after 200ms", value)
 }
 ```
 
-### TestScope and Virtual Time
+### TestScope и виртуальное время
 
-**TestScope:** Provides `currentTime` property to check virtual time.
+`runTest` предоставляет `TestScope` с:
+- `currentTime` для проверки виртуального времени;
+- доступом к `testScheduler` (в новых API) для создания тестовых диспетчеров.
 
 ```kotlin
 @Test
 fun testVirtualTime() = runTest {
-    println("Start: ${currentTime}ms") // 0ms
+    assertEquals(0, currentTime)
 
     delay(1000)
-    println("After 1s: ${currentTime}ms") // 1000ms
+    assertEquals(1000, currentTime)
 
     delay(5000)
-    println("After 6s: ${currentTime}ms") // 6000ms
-
-    // Total real time: < 1ms (virtual time!)
+    assertEquals(6000, currentTime)
 }
 ```
 
-### Testing Delays and Timeouts
+### Тестирование задержек и таймаутов
 
-**Test long delays instantly:**
+Длинные задержки выполняются мгновенно за счет виртуального времени:
 
 ```kotlin
+import kotlin.time.Duration.Companion.hours
+
 @Test
 fun testLongDelay() = runTest {
     var completed = false
 
     launch {
-        delay(1.hours.inWholeMilliseconds) // 1 hour!
+        delay(1.hours) // Виртуальный 1 час
         completed = true
     }
 
     advanceTimeBy(1.hours.inWholeMilliseconds)
 
     assertTrue(completed)
-    // Test completes instantly (virtual time)
 }
-
-val Long.hours: Duration
-    get() = Duration.parse("${this}h")
 ```
 
-**Test timeout:**
+Пример таймаута:
 
 ```kotlin
 @Test
 fun testTimeout() = runTest {
     assertFailsWith<TimeoutCancellationException> {
         withTimeout(1000) {
-            delay(2000) // Exceeds timeout
+            delay(2000)
         }
     }
 }
 ```
 
-### Testing Immediate Execution with UnconfinedTestDispatcher
+### Тестирование немедленного выполнения с UnconfinedTestDispatcher
 
-**Use case: Test code that must execute before suspension**
+`UnconfinedTestDispatcher` полезен, когда нужно проверить побочные эффекты, происходящие до первой приостановки.
+
+Пример с `ViewModel`, использующей внедренный диспетчер:
 
 ```kotlin
-class UserViewModel {
+class UserViewModel(
+    private val dispatcher: CoroutineDispatcher,
+    private val repository: UserRepository
+) : ViewModel() {
     private val _state = MutableStateFlow<State>(State.Idle)
     val state: StateFlow<State> = _state
 
     fun loadUser() {
-        viewModelScope.launch {
-            _state.value = State.Loading // Must be immediate
+        viewModelScope.launch(dispatcher) {
+            _state.value = State.Loading // Немедленно на UnconfinedTestDispatcher до первой приостановки
             delay(100)
             _state.value = State.Success
         }
@@ -272,12 +238,12 @@ class UserViewModel {
 }
 
 @Test
-fun testImmediateStateUpdate() = runTest(UnconfinedTestDispatcher()) {
-    val viewModel = UserViewModel()
+fun testImmediateStateUpdate() = runTest {
+    val dispatcher = UnconfinedTestDispatcher(testScheduler)
+    val viewModel = UserViewModel(dispatcher, FakeUserRepository())
 
     viewModel.loadUser()
 
-    // With UnconfinedTestDispatcher: Loading state is set immediately
     assertEquals(State.Loading, viewModel.state.value)
 
     advanceUntilIdle()
@@ -285,50 +251,44 @@ fun testImmediateStateUpdate() = runTest(UnconfinedTestDispatcher()) {
     assertEquals(State.Success, viewModel.state.value)
 }
 
-// With StandardTestDispatcher, this test would FAIL:
 @Test
 fun testWithStandardDispatcher() = runTest {
-    val viewModel = UserViewModel()
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    val viewModel = UserViewModel(dispatcher, FakeUserRepository())
 
     viewModel.loadUser()
 
-    // Loading state NOT set yet (coroutine queued)
-    assertEquals(State.Idle, viewModel.state.value) // State is still Idle!
-
+    // Эффект запланирован; продвигаем время/очередь, чтобы его увидеть
     advanceUntilIdle()
 
     assertEquals(State.Success, viewModel.state.value)
 }
 ```
 
-### Common Testing Patterns
+### Типичные паттерны тестирования
 
-**Pattern 1: Test StateFlow updates**
+Паттерн 1: тестирование обновлений `StateFlow` с `backgroundScope`:
 
 ```kotlin
 @Test
 fun testStateFlowUpdates() = runTest {
-    val viewModel = UserViewModel()
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    val viewModel = UserViewModel(dispatcher, FakeUserRepository())
     val states = mutableListOf<State>()
 
     backgroundScope.launch {
-        viewModel.state.collect {
-            states.add(it)
-        }
+        viewModel.state.collect { states.add(it) }
     }
 
     viewModel.loadUser()
 
     advanceUntilIdle()
 
-    assertEquals(
-        listOf(State.Idle, State.Loading, State.Success),
-        states
-    )
+    assertEquals(listOf(State.Idle, State.Loading, State.Success), states)
 }
 ```
 
-**Pattern 2: Test multiple coroutines**
+Паттерн 2: тестирование нескольких корутин:
 
 ```kotlin
 @Test
@@ -348,15 +308,14 @@ fun testMultipleCoroutines() = runTest {
 
     advanceTimeBy(100)
     assertEquals(1, result1)
-    assertEquals(0, result2) // Not executed yet
+    assertEquals(0, result2)
 
     advanceTimeBy(100)
-    assertEquals(1, result1)
-    assertEquals(2, result2) // Now executed
+    assertEquals(2, result2)
 }
 ```
 
-**Pattern 3: Test cancellation**
+Паттерн 3: тестирование отмены:
 
 ```kotlin
 @Test
@@ -373,18 +332,20 @@ fun testCancellation() = runTest {
 
     advanceUntilIdle()
 
-    assertFalse(executed) // Cancelled before execution
+    assertFalse(executed)
 }
 ```
 
-### Mixing Dispatchers in Tests
+### Смешивание диспетчеров в тестах
 
-**Background work with StandardTestDispatcher:**
+Используйте экземпляры диспетчеров, привязанные к одному `testScheduler`, для согласованного виртуального времени.
 
 ```kotlin
 @Test
 fun testBackgroundWork() = runTest {
-    val result = async(StandardTestDispatcher(testScheduler)) {
+    val dispatcher = StandardTestDispatcher(testScheduler)
+
+    val result = async(dispatcher) {
         delay(1000)
         "Result"
     }
@@ -395,45 +356,43 @@ fun testBackgroundWork() = runTest {
 }
 ```
 
-**Using UnconfinedTestDispatcher for specific coroutine:**
-
 ```kotlin
 @Test
 fun testMixedDispatchers() = runTest {
-    // Test scope uses StandardTestDispatcher
     var standardValue = 0
     var unconfinedValue = 0
 
-    launch {
-        standardValue = 1 // Queued
+    launch(StandardTestDispatcher(testScheduler)) {
+        standardValue = 1
     }
 
     launch(UnconfinedTestDispatcher(testScheduler)) {
-        unconfinedValue = 1 // Immediate
+        unconfinedValue = 1 // Немедленное выполнение до первой приостановки
     }
 
-    assertEquals(0, standardValue) // Not executed yet
-    assertEquals(1, unconfinedValue) // Already executed
+    assertEquals(0, standardValue)
+    assertEquals(1, unconfinedValue)
 
     advanceUntilIdle()
 
-    assertEquals(1, standardValue) // Now executed
+    assertEquals(1, standardValue)
 }
 ```
 
-### Real ViewModel Testing Examples
+### Примеры тестирования реальных `ViewModel`
 
-**Example 1: Testing loading states**
+Пример: тестирование состояний загрузки с внедренным диспетчером:
 
 ```kotlin
 class UserViewModel(
+    private val dispatcher: CoroutineDispatcher,
     private val repository: UserRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
     val uiState: StateFlow<UiState> = _uiState.asStateFlow()
 
     fun loadUser(userId: String) {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             _uiState.value = UiState.Loading
             try {
                 val user = repository.getUser(userId)
@@ -444,32 +403,24 @@ class UserViewModel(
         }
     }
 }
+```
 
-sealed class UiState {
-    object Idle : UiState()
-    object Loading : UiState()
-    data class Success(val user: User) : UiState()
-    data class Error(val message: String?) : UiState()
-}
-
+```kotlin
 @Test
 fun `test user loading success`() = runTest {
+    val dispatcher = StandardTestDispatcher(testScheduler)
     val repository = FakeUserRepository()
-    val viewModel = UserViewModel(repository)
+    val viewModel = UserViewModel(dispatcher, repository)
 
-    // Collect states
     val states = mutableListOf<UiState>()
     backgroundScope.launch {
         viewModel.uiState.collect { states.add(it) }
     }
 
-    // Trigger load
     viewModel.loadUser("123")
 
-    // Advance to execute coroutine
     advanceUntilIdle()
 
-    // Verify states
     assertEquals(3, states.size)
     assertTrue(states[0] is UiState.Idle)
     assertTrue(states[1] is UiState.Loading)
@@ -477,10 +428,13 @@ fun `test user loading success`() = runTest {
 }
 ```
 
-**Example 2: Testing debounce/throttle**
+Пример: тестирование debounce:
 
 ```kotlin
-class SearchViewModel : ViewModel() {
+class SearchViewModel(
+    private val dispatcher: CoroutineDispatcher,
+    private val searchRepository: SearchRepository
+) : ViewModel() {
     private val _query = MutableStateFlow("")
     val query: StateFlow<String> = _query
 
@@ -488,12 +442,12 @@ class SearchViewModel : ViewModel() {
     val results: StateFlow<List<String>> = _results
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(dispatcher) {
             query
-                .debounce(300) // Wait 300ms after last input
-                .collect { query ->
-                    if (query.isNotEmpty()) {
-                        _results.value = searchRepository.search(query)
+                .debounce(300)
+                .collect { q ->
+                    if (q.isNotEmpty()) {
+                        _results.value = searchRepository.search(q)
                     }
                 }
         }
@@ -503,10 +457,13 @@ class SearchViewModel : ViewModel() {
         _query.value = newQuery
     }
 }
+```
 
+```kotlin
 @Test
 fun `test search debounce`() = runTest {
-    val viewModel = SearchViewModel(FakeSearchRepository())
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    val viewModel = SearchViewModel(dispatcher, FakeSearchRepository())
 
     viewModel.setQuery("a")
     advanceTimeBy(100)
@@ -517,249 +474,791 @@ fun `test search debounce`() = runTest {
     viewModel.setQuery("abc")
     advanceTimeBy(100)
 
-    // No search yet (debounce period not elapsed)
-    assertEquals(emptyList(), viewModel.results.value)
+    // Окно debounce ещё не завершено
+    assertEquals(emptyList<String>(), viewModel.results.value)
 
-    // Wait for debounce
     advanceTimeBy(300)
 
-    // Now search executed
+    assertTrue(viewModel.results.value.isNotEmpty())
+}
+```
+
+### Миграция со старого тестового API
+
+Старый (устаревший) подход:
+
+```kotlin
+// Устарело: runBlockingTest, TestCoroutineDispatcher, TestCoroutineScope
+@Test
+fun oldTest() = runBlockingTest {
+    // Test code
+}
+```
+
+Новый API:
+
+```kotlin
+@Test
+fun newTest() = runTest {
+    // Используем runTest с TestScope и тестовыми диспетчерами
+}
+```
+
+Ключевые изменения:
+- `runBlockingTest` → `runTest`.
+- `TestCoroutineDispatcher` / `TestCoroutineScope` → `StandardTestDispatcher` / `UnconfinedTestDispatcher` + `TestScope`.
+- Виртуальное время управляется `runTest` и `TestCoroutineScheduler`; при необходимости вы явно продвигаете его.
+
+### Лучшие практики
+
+1. Используйте `StandardTestDispatcher` по умолчанию.
+2. Применяйте `UnconfinedTestDispatcher` только когда осознанно полагаетесь на его нетерпеливое, незафиксированное поведение.
+3. Для асинхронной работы:
+   - Явно ожидайте задачи (`join`, `await`), или
+   - Используйте `advanceTimeBy` / `advanceUntilIdle` при тестировании задержек и таймингов.
+4. Собирайте `Flow` / `StateFlow` в `backgroundScope`, чтобы не блокировать основной поток теста.
+5. Предпочитайте виртуальное время (`runTest`) реальным задержкам (`runBlocking`, `Thread.sleep`).
+
+### Распространенные ошибки
+
+Ошибка 1: отсутствие кооперации с планировщиком:
+
+```kotlin
+@Test
+fun badTest() = runTest {
+    var value = 0
+    launch { value = 1 }
+
+    // Нет join / advance; возможна преждевременная проверка
+    assertEquals(1, value) // Нестабильно / неверно
+}
+
+@Test
+fun goodTest() = runTest {
+    var value = 0
+    val job = launch { value = 1 }
+
+    job.join() // или advanceUntilIdle()
+
+    assertEquals(1, value)
+}
+```
+
+Ошибка 2: использование `runBlocking` с реальным временем:
+
+```kotlin
+@Test
+fun badTest() = runBlocking {
+    delay(1000) // Реальная секунда
+}
+
+@Test
+fun goodTest() = runTest {
+    delay(1000) // Виртуальное время
+}
+```
+
+Ошибка 3: collect в основном scope теста без `backgroundScope`:
+
+```kotlin
+@Test
+fun badTest() = runTest {
+    // Этот collect не завершится и заблокирует тест
+    collectFlow().collect { }
+}
+
+@Test
+fun goodTest() = runTest {
+    backgroundScope.launch {
+        collectFlow().collect { }
+    }
+
+    advanceUntilIdle()
+}
+```
+
+Ошибка 4: смешивание реального и виртуального времени:
+
+```kotlin
+@Test
+fun badTest() = runTest {
+    launch {
+        Thread.sleep(1000) // Реальное время, не управляется планировщиком
+    }
+    advanceTimeBy(1000) // Не влияет на Thread.sleep
+}
+
+@Test
+fun goodTest() = runTest {
+    launch {
+        delay(1000) // Виртуальное время
+    }
+    advanceTimeBy(1000)
+}
+```
+
+### Когда использовать каждый диспетчер
+
+Используйте `StandardTestDispatcher`, когда:
+- Нужна детерминированность и полный контроль порядка выполнения.
+- Тестируете задержки, debounce, таймауты, отмены.
+- Пишете большинство unit-тестов корутин.
+
+Используйте `UnconfinedTestDispatcher`, когда:
+- Важно немедленное выполнение до первой приостановки.
+- Осознанно зависите от его поведения и понимаете последствия.
+
+### Ключевые выводы
+
+1. `StandardTestDispatcher` (по умолчанию в `runTest`) — детерминированное, управляемое выполнение.
+2. `UnconfinedTestDispatcher` — нетерпеливое выполнение до первой приостановки, далее под управлением того же планировщика.
+3. Ни один не продвигает виртуальное время автоматически; используйте `advanceTimeBy` / `advanceUntilIdle` и корректное ожидание.
+4. Предпочитайте `runTest` и виртуальное время вместо `runBlocking` / `runBlockingTest`.
+5. Используйте `backgroundScope` для долгоживущих коллекций.
+6. Выбирайте диспетчер по требуемой семантике: контроль против немедленных эффектов.
+
+---
+
+## Answer (EN)
+
+Testing coroutines requires dedicated test dispatchers and a scheduler that control virtual time and execution order. The kotlinx.coroutines-test module provides `StandardTestDispatcher` and `UnconfinedTestDispatcher`, both backed by a shared `TestCoroutineScheduler` but with different scheduling behavior. Misunderstanding their behavior can lead to flaky tests, timeouts, or incorrect expectations.
+
+### Overview of Test Dispatchers
+
+| Feature | StandardTestDispatcher | UnconfinedTestDispatcher |
+|---------|------------------------|--------------------------|
+| Execution start | Enqueues tasks; executes via scheduler | Runs immediately until first suspension |
+| Thread confinement | Confined to the scheduler's execution | Unconfined (may resume in different contexts) |
+| Control | Deterministic, queued | Eager before first suspension, then scheduled |
+| Virtual time | Uses TestCoroutineScheduler | Uses same TestCoroutineScheduler |
+| Default in runTest | Yes (since 1.6) | No |
+| Typical use | Default for most tests | When immediate pre-suspension execution semantics are needed |
+
+Note: Neither dispatcher "auto-advances" time on its own. Virtual time is advanced by `runTest` and/or by explicit calls to `advanceTimeBy` / `advanceUntilIdle`.
+
+### StandardTestDispatcher Behavior
+
+Key characteristics:
+- Queues coroutines and runs them under control of `TestCoroutineScheduler`.
+- Deterministic execution order.
+- Ideal default for unit tests.
+
+Basic example (demonstrating need to cooperate with scheduler):
+
+```kotlin
+@Test
+fun testStandardDispatcher() = runTest {
+    var value = 0
+
+    val job = launch {
+        value = 1
+    }
+
+    // At this point, the coroutine is scheduled but may not have run yet.
+    // Cooperate with the scheduler by awaiting or advancing.
+    job.join() // or advanceUntilIdle()
+
+    assertEquals(1, value)
+}
+```
+
+### UnconfinedTestDispatcher Behavior
+
+Key characteristics:
+- Executes coroutine code immediately in the current call stack until the first suspension.
+- After suspension, resumption is scheduled by the same `TestCoroutineScheduler`.
+- Not bound to a particular thread.
+- Useful when you specifically want eager behavior before the first suspension.
+
+Basic example:
+
+```kotlin
+@Test
+fun testUnconfinedDispatcher() = runTest(UnconfinedTestDispatcher(testScheduler)) {
+    var value = 0
+
+    launch {
+        value = 1 // Executes immediately until first suspension
+    }
+
+    // Coroutine body up to first suspension has already run
+    assertEquals(1, value)
+}
+```
+
+### runTest Default Behavior
+
+`runTest` uses `StandardTestDispatcher` with an underlying `TestCoroutineScheduler` by default:
+
+```kotlin
+@Test
+fun defaultRunTest() = runTest {
+    // Uses StandardTestDispatcher(testScheduler) internally.
+}
+
+@Test
+fun explicitStandardDispatcher() = runTest(StandardTestDispatcher(testScheduler)) {
+    // Equivalent explicit configuration.
+}
+```
+
+`runTest`:
+- Integrates with virtual time.
+- Automatically runs scheduled tasks needed to complete the test body.
+- Still requires you to either await launched coroutines (e.g., via `join`/`await`) or advance virtual time when testing delayed/async behavior.
+
+### advanceUntilIdle with StandardTestDispatcher
+
+`advanceUntilIdle()` executes all tasks scheduled on `TestCoroutineScheduler` (including those after delays) until there is nothing left to run.
+
+```kotlin
+@Test
+fun testAdvanceUntilIdle() = runTest {
+    var step = 0
+
+    launch {
+        step = 1
+        delay(100)
+        step = 2
+        delay(200)
+        step = 3
+    }
+
+    assertEquals(0, step)
+
+    advanceUntilIdle()
+
+    assertEquals(3, step)
+    assertEquals(300, currentTime)
+}
+```
+
+### advanceTimeBy - Precise Time Control
+
+`advanceTimeBy(millis)` advances virtual time and runs tasks scheduled up to that time.
+
+```kotlin
+@Test
+fun testAdvanceTimeBy() = runTest {
+    var value = "start"
+
+    launch {
+        delay(100)
+        value = "after 100ms"
+        delay(100)
+        value = "after 200ms"
+    }
+
+    assertEquals("start", value)
+
+    advanceTimeBy(100)
+    assertEquals("after 100ms", value)
+
+    advanceTimeBy(100)
+    assertEquals("after 200ms", value)
+}
+```
+
+### TestScope and Virtual Time
+
+`runTest` provides a `TestScope` with:
+- `currentTime` to inspect virtual time.
+- Access to `testScheduler` (in newer APIs) for creating dispatchers.
+
+```kotlin
+@Test
+fun testVirtualTime() = runTest {
+    assertEquals(0, currentTime)
+
+    delay(1000)
+    assertEquals(1000, currentTime)
+
+    delay(5000)
+    assertEquals(6000, currentTime)
+}
+```
+
+### Testing Delays and Timeouts
+
+Long delays are executed instantly via virtual time:
+
+```kotlin
+import kotlin.time.Duration.Companion.hours
+
+@Test
+fun testLongDelay() = runTest {
+    var completed = false
+
+    launch {
+        delay(1.hours) // Virtual 1 hour
+        completed = true
+    }
+
+    advanceTimeBy(1.hours.inWholeMilliseconds)
+
+    assertTrue(completed)
+}
+```
+
+Timeout example:
+
+```kotlin
+@Test
+fun testTimeout() = runTest {
+    assertFailsWith<TimeoutCancellationException> {
+        withTimeout(1000) {
+            delay(2000)
+        }
+    }
+}
+```
+
+### Testing Immediate Execution with UnconfinedTestDispatcher
+
+Use `UnconfinedTestDispatcher` when you want to assert side effects that must happen before the first suspension.
+
+Example with a `ViewModel` using an injected dispatcher (simplified for correctness):
+
+```kotlin
+class UserViewModel(
+    private val dispatcher: CoroutineDispatcher,
+    private val repository: UserRepository
+) : ViewModel() {
+    private val _state = MutableStateFlow<State>(State.Idle)
+    val state: StateFlow<State> = _state
+
+    fun loadUser() {
+        viewModelScope.launch(dispatcher) {
+            _state.value = State.Loading // Immediate on UnconfinedTestDispatcher until first suspension
+            delay(100)
+            _state.value = State.Success
+        }
+    }
+}
+```
+
+```kotlin
+@Test
+fun testImmediateStateUpdate() = runTest {
+    val dispatcher = UnconfinedTestDispatcher(testScheduler)
+    val viewModel = UserViewModel(dispatcher, FakeUserRepository())
+
+    viewModel.loadUser()
+
+    assertEquals(State.Loading, viewModel.state.value)
+
+    advanceUntilIdle()
+
+    assertEquals(State.Success, viewModel.state.value)
+}
+```
+
+```kotlin
+@Test
+fun testWithStandardDispatcher() = runTest {
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    val viewModel = UserViewModel(dispatcher, FakeUserRepository())
+
+    viewModel.loadUser()
+
+    // The effect is scheduled; advance to observe it
+    advanceUntilIdle()
+
+    assertEquals(State.Success, viewModel.state.value)
+}
+```
+
+### Common Testing Patterns
+
+Pattern 1: Test `StateFlow` updates with `backgroundScope`
+
+```kotlin
+@Test
+fun testStateFlowUpdates() = runTest {
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    val viewModel = UserViewModel(dispatcher, FakeUserRepository())
+    val states = mutableListOf<State>()
+
+    backgroundScope.launch {
+        viewModel.state.collect { states.add(it) }
+    }
+
+    viewModel.loadUser()
+
+    advanceUntilIdle()
+
+    assertEquals(listOf(State.Idle, State.Loading, State.Success), states)
+}
+```
+
+Pattern 2: Test multiple coroutines
+
+```kotlin
+@Test
+fun testMultipleCoroutines() = runTest {
+    var result1 = 0
+    var result2 = 0
+
+    launch {
+        delay(100)
+        result1 = 1
+    }
+
+    launch {
+        delay(200)
+        result2 = 2
+    }
+
+    advanceTimeBy(100)
+    assertEquals(1, result1)
+    assertEquals(0, result2)
+
+    advanceTimeBy(100)
+    assertEquals(2, result2)
+}
+```
+
+Pattern 3: Test cancellation
+
+```kotlin
+@Test
+fun testCancellation() = runTest {
+    var executed = false
+
+    val job = launch {
+        delay(1000)
+        executed = true
+    }
+
+    advanceTimeBy(500)
+    job.cancel()
+
+    advanceUntilIdle()
+
+    assertFalse(executed)
+}
+```
+
+### Mixing Dispatchers in Tests
+
+Using dispatcher instances tied to the same `testScheduler` ensures consistent virtual time.
+
+```kotlin
+@Test
+fun testBackgroundWork() = runTest {
+    val dispatcher = StandardTestDispatcher(testScheduler)
+
+    val result = async(dispatcher) {
+        delay(1000)
+        "Result"
+    }
+
+    advanceTimeBy(1000)
+
+    assertEquals("Result", result.await())
+}
+```
+
+```kotlin
+@Test
+fun testMixedDispatchers() = runTest {
+    var standardValue = 0
+    var unconfinedValue = 0
+
+    launch(StandardTestDispatcher(testScheduler)) {
+        standardValue = 1
+    }
+
+    launch(UnconfinedTestDispatcher(testScheduler)) {
+        unconfinedValue = 1 // Eager before first suspension
+    }
+
+    assertEquals(0, standardValue)
+    assertEquals(1, unconfinedValue)
+
+    advanceUntilIdle()
+
+    assertEquals(1, standardValue)
+}
+```
+
+### Real `ViewModel` Testing Examples
+
+Example: Testing loading states with injected dispatcher
+
+```kotlin
+class UserViewModel(
+    private val dispatcher: CoroutineDispatcher,
+    private val repository: UserRepository
+) : ViewModel() {
+    private val _uiState = MutableStateFlow<UiState>(UiState.Idle)
+    val uiState: StateFlow<UiState> = _uiState.asStateFlow()
+
+    fun loadUser(userId: String) {
+        viewModelScope.launch(dispatcher) {
+            _uiState.value = UiState.Loading
+            try {
+                val user = repository.getUser(userId)
+                _uiState.value = UiState.Success(user)
+            } catch (e: Exception) {
+                _uiState.value = UiState.Error(e.message)
+            }
+        }
+    }
+}
+```
+
+```kotlin
+@Test
+fun `test user loading success`() = runTest {
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    val repository = FakeUserRepository()
+    val viewModel = UserViewModel(dispatcher, repository)
+
+    val states = mutableListOf<UiState>()
+    backgroundScope.launch {
+        viewModel.uiState.collect { states.add(it) }
+    }
+
+    viewModel.loadUser("123")
+
+    advanceUntilIdle()
+
+    assertEquals(3, states.size)
+    assertTrue(states[0] is UiState.Idle)
+    assertTrue(states[1] is UiState.Loading)
+    assertTrue(states[2] is UiState.Success)
+}
+```
+
+Example: Testing debounce
+
+```kotlin
+class SearchViewModel(
+    private val dispatcher: CoroutineDispatcher,
+    private val searchRepository: SearchRepository
+) : ViewModel() {
+    private val _query = MutableStateFlow("")
+    val query: StateFlow<String> = _query
+
+    private val _results = MutableStateFlow<List<String>>(emptyList())
+    val results: StateFlow<List<String>> = _results
+
+    init {
+        viewModelScope.launch(dispatcher) {
+            query
+                .debounce(300)
+                .collect { q ->
+                    if (q.isNotEmpty()) {
+                        _results.value = searchRepository.search(q)
+                    }
+                }
+        }
+    }
+
+    fun setQuery(newQuery: String) {
+        _query.value = newQuery
+    }
+}
+```
+
+```kotlin
+@Test
+fun `test search debounce`() = runTest {
+    val dispatcher = StandardTestDispatcher(testScheduler)
+    val viewModel = SearchViewModel(dispatcher, FakeSearchRepository())
+
+    viewModel.setQuery("a")
+    advanceTimeBy(100)
+
+    viewModel.setQuery("ab")
+    advanceTimeBy(100)
+
+    viewModel.setQuery("abc")
+    advanceTimeBy(100)
+
+    // Debounce window not completed yet
+    assertEquals(emptyList<String>(), viewModel.results.value)
+
+    advanceTimeBy(300)
+
     assertTrue(viewModel.results.value.isNotEmpty())
 }
 ```
 
 ### Migration from Old Test API
 
-**Old API (deprecated):**
+Old (deprecated):
 
 ```kotlin
-// Old: TestCoroutineDispatcher
+// Deprecated: runBlockingTest, TestCoroutineDispatcher, TestCoroutineScope
 @Test
-fun oldTest() = runBlockingTest { // Deprecated
+fun oldTest() = runBlockingTest {
     // Test code
 }
 ```
 
-**New API:**
+New API:
 
 ```kotlin
-// New: StandardTestDispatcher/UnconfinedTestDispatcher
 @Test
 fun newTest() = runTest {
-    // Test code
+    // Use runTest with TestScope and test dispatchers
 }
 ```
 
-**Key changes:**
-- `runBlockingTest` → `runTest`
-- `TestCoroutineDispatcher` → `StandardTestDispatcher`/`UnconfinedTestDispatcher`
-- Auto-advancement → Manual with `advanceUntilIdle()`
-- More explicit control over execution
+Key changes:
+- `runBlockingTest` → `runTest`.
+- `TestCoroutineDispatcher` / `TestCoroutineScope` → `StandardTestDispatcher` / `UnconfinedTestDispatcher` with `TestScope`.
+- Virtual time is managed by `runTest` and `TestCoroutineScheduler`; you explicitly advance it when needed.
 
 ### Best Practices
 
-**1. Use StandardTestDispatcher by default:**
-
-```kotlin
-@Test
-fun normalTest() = runTest {
-    // StandardTestDispatcher gives full control
-}
-```
-
-**2. Use UnconfinedTestDispatcher when testing immediate execution:**
-
-```kotlin
-@Test
-fun immediateExecutionTest() = runTest(UnconfinedTestDispatcher()) {
-    // When you need eager execution
-}
-```
-
-**3. Always call advanceUntilIdle():**
-
-```kotlin
-@Test
-fun goodTest() = runTest {
-    viewModel.loadData()
-
-    advanceUntilIdle() // Execute all pending coroutines
-
-    assertEquals(expected, viewModel.state.value)
-}
-```
-
-**4. Collect StateFlow in backgroundScope:**
-
-```kotlin
-@Test
-fun collectStateFlow() = runTest {
-    val states = mutableListOf<State>()
-
-    // Use backgroundScope, not launch
-    backgroundScope.launch {
-        viewModel.state.collect { states.add(it) }
-    }
-
-    // Test actions
-    viewModel.doSomething()
-
-    advanceUntilIdle()
-
-    // Verify states
-}
-```
-
-**5. Test virtual time, not real time:**
-
-```kotlin
-//  BAD: Real delays
-@Test
-fun badTest() = runBlocking {
-    delay(1000) // Actually waits 1 second!
-}
-
-//  GOOD: Virtual time
-@Test
-fun goodTest() = runTest {
-    delay(1000) // Instant (virtual time)
-}
-```
+1. Use `StandardTestDispatcher` as the default in tests.
+2. Use `UnconfinedTestDispatcher` only when you intentionally rely on its eager, unconfined behavior.
+3. For async work, either:
+   - Await jobs (`join`, `await`), or
+   - Use `advanceTimeBy` / `advanceUntilIdle` when testing delays and timing.
+4. Collect `Flow` / `StateFlow` in `backgroundScope` to avoid blocking the main test body.
+5. Prefer virtual time (`runTest`) over real delays (`runBlocking`, `Thread.sleep`).
 
 ### Common Mistakes
 
-**Mistake 1: Forgetting advanceUntilIdle()**
+Mistake 1: Forgetting to cooperate with the scheduler
 
 ```kotlin
-//  WRONG: Coroutine not executed
 @Test
 fun badTest() = runTest {
     var value = 0
     launch { value = 1 }
 
-    assertEquals(1, value) // FAILS: value is still 0
+    // No join / no advance; may assert too early
+    assertEquals(1, value) // Flaky / incorrect
 }
 
-//  CORRECT
 @Test
 fun goodTest() = runTest {
     var value = 0
-    launch { value = 1 }
+    val job = launch { value = 1 }
 
-    advanceUntilIdle()
+    job.join() // or advanceUntilIdle()
 
-    assertEquals(1, value) // PASSES
+    assertEquals(1, value)
 }
 ```
 
-**Mistake 2: Using runBlocking in tests:**
+Mistake 2: Using `runBlocking` with real time
 
 ```kotlin
-//  WRONG: Real time delays
 @Test
 fun badTest() = runBlocking {
-    delay(1000) // Blocks thread for 1 second
+    delay(1000) // Real 1 second
 }
 
-//  CORRECT: Virtual time
 @Test
 fun goodTest() = runTest {
-    delay(1000) // Instant
+    delay(1000) // Virtual
 }
 ```
 
-**Mistake 3: Not using backgroundScope for collectors:**
+Mistake 3: Collecting in the main test scope without `backgroundScope`
 
 ```kotlin
-//  WRONG: Collection blocks test
 @Test
 fun badTest() = runTest {
-    launch {
-        flow.collect { } // Blocks forever
-    }
-
-    // This never executes
-    advanceUntilIdle()
+    // This collect never completes and blocks the test
+    collectFlow().collect { }
 }
 
-//  CORRECT: Use backgroundScope
 @Test
 fun goodTest() = runTest {
     backgroundScope.launch {
-        flow.collect { }
+        collectFlow().collect { }
     }
 
-    advanceUntilIdle() // Executes
+    advanceUntilIdle()
 }
 ```
 
-**Mistake 4: Mixing real and virtual time:**
+Mistake 4: Mixing real and virtual time
 
 ```kotlin
-//  WRONG: Thread.sleep is real time
 @Test
 fun badTest() = runTest {
     launch {
-        Thread.sleep(1000) // Real delay!
+        Thread.sleep(1000) // Real time: not controlled by scheduler
     }
-    advanceTimeBy(1000) // Doesn't help
+    advanceTimeBy(1000) // Has no effect on Thread.sleep
 }
 
-//  CORRECT: Use delay
 @Test
 fun goodTest() = runTest {
     launch {
-        delay(1000) // Virtual delay
+        delay(1000) // Virtual
     }
-    advanceTimeBy(1000) // Works
+    advanceTimeBy(1000)
 }
 ```
 
 ### When to Use Each Dispatcher
 
-**Use StandardTestDispatcher when:**
-- Default choice for most tests
-- Need full control over execution order
-- Testing timing-dependent code
-- Testing delays and timeouts
-- Testing cancellation
+Use `StandardTestDispatcher` when:
+- You want deterministic, controllable execution.
+- Testing delays, debounces, timeouts, and cancellations.
+- Writing most coroutine unit tests.
 
-**Use UnconfinedTestDispatcher when:**
-- Need immediate execution before suspension
-- Testing StateFlow immediate updates
-- Testing code that must run before async operations
-- Specific test requirements for eager execution
+Use `UnconfinedTestDispatcher` when:
+- You need immediate execution before the first suspension.
+- You explicitly depend on unconfined behavior (e.g., verifying synchronous side effects) and understand its implications.
 
 ### Key Takeaways
 
-1. **StandardTestDispatcher is default** - Queues coroutines
-2. **UnconfinedTestDispatcher executes immediately** - Until first suspension
-3. **advanceUntilIdle() is essential** - With StandardTestDispatcher
-4. **Virtual time** - Tests run instantly
-5. **runTest** - Preferred over runBlocking for tests
-6. **backgroundScope** - For collectors that shouldn't block
-7. **Control execution order** - StandardTestDispatcher gives full control
-8. **Test StateFlow updates** - Collect in backgroundScope
-9. **Migration** - Old API deprecated, use new test dispatchers
-10. **Choose based on needs** - Standard for control, Unconfined for immediacy
+1. `StandardTestDispatcher` (default in `runTest`) — deterministic, queued execution.
+2. `UnconfinedTestDispatcher` — eager until first suspension, then scheduled by the same test scheduler.
+3. Neither dispatcher advances time magically; use `advanceTimeBy` / `advanceUntilIdle` and proper awaiting.
+4. Prefer `runTest` + virtual time over `runBlocking` / `runBlockingTest`.
+5. Use `backgroundScope` for long-running collectors.
+6. Pick the dispatcher based on the required semantics: control vs eager pre-suspension execution.
 
 ---
 
+## Дополнительные вопросы (RU)
+
+1. Как тестировать код, использующий несколько диспетчеров (`IO`, `Main`, `Default`)?
+2. Как связаны `TestScope` и тестовые диспетчеры (`StandardTestDispatcher` / `UnconfinedTestDispatcher`)?
+3. Как тестировать `Flow`, которые постоянно эмитят значения?
+4. Как работает виртуальное время внутренне в `kotlinx-coroutines-test`?
+5. Как тестировать код, где реальные задержки смешиваются с `delay` корутин?
+6. Что произойдет, если не координироваться с планировщиком в тестах?
+7. Как тестировать корутины, использующие `withContext` для переключения диспетчеров?
+
 ## Follow-ups
 
-1. How do you test code that uses multiple dispatchers (IO, Main, Default)?
-2. What's the relationship between TestScope and TestDispatcher?
-3. How do you test flows that emit values continuously?
-4. Can you explain how virtual time works internally?
-5. How do you test code with real delays mixed with coroutine delays?
-6. What happens if you don't call advanceUntilIdle() in tests?
+1. How do you test code that uses multiple dispatchers (`IO`, `Main`, `Default`)?
+2. What's the relationship between `TestScope` and test dispatchers (`StandardTestDispatcher` / `UnconfinedTestDispatcher`)?
+3. How do you test `Flow`s that emit values continuously?
+4. Can you explain how virtual time works internally in `kotlinx-coroutines-test`?
+5. How do you test code with real delays mixed with coroutine `delay`?
+6. What happens if you don't coordinate with the scheduler in tests?
 7. How do you test coroutines that use `withContext` to switch dispatchers?
+
+## Ссылки (RU)
+
+- https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/
+- https://developer.android.com/kotlin/coroutines/test
+- https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/kotlinx.coroutines.test/-test-dispatcher.html
 
 ## References
 
-- [Testing Kotlin Coroutines](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/)
-- [Testing Coroutines on Android](https://developer.android.com/kotlin/coroutines/test)
-- [TestDispatchers Documentation](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/kotlinx.coroutines.test/-test-dispatcher.html)
+- https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/
+- https://developer.android.com/kotlin/coroutines/test
+- https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-test/kotlinx.coroutines.test/-test-dispatcher.html
+
+## Связанные вопросы (RU)
+
+- [[q-debugging-coroutines-techniques--kotlin--medium|Отладка корутин]]
+- [[q-common-coroutine-mistakes--kotlin--medium|Типичные ошибки при работе с корутинами]]
+- [[q-channelflow-callbackflow-flow--kotlin--medium|Построители `Flow`]]
 
 ## Related Questions
 

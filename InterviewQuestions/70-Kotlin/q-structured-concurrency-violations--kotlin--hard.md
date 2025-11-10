@@ -1,7 +1,7 @@
 ---
 id: kotlin-086
-title: "Structured concurrency violations and escape hatches / Нарушения структурной параллельности"
-aliases: [Anti-Patterns, Escape Hatches, Structured Concurrency Violations, Нарушения параллельности]
+title: "Structured concurrency violations and escape hatches / Нарушения структурной конкурентности"
+aliases: [Anti-Patterns, Escape Hatches, Structured Concurrency Violations, Нарушения конкурентности]
 topic: kotlin
 subtopics: [coroutines, structured-concurrency]
 question_kind: theory
@@ -10,33 +10,1316 @@ original_language: en
 language_tags: [en, ru]
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-advantages-for-android--kotlin--easy]
+related: [c-kotlin, c-structured-concurrency, q-kotlin-advantages-for-android--kotlin--easy]
 created: 2025-10-12
-updated: 2025-10-31
+updated: 2025-11-09
 tags: [anti-patterns, architecture, best-practices, coroutines, difficulty/hard, kotlin, lifecycle, scope, structured-concurrency, violations]
 ---
 
-# Structured Concurrency Violations and Escape Hatches / Нарушения Структурной Параллельности
+# Вопрос (RU)
 
-## English
+> Нарушения структурной конкурентности в корутинах Kotlin: какие типичные анти-паттерны (GlobalScope, неуправляемые Job/CoroutineScope, утечки через архитектурные границы и т.п.), почему они опасны, и какие допустимые escape hatches существуют для работы вне строгой структуры?
+
+# Question (EN)
+
+> Structured concurrency violations in Kotlin coroutines: what are the typical anti-patterns (GlobalScope, unmanaged Job/CoroutineScope, leaks across architectural boundaries, etc.), why are they dangerous, and what legitimate escape hatches exist for working outside strict structure?
+
+## Ответ (RU)
+
+### Обзор
+
+Структурная конкурентность — это основной принцип корутин Kotlin (см. также [[c-kotlin]] и [[c-structured-concurrency]]), который обеспечивает организацию корутин в иерархию с автоматической отменой, распространением исключений и гарантиями завершения. Нарушения структурной конкурентности могут приводить к утечкам памяти, утечкам ресурсов, необработанным исключениям и трудно отлаживаемым проблемам конкурентности.
+
+Это руководство рассматривает:
+- что такое структурная конкурентность;
+- распространённые нарушения (GlobalScope, неуправляемые `Job`, фабричные `CoroutineScope`, запуск корутин в неправильных слоях);
+- когда нарушение правил допустимо (редко);
+- легитимные escape hatches с явным временем жизни;
+- способы обнаружения нарушений и тестирования структурной конкурентности.
+
+### Что такое структурная конкурентность
+
+**Структурная конкурентность** — это парадигма, где:
+1. Каждая корутина принадлежит некоторому `CoroutineScope`.
+2. Дочерние корутины связаны с родительскими корутинами.
+3. Родитель ждёт завершения всех дочерних корутин.
+4. Отмена распространяется от родителя к детям.
+5. Исключения распространяются от детей к родителю.
+6. Ни одна корутина не переживает свой scope.
+
+#### Основной принцип
+
+```
+Scope
+   Родительская корутина
+      Дочерняя корутина 1
+         Внучатая 1.1
+         Внучатая 1.2
+      Дочерняя корутина 2
+          Внучатая 2.1
+   Все завершаются вместе
+```
+
+#### Пример: структурированная vs неструктурированная
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateStructuredRu() = runBlocking {
+    println("=== Структурная конкурентность ===")
+
+    // СТРУКТУРИРОВАННО: родитель ждёт детей
+    coroutineScope {
+        launch {
+            delay(1000)
+            println("Дочерняя 1 завершена")
+        }
+
+        launch {
+            delay(500)
+            println("Дочерняя 2 завершена")
+        }
+
+        println("Тело родителя завершено, ждём детей...")
+    }
+
+    println("Вся работа завершена\n")
+
+    // НЕСТРУКТУРИРОВАННО: fire-and-forget
+    println("=== Неструктурированная (нарушение) ===")
+
+    GlobalScope.launch {
+        delay(1000)
+        println("Это может никогда не выполниться!")
+    }
+
+    println("Функция завершается немедленно")
+    // Корутина GlobalScope может быть заброшена!
+}
+```
+
+**Вывод:**
+```
+=== Структурная конкурентность ===
+Тело родителя завершено, ждём детей...
+Дочерняя 2 завершена
+Дочерняя 1 завершена
+Вся работа завершена
+
+=== Неструктурированная (нарушение) ===
+Функция завершается немедленно
+(Корутина GlobalScope может никогда не завершиться)
+```
+
+### Преимущества структурной конкурентности
+
+#### 1. Автоматическая отмена
+
+```kotlin
+import kotlinx.coroutines.*
+
+class AutomaticCancellationDemo {
+    suspend fun structuredWork() = coroutineScope {
+        launch {
+            repeat(10) {
+                delay(100)
+                println("Работаем... $it")
+            }
+        }
+
+        launch {
+            delay(300)
+            throw Exception("Что-то пошло не так!")
+        }
+        // При исключении во второй корутине первая будет автоматически отменена
+    }
+
+    fun demonstrateBenefit() = runBlocking {
+        try {
+            structuredWork()
+        } catch (e: Exception) {
+            println("Поймано: ${e.message}")
+            println("Все корутины были автоматически отменены")
+        }
+    }
+}
+```
+
+#### 2. Распространение исключений
+
+```kotlin
+import kotlinx.coroutines.*
+
+class ExceptionPropagationDemo {
+    suspend fun structuredWorkWithException() = coroutineScope {
+        val deferred1 = async {
+            delay(500)
+            "Результат 1"
+        }
+
+        val deferred2 = async {
+            delay(100)
+            throw IllegalStateException("Deferred 2 провалился")
+        }
+
+        // Исключение распространяется в родительский scope
+        val r1 = deferred1.await() // Не выполнится
+        val r2 = deferred2.await() // Бросит
+
+        "Никогда не вернётся"
+    }
+
+    fun demonstrate() = runBlocking {
+        try {
+            structuredWorkWithException()
+        } catch (e: IllegalStateException) {
+            println("Исключение корректно распространено: ${e.message}")
+        }
+    }
+}
+```
+
+#### 3. Гарантии завершения
+
+```kotlin
+import kotlinx.coroutines.*
+
+class CompletionGuaranteesDemo {
+    suspend fun structuredWorkWithGuarantees() = coroutineScope {
+        launch {
+            try {
+                repeat(10) {
+                    delay(100)
+                    println("Обработка $it")
+                }
+            } finally {
+                println("Выполнен cleanup")
+            }
+        }
+
+        delay(300)
+        println("Родитель завершает работу")
+        // Родитель дождётся дочерней корутины, включая finally
+    }
+
+    fun demonstrate() = runBlocking {
+        structuredWorkWithGuarantees()
+        println("Всё завершено, включая очистку ресурсов")
+    }
+}
+```
+
+#### 4. Управление ресурсами
+
+```kotlin
+import kotlinx.coroutines.*
+import java.io.Closeable
+
+class ResourceManagementDemo {
+    class Resource : Closeable {
+        init { println("Ресурс открыт") }
+        override fun close() { println("Ресурс закрыт") }
+    }
+
+    suspend fun structuredResourceManagement() = coroutineScope {
+        val resource = Resource()
+        try {
+            launch {
+                delay(500)
+                println("Используем ресурс")
+            }
+
+            launch {
+                delay(300)
+                throw Exception("Ошибка")
+            }
+        } finally {
+            resource.close() // Гарантированно вызовется
+        }
+    }
+
+    fun demonstrate() = runBlocking {
+        try {
+            structuredResourceManagement()
+        } catch (e: Exception) {
+            println("Исключение поймано, ресурс закрыт")
+        }
+    }
+}
+```
+
+### Нарушение #1: GlobalScope (худший вариант)
+
+**Почему это плохо:**
+- Нет родительского scope.
+- Не отменяется автоматически.
+- Нет распространения исключений.
+- Нет гарантий завершения.
+- Риск утечек памяти и логики.
+
+#### Проблема
+
+```kotlin
+import kotlinx.coroutines.*
+
+class GlobalScopeViolation {
+    fun processData() {
+        // НАРУШЕНИЕ: неструктурированная корутина
+        GlobalScope.launch {
+            val data = loadData()
+            process(data)
+            saveResults()
+        }
+        // Функция возвращается сразу, корутина может жить дольше "владельца"
+    }
+
+    private suspend fun loadData(): String {
+        delay(1000)
+        return "data"
+    }
+
+    private fun process(data: String) {
+        println("Обработка: $data")
+    }
+
+    private fun saveResults() {
+        println("Сохранение результатов")
+    }
+}
+```
+
+#### Почему это нарушает структурную конкурентность
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateGlobalScopeProblemsRu() = runBlocking {
+    println("=== Проблемы GlobalScope ===")
+
+    class Component {
+        fun start() {
+            println("Компонент запущен")
+
+            // ПРОБЛЕМА 1: нет родителя
+            GlobalScope.launch {
+                delay(2000)
+                println("У этой корутины нет родителя, который мог бы её отменить")
+            }
+        }
+
+        fun stop() {
+            println("Компонент остановлен")
+            // ПРОБЛЕМА 2: корутина не отменена и продолжает работу в фоне
+        }
+    }
+
+    val component = Component()
+    component.start()
+
+    delay(500)
+    component.stop()
+
+    // Компонент остановлен, но корутина всё ещё выполняется
+    delay(2000)
+    println("Корутина выполнилась даже после остановки компонента!")
+}
+```
+
+**Вывод:**
+```
+=== Проблемы GlobalScope ===
+Компонент запущен
+Компонент остановлен
+У этой корутины нет родителя, который мог бы её отменить
+Корутина выполнилась даже после остановки компонента!
+```
+
+#### Исправление
+
+```kotlin
+import kotlinx.coroutines.*
+
+class StructuredComponentRu2 {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    fun start() {
+        println("Компонент запущен")
+
+        // ХОРОШО: структурированная корутина в управляемом scope
+        scope.launch {
+            delay(2000)
+            println("Эта корутина будет корректно отменена")
+        }
+    }
+
+    fun stop() {
+        println("Компонент остановлен")
+        scope.cancel()
+        // Все корутины отменены!
+    }
+}
+
+fun demonstrateStructuredFixRu() = runBlocking {
+    val component = StructuredComponentRu2()
+    component.start()
+
+    delay(500)
+    component.stop()
+
+    delay(2000)
+    println("Корутина была корректно отменена")
+}
+```
+
+### Нарушение #2: создание Job() без жизненного цикла
+
+```kotlin
+import kotlinx.coroutines.*
+
+class UnmanagedJobViolationRu {
+    // НАРУШЕНИЕ: Scope создан, но нигде не отменяется
+    private val customScope = CoroutineScope(Job() + Dispatchers.Main)
+
+    fun doWork() {
+        customScope.launch {
+            repeat(100) {
+                delay(100)
+                println("Работа $it")
+            }
+        }
+    }
+    // ОТСУТСТВУЕТ: fun cleanup() { customScope.cancel() }
+}
+```
+
+**Почему это нарушение:**
+1. Нет явного конца жизненного цикла.
+2. Нет отмены — возможны "вечные" задачи.
+3. Держит ссылки → утечки памяти.
+4. Нет родителя — нельзя отменить извне.
+
+#### Исправление: явный жизненный цикл
+
+```kotlin
+import kotlinx.coroutines.*
+
+class ManagedJobComponentRu {
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+    fun doWork() {
+        scope.launch {
+            repeat(100) {
+                delay(100)
+                println("Работа $it")
+            }
+        }
+    }
+
+    fun cleanup() {
+        // ЯВНОЕ управление временем жизни
+        scope.cancel()
+        println("Все корутины отменены")
+    }
+}
+
+fun demonstrateExplicitLifecycleRu() = runBlocking {
+    val component = ManagedJobComponentRu()
+
+    component.doWork()
+    delay(500)
+
+    component.cleanup()
+    println("Компонент очищен")
+}
+```
+
+### Нарушение #3: CoroutineScope() как фабрика без жизненного цикла
+
+```kotlin
+import kotlinx.coroutines.*
+
+class FactoryScopeViolationRu {
+    fun processItems(items: List<String>) {
+        // НАРУШЕНИЕ: создаётся scope без связи с жизненным циклом владельца
+        CoroutineScope(Dispatchers.Default).launch {
+            items.forEach { item ->
+                delay(1000)
+                println("Обработка: $item")
+            }
+        }
+        // Ссылка на scope теряется сразу, отменить нельзя
+    }
+}
+```
+
+#### Почему это проблемно
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun demonstrateFactoryProblemRu() = runBlocking {
+    println("=== Проблема фабричного CoroutineScope() ===")
+
+    fun processData() {
+        CoroutineScope(Dispatchers.Default).launch {
+            repeat(5) {
+                delay(500)
+                println("Обработка $it")
+            }
+        }
+
+        println("Функция вернулась")
+        // Ссылка на scope потеряна, отменить нельзя.
+    }
+
+    processData()
+
+    delay(1000)
+    println("Хотим отменить, но не можем — нет ссылки на scope!")
+
+    delay(3000)
+    println("Корутина завершилась сама по себе")
+}
+```
+
+#### Исправление: принимать scope параметром
+
+```kotlin
+import kotlinx.coroutines.*
+
+class FactoryScopeFixRu {
+    // Принимаем управляющий scope извне
+    fun processItems(scope: CoroutineScope, items: List<String>) {
+        scope.launch {
+            items.forEach { item ->
+                delay(1000)
+                println("Обработка: $item")
+            }
+        }
+    }
+}
+
+fun demonstrateFactoryFixRu() = runBlocking {
+    val scope = CoroutineScope(Job() + Dispatchers.Default)
+    val processor = FactoryScopeFixRu()
+
+    processor.processItems(scope, listOf("A", "B", "C"))
+
+    delay(1500)
+    println("Отмена...")
+    scope.cancel()
+    println("Обработка отменена")
+}
+```
+
+### Нарушение #4: утечка корутин через архитектурные границы
+
+```kotlin
+import kotlinx.coroutines.*
+
+// НАРУШЕНИЕ: репозиторий сам запускает корутины в GlobalScope
+class LeakyRepositoryRu {
+    fun loadData(callback: (String) -> Unit) {
+        GlobalScope.launch {
+            val data = fetchFromNetwork()
+            callback(data)
+        }
+    }
+
+    private suspend fun fetchFromNetwork(): String {
+        delay(1000)
+        return "Данные из сети"
+    }
+}
+
+// ViewModel не контролирует работу репозитория
+class LeakyViewModelRu {
+    private val repository = LeakyRepositoryRu()
+
+    fun loadData() {
+        repository.loadData { data ->
+            println("Получены данные: $data")
+        }
+    }
+
+    fun onCleared() {
+        // Нет способа отменить корутины репозитория
+    }
+}
+```
+
+#### Почему это нарушает архитектуру
+
+1. Нарушение границ слоёв: репозиторий управляет конкурентностью вместо уровня вызова.
+2. Нет отмены: `LeakyViewModelRu` не может остановить работу.
+3. Жёсткая связность: поведение репозитория скрыто.
+4. Сложно тестировать и контролировать.
+
+#### Исправление: `suspend`-функции и управление из слоя вызова
+
+```kotlin
+import kotlinx.coroutines.*
+
+// Репозиторий только выполняет работу и возвращает результат
+class StructuredRepositoryRu {
+    suspend fun loadData(): String {
+        return withContext(Dispatchers.IO) {
+            fetchFromNetwork()
+        }
+    }
+
+    private suspend fun fetchFromNetwork(): String {
+        delay(1000)
+        return "Данные из сети"
+    }
+}
+
+// ViewModel управляет scope
+class StructuredViewModelRu {
+    private val repository = StructuredRepositoryRu()
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
+
+    fun loadData() {
+        scope.launch {
+            try {
+                val data = repository.loadData()
+                println("Получены данные: $data")
+            } catch (e: CancellationException) {
+                println("Отменено")
+                throw e
+            }
+        }
+    }
+
+    fun onCleared() {
+        scope.cancel()
+        // Отмена также прерывает работу репозитория
+    }
+}
+```
+
+### Когда нарушение структуры допустимо (редко)
+
+Некоторые случаи допускают осмысленное нарушение строгой структуры, если:
+- время жизни явно определено;
+- последствия изолированы;
+- решение документировано;
+- используется отдельный управляемый `CoroutineScope`.
+
+#### Законный кейс 1: фоновая работа уровня приложения
+
+```kotlin
+import kotlinx.coroutines.*
+
+class BackgroundSyncManagerRu(
+    private val applicationScope: CoroutineScope // Явный scope уровня приложения
+) {
+    fun startPeriodicSync() {
+        // ДОПУСТИМО: работа, живущая всё время жизни процесса
+        applicationScope.launch {
+            while (isActive) {
+                try {
+                    performSync()
+                    delay(3600_000) // 1 час
+                } catch (e: Exception) {
+                    // Логируем и пробуем позже
+                }
+            }
+        }
+    }
+
+    private suspend fun performSync() {
+        // Синхронизация данных с сервером
+    }
+}
+
+class MyApplicationRu : android.app.Application() {
+    private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+
+    override fun onCreate() {
+        super.onCreate()
+        val syncManager = BackgroundSyncManagerRu(applicationScope)
+        syncManager.startPeriodicSync()
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        // В основном полезно в тестах/эмуляторе
+        applicationScope.cancel()
+    }
+}
+```
+
+Почему допустимо:
+- Явный `applicationScope` с понятной семантикой времени жизни.
+- Работа действительно уровня приложения.
+- Есть возможность остановки и документированное поведение.
+
+#### Законный кейс 2: fire-and-forget аналитика
+
+```kotlin
+import kotlinx.coroutines.*
+
+class AnalyticsTrackerRu(
+    private val analyticsScope: CoroutineScope // Выделенный scope для аналитики
+) {
+    fun trackEvent(event: String) {
+        // ДОПУСТИМО: fire-and-forget в изолированном scope
+        analyticsScope.launch {
+            try {
+                sendToAnalyticsServer(event)
+            } catch (e: Exception) {
+                // Ошибки аналитики не должны падать на пользователя
+            }
+        }
+    }
+
+    private suspend fun sendToAnalyticsServer(event: String) {
+        withContext(Dispatchers.IO) {
+            // Отправка события
+        }
+    }
+}
+
+fun setupAnalyticsRu(app: android.app.Application): AnalyticsTrackerRu {
+    val analyticsScope = CoroutineScope(
+        SupervisorJob() +
+            Dispatchers.IO +
+            CoroutineName("Analytics")
+    )
+    return AnalyticsTrackerRu(analyticsScope)
+}
+```
+
+Почему допустимо:
+- Некритично для функциональности.
+- Fire-and-forget намеренный.
+- Выделенный scope с `SupervisorJob`.
+
+#### Законный кейс 3: отчёты о падениях
+
+```kotlin
+import kotlinx.coroutines.*
+
+class CrashReporterRu {
+    // Допустимо: выделенный scope, переживающий отмену
+    private val crashScope = CoroutineScope(
+        NonCancellable +
+            Dispatchers.IO +
+            CoroutineName("CrashReporter")
+    )
+
+    fun reportCrash(exception: Throwable) {
+        crashScope.launch {
+            try {
+                sendCrashReport(exception)
+            } catch (e: Exception) {
+                println("Не удалось отправить отчёт о падении: $e")
+            }
+        }
+    }
+
+    private suspend fun sendCrashReport(exception: Throwable) {
+        // Отправка отчёта о падении
+    }
+}
+
+class MyApplicationCrashRu : android.app.Application() {
+    private val crashReporter = CrashReporterRu()
+
+    override fun onCreate() {
+        super.onCreate()
+
+        Thread.setDefaultUncaughtExceptionHandler { _, exception ->
+            crashReporter.reportCrash(exception)
+            Thread.sleep(1000)
+            kotlin.system.exitProcess(1)
+        }
+    }
+}
+```
+
+Почему допустимо:
+- Критическая логика последнего шанса.
+- Явно используется `NonCancellable`.
+- Короткоживущая, целенаправленная операция.
+
+### Паттерны escape hatch
+
+#### Паттерн 1: явный scope уровня приложения
+
+```kotlin
+import kotlinx.coroutines.*
+
+class ApplicationScopeProviderRu {
+    val applicationScope = CoroutineScope(
+        SupervisorJob() +
+            Dispatchers.Default +
+            CoroutineName("Application")
+    )
+
+    fun shutdown() {
+        applicationScope.cancel()
+    }
+}
+
+class LongRunningServiceRu(
+    private val applicationScope: CoroutineScope
+) {
+    fun startBackgroundWork() {
+        applicationScope.launch {
+            while (isActive) {
+                doWork()
+                delay(60_000)
+            }
+        }
+    }
+
+    private suspend fun doWork() {
+        // Работа, которая должна переживать UI
+    }
+}
+```
+
+#### Паттерн 2: supervisorScope для независимых задач
+
+```kotlin
+import kotlinx.coroutines.*
+
+class IndependentTaskRunnerRu {
+    suspend fun runIndependentTasks() = supervisorScope {
+        val task1 = launch {
+            try {
+                performTask1()
+            } catch (e: Exception) {
+                // Обработка ошибки задачи 1
+            }
+        }
+
+        val task2 = launch {
+            try {
+                performTask2()
+            } catch (e: Exception) {
+                // Обработка ошибки задачи 2
+            }
+        }
+
+        task1.join()
+        task2.join()
+    }
+
+    private suspend fun performTask1() {
+        delay(1000)
+    }
+
+    private suspend fun performTask2() {
+        delay(500)
+        throw Exception("Задача 2 упала")
+    }
+}
+
+fun demonstrateSupervisorScopeRu() = runBlocking {
+    val runner = IndependentTaskRunnerRu()
+    runCatching { runner.runIndependentTasks() }
+    println("Обе задачи завершены независимо")
+}
+```
+
+#### Паттерн 3: отделённая корутина (использовать крайне осторожно)
+
+```kotlin
+import kotlinx.coroutines.*
+
+class DetachedCoroutinePatternRu {
+    fun performDetachedWork(scope: CoroutineScope, work: suspend () -> Unit) {
+        // ESCAPE HATCH: логически отделённая корутина.
+        scope.launch(start = CoroutineStart.UNDISPATCHED) {
+            withContext(Job()) {
+                work()
+            }
+        }
+    }
+}
+
+fun demonstrateDetachedRu() = runBlocking {
+    val scope = CoroutineScope(Job() + Dispatchers.Default)
+    val pattern = DetachedCoroutinePatternRu()
+
+    pattern.performDetachedWork(scope) {
+        repeat(10) {
+            delay(100)
+            println("Отделённая работа $it")
+        }
+    }
+
+    delay(300)
+    scope.cancel()
+    println("Родитель отменён, но отделённая работа продолжается")
+    delay(1000)
+}
+```
+
+### Реальные примеры
+
+#### Пример 1: фоновая синхронизация данных
+
+```kotlin
+import kotlinx.coroutines.*
+
+class DataSyncManagerRu(
+    private val applicationScope: CoroutineScope
+) {
+    private var syncJob: Job? = null
+
+    fun startSync() {
+        syncJob?.cancel()
+        syncJob = applicationScope.launch {
+            while (isActive) {
+                try {
+                    performSync()
+                    delay(3600_000)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    delay(60_000)
+                }
+            }
+        }
+    }
+
+    fun stopSync() {
+        syncJob?.cancel()
+        syncJob = null
+    }
+
+    private suspend fun performSync() {
+        withContext(Dispatchers.IO) {
+            println("Синхронизация данных...")
+            delay(5000)
+            println("Синхронизация завершена")
+        }
+    }
+}
+
+fun setupBackgroundSyncRu() {
+    val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    val syncManager = DataSyncManagerRu(applicationScope)
+    syncManager.startSync()
+
+    Runtime.getRuntime().addShutdownHook(Thread {
+        syncManager.stopSync()
+        applicationScope.cancel()
+    })
+}
+```
+
+#### Пример 2: SDK аналитики
+
+```kotlin
+import kotlinx.coroutines.*
+import java.util.concurrent.ConcurrentLinkedQueue
+
+data class AnalyticsEventRu(val name: String, val properties: Map<String, Any>)
+
+class AnalyticsSDK_Ru private constructor() {
+    private val analyticsScope = CoroutineScope(
+        SupervisorJob() +
+            Dispatchers.IO +
+            CoroutineName("Analytics") +
+            CoroutineExceptionHandler { _, exception ->
+                println("Ошибка аналитики: $exception")
+            }
+    )
+
+    private val eventQueue = ConcurrentLinkedQueue<AnalyticsEventRu>()
+    private var flushJob: Job? = null
+
+    fun initialize() {
+        startPeriodicFlush()
+    }
+
+    fun trackEvent(event: AnalyticsEventRu) {
+        eventQueue.offer(event)
+    }
+
+    private fun startPeriodicFlush() {
+        flushJob = analyticsScope.launch {
+            while (isActive) {
+                delay(10_000)
+                val events = mutableListOf<AnalyticsEventRu>()
+                while (eventQueue.isNotEmpty()) {
+                    eventQueue.poll()?.let { events.add(it) }
+                }
+                if (events.isNotEmpty()) {
+                    try {
+                        flushEvents(events)
+                    } catch (e: Exception) {
+                        events.forEach { eventQueue.offer(it) }
+                    }
+                }
+            }
+        }
+    }
+
+    private suspend fun flushEvents(events: List<AnalyticsEventRu>) {
+        withContext(Dispatchers.IO) {
+            println("Отправка ${events.size} событий аналитики")
+        }
+    }
+
+    fun shutdown() {
+        flushJob?.cancel()
+        analyticsScope.cancel()
+    }
+
+    companion object {
+        val instance = AnalyticsSDK_Ru()
+    }
+}
+```
+
+#### Пример 3: отчёт о падениях
+
+```kotlin
+import kotlinx.coroutines.*
+
+data class CrashReportRu(
+    val exception: String,
+    val stackTrace: String,
+    val timestamp: Long
+)
+
+class CrashReportingSDK_Ru {
+    private val crashScope = CoroutineScope(
+        NonCancellable +
+            Dispatchers.IO +
+            CoroutineName("CrashReporter")
+    )
+
+    fun reportException(exception: Throwable) {
+        crashScope.launch {
+            try {
+                val report = buildCrashReport(exception)
+                sendCrashReport(report)
+            } catch (e: Exception) {
+                println("Не удалось отправить отчёт о падении: $e")
+            }
+        }
+    }
+
+    private fun buildCrashReport(exception: Throwable): CrashReportRu {
+        return CrashReportRu(
+            exception = exception.toString(),
+            stackTrace = exception.stackTraceToString(),
+            timestamp = System.currentTimeMillis()
+        )
+    }
+
+    private suspend fun sendCrashReport(report: CrashReportRu) {
+        withContext(Dispatchers.IO) {
+            delay(1000)
+            println("Отчёт о падении отправлен: ${report.exception}")
+        }
+    }
+}
+```
+
+#### Пример 4: кэш уровня приложения
+
+```kotlin
+import kotlinx.coroutines.*
+import java.util.concurrent.ConcurrentHashMap
+
+class ApplicationCacheRu(
+    private val applicationScope: CoroutineScope
+) {
+    private val cache = ConcurrentHashMap<String, CacheEntry>()
+    private var cleanupJob: Job? = null
+
+    fun initialize() {
+        startPeriodicCleanup()
+    }
+
+    fun put(key: String, value: Any, ttlMs: Long = 3600_000) {
+        cache[key] = CacheEntry(
+            value = value,
+            expiryTime = System.currentTimeMillis() + ttlMs
+        )
+    }
+
+    fun get(key: String): Any? {
+        val entry = cache[key] ?: return null
+        return if (entry.isExpired()) {
+            cache.remove(key)
+            null
+        } else {
+            entry.value
+        }
+    }
+
+    private fun startPeriodicCleanup() {
+        cleanupJob = applicationScope.launch {
+            while (isActive) {
+                delay(60_000)
+                val now = System.currentTimeMillis()
+                cache.entries.removeIf { (_, entry) ->
+                    entry.expiryTime < now
+                }
+                println("Очистка кэша: осталось ${cache.size} записей")
+            }
+        }
+    }
+
+    fun shutdown() {
+        cleanupJob?.cancel()
+        cache.clear()
+    }
+
+    private data class CacheEntry(
+        val value: Any,
+        val expiryTime: Long
+    ) {
+        fun isExpired() = System.currentTimeMillis() > expiryTime
+    }
+}
+```
+
+### Обнаружение нарушений
+
+#### Инструмент 1: правило Detekt (упрощённый пример)
+
+```kotlin
+// Упрощённое правило Detekt для поиска GlobalScope.
+class GlobalScopeUsageRuleRu : Rule() {
+    override val issue = Issue(
+        id = "GlobalScopeUsage",
+        severity = Severity.Warning,
+        description = "GlobalScope, как правило, нарушает структурную конкурентность",
+        debt = Debt.FIVE_MINS
+    )
+
+    override fun visitCallExpression(expression: KtCallExpression) {
+        super.visitCallExpression(expression)
+        val text = expression.text
+        if (text.startsWith("GlobalScope.launch") || text.startsWith("GlobalScope.async")) {
+            report(
+                CodeSmell(
+                    issue = issue,
+                    entity = Entity.from(expression),
+                    message = "Обнаружен GlobalScope. Предпочитайте структурированный scope."
+                )
+            )
+        }
+    }
+}
+```
+
+#### Инструмент 2: правило Android Lint (упрощённый пример)
+
+```kotlin
+// Упрощённое правило Lint для обнаружения CoroutineScope без явной отмены.
+class UncancelledScopeDetectorRu : Detector(), SourceCodeScanner {
+    override fun getApplicableMethodNames(): List<String> = listOf("CoroutineScope")
+
+    override fun visitMethodCall(
+        context: JavaContext,
+        node: UCallExpression,
+        method: PsiMethod
+    ) {
+        val containingClass = node.getContainingClass()
+        val hasCancelMethod = containingClass?.methods?.any { it.name == "cancel" } ?: false
+
+        if (!hasCancelMethod) {
+            context.report(
+                issue = ISSUE,
+                location = context.getLocation(node),
+                message = "CoroutineScope создан без очевидного механизма отмены (упрощённое правило)"
+            )
+        }
+    }
+
+    companion object {
+        val ISSUE: Issue = Issue.create(
+            id = "UncancelledCoroutineScope",
+            briefDescription = "CoroutineScope без отмены",
+            explanation = "Каждый CoroutineScope должен иметь понятную точку отмены.",
+            category = Category.CORRECTNESS,
+            priority = 8,
+            severity = Severity.WARNING,
+            implementation = Implementation(
+                UncancelledScopeDetectorRu::class.java,
+                Scope.JAVA_FILE_SCOPE
+            )
+        )
+    }
+}
+```
+
+#### Инструмент 3: чеклист code review
+
+```kotlin
+/**
+ * Чеклист Code Review по структурной конкурентности
+ *
+ * КРАСНЫЕ ФЛАГИ:
+ * - GlobalScope.launch / GlobalScope.async
+ * - CoroutineScope(Job()) без явной отмены
+ * - Долгоживущие корутины внутри Repository/UseCase
+ * - Корутины, запущенные в конструкторах
+ * - Scope без понятного жизненного цикла
+ *
+ * ЗЕЛЁНЫЕ ФЛАГИ:
+ * - viewModelScope.launch
+ * - lifecycleScope.launch
+ * - suspend-функции в Repository/UseCase вместо скрытых корутин
+ * - Явное создание + cancel для scope
+ * - supervisorScope для независимых задач
+ * - Документированные escape hatches
+ */
+```
+
+### Тестирование структурной конкурентности
+
+#### Тест 1: проверка отмены и распространения исключений
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.*
+import kotlin.test.*
+
+class StructuredConcurrencyTestRu {
+    @Test
+    fun testCancellationPropagates() = runTest {
+        var child1Cancelled = false
+        var child2Cancelled = false
+
+        val scope = CoroutineScope(Job())
+
+        scope.launch {
+            try {
+                delay(10_000)
+            } catch (e: CancellationException) {
+                child1Cancelled = true
+                throw e
+            }
+        }
+
+        scope.launch {
+            try {
+                delay(10_000)
+            } catch (e: CancellationException) {
+                child2Cancelled = true
+                throw e
+            }
+        }
+
+        advanceTimeBy(100)
+        scope.cancel()
+        advanceUntilIdle()
+
+        assertTrue(child1Cancelled, "Child 1 должен быть отменён")
+        assertTrue(child2Cancelled, "Child 2 должен быть отменён")
+    }
+
+    @Test
+    fun testExceptionPropagates() = runTest {
+        var parentCaught = false
+
+        try {
+            coroutineScope {
+                launch {
+                    delay(100)
+                    throw IllegalStateException("Child failed")
+                }
+
+                launch {
+                    delay(10_000)
+                }
+            }
+        } catch (e: IllegalStateException) {
+            parentCaught = true
+        }
+
+        assertTrue(parentCaught, "Исключение должно дойти до родителя")
+    }
+}
+```
+
+#### Тест 2: проверка отсутствия утечек корутин
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlinx.coroutines.test.*
+import kotlin.test.*
+
+class LeakDetectionTestRu {
+    @Test
+    fun testNoLeakedCoroutines() = runTest {
+        val scope = CoroutineScope(Job())
+
+        repeat(10) {
+            scope.launch {
+                delay(1_000)
+            }
+        }
+
+        scope.cancel()
+        advanceUntilIdle()
+
+        val job = scope.coroutineContext[Job]!!
+        assertTrue(job.isCancelled, "Scope должен быть отменён")
+        assertTrue(job.children.toList().isEmpty(), "Не должно остаться дочерних задач")
+    }
+}
+```
+
+### Лучшие практики
+
+1. Отдавайте предпочтение структурной конкурентности:
+   ```kotlin
+   suspend fun loadDataRu() = coroutineScope {
+       val data1 = async { fetchData1() }
+       val data2 = async { fetchData2() }
+       DataResult(data1.await(), data2.await())
+   }
+   ```
+
+2. Используйте scope, привязанные к жизненному циклу (в Android — `viewModelScope`, `lifecycleScope`).
+
+3. Репозитории и UseCase предоставляют `suspend`-функции, а не скрыто запускают долгоживущие корутины.
+
+4. Escape hatches реализуются через явные, чётко задокументированные `CoroutineScope` с управляемым временем жизни.
+
+5. Любое отклонение от структурной конкурентности должно быть обосновано в комментариях и покрыто тестами.
+
+6. Регулярно проверяйте код (линтеры, чеклисты) на наличие `GlobalScope`, неотменяемых `CoroutineScope(Job())` и корутин в неправильных слоях.
+
+---
+
+## Answer (EN)
 
 ### Overview
 
-Structured concurrency is a core principle of Kotlin coroutines that ensures coroutines are organized in a hierarchy with automatic cancellation, exception propagation, and completion guarantees. Violations of structured concurrency can lead to memory leaks, resource leaks, unhandled exceptions, and difficult-to-debug concurrency issues.
+Structured concurrency is a core principle of Kotlin coroutines (see also [[c-kotlin]] and [[c-structured-concurrency]]) that ensures coroutines are organized in a hierarchy with automatic cancellation, exception propagation, and completion guarantees. Violations of structured concurrency can lead to memory leaks, resource leaks, unhandled exceptions, and hard-to-debug concurrency issues.
 
-This comprehensive guide explores what structured concurrency is, common violations, when breaking the rules is acceptable (rare), legitimate escape hatches, and tools for detection and enforcement.
+This guide covers:
+- what structured concurrency is;
+- common violations (GlobalScope, unmanaged `Job`, factory `CoroutineScope`, leaking across layers);
+- when breaking the rules is acceptable (rarely);
+- legitimate escape hatches with explicit lifetimes;
+- how to detect violations and test structured concurrency.
 
 ### What Is Structured Concurrency?
 
-**Structured concurrency** is a paradigm where:
-1. Every coroutine belongs to a scope
-2. Child coroutines are tied to parent coroutines
-3. Parents wait for all children to complete
-4. Cancellation propagates from parent to children
-5. Exceptions propagate from children to parent
-6. No coroutine outlives its scope
+Key ideas:
+1. Every coroutine belongs to a `CoroutineScope`.
+2. Children are tied to parents.
+3. Parents wait for all children.
+4. Cancellation flows from parent to children.
+5. Exceptions propagate from children to parent.
+6. No coroutine outlives its scope.
 
-#### The Core Principle
+#### Core Principle
 
 ```
 Scope
@@ -49,12 +1332,12 @@ Scope
    All complete together
 ```
 
-#### Example: Structured Vs Unstructured
+#### Example: Structured vs Unstructured
 
 ```kotlin
 import kotlinx.coroutines.*
 
-fun demonstrateStructured() = runBlocking {
+fun demonstrateStructuredEn() = runBlocking {
     println("=== Structured Concurrency ===")
 
     // STRUCTURED: Parent waits for children
@@ -107,7 +1390,7 @@ Function exits immediately
 ```kotlin
 import kotlinx.coroutines.*
 
-class AutomaticCancellationDemo {
+class AutomaticCancellationDemoEn {
     suspend fun structuredWork() = coroutineScope {
         launch {
             repeat(10) {
@@ -120,8 +1403,7 @@ class AutomaticCancellationDemo {
             delay(300)
             throw Exception("Something went wrong!")
         }
-
-        // When second coroutine throws, first is automatically cancelled
+        // On exception in the second coroutine, the first is automatically cancelled
     }
 
     fun demonstrateBenefit() = runBlocking {
@@ -140,7 +1422,7 @@ class AutomaticCancellationDemo {
 ```kotlin
 import kotlinx.coroutines.*
 
-class ExceptionPropagationDemo {
+class ExceptionPropagationDemoEn {
     suspend fun structuredWorkWithException() = coroutineScope {
         val deferred1 = async {
             delay(500)
@@ -152,8 +1434,8 @@ class ExceptionPropagationDemo {
             throw IllegalStateException("Deferred 2 failed")
         }
 
-        // Exception propagates to parent scope
-        val result1 = deferred1.await() // Never executes
+        // Exception propagates to the parent scope
+        val result1 = deferred1.await() // Will not run
         val result2 = deferred2.await() // Throws
 
         "Never returned"
@@ -174,7 +1456,7 @@ class ExceptionPropagationDemo {
 ```kotlin
 import kotlinx.coroutines.*
 
-class CompletionGuaranteesDemo {
+class CompletionGuaranteesDemoEn {
     suspend fun structuredWorkWithGuarantees() = coroutineScope {
         launch {
             try {
@@ -189,7 +1471,7 @@ class CompletionGuaranteesDemo {
 
         delay(300)
         println("Parent completing")
-        // Parent waits for child, including finally blocks
+        // Parent waits for the child coroutine, including finally
     }
 
     fun demonstrate() = runBlocking {
@@ -205,7 +1487,7 @@ class CompletionGuaranteesDemo {
 import kotlinx.coroutines.*
 import java.io.Closeable
 
-class ResourceManagementDemo {
+class ResourceManagementDemoEn {
     class Resource : Closeable {
         init {
             println("Resource opened")
@@ -231,7 +1513,6 @@ class ResourceManagementDemo {
             }
         } finally {
             resource.close()
-            // Guaranteed to execute even if exception or cancellation
         }
     }
 
@@ -247,33 +1528,25 @@ class ResourceManagementDemo {
 
 ### Violation #1: GlobalScope (The Worst Offender)
 
-**Why it's bad:**
-- No parent scope
-- Never cancelled automatically
-- No exception propagation
-- No completion guarantees
-- Memory leak risk
-
-#### The Problem
+Why it's bad:
+- No parent scope.
+- Not cancelled automatically.
+- No proper exception propagation.
+- No completion guarantees.
+- High risk of memory and logic leaks.
 
 ```kotlin
 import kotlinx.coroutines.*
 
-class GlobalScopeViolation {
+class GlobalScopeViolationEn {
     fun processData() {
-        // VIOLATION: Unstructured coroutine
+        // VIOLATION: unstructured coroutine
         GlobalScope.launch {
             val data = loadData()
-            processData(data)
+            process(data)
             saveResults()
         }
-
-        // Function returns immediately
-        // Coroutine might:
-        // 1. Never complete
-        // 2. Complete after component destroyed
-        // 3. Fail silently
-        // 4. Leak memory
+        // Function returns immediately; coroutine may outlive its owner
     }
 
     private suspend fun loadData(): String {
@@ -281,7 +1554,7 @@ class GlobalScopeViolation {
         return "data"
     }
 
-    private fun processData(data: String) {
+    private fun process(data: String) {
         println("Processing: $data")
     }
 
@@ -296,24 +1569,23 @@ class GlobalScopeViolation {
 ```kotlin
 import kotlinx.coroutines.*
 
-fun demonstrateGlobalScopeProblems() = runBlocking {
+fun demonstrateGlobalScopeProblemsEn() = runBlocking {
     println("=== GlobalScope Problems ===")
 
     class Component {
         fun start() {
             println("Component started")
 
-            // PROBLEM 1: No parent
+            // PROBLEM: no parent to cancel the coroutine
             GlobalScope.launch {
                 delay(2000)
-                println("This has no parent to cancel it")
+                println("This coroutine has no parent to cancel it")
             }
         }
 
         fun stop() {
             println("Component stopped")
-            // PROBLEM 2: Coroutine not cancelled
-            // Still running in background!
+            // Coroutine keeps running in the background
         }
     }
 
@@ -323,19 +1595,9 @@ fun demonstrateGlobalScopeProblems() = runBlocking {
     delay(500)
     component.stop()
 
-    // Component stopped, but coroutine still running
     delay(2000)
-    println("Coroutine still executed even after component stopped!")
+    println("Coroutine still executed after component stopped!")
 }
-```
-
-**Output:**
-```
-=== GlobalScope Problems ===
-Component started
-Component stopped
-This has no parent to cancel it
-Coroutine still executed even after component stopped!
 ```
 
 #### The Fix
@@ -343,28 +1605,28 @@ Coroutine still executed even after component stopped!
 ```kotlin
 import kotlinx.coroutines.*
 
-class StructuredComponent {
+class StructuredComponentEn {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     fun start() {
         println("Component started")
 
-        // GOOD: Structured coroutine
+        // GOOD: structured coroutine in a managed scope
         scope.launch {
             delay(2000)
-            println("This will be cancelled properly")
+            println("This coroutine will be cancelled correctly")
         }
     }
 
     fun stop() {
         println("Component stopped")
         scope.cancel()
-        // All coroutines cancelled!
+        // All coroutines are cancelled
     }
 }
 
-fun demonstrateStructuredFix() = runBlocking {
-    val component = StructuredComponent()
+fun demonstrateStructuredFixEn() = runBlocking {
+    val component = StructuredComponentEn()
     component.start()
 
     delay(500)
@@ -377,42 +1639,37 @@ fun demonstrateStructuredFix() = runBlocking {
 
 ### Violation #2: Creating Job() Without Lifecycle
 
-**The Problem:**
-
 ```kotlin
 import kotlinx.coroutines.*
 
-class UnmanagedJobViolation {
-    // VIOLATION: Scope created but never cancelled
+class UnmanagedJobViolationEn {
+    // VIOLATION: scope is created but never cancelled
     private val customScope = CoroutineScope(Job() + Dispatchers.Main)
 
     fun doWork() {
         customScope.launch {
-            // Work that might outlive the class
             repeat(100) {
                 delay(100)
                 println("Working $it")
             }
         }
     }
-
     // MISSING: fun cleanup() { customScope.cancel() }
 }
 ```
 
-#### Why It's a Violation
-
-1. **No explicit lifecycle** - when does scope end?
-2. **No cancellation** - coroutines run forever
-3. **Memory leak** - holds references
-4. **No parent** - can't be cancelled from outside
+Why it's a violation:
+1. No explicit end of lifecycle.
+2. No cancellation → potentially "eternal" tasks.
+3. Holds references → memory leaks.
+4. No parent → cannot be cancelled from outside.
 
 #### The Fix: Explicit Lifecycle
 
 ```kotlin
 import kotlinx.coroutines.*
 
-class ManagedJobComponent {
+class ManagedJobComponentEn {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     fun doWork() {
@@ -425,45 +1682,37 @@ class ManagedJobComponent {
     }
 
     fun cleanup() {
-        // EXPLICIT lifecycle management
         scope.cancel()
         println("All coroutines cancelled")
     }
 }
 
-// Usage with explicit lifecycle
-fun demonstrateExplicitLifecycle() = runBlocking {
-    val component = ManagedJobComponent()
+fun demonstrateExplicitLifecycleEn() = runBlocking {
+    val component = ManagedJobComponentEn()
 
     component.doWork()
-
     delay(500)
 
-    // Explicitly clean up
     component.cleanup()
-
     println("Component cleaned up")
 }
 ```
 
 ### Violation #3: CoroutineScope() Factory Without Lifecycle
 
-**The Problem:**
-
 ```kotlin
 import kotlinx.coroutines.*
 
-class FactoryScopeViolation {
+class FactoryScopeViolationEn {
     fun processItems(items: List<String>) {
-        // VIOLATION: Creates scope without tying to lifecycle
+        // VIOLATION: scope created without any lifecycle owner
         CoroutineScope(Dispatchers.Default).launch {
             items.forEach { item ->
                 delay(1000)
                 println("Processing: $item")
             }
         }
-
-        // Scope abandoned immediately!
+        // Scope reference is lost immediately; cannot cancel
     }
 }
 ```
@@ -473,11 +1722,10 @@ class FactoryScopeViolation {
 ```kotlin
 import kotlinx.coroutines.*
 
-fun demonstrateFactoryProblem() = runBlocking {
+fun demonstrateFactoryProblemEn() = runBlocking {
     println("=== CoroutineScope() Factory Problem ===")
 
     fun processData() {
-        // Creates scope
         CoroutineScope(Dispatchers.Default).launch {
             repeat(5) {
                 delay(500)
@@ -486,17 +1734,16 @@ fun demonstrateFactoryProblem() = runBlocking {
         }
 
         println("Function returned")
-        // Scope reference lost!
-        // No way to cancel!
+        // Scope reference is lost; no way to cancel
     }
 
     processData()
 
     delay(1000)
-    println("Want to cancel, but can't - no reference!")
+    println("We'd like to cancel, but can't — no scope reference!")
 
     delay(3000)
-    println("Coroutine completed on its own")
+    println("Coroutine finished on its own")
 }
 ```
 
@@ -505,8 +1752,8 @@ fun demonstrateFactoryProblem() = runBlocking {
 ```kotlin
 import kotlinx.coroutines.*
 
-class FactoryScopeFix {
-    // Accept scope as parameter
+class FactoryScopeFixEn {
+    // Accept managed scope from the caller
     fun processItems(scope: CoroutineScope, items: List<String>) {
         scope.launch {
             items.forEach { item ->
@@ -517,33 +1764,27 @@ class FactoryScopeFix {
     }
 }
 
-// Usage with managed scope
-fun demonstrateFactoryFix() = runBlocking {
+fun demonstrateFactoryFixEn() = runBlocking {
     val scope = CoroutineScope(Job() + Dispatchers.Default)
-    val processor = FactoryScopeFix()
+    val processor = FactoryScopeFixEn()
 
     processor.processItems(scope, listOf("A", "B", "C"))
 
     delay(1500)
-
     println("Cancelling...")
     scope.cancel()
-
     println("Processing cancelled")
 }
 ```
 
 ### Violation #4: Leaking Coroutines Across Architectural Boundaries
 
-**The Problem:**
-
 ```kotlin
 import kotlinx.coroutines.*
 
-// VIOLATION: Repository launches coroutines
-class LeakyRepository {
+// VIOLATION: repository launches its own GlobalScope coroutines
+class LeakyRepositoryEn {
     fun loadData(callback: (String) -> Unit) {
-        // BAD: Repository shouldn't launch coroutines
         GlobalScope.launch {
             val data = fetchFromNetwork()
             callback(data)
@@ -556,43 +1797,30 @@ class LeakyRepository {
     }
 }
 
-// ViewModel has no control over Repository's coroutines
-class LeakyViewModel {
-    private val repository = LeakyRepository()
+// ViewModel cannot control repository work
+class LeakyViewModelEn {
+    private val repository = LeakyRepositoryEn()
 
     fun loadData() {
         repository.loadData { data ->
-            // Can't cancel repository's coroutine!
             println("Got data: $data")
         }
     }
 
     fun onCleared() {
-        // Can't cancel repository's work!
+        // No way to cancel repository coroutines
     }
 }
 ```
 
-#### Why It Violates Architecture
-
-1. **Layer boundary violation** - Repository controls concurrency
-2. **No cancellation** - ViewModel can't cancel
-3. **Tight coupling** - ViewModel depends on Repository's threading
-4. **Testing difficulty** - Hard to test Repository
-
-#### The Fix: Suspend Functions
+#### The Fix: Suspend Functions and Call-Site Control
 
 ```kotlin
 import kotlinx.coroutines.*
 
-// GOOD: Repository exposes suspend functions
-class StructuredRepository {
-    suspend fun loadData(): String {
-        // Repository doesn't launch coroutines
-        // Just does work and returns
-        return withContext(Dispatchers.IO) {
-            fetchFromNetwork()
-        }
+class StructuredRepositoryEn {
+    suspend fun loadData(): String = withContext(Dispatchers.IO) {
+        fetchFromNetwork()
     }
 
     private suspend fun fetchFromNetwork(): String {
@@ -601,9 +1829,8 @@ class StructuredRepository {
     }
 }
 
-// ViewModel controls concurrency
-class StructuredViewModel {
-    private val repository = StructuredRepository()
+class StructuredViewModelEn {
+    private val repository = StructuredRepositoryEn()
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
 
     fun loadData() {
@@ -620,78 +1847,83 @@ class StructuredViewModel {
 
     fun onCleared() {
         scope.cancel()
-        // Now Repository's work is cancelled too!
+        // Cancelling the scope also cancels work in the repository
     }
 }
 ```
 
 ### When Breaking Structure Is Acceptable (Rare)
 
-#### Legitimate Use Case 1: Application-Level Background Work
+Some cases allow carefully controlled deviations from strict structure when:
+- lifetime is explicit and well-documented;
+- side effects are isolated;
+- a dedicated, managed `CoroutineScope` is used.
+
+#### Legitimate Case 1: Application-Level Background Work
 
 ```kotlin
 import kotlinx.coroutines.*
 
-class BackgroundSyncManager(
-    private val applicationScope: CoroutineScope // Explicit application-lifetime scope
+class BackgroundSyncManagerEn(
+    private val applicationScope: CoroutineScope // Explicit application-level scope
 ) {
     fun startPeriodicSync() {
-        // ACCEPTABLE: Application-level work
+        // ACCEPTABLE: work that lives as long as the process
         applicationScope.launch {
             while (isActive) {
                 try {
                     performSync()
                     delay(3600_000) // 1 hour
                 } catch (e: Exception) {
-                    // Log error
+                    // Log and retry later
                 }
             }
         }
     }
 
     private suspend fun performSync() {
-        // Sync data with server
+        // Data sync with server
     }
 }
 
-// Application class
-class MyApplication : Application() {
+class MyApplicationEn : android.app.Application() {
     private val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     override fun onCreate() {
         super.onCreate()
-
-        val syncManager = BackgroundSyncManager(applicationScope)
+        val syncManager = BackgroundSyncManagerEn(applicationScope)
         syncManager.startPeriodicSync()
+    }
+
+    override fun onTerminate() {
+        super.onTerminate()
+        applicationScope.cancel()
     }
 }
 ```
 
-**Why this is acceptable:**
-- **Explicit lifetime** - tied to Application lifecycle
-- **Intentional** - truly needs to outlive screens
-- **Managed** - applicationScope can be cancelled
-- **Documented** - clear that it's application-level
+Why acceptable:
+- Explicit `applicationScope` with clear lifetime.
+- Truly application-level work.
+- Ability to shut down.
 
-#### Legitimate Use Case 2: Fire-and-Forget Analytics
+#### Legitimate Case 2: Fire-and-Forget Analytics
 
 ```kotlin
 import kotlinx.coroutines.*
 
-class AnalyticsTracker(
+class AnalyticsTrackerEn(
     private val analyticsScope: CoroutineScope // Dedicated analytics scope
 ) {
     fun trackEvent(event: String) {
-        // ACCEPTABLE: Fire-and-forget analytics
+        // ACCEPTABLE: fire-and-forget in isolated scope
         analyticsScope.launch {
             try {
                 sendToAnalyticsServer(event)
             } catch (e: Exception) {
-                // Silently fail - analytics shouldn't crash app
+                // Analytics failures should not affect user
             }
         }
-
-        // Don't wait for completion
     }
 
     private suspend fun sendToAnalyticsServer(event: String) {
@@ -701,36 +1933,32 @@ class AnalyticsTracker(
     }
 }
 
-// Setup with explicit scope
-fun setupAnalytics(app: Application): AnalyticsTracker {
-    // Dedicated scope with supervisor (failures don't propagate)
+fun setupAnalyticsEn(app: android.app.Application): AnalyticsTrackerEn {
     val analyticsScope = CoroutineScope(
         SupervisorJob() +
-        Dispatchers.IO +
-        CoroutineName("Analytics")
+            Dispatchers.IO +
+            CoroutineName("Analytics")
     )
-
-    return AnalyticsTracker(analyticsScope)
+    return AnalyticsTrackerEn(analyticsScope)
 }
 ```
 
-**Why this is acceptable:**
-- **Non-critical** - analytics failures shouldn't affect app
-- **Fire-and-forget** - intentionally don't wait
-- **Isolated** - dedicated scope with SupervisorJob
-- **Explicit** - clear separation from app logic
+Why acceptable:
+- Non-critical.
+- Intentional fire-and-forget.
+- Dedicated scope with `SupervisorJob`.
 
-#### Legitimate Use Case 3: Crash Reporting
+#### Legitimate Case 3: Crash Reporting
 
 ```kotlin
 import kotlinx.coroutines.*
 
-class CrashReporter {
-    // ACCEPTABLE: Uses dedicated scope that survives cancellations
+class CrashReporterEn {
+    // Dedicated scope that can outlive normal cancellation
     private val crashScope = CoroutineScope(
-        NonCancellable + // Survives cancellations
-        Dispatchers.IO +
-        CoroutineName("CrashReporter")
+        NonCancellable +
+            Dispatchers.IO +
+            CoroutineName("CrashReporter")
     )
 
     fun reportCrash(exception: Throwable) {
@@ -738,55 +1966,48 @@ class CrashReporter {
             try {
                 sendCrashReport(exception)
             } catch (e: Exception) {
-                // Last resort logging
-                println("Failed to report crash: $e")
+                println("Failed to send crash report: $e")
             }
         }
     }
 
     private suspend fun sendCrashReport(exception: Throwable) {
-        // Send to crash reporting service
+        // Send crash report
     }
 }
 
-// Usage in exception handler
-class MyApplication : Application() {
-    private val crashReporter = CrashReporter()
+class MyApplicationCrashEn : android.app.Application() {
+    private val crashReporter = CrashReporterEn()
 
     override fun onCreate() {
         super.onCreate()
 
         Thread.setDefaultUncaughtExceptionHandler { _, exception ->
             crashReporter.reportCrash(exception)
-
-            // Give time to report
             Thread.sleep(1000)
-
-            // Then crash
-            System.exit(1)
+            kotlin.system.exitProcess(1)
         }
     }
 }
 ```
 
-**Why this is acceptable:**
-- **Critical path** - must complete even if app crashing
-- **NonCancellable** - explicitly survives cancellations
-- **Last resort** - only for crash reporting
-- **Short-lived** - completes quickly
+Why acceptable:
+- Last-chance critical reporting.
+- Explicit `NonCancellable` usage.
+- Short, well-defined work.
 
 ### Escape Hatch Patterns
 
-#### Pattern 1: Explicit Application Scope
+#### Pattern 1: Explicit Application-Level Scope
 
 ```kotlin
 import kotlinx.coroutines.*
 
-class ApplicationScopeProvider {
+class ApplicationScopeProviderEn {
     val applicationScope = CoroutineScope(
         SupervisorJob() +
-        Dispatchers.Default +
-        CoroutineName("Application")
+            Dispatchers.Default +
+            CoroutineName("Application")
     )
 
     fun shutdown() {
@@ -794,13 +2015,11 @@ class ApplicationScopeProvider {
     }
 }
 
-// Usage
-class LongRunningService(
+class LongRunningServiceEn(
     private val applicationScope: CoroutineScope
 ) {
     fun startBackgroundWork() {
         applicationScope.launch {
-            // Explicitly tied to application lifetime
             while (isActive) {
                 doWork()
                 delay(60_000)
@@ -809,19 +2028,18 @@ class LongRunningService(
     }
 
     private suspend fun doWork() {
-        // Work that needs to outlive UI
+        // Work that should outlive UI
     }
 }
 ```
 
-#### Pattern 2: Supervisor Scope for Independent Tasks
+#### Pattern 2: supervisorScope for Independent Tasks
 
 ```kotlin
 import kotlinx.coroutines.*
 
-class IndependentTaskRunner {
+class IndependentTaskRunnerEn {
     suspend fun runIndependentTasks() = supervisorScope {
-        // Each task independent - one failure doesn't cancel others
         val task1 = launch {
             try {
                 performTask1()
@@ -838,7 +2056,6 @@ class IndependentTaskRunner {
             }
         }
 
-        // Wait for all tasks
         task1.join()
         task2.join()
     }
@@ -853,27 +2070,22 @@ class IndependentTaskRunner {
     }
 }
 
-fun demonstrateSupervisorScope() = runBlocking {
-    val runner = IndependentTaskRunner()
-
-    runCatching {
-        runner.runIndependentTasks()
-    }
-
+fun demonstrateSupervisorScopeEn() = runBlocking {
+    val runner = IndependentTaskRunnerEn()
+    runCatching { runner.runIndependentTasks() }
     println("Both tasks completed independently")
 }
 ```
 
-#### Pattern 3: Detached Coroutine (Use Sparingly)
+#### Pattern 3: Detached Coroutine (Use with Extreme Care)
 
 ```kotlin
 import kotlinx.coroutines.*
 
-class DetachedCoroutinePattern {
+class DetachedCoroutinePatternEn {
     fun performDetachedWork(scope: CoroutineScope, work: suspend () -> Unit) {
-        // ESCAPE HATCH: Start detached coroutine
+        // ESCAPE HATCH: logically detached coroutine
         scope.launch(start = CoroutineStart.UNDISPATCHED) {
-            // Create new Job, breaking parent-child relationship
             withContext(Job()) {
                 work()
             }
@@ -881,11 +2093,9 @@ class DetachedCoroutinePattern {
     }
 }
 
-// Example: Long-running logging that shouldn't block parent
-fun demonstrateDetached() = runBlocking {
+fun demonstrateDetachedEn() = runBlocking {
     val scope = CoroutineScope(Job() + Dispatchers.Default)
-
-    val pattern = DetachedCoroutinePattern()
+    val pattern = DetachedCoroutinePatternEn()
 
     pattern.performDetachedWork(scope) {
         repeat(10) {
@@ -896,9 +2106,7 @@ fun demonstrateDetached() = runBlocking {
 
     delay(300)
     scope.cancel()
-
     println("Parent cancelled, but detached work continues")
-
     delay(1000)
 }
 ```
@@ -910,26 +2118,22 @@ fun demonstrateDetached() = runBlocking {
 ```kotlin
 import kotlinx.coroutines.*
 
-class DataSyncManager(
+class DataSyncManagerEn(
     private val applicationScope: CoroutineScope
 ) {
     private var syncJob: Job? = null
 
     fun startSync() {
-        // Cancel previous sync if running
         syncJob?.cancel()
-
-        // Start new sync in application scope
         syncJob = applicationScope.launch {
             while (isActive) {
                 try {
                     performSync()
-                    delay(3600_000) // 1 hour
+                    delay(3600_000)
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
-                    // Log and retry
-                    delay(60_000) // Retry in 1 minute
+                    delay(60_000)
                 }
             }
         }
@@ -942,24 +2146,21 @@ class DataSyncManager(
 
     private suspend fun performSync() {
         withContext(Dispatchers.IO) {
-            // Sync data with server
             println("Syncing data...")
             delay(5000)
-            println("Sync complete")
+            println("Sync completed")
         }
     }
 }
 
-// Application setup
-fun setupBackgroundSync(app: Application) {
+fun setupBackgroundSyncEn() {
     val applicationScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-
-    val syncManager = DataSyncManager(applicationScope)
+    val syncManager = DataSyncManagerEn(applicationScope)
     syncManager.startSync()
 
-    // Stop sync when app terminated
     Runtime.getRuntime().addShutdownHook(Thread {
         syncManager.stopSync()
+        applicationScope.cancel()
     })
 }
 ```
@@ -970,45 +2171,41 @@ fun setupBackgroundSync(app: Application) {
 import kotlinx.coroutines.*
 import java.util.concurrent.ConcurrentLinkedQueue
 
-class AnalyticsSDK private constructor() {
+data class AnalyticsEventEn(val name: String, val properties: Map<String, Any>)
+
+class AnalyticsSDK_En private constructor() {
     private val analyticsScope = CoroutineScope(
         SupervisorJob() +
-        Dispatchers.IO +
-        CoroutineName("Analytics") +
-        CoroutineExceptionHandler { _, exception ->
-            println("Analytics error: $exception")
-        }
+            Dispatchers.IO +
+            CoroutineName("Analytics") +
+            CoroutineExceptionHandler { _, exception ->
+                println("Analytics error: $exception")
+            }
     )
 
-    private val eventQueue = ConcurrentLinkedQueue<AnalyticsEvent>()
+    private val eventQueue = ConcurrentLinkedQueue<AnalyticsEventEn>()
     private var flushJob: Job? = null
 
     fun initialize() {
         startPeriodicFlush()
     }
 
-    fun trackEvent(event: AnalyticsEvent) {
+    fun trackEvent(event: AnalyticsEventEn) {
         eventQueue.offer(event)
-
-        // Fire-and-forget - intentionally unstructured
-        // Analytics should never block app
     }
 
     private fun startPeriodicFlush() {
         flushJob = analyticsScope.launch {
             while (isActive) {
-                delay(10_000) // Flush every 10 seconds
-
-                val events = mutableListOf<AnalyticsEvent>()
+                delay(10_000)
+                val events = mutableListOf<AnalyticsEventEn>()
                 while (eventQueue.isNotEmpty()) {
                     eventQueue.poll()?.let { events.add(it) }
                 }
-
                 if (events.isNotEmpty()) {
                     try {
                         flushEvents(events)
                     } catch (e: Exception) {
-                        // Re-queue events
                         events.forEach { eventQueue.offer(it) }
                     }
                 }
@@ -1016,10 +2213,9 @@ class AnalyticsSDK private constructor() {
         }
     }
 
-    private suspend fun flushEvents(events: List<AnalyticsEvent>) {
+    private suspend fun flushEvents(events: List<AnalyticsEventEn>) {
         withContext(Dispatchers.IO) {
-            // Send to analytics server
-            println("Flushing ${events.size} events")
+            println("Sending ${events.size} analytics events")
         }
     }
 
@@ -1029,69 +2225,64 @@ class AnalyticsSDK private constructor() {
     }
 
     companion object {
-        val instance = AnalyticsSDK()
+        val instance = AnalyticsSDK_En()
     }
 }
-
-data class AnalyticsEvent(val name: String, val properties: Map<String, Any>)
 ```
 
-#### Example 3: Crash Reporter
+#### Example 3: Crash Reporting SDK
 
 ```kotlin
 import kotlinx.coroutines.*
 
-class CrashReportingSDK {
+data class CrashReportEn(
+    val exception: String,
+    val stackTrace: String,
+    val timestamp: Long
+)
+
+class CrashReportingSDK_En {
     private val crashScope = CoroutineScope(
-        NonCancellable + // Must survive cancellations
-        Dispatchers.IO +
-        CoroutineName("CrashReporter")
+        NonCancellable +
+            Dispatchers.IO +
+            CoroutineName("CrashReporter")
     )
 
     fun reportException(exception: Throwable) {
-        // Intentionally unstructured - must complete
         crashScope.launch {
             try {
                 val report = buildCrashReport(exception)
                 sendCrashReport(report)
             } catch (e: Exception) {
-                // Log locally as fallback
                 println("Failed to send crash report: $e")
             }
         }
     }
 
-    private fun buildCrashReport(exception: Throwable): CrashReport {
-        return CrashReport(
+    private fun buildCrashReport(exception: Throwable): CrashReportEn {
+        return CrashReportEn(
             exception = exception.toString(),
             stackTrace = exception.stackTraceToString(),
             timestamp = System.currentTimeMillis()
         )
     }
 
-    private suspend fun sendCrashReport(report: CrashReport) {
+    private suspend fun sendCrashReport(report: CrashReportEn) {
         withContext(Dispatchers.IO) {
-            // Send to crash reporting service
-            delay(1000) // Simulate network call
+            delay(1000)
             println("Crash report sent: ${report.exception}")
         }
     }
 }
-
-data class CrashReport(
-    val exception: String,
-    val stackTrace: String,
-    val timestamp: Long
-)
 ```
 
-#### Example 4: App-Level Cache
+#### Example 4: Application-Level Cache
 
 ```kotlin
 import kotlinx.coroutines.*
 import java.util.concurrent.ConcurrentHashMap
 
-class ApplicationCache(
+class ApplicationCacheEn(
     private val applicationScope: CoroutineScope
 ) {
     private val cache = ConcurrentHashMap<String, CacheEntry>()
@@ -1110,7 +2301,6 @@ class ApplicationCache(
 
     fun get(key: String): Any? {
         val entry = cache[key] ?: return null
-
         return if (entry.isExpired()) {
             cache.remove(key)
             null
@@ -1120,17 +2310,14 @@ class ApplicationCache(
     }
 
     private fun startPeriodicCleanup() {
-        // Runs for application lifetime
         cleanupJob = applicationScope.launch {
             while (isActive) {
-                delay(60_000) // Cleanup every minute
-
+                delay(60_000)
                 val now = System.currentTimeMillis()
                 cache.entries.removeIf { (_, entry) ->
                     entry.expiryTime < now
                 }
-
-                println("Cache cleanup: ${cache.size} entries remain")
+                println("Cache cleanup: ${cache.size} entries left")
             }
         }
     }
@@ -1151,70 +2338,68 @@ class ApplicationCache(
 
 ### Detecting Violations
 
-#### Tool 1: Detekt Custom Rules
+#### Tool 1: Detekt Rule (Simplified)
 
 ```kotlin
-// Custom Detekt rule to detect GlobalScope
-class GlobalScopeUsageRule : Rule() {
+// Simplified Detekt rule to detect GlobalScope usage.
+class GlobalScopeUsageRuleEn : Rule() {
     override val issue = Issue(
         id = "GlobalScopeUsage",
         severity = Severity.Warning,
-        description = "GlobalScope violates structured concurrency",
+        description = "GlobalScope usually violates structured concurrency",
         debt = Debt.FIVE_MINS
     )
 
     override fun visitCallExpression(expression: KtCallExpression) {
         super.visitCallExpression(expression)
-
-        val callee = expression.calleeExpression?.text
-        if (callee == "GlobalScope.launch" || callee == "GlobalScope.async") {
-            report(CodeSmell(
-                issue = issue,
-                entity = Entity.from(expression),
-                message = "GlobalScope usage detected. Use a structured scope instead."
-            ))
+        val text = expression.text
+        if (text.startsWith("GlobalScope.launch") || text.startsWith("GlobalScope.async")) {
+            report(
+                CodeSmell(
+                    issue = issue,
+                    entity = Entity.from(expression),
+                    message = "Detected GlobalScope. Prefer a structured scope."
+                )
+            )
         }
     }
 }
 ```
 
-#### Tool 2: Android Lint Rule
+#### Tool 2: Android Lint Rule (Simplified)
 
 ```kotlin
-// Custom Android Lint rule
-class UncancelledScopeDetector : Detector(), SourceCodeScanner {
-    override fun getApplicableMethodNames(): List<String> {
-        return listOf("CoroutineScope")
-    }
+// Simplified Lint rule to detect CoroutineScope without an obvious cancel.
+class UncancelledScopeDetectorEn : Detector(), SourceCodeScanner {
+    override fun getApplicableMethodNames(): List<String> = listOf("CoroutineScope")
 
     override fun visitMethodCall(
         context: JavaContext,
         node: UCallExpression,
         method: PsiMethod
     ) {
-        // Check if CoroutineScope is created without lifecycle management
         val containingClass = node.getContainingClass()
-        val hasCancelMethod = containingClass?.methods?.any { it.name == "cancel" }
+        val hasCancelMethod = containingClass?.methods?.any { it.name == "cancel" } ?: false
 
-        if (hasCancelMethod != true) {
+        if (!hasCancelMethod) {
             context.report(
                 issue = ISSUE,
                 location = context.getLocation(node),
-                message = "CoroutineScope created without cancellation mechanism"
+                message = "CoroutineScope is created without an obvious cancellation mechanism (simplified rule)."
             )
         }
     }
 
     companion object {
-        val ISSUE = Issue.create(
+        val ISSUE: Issue = Issue.create(
             id = "UncancelledCoroutineScope",
-            briefDescription = "CoroutineScope without cancellation",
-            explanation = "Every CoroutineScope should have a clear cancellation point",
+            briefDescription = "CoroutineScope without cancel",
+            explanation = "Every CoroutineScope should have a clear cancellation point.",
             category = Category.CORRECTNESS,
             priority = 8,
             severity = Severity.WARNING,
             implementation = Implementation(
-                UncancelledScopeDetector::class.java,
+                UncancelledScopeDetectorEn::class.java,
                 Scope.JAVA_FILE_SCOPE
             )
         )
@@ -1226,36 +2411,35 @@ class UncancelledScopeDetector : Detector(), SourceCodeScanner {
 
 ```kotlin
 /**
- * Code Review Checklist for Structured Concurrency
+ * Structured Concurrency Code Review Checklist
  *
- *  RED FLAGS:
- * - GlobalScope.launch
- * - GlobalScope.async
- * - CoroutineScope(Job()) without cancellation
- * - Repository/UseCase launching coroutines
- * - Coroutines launched in constructors
- * - No clear lifecycle for scope
+ * RED FLAGS:
+ * - GlobalScope.launch / GlobalScope.async
+ * - CoroutineScope(Job()) without explicit cancel
+ * - Long-lived coroutines inside Repository/UseCase
+ * - Coroutines started in constructors
+ * - Scopes without clear lifecycle owner
  *
- *  GREEN FLAGS:
+ * GREEN FLAGS:
  * - viewModelScope.launch
  * - lifecycleScope.launch
- * - Suspend functions in Repository/UseCase
- * - Explicit scope lifecycle (create + cancel)
+ * - Repositories/UseCases expose suspend functions instead of hidden long-running coroutines
+ * - Explicit scope + cancel
  * - supervisorScope for independent tasks
- * - Well-documented escape hatches
+ * - Documented escape hatches
  */
 ```
 
 ### Testing Structured Concurrency
 
-#### Test 1: Verify Cancellation Propagation
+#### Test 1: Cancellation and Exception Propagation
 
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 import kotlin.test.*
 
-class StructuredConcurrencyTest {
+class StructuredConcurrencyTestEn {
     @Test
     fun testCancellationPropagates() = runTest {
         var child1Cancelled = false
@@ -1265,7 +2449,7 @@ class StructuredConcurrencyTest {
 
         scope.launch {
             try {
-                delay(10000)
+                delay(10_000)
             } catch (e: CancellationException) {
                 child1Cancelled = true
                 throw e
@@ -1274,7 +2458,7 @@ class StructuredConcurrencyTest {
 
         scope.launch {
             try {
-                delay(10000)
+                delay(10_000)
             } catch (e: CancellationException) {
                 child2Cancelled = true
                 throw e
@@ -1282,13 +2466,9 @@ class StructuredConcurrencyTest {
         }
 
         advanceTimeBy(100)
-
-        // Cancel parent
         scope.cancel()
-
         advanceUntilIdle()
 
-        // Verify both children cancelled
         assertTrue(child1Cancelled, "Child 1 should be cancelled")
         assertTrue(child2Cancelled, "Child 2 should be cancelled")
     }
@@ -1305,8 +2485,7 @@ class StructuredConcurrencyTest {
                 }
 
                 launch {
-                    delay(10000)
-                    // Should be cancelled due to sibling failure
+                    delay(10_000)
                 }
             }
         } catch (e: IllegalStateException) {
@@ -1315,883 +2494,90 @@ class StructuredConcurrencyTest {
 
         assertTrue(parentCaught, "Exception should propagate to parent")
     }
-
-    @Test
-    fun testParentWaitsForChildren() = runTest {
-        var child1Done = false
-        var child2Done = false
-        var parentDone = false
-
-        coroutineScope {
-            launch {
-                delay(500)
-                child1Done = true
-            }
-
-            launch {
-                delay(1000)
-                child2Done = true
-            }
-
-            parentDone = true
-        }
-
-        // Parent waits for all children
-        assertTrue(child1Done)
-        assertTrue(child2Done)
-        assertTrue(parentDone)
-    }
 }
 ```
 
-#### Test 2: Verify No Leaked Coroutines
+#### Test 2: No Leaked Coroutines
 
 ```kotlin
 import kotlinx.coroutines.*
 import kotlinx.coroutines.test.*
 import kotlin.test.*
 
-class LeakDetectionTest {
+class LeakDetectionTestEn {
     @Test
     fun testNoLeakedCoroutines() = runTest {
         val scope = CoroutineScope(Job())
 
-        // Start work
         repeat(10) {
             scope.launch {
-                delay(1000)
+                delay(1_000)
             }
         }
 
-        // Cancel scope
         scope.cancel()
-
         advanceUntilIdle()
 
-        // Verify all cancelled
         val job = scope.coroutineContext[Job]!!
         assertTrue(job.isCancelled, "Scope should be cancelled")
-        assertTrue(job.children.toList().isEmpty(), "No children should remain")
-    }
-
-    @Test
-    fun testScopeCompletesAfterChildren() = runTest {
-        var scopeCompleted = false
-
-        val scope = CoroutineScope(Job())
-
-        repeat(5) {
-            scope.launch {
-                delay(1000)
-            }
-        }
-
-        scope.coroutineContext[Job]!!.invokeOnCompletion {
-            scopeCompleted = true
-        }
-
-        advanceTimeBy(1000)
-
-        assertTrue(scopeCompleted, "Scope should complete after all children")
+        assertTrue(job.children.toList().isEmpty(), "No child jobs should remain")
     }
 }
 ```
 
 ### Best Practices
 
-1. **Always prefer structured concurrency**
+1. Prefer structured concurrency:
    ```kotlin
-   // GOOD
-   suspend fun loadData() = coroutineScope {
+   suspend fun loadDataEn() = coroutineScope {
        val data1 = async { fetchData1() }
        val data2 = async { fetchData2() }
        DataResult(data1.await(), data2.await())
    }
    ```
 
-2. **Use lifecycle-aware scopes in Android**
-   ```kotlin
-   // GOOD
-   class MyViewModel : ViewModel() {
-       fun loadData() {
-           viewModelScope.launch {
-               // Automatically cancelled in onCleared()
-           }
-       }
-   }
-   ```
+2. Use lifecycle-bound scopes (`viewModelScope`, `lifecycleScope`) where appropriate.
 
-3. **Repositories expose suspend functions, not coroutines**
-   ```kotlin
-   // GOOD
-   class Repository {
-       suspend fun fetchData(): Data {
-           return withContext(Dispatchers.IO) {
-               // Work
-           }
-       }
-   }
-   ```
+3. Repositories and use cases should expose `suspend` functions instead of spawning hidden, long-lived coroutines.
 
-4. **For escape hatches, use explicit scopes with clear lifecycle**
-   ```kotlin
-   // ACCEPTABLE (with justification)
-   class BackgroundService(
-       private val applicationScope: CoroutineScope
-   ) {
-       fun startWork() {
-           applicationScope.launch {
-               // Explicitly tied to application lifetime
-           }
-       }
-   }
-   ```
+4. Implement escape hatches via explicit, well-documented `CoroutineScope` instances with controlled lifetimes.
 
-5. **Document violations with clear reasoning**
-   ```kotlin
-   /**
-    * Uses application-level scope because:
-    * - Work must outlive UI components
-    * - Data sync is application-level concern
-    * - Scope is explicitly managed in Application.onTerminate()
-    */
-   ```
+5. Any deviation from structured concurrency must be justified in comments and covered by tests.
 
-6. **Test cancellation behavior**
-   ```kotlin
-   @Test
-   fun testCancellation() = runTest {
-       val scope = CoroutineScope(Job())
-       // Start work
-       scope.cancel()
-       // Verify cancelled
-   }
-   ```
+6. Continuously scan code (linters, checklists) for `GlobalScope`, unmanaged `CoroutineScope(Job())`, and coroutines in the wrong architectural layer.
 
----
+## Дополнительные вопросы (RU)
 
-## Русский
+- Как вы рефакторите существующий код с активным использованием `GlobalScope` к структурированной модели?
+- Как проектировать API библиотек так, чтобы вызывать код с контролируемым жизненным циклом корутин?
+- Как вы будете обеспечивать соблюдение этих правил в большой команде (инструменты, code review, архитектурные гайдлайны)?
 
-### Обзор
+## Ссылки (RU)
 
-Структурная конкурентность — это основной принцип Kotlin корутин, который обеспечивает организацию корутин в иерархию с автоматической отменой, распространением исключений и гарантиями завершения. Нарушения структурной конкурентности могут привести к утечкам памяти, утечкам ресурсов, необработанным исключениям и трудно отлаживаемым проблемам конкурентности.
+- [[c-kotlin]]
+- [[c-structured-concurrency]]
+- Официальная документация по Kotlin Coroutines: раздел "Structured concurrency"
 
-Это подробное руководство исследует что такое структурная конкурентность, распространённые нарушения, когда нарушение правил приемлемо (редко), легитимные пути обхода, а также инструменты для обнаружения и обеспечения соблюдения.
+## Связанные вопросы (RU)
 
-### Что Такое Структурная Конкурентность?
-
-**Структурная конкурентность** — это парадигма, где:
-1. Каждая корутина принадлежит скоупу
-2. Дочерние корутины связаны с родительскими корутинами
-3. Родители ждут завершения всех детей
-4. Отмена распространяется от родителя к детям
-5. Исключения распространяются от детей к родителю
-6. Ни одна корутина не переживает свой скоуп
-
-#### Основной Принцип
-
-```
-Scope
-   Родительская корутина
-      Дочерняя корутина 1
-         Внучатая 1.1
-         Внучатая 1.2
-      Дочерняя корутина 2
-          Внучатая 2.1
-   Все завершаются вместе
-```
-
-#### Пример: Структурированная Vs Неструктурированная
-
-```kotlin
-import kotlinx.coroutines.*
-
-fun demonstrateStructured() = runBlocking {
-    println("=== Структурная конкурентность ===")
-
-    // СТРУКТУРИРОВАННАЯ: Родитель ждёт детей
-    coroutineScope {
-        launch {
-            delay(1000)
-            println("Дочерняя 1 завершена")
-        }
-
-        launch {
-            delay(500)
-            println("Дочерняя 2 завершена")
-        }
-
-        println("Тело родителя завершено, ждём детей...")
-    }
-
-    println("Вся работа завершена\n")
-
-    // НЕСТРУКТУРИРОВАННАЯ: Fire and forget
-    println("=== Неструктурированная (нарушение) ===")
-
-    GlobalScope.launch {
-        delay(1000)
-        println("Это может никогда не выполниться!")
-    }
-
-    println("Функция завершается немедленно")
-    // Корутина GlobalScope может быть заброшена!
-}
-```
-
-**Вывод:**
-```
-=== Структурная конкурентность ===
-Тело родителя завершено, ждём детей...
-Дочерняя 2 завершена
-Дочерняя 1 завершена
-Вся работа завершена
-
-=== Неструктурированная (нарушение) ===
-Функция завершается немедленно
-(Корутина GlobalScope может никогда не завершиться)
-```
-
-### Преимущества Структурной Конкурентности
-
-#### 1. Автоматическая Отмена
-
-Когда родительская корутина отменяется или выбрасывает исключение, все дочерние корутины автоматически отменяются.
-
-#### 2. Распространение Исключений
-
-Исключения в дочерних корутинах автоматически распространяются к родительскому скоупу для обработки.
-
-#### 3. Гарантии Завершения
-
-Родительский скоуп не завершится до тех пор, пока все дочерние корутины не завершатся, включая блоки finally.
-
-#### 4. Управление Ресурсами
-
-Ресурсы гарантированно освобождаются даже при отмене или исключениях благодаря структурированному управлению жизненным циклом.
-
-### Нарушение #1: GlobalScope (худшее нарушение)
-
-**Почему это плохо:**
-- Нет родительского скоупа
-- Никогда не отменяется автоматически
-- Нет распространения исключений
-- Нет гарантий завершения
-- Риск утечки памяти
-
-#### Проблема
-
-```kotlin
-import kotlinx.coroutines.*
-
-class GlobalScopeViolation {
-    fun processData() {
-        // НАРУШЕНИЕ: Неструктурированная корутина
-        GlobalScope.launch {
-            val data = loadData()
-            processData(data)
-            saveResults()
-        }
-
-        // Функция возвращается немедленно
-        // Корутина может:
-        // 1. Никогда не завершиться
-        // 2. Завершиться после уничтожения компонента
-        // 3. Упасть молча
-        // 4. Вызвать утечку памяти
-    }
-
-    private suspend fun loadData(): String {
-        delay(1000)
-        return "data"
-    }
-
-    private fun processData(data: String) {
-        println("Обработка: $data")
-    }
-
-    private fun saveResults() {
-        println("Сохранение результатов")
-    }
-}
-```
-
-#### Исправление
-
-```kotlin
-import kotlinx.coroutines.*
-
-class StructuredComponent {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
-
-    fun start() {
-        println("Компонент запущен")
-
-        // ХОРОШО: Структурированная корутина
-        scope.launch {
-            delay(2000)
-            println("Это будет правильно отменено")
-        }
-    }
-
-    fun stop() {
-        println("Компонент остановлен")
-        scope.cancel()
-        // Все корутины отменены!
-    }
-}
-```
-
-### Нарушение #2: Создание Job() Без Жизненного Цикла
-
-**Проблема:**
-
-```kotlin
-import kotlinx.coroutines.*
-
-class UnmanagedJobViolation {
-    // НАРУШЕНИЕ: Скоуп создан, но никогда не отменяется
-    private val customScope = CoroutineScope(Job() + Dispatchers.Main)
-
-    fun doWork() {
-        customScope.launch {
-            // Работа, которая может пережить класс
-            repeat(100) {
-                delay(100)
-                println("Работа $it")
-            }
-        }
-    }
-
-    // ОТСУТСТВУЕТ: fun cleanup() { customScope.cancel() }
-}
-```
-
-#### Почему Это Нарушение
-
-1. **Нет явного жизненного цикла** - когда скоуп заканчивается?
-2. **Нет отмены** - корутины работают вечно
-3. **Утечка памяти** - держит ссылки
-4. **Нет родителя** - нельзя отменить извне
-
-#### Исправление: Явный Жизненный Цикл
-
-```kotlin
-import kotlinx.coroutines.*
-
-class ManagedJobComponent {
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-
-    fun doWork() {
-        scope.launch {
-            repeat(100) {
-                delay(100)
-                println("Работа $it")
-            }
-        }
-    }
-
-    fun cleanup() {
-        // ЯВНОЕ управление жизненным циклом
-        scope.cancel()
-        println("Все корутины отменены")
-    }
-}
-```
-
-### Нарушение #3: CoroutineScope() Фабрика Без Жизненного Цикла
-
-**Проблема:**
-
-```kotlin
-import kotlinx.coroutines.*
-
-class FactoryScopeViolation {
-    fun processItems(items: List<String>) {
-        // НАРУШЕНИЕ: Создаёт скоуп без привязки к жизненному циклу
-        CoroutineScope(Dispatchers.Default).launch {
-            items.forEach { item ->
-                delay(1000)
-                println("Обработка: $item")
-            }
-        }
-
-        // Скоуп заброшен немедленно!
-    }
-}
-```
-
-#### Исправление: Передача Скоупа Как Параметра
-
-```kotlin
-import kotlinx.coroutines.*
-
-class FactoryScopeFix {
-    // Принимать скоуп как параметр
-    fun processItems(scope: CoroutineScope, items: List<String>) {
-        scope.launch {
-            items.forEach { item ->
-                delay(1000)
-                println("Обработка: $item")
-            }
-        }
-    }
-}
-
-// Использование с управляемым скоупом
-fun demonstrateFactoryFix() = runBlocking {
-    val scope = CoroutineScope(Job() + Dispatchers.Default)
-    val processor = FactoryScopeFix()
-
-    processor.processItems(scope, listOf("A", "B", "C"))
-
-    delay(1500)
-
-    println("Отмена...")
-    scope.cancel()
-
-    println("Обработка отменена")
-}
-```
-
-### Нарушение #4: Утечка Корутин Через Архитектурные Границы
-
-**Проблема:**
-
-```kotlin
-import kotlinx.coroutines.*
-
-// НАРУШЕНИЕ: Репозиторий запускает корутины
-class LeakyRepository {
-    fun loadData(callback: (String) -> Unit) {
-        // ПЛОХО: Репозиторий не должен запускать корутины
-        GlobalScope.launch {
-            val data = fetchFromNetwork()
-            callback(data)
-        }
-    }
-
-    private suspend fun fetchFromNetwork(): String {
-        delay(1000)
-        return "Данные из сети"
-    }
-}
-
-// ViewModel не имеет контроля над корутинами Repository
-class LeakyViewModel {
-    private val repository = LeakyRepository()
-
-    fun loadData() {
-        repository.loadData { data ->
-            // Не может отменить корутину репозитория!
-            println("Получены данные: $data")
-        }
-    }
-
-    fun onCleared() {
-        // Не может отменить работу репозитория!
-    }
-}
-```
-
-#### Исправление: Suspend Функции
-
-```kotlin
-import kotlinx.coroutines.*
-
-// ХОРОШО: Репозиторий предоставляет suspend функции
-class StructuredRepository {
-    suspend fun loadData(): String {
-        // Репозиторий не запускает корутины
-        // Просто выполняет работу и возвращает результат
-        return withContext(Dispatchers.IO) {
-            fetchFromNetwork()
-        }
-    }
-
-    private suspend fun fetchFromNetwork(): String {
-        delay(1000)
-        return "Данные из сети"
-    }
-}
-
-// ViewModel контролирует конкурентность
-class StructuredViewModel {
-    private val repository = StructuredRepository()
-    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-
-    fun loadData() {
-        scope.launch {
-            try {
-                val data = repository.loadData()
-                println("Получены данные: $data")
-            } catch (e: CancellationException) {
-                println("Отменено")
-                throw e
-            }
-        }
-    }
-
-    fun onCleared() {
-        scope.cancel()
-        // Теперь работа Repository тоже отменена!
-    }
-}
-```
-
-### Когда Нарушение Структуры Приемлемо (редко)
-
-#### Легитимный Случай 1: Фоновая Работа Уровня Приложения
-
-```kotlin
-import kotlinx.coroutines.*
-
-class BackgroundSyncManager(
-    private val applicationScope: CoroutineScope // Явный скоуп времени жизни приложения
-) {
-    fun startPeriodicSync() {
-        // ПРИЕМЛЕМО: Работа уровня приложения
-        applicationScope.launch {
-            while (isActive) {
-                try {
-                    performSync()
-                    delay(3600_000) // 1 час
-                } catch (e: Exception) {
-                    // Логирование ошибки
-                }
-            }
-        }
-    }
-
-    private suspend fun performSync() {
-        // Синхронизация данных с сервером
-    }
-}
-```
-
-**Почему это приемлемо:**
-- **Явное время жизни** - привязано к жизненному циклу Application
-- **Намеренно** - действительно нужно пережить экраны
-- **Управляемо** - applicationScope может быть отменён
-- **Документировано** - ясно, что это уровень приложения
-
-#### Легитимный Случай 2: Fire-and-Forget Аналитика
-
-```kotlin
-import kotlinx.coroutines.*
-
-class AnalyticsTracker(
-    private val analyticsScope: CoroutineScope // Выделенный скоуп для аналитики
-) {
-    fun trackEvent(event: String) {
-        // ПРИЕМЛЕМО: Fire-and-forget аналитика
-        analyticsScope.launch {
-            try {
-                sendToAnalyticsServer(event)
-            } catch (e: Exception) {
-                // Молча провалиться - аналитика не должна ронять приложение
-            }
-        }
-
-        // Не ждём завершения
-    }
-
-    private suspend fun sendToAnalyticsServer(event: String) {
-        withContext(Dispatchers.IO) {
-            // Отправка события
-        }
-    }
-}
-```
-
-**Почему это приемлемо:**
-- **Некритично** - сбои аналитики не должны влиять на приложение
-- **Fire-and-forget** - намеренно не ждём
-- **Изолировано** - выделенный скоуп с SupervisorJob
-- **Явно** - чёткое разделение от логики приложения
-
-#### Легитимный Случай 3: Отчёты О Крашах
-
-```kotlin
-import kotlinx.coroutines.*
-
-class CrashReporter {
-    // ПРИЕМЛЕМО: Использует выделенный скоуп, который переживает отмены
-    private val crashScope = CoroutineScope(
-        NonCancellable + // Переживает отмены
-        Dispatchers.IO +
-        CoroutineName("CrashReporter")
-    )
-
-    fun reportCrash(exception: Throwable) {
-        crashScope.launch {
-            try {
-                sendCrashReport(exception)
-            } catch (e: Exception) {
-                // Последнее средство логирования
-                println("Не удалось отправить отчёт о краше: $e")
-            }
-        }
-    }
-
-    private suspend fun sendCrashReport(exception: Throwable) {
-        // Отправка в сервис отчётов о крашах
-    }
-}
-```
-
-**Почему это приемлемо:**
-- **Критический путь** - должен завершиться даже при краше приложения
-- **NonCancellable** - явно переживает отмены
-- **Последнее средство** - только для отчётов о крашах
-- **Короткоживущий** - завершается быстро
-
-### Паттерны Escape Hatch
-
-#### Паттерн 1: Явный Application Scope
-
-```kotlin
-import kotlinx.coroutines.*
-
-class ApplicationScopeProvider {
-    val applicationScope = CoroutineScope(
-        SupervisorJob() +
-        Dispatchers.Default +
-        CoroutineName("Application")
-    )
-
-    fun shutdown() {
-        applicationScope.cancel()
-    }
-}
-
-// Использование
-class LongRunningService(
-    private val applicationScope: CoroutineScope
-) {
-    fun startBackgroundWork() {
-        applicationScope.launch {
-            // Явно привязано к времени жизни приложения
-            while (isActive) {
-                doWork()
-                delay(60_000)
-            }
-        }
-    }
-
-    private suspend fun doWork() {
-        // Работа, которая должна пережить UI
-    }
-}
-```
-
-#### Паттерн 2: Supervisor Scope Для Независимых Задач
-
-```kotlin
-import kotlinx.coroutines.*
-
-class IndependentTaskRunner {
-    suspend fun runIndependentTasks() = supervisorScope {
-        // Каждая задача независима - один сбой не отменяет другие
-        val task1 = launch {
-            try {
-                performTask1()
-            } catch (e: Exception) {
-                // Обработка сбоя задачи 1
-            }
-        }
-
-        val task2 = launch {
-            try {
-                performTask2()
-            } catch (e: Exception) {
-                // Обработка сбоя задачи 2
-            }
-        }
-
-        // Ждём все задачи
-        task1.join()
-        task2.join()
-    }
-
-    private suspend fun performTask1() {
-        delay(1000)
-    }
-
-    private suspend fun performTask2() {
-        delay(500)
-        throw Exception("Задача 2 провалилась")
-    }
-}
-```
-
-### Обнаружение Нарушений
-
-#### Инструмент 1: Пользовательские Правила Detekt
-
-Можно создать пользовательские правила Detekt для обнаружения использования GlobalScope и других нарушений структурной конкурентности.
-
-#### Инструмент 2: Правила Android Lint
-
-Пользовательские правила Lint могут обнаруживать CoroutineScope, созданные без механизма отмены.
-
-#### Инструмент 3: Чеклист Code Review
-
-**КРАСНЫЕ ФЛАГИ:**
-- GlobalScope.launch
-- GlobalScope.async
-- CoroutineScope(Job()) без отмены
-- Repository/UseCase запускающие корутины
-- Корутины запущенные в конструкторах
-- Нет чёткого жизненного цикла для скоупа
-
-**ЗЕЛЁНЫЕ ФЛАГИ:**
-- viewModelScope.launch
-- lifecycleScope.launch
-- Suspend функции в Repository/UseCase
-- Явный жизненный цикл скоупа (create + cancel)
-- supervisorScope для независимых задач
-- Хорошо задокументированные пути обхода
-
-### Тестирование Структурной Конкурентности
-
-#### Тест 1: Проверка Распространения Отмены
-
-```kotlin
-import kotlinx.coroutines.*
-import kotlinx.coroutines.test.*
-import kotlin.test.*
-
-class StructuredConcurrencyTest {
-    @Test
-    fun testCancellationPropagates() = runTest {
-        var child1Cancelled = false
-        var child2Cancelled = false
-
-        val scope = CoroutineScope(Job())
-
-        scope.launch {
-            try {
-                delay(10000)
-            } catch (e: CancellationException) {
-                child1Cancelled = true
-                throw e
-            }
-        }
-
-        scope.launch {
-            try {
-                delay(10000)
-            } catch (e: CancellationException) {
-                child2Cancelled = true
-                throw e
-            }
-        }
-
-        advanceTimeBy(100)
-
-        // Отменить родителя
-        scope.cancel()
-
-        advanceUntilIdle()
-
-        // Проверить что оба ребёнка отменены
-        assertTrue(child1Cancelled, "Ребёнок 1 должен быть отменён")
-        assertTrue(child2Cancelled, "Ребёнок 2 должен быть отменён")
-    }
-}
-```
-
-### Лучшие Практики
-
-1. **Всегда предпочитайте структурную конкурентность**
-   ```kotlin
-   // ХОРОШО
-   suspend fun loadData() = coroutineScope {
-       val data1 = async { fetchData1() }
-       val data2 = async { fetchData2() }
-       DataResult(data1.await(), data2.await())
-   }
-   ```
-
-2. **Используйте lifecycle-aware скоупы в Android**
-   ```kotlin
-   // ХОРОШО
-   class MyViewModel : ViewModel() {
-       fun loadData() {
-           viewModelScope.launch {
-               // Автоматически отменяется в onCleared()
-           }
-       }
-   }
-   ```
-
-3. **Репозитории предоставляют suspend функции, а не корутины**
-   ```kotlin
-   // ХОРОШО
-   class Repository {
-       suspend fun fetchData(): Data {
-           return withContext(Dispatchers.IO) {
-               // Работа
-           }
-       }
-   }
-   ```
-
-4. **Для путей обхода используйте явные скоупы с чётким жизненным циклом**
-   ```kotlin
-   // ПРИЕМЛЕМО (с обоснованием)
-   class BackgroundService(
-       private val applicationScope: CoroutineScope
-   ) {
-       fun startWork() {
-           applicationScope.launch {
-               // Явно привязано к времени жизни приложения
-           }
-       }
-   }
-   ```
-
-5. **Документируйте нарушения с чётким обоснованием**
-   ```kotlin
-   /**
-    * Использует скоуп уровня приложения потому что:
-    * - Работа должна пережить UI компоненты
-    * - Синхронизация данных это забота уровня приложения
-    * * - Скоуп явно управляется в Application.onTerminate()
-    */
-   ```
-
-6. **Тестируйте поведение отмены**
-   ```kotlin
-   @Test
-   fun testCancellation() = runTest {
-       val scope = CoroutineScope(Job())
-       // Запустить работу
-       scope.cancel()
-       // Проверить отменено
-   }
-   ```
-
----
+- [[q-advanced-coroutine-patterns--kotlin--hard]]
+- [[q-actor-pattern--kotlin--hard]]
+- [[q-android-async-primitives--android--easy]]
 
 ## Follow-ups
 
-1. How do you refactor code that uses GlobalScope to use structured concurrency?
-2. What's the difference between `coroutineScope` and `supervisorScope`, and when should each be used?
-3. How do you handle a situation where you genuinely need a coroutine to outlive its parent?
-4. What are the performance implications of structured concurrency compared to unstructured?
-5. How do you test that a scope properly cancels all its children in all scenarios?
-6. Can you have structured concurrency across microservices, and what would that look like?
-7. How do you migrate a large codebase from unstructured to structured coroutines?
+- How would you refactor an existing codebase heavily using `GlobalScope` to a structured model?
+- How do you design library APIs to let callers control coroutine lifecycles?
+- How would you enforce these rules in a large team (tooling, code review, architecture guidelines)?
 
 ## References
 
-- [Kotlin Coroutines Guide - Structured Concurrency](https://kotlinlang.org/docs/coroutines-basics.html#structured-concurrency)
-- [Roman Elizarov on Structured Concurrency](https://medium.com/@elizarov/structured-concurrency-722d765aa952)
-- [Coroutine Scope Best Practices](https://developer.android.com/kotlin/coroutines/coroutines-best-practices)
-- [Android Lifecycle-Aware Components](https://developer.android.com/topic/libraries/architecture/lifecycle)
+- [[c-kotlin]]
+- [[c-structured-concurrency]]
+- Official Kotlin Coroutines documentation: "Structured concurrency" section
 
 ## Related Questions
 
-- [[q-kotlin-advantages-for-android--kotlin--easy|Kotlin advantages for Android]]
+- [[q-advanced-coroutine-patterns--kotlin--hard]]
+- [[q-actor-pattern--kotlin--hard]]
+- [[q-android-async-primitives--android--easy]]

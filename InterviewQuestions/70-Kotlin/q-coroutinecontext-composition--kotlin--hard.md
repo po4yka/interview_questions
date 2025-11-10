@@ -1,11 +1,11 @@
 ---
 id: kotlin-057
 title: "CoroutineContext Composition / Композиция CoroutineContext"
-aliases: ["CoroutineContext Composition, Композиция CoroutineContext"]
+aliases: ["CoroutineContext Composition", "Композиция CoroutineContext"]
 
 # Classification
 topic: kotlin
-subtopics: [advanced, composition, context]
+subtopics: [coroutines, flow, context]
 question_kind: theory
 difficulty: hard
 
@@ -18,35 +18,33 @@ source_note: Phase 1 Coroutines & Flow Advanced Questions
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-coroutine-context-detailed--kotlin--hard, q-kotlin-coroutines-introduction--kotlin--medium]
+related: [c-coroutines, q-coroutine-context-detailed--kotlin--hard, q-kotlin-coroutines-introduction--kotlin--medium]
 
 # Timestamps
 created: 2025-10-11
-updated: 2025-10-11
+updated: 2025-11-10
 
 tags: [advanced, composition, context, coroutines, difficulty/hard, kotlin]
 ---
 # Вопрос (RU)
-> Объясните как элементы CoroutineContext комбинируются и наследуются. Создайте пользовательский элемент CoroutineContext для отслеживания ID запроса в асинхронных операциях.
+> Объясните как элементы `CoroutineContext` комбинируются и наследуются. Создайте пользовательский элемент `CoroutineContext` для отслеживания ID запроса в асинхронных операциях.
 
 ---
 
-# Question (EN)
-> Explain how CoroutineContext elements combine and inherit. Create a custom CoroutineContext element for request ID tracking across async operations.
-
 ## Ответ (RU)
 
-CoroutineContext - это индексированный набор элементов, определяющий поведение корутин. Понимание композиции контекста необходимо для продвинутого использования корутин.
+`CoroutineContext` - это индексированный набор элементов, определяющий поведение корутин. Понимание композиции контекста необходимо для продвинутого использования корутин. См. также [[c-coroutines]].
 
 ### Структура CoroutineContext
 
-CoroutineContext - это индексированный набор, где каждый элемент имеет уникальный ключ. Элементы комбинируются оператором `+`.
+`CoroutineContext` - это индексированный набор, где каждый элемент имеет уникальный ключ. Элементы комбинируются оператором `+`.
 
 ```kotlin
 interface CoroutineContext {
     operator fun <E : Element> get(key: Key<E>): E?
     operator fun plus(context: CoroutineContext): CoroutineContext
     fun minusKey(key: Key<*>): CoroutineContext
+    fun <R> fold(initial: R, operation: (R, Element) -> R): R
 
     interface Element : CoroutineContext {
         val key: Key<*>
@@ -79,7 +77,7 @@ val context = job + dispatcher + name + handler
 
 ### Правила Композиции Контекста
 
-#### 1. Комбинирование С `+`
+#### 1. Комбинирование с `+`
 
 При комбинировании контекстов элементы с одинаковым ключом заменяют предыдущие:
 
@@ -104,6 +102,30 @@ fun main() = runBlocking(CoroutineName("Parent") + Dispatchers.Default) {
         println("Дочерний контекст: $coroutineContext")
         // Имя переопределено, Dispatcher унаследован
     }
+
+    launch(Dispatchers.IO) {
+        println("Второй дочерний контекст: $coroutineContext")
+        // Dispatcher переопределён, имя унаследовано
+    }
+}
+```
+
+#### 3. Иерархия Job
+
+Важно различать композицию контекстов и поведение `Job` при создании корутины.
+
+- Оператор `+` всегда заменяет элемент с тем же ключом (включая `Job`).
+- При создании новой корутины в scope (например, `launch`/`async`) ей автоматически создаётся новый `Job`, который ссылается на `Job` родителя как на родительский, формируя иерархию отмены.
+
+```kotlin
+val parentJob = Job()
+
+val scope = CoroutineScope(parentJob + CoroutineName("Scope"))
+
+scope.launch {
+    // У этой корутины НОВЫЙ Job, являющийся дочерним по отношению к parentJob
+    val job = coroutineContext[Job]
+    println(job?.parent === parentJob) // true
 }
 ```
 
@@ -179,11 +201,15 @@ fun main() = runBlocking {
 }
 
 /*
-Вывод:
+Возможный вывод:
 [a1b2c3d4] Обработка запроса для пользователя 123
 [a1b2c3d4] Получение данных пользователя
 [a1b2c3d4] Получение предпочтений
 [a1b2c3d4] Запрос завершен
+[custom-req-456] Обработка запроса для пользователя 456
+[custom-req-456] Получение данных пользователя
+[custom-req-456] Получение предпочтений
+[custom-req-456] Запрос завершен
 */
 ```
 
@@ -226,11 +252,34 @@ class DocumentRepository {
         val tenant = coroutineContext.tenant
             ?: throw IllegalStateException("Нет контекста tenant")
 
+        println("Получение документов для tenant: ${tenant.tenantId}")
+
         requirePermission("documents:read")
 
         return fetchDocumentsForTenant(tenant.tenantId)
     }
+
+    suspend fun createDocument(doc: Document) {
+        val tenant = coroutineContext.tenant
+            ?: throw IllegalStateException("Нет контекста tenant")
+
+        requirePermission("documents:write")
+
+        println("Создание документа для tenant: ${tenant.tenantId}")
+        saveDocument(tenant.tenantId, doc)
+    }
+
+    private suspend fun fetchDocumentsForTenant(tenantId: String): List<Document> {
+        delay(100)
+        return listOf(Document("doc1"), Document("doc2"))
+    }
+
+    private suspend fun saveDocument(tenantId: String, doc: Document) {
+        delay(50)
+    }
 }
+
+data class Document(val id: String)
 
 // Использование
 fun main() = runBlocking {
@@ -240,10 +289,30 @@ fun main() = runBlocking {
         permissions = setOf("documents:read", "documents:write")
     )
 
+    val tenant2 = TenantContext(
+        tenantId = "tenant-002",
+        tenantName = "Example Inc",
+        permissions = setOf("documents:read") // Нет права на запись
+    )
+
     val repo = DocumentRepository()
 
+    // Операции tenant 1
     launch(tenant1) {
-        val docs = repo.getDocuments() //  Работает
+        val docs = repo.getDocuments() // Работает
+        println(docs)
+        repo.createDocument(Document("new-doc")) // Работает
+    }
+
+    // Операции tenant 2
+    launch(tenant2) {
+        val docs = repo.getDocuments() // Работает
+        println(docs)
+        try {
+            repo.createDocument(Document("new-doc")) // Бросает SecurityException
+        } catch (e: SecurityException) {
+            println("Ошибка: ${e.message}")
+        }
     }
 }
 ```
@@ -251,10 +320,14 @@ fun main() = runBlocking {
 ### Контекст Распределенной Трассировки
 
 ```kotlin
+/**
+ * Контекст для распределенной трассировки с отслеживанием parent-child span.
+ */
 data class TraceContext(
     val traceId: String,
     val spanId: String,
-    val parentSpanId: String? = null
+    val parentSpanId: String? = null,
+    val metadata: Map<String, String> = emptyMap()
 ) : AbstractCoroutineContextElement(TraceContext) {
     companion object Key : CoroutineContext.Key<TraceContext>
 
@@ -264,49 +337,190 @@ data class TraceContext(
     )
 }
 
-// Логирование с контекстом трассировки
-fun traceLog(message: String) {
-    val trace = runBlocking { coroutineContext.trace }
+fun generateSpanId(): String = UUID.randomUUID().toString().take(8)
+fun generateTraceId(): String = UUID.randomUUID().toString()
+
+// Расширение для доступа к текущему TraceContext
+val CoroutineContext.trace: TraceContext?
+    get() = this[TraceContext]
+
+// Логирование с учетом трассировочного контекста (контекст явно передается)
+fun traceLog(message: String, context: CoroutineContext) {
+    val trace = context.trace
     if (trace != null) {
         println("[trace=${trace.traceId}, span=${trace.spanId}] $message")
     } else {
         println("[no-trace] $message")
     }
 }
+
+// Сервисный слой с использованием трассировки
+class UserService {
+    suspend fun getUser(userId: Int): User {
+        traceLog("UserService.getUser вызван с userId=$userId", coroutineContext)
+
+        // Создаем дочерний span для обращения к базе данных
+        val trace = coroutineContext.trace
+        val dbTrace = trace?.createChildSpan()
+
+        return withContext(dbTrace ?: EmptyCoroutineContext) {
+            traceLog("Выполнение запроса к базе данных", coroutineContext)
+            delay(100)
+            User(userId, "John Doe")
+        }
+    }
+}
+
+class OrderService(private val userService: UserService) {
+    suspend fun createOrder(userId: Int, items: List<String>): Order {
+        traceLog("OrderService.createOrder вызван", coroutineContext)
+
+        // Получение пользователя наследует трассировочный контекст
+        val user = userService.getUser(userId)
+        traceLog("Пользователь получен: ${user.name}", coroutineContext)
+
+        // Создаем дочерний span для создания заказа
+        val trace = coroutineContext.trace
+        val orderTrace = trace?.createChildSpan()
+
+        return withContext(orderTrace ?: EmptyCoroutineContext) {
+            traceLog("Создание заказа в базе данных", coroutineContext)
+            delay(50)
+            Order(UUID.randomUUID().toString(), userId, items)
+        }
+    }
+}
+
+data class User(val id: Int, val name: String)
+data class Order(val id: String, val userId: Int, val items: List<String>)
+
+// Использование
+fun main() = runBlocking {
+    val traceId = generateTraceId()
+    val rootTrace = TraceContext(
+        traceId = traceId,
+        spanId = generateSpanId(),
+        metadata = mapOf("endpoint" to "/api/orders")
+    )
+
+    val userService = UserService()
+    val orderService = OrderService(userService)
+
+    launch(rootTrace) {
+        traceLog("Обработка HTTP-запроса", coroutineContext)
+
+        val order = orderService.createOrder(
+            userId = 123,
+            items = listOf("item1", "item2")
+        )
+
+        traceLog("Заказ создан: ${order.id}", coroutineContext)
+    }
+}
+```
+
+### Паттерны Пропагации Контекста
+
+#### Паттерн 1: Изоляция Контекста
+
+Иногда нужно разорвать наследование контекста:
+
+```kotlin
+// Создание нового изолированного контекста
+suspend fun isolatedOperation() {
+    withContext(EmptyCoroutineContext) {
+        // Эта корутина выполняется с "чистым" контекстом
+        println(coroutineContext[CoroutineName]) // null
+    }
+}
+```
+
+#### Паттерн 2: Композиция Контекста
+
+Комбинирование нескольких пользовательских контекстов:
+
+```kotlin
+// Допустим, UserId реализован аналогично RequestId
+
+data class UserId(val id: Int) : AbstractCoroutineContextElement(UserId) {
+    companion object Key : CoroutineContext.Key<UserId>
+}
+
+suspend fun handleRequest(
+    tenantId: String,
+    requestId: String,
+    userId: Int
+) {
+    val context = TenantContext(tenantId, "Tenant", setOf()) +
+                  RequestId(requestId) +
+                  UserId(userId)
+
+    withContext(context) {
+        // Все асинхронные операции получают tenant, request и user контексты
+        processData()
+    }
+}
+
+suspend fun processData() {
+    // Реализация опущена, использует данные из контекста
+}
+```
+
+#### Паттерн 3: Перехват (Interception) Контекста
+
+```kotlin
+class LoggingContextElement(
+    private val logger: Logger
+) : AbstractCoroutineContextElement(LoggingContextElement) {
+    companion object Key : CoroutineContext.Key<LoggingContextElement>
+
+    fun log(message: String, context: CoroutineContext) {
+        val requestId = context.requestId ?: "unknown"
+        logger.info("[$requestId] $message")
+    }
+}
+
+// Упрощенное логирование через контекст
+suspend fun logInfo(message: String) {
+    coroutineContext[LoggingContextElement]?.log(message, coroutineContext)
+}
 ```
 
 ### Лучшие Практики
 
-1. **Делайте элементы контекста неизменяемыми**:
+1. Делайте элементы контекста неизменяемыми:
    ```kotlin
-   //  Неизменяемый data class
+   // Неизменяемый data class
    data class RequestId(val id: String) : AbstractCoroutineContextElement(RequestId)
 
-   //  Изменяемые свойства
+   // Изменяемые свойства (пример плохой практики)
    class RequestId(var id: String) : AbstractCoroutineContextElement(RequestId)
    ```
 
-2. **Предоставляйте companion object Key**:
+2. Предоставляйте `companion object Key`:
    ```kotlin
    data class MyContext(val value: String) : AbstractCoroutineContextElement(MyContext) {
-       companion object Key : CoroutineContext.Key<MyContext> // Обязательно
+       companion object Key : CoroutineContext.Key<MyContext>
    }
    ```
 
-3. **Используйте понятные имена**:
+3. Используйте понятные имена:
    ```kotlin
-   //  Понятная цель
-   val CoroutineContext.requestId: String?
+   val CoroutineContext.requestId: String? // хорошо
+   val CoroutineContext.id: String?       // неясно
+   ```
 
-   //  Неясно
-   val CoroutineContext.id: String?
+4. Явно документируйте потокобезопасность и nullability.
+
+5. Обрабатывайте отсутствие контекста безопасно:
+   ```kotlin
+   val requestId = coroutineContext.requestId ?: generateRequestId()
    ```
 
 ### Распространенные Ошибки
 
-1. **Изменение разделяемого изменяемого контекста**:
+1. Изменение разделяемого изменяемого контекста:
    ```kotlin
-   //  Изменяемое состояние в контексте
    class Counter(var count: Int) : AbstractCoroutineContextElement(Counter) {
        companion object Key : CoroutineContext.Key<Counter>
    }
@@ -317,16 +531,25 @@ fun traceLog(message: String) {
    }
    ```
 
-2. **Утечка контекста с GlobalScope**:
+2. Забытый `companion Key`:
    ```kotlin
-   //  Контекст потерян при использовании GlobalScope
+   // Неполная реализация — нет Key
+   // class MyContext(val v: String) : AbstractCoroutineContextElement(???)
+
+   // Правильно
+   class MyContext(val v: String) : AbstractCoroutineContextElement(MyContext) {
+       companion object Key : CoroutineContext.Key<MyContext>
+   }
+   ```
+
+3. Утечка контекста с `GlobalScope`:
+   ```kotlin
    withContext(RequestId("123")) {
        GlobalScope.launch {
-           println(coroutineContext.requestId) // null
+           println(coroutineContext.requestId) // null, контекст потерян
        }
    }
 
-   //  Используйте coroutineScope для сохранения контекста
    withContext(RequestId("123")) {
        coroutineScope {
            launch {
@@ -336,17 +559,29 @@ fun traceLog(message: String) {
    }
    ```
 
-**Краткое содержание**: CoroutineContext - это индексированный набор элементов, комбинируемых оператором +. Дочерние корутины наследуют родительский контекст но могут переопределять элементы. Job всегда заменяется для поддержки иерархии. Пользовательские элементы расширяют AbstractCoroutineContextElement и должны предоставлять companion Key. Типичные применения: отслеживание запросов, мультитенантная изоляция, распределенная трассировка. Элементы должны быть неизменяемыми, иметь понятные имена и изящно обрабатывать отсутствие значений.
+4. Отсутствие обработки отсутствующего контекста:
+   ```kotlin
+   // Падает, если RequestId нет
+   // val requestId = coroutineContext[RequestId]!!.id
+
+   // Безопасно
+   val requestId = coroutineContext.requestId ?: generateRequestId()
+   ```
+
+**Краткое содержание**: `CoroutineContext` - это индексированный набор элементов, комбинируемых оператором `+`. Дочерние корутины наследуют родительский контекст, но могут переопределять элементы. Оператор `+` всегда заменяет элемент с тем же ключом; при создании корутины в scope ей создаётся новый `Job`, являющийся дочерним по отношению к родительскому, что формирует иерархию отмены. Пользовательские элементы обычно расширяют `AbstractCoroutineContextElement` и должны предоставлять `companion Key`. Типичные применения: отслеживание запросов, мультитенантная изоляция, распределенная трассировка. Элементы должны быть неизменяемыми, иметь понятные имена и аккуратно обрабатывать отсутствие значений.
 
 ---
 
+# Question (EN)
+> Explain how `CoroutineContext` elements combine and inherit. Create a custom `CoroutineContext` element for request ID tracking across async operations.
+
 ## Answer (EN)
 
-CoroutineContext is a sophisticated indexed set of elements that defines the behavior of coroutines. Understanding context composition is essential for advanced coroutine usage.
+`CoroutineContext` is an indexed set of elements that defines the behavior of coroutines. Understanding context composition is essential for advanced coroutine usage.
 
 ### CoroutineContext Structure
 
-A CoroutineContext is an indexed set where each element has a unique key. Elements can be combined using the `+` operator.
+A `CoroutineContext` is an indexed set where each element has a unique key. Elements can be combined using the `+` operator.
 
 ```kotlin
 interface CoroutineContext {
@@ -424,16 +659,19 @@ fun main() = runBlocking(CoroutineName("Parent") + Dispatchers.Default) {
 
 #### 3. Job Hierarchy
 
-Jobs are always overridden (not inherited) to maintain parent-child relationships:
+It's important to distinguish between context combination and how `Job`s behave when launching coroutines:
+
+- The `+` operator always replaces an element with the same key (including `Job`).
+- When you launch a new coroutine in a scope, it gets a NEW `Job` whose parent is the `Job` from the scope's context, forming a structured concurrency hierarchy.
 
 ```kotlin
 val parentJob = Job()
-
 val scope = CoroutineScope(parentJob + CoroutineName("Scope"))
 
 scope.launch {
-    // This coroutine gets a NEW Job that is a child of parentJob
-    println(coroutineContext[Job]?.parent === parentJob) // true
+    // This coroutine gets a new Job that is a child of parentJob
+    val job = coroutineContext[Job]
+    println(job?.parent === parentJob) // true
 }
 ```
 
@@ -510,7 +748,7 @@ fun main() = runBlocking {
 }
 
 /*
-Output:
+Sample output:
 [a1b2c3d4] Processing request for user 123
 [a1b2c3d4] Fetching user data
 [a1b2c3d4] Fetching user preferences
@@ -615,28 +853,20 @@ fun main() = runBlocking {
 
     // Tenant 1 operations
     launch(tenant1) {
-        val docs = repo.getDocuments() //  Works
-        repo.createDocument(Document("new-doc")) //  Works
+        val docs = repo.getDocuments() // Works
+        repo.createDocument(Document("new-doc")) // Works
     }
 
     // Tenant 2 operations
     launch(tenant2) {
-        val docs = repo.getDocuments() //  Works
+        val docs = repo.getDocuments() // Works
         try {
-            repo.createDocument(Document("new-doc")) //  Fails
+            repo.createDocument(Document("new-doc")) // Fails
         } catch (e: SecurityException) {
             println("Error: ${e.message}")
         }
     }
 }
-
-/*
-Output:
-Fetching documents for tenant: tenant-001
-Creating document for tenant: tenant-001
-Fetching documents for tenant: tenant-002
-Error: Tenant tenant-002 lacks permission: documents:write
-*/
 ```
 
 ### Advanced: Correlation Context for Distributed Tracing
@@ -669,9 +899,9 @@ fun generateTraceId(): String = UUID.randomUUID().toString()
 val CoroutineContext.trace: TraceContext?
     get() = this[TraceContext]
 
-// Logging with trace context
-fun traceLog(message: String) {
-    val trace = runBlocking { coroutineContext.trace }
+// Logging with trace context (context is passed explicitly)
+fun traceLog(message: String, context: CoroutineContext) {
+    val trace = context.trace
     if (trace != null) {
         println("[trace=${trace.traceId}, span=${trace.spanId}] $message")
     } else {
@@ -682,14 +912,14 @@ fun traceLog(message: String) {
 // Service layer with tracing
 class UserService {
     suspend fun getUser(userId: Int): User {
-        traceLog("UserService.getUser called with userId=$userId")
+        traceLog("UserService.getUser called with userId=$userId", coroutineContext)
 
         // Create child span for database call
         val trace = coroutineContext.trace
-        val dbTrace = trace?.createChildSpan() ?: return User(userId, "Unknown")
+        val dbTrace = trace?.createChildSpan()
 
-        return withContext(dbTrace) {
-            traceLog("Querying database")
+        return withContext(dbTrace ?: EmptyCoroutineContext) {
+            traceLog("Querying database", coroutineContext)
             delay(100)
             User(userId, "John Doe")
         }
@@ -698,18 +928,18 @@ class UserService {
 
 class OrderService(private val userService: UserService) {
     suspend fun createOrder(userId: Int, items: List<String>): Order {
-        traceLog("OrderService.createOrder called")
+        traceLog("OrderService.createOrder called", coroutineContext)
 
         // User lookup inherits trace context automatically
         val user = userService.getUser(userId)
-        traceLog("User retrieved: ${user.name}")
+        traceLog("User retrieved: ${user.name}", coroutineContext)
 
         // Create child span for order creation
         val trace = coroutineContext.trace
         val orderTrace = trace?.createChildSpan()
 
         return withContext(orderTrace ?: EmptyCoroutineContext) {
-            traceLog("Creating order in database")
+            traceLog("Creating order in database", coroutineContext)
             delay(50)
             Order(UUID.randomUUID().toString(), userId, items)
         }
@@ -732,27 +962,16 @@ fun main() = runBlocking {
     val orderService = OrderService(userService)
 
     launch(rootTrace) {
-        traceLog("Handling HTTP request")
+        traceLog("Handling HTTP request", coroutineContext)
 
         val order = orderService.createOrder(
             userId = 123,
             items = listOf("item1", "item2")
         )
 
-        traceLog("Order created: ${order.id}")
+        traceLog("Order created: ${order.id}", coroutineContext)
     }
 }
-
-/*
-Output:
-[trace=abc123..., span=def456] Handling HTTP request
-[trace=abc123..., span=ghi789] OrderService.createOrder called
-[trace=abc123..., span=jkl012] UserService.getUser called with userId=123
-[trace=abc123..., span=mno345] Querying database
-[trace=abc123..., span=ghi789] User retrieved: John Doe
-[trace=abc123..., span=pqr678] Creating order in database
-[trace=abc123..., span=def456] Order created: stu901...
-*/
 ```
 
 ### Context Propagation Patterns
@@ -765,7 +984,7 @@ Sometimes you want to break inheritance:
 // Create new isolated context
 suspend fun isolatedOperation() {
     withContext(EmptyCoroutineContext) {
-        // This coroutine has no inherited context except Job
+        // This coroutine runs with a fresh context (its own Job, no Name/Dispatcher overrides)
         println(coroutineContext[CoroutineName]) // null
     }
 }
@@ -776,6 +995,12 @@ suspend fun isolatedOperation() {
 Combine multiple custom contexts:
 
 ```kotlin
+// Assume UserId is implemented similar to RequestId
+
+data class UserId(val id: Int) : AbstractCoroutineContextElement(UserId) {
+    companion object Key : CoroutineContext.Key<UserId>
+}
+
 suspend fun handleRequest(
     tenantId: String,
     requestId: String,
@@ -790,6 +1015,10 @@ suspend fun handleRequest(
         processData()
     }
 }
+
+suspend fun processData() {
+    // Implementation omitted, uses data from context
+}
 ```
 
 #### Pattern 3: Context Interception
@@ -800,46 +1029,43 @@ class LoggingContextElement(
 ) : AbstractCoroutineContextElement(LoggingContextElement) {
     companion object Key : CoroutineContext.Key<LoggingContextElement>
 
-    fun log(message: String) {
-        val requestId = runBlocking { coroutineContext.requestId } ?: "unknown"
+    fun log(message: String, context: CoroutineContext) {
+        val requestId = context.requestId ?: "unknown"
         logger.info("[$requestId] $message")
     }
 }
 
 // Extension for easy logging
 suspend fun logInfo(message: String) {
-    coroutineContext[LoggingContextElement]?.log(message)
+    coroutineContext[LoggingContextElement]?.log(message, coroutineContext)
 }
 ```
 
 ### Best Practices
 
-1. **Make context elements immutable**:
+1. Make context elements immutable:
    ```kotlin
-   //  Immutable data class
+   // Immutable data class
    data class RequestId(val id: String) : AbstractCoroutineContextElement(RequestId)
 
-   //  Mutable properties
+   // Mutable properties (avoid)
    class RequestId(var id: String) : AbstractCoroutineContextElement(RequestId)
    ```
 
-2. **Provide companion object Key**:
+2. Provide a `companion object Key`:
    ```kotlin
    data class MyContext(val value: String) : AbstractCoroutineContextElement(MyContext) {
        companion object Key : CoroutineContext.Key<MyContext> // Required
    }
    ```
 
-3. **Use meaningful names**:
+3. Use meaningful names:
    ```kotlin
-   //  Clear purpose
-   val CoroutineContext.requestId: String?
-
-   //  Unclear
-   val CoroutineContext.id: String?
+   val CoroutineContext.requestId: String? // clear
+   val CoroutineContext.id: String?       // unclear
    ```
 
-4. **Document thread safety**:
+4. Document thread safety and nullability:
    ```kotlin
    /**
     * Thread-safe context element for request tracking.
@@ -848,23 +1074,15 @@ suspend fun logInfo(message: String) {
    data class RequestId(val id: String) : ...
    ```
 
-5. **Consider nullability**:
+5. Handle missing context gracefully:
    ```kotlin
-   // Provide safe access
-   val CoroutineContext.requestId: String?
-       get() = this[RequestId]?.id
-
-   // Or require presence
-   suspend fun requireRequestId(): String =
-       coroutineContext[RequestId]?.id
-           ?: throw IllegalStateException("No request ID in context")
+   val requestId = coroutineContext.requestId ?: generateRequestId()
    ```
 
 ### Common Pitfalls
 
-1. **Modifying shared mutable context**:
+1. Modifying shared mutable context:
    ```kotlin
-   //  Mutable state in context
    class Counter(var count: Int) : AbstractCoroutineContextElement(Counter) {
        companion object Key : CoroutineContext.Key<Counter>
    }
@@ -875,20 +1093,20 @@ suspend fun logInfo(message: String) {
    }
    ```
 
-2. **Forgetting Key companion object**:
+2. Forgetting `Key` companion object:
    ```kotlin
-   //  Missing Key - won't compile properly
-   class MyContext : AbstractCoroutineContextElement(???)
+   // Incomplete - missing Key
+   // class MyContext : AbstractCoroutineContextElement(???)
 
-   //  With Key
+   // Correct
    class MyContext : AbstractCoroutineContextElement(MyContext) {
        companion object Key : CoroutineContext.Key<MyContext>
    }
    ```
 
-3. **Context leaks with GlobalScope**:
+3. Context leaks with `GlobalScope`:
    ```kotlin
-   //  Context lost when using GlobalScope
+   // Context lost when using GlobalScope
    withContext(RequestId("123")) {
        GlobalScope.launch {
            // RequestId is lost here!
@@ -896,7 +1114,7 @@ suspend fun logInfo(message: String) {
        }
    }
 
-   //  Use coroutineScope to preserve context
+   // Use coroutineScope to preserve context
    withContext(RequestId("123")) {
        coroutineScope {
            launch {
@@ -906,16 +1124,16 @@ suspend fun logInfo(message: String) {
    }
    ```
 
-4. **Not handling missing context gracefully**:
+4. Not handling missing context gracefully:
    ```kotlin
-   //  Assumes context exists
-   val requestId = coroutineContext[RequestId]!!.id // Crashes if null
+   // Unsafe
+   // val requestId = coroutineContext[RequestId]!!.id
 
-   //  Handle missing context
+   // Safe
    val requestId = coroutineContext.requestId ?: generateRequestId()
    ```
 
-**English Summary**: CoroutineContext is an indexed set of elements that combine using the + operator. Child coroutines inherit parent context but can override specific elements. Jobs are always replaced to maintain hierarchy. Custom context elements extend AbstractCoroutineContextElement and must provide a companion Key. Common uses include request tracking, multi-tenant isolation, and distributed tracing. Context elements should be immutable, well-named, and handle missing values gracefully.
+**English Summary**: `CoroutineContext` is an indexed set of elements that combine using the `+` operator. Child coroutines inherit parent context but can override specific elements. The `+` operator always replaces elements with the same key; when launching coroutines within a scope, a new child `Job` is created to maintain structured concurrency. Custom context elements typically extend `AbstractCoroutineContextElement` and must provide a companion `Key`. Common uses include request tracking, multi-tenant isolation, and distributed tracing. Context elements should be immutable, well-named, thread-safe, and handle missing values gracefully.
 
 ## Follow-ups
 
@@ -926,7 +1144,7 @@ suspend fun logInfo(message: String) {
 ## References
 - [Coroutine context and dispatchers - Kotlin](https://kotlinlang.org/docs/coroutine-context-and-dispatchers.html)
 - [CoroutineContext - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-context/)
-- [Custom CoroutineContext elements](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-abstract-coroutine-context-element/)
+- [Custom CoroutineContext elements](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx-coroutines-core/kotlinx.coroutines/-abstract-coroutine-context-element/)
 
 ## Related Questions
 - [[q-coroutine-context-detailed--kotlin--hard]]

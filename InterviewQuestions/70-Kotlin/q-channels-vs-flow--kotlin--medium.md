@@ -1,11 +1,11 @@
 ---
 id: kotlin-058
 title: "Channels vs Flow / Channels против Flow"
-aliases: ["Channels vs Flow, Channels против Flow"]
+aliases: ["Channels vs Flow", "Channels против Flow"]
 
 # Classification
 topic: kotlin
-subtopics: [async, buffering, channels]
+subtopics: [channels, coroutines, flow]
 question_kind: theory
 difficulty: medium
 
@@ -18,49 +18,78 @@ source_note: Phase 1 Coroutines & Flow Advanced Questions
 # Workflow & relations
 status: draft
 moc: moc-kotlin
-related: [q-kotlin-channels--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
+related: [c-kotlin, c-coroutines, q-kotlin-channels--kotlin--medium, q-kotlin-flow-basics--kotlin--medium]
 
 # Timestamps
 created: 2025-10-11
-updated: 2025-10-11
+updated: 2025-11-10
 
 tags: [async, buffering, channels, difficulty/medium, flow, kotlin]
 ---
 # Вопрос (RU)
-> Когда следует использовать Channels или Flow? Реализуйте буферизованный канал с различными стратегиями емкости и объясните их поведение.
+> Когда следует использовать Channels или `Flow`? Реализуйте буферизованный канал с различными стратегиями емкости и объясните их поведение.
 
 ---
 
 # Question (EN)
-> When should you use Channels vs Flow? Implement a buffered channel with different capacity strategies and explain their behavior.
+> When should you use Channels vs `Flow`? Implement a buffered channel with different capacity strategies and explain their behavior.
 
 ## Ответ (RU)
 
-Channels и Flows используются для асинхронных потоков данных, но служат разным целям.
+Channels и `Flow` используются для асинхронных потоков данных, но служат разным целям.
 
 ### Ключевые Различия
 
 | Характеристика | Channel | Flow |
 |----------------|---------|------|
-| **Тип** | Горячий (активный) | Холодный (ленивый) |
-| **Выполнение** | Всегда активен | Активируется при сборе |
-| **Буферизация** | Встроенный буфер | Нет буфера |
-| **Несколько потребителей** | Один (по умолчанию) | Множество независимых |
-| **Состояние** | Изменяемое | Неизменяемое |
-| **Применение** | Producer-consumer, события | Трансформации данных |
-| **Жизненный цикл** | Требует закрытия | Авто-закрытие |
+| **Тип** | Горячий (используется активными продюсерами/консюмерами) | Холодный (ленивый) |
+| **Выполнение** | Используется активными корутинами, существующий канал может принимать данные в любой момент | Активируется при collect() |
+| **Буферизация** | Встроенные стратегии емкости канала | Нет встроенного канального буфера по умолчанию (но есть buffer()/conflate() и операторные буферы) |
+| **Обратное давление** | Приостановка send()/receive() в зависимости от емкости | Приостановка и операторы управляют скоростью и спросом |
+| **Несколько потребителей** | Один потребитель по умолчанию; несколько конкурирующих потребителей разделяют элементы | Множество независимых коллекторов, каждый запускает источник заново |
+| **Состояние** | Изменяемое, stateful коммуникация | Иммутабельный, декларативный pipeline значений |
+| **Применение** | Producer-consumer, очереди задач, события между корутинами | Трансформации данных, реактивные потоки |
+| **Жизненный цикл** | Требует явного закрытия (или завершения продюсеров) | Автоматически завершается при завершении источника |
+
+### Основы Channel
+
+Каналы — это горячий примитив коммуникации между корутинами, похожий на безопасную очередь.
+
+```kotlin
+// Базовое использование Channel
+fun main() = runBlocking {
+    val channel = Channel<Int>()
+
+    // Продюсер
+    launch {
+        for (x in 1..5) {
+            println("Отправка $x")
+            channel.send(x)
+        }
+        channel.close() // Закрываем, когда закончили производить
+    }
+
+    // Консюмер
+    launch {
+        for (x in channel) {
+            println("Получено $x")
+            delay(100)
+        }
+    }
+}
+```
 
 ### Стратегии Емкости Channel
 
-#### 1. Rendezvous (по Умолчанию, Емкость = 0)
+#### 1. Rendezvous (по умолчанию, емкость = 0)
 
 ```kotlin
 val channel = Channel<Int>() // или Channel<Int>(Channel.RENDEZVOUS)
 
 /*
-Поведение: Нет буфера
-- send() приостанавливается пока не вызван receive()
-- receive() приостанавливается пока не вызван send()
+Поведение: Нет буфера по емкости
+- send() приостанавливается, пока соответствующий receive() не будет готов
+- receive() приостанавливается, пока не будет выполнен send()
 - Прямая передача между producer и consumer
 */
 
@@ -83,17 +112,6 @@ fun main() = runBlocking {
         delay(500)
     }
 }
-
-/*
-Вывод:
-Отправка 1 в 1000
-(ожидание...)
-Получено 1 в 2000
-Отправлено 1
-Отправка 2 в 2000
-(ожидание...)
-Получено 2 в 2500
-*/
 ```
 
 #### 2. Buffered (емкость = n)
@@ -103,9 +121,9 @@ val channel = Channel<Int>(capacity = 3)
 
 /*
 Поведение: Фиксированный размер буфера
-- send() не приостанавливается пока буфер не заполнен
-- receive() не приостанавливается пока есть значения
-- Разделяет producer от consumer
+- send() не приостанавливается, пока буфер не заполнен
+- receive() не приостанавливается, пока в буфере есть значения
+- Частично разделяет скорость producer и consumer
 */
 
 fun main() = runBlocking {
@@ -127,23 +145,6 @@ fun main() = runBlocking {
         delay(500)
     }
 }
-
-/*
-Вывод:
-Отправка 1
-Отправлено 1 (без приостановки)
-Отправка 2
-Отправлено 2 (без приостановки)
-Отправка 3
-Отправлено 3 (без приостановки)
-Отправка 4 (приостанавливается, буфер полон)
-(ожидание 2 секунды...)
-Получено 1
-Отправлено 4
-Отправка 5 (приостанавливается)
-Получено 2
-Отправлено 5
-*/
 ```
 
 #### 3. Unlimited (емкость = UNLIMITED)
@@ -152,10 +153,10 @@ fun main() = runBlocking {
 val channel = Channel<Int>(Channel.UNLIMITED)
 
 /*
-Поведение: Неограниченный буфер
-- send() никогда не приостанавливается
-- Память растет безгранично
-- Опасно если producer быстрее consumer
+Поведение: Неограниченный буфер (по емкости в терминах API)
+- send() не приостанавливается из-за заполнения буфера
+- Память может расти безгранично
+- Опасно, если producer существенно быстрее consumer
 */
 
 fun main() = runBlocking {
@@ -163,7 +164,7 @@ fun main() = runBlocking {
 
     launch {
         repeat(1000000) { i ->
-            channel.send(i) // Никогда не приостанавливается
+            channel.send(i)
             if (i % 100000 == 0) {
                 println("Отправлено $i элементов")
             }
@@ -171,7 +172,7 @@ fun main() = runBlocking {
         channel.close()
     }
 
-    delay(100) // Producer отправляет все мгновенно
+    delay(100)
 
     var count = 0
     for (value in channel) {
@@ -182,17 +183,6 @@ fun main() = runBlocking {
     }
     println("Всего получено: $count")
 }
-
-/*
-Вывод:
-Отправлено 0 элементов
-Отправлено 100000 элементов
-Отправлено 200000 элементов
-... (все отправлено немедленно)
-Получено 100000 элементов
-Получено 200000 элементов
-... (consumer опустошает буфер)
-*/
 ```
 
 #### 4. Conflated (емкость = CONFLATED)
@@ -201,11 +191,11 @@ fun main() = runBlocking {
 val channel = Channel<Int>(Channel.CONFLATED)
 
 /*
-Поведение: Буфер размером 1, отбрасывает старые значения
-- send() никогда не приостанавливается
+Поведение: По сути буфер размером 1, старые значения заменяются новыми
+- send() не приостанавливается из-за заполнения буфера
 - Хранится только последнее значение
 - Старые значения отбрасываются
-- Хорошо для обновлений состояния, где важно только последнее
+- Подходит для обновлений состояния, где важно только последнее
 */
 
 fun main() = runBlocking {
@@ -214,7 +204,7 @@ fun main() = runBlocking {
     launch {
         for (i in 1..10) {
             println("Отправка $i")
-            channel.send(i) // Никогда не приостанавливается
+            channel.send(i)
             delay(100)
         }
         channel.close()
@@ -226,25 +216,17 @@ fun main() = runBlocking {
         println("Получено $value")
     }
 }
-
-/*
-Вывод:
-Отправка 1
-Отправка 2
-Отправка 3
-...
-Отправка 10
-Получено 10 (только последнее значение!)
-*/
 ```
 
-### Когда Использовать Channels
+### Когда Использовать Channels vs Flow
 
-1. **Горячие потоки** - Данные производятся независимо от потребителей
-2. **Один producer, один consumer**
-3. **Шины событий** - Разделенная коммуникация
-4. **Пулы воркеров** - Распределение работы
-5. **Реал-тайм данные** - Датчики, websockets
+#### Когда Использовать Channels
+
+1. **Горячие потоки** — данные производятся независимо от того, есть ли текущие потребители
+2. **Один producer, один consumer** или несколько конкурирующих consumers как очередь задач
+3. **Очереди событий/работы** — разделенная коммуникация между корутинами
+4. **Пулы воркеров** — распределение работы между конкурентами
+5. **Реал-тайм данные** — датчики, websockets (один поток потребления или явный fan-out)
 
 ```kotlin
 // Пример: Пул воркеров с каналами
@@ -270,16 +252,21 @@ class WorkerPool(private val workerCount: Int) {
     suspend fun getResult(): Result {
         return results.receive()
     }
+
+    fun close() {
+        jobs.close()
+        results.close()
+    }
 }
 ```
 
-### Когда Использовать Flow
+#### Когда Использовать Flow
 
-1. **Холодные потоки** - Ленивые вычисления по требованию
-2. **Трансформации данных** - map, filter, reduce
-3. **Множество независимых коллекторов**
-4. **Реактивные потоки** - Обновления UI, запросы к БД
-5. **Композиция** - Сложные трансформационные конвейеры
+1. **Холодные потоки** — ленивые вычисления по требованию
+2. **Трансформации данных** — map, filter, reduce
+3. **Множество независимых коллекторов**, каждый получает свой независимый запуск
+4. **Реактивные потоки** — обновления UI, запросы к БД
+5. **Композиция** — сложные трансформационные конвейеры
 
 ```kotlin
 // Пример: Трансформация данных с Flow
@@ -291,9 +278,9 @@ class UserRepository {
             delay(5000)
         }
     }
-    .distinctUntilChanged()
-    .map { user -> user.copy(name = user.name.uppercase()) }
-    .catch { emit(User.DEFAULT) }
+        .distinctUntilChanged()
+        .map { user -> user.copy(name = user.name.uppercase()) }
+        .catch { emit(User.DEFAULT) }
 }
 
 // Множественные коллекторы работают независимо
@@ -302,54 +289,33 @@ userRepository.getUserUpdates(123)
 
 userRepository.getUserUpdates(123)
     .collect { user2 -> updateUI2(user2) }
-// Каждый коллектор получает независимый поток!
+// Каждый collect запускает новый поток запросов
 ```
 
-### Полный Пример: Все Типы Буферов
+### Преобразование между Channel и Flow
 
 ```kotlin
-suspend fun demonstrateBufferTypes() {
-    // Rendezvous - прямая передача
-    println("=== RENDEZVOUS ===")
-    val rendezvous = Channel<Int>(Channel.RENDEZVOUS)
-    testChannel(rendezvous, "Rendezvous")
-
-    // Buffered - фиксированная емкость
-    println("\n=== BUFFERED (3) ===")
-    val buffered = Channel<Int>(3)
-    testChannel(buffered, "Buffered")
-
-    // Unlimited - никогда не приостанавливается
-    println("\n=== UNLIMITED ===")
-    val unlimited = Channel<Int>(Channel.UNLIMITED)
-    testChannel(unlimited, "Unlimited")
-
-    // Conflated - хранит только последнее
-    println("\n=== CONFLATED ===")
-    val conflated = Channel<Int>(Channel.CONFLATED)
-    testChannel(conflated, "Conflated")
-}
-
-suspend fun testChannel(channel: Channel<Int>, name: String) = coroutineScope {
-    launch {
-        repeat(5) { i ->
-            println("[$name] Отправка $i")
-            channel.send(i)
-            println("[$name] Отправлено $i")
-        }
-        channel.close()
+// Flow -> Channel (производим значения Flow в Channel)
+fun <T> Flow<T>.produceIn(scope: CoroutineScope): ReceiveChannel<T> =
+    scope.produce {
+        collect { send(it) }
     }
 
-    delay(500) // Даем producer поработать
-
-    for (value in channel) {
-        println("[$name] Получено $value")
-        delay(200)
+// Channel -> Flow (потребляем значения Channel как Flow)
+fun <T> ReceiveChannel<T>.consumeAsFlow(): Flow<T> = flow {
+    for (value in this@consumeAsFlow) {
+        emit(value)
     }
 }
+
+// Использование
+val flow = flowOf(1, 2, 3, 4, 5)
+val channel = flow.produceIn(GlobalScope)
+
+val newFlow = channel.consumeAsFlow()
 ```
 
-### Реальный Пример: Шина Событий С Channels
+### Реальный Пример: Шина Событий с Channel (очередь, не broadcast)
 
 ```kotlin
 sealed class AppEvent {
@@ -359,6 +325,8 @@ sealed class AppEvent {
 }
 
 class EventBus {
+    // Channel используется как очередь событий.
+    // Потребители, читающие из одного ReceiveChannel, будут делить события между собой.
     private val events = Channel<AppEvent>(capacity = Channel.BUFFERED)
 
     suspend fun publish(event: AppEvent) {
@@ -397,12 +365,14 @@ launch {
 eventBus.publish(AppEvent.UserLoggedIn(123))
 ```
 
-### Реальный Пример: Конвейер Данных С Flow
+> Примечание: В этом примере подписчики конкурируют за события одного канала и не получают полную копию потока. Для broadcast-семантики лучше использовать `SharedFlow`/`StateFlow` или явный fan-out.
+
+### Реальный Пример: Конвейер Данных с Flow
 
 ```kotlin
 class DataPipeline {
     fun processStream(): Flow<ProcessedData> = fetchRawData()
-        .buffer(capacity = 50) // Добавляем буферизацию
+        .buffer(capacity = 50) // Добавляем буферизацию между стадиями
         .map { raw -> validate(raw) }
         .filter { it.isValid }
         .map { validated -> transform(validated) }
@@ -410,7 +380,7 @@ class DataPipeline {
             logger.error("Ошибка конвейера", exception)
             emit(ProcessedData.ERROR)
         }
-        .flowOn(Dispatchers.IO) // Выполнять на IO диспетчере
+        .flowOn(Dispatchers.IO)
 
     private fun fetchRawData(): Flow<RawData> = flow {
         while (true) {
@@ -432,18 +402,33 @@ pipeline.processStream()
     .collect { data -> saveToCache(data) }
 ```
 
+### Соображения Производительности
+
+```kotlin
+// Channel: горячий примитив синхронизации/очередь с буфером
+val channel = Channel<Int>(1000)
+// Может удерживать до 1000 элементов в памяти, даже если потребитель временно отсутствует
+
+// Flow: холодный, вычисления запускаются при collect()
+val flow = flow { emit(data) }
+// Память под элементы не используется до момента эмиссии и коллекции
+
+// Для одного потребителя и декларативных трансформаций чаще предпочтителен Flow
+// Для распределения работы между конкурентами (очередь задач) используйте Channel
+```
+
 ### Лучшие Практики
 
 1. **Выбирайте на основе горячий vs холодный**:
    ```kotlin
-   // Горячий: Channels для реал-тайм событий
+   // Горячий источник: Channel для реал-тайм событий (один/конкурирующие потребители)
    val sensorData = Channel<SensorReading>()
 
-   // Холодный: Flow для данных по требованию
+   // Холодный источник: Flow для данных по требованию
    val userData = flow { emit(fetchUser()) }
    ```
 
-2. **Всегда закрывайте каналы**:
+2. **Следите за жизненным циклом и закрытием каналов**:
    ```kotlin
    val channel = Channel<Int>()
    try {
@@ -458,122 +443,84 @@ pipeline.processStream()
    // Быстрый producer, медленный consumer
    Channel<Int>(capacity = 100)
 
-   // Обновления состояния
+   // Обновления состояния (важно только последнее)
    Channel<State>(Channel.CONFLATED)
 
-   // Синхронизированные операции
+   // Синхронизированные операции: прямая передача
    Channel<Request>(Channel.RENDEZVOUS)
    ```
 
 4. **Предпочитайте Flow для трансформаций**:
    ```kotlin
-   //  Flow лучше для этого
+   // Flow естественно подходит для цепочек операторов
    flow { emit(data) }
        .map { transform(it) }
        .filter { isValid(it) }
 
-   //  Неудобно с каналами
+   // С каналами пришлось бы вручную строить pipeline
    val ch1 = Channel<Data>()
    val ch2 = Channel<Transformed>()
-   // Нужна ручная передача
    ```
 
 ### Распространенные Ошибки
 
-1. **Забывание закрытия каналов**:
+1. **Забывание закрытия каналов, управляемых вручную**:
    ```kotlin
-   //  Утечка
+   // Потенциальная утечка
    val ch = Channel<Int>()
    ch.send(1)
-   // Никогда не закрыт!
+   // ch никогда не закрывается
 
-   //  Всегда закрывать
-   try { ch.send(1) }
-   finally { ch.close() }
+   // Лучше явно закрывать, когда источник завершён
+   val ch2 = Channel<Int>()
+   try { ch2.send(1) }
+   finally { ch2.close() }
    ```
 
 2. **Небрежное использование UNLIMITED**:
    ```kotlin
-   //  Риск OutOfMemoryError
+   // Риск OutOfMemoryError
    val ch = Channel<ByteArray>(Channel.UNLIMITED)
    repeat(1000000) { ch.send(ByteArray(1024)) }
 
-   //  Используйте ограниченную емкость
-   val ch = Channel<ByteArray>(100)
+   // Используйте ограниченную емкость
+   val bounded = Channel<ByteArray>(100)
    ```
 
-3. **Неправильный выбор для случая использования**:
+3. **Неправильный выбор примитива**:
    ```kotlin
-   //  Channel для трансформации данных
+   // Использование Channel для чистых трансформаций усложняет код
    val ch = Channel<Int>()
    launch { for (i in ch) process(i) }
 
-   //  Flow для трансформации данных
-   flowOf(1,2,3).map { process(it) }.collect()
+   // Для трансформаций удобнее Flow
+   flowOf(1, 2, 3).map { process(it) }.collect()
    ```
 
-### Преобразование Между Channels И Flow
-
-```kotlin
-// Flow -> Channel (производит в канал)
-fun <T> Flow<T>.produceIn(scope: CoroutineScope): ReceiveChannel<T> =
-    scope.produce {
-        collect { send(it) }
-    }
-
-// Channel -> Flow (потребляет из канала)
-fun <T> ReceiveChannel<T>.consumeAsFlow(): Flow<T> = flow {
-    for (value in this@consumeAsFlow) {
-        emit(value)
-    }
-}
-
-// Использование
-val flow = flowOf(1, 2, 3, 4, 5)
-val channel = flow.produceIn(GlobalScope)
-
-val newFlow = channel.consumeAsFlow()
-```
-
-### Соображения Производительности
-
-```kotlin
-// Channel: Горячий, накладные расходы памяти на буфер
-val channel = Channel<Int>(1000)
-// Хранит 1000 элементов в памяти даже если нет потребителя
-
-// Flow: Холодный, нет накладных расходов памяти до сбора
-val flow = flow { emit(data) }
-// Не используется память до вызова collect()
-
-// Для одного потребителя, предпочитайте Flow
-// Для нескольких потребителей с общим состоянием, используйте Channel
-```
-
-**Краткое содержание**: Channels - горячие, stateful примитивы коммуникации для producer-consumer паттернов, Flow - холодные функциональные реактивные потоки для трансформаций данных. Channels поддерживают буферизацию: RENDEZVOUS (без буфера), BUFFERED (фиксированный размер), UNLIMITED (безграничный), CONFLATED (только последнее). Используйте Channels для шин событий и пулов воркеров, Flows для реактивных потоков данных. Всегда закрывайте каналы. Выбирайте на основе требований горячий vs холодный и необходимости общего состояния.
+**Краткое содержание**: Channel — горячий примитив коммуникации и очереди между корутинами для producer-consumer и распределения задач. Flow — холодный декларативный поток значений для трансформаций и реактивных сценариев. Каналы поддерживают стратегии емкости: RENDEZVOUS (без буфера по емкости), BUFFERED (фиксированный размер), UNLIMITED (без ограничений по емкости), CONFLATED (только последнее значение). Выбирайте на основе горячего vs холодного поведения и семантики очереди/трансформаций, аккуратно управляйте емкостью и жизненным циклом и явно закрывайте каналы, которые вы контролируете.
 
 ---
 
 ## Answer (EN)
 
-Channels and Flows are both used for asynchronous data streams, but they serve different purposes and have distinct characteristics.
+Channels and `Flow`s are both used for asynchronous data streams, but they serve different purposes and have distinct characteristics.
 
 ### Key Differences
 
 | Feature | Channel | Flow |
 |---------|---------|------|
-| **Type** | Hot (eager) | Cold (lazy) |
-| **Execution** | Always active | Activates on collection |
-| **Buffering** | Built-in buffer | No buffer (unless explicitly added) |
-| **Backpressure** | Suspension | Suspension/operators |
-| **Multiple consumers** | Single consumer (by default) | Multiple independent collectors |
-| **State** | Mutable, stateful | Immutable, functional |
-| **Use case** | Producer-consumer, events | Data transformations, reactive streams |
-| **Lifecycle** | Manual close required | Auto-closed on completion |
+| **Type** | Hot-style primitive used by active producers/consumers | Cold (lazy) |
+| **Execution** | Used by running coroutines; an existing channel can receive/send at any time | Starts work only when collected |
+| **Buffering** | Built-in capacity strategies on the channel itself | No inherent channel buffer by default (but buffer()/conflate() and operators can add buffering) |
+| **Backpressure** | Suspension on send/receive based on capacity | Suspension/flow operators coordinate demand |
+| **Multiple consumers** | Single consumer by default; multiple consumers share work (competing receivers) | Multiple independent collectors, each re-runs the upstream |
+| **State** | Mutable, stateful communication | Immutable, declarative pipeline |
+| **Use case** | Producer-consumer queues, task distribution, inter-coroutine events | Data transformations, reactive streams, UI/data updates |
+| **Lifecycle** | Needs explicit close (or producer completion helpers) | Auto-completes when upstream finishes |
 
 ### Channel Basics
 
-Channels are hot streams for communication between coroutines - like a thread-safe queue.
+Channels are hot-style primitives for communication between coroutines, similar to a coroutine-safe queue.
 
 ```kotlin
 // Basic channel usage
@@ -586,7 +533,7 @@ fun main() = runBlocking {
             println("Sending $x")
             channel.send(x)
         }
-        channel.close() // Must close manually
+        channel.close() // Close when done producing
     }
 
     // Consumer
@@ -601,16 +548,16 @@ fun main() = runBlocking {
 
 ### Channel Capacity Strategies
 
-Channels support different buffering strategies via capacity parameter:
+Channels support different buffering strategies via the capacity parameter:
 
-#### 1. Rendezvous (Default, Capacity = 0)
+#### 1. Rendezvous (Default, capacity = 0)
 
 ```kotlin
 val channel = Channel<Int>() // or Channel<Int>(Channel.RENDEZVOUS)
 
 /*
-Behavior: No buffer
-- send() suspends until receive() is called
+Behavior: No capacity buffer
+- send() suspends until a matching receive() is ready
 - receive() suspends until send() is called
 - Direct handoff between producer and consumer
 */
@@ -621,7 +568,7 @@ fun main() = runBlocking {
     launch {
         for (i in 1..3) {
             println("Sending $i at ${System.currentTimeMillis()}")
-            channel.send(i) // Suspends until received
+            channel.send(i)
             println("Sent $i")
         }
         channel.close()
@@ -634,17 +581,6 @@ fun main() = runBlocking {
         delay(500)
     }
 }
-
-/*
-Output:
-Sending 1 at 1000
-(waits...)
-Received 1 at 2000
-Sent 1
-Sending 2 at 2000
-(waits...)
-Received 2 at 2500
-*/
 ```
 
 #### 2. Buffered (capacity = n)
@@ -654,9 +590,9 @@ val channel = Channel<Int>(capacity = 3)
 
 /*
 Behavior: Fixed size buffer
-- send() doesn't suspend until buffer is full
-- receive() doesn't suspend while buffer has values
-- Decouples producer from consumer
+- send() does not suspend until the buffer is full
+- receive() does not suspend while the buffer has values
+- Partially decouples producer and consumer speeds
 */
 
 fun main() = runBlocking {
@@ -671,30 +607,13 @@ fun main() = runBlocking {
         channel.close()
     }
 
-    delay(2000) // Let producer fill buffer
+    delay(2000) // Let producer fill the buffer
 
     for (value in channel) {
         println("Received $value")
         delay(500)
     }
 }
-
-/*
-Output:
-Sending 1
-Sent 1 (no suspend)
-Sending 2
-Sent 2 (no suspend)
-Sending 3
-Sent 3 (no suspend)
-Sending 4 (suspends, buffer full)
-(waits 2 seconds...)
-Received 1
-Sent 4
-Sending 5 (suspends)
-Received 2
-Sent 5
-*/
 ```
 
 #### 3. Unlimited (capacity = UNLIMITED)
@@ -703,10 +622,10 @@ Sent 5
 val channel = Channel<Int>(Channel.UNLIMITED)
 
 /*
-Behavior: Unlimited buffer
-- send() never suspends
-- Memory grows unbounded
-- Dangerous if producer faster than consumer
+Behavior: Unbounded buffer (by capacity setting)
+- send() does not suspend due to buffer being full
+- Memory usage can grow without bound
+- Dangerous if producer is much faster than consumer
 */
 
 fun main() = runBlocking {
@@ -714,7 +633,7 @@ fun main() = runBlocking {
 
     launch {
         repeat(1000000) { i ->
-            channel.send(i) // Never suspends
+            channel.send(i)
             if (i % 100000 == 0) {
                 println("Sent $i items")
             }
@@ -722,7 +641,7 @@ fun main() = runBlocking {
         channel.close()
     }
 
-    delay(100) // Producer sends all instantly
+    delay(100)
 
     var count = 0
     for (value in channel) {
@@ -733,17 +652,6 @@ fun main() = runBlocking {
     }
     println("Total received: $count")
 }
-
-/*
-Output:
-Sent 0 items
-Sent 100000 items
-Sent 200000 items
-... (all sent immediately)
-Received 100000 items
-Received 200000 items
-... (consumer drains buffer)
-*/
 ```
 
 #### 4. Conflated (capacity = CONFLATED)
@@ -752,11 +660,11 @@ Received 200000 items
 val channel = Channel<Int>(Channel.CONFLATED)
 
 /*
-Behavior: Buffer size 1, drops old values
-- send() never suspends
-- Only most recent value kept
-- Old values discarded
-- Good for state updates where only latest matters
+Behavior: Effectively buffer size 1, keeps only latest
+- send() does not suspend due to capacity
+- Only the most recent value is retained
+- Older values are dropped
+- Good for state updates where only the latest matters
 */
 
 fun main() = runBlocking {
@@ -765,7 +673,7 @@ fun main() = runBlocking {
     launch {
         for (i in 1..10) {
             println("Sending $i")
-            channel.send(i) // Never suspends
+            channel.send(i)
             delay(100)
         }
         channel.close()
@@ -777,16 +685,6 @@ fun main() = runBlocking {
         println("Received $value")
     }
 }
-
-/*
-Output:
-Sending 1
-Sending 2
-Sending 3
-...
-Sending 10
-Received 10 (only latest value!)
-*/
 ```
 
 ### Complete Example: All Buffer Types
@@ -803,7 +701,7 @@ suspend fun demonstrateBufferTypes() {
     val buffered = Channel<Int>(3)
     testChannel(buffered, "Buffered")
 
-    // Unlimited - never suspends
+    // Unlimited - no suspension due to capacity
     println("\n=== UNLIMITED ===")
     val unlimited = Channel<Int>(Channel.UNLIMITED)
     testChannel(unlimited, "Unlimited")
@@ -833,15 +731,15 @@ suspend fun testChannel(channel: Channel<Int>, name: String) = coroutineScope {
 }
 ```
 
-### When to Use Channels Vs Flow
+### When to Use Channels vs Flow
 
 #### Use Channels When:
 
-1. **Hot streams** - Data is produced regardless of consumers
-2. **Single producer, single consumer**
-3. **Event buses** - Decoupled communication
-4. **Worker pools** - Distributing work
-5. **Real-time data** - Sensor data, websockets
+1. **Hot-style communication** - data is produced regardless of active collectors
+2. **Single producer/single consumer**, or multiple competing consumers sharing a work queue
+3. **Event/task queues** - decoupled communication between coroutines
+4. **Worker pools** - distributing work across coroutines
+5. **Real-time data** - sensors, websockets (with clear semantics: single consumer or explicit fan-out)
 
 ```kotlin
 // Example: Worker pool with channels
@@ -878,11 +776,11 @@ class WorkerPool(private val workerCount: Int) {
 
 #### Use Flow When:
 
-1. **Cold streams** - Lazy, on-demand computation
-2. **Data transformations** - map, filter, reduce
-3. **Multiple independent collectors**
+1. **Cold streams** - lazy, on-demand computations
+2. **Data transformations** - map, filter, reduce, etc.
+3. **Multiple independent collectors** - each gets its own execution
 4. **Reactive streams** - UI updates, database queries
-5. **Composition** - Complex transformation pipelines
+5. **Composition** - complex transformation pipelines
 
 ```kotlin
 // Example: Data transformation with Flow
@@ -894,9 +792,9 @@ class UserRepository {
             delay(5000)
         }
     }
-    .distinctUntilChanged() // Only emit when changed
-    .map { user -> user.copy(name = user.name.uppercase()) }
-    .catch { emit(User.DEFAULT) }
+        .distinctUntilChanged() // Only emit on change
+        .map { user -> user.copy(name = user.name.uppercase()) }
+        .catch { emit(User.DEFAULT) }
 }
 
 // Multiple collectors work independently
@@ -905,19 +803,19 @@ userRepository.getUserUpdates(123)
 
 userRepository.getUserUpdates(123)
     .collect { user2 -> updateUI2(user2) }
-// Each collector gets independent stream!
+// Each collect starts a new upstream sequence
 ```
 
 ### Converting Between Channels and Flow
 
 ```kotlin
-// Flow -> Channel (produces to channel)
+// Flow -> Channel (produce Flow values into a Channel)
 fun <T> Flow<T>.produceIn(scope: CoroutineScope): ReceiveChannel<T> =
     scope.produce {
         collect { send(it) }
     }
 
-// Channel -> Flow (consumes from channel)
+// Channel -> Flow (consume Channel values as a Flow)
 fun <T> ReceiveChannel<T>.consumeAsFlow(): Flow<T> = flow {
     for (value in this@consumeAsFlow) {
         emit(value)
@@ -931,7 +829,7 @@ val channel = flow.produceIn(GlobalScope)
 val newFlow = channel.consumeAsFlow()
 ```
 
-### Real-world Example: Event Bus with Channels
+### Real-world Example: Event Bus with Channel (work-sharing)
 
 ```kotlin
 sealed class AppEvent {
@@ -941,6 +839,7 @@ sealed class AppEvent {
 }
 
 class EventBus {
+    // Single Channel used as an event queue; subscribers compete for events.
     private val events = Channel<AppEvent>(capacity = Channel.BUFFERED)
 
     suspend fun publish(event: AppEvent) {
@@ -954,7 +853,6 @@ class EventBus {
     }
 }
 
-// Usage
 val eventBus = EventBus()
 
 // Subscriber 1: Logging
@@ -979,12 +877,14 @@ launch {
 eventBus.publish(AppEvent.UserLoggedIn(123))
 ```
 
+Note: In this example, subscribers share (compete for) events from a single channel. They do not each receive a full copy of the stream. For broadcast semantics in real apps, prefer `SharedFlow`/`StateFlow` or a dedicated fan-out mechanism.
+
 ### Real-world Example: Data Pipeline with Flow
 
 ```kotlin
 class DataPipeline {
     fun processStream(): Flow<ProcessedData> = fetchRawData()
-        .buffer(capacity = 50) // Add buffering
+        .buffer(capacity = 50) // Add buffering between stages
         .map { raw -> validate(raw) }
         .filter { it.isValid }
         .map { validated -> transform(validated) }
@@ -992,7 +892,7 @@ class DataPipeline {
             logger.error("Pipeline error", exception)
             emit(ProcessedData.ERROR)
         }
-        .flowOn(Dispatchers.IO) // Run on IO dispatcher
+        .flowOn(Dispatchers.IO)
 
     private fun fetchRawData(): Flow<RawData> = flow {
         while (true) {
@@ -1017,100 +917,99 @@ pipeline.processStream()
 ### Performance Considerations
 
 ```kotlin
-// Channel: Hot, memory overhead for buffer
+// Channel: hot-style synchronization/queue primitive with buffer
 val channel = Channel<Int>(1000)
-// Holds 1000 items in memory even if no consumer
+// Can hold up to 1000 items in memory even if consumer is temporarily absent
 
-// Flow: Cold, no memory overhead until collected
+// Flow: cold, work starts on collection
 val flow = flow { emit(data) }
-// No memory used until collect() called
+// No data is produced until collect() is called
 
-// For single consumer, prefer Flow
-// For multiple consumers with shared state, use Channel
+// For a single consumer and declarative transformations, prefer Flow
+// For work queues and coordinating multiple workers, use Channel
 ```
 
 ### Best Practices
 
-1. **Choose based on hot vs cold**:
+1. **Choose based on hot vs cold semantics**:
    ```kotlin
-   // Hot: Channels for real-time events
+   // Hot-style: Channel for real-time events (single or competing consumers)
    val sensorData = Channel<SensorReading>()
 
    // Cold: Flow for on-demand data
    val userData = flow { emit(fetchUser()) }
    ```
 
-2. **Always close channels**:
+2. **Manage channel lifecycle carefully**:
    ```kotlin
    val channel = Channel<Int>()
    try {
        channel.send(1)
    } finally {
-       channel.close() // Prevent leaks
+       channel.close() // Prevent leaks for manually managed channels
    }
    ```
 
 3. **Use appropriate capacity**:
    ```kotlin
    // Fast producer, slow consumer
-   Channel<Int>(capacity = 100) // Buffer
+   Channel<Int>(capacity = 100)
 
-   // State updates
-   Channel<State>(Channel.CONFLATED) // Latest only
+   // State updates (latest only matters)
+   Channel<State>(Channel.CONFLATED)
 
-   // Synchronized operations
-   Channel<Request>(Channel.RENDEZVOUS) // Direct handoff
+   // Synchronized handoff
+   Channel<Request>(Channel.RENDEZVOUS)
    ```
 
 4. **Prefer Flow for transformations**:
    ```kotlin
-   //  Flow is better for this
+   // Flow is a natural fit for pipelines
    flow { emit(data) }
        .map { transform(it) }
        .filter { isValid(it) }
 
-   //  Awkward with channels
+   // With channels you'd need manual piping
    val ch1 = Channel<Data>()
    val ch2 = Channel<Transformed>()
-   // Manual piping needed
    ```
 
 ### Common Pitfalls
 
-1. **Forgetting to close channels**:
+1. **Forgetting to close channels you own**:
    ```kotlin
-   //  Leak
+   // Potential leak
    val ch = Channel<Int>()
    ch.send(1)
-   // Never closed!
+   // Never closed
 
-   //  Always close
-   val ch = Channel<Int>()
-   try { ch.send(1) }
-   finally { ch.close() }
+   // Better: close when done producing
+   val ch2 = Channel<Int>()
+   try { ch2.send(1) }
+   finally { ch2.close() }
    ```
 
 2. **Using UNLIMITED carelessly**:
    ```kotlin
-   //  OutOfMemoryError risk
+   // OutOfMemoryError risk
    val ch = Channel<ByteArray>(Channel.UNLIMITED)
    repeat(1000000) { ch.send(ByteArray(1024)) }
 
-   //  Use bounded capacity
-   val ch = Channel<ByteArray>(100)
+   // Prefer bounded capacity
+   val bounded = Channel<ByteArray>(100)
    ```
 
-3. **Wrong choice for use case**:
+3. **Choosing the wrong primitive**:
    ```kotlin
-   //  Channel for data transformation
+   // Using Channel for pure data transformations
    val ch = Channel<Int>()
    launch { for (i in ch) process(i) }
 
-   //  Flow for data transformation
-   flowOf(1,2,3).map { process(it) }.collect()
+   // Flow is a better fit here
+   flowOf(1, 2, 3).map { process(it) }.collect()
    ```
 
-**English Summary**: Channels are hot, stateful communication primitives for producer-consumer patterns, while Flows are cold, functional reactive streams for data transformations. Channels support buffering with strategies: RENDEZVOUS (no buffer), BUFFERED (fixed size), UNLIMITED (unbounded), and CONFLATED (latest only). Use Channels for event buses and worker pools, Flows for reactive data streams. Always close channels to prevent leaks. Choose based on hot vs cold requirements and whether you need shared state.
+**English Summary**: Channels are hot-style, stateful communication primitives and queues for producer-consumer and work distribution, while Flows are cold, declarative streams for data transformations and reactive patterns. Channels support capacity strategies: RENDEZVOUS (no capacity buffer), BUFFERED (fixed size), UNLIMITED (unbounded), and CONFLATED (latest only). Use Channels for task queues and inter-coroutine communication, and Flows for transformation pipelines and reactive data. Manage channel lifecycles carefully, choose capacities thoughtfully, and base your choice on hot vs cold semantics and queue vs transformation requirements.
 
 ## Follow-ups
 
@@ -1119,6 +1018,9 @@ val flow = flow { emit(data) }
 - What are common pitfalls to avoid?
 
 ## References
+- [[c-kotlin]]
+- [[c-coroutines]]
+- [[c-flow]]
 - [Channels - Kotlin Coroutines Guide](https://kotlinlang.org/docs/channels.html)
 - [Flow - Kotlin Documentation](https://kotlinlang.org/docs/flow.html)
 - [Channel capacity - API Reference](https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines.channels/-channel/)
@@ -1138,9 +1040,9 @@ val flow = flow { emit(data) }
 - [[q-channel-flow-comparison--kotlin--medium]] - Coroutines
 - [[q-hot-cold-flows--kotlin--medium]] - Hot vs Cold flows
 - [[q-cold-vs-hot-flows--kotlin--medium]] - Cold vs Hot flows explained
-- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs LiveData
-- [[q-sharedflow-stateflow--kotlin--medium]] - SharedFlow vs StateFlow
-- [[q-stateflow-sharedflow-differences--kotlin--medium]] - StateFlow & SharedFlow differences
+- [[q-flow-vs-livedata-comparison--kotlin--medium]] - Flow vs `LiveData`
+- [[q-sharedflow-stateflow--kotlin--medium]] - `SharedFlow` vs `StateFlow`
+- [[q-stateflow-sharedflow-differences--kotlin--medium]] - `StateFlow` & `SharedFlow` differences
 
 ### Advanced (Harder)
 - [[q-select-expression-channels--kotlin--hard]] - Coroutines
