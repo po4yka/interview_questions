@@ -5,6 +5,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Annotated, Any, Literal, Mapping, TypedDict, cast
 
+from .issue_history import filter_blocking_issue_history
+
 
 def _append_history(
     existing: list[dict[str, Any]], new_entries: list[dict[str, Any]]
@@ -233,7 +235,8 @@ class NoteReviewState:
         """Record the current issues as a signature for oscillation detection."""
         # Create a signature from current issues (severity + message)
         current_signatures = {
-            f"{issue.severity}:{issue.message}" for issue in self.issues
+            f"{issue.severity}:{issue.message}"
+            for issue in self.issues
         }
         self.issue_history.append(current_signatures)
 
@@ -248,20 +251,29 @@ class NoteReviewState:
         Returns:
             (is_oscillating, explanation) tuple
         """
+        blocking_history = filter_blocking_issue_history(self.issue_history)
+
+        if not blocking_history:
+            return False, None
+
+        # If the current iteration only has warning/info issues, oscillation shouldn't trigger
+        current_blocking_issues = blocking_history[-1]
+        if len(current_blocking_issues) == 0:
+            return False, None
+
         # STRATEGY 1: Immediate reversal detection
         # Check if issue from previous iteration reappeared
-        if len(self.issue_history) >= 2:
-            current_issues = self.issue_history[-1]
-            previous_issues = self.issue_history[-2]
+        if len(blocking_history) >= 2:
+            previous_issues = blocking_history[-2]
 
             # Check for exact match (issue disappeared and came back)
             # This shouldn't happen if fixes are working
-            reverted_issues = current_issues & previous_issues
+            reverted_issues = current_blocking_issues & previous_issues
 
-            if len(reverted_issues) > 0 and len(reverted_issues) == len(current_issues):
+            if len(reverted_issues) > 0 and len(reverted_issues) == len(current_blocking_issues):
                 # ALL current issues are from previous iteration = oscillation
                 explanation = (
-                    f"Oscillation detected: All {len(reverted_issues)} issue(s) from "
+                    f"Oscillation detected: All {len(reverted_issues)} blocking issue(s) from "
                     f"iteration {self.iteration - 1} reappeared in iteration {self.iteration}. "
                     f"Fixer likely reversed its own changes. "
                     f"Issues: {list(reverted_issues)[:3]}"
@@ -269,39 +281,44 @@ class NoteReviewState:
                 return True, explanation
 
         # STRATEGY 2: Original cycle detection (existing logic)
-        if len(self.issue_history) < 3:
+        if len(blocking_history) < 3:
             return False, None
 
-        current_issues = self.issue_history[-1]
-
         # Check against issues 2-3 iterations ago
-        for i in range(2, min(4, len(self.issue_history))):
-            if i >= len(self.issue_history):
+        for offset in range(2, min(4, len(blocking_history) + 1)):
+            if offset > len(blocking_history):
                 break
 
-            previous_issues = self.issue_history[-i]
-            common_issues = current_issues & previous_issues
+            previous_issues = blocking_history[-offset]
+            if not previous_issues:
+                continue
+
+            common_issues = current_blocking_issues & previous_issues
 
             if len(common_issues) > 0:
-                oscillation_rate = len(common_issues) / len(current_issues) if current_issues else 0
+                oscillation_rate = (
+                    len(common_issues) / len(current_blocking_issues)
+                    if current_blocking_issues
+                    else 0
+                )
 
                 if oscillation_rate > 0.5:  # More than 50% of issues are repeating
                     explanation = (
-                        f"Oscillation detected: {len(common_issues)} issue(s) from "
-                        f"iteration {self.iteration - i + 1} reappeared in iteration {self.iteration}. "
+                        f"Oscillation detected: {len(common_issues)} blocking issue(s) from "
+                        f"iteration {self.iteration - offset + 1} reappeared in iteration {self.iteration}. "
                         f"This suggests conflicting validators or unstable fixes. "
                         f"Repeating issues: {list(common_issues)[:3]}"
                     )
                     return True, explanation
 
         # STRATEGY 3: No-progress detection
-        if len(self.issue_history) >= 3:
-            last_3_counts = [len(issues) for issues in self.issue_history[-3:]]
+        if len(blocking_history) >= 3:
+            last_3_counts = [len(issues) for issues in blocking_history[-3:]]
 
             # If issue count hasn't decreased in last 3 iterations
             if last_3_counts[0] <= last_3_counts[1] <= last_3_counts[2]:
-                # AND they're all the same count
-                if last_3_counts[0] == last_3_counts[2]:
+                # AND they're all the same count (non-zero)
+                if last_3_counts[0] == last_3_counts[2] and last_3_counts[0] > 0:
                     explanation = (
                         f"Oscillation detected: Issue count stuck at {last_3_counts[0]} "
                         f"for 3 consecutive iterations. No progress being made."

@@ -57,6 +57,9 @@ class DeterministicFixer:
             "missing_timestamp": re.compile(
                 r"Missing.*(?:created|updated)", re.IGNORECASE
             ),
+            "future_timestamp": re.compile(
+                r"in the future", re.IGNORECASE
+            ),
             "type_name_backticks": re.compile(
                 r"Type name '([^']+)' found without backticks", re.IGNORECASE
             ),
@@ -144,7 +147,30 @@ class DeterministicFixer:
                         issues_fixed.append(issue.message)
                         changes_made = True
 
-        # Fix 4: Wrap common type names in backticks outside code blocks
+        # Fix 4: Future-dated timestamps
+        future_timestamp_issues: list[str] = []
+        future_fix_applied = False
+        future_updates: list[str] = []
+        for issue in issues:
+            if self.fix_patterns["future_timestamp"].search(issue.message):
+                future_timestamp_issues.append(issue.message)
+                if not future_fix_applied:
+                    changed, updates = self._fix_future_timestamps(yaml_data)
+                    if changed:
+                        future_updates = updates
+                        changes_made = True
+                        future_fix_applied = True
+
+        if future_fix_applied:
+            description = (
+                "Corrected future timestamps: " + ", ".join(future_updates)
+                if future_updates
+                else "Corrected future timestamps"
+            )
+            fixes_applied.append(description)
+            issues_fixed.extend(future_timestamp_issues)
+
+        # Fix 5: Wrap common type names in backticks outside code blocks
         processed_type_names: set[str] = set()
         type_pattern = self.fix_patterns["type_name_backticks"]
         for issue in issues:
@@ -286,6 +312,56 @@ class DeterministicFixer:
             changed = True
 
         return changed
+
+    def _fix_future_timestamps(self, yaml_data: dict[str, Any]) -> tuple[bool, list[str]]:
+        """Clamp future-dated timestamps back to the current date."""
+
+        current_date = datetime.now().date()
+        current_date_str = current_date.strftime("%Y-%m-%d")
+        changed = False
+        updates: list[str] = []
+
+        for field in ("created", "updated"):
+            if field not in yaml_data:
+                continue
+
+            raw_value = yaml_data[field]
+            try:
+                parsed_value = datetime.strptime(str(raw_value), "%Y-%m-%d").date()
+            except (TypeError, ValueError):
+                logger.debug(
+                    "Skipping future timestamp fix for %s: invalid format %r",
+                    field,
+                    raw_value,
+                )
+                continue
+
+            if parsed_value > current_date:
+                yaml_data[field] = current_date_str
+                updates.append(f"{field}={parsed_value}→{current_date_str}")
+                logger.debug(
+                    "Reset %s timestamp from %s to %s (value was in the future)",
+                    field,
+                    parsed_value,
+                    current_date_str,
+                )
+                changed = True
+
+        if all(field in yaml_data for field in ("created", "updated")):
+            try:
+                created = datetime.strptime(str(yaml_data["created"]), "%Y-%m-%d").date()
+                updated = datetime.strptime(str(yaml_data["updated"]), "%Y-%m-%d").date()
+                if created > updated:
+                    yaml_data["created"] = yaml_data["updated"]
+                    updates.append(f"created aligned to {yaml_data['created']} for ordering")
+                    logger.debug(
+                        "Adjusted 'created' timestamp to not exceed 'updated' after future-date correction",
+                    )
+                    changed = True
+            except (TypeError, ValueError):
+                logger.debug("Could not validate timestamp ordering after future-date fix")
+
+        return changed, updates
 
     def _reconstruct_note(self, yaml_data: dict[str, Any], body: str) -> str:
         """Reconstruct note with modified YAML frontmatter.

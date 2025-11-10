@@ -163,3 +163,32 @@ class TestStrictQANoneTypeFix:
         # Should pass despite warnings
         assert result.should_pass
         assert len(result.warnings) > 0
+
+    def test_warning_history_does_not_trigger_oscillation_block(self):
+        """Warnings repeating across iterations should not fail strict QA."""
+
+        verifier = StrictQAVerifier()
+
+        issues = [
+            ReviewIssue(
+                severity="WARNING",
+                message="[Metadata] created timestamp is in the future",
+                field="frontmatter",
+            )
+        ]
+
+        issue_history = [
+            {"WARNING:[Metadata] created timestamp is in the future"},
+            {"WARNING:[Metadata] created timestamp is in the future"},
+            {"WARNING:[Metadata] created timestamp is in the future"},
+        ]
+
+        result = verifier.verify(
+            current_issues=issues,
+            history=[],
+            issue_history=issue_history,
+            iteration=3,
+        )
+
+        assert result.should_pass
+        assert not result.blocking_reasons

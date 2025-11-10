@@ -25,6 +25,8 @@ from typing import Any
 
 from loguru import logger
 
+from .issue_history import filter_blocking_issue_history
+
 
 @dataclass
 class QABlockingReason:
@@ -91,10 +93,12 @@ class StrictQAVerifier:
                     )
                 )
 
+        blocking_history = filter_blocking_issue_history(issue_history)
+
         # CRITERION 2: Block if issue count increased in last iteration (regression)
-        if len(issue_history) >= 2:
-            prev_count = len(issue_history[-2])
-            curr_count = len(issue_history[-1])
+        if len(blocking_history) >= 2:
+            prev_count = len(blocking_history[-2])
+            curr_count = len(blocking_history[-1])
 
             if curr_count > prev_count:
                 blocking_reasons.append(
@@ -107,8 +111,8 @@ class StrictQAVerifier:
                 )
 
         # CRITERION 3: Block if same issues appear in multiple iterations (oscillation)
-        if len(issue_history) >= 3:
-            oscillating_issues = self._detect_oscillating_issues(issue_history)
+        if len(blocking_history) >= 3:
+            oscillating_issues = self._detect_oscillating_issues(blocking_history)
             if oscillating_issues:
                 for issue_sig in oscillating_issues:
                     blocking_reasons.append(
@@ -222,6 +226,10 @@ class StrictQAVerifier:
             iter_n = issue_history[i]
             iter_n1 = issue_history[i + 1]
             iter_n2 = issue_history[i + 2]
+
+            if not iter_n or not iter_n2:
+                # Nothing to compare (warnings-only iterations are filtered out)
+                continue
 
             # Find issues that were in N, not in N+1, but back in N+2
             disappeared = iter_n - iter_n1
