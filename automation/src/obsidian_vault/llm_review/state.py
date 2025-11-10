@@ -72,6 +72,7 @@ class NoteReviewStateDict(TypedDict, total=False):
     issue_history: list[set[str]]  # Track issue signatures per iteration for oscillation detection
     fix_attempts: list[FixAttempt]  # Track fix attempts to prevent repeated mistakes
     changed_sections: set[str]  # Track which sections changed (for incremental validation)
+    trace_id: str | None  # UUID for tracking note through workflow logs
 
 
 @dataclass
@@ -115,6 +116,9 @@ class NoteReviewState:
 
     # Section change tracking (for incremental validation)
     changed_sections: set[str] = field(default_factory=set)
+
+    # Trace ID for following note through workflow logs
+    trace_id: str | None = None
 
     @classmethod
     def from_dict(cls, data: Mapping[str, Any]) -> "NoteReviewState":
@@ -169,6 +173,7 @@ class NoteReviewState:
             issue_history=issue_history,
             fix_attempts=fix_attempts,
             changed_sections=changed_sections,
+            trace_id=data.get("trace_id"),
         )
 
     def to_dict(self) -> NoteReviewStateDict:
@@ -193,6 +198,7 @@ class NoteReviewState:
             "issue_history": [list(entry) for entry in self.issue_history],
             "fix_attempts": list(self.fix_attempts),
             "changed_sections": list(self.changed_sections),
+            "trace_id": self.trace_id,
         }
 
     def add_history_entry(self, node: str, message: str, **kwargs) -> dict[str, Any]:

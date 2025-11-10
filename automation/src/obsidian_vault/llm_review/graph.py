@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import re
+import uuid
 from collections import Counter
 from dataclasses import replace
 from datetime import datetime
@@ -125,9 +126,27 @@ class ReviewGraph:
 
     WORKFLOW ARCHITECTURE:
     ----------------------
-    START → initial_llm_review → run_validators (includes metadata check each iteration)
+    START → pre_flight_check → initial_llm_review → run_validators (includes metadata check each iteration)
       → check_bilingual_parity → [decision] → llm_fix_issues (loop) OR qa_verification (final)
       → [on failure] → summarize_qa_failures → END
+
+    PRE-FLIGHT VALIDATION:
+    ----------------------
+    Before starting the review workflow, the pre_flight_check node validates:
+    - UTF-8 encoding is valid
+    - YAML frontmatter is parseable
+    - Minimum content length (>100 chars)
+    - Required bilingual sections exist
+    If any check fails, the note is marked for human review and workflow exits early.
+
+    POST-FIX VALIDATION:
+    --------------------
+    After each fix (deterministic or LLM), the system validates:
+    - YAML is still parseable
+    - Content didn't shrink dramatically (>30%)
+    - Essential sections still present
+    - No null bytes or invalid UTF-8
+    If validation fails, the fix is rejected and the note is marked for human review.
 
     METADATA VALIDATION STRATEGY:
     -----------------------------
@@ -237,6 +256,7 @@ class ReviewGraph:
         """Build the LangGraph workflow."""
         workflow = StateGraph(NoteReviewStateDict)
 
+        workflow.add_node("pre_flight_check", self._pre_flight_check)
         workflow.add_node("initial_llm_review", self._initial_llm_review)
         workflow.add_node("run_validators", self._run_validators)
         workflow.add_node("check_bilingual_parity", self._check_bilingual_parity)
@@ -244,7 +264,15 @@ class ReviewGraph:
         workflow.add_node("qa_verification", self._qa_verification)
         workflow.add_node("summarize_qa_failures", self._summarize_qa_failures)
 
-        workflow.add_edge(START, "initial_llm_review")
+        workflow.add_edge(START, "pre_flight_check")
+        workflow.add_conditional_edges(
+            "pre_flight_check",
+            lambda state: "done" if state.get("error") else "continue",
+            {
+                "continue": "initial_llm_review",
+                "done": END,
+            },
+        )
         workflow.add_edge("initial_llm_review", "run_validators")
         workflow.add_edge("run_validators", "check_bilingual_parity")
 
@@ -436,6 +464,181 @@ class ReviewGraph:
             logger.debug("No section changes detected")
 
         return changed
+
+    def _validate_fix(self, text_before: str, text_after: str, note_path: str) -> tuple[bool, str | None]:
+        """Validate that a fix didn't break the note structure.
+
+        IMPROVEMENT 2: Post-fix validation to reject broken fixes.
+
+        Args:
+            text_before: Note content before fix
+            text_after: Note content after fix
+            note_path: Path to the note (for logging)
+
+        Returns:
+            (is_valid, error_message) tuple
+        """
+        logger.debug(f"Validating fix for {note_path}...")
+
+        # Check 1: YAML is still parseable
+        try:
+            from obsidian_vault.utils.frontmatter import load_frontmatter_text
+            yaml_after, body_after = load_frontmatter_text(text_after)
+            if yaml_after is None:
+                return False, "Fix broke YAML frontmatter - YAML is no longer parseable"
+        except Exception as e:
+            return False, f"Fix broke YAML frontmatter - parsing error: {e}"
+
+        # Check 2: Content didn't shrink dramatically (>30% loss is suspicious)
+        len_before = len(text_before)
+        len_after = len(text_after)
+        if len_before > 0:
+            shrinkage = (len_before - len_after) / len_before
+            if shrinkage > 0.3:
+                return False, f"Fix removed too much content - {shrinkage*100:.1f}% shrinkage (before: {len_before} chars, after: {len_after} chars)"
+
+        # Check 3: Essential bilingual sections still present
+        required_sections = [
+            "# Question (EN)",
+            "# Вопрос (RU)",
+            "## Answer (EN)",
+            "## Ответ (RU)",
+        ]
+        missing_sections = []
+        for section in required_sections:
+            if section in text_before and section not in text_after:
+                missing_sections.append(section)
+
+        if missing_sections:
+            return False, f"Fix removed required sections: {', '.join(missing_sections)}"
+
+        # Check 4: No null bytes or invalid characters
+        if '\x00' in text_after:
+            return False, "Fix introduced null bytes into the content"
+
+        # Check 5: Text is valid UTF-8
+        try:
+            text_after.encode('utf-8')
+        except UnicodeEncodeError as e:
+            return False, f"Fix introduced invalid UTF-8 characters: {e}"
+
+        logger.debug("Fix validation passed - all checks successful")
+        return True, None
+
+    async def _pre_flight_check(self, state: NoteReviewStateDict) -> dict[str, Any]:
+        """Node: Pre-flight validation before starting the review workflow.
+
+        IMPROVEMENT 3: Check YAML, encoding, structure before starting to fail fast.
+
+        Args:
+            state: Current state
+
+        Returns:
+            State updates (error if validation fails)
+        """
+        state_obj = NoteReviewState.from_dict(state)
+        history_updates: list[dict[str, Any]] = []
+
+        logger.info(f"Running pre-flight checks for {state_obj.note_path}")
+        history_updates.append(
+            state_obj.add_history_entry(
+                "pre_flight_check",
+                "Running pre-flight validation checks",
+            )
+        )
+
+        try:
+            text = state_obj.current_text
+            errors = []
+
+            # Check 1: Minimum content length (should be at least 100 chars for a valid Q&A)
+            if len(text) < 100:
+                errors.append(f"Content too short: {len(text)} chars (minimum: 100)")
+
+            # Check 2: Valid UTF-8 encoding
+            try:
+                text.encode('utf-8')
+            except UnicodeEncodeError as e:
+                errors.append(f"Invalid UTF-8 encoding: {e}")
+
+            # Check 3: No null bytes
+            if '\x00' in text:
+                errors.append("Content contains null bytes")
+
+            # Check 4: YAML frontmatter is parseable
+            from obsidian_vault.utils.frontmatter import load_frontmatter_text
+            try:
+                yaml_data, body = load_frontmatter_text(text)
+                if yaml_data is None:
+                    errors.append("YAML frontmatter is missing or not parseable")
+                elif not body or len(body.strip()) < 50:
+                    errors.append("Note body is missing or too short")
+            except Exception as e:
+                errors.append(f"YAML frontmatter parsing failed: {e}")
+
+            # Check 5: Required bilingual sections exist
+            required_sections = [
+                ("# Question (EN)", "English question section"),
+                ("# Вопрос (RU)", "Russian question section"),
+                ("## Answer (EN)", "English answer section"),
+                ("## Ответ (RU)", "Russian answer section"),
+            ]
+            missing_sections = []
+            for marker, name in required_sections:
+                if marker not in text:
+                    missing_sections.append(name)
+
+            if missing_sections:
+                errors.append(f"Missing required sections: {', '.join(missing_sections)}")
+
+            # If any errors found, mark for human review and fail fast
+            if errors:
+                error_summary = "; ".join(errors)
+                logger.error(f"Pre-flight check FAILED for {state_obj.note_path}: {error_summary}")
+                history_updates.append(
+                    state_obj.add_history_entry(
+                        "pre_flight_check",
+                        f"Pre-flight check failed: {len(errors)} error(s)",
+                        errors=errors,
+                    )
+                )
+
+                return {
+                    "error": f"Pre-flight validation failed: {error_summary}",
+                    "requires_human_review": True,
+                    "completed": True,
+                    "decision": "done",
+                    "history": history_updates,
+                }
+
+            # All checks passed
+            logger.info(f"Pre-flight checks passed for {state_obj.note_path}")
+            history_updates.append(
+                state_obj.add_history_entry(
+                    "pre_flight_check",
+                    "Pre-flight checks passed - note is processable",
+                )
+            )
+
+            return {
+                "history": history_updates,
+            }
+
+        except Exception as e:
+            logger.error(f"Error in pre-flight check: {e}")
+            history_updates.append(
+                state_obj.add_history_entry(
+                    "pre_flight_check",
+                    f"Pre-flight check error: {e}",
+                )
+            )
+            return {
+                "error": f"Pre-flight check failed with exception: {e}",
+                "requires_human_review": True,
+                "completed": True,
+                "decision": "done",
+                "history": history_updates,
+            }
 
     async def _run_validators(self, state: NoteReviewStateDict) -> dict[str, Any]:
         """Node: Run metadata checks and structural validation scripts.
@@ -1298,16 +1501,39 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
                     f"Deterministic fixer applied {len(deterministic_result.fixes_applied)} fix(es), "
                     f"resolved {len(deterministic_result.issues_fixed)} issue(s)"
                 )
-                history_updates.append(
-                    state_obj.add_history_entry(
-                        "deterministic_fixer",
-                        f"Applied {len(deterministic_result.fixes_applied)} deterministic fix(es)",
-                        fixes=deterministic_result.fixes_applied,
-                        issues_fixed=deterministic_result.issues_fixed,
-                    )
+
+                # IMPROVEMENT 2: Validate deterministic fix before accepting
+                is_valid, validation_error = self._validate_fix(
+                    state_obj.current_text,
+                    deterministic_result.revised_text,
+                    state_obj.note_path
                 )
 
-                state_obj.current_text = deterministic_result.revised_text
+                if not is_valid:
+                    logger.error(f"Deterministic fix validation FAILED: {validation_error}")
+                    logger.warning("Rejecting deterministic fix and keeping original text")
+                    history_updates.append(
+                        state_obj.add_history_entry(
+                            "deterministic_fix_validation",
+                            f"Deterministic fix rejected: {validation_error}",
+                            validation_error=validation_error,
+                        )
+                    )
+
+                    # Don't fail immediately - let LLM try to fix
+                    logger.info("Continuing to LLM fixer despite deterministic fix rejection")
+                else:
+                    logger.info("Deterministic fix validation passed - accepting changes")
+                    history_updates.append(
+                        state_obj.add_history_entry(
+                            "deterministic_fixer",
+                            f"Applied {len(deterministic_result.fixes_applied)} deterministic fix(es)",
+                            fixes=deterministic_result.fixes_applied,
+                            issues_fixed=deterministic_result.issues_fixed,
+                        )
+                    )
+
+                    state_obj.current_text = deterministic_result.revised_text
 
                 remaining_issues = [
                     issue for issue in state_obj.issues
@@ -1396,6 +1622,34 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
             updates: dict[str, Any] = {}
             if result.changes_made:
+                # IMPROVEMENT 2: Validate fix before accepting it
+                is_valid, validation_error = self._validate_fix(
+                    state_obj.current_text,
+                    result.revised_text,
+                    state_obj.note_path
+                )
+
+                if not is_valid:
+                    logger.error(f"Fix validation FAILED: {validation_error}")
+                    logger.warning("Rejecting fix and keeping original text")
+                    history_updates.append(
+                        state_obj.add_history_entry(
+                            "fix_validation",
+                            f"Fix rejected: {validation_error}",
+                            validation_error=validation_error,
+                        )
+                    )
+
+                    # Mark for human review
+                    return {
+                        "error": f"Fix validation failed: {validation_error}",
+                        "requires_human_review": True,
+                        "history": history_updates,
+                        "decision": "summarize_failures",
+                        "changed": False,
+                    }
+
+                logger.info("Fix validation passed - accepting changes")
                 updates["current_text"] = result.revised_text
                 updates["changed"] = True
                 logger.info(f"Applied fixes: {', '.join(result.fixes_applied)}")
@@ -1947,9 +2201,15 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
 
         import time
 
-        logger.info("=" * 70)
-        logger.info(f"Processing note: {note_path.name}")
-        logger.debug(f"Full path: {note_path}")
+        # IMPROVEMENT 1: Generate UUID trace ID for structured logging
+        trace_id = str(uuid.uuid4())
+        # Bind trace_id to logger for all subsequent log messages
+        bound_logger = logger.bind(trace_id=trace_id)
+
+        bound_logger.info("=" * 70)
+        bound_logger.info(f"Processing note: {note_path.name}")
+        bound_logger.debug(f"Full path: {note_path}")
+        bound_logger.debug(f"Trace ID: {trace_id}")
 
         note_path_key = self._resolve_note_path_key(note_path)
         self.analytics.start_note(
@@ -1962,9 +2222,9 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         # Read the note
         try:
             original_text = note_path.read_text(encoding="utf-8")
-            logger.debug(f"Read {len(original_text)} characters from note")
+            bound_logger.debug(f"Read {len(original_text)} characters from note")
         except Exception as e:
-            logger.error("Failed to read note {}: {}", note_path, e)
+            bound_logger.error("Failed to read note {}: {}", note_path, e)
             error_message = f"Failed to read note: {e}"
             error_state = self._create_error_state(
                 note_path_key,
@@ -1990,14 +2250,15 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             original_text=original_text,
             current_text=original_text,
             max_iterations=self.max_iterations,
+            trace_id=trace_id,
         )
-        logger.debug(f"Initialized state with max_iterations={self.max_iterations}")
+        bound_logger.debug(f"Initialized state with max_iterations={self.max_iterations}")
 
         if note_path_key in self.fix_memory:
             self.fix_memory[note_path_key].clear()
-            logger.debug("Cleared existing Fix Memory for this note")
+            bound_logger.debug("Cleared existing Fix Memory for this note")
 
-        logger.info(f"Starting LangGraph workflow for {note_path.name}")
+        bound_logger.info(f"Starting LangGraph workflow for {note_path.name}")
         try:
             config = {"recursion_limit": 50}
             final_state_dict = await self.graph.ainvoke(
@@ -2005,9 +2266,9 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             )
             final_state = NoteReviewState.from_dict(final_state_dict)
             elapsed_time = time.time() - start_time
-            logger.debug(f"LangGraph workflow completed in {elapsed_time:.2f}s")
+            bound_logger.debug(f"LangGraph workflow completed in {elapsed_time:.2f}s")
         except Exception as e:
-            logger.error("LangGraph workflow failed for {}: {}", note_path, e)
+            bound_logger.error("LangGraph workflow failed for {}: {}", note_path, e)
             elapsed = time.time() - start_time
             error_message = str(e)
             error_state = self._create_error_state(
@@ -2031,7 +2292,7 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             return error_state
 
         elapsed_time = time.time() - start_time
-        logger.success(
+        bound_logger.success(
             f"Completed review for {note_path.name} - "
             f"changed: {final_state.changed}, "
             f"iterations: {final_state.iteration}, "
@@ -2040,10 +2301,10 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
         )
 
         if final_state.error:
-            logger.error(f"Workflow ended with error: {final_state.error}")
+            bound_logger.error(f"Workflow ended with error: {final_state.error}")
 
         if final_state.requires_human_review:
-            logger.warning(f"Note requires human review: {note_path.name}")
+            bound_logger.warning(f"Note requires human review: {note_path.name}")
 
         self.analytics.finalize(
             note_path_key,
@@ -2055,8 +2316,8 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             requires_human_review=final_state.requires_human_review,
         )
 
-        logger.debug(f"Workflow history: {len(final_state.history)} entries")
-        logger.info("=" * 70)
+        bound_logger.debug(f"Workflow history: {len(final_state.history)} entries")
+        bound_logger.info("=" * 70)
 
         return final_state
 
