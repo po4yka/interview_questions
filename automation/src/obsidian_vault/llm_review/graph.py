@@ -29,6 +29,7 @@ from .agents import (
 )
 from .analytics import ReviewAnalyticsRecorder
 from .atomic_related_fixer import AtomicRelatedFixer
+from .decision_logic import DecisionContext, compute_decision, should_issues_block_completion
 from .deterministic_fixer import DeterministicFixer
 from .fix_memory import FixMemory
 from .smart_code_parity import SmartCodeParityChecker
@@ -1318,40 +1319,19 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
     def _should_issues_block_completion(self, issues: list[ReviewIssue]) -> tuple[bool, str]:
         """Check if issues should block completion based on severity thresholds.
 
+        Delegates to decision_logic.should_issues_block_completion for testability.
+
         Args:
             issues: List of current issues
 
         Returns:
             (should_block, reason) tuple
         """
-        if not issues:
-            return False, "No issues remaining"
-
-        # Count issues by severity
-        severity_counts = Counter(issue.severity for issue in issues)
-
-        # Get thresholds for current mode
-        thresholds = COMPLETION_THRESHOLDS[self.completion_mode]
-
-        # Check if any severity exceeds its threshold
-        blocking_severities = []
-        for severity, count in severity_counts.items():
-            max_allowed = thresholds.get(severity, 0)
-            if count > max_allowed:
-                blocking_severities.append(f"{severity}:{count}>{max_allowed}")
-
-        if blocking_severities:
-            reason = (
-                f"Issues exceed {self.completion_mode.value} mode thresholds: "
-                f"{', '.join(blocking_severities)}"
-            )
-            return True, reason
-        else:
-            summary = ', '.join(f"{sev}:{cnt}" for sev, cnt in severity_counts.items())
-            reason = (
-                f"Issues within {self.completion_mode.value} mode thresholds: {summary}"
-            )
-            return False, reason
+        return should_issues_block_completion(
+            issues=issues,
+            completion_mode=self.completion_mode.value,
+            completion_thresholds=COMPLETION_THRESHOLDS[self.completion_mode],
+        )
 
     def _get_fix_memory(self, note_path: str) -> FixMemory:
         """Get or create FixMemory for a note.
@@ -2001,6 +1981,8 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
     def _compute_decision(self, state: NoteReviewState) -> tuple[str, str]:
         """Compute the next step decision and corresponding history message.
 
+        Delegates to decision_logic.compute_decision for testability.
+
         Decision logic:
         1. If requires_human_review flag set -> summarize_failures
         2. If oscillation detected -> summarize_failures
@@ -2023,69 +2005,46 @@ tags: ["{topic}", "concept", "difficulty/medium", "auto-generated"]
             f"qa_passed={state.qa_verification_passed}"
         )
 
-        if state.requires_human_review:
-            message = (
-                f"Fix agent could not apply changes - escalating to human review "
-                f"(iteration {state.iteration}/{state.max_iterations}, "
-                f"{len(state.issues)} unresolved issue(s))"
-            )
-            logger.warning(message)
-            return "summarize_failures", message
-
+        # Detect oscillation
         is_oscillating, oscillation_explanation = state.detect_oscillation()
-        if is_oscillating:
-            message = (
-                f"CIRCUIT BREAKER TRIGGERED: Oscillation detected - stopping iteration. "
-                f"{oscillation_explanation}"
-            )
-            logger.error(message)
-            return "summarize_failures", message
 
-        if state.iteration >= state.max_iterations:
-            has_unresolved_issues = state.has_any_issues()
-            qa_failed = state.qa_verification_passed is False
+        # Create decision context
+        ctx = DecisionContext(
+            requires_human_review=state.requires_human_review,
+            completed=state.completed,
+            error=state.error,
+            iteration=state.iteration,
+            max_iterations=state.max_iterations,
+            issues=state.issues,
+            has_oscillation=is_oscillating,
+            oscillation_explanation=oscillation_explanation,
+            qa_verification_passed=state.qa_verification_passed,
+            completion_mode=self.completion_mode.value,
+            completion_thresholds=COMPLETION_THRESHOLDS[self.completion_mode],
+        )
 
-            if has_unresolved_issues or qa_failed:
-                message = (
-                    f"Max iterations ({state.max_iterations}) reached with unresolved issues - "
-                    f"triggering failure summarizer"
-                )
+        # Compute decision using pure function
+        decision, message = compute_decision(ctx)
+
+        # Log decision
+        if decision == "summarize_failures":
+            if state.requires_human_review:
                 logger.warning(message)
-                return "summarize_failures", message
             else:
-                message = f"Stopping: max iterations ({state.max_iterations}) reached"
-                logger.warning(message)
-                return "done", message
-
-        if state.error:
-            message = f"Stopping: error occurred: {state.error}"
-            logger.error(f"Stopping due to error: {state.error}")
-            return "done", message
-
-        if state.completed:
-            message = "Stopping: completed flag set"
-            logger.info("Completed flag set - stopping iteration")
-            return "done", message
-
-        should_block, block_reason = self._should_issues_block_completion(state.issues)
-
-        if not should_block:
-            if state.qa_verification_passed is None:
-                message = f"Issues don't block completion ({block_reason}) - routing to QA verification"
-                logger.info(message)
-                return "qa_verify", message
+                logger.error(message) if is_oscillating else logger.warning(message)
+        elif decision == "done":
+            if state.error:
+                logger.error(message)
             elif state.qa_verification_passed:
-                message = f"Stopping: {block_reason} and QA verification passed"
-                logger.success("Workflow complete - QA verification passed")
-                return "done", message
+                logger.success(message)
             else:
-                message = f"Continuing: QA verification found issues to fix (previous: {block_reason})"
-                logger.info(message)
-                return "continue", message
-        else:
-            message = f"Continuing to iteration {state.iteration + 1} ({block_reason})"
+                logger.warning(message)
+        elif decision == "qa_verify":
             logger.info(message)
-            return "continue", message
+        else:  # continue
+            logger.info(message)
+
+        return decision, message
 
     def _should_continue_fixing(self, state: NoteReviewStateDict) -> str:
         """Determine if we should continue the fix loop.
