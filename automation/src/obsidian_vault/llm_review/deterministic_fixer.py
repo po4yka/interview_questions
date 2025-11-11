@@ -171,7 +171,18 @@ class DeterministicFixer:
             fixes_applied.append(description)
             issues_fixed.extend(future_timestamp_issues)
 
-        # Fix 5: Wrap common type names in backticks outside code blocks
+        # Fix 5: Normalize optional Short/Detailed version headings
+        (
+            body_text,
+            normalized_headings,
+        ) = self._normalize_optional_version_headings(body_text)
+        if normalized_headings:
+            fixes_applied.append(
+                "Normalized optional version headings to canonical format"
+            )
+            changes_made = True
+
+        # Fix 6: Wrap common type names in backticks outside code blocks
         processed_type_names: set[str] = set()
         type_pattern = self.fix_patterns["type_name_backticks"]
         for issue in issues:
@@ -410,9 +421,20 @@ class DeterministicFixer:
 
             masked_segment = url_pattern.sub(_mask_url, segment)
 
-            replaced_segment, replacements = pattern.subn(
-                lambda match: f"`{match.group(0)}`", masked_segment
-            )
+            replacements = 0
+            processed_lines: list[str] = []
+            for line in masked_segment.splitlines(keepends=True):
+                if line.lstrip().startswith("#"):
+                    processed_lines.append(line)
+                    continue
+
+                replaced_line, line_replacements = pattern.subn(
+                    lambda match: f"`{match.group(0)}`", line
+                )
+                processed_lines.append(replaced_line)
+                replacements += line_replacements
+
+            replaced_segment = "".join(processed_lines)
 
             if placeholders:
                 for placeholder, url in placeholders.items():
@@ -459,6 +481,66 @@ class DeterministicFixer:
             parts.append((content[last_end:], False))
 
         return parts if parts else [(content, False)]
+
+    def _normalize_optional_version_headings(
+        self, body: str
+    ) -> tuple[str, list[str]]:
+        """Normalize Short/Detailed optional headings to canonical casing/level.
+
+        Returns the updated body along with descriptions of the applied
+        normalization so callers can include it in fix summaries if needed.
+        """
+
+        heading_variants: dict[str, list[str]] = {
+            "## Краткая Версия": [
+                "краткая версия",
+                "краткий вариант",
+                "краткий ответ",
+            ],
+            "## Подробная Версия": [
+                "подробная версия",
+                "подробный вариант",
+                "подробный ответ",
+            ],
+            "## Short Version": ["short version", "short answer"],
+            "## Detailed Version": ["detailed version", "detailed answer", "long version"],
+        }
+
+        changes: list[str] = []
+        updated_body = body
+
+        for canonical, synonyms in heading_variants.items():
+            normalized_variants = {variant.strip().lower() for variant in synonyms}
+            # Include the canonical text (without heading markers) so headings that
+            # only differ by level or casing are normalized as well.
+            canonical_text = canonical.lstrip("# ").strip().lower()
+            normalized_variants.add(canonical_text)
+
+            variant_pattern = "|".join(re.escape(variant) for variant in sorted(normalized_variants, key=len, reverse=True))
+            pattern = re.compile(
+                rf"^(?:##|###)\s+(?:{variant_pattern})\s*$",
+                re.IGNORECASE | re.MULTILINE,
+            )
+
+            matches = list(pattern.finditer(updated_body))
+            if not matches:
+                continue
+
+            for match in reversed(matches):
+                original = match.group(0)
+                if original == canonical:
+                    continue
+
+                updated_body = (
+                    updated_body[: match.start()]
+                    + canonical
+                    + updated_body[match.end() :]
+                )
+                changes.append(
+                    f"Normalized optional heading '{original.strip()}' → '{canonical}'"
+                )
+
+        return updated_body, changes
 
     def get_fixable_issue_count(self, issues: list[ReviewIssue]) -> int:
         """Count how many issues can be fixed deterministically.

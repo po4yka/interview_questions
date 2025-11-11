@@ -88,9 +88,25 @@ class CodeFormatValidator(BaseValidator):
 
                 matches = list(re.finditer(pattern, part))
                 if matches and type_name not in issues_found:
+                    # Skip matches that occur in Markdown headings
+                    filtered_matches = []
+                    for match in matches:
+                        line_start = part.rfind("\n", 0, match.start()) + 1
+                        line_end = part.find("\n", match.start())
+                        if line_end == -1:
+                            line_end = len(part)
+
+                        line_text = part[line_start:line_end].lstrip()
+                        if line_text.startswith("#"):
+                            continue
+                        filtered_matches.append(match)
+
+                    if not filtered_matches:
+                        continue
+
                     issues_found.add(type_name)
                     # Only report first occurrence to avoid spam
-                    first_match = matches[0]
+                    first_match = filtered_matches[0]
                     line_num = (
                         self.content[: self.content.find(part) + first_match.start()].count("\n")
                         + 1
