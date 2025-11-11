@@ -9,6 +9,9 @@ from .config import COMMON_TYPE_NAMES, UNESCAPED_GENERIC_PATTERN
 from .registry import ValidatorRegistry
 
 
+SETEXT_UNDERLINE_PATTERN = re.compile(r"^(=+|-+)\s*$")
+
+
 @ValidatorRegistry.register
 class CodeFormatValidator(BaseValidator):
     """
@@ -76,31 +79,47 @@ class CodeFormatValidator(BaseValidator):
 
         parts = self._split_by_code_blocks(self.content)
         issues_found = set()
+        offset = 0
 
         for part, is_code_block in parts:
             if is_code_block:
+                offset += len(part)
                 continue
 
             for type_name in COMMON_TYPE_NAMES:
-                # Look for type name not in backticks
-                # Pattern: type name not preceded/followed by backtick or alphanumeric
+                if type_name in issues_found:
+                    continue
+
                 pattern = rf"(?<!`)\b{re.escape(type_name)}\b(?!`)"
 
-                matches = list(re.finditer(pattern, part))
-                if matches and type_name not in issues_found:
+                for match in re.finditer(pattern, part):
+                    line_start = part.rfind("\n", 0, match.start()) + 1
+                    line_end = part.find("\n", match.start())
+                    if line_end == -1:
+                        line_end = len(part)
+
+                    line_text_raw = part[line_start:line_end]
+                    normalized_line = self._normalize_heading_candidate(line_text_raw)
+                    next_line_raw = self._get_next_line(part, line_end)
+                    normalized_next = self._normalize_heading_candidate(next_line_raw)
+
+                    if normalized_line.startswith("#") or self._is_setext_heading_line(
+                        normalized_line, normalized_next
+                    ):
+                        continue
+
                     issues_found.add(type_name)
-                    # Only report first occurrence to avoid spam
-                    first_match = matches[0]
-                    line_num = (
-                        self.content[: self.content.find(part) + first_match.start()].count("\n")
-                        + 1
-                    )
+                    absolute_match_start = offset + match.start()
+                    line_num = self.content[:absolute_match_start].count("\n") + 1
 
                     self.add_issue(
                         Severity.WARNING,
                         f"Type name '{type_name}' found without backticks (line ~{line_num}). "
                         f"Consider wrapping in backticks: `{type_name}`",
                     )
+                    break
+
+            offset += len(part)
 
         if not issues_found:
             self.add_passed("Common type names appear properly formatted")
@@ -133,3 +152,52 @@ class CodeFormatValidator(BaseValidator):
             parts.append((content[last_end:], False))
 
         return parts if parts else [(content, False)]
+
+    @staticmethod
+    def _normalize_heading_candidate(line: str) -> str:
+        """Remove leading whitespace and blockquote markers for heading checks."""
+
+        stripped = line.lstrip()
+        while stripped.startswith(">"):
+            stripped = stripped[1:].lstrip()
+        return stripped.rstrip("\r")
+
+    @staticmethod
+    def _get_next_line(part: str, line_end: int) -> str:
+        """Return the following line (without newline) for heading detection."""
+
+        if line_end >= len(part):
+            return ""
+
+        next_line_start = line_end
+        if part[line_end : line_end + 1] == "\n":
+            next_line_start += 1
+        elif part[line_end : line_end + 2] == "\r\n":
+            next_line_start += 2
+        else:
+            if part[line_end : line_end + 1] == "\r":
+                next_line_start += 1
+                if part[next_line_start : next_line_start + 1] == "\n":
+                    next_line_start += 1
+
+        if next_line_start >= len(part):
+            return ""
+
+        next_line_end = part.find("\n", next_line_start)
+        if next_line_end == -1:
+            next_line_end = len(part)
+
+        return part[next_line_start:next_line_end].rstrip("\r")
+
+    @staticmethod
+    def _is_setext_heading_line(current_line: str, next_line: str) -> bool:
+        """Check whether the current and next line compose a Setext heading."""
+
+        if not current_line.strip():
+            return False
+
+        next_stripped = next_line.strip()
+        if not next_stripped:
+            return False
+
+        return bool(SETEXT_UNDERLINE_PATTERN.fullmatch(next_stripped))
