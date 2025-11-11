@@ -81,3 +81,36 @@ Parcelable details are similar.
     assert "`Bundle`" in result.revised_text
     assert "`Parcelable`" in result.revised_text
     assert "https://developer.android.com/reference/android/os/Bundle" in result.revised_text
+
+
+def test_type_name_backticks_plural_variants():
+    """Plural mentions of type names should also gain backticks."""
+
+    note = """---
+title: Sample
+created: 2024-01-01
+updated: 2024-01-01
+---
+Legacy applications juggle Activities across modules while background Services
+handle work in the foreground and background simultaneously.
+"""
+
+    issues = [
+        ReviewIssue(
+            severity="WARNING",
+            message="WARNING:Type name 'Activity' found without backticks.",
+            field="content",
+        ),
+        ReviewIssue(
+            severity="WARNING",
+            message="WARNING:Type name 'Service' found without backticks.",
+            field="content",
+        ),
+    ]
+
+    fixer = DeterministicFixer()
+    result = fixer.fix(note, issues)
+
+    assert result.changes_made
+    assert "`Activities`" in result.revised_text
+    assert "`Services`" in result.revised_text
